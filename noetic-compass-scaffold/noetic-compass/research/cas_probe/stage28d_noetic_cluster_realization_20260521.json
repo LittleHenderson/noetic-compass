@@ -1,0 +1,3455 @@
+{
+  "activation_manifest_file": "stage24b_40_element_cpu_recap_prereg_20260521.json",
+  "activations_file": "stage9_elements_pilot_activations_20260517.npz",
+  "activations_sha256": "63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9",
+  "artifact_contract": {
+    "actual_activation_sha256": "63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9",
+    "contract_source": "replacement_artifact_contract.output_sha256",
+    "expected_activation_sha256": "63702c62e6230e25e891b0e68007780954f9e6c539e4996b69e91017b972c0c9",
+    "formal_gate_valid": true,
+    "status": "LOCKED_ARTIFACT_MATCH"
+  },
+  "boundary": "Stage 28D tests multi-label two-Noetic clusters on Pythia-160M using existing Stage 9 probes. It does not train a cluster classifier, test full formulas/equations, prove exact neurons, or establish generation control.",
+  "claim_boundary": {
+    "claim_if_null": "Compound Noetic cluster colloquialisms do not jointly elevate their target Noetics over hard replacement controls under the preregistered phrase-level readouts.",
+    "claim_if_pass": "A preregistered phrase-level readout shows that compound Noetic cluster colloquialisms jointly elevate their two target Noetics over hard replacement controls on Pythia-160M.",
+    "forbidden_claims": "Do not claim exact neurons, complete circuits, retrained cluster classifiers, full TKS formulas, raw CAS-symbol understanding, free-form generation control, or cross-model generality from Stage 28D.",
+    "grey_status": "GREY_NOETIC_CLUSTER_REALIZATION_PARTIAL",
+    "null_status": "NULL_NOETIC_CLUSTER_REALIZATION_NOT_ESTABLISHED",
+    "pass_status": "PASS_BOUNDED_NOETIC_CLUSTER_REALIZATION",
+    "scope_boundary": "Stage 28D tests multi-label two-Noetic clusters on Pythia-160M using existing Stage 9 probes. It does not train a cluster classifier, test full formulas/equations, prove exact neurons, or establish generation control."
+  },
+  "fixture_rows": [
+    {
+      "cluster": "attraction_cause",
+      "english": "The speaker says \"that reminds me of something I'm drawn to\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "that",
+      "last_phrase_token_index": 12,
+      "last_phrase_token_text": " to",
+      "phrase": "that reminds me of something I'm drawn to",
+      "phrase_end": 59,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        3529,
+        25264,
+        479,
+        273,
+        1633,
+        309,
+        1353,
+        8392,
+        281
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "phrase_token_text": [
+        "that",
+        " reminds",
+        " me",
+        " of",
+        " something",
+        " I",
+        "'m",
+        " drawn",
+        " to"
+      ],
+      "row_id": "stage28d_000",
+      "sequence_length": 21,
+      "target_indices": [
+        1,
+        7
+      ],
+      "targets": [
+        "^2",
+        "^8"
+      ]
+    },
+    {
+      "cluster": "attraction_cause",
+      "english": "The speaker says \"one thing leads me back to what speaks to me\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "one",
+      "last_phrase_token_index": 13,
+      "last_phrase_token_text": " me",
+      "phrase": "one thing leads me back to what speaks to me",
+      "phrase_end": 62,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        531,
+        2181,
+        5644,
+        479,
+        896,
+        281,
+        752,
+        16544,
+        281,
+        479
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "phrase_token_text": [
+        "one",
+        " thing",
+        " leads",
+        " me",
+        " back",
+        " to",
+        " what",
+        " speaks",
+        " to",
+        " me"
+      ],
+      "row_id": "stage28d_001",
+      "sequence_length": 22,
+      "target_indices": [
+        1,
+        7
+      ],
+      "targets": [
+        "^2",
+        "^8"
+      ]
+    },
+    {
+      "cluster": "attraction_cause",
+      "english": "The speaker says \"a memory triggered a pull toward it\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "a",
+      "last_phrase_token_index": 10,
+      "last_phrase_token_text": " it",
+      "phrase": "a memory triggered a pull toward it",
+      "phrase_end": 53,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        66,
+        3541,
+        17142,
+        247,
+        3785,
+        2584,
+        352
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "phrase_token_text": [
+        "a",
+        " memory",
+        " triggered",
+        " a",
+        " pull",
+        " toward",
+        " it"
+      ],
+      "row_id": "stage28d_002",
+      "sequence_length": 19,
+      "target_indices": [
+        1,
+        7
+      ],
+      "targets": [
+        "^2",
+        "^8"
+      ]
+    },
+    {
+      "cluster": "aversion_analysis",
+      "english": "The speaker says \"I'm breaking down why I can't stomach it\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "I",
+      "last_phrase_token_index": 13,
+      "last_phrase_token_text": " it",
+      "phrase": "I'm breaking down why I can't stomach it",
+      "phrase_end": 58,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        42,
+        1353,
+        10155,
+        1066,
+        2139,
+        309,
+        476,
+        626,
+        12607,
+        352
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "phrase_token_text": [
+        "I",
+        "'m",
+        " breaking",
+        " down",
+        " why",
+        " I",
+        " can",
+        "'t",
+        " stomach",
+        " it"
+      ],
+      "row_id": "stage28d_003",
+      "sequence_length": 22,
+      "target_indices": [
+        2,
+        5
+      ],
+      "targets": [
+        "^3",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "aversion_analysis",
+      "english": "The speaker says \"pulling apart the argument that rubs me the wrong way\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "pull",
+      "last_phrase_token_index": 15,
+      "last_phrase_token_text": " way",
+      "phrase": "pulling apart the argument that rubs me the wrong way",
+      "phrase_end": 71,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        23290,
+        272,
+        7419,
+        253,
+        4154,
+        326,
+        7692,
+        84,
+        479,
+        253,
+        3430,
+        1039
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "phrase_token_text": [
+        "pull",
+        "ing",
+        " apart",
+        " the",
+        " argument",
+        " that",
+        " rub",
+        "s",
+        " me",
+        " the",
+        " wrong",
+        " way"
+      ],
+      "row_id": "stage28d_004",
+      "sequence_length": 24,
+      "target_indices": [
+        2,
+        5
+      ],
+      "targets": [
+        "^3",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "aversion_analysis",
+      "english": "The speaker says \"looking underneath what pushes me away\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "looking",
+      "last_phrase_token_index": 9,
+      "last_phrase_token_text": " away",
+      "phrase": "looking underneath what pushes me away",
+      "phrase_end": 56,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        13565,
+        21281,
+        752,
+        32804,
+        479,
+        1977
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "phrase_token_text": [
+        "looking",
+        " underneath",
+        " what",
+        " pushes",
+        " me",
+        " away"
+      ],
+      "row_id": "stage28d_005",
+      "sequence_length": 18,
+      "target_indices": [
+        2,
+        5
+      ],
+      "targets": [
+        "^3",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "resonance_rhythm",
+      "english": "The speaker says \"it struck a chord and kept coming back\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "last_phrase_token_index": 11,
+      "last_phrase_token_text": " back",
+      "phrase": "it struck a chord and kept coming back",
+      "phrase_end": 56,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        262,
+        10903,
+        247,
+        32894,
+        285,
+        4934,
+        3551,
+        896
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "phrase_token_text": [
+        "it",
+        " struck",
+        " a",
+        " chord",
+        " and",
+        " kept",
+        " coming",
+        " back"
+      ],
+      "row_id": "stage28d_006",
+      "sequence_length": 20,
+      "target_indices": [
+        3,
+        6
+      ],
+      "targets": [
+        "^4",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "resonance_rhythm",
+      "english": "The speaker says \"the feeling resonated until I got into a groove\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "the",
+      "last_phrase_token_index": 13,
+      "last_phrase_token_text": " groove",
+      "phrase": "the feeling resonated until I got into a groove",
+      "phrase_end": 65,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        783,
+        5471,
+        8146,
+        456,
+        1919,
+        309,
+        1694,
+        715,
+        247,
+        27444
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "phrase_token_text": [
+        "the",
+        " feeling",
+        " reson",
+        "ated",
+        " until",
+        " I",
+        " got",
+        " into",
+        " a",
+        " groove"
+      ],
+      "row_id": "stage28d_007",
+      "sequence_length": 22,
+      "target_indices": [
+        3,
+        6
+      ],
+      "targets": [
+        "^4",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "resonance_rhythm",
+      "english": "The speaker says \"it made an impression through repeated practice\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "last_phrase_token_index": 10,
+      "last_phrase_token_text": " practice",
+      "phrase": "it made an impression through repeated practice",
+      "phrase_end": 65,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        262,
+        1160,
+        271,
+        13214,
+        949,
+        6015,
+        3946
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "phrase_token_text": [
+        "it",
+        " made",
+        " an",
+        " impression",
+        " through",
+        " repeated",
+        " practice"
+      ],
+      "row_id": "stage28d_008",
+      "sequence_length": 19,
+      "target_indices": [
+        3,
+        6
+      ],
+      "targets": [
+        "^4",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "mind_analysis",
+      "english": "The speaker says \"paying attention while unpacking the idea\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "pay",
+      "last_phrase_token_index": 11,
+      "last_phrase_token_text": " idea",
+      "phrase": "paying attention while unpacking the idea",
+      "phrase_end": 59,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        12080,
+        272,
+        4116,
+        1223,
+        45737,
+        272,
+        253,
+        2934
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "phrase_token_text": [
+        "pay",
+        "ing",
+        " attention",
+        " while",
+        " unpack",
+        "ing",
+        " the",
+        " idea"
+      ],
+      "row_id": "stage28d_009",
+      "sequence_length": 20,
+      "target_indices": [
+        0,
+        5
+      ],
+      "targets": [
+        "^1",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "mind_analysis",
+      "english": "The speaker says \"using my head to break it down\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "using",
+      "last_phrase_token_index": 10,
+      "last_phrase_token_text": " down",
+      "phrase": "using my head to break it down",
+      "phrase_end": 48,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        5302,
+        619,
+        1481,
+        281,
+        2740,
+        352,
+        1066
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "phrase_token_text": [
+        "using",
+        " my",
+        " head",
+        " to",
+        " break",
+        " it",
+        " down"
+      ],
+      "row_id": "stage28d_010",
+      "sequence_length": 19,
+      "target_indices": [
+        0,
+        5
+      ],
+      "targets": [
+        "^1",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "mind_analysis",
+      "english": "The speaker says \"making up my mind by looking underneath\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "making",
+      "last_phrase_token_index": 10,
+      "last_phrase_token_text": " underneath",
+      "phrase": "making up my mind by looking underneath",
+      "phrase_end": 57,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        11849,
+        598,
+        619,
+        2564,
+        407,
+        2819,
+        21281
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "phrase_token_text": [
+        "making",
+        " up",
+        " my",
+        " mind",
+        " by",
+        " looking",
+        " underneath"
+      ],
+      "row_id": "stage28d_011",
+      "sequence_length": 19,
+      "target_indices": [
+        0,
+        5
+      ],
+      "targets": [
+        "^1",
+        "^6"
+      ]
+    },
+    {
+      "cluster": "identity_arising",
+      "english": "The speaker says \"out of nowhere it felt like part of who I am\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "out",
+      "last_phrase_token_index": 14,
+      "last_phrase_token_text": " am",
+      "phrase": "out of nowhere it felt like part of who I am",
+      "phrase_end": 62,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        483,
+        273,
+        17663,
+        352,
+        3543,
+        751,
+        629,
+        273,
+        665,
+        309,
+        717
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "phrase_token_text": [
+        "out",
+        " of",
+        " nowhere",
+        " it",
+        " felt",
+        " like",
+        " part",
+        " of",
+        " who",
+        " I",
+        " am"
+      ],
+      "row_id": "stage28d_012",
+      "sequence_length": 23,
+      "target_indices": [
+        4,
+        8
+      ],
+      "targets": [
+        "^5",
+        "^9"
+      ]
+    },
+    {
+      "cluster": "identity_arising",
+      "english": "The speaker says \"the thought came to me as something that makes me me\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "the",
+      "last_phrase_token_index": 14,
+      "last_phrase_token_text": " me",
+      "phrase": "the thought came to me as something that makes me me",
+      "phrase_end": 70,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        783,
+        1869,
+        2210,
+        281,
+        479,
+        347,
+        1633,
+        326,
+        2789,
+        479,
+        479
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "phrase_token_text": [
+        "the",
+        " thought",
+        " came",
+        " to",
+        " me",
+        " as",
+        " something",
+        " that",
+        " makes",
+        " me",
+        " me"
+      ],
+      "row_id": "stage28d_013",
+      "sequence_length": 23,
+      "target_indices": [
+        4,
+        8
+      ],
+      "targets": [
+        "^5",
+        "^9"
+      ]
+    },
+    {
+      "cluster": "identity_arising",
+      "english": "The speaker says \"it clicked as shaped by what came before\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "last_phrase_token_index": 11,
+      "last_phrase_token_text": " before",
+      "phrase": "it clicked as shaped by what came before",
+      "phrase_end": 58,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        262,
+        25363,
+        347,
+        16745,
+        407,
+        752,
+        2210,
+        1078
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "phrase_token_text": [
+        "it",
+        " clicked",
+        " as",
+        " shaped",
+        " by",
+        " what",
+        " came",
+        " before"
+      ],
+      "row_id": "stage28d_014",
+      "sequence_length": 20,
+      "target_indices": [
+        4,
+        8
+      ],
+      "targets": [
+        "^5",
+        "^9"
+      ]
+    },
+    {
+      "cluster": "attraction_resonance",
+      "english": "The speaker says \"it resonated with me and pulled me toward it\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "last_phrase_token_index": 13,
+      "last_phrase_token_text": " it",
+      "phrase": "it resonated with me and pulled me toward it",
+      "phrase_end": 62,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        262,
+        8146,
+        456,
+        342,
+        479,
+        285,
+        7320,
+        479,
+        2584,
+        352
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "phrase_token_text": [
+        "it",
+        " reson",
+        "ated",
+        " with",
+        " me",
+        " and",
+        " pulled",
+        " me",
+        " toward",
+        " it"
+      ],
+      "row_id": "stage28d_015",
+      "sequence_length": 22,
+      "target_indices": [
+        1,
+        3
+      ],
+      "targets": [
+        "^2",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "attraction_resonance",
+      "english": "The speaker says \"it struck a chord because it speaks to me\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "last_phrase_token_index": 12,
+      "last_phrase_token_text": " me",
+      "phrase": "it struck a chord because it speaks to me",
+      "phrase_end": 59,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        262,
+        10903,
+        247,
+        32894,
+        984,
+        352,
+        16544,
+        281,
+        479
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "phrase_token_text": [
+        "it",
+        " struck",
+        " a",
+        " chord",
+        " because",
+        " it",
+        " speaks",
+        " to",
+        " me"
+      ],
+      "row_id": "stage28d_016",
+      "sequence_length": 21,
+      "target_indices": [
+        1,
+        3
+      ],
+      "targets": [
+        "^2",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "attraction_resonance",
+      "english": "The speaker says \"the impression made it hard to resist\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "the",
+      "last_phrase_token_index": 10,
+      "last_phrase_token_text": " resist",
+      "phrase": "the impression made it hard to resist",
+      "phrase_end": 55,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        783,
+        13214,
+        1160,
+        352,
+        1892,
+        281,
+        11623
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "phrase_token_text": [
+        "the",
+        " impression",
+        " made",
+        " it",
+        " hard",
+        " to",
+        " resist"
+      ],
+      "row_id": "stage28d_017",
+      "sequence_length": 19,
+      "target_indices": [
+        1,
+        3
+      ],
+      "targets": [
+        "^2",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "aversion_vibration",
+      "english": "The speaker says \"it hit me hard and rubbed me the wrong way\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "last_phrase_token_index": 13,
+      "last_phrase_token_text": " way",
+      "phrase": "it hit me hard and rubbed me the wrong way",
+      "phrase_end": 60,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        262,
+        4352,
+        479,
+        1892,
+        285,
+        32089,
+        479,
+        253,
+        3430,
+        1039
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "phrase_token_text": [
+        "it",
+        " hit",
+        " me",
+        " hard",
+        " and",
+        " rubbed",
+        " me",
+        " the",
+        " wrong",
+        " way"
+      ],
+      "row_id": "stage28d_018",
+      "sequence_length": 22,
+      "target_indices": [
+        2,
+        3
+      ],
+      "targets": [
+        "^3",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "aversion_vibration",
+      "english": "The speaker says \"the impression made me unable to stomach it\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "the",
+      "last_phrase_token_index": 11,
+      "last_phrase_token_text": " it",
+      "phrase": "the impression made me unable to stomach it",
+      "phrase_end": 61,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        783,
+        13214,
+        1160,
+        479,
+        7591,
+        281,
+        12607,
+        352
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "phrase_token_text": [
+        "the",
+        " impression",
+        " made",
+        " me",
+        " unable",
+        " to",
+        " stomach",
+        " it"
+      ],
+      "row_id": "stage28d_019",
+      "sequence_length": 20,
+      "target_indices": [
+        2,
+        3
+      ],
+      "targets": [
+        "^3",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "aversion_vibration",
+      "english": "The speaker says \"it struck a sour chord I would not touch\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "it",
+      "last_phrase_token_index": 12,
+      "last_phrase_token_text": " touch",
+      "phrase": "it struck a sour chord I would not touch",
+      "phrase_end": 58,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        262,
+        10903,
+        247,
+        18988,
+        32894,
+        309,
+        651,
+        417,
+        5181
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "phrase_token_text": [
+        "it",
+        " struck",
+        " a",
+        " sour",
+        " chord",
+        " I",
+        " would",
+        " not",
+        " touch"
+      ],
+      "row_id": "stage28d_020",
+      "sequence_length": 21,
+      "target_indices": [
+        2,
+        3
+      ],
+      "targets": [
+        "^3",
+        "^4"
+      ]
+    },
+    {
+      "cluster": "mind_rhythm",
+      "english": "The speaker says \"I keep paying attention until practice makes perfect\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "I",
+      "last_phrase_token_index": 11,
+      "last_phrase_token_text": " perfect",
+      "phrase": "I keep paying attention until practice makes perfect",
+      "phrase_end": 70,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        42,
+        1978,
+        10054,
+        4116,
+        1919,
+        3946,
+        2789,
+        3962
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "phrase_token_text": [
+        "I",
+        " keep",
+        " paying",
+        " attention",
+        " until",
+        " practice",
+        " makes",
+        " perfect"
+      ],
+      "row_id": "stage28d_021",
+      "sequence_length": 20,
+      "target_indices": [
+        0,
+        6
+      ],
+      "targets": [
+        "^1",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "mind_rhythm",
+      "english": "The speaker says \"using my head while getting into a groove\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "using",
+      "last_phrase_token_index": 11,
+      "last_phrase_token_text": " groove",
+      "phrase": "using my head while getting into a groove",
+      "phrase_end": 59,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        5302,
+        619,
+        1481,
+        1223,
+        2970,
+        715,
+        247,
+        27444
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "phrase_token_text": [
+        "using",
+        " my",
+        " head",
+        " while",
+        " getting",
+        " into",
+        " a",
+        " groove"
+      ],
+      "row_id": "stage28d_022",
+      "sequence_length": 20,
+      "target_indices": [
+        0,
+        6
+      ],
+      "targets": [
+        "^1",
+        "^7"
+      ]
+    },
+    {
+      "cluster": "mind_rhythm",
+      "english": "The speaker says \"making up my mind through repeated practice\". The quoted phrase is the focus.",
+      "focus_token_index": 4,
+      "focus_token_text": "making",
+      "last_phrase_token_index": 10,
+      "last_phrase_token_text": " practice",
+      "phrase": "making up my mind through repeated practice",
+      "phrase_end": 61,
+      "phrase_start": 18,
+      "phrase_token_ids": [
+        11849,
+        598,
+        619,
+        2564,
+        949,
+        6015,
+        3946
+      ],
+      "phrase_token_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "phrase_token_text": [
+        "making",
+        " up",
+        " my",
+        " mind",
+        " through",
+        " repeated",
+        " practice"
+      ],
+      "row_id": "stage28d_023",
+      "sequence_length": 19,
+      "target_indices": [
+        0,
+        6
+      ],
+      "targets": [
+        "^1",
+        "^7"
+      ]
+    }
+  ],
+  "gates": {
+    "max_sign_test_p": 0.025,
+    "min_mean_target_labels_in_top4": 0.9,
+    "min_positive_rows": 18,
+    "min_probe_test_acc": 0.5
+  },
+  "input_file": "stage9_elements_pilot_20260517.jsonl",
+  "input_sha256": "2f8637eedff0fb4d9e6191bd5c051ddc21cea699e33621896469a2e522306889",
+  "layer": 5,
+  "model": {
+    "device": "cpu",
+    "hidden_dim": 768,
+    "model_name": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "model_source": "EleutherAI/pythia-160m",
+    "n_layer_positions": 13,
+    "torch": "2.11.0+cpu",
+    "transformers": "5.8.1"
+  },
+  "noetic_labels": [
+    "^1",
+    "^2",
+    "^3",
+    "^4",
+    "^5",
+    "^6",
+    "^7",
+    "^8",
+    "^9",
+    "^0"
+  ],
+  "noetic_names": [
+    "Mind",
+    "Positive",
+    "Negative",
+    "Vibration",
+    "Female",
+    "Male",
+    "Rhythm",
+    "Above/Cause",
+    "Below/Effect",
+    "Idea"
+  ],
+  "plain_english_read": "This report tests compound Noetic colloquialisms as multi-label clusters by asking whether their two target Noetics are jointly elevated over hard replacement controls.",
+  "preregistration_file": "stage28d_noetic_cluster_prereg_20260521.json",
+  "preregistration_sha256": "b1791d9ccb81ff4c432c30277b5eee517844645fd4b302a2c470cf5d23dffd75",
+  "readout_results": {
+    "phrase_last": {
+      "eligible_probe_floor": true,
+      "metrics": {
+        "both_targets_in_top4_share": 0.0,
+        "mean_hard_control_z": 0.5705851391008694,
+        "mean_target_labels_in_top4": 0.7083333333333334,
+        "mean_target_minus_hard_control_z": -0.48270448971619667,
+        "mean_target_pair_z": 0.08788064938467277,
+        "median_target_minus_hard_control_z": -0.5459827468028347,
+        "n_rows": 24,
+        "per_cluster": [
+          {
+            "cluster": "attraction_cause",
+            "mean_margin": -0.30847520921021643,
+            "mean_target_labels_in_top4": 1.0,
+            "n": 3,
+            "positive_share": 0.3333333333333333,
+            "targets": [
+              "^2",
+              "^8"
+            ]
+          },
+          {
+            "cluster": "attraction_resonance",
+            "mean_margin": -0.5481914321386772,
+            "mean_target_labels_in_top4": 0.6666666666666666,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^2",
+              "^4"
+            ]
+          },
+          {
+            "cluster": "aversion_analysis",
+            "mean_margin": -0.058167997110839864,
+            "mean_target_labels_in_top4": 1.0,
+            "n": 3,
+            "positive_share": 0.3333333333333333,
+            "targets": [
+              "^3",
+              "^6"
+            ]
+          },
+          {
+            "cluster": "aversion_vibration",
+            "mean_margin": -0.416699761955967,
+            "mean_target_labels_in_top4": 1.0,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^3",
+              "^4"
+            ]
+          },
+          {
+            "cluster": "identity_arising",
+            "mean_margin": -0.6021479413989091,
+            "mean_target_labels_in_top4": 0.3333333333333333,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^5",
+              "^9"
+            ]
+          },
+          {
+            "cluster": "mind_analysis",
+            "mean_margin": 0.1122137254104683,
+            "mean_target_labels_in_top4": 0.6666666666666666,
+            "n": 3,
+            "positive_share": 0.6666666666666666,
+            "targets": [
+              "^1",
+              "^6"
+            ]
+          },
+          {
+            "cluster": "mind_rhythm",
+            "mean_margin": -0.9252586335776071,
+            "mean_target_labels_in_top4": 0.6666666666666666,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^1",
+              "^7"
+            ]
+          },
+          {
+            "cluster": "resonance_rhythm",
+            "mean_margin": -1.114908667747825,
+            "mean_target_labels_in_top4": 0.3333333333333333,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^4",
+              "^7"
+            ]
+          }
+        ],
+        "positive_margin_count": 4,
+        "positive_margin_share": 0.16666666666666666,
+        "row_reports": [
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_cause",
+            "hard_control_z": 1.2409639867583975,
+            "phrase": "that reminds me of something I'm drawn to",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              1.2409639867583975,
+              0.6628777806077232
+            ],
+            "replacement_pairs": [
+              [
+                "^8",
+                "^3"
+              ],
+              [
+                "^2",
+                "^9"
+              ]
+            ],
+            "row_id": "stage28d_000",
+            "target_indices": [
+              1,
+              7
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.43834561117745874,
+            "target_pair_z": 0.8026183755809387,
+            "targets": [
+              "^2",
+              "^8"
+            ],
+            "top4_labels": [
+              "^8",
+              "^9",
+              "^3",
+              "^1"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_cause",
+            "hard_control_z": 1.8162297370307476,
+            "phrase": "one thing leads me back to what speaks to me",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              1.8162297370307476,
+              -0.42529487563178425
+            ],
+            "replacement_pairs": [
+              [
+                "^8",
+                "^3"
+              ],
+              [
+                "^2",
+                "^9"
+              ]
+            ],
+            "row_id": "stage28d_001",
+            "target_indices": [
+              1,
+              7
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -1.0315385833572392,
+            "target_pair_z": 0.7846911536735085,
+            "targets": [
+              "^2",
+              "^8"
+            ],
+            "top4_labels": [
+              "^8",
+              "^3",
+              "^1",
+              "^0"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_cause",
+            "hard_control_z": 0.022735019172447135,
+            "phrase": "a memory triggered a pull toward it",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              0.022735019172447135,
+              -0.515444429342184
+            ],
+            "replacement_pairs": [
+              [
+                "^8",
+                "^3"
+              ],
+              [
+                "^2",
+                "^9"
+              ]
+            ],
+            "row_id": "stage28d_002",
+            "target_indices": [
+              1,
+              7
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": 0.5444585669040488,
+            "target_pair_z": 0.567193586076496,
+            "targets": [
+              "^2",
+              "^8"
+            ],
+            "top4_labels": [
+              "^4",
+              "^1",
+              "^5",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_analysis",
+            "hard_control_z": 1.0762341251149687,
+            "phrase": "I'm breaking down why I can't stomach it",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.04851934395310442,
+              1.0762341251149687
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^2"
+              ],
+              [
+                "^3",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_003",
+            "target_indices": [
+              2,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.575899563197048,
+            "target_pair_z": 0.5003345619179207,
+            "targets": [
+              "^3",
+              "^6"
+            ],
+            "top4_labels": [
+              "^3",
+              "^8",
+              "^2",
+              "^9"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_analysis",
+            "hard_control_z": 0.4688430241621486,
+            "phrase": "pulling apart the argument that rubs me the wrong way",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.5022151187343358,
+              0.4688430241621486
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^2"
+              ],
+              [
+                "^3",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_004",
+            "target_indices": [
+              2,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.0536944765496844,
+            "target_pair_z": 0.4151485476124642,
+            "targets": [
+              "^3",
+              "^6"
+            ],
+            "top4_labels": [
+              "^3",
+              "^8",
+              "^1",
+              "^9"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_analysis",
+            "hard_control_z": 0.4097515132492022,
+            "phrase": "looking underneath what pushes me away",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              0.19840524657347494,
+              0.4097515132492022
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^2"
+              ],
+              [
+                "^3",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_005",
+            "target_indices": [
+              2,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": 0.45509004841421286,
+            "target_pair_z": 0.8648415616634151,
+            "targets": [
+              "^3",
+              "^6"
+            ],
+            "top4_labels": [
+              "^3",
+              "^2",
+              "^1",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "resonance_rhythm",
+            "hard_control_z": 0.3768212754539932,
+            "phrase": "it struck a chord and kept coming back",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.9869083892708718,
+              0.3768212754539932
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^8"
+              ],
+              [
+                "^4",
+                "^1"
+              ]
+            ],
+            "row_id": "stage28d_006",
+            "target_indices": [
+              3,
+              6
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -1.4852347974463613,
+            "target_pair_z": -1.108413521992368,
+            "targets": [
+              "^4",
+              "^7"
+            ],
+            "top4_labels": [
+              "^3",
+              "^1",
+              "^9",
+              "^6"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "resonance_rhythm",
+            "hard_control_z": 0.20571629410134168,
+            "phrase": "the feeling resonated until I got into a groove",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.4509956083876446,
+              0.20571629410134168
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^8"
+              ],
+              [
+                "^4",
+                "^1"
+              ]
+            ],
+            "row_id": "stage28d_007",
+            "target_indices": [
+              3,
+              6
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -0.9442188771088995,
+            "target_pair_z": -0.7385025830075578,
+            "targets": [
+              "^4",
+              "^7"
+            ],
+            "top4_labels": [
+              "^9",
+              "^2",
+              "^3",
+              "^1"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "resonance_rhythm",
+            "hard_control_z": 0.6481557031288436,
+            "phrase": "it made an impression through repeated practice",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.08994027822934536,
+              0.6481557031288436
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^8"
+              ],
+              [
+                "^4",
+                "^1"
+              ]
+            ],
+            "row_id": "stage28d_008",
+            "target_indices": [
+              3,
+              6
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.9152723286882143,
+            "target_pair_z": -0.26711662555937066,
+            "targets": [
+              "^4",
+              "^7"
+            ],
+            "top4_labels": [
+              "^8",
+              "^9",
+              "^3",
+              "^4"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_analysis",
+            "hard_control_z": -0.6683803466414882,
+            "phrase": "paying attention while unpacking the idea",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              -0.6683803466414882,
+              -0.8532000498680883
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^5"
+              ],
+              [
+                "^1",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_009",
+            "target_indices": [
+              0,
+              5
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": 0.31328227157019684,
+            "target_pair_z": -0.3550980750712913,
+            "targets": [
+              "^1",
+              "^6"
+            ],
+            "top4_labels": [
+              "^8",
+              "^9",
+              "^3",
+              "^2"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_analysis",
+            "hard_control_z": 0.668283725364485,
+            "phrase": "using my head to break it down",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.05917358527560587,
+              0.668283725364485
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^5"
+              ],
+              [
+                "^1",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_010",
+            "target_indices": [
+              0,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.4520451357525945,
+            "target_pair_z": 0.21623858961189052,
+            "targets": [
+              "^1",
+              "^6"
+            ],
+            "top4_labels": [
+              "^3",
+              "^1",
+              "^9",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_analysis",
+            "hard_control_z": 0.37024674697550014,
+            "phrase": "making up my mind by looking underneath",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              -0.4852349442260751,
+              0.37024674697550014
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^5"
+              ],
+              [
+                "^1",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_011",
+            "target_indices": [
+              0,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": 0.4754040404138025,
+            "target_pair_z": 0.8456507873893027,
+            "targets": [
+              "^1",
+              "^6"
+            ],
+            "top4_labels": [
+              "^1",
+              "^8",
+              "^3",
+              "^2"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "identity_arising",
+            "hard_control_z": 0.02369225147062727,
+            "phrase": "out of nowhere it felt like part of who I am",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.02369225147062727,
+              -0.21680577781617244
+            ],
+            "replacement_pairs": [
+              [
+                "^9",
+                "^6"
+              ],
+              [
+                "^5",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_012",
+            "target_indices": [
+              4,
+              8
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -0.6713149316277242,
+            "target_pair_z": -0.6476226801570969,
+            "targets": [
+              "^5",
+              "^9"
+            ],
+            "top4_labels": [
+              "^3",
+              "^1",
+              "^8",
+              "^6"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "identity_arising",
+            "hard_control_z": -0.134674996552998,
+            "phrase": "the thought came to me as something that makes me me",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.134674996552998,
+              -0.46356819727370335
+            ],
+            "replacement_pairs": [
+              [
+                "^9",
+                "^6"
+              ],
+              [
+                "^5",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_013",
+            "target_indices": [
+              4,
+              8
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -0.5160659304086214,
+            "target_pair_z": -0.6507409269616193,
+            "targets": [
+              "^5",
+              "^9"
+            ],
+            "top4_labels": [
+              "^3",
+              "^1",
+              "^8",
+              "^0"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "identity_arising",
+            "hard_control_z": 0.1456346211802012,
+            "phrase": "it clicked as shaped by what came before",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.4119934637636876,
+              0.1456346211802012
+            ],
+            "replacement_pairs": [
+              [
+                "^9",
+                "^6"
+              ],
+              [
+                "^5",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_014",
+            "target_indices": [
+              4,
+              8
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.619062962160382,
+            "target_pair_z": -0.47342834098018083,
+            "targets": [
+              "^5",
+              "^9"
+            ],
+            "top4_labels": [
+              "^8",
+              "^3",
+              "^1",
+              "^9"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_resonance",
+            "hard_control_z": 0.6920080765513759,
+            "phrase": "it resonated with me and pulled me toward it",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.6920080765513759,
+              0.48386425732730975
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^3"
+              ],
+              [
+                "^2",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_015",
+            "target_indices": [
+              1,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.31795922508383884,
+            "target_pair_z": 0.374048851467537,
+            "targets": [
+              "^2",
+              "^4"
+            ],
+            "top4_labels": [
+              "^3",
+              "^9",
+              "^2",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_resonance",
+            "hard_control_z": 0.5784530495438108,
+            "phrase": "it struck a chord because it speaks to me",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.5784530495438108,
+              0.3865744410231722
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^3"
+              ],
+              [
+                "^2",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_016",
+            "target_indices": [
+              1,
+              3
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -1.1716467379713738,
+            "target_pair_z": -0.5931936884275628,
+            "targets": [
+              "^2",
+              "^4"
+            ],
+            "top4_labels": [
+              "^8",
+              "^3",
+              "^0",
+              "^1"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_resonance",
+            "hard_control_z": 0.5082222516540337,
+            "phrase": "the impression made it hard to resist",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.4424411189621522,
+              0.5082222516540337
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^3"
+              ],
+              [
+                "^2",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_017",
+            "target_indices": [
+              1,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.154968333360819,
+            "target_pair_z": 0.3532539182932147,
+            "targets": [
+              "^2",
+              "^4"
+            ],
+            "top4_labels": [
+              "^1",
+              "^8",
+              "^4",
+              "^9"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_vibration",
+            "hard_control_z": 1.0763730824349989,
+            "phrase": "it hit me hard and rubbed me the wrong way",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.1218020061905705,
+              1.0763730824349989
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^2"
+              ],
+              [
+                "^3",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_018",
+            "target_indices": [
+              2,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.16589833215168426,
+            "target_pair_z": 0.9104747502833146,
+            "targets": [
+              "^3",
+              "^4"
+            ],
+            "top4_labels": [
+              "^3",
+              "^9",
+              "^1",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_vibration",
+            "hard_control_z": 0.9582496803514204,
+            "phrase": "the impression made me unable to stomach it",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.3668796462463082,
+              0.9582496803514204
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^2"
+              ],
+              [
+                "^3",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_019",
+            "target_indices": [
+              2,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.31491915813738447,
+            "target_pair_z": 0.643330522214036,
+            "targets": [
+              "^3",
+              "^4"
+            ],
+            "top4_labels": [
+              "^3",
+              "^2",
+              "^5",
+              "^1"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_vibration",
+            "hard_control_z": 1.1450739025990602,
+            "phrase": "it struck a sour chord I would not touch",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -1.0712416368582676,
+              1.1450739025990602
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^2"
+              ],
+              [
+                "^3",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_020",
+            "target_indices": [
+              2,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.7692817955788323,
+            "target_pair_z": 0.37579210702022786,
+            "targets": [
+              "^3",
+              "^4"
+            ],
+            "top4_labels": [
+              "^3",
+              "^9",
+              "^8",
+              "^1"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_rhythm",
+            "hard_control_z": 1.0315962826535712,
+            "phrase": "I keep paying attention until practice makes perfect",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -1.1018657815683215,
+              1.0315962826535712
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^5"
+              ],
+              [
+                "^1",
+                "^2"
+              ]
+            ],
+            "row_id": "stage28d_021",
+            "target_indices": [
+              0,
+              6
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.7450460989262728,
+            "target_pair_z": 0.2865501837272983,
+            "targets": [
+              "^1",
+              "^7"
+            ],
+            "top4_labels": [
+              "^1",
+              "^9",
+              "^4",
+              "^2"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_rhythm",
+            "hard_control_z": 0.6943963484130604,
+            "phrase": "using my head while getting into a groove",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -1.1756257529130836,
+              0.6943963484130604
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^5"
+              ],
+              [
+                "^1",
+                "^2"
+              ]
+            ],
+            "row_id": "stage28d_022",
+            "target_indices": [
+              0,
+              6
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -1.2069565674890257,
+            "target_pair_z": -0.5125602190759653,
+            "targets": [
+              "^1",
+              "^7"
+            ],
+            "top4_labels": [
+              "^9",
+              "^3",
+              "^2",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_rhythm",
+            "hard_control_z": 0.3394179842511165,
+            "phrase": "making up my mind through repeated practice",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -1.5467472553032051,
+              0.3394179842511165
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^5"
+              ],
+              [
+                "^1",
+                "^2"
+              ]
+            ],
+            "row_id": "stage28d_023",
+            "target_indices": [
+              0,
+              6
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.8237732343175224,
+            "target_pair_z": -0.4843552500664059,
+            "targets": [
+              "^1",
+              "^7"
+            ],
+            "top4_labels": [
+              "^8",
+              "^3",
+              "^9",
+              "^1"
+            ]
+          }
+        ],
+        "sign_test_p_vs_half": 0.9998614192008972
+      },
+      "passes_all_primary_gates": false,
+      "probe": {
+        "n_test": 4480,
+        "n_train": 2560,
+        "n_val": 1280,
+        "readout_key": "X_final",
+        "test_acc": 0.9241071428571429,
+        "train_acc": 1.0,
+        "val_acc": 0.99921875
+      },
+      "runtime_readout": "phrase_last",
+      "stage9_readout_key": "X_final",
+      "stage9_readout_name": "final_token"
+    },
+    "phrase_mean": {
+      "eligible_probe_floor": true,
+      "metrics": {
+        "both_targets_in_top4_share": 0.125,
+        "mean_hard_control_z": 0.5287001039330964,
+        "mean_target_labels_in_top4": 0.9583333333333334,
+        "mean_target_minus_hard_control_z": -0.18883581635291935,
+        "mean_target_pair_z": 0.339864287580177,
+        "median_target_minus_hard_control_z": -0.3337639832321607,
+        "n_rows": 24,
+        "per_cluster": [
+          {
+            "cluster": "attraction_cause",
+            "mean_margin": -0.37717012435060343,
+            "mean_target_labels_in_top4": 1.0,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^2",
+              "^8"
+            ]
+          },
+          {
+            "cluster": "attraction_resonance",
+            "mean_margin": 0.31492712501093933,
+            "mean_target_labels_in_top4": 1.3333333333333333,
+            "n": 3,
+            "positive_share": 1.0,
+            "targets": [
+              "^2",
+              "^4"
+            ]
+          },
+          {
+            "cluster": "aversion_analysis",
+            "mean_margin": -0.3474978860229904,
+            "mean_target_labels_in_top4": 1.3333333333333333,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^3",
+              "^6"
+            ]
+          },
+          {
+            "cluster": "aversion_vibration",
+            "mean_margin": -0.6780134519460899,
+            "mean_target_labels_in_top4": 0.6666666666666666,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^3",
+              "^4"
+            ]
+          },
+          {
+            "cluster": "identity_arising",
+            "mean_margin": 0.5064835144737255,
+            "mean_target_labels_in_top4": 0.3333333333333333,
+            "n": 3,
+            "positive_share": 1.0,
+            "targets": [
+              "^5",
+              "^9"
+            ]
+          },
+          {
+            "cluster": "mind_analysis",
+            "mean_margin": -0.3525270621993121,
+            "mean_target_labels_in_top4": 1.0,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^1",
+              "^6"
+            ]
+          },
+          {
+            "cluster": "mind_rhythm",
+            "mean_margin": -0.08399763152850452,
+            "mean_target_labels_in_top4": 1.0,
+            "n": 3,
+            "positive_share": 0.3333333333333333,
+            "targets": [
+              "^1",
+              "^7"
+            ]
+          },
+          {
+            "cluster": "resonance_rhythm",
+            "mean_margin": -0.49289101426051946,
+            "mean_target_labels_in_top4": 1.0,
+            "n": 3,
+            "positive_share": 0.0,
+            "targets": [
+              "^4",
+              "^7"
+            ]
+          }
+        ],
+        "positive_margin_count": 7,
+        "positive_margin_share": 0.2916666666666667,
+        "row_reports": [
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_cause",
+            "hard_control_z": 0.2716780215998445,
+            "phrase": "that reminds me of something I'm drawn to",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.10424512030549626,
+              0.2716780215998445
+            ],
+            "replacement_pairs": [
+              [
+                "^8",
+                "^3"
+              ],
+              [
+                "^2",
+                "^9"
+              ]
+            ],
+            "row_id": "stage28d_000",
+            "target_indices": [
+              1,
+              7
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.4751367938361834,
+            "target_pair_z": -0.2034587722363389,
+            "targets": [
+              "^2",
+              "^8"
+            ],
+            "top4_labels": [
+              "^3",
+              "^0",
+              "^2",
+              "^1"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_cause",
+            "hard_control_z": 0.0400575517305522,
+            "phrase": "one thing leads me back to what speaks to me",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.22927647123743067,
+              0.0400575517305522
+            ],
+            "replacement_pairs": [
+              [
+                "^8",
+                "^3"
+              ],
+              [
+                "^2",
+                "^9"
+              ]
+            ],
+            "row_id": "stage28d_001",
+            "target_indices": [
+              1,
+              7
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.07440040264269998,
+            "target_pair_z": -0.03434285091214778,
+            "targets": [
+              "^2",
+              "^8"
+            ],
+            "top4_labels": [
+              "^7",
+              "^2",
+              "^0",
+              "^5"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_cause",
+            "hard_control_z": 0.915091663430645,
+            "phrase": "a memory triggered a pull toward it",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.915091663430645,
+              -0.01850214194978725
+            ],
+            "replacement_pairs": [
+              [
+                "^8",
+                "^3"
+              ],
+              [
+                "^2",
+                "^9"
+              ]
+            ],
+            "row_id": "stage28d_002",
+            "target_indices": [
+              1,
+              7
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.5819731765729269,
+            "target_pair_z": 0.33311848685771805,
+            "targets": [
+              "^2",
+              "^8"
+            ],
+            "top4_labels": [
+              "^8",
+              "^3",
+              "^1",
+              "^5"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_analysis",
+            "hard_control_z": 1.1326184942967081,
+            "phrase": "I'm breaking down why I can't stomach it",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.3763719341621948,
+              1.1326184942967081
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^2"
+              ],
+              [
+                "^3",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_003",
+            "target_indices": [
+              2,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.36652957202318803,
+            "target_pair_z": 0.7660889222735201,
+            "targets": [
+              "^3",
+              "^6"
+            ],
+            "top4_labels": [
+              "^3",
+              "^5",
+              "^1",
+              "^2"
+            ]
+          },
+          {
+            "both_targets_in_top4": true,
+            "cluster": "aversion_analysis",
+            "hard_control_z": 1.2409917268562483,
+            "phrase": "pulling apart the argument that rubs me the wrong way",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              1.2409917268562483,
+              0.608422437281237
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^2"
+              ],
+              [
+                "^3",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_004",
+            "target_indices": [
+              2,
+              5
+            ],
+            "target_labels_in_top4": 2,
+            "target_minus_hard_control_z": -0.34000239785701425,
+            "target_pair_z": 0.900989328999234,
+            "targets": [
+              "^3",
+              "^6"
+            ],
+            "top4_labels": [
+              "^2",
+              "^6",
+              "^3",
+              "^5"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_analysis",
+            "hard_control_z": 0.5340507258193037,
+            "phrase": "looking underneath what pushes me away",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.5340507258193037,
+              0.4914499475496523
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^2"
+              ],
+              [
+                "^3",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_005",
+            "target_indices": [
+              2,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.3359616881887688,
+            "target_pair_z": 0.1980890376305349,
+            "targets": [
+              "^3",
+              "^6"
+            ],
+            "top4_labels": [
+              "^1",
+              "^2",
+              "^7",
+              "^3"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "resonance_rhythm",
+            "hard_control_z": 0.48255261788635795,
+            "phrase": "it struck a chord and kept coming back",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.7325797166358321,
+              0.48255261788635795
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^8"
+              ],
+              [
+                "^4",
+                "^1"
+              ]
+            ],
+            "row_id": "stage28d_006",
+            "target_indices": [
+              3,
+              6
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.6247045705312614,
+            "target_pair_z": -0.1421519526449034,
+            "targets": [
+              "^4",
+              "^7"
+            ],
+            "top4_labels": [
+              "^5",
+              "^2",
+              "^1",
+              "^4"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "resonance_rhythm",
+            "hard_control_z": 0.49640480060636877,
+            "phrase": "the feeling resonated until I got into a groove",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.07317493837179245,
+              0.49640480060636877
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^8"
+              ],
+              [
+                "^4",
+                "^1"
+              ]
+            ],
+            "row_id": "stage28d_007",
+            "target_indices": [
+              3,
+              6
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.42554692744554073,
+            "target_pair_z": 0.07085787316082803,
+            "targets": [
+              "^4",
+              "^7"
+            ],
+            "top4_labels": [
+              "^1",
+              "^2",
+              "^7",
+              "^5"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "resonance_rhythm",
+            "hard_control_z": 0.6286667043787638,
+            "phrase": "it made an impression through repeated practice",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.16645850590138123,
+              0.6286667043787638
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^8"
+              ],
+              [
+                "^4",
+                "^1"
+              ]
+            ],
+            "row_id": "stage28d_008",
+            "target_indices": [
+              3,
+              6
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.42842154480475636,
+            "target_pair_z": 0.20024515957400746,
+            "targets": [
+              "^4",
+              "^7"
+            ],
+            "top4_labels": [
+              "^2",
+              "^4",
+              "^5",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_analysis",
+            "hard_control_z": 0.9174895492352451,
+            "phrase": "paying attention while unpacking the idea",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.6837882259359085,
+              0.9174895492352451
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^5"
+              ],
+              [
+                "^1",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_009",
+            "target_indices": [
+              0,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.294055568999257,
+            "target_pair_z": 0.6234339802359881,
+            "targets": [
+              "^1",
+              "^6"
+            ],
+            "top4_labels": [
+              "^2",
+              "^5",
+              "^1",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_analysis",
+            "hard_control_z": 1.0880093114405902,
+            "phrase": "using my head to break it down",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.29538169060336483,
+              1.0880093114405902
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^5"
+              ],
+              [
+                "^1",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_010",
+            "target_indices": [
+              0,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.472608971217095,
+            "target_pair_z": 0.6154003402234952,
+            "targets": [
+              "^1",
+              "^6"
+            ],
+            "top4_labels": [
+              "^1",
+              "^3",
+              "^5",
+              "^2"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_analysis",
+            "hard_control_z": 1.15353969115344,
+            "phrase": "making up my mind by looking underneath",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.48291033821522183,
+              1.15353969115344
+            ],
+            "replacement_pairs": [
+              [
+                "^6",
+                "^5"
+              ],
+              [
+                "^1",
+                "^5"
+              ]
+            ],
+            "row_id": "stage28d_011",
+            "target_indices": [
+              0,
+              5
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.2909166463815843,
+            "target_pair_z": 0.8626230447718556,
+            "targets": [
+              "^1",
+              "^6"
+            ],
+            "top4_labels": [
+              "^1",
+              "^3",
+              "^7",
+              "^9"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "identity_arising",
+            "hard_control_z": -0.6751104852978562,
+            "phrase": "out of nowhere it felt like part of who I am",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              -0.6751104852978562,
+              -0.9212604302716885
+            ],
+            "replacement_pairs": [
+              [
+                "^9",
+                "^6"
+              ],
+              [
+                "^5",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_012",
+            "target_indices": [
+              4,
+              8
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": 0.8320636833846544,
+            "target_pair_z": 0.15695319808679822,
+            "targets": [
+              "^5",
+              "^9"
+            ],
+            "top4_labels": [
+              "^3",
+              "^7",
+              "^0",
+              "^2"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "identity_arising",
+            "hard_control_z": -0.7841038518476189,
+            "phrase": "the thought came to me as something that makes me me",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              -0.7841038518476189,
+              -0.8096761032417358
+            ],
+            "replacement_pairs": [
+              [
+                "^9",
+                "^6"
+              ],
+              [
+                "^5",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_013",
+            "target_indices": [
+              4,
+              8
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": 0.6754122462174957,
+            "target_pair_z": -0.10869160563012312,
+            "targets": [
+              "^5",
+              "^9"
+            ],
+            "top4_labels": [
+              "^3",
+              "^1",
+              "^0",
+              "^7"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "identity_arising",
+            "hard_control_z": 0.14681934342979117,
+            "phrase": "it clicked as shaped by what came before",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              -0.7744368797749837,
+              0.14681934342979117
+            ],
+            "replacement_pairs": [
+              [
+                "^9",
+                "^6"
+              ],
+              [
+                "^5",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_014",
+            "target_indices": [
+              4,
+              8
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": 0.01197461381902637,
+            "target_pair_z": 0.15879395724881754,
+            "targets": [
+              "^5",
+              "^9"
+            ],
+            "top4_labels": [
+              "^1",
+              "^5",
+              "^3",
+              "^2"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_resonance",
+            "hard_control_z": 0.3432923552678816,
+            "phrase": "it resonated with me and pulled me toward it",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              0.3432923552678816,
+              0.24226903238812905
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^3"
+              ],
+              [
+                "^2",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_015",
+            "target_indices": [
+              1,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": 0.23315113820161304,
+            "target_pair_z": 0.5764434934694946,
+            "targets": [
+              "^2",
+              "^4"
+            ],
+            "top4_labels": [
+              "^5",
+              "^1",
+              "^2",
+              "^3"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "attraction_resonance",
+            "hard_control_z": -0.048601069350592885,
+            "phrase": "it struck a chord because it speaks to me",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              -0.048601069350592885,
+              -0.49510800556623463
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^3"
+              ],
+              [
+                "^2",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_016",
+            "target_indices": [
+              1,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": 0.20248674754526091,
+            "target_pair_z": 0.15388567819466803,
+            "targets": [
+              "^2",
+              "^4"
+            ],
+            "top4_labels": [
+              "^5",
+              "^2",
+              "^7",
+              "^3"
+            ]
+          },
+          {
+            "both_targets_in_top4": true,
+            "cluster": "attraction_resonance",
+            "hard_control_z": 0.32843976277604525,
+            "phrase": "the impression made it hard to resist",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              0.32843976277604525,
+              -0.3672359672714599
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^3"
+              ],
+              [
+                "^2",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_017",
+            "target_indices": [
+              1,
+              3
+            ],
+            "target_labels_in_top4": 2,
+            "target_minus_hard_control_z": 0.509143489285944,
+            "target_pair_z": 0.8375832520619892,
+            "targets": [
+              "^2",
+              "^4"
+            ],
+            "top4_labels": [
+              "^5",
+              "^2",
+              "^1",
+              "^4"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_vibration",
+            "hard_control_z": 0.1803625748852245,
+            "phrase": "it hit me hard and rubbed me the wrong way",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.1803625748852245,
+              0.0664168370952102
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^2"
+              ],
+              [
+                "^3",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_018",
+            "target_indices": [
+              2,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.33156627827555263,
+            "target_pair_z": -0.15120370339032813,
+            "targets": [
+              "^3",
+              "^4"
+            ],
+            "top4_labels": [
+              "^5",
+              "^1",
+              "^2",
+              "^3"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_vibration",
+            "hard_control_z": 0.6223626297855985,
+            "phrase": "the impression made me unable to stomach it",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.6223626297855985,
+              -0.37801449787027386
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^2"
+              ],
+              [
+                "^3",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_019",
+            "target_indices": [
+              2,
+              3
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -0.5205498615686711,
+            "target_pair_z": 0.10181276821692745,
+            "targets": [
+              "^3",
+              "^4"
+            ],
+            "top4_labels": [
+              "^5",
+              "^2",
+              "^1",
+              "^0"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "aversion_vibration",
+            "hard_control_z": 0.7782141335871741,
+            "phrase": "it struck a sour chord I would not touch",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.7782141335871741,
+              -0.7850702600539247
+            ],
+            "replacement_pairs": [
+              [
+                "^4",
+                "^2"
+              ],
+              [
+                "^3",
+                "^8"
+              ]
+            ],
+            "row_id": "stage28d_020",
+            "target_indices": [
+              2,
+              3
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -1.1819242159940457,
+            "target_pair_z": -0.4037100824068716,
+            "targets": [
+              "^3",
+              "^4"
+            ],
+            "top4_labels": [
+              "^5",
+              "^2",
+              "^7",
+              "^4"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_rhythm",
+            "hard_control_z": 0.874551774306654,
+            "phrase": "I keep paying attention until practice makes perfect",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              0.461011659138731,
+              0.874551774306654
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^5"
+              ],
+              [
+                "^1",
+                "^2"
+              ]
+            ],
+            "row_id": "stage28d_021",
+            "target_indices": [
+              0,
+              6
+            ],
+            "target_labels_in_top4": 0,
+            "target_minus_hard_control_z": -0.4917165476902302,
+            "target_pair_z": 0.3828352266164238,
+            "targets": [
+              "^1",
+              "^7"
+            ],
+            "top4_labels": [
+              "^2",
+              "^8",
+              "^6",
+              "^5"
+            ]
+          },
+          {
+            "both_targets_in_top4": false,
+            "cluster": "mind_rhythm",
+            "hard_control_z": 0.9538136973914801,
+            "phrase": "using my head while getting into a groove",
+            "positive_margin": false,
+            "replacement_pair_z": [
+              -0.44601558953134446,
+              0.9538136973914801
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^5"
+              ],
+              [
+                "^1",
+                "^2"
+              ]
+            ],
+            "row_id": "stage28d_022",
+            "target_indices": [
+              0,
+              6
+            ],
+            "target_labels_in_top4": 1,
+            "target_minus_hard_control_z": -0.15428531322532546,
+            "target_pair_z": 0.7995283841661547,
+            "targets": [
+              "^1",
+              "^7"
+            ],
+            "top4_labels": [
+              "^1",
+              "^9",
+              "^3",
+              "^8"
+            ]
+          },
+          {
+            "both_targets_in_top4": true,
+            "cluster": "mind_rhythm",
+            "hard_control_z": 1.0676107710264637,
+            "phrase": "making up my mind through repeated practice",
+            "positive_margin": true,
+            "replacement_pair_z": [
+              0.04247785438445281,
+              1.0676107710264637
+            ],
+            "replacement_pairs": [
+              [
+                "^7",
+                "^5"
+              ],
+              [
+                "^1",
+                "^2"
+              ]
+            ],
+            "row_id": "stage28d_023",
+            "target_indices": [
+              0,
+              6
+            ],
+            "target_labels_in_top4": 2,
+            "target_minus_hard_control_z": 0.3940089663300421,
+            "target_pair_z": 1.4616197373565059,
+            "targets": [
+              "^1",
+              "^7"
+            ],
+            "top4_labels": [
+              "^1",
+              "^7",
+              "^3",
+              "^8"
+            ]
+          }
+        ],
+        "sign_test_p_vs_half": 0.9886720776557922
+      },
+      "passes_all_primary_gates": false,
+      "probe": {
+        "n_test": 4480,
+        "n_train": 2560,
+        "n_val": 1280,
+        "readout_key": "X_mean",
+        "test_acc": 0.7308035714285714,
+        "train_acc": 0.996875,
+        "val_acc": 0.8609375
+      },
+      "runtime_readout": "phrase_mean",
+      "stage9_readout_key": "X_mean",
+      "stage9_readout_name": "mean_over_seq_len"
+    }
+  },
+  "schema_version": "stage28d_noetic_cluster_realization.v1",
+  "status": "NULL_NOETIC_CLUSTER_REALIZATION_NOT_ESTABLISHED"
+}
