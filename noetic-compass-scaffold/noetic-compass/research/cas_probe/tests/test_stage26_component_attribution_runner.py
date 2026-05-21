@@ -65,6 +65,18 @@ def test_top_set_control_ranks_selected_against_random_sets() -> None:
     assert 0.0 < result["empirical_p_random_ge_actual"] <= 1.0
 
 
+def test_matched_control_preserves_kind_and_layer() -> None:
+    stage26 = _load_module("stage26_runner_matched")
+
+    selected = ["L5H3", "L5H5", "L1H6"]
+    sample = stage26._matched_component_names(selected, np.random.default_rng(123))
+
+    assert len(sample) == len(selected)
+    assert all(name not in selected for name in sample)
+    assert all(stage26._component_from_name(name).kind == "head" for name in sample)
+    assert [stage26._component_from_name(name).layer for name in sample] == [5, 5, 1]
+
+
 def test_class_drop_summary_orders_largest_drops_first() -> None:
     stage26 = _load_module("stage26_runner_class_drop")
     y = np.array([0, 0, 1, 1])

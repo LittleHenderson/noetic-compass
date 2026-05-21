@@ -132,6 +132,34 @@ def _top_set_random_control(scores: dict[str, float], selected: list[str], n_ran
     return _summarize_vs_random(actual, values)
 
 
+def _matched_component_names(selected: list[str], rng: np.random.Generator) -> list[str]:
+    components = _all_components()
+    by_signature: dict[tuple[str, int], list[str]] = {}
+    all_names = [component.name for component in components]
+    selected_set = set(selected)
+    for component in components:
+        by_signature.setdefault((component.kind, component.layer), []).append(component.name)
+
+    out: list[str] = []
+    for name in selected:
+        component = _component_from_name(name)
+        pool = [candidate for candidate in by_signature[(component.kind, component.layer)] if candidate not in selected_set]
+        if not pool:
+            pool = [candidate for candidate in all_names if candidate not in selected_set]
+        out.append(str(rng.choice(pool)))
+    return out
+
+
+def _matched_top_set_random_control(scores: dict[str, float], selected: list[str], n_random: int, seed: int) -> dict[str, Any]:
+    rng = np.random.default_rng(seed)
+    actual = float(np.mean([scores[name] for name in selected])) if selected else 0.0
+    values: list[float] = []
+    for _ in range(n_random):
+        sample = _matched_component_names(selected, rng)
+        values.append(float(np.mean([scores[name] for name in sample])))
+    return _summarize_vs_random(actual, values)
+
+
 def _class_drop_summary(y_true: np.ndarray, baseline_pred: np.ndarray, ablated_pred: np.ndarray) -> dict[str, Any]:
     rows: list[dict[str, Any]] = []
     for class_idx, label in enumerate(_FOUNDATION_LABELS):
@@ -389,11 +417,17 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     ordered_components = sorted(score_map, key=lambda name: score_map[name], reverse=True)
     selected_names = ordered_components[: int(args.top_k_components)]
     selected_components = [_component_from_name(name) for name in selected_names]
-    alignment_control = _top_set_random_control(
+    alignment_control_all = _top_set_random_control(
         score_map,
         selected_names,
         int(args.n_random),
         int(args.seed) + 1,
+    )
+    alignment_control_matched = _matched_top_set_random_control(
+        score_map,
+        selected_names,
+        int(args.n_random),
+        int(args.seed) + 11,
     )
 
     eval_ids = splits["test"]
@@ -419,6 +453,7 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
     rng = np.random.default_rng(int(args.seed) + 2)
     all_components = _all_components()
     random_drops: list[float] = []
+    matched_random_drops: list[float] = []
     for _ in range(int(args.n_random)):
         sampled = rng.choice(len(all_components), size=len(selected_components), replace=False).astype(int).tolist()
         random_components = [all_components[i] for i in sampled]
@@ -432,7 +467,20 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         )
         random_metrics = _metrics(y_eval, random_pred, _FOUNDATION_LABELS)
         random_drops.append(float(baseline_metrics["acc"] - random_metrics["acc"]))
-    ablation_control = _summarize_vs_random(targeted_drop, random_drops)
+        matched_names = _matched_component_names(selected_names, rng)
+        matched_components = [_component_from_name(name) for name in matched_names]
+        matched_pred = _predict_forward_subset(
+            eval_rows,
+            model,
+            tokenizer,
+            device,
+            fitted,
+            components_to_ablate=matched_components,
+        )
+        matched_metrics = _metrics(y_eval, matched_pred, _FOUNDATION_LABELS)
+        matched_random_drops.append(float(baseline_metrics["acc"] - matched_metrics["acc"]))
+    ablation_control_all = _summarize_vs_random(targeted_drop, random_drops)
+    ablation_control_matched = _summarize_vs_random(targeted_drop, matched_random_drops)
     noop_pred = _predict_forward_subset(eval_rows, model, tokenizer, device, fitted)
     noop_metrics = _metrics(y_eval, noop_pred, _FOUNDATION_LABELS)
     class_specificity = _class_drop_summary(y_eval, baseline_pred, targeted_pred)
@@ -469,14 +517,18 @@ def build_report(args: argparse.Namespace) -> dict[str, Any]:
         "alignment_enrichment": {
             "selected_components": selected_names,
             "selected_mean_projection_score": float(np.mean([score_map[name] for name in selected_names])),
-            "random_control": alignment_control,
+            "random_control": alignment_control_matched,
+            "matched_same_kind_layer_control": alignment_control_matched,
+            "all_component_control": alignment_control_all,
         },
         "targeted_ablation_drop": {
             "eval_rows": int(len(eval_rows)),
             "baseline_acc": float(baseline_metrics["acc"]),
             "targeted_ablated_acc": float(targeted_metrics["acc"]),
             "targeted_drop": targeted_drop,
-            "random_control": ablation_control,
+            "random_control": ablation_control_matched,
+            "matched_same_kind_layer_control": ablation_control_matched,
+            "all_component_control": ablation_control_all,
         },
         "class_specificity": class_specificity,
         "sanity_controls": {
