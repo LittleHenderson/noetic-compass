@@ -1,0 +1,58 @@
+# Stage 27J Output-Side Component Attribution Pre-Registration
+
+**Status:** `PREREGISTERED_GPU_RECOMMENDED`
+
+## Motivation
+
+Stage 27I localized the layer-5 neuron-cover intervention to continuation prediction positions but still found a likelihood null, while the survival trace showed the readout signal fading by layer 12. Stage 27J therefore searches the output side directly for late components that carry or erase the readable-prefix likelihood margin.
+
+## Required Inputs
+
+- `model`: `EleutherAI/pythia-160m`
+- `model_revision`: `50f5173d932e8e61f858120bcb800b97af589f46`
+- `fixture`: `stage7_foundation_pilot_20260517.jsonl`
+- `stage7_prefix_report`: `stage7_cas_prefix_likelihood_20260517.json`
+- `stage27i_report`: `stage27i_prediction_position_steering_20260521.json`
+- `stage7_prefix_status`: `READABLE_PREFIX_CONDITIONS_PYTHIA_LIKELIHOOD`
+- `stage27i_status`: `NULL_PREDICTION_POSITION_NEURON_STEERING_NOT_ESTABLISHED`
+- `candidate_layers`: `[8, 9, 10, 11]`
+- `candidate_components`: `12 attention heads plus 1 MLP block per candidate layer`
+- `intervention_positions`: `continuation_prediction_positions_only`
+- `per_drive`: `16`
+- `learn_rows_per_drive`: `8`
+- `eval_rows_per_drive`: `8`
+- `cover_size`: `6`
+- `random_control_policy`: `same layer/kind when available; singleton MLP blocks fall back to same-kind different-layer controls`
+
+## Method
+
+1. Commit this pre-registration and runner before any Stage 27J GPU result is generated.
+2. Reuse the Stage 7 CAS-prefix likelihood row selection and readable plain-prefix wording.
+3. Verify the Stage 7 readable-prefix source PASS and Stage 27I prediction-position NULL source contract.
+4. Split the selected rows by drive into learn and held-out eval halves.
+5. On learn rows, ablate each late-layer output-side component at continuation prediction positions and score prefix-likelihood margin change.
+6. Rank carrier components by positive margin drop when ablated; rank eraser components by margin lift when ablated.
+7. On held-out eval rows, ablate the learned carrier cover and eraser cover separately.
+8. Compare held-out carrier drop and eraser lift against same-size matched random output-side component covers: layer/kind matched where available, with explicit same-kind fallback for singleton MLP blocks.
+
+## Gates
+
+| Gate | Kind | Criterion |
+|---|---|---|
+| `source_contracts` | `pass_floor` | Stage 7 readable-prefix source PASS and Stage 27I source NULL are both verified. |
+| `learn_eval_split` | `pass_floor` | Learn and eval rows are disjoint and balanced by drive. |
+| `carrier_cover_eval` | `primary` | Held-out carrier-cover ablation drop beats matched random cover drop on at least 60% of rows with sign-test p<0.05; random controls are layer/kind matched where available and explicitly same-kind for singleton MLP blocks. |
+| `eraser_cover_eval` | `primary` | Held-out eraser-cover ablation lift beats matched random cover lift on at least 60% of rows with sign-test p<0.05; random controls are layer/kind matched where available and explicitly same-kind for singleton MLP blocks. |
+| `attribution_floor` | `primary` | At least one of carrier_cover_eval or eraser_cover_eval passes; both passing is stronger. |
+
+## Claim Boundary
+
+Stage 27J is late-layer output-side component attribution over Pythia-160M likelihood margins. It is not complete circuit discovery, not model-wide control, not weight editing, and not visible free-form generation control.
+
+## Forbidden Claims
+
+Do not claim complete circuits, exact model-wide causal explanation, open-ended generation control, weight editing, cross-model control, or raw CAS-symbol understanding from Stage 27J.
+
+## Validation
+
+`{}`
