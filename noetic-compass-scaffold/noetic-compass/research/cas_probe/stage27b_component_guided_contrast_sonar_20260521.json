@@ -1,0 +1,466 @@
+{
+  "activation_manifest_file": "stage7_foundation_pilot_activations_manifest_20260517.json",
+  "activations_file": "stage7_foundation_pilot_activations_20260517.npz",
+  "activations_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+  "artifact_contract": {
+    "actual_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "expected_activation_sha256": "d2fc03ad2572f49f8cfbb79898b074fc4c552502fe62bc62a4427963ab67c47f",
+    "formal_gate_valid": true,
+    "status": "LOCKED_ARTIFACT_MATCH"
+  },
+  "boundary": "Stage 27B measures Foundation hard-partner token/logit contrast through the Stage 26/27A selected Pythia-160M attention-head path. It does not establish exact neurons, complete circuits, 40-Element component causality, raw CAS-symbol understanding, free-form generation control, or cross-model component generality.",
+  "component_path_contract": {
+    "expected_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "formal_gate_valid": true,
+    "stage26_file": "stage26_component_attribution_20260521.json",
+    "stage26_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "stage26_sha256": "24a902785769d1a89326738d0a39167f2155eb80f1bdd41a425d3a53542dc800",
+    "stage26_status": "PASS_BOUNDED_COMPONENT_ATTRIBUTION",
+    "stage27a_file": "stage27_component_path_patching_20260521.json",
+    "stage27a_selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "stage27a_sha256": "b945b417d2970466abfd8f9ab5d42680f260122aac21883918e0266cf948ea65",
+    "stage27a_status": "PASS_BOUNDED_COMPONENT_PATH_PATCHING"
+  },
+  "device": "cuda",
+  "elapsed_seconds": 1476.157913679257,
+  "eval_rows": 512,
+  "gates": {
+    "max_control_p": 0.05,
+    "min_mean_margin": 0.0,
+    "min_positive_share": 0.55,
+    "min_readable_rate": 0.5
+  },
+  "input_file": "stage7_foundation_pilot_20260517.jsonl",
+  "input_sha256": "3e4a1aca9f168a190116578b0b4fdb5bab633232ba06902039b233e589121250",
+  "locked_readout": {
+    "layer": 6,
+    "readout_key": "X_focus",
+    "readout_name": "focus_token"
+  },
+  "matched_component_control": {
+    "actual": 0.0037376467573320875,
+    "empirical_p_random_ge_actual": 0.03225806451612903,
+    "n_random": 30,
+    "random_mean": -1.3108949340788727e-05,
+    "random_mean_margins": [
+      0.00028553222824593654,
+      0.00013593742821919416,
+      -0.0004554479012956286,
+      0.0001664486893319472,
+      -0.00028329854437444035,
+      -9.995346172064751e-05,
+      -1.1376066509286828e-05,
+      0.00028553222824593654,
+      -1.1376066509286828e-05,
+      0.0001664486893319472,
+      -0.00028591860386166073,
+      -0.00040415123600615977,
+      -0.00040415123600615977,
+      0.00028553222824593654,
+      0.0005296820063895128,
+      -0.00040415123600615977,
+      0.0002592657961632363,
+      -0.0004554479012956286,
+      0.00010972918870059499,
+      0.0001664486893319472,
+      -1.1376066509286828e-05,
+      0.0001664486893319472,
+      0.0001664486893319472,
+      -0.00040415123600615977,
+      0.0005296820063895128,
+      0.0002592657961632363,
+      0.0001664486893319472,
+      -0.0004554479012956286,
+      -9.995346172064751e-05,
+      -0.00028591860386166073
+    ],
+    "random_p95": 0.00041981460622490276,
+    "random_patch_sets": [
+      [
+        "L5H2",
+        "L5H7",
+        "L5H8",
+        "L5H9",
+        "L1H4",
+        "L5H1"
+      ],
+      [
+        "L5H8",
+        "L5H4",
+        "L5H1",
+        "L5H7",
+        "L1H7",
+        "L5H11"
+      ],
+      [
+        "L5H9",
+        "L5H1",
+        "L5H11",
+        "L5H2",
+        "L1H1",
+        "L5H4"
+      ],
+      [
+        "L5H2",
+        "L5H4",
+        "L5H7",
+        "L5H1",
+        "L1H9",
+        "L5H8"
+      ],
+      [
+        "L5H2",
+        "L5H1",
+        "L5H7",
+        "L5H9",
+        "L1H3",
+        "L5H11"
+      ],
+      [
+        "L5H2",
+        "L5H11",
+        "L5H1",
+        "L5H7",
+        "L1H4",
+        "L5H8"
+      ],
+      [
+        "L5H9",
+        "L5H4",
+        "L5H7",
+        "L5H1",
+        "L1H2",
+        "L5H2"
+      ],
+      [
+        "L5H8",
+        "L5H2",
+        "L5H9",
+        "L5H7",
+        "L1H10",
+        "L5H1"
+      ],
+      [
+        "L5H1",
+        "L5H2",
+        "L5H4",
+        "L5H7",
+        "L1H1",
+        "L5H9"
+      ],
+      [
+        "L5H2",
+        "L5H4",
+        "L5H7",
+        "L5H1",
+        "L1H3",
+        "L5H8"
+      ],
+      [
+        "L5H1",
+        "L5H8",
+        "L5H11",
+        "L5H2",
+        "L1H3",
+        "L5H4"
+      ],
+      [
+        "L5H2",
+        "L5H11",
+        "L5H1",
+        "L5H4",
+        "L1H4",
+        "L5H7"
+      ],
+      [
+        "L5H11",
+        "L5H4",
+        "L5H2",
+        "L5H1",
+        "L1H3",
+        "L5H7"
+      ],
+      [
+        "L5H7",
+        "L5H1",
+        "L5H8",
+        "L5H9",
+        "L1H7",
+        "L5H2"
+      ],
+      [
+        "L5H8",
+        "L5H1",
+        "L5H9",
+        "L5H7",
+        "L1H4",
+        "L5H4"
+      ],
+      [
+        "L5H2",
+        "L5H7",
+        "L5H4",
+        "L5H11",
+        "L1H4",
+        "L5H1"
+      ],
+      [
+        "L5H7",
+        "L5H9",
+        "L5H8",
+        "L5H11",
+        "L1H11",
+        "L5H1"
+      ],
+      [
+        "L5H2",
+        "L5H1",
+        "L5H11",
+        "L5H9",
+        "L1H5",
+        "L5H4"
+      ],
+      [
+        "L5H8",
+        "L5H1",
+        "L5H2",
+        "L5H9",
+        "L1H9",
+        "L5H4"
+      ],
+      [
+        "L5H2",
+        "L5H4",
+        "L5H7",
+        "L5H8",
+        "L1H3",
+        "L5H1"
+      ],
+      [
+        "L5H1",
+        "L5H9",
+        "L5H2",
+        "L5H7",
+        "L1H10",
+        "L5H4"
+      ],
+      [
+        "L5H2",
+        "L5H1",
+        "L5H8",
+        "L5H4",
+        "L1H9",
+        "L5H7"
+      ],
+      [
+        "L5H4",
+        "L5H1",
+        "L5H8",
+        "L5H2",
+        "L1H5",
+        "L5H7"
+      ],
+      [
+        "L5H1",
+        "L5H11",
+        "L5H4",
+        "L5H2",
+        "L1H8",
+        "L5H7"
+      ],
+      [
+        "L5H8",
+        "L5H4",
+        "L5H7",
+        "L5H1",
+        "L1H4",
+        "L5H9"
+      ],
+      [
+        "L5H8",
+        "L5H7",
+        "L5H1",
+        "L5H11",
+        "L1H0",
+        "L5H9"
+      ],
+      [
+        "L5H4",
+        "L5H2",
+        "L5H7",
+        "L5H1",
+        "L1H2",
+        "L5H8"
+      ],
+      [
+        "L5H4",
+        "L5H11",
+        "L5H1",
+        "L5H9",
+        "L1H11",
+        "L5H2"
+      ],
+      [
+        "L5H11",
+        "L5H1",
+        "L5H7",
+        "L5H8",
+        "L1H3",
+        "L5H2"
+      ],
+      [
+        "L5H4",
+        "L5H8",
+        "L5H1",
+        "L5H11",
+        "L1H1",
+        "L5H2"
+      ]
+    ]
+  },
+  "model": {
+    "hidden_dim": 768,
+    "model_name": "EleutherAI/pythia-160m",
+    "model_revision": "50f5173d932e8e61f858120bcb800b97af589f46",
+    "model_source": "EleutherAI/pythia-160m",
+    "torch": "2.5.1+cu124",
+    "transformers": "5.8.1",
+    "vocab_size": 50304
+  },
+  "pair_kind_breakdown": {
+    "diff_drive_same_register": {
+      "mean": 0.0009736614096821432,
+      "median": -0.005538860749463026,
+      "n": 316,
+      "positive_share": 0.47151898734177217,
+      "std": 0.08909575284905516
+    },
+    "same_drive_diff_register": {
+      "mean": 0.008193868032114651,
+      "median": -0.00524376108872579,
+      "n": 196,
+      "positive_share": 0.4489795918367347,
+      "std": 0.0686189547905299
+    }
+  },
+  "probe": {
+    "raw_test_acc": 0.7857142857142857,
+    "raw_train_acc": 1.0,
+    "raw_val_acc": 0.9985119047619048
+  },
+  "sample_rows": [
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F5A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_system_process_F6A",
+      "selected_margin": -0.23799164050236277,
+      "target": "F6A"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F5A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_concrete_human_F6A",
+      "selected_margin": -0.20838437058455395,
+      "target": "F6A"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F5A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_role_inverse_minimal_F6A",
+      "selected_margin": -0.19124504241866214,
+      "target": "F6A"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F5A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F5A_F6A_long_embedded_clause_F6A",
+      "selected_margin": -0.18623175662681513,
+      "target": "F6A"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F1A",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_A_F1A_F2A_counter_alias_hard_negative_F2A",
+      "selected_margin": -0.18112274594614064,
+      "target": "F2A"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F6T",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F6T_F7T_no_alias_plain_F7T",
+      "selected_margin": 0.27683161271124845,
+      "target": "F7T"
+    },
+    {
+      "pair_kind": "same_drive_diff_register",
+      "partner": "F7f",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_drive_register_f_E_F7f_F7E_role_inverse_minimal_F7E",
+      "selected_margin": 0.26606149917006405,
+      "target": "F7E"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F6T",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F6T_F7T_compressed_minimal_F7T",
+      "selected_margin": 0.25386393738699553,
+      "target": "F7T"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F6T",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_T_F6T_F7T_long_embedded_clause_F7T",
+      "selected_margin": 0.24585984220963542,
+      "target": "F7T"
+    },
+    {
+      "pair_kind": "diff_drive_same_register",
+      "partner": "F7f",
+      "sample_id": "stage7_pilot_bundle041_patient_triage_same_register_drive_cycle_f_F7f_F1f_no_alias_plain_F1f",
+      "selected_margin": 0.23384032902807417,
+      "target": "F1f"
+    }
+  ],
+  "schema_version": "stage27b_component_guided_contrast_sonar.v1",
+  "selected_component_path": {
+    "mean_margin": 0.0037376467573320875,
+    "median_margin": -0.005538860749463026,
+    "positive_share": 0.462890625,
+    "selected_components": [
+      "L5H3",
+      "L5H5",
+      "L5H0",
+      "L5H10",
+      "L1H6",
+      "L5H6"
+    ],
+    "std_margin": 0.08186861706587746
+  },
+  "status": "GREY_COMPONENT_GUIDED_CONTRAST_SONAR_PARTIAL",
+  "token_signature_quality": {
+    "expected_top_tokens": 672,
+    "readable_rate": 1.0,
+    "readable_top_tokens": 672,
+    "short_foundations": []
+  }
+}
