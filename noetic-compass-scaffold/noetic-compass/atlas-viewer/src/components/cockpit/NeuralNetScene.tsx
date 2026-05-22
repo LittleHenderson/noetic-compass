@@ -407,7 +407,13 @@ export function NeuralNetScene({
      * `NeuronCoord` payload because it uses the exact same shape as a real hit.
      */
     let e2eClickAttached = false;
-    if (typeof window !== 'undefined' && window.location?.search?.includes('e2e=1')) {
+    // Strict gate: parse the search string and match `e2e` exactly to '1'.
+    // `.includes('e2e=1')` would also match `?e2eopen=1` or `?xe2e=12`.
+    const e2eFlag =
+      typeof window !== 'undefined'
+        ? new URLSearchParams(window.location?.search ?? '').get('e2e')
+        : null;
+    if (e2eFlag === '1') {
       (window as unknown as {
         __nn_e2e_click?: (layer: number, index: number) => void;
       }).__nn_e2e_click = (layer: number, index: number) => {
@@ -577,7 +583,18 @@ export function NeuralNetScene({
       typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function';
 
     const writeLiveDistance = () => {
-      const dist = camera.position.length();
+      // True orbit distance from the camera to the controls target, NOT
+      // distance from world origin. With OrbitControls target (0, 5, 0)
+      // and Z5 camera at (0, 5, 3), position.length() = √(5²+3²) ≈ 5.83
+      // but distanceTo(target) = 3 — the latter is what the zoom presets
+      // intend to mean.
+      // Fall back to position.length() (distance from world origin) only if
+      // controls is unexpectedly null — keeps the test surface populated even
+      // when OrbitControls failed to construct. distanceTo(target) is the
+      // truth otherwise.
+      const dist = controls
+        ? camera.position.distanceTo(controls.target)
+        : camera.position.length();
       if (wrapper) {
         (wrapper as HTMLDivElement & ZoomTestSurface).__nn_camera_distance = dist;
       }
