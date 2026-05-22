@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 480" width="640" height="480">
+  <!-- Atlas Viewer v0.0 spatial-evidence demo scene -->
+  <!-- A coffee cup sits beside an open book under a sunny window. -->
+
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fef9e7"/>
+      <stop offset="60%" stop-color="#fdf2d8"/>
+      <stop offset="100%" stop-color="#f4e3b8"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#fff7c2" stop-opacity="0.95"/>
+      <stop offset="60%" stop-color="#ffe27a" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#ffe27a" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="tableGradient" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#c9a878"/>
+      <stop offset="100%" stop-color="#8a6a3f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background light gradient -->
+  <rect x="0" y="0" width="640" height="480" fill="url(#bgGradient)"/>
+
+  <!-- Wall behind window -->
+  <rect x="0" y="0" width="640" height="300" fill="#eddca8" opacity="0.35"/>
+
+  <!-- Window frame -->
+  <g id="window">
+    <rect x="380" y="40" width="220" height="220" fill="#b9d8ee" stroke="#3a4a55" stroke-width="6"/>
+    <!-- Sun glow halo -->
+    <circle cx="490" cy="120" r="90" fill="url(#sunGlow)"/>
+    <!-- Sun disc -->
+    <circle cx="490" cy="120" r="38" fill="#ffd34d" stroke="#e09c1e" stroke-width="2"/>
+    <!-- Sun rays -->
+    <g stroke="#e09c1e" stroke-width="3" stroke-linecap="round">
+      <line x1="490" y1="60" x2="490" y2="40"/>
+      <line x1="490" y1="180" x2="490" y2="200"/>
+      <line x1="430" y1="120" x2="410" y2="120"/>
+      <line x1="550" y1="120" x2="570" y2="120"/>
+      <line x1="448" y1="78" x2="434" y2="64"/>
+      <line x1="532" y1="78" x2="546" y2="64"/>
+      <line x1="448" y1="162" x2="434" y2="176"/>
+      <line x1="532" y1="162" x2="546" y2="176"/>
+    </g>
+    <!-- Window mullions -->
+    <line x1="490" y1="40" x2="490" y2="260" stroke="#3a4a55" stroke-width="4"/>
+    <line x1="380" y1="150" x2="600" y2="150" stroke="#3a4a55" stroke-width="4"/>
+    <!-- Window sill -->
+    <rect x="370" y="260" width="240" height="14" fill="#7a5a35"/>
+  </g>
+
+  <!-- Table surface -->
+  <rect x="0" y="320" width="640" height="160" fill="url(#tableGradient)"/>
+  <line x1="0" y1="320" x2="640" y2="320" stroke="#5d4523" stroke-width="3"/>
+
+  <!-- Open book -->
+  <g id="book">
+    <!-- Book shadow -->
+    <ellipse cx="200" cy="408" rx="140" ry="10" fill="#000" opacity="0.18"/>
+    <!-- Left page -->
+    <polygon points="80,360 200,348 200,400 80,408" fill="#fafafa" stroke="#3b3b3b" stroke-width="2"/>
+    <!-- Right page -->
+    <polygon points="200,348 320,360 320,408 200,400" fill="#fafafa" stroke="#3b3b3b" stroke-width="2"/>
+    <!-- Spine crease -->
+    <line x1="200" y1="348" x2="200" y2="400" stroke="#888" stroke-width="2"/>
+    <!-- Text lines left -->
+    <g stroke="#555" stroke-width="1.5" stroke-linecap="round">
+      <line x1="92" y1="368" x2="190" y2="358"/>
+      <line x1="92" y1="376" x2="186" y2="367"/>
+      <line x1="92" y1="384" x2="190" y2="375"/>
+      <line x1="92" y1="392" x2="180" y2="383"/>
+    </g>
+    <!-- Text lines right -->
+    <g stroke="#555" stroke-width="1.5" stroke-linecap="round">
+      <line x1="210" y1="358" x2="308" y2="368"/>
+      <line x1="214" y1="367" x2="308" y2="376"/>
+      <line x1="210" y1="375" x2="308" y2="384"/>
+      <line x1="220" y1="383" x2="308" y2="392"/>
+    </g>
+  </g>
+
+  <!-- Coffee cup -->
+  <g id="coffeeCup">
+    <!-- Cup shadow -->
+    <ellipse cx="470" cy="408" rx="60" ry="8" fill="#000" opacity="0.2"/>
+    <!-- Saucer -->
+    <ellipse cx="470" cy="400" rx="68" ry="10" fill="#e8e2d2" stroke="#7a6a4a" stroke-width="2"/>
+    <!-- Cup body -->
+    <path d="M 425 340 Q 425 395 470 395 Q 515 395 515 340 Z" fill="#ffffff" stroke="#3a3a3a" stroke-width="2.5"/>
+    <!-- Cup rim -->
+    <ellipse cx="470" cy="340" rx="45" ry="9" fill="#f4eede" stroke="#3a3a3a" stroke-width="2"/>
+    <!-- Coffee surface -->
+    <ellipse cx="470" cy="340" rx="40" ry="7" fill="#5b3320"/>
+    <!-- Handle -->
+    <path d="M 515 350 Q 545 355 545 372 Q 545 388 515 388" fill="none" stroke="#3a3a3a" stroke-width="3"/>
+    <!-- Steam -->
+    <g fill="none" stroke="#bcbcbc" stroke-width="2" stroke-linecap="round" opacity="0.7">
+      <path d="M 455 330 Q 450 318 460 308 Q 470 296 460 282"/>
+      <path d="M 475 330 Q 482 316 472 304 Q 462 290 472 278"/>
+      <path d="M 490 330 Q 496 320 488 308 Q 480 296 490 282"/>
+    </g>
+  </g>
+</svg>
