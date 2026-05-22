@@ -407,13 +407,24 @@ export function NeuralNetScene({
      * `NeuronCoord` payload because it uses the exact same shape as a real hit.
      */
     let e2eClickAttached = false;
-    // Strict gate: parse the search string and match `e2e` exactly to '1'.
-    // `.includes('e2e=1')` would also match `?e2eopen=1` or `?xe2e=12`.
+    // Two-layer gate:
+    //   (a) The build must opt in — DEV mode OR a build done with
+    //       VITE_ENABLE_E2E_HOOK=true (e.g. vite build --mode e2e). Production
+    //       builds without that flag never ship the hook into the bundle path.
+    //   (b) The URL must include the strict ?e2e=1 query (exact match via
+    //       URLSearchParams — not .includes(), which would also match
+    //       ?e2eopen=1, ?xe2e=12, etc.).
+    // Belt + suspenders: a leaked preview URL can't activate the hook on a
+    // production build, and a production URL can't activate the hook even if
+    // the build opted in.
+    const e2eHookAllowedByBuild =
+      import.meta.env.DEV ||
+      import.meta.env.VITE_ENABLE_E2E_HOOK === 'true';
     const e2eFlag =
       typeof window !== 'undefined'
         ? new URLSearchParams(window.location?.search ?? '').get('e2e')
         : null;
-    if (e2eFlag === '1') {
+    if (e2eHookAllowedByBuild && e2eFlag === '1') {
       (window as unknown as {
         __nn_e2e_click?: (layer: number, index: number) => void;
       }).__nn_e2e_click = (layer: number, index: number) => {
