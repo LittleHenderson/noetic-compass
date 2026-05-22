@@ -89,7 +89,6 @@ export interface NeuralNetSceneProps {
  * Camera distance + orbit target per zoom preset, per atlas_viewer_neuralnet_scene_design §6.
  * Distance is the camera's distance from the origin along the line through (0, targetY, distance);
  * targetY is the OrbitControls target y (so look-at lines up with the layer plane centerline at y=5).
- * TODO wave 4: tween camera transition between presets instead of hard-setting position.
  */
 export const ZOOM_DISTANCE_PRESETS: ReadonlyArray<{
   level: ZoomLevelValue;
@@ -103,6 +102,13 @@ export const ZOOM_DISTANCE_PRESETS: ReadonlyArray<{
   { level: 4, distance: 5, targetY: 5 }, // Z4 Sparse cover cluster
   { level: 5, distance: 3, targetY: 5 }, // Z5 Individual neuron
 ];
+
+const ZOOM_TWEEN_DURATION_MS = 250;
+
+function easeOutCubic(t: number): number {
+  const u = 1 - t;
+  return 1 - u * u * u;
+}
 
 const GRID_COLS = 64;
 const GRID_ROWS = 48;
@@ -163,6 +169,7 @@ export function NeuralNetScene({
   const layerMeshesRef = useRef<InstancedMesh[]>([]);
   const planeMeshesRef = useRef<Mesh[]>([]);
   const rafRef = useRef<number | null>(null);
+  const zoomTweenRafRef = useRef<number | null>(null);
   const raycasterRef = useRef<MinimalRaycaster | null>(null);
   const onHoverRef = useRef(onNeuronHover);
   const onClickRef = useRef(onNeuronClick);
@@ -222,8 +229,10 @@ export function NeuralNetScene({
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
-    controls.minDistance = 4;
-    controls.maxDistance = 120;
+    // minDistance must be <= Z5 preset distance (3) so OrbitControls does not
+    // silently clamp the camera back toward 4 after controls.update().
+    controls.minDistance = 3;
+    controls.maxDistance = 50;
     controls.target.set(0, 0, 0);
 
     const planeWidth = GRID_COLS * NEURON_SPACING + PLANE_PADDING;
@@ -383,9 +392,45 @@ export function NeuralNetScene({
       tick();
     }
 
+    /**
+     * E2E click hook — Playwright-driven smoke contract.
+     *
+     * Contract: `window.__nn_e2e_click(layer: number, index: number): void`
+     * Behavior: synthesizes a `NeuronCoord` `{ layer, index, label: 'L<layer>N<index>' }`
+     * and invokes the `onNeuronClick` prop callback (same path the real raycaster
+     * would take on a click hit). Detached on unmount.
+     *
+     * Security: gated by `window.location.search` containing `e2e=1`. Production
+     * builds without the flag never expose this surface — no privilege escalation,
+     * no input is taken from the global beyond two numeric coordinates, and the
+     * synthesized coord cannot bypass any consumer-side validation of the
+     * `NeuronCoord` payload because it uses the exact same shape as a real hit.
+     */
+    let e2eClickAttached = false;
+    if (typeof window !== 'undefined' && window.location?.search?.includes('e2e=1')) {
+      (window as unknown as {
+        __nn_e2e_click?: (layer: number, index: number) => void;
+      }).__nn_e2e_click = (layer: number, index: number) => {
+        const coord: NeuronCoord = {
+          layer,
+          index,
+          label: buildLabel(layer, index),
+        };
+        onClickRef.current?.(coord);
+      };
+      e2eClickAttached = true;
+    }
+
     return () => {
       if (rafRef.current != null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
+      if (zoomTweenRafRef.current != null) {
+        cancelAnimationFrame(zoomTweenRafRef.current);
+        zoomTweenRafRef.current = null;
+      }
+      if (e2eClickAttached && typeof window !== 'undefined') {
+        delete (window as unknown as { __nn_e2e_click?: unknown }).__nn_e2e_click;
+      }
       ro.disconnect();
       renderer.domElement.removeEventListener('pointermove', onPointerMove);
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
@@ -479,12 +524,12 @@ export function NeuralNetScene({
     if (renderer && scene && camera) renderer.render(scene, camera);
   }, [mounted, currentFrame, selectedNeuron, blindspotCoords, activeTraceCoords]);
 
-  // Apply the zoom preset camera position + OrbitControls target.
-  // v0: hard-set position along (0, targetY, distance); look-at the (0, targetY, 0)
-  // target. Existing raycaster, hover, click, blindspot, and active-trace overlays
-  // are preserved — zoom is additive.
-  // TODO wave 4: tween camera transition between presets (lerp position + target
-  // over ~250ms) for a less jarring feel; today's hard-set is fine for v0.
+  // Apply the zoom preset by tweening camera position + OrbitControls target
+  // from the current camera state to the preset's (0, targetY, distance) over
+  // ~250ms (ease-out cubic). Any in-flight tween is cancelled when a new
+  // zoomLevel arrives, so successive preset changes never compound or overlap.
+  // Existing raycaster, hover, click, blindspot, and active-trace overlays are
+  // preserved — zoom is additive.
   useEffect(() => {
     if (!mounted) return;
     const camera = cameraRef.current;
@@ -493,30 +538,114 @@ export function NeuralNetScene({
     const preset =
       ZOOM_DISTANCE_PRESETS.find((p) => p.level === zoomLevel) ??
       ZOOM_DISTANCE_PRESETS[0];
-    camera.position.set(0, preset.targetY, preset.distance);
-    camera.lookAt(0, preset.targetY, 0);
-    if (controls) {
-      controls.target.set(0, preset.targetY, 0);
-      controls.update();
-    }
 
-    // Expose camera distance via test-only window prop and on the wrapper's
-    // test surface so test harnesses can assert preset application without a
-    // working WebGL projection.
+    const startPosX = camera.position.x;
+    const startPosY = camera.position.y;
+    const startPosZ = camera.position.z;
+    const startTargetX = controls?.target.x ?? 0;
+    const startTargetY = controls?.target.y ?? 0;
+    const startTargetZ = controls?.target.z ?? 0;
+    const endPosX = 0;
+    const endPosY = preset.targetY;
+    const endPosZ = preset.distance;
+    const endTargetX = 0;
+    const endTargetY = preset.targetY;
+    const endTargetZ = 0;
+
     const wrapper = wrapperRef.current;
+    type ZoomTestSurface = {
+      __nn_camera_distance?: number;
+      __nn_target_camera_distance?: number;
+    };
     if (wrapper) {
-      type ZoomTestSurface = { __nn_camera_distance?: number };
-      (wrapper as HTMLDivElement & ZoomTestSurface).__nn_camera_distance =
+      (wrapper as HTMLDivElement & ZoomTestSurface).__nn_target_camera_distance =
         preset.distance;
     }
     if (typeof window !== 'undefined') {
-      (window as unknown as { __nn_camera_distance?: number }).__nn_camera_distance =
+      (window as unknown as ZoomTestSurface).__nn_target_camera_distance =
         preset.distance;
     }
 
-    const renderer = rendererRef.current;
-    const scene = sceneRef.current;
-    if (renderer && scene) renderer.render(scene, camera);
+    // Cancel any in-flight zoom tween before starting a new one; prevents
+    // overlapping rAF loops from fighting over camera.position each frame.
+    if (zoomTweenRafRef.current != null) {
+      cancelAnimationFrame(zoomTweenRafRef.current);
+      zoomTweenRafRef.current = null;
+    }
+
+    const hasRaf =
+      typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function';
+
+    const writeLiveDistance = () => {
+      const dist = camera.position.length();
+      if (wrapper) {
+        (wrapper as HTMLDivElement & ZoomTestSurface).__nn_camera_distance = dist;
+      }
+      if (typeof window !== 'undefined') {
+        (window as unknown as ZoomTestSurface).__nn_camera_distance = dist;
+      }
+    };
+
+    if (!hasRaf) {
+      camera.position.set(endPosX, endPosY, endPosZ);
+      camera.lookAt(endTargetX, endTargetY, endTargetZ);
+      if (controls) {
+        controls.target.set(endTargetX, endTargetY, endTargetZ);
+        controls.update();
+      }
+      writeLiveDistance();
+      const renderer = rendererRef.current;
+      const scene = sceneRef.current;
+      if (renderer && scene) renderer.render(scene, camera);
+      return;
+    }
+
+    const startTime =
+      typeof performance !== 'undefined' && typeof performance.now === 'function'
+        ? performance.now()
+        : Date.now();
+
+    const step = (nowArg?: number) => {
+      const now =
+        typeof nowArg === 'number'
+          ? nowArg
+          : typeof performance !== 'undefined' && typeof performance.now === 'function'
+            ? performance.now()
+            : Date.now();
+      const elapsed = now - startTime;
+      const tRaw = Math.min(1, Math.max(0, elapsed / ZOOM_TWEEN_DURATION_MS));
+      const t = easeOutCubic(tRaw);
+      camera.position.set(
+        startPosX + (endPosX - startPosX) * t,
+        startPosY + (endPosY - startPosY) * t,
+        startPosZ + (endPosZ - startPosZ) * t,
+      );
+      if (controls) {
+        controls.target.set(
+          startTargetX + (endTargetX - startTargetX) * t,
+          startTargetY + (endTargetY - startTargetY) * t,
+          startTargetZ + (endTargetZ - startTargetZ) * t,
+        );
+        controls.update();
+      } else {
+        camera.lookAt(
+          startTargetX + (endTargetX - startTargetX) * t,
+          startTargetY + (endTargetY - startTargetY) * t,
+          startTargetZ + (endTargetZ - startTargetZ) * t,
+        );
+      }
+      writeLiveDistance();
+      const renderer = rendererRef.current;
+      const scene = sceneRef.current;
+      if (renderer && scene) renderer.render(scene, camera);
+      if (tRaw < 1) {
+        zoomTweenRafRef.current = window.requestAnimationFrame(step);
+      } else {
+        zoomTweenRafRef.current = null;
+      }
+    };
+
+    zoomTweenRafRef.current = window.requestAnimationFrame(step);
   }, [mounted, zoomLevel]);
 
   const containerStyle: CSSProperties = {
