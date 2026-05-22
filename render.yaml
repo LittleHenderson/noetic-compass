@@ -1,7 +1,14 @@
-# Render Blueprint - Noetic Compass API
+# Render Blueprint - Noetic Compass platform
 #
 # Render's Blueprint flow looks for this file at the Git repo root by default.
-# The actual FastAPI app lives in noetic-compass-scaffold/noetic-compass.
+# Two services:
+#   - noetic-compass-api  (existing, Docker, FastAPI + cas-engine Rust crate)
+#     Shared backend for noeticcompass.com AND the Atlas Viewer alpha. The
+#     visual_grounding router is already registered in api/main.py; Atlas
+#     Viewer calls it via /atlas/visual-grounding/{trace_id}.
+#   - atlas-viewer-app  (new, static Vite + React build)
+#     Alpha preview at atlas.noeticcompass.com. Calls api.noeticcompass.com
+#     via VITE_ATLAS_API_BASE_URL. noindex'd until legal/IP review.
 
 services:
   - type: web
@@ -24,8 +31,11 @@ services:
         value: enterprise
       - key: NC_RATE_LIMIT_RPM
         value: "120"
+      # NC_CORS_ORIGINS — explicit allowlist. atlas.noeticcompass.com added
+      # for the Atlas Viewer alpha (the regex below already permits it as
+      # *.noeticcompass.com, but explicit > implicit for production CORS).
       - key: NC_CORS_ORIGINS
-        value: https://noeticcompass.com,https://www.noeticcompass.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
+        value: https://noeticcompass.com,https://www.noeticcompass.com,https://atlas.noeticcompass.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
       - key: NC_CORS_ORIGIN_REGEX
         value: 'https://(.*\.)?noeticcompass\.com|https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?|http://127\.0\.0\.1(:\d+)?'
       - key: NC_DATABASE_URL
@@ -46,3 +56,26 @@ services:
         sync: false
       - key: NC_QWEN_API_KEY
         sync: false
+
+  # Atlas Viewer alpha — static Vite + React SPA served at
+  # atlas.noeticcompass.com. Calls into the shared noetic-compass-api
+  # backend above via VITE_ATLAS_API_BASE_URL. Custom domain attached via
+  # the Render dashboard (CNAME -> <service>.onrender.com). Production
+  # build (`npm run build`) — does NOT include the ?e2e=1 hook bytes.
+  - type: static
+    name: atlas-viewer-app
+    plan: free
+    branch: experiment/cas-probe-pythia
+    rootDir: noetic-compass-scaffold/noetic-compass/atlas-viewer
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    autoDeployTrigger: commit
+    envVars:
+      - key: VITE_ATLAS_API_BASE_URL
+        value: https://api.noeticcompass.com/atlas
+    routes:
+      # SPA fallback — every unmatched path (including /cockpit) serves
+      # index.html so React Router takes over client-side.
+      - type: rewrite
+        source: /*
+        destination: /index.html

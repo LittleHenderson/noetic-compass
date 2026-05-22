@@ -42,8 +42,17 @@ class Settings(BaseSettings):
     deepseek_api_key: str = Field(default="", validation_alias=AliasChoices("NC_DEEPSEEK_API_KEY", "DEEPSEEK_API_KEY"))
     qwen_api_key: str = Field(default="", validation_alias=AliasChoices("NC_QWEN_API_KEY", "QWEN_API_KEY"))
 
-    # CORS — comma-separated origins, "*" for dev (default)
-    cors_origins: str = "*"
+    # CORS — comma-separated origins, "*" for dev (default).
+    # Documented env name: ``ATLAS_ALLOWED_ORIGINS`` (canonical going forward).
+    # Legacy alias ``NC_CORS_ORIGINS`` retained for backward compatibility.
+    # Format: comma-separated list of fully-qualified origins, e.g.
+    #   ATLAS_ALLOWED_ORIGINS=https://atlas.noeticcompass.com,http://localhost:5173
+    # Atlas cockpit (atlas.noeticcompass.com) → atlas-api.noeticcompass.com
+    # cross-subdomain preflight requires the cockpit origin be listed here.
+    cors_origins: str = Field(
+        default="*",
+        validation_alias=AliasChoices("ATLAS_ALLOWED_ORIGINS", "NC_CORS_ORIGINS"),
+    )
     # CORS regex — matches any Vercel deployment alias + localhost by default
     cors_origin_regex: str = r"https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?"
 

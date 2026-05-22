@@ -2,6 +2,19 @@ import type { SpatialEvidenceArtifact } from './visualPrimitives';
 import { loadSpatialEvidenceArtifact } from './visualPrimitives';
 
 export interface VisualGroundingApiOptions {
+  /**
+   * Base URL for the Atlas backend API.
+   *
+   * Resolution order (highest priority first):
+   *   1. Explicit `options.baseUrl` passed at call site.
+   *   2. `import.meta.env.VITE_ATLAS_API_BASE_URL` (build-time env var; used in
+   *      production where the frontend is served from a different origin than
+   *      the backend, e.g. atlas.noeticcompass.com → atlas-api.noeticcompass.com).
+   *   3. `'/api/atlas'` fallback (used by `vite dev` via the Vite proxy and as
+   *      the same-origin default).
+   *
+   * Trailing slashes are stripped.
+   */
   baseUrl?: string;
   fixtureLoader?: () => Promise<SpatialEvidenceArtifact | null>;
   fetchImpl?: typeof fetch;
@@ -9,6 +22,17 @@ export interface VisualGroundingApiOptions {
 }
 
 const DEFAULT_BASE_URL = '/api/atlas';
+
+function resolveBaseUrl(explicit: string | undefined): string {
+  if (typeof explicit === 'string' && explicit.length > 0) {
+    return explicit;
+  }
+  const envBase = import.meta.env?.VITE_ATLAS_API_BASE_URL;
+  if (typeof envBase === 'string' && envBase.length > 0) {
+    return envBase;
+  }
+  return DEFAULT_BASE_URL;
+}
 
 function trimTrailingSlash(url: string): string {
   return url.endsWith('/') ? url.slice(0, -1) : url;
@@ -36,7 +60,7 @@ export async function fetchSpatialEvidence(
     throw new Error('fetchSpatialEvidence: traceId must be a non-empty string');
   }
 
-  const baseUrl = trimTrailingSlash(options?.baseUrl ?? DEFAULT_BASE_URL);
+  const baseUrl = trimTrailingSlash(resolveBaseUrl(options?.baseUrl));
   const fetchImpl = options?.fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
   if (!fetchImpl) {
     return runFixtureFallback(options?.fixtureLoader, 'fetch is not available in this runtime');

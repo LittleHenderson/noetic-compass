@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import type { SpatialEvidenceArtifact } from './visualPrimitives';
 import {
@@ -60,6 +60,35 @@ describe('fetchSpatialEvidence', () => {
     });
     const [url] = fetchImpl.mock.calls[0];
     expect(url).toBe('https://atlas.example.com/api/atlas/visual-grounding/unit-trace-001');
+  });
+
+  describe('with VITE_ATLAS_API_BASE_URL stubbed', () => {
+    afterEach(() => {
+      vi.unstubAllEnvs();
+    });
+
+    it('uses VITE_ATLAS_API_BASE_URL when no explicit baseUrl is passed', async () => {
+      vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://atlas-api.noeticcompass.com');
+      const fetchImpl = vi.fn(async () => jsonResponse(VALID_ARTIFACT));
+      await fetchSpatialEvidence('unit-trace-001', { fetchImpl });
+      const [url] = fetchImpl.mock.calls[0];
+      expect(url).toBe(
+        'https://atlas-api.noeticcompass.com/visual-grounding/unit-trace-001',
+      );
+    });
+
+    it('options.baseUrl takes precedence over VITE_ATLAS_API_BASE_URL', async () => {
+      vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://atlas-api.noeticcompass.com');
+      const fetchImpl = vi.fn(async () => jsonResponse(VALID_ARTIFACT));
+      await fetchSpatialEvidence('unit-trace-001', {
+        fetchImpl,
+        baseUrl: 'https://override.example.com/api/atlas',
+      });
+      const [url] = fetchImpl.mock.calls[0];
+      expect(url).toBe(
+        'https://override.example.com/api/atlas/visual-grounding/unit-trace-001',
+      );
+    });
   });
 
   it('falls back to fixtureLoader on a 404 response', async () => {
