@@ -534,6 +534,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             selectedNeuron={selectedNeuron}
             blindspotCoords={blindspotCoords}
             activeTraceCoords={activeTraceCoords}
+            zoomLevel={zoomLevel}
             onNeuronClick={handleNeuronClick}
           />
         </div>

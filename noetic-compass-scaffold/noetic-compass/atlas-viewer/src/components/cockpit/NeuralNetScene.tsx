@@ -65,18 +65,44 @@ export interface MinimalRaycaster {
   ) => Array<{ object: Object3D; instanceId?: number; distance: number }>;
 }
 
+export type ZoomLevelValue = 0 | 1 | 2 | 3 | 4 | 5;
+
 export interface NeuralNetSceneProps {
   architecture: ModelArchitecture;
   currentFrame?: PerTokenFrame;
   selectedNeuron?: { layer: number; index: number };
   blindspotCoords?: NeuronCoord[];
   activeTraceCoords?: NeuronCoord[];
+  /**
+   * Camera zoom preset Z0..Z5. Mapped to (distance, target) via
+   * ZOOM_DISTANCE_PRESETS per design doc §6. Default Z0 (whole-model wide view).
+   */
+  zoomLevel?: ZoomLevelValue;
   onNeuronHover?: (coord: NeuronCoord | null) => void;
   onNeuronClick?: (coord: NeuronCoord) => void;
   className?: string;
   rendererFactory?: () => MinimalWebGLRenderer;
   raycasterFactory?: () => MinimalRaycaster;
 }
+
+/**
+ * Camera distance + orbit target per zoom preset, per atlas_viewer_neuralnet_scene_design §6.
+ * Distance is the camera's distance from the origin along the line through (0, targetY, distance);
+ * targetY is the OrbitControls target y (so look-at lines up with the layer plane centerline at y=5).
+ * TODO wave 4: tween camera transition between presets instead of hard-setting position.
+ */
+export const ZOOM_DISTANCE_PRESETS: ReadonlyArray<{
+  level: ZoomLevelValue;
+  distance: number;
+  targetY: number;
+}> = [
+  { level: 0, distance: 30, targetY: 5 }, // Z0 Whole model
+  { level: 1, distance: 18, targetY: 5 }, // Z1 Layer
+  { level: 2, distance: 12, targetY: 5 }, // Z2 Attention block
+  { level: 3, distance: 8, targetY: 5 }, // Z3 Component group
+  { level: 4, distance: 5, targetY: 5 }, // Z4 Sparse cover cluster
+  { level: 5, distance: 3, targetY: 5 }, // Z5 Individual neuron
+];
 
 const GRID_COLS = 64;
 const GRID_ROWS = 48;
@@ -122,6 +148,7 @@ export function NeuralNetScene({
   selectedNeuron,
   blindspotCoords,
   activeTraceCoords,
+  zoomLevel = 0,
   onNeuronHover,
   onNeuronClick,
   className,
@@ -451,6 +478,46 @@ export function NeuralNetScene({
     const camera = cameraRef.current;
     if (renderer && scene && camera) renderer.render(scene, camera);
   }, [mounted, currentFrame, selectedNeuron, blindspotCoords, activeTraceCoords]);
+
+  // Apply the zoom preset camera position + OrbitControls target.
+  // v0: hard-set position along (0, targetY, distance); look-at the (0, targetY, 0)
+  // target. Existing raycaster, hover, click, blindspot, and active-trace overlays
+  // are preserved — zoom is additive.
+  // TODO wave 4: tween camera transition between presets (lerp position + target
+  // over ~250ms) for a less jarring feel; today's hard-set is fine for v0.
+  useEffect(() => {
+    if (!mounted) return;
+    const camera = cameraRef.current;
+    const controls = controlsRef.current;
+    if (!camera) return;
+    const preset =
+      ZOOM_DISTANCE_PRESETS.find((p) => p.level === zoomLevel) ??
+      ZOOM_DISTANCE_PRESETS[0];
+    camera.position.set(0, preset.targetY, preset.distance);
+    camera.lookAt(0, preset.targetY, 0);
+    if (controls) {
+      controls.target.set(0, preset.targetY, 0);
+      controls.update();
+    }
+
+    // Expose camera distance via test-only window prop and on the wrapper's
+    // test surface so test harnesses can assert preset application without a
+    // working WebGL projection.
+    const wrapper = wrapperRef.current;
+    if (wrapper) {
+      type ZoomTestSurface = { __nn_camera_distance?: number };
+      (wrapper as HTMLDivElement & ZoomTestSurface).__nn_camera_distance =
+        preset.distance;
+    }
+    if (typeof window !== 'undefined') {
+      (window as unknown as { __nn_camera_distance?: number }).__nn_camera_distance =
+        preset.distance;
+    }
+
+    const renderer = rendererRef.current;
+    const scene = sceneRef.current;
+    if (renderer && scene) renderer.render(scene, camera);
+  }, [mounted, zoomLevel]);
 
   const containerStyle: CSSProperties = {
     width: '100%',

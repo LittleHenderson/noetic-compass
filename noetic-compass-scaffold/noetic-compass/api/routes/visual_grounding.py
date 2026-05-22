@@ -11,8 +11,9 @@ with a DB-backed lookup at v0.1+ when user-uploaded artifacts ship.
 
 Registered in ``api/main.py`` alongside the other route modules. The
 artifact's ``image_url`` is a base64 data URL produced at module load
-from the colocated demo SVG (see ``_load_demo_image_data_url``); see the
-docstring there for the deployment-time caveat.
+from the colocated demo SVG (``_visual_grounding_demo.svg`` next to this
+module); see ``_load_demo_image_data_url`` for the regen note tying that
+copy to the canonical frontend fixture.
 """
 
 from __future__ import annotations
@@ -29,28 +30,40 @@ router = APIRouter(prefix="/atlas", tags=["atlas_visual_grounding"])
 
 
 def _load_demo_image_data_url() -> str:
-    """Read the demo SVG fixture and return it as a data: URL.
+    """Read the colocated demo SVG fixture and return it as a data: URL.
 
     The atlas-viewer client expects an ``image_url`` field that resolves in an
     <img> tag. Returning a relative path like ``/fixtures/...`` requires a
     matching static mount that we don't ship at v0.0; embedding the SVG as a
     data URL avoids the path-mismatch and works regardless of whether the
     client calls this route from the cockpit, the standalone API, or a test.
-    The SVG is ~3 KB so the inline payload cost is trivial.
+    The SVG is ~5 KB so the inline payload cost is trivial.
+
+    The SVG lives next to this module as ``_visual_grounding_demo.svg`` (the
+    leading underscore marks it as a private route asset). The backend is
+    therefore self-contained: it no longer depends on the ``atlas-viewer/``
+    frontend source tree being present at runtime, which matters when the
+    API is packaged into a backend-only container or deployed separately
+    from the frontend.
+
+    Regen note: the canonical fixture for the frontend Vite ``?url`` import
+    still lives at ``atlas-viewer/src/fixtures/visualGroundingDemoImage.svg``.
+    If that canonical asset changes, the colocated copy here must be updated
+    in lockstep (a future ``tools/sync_atlas_demo_assets.py`` helper is the
+    intended place for that sync; it is not yet created).
+
+    Failure mode: if the colocated file cannot be read (e.g. filesystem
+    permission error, missing copy after a partial deploy), raise
+    ``RuntimeError`` at module load. Failing loud is preferred over serving
+    an unservable relative-path fallback.
     """
-    svg_path = (
-        Path(__file__).resolve().parent.parent.parent
-        / "atlas-viewer"
-        / "src"
-        / "fixtures"
-        / "visualGroundingDemoImage.svg"
-    )
+    svg_path = Path(__file__).resolve().parent / "_visual_grounding_demo.svg"
     try:
         svg_bytes = svg_path.read_bytes()
-    except OSError:
-        # Fall back to a relative path; the cockpit's loadFixtures.ts injects
-        # the bundled URL anyway, so this only affects standalone API consumers.
-        return "/fixtures/visualGroundingDemoImage.svg"
+    except OSError as exc:  # pragma: no cover - deployment-time integrity check
+        raise RuntimeError(
+            f"atlas visual-grounding demo SVG missing or unreadable at {svg_path}: {exc}"
+        ) from exc
     encoded = base64.b64encode(svg_bytes).decode("ascii")
     return f"data:image/svg+xml;base64,{encoded}"
 

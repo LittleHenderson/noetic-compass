@@ -257,6 +257,30 @@ describe('NeuralNetScene — hover & click', () => {
   });
 });
 
+describe('NeuralNetScene — zoom presets', () => {
+  it('applies zoomLevel preset camera distance', () => {
+    const { container } = render(
+      <NeuralNetScene
+        architecture={PYTHIA_160M_PRESET}
+        zoomLevel={3}
+        rendererFactory={makeRendererStub}
+        raycasterFactory={() => makeRaycasterStub()}
+      />,
+    );
+    const wrapper = container.querySelector(
+      '[data-testid="neuralnet-scene"]',
+    ) as
+      | (HTMLElement & TestSurface & { __nn_camera_distance?: number })
+      | null;
+    expect(wrapper).not.toBeNull();
+    // Z3 (component group) preset = distance 8 per design doc §6.
+    expect(wrapper!.__nn_camera_distance).toBeDefined();
+    expect(Math.abs((wrapper!.__nn_camera_distance ?? 0) - 8)).toBeLessThanOrEqual(
+      0.5,
+    );
+  });
+});
+
 describe('NeuralNetScene — frame updates', () => {
   it('accepts a currentFrame prop update without throwing', () => {
     const frame: PerTokenFrame = {

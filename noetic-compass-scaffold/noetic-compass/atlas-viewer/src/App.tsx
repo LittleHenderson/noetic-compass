@@ -1,9 +1,13 @@
+import { lazy, Suspense } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import LoginPage from './pages/LoginPage';
 import LicensePage from './pages/LicensePage';
 import ModelConfigPage from './pages/ModelConfigPage';
-import CockpitPage from './pages/CockpitPage';
+
+// CockpitPage pulls in Three.js (~500 KB). Lazy-load it so the initial bundle
+// stays small for the eager Login / License / ModelConfig routes.
+const CockpitPage = lazy(() => import('./pages/CockpitPage'));
 
 function AuthGate({ children }: { children: ReactNode }) {
   return <>{children}</>;
@@ -34,7 +38,9 @@ export default function App() {
         path="/cockpit"
         element={
           <AuthGate>
-            <CockpitPage />
+            <Suspense fallback={<div>Loading cockpit…</div>}>
+              <CockpitPage />
+            </Suspense>
           </AuthGate>
         }
       />

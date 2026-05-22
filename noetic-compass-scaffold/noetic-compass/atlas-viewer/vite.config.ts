@@ -24,10 +24,41 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    chunkSizeWarningLimit: 350,
+    rollupOptions: {
+      output: {
+        // Manual chunk splitting: isolate Three.js (heavy, only needed on the
+        // cockpit route) and React vendor libs so the initial main bundle
+        // stays small. All other modules fall back to rollup's default
+        // chunking strategy.
+        manualChunks: (id: string): string | undefined => {
+          if (
+            /[\\/]node_modules[\\/]three[\\/]/.test(id) ||
+            /[\\/]node_modules[\\/]three-stdlib[\\/]/.test(id) ||
+            /three[\\/]examples[\\/]jsm[\\/]/.test(id)
+          ) {
+            return 'three';
+          }
+          if (
+            /[\\/]node_modules[\\/]react-dom[\\/]/.test(id) ||
+            /[\\/]node_modules[\\/]react-router-dom[\\/]/.test(id) ||
+            /[\\/]node_modules[\\/]react[\\/]/.test(id)
+          ) {
+            return 'react-vendor';
+          }
+          return undefined;
+        },
+      },
+    },
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./vitest.setup.ts'],
     globals: true,
     css: false,
+    // Exclude Playwright E2E specs; they have a different `test` import surface
+    // (@playwright/test) and run via `npm run test:e2e`, not vitest.
+    exclude: ['node_modules', 'dist', 'e2e/**', 'test-results/**', 'playwright-report/**'],
   },
 });
