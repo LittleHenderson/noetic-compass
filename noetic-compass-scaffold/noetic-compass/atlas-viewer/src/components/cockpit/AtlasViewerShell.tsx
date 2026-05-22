@@ -32,6 +32,16 @@ import {
   type VisualPrimitive,
 } from '../../lib/visualPrimitives';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
+import { parseCoord } from '../../lib/neuronCover';
+
+interface TraceNeuronCovers {
+  per_class_neuron_covers?: Record<string, string[]>;
+}
+interface TraceWithCovers {
+  neuron_covers?: TraceNeuronCovers;
+}
+
+const BLINDSPOT_DEMO_CLASSES = ['F1A', 'F1T', 'F1f', 'F1E'];
 
 export interface AtlasViewerShellProps {
   trace: ReplayTrace;
@@ -271,6 +281,45 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     [activePrimitives],
   );
 
+  // Active-trace coords for the 3D scene: the current token's high-activation
+  // neurons (above 0.3). Wave 2.1: gated by showActiveTrace.
+  const activeTraceCoords = useMemo<NeuronCoord[] | undefined>(() => {
+    if (!showActiveTrace || !currentFrame) return undefined;
+    return currentFrame.top_activated_neurons
+      .filter((n) => n.activation >= 0.3)
+      .map((n) => ({
+        layer: n.layer,
+        index: n.index,
+        label: `L${n.layer}N${n.index}`,
+      }));
+  }, [showActiveTrace, currentFrame]);
+
+  // Blindspot coords: union of the F1 (Unity) drive eraser-channel covers from
+  // the trace's neuron_covers block (Stage 27F shape). At v0 we surface the
+  // four F1|R covers (A/T/f/E) so the user sees the cross-register footprint
+  // of one drive's blindspot. Wave 3 will let the user pick which drive.
+  const blindspotCoords = useMemo<NeuronCoord[] | undefined>(() => {
+    if (!showBlindspots) return undefined;
+    const covers = (trace as unknown as TraceWithCovers).neuron_covers?.per_class_neuron_covers;
+    if (!covers) return undefined;
+    const seen = new Set<string>();
+    const out: NeuronCoord[] = [];
+    for (const cls of BLINDSPOT_DEMO_CLASSES) {
+      const labels = covers[cls];
+      if (!labels) continue;
+      for (const label of labels) {
+        if (seen.has(label)) continue;
+        seen.add(label);
+        try {
+          out.push(parseCoord(label));
+        } catch {
+          // Skip malformed cover entries; don't crash the scene.
+        }
+      }
+    }
+    return out;
+  }, [showBlindspots, trace]);
+
   // Clear primitive selection when the active step changes so stale highlight
   // state doesn't leak from one step to the next.
   useEffect(() => {
@@ -464,11 +513,14 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
                 style={placeholderCardStyle}
                 data-testid="notation-placeholder"
               >
-                <strong>2D Notation — Coming soon.</strong>
+                <strong>2D Notation — pending wave 3.</strong>
                 <p style={{ margin: '8px 0 0 0' }}>
-                  The CAS notation panel will land in a follow-on round. This
-                  cockpit slot is reserved for the wrapped Notation2DPanel from
-                  the dashboard package.
+                  This slot will render the 169-primitive CAS notation map
+                  (wrapping <code>dashboard/src/lib/notation2DMap</code>). Not
+                  yet wired in v0.0 — the dashboard package lives outside
+                  atlas-viewer's tsconfig include, so the wrap requires either
+                  a published shared package or a vendored copy. Tracked as a
+                  v0.0 → v0.1 follow-up.
                 </p>
               </div>
             )}
@@ -480,6 +532,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             architecture={architecture}
             currentFrame={currentFrame}
             selectedNeuron={selectedNeuron}
+            blindspotCoords={blindspotCoords}
+            activeTraceCoords={activeTraceCoords}
             onNeuronClick={handleNeuronClick}
           />
         </div>
