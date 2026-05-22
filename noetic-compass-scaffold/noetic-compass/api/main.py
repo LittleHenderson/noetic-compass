@@ -38,6 +38,7 @@ from api.routes import (
     reproducibility,
     scenarios,
     validation,
+    visual_grounding,
     wrap,
 )
 
@@ -128,3 +129,4 @@ app.include_router(reproducibility.router)
 app.include_router(idea_atlas.router)
 app.include_router(mode7.router)
 app.include_router(evidence.router)
+app.include_router(visual_grounding.router)
