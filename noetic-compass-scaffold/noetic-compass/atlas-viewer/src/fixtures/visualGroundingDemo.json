@@ -1,0 +1,167 @@
+{
+  "schema_version": "spatial_evidence_v1",
+  "trace_id": "demo-trace-001",
+  "image_id": "demo-image-001",
+  "image_url": "./visualGroundingDemoImage.svg",
+  "image_width": 640,
+  "image_height": 480,
+  "primitives": [
+    {
+      "id": "vp-001",
+      "kind": "box",
+      "image_id": "demo-image-001",
+      "label": "Coffee cup body",
+      "coords_norm": [0.6640625, 0.7083333, 0.1406250, 0.1145833],
+      "coords_px": [425, 340, 90, 55],
+      "cas_axis": "Noetic",
+      "cas_label": "^9^E|E",
+      "confidence": 0.92,
+      "source": "fixture",
+      "evidence_ref": {
+        "packet_id": "demo-packet-001",
+        "row_id": "row-1"
+      },
+      "explanation": "The model noticed a porcelain cup outline on the table and grounded it as an embodied perceptual landing — a visible object brought to Mind."
+    },
+    {
+      "id": "vp-002",
+      "kind": "point",
+      "image_id": "demo-image-001",
+      "label": "Coffee cup handle tip",
+      "coords_norm": [0.8515625, 0.7750000],
+      "coords_px": [545, 372],
+      "cas_axis": "Domain",
+      "cas_label": "^9^O|E",
+      "confidence": 0.81,
+      "source": "fixture",
+      "evidence_ref": {
+        "packet_id": "demo-packet-001",
+        "row_id": "row-2"
+      },
+      "explanation": "The model fixated on the curved handle as an affordance — an operational-domain feature signaling how the cup is grasped."
+    },
+    {
+      "id": "vp-003",
+      "kind": "box",
+      "image_id": "demo-image-001",
+      "label": "Open book on table",
+      "coords_norm": [0.1250000, 0.7250000, 0.3750000, 0.1250000],
+      "coords_px": [80, 348, 240, 60],
+      "cas_axis": "Noetic",
+      "cas_label": "^6^C|E",
+      "confidence": 0.88,
+      "source": "fixture",
+      "evidence_ref": {
+        "packet_id": "demo-packet-001",
+        "row_id": "row-3"
+      },
+      "explanation": "The model recognized the open-book silhouette with twin pages — a compositional object whose internal structure (text lines, spine) is decomposable."
+    },
+    {
+      "id": "vp-004",
+      "kind": "box",
+      "image_id": "demo-image-001",
+      "label": "Window frame with sunlit pane",
+      "coords_norm": [0.5937500, 0.0833333, 0.3437500, 0.4583333],
+      "coords_px": [380, 40, 220, 220],
+      "cas_axis": "Domain",
+      "cas_label": "^0^P|E",
+      "confidence": 0.90,
+      "source": "fixture",
+      "evidence_ref": {
+        "packet_id": "demo-packet-001",
+        "row_id": "row-4"
+      },
+      "explanation": "The model anchored the rectangular window aperture as the dominant scene boundary — a principled-domain frame containing the light source."
+    },
+    {
+      "id": "vp-005",
+      "kind": "point",
+      "image_id": "demo-image-001",
+      "label": "Sun disc center",
+      "coords_norm": [0.7656250, 0.2500000],
+      "coords_px": [490, 120],
+      "cas_axis": "Register",
+      "cas_label": "^4^E|E",
+      "confidence": 0.86,
+      "source": "fixture",
+      "evidence_ref": {
+        "packet_id": "demo-packet-001",
+        "row_id": "row-5"
+      },
+      "explanation": "The model located the bright sun disc at the brightest intensity peak — an embodied resonance with the warmest pixel cluster in the scene."
+    },
+    {
+      "id": "vp-006",
+      "kind": "polyline",
+      "image_id": "demo-image-001",
+      "label": "Rising steam wisp",
+      "coords_norm": [0.7421875, 0.6875000, 0.7187500, 0.6416667, 0.7343750, 0.5833333, 0.7187500, 0.5208333],
+      "coords_px": [475, 330, 460, 308, 470, 280, 460, 250],
+      "cas_axis": "Drive",
+      "cas_label": "F3|E",
+      "confidence": 0.74,
+      "source": "fixture",
+      "evidence_ref": {
+        "packet_id": "demo-packet-001",
+        "row_id": "row-6"
+      },
+      "explanation": "The model traced a vertical wisp rising from the cup rim, reading it as evidence of warmth — vitality-drive in embodied register."
+    },
+    {
+      "id": "vp-007",
+      "kind": "region",
+      "image_id": "demo-image-001",
+      "label": "Open-page region",
+      "coords_norm": [0.1250000, 0.7500000, 0.3125000, 0.7250000, 0.5000000, 0.7500000, 0.5000000, 0.8500000, 0.3125000, 0.8333333, 0.1250000, 0.8500000],
+      "coords_px": [80, 360, 200, 348, 320, 360, 320, 408, 200, 400, 80, 408],
+      "cas_axis": "Noetic",
+      "cas_label": "^5^C|E",
+      "confidence": 0.79,
+      "source": "fixture",
+      "evidence_ref": {
+        "packet_id": "demo-packet-001",
+        "row_id": "row-7"
+      },
+      "explanation": "The model outlined both pages as a single readable surface — a Mind-composed-of-Ideas substrate seen from the outside, registered embodied."
+    }
+  ],
+  "grounded_steps": [
+    {
+      "trace_id": "demo-trace-001",
+      "step_id": "step-001",
+      "token_index": 5,
+      "text_span": "a coffee cup",
+      "cas_state": "^9^E|E",
+      "primitive_ids": ["vp-001", "vp-002"],
+      "evidence_packet_ref": "demo-packet-001"
+    },
+    {
+      "trace_id": "demo-trace-001",
+      "step_id": "step-002",
+      "token_index": 9,
+      "text_span": "an open book",
+      "cas_state": "^6^C|E",
+      "primitive_ids": ["vp-003", "vp-007"],
+      "evidence_packet_ref": "demo-packet-001"
+    },
+    {
+      "trace_id": "demo-trace-001",
+      "step_id": "step-003",
+      "token_index": 13,
+      "text_span": "under a sunny window",
+      "cas_state": "^4^E|E",
+      "primitive_ids": ["vp-004", "vp-005"],
+      "evidence_packet_ref": "demo-packet-001"
+    },
+    {
+      "trace_id": "demo-trace-001",
+      "step_id": "step-004",
+      "token_index": 17,
+      "text_span": "with steam rising",
+      "cas_state": "^8^O|E",
+      "primitive_ids": ["vp-006", "vp-001"],
+      "evidence_packet_ref": "demo-packet-001"
+    }
+  ]
+}
