@@ -9,9 +9,10 @@ v0.0 stub: returns a single in-memory demo artifact for trace_id
 ``demo-trace-001`` only. Any other trace_id resolves to HTTP 404. Replace
 with a DB-backed lookup at v0.1+ when user-uploaded artifacts ship.
 
-This module is intentionally standalone — it is NOT registered in the
-top-level router at v0.0. Parent session wires registration when frontend
-integration lands.
+Registered in ``api/main.py`` alongside the other route modules. The
+artifact's ``image_url`` is a base64 data URL produced at module load
+from the colocated demo SVG (see ``_load_demo_image_data_url``); see the
+docstring there for the deployment-time caveat.
 """
 
 from __future__ import annotations
