@@ -6,9 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Atlas Viewer — private alpha preview. Not for public distribution." />
     <title>Atlas Viewer — Alpha</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" />
+    <!-- Fonts: system-ui first (SF Pro on macOS / iOS, Segoe UI on Windows,
+         Roboto on Android, Cantarell on GNOME). Inter listed as a local
+         fallback for users who already have it installed. No external font
+         CDN — keeps the alpha preview self-contained and avoids third-party
+         tracking + first-paint latency from font requests. Self-host Inter
+         via @fontsource/inter at public-launch time if needed. -->
   </head>
   <body>
     <div id="root"></div>

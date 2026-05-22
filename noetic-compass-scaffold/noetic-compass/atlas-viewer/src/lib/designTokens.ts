@@ -15,8 +15,13 @@ export const STAGGER_CHILDREN = 0.04;
 
 export const ACCENT_BLUE = '#3b82f6';
 
+// system-ui first — picks SF Pro on macOS/iOS (the iOS-native look the
+// liquid-glass aesthetic is matching), Segoe UI Variable on Windows 11,
+// Roboto on Android, Cantarell on GNOME. Inter listed as a local fallback
+// for environments where the user already has it installed. No external
+// font CDN at alpha; self-host Inter via @fontsource/inter at public launch.
 export const FONT_FAMILY =
-  "'Inter', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+  "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI Variable', 'Segoe UI', 'Inter', Roboto, 'Helvetica Neue', Arial, sans-serif";
 
 export const COLORS = {
   textPrimary: '#e5e7eb',
