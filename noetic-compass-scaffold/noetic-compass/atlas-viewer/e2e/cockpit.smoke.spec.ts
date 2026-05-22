@@ -153,7 +153,10 @@ test('click neuron opens EvidenceDrawer', async ({ page }) => {
   const center = page.getByTestId('atlas-viewer-center');
   await expect(center.locator('canvas').first()).toBeVisible();
 
-  // The hook is installed inside a useEffect; allow the e2e gate to evaluate.
+  // The hook is installed inside a useEffect, after the lazy CockpitPage
+  // chunk + Three.js + framer-motion (combined ~600 kB) finish loading and
+  // NeuralNetScene's first render commits. On a cold Render preview that
+  // can take 10+ seconds — bumped from the wave-4 baseline 5 s.
   await expect
     .poll(
       async () =>
@@ -161,7 +164,7 @@ test('click neuron opens EvidenceDrawer', async ({ page }) => {
           () => typeof (window as unknown as { __nn_e2e_click?: unknown }).__nn_e2e_click,
         ),
       {
-        timeout: 5_000,
+        timeout: 15_000,
         message:
           'window.__nn_e2e_click is not defined — NeuralNetScene e2e hook gate may be off. ' +
           'Confirm the cockpit URL contains `e2e=1` and that NeuralNetScene installs the hook ' +

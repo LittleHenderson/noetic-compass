@@ -1,5 +1,13 @@
 import { useState, useCallback } from 'react';
 import type { CSSProperties, ChangeEvent } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { GlassPanel } from '../ui/GlassPanel';
+import {
+  THEME,
+  SPRING_SNAPPY,
+  SPRING_GENTLE,
+  GLASS_PANEL_FILL,
+} from '../../lib/designTokens';
 import type { TestingMethod, KnobDef } from '../../lib/testingMethods';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 
@@ -18,23 +26,31 @@ const panelStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 8,
-  padding: 12,
   fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
   fontSize: 13,
   color: '#e5e7eb',
-  background: '#0f172a',
-  borderRadius: 6,
   minWidth: 320,
 };
 
 const cardStyle = (enabled: boolean): CSSProperties => ({
+  position: 'relative',
   display: 'flex',
   flexDirection: 'column',
-  border: `1px solid ${enabled ? '#1f2937' : '#374151'}`,
-  borderRadius: 6,
-  background: enabled ? '#111827' : '#1f2937',
-  opacity: enabled ? 1 : 0.6,
+  border: `1px solid ${enabled ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)'}`,
+  borderRadius: 10,
+  background: enabled ? GLASS_PANEL_FILL : 'rgba(15, 23, 42, 0.35)',
+  opacity: enabled ? 1 : 0.65,
+  overflow: 'hidden',
 });
+
+const cardSheenStyle: CSSProperties = {
+  position: 'absolute',
+  inset: 0,
+  borderRadius: 10,
+  background:
+    'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 55%)',
+  pointerEvents: 'none',
+};
 
 const headerStyle: CSSProperties = {
   display: 'flex',
@@ -43,6 +59,7 @@ const headerStyle: CSSProperties = {
   padding: 10,
   minHeight: 40,
   flexWrap: 'wrap',
+  position: 'relative',
 };
 
 const nameStyle: CSSProperties = {
@@ -50,25 +67,27 @@ const nameStyle: CSSProperties = {
   flex: '1 1 auto',
 };
 
-const badgeStyle = (background: string): CSSProperties => ({
+const pillStyle = (background: string, fg = '#0f172a'): CSSProperties => ({
   display: 'inline-block',
   padding: '2px 8px',
   borderRadius: 999,
   fontSize: 11,
   fontWeight: 600,
-  color: '#0f172a',
+  color: fg,
   background,
+  backdropFilter: 'blur(8px) saturate(140%)',
+  WebkitBackdropFilter: 'blur(8px) saturate(140%)',
 });
 
 const stageBadgeStyle: CSSProperties = {
   display: 'inline-block',
   padding: '2px 8px',
-  borderRadius: 4,
+  borderRadius: 6,
   fontSize: 11,
   fontWeight: 500,
   color: '#cbd5e1',
-  background: '#1e293b',
-  border: '1px solid #334155',
+  background: 'rgba(30, 41, 59, 0.6)',
+  border: '1px solid rgba(255,255,255,0.06)',
 };
 
 const bodyStyle: CSSProperties = {
@@ -76,7 +95,8 @@ const bodyStyle: CSSProperties = {
   flexDirection: 'column',
   gap: 8,
   padding: '0 10px 12px 10px',
-  borderTop: '1px solid #1e293b',
+  borderTop: '1px solid rgba(255,255,255,0.05)',
+  overflow: 'hidden',
 };
 
 const lineStyle: CSSProperties = {
@@ -105,9 +125,9 @@ const knobLabelStyle: CSSProperties = {
 
 const inputStyle: CSSProperties = {
   padding: '4px 6px',
-  borderRadius: 4,
-  border: '1px solid #334155',
-  background: '#0b1220',
+  borderRadius: 6,
+  border: '1px solid rgba(255,255,255,0.08)',
+  background: 'rgba(11, 18, 32, 0.7)',
   color: '#e5e7eb',
   fontSize: 12,
 };
@@ -119,6 +139,28 @@ const chevronStyle: CSSProperties = {
   color: '#cbd5e1',
   fontSize: 14,
   padding: 4,
+};
+
+const switchTrackStyle = (on: boolean): CSSProperties => ({
+  width: 32,
+  height: 18,
+  borderRadius: 999,
+  background: on ? ATLAS_STATUS_COLORS.accepted : 'rgba(55, 65, 81, 0.8)',
+  position: 'relative',
+  display: 'inline-block',
+  flexShrink: 0,
+  border: '1px solid rgba(255,255,255,0.08)',
+  transition: 'background 200ms ease',
+});
+
+const switchThumbStyle: CSSProperties = {
+  position: 'absolute',
+  top: 1,
+  width: 14,
+  height: 14,
+  borderRadius: '50%',
+  background: '#f8fafc',
+  boxShadow: '0 1px 3px rgba(0,0,0,0.4)',
 };
 
 function defaultForKnob(k: KnobDef): KnobValue {
@@ -222,7 +264,6 @@ function renderKnob(
     );
   }
 
-  // multiselect
   const opts = (knob.options as readonly string[] | undefined) ?? [];
   const current = Array.isArray(value) ? (value as string[]) : [];
   return (
@@ -298,117 +339,167 @@ export default function MethodKnobsPanel({
   }, []);
 
   return (
-    <div
+    <GlassPanel
+      intensity="regular"
+      as="aside"
       className={className}
-      data-testid="method-knobs-panel"
+      padding={12}
       style={panelStyle}
     >
-      {ordered.map((method) => {
-        const enabled = enabledMethodIds.has(method.id);
-        const isOpen = expanded.has(method.id);
-        const nameId = `method-${method.id}-name`;
-        const costLabel =
-          method.costEstimateGpuMinutes === 0
+      <div data-testid="method-knobs-panel" style={{ display: 'contents' }}>
+        {ordered.map((method) => {
+          const enabled = enabledMethodIds.has(method.id);
+          const isOpen = expanded.has(method.id);
+          const nameId = `method-${method.id}-name`;
+          const isFree = method.costEstimateGpuMinutes === 0;
+          const costLabel = isFree
             ? 'Free'
             : `${method.costEstimateGpuMinutes} GPU-min`;
-        const statusColor = enabled
-          ? ATLAS_STATUS_COLORS.accepted
-          : ATLAS_STATUS_COLORS.unavailable;
+          const costBg = isFree
+            ? 'rgba(34, 197, 94, 0.35)'
+            : 'rgba(203, 213, 225, 0.85)';
+          const costFg = isFree ? '#dcfce7' : '#0f172a';
+          const statusColor = enabled
+            ? ATLAS_STATUS_COLORS.accepted
+            : ATLAS_STATUS_COLORS.unavailable;
 
-        return (
-          <section
-            key={method.id}
-            data-testid={`method-card-${method.id}`}
-            role="group"
-            aria-labelledby={nameId}
-            style={cardStyle(enabled)}
-          >
-            <header style={headerStyle}>
-              <span id={nameId} style={nameStyle}>
-                {method.name}
-              </span>
-              <span
-                data-testid={`method-stage-${method.id}`}
-                style={stageBadgeStyle}
-              >
-                {method.stageAnchor.split('(')[0].trim()}
-              </span>
-              <span
-                data-testid={`method-cost-${method.id}`}
-                style={badgeStyle('#cbd5e1')}
-              >
-                {costLabel}
-              </span>
-              <span
-                data-testid={`method-status-${method.id}`}
-                style={badgeStyle(statusColor)}
-              >
-                {enabled ? 'enabled' : 'disabled'}
-              </span>
-              {/* a11y: toggle exposed as a checkbox so screen readers announce state */}
-              <label
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}
-              >
-                <input
-                  data-testid={`method-toggle-${method.id}`}
-                  type="checkbox"
-                  checked={enabled}
-                  aria-label={`Enable ${method.name}`}
-                  onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    onToggleMethod(method.id, e.target.checked)
-                  }
-                />
-              </label>
-              <button
-                type="button"
-                data-testid={`method-expand-${method.id}`}
-                aria-expanded={isOpen}
-                aria-label={
-                  isOpen ? `Collapse ${method.name}` : `Expand ${method.name}`
-                }
-                onClick={() => toggleExpand(method.id)}
-                style={chevronStyle}
-              >
-                {isOpen ? '▾' : '▸'}
-              </button>
-            </header>
-
-            {isOpen && (
-              <div style={bodyStyle}>
-                <p style={lineStyle}>{method.description}</p>
-                <p style={lineStyle}>
-                  <span style={labelStrong}>Reveals: </span>
-                  {method.reveals}
-                </p>
-                <p style={lineStyle}>
-                  <span style={labelStrong}>Output: </span>
-                  {method.outputShape}
-                </p>
-                <div
-                  data-testid={`method-knobs-${method.id}`}
-                  style={{ display: 'flex', flexDirection: 'column', gap: 4 }}
+          return (
+            <motion.section
+              key={method.id}
+              data-testid={`method-card-${method.id}`}
+              role="group"
+              aria-labelledby={nameId}
+              style={cardStyle(enabled)}
+              whileHover={{ scale: 1.01 }}
+              transition={SPRING_SNAPPY}
+            >
+              <span aria-hidden="true" style={cardSheenStyle} />
+              <header style={headerStyle}>
+                <span id={nameId} style={nameStyle}>
+                  {method.name}
+                </span>
+                <span
+                  data-testid={`method-stage-${method.id}`}
+                  style={stageBadgeStyle}
                 >
-                  {method.knobs.map((knob) =>
-                    renderKnob(
-                      method.id,
-                      knob,
-                      valueFor(knobValues, method.id, knob),
-                      !enabled,
-                      onKnobChange,
-                    ),
-                  )}
-                </div>
-                <p style={lineStyle}>
-                  <span style={labelStrong}>Prerequisites: </span>
-                  {method.prerequisites.length > 0
-                    ? method.prerequisites.join('; ')
-                    : 'none'}
-                </p>
-              </div>
-            )}
-          </section>
-        );
-      })}
-    </div>
+                  {method.stageAnchor.split('(')[0].trim()}
+                </span>
+                <span
+                  data-testid={`method-cost-${method.id}`}
+                  style={pillStyle(costBg, costFg)}
+                >
+                  {costLabel}
+                </span>
+                <span
+                  data-testid={`method-status-${method.id}`}
+                  style={pillStyle(statusColor)}
+                >
+                  {enabled ? 'enabled' : 'disabled'}
+                </span>
+                <label
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: 4,
+                    cursor: 'pointer',
+                  }}
+                >
+                  <input
+                    data-testid={`method-toggle-${method.id}`}
+                    type="checkbox"
+                    checked={enabled}
+                    aria-label={`Enable ${method.name}`}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                      onToggleMethod(method.id, e.target.checked)
+                    }
+                    style={{
+                      position: 'absolute',
+                      width: 1,
+                      height: 1,
+                      opacity: 0,
+                      margin: -1,
+                      overflow: 'hidden',
+                    }}
+                  />
+                  <span aria-hidden="true" style={switchTrackStyle(enabled)}>
+                    <motion.span
+                      layout
+                      layoutId={`switch-thumb-${method.id}`}
+                      style={{
+                        ...switchThumbStyle,
+                        left: enabled ? 16 : 2,
+                      }}
+                      transition={SPRING_SNAPPY}
+                    />
+                  </span>
+                </label>
+                <button
+                  type="button"
+                  data-testid={`method-expand-${method.id}`}
+                  aria-expanded={isOpen}
+                  aria-label={
+                    isOpen
+                      ? `Collapse ${method.name}`
+                      : `Expand ${method.name}`
+                  }
+                  onClick={() => toggleExpand(method.id)}
+                  style={chevronStyle}
+                >
+                  {isOpen ? '▾' : '▸'}
+                </button>
+              </header>
+
+              <AnimatePresence initial={false}>
+                {isOpen ? (
+                  <motion.div
+                    key="body"
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    transition={SPRING_GENTLE}
+                    style={bodyStyle}
+                  >
+                    <p style={lineStyle}>{method.description}</p>
+                    <p style={lineStyle}>
+                      <span style={labelStrong}>Reveals: </span>
+                      {method.reveals}
+                    </p>
+                    <p style={lineStyle}>
+                      <span style={labelStrong}>Output: </span>
+                      {method.outputShape}
+                    </p>
+                    <div
+                      data-testid={`method-knobs-${method.id}`}
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: 4,
+                      }}
+                    >
+                      {method.knobs.map((knob) =>
+                        renderKnob(
+                          method.id,
+                          knob,
+                          valueFor(knobValues, method.id, knob),
+                          !enabled,
+                          onKnobChange,
+                        ),
+                      )}
+                    </div>
+                    <p style={lineStyle}>
+                      <span style={labelStrong}>Prerequisites: </span>
+                      {method.prerequisites.length > 0
+                        ? method.prerequisites.join('; ')
+                        : 'none'}
+                    </p>
+                  </motion.div>
+                ) : null}
+              </AnimatePresence>
+            </motion.section>
+          );
+        })}
+      </div>
+    </GlassPanel>
   );
 }
+
+void THEME;

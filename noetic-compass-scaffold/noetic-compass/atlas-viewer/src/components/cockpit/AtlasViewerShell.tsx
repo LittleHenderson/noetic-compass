@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import type { CSSProperties } from 'react';
+import { motion } from 'framer-motion';
 import ControlBar, {
   type Speed,
   type VerificationMode,
@@ -33,6 +34,8 @@ import {
 } from '../../lib/visualPrimitives';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { parseCoord } from '../../lib/neuronCover';
+import { GlassPanel } from '../ui/GlassPanel';
+import { SPRING_SNAPPY } from '../../lib/designTokens';
 
 interface TraceNeuronCovers {
   per_class_neuron_covers?: Record<string, string[]>;
@@ -53,21 +56,33 @@ export interface AtlasViewerShellProps {
 
 type LeftTab = 'spatial' | 'notation';
 
+// Wave 5 layout polish — deep dark backdrop so the floating glass panels read
+// as glass against the cockpit, not against grey chrome. The hard 1px borders
+// that used to divide the three columns are gone; each column's child is a
+// GlassPanel-wrapped card with margin breathing room, and visual separation
+// comes from the glass itself.
 const shellStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
   height: '100%',
   minHeight: 0,
-  background: '#05070d',
+  background: '#02030a',
   color: '#e5e7eb',
-  fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+  fontFamily: 'Inter, system-ui, -apple-system, "Segoe UI", sans-serif',
+};
+
+const controlBarFloatStyle: CSSProperties = {
+  position: 'relative',
+  zIndex: 10,
+  margin: 8,
 };
 
 const mainGridStyle: CSSProperties = {
   flex: 1,
   display: 'grid',
   gridTemplateColumns: '40% 40% 20%',
+  columnGap: 8,
   minHeight: 0,
   overflow: 'hidden',
 };
@@ -77,28 +92,31 @@ const columnStyle: CSSProperties = {
   flexDirection: 'column',
   minWidth: 0,
   minHeight: 0,
-  borderRight: '1px solid #1f2937',
   overflow: 'hidden',
 };
 
-const lastColumnStyle: CSSProperties = {
-  ...columnStyle,
-  borderRight: 'none',
+const floatingCardStyle: CSSProperties = {
+  margin: 8,
+  flex: 1,
+  display: 'flex',
+  flexDirection: 'column',
+  minHeight: 0,
+  overflow: 'hidden',
 };
 
 const tabBarStyle: CSSProperties = {
   display: 'flex',
-  borderBottom: '1px solid #1f2937',
-  background: '#111827',
+  position: 'relative',
+  borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
 };
 
 const tabBaseStyle: CSSProperties = {
   flex: 1,
   padding: '8px 12px',
+  position: 'relative',
   background: 'transparent',
   color: '#9ca3af',
   border: 'none',
-  borderBottom: '2px solid transparent',
   cursor: 'pointer',
   fontSize: 13,
   fontWeight: 500,
@@ -107,7 +125,16 @@ const tabBaseStyle: CSSProperties = {
 const tabActiveStyle: CSSProperties = {
   ...tabBaseStyle,
   color: ATLAS_STATUS_COLORS.activeTrace,
-  borderBottom: `2px solid ${ATLAS_STATUS_COLORS.activeTrace}`,
+};
+
+const tabUnderlineStyle: CSSProperties = {
+  position: 'absolute',
+  left: 0,
+  right: 0,
+  bottom: -1,
+  height: 2,
+  background: ATLAS_STATUS_COLORS.activeTrace,
+  borderRadius: 1,
 };
 
 const tabPanelStyle: CSSProperties = {
@@ -122,25 +149,35 @@ const tabPanelStyle: CSSProperties = {
 
 const centerColumnStyle: CSSProperties = {
   ...columnStyle,
-  background: '#02040a',
+};
+
+const centerSceneWrapperStyle: CSSProperties = {
+  flex: 1,
+  minHeight: 0,
+  position: 'relative',
 };
 
 const rightColumnStyle: CSSProperties = {
-  ...lastColumnStyle,
+  ...columnStyle,
+};
+
+const rightCardInnerStyle: CSSProperties = {
+  flex: 1,
+  minHeight: 0,
   overflowY: 'auto',
 };
 
-const bottomTimelineStyle: CSSProperties = {
-  padding: '8px 12px 12px 12px',
-  background: '#0b1220',
-  borderTop: '1px solid #1f2937',
+const bottomTimelineFloatStyle: CSSProperties = {
+  position: 'relative',
+  zIndex: 10,
+  margin: '0 8px 8px 8px',
 };
 
 const placeholderCardStyle: CSSProperties = {
   padding: 16,
   borderRadius: 6,
-  background: '#0f172a',
-  border: '1px dashed #334155',
+  background: 'rgba(15, 23, 42, 0.4)',
+  border: '1px dashed rgba(255, 255, 255, 0.12)',
   color: '#9ca3af',
   fontSize: 13,
   lineHeight: 1.5,
@@ -439,124 +476,150 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       data-testid="atlas-viewer-shell"
       style={shellStyle}
     >
-      <ControlBar
-        playbackMode={state.playbackMode}
-        speed={state.speed as Speed}
-        zoomLevel={zoomLevel}
-        currentTokenIndex={currentTokenIndex}
-        tokenCount={state.tokenCount}
-        verificationMode={verificationMode}
-        showBlindspots={showBlindspots}
-        showActiveTrace={showActiveTrace}
-        onPlayToggle={handlePlayToggle}
-        onSpeedChange={handleSpeedChange}
-        onZoomLevelChange={setZoomLevel}
-        onTokenSeek={handleTokenSeek}
-        onVerificationModeChange={setVerificationMode}
-        onToggleBlindspots={() => setShowBlindspots((v) => !v)}
-        onToggleActiveTrace={() => setShowActiveTrace((v) => !v)}
-      />
+      <div style={controlBarFloatStyle}>
+        <ControlBar
+          playbackMode={state.playbackMode}
+          speed={state.speed as Speed}
+          zoomLevel={zoomLevel}
+          currentTokenIndex={currentTokenIndex}
+          tokenCount={state.tokenCount}
+          verificationMode={verificationMode}
+          showBlindspots={showBlindspots}
+          showActiveTrace={showActiveTrace}
+          onPlayToggle={handlePlayToggle}
+          onSpeedChange={handleSpeedChange}
+          onZoomLevelChange={setZoomLevel}
+          onTokenSeek={handleTokenSeek}
+          onVerificationModeChange={setVerificationMode}
+          onToggleBlindspots={() => setShowBlindspots((v) => !v)}
+          onToggleActiveTrace={() => setShowActiveTrace((v) => !v)}
+        />
+      </div>
 
       <div style={mainGridStyle} data-testid="atlas-viewer-main">
         <div style={columnStyle} data-testid="atlas-viewer-left">
-          <div role="tablist" aria-label="Evidence views" style={tabBarStyle}>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={leftTab === 'spatial'}
-              data-testid="left-tab-spatial"
-              onClick={() => setLeftTab('spatial')}
-              style={leftTab === 'spatial' ? tabActiveStyle : tabBaseStyle}
-            >
-              Spatial Evidence
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={leftTab === 'notation'}
-              data-testid="left-tab-notation"
-              onClick={() => setLeftTab('notation')}
-              style={leftTab === 'notation' ? tabActiveStyle : tabBaseStyle}
-            >
-              2D Notation
-            </button>
-          </div>
-          <div
-            role="tabpanel"
-            data-testid="left-tab-panel"
-            style={tabPanelStyle}
-          >
-            {leftTab === 'spatial' ? (
-              <>
-                <VisualPrimitiveCanvas
-                  imageUrl={spatialEvidence.image_url}
-                  imageWidth={spatialEvidence.image_width}
-                  imageHeight={spatialEvidence.image_height}
-                  primitives={spatialEvidence.primitives}
-                  activeStepPrimitiveIds={activePrimitiveIds}
-                  onPrimitiveClick={handlePrimitiveCanvasClick}
-                />
-                <SpatialEvidencePanel
-                  primitives={activePrimitives}
-                  selectedPrimitiveId={activePrimitiveId}
-                  onPrimitiveSelect={handlePrimitiveSelect}
-                  onOpenEvidence={handlePrimitiveOpenEvidence}
-                  emptyStateLabel={
-                    activeStep
-                      ? 'No spatial evidence for this step'
-                      : 'Scrub forward to reach a grounded step'
-                  }
-                />
-              </>
-            ) : (
-              <div
-                style={placeholderCardStyle}
-                data-testid="notation-placeholder"
+          <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
+            <div role="tablist" aria-label="Evidence views" style={tabBarStyle}>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={leftTab === 'spatial'}
+                data-testid="left-tab-spatial"
+                onClick={() => setLeftTab('spatial')}
+                style={leftTab === 'spatial' ? tabActiveStyle : tabBaseStyle}
               >
-                <strong>2D Notation — pending wave 3.</strong>
-                <p style={{ margin: '8px 0 0 0' }}>
-                  This slot will render the 169-primitive CAS notation map
-                  (wrapping <code>dashboard/src/lib/notation2DMap</code>). Not
-                  yet wired in v0.0 — the dashboard package lives outside
-                  atlas-viewer's tsconfig include, so the wrap requires either
-                  a published shared package or a vendored copy. Tracked as a
-                  v0.0 → v0.1 follow-up.
-                </p>
-              </div>
-            )}
-          </div>
+                Spatial Evidence
+                {leftTab === 'spatial' && (
+                  <motion.div
+                    layoutId="left-tab-underline"
+                    style={tabUnderlineStyle}
+                    transition={SPRING_SNAPPY}
+                  />
+                )}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={leftTab === 'notation'}
+                data-testid="left-tab-notation"
+                onClick={() => setLeftTab('notation')}
+                style={leftTab === 'notation' ? tabActiveStyle : tabBaseStyle}
+              >
+                2D Notation
+                {leftTab === 'notation' && (
+                  <motion.div
+                    layoutId="left-tab-underline"
+                    style={tabUnderlineStyle}
+                    transition={SPRING_SNAPPY}
+                  />
+                )}
+              </button>
+            </div>
+            <div
+              role="tabpanel"
+              data-testid="left-tab-panel"
+              style={tabPanelStyle}
+            >
+              {leftTab === 'spatial' ? (
+                <>
+                  <VisualPrimitiveCanvas
+                    imageUrl={spatialEvidence.image_url}
+                    imageWidth={spatialEvidence.image_width}
+                    imageHeight={spatialEvidence.image_height}
+                    primitives={spatialEvidence.primitives}
+                    activeStepPrimitiveIds={activePrimitiveIds}
+                    onPrimitiveClick={handlePrimitiveCanvasClick}
+                  />
+                  <SpatialEvidencePanel
+                    primitives={activePrimitives}
+                    selectedPrimitiveId={activePrimitiveId}
+                    onPrimitiveSelect={handlePrimitiveSelect}
+                    onOpenEvidence={handlePrimitiveOpenEvidence}
+                    emptyStateLabel={
+                      activeStep
+                        ? 'No spatial evidence for this step'
+                        : 'Scrub forward to reach a grounded step'
+                    }
+                  />
+                </>
+              ) : (
+                <div
+                  style={placeholderCardStyle}
+                  data-testid="notation-placeholder"
+                >
+                  <strong>2D Notation — pending wave 3.</strong>
+                  <p style={{ margin: '8px 0 0 0' }}>
+                    This slot will render the 169-primitive CAS notation map
+                    (wrapping <code>dashboard/src/lib/notation2DMap</code>).
+                    Not yet wired in v0.0 — the dashboard package lives outside
+                    atlas-viewer's tsconfig include, so the wrap requires
+                    either a published shared package or a vendored copy.
+                    Tracked as a v0.0 → v0.1 follow-up.
+                  </p>
+                </div>
+              )}
+            </div>
+          </GlassPanel>
         </div>
 
         <div style={centerColumnStyle} data-testid="atlas-viewer-center">
-          <NeuralNetScene
-            architecture={architecture}
-            currentFrame={currentFrame}
-            selectedNeuron={selectedNeuron}
-            blindspotCoords={blindspotCoords}
-            activeTraceCoords={activeTraceCoords}
-            zoomLevel={zoomLevel}
-            onNeuronClick={handleNeuronClick}
-          />
+          <div style={centerSceneWrapperStyle}>
+            <NeuralNetScene
+              architecture={architecture}
+              currentFrame={currentFrame}
+              selectedNeuron={selectedNeuron}
+              blindspotCoords={blindspotCoords}
+              activeTraceCoords={activeTraceCoords}
+              zoomLevel={zoomLevel}
+              onNeuronClick={handleNeuronClick}
+            />
+          </div>
         </div>
 
         <div style={rightColumnStyle} data-testid="atlas-viewer-right">
-          <MethodKnobsPanel
-            methods={[...methods]}
-            enabledMethodIds={enabledMethodIds}
-            knobValues={knobValues}
-            onToggleMethod={handleToggleMethod}
-            onKnobChange={handleKnobChange}
-          />
+          <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
+            <div style={rightCardInnerStyle}>
+              <MethodKnobsPanel
+                methods={[...methods]}
+                enabledMethodIds={enabledMethodIds}
+                knobValues={knobValues}
+                onToggleMethod={handleToggleMethod}
+                onKnobChange={handleKnobChange}
+              />
+            </div>
+          </GlassPanel>
         </div>
       </div>
 
-      <div style={bottomTimelineStyle} data-testid="atlas-viewer-bottom">
-        <Mode7Timeline
-          tokens={tokens}
-          frames={mode7Frames}
-          currentTokenIndex={currentTokenIndex}
-          onTokenSelect={handleTokenSeek}
-        />
+      <div style={bottomTimelineFloatStyle} data-testid="atlas-viewer-bottom">
+        <GlassPanel intensity="regular" padding="8px 12px">
+          <Mode7Timeline
+            tokens={tokens}
+            frames={mode7Frames}
+            currentTokenIndex={currentTokenIndex}
+            onTokenSelect={handleTokenSeek}
+          />
+        </GlassPanel>
       </div>
 
       <EvidenceDrawer

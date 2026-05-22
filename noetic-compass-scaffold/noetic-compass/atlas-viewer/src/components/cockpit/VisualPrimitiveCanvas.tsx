@@ -8,6 +8,12 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import {
+  THEME,
+  SPRING_GENTLE,
+  GLASS_RADIUS,
+} from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { toEnglish } from '../../lib/colloquialismMap';
 import type {
@@ -80,6 +86,17 @@ function pointsAttr(
     .join(' ');
 }
 
+const ACTIVE_ANIMATE = {
+  scale: [1, 1.06, 1],
+  opacity: [0.6, 1, 0.6],
+};
+
+const ACTIVE_TRANSITION = {
+  duration: 2,
+  repeat: Infinity,
+  ease: 'easeInOut' as const,
+};
+
 export function VisualPrimitiveCanvas(
   props: VisualPrimitiveCanvasProps,
 ): ReactNode {
@@ -103,8 +120,6 @@ export function VisualPrimitiveCanvas(
     [activeStepPrimitiveIds],
   );
 
-  // a11y: ResizeObserver keeps overlay coords in lockstep with rendered image
-  // so the SVG hit-targets stay anchored to the underlying spatial evidence.
   useEffect(() => {
     const node = containerRef.current;
     if (!node || typeof ResizeObserver === 'undefined') return undefined;
@@ -158,6 +173,7 @@ export function VisualPrimitiveCanvas(
     maxWidth: '100%',
     aspectRatio: `${aspectRatio}`,
     overflow: 'hidden',
+    borderRadius: GLASS_RADIUS,
   };
 
   const imageStyle: CSSProperties = {
@@ -165,6 +181,7 @@ export function VisualPrimitiveCanvas(
     height: '100%',
     display: 'block',
     objectFit: 'contain',
+    borderRadius: GLASS_RADIUS,
   };
 
   const svgStyle: CSSProperties = {
@@ -220,7 +237,12 @@ export function VisualPrimitiveCanvas(
             'data-primitive-id': primitive.id,
             'data-active': isActive ? 'true' : 'false',
             'data-kind': primitive.kind,
-            style: { cursor: 'pointer', pointerEvents: 'auto' } as CSSProperties,
+            style: {
+              cursor: 'pointer',
+              pointerEvents: 'auto' as const,
+              transformBox: 'fill-box' as const,
+              transformOrigin: 'center' as const,
+            },
             onMouseEnter: (e: { clientX: number; clientY: number }) =>
               handleEnter(primitive, e),
             onMouseLeave: handleLeave,
@@ -229,12 +251,14 @@ export function VisualPrimitiveCanvas(
             onClick: () => handleClick(primitive),
             onKeyDown: (e: KeyboardEvent<SVGElement>) => handleKey(primitive, e),
             filter,
+            animate: isActive ? ACTIVE_ANIMATE : undefined,
+            transition: isActive ? ACTIVE_TRANSITION : undefined,
           };
 
           if (primitive.kind === 'point') {
             const [nx = 0, ny = 0] = primitive.coords_norm;
             return (
-              <circle
+              <motion.circle
                 key={primitive.id}
                 cx={nx * imageWidth}
                 cy={ny * imageHeight}
@@ -251,7 +275,7 @@ export function VisualPrimitiveCanvas(
           if (primitive.kind === 'box') {
             const [nx = 0, ny = 0, nw = 0, nh = 0] = primitive.coords_norm;
             return (
-              <rect
+              <motion.rect
                 key={primitive.id}
                 x={nx * imageWidth}
                 y={ny * imageHeight}
@@ -268,7 +292,7 @@ export function VisualPrimitiveCanvas(
 
           if (primitive.kind === 'polyline') {
             return (
-              <polyline
+              <motion.polyline
                 key={primitive.id}
                 points={pointsAttr(primitive.coords_norm, imageWidth, imageHeight)}
                 fill="none"
@@ -281,9 +305,8 @@ export function VisualPrimitiveCanvas(
             );
           }
 
-          // region: closed polygon for v0
           return (
-            <polygon
+            <motion.polygon
               key={primitive.id}
               points={pointsAttr(primitive.coords_norm, imageWidth, imageHeight)}
               fill={color}
@@ -295,30 +318,42 @@ export function VisualPrimitiveCanvas(
           );
         })}
       </svg>
-      {tooltip ? (
-        <div
-          role="tooltip"
-          data-testid="vpc-tooltip"
-          style={{
-            position: 'absolute',
-            left: Math.min(tooltip.x + 12, Math.max(0, containerWidth - 240)),
-            top: Math.max(0, tooltip.y + 12),
-            maxWidth: 240,
-            padding: '6px 8px',
-            background: 'rgba(15, 23, 42, 0.88)',
-            color: '#f8fafc',
-            fontSize: 12,
-            lineHeight: 1.4,
-            borderRadius: 4,
-            pointerEvents: 'none',
-            zIndex: 2,
-          }}
-        >
-          {buildTooltipText(tooltip.primitive) || tooltip.primitive.id}
-        </div>
-      ) : null}
+      <AnimatePresence initial={false}>
+        {tooltip ? (
+          <motion.div
+            key="tooltip"
+            role="tooltip"
+            data-testid="vpc-tooltip"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={SPRING_GENTLE}
+            style={{
+              position: 'absolute',
+              left: Math.min(tooltip.x + 12, Math.max(0, containerWidth - 240)),
+              top: Math.max(0, tooltip.y + 12),
+              maxWidth: 240,
+              padding: '6px 10px',
+              background: 'rgba(15, 23, 42, 0.78)',
+              color: '#f8fafc',
+              fontSize: 12,
+              lineHeight: 1.4,
+              borderRadius: 8,
+              pointerEvents: 'none',
+              zIndex: 2,
+              border: '1px solid rgba(255,255,255,0.08)',
+              backdropFilter: 'blur(12px) saturate(160%)',
+              WebkitBackdropFilter: 'blur(12px) saturate(160%)',
+              boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+            }}
+          >
+            {buildTooltipText(tooltip.primitive) || tooltip.primitive.id}
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }
+
+void THEME;
 
 export default VisualPrimitiveCanvas;

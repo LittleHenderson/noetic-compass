@@ -1,5 +1,8 @@
 import { useCallback, useMemo, useRef } from 'react';
 import type { CSSProperties, KeyboardEvent } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { GlassPanel } from '../ui/GlassPanel';
+import { THEME, SPRING_SNAPPY, SPRING_GENTLE } from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 
 export interface Token {
@@ -27,8 +30,8 @@ export interface Mode7TimelineProps {
   className?: string;
 }
 
-const CELL_HEIGHT = 28;
-const EDGE_LAYER_HEIGHT = 28;
+const CELL_HEIGHT = 50;
+const EDGE_LAYER_HEIGHT = 30;
 const CELL_GAP = 2;
 const MIN_CELL_WIDTH = 28;
 const MAX_TOKEN_DISPLAY_CHARS = 8;
@@ -103,13 +106,14 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
     width: '100%',
     display: 'flex',
     flexDirection: 'column',
-    fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+    fontFamily: THEME?.fontFamily ?? 'Inter, ui-sans-serif, system-ui, sans-serif',
     fontSize: '11px',
-    color: '#e5e7eb',
+    color: THEME?.colors?.textPrimary ?? '#e5e7eb',
     outline: 'none',
   };
 
   const cellRowStyle: CSSProperties = {
+    position: 'relative',
     display: 'flex',
     gap: `${CELL_GAP}px`,
     width: '100%',
@@ -120,8 +124,8 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
   const edges = currentFrame?.mode7_attribution ?? [];
 
   return (
-    <div
-      ref={containerRef}
+    <GlassPanel
+      intensity="thin"
       role="slider"
       tabIndex={0}
       aria-label="Mode 7 token timeline"
@@ -133,19 +137,21 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
       className={className}
       style={wrapperStyle}
       data-testid="mode7-timeline"
+      ref={containerRef}
     >
       <div style={cellRowStyle} data-testid="mode7-timeline-cells">
         {tokens.map((tok, idx) => {
           const isCurrent = idx === safeCurrent;
           const cellStyle: CSSProperties = {
+            position: 'relative',
             flex: `1 1 ${cellWidthPct}%`,
             minWidth: `${MIN_CELL_WIDTH}px`,
             height: `${CELL_HEIGHT}px`,
-            background: isCurrent ? ATLAS_STATUS_COLORS.activeTrace : '#1f2937',
+            background: isCurrent ? 'transparent' : 'rgba(31, 41, 55, 0.55)',
             border: isCurrent
-              ? `2px solid ${ATLAS_STATUS_COLORS.activeTrace}`
-              : '1px solid #374151',
-            borderRadius: '3px',
+              ? '2px solid transparent'
+              : '1px solid rgba(55, 65, 81, 0.7)',
+            borderRadius: '8px',
             color: isCurrent ? '#ffffff' : '#d1d5db',
             display: 'flex',
             alignItems: 'center',
@@ -154,12 +160,13 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
             overflow: 'hidden',
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
-            padding: '0 4px',
-            fontWeight: isCurrent ? 600 : 400,
-            transition: 'background 120ms ease, border-color 120ms ease',
+            padding: '0 6px',
+            fontWeight: isCurrent ? 500 : 400,
+            fontFamily: THEME?.fontFamily ?? 'Inter, ui-sans-serif, system-ui, sans-serif',
+            zIndex: isCurrent ? 2 : 1,
           };
           return (
-            <div
+            <motion.div
               key={tok.token_index}
               role="button"
               tabIndex={-1}
@@ -170,9 +177,27 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
               data-current={isCurrent ? 'true' : 'false'}
               onClick={() => handleClick(idx)}
               style={cellStyle}
+              whileHover={{ scale: 1.04, filter: 'brightness(1.18)' }}
+              whileTap={{ scale: 0.97 }}
+              transition={SPRING_GENTLE}
             >
+              {isCurrent && (
+                <motion.div
+                  layoutId="timeline-active-cell"
+                  data-testid="mode7-timeline-active-highlight"
+                  transition={SPRING_SNAPPY}
+                  style={{
+                    position: 'absolute',
+                    inset: 0,
+                    borderRadius: '8px',
+                    background: ATLAS_STATUS_COLORS.activeTrace,
+                    boxShadow: `0 0 12px ${ATLAS_STATUS_COLORS.activeTrace}`,
+                    zIndex: -1,
+                  }}
+                />
+              )}
               {truncateToken(tok.token)}
-            </div>
+            </motion.div>
           );
         })}
       </div>
@@ -186,34 +211,43 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
           preserveAspectRatio="none"
           style={{ display: 'block', marginTop: '2px' }}
         >
-          {edges.map((edge, i) => {
-            if (edge.from_token_index === null || edge.from_token_index === undefined) {
-              return null;
-            }
-            const fromIdx = edge.from_token_index;
-            const toIdx = edge.to_token_index;
-            if (tokens.length === 0) return null;
-            const fromX = ((fromIdx + 0.5) / tokens.length) * 100;
-            const toX = ((toIdx + 0.5) / tokens.length) * 100;
-            const midX = (fromX + toX) / 2;
-            const path = `M ${fromX} 0 Q ${midX} ${EDGE_LAYER_HEIGHT} ${toX} 0`;
-            const opacity = Math.max(0.15, Math.min(1, edge.weight));
-            return (
-              <path
-                key={`${fromIdx}-${toIdx}-${i}`}
-                d={path}
-                stroke={ATLAS_STATUS_COLORS.activeTrace}
-                strokeWidth={1}
-                fill="none"
-                opacity={opacity}
-                data-testid={`mode7-timeline-edge-${fromIdx}-${toIdx}`}
-                vectorEffect="non-scaling-stroke"
-              />
-            );
-          })}
+          <AnimatePresence>
+            {edges.map((edge, i) => {
+              if (edge.from_token_index === null || edge.from_token_index === undefined) {
+                return null;
+              }
+              const fromIdx = edge.from_token_index;
+              const toIdx = edge.to_token_index;
+              if (tokens.length === 0) return null;
+              const fromX = ((fromIdx + 0.5) / tokens.length) * 100;
+              const toX = ((toIdx + 0.5) / tokens.length) * 100;
+              const midX = (fromX + toX) / 2;
+              const path = `M ${fromX} 0 Q ${midX} ${EDGE_LAYER_HEIGHT} ${toX} 0`;
+              const opacity = Math.max(0.15, Math.min(1, edge.weight));
+              // pathLength 0->1 draws the bezier on instead of popping it in;
+              // keyed by current frame so each frame change re-draws the edges.
+              return (
+                <motion.path
+                  key={`${safeCurrent}-${fromIdx}-${toIdx}-${i}`}
+                  d={path}
+                  stroke={ATLAS_STATUS_COLORS.activeTrace}
+                  strokeWidth={1.25}
+                  strokeLinecap="round"
+                  fill="none"
+                  opacity={opacity}
+                  data-testid={`mode7-timeline-edge-${fromIdx}-${toIdx}`}
+                  vectorEffect="non-scaling-stroke"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity }}
+                  exit={{ pathLength: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: 'easeOut' }}
+                />
+              );
+            })}
+          </AnimatePresence>
         </svg>
       )}
-    </div>
+    </GlassPanel>
   );
 }
 

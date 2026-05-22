@@ -1,5 +1,8 @@
 import { useEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { GlassPanel } from '../ui/GlassPanel';
+import { THEME, SPRING_GENTLE } from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 
 export interface EvidenceDrawerPayload {
@@ -18,37 +21,42 @@ export interface EvidenceDrawerProps {
 const backdropStyle: CSSProperties = {
   position: 'fixed',
   inset: 0,
-  background: 'rgba(2, 6, 23, 0.45)',
+  background: 'rgba(2, 6, 23, 0.55)',
   zIndex: 40,
+  backdropFilter: 'blur(4px)',
+  WebkitBackdropFilter: 'blur(4px)',
 };
 
-const panelStyle = (open: boolean): CSSProperties => ({
+const drawerWrapperStyle: CSSProperties = {
   position: 'fixed',
   top: 0,
   right: 0,
   bottom: 0,
   width: 420,
   maxWidth: '90vw',
-  background: '#0b1220',
-  color: '#e5e7eb',
-  borderLeft: '1px solid #1f2937',
-  boxShadow: '-8px 0 24px rgba(0,0,0,0.4)',
-  transform: open ? 'translateX(0)' : 'translateX(100%)',
-  transition: 'transform 200ms ease',
   zIndex: 50,
   display: 'flex',
   flexDirection: 'column',
   fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
   fontSize: 13,
-});
+};
+
+const drawerInnerStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  flex: 1,
+  height: '100%',
+  borderRadius: 0,
+  borderLeft: '1px solid rgba(255,255,255,0.08)',
+  boxShadow: '-12px 0 36px rgba(0,0,0,0.45)',
+};
 
 const headerStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
   padding: '12px 16px',
-  borderBottom: '1px solid #1f2937',
-  background: '#111827',
+  borderBottom: '1px solid rgba(255,255,255,0.06)',
 };
 
 const titleStyle: CSSProperties = {
@@ -58,11 +66,11 @@ const titleStyle: CSSProperties = {
 };
 
 const closeButtonStyle: CSSProperties = {
-  background: 'transparent',
-  border: '1px solid #374151',
+  background: 'rgba(255,255,255,0.04)',
+  border: '1px solid rgba(255,255,255,0.1)',
   color: '#e5e7eb',
-  borderRadius: 4,
-  padding: '4px 10px',
+  borderRadius: 6,
+  padding: '4px 12px',
   cursor: 'pointer',
   fontSize: 13,
 };
@@ -78,7 +86,7 @@ const bodyStyle: CSSProperties = {
 
 const noteStyle: CSSProperties = {
   padding: '8px 10px',
-  borderRadius: 4,
+  borderRadius: 6,
   background: 'rgba(234, 179, 8, 0.12)',
   border: `1px solid ${ATLAS_STATUS_COLORS.caveat}`,
   color: ATLAS_STATUS_COLORS.caveat,
@@ -89,9 +97,9 @@ const noteStyle: CSSProperties = {
 const codeBlockStyle: CSSProperties = {
   margin: 0,
   padding: 12,
-  background: '#020617',
-  border: '1px solid #1f2937',
-  borderRadius: 4,
+  background: 'rgba(2, 6, 23, 0.6)',
+  border: '1px solid rgba(255,255,255,0.06)',
+  borderRadius: 6,
   fontFamily: '"JetBrains Mono", Menlo, Consolas, monospace',
   fontSize: 12,
   color: '#cbd5e1',
@@ -136,62 +144,81 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
 
   return (
     <>
-      {open ? (
-        <div
-          data-testid="evidence-drawer-backdrop"
-          aria-hidden="true"
-          style={backdropStyle}
-          onClick={onClose}
-        />
-      ) : null}
-      <aside
+      <AnimatePresence>
+        {open ? (
+          <motion.div
+            key="backdrop"
+            data-testid="evidence-drawer-backdrop"
+            aria-hidden="true"
+            style={backdropStyle}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.4 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={onClose}
+          />
+        ) : null}
+      </AnimatePresence>
+      <motion.aside
         role="dialog"
         aria-modal="true"
         aria-label="Evidence Packet"
         aria-hidden={open ? 'false' : 'true'}
         data-testid="evidence-drawer"
         data-open={open ? 'true' : 'false'}
-        style={panelStyle(open)}
+        style={drawerWrapperStyle}
+        initial={{ x: '100%' }}
+        animate={{ x: open ? 0 : '100%' }}
+        transition={SPRING_GENTLE}
       >
-        <header style={headerStyle}>
-          <span style={titleStyle}>
-            Evidence Packet
-            {payload?.title ? ` — ${payload.title}` : ''}
-          </span>
-          <button
-            ref={closeBtnRef}
-            type="button"
-            data-testid="evidence-drawer-close"
-            onClick={onClose}
-            style={closeButtonStyle}
-            aria-label="Close evidence packet"
-          >
-            Close
-          </button>
-        </header>
-        <div style={bodyStyle}>
-          <div style={noteStyle} data-testid="evidence-drawer-pending-note">
-            v0.0: dashboard wrap pending. Below is the fixture-backed
-            evidence_ref payload only — full Evidence Packet rendering lands in
-            a follow-on round.
+        <GlassPanel
+          intensity="thick"
+          as="div"
+          padding={0}
+          style={drawerInnerStyle}
+        >
+          <header style={headerStyle}>
+            <span style={titleStyle}>
+              Evidence Packet
+              {payload?.title ? ` — ${payload.title}` : ''}
+            </span>
+            <button
+              ref={closeBtnRef}
+              type="button"
+              data-testid="evidence-drawer-close"
+              onClick={onClose}
+              style={closeButtonStyle}
+              aria-label="Close evidence packet"
+            >
+              Close
+            </button>
+          </header>
+          <div style={bodyStyle}>
+            <div style={noteStyle} data-testid="evidence-drawer-pending-note">
+              v0.0: dashboard wrap pending. Below is the fixture-backed
+              evidence_ref payload only — full Evidence Packet rendering lands in
+              a follow-on round.
+            </div>
+            <div style={sectionLabelStyle}>evidence_ref</div>
+            <pre style={codeBlockStyle} data-testid="evidence-drawer-ref-json">
+              {refJson}
+            </pre>
+            {detailJson ? (
+              <>
+                <div style={sectionLabelStyle}>detail</div>
+                <pre
+                  style={codeBlockStyle}
+                  data-testid="evidence-drawer-detail-json"
+                >
+                  {detailJson}
+                </pre>
+              </>
+            ) : null}
           </div>
-          <div style={sectionLabelStyle}>evidence_ref</div>
-          <pre style={codeBlockStyle} data-testid="evidence-drawer-ref-json">
-            {refJson}
-          </pre>
-          {detailJson ? (
-            <>
-              <div style={sectionLabelStyle}>detail</div>
-              <pre
-                style={codeBlockStyle}
-                data-testid="evidence-drawer-detail-json"
-              >
-                {detailJson}
-              </pre>
-            </>
-          ) : null}
-        </div>
-      </aside>
+        </GlassPanel>
+      </motion.aside>
     </>
   );
 }
+
+void THEME;

@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent } from 'react';
+import { motion } from 'framer-motion';
+import { THEME, SPRING_SNAPPY } from '../../lib/designTokens';
 import type {
   EvidenceRef,
   VisualPrimitive,
@@ -67,8 +69,6 @@ const panelStyle: CSSProperties = {
   fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
   fontSize: 13,
   color: '#e5e7eb',
-  background: '#0f172a',
-  borderRadius: 6,
   minWidth: 280,
 };
 
@@ -85,13 +85,18 @@ function cardStyle(selected: boolean): CSSProperties {
     flexDirection: 'column',
     gap: 4,
     padding: 10,
-    background: selected ? 'rgba(59,130,246,0.18)' : '#1e293b',
+    background: selected ? 'rgba(59,130,246,0.20)' : 'rgba(30, 41, 59, 0.55)',
     border: selected
-      ? `2px solid ${ATLAS_STATUS_COLORS.activeTrace}`
-      : '1px solid #334155',
-    borderRadius: 4,
+      ? `1px solid ${ATLAS_STATUS_COLORS.activeTrace}`
+      : '1px solid rgba(255,255,255,0.06)',
+    borderRadius: 10,
     cursor: 'pointer',
     outline: 'none',
+    boxShadow: selected
+      ? `0 0 0 1px ${ATLAS_STATUS_COLORS.activeTrace}, 0 0 18px rgba(59,130,246,0.35)`
+      : '0 1px 2px rgba(0,0,0,0.2)',
+    backdropFilter: 'blur(8px) saturate(140%)',
+    WebkitBackdropFilter: 'blur(8px) saturate(140%)',
   };
 }
 
@@ -105,9 +110,10 @@ const swatchStyle = (color: string): CSSProperties => ({
   display: 'inline-block',
   width: 12,
   height: 12,
-  borderRadius: 2,
+  borderRadius: 3,
   background: color,
   flexShrink: 0,
+  boxShadow: `0 0 6px ${color}55`,
 });
 
 const glyphStyle: CSSProperties = {
@@ -145,27 +151,30 @@ const footerStyle: CSSProperties = {
   marginTop: 4,
 };
 
-function badgeStyle(bg: string): CSSProperties {
+function pillStyle(bg: string, fg = '#0f172a'): CSSProperties {
   return {
     display: 'inline-block',
-    padding: '2px 6px',
-    borderRadius: 10,
+    padding: '2px 8px',
+    borderRadius: 999,
     fontSize: 11,
     fontWeight: 600,
-    color: '#0f172a',
+    color: fg,
     background: bg,
+    backdropFilter: 'blur(8px) saturate(140%)',
+    WebkitBackdropFilter: 'blur(8px) saturate(140%)',
   };
 }
 
 const evidenceButtonStyle: CSSProperties = {
-  padding: '4px 8px',
+  padding: '4px 10px',
   fontSize: 11,
   fontWeight: 600,
   color: '#0f172a',
   background: ATLAS_STATUS_COLORS.activeTrace,
   border: 'none',
-  borderRadius: 3,
+  borderRadius: 6,
   cursor: 'pointer',
+  boxShadow: '0 2px 6px rgba(59,130,246,0.35)',
 };
 
 export default function SpatialEvidencePanel({
@@ -258,9 +267,9 @@ export default function SpatialEvidencePanel({
           const glyph = KIND_GLYPHS[p.kind];
           const kindName = KIND_LABELS[p.kind];
           return (
-            <div
+            <motion.div
               key={p.id}
-              ref={(el) => {
+              ref={(el: HTMLDivElement | null) => {
                 cardRefs.current[index] = el;
               }}
               role="listitem"
@@ -271,7 +280,12 @@ export default function SpatialEvidencePanel({
               tabIndex={isFocus ? 0 : -1}
               style={cardStyle(isSelected)}
               onClick={() => handleSelect(p)}
-              onKeyDown={(e) => handleKeyDown(e, index)}
+              onKeyDown={(e: KeyboardEvent<HTMLDivElement>) =>
+                handleKeyDown(e, index)
+              }
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={SPRING_SNAPPY}
             >
               <div style={headerStyle}>
                 <span
@@ -286,13 +300,19 @@ export default function SpatialEvidencePanel({
               </div>
 
               {p.cas_label ? (
-                <div style={casLabelStyle} data-testid={`spatial-evidence-cas-${p.id}`}>
+                <div
+                  style={casLabelStyle}
+                  data-testid={`spatial-evidence-cas-${p.id}`}
+                >
                   {p.cas_label}
                 </div>
               ) : null}
 
               {english ? (
-                <div style={englishStyle} data-testid={`spatial-evidence-en-${p.id}`}>
+                <div
+                  style={englishStyle}
+                  data-testid={`spatial-evidence-en-${p.id}`}
+                >
                   {english}
                 </div>
               ) : null}
@@ -301,7 +321,7 @@ export default function SpatialEvidencePanel({
                 {typeof p.confidence === 'number' ? (
                   <span
                     data-testid={`spatial-evidence-confidence-${p.id}`}
-                    style={badgeStyle(confidenceBadgeColor(p.confidence))}
+                    style={pillStyle(confidenceBadgeColor(p.confidence))}
                   >
                     {`conf ${p.confidence.toFixed(2)}`}
                   </span>
@@ -322,10 +342,12 @@ export default function SpatialEvidencePanel({
                   </button>
                 ) : null}
               </div>
-            </div>
+            </motion.div>
           );
         })}
       </div>
     </section>
   );
 }
+
+void THEME;
