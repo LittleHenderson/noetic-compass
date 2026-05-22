@@ -52,7 +52,7 @@ const samplePrimitives: VisualPrimitive[] = [
     id: 'r1',
     kind: 'region',
     coords_norm: [0.7, 0.7, 0.9, 0.7, 0.9, 0.9, 0.7, 0.9],
-    cas_axis: 'inversion',
+    cas_axis: 'Domain',
     label: 'Inversion region',
   },
 ];
@@ -97,6 +97,13 @@ describe('VisualPrimitiveCanvas — image rendering', () => {
 });
 
 describe('VisualPrimitiveCanvas — interaction', () => {
+  // React's synthetic event system delegates at the root and listens for
+  // native `mouseover` / `mouseout` (which DO bubble in jsdom), then
+  // synthesizes `onMouseEnter` / `onMouseLeave` from them. Native
+  // `mouseenter` / `mouseleave` do not bubble and React's delegation never
+  // picks them up in jsdom — so the tests below dispatch `mouseover` /
+  // `mouseout` instead. Coordinate math also needs a non-zero container
+  // rect, hence the getBoundingClientRect mock.
   it('calls onPrimitiveHover with the primitive on mouse enter', () => {
     const onHover = vi.fn();
     render(
@@ -112,7 +119,7 @@ describe('VisualPrimitiveCanvas — interaction', () => {
     expect(node).not.toBeNull();
     act(() => {
       node.dispatchEvent(
-        new MouseEvent('mouseenter', { bubbles: true, clientX: 10, clientY: 10 }),
+        new MouseEvent('mouseover', { bubbles: true, clientX: 10, clientY: 10 }),
       );
     });
     expect(onHover).toHaveBeenCalled();
@@ -128,10 +135,16 @@ describe('VisualPrimitiveCanvas — interaction', () => {
         primitives={samplePrimitives}
       />,
     );
+    const container = host.querySelector(
+      '[data-testid="visual-primitive-canvas"]',
+    ) as HTMLElement;
+    // Realistic rect so tooltip coord math (evt.clientX - rect.left) is sane.
+    container.getBoundingClientRect = () =>
+      ({ left: 0, top: 0, right: 400, bottom: 200, width: 400, height: 200, x: 0, y: 0, toJSON: () => ({}) }) as DOMRect;
     const node = host.querySelector('[data-primitive-id="p1"]') as SVGElement;
     act(() => {
       node.dispatchEvent(
-        new MouseEvent('mouseenter', { bubbles: true, clientX: 10, clientY: 10 }),
+        new MouseEvent('mouseover', { bubbles: true, clientX: 10, clientY: 10 }),
       );
     });
     const tooltip = host.querySelector('[data-testid="vpc-tooltip"]');
@@ -155,11 +168,16 @@ describe('VisualPrimitiveCanvas — interaction', () => {
     const node = host.querySelector('[data-primitive-id="p1"]') as SVGElement;
     act(() => {
       node.dispatchEvent(
-        new MouseEvent('mouseenter', { bubbles: true, clientX: 10, clientY: 10 }),
+        new MouseEvent('mouseover', { bubbles: true, clientX: 10, clientY: 10 }),
       );
     });
+    // React's synthetic onMouseLeave is driven by native `mouseout` whose
+    // relatedTarget is outside the bound element. Setting relatedTarget to
+    // an outside node (host) makes React fire onMouseLeave.
     act(() => {
-      node.dispatchEvent(new MouseEvent('mouseleave', { bubbles: true }));
+      const evt = new MouseEvent('mouseout', { bubbles: true });
+      Object.defineProperty(evt, 'relatedTarget', { value: document.body });
+      node.dispatchEvent(evt);
     });
     expect(host.querySelector('[data-testid="vpc-tooltip"]')).toBeNull();
     expect(onHover).toHaveBeenLastCalledWith(null);

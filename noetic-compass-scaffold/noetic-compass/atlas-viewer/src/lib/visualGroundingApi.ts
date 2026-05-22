@@ -80,8 +80,15 @@ export async function fetchSpatialEvidence(
 
 export function createDemoFixtureLoader(): () => Promise<SpatialEvidenceArtifact> {
   return async () => {
-    const mod = await import('../fixtures/visualGroundingDemo.json');
-    const raw = (mod as { default?: unknown }).default ?? mod;
-    return loadSpatialEvidenceArtifact(raw);
+    const [demoJsonMod, demoImageMod] = await Promise.all([
+      import('../fixtures/visualGroundingDemo.json'),
+      import('../fixtures/visualGroundingDemoImage.svg?url'),
+    ]);
+    const raw = (demoJsonMod as { default?: unknown }).default ?? demoJsonMod;
+    const imageUrl =
+      (demoImageMod as { default?: string }).default ??
+      (demoImageMod as unknown as string);
+    const rawObj = raw as Record<string, unknown>;
+    return loadSpatialEvidenceArtifact({ ...rawObj, image_url: imageUrl });
   };
 }

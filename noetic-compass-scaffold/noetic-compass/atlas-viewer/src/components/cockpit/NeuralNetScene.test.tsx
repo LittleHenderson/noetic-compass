@@ -22,6 +22,22 @@ function makeRendererStub(): MinimalWebGLRenderer {
   const canvas = document.createElement('canvas');
   canvas.width = 600;
   canvas.height = 400;
+  // jsdom returns an all-zero DOMRect from getBoundingClientRect() because
+  // there is no layout pass. NeuralNetScene.pickNeuron bails out early when
+  // rect.width === 0 || rect.height === 0, which silently disables hover and
+  // click in jsdom. Stub a realistic rect so the raycaster-stub path runs.
+  canvas.getBoundingClientRect = () =>
+    ({
+      left: 0,
+      top: 0,
+      right: 600,
+      bottom: 400,
+      width: 600,
+      height: 400,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    }) as DOMRect;
   return {
     domElement: canvas,
     setPixelRatio: vi.fn(),

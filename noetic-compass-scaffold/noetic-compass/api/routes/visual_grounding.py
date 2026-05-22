@@ -16,6 +16,8 @@ integration lands.
 
 from __future__ import annotations
 
+import base64
+from pathlib import Path
 from typing import Literal
 
 from fastapi import APIRouter, HTTPException
@@ -23,6 +25,36 @@ from pydantic import BaseModel, Field
 
 
 router = APIRouter(prefix="/atlas", tags=["atlas_visual_grounding"])
+
+
+def _load_demo_image_data_url() -> str:
+    """Read the demo SVG fixture and return it as a data: URL.
+
+    The atlas-viewer client expects an ``image_url`` field that resolves in an
+    <img> tag. Returning a relative path like ``/fixtures/...`` requires a
+    matching static mount that we don't ship at v0.0; embedding the SVG as a
+    data URL avoids the path-mismatch and works regardless of whether the
+    client calls this route from the cockpit, the standalone API, or a test.
+    The SVG is ~3 KB so the inline payload cost is trivial.
+    """
+    svg_path = (
+        Path(__file__).resolve().parent.parent.parent
+        / "atlas-viewer"
+        / "src"
+        / "fixtures"
+        / "visualGroundingDemoImage.svg"
+    )
+    try:
+        svg_bytes = svg_path.read_bytes()
+    except OSError:
+        # Fall back to a relative path; the cockpit's loadFixtures.ts injects
+        # the bundled URL anyway, so this only affects standalone API consumers.
+        return "/fixtures/visualGroundingDemoImage.svg"
+    encoded = base64.b64encode(svg_bytes).decode("ascii")
+    return f"data:image/svg+xml;base64,{encoded}"
+
+
+_DEMO_IMAGE_URL = _load_demo_image_data_url()
 
 
 VisualPrimitiveKind = Literal["point", "box", "polyline", "region"]
@@ -79,7 +111,7 @@ _DEMO_ARTIFACT = SpatialEvidenceArtifact(
     schema_version="spatial_evidence_v1",
     trace_id=_DEMO_TRACE_ID,
     image_id="demo-image-001",
-    image_url="/fixtures/visualGroundingDemoImage.svg",
+    image_url=_DEMO_IMAGE_URL,
     image_width=640,
     image_height=480,
     primitives=[
