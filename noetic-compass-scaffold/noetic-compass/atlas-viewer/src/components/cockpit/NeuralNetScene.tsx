@@ -11,6 +11,7 @@ import {
   DoubleSide,
   InstancedMesh,
   Mesh,
+  MeshLambertMaterial,
   MeshBasicMaterial,
   Object3D,
   PerspectiveCamera,
@@ -22,12 +23,15 @@ import {
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { AnimatePresence, motion } from 'framer-motion';
 import type { ModelArchitecture } from '../../lib/modelArchitecture';
 import {
   ATLAS_STATUS_COLORS,
   foundationColorForActivation,
   type DriveIndex,
 } from '../../lib/atlasPalette';
+import { GlassPanel } from '../ui/GlassPanel';
+import { ACCENT_BLUE, SPRING_SNAPPY } from '../../lib/designTokens';
 
 export interface PerTokenFrameActivation {
   layer: number;
@@ -121,7 +125,18 @@ const PYTHIA_N_LAYERS = 12;
 
 const DIM_COLOR = new Color('#2a2a3a');
 const PLANE_COLOR = new Color('#0f172a');
-const SCENE_BG = new Color('#05070d');
+// Cockpit ambient tint — subtle dark-blue base to complement the floating
+// glass UI overhead. Wave 5 darkened the previous '#05070d' to '#03060f'
+// so the glass panels read more cleanly against the 3D scene. Spec allowed
+// a gradient (top '#050818' / bottom '#02030a') but a solid is cheaper and
+// indistinguishable on the rendered canvas at typical FOV.
+const SCENE_BG = new Color('#03060f');
+// Planes pick up ACCENT_BLUE at very low intensity to give a sense of depth
+// without colouring the neurons themselves. Lambert material reacts to the
+// existing AmbientLight + DirectionalLight; emissive carries the tint when
+// the lights aren't striking the plane directly.
+const PLANE_EMISSIVE = new Color(ACCENT_BLUE);
+const PLANE_EMISSIVE_INTENSITY = 0.05;
 
 function dominantDrive(probe: number[] | undefined): DriveIndex {
   if (!probe || probe.length === 0) return 1;
@@ -175,6 +190,13 @@ export function NeuralNetScene({
   const onClickRef = useRef(onNeuronClick);
   const hoveredRef = useRef<NeuronCoord | null>(null);
   const [mounted, setMounted] = useState(false);
+  // DOM tooltip state — Wave 5. The 3D scene reports hovers via the
+  // onNeuronHover prop callback (preserved); a parallel local state powers a
+  // GlassPanel tooltip that floats above the canvas at the cursor. Position
+  // is in wrapper-local coordinates so it survives canvas scrolling.
+  const [tooltip, setTooltip] = useState<
+    { coord: NeuronCoord; x: number; y: number } | null
+  >(null);
 
   useEffect(() => {
     onHoverRef.current = onNeuronHover;
@@ -249,8 +271,14 @@ export function NeuralNetScene({
       const z = zStart - layer * LAYER_Z_SPACING;
 
       const planeGeom = new PlaneGeometry(planeWidth, planeHeight);
-      const planeMat = new MeshBasicMaterial({
+      // Lambert (not Basic) so the plane can carry a low-intensity emissive
+      // tint while still responding to scene lights. Base colour stays
+      // grey/dim; emissive contributes ACCENT_BLUE at 5% — barely perceptible
+      // but enough to suggest depth and tie the 3D zone to the glass UI palette.
+      const planeMat = new MeshLambertMaterial({
         color: PLANE_COLOR.clone(),
+        emissive: PLANE_EMISSIVE.clone(),
+        emissiveIntensity: PLANE_EMISSIVE_INTENSITY,
         transparent: true,
         opacity: 0.18,
         side: DoubleSide,
@@ -306,6 +334,12 @@ export function NeuralNetScene({
       return null;
     }
 
+    function wrapperLocalPosition(clientX: number, clientY: number) {
+      if (!wrapper) return { x: 0, y: 0 };
+      const rect = wrapper.getBoundingClientRect();
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
     function onPointerMove(ev: PointerEvent) {
       const coord = pickNeuron(ev.clientX, ev.clientY);
       const prev = hoveredRef.current;
@@ -314,12 +348,21 @@ export function NeuralNetScene({
         hoveredRef.current = coord;
         onHoverRef.current?.(coord);
       }
+      // Tooltip tracks the cursor regardless of hit-change so the GlassPanel
+      // glides smoothly even while still hovering the same neuron.
+      if (coord) {
+        const pos = wrapperLocalPosition(ev.clientX, ev.clientY);
+        setTooltip({ coord, x: pos.x, y: pos.y });
+      } else if (changed) {
+        setTooltip(null);
+      }
     }
     function onPointerLeave() {
       if (hoveredRef.current !== null) {
         hoveredRef.current = null;
         onHoverRef.current?.(null);
       }
+      setTooltip(null);
     }
     function onClick(ev: MouseEvent) {
       const coord = pickNeuron(ev.clientX, ev.clientY);
@@ -376,12 +419,19 @@ export function NeuralNetScene({
           hoveredRef.current = coord;
           onHoverRef.current?.(coord);
         }
+        if (coord) {
+          const pos = wrapperLocalPosition(x, y);
+          setTooltip({ coord, x: pos.x, y: pos.y });
+        } else if (changed) {
+          setTooltip(null);
+        }
       };
       w.__nn_simulate_leave = () => {
         if (hoveredRef.current !== null) {
           hoveredRef.current = null;
           onHoverRef.current?.(null);
         }
+        setTooltip(null);
       };
       w.__nn_simulate_click = (x, y) => {
         const coord = pickNeuron(x, y);
@@ -460,7 +510,7 @@ export function NeuralNetScene({
       }
       for (const plane of planeMeshes) {
         plane.geometry.dispose();
-        (plane.material as MeshBasicMaterial).dispose();
+        (plane.material as MeshLambertMaterial).dispose();
         scene.remove(plane);
       }
       sphereGeom.dispose();
@@ -683,6 +733,11 @@ export function NeuralNetScene({
     position: 'relative',
   };
 
+  // Tooltip offset from cursor so the GlassPanel doesn't sit under the
+  // pointer (which would block subsequent hover picks on adjacent neurons).
+  const TOOLTIP_OFFSET_X = 14;
+  const TOOLTIP_OFFSET_Y = 14;
+
   return (
     <div
       ref={wrapperRef}
@@ -693,7 +748,41 @@ export function NeuralNetScene({
       data-arch-mlp={architecture.mlp_intermediate_dim}
       className={className ?? ''}
       style={containerStyle}
-    />
+    >
+      <AnimatePresence>
+        {tooltip && (
+          <motion.div
+            key="neuralnet-tooltip"
+            data-testid="neuralnet-tooltip"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={SPRING_SNAPPY}
+            style={{
+              position: 'absolute',
+              left: tooltip.x + TOOLTIP_OFFSET_X,
+              top: tooltip.y + TOOLTIP_OFFSET_Y,
+              pointerEvents: 'none',
+              zIndex: 5,
+            }}
+          >
+            <GlassPanel intensity="thick" padding="6px 10px">
+              <span
+                style={{
+                  fontFamily:
+                    'ui-monospace, SFMono-Regular, "JetBrains Mono", monospace',
+                  fontSize: 12,
+                  letterSpacing: 0.2,
+                  color: '#e2e8f0',
+                }}
+              >
+                {tooltip.coord.label}
+              </span>
+            </GlassPanel>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 
