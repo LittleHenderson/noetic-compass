@@ -62,7 +62,8 @@ services:
   # backend above via VITE_ATLAS_API_BASE_URL. Custom domain attached via
   # the Render dashboard (CNAME -> <service>.onrender.com). Production
   # build (`npm run build`) — does NOT include the ?e2e=1 hook bytes.
-  - type: static
+  - type: web
+    runtime: static
     name: atlas-viewer-app
     plan: free
     # Inherits the Blueprint branch. After Path 1 merges this file to master,
