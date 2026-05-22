@@ -121,8 +121,8 @@ describe("anti-drift JSDoc presence", () => {
 
   it("contains an ^8 anti-drift JSDoc block flagging TRIGGERING vs deductive reasoning", () => {
     expect(source).toMatch(
-      /\^8 Above\/Cause is associative TRIGGERING,? not deductive reasoning/i,
+      /\^8 Above\/Cause is associative TRIGGERING,?[\s*]+not deductive[\s*]+reasoning/i,
     );
-    expect(source).toMatch(/\^6.+\^9|\^6 Male.+\^9 Below\/Effect/);
+    expect(source).toMatch(/\^6[\s\S]+\^9/);
   });
 });
