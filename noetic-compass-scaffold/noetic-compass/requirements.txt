@@ -1,7 +1,7 @@
 # Render (and any other "pip install -r requirements.txt") runtime deps for
 # the Noetic Compass FastAPI service. Dev/build-only deps (maturin, pytest,
-# pytest-asyncio, mypy, ruff, etc.) live in requirements-dev.txt and must
-# NOT be added here — Render runs only this file before `uvicorn api.main:app`.
+# pytest-asyncio, mypy, ruff, etc.) are intentionally omitted here — Render
+# runs only this file before `uvicorn api.main:app`.
 #
 # Loose upper bounds keep the deploy reproducible without freezing patches.
 

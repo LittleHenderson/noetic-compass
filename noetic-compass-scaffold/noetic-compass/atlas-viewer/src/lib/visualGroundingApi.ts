@@ -9,7 +9,7 @@ export interface VisualGroundingApiOptions {
    *   1. Explicit `options.baseUrl` passed at call site.
    *   2. `import.meta.env.VITE_ATLAS_API_BASE_URL` (build-time env var; used in
    *      production where the frontend is served from a different origin than
-   *      the backend, e.g. atlas.noeticcompass.com → atlas-api.noeticcompass.com).
+   *      the backend, e.g. atlas.noeticcompass.com → api.noeticcompass.com).
    *   3. `'/api/atlas'` fallback (used by `vite dev` via the Vite proxy and as
    *      the same-origin default).
    *

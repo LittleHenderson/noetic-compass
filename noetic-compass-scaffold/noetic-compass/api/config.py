@@ -47,7 +47,7 @@ class Settings(BaseSettings):
     # Legacy alias ``NC_CORS_ORIGINS`` retained for backward compatibility.
     # Format: comma-separated list of fully-qualified origins, e.g.
     #   ATLAS_ALLOWED_ORIGINS=https://atlas.noeticcompass.com,http://localhost:5173
-    # Atlas cockpit (atlas.noeticcompass.com) → atlas-api.noeticcompass.com
+    # Atlas cockpit (atlas.noeticcompass.com) → api.noeticcompass.com
     # cross-subdomain preflight requires the cockpit origin be listed here.
     cors_origins: str = Field(
         default="*",

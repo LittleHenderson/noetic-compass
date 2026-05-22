@@ -65,7 +65,8 @@ services:
   - type: static
     name: atlas-viewer-app
     plan: free
-    branch: experiment/cas-probe-pythia
+    # Inherits the Blueprint branch. After Path 1 merges this file to master,
+    # Atlas deploys from master alongside the shared API.
     rootDir: noetic-compass-scaffold/noetic-compass/atlas-viewer
     buildCommand: npm install && npm run build
     staticPublishPath: dist
