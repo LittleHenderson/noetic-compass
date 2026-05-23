@@ -70,6 +70,33 @@ def _requested_probes(req: CreateSessionRequest) -> set[str]:
     return set(resolve_probes(req.probes))
 
 
+def _enabled_methods(req: CreateSessionRequest) -> set[str]:
+    raw = req.method_config.get("enabled_methods", []) if req.method_config else []
+    if not isinstance(raw, list):
+        return set()
+    return {str(item) for item in raw}
+
+
+def _inversion_risk(
+    req: CreateSessionRequest,
+    confidence: float,
+    activations: list[NeuronActivation],
+) -> float | None:
+    if "inversion_scan" not in _enabled_methods(req):
+        return None
+    threshold = 0.0
+    method_knobs = _knobs(req).get("inversion_scan", {})
+    if isinstance(method_knobs, dict):
+        try:
+            threshold = float(method_knobs.get("severity_threshold", 0.0))
+        except (TypeError, ValueError):
+            threshold = 0.0
+    activation_pressure = min(max((abs(a.activation) for a in activations), default=0.0), 1.0)
+    confidence_pressure = 1.0 - confidence
+    risk = max(0.0, min(1.0, (activation_pressure * 0.6) + (confidence_pressure * 0.4)))
+    return round(risk, 3) if risk >= threshold else 0.0
+
+
 # ---------------------------------------------------------------------------
 # Demo-mode (M1 carry-over) — fake-but-schema-valid trace.
 # Kept here both for fallback and as a sanity-check baseline.
@@ -129,18 +156,21 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
     max_new = min(req.max_new_tokens, 24)
     for i in range(max_new):
         tok = tokens[i % len(tokens)]
+        fake_neurons = _fake_neurons(rng, loaded.manifest.model_arch.n_layers)
+        fake_confidence = round(rng.uniform(0.55, 0.95), 3)
         yield TokenEvent(
             token_index=i,
             token=tok,
-            top_activated_neurons=_fake_neurons(rng, loaded.manifest.model_arch.n_layers)
+            top_activated_neurons=fake_neurons
             if "active_trace" in probes
             else [],
             mode7_attribution=_fake_mode7(rng, i)
             if "mode7_attribution" in probes
             else [],
-            confidence=round(rng.uniform(0.55, 0.95), 3)
+            confidence=fake_confidence
             if "confidence_margin" in probes
             else None,
+            inversion_risk=_inversion_risk(req, fake_confidence, fake_neurons),
         )
         await asyncio.sleep(0.04)
     yield CompleteEvent(total_tokens=max_new)

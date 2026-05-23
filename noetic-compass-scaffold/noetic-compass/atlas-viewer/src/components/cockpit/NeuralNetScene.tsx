@@ -44,6 +44,7 @@ export interface PerTokenFrame {
   token: string;
   top_activated_neurons: PerTokenFrameActivation[];
   foundation_probe?: number[];
+  inversion_risk?: number | null;
 }
 
 export interface NeuronCoord {

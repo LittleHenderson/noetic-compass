@@ -61,11 +61,15 @@ describe('atlasLiveApi', () => {
       token_index: 0,
       token: ' hello',
       top_activated_neurons: [{ layer: 5, index: 142, activation: 0.7 }],
+      inversion_risk: 0.42,
     });
 
     expect(trace.tokens).toEqual([{ token_index: 0, token: ' hello' }]);
     expect(trace.per_token_frames).toHaveLength(1);
     expect((trace as unknown as { model_id: string }).model_id).toBe('EleutherAI/pythia-160m');
+    expect(
+      (trace.per_token_frames[0] as { inversion_risk: number }).inversion_risk,
+    ).toBe(0.42);
     expect(
       (trace as unknown as { neuron_covers: { per_class_neuron_covers: Record<string, string[]> } })
         .neuron_covers.per_class_neuron_covers.F1E,

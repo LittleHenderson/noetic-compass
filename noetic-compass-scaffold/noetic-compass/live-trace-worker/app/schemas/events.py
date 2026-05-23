@@ -53,6 +53,7 @@ class TokenEvent(BaseModel):
     top_activated_neurons: list[NeuronActivation] = Field(default_factory=list)
     mode7_attribution: list[Mode7Edge] = Field(default_factory=list)
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    inversion_risk: float | None = Field(default=None, ge=0.0, le=1.0)
 
 
 class NeuronCoversEvent(BaseModel):

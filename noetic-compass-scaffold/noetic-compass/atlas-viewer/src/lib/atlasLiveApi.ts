@@ -49,6 +49,7 @@ export type LiveTraceEvent =
       top_activated_neurons?: unknown[];
       mode7_attribution?: unknown[];
       confidence?: number | null;
+      inversion_risk?: number | null;
     }
   | { type: 'error'; message: string; retryable?: boolean }
   | { type: 'complete'; total_tokens: number };
@@ -89,6 +90,7 @@ export function appendLiveEvent(trace: ReplayTrace, event: LiveTraceEvent): Repl
     top_activated_neurons: event.top_activated_neurons ?? [],
     mode7_attribution: event.mode7_attribution ?? [],
     confidence: event.confidence ?? null,
+    inversion_risk: event.inversion_risk ?? null,
   };
 
   const tokens = [...trace.tokens];

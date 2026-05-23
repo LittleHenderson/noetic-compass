@@ -41,6 +41,11 @@ def test_token_event_rejects_out_of_range_confidence():
         TokenEvent(token_index=0, token="x", confidence=1.5)
 
 
+def test_token_event_rejects_out_of_range_inversion_risk():
+    with pytest.raises(ValidationError):
+        TokenEvent(token_index=0, token="x", inversion_risk=1.5)
+
+
 def test_mode7_weight_must_be_in_unit_interval():
     with pytest.raises(ValidationError):
         Mode7Edge(from_token_index=0, to_token_index=1, weight=1.5)

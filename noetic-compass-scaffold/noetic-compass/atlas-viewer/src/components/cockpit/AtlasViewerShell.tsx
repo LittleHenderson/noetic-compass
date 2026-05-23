@@ -629,6 +629,10 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             ? 'Live unavailable'
             : `Replay · ${modelId} · recorded trace`;
   const tokenTextNow = tokens[currentTokenIndex]?.token ?? '';
+  const inversionRiskNow =
+    typeof currentFrame?.inversion_risk === 'number'
+      ? currentFrame.inversion_risk
+      : null;
   const narrationStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
@@ -752,6 +756,20 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
           <>
             <span style={narrationKeyStyle}>·</span>
             <span style={narrationValueStyle}>"{tokenTextNow}"</span>
+          </>
+        ) : null}
+        {inversionRiskNow !== null ? (
+          <>
+            <span style={narrationKeyStyle}>|</span>
+            <span
+              style={{
+                color: inversionRiskNow >= 0.5 ? '#fb7185' : '#fbbf24',
+                fontFamily: THEME.fontMono,
+              }}
+              title="Live Inversion Scan output from the worker for this token. This is a runtime proxy, not the full semantic inversion theorem."
+            >
+              inversion risk {inversionRiskNow.toFixed(2)}
+            </span>
           </>
         ) : null}
         {activeStep ? (

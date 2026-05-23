@@ -28,6 +28,7 @@ def test_explicit_empty_live_controls_emit_no_probe_payloads():
     assert token.top_activated_neurons == []
     assert token.mode7_attribution == []
     assert token.confidence is None
+    assert token.inversion_risk is None
 
 
 def test_live_controls_enable_only_selected_probe_payloads():
@@ -47,3 +48,20 @@ def test_live_controls_enable_only_selected_probe_payloads():
     assert token.top_activated_neurons == []
     assert token.mode7_attribution == []
     assert token.confidence is not None
+    assert token.inversion_risk is None
+
+
+def test_inversion_scan_emits_explicit_risk_side_channel():
+    req = CreateSessionRequest(
+        prompt="hello",
+        max_new_tokens=1,
+        probes=["active_trace", "confidence_margin"],
+        method_config={
+            "enabled_methods": ["inversion_scan"],
+            "knobs": {"inversion_scan": {"severity_threshold": 0.0}},
+        },
+    )
+    events = _drain(req)
+    token = next(event for event in events if isinstance(event, TokenEvent))
+    assert token.inversion_risk is not None
+    assert 0.0 <= token.inversion_risk <= 1.0

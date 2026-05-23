@@ -116,6 +116,9 @@ async def run_pythia(
                 "confidence": summary.confidence
                 if "confidence_margin" in requested_probes
                 else None,
+                "inversion_risk": _inversion_risk(summary, knobs)
+                if "inversion_scan" in _enabled_methods(req)
+                else None,
             }
 
             # Append next token, continue.
@@ -194,3 +197,19 @@ def _eraser_intervention(req: CreateSessionRequest) -> EraserIntervention | None
     if not coords:
         return None
     return EraserIntervention(coords=coords, gain=gain)
+
+
+def _inversion_risk(summary: Any, knobs: dict[str, dict[str, Any]]) -> float:
+    """Runtime inversion-risk side channel controlled by Inversion Scan."""
+    scan_knobs = knobs.get("inversion_scan", {})
+    threshold = _float_knob(scan_knobs.get("severity_threshold"), default=0.0)
+    activations = [
+        abs(float(item.get("activation", 0.0)))
+        for item in getattr(summary, "top_activated_neurons", [])
+        if isinstance(item, dict)
+    ]
+    activation_pressure = min(max(activations, default=0.0), 1.0)
+    confidence = getattr(summary, "confidence", None)
+    confidence_pressure = 1.0 - float(confidence) if confidence is not None else 0.5
+    risk = max(0.0, min(1.0, (activation_pressure * 0.6) + (confidence_pressure * 0.4)))
+    return round(risk, 3) if risk >= threshold else 0.0
