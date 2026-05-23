@@ -3,6 +3,8 @@ import type { CSSProperties } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ControlBar, {
   type Speed,
+  type LiveStatus,
+  type RuntimeMode,
   type VerificationMode,
   type ZoomLevel,
 } from './ControlBar';
@@ -53,6 +55,11 @@ export interface AtlasViewerShellProps {
   spatialEvidence: SpatialEvidenceArtifact;
   architecture: ModelArchitecture;
   methods?: readonly TestingMethod[];
+  runtimeMode?: RuntimeMode;
+  liveStatus?: LiveStatus;
+  liveError?: string | null;
+  onStartLive?: () => void;
+  onUseReplay?: () => void;
   className?: string;
 }
 
@@ -291,6 +298,11 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     spatialEvidence,
     architecture,
     methods = TESTING_METHODS,
+    runtimeMode = 'replay',
+    liveStatus = 'idle',
+    liveError = null,
+    onStartLive,
+    onUseReplay,
     className,
   } = props;
 
@@ -342,7 +354,14 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       .filter((f): f is Mode7Frame => f !== null);
   }, [trace.per_token_frames]);
 
-  const currentTokenIndex = state.currentTokenIndex;
+  const isLiveTraceVisible =
+    runtimeMode === 'live' &&
+    liveStatus !== 'idle' &&
+    liveStatus !== 'error' &&
+    tokens.length > 0;
+  const currentTokenIndex = isLiveTraceVisible
+    ? Math.max(0, tokens.length - 1)
+    : state.currentTokenIndex;
   const currentFrame = useMemo<PerTokenFrame | undefined>(
     () => frameAtIndex(trace.per_token_frames, currentTokenIndex),
     [trace.per_token_frames, currentTokenIndex],
@@ -559,6 +578,16 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   };
 
   const modelId = (trace as unknown as TraceWithCovers).model_id ?? architecture.family;
+  const liveLabel =
+    liveStatus === 'connecting'
+      ? 'Live · connecting'
+      : liveStatus === 'streaming'
+        ? `Live · streaming · ${modelId} · actual weights`
+        : liveStatus === 'complete'
+          ? `Live · complete · ${modelId} · actual weights`
+          : liveStatus === 'error'
+            ? 'Live unavailable'
+            : `Replay · ${modelId} · recorded trace`;
   const tokenTextNow = tokens[currentTokenIndex]?.token ?? '';
   const narrationStyle: CSSProperties = {
     display: 'flex',
@@ -637,11 +666,15 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
           speed={state.speed as Speed}
           zoomLevel={zoomLevel}
           currentTokenIndex={currentTokenIndex}
-          tokenCount={state.tokenCount}
+          tokenCount={tokens.length || state.tokenCount}
           verificationMode={verificationMode}
           showBlindspots={showBlindspots}
           showActiveTrace={showActiveTrace}
+          runtimeMode={runtimeMode}
+          liveStatus={liveStatus}
           onPlayToggle={handlePlayToggle}
+          onStartLive={onStartLive}
+          onUseReplay={onUseReplay}
           onSpeedChange={handleSpeedChange}
           onZoomLevelChange={setZoomLevel}
           onTokenSeek={handleTokenSeek}
@@ -660,10 +693,15 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       </div>
 
       <div style={narrationStyle} data-testid="narration-strip">
-        <span style={provenanceBadgeStyle} title="Trace is real activations from Pythia-160M, recorded offline and replayed here">
+        <span style={provenanceBadgeStyle} title={runtimeMode === 'live' ? 'Trace events are streaming through the API proxy from the live Pythia-160M worker.' : 'Trace is real activations from Pythia-160M, recorded offline and replayed here.'}>
           <span style={provenanceDotStyle} />
-          Live · {modelId} · actual weights
+          {liveLabel}
         </span>
+        {liveError ? (
+          <span style={{ color: '#fb7185', fontWeight: 600 }}>
+            {liveError}
+          </span>
+        ) : null}
         <span style={demoBadgeStyle} title="Spatial primitives below are demo fixtures until the live vision-grounding wire-up lands (roadmap item #6 + #8)">
           <span style={demoDotStyle} />
           Picture · demo fixture

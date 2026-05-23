@@ -58,6 +58,49 @@ class Settings(BaseSettings):
     cas_native_predictor_run_dir: str = ""
     cas_native_predictor_device: str = "cpu"
 
+    # Atlas LIVE alpha proxy. The browser calls noetic-compass-api only; this
+    # backend proxies to the private RunPod live-trace worker.
+    atlas_live_worker_url: str = Field(
+        default="",
+        validation_alias=AliasChoices("ATLAS_LIVE_WORKER_URL", "NC_ATLAS_LIVE_WORKER_URL"),
+    )
+    atlas_live_invite_codes: str = Field(
+        default="",
+        validation_alias=AliasChoices("ATLAS_LIVE_INVITE_CODES", "NC_ATLAS_LIVE_INVITE_CODES"),
+    )
+    atlas_live_session_rate_limit_per_ip_hour: int = Field(
+        default=3,
+        ge=1,
+        validation_alias=AliasChoices(
+            "ATLAS_LIVE_SESSION_RATE_LIMIT_PER_IP_HOUR",
+            "NC_ATLAS_LIVE_SESSION_RATE_LIMIT_PER_IP_HOUR",
+        ),
+    )
+    atlas_live_invite_daily_limit: int = Field(
+        default=10,
+        ge=1,
+        validation_alias=AliasChoices(
+            "ATLAS_LIVE_INVITE_DAILY_LIMIT",
+            "NC_ATLAS_LIVE_INVITE_DAILY_LIMIT",
+        ),
+    )
+    atlas_live_stream_token_minutes: int = Field(
+        default=30,
+        ge=1,
+        validation_alias=AliasChoices(
+            "ATLAS_LIVE_STREAM_TOKEN_MINUTES",
+            "NC_ATLAS_LIVE_STREAM_TOKEN_MINUTES",
+        ),
+    )
+    atlas_live_http_timeout_seconds: float = Field(
+        default=30.0,
+        gt=0.0,
+        validation_alias=AliasChoices(
+            "ATLAS_LIVE_HTTP_TIMEOUT_SECONDS",
+            "NC_ATLAS_LIVE_HTTP_TIMEOUT_SECONDS",
+        ),
+    )
+
     # Optional secondary scorer LLM. Empty = no separate scorer for mock/base demo flows.
     scoring_provider: str = ""
     scoring_model: str = ""

@@ -15,6 +15,8 @@ export type VerificationMode =
   | 'BALANCED'
   | 'HIGH_PRECISION'
   | 'MAX_COVERAGE_TRIAGE';
+export type RuntimeMode = 'replay' | 'live';
+export type LiveStatus = 'idle' | 'connecting' | 'streaming' | 'complete' | 'error';
 
 export interface ControlBarProps {
   playbackMode: PlaybackMode;
@@ -25,7 +27,11 @@ export interface ControlBarProps {
   verificationMode: VerificationMode;
   showBlindspots: boolean;
   showActiveTrace: boolean;
+  runtimeMode?: RuntimeMode;
+  liveStatus?: LiveStatus;
   onPlayToggle: () => void;
+  onStartLive?: () => void;
+  onUseReplay?: () => void;
   onSpeedChange: (s: Speed) => void;
   onZoomLevelChange: (z: ZoomLevel) => void;
   onTokenSeek: (idx: number) => void;
@@ -195,6 +201,24 @@ const dividerStyle: CSSProperties = {
   background: HAIRLINE,
 };
 
+const liveDotStyle = (status: LiveStatus | undefined): CSSProperties => ({
+  width: 7,
+  height: 7,
+  borderRadius: '50%',
+  background:
+    status === 'streaming'
+      ? '#22c55e'
+      : status === 'connecting'
+        ? '#fbbf24'
+        : status === 'error'
+          ? '#fb7185'
+          : 'rgba(148, 163, 184, 0.75)',
+  boxShadow:
+    status === 'streaming'
+      ? '0 0 0 4px rgba(34, 197, 94, 0.12)'
+      : undefined,
+});
+
 function clampToken(idx: number, tokenCount: number): number {
   if (tokenCount <= 0) return 0;
   if (idx < 0) return 0;
@@ -244,7 +268,11 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
     verificationMode,
     showBlindspots,
     showActiveTrace,
+    runtimeMode = 'replay',
+    liveStatus = 'idle',
     onPlayToggle,
+    onStartLive,
+    onUseReplay,
     onSpeedChange,
     onZoomLevelChange,
     onTokenSeek,
@@ -402,6 +430,28 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
       >
         {/* Playback */}
         <div style={segmentStyle} aria-label="Playback">
+          <div role="group" aria-label="Runtime mode" style={segmentStyle}>
+            <IconButton
+              label="Use replay fixture"
+              title="Replay recorded fixture"
+              testId="runtime-replay"
+              active={runtimeMode === 'replay'}
+              onClick={onUseReplay ?? (() => undefined)}
+            >
+              REPLAY
+            </IconButton>
+            <IconButton
+              label="Start live model stream"
+              title="Start LIVE Pythia-160M stream"
+              testId="runtime-live"
+              active={runtimeMode === 'live'}
+              onClick={onStartLive ?? (() => undefined)}
+            >
+              <span aria-hidden="true" style={liveDotStyle(liveStatus)} />
+              LIVE
+            </IconButton>
+          </div>
+          <div style={dividerStyle} aria-hidden="true" />
           {onRewind ? (
             <IconButton
               label="Rewind to start"

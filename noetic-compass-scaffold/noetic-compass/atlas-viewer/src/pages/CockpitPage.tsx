@@ -8,6 +8,13 @@ import {
 import { PYTHIA_160M_PRESET } from '../lib/modelArchitecture';
 import type { ReplayTrace } from '../lib/replayController';
 import type { SpatialEvidenceArtifact } from '../lib/visualPrimitives';
+import {
+  appendLiveEvent,
+  createLiveSession,
+  emptyLiveTrace,
+  type LiveTraceEvent,
+} from '../lib/atlasLiveApi';
+import type { LiveStatus, RuntimeMode } from '../components/cockpit/ControlBar';
 
 const viewportStyle: CSSProperties = {
   position: 'fixed',
@@ -37,6 +44,10 @@ interface FixtureBundle {
 export default function CockpitPage(): JSX.Element {
   const [bundle, setBundle] = useState<FixtureBundle | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [runtimeMode, setRuntimeMode] = useState<RuntimeMode>('replay');
+  const [liveStatus, setLiveStatus] = useState<LiveStatus>('idle');
+  const [liveError, setLiveError] = useState<string | null>(null);
+  const [liveTrace, setLiveTrace] = useState<ReplayTrace | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -78,12 +89,106 @@ export default function CockpitPage(): JSX.Element {
     );
   }
 
+  const startLive = async (): Promise<void> => {
+    if (liveStatus === 'connecting' || liveStatus === 'streaming') return;
+    const storedCode = window.localStorage.getItem('atlas_live_invite_code') ?? '';
+    const inviteCode = window.prompt('Enter Atlas LIVE invite code', storedCode);
+    if (!inviteCode) return;
+    window.localStorage.setItem('atlas_live_invite_code', inviteCode);
+
+    setRuntimeMode('live');
+    setLiveStatus('connecting');
+    setLiveError(null);
+    setLiveTrace(emptyLiveTrace());
+
+    try {
+      const session = await createLiveSession(
+        {
+          prompt: 'I noticed a warm coffee cup beside an open book under a sunny window.',
+          max_new_tokens: 24,
+          temperature: 0,
+          seed: 42,
+          probes: ['active_trace', 'blindspots_f1', 'mode7_attribution', 'confidence_margin'],
+        },
+        inviteCode,
+      );
+
+      const source = new EventSource(session.stream_url);
+      let acceptedRealManifest = false;
+
+      const applyEvent = (event: LiveTraceEvent): void => {
+        if (event.type === 'manifest') {
+          if (!event.manifest.is_real_model) {
+            source.close();
+            setLiveStatus('error');
+            setLiveError('LIVE worker is not running actual weights; staying on replay.');
+            setRuntimeMode('replay');
+            return;
+          }
+          acceptedRealManifest = true;
+          setLiveStatus('streaming');
+        }
+        if (event.type === 'error') {
+          source.close();
+          setLiveStatus('error');
+          setLiveError(event.message);
+          return;
+        }
+        if (event.type === 'complete') {
+          setLiveStatus('complete');
+          source.close();
+          return;
+        }
+        setLiveTrace((prev) => appendLiveEvent(prev ?? emptyLiveTrace(session.model_id), event));
+      };
+
+      for (const eventName of ['manifest', 'neuron_covers', 'token', 'error', 'complete']) {
+        source.addEventListener(eventName, (evt) => {
+          try {
+            applyEvent(JSON.parse((evt as MessageEvent).data) as LiveTraceEvent);
+          } catch (err) {
+            source.close();
+            setLiveStatus('error');
+            setLiveError(err instanceof Error ? err.message : String(err));
+          }
+        });
+      }
+
+      source.onerror = () => {
+        source.close();
+        setLiveStatus('error');
+        setLiveError(
+          acceptedRealManifest
+            ? 'LIVE stream disconnected.'
+            : 'LIVE stream failed before proving actual weights.',
+        );
+      };
+    } catch (err) {
+      setRuntimeMode('replay');
+      setLiveStatus('error');
+      setLiveError(err instanceof Error ? err.message : String(err));
+    }
+  };
+
+  const useReplay = (): void => {
+    setRuntimeMode('replay');
+    setLiveStatus('idle');
+    setLiveError(null);
+  };
+
+  const displayedTrace = runtimeMode === 'live' && liveTrace ? liveTrace : bundle.trace;
+
   return (
     <main style={viewportStyle} data-testid="cockpit-page">
       <AtlasViewerShell
-        trace={bundle.trace}
+        trace={displayedTrace}
         spatialEvidence={bundle.spatial}
         architecture={PYTHIA_160M_PRESET}
+        runtimeMode={runtimeMode}
+        liveStatus={liveStatus}
+        liveError={liveError}
+        onStartLive={startLive}
+        onUseReplay={useReplay}
       />
     </main>
   );
