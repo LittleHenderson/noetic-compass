@@ -81,6 +81,10 @@ function GlassPanelBase(
 
   const MotionComponent = motion[as] as typeof motion.div;
 
+  // Wave 5.2: dropped the whileHover scale-up. Container scaling on every
+  // hover read as "click-me-I'm-a-toy" — production tools don't do that.
+  // Interactive surfaces now signal hover via border + background hue
+  // changes from the consumer's style, not by physically growing.
   return (
     <MotionComponent
       ref={ref as Ref<HTMLDivElement>}
@@ -88,7 +92,6 @@ function GlassPanelBase(
       style={baseStyle}
       onClick={onClick}
       aria-label={ariaLabel}
-      whileHover={interactive ? { scale: 1.02 } : undefined}
       transition={SPRING_SNAPPY}
       data-intensity={intensity}
       data-interactive={interactive ? 'true' : 'false'}

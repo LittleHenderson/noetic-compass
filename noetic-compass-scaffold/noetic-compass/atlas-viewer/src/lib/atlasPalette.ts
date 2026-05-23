@@ -35,7 +35,11 @@ export const ATLAS_STATUS_COLORS: AtlasStatusColors = {
   caveat: '#eab308',
   constrain: '#f97316',
   suppress: '#ef4444',
-  activeTrace: '#3b82f6',
+  // Wave 5.2: teal-400 — matches noeticcompass.com production accent. The
+  // previous bright blue (#3b82f6) read as "Web 2.0 dashboard" and was the
+  // single biggest cartoonish-looking color across the cockpit (timeline,
+  // tab underlines, selected cards, scrubber fill, edges).
+  activeTrace: '#2dd4bf',
   intervention: '#a855f7',
   unavailable: '#6b7280',
 } as const;

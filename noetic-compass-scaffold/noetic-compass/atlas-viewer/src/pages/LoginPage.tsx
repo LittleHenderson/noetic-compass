@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import {
-  ACCENT_BLUE,
+  ACCENT_TEAL,
   COLORS,
   SPRING_SNAPPY,
   THEME,
@@ -12,16 +12,16 @@ import {
 
 const headingStyle: CSSProperties = {
   margin: 0,
-  fontSize: 28,
-  fontWeight: 600,
+  fontSize: 24,
+  fontWeight: 700,
   letterSpacing: -0.3,
   color: COLORS.textPrimary,
 };
 
 const subheadingStyle: CSSProperties = {
-  margin: '8px 0 24px 0',
-  fontSize: 14,
-  lineHeight: 1.5,
+  margin: '8px 0 22px 0',
+  fontSize: 13.5,
+  lineHeight: 1.55,
   color: COLORS.textSecondary,
 };
 
@@ -29,50 +29,53 @@ const fieldGroupStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: 6,
-  marginBottom: 14,
+  marginBottom: 12,
 };
 
 const labelStyle: CSSProperties = {
-  fontSize: 12,
-  fontWeight: 500,
-  letterSpacing: 0.4,
+  fontSize: 10.5,
+  fontWeight: 600,
+  letterSpacing: 1,
   textTransform: 'uppercase',
   color: COLORS.textMuted,
 };
 
 const inputStyle: CSSProperties = {
   width: '100%',
-  padding: '12px 14px',
-  borderRadius: 10,
+  padding: '10px 12px',
+  borderRadius: 6,
   border: '1px solid rgba(255, 255, 255, 0.08)',
-  background: 'rgba(2, 6, 23, 0.55)',
+  background: 'rgba(255, 255, 255, 0.02)',
   color: COLORS.textPrimary,
-  fontSize: 15,
+  fontSize: 14,
   fontFamily: THEME.fontFamily,
   outline: 'none',
 };
 
+// Bordered ghost button matching the production noeticcompass nav style:
+// transparent fill, 1 px hairline border, teal text + teal-tinted hover fill.
+// No gradient, no glow, no drop shadow.
 const buttonStyle: CSSProperties = {
   width: '100%',
-  marginTop: 6,
-  padding: '12px 18px',
-  borderRadius: 12,
-  border: '1px solid rgba(59, 130, 246, 0.55)',
-  background: `linear-gradient(135deg, ${ACCENT_BLUE} 0%, #1d4ed8 100%)`,
-  color: '#f8fafc',
-  fontSize: 15,
+  marginTop: 8,
+  padding: '10px 16px',
+  borderRadius: 6,
+  border: `1px solid ${ACCENT_TEAL}`,
+  background: 'rgba(45, 212, 191, 0.08)',
+  color: ACCENT_TEAL,
+  fontSize: 13,
   fontWeight: 600,
+  letterSpacing: 0.3,
   fontFamily: THEME.fontFamily,
   cursor: 'pointer',
-  boxShadow: '0 6px 20px rgba(59, 130, 246, 0.35)',
 };
 
 const footnoteStyle: CSSProperties = {
-  marginTop: 22,
-  paddingTop: 18,
-  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-  fontSize: 12,
-  lineHeight: 1.6,
+  marginTop: 20,
+  paddingTop: 16,
+  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+  fontSize: 11.5,
+  lineHeight: 1.55,
   color: COLORS.textMuted,
 };
 
@@ -88,7 +91,7 @@ export default function LoginPage() {
 
   return (
     <PageShell>
-      <GlassPanel intensity="regular" padding={28} ariaLabel="Sign in to Atlas Viewer">
+      <GlassPanel intensity="regular" padding={24} ariaLabel="Sign in to Atlas Viewer">
         <h1 style={headingStyle}>Sign in</h1>
         <p style={subheadingStyle}>
           Private alpha preview. Access is by invitation only — your email and
@@ -131,8 +134,11 @@ export default function LoginPage() {
           <motion.button
             type="submit"
             style={buttonStyle}
-            whileHover={{ scale: 1.02, y: -1 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{
+              background: 'rgba(45, 212, 191, 0.16)',
+              borderColor: '#5eead4',
+            }}
+            whileTap={{ scale: 0.99 }}
             transition={SPRING_SNAPPY}
           >
             Continue
@@ -140,9 +146,9 @@ export default function LoginPage() {
         </form>
 
         <p style={footnoteStyle}>
-          Alpha v0 — auth flow is not yet wired to the licensing backend. Submit
-          continues to the license step without verification. Real auth is
-          tracked in the roadmap (item #5).
+          Alpha v0 — auth flow is not yet wired to the licensing backend.
+          Continue advances to the license step without verification.
+          Tracked as roadmap item #5.
         </p>
       </GlassPanel>
     </PageShell>

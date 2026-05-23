@@ -147,12 +147,17 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
             flex: `1 1 ${cellWidthPct}%`,
             minWidth: `${MIN_CELL_WIDTH}px`,
             height: `${CELL_HEIGHT}px`,
-            background: isCurrent ? 'transparent' : 'rgba(31, 41, 55, 0.55)',
+            // Wave 5.2: no big colored fill on the current cell. Subtle
+            // teal-tinted background + teal border for the active cell;
+            // neutral hairline for others. No glow halo.
+            background: isCurrent
+              ? 'rgba(45, 212, 191, 0.10)'
+              : 'rgba(255, 255, 255, 0.02)',
             border: isCurrent
-              ? '2px solid transparent'
-              : '1px solid rgba(55, 65, 81, 0.7)',
-            borderRadius: '8px',
-            color: isCurrent ? '#ffffff' : '#d1d5db',
+              ? `1px solid ${ATLAS_STATUS_COLORS.activeTrace}`
+              : '1px solid rgba(255, 255, 255, 0.06)',
+            borderRadius: '6px',
+            color: isCurrent ? '#e2e8f0' : '#94a3b8',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -161,9 +166,12 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
             whiteSpace: 'nowrap',
             textOverflow: 'ellipsis',
             padding: '0 6px',
-            fontWeight: isCurrent ? 500 : 400,
-            fontFamily: THEME?.fontFamily ?? 'Inter, ui-sans-serif, system-ui, sans-serif',
+            fontWeight: isCurrent ? 600 : 400,
+            fontFamily: THEME?.fontMono ?? 'JetBrains Mono, ui-monospace, monospace',
+            fontSize: 11,
+            letterSpacing: 0.2,
             zIndex: isCurrent ? 2 : 1,
+            transition: 'border-color 0.15s ease, background 0.15s ease',
           };
           return (
             <motion.div
@@ -177,8 +185,13 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
               data-current={isCurrent ? 'true' : 'false'}
               onClick={() => handleClick(idx)}
               style={cellStyle}
-              whileHover={{ scale: 1.04, filter: 'brightness(1.18)' }}
-              whileTap={{ scale: 0.97 }}
+              whileHover={{
+                borderColor: isCurrent
+                  ? ATLAS_STATUS_COLORS.activeTrace
+                  : 'rgba(255, 255, 255, 0.12)',
+                color: '#e2e8f0',
+              }}
+              whileTap={{ scale: 0.98 }}
               transition={SPRING_GENTLE}
             >
               {isCurrent && (
@@ -188,11 +201,10 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
                   transition={SPRING_SNAPPY}
                   style={{
                     position: 'absolute',
-                    inset: 0,
-                    borderRadius: '8px',
-                    background: ATLAS_STATUS_COLORS.activeTrace,
-                    boxShadow: `0 0 12px ${ATLAS_STATUS_COLORS.activeTrace}`,
-                    zIndex: -1,
+                    inset: -1,
+                    borderRadius: '6px',
+                    border: `1px solid ${ATLAS_STATUS_COLORS.activeTrace}`,
+                    pointerEvents: 'none',
                   }}
                 />
               )}
