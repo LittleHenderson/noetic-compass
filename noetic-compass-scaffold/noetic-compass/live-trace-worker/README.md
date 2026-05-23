@@ -17,16 +17,18 @@ Atlas Viewer UI
 
 ## Milestone status
 
-- **M1 (this PR) — scaffold + fake trace.** Routes, schemas, Dockerfile,
-  fake event stream emitting schema-valid `manifest` / `neuron_covers` /
-  `token` / `complete` events. No model weights, no GPU. Health endpoint
-  reports `is_real_model: false`.
-- **M2 — real Pythia + probes.** Swap `runtime/event_stream.stream_fake_trace`
-  for a real `pythia_runner` + `probe_runner` pipeline. Seed from
-  `experiment/cas-probe-pythia` (copy/curate; don't promote in place).
+- **M1 — scaffold + fake trace.** Merged. Routes, schemas, Dockerfile,
+  fake event stream emitting schema-valid events.
+- **M2 (this PR) — real Pythia + probes.** Adds `runtime/pythia_runner.run_pythia`
+  driving Pythia-160M one token at a time, `runtime/probe_runner.capture_probes`
+  registering forward hooks on each layer's MLP, and a real-vs-fake
+  dispatcher (`runtime/event_stream.stream_trace`). Demo-mode fallback
+  remains for CI / local dev (`LIVE_TRACE_DEMO_MODE=1`, missing torch, or
+  failed load). `manifest.is_real_model` flips to true ONLY when weights
+  are actually loaded. Acceptance gate in `M2_ACCEPTANCE.md`.
 - **M3 — api proxy.** Add `POST /api/atlas/live/session` +
   `GET .../events` to `noetic-compass-api/routes/atlas_live.py`.
-  Auth/license enforced there.
+  Auth: invite-code allowlist + per-IP rate limit + short-lived stream token.
 - **M4 — UI toggle.** Wire LIVE/REPLAY mode toggle in the Atlas Viewer
   cockpit. REPLAY stays the default + fallback.
 - **v0.2 — adapters.** OLMo / Qwen adapters once Pythia path is stable.
