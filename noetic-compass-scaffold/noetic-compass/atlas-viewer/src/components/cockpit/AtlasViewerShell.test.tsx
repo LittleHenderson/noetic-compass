@@ -180,7 +180,9 @@ describe('AtlasViewerShell — playback wiring', () => {
     const scrubber = screen.getByTestId('token-scrubber') as HTMLInputElement;
     fireEvent.change(scrubber, { target: { value: '4' } });
     const label = screen.getByTestId('token-label');
-    expect(label.textContent).toContain('token 5 of 10');
+    // Wave 5.2: shortened token label from "token 5 of 10" to "5 / 10"
+    // so the control bar fits on a single row in the tighter restyle.
+    expect(label.textContent).toContain('5 / 10');
   });
 });
 

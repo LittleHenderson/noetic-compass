@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { GlassPanel } from '../ui/GlassPanel';
 import {
-  THEME,
+  ACCENT_TEAL,
+  COLORS,
   SPRING_SNAPPY,
-  GLASS_PANEL_FILL,
-  GLASS_PANEL_BORDER,
 } from '../../lib/designTokens';
 
 export type PlaybackMode = 'paused' | 'playing';
@@ -34,6 +33,15 @@ export interface ControlBarProps {
   onToggleBlindspots: () => void;
   onToggleActiveTrace: () => void;
   onExportEvidence?: () => void;
+  // Wave 5.2 additions:
+  onRewind?: () => void;
+  onToggleFullscreen?: () => void;
+  onToggleLeftPanel?: () => void;
+  onToggleRightPanel?: () => void;
+  onToggleHelp?: () => void;
+  fullscreen?: boolean;
+  leftPanelOpen?: boolean;
+  rightPanelOpen?: boolean;
   className?: string;
 }
 
@@ -45,82 +53,77 @@ const VERIFICATION_MODES: VerificationMode[] = [
   'MAX_COVERAGE_TRIAGE',
 ];
 
-const TEXT_COLOR = '#e2e8f0';
-const TEXT_MUTED = '#9ca3af';
-const ACTIVE_TEXT_ON_ACCENT = '#0b1220';
-const ACCENT = THEME.ACCENT_BLUE;
-const HAIRLINE = 'rgba(255, 255, 255, 0.08)';
+const HAIRLINE = 'rgba(255, 255, 255, 0.06)';
 
 const barStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 8,
-  height: 56,
-  padding: '8px 16px',
-  color: TEXT_COLOR,
-  fontFamily: 'Inter, system-ui, sans-serif',
-  fontSize: 13,
+  gap: 6,
+  height: 48,
+  padding: '6px 12px',
+  color: COLORS.textPrimary,
+  fontFamily: 'system-ui, -apple-system, "Segoe UI Variable", sans-serif',
+  fontSize: 12,
   outline: 'none',
   boxSizing: 'border-box',
+  flexWrap: 'wrap',
 };
 
 const segmentStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 8,
+  gap: 4,
   position: 'relative',
 };
 
 const middleSegmentStyle: CSSProperties = {
   ...segmentStyle,
   flex: 1,
-  minWidth: 0,
+  minWidth: 120,
+  gap: 10,
 };
 
+// Wave 5.2 pill style:
+//  - transparent background (no big colored fill)
+//  - thin hairline border at very low opacity
+//  - active state = teal text + teal-tinted background + teal border
+//  - inactive = slate-400 text on hairline border, hover lifts to slate-200
 const pillBaseStyle: CSSProperties = {
   position: 'relative',
-  minWidth: 32,
-  minHeight: 32,
-  padding: '4px 12px',
-  color: TEXT_COLOR,
+  minWidth: 28,
+  minHeight: 28,
+  padding: '4px 10px',
+  color: COLORS.textSecondary,
   background: 'transparent',
-  border: GLASS_PANEL_BORDER,
-  borderRadius: 8,
+  border: `1px solid ${HAIRLINE}`,
+  borderRadius: 6,
   cursor: 'pointer',
-  fontSize: 12,
+  fontSize: 11.5,
   fontWeight: 500,
   fontFamily: 'inherit',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
+  letterSpacing: 0.2,
+  transition: 'color 0.15s ease, background 0.15s ease, border-color 0.15s ease',
 };
 
-const activePillTextStyle: CSSProperties = {
-  color: ACTIVE_TEXT_ON_ACCENT,
+const activePillStyle: CSSProperties = {
+  ...pillBaseStyle,
+  color: ACCENT_TEAL,
+  background: 'rgba(45, 212, 191, 0.10)',
+  borderColor: 'rgba(45, 212, 191, 0.45)',
   fontWeight: 600,
 };
 
-const pillLabelStyle: CSSProperties = {
-  position: 'relative',
-  zIndex: 1,
-};
-
-const activeIndicatorBaseStyle: CSSProperties = {
-  position: 'absolute',
-  inset: 0,
-  borderRadius: 8,
-  background: ACCENT,
-  zIndex: 0,
-};
-
 const selectStyle: CSSProperties = {
-  minHeight: 32,
-  padding: '4px 10px',
-  background: GLASS_PANEL_FILL,
-  color: TEXT_COLOR,
-  border: GLASS_PANEL_BORDER,
-  borderRadius: 8,
-  fontSize: 12,
+  minHeight: 28,
+  padding: '4px 8px',
+  background: 'rgba(255, 255, 255, 0.02)',
+  color: COLORS.textPrimary,
+  border: `1px solid ${HAIRLINE}`,
+  borderRadius: 6,
+  fontSize: 11.5,
   fontFamily: 'inherit',
 };
 
@@ -128,7 +131,7 @@ const scrubberWrapStyle: CSSProperties = {
   flex: 1,
   minWidth: 80,
   position: 'relative',
-  height: 28,
+  height: 22,
   display: 'flex',
   alignItems: 'center',
   cursor: 'pointer',
@@ -137,9 +140,9 @@ const scrubberWrapStyle: CSSProperties = {
 const scrubberTrackStyle: CSSProperties = {
   position: 'relative',
   width: '100%',
-  height: 4,
+  height: 3,
   borderRadius: 2,
-  background: HAIRLINE,
+  background: 'rgba(255, 255, 255, 0.06)',
   overflow: 'visible',
 };
 
@@ -148,18 +151,19 @@ const scrubberFillStyle: CSSProperties = {
   top: 0,
   left: 0,
   bottom: 0,
-  background: ACCENT,
+  background: ACCENT_TEAL,
   borderRadius: 2,
 };
 
+// Smaller thumb, no glow halo. Just a hard 8 px dot.
 const scrubberThumbStyle: CSSProperties = {
   position: 'absolute',
   top: '50%',
-  width: 14,
-  height: 14,
+  width: 10,
+  height: 10,
   borderRadius: '50%',
-  background: ACCENT,
-  boxShadow: '0 0 0 2px rgba(255, 255, 255, 0.18)',
+  background: ACCENT_TEAL,
+  border: '2px solid #020617',
   transform: 'translate(-50%, -50%)',
   cursor: 'grab',
   touchAction: 'none',
@@ -180,12 +184,14 @@ const hiddenScrubberInputStyle: CSSProperties = {
 const tokenLabelStyle: CSSProperties = {
   whiteSpace: 'nowrap',
   fontVariantNumeric: 'tabular-nums',
-  color: TEXT_MUTED,
+  color: COLORS.textMuted,
+  fontSize: 11,
+  letterSpacing: 0.3,
 };
 
 const dividerStyle: CSSProperties = {
   width: 1,
-  height: 24,
+  height: 20,
   background: HAIRLINE,
 };
 
@@ -194,6 +200,38 @@ function clampToken(idx: number, tokenCount: number): number {
   if (idx < 0) return 0;
   if (idx > tokenCount - 1) return tokenCount - 1;
   return idx;
+}
+
+interface IconButtonProps {
+  label: string;
+  active?: boolean;
+  testId?: string;
+  title?: string;
+  onClick: () => void;
+  children: React.ReactNode;
+}
+
+function IconButton({ label, active, testId, title, onClick, children }: IconButtonProps) {
+  const style = active ? activePillStyle : pillBaseStyle;
+  return (
+    <motion.button
+      type="button"
+      onClick={onClick}
+      aria-label={label}
+      aria-pressed={active}
+      title={title ?? label}
+      style={style}
+      data-testid={testId}
+      whileHover={{
+        color: active ? ACCENT_TEAL : COLORS.textPrimary,
+        borderColor: active ? 'rgba(45, 212, 191, 0.65)' : 'rgba(255, 255, 255, 0.12)',
+      }}
+      whileTap={{ scale: 0.97 }}
+      transition={SPRING_SNAPPY}
+    >
+      {children}
+    </motion.button>
+  );
 }
 
 export default function ControlBar(props: ControlBarProps): JSX.Element {
@@ -214,6 +252,14 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
     onToggleBlindspots,
     onToggleActiveTrace,
     onExportEvidence,
+    onRewind,
+    onToggleFullscreen,
+    onToggleLeftPanel,
+    onToggleRightPanel,
+    onToggleHelp,
+    fullscreen,
+    leftPanelOpen,
+    rightPanelOpen,
     className,
   } = props;
 
@@ -263,6 +309,26 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           e.preventDefault();
           onToggleActiveTrace();
           return;
+        case 'r':
+        case 'R':
+          if (onRewind) {
+            e.preventDefault();
+            onRewind();
+          }
+          return;
+        case 'f':
+        case 'F':
+          if (onToggleFullscreen) {
+            e.preventDefault();
+            onToggleFullscreen();
+          }
+          return;
+        case '?':
+          if (onToggleHelp) {
+            e.preventDefault();
+            onToggleHelp();
+          }
+          return;
         default:
           return;
       }
@@ -276,12 +342,13 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
       onZoomLevelChange,
       onToggleBlindspots,
       onToggleActiveTrace,
+      onRewind,
+      onToggleFullscreen,
+      onToggleHelp,
     ],
   );
 
   const playing = playbackMode === 'playing';
-  const playGlyph = playing ? '⏸' : '▶';
-  const playLabel = playing ? 'Pause playback' : 'Start playback';
   const sliderMax = Math.max(0, tokenCount - 1);
   const pct = sliderMax === 0 ? 0 : (currentTokenIndex / sliderMax) * 100;
 
@@ -321,24 +388,8 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
     };
   }, [dragging, seekFromClientX]);
 
-  /**
-   * Active-pill morph: every active-state indicator shares a layoutId scoped
-   * to its segment. Framer's layout engine tweens the indicator's bounding
-   * box between sibling buttons instead of fading one out and another in,
-   * producing the liquid morph.
-   */
-  const renderActiveIndicator = (layoutId: string): JSX.Element => (
-    <motion.span
-      layoutId={layoutId}
-      layout
-      style={activeIndicatorBaseStyle}
-      transition={SPRING_SNAPPY}
-      aria-hidden="true"
-    />
-  );
-
   return (
-    <GlassPanel intensity="regular" as="div" padding={0}>
+    <GlassPanel intensity="thin" as="div" padding={0}>
       <div
         ref={containerRef}
         role="toolbar"
@@ -349,31 +400,27 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
         className={className}
         data-testid="control-bar"
       >
+        {/* Playback */}
         <div style={segmentStyle} aria-label="Playback">
-          <motion.button
-            type="button"
-            onClick={onPlayToggle}
-            aria-label={playLabel}
-            aria-pressed={playing}
-            style={pillBaseStyle}
-            data-testid="play-toggle"
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
-            transition={SPRING_SNAPPY}
-          >
-            <AnimatePresence>
-              {playing ? renderActiveIndicator('active-pill-play') : null}
-            </AnimatePresence>
-            <span
-              aria-hidden="true"
-              style={{
-                ...pillLabelStyle,
-                ...(playing ? activePillTextStyle : null),
-              }}
+          {onRewind ? (
+            <IconButton
+              label="Rewind to start"
+              title="Rewind to start (R)"
+              testId="rewind"
+              onClick={onRewind}
             >
-              {playGlyph}
-            </span>
-          </motion.button>
+              <span aria-hidden="true">⏮</span>
+            </IconButton>
+          ) : null}
+          <IconButton
+            label={playing ? 'Pause playback' : 'Start playback'}
+            title="Play / Pause (Space)"
+            testId="play-toggle"
+            active={playing}
+            onClick={onPlayToggle}
+          >
+            <span aria-hidden="true">{playing ? '⏸' : '▶'}</span>
+          </IconButton>
           <div role="group" aria-label="Playback speed" style={segmentStyle}>
             {SPEEDS.map((s) => {
               const active = s === speed;
@@ -384,21 +431,16 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
                   onClick={() => onSpeedChange(s)}
                   aria-label={`Set playback speed ${s}x`}
                   aria-pressed={active}
-                  style={pillBaseStyle}
+                  style={active ? activePillStyle : pillBaseStyle}
                   data-testid={`speed-${s}`}
-                  whileHover={{ scale: 1.06 }}
-                  whileTap={{ scale: 0.94 }}
+                  whileHover={{
+                    color: active ? ACCENT_TEAL : COLORS.textPrimary,
+                    borderColor: active ? 'rgba(45, 212, 191, 0.65)' : 'rgba(255, 255, 255, 0.12)',
+                  }}
+                  whileTap={{ scale: 0.97 }}
                   transition={SPRING_SNAPPY}
                 >
-                  {active ? renderActiveIndicator('active-pill-speed') : null}
-                  <span
-                    style={{
-                      ...pillLabelStyle,
-                      ...(active ? activePillTextStyle : null),
-                    }}
-                  >
-                    {s}x
-                  </span>
+                  {s}×
                 </motion.button>
               );
             })}
@@ -407,6 +449,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
 
         <div style={dividerStyle} aria-hidden="true" />
 
+        {/* Scrubber */}
         <div style={middleSegmentStyle} aria-label="Token scrubber">
           <div
             ref={trackRef}
@@ -424,8 +467,6 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
                 style={scrubberThumbStyle}
                 animate={{ left: `${pct}%` }}
                 transition={SPRING_SNAPPY}
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.92 }}
                 role="presentation"
                 data-testid="token-scrubber-thumb"
               />
@@ -448,12 +489,13 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
             data-testid="token-scrubber"
           />
           <span style={tokenLabelStyle} data-testid="token-label">
-            token {tokenCount === 0 ? 0 : currentTokenIndex + 1} of {tokenCount}
+            {tokenCount === 0 ? 0 : currentTokenIndex + 1} / {tokenCount}
           </span>
         </div>
 
         <div style={dividerStyle} aria-hidden="true" />
 
+        {/* View / overlays */}
         <div style={segmentStyle} aria-label="View controls">
           <div role="group" aria-label="Zoom level" style={segmentStyle}>
             {ZOOMS.map((z) => {
@@ -465,77 +507,38 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
                   onClick={() => onZoomLevelChange(z)}
                   aria-label={`Zoom level Z${z}`}
                   aria-pressed={active}
-                  style={pillBaseStyle}
+                  style={active ? activePillStyle : pillBaseStyle}
                   data-testid={`zoom-${z}`}
-                  whileHover={{ scale: 1.06 }}
-                  whileTap={{ scale: 0.94 }}
+                  whileHover={{
+                    color: active ? ACCENT_TEAL : COLORS.textPrimary,
+                    borderColor: active ? 'rgba(45, 212, 191, 0.65)' : 'rgba(255, 255, 255, 0.12)',
+                  }}
+                  whileTap={{ scale: 0.97 }}
                   transition={SPRING_SNAPPY}
                 >
-                  {active ? renderActiveIndicator('active-pill-zoom') : null}
-                  <span
-                    style={{
-                      ...pillLabelStyle,
-                      ...(active ? activePillTextStyle : null),
-                    }}
-                  >
-                    Z{z}
-                  </span>
+                  Z{z}
                 </motion.button>
               );
             })}
           </div>
-          <motion.button
-            type="button"
-            onClick={onToggleBlindspots}
-            aria-label="Toggle blindspots overlay"
-            aria-pressed={showBlindspots}
-            style={pillBaseStyle}
-            data-testid="toggle-blindspots"
+          <IconButton
+            label="Toggle blindspots overlay"
             title="Blindspots (B)"
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
-            transition={SPRING_SNAPPY}
+            testId="toggle-blindspots"
+            active={showBlindspots}
+            onClick={onToggleBlindspots}
           >
-            <AnimatePresence>
-              {showBlindspots
-                ? renderActiveIndicator('active-pill-blindspots')
-                : null}
-            </AnimatePresence>
-            <span
-              style={{
-                ...pillLabelStyle,
-                ...(showBlindspots ? activePillTextStyle : null),
-              }}
-            >
-              B
-            </span>
-          </motion.button>
-          <motion.button
-            type="button"
-            onClick={onToggleActiveTrace}
-            aria-label="Toggle active trace overlay"
-            aria-pressed={showActiveTrace}
-            style={pillBaseStyle}
-            data-testid="toggle-activetrace"
+            B
+          </IconButton>
+          <IconButton
+            label="Toggle active trace overlay"
             title="Active trace (T)"
-            whileHover={{ scale: 1.06 }}
-            whileTap={{ scale: 0.94 }}
-            transition={SPRING_SNAPPY}
+            testId="toggle-activetrace"
+            active={showActiveTrace}
+            onClick={onToggleActiveTrace}
           >
-            <AnimatePresence>
-              {showActiveTrace
-                ? renderActiveIndicator('active-pill-activetrace')
-                : null}
-            </AnimatePresence>
-            <span
-              style={{
-                ...pillLabelStyle,
-                ...(showActiveTrace ? activePillTextStyle : null),
-              }}
-            >
-              T
-            </span>
-          </motion.button>
+            T
+          </IconButton>
           <select
             value={verificationMode}
             onChange={(e) =>
@@ -547,23 +550,67 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           >
             {VERIFICATION_MODES.map((m) => (
               <option key={m} value={m}>
-                {m}
+                {m.replace(/_/g, ' ')}
               </option>
             ))}
           </select>
           {onExportEvidence ? (
-            <motion.button
-              type="button"
+            <IconButton
+              label="Export evidence pack"
+              testId="export-evidence"
               onClick={onExportEvidence}
-              aria-label="Export evidence pack"
-              style={pillBaseStyle}
-              data-testid="export-evidence"
-              whileHover={{ scale: 1.06 }}
-              whileTap={{ scale: 0.94 }}
-              transition={SPRING_SNAPPY}
             >
-              <span style={pillLabelStyle}>Export</span>
-            </motion.button>
+              Export
+            </IconButton>
+          ) : null}
+        </div>
+
+        <div style={dividerStyle} aria-hidden="true" />
+
+        {/* Layout */}
+        <div style={segmentStyle} aria-label="Layout">
+          {onToggleLeftPanel ? (
+            <IconButton
+              label={leftPanelOpen ? 'Collapse picture panel' : 'Expand picture panel'}
+              title="Picture panel"
+              testId="toggle-left-panel"
+              active={leftPanelOpen}
+              onClick={onToggleLeftPanel}
+            >
+              <span aria-hidden="true">{leftPanelOpen ? '◧' : '▣'}</span>
+            </IconButton>
+          ) : null}
+          {onToggleRightPanel ? (
+            <IconButton
+              label={rightPanelOpen ? 'Collapse controls panel' : 'Expand controls panel'}
+              title="Controls panel"
+              testId="toggle-right-panel"
+              active={rightPanelOpen}
+              onClick={onToggleRightPanel}
+            >
+              <span aria-hidden="true">{rightPanelOpen ? '◨' : '▤'}</span>
+            </IconButton>
+          ) : null}
+          {onToggleFullscreen ? (
+            <IconButton
+              label={fullscreen ? 'Exit fullscreen neural net' : 'Fullscreen neural net'}
+              title="Fullscreen (F)"
+              testId="toggle-fullscreen"
+              active={fullscreen}
+              onClick={onToggleFullscreen}
+            >
+              <span aria-hidden="true">{fullscreen ? '⤡' : '⤢'}</span>
+            </IconButton>
+          ) : null}
+          {onToggleHelp ? (
+            <IconButton
+              label="Open help and glossary"
+              title="Help / glossary (?)"
+              testId="toggle-help"
+              onClick={onToggleHelp}
+            >
+              ?
+            </IconButton>
           ) : null}
         </div>
       </div>

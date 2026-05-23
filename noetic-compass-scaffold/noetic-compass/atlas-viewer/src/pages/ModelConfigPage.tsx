@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import {
-  ACCENT_BLUE,
+  ACCENT_TEAL,
   COLORS,
   SPRING_SNAPPY,
   THEME,
@@ -50,24 +50,24 @@ const MODELS: ModelOption[] = [
 
 const headingStyle: CSSProperties = {
   margin: 0,
-  fontSize: 28,
-  fontWeight: 600,
+  fontSize: 24,
+  fontWeight: 700,
   letterSpacing: -0.3,
   color: COLORS.textPrimary,
 };
 
 const subheadingStyle: CSSProperties = {
-  margin: '8px 0 22px 0',
-  fontSize: 14,
-  lineHeight: 1.5,
+  margin: '8px 0 18px 0',
+  fontSize: 13.5,
+  lineHeight: 1.55,
   color: COLORS.textSecondary,
 };
 
 const listStyle: CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 10,
-  marginBottom: 18,
+  gap: 6,
+  marginBottom: 14,
 };
 
 const rowStyle = (active: boolean, available: boolean): CSSProperties => ({
@@ -75,76 +75,78 @@ const rowStyle = (active: boolean, available: boolean): CSSProperties => ({
   gridTemplateColumns: '1fr auto',
   alignItems: 'center',
   gap: 12,
-  padding: '14px 16px',
-  borderRadius: 12,
+  padding: '12px 14px',
+  borderRadius: 6,
   border: active
-    ? '1px solid rgba(59, 130, 246, 0.55)'
+    ? `1px solid ${ACCENT_TEAL}`
     : '1px solid rgba(255, 255, 255, 0.06)',
   background: active
-    ? 'rgba(59, 130, 246, 0.10)'
-    : 'rgba(15, 23, 42, 0.45)',
+    ? 'rgba(45, 212, 191, 0.08)'
+    : 'rgba(255, 255, 255, 0.02)',
   cursor: available ? 'pointer' : 'not-allowed',
   opacity: available ? 1 : 0.55,
+  transition: 'border-color 0.15s ease, background 0.15s ease',
 });
 
 const rowTitleStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'baseline',
   gap: 10,
-  fontSize: 15,
+  fontSize: 14,
   fontWeight: 600,
   color: COLORS.textPrimary,
 };
 
 const rowMetaStyle: CSSProperties = {
-  fontSize: 12,
+  fontSize: 11.5,
   color: COLORS.textMuted,
+  fontFamily: THEME.fontMono,
 };
 
 const rowNotesStyle: CSSProperties = {
   marginTop: 4,
-  fontSize: 12.5,
+  fontSize: 12,
   lineHeight: 1.5,
   color: COLORS.textSecondary,
 };
 
 const tagStyle = (kind: 'live' | 'soon'): CSSProperties => ({
-  fontSize: 11,
-  fontWeight: 600,
-  letterSpacing: 0.5,
+  fontSize: 10,
+  fontWeight: 700,
+  letterSpacing: 1,
   textTransform: 'uppercase',
-  padding: '4px 8px',
-  borderRadius: 8,
+  padding: '3px 8px',
+  borderRadius: 4,
   background:
-    kind === 'live' ? 'rgba(34, 197, 94, 0.16)' : 'rgba(148, 163, 184, 0.12)',
+    kind === 'live' ? 'rgba(34, 197, 94, 0.08)' : 'rgba(148, 163, 184, 0.06)',
   border:
     kind === 'live'
-      ? '1px solid rgba(34, 197, 94, 0.45)'
-      : '1px solid rgba(148, 163, 184, 0.25)',
-  color: kind === 'live' ? '#bbf7d0' : COLORS.textSecondary,
+      ? '1px solid rgba(34, 197, 94, 0.35)'
+      : '1px solid rgba(148, 163, 184, 0.20)',
+  color: kind === 'live' ? '#86efac' : COLORS.textMuted,
 });
 
 const buttonStyle: CSSProperties = {
   width: '100%',
-  marginTop: 8,
-  padding: '12px 18px',
-  borderRadius: 12,
-  border: '1px solid rgba(59, 130, 246, 0.55)',
-  background: `linear-gradient(135deg, ${ACCENT_BLUE} 0%, #1d4ed8 100%)`,
-  color: '#f8fafc',
-  fontSize: 15,
+  marginTop: 6,
+  padding: '10px 16px',
+  borderRadius: 6,
+  border: `1px solid ${ACCENT_TEAL}`,
+  background: 'rgba(45, 212, 191, 0.08)',
+  color: ACCENT_TEAL,
+  fontSize: 13,
   fontWeight: 600,
+  letterSpacing: 0.3,
   fontFamily: THEME.fontFamily,
   cursor: 'pointer',
-  boxShadow: '0 6px 20px rgba(59, 130, 246, 0.35)',
 };
 
 const footnoteStyle: CSSProperties = {
-  marginTop: 18,
-  paddingTop: 16,
-  borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-  fontSize: 12,
-  lineHeight: 1.6,
+  marginTop: 16,
+  paddingTop: 14,
+  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+  fontSize: 11.5,
+  lineHeight: 1.55,
   color: COLORS.textMuted,
 };
 
@@ -154,7 +156,7 @@ export default function ModelConfigPage() {
 
   return (
     <PageShell cardMaxWidth={540}>
-      <GlassPanel intensity="regular" padding={28} ariaLabel="Choose a model">
+      <GlassPanel intensity="regular" padding={24} ariaLabel="Choose a model">
         <h1 style={headingStyle}>Choose a model</h1>
         <p style={subheadingStyle}>
           The cockpit renders cached activations from the selected model.
@@ -165,7 +167,7 @@ export default function ModelConfigPage() {
           {MODELS.map((model) => {
             const active = selected === model.id;
             return (
-              <motion.div
+              <div
                 key={model.id}
                 role="radio"
                 aria-checked={active}
@@ -182,19 +184,14 @@ export default function ModelConfigPage() {
                   }
                 }}
                 style={rowStyle(active, model.available)}
-                whileHover={model.available ? { scale: 1.01 } : undefined}
-                whileTap={model.available ? { scale: 0.99 } : undefined}
-                transition={SPRING_SNAPPY}
                 data-testid={`model-row-${model.id}`}
               >
                 <div>
                   <div style={rowTitleStyle}>
-                    <span>
-                      {model.family}{' '}
-                      <span style={rowMetaStyle}>
-                        · {model.size}
-                        {model.layers > 0 ? ` · ${model.layers} layers` : ''}
-                      </span>
+                    <span>{model.family}</span>
+                    <span style={rowMetaStyle}>
+                      {model.size}
+                      {model.layers > 0 ? ` · ${model.layers} layers` : ''}
                     </span>
                   </div>
                   <div style={rowNotesStyle}>{model.notes}</div>
@@ -202,7 +199,7 @@ export default function ModelConfigPage() {
                 <span style={tagStyle(model.available ? 'live' : 'soon')}>
                   {model.available ? 'Live' : 'Soon'}
                 </span>
-              </motion.div>
+              </div>
             );
           })}
         </div>
@@ -210,8 +207,11 @@ export default function ModelConfigPage() {
         <motion.button
           type="button"
           style={buttonStyle}
-          whileHover={{ scale: 1.02, y: -1 }}
-          whileTap={{ scale: 0.98 }}
+          whileHover={{
+            background: 'rgba(45, 212, 191, 0.16)',
+            borderColor: '#5eead4',
+          }}
+          whileTap={{ scale: 0.99 }}
           transition={SPRING_SNAPPY}
           onClick={() => navigate('/cockpit')}
           data-testid="enter-cockpit"

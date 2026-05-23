@@ -175,8 +175,9 @@ describe('ControlBar', () => {
         {...makeProps({ currentTokenIndex: 4, tokenCount: 10 })}
       />,
     );
+    // Wave 5.2: tightened to "5 / 10" so the control bar fits on one row.
     expect(screen.getByTestId('token-label').textContent).toBe(
-      'token 5 of 10',
+      '5 / 10',
     );
   });
 });

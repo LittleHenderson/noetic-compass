@@ -1,8 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
-import { GlassPanel } from './GlassPanel';
-import { SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
+import { ACCENT_TEAL, ACCENT_CYAN, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
 
 export interface PageShellProps {
   children: ReactNode;
@@ -17,54 +16,59 @@ const STEPS: Array<{ to: string; label: string }> = [
   { to: '/cockpit', label: 'Cockpit' },
 ];
 
+// Wave 5.2: dropped the big purple/blue ambient blobs. Replaced with a tight
+// slate-950 base + a single subtle radial darkening from bottom. No
+// chromatic sky, no glow halo — production tools don't decorate the backdrop.
 const backdropStyle: CSSProperties = {
   position: 'fixed',
   inset: 0,
   background:
-    'radial-gradient(ellipse at top, #0a1124 0%, #02030a 60%, #000000 100%)',
+    'radial-gradient(ellipse at 50% 110%, rgba(15, 23, 42, 0.9) 0%, #020617 60%, #000000 100%)',
   overflow: 'hidden',
 };
 
-const ambientBlobStyle = (top: string, left: string, color: string): CSSProperties => ({
+// A faint grid graticule behind everything — gives the page a HUD-like
+// foundation without competing with the content. Uses inline SVG via
+// data URI so there's no extra HTTP request.
+const gridOverlayStyle: CSSProperties = {
   position: 'absolute',
-  top,
-  left,
-  width: 480,
-  height: 480,
-  borderRadius: '50%',
-  background: `radial-gradient(circle, ${color} 0%, transparent 65%)`,
-  filter: 'blur(60px)',
-  opacity: 0.45,
+  inset: 0,
   pointerEvents: 'none',
-});
+  opacity: 0.35,
+  backgroundImage:
+    "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'><path d='M40 0H0V40' fill='none' stroke='rgba(148,163,184,0.06)' stroke-width='1'/></svg>\")",
+  backgroundSize: '40px 40px',
+};
 
 const navWrapperStyle: CSSProperties = {
   position: 'relative',
   zIndex: 10,
   display: 'flex',
   justifyContent: 'center',
-  paddingTop: 18,
+  paddingTop: 22,
   paddingBottom: 4,
 };
 
 const navInnerStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
-  gap: 4,
-  padding: 6,
-  fontSize: 13,
+  gap: 2,
+  padding: 4,
+  fontSize: 12,
+  letterSpacing: 0.3,
   fontFamily: THEME.fontFamily,
 };
 
 const navStepStyle = (active: boolean): CSSProperties => ({
   position: 'relative',
   padding: '6px 12px',
-  borderRadius: 10,
-  color: active ? '#ffffff' : THEME.colors.textSecondary,
+  borderRadius: 6,
+  color: active ? ACCENT_TEAL : COLORS.textSecondary,
   fontWeight: active ? 600 : 500,
   textDecoration: 'none',
   cursor: 'pointer',
   zIndex: 2,
+  transition: 'color 0.15s ease',
 });
 
 const mainStyle: CSSProperties = {
@@ -77,26 +81,28 @@ const mainStyle: CSSProperties = {
   justifyContent: 'center',
   padding: '24px 24px 64px 24px',
   fontFamily: THEME.fontFamily,
-  color: THEME.colors.textPrimary,
+  color: COLORS.textPrimary,
 };
 
 const wordmarkStyle: CSSProperties = {
-  display: 'flex',
+  display: 'inline-flex',
   alignItems: 'baseline',
   gap: 8,
   marginBottom: 28,
-  fontSize: 13,
-  letterSpacing: 1.4,
+  fontSize: 11,
+  letterSpacing: 2.2,
   textTransform: 'uppercase',
-  color: THEME.colors.textSecondary,
+  color: COLORS.textMuted,
+  fontWeight: 500,
 };
 
-const wordmarkDotStyle: CSSProperties = {
-  width: 8,
-  height: 8,
-  borderRadius: '50%',
-  background: THEME.ACCENT_BLUE,
-  boxShadow: `0 0 14px ${THEME.ACCENT_BLUE}`,
+const wordmarkAccentStyle: CSSProperties = {
+  background: `linear-gradient(90deg, ${ACCENT_TEAL} 0%, ${ACCENT_CYAN} 100%)`,
+  WebkitBackgroundClip: 'text',
+  backgroundClip: 'text',
+  color: 'transparent',
+  fontWeight: 700,
+  letterSpacing: 2.5,
 };
 
 export function PageShell({
@@ -113,53 +119,62 @@ export function PageShell({
 
   return (
     <div style={backdropStyle}>
-      <div style={ambientBlobStyle('-160px', '-120px', 'rgba(59, 130, 246, 0.35)')} />
-      <div style={ambientBlobStyle('60%', '70%', 'rgba(168, 85, 247, 0.28)')} />
+      <div style={gridOverlayStyle} aria-hidden="true" />
 
       {showNav ? (
         <nav style={navWrapperStyle}>
-          <GlassPanel intensity="thin" padding={4} as="nav" ariaLabel="Atlas Viewer flow">
-            <div style={navInnerStyle}>
-              {STEPS.map((step) => {
-                const active = location.pathname.startsWith(step.to);
-                return (
-                  <Link
-                    key={step.to}
-                    to={step.to}
-                    style={navStepStyle(active)}
-                    aria-current={active ? 'page' : undefined}
-                    data-testid={`nav-step-${step.to.slice(1)}`}
-                  >
-                    {active ? (
-                      <motion.span
-                        layoutId="nav-active-pill"
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background: 'rgba(59, 130, 246, 0.18)',
-                          border: '1px solid rgba(59, 130, 246, 0.35)',
-                          borderRadius: 10,
-                          zIndex: -1,
-                        }}
-                        transition={SPRING_SNAPPY}
-                      />
-                    ) : null}
-                    {step.label}
-                  </Link>
-                );
-              })}
-            </div>
-          </GlassPanel>
+          <div
+            style={{
+              ...navInnerStyle,
+              background: 'rgba(255, 255, 255, 0.03)',
+              border: '1px solid rgba(255, 255, 255, 0.06)',
+              borderRadius: 8,
+              backdropFilter: 'blur(14px) saturate(120%)',
+              WebkitBackdropFilter: 'blur(14px) saturate(120%)',
+            }}
+            role="navigation"
+            aria-label="Atlas Viewer flow"
+          >
+            {STEPS.map((step) => {
+              const active = location.pathname.startsWith(step.to);
+              return (
+                <Link
+                  key={step.to}
+                  to={step.to}
+                  style={navStepStyle(active)}
+                  aria-current={active ? 'page' : undefined}
+                  data-testid={`nav-step-${step.to.slice(1)}`}
+                >
+                  {active ? (
+                    <motion.span
+                      layoutId="nav-active-pill"
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
+                        background: 'rgba(45, 212, 191, 0.10)',
+                        border: '1px solid rgba(45, 212, 191, 0.30)',
+                        borderRadius: 6,
+                        zIndex: -1,
+                      }}
+                      transition={SPRING_SNAPPY}
+                    />
+                  ) : null}
+                  {step.label}
+                </Link>
+              );
+            })}
+          </div>
         </nav>
       ) : null}
 
       <main style={mainStyle}>
         <div style={wordmarkStyle}>
-          <span style={wordmarkDotStyle} />
-          <span>Atlas Viewer · Alpha</span>
+          <span style={wordmarkAccentStyle}>Atlas Viewer</span>
+          <span>·</span>
+          <span>Alpha</span>
         </div>
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={SPRING_GENTLE}
           style={cardStyle}

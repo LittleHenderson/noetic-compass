@@ -13,44 +13,48 @@ import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 
 export type KnobValue = string | number | boolean | string[];
 
+export type MethodKnobsDensity = 'compact' | 'comfortable';
+
 export interface MethodKnobsPanelProps {
   methods: TestingMethod[];
   enabledMethodIds: Set<string>;
   knobValues: Record<string, Record<string, KnobValue>>;
   onToggleMethod: (methodId: string, enabled: boolean) => void;
   onKnobChange: (methodId: string, knobId: string, value: KnobValue) => void;
+  density?: MethodKnobsDensity;
   className?: string;
 }
 
-const panelStyle: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 8,
-  fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
-  fontSize: 13,
-  color: '#e5e7eb',
-  minWidth: 320,
-};
+// Wave 5.2: when the picture panel is collapsed the controls panel gets
+// more room, so we scale typography up. Compact = default cockpit (left
+// panel open). Comfortable = wider column, bigger text for legibility.
+function panelStyleFor(density: MethodKnobsDensity): CSSProperties {
+  return {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: density === 'comfortable' ? 10 : 8,
+    fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+    fontSize: density === 'comfortable' ? 14 : 13,
+    color: '#e2e8f0',
+    minWidth: density === 'comfortable' ? 360 : 320,
+  };
+}
 
 const cardStyle = (enabled: boolean): CSSProperties => ({
   position: 'relative',
   display: 'flex',
   flexDirection: 'column',
+  // Wave 5.2: drop the gradient sheen. Sharper radius. Cleaner.
   border: `1px solid ${enabled ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)'}`,
-  borderRadius: 10,
-  background: enabled ? GLASS_PANEL_FILL : 'rgba(15, 23, 42, 0.35)',
-  opacity: enabled ? 1 : 0.65,
+  borderRadius: 6,
+  background: enabled ? GLASS_PANEL_FILL : 'rgba(255, 255, 255, 0.01)',
+  opacity: enabled ? 1 : 0.6,
   overflow: 'hidden',
+  transition: 'border-color 0.15s ease, opacity 0.15s ease',
 });
 
-const cardSheenStyle: CSSProperties = {
-  position: 'absolute',
-  inset: 0,
-  borderRadius: 10,
-  background:
-    'linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 55%)',
-  pointerEvents: 'none',
-};
+// Sheen removed — see Wave 5.2 cardStyle comment.
+const cardSheenStyle: CSSProperties = { display: 'none' };
 
 const headerStyle: CSSProperties = {
   display: 'flex',
@@ -322,6 +326,7 @@ export default function MethodKnobsPanel({
   knobValues,
   onToggleMethod,
   onKnobChange,
+  density = 'compact',
   className,
 }: MethodKnobsPanelProps) {
   const ordered = [...methods].sort((a, b) => a.orderIndex - b.orderIndex);
@@ -338,13 +343,16 @@ export default function MethodKnobsPanel({
     });
   }, []);
 
+  const panelStyle = panelStyleFor(density);
+
   return (
     <GlassPanel
       intensity="regular"
       as="aside"
       className={className}
-      padding={12}
+      padding={density === 'comfortable' ? 16 : 12}
       style={panelStyle}
+      data-density={density}
     >
       <div data-testid="method-knobs-panel" style={{ display: 'contents' }}>
         {ordered.map((method) => {
@@ -370,7 +378,11 @@ export default function MethodKnobsPanel({
               role="group"
               aria-labelledby={nameId}
               style={cardStyle(enabled)}
-              whileHover={{ scale: 1.01 }}
+              whileHover={{
+                borderColor: enabled
+                  ? 'rgba(255, 255, 255, 0.14)'
+                  : 'rgba(255, 255, 255, 0.06)',
+              }}
               transition={SPRING_SNAPPY}
             >
               <span aria-hidden="true" style={cardSheenStyle} />

@@ -35,7 +35,11 @@ describe('ATLAS_STATUS_COLORS', () => {
     expect(ATLAS_STATUS_COLORS.caveat).toBe('#eab308');
     expect(ATLAS_STATUS_COLORS.constrain).toBe('#f97316');
     expect(ATLAS_STATUS_COLORS.suppress).toBe('#ef4444');
-    expect(ATLAS_STATUS_COLORS.activeTrace).toBe('#3b82f6');
+    // Wave 5.2: activeTrace shifted to teal-400 to match the production
+    // noeticcompass.com accent. Previous value '#3b82f6' read as Web-2.0
+    // bright blue and was the single biggest cartoonish color across the
+    // cockpit (timeline highlights, tab underlines, selected cards).
+    expect(ATLAS_STATUS_COLORS.activeTrace).toBe('#2dd4bf');
     expect(ATLAS_STATUS_COLORS.intervention).toBe('#a855f7');
     expect(ATLAS_STATUS_COLORS.unavailable).toBe('#6b7280');
   });

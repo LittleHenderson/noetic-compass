@@ -85,18 +85,19 @@ function cardStyle(selected: boolean): CSSProperties {
     flexDirection: 'column',
     gap: 4,
     padding: 10,
-    background: selected ? 'rgba(59,130,246,0.20)' : 'rgba(30, 41, 59, 0.55)',
+    // Wave 5.2: no glow halo, no heavy backdrop blur. Selected = subtle
+    // teal-tinted background + teal border. Unselected = hairline border.
+    background: selected
+      ? 'rgba(45, 212, 191, 0.08)'
+      : 'rgba(255, 255, 255, 0.02)',
     border: selected
       ? `1px solid ${ATLAS_STATUS_COLORS.activeTrace}`
-      : '1px solid rgba(255,255,255,0.06)',
-    borderRadius: 10,
+      : '1px solid rgba(255, 255, 255, 0.06)',
+    borderRadius: 6,
     cursor: 'pointer',
     outline: 'none',
-    boxShadow: selected
-      ? `0 0 0 1px ${ATLAS_STATUS_COLORS.activeTrace}, 0 0 18px rgba(59,130,246,0.35)`
-      : '0 1px 2px rgba(0,0,0,0.2)',
-    backdropFilter: 'blur(8px) saturate(140%)',
-    WebkitBackdropFilter: 'blur(8px) saturate(140%)',
+    boxShadow: 'none',
+    transition: 'border-color 0.15s ease, background 0.15s ease',
   };
 }
 
@@ -108,12 +109,11 @@ const headerStyle: CSSProperties = {
 
 const swatchStyle = (color: string): CSSProperties => ({
   display: 'inline-block',
-  width: 12,
-  height: 12,
-  borderRadius: 3,
+  width: 10,
+  height: 10,
+  borderRadius: 2,
   background: color,
   flexShrink: 0,
-  boxShadow: `0 0 6px ${color}55`,
 });
 
 const glyphStyle: CSSProperties = {
@@ -169,12 +169,12 @@ const evidenceButtonStyle: CSSProperties = {
   padding: '4px 10px',
   fontSize: 11,
   fontWeight: 600,
-  color: '#0f172a',
-  background: ATLAS_STATUS_COLORS.activeTrace,
-  border: 'none',
+  letterSpacing: 0.3,
+  color: ATLAS_STATUS_COLORS.activeTrace,
+  background: 'rgba(45, 212, 191, 0.10)',
+  border: `1px solid ${ATLAS_STATUS_COLORS.activeTrace}`,
   borderRadius: 6,
   cursor: 'pointer',
-  boxShadow: '0 2px 6px rgba(59,130,246,0.35)',
 };
 
 export default function SpatialEvidencePanel({
@@ -283,8 +283,12 @@ export default function SpatialEvidencePanel({
               onKeyDown={(e: KeyboardEvent<HTMLDivElement>) =>
                 handleKeyDown(e, index)
               }
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
+              whileHover={{
+                borderColor: isSelected
+                  ? ATLAS_STATUS_COLORS.activeTrace
+                  : 'rgba(255, 255, 255, 0.12)',
+              }}
+              whileTap={{ scale: 0.99 }}
               transition={SPRING_SNAPPY}
             >
               <div style={headerStyle}>
