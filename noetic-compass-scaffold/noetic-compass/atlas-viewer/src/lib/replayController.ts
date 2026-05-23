@@ -1,6 +1,11 @@
 export interface ReplayTrace {
   tokens: { token_index: number; token: string }[];
   per_token_frames: unknown[];
+  model_id?: string;
+  neuron_covers?: {
+    per_class_neuron_covers?: Record<string, string[]>;
+  };
+  model_manifest?: unknown;
 }
 
 export type ReplaySpeed = 0.25 | 0.5 | 1 | 2 | 4;

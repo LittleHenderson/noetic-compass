@@ -9,7 +9,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from api.config import settings
-from api.middleware.auth import PUBLIC_PATHS
+from api.middleware.auth import is_public_path
 
 # Tier definitions: (requests_per_minute, monthly_limit)
 # monthly_limit=0 means unlimited
@@ -81,7 +81,7 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return self.buckets[key]
 
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
-        if request.url.path in PUBLIC_PATHS or request.method == "OPTIONS":
+        if is_public_path(request.url.path) or request.method == "OPTIONS":
             return await call_next(request)
 
         api_key = getattr(request.state, "api_key", "default")

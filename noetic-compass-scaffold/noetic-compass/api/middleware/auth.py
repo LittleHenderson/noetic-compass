@@ -11,15 +11,30 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from api.config import settings
 
-# Paths that don't require authentication
-PUBLIC_PATHS = {"/health", "/health/db", "/health/ready", "/auth/token", "/docs", "/openapi.json", "/redoc"}
+# Paths that don't require JWT authentication. Atlas LIVE has its own
+# invite-code/session-token gate because the alpha does not have the full
+# licensing auth flow yet.
+PUBLIC_PATHS = {
+    "/health",
+    "/health/db",
+    "/health/ready",
+    "/auth/token",
+    "/docs",
+    "/openapi.json",
+    "/redoc",
+}
+PUBLIC_PATH_PREFIXES = ("/atlas/live",)
+
+
+def is_public_path(path: str) -> bool:
+    return path in PUBLIC_PATHS or any(path.startswith(prefix) for prefix in PUBLIC_PATH_PREFIXES)
 
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     """Validates JWT Bearer tokens on protected endpoints."""
 
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
-        if request.url.path in PUBLIC_PATHS or request.method == "OPTIONS":
+        if is_public_path(request.url.path) or request.method == "OPTIONS":
             return await call_next(request)
 
         auth_header = request.headers.get("Authorization", "")
