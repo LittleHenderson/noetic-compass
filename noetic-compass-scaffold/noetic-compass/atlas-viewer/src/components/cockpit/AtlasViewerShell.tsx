@@ -26,9 +26,13 @@ import { useReplayController } from '../../hooks/useReplayController';
 import type { ReplayTrace } from '../../lib/replayController';
 import type { ModelArchitecture } from '../../lib/modelArchitecture';
 import {
-  TESTING_METHODS,
+  LIVE_WORKER_METHODS,
   type TestingMethod,
 } from '../../lib/testingMethods';
+import type {
+  LiveMethodControls,
+  LiveMethodId,
+} from '../../lib/liveMethodControls';
 import {
   primitivesForStep,
   type EvidenceRef,
@@ -48,7 +52,16 @@ interface TraceWithCovers {
   model_id?: string;
 }
 
-const BLINDSPOT_DEMO_CLASSES = ['F1A', 'F1T', 'F1f', 'F1E'];
+const LIVE_METHOD_IDS: readonly LiveMethodId[] = [
+  'foundation_probe',
+  'rpm_gate_check',
+  'inversion_scan',
+  'sparse_neuron_cover',
+  'drive_local_eraser',
+  'blindspot_detection',
+  'verification_stack',
+];
+const LIVE_METHOD_ID_SET = new Set<string>(LIVE_METHOD_IDS);
 
 export interface AtlasViewerShellProps {
   trace: ReplayTrace;
@@ -58,7 +71,8 @@ export interface AtlasViewerShellProps {
   runtimeMode?: RuntimeMode;
   liveStatus?: LiveStatus;
   liveError?: string | null;
-  onStartLive?: () => void;
+  onStartLive?: (controls: LiveMethodControls) => void;
+  onLiveControlsChange?: (controls: LiveMethodControls) => void;
   onUseReplay?: () => void;
   className?: string;
 }
@@ -297,11 +311,12 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     trace,
     spatialEvidence,
     architecture,
-    methods = TESTING_METHODS,
+    methods = LIVE_WORKER_METHODS,
     runtimeMode = 'replay',
     liveStatus = 'idle',
     liveError = null,
     onStartLive,
+    onLiveControlsChange,
     onUseReplay,
     className,
   } = props;
@@ -400,9 +415,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     if (!covers) return undefined;
     const seen = new Set<string>();
     const out: NeuronCoord[] = [];
-    for (const cls of BLINDSPOT_DEMO_CLASSES) {
-      const labels = covers[cls];
-      if (!labels) continue;
+    for (const labels of Object.values(covers)) {
       for (const label of labels) {
         if (seen.has(label)) continue;
         seen.add(label);
@@ -415,6 +428,33 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     }
     return out;
   }, [showBlindspots, trace]);
+
+  const liveControls = useMemo<LiveMethodControls>(() => {
+    const enabled = [...enabledMethodIds].filter((id): id is LiveMethodId =>
+      LIVE_METHOD_ID_SET.has(id),
+    );
+    const liveKnobs: LiveMethodControls['knobValues'] = {};
+    for (const methodId of enabled) {
+      liveKnobs[methodId] = knobValues[methodId] ?? {};
+    }
+    return {
+      enabledMethodIds: enabled,
+      knobValues: liveKnobs,
+      verificationMode,
+      showBlindspots,
+      showActiveTrace,
+    };
+  }, [
+    enabledMethodIds,
+    knobValues,
+    verificationMode,
+    showBlindspots,
+    showActiveTrace,
+  ]);
+
+  useEffect(() => {
+    onLiveControlsChange?.(liveControls);
+  }, [liveControls, onLiveControlsChange]);
 
   useEffect(() => {
     setActivePrimitiveId(undefined);
@@ -673,7 +713,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
           runtimeMode={runtimeMode}
           liveStatus={liveStatus}
           onPlayToggle={handlePlayToggle}
-          onStartLive={onStartLive}
+          onStartLive={onStartLive ? () => onStartLive(liveControls) : undefined}
           onUseReplay={onUseReplay}
           onSpeedChange={handleSpeedChange}
           onZoomLevelChange={setZoomLevel}

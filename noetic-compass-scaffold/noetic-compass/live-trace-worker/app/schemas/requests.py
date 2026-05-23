@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -31,6 +31,10 @@ class CreateSessionRequest(BaseModel):
         "mode7_attribution",
         "confidence_margin",
     ]] = Field(default_factory=list)
+    method_config: dict[str, Any] = Field(
+        default_factory=dict,
+        description="Live testing-module controls forwarded by Atlas Viewer.",
+    )
 
 
 class CreateSessionResponse(BaseModel):

@@ -24,7 +24,8 @@ import logging
 from typing import Any, AsyncIterator
 
 from ..schemas.requests import CreateSessionRequest
-from .probe_runner import capture_probes, summarise
+from .cover_library import coords_for_drive
+from .probe_runner import EraserIntervention, capture_probes, resolve_probes, summarise
 
 logger = logging.getLogger(__name__)
 
@@ -59,10 +60,19 @@ async def run_pythia(
         torch.manual_seed(int(req.seed))
 
     max_new = min(req.max_new_tokens, 24)
+    requested_probes = _requested_probes(req)
+    knobs = _knobs(req)
+    foundation_layers = _layer_filter(knobs.get("foundation_probe", {}).get("layer_range"))
+    top_k = _positive_int(knobs.get("foundation_probe", {}).get("top_k"), default=8)
+    rpm_threshold = _float_knob(
+        knobs.get("rpm_gate_check", {}).get("strictness_threshold"),
+        default=0.0,
+    )
+    intervention = _eraser_intervention(req)
 
     with torch.no_grad():
         for new_idx in range(max_new):
-            with capture_probes(model, n_layers) as state:
+            with capture_probes(model, n_layers, intervention=intervention) as state:
                 outputs = model(
                     input_ids,
                     output_hidden_states=False,
@@ -85,15 +95,27 @@ async def run_pythia(
                 state,
                 token_index=new_idx,
                 attentions=list(outputs.attentions) if outputs.attentions else None,
-                top_k=8,
+                top_k=top_k,
+                layer_filter=foundation_layers,
             )
+            mode7_edges = summary.mode7_edges
+            if rpm_threshold > 0:
+                mode7_edges = [
+                    edge for edge in mode7_edges if float(edge.get("weight", 0.0)) >= rpm_threshold
+                ]
 
             yield {
                 "token_index": new_idx,
                 "token": token_text,
-                "top_activated_neurons": summary.top_activated_neurons,
-                "mode7_attribution": summary.mode7_edges,
-                "confidence": summary.confidence,
+                "top_activated_neurons": summary.top_activated_neurons
+                if "active_trace" in requested_probes
+                else [],
+                "mode7_attribution": mode7_edges
+                if "mode7_attribution" in requested_probes
+                else [],
+                "confidence": summary.confidence
+                if "confidence_margin" in requested_probes
+                else None,
             }
 
             # Append next token, continue.
@@ -115,3 +137,60 @@ async def run_pythia(
     # Touch prompt_len so static type checkers don't warn about unused vars
     # in case max_new == 0 (degenerate).
     _ = prompt_len
+
+
+def _knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
+    raw = req.method_config.get("knobs", {}) if req.method_config else {}
+    return raw if isinstance(raw, dict) else {}
+
+
+def _requested_probes(req: CreateSessionRequest) -> set[str]:
+    if req.method_config and "enabled_methods" in req.method_config and not req.probes:
+        return set()
+    return set(resolve_probes(req.probes))
+
+
+def _enabled_methods(req: CreateSessionRequest) -> set[str]:
+    raw = req.method_config.get("enabled_methods", []) if req.method_config else []
+    if not isinstance(raw, list):
+        return set()
+    return {str(item) for item in raw}
+
+
+def _layer_filter(raw: Any) -> set[int] | None:
+    if not isinstance(raw, list) or not raw:
+        return None
+    out: set[int] = set()
+    for item in raw:
+        try:
+            out.add(int(item))
+        except (TypeError, ValueError):
+            continue
+    return out or None
+
+
+def _positive_int(raw: Any, default: int) -> int:
+    try:
+        parsed = int(raw)
+    except (TypeError, ValueError):
+        return default
+    return parsed if parsed > 0 else default
+
+
+def _float_knob(raw: Any, default: float) -> float:
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return default
+
+
+def _eraser_intervention(req: CreateSessionRequest) -> EraserIntervention | None:
+    if "drive_local_eraser" not in _enabled_methods(req):
+        return None
+    knobs = _knobs(req).get("drive_local_eraser", {})
+    drive = str(knobs.get("drive") or "F1")
+    gain = _float_knob(knobs.get("gain"), default=1.0)
+    coords = tuple((coord.layer, coord.index) for coord in coords_for_drive(drive))
+    if not coords:
+        return None
+    return EraserIntervention(coords=coords, gain=gain)

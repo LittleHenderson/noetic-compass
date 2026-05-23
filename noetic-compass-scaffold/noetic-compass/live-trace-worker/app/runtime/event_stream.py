@@ -28,21 +28,46 @@ from ..schemas.events import (
     TokenEvent,
 )
 from ..schemas.requests import CreateSessionRequest
+from .cover_library import cover_for_drive
 from .model_loader import get_loaded_model
 from .probe_runner import resolve_probes
 
 logger = logging.getLogger(__name__)
 
 
-# Cover sets used in BOTH demo and real modes — the F1 (Unity) drive's
-# four-register footprint. v0.1 ships hardcoded covers; live-derivation
-# of covers is a v0.2 follow-up (needs the harness probe pipeline).
-F1_COVER_DEMO: dict[str, list[str]] = {
-    "F1A": ["L3N142", "L3N518", "L5N91", "L7N2204"],
-    "F1T": ["L4N336", "L6N1011", "L9N2782"],
-    "F1f": ["L5N1492", "L8N87", "L11N305"],
-    "F1E": ["L2N640", "L6N1872", "L10N2415"],
-}
+def _knobs(req: CreateSessionRequest) -> dict:
+    raw = req.method_config.get("knobs", {}) if req.method_config else {}
+    return raw if isinstance(raw, dict) else {}
+
+
+def _selected_drive(req: CreateSessionRequest) -> str:
+    knobs = _knobs(req)
+    for method_id, key in (
+        ("drive_local_eraser", "drive"),
+        ("sparse_neuron_cover", "target_class"),
+        ("blindspot_detection", "scope"),
+    ):
+        method_knobs = knobs.get(method_id, {})
+        if isinstance(method_knobs, dict):
+            val = method_knobs.get(key)
+            if isinstance(val, str) and val.startswith("F"):
+                return val
+    return "F1"
+
+
+def _cover_event(req: CreateSessionRequest) -> NeuronCoversEvent:
+    probes = _requested_probes(req)
+    if "blindspots_f1" not in probes:
+        return NeuronCoversEvent(per_class_neuron_covers={})
+    return NeuronCoversEvent(
+        per_class_neuron_covers=cover_for_drive(_selected_drive(req)),
+    )
+
+
+def _requested_probes(req: CreateSessionRequest) -> set[str]:
+    if req.method_config and "enabled_methods" in req.method_config and not req.probes:
+        return set()
+    return set(resolve_probes(req.probes))
 
 
 # ---------------------------------------------------------------------------
@@ -95,8 +120,8 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
     """Demo-mode trace — schema-valid, deterministic under seed, no real model."""
     loaded = get_loaded_model()
     yield ManifestEvent(manifest=loaded.manifest)
-    _ = resolve_probes(req.probes)
-    yield NeuronCoversEvent(per_class_neuron_covers=F1_COVER_DEMO)
+    probes = _requested_probes(req)
+    yield _cover_event(req)
 
     seed = req.seed if req.seed is not None else 1234
     rng = random.Random(seed)
@@ -107,9 +132,15 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         yield TokenEvent(
             token_index=i,
             token=tok,
-            top_activated_neurons=_fake_neurons(rng, loaded.manifest.model_arch.n_layers),
-            mode7_attribution=_fake_mode7(rng, i),
-            confidence=round(rng.uniform(0.55, 0.95), 3),
+            top_activated_neurons=_fake_neurons(rng, loaded.manifest.model_arch.n_layers)
+            if "active_trace" in probes
+            else [],
+            mode7_attribution=_fake_mode7(rng, i)
+            if "mode7_attribution" in probes
+            else [],
+            confidence=round(rng.uniform(0.55, 0.95), 3)
+            if "confidence_margin" in probes
+            else None,
         )
         await asyncio.sleep(0.04)
     yield CompleteEvent(total_tokens=max_new)
@@ -133,7 +164,7 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         return
 
     yield ManifestEvent(manifest=loaded.manifest)
-    yield NeuronCoversEvent(per_class_neuron_covers=F1_COVER_DEMO)
+    yield _cover_event(req)
 
     # Import locally so demo mode can import this module without torch.
     from .pythia_runner import run_pythia

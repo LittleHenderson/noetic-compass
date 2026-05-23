@@ -220,16 +220,16 @@ describe('MethodKnobsPanel', () => {
   it('disabled method renders with disabled visual state (status badge + disabled controls)', () => {
     renderPanel({ enabled: new Set(['m_num', 'm_bool', 'm_multi']) });
     expect(screen.getByTestId('method-status-m_enum')).toHaveTextContent(
-      'disabled',
+      'off',
     );
     const select = screen.getByTestId('knob-m_enum-axis') as HTMLSelectElement;
     expect(select.disabled).toBe(true);
   });
 
-  it('enabled method shows "enabled" status badge', () => {
+  it('enabled method shows "sent live" status badge', () => {
     renderPanel();
     expect(screen.getByTestId('method-status-m_enum')).toHaveTextContent(
-      'enabled',
+      'sent live',
     );
   });
 

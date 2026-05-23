@@ -296,6 +296,106 @@ export const TESTING_METHODS: readonly TestingMethod[] = [
   SPATIAL_EVIDENCE_MODULE,
 ];
 
+const LIVE_F1_ONLY_KNOB: KnobDef = {
+  id: 'drive',
+  label: 'Drive',
+  type: 'enum',
+  default: 'F1',
+  options: ['F1'] as const,
+  description: 'Alpha live worker has calibrated F1 cover/intervention only.',
+};
+
+export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
+  {
+    ...FOUNDATION_PROBE,
+    description:
+      'Sent to the live worker. Captures real Pythia hidden-state activity for the selected layers and paints the active neurons in the 3D scene.',
+    reveals:
+      'Which layers and neurons are carrying the selected Foundation signal during this live run',
+    outputShape: 'Live token events with filtered top activated neurons',
+  },
+  {
+    ...RPM_GATE_CHECK,
+    description:
+      'Sent to the live worker. Uses live attention-derived Mode 7 edges as the runtime prerequisite-chain readout.',
+    reveals:
+      'Which earlier tokens the current token depends on after the selected RPM threshold is applied',
+    outputShape: 'Live Mode 7 arcs filtered by the selected strictness threshold',
+    knobs: [
+      RPM_GATE_CHECK.knobs[0],
+      {
+        id: 'strictness_threshold',
+        label: 'Strictness threshold',
+        type: 'number',
+        default: 0,
+        description: '0 shows all live Mode 7 arcs; raise to hide weaker edges.',
+      },
+    ],
+  },
+  {
+    ...INVERSION_SCAN,
+    description:
+      'Sent to the live worker. Computes a live proxy from activation magnitude and confidence drift on every emitted token.',
+    reveals: 'Per-token structural drift risk while the model is generating',
+    outputShape: 'Live token events with inversion-risk side-channel metadata',
+  },
+  {
+    ...SPARSE_NEURON_COVER,
+    description:
+      'Sent to the live worker. Selects the causal F1 neuron-cover set used by the live blindspot/intervention overlays.',
+    reveals: 'The exact cover coordinates the live worker is using for F1',
+    outputShape: 'Live neuron-cover event for the selected target class',
+    knobs: [
+      {
+        id: 'target_class',
+        label: 'Target class',
+        type: 'enum',
+        default: 'F1',
+        options: ['F1'] as const,
+      },
+      {
+        id: 'sparsity_budget',
+        label: 'Sparsity budget',
+        type: 'number',
+        default: 0,
+        description: '0 = use the full calibrated alpha cover.',
+      },
+    ],
+  },
+  {
+    ...DRIVE_LOCAL_ERASER,
+    description:
+      'Sent to the live worker. Applies a real runtime MLP-output suppression hook to the selected F1 cover before logits are decoded.',
+    reveals: 'Whether suppressing the live F1 cover changes the next tokens and confidence',
+    outputShape: 'Live generation under the selected eraser gain',
+    knobs: [LIVE_F1_ONLY_KNOB, DRIVE_LOCAL_ERASER.knobs[1]],
+  },
+  {
+    ...BLINDSPOT_DETECTION,
+    description:
+      'Sent to the live worker. Controls which F1 cover coordinates are emitted for the red blindspot overlay.',
+    reveals: 'Which F1 cover neurons are being watched during this live run',
+    outputShape: 'Live neuron-cover event used directly by the 3D overlay',
+    knobs: [
+      {
+        id: 'scope',
+        label: 'Scope',
+        type: 'enum',
+        default: 'F1',
+        options: ['F1'] as const,
+      },
+      BLINDSPOT_DETECTION.knobs[1],
+    ],
+  },
+  {
+    ...VERIFICATION_STACK,
+    description:
+      'Sent to the live worker. Controls confidence-margin verification emitted with each live token.',
+    reveals: 'Whether each token has enough margin to accept under the selected mode',
+    outputShape: 'Live confidence-margin values used by the cockpit badges',
+  },
+];
+
 const METHOD_INDEX: ReadonlyMap<string, TestingMethod> = new Map(
   TESTING_METHODS.map((m) => [m.id, m]),
 );

@@ -14,7 +14,7 @@ import time
 from collections import defaultdict, deque
 from collections.abc import AsyncIterator
 from datetime import datetime, timedelta, timezone
-from typing import Literal
+from typing import Any, Literal
 
 import httpx
 from fastapi import APIRouter, Header, HTTPException, Query, Request
@@ -48,6 +48,7 @@ class LiveSessionRequest(BaseModel):
             "confidence_margin",
         ]
     ] = Field(default_factory=list)
+    method_config: dict[str, Any] = Field(default_factory=dict)
 
 
 class LiveSessionResponse(BaseModel):

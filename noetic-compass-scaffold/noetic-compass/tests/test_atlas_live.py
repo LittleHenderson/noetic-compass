@@ -50,6 +50,34 @@ def test_live_session_returns_stream_token(client, monkeypatch):
     assert body["stream_token"]
 
 
+def test_live_session_forwards_method_config_to_worker(client, monkeypatch):
+    seen = {}
+
+    async def fake_create_worker_session(req):
+        seen["payload"] = req.model_dump()
+        return {"session_id": "worker-session-controls", "events_url": "/sessions/worker-session-controls/events"}
+
+    monkeypatch.setattr(atlas_live, "_create_worker_session", fake_create_worker_session)
+
+    resp = client.post(
+        "/atlas/live/session",
+        headers={"X-Atlas-Invite-Code": "alpha-code"},
+        json={
+            "prompt": "hello",
+            "probes": ["active_trace"],
+            "method_config": {
+                "enabled_methods": ["foundation_probe"],
+                "knobs": {"foundation_probe": {"layer_range": ["5"]}},
+            },
+        },
+    )
+
+    assert resp.status_code == 200
+    assert seen["payload"]["probes"] == ["active_trace"]
+    assert seen["payload"]["method_config"]["enabled_methods"] == ["foundation_probe"]
+    assert seen["payload"]["method_config"]["knobs"]["foundation_probe"]["layer_range"] == ["5"]
+
+
 def test_live_session_rate_limits_by_ip(client, monkeypatch):
     async def fake_create_worker_session(req):
         return {"session_id": "worker-session-rate", "events_url": "/sessions/worker-session-rate/events"}

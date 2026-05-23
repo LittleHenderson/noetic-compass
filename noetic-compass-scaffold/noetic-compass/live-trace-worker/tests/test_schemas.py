@@ -63,6 +63,7 @@ def test_create_session_request_defaults():
     assert r.temperature == 0.0
     assert r.seed is None
     assert r.probes == []
+    assert r.method_config == {}
 
 
 def test_create_session_request_validates_prompt_length():

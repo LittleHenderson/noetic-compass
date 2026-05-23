@@ -48,6 +48,19 @@ def test_top_k_handles_empty_state():
     assert _top_k_neurons(CaptureState(), k=8) == []
 
 
+def test_top_k_honors_layer_filter():
+    state = CaptureState()
+    state.mlp_post = {
+        0: [9.0],
+        5: [0.5, -0.4],
+    }
+    out = _top_k_neurons(state, k=4, layer_filter={5})
+    assert out == [
+        {"layer": 5, "index": 0, "activation": 0.5},
+        {"layer": 5, "index": 1, "activation": -0.4},
+    ]
+
+
 def test_softmax_margin_none_logits_is_none():
     assert _softmax_margin(None) is None
     assert _softmax_margin([]) is None

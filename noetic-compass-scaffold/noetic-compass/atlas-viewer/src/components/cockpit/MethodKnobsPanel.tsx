@@ -109,6 +109,16 @@ const lineStyle: CSSProperties = {
   lineHeight: 1.4,
 };
 
+const liveNoticeStyle: CSSProperties = {
+  padding: 10,
+  borderRadius: 6,
+  border: '1px solid rgba(45, 212, 191, 0.24)',
+  background: 'rgba(45, 212, 191, 0.07)',
+  color: '#ccfbf1',
+  fontSize: 12,
+  lineHeight: 1.45,
+};
+
 const labelStrong: CSSProperties = {
   fontWeight: 600,
   color: '#94a3b8',
@@ -355,6 +365,11 @@ export default function MethodKnobsPanel({
       data-density={density}
     >
       <div data-testid="method-knobs-panel" style={{ display: 'contents' }}>
+        <div style={liveNoticeStyle} data-testid="live-methods-contract">
+          These are live-worker controls. Enabled modules are sent to the
+          running Pythia worker on LIVE start; changing a switch or knob while
+          LIVE is active restarts the stream with the new test configuration.
+        </div>
         {ordered.map((method) => {
           const enabled = enabledMethodIds.has(method.id);
           const isOpen = expanded.has(method.id);
@@ -406,7 +421,7 @@ export default function MethodKnobsPanel({
                   data-testid={`method-status-${method.id}`}
                   style={pillStyle(statusColor)}
                 >
-                  {enabled ? 'enabled' : 'disabled'}
+                  {enabled ? 'sent live' : 'off'}
                 </span>
                 <label
                   style={{

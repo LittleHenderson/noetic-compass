@@ -7,6 +7,7 @@
  */
 import { describe, expect, it, vi, beforeEach } from 'vitest';
 import { fireEvent, render, screen, act } from '@testing-library/react';
+import type { ComponentProps } from 'react';
 import type { ReplayTrace } from '../../lib/replayController';
 import type { SpatialEvidenceArtifact } from '../../lib/visualPrimitives';
 import { PYTHIA_160M_PRESET } from '../../lib/modelArchitecture';
@@ -128,12 +129,13 @@ const baseSpatial: SpatialEvidenceArtifact = {
   ],
 };
 
-function renderShell() {
+function renderShell(props?: Partial<ComponentProps<typeof AtlasViewerShell>>) {
   return render(
     <AtlasViewerShell
       trace={baseTrace}
       spatialEvidence={baseSpatial}
       architecture={PYTHIA_160M_PRESET}
+      {...props}
     />,
   );
 }
@@ -197,6 +199,21 @@ describe('AtlasViewerShell — method knobs wiring', () => {
     expect(toggle.checked).toBe(false);
     fireEvent.click(toggle);
     expect(toggle.checked).toBe(true);
+  });
+
+  it('passes current side-panel controls when LIVE is clicked', () => {
+    const onStartLive = vi.fn();
+    renderShell({ onStartLive });
+    fireEvent.change(screen.getByTestId('knob-rpm_gate_check-strictness_threshold'), {
+      target: { value: '0.4' },
+    });
+    fireEvent.click(screen.getByTestId('runtime-live'));
+    expect(onStartLive).toHaveBeenCalledTimes(1);
+    expect(onStartLive.mock.calls[0][0]).toMatchObject({
+      enabledMethodIds: expect.arrayContaining(['rpm_gate_check']),
+      knobValues: { rpm_gate_check: { strictness_threshold: 0.4 } },
+      verificationMode: 'BALANCED',
+    });
   });
 });
 

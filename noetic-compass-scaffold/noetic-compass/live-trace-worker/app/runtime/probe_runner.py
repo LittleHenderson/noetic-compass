@@ -79,13 +79,25 @@ class CaptureState:
     logits: list[float] | None = None
 
 
+@dataclass(frozen=True)
+class EraserIntervention:
+    """Runtime MLP-output suppression sent by the live controls panel."""
+
+    coords: tuple[tuple[int, int], ...]
+    gain: float
+
+
 # ---------------------------------------------------------------------------
 # Hook registration — context manager so cleanup is always called.
 # ---------------------------------------------------------------------------
 
 
 @contextmanager
-def capture_probes(model: Any, n_layers: int) -> Iterator[CaptureState]:
+def capture_probes(
+    model: Any,
+    n_layers: int,
+    intervention: EraserIntervention | None = None,
+) -> Iterator[CaptureState]:
     """Register forward hooks on the model, yield a CaptureState, clean up.
 
     The hooks are attached to:
@@ -122,7 +134,7 @@ def capture_probes(model: Any, n_layers: int) -> Iterator[CaptureState]:
                 # specific sub-linear. mlp(...) returns the post-activation
                 # post-projection (gelu(dense_h_to_4h(...))) @ dense_4h_to_h.T.
                 handle = mlp.register_forward_hook(
-                    _make_mlp_hook(state, layer_idx),
+                    _make_mlp_hook(state, layer_idx, intervention),
                 )
                 handles.append(handle)
         yield state
@@ -145,7 +157,11 @@ def _get_pythia_layers(model: Any) -> Any | None:
     return getattr(gpt_neox, "layers", None)
 
 
-def _make_mlp_hook(state: CaptureState, layer_idx: int) -> Any:
+def _make_mlp_hook(
+    state: CaptureState,
+    layer_idx: int,
+    intervention: EraserIntervention | None,
+) -> Any:
     """Build the forward hook that records the last-token MLP post-activation."""
 
     def _hook(_module: Any, _inputs: Any, output: Any) -> None:
@@ -155,16 +171,45 @@ def _make_mlp_hook(state: CaptureState, layer_idx: int) -> Any:
             # logits we're about to emit). batch=1 in the worker.
             if output is None:
                 return
-            last = output[0, -1].detach()
+            modified = _apply_eraser(output, layer_idx, intervention)
+            last = modified[0, -1].detach()
             # Move to CPU + tolist so the caller never sees a tensor.
             # The float() inside the comprehension is defensive — sometimes
             # tolist on bf16 returns numpy.float32 objects.
             state.mlp_post[layer_idx] = [float(v) for v in last.float().cpu().tolist()]
+            if modified is not output:
+                return modified
         except Exception:  # pragma: no cover — keep generation going even
             # if a single hook misbehaves.
             logger.exception("mlp hook (layer %d) failed", layer_idx)
 
     return _hook
+
+
+def _apply_eraser(
+    output: Any,
+    layer_idx: int,
+    intervention: EraserIntervention | None,
+) -> Any:
+    """Suppress selected MLP-output coordinates before logits are computed."""
+    if intervention is None or not intervention.coords:
+        return output
+    layer_coords = [idx for layer, idx in intervention.coords if layer == layer_idx]
+    if not layer_coords:
+        return output
+    try:
+        width = int(output.shape[-1])
+        valid = [idx for idx in layer_coords if 0 <= idx < width]
+        if not valid:
+            return output
+        factor = max(0.0, 1.0 - max(0.0, float(intervention.gain)))
+        modified = output.clone()
+        for idx in valid:
+            modified[0, -1, idx] = modified[0, -1, idx] * factor
+        return modified
+    except Exception:  # pragma: no cover
+        logger.exception("drive-local eraser failed at layer %d", layer_idx)
+        return output
 
 
 # ---------------------------------------------------------------------------
@@ -191,6 +236,7 @@ def summarise(
     token_index: int,
     attentions: list[Any] | None,
     top_k: int = 8,
+    layer_filter: set[int] | None = None,
 ) -> TokenProbeSummary:
     """Reduce a CaptureState to a TokenProbeSummary the event stream can ship.
 
@@ -200,18 +246,24 @@ def summarise(
     row (the current token's attention back over the prompt).
     """
     return TokenProbeSummary(
-        top_activated_neurons=_top_k_neurons(state, top_k),
+        top_activated_neurons=_top_k_neurons(state, top_k, layer_filter),
         mode7_edges=_mode7_edges_from_attentions(attentions, token_index),
         confidence=_softmax_margin(state.logits),
     )
 
 
-def _top_k_neurons(state: CaptureState, k: int) -> list[dict]:
+def _top_k_neurons(
+    state: CaptureState,
+    k: int,
+    layer_filter: set[int] | None = None,
+) -> list[dict]:
     """Top-K activated neurons across all hooked layers, by absolute value."""
     if not state.mlp_post:
         return []
     scored: list[tuple[int, int, float]] = []  # (layer, index, abs_act)
     for layer_idx, vec in state.mlp_post.items():
+        if layer_filter is not None and layer_idx not in layer_filter:
+            continue
         for n_idx, val in enumerate(vec):
             scored.append((layer_idx, n_idx, abs(float(val))))
     scored.sort(key=lambda t: t[2], reverse=True)

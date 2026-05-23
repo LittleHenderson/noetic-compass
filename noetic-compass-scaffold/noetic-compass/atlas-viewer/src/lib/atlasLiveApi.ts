@@ -2,15 +2,25 @@ import type { ReplayTrace } from './replayController';
 
 const DEFAULT_BASE_URL = '/api/atlas';
 
+export type LiveProbeName =
+  | 'active_trace'
+  | 'blindspots_f1'
+  | 'mode7_attribution'
+  | 'confidence_margin';
+
 export interface CreateLiveSessionRequest {
   prompt: string;
   model_id?: string;
   max_new_tokens?: number;
   temperature?: number;
   seed?: number;
-  probes?: Array<
-    'active_trace' | 'blindspots_f1' | 'mode7_attribution' | 'confidence_margin'
-  >;
+  probes?: LiveProbeName[];
+  method_config?: {
+    enabled_methods?: string[];
+    knobs?: Record<string, Record<string, unknown>>;
+    overlays?: Record<string, unknown>;
+    verification_mode?: string;
+  };
 }
 
 export interface CreateLiveSessionResponse {
