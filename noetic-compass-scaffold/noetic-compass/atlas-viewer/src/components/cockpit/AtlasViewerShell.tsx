@@ -43,6 +43,7 @@ interface TraceNeuronCovers {
 }
 interface TraceWithCovers {
   neuron_covers?: TraceNeuronCovers;
+  model_id?: string;
 }
 
 const BLINDSPOT_DEMO_CLASSES = ['F1A', 'F1T', 'F1f', 'F1E'];
@@ -138,18 +139,10 @@ const tabPanelStyle: CSSProperties = {
   minHeight: 0,
 };
 
-const centerColumnStyle: CSSProperties = {
-  ...columnStyle,
-};
-
 const centerSceneWrapperStyle: CSSProperties = {
   flex: 1,
   minHeight: 0,
   position: 'relative',
-};
-
-const rightColumnStyle: CSSProperties = {
-  ...columnStyle,
 };
 
 const rightCardInnerStyle: CSSProperties = {
@@ -174,15 +167,70 @@ const placeholderCardStyle: CSSProperties = {
   lineHeight: 1.55,
 };
 
-const fullscreenSceneStyle: CSSProperties = {
+// Wave 5.3 fullscreen: NN scene sits at viewport inset 0, hiding all
+// surrounding chrome (control bar, narration, timeline, side panels).
+// A small floating exit-fullscreen button overlays the top-right.
+const fullscreenOverlayStyle: CSSProperties = {
   position: 'absolute',
-  inset: 8,
-  bottom: 64, // leave room for the floating timeline
-  zIndex: 5,
-  border: '1px solid rgba(255, 255, 255, 0.06)',
-  borderRadius: 8,
-  overflow: 'hidden',
+  inset: 0,
+  zIndex: 40,
   background: '#020617',
+};
+
+const fullscreenExitButtonStyle: CSSProperties = {
+  position: 'absolute',
+  top: 12,
+  right: 12,
+  zIndex: 41,
+  padding: '6px 12px',
+  borderRadius: 6,
+  border: '1px solid rgba(45, 212, 191, 0.45)',
+  background: 'rgba(45, 212, 191, 0.10)',
+  color: ACCENT_TEAL,
+  fontSize: 11.5,
+  fontWeight: 600,
+  letterSpacing: 0.3,
+  fontFamily: THEME.fontFamily,
+  cursor: 'pointer',
+};
+
+// Provenance badge — surfaces real-vs-demo split in the cockpit header so
+// the user never thinks they're looking at a mock. Trace is real Pythia-160M
+// activations replayed from disk; spatial primitives are demo fixtures
+// until the live wire-up lands.
+const provenanceBadgeStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 6,
+  padding: '3px 8px',
+  borderRadius: 4,
+  border: '1px solid rgba(45, 212, 191, 0.35)',
+  background: 'rgba(45, 212, 191, 0.08)',
+  color: ACCENT_TEAL,
+  fontSize: 10.5,
+  fontWeight: 600,
+  letterSpacing: 0.8,
+  textTransform: 'uppercase',
+  fontFamily: THEME.fontFamily,
+};
+
+const provenanceDotStyle: CSSProperties = {
+  width: 6,
+  height: 6,
+  borderRadius: '50%',
+  background: ACCENT_TEAL,
+};
+
+const demoBadgeStyle: CSSProperties = {
+  ...provenanceBadgeStyle,
+  border: '1px solid rgba(234, 179, 8, 0.40)',
+  background: 'rgba(234, 179, 8, 0.08)',
+  color: '#fbbf24',
+};
+
+const demoDotStyle: CSSProperties = {
+  ...provenanceDotStyle,
+  background: '#fbbf24',
 };
 
 function defaultValueForKnob(knob: { type: string; default: unknown }): KnobValue {
@@ -237,18 +285,6 @@ function frameAtIndex(frames: unknown[], index: number): PerTokenFrame | undefin
   return candidate as PerTokenFrame;
 }
 
-// Build the grid template based on which side panels are open. Each panel
-// gets a fluid track when open and zero width when collapsed. The center
-// column always exists; in fullscreen mode the grid collapses to one
-// 100% column and the panels render off-screen.
-function gridTemplate(leftOpen: boolean, rightOpen: boolean, fullscreen: boolean): string {
-  if (fullscreen) return '100%';
-  if (leftOpen && rightOpen) return '38% 42% 20%';
-  if (leftOpen && !rightOpen) return '40% 60%';
-  if (!leftOpen && rightOpen) return '75% 25%';
-  return '100%';
-}
-
 export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const {
     trace,
@@ -288,7 +324,6 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     EvidenceDrawerPayload | undefined
   >(undefined);
 
-  // Wave 5.2: panel collapse + fullscreen + help state.
   const [leftPanelOpen, setLeftPanelOpen] = useState<boolean>(true);
   const [rightPanelOpen, setRightPanelOpen] = useState<boolean>(true);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
@@ -366,6 +401,17 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     setActivePrimitiveId(undefined);
   }, [activeStep?.step_id]);
 
+  // Wave 5.3: Esc exits fullscreen so the user always has a keyboard
+  // escape hatch even if they can't see the exit button.
+  useEffect(() => {
+    if (!fullscreen) return;
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFullscreen(false);
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [fullscreen]);
+
   const handlePlayToggle = useCallback(() => {
     toggle();
   }, [toggle]);
@@ -384,7 +430,6 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     [seek],
   );
 
-  // Wave 5.2: rewind to t=0
   const handleRewind = useCallback(() => {
     seek(0);
   }, [seek]);
@@ -494,30 +539,31 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     [openDrawer],
   );
 
-  // Wave 5.2: when the picture panel is collapsed, the controls panel
-  // typography scales up. User's explicit ask: "when picture panel is
-  // retracted the checks and control panel words and letters will get
-  // bigger and become more legible."
   const controlsDensity = leftPanelOpen ? 'compact' : 'comfortable';
 
-  const mainGridStyle: CSSProperties = {
+  // Wave 5.3: flex layout — each side column gets a motion.aside with an
+  // animated flex value. flex=0 collapses the column smoothly to 0 width
+  // (framer-motion interpolates the numeric flex basis). Production tools
+  // expect a continuous slide, not a CSS-grid snap.
+  const leftFlex = leftPanelOpen ? 38 : 0;
+  const rightFlex = rightPanelOpen ? 20 : 0;
+  const centerFlex = 100 - leftFlex - rightFlex;
+
+  const mainRowStyle: CSSProperties = {
     flex: 1,
-    display: 'grid',
-    gridTemplateColumns: gridTemplate(leftPanelOpen, rightPanelOpen, fullscreen),
-    columnGap: 8,
+    display: 'flex',
+    flexDirection: 'row',
     minHeight: 0,
     overflow: 'hidden',
     position: 'relative',
   };
 
-  // Caption strip beside the timeline: tells the user what's happening at
-  // the current token. Pulls the active grounded step (if any) plus the
-  // raw token string. Renders "—" when there's no grounded step at this
-  // moment, so the user knows scrubbing further forward will land one.
+  const modelId = (trace as unknown as TraceWithCovers).model_id ?? architecture.family;
   const tokenTextNow = tokens[currentTokenIndex]?.token ?? '';
   const narrationStyle: CSSProperties = {
     display: 'flex',
     alignItems: 'center',
+    flexWrap: 'wrap',
     gap: 12,
     padding: '6px 12px',
     fontSize: 11.5,
@@ -537,10 +583,52 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     fontFamily: THEME.fontMono,
   };
 
+  // Fullscreen mode renders only the NN scene + a floating exit button.
+  // All other chrome is hidden so the network truly fills the viewport.
+  if (fullscreen) {
+    return (
+      <div
+        className={className}
+        data-testid="atlas-viewer-shell"
+        data-fullscreen="true"
+        style={shellStyle}
+      >
+        <div style={fullscreenOverlayStyle}>
+          <NeuralNetScene
+            architecture={architecture}
+            currentFrame={currentFrame}
+            selectedNeuron={selectedNeuron}
+            blindspotCoords={blindspotCoords}
+            activeTraceCoords={activeTraceCoords}
+            zoomLevel={zoomLevel}
+            onNeuronClick={handleNeuronClick}
+          />
+          <button
+            type="button"
+            style={fullscreenExitButtonStyle}
+            onClick={handleToggleFullscreen}
+            data-testid="exit-fullscreen"
+            aria-label="Exit fullscreen"
+          >
+            Exit fullscreen · Esc
+          </button>
+        </div>
+
+        <EvidenceDrawer
+          open={evidenceDrawerOpen}
+          payload={evidencePayload}
+          onClose={closeDrawer}
+        />
+        <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
+      </div>
+    );
+  }
+
   return (
     <div
       className={className}
       data-testid="atlas-viewer-shell"
+      data-fullscreen="false"
       style={shellStyle}
     >
       <div style={controlBarFloatStyle}>
@@ -571,8 +659,15 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         />
       </div>
 
-      {/* Narration strip — tells user what they're seeing right now */}
       <div style={narrationStyle} data-testid="narration-strip">
+        <span style={provenanceBadgeStyle} title="Trace is real activations from Pythia-160M, recorded offline and replayed here">
+          <span style={provenanceDotStyle} />
+          Live · {modelId} · actual weights
+        </span>
+        <span style={demoBadgeStyle} title="Spatial primitives below are demo fixtures until the live vision-grounding wire-up lands (roadmap item #6 + #8)">
+          <span style={demoDotStyle} />
+          Picture · demo fixture
+        </span>
         <span style={narrationKeyStyle}>Now</span>
         <span style={narrationValueStyle}>token {currentTokenIndex + 1}</span>
         {tokenTextNow ? (
@@ -601,103 +696,99 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         )}
       </div>
 
-      <div style={mainGridStyle} data-testid="atlas-viewer-main">
-        <AnimatePresence initial={false}>
-          {leftPanelOpen && !fullscreen ? (
-            <motion.div
-              key="left"
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -8 }}
-              transition={SPRING_GENTLE}
-              style={columnStyle}
-              data-testid="atlas-viewer-left"
+      <div style={mainRowStyle} data-testid="atlas-viewer-main">
+        <motion.aside
+          animate={{ flexGrow: leftFlex, opacity: leftPanelOpen ? 1 : 0 }}
+          transition={SPRING_GENTLE}
+          style={{ ...columnStyle, flexBasis: 0, flexShrink: 1, pointerEvents: leftPanelOpen ? 'auto' : 'none' }}
+          data-testid="atlas-viewer-left"
+          aria-hidden={!leftPanelOpen}
+        >
+          <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
+            <div role="tablist" aria-label="Evidence views" style={tabBarStyle}>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={leftTab === 'spatial'}
+                data-testid="left-tab-spatial"
+                onClick={() => setLeftTab('spatial')}
+                style={leftTab === 'spatial' ? tabActiveStyle : tabBaseStyle}
+              >
+                Spatial Evidence
+                {leftTab === 'spatial' && (
+                  <motion.div
+                    layoutId="left-tab-underline"
+                    style={tabUnderlineStyle}
+                    transition={SPRING_SNAPPY}
+                  />
+                )}
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={leftTab === 'notation'}
+                data-testid="left-tab-notation"
+                onClick={() => setLeftTab('notation')}
+                style={leftTab === 'notation' ? tabActiveStyle : tabBaseStyle}
+              >
+                2D Notation
+                {leftTab === 'notation' && (
+                  <motion.div
+                    layoutId="left-tab-underline"
+                    style={tabUnderlineStyle}
+                    transition={SPRING_SNAPPY}
+                  />
+                )}
+              </button>
+            </div>
+            <div
+              role="tabpanel"
+              data-testid="left-tab-panel"
+              style={tabPanelStyle}
             >
-              <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
-                <div role="tablist" aria-label="Evidence views" style={tabBarStyle}>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={leftTab === 'spatial'}
-                    data-testid="left-tab-spatial"
-                    onClick={() => setLeftTab('spatial')}
-                    style={leftTab === 'spatial' ? tabActiveStyle : tabBaseStyle}
-                  >
-                    Spatial Evidence
-                    {leftTab === 'spatial' && (
-                      <motion.div
-                        layoutId="left-tab-underline"
-                        style={tabUnderlineStyle}
-                        transition={SPRING_SNAPPY}
-                      />
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    role="tab"
-                    aria-selected={leftTab === 'notation'}
-                    data-testid="left-tab-notation"
-                    onClick={() => setLeftTab('notation')}
-                    style={leftTab === 'notation' ? tabActiveStyle : tabBaseStyle}
-                  >
-                    2D Notation
-                    {leftTab === 'notation' && (
-                      <motion.div
-                        layoutId="left-tab-underline"
-                        style={tabUnderlineStyle}
-                        transition={SPRING_SNAPPY}
-                      />
-                    )}
-                  </button>
-                </div>
+              {leftTab === 'spatial' ? (
+                <>
+                  <VisualPrimitiveCanvas
+                    imageUrl={spatialEvidence.image_url}
+                    imageWidth={spatialEvidence.image_width}
+                    imageHeight={spatialEvidence.image_height}
+                    primitives={spatialEvidence.primitives}
+                    activeStepPrimitiveIds={activePrimitiveIds}
+                    onPrimitiveClick={handlePrimitiveCanvasClick}
+                  />
+                  <SpatialEvidencePanel
+                    primitives={activePrimitives}
+                    selectedPrimitiveId={activePrimitiveId}
+                    onPrimitiveSelect={handlePrimitiveSelect}
+                    onOpenEvidence={handlePrimitiveOpenEvidence}
+                    emptyStateLabel={
+                      activeStep
+                        ? 'No spatial evidence for this step'
+                        : 'Scrub forward to reach a grounded step'
+                    }
+                  />
+                </>
+              ) : (
                 <div
-                  role="tabpanel"
-                  data-testid="left-tab-panel"
-                  style={tabPanelStyle}
+                  style={placeholderCardStyle}
+                  data-testid="notation-placeholder"
                 >
-                  {leftTab === 'spatial' ? (
-                    <>
-                      <VisualPrimitiveCanvas
-                        imageUrl={spatialEvidence.image_url}
-                        imageWidth={spatialEvidence.image_width}
-                        imageHeight={spatialEvidence.image_height}
-                        primitives={spatialEvidence.primitives}
-                        activeStepPrimitiveIds={activePrimitiveIds}
-                        onPrimitiveClick={handlePrimitiveCanvasClick}
-                      />
-                      <SpatialEvidencePanel
-                        primitives={activePrimitives}
-                        selectedPrimitiveId={activePrimitiveId}
-                        onPrimitiveSelect={handlePrimitiveSelect}
-                        onOpenEvidence={handlePrimitiveOpenEvidence}
-                        emptyStateLabel={
-                          activeStep
-                            ? 'No spatial evidence for this step'
-                            : 'Scrub forward to reach a grounded step'
-                        }
-                      />
-                    </>
-                  ) : (
-                    <div
-                      style={placeholderCardStyle}
-                      data-testid="notation-placeholder"
-                    >
-                      <strong>2D Notation — pending wave 3.</strong>
-                      <p style={{ margin: '8px 0 0 0' }}>
-                        This slot will render the 169-primitive CAS notation
-                        map (wrapping <code>dashboard/src/lib/notation2DMap</code>).
-                        Not yet wired in v0.0.
-                      </p>
-                    </div>
-                  )}
+                  <strong>2D Notation — pending wave 3.</strong>
+                  <p style={{ margin: '8px 0 0 0' }}>
+                    This slot will render the 169-primitive CAS notation
+                    map (wrapping <code>dashboard/src/lib/notation2DMap</code>).
+                    Not yet wired in v0.0.
+                  </p>
                 </div>
-              </GlassPanel>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+              )}
+            </div>
+          </GlassPanel>
+        </motion.aside>
 
-        <div
-          style={fullscreen ? fullscreenSceneStyle : centerColumnStyle}
+        <motion.div
+          animate={{ flexGrow: centerFlex }}
+          transition={SPRING_GENTLE}
+          style={{ ...columnStyle, flexBasis: 0, flexShrink: 1 }}
           data-testid="atlas-viewer-center"
         >
           <div style={centerSceneWrapperStyle}>
@@ -711,34 +802,28 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
               onNeuronClick={handleNeuronClick}
             />
           </div>
-        </div>
+        </motion.div>
 
-        <AnimatePresence initial={false}>
-          {rightPanelOpen && !fullscreen ? (
-            <motion.div
-              key="right"
-              initial={{ opacity: 0, x: 8 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: 8 }}
-              transition={SPRING_GENTLE}
-              style={rightColumnStyle}
-              data-testid="atlas-viewer-right"
-            >
-              <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
-                <div style={rightCardInnerStyle}>
-                  <MethodKnobsPanel
-                    methods={[...methods]}
-                    enabledMethodIds={enabledMethodIds}
-                    knobValues={knobValues}
-                    onToggleMethod={handleToggleMethod}
-                    onKnobChange={handleKnobChange}
-                    density={controlsDensity}
-                  />
-                </div>
-              </GlassPanel>
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+        <motion.aside
+          animate={{ flexGrow: rightFlex, opacity: rightPanelOpen ? 1 : 0 }}
+          transition={SPRING_GENTLE}
+          style={{ ...columnStyle, flexBasis: 0, flexShrink: 1, pointerEvents: rightPanelOpen ? 'auto' : 'none' }}
+          data-testid="atlas-viewer-right"
+          aria-hidden={!rightPanelOpen}
+        >
+          <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
+            <div style={rightCardInnerStyle}>
+              <MethodKnobsPanel
+                methods={[...methods]}
+                enabledMethodIds={enabledMethodIds}
+                knobValues={knobValues}
+                onToggleMethod={handleToggleMethod}
+                onKnobChange={handleKnobChange}
+                density={controlsDensity}
+              />
+            </div>
+          </GlassPanel>
+        </motion.aside>
       </div>
 
       <div style={bottomTimelineFloatStyle} data-testid="atlas-viewer-bottom">
@@ -760,9 +845,11 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
 
       <HelpOverlay open={helpOpen} onClose={() => setHelpOpen(false)} />
 
-      {/* Touch the imported palette so it isn't dead-code-eliminated; we
-          still rely on activeTrace color via its consumers above. */}
       <span style={{ display: 'none' }} aria-hidden="true">{ATLAS_STATUS_COLORS.activeTrace}</span>
+
+      {/* Keep AnimatePresence import non-dead so any future child can use
+          exit animations without re-importing. */}
+      <AnimatePresence />
     </div>
   );
 }

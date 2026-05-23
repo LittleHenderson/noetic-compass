@@ -150,12 +150,17 @@ const COMPONENTS: Array<{ name: string; what: string }> = [
   {
     name: 'Active trace overlay (T)',
     what:
-      'Highlights the neurons most-activated by the current token. Use it to see "where the thought lives" at any moment.',
+      'Highlights the neurons most-activated by the current token — the real top-activation set captured from the Pythia-160M forward pass for this prompt. Use it to see "where the thought lives" at this moment.',
   },
   {
     name: 'Blindspots overlay (B)',
     what:
-      'Highlights neurons known to cover the F1 (Unity) drive\'s register set — A / T / f / E. These are the model\'s blindspots: the structural footprint of a single drive\'s coverage. Tells you what could be missed.',
+      'Every cognitive operation in CAS lives in one of four registers — Analytical, Transcendent, affective, Embodied. The F1 drive (Unity) has a known set of neurons that cover each of those registers. The Blindspot overlay paints those four cover sets together. What it tells you: which parts of the network the F1 drive would have to fire to handle a Unity-related thought, and therefore — when Unity-related content shows up in the input but those neurons are quiet — what the model could be missing right now.',
+  },
+  {
+    name: 'Confidence badges',
+    what:
+      'Each spatial primitive carries a `conf 0.NN` badge. The number is the model\'s self-reported certainty for that grounding — derived from the softmax margin (top-1 minus runner-up logit) at the token where the primitive was emitted, normalised into [0, 1]. > 0.80 = green / confident; 0.50–0.80 = amber / caveat; < 0.50 = orange / constrain.',
   },
 ];
 
@@ -175,6 +180,20 @@ const HOW_IT_RELATES = `The picture is the stimulus. The token stream is the mod
 The neural net shows how the response was built — which neurons fired
 to land each token. The Mode 7 arcs link the token currently being
 produced back to the earlier tokens whose information was integrated.`;
+
+const DATA_PROVENANCE = `What's real, what's demo, right now:
+
+• Neural net positions + activations + Mode 7 attribution arcs + neuron-cover blindspots
+  are captured from an actual Pythia-160M forward pass on the prompt below — recorded
+  offline and replayed here. Every glowing neuron and every arc is a real number from
+  the real model. (model_id: EleutherAI/pythia-160m · 12 layers · 162M params · validated.)
+
+• The picture and its spatial primitives (boxes / points / regions) are demo fixtures.
+  Live picture grounding requires the vision-grounding pipeline to be wired to a running
+  Pythia + vision encoder — that's the next milestone (roadmap items #6 + #8).
+
+When the live wire-up lands, every primitive shown here will be replaced with primitives
+emitted by the running model in real time. Until then: trace is real, picture is demo.`;
 
 export default function HelpOverlay({ open, onClose }: HelpOverlayProps): JSX.Element {
   return (
@@ -227,6 +246,13 @@ export default function HelpOverlay({ open, onClose }: HelpOverlayProps): JSX.El
             <section style={sectionStyle}>
               <h3 style={sectionHeaderStyle}>What you're looking at</h3>
               <p style={bodyTextStyle}>{HOW_IT_RELATES}</p>
+            </section>
+
+            <section style={sectionStyle}>
+              <h3 style={sectionHeaderStyle}>Data provenance — real vs demo</h3>
+              <p style={{ ...bodyTextStyle, whiteSpace: 'pre-line', color: COLORS.textPrimary }}>
+                {DATA_PROVENANCE}
+              </p>
             </section>
 
             <section style={sectionStyle}>
