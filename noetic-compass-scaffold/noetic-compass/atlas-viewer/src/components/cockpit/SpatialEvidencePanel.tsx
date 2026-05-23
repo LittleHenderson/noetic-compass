@@ -326,6 +326,7 @@ export default function SpatialEvidencePanel({
                   <span
                     data-testid={`spatial-evidence-confidence-${p.id}`}
                     style={pillStyle(confidenceBadgeColor(p.confidence))}
+                    title={`Confidence ${p.confidence.toFixed(2)} — derived from the softmax margin (top-1 minus runner-up logit) at the token where this primitive was emitted, normalised into [0, 1]. > 0.80 green / 0.50–0.80 amber / < 0.50 orange. Press ? for the full method.`}
                   >
                     {`conf ${p.confidence.toFixed(2)}`}
                   </span>
