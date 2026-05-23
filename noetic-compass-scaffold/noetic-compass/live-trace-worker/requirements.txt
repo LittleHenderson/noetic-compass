@@ -1,0 +1,8 @@
+# Milestone 1 — scaffold only. Pure FastAPI + Pydantic, no model weights.
+# Milestone 2 will add: torch, transformers, accelerate (for Pythia-160M
+# forward), and possibly bitsandbytes if we want int8 to keep the pod cheap.
+fastapi==0.115.0
+uvicorn[standard]==0.30.6
+pydantic==2.9.0
+sse-starlette==2.1.3
+httpx==0.27.2  # for the test client's async paths
