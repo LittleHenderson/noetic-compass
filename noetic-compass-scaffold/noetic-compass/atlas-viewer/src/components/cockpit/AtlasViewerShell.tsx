@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ControlBar, {
@@ -355,6 +355,12 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const [rightPanelOpen, setRightPanelOpen] = useState<boolean>(true);
   const [fullscreen, setFullscreen] = useState<boolean>(false);
   const [helpOpen, setHelpOpen] = useState<boolean>(false);
+  const onLiveControlsChangeRef = useRef(onLiveControlsChange);
+  const lastLiveControlsKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    onLiveControlsChangeRef.current = onLiveControlsChange;
+  }, [onLiveControlsChange]);
 
   const tokens = useMemo<Token[]>(() => {
     if (trace.tokens && trace.tokens.length > 0) return trace.tokens;
@@ -452,9 +458,16 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     showActiveTrace,
   ]);
 
+  const liveControlsKey = useMemo(
+    () => JSON.stringify(liveControls),
+    [liveControls],
+  );
+
   useEffect(() => {
-    onLiveControlsChange?.(liveControls);
-  }, [liveControls, onLiveControlsChange]);
+    if (lastLiveControlsKeyRef.current === liveControlsKey) return;
+    lastLiveControlsKeyRef.current = liveControlsKey;
+    onLiveControlsChangeRef.current?.(liveControls);
+  }, [liveControls, liveControlsKey]);
 
   useEffect(() => {
     setActivePrimitiveId(undefined);

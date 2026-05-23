@@ -215,6 +215,31 @@ describe('AtlasViewerShell — method knobs wiring', () => {
       verificationMode: 'BALANCED',
     });
   });
+
+  it('does not report a live controls change when only the callback prop changes', () => {
+    const firstCallback = vi.fn();
+    const secondCallback = vi.fn();
+    const { rerender } = renderShell({
+      runtimeMode: 'live',
+      liveStatus: 'connecting',
+      onLiveControlsChange: firstCallback,
+    });
+
+    expect(firstCallback).toHaveBeenCalledTimes(1);
+
+    rerender(
+      <AtlasViewerShell
+        trace={baseTrace}
+        spatialEvidence={baseSpatial}
+        architecture={PYTHIA_160M_PRESET}
+        runtimeMode="live"
+        liveStatus="streaming"
+        onLiveControlsChange={secondCallback}
+      />,
+    );
+
+    expect(secondCallback).not.toHaveBeenCalled();
+  });
 });
 
 describe('AtlasViewerShell — evidence drawer', () => {
