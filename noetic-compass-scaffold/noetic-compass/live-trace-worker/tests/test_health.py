@@ -4,7 +4,9 @@ def test_health_ok(client):
     body = r.json()
     assert body["status"] == "ok"
     assert body["model_id"] == "EleutherAI/pythia-160m"
-    # M1 is the scaffold — the worker MUST advertise is_real_model=False so
-    # callers can't confuse it with the real-Pythia milestone.
+    # M2 default in CI: LIVE_TRACE_DEMO_MODE=1 keeps the worker in demo
+    # mode. is_real_model + model_loaded both False; load_error None.
     assert body["is_real_model"] is False
-    assert body["worker_version"] == "m1-scaffold"
+    assert body["model_loaded"] is False
+    assert body["load_error"] is None
+    assert body["worker_version"] == "m2-real-pythia"
