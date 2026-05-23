@@ -90,7 +90,7 @@ def _check_invite(code: str | None) -> str:
     return code
 
 
-def _check_abuse_limits(ip: str, code: str) -> None:
+def _assert_abuse_limits(ip: str, code: str) -> None:
     now = time.time()
     ip_bucket = _ip_opens[ip]
     _trim_window(ip_bucket, now, _IP_WINDOW_SECONDS)
@@ -102,8 +102,11 @@ def _check_abuse_limits(ip: str, code: str) -> None:
     if len(code_bucket) >= settings.atlas_live_invite_daily_limit:
         raise HTTPException(status_code=429, detail="Atlas LIVE invite-code daily limit exceeded")
 
-    ip_bucket.append(now)
-    code_bucket.append(now)
+
+def _record_session_open(ip: str, code: str) -> None:
+    now = time.time()
+    _ip_opens[ip].append(now)
+    _code_opens[code].append(now)
 
 
 def _worker_base_url() -> str:
@@ -173,13 +176,15 @@ async def create_live_session(
     invite_code: str | None = Header(default=None, alias=INVITE_HEADER),
 ) -> LiveSessionResponse:
     code = _check_invite(invite_code)
-    _check_abuse_limits(_client_ip(request), code)
+    ip = _client_ip(request)
+    _assert_abuse_limits(ip, code)
 
     worker_resp = await _create_worker_session(req)
     session_id = str(worker_resp.get("session_id") or "")
     if not session_id:
         raise HTTPException(status_code=502, detail="Atlas LIVE worker did not return a session_id")
 
+    _record_session_open(ip, code)
     token = _create_stream_token(session_id)
     stream_url = f"/atlas/live/session/{session_id}/events?stream_token={token}"
     return LiveSessionResponse(

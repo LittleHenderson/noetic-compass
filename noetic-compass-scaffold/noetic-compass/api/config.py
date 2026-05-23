@@ -69,7 +69,7 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("ATLAS_LIVE_INVITE_CODES", "NC_ATLAS_LIVE_INVITE_CODES"),
     )
     atlas_live_session_rate_limit_per_ip_hour: int = Field(
-        default=3,
+        default=120,
         ge=1,
         validation_alias=AliasChoices(
             "ATLAS_LIVE_SESSION_RATE_LIMIT_PER_IP_HOUR",
@@ -77,7 +77,7 @@ class Settings(BaseSettings):
         ),
     )
     atlas_live_invite_daily_limit: int = Field(
-        default=10,
+        default=1000,
         ge=1,
         validation_alias=AliasChoices(
             "ATLAS_LIVE_INVITE_DAILY_LIMIT",

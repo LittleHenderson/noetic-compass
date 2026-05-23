@@ -100,6 +100,40 @@ def test_live_session_rate_limits_by_ip(client, monkeypatch):
     assert blocked.status_code == 429
 
 
+def test_live_session_does_not_count_failed_worker_open_against_limit(client, monkeypatch):
+    calls = {"count": 0}
+
+    async def flaky_create_worker_session(req):
+        calls["count"] += 1
+        if calls["count"] == 1:
+            raise atlas_live.HTTPException(status_code=502, detail="simulated worker failure")
+        return {"session_id": f"worker-session-{calls['count']}", "events_url": "/sessions/ok/events"}
+
+    monkeypatch.setattr(atlas_live, "_create_worker_session", flaky_create_worker_session)
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_session_rate_limit_per_ip_hour", 1)
+
+    failed = client.post(
+        "/atlas/live/session",
+        headers={"X-Atlas-Invite-Code": "alpha-code"},
+        json={"prompt": "hello"},
+    )
+    assert failed.status_code == 502
+
+    ok = client.post(
+        "/atlas/live/session",
+        headers={"X-Atlas-Invite-Code": "alpha-code"},
+        json={"prompt": "hello"},
+    )
+    assert ok.status_code == 200
+
+    blocked = client.post(
+        "/atlas/live/session",
+        headers={"X-Atlas-Invite-Code": "alpha-code"},
+        json={"prompt": "hello"},
+    )
+    assert blocked.status_code == 429
+
+
 def test_live_events_require_matching_stream_token(client, monkeypatch):
     async def fake_create_worker_session(req):
         return {"session_id": "worker-session-2", "events_url": "/sessions/worker-session-2/events"}
