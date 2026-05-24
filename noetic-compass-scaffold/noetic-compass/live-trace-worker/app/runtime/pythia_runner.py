@@ -25,6 +25,10 @@ from typing import Any, AsyncIterator
 
 from ..schemas.requests import CreateSessionRequest
 from .cover_library import coords_for_drive
+from .knob_resolution import (
+    enabled_methods as _resolve_enabled_methods,
+    resolve_knobs,
+)
 from .probe_runner import EraserIntervention, capture_probes, resolve_probes, summarise
 
 logger = logging.getLogger(__name__)
@@ -61,13 +65,14 @@ async def run_pythia(
 
     max_new = min(req.max_new_tokens, 24)
     requested_probes = _requested_probes(req)
-    knobs = _knobs(req)
-    foundation_layers = _layer_filter(knobs.get("foundation_probe", {}).get("layer_range"))
-    top_k = _positive_int(knobs.get("foundation_probe", {}).get("top_k"), default=8)
-    rpm_threshold = _float_knob(
-        knobs.get("rpm_gate_check", {}).get("strictness_threshold"),
-        default=0.0,
-    )
+    resolved = resolve_knobs(req)
+    fp_resolved = resolved["foundation_probe"]
+    layer_range_list = fp_resolved["layer_range"]
+    foundation_layers: set[int] | None = set(layer_range_list) if layer_range_list else None
+    top_k = int(fp_resolved["top_k"])
+    rpm_threshold = float(resolved["rpm_gate_check"]["strictness_threshold"])
+    inversion_threshold = float(resolved["inversion_scan"]["severity_threshold"])
+    inversion_active = bool(resolved["inversion_scan"]["active"])
     intervention = _eraser_intervention(req)
 
     with torch.no_grad():
@@ -116,8 +121,8 @@ async def run_pythia(
                 "confidence": summary.confidence
                 if "confidence_margin" in requested_probes
                 else None,
-                "inversion_risk": _inversion_risk(summary, knobs)
-                if "inversion_scan" in _enabled_methods(req)
+                "inversion_risk": _inversion_risk(summary, inversion_threshold)
+                if inversion_active
                 else None,
             }
 
@@ -142,67 +147,32 @@ async def run_pythia(
     _ = prompt_len
 
 
-def _knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
-    raw = req.method_config.get("knobs", {}) if req.method_config else {}
-    return raw if isinstance(raw, dict) else {}
-
-
 def _requested_probes(req: CreateSessionRequest) -> set[str]:
     if req.method_config and "enabled_methods" in req.method_config and not req.probes:
         return set()
     return set(resolve_probes(req.probes))
 
 
-def _enabled_methods(req: CreateSessionRequest) -> set[str]:
-    raw = req.method_config.get("enabled_methods", []) if req.method_config else []
-    if not isinstance(raw, list):
-        return set()
-    return {str(item) for item in raw}
-
-
-def _layer_filter(raw: Any) -> set[int] | None:
-    if not isinstance(raw, list) or not raw:
-        return None
-    out: set[int] = set()
-    for item in raw:
-        try:
-            out.add(int(item))
-        except (TypeError, ValueError):
-            continue
-    return out or None
-
-
-def _positive_int(raw: Any, default: int) -> int:
-    try:
-        parsed = int(raw)
-    except (TypeError, ValueError):
-        return default
-    return parsed if parsed > 0 else default
-
-
-def _float_knob(raw: Any, default: float) -> float:
-    try:
-        return float(raw)
-    except (TypeError, ValueError):
-        return default
-
-
 def _eraser_intervention(req: CreateSessionRequest) -> EraserIntervention | None:
-    if "drive_local_eraser" not in _enabled_methods(req):
+    """Build the runtime MLP-output suppression from resolved knobs.
+
+    Returns ``None`` when the method isn't enabled OR the requested
+    drive has no calibrated cover set (in which case the eraser knob
+    still echoes back via ``KnobResolutionEvent``, but no hook fires).
+    """
+    if "drive_local_eraser" not in _resolve_enabled_methods(req):
         return None
-    knobs = _knobs(req).get("drive_local_eraser", {})
-    drive = str(knobs.get("drive") or "F1")
-    gain = _float_knob(knobs.get("gain"), default=1.0)
+    eraser_resolved = resolve_knobs(req)["drive_local_eraser"]
+    drive = str(eraser_resolved["drive"])
+    gain = float(eraser_resolved["gain"])
     coords = tuple((coord.layer, coord.index) for coord in coords_for_drive(drive))
     if not coords:
         return None
     return EraserIntervention(coords=coords, gain=gain)
 
 
-def _inversion_risk(summary: Any, knobs: dict[str, dict[str, Any]]) -> float:
+def _inversion_risk(summary: Any, threshold: float) -> float:
     """Runtime inversion-risk side channel controlled by Inversion Scan."""
-    scan_knobs = knobs.get("inversion_scan", {})
-    threshold = _float_knob(scan_knobs.get("severity_threshold"), default=0.0)
     activations = [
         abs(float(item.get("activation", 0.0)))
         for item in getattr(summary, "top_activated_neurons", [])

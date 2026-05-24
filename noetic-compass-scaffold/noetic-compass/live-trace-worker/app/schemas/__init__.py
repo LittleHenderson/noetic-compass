@@ -3,6 +3,7 @@
 from .events import (
     CompleteEvent,
     ErrorEvent,
+    KnobResolutionEvent,
     LiveTraceEvent,
     ManifestEvent,
     Mode7Edge,
@@ -18,6 +19,7 @@ __all__ = [
     "CreateSessionRequest",
     "CreateSessionResponse",
     "ErrorEvent",
+    "KnobResolutionEvent",
     "LiveTraceEvent",
     "ManifestEvent",
     "ModelArch",

@@ -70,8 +70,10 @@ def test_real_mode_dispatch_uses_pythia_runner(monkeypatch: pytest.MonkeyPatch):
     # First event must be the manifest; first manifest must claim is_real_model.
     assert events[0].type == "manifest"
     assert events[0].manifest.is_real_model is True
-    # Second is neuron_covers.
-    assert events[1].type == "neuron_covers"
+    # Knob-resolution echo (new; carries what the worker actually used).
+    assert events[1].type == "knob_resolution"
+    # Then neuron_covers.
+    assert events[2].type == "neuron_covers"
     # Token events, then complete.
     token_events = [e for e in events if e.type == "token"]
     assert len(token_events) == 4

@@ -17,7 +17,10 @@ import Mode7Timeline, {
   type Mode7Frame,
   type Token,
 } from './Mode7Timeline';
-import MethodKnobsPanel, { type KnobValue } from './MethodKnobsPanel';
+import MethodKnobsPanel, {
+  type KnobValue,
+  type ResolvedKnobs,
+} from './MethodKnobsPanel';
 import SpatialEvidencePanel from './SpatialEvidencePanel';
 import VisualPrimitiveCanvas from './VisualPrimitiveCanvas';
 import EvidenceDrawer, { type EvidenceDrawerPayload } from './EvidenceDrawer';
@@ -77,6 +80,8 @@ export interface AtlasViewerShellProps {
   onLiveControlsChange?: (controls: LiveMethodControls) => void;
   onUseReplay?: () => void;
   className?: string;
+  /** Latest ``KnobResolutionEvent.resolved_knobs`` echoed by the worker. */
+  resolvedKnobs?: ResolvedKnobs | null;
 }
 
 type LeftTab = 'spatial' | 'notation';
@@ -321,6 +326,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     onLiveControlsChange,
     onUseReplay,
     className,
+    resolvedKnobs = null,
   } = props;
 
   const {
@@ -933,6 +939,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
                 onToggleMethod={handleToggleMethod}
                 onKnobChange={handleKnobChange}
                 density={controlsDensity}
+                resolvedKnobs={resolvedKnobs}
               />
             </div>
           </GlassPanel>

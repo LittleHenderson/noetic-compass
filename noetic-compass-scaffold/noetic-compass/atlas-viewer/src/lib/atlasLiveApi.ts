@@ -39,8 +39,11 @@ export interface LiveManifest {
   is_real_model: boolean;
 }
 
+export type ResolvedKnobs = Record<string, Record<string, unknown>>;
+
 export type LiveTraceEvent =
   | { type: 'manifest'; manifest: LiveManifest }
+  | { type: 'knob_resolution'; resolved_knobs: ResolvedKnobs }
   | { type: 'neuron_covers'; per_class_neuron_covers: Record<string, string[]> }
   | {
       type: 'token';

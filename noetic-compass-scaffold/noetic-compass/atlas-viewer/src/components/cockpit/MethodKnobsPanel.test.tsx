@@ -1,8 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 import MethodKnobsPanel from './MethodKnobsPanel';
-import type { KnobValue } from './MethodKnobsPanel';
+import type { KnobValue, ResolvedKnobs } from './MethodKnobsPanel';
 import type { TestingMethod } from '../../lib/testingMethods';
+import { buildLiveSessionRequest } from '../../lib/liveMethodControls';
 
 const enumMethod: TestingMethod = {
   id: 'm_enum',
@@ -98,6 +99,8 @@ function renderPanel(overrides?: {
   onToggle?: (id: string, enabled: boolean) => void;
   onKnob?: (id: string, knob: string, v: KnobValue) => void;
   methods?: TestingMethod[];
+  resolvedKnobs?: ResolvedKnobs | null;
+  showKnobDiagnostic?: boolean;
 }) {
   const onToggle = overrides?.onToggle ?? vi.fn();
   const onKnob = overrides?.onKnob ?? vi.fn();
@@ -110,6 +113,8 @@ function renderPanel(overrides?: {
       knobValues={overrides?.values ?? {}}
       onToggleMethod={onToggle}
       onKnobChange={onKnob}
+      resolvedKnobs={overrides?.resolvedKnobs}
+      showKnobDiagnostic={overrides?.showKnobDiagnostic}
     />,
   );
   return { onToggle, onKnob };
@@ -246,5 +251,120 @@ describe('MethodKnobsPanel', () => {
     const labelId = card.getAttribute('aria-labelledby');
     expect(labelId).toBe('method-m_enum-name');
     expect(document.getElementById(labelId!)).toHaveTextContent('Enum Method');
+  });
+
+  describe('Knob diagnostic disclosure', () => {
+    it('is hidden by default (production builds get no diagnostic)', () => {
+      renderPanel({ showKnobDiagnostic: false });
+      expect(
+        screen.queryByTestId('knob-diagnostic-panel'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('renders when the feature flag is set', () => {
+      renderPanel({ showKnobDiagnostic: true });
+      expect(
+        screen.getByTestId('knob-diagnostic-panel'),
+      ).toBeInTheDocument();
+    });
+
+    it('shows "awaiting worker echo" placeholder before any resolution lands', () => {
+      renderPanel({ showKnobDiagnostic: true });
+      fireEvent.click(screen.getByTestId('knob-diagnostic-toggle'));
+      expect(
+        screen.getByTestId('knob-diagnostic-empty'),
+      ).toBeInTheDocument();
+    });
+
+    it('paints ✓ when sent matches resolved (loose number-string equality)', () => {
+      renderPanel({
+        showKnobDiagnostic: true,
+        values: { m_enum: { axis: 'Drive' }, m_num: { gain: 1.5 } },
+        resolvedKnobs: {
+          m_enum: { axis: 'Drive' },
+          m_num: { gain: 1.5 },
+        },
+      });
+      fireEvent.click(screen.getByTestId('knob-diagnostic-toggle'));
+      expect(
+        screen.getByTestId('knob-diagnostic-m_enum-axis'),
+      ).toHaveAttribute('data-knob-match', 'true');
+      expect(
+        screen.getByTestId('knob-diagnostic-m_num-gain'),
+      ).toHaveAttribute('data-knob-match', 'true');
+    });
+
+    it('paints ✗ when sent differs from resolved', () => {
+      renderPanel({
+        showKnobDiagnostic: true,
+        values: { m_num: { gain: 2.5 } },
+        resolvedKnobs: { m_num: { gain: 1.0 } },
+      });
+      fireEvent.click(screen.getByTestId('knob-diagnostic-toggle'));
+      expect(
+        screen.getByTestId('knob-diagnostic-m_num-gain'),
+      ).toHaveAttribute('data-knob-match', 'false');
+    });
+
+    it('tolerates resolved-only entries (worker diagnostic bits like cover_available)', () => {
+      renderPanel({
+        showKnobDiagnostic: true,
+        values: {},
+        resolvedKnobs: {
+          m_num: { gain: 1.0, cover_available: false },
+        },
+      });
+      fireEvent.click(screen.getByTestId('knob-diagnostic-toggle'));
+      const coverRow = screen.getByTestId(
+        'knob-diagnostic-m_num-cover_available',
+      );
+      // Resolved-only row carries no Sent value -> match = na.
+      expect(coverRow).toHaveAttribute('data-knob-match', 'na');
+    });
+  });
+
+  describe('Outgoing method_config payload', () => {
+    // The diagnostic is window dressing without the round-trip. These
+    // tests pin the build-step that produces the request body the
+    // worker actually receives, so a refactor that drops a knob from
+    // the payload trips here.
+    it('serialises sent knob values into method_config.knobs', () => {
+      const req = buildLiveSessionRequest({
+        enabledMethodIds: ['foundation_probe', 'rpm_gate_check'],
+        knobValues: {
+          foundation_probe: { top_k: 4, layer_range: ['0', '1', '2', '3'] },
+          rpm_gate_check: { strictness_threshold: 0.9 },
+        },
+        verificationMode: 'BALANCED',
+        showBlindspots: true,
+        showActiveTrace: true,
+      });
+      expect(req.method_config?.enabled_methods).toEqual([
+        'foundation_probe',
+        'rpm_gate_check',
+      ]);
+      expect(req.method_config?.knobs).toEqual({
+        foundation_probe: { top_k: 4, layer_range: ['0', '1', '2', '3'] },
+        rpm_gate_check: { strictness_threshold: 0.9 },
+      });
+    });
+
+    it('different top_k values yield different request payloads', () => {
+      const low = buildLiveSessionRequest({
+        enabledMethodIds: ['foundation_probe'],
+        knobValues: { foundation_probe: { top_k: 4 } },
+        verificationMode: 'BALANCED',
+        showBlindspots: true,
+        showActiveTrace: true,
+      });
+      const high = buildLiveSessionRequest({
+        enabledMethodIds: ['foundation_probe'],
+        knobValues: { foundation_probe: { top_k: 8 } },
+        verificationMode: 'BALANCED',
+        showBlindspots: true,
+        showActiveTrace: true,
+      });
+      expect(low.method_config?.knobs).not.toEqual(high.method_config?.knobs);
+    });
   });
 });

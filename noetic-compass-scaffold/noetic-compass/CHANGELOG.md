@@ -1,5 +1,15 @@
 # Noetic Compass — Progress Log
 
+## Atlas LIVE — prove method knobs affect worker computation (May 24, 2026)
+
+**Proof surface added** for the method-panel toggles + knobs that ride along on `POST /atlas/live/session`. Before this session the cockpit was sending the knobs in `method_config["knobs"]` and the worker was reading them, but there was no proof that two different knob values produced two different worker outputs — toggling a switch could have been window dressing and we wouldn't have caught it. Now:
+
+- The worker exposes a new `KnobResolutionEvent` SSE event right after `ManifestEvent`. It carries `resolved_knobs: dict[method_id -> {knob_name -> resolved_value}]` — post-default / post-coerce / post-clamp values the runner actually used, sourced from a single `knob_resolution.resolve_knobs(req)` helper shared by both `pythia_runner.run_pythia` and `event_stream.stream_fake_trace`.
+- Worker pytest `live-trace-worker/tests/test_knob_effect.py` proves output divergence for three knobs: `foundation_probe.top_k` (controls per-token neuron count: 4 vs 8), `foundation_probe.layer_range` ([0,3] vs [6,11] partition the layer axis), and `rpm_gate_check.strictness_threshold` (0.0 vs 0.9 changes Mode 7 edge count). `inversion_scan.severity_threshold` (0.0 vs 1.0) also divergence-tested. `blindspot_detection.drive` documented as F1-only at v0.1 (`COVER_LIBRARY` carries no F2-F7 calibration) — the test asserts F1 returns a calibrated cover and F2 returns an empty cover with `cover_available: False` in the echo.
+- Atlas Viewer cockpit gains a collapsible "Knob diagnostic" disclosure at the bottom of `MethodKnobsPanel`, gated on `import.meta.env.DEV` or `VITE_ATLAS_SHOW_KNOB_DIAGNOSTIC === 'true'`. Hidden in default production builds. Shows per-method Sent vs Resolved with ✓/✗ (loose number-string equality). Six new vitest cases pin the diagnostic behaviour and the build-step that produces the outgoing `method_config` payload.
+
+Constraint preserved: no new typed schema — `method_config: dict[str, Any]` stays. The local parallel rewrite that tried a typed `MethodRunConfig` was rejected; this PR adds proof surface only.
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**
