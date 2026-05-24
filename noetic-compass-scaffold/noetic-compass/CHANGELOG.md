@@ -1,5 +1,50 @@
 # Noetic Compass — Progress Log
 
+## Compass <-> Atlas concordance harness M1 scaffold (May 24, 2026)
+
+Landed `research/concordance/` — a research-grade harness that runs the
+same scenario through Noetic Compass (`/wrap` or `/assess`) and Atlas
+LIVE, then produces a side-by-side agreement/mismatch report. Purpose:
+"same input, two independent paths, here is how often they agree" —
+proof surface for investors that neither path alone could provide.
+
+**Shipped.**
+- Design doc at `docs/working/compass_atlas_concordance_harness_2026_05_24.md`.
+  Covers all five agreement layers (operator correlation, DCI delta,
+  NCCS band match, inversion Jaccard, evidence-ref overlap), the
+  mismatch taxonomy (band_only, operator_direction_flip,
+  domain_precedence, register, residual), open-simplex pre-processing
+  per Correction 4, and batch post-processing.
+- `research/concordance/harness.py` — `Scenario`, `CompassResult`,
+  `AtlasResult`, `ConcordanceReport`, `SetReport` dataclasses. Real
+  `compare()` and `run_set()` (pure logic). `call_compass` and
+  `call_atlas` are documented stubs that raise NotImplementedError
+  with full M2 wiring plans (endpoints, payloads, auth, SSE handling)
+  inline as docstring comments.
+- `research/concordance/tests/test_compare.py` — 33 fixture tests
+  covering every taxonomy bucket, Pearson correlation edge cases,
+  open-simplex strict-positivity (Correction 4), CAS v7.7 register
+  canonicalization (Clarification 10), hash integrity, and the M1
+  refusal-to-do-live-calls guard.
+- `research/concordance/README.md` — onboarding, run instructions, M2
+  wiring checklist, taxonomy short-version table.
+
+**Object traceability.** Every `ConcordanceReport` carries SHA-256
+hashes of `(scenario, compass_response, atlas_response)`. Same three
+inputs produce the same report — durable receipt.
+
+**Not shipped (M2).** No live HTTP. `call_compass` / `call_atlas`
+intentionally raise. Wiring against staging Compass and staging
+Atlas-via-noetic-compass-api comes in a follow-up PR.
+
+**Dependency.** Agent C is producing
+`scenarios/atlas_alpha_set_v0.json` in parallel. Until that lands,
+`load_scenarios()` falls back to an inline 3-scenario stub fixture
+(ethics / AI safety / healthcare). Once the file is in tree, it gets
+picked up automatically — no harness change needed.
+
+**Tests.** `pytest research/concordance/tests/` -> 33 passed in 0.11s.
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**
