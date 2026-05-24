@@ -241,6 +241,7 @@ def test_live_health_realmode_forwards_worker_body(client, monkeypatch):
         "fake_runtime_env": False,
         "model_id": "EleutherAI/pythia-160m",
         "model_loaded": True,
+        "load_error": None,
         "worker_version": "m2-real-pythia",
     }
     seen: dict = {}

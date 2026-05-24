@@ -84,6 +84,8 @@ def check_api(api_url: str) -> list[CheckResult]:
         results.append(_check("Worker URL configured", False, "skipped — API unreachable"))
         results.append(_check("Worker reachable (via API)", False, "skipped — API unreachable"))
         results.append(_check("is_real_model = true", False, "skipped"))
+        results.append(_check("model_loaded = true", False, "skipped"))
+        results.append(_check("load_error = null", False, "skipped"))
         results.append(_check("fake_runtime_env = false", False, "skipped"))
         results.append(_check(f"model_id == {EXPECTED_MODEL_ID}", False, "skipped"))
         return results
@@ -102,6 +104,8 @@ def check_api(api_url: str) -> list[CheckResult]:
             results.append(_check("Worker URL configured", True, "configured (no atlas_live_disabled)"))
             results.append(_check("Worker reachable (via API)", False, f"API returned 503: {detail or 'no detail'}"))
         results.append(_check("is_real_model = true", False, "skipped — worker unreachable"))
+        results.append(_check("model_loaded = true", False, "skipped"))
+        results.append(_check("load_error = null", False, "skipped"))
         results.append(_check("fake_runtime_env = false", False, "skipped"))
         results.append(_check(f"model_id == {EXPECTED_MODEL_ID}", False, "skipped"))
         return results
@@ -110,6 +114,8 @@ def check_api(api_url: str) -> list[CheckResult]:
         results.append(_check("Worker URL configured", False, f"unexpected HTTP {status}"))
         results.append(_check("Worker reachable (via API)", False, "skipped"))
         results.append(_check("is_real_model = true", False, "skipped"))
+        results.append(_check("model_loaded = true", False, "skipped"))
+        results.append(_check("load_error = null", False, "skipped"))
         results.append(_check("fake_runtime_env = false", False, "skipped"))
         results.append(_check(f"model_id == {EXPECTED_MODEL_ID}", False, "skipped"))
         return results
@@ -117,17 +123,46 @@ def check_api(api_url: str) -> list[CheckResult]:
     results.append(_check("Worker URL configured", True, "/atlas/live/health -> 200"))
     results.append(_check("Worker reachable (via API)", True, "/atlas/live/health -> 200"))
 
-    # 2. Realmode probe.
+    # 2. Realmode probe. Real-mode means ALL FOUR conditions hold:
+    #    is_real_model=true (worker's own real-mode assertion),
+    #    model_loaded=true (Pythia weights actually in memory),
+    #    load_error=null (no prior load failure recorded),
+    #    fake_runtime_env=false (LIVE_TRACE_DEMO_MODE not set),
+    #    plus model_id == EleutherAI/pythia-160m. Earlier wiring of this
+    #    script only checked is_real_model, which can be true on a cold
+    #    worker that has never loaded weights — that lets a fake-but-not-
+    #    forced state silently certify "LIVE". Each condition is reported
+    #    separately so operators see which one fails.
     realmode_url = f"{api_url}/atlas/live/health/realmode"
     rstatus, rbody, rerr = _http_get(realmode_url)
     if rerr or rstatus != 200 or not isinstance(rbody, dict):
         results.append(_check("is_real_model = true", False, rerr or f"HTTP {rstatus}"))
+        results.append(_check("model_loaded = true", False, "skipped"))
+        results.append(_check("load_error = null", False, "skipped"))
         results.append(_check("fake_runtime_env = false", False, "skipped"))
         results.append(_check(f"model_id == {EXPECTED_MODEL_ID}", False, "skipped"))
         return results
 
     is_real = bool(rbody.get("is_real_model"))
     results.append(_check("is_real_model = true", is_real, f"is_real_model={rbody.get('is_real_model')!r}"))
+
+    model_loaded = bool(rbody.get("model_loaded"))
+    results.append(
+        _check(
+            "model_loaded = true",
+            model_loaded,
+            f"model_loaded={rbody.get('model_loaded')!r}",
+        )
+    )
+
+    load_error = rbody.get("load_error")
+    results.append(
+        _check(
+            "load_error = null",
+            load_error is None,
+            f"load_error={load_error!r}",
+        )
+    )
 
     fake_env = bool(rbody.get("fake_runtime_env"))
     results.append(
@@ -161,6 +196,8 @@ def check_worker(worker_url: str, api_key: str | None) -> list[CheckResult]:
         detail = err or f"HTTP {status}"
         results.append(_check("Worker reachable (direct)", False, detail))
         results.append(_check("Worker is_real_model = true", False, "skipped"))
+        results.append(_check("Worker model_loaded = true", False, "skipped"))
+        results.append(_check("Worker load_error = null", False, "skipped"))
         results.append(_check("Worker fake_runtime_env = false", False, "skipped"))
         results.append(_check(f"Worker model_id == {EXPECTED_MODEL_ID}", False, "skipped"))
         return results
@@ -173,6 +210,24 @@ def check_worker(worker_url: str, api_key: str | None) -> list[CheckResult]:
             "Worker is_real_model = true",
             is_real,
             f"is_real_model={body.get('is_real_model')!r}",
+        )
+    )
+
+    model_loaded = bool(body.get("model_loaded"))
+    results.append(
+        _check(
+            "Worker model_loaded = true",
+            model_loaded,
+            f"model_loaded={body.get('model_loaded')!r}",
+        )
+    )
+
+    load_error = body.get("load_error")
+    results.append(
+        _check(
+            "Worker load_error = null",
+            load_error is None,
+            f"load_error={load_error!r}",
         )
     )
 

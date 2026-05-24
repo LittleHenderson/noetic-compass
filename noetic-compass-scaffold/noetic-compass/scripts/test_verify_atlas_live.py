@@ -69,6 +69,7 @@ def test_all_green_when_api_reports_real_model(monkeypatch, capsys):
                 "fake_runtime_env": False,
                 "model_id": "EleutherAI/pythia-160m",
                 "model_loaded": True,
+                "load_error": None,
                 "worker_version": "m2-real-pythia",
             },
         ),
@@ -81,6 +82,8 @@ def test_all_green_when_api_reports_real_model(monkeypatch, capsys):
     assert exit_code == 0
     assert "API reachable" in out
     assert "is_real_model = true" in out
+    assert "model_loaded = true" in out
+    assert "load_error = null" in out
     assert "fake_runtime_env = false" in out
     assert "EleutherAI/pythia-160m" in out
     assert "PASS" in out
@@ -163,6 +166,7 @@ def test_red_when_worker_is_in_fake_mode(monkeypatch, capsys):
                 "fake_runtime_env": True,
                 "model_id": "EleutherAI/pythia-160m",
                 "model_loaded": False,
+                "load_error": None,
                 "worker_version": "m2-real-pythia",
             },
         ),
@@ -174,6 +178,7 @@ def test_red_when_worker_is_in_fake_mode(monkeypatch, capsys):
 
     assert exit_code == 1
     assert "[✗] is_real_model = true" in out
+    assert "[✗] model_loaded = true" in out
     assert "[✗] fake_runtime_env = false" in out
 
 
@@ -190,6 +195,7 @@ def test_red_when_model_id_mismatches(monkeypatch, capsys):
                 "fake_runtime_env": False,
                 "model_id": "EleutherAI/pythia-70m",
                 "model_loaded": True,
+                "load_error": None,
                 "worker_version": "m2-real-pythia",
             },
         ),
@@ -232,6 +238,7 @@ def test_worker_direct_probe_green(monkeypatch, capsys):
                     "fake_runtime_env": False,
                     "model_id": "EleutherAI/pythia-160m",
                     "model_loaded": True,
+                    "load_error": None,
                     "worker_version": "m2-real-pythia",
                 },
             )
@@ -243,6 +250,7 @@ def test_worker_direct_probe_green(monkeypatch, capsys):
                     "fake_runtime_env": False,
                     "model_id": "EleutherAI/pythia-160m",
                     "model_loaded": True,
+                    "load_error": None,
                     "worker_version": "m2-real-pythia",
                 },
             )
