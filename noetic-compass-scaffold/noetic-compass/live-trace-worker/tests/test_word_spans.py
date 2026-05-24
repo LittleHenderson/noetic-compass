@@ -171,14 +171,33 @@ def test_token_atomicity_when_decode_crosses_runs() -> None:
     assert out.structural_token_indices == []
 
 
-def test_token_indices_preserved_as_given() -> None:
-    """If the worker emits non-zero-based indices, the event preserves them."""
-    tokens = [(7, "hi"), (8, " "), (9, "there")]
+def test_token_indices_are_zero_based_contiguous() -> None:
+    """Input MUST be 0-based contiguous. UI indexes frames by token_index.
+
+    Audit fix (PR #54): the old contract said "indices need not start at
+    0", but the rest of the pipeline (replay controller, frame lookup,
+    per_token_frames array) treats token_index as the 0-based offset
+    into a flat list. Non-0-based or non-contiguous input would silently
+    desync frame lookups. Builder asserts the contract eagerly; the
+    WordSpansEvent model validator backstops it.
+    """
+    import pytest
+
+    # Happy path: 0-based contiguous, works.
+    tokens = [(0, "hi"), (1, " "), (2, "there")]
     out = build_word_spans(tokens)
-    assert out.spans[0].token_indices == [7]
-    assert out.spans[1].token_indices == [9]
-    assert out.structural_token_indices == [8]
+    assert out.spans[0].token_indices == [0]
+    assert out.spans[1].token_indices == [2]
+    assert out.structural_token_indices == [1]
     assert out.total_tokens_covered == 3
+
+    # Non-zero start → loud failure.
+    with pytest.raises(ValueError, match="0-based contiguous"):
+        build_word_spans([(7, "hi"), (8, " "), (9, "there")])
+
+    # Gap mid-stream → loud failure.
+    with pytest.raises(ValueError, match="0-based contiguous"):
+        build_word_spans([(0, "hi"), (2, "there")])
 
 
 def test_deterministic_under_identical_input() -> None:

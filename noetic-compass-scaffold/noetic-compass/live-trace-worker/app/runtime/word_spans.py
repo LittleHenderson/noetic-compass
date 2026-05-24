@@ -20,21 +20,40 @@ def build_word_spans(tokens: Iterable[tuple[int, str]]) -> WordSpansEvent:
 
     Args:
         tokens: iterable of ``(token_index, token_text)`` pairs, in emission
-            order. ``token_index`` need not start at 0 — whatever indices the
-            worker emitted are preserved verbatim in the output.
+            order. **Token indices MUST be 0-based contiguous**:
+            ``(0, t0), (1, t1), ..., (N-1, t_{N-1})``. The UI indexes per-
+            token frames by ``token_index``, so non-0-based or non-
+            contiguous input would silently desync frame lookups against
+            the worker's event stream. ``WordSpansEvent``'s model
+            validator enforces the same invariant on the way out, so this
+            function asserts the input contract eagerly and matches the
+            wire contract.
 
     Returns:
         A ``WordSpansEvent`` whose spans cover exactly the non-whitespace
         runs of the concatenated text. Whitespace-only tokens are recorded
         in ``structural_token_indices``. Token-backing is lossless: every
         input token_index appears in exactly one span OR in
-        ``structural_token_indices``.
+        ``structural_token_indices``, and their union equals
+        ``[0, total_tokens_covered)``.
 
     Determinism: identical input → identical output. No RNG, no clock, no
     locale-dependent calls.
+
+    Raises:
+        ValueError: if input violates the 0-based contiguous contract.
     """
 
     materialised: list[tuple[int, str]] = [(int(i), str(t)) for i, t in tokens]
+    # Eagerly assert the contract — fail loudly here rather than letting
+    # the schema validator do it after we have built spans we'd have to
+    # throw away.
+    for expected_idx, (got_idx, _) in enumerate(materialised):
+        if got_idx != expected_idx:
+            raise ValueError(
+                "build_word_spans expects 0-based contiguous token indices: "
+                f"expected {expected_idx} at position {expected_idx}, got {got_idx}"
+            )
 
     # Walk tokens, building char ranges for each token in the running output.
     token_char_ranges: list[tuple[int, int, int, str]] = []  # (token_index, start, end, text)

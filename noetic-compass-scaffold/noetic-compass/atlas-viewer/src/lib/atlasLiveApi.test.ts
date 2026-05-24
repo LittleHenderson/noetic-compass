@@ -70,10 +70,58 @@ describe('atlasLiveApi', () => {
     expect(
       (trace.per_token_frames[0] as { inversion_risk: number }).inversion_risk,
     ).toBe(0.42);
-    expect(
-      (trace as unknown as { neuron_covers: { per_class_neuron_covers: Record<string, string[]> } })
-        .neuron_covers.per_class_neuron_covers.F1E,
-    ).toEqual(['L5N142']);
+    // Legacy bare-string covers normalise to typed members at the UI edge
+    // so the cockpit's blindspot-interpretation surface can render against
+    // either old or new traces. Bare strings → placeholder/unavailable.
+    const covers = (
+      trace as unknown as {
+        neuron_covers: { per_class_neuron_covers: Record<string, unknown[]> };
+      }
+    ).neuron_covers.per_class_neuron_covers.F1E;
+    expect(covers).toHaveLength(1);
+    expect(covers[0]).toMatchObject({
+      label: 'L5N142',
+      confidence: null,
+      confidence_band: 'unavailable',
+      evidence_sources: [],
+    });
+  });
+
+  it('promotes typed neuron_covers events into normalised members', () => {
+    let trace = emptyLiveTrace();
+    trace = appendLiveEvent(trace, {
+      type: 'neuron_covers',
+      per_class_neuron_covers: {
+        F5A: [
+          {
+            label: 'L3N142',
+            confidence: 0.72,
+            confidence_band: 'medium',
+            evidence_sources: ['probe', 'ablation'],
+          },
+        ],
+        F1A: [
+          // Worker forgot to populate the band — UI must recompute it.
+          { label: 'L4N336', confidence: 0.85 } as never,
+        ],
+      },
+    });
+    const covers = (
+      trace as unknown as {
+        neuron_covers: { per_class_neuron_covers: Record<string, unknown[]> };
+      }
+    ).neuron_covers.per_class_neuron_covers;
+    expect(covers.F5A[0]).toMatchObject({
+      label: 'L3N142',
+      confidence: 0.72,
+      confidence_band: 'medium',
+      evidence_sources: ['probe', 'ablation'],
+    });
+    expect(covers.F1A[0]).toMatchObject({
+      label: 'L4N336',
+      confidence: 0.85,
+      confidence_band: 'high',  // recomputed from 0.85 -> high
+    });
   });
 
   it('absorbs word_spans events and exposes them on the trace', () => {

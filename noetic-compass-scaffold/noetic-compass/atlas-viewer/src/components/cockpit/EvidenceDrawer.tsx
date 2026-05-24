@@ -5,6 +5,15 @@ import { GlassPanel } from '../ui/GlassPanel';
 import { THEME, SPRING_GENTLE } from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { resolveAtlasApiBaseUrl } from '../../lib/atlasLiveApi';
+import BlindspotInterpretation from './BlindspotInterpretation';
+import type { DriveId, RegisterId } from '../../lib/driveTranslations';
+
+export interface BlindspotInterpretationRef {
+  driveId: DriveId;
+  register?: RegisterId;
+  confidence: number | null;
+  evidenceSources: string[];
+}
 
 export interface NeuronActivation {
   layer: number;
@@ -36,6 +45,13 @@ export interface EvidenceDrawerPayload {
   title: string;
   evidence_ref?: unknown;
   detail?: unknown;
+  /**
+   * Optional plain-English blindspot interpretations for this artifact.
+   * Populated by the cockpit when the clicked neuron belongs to one or
+   * more cover classes. The drawer renders these BELOW the existing
+   * Evidence Packet payload — see PR #45/#46/#50.
+   */
+  blindspotInterpretations?: BlindspotInterpretationRef[];
 }
 
 export interface EvidenceDrawerProps {
@@ -377,6 +393,22 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
     ? JSON.stringify(payload.detail, null, 2)
     : null;
   const packetFailed = packetState.status === 'error';
+  const blindspots = payload?.blindspotInterpretations ?? [];
+  const blindspotSection =
+    blindspots.length > 0 ? (
+      <div data-testid="evidence-drawer-blindspots" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={sectionLabelStyle}>blindspot interpretation</div>
+        {blindspots.map((b, idx) => (
+          <BlindspotInterpretation
+            key={`${b.driveId}-${b.register ?? 'none'}-${idx}`}
+            driveId={b.driveId}
+            register={b.register}
+            confidence={b.confidence}
+            evidenceSources={b.evidenceSources}
+          />
+        ))}
+      </div>
+    ) : null;
 
   return (
     <>
@@ -525,6 +557,7 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
                 <div style={sectionLabelStyle}>Evidence Packet</div>
               </div>
             ) : null}
+            {blindspotSection}
             {packetState.status === 'loaded' ? (
               <>
                 <div style={noteStyle} data-testid="evidence-packet-loaded">

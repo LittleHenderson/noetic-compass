@@ -1,10 +1,25 @@
 # Noetic Compass — Progress Log
 
-## Wave 5.5: clickable word spans + token-scoped Evidence Drawer (May 24, 2026)
+## Wave 5.5/5.6 (integration): clickable words + interpretable blindspots (May 24, 2026)
 
-Atlas Viewer cockpit now lets a user click any word in the generated continuation and immediately see what was happening inside the model when that word was emitted. Word-level clicks are token-backed under the hood — the live worker emits a one-shot `WordSpansEvent` just before `complete` that maps each rendered word to the exact token indices that produced it, with deterministic policies for leading-whitespace tokens, multi-token words, and whitespace-only structural tokens. Clicking a word seeks playback to the span's first token, highlights its neurons + Mode 7 attention path in the 3D scene, and opens the Evidence Drawer in a new `source: 'word'` mode that lists every constituent token (raw text, confidence, top neurons), the deduplicated attention path, and any Evidence Packet trace_ids those tokens carry. PR #45/#46 Evidence Drawer behavior (neuron + primitive sources, packet fetch, labeled fallback) is preserved.
+Two cockpit lanes shipped together because they both reshape the LIVE event stream — merging them independently would have left the schema half-typed. This release is the integrated version.
 
-**Investor framing:** "Click any word. See the neurons. See the path. The model's reasoning is no longer a black box — it's a transcript you can interrogate."
+**Clickable word spans (#52 lineage).** Click any word in the streamed output → cockpit highlights the exact token(s) behind it → 3D neurons, Mode 7 attention path, and Evidence Drawer all jump to that moment. Words are token-backed under the hood (models think in tokens, not words). The worker emits one `WordSpansEvent` just before `complete`, mapping each rendered word to the exact token indices that produced it, with a deterministic boundary policy and lossless backing (every token appears in exactly one span OR in `structural_token_indices`). Token-index contract is now strictly 0-based contiguous, asserted at build time.
+
+**Interpretable blindspots (#53 lineage).** Blindspots stop being a red overlay. Each cover class now renders a four-line interpretation: plain-English sentence (what concern the model may be missing) → `CAS source: F5 Agency · analytical register` (provenance, small dim text) → `Confidence: 72% medium` (band, when scored) → `Evidence: probe + ablation` (omitted when no sources). The 7 drive sentences are user-authored copy and ship verbatim, asserted by test. Confidence bands match spec exactly: 80-95 high, 60-79 medium, 40-59 low, otherwise unavailable. Default visible filter is high+medium with low behind an expand; unavailable entries are excluded from the textual list. Investor framing: "Atlas doesn't just say 'this model has a blindspot.' It translates the blindspot into the kind of human concern the model may be failing to consider."
+
+**Honesty fixes layered on top of the merge.**
+
+- Worker `cover_library` is honestly **F1-only** today (F1 Unity covers F1A/F1T/F1f/F1E). F2-F7 are NOT yet in the runtime cover library. The UI panel header surfaces this directly so a viewer is never misled by drive sentences it can't reach. F2-F7 will appear in the panel once their cover sets are calibrated.
+- Per-neuron probe scores are NOT in-tree. The closest artifact (`research/cas_probe/cas_harness_public_evidence_manifest.json`) carries aggregate panel claims (78.6% probe, 3.57% ablation), not per-neuron scores. Every cover member therefore ships with `confidence=None`, `confidence_band="unavailable"`, `evidence_sources=[]`. **Zero invented numbers.**
+- BlindspotsPanel distinguishes three states now, not two: (a) **markers detected + scored** → textual interpretations render; (b) **markers detected + scoring pending** (today's default state) → panel shows "Blindspot markers detected in the 3D scene, but per-neuron confidence scoring is not loaded yet — interpretations will appear here once probe data wires in"; (c) **no markers** → "No cover overlap detected for this frame." The 3D red overlay is unconditional (spatial marker stays); only the textual interpretation depends on probe data.
+- Evidence Drawer word-source rendering documents the LIVE trace_id flow honestly: LIVE-mode TokenEvents do not currently carry trace_ids (those are wired in the REPLAY fixture pipeline only), so the word drawer falls back to the existing "Local replay metadata only" label in LIVE today. Same fallback label PR #46 ships for other sources — no new labels invented.
+
+### Tests
+
+- Worker `pytest` → 60/60 pass (12 word_spans + 25 cover schema + existing).
+- Atlas vitest pending — could not run in the agent sandbox; run before merging.
+- New regression guard `test_word_spans.py::test_token_indices_are_zero_based_contiguous` asserts the tightened contract.
 
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 

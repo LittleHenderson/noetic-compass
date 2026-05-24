@@ -279,6 +279,69 @@ describe('EvidenceDrawer', () => {
     expect(fetchImpl).toHaveBeenCalledOnce();
   });
 
+  it('renders BlindspotInterpretation rows when the payload carries blindspotInterpretations', () => {
+    const fetchImpl = vi.fn();
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'neuron',
+          title: 'L3N142',
+          evidence_ref: {
+            neuron_coordinate: 'L3N142',
+            layer: 3,
+            neuron_index: 142,
+          },
+          blindspotInterpretations: [
+            {
+              driveId: 'F5',
+              register: 'A',
+              confidence: 0.72,
+              evidenceSources: ['neuron-cover overlap', 'ablation support'],
+            },
+          ],
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(screen.getByTestId('evidence-drawer-blindspots')).toBeTruthy();
+    expect(screen.getByTestId('blindspot-headline').textContent).toBe(
+      'The model may be overlooking whether someone has real choice, permission, responsibility, or control.',
+    );
+    expect(screen.getByTestId('blindspot-cas-source').textContent).toBe(
+      'CAS source: F5 Agency · analytical register',
+    );
+    expect(screen.getByTestId('blindspot-confidence').textContent).toBe(
+      'Confidence: 72% medium',
+    );
+    expect(screen.getByTestId('blindspot-evidence').textContent).toBe(
+      'Evidence: neuron-cover overlap + ablation support',
+    );
+  });
+
+  it('omits the blindspot section when no interpretations are provided', () => {
+    const fetchImpl = vi.fn();
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'neuron',
+          title: 'L9N42',
+          evidence_ref: { neuron_coordinate: 'L9N42' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(screen.queryByTestId('evidence-drawer-blindspots')).toBeNull();
+    expect(screen.queryByTestId('blindspot-interpretation')).toBeNull();
+  });
+
   it('falls back to the local reference when packet fetch fails', async () => {
     const fetchImpl = vi.fn(async () =>
       jsonResponse({ detail: 'trace_id not found' }, { status: 404 }),

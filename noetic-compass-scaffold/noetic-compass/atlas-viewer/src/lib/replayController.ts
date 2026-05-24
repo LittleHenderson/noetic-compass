@@ -3,7 +3,10 @@ export interface ReplayTrace {
   per_token_frames: unknown[];
   model_id?: string;
   neuron_covers?: {
-    per_class_neuron_covers?: Record<string, string[]>;
+    // Each value is now a list of NeuronCoverMember-shaped records OR
+    // legacy bare strings (older offline fixtures). The atlas viewer
+    // normalises both shapes via atlasLiveApi.normaliseCoverMember.
+    per_class_neuron_covers?: Record<string, unknown[]>;
   };
   model_manifest?: unknown;
   /**

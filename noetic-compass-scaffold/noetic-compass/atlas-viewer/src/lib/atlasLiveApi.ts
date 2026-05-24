@@ -1,4 +1,5 @@
 import type { ReplayTrace } from './replayController';
+import { bandForConfidence, type ConfidenceBand } from './confidenceBands';
 
 const DEFAULT_BASE_URL = '/api/atlas';
 
@@ -39,6 +40,12 @@ export interface LiveManifest {
   is_real_model: boolean;
 }
 
+/**
+ * One token-backed word span. The worker emits these once at end-of-stream
+ * (see `live-trace-worker/app/schemas/events.py::WordSpan`). Token indices
+ * are always 0-based contiguous over `[0, total_tokens_covered)`, and every
+ * input token appears in exactly one span OR in `structural_token_indices`.
+ */
 export interface LiveWordSpan {
   word: string;
   token_indices: number[];
@@ -46,9 +53,77 @@ export interface LiveWordSpan {
   char_end: number;
 }
 
+/**
+ * Typed neuron-cover member. Carries the interpretive payload the cockpit
+ * needs to turn a red blindspot into a plain-English human concern.
+ *
+ * The worker is the source of truth (see
+ * live-trace-worker/app/schemas/events.py::NeuronCoverMember). The UI
+ * tolerates the legacy bare-string shape for backward compatibility by
+ * promoting strings into placeholder members at parse time.
+ */
+export interface NeuronCoverMember {
+  label: string;
+  confidence: number | null;
+  confidence_band: ConfidenceBand;
+  evidence_sources: string[];
+}
+
+export type RawNeuronCoverMember =
+  | string
+  | {
+      label: string;
+      confidence?: number | null;
+      confidence_band?: ConfidenceBand;
+      evidence_sources?: string[];
+    };
+
+/**
+ * Promote a raw cover entry (string OR typed object) into a fully-typed
+ * NeuronCoverMember. Legacy traces with bare strings collapse to a
+ * placeholder (band = unavailable, no evidence), which keeps the 3D red
+ * overlay working while the textual interpretation panel waits for real
+ * probe data.
+ */
+export function normaliseCoverMember(raw: RawNeuronCoverMember): NeuronCoverMember {
+  if (typeof raw === 'string') {
+    return {
+      label: raw,
+      confidence: null,
+      confidence_band: 'unavailable',
+      evidence_sources: [],
+    };
+  }
+  const confidence =
+    typeof raw.confidence === 'number' ? raw.confidence : raw.confidence ?? null;
+  const declared = raw.confidence_band;
+  const computed = bandForConfidence(confidence);
+  // Trust the worker's declared band when it's a valid bucket; otherwise
+  // recompute from the confidence value. Keeps UI in sync even if a future
+  // worker version forgets to populate the field.
+  const band: ConfidenceBand =
+    declared === 'high' ||
+    declared === 'medium' ||
+    declared === 'low' ||
+    declared === 'unavailable'
+      ? declared
+      : computed;
+  return {
+    label: raw.label,
+    confidence,
+    confidence_band: band,
+    evidence_sources: Array.isArray(raw.evidence_sources)
+      ? raw.evidence_sources.filter((s): s is string => typeof s === 'string')
+      : [],
+  };
+}
+
 export type LiveTraceEvent =
   | { type: 'manifest'; manifest: LiveManifest }
-  | { type: 'neuron_covers'; per_class_neuron_covers: Record<string, string[]> }
+  | {
+      type: 'neuron_covers';
+      per_class_neuron_covers: Record<string, RawNeuronCoverMember[]>;
+    }
   | {
       type: 'token';
       token_index: number;
@@ -86,10 +161,14 @@ export function appendLiveEvent(trace: ReplayTrace, event: LiveTraceEvent): Repl
   }
 
   if (event.type === 'neuron_covers') {
+    const normalised: Record<string, NeuronCoverMember[]> = {};
+    for (const [cls, members] of Object.entries(event.per_class_neuron_covers)) {
+      normalised[cls] = (members ?? []).map(normaliseCoverMember);
+    }
     return {
       ...trace,
       neuron_covers: {
-        per_class_neuron_covers: event.per_class_neuron_covers,
+        per_class_neuron_covers: normalised,
       },
     } as ReplayTrace;
   }
