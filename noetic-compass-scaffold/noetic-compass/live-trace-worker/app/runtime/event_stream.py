@@ -28,7 +28,7 @@ from ..schemas.events import (
     TokenEvent,
 )
 from ..schemas.requests import CreateSessionRequest
-from .cover_library import cover_members_for_drive
+from .cover_library import cover_members_for_scope
 from .model_loader import get_loaded_model
 from .probe_runner import resolve_probes
 from .word_spans import build_word_spans
@@ -41,12 +41,18 @@ def _knobs(req: CreateSessionRequest) -> dict:
     return raw if isinstance(raw, dict) else {}
 
 
-def _selected_drive(req: CreateSessionRequest) -> str:
+def _selected_scope(req: CreateSessionRequest) -> str:
     knobs = _knobs(req)
+    blindspot_knobs = knobs.get("blindspot_detection", {})
+    if isinstance(blindspot_knobs, dict):
+        scope = blindspot_knobs.get("scope")
+        if scope == "all_7":
+            return "all_7"
+        if isinstance(scope, str) and scope.startswith("F"):
+            return scope
     for method_id, key in (
         ("drive_local_eraser", "drive"),
         ("sparse_neuron_cover", "target_class"),
-        ("blindspot_detection", "scope"),
     ):
         method_knobs = knobs.get(method_id, {})
         if isinstance(method_knobs, dict):
@@ -58,10 +64,10 @@ def _selected_drive(req: CreateSessionRequest) -> str:
 
 def _cover_event(req: CreateSessionRequest) -> NeuronCoversEvent:
     probes = _requested_probes(req)
-    if "blindspots_f1" not in probes:
+    if "blindspot_covers" not in probes:
         return NeuronCoversEvent(per_class_neuron_covers={})
     return NeuronCoversEvent(
-        per_class_neuron_covers=cover_members_for_drive(_selected_drive(req)),
+        per_class_neuron_covers=cover_members_for_scope(_selected_scope(req)),
     )
 
 

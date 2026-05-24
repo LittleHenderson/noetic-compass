@@ -204,7 +204,8 @@ export default function BlindspotsPanel(
   //      blindspots"). The user can hit "Show low-confidence" if low
   //      entries exist.
   //  (b) markersDetected + every cover is "unavailable" → render
-  //      unscored interpretation rows. This is today's default state.
+  //      unscored interpretation rows. This keeps legacy/unscored traces
+  //      useful without inventing percentages.
   //      Be useful about meaning and honest about confidence.
   //  (c) no markers detected at all → frame is clean, panel is empty,
   //      no overlay either.
@@ -222,7 +223,7 @@ export default function BlindspotsPanel(
     unsupportedDrives.length > 0
       ? `${unsupportedDrives.join(', ')} ${
           unsupportedDrives.length === 1 ? DRIVE_TRANSLATIONS[unsupportedDrives[0]].name : 'covers'
-        } calibration pending — only ${SUPPORTED_DRIVES.join(', ')} ${
+        } not wired in this worker build — only ${SUPPORTED_DRIVES.join(', ')} ${
           SUPPORTED_DRIVES.length === 1 ? DRIVE_TRANSLATIONS[SUPPORTED_DRIVES[0]].name : ''
         } cover sets are wired today.`
       : '';
@@ -246,8 +247,8 @@ export default function BlindspotsPanel(
             <p style={emptyStyle} data-testid="blindspots-markers-pending">
               Blindspot markers detected in the 3D scene. The meanings below
               are interpreted from the detected CAS cover classes; confidence
-              percentages are unavailable until calibrated per-neuron scoring
-              is loaded.
+              percentages are unavailable because this trace does not include
+              cover-level calibration scores.
             </p>
             {unscoredVisible.map((a) => (
               <BlindspotInterpretation

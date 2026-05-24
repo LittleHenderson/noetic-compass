@@ -75,13 +75,20 @@ export type RegisterId = keyof typeof REGISTER_NAMES;
 
 /**
  * Source of truth for which drives the worker actually emits cover sets
- * for today. The UI translates all 7 drives into plain-English sentences,
- * but the runtime cover library is currently F1-only (F2-F7 calibration
- * pending). Keep this in sync with
- * `live-trace-worker/app/runtime/cover_library.py::SUPPORTED_DRIVES` —
- * update both in the same commit when a new drive's covers land.
+ * for today. Keep this in sync with
+ * `live-trace-worker/app/runtime/cover_library.py::SUPPORTED_DRIVES`.
+ * These are calibrated for the Pythia-160M live worker from Stage 27F
+ * clean_margin + targeted_drop row reports.
  */
-export const SUPPORTED_DRIVES: readonly DriveId[] = ['F1'] as const;
+export const SUPPORTED_DRIVES: readonly DriveId[] = [
+  'F1',
+  'F2',
+  'F3',
+  'F4',
+  'F5',
+  'F6',
+  'F7',
+] as const;
 
 export const ALL_DRIVES: readonly DriveId[] = [
   'F1',

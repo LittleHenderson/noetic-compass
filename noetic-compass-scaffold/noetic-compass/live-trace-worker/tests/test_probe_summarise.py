@@ -17,7 +17,7 @@ from app.runtime.probe_runner import (
 def test_resolve_probes_empty_defaults_to_full_pipeline():
     out = resolve_probes([])
     assert "active_trace" in out
-    assert "blindspots_f1" in out
+    assert "blindspot_covers" in out
     assert "mode7_attribution" in out
     assert "confidence_margin" in out
 
@@ -25,6 +25,11 @@ def test_resolve_probes_empty_defaults_to_full_pipeline():
 def test_resolve_probes_preserves_user_order_and_dedupes():
     out = resolve_probes(["mode7_attribution", "active_trace", "active_trace"])
     assert out == ("mode7_attribution", "active_trace")
+
+
+def test_resolve_probes_accepts_legacy_blindspots_f1_alias():
+    out = resolve_probes(["blindspots_f1", "blindspot_covers"])
+    assert out == ("blindspot_covers",)
 
 
 def test_top_k_returns_signed_activations_sorted_by_magnitude():

@@ -5,7 +5,7 @@ const DEFAULT_BASE_URL = '/api/atlas';
 
 export type LiveProbeName =
   | 'active_trace'
-  | 'blindspots_f1'
+  | 'blindspot_covers'
   | 'mode7_attribution'
   | 'confidence_margin';
 

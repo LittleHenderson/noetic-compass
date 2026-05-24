@@ -1,22 +1,25 @@
 /**
  * Confidence bands for interpretable blindspots.
  *
+ * For live Pythia-160M blindspots, confidence is the Stage 27F cover-level
+ * ablation score: targeted_drop / clean_margin. It is projected onto the
+ * cover members so the UI can render a row per CAS class. It is not an
+ * independent single-neuron monosemantic score.
+ *
  * Per product spec:
- *   80-95% High    — probe + ablation + control separation agree
- *   60-79% Medium  — signal is measurable but not fully replicated
- *   40-59% Low     — weak/intermittent signal
- *   Unavailable    — not enough evidence, do not score
+ *   80-95% High    - strong cover-level ablation drop
+ *   60-79% Medium  - measurable cover-level ablation drop
+ *   40-59% Low     - weak/intermittent cover-level ablation drop
+ *   Unavailable    - not enough evidence, do not score
  *
- * Values above 0.95 or below 0.40 fall to "unavailable" — they are NOT
- * silently re-bucketed. A reported >0.95 needs review (probe + ablation +
- * control separation should at most agree to 0.95). The "unavailable"
- * band also catches null / undefined / NaN, which is the path we ship
- * today because real per-neuron probe scores aren't in-tree yet.
+ * Values above 0.95 or below 0.40 fall to "unavailable"; they are NOT
+ * silently re-bucketed. A reported >0.95 needs review. The unavailable band
+ * also catches null / undefined / NaN, used by legacy or uncalibrated traces.
  *
- * Default visible filter: high + medium. Low is opt-in via an "expand"
- * affordance. "Unavailable" entries don't appear in the textual list at
- * all until probe data lands (the 3D red overlay still draws — that's
- * the spatial marker, not the interpretation).
+ * Default visible filter: high + medium. Low is opt-in via an expand affordance.
+ * Unavailable entries are only shown in the textual panel when every detected
+ * cover is unscored, so the user still sees the plain-English meaning without
+ * fake percentages.
  */
 
 export type ConfidenceBand = 'high' | 'medium' | 'low' | 'unavailable';

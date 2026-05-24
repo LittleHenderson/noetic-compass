@@ -43,6 +43,8 @@ class LiveSessionRequest(BaseModel):
     probes: list[
         Literal[
             "active_trace",
+            "blindspot_covers",
+            # Legacy alias accepted for older SPA builds.
             "blindspots_f1",
             "mode7_attribution",
             "confidence_margin",

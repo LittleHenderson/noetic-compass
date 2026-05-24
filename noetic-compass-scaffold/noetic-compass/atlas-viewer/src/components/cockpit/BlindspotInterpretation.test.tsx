@@ -42,6 +42,9 @@ describe('BlindspotInterpretation', () => {
     expect(screen.getByTestId('blindspot-confidence').textContent).toBe(
       'Confidence: 72% medium',
     );
+    expect(screen.getByTestId('blindspot-confidence').getAttribute('title')).toMatch(
+      /cover-level confidence/i,
+    );
   });
 
   it('formats Confidence as "Confidence: 85% high" for high band', () => {

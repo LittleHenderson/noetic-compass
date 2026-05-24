@@ -154,7 +154,11 @@ export default function BlindspotInterpretation(
       <p style={provenanceStyle} data-testid="blindspot-cas-source">
         CAS source: {casSource}
       </p>
-      <p style={confidenceStyle} data-testid="blindspot-confidence">
+      <p
+        style={confidenceStyle}
+        data-testid="blindspot-confidence"
+        title="For live Pythia-160M, this is cover-level confidence: targeted_drop divided by clean_margin for the Stage 27F cover set. It is not a one-neuron-equals-one-meaning claim."
+      >
         {confidenceLine}
       </p>
       {evidenceLine ? (

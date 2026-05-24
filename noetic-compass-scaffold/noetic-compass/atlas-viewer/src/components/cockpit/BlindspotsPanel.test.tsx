@@ -7,8 +7,7 @@ import { DRIVE_TRANSLATIONS } from '../../lib/driveTranslations';
 describe('BlindspotsPanel', () => {
   it('renders unscored possible-blindspot rows when only unavailable-band entries are present', () => {
     // Audit fix (PR #54): when covers exist but every member is in the
-    // "unavailable" band (today's default state, no per-neuron probe
-    // scores in-tree), the 3D red overlay is still drawn — so an empty
+    // "unavailable" band (legacy/unscored trace), the 3D red overlay is still drawn — so an empty
     // textual panel would confuse the viewer. The panel now gives the
     // user the plain-English meaning while keeping confidence unavailable.
     render(

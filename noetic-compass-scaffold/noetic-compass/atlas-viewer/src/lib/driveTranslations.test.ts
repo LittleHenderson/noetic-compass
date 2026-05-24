@@ -1,9 +1,12 @@
 import { describe, it, expect } from 'vitest';
 
 import {
+  ALL_DRIVES,
   DRIVE_TRANSLATIONS,
   parseDriveClassKey,
   REGISTER_NAMES,
+  SUPPORTED_DRIVES,
+  unsupportedDriveSummary,
 } from './driveTranslations';
 
 describe('DRIVE_TRANSLATIONS', () => {
@@ -76,6 +79,11 @@ describe('DRIVE_TRANSLATIONS', () => {
     for (const translation of Object.values(DRIVE_TRANSLATIONS)) {
       expect(translation.shortBlindspot.length).toBeGreaterThan(0);
     }
+  });
+
+  it('marks all seven drives as runtime-supported for the Pythia-160M live worker', () => {
+    expect(SUPPORTED_DRIVES).toEqual(ALL_DRIVES);
+    expect(unsupportedDriveSummary()).toBe('');
   });
 });
 

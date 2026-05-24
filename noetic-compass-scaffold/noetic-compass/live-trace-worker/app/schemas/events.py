@@ -44,13 +44,15 @@ class NeuronCoverMember(BaseModel):
     needs to translate a red blindspot into a human-readable concern.
 
     `confidence`:
-      A scalar in [0, 1] indicating how strongly per-neuron evidence
-      (probe + ablation + control separation) supports membership in
-      this cover class. ``None`` is used when probe scores are not
-      available in-tree yet — see comment in
-      ``app/runtime/cover_library.py``. Values strictly > 0.95 or
-      < 0.40 fall to the "unavailable" band so they don't silently
-      get re-bucketed; a reported >0.95 deserves a closer look.
+      A scalar in [0, 1] indicating how strongly the cover-level
+      evidence supports this class. For the Stage 27F Pythia-160M live
+      worker, this is targeted_drop / clean_margin for the cover class,
+      projected onto each member row so the UI can render an
+      interpretable cover. It is NOT an independent monosemantic score
+      for each individual neuron. ``None`` is used when no calibrated
+      cover score is available. Values strictly > 0.95 or < 0.40 fall
+      to the "unavailable" band so they don't silently get re-bucketed;
+      a reported >0.95 deserves a closer look.
 
     `confidence_band`:
       Categorical bucket the UI shows ("80-95% high", "60-79% medium",
