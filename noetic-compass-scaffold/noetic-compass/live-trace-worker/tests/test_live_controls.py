@@ -51,6 +51,22 @@ def test_live_controls_enable_only_selected_probe_payloads():
     assert token.inversion_risk is None
 
 
+def test_live_controls_known_but_uncalibrated_blindspot_scope_emits_no_covers():
+    """The alpha live worker accepts the method envelope, but covers are F1-only."""
+    req = CreateSessionRequest(
+        prompt="hello",
+        max_new_tokens=1,
+        probes=["blindspots_f1"],
+        method_config={
+            "enabled_methods": ["blindspot_detection"],
+            "knobs": {"blindspot_detection": {"scope": "F2"}},
+        },
+    )
+    events = _drain(req)
+    cover = next(event for event in events if isinstance(event, NeuronCoversEvent))
+    assert cover.per_class_neuron_covers == {}
+
+
 def test_inversion_scan_emits_explicit_risk_side_channel():
     req = CreateSessionRequest(
         prompt="hello",

@@ -41,6 +41,9 @@ describe('DRIVE_TRANSLATIONS', () => {
 
   it('F5 sentence matches the spec verbatim', () => {
     expect(DRIVE_TRANSLATIONS.F5.name).toBe('Agency');
+    expect(DRIVE_TRANSLATIONS.F5.shortBlindspot).toBe(
+      'choice, consent, responsibility, or control',
+    );
     expect(DRIVE_TRANSLATIONS.F5.sentence).toBe(
       'The model may be overlooking whether someone has real choice, permission, responsibility, or control.',
     );
@@ -60,7 +63,7 @@ describe('DRIVE_TRANSLATIONS', () => {
     );
   });
 
-  it('covers all seven drives F1-F7', () => {
+  it('has translation copy for all seven drives F1-F7', () => {
     expect(Object.keys(DRIVE_TRANSLATIONS).sort()).toEqual([
       'F1',
       'F2',
@@ -70,6 +73,9 @@ describe('DRIVE_TRANSLATIONS', () => {
       'F6',
       'F7',
     ]);
+    for (const translation of Object.values(DRIVE_TRANSLATIONS)) {
+      expect(translation.shortBlindspot.length).toBeGreaterThan(0);
+    }
   });
 });
 

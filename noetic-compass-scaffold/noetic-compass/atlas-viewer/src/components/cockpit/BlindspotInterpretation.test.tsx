@@ -70,6 +70,23 @@ describe('BlindspotInterpretation', () => {
     );
   });
 
+  it('can lead with the short everyday blindspot phrase for unscored rows', () => {
+    render(
+      <BlindspotInterpretation
+        driveId="F5"
+        confidence={null}
+        evidenceSources={[]}
+        showShortLead
+      />,
+    );
+    expect(screen.getByTestId('blindspot-short-lead').textContent).toBe(
+      'Possible blindspot: choice, consent, responsibility, or control.',
+    );
+    expect(screen.getByTestId('blindspot-headline').textContent).toBe(
+      DRIVE_TRANSLATIONS.F5.sentence,
+    );
+  });
+
   it('OMITS the Evidence line entirely when evidenceSources is empty', () => {
     render(
       <BlindspotInterpretation

@@ -18,8 +18,9 @@
  *   - High + medium are visible by default.
  *   - Low is hidden behind a "Show low-confidence (N hidden)" expand
  *     affordance.
- *   - Unavailable entries do NOT appear in this textual list at all
- *     until probe data lands — the spec is explicit about this.
+ *   - Unavailable entries render as unscored possible blindspots when
+ *     they are the only available marker signal. The user still gets the
+ *     plain-English meaning, but the UI refuses to invent a percentage.
  *   - The 3D red overlay still draws for ALL detected covers regardless
  *     of band (the visual marker is unconditional; only the textual
  *     interpretation is filtered).
@@ -183,6 +184,10 @@ export default function BlindspotsPanel(
   visibleBands.delete('unavailable');
 
   const visible = aggregated.filter((a) => visibleBands.has(a.bestBand));
+  const unscoredVisible =
+    visible.length === 0 && aggregated.length > 0
+      ? aggregated.filter((a) => a.bestBand === 'unavailable')
+      : [];
   const hiddenLow = aggregated.filter(
     (a) => a.bestBand === 'low' && !visibleBands.has('low'),
   ).length;
@@ -198,8 +203,9 @@ export default function BlindspotsPanel(
   //      the existing message ("No high- or medium-confidence
   //      blindspots"). The user can hit "Show low-confidence" if low
   //      entries exist.
-  //  (b) markersDetected + every cover is "unavailable" → scoring is
-  //      pending. This is today's default state. Be honest about it.
+  //  (b) markersDetected + every cover is "unavailable" → render
+  //      unscored interpretation rows. This is today's default state.
+  //      Be useful about meaning and honest about confidence.
   //  (c) no markers detected at all → frame is clean, panel is empty,
   //      no overlay either.
   const markersDetected = aggregated.length > 0;
@@ -236,11 +242,24 @@ export default function BlindspotsPanel(
       ) : null}
       {visible.length === 0 ? (
         emptyMode === 'markers_pending' ? (
-          <p style={emptyStyle} data-testid="blindspots-markers-pending">
-            Blindspot markers detected in the 3D scene, but per-neuron
-            confidence scoring is not loaded yet — interpretations will
-            appear here once probe data wires in.
-          </p>
+          <>
+            <p style={emptyStyle} data-testid="blindspots-markers-pending">
+              Blindspot markers detected in the 3D scene. The meanings below
+              are interpreted from the detected CAS cover classes; confidence
+              percentages are unavailable until calibrated per-neuron scoring
+              is loaded.
+            </p>
+            {unscoredVisible.map((a) => (
+              <BlindspotInterpretation
+                key={a.classKey}
+                driveId={a.driveId}
+                register={a.register ?? undefined}
+                confidence={a.bestConfidence}
+                evidenceSources={a.evidenceSources}
+                showShortLead
+              />
+            ))}
+          </>
         ) : emptyMode === 'no_markers' ? (
           <p style={emptyStyle} data-testid="blindspots-no-markers">
             No cover overlap detected for this frame.
@@ -258,6 +277,7 @@ export default function BlindspotsPanel(
             register={a.register ?? undefined}
             confidence={a.bestConfidence}
             evidenceSources={a.evidenceSources}
+            showShortLead
           />
         ))
       )}

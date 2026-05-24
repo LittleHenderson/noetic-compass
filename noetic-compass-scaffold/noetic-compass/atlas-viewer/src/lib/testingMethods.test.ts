@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   KNOB_TYPE_VALUES,
+  LIVE_WORKER_METHODS,
   TESTING_METHODS,
   getMethod,
   listMethods,
@@ -99,6 +100,20 @@ describe('testingMethods registry', () => {
     const m = getMethod('drive_local_eraser');
     const drive = m?.knobs.find((k) => k.id === 'drive');
     expect(drive?.options).toEqual(['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7']);
+  });
+
+  it('live worker cover/intervention knobs expose only calibrated F1', () => {
+    const liveSparse = LIVE_WORKER_METHODS.find((m) => m.id === 'sparse_neuron_cover');
+    const target = liveSparse?.knobs.find((k) => k.id === 'target_class');
+    expect(target?.options).toEqual(['F1']);
+
+    const liveEraser = LIVE_WORKER_METHODS.find((m) => m.id === 'drive_local_eraser');
+    const drive = liveEraser?.knobs.find((k) => k.id === 'drive');
+    expect(drive?.options).toEqual(['F1']);
+
+    const liveBlindspots = LIVE_WORKER_METHODS.find((m) => m.id === 'blindspot_detection');
+    const scope = liveBlindspots?.knobs.find((k) => k.id === 'scope');
+    expect(scope?.options).toEqual(['F1']);
   });
 
   it('Module 7 mode enum has the 3 verification modes', () => {

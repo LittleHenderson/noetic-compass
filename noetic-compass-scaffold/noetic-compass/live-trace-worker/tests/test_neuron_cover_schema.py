@@ -162,3 +162,9 @@ def test_cover_members_for_drive_preserves_label_strings():
 
 def test_cover_members_for_unknown_drive_is_empty():
     assert cover_members_for_drive("F999") == {}
+
+
+def test_cover_members_for_known_but_uncalibrated_drives_is_empty():
+    """F2-F7 translations exist, but live runtime covers are F1-only today."""
+    for drive in ("F2", "F3", "F4", "F5", "F6", "F7"):
+        assert cover_members_for_drive(drive) == {}

@@ -5,12 +5,12 @@ import BlindspotsPanel from './BlindspotsPanel';
 import { DRIVE_TRANSLATIONS } from '../../lib/driveTranslations';
 
 describe('BlindspotsPanel', () => {
-  it('renders the markers-pending honest message when only unavailable-band entries are present', () => {
+  it('renders unscored possible-blindspot rows when only unavailable-band entries are present', () => {
     // Audit fix (PR #54): when covers exist but every member is in the
     // "unavailable" band (today's default state, no per-neuron probe
     // scores in-tree), the 3D red overlay is still drawn — so an empty
-    // textual panel would confuse the viewer. The panel routes this case
-    // to the "markers detected, scoring pending" message instead.
+    // textual panel would confuse the viewer. The panel now gives the
+    // user the plain-English meaning while keeping confidence unavailable.
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
@@ -20,12 +20,19 @@ describe('BlindspotsPanel', () => {
         }}
       />,
     );
-    expect(screen.queryByTestId('blindspot-interpretation')).toBeNull();
     expect(screen.queryByTestId('blindspots-empty')).toBeNull();
     expect(screen.queryByTestId('blindspots-no-markers')).toBeNull();
     const pending = screen.getByTestId('blindspots-markers-pending');
     expect(pending.textContent).toMatch(/markers detected/i);
-    expect(pending.textContent).toMatch(/confidence scoring is not loaded yet/i);
+    expect(pending.textContent).toMatch(/confidence percentages are unavailable/i);
+    const rows = screen.getAllByTestId('blindspot-interpretation');
+    expect(rows).toHaveLength(1);
+    expect(screen.getByTestId('blindspot-short-lead').textContent).toBe(
+      'Possible blindspot: inclusion, protection, or connection.',
+    );
+    expect(screen.getByTestId('blindspot-confidence').textContent).toBe(
+      'Confidence: not available (insufficient evidence)',
+    );
   });
 
   it('renders the no-markers message when there are no cover overlaps at all', () => {
@@ -40,7 +47,7 @@ describe('BlindspotsPanel', () => {
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
-          F5A: [
+          F1A: [
             { label: 'L3N142', confidence: 0.84, confidence_band: 'high', evidence_sources: ['probe'] },
           ],
           F1T: [
@@ -60,10 +67,10 @@ describe('BlindspotsPanel', () => {
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
-          F5A: [
+          F1A: [
             { label: 'L3N142', confidence: 0.85, confidence_band: 'high', evidence_sources: ['probe'] },
           ],
-          F3f: [
+          F1f: [
             { label: 'L5N91', confidence: 0.45, confidence_band: 'low', evidence_sources: ['probe'] },
           ],
         }}
@@ -81,10 +88,10 @@ describe('BlindspotsPanel', () => {
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
-          F5A: [
+          F1A: [
             { label: 'L3N142', confidence: 0.85, confidence_band: 'high', evidence_sources: ['probe'] },
           ],
-          F3f: [
+          F1f: [
             { label: 'L5N91', confidence: 0.45, confidence_band: 'low', evidence_sources: ['probe'] },
           ],
         }}
@@ -99,39 +106,39 @@ describe('BlindspotsPanel', () => {
     ]);
   });
 
-  it('never includes unavailable entries even when expanded', () => {
+  it('does not render unavailable entries when at least one scored row is visible', () => {
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
           F1A: [
             { label: 'L3N142', confidence: null, confidence_band: 'unavailable', evidence_sources: [] },
           ],
-          F5A: [
+          F1T: [
             { label: 'L3N518', confidence: 0.86, confidence_band: 'high', evidence_sources: ['probe', 'ablation'] },
           ],
         }}
       />,
     );
-    // Even without expanding, expand button should NOT be rendered for
-    // unavailable entries (only low-band hidden ones get the affordance).
+    // Unavailable rows are a fallback for unscored traces. Once a scored
+    // row exists, keep the panel focused on scored evidence.
     expect(screen.queryByTestId('blindspots-expand-low')).toBeNull();
     const rows = screen.getAllByTestId('blindspot-interpretation');
     expect(rows.length).toBe(1);
-    expect(rows[0].getAttribute('data-drive')).toBe('F5');
+    expect(rows[0].getAttribute('data-drive')).toBe('F1');
   });
 
   it('renders the verbatim drive sentence for the rendered class', () => {
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
-          F5A: [
+          F1A: [
             { label: 'L3N142', confidence: 0.72, confidence_band: 'medium', evidence_sources: ['probe'] },
           ],
         }}
       />,
     );
     expect(screen.getByTestId('blindspot-headline').textContent).toBe(
-      DRIVE_TRANSLATIONS.F5.sentence,
+      DRIVE_TRANSLATIONS.F1.sentence,
     );
   });
 
@@ -139,14 +146,14 @@ describe('BlindspotsPanel', () => {
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
-          F5A: [
+          F1A: [
             { label: 'L3N142', confidence: 0.72, confidence_band: 'medium', evidence_sources: ['probe'] },
           ],
         }}
       />,
     );
     expect(screen.getByTestId('blindspot-cas-source').textContent).toBe(
-      'CAS source: F5 Agency · analytical register',
+      'CAS source: F1 Unity · analytical register',
     );
   });
 
@@ -154,7 +161,7 @@ describe('BlindspotsPanel', () => {
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
-          F5A: [
+          F1A: [
             { label: 'L3N142', confidence: 0.65, confidence_band: 'medium', evidence_sources: ['probe'] },
             { label: 'L3N518', confidence: 0.84, confidence_band: 'high', evidence_sources: ['probe', 'ablation'] },
             { label: 'L5N91', confidence: 0.50, confidence_band: 'low', evidence_sources: ['probe'] },
@@ -175,8 +182,8 @@ describe('BlindspotsPanel', () => {
   it('renders bare-string covers (legacy offline traces) as placeholder/unavailable rows', () => {
     // Bare strings (legacy offline trace shape) normalise to
     // band=unavailable. Since they ARE present (markers exist in the
-    // scene), the panel routes to the markers-pending message rather
-    // than the no-cover-overlap message. PR #54 audit fix.
+    // scene), the panel routes to unscored possible-blindspot rows rather
+    // than the no-cover-overlap message.
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
@@ -184,9 +191,12 @@ describe('BlindspotsPanel', () => {
         }}
       />,
     );
-    expect(screen.queryByTestId('blindspot-interpretation')).toBeNull();
     expect(screen.queryByTestId('blindspots-empty')).toBeNull();
     expect(screen.queryByTestId('blindspots-no-markers')).toBeNull();
     expect(screen.getByTestId('blindspots-markers-pending')).toBeTruthy();
+    expect(screen.getAllByTestId('blindspot-interpretation')).toHaveLength(1);
+    expect(screen.getByTestId('blindspot-confidence').textContent).toBe(
+      'Confidence: not available (insufficient evidence)',
+    );
   });
 });

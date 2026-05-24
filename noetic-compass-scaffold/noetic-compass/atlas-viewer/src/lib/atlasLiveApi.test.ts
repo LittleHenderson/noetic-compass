@@ -87,14 +87,14 @@ describe('atlasLiveApi', () => {
     });
   });
 
-  it('promotes typed neuron_covers events into normalised members', () => {
+  it('promotes typed F1 neuron_covers events into normalised members', () => {
     let trace = emptyLiveTrace();
     trace = appendLiveEvent(trace, {
       type: 'neuron_covers',
       per_class_neuron_covers: {
-        F5A: [
+        F1T: [
           {
-            label: 'L3N142',
+            label: 'L4N336',
             confidence: 0.72,
             confidence_band: 'medium',
             evidence_sources: ['probe', 'ablation'],
@@ -102,7 +102,7 @@ describe('atlasLiveApi', () => {
         ],
         F1A: [
           // Worker forgot to populate the band — UI must recompute it.
-          { label: 'L4N336', confidence: 0.85 } as never,
+          { label: 'L3N142', confidence: 0.85 } as never,
         ],
       },
     });
@@ -111,14 +111,14 @@ describe('atlasLiveApi', () => {
         neuron_covers: { per_class_neuron_covers: Record<string, unknown[]> };
       }
     ).neuron_covers.per_class_neuron_covers;
-    expect(covers.F5A[0]).toMatchObject({
-      label: 'L3N142',
+    expect(covers.F1T[0]).toMatchObject({
+      label: 'L4N336',
       confidence: 0.72,
       confidence_band: 'medium',
       evidence_sources: ['probe', 'ablation'],
     });
     expect(covers.F1A[0]).toMatchObject({
-      label: 'L4N336',
+      label: 'L3N142',
       confidence: 0.85,
       confidence_band: 'high',  // recomputed from 0.85 -> high
     });

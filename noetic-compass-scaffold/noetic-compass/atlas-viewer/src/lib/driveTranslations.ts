@@ -15,42 +15,50 @@ export type DriveId = 'F1' | 'F2' | 'F3' | 'F4' | 'F5' | 'F6' | 'F7';
 
 export interface DriveTranslation {
   name: string;
+  shortBlindspot: string;
   sentence: string;
 }
 
 export const DRIVE_TRANSLATIONS: Record<DriveId, DriveTranslation> = {
   F1: {
     name: 'Unity',
+    shortBlindspot: 'inclusion, protection, or connection',
     sentence:
       'The model may be overlooking who needs to be included, protected, or kept connected in this situation.',
   },
   F2: {
     name: 'Wisdom',
+    shortBlindspot: 'missing facts, context, or uncertainty',
     sentence:
       'The model may be missing key facts, context, or uncertainty that should be understood before deciding.',
   },
   F3: {
     name: 'Vitality',
+    shortBlindspot: 'harm, stress, safety, health, or survival',
     sentence:
       'The model may be underestimating harm, stress, burnout, safety, health, or survival concerns.',
   },
   F4: {
     name: 'Connection',
+    shortBlindspot: 'trust, empathy, relationship damage, or social pressure',
     sentence:
       'The model may be missing trust, empathy, relationship damage, manipulation, or social pressure.',
   },
   F5: {
     name: 'Agency',
+    shortBlindspot: 'choice, consent, responsibility, or control',
     sentence:
       'The model may be overlooking whether someone has real choice, permission, responsibility, or control.',
   },
   F6: {
     name: 'Structure',
+    shortBlindspot: 'rules, boundaries, safeguards, or constraints',
     sentence:
       'The model may be missing the rules, boundaries, safeguards, or system constraints that should govern the answer.',
   },
   F7: {
     name: 'Purpose',
+    shortBlindspot: 'larger goals, meaning, or long-term consequences',
     sentence:
       'The model may be missing the larger goal, meaning, long-term consequence, or reason this matters.',
   },

@@ -43,6 +43,7 @@ export interface BlindspotInterpretationProps {
   register?: RegisterId;
   confidence: number | null;
   evidenceSources: string[];
+  showShortLead?: boolean;
 }
 
 const wrapperStyle: CSSProperties = {
@@ -61,6 +62,21 @@ const headlineStyle: CSSProperties = {
   lineHeight: 1.45,
   fontWeight: 600,
   color: COLORS.textPrimary ?? '#e5e7eb',
+};
+
+const shortLeadStyle: CSSProperties = {
+  margin: 0,
+  fontSize: 15,
+  lineHeight: 1.4,
+  fontWeight: 700,
+  color: COLORS.textPrimary ?? '#e5e7eb',
+};
+
+const supportingSentenceStyle: CSSProperties = {
+  margin: 0,
+  fontSize: 13,
+  lineHeight: 1.45,
+  color: '#cbd5e1',
 };
 
 const provenanceStyle: CSSProperties = {
@@ -93,7 +109,7 @@ function bandLabel(band: ConfidenceBand): string {
 export default function BlindspotInterpretation(
   props: BlindspotInterpretationProps,
 ): JSX.Element {
-  const { driveId, register, confidence, evidenceSources } = props;
+  const { driveId, register, confidence, evidenceSources, showShortLead = false } = props;
   const translation = DRIVE_TRANSLATIONS[driveId];
   const band = bandForConfidence(confidence);
 
@@ -121,9 +137,20 @@ export default function BlindspotInterpretation(
       data-band-label={bandLabel(band)}
       style={wrapperStyle}
     >
-      <p style={headlineStyle} data-testid="blindspot-headline">
-        {translation.sentence}
-      </p>
+      {showShortLead ? (
+        <>
+          <p style={shortLeadStyle} data-testid="blindspot-short-lead">
+            Possible blindspot: {translation.shortBlindspot}.
+          </p>
+          <p style={supportingSentenceStyle} data-testid="blindspot-headline">
+            {translation.sentence}
+          </p>
+        </>
+      ) : (
+        <p style={headlineStyle} data-testid="blindspot-headline">
+          {translation.sentence}
+        </p>
+      )}
       <p style={provenanceStyle} data-testid="blindspot-cas-source">
         CAS source: {casSource}
       </p>
