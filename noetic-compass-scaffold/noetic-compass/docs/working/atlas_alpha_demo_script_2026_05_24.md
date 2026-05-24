@@ -14,10 +14,18 @@ Work top to bottom. Anything red, stop and decide whether to demo LIVE or fall b
 
 1. **Browser.** Chrome or Edge, latest stable. Not Safari — Three.js plus the Server-Sent Events stream behave unevenly in Safari at the moment.
 2. **One clean tab.** Pre-load `https://atlas-viewer-app.onrender.com/cockpit`. Wait for the 3D scene to render and the control bar to show LIVE / REPLAY buttons. If the page shows "Failed to load Atlas Viewer fixtures," hard-refresh once.
-3. **Confirm LIVE mode is actually real.** Agent A is shipping a one-shot health check at `https://noetic-compass-api.onrender.com/atlas/live/health/realmode` in parallel with this script. The endpoint returns the worker manifest, and you want `is_real_model: true` before you call this a live-model demo.
-   - **If that endpoint is live:** hit it once in a separate tab. If the body is JSON with `is_real_model: true`, the worker is hot and you can demo LIVE.
-   - **If `is_real_model: false` or the endpoint 404s:** the worker is on the milestone-1 fake stream. Do NOT call this "real model" in front of the stakeholder. Switch the demo to Replay (Section 4) and frame it as "this is a recorded Pythia-160M trace; live mode requires the RunPod worker to be hot."
-   - **If Agent A's endpoint did not land:** click LIVE manually in the cockpit, then open Chrome DevTools → Network → find the SSE stream under `/atlas/live/session/<id>/events`, expand it, and look at the first event named `manifest`. The field `is_real_model` is the source of truth. Same decision rule as above.
+3. **Confirm LIVE mode is actually real.** PR #48 ships `/atlas/live/health/realmode` (worker + API proxy) plus a one-shot verification script at `noetic-compass-scaffold/noetic-compass/scripts/verify_atlas_live.py`. **Real-mode is not just `is_real_model: true` — that field alone can be true on a cold worker that has never loaded weights.** Real-mode means ALL FOUR conditions hold simultaneously:
+   - `is_real_model: true`
+   - `model_loaded: true` (Pythia weights actually in memory, not just "demo mode not forced")
+   - `load_error: null` (no prior load failure recorded)
+   - `fake_runtime_env: false` (`LIVE_TRACE_DEMO_MODE` not set)
+   - plus `model_id == "EleutherAI/pythia-160m"`
+   
+   Decision tree:
+   - **Preferred — run the script:** `python scripts/verify_atlas_live.py`. Exit 0 + green checklist → demo LIVE. Exit 1 → read which line is red, see below.
+   - **Any red on the four real-mode fields → demo as Replay, not LIVE.** Most common failure: `model_loaded: false`. That means the worker is reachable but hasn't loaded Pythia yet — the first LIVE click in the cockpit will warm-load (slow, may time out). Either warm the worker first by hitting `/atlas/live/session` once, then re-run the script, or demo Replay and frame it as "this is a recorded Pythia-160M trace; live mode requires the RunPod worker to have warm weights."
+   - **`load_error` is a non-null string:** Pythia tried to load and failed (HF download timeout, etc.). The error message tells you what failed. Demo Replay.
+   - **Manual fallback if the script can't run:** click LIVE in the cockpit, open Chrome DevTools → Network → find the SSE stream under `/atlas/live/session/<id>/events`, expand it, look at the first event named `manifest`. All four fields are in the manifest payload. Same decision rule.
 4. **DevTools open, silent.** Network tab visible. Filter by `atlas/live`. You will not narrate from this — it is your evidence if a viewer asks "is this really running?"
 5. **Invite code in clipboard, not on screen.** The LIVE path is gated by an `X-Atlas-Invite-Code` header (see `api/routes/atlas_live.py`). The cockpit attaches this from the user's session; if the request 401s in Network, your invite code is missing or expired. Re-fetch from the project alpha allowlist and reload.
 6. **Backup ready.** Keep this script open in another tab. If LIVE fails mid-meeting, switch to the wording in Section 4.
@@ -46,7 +54,7 @@ Point at three things as they happen:
 
 - **Tokens, left to right.** "These are tokens the model is producing in real time. Capped at 24 tokens per session right now."
 - **Neurons lighting up in the layer stack.** "Each pulse is a probe firing on one of Pythia-160M's actual residual-stream activations as that token is generated."
-- **Curved edges drawing back across the scene.** "Those edges are Mode 7 — they connect the token the model just emitted to the earlier neurons that pushed it toward that choice. It is an attribution path, not a metaphor."
+- **Curved edges drawing back across the scene.** "Those edges are Mode 7 — token-to-token attention attribution. For each token the model just emitted, the edges point back to the earlier tokens in the prompt that the model attended to most heavily when producing it. It is a real attention path, derived from the model's last-layer attention pattern, not a metaphor and not a neuron-to-neuron link."
 
 Say once, plainly: "Pythia-160M is a 160-million-parameter model. It is small, on purpose, so we can show every layer. It will produce coherent text on simple prompts and stumble on harder ones — both are useful."
 
@@ -66,13 +74,12 @@ End with the boundary card under it: "These are validated benchmark claims, not 
 
 Click a neuron in the 3D scene (or any active token in the timeline). The Evidence Drawer slides in from the right.
 
-Show:
+Show one of two states depending on what the drawer fetches:
 
-- **A trace ID** in the `evidence_ref` JSON block. "Every visual element here has an ID. That ID maps to a stored evidence packet."
-- **The yellow caveat note** that reads "v0.0: dashboard wrap pending. Below is the fixture-backed `evidence_ref` payload only — full Evidence Packet rendering lands in a follow-on round."
-- **Read the caveat out loud.** "We are showing what we have, and we are labelling what we don't. The drawer ships the lookup IDs today; the full packet (sample-level proof, validated stage artifact) lands when the API wrap is done."
+- **If a trace ID is present and the API returns an Evidence Packet** (the happy path PR #46 enables): the drawer displays the full packet — schema_version, trace_id, input/output, provenance, hashes, claim_levels, copy_slot_trace, caveats. "Every visual element here has a trace ID. That ID is sent to `/evidence/<trace_id>` on the API. What you see below is the actual stored Evidence Packet — sample-level proof, hashed for integrity."
+- **If there is no trace ID, or the fetch fails:** the drawer shows the local reference metadata with one of these explicit labels at the top — "Evidence Packet fetch failed; showing only the local reference metadata," or "Evidence Packet requested; showing local reference metadata while packet data is unavailable," or "Local replay metadata only; not presenting this as a verified Evidence Packet." "When we don't have a packet, we say so plainly. We do not paint a local fixture as a verified trace."
 
-This is the honesty surface. Don't gloss it. The investor wants to see whether you over-claim — show them you don't.
+Read whichever label is showing out loud. **This is the honesty surface.** Don't gloss it. The investor wants to see whether you over-claim — show them you don't. The fallback label literally reads "not presenting this as a verified Evidence Packet" — that's the point.
 
 ### 3:30 — 4:30 · Method knob change (60s)
 
