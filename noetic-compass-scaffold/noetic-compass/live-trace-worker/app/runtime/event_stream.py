@@ -28,7 +28,7 @@ from ..schemas.events import (
     TokenEvent,
 )
 from ..schemas.requests import CreateSessionRequest
-from .cover_library import cover_for_drive
+from .cover_library import cover_members_for_drive
 from .model_loader import get_loaded_model
 from .probe_runner import resolve_probes
 
@@ -60,7 +60,7 @@ def _cover_event(req: CreateSessionRequest) -> NeuronCoversEvent:
     if "blindspots_f1" not in probes:
         return NeuronCoversEvent(per_class_neuron_covers={})
     return NeuronCoversEvent(
-        per_class_neuron_covers=cover_for_drive(_selected_drive(req)),
+        per_class_neuron_covers=cover_members_for_drive(_selected_drive(req)),
     )
 
 

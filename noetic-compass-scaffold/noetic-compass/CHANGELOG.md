@@ -1,5 +1,30 @@
 # Noetic Compass — Progress Log
 
+## Session 62: cockpit — interpretable blindspots (May 23-24, 2026)
+
+**Headline.** Blindspots are no longer just a red overlay. They now translate the structural CAS class into the kind of human concern the model may be failing to consider, with an evidence-confidence range, an evidence-sources line, and a default filter that shows only the bands the team is actually confident about.
+
+"Atlas doesn't just say 'this model has a blindspot.' It translates the blindspot into the kind of human concern the model may be failing to consider." That's the framing the cockpit now lives up to.
+
+### What landed
+
+- **Worker schema.** `NeuronCoversEvent` now carries typed `NeuronCoverMember` records — each cover entry has `label`, `confidence`, `confidence_band` (`high` / `medium` / `low` / `unavailable`), and `evidence_sources`. The legacy bare-string shape stays compatible at the UI edge so older offline traces keep rendering.
+- **Confidence bands match the product spec exactly.** 80-95% high (probe + ablation + control separation agree), 60-79% medium (measurable but not fully replicated), 40-59% low (weak/intermittent), unavailable for anything else. Values above 0.95 or below 0.40 fall to "unavailable" — they are NOT silently re-bucketed; a reported >0.95 deserves a closer look.
+- **Plain-English drive translations.** The 7 drive sentences are user-authored copy and ship verbatim — F1 Unity ("who needs to be included, protected, or kept connected"), F2 Wisdom ("key facts, context, or uncertainty"), F3 Vitality ("harm, stress, burnout, safety, health, or survival"), F4 Connection ("trust, empathy, relationship damage, manipulation, or social pressure"), F5 Agency ("real choice, permission, responsibility, or control"), F6 Structure ("rules, boundaries, safeguards, or system constraints"), F7 Purpose ("larger goal, meaning, long-term consequence, or reason this matters").
+- **BlindspotInterpretation component.** Four-line layout: plain-English sentence as the headline (largest text), `CAS source: F5 Agency · analytical register` as small dim provenance, `Confidence: 72% medium` as the band line, and `Evidence: neuron-cover overlap + ablation support` joining sources with " + ". When the band is unavailable, prints `Confidence: not available (insufficient evidence)` and OMITS the Evidence line entirely (never writes "Evidence: none").
+- **BlindspotsPanel default filter.** High + medium are visible. Low is hidden behind a `Show low-confidence (N hidden)` expand affordance. Unavailable entries don't appear in the textual list at all — the 3D red overlay still draws for them (the spatial marker stays unconditional; only the textual interpretation is filtered).
+- **Evidence Drawer integration.** When the user clicks a neuron that belongs to one or more cover classes, the drawer renders a `BlindspotInterpretation` block per class below the existing Evidence Packet payload. Same component, same plain-English-first ordering. PR #45/#46/#50 drawer behavior preserved.
+- **Probe-score status.** Per-neuron probe scores are NOT in-tree yet. The closest artifact (`research/cas_probe/cas_harness_public_evidence_manifest.json`) carries aggregate panel claims (78.6% Foundation probe, 3.57% ablation chance), not per-neuron scores for L3N142 / L3N518 / etc. Every cover member ships today with `confidence=None`, `confidence_band="unavailable"`, `evidence_sources=[]`. The "unavailable" band exists for exactly this case. A comment in `cover_library.py` marks where probe scores should land when they do.
+
+### Tests
+
+- `live-trace-worker/tests/test_neuron_cover_schema.py` — band classification at every boundary (.80, .60, .40, .95, .96, .39, null, NaN), placeholder records valid, typed records round-trip, `cover_members_for_drive` wraps legacy strings.
+- `atlas-viewer/src/lib/confidenceBands.test.ts` — 16 boundary cases including .95-vs-.96 (must not re-bucket), null/undefined/NaN.
+- `atlas-viewer/src/lib/driveTranslations.test.ts` — each of the 7 sentences pinned verbatim. If a test fails, fix the code, not the test.
+- `atlas-viewer/src/components/cockpit/BlindspotInterpretation.test.tsx` — verbatim sentence, CAS source provenance, "72% medium" format, "not available" path, evidence omission on empty array, register suffix.
+- `atlas-viewer/src/components/cockpit/BlindspotsPanel.test.tsx` — default high+medium filter, expand reveals low, unavailable never shown, member aggregation per class, legacy bare-string compatibility.
+- `EvidenceDrawer.test.tsx` — blindspot section renders when payload carries interpretations; omitted otherwise.
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**

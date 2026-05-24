@@ -20,10 +20,19 @@ import Mode7Timeline, {
 import MethodKnobsPanel, { type KnobValue } from './MethodKnobsPanel';
 import SpatialEvidencePanel from './SpatialEvidencePanel';
 import VisualPrimitiveCanvas from './VisualPrimitiveCanvas';
-import EvidenceDrawer, { type EvidenceDrawerPayload } from './EvidenceDrawer';
+import EvidenceDrawer, {
+  type BlindspotInterpretationRef,
+  type EvidenceDrawerPayload,
+} from './EvidenceDrawer';
 import HelpOverlay from './HelpOverlay';
 import CasBaselineEvidencePanel from './CasBaselineEvidencePanel';
+import BlindspotsPanel from './BlindspotsPanel';
 import NeuralNetLegend from './NeuralNetLegend';
+import { parseDriveClassKey } from '../../lib/driveTranslations';
+import {
+  bandForConfidence,
+  type ConfidenceBand,
+} from '../../lib/confidenceBands';
 import { useReplayController } from '../../hooks/useReplayController';
 import type { ReplayTrace } from '../../lib/replayController';
 import type { ModelArchitecture } from '../../lib/modelArchitecture';
@@ -43,11 +52,15 @@ import {
 } from '../../lib/visualPrimitives';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { parseCoord } from '../../lib/neuronCover';
+import { normaliseCoverMember } from '../../lib/atlasLiveApi';
 import { GlassPanel } from '../ui/GlassPanel';
 import { ACCENT_TEAL, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
 
 interface TraceNeuronCovers {
-  per_class_neuron_covers?: Record<string, string[]>;
+  // unknown[] tolerates BOTH the legacy bare-string shape AND the new
+  // typed-record shape. Callers run each entry through
+  // normaliseCoverMember from atlasLiveApi before use.
+  per_class_neuron_covers?: Record<string, unknown[]>;
 }
 interface TraceWithCovers {
   neuron_covers?: TraceNeuronCovers;
@@ -417,14 +430,22 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       }));
   }, [showActiveTrace, currentFrame]);
 
+  const rawCovers = (trace as unknown as TraceWithCovers).neuron_covers?.per_class_neuron_covers;
+
   const blindspotCoords = useMemo<NeuronCoord[] | undefined>(() => {
     if (!showBlindspots) return undefined;
-    const covers = (trace as unknown as TraceWithCovers).neuron_covers?.per_class_neuron_covers;
+    const covers = rawCovers;
     if (!covers) return undefined;
     const seen = new Set<string>();
     const out: NeuronCoord[] = [];
-    for (const labels of Object.values(covers)) {
-      for (const label of labels) {
+    for (const members of Object.values(covers)) {
+      for (const member of members) {
+        // Support both legacy bare strings AND new typed records here so
+        // the 3D scene paints whether or not probe scores have landed.
+        const normalised = normaliseCoverMember(
+          member as Parameters<typeof normaliseCoverMember>[0],
+        );
+        const label = normalised.label;
         if (seen.has(label)) continue;
         seen.add(label);
         try {
@@ -435,7 +456,49 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       }
     }
     return out;
-  }, [showBlindspots, trace]);
+  }, [showBlindspots, rawCovers]);
+
+  /**
+   * Index from neuron label (e.g. "L3N142") to the list of cover classes
+   * that label belongs to. Used to surface the plain-English blindspot
+   * interpretation in the Evidence Drawer when the user clicks a neuron.
+   */
+  const blindspotIndex = useMemo<
+    Map<string, BlindspotInterpretationRef[]>
+  >(() => {
+    const idx = new Map<string, BlindspotInterpretationRef[]>();
+    if (!rawCovers) return idx;
+    for (const [classKey, rawMembers] of Object.entries(rawCovers)) {
+      const parsed = parseDriveClassKey(classKey);
+      if (!parsed) continue;
+      const members = (rawMembers ?? []).map((raw) =>
+        normaliseCoverMember(
+          raw as Parameters<typeof normaliseCoverMember>[0],
+        ),
+      );
+      for (const member of members) {
+        // Per spec: drawer surfaces high+medium+low interpretations.
+        // "Unavailable" entries don't have enough evidence to interpret,
+        // so we skip them here too — same rule as the panel.
+        const band: ConfidenceBand =
+          member.confidence_band ?? bandForConfidence(member.confidence);
+        if (band === 'unavailable') continue;
+        const entry: BlindspotInterpretationRef = {
+          driveId: parsed.driveId,
+          register: parsed.register ?? undefined,
+          confidence: member.confidence,
+          evidenceSources: member.evidence_sources,
+        };
+        const existing = idx.get(member.label);
+        if (existing) {
+          existing.push(entry);
+        } else {
+          idx.set(member.label, [entry]);
+        }
+      }
+    }
+    return idx;
+  }, [rawCovers]);
 
   const liveControls = useMemo<LiveMethodControls>(() => {
     const enabled = [...enabledMethodIds].filter((id): id is LiveMethodId =>
@@ -574,9 +637,10 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
           token: tokens[currentTokenIndex]?.token,
           architecture: architecture.family,
         },
+        blindspotInterpretations: blindspotIndex.get(coord.label),
       });
     },
-    [openDrawer, currentTokenIndex, tokens, architecture.family],
+    [openDrawer, currentTokenIndex, tokens, architecture.family, blindspotIndex],
   );
 
   const handlePrimitiveSelect = useCallback((p: VisualPrimitive) => {
@@ -925,6 +989,11 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         >
           <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
             <div style={rightCardInnerStyle}>
+              <BlindspotsPanel
+                perClassNeuronCovers={rawCovers as
+                  | Record<string, Parameters<typeof normaliseCoverMember>[0][]>
+                  | undefined}
+              />
               <CasBaselineEvidencePanel />
               <MethodKnobsPanel
                 methods={[...methods]}
