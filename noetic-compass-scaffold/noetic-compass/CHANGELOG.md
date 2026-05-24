@@ -1,5 +1,42 @@
 # Noetic Compass — Progress Log
 
+## Session 62: Atlas Viewer alpha v0 demo script (May 24, 2026)
+
+**Headline.** Time-budgeted 5-minute walkthrough for stakeholder demos of the deployed cockpit at `https://atlas-viewer-app.onrender.com/cockpit`. Plain language. No CAS jargon without translation. At least one prompt where Pythia-160M is expected to stumble — that's the alpha-honesty surface, not a bug.
+
+### What shipped
+
+- `docs/working/atlas_alpha_demo_script_2026_05_24.md` — full script with five sections plus two appendices.
+  - Section 1: pre-meeting setup checklist (browser, real-model verification via Agent A's `/atlas/live/health/realmode` endpoint with DevTools manifest fallback, invite-code prep, backup planning).
+  - Section 2: beat-by-beat 5-minute narrative — landing (0:00), LIVE prompt and stream (0:30), CAS-vs-baseline evidence panel (1:30), Evidence Drawer with the honesty caveat read aloud (2:30), method knob change (3:30, conditional on Agent B), close (4:30).
+  - Section 3: five prepared prompts — easy narrative, reasoning-light alternate, intentionally-hard stumble (`The square root of 144 is`), framework-relevant ethics-flavored prompt, backup short prompt. Each with exact text, expected continuation, what to point at, and failure mode. All bounded by the 24-token cap in `live-trace-worker/app/runtime/event_stream.py:110`.
+  - Section 4: failure recovery wording for LIVE-button greyed, token stall, Evidence Drawer fetch failure, "is this actually running a model" challenge, and cockpit lock-up.
+  - Section 5: one-page handout (what Atlas Viewer is / what you just saw / what's underneath / what to ask us about / contact) — fits a single page.
+  - Appendix A: dependencies on Agent A and Agent B in-flight work with fallback wording for each.
+  - Appendix B: file references for the demo runner (proxy, worker, cockpit, drawer, baseline-evidence library, replay fixture).
+
+### Constraints honored
+
+- Branch from `origin/master` (PRs #45 + #46 merged — cockpit + Evidence Drawer current).
+- No CAS jargon without inline translation.
+- One prompt explicitly chosen to make a 160M-parameter model stumble (Prompt 3). Honesty surface preserved.
+- Real-model claim conditional on Agent A's `/atlas/live/health/realmode` endpoint or manual DevTools manifest verification.
+- Method-knob beat reframed if Agent B's worker wiring hasn't merged.
+- No promises about features not shipped (concordance harness, scenario library both flagged as in-flight).
+- Deployed URL referenced exactly: `https://atlas-viewer-app.onrender.com/cockpit`.
+
+### Files of record
+
+- New: `docs/working/atlas_alpha_demo_script_2026_05_24.md`
+- Updated: `CHANGELOG.md`
+
+### Open dependencies
+
+- Agent A: `/atlas/live/health/realmode` endpoint on noetic-compass-api. Script includes manual DevTools manifest fallback (`is_real_model: true` in the first SSE event) when Agent A's work hasn't landed.
+- Agent B: method-knob worker re-run proof. Script includes "two pre-recorded traces side-by-side" fallback wording when Agent B's work hasn't merged.
+
+---
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**
