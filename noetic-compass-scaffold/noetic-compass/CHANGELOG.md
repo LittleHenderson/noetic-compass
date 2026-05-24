@@ -1,5 +1,34 @@
 # Noetic Compass — Progress Log
 
+## Session 62: Atlas Viewer alpha — golden scenario set v0 (May 24, 2026)
+
+**Headline.** Curated a hand-picked golden set of **25 scenarios** for the Atlas Viewer live-trace alpha demo. Selected from a surveyed corpus of **688 scenarios across 13 files** (the `CLAUDE.md` "200+" estimate is an undercount). Every scenario was read in full before inclusion. Set covers all 4 Domains (P/C/E/O), all 7 Drives (F1-F7), all 10 Noetic operators (^0-^9) with the load-bearing involution pairs (^2/^3, ^5/^6, ^8/^9) emphasized, and all 4 Phenomenological Registers (T/A/f/E). Four scenarios are flagged `honesty_flag` as expected-to-be-weak on Pythia-160M to keep the alpha set non-cherry-picked.
+
+### Files of record
+
+- `scenarios/atlas_alpha_set_v0.json` — the golden set (25 scenarios, each with rationale + expected CAS axes + honesty flag).
+- `docs/working/atlas_alpha_scenario_set_2026_05_24.md` — selection report with full coverage matrix, rejected categories, and open questions for human override.
+
+### Selection summary
+
+- Spine: `scenarios/catalog/cas_patterns.json` (the 7-Drive × 4-Domain matrix) provides 10 of 25 picks — the cleanest Drive×Domain wedges.
+- Adversarial: 4 picks from `adversarial_resilience.json` covering cognitive-bias (scarcity, reciprocity), domain-coherence (skip-P), and inversion-detection (freedom-inversion).
+- AI safety: 3 picks from `ai_safety.json` covering interpretability, three-valued logic, and instruction-vs-honesty.
+- Healthcare / hiring / relationships / life-execution: 1 representative each.
+- Rejected categories documented in the selection report: ~320 augmented_library inversion-prefixed variants (prompt-shape noise dominates trace), long-prompt scenarios (24-token cap incompatible), adversarials reading as attack tutorials.
+
+### Worker-cap constraint
+
+Every prompt in the set was checked against the 24-token output cap (`live-trace-worker/app/runtime/pythia_runner.py:62`: `max_new = min(req.max_new_tokens, 24)`). Longest prompt is alpha_11 at 41 input words; all expected to produce diagnostic CAS traces within the cap, with the exception of alpha_11 itself which is honesty-flagged as a deliberate stress test of the four-domain walk.
+
+### Status
+
+- Golden set v0: **READY for live-trace integration**.
+- Atlas live wire-up M1 (PR #42) supplies the schema; this set supplies the curated input surface.
+- Not yet validated against a running worker — first end-to-end test will be the next session.
+
+---
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**
