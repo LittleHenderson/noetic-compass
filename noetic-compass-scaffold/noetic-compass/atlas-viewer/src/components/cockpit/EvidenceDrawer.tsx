@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { GlassPanel } from '../ui/GlassPanel';
 import { THEME, SPRING_GENTLE } from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
+import { resolveAtlasApiBaseUrl } from '../../lib/atlasLiveApi';
 
 export interface EvidenceDrawerPayload {
   source: 'neuron' | 'primitive' | 'other';
@@ -195,6 +196,21 @@ function localSourceNote(hasTraceId: boolean, failed: boolean): string {
   return 'Local replay metadata only; not presenting this as a verified Evidence Packet.';
 }
 
+function evidenceApiBaseUrl(): string {
+  const atlasBaseUrl = resolveAtlasApiBaseUrl();
+  if (atlasBaseUrl.endsWith('/api/atlas')) {
+    return atlasBaseUrl.slice(0, -'/atlas'.length);
+  }
+  if (atlasBaseUrl.endsWith('/atlas')) {
+    return atlasBaseUrl.slice(0, -'/atlas'.length);
+  }
+  return atlasBaseUrl;
+}
+
+function evidencePacketUrl(traceId: string): string {
+  return `${evidenceApiBaseUrl()}/evidence/${encodeURIComponent(traceId)}`;
+}
+
 export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element {
   const { open, payload, onClose } = props;
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -210,7 +226,7 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
     const controller = new AbortController();
     setPacketState({ status: 'loading' });
 
-    fetch(`/api/evidence/${encodeURIComponent(traceId)}`, {
+    fetch(evidencePacketUrl(traceId), {
       method: 'GET',
       headers: { Accept: 'application/json' },
       signal: controller.signal,
