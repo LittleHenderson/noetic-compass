@@ -181,7 +181,7 @@ def test_compare_raises_on_scenario_id_mismatch():
     c = _compass(scenario_id="s1")
     a = _atlas(scenario_id="s2")
     with pytest.raises(ValueError, match="scenario_id mismatch"):
-        compare(c, a)
+        compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
 
 
 # --- compare(): no_mismatch path ----------------------------------------
@@ -199,7 +199,7 @@ def test_no_mismatch_clean_agreement():
         composite=78,  # same band (Gold), DCI close
         dci=83,
     )
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     assert report.verdict == "no_mismatch"
     assert report.taxonomy.primary == "no_mismatch"
     assert report.agreement.band_match is True
@@ -213,7 +213,7 @@ def test_band_only_mismatch():
     """Composite within 5 points but straddles the 75 cutoff."""
     c = _compass(composite=76)   # Gold
     a = _atlas(composite=74)     # Silver
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     assert report.verdict == "band_only"
     assert report.taxonomy.primary == "band_only"
     assert report.taxonomy.detail.get("composite_delta") == pytest.approx(2.0)
@@ -234,7 +234,7 @@ def test_operator_direction_flip_co2_co3():
     op_atlas[3] = 85     # Negative dominant
     c = _compass(op_scores=op_compass, composite=78)
     a = _atlas(op_scores=op_atlas, composite=78)
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     assert report.verdict == "operator_direction_flip"
     assert "CO-2/CO-3" in report.taxonomy.detail["involution_flips"]
 
@@ -249,7 +249,7 @@ def test_operator_direction_flip_only_when_both_above_threshold():
     op_atlas[3] = 30     # below 60-threshold
     c = _compass(op_scores=op_compass, composite=50)
     a = _atlas(op_scores=op_atlas, composite=50)
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     # Should not be flagged as involution flip; argmax differs but both
     # are weakly activated.
     assert report.verdict != "operator_direction_flip"
@@ -268,7 +268,7 @@ def test_domain_precedence_mismatch_p_vs_o_heavy():
         domain_avgs=[0.10, 0.15, 0.20, 0.55],  # O dominant
         composite=80,
     )
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     assert report.verdict == "domain_precedence"
     assert report.taxonomy.detail["domain_precedence_severity"] == 3
 
@@ -283,7 +283,7 @@ def test_domain_precedence_mismatch_e_vs_o_light():
         domain_avgs=[0.10, 0.20, 0.20, 0.50],   # O dominant
         composite=70,
     )
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     assert report.verdict == "domain_precedence"
     assert report.taxonomy.detail["domain_precedence_severity"] == 1
 
@@ -299,7 +299,7 @@ def test_register_only_mismatch():
     regs_c = ["T", None, None, None, None, None, None, None, None, None]
     c = _compass(op_scores=op_c, composite=80, dci=85, regs=regs_c)
     a = _atlas(op_scores=op_a, composite=78, dci=83, regs=None)
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     assert report.verdict == "register"
 
 
@@ -314,7 +314,7 @@ def test_residual_when_correlation_low_but_no_other_bucket():
     op_atlas = [90, 80, 70, 60, 50, 40, 30, 20, 10, 35]
     c = _compass(op_scores=op_compass, composite=80, dci=85)
     a = _atlas(op_scores=op_atlas, composite=80, dci=85)
-    report = compare(c, a)
+    report = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     # Bands match, domain match, no involution flip (since neither side
     # has both ^2/^3 above 60 with opposite directions). Anti-correlation
     # drops r below the strong threshold.
@@ -415,8 +415,8 @@ def test_report_hash_is_stable_across_runs():
     """Same inputs -> same hashes. Object traceability is load-bearing."""
     c = _compass(scenario_id="hash-test")
     a = _atlas(scenario_id="hash-test")
-    r1 = compare(c, a)
-    r2 = compare(c, a)
+    r1 = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
+    r2 = compare(Scenario(id=c.scenario_id, prompt="fixture"), c, a)
     assert r1.scenario_hash == r2.scenario_hash
     assert r1.compass_response_hash == r2.compass_response_hash
     assert r1.atlas_response_hash == r2.atlas_response_hash
@@ -432,9 +432,88 @@ def test_report_hash_changes_with_inputs():
     # asdict() fallback picks up composite. Make raw differ to force the
     # divergence:
     c2 = CompassResult(**{**c1.__dict__, "composite": 60, "raw": {"v": 2}})
-    r1 = compare(c1, a1)
-    r2 = compare(c2, a2)
+    r1 = compare(Scenario(id=c1.scenario_id, prompt="fixture"), c1, a1)
+    r2 = compare(Scenario(id=c2.scenario_id, prompt="fixture"), c2, a2)
     assert r1.compass_response_hash != r2.compass_response_hash
+
+
+def test_scenario_hash_detects_prompt_or_metadata_revision():
+    """A scenario revision under the same id MUST change scenario_hash.
+
+    Regression guard for the PR #49 audit finding: the harness was
+    hashing only {"id": scenario_id}, which made same-id revisions to
+    prompt or metadata invisible to the report. That breaks the
+    object-traceability claim. The fix hashes id + prompt + metadata
+    together so any revision is detectable.
+    """
+    c = _compass(scenario_id="rev-test")
+    a = _atlas(scenario_id="rev-test")
+
+    s_baseline = Scenario(id="rev-test", prompt="What is justice?")
+    s_prompt_edited = Scenario(id="rev-test", prompt="What is fairness?")
+    s_metadata_added = Scenario(
+        id="rev-test",
+        prompt="What is justice?",
+        metadata={"expected_cas_axes": {"domain": "P", "noetic": "^3"}},
+    )
+
+    r_baseline = compare(s_baseline, c, a)
+    r_prompt_edit = compare(s_prompt_edited, c, a)
+    r_metadata_added = compare(s_metadata_added, c, a)
+
+    assert r_baseline.scenario_id == r_prompt_edit.scenario_id == "rev-test"
+    assert r_baseline.scenario_hash != r_prompt_edit.scenario_hash, (
+        "prompt revision under same id must change scenario_hash"
+    )
+    assert r_baseline.scenario_hash != r_metadata_added.scenario_hash, (
+        "metadata addition under same id must change scenario_hash"
+    )
+
+
+def test_load_scenarios_preserves_top_level_fields_into_metadata(tmp_path):
+    """Agent C's scenarios/atlas_alpha_set_v0.json keeps load-bearing
+    fields at the top level (not nested under "metadata"). The loader
+    must preserve them into Scenario.metadata so downstream analysis
+    can read them.
+
+    Regression guard for the PR #49 audit finding: previously the
+    loader only read s.get("metadata", {}) and silently dropped
+    expected_cas_axes / rationale / expected_difficulty / honesty_flag.
+    """
+    import json as _json
+
+    fixture = tmp_path / "alpha.json"
+    fixture.write_text(
+        _json.dumps(
+            {
+                "set_id": "atlas_alpha_v0_test",
+                "scenarios": [
+                    {
+                        "id": "alpha_01",
+                        "prompt": "What is justice?",
+                        "expected_cas_axes": {"domain": "P", "noetic": "^3"},
+                        "rationale": "principled aversion",
+                        "expected_difficulty": "easy",
+                        "honesty_flag": None,
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    scenarios = load_scenarios(fixture)
+    assert len(scenarios) == 1
+    s = scenarios[0]
+    assert s.id == "alpha_01"
+    assert s.prompt == "What is justice?"
+    assert s.metadata["expected_cas_axes"] == {"domain": "P", "noetic": "^3"}
+    assert s.metadata["rationale"] == "principled aversion"
+    assert s.metadata["expected_difficulty"] == "easy"
+    assert "honesty_flag" in s.metadata
+    # Top-level set_id is NOT a per-scenario field; it must not leak into
+    # scenario metadata (loader iterates only items[]).
+    assert "set_id" not in s.metadata
 
 
 # --- Live-call stubs ----------------------------------------------------

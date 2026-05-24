@@ -501,25 +501,41 @@ def _classify(
 # --- compare() and run_set() --------------------------------------------
 
 
-def compare(c: CompassResult, a: AtlasResult) -> ConcordanceReport:
-    """Compare a single (compass, atlas) result pair.
+def compare(scenario: Scenario, c: CompassResult, a: AtlasResult) -> ConcordanceReport:
+    """Compare a single (compass, atlas) result pair for a known scenario.
 
-    Pre-conditions: scenario_id must match across the two results. We
-    fail loudly on mismatch rather than silently aligning by index — that
-    bug would make the report meaningless.
+    Pre-conditions: scenario.id must match both result scenario_ids. We
+    fail loudly on mismatch rather than silently aligning by index or
+    by id-only — those bugs would each make the report meaningless.
+
+    scenario_hash is computed over the FULL scenario (id + prompt +
+    metadata) so traceability survives prompt or metadata edits that
+    keep the same id. Hashing only the id (the original bug from PR
+    review) would let a scenario revision go undetected in the report.
     """
-    if c.scenario_id != a.scenario_id:
+    if scenario.id != c.scenario_id:
         raise ValueError(
-            f"scenario_id mismatch: compass={c.scenario_id!r} "
-            f"atlas={a.scenario_id!r}. These results are not paired."
+            f"scenario_id mismatch: scenario={scenario.id!r} "
+            f"compass={c.scenario_id!r}. Results not paired to this scenario."
+        )
+    if scenario.id != a.scenario_id:
+        raise ValueError(
+            f"scenario_id mismatch: scenario={scenario.id!r} "
+            f"atlas={a.scenario_id!r}. Results not paired to this scenario."
         )
 
     agreement = _compute_agreement(c, a)
     verdict = _classify(c, a, agreement)
 
     return ConcordanceReport(
-        scenario_id=c.scenario_id,
-        scenario_hash=_stable_hash({"id": c.scenario_id}),
+        scenario_id=scenario.id,
+        scenario_hash=_stable_hash(
+            {
+                "id": scenario.id,
+                "prompt": scenario.prompt,
+                "metadata": scenario.metadata,
+            }
+        ),
         compass_response_hash=_stable_hash(c.raw or asdict(c)),
         atlas_response_hash=_stable_hash(a.raw or asdict(a)),
         verdict=verdict.primary,
@@ -619,7 +635,8 @@ def run_set(
         )
 
     reports = [
-        compare(c, a) for c, a in zip(compass_results, atlas_results)
+        compare(s, c, a)
+        for s, c, a in zip(scenarios, compass_results, atlas_results)
     ]
     summary = _summarize(reports)
 
@@ -683,11 +700,20 @@ def load_scenarios(
 
     # Accept either a list of dicts or {"scenarios": [...]} shape.
     items = raw.get("scenarios") if isinstance(raw, dict) else raw
+    # Agent C's scenarios/atlas_alpha_set_v0.json keeps load-bearing fields
+    # (expected_cas_axes, rationale, expected_difficulty, honesty_flag)
+    # at the TOP level of each record, not nested under "metadata". Preserve
+    # every non-id/non-prompt field into Scenario.metadata so downstream
+    # analysis can read them; an explicit "metadata" sub-dict still merges
+    # last so callers can override.
     return [
         Scenario(
             id=s["id"],
             prompt=s["prompt"],
-            metadata=s.get("metadata", {}),
+            metadata={
+                **{k: v for k, v in s.items() if k not in ("id", "prompt", "metadata")},
+                **(s.get("metadata") or {}),
+            },
         )
         for s in items
     ]
@@ -734,21 +760,31 @@ def call_atlas(scenario: Scenario) -> AtlasResult:
     M2 wiring plan (per
     `memory/project_atlas_live_wire_runpod_behind_api_2026_05_23.md` —
     browser never hits RunPod directly; everything is API-mediated):
-        - Endpoint A: `POST {API_BASE_URL}/api/atlas/live/session`
+        - Endpoint A: `POST {API_BASE_URL}/atlas/live/session`
         - Auth: invite-code header during alpha:
               `X-Atlas-Invite-Code: <code>`
           (Per `project_atlas_live_auth_posture_2026_05_23.md`. Swaps to
            Bearer license token at M5+.)
-        - Body:
+        - Body (matches worker `CreateSessionRequest` in
+          live-trace-worker/app/schemas/requests.py):
             {
-                "model_id": "pythia-160m",
+                "model_id": "EleutherAI/pythia-160m",
                 "prompt": scenario.prompt,
-                "max_tokens": 64,
+                "max_new_tokens": 24,
+                "temperature": 0.0,
+                "seed": None,
+                "method_config": {},
             }
-        - Response: { "session_id": ..., "events_url": ...,
-                      "stream_token": ... }
-        - Endpoint B: `GET {events_url}` with
-              `Authorization: Bearer <stream_token>`
+          NOTE: 24-token cap enforced by the worker
+          (`event_stream.py` clamps max_new_tokens); requesting more is
+          silently truncated, so use the cap directly here.
+        - Response: { "session_id": ..., "stream_url": ...,
+                      "stream_token": ..., "mode": "live", "model_id": ... }
+        - Endpoint B: `GET {stream_url}` where stream_url already embeds
+          the stream_token as a query param (`?stream_token=<jwt>`).
+          Authorization is NOT sent as a header — EventSource cannot
+          attach custom headers, so the API issues the JWT as a query
+          param on the SSE URL it returns.
           Returns text/event-stream of LiveTraceEvent (manifest, token,
           neuron_covers, complete | error). Consume to completion.
         - Aggregation: accumulate token-level top_activated_neurons
