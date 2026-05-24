@@ -6,6 +6,21 @@ export interface ReplayTrace {
     per_class_neuron_covers?: Record<string, string[]>;
   };
   model_manifest?: unknown;
+  /**
+   * Word-level token-backing for the generated continuation. Populated by
+   * the live worker's WordSpansEvent (emitted once, just before complete).
+   * Absent for offline replay traces — UI must tolerate undefined.
+   */
+  word_spans?: {
+    spans: {
+      word: string;
+      token_indices: number[];
+      char_start: number;
+      char_end: number;
+    }[];
+    structural_token_indices?: number[];
+    total_tokens_covered: number;
+  };
 }
 
 export type ReplaySpeed = 0.25 | 0.5 | 1 | 2 | 4;

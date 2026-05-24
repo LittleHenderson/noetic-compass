@@ -39,6 +39,13 @@ export interface LiveManifest {
   is_real_model: boolean;
 }
 
+export interface LiveWordSpan {
+  word: string;
+  token_indices: number[];
+  char_start: number;
+  char_end: number;
+}
+
 export type LiveTraceEvent =
   | { type: 'manifest'; manifest: LiveManifest }
   | { type: 'neuron_covers'; per_class_neuron_covers: Record<string, string[]> }
@@ -50,6 +57,12 @@ export type LiveTraceEvent =
       mode7_attribution?: unknown[];
       confidence?: number | null;
       inversion_risk?: number | null;
+    }
+  | {
+      type: 'word_spans';
+      spans: LiveWordSpan[];
+      structural_token_indices?: number[];
+      total_tokens_covered: number;
     }
   | { type: 'error'; message: string; retryable?: boolean }
   | { type: 'complete'; total_tokens: number };
@@ -77,6 +90,17 @@ export function appendLiveEvent(trace: ReplayTrace, event: LiveTraceEvent): Repl
       ...trace,
       neuron_covers: {
         per_class_neuron_covers: event.per_class_neuron_covers,
+      },
+    } as ReplayTrace;
+  }
+
+  if (event.type === 'word_spans') {
+    return {
+      ...trace,
+      word_spans: {
+        spans: event.spans,
+        structural_token_indices: event.structural_token_indices ?? [],
+        total_tokens_covered: event.total_tokens_covered,
       },
     } as ReplayTrace;
   }

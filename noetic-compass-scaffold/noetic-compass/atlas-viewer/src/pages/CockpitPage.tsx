@@ -145,7 +145,7 @@ export default function CockpitPage(): JSX.Element {
           setLiveTrace((prev) => appendLiveEvent(prev ?? emptyLiveTrace(session.model_id), event));
         };
 
-        for (const eventName of ['manifest', 'neuron_covers', 'token', 'error', 'complete']) {
+        for (const eventName of ['manifest', 'neuron_covers', 'token', 'word_spans', 'error', 'complete']) {
           source.addEventListener(eventName, (evt) => {
             try {
               applyEvent(JSON.parse((evt as MessageEvent).data) as LiveTraceEvent);

@@ -20,7 +20,12 @@ import Mode7Timeline, {
 import MethodKnobsPanel, { type KnobValue } from './MethodKnobsPanel';
 import SpatialEvidencePanel from './SpatialEvidencePanel';
 import VisualPrimitiveCanvas from './VisualPrimitiveCanvas';
-import EvidenceDrawer, { type EvidenceDrawerPayload } from './EvidenceDrawer';
+import EvidenceDrawer, {
+  type EvidenceDrawerPayload,
+  type Mode7Edge as EvidenceMode7Edge,
+  type NeuronActivation as EvidenceNeuronActivation,
+} from './EvidenceDrawer';
+import WordTokenStream, { type WordSpan } from './WordTokenStream';
 import HelpOverlay from './HelpOverlay';
 import CasBaselineEvidencePanel from './CasBaselineEvidencePanel';
 import NeuralNetLegend from './NeuralNetLegend';
@@ -49,9 +54,15 @@ import { ACCENT_TEAL, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../
 interface TraceNeuronCovers {
   per_class_neuron_covers?: Record<string, string[]>;
 }
+interface TraceWordSpans {
+  spans: WordSpan[];
+  structural_token_indices?: number[];
+  total_tokens_covered: number;
+}
 interface TraceWithCovers {
   neuron_covers?: TraceNeuronCovers;
   model_id?: string;
+  word_spans?: TraceWordSpans;
 }
 
 const LIVE_METHOD_IDS: readonly LiveMethodId[] = [
@@ -371,6 +382,12 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       .filter((t): t is Token => t !== null);
   }, [trace.tokens, trace.per_token_frames]);
 
+  const wordSpans = useMemo<WordSpan[] | undefined>(() => {
+    const ws = (trace as unknown as TraceWithCovers).word_spans;
+    if (!ws || !Array.isArray(ws.spans) || ws.spans.length === 0) return undefined;
+    return ws.spans;
+  }, [trace]);
+
   const mode7Frames = useMemo<Mode7Frame[]>(() => {
     return trace.per_token_frames
       .map(frameToMode7Frame)
@@ -577,6 +594,56 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       });
     },
     [openDrawer, currentTokenIndex, tokens, architecture.family],
+  );
+
+  const handleWordClick = useCallback(
+    (span: WordSpan) => {
+      const firstTokenIdx = span.token_indices[0];
+      const lastTokenIdx = span.token_indices[span.token_indices.length - 1];
+      // 1) Seek playback to the first token in the span.
+      handleTokenSeek(firstTokenIdx);
+      // 2) Build the per-token detail array from per_token_frames.
+      const tokenDetails = span.token_indices.map((ti) => {
+        const frame = frameAtIndex(trace.per_token_frames, ti) as
+          | (PerTokenFrame & {
+              top_activated_neurons?: EvidenceNeuronActivation[];
+              mode7_attribution?: EvidenceMode7Edge[];
+              confidence?: number | null;
+              trace_id?: string;
+            })
+          | undefined;
+          return {
+            token_index: ti,
+            token: tokens[ti]?.token ?? '',
+            top_activated_neurons: Array.isArray(frame?.top_activated_neurons)
+              ? (frame!.top_activated_neurons as EvidenceNeuronActivation[])
+              : [],
+            mode7_attribution: Array.isArray(frame?.mode7_attribution)
+              ? (frame!.mode7_attribution as EvidenceMode7Edge[])
+              : [],
+            confidence:
+              typeof frame?.confidence === 'number' ? frame.confidence : null,
+            trace_id:
+              typeof frame?.trace_id === 'string' ? frame.trace_id : undefined,
+          };
+      });
+      // 3) Open the Evidence Drawer with the word-scoped payload.
+      const tokenRangeLabel =
+        firstTokenIdx === lastTokenIdx
+          ? `(token ${firstTokenIdx})`
+          : `(tokens ${firstTokenIdx}-${lastTokenIdx})`;
+      openDrawer({
+        source: 'word',
+        title: `"${span.word}" ${tokenRangeLabel}`,
+        evidence_ref: {
+          word: span.word,
+          token_indices: span.token_indices,
+          char_range: [span.char_start, span.char_end] as [number, number],
+        },
+        detail: { tokens: tokenDetails },
+      });
+    },
+    [handleTokenSeek, openDrawer, tokens, trace.per_token_frames],
   );
 
   const handlePrimitiveSelect = useCallback((p: VisualPrimitive) => {
@@ -937,6 +1004,20 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             </div>
           </GlassPanel>
         </motion.aside>
+      </div>
+
+      <div
+        style={{ ...bottomTimelineFloatStyle, marginBottom: 4 }}
+        data-testid="atlas-viewer-word-stream"
+      >
+        <GlassPanel intensity="thin" padding="8px 12px">
+          <WordTokenStream
+            tokens={tokens}
+            spans={wordSpans}
+            currentTokenIndex={currentTokenIndex}
+            onWordClick={handleWordClick}
+          />
+        </GlassPanel>
       </div>
 
       <div style={bottomTimelineFloatStyle} data-testid="atlas-viewer-bottom">

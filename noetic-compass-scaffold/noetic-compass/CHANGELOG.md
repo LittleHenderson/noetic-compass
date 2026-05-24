@@ -1,5 +1,11 @@
 # Noetic Compass — Progress Log
 
+## Wave 5.5: clickable word spans + token-scoped Evidence Drawer (May 24, 2026)
+
+Atlas Viewer cockpit now lets a user click any word in the generated continuation and immediately see what was happening inside the model when that word was emitted. Word-level clicks are token-backed under the hood — the live worker emits a one-shot `WordSpansEvent` just before `complete` that maps each rendered word to the exact token indices that produced it, with deterministic policies for leading-whitespace tokens, multi-token words, and whitespace-only structural tokens. Clicking a word seeks playback to the span's first token, highlights its neurons + Mode 7 attention path in the 3D scene, and opens the Evidence Drawer in a new `source: 'word'` mode that lists every constituent token (raw text, confidence, top neurons), the deduplicated attention path, and any Evidence Packet trace_ids those tokens carry. PR #45/#46 Evidence Drawer behavior (neuron + primitive sources, packet fetch, labeled fallback) is preserved.
+
+**Investor framing:** "Click any word. See the neurons. See the path. The model's reasoning is no longer a black box — it's a transcript you can interrogate."
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**

@@ -75,4 +75,26 @@ describe('atlasLiveApi', () => {
         .neuron_covers.per_class_neuron_covers.F1E,
     ).toEqual(['L5N142']);
   });
+
+  it('absorbs word_spans events and exposes them on the trace', () => {
+    let trace = emptyLiveTrace();
+    trace = appendLiveEvent(trace, {
+      type: 'word_spans',
+      spans: [
+        { word: 'hello', token_indices: [0], char_start: 0, char_end: 5 },
+        { word: 'world', token_indices: [1], char_start: 6, char_end: 11 },
+      ],
+      structural_token_indices: [],
+      total_tokens_covered: 2,
+    });
+
+    expect(trace.word_spans?.total_tokens_covered).toBe(2);
+    expect(trace.word_spans?.spans).toHaveLength(2);
+    expect(trace.word_spans?.spans[1]).toEqual({
+      word: 'world',
+      token_indices: [1],
+      char_start: 6,
+      char_end: 11,
+    });
+  });
 });

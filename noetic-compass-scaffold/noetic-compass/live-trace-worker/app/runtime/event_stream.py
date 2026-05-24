@@ -31,6 +31,7 @@ from ..schemas.requests import CreateSessionRequest
 from .cover_library import cover_for_drive
 from .model_loader import get_loaded_model
 from .probe_runner import resolve_probes
+from .word_spans import build_word_spans
 
 logger = logging.getLogger(__name__)
 
@@ -154,6 +155,7 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
     rng = random.Random(seed)
     tokens = _tokenise_whitespace(req.prompt)
     max_new = min(req.max_new_tokens, 24)
+    emitted_tokens: list[tuple[int, str]] = []
     for i in range(max_new):
         tok = tokens[i % len(tokens)]
         fake_neurons = _fake_neurons(rng, loaded.manifest.model_arch.n_layers)
@@ -172,7 +174,9 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
             else None,
             inversion_risk=_inversion_risk(req, fake_confidence, fake_neurons),
         )
+        emitted_tokens.append((i, tok))
         await asyncio.sleep(0.04)
+    yield build_word_spans(emitted_tokens)
     yield CompleteEvent(total_tokens=max_new)
 
 
@@ -201,9 +205,12 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
 
     n_layers = loaded.manifest.model_arch.n_layers
     emitted = 0
+    emitted_tokens: list[tuple[int, str]] = []
     try:
         async for token_payload in run_pythia(req, loaded.model, loaded.tokenizer, n_layers):
-            yield TokenEvent(**token_payload)
+            event = TokenEvent(**token_payload)
+            yield event
+            emitted_tokens.append((event.token_index, event.token))
             emitted += 1
     except Exception as exc:  # pragma: no cover — generation-time failures
         logger.exception("stream_real_trace: pythia_runner raised")
@@ -213,6 +220,7 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         )
         return
 
+    yield build_word_spans(emitted_tokens)
     yield CompleteEvent(total_tokens=emitted)
 
 

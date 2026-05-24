@@ -281,6 +281,68 @@ describe('AtlasViewerShell — evidence drawer', () => {
   });
 });
 
+describe('AtlasViewerShell — clickable word spans', () => {
+  const wordTrace: ReplayTrace = {
+    ...baseTrace,
+    word_spans: {
+      total_tokens_covered: 10,
+      structural_token_indices: [],
+      spans: [
+        { word: 'The', token_indices: [0], char_start: 0, char_end: 3 },
+        { word: 'patient', token_indices: [1], char_start: 4, char_end: 11 },
+        { word: 'nurse', token_indices: [2], char_start: 12, char_end: 17 },
+        { word: 'triaged', token_indices: [3], char_start: 18, char_end: 25 },
+        { word: 'the', token_indices: [4], char_start: 26, char_end: 29 },
+        { word: 'wound.', token_indices: [5, 6], char_start: 30, char_end: 36 },
+        { word: 'She', token_indices: [7], char_start: 37, char_end: 40 },
+        { word: 'moved', token_indices: [8], char_start: 41, char_end: 46 },
+        { word: 'calmly', token_indices: [9], char_start: 47, char_end: 53 },
+      ],
+    },
+  };
+
+  it('renders the streamed continuation as clickable word spans', () => {
+    renderShell({ trace: wordTrace });
+    expect(screen.getByTestId('word-token-stream')).toBeInTheDocument();
+    const patient = screen.getByTestId('word-stream-word-4');
+    expect(patient).toHaveAttribute('data-word', 'patient');
+  });
+
+  it('opens the Evidence Drawer with the word-scoped payload on click', () => {
+    renderShell({ trace: wordTrace });
+    const drawer = screen.getByTestId('evidence-drawer');
+    expect(drawer.getAttribute('data-open')).toBe('false');
+
+    fireEvent.click(screen.getByTestId('word-stream-word-30'));
+
+    expect(screen.getByTestId('evidence-drawer').getAttribute('data-open')).toBe(
+      'true',
+    );
+    // Header carries the word in quotes and the token range.
+    expect(screen.getAllByText(/wound\./)[0]).toBeInTheDocument();
+    // Multi-token span shows both rows.
+    expect(
+      screen.getByTestId('evidence-drawer-word-token-row-5'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('evidence-drawer-word-token-row-6'),
+    ).toBeInTheDocument();
+  });
+
+  it('seeks playback to the first token in the clicked word', () => {
+    renderShell({ trace: wordTrace });
+    fireEvent.click(screen.getByTestId('word-stream-word-30'));
+    const label = screen.getByTestId('token-label');
+    // Span "wound." starts at token 5 → label "6 / 10" (1-indexed display).
+    expect(label.textContent).toContain('6 / 10');
+  });
+
+  it('shows the placeholder when no word_spans event has arrived yet', () => {
+    renderShell();
+    expect(screen.getByTestId('word-token-stream-placeholder')).toBeInTheDocument();
+  });
+});
+
 describe('AtlasViewerShell — grounded step derivation', () => {
   it('shows no active primitives before the first grounded step', () => {
     renderShell();

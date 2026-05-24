@@ -9,6 +9,8 @@ from .events import (
     NeuronActivation,
     NeuronCoversEvent,
     TokenEvent,
+    WordSpan,
+    WordSpansEvent,
 )
 from .manifest import ModelArch, ModelManifest, SupportedHook
 from .requests import CreateSessionRequest, CreateSessionResponse
@@ -27,4 +29,6 @@ __all__ = [
     "NeuronCoversEvent",
     "SupportedHook",
     "TokenEvent",
+    "WordSpan",
+    "WordSpansEvent",
 ]

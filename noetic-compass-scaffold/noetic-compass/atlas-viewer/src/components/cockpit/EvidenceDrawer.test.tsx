@@ -171,6 +171,114 @@ describe('EvidenceDrawer', () => {
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 
+  it('renders constituent tokens for a word-scoped payload', () => {
+    const fetchImpl = vi.fn();
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'word',
+          title: '"wound." (tokens 5-6)',
+          evidence_ref: {
+            word: 'wound.',
+            token_indices: [5, 6],
+            char_range: [30, 36],
+          },
+          detail: {
+            tokens: [
+              {
+                token_index: 5,
+                token: ' wound',
+                top_activated_neurons: [
+                  { layer: 4, index: 12, activation: 0.8 },
+                  { layer: 3, index: 7, activation: 0.6 },
+                ],
+                mode7_attribution: [
+                  { from_token_index: 1, to_token_index: 5, weight: 0.7 },
+                ],
+                confidence: 0.91,
+              },
+              {
+                token_index: 6,
+                token: '.',
+                top_activated_neurons: [],
+                mode7_attribution: [
+                  { from_token_index: 5, to_token_index: 6, weight: 0.4 },
+                  // Duplicate of the from-token's edge, will be deduped at
+                  // the union level when from/to match.
+                  { from_token_index: 1, to_token_index: 5, weight: 0.7 },
+                ],
+                confidence: 0.85,
+              },
+            ],
+          },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(
+      screen.getByTestId('evidence-drawer-word-token-row-5'),
+    ).toHaveTextContent('5');
+    expect(
+      screen.getByTestId('evidence-drawer-word-token-row-5'),
+    ).toHaveTextContent('L4N12');
+    expect(
+      screen.getByTestId('evidence-drawer-word-token-row-6'),
+    ).toHaveTextContent('6');
+
+    // Mode 7 edges deduped: 1→5 appears only once; 5→6 appears once.
+    const ul = screen.getByTestId('evidence-drawer-word-mode7');
+    const items = ul.querySelectorAll('li');
+    expect(items).toHaveLength(2);
+
+    // No packet fetch because no trace_id provided.
+    expect(fetchImpl).not.toHaveBeenCalled();
+    // Local-fallback label preserved (PR #45/#46 contract).
+    expect(screen.getByTestId('evidence-drawer-source-label')).toHaveTextContent(
+      'Word click reference',
+    );
+    expect(screen.getByTestId('evidence-drawer-source-note')).toHaveTextContent(
+      'Local replay metadata only',
+    );
+  });
+
+  it('fetches the Evidence Packet for a word when any constituent token carries trace_id', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(packet));
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'word',
+          title: '"hello" (token 4)',
+          evidence_ref: { word: 'hello', token_indices: [4], char_range: [0, 5] },
+          detail: {
+            tokens: [
+              {
+                token_index: 4,
+                token: 'hello',
+                top_activated_neurons: [],
+                mode7_attribution: [],
+                confidence: 0.77,
+                trace_id: 'trace-123',
+              },
+            ],
+          },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-loaded')).toHaveTextContent(
+      'evidence_packet.v1',
+    );
+    expect(fetchImpl).toHaveBeenCalledOnce();
+  });
+
   it('falls back to the local reference when packet fetch fails', async () => {
     const fetchImpl = vi.fn(async () =>
       jsonResponse({ detail: 'trace_id not found' }, { status: 404 }),
