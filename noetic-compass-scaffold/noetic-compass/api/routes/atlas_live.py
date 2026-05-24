@@ -169,6 +169,67 @@ async def _iter_worker_events(session_id: str) -> AsyncIterator[bytes]:
                 yield chunk
 
 
+async def _proxy_worker_get(path: str) -> dict:
+    """Shared GET-proxy helper for worker health endpoints.
+
+    Maps configuration / network failures onto the same 503 contract the
+    ``verify_atlas_live.py`` script expects:
+
+    * ``atlas_live_disabled``        — ``ATLAS_LIVE_WORKER_URL`` is unset.
+    * ``atlas_live_worker_unavailable`` — request to worker timed out /
+      raised a transport error / the worker returned a non-2xx status.
+    """
+    base = settings.atlas_live_worker_url.strip().rstrip("/")
+    if not base:
+        raise HTTPException(status_code=503, detail="atlas_live_disabled")
+    timeout = httpx.Timeout(settings.atlas_live_http_timeout_seconds)
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.get(f"{base}{path}")
+    except httpx.HTTPError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="atlas_live_worker_unavailable",
+        ) from exc
+    if resp.status_code >= 400:
+        raise HTTPException(
+            status_code=503,
+            detail="atlas_live_worker_unavailable",
+        )
+    try:
+        return resp.json()
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="atlas_live_worker_unavailable",
+        ) from exc
+
+
+@router.get("/health")
+async def live_health() -> dict:
+    """Proxy worker /health — used as the API-level liveness probe.
+
+    Returns the worker's health payload verbatim when reachable. Returns
+    HTTP 503 with ``detail=atlas_live_disabled`` when the worker URL is
+    unset, or ``atlas_live_worker_unavailable`` when the worker request
+    fails. The cockpit + ``verify_atlas_live.py`` rely on this contract.
+    """
+    return await _proxy_worker_get("/health")
+
+
+@router.get("/health/realmode")
+async def live_health_realmode() -> dict:
+    """Proxy worker /health/realmode — cheap real-mode verification.
+
+    Returns the worker's realmode payload verbatim when reachable. Same
+    503 error mapping as ``/atlas/live/health``. Used by
+    ``scripts/verify_atlas_live.py`` to verify that a deployed RunPod
+    worker is in real-model mode (Pythia-160M loaded) without driving an
+    actual SSE session.
+    """
+    return await _proxy_worker_get("/health/realmode")
+
+
 @router.post("/session", response_model=LiveSessionResponse)
 async def create_live_session(
     req: LiveSessionRequest,
