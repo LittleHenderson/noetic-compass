@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import httpx
 import pytest
 
 from api.routes import atlas_live
@@ -179,3 +180,126 @@ def test_live_events_stream_worker_sse(client, monkeypatch):
     assert resp.status_code == 200
     assert "event: manifest" in body
     assert "event: token" in body
+
+
+# --- /atlas/live/health[/realmode] proxy ------------------------------------
+
+
+class _MockResp:
+    """Minimal httpx.Response stand-in for the proxy tests."""
+
+    def __init__(self, status_code: int, payload: dict | None):
+        self.status_code = status_code
+        self._payload = payload
+
+    def json(self):
+        if self._payload is None:
+            raise ValueError("no json body")
+        return self._payload
+
+
+def _install_mock_async_client(monkeypatch, get_handler):
+    """Replace httpx.AsyncClient with a fake whose .get() runs get_handler(url).
+
+    ``get_handler`` is an async callable taking a URL string and returning a
+    _MockResp (or raising httpx.HTTPError).
+    """
+
+    class _Client:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            return False
+
+        async def get(self, url, **kwargs):
+            return await get_handler(url)
+
+    monkeypatch.setattr(atlas_live.httpx, "AsyncClient", _Client)
+
+
+def test_live_health_realmode_disabled_when_worker_url_unset(client, monkeypatch):
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_url", "")
+    resp = client.get("/atlas/live/health/realmode")
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "atlas_live_disabled"
+
+
+def test_live_health_disabled_when_worker_url_unset(client, monkeypatch):
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_url", "")
+    resp = client.get("/atlas/live/health")
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "atlas_live_disabled"
+
+
+def test_live_health_realmode_forwards_worker_body(client, monkeypatch):
+    expected_payload = {
+        "is_real_model": True,
+        "fake_runtime_env": False,
+        "model_id": "EleutherAI/pythia-160m",
+        "model_loaded": True,
+        "worker_version": "m2-real-pythia",
+    }
+    seen: dict = {}
+
+    async def _get(url):
+        seen["url"] = url
+        return _MockResp(200, expected_payload)
+
+    _install_mock_async_client(monkeypatch, _get)
+
+    resp = client.get("/atlas/live/health/realmode")
+    assert resp.status_code == 200
+    assert resp.json() == expected_payload
+    # The API must hit the worker's /health/realmode (not /health).
+    assert seen["url"].endswith("/health/realmode")
+
+
+def test_live_health_realmode_returns_503_on_worker_timeout(client, monkeypatch):
+    async def _timeout(url):
+        raise httpx.ReadTimeout("simulated worker timeout")
+
+    _install_mock_async_client(monkeypatch, _timeout)
+
+    resp = client.get("/atlas/live/health/realmode")
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "atlas_live_worker_unavailable"
+
+
+def test_live_health_realmode_returns_503_when_worker_5xx(client, monkeypatch):
+    async def _err(url):
+        return _MockResp(500, {"detail": "boom"})
+
+    _install_mock_async_client(monkeypatch, _err)
+
+    resp = client.get("/atlas/live/health/realmode")
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "atlas_live_worker_unavailable"
+
+
+def test_live_health_forwards_worker_body(client, monkeypatch):
+    expected_payload = {
+        "status": "ok",
+        "worker_version": "m2-real-pythia",
+        "model_id": "EleutherAI/pythia-160m",
+        "is_real_model": True,
+        "model_loaded": True,
+        "load_error": None,
+    }
+    seen: dict = {}
+
+    async def _get(url):
+        seen["url"] = url
+        return _MockResp(200, expected_payload)
+
+    _install_mock_async_client(monkeypatch, _get)
+
+    resp = client.get("/atlas/live/health")
+    assert resp.status_code == 200
+    assert resp.json() == expected_payload
+    # /atlas/live/health -> worker /health, NOT /health/realmode.
+    assert seen["url"].endswith("/health")
+    assert not seen["url"].endswith("/health/realmode")

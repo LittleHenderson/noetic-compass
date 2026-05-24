@@ -1,5 +1,42 @@
 # Noetic Compass — Progress Log
 
+## 2026-05-24 — Atlas LIVE realmode health endpoint + verification script
+
+Adds a single-command way to verify the deployed RunPod live-trace worker is in
+real-model mode (Pythia-160M loaded) instead of falling back to fake. Before this
+change the only way to check was to click LIVE in the cockpit and parse SSE
+events — fine for one-off debugging, useless for CI / post-deploy smoke / on-call.
+
+Three surfaces shipped:
+
+1. **Worker `GET /health/realmode`** (`live-trace-worker/app/routes/health.py`) —
+   cheap probe that does NOT trigger a model load. Returns `is_real_model`,
+   `fake_runtime_env` (mirroring `LIVE_TRACE_DEMO_MODE`), `model_id`,
+   `model_loaded` (probed without forcing warm_load), and `worker_version`.
+2. **API proxy `GET /atlas/live/health/realmode`** (`api/routes/atlas_live.py`) —
+   forwards to the worker behind invite-code-free public path. Returns 503
+   `atlas_live_disabled` when `ATLAS_LIVE_WORKER_URL` is unset, 503
+   `atlas_live_worker_unavailable` when the worker times out / errors. A
+   sibling `GET /atlas/live/health` proxies the worker's `/health` endpoint
+   under the same 503 contract.
+3. **`scripts/verify_atlas_live.py`** — operator-facing CLI. Hits the API, then
+   optionally the worker directly, prints a ✓/✗ checklist, exits 0 when all
+   green.
+
+Verification command (run after any worker / API deploy):
+
+```
+python noetic-compass-scaffold/noetic-compass/scripts/verify_atlas_live.py \
+    --api-url https://noetic-compass-api.onrender.com
+```
+
+Tests: 5 new in `live-trace-worker/tests/test_health.py` (demo-env on/off,
+loaded-singleton path, cheap-probe enforcement), 6 new in
+`tests/test_atlas_live.py` (disabled / forwarded / timeout / 5xx for both
+`/atlas/live/health` and `/atlas/live/health/realmode`), 8 new in
+`scripts/test_verify_atlas_live.py` (exit-code matrix + bearer-token header
+forwarding + CLI help).
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**
