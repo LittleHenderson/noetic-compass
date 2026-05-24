@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { CSSProperties } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassPanel } from '../ui/GlassPanel';
@@ -17,6 +17,25 @@ export interface EvidenceDrawerProps {
   payload?: EvidenceDrawerPayload;
   onClose: () => void;
 }
+
+interface EvidencePacket {
+  schema_version?: string;
+  trace_id?: string;
+  input?: unknown;
+  cas_expression?: unknown;
+  output?: unknown;
+  provenance?: unknown;
+  hashes?: unknown;
+  claim_levels?: unknown;
+  copy_slot_trace?: unknown;
+  caveats?: unknown;
+}
+
+type PacketState =
+  | { status: 'idle'; packet?: undefined; error?: undefined }
+  | { status: 'loading'; packet?: undefined; error?: undefined }
+  | { status: 'loaded'; packet: EvidencePacket; error?: undefined }
+  | { status: 'error'; packet?: undefined; error: string };
 
 const backdropStyle: CSSProperties = {
   position: 'fixed',
@@ -94,6 +113,13 @@ const noteStyle: CSSProperties = {
   lineHeight: 1.4,
 };
 
+const errorStyle: CSSProperties = {
+  ...noteStyle,
+  background: 'rgba(239, 68, 68, 0.12)',
+  border: `1px solid ${ATLAS_STATUS_COLORS.suppress}`,
+  color: '#fecaca',
+};
+
 const codeBlockStyle: CSSProperties = {
   margin: 0,
   padding: 12,
@@ -116,15 +142,103 @@ const sectionLabelStyle: CSSProperties = {
   letterSpacing: '0.04em',
 };
 
+const sourceTitleStyle: CSSProperties = {
+  margin: 0,
+  color: '#e2e8f0',
+  fontSize: 13,
+  fontWeight: 700,
+};
+
+const sourceNoteStyle: CSSProperties = {
+  margin: 0,
+  color: '#cbd5e1',
+  fontSize: 12,
+  lineHeight: 1.45,
+};
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}
+
+function extractTraceId(payload?: EvidenceDrawerPayload): string | null {
+  const candidates = [payload?.evidence_ref, payload?.detail];
+  for (const candidate of candidates) {
+    if (isRecord(candidate) && typeof candidate.trace_id === 'string') {
+      return candidate.trace_id;
+    }
+  }
+  return null;
+}
+
+function stringify(value: unknown): string {
+  if (value === undefined || value === null) return '(none)';
+  return JSON.stringify(value, null, 2);
+}
+
+function packetText(packet: EvidencePacket, key: keyof EvidencePacket): string {
+  return stringify(packet[key]);
+}
+
+function localSourceLabel(source?: EvidenceDrawerPayload['source']): string {
+  if (source === 'neuron') return 'Neuron click reference';
+  if (source === 'primitive') return 'Spatial primitive reference';
+  return 'Local reference';
+}
+
+function localSourceNote(hasTraceId: boolean, failed: boolean): string {
+  if (failed) {
+    return 'Evidence Packet fetch failed; showing only the local reference metadata.';
+  }
+  if (hasTraceId) {
+    return 'Evidence Packet requested; showing local reference metadata while packet data is unavailable.';
+  }
+  return 'Local replay metadata only; not presenting this as a verified Evidence Packet.';
+}
+
 export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element {
   const { open, payload, onClose } = props;
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
+  const traceId = useMemo(() => extractTraceId(payload), [payload]);
+  const [packetState, setPacketState] = useState<PacketState>({ status: 'idle' });
+
+  useEffect(() => {
+    if (!open || !traceId) {
+      setPacketState({ status: 'idle' });
+      return;
+    }
+
+    const controller = new AbortController();
+    setPacketState({ status: 'loading' });
+
+    fetch(`/api/evidence/${encodeURIComponent(traceId)}`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const body = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = isRecord(body) && typeof body.detail === 'string'
+            ? body.detail
+            : `Evidence Packet request failed (${response.status})`;
+          throw new Error(detail);
+        }
+        setPacketState({ status: 'loaded', packet: body as EvidencePacket });
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        const message = error instanceof Error ? error.message : 'Evidence Packet request failed';
+        setPacketState({ status: 'error', error: message });
+      });
+
+    return () => controller.abort();
+  }, [open, traceId]);
 
   useEffect(() => {
     if (!open) return;
-    const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
+    const handler = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        event.preventDefault();
         onClose();
       }
     };
@@ -141,6 +255,7 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
   const detailJson = payload?.detail
     ? JSON.stringify(payload.detail, null, 2)
     : null;
+  const packetFailed = packetState.status === 'error';
 
   return (
     <>
@@ -180,7 +295,7 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
           <header style={headerStyle}>
             <span style={titleStyle}>
               Evidence Packet
-              {payload?.title ? ` — ${payload.title}` : ''}
+              {payload?.title ? ` - ${payload.title}` : ''}
             </span>
             <button
               ref={closeBtnRef}
@@ -194,26 +309,73 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
             </button>
           </header>
           <div style={bodyStyle}>
-            <div style={noteStyle} data-testid="evidence-drawer-pending-note">
-              v0.0: dashboard wrap pending. Below is the fixture-backed
-              evidence_ref payload only — full Evidence Packet rendering lands in
-              a follow-on round.
-            </div>
-            <div style={sectionLabelStyle}>evidence_ref</div>
-            <pre style={codeBlockStyle} data-testid="evidence-drawer-ref-json">
-              {refJson}
-            </pre>
-            {detailJson ? (
+            {packetState.status === 'loaded' ? (
               <>
-                <div style={sectionLabelStyle}>detail</div>
-                <pre
-                  style={codeBlockStyle}
-                  data-testid="evidence-drawer-detail-json"
-                >
-                  {detailJson}
+                <div style={noteStyle} data-testid="evidence-packet-loaded">
+                  Loaded {packetState.packet.schema_version ?? 'Evidence Packet'}
+                </div>
+                <div style={sectionLabelStyle}>input</div>
+                <pre style={codeBlockStyle} data-testid="evidence-packet-input">
+                  {packetText(packetState.packet, 'input')}
+                </pre>
+                <div style={sectionLabelStyle}>cas_expression</div>
+                <pre style={codeBlockStyle} data-testid="evidence-packet-cas">
+                  {packetText(packetState.packet, 'cas_expression')}
+                </pre>
+                <div style={sectionLabelStyle}>output</div>
+                <pre style={codeBlockStyle} data-testid="evidence-packet-output">
+                  {packetText(packetState.packet, 'output')}
+                </pre>
+                <div style={sectionLabelStyle}>provenance</div>
+                <pre style={codeBlockStyle} data-testid="evidence-packet-provenance">
+                  {packetText(packetState.packet, 'provenance')}
+                </pre>
+                <div style={sectionLabelStyle}>hashes</div>
+                <pre style={codeBlockStyle} data-testid="evidence-packet-hashes">
+                  {packetText(packetState.packet, 'hashes')}
+                </pre>
+                <div style={sectionLabelStyle}>claim_levels</div>
+                <pre style={codeBlockStyle} data-testid="evidence-packet-claim-levels">
+                  {packetText(packetState.packet, 'claim_levels')}
                 </pre>
               </>
-            ) : null}
+            ) : (
+              <>
+                {packetState.status === 'loading' ? (
+                  <div style={noteStyle} data-testid="evidence-drawer-loading">
+                    Loading Evidence Packet for trace_id {traceId}.
+                  </div>
+                ) : null}
+                {packetState.status === 'error' ? (
+                  <div style={errorStyle} data-testid="evidence-drawer-error">
+                    {packetState.error}
+                  </div>
+                ) : null}
+                <div>
+                  <p style={sourceTitleStyle} data-testid="evidence-drawer-source-label">
+                    {localSourceLabel(payload?.source)}
+                  </p>
+                  <p style={sourceNoteStyle} data-testid="evidence-drawer-source-note">
+                    {localSourceNote(Boolean(traceId), packetFailed)}
+                  </p>
+                </div>
+                <div style={sectionLabelStyle}>evidence_ref</div>
+                <pre style={codeBlockStyle} data-testid="evidence-drawer-ref-json">
+                  {refJson}
+                </pre>
+                {detailJson ? (
+                  <>
+                    <div style={sectionLabelStyle}>detail</div>
+                    <pre
+                      style={codeBlockStyle}
+                      data-testid="evidence-drawer-detail-json"
+                    >
+                      {detailJson}
+                    </pre>
+                  </>
+                ) : null}
+              </>
+            )}
           </div>
         </GlassPanel>
       </motion.aside>

@@ -1,0 +1,110 @@
+{
+  "schema_version": "cas_harness_public_evidence_manifest.v1",
+  "scope": "Artifact-backed manifest for CAS-vs-baseline claims already visible in local docs/UI.",
+  "manifest_known_bound": "This file records public-facing claims visible in the local UI/docs only. It does not add unpublished claims, infer missing evidence packet IDs, or invent missing hashes.",
+  "claims": [
+    {
+      "claim_id": "internal-readout",
+      "headline": "Internal state readout beats text baseline on visible Pythia readout claims",
+      "model_stage": "Pythia-160M Foundation probe Stage 7; Pythia-160M 40-element readout Stage 9; UI Stage 26 summary also displays OLMo-1B and Qwen2.5-1.5B readouts.",
+      "cas_result": "Pythia-160M Foundation probe 78.6%; Pythia-160M 40-element probe 89.8%; OLMo-1B 90.6%; Qwen2.5-1.5B 82.0%.",
+      "baseline_control_result": "Text baseline was lower by +28.9 percentage points on Foundation and +39.7 points on the 40-element readout.",
+      "n_sample_size": null,
+      "p_value": "Pythia-160M Foundation p ~= 1e-95 vs text baseline; Pythia-160M 40-element McNemar p = 0 at machine precision. No local p-value found for the visible OLMo/Qwen readout summary.",
+      "artifact_paths": [
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/CAS_HARNESS_SPEC_SHEET_20260517.md",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_manifest_20260517.json",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_20260517.npz"
+      ],
+      "sha256": {
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts": "e5ae3cfa51d7ef8df24722d6ac77f9e4b4718da5d400ce2aaedc01a197b9d9e0",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts": "0764e3c114df15599d0b1c1c915c3404b70eefee442f4704333b1315dfd7e7f9",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/CAS_HARNESS_SPEC_SHEET_20260517.md": "91eb86d24f6cc7a51695e95ce46c7be5c46b28e7140f7868f07af2dd158f15f0",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_manifest_20260517.json": "ae364271bd08245d016566ca9a3f72f5b628f19de50ea1b33573aadeb652878f",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_20260517.npz": "04800d4263e16ff1aa25653d58fe8db3531a9035602429ea7e658413320b4913"
+      },
+      "evidence_packet_trace_id": null,
+      "known_bound": "Readout-level claim only. The UI-visible OLMo/Qwen readout values are present in local source, but no local evidence packet trace ID or p-value was found for those rows."
+    },
+    {
+      "claim_id": "causal-removal",
+      "headline": "CAS subspace ablation collapses Foundation readout to chance",
+      "model_stage": "Pythia-160M Foundation subspace validation; Stage 7.1 in the CAS Harness spec sheet.",
+      "cas_result": "Foundation readout dropped from 78.6% to 3.57% after CAS subspace ablation.",
+      "baseline_control_result": "3.57% is exact 1-in-28 chance. Random same-rank ablations had mean disruption 0.000 and max 0.000.",
+      "n_sample_size": "28 Foundation classes; per-claim row count not stated in the visible UI/spec summary.",
+      "p_value": "Empirical paired p = 0.032 per CAS_HARNESS_SPEC_SHEET_20260517.md.",
+      "artifact_paths": [
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/CAS_HARNESS_SPEC_SHEET_20260517.md"
+      ],
+      "sha256": {
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts": "e5ae3cfa51d7ef8df24722d6ac77f9e4b4718da5d400ce2aaedc01a197b9d9e0",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts": "0764e3c114df15599d0b1c1c915c3404b70eefee442f4704333b1315dfd7e7f9",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/CAS_HARNESS_SPEC_SHEET_20260517.md": "91eb86d24f6cc7a51695e95ce46c7be5c46b28e7140f7868f07af2dd158f15f0"
+      },
+      "evidence_packet_trace_id": null,
+      "known_bound": "Causal readout-ablation claim only. It does not assert free-form generation control, complete circuit discovery, or raw CAS-symbol understanding."
+    },
+    {
+      "claim_id": "output-effect",
+      "headline": "CAS-conditioned choices move likelihood in the predicted direction",
+      "model_stage": "Pythia-160M Stage 7.CPL2; Pythia-1B Stage 8; UI-visible OLMo-1B/Qwen2.5-1.5B likelihood summary.",
+      "cas_result": "Likelihood shifts: Pythia-160M +0.283, Pythia-1B +0.554, OLMo-1B +0.604, Qwen2.5-1.5B +0.796.",
+      "baseline_control_result": "Raw-CAS-symbol control on Qwen was near null at -0.0002; the Pythia spec also states raw CAS symbol prefixes had no effect.",
+      "n_sample_size": "Pythia likelihood table reports 112 paired cases for Pythia-160M and Pythia-1B; no local n found for the visible OLMo/Qwen likelihood summary.",
+      "p_value": "Pythia-160M p < 0.0001; Pythia-1B p = 2.58e-14. No local p-value found for the visible OLMo/Qwen likelihood summary.",
+      "artifact_paths": [
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/CAS_HARNESS_SPEC_SHEET_20260517.md"
+      ],
+      "sha256": {
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts": "e5ae3cfa51d7ef8df24722d6ac77f9e4b4718da5d400ce2aaedc01a197b9d9e0",
+        "noetic-compass-scaffold/noetic-compass/research/cas_probe/CAS_HARNESS_SPEC_SHEET_20260517.md": "91eb86d24f6cc7a51695e95ce46c7be5c46b28e7140f7868f07af2dd158f15f0"
+      },
+      "evidence_packet_trace_id": null,
+      "known_bound": "Likelihood-tier claim only. The local spec explicitly bounds visible-text steering at small-model scale as not closed."
+    },
+    {
+      "claim_id": "verification-stack",
+      "headline": "Accepted OLMo/Qwen rows are high-accuracy with coverage reported separately",
+      "model_stage": "Stage 22.4 OLMo/Qwen diagnostic rows; Verification Stack UI summary.",
+      "cas_result": "OLMo accepted accuracy 98.16% at 71.73% coverage; Qwen accepted accuracy 99.49% at 74.57% coverage.",
+      "baseline_control_result": "Accepting everything would hide risk; CAS reports accepted-row accuracy and coverage separately so suppressed or triaged rows remain visible.",
+      "n_sample_size": "Stage 22.4 UI method summary says full diagnostic rows were emitted for all 4,704 OLMo/Qwen rows; accepted-row denominators by model are not stated locally.",
+      "p_value": null,
+      "artifact_paths": [
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts"
+      ],
+      "sha256": {
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts": "e5ae3cfa51d7ef8df24722d6ac77f9e4b4718da5d400ce2aaedc01a197b9d9e0",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts": "0764e3c114df15599d0b1c1c915c3404b70eefee442f4704333b1315dfd7e7f9"
+      },
+      "evidence_packet_trace_id": null,
+      "known_bound": "Verifier/product behavior claim only. It does not claim every row is accepted or that suppressed/triaged rows are correct."
+    },
+    {
+      "claim_id": "inversion-coverage",
+      "headline": "Inversion scanner produced numeric proxy rows for every OLMo/Qwen diagnostic row",
+      "model_stage": "Stage 22.6/22.7 inversion proxy attribution over OLMo/Qwen diagnostic rows.",
+      "cas_result": "Stage 22.6/22.7 measured 4,704 of 4,704 rows: numeric proxy rate 1.000.",
+      "baseline_control_result": "Stage 22.5 had 0 numeric inversion rows; inversion fields were reserved but not measured.",
+      "n_sample_size": "4,704 of 4,704 OLMo/Qwen diagnostic rows.",
+      "p_value": null,
+      "artifact_paths": [
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts"
+      ],
+      "sha256": {
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/casBenchmarkEvidence.ts": "e5ae3cfa51d7ef8df24722d6ac77f9e4b4718da5d400ce2aaedc01a197b9d9e0",
+        "noetic-compass-scaffold/noetic-compass/atlas-viewer/src/lib/testingMethods.ts": "0764e3c114df15599d0b1c1c915c3404b70eefee442f4704333b1315dfd7e7f9"
+      },
+      "evidence_packet_trace_id": null,
+      "known_bound": "Numeric proxy coverage only. The UI source explicitly bounds this as not a full semantic inversion theorem."
+    }
+  ]
+}

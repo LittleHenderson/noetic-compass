@@ -22,6 +22,8 @@ import SpatialEvidencePanel from './SpatialEvidencePanel';
 import VisualPrimitiveCanvas from './VisualPrimitiveCanvas';
 import EvidenceDrawer, { type EvidenceDrawerPayload } from './EvidenceDrawer';
 import HelpOverlay from './HelpOverlay';
+import CasBaselineEvidencePanel from './CasBaselineEvidencePanel';
+import NeuralNetLegend from './NeuralNetLegend';
 import { useReplayController } from '../../hooks/useReplayController';
 import type { ReplayTrace } from '../../lib/replayController';
 import type { ModelArchitecture } from '../../lib/modelArchitecture';
@@ -910,6 +912,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
               zoomLevel={zoomLevel}
               onNeuronClick={handleNeuronClick}
             />
+            <NeuralNetLegend />
           </div>
         </motion.div>
 
@@ -922,6 +925,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         >
           <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
             <div style={rightCardInnerStyle}>
+              <CasBaselineEvidencePanel />
               <MethodKnobsPanel
                 methods={[...methods]}
                 enabledMethodIds={enabledMethodIds}
