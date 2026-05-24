@@ -5,7 +5,12 @@ import BlindspotsPanel from './BlindspotsPanel';
 import { DRIVE_TRANSLATIONS } from '../../lib/driveTranslations';
 
 describe('BlindspotsPanel', () => {
-  it('renders nothing visible when only unavailable-band entries are present', () => {
+  it('renders the markers-pending honest message when only unavailable-band entries are present', () => {
+    // Audit fix (PR #54): when covers exist but every member is in the
+    // "unavailable" band (today's default state, no per-neuron probe
+    // scores in-tree), the 3D red overlay is still drawn — so an empty
+    // textual panel would confuse the viewer. The panel routes this case
+    // to the "markers detected, scoring pending" message instead.
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
@@ -16,7 +21,19 @@ describe('BlindspotsPanel', () => {
       />,
     );
     expect(screen.queryByTestId('blindspot-interpretation')).toBeNull();
-    expect(screen.getByTestId('blindspots-empty')).toBeTruthy();
+    expect(screen.queryByTestId('blindspots-empty')).toBeNull();
+    expect(screen.queryByTestId('blindspots-no-markers')).toBeNull();
+    const pending = screen.getByTestId('blindspots-markers-pending');
+    expect(pending.textContent).toMatch(/markers detected/i);
+    expect(pending.textContent).toMatch(/confidence scoring is not loaded yet/i);
+  });
+
+  it('renders the no-markers message when there are no cover overlaps at all', () => {
+    render(<BlindspotsPanel perClassNeuronCovers={{}} />);
+    expect(screen.queryByTestId('blindspot-interpretation')).toBeNull();
+    expect(screen.queryByTestId('blindspots-markers-pending')).toBeNull();
+    expect(screen.queryByTestId('blindspots-empty')).toBeNull();
+    expect(screen.getByTestId('blindspots-no-markers')).toBeTruthy();
   });
 
   it('renders high + medium bands by default', () => {
@@ -156,6 +173,10 @@ describe('BlindspotsPanel', () => {
   });
 
   it('renders bare-string covers (legacy offline traces) as placeholder/unavailable rows', () => {
+    // Bare strings (legacy offline trace shape) normalise to
+    // band=unavailable. Since they ARE present (markers exist in the
+    // scene), the panel routes to the markers-pending message rather
+    // than the no-cover-overlap message. PR #54 audit fix.
     render(
       <BlindspotsPanel
         perClassNeuronCovers={{
@@ -163,8 +184,9 @@ describe('BlindspotsPanel', () => {
         }}
       />,
     );
-    // Bare strings normalise to band=unavailable, which never shows.
     expect(screen.queryByTestId('blindspot-interpretation')).toBeNull();
-    expect(screen.getByTestId('blindspots-empty')).toBeTruthy();
+    expect(screen.queryByTestId('blindspots-empty')).toBeNull();
+    expect(screen.queryByTestId('blindspots-no-markers')).toBeNull();
+    expect(screen.getByTestId('blindspots-markers-pending')).toBeTruthy();
   });
 });
