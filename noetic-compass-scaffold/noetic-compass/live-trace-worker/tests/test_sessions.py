@@ -50,9 +50,10 @@ def test_dump_session_emits_full_event_sequence(client):
     assert r.status_code == 200
     events = r.json()["events"]
 
-    # Manifest first, complete last, neuron_covers right after manifest.
+    # Manifest first, knob_resolution echo, then neuron_covers, complete last.
     assert events[0]["type"] == "manifest"
-    assert events[1]["type"] == "neuron_covers"
+    assert events[1]["type"] == "knob_resolution"
+    assert events[2]["type"] == "neuron_covers"
     assert events[-1]["type"] == "complete"
 
     # Token events in between, exact count == max_new_tokens.
@@ -74,7 +75,7 @@ def test_dump_session_emits_full_event_sequence(client):
                 assert edge["to_token_index"] == i
 
     # Cover sets present and conform to the offline trace shape.
-    covers = events[1]["per_class_neuron_covers"]
+    covers = events[2]["per_class_neuron_covers"]
     for cls in ("F1A", "F1T", "F1f", "F1E"):
         assert cls in covers
         assert all(label.startswith("L") and "N" in label for label in covers[cls])

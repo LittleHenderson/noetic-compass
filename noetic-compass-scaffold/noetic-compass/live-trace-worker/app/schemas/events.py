@@ -11,7 +11,7 @@ shape so the UI can reuse most of its rendering code unchanged.
 
 from __future__ import annotations
 
-from typing import Literal
+from typing import Any, Literal
 
 from pydantic import BaseModel, Field
 
@@ -38,6 +38,26 @@ class ManifestEvent(BaseModel):
 
     type: Literal["manifest"] = "manifest"
     manifest: ModelManifest
+
+
+class KnobResolutionEvent(BaseModel):
+    """Emitted right after ManifestEvent so the cockpit can prove that the
+    method-panel knobs it sent are the values the worker actually used.
+
+    ``resolved_knobs`` is keyed by ``method_id`` (matches the ids in
+    ``atlas-viewer/src/lib/testingMethods.ts``) and carries the
+    post-default/clamp/coerce values the worker resolved from
+    ``req.method_config["knobs"]``. The UI's diagnostic disclosure
+    cross-references this against what it sent.
+
+    This event is a NEW envelope variant; downstream consumers that
+    pre-date it must tolerate unknown types — the cockpit's
+    ``appendLiveEvent`` already returns the trace unchanged for
+    unrecognised types so the worker can emit safely.
+    """
+
+    type: Literal["knob_resolution"] = "knob_resolution"
+    resolved_knobs: dict[str, dict[str, Any]] = Field(default_factory=dict)
 
 
 class TokenEvent(BaseModel):
@@ -83,5 +103,10 @@ class CompleteEvent(BaseModel):
 
 
 LiveTraceEvent = (
-    ManifestEvent | TokenEvent | NeuronCoversEvent | ErrorEvent | CompleteEvent
+    ManifestEvent
+    | KnobResolutionEvent
+    | TokenEvent
+    | NeuronCoversEvent
+    | ErrorEvent
+    | CompleteEvent
 )

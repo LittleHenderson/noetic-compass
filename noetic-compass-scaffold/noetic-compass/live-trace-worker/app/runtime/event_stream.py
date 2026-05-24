@@ -20,6 +20,7 @@ from typing import AsyncIterator
 from ..schemas.events import (
     CompleteEvent,
     ErrorEvent,
+    KnobResolutionEvent,
     LiveTraceEvent,
     ManifestEvent,
     Mode7Edge,
@@ -29,30 +30,32 @@ from ..schemas.events import (
 )
 from ..schemas.requests import CreateSessionRequest
 from .cover_library import cover_for_drive
+from .knob_resolution import (
+    enabled_methods as _resolve_enabled_methods,
+    resolve_knobs,
+)
 from .model_loader import get_loaded_model
 from .probe_runner import resolve_probes
 
 logger = logging.getLogger(__name__)
 
 
-def _knobs(req: CreateSessionRequest) -> dict:
-    raw = req.method_config.get("knobs", {}) if req.method_config else {}
-    return raw if isinstance(raw, dict) else {}
-
-
 def _selected_drive(req: CreateSessionRequest) -> str:
-    knobs = _knobs(req)
-    for method_id, key in (
-        ("drive_local_eraser", "drive"),
-        ("sparse_neuron_cover", "target_class"),
-        ("blindspot_detection", "scope"),
-    ):
-        method_knobs = knobs.get(method_id, {})
-        if isinstance(method_knobs, dict):
-            val = method_knobs.get(key)
-            if isinstance(val, str) and val.startswith("F"):
-                return val
-    return "F1"
+    """Pick the drive to colour the cover overlay.
+
+    Reads from the resolved knob bag (which already normalises drive
+    strings + falls back to ``F1``). Honours an explicit
+    ``drive_local_eraser.drive`` over the blindspot ``scope``/``drive``
+    so the panel's eraser selection wins when both are set.
+    """
+    resolved = resolve_knobs(req)
+    eraser_drive = resolved["drive_local_eraser"]["drive"]
+    if eraser_drive and eraser_drive != "F1":
+        return eraser_drive
+    bs_drive = resolved["blindspot_detection"]["drive"]
+    if bs_drive and bs_drive != "F1":
+        return bs_drive
+    return eraser_drive or bs_drive or "F1"
 
 
 def _cover_event(req: CreateSessionRequest) -> NeuronCoversEvent:
@@ -70,11 +73,9 @@ def _requested_probes(req: CreateSessionRequest) -> set[str]:
     return set(resolve_probes(req.probes))
 
 
-def _enabled_methods(req: CreateSessionRequest) -> set[str]:
-    raw = req.method_config.get("enabled_methods", []) if req.method_config else []
-    if not isinstance(raw, list):
-        return set()
-    return {str(item) for item in raw}
+def _knob_resolution_event(req: CreateSessionRequest) -> KnobResolutionEvent:
+    """Build the runtime echo of what the worker resolved from the panel."""
+    return KnobResolutionEvent(resolved_knobs=resolve_knobs(req))
 
 
 def _inversion_risk(
@@ -82,15 +83,9 @@ def _inversion_risk(
     confidence: float,
     activations: list[NeuronActivation],
 ) -> float | None:
-    if "inversion_scan" not in _enabled_methods(req):
+    if "inversion_scan" not in _resolve_enabled_methods(req):
         return None
-    threshold = 0.0
-    method_knobs = _knobs(req).get("inversion_scan", {})
-    if isinstance(method_knobs, dict):
-        try:
-            threshold = float(method_knobs.get("severity_threshold", 0.0))
-        except (TypeError, ValueError):
-            threshold = 0.0
+    threshold = float(resolve_knobs(req)["inversion_scan"]["severity_threshold"])
     activation_pressure = min(max((abs(a.activation) for a in activations), default=0.0), 1.0)
     confidence_pressure = 1.0 - confidence
     risk = max(0.0, min(1.0, (activation_pressure * 0.6) + (confidence_pressure * 0.4)))
@@ -103,22 +98,50 @@ def _inversion_risk(
 # ---------------------------------------------------------------------------
 
 
-def _fake_neurons(rng: random.Random, n_layers: int) -> list[NeuronActivation]:
+def _fake_neurons(
+    rng: random.Random,
+    n_layers: int,
+    top_k: int,
+    layer_filter: set[int] | None,
+) -> list[NeuronActivation]:
+    """Generate the same knob-sensitive top-K neuron output the real runner
+    would for a forward pass.
+
+    ``top_k`` controls how many neurons are returned. ``layer_filter``
+    (when non-empty) constrains which layers can contribute. The fake
+    stream is the demo-mode stand-in for the real probe summariser;
+    it MUST honour these knobs so demo-mode tests can prove the
+    panel's knobs travel all the way through.
+    """
+    eligible = (
+        sorted(layer_filter)
+        if layer_filter
+        else list(range(n_layers))
+    )
+    # Guard against an empty layer set so demo mode never crashes.
+    if not eligible:
+        eligible = list(range(n_layers))
     out: list[NeuronActivation] = []
-    for _ in range(8):
-        layer = rng.randint(0, n_layers - 1)
+    for _ in range(max(0, int(top_k))):
+        layer = rng.choice(eligible)
         index = rng.randint(0, 3071)
         activation = rng.uniform(0.30, 0.95)
         out.append(NeuronActivation(layer=layer, index=index, activation=activation))
     return out
 
 
-def _fake_mode7(rng: random.Random, current: int) -> list[Mode7Edge]:
+def _fake_mode7(
+    rng: random.Random,
+    current: int,
+    rpm_threshold: float,
+) -> list[Mode7Edge]:
+    """Demo Mode 7 edges, filtered to honour the RPM strictness threshold."""
     if current == 0:
-        return [Mode7Edge(from_token_index=None, to_token_index=0, weight=1.0)]
+        edge = Mode7Edge(from_token_index=None, to_token_index=0, weight=1.0)
+        return [edge] if edge.weight >= rpm_threshold else []
     n_edges = min(current, 3)
     targets = rng.sample(range(current), n_edges)
-    return [
+    edges = [
         Mode7Edge(
             from_token_index=t,
             to_token_index=current,
@@ -126,6 +149,9 @@ def _fake_mode7(rng: random.Random, current: int) -> list[Mode7Edge]:
         )
         for t in targets
     ]
+    if rpm_threshold > 0:
+        edges = [e for e in edges if e.weight >= rpm_threshold]
+    return edges
 
 
 def _tokenise_whitespace(prompt: str) -> list[str]:
@@ -144,11 +170,27 @@ def _tokenise_whitespace(prompt: str) -> list[str]:
 
 
 async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTraceEvent]:
-    """Demo-mode trace — schema-valid, deterministic under seed, no real model."""
+    """Demo-mode trace — schema-valid, deterministic under seed, no real model.
+
+    Now honours the same panel knobs the real runner does
+    (foundation_probe.top_k, foundation_probe.layer_range,
+    rpm_gate_check.strictness_threshold, drive_local_eraser.drive,
+    blindspot_detection.scope, inversion_scan.severity_threshold).
+    Tests in ``test_knob_effect.py`` rely on this — they drive the
+    fake stream and assert output divergence under the same knob
+    plumbing the real runner uses.
+    """
     loaded = get_loaded_model()
     yield ManifestEvent(manifest=loaded.manifest)
+    yield _knob_resolution_event(req)
     probes = _requested_probes(req)
     yield _cover_event(req)
+
+    resolved = resolve_knobs(req)
+    top_k = int(resolved["foundation_probe"]["top_k"])
+    layer_list = resolved["foundation_probe"]["layer_range"]
+    layer_filter: set[int] | None = set(layer_list) if layer_list else None
+    rpm_threshold = float(resolved["rpm_gate_check"]["strictness_threshold"])
 
     seed = req.seed if req.seed is not None else 1234
     rng = random.Random(seed)
@@ -156,7 +198,12 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
     max_new = min(req.max_new_tokens, 24)
     for i in range(max_new):
         tok = tokens[i % len(tokens)]
-        fake_neurons = _fake_neurons(rng, loaded.manifest.model_arch.n_layers)
+        fake_neurons = _fake_neurons(
+            rng,
+            loaded.manifest.model_arch.n_layers,
+            top_k=top_k,
+            layer_filter=layer_filter,
+        )
         fake_confidence = round(rng.uniform(0.55, 0.95), 3)
         yield TokenEvent(
             token_index=i,
@@ -164,7 +211,7 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
             top_activated_neurons=fake_neurons
             if "active_trace" in probes
             else [],
-            mode7_attribution=_fake_mode7(rng, i)
+            mode7_attribution=_fake_mode7(rng, i, rpm_threshold)
             if "mode7_attribution" in probes
             else [],
             confidence=fake_confidence
@@ -194,6 +241,7 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         return
 
     yield ManifestEvent(manifest=loaded.manifest)
+    yield _knob_resolution_event(req)
     yield _cover_event(req)
 
     # Import locally so demo mode can import this module without torch.

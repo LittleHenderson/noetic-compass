@@ -13,6 +13,7 @@ import {
   createLiveSession,
   emptyLiveTrace,
   type LiveTraceEvent,
+  type ResolvedKnobs,
 } from '../lib/atlasLiveApi';
 import type { LiveStatus, RuntimeMode } from '../components/cockpit/ControlBar';
 import {
@@ -53,6 +54,7 @@ export default function CockpitPage(): JSX.Element {
   const [liveStatus, setLiveStatus] = useState<LiveStatus>('idle');
   const [liveError, setLiveError] = useState<string | null>(null);
   const [liveTrace, setLiveTrace] = useState<ReplayTrace | null>(null);
+  const [resolvedKnobs, setResolvedKnobs] = useState<ResolvedKnobs | null>(null);
   const sourceRef = useRef<EventSource | null>(null);
   const runIdRef = useRef(0);
   const restartTimerRef = useRef<number | null>(null);
@@ -105,6 +107,10 @@ export default function CockpitPage(): JSX.Element {
       setLiveStatus('connecting');
       setLiveError(reason === 'controls' ? 'Live controls changed; restarting worker stream.' : null);
       setLiveTrace(emptyLiveTrace());
+      // Reset on each session so the diagnostic disclosure can show
+      // "awaiting worker echo" until the new session emits its
+      // KnobResolutionEvent.
+      setResolvedKnobs(null);
 
       try {
         const session = await createLiveSession(
@@ -131,6 +137,10 @@ export default function CockpitPage(): JSX.Element {
             setLiveStatus('streaming');
             setLiveError(null);
           }
+          if (event.type === 'knob_resolution') {
+            setResolvedKnobs(event.resolved_knobs);
+            return;
+          }
           if (event.type === 'error') {
             source.close();
             setLiveStatus('error');
@@ -145,7 +155,14 @@ export default function CockpitPage(): JSX.Element {
           setLiveTrace((prev) => appendLiveEvent(prev ?? emptyLiveTrace(session.model_id), event));
         };
 
-        for (const eventName of ['manifest', 'neuron_covers', 'token', 'error', 'complete']) {
+        for (const eventName of [
+          'manifest',
+          'knob_resolution',
+          'neuron_covers',
+          'token',
+          'error',
+          'complete',
+        ]) {
           source.addEventListener(eventName, (evt) => {
             try {
               applyEvent(JSON.parse((evt as MessageEvent).data) as LiveTraceEvent);
@@ -243,6 +260,7 @@ export default function CockpitPage(): JSX.Element {
         onStartLive={startLive}
         onLiveControlsChange={handleLiveControlsChange}
         onUseReplay={useReplay}
+        resolvedKnobs={resolvedKnobs}
       />
     </main>
   );

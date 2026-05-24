@@ -21,7 +21,8 @@ def test_sse_stream_yields_typed_events(client):
     # Each event is `event: <type>\ndata: <json>\n\n`. Split on the blank
     # line and verify the structure.
     blocks = [b for b in raw.split("\n\n") if b.strip()]
-    assert len(blocks) >= 5  # manifest + covers + 3 tokens + complete
+    # manifest + knob_resolution + covers + 3 tokens + complete
+    assert len(blocks) >= 6
 
     types: list[str] = []
     for block in blocks:
@@ -34,6 +35,7 @@ def test_sse_stream_yields_typed_events(client):
         types.append(event_type)
 
     assert types[0] == "manifest"
-    assert types[1] == "neuron_covers"
+    assert types[1] == "knob_resolution"
+    assert types[2] == "neuron_covers"
     assert types[-1] == "complete"
     assert types.count("token") == 3
