@@ -1,13 +1,21 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  clearFaqReturnPoint,
+  queueFaqScrollRestore,
+  readFaqReturnPoint,
+  type FaqReturnPoint,
+} from '../lib/contextualFaq';
 
 interface FaqItem {
+  id: string;
   question: string;
   answer: React.ReactNode;
 }
 
 const FAQ_ITEMS: FaqItem[] = [
   {
+    id: 'what-is-noetic-compass',
     question: 'What is the Noetic Compass?',
     answer: (
       <p>
@@ -20,6 +28,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'anthropic-ai-emotions',
     question: 'How does CAS relate to Anthropic\'s research on AI emotions?',
     answer: (
       <div className="space-y-2">
@@ -44,6 +53,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'nccs',
     question: 'What does NCCS stand for?',
     answer: (
       <p>
@@ -55,6 +65,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'how-score-calculated',
     question: 'How is the composite score calculated?',
     answer: (
       <div className="space-y-2">
@@ -75,6 +86,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'cognitive-operators',
     question: 'What are Cognitive Operators?',
     answer: (
       <p>
@@ -88,6 +100,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'involution-pairs',
     question: 'What are the involution pairs?',
     answer: (
       <div className="space-y-2">
@@ -103,6 +116,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'rpm-model',
     question: 'What is the RPM model?',
     answer: (
       <div className="space-y-2">
@@ -123,6 +137,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'inversion',
     question: 'What is an inversion?',
     answer: (
       <p>
@@ -137,6 +152,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'dial-system',
     question: 'How does the dial system work?',
     answer: (
       <div className="space-y-2">
@@ -154,6 +170,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'providers',
     question: 'What LLM providers are supported?',
     answer: (
       <p>
@@ -164,6 +181,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'data-handling',
     question: 'How is my data handled?',
     answer: (
       <p>
@@ -175,6 +193,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'evaluation-trace',
     question: 'What is the Evaluation Trace?',
     answer: (
       <div className="space-y-2">
@@ -197,6 +216,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'evidence-packet-flight-recorder',
     question: 'Is the Evidence Packet the black-box flight recorder of a CAS Harness run?',
     answer: (
       <div className="space-y-3">
@@ -262,6 +282,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'scenario-browser',
     question: 'How do I use the Scenario Browser?',
     answer: (
       <div className="space-y-2">
@@ -281,6 +302,7 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    id: 'notation-composer',
     question: 'What is the Notation Composer?',
     answer: (
       <div className="space-y-2">
@@ -310,10 +332,36 @@ const FAQ_ITEMS: FaqItem[] = [
 ];
 
 export function FaqPage() {
-  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const [returnPoint, setReturnPoint] = useState<FaqReturnPoint | null>(() => readFaqReturnPoint());
 
-  const toggle = (i: number) => {
-    setActiveIndex((prev) => (prev === i ? null : i));
+  useEffect(() => {
+    const hashId = decodeURIComponent(location.hash.replace(/^#/, ''));
+    if (!hashId) return;
+    if (!FAQ_ITEMS.some((item) => item.id === hashId)) return;
+
+    setActiveId(hashId);
+    window.setTimeout(() => {
+      document.getElementById(hashId)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }, 60);
+  }, [location.hash]);
+
+  useEffect(() => {
+    setReturnPoint(readFaqReturnPoint());
+  }, [location.hash]);
+
+  const toggle = (id: string) => {
+    setActiveId((prev) => (prev === id ? null : id));
+  };
+
+  const returnToSource = () => {
+    if (!returnPoint) return;
+    queueFaqScrollRestore(returnPoint.scrollTop);
+    clearFaqReturnPoint();
+    setReturnPoint(null);
+    navigate(returnPoint.path);
   };
 
   return (
@@ -322,14 +370,34 @@ export function FaqPage() {
       <p className="text-slate-400 mb-8 text-sm">
         Common questions about the Noetic Compass and the CAS framework.
       </p>
+      {returnPoint ? (
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-accent-teal/20 bg-accent-teal/5 px-4 py-3 text-sm">
+          <span className="text-slate-300">Opened from {returnPoint.topicLabel}</span>
+          <button
+            type="button"
+            onClick={returnToSource}
+            className="rounded-full border border-accent-teal/35 bg-accent-teal/10 px-3 py-2 text-xs font-semibold text-accent-teal transition hover:border-accent-teal/70 hover:bg-accent-teal/15"
+          >
+            Back to where you clicked
+          </button>
+        </div>
+      ) : null}
 
       <div className="space-y-2">
-        {FAQ_ITEMS.map((item, i) => {
-          const isOpen = activeIndex === i;
+        {FAQ_ITEMS.map((item) => {
+          const isOpen = activeId === item.id;
           return (
-            <div key={i} className="glass-card overflow-hidden">
+            <div
+              key={item.id}
+              id={item.id}
+              className={`glass-card scroll-mt-24 overflow-hidden ${
+                isOpen ? 'border-accent-teal/30 shadow-[0_0_22px_rgba(45,212,191,0.08)]' : ''
+              }`}
+              onDoubleClick={returnPoint ? returnToSource : undefined}
+              title={returnPoint ? 'Double-click this FAQ section to return to the page that opened it.' : undefined}
+            >
               <button
-                onClick={() => toggle(i)}
+                onClick={() => toggle(item.id)}
                 className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer"
               >
                 <span className="text-sm font-medium text-slate-200">{item.question}</span>

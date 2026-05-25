@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Header } from './Header';
 import { Sidebar } from './Sidebar';
 import { WelcomeModal } from '../shared/WelcomeModal';
+import { ContextualFaqButton } from '../shared/ContextualFaqButton';
 
 export function AppShell({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -12,11 +13,15 @@ export function AppShell({ children }: { children: ReactNode }) {
       <div className="flex flex-1 overflow-hidden">
         <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
-        <main className="flex-1 overflow-y-auto bg-dark-900 p-3 pb-6 sm:p-4 md:p-6 -webkit-overflow-scrolling-touch">
+        <main
+          id="app-main-scroll"
+          className="flex-1 overflow-y-auto bg-dark-900 p-3 pb-6 sm:p-4 md:p-6 -webkit-overflow-scrolling-touch"
+        >
           {children}
         </main>
       </div>
       <WelcomeModal />
+      <ContextualFaqButton />
     </div>
   );
 }
