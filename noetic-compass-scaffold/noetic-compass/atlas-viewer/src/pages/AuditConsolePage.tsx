@@ -253,6 +253,21 @@ const subheadingStyle: CSSProperties = {
   color: COLORS.textSecondary,
 };
 
+const monikerStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  marginTop: 14,
+  padding: '7px 10px',
+  border: '1px solid rgba(45, 212, 191, 0.30)',
+  borderRadius: 6,
+  background: 'rgba(45, 212, 191, 0.08)',
+  color: COLORS.textPrimary,
+  fontSize: 12,
+  fontWeight: 750,
+  letterSpacing: 0.6,
+  textTransform: 'uppercase',
+};
+
 const framingStyle: CSSProperties = {
   marginTop: 18,
   padding: '12px 14px',
@@ -453,6 +468,7 @@ export default function AuditConsolePage() {
             <h1 className="cas-heading-wave" style={headingWaveStyle}>
               Connect a model. Run a CAS audit. Return a verdict with evidence.
             </h1>
+            <p style={monikerStyle}>TURN YOUR BLACK BOX INTO A GLASS HOUSE</p>
             <p style={subheadingStyle}>
               This is the operator-facing product layer for licensed users:
               ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW, with confidence and
