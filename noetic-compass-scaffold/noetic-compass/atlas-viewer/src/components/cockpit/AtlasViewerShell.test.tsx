@@ -279,6 +279,27 @@ describe('AtlasViewerShell — method knobs wiring', () => {
   });
 });
 
+describe('AtlasViewerShell — LIVE provenance badge', () => {
+  it('does not claim actual weights when the LIVE manifest proof is absent', () => {
+    renderShell({ runtimeMode: 'live', liveStatus: 'complete' });
+    const strip = screen.getByTestId('narration-strip');
+    expect(strip.textContent).toContain('Live · complete');
+    expect(strip.textContent).toContain('weight proof pending');
+    expect(strip.textContent).not.toContain('actual weights verified');
+  });
+
+  it('claims actual weights only after an explicit real-model proof', () => {
+    renderShell({
+      runtimeMode: 'live',
+      liveStatus: 'complete',
+      liveVerified: true,
+    });
+    expect(screen.getByTestId('narration-strip').textContent).toContain(
+      'actual weights verified',
+    );
+  });
+});
+
 describe('AtlasViewerShell — evidence drawer', () => {
   it('opens the evidence drawer when a neuron is clicked', () => {
     renderShell();

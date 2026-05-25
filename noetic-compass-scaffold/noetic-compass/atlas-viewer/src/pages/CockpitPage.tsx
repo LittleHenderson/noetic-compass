@@ -53,6 +53,7 @@ export default function CockpitPage(): JSX.Element {
   const [error, setError] = useState<string | null>(null);
   const [runtimeMode, setRuntimeMode] = useState<RuntimeMode>('replay');
   const [liveStatus, setLiveStatus] = useState<LiveStatus>('idle');
+  const [liveVerified, setLiveVerified] = useState<boolean | null>(null);
   const [liveError, setLiveError] = useState<string | null>(null);
   const [liveTrace, setLiveTrace] = useState<ReplayTrace | null>(null);
   const [resolvedKnobs, setResolvedKnobs] = useState<ResolvedKnobs | null>(null);
@@ -106,6 +107,7 @@ export default function CockpitPage(): JSX.Element {
 
       setRuntimeMode('live');
       setLiveStatus('connecting');
+      setLiveVerified(null);
       setLiveError(reason === 'controls' ? 'Live controls changed; restarting worker stream.' : null);
       setLiveTrace(emptyLiveTrace());
       // Reset on each session so the diagnostic disclosure can show
@@ -130,11 +132,13 @@ export default function CockpitPage(): JSX.Element {
             if (!event.manifest.is_real_model) {
               source.close();
               setLiveStatus('error');
+              setLiveVerified(false);
               setLiveError('LIVE worker is not running actual weights; staying on replay.');
               setRuntimeMode('replay');
               return;
             }
             acceptedRealManifest = true;
+            setLiveVerified(true);
             setLiveStatus('streaming');
             setLiveError(null);
           }
@@ -190,6 +194,7 @@ export default function CockpitPage(): JSX.Element {
         if (runIdRef.current !== runId) return;
         setRuntimeMode('replay');
         setLiveStatus('error');
+        setLiveVerified(false);
         setLiveError(err instanceof Error ? err.message : String(err));
       }
     },
@@ -224,6 +229,7 @@ export default function CockpitPage(): JSX.Element {
     runIdRef.current += 1;
     setRuntimeMode('replay');
     setLiveStatus('idle');
+    setLiveVerified(null);
     setLiveError(null);
   }, []);
 
@@ -259,6 +265,7 @@ export default function CockpitPage(): JSX.Element {
         methods={LIVE_WORKER_METHODS}
         runtimeMode={runtimeMode}
         liveStatus={liveStatus}
+        liveVerified={liveVerified}
         liveError={liveError}
         onStartLive={startLive}
         onLiveControlsChange={handleLiveControlsChange}
