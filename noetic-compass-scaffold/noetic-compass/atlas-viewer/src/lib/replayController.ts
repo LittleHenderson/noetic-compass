@@ -74,9 +74,14 @@ export class ReplayController {
   play(): void {
     if (this.destroyed) return;
     if (this.state.tokenCount === 0) return;
-    if (this.state.currentTokenIndex >= this.state.tokenCount - 1) return;
+    if (this.state.tokenCount === 1) return;
     if (this.state.playbackMode === 'playing') return;
-    this.setState({ ...this.state, playbackMode: 'playing' });
+    const restartFromEnd = this.state.currentTokenIndex >= this.state.tokenCount - 1;
+    this.setState({
+      ...this.state,
+      currentTokenIndex: restartFromEnd ? 0 : this.state.currentTokenIndex,
+      playbackMode: 'playing',
+    });
     this.scheduleTick();
   }
 

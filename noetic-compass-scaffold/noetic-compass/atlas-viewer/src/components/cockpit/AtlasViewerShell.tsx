@@ -368,6 +368,20 @@ function frameAtIndex(frames: unknown[], index: number): PerTokenFrame | undefin
   return candidate as PerTokenFrame;
 }
 
+function sentenceToTokens(sentence?: string): Token[] {
+  if (!sentence) return [];
+  const pieces = sentence.match(/\S+|\s+/g) ?? [];
+  const tokens: Token[] = [];
+  let tokenIndex = 0;
+  for (const piece of pieces) {
+    if (!/\S/.test(piece)) continue;
+    const leadingSpace = tokenIndex === 0 ? '' : ' ';
+    tokens.push({ token_index: tokenIndex, token: `${leadingSpace}${piece}` });
+    tokenIndex += 1;
+  }
+  return tokens;
+}
+
 export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const {
     trace,
@@ -499,6 +513,18 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const activePrimitiveIds = useMemo<string[]>(
     () => activePrimitives.map((p) => p.id),
     [activePrimitives],
+  );
+  const pictureSentenceTokens = useMemo<Token[]>(
+    () => sentenceToTokens(activeSpatialEvidence.scenario_sentence),
+    [activeSpatialEvidence.scenario_sentence],
+  );
+  const bottomStreamTokens =
+    (wordSpans?.length ?? 0) > 0 || runtimeMode === 'live' || pictureSentenceTokens.length === 0
+      ? tokens
+      : pictureSentenceTokens;
+  const bottomStreamCurrentTokenIndex = Math.min(
+    currentTokenIndex,
+    Math.max(0, bottomStreamTokens.length - 1),
   );
 
   const activeTraceCoords = useMemo<NeuronCoord[] | undefined>(() => {
@@ -1221,9 +1247,9 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       >
         <GlassPanel intensity="thin" padding="8px 12px">
           <WordTokenStream
-            tokens={tokens}
+            tokens={bottomStreamTokens}
             spans={wordSpans}
-            currentTokenIndex={currentTokenIndex}
+            currentTokenIndex={bottomStreamCurrentTokenIndex}
             onWordClick={handleWordClick}
           />
         </GlassPanel>
