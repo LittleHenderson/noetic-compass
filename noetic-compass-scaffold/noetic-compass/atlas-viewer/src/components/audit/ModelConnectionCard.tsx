@@ -94,6 +94,21 @@ const subtitleStyle: CSSProperties = {
   lineHeight: 1.45,
 };
 
+const infoTipStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 22,
+  height: 22,
+  borderRadius: 5,
+  border: '1px solid rgba(45, 212, 191, 0.28)',
+  background: 'rgba(45, 212, 191, 0.08)',
+  color: '#ccfbf1',
+  cursor: 'help',
+  fontSize: 12,
+  fontWeight: 900,
+};
+
 const statusPillStyle = (status: ModelConnectionStatus): CSSProperties => {
   const tone = statusTone[status];
   return {
@@ -198,6 +213,7 @@ export function ModelConnectionCard({
 }: ModelConnectionCardProps): JSX.Element {
   const runDisabled = status !== 'connected' || isAuditRunning || !canRunAudit;
   const connectDisabled = status === 'connecting';
+  const showDetails = status !== 'disconnected' || Boolean(lastChecked);
 
   return (
     <GlassPanel
@@ -211,7 +227,10 @@ export function ModelConnectionCard({
         <div style={headerStyle}>
           <div>
             <h2 style={titleStyle}>Model connection</h2>
-            <p style={subtitleStyle}>
+            <p
+              style={subtitleStyle}
+              title="Connect a supported target before running a CAS Harness audit."
+            >
               Verify target, then run audit.
             </p>
           </div>
@@ -222,29 +241,37 @@ export function ModelConnectionCard({
         </div>
 
         {statusDetail ? (
-          <p style={{ margin: 0, color: COLORS.textSecondary, fontSize: 13 }}>
-            {statusDetail}
-          </p>
+          <span
+            aria-label={statusDetail}
+            role="note"
+            style={infoTipStyle}
+            tabIndex={0}
+            title={statusDetail}
+          >
+            ?
+          </span>
         ) : null}
 
-        <div style={detailsGridStyle}>
-          <div style={detailTileStyle}>
-            <span style={detailLabelStyle}>Model</span>
-            <span style={detailValueStyle}>{modelName}</span>
+        {showDetails ? (
+          <div style={detailsGridStyle}>
+            <div style={detailTileStyle} title="The model or endpoint currently selected for audit.">
+              <span style={detailLabelStyle}>Model</span>
+              <span style={detailValueStyle}>{modelName}</span>
+            </div>
+            <div style={detailTileStyle} title="Runtime path that will execute or represent the model audit.">
+              <span style={detailLabelStyle}>Runtime</span>
+              <span style={detailValueStyle}>{provider}</span>
+            </div>
+            <div style={detailTileStyle} title="API route used to create and run the audit session.">
+              <span style={detailLabelStyle}>API route</span>
+              <span style={detailValueStyle}>{endpointLabel}</span>
+            </div>
+            <div style={detailTileStyle} title="Latest backend state returned by the audit API.">
+              <span style={detailLabelStyle}>Backend</span>
+              <span style={detailValueStyle}>{lastChecked ?? 'Not checked'}</span>
+            </div>
           </div>
-          <div style={detailTileStyle}>
-            <span style={detailLabelStyle}>Runtime</span>
-            <span style={detailValueStyle}>{provider}</span>
-          </div>
-          <div style={detailTileStyle}>
-            <span style={detailLabelStyle}>API route</span>
-            <span style={detailValueStyle}>{endpointLabel}</span>
-          </div>
-          <div style={detailTileStyle}>
-            <span style={detailLabelStyle}>Backend</span>
-            <span style={detailValueStyle}>{lastChecked ?? 'Not checked'}</span>
-          </div>
-        </div>
+        ) : null}
 
         <div style={actionRowStyle}>
           {status === 'connected' && onDisconnect ? (

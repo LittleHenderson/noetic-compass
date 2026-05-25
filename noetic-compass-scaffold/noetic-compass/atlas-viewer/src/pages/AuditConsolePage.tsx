@@ -1,17 +1,14 @@
 import { useMemo, useState, type CSSProperties } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
 import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
-import { AuditTerm } from '../components/audit/AuditTerm';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
-import { ProvenanceChips } from '../components/audit/ProvenanceChips';
 import {
   buildDefaultProvenanceChips,
-  type AuditVerdict,
   type ProvenanceChip,
 } from '../lib/casHarnessAudit';
 import {
@@ -20,7 +17,6 @@ import {
   type CasHarnessAuditSession,
 } from '../lib/casHarnessAuditApi';
 import {
-  ACCENT_AMBER,
   ACCENT_CYAN,
   ACCENT_TEAL,
   COLORS,
@@ -72,24 +68,6 @@ const AUDIT_STEPS: AuditStep[] = [
     label: 'Return verdict + evidence',
     detail: 'Return ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips.',
     command: 'VERDICT',
-  },
-];
-
-const VERDICT_COPY: Array<{ label: string; value: AuditVerdict; detail: string }> = [
-  {
-    label: 'ACCEPT',
-    value: 'ACCEPT',
-    detail: 'Allow the output to proceed under the active audit profile.',
-  },
-  {
-    label: 'SUPPRESS',
-    value: 'SUPPRESS',
-    detail: 'Block, redact, or withhold the output.',
-  },
-  {
-    label: 'FLAG FOR HUMAN REVIEW',
-    value: 'FLAG_FOR_HUMAN_REVIEW',
-    detail: 'Send the output to a person before trusting it.',
   },
 ];
 
@@ -296,14 +274,6 @@ const eyebrowStyle: CSSProperties = {
   color: ACCENT_TEAL,
 };
 
-const subheadingStyle: CSSProperties = {
-  margin: '12px 0 0 0',
-  maxWidth: 760,
-  fontSize: 15,
-  lineHeight: 1.6,
-  color: COLORS.textSecondary,
-};
-
 const monikerStyle: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
@@ -319,63 +289,11 @@ const monikerStyle: CSSProperties = {
   textTransform: 'uppercase',
 };
 
-const framingStyle: CSSProperties = {
-  marginTop: 18,
-  padding: '12px 14px',
-  borderRadius: 6,
-  border: '1px solid rgba(45, 212, 191, 0.24)',
-  background: 'rgba(45, 212, 191, 0.06)',
-  color: COLORS.textPrimary,
-  fontSize: 13,
-  lineHeight: 1.55,
-};
-
 const topGridStyle: CSSProperties = {
   display: 'grid',
   gridTemplateColumns: 'minmax(0, 1.15fr) minmax(300px, 0.85fr)',
   gap: 18,
   alignItems: 'start',
-};
-
-const readinessStripStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))',
-  gap: 8,
-  marginTop: 16,
-};
-
-const readinessTileStyle: CSSProperties = {
-  minHeight: 86,
-  padding: '10px 12px',
-  borderRadius: 6,
-  border: '1px solid rgba(45, 212, 191, 0.18)',
-  background: 'rgba(45, 212, 191, 0.045)',
-};
-
-const readinessLabelStyle: CSSProperties = {
-  display: 'block',
-  marginBottom: 5,
-  color: COLORS.textMuted,
-  fontSize: 10.5,
-  fontWeight: 800,
-  letterSpacing: 0.5,
-  textTransform: 'uppercase',
-};
-
-const readinessValueStyle: CSSProperties = {
-  display: 'block',
-  color: COLORS.textPrimary,
-  fontSize: 13,
-  fontWeight: 850,
-  overflowWrap: 'anywhere',
-};
-
-const readinessDetailStyle: CSSProperties = {
-  display: 'block',
-  marginTop: 5,
-  color: COLORS.textSecondary,
-  fontSize: 11.5,
-  lineHeight: 1.35,
 };
 
 type CommandState = 'active' | 'ready' | 'done' | 'waiting' | 'blocked';
@@ -485,13 +403,6 @@ const stepLabelStyle: CSSProperties = {
   color: COLORS.textPrimary,
 };
 
-const stepDetailStyle: CSSProperties = {
-  margin: 0,
-  fontSize: 13,
-  lineHeight: 1.45,
-  color: COLORS.textSecondary,
-};
-
 const commandBadgeStyle = (state: CommandState): CSSProperties => ({
   display: 'inline-flex',
   alignItems: 'center',
@@ -528,46 +439,16 @@ const lowerGridStyle: CSSProperties = {
   marginTop: 16,
 };
 
+const singleColumnStyle: CSSProperties = {
+  display: 'grid',
+  gap: 16,
+  marginTop: 16,
+};
+
 const verdictStackStyle: CSSProperties = {
   display: 'grid',
   gap: 16,
 };
-
-const sectionStyle: CSSProperties = {
-  borderRadius: 8,
-  border: '1px solid rgba(255, 255, 255, 0.07)',
-  background: 'rgba(255, 255, 255, 0.02)',
-  padding: 16,
-};
-
-const sectionHeadingStyle: CSSProperties = {
-  margin: '0 0 12px 0',
-  fontSize: 16,
-  fontWeight: 750,
-  color: COLORS.textPrimary,
-};
-
-const verdictListStyle: CSSProperties = {
-  display: 'grid',
-  gap: 8,
-};
-
-const verdictRowStyle = (value: AuditVerdict): CSSProperties => ({
-  padding: '10px 12px',
-  borderRadius: 6,
-  border:
-    value === 'ACCEPT'
-      ? '1px solid rgba(34, 197, 94, 0.35)'
-      : value === 'SUPPRESS'
-        ? '1px solid rgba(248, 113, 113, 0.35)'
-        : '1px solid rgba(251, 191, 36, 0.35)',
-  background:
-    value === 'ACCEPT'
-      ? 'rgba(34, 197, 94, 0.07)'
-      : value === 'SUPPRESS'
-        ? 'rgba(248, 113, 113, 0.07)'
-        : 'rgba(251, 191, 36, 0.07)',
-});
 
 const verdictLabelStyle: CSSProperties = {
   display: 'block',
@@ -577,41 +458,6 @@ const verdictLabelStyle: CSSProperties = {
   letterSpacing: 0.4,
   fontFamily: THEME.fontMono,
   color: COLORS.textPrimary,
-};
-
-const verdictDetailStyle: CSSProperties = {
-  margin: 0,
-  fontSize: 12.5,
-  lineHeight: 1.45,
-  color: COLORS.textSecondary,
-};
-
-const noteStyle: CSSProperties = {
-  margin: '12px 0 0 0',
-  color: ACCENT_AMBER,
-  fontSize: 12,
-  lineHeight: 1.5,
-};
-
-const helperButtonStyle: CSSProperties = {
-  minHeight: 34,
-  marginTop: 12,
-  padding: '7px 12px',
-  borderRadius: 6,
-  border: '1px solid rgba(45, 212, 191, 0.40)',
-  background: 'rgba(45, 212, 191, 0.10)',
-  color: '#ccfbf1',
-  cursor: 'pointer',
-  fontFamily: 'inherit',
-  fontSize: 13,
-  fontWeight: 800,
-};
-
-const termRowStyle: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: 6,
-  marginTop: 12,
 };
 
 export default function AuditConsolePage() {
@@ -632,28 +478,7 @@ export default function AuditConsolePage() {
       : session?.verdict
         ? 'Verdict ready'
         : 'Run CAS audit';
-  const readinessItems = [
-    {
-      label: 'Model',
-      value: target?.modelId ?? 'Not connected',
-      detail: target ? 'Target selected' : 'Choose a model endpoint',
-    },
-    {
-      label: 'Runtime',
-      value: target ? 'Reference backend' : 'Pending',
-      detail: target ? 'No verdict without backend proof' : 'Worker not selected',
-    },
-    {
-      label: 'License/API',
-      value: target ? 'Alpha API route' : 'Pending',
-      detail: target ? 'Session route ready' : 'License gate required',
-    },
-    {
-      label: 'Audit mode',
-      value: 'BALANCED',
-      detail: 'Precision and coverage tradeoff',
-    },
-  ];
+  const showVerdictExplainer = Boolean(session?.verdict || session?.verifier_decision);
 
   const connectReferenceTarget = () => {
     setTarget(M1_REFERENCE_TARGET);
@@ -707,30 +532,19 @@ export default function AuditConsolePage() {
         <div style={topGridStyle}>
           <div>
             <p style={eyebrowStyle}>CAS Harness Audit Console</p>
-            <h1 className="cas-heading-wave" style={headingWaveStyle}>
+            <h1
+              className="cas-heading-wave"
+              style={headingWaveStyle}
+              title="Licensed users attach a model, run the audit, and receive ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips."
+            >
               Connect a model. Run a CAS audit. Return a verdict with evidence.
             </h1>
-            <p style={monikerStyle}>TURN YOUR BLACK BOX INTO A GLASS HOUSE</p>
-            <p style={subheadingStyle}>
-              Licensed users attach a model, run the audit, and receive a
-              decision: ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW. The verdict
-              carries confidence and proof chips; Atlas opens only when deeper
-              inspection is needed.
+            <p
+              style={monikerStyle}
+              title="The console keeps the visible path simple; hover individual panels for the longer operating notes."
+            >
+              TURN YOUR BLACK BOX INTO A GLASS HOUSE
             </p>
-            <div style={framingStyle}>
-              Current gate: the UI shows ACCEPT or SUPPRESS only when the
-              backend returns an explicit verifier decision from an{' '}
-              <AuditTerm term="evidencePacket">Evidence Packet</AuditTerm>.
-            </div>
-            <div style={readinessStripStyle} aria-label="Audit readiness">
-              {readinessItems.map((item) => (
-                <div key={item.label} style={readinessTileStyle}>
-                  <span style={readinessLabelStyle}>{item.label}</span>
-                  <span style={readinessValueStyle}>{item.value}</span>
-                  <span style={readinessDetailStyle}>{item.detail}</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           <ModelConnectionCard
@@ -756,9 +570,11 @@ export default function AuditConsolePage() {
           <div style={commandHeaderStyle}>
             <div>
               <h2 style={commandTitleStyle}>Audit command center</h2>
-              <p style={commandSubtitleStyle}>
-                This is the user path: connect the target, run CAS, then return
-                a verdict with proof chips and an Evidence Packet.
+              <p
+                style={commandSubtitleStyle}
+                title="The user path is: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
+              >
+                Connect. Run. Decide.
               </p>
             </div>
             <button
@@ -780,11 +596,10 @@ export default function AuditConsolePage() {
                 sessionError,
               );
               return (
-                <article key={step.label} style={stepStyle(state)}>
+                <article key={step.label} style={stepStyle(state)} title={step.detail}>
                   <span style={stepNumberStyle}>{index + 1}</span>
                   <h2 style={stepLabelStyle}>{step.command}</h2>
                   <p style={verdictLabelStyle}>{step.label}</p>
-                  <p style={stepDetailStyle}>{step.detail}</p>
                   <span style={commandBadgeStyle(state)}>
                     {commandStatusLabel(state)}
                   </span>
@@ -794,132 +609,51 @@ export default function AuditConsolePage() {
           </section>
         </section>
 
-        <div style={lowerGridStyle}>
+        <div style={session ? lowerGridStyle : singleColumnStyle}>
           <AuditSessionProgress
             status={lifecycleStatus}
             detail={progressDetail(lifecycleStatus, isConfigured)}
             errorMessage={sessionError}
           />
-          <AuditSessionSummaryCard
-            auditId={session?.audit_id}
-            modelTarget={session?.model_id ?? target?.modelId}
-            mode={session?.audit_mode ?? 'BALANCED'}
-            selectedModulesCount={session?.selected_modules.length ?? (isConfigured ? SELECTED_MODULES.length : null)}
-            status={lifecycleStatus}
-            verdict={session?.verdict ?? null}
-            confidence={session?.confidence ?? null}
-            evidencePacketId={session?.evidence_packet_trace_id}
-            updatedAt={session?.updated_at}
-          />
+          {session ? (
+            <AuditSessionSummaryCard
+              auditId={session.audit_id}
+              modelTarget={session.model_id ?? target?.modelId}
+              mode={session.audit_mode}
+              selectedModulesCount={session.selected_modules.length}
+              status={lifecycleStatus}
+              verdict={session.verdict ?? null}
+              confidence={session.confidence ?? null}
+              evidencePacketId={session.evidence_packet_trace_id}
+              updatedAt={session.updated_at}
+            />
+          ) : null}
         </div>
 
-        {!isConfigured ? (
-          <section style={sectionStyle} aria-labelledby="session-lifecycle-heading">
-            <h2 id="session-lifecycle-heading" style={sectionHeadingStyle}>
-              Session lifecycle
-            </h2>
-            <p style={verdictDetailStyle}>
-              Run Audit stays disabled until a model target is configured.
-              The reference path tests the session lifecycle without inventing a verdict.
-            </p>
-            <button
-              type="button"
-              style={helperButtonStyle}
-              onClick={connectReferenceTarget}
-            >
-              Prepare reference session
-            </button>
-          </section>
-        ) : null}
-
-        <div style={lowerGridStyle}>
+        <div style={singleColumnStyle}>
           <div style={verdictStackStyle}>
             <AuditVerdictCard
               verdict={session?.verdict ?? null}
               confidence={session?.confidence ?? null}
-              summary={verdictSummaryFor(session)}
-              onInspectInAtlas={() => navigate('/cockpit')}
+              summary={session?.verdict ? verdictSummaryFor(session) : undefined}
+              evidencePacket={
+                session?.evidence_packet_trace_id
+                  ? { packetId: session.evidence_packet_trace_id }
+                  : undefined
+              }
+              onInspectInAtlas={session ? () => navigate('/cockpit') : undefined}
             />
-            <AuditVerdictExplainer
-              verdict={session?.verdict ?? null}
-              confidence={session?.confidence ?? null}
-              chips={sessionChips}
-              verifierDecision={session?.verifier_decision ?? null}
-              lifecycleMessage={latestLifecycleMessage(session)}
-            />
+            {showVerdictExplainer ? (
+              <AuditVerdictExplainer
+                verdict={session?.verdict ?? null}
+                confidence={session?.confidence ?? null}
+                chips={sessionChips}
+                verifierDecision={session?.verifier_decision ?? null}
+                lifecycleMessage={latestLifecycleMessage(session)}
+              />
+            ) : null}
           </div>
-
-          <section style={sectionStyle} aria-labelledby="provenance-heading">
-            <h2 id="provenance-heading" style={sectionHeadingStyle}>
-              Proof chips
-            </h2>
-            <ProvenanceChips chips={sessionChips} />
-            <p style={noteStyle}>
-              ACCEPT requires model proof, CAS readout,{' '}
-              <AuditTerm term="ablation">causal proof</AuditTerm>,{' '}
-              <AuditTerm term="matchedControl">control proof</AuditTerm>, output
-              proof, and packet proof. Missing evidence routes to review or keeps
-              the case pending.
-            </p>
-          </section>
         </div>
-
-        <div style={lowerGridStyle}>
-          <section style={sectionStyle} aria-labelledby="verdict-vocabulary">
-            <h2 id="verdict-vocabulary" style={sectionHeadingStyle}>
-              Verdict vocabulary
-            </h2>
-            <div style={verdictListStyle}>
-              {VERDICT_COPY.map((item) => (
-                <div key={item.value} style={verdictRowStyle(item.value)}>
-                  <span style={verdictLabelStyle}>{item.label}</span>
-                  <p style={verdictDetailStyle}>{item.detail}</p>
-                </div>
-              ))}
-            </div>
-          </section>
-
-          <section style={sectionStyle} aria-labelledby="atlas-boundary">
-            <h2 id="atlas-boundary" style={sectionHeadingStyle}>
-              Atlas boundary
-            </h2>
-            <p style={verdictDetailStyle}>
-              Audit Console is the decision workflow. Atlas is the evidence
-              microscope. A user should not need Atlas to understand the
-              verdict, but Atlas stays one click away for token traces,
-              <AuditTerm term="blindspot">blindspots</AuditTerm>, and{' '}
-              <AuditTerm term="inversion">inversion</AuditTerm> evidence.
-            </p>
-            <p style={noteStyle}>
-              <Link to="/cockpit" style={{ color: ACCENT_TEAL }}>
-                Open Atlas cockpit
-              </Link>
-            </p>
-          </section>
-        </div>
-
-        <section
-          style={{ ...sectionStyle, marginTop: 16 }}
-          aria-labelledby="audit-term-help"
-        >
-          <h2 id="audit-term-help" style={sectionHeadingStyle}>
-            Hover help
-          </h2>
-          <p style={verdictDetailStyle}>
-            Keep the screen clean; hover these terms when a reviewer asks what
-            a proof word means.
-          </p>
-          <div style={termRowStyle} aria-label="Audit term help">
-            <AuditTerm term="baseline">baseline</AuditTerm>
-            <AuditTerm term="ablation">ablation</AuditTerm>
-            <AuditTerm term="matchedControl">matched control</AuditTerm>
-            <AuditTerm term="evidencePacket">Evidence Packet</AuditTerm>
-            <AuditTerm term="confidence">confidence</AuditTerm>
-            <AuditTerm term="coverage">coverage</AuditTerm>
-            <AuditTerm term="inversion">inversion</AuditTerm>
-            <AuditTerm term="blindspot">blindspot</AuditTerm>
-          </div>
-        </section>
       </GlassPanel>
       </PageShell>
     </>

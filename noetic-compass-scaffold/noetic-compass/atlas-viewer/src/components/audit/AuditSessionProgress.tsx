@@ -140,13 +140,6 @@ const headlineStyle: CSSProperties = {
   letterSpacing: 0,
 };
 
-const bodyStyle: CSSProperties = {
-  margin: '8px 0 0',
-  color: COLORS.textSecondary,
-  fontSize: 13,
-  lineHeight: 1.45,
-};
-
 const statusPillStyle = (status: AuditLifecycleStatus): CSSProperties => {
   const failed = status === 'failed';
   const complete = status === 'complete';
@@ -183,6 +176,22 @@ const statusPillStyle = (status: AuditLifecycleStatus): CSSProperties => {
     fontWeight: 800,
     whiteSpace: 'nowrap',
   };
+};
+
+const infoTipStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 22,
+  height: 22,
+  marginTop: 8,
+  borderRadius: 5,
+  border: '1px solid rgba(45, 212, 191, 0.24)',
+  background: 'rgba(45, 212, 191, 0.07)',
+  color: '#ccfbf1',
+  cursor: 'help',
+  fontSize: 12,
+  fontWeight: 900,
 };
 
 const stepListStyle: CSSProperties = {
@@ -251,13 +260,6 @@ const stepLabelStyle: CSSProperties = {
   lineHeight: 1.25,
 };
 
-const stepDescriptionStyle: CSSProperties = {
-  margin: '3px 0 0',
-  color: COLORS.textSecondary,
-  fontSize: 12,
-  lineHeight: 1.4,
-};
-
 function stepState(
   step: AuditLifecycleStatus,
   current: AuditLifecycleStatus,
@@ -279,6 +281,8 @@ export function AuditSessionProgress({
 }: AuditSessionProgressProps): JSX.Element {
   const copy = statusCopy[status];
   const steps = visibleSteps(status);
+  const activeDetail = detail ?? copy.body;
+  const showSteps = status !== 'draft';
 
   return (
     <GlassPanel
@@ -293,7 +297,15 @@ export function AuditSessionProgress({
           <div>
             <p style={eyebrowStyle}>Audit progress</p>
             <h2 style={headlineStyle}>{copy.headline}</h2>
-            <p style={bodyStyle}>{detail ?? copy.body}</p>
+            <span
+              aria-label={activeDetail}
+              role="note"
+              style={infoTipStyle}
+              tabIndex={0}
+              title={activeDetail}
+            >
+              ?
+            </span>
           </div>
           <span style={statusPillStyle(status)}>{copy.headline}</span>
         </div>
@@ -316,20 +328,26 @@ export function AuditSessionProgress({
           </p>
         ) : null}
 
-        <ol style={stepListStyle} aria-label="Audit lifecycle steps">
-          {steps.map((step) => {
-            const state = stepState(step.id, status);
-            return (
-              <li key={step.id} style={stepStyle(state)} data-state={state}>
-                <span aria-hidden="true" style={markerStyle(state)} />
-                <div>
-                  <p style={stepLabelStyle}>{step.label}</p>
-                  <p style={stepDescriptionStyle}>{step.description}</p>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+        {showSteps ? (
+          <ol style={stepListStyle} aria-label="Audit lifecycle steps">
+            {steps.map((step) => {
+              const state = stepState(step.id, status);
+              return (
+                <li
+                  key={step.id}
+                  style={stepStyle(state)}
+                  data-state={state}
+                  title={step.description}
+                >
+                  <span aria-hidden="true" style={markerStyle(state)} />
+                  <div>
+                    <p style={stepLabelStyle}>{step.label}</p>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        ) : null}
       </div>
     </GlassPanel>
   );

@@ -166,6 +166,10 @@ function packetLabel(packet?: EvidencePacketSummary): string {
   return packet.packetId;
 }
 
+function hasPacketMeta(packet?: EvidencePacketSummary): boolean {
+  return Boolean(packet?.packetId || packet?.createdAt || packet?.evidenceCount != null);
+}
+
 export function AuditVerdictCard({
   verdict = null,
   confidence = null,
@@ -180,6 +184,8 @@ export function AuditVerdictCard({
   const confidenceValue = confidence == null ? null : confidencePercent(confidence);
   const confidenceLabel =
     confidenceValue == null ? 'Confidence not available' : `Confidence ${confidenceValue}%`;
+  const showPacketMeta = hasPacketMeta(evidencePacket);
+  const showActions = Boolean(onOpenEvidencePacket || onInspectInAtlas);
 
   return (
     <GlassPanel
@@ -188,6 +194,7 @@ export function AuditVerdictCard({
       padding={20}
       className={className}
       ariaLabel="Audit verdict"
+      title="Verdict appears only after the backend returns an evidence-gated verifier decision."
       style={{
         borderColor: tone.border,
         background: `linear-gradient(180deg, ${tone.fill}, rgba(255, 255, 255, 0.03))`,
@@ -245,41 +252,45 @@ export function AuditVerdictCard({
           </p>
         ) : null}
 
-        <div style={metaGridStyle}>
-          <div style={metaTileStyle}>
-            <span style={metaLabelStyle}>Evidence Packet</span>
-            <span style={metaValueStyle}>{packetLabel(evidencePacket)}</span>
+        {showPacketMeta ? (
+          <div style={metaGridStyle}>
+            <div style={metaTileStyle}>
+              <span style={metaLabelStyle}>Evidence Packet</span>
+              <span style={metaValueStyle}>{packetLabel(evidencePacket)}</span>
+            </div>
+            {evidencePacket?.evidenceCount != null ? (
+              <div style={metaTileStyle}>
+                <span style={metaLabelStyle}>Evidence count</span>
+                <span style={metaValueStyle}>{evidencePacket.evidenceCount}</span>
+              </div>
+            ) : null}
+            {evidencePacket?.createdAt ? (
+              <div style={metaTileStyle}>
+                <span style={metaLabelStyle}>Created</span>
+                <span style={metaValueStyle}>{evidencePacket.createdAt}</span>
+              </div>
+            ) : null}
           </div>
-          <div style={metaTileStyle}>
-            <span style={metaLabelStyle}>Evidence count</span>
-            <span style={metaValueStyle}>
-              {evidencePacket?.evidenceCount ?? 'Not available'}
-            </span>
-          </div>
-          <div style={metaTileStyle}>
-            <span style={metaLabelStyle}>Created</span>
-            <span style={metaValueStyle}>
-              {evidencePacket?.createdAt ?? 'Not available'}
-            </span>
-          </div>
-        </div>
+        ) : null}
 
-        <div style={actionRowStyle}>
-          {onOpenEvidencePacket ? (
-            <button
-              type="button"
-              style={primaryButtonStyle}
-              onClick={onOpenEvidencePacket}
-            >
-              Evidence Packet
-            </button>
-          ) : null}
-          {onInspectInAtlas ? (
-            <button type="button" style={buttonStyle} onClick={onInspectInAtlas}>
-              Inspect in Atlas
-            </button>
-          ) : null}
-        </div>
+        {showActions ? (
+          <div style={actionRowStyle}>
+            {onOpenEvidencePacket ? (
+              <button
+                type="button"
+                style={primaryButtonStyle}
+                onClick={onOpenEvidencePacket}
+              >
+                Evidence Packet
+              </button>
+            ) : null}
+            {onInspectInAtlas ? (
+              <button type="button" style={buttonStyle} onClick={onInspectInAtlas}>
+                Inspect in Atlas
+              </button>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </GlassPanel>
   );
