@@ -4,14 +4,55 @@ import {
   createLiveSession,
   emptyLiveTrace,
   fetchLiveRealModeProof,
+  isLiveRealModeProofVerified,
+  openLiveEventStream,
   resolveLiveStreamUrl,
+  type LiveEventSourceLike,
 } from './atlasLiveApi';
 
-function jsonResponse(body: unknown, status = 200): Response {
+function jsonResponse(
+  body: unknown,
+  status = 200,
+  headers?: Record<string, string>,
+): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...(headers ?? {}) },
   });
+}
+
+class FakeEventSource implements LiveEventSourceLike {
+  static last: FakeEventSource | null = null;
+
+  readonly listeners = new Map<string, Array<(event: Event) => void>>();
+  readonly url: string;
+  closed = false;
+  onerror: ((event: Event) => void) | null = null;
+  onopen: ((event: Event) => void) | null = null;
+
+  constructor(url: string) {
+    this.url = url;
+    FakeEventSource.last = this;
+  }
+
+  addEventListener(type: string, listener: (event: Event) => void): void {
+    this.listeners.set(type, [...(this.listeners.get(type) ?? []), listener]);
+  }
+
+  close(): void {
+    this.closed = true;
+  }
+
+  emit(type: string, body: unknown): void {
+    const event = new MessageEvent(type, { data: JSON.stringify(body) });
+    for (const listener of this.listeners.get(type) ?? []) {
+      listener(event);
+    }
+  }
+
+  failTransport(): void {
+    this.onerror?.(new Event('error'));
+  }
 }
 
 describe('atlasLiveApi', () => {
@@ -42,6 +83,73 @@ describe('atlasLiveApi', () => {
     const [url, init] = fetchImpl.mock.calls[0];
     expect(url).toBe('/api/atlas/live/session');
     expect((init?.headers as Record<string, string>)['X-Atlas-Invite-Code']).toBe('alpha');
+  });
+
+  it('rejects missing invite codes before opening a session', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse({}));
+
+    await expect(
+      createLiveSession({ prompt: 'hello' }, '   ', { fetchImpl }),
+    ).rejects.toMatchObject({
+      kind: 'missing_invite',
+      message: expect.stringContaining('invite code is required'),
+    });
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it('maps invalid invite responses to a clear user message', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({ detail: 'Invalid Atlas LIVE invite code' }, 403),
+    );
+
+    await expect(
+      createLiveSession({ prompt: 'hello' }, 'wrong', { fetchImpl }),
+    ).rejects.toMatchObject({
+      kind: 'invalid_invite',
+      httpStatus: 403,
+      detail: 'Invalid Atlas LIVE invite code',
+      message: expect.stringContaining('was not accepted'),
+    });
+  });
+
+  it('separates per-IP and per-code rate-limit messages', async () => {
+    const perIp = vi.fn(async () =>
+      jsonResponse(
+        { detail: 'Atlas LIVE per-IP session limit exceeded' },
+        429,
+        { 'Retry-After': '12' },
+      ),
+    );
+    const perCode = vi.fn(async () =>
+      jsonResponse({ detail: 'Atlas LIVE invite-code daily limit exceeded' }, 429),
+    );
+
+    await expect(
+      createLiveSession({ prompt: 'hello' }, 'alpha', { fetchImpl: perIp }),
+    ).rejects.toMatchObject({
+      kind: 'rate_limited_ip',
+      retryAfterSeconds: 12,
+      message: expect.stringContaining('per-IP session limit'),
+    });
+    await expect(
+      createLiveSession({ prompt: 'hello' }, 'alpha', { fetchImpl: perCode }),
+    ).rejects.toMatchObject({
+      kind: 'rate_limited_code',
+      message: expect.stringContaining('invite code'),
+    });
+  });
+
+  it('maps worker-unavailable session-open failures to replay-safe guidance', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({ detail: 'Atlas LIVE worker URL is not configured' }, 503),
+    );
+
+    await expect(
+      createLiveSession({ prompt: 'hello' }, 'alpha', { fetchImpl }),
+    ).rejects.toMatchObject({
+      kind: 'worker_unavailable',
+      message: expect.stringContaining('Replay fixtures are still available'),
+    });
   });
 
   it('appends live manifest, cover, and token events to replay-shaped trace', () => {
@@ -174,6 +282,7 @@ describe('atlasLiveApi', () => {
       load_error: null,
       http_status: 200,
     });
+    expect(isLiveRealModeProofVerified(proof)).toBe(true);
   });
 
   it('treats a 503 worker-unavailable response as not connected', async () => {
@@ -193,5 +302,74 @@ describe('atlasLiveApi', () => {
       load_error: 'atlas_live_worker_unavailable',
       http_status: 503,
     });
+    expect(isLiveRealModeProofVerified(proof)).toBe(false);
+  });
+
+  it('does not accept fake/demo realmode proof as verified', () => {
+    expect(
+      isLiveRealModeProofVerified({
+        verdict: 'NOT_REAL_PYTHIA_WEIGHTS',
+        is_real_model: false,
+        model_loaded: true,
+        load_error: null,
+        fake_runtime_env: true,
+        manifest_is_real_model: true,
+        http_status: 200,
+        checked_at: '2026-05-25T00:00:00.000Z',
+      }),
+    ).toBe(false);
+  });
+
+  it('bounds EventSource transport reconnect attempts', () => {
+    const onFailure = vi.fn();
+    const handle = openLiveEventStream('/stream', {
+      eventSourceImpl: FakeEventSource,
+      maxTransportErrors: 1,
+      onEvent: vi.fn(),
+      onFailure,
+    });
+    const source = FakeEventSource.last;
+    expect(source).not.toBeNull();
+    expect(handle.closed).toBe(false);
+
+    source!.failTransport();
+    expect(source!.closed).toBe(false);
+    expect(onFailure).not.toHaveBeenCalled();
+
+    source!.failTransport();
+    expect(source!.closed).toBe(true);
+    expect(handle.closed).toBe(true);
+    expect(onFailure).toHaveBeenCalledWith(
+      expect.objectContaining({
+        kind: 'stream_disconnected',
+        message: expect.stringContaining('reconnect attempts were stopped'),
+      }),
+    );
+  });
+
+  it('closes the stream on worker error events instead of letting EventSource loop', () => {
+    const onFailure = vi.fn();
+    const onEvent = vi.fn();
+    openLiveEventStream('/stream', {
+      eventSourceImpl: FakeEventSource,
+      onEvent,
+      onFailure,
+    });
+    const source = FakeEventSource.last;
+    expect(source).not.toBeNull();
+
+    source!.emit('error', {
+      type: 'error',
+      message: 'Atlas LIVE worker stream failed',
+      retryable: true,
+    });
+
+    expect(source!.closed).toBe(true);
+    expect(onEvent).not.toHaveBeenCalled();
+    expect(onFailure).toHaveBeenCalledWith(
+      expect.objectContaining({
+        kind: 'worker_unavailable',
+      }),
+    );
   });
 });

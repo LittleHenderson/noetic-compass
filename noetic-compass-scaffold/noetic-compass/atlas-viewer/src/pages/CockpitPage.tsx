@@ -9,11 +9,18 @@ import { PYTHIA_160M_PRESET } from '../lib/modelArchitecture';
 import type { ReplayTrace } from '../lib/replayController';
 import type { SpatialEvidenceArtifact } from '../lib/visualPrimitives';
 import {
+  AtlasLiveError,
   appendLiveEvent,
   createLiveSession,
   emptyLiveTrace,
+  errorFromLiveProof,
   fetchLiveRealModeProof,
+  isLiveRealModeProofVerified,
+  liveFailureMessage,
+  liveProofFailureMessage,
+  openLiveEventStream,
   type LiveTraceEvent,
+  type LiveEventStreamHandle,
   type LiveRealModeProof,
   type ResolvedKnobs,
 } from '../lib/atlasLiveApi';
@@ -61,7 +68,7 @@ export default function CockpitPage(): JSX.Element {
   const [liveProof, setLiveProof] = useState<LiveRealModeProof | null>(null);
   const [liveProofChecking, setLiveProofChecking] = useState<boolean>(false);
   const [resolvedKnobs, setResolvedKnobs] = useState<ResolvedKnobs | null>(null);
-  const sourceRef = useRef<EventSource | null>(null);
+  const sourceRef = useRef<LiveEventStreamHandle | null>(null);
   const runIdRef = useRef(0);
   const restartTimerRef = useRef<number | null>(null);
   const latestControlsRef = useRef<LiveMethodControls | null>(null);
@@ -95,22 +102,25 @@ export default function CockpitPage(): JSX.Element {
     };
   }, []);
 
-  const refreshLiveProof = useCallback(async (): Promise<void> => {
+  const refreshLiveProof = useCallback(async (): Promise<LiveRealModeProof> => {
     setLiveProofChecking(true);
+    let proof: LiveRealModeProof;
     try {
-      setLiveProof(await fetchLiveRealModeProof());
+      proof = await fetchLiveRealModeProof();
     } catch (err) {
-      setLiveProof({
+      proof = {
         verdict: 'PROOF_CHECK_FAILED',
         is_real_model: false,
         model_loaded: false,
         load_error: err instanceof Error ? err.message : String(err),
         http_status: 0,
         checked_at: new Date().toISOString(),
-      });
+      };
     } finally {
       setLiveProofChecking(false);
     }
+    setLiveProof(proof);
+    return proof;
   }, []);
 
   useEffect(() => {
@@ -124,8 +134,15 @@ export default function CockpitPage(): JSX.Element {
         reason === 'manual'
           ? window.prompt('Enter Atlas LIVE invite code', storedCode)
           : storedCode;
-      if (!inviteCode) return;
-      window.localStorage.setItem('atlas_live_invite_code', inviteCode);
+      if (!inviteCode?.trim()) {
+        setRuntimeMode('replay');
+        setLiveStatus('error');
+        setLiveVerified(false);
+        setLiveError(liveFailureMessage('missing_invite'));
+        return;
+      }
+      const trimmedInviteCode = inviteCode.trim();
+      window.localStorage.setItem('atlas_live_invite_code', trimmedInviteCode);
 
       sourceRef.current?.close();
       const runId = runIdRef.current + 1;
@@ -136,7 +153,6 @@ export default function CockpitPage(): JSX.Element {
       setLiveVerified(null);
       setLiveError(reason === 'controls' ? 'Live controls changed; restarting worker stream.' : null);
       setLiveTrace(emptyLiveTrace());
-      void refreshLiveProof();
       // Reset on each session so the diagnostic disclosure can show
       // "awaiting worker echo" until the new session emits its
       // KnobResolutionEvent.
@@ -145,26 +161,39 @@ export default function CockpitPage(): JSX.Element {
       try {
         const session = await createLiveSession(
           buildLiveSessionRequest(controls),
-          inviteCode,
+          trimmedInviteCode,
         );
+        const proof = await refreshLiveProof();
 
         if (runIdRef.current !== runId) return;
-        const source = new EventSource(session.stream_url);
-        sourceRef.current = source;
-        let acceptedRealManifest = false;
+        if (!isLiveRealModeProofVerified(proof)) {
+          throw errorFromLiveProof(proof);
+        }
+
+        const failLive = (err: AtlasLiveError): void => {
+          if (runIdRef.current !== runId) return;
+          setRuntimeMode('replay');
+          setLiveStatus('error');
+          setLiveVerified(false);
+          setLiveError(err.message);
+          setLiveTrace(null);
+        };
 
         const applyEvent = (event: LiveTraceEvent): void => {
           if (runIdRef.current !== runId) return;
           if (event.type === 'manifest') {
-            if (!event.manifest.is_real_model) {
-              source.close();
-              setLiveStatus('error');
-              setLiveVerified(false);
-              setLiveError('LIVE worker is not running actual weights; staying on replay.');
-              setRuntimeMode('replay');
+            if (!event.manifest.is_real_model || !isLiveRealModeProofVerified(proof)) {
+              sourceRef.current?.close();
+              failLive(
+                new AtlasLiveError(
+                  'unverified_model',
+                  event.manifest.is_real_model
+                    ? liveProofFailureMessage(proof)
+                    : 'LIVE worker manifest is fake or unverified, so LIVE was stopped before any actual-weights claim.',
+                ),
+              );
               return;
             }
-            acceptedRealManifest = true;
             setLiveVerified(true);
             setLiveStatus('streaming');
             setLiveError(null);
@@ -174,55 +203,41 @@ export default function CockpitPage(): JSX.Element {
             return;
           }
           if (event.type === 'error') {
-            source.close();
-            setLiveStatus('error');
-            setLiveError(event.message);
+            sourceRef.current?.close();
+            failLive(new AtlasLiveError('stream_disconnected', event.message));
             return;
           }
           if (event.type === 'complete') {
             setLiveStatus('complete');
-            source.close();
+            sourceRef.current?.close();
             return;
           }
           setLiveTrace((prev) => appendLiveEvent(prev ?? emptyLiveTrace(session.model_id), event));
         };
 
-        for (const eventName of [
-          'manifest',
-          'knob_resolution',
-          'neuron_covers',
-          'token',
-          'word_spans',
-          'error',
-          'complete',
-        ]) {
-          source.addEventListener(eventName, (evt) => {
-            try {
-              applyEvent(JSON.parse((evt as MessageEvent).data) as LiveTraceEvent);
-            } catch (err) {
-              source.close();
-              setLiveStatus('error');
-              setLiveError(err instanceof Error ? err.message : String(err));
-            }
-          });
-        }
-
-        source.onerror = () => {
-          if (runIdRef.current !== runId) return;
-          source.close();
-          setLiveStatus('error');
-          setLiveError(
-            acceptedRealManifest
-              ? 'LIVE stream disconnected.'
-              : 'LIVE stream failed before proving actual weights.',
-          );
-        };
+        sourceRef.current = openLiveEventStream(session.stream_url, {
+          maxTransportErrors: 1,
+          onEvent: applyEvent,
+          onFailure: failLive,
+          onTransportError: (attempt, maxAttempts) => {
+            if (runIdRef.current !== runId) return;
+            setLiveStatus('connecting');
+            setLiveError(
+              `LIVE stream disconnected; retrying ${attempt}/${maxAttempts}.`,
+            );
+          },
+        });
       } catch (err) {
         if (runIdRef.current !== runId) return;
         setRuntimeMode('replay');
         setLiveStatus('error');
         setLiveVerified(false);
-        setLiveError(err instanceof Error ? err.message : String(err));
+        setLiveTrace(null);
+        setLiveError(
+          err instanceof Error
+            ? err.message
+            : liveFailureMessage('bad_response'),
+        );
       }
     },
     [refreshLiveProof],
