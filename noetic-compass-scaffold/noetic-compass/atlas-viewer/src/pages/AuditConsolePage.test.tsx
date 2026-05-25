@@ -100,7 +100,10 @@ describe('AuditConsolePage', () => {
       }),
     ).toHaveClass('cas-heading-wave');
     expect(screen.getByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).toBeInTheDocument();
-    expect(screen.getAllByRole('heading', { name: /connect model/i }).length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { name: 'Audit command center' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'CONNECT' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'RUN' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'VERDICT' })).toBeInTheDocument();
     expect(screen.getAllByText('Run CAS audit').length).toBeGreaterThan(0);
     expect(screen.getByText('Return verdict + evidence')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
