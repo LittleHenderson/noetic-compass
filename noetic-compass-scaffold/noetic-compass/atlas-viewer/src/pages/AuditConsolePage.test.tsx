@@ -1,6 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
 
 function renderPage() {
@@ -11,7 +11,51 @@ function renderPage() {
   );
 }
 
+function sessionResponse(overrides: Record<string, unknown> = {}) {
+  return {
+    audit_id: 'cas-audit-test-session',
+    status: 'DRAFT',
+    model_status: 'NOT_CONNECTED_MOCK',
+    model_id: 'EleutherAI/pythia-160m',
+    endpoint_url: null,
+    audit_mode: 'BALANCED',
+    prompt_summary: null,
+    scenario_summary:
+      'M1 audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
+    selected_modules: [
+      'model_proof',
+      'cas_readout',
+      'causal_proof',
+      'control_proof',
+      'output_proof',
+      'packet_proof',
+    ],
+    created_at: '2026-05-25T11:00:00Z',
+    updated_at: '2026-05-25T11:00:00Z',
+    verdict: null,
+    confidence: null,
+    evidence_packet_trace_id: null,
+    atlas_deep_link: null,
+    provenance_chips: [
+      { label: 'runner', value: 'scaffold/mock: no CAS audit runner wired' },
+      { label: 'verdict', value: 'not computed' },
+    ],
+    lifecycle: [
+      {
+        status: 'DRAFT',
+        message: 'Audit session created.',
+        timestamp: '2026-05-25T11:00:00Z',
+      },
+    ],
+    ...overrides,
+  };
+}
+
 describe('AuditConsolePage', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it('presents the CAS audit workflow and verdict vocabulary', () => {
     renderPage();
 
@@ -26,6 +70,11 @@ describe('AuditConsolePage', () => {
     expect(screen.getByText('ACCEPT')).toBeInTheDocument();
     expect(screen.getByText('SUPPRESS')).toBeInTheDocument();
     expect(screen.getByText('FLAG FOR HUMAN REVIEW')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Run audit' })).toBeDisabled();
+    expect(screen.getByRole('heading', { name: 'Audit not started' })).toBeInTheDocument();
+    expect(
+      screen.getByText('Prepare a supported audit target before creating a backend session.'),
+    ).toBeInTheDocument();
   });
 
   it('frames Atlas as deep inspection and avoids fake verdict claims', () => {
@@ -36,5 +85,82 @@ describe('AuditConsolePage', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/Audit Console is the decision workflow/i)).toBeInTheDocument();
     expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
+  });
+
+  it('creates a backend session and keeps the verdict pending until computed', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => sessionResponse(),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            status: 'SCAFFOLD_PENDING_RUNNER',
+            updated_at: '2026-05-25T11:01:00Z',
+            lifecycle: [
+              {
+                status: 'DRAFT',
+                message: 'Audit session created.',
+                timestamp: '2026-05-25T11:00:00Z',
+              },
+              {
+                status: 'VALIDATING',
+                message: 'Input contract validated.',
+                timestamp: '2026-05-25T11:00:30Z',
+              },
+              {
+                status: 'RUNNING',
+                message: 'Run requested.',
+                timestamp: '2026-05-25T11:00:45Z',
+              },
+              {
+                status: 'SCAFFOLD_PENDING_RUNNER',
+                message: 'Stopped before verdict.',
+                timestamp: '2026-05-25T11:01:00Z',
+              },
+            ],
+          }),
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare M1 reference session' }));
+    expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
+    expect(screen.getByText(/M1 session target configured/i)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+
+    expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'The backend created and ran the M1 lifecycle, then stopped honestly before verdict because the real audit runner is not wired yet.',
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText('Runner pending').length).toBeGreaterThan(0);
+    expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      1,
+      '/api/cas-harness/audit/session',
+      expect.objectContaining({ method: 'POST' }),
+    );
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      '/api/cas-harness/audit/session/cas-audit-test-session/run',
+      expect.objectContaining({ method: 'POST' }),
+    );
+  });
+
+  it('keeps navigation links available', () => {
+    renderPage();
+
+    expect(screen.getByRole('link', { name: 'Open Atlas cockpit' })).toHaveAttribute(
+      'href',
+      '/cockpit',
+    );
   });
 });

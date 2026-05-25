@@ -1,14 +1,22 @@
-import type { CSSProperties } from 'react';
+import { useMemo, useState, type CSSProperties } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
+import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
+import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
 import { ProvenanceChips } from '../components/audit/ProvenanceChips';
 import {
   buildDefaultProvenanceChips,
   type AuditVerdict,
+  type ProvenanceChip,
 } from '../lib/casHarnessAudit';
+import {
+  createCasHarnessAuditSession,
+  startCasHarnessAuditSession,
+  type CasHarnessAuditSession,
+} from '../lib/casHarnessAuditApi';
 import {
   ACCENT_AMBER,
   ACCENT_TEAL,
@@ -20,6 +28,30 @@ interface AuditStep {
   label: string;
   detail: string;
 }
+
+interface AuditTargetConfig {
+  modelId: string;
+  provider: string;
+  endpointLabel: string;
+  scenarioText: string;
+}
+
+const SELECTED_MODULES = [
+  'model_proof',
+  'cas_readout',
+  'causal_proof',
+  'control_proof',
+  'output_proof',
+  'packet_proof',
+];
+
+const M1_REFERENCE_TARGET: AuditTargetConfig = {
+  modelId: 'EleutherAI/pythia-160m',
+  provider: 'CAS Harness M1 reference path',
+  endpointLabel: '/api/cas-harness/audit/session',
+  scenarioText:
+    'M1 audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
+};
 
 const AUDIT_STEPS: AuditStep[] = [
   {
@@ -88,6 +120,80 @@ const pendingChips = buildDefaultProvenanceChips({
     detail: 'No Evidence Packet has been created for this audit session yet.',
   },
 });
+
+function chipsForSession(session: CasHarnessAuditSession | null): ProvenanceChip[] {
+  if (!session) return pendingChips;
+
+  return buildDefaultProvenanceChips({
+    modelProof: {
+      status: 'missing',
+      detail: `Backend model status: ${session.model_status}. This is not a completed model proof.`,
+    },
+    casReadout: {
+      status: 'unavailable',
+      detail: 'CAS readout is pending until the audit runner processes the session.',
+    },
+    causalProof: {
+      status: 'unavailable',
+      detail: 'Causal proof is pending until ablation/intervention runs are attached.',
+    },
+    controlProof: {
+      status: 'unavailable',
+      detail: 'Control proof is pending until matched baseline checks are attached.',
+    },
+    outputProof: {
+      status: 'unavailable',
+      detail: 'Output proof is pending until the model output is evaluated.',
+    },
+    packetProof: {
+      status: session.evidence_packet_trace_id ? 'present' : 'missing',
+      detail: session.evidence_packet_trace_id
+        ? `Evidence trace: ${session.evidence_packet_trace_id}`
+        : 'Evidence Packet has not been created for this session yet.',
+    },
+  });
+}
+
+function lifecycleStatusFor(
+  session: CasHarnessAuditSession | null,
+  isAuditRunning: boolean,
+  error: string | null,
+): AuditLifecycleStatus {
+  if (error) return 'failed';
+  if (isAuditRunning) return 'validating';
+  if (!session) return 'draft';
+
+  switch (session.status) {
+    case 'DRAFT':
+      return 'draft';
+    case 'VALIDATING':
+      return 'validating';
+    case 'RUNNING':
+      return 'running';
+    case 'SCAFFOLD_PENDING_RUNNER':
+      return 'runner_pending';
+    case 'EVIDENCE_PENDING':
+    case 'EVIDENCE_READY':
+      return 'evidence_pending';
+    case 'COMPLETE':
+      return 'complete';
+    case 'FAILED':
+      return 'failed';
+  }
+}
+
+function progressDetail(
+  status: AuditLifecycleStatus,
+  hasTarget: boolean,
+): string | null {
+  if (!hasTarget && status === 'draft') {
+    return 'Prepare a supported audit target before creating a backend session.';
+  }
+  if (status === 'runner_pending') {
+    return 'The backend created and ran the M1 lifecycle, then stopped honestly before verdict because the real audit runner is not wired yet.';
+  }
+  return null;
+}
 
 const headingStyle: CSSProperties = {
   margin: 0,
@@ -243,8 +349,66 @@ const noteStyle: CSSProperties = {
   lineHeight: 1.5,
 };
 
+const helperButtonStyle: CSSProperties = {
+  minHeight: 34,
+  marginTop: 12,
+  padding: '7px 12px',
+  borderRadius: 6,
+  border: '1px solid rgba(45, 212, 191, 0.40)',
+  background: 'rgba(45, 212, 191, 0.10)',
+  color: '#ccfbf1',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: 13,
+  fontWeight: 800,
+};
+
 export default function AuditConsolePage() {
   const navigate = useNavigate();
+  const [target, setTarget] = useState<AuditTargetConfig | null>(null);
+  const [session, setSession] = useState<CasHarnessAuditSession | null>(null);
+  const [sessionError, setSessionError] = useState<string | null>(null);
+  const [isAuditRunning, setIsAuditRunning] = useState(false);
+
+  const isConfigured = target !== null;
+  const sessionChips = useMemo(() => chipsForSession(session), [session]);
+  const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning, sessionError);
+
+  const connectReferenceTarget = () => {
+    setTarget(M1_REFERENCE_TARGET);
+    setSession(null);
+    setSessionError(null);
+  };
+
+  const disconnectTarget = () => {
+    setTarget(null);
+    setSession(null);
+    setSessionError(null);
+    setIsAuditRunning(false);
+  };
+
+  const runAudit = async () => {
+    if (!target) return;
+    setSessionError(null);
+    setIsAuditRunning(true);
+    try {
+      const created = await createCasHarnessAuditSession({
+        model_id: target.modelId,
+        audit_mode: 'BALANCED',
+        scenario_text: target.scenarioText,
+        selected_modules: SELECTED_MODULES,
+      });
+      setSession(created);
+      const started = await startCasHarnessAuditSession(created.audit_id);
+      setSession(started);
+    } catch (error) {
+      setSessionError(
+        error instanceof Error ? error.message : 'Audit session request failed',
+      );
+    } finally {
+      setIsAuditRunning(false);
+    }
+  };
 
   return (
     <PageShell cardMaxWidth={1180}>
@@ -262,21 +426,68 @@ export default function AuditConsolePage() {
               needs model-internal explanation.
             </p>
             <div style={framingStyle}>
-              Current state: product shell plus API contract. No final audit
-              verdict is shown until a real audit runner computes it.
+              Current state: product shell plus M1 API session lifecycle. No
+              final audit verdict is shown until a real audit runner computes it.
             </div>
           </div>
 
           <ModelConnectionCard
-            status="disconnected"
-            modelName="No model connected"
-            provider="License/API connector pending"
-            endpointLabel="Configure in Model"
-            statusDetail="Connect a supported model before running a real CAS Harness audit."
-            canRunAudit={false}
-            onConnect={() => navigate('/model-config')}
+            status={isAuditRunning ? 'connecting' : isConfigured ? 'connected' : 'disconnected'}
+            modelName={target?.modelId ?? 'No model connected'}
+            provider={target?.provider ?? 'License/API connector pending'}
+            endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
+            statusDetail={
+              isConfigured
+                ? 'M1 session target configured. This does not create a final verdict until the backend runner computes one.'
+                : 'Connect or configure a supported audit target before running a CAS Harness audit.'
+            }
+            lastChecked={session ? 'Backend session accepted' : undefined}
+            isAuditRunning={isAuditRunning}
+            canRunAudit={isConfigured}
+            onConnect={connectReferenceTarget}
+            onDisconnect={disconnectTarget}
+            onRunAudit={runAudit}
           />
         </div>
+
+        <div style={lowerGridStyle}>
+          <AuditSessionProgress
+            status={lifecycleStatus}
+            detail={progressDetail(lifecycleStatus, isConfigured)}
+            errorMessage={sessionError}
+          />
+          <AuditSessionSummaryCard
+            auditId={session?.audit_id}
+            modelTarget={session?.model_id ?? target?.modelId}
+            mode={session?.audit_mode ?? 'BALANCED'}
+            selectedModulesCount={session?.selected_modules.length ?? (isConfigured ? SELECTED_MODULES.length : null)}
+            status={lifecycleStatus}
+            verdict={session?.verdict ?? null}
+            confidence={session?.confidence ?? null}
+            evidencePacketId={session?.evidence_packet_trace_id}
+            updatedAt={session?.updated_at}
+          />
+        </div>
+
+        {!isConfigured ? (
+          <section style={sectionStyle} aria-labelledby="session-lifecycle-heading">
+            <h2 id="session-lifecycle-heading" style={sectionHeadingStyle}>
+              Session lifecycle
+            </h2>
+            <p style={verdictDetailStyle}>
+              Run Audit stays disabled until a session target is configured.
+              Use the M1 reference target to exercise the real session
+              lifecycle without pretending a final audit verdict exists.
+            </p>
+            <button
+              type="button"
+              style={helperButtonStyle}
+              onClick={connectReferenceTarget}
+            >
+              Prepare M1 reference session
+            </button>
+          </section>
+        ) : null}
 
         <section style={flowStyle} aria-label="Audit workflow">
           {AUDIT_STEPS.map((step, index) => (
@@ -290,8 +501,8 @@ export default function AuditConsolePage() {
 
         <div style={lowerGridStyle}>
           <AuditVerdictCard
-            verdict={null}
-            confidence={null}
+            verdict={session?.verdict ?? null}
+            confidence={session?.confidence ?? null}
             summary="No CAS audit verdict has been computed for this model yet. This prevents a demo confidence number from being mistaken for a real audit result."
             onInspectInAtlas={() => navigate('/cockpit')}
           />
@@ -300,7 +511,7 @@ export default function AuditConsolePage() {
             <h2 id="provenance-heading" style={sectionHeadingStyle}>
               Provenance required before a verdict
             </h2>
-            <ProvenanceChips chips={pendingChips} />
+            <ProvenanceChips chips={sessionChips} />
             <p style={noteStyle}>
               A customer-safe ACCEPT requires model proof, CAS readout, causal
               proof, control proof, output proof, and packet proof. Missing

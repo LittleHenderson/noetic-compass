@@ -187,6 +187,10 @@ Default disclaimer for demo surfaces:
 
 ## Build Phases
 
+Evidence Packet bridge note:
+
+- M1 session persistence must store the facts that M2 packet export will later package. See `cas_harness_m1_evidence_packet_bridge_2026_05_25.md` for required session fields, provenance-chip mapping, Atlas-vs-audit evidence boundaries, and M1.1/M1.2/M2 checkpoints.
+
 ### M0 - Scaffold
 
 Goal: create the visible Audit Console shape without implying full backend completeness.

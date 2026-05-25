@@ -1,24 +1,38 @@
 """CAS Harness audit API scaffold.
 
-This route is intentionally a mock/scaffold until a real CAS audit runner is
-wired behind it. It validates the front-door contract and returns honest
-pending state instead of fabricated verdicts.
+This route owns the M1 audit-session lifecycle contract. It stores sessions
+in-process and advances state honestly, but it does not fabricate CAS verdicts
+until a real audit runner is wired behind it.
 """
 
 from __future__ import annotations
 
-import hashlib
-import json
 from typing import Literal
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
+
+from api.services.cas_harness_audit_sessions import (
+    create_session,
+    get_session,
+    list_sessions,
+    run_session,
+)
 
 
 router = APIRouter(prefix="/api/cas-harness/audit", tags=["cas_harness_audit"])
 
 AuditMode = Literal["BALANCED", "HIGH_PRECISION", "MAX_COVERAGE_TRIAGE"]
-AuditStatus = Literal["SCAFFOLD_PENDING_RUNNER"]
+AuditStatus = Literal[
+    "DRAFT",
+    "VALIDATING",
+    "RUNNING",
+    "EVIDENCE_PENDING",
+    "SCAFFOLD_PENDING_RUNNER",
+    "EVIDENCE_READY",
+    "COMPLETE",
+    "FAILED",
+]
 ModelStatus = Literal["NOT_CONNECTED_MOCK"]
 Verdict = Literal["ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"]
 
@@ -26,6 +40,12 @@ Verdict = Literal["ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"]
 class ProvenanceChip(BaseModel):
     label: str = Field(..., min_length=1, max_length=64)
     value: str = Field(..., min_length=1, max_length=160)
+
+
+class AuditLifecycleEvent(BaseModel):
+    status: AuditStatus
+    message: str = Field(..., min_length=1, max_length=240)
+    timestamp: str
 
 
 class AuditSessionRequest(BaseModel):
@@ -79,47 +99,53 @@ class AuditSessionResponse(BaseModel):
     audit_id: str
     status: AuditStatus
     model_status: ModelStatus
+    model_id: str | None
+    endpoint_url: str | None
+    audit_mode: AuditMode
+    prompt_summary: str | None
+    scenario_summary: str | None
+    selected_modules: list[str]
+    created_at: str
+    updated_at: str
     verdict: Verdict | None
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     evidence_packet_trace_id: str | None
     atlas_deep_link: str | None
     provenance_chips: list[ProvenanceChip]
+    lifecycle: list[AuditLifecycleEvent]
 
 
-def _provenance_chips() -> list[ProvenanceChip]:
-    return [
-        ProvenanceChip(label="runner", value="scaffold/mock: no CAS audit runner wired"),
-        ProvenanceChip(label="verdict", value="not computed"),
-        ProvenanceChip(label="license", value="placeholder only; JWT auth remains the gate"),
-    ]
-
-
-def _audit_id_for(req: AuditSessionRequest) -> str:
-    payload = req.model_dump(mode="json", exclude={"license_key"})
-    digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
-    return f"cas-audit-{digest[:16]}"
-
-
-def _mock_pending_response(audit_id: str) -> AuditSessionResponse:
-    return AuditSessionResponse(
-        audit_id=audit_id,
-        status="SCAFFOLD_PENDING_RUNNER",
-        model_status="NOT_CONNECTED_MOCK",
-        verdict=None,
-        confidence=None,
-        evidence_packet_trace_id=None,
-        atlas_deep_link=None,
-        provenance_chips=_provenance_chips(),
-    )
+class AuditSessionListResponse(BaseModel):
+    sessions: list[AuditSessionResponse]
 
 
 @router.post("/session", response_model=AuditSessionResponse)
 async def create_audit_session(req: AuditSessionRequest) -> AuditSessionResponse:
-    """Validate the CAS Harness audit contract and return pending scaffold state."""
-    return _mock_pending_response(_audit_id_for(req))
+    """Validate the CAS Harness audit contract and create a stored M1 session."""
+    payload = req.model_dump(mode="json")
+    return AuditSessionResponse.model_validate(create_session(payload).to_dict())
 
 
 @router.get("/session/{audit_id}/status", response_model=AuditSessionResponse)
 async def get_audit_session_status(audit_id: str) -> AuditSessionResponse:
-    """Return deterministic scaffold status until a real runner is connected."""
-    return _mock_pending_response(audit_id)
+    """Return the stored session state instead of fabricating by audit id."""
+    record = get_session(audit_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Audit session not found")
+    return AuditSessionResponse.model_validate(record.to_dict())
+
+
+@router.post("/session/{audit_id}/run", response_model=AuditSessionResponse)
+async def run_audit_session(audit_id: str) -> AuditSessionResponse:
+    """Advance the M1 lifecycle without fabricating a final CAS verdict."""
+    record = run_session(audit_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Audit session not found")
+    return AuditSessionResponse.model_validate(record.to_dict())
+
+
+@router.get("/sessions", response_model=AuditSessionListResponse)
+async def list_audit_sessions() -> AuditSessionListResponse:
+    """List in-process M1 audit sessions for the current API process."""
+    sessions = [AuditSessionResponse.model_validate(record.to_dict()) for record in list_sessions()]
+    return AuditSessionListResponse(sessions=sessions)
