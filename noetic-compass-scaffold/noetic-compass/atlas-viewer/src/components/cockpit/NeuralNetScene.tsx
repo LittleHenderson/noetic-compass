@@ -27,7 +27,7 @@ import {
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, type PanInfo } from 'framer-motion';
 import type { ModelArchitecture } from '../../lib/modelArchitecture';
 import {
   ATLAS_STATUS_COLORS,
@@ -129,6 +129,12 @@ const NEURON_RADIUS = 0.06;
 const LAYER_Z_SPACING = 2;
 const PLANE_PADDING = 0.5;
 const PYTHIA_N_LAYERS = 12;
+const MINI_STACK_SCALE = 0.26;
+const DETACHED_ACTIVE_SCALE = 1.12;
+const DETACHED_SIDE_SCALE = 0.58;
+const MINI_STACK_X = -7.8;
+const MINI_STACK_Y = 3.7;
+const DETACHED_SIDE_X = 6.2;
 
 const DIM_COLOR = new Color('#2a2a3a');
 const PLANE_COLOR = new Color('#0f172a');
@@ -166,14 +172,26 @@ function neuronLocalPosition(index: number): { x: number; y: number } {
   return { x, y };
 }
 
-function neuronWorldPosition(coord: { layer: number; index: number }): Vector3 {
+function layerHomeZ(layer: number): number {
   const zStart = ((PYTHIA_N_LAYERS - 1) / 2) * LAYER_Z_SPACING;
+  return zStart - layer * LAYER_Z_SPACING;
+}
+
+function neuronWorldPosition(coord: { layer: number; index: number }): Vector3 {
   const { x, y } = neuronLocalPosition(coord.index);
-  return new Vector3(x, y, zStart - coord.layer * LAYER_Z_SPACING);
+  return new Vector3(x, y, layerHomeZ(coord.layer));
 }
 
 function buildLabel(layer: number, index: number): string {
   return `L${layer}N${index}`;
+}
+
+function layerTitle(layer: number): string {
+  return `Layer ${layer}`;
+}
+
+function stackPlace(layer: number): string {
+  return `${layer + 1} of ${PYTHIA_N_LAYERS}`;
 }
 
 export function NeuralNetScene({
@@ -192,6 +210,7 @@ export function NeuralNetScene({
   raycasterFactory,
 }: NeuralNetSceneProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const stackDockRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<Scene | null>(null);
   const cameraRef = useRef<PerspectiveCamera | null>(null);
   const rendererRef = useRef<MinimalWebGLRenderer | null>(null);
@@ -202,12 +221,17 @@ export function NeuralNetScene({
   const rafRef = useRef<number | null>(null);
   const zoomTweenRafRef = useRef<number | null>(null);
   const focusPulseRafRef = useRef<number | null>(null);
+  const layerSpinRafRef = useRef<number | null>(null);
   const raycasterRef = useRef<MinimalRaycaster | null>(null);
   const onHoverRef = useRef(onNeuronHover);
   const onClickRef = useRef(onNeuronClick);
+  const detachLayerRef = useRef<(layer: number) => void>(() => {});
   const hoveredRef = useRef<NeuronCoord | null>(null);
   const [mounted, setMounted] = useState(false);
   const [focusPulse, setFocusPulse] = useState(0);
+  const [detachedLayers, setDetachedLayers] = useState<number[]>([]);
+  const [activeDetachedLayer, setActiveDetachedLayer] = useState<number | null>(null);
+  const [spinningLayers, setSpinningLayers] = useState<number[]>([]);
   // DOM tooltip state — Wave 5. The 3D scene reports hovers via the
   // onNeuronHover prop callback (preserved); a parallel local state powers a
   // GlassPanel tooltip that floats above the canvas at the cursor. Position
@@ -222,6 +246,58 @@ export function NeuralNetScene({
   useEffect(() => {
     onClickRef.current = onNeuronClick;
   }, [onNeuronClick]);
+
+  const detachLayer = (layer: number) => {
+    setDetachedLayers((prev) => {
+      if (prev.includes(layer)) return prev;
+      return [...prev, layer];
+    });
+    setActiveDetachedLayer(layer);
+  };
+
+  const snapLayerHome = (layer: number) => {
+    setDetachedLayers((prev) => prev.filter((item) => item !== layer));
+    setSpinningLayers((prev) => prev.filter((item) => item !== layer));
+    setActiveDetachedLayer((current) => {
+      if (current !== layer) return current;
+      const remaining = detachedLayers.filter((item) => item !== layer);
+      return remaining.length > 0 ? remaining[remaining.length - 1] : null;
+    });
+  };
+
+  const snapAllLayersHome = () => {
+    setDetachedLayers([]);
+    setSpinningLayers([]);
+    setActiveDetachedLayer(null);
+  };
+
+  const toggleLayerSpin = (layer: number) => {
+    setSpinningLayers((prev) =>
+      prev.includes(layer)
+        ? prev.filter((item) => item !== layer)
+        : [...prev, layer],
+    );
+    setActiveDetachedLayer(layer);
+  };
+
+  detachLayerRef.current = (layer: number) => {
+    detachLayer(layer);
+  };
+
+  useEffect(() => {
+    if (activeDetachedLayer !== null && !detachedLayers.includes(activeDetachedLayer)) {
+      setActiveDetachedLayer(
+        detachedLayers.length > 0 ? detachedLayers[detachedLayers.length - 1] : null,
+      );
+    }
+  }, [activeDetachedLayer, detachedLayers]);
+
+  function neuronScenePosition(coord: { layer: number; index: number }): Vector3 {
+    const layerMesh = layerMeshesRef.current[coord.layer];
+    if (!layerMesh) return neuronWorldPosition(coord);
+    const { x, y } = neuronLocalPosition(coord.index);
+    return layerMesh.localToWorld(new Vector3(x, y, 0));
+  }
 
   const archMismatch =
     architecture.family !== 'pythia' ||
@@ -310,9 +386,10 @@ export function NeuralNetScene({
       const instMat = new MeshBasicMaterial();
       const inst = new InstancedMesh(sphereGeom, instMat, NEURONS_PER_LAYER);
       inst.userData = { kind: 'layer-neurons', layer };
+      inst.position.set(0, 0, z);
       for (let i = 0; i < NEURONS_PER_LAYER; i++) {
         const { x, y } = neuronLocalPosition(i);
-        dummy.position.set(x, y, z);
+        dummy.position.set(x, y, 0);
         dummy.updateMatrix();
         inst.setMatrixAt(i, dummy.matrix);
         inst.setColorAt(i, DIM_COLOR);
@@ -352,6 +429,25 @@ export function NeuralNetScene({
       return null;
     }
 
+    function pickLayer(clientX: number, clientY: number): number | null {
+      const neuron = pickNeuron(clientX, clientY);
+      if (neuron) return neuron.layer;
+
+      const cam = cameraRef.current;
+      if (!cam) return null;
+      const rect = renderer.domElement.getBoundingClientRect();
+      if (rect.width === 0 || rect.height === 0) return null;
+      const nx = ((clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = -((clientY - rect.top) / rect.height) * 2 + 1;
+      raycaster.setFromCamera(new Vector2(nx, ny), cam);
+      for (let layer = 0; layer < planeMeshesRef.current.length; layer++) {
+        const plane = planeMeshesRef.current[layer];
+        const hits = raycaster.intersectObject(plane, false);
+        if (hits.length > 0) return layer;
+      }
+      return null;
+    }
+
     function wrapperLocalPosition(clientX: number, clientY: number) {
       if (!wrapper) return { x: 0, y: 0 };
       const rect = wrapper.getBoundingClientRect();
@@ -386,9 +482,16 @@ export function NeuralNetScene({
       const coord = pickNeuron(ev.clientX, ev.clientY);
       if (coord) onClickRef.current?.(coord);
     }
+    function onDoubleClick(ev: MouseEvent) {
+      const layer = pickLayer(ev.clientX, ev.clientY);
+      if (layer !== null) {
+        detachLayerRef.current(layer);
+      }
+    }
     renderer.domElement.addEventListener('pointermove', onPointerMove);
     renderer.domElement.addEventListener('pointerleave', onPointerLeave);
     renderer.domElement.addEventListener('click', onClick);
+    renderer.domElement.addEventListener('dblclick', onDoubleClick);
 
     const ro = new ResizeObserver(() => {
       const w = Math.max(wrapper.clientWidth, 1);
@@ -419,16 +522,28 @@ export function NeuralNetScene({
         __nn_scene?: Scene;
         __nn_camera?: PerspectiveCamera;
         __nn_layers?: InstancedMesh[];
+        __nn_planes?: Mesh[];
         __nn_pick?: (x: number, y: number) => NeuronCoord | null;
+        __nn_pick_layer?: (x: number, y: number) => number | null;
         __nn_simulate_hover?: (x: number, y: number) => void;
         __nn_simulate_leave?: () => void;
         __nn_simulate_click?: (x: number, y: number) => void;
+        __nn_simulate_double_click?: (x: number, y: number) => void;
+        __nn_layer_layout?: () => Array<{
+          layer: number;
+          x: number;
+          y: number;
+          z: number;
+          scale: number;
+        }>;
       };
       const w = wrapper as HTMLDivElement & TestSurface;
       w.__nn_scene = scene;
       w.__nn_camera = camera;
       w.__nn_layers = layerMeshes;
+      w.__nn_planes = planeMeshes;
       w.__nn_pick = pickNeuron;
+      w.__nn_pick_layer = pickLayer;
       w.__nn_simulate_hover = (x, y) => {
         const coord = pickNeuron(x, y);
         const prev = hoveredRef.current;
@@ -455,6 +570,18 @@ export function NeuralNetScene({
         const coord = pickNeuron(x, y);
         if (coord) onClickRef.current?.(coord);
       };
+      w.__nn_simulate_double_click = (x, y) => {
+        const layer = pickLayer(x, y);
+        if (layer !== null) detachLayerRef.current(layer);
+      };
+      w.__nn_layer_layout = () =>
+        layerMeshes.map((mesh, layer) => ({
+          layer,
+          x: mesh.position.x,
+          y: mesh.position.y,
+          z: mesh.position.z,
+          scale: mesh.scale.x,
+        }));
       renderer.render(scene, camera);
     } else if (typeof window !== 'undefined') {
       tick();
@@ -513,6 +640,10 @@ export function NeuralNetScene({
         cancelAnimationFrame(zoomTweenRafRef.current);
         zoomTweenRafRef.current = null;
       }
+      if (layerSpinRafRef.current != null) {
+        cancelAnimationFrame(layerSpinRafRef.current);
+        layerSpinRafRef.current = null;
+      }
       if (e2eClickAttached && typeof window !== 'undefined') {
         delete (window as unknown as { __nn_e2e_click?: unknown }).__nn_e2e_click;
       }
@@ -520,6 +651,7 @@ export function NeuralNetScene({
       renderer.domElement.removeEventListener('pointermove', onPointerMove);
       renderer.domElement.removeEventListener('pointerleave', onPointerLeave);
       renderer.domElement.removeEventListener('click', onClick);
+      renderer.domElement.removeEventListener('dblclick', onDoubleClick);
       // Three.js requires explicit disposal of geometries, materials, and the
       // renderer itself — React unmount doesn't reach into GPU resources.
       for (const inst of layerMeshes) {
@@ -583,6 +715,117 @@ export function NeuralNetScene({
 
   useEffect(() => {
     if (!mounted) return;
+    const layers = layerMeshesRef.current;
+    const planes = planeMeshesRef.current;
+    if (layers.length === 0 || planes.length === 0) return;
+
+    const detachedSet = new Set(detachedLayers);
+    const activeLayer =
+      activeDetachedLayer !== null && detachedSet.has(activeDetachedLayer)
+        ? activeDetachedLayer
+        : detachedLayers[detachedLayers.length - 1] ?? null;
+    const dockedLayers = Array.from({ length: PYTHIA_N_LAYERS }, (_, layer) => layer).filter(
+      (layer) => !detachedSet.has(layer),
+    );
+
+    for (let layer = 0; layer < PYTHIA_N_LAYERS; layer++) {
+      const inst = layers[layer];
+      const plane = planes[layer];
+      if (!inst || !plane) continue;
+
+      const isDetached = detachedSet.has(layer);
+      const isActive = isDetached && layer === activeLayer;
+      const detachIndex = Math.max(0, detachedLayers.indexOf(layer));
+      const dockIndex = Math.max(0, dockedLayers.indexOf(layer));
+
+      let x = 0;
+      let y = 0;
+      let z = layerHomeZ(layer);
+      let scale = 1;
+      let planeOpacity = 0.18;
+
+      if (isDetached) {
+        if (isActive) {
+          x = 0;
+          y = 0;
+          z = 0;
+          scale = DETACHED_ACTIVE_SCALE;
+          planeOpacity = 0.3;
+        } else {
+          x = DETACHED_SIDE_X;
+          y = 2.4 - detachIndex * 1.45;
+          z = 1.4 - detachIndex * 0.42;
+          scale = DETACHED_SIDE_SCALE;
+          planeOpacity = 0.22;
+        }
+      } else if (detachedLayers.length > 0) {
+        x = MINI_STACK_X;
+        y = MINI_STACK_Y - dockIndex * 0.24;
+        z = 3.6 - dockIndex * 0.18;
+        scale = MINI_STACK_SCALE;
+        planeOpacity = 0.14;
+      }
+
+      inst.position.set(x, y, z);
+      plane.position.set(x, y, z);
+      inst.scale.setScalar(scale);
+      plane.scale.setScalar(scale);
+      if (!spinningLayers.includes(layer)) {
+        inst.rotation.set(0, 0, 0);
+        plane.rotation.set(0, 0, 0);
+      }
+      const planeMat = plane.material as MeshLambertMaterial;
+      planeMat.opacity = planeOpacity;
+      planeMat.emissiveIntensity = isActive
+        ? PLANE_EMISSIVE_INTENSITY * 2.4
+        : PLANE_EMISSIVE_INTENSITY;
+    }
+
+    const renderer = rendererRef.current;
+    const scene = sceneRef.current;
+    const camera = cameraRef.current;
+    if (renderer && scene && camera) renderer.render(scene, camera);
+  }, [mounted, detachedLayers, activeDetachedLayer, spinningLayers]);
+
+  useEffect(() => {
+    if (!mounted || typeof window === 'undefined') return;
+    if (spinningLayers.length === 0) {
+      if (layerSpinRafRef.current !== null) {
+        window.cancelAnimationFrame(layerSpinRafRef.current);
+        layerSpinRafRef.current = null;
+      }
+      return;
+    }
+
+    let active = true;
+    const step = (ts: number) => {
+      if (!active) return;
+      for (const layer of spinningLayers) {
+        if (!detachedLayers.includes(layer)) continue;
+        const inst = layerMeshesRef.current[layer];
+        const plane = planeMeshesRef.current[layer];
+        const angle = ts / 900;
+        inst?.rotation.set(0, 0, angle);
+        plane?.rotation.set(0, 0, angle);
+      }
+      const renderer = rendererRef.current;
+      const scene = sceneRef.current;
+      const camera = cameraRef.current;
+      if (renderer && scene && camera) renderer.render(scene, camera);
+      layerSpinRafRef.current = window.requestAnimationFrame(step);
+    };
+    layerSpinRafRef.current = window.requestAnimationFrame(step);
+    return () => {
+      active = false;
+      if (layerSpinRafRef.current !== null) {
+        window.cancelAnimationFrame(layerSpinRafRef.current);
+        layerSpinRafRef.current = null;
+      }
+    };
+  }, [mounted, detachedLayers, spinningLayers]);
+
+  useEffect(() => {
+    if (!mounted) return;
     const scene = sceneRef.current;
     const renderer = rendererRef.current;
     const camera = cameraRef.current;
@@ -605,8 +848,8 @@ export function NeuralNetScene({
       });
       for (let i = 0; i < sorted.length - 1; i++) {
         const points = [
-          neuronWorldPosition(sorted[i]),
-          neuronWorldPosition(sorted[i + 1]),
+          neuronScenePosition(sorted[i]),
+          neuronScenePosition(sorted[i + 1]),
         ];
         const geometry = new BufferGeometry().setFromPoints(points);
         const material = new LineBasicMaterial({
@@ -625,7 +868,14 @@ export function NeuralNetScene({
     }
 
     renderer.render(scene, camera);
-  }, [mounted, focusedBlindspotCoords, focusedBlindspotLabel, zoomLevel]);
+  }, [
+    mounted,
+    focusedBlindspotCoords,
+    focusedBlindspotLabel,
+    zoomLevel,
+    detachedLayers,
+    activeDetachedLayer,
+  ]);
 
   useEffect(() => {
     if (!mounted) return;
@@ -849,6 +1099,80 @@ export function NeuralNetScene({
     position: 'relative',
   };
 
+  const layerHintStyle: CSSProperties = {
+    position: 'absolute',
+    left: 14,
+    bottom: 14,
+    zIndex: 4,
+    maxWidth: 320,
+    pointerEvents: 'none',
+  };
+
+  const stackDockStyle: CSSProperties = {
+    position: 'absolute',
+    right: 14,
+    top: 14,
+    zIndex: 4,
+    width: 184,
+  };
+
+  const layerCardRailStyle: CSSProperties = {
+    position: 'absolute',
+    right: 14,
+    top: detachedLayers.length > 0 ? 106 : 14,
+    zIndex: 5,
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+    width: 238,
+    maxHeight: 'calc(100% - 124px)',
+    overflowY: 'auto',
+    pointerEvents: 'auto',
+  };
+
+  const layerActionButtonStyle: CSSProperties = {
+    minHeight: 25,
+    padding: '4px 8px',
+    borderRadius: 6,
+    border: '1px solid rgba(45, 212, 191, 0.32)',
+    background: 'rgba(15, 23, 42, 0.72)',
+    color: '#ccfbf1',
+    cursor: 'pointer',
+    fontSize: 11,
+    fontWeight: 700,
+  };
+
+  const activeDetached =
+    activeDetachedLayer !== null && detachedLayers.includes(activeDetachedLayer)
+      ? activeDetachedLayer
+      : detachedLayers[detachedLayers.length - 1] ?? null;
+
+  const layerActivityCount = (layer: number) =>
+    currentFrame?.top_activated_neurons.filter((item) => item.layer === layer).length ?? 0;
+  const layerBlindspotCount = (layer: number) =>
+    (blindspotCoords ?? []).filter((item) => item.layer === layer).length;
+  const layerTraceCount = (layer: number) =>
+    (activeTraceCoords ?? []).filter((item) => item.layer === layer).length;
+
+  const isPointInsideStackDock = (point: { x: number; y: number }) => {
+    const dock = stackDockRef.current;
+    if (!dock) return false;
+    const rect = dock.getBoundingClientRect();
+    const margin = 18;
+    return (
+      point.x >= rect.left - margin &&
+      point.x <= rect.right + margin &&
+      point.y >= rect.top - margin &&
+      point.y <= rect.bottom + margin
+    );
+  };
+
+  const handleLayerCardDragEnd = (layer: number, info: PanInfo) => {
+    if (isPointInsideStackDock(info.point)) {
+      snapLayerHome(layer);
+    }
+  };
+
   // Tooltip offset from cursor so the GlassPanel doesn't sit under the
   // pointer (which would block subsequent hover picks on adjacent neurons).
   const TOOLTIP_OFFSET_X = 14;
@@ -906,6 +1230,190 @@ export function NeuralNetScene({
               </span>
             </GlassPanel>
           </motion.div>
+        ) : null}
+      </AnimatePresence>
+      <AnimatePresence>
+        {detachedLayers.length === 0 ? (
+          <motion.div
+            key="layer-detach-hint"
+            data-testid="layer-detach-hint"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 6 }}
+            transition={SPRING_SNAPPY}
+            style={layerHintStyle}
+          >
+            <GlassPanel intensity="thin" padding="7px 10px">
+              <span
+                style={{
+                  display: 'block',
+                  color: '#ccfbf1',
+                  fontSize: 12,
+                  fontWeight: 800,
+                }}
+              >
+                Double-click a layer to inspect it
+              </span>
+              <span
+                style={{
+                  display: 'block',
+                  color: '#94a3b8',
+                  fontSize: 11,
+                  marginTop: 2,
+                  lineHeight: 1.35,
+                }}
+              >
+                The layer detaches; the remaining stack docks in the corner.
+              </span>
+            </GlassPanel>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+      <AnimatePresence>
+        {detachedLayers.length > 0 ? (
+          <motion.div
+            key="layer-stack-dock"
+            ref={stackDockRef}
+            data-testid="layer-stack-dock"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 10 }}
+            transition={SPRING_SNAPPY}
+            style={stackDockStyle}
+          >
+            <GlassPanel intensity="regular" padding="8px 10px">
+              <span
+                style={{
+                  display: 'block',
+                  color: '#e2e8f0',
+                  fontSize: 12,
+                  fontWeight: 800,
+                }}
+              >
+                Mini stack dock
+              </span>
+              <span
+                style={{
+                  display: 'block',
+                  color: '#94a3b8',
+                  fontSize: 11,
+                  lineHeight: 1.35,
+                  marginTop: 3,
+                }}
+              >
+                {PYTHIA_N_LAYERS - detachedLayers.length} layers docked · drag a
+                layer card here to snap home
+              </span>
+              <button
+                type="button"
+                data-testid="layer-snap-all"
+                onClick={snapAllLayersHome}
+                style={{
+                  ...layerActionButtonStyle,
+                  width: '100%',
+                  marginTop: 8,
+                }}
+              >
+                Snap all back
+              </button>
+            </GlassPanel>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+      <AnimatePresence>
+        {detachedLayers.length > 0 ? (
+          <div style={layerCardRailStyle} data-testid="layer-card-rail">
+            {detachedLayers.map((layer) => {
+              const isActive = layer === activeDetached;
+              const isSpinning = spinningLayers.includes(layer);
+              return (
+                <motion.div
+                  key={layer}
+                  drag
+                  dragMomentum={false}
+                  dragElastic={0.08}
+                  onDragStart={() => setActiveDetachedLayer(layer)}
+                  onDragEnd={(_, info) => handleLayerCardDragEnd(layer, info)}
+                  initial={{ opacity: 0, x: 18 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 18 }}
+                  whileDrag={{ scale: 1.02 }}
+                  transition={SPRING_SNAPPY}
+                  data-testid={`detached-layer-card-${layer}`}
+                  style={{ cursor: 'grab' }}
+                >
+                  <GlassPanel
+                    intensity={isActive ? 'thick' : 'regular'}
+                    padding="9px 10px"
+                    style={{
+                      borderColor: isActive
+                        ? 'rgba(45, 212, 191, 0.58)'
+                        : 'rgba(255, 255, 255, 0.08)',
+                      background: isActive
+                        ? 'rgba(20, 184, 166, 0.10)'
+                        : 'rgba(15, 23, 42, 0.56)',
+                    }}
+                  >
+                    <span
+                      style={{
+                        display: 'block',
+                        color: isActive ? '#ccfbf1' : '#e2e8f0',
+                        fontSize: 12,
+                        fontWeight: 900,
+                      }}
+                    >
+                      {layerTitle(layer)} · stack place {stackPlace(layer)}
+                    </span>
+                    <span
+                      style={{
+                        display: 'block',
+                        color: '#94a3b8',
+                        fontSize: 11,
+                        marginTop: 3,
+                        lineHeight: 1.35,
+                      }}
+                    >
+                      3,072 MLP neurons · active {layerActivityCount(layer)} ·
+                      covers {layerBlindspotCount(layer)} · trace {layerTraceCount(layer)}
+                    </span>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: '1fr 1fr 1fr',
+                        gap: 6,
+                        marginTop: 8,
+                      }}
+                    >
+                      <button
+                        type="button"
+                        data-testid={`layer-focus-${layer}`}
+                        onClick={() => setActiveDetachedLayer(layer)}
+                        style={layerActionButtonStyle}
+                      >
+                        Focus
+                      </button>
+                      <button
+                        type="button"
+                        data-testid={`layer-spin-${layer}`}
+                        onClick={() => toggleLayerSpin(layer)}
+                        style={layerActionButtonStyle}
+                      >
+                        {isSpinning ? 'Stop' : 'Spin'}
+                      </button>
+                      <button
+                        type="button"
+                        data-testid={`layer-snap-${layer}`}
+                        onClick={() => snapLayerHome(layer)}
+                        style={layerActionButtonStyle}
+                      >
+                        Snap
+                      </button>
+                    </div>
+                  </GlassPanel>
+                </motion.div>
+              );
+            })}
+          </div>
         ) : null}
       </AnimatePresence>
       <AnimatePresence>
