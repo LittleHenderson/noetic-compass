@@ -301,8 +301,8 @@ def test_blindspot_drive_f1_vs_f2_changes_cover_event():
     # disclosure's "✓/✗" signal.
     f1_knob = _knob_event(f1_events).resolved_knobs["blindspot_detection"]
     f2_knob = _knob_event(f2_events).resolved_knobs["blindspot_detection"]
-    assert f1_knob == {"drive": "F1", "cover_available": True}
-    assert f2_knob == {"drive": "F2", "cover_available": True}
+    assert f1_knob == {"scope": "F1", "drive": "F1", "cover_available": True}
+    assert f2_knob == {"scope": "F2", "drive": "F2", "cover_available": True}
 
 
 # ---------------------------------------------------------------------------

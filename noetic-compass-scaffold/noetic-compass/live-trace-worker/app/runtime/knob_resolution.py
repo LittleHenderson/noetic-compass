@@ -192,8 +192,16 @@ def resolve_knobs(req: CreateSessionRequest) -> dict[str, dict[str, Any]]:
     # blindspot_detection — drive scope used by the cover overlay.
     bs = raw.get("blindspot_detection", {})
     bs_drive = bs.get("scope") or bs.get("drive")
+    if bs_drive == "all_7":
+        out["blindspot_detection"] = {
+            "scope": "all_7",
+            "drive": "all_7",
+            "cover_available": True,
+        }
+        return out
     bs_resolved = resolve_drive(bs_drive)
     out["blindspot_detection"] = {
+        "scope": bs_resolved,
         "drive": bs_resolved,
         "cover_available": bs_resolved in COVER_LIBRARY,
     }
