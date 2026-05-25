@@ -91,14 +91,14 @@ describe('AuditConsolePage', () => {
     vi.unstubAllGlobals();
   });
 
-  it('presents the CAS audit workflow and verdict vocabulary', () => {
+  it('presents the CAS audit workflow without the old explanatory clutter', () => {
     renderPage();
 
-    expect(
-      screen.getByRole('heading', {
-        name: 'Connect a model. Run a CAS audit. Return a verdict with evidence.',
-      }),
-    ).toHaveClass('cas-heading-wave');
+    const heading = screen.getByRole('heading', {
+      name: 'Connect a model. Run a CAS audit. Return a verdict with evidence.',
+    });
+    expect(heading).toHaveClass('cas-heading-wave');
+    expect(heading).toHaveAttribute('title', expect.stringContaining('Licensed users attach'));
     expect(screen.getByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Audit command center' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'CONNECT' })).toBeInTheDocument();
@@ -107,34 +107,45 @@ describe('AuditConsolePage', () => {
     expect(screen.getAllByText('Run CAS audit').length).toBeGreaterThan(0);
     expect(screen.getByText('Return verdict + evidence')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Proof chips' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Hover help' })).toBeInTheDocument();
-    expect(screen.getByText('License/API')).toBeInTheDocument();
-    expect(screen.getByText('Audit mode')).toBeInTheDocument();
-    expect(screen.getAllByText('Inspect in Atlas').length).toBeGreaterThan(0);
+    expect(screen.queryByRole('heading', { name: 'Proof chips' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Hover help' })).not.toBeInTheDocument();
+    expect(screen.queryByText('License/API')).not.toBeInTheDocument();
+    expect(screen.queryByText('Audit mode')).not.toBeInTheDocument();
+    expect(screen.queryByText('Inspect in Atlas')).not.toBeInTheDocument();
+    expect(screen.queryByText('Evidence count')).not.toBeInTheDocument();
+    expect(screen.queryByText('Verdict vocabulary')).not.toBeInTheDocument();
 
-    expect(screen.getByText('ACCEPT')).toBeInTheDocument();
-    expect(screen.getByText('SUPPRESS')).toBeInTheDocument();
-    expect(screen.getByText('FLAG FOR HUMAN REVIEW')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeDisabled();
     expect(screen.getByRole('heading', { name: 'Audit not started' })).toBeInTheDocument();
     expect(
-      screen.getByText('Connect a supported target before running an audit.'),
+      screen.getByRole('note', {
+        name: 'Connect a supported target before running an audit.',
+      }),
     ).toBeInTheDocument();
-    expect(screen.getByText('baseline')).toHaveAttribute(
-      'title',
-      expect.stringContaining('comparison opponent'),
-    );
   });
 
-  it('frames Atlas as deep inspection and avoids fake verdict claims', () => {
+  it('keeps explanatory wording on hover targets instead of visible paragraphs', () => {
     renderPage();
 
     expect(
-      screen.getByText(/the UI shows ACCEPT or SUPPRESS only when the/i)
-    ).toBeInTheDocument();
-    expect(screen.getByText(/Audit Console is the decision workflow/i)).toBeInTheDocument();
+      screen.queryByText(/the UI shows ACCEPT or SUPPRESS only when the/i),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/Audit Console is the decision workflow/i)).not.toBeInTheDocument();
+    expect(
+      screen.getByText('Connect. Run. Decide.'),
+    ).toHaveAttribute(
+      'title',
+      expect.stringContaining('connect the target, run CAS, then return a verdict'),
+    );
+  });
+
+  it('keeps the pending verdict compact', () => {
+    renderPage();
+
     expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
+    expect(screen.queryByText(/No verdict yet\. Run a CAS audit/i)).not.toBeInTheDocument();
+    expect(screen.queryByText('Not created')).not.toBeInTheDocument();
+    expect(screen.queryByText('Not available')).not.toBeInTheDocument();
   });
 
   it('creates a backend session and keeps the verdict pending until computed', async () => {
@@ -178,15 +189,17 @@ describe('AuditConsolePage', () => {
 
     renderPage();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Prepare reference session' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
-    expect(screen.getByText(/Target ready/i)).toBeInTheDocument();
+    expect(screen.getByRole('note', { name: /Target ready/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
     expect(
-      screen.getByText('Session created. Verdict blocked until an Evidence Packet is attached.'),
+      screen.getByRole('note', {
+        name: 'Session created. Verdict blocked until an Evidence Packet is attached.',
+      }),
     ).toBeInTheDocument();
     expect(screen.getAllByText('Runner pending').length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
@@ -268,22 +281,15 @@ describe('AuditConsolePage', () => {
 
     renderPage();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Prepare reference session' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
     expect(screen.getByText(/Accepted because the verifier explicitly allowed it/i)).toBeInTheDocument();
-    expect(screen.getByText(/CAS accepted this output because the verifier allowed it and 6\/6/i)).toBeInTheDocument();
-    expect(screen.getByText(/Stage 19 accepted_accuracy/i)).toBeInTheDocument();
-    expect(screen.getByText(/Verifier source: stage19_verification_stack\+stage20_generation_readiness/i)).toBeInTheDocument();
-  });
-
-  it('keeps navigation links available', () => {
-    renderPage();
-
-    expect(screen.getByRole('link', { name: 'Open Atlas cockpit' })).toHaveAttribute(
-      'href',
-      '/cockpit',
-    );
+    expect(screen.getByText('Proof chips ready: 6/6')).toBeInTheDocument();
+    expect(screen.getByText('Confidence: 98%')).toBeInTheDocument();
+    expect(
+      screen.getByRole('note', { name: /Stage 19 accepted the row and Stage 20 readiness action is allow/i }),
+    ).toBeInTheDocument();
   });
 });

@@ -3,7 +3,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { ModelConnectionCard } from './ModelConnectionCard';
 
 describe('ModelConnectionCard', () => {
-  it('renders connection details and disables Run audit while disconnected', () => {
+  it('keeps disconnected connection details hidden and disables Run audit', () => {
     render(
       <ModelConnectionCard
         status="disconnected"
@@ -15,7 +15,7 @@ describe('ModelConnectionCard', () => {
 
     expect(screen.getByText('Model connection')).toBeInTheDocument();
     expect(screen.getByText('Not connected')).toBeInTheDocument();
-    expect(screen.getByText('Pythia 160M')).toBeInTheDocument();
+    expect(screen.queryByText('Pythia 160M')).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeDisabled();
   });
 

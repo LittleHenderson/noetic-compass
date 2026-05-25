@@ -8,7 +8,9 @@ describe('AuditSessionProgress', () => {
 
     expect(screen.getByRole('heading', { name: 'Running CAS audit' })).toBeInTheDocument();
     expect(
-      screen.getByText('The selected CAS modules are evaluating the model output.'),
+      screen.getByRole('note', {
+        name: 'The selected CAS modules are evaluating the model output.',
+      }),
     ).toBeInTheDocument();
     const steps = screen.getByLabelText('Audit lifecycle steps');
     expect(within(steps).getByText('Validating model')).toBeInTheDocument();
@@ -22,7 +24,9 @@ describe('AuditSessionProgress', () => {
 
     expect(screen.getByRole('heading', { name: 'Runner pending' })).toBeInTheDocument();
     expect(
-      screen.getByText('The backend accepted the session, but no final CAS verdict was computed.'),
+      screen.getByRole('note', {
+        name: 'The backend accepted the session, but no final CAS verdict was computed.',
+      }),
     ).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Audit complete' })).not.toBeInTheDocument();
   });
@@ -32,7 +36,9 @@ describe('AuditSessionProgress', () => {
 
     expect(screen.getByRole('heading', { name: 'Evidence packet pending' })).toBeInTheDocument();
     expect(
-      screen.getByText('The run has produced audit data and is assembling the packet.'),
+      screen.getByRole('note', {
+        name: 'The run has produced audit data and is assembling the packet.',
+      }),
     ).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Audit complete' })).not.toBeInTheDocument();
   });
@@ -46,7 +52,11 @@ describe('AuditSessionProgress', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Audit failed' })).toBeInTheDocument();
-    expect(screen.getByText('Do not use a verdict from this failed run.')).toBeInTheDocument();
+    expect(
+      screen.getByRole('note', {
+        name: 'Do not use a verdict from this failed run.',
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Worker returned atlas_live_worker_auth_failed.',
     );

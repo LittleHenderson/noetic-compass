@@ -46,9 +46,18 @@ describe('AuditVerdictExplainer', () => {
     );
 
     expect(screen.getByText(/Accepted because the verifier explicitly allowed it/i)).toBeInTheDocument();
-    expect(screen.getByText(/CAS accepted this output because the verifier allowed it and 6\/6/i)).toBeInTheDocument();
-    expect(screen.getByText(/Stage 19 accepted_accuracy/i)).toBeInTheDocument();
-    expect(screen.getByText(/Verifier source: stage19_verification_stack\+stage20_generation_readiness/i)).toBeInTheDocument();
+    expect(screen.getByText('Proof chips ready: 6/6')).toBeInTheDocument();
+    expect(screen.getByText('Confidence: 98%')).toBeInTheDocument();
+    expect(
+      screen.getByRole('note', {
+        name: /CAS accepted this output because the verifier allowed it and 6\/6/i,
+      }),
+    ).toHaveAccessibleName(/Stage 19 accepted_accuracy/i);
+    expect(
+      screen.getByRole('note', {
+        name: /Verifier source: stage19_verification_stack\+stage20_generation_readiness/i,
+      }),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText('Required proof chips passed 6 of 6')).toBeInTheDocument();
   });
 
@@ -68,8 +77,10 @@ describe('AuditVerdictExplainer', () => {
     );
 
     expect(screen.getByText(/Suppressed because the verifier rejected the row/i)).toBeInTheDocument();
-    expect(screen.getByText(/Stage 20 risk_score/i)).toBeInTheDocument();
-    expect(screen.getByText(/Current confidence:/)).toHaveTextContent('90%');
+    expect(screen.getByText('Confidence: 90%')).toBeInTheDocument();
+    expect(
+      screen.getByRole('note', { name: /Stage 20 risk_score/i }),
+    ).toBeInTheDocument();
   });
 
   it('explains human review when proof chips are missing', () => {
@@ -86,8 +97,13 @@ describe('AuditVerdictExplainer', () => {
     );
 
     expect(screen.getByText(/Flagged because required proof is missing/i)).toBeInTheDocument();
-    expect(screen.getByText(/CAS flagged this for human review because 1\/6 required proof chips/i)).toBeInTheDocument();
-    expect(screen.getByText(/Confidence source: none/i)).toBeInTheDocument();
-    expect(screen.getAllByText(/control_proof/i).length).toBeGreaterThan(0);
+    expect(screen.getByText('Proof chips ready: 5/6')).toBeInTheDocument();
+    expect(screen.getByText('Confidence: not available')).toBeInTheDocument();
+    expect(
+      screen.getByRole('note', {
+        name: /CAS flagged this for human review because 1\/6 required proof chips/i,
+      }),
+    ).toHaveAccessibleName(/Confidence source: none/i);
+    expect(screen.getByText('Control proof')).toBeInTheDocument();
   });
 });

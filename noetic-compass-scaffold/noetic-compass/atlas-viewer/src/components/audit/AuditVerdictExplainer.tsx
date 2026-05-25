@@ -1,6 +1,5 @@
 import type { CSSProperties } from 'react';
 import {
-  ACCENT_AMBER,
   ACCENT_TEAL,
   COLORS,
   FONT_FAMILY,
@@ -12,7 +11,6 @@ import type {
   ProvenanceChipId,
   VerifierDecision,
 } from '../../lib/casHarnessAudit';
-import { AuditTerm } from './AuditTerm';
 
 export interface AuditVerdictExplainerProps {
   verdict?: AuditVerdict | null;
@@ -58,23 +56,17 @@ const headlineStyle: CSSProperties = {
   fontWeight: 850,
 };
 
-const bodyStyle: CSSProperties = {
-  margin: 0,
-  color: COLORS.textSecondary,
-  fontSize: 13,
-  lineHeight: 1.55,
-};
-
 const proofGridStyle: CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
   gap: 8,
 };
 
 const proofRowStyle = (state: 'pass' | 'blocked' | 'unknown'): CSSProperties => ({
-  minHeight: 92,
+  minHeight: 54,
   padding: 10,
   borderRadius: 6,
+  cursor: 'help',
   border:
     state === 'pass'
       ? '1px solid rgba(45, 212, 191, 0.30)'
@@ -120,28 +112,30 @@ const statusPillStyle = (state: 'pass' | 'blocked' | 'unknown'): CSSProperties =
   textTransform: 'uppercase',
 });
 
-const proofTextStyle: CSSProperties = {
-  margin: '7px 0 0 0',
-  color: COLORS.textSecondary,
-  fontSize: 12,
-  lineHeight: 1.45,
-};
-
-const decisionBoxStyle: CSSProperties = {
-  display: 'grid',
-  gap: 6,
-  padding: 12,
-  borderRadius: 6,
-  border: '1px solid rgba(255, 255, 255, 0.07)',
-  background: 'rgba(2, 6, 23, 0.28)',
-};
-
-const sourceStyle: CSSProperties = {
+const compactLineStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: 8,
   margin: 0,
-  color: COLORS.textMuted,
+  color: COLORS.textSecondary,
+  fontSize: 13,
+  lineHeight: 1.4,
+};
+
+const infoTipStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: 22,
+  height: 22,
+  borderRadius: 5,
+  border: '1px solid rgba(45, 212, 191, 0.24)',
+  background: 'rgba(45, 212, 191, 0.07)',
+  color: '#ccfbf1',
+  cursor: 'help',
   fontSize: 12,
-  lineHeight: 1.45,
-  fontFamily: FONT_MONO,
+  fontWeight: 900,
 };
 
 function chipState(chip: ProvenanceChip | undefined): 'pass' | 'blocked' | 'unknown' {
@@ -233,38 +227,15 @@ function customerSentence(
   return `Tell the user: CAS flagged this for human review because ${blocked}/6 required proof chips were not pass-ready or the verifier requested review.`;
 }
 
-function chipMeaning(id: ProvenanceChipId): JSX.Element {
-  switch (id) {
-    case 'model_proof':
-      return <>Which exact model or weight artifact was audited.</>;
-    case 'cas_readout':
-      return <>CAS found the model-internal signal it is judging.</>;
-    case 'causal_proof':
-      return (
-        <>
-          <AuditTerm term="ablation">Ablation</AuditTerm> or intervention shows the
-          CAS direction matters.
-        </>
-      );
-    case 'control_proof':
-      return (
-        <>
-          <AuditTerm term="matchedControl">Matched controls</AuditTerm> and{' '}
-          <AuditTerm term="baseline">baselines</AuditTerm> did not explain the
-          same effect.
-        </>
-      );
-    case 'output_proof':
-      return <>The verdict is tied to observed model output.</>;
-    case 'packet_proof':
-      return (
-        <>
-          The audit trail is attached to an{' '}
-          <AuditTerm term="evidencePacket">Evidence Packet</AuditTerm>.
-        </>
-      );
-  }
-}
+const CHIP_MEANING_TEXT: Record<ProvenanceChipId, string> = {
+  model_proof: 'Which exact model or weight artifact was audited.',
+  cas_readout: 'CAS found the model-internal signal it is judging.',
+  causal_proof: 'Ablation or intervention shows the CAS direction matters.',
+  control_proof:
+    'Matched controls and baselines did not explain the same effect.',
+  output_proof: 'The verdict is tied to observed model output.',
+  packet_proof: 'The audit trail is attached to an Evidence Packet.',
+};
 
 export function AuditVerdictExplainer({
   verdict = null,
@@ -275,9 +246,23 @@ export function AuditVerdictExplainer({
 }: AuditVerdictExplainerProps): JSX.Element {
   const byId = new Map(chips.map((chip) => [chip.id, chip]));
   const { passed } = proofSummary(chips);
+  const confidenceText = confidencePercent(confidence);
+  const decisionHelp = [
+    customerSentence(verdict, chips),
+    `${confidenceSource(verdict, confidence)} Current confidence: ${confidenceText}.`,
+    verifierDecision ? verifierDecision.reason : lifecycleMessage,
+    verifierDecision ? `Verifier source: ${verifierDecision.source}` : null,
+    'Rule: the UI does not create verdicts. It only explains what the backend runner returned after checking the Evidence Packet and proof chips.',
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
-    <section style={shellStyle} aria-labelledby="audit-verdict-explainer-heading">
+    <section
+      style={shellStyle}
+      aria-labelledby="audit-verdict-explainer-heading"
+      title={decisionHelp}
+    >
       <div>
         <p style={eyebrowStyle}>Why this verdict happened</p>
         <h2 id="audit-verdict-explainer-heading" style={headlineStyle}>
@@ -285,43 +270,35 @@ export function AuditVerdictExplainer({
         </h2>
       </div>
 
-      <div style={decisionBoxStyle}>
-        <p style={bodyStyle}>{customerSentence(verdict, chips)}</p>
-        <p style={bodyStyle}>
-          {confidenceSource(verdict, confidence)} Current confidence:{' '}
-          <strong style={{ color: COLORS.textPrimary }}>{confidencePercent(confidence)}</strong>.
-        </p>
-        {verifierDecision ? (
-          <>
-            <p style={bodyStyle}>{verifierDecision.reason}</p>
-            <p style={sourceStyle}>Verifier source: {verifierDecision.source}</p>
-          </>
-        ) : lifecycleMessage ? (
-          <p style={bodyStyle}>{lifecycleMessage}</p>
-        ) : null}
-      </div>
+      <p style={compactLineStyle}>
+        <span>Proof chips ready: {passed}/6</span>
+        <span>Confidence: {confidenceText}</span>
+        <span
+          aria-label={decisionHelp}
+          role="note"
+          style={infoTipStyle}
+          tabIndex={0}
+          title={decisionHelp}
+        >
+          ?
+        </span>
+      </p>
 
       <div style={proofGridStyle} aria-label={`Required proof chips passed ${passed} of 6`}>
         {REQUIRED_ORDER.map((id) => {
           const chip = byId.get(id);
           const state = chipState(chip);
+          const chipHelp = `${CHIP_MEANING_TEXT[id]} ${chip?.detail ?? 'No evidence attached yet.'}`;
           return (
-            <article key={id} style={proofRowStyle(state)}>
+            <article key={id} style={proofRowStyle(state)} title={chipHelp}>
               <div style={proofNameStyle}>
                 <span>{chip?.name ?? id}</span>
                 <span style={statusPillStyle(state)}>{chipStatusLabel(chip)}</span>
               </div>
-              <p style={proofTextStyle}>{chipMeaning(id)}</p>
-              <p style={proofTextStyle}>{chip?.detail ?? 'No evidence attached yet.'}</p>
             </article>
           );
         })}
       </div>
-
-      <p style={{ ...bodyStyle, color: ACCENT_AMBER }}>
-        Rule: the UI does not create verdicts. It only explains what the backend
-        runner returned after checking the Evidence Packet and proof chips.
-      </p>
     </section>
   );
 }

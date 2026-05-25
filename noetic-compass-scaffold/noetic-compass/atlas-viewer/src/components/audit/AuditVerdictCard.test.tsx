@@ -37,4 +37,14 @@ describe('AuditVerdictCard', () => {
     expect(openPacket).toHaveBeenCalledTimes(1);
     expect(inspect).toHaveBeenCalledTimes(1);
   });
+
+  it('does not print empty packet metadata before an evidence packet exists', () => {
+    render(<AuditVerdictCard />);
+
+    expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
+    expect(screen.queryByText('Evidence Packet')).not.toBeInTheDocument();
+    expect(screen.queryByText('Evidence count')).not.toBeInTheDocument();
+    expect(screen.queryByText('Not created')).not.toBeInTheDocument();
+    expect(screen.queryByText('Not available')).not.toBeInTheDocument();
+  });
 });
