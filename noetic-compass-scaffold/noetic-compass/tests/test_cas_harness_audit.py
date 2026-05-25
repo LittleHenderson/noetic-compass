@@ -232,6 +232,38 @@ def test_run_route_advances_lifecycle_without_inventing_verdict(client, auth_hea
     assert status.json() == body
 
 
+def test_run_route_flags_attached_packet_when_required_proof_is_incomplete(client, auth_headers):
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "evidence_packet_trace_id": "dev_example_001",
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] is None
+    assert body["evidence_packet_trace_id"] == "dev_example_001"
+    assert body["atlas_deep_link"] == "/cockpit?trace_id=dev_example_001"
+    assert [event["status"] for event in body["lifecycle"]] == [
+        "DRAFT",
+        "VALIDATING",
+        "RUNNING",
+        "COMPLETE",
+    ]
+    assert "missing required proof" in body["lifecycle"][-1]["message"]
+
+
 def test_list_route_returns_in_process_sessions(client, auth_headers):
     first_payload = _valid_payload()
     second_payload = {
