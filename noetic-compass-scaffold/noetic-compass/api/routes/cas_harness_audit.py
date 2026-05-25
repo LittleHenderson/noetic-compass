@@ -20,6 +20,7 @@ from api.services.cas_harness_audit_sessions import (
     run_session,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.cas_harness_verifier_decision_adapter import verifier_decision_from_packet
 
 
 router = APIRouter(prefix="/api/cas-harness/audit", tags=["cas_harness_audit"])
@@ -143,7 +144,7 @@ async def create_audit_session(req: AuditSessionRequest) -> AuditSessionResponse
     """Validate the CAS Harness audit contract and create a stored M1 session."""
     payload = req.model_dump(mode="json")
     if req.evidence_packet_trace_id:
-        payload["provenance_chips"] = _proof_chips_for_evidence_trace(req.evidence_packet_trace_id)
+        payload.update(_audit_evidence_for_trace(req.evidence_packet_trace_id))
     return AuditSessionResponse.model_validate(create_session(payload).to_dict())
 
 
@@ -172,11 +173,18 @@ async def list_audit_sessions() -> AuditSessionListResponse:
     return AuditSessionListResponse(sessions=sessions)
 
 
-def _proof_chips_for_evidence_trace(trace_id: str) -> list[dict[str, str]]:
+def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
     try:
         packet = build_packet_for_trace(trace_id)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail=f"Evidence Packet trace_id not found: {trace_id}")
 
-    bridge = normalize_evidence_packet_for_audit(packet.model_dump(mode="json"))
-    return [chip.to_dict() for chip in bridge.chips]
+    packet_payload = packet.model_dump(mode="json")
+    bridge = normalize_evidence_packet_for_audit(packet_payload)
+    payload: dict[str, object] = {
+        "provenance_chips": [chip.to_dict() for chip in bridge.chips],
+    }
+    verifier_decision = verifier_decision_from_packet(packet_payload)
+    if verifier_decision is not None:
+        payload["verifier_decision"] = verifier_decision.to_dict()
+    return payload

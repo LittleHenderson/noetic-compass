@@ -61,6 +61,7 @@ class AuditSessionRecord:
     evidence_packet_trace_id: str | None = None
     atlas_deep_link: str | None = None
     provenance_chips: list[dict[str, str]] = field(default_factory=list)
+    verifier_decision: dict[str, Any] | None = None
     lifecycle: list[AuditLifecycleEvent] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
@@ -101,6 +102,11 @@ def create_session(payload: dict[str, Any]) -> AuditSessionRecord:
             updated_at=now,
             evidence_packet_trace_id=payload.get("evidence_packet_trace_id"),
             atlas_deep_link=_atlas_deep_link(payload.get("evidence_packet_trace_id")),
+            verifier_decision=(
+                dict(payload["verifier_decision"])
+                if isinstance(payload.get("verifier_decision"), dict)
+                else None
+            ),
             provenance_chips=(
                 list(payload["provenance_chips"])
                 if isinstance(payload.get("provenance_chips"), list)
@@ -153,6 +159,7 @@ def run_session(audit_id: str) -> AuditSessionRecord | None:
         result = run_evidence_gated_verdict(
             evidence_packet_trace_id=record.evidence_packet_trace_id,
             proof_chips=record.provenance_chips,
+            explicit_verifier_decision=record.verifier_decision,
         )
         record.verdict = result.verdict
         record.confidence = result.confidence
