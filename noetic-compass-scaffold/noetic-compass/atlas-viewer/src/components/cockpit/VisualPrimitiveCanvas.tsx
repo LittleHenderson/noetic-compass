@@ -172,6 +172,7 @@ export function VisualPrimitiveCanvas(
     width: '100%',
     maxWidth: '100%',
     aspectRatio: `${aspectRatio}`,
+    minHeight: 160,
     overflow: 'hidden',
     borderRadius: GLASS_RADIUS,
   };

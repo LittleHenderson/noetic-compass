@@ -257,6 +257,12 @@ export type LiveTraceEvent =
       mode7_attribution?: unknown[];
       confidence?: number | null;
       inversion_risk?: number | null;
+      verification_mode?: string | null;
+      verification_verdict?: string | null;
+      verification_threshold?: number | null;
+      verification_score?: number | null;
+      verification_score_source?: string | null;
+      verification_invalid_mode?: string | null;
     }
   | {
       type: 'word_spans';
@@ -319,6 +325,12 @@ export function appendLiveEvent(trace: ReplayTrace, event: LiveTraceEvent): Repl
     mode7_attribution: event.mode7_attribution ?? [],
     confidence: event.confidence ?? null,
     inversion_risk: event.inversion_risk ?? null,
+    verification_mode: event.verification_mode ?? null,
+    verification_verdict: event.verification_verdict ?? null,
+    verification_threshold: event.verification_threshold ?? null,
+    verification_score: event.verification_score ?? null,
+    verification_score_source: event.verification_score_source ?? null,
+    verification_invalid_mode: event.verification_invalid_mode ?? null,
   };
 
   const tokens = [...trace.tokens];

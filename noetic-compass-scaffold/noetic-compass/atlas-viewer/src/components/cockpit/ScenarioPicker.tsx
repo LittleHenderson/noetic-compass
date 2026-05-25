@@ -149,7 +149,7 @@ export default function ScenarioPicker({
             type="button"
           >
             <strong>
-              {scenario.id} · {scenario.expectedCasAxes.drive} · {scenario.difficulty}
+              {scenario.id} - {scenario.expectedCasAxes.drive} - {scenario.difficulty}
             </strong>
             <p>{scenario.prompt}</p>
             <small>{scenario.purpose}</small>

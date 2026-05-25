@@ -34,6 +34,10 @@ import HelpOverlay from './HelpOverlay';
 import CasBaselineEvidencePanel from './CasBaselineEvidencePanel';
 import BlindspotsPanel from './BlindspotsPanel';
 import NeuralNetLegend from './NeuralNetLegend';
+import LiveProofPanel, {
+  type LiveProofConnectionState,
+} from './LiveProofPanel';
+import ScenarioPicker from './ScenarioPicker';
 import { parseDriveClassKey } from '../../lib/driveTranslations';
 import {
   bandForConfidence,
@@ -46,10 +50,12 @@ import {
   LIVE_WORKER_METHODS,
   type TestingMethod,
 } from '../../lib/testingMethods';
+import { buildLiveSessionEvidence } from '../../lib/liveSessionEvidence';
 import type {
   LiveMethodControls,
   LiveMethodId,
 } from '../../lib/liveMethodControls';
+import type { AlphaScenario } from '../../lib/alphaScenarios';
 import {
   primitivesForStep,
   type EvidenceRef,
@@ -60,6 +66,8 @@ import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { parseCoord } from '../../lib/neuronCover';
 import {
   normaliseCoverMember,
+  type CreateLiveSessionResponse,
+  type LiveManifest,
   type LiveRealModeProof,
 } from '../../lib/atlasLiveApi';
 import { GlassPanel } from '../ui/GlassPanel';
@@ -105,6 +113,11 @@ export interface AtlasViewerShellProps {
   liveProof?: LiveRealModeProof | null;
   liveProofChecking?: boolean;
   liveError?: string | null;
+  liveSession?: CreateLiveSessionResponse | null;
+  liveManifest?: LiveManifest | null;
+  liveEventCount?: number;
+  liveLastEventAt?: string | null;
+  liveCompleteTotalTokens?: number | null;
   onStartLive?: (controls: LiveMethodControls) => void;
   onRefreshLiveProof?: () => void;
   onLiveControlsChange?: (controls: LiveMethodControls) => void;
@@ -359,19 +372,6 @@ const proofBadgeStyle = (connected: boolean | null): CSSProperties => ({
   fontFamily: THEME.fontFamily,
 });
 
-const proofRefreshButtonStyle: CSSProperties = {
-  margin: 0,
-  padding: '1px 6px',
-  borderRadius: 4,
-  border: '1px solid rgba(255, 255, 255, 0.18)',
-  background: 'rgba(15, 23, 42, 0.55)',
-  color: 'inherit',
-  cursor: 'pointer',
-  fontSize: 10,
-  fontWeight: 700,
-  fontFamily: THEME.fontFamily,
-};
-
 function defaultValueForKnob(knob: { type: string; default: unknown }): KnobValue {
   if (knob.type === 'multiselect') {
     return Array.isArray(knob.default) ? [...(knob.default as string[])] : [];
@@ -467,6 +467,11 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     liveProof = null,
     liveProofChecking = false,
     liveError = null,
+    liveSession = null,
+    liveManifest = null,
+    liveEventCount = 0,
+    liveLastEventAt = null,
+    liveCompleteTotalTokens = null,
     onStartLive,
     onRefreshLiveProof,
     onLiveControlsChange,
@@ -499,6 +504,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const [selectedSpatialTraceId, setSelectedSpatialTraceId] = useState<string>(
     spatialEvidence.trace_id,
   );
+  const [selectedAlphaScenario, setSelectedAlphaScenario] =
+    useState<AlphaScenario | null>(null);
   const [enabledMethodIds, setEnabledMethodIds] = useState<Set<string>>(
     () => new Set(methods.map((m) => m.id)),
   );
@@ -731,10 +738,13 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       verificationMode,
       showBlindspots,
       showActiveTrace,
+      prompt: selectedAlphaScenario?.prompt ?? activeSpatialEvidence.scenario_sentence,
     };
   }, [
+    activeSpatialEvidence.scenario_sentence,
     enabledMethodIds,
     knobValues,
+    selectedAlphaScenario?.prompt,
     verificationMode,
     showBlindspots,
     showActiveTrace,
@@ -1021,10 +1031,93 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     `model_loaded: ${String(liveProof?.model_loaded ?? false)}\n` +
     `load_error: ${liveProof?.load_error ?? 'null'}\n` +
     `checked: ${proofCheckedAt}`;
+  const liveProofConnectionState: LiveProofConnectionState = liveProofChecking
+    ? 'checking'
+    : liveStatus === 'error'
+      ? liveProof?.http_status === 503
+        ? 'unavailable'
+        : 'failed'
+      : liveStatus;
+  const liveMethodConfigForEvidence = useMemo(
+    () => ({
+      enabled_methods: liveControls.enabledMethodIds,
+      knobs: liveControls.knobValues as Record<string, Record<string, unknown>>,
+      overlays: {
+        show_active_trace: liveControls.showActiveTrace,
+        show_blindspots: liveControls.showBlindspots,
+      },
+      verification_mode: liveControls.verificationMode,
+    }),
+    [liveControls],
+  );
+  const handleOpenLiveEvidence = useCallback(() => {
+    const summary = buildLiveSessionEvidence({
+      runtimeMode,
+      realModeProof: liveProof,
+      sessionId: liveSession?.session_id ?? null,
+      modelId,
+      manifest: liveManifest,
+      tokenEventCount: runtimeMode === 'live' ? tokens.length : state.tokenCount,
+      completeTotalTokens: liveCompleteTotalTokens,
+      methodConfig: liveMethodConfigForEvidence,
+      resolvedKnobs,
+      sessionResponse: liveSession ? { ...liveSession } : null,
+      streamUrl: liveSession?.stream_url ?? null,
+      failureReason: liveError,
+      checkedAt: liveProof?.checked_at ?? null,
+      extra: {
+        eventCount: liveEventCount,
+        lastEventAt: liveLastEventAt,
+        selectedScenarioId: selectedAlphaScenario?.id ?? null,
+        selectedScenarioPrompt: selectedAlphaScenario?.prompt ?? null,
+      },
+    });
+    openDrawer({
+      source: 'other',
+      title: 'LIVE proof evidence',
+      evidence_ref: {
+        schema: summary.schema,
+        kind: summary.kind,
+        status: summary.status,
+        session_id: summary.sessionId,
+        trace_id: summary.traceId,
+      },
+      detail: summary,
+    });
+  }, [
+    liveCompleteTotalTokens,
+    liveError,
+    liveEventCount,
+    liveLastEventAt,
+    liveManifest,
+    liveMethodConfigForEvidence,
+    liveProof,
+    liveSession,
+    modelId,
+    openDrawer,
+    resolvedKnobs,
+    runtimeMode,
+    selectedAlphaScenario?.id,
+    selectedAlphaScenario?.prompt,
+    state.tokenCount,
+    tokens.length,
+  ]);
   const tokenTextNow = tokens[currentTokenIndex]?.token ?? '';
   const inversionRiskNow =
     typeof currentFrame?.inversion_risk === 'number'
       ? currentFrame.inversion_risk
+      : null;
+  const verificationVerdictNow =
+    typeof currentFrame?.verification_verdict === 'string'
+      ? currentFrame.verification_verdict
+      : null;
+  const verificationScoreNow =
+    typeof currentFrame?.verification_score === 'number'
+      ? currentFrame.verification_score
+      : null;
+  const verificationScoreSource =
+    typeof currentFrame?.verification_score_source === 'string'
+      ? currentFrame.verification_score_source
       : null;
   const narrationStyle: CSSProperties = {
     display: 'flex',
@@ -1157,17 +1250,6 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
           >
             {proofReason}
           </span>
-          {onRefreshLiveProof ? (
-            <button
-              type="button"
-              style={proofRefreshButtonStyle}
-              onClick={onRefreshLiveProof}
-              disabled={liveProofChecking}
-              data-testid="live-proof-refresh"
-            >
-              Refresh proof
-            </button>
-          ) : null}
         </span>
         <span style={demoBadgeStyle} title="Spatial primitives below are demo fixtures until the live vision-grounding wire-up lands (roadmap item #6 + #8)">
           <span style={demoDotStyle} />
@@ -1192,6 +1274,26 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
               title="Live Inversion Scan output from the worker for this token. This is a runtime proxy, not the full semantic inversion theorem."
             >
               inversion risk {inversionRiskNow.toFixed(2)}
+            </span>
+          </>
+        ) : null}
+        {verificationVerdictNow ? (
+          <>
+            <span style={narrationKeyStyle}>|</span>
+            <span
+              style={{
+                color:
+                  verificationVerdictNow === 'ACCEPT'
+                    ? '#86efac'
+                    : verificationVerdictNow === 'SUPPRESS'
+                      ? '#fb7185'
+                      : '#fde68a',
+                fontFamily: THEME.fontMono,
+              }}
+              title={`Live Verification Stack output for this token. Mode: ${currentFrame?.verification_mode ?? verificationMode}. Score source: ${verificationScoreSource ?? 'not reported'}.`}
+            >
+              verifier {verificationVerdictNow.toLowerCase()}
+              {verificationScoreNow !== null ? ` ${verificationScoreNow.toFixed(2)}` : ''}
             </span>
           </>
         ) : null}
@@ -1324,6 +1426,10 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
                         : 'Scrub forward to reach a grounded step'
                     }
                   />
+                  <ScenarioPicker
+                    selectedId={selectedAlphaScenario?.id}
+                    onSelect={setSelectedAlphaScenario}
+                  />
                 </>
               ) : (
                 <div
@@ -1373,6 +1479,44 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         >
           <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
             <div style={rightCardInnerStyle}>
+              <LiveProofPanel
+                connectionState={liveProofConnectionState}
+                modelId={modelId}
+                proof={
+                  liveProof
+                    ? {
+                        verdict: liveProof.verdict,
+                        httpStatus: liveProof.http_status,
+                        isRealModel: liveProof.is_real_model,
+                        modelLoaded: liveProof.model_loaded,
+                        fakeRuntimeEnv: liveProof.fake_runtime_env,
+                        manifestIsRealModel: liveProof.manifest_is_real_model,
+                        loadError: liveProof.load_error,
+                        checkedAt: liveProof.checked_at,
+                        workerVersion: liveProof.worker_version,
+                      }
+                    : null
+                }
+                manifest={
+                  liveManifest
+                    ? {
+                        isRealModel: liveManifest.is_real_model,
+                        modelId: liveManifest.model_id,
+                        workerVersion: liveManifest.worker_version,
+                      }
+                    : null
+                }
+                stream={{
+                  streamTokenIssued: liveSession ? Boolean(liveSession.stream_token) : null,
+                  tokenCount: runtimeMode === 'live' ? tokens.length : null,
+                  currentTokenIndex: runtimeMode === 'live' ? currentTokenIndex : null,
+                  eventCount: liveEventCount,
+                  lastEventAt: liveLastEventAt,
+                }}
+                failureReason={liveError}
+                onRefreshProof={onRefreshLiveProof}
+                onOpenEvidence={handleOpenLiveEvidence}
+              />
               <BlindspotsPanel
                 perClassNeuronCovers={rawCovers as
                   | Record<string, Parameters<typeof normaliseCoverMember>[0][]>

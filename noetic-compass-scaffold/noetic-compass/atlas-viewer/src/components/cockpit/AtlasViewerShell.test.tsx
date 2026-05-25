@@ -253,6 +253,20 @@ describe('AtlasViewerShell — method knobs wiring', () => {
     });
   });
 
+  it('uses the selected alpha scenario prompt for LIVE runs', () => {
+    const onStartLive = vi.fn();
+    renderShell({ onStartLive });
+
+    fireEvent.click(screen.getByTestId('scenario-option-alpha_05'));
+    fireEvent.click(screen.getByTestId('runtime-live'));
+
+    expect(onStartLive).toHaveBeenCalledTimes(1);
+    expect(onStartLive.mock.calls[0][0]).toMatchObject({
+      prompt:
+        'What is the relationship between freedom and responsibility? Can you have one without the other?',
+    });
+  });
+
   it('does not report a live controls change when only the callback prop changes', () => {
     const firstCallback = vi.fn();
     const secondCallback = vi.fn();
@@ -323,6 +337,53 @@ describe('AtlasViewerShell — LIVE provenance badge', () => {
     renderShell({ onRefreshLiveProof });
     fireEvent.click(screen.getByTestId('live-proof-refresh'));
     expect(onRefreshLiveProof).toHaveBeenCalledTimes(1);
+  });
+
+  it('opens sanitized live proof evidence from the proof panel', () => {
+    renderShell({
+      runtimeMode: 'live',
+      liveStatus: 'streaming',
+      liveVerified: true,
+      liveSession: {
+        session_id: 'live-session-1',
+        mode: 'live',
+        model_id: 'EleutherAI/pythia-160m',
+        stream_url: '/atlas/live/session/live-session-1/events?stream_token=secret',
+        stream_token: 'secret',
+      },
+      liveManifest: {
+        model_id: 'EleutherAI/pythia-160m',
+        worker_version: 'm2-real-pythia',
+        is_real_model: true,
+      },
+      liveProof: {
+        verdict: 'REAL_PYTHIA_WEIGHTS_LOADED',
+        is_real_model: true,
+        model_loaded: true,
+        load_error: null,
+        fake_runtime_env: false,
+        manifest_is_real_model: true,
+        model_id: 'EleutherAI/pythia-160m',
+        worker_version: 'm2-real-pythia',
+        http_status: 200,
+        checked_at: '2026-05-25T09:00:00.000Z',
+      },
+    });
+
+    fireEvent.click(screen.getByTestId('live-proof-open-evidence'));
+
+    expect(screen.getByTestId('evidence-drawer').getAttribute('data-open')).toBe(
+      'true',
+    );
+    expect(screen.getByTestId('evidence-drawer-detail-json').textContent).toContain(
+      'atlas_live_session_evidence_v0',
+    );
+    expect(screen.getByTestId('evidence-drawer-detail-json').textContent).toContain(
+      '[redacted]',
+    );
+    expect(screen.getByTestId('evidence-drawer-detail-json').textContent).not.toContain(
+      'secret',
+    );
   });
 });
 
