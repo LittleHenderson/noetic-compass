@@ -280,8 +280,16 @@ export function NeuralNetScene({
     setActiveDetachedLayer(layer);
   };
 
-  detachLayerRef.current = (layer: number) => {
+  const toggleLayerDetach = (layer: number) => {
+    if (detachedLayers.includes(layer)) {
+      snapLayerHome(layer);
+      return;
+    }
     detachLayer(layer);
+  };
+
+  detachLayerRef.current = (layer: number) => {
+    toggleLayerDetach(layer);
   };
 
   useEffect(() => {
@@ -1113,7 +1121,7 @@ export function NeuralNetScene({
     right: 14,
     top: 14,
     zIndex: 4,
-    width: 184,
+    width: 220,
   };
 
   const layerCardRailStyle: CSSProperties = {
@@ -1142,10 +1150,35 @@ export function NeuralNetScene({
     fontWeight: 700,
   };
 
+  const dockLayerGridStyle: CSSProperties = {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(6, 1fr)',
+    gap: 4,
+    marginTop: 8,
+  };
+
+  const dockLayerButtonStyle: CSSProperties = {
+    minHeight: 22,
+    borderRadius: 5,
+    border: '1px solid rgba(148, 163, 184, 0.22)',
+    background: 'rgba(15, 23, 42, 0.68)',
+    color: '#cbd5e1',
+    cursor: 'pointer',
+    fontSize: 10,
+    fontWeight: 800,
+    fontFamily: 'inherit',
+    padding: '2px 0',
+  };
+
   const activeDetached =
     activeDetachedLayer !== null && detachedLayers.includes(activeDetachedLayer)
       ? activeDetachedLayer
       : detachedLayers[detachedLayers.length - 1] ?? null;
+
+  const dockedLayerControls = Array.from(
+    { length: PYTHIA_N_LAYERS },
+    (_, layer) => layer,
+  ).filter((layer) => !detachedLayers.includes(layer));
 
   const layerActivityCount = (layer: number) =>
     currentFrame?.top_activated_neurons.filter((item) => item.layer === layer).length ?? 0;
@@ -1264,6 +1297,7 @@ export function NeuralNetScene({
                 }}
               >
                 The layer detaches; the remaining stack docks in the corner.
+                Double-click a detached layer again to snap it back.
               </span>
             </GlassPanel>
           </motion.div>
@@ -1302,8 +1336,25 @@ export function NeuralNetScene({
                 }}
               >
                 {PYTHIA_N_LAYERS - detachedLayers.length} layers docked · drag a
-                layer card here to snap home
+                layer card here to snap home · click a layer number to detach it
               </span>
+              {dockedLayerControls.length > 0 ? (
+                <div data-testid="layer-dock-buttons" style={dockLayerGridStyle}>
+                  {dockedLayerControls.map((layer) => (
+                    <button
+                      key={layer}
+                      type="button"
+                      data-testid={`layer-dock-detach-${layer}`}
+                      aria-label={`Detach layer ${layer}`}
+                      title={`Detach ${layerTitle(layer)} (${stackPlace(layer)} in stack)`}
+                      onClick={() => detachLayer(layer)}
+                      style={dockLayerButtonStyle}
+                    >
+                      {layer}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
               <button
                 type="button"
                 data-testid="layer-snap-all"
