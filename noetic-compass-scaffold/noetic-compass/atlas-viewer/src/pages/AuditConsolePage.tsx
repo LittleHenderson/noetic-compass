@@ -5,6 +5,7 @@ import { PageShell } from '../components/ui/PageShell';
 import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
 import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
+import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
 import { ProvenanceChips } from '../components/audit/ProvenanceChips';
 import {
@@ -48,10 +49,10 @@ const SELECTED_MODULES = [
 
 const M1_REFERENCE_TARGET: AuditTargetConfig = {
   modelId: 'EleutherAI/pythia-160m',
-  provider: 'CAS Harness M1 reference path',
+  provider: 'CAS Harness reference path',
   endpointLabel: '/api/cas-harness/audit/session',
   scenarioText:
-    'M1 audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
+    'Reference audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
 };
 
 const AUDIT_STEPS: AuditStep[] = [
@@ -192,9 +193,27 @@ function progressDetail(
     return 'Prepare a supported audit target before creating a backend session.';
   }
   if (status === 'runner_pending') {
-    return 'The backend created and ran the M1 lifecycle, then stopped honestly before verdict because the real audit runner is not wired yet.';
+    return 'The backend created the session, but no Evidence Packet is attached, so the verdict runner refused to compute a verdict.';
   }
   return null;
+}
+
+function latestLifecycleMessage(session: CasHarnessAuditSession | null): string | null {
+  if (!session || session.lifecycle.length === 0) return null;
+  return session.lifecycle[session.lifecycle.length - 1]?.message ?? null;
+}
+
+function verdictSummaryFor(session: CasHarnessAuditSession | null): string {
+  if (!session?.verdict) {
+    return 'No CAS audit verdict has been computed for this model yet. This prevents a demo confidence number from being mistaken for a real audit result.';
+  }
+  if (session.verdict === 'ACCEPT') {
+    return 'CAS accepted this output only after the Evidence Packet passed the required proof-chip gate and carried an explicit Stage 19/20/21 verifier decision.';
+  }
+  if (session.verdict === 'SUPPRESS') {
+    return 'CAS suppressed this output because the Evidence Packet passed the proof-chip gate and the explicit verifier decision said suppress.';
+  }
+  return 'CAS flagged this output because required proof was missing/failed, or the verifier decision required human review.';
 }
 
 const headingStyle: CSSProperties = {
@@ -337,6 +356,11 @@ const lowerGridStyle: CSSProperties = {
   marginTop: 16,
 };
 
+const verdictStackStyle: CSSProperties = {
+  display: 'grid',
+  gap: 16,
+};
+
 const sectionStyle: CSSProperties = {
   borderRadius: 8,
   border: '1px solid rgba(255, 255, 255, 0.07)',
@@ -477,8 +501,9 @@ export default function AuditConsolePage() {
               needs model-internal explanation.
             </p>
             <div style={framingStyle}>
-              Current state: product shell plus M1 API session lifecycle. No
-              final audit verdict is shown until a real audit runner computes it.
+              Current state: M3 evidence-gated sessions. The UI shows ACCEPT
+              or SUPPRESS only when the backend returns an explicit Stage
+              19/20/21 verifier decision from an Evidence Packet.
             </div>
           </div>
 
@@ -489,7 +514,7 @@ export default function AuditConsolePage() {
             endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
             statusDetail={
               isConfigured
-                ? 'M1 session target configured. This does not create a final verdict until the backend runner computes one.'
+                ? 'M3 session target configured. This does not create a final verdict until the backend has an Evidence Packet with explicit verifier fields.'
                 : 'Connect or configure a supported audit target before running a CAS Harness audit.'
             }
             lastChecked={session ? 'Backend session accepted' : undefined}
@@ -527,15 +552,15 @@ export default function AuditConsolePage() {
             </h2>
             <p style={verdictDetailStyle}>
               Run Audit stays disabled until a session target is configured.
-              Use the M1 reference target to exercise the real session
-              lifecycle without pretending a final audit verdict exists.
+              Use the reference target to exercise the real session lifecycle
+              without pretending a final audit verdict exists.
             </p>
             <button
               type="button"
               style={helperButtonStyle}
               onClick={connectReferenceTarget}
             >
-              Prepare M1 reference session
+              Prepare reference session
             </button>
           </section>
         ) : null}
@@ -551,12 +576,21 @@ export default function AuditConsolePage() {
         </section>
 
         <div style={lowerGridStyle}>
-          <AuditVerdictCard
-            verdict={session?.verdict ?? null}
-            confidence={session?.confidence ?? null}
-            summary="No CAS audit verdict has been computed for this model yet. This prevents a demo confidence number from being mistaken for a real audit result."
-            onInspectInAtlas={() => navigate('/cockpit')}
-          />
+          <div style={verdictStackStyle}>
+            <AuditVerdictCard
+              verdict={session?.verdict ?? null}
+              confidence={session?.confidence ?? null}
+              summary={verdictSummaryFor(session)}
+              onInspectInAtlas={() => navigate('/cockpit')}
+            />
+            <AuditVerdictExplainer
+              verdict={session?.verdict ?? null}
+              confidence={session?.confidence ?? null}
+              chips={sessionChips}
+              verifierDecision={session?.verifier_decision ?? null}
+              lifecycleMessage={latestLifecycleMessage(session)}
+            />
+          </div>
 
           <section style={sectionStyle} aria-labelledby="provenance-heading">
             <h2 id="provenance-heading" style={sectionHeadingStyle}>

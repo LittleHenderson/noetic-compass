@@ -4,6 +4,7 @@ import {
   type AuditVerdict,
   type ProvenanceChip,
   type ProvenanceChipId,
+  type VerifierDecision,
 } from './casHarnessAudit';
 
 const DEFAULT_BASE_URL = '/api/cas-harness/audit';
@@ -90,6 +91,7 @@ export interface CasHarnessAuditSession {
   evidence_packet_trace_id: string | null;
   atlas_deep_link: string | null;
   provenance_chips: ProvenanceChip[];
+  verifier_decision: VerifierDecision | null;
   lifecycle: CasHarnessAuditLifecycleEvent[];
 }
 
@@ -222,6 +224,7 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
   const chips = Array.isArray(raw.provenance_chips)
     ? raw.provenance_chips.map(parseProvenanceChip)
     : [];
+  const verifierDecision = parseNullableVerifierDecision(raw.verifier_decision);
   const lifecycle = Array.isArray(raw.lifecycle)
     ? raw.lifecycle.map(parseLifecycleEvent)
     : [];
@@ -245,6 +248,7 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
     evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
     atlas_deep_link: nullableString(raw.atlas_deep_link),
     provenance_chips: chips,
+    verifier_decision: verifierDecision,
     lifecycle,
   };
 }
@@ -372,6 +376,27 @@ function parseProvenanceChip(raw: unknown): ProvenanceChip {
     status: 'unavailable',
     statusLabel: STATUS_LABELS.unavailable,
     detail: requiredString(raw.value, 'provenance_chips[].value'),
+  };
+}
+
+function parseNullableVerifierDecision(raw: unknown): VerifierDecision | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness verifier decision was malformed');
+  }
+  const verdict = parseNullableVerdict(raw.verdict);
+  if (verdict === null) {
+    throw new CasHarnessAuditApiError('CAS Harness verifier decision verdict is required');
+  }
+  const confidence = parseNullableConfidence(raw.confidence);
+  if (confidence === null) {
+    throw new CasHarnessAuditApiError('CAS Harness verifier decision confidence is required');
+  }
+  return {
+    verdict,
+    confidence,
+    source: requiredString(raw.source, 'verifier_decision.source'),
+    reason: requiredString(raw.reason, 'verifier_decision.reason'),
   };
 }
 

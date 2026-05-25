@@ -96,6 +96,7 @@ describe('casHarnessAuditApi', () => {
     });
     expect(session.verdict).toBeNull();
     expect(session.confidence).toBeNull();
+    expect(session.verifier_decision).toBeNull();
     expect(fetchImpl).toHaveBeenCalledOnce();
     const [url, init] = fetchImpl.mock.calls[0];
     expect(url).toBe('/api/cas-harness/audit/session');
@@ -214,6 +215,38 @@ describe('casHarnessAuditApi', () => {
       verdict: 'ALLOW',
       confidence: 0.9,
     }))).toThrow(/Unsupported CAS Harness audit verdict/);
+  });
+
+  it('parses explicit verifier decision reason and source for UI explanation', () => {
+    const parsed = parseAuditSessionResponse(pendingSession({
+      status: 'COMPLETE',
+      verdict: 'ACCEPT',
+      confidence: 0.9816,
+      verifier_decision: {
+        verdict: 'ACCEPT',
+        confidence: 0.9816,
+        source: 'stage19_verification_stack+stage20_generation_readiness',
+        reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+      },
+    }));
+
+    expect(parsed.verifier_decision).toEqual({
+      verdict: 'ACCEPT',
+      confidence: 0.9816,
+      source: 'stage19_verification_stack+stage20_generation_readiness',
+      reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+    });
+  });
+
+  it('rejects malformed verifier decision instead of inventing explanation text', () => {
+    expect(() => parseAuditSessionResponse(pendingSession({
+      verifier_decision: {
+        verdict: 'ACCEPT',
+        confidence: null,
+        source: 'stage19',
+        reason: 'missing confidence',
+      },
+    }))).toThrow(/verifier decision confidence is required/);
   });
 
   it('rejects invalid confidence instead of coercing it', () => {

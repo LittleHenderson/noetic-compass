@@ -25,6 +25,13 @@ export interface ProvenanceChip {
   detail: string;
 }
 
+export interface VerifierDecision {
+  verdict: AuditVerdict;
+  confidence: number;
+  source: string;
+  reason: string;
+}
+
 export interface AuditRuntimeProof {
   verdict?: string | null;
   isRealModel?: boolean | null;
