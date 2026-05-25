@@ -387,9 +387,9 @@ export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
   {
     ...VERIFICATION_STACK,
     description:
-      'Sent to the live worker. Enables confidence-margin verification emitted with each live token; mode selection is not consumed by the current worker.',
-    reveals: 'The confidence margin available for each live token',
-    outputShape: 'Live confidence-margin values used by the cockpit badges',
+      'Sent to the live worker. Enables confidence-margin verification emitted with each live token; mode selection changes the worker verdict thresholds.',
+    reveals: 'Per-token verification verdict, threshold, and confidence-margin proxy',
+    outputShape: 'Per-token ACCEPT / SUPPRESS / FLAG table',
     knobs: [],
   },
 ];

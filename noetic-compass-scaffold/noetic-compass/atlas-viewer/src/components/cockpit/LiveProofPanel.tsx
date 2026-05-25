@@ -52,6 +52,7 @@ export interface LiveProofPanelProps {
   stream?: LiveStreamStatus | null;
   failureReason?: string | null;
   onRefreshProof?: () => void;
+  onOpenEvidence?: () => void;
 }
 
 const panelStyle: CSSProperties = {
@@ -323,6 +324,7 @@ export default function LiveProofPanel({
   stream,
   failureReason,
   onRefreshProof,
+  onOpenEvidence,
 }: LiveProofPanelProps): JSX.Element {
   const verified = proofVerified(proof);
   const visibleModelId = modelId ?? manifest?.modelId ?? 'not reported';
@@ -343,16 +345,28 @@ export default function LiveProofPanel({
           <p style={eyebrowStyle}>LIVE proof</p>
           <h2 style={titleStyle}>Is Atlas actually connected?</h2>
         </div>
-        {onRefreshProof ? (
-          <button
-            type="button"
-            onClick={onRefreshProof}
-            style={refreshButtonStyle}
-            data-testid="live-proof-refresh"
-          >
-            Recheck
-          </button>
-        ) : null}
+        <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          {onOpenEvidence ? (
+            <button
+              type="button"
+              onClick={onOpenEvidence}
+              style={refreshButtonStyle}
+              data-testid="live-proof-open-evidence"
+            >
+              Open evidence
+            </button>
+          ) : null}
+          {onRefreshProof ? (
+            <button
+              type="button"
+              onClick={onRefreshProof}
+              style={refreshButtonStyle}
+              data-testid="live-proof-refresh"
+            >
+              Recheck
+            </button>
+          ) : null}
+        </div>
       </div>
 
       <span style={statusStyle(toneFor(connectionState, verified))} data-testid="live-proof-status">

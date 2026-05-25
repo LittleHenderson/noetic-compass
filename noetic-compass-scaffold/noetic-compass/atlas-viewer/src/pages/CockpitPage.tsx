@@ -19,8 +19,10 @@ import {
   liveFailureMessage,
   liveProofFailureMessage,
   openLiveEventStream,
+  type CreateLiveSessionResponse,
   type LiveTraceEvent,
   type LiveEventStreamHandle,
+  type LiveManifest,
   type LiveRealModeProof,
   type ResolvedKnobs,
 } from '../lib/atlasLiveApi';
@@ -68,6 +70,13 @@ export default function CockpitPage(): JSX.Element {
   const [liveProof, setLiveProof] = useState<LiveRealModeProof | null>(null);
   const [liveProofChecking, setLiveProofChecking] = useState<boolean>(false);
   const [resolvedKnobs, setResolvedKnobs] = useState<ResolvedKnobs | null>(null);
+  const [liveSession, setLiveSession] =
+    useState<CreateLiveSessionResponse | null>(null);
+  const [liveManifest, setLiveManifest] = useState<LiveManifest | null>(null);
+  const [liveEventCount, setLiveEventCount] = useState<number>(0);
+  const [liveLastEventAt, setLiveLastEventAt] = useState<string | null>(null);
+  const [liveCompleteTotalTokens, setLiveCompleteTotalTokens] =
+    useState<number | null>(null);
   const sourceRef = useRef<LiveEventStreamHandle | null>(null);
   const runIdRef = useRef(0);
   const restartTimerRef = useRef<number | null>(null);
@@ -153,6 +162,11 @@ export default function CockpitPage(): JSX.Element {
       setLiveVerified(null);
       setLiveError(reason === 'controls' ? 'Live controls changed; restarting worker stream.' : null);
       setLiveTrace(emptyLiveTrace());
+      setLiveSession(null);
+      setLiveManifest(null);
+      setLiveEventCount(0);
+      setLiveLastEventAt(null);
+      setLiveCompleteTotalTokens(null);
       // Reset on each session so the diagnostic disclosure can show
       // "awaiting worker echo" until the new session emits its
       // KnobResolutionEvent.
@@ -163,6 +177,7 @@ export default function CockpitPage(): JSX.Element {
           buildLiveSessionRequest(controls),
           trimmedInviteCode,
         );
+        setLiveSession(session);
         const proof = await refreshLiveProof();
 
         if (runIdRef.current !== runId) return;
@@ -181,6 +196,8 @@ export default function CockpitPage(): JSX.Element {
 
         const applyEvent = (event: LiveTraceEvent): void => {
           if (runIdRef.current !== runId) return;
+          setLiveEventCount((count) => count + 1);
+          setLiveLastEventAt(new Date().toISOString());
           if (event.type === 'manifest') {
             if (!event.manifest.is_real_model || !isLiveRealModeProofVerified(proof)) {
               sourceRef.current?.close();
@@ -194,6 +211,7 @@ export default function CockpitPage(): JSX.Element {
               );
               return;
             }
+            setLiveManifest(event.manifest);
             setLiveVerified(true);
             setLiveStatus('streaming');
             setLiveError(null);
@@ -208,6 +226,7 @@ export default function CockpitPage(): JSX.Element {
             return;
           }
           if (event.type === 'complete') {
+            setLiveCompleteTotalTokens(event.total_tokens);
             setLiveStatus('complete');
             sourceRef.current?.close();
             return;
@@ -233,6 +252,8 @@ export default function CockpitPage(): JSX.Element {
         setLiveStatus('error');
         setLiveVerified(false);
         setLiveTrace(null);
+        setLiveSession(null);
+        setLiveManifest(null);
         setLiveError(
           err instanceof Error
             ? err.message
@@ -273,6 +294,11 @@ export default function CockpitPage(): JSX.Element {
     setLiveStatus('idle');
     setLiveVerified(null);
     setLiveError(null);
+    setLiveSession(null);
+    setLiveManifest(null);
+    setLiveEventCount(0);
+    setLiveLastEventAt(null);
+    setLiveCompleteTotalTokens(null);
   }, []);
 
   if (error) {
@@ -311,6 +337,11 @@ export default function CockpitPage(): JSX.Element {
         liveProof={liveProof}
         liveProofChecking={liveProofChecking}
         liveError={liveError}
+        liveSession={liveSession}
+        liveManifest={liveManifest}
+        liveEventCount={liveEventCount}
+        liveLastEventAt={liveLastEventAt}
+        liveCompleteTotalTokens={liveCompleteTotalTokens}
         onStartLive={startLive}
         onRefreshLiveProof={refreshLiveProof}
         onLiveControlsChange={handleLiveControlsChange}

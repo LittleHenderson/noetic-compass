@@ -49,6 +49,12 @@ export interface PerTokenFrame {
   top_activated_neurons: PerTokenFrameActivation[];
   foundation_probe?: number[];
   inversion_risk?: number | null;
+  verification_mode?: string | null;
+  verification_verdict?: string | null;
+  verification_threshold?: number | null;
+  verification_score?: number | null;
+  verification_score_source?: string | null;
+  verification_invalid_mode?: string | null;
 }
 
 export interface NeuronCoord {

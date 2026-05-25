@@ -17,6 +17,7 @@ export interface LiveMethodControls {
   verificationMode: VerificationMode;
   showBlindspots: boolean;
   showActiveTrace: boolean;
+  prompt?: string;
 }
 
 const DEFAULT_PROMPT =
@@ -37,7 +38,7 @@ export function buildLiveSessionRequest(
   overrides?: Partial<CreateLiveSessionRequest>,
 ): CreateLiveSessionRequest {
   return {
-    prompt: DEFAULT_PROMPT,
+    prompt: controls.prompt ?? DEFAULT_PROMPT,
     max_new_tokens: 24,
     temperature: 0,
     seed: 42,

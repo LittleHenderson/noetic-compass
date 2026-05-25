@@ -171,6 +171,11 @@ describe('atlasLiveApi', () => {
       token: ' hello',
       top_activated_neurons: [{ layer: 5, index: 142, activation: 0.7 }],
       inversion_risk: 0.42,
+      verification_mode: 'HIGH_PRECISION',
+      verification_verdict: 'FLAG',
+      verification_threshold: 0.85,
+      verification_score: 0.72,
+      verification_score_source: 'confidence',
     });
 
     expect(trace.tokens).toEqual([{ token_index: 0, token: ' hello' }]);
@@ -179,6 +184,13 @@ describe('atlasLiveApi', () => {
     expect(
       (trace.per_token_frames[0] as { inversion_risk: number }).inversion_risk,
     ).toBe(0.42);
+    expect(trace.per_token_frames[0]).toMatchObject({
+      verification_mode: 'HIGH_PRECISION',
+      verification_verdict: 'FLAG',
+      verification_threshold: 0.85,
+      verification_score: 0.72,
+      verification_score_source: 'confidence',
+    });
     // Legacy bare-string covers normalise to typed members at the UI edge
     // so the cockpit's blindspot-interpretation surface can render against
     // either old or new traces. Bare strings → placeholder/unavailable.

@@ -48,4 +48,13 @@ describe('liveMethodControls', () => {
     expect(req.method_config?.knobs?.rpm_gate_check.strictness_threshold).toBe(0.25);
     expect(req.method_config?.verification_mode).toBe('BALANCED');
   });
+
+  it('uses the selected scenario prompt when present', () => {
+    const req = buildLiveSessionRequest({
+      ...baseControls,
+      prompt: 'What does real consent require when pressure is present?',
+    });
+
+    expect(req.prompt).toBe('What does real consent require when pressure is present?');
+  });
 });
