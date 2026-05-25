@@ -13,6 +13,7 @@ const STEPS: Array<{ to: string; label: string }> = [
   { to: '/login', label: 'Sign in' },
   { to: '/license', label: 'License' },
   { to: '/model-config', label: 'Model' },
+  { to: '/audit-console', label: 'Audit' },
   { to: '/cockpit', label: 'Cockpit' },
 ];
 
@@ -24,7 +25,8 @@ const backdropStyle: CSSProperties = {
   inset: 0,
   background:
     'radial-gradient(ellipse at 50% 110%, rgba(15, 23, 42, 0.9) 0%, #020617 60%, #000000 100%)',
-  overflow: 'hidden',
+  overflowX: 'hidden',
+  overflowY: 'auto',
 };
 
 // A faint grid graticule behind everything — gives the page a HUD-like

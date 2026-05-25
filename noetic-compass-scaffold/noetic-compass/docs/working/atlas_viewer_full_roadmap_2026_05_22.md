@@ -9,6 +9,8 @@ This document captures the 15-item product composition. It extends — does not 
 
 ## Product framing
 
+**2026-05-25 addendum:** The CAS Harness Audit Console is the customer-facing verdict workflow: licensed/API users connect a model, CAS audits it, and the console returns ACCEPT / SUPPRESS / FLAG FOR HUMAN REVIEW with confidence and provenance. Atlas remains the deep inspection cockpit used to inspect selected evidence paths; it should not be described as the whole product surface.
+
 > CAS Compass measures model **behavior**. CAS Harness Atlas explains the **evidence path** behind that behavior. The strongest claim — and the strongest product story — is when the two agree on a model's failure pattern. The most valuable signal is when they disagree.
 
 The cockpit is the front door. The product is the full workflow around attaching a model, running CAS tests, watching the evidence story, and exporting defensible results.
