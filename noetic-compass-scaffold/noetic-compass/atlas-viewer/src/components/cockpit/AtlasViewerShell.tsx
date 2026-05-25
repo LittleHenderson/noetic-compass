@@ -382,6 +382,22 @@ function sentenceToTokens(sentence?: string): Token[] {
   return tokens;
 }
 
+function sentenceToMode7Frames(tokens: Token[]): Mode7Frame[] {
+  return tokens.map((tok, idx) => ({
+    token_index: tok.token_index,
+    mode7_attribution:
+      idx === 0
+        ? [{ from_token_index: null, to_token_index: tok.token_index, weight: 1 }]
+        : [
+            {
+              from_token_index: tokens[idx - 1]?.token_index ?? null,
+              to_token_index: tok.token_index,
+              weight: 0.72,
+            },
+          ],
+  }));
+}
+
 export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const {
     trace,
@@ -518,10 +534,18 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     () => sentenceToTokens(activeSpatialEvidence.scenario_sentence),
     [activeSpatialEvidence.scenario_sentence],
   );
-  const bottomStreamTokens =
-    (wordSpans?.length ?? 0) > 0 || runtimeMode === 'live' || pictureSentenceTokens.length === 0
-      ? tokens
-      : pictureSentenceTokens;
+  const pictureSentenceMode7Frames = useMemo<Mode7Frame[]>(
+    () => sentenceToMode7Frames(pictureSentenceTokens),
+    [pictureSentenceTokens],
+  );
+  const usePictureSentenceTimeline =
+    (wordSpans?.length ?? 0) === 0 &&
+    runtimeMode !== 'live' &&
+    pictureSentenceTokens.length > 0;
+  const bottomStreamTokens = usePictureSentenceTimeline ? pictureSentenceTokens : tokens;
+  const bottomTimelineFrames = usePictureSentenceTimeline
+    ? pictureSentenceMode7Frames
+    : mode7Frames;
   const bottomStreamCurrentTokenIndex = Math.min(
     currentTokenIndex,
     Math.max(0, bottomStreamTokens.length - 1),
@@ -1258,9 +1282,9 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       <div style={bottomTimelineFloatStyle} data-testid="atlas-viewer-bottom">
         <GlassPanel intensity="thin" padding="8px 12px">
           <Mode7Timeline
-            tokens={tokens}
-            frames={mode7Frames}
-            currentTokenIndex={currentTokenIndex}
+            tokens={bottomStreamTokens}
+            frames={bottomTimelineFrames}
+            currentTokenIndex={bottomStreamCurrentTokenIndex}
             onTokenSelect={handleTokenSeek}
           />
         </GlassPanel>

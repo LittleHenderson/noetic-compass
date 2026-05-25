@@ -413,6 +413,12 @@ describe('AtlasViewerShell — grounded step derivation', () => {
     expect(screen.getByTestId('word-token-stream-placeholder').textContent).toBe(
       'The patient nurse trace is shown as a visual grounding fixture.',
     );
+    expect(screen.getByTestId('mode7-timeline-cell-0').textContent).toContain(
+      'The',
+    );
+    expect(screen.getByTestId('mode7-timeline-cell-1').textContent).toContain(
+      'patient',
+    );
 
     fireEvent.click(screen.getByTestId('spatial-scenario-alt-trace'));
     const scrubber = screen.getByTestId('token-scrubber') as HTMLInputElement;
@@ -423,6 +429,13 @@ describe('AtlasViewerShell — grounded step derivation', () => {
     expect(screen.getByTestId('word-token-stream-placeholder').textContent).toBe(
       'A second fixture sentence controls the picture and primitive set.',
     );
+    expect(screen.getByTestId('mode7-timeline-cell-0').textContent).toContain(
+      'A',
+    );
+    expect(screen.getByTestId('mode7-timeline-cell-1').textContent).toContain(
+      'second',
+    );
+    expect(screen.getByTestId('mode7-timeline-edge-0-1')).toBeInTheDocument();
     expect(screen.getByTestId('spatial-evidence-card-p-c')).toBeInTheDocument();
     expect(screen.queryByTestId('spatial-evidence-card-p-a')).toBeNull();
   });
