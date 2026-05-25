@@ -20,6 +20,52 @@ def _valid_payload() -> dict:
     }
 
 
+class _PacketStub:
+    def __init__(self, packet: dict):
+        self._packet = packet
+
+    def model_dump(self, *, mode: str = "json") -> dict:
+        return self._packet
+
+
+def _complete_stage21_packet(*, action: str = "allow", accepted: bool = True) -> dict:
+    return {
+        "schema_version": "cas_harness_evidence_packet_v1",
+        "trace_id": f"stage21-{action}-001",
+        "model": {
+            "model_key": "EleutherAI/pythia-160m",
+            "name": "EleutherAI/pythia-160m",
+        },
+        "provenance": {
+            "source_stage": "Stage 21A",
+            "source_reports": [
+                "stage19_verification_stack_report.json",
+                "stage20_generation_readiness_report.json",
+            ],
+        },
+        "readout": {"axis": "drive", "label": "F1", "confidence": 0.86},
+        "ablation": {"status": "present", "effect": "targeted_drop"},
+        "matched_controls": {"status": "present", "control": "random_same_rank"},
+        "output": {"text": "Observed model output"},
+        "verification": {
+            "accepted": accepted,
+            "mode": "BALANCED",
+            "confidence_tier": "high",
+            "mode_profile": {
+                "accepted_accuracy": 0.9816,
+                "coverage": 0.7173,
+            },
+            "suppression_reasons": [] if accepted else ["verification_stack_rejected"],
+        },
+        "generation_readiness": {
+            "generation_readiness": action,
+            "risk_score": 0.9 if action == "suppress" else 0.11,
+            "policy_version": "stage20_v1",
+            "reasons": [],
+        },
+    }
+
+
 def test_audit_session_route_registered(client):
     openapi = client.get("/openapi.json").json()
 
@@ -262,6 +308,145 @@ def test_run_route_flags_attached_packet_when_required_proof_is_incomplete(clien
         "COMPLETE",
     ]
     assert "missing required proof" in body["lifecycle"][-1]["message"]
+
+
+def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decision(
+    client,
+    auth_headers,
+    monkeypatch,
+):
+    packet = _complete_stage21_packet(action="allow", accepted=True)
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.build_packet_for_trace",
+        lambda trace_id: _PacketStub(packet),
+    )
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "evidence_packet_trace_id": "stage21-allow-001",
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "ACCEPT"
+    assert body["confidence"] == 0.9816
+    assert set(chips.values()) == {"present"}
+    assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
+
+
+def test_run_route_suppresses_only_when_complete_packet_has_explicit_rejection(
+    client,
+    auth_headers,
+    monkeypatch,
+):
+    packet = _complete_stage21_packet(action="suppress", accepted=False)
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.build_packet_for_trace",
+        lambda trace_id: _PacketStub(packet),
+    )
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "evidence_packet_trace_id": "stage21-suppress-001",
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "SUPPRESS"
+    assert body["confidence"] == 0.9
+
+
+def test_run_route_blocks_explicit_verifier_decision_when_required_proof_is_incomplete(
+    client,
+    auth_headers,
+    monkeypatch,
+):
+    packet = _complete_stage21_packet(action="allow", accepted=True)
+    packet.pop("matched_controls")
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.build_packet_for_trace",
+        lambda trace_id: _PacketStub(packet),
+    )
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "evidence_packet_trace_id": "stage21-missing-control-001",
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] is None
+    assert chips["control_proof"] == "missing"
+    assert "missing required proof" in body["lifecycle"][-1]["message"]
+
+
+def test_run_route_flags_complete_packet_without_stage19_stage20_verifier_sources(
+    client,
+    auth_headers,
+    monkeypatch,
+):
+    packet = _complete_stage21_packet(action="allow", accepted=True)
+    packet["provenance"]["source_reports"] = ["stage21_packet_builder_report.json"]
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.build_packet_for_trace",
+        lambda trace_id: _PacketStub(packet),
+    )
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "evidence_packet_trace_id": "stage21-no-verifier-sources-001",
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] is None
+    assert set(chips.values()) == {"present"}
+    assert "no explicit Stage 19/20/21 verifier decision" in body["lifecycle"][-1]["message"]
 
 
 def test_list_route_returns_in_process_sessions(client, auth_headers):
