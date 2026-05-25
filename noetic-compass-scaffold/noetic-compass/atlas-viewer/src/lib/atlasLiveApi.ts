@@ -40,6 +40,8 @@ export interface LiveManifest {
   is_real_model: boolean;
 }
 
+export type ResolvedKnobs = Record<string, Record<string, unknown>>;
+
 /**
  * One token-backed word span. The worker emits these once at end-of-stream
  * (see `live-trace-worker/app/schemas/events.py::WordSpan`). Token indices
@@ -120,6 +122,7 @@ export function normaliseCoverMember(raw: RawNeuronCoverMember): NeuronCoverMemb
 
 export type LiveTraceEvent =
   | { type: 'manifest'; manifest: LiveManifest }
+  | { type: 'knob_resolution'; resolved_knobs: ResolvedKnobs }
   | {
       type: 'neuron_covers';
       per_class_neuron_covers: Record<string, RawNeuronCoverMember[]>;

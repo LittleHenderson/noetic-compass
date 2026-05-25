@@ -15,6 +15,8 @@ export type KnobValue = string | number | boolean | string[];
 
 export type MethodKnobsDensity = 'compact' | 'comfortable';
 
+export type ResolvedKnobs = Record<string, Record<string, unknown>>;
+
 export interface MethodKnobsPanelProps {
   methods: TestingMethod[];
   enabledMethodIds: Set<string>;
@@ -23,6 +25,19 @@ export interface MethodKnobsPanelProps {
   onKnobChange: (methodId: string, knobId: string, value: KnobValue) => void;
   density?: MethodKnobsDensity;
   className?: string;
+  /**
+   * Worker echo of resolved knob values for the current LIVE session.
+   * Drives the "Knob diagnostic" disclosure at the bottom of the panel.
+   * Hidden behind ``import.meta.env.DEV`` OR
+   * ``VITE_ATLAS_SHOW_KNOB_DIAGNOSTIC === 'true'`` so production builds
+   * don't surface the diagnostic by default.
+   */
+  resolvedKnobs?: ResolvedKnobs | null;
+  /**
+   * Override the diagnostic visibility for tests. Production callers
+   * should not pass this — the env-flag gating below is the contract.
+   */
+  showKnobDiagnostic?: boolean;
 }
 
 // Wave 5.2: when the picture panel is collapsed the controls panel gets
@@ -330,6 +345,153 @@ function renderKnob(
   );
 }
 
+function isKnobDiagnosticEnabled(): boolean {
+  // `import.meta` shape varies between vitest + vite runtimes — guard
+  // defensively so the panel never throws when env is unavailable.
+  try {
+    const env = (import.meta as { env?: Record<string, unknown> }).env ?? {};
+    if (env.DEV === true) return true;
+    if (env.VITE_ATLAS_SHOW_KNOB_DIAGNOSTIC === 'true') return true;
+  } catch {
+    // SSR / non-vite consumers — diagnostic stays off.
+  }
+  return false;
+}
+
+function looselyEqual(sent: unknown, resolved: unknown): boolean {
+  // Tolerant comparator: number-string equality OK, array order ignored.
+  if (sent === resolved) return true;
+  if (Array.isArray(sent) && Array.isArray(resolved)) {
+    if (sent.length !== resolved.length) return false;
+    const sa = [...sent].map(String).sort();
+    const sb = [...resolved].map(String).sort();
+    return sa.every((v, i) => v === sb[i]);
+  }
+  if (sent === null || sent === undefined) {
+    return resolved === null || resolved === undefined;
+  }
+  if (resolved === null || resolved === undefined) return false;
+  if (typeof sent === 'number' || typeof resolved === 'number') {
+    return Number(sent) === Number(resolved);
+  }
+  return String(sent) === String(resolved);
+}
+
+interface KnobDiagnosticRowProps {
+  methodId: string;
+  methodName: string;
+  sent?: Record<string, KnobValue>;
+  resolved?: Record<string, unknown>;
+}
+
+function KnobDiagnosticRow({
+  methodId,
+  methodName,
+  sent,
+  resolved,
+}: KnobDiagnosticRowProps) {
+  // Only enumerate knobs that appear on EITHER side so the disclosure
+  // doesn't fabricate ✓ matches against fields the worker doesn't
+  // consume. ``cover_available`` / ``active`` are worker-only diagnostic
+  // bits — they render below as resolved-only entries (no Sent side).
+  const knobIds = new Set<string>();
+  for (const k of Object.keys(sent ?? {})) knobIds.add(k);
+  for (const k of Object.keys(resolved ?? {})) knobIds.add(k);
+  const rows = [...knobIds].sort();
+
+  if (rows.length === 0) {
+    return (
+      <div
+        data-testid={`knob-diagnostic-row-${methodId}`}
+        style={{
+          padding: '6px 8px',
+          fontSize: 11,
+          color: '#94a3b8',
+        }}
+      >
+        <strong style={{ color: '#cbd5e1' }}>{methodName}</strong>
+        <span style={{ marginLeft: 8, fontStyle: 'italic' }}>
+          (no resolved knobs)
+        </span>
+      </div>
+    );
+  }
+
+  return (
+    <div
+      data-testid={`knob-diagnostic-row-${methodId}`}
+      style={{
+        padding: '6px 8px',
+        fontSize: 11,
+        color: '#cbd5e1',
+        borderTop: '1px solid rgba(255,255,255,0.04)',
+      }}
+    >
+      <strong style={{ color: '#cbd5e1', display: 'block', marginBottom: 4 }}>
+        {methodName}
+      </strong>
+      {rows.map((knobId) => {
+        const sentVal = sent?.[knobId];
+        const resolvedVal = resolved?.[knobId];
+        const sentPresent = sent && knobId in sent;
+        const resolvedPresent = resolved && knobId in resolved;
+        const match =
+          sentPresent && resolvedPresent
+            ? looselyEqual(sentVal, resolvedVal)
+            : null;
+        return (
+          <div
+            key={knobId}
+            data-testid={`knob-diagnostic-${methodId}-${knobId}`}
+            data-knob-match={
+              match === null ? 'na' : match ? 'true' : 'false'
+            }
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '90px 1fr 1fr 16px',
+              gap: 6,
+              alignItems: 'baseline',
+              padding: '2px 0',
+              fontFamily: 'ui-monospace, SFMono-Regular, monospace',
+              fontSize: 11,
+            }}
+          >
+            <span style={{ color: '#94a3b8' }}>{knobId}</span>
+            <span style={{ color: '#e2e8f0' }}>
+              {sentPresent ? `Sent: ${JSON.stringify(sentVal)}` : '—'}
+            </span>
+            <span style={{ color: '#e2e8f0' }}>
+              {resolvedPresent
+                ? `Resolved: ${JSON.stringify(resolvedVal)}`
+                : '—'}
+            </span>
+            <span
+              aria-label={
+                match === null
+                  ? 'no comparison'
+                  : match
+                    ? 'match'
+                    : 'mismatch'
+              }
+              style={{
+                color:
+                  match === null
+                    ? '#94a3b8'
+                    : match
+                      ? '#22c55e'
+                      : '#fb7185',
+                fontWeight: 700,
+              }}
+            >
+              {match === null ? '·' : match ? '✓' : '✗'}
+            </span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function MethodKnobsPanel({
   methods,
   enabledMethodIds,
@@ -338,11 +500,18 @@ export default function MethodKnobsPanel({
   onKnobChange,
   density = 'compact',
   className,
+  resolvedKnobs = null,
+  showKnobDiagnostic,
 }: MethodKnobsPanelProps) {
   const ordered = [...methods].sort((a, b) => a.orderIndex - b.orderIndex);
   const [expanded, setExpanded] = useState<Set<string>>(
     () => new Set(ordered.map((m) => m.id)),
   );
+  const [diagnosticOpen, setDiagnosticOpen] = useState<boolean>(false);
+  const diagnosticVisible =
+    showKnobDiagnostic !== undefined
+      ? showKnobDiagnostic
+      : isKnobDiagnosticEnabled();
 
   const toggleExpand = useCallback((id: string) => {
     setExpanded((prev) => {
@@ -524,6 +693,88 @@ export default function MethodKnobsPanel({
             </motion.section>
           );
         })}
+        {diagnosticVisible ? (
+          <section
+            data-testid="knob-diagnostic-panel"
+            style={{
+              marginTop: 6,
+              border: '1px solid rgba(255,255,255,0.04)',
+              borderRadius: 6,
+              background: 'rgba(15, 23, 42, 0.45)',
+              overflow: 'hidden',
+            }}
+          >
+            <button
+              type="button"
+              data-testid="knob-diagnostic-toggle"
+              aria-expanded={diagnosticOpen}
+              onClick={() => setDiagnosticOpen((v) => !v)}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                padding: '8px 10px',
+                background: 'transparent',
+                border: 'none',
+                color: '#cbd5e1',
+                cursor: 'pointer',
+                fontSize: 12,
+                fontWeight: 600,
+                textAlign: 'left',
+                letterSpacing: 0.3,
+              }}
+            >
+              <span aria-hidden="true">{diagnosticOpen ? '▾' : '▸'}</span>
+              <span>Knob diagnostic</span>
+              <span
+                style={{ marginLeft: 'auto', color: '#94a3b8', fontWeight: 400 }}
+              >
+                {resolvedKnobs
+                  ? 'Sent vs worker-resolved'
+                  : 'awaiting worker echo…'}
+              </span>
+            </button>
+            <AnimatePresence initial={false}>
+              {diagnosticOpen ? (
+                <motion.div
+                  key="diagnostic-body"
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={SPRING_GENTLE}
+                  style={{ overflow: 'hidden' }}
+                  data-testid="knob-diagnostic-body"
+                >
+                  {resolvedKnobs ? (
+                    ordered.map((method) => (
+                      <KnobDiagnosticRow
+                        key={method.id}
+                        methodId={method.id}
+                        methodName={method.name}
+                        sent={knobValues[method.id]}
+                        resolved={resolvedKnobs[method.id]}
+                      />
+                    ))
+                  ) : (
+                    <div
+                      data-testid="knob-diagnostic-empty"
+                      style={{
+                        padding: 10,
+                        fontSize: 11,
+                        color: '#94a3b8',
+                        fontStyle: 'italic',
+                      }}
+                    >
+                      Worker has not echoed any resolved knobs yet. Start
+                      a LIVE session to see Sent vs Resolved per method.
+                    </div>
+                  )}
+                </motion.div>
+              ) : null}
+            </AnimatePresence>
+          </section>
+        ) : null}
       </div>
     </GlassPanel>
   );
