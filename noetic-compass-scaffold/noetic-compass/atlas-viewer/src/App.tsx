@@ -5,6 +5,7 @@ import type { ReactNode } from 'react';
 import LoginPage from './pages/LoginPage';
 import LicensePage from './pages/LicensePage';
 import ModelConfigPage from './pages/ModelConfigPage';
+import AuditConsolePage from './pages/AuditConsolePage';
 import { GlassPanel } from './components/ui/GlassPanel';
 import { ACCENT_BLUE, COLORS, THEME } from './lib/designTokens';
 
@@ -80,6 +81,14 @@ export default function App() {
         element={
           <AuthGate>
             <ModelConfigPage />
+          </AuthGate>
+        }
+      />
+      <Route
+        path="/audit-console"
+        element={
+          <AuthGate>
+            <AuditConsolePage />
           </AuthGate>
         }
       />
