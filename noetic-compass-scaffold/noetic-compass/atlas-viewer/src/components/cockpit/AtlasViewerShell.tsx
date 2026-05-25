@@ -98,6 +98,7 @@ export interface AtlasViewerShellProps {
   methods?: readonly TestingMethod[];
   runtimeMode?: RuntimeMode;
   liveStatus?: LiveStatus;
+  liveVerified?: boolean | null;
   liveError?: string | null;
   onStartLive?: (controls: LiveMethodControls) => void;
   onLiveControlsChange?: (controls: LiveMethodControls) => void;
@@ -412,6 +413,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     methods = LIVE_WORKER_METHODS,
     runtimeMode = 'replay',
     liveStatus = 'idle',
+    liveVerified = null,
     liveError = null,
     onStartLive,
     onLiveControlsChange,
@@ -916,16 +918,30 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   };
 
   const modelId = (trace as unknown as TraceWithCovers).model_id ?? architecture.family;
+  const liveProofLabel =
+    liveVerified === true
+      ? 'actual weights verified'
+      : liveVerified === false
+        ? 'weights not verified'
+        : 'weight proof pending';
   const liveLabel =
     liveStatus === 'connecting'
-      ? 'Live · connecting'
+      ? 'Live · proving weights'
       : liveStatus === 'streaming'
-        ? `Live · streaming · ${modelId} · actual weights`
+        ? `Live · streaming · ${modelId} · ${liveProofLabel}`
         : liveStatus === 'complete'
-          ? `Live · complete · ${modelId} · actual weights`
+          ? `Live · complete · ${modelId} · ${liveProofLabel}`
           : liveStatus === 'error'
             ? 'Live unavailable'
             : `Replay · ${modelId} · recorded trace`;
+  const liveBadgeTitle =
+    runtimeMode === 'live'
+      ? liveVerified === true
+        ? 'The current stream manifest reported is_real_model=true before the cockpit accepted the LIVE run.'
+        : liveVerified === false
+          ? 'The current stream did not prove real weights. The cockpit must not present it as actual-weight LIVE.'
+          : 'The cockpit is waiting for the live stream manifest to prove whether real weights are loaded.'
+      : 'Trace is real activations from Pythia-160M, recorded offline and replayed here.';
   const tokenTextNow = tokens[currentTokenIndex]?.token ?? '';
   const inversionRiskNow =
     typeof currentFrame?.inversion_risk === 'number'
@@ -1037,7 +1053,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       </div>
 
       <div style={narrationStyle} data-testid="narration-strip">
-        <span style={provenanceBadgeStyle} title={runtimeMode === 'live' ? 'Trace events are streaming through the API proxy from the live Pythia-160M worker.' : 'Trace is real activations from Pythia-160M, recorded offline and replayed here.'}>
+        <span style={provenanceBadgeStyle} title={liveBadgeTitle}>
           <span style={provenanceDotStyle} />
           {liveLabel}
         </span>
