@@ -298,6 +298,32 @@ describe('AtlasViewerShell — LIVE provenance badge', () => {
       'actual weights verified',
     );
   });
+
+  it('shows the backend realmode proof as the user-visible connection truth', () => {
+    renderShell({
+      liveProof: {
+        verdict: 'NOT_REAL_PYTHIA_WEIGHTS',
+        is_real_model: false,
+        model_loaded: false,
+        load_error: 'atlas_live_worker_unavailable',
+        http_status: 503,
+        checked_at: '2026-05-25T06:30:00.000Z',
+      },
+    });
+    expect(screen.getByTestId('live-proof-badge').textContent).toContain(
+      'Model connection: not connected',
+    );
+    expect(screen.getByTestId('live-proof-reason').textContent).toContain(
+      'atlas_live_worker_unavailable',
+    );
+  });
+
+  it('lets the user manually refresh the realmode proof', () => {
+    const onRefreshLiveProof = vi.fn();
+    renderShell({ onRefreshLiveProof });
+    fireEvent.click(screen.getByTestId('live-proof-refresh'));
+    expect(onRefreshLiveProof).toHaveBeenCalledTimes(1);
+  });
 });
 
 describe('AtlasViewerShell — evidence drawer', () => {

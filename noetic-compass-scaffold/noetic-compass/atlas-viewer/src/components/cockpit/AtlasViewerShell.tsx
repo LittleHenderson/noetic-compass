@@ -58,7 +58,10 @@ import {
 } from '../../lib/visualPrimitives';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { parseCoord } from '../../lib/neuronCover';
-import { normaliseCoverMember } from '../../lib/atlasLiveApi';
+import {
+  normaliseCoverMember,
+  type LiveRealModeProof,
+} from '../../lib/atlasLiveApi';
 import { GlassPanel } from '../ui/GlassPanel';
 import { ACCENT_TEAL, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
 
@@ -99,8 +102,11 @@ export interface AtlasViewerShellProps {
   runtimeMode?: RuntimeMode;
   liveStatus?: LiveStatus;
   liveVerified?: boolean | null;
+  liveProof?: LiveRealModeProof | null;
+  liveProofChecking?: boolean;
   liveError?: string | null;
   onStartLive?: (controls: LiveMethodControls) => void;
+  onRefreshLiveProof?: () => void;
   onLiveControlsChange?: (controls: LiveMethodControls) => void;
   onUseReplay?: () => void;
   className?: string;
@@ -322,6 +328,50 @@ const demoDotStyle: CSSProperties = {
   background: '#fbbf24',
 };
 
+const proofBadgeStyle = (connected: boolean | null): CSSProperties => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 7,
+  padding: '4px 8px',
+  borderRadius: 4,
+  border:
+    connected === true
+      ? '1px solid rgba(34, 197, 94, 0.42)'
+      : connected === false
+        ? '1px solid rgba(251, 113, 133, 0.42)'
+        : '1px solid rgba(234, 179, 8, 0.38)',
+  background:
+    connected === true
+      ? 'rgba(34, 197, 94, 0.08)'
+      : connected === false
+        ? 'rgba(251, 113, 133, 0.08)'
+        : 'rgba(234, 179, 8, 0.08)',
+  color:
+    connected === true
+      ? '#86efac'
+      : connected === false
+        ? '#fda4af'
+        : '#fde68a',
+  fontSize: 10.5,
+  fontWeight: 700,
+  letterSpacing: 0.5,
+  textTransform: 'uppercase',
+  fontFamily: THEME.fontFamily,
+});
+
+const proofRefreshButtonStyle: CSSProperties = {
+  margin: 0,
+  padding: '1px 6px',
+  borderRadius: 4,
+  border: '1px solid rgba(255, 255, 255, 0.18)',
+  background: 'rgba(15, 23, 42, 0.55)',
+  color: 'inherit',
+  cursor: 'pointer',
+  fontSize: 10,
+  fontWeight: 700,
+  fontFamily: THEME.fontFamily,
+};
+
 function defaultValueForKnob(knob: { type: string; default: unknown }): KnobValue {
   if (knob.type === 'multiselect') {
     return Array.isArray(knob.default) ? [...(knob.default as string[])] : [];
@@ -414,8 +464,11 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     runtimeMode = 'replay',
     liveStatus = 'idle',
     liveVerified = null,
+    liveProof = null,
+    liveProofChecking = false,
     liveError = null,
     onStartLive,
+    onRefreshLiveProof,
     onLiveControlsChange,
     onUseReplay,
     className,
@@ -942,6 +995,32 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
           ? 'The current stream did not prove real weights. The cockpit must not present it as actual-weight LIVE.'
           : 'The cockpit is waiting for the live stream manifest to prove whether real weights are loaded.'
       : 'Trace is real activations from Pythia-160M, recorded offline and replayed here.';
+  const proofConnected =
+    liveProof === null ? null : liveProof.is_real_model === true;
+  const proofLabel =
+    liveProofChecking
+      ? 'Checking model connection'
+      : proofConnected === true
+        ? 'Model connection: verified'
+        : proofConnected === false
+          ? 'Model connection: not connected'
+          : 'Model connection: unknown';
+  const proofReason =
+    liveProof?.load_error ??
+    liveProof?.detail ??
+    liveProof?.verdict ??
+    'No proof check has completed yet';
+  const proofCheckedAt = liveProof
+    ? new Date(liveProof.checked_at).toLocaleTimeString()
+    : 'not checked';
+  const proofTitle =
+    `Source of truth: /atlas/live/health/realmode\n` +
+    `HTTP: ${liveProof?.http_status ?? 'not checked'}\n` +
+    `verdict: ${liveProof?.verdict ?? 'not checked'}\n` +
+    `is_real_model: ${String(liveProof?.is_real_model ?? false)}\n` +
+    `model_loaded: ${String(liveProof?.model_loaded ?? false)}\n` +
+    `load_error: ${liveProof?.load_error ?? 'null'}\n` +
+    `checked: ${proofCheckedAt}`;
   const tokenTextNow = tokens[currentTokenIndex]?.token ?? '';
   const inversionRiskNow =
     typeof currentFrame?.inversion_risk === 'number'
@@ -1062,6 +1141,34 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             {liveError}
           </span>
         ) : null}
+        <span
+          style={proofBadgeStyle(proofConnected)}
+          title={proofTitle}
+          data-testid="live-proof-badge"
+        >
+          {proofLabel}
+          <span
+            style={{
+              color: 'rgba(255, 255, 255, 0.78)',
+              textTransform: 'none',
+              fontWeight: 600,
+            }}
+            data-testid="live-proof-reason"
+          >
+            {proofReason}
+          </span>
+          {onRefreshLiveProof ? (
+            <button
+              type="button"
+              style={proofRefreshButtonStyle}
+              onClick={onRefreshLiveProof}
+              disabled={liveProofChecking}
+              data-testid="live-proof-refresh"
+            >
+              Refresh proof
+            </button>
+          ) : null}
+        </span>
         <span style={demoBadgeStyle} title="Spatial primitives below are demo fixtures until the live vision-grounding wire-up lands (roadmap item #6 + #8)">
           <span style={demoDotStyle} />
           Picture · demo fixture

@@ -12,7 +12,9 @@ import {
   appendLiveEvent,
   createLiveSession,
   emptyLiveTrace,
+  fetchLiveRealModeProof,
   type LiveTraceEvent,
+  type LiveRealModeProof,
   type ResolvedKnobs,
 } from '../lib/atlasLiveApi';
 import type { LiveStatus, RuntimeMode } from '../components/cockpit/ControlBar';
@@ -56,6 +58,8 @@ export default function CockpitPage(): JSX.Element {
   const [liveVerified, setLiveVerified] = useState<boolean | null>(null);
   const [liveError, setLiveError] = useState<string | null>(null);
   const [liveTrace, setLiveTrace] = useState<ReplayTrace | null>(null);
+  const [liveProof, setLiveProof] = useState<LiveRealModeProof | null>(null);
+  const [liveProofChecking, setLiveProofChecking] = useState<boolean>(false);
   const [resolvedKnobs, setResolvedKnobs] = useState<ResolvedKnobs | null>(null);
   const sourceRef = useRef<EventSource | null>(null);
   const runIdRef = useRef(0);
@@ -91,6 +95,28 @@ export default function CockpitPage(): JSX.Element {
     };
   }, []);
 
+  const refreshLiveProof = useCallback(async (): Promise<void> => {
+    setLiveProofChecking(true);
+    try {
+      setLiveProof(await fetchLiveRealModeProof());
+    } catch (err) {
+      setLiveProof({
+        verdict: 'PROOF_CHECK_FAILED',
+        is_real_model: false,
+        model_loaded: false,
+        load_error: err instanceof Error ? err.message : String(err),
+        http_status: 0,
+        checked_at: new Date().toISOString(),
+      });
+    } finally {
+      setLiveProofChecking(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    void refreshLiveProof();
+  }, [refreshLiveProof]);
+
   const beginLive = useCallback(
     async (controls: LiveMethodControls, reason: 'manual' | 'controls'): Promise<void> => {
       const storedCode = window.localStorage.getItem('atlas_live_invite_code') ?? '';
@@ -110,6 +136,7 @@ export default function CockpitPage(): JSX.Element {
       setLiveVerified(null);
       setLiveError(reason === 'controls' ? 'Live controls changed; restarting worker stream.' : null);
       setLiveTrace(emptyLiveTrace());
+      void refreshLiveProof();
       // Reset on each session so the diagnostic disclosure can show
       // "awaiting worker echo" until the new session emits its
       // KnobResolutionEvent.
@@ -198,7 +225,7 @@ export default function CockpitPage(): JSX.Element {
         setLiveError(err instanceof Error ? err.message : String(err));
       }
     },
-    [],
+    [refreshLiveProof],
   );
 
   const startLive = useCallback(
@@ -266,8 +293,11 @@ export default function CockpitPage(): JSX.Element {
         runtimeMode={runtimeMode}
         liveStatus={liveStatus}
         liveVerified={liveVerified}
+        liveProof={liveProof}
+        liveProofChecking={liveProofChecking}
         liveError={liveError}
         onStartLive={startLive}
+        onRefreshLiveProof={refreshLiveProof}
         onLiveControlsChange={handleLiveControlsChange}
         onUseReplay={useReplay}
         resolvedKnobs={resolvedKnobs}
