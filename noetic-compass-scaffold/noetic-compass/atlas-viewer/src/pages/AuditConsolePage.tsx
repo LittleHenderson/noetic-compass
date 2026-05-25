@@ -124,6 +124,7 @@ const pendingChips = buildDefaultProvenanceChips({
 
 function chipsForSession(session: CasHarnessAuditSession | null): ProvenanceChip[] {
   if (!session) return pendingChips;
+  if (session.provenance_chips.length > 0) return session.provenance_chips;
 
   return buildDefaultProvenanceChips({
     modelProof: {

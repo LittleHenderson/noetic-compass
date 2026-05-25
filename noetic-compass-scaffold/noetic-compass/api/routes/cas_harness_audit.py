@@ -12,12 +12,14 @@ from typing import Literal
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
 
+from api.routes.evidence import build_packet_for_trace
 from api.services.cas_harness_audit_sessions import (
     create_session,
     get_session,
     list_sessions,
     run_session,
 )
+from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
 
 
 router = APIRouter(prefix="/api/cas-harness/audit", tags=["cas_harness_audit"])
@@ -35,11 +37,22 @@ AuditStatus = Literal[
 ]
 ModelStatus = Literal["NOT_CONNECTED_MOCK"]
 Verdict = Literal["ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"]
+ProofChipId = Literal[
+    "model_proof",
+    "cas_readout",
+    "causal_proof",
+    "control_proof",
+    "output_proof",
+    "packet_proof",
+]
+ProofChipStatus = Literal["verified", "present", "missing", "failed", "unavailable"]
 
 
 class ProvenanceChip(BaseModel):
-    label: str = Field(..., min_length=1, max_length=64)
-    value: str = Field(..., min_length=1, max_length=160)
+    id: ProofChipId
+    name: str = Field(..., min_length=1, max_length=64)
+    status: ProofChipStatus
+    detail: str = Field(..., min_length=1, max_length=1000)
 
 
 class AuditLifecycleEvent(BaseModel):
@@ -55,6 +68,12 @@ class AuditSessionRequest(BaseModel):
     prompt: str | None = Field(default=None, min_length=1, max_length=12000)
     scenario_text: str | None = Field(default=None, min_length=1, max_length=12000)
     selected_modules: list[str] = Field(..., min_length=1, max_length=24)
+    evidence_packet_trace_id: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=160,
+        description="Optional existing Evidence Packet trace ID to attach as proof-chip evidence.",
+    )
     license_key: str | None = Field(
         default=None,
         min_length=1,
@@ -62,7 +81,7 @@ class AuditSessionRequest(BaseModel):
         description="Placeholder for future license validation; not billed or verified here.",
     )
 
-    @field_validator("model_id", "prompt", "scenario_text", "license_key")
+    @field_validator("model_id", "prompt", "scenario_text", "evidence_packet_trace_id", "license_key")
     @classmethod
     def strip_optional_text(cls, value: str | None) -> str | None:
         if value is None:
@@ -123,6 +142,8 @@ class AuditSessionListResponse(BaseModel):
 async def create_audit_session(req: AuditSessionRequest) -> AuditSessionResponse:
     """Validate the CAS Harness audit contract and create a stored M1 session."""
     payload = req.model_dump(mode="json")
+    if req.evidence_packet_trace_id:
+        payload["provenance_chips"] = _proof_chips_for_evidence_trace(req.evidence_packet_trace_id)
     return AuditSessionResponse.model_validate(create_session(payload).to_dict())
 
 
@@ -149,3 +170,13 @@ async def list_audit_sessions() -> AuditSessionListResponse:
     """List in-process M1 audit sessions for the current API process."""
     sessions = [AuditSessionResponse.model_validate(record.to_dict()) for record in list_sessions()]
     return AuditSessionListResponse(sessions=sessions)
+
+
+def _proof_chips_for_evidence_trace(trace_id: str) -> list[dict[str, str]]:
+    try:
+        packet = build_packet_for_trace(trace_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail=f"Evidence Packet trace_id not found: {trace_id}")
+
+    bridge = normalize_evidence_packet_for_audit(packet.model_dump(mode="json"))
+    return [chip.to_dict() for chip in bridge.chips]

@@ -1,9 +1,37 @@
 import {
   isAuditVerdict,
+  type AuditStatus,
   type AuditVerdict,
+  type ProvenanceChip,
+  type ProvenanceChipId,
 } from './casHarnessAudit';
 
 const DEFAULT_BASE_URL = '/api/cas-harness/audit';
+
+const PROVENANCE_CHIP_IDS: readonly ProvenanceChipId[] = [
+  'model_proof',
+  'cas_readout',
+  'causal_proof',
+  'control_proof',
+  'output_proof',
+  'packet_proof',
+];
+
+const AUDIT_STATUSES: readonly AuditStatus[] = [
+  'verified',
+  'present',
+  'missing',
+  'failed',
+  'unavailable',
+];
+
+const STATUS_LABELS: Record<AuditStatus, string> = {
+  verified: 'Verified',
+  present: 'Present',
+  missing: 'Missing',
+  failed: 'Failed',
+  unavailable: 'Unavailable',
+};
 
 export type CasHarnessAuditMode =
   | 'BALANCED'
@@ -35,12 +63,8 @@ export interface CasHarnessAuditSessionRequest {
   prompt?: string | null;
   scenario_text?: string | null;
   selected_modules: string[];
+  evidence_packet_trace_id?: string | null;
   license_key?: string | null;
-}
-
-export interface CasHarnessAuditProvenanceChip {
-  label: string;
-  value: string;
 }
 
 export interface CasHarnessAuditLifecycleEvent {
@@ -65,7 +89,7 @@ export interface CasHarnessAuditSession {
   confidence: number | null;
   evidence_packet_trace_id: string | null;
   atlas_deep_link: string | null;
-  provenance_chips: CasHarnessAuditProvenanceChip[];
+  provenance_chips: ProvenanceChip[];
   lifecycle: CasHarnessAuditLifecycleEvent[];
 }
 
@@ -325,14 +349,44 @@ function parseNullableConfidence(raw: unknown): number | null {
   throw new CasHarnessAuditApiError('CAS Harness audit confidence must be null or a number in [0, 1]');
 }
 
-function parseProvenanceChip(raw: unknown): CasHarnessAuditProvenanceChip {
+function parseProvenanceChip(raw: unknown): ProvenanceChip {
   if (!isRecord(raw)) {
     throw new CasHarnessAuditApiError('CAS Harness audit provenance chip was malformed');
   }
+  if ('id' in raw || 'status' in raw || 'detail' in raw) {
+    const id = parseProvenanceChipId(raw.id);
+    const status = parseAuditStatus(raw.status);
+    return {
+      id,
+      name: requiredString(raw.name, 'provenance_chips[].name'),
+      status,
+      statusLabel: STATUS_LABELS[status],
+      detail: requiredString(raw.detail, 'provenance_chips[].detail'),
+    };
+  }
+
+  const legacyLabel = requiredString(raw.label, 'provenance_chips[].label');
   return {
-    label: requiredString(raw.label, 'provenance_chips[].label'),
-    value: requiredString(raw.value, 'provenance_chips[].value'),
+    id: 'packet_proof',
+    name: legacyLabel,
+    status: 'unavailable',
+    statusLabel: STATUS_LABELS.unavailable,
+    detail: requiredString(raw.value, 'provenance_chips[].value'),
   };
+}
+
+function parseProvenanceChipId(raw: unknown): ProvenanceChipId {
+  if (typeof raw === 'string' && PROVENANCE_CHIP_IDS.includes(raw as ProvenanceChipId)) {
+    return raw as ProvenanceChipId;
+  }
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness provenance chip id: ${String(raw)}`);
+}
+
+function parseAuditStatus(raw: unknown): AuditStatus {
+  if (typeof raw === 'string' && AUDIT_STATUSES.includes(raw as AuditStatus)) {
+    return raw as AuditStatus;
+  }
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness provenance status: ${String(raw)}`);
 }
 
 function parseLifecycleEvent(raw: unknown): CasHarnessAuditLifecycleEvent {
