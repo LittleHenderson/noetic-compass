@@ -2,6 +2,8 @@
   "schema_version": "spatial_evidence_v1",
   "trace_id": "demo-trace-001",
   "image_id": "demo-image-001",
+  "scenario_title": "Warm study desk",
+  "scenario_sentence": "I noticed a warm coffee cup beside an open book under a sunny window, with steam rising.",
   "image_url": "./visualGroundingDemoImage.svg",
   "image_width": 640,
   "image_height": 480,

@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Wave 5.5/5.6 (integration): clickable words + interpretable blindspots (May 24, 2026)
+
+Two cockpit lanes shipped together because they both reshape the LIVE event stream — merging them independently would have left the schema half-typed. This release is the integrated version.
+
+**Clickable word spans (#52 lineage).** Click any word in the streamed output → cockpit highlights the exact token(s) behind it → 3D neurons, Mode 7 attention path, and Evidence Drawer all jump to that moment. Words are token-backed under the hood (models think in tokens, not words). The worker emits one `WordSpansEvent` just before `complete`, mapping each rendered word to the exact token indices that produced it, with a deterministic boundary policy and lossless backing (every token appears in exactly one span OR in `structural_token_indices`). Token-index contract is now strictly 0-based contiguous, asserted at build time.
+
+**Interpretable blindspots (#53 lineage).** Blindspots stop being a red overlay. Each cover class now renders a four-line interpretation: plain-English sentence (what concern the model may be missing) → `CAS source: F5 Agency · analytical register` (provenance, small dim text) → `Confidence: 72% medium` (band, when scored) → `Evidence: probe + ablation` (omitted when no sources). The 7 drive sentences are user-authored copy and ship verbatim, asserted by test. Confidence bands match spec exactly: 80-95 high, 60-79 medium, 40-59 low, otherwise unavailable. Default visible filter is high+medium with low behind an expand; unavailable entries are excluded from the textual list. Investor framing: "Atlas doesn't just say 'this model has a blindspot.' It translates the blindspot into the kind of human concern the model may be failing to consider."
+
+**Honesty fixes layered on top of the merge.**
+
+- Worker `cover_library` is runtime-calibrated for **F1-F7 on Pythia-160M** from Stage 27F `row_reports` (`neuron_cover`, `clean_margin`, `targeted_drop`). The live side-panel drive/scope knobs now expose all seven drives because the worker can actually emit and intervene on those cover sets.
+- Confidence is **cover-level**, not single-neuron certainty: `targeted_drop / clean_margin` for the Stage 27F cover class, projected onto each member row so the UI can render it. That says the tested cover set moved the measured signal; it does not claim one neuron equals one meaning. **Zero invented numbers.**
+- BlindspotsPanel distinguishes three states now, not two: (a) **markers detected + scored** -> textual interpretations render; (b) **markers detected + unscored legacy trace** -> panel shows the plain-English meaning but no percentage; (c) **no markers** -> "No cover overlap detected for this frame." The 3D red overlay is unconditional (spatial marker stays); the confidence line depends on calibration evidence.
+- Evidence Drawer word-source rendering documents the LIVE trace_id flow honestly: LIVE-mode TokenEvents do not currently carry trace_ids (those are wired in the REPLAY fixture pipeline only), so the word drawer falls back to the existing "Local replay metadata only" label in LIVE today. Same fallback label PR #46 ships for other sources — no new labels invented.
+
+### Tests
+
+- Worker `pytest` → 60/60 pass (12 word_spans + 25 cover schema + existing).
+- Atlas vitest pending — could not run in the agent sandbox; run before merging.
+- New regression guard `test_word_spans.py::test_token_indices_are_zero_based_contiguous` asserts the tightened contract.
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**

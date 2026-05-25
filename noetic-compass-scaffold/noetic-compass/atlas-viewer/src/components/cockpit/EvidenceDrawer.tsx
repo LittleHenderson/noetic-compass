@@ -5,12 +5,53 @@ import { GlassPanel } from '../ui/GlassPanel';
 import { THEME, SPRING_GENTLE } from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { resolveAtlasApiBaseUrl } from '../../lib/atlasLiveApi';
+import BlindspotInterpretation from './BlindspotInterpretation';
+import type { DriveId, RegisterId } from '../../lib/driveTranslations';
+
+export interface BlindspotInterpretationRef {
+  driveId: DriveId;
+  register?: RegisterId;
+  confidence: number | null;
+  evidenceSources: string[];
+}
+
+export interface NeuronActivation {
+  layer: number;
+  index: number;
+  activation: number;
+}
+
+export interface Mode7Edge {
+  from_token_index: number | null;
+  to_token_index: number;
+  weight: number;
+}
+
+export interface WordSourceTokenDetail {
+  token_index: number;
+  token: string;
+  top_activated_neurons: NeuronActivation[];
+  mode7_attribution: Mode7Edge[];
+  confidence: number | null;
+  trace_id?: string;
+}
+
+export interface WordSourceDetail {
+  tokens: WordSourceTokenDetail[];
+}
 
 export interface EvidenceDrawerPayload {
-  source: 'neuron' | 'primitive' | 'other';
+  source: 'neuron' | 'primitive' | 'word' | 'other';
   title: string;
   evidence_ref?: unknown;
   detail?: unknown;
+  /**
+   * Optional plain-English blindspot interpretations for this artifact.
+   * Populated by the cockpit when the clicked neuron belongs to one or
+   * more cover classes. The drawer renders these BELOW the existing
+   * Evidence Packet payload — see PR #45/#46/#50.
+   */
+  blindspotInterpretations?: BlindspotInterpretationRef[];
 }
 
 export interface EvidenceDrawerProps {
@@ -161,7 +202,47 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
+function extractWordTokens(payload?: EvidenceDrawerPayload): WordSourceTokenDetail[] {
+  if (payload?.source !== 'word') return [];
+  if (!isRecord(payload.detail)) return [];
+  const tokens = payload.detail.tokens;
+  if (!Array.isArray(tokens)) return [];
+  const out: WordSourceTokenDetail[] = [];
+  for (const raw of tokens) {
+    if (!isRecord(raw)) continue;
+    if (typeof raw.token_index !== 'number' || typeof raw.token !== 'string') continue;
+    const top = Array.isArray(raw.top_activated_neurons)
+      ? (raw.top_activated_neurons as NeuronActivation[])
+      : [];
+    const mode7 = Array.isArray(raw.mode7_attribution)
+      ? (raw.mode7_attribution as Mode7Edge[])
+      : [];
+    const confidence =
+      typeof raw.confidence === 'number' ? raw.confidence : null;
+    const traceId = typeof raw.trace_id === 'string' ? raw.trace_id : undefined;
+    out.push({
+      token_index: raw.token_index,
+      token: raw.token,
+      top_activated_neurons: top,
+      mode7_attribution: mode7,
+      confidence,
+      trace_id: traceId,
+    });
+  }
+  return out;
+}
+
 function extractTraceId(payload?: EvidenceDrawerPayload): string | null {
+  // For word source, the first token carrying a trace_id wins. This is
+  // captured separately from the per-token list so the drawer can show
+  // both the packet (one fetch) AND the per-token table.
+  if (payload?.source === 'word') {
+    for (const token of extractWordTokens(payload)) {
+      if (token.trace_id) return token.trace_id;
+    }
+    // No fallthrough — word source uses only token-level trace_ids.
+    return null;
+  }
   const candidates = [payload?.evidence_ref, payload?.detail];
   for (const candidate of candidates) {
     if (isRecord(candidate) && typeof candidate.trace_id === 'string') {
@@ -169,6 +250,32 @@ function extractTraceId(payload?: EvidenceDrawerPayload): string | null {
     }
   }
   return null;
+}
+
+function dedupeMode7Edges(tokens: WordSourceTokenDetail[]): Mode7Edge[] {
+  const seen = new Set<string>();
+  const out: Mode7Edge[] = [];
+  for (const token of tokens) {
+    for (const edge of token.mode7_attribution) {
+      const fromKey = edge.from_token_index === null ? 'null' : String(edge.from_token_index);
+      const key = `${fromKey}->${edge.to_token_index}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      out.push(edge);
+    }
+  }
+  return out;
+}
+
+function escapeForDisplay(text: string): string {
+  // Visually surface whitespace/control chars so the user sees what the
+  // tokenizer produced (leading space, newlines, tabs).
+  return text
+    .replace(/\\/g, '\\\\')
+    .replace(/\n/g, '\\n')
+    .replace(/\t/g, '\\t')
+    .replace(/\r/g, '\\r')
+    .replace(/ /g, '␣'); // open-box for visible space
 }
 
 function stringify(value: unknown): string {
@@ -183,6 +290,7 @@ function packetText(packet: EvidencePacket, key: keyof EvidencePacket): string {
 function localSourceLabel(source?: EvidenceDrawerPayload['source']): string {
   if (source === 'neuron') return 'Neuron click reference';
   if (source === 'primitive') return 'Spatial primitive reference';
+  if (source === 'word') return 'Word click reference';
   return 'Local reference';
 }
 
@@ -215,6 +323,19 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
   const { open, payload, onClose } = props;
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   const traceId = useMemo(() => extractTraceId(payload), [payload]);
+  const wordTokens = useMemo(() => extractWordTokens(payload), [payload]);
+  const wordTraceIds = useMemo(() => {
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const t of wordTokens) {
+      if (t.trace_id && !seen.has(t.trace_id)) {
+        seen.add(t.trace_id);
+        out.push(t.trace_id);
+      }
+    }
+    return out;
+  }, [wordTokens]);
+  const dedupedMode7 = useMemo(() => dedupeMode7Edges(wordTokens), [wordTokens]);
   const [packetState, setPacketState] = useState<PacketState>({ status: 'idle' });
 
   useEffect(() => {
@@ -272,6 +393,22 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
     ? JSON.stringify(payload.detail, null, 2)
     : null;
   const packetFailed = packetState.status === 'error';
+  const blindspots = payload?.blindspotInterpretations ?? [];
+  const blindspotSection =
+    blindspots.length > 0 ? (
+      <div data-testid="evidence-drawer-blindspots" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={sectionLabelStyle}>blindspot interpretation</div>
+        {blindspots.map((b, idx) => (
+          <BlindspotInterpretation
+            key={`${b.driveId}-${b.register ?? 'none'}-${idx}`}
+            driveId={b.driveId}
+            register={b.register}
+            confidence={b.confidence}
+            evidenceSources={b.evidenceSources}
+          />
+        ))}
+      </div>
+    ) : null;
 
   return (
     <>
@@ -325,6 +462,102 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
             </button>
           </header>
           <div style={bodyStyle}>
+            {payload?.source === 'word' && wordTokens.length > 0 ? (
+              <div data-testid="evidence-drawer-word-section" style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div style={sectionLabelStyle}>Tokens behind this word</div>
+                <table
+                  data-testid="evidence-drawer-word-tokens"
+                  style={{
+                    width: '100%',
+                    borderCollapse: 'collapse',
+                    fontSize: 12,
+                    color: '#cbd5e1',
+                  }}
+                >
+                  <thead>
+                    <tr style={{ textAlign: 'left', color: '#94a3b8' }}>
+                      <th style={{ padding: '4px 6px' }}>idx</th>
+                      <th style={{ padding: '4px 6px' }}>token</th>
+                      <th style={{ padding: '4px 6px' }}>conf</th>
+                      <th style={{ padding: '4px 6px' }}>top neurons</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {wordTokens.map((tok) => (
+                      <tr
+                        key={tok.token_index}
+                        data-testid={`evidence-drawer-word-token-row-${tok.token_index}`}
+                        style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}
+                      >
+                        <td style={{ padding: '4px 6px', fontFamily: '"JetBrains Mono", monospace' }}>{tok.token_index}</td>
+                        <td style={{ padding: '4px 6px', fontFamily: '"JetBrains Mono", monospace' }}>
+                          "{escapeForDisplay(tok.token)}"
+                        </td>
+                        <td style={{ padding: '4px 6px', fontFamily: '"JetBrains Mono", monospace' }}>
+                          {tok.confidence === null ? '—' : tok.confidence.toFixed(2)}
+                        </td>
+                        <td style={{ padding: '4px 6px', fontFamily: '"JetBrains Mono", monospace' }}>
+                          {tok.top_activated_neurons.length === 0
+                            ? '—'
+                            : tok.top_activated_neurons
+                                .slice(0, 3)
+                                .map((n) => `L${n.layer}N${n.index}`)
+                                .join(', ')}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+
+                <div style={sectionLabelStyle}>Attention path</div>
+                {dedupedMode7.length === 0 ? (
+                  <div style={{ color: '#94a3b8', fontSize: 12 }} data-testid="evidence-drawer-word-mode7-empty">
+                    No Mode 7 edges recorded for these tokens.
+                  </div>
+                ) : (
+                  <ul
+                    data-testid="evidence-drawer-word-mode7"
+                    style={{
+                      margin: 0,
+                      paddingLeft: 18,
+                      fontSize: 12,
+                      fontFamily: '"JetBrains Mono", monospace',
+                      color: '#cbd5e1',
+                    }}
+                  >
+                    {dedupedMode7.map((edge) => {
+                      const fromLabel =
+                        edge.from_token_index === null
+                          ? 'prompt'
+                          : `token ${edge.from_token_index}`;
+                      const key = `${edge.from_token_index ?? 'null'}->${edge.to_token_index}`;
+                      return (
+                        <li
+                          key={key}
+                          data-testid={`evidence-drawer-word-mode7-edge-${key}`}
+                        >
+                          {fromLabel} → token {edge.to_token_index}
+                          <span style={{ color: '#94a3b8' }}>
+                            {' '}(weight {edge.weight.toFixed(2)})
+                          </span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
+
+                {wordTraceIds.length > 0 ? (
+                  <div data-testid="evidence-drawer-word-trace-ids" style={{ fontSize: 12, color: '#94a3b8' }}>
+                    {wordTraceIds.length === 1
+                      ? `Evidence Packet trace_id: ${wordTraceIds[0]}`
+                      : `Evidence Packet trace_ids: ${wordTraceIds.join(', ')}`}
+                  </div>
+                ) : null}
+
+                <div style={sectionLabelStyle}>Evidence Packet</div>
+              </div>
+            ) : null}
+            {blindspotSection}
             {packetState.status === 'loaded' ? (
               <>
                 <div style={noteStyle} data-testid="evidence-packet-loaded">

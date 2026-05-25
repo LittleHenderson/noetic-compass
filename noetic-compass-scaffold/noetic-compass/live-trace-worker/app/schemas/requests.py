@@ -27,6 +27,8 @@ class CreateSessionRequest(BaseModel):
     # down. Empty list = run the full default probe pipeline.
     probes: list[Literal[
         "active_trace",
+        "blindspot_covers",
+        # Legacy alias accepted so older deployed UI builds still work.
         "blindspots_f1",
         "mode7_attribution",
         "confidence_margin",

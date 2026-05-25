@@ -16,8 +16,14 @@ vi.mock('./NeuralNetScene', () => {
   return {
     NeuralNetScene: (props: {
       onNeuronClick?: (c: { layer: number; index: number; label: string }) => void;
+      focusedBlindspotCoords?: Array<{ layer: number; index: number; label: string }>;
+      focusedBlindspotLabel?: string;
     }) => (
-      <div data-testid="neuralnet-scene-stub">
+      <div
+        data-testid="neuralnet-scene-stub"
+        data-focused-cover={props.focusedBlindspotLabel ?? ''}
+        data-focused-count={props.focusedBlindspotCoords?.length ?? 0}
+      >
         <button
           type="button"
           data-testid="neuralnet-fake-neuron"
@@ -86,6 +92,8 @@ const baseSpatial: SpatialEvidenceArtifact = {
   schema_version: 'spatial_evidence_v1',
   trace_id: 'test-trace',
   image_id: 'test-image',
+  scenario_title: 'Base scene',
+  scenario_sentence: 'The patient nurse trace is shown as a visual grounding fixture.',
   image_url: 'about:blank',
   image_width: 200,
   image_height: 100,
@@ -125,6 +133,35 @@ const baseSpatial: SpatialEvidenceArtifact = {
       step_id: 'step-b',
       token_index: 5,
       primitive_ids: ['p-b'],
+    },
+  ],
+};
+
+const altSpatial: SpatialEvidenceArtifact = {
+  ...baseSpatial,
+  trace_id: 'alt-trace',
+  image_id: 'alt-image',
+  scenario_title: 'Second scene',
+  scenario_sentence: 'A second fixture sentence controls the picture and primitive set.',
+  primitives: [
+    {
+      id: 'p-c',
+      kind: 'box',
+      image_id: 'alt-image',
+      label: 'Primitive C',
+      coords_norm: [0.1, 0.1, 0.2, 0.2],
+      source: 'fixture',
+      cas_axis: 'Drive',
+      cas_label: 'F5|E',
+      evidence_ref: { packet_id: 'pk-c', row_id: 'row-c' },
+    },
+  ],
+  grounded_steps: [
+    {
+      trace_id: 'alt-trace',
+      step_id: 'step-c',
+      token_index: 1,
+      primitive_ids: ['p-c'],
     },
   ],
 };
@@ -281,6 +318,68 @@ describe('AtlasViewerShell — evidence drawer', () => {
   });
 });
 
+describe('AtlasViewerShell — clickable word spans', () => {
+  const wordTrace: ReplayTrace = {
+    ...baseTrace,
+    word_spans: {
+      total_tokens_covered: 10,
+      structural_token_indices: [],
+      spans: [
+        { word: 'The', token_indices: [0], char_start: 0, char_end: 3 },
+        { word: 'patient', token_indices: [1], char_start: 4, char_end: 11 },
+        { word: 'nurse', token_indices: [2], char_start: 12, char_end: 17 },
+        { word: 'triaged', token_indices: [3], char_start: 18, char_end: 25 },
+        { word: 'the', token_indices: [4], char_start: 26, char_end: 29 },
+        { word: 'wound.', token_indices: [5, 6], char_start: 30, char_end: 36 },
+        { word: 'She', token_indices: [7], char_start: 37, char_end: 40 },
+        { word: 'moved', token_indices: [8], char_start: 41, char_end: 46 },
+        { word: 'calmly', token_indices: [9], char_start: 47, char_end: 53 },
+      ],
+    },
+  };
+
+  it('renders the streamed continuation as clickable word spans', () => {
+    renderShell({ trace: wordTrace });
+    expect(screen.getByTestId('word-token-stream')).toBeInTheDocument();
+    const patient = screen.getByTestId('word-stream-word-4');
+    expect(patient).toHaveAttribute('data-word', 'patient');
+  });
+
+  it('opens the Evidence Drawer with the word-scoped payload on click', () => {
+    renderShell({ trace: wordTrace });
+    const drawer = screen.getByTestId('evidence-drawer');
+    expect(drawer.getAttribute('data-open')).toBe('false');
+
+    fireEvent.click(screen.getByTestId('word-stream-word-30'));
+
+    expect(screen.getByTestId('evidence-drawer').getAttribute('data-open')).toBe(
+      'true',
+    );
+    // Header carries the word in quotes and the token range.
+    expect(screen.getAllByText(/wound\./)[0]).toBeInTheDocument();
+    // Multi-token span shows both rows.
+    expect(
+      screen.getByTestId('evidence-drawer-word-token-row-5'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByTestId('evidence-drawer-word-token-row-6'),
+    ).toBeInTheDocument();
+  });
+
+  it('seeks playback to the first token in the clicked word', () => {
+    renderShell({ trace: wordTrace });
+    fireEvent.click(screen.getByTestId('word-stream-word-30'));
+    const label = screen.getByTestId('token-label');
+    // Span "wound." starts at token 5 → label "6 / 10" (1-indexed display).
+    expect(label.textContent).toContain('6 / 10');
+  });
+
+  it('shows the placeholder when no word_spans event has arrived yet', () => {
+    renderShell();
+    expect(screen.getByTestId('word-token-stream-placeholder')).toBeInTheDocument();
+  });
+});
+
 describe('AtlasViewerShell — grounded step derivation', () => {
   it('shows no active primitives before the first grounded step', () => {
     renderShell();
@@ -301,5 +400,65 @@ describe('AtlasViewerShell — grounded step derivation', () => {
     fireEvent.change(scrubber, { target: { value: '5' } });
     expect(screen.getByTestId('spatial-evidence-card-p-b')).toBeInTheDocument();
     expect(screen.queryByTestId('spatial-evidence-card-p-a')).toBeNull();
+  });
+
+  it('switches between multiple picture-and-sentence spatial fixtures', () => {
+    renderShell({ spatialEvidenceOptions: [baseSpatial, altSpatial] });
+    expect(screen.getByTestId('spatial-scenario-selector')).toBeInTheDocument();
+    expect(screen.getByText('Base scene')).toBeInTheDocument();
+    expect(screen.getByText('Second scene')).toBeInTheDocument();
+    expect(screen.getByTestId('spatial-scenario-active-sentence').textContent).toBe(
+      'The patient nurse trace is shown as a visual grounding fixture.',
+    );
+    expect(screen.getByTestId('word-token-stream-placeholder').textContent).toBe(
+      'The patient nurse trace is shown as a visual grounding fixture.',
+    );
+    expect(screen.getByTestId('mode7-timeline-cell-0').textContent).toContain(
+      'The',
+    );
+    expect(screen.getByTestId('mode7-timeline-cell-1').textContent).toContain(
+      'patient',
+    );
+
+    fireEvent.click(screen.getByTestId('spatial-scenario-alt-trace'));
+    const scrubber = screen.getByTestId('token-scrubber') as HTMLInputElement;
+    fireEvent.change(scrubber, { target: { value: '1' } });
+    expect(screen.getByTestId('spatial-scenario-active-sentence').textContent).toBe(
+      'A second fixture sentence controls the picture and primitive set.',
+    );
+    expect(screen.getByTestId('word-token-stream-placeholder').textContent).toBe(
+      'A second fixture sentence controls the picture and primitive set.',
+    );
+    expect(screen.getByTestId('mode7-timeline-cell-0').textContent).toContain(
+      'A',
+    );
+    expect(screen.getByTestId('mode7-timeline-cell-1').textContent).toContain(
+      'second',
+    );
+    expect(screen.getByTestId('mode7-timeline-edge-0-1')).toBeInTheDocument();
+    expect(screen.getByTestId('spatial-evidence-card-p-c')).toBeInTheDocument();
+    expect(screen.queryByTestId('spatial-evidence-card-p-a')).toBeNull();
+  });
+});
+
+describe('AtlasViewerShell — blindspot cover focusing', () => {
+  it('routes a blindspot row click into focused 3D neuron coordinates', () => {
+    const traceWithCovers = {
+      ...baseTrace,
+      neuron_covers: {
+        per_class_neuron_covers: {
+          F1A: [
+            { label: 'L3N142', confidence: 0.84, confidence_band: 'high', evidence_sources: ['probe'] },
+            { label: 'L3N518', confidence: 0.82, confidence_band: 'high', evidence_sources: ['probe'] },
+          ],
+        },
+      },
+    } as unknown as ReplayTrace;
+
+    renderShell({ trace: traceWithCovers });
+    fireEvent.click(screen.getByTestId('blindspot-focus-cover'));
+    const scene = screen.getByTestId('neuralnet-scene-stub');
+    expect(scene.getAttribute('data-focused-cover')).toBe('F1A');
+    expect(scene.getAttribute('data-focused-count')).toBe('2');
   });
 });

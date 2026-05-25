@@ -151,13 +151,14 @@ describe('ReplayController', () => {
     expect(c.getState().currentTokenIndex).toBe(0);
   });
 
-  it('play() on the last token is a no-op', () => {
+  it('play() on the last token restarts from the beginning', () => {
     const c = new ReplayController(makeTrace(3), { tickIntervalMs: 100 });
     c.seek(2);
     c.play();
-    expect(c.getState().playbackMode).toBe('paused');
-    vi.advanceTimersByTime(1000);
-    expect(c.getState().currentTokenIndex).toBe(2);
+    expect(c.getState().playbackMode).toBe('playing');
+    expect(c.getState().currentTokenIndex).toBe(0);
+    vi.advanceTimersByTime(100);
+    expect(c.getState().currentTokenIndex).toBe(1);
     c.destroy();
   });
 });

@@ -101,7 +101,8 @@ curl -N https://<pod>.proxy.runpod.net/sessions/<id>/events
 Expected sequence:
 
 1. `event: manifest` with `is_real_model: true` (NOT false — that's demo mode)
-2. `event: neuron_covers` with F1 cover sets
+2. `event: neuron_covers` with the selected Stage 27F calibrated F1-F7 cover
+   sets (`scope=all_7` emits all 28 Foundation class covers)
 3. `event: token` × max_new_tokens — each with:
    * `token` decoded by the Pythia tokenizer (NOT the whitespace-split
      stand-in; real BPE produces e.g. `" the"` with leading space)

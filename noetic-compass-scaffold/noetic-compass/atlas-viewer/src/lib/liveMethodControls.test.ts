@@ -26,7 +26,7 @@ describe('liveMethodControls', () => {
     expect(probesForControls(baseControls)).toEqual([
       'active_trace',
       'mode7_attribution',
-      'blindspots_f1',
+      'blindspot_covers',
       'confidence_margin',
     ]);
   });

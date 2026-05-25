@@ -26,9 +26,9 @@ const PROBES_BY_METHOD: Record<LiveMethodId, LiveProbeName[]> = {
   foundation_probe: ['active_trace'],
   rpm_gate_check: ['mode7_attribution'],
   inversion_scan: ['active_trace', 'confidence_margin'],
-  sparse_neuron_cover: ['blindspots_f1'],
+  sparse_neuron_cover: ['blindspot_covers'],
   drive_local_eraser: ['active_trace', 'confidence_margin'],
-  blindspot_detection: ['blindspots_f1'],
+  blindspot_detection: ['blindspot_covers'],
   verification_stack: ['confidence_margin'],
 };
 
@@ -69,7 +69,7 @@ export function probesForControls(controls: LiveMethodControls): LiveProbeName[]
     remove(out, 'active_trace');
   }
   if (!controls.showBlindspots) {
-    remove(out, 'blindspots_f1');
+    remove(out, 'blindspot_covers');
   }
   return out;
 }

@@ -73,11 +73,16 @@ def test_dump_session_emits_full_event_sequence(client):
                 assert 0 <= edge["from_token_index"] < i
                 assert edge["to_token_index"] == i
 
-    # Cover sets present and conform to the offline trace shape.
+    # Cover sets present, now carried as typed NeuronCoverMember records.
     covers = events[1]["per_class_neuron_covers"]
     for cls in ("F1A", "F1T", "F1f", "F1E"):
         assert cls in covers
-        assert all(label.startswith("L") and "N" in label for label in covers[cls])
+        for member in covers[cls]:
+            # Each member must carry label + confidence_band + evidence_sources.
+            assert isinstance(member, dict)
+            assert member["label"].startswith("L") and "N" in member["label"]
+            assert member["confidence_band"] in {"high", "medium", "low", "unavailable"}
+            assert isinstance(member["evidence_sources"], list)
 
 
 def test_dump_session_is_deterministic_under_seed(client):

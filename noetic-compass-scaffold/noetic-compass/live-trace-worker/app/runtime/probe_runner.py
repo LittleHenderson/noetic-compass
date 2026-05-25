@@ -25,6 +25,7 @@ logger = logging.getLogger(__name__)
 
 ProbeName = Literal[
     "active_trace",
+    "blindspot_covers",
     "blindspots_f1",
     "mode7_attribution",
     "confidence_margin",
@@ -32,10 +33,14 @@ ProbeName = Literal[
 
 DEFAULT_PROBES: tuple[ProbeName, ...] = (
     "active_trace",
-    "blindspots_f1",
+    "blindspot_covers",
     "mode7_attribution",
     "confidence_margin",
 )
+
+LEGACY_PROBE_ALIASES: dict[ProbeName, ProbeName] = {
+    "blindspots_f1": "blindspot_covers",
+}
 
 
 def resolve_probes(requested: list[ProbeName]) -> tuple[ProbeName, ...]:
@@ -45,10 +50,11 @@ def resolve_probes(requested: list[ProbeName]) -> tuple[ProbeName, ...]:
     seen: set[ProbeName] = set()
     out: list[ProbeName] = []
     for p in requested:
-        if p in seen:
+        canonical = LEGACY_PROBE_ALIASES.get(p, p)
+        if canonical in seen:
             continue
-        seen.add(p)
-        out.append(p)
+        seen.add(canonical)
+        out.append(canonical)
     return tuple(out)
 
 

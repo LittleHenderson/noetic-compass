@@ -1,0 +1,106 @@
+{
+  "schema_version": "spatial_evidence_v1",
+  "trace_id": "demo-trace-clinic-001",
+  "image_id": "demo-image-clinic-001",
+  "scenario_title": "Clinic consent moment",
+  "scenario_sentence": "A clinician checks a chart while a patient and family member discuss consent.",
+  "image_url": "./visualGroundingClinic.svg",
+  "image_width": 640,
+  "image_height": 480,
+  "primitives": [
+    {
+      "id": "cl-001",
+      "kind": "box",
+      "image_id": "demo-image-clinic-001",
+      "label": "Patient in bed",
+      "coords_norm": [0.1125, 0.3667, 0.5875, 0.3000],
+      "coords_px": [72, 176, 376, 144],
+      "cas_axis": "Drive",
+      "cas_label": "F3|E",
+      "confidence": 0.84,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-clinic-001", "row_id": "row-1" },
+      "explanation": "The model grounds the patient as the health and vulnerability center of the scene."
+    },
+    {
+      "id": "cl-002",
+      "kind": "box",
+      "image_id": "demo-image-clinic-001",
+      "label": "Clinician with chart",
+      "coords_norm": [0.6984, 0.2458, 0.1750, 0.3521],
+      "coords_px": [447, 118, 112, 169],
+      "cas_axis": "Drive",
+      "cas_label": "F6|E",
+      "confidence": 0.87,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-clinic-001", "row_id": "row-2" },
+      "explanation": "The chart and clinician form the rule-and-record evidence governing the next decision."
+    },
+    {
+      "id": "cl-003",
+      "kind": "box",
+      "image_id": "demo-image-clinic-001",
+      "label": "Family member",
+      "coords_norm": [0.1109, 0.1625, 0.1500, 0.2833],
+      "coords_px": [71, 78, 96, 136],
+      "cas_axis": "Drive",
+      "cas_label": "F4|E",
+      "confidence": 0.78,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-clinic-001", "row_id": "row-3" },
+      "explanation": "The model identifies the family member as relational context that can affect trust and pressure."
+    },
+    {
+      "id": "cl-004",
+      "kind": "point",
+      "image_id": "demo-image-clinic-001",
+      "label": "Consent question",
+      "coords_norm": [0.7578, 0.1958],
+      "coords_px": [485, 94],
+      "cas_axis": "Drive",
+      "cas_label": "F5|E",
+      "confidence": 0.81,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-clinic-001", "row_id": "row-4" },
+      "explanation": "The consent label is the agency cue: the model should consider choice, permission, and control."
+    }
+  ],
+  "grounded_steps": [
+    {
+      "trace_id": "demo-trace-clinic-001",
+      "step_id": "cl-step-001",
+      "token_index": 5,
+      "text_span": "A clinician checks",
+      "cas_state": "F6|E",
+      "primitive_ids": ["cl-002"],
+      "evidence_packet_ref": "demo-packet-clinic-001"
+    },
+    {
+      "trace_id": "demo-trace-clinic-001",
+      "step_id": "cl-step-002",
+      "token_index": 9,
+      "text_span": "a chart",
+      "cas_state": "F6|E",
+      "primitive_ids": ["cl-002"],
+      "evidence_packet_ref": "demo-packet-clinic-001"
+    },
+    {
+      "trace_id": "demo-trace-clinic-001",
+      "step_id": "cl-step-003",
+      "token_index": 13,
+      "text_span": "a patient and family member",
+      "cas_state": "F4|E",
+      "primitive_ids": ["cl-001", "cl-003"],
+      "evidence_packet_ref": "demo-packet-clinic-001"
+    },
+    {
+      "trace_id": "demo-trace-clinic-001",
+      "step_id": "cl-step-004",
+      "token_index": 17,
+      "text_span": "discuss consent",
+      "cas_state": "F5|E",
+      "primitive_ids": ["cl-004", "cl-001", "cl-003"],
+      "evidence_packet_ref": "demo-packet-clinic-001"
+    }
+  ]
+}

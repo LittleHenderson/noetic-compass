@@ -296,13 +296,14 @@ export const TESTING_METHODS: readonly TestingMethod[] = [
   SPATIAL_EVIDENCE_MODULE,
 ];
 
-const LIVE_F1_ONLY_KNOB: KnobDef = {
+const LIVE_CALIBRATED_DRIVE_KNOB: KnobDef = {
   id: 'drive',
   label: 'Drive',
   type: 'enum',
   default: 'F1',
-  options: ['F1'] as const,
-  description: 'Alpha live worker has calibrated F1 cover/intervention only.',
+  options: ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'] as const,
+  description:
+    'Selects a Stage 27F calibrated Pythia-160M cover. Confidence is cover-level targeted_drop / clean_margin, not single-neuron certainty.',
 };
 
 export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
@@ -342,8 +343,8 @@ export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
   {
     ...SPARSE_NEURON_COVER,
     description:
-      'Sent to the live worker. Selects the causal F1 neuron-cover set used by the live blindspot/intervention overlays.',
-    reveals: 'The exact cover coordinates the live worker is using for F1',
+      'Sent to the live worker. Selects the calibrated F1-F7 neuron-cover set used by the live blindspot/intervention overlays.',
+    reveals: 'The exact cover coordinates the live worker is using for the selected drive',
     outputShape: 'Live neuron-cover event for the selected target class',
     knobs: [
       {
@@ -351,7 +352,7 @@ export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
         label: 'Target class',
         type: 'enum',
         default: 'F1',
-        options: ['F1'] as const,
+        options: ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'] as const,
       },
       {
         id: 'sparsity_budget',
@@ -365,24 +366,24 @@ export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
   {
     ...DRIVE_LOCAL_ERASER,
     description:
-      'Sent to the live worker. Applies a real runtime MLP-output suppression hook to the selected F1 cover before logits are decoded.',
-    reveals: 'Whether suppressing the live F1 cover changes the next tokens and confidence',
+      'Sent to the live worker. Applies a real runtime MLP-output suppression hook to the selected calibrated F1-F7 cover before logits are decoded.',
+    reveals: 'Whether suppressing the selected live cover changes the next tokens and confidence',
     outputShape: 'Live generation under the selected eraser gain',
-    knobs: [LIVE_F1_ONLY_KNOB, DRIVE_LOCAL_ERASER.knobs[1]],
+    knobs: [LIVE_CALIBRATED_DRIVE_KNOB, DRIVE_LOCAL_ERASER.knobs[1]],
   },
   {
     ...BLINDSPOT_DETECTION,
     description:
-      'Sent to the live worker. Controls which F1 cover coordinates are emitted for the red blindspot overlay.',
-    reveals: 'Which F1 cover neurons are being watched during this live run',
+      'Sent to the live worker. Controls which calibrated F1-F7 cover coordinates are emitted for the red blindspot overlay.',
+    reveals: 'Which cover neurons are being watched during this live run',
     outputShape: 'Live neuron-cover event used directly by the 3D overlay',
     knobs: [
       {
         id: 'scope',
         label: 'Scope',
         type: 'enum',
-        default: 'F1',
-        options: ['F1'] as const,
+        default: 'all_7',
+        options: ['all_7', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'] as const,
       },
       BLINDSPOT_DETECTION.knobs[1],
     ],

@@ -1,0 +1,106 @@
+{
+  "schema_version": "spatial_evidence_v1",
+  "trace_id": "demo-trace-crosswalk-001",
+  "image_id": "demo-image-crosswalk-001",
+  "scenario_title": "Blocked curb ramp",
+  "scenario_sentence": "A child waits at a crosswalk while a delivery van blocks the curb ramp.",
+  "image_url": "./visualGroundingCrosswalk.svg",
+  "image_width": 640,
+  "image_height": 480,
+  "primitives": [
+    {
+      "id": "cw-001",
+      "kind": "box",
+      "image_id": "demo-image-crosswalk-001",
+      "label": "Waiting child",
+      "coords_norm": [0.3625, 0.3729, 0.0813, 0.2729],
+      "coords_px": [232, 179, 52, 131],
+      "cas_axis": "Drive",
+      "cas_label": "F3|E",
+      "confidence": 0.86,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-crosswalk-001", "row_id": "row-1" },
+      "explanation": "The model grounds the small pedestrian as the safety-critical person in the scene."
+    },
+    {
+      "id": "cw-002",
+      "kind": "box",
+      "image_id": "demo-image-crosswalk-001",
+      "label": "Delivery van",
+      "coords_norm": [0.1094, 0.3229, 0.2266, 0.2333],
+      "coords_px": [70, 155, 145, 112],
+      "cas_axis": "Domain",
+      "cas_label": "^0^P|E",
+      "confidence": 0.88,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-crosswalk-001", "row_id": "row-2" },
+      "explanation": "The model identifies the van as the object changing the usable path through the street."
+    },
+    {
+      "id": "cw-003",
+      "kind": "box",
+      "image_id": "demo-image-crosswalk-001",
+      "label": "Blocked curb ramp",
+      "coords_norm": [0.3344, 0.5104, 0.1438, 0.0708],
+      "coords_px": [214, 245, 92, 34],
+      "cas_axis": "Drive",
+      "cas_label": "F6|E",
+      "confidence": 0.80,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-crosswalk-001", "row_id": "row-3" },
+      "explanation": "The curb ramp is the constraint that should govern the answer: access is blocked."
+    },
+    {
+      "id": "cw-004",
+      "kind": "region",
+      "image_id": "demo-image-crosswalk-001",
+      "label": "Crosswalk path",
+      "coords_norm": [0.0688, 0.6958, 0.8719, 0.6958, 0.8719, 0.7333, 0.0688, 0.7333],
+      "coords_px": [44, 334, 558, 334, 558, 352, 44, 352],
+      "cas_axis": "Noetic",
+      "cas_label": "^5^C|E",
+      "confidence": 0.82,
+      "source": "fixture",
+      "evidence_ref": { "packet_id": "demo-packet-crosswalk-001", "row_id": "row-4" },
+      "explanation": "The crosswalk stripes are grouped as the intended safe route across the road."
+    }
+  ],
+  "grounded_steps": [
+    {
+      "trace_id": "demo-trace-crosswalk-001",
+      "step_id": "cw-step-001",
+      "token_index": 5,
+      "text_span": "A child waits",
+      "cas_state": "F3|E",
+      "primitive_ids": ["cw-001"],
+      "evidence_packet_ref": "demo-packet-crosswalk-001"
+    },
+    {
+      "trace_id": "demo-trace-crosswalk-001",
+      "step_id": "cw-step-002",
+      "token_index": 9,
+      "text_span": "at a crosswalk",
+      "cas_state": "^5^C|E",
+      "primitive_ids": ["cw-004"],
+      "evidence_packet_ref": "demo-packet-crosswalk-001"
+    },
+    {
+      "trace_id": "demo-trace-crosswalk-001",
+      "step_id": "cw-step-003",
+      "token_index": 13,
+      "text_span": "a delivery van blocks",
+      "cas_state": "^0^P|E",
+      "primitive_ids": ["cw-002"],
+      "evidence_packet_ref": "demo-packet-crosswalk-001"
+    },
+    {
+      "trace_id": "demo-trace-crosswalk-001",
+      "step_id": "cw-step-004",
+      "token_index": 17,
+      "text_span": "the curb ramp",
+      "cas_state": "F6|E",
+      "primitive_ids": ["cw-003", "cw-004"],
+      "evidence_packet_ref": "demo-packet-crosswalk-001"
+    }
+  ]
+}

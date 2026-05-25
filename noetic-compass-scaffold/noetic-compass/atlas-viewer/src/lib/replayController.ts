@@ -3,9 +3,27 @@ export interface ReplayTrace {
   per_token_frames: unknown[];
   model_id?: string;
   neuron_covers?: {
-    per_class_neuron_covers?: Record<string, string[]>;
+    // Each value is now a list of NeuronCoverMember-shaped records OR
+    // legacy bare strings (older offline fixtures). The atlas viewer
+    // normalises both shapes via atlasLiveApi.normaliseCoverMember.
+    per_class_neuron_covers?: Record<string, unknown[]>;
   };
   model_manifest?: unknown;
+  /**
+   * Word-level token-backing for the generated continuation. Populated by
+   * the live worker's WordSpansEvent (emitted once, just before complete).
+   * Absent for offline replay traces — UI must tolerate undefined.
+   */
+  word_spans?: {
+    spans: {
+      word: string;
+      token_indices: number[];
+      char_start: number;
+      char_end: number;
+    }[];
+    structural_token_indices?: number[];
+    total_tokens_covered: number;
+  };
 }
 
 export type ReplaySpeed = 0.25 | 0.5 | 1 | 2 | 4;
@@ -56,9 +74,14 @@ export class ReplayController {
   play(): void {
     if (this.destroyed) return;
     if (this.state.tokenCount === 0) return;
-    if (this.state.currentTokenIndex >= this.state.tokenCount - 1) return;
+    if (this.state.tokenCount === 1) return;
     if (this.state.playbackMode === 'playing') return;
-    this.setState({ ...this.state, playbackMode: 'playing' });
+    const restartFromEnd = this.state.currentTokenIndex >= this.state.tokenCount - 1;
+    this.setState({
+      ...this.state,
+      currentTokenIndex: restartFromEnd ? 0 : this.state.currentTokenIndex,
+      playbackMode: 'playing',
+    });
     this.scheduleTick();
   }
 

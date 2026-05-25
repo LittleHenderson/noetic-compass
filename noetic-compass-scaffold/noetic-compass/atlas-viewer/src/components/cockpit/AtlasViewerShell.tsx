@@ -20,10 +20,22 @@ import Mode7Timeline, {
 import MethodKnobsPanel, { type KnobValue } from './MethodKnobsPanel';
 import SpatialEvidencePanel from './SpatialEvidencePanel';
 import VisualPrimitiveCanvas from './VisualPrimitiveCanvas';
-import EvidenceDrawer, { type EvidenceDrawerPayload } from './EvidenceDrawer';
+import EvidenceDrawer, {
+  type BlindspotInterpretationRef,
+  type EvidenceDrawerPayload,
+  type Mode7Edge as EvidenceMode7Edge,
+  type NeuronActivation as EvidenceNeuronActivation,
+} from './EvidenceDrawer';
+import WordTokenStream, { type WordSpan } from './WordTokenStream';
 import HelpOverlay from './HelpOverlay';
 import CasBaselineEvidencePanel from './CasBaselineEvidencePanel';
+import BlindspotsPanel from './BlindspotsPanel';
 import NeuralNetLegend from './NeuralNetLegend';
+import { parseDriveClassKey } from '../../lib/driveTranslations';
+import {
+  bandForConfidence,
+  type ConfidenceBand,
+} from '../../lib/confidenceBands';
 import { useReplayController } from '../../hooks/useReplayController';
 import type { ReplayTrace } from '../../lib/replayController';
 import type { ModelArchitecture } from '../../lib/modelArchitecture';
@@ -43,15 +55,25 @@ import {
 } from '../../lib/visualPrimitives';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { parseCoord } from '../../lib/neuronCover';
+import { normaliseCoverMember } from '../../lib/atlasLiveApi';
 import { GlassPanel } from '../ui/GlassPanel';
 import { ACCENT_TEAL, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
 
 interface TraceNeuronCovers {
-  per_class_neuron_covers?: Record<string, string[]>;
+  // unknown[] tolerates BOTH the legacy bare-string shape AND the new
+  // typed-record shape. Callers run each entry through
+  // normaliseCoverMember from atlasLiveApi before use.
+  per_class_neuron_covers?: Record<string, unknown[]>;
+}
+interface TraceWordSpans {
+  spans: WordSpan[];
+  structural_token_indices?: number[];
+  total_tokens_covered: number;
 }
 interface TraceWithCovers {
   neuron_covers?: TraceNeuronCovers;
   model_id?: string;
+  word_spans?: TraceWordSpans;
 }
 
 const LIVE_METHOD_IDS: readonly LiveMethodId[] = [
@@ -68,6 +90,7 @@ const LIVE_METHOD_ID_SET = new Set<string>(LIVE_METHOD_IDS);
 export interface AtlasViewerShellProps {
   trace: ReplayTrace;
   spatialEvidence: SpatialEvidenceArtifact;
+  spatialEvidenceOptions?: readonly SpatialEvidenceArtifact[];
   architecture: ModelArchitecture;
   methods?: readonly TestingMethod[];
   runtimeMode?: RuntimeMode;
@@ -160,6 +183,43 @@ const tabPanelStyle: CSSProperties = {
   flexDirection: 'column',
   gap: 12,
   minHeight: 0,
+};
+
+const spatialScenarioSelectorStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
+  gap: 7,
+};
+
+const spatialScenarioButtonStyle = (active: boolean): CSSProperties => ({
+  flex: '1 1 120px',
+  textAlign: 'left',
+  border: active
+    ? `1px solid ${ACCENT_TEAL}`
+    : '1px solid rgba(148, 163, 184, 0.22)',
+  background: active ? 'rgba(20, 184, 166, 0.14)' : 'rgba(15, 23, 42, 0.42)',
+  color: active ? '#ccfbf1' : COLORS.textSecondary,
+  borderRadius: 8,
+  padding: '6px 8px',
+  cursor: 'pointer',
+});
+
+const spatialScenarioTitleStyle: CSSProperties = {
+  display: 'block',
+  fontSize: 12,
+  fontWeight: 800,
+};
+
+const spatialScenarioSentenceStyle: CSSProperties = {
+  margin: 0,
+  padding: '9px 10px',
+  borderRadius: 8,
+  border: '1px solid rgba(45, 212, 191, 0.22)',
+  background: 'rgba(20, 184, 166, 0.08)',
+  color: COLORS.textSecondary,
+  fontSize: 12,
+  lineHeight: 1.45,
 };
 
 const centerSceneWrapperStyle: CSSProperties = {
@@ -308,10 +368,41 @@ function frameAtIndex(frames: unknown[], index: number): PerTokenFrame | undefin
   return candidate as PerTokenFrame;
 }
 
+function sentenceToTokens(sentence?: string): Token[] {
+  if (!sentence) return [];
+  const pieces = sentence.match(/\S+|\s+/g) ?? [];
+  const tokens: Token[] = [];
+  let tokenIndex = 0;
+  for (const piece of pieces) {
+    if (!/\S/.test(piece)) continue;
+    const leadingSpace = tokenIndex === 0 ? '' : ' ';
+    tokens.push({ token_index: tokenIndex, token: `${leadingSpace}${piece}` });
+    tokenIndex += 1;
+  }
+  return tokens;
+}
+
+function sentenceToMode7Frames(tokens: Token[]): Mode7Frame[] {
+  return tokens.map((tok, idx) => ({
+    token_index: tok.token_index,
+    mode7_attribution:
+      idx === 0
+        ? [{ from_token_index: null, to_token_index: tok.token_index, weight: 1 }]
+        : [
+            {
+              from_token_index: tokens[idx - 1]?.token_index ?? null,
+              to_token_index: tok.token_index,
+              weight: 0.72,
+            },
+          ],
+  }));
+}
+
 export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const {
     trace,
     spatialEvidence,
+    spatialEvidenceOptions,
     architecture,
     methods = LIVE_WORKER_METHODS,
     runtimeMode = 'replay',
@@ -337,6 +428,16 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const [activePrimitiveId, setActivePrimitiveId] = useState<string | undefined>(
     undefined,
   );
+  const spatialEvidenceChoices = useMemo<readonly SpatialEvidenceArtifact[]>(
+    () =>
+      spatialEvidenceOptions && spatialEvidenceOptions.length > 0
+        ? spatialEvidenceOptions
+        : [spatialEvidence],
+    [spatialEvidenceOptions, spatialEvidence],
+  );
+  const [selectedSpatialTraceId, setSelectedSpatialTraceId] = useState<string>(
+    spatialEvidence.trace_id,
+  );
   const [enabledMethodIds, setEnabledMethodIds] = useState<Set<string>>(
     () => new Set(methods.map((m) => m.id)),
   );
@@ -346,6 +447,9 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(0);
   const [showBlindspots, setShowBlindspots] = useState<boolean>(true);
   const [showActiveTrace, setShowActiveTrace] = useState<boolean>(true);
+  const [focusedBlindspotClassKey, setFocusedBlindspotClassKey] = useState<
+    string | null
+  >(null);
   const [verificationMode, setVerificationMode] =
     useState<VerificationMode>('BALANCED');
   const [evidenceDrawerOpen, setEvidenceDrawerOpen] = useState<boolean>(false);
@@ -364,12 +468,33 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     onLiveControlsChangeRef.current = onLiveControlsChange;
   }, [onLiveControlsChange]);
 
+  const activeSpatialEvidence = useMemo<SpatialEvidenceArtifact>(() => {
+    return (
+      spatialEvidenceChoices.find((item) => item.trace_id === selectedSpatialTraceId) ??
+      spatialEvidenceChoices[0] ??
+      spatialEvidence
+    );
+  }, [spatialEvidenceChoices, selectedSpatialTraceId, spatialEvidence]);
+
+  useEffect(() => {
+    if (!spatialEvidenceChoices.some((item) => item.trace_id === selectedSpatialTraceId)) {
+      setSelectedSpatialTraceId(spatialEvidenceChoices[0]?.trace_id ?? spatialEvidence.trace_id);
+      setActivePrimitiveId(undefined);
+    }
+  }, [spatialEvidenceChoices, selectedSpatialTraceId, spatialEvidence.trace_id]);
+
   const tokens = useMemo<Token[]>(() => {
     if (trace.tokens && trace.tokens.length > 0) return trace.tokens;
     return trace.per_token_frames
       .map(frameToToken)
       .filter((t): t is Token => t !== null);
   }, [trace.tokens, trace.per_token_frames]);
+
+  const wordSpans = useMemo<WordSpan[] | undefined>(() => {
+    const ws = (trace as unknown as TraceWithCovers).word_spans;
+    if (!ws || !Array.isArray(ws.spans) || ws.spans.length === 0) return undefined;
+    return ws.spans;
+  }, [trace]);
 
   const mode7Frames = useMemo<Mode7Frame[]>(() => {
     return trace.per_token_frames
@@ -391,19 +516,39 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   );
 
   const activeStep = useMemo(() => {
-    return spatialEvidence.grounded_steps.find(
+    return activeSpatialEvidence.grounded_steps.find(
       (s) => s.token_index === currentTokenIndex,
     );
-  }, [spatialEvidence.grounded_steps, currentTokenIndex]);
+  }, [activeSpatialEvidence.grounded_steps, currentTokenIndex]);
 
   const activePrimitives = useMemo<VisualPrimitive[]>(() => {
     if (!activeStep) return [];
-    return primitivesForStep(spatialEvidence, activeStep.step_id);
-  }, [spatialEvidence, activeStep]);
+    return primitivesForStep(activeSpatialEvidence, activeStep.step_id);
+  }, [activeSpatialEvidence, activeStep]);
 
   const activePrimitiveIds = useMemo<string[]>(
     () => activePrimitives.map((p) => p.id),
     [activePrimitives],
+  );
+  const pictureSentenceTokens = useMemo<Token[]>(
+    () => sentenceToTokens(activeSpatialEvidence.scenario_sentence),
+    [activeSpatialEvidence.scenario_sentence],
+  );
+  const pictureSentenceMode7Frames = useMemo<Mode7Frame[]>(
+    () => sentenceToMode7Frames(pictureSentenceTokens),
+    [pictureSentenceTokens],
+  );
+  const usePictureSentenceTimeline =
+    (wordSpans?.length ?? 0) === 0 &&
+    runtimeMode !== 'live' &&
+    pictureSentenceTokens.length > 0;
+  const bottomStreamTokens = usePictureSentenceTimeline ? pictureSentenceTokens : tokens;
+  const bottomTimelineFrames = usePictureSentenceTimeline
+    ? pictureSentenceMode7Frames
+    : mode7Frames;
+  const bottomStreamCurrentTokenIndex = Math.min(
+    currentTokenIndex,
+    Math.max(0, bottomStreamTokens.length - 1),
   );
 
   const activeTraceCoords = useMemo<NeuronCoord[] | undefined>(() => {
@@ -417,14 +562,22 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       }));
   }, [showActiveTrace, currentFrame]);
 
+  const rawCovers = (trace as unknown as TraceWithCovers).neuron_covers?.per_class_neuron_covers;
+
   const blindspotCoords = useMemo<NeuronCoord[] | undefined>(() => {
     if (!showBlindspots) return undefined;
-    const covers = (trace as unknown as TraceWithCovers).neuron_covers?.per_class_neuron_covers;
+    const covers = rawCovers;
     if (!covers) return undefined;
     const seen = new Set<string>();
     const out: NeuronCoord[] = [];
-    for (const labels of Object.values(covers)) {
-      for (const label of labels) {
+    for (const members of Object.values(covers)) {
+      for (const member of members) {
+        // Support both legacy bare strings AND new typed records here so
+        // the 3D scene paints whether or not probe scores have landed.
+        const normalised = normaliseCoverMember(
+          member as Parameters<typeof normaliseCoverMember>[0],
+        );
+        const label = normalised.label;
         if (seen.has(label)) continue;
         seen.add(label);
         try {
@@ -435,7 +588,73 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       }
     }
     return out;
-  }, [showBlindspots, trace]);
+  }, [showBlindspots, rawCovers]);
+
+  const focusedBlindspotCoords = useMemo<NeuronCoord[] | undefined>(() => {
+    if (!showBlindspots || !focusedBlindspotClassKey || !rawCovers) {
+      return undefined;
+    }
+    const members = rawCovers[focusedBlindspotClassKey];
+    if (!members) return undefined;
+    const seen = new Set<string>();
+    const out: NeuronCoord[] = [];
+    for (const member of members) {
+      const normalised = normaliseCoverMember(
+        member as Parameters<typeof normaliseCoverMember>[0],
+      );
+      const label = normalised.label;
+      if (seen.has(label)) continue;
+      seen.add(label);
+      try {
+        out.push(parseCoord(label));
+      } catch {
+        // Skip malformed cover entries; don't crash the scene.
+      }
+    }
+    return out;
+  }, [showBlindspots, focusedBlindspotClassKey, rawCovers]);
+
+  /**
+   * Index from neuron label (e.g. "L3N142") to the list of cover classes
+   * that label belongs to. Used to surface the plain-English blindspot
+   * interpretation in the Evidence Drawer when the user clicks a neuron.
+   */
+  const blindspotIndex = useMemo<
+    Map<string, BlindspotInterpretationRef[]>
+  >(() => {
+    const idx = new Map<string, BlindspotInterpretationRef[]>();
+    if (!rawCovers) return idx;
+    for (const [classKey, rawMembers] of Object.entries(rawCovers)) {
+      const parsed = parseDriveClassKey(classKey);
+      if (!parsed) continue;
+      const members = (rawMembers ?? []).map((raw) =>
+        normaliseCoverMember(
+          raw as Parameters<typeof normaliseCoverMember>[0],
+        ),
+      );
+      for (const member of members) {
+        // Per spec: drawer surfaces high+medium+low interpretations.
+        // "Unavailable" entries don't have enough evidence to interpret,
+        // so we skip them here too — same rule as the panel.
+        const band: ConfidenceBand =
+          member.confidence_band ?? bandForConfidence(member.confidence);
+        if (band === 'unavailable') continue;
+        const entry: BlindspotInterpretationRef = {
+          driveId: parsed.driveId,
+          register: parsed.register ?? undefined,
+          confidence: member.confidence,
+          evidenceSources: member.evidence_sources,
+        };
+        const existing = idx.get(member.label);
+        if (existing) {
+          existing.push(entry);
+        } else {
+          idx.set(member.label, [entry]);
+        }
+      }
+    }
+    return idx;
+  }, [rawCovers]);
 
   const liveControls = useMemo<LiveMethodControls>(() => {
     const enabled = [...enabledMethodIds].filter((id): id is LiveMethodId =>
@@ -574,9 +793,67 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
           token: tokens[currentTokenIndex]?.token,
           architecture: architecture.family,
         },
+        blindspotInterpretations: blindspotIndex.get(coord.label),
       });
     },
-    [openDrawer, currentTokenIndex, tokens, architecture.family],
+    [openDrawer, currentTokenIndex, tokens, architecture.family, blindspotIndex],
+  );
+
+  const handleFocusBlindspotClass = useCallback((classKey: string) => {
+    setShowBlindspots(true);
+    setFocusedBlindspotClassKey((current) =>
+      current === classKey ? null : classKey,
+    );
+  }, []);
+
+  const handleWordClick = useCallback(
+    (span: WordSpan) => {
+      const firstTokenIdx = span.token_indices[0];
+      const lastTokenIdx = span.token_indices[span.token_indices.length - 1];
+      // 1) Seek playback to the first token in the span.
+      handleTokenSeek(firstTokenIdx);
+      // 2) Build the per-token detail array from per_token_frames.
+      const tokenDetails = span.token_indices.map((ti) => {
+        const frame = frameAtIndex(trace.per_token_frames, ti) as
+          | (PerTokenFrame & {
+              top_activated_neurons?: EvidenceNeuronActivation[];
+              mode7_attribution?: EvidenceMode7Edge[];
+              confidence?: number | null;
+              trace_id?: string;
+            })
+          | undefined;
+          return {
+            token_index: ti,
+            token: tokens[ti]?.token ?? '',
+            top_activated_neurons: Array.isArray(frame?.top_activated_neurons)
+              ? (frame!.top_activated_neurons as EvidenceNeuronActivation[])
+              : [],
+            mode7_attribution: Array.isArray(frame?.mode7_attribution)
+              ? (frame!.mode7_attribution as EvidenceMode7Edge[])
+              : [],
+            confidence:
+              typeof frame?.confidence === 'number' ? frame.confidence : null,
+            trace_id:
+              typeof frame?.trace_id === 'string' ? frame.trace_id : undefined,
+          };
+      });
+      // 3) Open the Evidence Drawer with the word-scoped payload.
+      const tokenRangeLabel =
+        firstTokenIdx === lastTokenIdx
+          ? `(token ${firstTokenIdx})`
+          : `(tokens ${firstTokenIdx}-${lastTokenIdx})`;
+      openDrawer({
+        source: 'word',
+        title: `"${span.word}" ${tokenRangeLabel}`,
+        evidence_ref: {
+          word: span.word,
+          token_indices: span.token_indices,
+          char_range: [span.char_start, span.char_end] as [number, number],
+        },
+        detail: { tokens: tokenDetails },
+      });
+    },
+    [handleTokenSeek, openDrawer, tokens, trace.per_token_frames],
   );
 
   const handlePrimitiveSelect = useCallback((p: VisualPrimitive) => {
@@ -687,6 +964,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             currentFrame={currentFrame}
             selectedNeuron={selectedNeuron}
             blindspotCoords={blindspotCoords}
+            focusedBlindspotCoords={focusedBlindspotCoords}
+            focusedBlindspotLabel={focusedBlindspotClassKey ?? undefined}
             activeTraceCoords={activeTraceCoords}
             zoomLevel={zoomLevel}
             onNeuronClick={handleNeuronClick}
@@ -859,14 +1138,52 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             >
               {leftTab === 'spatial' ? (
                 <>
+                  {spatialEvidenceChoices.length > 1 ? (
+                    <div
+                      style={spatialScenarioSelectorStyle}
+                      role="radiogroup"
+                      aria-label="Spatial evidence demo scenes"
+                      data-testid="spatial-scenario-selector"
+                    >
+                      {spatialEvidenceChoices.map((option) => {
+                        const active = option.trace_id === activeSpatialEvidence.trace_id;
+                        return (
+                          <button
+                            key={option.trace_id}
+                            type="button"
+                            role="radio"
+                            aria-checked={active}
+                            data-testid={`spatial-scenario-${option.trace_id}`}
+                            style={spatialScenarioButtonStyle(active)}
+                            onClick={() => {
+                              setSelectedSpatialTraceId(option.trace_id);
+                              setActivePrimitiveId(undefined);
+                            }}
+                          >
+                            <span style={spatialScenarioTitleStyle}>
+                              {option.scenario_title ?? option.image_id}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : null}
                   <VisualPrimitiveCanvas
-                    imageUrl={spatialEvidence.image_url}
-                    imageWidth={spatialEvidence.image_width}
-                    imageHeight={spatialEvidence.image_height}
-                    primitives={spatialEvidence.primitives}
+                    imageUrl={activeSpatialEvidence.image_url}
+                    imageWidth={activeSpatialEvidence.image_width}
+                    imageHeight={activeSpatialEvidence.image_height}
+                    primitives={activeSpatialEvidence.primitives}
                     activeStepPrimitiveIds={activePrimitiveIds}
                     onPrimitiveClick={handlePrimitiveCanvasClick}
                   />
+                  {activeSpatialEvidence.scenario_sentence ? (
+                    <p
+                      style={spatialScenarioSentenceStyle}
+                      data-testid="spatial-scenario-active-sentence"
+                    >
+                      {activeSpatialEvidence.scenario_sentence}
+                    </p>
+                  ) : null}
                   <SpatialEvidencePanel
                     primitives={activePrimitives}
                     selectedPrimitiveId={activePrimitiveId}
@@ -908,6 +1225,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
               currentFrame={currentFrame}
               selectedNeuron={selectedNeuron}
               blindspotCoords={blindspotCoords}
+              focusedBlindspotCoords={focusedBlindspotCoords}
+              focusedBlindspotLabel={focusedBlindspotClassKey ?? undefined}
               activeTraceCoords={activeTraceCoords}
               zoomLevel={zoomLevel}
               onNeuronClick={handleNeuronClick}
@@ -925,6 +1244,13 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         >
           <GlassPanel intensity="regular" padding={0} style={floatingCardStyle}>
             <div style={rightCardInnerStyle}>
+              <BlindspotsPanel
+                perClassNeuronCovers={rawCovers as
+                  | Record<string, Parameters<typeof normaliseCoverMember>[0][]>
+                  | undefined}
+                focusedClassKey={focusedBlindspotClassKey}
+                onFocusClass={handleFocusBlindspotClass}
+              />
               <CasBaselineEvidencePanel />
               <MethodKnobsPanel
                 methods={[...methods]}
@@ -939,12 +1265,26 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         </motion.aside>
       </div>
 
+      <div
+        style={{ ...bottomTimelineFloatStyle, marginBottom: 4 }}
+        data-testid="atlas-viewer-word-stream"
+      >
+        <GlassPanel intensity="thin" padding="8px 12px">
+          <WordTokenStream
+            tokens={bottomStreamTokens}
+            spans={wordSpans}
+            currentTokenIndex={bottomStreamCurrentTokenIndex}
+            onWordClick={handleWordClick}
+          />
+        </GlassPanel>
+      </div>
+
       <div style={bottomTimelineFloatStyle} data-testid="atlas-viewer-bottom">
         <GlassPanel intensity="thin" padding="8px 12px">
           <Mode7Timeline
-            tokens={tokens}
-            frames={mode7Frames}
-            currentTokenIndex={currentTokenIndex}
+            tokens={bottomStreamTokens}
+            frames={bottomTimelineFrames}
+            currentTokenIndex={bottomStreamCurrentTokenIndex}
             onTokenSelect={handleTokenSeek}
           />
         </GlassPanel>
