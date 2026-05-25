@@ -6,6 +6,7 @@ import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/a
 import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
+import { AuditTerm } from '../components/audit/AuditTerm';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
 import { ProvenanceChips } from '../components/audit/ProvenanceChips';
 import {
@@ -58,23 +59,15 @@ const M1_REFERENCE_TARGET: AuditTargetConfig = {
 const AUDIT_STEPS: AuditStep[] = [
   {
     label: 'Connect model',
-    detail: 'Attach a supported model endpoint or validated reference worker.',
+    detail: 'Verify the model target, API route, and license gate.',
   },
   {
     label: 'Run CAS audit',
-    detail: 'Execute the selected audit profile against the model output.',
+    detail: 'Run readout, causal, control, output, and packet checks.',
   },
   {
-    label: 'Get verdict',
-    detail: 'Route each item to ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW.',
-  },
-  {
-    label: 'Read evidence',
-    detail: 'Show confidence and provenance chips next to the verdict.',
-  },
-  {
-    label: 'Inspect in Atlas',
-    detail: 'Open deep trace inspection only when trace evidence exists.',
+    label: 'Return verdict + evidence',
+    detail: 'Return ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips.',
   },
 ];
 
@@ -99,27 +92,27 @@ const VERDICT_COPY: Array<{ label: string; value: AuditVerdict; detail: string }
 const pendingChips = buildDefaultProvenanceChips({
   modelProof: {
     status: 'missing',
-    detail: 'No model connection has been verified for this audit session yet.',
+    detail: 'No model target has been verified yet.',
   },
   casReadout: {
     status: 'unavailable',
-    detail: 'No CAS readout exists until the audit runner processes a model output.',
+    detail: 'No CAS readout has been run yet.',
   },
   causalProof: {
     status: 'unavailable',
-    detail: 'No ablation or intervention result exists for this audit session yet.',
+    detail: 'No ablation/intervention result yet.',
   },
   controlProof: {
     status: 'unavailable',
-    detail: 'No matched baseline/control result exists for this audit session yet.',
+    detail: 'No matched control or baseline check yet.',
   },
   outputProof: {
     status: 'unavailable',
-    detail: 'No output effect has been measured for this audit session yet.',
+    detail: 'No output effect has been measured yet.',
   },
   packetProof: {
     status: 'missing',
-    detail: 'No Evidence Packet has been created for this audit session yet.',
+    detail: 'No Evidence Packet has been created yet.',
   },
 });
 
@@ -190,10 +183,10 @@ function progressDetail(
   hasTarget: boolean,
 ): string | null {
   if (!hasTarget && status === 'draft') {
-    return 'Prepare a supported audit target before creating a backend session.';
+    return 'Connect a supported target before running an audit.';
   }
   if (status === 'runner_pending') {
-    return 'The backend created the session, but no Evidence Packet is attached, so the verdict runner refused to compute a verdict.';
+    return 'Session created. Verdict blocked until an Evidence Packet is attached.';
   }
   return null;
 }
@@ -205,15 +198,15 @@ function latestLifecycleMessage(session: CasHarnessAuditSession | null): string 
 
 function verdictSummaryFor(session: CasHarnessAuditSession | null): string {
   if (!session?.verdict) {
-    return 'No CAS audit verdict has been computed for this model yet. This prevents a demo confidence number from being mistaken for a real audit result.';
+    return 'No verdict yet. Run a CAS audit to create an evidence-gated decision.';
   }
   if (session.verdict === 'ACCEPT') {
-    return 'CAS accepted this output only after the Evidence Packet passed the required proof-chip gate and carried an explicit Stage 19/20/21 verifier decision.';
+    return 'Accepted: the verifier allowed it and required proof chips passed.';
   }
   if (session.verdict === 'SUPPRESS') {
-    return 'CAS suppressed this output because the Evidence Packet passed the proof-chip gate and the explicit verifier decision said suppress.';
+    return 'Suppressed: the verifier rejected it under the active proof gate.';
   }
-  return 'CAS flagged this output because required proof was missing/failed, or the verifier decision required human review.';
+  return 'Human review: proof is missing/failed or the verifier requested review.';
 }
 
 const headingStyle: CSSProperties = {
@@ -306,9 +299,50 @@ const topGridStyle: CSSProperties = {
   alignItems: 'start',
 };
 
+const readinessStripStyle: CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(155px, 1fr))',
+  gap: 8,
+  marginTop: 16,
+};
+
+const readinessTileStyle: CSSProperties = {
+  minHeight: 86,
+  padding: '10px 12px',
+  borderRadius: 6,
+  border: '1px solid rgba(45, 212, 191, 0.18)',
+  background: 'rgba(45, 212, 191, 0.045)',
+};
+
+const readinessLabelStyle: CSSProperties = {
+  display: 'block',
+  marginBottom: 5,
+  color: COLORS.textMuted,
+  fontSize: 10.5,
+  fontWeight: 800,
+  letterSpacing: 0.5,
+  textTransform: 'uppercase',
+};
+
+const readinessValueStyle: CSSProperties = {
+  display: 'block',
+  color: COLORS.textPrimary,
+  fontSize: 13,
+  fontWeight: 850,
+  overflowWrap: 'anywhere',
+};
+
+const readinessDetailStyle: CSSProperties = {
+  display: 'block',
+  marginTop: 5,
+  color: COLORS.textSecondary,
+  fontSize: 11.5,
+  lineHeight: 1.35,
+};
+
 const flowStyle: CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
   gap: 8,
   marginTop: 18,
 };
@@ -435,6 +469,13 @@ const helperButtonStyle: CSSProperties = {
   fontWeight: 800,
 };
 
+const termRowStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 6,
+  marginTop: 12,
+};
+
 export default function AuditConsolePage() {
   const navigate = useNavigate();
   const [target, setTarget] = useState<AuditTargetConfig | null>(null);
@@ -445,6 +486,28 @@ export default function AuditConsolePage() {
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
   const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning, sessionError);
+  const readinessItems = [
+    {
+      label: 'Model',
+      value: target?.modelId ?? 'Not connected',
+      detail: target ? 'Target selected' : 'Choose a model endpoint',
+    },
+    {
+      label: 'Runtime',
+      value: target ? 'Reference backend' : 'Pending',
+      detail: target ? 'No verdict without backend proof' : 'Worker not selected',
+    },
+    {
+      label: 'License/API',
+      value: target ? 'Alpha API route' : 'Pending',
+      detail: target ? 'Session route ready' : 'License gate required',
+    },
+    {
+      label: 'Audit mode',
+      value: 'BALANCED',
+      detail: 'Precision and coverage tradeoff',
+    },
+  ];
 
   const connectReferenceTarget = () => {
     setTarget(M1_REFERENCE_TARGET);
@@ -495,15 +558,24 @@ export default function AuditConsolePage() {
             </h1>
             <p style={monikerStyle}>TURN YOUR BLACK BOX INTO A GLASS HOUSE</p>
             <p style={subheadingStyle}>
-              This is the operator-facing product layer for licensed users:
-              ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW, with confidence and
-              provenance. Atlas remains the deep inspection cockpit when a case
-              needs model-internal explanation.
+              Licensed users attach a model, run the audit, and receive a
+              decision: ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW. The verdict
+              carries confidence and proof chips; Atlas opens only when deeper
+              inspection is needed.
             </p>
             <div style={framingStyle}>
-              Current state: M3 evidence-gated sessions. The UI shows ACCEPT
-              or SUPPRESS only when the backend returns an explicit Stage
-              19/20/21 verifier decision from an Evidence Packet.
+              Current gate: the UI shows ACCEPT or SUPPRESS only when the
+              backend returns an explicit verifier decision from an{' '}
+              <AuditTerm term="evidencePacket">Evidence Packet</AuditTerm>.
+            </div>
+            <div style={readinessStripStyle} aria-label="Audit readiness">
+              {readinessItems.map((item) => (
+                <div key={item.label} style={readinessTileStyle}>
+                  <span style={readinessLabelStyle}>{item.label}</span>
+                  <span style={readinessValueStyle}>{item.value}</span>
+                  <span style={readinessDetailStyle}>{item.detail}</span>
+                </div>
+              ))}
             </div>
           </div>
 
@@ -514,8 +586,8 @@ export default function AuditConsolePage() {
             endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
             statusDetail={
               isConfigured
-                ? 'M3 session target configured. This does not create a final verdict until the backend has an Evidence Packet with explicit verifier fields.'
-                : 'Connect or configure a supported audit target before running a CAS Harness audit.'
+                ? 'Target ready. Final verdict requires an Evidence Packet and verifier decision.'
+                : 'Connect a supported target before running a CAS Harness audit.'
             }
             lastChecked={session ? 'Backend session accepted' : undefined}
             isAuditRunning={isAuditRunning}
@@ -551,9 +623,8 @@ export default function AuditConsolePage() {
               Session lifecycle
             </h2>
             <p style={verdictDetailStyle}>
-              Run Audit stays disabled until a session target is configured.
-              Use the reference target to exercise the real session lifecycle
-              without pretending a final audit verdict exists.
+              Run Audit stays disabled until a model target is configured.
+              The reference path tests the session lifecycle without inventing a verdict.
             </p>
             <button
               type="button"
@@ -594,13 +665,15 @@ export default function AuditConsolePage() {
 
           <section style={sectionStyle} aria-labelledby="provenance-heading">
             <h2 id="provenance-heading" style={sectionHeadingStyle}>
-              Provenance required before a verdict
+              Proof chips
             </h2>
             <ProvenanceChips chips={sessionChips} />
             <p style={noteStyle}>
-              A customer-safe ACCEPT requires model proof, CAS readout, causal
-              proof, control proof, output proof, and packet proof. Missing
-              evidence routes the item to review or keeps it pending.
+              ACCEPT requires model proof, CAS readout,{' '}
+              <AuditTerm term="ablation">causal proof</AuditTerm>,{' '}
+              <AuditTerm term="matchedControl">control proof</AuditTerm>, output
+              proof, and packet proof. Missing evidence routes to review or keeps
+              the case pending.
             </p>
           </section>
         </div>
@@ -627,8 +700,9 @@ export default function AuditConsolePage() {
             <p style={verdictDetailStyle}>
               Audit Console is the decision workflow. Atlas is the evidence
               microscope. A user should not need Atlas to understand the
-              verdict, but Atlas should be one click away when the evidence
-              needs inspection.
+              verdict, but Atlas stays one click away for token traces,
+              <AuditTerm term="blindspot">blindspots</AuditTerm>, and{' '}
+              <AuditTerm term="inversion">inversion</AuditTerm> evidence.
             </p>
             <p style={noteStyle}>
               <Link to="/cockpit" style={{ color: ACCENT_TEAL }}>
@@ -637,6 +711,29 @@ export default function AuditConsolePage() {
             </p>
           </section>
         </div>
+
+        <section
+          style={{ ...sectionStyle, marginTop: 16 }}
+          aria-labelledby="audit-term-help"
+        >
+          <h2 id="audit-term-help" style={sectionHeadingStyle}>
+            Hover help
+          </h2>
+          <p style={verdictDetailStyle}>
+            Keep the screen clean; hover these terms when a reviewer asks what
+            a proof word means.
+          </p>
+          <div style={termRowStyle} aria-label="Audit term help">
+            <AuditTerm term="baseline">baseline</AuditTerm>
+            <AuditTerm term="ablation">ablation</AuditTerm>
+            <AuditTerm term="matchedControl">matched control</AuditTerm>
+            <AuditTerm term="evidencePacket">Evidence Packet</AuditTerm>
+            <AuditTerm term="confidence">confidence</AuditTerm>
+            <AuditTerm term="coverage">coverage</AuditTerm>
+            <AuditTerm term="inversion">inversion</AuditTerm>
+            <AuditTerm term="blindspot">blindspot</AuditTerm>
+          </div>
+        </section>
       </GlassPanel>
       </PageShell>
     </>

@@ -12,6 +12,7 @@ import type {
   ProvenanceChipId,
   VerifierDecision,
 } from '../../lib/casHarnessAudit';
+import { AuditTerm } from './AuditTerm';
 
 export interface AuditVerdictExplainerProps {
   verdict?: AuditVerdict | null;
@@ -20,15 +21,6 @@ export interface AuditVerdictExplainerProps {
   verifierDecision?: VerifierDecision | null;
   lifecycleMessage?: string | null;
 }
-
-const CHIP_MEANING: Record<ProvenanceChipId, string> = {
-  model_proof: 'Which exact model or weight artifact was audited.',
-  cas_readout: 'CAS found the internal signal it is judging.',
-  causal_proof: 'Ablation/intervention evidence says the CAS direction matters.',
-  control_proof: 'Random or wrong-drive controls did not explain the same effect.',
-  output_proof: 'The verdict is tied to observed model output.',
-  packet_proof: 'The audit trail is attached to an Evidence Packet.',
-};
 
 const REQUIRED_ORDER: ProvenanceChipId[] = [
   'model_proof',
@@ -241,6 +233,39 @@ function customerSentence(
   return `Tell the user: CAS flagged this for human review because ${blocked}/6 required proof chips were not pass-ready or the verifier requested review.`;
 }
 
+function chipMeaning(id: ProvenanceChipId): JSX.Element {
+  switch (id) {
+    case 'model_proof':
+      return <>Which exact model or weight artifact was audited.</>;
+    case 'cas_readout':
+      return <>CAS found the model-internal signal it is judging.</>;
+    case 'causal_proof':
+      return (
+        <>
+          <AuditTerm term="ablation">Ablation</AuditTerm> or intervention shows the
+          CAS direction matters.
+        </>
+      );
+    case 'control_proof':
+      return (
+        <>
+          <AuditTerm term="matchedControl">Matched controls</AuditTerm> and{' '}
+          <AuditTerm term="baseline">baselines</AuditTerm> did not explain the
+          same effect.
+        </>
+      );
+    case 'output_proof':
+      return <>The verdict is tied to observed model output.</>;
+    case 'packet_proof':
+      return (
+        <>
+          The audit trail is attached to an{' '}
+          <AuditTerm term="evidencePacket">Evidence Packet</AuditTerm>.
+        </>
+      );
+  }
+}
+
 export function AuditVerdictExplainer({
   verdict = null,
   confidence = null,
@@ -286,7 +311,7 @@ export function AuditVerdictExplainer({
                 <span>{chip?.name ?? id}</span>
                 <span style={statusPillStyle(state)}>{chipStatusLabel(chip)}</span>
               </div>
-              <p style={proofTextStyle}>{CHIP_MEANING[id]}</p>
+              <p style={proofTextStyle}>{chipMeaning(id)}</p>
               <p style={proofTextStyle}>{chip?.detail ?? 'No evidence attached yet.'}</p>
             </article>
           );

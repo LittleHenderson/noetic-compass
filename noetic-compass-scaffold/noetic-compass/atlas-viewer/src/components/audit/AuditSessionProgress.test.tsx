@@ -8,7 +8,7 @@ describe('AuditSessionProgress', () => {
 
     expect(screen.getByRole('heading', { name: 'Running CAS audit' })).toBeInTheDocument();
     expect(
-      screen.getByText('The selected CAS modules are testing the model output right now.'),
+      screen.getByText('The selected CAS modules are evaluating the model output.'),
     ).toBeInTheDocument();
     const steps = screen.getByLabelText('Audit lifecycle steps');
     expect(within(steps).getByText('Validating model')).toBeInTheDocument();
@@ -46,7 +46,7 @@ describe('AuditSessionProgress', () => {
     );
 
     expect(screen.getByRole('heading', { name: 'Audit failed' })).toBeInTheDocument();
-    expect(screen.getByText('No verdict should be trusted from this run.')).toBeInTheDocument();
+    expect(screen.getByText('Do not use a verdict from this failed run.')).toBeInTheDocument();
     expect(screen.getByRole('alert')).toHaveTextContent(
       'Worker returned atlas_live_worker_auth_failed.',
     );

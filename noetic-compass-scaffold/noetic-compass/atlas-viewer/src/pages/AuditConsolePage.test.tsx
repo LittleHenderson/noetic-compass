@@ -102,10 +102,12 @@ describe('AuditConsolePage', () => {
     expect(screen.getByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).toBeInTheDocument();
     expect(screen.getAllByRole('heading', { name: /connect model/i }).length).toBeGreaterThan(0);
     expect(screen.getAllByText('Run CAS audit').length).toBeGreaterThan(0);
+    expect(screen.getByText('Return verdict + evidence')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
-    expect(
-      screen.getByRole('heading', { name: 'Provenance required before a verdict' }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Proof chips' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Hover help' })).toBeInTheDocument();
+    expect(screen.getByText('License/API')).toBeInTheDocument();
+    expect(screen.getByText('Audit mode')).toBeInTheDocument();
     expect(screen.getAllByText('Inspect in Atlas').length).toBeGreaterThan(0);
 
     expect(screen.getByText('ACCEPT')).toBeInTheDocument();
@@ -114,15 +116,19 @@ describe('AuditConsolePage', () => {
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeDisabled();
     expect(screen.getByRole('heading', { name: 'Audit not started' })).toBeInTheDocument();
     expect(
-      screen.getByText('Prepare a supported audit target before creating a backend session.'),
+      screen.getByText('Connect a supported target before running an audit.'),
     ).toBeInTheDocument();
+    expect(screen.getByText('baseline')).toHaveAttribute(
+      'title',
+      expect.stringContaining('comparison opponent'),
+    );
   });
 
   it('frames Atlas as deep inspection and avoids fake verdict claims', () => {
     renderPage();
 
     expect(
-      screen.getByText(/The UI shows ACCEPT or SUPPRESS only when the backend returns an explicit Stage/i)
+      screen.getByText(/the UI shows ACCEPT or SUPPRESS only when the/i)
     ).toBeInTheDocument();
     expect(screen.getByText(/Audit Console is the decision workflow/i)).toBeInTheDocument();
     expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
@@ -171,15 +177,13 @@ describe('AuditConsolePage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Prepare reference session' }));
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
-    expect(screen.getByText(/M3 session target configured/i)).toBeInTheDocument();
+    expect(screen.getByText(/Target ready/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
     expect(
-      screen.getByText(
-        'The backend created the session, but no Evidence Packet is attached, so the verdict runner refused to compute a verdict.',
-      ),
+      screen.getByText('Session created. Verdict blocked until an Evidence Packet is attached.'),
     ).toBeInTheDocument();
     expect(screen.getAllByText('Runner pending').length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
