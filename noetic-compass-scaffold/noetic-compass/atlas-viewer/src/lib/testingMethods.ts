@@ -310,20 +310,29 @@ export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
   {
     ...FOUNDATION_PROBE,
     description:
-      'Sent to the live worker. Captures real Pythia hidden-state activity for the selected layers and paints the active neurons in the 3D scene.',
+      'Sent to the live worker. Captures real Pythia hidden-state activity for the selected layers/top-K count and paints the active neurons in the 3D scene.',
     reveals:
       'Which layers and neurons are carrying the selected Foundation signal during this live run',
     outputShape: 'Live token events with filtered top activated neurons',
+    knobs: [
+      {
+        id: 'top_k',
+        label: 'Top K neurons',
+        type: 'number',
+        default: 8,
+        description: 'Number of top activations emitted per token',
+      },
+      FOUNDATION_PROBE.knobs[1],
+    ],
   },
   {
     ...RPM_GATE_CHECK,
     description:
-      'Sent to the live worker. Uses live attention-derived Mode 7 edges as the runtime prerequisite-chain readout.',
+      'Sent to the live worker. Uses live attention-derived Mode 7 edges as the runtime prerequisite-chain readout; the current worker only consumes the strictness threshold.',
     reveals:
       'Which earlier tokens the current token depends on after the selected RPM threshold is applied',
     outputShape: 'Live Mode 7 arcs filtered by the selected strictness threshold',
     knobs: [
-      RPM_GATE_CHECK.knobs[0],
       {
         id: 'strictness_threshold',
         label: 'Strictness threshold',
@@ -336,30 +345,16 @@ export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
   {
     ...INVERSION_SCAN,
     description:
-      'Sent to the live worker. Computes a live proxy from activation magnitude and confidence drift on every emitted token.',
+      'Sent to the live worker. Computes a live scalar proxy from activation magnitude and confidence drift on every emitted token; per-axis selection is not part of the live worker path.',
     reveals: 'Per-token structural drift risk while the model is generating',
     outputShape: 'Live token events with inversion-risk side-channel metadata',
-  },
-  {
-    ...SPARSE_NEURON_COVER,
-    description:
-      'Sent to the live worker. Selects the calibrated F1-F7 neuron-cover set used by the live blindspot/intervention overlays.',
-    reveals: 'The exact cover coordinates the live worker is using for the selected drive',
-    outputShape: 'Live neuron-cover event for the selected target class',
     knobs: [
       {
-        id: 'target_class',
-        label: 'Target class',
-        type: 'enum',
-        default: 'F1',
-        options: ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'] as const,
-      },
-      {
-        id: 'sparsity_budget',
-        label: 'Sparsity budget',
+        id: 'severity_threshold',
+        label: 'Severity threshold',
         type: 'number',
         default: 0,
-        description: '0 = use the full calibrated alpha cover.',
+        description: 'Minimum live inversion-risk value to emit as non-zero',
       },
     ],
   },
@@ -382,18 +377,20 @@ export const LIVE_WORKER_METHODS: readonly TestingMethod[] = [
         id: 'scope',
         label: 'Scope',
         type: 'enum',
-        default: 'all_7',
-        options: ['all_7', 'F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'] as const,
+        default: 'F1',
+        options: ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'] as const,
+        description:
+          'Current live worker consumes one calibrated F1-F7 drive at a time',
       },
-      BLINDSPOT_DETECTION.knobs[1],
     ],
   },
   {
     ...VERIFICATION_STACK,
     description:
-      'Sent to the live worker. Controls confidence-margin verification emitted with each live token.',
-    reveals: 'Whether each token has enough margin to accept under the selected mode',
+      'Sent to the live worker. Enables confidence-margin verification emitted with each live token; mode selection is not consumed by the current worker.',
+    reveals: 'The confidence margin available for each live token',
     outputShape: 'Live confidence-margin values used by the cockpit badges',
+    knobs: [],
   },
 ];
 
