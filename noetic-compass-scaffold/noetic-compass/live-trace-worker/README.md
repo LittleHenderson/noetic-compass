@@ -73,12 +73,50 @@ pytest
 
 ## RunPod deploy
 
-The `Dockerfile` is currently CPU-only (milestone 1). At milestone 2 we
-swap the base to a CUDA pytorch image and update `requirements.txt` to
-pull torch / transformers / accelerate.
+The `Dockerfile` is the preferred production artifact. For the current
+always-on alpha pod, there is also a restart-safe RunPod bootstrap path in
+`scripts/`:
 
-Deploy target — TBD (always-on pod vs serverless vs on-demand). Tracked
-as a decision before milestone 2 ships.
+```bash
+cd /workspace/atlas-live-worker-current
+cp scripts/runpod_start_atlas_live_worker.sh /root/start-atlas-live-worker.sh
+cp scripts/runpod_start_atlas_live_worker.sh /workspace/start-atlas-live-worker.sh
+cp scripts/runpod_pre_start.sh /pre_start.sh
+chmod +x /root/start-atlas-live-worker.sh /workspace/start-atlas-live-worker.sh /pre_start.sh
+/root/start-atlas-live-worker.sh
+```
+
+Why this path exists:
+
+- RunPod's template starts `/start.sh` as PID 1, not systemd.
+- `/start.sh` automatically runs `/pre_start.sh` when present.
+- Long-running Python from `/workspace` can hang if the FUSE mount stalls.
+- The startup script syncs source into `/root/atlas-live-worker-run`, runs
+  from `/root/atlas-live-worker-venv`, forces `LIVE_TRACE_USE_FAKE=0`, and
+  verifies `/health/realmode` before the API is allowed to claim real weights.
+
+Verification:
+
+```bash
+curl http://127.0.0.1:8080/health
+curl http://127.0.0.1:8080/health/realmode
+curl https://noetic-compass-api.onrender.com/atlas/live/health/realmode
+```
+
+The real-mode endpoint must show:
+
+```json
+{
+  "verdict": "REAL_PYTHIA_WEIGHTS_LOADED",
+  "is_real_model": true,
+  "fake_runtime_env": false,
+  "model_loaded": true,
+  "load_error": null
+}
+```
+
+If it does not, the cockpit must say the model is not connected or not
+verified. It must not claim "actual weights."
 
 ## Security posture
 
