@@ -348,8 +348,11 @@ describe('NeuralNetScene — detachable layer inspection', () => {
     act(() => {
       wrapper!.__nn_simulate_double_click!(60, 160);
     });
-    expect(await screen.findByTestId('layer-dock-buttons')).toBeInTheDocument();
-    fireEvent.click(screen.getByTestId('layer-dock-detach-7'));
+    expect(await screen.findByTestId('layer-dock-controls')).toBeInTheDocument();
+    fireEvent.change(screen.getByTestId('layer-dock-select'), {
+      target: { value: '7' },
+    });
+    fireEvent.click(screen.getByTestId('layer-dock-detach-selected'));
 
     expect(await screen.findByTestId('detached-layer-card-2')).toBeInTheDocument();
     expect(await screen.findByTestId('detached-layer-card-7')).toBeInTheDocument();
@@ -358,6 +361,7 @@ describe('NeuralNetScene — detachable layer inspection', () => {
       const layout = wrapper!.__nn_layer_layout!();
       expect(layout[2].scale).toBeGreaterThan(1);
       expect(layout[7].scale).toBeLessThan(1);
+      expect(layout[7].y).toBeLessThan(-3);
     });
     fireEvent.click(screen.getByTestId('layer-spin-2'));
     expect(screen.getByTestId('layer-spin-2')).toHaveTextContent('Stop');

@@ -129,12 +129,15 @@ const NEURON_RADIUS = 0.06;
 const LAYER_Z_SPACING = 2;
 const PLANE_PADDING = 0.5;
 const PYTHIA_N_LAYERS = 12;
-const MINI_STACK_SCALE = 0.26;
-const DETACHED_ACTIVE_SCALE = 1.12;
-const DETACHED_SIDE_SCALE = 0.58;
-const MINI_STACK_X = -7.8;
-const MINI_STACK_Y = 3.7;
-const DETACHED_SIDE_X = 6.2;
+const MINI_STACK_SCALE = 0.18;
+const DETACHED_ACTIVE_SCALE = 1.16;
+const DETACHED_TRAY_SCALE = 0.44;
+const MINI_STACK_X = -8.4;
+const MINI_STACK_Y = 4.4;
+const DETACHED_TRAY_START_X = -4.8;
+const DETACHED_TRAY_START_Y = -4.1;
+const DETACHED_TRAY_COL_GAP = 2.7;
+const DETACHED_TRAY_ROW_GAP = 1.25;
 
 const DIM_COLOR = new Color('#2a2a3a');
 const PLANE_COLOR = new Color('#0f172a');
@@ -232,6 +235,7 @@ export function NeuralNetScene({
   const [detachedLayers, setDetachedLayers] = useState<number[]>([]);
   const [activeDetachedLayer, setActiveDetachedLayer] = useState<number | null>(null);
   const [spinningLayers, setSpinningLayers] = useState<number[]>([]);
+  const [selectedDockLayer, setSelectedDockLayer] = useState(0);
   // DOM tooltip state — Wave 5. The 3D scene reports hovers via the
   // onNeuronHover prop callback (preserved); a parallel local state powers a
   // GlassPanel tooltip that floats above the canvas at the cursor. Position
@@ -299,6 +303,15 @@ export function NeuralNetScene({
       );
     }
   }, [activeDetachedLayer, detachedLayers]);
+
+  useEffect(() => {
+    const docked = Array.from({ length: PYTHIA_N_LAYERS }, (_, layer) => layer).filter(
+      (layer) => !detachedLayers.includes(layer),
+    );
+    if (docked.length > 0 && !docked.includes(selectedDockLayer)) {
+      setSelectedDockLayer(docked[0]);
+    }
+  }, [detachedLayers, selectedDockLayer]);
 
   function neuronScenePosition(coord: { layer: number; index: number }): Vector3 {
     const layerMesh = layerMeshesRef.current[coord.layer];
@@ -745,6 +758,10 @@ export function NeuralNetScene({
       const isActive = isDetached && layer === activeLayer;
       const detachIndex = Math.max(0, detachedLayers.indexOf(layer));
       const dockIndex = Math.max(0, dockedLayers.indexOf(layer));
+      const trayLayers = detachedLayers.filter((item) => item !== activeLayer);
+      const trayIndex = Math.max(0, trayLayers.indexOf(layer));
+      const trayCol = trayIndex % 4;
+      const trayRow = Math.floor(trayIndex / 4);
 
       let x = 0;
       let y = 0;
@@ -760,16 +777,16 @@ export function NeuralNetScene({
           scale = DETACHED_ACTIVE_SCALE;
           planeOpacity = 0.3;
         } else {
-          x = DETACHED_SIDE_X;
-          y = 2.4 - detachIndex * 1.45;
-          z = 1.4 - detachIndex * 0.42;
-          scale = DETACHED_SIDE_SCALE;
+          x = DETACHED_TRAY_START_X + trayCol * DETACHED_TRAY_COL_GAP;
+          y = DETACHED_TRAY_START_Y - trayRow * DETACHED_TRAY_ROW_GAP;
+          z = 1.2 - trayRow * 0.22 - detachIndex * 0.04;
+          scale = DETACHED_TRAY_SCALE;
           planeOpacity = 0.22;
         }
       } else if (detachedLayers.length > 0) {
         x = MINI_STACK_X;
         y = MINI_STACK_Y - dockIndex * 0.24;
-        z = 3.6 - dockIndex * 0.18;
+        z = 4.2 - dockIndex * 0.1;
         scale = MINI_STACK_SCALE;
         planeOpacity = 0.14;
       }
@@ -1120,15 +1137,15 @@ export function NeuralNetScene({
     position: 'absolute',
     right: 14,
     top: 14,
-    zIndex: 4,
-    width: 220,
+    zIndex: 10,
+    width: 258,
   };
 
   const layerCardRailStyle: CSSProperties = {
     position: 'absolute',
     right: 14,
-    top: detachedLayers.length > 0 ? 106 : 14,
-    zIndex: 5,
+    top: detachedLayers.length > 0 ? 146 : 14,
+    zIndex: 11,
     display: 'flex',
     flexDirection: 'column',
     gap: 8,
@@ -1150,24 +1167,35 @@ export function NeuralNetScene({
     fontWeight: 700,
   };
 
-  const dockLayerGridStyle: CSSProperties = {
+  const dockSelectRowStyle: CSSProperties = {
     display: 'grid',
-    gridTemplateColumns: 'repeat(6, 1fr)',
-    gap: 4,
+    gridTemplateColumns: '1fr auto',
+    gap: 6,
     marginTop: 8,
   };
 
-  const dockLayerButtonStyle: CSSProperties = {
-    minHeight: 22,
-    borderRadius: 5,
-    border: '1px solid rgba(148, 163, 184, 0.22)',
+  const dockLayerSelectStyle: CSSProperties = {
+    minHeight: 30,
+    borderRadius: 6,
+    border: '1px solid rgba(148, 163, 184, 0.24)',
     background: 'rgba(15, 23, 42, 0.68)',
     color: '#cbd5e1',
+    fontSize: 12,
+    fontFamily: 'inherit',
+    padding: '4px 8px',
+  };
+
+  const dockLayerButtonStyle: CSSProperties = {
+    minHeight: 30,
+    borderRadius: 6,
+    border: '1px solid rgba(45, 212, 191, 0.42)',
+    background: 'rgba(20, 184, 166, 0.16)',
+    color: '#ccfbf1',
     cursor: 'pointer',
-    fontSize: 10,
+    fontSize: 11,
     fontWeight: 800,
     fontFamily: 'inherit',
-    padding: '2px 0',
+    padding: '4px 10px',
   };
 
   const activeDetached =
@@ -1339,20 +1367,43 @@ export function NeuralNetScene({
                 layer card here to snap home · click a layer number to detach it
               </span>
               {dockedLayerControls.length > 0 ? (
-                <div data-testid="layer-dock-buttons" style={dockLayerGridStyle}>
-                  {dockedLayerControls.map((layer) => (
+                <div data-testid="layer-dock-controls" style={{ marginTop: 8 }}>
+                  <label
+                    htmlFor="layer-dock-select"
+                    style={{
+                      display: 'block',
+                      color: '#cbd5e1',
+                      fontSize: 11,
+                      fontWeight: 800,
+                      marginBottom: 4,
+                    }}
+                  >
+                    Detach another layer
+                  </label>
+                  <div style={dockSelectRowStyle}>
+                    <select
+                      id="layer-dock-select"
+                      data-testid="layer-dock-select"
+                      value={selectedDockLayer}
+                      onChange={(event) => setSelectedDockLayer(Number(event.target.value))}
+                      style={dockLayerSelectStyle}
+                      aria-label="Choose another layer to detach"
+                    >
+                      {dockedLayerControls.map((layer) => (
+                        <option key={layer} value={layer}>
+                          {layerTitle(layer)} · {stackPlace(layer)}
+                        </option>
+                      ))}
+                    </select>
                     <button
-                      key={layer}
                       type="button"
-                      data-testid={`layer-dock-detach-${layer}`}
-                      aria-label={`Detach layer ${layer}`}
-                      title={`Detach ${layerTitle(layer)} (${stackPlace(layer)} in stack)`}
-                      onClick={() => detachLayer(layer)}
+                      data-testid="layer-dock-detach-selected"
+                      onClick={() => detachLayer(selectedDockLayer)}
                       style={dockLayerButtonStyle}
                     >
-                      {layer}
+                      Detach
                     </button>
-                  ))}
+                  </div>
                 </div>
               ) : null}
               <button
@@ -1478,10 +1529,10 @@ export function NeuralNetScene({
             transition={SPRING_SNAPPY}
             style={{
               position: 'absolute',
-              left: tooltip.x + TOOLTIP_OFFSET_X,
-              top: tooltip.y + TOOLTIP_OFFSET_Y,
+              left: `min(${tooltip.x + TOOLTIP_OFFSET_X}px, calc(100% - 130px))`,
+              top: `min(${tooltip.y + TOOLTIP_OFFSET_Y}px, calc(100% - 44px))`,
               pointerEvents: 'none',
-              zIndex: 5,
+              zIndex: 3,
             }}
           >
             <GlassPanel intensity="thick" padding="6px 10px">
