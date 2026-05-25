@@ -53,7 +53,16 @@ def test_create_audit_session_returns_stored_draft_without_fake_result(client, a
     assert body["confidence"] is None
     assert body["evidence_packet_trace_id"] is None
     assert body["atlas_deep_link"] is None
-    assert any("scaffold/mock" in chip["value"] for chip in body["provenance_chips"])
+    assert [chip["id"] for chip in body["provenance_chips"]] == [
+        "model_proof",
+        "cas_readout",
+        "causal_proof",
+        "control_proof",
+        "output_proof",
+        "packet_proof",
+    ]
+    assert body["provenance_chips"][0]["status"] == "missing"
+    assert body["provenance_chips"][-1]["status"] == "missing"
     assert body["lifecycle"][0]["status"] == "DRAFT"
 
 
@@ -90,6 +99,48 @@ def test_audit_session_accepts_endpoint_url_and_scenario_text(client, auth_heade
     assert body["status"] == "DRAFT"
     assert body["endpoint_url"] == "https://model.example/v1/chat/completions"
     assert body["scenario_summary"] == "The model is asked to triage a risky medical instruction."
+
+
+def test_audit_session_can_attach_existing_evidence_packet(client, auth_headers):
+    payload = {
+        **_valid_payload(),
+        "evidence_packet_trace_id": "dev_example_001",
+    }
+
+    resp = client.post(
+        "/api/cas-harness/audit/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    chips = {chip["id"]: chip for chip in body["provenance_chips"]}
+
+    assert body["evidence_packet_trace_id"] == "dev_example_001"
+    assert body["atlas_deep_link"] == "/cockpit?trace_id=dev_example_001"
+    assert body["verdict"] is None
+    assert body["confidence"] is None
+    assert chips["packet_proof"]["status"] == "present"
+    assert chips["output_proof"]["status"] == "present"
+    assert chips["cas_readout"]["status"] in {"present", "missing"}
+    assert "Evidence Packet dev_example_001" in body["lifecycle"][0]["message"]
+
+
+def test_audit_session_rejects_missing_evidence_packet(client, auth_headers):
+    payload = {
+        **_valid_payload(),
+        "evidence_packet_trace_id": "missing-trace-id",
+    }
+
+    resp = client.post(
+        "/api/cas-harness/audit/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 404
+    assert "Evidence Packet trace_id not found" in resp.json()["detail"]
 
 
 def test_audit_session_rejects_invalid_mode_and_empty_modules(client, auth_headers):

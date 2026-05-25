@@ -37,8 +37,42 @@ function sessionResponse(overrides: Record<string, unknown> = {}) {
     evidence_packet_trace_id: null,
     atlas_deep_link: null,
     provenance_chips: [
-      { label: 'runner', value: 'scaffold/mock: no CAS audit runner wired' },
-      { label: 'verdict', value: 'not computed' },
+      {
+        id: 'model_proof',
+        name: 'Model proof',
+        status: 'missing',
+        detail: 'No model proof has been verified for this audit session yet.',
+      },
+      {
+        id: 'cas_readout',
+        name: 'CAS readout',
+        status: 'unavailable',
+        detail: 'No CAS readout exists until an Evidence Packet is attached.',
+      },
+      {
+        id: 'causal_proof',
+        name: 'Causal proof',
+        status: 'unavailable',
+        detail: 'No causal proof exists yet.',
+      },
+      {
+        id: 'control_proof',
+        name: 'Control proof',
+        status: 'unavailable',
+        detail: 'No matched control proof exists yet.',
+      },
+      {
+        id: 'output_proof',
+        name: 'Output proof',
+        status: 'unavailable',
+        detail: 'No output proof exists yet.',
+      },
+      {
+        id: 'packet_proof',
+        name: 'Packet proof',
+        status: 'missing',
+        detail: 'No Evidence Packet has been attached.',
+      },
     ],
     lifecycle: [
       {

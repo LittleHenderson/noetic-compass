@@ -40,8 +40,18 @@ function pendingSession(overrides: Record<string, unknown> = {}): Record<string,
     evidence_packet_trace_id: null,
     atlas_deep_link: null,
     provenance_chips: [
-      { label: 'runner', value: 'scaffold/mock: no CAS audit runner wired' },
-      { label: 'verdict', value: 'not computed' },
+      {
+        id: 'model_proof',
+        name: 'Model proof',
+        status: 'missing',
+        detail: 'No model proof has been verified for this audit session yet.',
+      },
+      {
+        id: 'packet_proof',
+        name: 'Packet proof',
+        status: 'missing',
+        detail: 'No Evidence Packet has been attached.',
+      },
     ],
     lifecycle: [
       {
@@ -79,6 +89,11 @@ describe('casHarnessAuditApi', () => {
     expect(session.audit_mode).toBe('BALANCED');
     expect(session.selected_modules).toEqual(['model_proof', 'cas_readout']);
     expect(session.lifecycle[0]?.status).toBe('DRAFT');
+    expect(session.provenance_chips[0]).toMatchObject({
+      id: 'model_proof',
+      status: 'missing',
+      statusLabel: 'Missing',
+    });
     expect(session.verdict).toBeNull();
     expect(session.confidence).toBeNull();
     expect(fetchImpl).toHaveBeenCalledOnce();

@@ -22,6 +22,16 @@ AuditStatus = Literal[
 ]
 
 ModelStatus = Literal["NOT_CONNECTED_MOCK"]
+ProofChipStatus = Literal["verified", "present", "missing", "failed", "unavailable"]
+
+_PROOF_CHIP_NAMES = {
+    "model_proof": "Model proof",
+    "cas_readout": "CAS readout",
+    "causal_proof": "Causal proof",
+    "control_proof": "Control proof",
+    "output_proof": "Output proof",
+    "packet_proof": "Packet proof",
+}
 
 
 @dataclass(frozen=True)
@@ -46,8 +56,8 @@ class AuditSessionRecord:
     updated_at: str
     verdict: None = None
     confidence: None = None
-    evidence_packet_trace_id: None = None
-    atlas_deep_link: None = None
+    evidence_packet_trace_id: str | None = None
+    atlas_deep_link: str | None = None
     provenance_chips: list[dict[str, str]] = field(default_factory=list)
     lifecycle: list[AuditLifecycleEvent] = field(default_factory=list)
 
@@ -87,11 +97,17 @@ def create_session(payload: dict[str, Any]) -> AuditSessionRecord:
             selected_modules=list(payload["selected_modules"]),
             created_at=now,
             updated_at=now,
-            provenance_chips=_provenance_chips(),
+            evidence_packet_trace_id=payload.get("evidence_packet_trace_id"),
+            atlas_deep_link=_atlas_deep_link(payload.get("evidence_packet_trace_id")),
+            provenance_chips=(
+                list(payload["provenance_chips"])
+                if isinstance(payload.get("provenance_chips"), list)
+                else _provenance_chips()
+            ),
             lifecycle=[
                 AuditLifecycleEvent(
                     status="DRAFT",
-                    message="Audit session created. No CAS runner has executed yet.",
+                    message=_draft_message(payload.get("evidence_packet_trace_id")),
                     timestamp=now,
                 )
             ],
@@ -153,10 +169,61 @@ def _audit_id_for(payload: dict[str, Any]) -> str:
 
 def _provenance_chips() -> list[dict[str, str]]:
     return [
-        {"label": "runner", "value": "scaffold/mock: no CAS audit runner wired"},
-        {"label": "verdict", "value": "not computed"},
-        {"label": "license", "value": "placeholder only; JWT auth remains the gate"},
+        _proof_chip(
+            "model_proof",
+            "missing",
+            "No model connection or Evidence Packet model proof has been verified for this audit session yet.",
+        ),
+        _proof_chip(
+            "cas_readout",
+            "unavailable",
+            "No CAS readout exists until an Evidence Packet or audit runner output is attached.",
+        ),
+        _proof_chip(
+            "causal_proof",
+            "unavailable",
+            "No ablation or intervention evidence has been attached to this audit session yet.",
+        ),
+        _proof_chip(
+            "control_proof",
+            "unavailable",
+            "No matched baseline/control evidence has been attached to this audit session yet.",
+        ),
+        _proof_chip(
+            "output_proof",
+            "unavailable",
+            "No model output evidence has been attached to this audit session yet.",
+        ),
+        _proof_chip(
+            "packet_proof",
+            "missing",
+            "No Evidence Packet has been attached to this audit session yet.",
+        ),
     ]
+
+
+def _proof_chip(chip_id: str, status: ProofChipStatus, detail: str) -> dict[str, str]:
+    return {
+        "id": chip_id,
+        "name": _PROOF_CHIP_NAMES[chip_id],
+        "status": status,
+        "detail": detail,
+    }
+
+
+def _draft_message(evidence_packet_trace_id: str | None) -> str:
+    if evidence_packet_trace_id:
+        return (
+            f"Audit session created with Evidence Packet {evidence_packet_trace_id}. "
+            "No CAS runner has executed yet."
+        )
+    return "Audit session created. No CAS runner has executed yet."
+
+
+def _atlas_deep_link(evidence_packet_trace_id: str | None) -> str | None:
+    if not evidence_packet_trace_id:
+        return None
+    return f"/cockpit?trace_id={evidence_packet_trace_id}"
 
 
 def _summary(value: str | None, *, limit: int = 180) -> str | None:
