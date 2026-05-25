@@ -30,6 +30,7 @@ import {
 interface AuditStep {
   label: string;
   detail: string;
+  command: string;
 }
 
 interface AuditTargetConfig {
@@ -60,14 +61,17 @@ const AUDIT_STEPS: AuditStep[] = [
   {
     label: 'Connect model',
     detail: 'Verify the model target, API route, and license gate.',
+    command: 'CONNECT',
   },
   {
     label: 'Run CAS audit',
     detail: 'Run readout, causal, control, output, and packet checks.',
+    command: 'RUN',
   },
   {
     label: 'Return verdict + evidence',
     detail: 'Return ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips.',
+    command: 'VERDICT',
   },
 ];
 
@@ -209,6 +213,40 @@ function verdictSummaryFor(session: CasHarnessAuditSession | null): string {
   return 'Human review: proof is missing/failed or the verifier requested review.';
 }
 
+function commandStateFor(
+  index: number,
+  hasTarget: boolean,
+  session: CasHarnessAuditSession | null,
+  isAuditRunning: boolean,
+  error: string | null,
+): CommandState {
+  if (error) return index < 2 ? 'done' : 'blocked';
+  if (index === 0) return hasTarget ? 'done' : 'active';
+  if (index === 1) {
+    if (!hasTarget) return 'waiting';
+    if (isAuditRunning) return 'active';
+    return session ? 'done' : 'ready';
+  }
+  if (!session) return hasTarget ? 'waiting' : 'waiting';
+  if (session.verdict) return 'done';
+  return 'blocked';
+}
+
+function commandStatusLabel(state: CommandState): string {
+  switch (state) {
+    case 'active':
+      return 'active';
+    case 'ready':
+      return 'ready';
+    case 'done':
+      return 'done';
+    case 'blocked':
+      return 'blocked';
+    case 'waiting':
+      return 'waiting';
+  }
+}
+
 const headingStyle: CSSProperties = {
   margin: 0,
   fontSize: 34,
@@ -340,48 +378,148 @@ const readinessDetailStyle: CSSProperties = {
   lineHeight: 1.35,
 };
 
+type CommandState = 'active' | 'ready' | 'done' | 'waiting' | 'blocked';
+
+const commandCenterStyle: CSSProperties = {
+  marginTop: 20,
+  padding: 18,
+  borderRadius: 8,
+  border: '1px solid rgba(45, 212, 191, 0.34)',
+  background:
+    'linear-gradient(135deg, rgba(45, 212, 191, 0.16), rgba(2, 6, 23, 0.82) 42%, rgba(34, 211, 238, 0.10))',
+  boxShadow: '0 24px 80px rgba(0, 0, 0, 0.28)',
+};
+
+const commandHeaderStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
+  alignItems: 'flex-start',
+  gap: 12,
+  marginBottom: 14,
+};
+
+const commandTitleStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textPrimary,
+  fontSize: 20,
+  fontWeight: 900,
+  letterSpacing: 0,
+};
+
+const commandSubtitleStyle: CSSProperties = {
+  margin: '5px 0 0',
+  color: COLORS.textSecondary,
+  fontSize: 13,
+  lineHeight: 1.45,
+};
+
+const commandActionStyle = (enabled: boolean): CSSProperties => ({
+  minHeight: 42,
+  padding: '9px 15px',
+  borderRadius: 6,
+  border: enabled
+    ? '1px solid rgba(45, 212, 191, 0.56)'
+    : '1px solid rgba(148, 163, 184, 0.24)',
+  background: enabled ? 'rgba(45, 212, 191, 0.16)' : 'rgba(148, 163, 184, 0.06)',
+  color: enabled ? '#ccfbf1' : COLORS.textMuted,
+  cursor: enabled ? 'pointer' : 'not-allowed',
+  fontFamily: 'inherit',
+  fontSize: 13,
+  fontWeight: 900,
+  letterSpacing: 0.4,
+  textTransform: 'uppercase',
+});
+
 const flowStyle: CSSProperties = {
   display: 'grid',
   gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
-  gap: 8,
-  marginTop: 18,
+  gap: 12,
 };
 
-const stepStyle: CSSProperties = {
-  minHeight: 116,
-  padding: 12,
-  borderRadius: 6,
-  border: '1px solid rgba(255, 255, 255, 0.07)',
-  background: 'rgba(255, 255, 255, 0.02)',
-};
+const stepStyle = (state: CommandState): CSSProperties => ({
+  minHeight: 148,
+  padding: 15,
+  borderRadius: 8,
+  border:
+    state === 'done'
+      ? '1px solid rgba(34, 197, 94, 0.46)'
+      : state === 'active' || state === 'ready'
+        ? '1px solid rgba(45, 212, 191, 0.56)'
+        : state === 'blocked'
+          ? '1px solid rgba(251, 191, 36, 0.42)'
+          : '1px solid rgba(148, 163, 184, 0.20)',
+  background:
+    state === 'done'
+      ? 'linear-gradient(180deg, rgba(34, 197, 94, 0.13), rgba(255, 255, 255, 0.025))'
+      : state === 'active' || state === 'ready'
+        ? 'linear-gradient(180deg, rgba(45, 212, 191, 0.16), rgba(255, 255, 255, 0.03))'
+        : state === 'blocked'
+          ? 'linear-gradient(180deg, rgba(251, 191, 36, 0.12), rgba(255, 255, 255, 0.025))'
+          : 'rgba(2, 6, 23, 0.38)',
+  boxShadow:
+    state === 'active' || state === 'ready'
+      ? '0 0 0 1px rgba(45, 212, 191, 0.10), 0 16px 42px rgba(45, 212, 191, 0.08)'
+      : 'none',
+});
 
 const stepNumberStyle: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  width: 22,
-  height: 22,
-  borderRadius: 4,
-  border: '1px solid rgba(45, 212, 191, 0.28)',
-  color: ACCENT_TEAL,
-  fontSize: 11,
-  fontWeight: 700,
+  width: 34,
+  height: 34,
+  borderRadius: 6,
+  border: '1px solid rgba(45, 212, 191, 0.40)',
+  color: '#ccfbf1',
+  background: 'rgba(45, 212, 191, 0.12)',
+  fontSize: 13,
+  fontWeight: 900,
   fontFamily: THEME.fontMono,
 };
 
 const stepLabelStyle: CSSProperties = {
-  margin: '10px 0 6px 0',
-  fontSize: 14,
-  fontWeight: 700,
+  margin: '12px 0 6px 0',
+  fontSize: 18,
+  fontWeight: 900,
   color: COLORS.textPrimary,
 };
 
 const stepDetailStyle: CSSProperties = {
   margin: 0,
-  fontSize: 12,
+  fontSize: 13,
   lineHeight: 1.45,
   color: COLORS.textSecondary,
 };
+
+const commandBadgeStyle = (state: CommandState): CSSProperties => ({
+  display: 'inline-flex',
+  alignItems: 'center',
+  minHeight: 24,
+  marginTop: 12,
+  padding: '3px 7px',
+  borderRadius: 5,
+  color:
+    state === 'done'
+      ? '#bbf7d0'
+      : state === 'active' || state === 'ready'
+        ? '#ccfbf1'
+        : state === 'blocked'
+          ? '#fef3c7'
+          : COLORS.textMuted,
+  background:
+    state === 'done'
+      ? 'rgba(34, 197, 94, 0.14)'
+      : state === 'active' || state === 'ready'
+        ? 'rgba(45, 212, 191, 0.14)'
+        : state === 'blocked'
+          ? 'rgba(251, 191, 36, 0.12)'
+          : 'rgba(148, 163, 184, 0.08)',
+  fontFamily: THEME.fontMono,
+  fontSize: 11,
+  fontWeight: 900,
+  textTransform: 'uppercase',
+});
 
 const lowerGridStyle: CSSProperties = {
   display: 'grid',
@@ -486,6 +624,14 @@ export default function AuditConsolePage() {
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
   const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning, sessionError);
+  const commandButtonEnabled = !isAuditRunning && (!isConfigured || !session?.verdict);
+  const commandButtonLabel = !isConfigured
+    ? 'Prepare target'
+    : isAuditRunning
+      ? 'Running audit'
+      : session?.verdict
+        ? 'Verdict ready'
+        : 'Run CAS audit';
   const readinessItems = [
     {
       label: 'Model',
@@ -545,6 +691,14 @@ export default function AuditConsolePage() {
     }
   };
 
+  const runPrimaryCommand = () => {
+    if (!isConfigured) {
+      connectReferenceTarget();
+      return;
+    }
+    void runAudit();
+  };
+
   return (
     <>
       <style>{headingWaveCss}</style>
@@ -598,6 +752,48 @@ export default function AuditConsolePage() {
           />
         </div>
 
+        <section style={commandCenterStyle} aria-label="CAS audit command center">
+          <div style={commandHeaderStyle}>
+            <div>
+              <h2 style={commandTitleStyle}>Audit command center</h2>
+              <p style={commandSubtitleStyle}>
+                This is the user path: connect the target, run CAS, then return
+                a verdict with proof chips and an Evidence Packet.
+              </p>
+            </div>
+            <button
+              type="button"
+              style={commandActionStyle(commandButtonEnabled)}
+              onClick={runPrimaryCommand}
+              disabled={!commandButtonEnabled}
+            >
+              {commandButtonLabel}
+            </button>
+          </div>
+          <section style={flowStyle} aria-label="Audit workflow">
+            {AUDIT_STEPS.map((step, index) => {
+              const state = commandStateFor(
+                index,
+                isConfigured,
+                session,
+                isAuditRunning,
+                sessionError,
+              );
+              return (
+                <article key={step.label} style={stepStyle(state)}>
+                  <span style={stepNumberStyle}>{index + 1}</span>
+                  <h2 style={stepLabelStyle}>{step.command}</h2>
+                  <p style={verdictLabelStyle}>{step.label}</p>
+                  <p style={stepDetailStyle}>{step.detail}</p>
+                  <span style={commandBadgeStyle(state)}>
+                    {commandStatusLabel(state)}
+                  </span>
+                </article>
+              );
+            })}
+          </section>
+        </section>
+
         <div style={lowerGridStyle}>
           <AuditSessionProgress
             status={lifecycleStatus}
@@ -635,16 +831,6 @@ export default function AuditConsolePage() {
             </button>
           </section>
         ) : null}
-
-        <section style={flowStyle} aria-label="Audit workflow">
-          {AUDIT_STEPS.map((step, index) => (
-            <article key={step.label} style={stepStyle}>
-              <span style={stepNumberStyle}>{index + 1}</span>
-              <h2 style={stepLabelStyle}>{step.label}</h2>
-              <p style={stepDetailStyle}>{step.detail}</p>
-            </article>
-          ))}
-        </section>
 
         <div style={lowerGridStyle}>
           <div style={verdictStackStyle}>
