@@ -9,6 +9,8 @@ import json
 from threading import Lock
 from typing import Any, Literal
 
+from api.services.cas_harness_verdict_runner import run_evidence_gated_verdict
+
 
 AuditStatus = Literal[
     "DRAFT",
@@ -54,8 +56,8 @@ class AuditSessionRecord:
     selected_modules: list[str]
     created_at: str
     updated_at: str
-    verdict: None = None
-    confidence: None = None
+    verdict: str | None = None
+    confidence: float | None = None
     evidence_packet_trace_id: str | None = None
     atlas_deep_link: str | None = None
     provenance_chips: list[dict[str, str]] = field(default_factory=list)
@@ -132,23 +134,32 @@ def run_session(audit_id: str) -> AuditSessionRecord | None:
         if record is None:
             return None
 
-        if record.status in {"SCAFFOLD_PENDING_RUNNER", "EVIDENCE_PENDING"}:
+        if record.status in {"SCAFFOLD_PENDING_RUNNER", "EVIDENCE_PENDING", "COMPLETE"}:
             return record
 
         _append_event(
             record,
             status="VALIDATING",
-            message="Input contract validated. License and external model billing are not active in M1.",
+            message="Input contract validated. License and external model billing are not active in M3.1.",
         )
         _append_event(
             record,
             status="RUNNING",
-            message="Run requested. M1 does not have a real CAS audit runner connected.",
+            message=(
+                "M3 evidence-gated verdict runner started. It cannot ACCEPT without "
+                "complete proof chips and an explicit verifier decision."
+            ),
         )
+        result = run_evidence_gated_verdict(
+            evidence_packet_trace_id=record.evidence_packet_trace_id,
+            proof_chips=record.provenance_chips,
+        )
+        record.verdict = result.verdict
+        record.confidence = result.confidence
         _append_event(
             record,
-            status="SCAFFOLD_PENDING_RUNNER",
-            message="Stopped before verdict: CAS audit runner is not wired, so no verdict or confidence was computed.",
+            status=result.status,
+            message=result.message,
         )
         return record
 
