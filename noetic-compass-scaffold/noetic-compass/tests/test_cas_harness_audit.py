@@ -341,6 +341,12 @@ def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decis
     assert body["status"] == "COMPLETE"
     assert body["verdict"] == "ACCEPT"
     assert body["confidence"] == 0.9816
+    assert body["verifier_decision"] == {
+        "verdict": "ACCEPT",
+        "confidence": 0.9816,
+        "source": "stage19_verification_stack+stage20_generation_readiness",
+        "reason": "Stage 19 accepted the row and Stage 20 readiness action is allow.",
+    }
     assert set(chips.values()) == {"present"}
     assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
 
@@ -375,6 +381,12 @@ def test_run_route_suppresses_only_when_complete_packet_has_explicit_rejection(
     assert body["status"] == "COMPLETE"
     assert body["verdict"] == "SUPPRESS"
     assert body["confidence"] == 0.9
+    assert body["verifier_decision"] == {
+        "verdict": "SUPPRESS",
+        "confidence": 0.9,
+        "source": "stage19_verification_stack+stage20_generation_readiness",
+        "reason": "Stage 19 rejected the row and Stage 20 readiness action is suppress.",
+    }
 
 
 def test_run_route_blocks_explicit_verifier_decision_when_required_proof_is_incomplete(
@@ -409,6 +421,7 @@ def test_run_route_blocks_explicit_verifier_decision_when_required_proof_is_inco
     assert body["status"] == "COMPLETE"
     assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
     assert body["confidence"] is None
+    assert body["verifier_decision"]["verdict"] == "ACCEPT"
     assert chips["control_proof"] == "missing"
     assert "missing required proof" in body["lifecycle"][-1]["message"]
 
@@ -445,6 +458,7 @@ def test_run_route_flags_complete_packet_without_stage19_stage20_verifier_source
     assert body["status"] == "COMPLETE"
     assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
     assert body["confidence"] is None
+    assert body["verifier_decision"] is None
     assert set(chips.values()) == {"present"}
     assert "no explicit Stage 19/20/21 verifier decision" in body["lifecycle"][-1]["message"]
 

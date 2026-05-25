@@ -21,7 +21,7 @@ function sessionResponse(overrides: Record<string, unknown> = {}) {
     audit_mode: 'BALANCED',
     prompt_summary: null,
     scenario_summary:
-      'M1 audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
+      'Reference audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
     selected_modules: [
       'model_proof',
       'cas_readout',
@@ -36,6 +36,7 @@ function sessionResponse(overrides: Record<string, unknown> = {}) {
     confidence: null,
     evidence_packet_trace_id: null,
     atlas_deep_link: null,
+    verifier_decision: null,
     provenance_chips: [
       {
         id: 'model_proof',
@@ -121,7 +122,7 @@ describe('AuditConsolePage', () => {
     renderPage();
 
     expect(
-      screen.getByText(/No final audit verdict is shown until a real audit runner computes it/i)
+      screen.getByText(/The UI shows ACCEPT or SUPPRESS only when the backend returns an explicit Stage/i)
     ).toBeInTheDocument();
     expect(screen.getByText(/Audit Console is the decision workflow/i)).toBeInTheDocument();
     expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
@@ -168,16 +169,16 @@ describe('AuditConsolePage', () => {
 
     renderPage();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Prepare M1 reference session' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare reference session' }));
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
-    expect(screen.getByText(/M1 session target configured/i)).toBeInTheDocument();
+    expect(screen.getByText(/M3 session target configured/i)).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
     expect(
       screen.getByText(
-        'The backend created and ran the M1 lifecycle, then stopped honestly before verdict because the real audit runner is not wired yet.',
+        'The backend created the session, but no Evidence Packet is attached, so the verdict runner refused to compute a verdict.',
       ),
     ).toBeInTheDocument();
     expect(screen.getAllByText('Runner pending').length).toBeGreaterThan(0);
@@ -193,6 +194,81 @@ describe('AuditConsolePage', () => {
       '/api/cas-harness/audit/session/cas-audit-test-session/run',
       expect.objectContaining({ method: 'POST' }),
     );
+  });
+
+  it('explains a backend ACCEPT verdict with verifier reason and proof chips', async () => {
+    const allPresentChips = [
+      'model_proof',
+      'cas_readout',
+      'causal_proof',
+      'control_proof',
+      'output_proof',
+      'packet_proof',
+    ].map((id) => ({
+      id,
+      name: id === 'cas_readout'
+        ? 'CAS readout'
+        : `${id.replace('_', ' ')}`
+            .replace(/\b\w/g, (letter) => letter.toUpperCase()),
+      status: 'present',
+      detail: `${id} present`,
+    }));
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => sessionResponse({
+          evidence_packet_trace_id: 'stage21-allow-001',
+          provenance_chips: allPresentChips,
+          verifier_decision: {
+            verdict: 'ACCEPT',
+            confidence: 0.9816,
+            source: 'stage19_verification_stack+stage20_generation_readiness',
+            reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+          },
+        }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            status: 'COMPLETE',
+            verdict: 'ACCEPT',
+            confidence: 0.9816,
+            evidence_packet_trace_id: 'stage21-allow-001',
+            provenance_chips: allPresentChips,
+            verifier_decision: {
+              verdict: 'ACCEPT',
+              confidence: 0.9816,
+              source: 'stage19_verification_stack+stage20_generation_readiness',
+              reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+            },
+            lifecycle: [
+              {
+                status: 'DRAFT',
+                message: 'Audit session created.',
+                timestamp: '2026-05-25T11:00:00Z',
+              },
+              {
+                status: 'COMPLETE',
+                message: 'M3 verdict runner returned the explicit verifier decision from the attached evidence contract.',
+                timestamp: '2026-05-25T11:01:00Z',
+              },
+            ],
+          }),
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare reference session' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+
+    expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
+    expect(screen.getByText(/Accepted because the verifier explicitly allowed it/i)).toBeInTheDocument();
+    expect(screen.getByText(/CAS accepted this output because the verifier allowed it and 6\/6/i)).toBeInTheDocument();
+    expect(screen.getByText(/Stage 19 accepted_accuracy/i)).toBeInTheDocument();
+    expect(screen.getByText(/Verifier source: stage19_verification_stack\+stage20_generation_readiness/i)).toBeInTheDocument();
   });
 
   it('keeps navigation links available', () => {

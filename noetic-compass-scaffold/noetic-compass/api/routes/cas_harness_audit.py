@@ -62,6 +62,13 @@ class AuditLifecycleEvent(BaseModel):
     timestamp: str
 
 
+class VerifierDecision(BaseModel):
+    verdict: Verdict
+    confidence: float = Field(..., ge=0.0, le=1.0)
+    source: str = Field(..., min_length=1, max_length=160)
+    reason: str = Field(..., min_length=1, max_length=500)
+
+
 class AuditSessionRequest(BaseModel):
     model_id: str | None = Field(default=None, min_length=1, max_length=200)
     endpoint_url: HttpUrl | None = None
@@ -132,6 +139,7 @@ class AuditSessionResponse(BaseModel):
     evidence_packet_trace_id: str | None
     atlas_deep_link: str | None
     provenance_chips: list[ProvenanceChip]
+    verifier_decision: VerifierDecision | None = None
     lifecycle: list[AuditLifecycleEvent]
 
 
