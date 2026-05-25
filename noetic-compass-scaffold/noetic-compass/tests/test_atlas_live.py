@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import httpx
 import pytest
 
 from api.routes import atlas_live
@@ -179,3 +180,165 @@ def test_live_events_stream_worker_sse(client, monkeypatch):
     assert resp.status_code == 200
     assert "event: manifest" in body
     assert "event: token" in body
+
+
+class _MockResp:
+    def __init__(self, status_code: int, payload: dict | None):
+        self.status_code = status_code
+        self._payload = payload
+
+    def json(self):
+        if self._payload is None:
+            raise ValueError("no json body")
+        return self._payload
+
+
+def _install_mock_async_client(monkeypatch, get_handler):
+    class _Client:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            return False
+
+        async def get(self, url, **kwargs):
+            return await get_handler(url)
+
+    monkeypatch.setattr(atlas_live.httpx, "AsyncClient", _Client)
+
+
+def test_live_health_realmode_good_state_forwards_worker_verdict(client, monkeypatch):
+    expected_payload = {
+        "verdict": "REAL_PYTHIA_WEIGHTS_LOADED",
+        "is_real_model": True,
+        "fake_runtime_env": False,
+        "model_loaded": True,
+        "load_error": None,
+        "manifest_is_real_model": True,
+        "model_id": "EleutherAI/pythia-160m",
+        "worker_version": "m2-real-pythia",
+    }
+    seen: dict[str, str] = {}
+
+    async def _get(url):
+        seen["url"] = url
+        return _MockResp(200, expected_payload)
+
+    _install_mock_async_client(monkeypatch, _get)
+
+    resp = client.get("/atlas/live/health/realmode")
+
+    assert resp.status_code == 200
+    assert resp.json() == expected_payload
+    assert seen["url"].endswith("/health/realmode")
+
+
+@pytest.mark.parametrize(
+    ("name", "payload"),
+    [
+        (
+            "fake mode",
+            {
+                "verdict": "NOT_REAL_PYTHIA_WEIGHTS",
+                "is_real_model": False,
+                "fake_runtime_env": True,
+                "model_loaded": True,
+                "load_error": None,
+                "manifest_is_real_model": True,
+                "model_id": "EleutherAI/pythia-160m",
+                "worker_version": "m2-real-pythia",
+            },
+        ),
+        (
+            "unloaded model",
+            {
+                "verdict": "NOT_REAL_PYTHIA_WEIGHTS",
+                "is_real_model": False,
+                "fake_runtime_env": False,
+                "model_loaded": False,
+                "load_error": None,
+                "manifest_is_real_model": True,
+                "model_id": "EleutherAI/pythia-160m",
+                "worker_version": "m2-real-pythia",
+            },
+        ),
+        (
+            "load error",
+            {
+                "verdict": "NOT_REAL_PYTHIA_WEIGHTS",
+                "is_real_model": False,
+                "fake_runtime_env": False,
+                "model_loaded": True,
+                "load_error": "HF download timed out",
+                "manifest_is_real_model": True,
+                "model_id": "EleutherAI/pythia-160m",
+                "worker_version": "m2-real-pythia",
+            },
+        ),
+    ],
+)
+def test_live_health_realmode_forwards_worker_failure_states(
+    client,
+    monkeypatch,
+    name,
+    payload,
+):
+    async def _get(url):
+        assert url.endswith("/health/realmode"), name
+        return _MockResp(200, payload)
+
+    _install_mock_async_client(monkeypatch, _get)
+
+    resp = client.get("/atlas/live/health/realmode")
+
+    assert resp.status_code == 200
+    assert resp.json() == payload
+
+
+def test_live_health_realmode_disabled_when_worker_url_unset(client, monkeypatch):
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_url", "")
+
+    resp = client.get("/atlas/live/health/realmode")
+
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "atlas_live_disabled"
+
+
+def test_live_health_realmode_returns_503_when_worker_unreachable(client, monkeypatch):
+    async def _timeout(url):
+        raise httpx.ReadTimeout("simulated worker timeout")
+
+    _install_mock_async_client(monkeypatch, _timeout)
+
+    resp = client.get("/atlas/live/health/realmode")
+
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "atlas_live_worker_unavailable"
+
+
+def test_live_health_forwards_worker_body(client, monkeypatch):
+    expected_payload = {
+        "status": "ok",
+        "worker_version": "m2-real-pythia",
+        "model_id": "EleutherAI/pythia-160m",
+        "is_real_model": True,
+        "model_loaded": True,
+        "load_error": None,
+    }
+    seen: dict[str, str] = {}
+
+    async def _get(url):
+        seen["url"] = url
+        return _MockResp(200, expected_payload)
+
+    _install_mock_async_client(monkeypatch, _get)
+
+    resp = client.get("/atlas/live/health")
+
+    assert resp.status_code == 200
+    assert resp.json() == expected_payload
+    assert seen["url"].endswith("/health")
+    assert not seen["url"].endswith("/health/realmode")

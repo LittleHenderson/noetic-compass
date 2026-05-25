@@ -1,3 +1,6 @@
+from app.runtime import model_loader
+
+
 def test_health_ok(client):
     r = client.get("/health")
     assert r.status_code == 200
@@ -10,3 +13,107 @@ def test_health_ok(client):
     assert body["model_loaded"] is False
     assert body["load_error"] is None
     assert body["worker_version"] == "m2-real-pythia"
+
+
+def _loaded_model(*, manifest_is_real: bool, load_error: str | None = None):
+    manifest = model_loader.PYTHIA_160M_MANIFEST.model_copy(
+        update={"is_real_model": manifest_is_real},
+    )
+    return model_loader.LoadedModel(
+        manifest=manifest,
+        model=object(),
+        tokenizer=object(),
+        load_error=load_error,
+    )
+
+
+def test_health_realmode_good_state(client, monkeypatch):
+    monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
+    monkeypatch.setattr(model_loader, "_LOADED", _loaded_model(manifest_is_real=True))
+
+    r = client.get("/health/realmode")
+
+    assert r.status_code == 200
+    body = r.json()
+    assert body["verdict"] == "REAL_PYTHIA_WEIGHTS_LOADED"
+    assert body["is_real_model"] is True
+    assert body["fake_runtime_env"] is False
+    assert body["model_loaded"] is True
+    assert body["load_error"] is None
+    assert body["manifest_is_real_model"] is True
+    assert body["model_id"] == "EleutherAI/pythia-160m"
+
+
+def test_health_realmode_fake_mode_fails_even_with_loaded_model(client, monkeypatch):
+    monkeypatch.setenv("LIVE_TRACE_DEMO_MODE", "1")
+    monkeypatch.setattr(model_loader, "_LOADED", _loaded_model(manifest_is_real=True))
+
+    r = client.get("/health/realmode")
+
+    assert r.status_code == 200
+    body = r.json()
+    assert body["verdict"] == "NOT_REAL_PYTHIA_WEIGHTS"
+    assert body["is_real_model"] is False
+    assert body["fake_runtime_env"] is True
+    assert body["model_loaded"] is True
+    assert body["load_error"] is None
+    assert body["manifest_is_real_model"] is True
+
+
+def test_health_realmode_unloaded_model_fails_without_triggering_load(client, monkeypatch):
+    monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
+    monkeypatch.setattr(model_loader, "_LOADED", None)
+
+    def _boom():
+        raise AssertionError("/health/realmode must not trigger warm_load()")
+
+    monkeypatch.setattr(model_loader, "warm_load", _boom)
+    r = client.get("/health/realmode")
+
+    assert r.status_code == 200
+    body = r.json()
+    assert body["verdict"] == "NOT_REAL_PYTHIA_WEIGHTS"
+    assert body["is_real_model"] is False
+    assert body["fake_runtime_env"] is False
+    assert body["model_loaded"] is False
+    assert body["load_error"] is None
+    assert body["manifest_is_real_model"] is False
+
+
+def test_health_realmode_load_error_fails(client, monkeypatch):
+    monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
+    monkeypatch.setattr(
+        model_loader,
+        "_LOADED",
+        _loaded_model(
+            manifest_is_real=True,
+            load_error="HF download timed out",
+        ),
+    )
+
+    r = client.get("/health/realmode")
+
+    assert r.status_code == 200
+    body = r.json()
+    assert body["verdict"] == "NOT_REAL_PYTHIA_WEIGHTS"
+    assert body["is_real_model"] is False
+    assert body["fake_runtime_env"] is False
+    assert body["model_loaded"] is True
+    assert body["load_error"] == "HF download timed out"
+    assert body["manifest_is_real_model"] is True
+
+
+def test_health_realmode_manifest_false_fails(client, monkeypatch):
+    monkeypatch.delenv("LIVE_TRACE_DEMO_MODE", raising=False)
+    monkeypatch.setattr(model_loader, "_LOADED", _loaded_model(manifest_is_real=False))
+
+    r = client.get("/health/realmode")
+
+    assert r.status_code == 200
+    body = r.json()
+    assert body["verdict"] == "NOT_REAL_PYTHIA_WEIGHTS"
+    assert body["is_real_model"] is False
+    assert body["fake_runtime_env"] is False
+    assert body["model_loaded"] is True
+    assert body["load_error"] is None
+    assert body["manifest_is_real_model"] is False

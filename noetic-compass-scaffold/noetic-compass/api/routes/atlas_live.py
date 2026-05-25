@@ -171,6 +171,49 @@ async def _iter_worker_events(session_id: str) -> AsyncIterator[bytes]:
                 yield chunk
 
 
+async def _proxy_worker_get(path: str) -> dict:
+    """Proxy a worker health GET with an operator-readable 503 contract."""
+    base = settings.atlas_live_worker_url.strip().rstrip("/")
+    if not base:
+        raise HTTPException(status_code=503, detail="atlas_live_disabled")
+
+    timeout = httpx.Timeout(settings.atlas_live_http_timeout_seconds)
+    try:
+        async with httpx.AsyncClient(timeout=timeout) as client:
+            resp = await client.get(f"{base}{path}")
+    except httpx.HTTPError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="atlas_live_worker_unavailable",
+        ) from exc
+
+    if resp.status_code >= 400:
+        raise HTTPException(
+            status_code=503,
+            detail="atlas_live_worker_unavailable",
+        )
+
+    try:
+        return resp.json()
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="atlas_live_worker_unavailable",
+        ) from exc
+
+
+@router.get("/health")
+async def live_health() -> dict:
+    """Proxy worker /health for API-side liveness checks."""
+    return await _proxy_worker_get("/health")
+
+
+@router.get("/health/realmode")
+async def live_health_realmode() -> dict:
+    """Proxy worker /health/realmode for real Pythia weight verification."""
+    return await _proxy_worker_get("/health/realmode")
+
+
 @router.post("/session", response_model=LiveSessionResponse)
 async def create_live_session(
     req: LiveSessionRequest,
