@@ -6,7 +6,7 @@ import { COLORS, SPRING_GENTLE, THEME } from '../../lib/designTokens';
 const wrapStyle: CSSProperties = {
   position: 'absolute',
   top: 12,
-  right: 12,
+  left: 12,
   zIndex: 20,
   pointerEvents: 'auto',
   fontFamily: THEME.fontFamily,
