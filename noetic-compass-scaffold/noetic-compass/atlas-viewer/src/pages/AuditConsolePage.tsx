@@ -19,6 +19,7 @@ import {
 } from '../lib/casHarnessAuditApi';
 import {
   ACCENT_AMBER,
+  ACCENT_CYAN,
   ACCENT_TEAL,
   COLORS,
   THEME,
@@ -208,7 +209,7 @@ const headingWaveStyle: CSSProperties = {
   ...headingStyle,
   color: 'transparent',
   backgroundImage:
-    'linear-gradient(90deg, #e2e8f0 0%, #ccfbf1 16%, #5eead4 34%, #14b8a6 50%, #5eead4 66%, #ccfbf1 84%, #e2e8f0 100%)',
+    `linear-gradient(90deg, ${ACCENT_TEAL} 0%, ${ACCENT_CYAN} 50%, ${ACCENT_TEAL} 100%)`,
   backgroundSize: '280% 100%',
   backgroundClip: 'text',
   WebkitBackgroundClip: 'text',
