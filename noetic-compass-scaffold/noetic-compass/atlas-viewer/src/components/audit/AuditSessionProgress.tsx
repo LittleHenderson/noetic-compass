@@ -43,7 +43,7 @@ const progressSteps: ProgressStep[] = [
   {
     id: 'running',
     label: 'Running CAS audit',
-    description: 'CAS modules are testing the selected model output.',
+    description: 'CAS modules are evaluating the selected model output.',
   },
   {
     id: 'runner_pending',
@@ -65,7 +65,7 @@ const progressSteps: ProgressStep[] = [
 const failedStep: ProgressStep = {
   id: 'failed',
   label: 'Failed',
-  description: 'The audit stopped before a trustworthy verdict was produced.',
+  description: 'The audit stopped before an evidence-gated verdict was produced.',
 };
 
 const statusCopy: Record<AuditLifecycleStatus, { headline: string; body: string }> = {
@@ -79,7 +79,7 @@ const statusCopy: Record<AuditLifecycleStatus, { headline: string; body: string 
   },
   running: {
     headline: 'Running CAS audit',
-    body: 'The selected CAS modules are testing the model output right now.',
+    body: 'The selected CAS modules are evaluating the model output.',
   },
   runner_pending: {
     headline: 'Runner pending',
@@ -95,7 +95,7 @@ const statusCopy: Record<AuditLifecycleStatus, { headline: string; body: string 
   },
   failed: {
     headline: 'Audit failed',
-    body: 'No verdict should be trusted from this run.',
+    body: 'Do not use a verdict from this failed run.',
   },
 };
 

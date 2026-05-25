@@ -1,5 +1,6 @@
 import type { CSSProperties } from 'react';
 import { GlassPanel } from '../ui/GlassPanel';
+import { AuditTerm } from './AuditTerm';
 import {
   ACCENT_AMBER,
   ACCENT_TEAL,
@@ -149,7 +150,7 @@ const buttonStyle: CSSProperties = {
 
 const primaryButtonStyle: CSSProperties = {
   ...buttonStyle,
-  borderColor: 'rgba(45, 212, 191, 0.45)',
+  border: '1px solid rgba(45, 212, 191, 0.45)',
   background: 'rgba(45, 212, 191, 0.12)',
   color: '#ccfbf1',
 };
@@ -212,7 +213,9 @@ export function AuditVerdictCard({
               fontWeight: 700,
             }}
           >
-            <span>Confidence</span>
+            <span>
+              <AuditTerm term="confidence">Confidence</AuditTerm>
+            </span>
             <span style={{ color: tone.text, fontFamily: FONT_MONO }}>
               {confidenceValue == null ? 'Not computed' : `${confidenceValue}%`}
             </span>

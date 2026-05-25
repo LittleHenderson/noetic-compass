@@ -171,7 +171,7 @@ const buttonStyle: CSSProperties = {
 
 const primaryButtonStyle: CSSProperties = {
   ...buttonStyle,
-  borderColor: 'rgba(45, 212, 191, 0.45)',
+  border: '1px solid rgba(45, 212, 191, 0.45)',
   background: 'rgba(45, 212, 191, 0.12)',
   color: '#ccfbf1',
 };
@@ -212,7 +212,7 @@ export function ModelConnectionCard({
           <div>
             <h2 style={titleStyle}>Model connection</h2>
             <p style={subtitleStyle}>
-              Connect a model, then run an audit against the current output.
+              Verify target, then run audit.
             </p>
           </div>
           <span style={statusPillStyle(status)}>
@@ -233,15 +233,15 @@ export function ModelConnectionCard({
             <span style={detailValueStyle}>{modelName}</span>
           </div>
           <div style={detailTileStyle}>
-            <span style={detailLabelStyle}>Provider</span>
+            <span style={detailLabelStyle}>Runtime</span>
             <span style={detailValueStyle}>{provider}</span>
           </div>
           <div style={detailTileStyle}>
-            <span style={detailLabelStyle}>Endpoint</span>
+            <span style={detailLabelStyle}>API route</span>
             <span style={detailValueStyle}>{endpointLabel}</span>
           </div>
           <div style={detailTileStyle}>
-            <span style={detailLabelStyle}>Last checked</span>
+            <span style={detailLabelStyle}>Backend</span>
             <span style={detailValueStyle}>{lastChecked ?? 'Not checked'}</span>
           </div>
         </div>
