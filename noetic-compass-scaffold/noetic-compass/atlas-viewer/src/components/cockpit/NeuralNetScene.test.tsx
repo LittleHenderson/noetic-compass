@@ -356,6 +356,12 @@ describe('NeuralNetScene — detachable layer inspection', () => {
 
     expect(await screen.findByTestId('detached-layer-card-2')).toBeInTheDocument();
     expect(await screen.findByTestId('detached-layer-card-7')).toBeInTheDocument();
+    expect(screen.getByTestId('layer-card-rail')).toHaveStyle({
+      flexDirection: 'row',
+      overflow: 'visible',
+      maxHeight: 'none',
+      pointerEvents: 'none',
+    });
     fireEvent.click(screen.getByTestId('layer-focus-2'));
     await waitFor(() => {
       const layout = wrapper!.__nn_layer_layout!();

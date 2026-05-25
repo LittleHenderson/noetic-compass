@@ -1143,16 +1143,20 @@ export function NeuralNetScene({
 
   const layerCardRailStyle: CSSProperties = {
     position: 'absolute',
-    right: 14,
-    top: detachedLayers.length > 0 ? 146 : 14,
+    left: 14,
+    right: 292,
+    bottom: 14,
     zIndex: 11,
     display: 'flex',
-    flexDirection: 'column',
+    flexDirection: 'row',
+    flexWrap: 'wrap-reverse',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-start',
     gap: 8,
-    width: 238,
-    maxHeight: 'calc(100% - 124px)',
-    overflowY: 'auto',
-    pointerEvents: 'auto',
+    width: 'auto',
+    maxHeight: 'none',
+    overflow: 'visible',
+    pointerEvents: 'none',
   };
 
   const layerActionButtonStyle: CSSProperties = {
@@ -1261,8 +1265,8 @@ export function NeuralNetScene({
             transition={SPRING_SNAPPY}
             style={{
               position: 'absolute',
-              left: 14,
-              top: 14,
+              right: 14,
+              bottom: 14,
               zIndex: 4,
               pointerEvents: 'none',
             }}
@@ -1442,7 +1446,11 @@ export function NeuralNetScene({
                   whileDrag={{ scale: 1.02 }}
                   transition={SPRING_SNAPPY}
                   data-testid={`detached-layer-card-${layer}`}
-                  style={{ cursor: 'grab' }}
+                  style={{
+                    cursor: 'grab',
+                    width: 238,
+                    pointerEvents: 'auto',
+                  }}
                 >
                   <GlassPanel
                     intensity={isActive ? 'thick' : 'regular'}
