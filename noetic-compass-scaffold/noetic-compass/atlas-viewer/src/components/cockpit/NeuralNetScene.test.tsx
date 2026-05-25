@@ -301,6 +301,20 @@ describe('NeuralNetScene — detachable layer inspection', () => {
       expect(layout[0].scale).toBeLessThan(0.5);
     });
 
+    act(() => {
+      wrapper!.__nn_simulate_double_click!(220, 160);
+    });
+    await waitFor(() => {
+      expect(screen.queryByTestId('detached-layer-card-4')).toBeNull();
+      const layout = wrapper!.__nn_layer_layout!();
+      expect(layout[4].scale).toBe(1);
+      expect(layout[4].z).toBeCloseTo(3);
+    });
+
+    act(() => {
+      wrapper!.__nn_simulate_double_click!(220, 160);
+    });
+    expect(await screen.findByTestId('detached-layer-card-4')).toBeInTheDocument();
     fireEvent.click(screen.getByTestId('layer-snap-4'));
     await waitFor(() => {
       expect(screen.queryByTestId('detached-layer-card-4')).toBeNull();
@@ -323,8 +337,8 @@ describe('NeuralNetScene — detachable layer inspection', () => {
       '[data-testid="neuralnet-scene"]',
     ) as (HTMLElement & TestSurface) | null;
 
-    // Use the real test hook by making the raycaster report different planes
-    // for two double-clicks.
+    // Use the real test hook for the first layer, then the mini-dock controls
+    // for pulling out additional layers without relying on tiny 3D hit targets.
     (raycaster.intersectObject as ReturnType<typeof vi.fn>).mockImplementation(
       (obj: Object3D) =>
         obj === wrapper!.__nn_planes![2]
@@ -334,15 +348,8 @@ describe('NeuralNetScene — detachable layer inspection', () => {
     act(() => {
       wrapper!.__nn_simulate_double_click!(60, 160);
     });
-    (raycaster.intersectObject as ReturnType<typeof vi.fn>).mockImplementation(
-      (obj: Object3D) =>
-        obj === wrapper!.__nn_planes![7]
-          ? [{ object: obj, distance: 1 }]
-          : [],
-    );
-    act(() => {
-      wrapper!.__nn_simulate_double_click!(240, 160);
-    });
+    expect(await screen.findByTestId('layer-dock-buttons')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('layer-dock-detach-7'));
 
     expect(await screen.findByTestId('detached-layer-card-2')).toBeInTheDocument();
     expect(await screen.findByTestId('detached-layer-card-7')).toBeInTheDocument();
