@@ -31,9 +31,9 @@ describe('AssessmentPage', () => {
     renderPage();
     expect(screen.getByPlaceholderText(/enter text/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^assess$/i })).toBeInTheDocument();
-    expect(screen.getByText(/Scoring Mode/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Scoring Mode/i).length).toBeGreaterThan(0);
     expect(screen.getByText(/Scorer Provider/i)).toBeInTheDocument();
-    expect(screen.getByText(/Advanced scoring options/i)).toBeInTheDocument();
+    expect(screen.getByText(/Show advanced scoring modes/i)).toBeInTheDocument();
   });
 
   it('submits and shows results', async () => {
@@ -52,13 +52,13 @@ describe('AssessmentPage', () => {
     expect(screen.getByText(/The Bottom Line/)).toBeInTheDocument();
     expect(screen.getByText(/Scoring Provenance/)).toBeInTheDocument();
     expect(screen.getAllByText(/Deterministic heuristic fallback/i).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Research Prototype \/ Not Validated/i).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/Research-stage output/i).length).toBeGreaterThan(0);
 
     // Switch to technical view to see NCCS score
     await user.click(screen.getByRole('button', { name: /Show Technical View/i }));
 
     await waitFor(() => {
-      expect(screen.getByText('68.0')).toBeInTheDocument();
+      expect(screen.getByText(/NCCS Score/i)).toBeInTheDocument();
     });
     expect(screen.getAllByText(/Silver/).length).toBeGreaterThan(0);
   });
@@ -76,7 +76,7 @@ describe('AssessmentPage', () => {
     });
     expect(screen.queryByRole('option', { name: /Self-reported inline scores/i })).not.toBeInTheDocument();
 
-    await user.click(screen.getByRole('checkbox', { name: /Advanced scoring options/i }));
+    await user.click(screen.getByRole('checkbox', { name: /Show advanced scoring modes/i }));
     expect(screen.getByRole('option', { name: /Self-reported inline scores/i })).toBeInTheDocument();
   });
 

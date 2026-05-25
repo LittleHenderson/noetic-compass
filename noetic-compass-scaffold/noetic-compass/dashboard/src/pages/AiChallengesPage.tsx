@@ -362,14 +362,12 @@ export function AiChallengesPage() {
         })}
       </div>
 
-      {/* Disclaimer */}
+      {/* Status */}
       <SectionReveal>
-        <div className="glass-card p-5">
-          <p className="text-[12px] text-slate-400 leading-relaxed">
-            <strong className="text-slate-200">Research status:</strong> CAS provides heuristic scoring
-            for these challenges. All results are research indicators, not certified safety guarantees.
-            Scores should be interpreted as heuristic measurements pending empirical validation.
-          </p>
+        <div className="glass-card flex flex-wrap items-center gap-2 p-4 text-xs">
+          <span className="font-semibold uppercase tracking-[0.14em] text-amber-300">Research-stage output</span>
+          <span className="rounded-full bg-white/[0.04] px-2.5 py-1 text-slate-400">Heuristic challenge scores</span>
+          <span className="rounded-full bg-amber-400/10 px-2.5 py-1 text-amber-300">Not a safety certification</span>
         </div>
       </SectionReveal>
     </div>

@@ -51,9 +51,8 @@ export function VisualizationPage() {
           <h1 className="max-w-3xl text-3xl font-black tracking-tight text-slate-100 sm:text-4xl">
             See and hear the same CAS structure.
           </h1>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-slate-400">
-            The Radial Architecture Display shows the state. The Temporal Cognitive Score turns the same Noetics,
-            Domains, Registers, Drives, and lacunarity into synthesized sound. Nothing here is a stock audio sample.
+          <p className="mt-3 max-w-3xl text-sm text-slate-400">
+            Pick a profile. Inspect the state. Press play.
           </p>
         </div>
       </div>
@@ -105,25 +104,19 @@ export function VisualizationPage() {
         </Card>
       </div>
 
-      <Card title="How to read this without needing the math first">
+      <Card title="Quick key">
         <div className="grid gap-3 md:grid-cols-3">
           <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <p className="text-sm font-semibold text-slate-100">Pitch means Noetic</p>
-            <p className="mt-1 text-xs leading-relaxed text-slate-500">
-              Different notes mark different cognitive primitives, from Idea through Below/Effect.
-            </p>
+            <p className="mt-1 text-xs text-slate-500">Different primitive.</p>
           </div>
           <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <p className="text-sm font-semibold text-slate-100">Expression means Register</p>
-            <p className="mt-1 text-xs leading-relaxed text-slate-500">
-              |T sustains, |A detaches, |f connects, and |E accents the same structural material.
-            </p>
+            <p className="mt-1 text-xs text-slate-500">Different processing mode.</p>
           </div>
           <div className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
             <p className="text-sm font-semibold text-slate-100">Silence means lacunarity</p>
-            <p className="mt-1 text-xs leading-relaxed text-slate-500">
-              Rests are not decoration. They mark explicit structural gaps in the source profile.
-            </p>
+            <p className="mt-1 text-xs text-slate-500">Detected structural gap.</p>
           </div>
         </div>
       </Card>

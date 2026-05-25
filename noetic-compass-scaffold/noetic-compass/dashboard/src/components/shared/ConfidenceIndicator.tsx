@@ -11,20 +11,20 @@ function getConfidenceLevel(count: number): {
     return {
       label: 'Low Coverage',
       color: '#f87171',
-      description: 'Prompt coverage is still limited. This indicator reflects sample depth only, not statistical validation.',
+      description: 'Sample depth: limited.',
     };
   }
   if (count < 40) {
     return {
       label: 'Moderate Coverage',
       color: '#fbbf24',
-      description: 'Coverage is improving, but the profile may still shift with broader prompts. This is not a calibrated confidence score.',
+      description: 'Sample depth: growing.',
     };
   }
   return {
     label: 'Broader Coverage',
     color: '#34d399',
-    description: 'The prompt set is broader, but this still does not imply statistical stability or external validation.',
+    description: 'Sample depth: broader.',
   };
 }
 
@@ -50,10 +50,10 @@ export function ConfidenceIndicator() {
           style={{ width: `${pct}%`, backgroundColor: level.color }}
         />
       </div>
-      <p className="text-[10px] text-slate-500 leading-relaxed">
+      <p className="flex flex-wrap items-center gap-2 text-[10px] text-slate-500">
         {level.description}
         {count > 0 && count < STABILIZATION_THRESHOLD && (
-          <span className="text-slate-400"> Coverage: {pct}%</span>
+          <span className="rounded-full bg-white/[0.04] px-2 py-0.5 text-slate-400">Coverage {pct}%</span>
         )}
       </p>
     </div>

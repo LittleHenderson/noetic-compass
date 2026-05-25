@@ -61,12 +61,12 @@ function getScoringMethodLabel(method: ScoringMode | undefined): string {
 function getScoringMethodDescription(method: ScoringMode | undefined): string {
   switch (method) {
     case 'secondary_llm':
-      return 'A second scoring call graded the generated response. If no scorer provider is configured, the backend may still fall back safely.';
+      return 'Independent scorer.';
     case 'self_reported':
-      return 'The generating model embedded its own operator scores in the response. Treat this as self-assessment, not independent grading.';
+      return 'Generator self-score.';
     case 'heuristic_fallback':
     default:
-      return 'Scores were derived from deterministic text heuristics. This avoids self-grading, but it is still a research-stage approximation.';
+      return 'Deterministic baseline.';
   }
 }
 
@@ -461,7 +461,7 @@ export function AssessmentPage() {
                     )}
                   </>
                 ) : liveNotation && !liveNotationLoading ? (
-                  <p className="text-[11px] text-slate-500">Keep typing — the system needs more text to detect CAS patterns...</p>
+                  <p className="text-[11px] text-slate-500">Need more text.</p>
                 ) : null}
               </div>
             )}
@@ -526,9 +526,9 @@ export function AssessmentPage() {
                         className="mt-1 h-4 w-4 rounded border-white/[0.12] bg-dark-700 text-accent-teal focus:ring-accent-teal/40"
                       />
                       <span className="space-y-1">
-                        <span className="block text-[11px] font-medium text-slate-300">Advanced scoring options</span>
-                        <span className="block text-[11px] leading-relaxed text-slate-500">
-                          Reveal self-reported scoring. This allows the generator to grade its own response and is not recommended for stakeholder-facing assessments.
+                        <span className="block text-[11px] font-medium text-slate-300">Show advanced scoring modes</span>
+                        <span className="block text-[11px] text-slate-500">
+                          Internal checks only.
                         </span>
                       </span>
                     </label>
@@ -568,27 +568,24 @@ export function AssessmentPage() {
                 <p className="text-[11px] leading-relaxed text-slate-500">
                   {getScoringMethodDescription(scoringMode)}
                 </p>
-                <div className="rounded-lg border border-white/[0.06] bg-dark-900/30 px-3 py-2 text-[10px] leading-relaxed text-slate-500">
-                  <p className="font-semibold uppercase tracking-wider text-slate-400">Mode guidance</p>
-                  <p className="mt-1">
-                    Least-biased automated baseline: <span className="text-slate-300">heuristic_fallback</span>.
-                    Best overall current mode: <span className="text-slate-300">secondary_llm</span> with a separate scorer.
-                    Worst stakeholder comparison mode: <span className="text-slate-300">self_reported</span>.
-                  </p>
+                <div className="flex flex-wrap gap-2 rounded-lg border border-white/[0.06] bg-dark-900/30 px-3 py-2 text-[10px] text-slate-500">
+                  <span className="rounded-full bg-white/[0.04] px-2 py-1 text-slate-300">Baseline: heuristic_fallback</span>
+                  <span className="rounded-full bg-emerald-400/10 px-2 py-1 text-emerald-300">Recommended: secondary_llm</span>
+                  <span className="rounded-full bg-amber-400/10 px-2 py-1 text-amber-300">Avoid for demos: self_reported</span>
                 </div>
                 {provider !== 'mock' && scoringMode === 'secondary_llm' && (
                   <p className="text-[10px] text-emerald-300/80">
-                    Recommended default for live providers: a separate scorer reduces self-grading risk and makes report provenance clearer.
+                    Recommended for live assessments.
                   </p>
                 )}
                 {scoringMode === 'secondary_llm' && (
                   <p className="text-[10px] text-slate-500">
-                    Auto prefers a different scorer provider when one is configured and available. Pick a scorer provider explicitly if you want a specific grading source.
+                    Auto selects an available separate scorer.
                   </p>
                 )}
                 {scoringMode === 'self_reported' && (
                   <p className="text-[10px] text-amber-400/80">
-                    Advanced warning: self-reported mode allows the generator to supply its own operator scores. Treat it as self-assessment only.
+                    Self-score. Do not use for stakeholder comparisons.
                   </p>
                 )}
               </div>
@@ -647,20 +644,22 @@ export function AssessmentPage() {
                 <p className="mt-1 text-sm font-medium text-slate-200">{resolvedScorerModel ?? 'Not provided'}</p>
               </div>
             </div>
-            <div className="mt-4 space-y-2 text-sm text-slate-400">
-              <p>{getScoringMethodDescription(scoringMethod)}</p>
-              <p className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-slate-400">
-                Social engineering resistance and bias-flag counts are measured as heuristic risk signals. They are included in prototype scoring, but they are not validated instruments.
-              </p>
+            <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-400">
+              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
+                {getScoringMethodDescription(scoringMethod)}
+              </span>
+              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
+                Heuristic risk signals included
+              </span>
               {scoringMethod === 'self_reported' && (
-                <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-amber-300">
-                  This run used inline self-reporting from the generator response. Treat the scores as self-assessment, not independent grading.
-                </p>
+                <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1.5 text-amber-300">
+                  Self-score
+                </span>
               )}
               {unmeasuredLabels.length > 0 && (
-                <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-amber-300">
-                  Unmeasured dimensions: {unmeasuredLabels.join(', ')}. These metrics are not currently measured by the scoring pipeline.
-                </p>
+                <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1.5 text-amber-300">
+                  Unmeasured: {unmeasuredLabels.join(', ')}
+                </span>
               )}
             </div>
           </Card>
@@ -703,7 +702,7 @@ export function AssessmentPage() {
                   ) : (
                     <span className="text-[10px] px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-medium">unvalidated</span>
                   )}
-                  <span className="text-[10px] text-slate-600">synthesized from pipeline results</span>
+                  <span className="text-[10px] text-slate-600">pipeline-derived</span>
                 </div>
                 <p className="font-mono text-base text-accent-teal tracking-wide">{result.compiled_notation.source}</p>
                 {result.compiled_notation.english && (

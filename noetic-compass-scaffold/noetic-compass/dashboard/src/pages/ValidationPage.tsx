@@ -402,12 +402,9 @@ export function ValidationPage() {
       <div className="mx-auto max-w-md space-y-4 pt-6">
         <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How This Works" />
         <ResearchPrototypeNotice compact />
-        <Card title="Who is validating?">
-          <div className="space-y-3">
-            <p className="text-[12px] text-slate-400">
-              Enter your name. Your validations and calibration notes are saved under this identifier
-              so you can resume later.
-            </p>
+      <Card title="Who is validating?">
+        <div className="space-y-3">
+            <p className="text-[12px] text-slate-400">Enter reviewer name.</p>
             <input
               type="text"
               value={raterInput}
@@ -434,12 +431,18 @@ export function ValidationPage() {
       <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How This Works" />
       <ResearchPrototypeNotice compact />
 
-      <Card title="Protocol Note">
-        <p className="text-[11px] leading-relaxed text-slate-400">
-          This page is part of the documented validation protocol in{' '}
-          <code className="text-slate-300">validation/VALIDATION_PROTOCOL.md</code>. Collect independent human
-          scores here, then use the calibration session queue to review disagreements without leaving the workflow.
-        </p>
+      <Card title="Protocol">
+        <div className="flex flex-wrap gap-2 text-xs">
+          <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-slate-300">
+            Independent human score
+          </span>
+          <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-slate-300">
+            Review disagreement
+          </span>
+          <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5 text-slate-300">
+            Save reconciliation
+          </span>
+        </div>
       </Card>
 
       <Card title="Calibration Session">

@@ -12,11 +12,10 @@ export function ResearchPrototypeNotice({
       } ${className}`.trim()}
     >
       <p className={`${compact ? 'text-[11px]' : 'text-xs'} font-semibold uppercase tracking-[0.14em] text-amber-300`}>
-        Research Prototype / Not Validated
+        Research-stage output
       </p>
       <p className={`${compact ? 'mt-1 text-[11px]' : 'mt-1 text-xs'} text-slate-300`}>
-        Scores are research-stage outputs under active empirical validation. Do not treat them as validated
-        psychological, safety, or deployment determinations.
+        Not a deployment certification.
       </p>
     </div>
   );
