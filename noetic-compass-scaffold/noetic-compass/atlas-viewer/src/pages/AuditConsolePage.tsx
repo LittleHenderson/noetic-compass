@@ -208,7 +208,7 @@ const headingWaveStyle: CSSProperties = {
   ...headingStyle,
   color: 'transparent',
   backgroundImage:
-    'linear-gradient(90deg, #e2e8f0 0%, #2dd4bf 14%, #38bdf8 28%, #facc15 42%, #fb7185 56%, #a78bfa 70%, #e2e8f0 84%, #2dd4bf 100%)',
+    'linear-gradient(90deg, #e2e8f0 0%, #ccfbf1 16%, #5eead4 34%, #14b8a6 50%, #5eead4 66%, #ccfbf1 84%, #e2e8f0 100%)',
   backgroundSize: '280% 100%',
   backgroundClip: 'text',
   WebkitBackgroundClip: 'text',
