@@ -197,6 +197,71 @@ const FAQ_ITEMS: FaqItem[] = [
     ),
   },
   {
+    question: 'Is the Evidence Packet the black-box flight recorder of a CAS Harness run?',
+    answer: (
+      <div className="space-y-3">
+        <p>
+          Yes. The Evidence Packet is the difference between <strong className="text-slate-200">"CAS says
+          trust this"</strong> and <strong className="text-slate-200">"CAS says trust this, and here is
+          the audit trail showing why."</strong> Plain English: it is the receipt, lab notebook,
+          black-box flight recorder, and chain-of-custody file for a CAS Harness run.
+        </p>
+        <p>
+          A verdict by itself is weak. ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW becomes credible
+          only when the packet records the model, prompt/scenario, CAS modules, CAS readout,
+          ablation/intervention evidence, matched controls, output effect, verifier decision,
+          confidence source, artifact hashes, and source reports behind the decision.
+        </p>
+        <p>
+          The flight-recorder mapping is direct: each inference gets a trace_id-keyed packet;
+          schema_version plus hashes define the canonical record; input, CAS expression, output,
+          provenance, and trace fields capture the decision path; hashes act as the cryptographic
+          seal; and claim_levels plus caveats say what CAS is confident about and what it is not.
+          If something goes wrong with an AI output, the goal is to reconstruct exactly what
+          happened and why.
+        </p>
+        <p>
+          It is not magic and should not be marketed as impossible to fake. The accurate claim is:
+          <strong className="text-slate-200"> Evidence Packets are designed to be tamper-evident,
+          not magically unfakeable.</strong> If someone edits a packet after the run, hashes,
+          signatures, artifact IDs, and verification checks should expose the mismatch. If someone
+          controls the whole environment before capture, lies about model weights, disables modules,
+          or steals signing keys, the system still needs operational controls.
+        </p>
+        <p>
+          The honest gaps are important. A real flight recorder is physically armored and legally
+          mandatory; an Evidence Packet also needs immutable hash logging, protected signing keys,
+          durable storage, and enforcement that every CAS-wrapped inference writes a packet. For
+          multi-turn sessions, packets should be bound by a session_id so reviewers can reconstruct
+          what happened three turns ago, not only the latest decision.
+        </p>
+        <p>
+          Atlas also goes beyond the airplane metaphor: the Evidence Drawer surfaces the packet
+          during normal operation, not only after an incident. That makes it more like a flight
+          recorder plus live cockpit data. A future companion record for intermediate reasoning
+          traces can play the "cockpit voice recorder" role: the deliberation record next to the
+          decision record.
+        </p>
+        <p>For senior researchers and developers, the packet answers the questions they will ask:</p>
+        <ul className="list-disc list-inside space-y-1 text-slate-400">
+          <li>Was the real model identified, including weights or model artifact proof?</li>
+          <li>Was the exact prompt or scenario recorded?</li>
+          <li>Did CAS read a real internal signal, or only label text after the fact?</li>
+          <li>Did ablation/intervention change the signal or output behavior?</li>
+          <li>Did matched controls rule out random or wrong-drive explanations?</li>
+          <li>Where did the confidence number come from?</li>
+          <li>Are missing fields clearly marked instead of hidden?</li>
+          <li>Can another engineer rerun or challenge the result?</li>
+        </ul>
+        <p>
+          Bottom line: without the Evidence Packet, Atlas is a beautiful dashboard. With it, CAS
+          Harness becomes an auditable system that a technical reviewer can inspect, reproduce, and
+          challenge.
+        </p>
+      </div>
+    ),
+  },
+  {
     question: 'How do I use the Scenario Browser?',
     answer: (
       <div className="space-y-2">
