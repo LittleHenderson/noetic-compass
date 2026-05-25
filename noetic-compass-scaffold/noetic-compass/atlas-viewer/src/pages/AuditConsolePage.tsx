@@ -204,6 +204,37 @@ const headingStyle: CSSProperties = {
   color: COLORS.textPrimary,
 };
 
+const headingWaveStyle: CSSProperties = {
+  ...headingStyle,
+  color: 'transparent',
+  backgroundImage:
+    'linear-gradient(90deg, #e2e8f0 0%, #2dd4bf 14%, #38bdf8 28%, #facc15 42%, #fb7185 56%, #a78bfa 70%, #e2e8f0 84%, #2dd4bf 100%)',
+  backgroundSize: '280% 100%',
+  backgroundClip: 'text',
+  WebkitBackgroundClip: 'text',
+  WebkitTextFillColor: 'transparent',
+  animation: 'cas-heading-wave 4.8s linear infinite',
+};
+
+const headingWaveCss = `
+@keyframes cas-heading-wave {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  100% {
+    background-position: 280% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cas-heading-wave {
+    animation: none !important;
+    background-position: 50% 50%;
+  }
+}
+`;
+
 const eyebrowStyle: CSSProperties = {
   margin: '0 0 10px 0',
   fontSize: 11,
@@ -411,12 +442,14 @@ export default function AuditConsolePage() {
   };
 
   return (
-    <PageShell cardMaxWidth={1180}>
+    <>
+      <style>{headingWaveCss}</style>
+      <PageShell cardMaxWidth={1180}>
       <GlassPanel intensity="regular" padding={24} ariaLabel="CAS Harness Audit Console">
         <div style={topGridStyle}>
           <div>
             <p style={eyebrowStyle}>CAS Harness Audit Console</p>
-            <h1 style={headingStyle}>
+            <h1 className="cas-heading-wave" style={headingWaveStyle}>
               Connect a model. Run a CAS audit. Return a verdict with evidence.
             </h1>
             <p style={subheadingStyle}>
@@ -553,6 +586,7 @@ export default function AuditConsolePage() {
           </section>
         </div>
       </GlassPanel>
-    </PageShell>
+      </PageShell>
+    </>
   );
 }

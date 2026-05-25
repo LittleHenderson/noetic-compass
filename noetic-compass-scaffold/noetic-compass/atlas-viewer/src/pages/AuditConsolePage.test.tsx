@@ -59,6 +59,11 @@ describe('AuditConsolePage', () => {
   it('presents the CAS audit workflow and verdict vocabulary', () => {
     renderPage();
 
+    expect(
+      screen.getByRole('heading', {
+        name: 'Connect a model. Run a CAS audit. Return a verdict with evidence.',
+      }),
+    ).toHaveClass('cas-heading-wave');
     expect(screen.getAllByRole('heading', { name: /connect model/i }).length).toBeGreaterThan(0);
     expect(screen.getAllByText('Run CAS audit').length).toBeGreaterThan(0);
     expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
