@@ -407,10 +407,16 @@ describe('AtlasViewerShell — grounded step derivation', () => {
     expect(screen.getByTestId('spatial-scenario-selector')).toBeInTheDocument();
     expect(screen.getByText('Base scene')).toBeInTheDocument();
     expect(screen.getByText('Second scene')).toBeInTheDocument();
+    expect(screen.getByTestId('spatial-scenario-active-sentence').textContent).toBe(
+      'The patient nurse trace is shown as a visual grounding fixture.',
+    );
 
     fireEvent.click(screen.getByTestId('spatial-scenario-alt-trace'));
     const scrubber = screen.getByTestId('token-scrubber') as HTMLInputElement;
     fireEvent.change(scrubber, { target: { value: '1' } });
+    expect(screen.getByTestId('spatial-scenario-active-sentence').textContent).toBe(
+      'A second fixture sentence controls the picture and primitive set.',
+    );
     expect(screen.getByTestId('spatial-evidence-card-p-c')).toBeInTheDocument();
     expect(screen.queryByTestId('spatial-evidence-card-p-a')).toBeNull();
   });

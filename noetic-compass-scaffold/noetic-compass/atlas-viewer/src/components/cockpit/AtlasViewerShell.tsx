@@ -187,12 +187,13 @@ const tabPanelStyle: CSSProperties = {
 
 const spatialScenarioSelectorStyle: CSSProperties = {
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
+  flexWrap: 'wrap',
   gap: 7,
 };
 
 const spatialScenarioButtonStyle = (active: boolean): CSSProperties => ({
-  width: '100%',
+  flex: '1 1 120px',
   textAlign: 'left',
   border: active
     ? `1px solid ${ACCENT_TEAL}`
@@ -200,7 +201,7 @@ const spatialScenarioButtonStyle = (active: boolean): CSSProperties => ({
   background: active ? 'rgba(20, 184, 166, 0.14)' : 'rgba(15, 23, 42, 0.42)',
   color: active ? '#ccfbf1' : COLORS.textSecondary,
   borderRadius: 8,
-  padding: '7px 9px',
+  padding: '6px 8px',
   cursor: 'pointer',
 });
 
@@ -211,11 +212,14 @@ const spatialScenarioTitleStyle: CSSProperties = {
 };
 
 const spatialScenarioSentenceStyle: CSSProperties = {
-  display: 'block',
-  marginTop: 3,
-  fontSize: 11,
-  lineHeight: 1.35,
-  color: '#94a3b8',
+  margin: 0,
+  padding: '9px 10px',
+  borderRadius: 8,
+  border: '1px solid rgba(45, 212, 191, 0.22)',
+  background: 'rgba(20, 184, 166, 0.08)',
+  color: COLORS.textSecondary,
+  fontSize: 12,
+  lineHeight: 1.45,
 };
 
 const centerSceneWrapperStyle: CSSProperties = {
@@ -1109,11 +1113,6 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
                             <span style={spatialScenarioTitleStyle}>
                               {option.scenario_title ?? option.image_id}
                             </span>
-                            {option.scenario_sentence ? (
-                              <span style={spatialScenarioSentenceStyle}>
-                                {option.scenario_sentence}
-                              </span>
-                            ) : null}
                           </button>
                         );
                       })}
@@ -1127,6 +1126,14 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
                     activeStepPrimitiveIds={activePrimitiveIds}
                     onPrimitiveClick={handlePrimitiveCanvasClick}
                   />
+                  {activeSpatialEvidence.scenario_sentence ? (
+                    <p
+                      style={spatialScenarioSentenceStyle}
+                      data-testid="spatial-scenario-active-sentence"
+                    >
+                      {activeSpatialEvidence.scenario_sentence}
+                    </p>
+                  ) : null}
                   <SpatialEvidencePanel
                     primitives={activePrimitives}
                     selectedPrimitiveId={activePrimitiveId}
