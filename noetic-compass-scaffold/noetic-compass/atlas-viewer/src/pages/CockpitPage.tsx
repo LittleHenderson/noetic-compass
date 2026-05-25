@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react';
 import AtlasViewerShell from '../components/cockpit/AtlasViewerShell';
 import {
   loadPythiaTrace,
-  loadSpatialEvidenceDemo,
+  loadSpatialEvidenceDemos,
 } from '../lib/loadFixtures';
 import { PYTHIA_160M_PRESET } from '../lib/modelArchitecture';
 import type { ReplayTrace } from '../lib/replayController';
@@ -44,6 +44,7 @@ const messageStyle: CSSProperties = {
 interface FixtureBundle {
   trace: ReplayTrace;
   spatial: SpatialEvidenceArtifact;
+  spatialOptions: SpatialEvidenceArtifact[];
 }
 
 export default function CockpitPage(): JSX.Element {
@@ -64,10 +65,10 @@ export default function CockpitPage(): JSX.Element {
       try {
         const [trace, spatial] = await Promise.all([
           loadPythiaTrace(),
-          loadSpatialEvidenceDemo(),
+          loadSpatialEvidenceDemos(),
         ]);
         if (cancelled) return;
-        setBundle({ trace, spatial });
+        setBundle({ trace, spatial: spatial[0], spatialOptions: spatial });
       } catch (err) {
         if (cancelled) return;
         setError(err instanceof Error ? err.message : String(err));
@@ -235,6 +236,7 @@ export default function CockpitPage(): JSX.Element {
       <AtlasViewerShell
         trace={displayedTrace}
         spatialEvidence={bundle.spatial}
+        spatialEvidenceOptions={bundle.spatialOptions}
         architecture={PYTHIA_160M_PRESET}
         methods={LIVE_WORKER_METHODS}
         runtimeMode={runtimeMode}

@@ -57,6 +57,12 @@ export interface BlindspotsPanelProps {
    * BAND_DEFAULT_VISIBLE (high + medium).
    */
   defaultVisibleBands?: readonly ConfidenceBand[];
+  /**
+   * The cover class currently highlighted in the 3D scene. Clicking a
+   * row toggles this value through onFocusClass.
+   */
+  focusedClassKey?: string | null;
+  onFocusClass?: (classKey: string) => void;
 }
 
 interface AggregatedClass {
@@ -157,7 +163,12 @@ const expandButtonStyle: CSSProperties = {
 export default function BlindspotsPanel(
   props: BlindspotsPanelProps,
 ): JSX.Element {
-  const { perClassNeuronCovers, defaultVisibleBands = BAND_DEFAULT_VISIBLE } = props;
+  const {
+    perClassNeuronCovers,
+    defaultVisibleBands = BAND_DEFAULT_VISIBLE,
+    focusedClassKey = null,
+    onFocusClass,
+  } = props;
   const [expanded, setExpanded] = useState(false);
 
   const aggregated = useMemo<AggregatedClass[]>(() => {
@@ -253,11 +264,17 @@ export default function BlindspotsPanel(
             {unscoredVisible.map((a) => (
               <BlindspotInterpretation
                 key={a.classKey}
+                classKey={a.classKey}
                 driveId={a.driveId}
                 register={a.register ?? undefined}
                 confidence={a.bestConfidence}
                 evidenceSources={a.evidenceSources}
                 showShortLead
+                memberCount={a.memberCount}
+                isFocused={focusedClassKey === a.classKey}
+                onFocusCover={
+                  onFocusClass ? () => onFocusClass(a.classKey) : undefined
+                }
               />
             ))}
           </>
@@ -274,11 +291,17 @@ export default function BlindspotsPanel(
         visible.map((a) => (
           <BlindspotInterpretation
             key={a.classKey}
+            classKey={a.classKey}
             driveId={a.driveId}
             register={a.register ?? undefined}
             confidence={a.bestConfidence}
             evidenceSources={a.evidenceSources}
             showShortLead
+            memberCount={a.memberCount}
+            isFocused={focusedClassKey === a.classKey}
+            onFocusCover={
+              onFocusClass ? () => onFocusClass(a.classKey) : undefined
+            }
           />
         ))
       )}

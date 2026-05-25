@@ -39,11 +39,15 @@ import {
 import { COLORS } from '../../lib/designTokens';
 
 export interface BlindspotInterpretationProps {
+  classKey?: string;
   driveId: DriveId;
   register?: RegisterId;
   confidence: number | null;
   evidenceSources: string[];
   showShortLead?: boolean;
+  memberCount?: number;
+  isFocused?: boolean;
+  onFocusCover?: () => void;
 }
 
 const wrapperStyle: CSSProperties = {
@@ -99,6 +103,25 @@ const evidenceStyle: CSSProperties = {
   fontStyle: 'italic',
 };
 
+const actionRowStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 10,
+};
+
+const focusButtonStyle: CSSProperties = {
+  flexShrink: 0,
+  border: '1px solid rgba(45, 212, 191, 0.45)',
+  background: 'rgba(20, 184, 166, 0.12)',
+  color: '#ccfbf1',
+  borderRadius: 7,
+  padding: '5px 8px',
+  fontSize: 11,
+  fontWeight: 700,
+  cursor: 'pointer',
+};
+
 function bandLabel(band: ConfidenceBand): string {
   // Map internal band names to the spec's display tokens so tests can
   // assert against the exact strings the user wrote.
@@ -109,7 +132,17 @@ function bandLabel(band: ConfidenceBand): string {
 export default function BlindspotInterpretation(
   props: BlindspotInterpretationProps,
 ): JSX.Element {
-  const { driveId, register, confidence, evidenceSources, showShortLead = false } = props;
+  const {
+    classKey,
+    driveId,
+    register,
+    confidence,
+    evidenceSources,
+    showShortLead = false,
+    memberCount,
+    isFocused = false,
+    onFocusCover,
+  } = props;
   const translation = DRIVE_TRANSLATIONS[driveId];
   const band = bandForConfidence(confidence);
 
@@ -135,21 +168,69 @@ export default function BlindspotInterpretation(
       data-drive={driveId}
       data-band={band}
       data-band-label={bandLabel(band)}
-      style={wrapperStyle}
+      data-class-key={classKey}
+      data-focused={isFocused ? 'true' : 'false'}
+      style={{
+        ...wrapperStyle,
+        border: isFocused
+          ? '1px solid rgba(45, 212, 191, 0.78)'
+          : wrapperStyle.border,
+        boxShadow: isFocused ? '0 0 18px rgba(45, 212, 191, 0.22)' : 'none',
+      }}
     >
       {showShortLead ? (
         <>
-          <p style={shortLeadStyle} data-testid="blindspot-short-lead">
-            Possible blindspot: {translation.shortBlindspot}.
-          </p>
+          <div style={actionRowStyle}>
+            <p style={shortLeadStyle} data-testid="blindspot-short-lead">
+              Possible blindspot: {translation.shortBlindspot}.
+            </p>
+            {onFocusCover ? (
+              <button
+                type="button"
+                style={{
+                  ...focusButtonStyle,
+                  background: isFocused
+                    ? 'rgba(20, 184, 166, 0.28)'
+                    : focusButtonStyle.background,
+                }}
+                onClick={onFocusCover}
+                data-testid="blindspot-focus-cover"
+                aria-pressed={isFocused}
+                title={`Highlight ${classKey ?? driveId} cover neurons in the 3D network.`}
+              >
+                {isFocused ? 'Showing neurons' : 'Show neurons'}
+                {typeof memberCount === 'number' ? ` (${memberCount})` : ''}
+              </button>
+            ) : null}
+          </div>
           <p style={supportingSentenceStyle} data-testid="blindspot-headline">
             {translation.sentence}
           </p>
         </>
       ) : (
-        <p style={headlineStyle} data-testid="blindspot-headline">
-          {translation.sentence}
-        </p>
+        <div style={actionRowStyle}>
+          <p style={headlineStyle} data-testid="blindspot-headline">
+            {translation.sentence}
+          </p>
+          {onFocusCover ? (
+            <button
+              type="button"
+              style={{
+                ...focusButtonStyle,
+                background: isFocused
+                  ? 'rgba(20, 184, 166, 0.28)'
+                  : focusButtonStyle.background,
+              }}
+              onClick={onFocusCover}
+              data-testid="blindspot-focus-cover"
+              aria-pressed={isFocused}
+              title={`Highlight ${classKey ?? driveId} cover neurons in the 3D network.`}
+            >
+              {isFocused ? 'Showing neurons' : 'Show neurons'}
+              {typeof memberCount === 'number' ? ` (${memberCount})` : ''}
+            </button>
+          ) : null}
+        </div>
       )}
       <p style={provenanceStyle} data-testid="blindspot-cas-source">
         CAS source: {casSource}

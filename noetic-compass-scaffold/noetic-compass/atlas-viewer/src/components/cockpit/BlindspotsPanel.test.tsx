@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi } from 'vitest';
 import { fireEvent, render, screen } from '@testing-library/react';
 
 import BlindspotsPanel from './BlindspotsPanel';
@@ -60,6 +60,28 @@ describe('BlindspotsPanel', () => {
     // High first, then medium (stronger band first).
     expect(rows[0].getAttribute('data-band')).toBe('high');
     expect(rows[1].getAttribute('data-band')).toBe('medium');
+  });
+
+  it('lets a user focus a blindspot row in the 3D neuron scene', () => {
+    const onFocusClass = vi.fn();
+    render(
+      <BlindspotsPanel
+        focusedClassKey="F1A"
+        onFocusClass={onFocusClass}
+        perClassNeuronCovers={{
+          F1A: [
+            { label: 'L3N142', confidence: 0.84, confidence_band: 'high', evidence_sources: ['probe'] },
+            { label: 'L3N518', confidence: 0.82, confidence_band: 'high', evidence_sources: ['probe'] },
+          ],
+        }}
+      />,
+    );
+    const row = screen.getByTestId('blindspot-interpretation');
+    expect(row.getAttribute('data-focused')).toBe('true');
+    const button = screen.getByTestId('blindspot-focus-cover');
+    expect(button.textContent).toBe('Showing neurons (2)');
+    fireEvent.click(button);
+    expect(onFocusClass).toHaveBeenCalledWith('F1A');
   });
 
   it('hides low-confidence entries by default and surfaces an expand affordance', () => {

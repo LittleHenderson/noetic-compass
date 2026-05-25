@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import BlindspotInterpretation from './BlindspotInterpretation';
 import { DRIVE_TRANSLATIONS } from '../../lib/driveTranslations';
@@ -175,5 +175,29 @@ describe('BlindspotInterpretation', () => {
     );
     const root = container.querySelector('[data-testid="blindspot-interpretation"]');
     expect(root?.getAttribute('data-band')).toBe('low');
+  });
+
+  it('renders a cover-focus button that can highlight the related neurons', () => {
+    const onFocusCover = vi.fn();
+    const { container } = render(
+      <BlindspotInterpretation
+        classKey="F1A"
+        driveId="F1"
+        register="A"
+        confidence={0.84}
+        evidenceSources={['probe']}
+        memberCount={3}
+        isFocused
+        onFocusCover={onFocusCover}
+      />,
+    );
+    const root = container.querySelector('[data-testid="blindspot-interpretation"]');
+    expect(root?.getAttribute('data-class-key')).toBe('F1A');
+    expect(root?.getAttribute('data-focused')).toBe('true');
+    const button = screen.getByTestId('blindspot-focus-cover');
+    expect(button.textContent).toBe('Showing neurons (3)');
+    expect(button.getAttribute('aria-pressed')).toBe('true');
+    fireEvent.click(button);
+    expect(onFocusCover).toHaveBeenCalledTimes(1);
   });
 });

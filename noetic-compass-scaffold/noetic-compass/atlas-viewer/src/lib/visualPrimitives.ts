@@ -53,6 +53,8 @@ export interface SpatialEvidenceArtifact {
   schema_version: 'spatial_evidence_v1';
   trace_id: string;
   image_id: string;
+  scenario_title?: string;
+  scenario_sentence?: string;
   image_url: string;
   image_width: number;
   image_height: number;
@@ -304,6 +306,8 @@ export function loadSpatialEvidenceArtifact(json: unknown): SpatialEvidenceArtif
 
   const trace_id = requireString(json, 'trace_id', ctx);
   const image_id = requireString(json, 'image_id', ctx);
+  const scenario_title = optionalString(json, 'scenario_title', ctx);
+  const scenario_sentence = optionalString(json, 'scenario_sentence', ctx);
   const image_url = requireString(json, 'image_url', ctx);
   const image_width = requireNumber(json, 'image_width', ctx);
   const image_height = requireNumber(json, 'image_height', ctx);
@@ -338,6 +342,8 @@ export function loadSpatialEvidenceArtifact(json: unknown): SpatialEvidenceArtif
     schema_version: 'spatial_evidence_v1',
     trace_id,
     image_id,
+    ...(scenario_title ? { scenario_title } : {}),
+    ...(scenario_sentence ? { scenario_sentence } : {}),
     image_url,
     image_width,
     image_height,

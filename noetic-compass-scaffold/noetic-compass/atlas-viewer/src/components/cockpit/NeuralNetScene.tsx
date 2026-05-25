@@ -6,10 +6,13 @@ import {
 } from 'react';
 import {
   AmbientLight,
+  BufferGeometry,
   Color,
   DirectionalLight,
   DoubleSide,
   InstancedMesh,
+  Line,
+  LineBasicMaterial,
   Mesh,
   MeshLambertMaterial,
   MeshBasicMaterial,
@@ -20,6 +23,7 @@ import {
   Scene,
   SphereGeometry,
   Vector2,
+  Vector3,
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
@@ -77,6 +81,8 @@ export interface NeuralNetSceneProps {
   currentFrame?: PerTokenFrame;
   selectedNeuron?: { layer: number; index: number };
   blindspotCoords?: NeuronCoord[];
+  focusedBlindspotCoords?: NeuronCoord[];
+  focusedBlindspotLabel?: string;
   activeTraceCoords?: NeuronCoord[];
   /**
    * Camera zoom preset Z0..Z5. Mapped to (distance, target) via
@@ -160,6 +166,12 @@ function neuronLocalPosition(index: number): { x: number; y: number } {
   return { x, y };
 }
 
+function neuronWorldPosition(coord: { layer: number; index: number }): Vector3 {
+  const zStart = ((PYTHIA_N_LAYERS - 1) / 2) * LAYER_Z_SPACING;
+  const { x, y } = neuronLocalPosition(coord.index);
+  return new Vector3(x, y, zStart - coord.layer * LAYER_Z_SPACING);
+}
+
 function buildLabel(layer: number, index: number): string {
   return `L${layer}N${index}`;
 }
@@ -169,6 +181,8 @@ export function NeuralNetScene({
   currentFrame,
   selectedNeuron,
   blindspotCoords,
+  focusedBlindspotCoords,
+  focusedBlindspotLabel,
   activeTraceCoords,
   zoomLevel = 0,
   onNeuronHover,
@@ -184,13 +198,16 @@ export function NeuralNetScene({
   const controlsRef = useRef<OrbitControls | null>(null);
   const layerMeshesRef = useRef<InstancedMesh[]>([]);
   const planeMeshesRef = useRef<Mesh[]>([]);
+  const focusLineRefs = useRef<Line[]>([]);
   const rafRef = useRef<number | null>(null);
   const zoomTweenRafRef = useRef<number | null>(null);
+  const focusPulseRafRef = useRef<number | null>(null);
   const raycasterRef = useRef<MinimalRaycaster | null>(null);
   const onHoverRef = useRef(onNeuronHover);
   const onClickRef = useRef(onNeuronClick);
   const hoveredRef = useRef<NeuronCoord | null>(null);
   const [mounted, setMounted] = useState(false);
+  const [focusPulse, setFocusPulse] = useState(0);
   // DOM tooltip state — Wave 5. The 3D scene reports hovers via the
   // onNeuronHover prop callback (preserved); a parallel local state powers a
   // GlassPanel tooltip that floats above the canvas at the cursor. Position
@@ -514,6 +531,12 @@ export function NeuralNetScene({
         (plane.material as MeshLambertMaterial).dispose();
         scene.remove(plane);
       }
+      for (const line of focusLineRefs.current) {
+        line.geometry.dispose();
+        (line.material as LineBasicMaterial).dispose();
+        scene.remove(line);
+      }
+      focusLineRefs.current = [];
       sphereGeom.dispose();
       controls.dispose();
       renderer.dispose();
@@ -533,6 +556,78 @@ export function NeuralNetScene({
   }, []);
 
   useEffect(() => {
+    if (!focusedBlindspotCoords?.length || typeof window === 'undefined') {
+      setFocusPulse(0);
+      if (focusPulseRafRef.current !== null && typeof window !== 'undefined') {
+        window.cancelAnimationFrame(focusPulseRafRef.current);
+        focusPulseRafRef.current = null;
+      }
+      return;
+    }
+
+    let active = true;
+    const step = (ts: number) => {
+      if (!active) return;
+      setFocusPulse(ts);
+      focusPulseRafRef.current = window.requestAnimationFrame(step);
+    };
+    focusPulseRafRef.current = window.requestAnimationFrame(step);
+    return () => {
+      active = false;
+      if (focusPulseRafRef.current !== null) {
+        window.cancelAnimationFrame(focusPulseRafRef.current);
+        focusPulseRafRef.current = null;
+      }
+    };
+  }, [focusedBlindspotCoords]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    const scene = sceneRef.current;
+    const renderer = rendererRef.current;
+    const camera = cameraRef.current;
+    if (!scene || !renderer || !camera) return;
+
+    for (const line of focusLineRefs.current) {
+      line.geometry.dispose();
+      (line.material as LineBasicMaterial).dispose();
+      scene.remove(line);
+    }
+    focusLineRefs.current = [];
+
+    const coords = focusedBlindspotCoords ?? [];
+    const stringOpacity =
+      zoomLevel >= 5 ? 0.9 : zoomLevel === 4 ? 0.58 : zoomLevel === 3 ? 0.24 : 0;
+    if (coords.length >= 2 && stringOpacity > 0) {
+      const sorted = [...coords].sort((a, b) => {
+        if (a.layer !== b.layer) return a.layer - b.layer;
+        return a.index - b.index;
+      });
+      for (let i = 0; i < sorted.length - 1; i++) {
+        const points = [
+          neuronWorldPosition(sorted[i]),
+          neuronWorldPosition(sorted[i + 1]),
+        ];
+        const geometry = new BufferGeometry().setFromPoints(points);
+        const material = new LineBasicMaterial({
+          color: '#2dd4bf',
+          transparent: true,
+          opacity: stringOpacity,
+        });
+        const line = new Line(geometry, material);
+        line.userData = {
+          kind: 'focused-blindspot-string',
+          label: focusedBlindspotLabel,
+        };
+        scene.add(line);
+        focusLineRefs.current.push(line);
+      }
+    }
+
+    renderer.render(scene, camera);
+  }, [mounted, focusedBlindspotCoords, focusedBlindspotLabel, zoomLevel]);
+
+  useEffect(() => {
     if (!mounted) return;
     const layers = layerMeshesRef.current;
     if (layers.length === 0) return;
@@ -545,6 +640,9 @@ export function NeuralNetScene({
     const blindspotSet = new Set(
       (blindspotCoords ?? []).map((c) => buildLabel(c.layer, c.index)),
     );
+    const focusedBlindspotSet = new Set(
+      (focusedBlindspotCoords ?? []).map((c) => buildLabel(c.layer, c.index)),
+    );
     const traceSet = new Set(
       (activeTraceCoords ?? []).map((c) => buildLabel(c.layer, c.index)),
     );
@@ -553,11 +651,20 @@ export function NeuralNetScene({
     const blindspotColor = new Color(ATLAS_STATUS_COLORS.suppress);
     const traceColor = new Color(ATLAS_STATUS_COLORS.activeTrace);
     const selectedColor = new Color(ATLAS_STATUS_COLORS.intervention);
+    const focusedBaseColor = new Color('#2dd4bf');
+    const focusedPulseColor = new Color('#facc15');
+    const pulseAmount =
+      focusedBlindspotSet.size > 0 ? (Math.sin(focusPulse / 150) + 1) / 2 : 0;
+    const focusedColor = focusedBaseColor.clone().lerp(focusedPulseColor, pulseAmount);
 
     for (let layer = 0; layer < layers.length; layer++) {
       const inst = layers[layer];
       for (let i = 0; i < NEURONS_PER_LAYER; i++) {
         const label = buildLabel(layer, i);
+        if (focusedBlindspotSet.has(label)) {
+          inst.setColorAt(i, focusedColor);
+          continue;
+        }
         if (
           selectedNeuron &&
           selectedNeuron.layer === layer &&
@@ -590,7 +697,15 @@ export function NeuralNetScene({
     const scene = sceneRef.current;
     const camera = cameraRef.current;
     if (renderer && scene && camera) renderer.render(scene, camera);
-  }, [mounted, currentFrame, selectedNeuron, blindspotCoords, activeTraceCoords]);
+  }, [
+    mounted,
+    currentFrame,
+    selectedNeuron,
+    blindspotCoords,
+    focusedBlindspotCoords,
+    focusPulse,
+    activeTraceCoords,
+  ]);
 
   // Apply the zoom preset by tweening camera position + OrbitControls target
   // from the current camera state to the preset's (0, targetY, distance) over
@@ -750,6 +865,49 @@ export function NeuralNetScene({
       className={className ?? ''}
       style={containerStyle}
     >
+      <AnimatePresence>
+        {focusedBlindspotCoords?.length ? (
+          <motion.div
+            key="focused-blindspot-badge"
+            data-testid="focused-blindspot-badge"
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={SPRING_SNAPPY}
+            style={{
+              position: 'absolute',
+              left: 14,
+              top: 14,
+              zIndex: 4,
+              pointerEvents: 'none',
+            }}
+          >
+            <GlassPanel intensity="regular" padding="7px 10px">
+              <span
+                style={{
+                  display: 'block',
+                  color: '#ccfbf1',
+                  fontSize: 12,
+                  fontWeight: 800,
+                }}
+              >
+                {focusedBlindspotLabel ?? 'Cover'} neurons pulsing
+              </span>
+              <span
+                style={{
+                  display: 'block',
+                  color: '#94a3b8',
+                  fontSize: 11,
+                  marginTop: 2,
+                }}
+              >
+                {focusedBlindspotCoords.length} neurons highlighted
+                {zoomLevel >= 3 ? ' · cover string visible' : ' · zoom in for cover string'}
+              </span>
+            </GlassPanel>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
       <AnimatePresence>
         {tooltip && (
           <motion.div

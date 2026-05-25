@@ -16,8 +16,14 @@ vi.mock('./NeuralNetScene', () => {
   return {
     NeuralNetScene: (props: {
       onNeuronClick?: (c: { layer: number; index: number; label: string }) => void;
+      focusedBlindspotCoords?: Array<{ layer: number; index: number; label: string }>;
+      focusedBlindspotLabel?: string;
     }) => (
-      <div data-testid="neuralnet-scene-stub">
+      <div
+        data-testid="neuralnet-scene-stub"
+        data-focused-cover={props.focusedBlindspotLabel ?? ''}
+        data-focused-count={props.focusedBlindspotCoords?.length ?? 0}
+      >
         <button
           type="button"
           data-testid="neuralnet-fake-neuron"
@@ -86,6 +92,8 @@ const baseSpatial: SpatialEvidenceArtifact = {
   schema_version: 'spatial_evidence_v1',
   trace_id: 'test-trace',
   image_id: 'test-image',
+  scenario_title: 'Base scene',
+  scenario_sentence: 'The patient nurse trace is shown as a visual grounding fixture.',
   image_url: 'about:blank',
   image_width: 200,
   image_height: 100,
@@ -125,6 +133,35 @@ const baseSpatial: SpatialEvidenceArtifact = {
       step_id: 'step-b',
       token_index: 5,
       primitive_ids: ['p-b'],
+    },
+  ],
+};
+
+const altSpatial: SpatialEvidenceArtifact = {
+  ...baseSpatial,
+  trace_id: 'alt-trace',
+  image_id: 'alt-image',
+  scenario_title: 'Second scene',
+  scenario_sentence: 'A second fixture sentence controls the picture and primitive set.',
+  primitives: [
+    {
+      id: 'p-c',
+      kind: 'box',
+      image_id: 'alt-image',
+      label: 'Primitive C',
+      coords_norm: [0.1, 0.1, 0.2, 0.2],
+      source: 'fixture',
+      cas_axis: 'Drive',
+      cas_label: 'F5|E',
+      evidence_ref: { packet_id: 'pk-c', row_id: 'row-c' },
+    },
+  ],
+  grounded_steps: [
+    {
+      trace_id: 'alt-trace',
+      step_id: 'step-c',
+      token_index: 1,
+      primitive_ids: ['p-c'],
     },
   ],
 };
@@ -363,5 +400,40 @@ describe('AtlasViewerShell — grounded step derivation', () => {
     fireEvent.change(scrubber, { target: { value: '5' } });
     expect(screen.getByTestId('spatial-evidence-card-p-b')).toBeInTheDocument();
     expect(screen.queryByTestId('spatial-evidence-card-p-a')).toBeNull();
+  });
+
+  it('switches between multiple picture-and-sentence spatial fixtures', () => {
+    renderShell({ spatialEvidenceOptions: [baseSpatial, altSpatial] });
+    expect(screen.getByTestId('spatial-scenario-selector')).toBeInTheDocument();
+    expect(screen.getByText('Base scene')).toBeInTheDocument();
+    expect(screen.getByText('Second scene')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId('spatial-scenario-alt-trace'));
+    const scrubber = screen.getByTestId('token-scrubber') as HTMLInputElement;
+    fireEvent.change(scrubber, { target: { value: '1' } });
+    expect(screen.getByTestId('spatial-evidence-card-p-c')).toBeInTheDocument();
+    expect(screen.queryByTestId('spatial-evidence-card-p-a')).toBeNull();
+  });
+});
+
+describe('AtlasViewerShell — blindspot cover focusing', () => {
+  it('routes a blindspot row click into focused 3D neuron coordinates', () => {
+    const traceWithCovers = {
+      ...baseTrace,
+      neuron_covers: {
+        per_class_neuron_covers: {
+          F1A: [
+            { label: 'L3N142', confidence: 0.84, confidence_band: 'high', evidence_sources: ['probe'] },
+            { label: 'L3N518', confidence: 0.82, confidence_band: 'high', evidence_sources: ['probe'] },
+          ],
+        },
+      },
+    } as unknown as ReplayTrace;
+
+    renderShell({ trace: traceWithCovers });
+    fireEvent.click(screen.getByTestId('blindspot-focus-cover'));
+    const scene = screen.getByTestId('neuralnet-scene-stub');
+    expect(scene.getAttribute('data-focused-cover')).toBe('F1A');
+    expect(scene.getAttribute('data-focused-count')).toBe('2');
   });
 });

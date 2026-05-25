@@ -90,6 +90,7 @@ const LIVE_METHOD_ID_SET = new Set<string>(LIVE_METHOD_IDS);
 export interface AtlasViewerShellProps {
   trace: ReplayTrace;
   spatialEvidence: SpatialEvidenceArtifact;
+  spatialEvidenceOptions?: readonly SpatialEvidenceArtifact[];
   architecture: ModelArchitecture;
   methods?: readonly TestingMethod[];
   runtimeMode?: RuntimeMode;
@@ -182,6 +183,39 @@ const tabPanelStyle: CSSProperties = {
   flexDirection: 'column',
   gap: 12,
   minHeight: 0,
+};
+
+const spatialScenarioSelectorStyle: CSSProperties = {
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 7,
+};
+
+const spatialScenarioButtonStyle = (active: boolean): CSSProperties => ({
+  width: '100%',
+  textAlign: 'left',
+  border: active
+    ? `1px solid ${ACCENT_TEAL}`
+    : '1px solid rgba(148, 163, 184, 0.22)',
+  background: active ? 'rgba(20, 184, 166, 0.14)' : 'rgba(15, 23, 42, 0.42)',
+  color: active ? '#ccfbf1' : COLORS.textSecondary,
+  borderRadius: 8,
+  padding: '7px 9px',
+  cursor: 'pointer',
+});
+
+const spatialScenarioTitleStyle: CSSProperties = {
+  display: 'block',
+  fontSize: 12,
+  fontWeight: 800,
+};
+
+const spatialScenarioSentenceStyle: CSSProperties = {
+  display: 'block',
+  marginTop: 3,
+  fontSize: 11,
+  lineHeight: 1.35,
+  color: '#94a3b8',
 };
 
 const centerSceneWrapperStyle: CSSProperties = {
@@ -334,6 +368,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const {
     trace,
     spatialEvidence,
+    spatialEvidenceOptions,
     architecture,
     methods = LIVE_WORKER_METHODS,
     runtimeMode = 'replay',
@@ -359,6 +394,16 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const [activePrimitiveId, setActivePrimitiveId] = useState<string | undefined>(
     undefined,
   );
+  const spatialEvidenceChoices = useMemo<readonly SpatialEvidenceArtifact[]>(
+    () =>
+      spatialEvidenceOptions && spatialEvidenceOptions.length > 0
+        ? spatialEvidenceOptions
+        : [spatialEvidence],
+    [spatialEvidenceOptions, spatialEvidence],
+  );
+  const [selectedSpatialTraceId, setSelectedSpatialTraceId] = useState<string>(
+    spatialEvidence.trace_id,
+  );
   const [enabledMethodIds, setEnabledMethodIds] = useState<Set<string>>(
     () => new Set(methods.map((m) => m.id)),
   );
@@ -368,6 +413,9 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const [zoomLevel, setZoomLevel] = useState<ZoomLevel>(0);
   const [showBlindspots, setShowBlindspots] = useState<boolean>(true);
   const [showActiveTrace, setShowActiveTrace] = useState<boolean>(true);
+  const [focusedBlindspotClassKey, setFocusedBlindspotClassKey] = useState<
+    string | null
+  >(null);
   const [verificationMode, setVerificationMode] =
     useState<VerificationMode>('BALANCED');
   const [evidenceDrawerOpen, setEvidenceDrawerOpen] = useState<boolean>(false);
@@ -385,6 +433,21 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   useEffect(() => {
     onLiveControlsChangeRef.current = onLiveControlsChange;
   }, [onLiveControlsChange]);
+
+  const activeSpatialEvidence = useMemo<SpatialEvidenceArtifact>(() => {
+    return (
+      spatialEvidenceChoices.find((item) => item.trace_id === selectedSpatialTraceId) ??
+      spatialEvidenceChoices[0] ??
+      spatialEvidence
+    );
+  }, [spatialEvidenceChoices, selectedSpatialTraceId, spatialEvidence]);
+
+  useEffect(() => {
+    if (!spatialEvidenceChoices.some((item) => item.trace_id === selectedSpatialTraceId)) {
+      setSelectedSpatialTraceId(spatialEvidenceChoices[0]?.trace_id ?? spatialEvidence.trace_id);
+      setActivePrimitiveId(undefined);
+    }
+  }, [spatialEvidenceChoices, selectedSpatialTraceId, spatialEvidence.trace_id]);
 
   const tokens = useMemo<Token[]>(() => {
     if (trace.tokens && trace.tokens.length > 0) return trace.tokens;
@@ -419,15 +482,15 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   );
 
   const activeStep = useMemo(() => {
-    return spatialEvidence.grounded_steps.find(
+    return activeSpatialEvidence.grounded_steps.find(
       (s) => s.token_index === currentTokenIndex,
     );
-  }, [spatialEvidence.grounded_steps, currentTokenIndex]);
+  }, [activeSpatialEvidence.grounded_steps, currentTokenIndex]);
 
   const activePrimitives = useMemo<VisualPrimitive[]>(() => {
     if (!activeStep) return [];
-    return primitivesForStep(spatialEvidence, activeStep.step_id);
-  }, [spatialEvidence, activeStep]);
+    return primitivesForStep(activeSpatialEvidence, activeStep.step_id);
+  }, [activeSpatialEvidence, activeStep]);
 
   const activePrimitiveIds = useMemo<string[]>(
     () => activePrimitives.map((p) => p.id),
@@ -472,6 +535,30 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     }
     return out;
   }, [showBlindspots, rawCovers]);
+
+  const focusedBlindspotCoords = useMemo<NeuronCoord[] | undefined>(() => {
+    if (!showBlindspots || !focusedBlindspotClassKey || !rawCovers) {
+      return undefined;
+    }
+    const members = rawCovers[focusedBlindspotClassKey];
+    if (!members) return undefined;
+    const seen = new Set<string>();
+    const out: NeuronCoord[] = [];
+    for (const member of members) {
+      const normalised = normaliseCoverMember(
+        member as Parameters<typeof normaliseCoverMember>[0],
+      );
+      const label = normalised.label;
+      if (seen.has(label)) continue;
+      seen.add(label);
+      try {
+        out.push(parseCoord(label));
+      } catch {
+        // Skip malformed cover entries; don't crash the scene.
+      }
+    }
+    return out;
+  }, [showBlindspots, focusedBlindspotClassKey, rawCovers]);
 
   /**
    * Index from neuron label (e.g. "L3N142") to the list of cover classes
@@ -658,6 +745,13 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     [openDrawer, currentTokenIndex, tokens, architecture.family, blindspotIndex],
   );
 
+  const handleFocusBlindspotClass = useCallback((classKey: string) => {
+    setShowBlindspots(true);
+    setFocusedBlindspotClassKey((current) =>
+      current === classKey ? null : classKey,
+    );
+  }, []);
+
   const handleWordClick = useCallback(
     (span: WordSpan) => {
       const firstTokenIdx = span.token_indices[0];
@@ -816,6 +910,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             currentFrame={currentFrame}
             selectedNeuron={selectedNeuron}
             blindspotCoords={blindspotCoords}
+            focusedBlindspotCoords={focusedBlindspotCoords}
+            focusedBlindspotLabel={focusedBlindspotClassKey ?? undefined}
             activeTraceCoords={activeTraceCoords}
             zoomLevel={zoomLevel}
             onNeuronClick={handleNeuronClick}
@@ -988,11 +1084,46 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
             >
               {leftTab === 'spatial' ? (
                 <>
+                  {spatialEvidenceChoices.length > 1 ? (
+                    <div
+                      style={spatialScenarioSelectorStyle}
+                      role="radiogroup"
+                      aria-label="Spatial evidence demo scenes"
+                      data-testid="spatial-scenario-selector"
+                    >
+                      {spatialEvidenceChoices.map((option) => {
+                        const active = option.trace_id === activeSpatialEvidence.trace_id;
+                        return (
+                          <button
+                            key={option.trace_id}
+                            type="button"
+                            role="radio"
+                            aria-checked={active}
+                            data-testid={`spatial-scenario-${option.trace_id}`}
+                            style={spatialScenarioButtonStyle(active)}
+                            onClick={() => {
+                              setSelectedSpatialTraceId(option.trace_id);
+                              setActivePrimitiveId(undefined);
+                            }}
+                          >
+                            <span style={spatialScenarioTitleStyle}>
+                              {option.scenario_title ?? option.image_id}
+                            </span>
+                            {option.scenario_sentence ? (
+                              <span style={spatialScenarioSentenceStyle}>
+                                {option.scenario_sentence}
+                              </span>
+                            ) : null}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : null}
                   <VisualPrimitiveCanvas
-                    imageUrl={spatialEvidence.image_url}
-                    imageWidth={spatialEvidence.image_width}
-                    imageHeight={spatialEvidence.image_height}
-                    primitives={spatialEvidence.primitives}
+                    imageUrl={activeSpatialEvidence.image_url}
+                    imageWidth={activeSpatialEvidence.image_width}
+                    imageHeight={activeSpatialEvidence.image_height}
+                    primitives={activeSpatialEvidence.primitives}
                     activeStepPrimitiveIds={activePrimitiveIds}
                     onPrimitiveClick={handlePrimitiveCanvasClick}
                   />
@@ -1037,6 +1168,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
               currentFrame={currentFrame}
               selectedNeuron={selectedNeuron}
               blindspotCoords={blindspotCoords}
+              focusedBlindspotCoords={focusedBlindspotCoords}
+              focusedBlindspotLabel={focusedBlindspotClassKey ?? undefined}
               activeTraceCoords={activeTraceCoords}
               zoomLevel={zoomLevel}
               onNeuronClick={handleNeuronClick}
@@ -1058,6 +1191,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
                 perClassNeuronCovers={rawCovers as
                   | Record<string, Parameters<typeof normaliseCoverMember>[0][]>
                   | undefined}
+                focusedClassKey={focusedBlindspotClassKey}
+                onFocusClass={handleFocusBlindspotClass}
               />
               <CasBaselineEvidencePanel />
               <MethodKnobsPanel
