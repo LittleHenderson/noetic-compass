@@ -34,6 +34,9 @@ class Mode7Edge(BaseModel):
 
 
 ConfidenceBand = Literal["high", "medium", "low", "unavailable"]
+VerificationMode = Literal["BALANCED", "HIGH_PRECISION", "MAX_COVERAGE_TRIAGE"]
+VerificationVerdict = Literal["ACCEPT", "FLAG", "SUPPRESS"]
+VerificationScoreSource = Literal["confidence", "proxy_confidence", "unavailable"]
 
 
 class NeuronCoverMember(BaseModel):
@@ -143,6 +146,12 @@ class TokenEvent(BaseModel):
     mode7_attribution: list[Mode7Edge] = Field(default_factory=list)
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     inversion_risk: float | None = Field(default=None, ge=0.0, le=1.0)
+    verification_mode: VerificationMode | None = Field(default=None)
+    verification_verdict: VerificationVerdict | None = Field(default=None)
+    verification_threshold: float | None = Field(default=None, ge=0.0, le=1.0)
+    verification_score: float | None = Field(default=None, ge=0.0, le=1.0)
+    verification_score_source: VerificationScoreSource | None = Field(default=None)
+    verification_invalid_mode: str | None = Field(default=None)
 
 
 class NeuronCoversEvent(BaseModel):

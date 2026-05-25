@@ -30,6 +30,7 @@ from .knob_resolution import (
     resolve_knobs,
 )
 from .probe_runner import EraserIntervention, capture_probes, resolve_probes, summarise
+from .verification_mode import build_verification_telemetry
 
 logger = logging.getLogger(__name__)
 
@@ -103,6 +104,7 @@ async def run_pythia(
                 top_k=top_k,
                 layer_filter=foundation_layers,
             )
+            verification_payload = _verification_payload(req, summary.confidence)
             mode7_edges = summary.mode7_edges
             if rpm_threshold > 0:
                 mode7_edges = [
@@ -124,6 +126,7 @@ async def run_pythia(
                 "inversion_risk": _inversion_risk(summary, inversion_threshold)
                 if inversion_active
                 else None,
+                **verification_payload,
             }
 
             # Append next token, continue.
@@ -169,6 +172,35 @@ def _eraser_intervention(req: CreateSessionRequest) -> EraserIntervention | None
     if not coords:
         return None
     return EraserIntervention(coords=coords, gain=gain)
+
+
+def _verification_payload(req: CreateSessionRequest, confidence: float | None) -> dict[str, Any]:
+    """Return per-token verification telemetry when the stack is requested."""
+    if not _verification_requested(req):
+        return {}
+    telemetry = build_verification_telemetry(
+        req.method_config,
+        confidence=confidence,
+    )
+    return {
+        "verification_mode": telemetry.mode,
+        "verification_verdict": telemetry.verdict,
+        "verification_threshold": telemetry.threshold,
+        "verification_score": telemetry.score,
+        "verification_score_source": telemetry.score_source,
+        "verification_invalid_mode": telemetry.invalid_mode,
+    }
+
+
+def _verification_requested(req: CreateSessionRequest) -> bool:
+    """Detect both current and older UI shapes for the top-level mode."""
+    if "verification_stack" in _resolve_enabled_methods(req):
+        return True
+    config = req.method_config if isinstance(req.method_config, dict) else {}
+    if "verification_mode" in config or "mode" in config:
+        return True
+    knobs = config.get("knobs")
+    return isinstance(knobs, dict) and "verification_stack" in knobs
 
 
 def _inversion_risk(summary: Any, threshold: float) -> float:
