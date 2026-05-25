@@ -40,6 +40,20 @@ export interface LiveManifest {
   is_real_model: boolean;
 }
 
+export interface LiveRealModeProof {
+  verdict: string;
+  is_real_model: boolean;
+  model_loaded: boolean;
+  load_error: string | null;
+  fake_runtime_env?: boolean;
+  manifest_is_real_model?: boolean;
+  model_id?: string;
+  worker_version?: string;
+  detail?: string;
+  http_status: number;
+  checked_at: string;
+}
+
 export type ResolvedKnobs = Record<string, Record<string, unknown>>;
 
 /**
@@ -274,6 +288,63 @@ export async function createLiveSession(
   return {
     ...body,
     stream_url: resolveLiveStreamUrl(body.stream_url, baseUrl),
+  };
+}
+
+export async function fetchLiveRealModeProof(options?: {
+  baseUrl?: string;
+  fetchImpl?: typeof fetch;
+  signal?: AbortSignal;
+}): Promise<LiveRealModeProof> {
+  const baseUrl = resolveAtlasApiBaseUrl(options?.baseUrl);
+  const fetchImpl = options?.fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
+  if (!fetchImpl) throw new Error('Atlas LIVE proof requires fetch support');
+
+  const resp = await fetchImpl(`${baseUrl}/live/health/realmode`, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    signal: options?.signal,
+  });
+  let body: Record<string, unknown> = {};
+  try {
+    body = (await resp.json()) as Record<string, unknown>;
+  } catch {
+    body = {};
+  }
+
+  const loadError =
+    typeof body.load_error === 'string'
+      ? body.load_error
+      : body.load_error === null
+        ? null
+        : typeof body.detail === 'string'
+          ? body.detail
+          : resp.ok
+            ? null
+            : `HTTP ${resp.status}`;
+  const isRealModel =
+    resp.ok &&
+    body.is_real_model === true &&
+    body.model_loaded === true &&
+    loadError === null;
+
+  return {
+    verdict: typeof body.verdict === 'string' ? body.verdict : isRealModel ? 'REAL_PYTHIA_WEIGHTS_LOADED' : 'NOT_REAL_PYTHIA_WEIGHTS',
+    is_real_model: isRealModel,
+    model_loaded: body.model_loaded === true,
+    load_error: loadError,
+    fake_runtime_env:
+      typeof body.fake_runtime_env === 'boolean' ? body.fake_runtime_env : undefined,
+    manifest_is_real_model:
+      typeof body.manifest_is_real_model === 'boolean'
+        ? body.manifest_is_real_model
+        : undefined,
+    model_id: typeof body.model_id === 'string' ? body.model_id : undefined,
+    worker_version:
+      typeof body.worker_version === 'string' ? body.worker_version : undefined,
+    detail: typeof body.detail === 'string' ? body.detail : undefined,
+    http_status: resp.status,
+    checked_at: new Date().toISOString(),
   };
 }
 

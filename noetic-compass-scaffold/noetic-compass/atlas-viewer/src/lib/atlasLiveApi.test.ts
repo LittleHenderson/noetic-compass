@@ -3,6 +3,7 @@ import {
   appendLiveEvent,
   createLiveSession,
   emptyLiveTrace,
+  fetchLiveRealModeProof,
   resolveLiveStreamUrl,
 } from './atlasLiveApi';
 
@@ -143,6 +144,54 @@ describe('atlasLiveApi', () => {
       token_indices: [1],
       char_start: 6,
       char_end: 11,
+    });
+  });
+
+  it('normalises the realmode proof endpoint into a boolean source of truth', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({
+        verdict: 'REAL_PYTHIA_WEIGHTS_LOADED',
+        is_real_model: true,
+        model_loaded: true,
+        load_error: null,
+        model_id: 'EleutherAI/pythia-160m',
+      }),
+    );
+
+    const proof = await fetchLiveRealModeProof({
+      baseUrl: '/api/atlas',
+      fetchImpl,
+    });
+
+    expect(fetchImpl).toHaveBeenCalledWith(
+      '/api/atlas/live/health/realmode',
+      expect.objectContaining({ method: 'GET' }),
+    );
+    expect(proof).toMatchObject({
+      verdict: 'REAL_PYTHIA_WEIGHTS_LOADED',
+      is_real_model: true,
+      model_loaded: true,
+      load_error: null,
+      http_status: 200,
+    });
+  });
+
+  it('treats a 503 worker-unavailable response as not connected', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({ detail: 'atlas_live_worker_unavailable' }, 503),
+    );
+
+    const proof = await fetchLiveRealModeProof({
+      baseUrl: '/api/atlas',
+      fetchImpl,
+    });
+
+    expect(proof).toMatchObject({
+      verdict: 'NOT_REAL_PYTHIA_WEIGHTS',
+      is_real_model: false,
+      model_loaded: false,
+      load_error: 'atlas_live_worker_unavailable',
+      http_status: 503,
     });
   });
 });
