@@ -104,17 +104,34 @@ describe('testingMethods registry', () => {
 
   it('live worker cover/intervention knobs expose calibrated F1..F7', () => {
     const calibrated = ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'];
-    const liveSparse = LIVE_WORKER_METHODS.find((m) => m.id === 'sparse_neuron_cover');
-    const target = liveSparse?.knobs.find((k) => k.id === 'target_class');
-    expect(target?.options).toEqual(calibrated);
-
     const liveEraser = LIVE_WORKER_METHODS.find((m) => m.id === 'drive_local_eraser');
     const drive = liveEraser?.knobs.find((k) => k.id === 'drive');
     expect(drive?.options).toEqual(calibrated);
 
     const liveBlindspots = LIVE_WORKER_METHODS.find((m) => m.id === 'blindspot_detection');
     const scope = liveBlindspots?.knobs.find((k) => k.id === 'scope');
-    expect(scope?.options).toEqual(['all_7', ...calibrated]);
+    expect(scope?.options).toEqual(calibrated);
+  });
+
+  it('live worker methods expose only worker-consumed knobs', () => {
+    const liveKnobs = Object.fromEntries(
+      LIVE_WORKER_METHODS.map((m) => [m.id, m.knobs.map((k) => k.id)]),
+    );
+
+    expect(Object.keys(liveKnobs)).toEqual([
+      'foundation_probe',
+      'rpm_gate_check',
+      'inversion_scan',
+      'drive_local_eraser',
+      'blindspot_detection',
+      'verification_stack',
+    ]);
+    expect(liveKnobs.foundation_probe).toEqual(['top_k', 'layer_range']);
+    expect(liveKnobs.rpm_gate_check).toEqual(['strictness_threshold']);
+    expect(liveKnobs.inversion_scan).toEqual(['severity_threshold']);
+    expect(liveKnobs.drive_local_eraser).toEqual(['drive', 'gain']);
+    expect(liveKnobs.blindspot_detection).toEqual(['scope']);
+    expect(liveKnobs.verification_stack).toEqual([]);
   });
 
   it('Module 7 mode enum has the 3 verification modes', () => {
