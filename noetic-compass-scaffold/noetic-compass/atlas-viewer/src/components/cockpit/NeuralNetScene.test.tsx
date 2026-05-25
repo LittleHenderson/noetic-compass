@@ -7,8 +7,8 @@
  * a working camera projection inside jsdom.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render } from '@testing-library/react';
-import type { InstancedMesh, Object3D, Scene } from 'three';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import type { InstancedMesh, Mesh, Object3D, Scene } from 'three';
 import {
   NeuralNetScene,
   type MinimalRaycaster,
@@ -60,9 +60,18 @@ function makeRaycasterStub(
 interface TestSurface {
   __nn_scene?: Scene;
   __nn_layers?: InstancedMesh[];
+  __nn_planes?: Mesh[];
   __nn_simulate_hover?: (x: number, y: number) => void;
   __nn_simulate_leave?: () => void;
   __nn_simulate_click?: (x: number, y: number) => void;
+  __nn_simulate_double_click?: (x: number, y: number) => void;
+  __nn_layer_layout?: () => Array<{
+    layer: number;
+    x: number;
+    y: number;
+    z: number;
+    scale: number;
+  }>;
 }
 
 beforeEach(() => {
@@ -254,6 +263,97 @@ describe('NeuralNetScene — hover & click', () => {
       index: 1234,
       label: 'L3N1234',
     });
+  });
+});
+
+describe('NeuralNetScene — detachable layer inspection', () => {
+  it('detaches a double-clicked layer into inspection mode and snaps it home', async () => {
+    const raycaster = makeRaycasterStub();
+    const { container } = render(
+      <NeuralNetScene
+        architecture={PYTHIA_160M_PRESET}
+        rendererFactory={makeRendererStub}
+        raycasterFactory={() => raycaster}
+      />,
+    );
+    const wrapper = container.querySelector(
+      '[data-testid="neuralnet-scene"]',
+    ) as (HTMLElement & TestSurface) | null;
+    const plane = wrapper!.__nn_planes![4];
+    (raycaster.intersectObject as ReturnType<typeof vi.fn>).mockImplementation(
+      (obj: Object3D) =>
+        obj === plane ? [{ object: plane, distance: 1 }] : [],
+    );
+
+    expect(screen.getByTestId('layer-detach-hint')).toBeInTheDocument();
+    act(() => {
+      wrapper!.__nn_simulate_double_click!(220, 160);
+    });
+
+    expect(await screen.findByTestId('detached-layer-card-4')).toHaveTextContent(
+      'Layer 4 · stack place 5 of 12',
+    );
+    expect(screen.getByTestId('layer-stack-dock')).toBeInTheDocument();
+
+    await waitFor(() => {
+      const layout = wrapper!.__nn_layer_layout!();
+      expect(layout[4].scale).toBeGreaterThan(1);
+      expect(layout[0].scale).toBeLessThan(0.5);
+    });
+
+    fireEvent.click(screen.getByTestId('layer-snap-4'));
+    await waitFor(() => {
+      expect(screen.queryByTestId('detached-layer-card-4')).toBeNull();
+      const layout = wrapper!.__nn_layer_layout!();
+      expect(layout[4].scale).toBe(1);
+      expect(layout[4].z).toBeCloseTo(3);
+    });
+  });
+
+  it('supports separating more than one layer and choosing the active card', async () => {
+    const raycaster = makeRaycasterStub();
+    const { container } = render(
+      <NeuralNetScene
+        architecture={PYTHIA_160M_PRESET}
+        rendererFactory={makeRendererStub}
+        raycasterFactory={() => raycaster}
+      />,
+    );
+    const wrapper = container.querySelector(
+      '[data-testid="neuralnet-scene"]',
+    ) as (HTMLElement & TestSurface) | null;
+
+    // Use the real test hook by making the raycaster report different planes
+    // for two double-clicks.
+    (raycaster.intersectObject as ReturnType<typeof vi.fn>).mockImplementation(
+      (obj: Object3D) =>
+        obj === wrapper!.__nn_planes![2]
+          ? [{ object: obj, distance: 1 }]
+          : [],
+    );
+    act(() => {
+      wrapper!.__nn_simulate_double_click!(60, 160);
+    });
+    (raycaster.intersectObject as ReturnType<typeof vi.fn>).mockImplementation(
+      (obj: Object3D) =>
+        obj === wrapper!.__nn_planes![7]
+          ? [{ object: obj, distance: 1 }]
+          : [],
+    );
+    act(() => {
+      wrapper!.__nn_simulate_double_click!(240, 160);
+    });
+
+    expect(await screen.findByTestId('detached-layer-card-2')).toBeInTheDocument();
+    expect(await screen.findByTestId('detached-layer-card-7')).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('layer-focus-2'));
+    await waitFor(() => {
+      const layout = wrapper!.__nn_layer_layout!();
+      expect(layout[2].scale).toBeGreaterThan(1);
+      expect(layout[7].scale).toBeLessThan(1);
+    });
+    fireEvent.click(screen.getByTestId('layer-spin-2'));
+    expect(screen.getByTestId('layer-spin-2')).toHaveTextContent('Stop');
   });
 });
 
