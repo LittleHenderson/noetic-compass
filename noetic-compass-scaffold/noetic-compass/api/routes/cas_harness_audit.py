@@ -23,6 +23,15 @@ from api.services.cas_harness_audit_sessions import (
     list_sessions,
     run_session,
 )
+from api.services.cas_harness_distributed_audits import (
+    create_distributed_audit,
+    dispatch_distributed_audit,
+    get_distributed_audit,
+    list_distributed_audits,
+    mark_worker_running,
+    merge_distributed_audit,
+    record_worker_evidence,
+)
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
 from api.services.cas_harness_scale_planner import (
     ScalePlanRequest as PlannerScalePlanRequest,
@@ -342,6 +351,70 @@ class ScalePlanResponse(BaseModel):
     limitations: list[str]
 
 
+class DistributedWorkerEvidenceResponse(BaseModel):
+    worker_id: str
+    layer_start: int
+    layer_end: int
+    shard_id: str
+    assigned_methods: list[str]
+    expected_outputs: list[str]
+    worker_status: Literal["queued", "assigned", "running", "completed", "failed"]
+    produced_outputs: list[str]
+    missing_outputs: list[str]
+    evidence_packet_ref: str | None = None
+    error_message: str | None = None
+    updated_at: str
+
+
+class DistributedAuditResponse(BaseModel):
+    audit_id: str
+    plan_id: str
+    status: Literal["PLANNED", "DISPATCHED", "RUNNING", "MERGE_PENDING", "COMPLETE", "FAILED"]
+    merge_status: Literal["pending", "partial", "complete", "failed"]
+    verdict: Verdict | None = None
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    evidence_packet_trace_id: str | None = None
+    merge_reason: str
+    created_at: str
+    updated_at: str
+    plan: ScalePlanResponse
+    worker_evidence: list[DistributedWorkerEvidenceResponse]
+    ready_workers: int
+    failed_workers: int
+    total_workers: int
+    missing_outputs: list[str]
+
+
+class DistributedAuditListResponse(BaseModel):
+    audits: list[DistributedAuditResponse]
+
+
+class DistributedWorkerEvidenceRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    produced_outputs: list[str] = Field(..., min_length=1, max_length=32)
+    missing_outputs: list[str] = Field(default_factory=list, max_length=32)
+    evidence_packet_ref: str | None = Field(default=None, min_length=1, max_length=240)
+    error_message: str | None = Field(default=None, min_length=1, max_length=500)
+    worker_status: Literal["completed", "failed"] = "completed"
+
+    @field_validator("produced_outputs", "missing_outputs")
+    @classmethod
+    def clean_output_list(cls, values: list[str]) -> list[str]:
+        cleaned: list[str] = []
+        seen: set[str] = set()
+        for value in values:
+            stripped = value.strip() if isinstance(value, str) else ""
+            if not stripped:
+                raise ValueError("output names must be non-empty strings")
+            if len(stripped) > 120:
+                raise ValueError("output names must be 120 characters or fewer")
+            if stripped not in seen:
+                cleaned.append(stripped)
+                seen.add(stripped)
+        return cleaned
+
+
 @router.post("/target/verify", response_model=ModelTargetVerificationResponse)
 async def verify_model_target(
     req: ModelTargetVerificationRequest,
@@ -367,6 +440,102 @@ async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
         )
     )
     return ScalePlanResponse.model_validate(plan.to_dict())
+
+
+@router.post("/distributed/session", response_model=DistributedAuditResponse)
+async def create_distributed_audit_session(req: ScalePlanRequest) -> DistributedAuditResponse:
+    """Create a real distributed audit control-plane run from an open-weight plan."""
+    record = create_distributed_audit(
+        PlannerScalePlanRequest(
+            model_id=req.model_id,
+            parameter_count_b=req.parameter_count_b,
+            num_layers=req.num_layers,
+            precision=req.precision,
+            available_gpu_memory_gb=req.available_gpu_memory_gb,
+            audit_depth=req.audit_depth,
+        )
+    )
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post("/distributed/session/{audit_id}/dispatch", response_model=DistributedAuditResponse)
+async def dispatch_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+    """Mark planned Probe Worker assignments as dispatched."""
+    record = dispatch_distributed_audit(audit_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post(
+    "/distributed/session/{audit_id}/worker/{worker_id}/running",
+    response_model=DistributedAuditResponse,
+)
+async def mark_distributed_worker_running(audit_id: str, worker_id: str) -> DistributedAuditResponse:
+    """Mark one Probe Worker as running."""
+    try:
+        record = mark_worker_running(audit_id, worker_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Distributed worker assignment not found")
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post(
+    "/distributed/session/{audit_id}/worker/{worker_id}/evidence",
+    response_model=DistributedAuditResponse,
+)
+async def submit_distributed_worker_evidence(
+    audit_id: str,
+    worker_id: str,
+    req: DistributedWorkerEvidenceRequest,
+) -> DistributedAuditResponse:
+    """Attach one Probe Worker's evidence receipt to the distributed audit."""
+    try:
+        record = record_worker_evidence(
+            audit_id,
+            worker_id,
+            produced_outputs=req.produced_outputs,
+            missing_outputs=req.missing_outputs,
+            evidence_packet_ref=req.evidence_packet_ref,
+            error_message=req.error_message,
+            worker_status=req.worker_status,
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Distributed worker assignment not found")
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post("/distributed/session/{audit_id}/merge", response_model=DistributedAuditResponse)
+async def merge_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+    """Merge worker evidence receipts without fabricating ACCEPT."""
+    record = merge_distributed_audit(audit_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.get("/distributed/session/{audit_id}", response_model=DistributedAuditResponse)
+async def get_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+    """Return distributed audit worker and merge state."""
+    record = get_distributed_audit(audit_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.get("/distributed/sessions", response_model=DistributedAuditListResponse)
+async def list_distributed_audit_sessions() -> DistributedAuditListResponse:
+    """List distributed audit runs held by this API process."""
+    return DistributedAuditListResponse(
+        audits=[
+            DistributedAuditResponse.model_validate(record.to_dict())
+            for record in list_distributed_audits()
+        ]
+    )
 
 
 @router.post("/session", response_model=AuditSessionResponse)

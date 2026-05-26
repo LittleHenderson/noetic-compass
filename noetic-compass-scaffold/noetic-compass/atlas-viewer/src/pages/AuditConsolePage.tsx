@@ -6,6 +6,7 @@ import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/a
 import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
+import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
 import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
 import { AuditPopover } from '../components/audit/AuditPopover';
@@ -14,11 +15,15 @@ import {
   type ProvenanceChip,
 } from '../lib/casHarnessAudit';
 import {
+  createCasHarnessDistributedAudit,
   createCasHarnessScalePlan,
   createCasHarnessAuditSession,
+  dispatchCasHarnessDistributedAudit,
+  mergeCasHarnessDistributedAudit,
   startCasHarnessAuditSession,
   verifyCasHarnessModelTarget,
   type CasHarnessAuditSession,
+  type CasHarnessDistributedAudit,
   type CasHarnessScalePlanRequest,
 } from '../lib/casHarnessAuditApi';
 import {
@@ -525,6 +530,10 @@ export default function AuditConsolePage() {
     useState<EnterpriseScalePlan>(DEFAULT_ENTERPRISE_SCALE_PLAN);
   const [enterprisePlanError, setEnterprisePlanError] = useState<string | null>(null);
   const [isEnterprisePlanLoading, setIsEnterprisePlanLoading] = useState(false);
+  const [distributedAudit, setDistributedAudit] =
+    useState<CasHarnessDistributedAudit | null>(null);
+  const [distributedAuditError, setDistributedAuditError] = useState<string | null>(null);
+  const [isDistributedAuditLoading, setIsDistributedAuditLoading] = useState(false);
 
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
@@ -624,6 +633,8 @@ export default function AuditConsolePage() {
     setEnterprisePlanSize(size);
     setEnterprisePlan(getEnterpriseScalePlan(size));
     setEnterprisePlanError(null);
+    setDistributedAudit(null);
+    setDistributedAuditError(null);
     setIsEnterprisePlanLoading(true);
     try {
       const plan = await createCasHarnessScalePlan(SCALE_PLAN_REQUESTS[size]);
@@ -636,6 +647,55 @@ export default function AuditConsolePage() {
       );
     } finally {
       setIsEnterprisePlanLoading(false);
+    }
+  };
+
+  const createDistributedRun = async () => {
+    setDistributedAuditError(null);
+    setIsDistributedAuditLoading(true);
+    try {
+      const audit = await createCasHarnessDistributedAudit(
+        SCALE_PLAN_REQUESTS[enterprisePlanSize],
+      );
+      setDistributedAudit(audit);
+    } catch (error) {
+      setDistributedAuditError(
+        error instanceof Error ? error.message : 'Distributed audit run creation failed',
+      );
+    } finally {
+      setIsDistributedAuditLoading(false);
+    }
+  };
+
+  const dispatchDistributedRun = async () => {
+    if (!distributedAudit) return;
+    setDistributedAuditError(null);
+    setIsDistributedAuditLoading(true);
+    try {
+      const audit = await dispatchCasHarnessDistributedAudit(distributedAudit.audit_id);
+      setDistributedAudit(audit);
+    } catch (error) {
+      setDistributedAuditError(
+        error instanceof Error ? error.message : 'Distributed worker dispatch failed',
+      );
+    } finally {
+      setIsDistributedAuditLoading(false);
+    }
+  };
+
+  const mergeDistributedRun = async () => {
+    if (!distributedAudit) return;
+    setDistributedAuditError(null);
+    setIsDistributedAuditLoading(true);
+    try {
+      const audit = await mergeCasHarnessDistributedAudit(distributedAudit.audit_id);
+      setDistributedAudit(audit);
+    } catch (error) {
+      setDistributedAuditError(
+        error instanceof Error ? error.message : 'Distributed evidence merge failed',
+      );
+    } finally {
+      setIsDistributedAuditLoading(false);
     }
   };
 
@@ -755,6 +815,23 @@ export default function AuditConsolePage() {
             error={enterprisePlanError}
             onSelectSize={(size) => {
               void loadEnterprisePlan(size);
+            }}
+          />
+        </div>
+
+        <div style={singleColumnStyle}>
+          <DistributedAuditRunPanel
+            audit={distributedAudit}
+            isLoading={isDistributedAuditLoading}
+            error={distributedAuditError}
+            onCreateRun={() => {
+              void createDistributedRun();
+            }}
+            onDispatchRun={() => {
+              void dispatchDistributedRun();
+            }}
+            onMergeRun={() => {
+              void mergeDistributedRun();
             }}
           />
         </div>

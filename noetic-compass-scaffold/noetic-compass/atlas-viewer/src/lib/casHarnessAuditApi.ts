@@ -203,6 +203,69 @@ export interface CasHarnessScalePlan {
   limitations: string[];
 }
 
+export type CasHarnessDistributedAuditStatus =
+  | 'PLANNED'
+  | 'DISPATCHED'
+  | 'RUNNING'
+  | 'MERGE_PENDING'
+  | 'COMPLETE'
+  | 'FAILED';
+
+export type CasHarnessDistributedMergeStatus =
+  | 'pending'
+  | 'partial'
+  | 'complete'
+  | 'failed';
+
+export type CasHarnessDistributedWorkerStatus =
+  | 'queued'
+  | 'assigned'
+  | 'running'
+  | 'completed'
+  | 'failed';
+
+export interface CasHarnessDistributedWorkerEvidence {
+  worker_id: string;
+  layer_start: number;
+  layer_end: number;
+  shard_id: string;
+  assigned_methods: string[];
+  expected_outputs: string[];
+  worker_status: CasHarnessDistributedWorkerStatus;
+  produced_outputs: string[];
+  missing_outputs: string[];
+  evidence_packet_ref: string | null;
+  error_message: string | null;
+  updated_at: string;
+}
+
+export interface CasHarnessDistributedAudit {
+  audit_id: string;
+  plan_id: string;
+  status: CasHarnessDistributedAuditStatus;
+  merge_status: CasHarnessDistributedMergeStatus;
+  verdict: AuditVerdict | null;
+  confidence: number | null;
+  evidence_packet_trace_id: string | null;
+  merge_reason: string;
+  created_at: string;
+  updated_at: string;
+  plan: CasHarnessScalePlan;
+  worker_evidence: CasHarnessDistributedWorkerEvidence[];
+  ready_workers: number;
+  failed_workers: number;
+  total_workers: number;
+  missing_outputs: string[];
+}
+
+export interface CasHarnessDistributedWorkerEvidenceRequest {
+  produced_outputs: string[];
+  missing_outputs?: string[];
+  evidence_packet_ref?: string | null;
+  error_message?: string | null;
+  worker_status?: 'completed' | 'failed';
+}
+
 export class CasHarnessAuditApiError extends Error {
   readonly httpStatus?: number;
   readonly detail?: string;
@@ -273,6 +336,74 @@ export async function createCasHarnessScalePlan(
     signal: options?.signal,
   }, options);
   return parseScalePlanResponse(response);
+}
+
+export async function createCasHarnessDistributedAudit(
+  request: CasHarnessScalePlanRequest,
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessDistributedAudit> {
+  const response = await requestJson(`${baseUrl(options)}/distributed/session`, {
+    method: 'POST',
+    headers: jsonHeaders(),
+    body: JSON.stringify(request),
+    signal: options?.signal,
+  }, options);
+  return parseDistributedAuditResponse(response);
+}
+
+export async function dispatchCasHarnessDistributedAudit(
+  auditId: string,
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessDistributedAudit> {
+  assertNonEmpty('auditId', auditId);
+  const response = await requestJson(
+    `${baseUrl(options)}/distributed/session/${encodeURIComponent(auditId)}/dispatch`,
+    {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      signal: options?.signal,
+    },
+    options,
+  );
+  return parseDistributedAuditResponse(response);
+}
+
+export async function submitCasHarnessDistributedWorkerEvidence(
+  auditId: string,
+  workerId: string,
+  request: CasHarnessDistributedWorkerEvidenceRequest,
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessDistributedAudit> {
+  assertNonEmpty('auditId', auditId);
+  assertNonEmpty('workerId', workerId);
+  const response = await requestJson(
+    `${baseUrl(options)}/distributed/session/${encodeURIComponent(auditId)}/worker/${encodeURIComponent(workerId)}/evidence`,
+    {
+      method: 'POST',
+      headers: jsonHeaders(),
+      body: JSON.stringify(request),
+      signal: options?.signal,
+    },
+    options,
+  );
+  return parseDistributedAuditResponse(response);
+}
+
+export async function mergeCasHarnessDistributedAudit(
+  auditId: string,
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessDistributedAudit> {
+  assertNonEmpty('auditId', auditId);
+  const response = await requestJson(
+    `${baseUrl(options)}/distributed/session/${encodeURIComponent(auditId)}/merge`,
+    {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      signal: options?.signal,
+    },
+    options,
+  );
+  return parseDistributedAuditResponse(response);
 }
 
 export async function getCasHarnessAuditSessionStatus(
@@ -374,6 +505,37 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
     provenance_chips: chips,
     verifier_decision: verifierDecision,
     lifecycle,
+  };
+}
+
+export function parseDistributedAuditResponse(raw: unknown): CasHarnessDistributedAudit {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness distributed audit response was not an object');
+  }
+  const workerEvidence = Array.isArray(raw.worker_evidence)
+    ? raw.worker_evidence.map(parseDistributedWorkerEvidence)
+    : null;
+  if (!workerEvidence) {
+    throw new CasHarnessAuditApiError('CAS Harness distributed audit worker_evidence must be an array');
+  }
+
+  return {
+    audit_id: requiredString(raw.audit_id, 'audit_id'),
+    plan_id: requiredString(raw.plan_id, 'plan_id'),
+    status: parseDistributedAuditStatus(raw.status),
+    merge_status: parseDistributedMergeStatus(raw.merge_status),
+    verdict: parseNullableVerdict(raw.verdict),
+    confidence: parseNullableConfidence(raw.confidence),
+    evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
+    merge_reason: requiredString(raw.merge_reason, 'merge_reason'),
+    created_at: requiredString(raw.created_at, 'created_at'),
+    updated_at: requiredString(raw.updated_at, 'updated_at'),
+    plan: parseScalePlanResponse(raw.plan),
+    worker_evidence: workerEvidence,
+    ready_workers: requiredInteger(raw.ready_workers, 'ready_workers'),
+    failed_workers: requiredInteger(raw.failed_workers, 'failed_workers'),
+    total_workers: requiredInteger(raw.total_workers, 'total_workers'),
+    missing_outputs: parseStringArray(raw.missing_outputs, 'missing_outputs'),
   };
 }
 
@@ -501,6 +663,31 @@ async function readErrorDetail(response: Response): Promise<string> {
   return response.statusText || `HTTP ${response.status}`;
 }
 
+function parseDistributedWorkerEvidence(raw: unknown): CasHarnessDistributedWorkerEvidence {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness distributed worker evidence was malformed');
+  }
+  const layerStart = requiredInteger(raw.layer_start, 'worker_evidence[].layer_start');
+  const layerEnd = requiredInteger(raw.layer_end, 'worker_evidence[].layer_end');
+  if (layerEnd < layerStart) {
+    throw new CasHarnessAuditApiError('CAS Harness distributed worker layer range was malformed');
+  }
+  return {
+    worker_id: requiredString(raw.worker_id, 'worker_evidence[].worker_id'),
+    layer_start: layerStart,
+    layer_end: layerEnd,
+    shard_id: requiredString(raw.shard_id, 'worker_evidence[].shard_id'),
+    assigned_methods: parseStringArray(raw.assigned_methods, 'worker_evidence[].assigned_methods'),
+    expected_outputs: parseStringArray(raw.expected_outputs, 'worker_evidence[].expected_outputs'),
+    worker_status: parseDistributedWorkerStatus(raw.worker_status),
+    produced_outputs: parseStringArray(raw.produced_outputs, 'worker_evidence[].produced_outputs'),
+    missing_outputs: parseStringArray(raw.missing_outputs, 'worker_evidence[].missing_outputs'),
+    evidence_packet_ref: nullableString(raw.evidence_packet_ref),
+    error_message: nullableString(raw.error_message),
+    updated_at: requiredString(raw.updated_at, 'worker_evidence[].updated_at'),
+  };
+}
+
 function parseScalePlanWorkerAssignment(raw: unknown): CasHarnessScalePlanWorkerAssignment {
   if (!isRecord(raw)) {
     throw new CasHarnessAuditApiError('CAS Harness scale plan worker assignment was malformed');
@@ -518,6 +705,40 @@ function parseScalePlanWorkerAssignment(raw: unknown): CasHarnessScalePlanWorker
     assigned_methods: parseStringArray(raw.assigned_methods, 'worker_assignments[].assigned_methods'),
     expected_outputs: parseStringArray(raw.expected_outputs, 'worker_assignments[].expected_outputs'),
   };
+}
+
+function parseDistributedAuditStatus(raw: unknown): CasHarnessDistributedAuditStatus {
+  if (
+    raw === 'PLANNED' ||
+    raw === 'DISPATCHED' ||
+    raw === 'RUNNING' ||
+    raw === 'MERGE_PENDING' ||
+    raw === 'COMPLETE' ||
+    raw === 'FAILED'
+  ) {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness distributed audit status: ${String(raw)}`);
+}
+
+function parseDistributedMergeStatus(raw: unknown): CasHarnessDistributedMergeStatus {
+  if (raw === 'pending' || raw === 'partial' || raw === 'complete' || raw === 'failed') {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness distributed merge status: ${String(raw)}`);
+}
+
+function parseDistributedWorkerStatus(raw: unknown): CasHarnessDistributedWorkerStatus {
+  if (
+    raw === 'queued' ||
+    raw === 'assigned' ||
+    raw === 'running' ||
+    raw === 'completed' ||
+    raw === 'failed'
+  ) {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness distributed worker status: ${String(raw)}`);
 }
 
 function parseScalePlanMemoryEstimate(raw: unknown): CasHarnessScalePlanMemoryEstimate {

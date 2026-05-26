@@ -3,14 +3,19 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   CasHarnessAuditApiError,
   createCasHarnessAuditSession,
+  createCasHarnessDistributedAudit,
   createCasHarnessScalePlan,
+  dispatchCasHarnessDistributedAudit,
   getCasHarnessAuditSessionStatus,
   listCasHarnessAuditSessions,
+  mergeCasHarnessDistributedAudit,
   parseAuditSessionResponse,
+  parseDistributedAuditResponse,
   parseModelTargetVerificationResponse,
   parseScalePlanResponse,
   resolveCasHarnessAuditBaseUrl,
   startCasHarnessAuditSession,
+  submitCasHarnessDistributedWorkerEvidence,
   verifyCasHarnessModelTarget,
 } from './casHarnessAuditApi';
 
@@ -130,6 +135,43 @@ function scalePlan(overrides: Record<string, unknown> = {}): Record<string, unkn
     expected_capability: ['single orchestrated Evidence Packet across all workers'],
     evidence_requirements: ['open model weights or customer-hosted activation hooks'],
     limitations: ['does not support black-box/API-only model audits in this product lane'],
+    ...overrides,
+  };
+}
+
+function distributedAudit(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    audit_id: 'cas-dist-unit',
+    plan_id: 'cas-plan-unit',
+    status: 'PLANNED',
+    merge_status: 'pending',
+    verdict: null,
+    confidence: null,
+    evidence_packet_trace_id: null,
+    merge_reason: 'Distributed audit planned; no worker evidence has been merged yet.',
+    created_at: '2026-05-26T10:00:00Z',
+    updated_at: '2026-05-26T10:00:00Z',
+    plan: scalePlan(),
+    worker_evidence: [
+      {
+        worker_id: 'probe-worker-01',
+        layer_start: 0,
+        layer_end: 9,
+        shard_id: 'layers-000-009',
+        assigned_methods: ['foundation_probe', 'targeted_ablation'],
+        expected_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+        worker_status: 'queued',
+        produced_outputs: [],
+        missing_outputs: [],
+        evidence_packet_ref: null,
+        error_message: null,
+        updated_at: '2026-05-26T10:00:00Z',
+      },
+    ],
+    ready_workers: 0,
+    failed_workers: 0,
+    total_workers: 1,
+    missing_outputs: [],
     ...overrides,
   };
 }
@@ -254,6 +296,76 @@ describe('casHarnessAuditApi', () => {
       model_id: 'customer/open-100b',
       parameter_count_b: 100,
     });
+  });
+
+  it('creates, dispatches, records, and merges a distributed audit through the API', async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(distributedAudit()))
+      .mockResolvedValueOnce(jsonResponse(distributedAudit({ status: 'DISPATCHED' })))
+      .mockResolvedValueOnce(jsonResponse(distributedAudit({
+        status: 'MERGE_PENDING',
+        merge_status: 'partial',
+        worker_evidence: [
+          {
+            ...distributedAudit().worker_evidence[0] as Record<string, unknown>,
+            worker_status: 'completed',
+            produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+            evidence_packet_ref: 'packet://probe-worker-01',
+          },
+        ],
+        ready_workers: 1,
+      })))
+      .mockResolvedValueOnce(jsonResponse(distributedAudit({
+        status: 'COMPLETE',
+        merge_status: 'complete',
+        verdict: 'FLAG_FOR_HUMAN_REVIEW',
+        confidence: null,
+        evidence_packet_trace_id: 'cas-dist-unit-distributed-merge',
+        ready_workers: 1,
+        merge_reason: 'All distributed worker evidence receipts merged. Final ACCEPT/SUPPRESS still requires the verifier decision layer over the merged Evidence Packet.',
+      })));
+
+    const created = await createCasHarnessDistributedAudit(
+      {
+        model_id: 'customer/open-100b',
+        weight_access: 'open_weight',
+        parameter_count_b: 100,
+        num_layers: 120,
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const dispatched = await dispatchCasHarnessDistributedAudit(created.audit_id, {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const receipted = await submitCasHarnessDistributedWorkerEvidence(
+      created.audit_id,
+      'probe-worker-01',
+      {
+        produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+        evidence_packet_ref: 'packet://probe-worker-01',
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const merged = await mergeCasHarnessDistributedAudit(created.audit_id, {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+
+    expect(created.status).toBe('PLANNED');
+    expect(dispatched.status).toBe('DISPATCHED');
+    expect(receipted.ready_workers).toBe(1);
+    expect(merged.merge_status).toBe('complete');
+    expect(merged.verdict).toBe('FLAG_FOR_HUMAN_REVIEW');
+    expect(merged.confidence).toBeNull();
+    expect(merged.merge_reason).toMatch(/Final ACCEPT\/SUPPRESS still requires/);
+    expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/session',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/dispatch',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/worker/probe-worker-01/evidence',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/merge',
+    ]);
   });
 
   it('verifies an API endpoint target using a credential reference', async () => {
@@ -415,6 +527,21 @@ describe('casHarnessAuditApi', () => {
         },
       ],
     }))).toThrow(/layer range/);
+  });
+
+  it('rejects malformed distributed audit responses', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      status: 'DONE',
+    }))).toThrow(/distributed audit status/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        {
+          ...distributedAudit().worker_evidence[0] as Record<string, unknown>,
+          worker_status: 'finished',
+        },
+      ],
+    }))).toThrow(/distributed worker status/);
   });
 
   it('rejects malformed target verification payloads', () => {

@@ -137,6 +137,75 @@ function allPresentChips() {
   }));
 }
 
+function scalePlan() {
+  return {
+    model_id: 'customer/open-weight-100b',
+    weight_access: 'open_weight',
+    parameter_count_b: 100,
+    num_layers: 120,
+    scale_tier: 'enterprise_distributed_open_weight',
+    recommended_worker_count: 12,
+    orchestration_pattern: 'CAS Orchestrator + distributed Probe Workers.',
+    worker_assignments: [
+      {
+        worker_id: 'probe-worker-01',
+        layer_start: 0,
+        layer_end: 9,
+        shard_id: 'layers-000-009',
+        assigned_methods: ['foundation_probe'],
+        expected_outputs: ['layer_activation_summary'],
+      },
+    ],
+    memory_estimate: {
+      precision: 'bf16',
+      total_weight_memory_gb: 200,
+      activation_overhead_gb: 36,
+      estimated_total_runtime_gb: 236,
+      estimated_memory_per_worker_gb: 19.67,
+    },
+    expected_capability: ['single orchestrated Evidence Packet across all workers'],
+    evidence_requirements: ['open model weights or customer-hosted activation hooks'],
+    limitations: ['does not support black-box/API-only model audits in this product lane'],
+  };
+}
+
+function distributedAudit(overrides: Record<string, unknown> = {}) {
+  return {
+    audit_id: 'cas-dist-unit',
+    plan_id: 'cas-plan-unit',
+    status: 'PLANNED',
+    merge_status: 'pending',
+    verdict: null,
+    confidence: null,
+    evidence_packet_trace_id: null,
+    merge_reason: 'Distributed audit planned; no worker evidence has been merged yet.',
+    created_at: '2026-05-26T10:00:00Z',
+    updated_at: '2026-05-26T10:00:00Z',
+    plan: scalePlan(),
+    worker_evidence: [
+      {
+        worker_id: 'probe-worker-01',
+        layer_start: 0,
+        layer_end: 9,
+        shard_id: 'layers-000-009',
+        assigned_methods: ['foundation_probe'],
+        expected_outputs: ['layer_activation_summary'],
+        worker_status: 'queued',
+        produced_outputs: [],
+        missing_outputs: [],
+        evidence_packet_ref: null,
+        error_message: null,
+        updated_at: '2026-05-26T10:00:00Z',
+      },
+    ],
+    ready_workers: 0,
+    failed_workers: 0,
+    total_workers: 1,
+    missing_outputs: [],
+    ...overrides,
+  };
+}
+
 describe('AuditConsolePage', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -152,6 +221,7 @@ describe('AuditConsolePage', () => {
     expect(heading).not.toHaveAttribute('title');
     expect(screen.getByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Audit command center' })).toBeInTheDocument();
+    expect(screen.getByText(/Worker evidence, not planner theater/i)).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'CONNECT' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'RUN' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'VERDICT' })).toBeInTheDocument();
@@ -298,6 +368,46 @@ describe('AuditConsolePage', () => {
       '/api/cas-harness/audit/session/cas-audit-test-session/run',
       expect.objectContaining({ method: 'POST' }),
     );
+  });
+
+  it('creates and dispatches a distributed audit run from the enterprise plan panel', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => distributedAudit(),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => distributedAudit({ status: 'DISPATCHED' }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => distributedAudit({
+          status: 'MERGE_PENDING',
+          merge_status: 'partial',
+          merge_reason: 'Waiting for worker evidence from: probe-worker-01.',
+        }),
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
+    expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
+    expect(screen.getByText('0/1 ready')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Dispatch workers' }));
+    expect(await screen.findByText('DISPATCHED')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Merge evidence' }));
+    expect(await screen.findByText(/Waiting for worker evidence/i)).toBeInTheDocument();
+
+    expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/session',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/dispatch',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/merge',
+    ]);
   });
 
   it('explains a backend ACCEPT verdict with verifier reason and proof chips', async () => {
