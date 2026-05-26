@@ -236,12 +236,11 @@ What exists:
 - A drive-only forward-pass pilot that returned null/negative against matched random controls.
 - A balanced Foundation-28 v0 engineering run with real hidden-state readout and matched activation ablation.
 - Worker-side builders that preserve legacy TKS mappings for Foundation-28 (`1a..7d`) and 40 Elements (`A1..D10`).
+- A source-derived TKS40 GPT-NeoX-20B run with 40-class readout and activation-level cover ablation.
 
 What is missing:
 
-- Source-faithful rerun from the original Stage 7/Stage 9 definition surfaces.
-- Balanced 40-Element scenario capture.
-- 40-Element hidden-state readout on that balanced source library.
+- Source-faithful Foundation-28 rerun from the original Stage 7 definition surface.
 - Foundation-28 and 40-Element cover maps from the source-faithful libraries.
 - Matched ablation on the source-faithful libraries.
 - Foundation-level likelihood bridge.
@@ -256,9 +255,9 @@ The final 40-Element library must use the TKS Element definitions directly: A1-A
 The UI and investor/demo language must use this distinction:
 
 ```text
-Current 20B status: real model run, real activation capture, early non-random CAS signal, plus a Foundation-28 v0 engineering run.
-Not yet: source-faithful TKS definition replication, behavioral pass, or CAS universality proof.
-Next gate: rerun Foundation-28 and 40 Elements using the source-derived Stage 7/Stage 9 methodology.
+Current 20B status: real model run, real activation capture, early non-random CAS signal, a Foundation-28 v0 engineering run, and a source-derived TKS40 activation-level pass.
+Not yet: behavioral pass or CAS universality proof.
+Next gate: rerun Foundation-28 using the source-derived Stage 7 methodology, then run Foundation/Element likelihood-output bridge.
 ```
 
 ## Concrete Next Work

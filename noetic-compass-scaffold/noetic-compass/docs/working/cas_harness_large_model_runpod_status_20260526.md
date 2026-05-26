@@ -90,6 +90,38 @@ Derived 40-Element result on the existing 400-row dataset:
 
 Activation ablation on that imbalanced 40-Element derived axis reduced hidden readout from `13.75%` to `8.75%`; same-size random label controls had mean drop `0.00 pp`. This is a small activation-level signal, not a 40-Element replication claim.
 
+### GPT-NeoX-20B source-derived TKS40 run
+
+- Scenario source: `/workspace/cas-harness-large-eval/scenarios/tks40_balanced_v0_20260526.json`
+- Scenarios: `400`, exactly `10` per TKS40 class
+- Taxonomy: legacy `A1..D10` source codes mapped to current CAS `operator x domain` labels
+- Source profile: `source_derived_from_original_stage9_tks40_glosses`
+- Model: `EleutherAI/gpt-neox-20b`
+- Layers captured: `0-43`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_tks40_400_layers_0_43.npz`
+- Metadata: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_tks40_400_layers_0_43.metadata.json`
+- Eval report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_tks40_probe_eval_report_top256.json`
+- Ablation report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_tks40_activation_cover_ablation_report_top256.json`
+- Local copies: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Axis | Classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain slice | 4 | 38 | 78.75% | 25.00% | 24.75% | 100.00% | Strong hidden domain readout, but text is fully separable in this source-gloss library |
+| 40 Elements | 40 | 1 | 40.00% | 2.50% | 2.56% | 100.00% | Real 40-class hidden signal far above chance/noise; not above text baseline |
+| Noetic/operator slice | 10 | 41 | 40.00% | 10.00% | 9.88% | 100.00% | Real noetic/operator hidden signal above weak controls |
+
+Activation ablation:
+
+| Axis | Clean acc | Label-cover ablated acc | Label-cover drop | Mean random-control drop | Wrong-cover drop | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain slice | 78.75% | 70.00% | 8.75 pp | 1.50 pp | 1.25 pp | Label-specific cover reduces accuracy more than random mean, but the report's conservative summary says the candidate cover does not clear all matched controls |
+| 40 Elements | 40.00% | 26.25% | 13.75 pp | -0.06 pp | 0.00 pp | Positive activation-level result: candidate cover is stronger than matched controls |
+| Noetic/operator slice | 40.00% | 28.75% | 11.25 pp | 0.38 pp | -2.50 pp | Positive against random mean, but conservative report says it does not clear all controls |
+
+Interpretation: this is the first source-derived TKS40 large-model result. It is not a final universality proof because the source-gloss prompts remain fully text-separable, and the test is activation-level over captured vectors rather than live forward-pass intervention. It is still materially stronger than the earlier imbalanced 40-Element relabel check: balanced 40 classes, real GPT-NeoX-20B activations, hidden readout at `40.00%` against `2.50%` majority/chance, and a label-specific activation cover drop of `13.75 pp` versus approximately zero random/wrong-cover controls.
+
 ### GPT-NeoX-20B Foundation-28 corrected run
 
 - Scenario source: `/workspace/cas-harness-large-eval/scenarios/foundation28_balanced_v0_20260526.json`
@@ -210,15 +242,16 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 4. Completed: capture GPT-NeoX-20B hidden states for the Foundation-labeled set.
 5. Completed: train/evaluate the 28-Foundation readout and compare it against controls.
 6. Completed: run Foundation-level activation ablation with matched random and wrong-Foundation controls.
-7. Next: rerun with source-derived Foundation-28 and 40-Element libraries that preserve legacy TKS codes (`1a..7d`, `A1..D10`) and current CAS labels, then rerun the readout gates.
-8. Only after the Foundation readout/intervention gate is strong against text controls, run the 27H-style likelihood/output bridge at the Foundation level.
-9. Run the same scenario set with:
+7. Completed: run source-derived TKS40 (`A1..D10`) on GPT-NeoX-20B. Result: 40-Element hidden readout `40.00%` versus `2.50%` majority/chance, and label-specific activation cover drop `13.75 pp` versus approximately zero random/wrong controls.
+8. Next: rerun Foundation-28 with the same source-lineage discipline, then test whether text-separability can be reduced without dropping the TKS definitions.
+9. Only after the Foundation/Element readout and intervention gates are strong against controls, run the 27H-style likelihood/output bridge.
+10. Run the same scenario set with:
    - probe readout
    - ablation/intervention
    - matched random/wrong-label controls
    - output-effect prediction
    - Evidence Packet merge
-10. Report accepted accuracy, coverage, confidence bands, and failures separately.
+11. Report accepted accuracy, coverage, confidence bands, and failures separately.
 
 ## 100B / 300B status
 
