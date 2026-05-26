@@ -125,6 +125,15 @@ def test_prepare_fleet_and_lease_jobs_to_registered_workers():
     assert saved.to_dict()["completed_fragments"] == 0
 
 
+def test_unregistered_worker_cannot_lease_a_job():
+    audit = _create_dispatched_audit(parameter_count_b=1, num_layers=1)
+    run = prepare_fleet_for_audit(audit.audit_id)
+    assert run is not None
+
+    with pytest.raises(FleetExecutorStateError, match="Worker must register before leasing jobs"):
+        lease_next_job(audit_id=audit.audit_id, worker_id=audit.worker_evidence[0].worker_id)
+
+
 def test_stale_heartbeat_detection_marks_workers_and_blocks_gate():
     audit = _create_dispatched_audit(parameter_count_b=1, num_layers=1)
     assignment = audit.worker_evidence[0]
