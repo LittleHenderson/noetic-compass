@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { AuditTerm } from './AuditTerm';
 
@@ -7,7 +7,8 @@ describe('AuditTerm', () => {
     render(<AuditTerm term="matchedControl">matched control</AuditTerm>);
 
     const term = screen.getByRole('note', { name: /matched control/i });
-    expect(term).toHaveAttribute('title', expect.stringContaining('fair comparison'));
-    expect(term).toHaveAttribute('tabIndex', '0');
+    expect(term).not.toHaveAttribute('title');
+    fireEvent.mouseEnter(term);
+    expect(screen.getByRole('tooltip')).toHaveTextContent('fair comparison');
   });
 });

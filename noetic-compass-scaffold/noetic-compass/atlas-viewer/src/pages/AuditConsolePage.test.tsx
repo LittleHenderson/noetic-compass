@@ -98,7 +98,7 @@ describe('AuditConsolePage', () => {
       name: 'Connect a model. Run a CAS audit. Return a verdict with evidence.',
     });
     expect(heading).toHaveClass('cas-heading-wave');
-    expect(heading).toHaveAttribute('title', expect.stringContaining('Licensed users attach'));
+    expect(heading).not.toHaveAttribute('title');
     expect(screen.getByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Audit command center' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'CONNECT' })).toBeInTheDocument();
@@ -131,11 +131,11 @@ describe('AuditConsolePage', () => {
       screen.queryByText(/the UI shows ACCEPT or SUPPRESS only when the/i),
     ).not.toBeInTheDocument();
     expect(screen.queryByText(/Audit Console is the decision workflow/i)).not.toBeInTheDocument();
-    expect(
-      screen.getByText('Connect. Run. Decide.'),
-    ).toHaveAttribute(
-      'title',
-      expect.stringContaining('connect the target, run CAS, then return a verdict'),
+    const commandSubtitle = screen.getByText('Connect. Run. Decide.');
+    expect(commandSubtitle).not.toHaveAttribute('title');
+    fireEvent.mouseEnter(commandSubtitle);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
+      'connect the target, run CAS, then return a verdict',
     );
   });
 

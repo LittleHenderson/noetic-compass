@@ -6,6 +6,7 @@ import {
   COLORS,
   FONT_FAMILY,
 } from '../../lib/designTokens';
+import { AuditPopover } from './AuditPopover';
 
 export type AuditLifecycleStatus =
   | 'draft'
@@ -297,15 +298,11 @@ export function AuditSessionProgress({
           <div>
             <p style={eyebrowStyle}>Audit progress</p>
             <h2 style={headlineStyle}>{copy.headline}</h2>
-            <span
-              aria-label={activeDetail}
-              role="note"
-              style={infoTipStyle}
-              tabIndex={0}
-              title={activeDetail}
-            >
-              ?
-            </span>
+            <AuditPopover briefing={activeDetail} placement="right">
+              <span aria-label={activeDetail} role="note" style={infoTipStyle}>
+                ?
+              </span>
+            </AuditPopover>
           </div>
           <span style={statusPillStyle(status)}>{copy.headline}</span>
         </div>
@@ -333,15 +330,12 @@ export function AuditSessionProgress({
             {steps.map((step) => {
               const state = stepState(step.id, status);
               return (
-                <li
-                  key={step.id}
-                  style={stepStyle(state)}
-                  data-state={state}
-                  title={step.description}
-                >
+                <li key={step.id} style={stepStyle(state)} data-state={state}>
                   <span aria-hidden="true" style={markerStyle(state)} />
                   <div>
-                    <p style={stepLabelStyle}>{step.label}</p>
+                    <AuditPopover briefing={step.description} placement="bottom">
+                      <p style={stepLabelStyle}>{step.label}</p>
+                    </AuditPopover>
                   </div>
                 </li>
               );

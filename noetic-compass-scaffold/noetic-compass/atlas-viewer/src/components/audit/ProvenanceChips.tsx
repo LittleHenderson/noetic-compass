@@ -10,6 +10,7 @@ import type {
   ProvenanceChip as AuditProvenanceChip,
   ProvenanceChipId,
 } from '../../lib/casHarnessAudit';
+import { AuditPopover } from './AuditPopover';
 
 export type ProvenanceProofKey =
   | 'model'
@@ -207,10 +208,15 @@ export function ProvenanceChips({
         const chip = byId.get(id);
         const state = chip?.status ?? 'pending';
         return (
-          <li key={id} style={chipStyle(state)} title={chip?.detail}>
-            <span aria-hidden="true" style={dotStyle(state)} />
-            <span>{chip?.name ?? proofLabels[id]}</span>
-            <span style={detailStyle}>{stateLabels[state]}</span>
+          <li key={id} style={chipStyle(state)}>
+            <AuditPopover
+              briefing={chip?.detail ?? 'This proof chip has not attached evidence yet.'}
+              placement="top"
+            >
+              <span aria-hidden="true" style={dotStyle(state)} />
+              <span>{chip?.name ?? proofLabels[id]}</span>
+              <span style={detailStyle}>{stateLabels[state]}</span>
+            </AuditPopover>
           </li>
         );
       })}

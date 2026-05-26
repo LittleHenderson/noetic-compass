@@ -237,6 +237,8 @@ describe('Mode7Timeline', () => {
     );
     const cell0 = screen.getByTestId('mode7-timeline-cell-0');
     expect(cell0.textContent).toContain('…');
-    expect(cell0.getAttribute('title')).toBe('extraordinarily');
+    expect(cell0).not.toHaveAttribute('title');
+    fireEvent.mouseEnter(cell0);
+    expect(screen.getByRole('tooltip')).toHaveTextContent('extraordinarily');
   });
 });

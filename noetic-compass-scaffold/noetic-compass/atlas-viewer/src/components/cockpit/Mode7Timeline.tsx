@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef } from 'react';
 import type { CSSProperties, KeyboardEvent } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { GlassPanel } from '../ui/GlassPanel';
+import LiquidGlassTooltip from '../ui/LiquidGlassTooltip';
 import { THEME, SPRING_SNAPPY, SPRING_GENTLE } from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 
@@ -142,11 +143,15 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
       <div style={cellRowStyle} data-testid="mode7-timeline-cells">
         {tokens.map((tok, idx) => {
           const isCurrent = idx === safeCurrent;
-          const cellStyle: CSSProperties = {
-            position: 'relative',
+          const cellWrapperStyle: CSSProperties = {
             flex: `1 1 ${cellWidthPct}%`,
             minWidth: `${MIN_CELL_WIDTH}px`,
             height: `${CELL_HEIGHT}px`,
+          };
+          const cellStyle: CSSProperties = {
+            position: 'relative',
+            width: '100%',
+            height: '100%',
             // Wave 5.2: no big colored fill on the current cell. Subtle
             // teal-tinted background + teal border for the active cell;
             // neutral hairline for others. No glow halo.
@@ -174,42 +179,48 @@ export function Mode7Timeline(props: Mode7TimelineProps): JSX.Element {
             transition: 'border-color 0.15s ease, background 0.15s ease',
           };
           return (
-            <motion.div
+            <LiquidGlassTooltip
               key={tok.token_index}
-              role="button"
-              tabIndex={-1}
-              aria-label={`Token ${idx}: ${tok.token}`}
-              aria-current={isCurrent ? 'true' : undefined}
-              title={tok.token}
-              data-testid={`mode7-timeline-cell-${idx}`}
-              data-current={isCurrent ? 'true' : 'false'}
-              onClick={() => handleClick(idx)}
-              style={cellStyle}
-              whileHover={{
-                borderColor: isCurrent
-                  ? ATLAS_STATUS_COLORS.activeTrace
-                  : 'rgba(255, 255, 255, 0.12)',
-                color: '#e2e8f0',
-              }}
-              whileTap={{ scale: 0.98 }}
-              transition={SPRING_GENTLE}
+              briefing={tok.token}
+              placement="top"
+              focusable={false}
+              style={cellWrapperStyle}
             >
-              {isCurrent && (
-                <motion.div
-                  layoutId="timeline-active-cell"
-                  data-testid="mode7-timeline-active-highlight"
-                  transition={SPRING_SNAPPY}
-                  style={{
-                    position: 'absolute',
-                    inset: -1,
-                    borderRadius: '6px',
-                    border: `1px solid ${ATLAS_STATUS_COLORS.activeTrace}`,
-                    pointerEvents: 'none',
-                  }}
-                />
-              )}
-              {truncateToken(tok.token)}
-            </motion.div>
+              <motion.div
+                role="button"
+                tabIndex={-1}
+                aria-label={`Token ${idx}: ${tok.token}`}
+                aria-current={isCurrent ? 'true' : undefined}
+                data-testid={`mode7-timeline-cell-${idx}`}
+                data-current={isCurrent ? 'true' : 'false'}
+                onClick={() => handleClick(idx)}
+                style={cellStyle}
+                whileHover={{
+                  borderColor: isCurrent
+                    ? ATLAS_STATUS_COLORS.activeTrace
+                    : 'rgba(255, 255, 255, 0.12)',
+                  color: '#e2e8f0',
+                }}
+                whileTap={{ scale: 0.98 }}
+                transition={SPRING_GENTLE}
+              >
+                {isCurrent && (
+                  <motion.div
+                    layoutId="timeline-active-cell"
+                    data-testid="mode7-timeline-active-highlight"
+                    transition={SPRING_SNAPPY}
+                    style={{
+                      position: 'absolute',
+                      inset: -1,
+                      borderRadius: '6px',
+                      border: `1px solid ${ATLAS_STATUS_COLORS.activeTrace}`,
+                      pointerEvents: 'none',
+                    }}
+                  />
+                )}
+                {truncateToken(tok.token)}
+              </motion.div>
+            </LiquidGlassTooltip>
           );
         })}
       </div>

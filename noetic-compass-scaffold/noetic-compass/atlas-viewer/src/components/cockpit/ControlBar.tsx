@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { CSSProperties, KeyboardEvent, PointerEvent as ReactPointerEvent } from 'react';
 import { motion } from 'framer-motion';
 import { GlassPanel } from '../ui/GlassPanel';
+import LiquidGlassTooltip from '../ui/LiquidGlassTooltip';
 import {
   ACCENT_TEAL,
   COLORS,
@@ -230,31 +231,36 @@ interface IconButtonProps {
   label: string;
   active?: boolean;
   testId?: string;
-  title?: string;
+  briefing?: string;
   onClick: () => void;
   children: React.ReactNode;
 }
 
-function IconButton({ label, active, testId, title, onClick, children }: IconButtonProps) {
+function IconButton({ label, active, testId, briefing, onClick, children }: IconButtonProps) {
   const style = active ? activePillStyle : pillBaseStyle;
   return (
-    <motion.button
-      type="button"
-      onClick={onClick}
-      aria-label={label}
-      aria-pressed={active}
-      title={title ?? label}
-      style={style}
-      data-testid={testId}
-      whileHover={{
-        color: active ? ACCENT_TEAL : COLORS.textPrimary,
-        borderColor: active ? 'rgba(45, 212, 191, 0.65)' : 'rgba(255, 255, 255, 0.12)',
-      }}
-      whileTap={{ scale: 0.97 }}
-      transition={SPRING_SNAPPY}
+    <LiquidGlassTooltip
+      briefing={briefing ?? label}
+      placement="bottom"
+      focusable={false}
     >
-      {children}
-    </motion.button>
+      <motion.button
+        type="button"
+        onClick={onClick}
+        aria-label={label}
+        aria-pressed={active}
+        style={style}
+        data-testid={testId}
+        whileHover={{
+          color: active ? ACCENT_TEAL : COLORS.textPrimary,
+          borderColor: active ? 'rgba(45, 212, 191, 0.65)' : 'rgba(255, 255, 255, 0.12)',
+        }}
+        whileTap={{ scale: 0.97 }}
+        transition={SPRING_SNAPPY}
+      >
+        {children}
+      </motion.button>
+    </LiquidGlassTooltip>
   );
 }
 
@@ -433,7 +439,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           <div role="group" aria-label="Runtime mode" style={segmentStyle}>
             <IconButton
               label="Use replay fixture"
-              title="Replay recorded fixture"
+              briefing="Replay recorded fixture"
               testId="runtime-replay"
               active={runtimeMode === 'replay'}
               onClick={onUseReplay ?? (() => undefined)}
@@ -442,7 +448,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
             </IconButton>
             <IconButton
               label="Start live model stream"
-              title="Start LIVE Pythia-160M stream"
+              briefing="Start LIVE Pythia-160M stream"
               testId="runtime-live"
               active={runtimeMode === 'live'}
               onClick={onStartLive ?? (() => undefined)}
@@ -455,7 +461,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           {onRewind ? (
             <IconButton
               label="Rewind to start"
-              title="Rewind to start (R)"
+              briefing="Rewind to start (R)"
               testId="rewind"
               onClick={onRewind}
             >
@@ -464,7 +470,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           ) : null}
           <IconButton
             label={playing ? 'Pause playback' : 'Start playback'}
-            title="Play / Pause (Space)"
+            briefing="Play / Pause (Space)"
             testId="play-toggle"
             active={playing}
             onClick={onPlayToggle}
@@ -573,7 +579,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           </div>
           <IconButton
             label="Toggle blindspots overlay"
-            title="Blindspots (B)"
+            briefing="Blindspots (B)"
             testId="toggle-blindspots"
             active={showBlindspots}
             onClick={onToggleBlindspots}
@@ -582,7 +588,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           </IconButton>
           <IconButton
             label="Toggle active trace overlay"
-            title="Active trace (T)"
+            briefing="Active trace (T)"
             testId="toggle-activetrace"
             active={showActiveTrace}
             onClick={onToggleActiveTrace}
@@ -622,7 +628,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           {onToggleLeftPanel ? (
             <IconButton
               label={leftPanelOpen ? 'Collapse picture panel' : 'Expand picture panel'}
-              title="Picture panel"
+              briefing="Picture panel"
               testId="toggle-left-panel"
               active={leftPanelOpen}
               onClick={onToggleLeftPanel}
@@ -633,7 +639,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           {onToggleRightPanel ? (
             <IconButton
               label={rightPanelOpen ? 'Collapse controls panel' : 'Expand controls panel'}
-              title="Controls panel"
+              briefing="Controls panel"
               testId="toggle-right-panel"
               active={rightPanelOpen}
               onClick={onToggleRightPanel}
@@ -644,7 +650,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           {onToggleFullscreen ? (
             <IconButton
               label={fullscreen ? 'Exit fullscreen neural net' : 'Fullscreen neural net'}
-              title="Fullscreen (F)"
+              briefing="Fullscreen (F)"
               testId="toggle-fullscreen"
               active={fullscreen}
               onClick={onToggleFullscreen}
@@ -655,7 +661,7 @@ export default function ControlBar(props: ControlBarProps): JSX.Element {
           {onToggleHelp ? (
             <IconButton
               label="Open help and glossary"
-              title="Help / glossary (?)"
+              briefing="Help / glossary (?)"
               testId="toggle-help"
               onClick={onToggleHelp}
             >

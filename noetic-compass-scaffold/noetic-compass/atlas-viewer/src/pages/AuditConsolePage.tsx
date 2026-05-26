@@ -7,6 +7,7 @@ import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummary
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
+import { AuditPopover } from '../components/audit/AuditPopover';
 import {
   buildDefaultProvenanceChips,
   type ProvenanceChip,
@@ -532,19 +533,23 @@ export default function AuditConsolePage() {
         <div style={topGridStyle}>
           <div>
             <p style={eyebrowStyle}>CAS Harness Audit Console</p>
-            <h1
-              className="cas-heading-wave"
-              style={headingWaveStyle}
-              title="Licensed users attach a model, run the audit, and receive ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips."
+            <AuditPopover
+              briefing="Licensed users attach a model, run the audit, and receive ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips."
+              block
+              placement="bottom"
+              width={360}
             >
-              Connect a model. Run a CAS audit. Return a verdict with evidence.
-            </h1>
-            <p
-              style={monikerStyle}
-              title="The console keeps the visible path simple; hover individual panels for the longer operating notes."
+              <h1 className="cas-heading-wave" style={headingWaveStyle}>
+                Connect a model. Run a CAS audit. Return a verdict with evidence.
+              </h1>
+            </AuditPopover>
+            <AuditPopover
+              briefing="The console keeps the visible path simple. Deeper explanations open only when the reviewer asks for them."
+              placement="bottom"
+              width={330}
             >
-              TURN YOUR BLACK BOX INTO A GLASS HOUSE
-            </p>
+              <p style={monikerStyle}>TURN YOUR BLACK BOX INTO A GLASS HOUSE</p>
+            </AuditPopover>
           </div>
 
           <ModelConnectionCard
@@ -570,12 +575,13 @@ export default function AuditConsolePage() {
           <div style={commandHeaderStyle}>
             <div>
               <h2 style={commandTitleStyle}>Audit command center</h2>
-              <p
-                style={commandSubtitleStyle}
-                title="The user path is: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
+              <AuditPopover
+                briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
+                placement="bottom"
+                width={340}
               >
-                Connect. Run. Decide.
-              </p>
+                <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
+              </AuditPopover>
             </div>
             <button
               type="button"
@@ -596,13 +602,15 @@ export default function AuditConsolePage() {
                 sessionError,
               );
               return (
-                <article key={step.label} style={stepStyle(state)} title={step.detail}>
-                  <span style={stepNumberStyle}>{index + 1}</span>
-                  <h2 style={stepLabelStyle}>{step.command}</h2>
-                  <p style={verdictLabelStyle}>{step.label}</p>
-                  <span style={commandBadgeStyle(state)}>
-                    {commandStatusLabel(state)}
-                  </span>
+                <article key={step.label} style={stepStyle(state)}>
+                  <AuditPopover briefing={step.detail} block placement="bottom">
+                    <span style={stepNumberStyle}>{index + 1}</span>
+                    <h2 style={stepLabelStyle}>{step.command}</h2>
+                    <p style={verdictLabelStyle}>{step.label}</p>
+                    <span style={commandBadgeStyle(state)}>
+                      {commandStatusLabel(state)}
+                    </span>
+                  </AuditPopover>
                 </article>
               );
             })}

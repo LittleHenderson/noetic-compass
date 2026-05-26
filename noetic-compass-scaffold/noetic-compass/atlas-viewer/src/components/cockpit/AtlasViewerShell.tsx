@@ -71,6 +71,7 @@ import {
   type LiveRealModeProof,
 } from '../../lib/atlasLiveApi';
 import { GlassPanel } from '../ui/GlassPanel';
+import LiquidGlassTooltip from '../ui/LiquidGlassTooltip';
 import { ACCENT_TEAL, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
 
 interface TraceNeuronCovers {
@@ -1225,36 +1226,45 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       </div>
 
       <div style={narrationStyle} data-testid="narration-strip">
-        <span style={provenanceBadgeStyle} title={liveBadgeTitle}>
-          <span style={provenanceDotStyle} />
-          {liveLabel}
-        </span>
+        <LiquidGlassTooltip briefing={liveBadgeTitle} placement="bottom" focusable={false}>
+          <span style={provenanceBadgeStyle}>
+            <span style={provenanceDotStyle} />
+            {liveLabel}
+          </span>
+        </LiquidGlassTooltip>
         {liveError ? (
           <span style={{ color: '#fb7185', fontWeight: 600 }}>
             {liveError}
           </span>
         ) : null}
-        <span
-          style={proofBadgeStyle(proofConnected)}
-          title={proofTitle}
-          data-testid="live-proof-badge"
-        >
-          {proofLabel}
+        <LiquidGlassTooltip briefing={proofTitle} placement="bottom" focusable={false}>
           <span
-            style={{
-              color: 'rgba(255, 255, 255, 0.78)',
-              textTransform: 'none',
-              fontWeight: 600,
-            }}
-            data-testid="live-proof-reason"
+            style={proofBadgeStyle(proofConnected)}
+            data-testid="live-proof-badge"
           >
-            {proofReason}
+            {proofLabel}
+            <span
+              style={{
+                color: 'rgba(255, 255, 255, 0.78)',
+                textTransform: 'none',
+                fontWeight: 600,
+              }}
+              data-testid="live-proof-reason"
+            >
+              {proofReason}
+            </span>
           </span>
-        </span>
-        <span style={demoBadgeStyle} title="Spatial primitives below are demo fixtures until the live vision-grounding wire-up lands (roadmap item #6 + #8)">
-          <span style={demoDotStyle} />
-          Picture · demo fixture
-        </span>
+        </LiquidGlassTooltip>
+        <LiquidGlassTooltip
+          briefing="Spatial primitives below are demo fixtures until the live vision-grounding wire-up lands (roadmap item #6 + #8)."
+          placement="bottom"
+          focusable={false}
+        >
+          <span style={demoBadgeStyle}>
+            <span style={demoDotStyle} />
+            Picture · demo fixture
+          </span>
+        </LiquidGlassTooltip>
         <span style={narrationKeyStyle}>Now</span>
         <span style={narrationValueStyle}>token {currentTokenIndex + 1}</span>
         {tokenTextNow ? (
@@ -1266,35 +1276,45 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         {inversionRiskNow !== null ? (
           <>
             <span style={narrationKeyStyle}>|</span>
-            <span
-              style={{
-                color: inversionRiskNow >= 0.5 ? '#fb7185' : '#fbbf24',
-                fontFamily: THEME.fontMono,
-              }}
-              title="Live Inversion Scan output from the worker for this token. This is a runtime proxy, not the full semantic inversion theorem."
+            <LiquidGlassTooltip
+              briefing="Live Inversion Scan output from the worker for this token. This is a runtime proxy, not the full semantic inversion theorem."
+              placement="top"
+              focusable={false}
             >
-              inversion risk {inversionRiskNow.toFixed(2)}
-            </span>
+              <span
+                style={{
+                  color: inversionRiskNow >= 0.5 ? '#fb7185' : '#fbbf24',
+                  fontFamily: THEME.fontMono,
+                }}
+              >
+                inversion risk {inversionRiskNow.toFixed(2)}
+              </span>
+            </LiquidGlassTooltip>
           </>
         ) : null}
         {verificationVerdictNow ? (
           <>
             <span style={narrationKeyStyle}>|</span>
-            <span
-              style={{
-                color:
-                  verificationVerdictNow === 'ACCEPT'
-                    ? '#86efac'
-                    : verificationVerdictNow === 'SUPPRESS'
-                      ? '#fb7185'
-                      : '#fde68a',
-                fontFamily: THEME.fontMono,
-              }}
-              title={`Live Verification Stack output for this token. Mode: ${currentFrame?.verification_mode ?? verificationMode}. Score source: ${verificationScoreSource ?? 'not reported'}.`}
+            <LiquidGlassTooltip
+              briefing={`Live Verification Stack output for this token. Mode: ${currentFrame?.verification_mode ?? verificationMode}. Score source: ${verificationScoreSource ?? 'not reported'}.`}
+              placement="top"
+              focusable={false}
             >
-              verifier {verificationVerdictNow.toLowerCase()}
-              {verificationScoreNow !== null ? ` ${verificationScoreNow.toFixed(2)}` : ''}
-            </span>
+              <span
+                style={{
+                  color:
+                    verificationVerdictNow === 'ACCEPT'
+                      ? '#86efac'
+                      : verificationVerdictNow === 'SUPPRESS'
+                        ? '#fb7185'
+                        : '#fde68a',
+                  fontFamily: THEME.fontMono,
+                }}
+              >
+                verifier {verificationVerdictNow.toLowerCase()}
+                {verificationScoreNow !== null ? ` ${verificationScoreNow.toFixed(2)}` : ''}
+              </span>
+            </LiquidGlassTooltip>
           </>
         ) : null}
         {activeStep ? (
@@ -1321,7 +1341,14 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         <motion.aside
           animate={{ flexGrow: leftFlex, opacity: leftPanelOpen ? 1 : 0 }}
           transition={SPRING_GENTLE}
-          style={{ ...columnStyle, flexBasis: 0, flexShrink: 1, pointerEvents: leftPanelOpen ? 'auto' : 'none' }}
+          style={{
+            ...columnStyle,
+            flexBasis: 0,
+            flexShrink: 1,
+            flexGrow: leftFlex,
+            opacity: leftPanelOpen ? 1 : 0,
+            pointerEvents: leftPanelOpen ? 'auto' : 'none',
+          }}
           data-testid="atlas-viewer-left"
           aria-hidden={!leftPanelOpen}
         >
@@ -1451,7 +1478,12 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         <motion.div
           animate={{ flexGrow: centerFlex }}
           transition={SPRING_GENTLE}
-          style={{ ...columnStyle, flexBasis: 0, flexShrink: 1 }}
+          style={{
+            ...columnStyle,
+            flexBasis: 0,
+            flexShrink: 1,
+            flexGrow: centerFlex,
+          }}
           data-testid="atlas-viewer-center"
         >
           <div style={centerSceneWrapperStyle}>
@@ -1473,7 +1505,14 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         <motion.aside
           animate={{ flexGrow: rightFlex, opacity: rightPanelOpen ? 1 : 0 }}
           transition={SPRING_GENTLE}
-          style={{ ...columnStyle, flexBasis: 0, flexShrink: 1, pointerEvents: rightPanelOpen ? 'auto' : 'none' }}
+          style={{
+            ...columnStyle,
+            flexBasis: 0,
+            flexShrink: 1,
+            flexGrow: rightFlex,
+            opacity: rightPanelOpen ? 1 : 0,
+            pointerEvents: rightPanelOpen ? 'auto' : 'none',
+          }}
           data-testid="atlas-viewer-right"
           aria-hidden={!rightPanelOpen}
         >

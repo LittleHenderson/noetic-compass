@@ -42,7 +42,10 @@ describe('BlindspotInterpretation', () => {
     expect(screen.getByTestId('blindspot-confidence').textContent).toBe(
       'Confidence: 72% medium',
     );
-    expect(screen.getByTestId('blindspot-confidence').getAttribute('title')).toMatch(
+    const confidence = screen.getByText('Confidence: 72% medium');
+    expect(confidence).not.toHaveAttribute('title');
+    fireEvent.mouseEnter(confidence);
+    expect(screen.getByRole('tooltip')).toHaveTextContent(
       /cover-level confidence/i,
     );
   });
