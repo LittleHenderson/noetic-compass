@@ -13,7 +13,8 @@ from api.config import settings
 
 # Paths that don't require JWT authentication. Atlas LIVE has its own
 # invite-code/session-token gate because the alpha does not have the full
-# licensing auth flow yet.
+# licensing auth flow yet. CAS Harness audit beta is public only for the
+# reference/session lifecycle; it does not run customer model calls or billing.
 PUBLIC_PATHS = {
     "/health",
     "/health/db",
@@ -23,7 +24,7 @@ PUBLIC_PATHS = {
     "/openapi.json",
     "/redoc",
 }
-PUBLIC_PATH_PREFIXES = ("/atlas/live",)
+PUBLIC_PATH_PREFIXES = ("/atlas/live", "/api/cas-harness/audit")
 
 
 def is_public_path(path: str) -> bool:

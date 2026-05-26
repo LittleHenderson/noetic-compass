@@ -108,6 +108,20 @@ def test_verify_reference_model_target_success_without_secret(client, auth_heade
     assert "bundled reference Evidence Packet" in body["detail"]
 
 
+def test_verify_reference_model_target_public_for_alpha_console(client):
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={"target": {"kind": "demo_reference"}},
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["target"]["model_id"] == "EleutherAI/pythia-160m"
+    assert body["reference_evidence_packet_trace_id"] == "cas_harness_reference_accept_001"
+    assert body["verdict"] is None
+    assert body["confidence"] is None
+
+
 def test_verify_api_endpoint_target_success_does_not_echo_secret_or_verdict(
     client,
     auth_headers,
@@ -485,6 +499,30 @@ def test_reference_target_trace_completes_evidence_backed_accept(client, auth_he
         "COMPLETE",
     ]
     assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
+
+
+def test_reference_target_trace_can_run_from_public_alpha_console(client):
+    verified = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={"target": {"kind": "demo_reference"}},
+    )
+    trace_id = verified.json()["reference_evidence_packet_trace_id"]
+
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "model_id": "EleutherAI/pythia-160m",
+            "evidence_packet_trace_id": trace_id,
+        },
+    )
+    audit_id = created.json()["audit_id"]
+    ran = client.post(f"/api/cas-harness/audit/session/{audit_id}/run")
+
+    assert verified.status_code == 200
+    assert created.status_code == 200
+    assert ran.status_code == 200
+    assert ran.json()["verdict"] == "ACCEPT"
 
 
 def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decision(
