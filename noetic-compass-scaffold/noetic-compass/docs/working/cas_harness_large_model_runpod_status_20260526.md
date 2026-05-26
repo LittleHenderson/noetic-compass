@@ -38,32 +38,67 @@
 - Produced: `layer_activation_summary`, `worker_evidence_manifest`
 - Missing by design: `cas_axis_readout`, `blindspot_overlay`
 
+### GPT-NeoX-20B probe dataset capture
+
+- Model: `EleutherAI/gpt-neox-20b`
+- Status: real model forward completed
+- Scenario source: `/workspace/cas-harness-large-eval/scenarios/augmented_library.json`
+- Labeled scenarios found: `400`
+- Layers captured: 0-43
+- Hidden size: `6144`
+- Feature shape: `[400, 44, 6144]`
+- Output on RunPod: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_augmented_400_layers_0_43.npz`
+- Metadata on RunPod: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_augmented_400_layers_0_43.metadata.json`
+- Local copies:
+  - `C:\tmp\gpt_neox_20b_augmented_400_layers_0_43.npz`
+  - `C:\tmp\gpt_neox_20b_augmented_400_layers_0_43.metadata.json`
+
+### GPT-NeoX-20B heldout readout evaluation
+
+- Evaluator: nearest-centroid readout over real hidden vectors
+- Report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_probe_eval_report.json`
+- Candidate cover map on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_candidate_cover_map.json`
+- Local copies:
+  - `C:\tmp\gpt_neox_20b_probe_eval_report.json`
+  - `C:\tmp\gpt_neox_20b_candidate_cover_map.json`
+
+Metric summary:
+
+| Axis | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain | 11 | 46.84% | 44.30% | 26.96% | 74.68% | Hidden beats weak controls, not text baseline |
+| Drive | 31 | 35.80% | 22.22% | 15.19% | 74.07% | Hidden beats weak controls, not text baseline |
+| Operator | 8 | 31.25% | 16.25% | 8.81% | 83.75% | Hidden beats weak controls, not text baseline |
+
+Interpretation: GPT-NeoX-20B contains some recoverable CAS-labeled structure in the hidden states on this prompt-labeled dataset, but this run does **not** yet establish the stronger "CAS beats text baseline" claim at 20B. The text baseline is very strong because the scenario prompts themselves are label-shaped. The next probe run needs a less label-leaky heldout set or response-conditioned labels, then ablation/intervention.
+
 ## What this proves
 
-This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, and emit a non-fabricated evidence fragment.
+This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for 400 labeled scenarios, and train/evaluate heldout readout probes.
 
-It does **not** yet prove CAS universality at 20B, because the run did not include GPT-NeoX-20B-specific probe weights, cover maps, ablations, matched controls, or verifier merge.
+It does **not** yet prove CAS universality at 20B, because the current heldout readout does not beat the text baseline and the run did not include causal ablations, matched controls over interventions, output-effect prediction, or verifier merge.
 
 ## Why the missing fields are good, not bad
 
-The runner did not invent proof. Because no GPT-NeoX-20B probe weights or cover maps were supplied, it returned:
+The first-pass runner did not invent proof. Because no GPT-NeoX-20B probe weights or cover maps were supplied, it returned:
 
 - missing `cas_axis_readout`
 - missing `blindspot_overlay`
 
-That is the correct anti-fake behavior. The system can say, "we captured real 20B activations," but it cannot yet say, "CAS passed on 20B."
+That is the correct anti-fake behavior. The system can now say, "we captured real 20B activations and got a first heldout readout signal above weak controls." It cannot yet say, "CAS passed on 20B."
 
 ## Next required proof steps for 20B
 
-1. Train or import GPT-NeoX-20B CAS probe weights.
-2. Build GPT-NeoX-20B cover maps for the CAS drives/registers under test.
-3. Run the same 25 alpha scenarios with:
+1. Build a less label-leaky 20B evaluation set, preferably response-conditioned rather than prompt-title-conditioned.
+2. Train stronger GPT-NeoX-20B probe weights from raw hidden vectors.
+3. Convert candidate covers into causal covers through ablation/intervention.
+4. Run the same scenario set with:
    - probe readout
    - ablation/intervention
    - matched random/wrong-drive controls
    - output-effect prediction
    - Evidence Packet merge
-4. Report accepted accuracy, coverage, confidence bands, and failures separately.
+5. Report accepted accuracy, coverage, confidence bands, and failures separately.
 
 ## 100B / 300B status
 
