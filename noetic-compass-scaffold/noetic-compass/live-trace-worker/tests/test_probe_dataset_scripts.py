@@ -34,6 +34,7 @@ def test_load_labeled_scenarios_supports_alpha_schema(tmp_path: Path):
     assert scenarios[0].labels == {
         "domain": "P",
         "drive": "F1",
+        "foundation": "F1|A",
         "register": "A",
         "noetic": "^2/^3",
     }
@@ -43,12 +44,13 @@ def test_extract_labels_supports_augmented_schema():
     labels = extract_labels(
         {
             "prompt": "x",
+            "expected_cas_axes": {"register": "E"},
             "target_domain": "O",
             "target_drives": [6],
             "target_operators": [3],
         }
     )
-    assert labels == {"domain": "O", "drive": "F7", "operator": "^3"}
+    assert labels == {"domain": "O", "drive": "F7", "foundation": "F7|E", "operator": "^3", "register": "E"}
 
 
 def test_evaluate_axis_reports_hidden_vs_controls():

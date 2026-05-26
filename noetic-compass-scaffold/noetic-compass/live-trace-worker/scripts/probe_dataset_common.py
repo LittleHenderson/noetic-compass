@@ -73,6 +73,8 @@ def extract_labels(item: dict[str, Any]) -> dict[str, str]:
     operator = _first_int(item.get("target_operators"))
     if operator is not None:
         labels.setdefault("operator", f"^{operator}")
+    if labels.get("drive") and labels.get("register"):
+        labels.setdefault("foundation", f"{labels['drive']}|{labels['register']}")
     return labels
 
 

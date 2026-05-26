@@ -93,11 +93,55 @@ Top-16 covers did **not** reduce heldout top-1 accuracy on any axis. They did we
 
 Top-256 label-specific covers are the first 20B causal-control signal: replacing the true-label candidate cover dimensions hurt heldout accuracy more than same-size random replacements on domain, drive, and operator. This is promising, but it is still activation-level evidence only. It is **not** a live model-forward intervention, not a verifier verdict, and not a full CAS Harness ACCEPT on GPT-NeoX-20B.
 
+### GPT-NeoX-20B 27H-style forward-pass cover ablation pilot
+
+- Runner: `live-trace-worker/scripts/run_open_weight_cover_ablation.py`
+- Model: `EleutherAI/gpt-neox-20b`
+- Axis: `drive`
+- Cover map: top-256 candidate covers
+- Mode: suppress true-label cover coordinates during a fresh model forward pass, then score the true CAS drive verbalizer likelihood against wrong-cover and matched random-cover controls
+- Pilot output on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_forward_cover_ablation_drive_balanced14.json`
+- Local copy: `C:\tmp\gpt_neox_20b_forward_cover_ablation_drive_balanced14.json`
+
+Metric summary:
+
+| Run | Rows | Drive balance | Mean target drop | Mean random drop | Target minus random | Target beats random mean | Honest read |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | --- |
+| First pilot | 6 | skewed mostly F7 | -0.0479 | +0.0730 | -0.1209 | 1/6 | Not usable as a balanced result |
+| Balanced pilot | 14 | 2 rows each for F1-F7 | -0.0244 | +0.0140 | -0.0383 | 5/14 | Current cover does not pass 27H-style forward intervention |
+
+The balanced pilot is a genuine 20B forward-pass intervention, but it is **not** a positive 27H result. Suppressing the current candidate drive covers did not reduce the true-drive verbalizer likelihood more than matched random controls. The likely next move is not to overclaim the result; it is to improve the cover/rubric pair:
+
+1. build per-drive balanced scenarios specifically designed for 27H output scoring,
+2. test alternative cover sizes and selection methods,
+3. score against multiple verbalizers per drive instead of one sentence,
+4. only then rerun the 27H forward-pass gate.
+
+### Original-results audit correction
+
+Re-reading the original CAS Harness notes changes the 20B priority. The strongest original Pythia evidence was **not** drive-only forward steering. It was the 28-Foundation chain:
+
+- 28 Foundations readout: Pythia-160M `78.6%`, `+28.9 pp` over text baseline, p about `1e-95`.
+- Foundation subspace ablation: `78.6% -> 3.57%`, exact `1/28` chance.
+- Random same-rank ablations: clean/null.
+- 28-Foundation lacunarity: `0.021`, far cleaner than the noisier Noetic axis.
+- 40-Element readout: `89.8%`, `+39.7 pp` over text baseline.
+- Likelihood-tier eta-to-epsilon bridge: Pythia-160M `+0.283`, Pythia-1B `+0.554`.
+
+The same notes also record null or bounded results that must not be confused with the closed claim:
+
+- Stage 6.6 noetic generation steering: NULL.
+- Stage 7.3 drive-subspace generation steering: NULL, p = `1.0`.
+- Stage 7.LA late-layer additive steering: NULL.
+- Stage 27H / 27I prefix-plus-neuron steering: diagnostic/null at Pythia-160M scale, not free-form generation control.
+
+So the current 20B drive-only forward pilot is a useful negative diagnostic, but it is **not** the proper replication of the original success. The correct 20B proof path is to build a real 28-Foundation dataset (`drive x register`), train/evaluate 28-Foundation readouts, run matched ablation/intervention against those covers, and only then attempt the Foundation-level likelihood/output bridge.
+
 ## What this proves
 
 This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for 400 labeled scenarios, train/evaluate heldout readout probes, and run an activation-level matched-control ablation over candidate covers.
 
-It does **not** yet prove CAS universality at 20B, because the current causal-control evidence is activation-level only and does not yet include live forward-pass interventions, output-effect prediction, or verifier merge.
+It does **not** yet prove CAS universality at 20B. The current evidence includes heldout readout, activation-level matched-control ablation, and a first genuine 27H-style forward-pass pilot. The forward-pass pilot is currently null against random controls, so the 20B behavioral intervention claim remains open.
 
 ## Why the missing fields are good, not bad
 
@@ -111,15 +155,18 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 ## Next required proof steps for 20B
 
 1. Keep the canonical CAS colloquialisms; do not treat approved English aliases as contamination.
-2. Train stronger GPT-NeoX-20B probe weights from raw hidden vectors.
-3. Convert candidate covers into causal covers through live forward-pass ablation/intervention.
-4. Run the same scenario set with:
+2. Build or recover a balanced 28-Foundation scenario set (`F1..F7 x T/A/f/E`). The current 400-row 20B dataset has domain, drive, and operator labels only; it does **not** contain register/foundation labels in the captured metadata.
+3. Capture GPT-NeoX-20B hidden states for that Foundation-labeled set.
+4. Train/evaluate the 28-Foundation readout and compare it against weak controls plus the canonical-English surface baseline.
+5. Run Foundation-level subspace/cover ablation with matched random and wrong-Foundation controls.
+6. Only after the Foundation readout/intervention gate passes, run the 27H-style likelihood/output bridge at the Foundation level.
+7. Run the same scenario set with:
    - probe readout
    - ablation/intervention
-   - matched random/wrong-drive controls
+   - matched random/wrong-label controls
    - output-effect prediction
    - Evidence Packet merge
-5. Report accepted accuracy, coverage, confidence bands, and failures separately.
+8. Report accepted accuracy, coverage, confidence bands, and failures separately.
 
 ## 100B / 300B status
 
