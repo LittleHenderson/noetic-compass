@@ -119,6 +119,7 @@ class FleetJobExecutionResult:
     produced_outputs: tuple[str, ...]
     missing_outputs: tuple[str, ...] = ()
     error_message: str | None = None
+    evidence_payload: dict[str, Any] | None = None
 
     @property
     def status(self) -> Literal["completed", "failed"]:
@@ -421,6 +422,8 @@ def write_evidence_fragment(
         "produced_outputs": list(result.produced_outputs),
         "missing_outputs": list(result.missing_outputs),
     }
+    if result.evidence_payload is not None:
+        payload["evidence_payload"] = result.evidence_payload
     path = config.evidence_dir / f"{job.job_id}.evidence-fragment.json"
     path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
     return fragment_ref
@@ -460,6 +463,7 @@ def _parse_command_result(path: Path, job: FleetJob) -> FleetJobExecutionResult:
     payload = json.loads(path.read_text(encoding="utf-8"))
     produced = tuple(_clean_list(payload.get("produced_outputs", [])))
     missing = tuple(_clean_list(payload.get("missing_outputs", [])))
+    evidence_payload = payload.get("evidence_payload") if isinstance(payload.get("evidence_payload"), dict) else None
     error = payload.get("error_message")
     error_message = str(error).strip() if error is not None and str(error).strip() else None
     if error_message:
@@ -467,6 +471,7 @@ def _parse_command_result(path: Path, job: FleetJob) -> FleetJobExecutionResult:
             produced_outputs=produced,
             missing_outputs=missing or tuple(item for item in job.expected_outputs if item not in produced),
             error_message=error_message,
+            evidence_payload=evidence_payload,
         )
     if not produced:
         return FleetJobExecutionResult(
@@ -484,6 +489,7 @@ def _parse_command_result(path: Path, job: FleetJob) -> FleetJobExecutionResult:
     return FleetJobExecutionResult(
         produced_outputs=produced,
         missing_outputs=missing or tuple(item for item in job.expected_outputs if item not in produced),
+        evidence_payload=evidence_payload,
     )
 
 
