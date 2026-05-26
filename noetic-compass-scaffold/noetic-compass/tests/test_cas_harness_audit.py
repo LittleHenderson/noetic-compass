@@ -69,10 +69,135 @@ def _complete_stage21_packet(*, action: str = "allow", accepted: bool = True) ->
 def test_audit_session_route_registered(client):
     openapi = client.get("/openapi.json").json()
 
+    assert "/api/cas-harness/audit/target/verify" in openapi["paths"]
     assert "/api/cas-harness/audit/session" in openapi["paths"]
     assert "/api/cas-harness/audit/session/{audit_id}/status" in openapi["paths"]
     assert "/api/cas-harness/audit/session/{audit_id}/run" in openapi["paths"]
     assert "/api/cas-harness/audit/sessions" in openapi["paths"]
+
+
+def test_verify_reference_model_target_success_without_secret(client, auth_headers):
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={"target": {"kind": "demo_reference"}},
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["connection_id"].startswith("cas-target-")
+    assert body["connection_state"] == "CONNECTED"
+    assert body["model_status"] == "CONNECTED"
+    assert body["can_run_audit"] is True
+    assert body["target"] == {
+        "kind": "demo_reference",
+        "provider": "cas_harness_reference",
+        "model_id": "EleutherAI/pythia-160m",
+        "endpoint_url": None,
+        "credential_mode": "none",
+        "timeout_ms": 10000,
+    }
+    assert body["provenance_chip"]["id"] == "model_proof"
+    assert body["provenance_chip"]["status"] == "verified"
+    assert body["verdict"] is None
+    assert body["confidence"] is None
+    assert body["evidence_packet_trace_id"] is None
+    assert body["atlas_deep_link"] is None
+    assert "No external model call" in body["detail"]
+
+
+def test_verify_api_endpoint_target_success_does_not_echo_secret_or_verdict(
+    client,
+    auth_headers,
+):
+    secret = "sk-test-secret-should-not-echo"
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={
+            "target": {
+                "kind": "api_endpoint",
+                "provider": "openai",
+                "model_id": "gpt-4.1-mini",
+                "endpoint_url": "https://model.example/v1/chat/completions",
+                "api_key": secret,
+            }
+        },
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    assert secret not in resp.text
+    body = resp.json()
+    assert body["connection_state"] == "CONFIGURED"
+    assert body["model_status"] == "READY"
+    assert body["target"]["credential_mode"] == "ephemeral_secret"
+    assert body["target"]["endpoint_url"] == "https://model.example/v1/chat/completions"
+    assert body["provenance_chip"]["status"] == "present"
+    assert body["verdict"] is None
+    assert body["confidence"] is None
+    assert "did not call the model" in body["detail"]
+
+
+def test_verify_reference_model_target_rejects_credentials(client, auth_headers):
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={
+            "target": {
+                "kind": "demo_reference",
+                "credential_ref": "prod-openai-key",
+            }
+        },
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "demo_reference target must not include credentials" in resp.text
+
+
+def test_verify_model_target_requires_target(client, auth_headers):
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={},
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "target" in resp.text
+
+
+def test_verify_model_target_rejects_bad_endpoint_url(client, auth_headers):
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={
+            "target": {
+                "kind": "api_endpoint",
+                "model_id": "custom-model",
+                "endpoint_url": "ftp://model.example/v1/chat/completions",
+                "allow_unauthenticated": True,
+            }
+        },
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "endpoint_url" in resp.text
+
+
+def test_verify_model_target_rejects_incomplete_endpoint_config(client, auth_headers):
+    resp = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={
+            "target": {
+                "kind": "api_endpoint",
+                "model_id": "custom-model",
+                "endpoint_url": "https://model.example/v1/chat/completions",
+            }
+        },
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "credential_ref, api_key, or allow_unauthenticated=true" in resp.text
 
 
 def test_create_audit_session_returns_stored_draft_without_fake_result(client, auth_headers):

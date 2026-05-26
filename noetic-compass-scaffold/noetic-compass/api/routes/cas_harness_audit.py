@@ -7,10 +7,14 @@ until a real audit runner is wired behind it.
 
 from __future__ import annotations
 
+from datetime import UTC, datetime
+import hashlib
+import json
 from typing import Literal
+from urllib.parse import urlparse
 
 from fastapi import APIRouter, HTTPException
-from pydantic import BaseModel, Field, HttpUrl, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, Field, HttpUrl, SecretStr, field_validator, model_validator
 
 from api.routes.evidence import build_packet_for_trace
 from api.services.cas_harness_audit_sessions import (
@@ -37,6 +41,10 @@ AuditStatus = Literal[
     "FAILED",
 ]
 ModelStatus = Literal["NOT_CONNECTED_MOCK"]
+ModelTargetKind = Literal["demo_reference", "api_endpoint"]
+ModelConnectionState = Literal["CONNECTED", "CONFIGURED"]
+VerifiedModelStatus = Literal["CONNECTED", "READY"]
+CredentialMode = Literal["none", "credential_ref", "ephemeral_secret"]
 Verdict = Literal["ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"]
 ProofChipId = Literal[
     "model_proof",
@@ -47,6 +55,10 @@ ProofChipId = Literal[
     "packet_proof",
 ]
 ProofChipStatus = Literal["verified", "present", "missing", "failed", "unavailable"]
+
+REFERENCE_TARGET_MODEL_ID = "EleutherAI/pythia-160m"
+REFERENCE_TARGET_PROVIDER = "cas_harness_reference"
+_LOCAL_HTTP_HOSTS = {"localhost", "127.0.0.1", "::1"}
 
 
 class ProvenanceChip(BaseModel):
@@ -67,6 +79,114 @@ class VerifierDecision(BaseModel):
     confidence: float = Field(..., ge=0.0, le=1.0)
     source: str = Field(..., min_length=1, max_length=160)
     reason: str = Field(..., min_length=1, max_length=500)
+
+
+class ModelTargetConfig(BaseModel):
+    """User-submitted model target config for the Audit Console connect step."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    kind: ModelTargetKind = Field(
+        default="api_endpoint",
+        description="Use demo_reference for the built-in safe reference target; api_endpoint for customer targets.",
+    )
+    provider: str | None = Field(default=None, min_length=1, max_length=120)
+    model_id: str | None = Field(default=None, min_length=1, max_length=200)
+    endpoint_url: HttpUrl | None = None
+    credential_ref: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=200,
+        description="Reference to a server-side credential; raw secrets are not echoed or persisted.",
+    )
+    api_key: SecretStr | None = Field(
+        default=None,
+        min_length=1,
+        max_length=4096,
+        description="Optional one-request secret for future live probing; never returned by this endpoint.",
+    )
+    allow_unauthenticated: bool = Field(
+        default=False,
+        description="Set true only for public or locally controlled endpoints that do not require credentials.",
+    )
+    timeout_ms: int = Field(default=10_000, ge=100, le=60_000)
+
+    @field_validator("provider", "model_id", "credential_ref")
+    @classmethod
+    def strip_optional_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        stripped = value.strip()
+        return stripped or None
+
+    @field_validator("api_key")
+    @classmethod
+    def strip_optional_secret(cls, value: SecretStr | None) -> SecretStr | None:
+        if value is None:
+            return None
+        return value if value.get_secret_value().strip() else None
+
+    @model_validator(mode="after")
+    def validate_target_config(self) -> "ModelTargetConfig":
+        if self.kind == "demo_reference":
+            if self.endpoint_url is not None:
+                raise ValueError("demo_reference target must not include endpoint_url")
+            if self.credential_ref is not None or self.api_key is not None:
+                raise ValueError("demo_reference target must not include credentials")
+            if self.model_id and self.model_id != REFERENCE_TARGET_MODEL_ID:
+                raise ValueError(
+                    f"demo_reference target only supports {REFERENCE_TARGET_MODEL_ID}"
+                )
+            return self
+
+        if self.endpoint_url is None:
+            raise ValueError("api_endpoint target requires endpoint_url")
+        if not self.model_id:
+            raise ValueError("api_endpoint target requires model_id")
+        if self.credential_ref is not None and self.api_key is not None:
+            raise ValueError("Provide either credential_ref or api_key, not both")
+        if (
+            self.credential_ref is None
+            and self.api_key is None
+            and not self.allow_unauthenticated
+        ):
+            raise ValueError(
+                "api_endpoint target requires credential_ref, api_key, "
+                "or allow_unauthenticated=true"
+            )
+        if not _is_allowed_endpoint_url(str(self.endpoint_url)):
+            raise ValueError("endpoint_url must use https unless it targets localhost")
+        return self
+
+
+class ModelTargetVerificationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    target: ModelTargetConfig = Field(..., description="Model target to validate for CAS Harness.")
+
+
+class VerifiedModelTarget(BaseModel):
+    kind: ModelTargetKind
+    provider: str
+    model_id: str
+    endpoint_url: str | None
+    credential_mode: CredentialMode
+    timeout_ms: int
+
+
+class ModelTargetVerificationResponse(BaseModel):
+    connection_id: str
+    connection_state: ModelConnectionState
+    model_status: VerifiedModelStatus
+    can_run_audit: bool
+    target: VerifiedModelTarget
+    detail: str = Field(..., min_length=1, max_length=1000)
+    checked_at: str
+    provenance_chip: ProvenanceChip
+    verdict: Verdict | None = None
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    evidence_packet_trace_id: str | None = None
+    atlas_deep_link: str | None = None
 
 
 class AuditSessionRequest(BaseModel):
@@ -147,6 +267,17 @@ class AuditSessionListResponse(BaseModel):
     sessions: list[AuditSessionResponse]
 
 
+@router.post("/target/verify", response_model=ModelTargetVerificationResponse)
+async def verify_model_target(
+    req: ModelTargetVerificationRequest,
+) -> ModelTargetVerificationResponse:
+    """Validate a model target without producing or implying an audit verdict."""
+    target = req.target
+    if target.kind == "demo_reference":
+        return _reference_target_response(target)
+    return _api_endpoint_target_response(target)
+
+
 @router.post("/session", response_model=AuditSessionResponse)
 async def create_audit_session(req: AuditSessionRequest) -> AuditSessionResponse:
     """Validate the CAS Harness audit contract and create a stored M1 session."""
@@ -196,3 +327,95 @@ def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
     if verifier_decision is not None:
         payload["verifier_decision"] = verifier_decision.to_dict()
     return payload
+
+
+def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerificationResponse:
+    verified = VerifiedModelTarget(
+        kind="demo_reference",
+        provider=REFERENCE_TARGET_PROVIDER,
+        model_id=REFERENCE_TARGET_MODEL_ID,
+        endpoint_url=None,
+        credential_mode="none",
+        timeout_ms=target.timeout_ms,
+    )
+    return ModelTargetVerificationResponse(
+        connection_id=_connection_id_for(verified),
+        connection_state="CONNECTED",
+        model_status="CONNECTED",
+        can_run_audit=True,
+        target=verified,
+        detail=(
+            "CAS Harness reference target verified locally. No external model call, "
+            "credential, Evidence Packet, or audit verdict was created."
+        ),
+        checked_at=_utc_now(),
+        provenance_chip=ProvenanceChip(
+            id="model_proof",
+            name="Model proof",
+            status="verified",
+            detail=(
+                f"Reference target {REFERENCE_TARGET_MODEL_ID} is available for "
+                "non-secret Audit Console demos. This is target verification only."
+            ),
+        ),
+    )
+
+
+def _api_endpoint_target_response(target: ModelTargetConfig) -> ModelTargetVerificationResponse:
+    verified = VerifiedModelTarget(
+        kind="api_endpoint",
+        provider=target.provider or "custom_api",
+        model_id=target.model_id or "",
+        endpoint_url=str(target.endpoint_url) if target.endpoint_url else None,
+        credential_mode=_credential_mode_for(target),
+        timeout_ms=target.timeout_ms,
+    )
+    return ModelTargetVerificationResponse(
+        connection_id=_connection_id_for(verified),
+        connection_state="CONFIGURED",
+        model_status="READY",
+        can_run_audit=True,
+        target=verified,
+        detail=(
+            "Model target configuration is valid for CAS Harness beta. The backend "
+            "did not call the model and did not compute a verdict or confidence."
+        ),
+        checked_at=_utc_now(),
+        provenance_chip=ProvenanceChip(
+            id="model_proof",
+            name="Model proof",
+            status="present",
+            detail=(
+                "Endpoint target configuration passed schema validation. Live model "
+                "probing and Evidence Packet generation are separate audit-runner steps."
+            ),
+        ),
+    )
+
+
+def _credential_mode_for(target: ModelTargetConfig) -> CredentialMode:
+    if target.credential_ref is not None:
+        return "credential_ref"
+    if target.api_key is not None:
+        return "ephemeral_secret"
+    return "none"
+
+
+def _connection_id_for(target: VerifiedModelTarget) -> str:
+    payload = target.model_dump(mode="json")
+    digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+    return f"cas-target-{digest[:16]}"
+
+
+def _is_allowed_endpoint_url(endpoint_url: str) -> bool:
+    parsed = urlparse(endpoint_url)
+    if parsed.scheme == "https":
+        return True
+    if parsed.scheme != "http":
+        return False
+    hostname = (parsed.hostname or "").lower()
+    return hostname in _LOCAL_HTTP_HOSTS or hostname.endswith(".localhost")
+
+
+def _utc_now() -> str:
+    return datetime.now(UTC).isoformat()

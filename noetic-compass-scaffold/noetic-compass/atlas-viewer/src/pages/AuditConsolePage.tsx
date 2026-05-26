@@ -15,6 +15,7 @@ import {
 import {
   createCasHarnessAuditSession,
   startCasHarnessAuditSession,
+  verifyCasHarnessModelTarget,
   type CasHarnessAuditSession,
 } from '../lib/casHarnessAuditApi';
 import {
@@ -35,6 +36,11 @@ interface AuditTargetConfig {
   provider: string;
   endpointLabel: string;
   scenarioText: string;
+  endpointUrl?: string | null;
+  connectionId: string;
+  checkedAt: string;
+  statusDetail: string;
+  canRunAudit: boolean;
 }
 
 const SELECTED_MODULES = [
@@ -49,9 +55,14 @@ const SELECTED_MODULES = [
 const M1_REFERENCE_TARGET: AuditTargetConfig = {
   modelId: 'EleutherAI/pythia-160m',
   provider: 'CAS Harness reference path',
-  endpointLabel: '/api/cas-harness/audit/session',
+  endpointLabel: '/api/cas-harness/audit/target/verify',
   scenarioText:
     'Reference audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
+  endpointUrl: null,
+  connectionId: 'cas-target-reference-pending',
+  checkedAt: '',
+  statusDetail: 'Reference target has not been verified by the backend yet.',
+  canRunAudit: false,
 };
 
 const AUDIT_STEPS: AuditStep[] = [
@@ -466,14 +477,20 @@ export default function AuditConsolePage() {
   const [target, setTarget] = useState<AuditTargetConfig | null>(null);
   const [session, setSession] = useState<CasHarnessAuditSession | null>(null);
   const [sessionError, setSessionError] = useState<string | null>(null);
+  const [targetError, setTargetError] = useState<string | null>(null);
+  const [isTargetConnecting, setIsTargetConnecting] = useState(false);
   const [isAuditRunning, setIsAuditRunning] = useState(false);
 
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
-  const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning, sessionError);
-  const commandButtonEnabled = !isAuditRunning && (!isConfigured || !session?.verdict);
+  const activeError = targetError ?? sessionError;
+  const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning || isTargetConnecting, activeError);
+  const commandButtonEnabled =
+    !isAuditRunning && !isTargetConnecting && (!isConfigured || !session?.verdict);
   const commandButtonLabel = !isConfigured
-    ? 'Prepare target'
+    ? isTargetConnecting
+      ? 'Connecting target'
+      : 'Prepare target'
     : isAuditRunning
       ? 'Running audit'
       : session?.verdict
@@ -481,26 +498,55 @@ export default function AuditConsolePage() {
         : 'Run CAS audit';
   const showVerdictExplainer = Boolean(session?.verdict || session?.verifier_decision);
 
-  const connectReferenceTarget = () => {
-    setTarget(M1_REFERENCE_TARGET);
+  const connectReferenceTarget = async () => {
     setSession(null);
     setSessionError(null);
+    setTargetError(null);
+    setIsTargetConnecting(true);
+    try {
+      const verification = await verifyCasHarnessModelTarget({
+        target: { kind: 'demo_reference' },
+      });
+      setTarget({
+        ...M1_REFERENCE_TARGET,
+        modelId: verification.target.model_id,
+        provider: verification.target.kind === 'demo_reference'
+          ? 'CAS Harness reference path'
+          : verification.target.provider,
+        endpointUrl: verification.target.endpoint_url,
+        connectionId: verification.connection_id,
+        checkedAt: verification.checked_at,
+        statusDetail: verification.detail,
+        canRunAudit: verification.can_run_audit,
+      });
+    } catch (error) {
+      setTarget(null);
+      setTargetError(
+        error instanceof Error ? error.message : 'Model target verification failed',
+      );
+    } finally {
+      setIsTargetConnecting(false);
+    }
   };
 
   const disconnectTarget = () => {
     setTarget(null);
     setSession(null);
     setSessionError(null);
+    setTargetError(null);
+    setIsTargetConnecting(false);
     setIsAuditRunning(false);
   };
 
   const runAudit = async () => {
     if (!target) return;
     setSessionError(null);
+    setTargetError(null);
     setIsAuditRunning(true);
     try {
       const created = await createCasHarnessAuditSession({
         model_id: target.modelId,
+        endpoint_url: target.endpointUrl ?? undefined,
         audit_mode: 'BALANCED',
         scenario_text: target.scenarioText,
         selected_modules: SELECTED_MODULES,
@@ -519,7 +565,7 @@ export default function AuditConsolePage() {
 
   const runPrimaryCommand = () => {
     if (!isConfigured) {
-      connectReferenceTarget();
+      void connectReferenceTarget();
       return;
     }
     void runAudit();
@@ -553,18 +599,34 @@ export default function AuditConsolePage() {
           </div>
 
           <ModelConnectionCard
-            status={isAuditRunning ? 'connecting' : isConfigured ? 'connected' : 'disconnected'}
+            status={
+              isTargetConnecting
+                ? 'connecting'
+                : targetError
+                  ? 'error'
+                  : isConfigured
+                    ? 'connected'
+                    : 'disconnected'
+            }
             modelName={target?.modelId ?? 'No model connected'}
             provider={target?.provider ?? 'License/API connector pending'}
             endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
             statusDetail={
-              isConfigured
-                ? 'Target ready. Final verdict requires an Evidence Packet and verifier decision.'
-                : 'Connect a supported target before running a CAS Harness audit.'
+              targetError
+                ? targetError
+                : isConfigured
+                  ? target.statusDetail
+                  : 'Connect a supported target before running a CAS Harness audit.'
             }
-            lastChecked={session ? 'Backend session accepted' : undefined}
+            lastChecked={
+              session
+                ? 'Backend session accepted'
+                : target?.checkedAt
+                  ? 'Target verified'
+                  : undefined
+            }
             isAuditRunning={isAuditRunning}
-            canRunAudit={isConfigured}
+            canRunAudit={Boolean(target?.canRunAudit)}
             onConnect={connectReferenceTarget}
             onDisconnect={disconnectTarget}
             onRunAudit={runAudit}
@@ -621,7 +683,7 @@ export default function AuditConsolePage() {
           <AuditSessionProgress
             status={lifecycleStatus}
             detail={progressDetail(lifecycleStatus, isConfigured)}
-            errorMessage={sessionError}
+            errorMessage={activeError}
           />
           {session ? (
             <AuditSessionSummaryCard

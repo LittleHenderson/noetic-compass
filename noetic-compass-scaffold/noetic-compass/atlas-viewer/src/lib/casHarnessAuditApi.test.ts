@@ -6,8 +6,10 @@ import {
   getCasHarnessAuditSessionStatus,
   listCasHarnessAuditSessions,
   parseAuditSessionResponse,
+  parseModelTargetVerificationResponse,
   resolveCasHarnessAuditBaseUrl,
   startCasHarnessAuditSession,
+  verifyCasHarnessModelTarget,
 } from './casHarnessAuditApi';
 
 function jsonResponse(
@@ -64,6 +66,37 @@ function pendingSession(overrides: Record<string, unknown> = {}): Record<string,
   };
 }
 
+function targetVerification(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    connection_id: 'cas-target-demo',
+    connection_state: 'CONNECTED',
+    model_status: 'CONNECTED',
+    can_run_audit: true,
+    target: {
+      kind: 'demo_reference',
+      provider: 'cas_harness_reference',
+      model_id: 'EleutherAI/pythia-160m',
+      endpoint_url: null,
+      credential_mode: 'none',
+      timeout_ms: 10000,
+    },
+    detail:
+      'CAS Harness reference target verified locally. No verdict was created.',
+    checked_at: '2026-05-26T10:00:00Z',
+    provenance_chip: {
+      id: 'model_proof',
+      name: 'Model proof',
+      status: 'verified',
+      detail: 'Reference target verified for target connection only.',
+    },
+    verdict: null,
+    confidence: null,
+    evidence_packet_trace_id: null,
+    atlas_deep_link: null,
+    ...overrides,
+  };
+}
+
 describe('casHarnessAuditApi', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
@@ -108,6 +141,100 @@ describe('casHarnessAuditApi', () => {
       },
     });
     expect(JSON.parse(String((init as RequestInit).body))).toEqual(payload);
+  });
+
+  it('verifies the built-in demo reference target without fabricating a verdict', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(targetVerification()));
+
+    const result = await verifyCasHarnessModelTarget(
+      { target: { kind: 'demo_reference' } },
+      {
+        baseUrl: '/api/cas-harness/audit/',
+        fetchImpl,
+      },
+    );
+
+    expect(result.connection_id).toBe('cas-target-demo');
+    expect(result.connection_state).toBe('CONNECTED');
+    expect(result.model_status).toBe('CONNECTED');
+    expect(result.target).toMatchObject({
+      kind: 'demo_reference',
+      model_id: 'EleutherAI/pythia-160m',
+      credential_mode: 'none',
+    });
+    expect(result.verdict).toBeNull();
+    expect(result.confidence).toBeNull();
+    expect(result.provenance_chip).toMatchObject({
+      id: 'model_proof',
+      status: 'verified',
+      statusLabel: 'Verified',
+    });
+    expect(fetchImpl).toHaveBeenCalledOnce();
+    const [url, init] = fetchImpl.mock.calls[0];
+    expect(url).toBe('/api/cas-harness/audit/target/verify');
+    expect(init).toMatchObject({
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    expect(JSON.parse(String((init as RequestInit).body))).toEqual({
+      target: { kind: 'demo_reference' },
+    });
+  });
+
+  it('verifies an API endpoint target using a credential reference', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse(targetVerification({
+        connection_id: 'cas-target-api',
+        connection_state: 'CONFIGURED',
+        model_status: 'READY',
+        target: {
+          kind: 'api_endpoint',
+          provider: 'customer_gateway',
+          model_id: 'customer/model-a',
+          endpoint_url: 'https://models.example/v1/chat/completions',
+          credential_mode: 'credential_ref',
+          timeout_ms: 15000,
+        },
+        provenance_chip: {
+          id: 'model_proof',
+          name: 'Model proof',
+          status: 'present',
+          detail: 'Endpoint target configuration passed schema validation.',
+        },
+      })),
+    );
+
+    const result = await verifyCasHarnessModelTarget(
+      {
+        target: {
+          kind: 'api_endpoint',
+          provider: 'customer_gateway',
+          model_id: 'customer/model-a',
+          endpoint_url: 'https://models.example/v1/chat/completions',
+          credential_ref: 'cred_live_customer_model_a',
+          timeout_ms: 15000,
+        },
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+
+    expect(result.connection_id).toBe('cas-target-api');
+    expect(result.connection_state).toBe('CONFIGURED');
+    expect(result.model_status).toBe('READY');
+    expect(result.target).toEqual({
+      kind: 'api_endpoint',
+      provider: 'customer_gateway',
+      model_id: 'customer/model-a',
+      endpoint_url: 'https://models.example/v1/chat/completions',
+      credential_mode: 'credential_ref',
+      timeout_ms: 15000,
+    });
+    expect(result.provenance_chip.status).toBe('present');
+    expect(result.verdict).toBeNull();
+    expect(result.confidence).toBeNull();
   });
 
   it('gets session status with an encoded audit id', async () => {
@@ -184,6 +311,35 @@ describe('casHarnessAuditApi', () => {
 
     expect(parsed.verdict).toBeNull();
     expect(parsed.confidence).toBeNull();
+  });
+
+  it('rejects target verification responses that pretend to include a verdict or confidence', () => {
+    expect(() => parseModelTargetVerificationResponse(targetVerification({
+      verdict: 'ACCEPT',
+      confidence: null,
+    }))).toThrow(/target verification must not return a verdict/);
+
+    expect(() => parseModelTargetVerificationResponse(targetVerification({
+      verdict: null,
+      confidence: 0.88,
+    }))).toThrow(/target verification must not return confidence/);
+  });
+
+  it('rejects malformed target verification payloads', () => {
+    expect(() => parseModelTargetVerificationResponse(targetVerification({
+      target: {
+        kind: 'api_endpoint',
+        provider: 'customer_gateway',
+        model_id: 'customer/model-a',
+        endpoint_url: 'https://models.example/v1/chat/completions',
+        credential_mode: 'raw_key_echoed',
+        timeout_ms: 15000,
+      },
+    }))).toThrow(/Unsupported CAS Harness credential mode/);
+
+    expect(() => parseModelTargetVerificationResponse(targetVerification({
+      can_run_audit: 'yes',
+    }))).toThrow(/can_run_audit must be boolean/);
   });
 
   it('treats missing verdict and confidence as null, not as ACCEPT or zero', () => {
@@ -263,6 +419,20 @@ describe('casHarnessAuditApi', () => {
 
     expect(resolveCasHarnessAuditBaseUrl()).toBe(
       'https://noetic-compass-api.onrender.com/api/cas-harness/audit',
+    );
+  });
+
+  it('uses the derived hosted audit API URL for target verification', async () => {
+    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://noetic-compass-api.onrender.com/atlas');
+    const fetchImpl = vi.fn(async () => jsonResponse(targetVerification()));
+
+    await verifyCasHarnessModelTarget(
+      { target: { kind: 'demo_reference' } },
+      { fetchImpl },
+    );
+
+    expect(fetchImpl.mock.calls[0][0]).toBe(
+      'https://noetic-compass-api.onrender.com/api/cas-harness/audit/target/verify',
     );
   });
 
