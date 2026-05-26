@@ -54,6 +54,7 @@ def extract_labels(item: dict[str, Any]) -> dict[str, str]:
         domain = _clean_label(expected.get("domain"))
         drive = _clean_label(expected.get("drive"))
         register = _clean_label(expected.get("register"))
+        foundation = _normalise_foundation(expected.get("foundation"))
         noetic = _clean_label(expected.get("noetic"))
         if domain and _single_or_combo_domain(domain):
             labels["domain"] = domain
@@ -61,6 +62,8 @@ def extract_labels(item: dict[str, Any]) -> dict[str, str]:
             labels["drive"] = drive
         if register in REGISTER_VALUES:
             labels["register"] = register
+        if foundation:
+            labels["foundation"] = foundation
         if noetic:
             labels["noetic"] = noetic
 
@@ -140,3 +143,19 @@ def _clean_label(value: Any) -> str | None:
         return None
     text = str(value).strip()
     return text or None
+
+
+def _normalise_foundation(value: Any) -> str | None:
+    text = _clean_label(value)
+    if not text:
+        return None
+    if "|" in text:
+        drive, register = text.split("|", 1)
+        if drive.startswith("F") and register in REGISTER_VALUES:
+            return f"{drive}|{register}"
+    if len(text) >= 3 and text[0] == "F":
+        drive = text[:-1]
+        register = text[-1]
+        if drive.startswith("F") and register in REGISTER_VALUES:
+            return f"{drive}|{register}"
+    return None

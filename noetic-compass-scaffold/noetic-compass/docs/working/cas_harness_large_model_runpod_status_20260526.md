@@ -157,7 +157,7 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 ## Next required proof steps for 20B
 
 1. Keep the canonical CAS colloquialisms; do not treat approved English aliases as contamination.
-2. Build or recover a balanced 28-Foundation scenario set (`F1..F7 x T/A/f/E`). The current 400-row 20B dataset has domain, drive, and operator labels only; it does **not** contain register/foundation labels in the captured metadata.
+2. Build or recover a balanced 28-Foundation scenario set (`F1..F7 x T/A/f/E`). The current 400-row 20B dataset has domain, drive, and operator labels only; it does **not** contain register/foundation labels in the captured metadata. A first concrete scenario source now exists at `live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json` with 280 rows, 10 per Foundation class.
 3. Capture GPT-NeoX-20B hidden states for that Foundation-labeled set.
 4. Train/evaluate the 28-Foundation readout and compare it against weak controls plus the canonical-English surface baseline.
 5. Run Foundation-level subspace/cover ablation with matched random and wrong-Foundation controls.

@@ -40,6 +40,20 @@ def test_load_labeled_scenarios_supports_alpha_schema(tmp_path: Path):
     }
 
 
+def test_extract_labels_normalises_explicit_foundation_compact_label():
+    labels = extract_labels(
+        {
+            "prompt": "x",
+            "expected_cas_axes": {
+                "drive": "F2",
+                "register": "f",
+                "foundation": "F2f",
+            },
+        }
+    )
+    assert labels == {"drive": "F2", "foundation": "F2|f", "register": "f"}
+
+
 def test_extract_labels_supports_augmented_schema():
     labels = extract_labels(
         {
