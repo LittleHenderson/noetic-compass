@@ -137,6 +137,8 @@ The same notes also record null or bounded results that must not be confused wit
 
 So the current 20B drive-only forward pilot is a useful negative diagnostic, but it is **not** the proper replication of the original success. The correct 20B proof path is to build a real 28-Foundation dataset (`drive x register`), train/evaluate 28-Foundation readouts, run matched ablation/intervention against those covers, and only then attempt the Foundation-level likelihood/output bridge.
 
+Concrete protocol: `docs/working/cas_harness_foundation28_large_model_protocol_20260526.md`.
+
 ## What this proves
 
 This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for 400 labeled scenarios, train/evaluate heldout readout probes, and run an activation-level matched-control ablation over candidate covers.
