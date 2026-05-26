@@ -1,8 +1,9 @@
 """Verify deployed CAS Harness fleet-executor gates.
 
-This script intentionally does not require real model weights. It validates the
-control-plane contract that a large-model distributed audit cannot move forward
-without worker registration, job leases, and Evidence Packet fragment receipts.
+This script is a control-plane verifier only. It intentionally does not load,
+probe, or run inference through a real 300B model. It validates the deployed API
+contract that a large-model distributed audit cannot move forward without worker
+registration, job leases, and Evidence Packet fragment receipts.
 """
 
 from __future__ import annotations
@@ -16,12 +17,39 @@ from urllib.request import Request, urlopen
 
 
 DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
+DEFAULT_WORKERS = 25
+
+
+class GateFailure(AssertionError):
+    """Raised when a named deployment gate fails."""
+
+    def __init__(self, gate: str, message: str) -> None:
+        super().__init__(f"{gate}: {message}")
+        self.gate = gate
+        self.message = message
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
-    parser.add_argument("--workers", type=int, default=25)
+    parser = argparse.ArgumentParser(
+        description=(
+            "Verify deployed CAS Harness fleet control-plane gates. "
+            "This does not perform real 300B model inference."
+        )
+    )
+    parser.add_argument(
+        "--base-url",
+        default=DEFAULT_BASE_URL,
+        help=f"Deployed noetic-compass-api base URL. Default: {DEFAULT_BASE_URL}",
+    )
+    parser.add_argument(
+        "--workers",
+        type=int,
+        default=DEFAULT_WORKERS,
+        help=(
+            "Requested worker count for the control-plane test. "
+            f"Default: {DEFAULT_WORKERS}."
+        ),
+    )
     args = parser.parse_args()
 
     base = args.base_url.rstrip("/")
@@ -29,7 +57,13 @@ def main() -> int:
     if worker_count < 2:
         raise SystemExit("--workers must be at least 2 for the partial-merge negative test")
 
-    print(f"CAS Harness fleet deploy verification: {base}")
+    print("CAS Harness deployed fleet verification")
+    print(f"Base URL: {base}")
+    print(f"Requested workers: {worker_count}")
+    print("Scope: control-plane gates only; no 300B model weights or inference are exercised.")
+    print()
+
+    step(1, "Create a 300B-scale distributed session")
     session = post_json(
         base,
         "/api/cas-harness/audit/distributed/session",
@@ -44,39 +78,77 @@ def main() -> int:
         },
     )
     audit_id = session["audit_id"]
-    require(session["total_workers"] == worker_count, f"expected {worker_count} workers")
-    require(session["verdict"] is None, "distributed session must not invent verdict")
-    print(f"created distributed session {audit_id} with {session['total_workers']} workers")
+    require_gate(
+        "create-distributed-session",
+        session["total_workers"] == worker_count,
+        f"expected {worker_count} workers, got {session['total_workers']}",
+    )
+    require_gate(
+        "create-distributed-session",
+        session["verdict"] is None,
+        f"distributed session invented verdict {session['verdict']!r}",
+    )
+    ok(f"created control-plane session {audit_id} with {session['total_workers']} worker assignments")
 
+    step(2, "Dispatch worker assignments")
     dispatch = post_json(base, f"/api/cas-harness/audit/distributed/session/{audit_id}/dispatch", None)
-    require(dispatch["status"] == "DISPATCHED", "dispatch should mark assignments dispatched")
-    print("dispatch ok")
+    require_gate(
+        "dispatch-workers",
+        dispatch["status"] == "DISPATCHED",
+        f"expected DISPATCHED, got {dispatch['status']!r}",
+    )
+    ok("assignments dispatched")
 
+    step(3, "Prepare fleet jobs from assignments")
     fleet = post_json(base, f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/prepare", None)
-    require(fleet["total_jobs"] == worker_count, f"expected {worker_count} fleet jobs")
-    require(fleet["verifier_gate_status"] == "waiting_for_workers", "fleet should wait for workers")
-    print("fleet prepare ok")
+    require_gate(
+        "prepare-fleet-jobs",
+        fleet["total_jobs"] == worker_count,
+        f"expected {worker_count} fleet jobs, got {fleet['total_jobs']}",
+    )
+    require_gate(
+        "prepare-fleet-jobs",
+        fleet["verifier_gate_status"] == "waiting_for_workers",
+        f"expected waiting_for_workers, got {fleet['verifier_gate_status']!r}",
+    )
+    ok("fleet jobs prepared; verifier is correctly waiting for workers")
 
+    step(4, "Reject an unregistered worker lease")
     first_assignment = dispatch["worker_evidence"][0]
     unregistered = post_json_expect_error(
         base,
         f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/lease",
         {"worker_id": first_assignment["worker_id"]},
+        gate="block-unregistered-lease",
         expected_status=409,
     )
-    require("Worker must register before leasing jobs" in unregistered, "unregistered lease must fail")
-    print("unregistered lease blocked")
+    require_gate(
+        "block-unregistered-lease",
+        "Worker must register before leasing jobs" in unregistered,
+        f"unexpected error body: {unregistered}",
+    )
+    ok("unregistered worker lease blocked")
 
+    step(5, "Register one worker and lease one job")
     register_worker(base, first_assignment, dispatch["plan"]["model_id"])
     leased = post_json(
         base,
         f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/lease",
         {"worker_id": first_assignment["worker_id"]},
     )
-    require(leased["status"] == "leased", "registered worker should lease one assigned job")
-    require(leased["lease_token"], "leased job must include lease token")
-    print(f"leased {leased['job_id']}")
+    require_gate(
+        "lease-registered-worker",
+        leased["status"] == "leased",
+        f"expected leased status, got {leased['status']!r}",
+    )
+    require_gate(
+        "lease-registered-worker",
+        bool(leased["lease_token"]),
+        "leased job did not include a lease token",
+    )
+    ok(f"leased {leased['job_id']}")
 
+    step(6, "Submit one Evidence Packet fragment receipt")
     receipt = post_json(
         base,
         f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/{leased['job_id']}/receipt",
@@ -87,23 +159,44 @@ def main() -> int:
             "evidence_packet_fragment_ref": f"deploy-check-fragment://{leased['job_id']}",
         },
     )
-    require(receipt["completed_fragments"] == 1, "one fragment should be complete")
-    require(receipt["verifier_gate_status"] == "waiting_for_workers", "remaining workers should still block")
-    print("one receipt accepted; verifier still blocked")
+    require_gate(
+        "submit-fragment-receipt",
+        receipt["completed_fragments"] == 1,
+        f"expected one completed fragment, got {receipt['completed_fragments']}",
+    )
+    require_gate(
+        "submit-fragment-receipt",
+        receipt["verifier_gate_status"] == "waiting_for_workers",
+        f"expected waiting_for_workers, got {receipt['verifier_gate_status']!r}",
+    )
+    ok("one fragment accepted; verifier remains blocked until all workers report")
 
+    step(7, "Prove partial fleet merge is blocked")
     blocked_merge = post_json_expect_error(
         base,
         f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/merge",
         None,
+        gate="block-partial-fleet-merge",
         expected_status=409,
     )
-    require("every assigned job returns a receipt" in blocked_merge, "partial fleet merge must be blocked")
-    print("partial merge blocked")
+    require_gate(
+        "block-partial-fleet-merge",
+        "every assigned job returns a receipt" in blocked_merge,
+        f"unexpected error body: {blocked_merge}",
+    )
+    ok("partial fleet merge blocked")
 
+    step(8, "Confirm distributed merge still cannot fake ACCEPT")
     merged_distributed = post_json(base, f"/api/cas-harness/audit/distributed/session/{audit_id}/merge", None)
-    require(merged_distributed["verdict"] is None, "distributed merge must not accept before all receipts")
-    print("distributed merge still has no ACCEPT")
-    print("PASS: fleet deploy contract is enforcing registration, leases, receipts, and no fake ACCEPT")
+    require_gate(
+        "block-fake-accept",
+        merged_distributed["verdict"] is None,
+        f"distributed merge invented verdict {merged_distributed['verdict']!r}",
+    )
+    ok("distributed merge still has no ACCEPT")
+    print()
+    print("PASS: deployed fleet control plane enforces registration, leases, receipts, and no fake ACCEPT.")
+    print("PASS SCOPE: control-plane verified only; no real 300B inference was claimed or performed.")
     return 0
 
 
@@ -139,15 +232,28 @@ def post_json_expect_error(
     path: str,
     payload: dict[str, Any] | None,
     *,
+    gate: str,
     expected_status: int,
 ) -> str:
     try:
         post_json(base, path, payload)
     except HTTPError as exc:
         body = exc.read().decode("utf-8")
-        require(exc.code == expected_status, f"expected HTTP {expected_status}, got {exc.code}: {body}")
+        require_gate(
+            gate,
+            exc.code == expected_status,
+            f"expected HTTP {expected_status}, got {exc.code}: {body}",
+        )
         return body
-    raise AssertionError(f"expected HTTP {expected_status} for {path}")
+    raise GateFailure(gate, f"expected HTTP {expected_status} for {path}")
+
+
+def step(number: int, message: str) -> None:
+    print(f"[{number:02d}] {message}")
+
+
+def ok(message: str) -> None:
+    print(f"     OK - {message}")
 
 
 def require(condition: bool, message: str) -> None:
@@ -155,9 +261,18 @@ def require(condition: bool, message: str) -> None:
         raise AssertionError(message)
 
 
+def require_gate(gate: str, condition: bool, message: str) -> None:
+    if not condition:
+        raise GateFailure(gate, message)
+
+
 if __name__ == "__main__":
     try:
         raise SystemExit(main())
+    except GateFailure as exc:
+        print(f"FAIL GATE: {exc.gate}", file=sys.stderr)
+        print(f"DETAIL: {exc.message}", file=sys.stderr)
+        raise SystemExit(1)
     except Exception as exc:
         print(f"FAIL: {exc}", file=sys.stderr)
         raise SystemExit(1)
