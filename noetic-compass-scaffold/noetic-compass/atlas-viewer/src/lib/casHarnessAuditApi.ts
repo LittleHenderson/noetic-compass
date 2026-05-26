@@ -57,6 +57,53 @@ export type CasHarnessModelStatus =
   | 'NOT_CONNECTED_MOCK'
   | string;
 
+export type CasHarnessModelTargetKind = 'demo_reference' | 'api_endpoint';
+export type CasHarnessModelConnectionState = 'CONNECTED' | 'CONFIGURED';
+export type CasHarnessVerifiedModelStatus = 'CONNECTED' | 'READY';
+export type CasHarnessCredentialMode =
+  | 'none'
+  | 'credential_ref'
+  | 'ephemeral_secret';
+
+export interface CasHarnessModelTargetConfig {
+  kind: CasHarnessModelTargetKind;
+  provider?: string | null;
+  model_id?: string | null;
+  endpoint_url?: string | null;
+  credential_ref?: string | null;
+  api_key?: string | null;
+  allow_unauthenticated?: boolean;
+  timeout_ms?: number;
+}
+
+export interface CasHarnessModelTargetVerificationRequest {
+  target: CasHarnessModelTargetConfig;
+}
+
+export interface CasHarnessVerifiedModelTarget {
+  kind: CasHarnessModelTargetKind;
+  provider: string;
+  model_id: string;
+  endpoint_url: string | null;
+  credential_mode: CasHarnessCredentialMode;
+  timeout_ms: number;
+}
+
+export interface CasHarnessModelTargetVerification {
+  connection_id: string;
+  connection_state: CasHarnessModelConnectionState;
+  model_status: CasHarnessVerifiedModelStatus;
+  can_run_audit: boolean;
+  target: CasHarnessVerifiedModelTarget;
+  detail: string;
+  checked_at: string;
+  provenance_chip: ProvenanceChip;
+  verdict: null;
+  confidence: null;
+  evidence_packet_trace_id: string | null;
+  atlas_deep_link: string | null;
+}
+
 export interface CasHarnessAuditSessionRequest {
   model_id?: string | null;
   endpoint_url?: string | null;
@@ -149,6 +196,19 @@ export async function createCasHarnessAuditSession(
     signal: options?.signal,
   }, options);
   return parseAuditSessionResponse(response);
+}
+
+export async function verifyCasHarnessModelTarget(
+  request: CasHarnessModelTargetVerificationRequest,
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessModelTargetVerification> {
+  const response = await requestJson(`${baseUrl(options)}/target/verify`, {
+    method: 'POST',
+    headers: jsonHeaders(),
+    body: JSON.stringify(request),
+    signal: options?.signal,
+  }, options);
+  return parseModelTargetVerificationResponse(response);
 }
 
 export async function getCasHarnessAuditSessionStatus(
@@ -253,6 +313,42 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
   };
 }
 
+export function parseModelTargetVerificationResponse(
+  raw: unknown,
+): CasHarnessModelTargetVerification {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness target verification response was not an object');
+  }
+
+  const verdict = parseNullableVerdict(raw.verdict);
+  if (verdict !== null) {
+    throw new CasHarnessAuditApiError('CAS Harness target verification must not return a verdict');
+  }
+  const confidence = parseNullableConfidence(raw.confidence);
+  if (confidence !== null) {
+    throw new CasHarnessAuditApiError('CAS Harness target verification must not return confidence');
+  }
+
+  if (typeof raw.can_run_audit !== 'boolean') {
+    throw new CasHarnessAuditApiError('CAS Harness target verification can_run_audit must be boolean');
+  }
+
+  return {
+    connection_id: requiredString(raw.connection_id, 'connection_id'),
+    connection_state: parseModelConnectionState(raw.connection_state),
+    model_status: parseVerifiedModelStatus(raw.model_status),
+    can_run_audit: raw.can_run_audit,
+    target: parseVerifiedModelTarget(raw.target),
+    detail: requiredString(raw.detail, 'detail'),
+    checked_at: requiredString(raw.checked_at, 'checked_at'),
+    provenance_chip: parseProvenanceChip(raw.provenance_chip),
+    verdict: null,
+    confidence: null,
+    evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
+    atlas_deep_link: nullableString(raw.atlas_deep_link),
+  };
+}
+
 async function requestJson(
   url: string,
   init: RequestInit,
@@ -339,6 +435,36 @@ function parseAuditMode(raw: unknown): CasHarnessAuditMode {
   return 'BALANCED';
 }
 
+function parseModelConnectionState(raw: unknown): CasHarnessModelConnectionState {
+  if (raw === 'CONNECTED' || raw === 'CONFIGURED') return raw;
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness model connection state: ${String(raw)}`,
+  );
+}
+
+function parseVerifiedModelStatus(raw: unknown): CasHarnessVerifiedModelStatus {
+  if (raw === 'CONNECTED' || raw === 'READY') return raw;
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness verified model status: ${String(raw)}`,
+  );
+}
+
+function parseModelTargetKind(raw: unknown): CasHarnessModelTargetKind {
+  if (raw === 'demo_reference' || raw === 'api_endpoint') return raw;
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness model target kind: ${String(raw)}`,
+  );
+}
+
+function parseCredentialMode(raw: unknown): CasHarnessCredentialMode {
+  if (raw === 'none' || raw === 'credential_ref' || raw === 'ephemeral_secret') {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness credential mode: ${String(raw)}`,
+  );
+}
+
 function parseNullableVerdict(raw: unknown): AuditVerdict | null {
   if (raw === null || raw === undefined) return null;
   if (isAuditVerdict(raw)) return raw;
@@ -351,6 +477,24 @@ function parseNullableConfidence(raw: unknown): number | null {
     return raw;
   }
   throw new CasHarnessAuditApiError('CAS Harness audit confidence must be null or a number in [0, 1]');
+}
+
+function parseVerifiedModelTarget(raw: unknown): CasHarnessVerifiedModelTarget {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness verified model target was malformed');
+  }
+  const timeoutMs = raw.timeout_ms;
+  if (typeof timeoutMs !== 'number' || !Number.isInteger(timeoutMs) || timeoutMs <= 0) {
+    throw new CasHarnessAuditApiError('CAS Harness verified model target timeout_ms must be positive integer');
+  }
+  return {
+    kind: parseModelTargetKind(raw.kind),
+    provider: requiredString(raw.provider, 'target.provider'),
+    model_id: requiredString(raw.model_id, 'target.model_id'),
+    endpoint_url: nullableString(raw.endpoint_url),
+    credential_mode: parseCredentialMode(raw.credential_mode),
+    timeout_ms: timeoutMs,
+  };
 }
 
 function parseProvenanceChip(raw: unknown): ProvenanceChip {
