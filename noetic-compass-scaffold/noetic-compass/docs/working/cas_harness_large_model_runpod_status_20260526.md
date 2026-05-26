@@ -66,17 +66,17 @@ Metric summary:
 
 | Axis | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
 | --- | ---: | ---: | ---: | ---: | ---: | --- |
-| Domain | 11 | 46.84% | 44.30% | 26.96% | 74.68% | Hidden beats weak controls, not text baseline |
-| Drive | 31 | 35.80% | 22.22% | 15.19% | 74.07% | Hidden beats weak controls, not text baseline |
-| Operator | 8 | 31.25% | 16.25% | 8.81% | 83.75% | Hidden beats weak controls, not text baseline |
+| Domain | 11 | 46.84% | 44.30% | 26.96% | 74.68% | Hidden beats weak controls; canonical English surface aliases are stronger here |
+| Drive | 31 | 35.80% | 22.22% | 15.19% | 74.07% | Hidden beats weak controls; canonical English surface aliases are stronger here |
+| Operator | 8 | 31.25% | 16.25% | 8.81% | 83.75% | Hidden beats weak controls; canonical English surface aliases are stronger here |
 
-Interpretation: GPT-NeoX-20B contains some recoverable CAS-labeled structure in the hidden states on this prompt-labeled dataset, but this run does **not** yet establish the stronger "CAS beats text baseline" claim at 20B. The text baseline is very strong because the scenario prompts themselves are label-shaped. The next probe run needs a less label-leaky heldout set or response-conditioned labels, then ablation/intervention.
+Interpretation: GPT-NeoX-20B contains recoverable CAS-labeled structure in the hidden states on this canonical-English dataset. The strong text baseline should not be described as "label leakage" by default: CAS colloquialisms are approved English aliases for the axes, so a text baseline doing well is evidence that the surface aliases are predictive. What this run does **not** yet establish is the stronger causal claim: that a localized internal CAS subspace or cover is load-bearing after accounting for the surface text signal. The next proof step is ablation/intervention against the candidate covers, not removing the canonical colloquialisms.
 
 ## What this proves
 
 This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for 400 labeled scenarios, and train/evaluate heldout readout probes.
 
-It does **not** yet prove CAS universality at 20B, because the current heldout readout does not beat the text baseline and the run did not include causal ablations, matched controls over interventions, output-effect prediction, or verifier merge.
+It does **not** yet prove CAS universality at 20B, because the current heldout readout has not isolated a causal internal mechanism beyond the canonical English surface signal, and the run did not include causal ablations, matched controls over interventions, output-effect prediction, or verifier merge.
 
 ## Why the missing fields are good, not bad
 
@@ -89,7 +89,7 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 
 ## Next required proof steps for 20B
 
-1. Build a less label-leaky 20B evaluation set, preferably response-conditioned rather than prompt-title-conditioned.
+1. Keep the canonical CAS colloquialisms; do not treat approved English aliases as contamination.
 2. Train stronger GPT-NeoX-20B probe weights from raw hidden vectors.
 3. Convert candidate covers into causal covers through ablation/intervention.
 4. Run the same scenario set with:
