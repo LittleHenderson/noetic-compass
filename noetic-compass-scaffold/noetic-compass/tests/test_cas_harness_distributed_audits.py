@@ -71,6 +71,9 @@ def test_merge_blocks_until_all_worker_receipts_exist(client):
         "/api/cas-harness/audit/distributed/session",
         json=_scale_payload(20, 8),
     ).json()
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{created['audit_id']}/dispatch",
+    )
 
     merged = client.post(
         f"/api/cas-harness/audit/distributed/session/{created['audit_id']}/merge",
@@ -91,6 +94,9 @@ def test_completed_worker_receipts_merge_but_do_not_fabricate_accept(client):
         json=_scale_payload(20, 8),
     ).json()
     audit_id = created["audit_id"]
+    created = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit_id}/dispatch",
+    ).json()
     expected_outputs = created["worker_evidence"][0]["expected_outputs"]
 
     for worker in created["worker_evidence"]:
@@ -122,6 +128,9 @@ def test_missing_worker_output_routes_to_human_review(client):
         json=_scale_payload(20, 8),
     ).json()
     audit_id = created["audit_id"]
+    created = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit_id}/dispatch",
+    ).json()
     expected_outputs = created["worker_evidence"][0]["expected_outputs"]
 
     for index, worker in enumerate(created["worker_evidence"]):
@@ -153,6 +162,9 @@ def test_failed_worker_routes_to_human_review(client):
         json=_scale_payload(20, 8),
     ).json()
     audit_id = created["audit_id"]
+    created = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit_id}/dispatch",
+    ).json()
     worker = created["worker_evidence"][0]
 
     resp = client.post(
@@ -189,6 +201,17 @@ def test_300b_audit_requires_worker_fleet_receipts_before_completion(client):
     assert body["total_workers"] >= 25
     assert body["verdict"] is None
 
+    premature_merge = client.post(
+        f"/api/cas-harness/audit/distributed/session/{body['audit_id']}/merge",
+    )
+
+    assert premature_merge.status_code == 409
+    assert "Dispatch Probe Worker assignments" in premature_merge.text
+
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{body['audit_id']}/dispatch",
+    )
+
     merged = client.post(
         f"/api/cas-harness/audit/distributed/session/{body['audit_id']}/merge",
     ).json()
@@ -196,6 +219,62 @@ def test_300b_audit_requires_worker_fleet_receipts_before_completion(client):
     assert merged["status"] == "MERGE_PENDING"
     assert merged["verdict"] is None
     assert "Waiting for worker evidence" in merged["merge_reason"]
+
+
+def test_300b_audit_can_request_larger_worker_fleet(client):
+    created = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            **_scale_payload(300, 160),
+            "minimum_worker_count": 300,
+        },
+    )
+
+    assert created.status_code == 200
+    body = created.json()
+    assert body["total_workers"] == 300
+    assert body["plan"]["recommended_worker_count"] == 300
+    assert body["worker_evidence"][0]["shard_id"].startswith("layer-")
+    assert body["worker_evidence"][0]["layer_start"] == body["worker_evidence"][0]["layer_end"]
+
+
+def test_worker_receipts_are_rejected_before_dispatch(client):
+    created = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(20, 8),
+    ).json()
+    worker = created["worker_evidence"][0]
+
+    resp = client.post(
+        f"/api/cas-harness/audit/distributed/session/{created['audit_id']}/worker/{worker['worker_id']}/evidence",
+        json={
+            "produced_outputs": worker["expected_outputs"],
+            "evidence_packet_ref": f"packet://{worker['worker_id']}",
+        },
+    )
+
+    assert resp.status_code == 409
+    assert "Dispatch Probe Worker assignments" in resp.text
+
+
+def test_completed_worker_receipt_requires_evidence_packet_ref(client):
+    created = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(20, 8),
+    ).json()
+    audit_id = created["audit_id"]
+    created = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit_id}/dispatch",
+    ).json()
+    worker = created["worker_evidence"][0]
+
+    resp = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit_id}/worker/{worker['worker_id']}/evidence",
+        json={"produced_outputs": worker["expected_outputs"]},
+    )
+
+    assert resp.status_code == 422
+    assert "evidence_packet_ref" in resp.text
 
 
 def test_distributed_endpoint_rejects_black_box_customer_models(client):

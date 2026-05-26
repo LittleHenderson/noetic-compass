@@ -31,6 +31,10 @@ DistributedMergeStatus = Literal["pending", "partial", "complete", "failed"]
 DistributedVerdict = Literal["ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"]
 
 
+class DistributedAuditStateError(ValueError):
+    """Raised when a distributed audit transition would overstate readiness."""
+
+
 @dataclass
 class WorkerEvidenceRecord:
     worker_id: str
@@ -168,9 +172,15 @@ def mark_worker_running(audit_id: str, worker_id: str) -> DistributedAuditRecord
     record = get_distributed_audit(audit_id)
     if record is None:
         return None
+    if record.status == "PLANNED":
+        raise DistributedAuditStateError("Dispatch Probe Worker assignments before marking a worker running.")
+    if record.status in {"COMPLETE", "FAILED"}:
+        raise DistributedAuditStateError("Completed distributed audit sessions cannot be marked running.")
     worker = _worker(record, worker_id)
     if worker is None:
         raise KeyError(worker_id)
+    if worker.worker_status == "queued":
+        raise DistributedAuditStateError("Worker has not been assigned; dispatch the audit first.")
     worker.worker_status = "running"
     worker.updated_at = datetime.now(UTC).isoformat()
     record.status = "RUNNING"
@@ -192,9 +202,19 @@ def record_worker_evidence(
     record = get_distributed_audit(audit_id)
     if record is None:
         return None
+    if record.status == "PLANNED":
+        raise DistributedAuditStateError("Dispatch Probe Worker assignments before accepting evidence receipts.")
+    if record.status in {"COMPLETE", "FAILED"}:
+        raise DistributedAuditStateError("Completed distributed audit sessions cannot accept new worker evidence.")
     worker = _worker(record, worker_id)
     if worker is None:
         raise KeyError(worker_id)
+    if worker.worker_status == "queued":
+        raise DistributedAuditStateError("Worker has not been assigned; dispatch the audit first.")
+    if worker_status == "completed" and not (evidence_packet_ref or "").strip():
+        raise DistributedAuditStateError("Completed worker evidence requires an evidence_packet_ref.")
+    if worker_status == "failed" and not (error_message or "").strip():
+        raise DistributedAuditStateError("Failed worker evidence requires an error_message.")
 
     produced = tuple(_dedupe_nonempty(produced_outputs))
     explicit_missing = set(_dedupe_nonempty(missing_outputs or []))
@@ -220,6 +240,8 @@ def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
     record = get_distributed_audit(audit_id)
     if record is None:
         return None
+    if record.status == "PLANNED":
+        raise DistributedAuditStateError("Dispatch Probe Worker assignments before merging worker evidence.")
 
     now = datetime.now(UTC).isoformat()
     failed = [worker.worker_id for worker in record.worker_evidence if worker.worker_status == "failed"]
@@ -229,6 +251,11 @@ def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
         if worker.worker_status != "completed"
     ]
     missing = _missing_outputs(record.worker_evidence)
+    missing_packet_refs = [
+        worker.worker_id
+        for worker in record.worker_evidence
+        if worker.worker_status == "completed" and not worker.evidence_packet_ref
+    ]
 
     record.updated_at = now
     if failed:
@@ -244,6 +271,16 @@ def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
         record.verdict = None
         record.confidence = None
         record.merge_reason = f"Waiting for worker evidence from: {', '.join(incomplete)}."
+        return record
+    if missing_packet_refs:
+        record.status = "COMPLETE"
+        record.merge_status = "partial"
+        record.verdict = "FLAG_FOR_HUMAN_REVIEW"
+        record.confidence = None
+        record.merge_reason = (
+            "Distributed audit completed with worker receipts missing Evidence Packet refs; "
+            f"cannot ACCEPT. Missing refs: {', '.join(missing_packet_refs)}."
+        )
         return record
     if missing:
         record.status = "COMPLETE"

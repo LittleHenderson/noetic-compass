@@ -224,6 +224,8 @@ export type CasHarnessDistributedWorkerStatus =
   | 'completed'
   | 'failed';
 
+export type CasHarnessDistributedMergeVerdict = 'FLAG_FOR_HUMAN_REVIEW';
+
 export interface CasHarnessDistributedWorkerEvidence {
   worker_id: string;
   layer_start: number;
@@ -244,7 +246,7 @@ export interface CasHarnessDistributedAudit {
   plan_id: string;
   status: CasHarnessDistributedAuditStatus;
   merge_status: CasHarnessDistributedMergeStatus;
-  verdict: AuditVerdict | null;
+  verdict: CasHarnessDistributedMergeVerdict | null;
   confidence: number | null;
   evidence_packet_trace_id: string | null;
   merge_reason: string;
@@ -518,24 +520,32 @@ export function parseDistributedAuditResponse(raw: unknown): CasHarnessDistribut
   if (!workerEvidence) {
     throw new CasHarnessAuditApiError('CAS Harness distributed audit worker_evidence must be an array');
   }
+  const status = parseDistributedAuditStatus(raw.status);
+  const mergeStatus = parseDistributedMergeStatus(raw.merge_status);
+  const readyWorkers = requiredInteger(raw.ready_workers, 'ready_workers');
+  const failedWorkers = requiredInteger(raw.failed_workers, 'failed_workers');
+  const totalWorkers = requiredInteger(raw.total_workers, 'total_workers');
+  const missingOutputs = parseStringArray(raw.missing_outputs, 'missing_outputs');
+  assertDistributedAuditWorkerCounts(workerEvidence, readyWorkers, failedWorkers, totalWorkers);
+  assertDistributedMergeCompleteness(workerEvidence, mergeStatus, missingOutputs);
 
   return {
     audit_id: requiredString(raw.audit_id, 'audit_id'),
     plan_id: requiredString(raw.plan_id, 'plan_id'),
-    status: parseDistributedAuditStatus(raw.status),
-    merge_status: parseDistributedMergeStatus(raw.merge_status),
-    verdict: parseNullableVerdict(raw.verdict),
-    confidence: parseNullableConfidence(raw.confidence),
+    status,
+    merge_status: mergeStatus,
+    verdict: parseNullableDistributedMergeVerdict(raw.verdict),
+    confidence: parseNullableDistributedMergeConfidence(raw.confidence),
     evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
     merge_reason: requiredString(raw.merge_reason, 'merge_reason'),
     created_at: requiredString(raw.created_at, 'created_at'),
     updated_at: requiredString(raw.updated_at, 'updated_at'),
     plan: parseScalePlanResponse(raw.plan),
     worker_evidence: workerEvidence,
-    ready_workers: requiredInteger(raw.ready_workers, 'ready_workers'),
-    failed_workers: requiredInteger(raw.failed_workers, 'failed_workers'),
-    total_workers: requiredInteger(raw.total_workers, 'total_workers'),
-    missing_outputs: parseStringArray(raw.missing_outputs, 'missing_outputs'),
+    ready_workers: readyWorkers,
+    failed_workers: failedWorkers,
+    total_workers: totalWorkers,
+    missing_outputs: missingOutputs,
   };
 }
 
@@ -672,18 +682,38 @@ function parseDistributedWorkerEvidence(raw: unknown): CasHarnessDistributedWork
   if (layerEnd < layerStart) {
     throw new CasHarnessAuditApiError('CAS Harness distributed worker layer range was malformed');
   }
+  const expectedOutputs = parseStringArray(raw.expected_outputs, 'worker_evidence[].expected_outputs');
+  const producedOutputs = parseStringArray(raw.produced_outputs, 'worker_evidence[].produced_outputs');
+  const missingOutputs = parseStringArray(raw.missing_outputs, 'worker_evidence[].missing_outputs');
+  const workerStatus = parseDistributedWorkerStatus(raw.worker_status);
+  const evidencePacketRef = nullableStringStrict(
+    raw.evidence_packet_ref,
+    'worker_evidence[].evidence_packet_ref',
+  );
+  const errorMessage = nullableStringStrict(raw.error_message, 'worker_evidence[].error_message');
+  assertWorkerOutputReceipts(expectedOutputs, producedOutputs, missingOutputs);
+  if (workerStatus === 'completed' && evidencePacketRef === null) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness completed distributed worker evidence requires evidence_packet_ref',
+    );
+  }
+  if (workerStatus === 'failed' && errorMessage === null) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness failed distributed worker evidence requires error_message',
+    );
+  }
   return {
     worker_id: requiredString(raw.worker_id, 'worker_evidence[].worker_id'),
     layer_start: layerStart,
     layer_end: layerEnd,
     shard_id: requiredString(raw.shard_id, 'worker_evidence[].shard_id'),
     assigned_methods: parseStringArray(raw.assigned_methods, 'worker_evidence[].assigned_methods'),
-    expected_outputs: parseStringArray(raw.expected_outputs, 'worker_evidence[].expected_outputs'),
-    worker_status: parseDistributedWorkerStatus(raw.worker_status),
-    produced_outputs: parseStringArray(raw.produced_outputs, 'worker_evidence[].produced_outputs'),
-    missing_outputs: parseStringArray(raw.missing_outputs, 'worker_evidence[].missing_outputs'),
-    evidence_packet_ref: nullableString(raw.evidence_packet_ref),
-    error_message: nullableString(raw.error_message),
+    expected_outputs: expectedOutputs,
+    worker_status: workerStatus,
+    produced_outputs: producedOutputs,
+    missing_outputs: missingOutputs,
+    evidence_packet_ref: evidencePacketRef,
+    error_message: errorMessage,
     updated_at: requiredString(raw.updated_at, 'worker_evidence[].updated_at'),
   };
 }
@@ -739,6 +769,101 @@ function parseDistributedWorkerStatus(raw: unknown): CasHarnessDistributedWorker
     return raw;
   }
   throw new CasHarnessAuditApiError(`Unsupported CAS Harness distributed worker status: ${String(raw)}`);
+}
+
+function parseNullableDistributedMergeVerdict(
+  raw: unknown,
+): CasHarnessDistributedMergeVerdict | null {
+  if (raw === null || raw === undefined) return null;
+  if (raw === 'FLAG_FOR_HUMAN_REVIEW') return raw;
+  throw new CasHarnessAuditApiError(
+    'CAS Harness distributed merge must not return ACCEPT/SUPPRESS; final verdict requires verifier decision layer',
+  );
+}
+
+function parseNullableDistributedMergeConfidence(raw: unknown): null {
+  if (raw === null || raw === undefined) return null;
+  throw new CasHarnessAuditApiError(
+    'CAS Harness distributed merge confidence must be null until verifier decision layer computes confidence',
+  );
+}
+
+function assertWorkerOutputReceipts(
+  expectedOutputs: string[],
+  producedOutputs: string[],
+  missingOutputs: string[],
+): void {
+  const expected = new Set(expectedOutputs);
+  for (const output of producedOutputs) {
+    if (!expected.has(output)) {
+      throw new CasHarnessAuditApiError(
+        `CAS Harness distributed worker produced unknown output: ${output}`,
+      );
+    }
+  }
+  for (const output of missingOutputs) {
+    if (!expected.has(output)) {
+      throw new CasHarnessAuditApiError(
+        `CAS Harness distributed worker reported unknown missing output: ${output}`,
+      );
+    }
+  }
+  const missing = new Set(missingOutputs);
+  for (const output of producedOutputs) {
+    if (missing.has(output)) {
+      throw new CasHarnessAuditApiError(
+        `CAS Harness distributed worker output cannot be both produced and missing: ${output}`,
+      );
+    }
+  }
+}
+
+function assertDistributedAuditWorkerCounts(
+  workerEvidence: CasHarnessDistributedWorkerEvidence[],
+  readyWorkers: number,
+  failedWorkers: number,
+  totalWorkers: number,
+): void {
+  if (totalWorkers !== workerEvidence.length) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness distributed audit total_workers must match worker_evidence length',
+    );
+  }
+  const completedCount = workerEvidence.filter(
+    (worker) => worker.worker_status === 'completed',
+  ).length;
+  if (readyWorkers !== completedCount) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness distributed audit ready_workers must match completed worker receipts',
+    );
+  }
+  const failedCount = workerEvidence.filter((worker) => worker.worker_status === 'failed').length;
+  if (failedWorkers !== failedCount) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness distributed audit failed_workers must match failed worker receipts',
+    );
+  }
+}
+
+function assertDistributedMergeCompleteness(
+  workerEvidence: CasHarnessDistributedWorkerEvidence[],
+  mergeStatus: CasHarnessDistributedMergeStatus,
+  auditMissingOutputs: string[],
+): void {
+  if (mergeStatus !== 'complete') return;
+
+  const nonCompleted = workerEvidence.find((worker) => worker.worker_status !== 'completed');
+  if (nonCompleted) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness complete distributed merge requires every worker receipt to be completed',
+    );
+  }
+  const workerMissingOutput = workerEvidence.find((worker) => worker.missing_outputs.length > 0);
+  if (auditMissingOutputs.length > 0 || workerMissingOutput) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness complete distributed merge cannot include missing worker outputs',
+    );
+  }
 }
 
 function parseScalePlanMemoryEstimate(raw: unknown): CasHarnessScalePlanMemoryEstimate {
@@ -965,6 +1090,14 @@ function parseStringArray(raw: unknown, field: string): string[] {
 function nullableString(raw: unknown): string | null {
   if (raw === null || raw === undefined) return null;
   return typeof raw === 'string' ? raw : null;
+}
+
+function nullableStringStrict(raw: unknown, field: string): string | null {
+  if (raw === null || raw === undefined) return null;
+  if (typeof raw === 'string' && raw.length > 0) return raw;
+  throw new CasHarnessAuditApiError(
+    `CAS Harness audit response field "${field}" must be null or a non-empty string`,
+  );
 }
 
 function baseUrl(options?: CasHarnessAuditApiOptions): string {

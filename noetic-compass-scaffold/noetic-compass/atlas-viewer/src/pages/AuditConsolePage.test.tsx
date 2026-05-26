@@ -380,14 +380,6 @@ describe('AuditConsolePage', () => {
       .mockResolvedValueOnce({
         ok: true,
         json: async () => distributedAudit({ status: 'DISPATCHED' }),
-      })
-      .mockResolvedValueOnce({
-        ok: true,
-        json: async () => distributedAudit({
-          status: 'MERGE_PENDING',
-          merge_status: 'partial',
-          merge_reason: 'Waiting for worker evidence from: probe-worker-01.',
-        }),
       });
     vi.stubGlobal('fetch', fetchMock);
 
@@ -399,14 +391,12 @@ describe('AuditConsolePage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Dispatch workers' }));
     expect(await screen.findByText('DISPATCHED')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Merge evidence' }));
-    expect(await screen.findByText(/Waiting for worker evidence/i)).toBeInTheDocument();
+    expect(screen.getByTestId('distributed-merge-gate')).toHaveTextContent(/worker receipt is still pending/i);
+    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
 
     expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
       '/api/cas-harness/audit/distributed/session',
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/dispatch',
-      '/api/cas-harness/audit/distributed/session/cas-dist-unit/merge',
     ]);
   });
 

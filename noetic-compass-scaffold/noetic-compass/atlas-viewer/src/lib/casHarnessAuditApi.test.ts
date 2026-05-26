@@ -176,6 +176,13 @@ function distributedAudit(overrides: Record<string, unknown> = {}): Record<strin
   };
 }
 
+function distributedWorker(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    ...(distributedAudit().worker_evidence[0] as Record<string, unknown>),
+    ...overrides,
+  };
+}
+
 describe('casHarnessAuditApi', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
@@ -307,12 +314,11 @@ describe('casHarnessAuditApi', () => {
         status: 'MERGE_PENDING',
         merge_status: 'partial',
         worker_evidence: [
-          {
-            ...distributedAudit().worker_evidence[0] as Record<string, unknown>,
+          distributedWorker({
             worker_status: 'completed',
             produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
             evidence_packet_ref: 'packet://probe-worker-01',
-          },
+          }),
         ],
         ready_workers: 1,
       })))
@@ -322,6 +328,13 @@ describe('casHarnessAuditApi', () => {
         verdict: 'FLAG_FOR_HUMAN_REVIEW',
         confidence: null,
         evidence_packet_trace_id: 'cas-dist-unit-distributed-merge',
+        worker_evidence: [
+          distributedWorker({
+            worker_status: 'completed',
+            produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+            evidence_packet_ref: 'packet://probe-worker-01',
+          }),
+        ],
         ready_workers: 1,
         merge_reason: 'All distributed worker evidence receipts merged. Final ACCEPT/SUPPRESS still requires the verifier decision layer over the merged Evidence Packet.',
       })));
@@ -359,6 +372,11 @@ describe('casHarnessAuditApi', () => {
     expect(merged.merge_status).toBe('complete');
     expect(merged.verdict).toBe('FLAG_FOR_HUMAN_REVIEW');
     expect(merged.confidence).toBeNull();
+    expect(merged.worker_evidence[0]).toMatchObject({
+      worker_status: 'completed',
+      evidence_packet_ref: 'packet://probe-worker-01',
+      missing_outputs: [],
+    });
     expect(merged.merge_reason).toMatch(/Final ACCEPT\/SUPPRESS still requires/);
     expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
       '/api/cas-harness/audit/distributed/session',
@@ -536,12 +554,110 @@ describe('casHarnessAuditApi', () => {
 
     expect(() => parseDistributedAuditResponse(distributedAudit({
       worker_evidence: [
-        {
-          ...distributedAudit().worker_evidence[0] as Record<string, unknown>,
+        distributedWorker({
           worker_status: 'finished',
-        },
+        }),
       ],
     }))).toThrow(/distributed worker status/);
+  });
+
+  it('parses distributed worker receipt packet refs, missing outputs, and statuses explicitly', () => {
+    const parsed = parseDistributedAuditResponse(distributedAudit({
+      status: 'MERGE_PENDING',
+      merge_status: 'partial',
+      worker_evidence: [
+        distributedWorker({
+          worker_status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['worker_evidence_manifest'],
+          evidence_packet_ref: 'packet://probe-worker-01',
+        }),
+      ],
+      ready_workers: 1,
+      missing_outputs: ['probe-worker-01:worker_evidence_manifest'],
+    }));
+
+    expect(parsed.status).toBe('MERGE_PENDING');
+    expect(parsed.merge_status).toBe('partial');
+    expect(parsed.verdict).toBeNull();
+    expect(parsed.confidence).toBeNull();
+    expect(parsed.worker_evidence[0]).toMatchObject({
+      worker_status: 'completed',
+      produced_outputs: ['layer_activation_summary'],
+      missing_outputs: ['worker_evidence_manifest'],
+      evidence_packet_ref: 'packet://probe-worker-01',
+    });
+    expect(parsed.missing_outputs).toEqual(['probe-worker-01:worker_evidence_manifest']);
+  });
+
+  it('rejects distributed merge ACCEPT/SUPPRESS and confidence without verifier output', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      verdict: 'ACCEPT',
+    }))).toThrow(/must not return ACCEPT\/SUPPRESS/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      verdict: 'SUPPRESS',
+    }))).toThrow(/must not return ACCEPT\/SUPPRESS/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      confidence: 0.91,
+    }))).toThrow(/distributed merge confidence must be null/);
+  });
+
+  it('rejects completed worker receipts without packet refs', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        distributedWorker({
+          worker_status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          evidence_packet_ref: null,
+        }),
+      ],
+      ready_workers: 1,
+    }))).toThrow(/completed distributed worker evidence requires evidence_packet_ref/);
+  });
+
+  it('rejects impossible distributed worker output receipt accounting', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        distributedWorker({
+          produced_outputs: ['unregistered_output'],
+        }),
+      ],
+    }))).toThrow(/produced unknown output/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        distributedWorker({
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['layer_activation_summary'],
+        }),
+      ],
+    }))).toThrow(/both produced and missing/);
+  });
+
+  it('rejects complete distributed merges before every worker receipt is completed', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      status: 'COMPLETE',
+      merge_status: 'complete',
+      verdict: 'FLAG_FOR_HUMAN_REVIEW',
+    }))).toThrow(/complete distributed merge requires every worker receipt to be completed/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      status: 'COMPLETE',
+      merge_status: 'complete',
+      verdict: 'FLAG_FOR_HUMAN_REVIEW',
+      worker_evidence: [
+        distributedWorker({
+          worker_status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['worker_evidence_manifest'],
+          evidence_packet_ref: 'packet://probe-worker-01',
+        }),
+      ],
+      ready_workers: 1,
+      missing_outputs: ['probe-worker-01:worker_evidence_manifest'],
+    }))).toThrow(/complete distributed merge cannot include missing worker outputs/);
   });
 
   it('rejects malformed target verification payloads', () => {

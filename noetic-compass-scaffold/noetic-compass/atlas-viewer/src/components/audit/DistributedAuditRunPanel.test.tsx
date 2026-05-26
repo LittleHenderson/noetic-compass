@@ -88,10 +88,12 @@ describe('DistributedAuditRunPanel', () => {
     );
 
     expect(screen.getByText('cas-dist-unit')).toBeInTheDocument();
+    expect(screen.getByText('0/1 assigned')).toBeInTheDocument();
     expect(screen.getByText('0/1 ready')).toBeInTheDocument();
     expect(screen.getByText('probe-worker-01')).toBeInTheDocument();
+    expect(screen.getByText('Outputs 0/1')).toBeInTheDocument();
     expect(screen.getByText('No verdict')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
   });
 
   it('fires command callbacks', () => {
@@ -113,5 +115,133 @@ describe('DistributedAuditRunPanel', () => {
     expect(onCreateRun).toHaveBeenCalledOnce();
     expect(onDispatchRun).toHaveBeenCalledOnce();
     expect(onMergeRun).not.toHaveBeenCalled();
+  });
+
+  it('warns that a 300B audit cannot move forward without all worker receipts', () => {
+    const base = audit();
+    render(
+      <DistributedAuditRunPanel
+        audit={audit({
+          status: 'RUNNING',
+          total_workers: 2,
+          ready_workers: 1,
+          plan: {
+            ...base.plan,
+            parameter_count_b: 300,
+            recommended_worker_count: 2,
+          },
+          worker_evidence: [
+            {
+              ...base.worker_evidence[0],
+              worker_id: 'probe-worker-01',
+              worker_status: 'completed',
+              produced_outputs: ['layer_activation_summary'],
+            },
+            {
+              ...base.worker_evidence[0],
+              worker_id: 'probe-worker-02',
+              layer_start: 10,
+              layer_end: 19,
+              shard_id: 'layers-010-019',
+              worker_status: 'running',
+            },
+          ],
+        })}
+        onCreateRun={vi.fn()}
+        onDispatchRun={vi.fn()}
+        onMergeRun={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByTestId('distributed-300b-gate')).toHaveTextContent(
+      /300B gate: this audit cannot move forward/i,
+    );
+    expect(screen.getByTestId('distributed-300b-gate')).toHaveTextContent(
+      /1 worker receipt is still pending/i,
+    );
+    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
+  });
+
+  it('keeps merge disabled when outputs are missing or workers failed', () => {
+    const base = audit();
+    render(
+      <DistributedAuditRunPanel
+        audit={audit({
+          status: 'RUNNING',
+          ready_workers: 1,
+          failed_workers: 1,
+          total_workers: 2,
+          missing_outputs: ['global_merge_manifest'],
+          worker_evidence: [
+            {
+              ...base.worker_evidence[0],
+              worker_id: 'probe-worker-01',
+              worker_status: 'completed',
+              produced_outputs: ['layer_activation_summary'],
+            },
+            {
+              ...base.worker_evidence[0],
+              worker_id: 'probe-worker-02',
+              layer_start: 10,
+              layer_end: 19,
+              shard_id: 'layers-010-019',
+              worker_status: 'failed',
+              missing_outputs: ['layer_activation_summary'],
+              error_message: 'worker timeout',
+            },
+          ],
+        })}
+        onCreateRun={vi.fn()}
+        onDispatchRun={vi.fn()}
+        onMergeRun={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText('1')).toBeInTheDocument();
+    expect(screen.getByText('Missing: layer_activation_summary')).toBeInTheDocument();
+    expect(screen.getByText('worker timeout')).toBeInTheDocument();
+    expect(screen.getByTestId('distributed-merge-gate')).toHaveTextContent(/required worker outputs are missing/i);
+    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
+  });
+
+  it('enables merge only after every worker receipt is complete', () => {
+    const base = audit();
+    const onMergeRun = vi.fn();
+    render(
+      <DistributedAuditRunPanel
+        audit={audit({
+          status: 'RUNNING',
+          ready_workers: 2,
+          total_workers: 2,
+          worker_evidence: [
+            {
+              ...base.worker_evidence[0],
+              worker_id: 'probe-worker-01',
+              worker_status: 'completed',
+              produced_outputs: ['layer_activation_summary'],
+              evidence_packet_ref: 'packet-worker-01',
+            },
+            {
+              ...base.worker_evidence[0],
+              worker_id: 'probe-worker-02',
+              layer_start: 10,
+              layer_end: 19,
+              shard_id: 'layers-010-019',
+              worker_status: 'completed',
+              produced_outputs: ['layer_activation_summary'],
+              evidence_packet_ref: 'packet-worker-02',
+            },
+          ],
+        })}
+        onCreateRun={vi.fn()}
+        onDispatchRun={vi.fn()}
+        onMergeRun={onMergeRun}
+      />,
+    );
+
+    expect(screen.getByText('2/2 ready')).toBeInTheDocument();
+    expect(screen.getByTestId('distributed-merge-gate')).toHaveTextContent(/all worker receipts are ready/i);
+    fireEvent.click(screen.getByRole('button', { name: 'Merge evidence' }));
+    expect(onMergeRun).toHaveBeenCalledOnce();
   });
 });

@@ -24,6 +24,7 @@ from api.services.cas_harness_audit_sessions import (
     run_session,
 )
 from api.services.cas_harness_distributed_audits import (
+    DistributedAuditStateError,
     create_distributed_audit,
     dispatch_distributed_audit,
     get_distributed_audit,
@@ -326,6 +327,7 @@ class ScalePlanRequest(BaseModel):
     precision: ScalePlanPrecision = "bf16"
     available_gpu_memory_gb: int | None = Field(default=None, gt=0, le=2048)
     audit_depth: ScalePlanAuditDepth = "FULL_INTERNAL"
+    minimum_worker_count: int | None = Field(default=None, gt=0, le=512)
 
     @field_validator("model_id")
     @classmethod
@@ -414,6 +416,22 @@ class DistributedWorkerEvidenceRequest(BaseModel):
                 seen.add(stripped)
         return cleaned
 
+    @field_validator("evidence_packet_ref", "error_message")
+    @classmethod
+    def clean_optional_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        stripped = value.strip()
+        return stripped or None
+
+    @model_validator(mode="after")
+    def validate_receipt_shape(self) -> "DistributedWorkerEvidenceRequest":
+        if self.worker_status == "completed" and not self.evidence_packet_ref:
+            raise ValueError("completed worker evidence requires evidence_packet_ref")
+        if self.worker_status == "failed" and not self.error_message:
+            raise ValueError("failed worker evidence requires error_message")
+        return self
+
 
 @router.post("/target/verify", response_model=ModelTargetVerificationResponse)
 async def verify_model_target(
@@ -437,6 +455,7 @@ async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
             precision=req.precision,
             available_gpu_memory_gb=req.available_gpu_memory_gb,
             audit_depth=req.audit_depth,
+            minimum_worker_count=req.minimum_worker_count,
         )
     )
     return ScalePlanResponse.model_validate(plan.to_dict())
@@ -453,6 +472,7 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
             precision=req.precision,
             available_gpu_memory_gb=req.available_gpu_memory_gb,
             audit_depth=req.audit_depth,
+            minimum_worker_count=req.minimum_worker_count,
         )
     )
     return DistributedAuditResponse.model_validate(record.to_dict())
@@ -477,6 +497,8 @@ async def mark_distributed_worker_running(audit_id: str, worker_id: str) -> Dist
         record = mark_worker_running(audit_id, worker_id)
     except KeyError:
         raise HTTPException(status_code=404, detail="Distributed worker assignment not found")
+    except DistributedAuditStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
     if record is None:
         raise HTTPException(status_code=404, detail="Distributed audit session not found")
     return DistributedAuditResponse.model_validate(record.to_dict())
@@ -504,6 +526,8 @@ async def submit_distributed_worker_evidence(
         )
     except KeyError:
         raise HTTPException(status_code=404, detail="Distributed worker assignment not found")
+    except DistributedAuditStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
     if record is None:
         raise HTTPException(status_code=404, detail="Distributed audit session not found")
     return DistributedAuditResponse.model_validate(record.to_dict())
@@ -512,7 +536,10 @@ async def submit_distributed_worker_evidence(
 @router.post("/distributed/session/{audit_id}/merge", response_model=DistributedAuditResponse)
 async def merge_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
     """Merge worker evidence receipts without fabricating ACCEPT."""
-    record = merge_distributed_audit(audit_id)
+    try:
+        record = merge_distributed_audit(audit_id)
+    except DistributedAuditStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
     if record is None:
         raise HTTPException(status_code=404, detail="Distributed audit session not found")
     return DistributedAuditResponse.model_validate(record.to_dict())

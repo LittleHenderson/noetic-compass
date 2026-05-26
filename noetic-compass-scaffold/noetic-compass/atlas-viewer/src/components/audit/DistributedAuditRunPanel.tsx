@@ -159,6 +159,29 @@ function Metric({ label, value }: { label: string; value: string }) {
   );
 }
 
+function countMissingOutputs(audit: CasHarnessDistributedAudit): number {
+  return audit.worker_evidence.reduce(
+    (total, worker) => total + worker.missing_outputs.length,
+    audit.missing_outputs.length,
+  );
+}
+
+function countAssignedWorkers(audit: CasHarnessDistributedAudit): number {
+  return audit.worker_evidence.filter((worker) => worker.worker_status !== 'queued').length;
+}
+
+function canMergeEvidence(audit: CasHarnessDistributedAudit | null, isLoading: boolean): boolean {
+  if (!audit || isLoading || audit.status === 'PLANNED') {
+    return false;
+  }
+
+  return (
+    audit.ready_workers === audit.total_workers &&
+    audit.failed_workers === 0 &&
+    countMissingOutputs(audit) === 0
+  );
+}
+
 export function DistributedAuditRunPanel({
   audit,
   isLoading = false,
@@ -168,7 +191,24 @@ export function DistributedAuditRunPanel({
   onMergeRun,
 }: DistributedAuditRunPanelProps) {
   const canDispatch = Boolean(audit && audit.status === 'PLANNED' && !isLoading);
-  const canMerge = Boolean(audit && audit.status !== 'PLANNED' && !isLoading);
+  const canMerge = canMergeEvidence(audit, isLoading);
+  const assignedWorkers = audit ? countAssignedWorkers(audit) : 0;
+  const missingOutputCount = audit ? countMissingOutputs(audit) : 0;
+  const pendingReceipts = audit
+    ? Math.max(audit.total_workers - audit.ready_workers - audit.failed_workers, 0)
+    : 0;
+  const isThreeHundredBRun = audit ? audit.plan.parameter_count_b >= 300 : false;
+  const receiptGateReason = audit
+    ? canMerge
+      ? 'All worker receipts are ready. Evidence can be merged.'
+      : audit.status === 'PLANNED'
+        ? 'Create and dispatch the run before evidence can be merged.'
+        : missingOutputCount > 0
+          ? `${missingOutputCount} required worker output${missingOutputCount === 1 ? ' is' : 's are'} missing.`
+          : audit.failed_workers > 0
+            ? `${audit.failed_workers} worker${audit.failed_workers === 1 ? ' has' : 's have'} failed and must be replaced or rerun.`
+            : `${pendingReceipts} worker receipt${pendingReceipts === 1 ? ' is' : 's are'} still pending.`
+    : 'No distributed run exists yet.';
 
   return (
     <GlassPanel
@@ -198,9 +238,10 @@ export function DistributedAuditRunPanel({
       </header>
 
       <p style={bodyStyle}>
-        A 20B/100B/300B audit is real only when assigned Probe Workers return
-        evidence receipts. Missing, failed, or partial worker evidence cannot
-        become ACCEPT.
+        This panel is the worker-fleet gate. The scale card is only a plan; a
+        20B/100B/300B audit becomes real only after assigned Probe Workers
+        return complete evidence receipts. Missing, failed, or partial worker
+        evidence cannot become ACCEPT.
       </p>
 
       {isLoading ? <p style={noticeStyle('info')}>Distributed audit request in flight...</p> : null}
@@ -212,10 +253,22 @@ export function DistributedAuditRunPanel({
             <Metric label="Run" value={audit.audit_id} />
             <Metric label="Status" value={audit.status} />
             <Metric label="Merge" value={audit.merge_status} />
-            <Metric label="Workers" value={`${audit.ready_workers}/${audit.total_workers} ready`} />
+            <Metric label="Assigned workers" value={`${assignedWorkers}/${audit.total_workers} assigned`} />
+            <Metric label="Ready receipts" value={`${audit.ready_workers}/${audit.total_workers} ready`} />
+            <Metric label="Failed workers" value={`${audit.failed_workers}`} />
+            <Metric label="Missing outputs" value={`${missingOutputCount}`} />
             <Metric label="Verdict" value={audit.verdict ?? 'No verdict'} />
             <Metric label="Packet" value={audit.evidence_packet_trace_id ?? 'Not created'} />
           </div>
+          {isThreeHundredBRun ? (
+            <p data-testid="distributed-300b-gate" style={noticeStyle(canMerge ? 'info' : 'warning')}>
+              300B gate: this audit cannot move forward until every assigned
+              worker returns a complete receipt. {receiptGateReason}
+            </p>
+          ) : null}
+          <p data-testid="distributed-merge-gate" style={noticeStyle(canMerge ? 'info' : 'warning')}>
+            Merge gate: {receiptGateReason}
+          </p>
           <p style={noticeStyle(audit.merge_status === 'complete' ? 'info' : 'warning')}>
             {audit.merge_reason}
           </p>
@@ -226,6 +279,17 @@ export function DistributedAuditRunPanel({
                 <span style={bodyStyle}>Layers {worker.layer_start}-{worker.layer_end}</span>
                 <span style={bodyStyle}>{worker.shard_id}</span>
                 <span style={metricLabelStyle}>{worker.worker_status}</span>
+                <span style={bodyStyle}>
+                  Outputs {worker.produced_outputs.length}/{worker.expected_outputs.length}
+                </span>
+                {worker.missing_outputs.length > 0 ? (
+                  <span style={{ ...bodyStyle, color: '#fef3c7' }}>
+                    Missing: {worker.missing_outputs.join(', ')}
+                  </span>
+                ) : null}
+                {worker.error_message ? (
+                  <span style={{ ...bodyStyle, color: '#fecaca' }}>{worker.error_message}</span>
+                ) : null}
               </article>
             ))}
           </div>
