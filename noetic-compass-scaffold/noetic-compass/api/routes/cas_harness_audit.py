@@ -24,12 +24,24 @@ from api.services.cas_harness_audit_sessions import (
     run_session,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.cas_harness_scale_planner import (
+    ScalePlanRequest as PlannerScalePlanRequest,
+    build_scale_plan,
+)
 from api.services.cas_harness_verifier_decision_adapter import verifier_decision_from_packet
 
 
 router = APIRouter(prefix="/api/cas-harness/audit", tags=["cas_harness_audit"])
 
 AuditMode = Literal["BALANCED", "HIGH_PRECISION", "MAX_COVERAGE_TRIAGE"]
+ScalePlanPrecision = Literal["fp16", "bf16", "int8", "int4"]
+ScalePlanAuditDepth = Literal["FULL_INTERNAL", "LAYER_SAMPLE"]
+ScalePlanTier = Literal[
+    "single_worker_open_weight",
+    "small_distributed_open_weight",
+    "distributed_open_weight",
+    "enterprise_distributed_open_weight",
+]
 AuditStatus = Literal[
     "DRAFT",
     "VALIDATING",
@@ -269,6 +281,67 @@ class AuditSessionListResponse(BaseModel):
     sessions: list[AuditSessionResponse]
 
 
+class ScalePlanWorkerAssignment(BaseModel):
+    worker_id: str
+    layer_start: int
+    layer_end: int
+    shard_id: str
+    assigned_methods: list[str]
+    expected_outputs: list[str]
+
+
+class ScalePlanMemoryEstimate(BaseModel):
+    precision: ScalePlanPrecision
+    total_weight_memory_gb: float
+    activation_overhead_gb: float
+    estimated_total_runtime_gb: float
+    estimated_memory_per_worker_gb: float
+
+
+class ScalePlanRequest(BaseModel):
+    """Open-weight enterprise planning request.
+
+    This endpoint creates a deployment plan only. It does not claim a verdict,
+    run a customer model, or offer black-box/API-only auditing.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    model_id: str = Field(..., min_length=1, max_length=200)
+    weight_access: Literal["open_weight"] = Field(
+        default="open_weight",
+        description="CAS Harness beta enterprise planning is open-weight/internal-access only.",
+    )
+    parameter_count_b: float = Field(..., gt=0, le=300)
+    num_layers: int | None = Field(default=None, gt=0, le=4096)
+    precision: ScalePlanPrecision = "bf16"
+    available_gpu_memory_gb: int | None = Field(default=None, gt=0, le=2048)
+    audit_depth: ScalePlanAuditDepth = "FULL_INTERNAL"
+
+    @field_validator("model_id")
+    @classmethod
+    def strip_model_id(cls, value: str) -> str:
+        stripped = value.strip()
+        if not stripped:
+            raise ValueError("model_id is required")
+        return stripped
+
+
+class ScalePlanResponse(BaseModel):
+    model_id: str
+    weight_access: Literal["open_weight"]
+    parameter_count_b: float
+    num_layers: int
+    scale_tier: ScalePlanTier
+    recommended_worker_count: int
+    orchestration_pattern: str
+    worker_assignments: list[ScalePlanWorkerAssignment]
+    memory_estimate: ScalePlanMemoryEstimate
+    expected_capability: list[str]
+    evidence_requirements: list[str]
+    limitations: list[str]
+
+
 @router.post("/target/verify", response_model=ModelTargetVerificationResponse)
 async def verify_model_target(
     req: ModelTargetVerificationRequest,
@@ -278,6 +351,22 @@ async def verify_model_target(
     if target.kind == "demo_reference":
         return _reference_target_response(target)
     return _api_endpoint_target_response(target)
+
+
+@router.post("/scale-plan", response_model=ScalePlanResponse)
+async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
+    """Return an open-weight distributed CAS Harness plan for 1B-300B models."""
+    plan = build_scale_plan(
+        PlannerScalePlanRequest(
+            model_id=req.model_id,
+            parameter_count_b=req.parameter_count_b,
+            num_layers=req.num_layers,
+            precision=req.precision,
+            available_gpu_memory_gb=req.available_gpu_memory_gb,
+            audit_depth=req.audit_depth,
+        )
+    )
+    return ScalePlanResponse.model_validate(plan.to_dict())
 
 
 @router.post("/session", response_model=AuditSessionResponse)

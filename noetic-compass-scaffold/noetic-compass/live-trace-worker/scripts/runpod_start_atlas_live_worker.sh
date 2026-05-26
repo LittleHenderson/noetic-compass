@@ -30,6 +30,18 @@ log() {
   printf '%s %s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "$*" | tee -a "${BOOT_LOG}"
 }
 
+sync_source() {
+  source="$1"
+  dest="$2"
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a --delete "${source}/app" "${dest}/"
+  else
+    rm -rf "${dest}/app"
+    cp -a "${source}/app" "${dest}/"
+  fi
+  [ -f "${source}/requirements.txt" ] && cp "${source}/requirements.txt" "${dest}/requirements.txt"
+}
+
 realmode_ok() {
   curl -fsS "http://127.0.0.1:${PORT}/health/realmode" 2>/dev/null | grep -q 'REAL_PYTHIA_WEIGHTS_LOADED'
 }
@@ -41,12 +53,10 @@ fi
 
 if [ -d "${SOURCE_DIR}/app" ]; then
   log "Syncing worker source from ${SOURCE_DIR} to ${RUN_DIR}."
-  rsync -a --delete "${SOURCE_DIR}/app" "${RUN_DIR}/"
-  [ -f "${SOURCE_DIR}/requirements.txt" ] && cp "${SOURCE_DIR}/requirements.txt" "${RUN_DIR}/requirements.txt"
+  sync_source "${SOURCE_DIR}" "${RUN_DIR}"
 elif [ -d "${FALLBACK_SOURCE_DIR}/app" ]; then
   log "Syncing worker source from fallback ${FALLBACK_SOURCE_DIR} to ${RUN_DIR}."
-  rsync -a --delete "${FALLBACK_SOURCE_DIR}/app" "${RUN_DIR}/"
-  [ -f "${FALLBACK_SOURCE_DIR}/requirements.txt" ] && cp "${FALLBACK_SOURCE_DIR}/requirements.txt" "${RUN_DIR}/requirements.txt"
+  sync_source "${FALLBACK_SOURCE_DIR}" "${RUN_DIR}"
 elif [ -d "${RUN_DIR}/app" ]; then
   log "Using existing worker source in ${RUN_DIR}."
 else

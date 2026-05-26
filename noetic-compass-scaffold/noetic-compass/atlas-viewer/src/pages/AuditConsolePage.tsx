@@ -6,6 +6,7 @@ import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/a
 import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
+import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
 import { AuditPopover } from '../components/audit/AuditPopover';
 import {
@@ -13,11 +14,20 @@ import {
   type ProvenanceChip,
 } from '../lib/casHarnessAudit';
 import {
+  createCasHarnessScalePlan,
   createCasHarnessAuditSession,
   startCasHarnessAuditSession,
   verifyCasHarnessModelTarget,
   type CasHarnessAuditSession,
+  type CasHarnessScalePlanRequest,
 } from '../lib/casHarnessAuditApi';
+import {
+  DEFAULT_ENTERPRISE_SCALE_PLAN,
+  enterpriseScalePlanFromApi,
+  getEnterpriseScalePlan,
+  type EnterpriseScalePlan,
+  type EnterpriseScalePlanSize,
+} from '../lib/enterpriseScalePlan';
 import {
   ACCENT_CYAN,
   ACCENT_TEAL,
@@ -52,6 +62,33 @@ const SELECTED_MODULES = [
   'output_proof',
   'packet_proof',
 ];
+
+const SCALE_PLAN_REQUESTS: Record<EnterpriseScalePlanSize, CasHarnessScalePlanRequest> = {
+  '20B': {
+    model_id: 'customer/open-weight-20b',
+    weight_access: 'open_weight',
+    parameter_count_b: 20,
+    num_layers: 40,
+    precision: 'bf16',
+    available_gpu_memory_gb: 80,
+  },
+  '100B': {
+    model_id: 'customer/open-weight-100b',
+    weight_access: 'open_weight',
+    parameter_count_b: 100,
+    num_layers: 120,
+    precision: 'bf16',
+    available_gpu_memory_gb: 80,
+  },
+  '300B': {
+    model_id: 'customer/open-weight-300b',
+    weight_access: 'open_weight',
+    parameter_count_b: 300,
+    num_layers: 160,
+    precision: 'int4',
+    available_gpu_memory_gb: 80,
+  },
+};
 
 const M1_REFERENCE_TARGET: AuditTargetConfig = {
   modelId: 'EleutherAI/pythia-160m',
@@ -482,6 +519,12 @@ export default function AuditConsolePage() {
   const [targetError, setTargetError] = useState<string | null>(null);
   const [isTargetConnecting, setIsTargetConnecting] = useState(false);
   const [isAuditRunning, setIsAuditRunning] = useState(false);
+  const [enterprisePlanSize, setEnterprisePlanSize] =
+    useState<EnterpriseScalePlanSize>('100B');
+  const [enterprisePlan, setEnterprisePlan] =
+    useState<EnterpriseScalePlan>(DEFAULT_ENTERPRISE_SCALE_PLAN);
+  const [enterprisePlanError, setEnterprisePlanError] = useState<string | null>(null);
+  const [isEnterprisePlanLoading, setIsEnterprisePlanLoading] = useState(false);
 
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
@@ -575,6 +618,25 @@ export default function AuditConsolePage() {
       return;
     }
     void runAudit();
+  };
+
+  const loadEnterprisePlan = async (size: EnterpriseScalePlanSize) => {
+    setEnterprisePlanSize(size);
+    setEnterprisePlan(getEnterpriseScalePlan(size));
+    setEnterprisePlanError(null);
+    setIsEnterprisePlanLoading(true);
+    try {
+      const plan = await createCasHarnessScalePlan(SCALE_PLAN_REQUESTS[size]);
+      setEnterprisePlan(enterpriseScalePlanFromApi(plan));
+    } catch (error) {
+      setEnterprisePlanError(
+        error instanceof Error
+          ? `Backend planner unavailable; showing local planning scaffold. ${error.message}`
+          : 'Backend planner unavailable; showing local planning scaffold.',
+      );
+    } finally {
+      setIsEnterprisePlanLoading(false);
+    }
   };
 
   return (
@@ -684,6 +746,18 @@ export default function AuditConsolePage() {
             })}
           </section>
         </section>
+
+        <div style={singleColumnStyle}>
+          <EnterpriseScalePlanCard
+            plan={enterprisePlan}
+            selectedSize={enterprisePlanSize}
+            isLoading={isEnterprisePlanLoading}
+            error={enterprisePlanError}
+            onSelectSize={(size) => {
+              void loadEnterprisePlan(size);
+            }}
+          />
+        </div>
 
         <div style={session ? lowerGridStyle : singleColumnStyle}>
           <AuditSessionProgress
