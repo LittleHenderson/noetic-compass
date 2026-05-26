@@ -3,10 +3,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   CasHarnessAuditApiError,
   createCasHarnessAuditSession,
+  createCasHarnessScalePlan,
   getCasHarnessAuditSessionStatus,
   listCasHarnessAuditSessions,
   parseAuditSessionResponse,
   parseModelTargetVerificationResponse,
+  parseScalePlanResponse,
   resolveCasHarnessAuditBaseUrl,
   startCasHarnessAuditSession,
   verifyCasHarnessModelTarget,
@@ -98,6 +100,40 @@ function targetVerification(overrides: Record<string, unknown> = {}): Record<str
   };
 }
 
+function scalePlan(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    model_id: 'customer/open-100b',
+    weight_access: 'open_weight',
+    parameter_count_b: 100,
+    num_layers: 120,
+    scale_tier: 'enterprise_distributed_open_weight',
+    recommended_worker_count: 12,
+    orchestration_pattern:
+      'CAS Orchestrator + distributed Probe Workers assigned by contiguous layer ranges and model shards; one merged Evidence Packet and one verdict.',
+    worker_assignments: [
+      {
+        worker_id: 'probe-worker-01',
+        layer_start: 0,
+        layer_end: 9,
+        shard_id: 'layers-000-009',
+        assigned_methods: ['foundation_probe', 'targeted_ablation'],
+        expected_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+      },
+    ],
+    memory_estimate: {
+      precision: 'bf16',
+      total_weight_memory_gb: 200,
+      activation_overhead_gb: 36,
+      estimated_total_runtime_gb: 236,
+      estimated_memory_per_worker_gb: 19.67,
+    },
+    expected_capability: ['single orchestrated Evidence Packet across all workers'],
+    evidence_requirements: ['open model weights or customer-hosted activation hooks'],
+    limitations: ['does not support black-box/API-only model audits in this product lane'],
+    ...overrides,
+  };
+}
+
 describe('casHarnessAuditApi', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
@@ -185,6 +221,38 @@ describe('casHarnessAuditApi', () => {
     });
     expect(JSON.parse(String((init as RequestInit).body))).toEqual({
       target: { kind: 'demo_reference' },
+    });
+  });
+
+  it('creates an enterprise scale plan through the audit API', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(scalePlan()));
+    const result = await createCasHarnessScalePlan(
+      {
+        model_id: 'customer/open-100b',
+        weight_access: 'open_weight',
+        parameter_count_b: 100,
+        num_layers: 120,
+        precision: 'bf16',
+        available_gpu_memory_gb: 80,
+      },
+      {
+        baseUrl: '/api/cas-harness/audit',
+        fetchImpl,
+      },
+    );
+
+    expect(result.scale_tier).toBe('enterprise_distributed_open_weight');
+    expect(result.weight_access).toBe('open_weight');
+    expect(result.worker_assignments[0]).toMatchObject({
+      worker_id: 'probe-worker-01',
+      layer_start: 0,
+      layer_end: 9,
+    });
+    expect(result.limitations.join(' ')).toMatch(/black-box/);
+    expect(fetchImpl.mock.calls[0][0]).toBe('/api/cas-harness/audit/scale-plan');
+    expect(JSON.parse(String((fetchImpl.mock.calls[0][1] as RequestInit).body))).toMatchObject({
+      model_id: 'customer/open-100b',
+      parameter_count_b: 100,
     });
   });
 
@@ -328,6 +396,25 @@ describe('casHarnessAuditApi', () => {
       verdict: null,
       confidence: 0.88,
     }))).toThrow(/target verification must not return confidence/);
+  });
+
+  it('rejects malformed scale plan responses instead of inventing worker coverage', () => {
+    expect(() => parseScalePlanResponse(scalePlan({
+      weight_access: 'black_box',
+    }))).toThrow(/weight_access/);
+
+    expect(() => parseScalePlanResponse(scalePlan({
+      worker_assignments: [
+        {
+          worker_id: 'bad-worker',
+          layer_start: 10,
+          layer_end: 3,
+          shard_id: 'bad',
+          assigned_methods: ['foundation_probe'],
+          expected_outputs: ['worker_evidence_manifest'],
+        },
+      ],
+    }))).toThrow(/layer range/);
   });
 
   it('rejects malformed target verification payloads', () => {

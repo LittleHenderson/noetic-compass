@@ -12,6 +12,7 @@ if [ ! -x /root/start-atlas-live-worker.sh ] && [ -f /workspace/start-atlas-live
 fi
 
 if [ -x /root/start-atlas-live-worker.sh ]; then
+  export ATLAS_LIVE_WORKER_PORT="${ATLAS_LIVE_WORKER_PORT:-8888}"
   /root/start-atlas-live-worker.sh
 else
   echo "Atlas live worker startup script missing; leaving pod online for SSH repair."

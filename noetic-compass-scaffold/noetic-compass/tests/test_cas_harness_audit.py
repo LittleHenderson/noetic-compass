@@ -70,6 +70,7 @@ def test_audit_session_route_registered(client):
     openapi = client.get("/openapi.json").json()
 
     assert "/api/cas-harness/audit/target/verify" in openapi["paths"]
+    assert "/api/cas-harness/audit/scale-plan" in openapi["paths"]
     assert "/api/cas-harness/audit/session" in openapi["paths"]
     assert "/api/cas-harness/audit/session/{audit_id}/status" in openapi["paths"]
     assert "/api/cas-harness/audit/session/{audit_id}/run" in openapi["paths"]
@@ -106,6 +107,46 @@ def test_verify_reference_model_target_success_without_secret(client, auth_heade
     assert body["atlas_deep_link"] is None
     assert "No external model call" in body["detail"]
     assert "bundled reference Evidence Packet" in body["detail"]
+
+
+def test_scale_plan_returns_open_weight_enterprise_worker_plan(client):
+    resp = client.post(
+        "/api/cas-harness/audit/scale-plan",
+        json={
+            "model_id": "customer/open-100b",
+            "weight_access": "open_weight",
+            "parameter_count_b": 100,
+            "num_layers": 120,
+            "precision": "bf16",
+            "available_gpu_memory_gb": 80,
+        },
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["model_id"] == "customer/open-100b"
+    assert body["weight_access"] == "open_weight"
+    assert body["scale_tier"] == "enterprise_distributed_open_weight"
+    assert body["recommended_worker_count"] >= 9
+    assert body["worker_assignments"][0]["layer_start"] == 0
+    assert body["worker_assignments"][-1]["layer_end"] == 119
+    assert "CAS Orchestrator + distributed Probe Workers" in body["orchestration_pattern"]
+    assert any("Evidence Packet" in item for item in body["expected_capability"])
+    assert any("does not support black-box" in item for item in body["limitations"])
+
+
+def test_scale_plan_rejects_black_box_or_output_only_access(client):
+    resp = client.post(
+        "/api/cas-harness/audit/scale-plan",
+        json={
+            "model_id": "closed-api-only",
+            "weight_access": "black_box",
+            "parameter_count_b": 20,
+        },
+    )
+
+    assert resp.status_code == 422
+    assert "open_weight" in resp.text
 
 
 def test_verify_reference_model_target_public_for_alpha_console(client):

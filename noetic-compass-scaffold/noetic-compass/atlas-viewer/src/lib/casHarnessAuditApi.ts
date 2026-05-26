@@ -153,6 +153,56 @@ export interface CasHarnessAuditApiOptions {
   signal?: AbortSignal;
 }
 
+export type CasHarnessScalePlanPrecision = 'fp16' | 'bf16' | 'int8' | 'int4';
+export type CasHarnessScalePlanAuditDepth = 'FULL_INTERNAL' | 'LAYER_SAMPLE';
+export type CasHarnessScalePlanTier =
+  | 'single_worker_open_weight'
+  | 'small_distributed_open_weight'
+  | 'distributed_open_weight'
+  | 'enterprise_distributed_open_weight';
+
+export interface CasHarnessScalePlanRequest {
+  model_id: string;
+  weight_access?: 'open_weight';
+  parameter_count_b: number;
+  num_layers?: number | null;
+  precision?: CasHarnessScalePlanPrecision;
+  available_gpu_memory_gb?: number | null;
+  audit_depth?: CasHarnessScalePlanAuditDepth;
+}
+
+export interface CasHarnessScalePlanWorkerAssignment {
+  worker_id: string;
+  layer_start: number;
+  layer_end: number;
+  shard_id: string;
+  assigned_methods: string[];
+  expected_outputs: string[];
+}
+
+export interface CasHarnessScalePlanMemoryEstimate {
+  precision: CasHarnessScalePlanPrecision;
+  total_weight_memory_gb: number;
+  activation_overhead_gb: number;
+  estimated_total_runtime_gb: number;
+  estimated_memory_per_worker_gb: number;
+}
+
+export interface CasHarnessScalePlan {
+  model_id: string;
+  weight_access: 'open_weight';
+  parameter_count_b: number;
+  num_layers: number;
+  scale_tier: CasHarnessScalePlanTier;
+  recommended_worker_count: number;
+  orchestration_pattern: string;
+  worker_assignments: CasHarnessScalePlanWorkerAssignment[];
+  memory_estimate: CasHarnessScalePlanMemoryEstimate;
+  expected_capability: string[];
+  evidence_requirements: string[];
+  limitations: string[];
+}
+
 export class CasHarnessAuditApiError extends Error {
   readonly httpStatus?: number;
   readonly detail?: string;
@@ -210,6 +260,19 @@ export async function verifyCasHarnessModelTarget(
     signal: options?.signal,
   }, options);
   return parseModelTargetVerificationResponse(response);
+}
+
+export async function createCasHarnessScalePlan(
+  request: CasHarnessScalePlanRequest,
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessScalePlan> {
+  const response = await requestJson(`${baseUrl(options)}/scale-plan`, {
+    method: 'POST',
+    headers: jsonHeaders(),
+    body: JSON.stringify(request),
+    signal: options?.signal,
+  }, options);
+  return parseScalePlanResponse(response);
 }
 
 export async function getCasHarnessAuditSessionStatus(
@@ -314,6 +377,34 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
   };
 }
 
+export function parseScalePlanResponse(raw: unknown): CasHarnessScalePlan {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness scale plan response was not an object');
+  }
+
+  const assignments = Array.isArray(raw.worker_assignments)
+    ? raw.worker_assignments.map(parseScalePlanWorkerAssignment)
+    : null;
+  if (!assignments) {
+    throw new CasHarnessAuditApiError('CAS Harness scale plan worker_assignments must be an array');
+  }
+
+  return {
+    model_id: requiredString(raw.model_id, 'model_id'),
+    weight_access: parseScalePlanWeightAccess(raw.weight_access),
+    parameter_count_b: requiredNumber(raw.parameter_count_b, 'parameter_count_b'),
+    num_layers: requiredInteger(raw.num_layers, 'num_layers'),
+    scale_tier: parseScalePlanTier(raw.scale_tier),
+    recommended_worker_count: requiredInteger(raw.recommended_worker_count, 'recommended_worker_count'),
+    orchestration_pattern: requiredString(raw.orchestration_pattern, 'orchestration_pattern'),
+    worker_assignments: assignments,
+    memory_estimate: parseScalePlanMemoryEstimate(raw.memory_estimate),
+    expected_capability: parseStringArray(raw.expected_capability, 'expected_capability'),
+    evidence_requirements: parseStringArray(raw.evidence_requirements, 'evidence_requirements'),
+    limitations: parseStringArray(raw.limitations, 'limitations'),
+  };
+}
+
 export function parseModelTargetVerificationResponse(
   raw: unknown,
 ): CasHarnessModelTargetVerification {
@@ -410,6 +501,38 @@ async function readErrorDetail(response: Response): Promise<string> {
   return response.statusText || `HTTP ${response.status}`;
 }
 
+function parseScalePlanWorkerAssignment(raw: unknown): CasHarnessScalePlanWorkerAssignment {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness scale plan worker assignment was malformed');
+  }
+  const layerStart = requiredInteger(raw.layer_start, 'worker_assignments[].layer_start');
+  const layerEnd = requiredInteger(raw.layer_end, 'worker_assignments[].layer_end');
+  if (layerEnd < layerStart) {
+    throw new CasHarnessAuditApiError('CAS Harness scale plan worker layer range was malformed');
+  }
+  return {
+    worker_id: requiredString(raw.worker_id, 'worker_assignments[].worker_id'),
+    layer_start: layerStart,
+    layer_end: layerEnd,
+    shard_id: requiredString(raw.shard_id, 'worker_assignments[].shard_id'),
+    assigned_methods: parseStringArray(raw.assigned_methods, 'worker_assignments[].assigned_methods'),
+    expected_outputs: parseStringArray(raw.expected_outputs, 'worker_assignments[].expected_outputs'),
+  };
+}
+
+function parseScalePlanMemoryEstimate(raw: unknown): CasHarnessScalePlanMemoryEstimate {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness scale plan memory_estimate was malformed');
+  }
+  return {
+    precision: parseScalePlanPrecision(raw.precision),
+    total_weight_memory_gb: requiredNumber(raw.total_weight_memory_gb, 'memory_estimate.total_weight_memory_gb'),
+    activation_overhead_gb: requiredNumber(raw.activation_overhead_gb, 'memory_estimate.activation_overhead_gb'),
+    estimated_total_runtime_gb: requiredNumber(raw.estimated_total_runtime_gb, 'memory_estimate.estimated_total_runtime_gb'),
+    estimated_memory_per_worker_gb: requiredNumber(raw.estimated_memory_per_worker_gb, 'memory_estimate.estimated_memory_per_worker_gb'),
+  };
+}
+
 function parseSessionStatus(raw: unknown): CasHarnessAuditSessionStatus {
   if (
     raw === 'DRAFT' ||
@@ -424,6 +547,30 @@ function parseSessionStatus(raw: unknown): CasHarnessAuditSessionStatus {
     return raw;
   }
   throw new CasHarnessAuditApiError(`Unsupported CAS Harness audit status: ${String(raw)}`);
+}
+
+function parseScalePlanWeightAccess(raw: unknown): 'open_weight' {
+  if (raw === 'open_weight') return raw;
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness scale plan weight_access: ${String(raw)}`);
+}
+
+function parseScalePlanPrecision(raw: unknown): CasHarnessScalePlanPrecision {
+  if (raw === 'fp16' || raw === 'bf16' || raw === 'int8' || raw === 'int4') {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness scale plan precision: ${String(raw)}`);
+}
+
+function parseScalePlanTier(raw: unknown): CasHarnessScalePlanTier {
+  if (
+    raw === 'single_worker_open_weight' ||
+    raw === 'small_distributed_open_weight' ||
+    raw === 'distributed_open_weight' ||
+    raw === 'enterprise_distributed_open_weight'
+  ) {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness scale tier: ${String(raw)}`);
 }
 
 function parseAuditMode(raw: unknown): CasHarnessAuditMode {
@@ -574,6 +721,24 @@ function parseLifecycleEvent(raw: unknown): CasHarnessAuditLifecycleEvent {
 function requiredString(raw: unknown, field: string): string {
   if (typeof raw === 'string' && raw.length > 0) return raw;
   throw new CasHarnessAuditApiError(`CAS Harness audit response field "${field}" must be a non-empty string`);
+}
+
+function requiredNumber(raw: unknown, field: string): number {
+  if (typeof raw === 'number' && Number.isFinite(raw)) return raw;
+  throw new CasHarnessAuditApiError(`CAS Harness audit response field "${field}" must be a finite number`);
+}
+
+function requiredInteger(raw: unknown, field: string): number {
+  const value = requiredNumber(raw, field);
+  if (Number.isInteger(value)) return value;
+  throw new CasHarnessAuditApiError(`CAS Harness audit response field "${field}" must be an integer`);
+}
+
+function parseStringArray(raw: unknown, field: string): string[] {
+  if (!Array.isArray(raw)) {
+    throw new CasHarnessAuditApiError(`CAS Harness audit response field "${field}" must be an array`);
+  }
+  return raw.map((value, index) => requiredString(value, `${field}[${index}]`));
 }
 
 function nullableString(raw: unknown): string | null {
