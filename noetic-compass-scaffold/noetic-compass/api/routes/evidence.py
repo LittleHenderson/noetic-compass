@@ -118,12 +118,22 @@ def _project_root() -> Path:
 
     Resolved as ``api/routes/evidence.py`` → up 4 → outer repo root.
     """
-    return Path(__file__).resolve().parents[4]
+    current = Path(__file__).resolve()
+    for parent in current.parents:
+        if (parent / ".git").exists() or (parent / "noetic-compass-scaffold").exists():
+            return parent
+    parents = list(current.parents)
+    return parents[4] if len(parents) > 4 else parents[-1]
 
 
 def _scaffold_root() -> Path:
     """Return ``noetic-compass-scaffold/noetic-compass/``."""
-    return Path(__file__).resolve().parents[2]
+    current = Path(__file__).resolve()
+    for parent in current.parents:
+        if (parent / "api").is_dir() and (parent / "atlas-viewer").is_dir():
+            return parent
+    parents = list(current.parents)
+    return parents[2] if len(parents) > 2 else parents[-1]
 
 
 # ---------------------------------------------------------------------------
@@ -147,7 +157,7 @@ def _git_head_sha() -> str | None:
             timeout=5,
             check=False,
         )
-    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+    except (FileNotFoundError, OSError, RuntimeError, IndexError, subprocess.TimeoutExpired):
         return None
     if result.returncode != 0:
         return None
@@ -166,7 +176,7 @@ def _git_head_subject() -> str | None:
             timeout=5,
             check=False,
         )
-    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+    except (FileNotFoundError, OSError, RuntimeError, IndexError, subprocess.TimeoutExpired):
         return None
     if result.returncode != 0:
         return None
