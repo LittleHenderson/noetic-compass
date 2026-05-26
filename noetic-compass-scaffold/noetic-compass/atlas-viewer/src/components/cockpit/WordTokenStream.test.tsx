@@ -62,7 +62,9 @@ describe('WordTokenStream', () => {
     ];
     render(<WordTokenStream tokens={[]} spans={multi} />);
     const el = screen.getByTestId('word-stream-word-0');
-    expect(el.getAttribute('title')).toContain('tokens 5-6');
+    expect(el).not.toHaveAttribute('title');
+    fireEvent.mouseEnter(el);
+    expect(screen.getByRole('tooltip')).toHaveTextContent('tokens 5-6');
   });
 
   it('highlights the word that contains the current token', () => {

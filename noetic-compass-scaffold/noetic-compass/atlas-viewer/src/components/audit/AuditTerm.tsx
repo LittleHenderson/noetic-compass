@@ -4,6 +4,7 @@ import {
   COLORS,
   FONT_FAMILY,
 } from '../../lib/designTokens';
+import { AuditPopover } from './AuditPopover';
 
 export type AuditTermKey =
   | 'baseline'
@@ -67,16 +68,16 @@ export function AuditTerm({
 }: AuditTermProps): JSX.Element {
   const definition = AUDIT_TERM_DEFINITIONS[term];
   return (
-    <span
-      aria-label={`${String(children)}: ${definition}`}
-      className={className}
-      role="note"
-      style={termStyle}
-      tabIndex={0}
-      title={definition}
-    >
-      {children}
-    </span>
+    <AuditPopover briefing={definition} placement="top">
+      <span
+        aria-label={`${String(children)}: ${definition}`}
+        className={className}
+        role="note"
+        style={termStyle}
+      >
+        {children}
+      </span>
+    </AuditPopover>
   );
 }
 

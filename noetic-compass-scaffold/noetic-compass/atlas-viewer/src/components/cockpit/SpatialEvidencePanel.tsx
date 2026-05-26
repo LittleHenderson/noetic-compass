@@ -9,6 +9,7 @@ import type {
 } from '../../lib/visualPrimitives';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { toEnglish } from '../../lib/colloquialismMap';
+import LiquidGlassTooltip from '../ui/LiquidGlassTooltip';
 
 export interface SpatialEvidencePanelProps {
   primitives: VisualPrimitive[];
@@ -297,9 +298,11 @@ export default function SpatialEvidencePanel({
                   style={swatchStyle(swatch)}
                   data-testid={`spatial-evidence-swatch-${p.id}`}
                 />
-                <span aria-hidden="true" style={glyphStyle} title={kindName}>
-                  {glyph}
-                </span>
+                <LiquidGlassTooltip briefing={kindName} focusable={false}>
+                  <span aria-hidden="true" style={glyphStyle}>
+                    {glyph}
+                  </span>
+                </LiquidGlassTooltip>
                 <span style={labelStyle}>{p.label ?? 'Unnamed primitive'}</span>
               </div>
 
@@ -323,13 +326,18 @@ export default function SpatialEvidencePanel({
 
               <div style={footerStyle}>
                 {typeof p.confidence === 'number' ? (
-                  <span
-                    data-testid={`spatial-evidence-confidence-${p.id}`}
-                    style={pillStyle(confidenceBadgeColor(p.confidence))}
-                    title={`Confidence ${p.confidence.toFixed(2)} — derived from the softmax margin (top-1 minus runner-up logit) at the token where this primitive was emitted, normalised into [0, 1]. > 0.80 green / 0.50–0.80 amber / < 0.50 orange. Press ? for the full method.`}
+                  <LiquidGlassTooltip
+                    briefing={`Confidence ${p.confidence.toFixed(2)} is derived from the softmax margin, meaning top-1 minus runner-up logit at the token where this primitive was emitted, normalised into [0, 1]. Above 0.80 is green, 0.50 to 0.80 is amber, and below 0.50 is orange.`}
+                    placement="top"
+                    focusable={false}
                   >
-                    {`conf ${p.confidence.toFixed(2)}`}
-                  </span>
+                    <span
+                      data-testid={`spatial-evidence-confidence-${p.id}`}
+                      style={pillStyle(confidenceBadgeColor(p.confidence))}
+                    >
+                      {`conf ${p.confidence.toFixed(2)}`}
+                    </span>
+                  </LiquidGlassTooltip>
                 ) : (
                   <span />
                 )}

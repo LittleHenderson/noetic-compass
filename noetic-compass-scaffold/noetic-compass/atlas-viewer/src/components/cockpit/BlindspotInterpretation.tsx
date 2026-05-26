@@ -37,6 +37,7 @@ import {
   type ConfidenceBand,
 } from '../../lib/confidenceBands';
 import { COLORS } from '../../lib/designTokens';
+import LiquidGlassTooltip from '../ui/LiquidGlassTooltip';
 
 export interface BlindspotInterpretationProps {
   classKey?: string;
@@ -185,22 +186,26 @@ export default function BlindspotInterpretation(
               Possible blindspot: {translation.shortBlindspot}.
             </p>
             {onFocusCover ? (
-              <button
-                type="button"
-                style={{
-                  ...focusButtonStyle,
-                  background: isFocused
-                    ? 'rgba(20, 184, 166, 0.28)'
-                    : focusButtonStyle.background,
-                }}
-                onClick={onFocusCover}
-                data-testid="blindspot-focus-cover"
-                aria-pressed={isFocused}
-                title={`Highlight ${classKey ?? driveId} cover neurons in the 3D network.`}
+              <LiquidGlassTooltip
+                briefing={`Highlight ${classKey ?? driveId} cover neurons in the 3D network.`}
+                focusable={false}
               >
-                {isFocused ? 'Showing neurons' : 'Show neurons'}
-                {typeof memberCount === 'number' ? ` (${memberCount})` : ''}
-              </button>
+                <button
+                  type="button"
+                  style={{
+                    ...focusButtonStyle,
+                    background: isFocused
+                      ? 'rgba(20, 184, 166, 0.28)'
+                      : focusButtonStyle.background,
+                  }}
+                  onClick={onFocusCover}
+                  data-testid="blindspot-focus-cover"
+                  aria-pressed={isFocused}
+                >
+                  {isFocused ? 'Showing neurons' : 'Show neurons'}
+                  {typeof memberCount === 'number' ? ` (${memberCount})` : ''}
+                </button>
+              </LiquidGlassTooltip>
             ) : null}
           </div>
           <p style={supportingSentenceStyle} data-testid="blindspot-headline">
@@ -213,22 +218,26 @@ export default function BlindspotInterpretation(
             {translation.sentence}
           </p>
           {onFocusCover ? (
-            <button
-              type="button"
-              style={{
-                ...focusButtonStyle,
-                background: isFocused
-                  ? 'rgba(20, 184, 166, 0.28)'
-                  : focusButtonStyle.background,
-              }}
-              onClick={onFocusCover}
-              data-testid="blindspot-focus-cover"
-              aria-pressed={isFocused}
-              title={`Highlight ${classKey ?? driveId} cover neurons in the 3D network.`}
+            <LiquidGlassTooltip
+              briefing={`Highlight ${classKey ?? driveId} cover neurons in the 3D network.`}
+              focusable={false}
             >
-              {isFocused ? 'Showing neurons' : 'Show neurons'}
-              {typeof memberCount === 'number' ? ` (${memberCount})` : ''}
-            </button>
+              <button
+                type="button"
+                style={{
+                  ...focusButtonStyle,
+                  background: isFocused
+                    ? 'rgba(20, 184, 166, 0.28)'
+                    : focusButtonStyle.background,
+                }}
+                onClick={onFocusCover}
+                data-testid="blindspot-focus-cover"
+                aria-pressed={isFocused}
+              >
+                {isFocused ? 'Showing neurons' : 'Show neurons'}
+                {typeof memberCount === 'number' ? ` (${memberCount})` : ''}
+              </button>
+            </LiquidGlassTooltip>
           ) : null}
         </div>
       )}
@@ -238,9 +247,14 @@ export default function BlindspotInterpretation(
       <p
         style={confidenceStyle}
         data-testid="blindspot-confidence"
-        title="For live Pythia-160M, this is cover-level confidence: targeted_drop divided by clean_margin for the Stage 27F cover set. It is not a one-neuron-equals-one-meaning claim."
       >
-        {confidenceLine}
+        <LiquidGlassTooltip
+          briefing="For live Pythia-160M, this is cover-level confidence: targeted_drop divided by clean_margin for the Stage 27F cover set. It is not a one-neuron-equals-one-meaning claim."
+          placement="top"
+          focusable={false}
+        >
+          <span>{confidenceLine}</span>
+        </LiquidGlassTooltip>
       </p>
       {evidenceLine ? (
         <p style={evidenceStyle} data-testid="blindspot-evidence">

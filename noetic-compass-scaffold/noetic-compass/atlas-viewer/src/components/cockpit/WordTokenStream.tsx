@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import type { CSSProperties } from 'react';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { THEME, COLORS } from '../../lib/designTokens';
+import LiquidGlassTooltip from '../ui/LiquidGlassTooltip';
 
 export interface WordSpan {
   word: string;
@@ -139,36 +140,40 @@ export function WordTokenStream(props: WordTokenStreamProps): JSX.Element {
         : 'none',
     };
     pieces.push(
-      <span
+      <LiquidGlassTooltip
         key={`word-${span.char_start}-${span.char_end}`}
-        role="button"
-        tabIndex={0}
-        data-testid={`word-stream-word-${span.char_start}`}
-        data-word={span.word}
-        aria-label={`Inspect word "${span.word}"`}
-        title={tooltipFor(span)}
-        style={wordStyle}
-        onClick={() => onWordClick?.(span)}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            onWordClick?.(span);
-          }
-        }}
-        onMouseEnter={(e) => {
-          if (!isActive) {
-            (e.currentTarget as HTMLSpanElement).style.background =
-              'rgba(45, 212, 191, 0.08)';
-          }
-        }}
-        onMouseLeave={(e) => {
-          if (!isActive) {
-            (e.currentTarget as HTMLSpanElement).style.background = 'transparent';
-          }
-        }}
+        briefing={tooltipFor(span)}
+        focusable={false}
       >
-        {span.word}
-      </span>,
+        <span
+          role="button"
+          tabIndex={0}
+          data-testid={`word-stream-word-${span.char_start}`}
+          data-word={span.word}
+          aria-label={`Inspect word "${span.word}"`}
+          style={wordStyle}
+          onClick={() => onWordClick?.(span)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              onWordClick?.(span);
+            }
+          }}
+          onMouseEnter={(e) => {
+            if (!isActive) {
+              (e.currentTarget as HTMLSpanElement).style.background =
+                'rgba(45, 212, 191, 0.08)';
+            }
+          }}
+          onMouseLeave={(e) => {
+            if (!isActive) {
+              (e.currentTarget as HTMLSpanElement).style.background = 'transparent';
+            }
+          }}
+        >
+          {span.word}
+        </span>
+      </LiquidGlassTooltip>,
     );
     cursor = span.char_end;
   }

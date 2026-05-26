@@ -6,6 +6,7 @@ import {
   COLORS,
   FONT_FAMILY,
 } from '../../lib/designTokens';
+import { AuditPopover } from './AuditPopover';
 
 export type ModelConnectionStatus =
   | 'disconnected'
@@ -227,12 +228,12 @@ export function ModelConnectionCard({
         <div style={headerStyle}>
           <div>
             <h2 style={titleStyle}>Model connection</h2>
-            <p
-              style={subtitleStyle}
-              title="Connect a supported target before running a CAS Harness audit."
+            <AuditPopover
+              briefing="Connect a supported target before running a CAS Harness audit."
+              placement="bottom"
             >
-              Verify target, then run audit.
-            </p>
+              <p style={subtitleStyle}>Verify target, then run audit.</p>
+            </AuditPopover>
           </div>
           <span style={statusPillStyle(status)}>
             <span aria-hidden="true" style={dotStyle(status)} />
@@ -241,35 +242,39 @@ export function ModelConnectionCard({
         </div>
 
         {statusDetail ? (
-          <span
-            aria-label={statusDetail}
-            role="note"
-            style={infoTipStyle}
-            tabIndex={0}
-            title={statusDetail}
-          >
-            ?
-          </span>
+          <AuditPopover briefing={statusDetail} placement="right">
+            <span aria-label={statusDetail} role="note" style={infoTipStyle}>
+              ?
+            </span>
+          </AuditPopover>
         ) : null}
 
         {showDetails ? (
           <div style={detailsGridStyle}>
-            <div style={detailTileStyle} title="The model or endpoint currently selected for audit.">
-              <span style={detailLabelStyle}>Model</span>
-              <span style={detailValueStyle}>{modelName}</span>
-            </div>
-            <div style={detailTileStyle} title="Runtime path that will execute or represent the model audit.">
-              <span style={detailLabelStyle}>Runtime</span>
-              <span style={detailValueStyle}>{provider}</span>
-            </div>
-            <div style={detailTileStyle} title="API route used to create and run the audit session.">
-              <span style={detailLabelStyle}>API route</span>
-              <span style={detailValueStyle}>{endpointLabel}</span>
-            </div>
-            <div style={detailTileStyle} title="Latest backend state returned by the audit API.">
-              <span style={detailLabelStyle}>Backend</span>
-              <span style={detailValueStyle}>{lastChecked ?? 'Not checked'}</span>
-            </div>
+            <AuditPopover briefing="The exact model or endpoint currently selected for audit." block>
+              <div style={detailTileStyle}>
+                <span style={detailLabelStyle}>Model</span>
+                <span style={detailValueStyle}>{modelName}</span>
+              </div>
+            </AuditPopover>
+            <AuditPopover briefing="The runtime path that will execute or represent the model audit." block>
+              <div style={detailTileStyle}>
+                <span style={detailLabelStyle}>Runtime</span>
+                <span style={detailValueStyle}>{provider}</span>
+              </div>
+            </AuditPopover>
+            <AuditPopover briefing="The API route used to create and run the audit session." block>
+              <div style={detailTileStyle}>
+                <span style={detailLabelStyle}>API route</span>
+                <span style={detailValueStyle}>{endpointLabel}</span>
+              </div>
+            </AuditPopover>
+            <AuditPopover briefing="The latest backend state returned by the audit API." block>
+              <div style={detailTileStyle}>
+                <span style={detailLabelStyle}>Backend</span>
+                <span style={detailValueStyle}>{lastChecked ?? 'Not checked'}</span>
+              </div>
+            </AuditPopover>
           </div>
         ) : null}
 

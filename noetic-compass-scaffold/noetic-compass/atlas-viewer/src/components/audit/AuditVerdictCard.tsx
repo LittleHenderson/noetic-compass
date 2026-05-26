@@ -9,6 +9,7 @@ import {
   FONT_MONO,
 } from '../../lib/designTokens';
 import type { AuditVerdict } from '../../lib/casHarnessAudit';
+import { AuditPopover } from './AuditPopover';
 
 export interface EvidencePacketSummary {
   packetId?: string;
@@ -194,7 +195,6 @@ export function AuditVerdictCard({
       padding={20}
       className={className}
       ariaLabel="Audit verdict"
-      title="Verdict appears only after the backend returns an evidence-gated verifier decision."
       style={{
         borderColor: tone.border,
         background: `linear-gradient(180deg, ${tone.fill}, rgba(255, 255, 255, 0.03))`,
@@ -203,9 +203,16 @@ export function AuditVerdictCard({
       <div style={shellStyle}>
         <div>
           <p style={eyebrowStyle}>Audit verdict</p>
-          <h2 style={verdictStyle(toneKey)}>
-            {verdict ? verdictLabels[verdict] : 'NO VERDICT YET'}
-          </h2>
+          <AuditPopover
+            briefing="Verdict appears only after the backend returns an evidence-gated verifier decision."
+            block
+            placement="bottom"
+            width={360}
+          >
+            <h2 style={verdictStyle(toneKey)}>
+              {verdict ? verdictLabels[verdict] : 'NO VERDICT YET'}
+            </h2>
+          </AuditPopover>
         </div>
 
         <div aria-label={confidenceLabel}>

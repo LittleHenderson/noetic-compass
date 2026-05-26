@@ -5,6 +5,7 @@ import {
   FONT_FAMILY,
   FONT_MONO,
 } from '../../lib/designTokens';
+import { AuditPopover } from './AuditPopover';
 import type {
   AuditVerdict,
   ProvenanceChip,
@@ -261,27 +262,24 @@ export function AuditVerdictExplainer({
     <section
       style={shellStyle}
       aria-labelledby="audit-verdict-explainer-heading"
-      title={decisionHelp}
     >
       <div>
         <p style={eyebrowStyle}>Why this verdict happened</p>
-        <h2 id="audit-verdict-explainer-heading" style={headlineStyle}>
-          {verdictHeadline(verdict, chips, verifierDecision)}
-        </h2>
+        <AuditPopover briefing={decisionHelp} block placement="bottom" width={420}>
+          <h2 id="audit-verdict-explainer-heading" style={headlineStyle}>
+            {verdictHeadline(verdict, chips, verifierDecision)}
+          </h2>
+        </AuditPopover>
       </div>
 
       <p style={compactLineStyle}>
         <span>Proof chips ready: {passed}/6</span>
         <span>Confidence: {confidenceText}</span>
-        <span
-          aria-label={decisionHelp}
-          role="note"
-          style={infoTipStyle}
-          tabIndex={0}
-          title={decisionHelp}
-        >
-          ?
-        </span>
+        <AuditPopover briefing={decisionHelp} placement="right" width={420}>
+          <span aria-label={decisionHelp} role="note" style={infoTipStyle}>
+            ?
+          </span>
+        </AuditPopover>
       </p>
 
       <div style={proofGridStyle} aria-label={`Required proof chips passed ${passed} of 6`}>
@@ -290,11 +288,13 @@ export function AuditVerdictExplainer({
           const state = chipState(chip);
           const chipHelp = `${CHIP_MEANING_TEXT[id]} ${chip?.detail ?? 'No evidence attached yet.'}`;
           return (
-            <article key={id} style={proofRowStyle(state)} title={chipHelp}>
-              <div style={proofNameStyle}>
-                <span>{chip?.name ?? id}</span>
-                <span style={statusPillStyle(state)}>{chipStatusLabel(chip)}</span>
-              </div>
+            <article key={id} style={proofRowStyle(state)}>
+              <AuditPopover briefing={chipHelp} block placement="bottom">
+                <div style={proofNameStyle}>
+                  <span>{chip?.name ?? id}</span>
+                  <span style={statusPillStyle(state)}>{chipStatusLabel(chip)}</span>
+                </div>
+              </AuditPopover>
             </article>
           );
         })}
