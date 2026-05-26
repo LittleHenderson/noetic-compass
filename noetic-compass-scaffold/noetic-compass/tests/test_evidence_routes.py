@@ -423,6 +423,18 @@ def test_sha256_streamer_returns_none_on_missing(tmp_path):
     assert _sha256_file(tmp_path / "nope.bin") is None
 
 
+def test_path_helpers_tolerate_shallow_deploy_paths(monkeypatch, tmp_path):
+    from api.routes import evidence as evidence_route
+
+    deployed_file = tmp_path / "api" / "routes" / "evidence.py"
+    deployed_file.parent.mkdir(parents=True)
+    deployed_file.write_text("# deployed path sentinel\n", encoding="utf-8")
+    monkeypatch.setattr(evidence_route, "__file__", str(deployed_file))
+
+    assert evidence_route._project_root().exists()
+    assert evidence_route._scaffold_root().exists()
+
+
 # ---------------------------------------------------------------------------
 # Packet builder exposed at module level.
 # ---------------------------------------------------------------------------
