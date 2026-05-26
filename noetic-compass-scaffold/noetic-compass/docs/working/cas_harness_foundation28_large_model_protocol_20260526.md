@@ -4,6 +4,10 @@ Date: 2026-05-26
 
 Status: concrete protocol draft for the 20B/100B/300B open-weight path.
 
+Companion axis: 40 Elements (`10 Noetics/operators x 4 Domains`) is the strongest original Pythia readout axis. This document focuses on Foundation-28 because that was the taxonomy drift risk, but large-model replication should test both Foundation-28 and 40 Elements.
+
+Important source-definition rule: the original successful methodology used the TKS definition surfaces, not generic CAS paraphrases. Foundation-28 must preserve the legacy `1a..7d -> F1|T..F7|E` mapping. 40 Elements must preserve the legacy `A1..D10 -> operator x domain` mapping. This is not optional. The first Foundation-28 v0 library used compact source-derived Stage-7/TKS28 glosses and the first 40-Element check only derived `operator x domain` labels from an existing dataset. Treat those as engineering/probe-path runs. The final headline methodology needs source-faithful scenario libraries grounded in the original TKS definitions or in the original Stage 7/Stage 9 fixture builders.
+
 ## Purpose
 
 This protocol prevents axis drift in large-model CAS Harness evaluations.
@@ -45,6 +49,13 @@ The replication target is the original Pythia evidence chain:
 | Stage 27G readout steering | Amplification and polarity flip beat random `28/28` | Cover interventions controlled the trained Foundation readout. |
 | Eta-to-epsilon likelihood bridge | Pythia-160M `+0.283`, Pythia-1B `+0.554` | Probe-predicted readable prefixes moved next-token likelihood in the predicted direction. |
 
+The original Pythia notes also record the 40-Element readout:
+
+| Gate | Original Pythia result | Meaning |
+| --- | --- | --- |
+| 40 Elements readout | Pythia-160M `89.8%`, `+39.7 pp`, McNemar p at machine precision | The `10 Noetics/operators x 4 Domains` cross-product was the strongest readout result. |
+| 40 Elements ablation | Listed as pending Stage 9.1 in the 2026-05-17 spec | Do not claim a closed 40-Element ablation chain unless a later artifact is cited. |
+
 ## Explicit Non-Claims
 
 The following were not the original closed headline and must not be used as substitutes:
@@ -55,6 +66,8 @@ The following were not the original closed headline and must not be used as subs
 - Drive-only forward-pass steering.
 - Free-form generation steering.
 - Any run that lacks Foundation labels.
+
+Also do not present an imbalanced 40-Element relabel run as the clean headline comparator. It can be an early signal test, but the rigorous comparator needs a balanced 40-class library.
 
 The original notes also record null/bounded findings:
 
@@ -76,6 +89,8 @@ Minimum requirements:
 - Every row has a drive label: `F1..F7`.
 - Every row has a register label: `T`, `A`, `f`, or `E`.
 - Every row has a derived Foundation label such as `F1T` or machine-safe equivalent `F1|T`.
+- Prompt semantics are grounded in the TKS Foundation definition for that `drive x register` cell, not only in generic CAS drive/register wording.
+- Metadata preserves the legacy TKS code (`1a..7d`) for auditability.
 - All 28 classes are represented.
 - Class counts are reported.
 - Train/eval split is disjoint.
@@ -211,7 +226,7 @@ Fail condition:
 
 ## Current 20B Status Under This Protocol
 
-The current GPT-NeoX-20B run is **not yet** a Foundation-28 replication.
+The current GPT-NeoX-20B evidence is **not yet** a final source-faithful Foundation-28 or 40-Element replication.
 
 What exists:
 
@@ -219,32 +234,40 @@ What exists:
 - Domain/drive/operator readouts.
 - Activation-level candidate cover ablations for domain/drive/operator.
 - A drive-only forward-pass pilot that returned null/negative against matched random controls.
+- A balanced Foundation-28 v0 engineering run with real hidden-state readout and matched activation ablation.
+- Worker-side builders that preserve legacy TKS mappings for Foundation-28 (`1a..7d`) and 40 Elements (`A1..D10`).
 
 What is missing:
 
-- Balanced Foundation-28 scenario labels.
-- Foundation-28 hidden-state readout.
-- Foundation-28 cover map.
-- Foundation-28 ablation.
+- Source-faithful rerun from the original Stage 7/Stage 9 definition surfaces.
+- Balanced 40-Element scenario capture.
+- 40-Element hidden-state readout on that balanced source library.
+- Foundation-28 and 40-Element cover maps from the source-faithful libraries.
+- Matched ablation on the source-faithful libraries.
 - Foundation-level likelihood bridge.
 - Fresh full Evidence Packet.
+
+The earlier 400-row GPT-NeoX-20B dataset can derive a 40-Element label from existing `operator x domain` labels, but it is imbalanced and has only 39 populated classes. That run is useful as a zero-new-GPU signal check, not a final 40-Element headline replication.
+
+The final 40-Element library must use the TKS Element definitions directly: A1-A10 spiritual, B1-B10 mental, C1-C10 emotional, D1-D10 physical. A pure relabel of an unrelated dataset is not enough for a clean methodology claim. Worker tooling now has a source-derived TKS40 builder (`live-trace-worker/scripts/build_tks40_scenarios.py`) ported from the original Stage 9 fixture surface.
 
 ## Product Rule
 
 The UI and investor/demo language must use this distinction:
 
 ```text
-Current 20B status: real model run, real activation capture, early non-random CAS signal.
-Not yet: Foundation-28 replication, behavioral pass, or CAS universality proof.
-Next gate: Foundation-28 replication using the original Pythia methodology.
+Current 20B status: real model run, real activation capture, early non-random CAS signal, plus a Foundation-28 v0 engineering run.
+Not yet: source-faithful TKS definition replication, behavioral pass, or CAS universality proof.
+Next gate: rerun Foundation-28 and 40 Elements using the source-derived Stage 7/Stage 9 methodology.
 ```
 
 ## Concrete Next Work
 
-1. Build a balanced Foundation-28 scenario library.
-2. Re-capture GPT-NeoX-20B hidden states for that library.
-3. Run Foundation-28 readout evaluation.
-4. Generate Foundation-28 candidate covers.
-5. Run Foundation-28 matched ablation.
-6. If positive, run Foundation-level likelihood bridge.
-7. Produce Evidence Packet and a one-page result summary.
+1. Build balanced source-derived Foundation-28 and 40-Element scenario libraries.
+2. Verify metadata keeps legacy TKS codes (`1a..7d`, `A1..D10`) and current CAS labels.
+3. Re-capture GPT-NeoX-20B hidden states for both source-faithful libraries.
+4. Run Foundation-28 and 40-Element readout evaluation.
+5. Generate candidate covers.
+6. Run matched ablation.
+7. If positive, run likelihood/output bridge.
+8. Produce Evidence Packet and a one-page result summary.

@@ -55,7 +55,9 @@ def extract_labels(item: dict[str, Any]) -> dict[str, str]:
         drive = _clean_label(expected.get("drive"))
         register = _clean_label(expected.get("register"))
         foundation = _normalise_foundation(expected.get("foundation"))
+        element = _normalise_element(expected.get("element"))
         noetic = _clean_label(expected.get("noetic"))
+        operator = _clean_label(expected.get("operator"))
         if domain and _single_or_combo_domain(domain):
             labels["domain"] = domain
         if drive and drive.startswith("F"):
@@ -64,6 +66,10 @@ def extract_labels(item: dict[str, Any]) -> dict[str, str]:
             labels["register"] = register
         if foundation:
             labels["foundation"] = foundation
+        if element:
+            labels["element"] = element
+        if operator and operator.startswith("^"):
+            labels["operator"] = operator
         if noetic:
             labels["noetic"] = noetic
 
@@ -78,6 +84,8 @@ def extract_labels(item: dict[str, Any]) -> dict[str, str]:
         labels.setdefault("operator", f"^{operator}")
     if labels.get("drive") and labels.get("register"):
         labels.setdefault("foundation", f"{labels['drive']}|{labels['register']}")
+    if labels.get("operator") and labels.get("domain"):
+        labels.setdefault("element", f"{labels['operator']}|{labels['domain']}")
     return labels
 
 
@@ -158,4 +166,15 @@ def _normalise_foundation(value: Any) -> str | None:
         register = text[-1]
         if drive.startswith("F") and register in REGISTER_VALUES:
             return f"{drive}|{register}"
+    return None
+
+
+def _normalise_element(value: Any) -> str | None:
+    text = _clean_label(value)
+    if not text:
+        return None
+    if "|" in text:
+        operator, domain = text.split("|", 1)
+        if operator.startswith("^") and domain in DOMAIN_VALUES:
+            return f"{operator}|{domain}"
     return None

@@ -64,7 +64,14 @@ def test_extract_labels_supports_augmented_schema():
             "target_operators": [3],
         }
     )
-    assert labels == {"domain": "O", "drive": "F7", "foundation": "F7|E", "operator": "^3", "register": "E"}
+    assert labels == {
+        "domain": "O",
+        "drive": "F7",
+        "element": "^3|O",
+        "foundation": "F7|E",
+        "operator": "^3",
+        "register": "E",
+    }
 
 
 def test_evaluate_axis_reports_hidden_vs_controls():

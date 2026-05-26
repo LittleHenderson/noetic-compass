@@ -1,8 +1,10 @@
-"""Build a balanced Foundation-28 scenario library.
+"""Build a balanced source-derived Foundation-28 scenario library.
 
 Foundation-28 is the 7 Drive x 4 Register axis used by the original Pythia
 Foundation readout. This script creates a concrete open-weight probe dataset
-source without embedding class codes in the prompt text.
+source without embedding class codes in the prompt text. It mirrors the
+original Stage 7 TKS Foundation surface, where legacy worlds 1a-7d map onto
+CAS drive/register labels F1|T through F7|E.
 """
 
 from __future__ import annotations
@@ -69,6 +71,14 @@ REGISTERS: dict[str, dict[str, str]] = {
         "lens": "embodied",
         "cue": "the question turns on practical bodily, material, environmental, or lived constraints",
     },
+}
+
+
+REGISTER_TO_LEGACY_WORLD: dict[str, str] = {
+    "T": "a",
+    "A": "b",
+    "f": "c",
+    "E": "d",
 }
 
 
@@ -157,8 +167,10 @@ def build_payload(*, examples_per_class: int) -> dict[str, Any]:
                         "metadata": {
                             "axis": "foundation",
                             "foundation": foundation,
+                            "legacy_foundation_code": f"{drive[1:]}{REGISTER_TO_LEGACY_WORLD[register]}",
                             "drive_name": DRIVES[drive]["name"],
                             "register_name": REGISTERS[register]["name"],
+                            "source_profile": "source_derived_from_original_stage7_tks28_glosses",
                             "variant": variant,
                             "prompt_sha256": sha256_text(prompt),
                         },
@@ -170,6 +182,8 @@ def build_payload(*, examples_per_class: int) -> dict[str, Any]:
         "generator": "live-trace-worker/scripts/build_foundation28_scenarios.py",
         "axis": "foundation",
         "class_definition": "7 Drives x 4 Registers = 28 Foundation classes",
+        "source_profile": "source_derived_from_original_stage7_tks28_glosses",
+        "original_method_reference": "research/cas_probe/build_stage7_foundation_fixture.py on experiment/cas-probe-pythia",
         "examples_per_class": examples_per_class,
         "scenario_count": len(scenarios),
         "important_limit": (

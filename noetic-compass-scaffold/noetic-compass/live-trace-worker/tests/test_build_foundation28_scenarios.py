@@ -22,6 +22,18 @@ def test_build_payload_is_balanced_foundation28():
     assert set(counts.values()) == {3}
     assert counts["F1|T"] == 3
     assert counts["F7|E"] == 3
+    assert payload["source_profile"] == "source_derived_from_original_stage7_tks28_glosses"
+
+
+def test_build_payload_preserves_legacy_tks_foundation_codes():
+    payload = build_payload(examples_per_class=3)
+    by_legacy = {item["metadata"]["legacy_foundation_code"]: item for item in payload["scenarios"]}
+
+    assert by_legacy["1a"]["expected_cas_axes"]["foundation"] == "F1|T"
+    assert by_legacy["1b"]["expected_cas_axes"]["foundation"] == "F1|A"
+    assert by_legacy["1c"]["expected_cas_axes"]["foundation"] == "F1|f"
+    assert by_legacy["1d"]["expected_cas_axes"]["foundation"] == "F1|E"
+    assert by_legacy["7d"]["expected_cas_axes"]["foundation"] == "F7|E"
 
 
 def test_build_payload_does_not_put_class_codes_in_prompts():

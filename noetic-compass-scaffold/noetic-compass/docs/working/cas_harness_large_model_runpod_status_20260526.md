@@ -72,6 +72,54 @@ Metric summary:
 
 Interpretation: GPT-NeoX-20B contains recoverable CAS-labeled structure in the hidden states on this canonical-English dataset. The strong text baseline should not be described as "label leakage" by default: CAS colloquialisms are approved English aliases for the axes, so a text baseline doing well is evidence that the surface aliases are predictive. What this run does **not** yet establish is the stronger causal claim: that a localized internal CAS subspace or cover is load-bearing after accounting for the surface text signal. The next proof step is ablation/intervention against the candidate covers, not removing the canonical colloquialisms.
 
+### GPT-NeoX-20B 40-Element derived-axis check
+
+The original Pythia-160M 40-Element readout was the strongest documented readout: `89.8%`, `+39.7 pp` over text baseline, with Stage 9.1 ablation listed as pending in the 2026-05-17 spec. 40 Elements means `10 Noetics/operators x 4 Domains`.
+
+The current 400-row GPT-NeoX-20B dataset already has `operator` and `domain` labels, so it can derive a first 40-Element label without new GPU capture. The class grid is not clean, though: it has 39 populated classes, with class counts ranging from 1 to 29. This is useful as a zero-new-GPU signal check, not a clean headline comparator against Pythia's balanced 40-Element result.
+
+Definition-source caveat: this derived-axis check does **not** use the TKS A1-D10 definitions as prompt source material. It only derives labels from the existing dataset's operator/domain annotations. A clean 40-Element replication needs a balanced scenario library grounded in the TKS spiritual/mental/emotional/physical Element definitions. Worker tooling now includes `live-trace-worker/scripts/build_tks40_scenarios.py`, which preserves the legacy `A1..D10` codes and current CAS `operator x domain` labels.
+
+Tooling: `live-trace-worker/scripts/derive_probe_dataset_axis.py` adds derived axes such as `element = operator|domain` to captured `.npz` datasets.
+
+Derived 40-Element result on the existing 400-row dataset:
+
+| Axis | Usable classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 40 Elements (`operator x domain`) | 32 of 40 | 33 | 13.75% | 7.50% | 3.00% | 45.00% | Weak hidden signal above majority/noise, but far below text baseline and not comparable to balanced Pythia Stage 9 |
+
+Activation ablation on that imbalanced 40-Element derived axis reduced hidden readout from `13.75%` to `8.75%`; same-size random label controls had mean drop `0.00 pp`. This is a small activation-level signal, not a 40-Element replication claim.
+
+### GPT-NeoX-20B Foundation-28 corrected run
+
+- Scenario source: `/workspace/cas-harness-large-eval/scenarios/foundation28_balanced_v0_20260526.json`
+- Scenarios: `280`, exactly `10` per Foundation class
+- Taxonomy: `7 Drives x 4 Registers = 28 Foundation classes`
+- Source-definition caveat: this v0 library used compact source-derived Stage-7/TKS28 glosses and now preserves the legacy `1a..7d` mapping in the builder. A final methodology run should still be treated as source-faithful only when the scenario library is generated from the original Stage 7 surface or the full TKS 28 Foundation text, not generic CAS drive/register wording.
+- Model: `EleutherAI/gpt-neox-20b`
+- Layers captured: `0-43`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_foundation28_280_layers_0_43.npz`
+- Eval report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_foundation28_probe_eval_report_top256.json`
+- Ablation report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_foundation28_activation_cover_ablation_report_top256.json`
+- Local artifact copy: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Axis | Classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Foundation-28 | 28 | 1 | 73.21% | 3.57% | 2.59% | 100.00% | Strong hidden readout above weak controls, but generated prompt wording is text-separable |
+| Drive slice | 7 | 41 | 71.43% | 14.29% | 14.20% | 100.00% | Useful slice, not the headline taxonomy |
+| Register slice | 4 | 38 | 98.21% | 25.00% | 26.25% | 100.00% | Register is very separable in this generated library |
+
+Foundation-28 activation ablation:
+
+| Test | Clean acc | Ablated acc | Mean random-control drop | Wrong-cover drop | Honest read |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Label-specific Foundation cover | 73.21% | 57.14% | 1.25 pp | 3.57 pp | True Foundation cover hurts readout much more than matched random/wrong controls |
+| Foundation union cover | 73.21% | 32.14% | 25.09 pp | 3.57 pp | Large effect, but union random controls also damage the model; label-specific result is cleaner |
+
+Interpretation: this is the best 20B result so far. It does **not** yet equal the original Pythia claim because the text baseline is too high on the generated scenario library and the library used compact source-derived Stage-7/TKS28 glosses rather than a full source-faithful definition library. It does show a real Foundation-28 hidden readout and an activation-level causal-control signal on GPT-NeoX-20B.
+
 ### GPT-NeoX-20B activation-level cover ablation
 
 - Evaluator: `live-trace-worker/scripts/ablate_probe_dataset.py`
@@ -141,9 +189,9 @@ Concrete protocol: `docs/working/cas_harness_foundation28_large_model_protocol_2
 
 ## What this proves
 
-This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for 400 labeled scenarios, train/evaluate heldout readout probes, and run an activation-level matched-control ablation over candidate covers.
+This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for labeled scenarios, train/evaluate heldout readout probes, run derived-axis checks, and run activation-level matched-control ablation over candidate covers.
 
-It does **not** yet prove CAS universality at 20B. The current evidence includes heldout readout, activation-level matched-control ablation, and a first genuine 27H-style forward-pass pilot. The forward-pass pilot is currently null against random controls, so the 20B behavioral intervention claim remains open.
+It does **not** yet prove CAS universality at 20B. The current evidence includes heldout readout, activation-level matched-control ablation, a corrected Foundation-28 run with a strong activation-level result, and a first genuine 27H-style forward-pass pilot. The forward-pass pilot is currently null against random controls, and the corrected Foundation-28 library has a 100% text baseline, so the behavioral/universality claim remains open.
 
 ## Why the missing fields are good, not bad
 
@@ -157,18 +205,20 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 ## Next required proof steps for 20B
 
 1. Keep the canonical CAS colloquialisms; do not treat approved English aliases as contamination.
-2. Build or recover a balanced 28-Foundation scenario set (`F1..F7 x T/A/f/E`). The current 400-row 20B dataset has domain, drive, and operator labels only; it does **not** contain register/foundation labels in the captured metadata. A first concrete scenario source now exists at `live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json` with 280 rows, 10 per Foundation class.
-3. Capture GPT-NeoX-20B hidden states for that Foundation-labeled set.
-4. Train/evaluate the 28-Foundation readout and compare it against weak controls plus the canonical-English surface baseline.
-5. Run Foundation-level subspace/cover ablation with matched random and wrong-Foundation controls.
-6. Only after the Foundation readout/intervention gate passes, run the 27H-style likelihood/output bridge at the Foundation level.
-7. Run the same scenario set with:
+2. Completed: run the 40-Element derived-axis check on the existing 400-row dataset. Result is weak and imbalanced; build a balanced 40-Element library before using it as a headline comparator.
+3. Completed: build a balanced 28-Foundation scenario set (`F1..F7 x T/A/f/E`) at `live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json`.
+4. Completed: capture GPT-NeoX-20B hidden states for the Foundation-labeled set.
+5. Completed: train/evaluate the 28-Foundation readout and compare it against controls.
+6. Completed: run Foundation-level activation ablation with matched random and wrong-Foundation controls.
+7. Next: rerun with source-derived Foundation-28 and 40-Element libraries that preserve legacy TKS codes (`1a..7d`, `A1..D10`) and current CAS labels, then rerun the readout gates.
+8. Only after the Foundation readout/intervention gate is strong against text controls, run the 27H-style likelihood/output bridge at the Foundation level.
+9. Run the same scenario set with:
    - probe readout
    - ablation/intervention
    - matched random/wrong-label controls
    - output-effect prediction
    - Evidence Packet merge
-8. Report accepted accuracy, coverage, confidence bands, and failures separately.
+10. Report accepted accuracy, coverage, confidence bands, and failures separately.
 
 ## 100B / 300B status
 
