@@ -79,6 +79,7 @@ class FleetJobRecord:
     expected_outputs: tuple[str, ...]
     status: FleetJobStatus = "queued"
     lease_token: str | None = None
+    lease_token_hash: str | None = None
     lease_expires_at: str | None = None
     evidence_packet_fragment_ref: str | None = None
     produced_outputs: tuple[str, ...] = ()
@@ -86,7 +87,7 @@ class FleetJobRecord:
     error_message: str | None = None
     updated_at: str = field(default_factory=lambda: _utc_now())
 
-    def to_dict(self) -> dict[str, object]:
+    def to_dict(self, *, include_lease_token: bool = False) -> dict[str, object]:
         return {
             "job_id": self.job_id,
             "audit_id": self.audit_id,
@@ -97,7 +98,7 @@ class FleetJobRecord:
             "assigned_methods": list(self.assigned_methods),
             "expected_outputs": list(self.expected_outputs),
             "status": self.status,
-            "lease_token": self.lease_token,
+            "lease_token": self.lease_token if include_lease_token else None,
             "lease_expires_at": self.lease_expires_at,
             "evidence_packet_fragment_ref": self.evidence_packet_fragment_ref,
             "produced_outputs": list(self.produced_outputs),
@@ -135,19 +136,21 @@ class FleetRunRecord:
             "leased_jobs": len(leased),
             "completed_fragments": len(completed),
             "failed_jobs": len(failed),
-            "registered_workers": sum(1 for job in self.jobs if job.assigned_worker_id in _WORKERS),
+            "registered_workers": sum(1 for job in self.jobs if _job_has_ready_worker(job)),
             "stale_workers": stale_workers,
-            "jobs": [job.to_dict() for job in self.jobs],
+            "jobs": [job.to_dict(include_lease_token=False) for job in self.jobs],
         }
 
 
 _WORKERS: dict[str, FleetWorkerRecord] = {}
 _FLEET_RUNS: dict[str, FleetRunRecord] = {}
+_FRAGMENT_REFS: set[str] = set()
 
 
 def reset_fleet_executor_for_tests() -> None:
     _WORKERS.clear()
     _FLEET_RUNS.clear()
+    _FRAGMENT_REFS.clear()
 
 
 def register_worker(
@@ -168,6 +171,9 @@ def register_worker(
     methods = tuple(_dedupe_nonempty(supported_methods))
     if not methods:
         raise FleetExecutorStateError("Worker registration requires at least one supported method.")
+    existing = _WORKERS.get(worker_id.strip())
+    if existing is not None:
+        raise FleetExecutorStateError("Worker ID is already registered; heartbeat the existing worker instead.")
 
     now = _utc_now()
     record = FleetWorkerRecord(
@@ -188,6 +194,8 @@ def heartbeat_worker(worker_id: str) -> FleetWorkerRecord | None:
     worker = _WORKERS.get(worker_id)
     if worker is None:
         return None
+    if _mark_stale_worker_if_expired(worker):
+        _expire_worker_leases(worker.worker_id)
     worker.status = "active"
     worker.last_heartbeat_at = _utc_now()
     return worker
@@ -287,6 +295,7 @@ def lease_next_job(
             now = datetime.now(UTC)
             job.status = "leased"
             job.lease_token = _lease_token_for(job, now)
+            job.lease_token_hash = _hash_token(job.lease_token)
             job.lease_expires_at = (now + timedelta(seconds=lease_seconds)).isoformat()
             job.updated_at = now.isoformat()
             run.status = "LEASING"
@@ -326,6 +335,8 @@ def submit_job_receipt(
         raise FleetExecutorStateError("Job receipt requires an active lease.")
     if job.lease_token != lease_token:
         raise FleetExecutorStateError("Job receipt lease_token does not match the active lease.")
+    if job.lease_token_hash != _hash_token(lease_token):
+        raise FleetExecutorStateError("Job receipt lease_token does not match the active lease.")
     if job_status == "completed" and not (evidence_packet_fragment_ref or "").strip():
         raise FleetExecutorStateError("Completed job receipts require evidence_packet_fragment_ref.")
     if job_status == "failed" and not (error_message or "").strip():
@@ -338,14 +349,28 @@ def submit_job_receipt(
     overlap = set(produced).intersection(missing)
     if overlap:
         raise FleetExecutorStateError(f"Produced and missing outputs overlap: {', '.join(sorted(overlap))}.")
+    fragment_ref = (evidence_packet_fragment_ref or "").strip()
+    if job_status == "completed":
+        _validate_fragment_ref(
+            run=run,
+            job=job,
+            worker=worker,
+            produced_outputs=produced,
+            missing_outputs=missing,
+            fragment_ref=fragment_ref,
+        )
 
     now = _utc_now()
     job.produced_outputs = produced
     job.missing_outputs = missing
-    job.evidence_packet_fragment_ref = evidence_packet_fragment_ref.strip() if evidence_packet_fragment_ref else None
+    job.evidence_packet_fragment_ref = fragment_ref if fragment_ref else None
     job.error_message = error_message.strip() if error_message else None
     job.status = "failed" if job_status == "failed" else "completed"
+    job.lease_token = None
+    job.lease_token_hash = None
     job.updated_at = now
+    if job.evidence_packet_fragment_ref:
+        _FRAGMENT_REFS.add(job.evidence_packet_fragment_ref)
 
     record_worker_evidence(
         audit_id,
@@ -388,8 +413,7 @@ def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
 
 
 def _refresh_run_gate(run: FleetRunRecord) -> None:
-    registered = {worker_id for worker_id in _WORKERS}
-    unregistered_jobs = [job for job in run.jobs if job.assigned_worker_id not in registered]
+    unregistered_jobs = [job for job in run.jobs if not _job_has_ready_worker(job)]
     failed_jobs = [job for job in run.jobs if job.status == "failed"]
     incomplete_jobs = [job for job in run.jobs if job.status not in {"completed", "failed"}]
     missing_jobs = [job for job in run.jobs if job.missing_outputs]
@@ -416,6 +440,11 @@ def _refresh_run_gate(run: FleetRunRecord) -> None:
 
 
 def _assert_worker_can_run_job(worker: FleetWorkerRecord, job: FleetJobRecord) -> None:
+    audit = get_distributed_audit(job.audit_id)
+    if audit is None:
+        raise FleetExecutorStateError("Distributed audit session not found for fleet job.")
+    if worker.model_id != audit.plan.model_id:
+        raise FleetExecutorStateError("Worker model_id does not match the distributed audit model.")
     unsupported = set(job.assigned_methods) - set(worker.supported_methods)
     if unsupported:
         raise FleetExecutorStateError(
@@ -429,7 +458,23 @@ def _expire_stale_leases(run: FleetRunRecord) -> None:
         if job.status == "leased" and job.lease_expires_at and _parse_utc(job.lease_expires_at) < now:
             job.status = "expired"
             job.lease_token = None
+            job.lease_token_hash = None
             job.updated_at = now.isoformat()
+
+
+def _expire_worker_leases(worker_id: str) -> None:
+    now = _utc_now()
+    for run in _FLEET_RUNS.values():
+        changed = False
+        for job in run.jobs:
+            if job.assigned_worker_id == worker_id and job.status == "leased":
+                job.status = "expired"
+                job.lease_token = None
+                job.lease_token_hash = None
+                job.updated_at = now
+                changed = True
+        if changed:
+            run.updated_at = now
 
 
 def _stale_assigned_workers(run: FleetRunRecord) -> list[str]:
@@ -450,9 +495,23 @@ def _mark_stale_worker_if_expired(
 ) -> bool:
     cutoff = datetime.now(UTC) - timedelta(seconds=max_heartbeat_age_seconds)
     if _parse_utc(worker.last_heartbeat_at) < cutoff:
+        was_active = worker.status == "active"
         worker.status = "stale"
+        if was_active:
+            _expire_worker_leases(worker.worker_id)
         return True
     return worker.status == "stale"
+
+
+def _job_has_ready_worker(job: FleetJobRecord) -> bool:
+    worker = _WORKERS.get(job.assigned_worker_id)
+    if worker is None or worker.status != "active":
+        return False
+    try:
+        _assert_worker_can_run_job(worker, job)
+    except FleetExecutorStateError:
+        return False
+    return True
 
 
 def _job(run: FleetRunRecord, job_id: str) -> FleetJobRecord | None:
@@ -475,6 +534,98 @@ def _lease_token_for(job: FleetJobRecord, leased_at: datetime) -> str:
         "leased_at": leased_at.isoformat(),
     }
     return hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
+
+
+def _hash_token(token: str | None) -> str | None:
+    if token is None:
+        return None
+    return hashlib.sha256(token.encode("utf-8")).hexdigest()
+
+
+def build_evidence_fragment_ref(
+    *,
+    audit_id: str,
+    job_id: str,
+    worker_id: str,
+    model_id: str,
+    layer_start: int,
+    layer_end: int,
+    shard_id: str,
+    expected_outputs: list[str] | tuple[str, ...],
+    produced_outputs: list[str] | tuple[str, ...],
+    missing_outputs: list[str] | tuple[str, ...] = (),
+) -> str:
+    payload = _canonical_fragment_payload(
+        audit_id=audit_id,
+        job_id=job_id,
+        worker_id=worker_id,
+        model_id=model_id,
+        layer_start=layer_start,
+        layer_end=layer_end,
+        shard_id=shard_id,
+        expected_outputs=tuple(expected_outputs),
+        produced_outputs=tuple(produced_outputs),
+        missing_outputs=tuple(missing_outputs),
+    )
+    digest = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+    return f"cas-fragment://{audit_id}/{job_id}/{worker_id}/{shard_id}/sha256:{digest}"
+
+
+def _validate_fragment_ref(
+    *,
+    run: FleetRunRecord,
+    job: FleetJobRecord,
+    worker: FleetWorkerRecord,
+    produced_outputs: tuple[str, ...],
+    missing_outputs: tuple[str, ...],
+    fragment_ref: str,
+) -> None:
+    expected = build_evidence_fragment_ref(
+        audit_id=run.audit_id,
+        job_id=job.job_id,
+        worker_id=worker.worker_id,
+        model_id=worker.model_id,
+        layer_start=job.layer_start,
+        layer_end=job.layer_end,
+        shard_id=job.shard_id,
+        expected_outputs=job.expected_outputs,
+        produced_outputs=produced_outputs,
+        missing_outputs=missing_outputs,
+    )
+    if fragment_ref != expected:
+        raise FleetExecutorStateError(
+            "Evidence Packet fragment ref failed hash/assignment validation for this audit job."
+        )
+    if fragment_ref in _FRAGMENT_REFS:
+        raise FleetExecutorStateError("Evidence Packet fragment ref was already submitted.")
+
+
+def _canonical_fragment_payload(
+    *,
+    audit_id: str,
+    job_id: str,
+    worker_id: str,
+    model_id: str,
+    layer_start: int,
+    layer_end: int,
+    shard_id: str,
+    expected_outputs: tuple[str, ...],
+    produced_outputs: tuple[str, ...],
+    missing_outputs: tuple[str, ...],
+) -> dict[str, object]:
+    return {
+        "schema_version": "cas_harness_evidence_fragment.v1",
+        "audit_id": audit_id,
+        "job_id": job_id,
+        "worker_id": worker_id,
+        "model_id": model_id,
+        "layer_start": layer_start,
+        "layer_end": layer_end,
+        "shard_id": shard_id,
+        "expected_outputs": list(expected_outputs),
+        "produced_outputs": list(produced_outputs),
+        "missing_outputs": list(missing_outputs),
+    }
 
 
 def _dedupe_nonempty(values: list[str]) -> list[str]:

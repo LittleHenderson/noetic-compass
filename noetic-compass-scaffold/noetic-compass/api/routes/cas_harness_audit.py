@@ -679,6 +679,11 @@ async def submit_distributed_worker_evidence(
     req: DistributedWorkerEvidenceRequest,
 ) -> DistributedAuditResponse:
     """Attach one Probe Worker's evidence receipt to the distributed audit."""
+    if get_fleet_run(audit_id) is not None:
+        raise HTTPException(
+            status_code=409,
+            detail="Fleet-backed distributed audits require leased fleet job receipts.",
+        )
     try:
         record = record_worker_evidence(
             audit_id,
@@ -806,7 +811,7 @@ async def lease_distributed_fleet_job(
         if get_fleet_run(audit_id) is None:
             raise HTTPException(status_code=404, detail="Fleet run not found")
         return None
-    return FleetJobResponse.model_validate(job.to_dict())
+    return FleetJobResponse.model_validate(job.to_dict(include_lease_token=True))
 
 
 @router.post("/distributed/session/{audit_id}/fleet/job/{job_id}/receipt", response_model=FleetRunResponse)

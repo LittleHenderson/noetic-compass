@@ -14,6 +14,7 @@ from datetime import UTC, datetime
 import hashlib
 import json
 from typing import Literal
+from uuid import uuid4
 
 from api.services.cas_harness_scale_planner import ScalePlan, ScalePlanRequest, build_scale_plan
 
@@ -114,9 +115,6 @@ def create_distributed_audit(request: ScalePlanRequest) -> DistributedAuditRecor
     plan = build_scale_plan(request)
     now = datetime.now(UTC).isoformat()
     audit_id = _audit_id_for(plan)
-    existing = _DISTRIBUTED_AUDITS.get(audit_id)
-    if existing is not None:
-        return existing
 
     worker_evidence = [
         WorkerEvidenceRecord(
@@ -312,6 +310,7 @@ def _audit_id_for(plan: ScalePlan) -> str:
         "num_layers": plan.num_layers,
         "worker_count": plan.recommended_worker_count,
         "precision": plan.memory_estimate.precision,
+        "run_nonce": uuid4().hex,
     }
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True).encode("utf-8")).hexdigest()
     return f"cas-dist-{digest[:16]}"

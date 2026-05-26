@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
+import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
 
 function renderPage() {
   return render(
@@ -270,6 +271,24 @@ function fleetRun(overrides: Record<string, unknown> = {}) {
   };
 }
 
+async function fleetFragmentRef(
+  overrides: Partial<Parameters<typeof buildCasHarnessFleetEvidenceFragmentRef>[0]> = {},
+) {
+  return buildCasHarnessFleetEvidenceFragmentRef({
+    audit_id: 'cas-dist-unit',
+    job_id: 'fleet-job-001',
+    worker_id: 'probe-worker-01',
+    model_id: 'customer/open-weight-100b',
+    layer_start: 0,
+    layer_end: 9,
+    shard_id: 'layers-000-009',
+    expected_outputs: ['layer_activation_summary'],
+    produced_outputs: ['layer_activation_summary'],
+    missing_outputs: [],
+    ...overrides,
+  });
+}
+
 describe('AuditConsolePage', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -465,6 +484,7 @@ describe('AuditConsolePage', () => {
   });
 
   it('wires fleet executor controls to prepare, register, lease, receipt, and merge APIs', async () => {
+    const fragmentRef = await fleetFragmentRef();
     const leasedJob = fleetJob({
       status: 'leased',
       lease_token: 'lease-token-001',
@@ -473,7 +493,7 @@ describe('AuditConsolePage', () => {
     });
     const completedJob = fleetJob({
       status: 'completed',
-      evidence_packet_fragment_ref: 'cas-dist-unit:fleet-job-001:evidence-fragment',
+      evidence_packet_fragment_ref: fragmentRef,
       produced_outputs: ['layer_activation_summary'],
       updated_at: '2026-05-26T10:02:00Z',
     });
@@ -540,6 +560,9 @@ describe('AuditConsolePage', () => {
 
     expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
+    fireEvent.change(screen.getByLabelText('Protected API token'), {
+      target: { value: 'fleet-jwt' },
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
     expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
@@ -560,6 +583,7 @@ describe('AuditConsolePage', () => {
     expect(await screen.findByText('1/1')).toBeInTheDocument();
     expect(screen.getByTestId('fleet-executor-gate')).toHaveTextContent(/receipts are still missing/i);
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
+    expect(screen.queryByText('lease-token-001')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Submit one receipt' }));
     expect(await screen.findByText('ready for verifier')).toBeInTheDocument();
@@ -585,12 +609,21 @@ describe('AuditConsolePage', () => {
     expect(JSON.parse(String((fetchMock.mock.calls[5][1] as RequestInit).body))).toMatchObject({
       worker_id: 'probe-worker-01',
       lease_token: 'lease-token-001',
-      evidence_packet_fragment_ref: 'cas-dist-unit:fleet-job-001:evidence-fragment',
+      evidence_packet_fragment_ref: fragmentRef,
       job_status: 'completed',
     });
+    for (const call of fetchMock.mock.calls) {
+      expect((call[1] as RequestInit).headers).toMatchObject({
+        Authorization: 'Bearer fleet-jwt',
+      });
+    }
   });
 
   it('keeps fleet merge disabled when the backend verifier gate is blocked', async () => {
+    const blockedFragmentRef = await fleetFragmentRef({
+      produced_outputs: [],
+      missing_outputs: ['layer_activation_summary'],
+    });
     const leasedJob = fleetJob({
       status: 'leased',
       lease_token: 'lease-token-001',
@@ -599,7 +632,7 @@ describe('AuditConsolePage', () => {
     });
     const blockedJob = fleetJob({
       status: 'completed',
-      evidence_packet_fragment_ref: 'cas-dist-unit:fleet-job-001:evidence-fragment',
+      evidence_packet_fragment_ref: blockedFragmentRef,
       produced_outputs: [],
       missing_outputs: ['layer_activation_summary'],
       updated_at: '2026-05-26T10:02:00Z',

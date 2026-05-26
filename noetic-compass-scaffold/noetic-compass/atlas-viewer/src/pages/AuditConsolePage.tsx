@@ -16,6 +16,7 @@ import {
   type ProvenanceChip,
 } from '../lib/casHarnessAudit';
 import {
+  buildCasHarnessFleetEvidenceFragmentRef,
   createCasHarnessDistributedAudit,
   createCasHarnessScalePlan,
   createCasHarnessAuditSession,
@@ -28,6 +29,7 @@ import {
   startCasHarnessAuditSession,
   submitCasHarnessFleetJobReceipt,
   verifyCasHarnessModelTarget,
+  type CasHarnessAuditApiOptions,
   type CasHarnessAuditSession,
   type CasHarnessDistributedAudit,
   type CasHarnessFleetJob,
@@ -294,9 +296,13 @@ function replaceFleetJob(
   run: CasHarnessFleetRun,
   job: CasHarnessFleetJob,
 ): CasHarnessFleetRun {
+  const jobForRun = {
+    ...job,
+    lease_token: null,
+  };
   const jobs = run.jobs.some((candidate) => candidate.job_id === job.job_id)
-    ? run.jobs.map((candidate) => (candidate.job_id === job.job_id ? job : candidate))
-    : [...run.jobs, job];
+    ? run.jobs.map((candidate) => (candidate.job_id === job.job_id ? jobForRun : candidate))
+    : [...run.jobs, jobForRun];
 
   return {
     ...run,
@@ -604,6 +610,19 @@ const fleetButtonRowStyle: CSSProperties = {
   gap: 8,
 };
 
+const fleetAuthInputStyle: CSSProperties = {
+  width: 'min(100%, 360px)',
+  minHeight: 38,
+  padding: '8px 10px',
+  borderRadius: 6,
+  border: '1px solid rgba(148, 163, 184, 0.26)',
+  background: 'rgba(2, 6, 23, 0.48)',
+  color: COLORS.textPrimary,
+  fontFamily: THEME.fontMono,
+  fontSize: 12,
+  outline: 'none',
+};
+
 const fleetNoticeStyle: CSSProperties = {
   margin: 0,
   color: COLORS.textSecondary,
@@ -648,6 +667,7 @@ export default function AuditConsolePage() {
   const [registeredFleetWorker, setRegisteredFleetWorker] =
     useState<CasHarnessFleetWorker | null>(null);
   const [leasedFleetJob, setLeasedFleetJob] = useState<CasHarnessFleetJob | null>(null);
+  const [fleetAuthToken, setFleetAuthToken] = useState('');
   const [fleetExecutorError, setFleetExecutorError] = useState<string | null>(null);
   const [isFleetExecutorLoading, setIsFleetExecutorLoading] = useState(false);
 
@@ -667,6 +687,10 @@ export default function AuditConsolePage() {
         ? 'Verdict ready'
         : 'Run CAS audit';
   const showVerdictExplainer = Boolean(session?.verdict || session?.verifier_decision);
+  const protectedAuditApiOptions = useMemo<CasHarnessAuditApiOptions | undefined>(() => {
+    const authToken = fleetAuthToken.trim();
+    return authToken ? { authToken } : undefined;
+  }, [fleetAuthToken]);
   const fleetRegisteredWorkers = fleetRun
     ? Math.max(fleetRun.registered_workers, registeredFleetWorker ? 1 : 0)
     : registeredFleetWorker
@@ -802,6 +826,7 @@ export default function AuditConsolePage() {
     try {
       const audit = await createCasHarnessDistributedAudit(
         SCALE_PLAN_REQUESTS[enterprisePlanSize],
+        protectedAuditApiOptions,
       );
       setDistributedAudit(audit);
     } catch (error) {
@@ -818,7 +843,10 @@ export default function AuditConsolePage() {
     setDistributedAuditError(null);
     setIsDistributedAuditLoading(true);
     try {
-      const audit = await dispatchCasHarnessDistributedAudit(distributedAudit.audit_id);
+      const audit = await dispatchCasHarnessDistributedAudit(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
       setDistributedAudit(audit);
     } catch (error) {
       setDistributedAuditError(
@@ -834,7 +862,10 @@ export default function AuditConsolePage() {
     setDistributedAuditError(null);
     setIsDistributedAuditLoading(true);
     try {
-      const audit = await mergeCasHarnessDistributedAudit(distributedAudit.audit_id);
+      const audit = await mergeCasHarnessDistributedAudit(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
       setDistributedAudit(audit);
     } catch (error) {
       setDistributedAuditError(
@@ -850,7 +881,10 @@ export default function AuditConsolePage() {
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
-      const run = await prepareCasHarnessFleetRun(distributedAudit.audit_id);
+      const run = await prepareCasHarnessFleetRun(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
       setFleetRun(run);
       setLeasedFleetJob(null);
     } catch (error) {
@@ -881,7 +915,7 @@ export default function AuditConsolePage() {
           'verification_stack',
           'evidence_packet',
         ],
-      });
+      }, protectedAuditApiOptions);
       setRegisteredFleetWorker(worker);
       setFleetRun((run) =>
         run
@@ -906,9 +940,13 @@ export default function AuditConsolePage() {
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
-      const job = await leaseCasHarnessFleetJob(distributedAudit.audit_id, {
-        worker_id: registeredFleetWorker.worker_id,
-      });
+      const job = await leaseCasHarnessFleetJob(
+        distributedAudit.audit_id,
+        {
+          worker_id: registeredFleetWorker.worker_id,
+        },
+        protectedAuditApiOptions,
+      );
       if (!job) {
         setFleetExecutorError('No fleet jobs are available for this worker.');
         return;
@@ -929,18 +967,32 @@ export default function AuditConsolePage() {
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
+      const producedOutputs = leasedFleetJob.expected_outputs;
+      const missingOutputs: string[] = [];
+      const evidencePacketFragmentRef = await buildCasHarnessFleetEvidenceFragmentRef({
+        audit_id: distributedAudit.audit_id,
+        job_id: leasedFleetJob.job_id,
+        worker_id: registeredFleetWorker.worker_id,
+        model_id: registeredFleetWorker.model_id,
+        layer_start: leasedFleetJob.layer_start,
+        layer_end: leasedFleetJob.layer_end,
+        shard_id: leasedFleetJob.shard_id,
+        expected_outputs: leasedFleetJob.expected_outputs,
+        produced_outputs: producedOutputs,
+        missing_outputs: missingOutputs,
+      });
       const run = await submitCasHarnessFleetJobReceipt(
         distributedAudit.audit_id,
         leasedFleetJob.job_id,
         {
           worker_id: registeredFleetWorker.worker_id,
           lease_token: leasedFleetJob.lease_token,
-          produced_outputs: leasedFleetJob.expected_outputs,
-          missing_outputs: [],
-          evidence_packet_fragment_ref:
-            `${distributedAudit.audit_id}:${leasedFleetJob.job_id}:evidence-fragment`,
+          produced_outputs: producedOutputs,
+          missing_outputs: missingOutputs,
+          evidence_packet_fragment_ref: evidencePacketFragmentRef,
           job_status: 'completed',
         },
+        protectedAuditApiOptions,
       );
       setFleetRun(run);
       setLeasedFleetJob(null);
@@ -958,7 +1010,10 @@ export default function AuditConsolePage() {
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
-      const run = await mergeCasHarnessFleetRun(distributedAudit.audit_id);
+      const run = await mergeCasHarnessFleetRun(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
       setFleetRun(run);
     } catch (error) {
       setFleetExecutorError(
@@ -1125,6 +1180,19 @@ export default function AuditConsolePage() {
                   stays blocked until a leased job returns an Evidence Packet
                   fragment.
                 </p>
+                <label htmlFor="fleet-auth-token" style={verdictLabelStyle}>
+                  Protected API token
+                </label>
+                <input
+                  id="fleet-auth-token"
+                  type="password"
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={fleetAuthToken}
+                  onChange={(event) => setFleetAuthToken(event.target.value)}
+                  placeholder="Optional bearer token"
+                  style={fleetAuthInputStyle}
+                />
               </div>
               <div style={fleetButtonRowStyle}>
                 <button

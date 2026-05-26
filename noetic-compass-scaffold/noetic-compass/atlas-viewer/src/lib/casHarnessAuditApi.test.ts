@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  buildCasHarnessFleetEvidenceFragmentRef,
   CasHarnessAuditApiError,
   createCasHarnessAuditSession,
   createCasHarnessDistributedAudit,
@@ -19,6 +20,7 @@ import {
   parseDistributedAuditResponse,
   parseFleetRunResponse,
   parseModelTargetVerificationResponse,
+  parseNullableFleetJobResponse,
   parseScalePlanResponse,
   prepareCasHarnessFleetRun,
   registerCasHarnessFleetWorker,
@@ -251,6 +253,24 @@ function fleetRun(overrides: Record<string, unknown> = {}): Record<string, unkno
   };
 }
 
+async function fleetFragmentRef(
+  overrides: Partial<Parameters<typeof buildCasHarnessFleetEvidenceFragmentRef>[0]> = {},
+): Promise<string> {
+  return buildCasHarnessFleetEvidenceFragmentRef({
+    audit_id: 'cas-dist-unit',
+    job_id: 'fleet-job-01',
+    worker_id: 'probe-worker-01',
+    model_id: 'customer/open-100b',
+    layer_start: 0,
+    layer_end: 9,
+    shard_id: 'layers-000-009',
+    expected_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    missing_outputs: [],
+    ...overrides,
+  });
+}
+
 describe('casHarnessAuditApi', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
@@ -454,6 +474,37 @@ describe('casHarnessAuditApi', () => {
     ]);
   });
 
+  it('adds Authorization when callers supply an audit auth token', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(distributedAudit({ status: 'DISPATCHED' })));
+
+    await dispatchCasHarnessDistributedAudit('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+      authToken: 'fleet-jwt',
+    });
+
+    expect(fetchImpl.mock.calls[0][1]).toMatchObject({
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer fleet-jwt',
+      },
+    });
+  });
+
+  it('preserves explicit Bearer auth tokens without double-prefixing', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(distributedAudit({ status: 'DISPATCHED' })));
+
+    await dispatchCasHarnessDistributedAudit('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+      authToken: 'Bearer already-prefixed',
+    });
+
+    expect((fetchImpl.mock.calls[0][1] as RequestInit).headers).toMatchObject({
+      Authorization: 'Bearer already-prefixed',
+    });
+  });
+
   it('registers, lists, heartbeats, and stale-scans fleet workers through the API', async () => {
     const fetchImpl = vi
       .fn()
@@ -502,6 +553,7 @@ describe('casHarnessAuditApi', () => {
   });
 
   it('prepares, leases, receipts, merges, gets, and lists fleet runs without fabricating ACCEPT', async () => {
+    const fragmentRef = await fleetFragmentRef();
     const leasedJob = fleetJob({
       status: 'leased',
       lease_token: 'lease-token-01',
@@ -509,9 +561,8 @@ describe('casHarnessAuditApi', () => {
     });
     const completedJob = fleetJob({
       status: 'completed',
-      lease_token: 'lease-token-01',
       lease_expires_at: '2026-05-26T10:30:00Z',
-      evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+      evidence_packet_fragment_ref: fragmentRef,
       produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
     });
     const readyRun = fleetRun({
@@ -554,7 +605,7 @@ describe('casHarnessAuditApi', () => {
         worker_id: 'probe-worker-01',
         lease_token: 'lease-token-01',
         produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
-        evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+        evidence_packet_fragment_ref: fragmentRef,
       },
       { baseUrl: '/api/cas-harness/audit', fetchImpl },
     );
@@ -579,7 +630,7 @@ describe('casHarnessAuditApi', () => {
     expect(receipted.verifier_gate_status).toBe('ready_for_verifier');
     expect(receipted.jobs[0]).toMatchObject({
       status: 'completed',
-      evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+      evidence_packet_fragment_ref: fragmentRef,
     });
     expect(merged.status).toBe('COMPLETE');
     expect(merged.merged_packet_trace_id).toBe('cas-dist-unit-fleet-merge');
@@ -594,6 +645,38 @@ describe('casHarnessAuditApi', () => {
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet',
       '/api/cas-harness/audit/distributed/fleet/runs',
     ]);
+  });
+
+  it('builds canonical content-addressed fleet Evidence Packet fragment refs', async () => {
+    const fragmentRef = await fleetFragmentRef();
+
+    expect(fragmentRef).toMatch(
+      /^cas-fragment:\/\/cas-dist-unit\/fleet-job-01\/probe-worker-01\/layers-000-009\/sha256:[a-f0-9]{64}$/,
+    );
+    expect(fragmentRef).not.toContain('evidence-fragment');
+  });
+
+  it('redacts lease tokens from fleet run responses while preserving lease responses', () => {
+    const parsedRun = parseFleetRunResponse(fleetRun({
+      status: 'LEASING',
+      verifier_gate_status: 'waiting_for_receipts',
+      leased_jobs: 1,
+      jobs: [
+        fleetJob({
+          status: 'leased',
+          lease_token: 'leaked-lease-token',
+          lease_expires_at: '2026-05-26T10:30:00Z',
+        }),
+      ],
+    }));
+    const parsedLease = parseNullableFleetJobResponse(fleetJob({
+      status: 'leased',
+      lease_token: 'immediate-lease-token',
+      lease_expires_at: '2026-05-26T10:30:00Z',
+    }));
+
+    expect(parsedRun.jobs[0]?.lease_token).toBeNull();
+    expect(parsedLease?.lease_token).toBe('immediate-lease-token');
   });
 
   it('verifies an API endpoint target using a credential reference', async () => {
@@ -808,7 +891,8 @@ describe('casHarnessAuditApi', () => {
           status: 'completed',
           produced_outputs: ['layer_activation_summary'],
           missing_outputs: ['worker_evidence_manifest'],
-          evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+          evidence_packet_fragment_ref:
+            'cas-fragment://cas-dist-unit/fleet-job-01/probe-worker-01/layers-000-009/sha256:0000000000000000000000000000000000000000000000000000000000000000',
         }),
       ],
     }))).toThrow(/ready_for_verifier cannot include missing job outputs/);

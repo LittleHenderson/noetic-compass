@@ -151,6 +151,7 @@ export interface CasHarnessAuditApiOptions {
   baseUrl?: string;
   fetchImpl?: typeof fetch;
   signal?: AbortSignal;
+  authToken?: string | null;
 }
 
 export type CasHarnessScalePlanPrecision = 'fp16' | 'bf16' | 'int8' | 'int4';
@@ -346,6 +347,19 @@ export interface CasHarnessFleetJobReceiptRequest {
   evidence_packet_fragment_ref?: string | null;
   error_message?: string | null;
   job_status?: 'completed' | 'failed';
+}
+
+export interface CasHarnessFleetEvidenceFragmentRefInput {
+  audit_id: string;
+  job_id: string;
+  worker_id: string;
+  model_id: string;
+  layer_start: number;
+  layer_end: number;
+  shard_id: string;
+  expected_outputs: readonly string[];
+  produced_outputs: readonly string[];
+  missing_outputs?: readonly string[];
 }
 
 export interface CasHarnessFleetRun {
@@ -624,6 +638,40 @@ export async function submitCasHarnessFleetJobReceipt(
   return parseFleetRunResponse(response);
 }
 
+export async function buildCasHarnessFleetEvidenceFragmentRef(
+  input: CasHarnessFleetEvidenceFragmentRefInput,
+): Promise<string> {
+  const auditId = requiredFragmentString(input.audit_id, 'audit_id');
+  const jobId = requiredFragmentString(input.job_id, 'job_id');
+  const workerId = requiredFragmentString(input.worker_id, 'worker_id');
+  const shardId = requiredFragmentString(input.shard_id, 'shard_id');
+  const expectedOutputs = cleanFragmentOutputList(input.expected_outputs, 'expected_outputs');
+  const producedOutputs = cleanFragmentOutputList(input.produced_outputs, 'produced_outputs');
+  const explicitMissingOutputs = cleanFragmentOutputList(
+    input.missing_outputs ?? [],
+    'missing_outputs',
+  );
+  const missingOutputs = Array.from(new Set([
+    ...explicitMissingOutputs,
+    ...expectedOutputs.filter((output) => !producedOutputs.includes(output)),
+  ])).sort();
+  const payload = {
+    schema_version: 'cas_harness_evidence_fragment.v1',
+    audit_id: auditId,
+    job_id: jobId,
+    worker_id: workerId,
+    model_id: requiredFragmentString(input.model_id, 'model_id'),
+    layer_start: requiredFragmentInteger(input.layer_start, 'layer_start'),
+    layer_end: requiredFragmentInteger(input.layer_end, 'layer_end'),
+    shard_id: shardId,
+    expected_outputs: expectedOutputs,
+    produced_outputs: producedOutputs,
+    missing_outputs: missingOutputs,
+  };
+  const digest = await sha256Hex(stableJsonStringify(payload));
+  return `cas-fragment://${auditId}/${jobId}/${workerId}/${shardId}/sha256:${digest}`;
+}
+
 export async function mergeCasHarnessFleetRun(
   auditId: string,
   options?: CasHarnessAuditApiOptions,
@@ -887,7 +935,7 @@ async function requestJson(
 
   let response: Response;
   try {
-    response = await fetchImpl(url, init);
+    response = await fetchImpl(url, withAuthHeader(init, options));
   } catch (err) {
     throw new CasHarnessAuditApiError('CAS Harness audit API request failed before a response', {
       detail: err instanceof Error ? err.message : String(err),
@@ -914,6 +962,37 @@ async function requestJson(
       cause: err,
     });
   }
+}
+
+function withAuthHeader(
+  init: RequestInit,
+  options?: CasHarnessAuditApiOptions,
+): RequestInit {
+  const authorization = authorizationHeaderValue(options?.authToken);
+  if (!authorization) return init;
+
+  return {
+    ...init,
+    headers: {
+      ...headersToRecord(init.headers),
+      Authorization: authorization,
+    },
+  };
+}
+
+function authorizationHeaderValue(authToken?: string | null): string | null {
+  const trimmed = authToken?.trim();
+  if (!trimmed) return null;
+  return /^Bearer\s+/i.test(trimmed) ? trimmed : `Bearer ${trimmed}`;
+}
+
+function headersToRecord(headers: HeadersInit | undefined): Record<string, string> {
+  if (!headers) return {};
+  if (typeof Headers !== 'undefined' && headers instanceof Headers) {
+    return Object.fromEntries(headers.entries());
+  }
+  if (Array.isArray(headers)) return Object.fromEntries(headers);
+  return { ...(headers as Record<string, string>) };
 }
 
 async function readErrorDetail(response: Response): Promise<string> {
@@ -969,7 +1048,14 @@ export function parseNullableFleetJobResponse(raw: unknown): CasHarnessFleetJob 
   return parseFleetJobResponse(raw);
 }
 
-export function parseFleetJobResponse(raw: unknown): CasHarnessFleetJob {
+interface FleetJobParseOptions {
+  leaseTokenMode?: 'preserve' | 'redact';
+}
+
+export function parseFleetJobResponse(
+  raw: unknown,
+  options: FleetJobParseOptions = {},
+): CasHarnessFleetJob {
   if (!isRecord(raw)) {
     throw new CasHarnessAuditApiError('CAS Harness fleet job response was not an object');
   }
@@ -984,14 +1070,18 @@ export function parseFleetJobResponse(raw: unknown): CasHarnessFleetJob {
   const status = parseFleetJobStatus(raw.status);
   const leaseToken = nullableStringStrict(raw.lease_token, 'fleet_job.lease_token');
   const leaseExpiresAt = nullableStringStrict(raw.lease_expires_at, 'fleet_job.lease_expires_at');
+  const preserveLeaseToken = options.leaseTokenMode !== 'redact';
   const evidencePacketFragmentRef = nullableStringStrict(
     raw.evidence_packet_fragment_ref,
     'fleet_job.evidence_packet_fragment_ref',
   );
   const errorMessage = nullableStringStrict(raw.error_message, 'fleet_job.error_message');
   assertWorkerOutputReceipts(expectedOutputs, producedOutputs, missingOutputs);
-  if (status === 'leased' && (leaseToken === null || leaseExpiresAt === null)) {
-    throw new CasHarnessAuditApiError('CAS Harness leased fleet job requires lease_token and lease_expires_at');
+  if (status === 'leased' && leaseExpiresAt === null) {
+    throw new CasHarnessAuditApiError('CAS Harness leased fleet job requires lease_expires_at');
+  }
+  if (status === 'leased' && preserveLeaseToken && leaseToken === null) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet job lease response requires lease_token');
   }
   if (status === 'completed' && evidencePacketFragmentRef === null) {
     throw new CasHarnessAuditApiError(
@@ -1011,7 +1101,7 @@ export function parseFleetJobResponse(raw: unknown): CasHarnessFleetJob {
     assigned_methods: parseStringArray(raw.assigned_methods, 'fleet_job.assigned_methods'),
     expected_outputs: expectedOutputs,
     status,
-    lease_token: leaseToken,
+    lease_token: preserveLeaseToken ? leaseToken : null,
     lease_expires_at: leaseExpiresAt,
     evidence_packet_fragment_ref: evidencePacketFragmentRef,
     produced_outputs: producedOutputs,
@@ -1035,7 +1125,9 @@ export function parseFleetRunResponse(raw: unknown): CasHarnessFleetRun {
       'CAS Harness fleet executor confidence must be null until verifier decision layer computes confidence',
     );
   }
-  const jobs = Array.isArray(raw.jobs) ? raw.jobs.map(parseFleetJobResponse) : null;
+  const jobs = Array.isArray(raw.jobs)
+    ? raw.jobs.map((job) => parseFleetJobResponse(job, { leaseTokenMode: 'redact' }))
+    : null;
   if (!jobs) {
     throw new CasHarnessAuditApiError('CAS Harness fleet run jobs must be an array');
   }
@@ -1629,6 +1721,76 @@ function nullableStringStrict(raw: unknown, field: string): string | null {
   throw new CasHarnessAuditApiError(
     `CAS Harness audit response field "${field}" must be null or a non-empty string`,
   );
+}
+
+function requiredFragmentString(raw: unknown, field: string): string {
+  if (typeof raw === 'string' && raw.trim().length > 0) return raw.trim();
+  throw new CasHarnessAuditApiError(`CAS Harness fleet fragment field "${field}" must be a non-empty string`);
+}
+
+function requiredFragmentInteger(raw: unknown, field: string): number {
+  if (typeof raw === 'number' && Number.isInteger(raw)) return raw;
+  throw new CasHarnessAuditApiError(`CAS Harness fleet fragment field "${field}" must be an integer`);
+}
+
+function cleanFragmentOutputList(values: readonly string[], field: string): string[] {
+  if (!Array.isArray(values)) {
+    throw new CasHarnessAuditApiError(`CAS Harness fleet fragment field "${field}" must be an array`);
+  }
+  const cleaned: string[] = [];
+  const seen = new Set<string>();
+  for (const value of values) {
+    if (typeof value !== 'string') {
+      throw new CasHarnessAuditApiError(`CAS Harness fleet fragment field "${field}" must contain strings`);
+    }
+    const stripped = value.trim();
+    if (!stripped) {
+      throw new CasHarnessAuditApiError(`CAS Harness fleet fragment field "${field}" cannot contain empty strings`);
+    }
+    if (!seen.has(stripped)) {
+      cleaned.push(stripped);
+      seen.add(stripped);
+    }
+  }
+  return cleaned;
+}
+
+function stableJsonStringify(value: unknown): string {
+  if (Array.isArray(value)) {
+    return `[${value.map((item) => stableJsonStringify(item)).join(',')}]`;
+  }
+  if (isRecord(value)) {
+    return `{${Object.keys(value)
+      .sort()
+      .map((key) => `${pythonAsciiJsonString(key)}:${stableJsonStringify(value[key])}`)
+      .join(',')}}`;
+  }
+  if (typeof value === 'string') return pythonAsciiJsonString(value);
+  const json = JSON.stringify(value);
+  if (json === undefined) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet fragment payload contained unsupported JSON');
+  }
+  return json;
+}
+
+function pythonAsciiJsonString(value: string): string {
+  return JSON.stringify(value).replace(
+    /[\u007f-\uffff]/g,
+    (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, '0')}`,
+  );
+}
+
+async function sha256Hex(value: string): Promise<string> {
+  const subtle = globalThis.crypto?.subtle;
+  if (!subtle) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness fleet Evidence Packet fragment refs require Web Crypto SHA-256 support',
+    );
+  }
+  const digest = await subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return Array.from(new Uint8Array(digest))
+    .map((byte) => byte.toString(16).padStart(2, '0'))
+    .join('');
 }
 
 function baseUrl(options?: CasHarnessAuditApiOptions): string {
