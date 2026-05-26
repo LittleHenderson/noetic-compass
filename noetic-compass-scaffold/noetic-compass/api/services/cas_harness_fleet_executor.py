@@ -34,6 +34,8 @@ FleetVerifierGateStatus = Literal[
     "ready_for_verifier",
 ]
 
+DEFAULT_MAX_HEARTBEAT_AGE_SECONDS = 120
+
 
 class FleetExecutorStateError(ValueError):
     """Raised when a fleet transition would make the audit look more ready than it is."""
@@ -195,15 +197,15 @@ def list_workers() -> list[FleetWorkerRecord]:
     return list(_WORKERS.values())
 
 
-def mark_stale_workers(*, max_heartbeat_age_seconds: int = 120) -> list[FleetWorkerRecord]:
+def mark_stale_workers(*, max_heartbeat_age_seconds: int = DEFAULT_MAX_HEARTBEAT_AGE_SECONDS) -> list[FleetWorkerRecord]:
     if max_heartbeat_age_seconds <= 0:
         raise FleetExecutorStateError("max_heartbeat_age_seconds must be positive.")
-    cutoff = datetime.now(UTC) - timedelta(seconds=max_heartbeat_age_seconds)
     stale: list[FleetWorkerRecord] = []
     for worker in _WORKERS.values():
-        last_heartbeat = _parse_utc(worker.last_heartbeat_at)
-        if last_heartbeat < cutoff:
-            worker.status = "stale"
+        if _mark_stale_worker_if_expired(
+            worker,
+            max_heartbeat_age_seconds=max_heartbeat_age_seconds,
+        ):
             stale.append(worker)
     return stale
 
@@ -274,6 +276,7 @@ def lease_next_job(
     worker = _WORKERS.get(worker_id)
     if worker is None:
         raise FleetExecutorStateError("Worker must register before leasing jobs.")
+    _mark_stale_worker_if_expired(worker)
     if worker.status != "active":
         raise FleetExecutorStateError("Worker heartbeat is not active; cannot lease jobs.")
 
@@ -313,6 +316,12 @@ def submit_job_receipt(
         raise KeyError(job_id)
     if job.assigned_worker_id != worker_id:
         raise FleetExecutorStateError("Worker cannot submit a receipt for another worker's job.")
+    worker = _WORKERS.get(worker_id)
+    if worker is None:
+        raise FleetExecutorStateError("Worker must register before submitting job receipts.")
+    _mark_stale_worker_if_expired(worker)
+    if worker.status != "active":
+        raise FleetExecutorStateError("Worker heartbeat is not active; cannot submit job receipts.")
     if job.status != "leased":
         raise FleetExecutorStateError("Job receipt requires an active lease.")
     if job.lease_token != lease_token:
@@ -400,7 +409,10 @@ def _refresh_run_gate(run: FleetRunRecord) -> None:
         run.merge_reason = "At least one worker receipt is missing required outputs; cannot ACCEPT."
     else:
         run.verifier_gate_status = "ready_for_verifier"
-        run.merge_reason = "All worker receipts are present; verifier decision layer can evaluate the merged packet."
+        run.merge_reason = (
+            "All worker receipts are present; merge can assemble the distributed "
+            "Evidence Packet for verifier review."
+        )
 
 
 def _assert_worker_can_run_job(worker: FleetWorkerRecord, job: FleetJobRecord) -> None:
@@ -424,9 +436,23 @@ def _stale_assigned_workers(run: FleetRunRecord) -> list[str]:
     stale: set[str] = set()
     for job in run.jobs:
         worker = _WORKERS.get(job.assigned_worker_id)
-        if worker is not None and worker.status != "active":
-            stale.add(worker.worker_id)
+        if worker is not None:
+            _mark_stale_worker_if_expired(worker)
+            if worker.status != "active":
+                stale.add(worker.worker_id)
     return sorted(stale)
+
+
+def _mark_stale_worker_if_expired(
+    worker: FleetWorkerRecord,
+    *,
+    max_heartbeat_age_seconds: int = DEFAULT_MAX_HEARTBEAT_AGE_SECONDS,
+) -> bool:
+    cutoff = datetime.now(UTC) - timedelta(seconds=max_heartbeat_age_seconds)
+    if _parse_utc(worker.last_heartbeat_at) < cutoff:
+        worker.status = "stale"
+        return True
+    return worker.status == "stale"
 
 
 def _job(run: FleetRunRecord, job_id: str) -> FleetJobRecord | None:

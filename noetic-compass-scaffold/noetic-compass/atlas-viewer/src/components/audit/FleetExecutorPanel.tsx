@@ -142,7 +142,7 @@ function gateCopy(status: FleetVerifierGateStatus): { tone: 'info' | 'warning' |
     case 'blocked_missing_outputs':
       return { tone: 'error', text: 'A receipt is missing required outputs. The run cannot become ACCEPT.' };
     case 'ready_for_verifier':
-      return { tone: 'info', text: 'All fragments are present. The verifier can review the merged Evidence Packet.' };
+      return { tone: 'info', text: 'All fragment receipts are present. Merge can assemble the distributed Evidence Packet for verifier review.' };
   }
 }
 
@@ -181,7 +181,7 @@ export function FleetExecutorPanel({
       </p>
 
       <div style={gridStyle}>
-        <Metric label="Workers" value={`${registeredWorkers} registered`} />
+        <Metric label="Covered jobs" value={`${registeredWorkers}/${totalJobs}`} />
         <Metric label="Leases" value={`${leasedJobs}/${totalJobs}`} />
         <Metric label="Fragments" value={`${completedFragments}/${totalJobs}`} />
         <Metric label="Stale workers" value={`${staleWorkers}`} />

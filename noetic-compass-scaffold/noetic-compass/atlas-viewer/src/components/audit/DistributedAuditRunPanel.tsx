@@ -232,7 +232,7 @@ export function DistributedAuditRunPanel({
             Dispatch workers
           </button>
           <button type="button" style={buttonStyle(canMerge)} onClick={onMergeRun} disabled={!canMerge}>
-            Merge evidence
+            Merge distributed receipts
           </button>
         </div>
       </header>

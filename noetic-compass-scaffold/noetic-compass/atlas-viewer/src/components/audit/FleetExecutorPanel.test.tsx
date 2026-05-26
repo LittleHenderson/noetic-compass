@@ -34,7 +34,7 @@ describe('FleetExecutorPanel', () => {
       />,
     );
 
-    expect(screen.getByText('24 registered')).toBeInTheDocument();
+    expect(screen.getByText('24/25')).toBeInTheDocument();
     expect(screen.getByText('20/25')).toBeInTheDocument();
     expect(screen.getByText('18/25')).toBeInTheDocument();
     expect(screen.getByText('1')).toBeInTheDocument();
@@ -72,7 +72,7 @@ describe('FleetExecutorPanel', () => {
       />,
     );
 
-    expect(screen.getByTestId('fleet-executor-gate')).toHaveTextContent(/verifier can review/i);
+    expect(screen.getByTestId('fleet-executor-gate')).toHaveTextContent(/merge can assemble/i);
     expect(screen.queryByTestId('fleet-executor-block')).not.toBeInTheDocument();
   });
 });

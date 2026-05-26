@@ -157,6 +157,24 @@ def test_stale_heartbeat_detection_marks_workers_and_blocks_gate():
     assert refreshed.status == "active"
 
 
+def test_stale_heartbeat_blocks_gate_without_explicit_stale_scan():
+    audit = _create_dispatched_audit(parameter_count_b=1, num_layers=1)
+    assignment = audit.worker_evidence[0]
+    _register_assignment_worker(assignment, model_id=audit.plan.model_id)
+    run = prepare_fleet_for_audit(audit.audit_id)
+    assert run is not None
+
+    worker = list_workers()[0]
+    worker.last_heartbeat_at = (datetime.now(UTC) - timedelta(seconds=180)).isoformat()
+    saved = get_fleet_run(audit.audit_id)
+
+    assert saved is not None
+    assert saved.verifier_gate_status == "waiting_for_workers"
+    assert saved.to_dict()["stale_workers"] == [assignment.worker_id]
+    with pytest.raises(FleetExecutorStateError, match="heartbeat is not active"):
+        lease_next_job(audit_id=audit.audit_id, worker_id=assignment.worker_id)
+
+
 def test_receipt_submission_requires_active_lease_and_evidence_packet_fragment_ref():
     audit = _create_dispatched_audit(parameter_count_b=1, num_layers=1)
     assignment = audit.worker_evidence[0]
@@ -185,6 +203,34 @@ def test_receipt_submission_requires_active_lease_and_evidence_packet_fragment_r
             lease_token=leased.lease_token or "",
             produced_outputs=list(leased.expected_outputs),
         )
+
+
+def test_stale_worker_cannot_submit_receipt_with_unexpired_lease():
+    audit = _create_dispatched_audit(parameter_count_b=1, num_layers=1)
+    assignment = audit.worker_evidence[0]
+    _register_assignment_worker(assignment, model_id=audit.plan.model_id)
+    run = prepare_fleet_for_audit(audit.audit_id)
+    assert run is not None
+    leased = lease_next_job(audit_id=audit.audit_id, worker_id=assignment.worker_id)
+    assert leased is not None
+
+    worker = list_workers()[0]
+    worker.last_heartbeat_at = (datetime.now(UTC) - timedelta(seconds=180)).isoformat()
+
+    with pytest.raises(FleetExecutorStateError, match="heartbeat is not active"):
+        submit_job_receipt(
+            audit_id=audit.audit_id,
+            job_id=leased.job_id,
+            worker_id=assignment.worker_id,
+            lease_token=leased.lease_token or "",
+            produced_outputs=list(leased.expected_outputs),
+            evidence_packet_fragment_ref=f"packet-fragment://{leased.job_id}",
+        )
+
+    saved = get_fleet_run(audit.audit_id)
+    assert saved is not None
+    assert saved.verifier_gate_status == "waiting_for_workers"
+    assert saved.to_dict()["stale_workers"] == [assignment.worker_id]
 
 
 def test_merge_is_blocked_until_every_assigned_job_has_a_receipt():

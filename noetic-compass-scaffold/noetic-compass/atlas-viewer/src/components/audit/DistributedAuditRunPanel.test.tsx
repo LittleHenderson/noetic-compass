@@ -74,7 +74,7 @@ describe('DistributedAuditRunPanel', () => {
     expect(screen.getByText(/scale card above is a plan/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Create run' })).toBeEnabled();
     expect(screen.getByRole('button', { name: 'Dispatch workers' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge distributed receipts' })).toBeDisabled();
   });
 
   it('renders worker receipts and merge reason for an existing run', () => {
@@ -93,7 +93,7 @@ describe('DistributedAuditRunPanel', () => {
     expect(screen.getByText('probe-worker-01')).toBeInTheDocument();
     expect(screen.getByText('Outputs 0/1')).toBeInTheDocument();
     expect(screen.getByText('No verdict')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge distributed receipts' })).toBeDisabled();
   });
 
   it('fires command callbacks', () => {
@@ -159,7 +159,7 @@ describe('DistributedAuditRunPanel', () => {
     expect(screen.getByTestId('distributed-300b-gate')).toHaveTextContent(
       /1 worker receipt is still pending/i,
     );
-    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge distributed receipts' })).toBeDisabled();
   });
 
   it('keeps merge disabled when outputs are missing or workers failed', () => {
@@ -201,7 +201,7 @@ describe('DistributedAuditRunPanel', () => {
     expect(screen.getByText('Missing: layer_activation_summary')).toBeInTheDocument();
     expect(screen.getByText('worker timeout')).toBeInTheDocument();
     expect(screen.getByTestId('distributed-merge-gate')).toHaveTextContent(/required worker outputs are missing/i);
-    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge distributed receipts' })).toBeDisabled();
   });
 
   it('enables merge only after every worker receipt is complete', () => {
@@ -241,7 +241,7 @@ describe('DistributedAuditRunPanel', () => {
 
     expect(screen.getByText('2/2 ready')).toBeInTheDocument();
     expect(screen.getByTestId('distributed-merge-gate')).toHaveTextContent(/all worker receipts are ready/i);
-    fireEvent.click(screen.getByRole('button', { name: 'Merge evidence' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Merge distributed receipts' }));
     expect(onMergeRun).toHaveBeenCalledOnce();
   });
 });

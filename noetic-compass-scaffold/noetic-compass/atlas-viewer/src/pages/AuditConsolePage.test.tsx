@@ -206,6 +206,70 @@ function distributedAudit(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function fleetWorker(overrides: Record<string, unknown> = {}) {
+  return {
+    worker_id: 'probe-worker-01',
+    model_id: 'customer/open-weight-100b',
+    worker_url: 'local://probe-worker-01',
+    gpu_type: 'H100-80GB',
+    capacity: 1,
+    supported_methods: [
+      'foundation_probe',
+      'rpm_gate_check',
+      'inversion_scan',
+      'blindspot_detection',
+      'verification_stack',
+      'evidence_packet',
+    ],
+    registered_at: '2026-05-26T10:00:00Z',
+    last_heartbeat_at: '2026-05-26T10:00:01Z',
+    status: 'active',
+    ...overrides,
+  };
+}
+
+function fleetJob(overrides: Record<string, unknown> = {}) {
+  return {
+    job_id: 'fleet-job-001',
+    audit_id: 'cas-dist-unit',
+    assigned_worker_id: 'probe-worker-01',
+    layer_start: 0,
+    layer_end: 9,
+    shard_id: 'layers-000-009',
+    assigned_methods: ['foundation_probe'],
+    expected_outputs: ['layer_activation_summary'],
+    status: 'queued',
+    lease_token: null,
+    lease_expires_at: null,
+    evidence_packet_fragment_ref: null,
+    produced_outputs: [],
+    missing_outputs: [],
+    error_message: null,
+    updated_at: '2026-05-26T10:00:00Z',
+    ...overrides,
+  };
+}
+
+function fleetRun(overrides: Record<string, unknown> = {}) {
+  return {
+    audit_id: 'cas-dist-unit',
+    status: 'PREPARED',
+    verifier_gate_status: 'waiting_for_workers',
+    merged_packet_trace_id: null,
+    merge_reason: 'Fleet jobs prepared; waiting for registered workers.',
+    created_at: '2026-05-26T10:00:00Z',
+    updated_at: '2026-05-26T10:00:00Z',
+    total_jobs: 1,
+    leased_jobs: 0,
+    completed_fragments: 0,
+    failed_jobs: 0,
+    registered_workers: 0,
+    stale_workers: [],
+    jobs: [fleetJob()],
+    ...overrides,
+  };
+}
+
 describe('AuditConsolePage', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -392,12 +456,189 @@ describe('AuditConsolePage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Dispatch workers' }));
     expect(await screen.findByText('DISPATCHED')).toBeInTheDocument();
     expect(screen.getByTestId('distributed-merge-gate')).toHaveTextContent(/worker receipt is still pending/i);
-    expect(screen.getByRole('button', { name: 'Merge evidence' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge distributed receipts' })).toBeDisabled();
 
     expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
       '/api/cas-harness/audit/distributed/session',
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/dispatch',
     ]);
+  });
+
+  it('wires fleet executor controls to prepare, register, lease, receipt, and merge APIs', async () => {
+    const leasedJob = fleetJob({
+      status: 'leased',
+      lease_token: 'lease-token-001',
+      lease_expires_at: '2026-05-26T10:05:00Z',
+      updated_at: '2026-05-26T10:01:00Z',
+    });
+    const completedJob = fleetJob({
+      status: 'completed',
+      evidence_packet_fragment_ref: 'cas-dist-unit:fleet-job-001:evidence-fragment',
+      produced_outputs: ['layer_activation_summary'],
+      updated_at: '2026-05-26T10:02:00Z',
+    });
+    const readyRun = fleetRun({
+      status: 'MERGE_PENDING',
+      verifier_gate_status: 'ready_for_verifier',
+      merge_reason: 'All worker Evidence Packet fragments returned; verifier gate is ready.',
+      registered_workers: 1,
+      completed_fragments: 1,
+      jobs: [completedJob],
+    });
+    const mergedRun = fleetRun({
+      status: 'COMPLETE',
+      verifier_gate_status: 'ready_for_verifier',
+      merged_packet_trace_id: 'cas-dist-unit-merged-packet',
+      merge_reason:
+        'Merged packet ready for verifier decision. Final ACCEPT/SUPPRESS still requires verifier decision layer.',
+      registered_workers: 1,
+      completed_fragments: 1,
+      jobs: [completedJob],
+    });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => distributedAudit(),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          distributedAudit({
+            status: 'DISPATCHED',
+            worker_evidence: [
+              {
+                ...distributedAudit().worker_evidence[0],
+                worker_status: 'assigned',
+              },
+            ],
+          }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => fleetRun(),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => fleetWorker(),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => leasedJob,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => readyRun,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => mergedRun,
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
+    expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Dispatch workers' }));
+    expect(await screen.findByText('DISPATCHED')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare fleet' }));
+    expect(await screen.findByTestId('fleet-executor-gate')).toHaveTextContent(
+      /waiting for registered/i,
+    );
+    expect(screen.getByRole('button', { name: 'Lease one job' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Register demo worker' }));
+    expect(await screen.findByText('1/1')).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Lease one job' }));
+    expect(await screen.findByText('1/1')).toBeInTheDocument();
+    expect(screen.getByTestId('fleet-executor-gate')).toHaveTextContent(/receipts are still missing/i);
+    expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Submit one receipt' }));
+    expect(await screen.findByText('ready for verifier')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeEnabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Merge fleet' }));
+    expect(await screen.findByText(/cas-dist-unit-merged-packet/)).toBeInTheDocument();
+    expect(screen.getByText(/Final ACCEPT\/SUPPRESS still requires verifier decision layer/i)).toBeInTheDocument();
+
+    expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/session',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/dispatch',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/prepare',
+      '/api/cas-harness/audit/distributed/fleet/worker/register',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/lease',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/fleet-job-001/receipt',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/merge',
+    ]);
+    expect(JSON.parse(String((fetchMock.mock.calls[3][1] as RequestInit).body))).toMatchObject({
+      worker_id: 'probe-worker-01',
+      gpu_type: 'H100-80GB',
+    });
+    expect(JSON.parse(String((fetchMock.mock.calls[5][1] as RequestInit).body))).toMatchObject({
+      worker_id: 'probe-worker-01',
+      lease_token: 'lease-token-001',
+      evidence_packet_fragment_ref: 'cas-dist-unit:fleet-job-001:evidence-fragment',
+      job_status: 'completed',
+    });
+  });
+
+  it('keeps fleet merge disabled when the backend verifier gate is blocked', async () => {
+    const leasedJob = fleetJob({
+      status: 'leased',
+      lease_token: 'lease-token-001',
+      lease_expires_at: '2026-05-26T10:05:00Z',
+      updated_at: '2026-05-26T10:01:00Z',
+    });
+    const blockedJob = fleetJob({
+      status: 'completed',
+      evidence_packet_fragment_ref: 'cas-dist-unit:fleet-job-001:evidence-fragment',
+      produced_outputs: [],
+      missing_outputs: ['layer_activation_summary'],
+      updated_at: '2026-05-26T10:02:00Z',
+    });
+    const blockedRun = fleetRun({
+      status: 'MERGE_PENDING',
+      verifier_gate_status: 'blocked_missing_outputs',
+      merge_reason: 'At least one worker receipt is missing required outputs; cannot ACCEPT.',
+      registered_workers: 1,
+      completed_fragments: 1,
+      jobs: [blockedJob],
+    });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => distributedAudit() })
+      .mockResolvedValueOnce({ ok: true, json: async () => distributedAudit({ status: 'DISPATCHED' }) })
+      .mockResolvedValueOnce({ ok: true, json: async () => fleetRun() })
+      .mockResolvedValueOnce({ ok: true, json: async () => fleetWorker() })
+      .mockResolvedValueOnce({ ok: true, json: async () => leasedJob })
+      .mockResolvedValueOnce({ ok: true, json: async () => blockedRun });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
+    expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Dispatch workers' }));
+    expect(await screen.findByText('DISPATCHED')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare fleet' }));
+    expect(await screen.findByTestId('fleet-executor-gate')).toHaveTextContent(/waiting for registered/i);
+    fireEvent.click(screen.getByRole('button', { name: 'Register demo worker' }));
+    expect(await screen.findByText('1/1')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Lease one job' }));
+    expect(await screen.findByText('waiting for receipts')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Submit one receipt' }));
+
+    expect(await screen.findByTestId('fleet-executor-gate')).toHaveTextContent(/missing required outputs/i);
+    expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
+    expect(fetchMock).toHaveBeenCalledTimes(6);
   });
 
   it('explains a backend ACCEPT verdict with verifier reason and proof chips', async () => {
