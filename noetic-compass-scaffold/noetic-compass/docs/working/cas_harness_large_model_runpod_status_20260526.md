@@ -189,6 +189,42 @@ Activation ablation:
 
 Interpretation: this is the cleanest 20B Foundation-28 result because it uses the exact original Stage 7 role-bound fixture method rather than the simpler generated v0 library. It does not match Pythia-160M's `78.6% -> 3.57%` collapse, but it is a genuine same-method large-model replication signal: hidden Foundation readout beats text (`51.04%` vs `42.28%`) and true-cover activation ablation causes a `12.44 pp` drop while random/wrong controls do not.
 
+### GPT-NeoX-20B exact Stage 7 eta-to-epsilon bridge
+
+- Runner: `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py`
+- Protocol source: Stage 7.CPL2 full-loop shape from `experiment/cas-probe-pythia`
+- Model: `EleutherAI/gpt-neox-20b`
+- Scenario source: exact Stage 7 role-bound fixture, same as the Foundation-28 run above
+- Axis: `foundation`
+- Readout layer: `40`
+- Cases: `112` (`16` same-register drive-cycle test rows per drive)
+- Output report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_eta_epsilon_bridge_per_drive16.json`
+- Markdown report on RunPod: `/workspace/cas-harness-large-eval/reports/GPT_NEOX_20B_STAGE7_ETA_EPSILON_BRIDGE_PER_DRIVE16.md`
+- Local copies: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Condition | Mean margin | Mean delta vs none | Positive rows | Sign p | Honest read |
+| --- | ---: | ---: | ---: | ---: | --- |
+| none | 0.0674 | 0.0000 | 0/112 | 1.000000 | Baseline likelihood margin |
+| gold readable | 0.7274 | +0.6601 | 93/112 | ~0 | Epsilon/readable realization works strongly when the Foundation label is correct |
+| probe readable | 0.2647 | +0.1974 | 72/112 | 0.001608 | Positive and statistically directional, but misses the original strict `>0.20` delta gate by about `0.0026` |
+| partner readable | -0.5811 | -0.6485 | 26/112 | ~1.0 | Wrong readable prefix pushes the likelihood the wrong way, as expected |
+| gold raw | 0.0695 | +0.0022 | 59/112 | 0.318400 | Raw CAS symbols remain non-load-bearing |
+| probe raw | 0.0708 | +0.0035 | 59/112 | 0.318400 | Raw CAS symbols remain non-load-bearing |
+
+Status: `ORACLE_ETA_EPSILON_BRIDGE_PASS_PROBE_LOOP_WEAK`.
+
+Correctness-bucket diagnosis:
+
+| Bucket | Rows | Probe delta vs none | Probe minus partner | Gold delta vs none | Interpretation |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Foundation correct | 42 | +0.6517 | +1.3451 | +0.6517 | When the probe predicts the exact Foundation label, the full eta-to-epsilon loop works |
+| Drive correct | 68 | +0.7185 | +1.3742 | +0.6793 | Even a correct Drive with wrong register often carries the bridge |
+| Foundation wrong | 70 | -0.0752 | +0.5464 | +0.6651 | Wrong Foundation predictions are the bottleneck |
+
+Interpretation: this is a real 20B behavioral likelihood result, but it is not a full 20B closure. The readable epsilon bridge itself works: gold-readable prefixes produce a large positive likelihood shift and wrong-readable prefixes push in the opposite direction. The raw-symbol control stays near zero, matching the original methodology. The current failure is the probe handoff: selected-row Foundation accuracy is only `37.50%` and selected Drive accuracy is `60.71%`. The next fix is therefore readout confidence/filtering or a stronger Foundation readout, not changing the TKS definitions or abandoning the eta-to-epsilon mechanism.
+
 ### GPT-NeoX-20B activation-level cover ablation
 
 - Evaluator: `live-trace-worker/scripts/ablate_probe_dataset.py`

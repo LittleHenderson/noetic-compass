@@ -238,11 +238,12 @@ What exists:
 - Worker-side builders that preserve legacy TKS mappings for Foundation-28 (`1a..7d`) and 40 Elements (`A1..D10`).
 - A source-derived TKS40 GPT-NeoX-20B run with 40-class readout and activation-level cover ablation.
 - An exact-original Stage 7 Foundation-28 GPT-NeoX-20B rerun from the role-bound fixture builder.
+- An exact-original Stage 7 eta-to-epsilon likelihood bridge on GPT-NeoX-20B. Gold/readable epsilon prefixes pass strongly (`+0.6601` mean delta, `93/112` positive rows); probe/readable is positive (`+0.1974`, `72/112`, p `0.001608`) but misses the original strict full-loop gate by about `0.0026`.
 
 What is missing:
 
-- Behavioral / likelihood bridge after the source-faithful Foundation-28 and TKS40 activation-level gates.
-- Foundation-level likelihood bridge.
+- A probe-predicted eta-to-epsilon pass that clears the original strict full-loop gate without oracle/gold labels.
+- A readout confidence/filtering layer that prevents weak Foundation predictions from being realized into epsilon prefixes.
 - Fresh full Evidence Packet.
 
 The earlier 400-row GPT-NeoX-20B dataset can derive a 40-Element label from existing `operator x domain` labels, but it is imbalanced and has only 39 populated classes. That run is useful as a zero-new-GPU signal check, not a final 40-Element headline replication.
@@ -255,17 +256,15 @@ The UI and investor/demo language must use this distinction:
 
 ```text
 Current 20B status: real model run, real activation capture, exact Stage 7 Foundation-28 readout/ablation pass, and source-derived TKS40 activation-level pass.
-Not yet: behavioral pass or CAS universality proof.
-Next gate: run Foundation/Element likelihood-output bridge and merge into an Evidence Packet.
+Behavioral bridge status: oracle/gold readable epsilon pass; probe-predicted full loop is weak because the Foundation readout handoff is not accurate enough yet.
+Not yet: full probe-predicted behavioral pass or CAS universality proof.
+Next gate: improve/filter Foundation readout, rerun eta-to-epsilon, then merge a passing chain into an Evidence Packet.
 ```
 
 ## Concrete Next Work
 
-1. Build balanced source-derived Foundation-28 and 40-Element scenario libraries.
-2. Verify metadata keeps legacy TKS codes (`1a..7d`, `A1..D10`) and current CAS labels.
-3. Re-capture GPT-NeoX-20B hidden states for both source-faithful libraries.
-4. Run Foundation-28 and 40-Element readout evaluation.
-5. Generate candidate covers.
-6. Run matched ablation.
-7. If positive, run likelihood/output bridge.
-8. Produce Evidence Packet and a one-page result summary.
+1. Add Foundation readout confidence/filtering to the eta-to-epsilon runner.
+2. Rerun GPT-NeoX-20B eta-to-epsilon on high-confidence Foundation predictions and report kept coverage separately from pass accuracy.
+3. Run lacunarity/fractal diagnostics on the exact Stage 7 Foundation-28 20B trace.
+4. Build the Evidence Packet merger for the exact Stage 7 20B chain.
+5. Only if the filtered bridge clears the gate, present 20B as behavioral bridge evidence rather than activation-only evidence.
