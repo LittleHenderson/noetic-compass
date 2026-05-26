@@ -72,11 +72,32 @@ Metric summary:
 
 Interpretation: GPT-NeoX-20B contains recoverable CAS-labeled structure in the hidden states on this canonical-English dataset. The strong text baseline should not be described as "label leakage" by default: CAS colloquialisms are approved English aliases for the axes, so a text baseline doing well is evidence that the surface aliases are predictive. What this run does **not** yet establish is the stronger causal claim: that a localized internal CAS subspace or cover is load-bearing after accounting for the surface text signal. The next proof step is ablation/intervention against the candidate covers, not removing the canonical colloquialisms.
 
+### GPT-NeoX-20B activation-level cover ablation
+
+- Evaluator: `live-trace-worker/scripts/ablate_probe_dataset.py`
+- Mode: activation-level train-mean replacement on already captured real GPT-NeoX-20B hidden vectors
+- Top-16 report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_activation_cover_ablation_report_top16.json`
+- Top-256 report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_activation_cover_ablation_report_top256.json`
+- Top-256 cover map on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_candidate_cover_map_top256.json`
+- Local archive: `D:\tksCAS-archive\gpt_neox_20b_activation_cover_ablation_20260526`
+
+Metric summary:
+
+| Axis | Cover size | Clean acc | Label-cover ablated acc | Same-size random acc | Label-cover drop vs random | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain | 256/class | 46.84% | 43.04% | 46.90% mean | +3.86 pp | Label-specific cover beats same-size random; axis-union cover does not |
+| Drive | 256/class | 35.80% | 32.10% | 35.80% mean | +3.70 pp | Label-specific cover beats same-size random; axis-union cover does not |
+| Operator | 256/class | 31.25% | 28.75% | 31.25% mean | +2.50 pp | Label-specific cover beats same-size random; axis-union cover does not |
+
+Top-16 covers did **not** reduce heldout top-1 accuracy on any axis. They did weaken label-specific readout margins more than same-size random controls, but that is not strong enough to call a causal pass.
+
+Top-256 label-specific covers are the first 20B causal-control signal: replacing the true-label candidate cover dimensions hurt heldout accuracy more than same-size random replacements on domain, drive, and operator. This is promising, but it is still activation-level evidence only. It is **not** a live model-forward intervention, not a verifier verdict, and not a full CAS Harness ACCEPT on GPT-NeoX-20B.
+
 ## What this proves
 
-This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for 400 labeled scenarios, and train/evaluate heldout readout probes.
+This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for 400 labeled scenarios, train/evaluate heldout readout probes, and run an activation-level matched-control ablation over candidate covers.
 
-It does **not** yet prove CAS universality at 20B, because the current heldout readout has not isolated a causal internal mechanism beyond the canonical English surface signal, and the run did not include causal ablations, matched controls over interventions, output-effect prediction, or verifier merge.
+It does **not** yet prove CAS universality at 20B, because the current causal-control evidence is activation-level only and does not yet include live forward-pass interventions, output-effect prediction, or verifier merge.
 
 ## Why the missing fields are good, not bad
 
@@ -91,7 +112,7 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 
 1. Keep the canonical CAS colloquialisms; do not treat approved English aliases as contamination.
 2. Train stronger GPT-NeoX-20B probe weights from raw hidden vectors.
-3. Convert candidate covers into causal covers through ablation/intervention.
+3. Convert candidate covers into causal covers through live forward-pass ablation/intervention.
 4. Run the same scenario set with:
    - probe readout
    - ablation/intervention
