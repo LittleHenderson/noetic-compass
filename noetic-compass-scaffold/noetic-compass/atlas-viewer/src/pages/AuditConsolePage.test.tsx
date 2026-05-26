@@ -112,9 +112,29 @@ function targetVerification(overrides: Record<string, unknown> = {}) {
     verdict: null,
     confidence: null,
     evidence_packet_trace_id: null,
+    reference_evidence_packet_trace_id: 'cas_harness_reference_accept_001',
     atlas_deep_link: null,
     ...overrides,
   };
+}
+
+function allPresentChips() {
+  return [
+    'model_proof',
+    'cas_readout',
+    'causal_proof',
+    'control_proof',
+    'output_proof',
+    'packet_proof',
+  ].map((id) => ({
+    id,
+    name: id === 'cas_readout'
+      ? 'CAS readout'
+      : `${id.replace('_', ' ')}`
+          .replace(/\b\w/g, (letter) => letter.toUpperCase()),
+    status: 'present',
+    detail: `${id} present`,
+  }));
 }
 
 describe('AuditConsolePage', () => {
@@ -179,7 +199,8 @@ describe('AuditConsolePage', () => {
     expect(screen.queryByText('Not available')).not.toBeInTheDocument();
   });
 
-  it('creates a backend session and keeps the verdict pending until computed', async () => {
+  it('creates a reference-backed backend session and shows the evidence-gated verdict', async () => {
+    const chips = allPresentChips();
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({
@@ -188,13 +209,33 @@ describe('AuditConsolePage', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
-        json: async () => sessionResponse(),
+        json: async () =>
+          sessionResponse({
+            evidence_packet_trace_id: 'cas_harness_reference_accept_001',
+            provenance_chips: chips,
+            verifier_decision: {
+              verdict: 'ACCEPT',
+              confidence: 0.9816,
+              source: 'stage19_verification_stack+stage20_generation_readiness',
+              reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+            },
+          }),
       })
       .mockResolvedValueOnce({
         ok: true,
         json: async () =>
           sessionResponse({
-            status: 'SCAFFOLD_PENDING_RUNNER',
+            status: 'COMPLETE',
+            verdict: 'ACCEPT',
+            confidence: 0.9816,
+            evidence_packet_trace_id: 'cas_harness_reference_accept_001',
+            provenance_chips: chips,
+            verifier_decision: {
+              verdict: 'ACCEPT',
+              confidence: 0.9816,
+              source: 'stage19_verification_stack+stage20_generation_readiness',
+              reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+            },
             updated_at: '2026-05-25T11:01:00Z',
             lifecycle: [
               {
@@ -213,8 +254,8 @@ describe('AuditConsolePage', () => {
                 timestamp: '2026-05-25T11:00:45Z',
               },
               {
-                status: 'SCAFFOLD_PENDING_RUNNER',
-                message: 'Stopped before verdict.',
+                status: 'COMPLETE',
+                message: 'M3 verdict runner returned the explicit verifier decision from the attached evidence contract.',
                 timestamp: '2026-05-25T11:01:00Z',
               },
             ],
@@ -232,14 +273,9 @@ describe('AuditConsolePage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
-    expect(
-      screen.getByRole('note', {
-        name: 'Session created. Verdict blocked until an Evidence Packet is attached.',
-      }),
-    ).toBeInTheDocument();
-    expect(screen.getAllByText('Runner pending').length).toBeGreaterThan(0);
-    expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
-    expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Audit complete' })).toBeInTheDocument();
+    expect(screen.getByText('Confidence: 98%')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
       '/api/cas-harness/audit/target/verify',
@@ -253,6 +289,10 @@ describe('AuditConsolePage', () => {
       '/api/cas-harness/audit/session',
       expect.objectContaining({ method: 'POST' }),
     );
+    expect(JSON.parse(String((fetchMock.mock.calls[1][1] as RequestInit).body))).toMatchObject({
+      evidence_packet_trace_id: 'cas_harness_reference_accept_001',
+      model_id: 'EleutherAI/pythia-160m',
+    });
     expect(fetchMock).toHaveBeenNthCalledWith(
       3,
       '/api/cas-harness/audit/session/cas-audit-test-session/run',
@@ -261,22 +301,7 @@ describe('AuditConsolePage', () => {
   });
 
   it('explains a backend ACCEPT verdict with verifier reason and proof chips', async () => {
-    const allPresentChips = [
-      'model_proof',
-      'cas_readout',
-      'causal_proof',
-      'control_proof',
-      'output_proof',
-      'packet_proof',
-    ].map((id) => ({
-      id,
-      name: id === 'cas_readout'
-        ? 'CAS readout'
-        : `${id.replace('_', ' ')}`
-            .replace(/\b\w/g, (letter) => letter.toUpperCase()),
-      status: 'present',
-      detail: `${id} present`,
-    }));
+    const chips = allPresentChips();
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce({
@@ -287,7 +312,7 @@ describe('AuditConsolePage', () => {
         ok: true,
         json: async () => sessionResponse({
           evidence_packet_trace_id: 'stage21-allow-001',
-          provenance_chips: allPresentChips,
+          provenance_chips: chips,
           verifier_decision: {
             verdict: 'ACCEPT',
             confidence: 0.9816,
@@ -304,7 +329,7 @@ describe('AuditConsolePage', () => {
             verdict: 'ACCEPT',
             confidence: 0.9816,
             evidence_packet_trace_id: 'stage21-allow-001',
-            provenance_chips: allPresentChips,
+            provenance_chips: chips,
             verifier_decision: {
               verdict: 'ACCEPT',
               confidence: 0.9816,

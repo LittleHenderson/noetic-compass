@@ -41,6 +41,7 @@ interface AuditTargetConfig {
   checkedAt: string;
   statusDetail: string;
   canRunAudit: boolean;
+  evidencePacketTraceId?: string | null;
 }
 
 const SELECTED_MODULES = [
@@ -63,6 +64,7 @@ const M1_REFERENCE_TARGET: AuditTargetConfig = {
   checkedAt: '',
   statusDetail: 'Reference target has not been verified by the backend yet.',
   canRunAudit: false,
+  evidencePacketTraceId: null,
 };
 
 const AUDIT_STEPS: AuditStep[] = [
@@ -516,8 +518,11 @@ export default function AuditConsolePage() {
         endpointUrl: verification.target.endpoint_url,
         connectionId: verification.connection_id,
         checkedAt: verification.checked_at,
-        statusDetail: verification.detail,
+        statusDetail: verification.reference_evidence_packet_trace_id
+          ? `${verification.detail} Reference Evidence Packet ready: ${verification.reference_evidence_packet_trace_id}.`
+          : verification.detail,
         canRunAudit: verification.can_run_audit,
+        evidencePacketTraceId: verification.reference_evidence_packet_trace_id,
       });
     } catch (error) {
       setTarget(null);
@@ -550,6 +555,7 @@ export default function AuditConsolePage() {
         audit_mode: 'BALANCED',
         scenario_text: target.scenarioText,
         selected_modules: SELECTED_MODULES,
+        evidence_packet_trace_id: target.evidencePacketTraceId ?? undefined,
       });
       setSession(created);
       const started = await startCasHarnessAuditSession(created.audit_id);

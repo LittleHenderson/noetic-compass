@@ -58,6 +58,7 @@ ProofChipStatus = Literal["verified", "present", "missing", "failed", "unavailab
 
 REFERENCE_TARGET_MODEL_ID = "EleutherAI/pythia-160m"
 REFERENCE_TARGET_PROVIDER = "cas_harness_reference"
+REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID = "cas_harness_reference_accept_001"
 _LOCAL_HTTP_HOSTS = {"localhost", "127.0.0.1", "::1"}
 
 
@@ -187,6 +188,7 @@ class ModelTargetVerificationResponse(BaseModel):
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     evidence_packet_trace_id: str | None = None
     atlas_deep_link: str | None = None
+    reference_evidence_packet_trace_id: str | None = None
 
 
 class AuditSessionRequest(BaseModel):
@@ -346,7 +348,8 @@ def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerifica
         target=verified,
         detail=(
             "CAS Harness reference target verified locally. No external model call, "
-            "credential, Evidence Packet, or audit verdict was created."
+            "credential, or audit verdict was created. A bundled reference "
+            "Evidence Packet is available for the beta run step."
         ),
         checked_at=_utc_now(),
         provenance_chip=ProvenanceChip(
@@ -358,6 +361,7 @@ def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerifica
                 "non-secret Audit Console demos. This is target verification only."
             ),
         ),
+        reference_evidence_packet_trace_id=REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID,
     )
 
 
