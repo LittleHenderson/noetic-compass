@@ -102,8 +102,10 @@ def test_verify_reference_model_target_success_without_secret(client, auth_heade
     assert body["verdict"] is None
     assert body["confidence"] is None
     assert body["evidence_packet_trace_id"] is None
+    assert body["reference_evidence_packet_trace_id"] == "cas_harness_reference_accept_001"
     assert body["atlas_deep_link"] is None
     assert "No external model call" in body["detail"]
+    assert "bundled reference Evidence Packet" in body["detail"]
 
 
 def test_verify_api_endpoint_target_success_does_not_echo_secret_or_verdict(
@@ -433,6 +435,56 @@ def test_run_route_flags_attached_packet_when_required_proof_is_incomplete(clien
         "COMPLETE",
     ]
     assert "missing required proof" in body["lifecycle"][-1]["message"]
+
+
+def test_reference_target_trace_completes_evidence_backed_accept(client, auth_headers):
+    verified = client.post(
+        "/api/cas-harness/audit/target/verify",
+        json={"target": {"kind": "demo_reference"}},
+        headers=auth_headers,
+    )
+    assert verified.status_code == 200
+    trace_id = verified.json()["reference_evidence_packet_trace_id"]
+
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "model_id": "EleutherAI/pythia-160m",
+            "evidence_packet_trace_id": trace_id,
+        },
+        headers=auth_headers,
+    )
+    assert created.status_code == 200
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "ACCEPT"
+    assert body["confidence"] == 0.9816
+    assert body["evidence_packet_trace_id"] == "cas_harness_reference_accept_001"
+    assert body["atlas_deep_link"] == "/cockpit?trace_id=cas_harness_reference_accept_001"
+    assert body["verifier_decision"] == {
+        "verdict": "ACCEPT",
+        "confidence": 0.9816,
+        "source": "stage19_verification_stack+stage20_generation_readiness",
+        "reason": "Stage 19 accepted the row and Stage 20 readiness action is allow.",
+    }
+    assert set(chips.values()) == {"present"}
+    assert [event["status"] for event in body["lifecycle"]] == [
+        "DRAFT",
+        "VALIDATING",
+        "RUNNING",
+        "COMPLETE",
+    ]
+    assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
 
 
 def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decision(

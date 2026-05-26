@@ -92,6 +92,7 @@ function targetVerification(overrides: Record<string, unknown> = {}): Record<str
     verdict: null,
     confidence: null,
     evidence_packet_trace_id: null,
+    reference_evidence_packet_trace_id: 'cas_harness_reference_accept_001',
     atlas_deep_link: null,
     ...overrides,
   };
@@ -164,6 +165,9 @@ describe('casHarnessAuditApi', () => {
     });
     expect(result.verdict).toBeNull();
     expect(result.confidence).toBeNull();
+    expect(result.reference_evidence_packet_trace_id).toBe(
+      'cas_harness_reference_accept_001',
+    );
     expect(result.provenance_chip).toMatchObject({
       id: 'model_proof',
       status: 'verified',
@@ -204,6 +208,7 @@ describe('casHarnessAuditApi', () => {
           status: 'present',
           detail: 'Endpoint target configuration passed schema validation.',
         },
+        reference_evidence_packet_trace_id: null,
       })),
     );
 

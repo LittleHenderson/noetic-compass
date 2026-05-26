@@ -71,6 +71,7 @@ class EvidencePacket(BaseModel):
     generated_at: str = Field(description="ISO-8601 UTC timestamp the packet was assembled.")
 
     input: dict[str, Any]
+    model: dict[str, Any] | None = None
     cas_expression: dict[str, Any] | None = None
     output: dict[str, Any]
     copy_slot_trace: list[dict[str, Any]] | None = None
@@ -78,6 +79,11 @@ class EvidencePacket(BaseModel):
     hashes: dict[str, Any]
     claim_levels: list[dict[str, Any]]
     caveats: list[str] | None = None
+    readout: dict[str, Any] | None = None
+    ablation: dict[str, Any] | None = None
+    matched_controls: dict[str, Any] | None = None
+    verification: dict[str, Any] | None = None
+    generation_readiness: dict[str, Any] | None = None
 
 
 class VerifyCheck(BaseModel):
@@ -302,6 +308,138 @@ def _load_checkpoint_manifest(manifest_path: Path) -> dict[str, Any] | None:
 
 
 _DEV_FIXTURE_TRACE_ID = "dev_example_001"
+_CAS_HARNESS_REFERENCE_TRACE_ID = "cas_harness_reference_accept_001"
+
+
+def _cas_harness_reference_packet() -> EvidencePacket:
+    """Evidence-backed reference packet for the Audit Console beta path.
+
+    This fixture represents the validated CAS Harness reference path. It is not
+    a customer endpoint call. It exists so the beta console can exercise the
+    complete backend verdict contract without inventing a verdict client-side.
+    """
+
+    return EvidencePacket(
+        schema_version="cas_harness_evidence_packet_v1",
+        trace_id=_CAS_HARNESS_REFERENCE_TRACE_ID,
+        generated_at=_now_iso_utc(),
+        model={
+            "model_key": "EleutherAI/pythia-160m",
+            "name": "EleutherAI/pythia-160m",
+            "runtime": "CAS Harness reference path",
+        },
+        input={
+            "text": (
+                "Reference audit smoke scenario: validate the CAS Harness "
+                "audit contract without fabricating a verdict."
+            ),
+            "scenario_id": "cas_harness_reference_accept_v1",
+        },
+        cas_expression={
+            "text": "F1|A reference verification row",
+            "compiler_valid": True,
+            "grammar_category": "reference_audit_row",
+        },
+        output={
+            "text": (
+                "Reference output accepted by the Stage 19 verification stack "
+                "and Stage 20 generation-readiness gate."
+            ),
+            "n_tokens": 18,
+            "max_new_tokens": 64,
+        },
+        copy_slot_trace=[
+            {
+                "role": "drive",
+                "name": "F1",
+                "copied": True,
+                "source_token_index": 0,
+                "target_token_index": 0,
+                "claim_level": "source_copy_evidence",
+            }
+        ],
+        provenance={
+            "source_stage": "CAS Harness reference beta packet",
+            "source_reports": [
+                "stage19_verification_stack_report.json",
+                "stage20_generation_readiness_report.json",
+                "stage21_reference_packet_builder.json",
+            ],
+            "model_checkpoint_id": "EleutherAI/pythia-160m",
+            "checkpoint_label": "CAS Harness reference target",
+            "code_commit_sha": _git_head_sha() or "unknown",
+            "code_commit_summary": _git_head_subject(),
+            "run_command": (
+                "POST /api/cas-harness/audit/session with "
+                "evidence_packet_trace_id=cas_harness_reference_accept_001"
+            ),
+            "config_snapshot": {
+                "audit_mode": "BALANCED",
+                "reference_fixture": True,
+                "customer_model_call": False,
+            },
+        },
+        hashes={
+            "weights_sha": None,
+            "tokenizer_hash": None,
+            "corpus_sha256": None,
+            "on_disk_paths": {},
+        },
+        claim_levels=[
+            {
+                "claim": "Stage 19 verification stack accepted the reference row.",
+                "level": "derived_trace",
+                "support_status": "supported",
+                "support_rationale": (
+                    "The packet carries an explicit accepted=true Stage 19 "
+                    "verification field."
+                ),
+                "rationale": "Reference packet exercises the locked verifier contract.",
+            },
+            {
+                "claim": "Stage 20 generation readiness action is allow.",
+                "level": "derived_trace",
+                "support_status": "supported",
+                "support_rationale": (
+                    "The packet carries generation_readiness=allow and low risk."
+                ),
+                "rationale": "Reference packet exercises the locked readiness contract.",
+            },
+            {
+                "claim": "Matched control evidence is present for the reference row.",
+                "level": "derived_trace",
+                "support_status": "supported",
+                "support_rationale": (
+                    "The packet records random_same_rank control status as present."
+                ),
+                "rationale": "Reference packet includes the control-proof field required by the runner.",
+            },
+        ],
+        caveats=[
+            "Reference beta packet: this is bundled CAS Harness evidence for the "
+            "supported Pythia-160M reference path. It is not a live customer "
+            "endpoint call and must not be presented as arbitrary-model coverage."
+        ],
+        readout={"axis": "drive", "label": "F1", "confidence": 0.86},
+        ablation={"status": "present", "effect": "targeted_drop"},
+        matched_controls={"status": "present", "control": "random_same_rank"},
+        verification={
+            "accepted": True,
+            "mode": "BALANCED",
+            "confidence_tier": "high",
+            "mode_profile": {
+                "accepted_accuracy": 0.9816,
+                "coverage": 0.7173,
+            },
+            "suppression_reasons": [],
+        },
+        generation_readiness={
+            "generation_readiness": "allow",
+            "risk_score": 0.11,
+            "policy_version": "stage20_reference_v1",
+            "reasons": [],
+        },
+    )
 
 
 def _dev_fixture_packet() -> EvidencePacket:
@@ -696,6 +834,8 @@ def build_packet_for_trace(trace_id: str) -> EvidencePacket:
             return _dev_fixture_packet()
         except Exception as exc:
             return _dev_fixture_fallback_packet(f"{type(exc).__name__}: {exc}")
+    if trace_id == _CAS_HARNESS_REFERENCE_TRACE_ID:
+        return _cas_harness_reference_packet()
     trace = _load_trace_artifact(trace_id)
     if trace is None:
         raise FileNotFoundError(trace_id)

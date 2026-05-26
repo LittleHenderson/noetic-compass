@@ -101,6 +101,7 @@ export interface CasHarnessModelTargetVerification {
   verdict: null;
   confidence: null;
   evidence_packet_trace_id: string | null;
+  reference_evidence_packet_trace_id: string | null;
   atlas_deep_link: string | null;
 }
 
@@ -345,6 +346,7 @@ export function parseModelTargetVerificationResponse(
     verdict: null,
     confidence: null,
     evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
+    reference_evidence_packet_trace_id: nullableString(raw.reference_evidence_packet_trace_id),
     atlas_deep_link: nullableString(raw.atlas_deep_link),
   };
 }

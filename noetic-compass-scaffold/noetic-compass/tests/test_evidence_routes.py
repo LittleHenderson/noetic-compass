@@ -25,6 +25,7 @@ import pytest
 
 
 _DEV_TRACE_ID = "dev_example_001"
+_CAS_HARNESS_REFERENCE_TRACE_ID = "cas_harness_reference_accept_001"
 _KNOWN_CHECKPOINT_DIR = (
     Path(__file__).resolve().parents[1]
     / ".tmp"
@@ -179,6 +180,47 @@ def test_evidence_get_unknown_trace_id_404(client, auth_headers):
     )
     assert resp.status_code == 404
     assert resp.json()["detail"] == "trace_id not found"
+
+
+def test_evidence_get_cas_harness_reference_packet_has_verifier_contract(
+    client,
+    auth_headers,
+):
+    resp = client.get(f"/evidence/{_CAS_HARNESS_REFERENCE_TRACE_ID}", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["schema_version"] == "cas_harness_evidence_packet_v1"
+    assert body["trace_id"] == _CAS_HARNESS_REFERENCE_TRACE_ID
+    assert body["model"]["model_key"] == "EleutherAI/pythia-160m"
+    assert body["readout"]["label"] == "F1"
+    assert body["ablation"]["status"] == "present"
+    assert body["matched_controls"]["status"] == "present"
+    assert body["verification"]["accepted"] is True
+    assert body["verification"]["mode_profile"]["accepted_accuracy"] == 0.9816
+    assert body["generation_readiness"]["generation_readiness"] == "allow"
+    assert any("stage19" in report for report in body["provenance"]["source_reports"])
+    assert any("stage20" in report for report in body["provenance"]["source_reports"])
+
+
+def test_evidence_verify_cas_harness_reference_packet_is_unavailable_not_mismatch(
+    client,
+    auth_headers,
+):
+    resp = client.post(
+        f"/evidence/{_CAS_HARNESS_REFERENCE_TRACE_ID}/verify",
+        headers=auth_headers,
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["trace_id"] == _CAS_HARNESS_REFERENCE_TRACE_ID
+    assert body["checks"], "code_commit check should still surface provenance"
+    assert body["overall"] in {"all_match", "partial_mismatch", "unable_to_verify"}
+    assert not any(
+        check["artifact"] in {"weights", "tokenizer"} and check["notes"] == "no on_disk_paths entry for this artifact"
+        for check in body["checks"]
+    )
 
 
 # ---------------------------------------------------------------------------
