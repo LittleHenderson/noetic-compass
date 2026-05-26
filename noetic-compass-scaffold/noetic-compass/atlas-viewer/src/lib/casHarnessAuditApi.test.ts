@@ -7,14 +7,25 @@ import {
   createCasHarnessScalePlan,
   dispatchCasHarnessDistributedAudit,
   getCasHarnessAuditSessionStatus,
+  getCasHarnessFleetRun,
+  heartbeatCasHarnessFleetWorker,
+  leaseCasHarnessFleetJob,
   listCasHarnessAuditSessions,
+  listCasHarnessFleetRuns,
+  listCasHarnessFleetWorkers,
   mergeCasHarnessDistributedAudit,
+  mergeCasHarnessFleetRun,
   parseAuditSessionResponse,
   parseDistributedAuditResponse,
+  parseFleetRunResponse,
   parseModelTargetVerificationResponse,
   parseScalePlanResponse,
+  prepareCasHarnessFleetRun,
+  registerCasHarnessFleetWorker,
   resolveCasHarnessAuditBaseUrl,
+  scanCasHarnessFleetStaleWorkers,
   startCasHarnessAuditSession,
+  submitCasHarnessFleetJobReceipt,
   submitCasHarnessDistributedWorkerEvidence,
   verifyCasHarnessModelTarget,
 } from './casHarnessAuditApi';
@@ -179,6 +190,63 @@ function distributedAudit(overrides: Record<string, unknown> = {}): Record<strin
 function distributedWorker(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
     ...(distributedAudit().worker_evidence[0] as Record<string, unknown>),
+    ...overrides,
+  };
+}
+
+function fleetWorker(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    worker_id: 'probe-worker-01',
+    model_id: 'customer/open-100b',
+    worker_url: 'https://worker-01.example',
+    gpu_type: 'H100-80GB',
+    capacity: 1,
+    supported_methods: ['foundation_probe', 'targeted_ablation'],
+    registered_at: '2026-05-26T10:01:00Z',
+    last_heartbeat_at: '2026-05-26T10:02:00Z',
+    status: 'active',
+    ...overrides,
+  };
+}
+
+function fleetJob(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    job_id: 'fleet-job-01',
+    audit_id: 'cas-dist-unit',
+    assigned_worker_id: 'probe-worker-01',
+    layer_start: 0,
+    layer_end: 9,
+    shard_id: 'layers-000-009',
+    assigned_methods: ['foundation_probe', 'targeted_ablation'],
+    expected_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    status: 'queued',
+    lease_token: null,
+    lease_expires_at: null,
+    evidence_packet_fragment_ref: null,
+    produced_outputs: [],
+    missing_outputs: [],
+    error_message: null,
+    updated_at: '2026-05-26T10:02:00Z',
+    ...overrides,
+  };
+}
+
+function fleetRun(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    audit_id: 'cas-dist-unit',
+    status: 'PREPARED',
+    verifier_gate_status: 'waiting_for_receipts',
+    merged_packet_trace_id: null,
+    merge_reason: 'Waiting for worker Evidence Packet fragment receipts.',
+    created_at: '2026-05-26T10:01:00Z',
+    updated_at: '2026-05-26T10:02:00Z',
+    total_jobs: 1,
+    leased_jobs: 0,
+    completed_fragments: 0,
+    failed_jobs: 0,
+    registered_workers: 1,
+    stale_workers: [],
+    jobs: [fleetJob()],
     ...overrides,
   };
 }
@@ -386,6 +454,148 @@ describe('casHarnessAuditApi', () => {
     ]);
   });
 
+  it('registers, lists, heartbeats, and stale-scans fleet workers through the API', async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(fleetWorker()))
+      .mockResolvedValueOnce(jsonResponse({ workers: [fleetWorker()] }))
+      .mockResolvedValueOnce(jsonResponse(fleetWorker({ last_heartbeat_at: '2026-05-26T10:03:00Z' })))
+      .mockResolvedValueOnce(jsonResponse({ workers: [fleetWorker({ status: 'stale' })] }));
+
+    const registered = await registerCasHarnessFleetWorker(
+      {
+        worker_id: 'probe-worker-01',
+        model_id: 'customer/open-100b',
+        worker_url: 'https://worker-01.example',
+        gpu_type: 'H100-80GB',
+        supported_methods: ['foundation_probe', 'targeted_ablation'],
+        capacity: 1,
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const listed = await listCasHarnessFleetWorkers({
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const heartbeat = await heartbeatCasHarnessFleetWorker('probe-worker-01', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const stale = await scanCasHarnessFleetStaleWorkers(
+      { max_heartbeat_age_seconds: 1 },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+
+    expect(registered.status).toBe('active');
+    expect(listed.workers[0]?.worker_id).toBe('probe-worker-01');
+    expect(heartbeat.last_heartbeat_at).toBe('2026-05-26T10:03:00Z');
+    expect(stale.workers[0]?.status).toBe('stale');
+    expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/fleet/worker/register',
+      '/api/cas-harness/audit/distributed/fleet/workers',
+      '/api/cas-harness/audit/distributed/fleet/worker/probe-worker-01/heartbeat',
+      '/api/cas-harness/audit/distributed/fleet/workers/stale-scan',
+    ]);
+    expect(JSON.parse(String((fetchImpl.mock.calls[3][1] as RequestInit).body))).toEqual({
+      max_heartbeat_age_seconds: 1,
+    });
+  });
+
+  it('prepares, leases, receipts, merges, gets, and lists fleet runs without fabricating ACCEPT', async () => {
+    const leasedJob = fleetJob({
+      status: 'leased',
+      lease_token: 'lease-token-01',
+      lease_expires_at: '2026-05-26T10:30:00Z',
+    });
+    const completedJob = fleetJob({
+      status: 'completed',
+      lease_token: 'lease-token-01',
+      lease_expires_at: '2026-05-26T10:30:00Z',
+      evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+      produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    });
+    const readyRun = fleetRun({
+      status: 'MERGE_PENDING',
+      verifier_gate_status: 'ready_for_verifier',
+      completed_fragments: 1,
+      jobs: [completedJob],
+    });
+    const mergedRun = fleetRun({
+      status: 'COMPLETE',
+      verifier_gate_status: 'ready_for_verifier',
+      merged_packet_trace_id: 'cas-dist-unit-fleet-merge',
+      merge_reason:
+        'All fleet job fragments are present. Merged Evidence Packet is ready for the verifier decision layer; fleet executor does not fabricate ACCEPT.',
+      completed_fragments: 1,
+      jobs: [completedJob],
+    });
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(fleetRun()))
+      .mockResolvedValueOnce(jsonResponse(leasedJob))
+      .mockResolvedValueOnce(jsonResponse(readyRun))
+      .mockResolvedValueOnce(jsonResponse(mergedRun))
+      .mockResolvedValueOnce(jsonResponse(mergedRun))
+      .mockResolvedValueOnce(jsonResponse({ runs: [mergedRun] }));
+
+    const prepared = await prepareCasHarnessFleetRun('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const leased = await leaseCasHarnessFleetJob(
+      'cas-dist-unit',
+      { worker_id: 'probe-worker-01', lease_seconds: 900 },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const receipted = await submitCasHarnessFleetJobReceipt(
+      'cas-dist-unit',
+      'fleet-job-01',
+      {
+        worker_id: 'probe-worker-01',
+        lease_token: 'lease-token-01',
+        produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+        evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const merged = await mergeCasHarnessFleetRun('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const fetched = await getCasHarnessFleetRun('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const listed = await listCasHarnessFleetRuns({
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+
+    expect(prepared.verifier_gate_status).toBe('waiting_for_receipts');
+    expect(leased).toMatchObject({
+      status: 'leased',
+      lease_token: 'lease-token-01',
+    });
+    expect(receipted.verifier_gate_status).toBe('ready_for_verifier');
+    expect(receipted.jobs[0]).toMatchObject({
+      status: 'completed',
+      evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+    });
+    expect(merged.status).toBe('COMPLETE');
+    expect(merged.merged_packet_trace_id).toBe('cas-dist-unit-fleet-merge');
+    expect(merged.merge_reason).toMatch(/does not fabricate ACCEPT/);
+    expect(fetched.audit_id).toBe('cas-dist-unit');
+    expect(listed.runs[0]?.status).toBe('COMPLETE');
+    expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/prepare',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/lease',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/fleet-job-01/receipt',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/merge',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet',
+      '/api/cas-harness/audit/distributed/fleet/runs',
+    ]);
+  });
+
   it('verifies an API endpoint target using a credential reference', async () => {
     const fetchImpl = vi.fn(async () =>
       jsonResponse(targetVerification({
@@ -559,6 +769,49 @@ describe('casHarnessAuditApi', () => {
         }),
       ],
     }))).toThrow(/distributed worker status/);
+  });
+
+  it('rejects fleet executor responses that fake verifier readiness or final verdicts', () => {
+    expect(() => parseFleetRunResponse(fleetRun({
+      verifier_gate_status: 'accepted',
+    }))).toThrow(/fleet verifier gate status/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      verdict: 'ACCEPT',
+    }))).toThrow(/must not return ACCEPT\/SUPPRESS/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      confidence: 0.91,
+    }))).toThrow(/fleet executor confidence must be null/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      jobs: [
+        fleetJob({
+          status: 'completed',
+          produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+          evidence_packet_fragment_ref: null,
+        }),
+      ],
+      completed_fragments: 1,
+    }))).toThrow(/completed fleet job requires evidence_packet_fragment_ref/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      verifier_gate_status: 'ready_for_verifier',
+      jobs: [fleetJob()],
+    }))).toThrow(/ready_for_verifier requires every job to be completed/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      verifier_gate_status: 'ready_for_verifier',
+      completed_fragments: 1,
+      jobs: [
+        fleetJob({
+          status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['worker_evidence_manifest'],
+          evidence_packet_fragment_ref: 'packet-fragment://fleet-job-01',
+        }),
+      ],
+    }))).toThrow(/ready_for_verifier cannot include missing job outputs/);
   });
 
   it('parses distributed worker receipt packet refs, missing outputs, and statuses explicitly', () => {
