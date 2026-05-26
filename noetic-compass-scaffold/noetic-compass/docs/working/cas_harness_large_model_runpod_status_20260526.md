@@ -152,6 +152,43 @@ Foundation-28 activation ablation:
 
 Interpretation: this is the best 20B result so far. It does **not** yet equal the original Pythia claim because the text baseline is too high on the generated scenario library and the library used compact source-derived Stage-7/TKS28 glosses rather than a full source-faithful definition library. It does show a real Foundation-28 hidden readout and an activation-level causal-control signal on GPT-NeoX-20B.
 
+### GPT-NeoX-20B exact original Stage 7 Foundation-28 rerun
+
+- Original builder: `research/cas_probe/build_stage7_foundation_fixture.py` from `experiment/cas-probe-pythia`
+- Original dependency: `research/cas_probe/build_stage6_role_bound_full.py` from `experiment/cas-probe-pythia`
+- Scenario source on RunPod: `/workspace/cas-harness-large-eval/scenarios/stage7_foundation_rolebound_pilot_20260526.json`
+- Scenario source in repo: `live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json`
+- Original JSONL source: `/workspace/cas-harness-large-eval/original_stage7/stage7_foundation_pilot_20260517.jsonl`
+- Original manifest: `/workspace/cas-harness-large-eval/original_stage7/stage7_foundation_pilot_manifest_20260517.json`
+- Scenarios: `4,368`, exactly `156` per Foundation class
+- Taxonomy: exact Stage 7 role-bound TKS 28 Foundations (`F1T/F1A/F1f/F1E...F7E`) mapped to `F1|T...F7|E`
+- Source profile: `exact_original_stage7_rolebound_fixture`
+- Model: `EleutherAI/gpt-neox-20b`
+- Layers captured: `0-43`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_stage7_foundation_rolebound_pilot_layers_0_43.npz`
+- Metadata: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_stage7_foundation_rolebound_pilot_layers_0_43.metadata.json`
+- Eval report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_foundation_rolebound_probe_eval_report_top256.json`
+- Ablation report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_foundation_rolebound_activation_cover_ablation_report_top256.json`
+- Local copies: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Axis | Classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Drive slice | 7 | 1 | 66.63% | 14.29% | 14.70% | 68.00% | Hidden readout roughly matches text baseline; useful slice, not the headline taxonomy |
+| Foundation-28 | 28 | 40 | 51.04% | 3.57% | 3.40% | 42.28% | Positive exact-Stage-7 hidden readout: hidden beats text by 8.76 pp and far exceeds chance/noise |
+| Register slice | 4 | 40 | 76.15% | 25.00% | 24.69% | 86.35% | Register is recoverable but text is stronger on this slice |
+
+Activation ablation:
+
+| Axis | Clean acc | Label-cover ablated acc | Label-cover drop | Mean random-control drop | Wrong-cover drop | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Drive slice | 66.63% | 60.91% | 5.71 pp | -0.08 pp | -0.80 pp | Candidate cover weakened margin but did not clear the conservative accuracy gate |
+| Foundation-28 | 51.04% | 38.59% | 12.44 pp | 0.07 pp | 0.12 pp | Positive activation-level result: true Foundation cover beats random and wrong-cover controls |
+| Register slice | 76.15% | 70.18% | 5.96 pp | 0.19 pp | -0.80 pp | Positive activation-level result on register slice |
+
+Interpretation: this is the cleanest 20B Foundation-28 result because it uses the exact original Stage 7 role-bound fixture method rather than the simpler generated v0 library. It does not match Pythia-160M's `78.6% -> 3.57%` collapse, but it is a genuine same-method large-model replication signal: hidden Foundation readout beats text (`51.04%` vs `42.28%`) and true-cover activation ablation causes a `12.44 pp` drop while random/wrong controls do not.
+
 ### GPT-NeoX-20B activation-level cover ablation
 
 - Evaluator: `live-trace-worker/scripts/ablate_probe_dataset.py`

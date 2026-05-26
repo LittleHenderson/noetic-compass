@@ -237,12 +237,11 @@ What exists:
 - A balanced Foundation-28 v0 engineering run with real hidden-state readout and matched activation ablation.
 - Worker-side builders that preserve legacy TKS mappings for Foundation-28 (`1a..7d`) and 40 Elements (`A1..D10`).
 - A source-derived TKS40 GPT-NeoX-20B run with 40-class readout and activation-level cover ablation.
+- An exact-original Stage 7 Foundation-28 GPT-NeoX-20B rerun from the role-bound fixture builder.
 
 What is missing:
 
-- Source-faithful Foundation-28 rerun from the original Stage 7 definition surface.
-- Foundation-28 and 40-Element cover maps from the source-faithful libraries.
-- Matched ablation on the source-faithful libraries.
+- Behavioral / likelihood bridge after the source-faithful Foundation-28 and TKS40 activation-level gates.
 - Foundation-level likelihood bridge.
 - Fresh full Evidence Packet.
 
@@ -255,9 +254,9 @@ The final 40-Element library must use the TKS Element definitions directly: A1-A
 The UI and investor/demo language must use this distinction:
 
 ```text
-Current 20B status: real model run, real activation capture, early non-random CAS signal, a Foundation-28 v0 engineering run, and a source-derived TKS40 activation-level pass.
+Current 20B status: real model run, real activation capture, exact Stage 7 Foundation-28 readout/ablation pass, and source-derived TKS40 activation-level pass.
 Not yet: behavioral pass or CAS universality proof.
-Next gate: rerun Foundation-28 using the source-derived Stage 7 methodology, then run Foundation/Element likelihood-output bridge.
+Next gate: run Foundation/Element likelihood-output bridge and merge into an Evidence Packet.
 ```
 
 ## Concrete Next Work
