@@ -12,10 +12,15 @@ from scripts.run_open_weight_eta_epsilon_bridge import (
     canonical_foundation,
     condition_prefix,
     centroid_readout_scores,
+    fit_eval_readout,
+    fit_eval_logistic_readout,
     interpret_bridge_status,
     key_comparisons,
     load_stage7_scenario_meta,
     parse_foundation_label,
+    predict_readout,
+    readout_confidence_scores,
+    select_readout_layers,
     select_stage7_bridge_indices,
     split_from_scenario_meta,
     summarize_correctness_buckets,
@@ -231,3 +236,109 @@ def test_centroid_confidence_filter_uses_readout_margin_without_gold_labels():
     assert info["original_selected_cases"] == 3
     assert info["kept_cases"] == 2
     assert info["coverage"] == 0.666667
+
+
+def test_select_readout_layers_uses_validation_rank_and_optional_anchor(tmp_path: Path):
+    eval_report = tmp_path / "eval.json"
+    eval_report.write_text(
+        json.dumps(
+            {
+                "axes": {
+                    "foundation": {
+                        "best_layer": {"layer": 1},
+                        "per_layer": [
+                            {"layer": 0, "val_acc": 0.4, "test_acc": 0.7},
+                            {"layer": 1, "val_acc": 0.8, "test_acc": 0.6},
+                            {"layer": 2, "val_acc": 0.9, "test_acc": 0.5},
+                        ],
+                    }
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    assert select_readout_layers(
+        eval_report,
+        "foundation",
+        available_layers=[0, 1, 2],
+        requested_layer=None,
+        ensemble_layers=2,
+    ) == [2, 1]
+    assert select_readout_layers(
+        eval_report,
+        "foundation",
+        available_layers=[0, 1, 2],
+        requested_layer=0,
+        ensemble_layers=2,
+    ) == [0, 2]
+
+
+def test_multi_layer_readout_ensemble_predicts_from_layer_stack():
+    labels = np.asarray(["F1|T", "F1|T", "F2|T", "F2|T", "F1|T", "F2|T"])
+    features = np.asarray(
+        [
+            [[0.0, 0.0], [0.0, 0.0]],
+            [[0.2, 0.0], [0.0, 0.2]],
+            [[8.0, 0.0], [8.0, 0.0]],
+            [[8.2, 0.0], [8.0, 0.2]],
+            [[0.1, 0.0], [0.0, 0.1]],
+            [[8.1, 0.0], [8.0, 0.1]],
+        ],
+        dtype=np.float32,
+    )
+    split = {
+        "train": np.asarray([0, 1, 2, 3]),
+        "val": np.asarray([4]),
+        "test": np.asarray([5]),
+    }
+
+    metrics, model = fit_eval_readout(
+        features,
+        labels,
+        split,
+        layer_positions={10: 0, 11: 1},
+        readout_layers=[10, 11],
+    )
+
+    assert model["kind"] == "centroid_ensemble"
+    assert metrics["test_acc"] == 1.0
+    assert predict_readout(features, model).tolist() == labels.tolist()
+
+
+def test_logistic_readout_matches_original_balanced_linear_probe_shape():
+    labels = np.asarray(["F1|T", "F1|T", "F1|T", "F2|T", "F2|T", "F2|T"])
+    features = np.asarray(
+        [
+            [[0.0, 0.0]],
+            [[0.1, 0.0]],
+            [[0.2, 0.0]],
+            [[4.0, 0.0]],
+            [[4.1, 0.0]],
+            [[4.2, 0.0]],
+        ],
+        dtype=np.float32,
+    )
+    split = {
+        "train": np.asarray([0, 1, 3, 4]),
+        "val": np.asarray([2]),
+        "test": np.asarray([5]),
+    }
+
+    metrics, model = fit_eval_logistic_readout(
+        features,
+        labels,
+        split,
+        layer_positions={40: 0},
+        readout_layers=[40],
+        C=0.1,
+        max_iter=1000,
+    )
+    scores = readout_confidence_scores(features, model)
+
+    assert model["kind"] == "logistic_linear_probe"
+    assert model["C"] == 0.1
+    assert metrics["test_acc"] == 1.0
+    assert predict_readout(features, model).tolist() == labels.tolist()
+    assert scores[0]["predicted_label"] == "F1|T"
+    assert "probability_margin" in scores[0]

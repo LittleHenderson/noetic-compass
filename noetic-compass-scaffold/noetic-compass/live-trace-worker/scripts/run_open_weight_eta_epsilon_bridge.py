@@ -28,12 +28,15 @@ import time
 from typing import Any
 
 import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from evaluate_probe_dataset import fit_eval_centroid, predict_centroid  # noqa: E402
+from evaluate_probe_dataset import accuracy, fit_eval_centroid, macro_f1  # noqa: E402
 from run_open_weight_probe_shard import (  # noqa: E402
     ProbeShardConfig,
     first_real_parameter_device,
@@ -80,6 +83,7 @@ class BridgeConfig:
     eval_report: Path
     output: Path
     axis: str = "foundation"
+    readout_kind: str = "centroid"
     model_revision: str | None = None
     torch_dtype: str = "float16"
     device_map: str = "auto"
@@ -87,6 +91,9 @@ class BridgeConfig:
     selection_seed: int = 449
     readout_seed: int = 42
     readout_layer: int | None = None
+    readout_ensemble_layers: int = 1
+    probe_C: float = 0.1
+    probe_max_iter: int = 1000
     min_readout_margin: float | None = None
     readout_margin_quantile: float | None = None
     max_length: int = 256
@@ -113,6 +120,12 @@ def parse_args() -> Any:
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--output-md", type=Path)
     parser.add_argument("--axis", default="foundation", choices=("foundation",))
+    parser.add_argument(
+        "--readout-kind",
+        default="centroid",
+        choices=("centroid", "logistic"),
+        help="Foundation readout implementation. 'logistic' matches the original sklearn linear-probe methodology.",
+    )
     parser.add_argument("--model-revision")
     parser.add_argument("--torch-dtype", default="float16")
     parser.add_argument("--device-map", default="auto")
@@ -120,6 +133,14 @@ def parse_args() -> Any:
     parser.add_argument("--selection-seed", type=int, default=449)
     parser.add_argument("--readout-seed", type=int, default=42)
     parser.add_argument("--readout-layer", type=int)
+    parser.add_argument("--probe-C", type=float, default=0.1)
+    parser.add_argument("--probe-max-iter", type=int, default=1000)
+    parser.add_argument(
+        "--readout-ensemble-layers",
+        type=int,
+        default=1,
+        help="Use the top-N validation layers as a centroid-distance ensemble for Foundation readout.",
+    )
     parser.add_argument(
         "--min-readout-margin",
         type=float,
@@ -145,6 +166,7 @@ def main() -> int:
         output=args.output,
         output_md=args.output_md,
         axis=args.axis,
+        readout_kind=args.readout_kind,
         model_revision=args.model_revision,
         torch_dtype=args.torch_dtype,
         device_map=args.device_map,
@@ -152,6 +174,9 @@ def main() -> int:
         selection_seed=args.selection_seed,
         readout_seed=args.readout_seed,
         readout_layer=args.readout_layer,
+        readout_ensemble_layers=args.readout_ensemble_layers,
+        probe_C=args.probe_C,
+        probe_max_iter=args.probe_max_iter,
         min_readout_margin=args.min_readout_margin,
         readout_margin_quantile=args.readout_margin_quantile,
         max_length=args.max_length,
@@ -180,14 +205,29 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
         labels = np.asarray(data[f"labels_{config.axis}"], dtype=str)
 
     split = split_from_scenario_meta(scenario_ids, scenario_meta)
-    readout_layer = config.readout_layer if config.readout_layer is not None else best_layer_from_eval(config.eval_report, config.axis)
     layer_positions = {int(layer): idx for idx, layer in enumerate(layers.tolist())}
-    if readout_layer not in layer_positions:
-        raise RuntimeError(f"Readout layer {readout_layer} not present in dataset layers {layers.tolist()}.")
-    layer_position = layer_positions[readout_layer]
-    metrics, model = fit_eval_centroid(features[:, layer_position, :], labels, split)
-    predicted = predict_centroid(features[:, layer_position, :], model)
-    readout_scores = centroid_readout_scores(features[:, layer_position, :], model)
+    readout_layers = select_readout_layers(
+        config.eval_report,
+        config.axis,
+        available_layers=layers.tolist(),
+        requested_layer=config.readout_layer,
+        ensemble_layers=config.readout_ensemble_layers,
+    )
+    readout_layer = readout_layers[0]
+    if config.readout_kind == "logistic":
+        metrics, model = fit_eval_logistic_readout(
+            features,
+            labels,
+            split,
+            layer_positions,
+            readout_layers,
+            C=config.probe_C,
+            max_iter=config.probe_max_iter,
+        )
+    else:
+        metrics, model = fit_eval_readout(features, labels, split, layer_positions, readout_layers)
+    predicted = predict_readout(features, model)
+    readout_scores = readout_confidence_scores(features, model)
 
     unfiltered_selected_indices = select_stage7_bridge_indices(
         scenario_ids=scenario_ids,
@@ -332,8 +372,12 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
         "eval_report": str(config.eval_report),
         "eval_report_sha256": sha256_file(config.eval_report),
         "readout_layer": int(readout_layer),
-        "readout_layer_position": int(layer_position),
+        "readout_layers": [int(layer) for layer in readout_layers],
+        "readout_mode": str(model["kind"]),
+        "readout_layer_position": int(layer_positions[int(readout_layer)]),
         "readout_seed": config.readout_seed,
+        "probe_C": config.probe_C if config.readout_kind == "logistic" else None,
+        "probe_max_iter": config.probe_max_iter if config.readout_kind == "logistic" else None,
         "selection_seed": config.selection_seed,
         "per_drive": config.per_drive,
         "readout_filter": readout_filter,
@@ -422,6 +466,175 @@ def best_layer_from_eval(eval_report: Path, axis: str) -> int:
         raise RuntimeError(f"Could not resolve axes.{axis}.best_layer.layer from {eval_report}") from exc
 
 
+def select_readout_layers(
+    eval_report: Path,
+    axis: str,
+    *,
+    available_layers: list[int],
+    requested_layer: int | None,
+    ensemble_layers: int,
+) -> list[int]:
+    if ensemble_layers < 1:
+        raise ValueError("--readout-ensemble-layers must be at least 1")
+    available = {int(layer) for layer in available_layers}
+    payload = json.loads(eval_report.read_text(encoding="utf-8"))
+    axis_payload = payload.get("axes", {}).get(axis, {})
+    per_layer = axis_payload.get("per_layer") or []
+
+    if requested_layer is not None and int(requested_layer) not in available:
+        raise RuntimeError(f"Readout layer {requested_layer} not present in dataset layers {available_layers}.")
+
+    ordered: list[int] = []
+    if requested_layer is not None:
+        ordered.append(int(requested_layer))
+
+    if per_layer:
+        ranked = sorted(
+            per_layer,
+            key=lambda item: (float(item.get("val_acc", 0.0)), float(item.get("test_acc", 0.0))),
+            reverse=True,
+        )
+        ordered.extend(int(item["layer"]) for item in ranked if int(item["layer"]) in available)
+    else:
+        ordered.append(best_layer_from_eval(eval_report, axis))
+
+    selected: list[int] = []
+    for layer in ordered:
+        if layer in available and layer not in selected:
+            selected.append(layer)
+        if len(selected) >= ensemble_layers:
+            break
+    if not selected:
+        raise RuntimeError(f"No readout layers from {eval_report} are present in dataset layers {available_layers}.")
+    return selected
+
+
+def fit_eval_readout(
+    features: np.ndarray,
+    labels: np.ndarray,
+    split: dict[str, np.ndarray],
+    layer_positions: dict[int, int],
+    readout_layers: list[int],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    layer_models: list[dict[str, Any]] = []
+    for layer in readout_layers:
+        position = layer_positions[int(layer)]
+        _metrics, centroid_model = fit_eval_centroid(features[:, position, :], labels, split)
+        layer_models.append(
+            {
+                "layer": int(layer),
+                "position": int(position),
+                "model": centroid_model,
+            }
+        )
+    classes = [str(label) for label in layer_models[0]["model"]["classes"]]
+    model = {
+        "kind": "centroid_ensemble" if len(layer_models) > 1 else "centroid_single_layer",
+        "classes": classes,
+        "layers": layer_models,
+    }
+    metrics = {
+        "train_acc": accuracy(labels[split["train"]], predict_readout(features[split["train"]], model)),
+        "val_acc": accuracy(labels[split["val"]], predict_readout(features[split["val"]], model)),
+        "test_acc": accuracy(labels[split["test"]], predict_readout(features[split["test"]], model)),
+        "test_macro_f1": macro_f1(labels[split["test"]], predict_readout(features[split["test"]], model), classes),
+    }
+    return {key: round(float(value), 6) for key, value in metrics.items()}, model
+
+
+def fit_eval_logistic_readout(
+    features: np.ndarray,
+    labels: np.ndarray,
+    split: dict[str, np.ndarray],
+    layer_positions: dict[int, int],
+    readout_layers: list[int],
+    *,
+    C: float,
+    max_iter: int,
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    layer_specs = [
+        {"layer": int(layer), "position": int(layer_positions[int(layer)])}
+        for layer in readout_layers
+    ]
+    x_train = readout_feature_matrix(features[split["train"]], layer_specs)
+    pipeline = make_pipeline(
+        StandardScaler(),
+        LogisticRegression(C=C, max_iter=max_iter, class_weight="balanced", solver="lbfgs"),
+    )
+    pipeline.fit(x_train, labels[split["train"]])
+    classes = [str(label) for label in pipeline.classes_.tolist()]
+    model = {
+        "kind": "logistic_linear_probe",
+        "classes": classes,
+        "layers": layer_specs,
+        "pipeline": pipeline,
+        "C": C,
+        "max_iter": max_iter,
+    }
+    metrics = {
+        "train_acc": accuracy(labels[split["train"]], predict_readout(features[split["train"]], model)),
+        "val_acc": accuracy(labels[split["val"]], predict_readout(features[split["val"]], model)),
+        "test_acc": accuracy(labels[split["test"]], predict_readout(features[split["test"]], model)),
+        "test_macro_f1": macro_f1(labels[split["test"]], predict_readout(features[split["test"]], model), classes),
+    }
+    return {key: round(float(value), 6) for key, value in metrics.items()}, model
+
+
+def predict_readout(features: np.ndarray, model: dict[str, Any]) -> np.ndarray:
+    if model["kind"] == "logistic_linear_probe":
+        return np.asarray(model["pipeline"].predict(readout_feature_matrix(features, model["layers"])), dtype=str)
+    distances = readout_distance_matrix(features, model)
+    classes = [str(label) for label in model["classes"]]
+    return np.asarray([classes[int(idx)] for idx in distances.argmin(axis=1)])
+
+
+def readout_confidence_scores(features: np.ndarray, model: dict[str, Any]) -> list[dict[str, Any]]:
+    if model["kind"] == "logistic_linear_probe":
+        probabilities = model["pipeline"].predict_proba(readout_feature_matrix(features, model["layers"]))
+        return probability_scores(probabilities, [str(label) for label in model["classes"]])
+    return scores_from_distances(readout_distance_matrix(features, model), [str(label) for label in model["classes"]])
+
+
+def readout_feature_matrix(features: np.ndarray, layer_specs: list[dict[str, int]]) -> np.ndarray:
+    matrices = [features[:, int(spec["position"]), :].astype(np.float32) for spec in layer_specs]
+    if len(matrices) == 1:
+        return matrices[0]
+    return np.concatenate(matrices, axis=1)
+
+
+def probability_scores(probabilities: np.ndarray, classes: list[str]) -> list[dict[str, Any]]:
+    out: list[dict[str, Any]] = []
+    for row in probabilities:
+        order = np.argsort(row)[::-1]
+        best_idx = int(order[0])
+        second_idx = int(order[1]) if len(order) > 1 else best_idx
+        best_prob = float(row[best_idx])
+        second_prob = float(row[second_idx])
+        margin = best_prob - second_prob
+        out.append(
+            {
+                "predicted_label": classes[best_idx],
+                "runner_up_label": classes[second_idx],
+                "best_probability": round(best_prob, 6),
+                "runner_up_probability": round(second_prob, 6),
+                "probability_margin": round(float(margin), 6),
+                "normalized_centroid_margin": round(float(margin), 6),
+            }
+        )
+    return out
+
+
+def readout_distance_matrix(features: np.ndarray, model: dict[str, Any]) -> np.ndarray:
+    distances: np.ndarray | None = None
+    for layer_model in model["layers"]:
+        position = int(layer_model["position"])
+        layer_distances = centroid_distance_matrix(features[:, position, :], layer_model["model"])
+        distances = layer_distances if distances is None else distances + layer_distances
+    if distances is None:
+        raise RuntimeError("Readout model has no layer models.")
+    return distances / max(len(model["layers"]), 1)
+
+
 def select_stage7_bridge_indices(
     *,
     scenario_ids: np.ndarray,
@@ -453,10 +666,19 @@ def select_stage7_bridge_indices(
 
 
 def centroid_readout_scores(x: np.ndarray, model: dict[str, Any]) -> list[dict[str, Any]]:
+    return scores_from_distances(centroid_distance_matrix(x, model), [str(label) for label in model["classes"]])
+
+
+def centroid_distance_matrix(x: np.ndarray, model: dict[str, Any]) -> np.ndarray:
     scaled = (x.astype(np.float32) - model["mean"]) / model["std"]
     classes = [str(label) for label in model["classes"]]
     centroid_matrix = np.stack([model["centroids"][label] for label in model["classes"]], axis=0)
-    distances = ((scaled[:, None, :] - centroid_matrix[None, :, :]) ** 2).sum(axis=2)
+    if len(classes) != centroid_matrix.shape[0]:
+        raise RuntimeError("Centroid class matrix is malformed.")
+    return ((scaled[:, None, :] - centroid_matrix[None, :, :]) ** 2).sum(axis=2)
+
+
+def scores_from_distances(distances: np.ndarray, classes: list[str]) -> list[dict[str, Any]]:
     out: list[dict[str, Any]] = []
     for row in distances:
         order = np.argsort(row)
@@ -503,10 +725,10 @@ def apply_readout_filter(
             for idx in indices
             if float(readout_scores[int(idx)]["normalized_centroid_margin"]) >= threshold
         ]
-        mode = "normalized_centroid_margin"
+        mode = "normalized_readout_margin"
     return kept, {
         "mode": mode,
-        "score": "normalized_centroid_margin",
+        "score": "normalized_readout_margin",
         "min_readout_margin": min_margin,
         "readout_margin_quantile": margin_quantile,
         "effective_threshold": round(threshold, 6) if threshold is not None else None,
@@ -779,7 +1001,9 @@ def render_markdown(report: dict[str, Any]) -> str:
         "",
         f"- Model: `{report['model_id']}`",
         f"- Axis: `{report['axis']}`",
+        f"- Readout mode: `{report.get('readout_mode', 'centroid_single_layer')}`",
         f"- Readout layer: `{report['readout_layer']}`",
+        f"- Readout layers: `{report.get('readout_layers', [report['readout_layer']])}`",
         f"- Selected Foundation accuracy: `{report['probe_prediction']['selected_foundation_accuracy']:.4f}`",
         f"- Selected Drive accuracy: `{report['probe_prediction']['selected_drive_accuracy']:.4f}`",
         f"- Filter coverage: `{report['readout_filter']['kept_cases']} / {report['readout_filter']['original_selected_cases']}` (`{report['readout_filter']['coverage']:.4f}`)",

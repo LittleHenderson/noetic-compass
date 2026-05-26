@@ -17,3 +17,6 @@ httpx==0.27.2  # async paths in tests
 transformers==4.46.3
 accelerate==1.1.1
 safetensors==0.4.5
+
+# Original CAS Harness probe methodology uses balanced sklearn linear probes.
+scikit-learn==1.8.0

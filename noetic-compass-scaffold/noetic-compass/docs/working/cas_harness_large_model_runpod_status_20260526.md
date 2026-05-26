@@ -236,6 +236,33 @@ The q75 slice is informative but not a pass. It clears the effect-size line (`+0
 
 Interpretation: this is a real 20B behavioral likelihood result, but it is not a full 20B closure. The readable epsilon bridge itself works: gold-readable prefixes produce a large positive likelihood shift and wrong-readable prefixes push in the opposite direction. The raw-symbol control stays near zero, matching the original methodology. The current failure is the probe handoff: selected-row Foundation accuracy is only `37.50%` unfiltered and only `57.14%` at the q75 high-confidence slice. Simple centroid-margin confidence filtering is not enough. The next fix is a stronger Foundation readout or an explicitly downgraded Drive-level fallback mode, not changing the TKS definitions or abandoning the eta-to-epsilon mechanism.
 
+### GPT-NeoX-20B exact Stage 7 eta-to-epsilon bridge — balanced logistic correction
+
+The original Stage 7 closure methodology used balanced sklearn linear probes, not nearest-centroid probes. Re-running the exact Stage 7 bridge with `LogisticRegression(C=0.1, class_weight="balanced")` after `StandardScaler` closes the GPT-NeoX-20B probe-predicted bridge.
+
+- Runner: `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py --readout-kind logistic --probe-C 0.1 --probe-max-iter 1000`
+- Output report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_eta_epsilon_bridge_logistic.json`
+- Markdown report on RunPod: `/workspace/cas-harness-large-eval/reports/GPT_NEOX_20B_STAGE7_ETA_EPSILON_BRIDGE_LOGISTIC.md`
+- Local archive target: `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526`
+
+| Metric | Result | Read |
+| --- | ---: | --- |
+| Heldout Foundation readout | 86.8622% | Strong 28-class Stage 7 readout on real GPT-NeoX-20B activations |
+| Selected bridge-row Foundation accuracy | 85.7143% | Probe handoff fixed for the likelihood bridge set |
+| Selected bridge-row Drive accuracy | 93.75% | Drive-level handoff is very strong |
+| Probe-readable delta vs none | +0.596413 | Clears original `>0.20` effect-size gate |
+| Probe-readable positive rows | 90/112 | Directional on most rows |
+| Probe-readable sign p | 3e-11 | Clears original `p <= 0.01` gate |
+| Probe-readable minus partner-readable | +1.244917 | Clears original `>0.30` wrong-prefix separation gate |
+| Gold-readable delta vs none | +0.660065 | Oracle upper bound remains strong |
+| Gold-readable positive rows | 93/112 | Gold epsilon still behaves as expected |
+| Probe raw delta vs none | +0.002524 | Raw CAS symbols remain non-load-bearing |
+| Gold raw delta vs none | +0.002186 | Raw CAS symbols remain non-load-bearing |
+
+Status: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`.
+
+Interpretation: this closes the 20B Stage 7 likelihood-bridge tier under the original balanced-logistic readout methodology. It does not by itself create a CAS Harness ACCEPT/SUPPRESS verdict or a full Evidence Packet; it is the behavioral likelihood bridge evidence layer that should be merged with the activation readout/ablation results and remaining lacunarity/fractal diagnostics.
+
 ### GPT-NeoX-20B activation-level cover ablation
 
 - Evaluator: `live-trace-worker/scripts/ablate_probe_dataset.py`
