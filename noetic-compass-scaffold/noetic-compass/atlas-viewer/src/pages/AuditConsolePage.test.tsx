@@ -86,6 +86,37 @@ function sessionResponse(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function targetVerification(overrides: Record<string, unknown> = {}) {
+  return {
+    connection_id: 'cas-target-demo',
+    connection_state: 'CONNECTED',
+    model_status: 'CONNECTED',
+    can_run_audit: true,
+    target: {
+      kind: 'demo_reference',
+      provider: 'cas_harness_reference',
+      model_id: 'EleutherAI/pythia-160m',
+      endpoint_url: null,
+      credential_mode: 'none',
+      timeout_ms: 10000,
+    },
+    detail:
+      'CAS Harness reference target verified locally. No external model call, credential, Evidence Packet, or audit verdict was created.',
+    checked_at: '2026-05-26T10:00:00Z',
+    provenance_chip: {
+      id: 'model_proof',
+      name: 'Model proof',
+      status: 'verified',
+      detail: 'Reference target verified for non-secret Audit Console demos.',
+    },
+    verdict: null,
+    confidence: null,
+    evidence_packet_trace_id: null,
+    atlas_deep_link: null,
+    ...overrides,
+  };
+}
+
 describe('AuditConsolePage', () => {
   afterEach(() => {
     vi.unstubAllGlobals();
@@ -153,6 +184,10 @@ describe('AuditConsolePage', () => {
       .fn()
       .mockResolvedValueOnce({
         ok: true,
+        json: async () => targetVerification(),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
         json: async () => sessionResponse(),
       })
       .mockResolvedValueOnce({
@@ -190,8 +225,9 @@ describe('AuditConsolePage', () => {
     renderPage();
 
     fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
-    expect(screen.getByRole('note', { name: /Target ready/i })).toBeInTheDocument();
+    expect(screen.getByRole('note', { name: /reference target verified/i })).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
@@ -206,11 +242,19 @@ describe('AuditConsolePage', () => {
     expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
+      '/api/cas-harness/audit/target/verify',
+      expect.objectContaining({ method: 'POST' }),
+    );
+    expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toEqual({
+      target: { kind: 'demo_reference' },
+    });
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
       '/api/cas-harness/audit/session',
       expect.objectContaining({ method: 'POST' }),
     );
     expect(fetchMock).toHaveBeenNthCalledWith(
-      2,
+      3,
       '/api/cas-harness/audit/session/cas-audit-test-session/run',
       expect.objectContaining({ method: 'POST' }),
     );
@@ -235,6 +279,10 @@ describe('AuditConsolePage', () => {
     }));
     const fetchMock = vi
       .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => targetVerification(),
+      })
       .mockResolvedValueOnce({
         ok: true,
         json: async () => sessionResponse({
@@ -282,6 +330,7 @@ describe('AuditConsolePage', () => {
     renderPage();
 
     fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
