@@ -239,11 +239,12 @@ What exists:
 - A source-derived TKS40 GPT-NeoX-20B run with 40-class readout and activation-level cover ablation.
 - An exact-original Stage 7 Foundation-28 GPT-NeoX-20B rerun from the role-bound fixture builder.
 - An exact-original Stage 7 eta-to-epsilon likelihood bridge on GPT-NeoX-20B. Gold/readable epsilon prefixes pass strongly (`+0.6601` mean delta, `93/112` positive rows); probe/readable is positive (`+0.1974`, `72/112`, p `0.001608`) but misses the original strict full-loop gate by about `0.0026`.
+- A readout confidence/filtering implementation in the eta-to-epsilon runner. The q75 high-confidence slice keeps `28/112` rows, improves Foundation accuracy to `57.14%`, and raises probe/readable delta to `+0.2775`; it still misses the strict full-loop gate because sign-test p is `0.017849` rather than `<= 0.01`.
 
 What is missing:
 
 - A probe-predicted eta-to-epsilon pass that clears the original strict full-loop gate without oracle/gold labels.
-- A readout confidence/filtering layer that prevents weak Foundation predictions from being realized into epsilon prefixes.
+- A readout confidence mechanism strong enough to prevent weak Foundation predictions from being realized into epsilon prefixes. Simple centroid-margin filtering is implemented and is not sufficient by itself.
 - Fresh full Evidence Packet.
 
 The earlier 400-row GPT-NeoX-20B dataset can derive a 40-Element label from existing `operator x domain` labels, but it is imbalanced and has only 39 populated classes. That run is useful as a zero-new-GPU signal check, not a final 40-Element headline replication.
@@ -256,15 +257,16 @@ The UI and investor/demo language must use this distinction:
 
 ```text
 Current 20B status: real model run, real activation capture, exact Stage 7 Foundation-28 readout/ablation pass, and source-derived TKS40 activation-level pass.
-Behavioral bridge status: oracle/gold readable epsilon pass; probe-predicted full loop is weak because the Foundation readout handoff is not accurate enough yet.
+Behavioral bridge status: oracle/gold readable epsilon pass; probe-predicted full loop is weak because the Foundation readout handoff is not accurate enough yet. The q75 high-confidence slice clears effect size but misses the sign-test gate.
 Not yet: full probe-predicted behavioral pass or CAS universality proof.
-Next gate: improve/filter Foundation readout, rerun eta-to-epsilon, then merge a passing chain into an Evidence Packet.
+Next gate: improve the Foundation readout or add an explicitly lower-resolution Drive-level fallback, rerun eta-to-epsilon, then merge only passing chains into an Evidence Packet.
 ```
 
 ## Concrete Next Work
 
-1. Add Foundation readout confidence/filtering to the eta-to-epsilon runner.
-2. Rerun GPT-NeoX-20B eta-to-epsilon on high-confidence Foundation predictions and report kept coverage separately from pass accuracy.
+1. Completed: add Foundation readout confidence/filtering to the eta-to-epsilon runner.
+2. Completed: rerun GPT-NeoX-20B eta-to-epsilon on q25/q50/q75 high-confidence Foundation predictions and report kept coverage separately from pass accuracy.
 3. Run lacunarity/fractal diagnostics on the exact Stage 7 Foundation-28 20B trace.
-4. Build the Evidence Packet merger for the exact Stage 7 20B chain.
-5. Only if the filtered bridge clears the gate, present 20B as behavioral bridge evidence rather than activation-only evidence.
+4. Improve the readout handoff: either a stronger Foundation readout/ensemble or a clearly labeled Drive-level fallback that does not pretend to be Foundation-28 resolution.
+5. Build the Evidence Packet merger for the exact Stage 7 20B chain.
+6. Only if a probe-predicted bridge clears the gate, present 20B as behavioral bridge evidence rather than activation-plus-oracle evidence.

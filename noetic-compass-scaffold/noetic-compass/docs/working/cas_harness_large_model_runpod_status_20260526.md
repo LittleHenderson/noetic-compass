@@ -223,7 +223,18 @@ Correctness-bucket diagnosis:
 | Drive correct | 68 | +0.7185 | +1.3742 | +0.6793 | Even a correct Drive with wrong register often carries the bridge |
 | Foundation wrong | 70 | -0.0752 | +0.5464 | +0.6651 | Wrong Foundation predictions are the bottleneck |
 
-Interpretation: this is a real 20B behavioral likelihood result, but it is not a full 20B closure. The readable epsilon bridge itself works: gold-readable prefixes produce a large positive likelihood shift and wrong-readable prefixes push in the opposite direction. The raw-symbol control stays near zero, matching the original methodology. The current failure is the probe handoff: selected-row Foundation accuracy is only `37.50%` and selected Drive accuracy is `60.71%`. The next fix is therefore readout confidence/filtering or a stronger Foundation readout, not changing the TKS definitions or abandoning the eta-to-epsilon mechanism.
+Confidence-filter sweep:
+
+| Filter | Kept rows | Coverage | Foundation acc | Drive acc | Probe readable delta | Probe minus partner | Sign p | Status |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| none | 112/112 | 100% | 37.50% | 60.71% | +0.1974 | +0.8459 | 0.001608 | weak by delta gate |
+| q25 centroid-margin | 84/112 | 75% | 41.67% | 63.10% | +0.1276 | +0.7738 | n/a | weak |
+| q50 centroid-margin | 56/112 | 50% | 46.43% | 62.50% | +0.0693 | +0.6890 | n/a | weak |
+| q75 centroid-margin | 28/112 | 25% | 57.14% | 71.43% | +0.2775 | +0.7770 | 0.017849 | weak by sign-test gate |
+
+The q75 slice is informative but not a pass. It clears the effect-size line (`+0.2775`) and the partner-separation line (`+0.7770`), but misses the original sign-test gate (`p <= 0.01`) at only 28 kept rows. Its correctness buckets preserve the mechanism: Foundation-correct rows bridge strongly (`+0.5466`), Drive-correct rows bridge strongly (`+0.6118`), and Foundation-wrong rows do not (`-0.0814`).
+
+Interpretation: this is a real 20B behavioral likelihood result, but it is not a full 20B closure. The readable epsilon bridge itself works: gold-readable prefixes produce a large positive likelihood shift and wrong-readable prefixes push in the opposite direction. The raw-symbol control stays near zero, matching the original methodology. The current failure is the probe handoff: selected-row Foundation accuracy is only `37.50%` unfiltered and only `57.14%` at the q75 high-confidence slice. Simple centroid-margin confidence filtering is not enough. The next fix is a stronger Foundation readout or an explicitly downgraded Drive-level fallback mode, not changing the TKS definitions or abandoning the eta-to-epsilon mechanism.
 
 ### GPT-NeoX-20B activation-level cover ablation
 

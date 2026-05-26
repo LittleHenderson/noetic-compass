@@ -6,9 +6,12 @@ from pathlib import Path
 import numpy as np
 
 from scripts.run_open_weight_eta_epsilon_bridge import (
+    apply_readout_filter,
     base_prompt,
+    bridge_gates,
     canonical_foundation,
     condition_prefix,
+    centroid_readout_scores,
     interpret_bridge_status,
     key_comparisons,
     load_stage7_scenario_meta,
@@ -143,6 +146,27 @@ def test_bridge_status_uses_original_probe_readable_gate():
     assert "Raw CAS-symbol prefixes remain non-load-bearing" in implication
 
 
+def test_bridge_gates_expose_which_original_gate_failed():
+    margins = {
+        "none": [0.0] * 28,
+        "gold_readable": [0.6] * 28,
+        "probe_readable": [0.4] * 20 + [-0.1] * 8,
+        "partner_readable": [-0.3] * 28,
+        "gold_raw": [0.0] * 28,
+        "probe_raw": [0.0] * 28,
+        "partner_raw": [0.0] * 28,
+    }
+
+    summaries = summarize_conditions(margins)
+    key = key_comparisons(summaries)
+    gates = bridge_gates(summaries, key)
+
+    assert gates["probe_readable"]["checks"]["delta_vs_none"]["passed"] is True
+    assert gates["probe_readable"]["checks"]["minus_partner_readable_margin"]["passed"] is True
+    assert gates["probe_readable"]["checks"]["delta_positive_sign_p"]["passed"] is False
+    assert gates["probe_readable"]["passed"] is False
+
+
 def test_correctness_buckets_expose_readout_handoff_failure_mode():
     def case(*, foundation_correct: bool, drive_correct: bool, none: float, probe: float, gold: float, partner: float):
         return {
@@ -170,3 +194,40 @@ def test_correctness_buckets_expose_readout_handoff_failure_mode():
     assert buckets["drive_correct"]["probe_readable_delta_vs_none"] == 0.6
     assert buckets["foundation_wrong"]["n"] == 2
     assert buckets["foundation_wrong"]["probe_readable_delta_vs_none"] == 0.1
+
+
+def test_centroid_confidence_filter_uses_readout_margin_without_gold_labels():
+    model = {
+        "mean": np.asarray([0.0, 0.0], dtype=np.float32),
+        "std": np.asarray([1.0, 1.0], dtype=np.float32),
+        "classes": ["F1|T", "F2|T"],
+        "centroids": {
+            "F1|T": np.asarray([0.0, 0.0], dtype=np.float32),
+            "F2|T": np.asarray([10.0, 0.0], dtype=np.float32),
+        },
+    }
+    scores = centroid_readout_scores(
+        np.asarray(
+            [
+                [0.1, 0.0],
+                [4.9, 0.0],
+                [9.9, 0.0],
+            ],
+            dtype=np.float32,
+        ),
+        model,
+    )
+
+    assert scores[0]["predicted_label"] == "F1|T"
+    assert scores[0]["normalized_centroid_margin"] > scores[1]["normalized_centroid_margin"]
+    kept, info = apply_readout_filter(
+        [0, 1, 2],
+        scores,
+        min_margin=None,
+        margin_quantile=0.5,
+    )
+
+    assert kept == [0, 2]
+    assert info["original_selected_cases"] == 3
+    assert info["kept_cases"] == 2
+    assert info["coverage"] == 0.666667

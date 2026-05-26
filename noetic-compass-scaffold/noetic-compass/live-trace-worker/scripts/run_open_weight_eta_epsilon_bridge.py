@@ -87,6 +87,8 @@ class BridgeConfig:
     selection_seed: int = 449
     readout_seed: int = 42
     readout_layer: int | None = None
+    min_readout_margin: float | None = None
+    readout_margin_quantile: float | None = None
     max_length: int = 256
     trust_remote_code: bool = False
     output_md: Path | None = None
@@ -118,6 +120,16 @@ def parse_args() -> Any:
     parser.add_argument("--selection-seed", type=int, default=449)
     parser.add_argument("--readout-seed", type=int, default=42)
     parser.add_argument("--readout-layer", type=int)
+    parser.add_argument(
+        "--min-readout-margin",
+        type=float,
+        help="Keep only rows whose centroid readout margin is at least this value.",
+    )
+    parser.add_argument(
+        "--readout-margin-quantile",
+        type=float,
+        help="Keep only rows at or above this selected-row readout-margin quantile, e.g. 0.5.",
+    )
     parser.add_argument("--max-length", type=int, default=256)
     parser.add_argument("--trust-remote-code", action="store_true")
     return parser.parse_args()
@@ -140,6 +152,8 @@ def main() -> int:
         selection_seed=args.selection_seed,
         readout_seed=args.readout_seed,
         readout_layer=args.readout_layer,
+        min_readout_margin=args.min_readout_margin,
+        readout_margin_quantile=args.readout_margin_quantile,
         max_length=args.max_length,
         trust_remote_code=args.trust_remote_code,
     )
@@ -173,8 +187,9 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
     layer_position = layer_positions[readout_layer]
     metrics, model = fit_eval_centroid(features[:, layer_position, :], labels, split)
     predicted = predict_centroid(features[:, layer_position, :], model)
+    readout_scores = centroid_readout_scores(features[:, layer_position, :], model)
 
-    selected_indices = select_stage7_bridge_indices(
+    unfiltered_selected_indices = select_stage7_bridge_indices(
         scenario_ids=scenario_ids,
         labels=labels,
         split=split,
@@ -182,8 +197,14 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
         per_drive=config.per_drive,
         seed=config.selection_seed,
     )
+    selected_indices, readout_filter = apply_readout_filter(
+        unfiltered_selected_indices,
+        readout_scores,
+        min_margin=config.min_readout_margin,
+        margin_quantile=config.readout_margin_quantile,
+    )
     if not selected_indices:
-        raise RuntimeError("No Stage 7 same-register drive-cycle test rows selected.")
+        raise RuntimeError("No Stage 7 same-register drive-cycle test rows survived selection/filtering.")
 
     model_config = ProbeShardConfig(
         model_id=config.model_id,
@@ -241,6 +262,7 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
             "gold_drive": gold_drive,
             "predicted_drive": predicted_drive,
             "partner_drive": partner_drive,
+            "readout_confidence": readout_scores[int(idx)],
             "foundation_correct": predicted_label == gold_label,
             "drive_correct": predicted_drive == gold_drive,
             "condition_scores": {},
@@ -285,6 +307,7 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
     n_cases = len(selected_indices)
     selected_foundation_acc = selected_foundation_hits / max(n_cases, 1)
     selected_drive_acc = selected_drive_hits / max(n_cases, 1)
+    gates = bridge_gates(summaries, key)
     status, implication = interpret_bridge_status(summaries, key)
 
     return {
@@ -313,6 +336,7 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
         "readout_seed": config.readout_seed,
         "selection_seed": config.selection_seed,
         "per_drive": config.per_drive,
+        "readout_filter": readout_filter,
         "n_cases": n_cases,
         "probe_prediction": {
             "all_train_foundation_accuracy": metrics["train_acc"],
@@ -324,6 +348,7 @@ def run_eta_epsilon_bridge(config: BridgeConfig) -> dict[str, Any]:
         },
         "conditions": summaries,
         "key_comparisons": key,
+        "bridge_gates": gates,
         "correctness_buckets": summarize_correctness_buckets(cases),
         "cases": cases,
         "produced_outputs": ["foundation_readout", "eta_epsilon_likelihood_bridge", "worker_evidence_manifest"],
@@ -425,6 +450,70 @@ def select_stage7_bridge_indices(
             raise RuntimeError(f"Drive {drive} needs {per_drive} bridge rows, got {len(candidates)}.")
         selected.extend(int(idx) for idx in candidates[:per_drive])
     return selected
+
+
+def centroid_readout_scores(x: np.ndarray, model: dict[str, Any]) -> list[dict[str, Any]]:
+    scaled = (x.astype(np.float32) - model["mean"]) / model["std"]
+    classes = [str(label) for label in model["classes"]]
+    centroid_matrix = np.stack([model["centroids"][label] for label in model["classes"]], axis=0)
+    distances = ((scaled[:, None, :] - centroid_matrix[None, :, :]) ** 2).sum(axis=2)
+    out: list[dict[str, Any]] = []
+    for row in distances:
+        order = np.argsort(row)
+        best_idx = int(order[0])
+        second_idx = int(order[1]) if len(order) > 1 else best_idx
+        best_distance = float(row[best_idx])
+        second_distance = float(row[second_idx])
+        margin = second_distance - best_distance
+        normalized_margin = margin / max(abs(second_distance), 1e-9)
+        out.append(
+            {
+                "predicted_label": classes[best_idx],
+                "runner_up_label": classes[second_idx],
+                "best_distance": round(best_distance, 6),
+                "runner_up_distance": round(second_distance, 6),
+                "centroid_margin": round(float(margin), 6),
+                "normalized_centroid_margin": round(float(normalized_margin), 6),
+            }
+        )
+    return out
+
+
+def apply_readout_filter(
+    indices: list[int],
+    readout_scores: list[dict[str, Any]],
+    *,
+    min_margin: float | None,
+    margin_quantile: float | None,
+) -> tuple[list[int], dict[str, Any]]:
+    if margin_quantile is not None and not (0.0 <= margin_quantile <= 1.0):
+        raise ValueError("--readout-margin-quantile must be between 0.0 and 1.0")
+    margins = [float(readout_scores[int(idx)]["normalized_centroid_margin"]) for idx in indices]
+    threshold: float | None = None
+    if margin_quantile is not None:
+        threshold = float(np.quantile(np.asarray(margins, dtype=np.float64), margin_quantile))
+    if min_margin is not None:
+        threshold = float(min_margin) if threshold is None else max(float(min_margin), threshold)
+    if threshold is None:
+        kept = list(indices)
+        mode = "none"
+    else:
+        kept = [
+            int(idx)
+            for idx in indices
+            if float(readout_scores[int(idx)]["normalized_centroid_margin"]) >= threshold
+        ]
+        mode = "normalized_centroid_margin"
+    return kept, {
+        "mode": mode,
+        "score": "normalized_centroid_margin",
+        "min_readout_margin": min_margin,
+        "readout_margin_quantile": margin_quantile,
+        "effective_threshold": round(threshold, 6) if threshold is not None else None,
+        "original_selected_cases": len(indices),
+        "kept_cases": len(kept),
+        "coverage": round(len(kept) / len(indices), 6) if indices else 0.0,
+    }
 
 
 def canonical_foundation(value: Any) -> str:
@@ -588,16 +677,9 @@ def summarize_case_subset(cases: list[dict[str, Any]]) -> dict[str, Any]:
 
 
 def interpret_bridge_status(summaries: dict[str, Any], key: dict[str, float]) -> tuple[str, str]:
-    probe_pass = (
-        key["probe_readable_delta_vs_none"] > 0.20
-        and key["probe_readable_minus_partner_readable_margin"] > 0.30
-        and float(summaries["probe_readable"]["delta_positive_sign_p"]) <= 0.01
-    )
-    gold_pass = (
-        key["gold_readable_delta_vs_none"] > 0.20
-        and key["gold_readable_minus_partner_readable_margin"] > 0.30
-        and float(summaries["gold_readable"]["delta_positive_sign_p"]) <= 0.01
-    )
+    gates = bridge_gates(summaries, key)
+    probe_pass = bool(gates["probe_readable"]["passed"])
+    gold_pass = bool(gates["gold_readable"]["passed"])
     if probe_pass:
         status = "PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS"
         implication = (
@@ -620,6 +702,42 @@ def interpret_bridge_status(summaries: dict[str, Any], key: dict[str, float]) ->
     if key["probe_raw_delta_vs_none"] <= 0.03 and key["gold_raw_delta_vs_none"] <= 0.03:
         implication += " Raw CAS-symbol prefixes remain non-load-bearing."
     return status, implication
+
+
+def bridge_gates(summaries: dict[str, Any], key: dict[str, float]) -> dict[str, Any]:
+    def gate(prefix: str) -> dict[str, Any]:
+        delta_key = f"{prefix}_delta_vs_none"
+        partner_key = f"{prefix}_minus_partner_readable_margin"
+        sign_p = float(summaries[prefix]["delta_positive_sign_p"])
+        checks = {
+            "delta_vs_none": {
+                "value": key[delta_key],
+                "threshold": 0.20,
+                "operator": ">",
+                "passed": key[delta_key] > 0.20,
+            },
+            "minus_partner_readable_margin": {
+                "value": key[partner_key],
+                "threshold": 0.30,
+                "operator": ">",
+                "passed": key[partner_key] > 0.30,
+            },
+            "delta_positive_sign_p": {
+                "value": sign_p,
+                "threshold": 0.01,
+                "operator": "<=",
+                "passed": sign_p <= 0.01,
+            },
+        }
+        return {
+            "passed": all(bool(check["passed"]) for check in checks.values()),
+            "checks": checks,
+        }
+
+    return {
+        "probe_readable": gate("probe_readable"),
+        "gold_readable": gate("gold_readable"),
+    }
 
 
 def summarize(values: list[float]) -> dict[str, float]:
@@ -664,6 +782,8 @@ def render_markdown(report: dict[str, Any]) -> str:
         f"- Readout layer: `{report['readout_layer']}`",
         f"- Selected Foundation accuracy: `{report['probe_prediction']['selected_foundation_accuracy']:.4f}`",
         f"- Selected Drive accuracy: `{report['probe_prediction']['selected_drive_accuracy']:.4f}`",
+        f"- Filter coverage: `{report['readout_filter']['kept_cases']} / {report['readout_filter']['original_selected_cases']}` (`{report['readout_filter']['coverage']:.4f}`)",
+        f"- Filter threshold: `{report['readout_filter']['effective_threshold']}` on `{report['readout_filter']['score']}`",
         "",
         "## Likelihood Conditions",
         "",
@@ -680,6 +800,16 @@ def render_markdown(report: dict[str, Any]) -> str:
     lines.extend(["", "## Key Comparisons", ""])
     for name, value in report["key_comparisons"].items():
         lines.append(f"- `{name}`: `{value:.6f}`")
+    lines.extend(["", "## Bridge Gates", ""])
+    lines.append("| Loop | Gate | Value | Required | Pass |")
+    lines.append("|---|---|---:|---:|---|")
+    for loop_name, loop_gate in report.get("bridge_gates", {}).items():
+        for gate_name, check in loop_gate.get("checks", {}).items():
+            lines.append(
+                f"| {loop_name} | {gate_name} | "
+                f"{float(check['value']):.6f} | {check['operator']} {float(check['threshold']):.2f} | "
+                f"{'yes' if check['passed'] else 'no'} |"
+            )
     lines.extend(["", "## Correctness Buckets", ""])
     lines.append("| Bucket | Rows | Probe delta vs none | Probe minus partner | Gold delta vs none |")
     lines.append("|---|---:|---:|---:|---:|")
