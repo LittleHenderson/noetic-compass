@@ -241,11 +241,12 @@ What exists:
 - An exact-original Stage 7 eta-to-epsilon likelihood bridge on GPT-NeoX-20B. Gold/readable epsilon prefixes pass strongly (`+0.6601` mean delta, `93/112` positive rows); probe/readable is positive (`+0.1974`, `72/112`, p `0.001608`) but misses the original strict full-loop gate by about `0.0026`.
 - A readout confidence/filtering implementation in the eta-to-epsilon runner. The q75 high-confidence slice keeps `28/112` rows, improves Foundation accuracy to `57.14%`, and raises probe/readable delta to `+0.2775`; it still misses the strict full-loop gate because sign-test p is `0.017849` rather than `<= 0.01`.
 - A methodology-correct balanced-logistic readout rerun. Replacing nearest-centroid with the original sklearn `LogisticRegression(C=0.1, class_weight="balanced")` + `StandardScaler` readout produces `86.8622%` heldout Foundation accuracy, `85.7143%` selected bridge-row Foundation accuracy, and a probe-predicted eta-to-epsilon pass: `+0.596413` probe-readable delta, `90/112` positive rows, sign-test p `3e-11`, probe-readable minus partner `+1.244917`.
+- A trace-diagnostics pass on the exact Stage 7 Foundation-28 GPT-NeoX-20B trace. At the bridge readout layer (`40`), heldout Foundation accuracy is `86.8622%`, Foundation lacunarity is `0.006715` (Uniform; pass threshold `<= 0.05`), drive lacunarity is `0.002752`, register lacunarity is `0.001283`, and the numeric layer-trace preflight class is `Amplifying`.
 
 What is missing:
 
-- Lacunarity/fractal diagnostics on the exact Stage 7 Foundation-28 20B trace.
 - Fresh full Evidence Packet.
+- Discrete `cas-engine` `CognitiveFractal` orbit-classifier packaging. The current fractal preflight is the numeric layer-trace proxy.
 
 The earlier 400-row GPT-NeoX-20B dataset can derive a 40-Element label from existing `operator x domain` labels, but it is imbalanced and has only 39 populated classes. That run is useful as a zero-new-GPU signal check, not a final 40-Element headline replication.
 
@@ -258,8 +259,9 @@ The UI and investor/demo language must use this distinction:
 ```text
 Current 20B status: real model run, real activation capture, exact Stage 7 Foundation-28 readout/ablation pass, and source-derived TKS40 activation-level pass.
 Behavioral bridge status: probe-predicted eta-to-epsilon likelihood bridge PASS on GPT-NeoX-20B under the original balanced-logistic readout methodology.
-Not yet: full CAS Harness ACCEPT/SUPPRESS verdict, lacunarity/fractal closure, or 100B/300B universality proof.
-Next gate: run lacunarity/fractal diagnostics and merge the exact Stage 7 20B chain into an Evidence Packet.
+Trace diagnostic status: exact Stage 7 Foundation-28 lacunarity/fractal preflight PASS on GPT-NeoX-20B (`0.006715` lacunarity; numeric trace class `Amplifying`).
+Not yet: full CAS Harness ACCEPT/SUPPRESS verdict, discrete cas-engine fractal-orbit packaging, or 100B/300B universality proof.
+Next gate: merge the exact Stage 7 20B chain into an Evidence Packet.
 ```
 
 ## Concrete Next Work
@@ -267,6 +269,6 @@ Next gate: run lacunarity/fractal diagnostics and merge the exact Stage 7 20B ch
 1. Completed: add Foundation readout confidence/filtering to the eta-to-epsilon runner.
 2. Completed: rerun GPT-NeoX-20B eta-to-epsilon on q25/q50/q75 high-confidence Foundation predictions and report kept coverage separately from pass accuracy.
 3. Completed: rerun GPT-NeoX-20B eta-to-epsilon with the original balanced-logistic readout. Result: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`.
-4. Run lacunarity/fractal diagnostics on the exact Stage 7 Foundation-28 20B trace.
+4. Completed: run lacunarity/fractal diagnostics on the exact Stage 7 Foundation-28 20B trace. Result: `TRACE_DIAGNOSTICS_PASS`.
 5. Build the Evidence Packet merger for the exact Stage 7 20B chain.
-6. Present 20B as behavioral likelihood-bridge evidence, not yet as a full CAS Harness verdict until the Evidence Packet/verifier merge exists.
+6. Present 20B as behavioral likelihood-bridge + trace-diagnostic evidence, not yet as a full CAS Harness verdict until the Evidence Packet/verifier merge exists.

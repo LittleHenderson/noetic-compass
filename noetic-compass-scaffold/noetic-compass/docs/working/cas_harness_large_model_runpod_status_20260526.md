@@ -261,7 +261,31 @@ The original Stage 7 closure methodology used balanced sklearn linear probes, no
 
 Status: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`.
 
-Interpretation: this closes the 20B Stage 7 likelihood-bridge tier under the original balanced-logistic readout methodology. It does not by itself create a CAS Harness ACCEPT/SUPPRESS verdict or a full Evidence Packet; it is the behavioral likelihood bridge evidence layer that should be merged with the activation readout/ablation results and remaining lacunarity/fractal diagnostics.
+Interpretation: this closes the 20B Stage 7 likelihood-bridge tier under the original balanced-logistic readout methodology. It does not by itself create a CAS Harness ACCEPT/SUPPRESS verdict or a full Evidence Packet; it is the behavioral likelihood bridge evidence layer that should be merged with the activation readout/ablation results, trace diagnostics, and Evidence Packet verifier.
+
+### GPT-NeoX-20B exact Stage 7 trace diagnostics
+
+- Runner: `live-trace-worker/scripts/run_open_weight_trace_diagnostics.py`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_stage7_foundation_rolebound_pilot_layers_0_43.npz`
+- Bridge context: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_eta_epsilon_bridge_logistic.json`
+- Ablation context: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_foundation_rolebound_activation_cover_ablation_report_top256.json`
+- Output report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_trace_diagnostics_logistic.json`
+- Markdown report on RunPod: `/workspace/cas-harness-large-eval/reports/GPT_NEOX_20B_STAGE7_TRACE_DIAGNOSTICS_LOGISTIC.md`
+- Local archive target: `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526`
+
+Metric summary:
+
+| Gate | GPT-NeoX-20B result | Comparator / threshold | Honest read |
+| --- | ---: | ---: | --- |
+| Gate-layer heldout Foundation accuracy | 86.8622% | Pythia-160M Foundation readout 78.6% | Strong readout on the exact Stage 7 Foundation axis under the original balanced-logistic probe |
+| Foundation lacunarity | 0.006715 | pass <= 0.05; Pythia-160M 0.021; Pythia-1B 0.015 | Pass; cleaner than the Pythia Foundation comparators |
+| Drive lacunarity inside Foundation grid | 0.002752 | lower is cleaner | Drive component is evenly distributed inside the Foundation readout |
+| Register lacunarity inside Foundation grid | 0.001283 | lower is cleaner | Register component is evenly distributed inside the Foundation readout |
+| Fractal preflight | Amplifying | pass classes: Stabilizing or Amplifying | Pass as a numeric layer-trace proxy |
+
+Status: `TRACE_DIAGNOSTICS_PASS`.
+
+Important limit: the fractal preflight is currently a numeric trace proxy over layer-by-layer Foundation readout accuracy. It uses the CAS fractal vocabulary, but it is not yet the discrete `cas-engine` `CognitiveFractal` orbit classifier.
 
 ### GPT-NeoX-20B activation-level cover ablation
 
