@@ -94,3 +94,19 @@ surface wording.
 The fix is not to abandon TKS definitions. The fix is to turn the definitions
 into varied real situations, then prove a text-only classifier cannot solve the
 task before checking whether hidden states can.
+
+## Follow-Up: Original Fixtures
+
+A follow-up diagnostic ran the same modern text-only check on the original
+Pythia-era fixtures:
+
+- Original Stage 9 40E: `49.24%` text-only accuracy, gate passed.
+- Original Stage 7 Foundation-28: `54.08%` text-only accuracy, gate passed.
+
+So the blocked result is specific to the new compact-gloss
+`tks40_balanced_v0_20260526.json` library. The original role-bound
+counterfactual fixture design remains a usable text-baseline adversary under
+the modern diagnostic.
+
+See:
+`docs/working/original_stage7_stage9_text_baseline_diagnostics_20260527.md`.

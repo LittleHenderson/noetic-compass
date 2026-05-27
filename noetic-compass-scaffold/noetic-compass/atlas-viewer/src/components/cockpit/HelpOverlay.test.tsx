@@ -24,9 +24,10 @@ describe('HelpOverlay', () => {
 
     const faq = screen.getByTestId('tks40-text-baseline-faq');
     expect(faq).toHaveTextContent('FAQ: TKS40 Text Baseline Guard');
-    expect(faq).toHaveTextContent('hidden states read the balanced TKS40 axis at 97.50%');
+    expect(faq).toHaveTextContent('hidden states read the compact-gloss TKS40 axis at 97.50%');
     expect(faq).toHaveTextContent('text-only classifier also reached 100.00%');
-    expect(faq).toHaveTextContent('cannot support the claim that CAS beats text-only baselines yet');
+    expect(faq).toHaveTextContent('original Stage 9 40E fixture');
+    expect(faq).toHaveTextContent('49.24%');
     expect(faq).toHaveTextContent('pre-registered text-baseline ceiling of 60% or lower');
   });
 

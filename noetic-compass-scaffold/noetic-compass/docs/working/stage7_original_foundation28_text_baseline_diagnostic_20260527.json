@@ -1,0 +1,1630 @@
+{
+  "axis": "original_stage7_foundation28",
+  "claim_gate": {
+    "actual_text_baseline": 0.5408163265306123,
+    "cas_beats_text_claim_allowed": true,
+    "reason": "The text-only classifier stayed below the ceiling for original_stage7_foundation28. This scenario library can be used as a meaningful text-baseline adversary.",
+    "status": "passes_text_baseline_ceiling",
+    "target_text_baseline_ceiling": 0.6
+  },
+  "created_at": "2026-05-27T19:27:43.143610+00:00",
+  "interpretation": "If test_accuracy is near 1.0, the scenario text is too lexically separable for a CAS-beats-text claim on this axis. Hidden-state readout can still be real, but the eval set is not a meaningful text adversary.",
+  "label_counts": {
+    "F1|A": 156,
+    "F1|E": 156,
+    "F1|T": 156,
+    "F1|f": 156,
+    "F2|A": 156,
+    "F2|E": 156,
+    "F2|T": 156,
+    "F2|f": 156,
+    "F3|A": 156,
+    "F3|E": 156,
+    "F3|T": 156,
+    "F3|f": 156,
+    "F4|A": 156,
+    "F4|E": 156,
+    "F4|T": 156,
+    "F4|f": 156,
+    "F5|A": 156,
+    "F5|E": 156,
+    "F5|T": 156,
+    "F5|f": 156,
+    "F6|A": 156,
+    "F6|E": 156,
+    "F6|T": 156,
+    "F6|f": 156,
+    "F7|A": 156,
+    "F7|E": 156,
+    "F7|T": 156,
+    "F7|f": 156
+  },
+  "label_key": "foundation",
+  "n_classes": 28,
+  "n_scenarios": 4368,
+  "sample_prompts_per_class": {
+    "F1|A": [
+      "A is the sacred-orientation view of the pull toward ultimate source and belonging inside the reimbursement package; B is the thought-model check of the pull toward ultimate source and belonging inside the reimbursement package. Focus: B.",
+      "A is the ultimate-purpose frame that keeps the pull toward ultimate source and belonging inside the reimbursement package visible; B is the explicit reasoning pass that tests the pull toward ultimate source and belonging inside the reimbursement package. Focus: B.",
+      "A is the prayer-like attention the auditor keeps over the pull toward ultimate source and belonging inside the reimbursement package; B is the line-by-line review the auditor makes of the pull toward ultimate source and belonging inside the reimbursement package. Focus: B."
+    ],
+    "F1|E": [
+      "A is the heart-pressure around the pull toward ultimate source and belonging inside the reimbursement package; B is the body-level contact with the pull toward ultimate source and belonging inside the reimbursement package. Focus: B.",
+      "A is the value-toned pull that makes the pull toward ultimate source and belonging inside the reimbursement package feel important; B is the concrete handling that puts the pull toward ultimate source and belonging inside the reimbursement package into contact with the situation. Focus: B.",
+      "A is the charged reaction the auditor has around the pull toward ultimate source and belonging inside the reimbursement package; B is the bodily move the auditor makes around the pull toward ultimate source and belonging inside the reimbursement package. Focus: B."
+    ],
+    "F1|T": [
+      "A is the sacred-orientation view of the pull toward ultimate source and belonging inside the reimbursement package; B is the thought-model check of the pull toward ultimate source and belonging inside the reimbursement package. Focus: A.",
+      "A is the ultimate-purpose frame that keeps the pull toward ultimate source and belonging inside the reimbursement package visible; B is the explicit reasoning pass that tests the pull toward ultimate source and belonging inside the reimbursement package. Focus: A.",
+      "A is the prayer-like attention the auditor keeps over the pull toward ultimate source and belonging inside the reimbursement package; B is the line-by-line review the auditor makes of the pull toward ultimate source and belonging inside the reimbursement package. Focus: A."
+    ],
+    "F1|f": [
+      "A is the heart-pressure around the pull toward ultimate source and belonging inside the reimbursement package; B is the body-level contact with the pull toward ultimate source and belonging inside the reimbursement package. Focus: A.",
+      "A is the value-toned pull that makes the pull toward ultimate source and belonging inside the reimbursement package feel important; B is the concrete handling that puts the pull toward ultimate source and belonging inside the reimbursement package into contact with the situation. Focus: A.",
+      "A is the charged reaction the auditor has around the pull toward ultimate source and belonging inside the reimbursement package; B is the bodily move the auditor makes around the pull toward ultimate source and belonging inside the reimbursement package. Focus: A."
+    ],
+    "F2|A": [
+      "A is the sacred-orientation view of the search for insight from vendor history about what should be trusted; B is the thought-model check of the search for insight from vendor history about what should be trusted. Focus: B.",
+      "A is the ultimate-purpose frame that keeps the search for insight from vendor history about what should be trusted visible; B is the explicit reasoning pass that tests the search for insight from vendor history about what should be trusted. Focus: B.",
+      "A is the prayer-like attention the auditor keeps over the search for insight from vendor history about what should be trusted; B is the line-by-line review the auditor makes of the search for insight from vendor history about what should be trusted. Focus: B."
+    ],
+    "F2|E": [
+      "A is the heart-pressure around the search for insight from vendor history about what should be trusted; B is the body-level contact with the search for insight from vendor history about what should be trusted. Focus: B.",
+      "A is the value-toned pull that makes the search for insight from vendor history about what should be trusted feel important; B is the concrete handling that puts the search for insight from vendor history about what should be trusted into contact with the situation. Focus: B.",
+      "A is the charged reaction the auditor has around the search for insight from vendor history about what should be trusted; B is the bodily move the auditor makes around the search for insight from vendor history about what should be trusted. Focus: B."
+    ],
+    "F2|T": [
+      "A is the sacred-orientation view of the search for insight from vendor history about what should be trusted; B is the thought-model check of the search for insight from vendor history about what should be trusted. Focus: A.",
+      "A is the ultimate-purpose frame that keeps the search for insight from vendor history about what should be trusted visible; B is the explicit reasoning pass that tests the search for insight from vendor history about what should be trusted. Focus: A.",
+      "A is the prayer-like attention the auditor keeps over the search for insight from vendor history about what should be trusted; B is the line-by-line review the auditor makes of the search for insight from vendor history about what should be trusted. Focus: A."
+    ],
+    "F2|f": [
+      "A is the heart-pressure around the search for insight from vendor history about what should be trusted; B is the body-level contact with the search for insight from vendor history about what should be trusted. Focus: A.",
+      "A is the value-toned pull that makes the search for insight from vendor history about what should be trusted feel important; B is the concrete handling that puts the search for insight from vendor history about what should be trusted into contact with the situation. Focus: A.",
+      "A is the charged reaction the auditor has around the search for insight from vendor history about what should be trusted; B is the bodily move the auditor makes around the search for insight from vendor history about what should be trusted. Focus: A."
+    ],
+    "F3|A": [
+      "A is the sacred-orientation view of the living capacity in verified receipt trail staying healthy and active; B is the thought-model check of the living capacity in verified receipt trail staying healthy and active. Focus: B.",
+      "A is the ultimate-purpose frame that keeps the living capacity in verified receipt trail staying healthy and active visible; B is the explicit reasoning pass that tests the living capacity in verified receipt trail staying healthy and active. Focus: B.",
+      "A is the prayer-like attention the auditor keeps over the living capacity in verified receipt trail staying healthy and active; B is the line-by-line review the auditor makes of the living capacity in verified receipt trail staying healthy and active. Focus: B."
+    ],
+    "F3|E": [
+      "A is the heart-pressure around the living capacity in verified receipt trail staying healthy and active; B is the body-level contact with the living capacity in verified receipt trail staying healthy and active. Focus: B.",
+      "A is the value-toned pull that makes the living capacity in verified receipt trail staying healthy and active feel important; B is the concrete handling that puts the living capacity in verified receipt trail staying healthy and active into contact with the situation. Focus: B.",
+      "A is the charged reaction the auditor has around the living capacity in verified receipt trail staying healthy and active; B is the bodily move the auditor makes around the living capacity in verified receipt trail staying healthy and active. Focus: B."
+    ],
+    "F3|T": [
+      "A is the sacred-orientation view of the living capacity in verified receipt trail staying healthy and active; B is the thought-model check of the living capacity in verified receipt trail staying healthy and active. Focus: A.",
+      "A is the ultimate-purpose frame that keeps the living capacity in verified receipt trail staying healthy and active visible; B is the explicit reasoning pass that tests the living capacity in verified receipt trail staying healthy and active. Focus: A.",
+      "A is the prayer-like attention the auditor keeps over the living capacity in verified receipt trail staying healthy and active; B is the line-by-line review the auditor makes of the living capacity in verified receipt trail staying healthy and active. Focus: A."
+    ],
+    "F3|f": [
+      "A is the heart-pressure around the living capacity in verified receipt trail staying healthy and active; B is the body-level contact with the living capacity in verified receipt trail staying healthy and active. Focus: A.",
+      "A is the value-toned pull that makes the living capacity in verified receipt trail staying healthy and active feel important; B is the concrete handling that puts the living capacity in verified receipt trail staying healthy and active into contact with the situation. Focus: A.",
+      "A is the charged reaction the auditor has around the living capacity in verified receipt trail staying healthy and active; B is the bodily move the auditor makes around the living capacity in verified receipt trail staying healthy and active. Focus: A."
+    ],
+    "F4|A": [
+      "A is the sacred-orientation view of the bond of care between auditor and finance desk keeping the case joined; B is the thought-model check of the bond of care between auditor and finance desk keeping the case joined. Focus: B.",
+      "A is the ultimate-purpose frame that keeps the bond of care between auditor and finance desk keeping the case joined visible; B is the explicit reasoning pass that tests the bond of care between auditor and finance desk keeping the case joined. Focus: B.",
+      "A is the prayer-like attention the auditor keeps over the bond of care between auditor and finance desk keeping the case joined; B is the line-by-line review the auditor makes of the bond of care between auditor and finance desk keeping the case joined. Focus: B."
+    ],
+    "F4|E": [
+      "A is the heart-pressure around the bond of care between auditor and finance desk keeping the case joined; B is the body-level contact with the bond of care between auditor and finance desk keeping the case joined. Focus: B.",
+      "A is the value-toned pull that makes the bond of care between auditor and finance desk keeping the case joined feel important; B is the concrete handling that puts the bond of care between auditor and finance desk keeping the case joined into contact with the situation. Focus: B.",
+      "A is the charged reaction the auditor has around the bond of care between auditor and finance desk keeping the case joined; B is the bodily move the auditor makes around the bond of care between auditor and finance desk keeping the case joined. Focus: B."
+    ],
+    "F4|T": [
+      "A is the sacred-orientation view of the bond of care between auditor and finance desk keeping the case joined; B is the thought-model check of the bond of care between auditor and finance desk keeping the case joined. Focus: A.",
+      "A is the ultimate-purpose frame that keeps the bond of care between auditor and finance desk keeping the case joined visible; B is the explicit reasoning pass that tests the bond of care between auditor and finance desk keeping the case joined. Focus: A.",
+      "A is the prayer-like attention the auditor keeps over the bond of care between auditor and finance desk keeping the case joined; B is the line-by-line review the auditor makes of the bond of care between auditor and finance desk keeping the case joined. Focus: A."
+    ],
+    "F4|f": [
+      "A is the heart-pressure around the bond of care between auditor and finance desk keeping the case joined; B is the body-level contact with the bond of care between auditor and finance desk keeping the case joined. Focus: A.",
+      "A is the value-toned pull that makes the bond of care between auditor and finance desk keeping the case joined feel important; B is the concrete handling that puts the bond of care between auditor and finance desk keeping the case joined into contact with the situation. Focus: A.",
+      "A is the charged reaction the auditor has around the bond of care between auditor and finance desk keeping the case joined; B is the bodily move the auditor makes around the bond of care between auditor and finance desk keeping the case joined. Focus: A."
+    ],
+    "F5|A": [
+      "A is the sacred-orientation view of the push to shape review workflow and guide what happens next; B is the thought-model check of the push to shape review workflow and guide what happens next. Focus: B.",
+      "A is the ultimate-purpose frame that keeps the push to shape review workflow and guide what happens next visible; B is the explicit reasoning pass that tests the push to shape review workflow and guide what happens next. Focus: B.",
+      "A is the prayer-like attention the auditor keeps over the push to shape review workflow and guide what happens next; B is the line-by-line review the auditor makes of the push to shape review workflow and guide what happens next. Focus: B."
+    ],
+    "F5|E": [
+      "A is the heart-pressure around the push to shape review workflow and guide what happens next; B is the body-level contact with the push to shape review workflow and guide what happens next. Focus: B.",
+      "A is the value-toned pull that makes the push to shape review workflow and guide what happens next feel important; B is the concrete handling that puts the push to shape review workflow and guide what happens next into contact with the situation. Focus: B.",
+      "A is the charged reaction the auditor has around the push to shape review workflow and guide what happens next; B is the bodily move the auditor makes around the push to shape review workflow and guide what happens next. Focus: B."
+    ],
+    "F5|T": [
+      "A is the sacred-orientation view of the push to shape review workflow and guide what happens next; B is the thought-model check of the push to shape review workflow and guide what happens next. Focus: A.",
+      "A is the ultimate-purpose frame that keeps the push to shape review workflow and guide what happens next visible; B is the explicit reasoning pass that tests the push to shape review workflow and guide what happens next. Focus: A.",
+      "A is the prayer-like attention the auditor keeps over the push to shape review workflow and guide what happens next; B is the line-by-line review the auditor makes of the push to shape review workflow and guide what happens next. Focus: A."
+    ],
+    "F5|f": [
+      "A is the heart-pressure around the push to shape review workflow and guide what happens next; B is the body-level contact with the push to shape review workflow and guide what happens next. Focus: A.",
+      "A is the value-toned pull that makes the push to shape review workflow and guide what happens next feel important; B is the concrete handling that puts the push to shape review workflow and guide what happens next into contact with the situation. Focus: A.",
+      "A is the charged reaction the auditor has around the push to shape review workflow and guide what happens next; B is the bodily move the auditor makes around the push to shape review workflow and guide what happens next. Focus: A."
+    ],
+    "F6|A": [
+      "A is the sacred-orientation view of the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the thought-model check of the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: B.",
+      "A is the ultimate-purpose frame that keeps the need for usable resources in claim, receipt, approval, and payout that sustain the work visible; B is the explicit reasoning pass that tests the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: B.",
+      "A is the prayer-like attention the auditor keeps over the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the line-by-line review the auditor makes of the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: B."
+    ],
+    "F6|E": [
+      "A is the heart-pressure around the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the body-level contact with the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: B.",
+      "A is the value-toned pull that makes the need for usable resources in claim, receipt, approval, and payout that sustain the work feel important; B is the concrete handling that puts the need for usable resources in claim, receipt, approval, and payout that sustain the work into contact with the situation. Focus: B.",
+      "A is the charged reaction the auditor has around the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the bodily move the auditor makes around the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: B."
+    ],
+    "F6|T": [
+      "A is the sacred-orientation view of the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the thought-model check of the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: A.",
+      "A is the ultimate-purpose frame that keeps the need for usable resources in claim, receipt, approval, and payout that sustain the work visible; B is the explicit reasoning pass that tests the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: A.",
+      "A is the prayer-like attention the auditor keeps over the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the line-by-line review the auditor makes of the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: A."
+    ],
+    "F6|f": [
+      "A is the heart-pressure around the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the body-level contact with the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: A.",
+      "A is the value-toned pull that makes the need for usable resources in claim, receipt, approval, and payout that sustain the work feel important; B is the concrete handling that puts the need for usable resources in claim, receipt, approval, and payout that sustain the work into contact with the situation. Focus: A.",
+      "A is the charged reaction the auditor has around the need for usable resources in claim, receipt, approval, and payout that sustain the work; B is the bodily move the auditor makes around the need for usable resources in claim, receipt, approval, and payout that sustain the work. Focus: A."
+    ],
+    "F7|A": [
+      "A is the sacred-orientation view of the generative urge that carries review workflow toward continuation; B is the thought-model check of the generative urge that carries review workflow toward continuation. Focus: B.",
+      "A is the ultimate-purpose frame that keeps the generative urge that carries review workflow toward continuation visible; B is the explicit reasoning pass that tests the generative urge that carries review workflow toward continuation. Focus: B.",
+      "A is the prayer-like attention the auditor keeps over the generative urge that carries review workflow toward continuation; B is the line-by-line review the auditor makes of the generative urge that carries review workflow toward continuation. Focus: B."
+    ],
+    "F7|E": [
+      "A is the heart-pressure around the generative urge that carries review workflow toward continuation; B is the body-level contact with the generative urge that carries review workflow toward continuation. Focus: B.",
+      "A is the value-toned pull that makes the generative urge that carries review workflow toward continuation feel important; B is the concrete handling that puts the generative urge that carries review workflow toward continuation into contact with the situation. Focus: B.",
+      "A is the charged reaction the auditor has around the generative urge that carries review workflow toward continuation; B is the bodily move the auditor makes around the generative urge that carries review workflow toward continuation. Focus: B."
+    ],
+    "F7|T": [
+      "A is the sacred-orientation view of the generative urge that carries review workflow toward continuation; B is the thought-model check of the generative urge that carries review workflow toward continuation. Focus: A.",
+      "A is the ultimate-purpose frame that keeps the generative urge that carries review workflow toward continuation visible; B is the explicit reasoning pass that tests the generative urge that carries review workflow toward continuation. Focus: A.",
+      "A is the prayer-like attention the auditor keeps over the generative urge that carries review workflow toward continuation; B is the line-by-line review the auditor makes of the generative urge that carries review workflow toward continuation. Focus: A."
+    ],
+    "F7|f": [
+      "A is the heart-pressure around the generative urge that carries review workflow toward continuation; B is the body-level contact with the generative urge that carries review workflow toward continuation. Focus: A.",
+      "A is the value-toned pull that makes the generative urge that carries review workflow toward continuation feel important; B is the concrete handling that puts the generative urge that carries review workflow toward continuation into contact with the situation. Focus: A.",
+      "A is the charged reaction the auditor has around the generative urge that carries review workflow toward continuation; B is the bodily move the auditor makes around the generative urge that carries review workflow toward continuation. Focus: A."
+    ]
+  },
+  "scenario_path": "live-trace-worker\\scenarios\\stage7_foundation_rolebound_pilot_20260526.json",
+  "schema_version": "cas_harness_text_baseline_diagnostic.v2",
+  "split": {
+    "kind": "fixed split by metadata.split; test_split=test",
+    "seed": 2026,
+    "test_count": 2352,
+    "test_size": 0.2,
+    "train_count": 2016,
+    "train_test_group_overlap_count": 0,
+    "train_test_group_overlap_examples": [],
+    "unique_groups": 2184
+  },
+  "template_prefix_counts": {
+    "A is the charged reaction the auditor has around the pull toward ultimate source and belonging inside the reimbursement package; B is the bodily move the auditor makes around the pull toward ultimate source and belonging inside the reimbursement package": 2,
+    "A is the charged reaction the auditor has around the search for insight from vendor history about what should be trusted; B is the bodily move the auditor makes around the search for insight from vendor history about what should be trusted": 2,
+    "A is the heart-pressure around the pull toward ultimate source and belonging inside the reimbursement package; B is the body-level contact with the pull toward ultimate source and belonging inside the reimbursement package": 2,
+    "A is the heart-pressure around the search for insight from vendor history about what should be trusted; B is the body-level contact with the search for insight from vendor history about what should be trusted": 2,
+    "A is the highest-level orientation that keeps the living capacity in verified receipt trail staying healthy and active visible across the process; B is the sequential logic that tests the living capacity in verified receipt trail staying healthy and active against the record": 2,
+    "A is the highest-level orientation that keeps the pull toward ultimate source and belonging inside the reimbursement package visible across the process; B is the sequential logic that tests the pull toward ultimate source and belonging inside the reimbursement package against the record": 2,
+    "A is the highest-level orientation that keeps the search for insight from vendor history about what should be trusted visible across the process; B is the sequential logic that tests the search for insight from vendor history about what should be trusted against the record": 2,
+    "A is the prayer-like attention the auditor keeps over the living capacity in verified receipt trail staying healthy and active; B is the line-by-line review the auditor makes of the living capacity in verified receipt trail staying healthy and active": 2,
+    "A is the prayer-like attention the auditor keeps over the pull toward ultimate source and belonging inside the reimbursement package; B is the line-by-line review the auditor makes of the pull toward ultimate source and belonging inside the reimbursement package": 2,
+    "A is the prayer-like attention the auditor keeps over the search for insight from vendor history about what should be trusted; B is the line-by-line review the auditor makes of the search for insight from vendor history about what should be trusted": 2,
+    "A is the preference-weighted signal that makes the pull toward ultimate source and belonging inside the reimbursement package matter in the flow; B is the material operation that puts the pull toward ultimate source and belonging inside the reimbursement package into the workflow": 2,
+    "A is the preference-weighted signal that makes the search for insight from vendor history about what should be trusted matter in the flow; B is the material operation that puts the search for insight from vendor history about what should be trusted into the workflow": 2,
+    "A is the sacred-orientation view of the living capacity in verified receipt trail staying healthy and active; B is the thought-model check of the living capacity in verified receipt trail staying healthy and active": 2,
+    "A is the sacred-orientation view of the pull toward ultimate source and belonging inside the reimbursement package; B is the thought-model check of the pull toward ultimate source and belonging inside the reimbursement package": 2,
+    "A is the sacred-orientation view of the search for insight from vendor history about what should be trusted; B is the thought-model check of the search for insight from vendor history about what should be trusted": 2,
+    "A is the ultimate-purpose frame that keeps the living capacity in verified receipt trail staying healthy and active visible; B is the explicit reasoning pass that tests the living capacity in verified receipt trail staying healthy and active": 2,
+    "A is the ultimate-purpose frame that keeps the pull toward ultimate source and belonging inside the reimbursement package visible; B is the explicit reasoning pass that tests the pull toward ultimate source and belonging inside the reimbursement package": 2,
+    "A is the ultimate-purpose frame that keeps the search for insight from vendor history about what should be trusted visible; B is the explicit reasoning pass that tests the search for insight from vendor history about what should be trusted": 2,
+    "A is the value-toned pull that makes the pull toward ultimate source and belonging inside the reimbursement package feel important; B is the concrete handling that puts the pull toward ultimate source and belonging inside the reimbursement package into contact with the situation": 2,
+    "A is the value-toned pull that makes the search for insight from vendor history about what should be trusted feel important; B is the concrete handling that puts the search for insight from vendor history about what should be trusted into contact with the situation": 2
+  },
+  "text_baseline": {
+    "model": "CountVectorizer(1-2 grams) + LogisticRegression(class_weight='balanced')",
+    "n_features": 593,
+    "test_accuracy": 0.5408163265306123,
+    "test_macro_f1": 0.5321889366104141,
+    "train_accuracy": 0.6780753968253969
+  },
+  "top_predictive_features_per_class": {
+    "F1|A": [
+      {
+        "feature": "focus b",
+        "weight": 0.7207584958474347
+      },
+      {
+        "feature": "b",
+        "weight": 0.7063123480727247
+      },
+      {
+        "feature": "of the",
+        "weight": 0.43834103153690773
+      },
+      {
+        "feature": "tests the",
+        "weight": 0.4235650003463765
+      },
+      {
+        "feature": "that tests",
+        "weight": 0.4235650003463765
+      },
+      {
+        "feature": "tests",
+        "weight": 0.4235650003463765
+      },
+      {
+        "feature": "thought-model",
+        "weight": 0.39256993664798406
+      },
+      {
+        "feature": "check",
+        "weight": 0.39256993664798406
+      },
+      {
+        "feature": "check of",
+        "weight": 0.39256993664798406
+      },
+      {
+        "feature": "thought-model check",
+        "weight": 0.39256993664798406
+      },
+      {
+        "feature": "the thought-model",
+        "weight": 0.39256993664798406
+      },
+      {
+        "feature": "of",
+        "weight": 0.36324126102388427
+      }
+    ],
+    "F1|E": [
+      {
+        "feature": "focus b",
+        "weight": 0.7363012396713847
+      },
+      {
+        "feature": "b",
+        "weight": 0.7067977143430119
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.4494941276251656
+      },
+      {
+        "feature": "contact",
+        "weight": 0.4494941276251656
+      },
+      {
+        "feature": "with the",
+        "weight": 0.4494941276251656
+      },
+      {
+        "feature": "with",
+        "weight": 0.4494941276251656
+      },
+      {
+        "feature": "bodily move",
+        "weight": 0.4053522891059477
+      },
+      {
+        "feature": "move the",
+        "weight": 0.4053522891059477
+      },
+      {
+        "feature": "makes around",
+        "weight": 0.4053522891059477
+      },
+      {
+        "feature": "the bodily",
+        "weight": 0.4053522891059477
+      },
+      {
+        "feature": "bodily",
+        "weight": 0.4053522891059477
+      },
+      {
+        "feature": "move",
+        "weight": 0.4053522891059477
+      }
+    ],
+    "F1|T": [
+      {
+        "feature": "a",
+        "weight": 0.7585885794929328
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7546430756840867
+      },
+      {
+        "feature": "keeps",
+        "weight": 0.6246274268157135
+      },
+      {
+        "feature": "view of",
+        "weight": 0.48429115902485576
+      },
+      {
+        "feature": "sacred-orientation",
+        "weight": 0.48429115902485576
+      },
+      {
+        "feature": "sacred-orientation view",
+        "weight": 0.48429115902485576
+      },
+      {
+        "feature": "the sacred-orientation",
+        "weight": 0.48429115902485576
+      },
+      {
+        "feature": "view",
+        "weight": 0.48429115902485576
+      },
+      {
+        "feature": "visible",
+        "weight": 0.3571555086676973
+      },
+      {
+        "feature": "that keeps",
+        "weight": 0.3571555086676973
+      },
+      {
+        "feature": "keeps the",
+        "weight": 0.3571555086676973
+      },
+      {
+        "feature": "toward",
+        "weight": 0.29640904432128745
+      }
+    ],
+    "F1|f": [
+      {
+        "feature": "a",
+        "weight": 0.7418307649500898
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7317426353376225
+      },
+      {
+        "feature": "around the",
+        "weight": 0.5227279671057465
+      },
+      {
+        "feature": "around",
+        "weight": 0.5227279671057465
+      },
+      {
+        "feature": "heart-pressure around",
+        "weight": 0.5190546782329423
+      },
+      {
+        "feature": "heart-pressure",
+        "weight": 0.5190546782329423
+      },
+      {
+        "feature": "the heart-pressure",
+        "weight": 0.5190546782329423
+      },
+      {
+        "feature": "pull",
+        "weight": 0.4801469447520082
+      },
+      {
+        "feature": "makes the",
+        "weight": 0.40741173055608704
+      },
+      {
+        "feature": "that makes",
+        "weight": 0.40741173055608704
+      },
+      {
+        "feature": "toward",
+        "weight": 0.29694653156828427
+      },
+      {
+        "feature": "ultimate",
+        "weight": 0.2758756625385814
+      }
+    ],
+    "F2|A": [
+      {
+        "feature": "b",
+        "weight": 0.7302954957538645
+      },
+      {
+        "feature": "focus b",
+        "weight": 0.7287734507200798
+      },
+      {
+        "feature": "of the",
+        "weight": 0.43886618376346365
+      },
+      {
+        "feature": "tests the",
+        "weight": 0.42681787000945276
+      },
+      {
+        "feature": "tests",
+        "weight": 0.42681787000945276
+      },
+      {
+        "feature": "that tests",
+        "weight": 0.42681787000945276
+      },
+      {
+        "feature": "the thought-model",
+        "weight": 0.38835132289440455
+      },
+      {
+        "feature": "check",
+        "weight": 0.38835132289440455
+      },
+      {
+        "feature": "thought-model check",
+        "weight": 0.38835132289440455
+      },
+      {
+        "feature": "thought-model",
+        "weight": 0.38835132289440455
+      },
+      {
+        "feature": "check of",
+        "weight": 0.38835132289440455
+      },
+      {
+        "feature": "of",
+        "weight": 0.3501119157621051
+      }
+    ],
+    "F2|E": [
+      {
+        "feature": "focus b",
+        "weight": 0.7448300916385531
+      },
+      {
+        "feature": "b",
+        "weight": 0.7319867017427558
+      },
+      {
+        "feature": "contact",
+        "weight": 0.4433181213038584
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.4433181213038584
+      },
+      {
+        "feature": "with",
+        "weight": 0.4433181213038584
+      },
+      {
+        "feature": "with the",
+        "weight": 0.4433181213038584
+      },
+      {
+        "feature": "the bodily",
+        "weight": 0.4114360293294087
+      },
+      {
+        "feature": "makes around",
+        "weight": 0.4114360293294087
+      },
+      {
+        "feature": "bodily move",
+        "weight": 0.4114360293294087
+      },
+      {
+        "feature": "bodily",
+        "weight": 0.4114360293294087
+      },
+      {
+        "feature": "move",
+        "weight": 0.4114360293294087
+      },
+      {
+        "feature": "move the",
+        "weight": 0.4114360293294087
+      }
+    ],
+    "F2|T": [
+      {
+        "feature": "a",
+        "weight": 0.7807565891495277
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7621909992702381
+      },
+      {
+        "feature": "keeps",
+        "weight": 0.6290949322321748
+      },
+      {
+        "feature": "the sacred-orientation",
+        "weight": 0.4794647041173235
+      },
+      {
+        "feature": "view of",
+        "weight": 0.4794647041173235
+      },
+      {
+        "feature": "view",
+        "weight": 0.4794647041173235
+      },
+      {
+        "feature": "sacred-orientation",
+        "weight": 0.4794647041173235
+      },
+      {
+        "feature": "sacred-orientation view",
+        "weight": 0.4794647041173235
+      },
+      {
+        "feature": "that keeps",
+        "weight": 0.35202653473671963
+      },
+      {
+        "feature": "keeps the",
+        "weight": 0.35202653473671963
+      },
+      {
+        "feature": "visible",
+        "weight": 0.35202653473671963
+      },
+      {
+        "feature": "trusted visible",
+        "weight": 0.29277552149543107
+      }
+    ],
+    "F2|f": [
+      {
+        "feature": "a",
+        "weight": 0.7654557184619233
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7398374060102298
+      },
+      {
+        "feature": "around the",
+        "weight": 0.5197059209017392
+      },
+      {
+        "feature": "around",
+        "weight": 0.5197059209017392
+      },
+      {
+        "feature": "the heart-pressure",
+        "weight": 0.5015772723637836
+      },
+      {
+        "feature": "heart-pressure",
+        "weight": 0.5015772723637836
+      },
+      {
+        "feature": "heart-pressure around",
+        "weight": 0.5015772723637836
+      },
+      {
+        "feature": "that makes",
+        "weight": 0.41072312390005716
+      },
+      {
+        "feature": "makes the",
+        "weight": 0.41072312390005716
+      },
+      {
+        "feature": "the charged",
+        "weight": 0.26859276718662134
+      },
+      {
+        "feature": "has around",
+        "weight": 0.26859276718662134
+      },
+      {
+        "feature": "has",
+        "weight": 0.26859276718662134
+      }
+    ],
+    "F3|A": [
+      {
+        "feature": "b",
+        "weight": 0.7377947178571876
+      },
+      {
+        "feature": "focus b",
+        "weight": 0.7315589897695076
+      },
+      {
+        "feature": "of",
+        "weight": 0.4344671960376272
+      },
+      {
+        "feature": "that tests",
+        "weight": 0.431822242453848
+      },
+      {
+        "feature": "tests the",
+        "weight": 0.431822242453848
+      },
+      {
+        "feature": "tests",
+        "weight": 0.431822242453848
+      },
+      {
+        "feature": "of the",
+        "weight": 0.4311543452347697
+      },
+      {
+        "feature": "thought-model",
+        "weight": 0.3853983087334091
+      },
+      {
+        "feature": "check",
+        "weight": 0.3853983087334091
+      },
+      {
+        "feature": "the thought-model",
+        "weight": 0.3853983087334091
+      },
+      {
+        "feature": "check of",
+        "weight": 0.3853983087334091
+      },
+      {
+        "feature": "thought-model check",
+        "weight": 0.3853983087334091
+      }
+    ],
+    "F3|E": [
+      {
+        "feature": "focus b",
+        "weight": 0.7484403734168795
+      },
+      {
+        "feature": "b",
+        "weight": 0.7422337794329589
+      },
+      {
+        "feature": "contact",
+        "weight": 0.4480510947556022
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.4480510947556022
+      },
+      {
+        "feature": "with the",
+        "weight": 0.4480510947556022
+      },
+      {
+        "feature": "with",
+        "weight": 0.4480510947556022
+      },
+      {
+        "feature": "move the",
+        "weight": 0.41436306542174145
+      },
+      {
+        "feature": "makes around",
+        "weight": 0.41436306542174145
+      },
+      {
+        "feature": "the bodily",
+        "weight": 0.41436306542174145
+      },
+      {
+        "feature": "bodily move",
+        "weight": 0.41436306542174145
+      },
+      {
+        "feature": "move",
+        "weight": 0.41436306542174145
+      },
+      {
+        "feature": "bodily",
+        "weight": 0.41436306542174145
+      }
+    ],
+    "F3|T": [
+      {
+        "feature": "a",
+        "weight": 0.788582534487689
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7650096518606417
+      },
+      {
+        "feature": "keeps",
+        "weight": 0.6350247212289007
+      },
+      {
+        "feature": "the sacred-orientation",
+        "weight": 0.4744324663091765
+      },
+      {
+        "feature": "sacred-orientation",
+        "weight": 0.4744324663091765
+      },
+      {
+        "feature": "view of",
+        "weight": 0.4744324663091765
+      },
+      {
+        "feature": "view",
+        "weight": 0.4744324663091765
+      },
+      {
+        "feature": "sacred-orientation view",
+        "weight": 0.4744324663091765
+      },
+      {
+        "feature": "that keeps",
+        "weight": 0.35281372367749647
+      },
+      {
+        "feature": "visible",
+        "weight": 0.35281372367749647
+      },
+      {
+        "feature": "keeps the",
+        "weight": 0.35281372367749647
+      },
+      {
+        "feature": "active visible",
+        "weight": 0.309671301931146
+      }
+    ],
+    "F3|f": [
+      {
+        "feature": "a",
+        "weight": 0.776766328168235
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7437210897525217
+      },
+      {
+        "feature": "around",
+        "weight": 0.5292340585469347
+      },
+      {
+        "feature": "around the",
+        "weight": 0.5292340585469347
+      },
+      {
+        "feature": "the heart-pressure",
+        "weight": 0.5084211324189046
+      },
+      {
+        "feature": "heart-pressure",
+        "weight": 0.5084211324189046
+      },
+      {
+        "feature": "heart-pressure around",
+        "weight": 0.5084211324189046
+      },
+      {
+        "feature": "that makes",
+        "weight": 0.40687601469075113
+      },
+      {
+        "feature": "makes the",
+        "weight": 0.40687601469075113
+      },
+      {
+        "feature": "in",
+        "weight": 0.4057042876140968
+      },
+      {
+        "feature": "staying healthy",
+        "weight": 0.2989582616141525
+      },
+      {
+        "feature": "healthy and",
+        "weight": 0.2989582616141525
+      }
+    ],
+    "F4|A": [
+      {
+        "feature": "focus b",
+        "weight": 0.7194121633456756
+      },
+      {
+        "feature": "b",
+        "weight": 0.7009248800844344
+      },
+      {
+        "feature": "of",
+        "weight": 0.6249469586041204
+      },
+      {
+        "feature": "that tests",
+        "weight": 0.4433642080515463
+      },
+      {
+        "feature": "tests the",
+        "weight": 0.4433642080515463
+      },
+      {
+        "feature": "tests",
+        "weight": 0.4433642080515463
+      },
+      {
+        "feature": "of the",
+        "weight": 0.3892989161033486
+      },
+      {
+        "feature": "thought-model check",
+        "weight": 0.3764960725668339
+      },
+      {
+        "feature": "the thought-model",
+        "weight": 0.3764960725668339
+      },
+      {
+        "feature": "thought-model",
+        "weight": 0.3764960725668339
+      },
+      {
+        "feature": "check",
+        "weight": 0.3764960725668339
+      },
+      {
+        "feature": "check of",
+        "weight": 0.3764960725668339
+      }
+    ],
+    "F4|E": [
+      {
+        "feature": "focus b",
+        "weight": 0.7379860678719833
+      },
+      {
+        "feature": "b",
+        "weight": 0.7103181056358843
+      },
+      {
+        "feature": "contact",
+        "weight": 0.4458983992123833
+      },
+      {
+        "feature": "with the",
+        "weight": 0.4458983992123833
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.4458983992123833
+      },
+      {
+        "feature": "with",
+        "weight": 0.4458983992123833
+      },
+      {
+        "feature": "bodily",
+        "weight": 0.4013825384558572
+      },
+      {
+        "feature": "the bodily",
+        "weight": 0.4013825384558572
+      },
+      {
+        "feature": "move the",
+        "weight": 0.4013825384558572
+      },
+      {
+        "feature": "move",
+        "weight": 0.4013825384558572
+      },
+      {
+        "feature": "bodily move",
+        "weight": 0.4013825384558572
+      },
+      {
+        "feature": "makes around",
+        "weight": 0.4013825384558572
+      }
+    ],
+    "F4|T": [
+      {
+        "feature": "focus a",
+        "weight": 0.7526715469055165
+      },
+      {
+        "feature": "a",
+        "weight": 0.7523521016586628
+      },
+      {
+        "feature": "keeps",
+        "weight": 0.6391680779983326
+      },
+      {
+        "feature": "the sacred-orientation",
+        "weight": 0.4616406567178475
+      },
+      {
+        "feature": "view",
+        "weight": 0.4616406567178475
+      },
+      {
+        "feature": "sacred-orientation",
+        "weight": 0.4616406567178475
+      },
+      {
+        "feature": "sacred-orientation view",
+        "weight": 0.4616406567178475
+      },
+      {
+        "feature": "view of",
+        "weight": 0.4616406567178475
+      },
+      {
+        "feature": "of",
+        "weight": 0.3853153771787834
+      },
+      {
+        "feature": "visible",
+        "weight": 0.361570499744204
+      },
+      {
+        "feature": "that keeps",
+        "weight": 0.361570499744204
+      },
+      {
+        "feature": "keeps the",
+        "weight": 0.361570499744204
+      }
+    ],
+    "F4|f": [
+      {
+        "feature": "a",
+        "weight": 0.7450861591034728
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7327448071328196
+      },
+      {
+        "feature": "heart-pressure",
+        "weight": 0.5146083587563585
+      },
+      {
+        "feature": "the heart-pressure",
+        "weight": 0.5146083587563585
+      },
+      {
+        "feature": "heart-pressure around",
+        "weight": 0.5146083587563585
+      },
+      {
+        "feature": "around the",
+        "weight": 0.5090213473606069
+      },
+      {
+        "feature": "around",
+        "weight": 0.5090213473606069
+      },
+      {
+        "feature": "makes the",
+        "weight": 0.4138913019707009
+      },
+      {
+        "feature": "that makes",
+        "weight": 0.4138913019707009
+      },
+      {
+        "feature": "bond",
+        "weight": 0.2878030197730846
+      },
+      {
+        "feature": "case joined",
+        "weight": 0.2878030197730846
+      },
+      {
+        "feature": "keeping the",
+        "weight": 0.2878030197730846
+      }
+    ],
+    "F5|A": [
+      {
+        "feature": "focus b",
+        "weight": 0.7229613811867424
+      },
+      {
+        "feature": "b",
+        "weight": 0.7113179581023212
+      },
+      {
+        "feature": "of the",
+        "weight": 0.427699997119089
+      },
+      {
+        "feature": "tests the",
+        "weight": 0.42541601945994933
+      },
+      {
+        "feature": "that tests",
+        "weight": 0.42541601945994933
+      },
+      {
+        "feature": "tests",
+        "weight": 0.42541601945994933
+      },
+      {
+        "feature": "of",
+        "weight": 0.42322418678688806
+      },
+      {
+        "feature": "the thought-model",
+        "weight": 0.38817978909032974
+      },
+      {
+        "feature": "thought-model",
+        "weight": 0.38817978909032974
+      },
+      {
+        "feature": "check of",
+        "weight": 0.38817978909032974
+      },
+      {
+        "feature": "thought-model check",
+        "weight": 0.38817978909032974
+      },
+      {
+        "feature": "check",
+        "weight": 0.38817978909032974
+      }
+    ],
+    "F5|E": [
+      {
+        "feature": "focus b",
+        "weight": 0.7398865730311455
+      },
+      {
+        "feature": "b",
+        "weight": 0.7161754307236254
+      },
+      {
+        "feature": "contact",
+        "weight": 0.4441251193637806
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.4441251193637806
+      },
+      {
+        "feature": "with",
+        "weight": 0.4441251193637806
+      },
+      {
+        "feature": "with the",
+        "weight": 0.4441251193637806
+      },
+      {
+        "feature": "move the",
+        "weight": 0.41035679444508993
+      },
+      {
+        "feature": "move",
+        "weight": 0.41035679444508993
+      },
+      {
+        "feature": "bodily move",
+        "weight": 0.41035679444508993
+      },
+      {
+        "feature": "bodily",
+        "weight": 0.41035679444508993
+      },
+      {
+        "feature": "the bodily",
+        "weight": 0.41035679444508993
+      },
+      {
+        "feature": "makes around",
+        "weight": 0.41035679444508993
+      }
+    ],
+    "F5|T": [
+      {
+        "feature": "a",
+        "weight": 0.763314246349491
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7565831028205978
+      },
+      {
+        "feature": "keeps",
+        "weight": 0.6266688561484427
+      },
+      {
+        "feature": "view",
+        "weight": 0.47568938436671204
+      },
+      {
+        "feature": "sacred-orientation",
+        "weight": 0.47568938436671204
+      },
+      {
+        "feature": "the sacred-orientation",
+        "weight": 0.47568938436671204
+      },
+      {
+        "feature": "view of",
+        "weight": 0.47568938436671204
+      },
+      {
+        "feature": "sacred-orientation view",
+        "weight": 0.47568938436671204
+      },
+      {
+        "feature": "keeps the",
+        "weight": 0.347536118228449
+      },
+      {
+        "feature": "visible",
+        "weight": 0.347536118228449
+      },
+      {
+        "feature": "that keeps",
+        "weight": 0.347536118228449
+      },
+      {
+        "feature": "next visible",
+        "weight": 0.30758264132128527
+      }
+    ],
+    "F5|f": [
+      {
+        "feature": "a",
+        "weight": 0.7504592689066232
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7346299481465542
+      },
+      {
+        "feature": "around",
+        "weight": 0.5172716934657734
+      },
+      {
+        "feature": "around the",
+        "weight": 0.5172716934657734
+      },
+      {
+        "feature": "heart-pressure",
+        "weight": 0.5048446389927702
+      },
+      {
+        "feature": "heart-pressure around",
+        "weight": 0.5048446389927702
+      },
+      {
+        "feature": "the heart-pressure",
+        "weight": 0.5048446389927702
+      },
+      {
+        "feature": "that makes",
+        "weight": 0.4108184484358058
+      },
+      {
+        "feature": "makes the",
+        "weight": 0.4108184484358058
+      },
+      {
+        "feature": "and guide",
+        "weight": 0.2922594191047508
+      },
+      {
+        "feature": "push",
+        "weight": 0.2922594191047508
+      },
+      {
+        "feature": "what happens",
+        "weight": 0.2922594191047508
+      }
+    ],
+    "F6|A": [
+      {
+        "feature": "focus b",
+        "weight": 0.717758182158276
+      },
+      {
+        "feature": "b",
+        "weight": 0.6962641215860891
+      },
+      {
+        "feature": "of the",
+        "weight": 0.463106407033107
+      },
+      {
+        "feature": "thought-model check",
+        "weight": 0.4015614512686099
+      },
+      {
+        "feature": "check",
+        "weight": 0.4015614512686099
+      },
+      {
+        "feature": "the thought-model",
+        "weight": 0.4015614512686099
+      },
+      {
+        "feature": "thought-model",
+        "weight": 0.4015614512686099
+      },
+      {
+        "feature": "check of",
+        "weight": 0.4015614512686099
+      },
+      {
+        "feature": "tests the",
+        "weight": 0.3923566909431514
+      },
+      {
+        "feature": "tests",
+        "weight": 0.3923566909431514
+      },
+      {
+        "feature": "that tests",
+        "weight": 0.3923566909431514
+      },
+      {
+        "feature": "of",
+        "weight": 0.3630600732223433
+      }
+    ],
+    "F6|E": [
+      {
+        "feature": "focus b",
+        "weight": 0.7353131778069427
+      },
+      {
+        "feature": "b",
+        "weight": 0.7028978402142033
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.4471934778753485
+      },
+      {
+        "feature": "contact",
+        "weight": 0.4471934778753485
+      },
+      {
+        "feature": "with the",
+        "weight": 0.4471934778753485
+      },
+      {
+        "feature": "with",
+        "weight": 0.4471934778753485
+      },
+      {
+        "feature": "bodily move",
+        "weight": 0.4154534735884573
+      },
+      {
+        "feature": "move",
+        "weight": 0.4154534735884573
+      },
+      {
+        "feature": "the bodily",
+        "weight": 0.4154534735884573
+      },
+      {
+        "feature": "makes around",
+        "weight": 0.4154534735884573
+      },
+      {
+        "feature": "move the",
+        "weight": 0.4154534735884573
+      },
+      {
+        "feature": "bodily",
+        "weight": 0.4154534735884573
+      }
+    ],
+    "F6|T": [
+      {
+        "feature": "focus a",
+        "weight": 0.7517984550009511
+      },
+      {
+        "feature": "a",
+        "weight": 0.7493874649587495
+      },
+      {
+        "feature": "keeps",
+        "weight": 0.6051725149969106
+      },
+      {
+        "feature": "view of",
+        "weight": 0.4903929824812684
+      },
+      {
+        "feature": "view",
+        "weight": 0.4903929824812684
+      },
+      {
+        "feature": "sacred-orientation",
+        "weight": 0.4903929824812684
+      },
+      {
+        "feature": "the sacred-orientation",
+        "weight": 0.4903929824812684
+      },
+      {
+        "feature": "sacred-orientation view",
+        "weight": 0.4903929824812684
+      },
+      {
+        "feature": "visible",
+        "weight": 0.3208176445755742
+      },
+      {
+        "feature": "that keeps",
+        "weight": 0.3208176445755742
+      },
+      {
+        "feature": "keeps the",
+        "weight": 0.3208176445755742
+      },
+      {
+        "feature": "work visible",
+        "weight": 0.28970313375765305
+      }
+    ],
+    "F6|f": [
+      {
+        "feature": "a",
+        "weight": 0.7372475609398514
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7306085324438839
+      },
+      {
+        "feature": "around",
+        "weight": 0.5415451013676169
+      },
+      {
+        "feature": "around the",
+        "weight": 0.5415451013676169
+      },
+      {
+        "feature": "heart-pressure",
+        "weight": 0.5190972947090557
+      },
+      {
+        "feature": "heart-pressure around",
+        "weight": 0.5190972947090557
+      },
+      {
+        "feature": "the heart-pressure",
+        "weight": 0.5190972947090557
+      },
+      {
+        "feature": "that makes",
+        "weight": 0.3786649246462928
+      },
+      {
+        "feature": "makes the",
+        "weight": 0.3786649246462928
+      },
+      {
+        "feature": "in",
+        "weight": 0.3487843959076287
+      },
+      {
+        "feature": "charged",
+        "weight": 0.2699758779423068
+      },
+      {
+        "feature": "reaction",
+        "weight": 0.2699758779423068
+      }
+    ],
+    "F7|A": [
+      {
+        "feature": "b",
+        "weight": 0.7290887591352224
+      },
+      {
+        "feature": "focus b",
+        "weight": 0.7286950988215289
+      },
+      {
+        "feature": "of the",
+        "weight": 0.473573695705069
+      },
+      {
+        "feature": "thought-model check",
+        "weight": 0.4094261173877473
+      },
+      {
+        "feature": "thought-model",
+        "weight": 0.4094261173877473
+      },
+      {
+        "feature": "check",
+        "weight": 0.4094261173877473
+      },
+      {
+        "feature": "the thought-model",
+        "weight": 0.4094261173877473
+      },
+      {
+        "feature": "check of",
+        "weight": 0.4094261173877473
+      },
+      {
+        "feature": "of",
+        "weight": 0.4008548857882324
+      },
+      {
+        "feature": "that tests",
+        "weight": 0.39691852511139336
+      },
+      {
+        "feature": "tests the",
+        "weight": 0.39691852511139336
+      },
+      {
+        "feature": "tests",
+        "weight": 0.39691852511139336
+      }
+    ],
+    "F7|E": [
+      {
+        "feature": "focus b",
+        "weight": 0.7462739215917817
+      },
+      {
+        "feature": "b",
+        "weight": 0.7355043587874834
+      },
+      {
+        "feature": "contact",
+        "weight": 0.45745685917420426
+      },
+      {
+        "feature": "with",
+        "weight": 0.45745685917420426
+      },
+      {
+        "feature": "with the",
+        "weight": 0.45745685917420426
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.45745685917420426
+      },
+      {
+        "feature": "bodily move",
+        "weight": 0.41937089161798397
+      },
+      {
+        "feature": "the bodily",
+        "weight": 0.41937089161798397
+      },
+      {
+        "feature": "bodily",
+        "weight": 0.41937089161798397
+      },
+      {
+        "feature": "makes around",
+        "weight": 0.41937089161798397
+      },
+      {
+        "feature": "move",
+        "weight": 0.41937089161798397
+      },
+      {
+        "feature": "move the",
+        "weight": 0.41937089161798397
+      }
+    ],
+    "F7|T": [
+      {
+        "feature": "a",
+        "weight": 0.7818091626679466
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7625843254022443
+      },
+      {
+        "feature": "keeps",
+        "weight": 0.6152433726693612
+      },
+      {
+        "feature": "view of",
+        "weight": 0.49795061002179863
+      },
+      {
+        "feature": "sacred-orientation",
+        "weight": 0.49795061002179863
+      },
+      {
+        "feature": "sacred-orientation view",
+        "weight": 0.49795061002179863
+      },
+      {
+        "feature": "the sacred-orientation",
+        "weight": 0.49795061002179863
+      },
+      {
+        "feature": "view",
+        "weight": 0.49795061002179863
+      },
+      {
+        "feature": "toward",
+        "weight": 0.3377182733094429
+      },
+      {
+        "feature": "visible",
+        "weight": 0.3231245211425778
+      },
+      {
+        "feature": "that keeps",
+        "weight": 0.3231245211425778
+      },
+      {
+        "feature": "keeps the",
+        "weight": 0.3231245211425778
+      }
+    ],
+    "F7|f": [
+      {
+        "feature": "a",
+        "weight": 0.7693867183949973
+      },
+      {
+        "feature": "focus a",
+        "weight": 0.7412206265161871
+      },
+      {
+        "feature": "around the",
+        "weight": 0.5601461687981691
+      },
+      {
+        "feature": "around",
+        "weight": 0.5601461687981691
+      },
+      {
+        "feature": "heart-pressure",
+        "weight": 0.5313016318172284
+      },
+      {
+        "feature": "heart-pressure around",
+        "weight": 0.5313016318172284
+      },
+      {
+        "feature": "the heart-pressure",
+        "weight": 0.5313016318172284
+      },
+      {
+        "feature": "that makes",
+        "weight": 0.38392080122602945
+      },
+      {
+        "feature": "makes the",
+        "weight": 0.38392080122602945
+      },
+      {
+        "feature": "toward",
+        "weight": 0.34217386355774176
+      },
+      {
+        "feature": "continuation",
+        "weight": 0.3274069554376436
+      },
+      {
+        "feature": "carries",
+        "weight": 0.3274069554376436
+      }
+    ]
+  }
+}

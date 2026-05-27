@@ -1,14 +1,14 @@
 {
-  "axis": "40_element_operator_x_domain",
+  "axis": "tks40_balanced_v0",
   "claim_gate": {
     "actual_text_baseline": 1.0,
     "cas_beats_text_claim_allowed": false,
-    "reason": "A text-only classifier can recover the TKS40 label too well. Do not claim hidden-state readout beats surface text until the scenario library is hardened and rerun.",
+    "reason": "A text-only classifier can recover the tks40_balanced_v0 label too well. Do not claim hidden-state readout beats surface text until the scenario library is hardened and rerun.",
     "status": "blocked_text_baseline_too_high",
     "target_text_baseline_ceiling": 0.6
   },
-  "created_at": "2026-05-27T18:11:57.096847+00:00",
-  "interpretation": "If test_accuracy is near 1.0, the scenario text is too lexically separable for a CAS-beats-text claim. Hidden-state readout can still be real, but the eval set is not a meaningful text adversary.",
+  "created_at": "2026-05-27T19:27:15.525402+00:00",
+  "interpretation": "If test_accuracy is near 1.0, the scenario text is too lexically separable for a CAS-beats-text claim on this axis. Hidden-state readout can still be real, but the eval set is not a meaningful text adversary.",
   "label_counts": {
     "^0|C": 10,
     "^0|E": 10,
@@ -51,6 +51,7 @@
     "^9|O": 10,
     "^9|P": 10
   },
+  "label_key": "element",
   "n_classes": 40,
   "n_scenarios": 400,
   "sample_prompts_per_class": {
@@ -256,7 +257,7 @@
     ]
   },
   "scenario_path": "live-trace-worker\\scenarios\\tks40_balanced_v0_20260526.json",
-  "schema_version": "cas_harness_tks40_text_baseline_diagnostic.v1",
+  "schema_version": "cas_harness_text_baseline_diagnostic.v2",
   "split": {
     "kind": "GroupShuffleSplit by stripped base prompt",
     "seed": 2026,
