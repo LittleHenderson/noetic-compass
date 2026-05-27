@@ -39,6 +39,7 @@ class ScalePlanRequest:
     precision: Precision = "bf16"
     available_gpu_memory_gb: int | None = None
     audit_depth: AuditDepth = "FULL_INTERNAL"
+    minimum_worker_count: int | None = None
 
 
 @dataclass(frozen=True)
@@ -122,6 +123,7 @@ def build_scale_plan(request: ScalePlanRequest) -> ScalePlan:
             worker_count=1,
         ),
         available_gpu_memory_gb=request.available_gpu_memory_gb,
+        minimum_worker_count=request.minimum_worker_count,
     )
     memory = _memory_estimate(
         parameter_count_b=request.parameter_count_b,
@@ -175,6 +177,10 @@ def _validate_request(request: ScalePlanRequest) -> None:
         raise ValueError("CAS Harness beta supports open-weight internal audit modes only")
     if request.available_gpu_memory_gb is not None and request.available_gpu_memory_gb <= 0:
         raise ValueError("available_gpu_memory_gb must be positive when provided")
+    if request.minimum_worker_count is not None and request.minimum_worker_count <= 0:
+        raise ValueError("minimum_worker_count must be positive when provided")
+    if request.minimum_worker_count is not None and request.minimum_worker_count > 512:
+        raise ValueError("minimum_worker_count currently supports up to 512 Probe Workers")
 
 
 def _scale_tier(parameter_count_b: float) -> ScaleTier:
@@ -206,6 +212,7 @@ def _recommended_worker_count(
     scale_tier: ScaleTier,
     memory_estimate: MemoryEstimate,
     available_gpu_memory_gb: int | None,
+    minimum_worker_count: int | None,
 ) -> int:
     layer_floor = {
         "single_worker_open_weight": 1,
@@ -220,7 +227,7 @@ def _recommended_worker_count(
         usable_gb = max(1.0, available_gpu_memory_gb * 0.62)
         memory_floor = ceil(memory_estimate.estimated_total_runtime_gb / usable_gb)
 
-    return min(64, max(layer_floor, size_floor, memory_floor))
+    return min(512, max(layer_floor, size_floor, memory_floor, minimum_worker_count or 1))
 
 
 def _memory_estimate(
@@ -248,7 +255,6 @@ def _assign_layers(
     worker_count: int,
     audit_depth: AuditDepth,
 ) -> tuple[WorkerAssignment, ...]:
-    assignment_count = min(worker_count, num_layers)
     methods = (
         "foundation_probe",
         "inversion_scan",
@@ -259,6 +265,30 @@ def _assign_layers(
         methods = methods + ("targeted_ablation", "matched_controls")
 
     assignments: list[WorkerAssignment] = []
+    if worker_count > num_layers:
+        layer_shard_counts: dict[int, int] = {}
+        for index in range(worker_count):
+            layer = min(num_layers - 1, (index * num_layers) // worker_count)
+            shard_ordinal = layer_shard_counts.get(layer, 0)
+            layer_shard_counts[layer] = shard_ordinal + 1
+            assignments.append(
+                WorkerAssignment(
+                    worker_id=f"probe-worker-{index + 1:03d}",
+                    layer_start=layer,
+                    layer_end=layer,
+                    shard_id=f"layer-{layer:03d}-tensor-shard-{shard_ordinal:02d}",
+                    assigned_methods=methods,
+                    expected_outputs=(
+                        "layer_activation_summary",
+                        "cas_axis_readout",
+                        "blindspot_overlay",
+                        "worker_evidence_manifest",
+                    ),
+                )
+            )
+        return tuple(assignments)
+
+    assignment_count = worker_count
     cursor = 0
     base = num_layers // assignment_count
     remainder = num_layers % assignment_count

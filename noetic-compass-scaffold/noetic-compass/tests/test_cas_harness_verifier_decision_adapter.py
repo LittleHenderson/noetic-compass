@@ -35,6 +35,30 @@ def _stage21_packet() -> dict:
     }
 
 
+def _s7_f28_packet() -> dict:
+    return {
+        "schema_version": "cas_harness_evidence_packet_v1",
+        "trace_id": "s7-f28-balanced-bridge-gpt-neox-20b-20260526",
+        "provenance": {"method_label": "S7-F28-BALANCED-BRIDGE"},
+        "verification": {
+            "explicit_verifier_decision": {
+                "verdict": "FLAG_FOR_HUMAN_REVIEW",
+                "confidence": 0.803571,
+                "source": "S7-F28-BALANCED-BRIDGE",
+                "reason": "Final ACCEPT/SUPPRESS still requires the Stage 19/20/21 verifier decision layer.",
+            },
+            "proof_chips": [
+                {"id": "model_proof", "status": "present"},
+                {"id": "cas_readout", "status": "verified"},
+                {"id": "causal_proof", "status": "verified"},
+                {"id": "control_proof", "status": "verified"},
+                {"id": "output_proof", "status": "verified"},
+                {"id": "packet_proof", "status": "present"},
+            ],
+        },
+    }
+
+
 def test_allow_and_accepted_maps_to_accept_with_accepted_accuracy():
     decision = verifier_decision_from_packet(_stage21_packet())
 
@@ -109,6 +133,30 @@ def test_missing_numeric_confidence_does_not_create_verifier_decision():
 def test_out_of_range_confidence_does_not_create_verifier_decision():
     packet = _stage21_packet()
     packet["verification"]["mode_profile"]["accepted_accuracy"] = 1.2
+
+    assert verifier_decision_from_packet(packet) is None
+
+
+def test_s7_f28_packet_maps_only_to_human_review():
+    decision = verifier_decision_from_packet(_s7_f28_packet())
+
+    assert decision is not None
+    assert decision.verdict == "FLAG_FOR_HUMAN_REVIEW"
+    assert decision.confidence == 0.803571
+    assert decision.source == "S7-F28-BALANCED-BRIDGE"
+    assert "Stage 19/20/21" in decision.reason
+
+
+def test_s7_f28_packet_never_upgrades_to_accept():
+    packet = _s7_f28_packet()
+    packet["verification"]["explicit_verifier_decision"]["verdict"] = "ACCEPT"
+
+    assert verifier_decision_from_packet(packet) is None
+
+
+def test_s7_f28_packet_requires_pass_ready_proof_chips():
+    packet = _s7_f28_packet()
+    packet["verification"]["proof_chips"][3]["status"] = "missing"
 
     assert verifier_decision_from_packet(packet) is None
 

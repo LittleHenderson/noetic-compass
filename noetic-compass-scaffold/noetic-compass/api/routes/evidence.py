@@ -275,7 +275,10 @@ def _candidate_trace_paths(trace_id: str) -> list[Path]:
     safe = trace_id.replace("/", "_").replace("\\", "_")
     scaffold = _scaffold_root()
     project = _project_root()
-    return [
+    candidates = [
+        # CAS Harness working packets checked into the repo for audit review.
+        scaffold / "docs" / "working" / f"{safe}.json",
+        scaffold / "docs" / "working" / f"{safe.upper()}.json",
         # SPEC §7 Step 1 — canonical path served to the UI.
         scaffold / "dashboard" / "public" / "traces" / f"{safe}.json",
         # Conventional Mode 7 live capture location.
@@ -287,6 +290,15 @@ def _candidate_trace_paths(trace_id: str) -> list[Path]:
         # Worktree-style scratch directory occasionally used by tests.
         scaffold / "cas-native" / "trace" / f"{safe}.json",
     ]
+    if trace_id == "s7-f28-balanced-bridge-gpt-neox-20b-20260526":
+        candidates.insert(
+            0,
+            scaffold
+            / "docs"
+            / "working"
+            / "S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json",
+        )
+    return candidates
 
 
 def _load_trace_artifact(trace_id: str) -> dict[str, Any] | None:
@@ -849,7 +861,27 @@ def build_packet_for_trace(trace_id: str) -> EvidencePacket:
     trace = _load_trace_artifact(trace_id)
     if trace is None:
         raise FileNotFoundError(trace_id)
+    if _is_evidence_packet_payload(trace):
+        return EvidencePacket.model_validate(trace)
     return _packet_from_trace(trace_id, trace)
+
+
+def _is_evidence_packet_payload(payload: dict[str, Any]) -> bool:
+    schema = payload.get("schema_version")
+    return (
+        schema
+        in {
+            "evidence_packet.v1",
+            "cas_harness_evidence_packet_v1",
+            "cas_harness_evidence_packet.v1",
+        }
+        and isinstance(payload.get("trace_id"), str)
+        and isinstance(payload.get("input"), dict)
+        and isinstance(payload.get("output"), dict)
+        and isinstance(payload.get("provenance"), dict)
+        and isinstance(payload.get("hashes"), dict)
+        and isinstance(payload.get("claim_levels"), list)
+    )
 
 
 # ---------------------------------------------------------------------------

@@ -6,7 +6,9 @@ import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/a
 import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
+import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
 import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
+import FleetExecutorPanel from '../components/audit/FleetExecutorPanel';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
 import { AuditPopover } from '../components/audit/AuditPopover';
 import {
@@ -14,11 +16,25 @@ import {
   type ProvenanceChip,
 } from '../lib/casHarnessAudit';
 import {
+  buildCasHarnessFleetEvidenceFragmentRef,
+  createCasHarnessDistributedAudit,
   createCasHarnessScalePlan,
   createCasHarnessAuditSession,
+  dispatchCasHarnessDistributedAudit,
+  leaseCasHarnessFleetJob,
+  mergeCasHarnessDistributedAudit,
+  mergeCasHarnessFleetRun,
+  prepareCasHarnessFleetRun,
+  registerCasHarnessFleetWorker,
   startCasHarnessAuditSession,
+  submitCasHarnessFleetJobReceipt,
   verifyCasHarnessModelTarget,
+  type CasHarnessAuditApiOptions,
   type CasHarnessAuditSession,
+  type CasHarnessDistributedAudit,
+  type CasHarnessFleetJob,
+  type CasHarnessFleetRun,
+  type CasHarnessFleetWorker,
   type CasHarnessScalePlanRequest,
 } from '../lib/casHarnessAuditApi';
 import {
@@ -102,6 +118,23 @@ const M1_REFERENCE_TARGET: AuditTargetConfig = {
   statusDetail: 'Reference target has not been verified by the backend yet.',
   canRunAudit: false,
   evidencePacketTraceId: null,
+};
+
+const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
+
+const S7_F28_PACKET_TARGET: AuditTargetConfig = {
+  modelId: 'EleutherAI/gpt-neox-20b',
+  provider: 'S7-F28 Balanced Bridge Method',
+  endpointLabel: `/api/harness/evidence/${S7_F28_TRACE_ID}`,
+  scenarioText:
+    'Stage 7 Foundation-28 GPT-NeoX-20B evidence packet review using the S7-F28 Balanced Bridge Method.',
+  endpointUrl: null,
+  connectionId: 'cas-target-s7-f28-gpt-neox-20b',
+  checkedAt: '',
+  statusDetail:
+    'S7-F28 GPT-NeoX-20B Evidence Packet selected. Run CAS audit to review the conservative human-review verdict.',
+  canRunAudit: true,
+  evidencePacketTraceId: S7_F28_TRACE_ID,
 };
 
 const AUDIT_STEPS: AuditStep[] = [
@@ -276,6 +309,74 @@ function commandStatusLabel(state: CommandState): string {
   }
 }
 
+function replaceFleetJob(
+  run: CasHarnessFleetRun,
+  job: CasHarnessFleetJob,
+): CasHarnessFleetRun {
+  const jobForRun = {
+    ...job,
+    lease_token: null,
+  };
+  const jobs = run.jobs.some((candidate) => candidate.job_id === job.job_id)
+    ? run.jobs.map((candidate) => (candidate.job_id === job.job_id ? jobForRun : candidate))
+    : [...run.jobs, jobForRun];
+
+  return {
+    ...run,
+    status: job.status === 'leased' ? 'LEASING' : run.status,
+    verifier_gate_status:
+      job.status === 'leased' && run.verifier_gate_status === 'waiting_for_workers'
+        ? 'waiting_for_receipts'
+        : run.verifier_gate_status,
+    jobs,
+    leased_jobs: jobs.filter((candidate) => candidate.status === 'leased').length,
+    completed_fragments: jobs.filter((candidate) => candidate.status === 'completed').length,
+    failed_jobs: jobs.filter((candidate) => candidate.status === 'failed').length,
+    updated_at: job.updated_at,
+  };
+}
+
+function mergedPacketStatusFor(
+  run: CasHarnessFleetRun | null,
+): 'not_created' | 'partial' | 'ready' {
+  if (!run) return 'not_created';
+  if (run.verifier_gate_status === 'ready_for_verifier' && run.merged_packet_trace_id) {
+    return 'ready';
+  }
+  if (
+    run.completed_fragments > 0 ||
+    run.failed_jobs > 0 ||
+    run.status === 'MERGE_PENDING' ||
+    run.status === 'COMPLETE'
+  ) {
+    return 'partial';
+  }
+  return 'not_created';
+}
+
+function assignedFleetWorkerId(
+  audit: CasHarnessDistributedAudit | null,
+  run: CasHarnessFleetRun | null,
+): string | null {
+  const openJob = run?.jobs.find((job) => job.status !== 'completed');
+  const anyJob = run?.jobs[0];
+  return openJob?.assigned_worker_id ?? anyJob?.assigned_worker_id ?? audit?.worker_evidence[0]?.worker_id ?? null;
+}
+
+function canMergeFleetRun(run: CasHarnessFleetRun | null, isLoading: boolean): boolean {
+  return Boolean(
+    run &&
+      !isLoading &&
+      run.verifier_gate_status === 'ready_for_verifier' &&
+      !run.merged_packet_trace_id &&
+      run.total_jobs > 0 &&
+      run.completed_fragments === run.total_jobs &&
+      run.failed_jobs === 0 &&
+      run.stale_workers.length === 0 &&
+      run.jobs.every((job) => job.missing_outputs.length === 0),
+  );
+}
+
 const headingStyle: CSSProperties = {
   margin: 0,
   fontSize: 34,
@@ -366,6 +467,13 @@ const commandHeaderStyle: CSSProperties = {
   alignItems: 'flex-start',
   gap: 12,
   marginBottom: 14,
+};
+
+const commandActionsStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'flex-end',
+  gap: 10,
 };
 
 const commandTitleStyle: CSSProperties = {
@@ -496,6 +604,56 @@ const singleColumnStyle: CSSProperties = {
   marginTop: 16,
 };
 
+const fleetControlPanelStyle: CSSProperties = {
+  display: 'grid',
+  gap: 12,
+  padding: 16,
+  borderRadius: 8,
+  border: '1px solid rgba(45, 212, 191, 0.22)',
+  background: 'rgba(2, 6, 23, 0.40)',
+};
+
+const fleetControlHeaderStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 12,
+};
+
+const fleetControlTitleStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textPrimary,
+  fontSize: 17,
+  fontWeight: 900,
+};
+
+const fleetButtonRowStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 8,
+};
+
+const fleetAuthInputStyle: CSSProperties = {
+  width: 'min(100%, 360px)',
+  minHeight: 38,
+  padding: '8px 10px',
+  borderRadius: 6,
+  border: '1px solid rgba(148, 163, 184, 0.26)',
+  background: 'rgba(2, 6, 23, 0.48)',
+  color: COLORS.textPrimary,
+  fontFamily: THEME.fontMono,
+  fontSize: 12,
+  outline: 'none',
+};
+
+const fleetNoticeStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textSecondary,
+  fontSize: 12,
+  lineHeight: 1.45,
+};
+
 const verdictStackStyle: CSSProperties = {
   display: 'grid',
   gap: 16,
@@ -525,6 +683,17 @@ export default function AuditConsolePage() {
     useState<EnterpriseScalePlan>(DEFAULT_ENTERPRISE_SCALE_PLAN);
   const [enterprisePlanError, setEnterprisePlanError] = useState<string | null>(null);
   const [isEnterprisePlanLoading, setIsEnterprisePlanLoading] = useState(false);
+  const [distributedAudit, setDistributedAudit] =
+    useState<CasHarnessDistributedAudit | null>(null);
+  const [distributedAuditError, setDistributedAuditError] = useState<string | null>(null);
+  const [isDistributedAuditLoading, setIsDistributedAuditLoading] = useState(false);
+  const [fleetRun, setFleetRun] = useState<CasHarnessFleetRun | null>(null);
+  const [registeredFleetWorker, setRegisteredFleetWorker] =
+    useState<CasHarnessFleetWorker | null>(null);
+  const [leasedFleetJob, setLeasedFleetJob] = useState<CasHarnessFleetJob | null>(null);
+  const [fleetAuthToken, setFleetAuthToken] = useState('');
+  const [fleetExecutorError, setFleetExecutorError] = useState<string | null>(null);
+  const [isFleetExecutorLoading, setIsFleetExecutorLoading] = useState(false);
 
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
@@ -542,6 +711,32 @@ export default function AuditConsolePage() {
         ? 'Verdict ready'
         : 'Run CAS audit';
   const showVerdictExplainer = Boolean(session?.verdict || session?.verifier_decision);
+  const protectedAuditApiOptions = useMemo<CasHarnessAuditApiOptions | undefined>(() => {
+    const authToken = fleetAuthToken.trim();
+    return authToken ? { authToken } : undefined;
+  }, [fleetAuthToken]);
+  const fleetRegisteredWorkers = fleetRun
+    ? Math.max(fleetRun.registered_workers, registeredFleetWorker ? 1 : 0)
+    : registeredFleetWorker
+      ? 1
+      : 0;
+  const fleetTotalJobs = fleetRun?.total_jobs ?? distributedAudit?.total_workers ?? 0;
+  const targetFleetWorkerId = assignedFleetWorkerId(distributedAudit, fleetRun);
+  const canPrepareFleet =
+    Boolean(distributedAudit && distributedAudit.status !== 'PLANNED' && !fleetRun) &&
+    !isFleetExecutorLoading;
+  const canRegisterFleetWorker = Boolean(distributedAudit && targetFleetWorkerId && !registeredFleetWorker) &&
+    !isFleetExecutorLoading;
+  const canLeaseFleetJob = Boolean(fleetRun && registeredFleetWorker && !leasedFleetJob) &&
+    !isFleetExecutorLoading;
+  const canSubmitFleetReceipt =
+    Boolean(
+      fleetRun &&
+        leasedFleetJob &&
+        leasedFleetJob.status === 'leased' &&
+        leasedFleetJob.lease_token,
+    ) && !isFleetExecutorLoading;
+  const canMergeFleet = canMergeFleetRun(fleetRun, isFleetExecutorLoading);
 
   const connectReferenceTarget = async () => {
     setSession(null);
@@ -575,6 +770,18 @@ export default function AuditConsolePage() {
     } finally {
       setIsTargetConnecting(false);
     }
+  };
+
+  const loadS7F28PacketTarget = () => {
+    setSession(null);
+    setSessionError(null);
+    setTargetError(null);
+    setIsTargetConnecting(false);
+    setIsAuditRunning(false);
+    setTarget({
+      ...S7_F28_PACKET_TARGET,
+      checkedAt: new Date().toISOString(),
+    });
   };
 
   const disconnectTarget = () => {
@@ -624,6 +831,12 @@ export default function AuditConsolePage() {
     setEnterprisePlanSize(size);
     setEnterprisePlan(getEnterpriseScalePlan(size));
     setEnterprisePlanError(null);
+    setDistributedAudit(null);
+    setDistributedAuditError(null);
+    setFleetRun(null);
+    setRegisteredFleetWorker(null);
+    setLeasedFleetJob(null);
+    setFleetExecutorError(null);
     setIsEnterprisePlanLoading(true);
     try {
       const plan = await createCasHarnessScalePlan(SCALE_PLAN_REQUESTS[size]);
@@ -636,6 +849,214 @@ export default function AuditConsolePage() {
       );
     } finally {
       setIsEnterprisePlanLoading(false);
+    }
+  };
+
+  const createDistributedRun = async () => {
+    setDistributedAuditError(null);
+    setFleetRun(null);
+    setRegisteredFleetWorker(null);
+    setLeasedFleetJob(null);
+    setFleetExecutorError(null);
+    setIsDistributedAuditLoading(true);
+    try {
+      const audit = await createCasHarnessDistributedAudit(
+        SCALE_PLAN_REQUESTS[enterprisePlanSize],
+        protectedAuditApiOptions,
+      );
+      setDistributedAudit(audit);
+    } catch (error) {
+      setDistributedAuditError(
+        error instanceof Error ? error.message : 'Distributed audit run creation failed',
+      );
+    } finally {
+      setIsDistributedAuditLoading(false);
+    }
+  };
+
+  const dispatchDistributedRun = async () => {
+    if (!distributedAudit) return;
+    setDistributedAuditError(null);
+    setIsDistributedAuditLoading(true);
+    try {
+      const audit = await dispatchCasHarnessDistributedAudit(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
+      setDistributedAudit(audit);
+    } catch (error) {
+      setDistributedAuditError(
+        error instanceof Error ? error.message : 'Distributed worker dispatch failed',
+      );
+    } finally {
+      setIsDistributedAuditLoading(false);
+    }
+  };
+
+  const mergeDistributedRun = async () => {
+    if (!distributedAudit) return;
+    setDistributedAuditError(null);
+    setIsDistributedAuditLoading(true);
+    try {
+      const audit = await mergeCasHarnessDistributedAudit(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
+      setDistributedAudit(audit);
+    } catch (error) {
+      setDistributedAuditError(
+        error instanceof Error ? error.message : 'Distributed evidence merge failed',
+      );
+    } finally {
+      setIsDistributedAuditLoading(false);
+    }
+  };
+
+  const prepareFleet = async () => {
+    if (!distributedAudit) return;
+    setFleetExecutorError(null);
+    setIsFleetExecutorLoading(true);
+    try {
+      const run = await prepareCasHarnessFleetRun(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
+      setFleetRun(run);
+      setLeasedFleetJob(null);
+    } catch (error) {
+      setFleetExecutorError(
+        error instanceof Error ? error.message : 'Fleet preparation failed',
+      );
+    } finally {
+      setIsFleetExecutorLoading(false);
+    }
+  };
+
+  const registerDemoFleetWorker = async () => {
+    if (!distributedAudit || !targetFleetWorkerId) return;
+    setFleetExecutorError(null);
+    setIsFleetExecutorLoading(true);
+    try {
+      const worker = await registerCasHarnessFleetWorker({
+        worker_id: targetFleetWorkerId,
+        model_id: distributedAudit.plan.model_id,
+        worker_url: `local://${targetFleetWorkerId}`,
+        gpu_type: 'H100-80GB',
+        capacity: 1,
+        supported_methods: [
+          'foundation_probe',
+          'rpm_gate_check',
+          'inversion_scan',
+          'blindspot_detection',
+          'verification_stack',
+          'evidence_packet',
+        ],
+      }, protectedAuditApiOptions);
+      setRegisteredFleetWorker(worker);
+      setFleetRun((run) =>
+        run
+          ? {
+              ...run,
+              registered_workers: Math.max(run.registered_workers, 1),
+              updated_at: worker.last_heartbeat_at,
+            }
+          : run,
+      );
+    } catch (error) {
+      setFleetExecutorError(
+        error instanceof Error ? error.message : 'Demo Probe Worker registration failed',
+      );
+    } finally {
+      setIsFleetExecutorLoading(false);
+    }
+  };
+
+  const leaseOneFleetJob = async () => {
+    if (!distributedAudit || !registeredFleetWorker) return;
+    setFleetExecutorError(null);
+    setIsFleetExecutorLoading(true);
+    try {
+      const job = await leaseCasHarnessFleetJob(
+        distributedAudit.audit_id,
+        {
+          worker_id: registeredFleetWorker.worker_id,
+        },
+        protectedAuditApiOptions,
+      );
+      if (!job) {
+        setFleetExecutorError('No fleet jobs are available for this worker.');
+        return;
+      }
+      setLeasedFleetJob(job);
+      setFleetRun((run) => (run ? replaceFleetJob(run, job) : run));
+    } catch (error) {
+      setFleetExecutorError(
+        error instanceof Error ? error.message : 'Fleet job lease failed',
+      );
+    } finally {
+      setIsFleetExecutorLoading(false);
+    }
+  };
+
+  const submitOneFleetReceipt = async () => {
+    if (!distributedAudit || !registeredFleetWorker || !leasedFleetJob?.lease_token) return;
+    setFleetExecutorError(null);
+    setIsFleetExecutorLoading(true);
+    try {
+      const producedOutputs = leasedFleetJob.expected_outputs;
+      const missingOutputs: string[] = [];
+      const evidencePacketFragmentRef = await buildCasHarnessFleetEvidenceFragmentRef({
+        audit_id: distributedAudit.audit_id,
+        job_id: leasedFleetJob.job_id,
+        worker_id: registeredFleetWorker.worker_id,
+        model_id: registeredFleetWorker.model_id,
+        layer_start: leasedFleetJob.layer_start,
+        layer_end: leasedFleetJob.layer_end,
+        shard_id: leasedFleetJob.shard_id,
+        expected_outputs: leasedFleetJob.expected_outputs,
+        produced_outputs: producedOutputs,
+        missing_outputs: missingOutputs,
+      });
+      const run = await submitCasHarnessFleetJobReceipt(
+        distributedAudit.audit_id,
+        leasedFleetJob.job_id,
+        {
+          worker_id: registeredFleetWorker.worker_id,
+          lease_token: leasedFleetJob.lease_token,
+          produced_outputs: producedOutputs,
+          missing_outputs: missingOutputs,
+          evidence_packet_fragment_ref: evidencePacketFragmentRef,
+          job_status: 'completed',
+        },
+        protectedAuditApiOptions,
+      );
+      setFleetRun(run);
+      setLeasedFleetJob(null);
+    } catch (error) {
+      setFleetExecutorError(
+        error instanceof Error ? error.message : 'Fleet receipt submission failed',
+      );
+    } finally {
+      setIsFleetExecutorLoading(false);
+    }
+  };
+
+  const mergeFleet = async () => {
+    if (!distributedAudit) return;
+    setFleetExecutorError(null);
+    setIsFleetExecutorLoading(true);
+    try {
+      const run = await mergeCasHarnessFleetRun(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
+      setFleetRun(run);
+    } catch (error) {
+      setFleetExecutorError(
+        error instanceof Error ? error.message : 'Fleet evidence merge failed',
+      );
+    } finally {
+      setIsFleetExecutorLoading(false);
     }
   };
 
@@ -709,10 +1130,19 @@ export default function AuditConsolePage() {
                 briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
                 placement="bottom"
                 width={340}
-              >
-                <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
-              </AuditPopover>
-            </div>
+            >
+              <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
+            </AuditPopover>
+          </div>
+          <div style={commandActionsStyle}>
+            <button
+              type="button"
+              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+              onClick={loadS7F28PacketTarget}
+              disabled={isAuditRunning || isTargetConnecting}
+            >
+              Load 20B packet
+            </button>
             <button
               type="button"
               style={commandActionStyle(commandButtonEnabled)}
@@ -722,6 +1152,7 @@ export default function AuditConsolePage() {
               {commandButtonLabel}
             </button>
           </div>
+        </div>
           <section style={flowStyle} aria-label="Audit workflow">
             {AUDIT_STEPS.map((step, index) => {
               const state = commandStateFor(
@@ -757,6 +1188,132 @@ export default function AuditConsolePage() {
               void loadEnterprisePlan(size);
             }}
           />
+        </div>
+
+        <div style={singleColumnStyle}>
+          <DistributedAuditRunPanel
+            audit={distributedAudit}
+            isLoading={isDistributedAuditLoading}
+            error={distributedAuditError}
+            onCreateRun={() => {
+              void createDistributedRun();
+            }}
+            onDispatchRun={() => {
+              void dispatchDistributedRun();
+            }}
+            onMergeRun={() => {
+              void mergeDistributedRun();
+            }}
+          />
+        </div>
+
+        <div style={singleColumnStyle}>
+          <FleetExecutorPanel
+            registeredWorkers={fleetRegisteredWorkers}
+            leasedJobs={fleetRun?.leased_jobs ?? 0}
+            staleWorkers={fleetRun?.stale_workers.length ?? 0}
+            completedFragments={fleetRun?.completed_fragments ?? 0}
+            totalJobs={fleetTotalJobs}
+            mergedPacketStatus={mergedPacketStatusFor(fleetRun)}
+            verifierGateStatus={fleetRun?.verifier_gate_status ?? 'not_prepared'}
+          />
+          <section style={fleetControlPanelStyle} aria-label="Fleet executor controls">
+            <div style={fleetControlHeaderStyle}>
+              <div>
+                <h2 style={fleetControlTitleStyle}>Fleet executor controls</h2>
+                <p style={fleetNoticeStyle}>
+                  These controls exercise the real fleet API path. Fleet merge
+                  stays blocked until a leased job returns an Evidence Packet
+                  fragment.
+                </p>
+                <label htmlFor="fleet-auth-token" style={verdictLabelStyle}>
+                  Protected API token
+                </label>
+                <input
+                  id="fleet-auth-token"
+                  type="password"
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={fleetAuthToken}
+                  onChange={(event) => setFleetAuthToken(event.target.value)}
+                  placeholder="Optional bearer token"
+                  style={fleetAuthInputStyle}
+                />
+              </div>
+              <div style={fleetButtonRowStyle}>
+                <button
+                  type="button"
+                  style={commandActionStyle(canPrepareFleet)}
+                  disabled={!canPrepareFleet}
+                  onClick={() => {
+                    void prepareFleet();
+                  }}
+                >
+                  Prepare fleet
+                </button>
+                <button
+                  type="button"
+                  style={commandActionStyle(canRegisterFleetWorker)}
+                  disabled={!canRegisterFleetWorker}
+                  onClick={() => {
+                    void registerDemoFleetWorker();
+                  }}
+                >
+                  Register demo worker
+                </button>
+                <button
+                  type="button"
+                  style={commandActionStyle(canLeaseFleetJob)}
+                  disabled={!canLeaseFleetJob}
+                  onClick={() => {
+                    void leaseOneFleetJob();
+                  }}
+                >
+                  Lease one job
+                </button>
+                <button
+                  type="button"
+                  style={commandActionStyle(canSubmitFleetReceipt)}
+                  disabled={!canSubmitFleetReceipt}
+                  onClick={() => {
+                    void submitOneFleetReceipt();
+                  }}
+                >
+                  Submit one receipt
+                </button>
+                <button
+                  type="button"
+                  style={commandActionStyle(canMergeFleet)}
+                  disabled={!canMergeFleet}
+                  onClick={() => {
+                    void mergeFleet();
+                  }}
+                >
+                  Merge fleet
+                </button>
+              </div>
+            </div>
+            {isFleetExecutorLoading ? (
+              <p role="status" style={fleetNoticeStyle}>
+                Fleet executor request in flight...
+              </p>
+            ) : null}
+            {fleetExecutorError ? (
+              <p role="status" style={{ ...fleetNoticeStyle, color: '#fecaca' }}>
+                {fleetExecutorError}
+              </p>
+            ) : null}
+            {fleetRun?.merged_packet_trace_id ? (
+              <p role="status" style={fleetNoticeStyle}>
+                Merged Evidence Packet: {fleetRun.merged_packet_trace_id}
+              </p>
+            ) : null}
+            {fleetRun ? (
+              <p style={fleetNoticeStyle}>
+                Fleet merge reason: {fleetRun.merge_reason}
+              </p>
+            ) : null}
+          </section>
         </div>
 
         <div style={session ? lowerGridStyle : singleColumnStyle}>

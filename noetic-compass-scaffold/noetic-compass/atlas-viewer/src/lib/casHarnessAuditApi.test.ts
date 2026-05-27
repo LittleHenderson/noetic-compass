@@ -1,16 +1,34 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  buildCasHarnessFleetEvidenceFragmentRef,
   CasHarnessAuditApiError,
   createCasHarnessAuditSession,
+  createCasHarnessDistributedAudit,
   createCasHarnessScalePlan,
+  dispatchCasHarnessDistributedAudit,
   getCasHarnessAuditSessionStatus,
+  getCasHarnessFleetRun,
+  heartbeatCasHarnessFleetWorker,
+  leaseCasHarnessFleetJob,
   listCasHarnessAuditSessions,
+  listCasHarnessFleetRuns,
+  listCasHarnessFleetWorkers,
+  mergeCasHarnessDistributedAudit,
+  mergeCasHarnessFleetRun,
   parseAuditSessionResponse,
+  parseDistributedAuditResponse,
+  parseFleetRunResponse,
   parseModelTargetVerificationResponse,
+  parseNullableFleetJobResponse,
   parseScalePlanResponse,
+  prepareCasHarnessFleetRun,
+  registerCasHarnessFleetWorker,
   resolveCasHarnessAuditBaseUrl,
+  scanCasHarnessFleetStaleWorkers,
   startCasHarnessAuditSession,
+  submitCasHarnessFleetJobReceipt,
+  submitCasHarnessDistributedWorkerEvidence,
   verifyCasHarnessModelTarget,
 } from './casHarnessAuditApi';
 
@@ -134,6 +152,125 @@ function scalePlan(overrides: Record<string, unknown> = {}): Record<string, unkn
   };
 }
 
+function distributedAudit(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    audit_id: 'cas-dist-unit',
+    plan_id: 'cas-plan-unit',
+    status: 'PLANNED',
+    merge_status: 'pending',
+    verdict: null,
+    confidence: null,
+    evidence_packet_trace_id: null,
+    merge_reason: 'Distributed audit planned; no worker evidence has been merged yet.',
+    created_at: '2026-05-26T10:00:00Z',
+    updated_at: '2026-05-26T10:00:00Z',
+    plan: scalePlan(),
+    worker_evidence: [
+      {
+        worker_id: 'probe-worker-01',
+        layer_start: 0,
+        layer_end: 9,
+        shard_id: 'layers-000-009',
+        assigned_methods: ['foundation_probe', 'targeted_ablation'],
+        expected_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+        worker_status: 'queued',
+        produced_outputs: [],
+        missing_outputs: [],
+        evidence_packet_ref: null,
+        error_message: null,
+        updated_at: '2026-05-26T10:00:00Z',
+      },
+    ],
+    ready_workers: 0,
+    failed_workers: 0,
+    total_workers: 1,
+    missing_outputs: [],
+    ...overrides,
+  };
+}
+
+function distributedWorker(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    ...(distributedAudit().worker_evidence[0] as Record<string, unknown>),
+    ...overrides,
+  };
+}
+
+function fleetWorker(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    worker_id: 'probe-worker-01',
+    model_id: 'customer/open-100b',
+    worker_url: 'https://worker-01.example',
+    gpu_type: 'H100-80GB',
+    capacity: 1,
+    supported_methods: ['foundation_probe', 'targeted_ablation'],
+    registered_at: '2026-05-26T10:01:00Z',
+    last_heartbeat_at: '2026-05-26T10:02:00Z',
+    status: 'active',
+    ...overrides,
+  };
+}
+
+function fleetJob(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    job_id: 'fleet-job-01',
+    audit_id: 'cas-dist-unit',
+    assigned_worker_id: 'probe-worker-01',
+    layer_start: 0,
+    layer_end: 9,
+    shard_id: 'layers-000-009',
+    assigned_methods: ['foundation_probe', 'targeted_ablation'],
+    expected_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    status: 'queued',
+    lease_token: null,
+    lease_expires_at: null,
+    evidence_packet_fragment_ref: null,
+    produced_outputs: [],
+    missing_outputs: [],
+    error_message: null,
+    updated_at: '2026-05-26T10:02:00Z',
+    ...overrides,
+  };
+}
+
+function fleetRun(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    audit_id: 'cas-dist-unit',
+    status: 'PREPARED',
+    verifier_gate_status: 'waiting_for_receipts',
+    merged_packet_trace_id: null,
+    merge_reason: 'Waiting for worker Evidence Packet fragment receipts.',
+    created_at: '2026-05-26T10:01:00Z',
+    updated_at: '2026-05-26T10:02:00Z',
+    total_jobs: 1,
+    leased_jobs: 0,
+    completed_fragments: 0,
+    failed_jobs: 0,
+    registered_workers: 1,
+    stale_workers: [],
+    jobs: [fleetJob()],
+    ...overrides,
+  };
+}
+
+async function fleetFragmentRef(
+  overrides: Partial<Parameters<typeof buildCasHarnessFleetEvidenceFragmentRef>[0]> = {},
+): Promise<string> {
+  return buildCasHarnessFleetEvidenceFragmentRef({
+    audit_id: 'cas-dist-unit',
+    job_id: 'fleet-job-01',
+    worker_id: 'probe-worker-01',
+    model_id: 'customer/open-100b',
+    layer_start: 0,
+    layer_end: 9,
+    shard_id: 'layers-000-009',
+    expected_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    missing_outputs: [],
+    ...overrides,
+  });
+}
+
 describe('casHarnessAuditApi', () => {
   afterEach(() => {
     vi.unstubAllEnvs();
@@ -254,6 +391,292 @@ describe('casHarnessAuditApi', () => {
       model_id: 'customer/open-100b',
       parameter_count_b: 100,
     });
+  });
+
+  it('creates, dispatches, records, and merges a distributed audit through the API', async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(distributedAudit()))
+      .mockResolvedValueOnce(jsonResponse(distributedAudit({ status: 'DISPATCHED' })))
+      .mockResolvedValueOnce(jsonResponse(distributedAudit({
+        status: 'MERGE_PENDING',
+        merge_status: 'partial',
+        worker_evidence: [
+          distributedWorker({
+            worker_status: 'completed',
+            produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+            evidence_packet_ref: 'packet://probe-worker-01',
+          }),
+        ],
+        ready_workers: 1,
+      })))
+      .mockResolvedValueOnce(jsonResponse(distributedAudit({
+        status: 'COMPLETE',
+        merge_status: 'complete',
+        verdict: 'FLAG_FOR_HUMAN_REVIEW',
+        confidence: null,
+        evidence_packet_trace_id: 'cas-dist-unit-distributed-merge',
+        worker_evidence: [
+          distributedWorker({
+            worker_status: 'completed',
+            produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+            evidence_packet_ref: 'packet://probe-worker-01',
+          }),
+        ],
+        ready_workers: 1,
+        merge_reason: 'All distributed worker evidence receipts merged. Final ACCEPT/SUPPRESS still requires the verifier decision layer over the merged Evidence Packet.',
+      })));
+
+    const created = await createCasHarnessDistributedAudit(
+      {
+        model_id: 'customer/open-100b',
+        weight_access: 'open_weight',
+        parameter_count_b: 100,
+        num_layers: 120,
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const dispatched = await dispatchCasHarnessDistributedAudit(created.audit_id, {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const receipted = await submitCasHarnessDistributedWorkerEvidence(
+      created.audit_id,
+      'probe-worker-01',
+      {
+        produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+        evidence_packet_ref: 'packet://probe-worker-01',
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const merged = await mergeCasHarnessDistributedAudit(created.audit_id, {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+
+    expect(created.status).toBe('PLANNED');
+    expect(dispatched.status).toBe('DISPATCHED');
+    expect(receipted.ready_workers).toBe(1);
+    expect(merged.merge_status).toBe('complete');
+    expect(merged.verdict).toBe('FLAG_FOR_HUMAN_REVIEW');
+    expect(merged.confidence).toBeNull();
+    expect(merged.worker_evidence[0]).toMatchObject({
+      worker_status: 'completed',
+      evidence_packet_ref: 'packet://probe-worker-01',
+      missing_outputs: [],
+    });
+    expect(merged.merge_reason).toMatch(/Final ACCEPT\/SUPPRESS still requires/);
+    expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/session',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/dispatch',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/worker/probe-worker-01/evidence',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/merge',
+    ]);
+  });
+
+  it('adds Authorization when callers supply an audit auth token', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(distributedAudit({ status: 'DISPATCHED' })));
+
+    await dispatchCasHarnessDistributedAudit('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+      authToken: 'fleet-jwt',
+    });
+
+    expect(fetchImpl.mock.calls[0][1]).toMatchObject({
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer fleet-jwt',
+      },
+    });
+  });
+
+  it('preserves explicit Bearer auth tokens without double-prefixing', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(distributedAudit({ status: 'DISPATCHED' })));
+
+    await dispatchCasHarnessDistributedAudit('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+      authToken: 'Bearer already-prefixed',
+    });
+
+    expect((fetchImpl.mock.calls[0][1] as RequestInit).headers).toMatchObject({
+      Authorization: 'Bearer already-prefixed',
+    });
+  });
+
+  it('registers, lists, heartbeats, and stale-scans fleet workers through the API', async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(fleetWorker()))
+      .mockResolvedValueOnce(jsonResponse({ workers: [fleetWorker()] }))
+      .mockResolvedValueOnce(jsonResponse(fleetWorker({ last_heartbeat_at: '2026-05-26T10:03:00Z' })))
+      .mockResolvedValueOnce(jsonResponse({ workers: [fleetWorker({ status: 'stale' })] }));
+
+    const registered = await registerCasHarnessFleetWorker(
+      {
+        worker_id: 'probe-worker-01',
+        model_id: 'customer/open-100b',
+        worker_url: 'https://worker-01.example',
+        gpu_type: 'H100-80GB',
+        supported_methods: ['foundation_probe', 'targeted_ablation'],
+        capacity: 1,
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const listed = await listCasHarnessFleetWorkers({
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const heartbeat = await heartbeatCasHarnessFleetWorker('probe-worker-01', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const stale = await scanCasHarnessFleetStaleWorkers(
+      { max_heartbeat_age_seconds: 1 },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+
+    expect(registered.status).toBe('active');
+    expect(listed.workers[0]?.worker_id).toBe('probe-worker-01');
+    expect(heartbeat.last_heartbeat_at).toBe('2026-05-26T10:03:00Z');
+    expect(stale.workers[0]?.status).toBe('stale');
+    expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/fleet/worker/register',
+      '/api/cas-harness/audit/distributed/fleet/workers',
+      '/api/cas-harness/audit/distributed/fleet/worker/probe-worker-01/heartbeat',
+      '/api/cas-harness/audit/distributed/fleet/workers/stale-scan',
+    ]);
+    expect(JSON.parse(String((fetchImpl.mock.calls[3][1] as RequestInit).body))).toEqual({
+      max_heartbeat_age_seconds: 1,
+    });
+  });
+
+  it('prepares, leases, receipts, merges, gets, and lists fleet runs without fabricating ACCEPT', async () => {
+    const fragmentRef = await fleetFragmentRef();
+    const leasedJob = fleetJob({
+      status: 'leased',
+      lease_token: 'lease-token-01',
+      lease_expires_at: '2026-05-26T10:30:00Z',
+    });
+    const completedJob = fleetJob({
+      status: 'completed',
+      lease_expires_at: '2026-05-26T10:30:00Z',
+      evidence_packet_fragment_ref: fragmentRef,
+      produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+    });
+    const readyRun = fleetRun({
+      status: 'MERGE_PENDING',
+      verifier_gate_status: 'ready_for_verifier',
+      completed_fragments: 1,
+      jobs: [completedJob],
+    });
+    const mergedRun = fleetRun({
+      status: 'COMPLETE',
+      verifier_gate_status: 'ready_for_verifier',
+      merged_packet_trace_id: 'cas-dist-unit-fleet-merge',
+      merge_reason:
+        'All fleet job fragments are present. Merged Evidence Packet is ready for the verifier decision layer; fleet executor does not fabricate ACCEPT.',
+      completed_fragments: 1,
+      jobs: [completedJob],
+    });
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse(fleetRun()))
+      .mockResolvedValueOnce(jsonResponse(leasedJob))
+      .mockResolvedValueOnce(jsonResponse(readyRun))
+      .mockResolvedValueOnce(jsonResponse(mergedRun))
+      .mockResolvedValueOnce(jsonResponse(mergedRun))
+      .mockResolvedValueOnce(jsonResponse({ runs: [mergedRun] }));
+
+    const prepared = await prepareCasHarnessFleetRun('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const leased = await leaseCasHarnessFleetJob(
+      'cas-dist-unit',
+      { worker_id: 'probe-worker-01', lease_seconds: 900 },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const receipted = await submitCasHarnessFleetJobReceipt(
+      'cas-dist-unit',
+      'fleet-job-01',
+      {
+        worker_id: 'probe-worker-01',
+        lease_token: 'lease-token-01',
+        produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+        evidence_packet_fragment_ref: fragmentRef,
+      },
+      { baseUrl: '/api/cas-harness/audit', fetchImpl },
+    );
+    const merged = await mergeCasHarnessFleetRun('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const fetched = await getCasHarnessFleetRun('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const listed = await listCasHarnessFleetRuns({
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+
+    expect(prepared.verifier_gate_status).toBe('waiting_for_receipts');
+    expect(leased).toMatchObject({
+      status: 'leased',
+      lease_token: 'lease-token-01',
+    });
+    expect(receipted.verifier_gate_status).toBe('ready_for_verifier');
+    expect(receipted.jobs[0]).toMatchObject({
+      status: 'completed',
+      evidence_packet_fragment_ref: fragmentRef,
+    });
+    expect(merged.status).toBe('COMPLETE');
+    expect(merged.merged_packet_trace_id).toBe('cas-dist-unit-fleet-merge');
+    expect(merged.merge_reason).toMatch(/does not fabricate ACCEPT/);
+    expect(fetched.audit_id).toBe('cas-dist-unit');
+    expect(listed.runs[0]?.status).toBe('COMPLETE');
+    expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/prepare',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/lease',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/fleet-job-01/receipt',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/merge',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet',
+      '/api/cas-harness/audit/distributed/fleet/runs',
+    ]);
+  });
+
+  it('builds canonical content-addressed fleet Evidence Packet fragment refs', async () => {
+    const fragmentRef = await fleetFragmentRef();
+
+    expect(fragmentRef).toMatch(
+      /^cas-fragment:\/\/cas-dist-unit\/fleet-job-01\/probe-worker-01\/layers-000-009\/sha256:[a-f0-9]{64}$/,
+    );
+    expect(fragmentRef).not.toContain('evidence-fragment');
+  });
+
+  it('redacts lease tokens from fleet run responses while preserving lease responses', () => {
+    const parsedRun = parseFleetRunResponse(fleetRun({
+      status: 'LEASING',
+      verifier_gate_status: 'waiting_for_receipts',
+      leased_jobs: 1,
+      jobs: [
+        fleetJob({
+          status: 'leased',
+          lease_token: 'leaked-lease-token',
+          lease_expires_at: '2026-05-26T10:30:00Z',
+        }),
+      ],
+    }));
+    const parsedLease = parseNullableFleetJobResponse(fleetJob({
+      status: 'leased',
+      lease_token: 'immediate-lease-token',
+      lease_expires_at: '2026-05-26T10:30:00Z',
+    }));
+
+    expect(parsedRun.jobs[0]?.lease_token).toBeNull();
+    expect(parsedLease?.lease_token).toBe('immediate-lease-token');
   });
 
   it('verifies an API endpoint target using a credential reference', async () => {
@@ -415,6 +838,163 @@ describe('casHarnessAuditApi', () => {
         },
       ],
     }))).toThrow(/layer range/);
+  });
+
+  it('rejects malformed distributed audit responses', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      status: 'DONE',
+    }))).toThrow(/distributed audit status/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        distributedWorker({
+          worker_status: 'finished',
+        }),
+      ],
+    }))).toThrow(/distributed worker status/);
+  });
+
+  it('rejects fleet executor responses that fake verifier readiness or final verdicts', () => {
+    expect(() => parseFleetRunResponse(fleetRun({
+      verifier_gate_status: 'accepted',
+    }))).toThrow(/fleet verifier gate status/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      verdict: 'ACCEPT',
+    }))).toThrow(/must not return ACCEPT\/SUPPRESS/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      confidence: 0.91,
+    }))).toThrow(/fleet executor confidence must be null/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      jobs: [
+        fleetJob({
+          status: 'completed',
+          produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+          evidence_packet_fragment_ref: null,
+        }),
+      ],
+      completed_fragments: 1,
+    }))).toThrow(/completed fleet job requires evidence_packet_fragment_ref/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      verifier_gate_status: 'ready_for_verifier',
+      jobs: [fleetJob()],
+    }))).toThrow(/ready_for_verifier requires every job to be completed/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      verifier_gate_status: 'ready_for_verifier',
+      completed_fragments: 1,
+      jobs: [
+        fleetJob({
+          status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['worker_evidence_manifest'],
+          evidence_packet_fragment_ref:
+            'cas-fragment://cas-dist-unit/fleet-job-01/probe-worker-01/layers-000-009/sha256:0000000000000000000000000000000000000000000000000000000000000000',
+        }),
+      ],
+    }))).toThrow(/ready_for_verifier cannot include missing job outputs/);
+  });
+
+  it('parses distributed worker receipt packet refs, missing outputs, and statuses explicitly', () => {
+    const parsed = parseDistributedAuditResponse(distributedAudit({
+      status: 'MERGE_PENDING',
+      merge_status: 'partial',
+      worker_evidence: [
+        distributedWorker({
+          worker_status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['worker_evidence_manifest'],
+          evidence_packet_ref: 'packet://probe-worker-01',
+        }),
+      ],
+      ready_workers: 1,
+      missing_outputs: ['probe-worker-01:worker_evidence_manifest'],
+    }));
+
+    expect(parsed.status).toBe('MERGE_PENDING');
+    expect(parsed.merge_status).toBe('partial');
+    expect(parsed.verdict).toBeNull();
+    expect(parsed.confidence).toBeNull();
+    expect(parsed.worker_evidence[0]).toMatchObject({
+      worker_status: 'completed',
+      produced_outputs: ['layer_activation_summary'],
+      missing_outputs: ['worker_evidence_manifest'],
+      evidence_packet_ref: 'packet://probe-worker-01',
+    });
+    expect(parsed.missing_outputs).toEqual(['probe-worker-01:worker_evidence_manifest']);
+  });
+
+  it('rejects distributed merge ACCEPT/SUPPRESS and confidence without verifier output', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      verdict: 'ACCEPT',
+    }))).toThrow(/must not return ACCEPT\/SUPPRESS/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      verdict: 'SUPPRESS',
+    }))).toThrow(/must not return ACCEPT\/SUPPRESS/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      confidence: 0.91,
+    }))).toThrow(/distributed merge confidence must be null/);
+  });
+
+  it('rejects completed worker receipts without packet refs', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        distributedWorker({
+          worker_status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          evidence_packet_ref: null,
+        }),
+      ],
+      ready_workers: 1,
+    }))).toThrow(/completed distributed worker evidence requires evidence_packet_ref/);
+  });
+
+  it('rejects impossible distributed worker output receipt accounting', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        distributedWorker({
+          produced_outputs: ['unregistered_output'],
+        }),
+      ],
+    }))).toThrow(/produced unknown output/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      worker_evidence: [
+        distributedWorker({
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['layer_activation_summary'],
+        }),
+      ],
+    }))).toThrow(/both produced and missing/);
+  });
+
+  it('rejects complete distributed merges before every worker receipt is completed', () => {
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      status: 'COMPLETE',
+      merge_status: 'complete',
+      verdict: 'FLAG_FOR_HUMAN_REVIEW',
+    }))).toThrow(/complete distributed merge requires every worker receipt to be completed/);
+
+    expect(() => parseDistributedAuditResponse(distributedAudit({
+      status: 'COMPLETE',
+      merge_status: 'complete',
+      verdict: 'FLAG_FOR_HUMAN_REVIEW',
+      worker_evidence: [
+        distributedWorker({
+          worker_status: 'completed',
+          produced_outputs: ['layer_activation_summary'],
+          missing_outputs: ['worker_evidence_manifest'],
+          evidence_packet_ref: 'packet://probe-worker-01',
+        }),
+      ],
+      ready_workers: 1,
+      missing_outputs: ['probe-worker-01:worker_evidence_manifest'],
+    }))).toThrow(/complete distributed merge cannot include missing worker outputs/);
   });
 
   it('rejects malformed target verification payloads', () => {

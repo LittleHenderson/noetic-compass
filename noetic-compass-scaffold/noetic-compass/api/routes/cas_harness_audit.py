@@ -23,7 +23,30 @@ from api.services.cas_harness_audit_sessions import (
     list_sessions,
     run_session,
 )
+from api.services.cas_harness_distributed_audits import (
+    DistributedAuditStateError,
+    create_distributed_audit,
+    dispatch_distributed_audit,
+    get_distributed_audit,
+    list_distributed_audits,
+    mark_worker_running,
+    merge_distributed_audit,
+    record_worker_evidence,
+)
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.cas_harness_fleet_executor import (
+    FleetExecutorStateError,
+    get_fleet_run,
+    heartbeat_worker,
+    lease_next_job,
+    list_fleet_runs,
+    list_workers,
+    mark_stale_workers,
+    merge_fleet_evidence,
+    prepare_fleet_for_audit,
+    register_worker,
+    submit_job_receipt,
+)
 from api.services.cas_harness_scale_planner import (
     ScalePlanRequest as PlannerScalePlanRequest,
     build_scale_plan,
@@ -317,6 +340,7 @@ class ScalePlanRequest(BaseModel):
     precision: ScalePlanPrecision = "bf16"
     available_gpu_memory_gb: int | None = Field(default=None, gt=0, le=2048)
     audit_depth: ScalePlanAuditDepth = "FULL_INTERNAL"
+    minimum_worker_count: int | None = Field(default=None, gt=0, le=512)
 
     @field_validator("model_id")
     @classmethod
@@ -342,6 +366,238 @@ class ScalePlanResponse(BaseModel):
     limitations: list[str]
 
 
+class DistributedWorkerEvidenceResponse(BaseModel):
+    worker_id: str
+    layer_start: int
+    layer_end: int
+    shard_id: str
+    assigned_methods: list[str]
+    expected_outputs: list[str]
+    worker_status: Literal["queued", "assigned", "running", "completed", "failed"]
+    produced_outputs: list[str]
+    missing_outputs: list[str]
+    evidence_packet_ref: str | None = None
+    error_message: str | None = None
+    updated_at: str
+
+
+class DistributedAuditResponse(BaseModel):
+    audit_id: str
+    plan_id: str
+    status: Literal["PLANNED", "DISPATCHED", "RUNNING", "MERGE_PENDING", "COMPLETE", "FAILED"]
+    merge_status: Literal["pending", "partial", "complete", "failed"]
+    verdict: Verdict | None = None
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    evidence_packet_trace_id: str | None = None
+    merge_reason: str
+    created_at: str
+    updated_at: str
+    plan: ScalePlanResponse
+    worker_evidence: list[DistributedWorkerEvidenceResponse]
+    ready_workers: int
+    failed_workers: int
+    total_workers: int
+    missing_outputs: list[str]
+
+
+class DistributedAuditListResponse(BaseModel):
+    audits: list[DistributedAuditResponse]
+
+
+class DistributedWorkerEvidenceRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    produced_outputs: list[str] = Field(..., min_length=1, max_length=32)
+    missing_outputs: list[str] = Field(default_factory=list, max_length=32)
+    evidence_packet_ref: str | None = Field(default=None, min_length=1, max_length=240)
+    error_message: str | None = Field(default=None, min_length=1, max_length=500)
+    worker_status: Literal["completed", "failed"] = "completed"
+
+    @field_validator("produced_outputs", "missing_outputs")
+    @classmethod
+    def clean_output_list(cls, values: list[str]) -> list[str]:
+        cleaned: list[str] = []
+        seen: set[str] = set()
+        for value in values:
+            stripped = value.strip() if isinstance(value, str) else ""
+            if not stripped:
+                raise ValueError("output names must be non-empty strings")
+            if len(stripped) > 120:
+                raise ValueError("output names must be 120 characters or fewer")
+            if stripped not in seen:
+                cleaned.append(stripped)
+                seen.add(stripped)
+        return cleaned
+
+    @field_validator("evidence_packet_ref", "error_message")
+    @classmethod
+    def clean_optional_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        stripped = value.strip()
+        return stripped or None
+
+    @model_validator(mode="after")
+    def validate_receipt_shape(self) -> "DistributedWorkerEvidenceRequest":
+        if self.worker_status == "completed" and not self.evidence_packet_ref:
+            raise ValueError("completed worker evidence requires evidence_packet_ref")
+        if self.worker_status == "failed" and not self.error_message:
+            raise ValueError("failed worker evidence requires error_message")
+        return self
+
+
+class FleetWorkerRegistrationRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    worker_id: str = Field(..., min_length=1, max_length=120)
+    model_id: str = Field(..., min_length=1, max_length=200)
+    worker_url: str = Field(..., min_length=1, max_length=500)
+    gpu_type: str = Field(..., min_length=1, max_length=120)
+    capacity: int = Field(default=1, gt=0, le=64)
+    supported_methods: list[str] = Field(..., min_length=1, max_length=32)
+
+    @field_validator("worker_id", "model_id", "worker_url", "gpu_type")
+    @classmethod
+    def clean_required_text(cls, value: str) -> str:
+        stripped = value.strip()
+        if not stripped:
+            raise ValueError("field must be non-empty")
+        return stripped
+
+    @field_validator("supported_methods")
+    @classmethod
+    def clean_supported_methods(cls, values: list[str]) -> list[str]:
+        return _clean_string_list(values, field_name="supported_methods", max_length=120)
+
+
+class FleetWorkerResponse(BaseModel):
+    worker_id: str
+    model_id: str
+    worker_url: str
+    gpu_type: str
+    capacity: int
+    supported_methods: list[str]
+    registered_at: str
+    last_heartbeat_at: str
+    status: Literal["active", "stale", "offline"]
+
+
+class FleetWorkerListResponse(BaseModel):
+    workers: list[FleetWorkerResponse]
+
+
+class FleetJobResponse(BaseModel):
+    job_id: str
+    audit_id: str
+    assigned_worker_id: str
+    layer_start: int
+    layer_end: int
+    shard_id: str
+    assigned_methods: list[str]
+    expected_outputs: list[str]
+    status: Literal["queued", "leased", "completed", "failed", "expired"]
+    lease_token: str | None = None
+    lease_expires_at: str | None = None
+    evidence_packet_fragment_ref: str | None = None
+    produced_outputs: list[str]
+    missing_outputs: list[str]
+    error_message: str | None = None
+    updated_at: str
+
+
+class FleetRunResponse(BaseModel):
+    audit_id: str
+    status: Literal["PREPARED", "LEASING", "MERGE_PENDING", "COMPLETE", "FAILED"]
+    verifier_gate_status: Literal[
+        "not_prepared",
+        "waiting_for_workers",
+        "waiting_for_receipts",
+        "blocked_failed_worker",
+        "blocked_missing_outputs",
+        "ready_for_verifier",
+    ]
+    merged_packet_trace_id: str | None = None
+    merge_reason: str
+    created_at: str
+    updated_at: str
+    total_jobs: int
+    leased_jobs: int
+    completed_fragments: int
+    failed_jobs: int
+    registered_workers: int
+    stale_workers: list[str]
+    jobs: list[FleetJobResponse]
+
+
+class FleetRunListResponse(BaseModel):
+    runs: list[FleetRunResponse]
+
+
+class FleetLeaseRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    worker_id: str = Field(..., min_length=1, max_length=120)
+    lease_seconds: int = Field(default=900, gt=0, le=86_400)
+
+    @field_validator("worker_id")
+    @classmethod
+    def clean_worker_id(cls, value: str) -> str:
+        stripped = value.strip()
+        if not stripped:
+            raise ValueError("worker_id is required")
+        return stripped
+
+
+class FleetJobReceiptRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    worker_id: str = Field(..., min_length=1, max_length=120)
+    lease_token: str = Field(..., min_length=1, max_length=256)
+    produced_outputs: list[str] = Field(default_factory=list, max_length=32)
+    missing_outputs: list[str] = Field(default_factory=list, max_length=32)
+    evidence_packet_fragment_ref: str | None = Field(default=None, min_length=1, max_length=240)
+    error_message: str | None = Field(default=None, min_length=1, max_length=500)
+    job_status: Literal["completed", "failed"] = "completed"
+
+    @field_validator("worker_id", "lease_token")
+    @classmethod
+    def clean_required_text(cls, value: str) -> str:
+        stripped = value.strip()
+        if not stripped:
+            raise ValueError("field must be non-empty")
+        return stripped
+
+    @field_validator("produced_outputs", "missing_outputs")
+    @classmethod
+    def clean_outputs(cls, values: list[str]) -> list[str]:
+        return _clean_string_list(values, field_name="output", max_length=120)
+
+    @field_validator("evidence_packet_fragment_ref", "error_message")
+    @classmethod
+    def clean_optional_text(cls, value: str | None) -> str | None:
+        if value is None:
+            return None
+        stripped = value.strip()
+        return stripped or None
+
+    @model_validator(mode="after")
+    def validate_receipt_shape(self) -> "FleetJobReceiptRequest":
+        if self.job_status == "completed" and not self.evidence_packet_fragment_ref:
+            raise ValueError("completed fleet job receipt requires evidence_packet_fragment_ref")
+        if self.job_status == "failed" and not self.error_message:
+            raise ValueError("failed fleet job receipt requires error_message")
+        overlap = set(self.produced_outputs).intersection(self.missing_outputs)
+        if overlap:
+            raise ValueError(f"produced_outputs and missing_outputs overlap: {', '.join(sorted(overlap))}")
+        return self
+
+
+class FleetStaleWorkerRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    max_heartbeat_age_seconds: int = Field(default=120, gt=0, le=86_400)
+
+
 @router.post("/target/verify", response_model=ModelTargetVerificationResponse)
 async def verify_model_target(
     req: ModelTargetVerificationRequest,
@@ -364,9 +620,255 @@ async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
             precision=req.precision,
             available_gpu_memory_gb=req.available_gpu_memory_gb,
             audit_depth=req.audit_depth,
+            minimum_worker_count=req.minimum_worker_count,
         )
     )
     return ScalePlanResponse.model_validate(plan.to_dict())
+
+
+@router.post("/distributed/session", response_model=DistributedAuditResponse)
+async def create_distributed_audit_session(req: ScalePlanRequest) -> DistributedAuditResponse:
+    """Create a real distributed audit control-plane run from an open-weight plan."""
+    record = create_distributed_audit(
+        PlannerScalePlanRequest(
+            model_id=req.model_id,
+            parameter_count_b=req.parameter_count_b,
+            num_layers=req.num_layers,
+            precision=req.precision,
+            available_gpu_memory_gb=req.available_gpu_memory_gb,
+            audit_depth=req.audit_depth,
+            minimum_worker_count=req.minimum_worker_count,
+        )
+    )
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post("/distributed/session/{audit_id}/dispatch", response_model=DistributedAuditResponse)
+async def dispatch_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+    """Mark planned Probe Worker assignments as dispatched."""
+    record = dispatch_distributed_audit(audit_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post(
+    "/distributed/session/{audit_id}/worker/{worker_id}/running",
+    response_model=DistributedAuditResponse,
+)
+async def mark_distributed_worker_running(audit_id: str, worker_id: str) -> DistributedAuditResponse:
+    """Mark one Probe Worker as running."""
+    try:
+        record = mark_worker_running(audit_id, worker_id)
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Distributed worker assignment not found")
+    except DistributedAuditStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post(
+    "/distributed/session/{audit_id}/worker/{worker_id}/evidence",
+    response_model=DistributedAuditResponse,
+)
+async def submit_distributed_worker_evidence(
+    audit_id: str,
+    worker_id: str,
+    req: DistributedWorkerEvidenceRequest,
+) -> DistributedAuditResponse:
+    """Attach one Probe Worker's evidence receipt to the distributed audit."""
+    if get_fleet_run(audit_id) is not None:
+        raise HTTPException(
+            status_code=409,
+            detail="Fleet-backed distributed audits require leased fleet job receipts.",
+        )
+    try:
+        record = record_worker_evidence(
+            audit_id,
+            worker_id,
+            produced_outputs=req.produced_outputs,
+            missing_outputs=req.missing_outputs,
+            evidence_packet_ref=req.evidence_packet_ref,
+            error_message=req.error_message,
+            worker_status=req.worker_status,
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Distributed worker assignment not found")
+    except DistributedAuditStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.post("/distributed/session/{audit_id}/merge", response_model=DistributedAuditResponse)
+async def merge_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+    """Merge worker evidence receipts without fabricating ACCEPT."""
+    try:
+        record = merge_distributed_audit(audit_id)
+    except DistributedAuditStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.get("/distributed/session/{audit_id}", response_model=DistributedAuditResponse)
+async def get_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+    """Return distributed audit worker and merge state."""
+    record = get_distributed_audit(audit_id)
+    if record is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return DistributedAuditResponse.model_validate(record.to_dict())
+
+
+@router.get("/distributed/sessions", response_model=DistributedAuditListResponse)
+async def list_distributed_audit_sessions() -> DistributedAuditListResponse:
+    """List distributed audit runs held by this API process."""
+    return DistributedAuditListResponse(
+        audits=[
+            DistributedAuditResponse.model_validate(record.to_dict())
+            for record in list_distributed_audits()
+        ]
+    )
+
+
+@router.post("/distributed/fleet/worker/register", response_model=FleetWorkerResponse)
+async def register_fleet_worker(req: FleetWorkerRegistrationRequest) -> FleetWorkerResponse:
+    """Register one Probe Worker that can receive distributed audit jobs."""
+    try:
+        worker = register_worker(
+            worker_id=req.worker_id,
+            model_id=req.model_id,
+            worker_url=req.worker_url,
+            gpu_type=req.gpu_type,
+            capacity=req.capacity,
+            supported_methods=req.supported_methods,
+        )
+    except FleetExecutorStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    return FleetWorkerResponse.model_validate(worker.to_dict())
+
+
+@router.post("/distributed/fleet/worker/{worker_id}/heartbeat", response_model=FleetWorkerResponse)
+async def heartbeat_fleet_worker(worker_id: str) -> FleetWorkerResponse:
+    """Refresh one Probe Worker's heartbeat."""
+    worker = heartbeat_worker(worker_id)
+    if worker is None:
+        raise HTTPException(status_code=404, detail="Fleet worker not found")
+    return FleetWorkerResponse.model_validate(worker.to_dict())
+
+
+@router.post("/distributed/fleet/workers/stale-scan", response_model=FleetWorkerListResponse)
+async def scan_stale_fleet_workers(req: FleetStaleWorkerRequest) -> FleetWorkerListResponse:
+    """Mark stale Probe Workers using the requested heartbeat age threshold."""
+    try:
+        workers = mark_stale_workers(max_heartbeat_age_seconds=req.max_heartbeat_age_seconds)
+    except FleetExecutorStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    return FleetWorkerListResponse(
+        workers=[FleetWorkerResponse.model_validate(worker.to_dict()) for worker in workers]
+    )
+
+
+@router.get("/distributed/fleet/workers", response_model=FleetWorkerListResponse)
+async def list_fleet_workers() -> FleetWorkerListResponse:
+    """List registered Probe Workers."""
+    return FleetWorkerListResponse(
+        workers=[FleetWorkerResponse.model_validate(worker.to_dict()) for worker in list_workers()]
+    )
+
+
+@router.post("/distributed/session/{audit_id}/fleet/prepare", response_model=FleetRunResponse)
+async def prepare_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
+    """Create fleet jobs from a dispatched distributed audit run."""
+    try:
+        run = prepare_fleet_for_audit(audit_id)
+    except FleetExecutorStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if run is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    return FleetRunResponse.model_validate(run.to_dict())
+
+
+@router.post("/distributed/session/{audit_id}/fleet/job/lease", response_model=FleetJobResponse | None)
+async def lease_distributed_fleet_job(
+    audit_id: str,
+    req: FleetLeaseRequest,
+) -> FleetJobResponse | None:
+    """Lease the next queued fleet job assigned to a registered Probe Worker."""
+    try:
+        job = lease_next_job(
+            audit_id=audit_id,
+            worker_id=req.worker_id,
+            lease_seconds=req.lease_seconds,
+        )
+    except FleetExecutorStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if job is None:
+        if get_fleet_run(audit_id) is None:
+            raise HTTPException(status_code=404, detail="Fleet run not found")
+        return None
+    return FleetJobResponse.model_validate(job.to_dict(include_lease_token=True))
+
+
+@router.post("/distributed/session/{audit_id}/fleet/job/{job_id}/receipt", response_model=FleetRunResponse)
+async def submit_distributed_fleet_job_receipt(
+    audit_id: str,
+    job_id: str,
+    req: FleetJobReceiptRequest,
+) -> FleetRunResponse:
+    """Submit one worker Evidence Packet fragment receipt for a leased job."""
+    try:
+        run = submit_job_receipt(
+            audit_id=audit_id,
+            job_id=job_id,
+            worker_id=req.worker_id,
+            lease_token=req.lease_token,
+            produced_outputs=req.produced_outputs,
+            missing_outputs=req.missing_outputs,
+            evidence_packet_fragment_ref=req.evidence_packet_fragment_ref,
+            error_message=req.error_message,
+            job_status=req.job_status,
+        )
+    except KeyError:
+        raise HTTPException(status_code=404, detail="Fleet job not found")
+    except (FleetExecutorStateError, DistributedAuditStateError) as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if run is None:
+        raise HTTPException(status_code=404, detail="Fleet run not found")
+    return FleetRunResponse.model_validate(run.to_dict())
+
+
+@router.post("/distributed/session/{audit_id}/fleet/merge", response_model=FleetRunResponse)
+async def merge_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
+    """Merge fleet Evidence Packet fragments only after all receipts arrive."""
+    try:
+        run = merge_fleet_evidence(audit_id)
+    except (FleetExecutorStateError, DistributedAuditStateError) as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if run is None:
+        raise HTTPException(status_code=404, detail="Fleet run not found")
+    return FleetRunResponse.model_validate(run.to_dict())
+
+
+@router.get("/distributed/session/{audit_id}/fleet", response_model=FleetRunResponse)
+async def get_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
+    """Return fleet executor state for one distributed audit."""
+    run = get_fleet_run(audit_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="Fleet run not found")
+    return FleetRunResponse.model_validate(run.to_dict())
+
+
+@router.get("/distributed/fleet/runs", response_model=FleetRunListResponse)
+async def list_distributed_fleet_runs() -> FleetRunListResponse:
+    """List fleet executor runs held by this API process."""
+    return FleetRunListResponse(
+        runs=[FleetRunResponse.model_validate(run.to_dict()) for run in list_fleet_runs()]
+    )
 
 
 @router.post("/session", response_model=AuditSessionResponse)
@@ -492,6 +994,21 @@ def _credential_mode_for(target: ModelTargetConfig) -> CredentialMode:
     if target.api_key is not None:
         return "ephemeral_secret"
     return "none"
+
+
+def _clean_string_list(values: list[str], *, field_name: str, max_length: int) -> list[str]:
+    cleaned: list[str] = []
+    seen: set[str] = set()
+    for value in values:
+        stripped = value.strip() if isinstance(value, str) else ""
+        if not stripped:
+            raise ValueError(f"{field_name} entries must be non-empty strings")
+        if len(stripped) > max_length:
+            raise ValueError(f"{field_name} entries must be {max_length} characters or fewer")
+        if stripped not in seen:
+            cleaned.append(stripped)
+            seen.add(stripped)
+    return cleaned
 
 
 def _connection_id_for(target: VerifiedModelTarget) -> str:

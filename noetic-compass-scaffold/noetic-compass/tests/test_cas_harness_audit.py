@@ -607,6 +607,38 @@ def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decis
     assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
 
 
+def test_run_route_uses_s7_f28_packet_as_conservative_human_review(client, auth_headers):
+    trace_id = "s7-f28-balanced-bridge-gpt-neox-20b-20260526"
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "model_id": "EleutherAI/gpt-neox-20b",
+            "evidence_packet_trace_id": trace_id,
+        },
+        headers=auth_headers,
+    )
+    assert created.status_code == 200, created.text
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] == 0.803571
+    assert body["evidence_packet_trace_id"] == trace_id
+    assert body["atlas_deep_link"] == f"/cockpit?trace_id={trace_id}"
+    assert body["verifier_decision"]["source"] == "S7-F28-BALANCED-BRIDGE"
+    assert set(chips.values()).issubset({"verified", "present"})
+    assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
+
+
 def test_run_route_suppresses_only_when_complete_packet_has_explicit_rejection(
     client,
     auth_headers,

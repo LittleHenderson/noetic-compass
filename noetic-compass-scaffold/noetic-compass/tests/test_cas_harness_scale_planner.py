@@ -67,6 +67,26 @@ def test_three_hundred_b_model_caps_to_supported_enterprise_plan():
     assert plan.memory_estimate.estimated_memory_per_worker_gb < 80
 
 
+def test_three_hundred_b_model_can_request_larger_tensor_shard_fleet():
+    plan = build_scale_plan(
+        ScalePlanRequest(
+            model_id="customer/open-300b",
+            parameter_count_b=300,
+            num_layers=160,
+            precision="int4",
+            available_gpu_memory_gb=80,
+            minimum_worker_count=300,
+        )
+    )
+
+    assert plan.recommended_worker_count == 300
+    assert len(plan.worker_assignments) == 300
+    assert plan.worker_assignments[0].shard_id.startswith("layer-")
+    assert plan.worker_assignments[0].layer_start == plan.worker_assignments[0].layer_end
+    assert plan.worker_assignments[-1].layer_end == 159
+    assert {assignment.layer_start for assignment in plan.worker_assignments} == set(range(160))
+
+
 def test_missing_layers_falls_back_to_reasonable_layer_count():
     plan = build_scale_plan(ScalePlanRequest(model_id="open-70b", parameter_count_b=70))
 
