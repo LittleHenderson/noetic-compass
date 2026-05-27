@@ -235,6 +235,32 @@ const CAS_HARNESS_METHOD_STEPS: Array<{ title: string; body: string }> = [
 const CAS_METHOD_SUMMARY =
   'Canonical label: S7-F28-BALANCED-BRIDGE. Plain name: S7-F28 Balanced Bridge Method. CAS Harness is not a pretty label overlay; this method means source-defined labels, real hidden states, balanced probe, targeted removal, matched controls, output-likelihood bridge, trace diagnostics, then Evidence Packet verdict.';
 
+const TKS40_TEXT_BASELINE_SUMMARY =
+  'TKS40 is guarded right now. GPT-NeoX-20B hidden states read the balanced TKS40 axis at 97.50%, but a text-only classifier also reached 100.00%. That means the current TKS40 prompt library is too easy from wording alone, so it cannot support the claim that CAS beats text-only baselines yet.';
+
+const TKS40_TEXT_BASELINE_STEPS: Array<{ title: string; body: string }> = [
+  {
+    title: 'What text baseline means.',
+    body:
+      'It is a classifier that sees only the scenario words. It does not load the model and does not inspect hidden states.',
+  },
+  {
+    title: 'Why 100% blocks the TKS40 comparison claim.',
+    body:
+      'If text alone gets every heldout label right, the scenario wording is acting like an answer key. Hidden readout can still be real, but it has not beaten a meaningful text adversary.',
+  },
+  {
+    title: 'What remains true.',
+    body:
+      'The current TKS40 packet still shows a strong 20B hidden-state signal above majority and shuffled-label controls. It just cannot claim CAS beats surface text on TKS40.',
+  },
+  {
+    title: 'What fixes it.',
+    body:
+      'Build TKS40 v1 with concrete situations, lexical distractors, grouped paraphrases, at least 25 examples per class, and a pre-registered text-baseline ceiling of 60% or lower.',
+  },
+];
+
 const HOW_IT_RELATES = `The picture is the stimulus. The token stream is the model's response.
 The neural net shows how the response was built — which neurons fired
 to land each token. The Mode 7 arcs link the token currently being
@@ -341,6 +367,18 @@ export default function HelpOverlay({ open, onClose }: HelpOverlayProps): JSX.El
               <p style={bodyTextStyle}>{CAS_METHOD_SUMMARY}</p>
               <ol style={orderedListStyle}>
                 {CAS_HARNESS_METHOD_STEPS.map((step) => (
+                  <li key={step.title} style={listItemStyle}>
+                    <span style={inlineStrongStyle}>{step.title}</span> {step.body}
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <section style={sectionStyle} data-testid="tks40-text-baseline-faq">
+              <h3 style={sectionHeaderStyle}>FAQ: TKS40 Text Baseline Guard</h3>
+              <p style={bodyTextStyle}>{TKS40_TEXT_BASELINE_SUMMARY}</p>
+              <ol style={orderedListStyle}>
+                {TKS40_TEXT_BASELINE_STEPS.map((step) => (
                   <li key={step.title} style={listItemStyle}>
                     <span style={inlineStrongStyle}>{step.title}</span> {step.body}
                   </li>

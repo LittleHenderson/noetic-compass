@@ -7,8 +7,9 @@ The original Pythia Stage 9 fixture tested the user's TKS 40 Elements:
 This worker-side builder mirrors that source surface for large-model open-
 weight replication. It emits current CAS labels (`operator x domain`) plus the
 legacy A1-D10 code used by the original methodology. Prompt text avoids literal
-class codes and framework names so the scenario can be evaluated against text
-baselines without leaking labels directly.
+class codes and framework names, but the compact source glosses are still
+highly text-separable. Treat this v0 library as a source-derived
+activation/readout fixture, not a final "CAS beats text" adversarial eval set.
 """
 
 from __future__ import annotations
@@ -171,7 +172,7 @@ def build_payload(*, examples_per_class: int) -> dict[str, Any]:
         "scenario_count": len(scenarios),
         "important_limit": (
             "Scenario source only. This is not a probe result, ablation result, "
-            "verifier verdict, or Evidence Packet."
+            "verifier verdict, Evidence Packet, or final text-baseline adversary."
         ),
         "scenarios": scenarios,
     }

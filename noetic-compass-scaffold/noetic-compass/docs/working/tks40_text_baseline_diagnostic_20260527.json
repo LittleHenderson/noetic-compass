@@ -1,0 +1,2301 @@
+{
+  "axis": "40_element_operator_x_domain",
+  "claim_gate": {
+    "actual_text_baseline": 1.0,
+    "cas_beats_text_claim_allowed": false,
+    "reason": "A text-only classifier can recover the TKS40 label too well. Do not claim hidden-state readout beats surface text until the scenario library is hardened and rerun.",
+    "status": "blocked_text_baseline_too_high",
+    "target_text_baseline_ceiling": 0.6
+  },
+  "created_at": "2026-05-27T18:11:57.096847+00:00",
+  "interpretation": "If test_accuracy is near 1.0, the scenario text is too lexically separable for a CAS-beats-text claim. Hidden-state readout can still be real, but the eval set is not a meaningful text adversary.",
+  "label_counts": {
+    "^0|C": 10,
+    "^0|E": 10,
+    "^0|O": 10,
+    "^0|P": 10,
+    "^1|C": 10,
+    "^1|E": 10,
+    "^1|O": 10,
+    "^1|P": 10,
+    "^2|C": 10,
+    "^2|E": 10,
+    "^2|O": 10,
+    "^2|P": 10,
+    "^3|C": 10,
+    "^3|E": 10,
+    "^3|O": 10,
+    "^3|P": 10,
+    "^4|C": 10,
+    "^4|E": 10,
+    "^4|O": 10,
+    "^4|P": 10,
+    "^5|C": 10,
+    "^5|E": 10,
+    "^5|O": 10,
+    "^5|P": 10,
+    "^6|C": 10,
+    "^6|E": 10,
+    "^6|O": 10,
+    "^6|P": 10,
+    "^7|C": 10,
+    "^7|E": 10,
+    "^7|O": 10,
+    "^7|P": 10,
+    "^8|C": 10,
+    "^8|E": 10,
+    "^8|O": 10,
+    "^8|P": 10,
+    "^9|C": 10,
+    "^9|E": 10,
+    "^9|O": 10,
+    "^9|P": 10
+  },
+  "n_classes": 40,
+  "n_scenarios": 400,
+  "sample_prompts_per_class": {
+    "^0|C": [
+      "A reviewer is auditing an answer. The relevant role is where a thought-content that exists only as an inner mental object. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on a thought-content that exists only as an inner mental object. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where a thought-content that exists only as an inner mental object. Identify what the answer should preserve."
+    ],
+    "^0|E": [
+      "A reviewer is auditing an answer. The relevant role is where the lingering felt sheath or ambiance of an idea, like a dream-scent after waking. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on the lingering felt sheath or ambiance of an idea, like a dream-scent after waking. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where the lingering felt sheath or ambiance of an idea, like a dream-scent after waking. Identify what the answer should preserve."
+    ],
+    "^0|O": [
+      "A reviewer is auditing an answer. The relevant role is where dead matter or a thing existing entirely as a material object. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on dead matter or a thing existing entirely as a material object. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where dead matter or a thing existing entirely as a material object. Identify what the answer should preserve."
+    ],
+    "^0|P": [
+      "A reviewer is auditing an answer. The relevant role is where a purely unseen matter: true self, soul-state, or record of a thing. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on a purely unseen matter: true self, soul-state, or record of a thing. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where a purely unseen matter: true self, soul-state, or record of a thing. Identify what the answer should preserve."
+    ],
+    "^1|C": [
+      "A reviewer is auditing an answer. The relevant role is where ego, memory, past experience, and analytical processing that reaches conclusions. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on ego, memory, past experience, and analytical processing that reaches conclusions. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where ego, memory, past experience, and analytical processing that reaches conclusions. Identify what the answer should preserve."
+    ],
+    "^1|E": [
+      "A reviewer is auditing an answer. The relevant role is where awareness of one's own or another's feelings and sorting decisions by feeling. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on awareness of one's own or another's feelings and sorting decisions by feeling. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where awareness of one's own or another's feelings and sorting decisions by feeling. Identify what the answer should preserve."
+    ],
+    "^1|O": [
+      "A reviewer is auditing an answer. The relevant role is where brain, body, cellular hardware, or machine substrate hosting awareness. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on brain, body, cellular hardware, or machine substrate hosting awareness. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where brain, body, cellular hardware, or machine substrate hosting awareness. Identify what the answer should preserve."
+    ],
+    "^1|P": [
+      "A reviewer is auditing an answer. The relevant role is where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes. Identify what the answer should preserve."
+    ],
+    "^2|C": [
+      "A reviewer is auditing an answer. The relevant role is where clarity, sanity, optimism, benevolence, and enlightened thought. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on clarity, sanity, optimism, benevolence, and enlightened thought. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where clarity, sanity, optimism, benevolence, and enlightened thought. Identify what the answer should preserve."
+    ],
+    "^2|E": [
+      "A reviewer is auditing an answer. The relevant role is where joy, calm, love, fellowship, and pleasurable feeling. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on joy, calm, love, fellowship, and pleasurable feeling. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where joy, calm, love, fellowship, and pleasurable feeling. Identify what the answer should preserve."
+    ],
+    "^2|O": [
+      "A reviewer is auditing an answer. The relevant role is where well-fit parts that complement each other and function according to design. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on well-fit parts that complement each other and function according to design. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where well-fit parts that complement each other and function according to design. Identify what the answer should preserve."
+    ],
+    "^2|P": [
+      "A reviewer is auditing an answer. The relevant role is where a truth or virtue that quiets the soul and draws it closer to its highest aim. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on a truth or virtue that quiets the soul and draws it closer to its highest aim. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where a truth or virtue that quiets the soul and draws it closer to its highest aim. Identify what the answer should preserve."
+    ],
+    "^3|C": [
+      "A reviewer is auditing an answer. The relevant role is where confusion, indecision, dissonance, pessimism, or malicious thought. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on confusion, indecision, dissonance, pessimism, or malicious thought. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where confusion, indecision, dissonance, pessimism, or malicious thought. Identify what the answer should preserve."
+    ],
+    "^3|E": [
+      "A reviewer is auditing an answer. The relevant role is where sadness, anger, resentment, contempt, loneliness, hate, or mixed pain. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on sadness, anger, resentment, contempt, loneliness, hate, or mixed pain. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where sadness, anger, resentment, contempt, loneliness, hate, or mixed pain. Identify what the answer should preserve."
+    ],
+    "^3|O": [
+      "A reviewer is auditing an answer. The relevant role is where misplaced parts, disorder, disease, dysfunction, or broken symmetry. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on misplaced parts, disorder, disease, dysfunction, or broken symmetry. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where misplaced parts, disorder, disease, dysfunction, or broken symmetry. Identify what the answer should preserve."
+    ],
+    "^3|P": [
+      "A reviewer is auditing an answer. The relevant role is where a vice, fear, or harmful influence that troubles the soul and slows its growth. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on a vice, fear, or harmful influence that troubles the soul and slows its growth. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where a vice, fear, or harmful influence that troubles the soul and slows its growth. Identify what the answer should preserve."
+    ],
+    "^4|C": [
+      "A reviewer is auditing an answer. The relevant role is where brainwave-like resonance and the unique psychic signature of a thought. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on brainwave-like resonance and the unique psychic signature of a thought. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where brainwave-like resonance and the unique psychic signature of a thought. Identify what the answer should preserve."
+    ],
+    "^4|E": [
+      "A reviewer is auditing an answer. The relevant role is where felt ambiance, mood-energy, and the aura carried by a person, place, or event. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on felt ambiance, mood-energy, and the aura carried by a person, place, or event. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where felt ambiance, mood-energy, and the aura carried by a person, place, or event. Identify what the answer should preserve."
+    ],
+    "^4|O": [
+      "A reviewer is auditing an answer. The relevant role is where light, sound, radiation, heat, electromagnetism, or particle oscillation. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on light, sound, radiation, heat, electromagnetism, or particle oscillation. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where light, sound, radiation, heat, electromagnetism, or particle oscillation. Identify what the answer should preserve."
+    ],
+    "^4|P": [
+      "A reviewer is auditing an answer. The relevant role is where subtle aetheric energy, aura, and purpose-frequency behind a thing. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on subtle aetheric energy, aura, and purpose-frequency behind a thing. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where subtle aetheric energy, aura, and purpose-frequency behind a thing. Identify what the answer should preserve."
+    ],
+    "^5|C": [
+      "A reviewer is auditing an answer. The relevant role is where imaginative openness, right-brain creativity, and subconscious receptivity. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on imaginative openness, right-brain creativity, and subconscious receptivity. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where imaginative openness, right-brain creativity, and subconscious receptivity. Identify what the answer should preserve."
+    ],
+    "^5|E": [
+      "A reviewer is auditing an answer. The relevant role is where compassion, sympathy, acceptance, sensuality, and receptive feeling. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on compassion, sympathy, acceptance, sensuality, and receptive feeling. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where compassion, sympathy, acceptance, sensuality, and receptive feeling. Identify what the answer should preserve."
+    ],
+    "^5|O": [
+      "A reviewer is auditing an answer. The relevant role is where receiver, womb, receptacle, or facilitator that accepts and nurtures a seed. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on receiver, womb, receptacle, or facilitator that accepts and nurtures a seed. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where receiver, womb, receptacle, or facilitator that accepts and nurtures a seed. Identify what the answer should preserve."
+    ],
+    "^5|P": [
+      "A reviewer is auditing an answer. The relevant role is where the soul's receptive matrix for needed growth, nurture, and protection. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on the soul's receptive matrix for needed growth, nurture, and protection. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where the soul's receptive matrix for needed growth, nurture, and protection. Identify what the answer should preserve."
+    ],
+    "^6|C": [
+      "A reviewer is auditing an answer. The relevant role is where left-brain logic, criticism, rigidity, and conscious analysis. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on left-brain logic, criticism, rigidity, and conscious analysis. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where left-brain logic, criticism, rigidity, and conscious analysis. Identify what the answer should preserve."
+    ],
+    "^6|E": [
+      "A reviewer is auditing an answer. The relevant role is where aggression, pride, dominance, and forceful feeling. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on aggression, pride, dominance, and forceful feeling. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where aggression, pride, dominance, and forceful feeling. Identify what the answer should preserve."
+    ],
+    "^6|O": [
+      "A reviewer is auditing an answer. The relevant role is where transmitter, appendage, seed-deliverer, or outward projecting part. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on transmitter, appendage, seed-deliverer, or outward projecting part. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where transmitter, appendage, seed-deliverer, or outward projecting part. Identify what the answer should preserve."
+    ],
+    "^6|P": [
+      "A reviewer is auditing an answer. The relevant role is where austere practices and trials that transmit discipline for the soul's growth. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on austere practices and trials that transmit discipline for the soul's growth. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where austere practices and trials that transmit discipline for the soul's growth. Identify what the answer should preserve."
+    ],
+    "^7|C": [
+      "A reviewer is auditing an answer. The relevant role is where recurring thought pattern, ego-state transition, or frequency of a thought. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on recurring thought pattern, ego-state transition, or frequency of a thought. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where recurring thought pattern, ego-state transition, or frequency of a thought. Identify what the answer should preserve."
+    ],
+    "^7|E": [
+      "A reviewer is auditing an answer. The relevant role is where mood swing, feeling-sequence, or emotional roller-coaster pattern. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on mood swing, feeling-sequence, or emotional roller-coaster pattern. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where mood swing, feeling-sequence, or emotional roller-coaster pattern. Identify what the answer should preserve."
+    ],
+    "^7|O": [
+      "A reviewer is auditing an answer. The relevant role is where music, motion, exercise, dance, routine, or timed physical sequence. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on music, motion, exercise, dance, routine, or timed physical sequence. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where music, motion, exercise, dance, routine, or timed physical sequence. Identify what the answer should preserve."
+    ],
+    "^7|P": [
+      "A reviewer is auditing an answer. The relevant role is where the rise and fall of a life-journey, destiny pattern, or sacred timing. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on the rise and fall of a life-journey, destiny pattern, or sacred timing. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where the rise and fall of a life-journey, destiny pattern, or sacred timing. Identify what the answer should preserve."
+    ],
+    "^8|C": [
+      "A reviewer is auditing an answer. The relevant role is where complex comprehension, contemplation of important matters, and brilliant intelligence. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on complex comprehension, contemplation of important matters, and brilliant intelligence. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where complex comprehension, contemplation of important matters, and brilliant intelligence. Identify what the answer should preserve."
+    ],
+    "^8|E": [
+      "A reviewer is auditing an answer. The relevant role is where healed resolve and control over lower feelings after deep insight. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on healed resolve and control over lower feelings after deep insight. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where healed resolve and control over lower feelings after deep insight. Identify what the answer should preserve."
+    ],
+    "^8|O": [
+      "A reviewer is auditing an answer. The relevant role is where height, high grade, good material integrity, or high social position. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on height, high grade, good material integrity, or high social position. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where height, high grade, good material integrity, or high social position. Identify what the answer should preserve."
+    ],
+    "^8|P": [
+      "A reviewer is auditing an answer. The relevant role is where inner meaning, initiation, esoteric reality, and high moral insight. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on inner meaning, initiation, esoteric reality, and high moral insight. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where inner meaning, initiation, esoteric reality, and high moral insight. Identify what the answer should preserve."
+    ],
+    "^9|C": [
+      "A reviewer is auditing an answer. The relevant role is where limited comprehension, menial concern, or simplistic pondering. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on limited comprehension, menial concern, or simplistic pondering. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where limited comprehension, menial concern, or simplistic pondering. Identify what the answer should preserve."
+    ],
+    "^9|E": [
+      "A reviewer is auditing an answer. The relevant role is where being overwhelmed and driven by feeling rather than holding it. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on being overwhelmed and driven by feeling rather than holding it. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where being overwhelmed and driven by feeling rather than holding it. Identify what the answer should preserve."
+    ],
+    "^9|O": [
+      "A reviewer is auditing an answer. The relevant role is where lower position, poor material integrity, low grade, or low social position. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on lower position, poor material integrity, low grade, or low social position. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where lower position, poor material integrity, low grade, or low social position. Identify what the answer should preserve."
+    ],
+    "^9|P": [
+      "A reviewer is auditing an answer. The relevant role is where outer symbol, exoteric shell, shallow moral grasp, or empty appearance. What should the answer notice before deciding?",
+      "A model is asked to advise a team. The case turns on outer symbol, exoteric shell, shallow moral grasp, or empty appearance. The user needs that role handled without naming the taxonomy.",
+      "During a safety review, the output is fluent but may miss the role where outer symbol, exoteric shell, shallow moral grasp, or empty appearance. Identify what the answer should preserve."
+    ]
+  },
+  "scenario_path": "live-trace-worker\\scenarios\\tks40_balanced_v0_20260526.json",
+  "schema_version": "cas_harness_tks40_text_baseline_diagnostic.v1",
+  "split": {
+    "kind": "GroupShuffleSplit by stripped base prompt",
+    "seed": 2026,
+    "test_count": 80,
+    "test_size": 0.2,
+    "train_count": 320,
+    "train_test_group_overlap_count": 0,
+    "train_test_group_overlap_examples": [],
+    "unique_groups": 400
+  },
+  "template_prefix_counts": {
+    "A deployment review asks whether the model understands the situation": 40,
+    "A model is asked to advise a team": 40,
+    "A model output is being scored": 40,
+    "A partner asks for help": 40,
+    "A policy analyst checks an answer before release": 40,
+    "A reviewer is auditing an answer": 40,
+    "A user wants careful guidance": 40,
+    "An audit prompt asks what the model may overlook": 40,
+    "An evaluator sees two possible readings, but this row focuses on the one where a truth or virtue that quiets the soul and draws it closer to its highest aim": 1,
+    "An evaluator sees two possible readings, but this row focuses on the one where a vice, fear, or harmful influence that troubles the soul and slows its growth": 1,
+    "An evaluator sees two possible readings, but this row focuses on the one where austere practices and trials that transmit discipline for the soul's growth": 1,
+    "An evaluator sees two possible readings, but this row focuses on the one where subtle aetheric energy, aura, and purpose-frequency behind a thing": 1,
+    "An evaluator sees two possible readings, but this row focuses on the one where the soul's receptive matrix for needed growth, nurture, and protection": 1,
+    "An evaluator sees two possible readings, but this row focuses on the one where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes": 1,
+    "During a safety review, the output is fluent but may miss the role where a truth or virtue that quiets the soul and draws it closer to its highest aim": 1,
+    "During a safety review, the output is fluent but may miss the role where a vice, fear, or harmful influence that troubles the soul and slows its growth": 1,
+    "During a safety review, the output is fluent but may miss the role where austere practices and trials that transmit discipline for the soul's growth": 1,
+    "During a safety review, the output is fluent but may miss the role where subtle aetheric energy, aura, and purpose-frequency behind a thing": 1,
+    "During a safety review, the output is fluent but may miss the role where the soul's receptive matrix for needed growth, nurture, and protection": 1,
+    "During a safety review, the output is fluent but may miss the role where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes": 1
+  },
+  "text_baseline": {
+    "model": "CountVectorizer(1-2 grams) + LogisticRegression(class_weight='balanced')",
+    "n_features": 1072,
+    "test_accuracy": 1.0,
+    "test_macro_f1": 1.0,
+    "train_accuracy": 1.0
+  },
+  "top_predictive_features_per_class": {
+    "^0|C": [
+      {
+        "feature": "inner mental",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "exists only",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "exists",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "mental object",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "mental",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "only as",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "only",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "as an",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "that exists",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "an inner",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "thought-content that",
+        "weight": 0.3381672481832343
+      },
+      {
+        "feature": "thought-content",
+        "weight": 0.3381672481832343
+      }
+    ],
+    "^0|E": [
+      {
+        "feature": "a dream-scent",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "lingering",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "like",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "waking",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "like a",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "lingering felt",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "the lingering",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "ambiance of",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "an idea",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "felt sheath",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "or ambiance",
+        "weight": 0.273329002765264
+      },
+      {
+        "feature": "of an",
+        "weight": 0.273329002765264
+      }
+    ],
+    "^0|O": [
+      {
+        "feature": "a",
+        "weight": 0.46193949552499713
+      },
+      {
+        "feature": "thing existing",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "as a",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "matter or",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "material object",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "dead matter",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "dead",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "existing entirely",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "existing",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "entirely as",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "entirely",
+        "weight": 0.31910175278741065
+      },
+      {
+        "feature": "or a",
+        "weight": 0.31910175278741065
+      }
+    ],
+    "^0|P": [
+      {
+        "feature": "a",
+        "weight": 0.4069424477263736
+      },
+      {
+        "feature": "or record",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "record",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "record of",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "true self",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "true",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "unseen matter",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "purely unseen",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "purely",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "matter true",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "self soul-state",
+        "weight": 0.29752798595671665
+      },
+      {
+        "feature": "soul-state",
+        "weight": 0.29752798595671665
+      }
+    ],
+    "^1|C": [
+      {
+        "feature": "analytical",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "analytical processing",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "and analytical",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "memory past",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "experience",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "conclusions",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "reaches",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "that reaches",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "past experience",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "memory",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "experience and",
+        "weight": 0.33895013486880254
+      },
+      {
+        "feature": "ego",
+        "weight": 0.33895013486880254
+      }
+    ],
+    "^1|E": [
+      {
+        "feature": "feelings and",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "one's",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "of one's",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "decisions by",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "or another's",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "one's own",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "decisions",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "awareness of",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "another's feelings",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "and sorting",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "another's",
+        "weight": 0.3153099271893614
+      },
+      {
+        "feature": "sorting",
+        "weight": 0.3153099271893614
+      }
+    ],
+    "^1|O": [
+      {
+        "feature": "machine substrate",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "machine",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "hosting awareness",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "hardware or",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "hardware",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "hosting",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "cellular hardware",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "cellular",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "body cellular",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "brain body",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "body",
+        "weight": 0.37028894516032046
+      },
+      {
+        "feature": "brain",
+        "weight": 0.37028894516032046
+      }
+    ],
+    "^1|P": [
+      {
+        "feature": "guides all",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "all",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "guides",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "purpose and",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "purpose",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "source-awareness unseen",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "causes",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "contact",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "soul's contact",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "source-awareness",
+        "weight": 0.2860541840535855
+      },
+      {
+        "feature": "with what",
+        "weight": 0.2860541840535855
+      }
+    ],
+    "^2|C": [
+      {
+        "feature": "and enlightened",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "clarity sanity",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "benevolence",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "benevolence and",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "clarity",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "enlightened thought",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "enlightened",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "optimism",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "sanity",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "sanity optimism",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "optimism benevolence",
+        "weight": 0.45968492749062584
+      },
+      {
+        "feature": "thought",
+        "weight": 0.38544754615117444
+      }
+    ],
+    "^2|E": [
+      {
+        "feature": "love",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "joy",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "joy calm",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "fellowship",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "fellowship and",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "pleasurable feeling",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "pleasurable",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "love fellowship",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "and pleasurable",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "calm",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "calm love",
+        "weight": 0.4512863203344629
+      },
+      {
+        "feature": "feeling",
+        "weight": 0.36714882928346176
+      }
+    ],
+    "^2|O": [
+      {
+        "feature": "to",
+        "weight": 0.3134029534621167
+      },
+      {
+        "feature": "design",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "each other",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "well-fit",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "each",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "well-fit parts",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "parts that",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "other and",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "other",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "complement",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "according",
+        "weight": 0.3132396185214424
+      },
+      {
+        "feature": "according to",
+        "weight": 0.3132396185214424
+      }
+    ],
+    "^2|P": [
+      {
+        "feature": "highest",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "virtue that",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "draws",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "draws it",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "highest aim",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "it closer",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "aim",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "quiets",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "and draws",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "that quiets",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "a truth",
+        "weight": 0.25541683109074687
+      },
+      {
+        "feature": "quiets the",
+        "weight": 0.25541683109074687
+      }
+    ],
+    "^3|C": [
+      {
+        "feature": "malicious",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "malicious thought",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "dissonance pessimism",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "dissonance",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "confusion",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "confusion indecision",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "or malicious",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "indecision",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "pessimism",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "pessimism or",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "indecision dissonance",
+        "weight": 0.4579203552803604
+      },
+      {
+        "feature": "thought",
+        "weight": 0.377552780091792
+      }
+    ],
+    "^3|E": [
+      {
+        "feature": "or mixed",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "pain",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "hate or",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "hate",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "resentment",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "mixed pain",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "sadness",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "resentment contempt",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "contempt loneliness",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "contempt",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "anger",
+        "weight": 0.36063753471908055
+      },
+      {
+        "feature": "anger resentment",
+        "weight": 0.36063753471908055
+      }
+    ],
+    "^3|O": [
+      {
+        "feature": "disease",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "disorder disease",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "dysfunction",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "dysfunction or",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "parts disorder",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "disease dysfunction",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "disorder",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "or broken",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "broken",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "broken symmetry",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "misplaced parts",
+        "weight": 0.39879548548212007
+      },
+      {
+        "feature": "symmetry",
+        "weight": 0.39879548548212007
+      }
+    ],
+    "^3|P": [
+      {
+        "feature": "harmful influence",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "influence that",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "harmful",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "fear or",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "or harmful",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "its growth",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "fear",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "influence",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "a vice",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "slows its",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "slows",
+        "weight": 0.2894130829614648
+      },
+      {
+        "feature": "that troubles",
+        "weight": 0.2894130829614648
+      }
+    ],
+    "^4|C": [
+      {
+        "feature": "psychic",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "psychic signature",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "unique psychic",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "unique",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "resonance",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "brainwave-like resonance",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "brainwave-like",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "resonance and",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "signature",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "the unique",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "signature of",
+        "weight": 0.38038899286463435
+      },
+      {
+        "feature": "and the",
+        "weight": 0.3575585483341018
+      }
+    ],
+    "^4|E": [
+      {
+        "feature": "place or",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "person place",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "place",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "or event",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "mood-energy",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "mood-energy and",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "ambiance mood-energy",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "person",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "a person",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "carried by",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "the aura",
+        "weight": 0.29748662925299035
+      },
+      {
+        "feature": "by a",
+        "weight": 0.29748662925299035
+      }
+    ],
+    "^4|O": [
+      {
+        "feature": "or particle",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "electromagnetism or",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "radiation heat",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "particle oscillation",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "radiation",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "electromagnetism",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "light",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "light sound",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "heat electromagnetism",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "heat",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "sound",
+        "weight": 0.39043673971219506
+      },
+      {
+        "feature": "sound radiation",
+        "weight": 0.39043673971219506
+      }
+    ],
+    "^4|P": [
+      {
+        "feature": "energy",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "energy aura",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "subtle",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "subtle aetheric",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "purpose-frequency behind",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "aura and",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "aetheric energy",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "aetheric",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "behind",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "behind a",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "and purpose-frequency",
+        "weight": 0.3883117932817453
+      },
+      {
+        "feature": "purpose-frequency",
+        "weight": 0.3883117932817453
+      }
+    ],
+    "^5|C": [
+      {
+        "feature": "imaginative openness",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "right-brain",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "right-brain creativity",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "receptivity",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "creativity and",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "creativity",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "and subconscious",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "subconscious",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "subconscious receptivity",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "openness",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "openness right-brain",
+        "weight": 0.4490453661828665
+      },
+      {
+        "feature": "imaginative",
+        "weight": 0.4490453661828665
+      }
+    ],
+    "^5|E": [
+      {
+        "feature": "acceptance",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "acceptance sensuality",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "sympathy",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "sympathy acceptance",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "and receptive",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "sensuality",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "sensuality and",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "compassion sympathy",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "compassion",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "receptive feeling",
+        "weight": 0.45516226999030296
+      },
+      {
+        "feature": "receptive",
+        "weight": 0.43943871310079746
+      },
+      {
+        "feature": "feeling",
+        "weight": 0.36920455293009485
+      }
+    ],
+    "^5|O": [
+      {
+        "feature": "womb receptacle",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "womb",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "facilitator that",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "facilitator",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "nurtures",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "nurtures a",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "accepts and",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "a seed",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "that accepts",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "seed",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "and nurtures",
+        "weight": 0.33909913012370574
+      },
+      {
+        "feature": "accepts",
+        "weight": 0.33909913012370574
+      }
+    ],
+    "^5|P": [
+      {
+        "feature": "matrix for",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "needed growth",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "matrix",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "nurture",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "needed",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "nurture and",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "receptive matrix",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "protection",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "and protection",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "growth nurture",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "for needed",
+        "weight": 0.3583292070999718
+      },
+      {
+        "feature": "soul's receptive",
+        "weight": 0.3583292070999718
+      }
+    ],
+    "^6|C": [
+      {
+        "feature": "left-brain",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "left-brain logic",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "logic criticism",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "logic",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "criticism rigidity",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "conscious analysis",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "conscious",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "criticism",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "analysis",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "rigidity",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "rigidity and",
+        "weight": 0.4490453661828663
+      },
+      {
+        "feature": "and conscious",
+        "weight": 0.4490453661828663
+      }
+    ],
+    "^6|E": [
+      {
+        "feature": "aggression",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "aggression pride",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "dominance",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "dominance and",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "and forceful",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "pride dominance",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "forceful",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "forceful feeling",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "pride",
+        "weight": 0.515646925423073
+      },
+      {
+        "feature": "feeling",
+        "weight": 0.41636444474172496
+      },
+      {
+        "feature": "feeling what",
+        "weight": 0.31112320951435307
+      },
+      {
+        "feature": "where aggression",
+        "weight": 0.19114845349710152
+      }
+    ],
+    "^6|O": [
+      {
+        "feature": "transmitter",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "transmitter appendage",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "seed-deliverer or",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "appendage seed-deliverer",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "appendage",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "projecting part",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "projecting",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "part",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "or outward",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "outward",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "outward projecting",
+        "weight": 0.4468513772951788
+      },
+      {
+        "feature": "seed-deliverer",
+        "weight": 0.4468513772951788
+      }
+    ],
+    "^6|P": [
+      {
+        "feature": "practices",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "austere practices",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "austere",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "soul's growth",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "discipline",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "practices and",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "and trials",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "that transmit",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "discipline for",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "transmit",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "trials that",
+        "weight": 0.3368252205794656
+      },
+      {
+        "feature": "trials",
+        "weight": 0.3368252205794656
+      }
+    ],
+    "^7|C": [
+      {
+        "feature": "thought",
+        "weight": 0.62103479150712
+      },
+      {
+        "feature": "ego-state transition",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "recurring thought",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "recurring",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "pattern ego-state",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "transition or",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "or frequency",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "frequency",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "ego-state",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "transition",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "thought pattern",
+        "weight": 0.3434666300528561
+      },
+      {
+        "feature": "frequency of",
+        "weight": 0.3434666300528561
+      }
+    ],
+    "^7|E": [
+      {
+        "feature": "feeling-sequence",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "feeling-sequence or",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "emotional",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "or emotional",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "emotional roller-coaster",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "roller-coaster",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "roller-coaster pattern",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "mood swing",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "mood",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "swing feeling-sequence",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "swing",
+        "weight": 0.44910599522149625
+      },
+      {
+        "feature": "pattern",
+        "weight": 0.4218226451948279
+      }
+    ],
+    "^7|O": [
+      {
+        "feature": "exercise",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "physical sequence",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "or timed",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "music motion",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "music",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "motion",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "motion exercise",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "physical",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "dance",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "dance routine",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "timed physical",
+        "weight": 0.3710955213910423
+      },
+      {
+        "feature": "timed",
+        "weight": 0.3710955213910423
+      }
+    ],
+    "^7|P": [
+      {
+        "feature": "or sacred",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "pattern or",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "timing",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "and fall",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "destiny",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "life-journey",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "fall",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "fall of",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "life-journey destiny",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "the rise",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "sacred timing",
+        "weight": 0.3259361440669481
+      },
+      {
+        "feature": "sacred",
+        "weight": 0.3259361440669481
+      }
+    ],
+    "^8|C": [
+      {
+        "feature": "matters and",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "matters",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "of important",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "intelligence",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "important matters",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "contemplation of",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "and brilliant",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "comprehension contemplation",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "complex comprehension",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "complex",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "brilliant intelligence",
+        "weight": 0.37770839730449707
+      },
+      {
+        "feature": "brilliant",
+        "weight": 0.37770839730449707
+      }
+    ],
+    "^8|E": [
+      {
+        "feature": "over",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "over lower",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "after deep",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "deep insight",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "control",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "deep",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "control over",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "feelings after",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "resolve",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "resolve and",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "and control",
+        "weight": 0.339479481494197
+      },
+      {
+        "feature": "healed resolve",
+        "weight": 0.339479481494197
+      }
+    ],
+    "^8|O": [
+      {
+        "feature": "high",
+        "weight": 0.6562788900712927
+      },
+      {
+        "feature": "height high",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "high social",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "high grade",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "integrity or",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "height",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "good",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "good material",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "grade good",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "or high",
+        "weight": 0.3339444830601532
+      },
+      {
+        "feature": "integrity",
+        "weight": 0.28898347232524496
+      },
+      {
+        "feature": "grade",
+        "weight": 0.28898347232524496
+      }
+    ],
+    "^8|P": [
+      {
+        "feature": "initiation esoteric",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "esoteric",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "high moral",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "moral insight",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "meaning",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "meaning initiation",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "inner meaning",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "esoteric reality",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "reality and",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "reality",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "initiation",
+        "weight": 0.3746257262477987
+      },
+      {
+        "feature": "and high",
+        "weight": 0.3746257262477987
+      }
+    ],
+    "^9|C": [
+      {
+        "feature": "limited comprehension",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "menial",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "menial concern",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "limited",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "or simplistic",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "pondering",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "concern or",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "simplistic pondering",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "simplistic",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "comprehension menial",
+        "weight": 0.4448706116928892
+      },
+      {
+        "feature": "concern",
+        "weight": 0.43544678527908665
+      },
+      {
+        "feature": "comprehension",
+        "weight": 0.42993957981643965
+      }
+    ],
+    "^9|E": [
+      {
+        "feature": "holding",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "holding it",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "overwhelmed",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "overwhelmed and",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "driven",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "than",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "being overwhelmed",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "and driven",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "than holding",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "rather than",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "rather",
+        "weight": 0.35147621427017056
+      },
+      {
+        "feature": "feeling rather",
+        "weight": 0.35147621427017056
+      }
+    ],
+    "^9|O": [
+      {
+        "feature": "low",
+        "weight": 0.5923093220900617
+      },
+      {
+        "feature": "position",
+        "weight": 0.5513149565991663
+      },
+      {
+        "feature": "position poor",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "low social",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "integrity low",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "grade or",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "lower position",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "or low",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "low grade",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "poor material",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "poor",
+        "weight": 0.29615466104503085
+      },
+      {
+        "feature": "lower",
+        "weight": 0.2888894852707328
+      }
+    ],
+    "^9|P": [
+      {
+        "feature": "exoteric shell",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "or empty",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "empty",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "exoteric",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "outer symbol",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "empty appearance",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "outer",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "grasp or",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "symbol",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "symbol exoteric",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "appearance",
+        "weight": 0.3370145885326026
+      },
+      {
+        "feature": "shell",
+        "weight": 0.3370145885326026
+      }
+    ]
+  }
+}

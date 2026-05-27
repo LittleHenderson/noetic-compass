@@ -70,6 +70,12 @@ the claim:
 - Not allowed from this report alone: CAS beats text-only baselines on TKS40.
 - Not allowed from this report alone: a production ACCEPT/SUPPRESS verdict.
 
+A follow-up diagnostic confirmed this with an interpretable text-only
+classifier: `CountVectorizer(1-2 grams) +
+LogisticRegression(class_weight="balanced")` also reached `100.00%` heldout
+accuracy with `0` train/test group overlap. The diagnostic report is:
+`docs/working/tks40_text_baseline_diagnostic_20260527.json`.
+
 ## Next
 
 To promote TKS40 into a fuller Evidence Packet, merge this readout report with:
@@ -79,3 +85,7 @@ To promote TKS40 into a fuller Evidence Packet, merge this readout report with:
 3. an output-effect or eta-to-epsilon bridge layer for TKS40,
 4. a conservative verifier decision that remains `FLAG_FOR_HUMAN_REVIEW` unless
    the Stage 19/20/21 product verifier is attached.
+
+For a future TKS40 headline claim, first build a hardened `tks40_balanced_v1`
+scenario library where compact class glosses are not repeated directly and the
+pre-registered text-baseline ceiling is `<= 60%`.
