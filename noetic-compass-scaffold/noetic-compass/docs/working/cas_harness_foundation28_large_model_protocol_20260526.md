@@ -4,6 +4,8 @@ Date: 2026-05-26
 
 Status: concrete protocol draft for the 20B/100B/300B open-weight path.
 
+Canonical method label for the successful 20B path: `S7-F28-BALANCED-BRIDGE`.
+
 Companion axis: 40 Elements (`10 Noetics/operators x 4 Domains`) is the strongest original Pythia readout axis. This document focuses on Foundation-28 because that was the taxonomy drift risk, but large-model replication should test both Foundation-28 and 40 Elements.
 
 Important source-definition rule: the original successful methodology used the TKS definition surfaces, not generic CAS paraphrases. Foundation-28 must preserve the legacy `1a..7d -> F1|T..F7|E` mapping. 40 Elements must preserve the legacy `A1..D10 -> operator x domain` mapping. This is not optional. The first Foundation-28 v0 library used compact source-derived Stage-7/TKS28 glosses and the first 40-Element check only derived `operator x domain` labels from an existing dataset. Treat those as engineering/probe-path runs. The final headline methodology needs source-faithful scenario libraries grounded in the original TKS definitions or in the original Stage 7/Stage 9 fixture builders.

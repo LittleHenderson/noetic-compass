@@ -238,6 +238,8 @@ Interpretation: this is a real 20B behavioral likelihood result, but it is not a
 
 ### GPT-NeoX-20B exact Stage 7 eta-to-epsilon bridge — balanced logistic correction
 
+Method label: `S7-F28-BALANCED-BRIDGE` — S7-F28 Balanced Bridge Method.
+
 The original Stage 7 closure methodology used balanced sklearn linear probes, not nearest-centroid probes. Re-running the exact Stage 7 bridge with `LogisticRegression(C=0.1, class_weight="balanced")` after `StandardScaler` closes the GPT-NeoX-20B probe-predicted bridge.
 
 - Runner: `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py --readout-kind logistic --probe-C 0.1 --probe-max-iter 1000`
