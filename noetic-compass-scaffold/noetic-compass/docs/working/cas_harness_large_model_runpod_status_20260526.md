@@ -402,12 +402,13 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 5. Completed: train/evaluate the 28-Foundation readout and compare it against controls.
 6. Completed: run Foundation-level activation ablation with matched random and wrong-Foundation controls.
 7. Completed: run source-derived TKS40 (`A1..D10`) on GPT-NeoX-20B. Result: 40-Element hidden readout `40.00%` versus `2.50%` majority/chance, and label-specific activation cover drop `13.75 pp` versus approximately zero random/wrong controls.
-8. Completed: rerun Foundation-28 with the exact Stage 7 source-lineage discipline and original balanced-logistic readout. Result: `86.8622%` heldout Foundation accuracy.
-9. Completed: run the Foundation-level eta-to-epsilon likelihood/output bridge. Result: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`, `+0.596413` probe-readable delta, `90/112` positive rows, sign-test p `3e-11`.
-10. Completed: run trace diagnostics. Result: `TRACE_DIAGNOSTICS_PASS`, lacunarity `0.006715`, numeric class `Amplifying`.
-11. Completed: merge the exact chain into an Evidence Packet. Result: `S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`, verdict `FLAG_FOR_HUMAN_REVIEW`, evidence confidence `0.803571`.
-12. Next: attach the Stage 19/20/21 production verifier decision layer before any ACCEPT/SUPPRESS product verdict.
-13. Next: run the same packet protocol on the next open-weight model family and separately on a real worker fleet for 100B/300B.
+8. Completed: rerun source-derived TKS40 with the strict guarded balanced-logistic evaluator. Result: `packet_ready_evaluation_completed`, `40/40` cells populated, best hidden readout `97.50%`, majority `3.75%`, shuffled-label mean `1.75%`, text-hash baseline `100.00%`. Report: `docs/working/gpt_neox_20b_tks40_balanced_logistic_eval_guarded_20260527.json`.
+9. Completed: rerun Foundation-28 with the exact Stage 7 source-lineage discipline and original balanced-logistic readout. Result: `86.8622%` heldout Foundation accuracy.
+10. Completed: run the Foundation-level eta-to-epsilon likelihood/output bridge. Result: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`, `+0.596413` probe-readable delta, `90/112` positive rows, sign-test p `3e-11`.
+11. Completed: run trace diagnostics. Result: `TRACE_DIAGNOSTICS_PASS`, lacunarity `0.006715`, numeric class `Amplifying`.
+12. Completed: merge the exact chain into an Evidence Packet. Result: `S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`, verdict `FLAG_FOR_HUMAN_REVIEW`, evidence confidence `0.803571`.
+13. Next: attach the Stage 19/20/21 production verifier decision layer before any ACCEPT/SUPPRESS product verdict.
+14. Next: run the same packet protocol on the next open-weight model family and separately on a real worker fleet for 100B/300B.
 
 ## 100B / 300B status
 
