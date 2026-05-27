@@ -236,7 +236,7 @@ const CAS_METHOD_SUMMARY =
   'Canonical label: S7-F28-BALANCED-BRIDGE. Plain name: S7-F28 Balanced Bridge Method. CAS Harness is not a pretty label overlay; this method means source-defined labels, real hidden states, balanced probe, targeted removal, matched controls, output-likelihood bridge, trace diagnostics, then Evidence Packet verdict.';
 
 const TKS40_TEXT_BASELINE_SUMMARY =
-  'TKS40 is guarded right now. GPT-NeoX-20B hidden states read the balanced TKS40 axis at 97.50%, but a text-only classifier also reached 100.00%. That means the current TKS40 prompt library is too easy from wording alone, so it cannot support the claim that CAS beats text-only baselines yet.';
+  'TKS40 v0 is guarded right now. GPT-NeoX-20B hidden states read the compact-gloss TKS40 axis at 97.50%, but a text-only classifier also reached 100.00%. The original Stage 9 40E fixture does not have that failure under the modern diagnostic: text-only scored 49.24%.';
 
 const TKS40_TEXT_BASELINE_STEPS: Array<{ title: string; body: string }> = [
   {
@@ -252,12 +252,12 @@ const TKS40_TEXT_BASELINE_STEPS: Array<{ title: string; body: string }> = [
   {
     title: 'What remains true.',
     body:
-      'The current TKS40 packet still shows a strong 20B hidden-state signal above majority and shuffled-label controls. It just cannot claim CAS beats surface text on TKS40.',
+      'The current compact-gloss TKS40 packet still shows a strong 20B hidden-state signal above majority and shuffled-label controls. It just cannot claim CAS beats surface text on that v0 library.',
   },
   {
     title: 'What fixes it.',
     body:
-      'Build TKS40 v1 with concrete situations, lexical distractors, grouped paraphrases, at least 25 examples per class, and a pre-registered text-baseline ceiling of 60% or lower.',
+      'Reuse the original Stage 9 role-bound counterfactual design for the next 20B capture, or build TKS40 v1 with concrete situations, lexical distractors, grouped paraphrases, and a pre-registered text-baseline ceiling of 60% or lower.',
   },
 ];
 

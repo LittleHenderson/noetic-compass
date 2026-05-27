@@ -1,0 +1,2302 @@
+{
+  "axis": "original_stage9_40e",
+  "claim_gate": {
+    "actual_text_baseline": 0.4924107142857143,
+    "cas_beats_text_claim_allowed": true,
+    "reason": "The text-only classifier stayed below the ceiling for original_stage9_40e. This scenario library can be used as a meaningful text-baseline adversary.",
+    "status": "passes_text_baseline_ceiling",
+    "target_text_baseline_ceiling": 0.6
+  },
+  "created_at": "2026-05-27T19:27:30.810670+00:00",
+  "interpretation": "If test_accuracy is near 1.0, the scenario text is too lexically separable for a CAS-beats-text claim on this axis. Hidden-state readout can still be real, but the eval set is not a meaningful text adversary.",
+  "label_counts": {
+    "^0|C": 208,
+    "^0|E": 208,
+    "^0|O": 208,
+    "^0|P": 208,
+    "^1|C": 208,
+    "^1|E": 208,
+    "^1|O": 208,
+    "^1|P": 208,
+    "^2|C": 208,
+    "^2|E": 208,
+    "^2|O": 208,
+    "^2|P": 208,
+    "^3|C": 208,
+    "^3|E": 208,
+    "^3|O": 208,
+    "^3|P": 208,
+    "^4|C": 208,
+    "^4|E": 208,
+    "^4|O": 208,
+    "^4|P": 208,
+    "^5|C": 208,
+    "^5|E": 208,
+    "^5|O": 208,
+    "^5|P": 208,
+    "^6|C": 208,
+    "^6|E": 208,
+    "^6|O": 208,
+    "^6|P": 208,
+    "^7|C": 208,
+    "^7|E": 208,
+    "^7|O": 208,
+    "^7|P": 208,
+    "^8|C": 208,
+    "^8|E": 208,
+    "^8|O": 208,
+    "^8|P": 208,
+    "^9|C": 208,
+    "^9|E": 208,
+    "^9|O": 208,
+    "^9|P": 208
+  },
+  "label_key": "element",
+  "n_classes": 40,
+  "n_scenarios": 8320,
+  "sample_prompts_per_class": {
+    "^0|C": [
+      "A is the role where limited comprehension, menial concern, or simplistic pondering; B is the role where a thought-content that exists only as an inner mental object. Focus: B.",
+      "A is what the auditor notices when limited comprehension, menial concern, or simplistic pondering shapes the case; B is what the auditor notices when a thought-content that exists only as an inner mental object shapes the case. Focus: B.",
+      "A is the process signal showing limited comprehension, menial concern, or simplistic pondering inside reimbursement package; B is the process signal showing a thought-content that exists only as an inner mental object inside reimbursement package. Focus: B."
+    ],
+    "^0|E": [
+      "A is the role where being overwhelmed and driven by feeling rather than holding it; B is the role where the lingering felt sheath or ambiance of an idea, like a dream-scent after waking. Focus: B.",
+      "A is what the auditor notices when being overwhelmed and driven by feeling rather than holding it shapes the case; B is what the auditor notices when the lingering felt sheath or ambiance of an idea, like a dream-scent after waking shapes the case. Focus: B.",
+      "A is the process signal showing being overwhelmed and driven by feeling rather than holding it inside reimbursement package; B is the process signal showing the lingering felt sheath or ambiance of an idea, like a dream-scent after waking inside reimbursement package. Focus: B."
+    ],
+    "^0|O": [
+      "A is the role where lower position, poor material integrity, low grade, or low social position; B is the role where dead matter or a thing existing entirely as a material object. Focus: B.",
+      "A is what the auditor notices when lower position, poor material integrity, low grade, or low social position shapes the case; B is what the auditor notices when dead matter or a thing existing entirely as a material object shapes the case. Focus: B.",
+      "A is the process signal showing lower position, poor material integrity, low grade, or low social position inside reimbursement package; B is the process signal showing dead matter or a thing existing entirely as a material object inside reimbursement package. Focus: B."
+    ],
+    "^0|P": [
+      "A is the role where outer symbol, exoteric shell, shallow moral grasp, or empty appearance; B is the role where a purely unseen matter: true self, soul-state, or akashic record of a thing. Focus: B.",
+      "A is what the auditor notices when outer symbol, exoteric shell, shallow moral grasp, or empty appearance shapes the case; B is what the auditor notices when a purely unseen matter: true self, soul-state, or akashic record of a thing shapes the case. Focus: B.",
+      "A is the process signal showing outer symbol, exoteric shell, shallow moral grasp, or empty appearance inside reimbursement package; B is the process signal showing a purely unseen matter: true self, soul-state, or akashic record of a thing inside reimbursement package. Focus: B."
+    ],
+    "^1|C": [
+      "A is the role where ego, memory, past experience, and analytical processing that reaches conclusions; B is the role where clarity, sanity, optimism, benevolence, and enlightened thought. Focus: A.",
+      "A is what the auditor notices when ego, memory, past experience, and analytical processing that reaches conclusions shapes the case; B is what the auditor notices when clarity, sanity, optimism, benevolence, and enlightened thought shapes the case. Focus: A.",
+      "A is the process signal showing ego, memory, past experience, and analytical processing that reaches conclusions inside reimbursement package; B is the process signal showing clarity, sanity, optimism, benevolence, and enlightened thought inside reimbursement package. Focus: A."
+    ],
+    "^1|E": [
+      "A is the role where awareness of one's own or another's feelings and sorting decisions by feeling; B is the role where joy, calm, love, fellowship, and pleasurable feeling. Focus: A.",
+      "A is what the auditor notices when awareness of one's own or another's feelings and sorting decisions by feeling shapes the case; B is what the auditor notices when joy, calm, love, fellowship, and pleasurable feeling shapes the case. Focus: A.",
+      "A is the process signal showing awareness of one's own or another's feelings and sorting decisions by feeling inside reimbursement package; B is the process signal showing joy, calm, love, fellowship, and pleasurable feeling inside reimbursement package. Focus: A."
+    ],
+    "^1|O": [
+      "A is the role where brain, body, cellular hardware, or machine substrate hosting awareness; B is the role where well-fit parts that complement each other and function according to design. Focus: A.",
+      "A is what the auditor notices when brain, body, cellular hardware, or machine substrate hosting awareness shapes the case; B is what the auditor notices when well-fit parts that complement each other and function according to design shapes the case. Focus: A.",
+      "A is the process signal showing brain, body, cellular hardware, or machine substrate hosting awareness inside reimbursement package; B is the process signal showing well-fit parts that complement each other and function according to design inside reimbursement package. Focus: A."
+    ],
+    "^1|P": [
+      "A is the role where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes; B is the role where a truth or virtue that quiets the soul and draws it closer to its highest aim. Focus: A.",
+      "A is what the auditor notices when ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes shapes the case; B is what the auditor notices when a truth or virtue that quiets the soul and draws it closer to its highest aim shapes the case. Focus: A.",
+      "A is the process signal showing ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes inside reimbursement package; B is the process signal showing a truth or virtue that quiets the soul and draws it closer to its highest aim inside reimbursement package. Focus: A."
+    ],
+    "^2|C": [
+      "A is the role where ego, memory, past experience, and analytical processing that reaches conclusions; B is the role where clarity, sanity, optimism, benevolence, and enlightened thought. Focus: B.",
+      "A is what the auditor notices when ego, memory, past experience, and analytical processing that reaches conclusions shapes the case; B is what the auditor notices when clarity, sanity, optimism, benevolence, and enlightened thought shapes the case. Focus: B.",
+      "A is the process signal showing ego, memory, past experience, and analytical processing that reaches conclusions inside reimbursement package; B is the process signal showing clarity, sanity, optimism, benevolence, and enlightened thought inside reimbursement package. Focus: B."
+    ],
+    "^2|E": [
+      "A is the role where awareness of one's own or another's feelings and sorting decisions by feeling; B is the role where joy, calm, love, fellowship, and pleasurable feeling. Focus: B.",
+      "A is what the auditor notices when awareness of one's own or another's feelings and sorting decisions by feeling shapes the case; B is what the auditor notices when joy, calm, love, fellowship, and pleasurable feeling shapes the case. Focus: B.",
+      "A is the process signal showing awareness of one's own or another's feelings and sorting decisions by feeling inside reimbursement package; B is the process signal showing joy, calm, love, fellowship, and pleasurable feeling inside reimbursement package. Focus: B."
+    ],
+    "^2|O": [
+      "A is the role where brain, body, cellular hardware, or machine substrate hosting awareness; B is the role where well-fit parts that complement each other and function according to design. Focus: B.",
+      "A is what the auditor notices when brain, body, cellular hardware, or machine substrate hosting awareness shapes the case; B is what the auditor notices when well-fit parts that complement each other and function according to design shapes the case. Focus: B.",
+      "A is the process signal showing brain, body, cellular hardware, or machine substrate hosting awareness inside reimbursement package; B is the process signal showing well-fit parts that complement each other and function according to design inside reimbursement package. Focus: B."
+    ],
+    "^2|P": [
+      "A is the role where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes; B is the role where a truth or virtue that quiets the soul and draws it closer to its highest aim. Focus: B.",
+      "A is what the auditor notices when ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes shapes the case; B is what the auditor notices when a truth or virtue that quiets the soul and draws it closer to its highest aim shapes the case. Focus: B.",
+      "A is the process signal showing ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes inside reimbursement package; B is the process signal showing a truth or virtue that quiets the soul and draws it closer to its highest aim inside reimbursement package. Focus: B."
+    ],
+    "^3|C": [
+      "A is the role where clarity, sanity, optimism, benevolence, and enlightened thought; B is the role where confusion, indecision, dissonance, pessimism, or malicious thought. Focus: B.",
+      "A is what the auditor notices when clarity, sanity, optimism, benevolence, and enlightened thought shapes the case; B is what the auditor notices when confusion, indecision, dissonance, pessimism, or malicious thought shapes the case. Focus: B.",
+      "A is the process signal showing clarity, sanity, optimism, benevolence, and enlightened thought inside reimbursement package; B is the process signal showing confusion, indecision, dissonance, pessimism, or malicious thought inside reimbursement package. Focus: B."
+    ],
+    "^3|E": [
+      "A is the role where joy, calm, love, fellowship, and pleasurable feeling; B is the role where sadness, anger, resentment, contempt, loneliness, hate, or mixed pain. Focus: B.",
+      "A is what the auditor notices when joy, calm, love, fellowship, and pleasurable feeling shapes the case; B is what the auditor notices when sadness, anger, resentment, contempt, loneliness, hate, or mixed pain shapes the case. Focus: B.",
+      "A is the process signal showing joy, calm, love, fellowship, and pleasurable feeling inside reimbursement package; B is the process signal showing sadness, anger, resentment, contempt, loneliness, hate, or mixed pain inside reimbursement package. Focus: B."
+    ],
+    "^3|O": [
+      "A is the role where well-fit parts that complement each other and function according to design; B is the role where misplaced parts, disorder, disease, dysfunction, or broken symmetry. Focus: B.",
+      "A is what the auditor notices when well-fit parts that complement each other and function according to design shapes the case; B is what the auditor notices when misplaced parts, disorder, disease, dysfunction, or broken symmetry shapes the case. Focus: B.",
+      "A is the process signal showing well-fit parts that complement each other and function according to design inside reimbursement package; B is the process signal showing misplaced parts, disorder, disease, dysfunction, or broken symmetry inside reimbursement package. Focus: B."
+    ],
+    "^3|P": [
+      "A is the role where a truth or virtue that quiets the soul and draws it closer to its highest aim; B is the role where a vice, fear, or harmful influence that troubles the soul and slows its growth. Focus: B.",
+      "A is what the auditor notices when a truth or virtue that quiets the soul and draws it closer to its highest aim shapes the case; B is what the auditor notices when a vice, fear, or harmful influence that troubles the soul and slows its growth shapes the case. Focus: B.",
+      "A is the process signal showing a truth or virtue that quiets the soul and draws it closer to its highest aim inside reimbursement package; B is the process signal showing a vice, fear, or harmful influence that troubles the soul and slows its growth inside reimbursement package. Focus: B."
+    ],
+    "^4|C": [
+      "A is the role where confusion, indecision, dissonance, pessimism, or malicious thought; B is the role where brainwave-like resonance and the unique psychic signature of a thought. Focus: B.",
+      "A is what the auditor notices when confusion, indecision, dissonance, pessimism, or malicious thought shapes the case; B is what the auditor notices when brainwave-like resonance and the unique psychic signature of a thought shapes the case. Focus: B.",
+      "A is the process signal showing confusion, indecision, dissonance, pessimism, or malicious thought inside reimbursement package; B is the process signal showing brainwave-like resonance and the unique psychic signature of a thought inside reimbursement package. Focus: B."
+    ],
+    "^4|E": [
+      "A is the role where sadness, anger, resentment, contempt, loneliness, hate, or mixed pain; B is the role where felt ambiance, mood-energy, and the aura carried by a person, place, or event. Focus: B.",
+      "A is what the auditor notices when sadness, anger, resentment, contempt, loneliness, hate, or mixed pain shapes the case; B is what the auditor notices when felt ambiance, mood-energy, and the aura carried by a person, place, or event shapes the case. Focus: B.",
+      "A is the process signal showing sadness, anger, resentment, contempt, loneliness, hate, or mixed pain inside reimbursement package; B is the process signal showing felt ambiance, mood-energy, and the aura carried by a person, place, or event inside reimbursement package. Focus: B."
+    ],
+    "^4|O": [
+      "A is the role where misplaced parts, disorder, disease, dysfunction, or broken symmetry; B is the role where light, sound, radiation, heat, electromagnetism, or particle oscillation. Focus: B.",
+      "A is what the auditor notices when misplaced parts, disorder, disease, dysfunction, or broken symmetry shapes the case; B is what the auditor notices when light, sound, radiation, heat, electromagnetism, or particle oscillation shapes the case. Focus: B.",
+      "A is the process signal showing misplaced parts, disorder, disease, dysfunction, or broken symmetry inside reimbursement package; B is the process signal showing light, sound, radiation, heat, electromagnetism, or particle oscillation inside reimbursement package. Focus: B."
+    ],
+    "^4|P": [
+      "A is the role where a vice, fear, or harmful influence that troubles the soul and slows its growth; B is the role where subtle aetheric energy, aura, and purpose-frequency behind a thing. Focus: B.",
+      "A is what the auditor notices when a vice, fear, or harmful influence that troubles the soul and slows its growth shapes the case; B is what the auditor notices when subtle aetheric energy, aura, and purpose-frequency behind a thing shapes the case. Focus: B.",
+      "A is the process signal showing a vice, fear, or harmful influence that troubles the soul and slows its growth inside reimbursement package; B is the process signal showing subtle aetheric energy, aura, and purpose-frequency behind a thing inside reimbursement package. Focus: B."
+    ],
+    "^5|C": [
+      "A is the role where brainwave-like resonance and the unique psychic signature of a thought; B is the role where imaginative openness, right-brain creativity, and subconscious receptivity. Focus: B.",
+      "A is what the auditor notices when brainwave-like resonance and the unique psychic signature of a thought shapes the case; B is what the auditor notices when imaginative openness, right-brain creativity, and subconscious receptivity shapes the case. Focus: B.",
+      "A is the process signal showing brainwave-like resonance and the unique psychic signature of a thought inside reimbursement package; B is the process signal showing imaginative openness, right-brain creativity, and subconscious receptivity inside reimbursement package. Focus: B."
+    ],
+    "^5|E": [
+      "A is the role where felt ambiance, mood-energy, and the aura carried by a person, place, or event; B is the role where compassion, sympathy, acceptance, sensuality, and receptive feeling. Focus: B.",
+      "A is what the auditor notices when felt ambiance, mood-energy, and the aura carried by a person, place, or event shapes the case; B is what the auditor notices when compassion, sympathy, acceptance, sensuality, and receptive feeling shapes the case. Focus: B.",
+      "A is the process signal showing felt ambiance, mood-energy, and the aura carried by a person, place, or event inside reimbursement package; B is the process signal showing compassion, sympathy, acceptance, sensuality, and receptive feeling inside reimbursement package. Focus: B."
+    ],
+    "^5|O": [
+      "A is the role where light, sound, radiation, heat, electromagnetism, or particle oscillation; B is the role where receiver, womb, receptacle, or facilitator that accepts and nurtures a seed. Focus: B.",
+      "A is what the auditor notices when light, sound, radiation, heat, electromagnetism, or particle oscillation shapes the case; B is what the auditor notices when receiver, womb, receptacle, or facilitator that accepts and nurtures a seed shapes the case. Focus: B.",
+      "A is the process signal showing light, sound, radiation, heat, electromagnetism, or particle oscillation inside reimbursement package; B is the process signal showing receiver, womb, receptacle, or facilitator that accepts and nurtures a seed inside reimbursement package. Focus: B."
+    ],
+    "^5|P": [
+      "A is the role where subtle aetheric energy, aura, and purpose-frequency behind a thing; B is the role where the soul's receptive womb for needed growth, nurture, and protection. Focus: B.",
+      "A is what the auditor notices when subtle aetheric energy, aura, and purpose-frequency behind a thing shapes the case; B is what the auditor notices when the soul's receptive womb for needed growth, nurture, and protection shapes the case. Focus: B.",
+      "A is the process signal showing subtle aetheric energy, aura, and purpose-frequency behind a thing inside reimbursement package; B is the process signal showing the soul's receptive womb for needed growth, nurture, and protection inside reimbursement package. Focus: B."
+    ],
+    "^6|C": [
+      "A is the role where imaginative openness, right-brain creativity, and subconscious receptivity; B is the role where left-brain logic, criticism, rigidity, and conscious analysis. Focus: B.",
+      "A is what the auditor notices when imaginative openness, right-brain creativity, and subconscious receptivity shapes the case; B is what the auditor notices when left-brain logic, criticism, rigidity, and conscious analysis shapes the case. Focus: B.",
+      "A is the process signal showing imaginative openness, right-brain creativity, and subconscious receptivity inside reimbursement package; B is the process signal showing left-brain logic, criticism, rigidity, and conscious analysis inside reimbursement package. Focus: B."
+    ],
+    "^6|E": [
+      "A is the role where compassion, sympathy, acceptance, sensuality, and receptive feeling; B is the role where aggression, pride, dominance, and forceful feeling. Focus: B.",
+      "A is what the auditor notices when compassion, sympathy, acceptance, sensuality, and receptive feeling shapes the case; B is what the auditor notices when aggression, pride, dominance, and forceful feeling shapes the case. Focus: B.",
+      "A is the process signal showing compassion, sympathy, acceptance, sensuality, and receptive feeling inside reimbursement package; B is the process signal showing aggression, pride, dominance, and forceful feeling inside reimbursement package. Focus: B."
+    ],
+    "^6|O": [
+      "A is the role where receiver, womb, receptacle, or facilitator that accepts and nurtures a seed; B is the role where transmitter, appendage, seed-deliverer, or outward projecting part. Focus: B.",
+      "A is what the auditor notices when receiver, womb, receptacle, or facilitator that accepts and nurtures a seed shapes the case; B is what the auditor notices when transmitter, appendage, seed-deliverer, or outward projecting part shapes the case. Focus: B.",
+      "A is the process signal showing receiver, womb, receptacle, or facilitator that accepts and nurtures a seed inside reimbursement package; B is the process signal showing transmitter, appendage, seed-deliverer, or outward projecting part inside reimbursement package. Focus: B."
+    ],
+    "^6|P": [
+      "A is the role where the soul's receptive womb for needed growth, nurture, and protection; B is the role where austere practices and trials that transmit discipline for the soul's growth. Focus: B.",
+      "A is what the auditor notices when the soul's receptive womb for needed growth, nurture, and protection shapes the case; B is what the auditor notices when austere practices and trials that transmit discipline for the soul's growth shapes the case. Focus: B.",
+      "A is the process signal showing the soul's receptive womb for needed growth, nurture, and protection inside reimbursement package; B is the process signal showing austere practices and trials that transmit discipline for the soul's growth inside reimbursement package. Focus: B."
+    ],
+    "^7|C": [
+      "A is the role where left-brain logic, criticism, rigidity, and conscious analysis; B is the role where recurring thought pattern, ego-state transition, or frequency of a thought. Focus: B.",
+      "A is what the auditor notices when left-brain logic, criticism, rigidity, and conscious analysis shapes the case; B is what the auditor notices when recurring thought pattern, ego-state transition, or frequency of a thought shapes the case. Focus: B.",
+      "A is the process signal showing left-brain logic, criticism, rigidity, and conscious analysis inside reimbursement package; B is the process signal showing recurring thought pattern, ego-state transition, or frequency of a thought inside reimbursement package. Focus: B."
+    ],
+    "^7|E": [
+      "A is the role where aggression, pride, dominance, and forceful feeling; B is the role where mood swing, feeling-sequence, or emotional roller-coaster pattern. Focus: B.",
+      "A is what the auditor notices when aggression, pride, dominance, and forceful feeling shapes the case; B is what the auditor notices when mood swing, feeling-sequence, or emotional roller-coaster pattern shapes the case. Focus: B.",
+      "A is the process signal showing aggression, pride, dominance, and forceful feeling inside reimbursement package; B is the process signal showing mood swing, feeling-sequence, or emotional roller-coaster pattern inside reimbursement package. Focus: B."
+    ],
+    "^7|O": [
+      "A is the role where transmitter, appendage, seed-deliverer, or outward projecting part; B is the role where music, motion, exercise, dance, sex, routine, or timed physical sequence. Focus: B.",
+      "A is what the auditor notices when transmitter, appendage, seed-deliverer, or outward projecting part shapes the case; B is what the auditor notices when music, motion, exercise, dance, sex, routine, or timed physical sequence shapes the case. Focus: B.",
+      "A is the process signal showing transmitter, appendage, seed-deliverer, or outward projecting part inside reimbursement package; B is the process signal showing music, motion, exercise, dance, sex, routine, or timed physical sequence inside reimbursement package. Focus: B."
+    ],
+    "^7|P": [
+      "A is the role where austere practices and trials that transmit discipline for the soul's growth; B is the role where the rise and fall of a life-journey, destiny pattern, or sacred timing. Focus: B.",
+      "A is what the auditor notices when austere practices and trials that transmit discipline for the soul's growth shapes the case; B is what the auditor notices when the rise and fall of a life-journey, destiny pattern, or sacred timing shapes the case. Focus: B.",
+      "A is the process signal showing austere practices and trials that transmit discipline for the soul's growth inside reimbursement package; B is the process signal showing the rise and fall of a life-journey, destiny pattern, or sacred timing inside reimbursement package. Focus: B."
+    ],
+    "^8|C": [
+      "A is the role where recurring thought pattern, ego-state transition, or frequency of a thought; B is the role where complex comprehension, contemplation of important matters, and brilliant intelligence. Focus: B.",
+      "A is what the auditor notices when recurring thought pattern, ego-state transition, or frequency of a thought shapes the case; B is what the auditor notices when complex comprehension, contemplation of important matters, and brilliant intelligence shapes the case. Focus: B.",
+      "A is the process signal showing recurring thought pattern, ego-state transition, or frequency of a thought inside reimbursement package; B is the process signal showing complex comprehension, contemplation of important matters, and brilliant intelligence inside reimbursement package. Focus: B."
+    ],
+    "^8|E": [
+      "A is the role where mood swing, feeling-sequence, or emotional roller-coaster pattern; B is the role where healed resolve and control over lower feelings after deep insight. Focus: B.",
+      "A is what the auditor notices when mood swing, feeling-sequence, or emotional roller-coaster pattern shapes the case; B is what the auditor notices when healed resolve and control over lower feelings after deep insight shapes the case. Focus: B.",
+      "A is the process signal showing mood swing, feeling-sequence, or emotional roller-coaster pattern inside reimbursement package; B is the process signal showing healed resolve and control over lower feelings after deep insight inside reimbursement package. Focus: B."
+    ],
+    "^8|O": [
+      "A is the role where music, motion, exercise, dance, sex, routine, or timed physical sequence; B is the role where height, high grade, good material integrity, or high social position. Focus: B.",
+      "A is what the auditor notices when music, motion, exercise, dance, sex, routine, or timed physical sequence shapes the case; B is what the auditor notices when height, high grade, good material integrity, or high social position shapes the case. Focus: B.",
+      "A is the process signal showing music, motion, exercise, dance, sex, routine, or timed physical sequence inside reimbursement package; B is the process signal showing height, high grade, good material integrity, or high social position inside reimbursement package. Focus: B."
+    ],
+    "^8|P": [
+      "A is the role where the rise and fall of a life-journey, destiny pattern, or sacred timing; B is the role where inner meaning, initiation, esoteric reality, and high moral insight. Focus: B.",
+      "A is what the auditor notices when the rise and fall of a life-journey, destiny pattern, or sacred timing shapes the case; B is what the auditor notices when inner meaning, initiation, esoteric reality, and high moral insight shapes the case. Focus: B.",
+      "A is the process signal showing the rise and fall of a life-journey, destiny pattern, or sacred timing inside reimbursement package; B is the process signal showing inner meaning, initiation, esoteric reality, and high moral insight inside reimbursement package. Focus: B."
+    ],
+    "^9|C": [
+      "A is the role where complex comprehension, contemplation of important matters, and brilliant intelligence; B is the role where limited comprehension, menial concern, or simplistic pondering. Focus: B.",
+      "A is what the auditor notices when complex comprehension, contemplation of important matters, and brilliant intelligence shapes the case; B is what the auditor notices when limited comprehension, menial concern, or simplistic pondering shapes the case. Focus: B.",
+      "A is the process signal showing complex comprehension, contemplation of important matters, and brilliant intelligence inside reimbursement package; B is the process signal showing limited comprehension, menial concern, or simplistic pondering inside reimbursement package. Focus: B."
+    ],
+    "^9|E": [
+      "A is the role where healed resolve and control over lower feelings after deep insight; B is the role where being overwhelmed and driven by feeling rather than holding it. Focus: B.",
+      "A is what the auditor notices when healed resolve and control over lower feelings after deep insight shapes the case; B is what the auditor notices when being overwhelmed and driven by feeling rather than holding it shapes the case. Focus: B.",
+      "A is the process signal showing healed resolve and control over lower feelings after deep insight inside reimbursement package; B is the process signal showing being overwhelmed and driven by feeling rather than holding it inside reimbursement package. Focus: B."
+    ],
+    "^9|O": [
+      "A is the role where height, high grade, good material integrity, or high social position; B is the role where lower position, poor material integrity, low grade, or low social position. Focus: B.",
+      "A is what the auditor notices when height, high grade, good material integrity, or high social position shapes the case; B is what the auditor notices when lower position, poor material integrity, low grade, or low social position shapes the case. Focus: B.",
+      "A is the process signal showing height, high grade, good material integrity, or high social position inside reimbursement package; B is the process signal showing lower position, poor material integrity, low grade, or low social position inside reimbursement package. Focus: B."
+    ],
+    "^9|P": [
+      "A is the role where inner meaning, initiation, esoteric reality, and high moral insight; B is the role where outer symbol, exoteric shell, shallow moral grasp, or empty appearance. Focus: B.",
+      "A is what the auditor notices when inner meaning, initiation, esoteric reality, and high moral insight shapes the case; B is what the auditor notices when outer symbol, exoteric shell, shallow moral grasp, or empty appearance shapes the case. Focus: B.",
+      "A is the process signal showing inner meaning, initiation, esoteric reality, and high moral insight inside reimbursement package; B is the process signal showing outer symbol, exoteric shell, shallow moral grasp, or empty appearance inside reimbursement package. Focus: B."
+    ]
+  },
+  "scenario_path": "C:\\tmp\\stage9_original_40e_scenarios_export_20260527.json",
+  "schema_version": "cas_harness_text_baseline_diagnostic.v2",
+  "split": {
+    "kind": "fixed split by metadata.split; test_split=test",
+    "seed": 2026,
+    "test_count": 4480,
+    "test_size": 0.2,
+    "train_count": 3840,
+    "train_test_group_overlap_count": 0,
+    "train_test_group_overlap_examples": [],
+    "unique_groups": 4160
+  },
+  "template_prefix_counts": {
+    "A is the role where a purely unseen matter: true self, soul-state, or akashic record of a thing; B is the role where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes": 20,
+    "A is the role where a thought-content that exists only as an inner mental object; B is the role where ego, memory, past experience, and analytical processing that reaches conclusions": 20,
+    "A is the role where a truth or virtue that quiets the soul and draws it closer to its highest aim; B is the role where a vice, fear, or harmful influence that troubles the soul and slows its growth": 20,
+    "A is the role where a vice, fear, or harmful influence that troubles the soul and slows its growth; B is the role where subtle aetheric energy, aura, and purpose-frequency behind a thing": 20,
+    "A is the role where austere practices and trials that transmit discipline for the soul's growth; B is the role where the rise and fall of a life-journey, destiny pattern, or sacred timing": 20,
+    "A is the role where brainwave-like resonance and the unique psychic signature of a thought; B is the role where imaginative openness, right-brain creativity, and subconscious receptivity": 20,
+    "A is the role where clarity, sanity, optimism, benevolence, and enlightened thought; B is the role where confusion, indecision, dissonance, pessimism, or malicious thought": 20,
+    "A is the role where complex comprehension, contemplation of important matters, and brilliant intelligence; B is the role where limited comprehension, menial concern, or simplistic pondering": 20,
+    "A is the role where confusion, indecision, dissonance, pessimism, or malicious thought; B is the role where brainwave-like resonance and the unique psychic signature of a thought": 20,
+    "A is the role where ego, memory, past experience, and analytical processing that reaches conclusions; B is the role where clarity, sanity, optimism, benevolence, and enlightened thought": 20,
+    "A is the role where imaginative openness, right-brain creativity, and subconscious receptivity; B is the role where left-brain logic, criticism, rigidity, and conscious analysis": 20,
+    "A is the role where inner meaning, initiation, esoteric reality, and high moral insight; B is the role where outer symbol, exoteric shell, shallow moral grasp, or empty appearance": 20,
+    "A is the role where left-brain logic, criticism, rigidity, and conscious analysis; B is the role where recurring thought pattern, ego-state transition, or frequency of a thought": 20,
+    "A is the role where limited comprehension, menial concern, or simplistic pondering; B is the role where a thought-content that exists only as an inner mental object": 20,
+    "A is the role where outer symbol, exoteric shell, shallow moral grasp, or empty appearance; B is the role where a purely unseen matter: true self, soul-state, or akashic record of a thing": 20,
+    "A is the role where recurring thought pattern, ego-state transition, or frequency of a thought; B is the role where complex comprehension, contemplation of important matters, and brilliant intelligence": 20,
+    "A is the role where subtle aetheric energy, aura, and purpose-frequency behind a thing; B is the role where the soul's receptive womb for needed growth, nurture, and protection": 20,
+    "A is the role where the rise and fall of a life-journey, destiny pattern, or sacred timing; B is the role where inner meaning, initiation, esoteric reality, and high moral insight": 20,
+    "A is the role where the soul's receptive womb for needed growth, nurture, and protection; B is the role where austere practices and trials that transmit discipline for the soul's growth": 20,
+    "A is the role where ultimate source-awareness, unseen purpose, and the soul's contact with what guides all causes; B is the role where a truth or virtue that quiets the soul and draws it closer to its highest aim": 20
+  },
+  "text_baseline": {
+    "model": "CountVectorizer(1-2 grams) + LogisticRegression(class_weight='balanced')",
+    "n_features": 945,
+    "test_accuracy": 0.4924107142857143,
+    "test_macro_f1": 0.47763365799027147,
+    "train_accuracy": 0.4765625
+  },
+  "top_predictive_features_per_class": {
+    "^0|C": [
+      {
+        "feature": "an",
+        "weight": 0.40034174299797853
+      },
+      {
+        "feature": "an inner",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "as an",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "exists only",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "inner mental",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "thought-content that",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "exists",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "thought-content",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "only",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "mental object",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "that exists",
+        "weight": 0.3593074729531455
+      },
+      {
+        "feature": "mental",
+        "weight": 0.3593074729531455
+      }
+    ],
+    "^0|E": [
+      {
+        "feature": "an",
+        "weight": 0.3279882502997575
+      },
+      {
+        "feature": "after waking",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "sheath or",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "of an",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "an idea",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "sheath",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "the lingering",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "lingering",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "like",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "lingering felt",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "felt sheath",
+        "weight": 0.2904574406528067
+      },
+      {
+        "feature": "idea like",
+        "weight": 0.2904574406528067
+      }
+    ],
+    "^0|O": [
+      {
+        "feature": "a",
+        "weight": 0.3797453857239006
+      },
+      {
+        "feature": "material",
+        "weight": 0.36844500410153563
+      },
+      {
+        "feature": "matter",
+        "weight": 0.34124954255650025
+      },
+      {
+        "feature": "entirely",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "entirely as",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "existing",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "dead",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "dead matter",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "existing entirely",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "as a",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "matter or",
+        "weight": 0.32906667258365063
+      },
+      {
+        "feature": "a material",
+        "weight": 0.32906667258365063
+      }
+    ],
+    "^0|P": [
+      {
+        "feature": "unseen",
+        "weight": 0.35940050877479773
+      },
+      {
+        "feature": "a",
+        "weight": 0.34263536559164554
+      },
+      {
+        "feature": "matter",
+        "weight": 0.30207131538303683
+      },
+      {
+        "feature": "akashic",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "soul-state or",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "soul-state",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "akashic record",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "unseen matter",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "a purely",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "record",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "or akashic",
+        "weight": 0.29605994432559857
+      },
+      {
+        "feature": "matter true",
+        "weight": 0.29605994432559857
+      }
+    ],
+    "^1|C": [
+      {
+        "feature": "analytical processing",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "analytical",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "memory past",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "conclusions",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "ego memory",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "ego",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "past",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "past experience",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "processing",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "processing that",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "reaches",
+        "weight": 0.36654226903808984
+      },
+      {
+        "feature": "experience",
+        "weight": 0.36654226903808984
+      }
+    ],
+    "^1|E": [
+      {
+        "feature": "awareness",
+        "weight": 0.38342860658922473
+      },
+      {
+        "feature": "another's feelings",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "another's",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "and sorting",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "awareness of",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "sorting",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "sorting decisions",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "feelings and",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "own",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "or another's",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "of one's",
+        "weight": 0.3343456650926119
+      },
+      {
+        "feature": "one's",
+        "weight": 0.3343456650926119
+      }
+    ],
+    "^1|O": [
+      {
+        "feature": "awareness",
+        "weight": 0.45108449107615844
+      },
+      {
+        "feature": "substrate hosting",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "brain body",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "body",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "machine substrate",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "brain",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "body cellular",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "or machine",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "hosting awareness",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "hardware",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "hosting",
+        "weight": 0.39027549330669226
+      },
+      {
+        "feature": "hardware or",
+        "weight": 0.39027549330669226
+      }
+    ],
+    "^1|P": [
+      {
+        "feature": "unseen",
+        "weight": 0.359636956073827
+      },
+      {
+        "feature": "all",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "all causes",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "what guides",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "contact with",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "contact",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "causes",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "guides",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "ultimate",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "guides all",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "ultimate source-awareness",
+        "weight": 0.3032670856084627
+      },
+      {
+        "feature": "unseen purpose",
+        "weight": 0.3032670856084627
+      }
+    ],
+    "^2|C": [
+      {
+        "feature": "sanity optimism",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "sanity",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "benevolence",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "optimism benevolence",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "benevolence and",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "optimism",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "clarity",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "and enlightened",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "clarity sanity",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "enlightened thought",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "enlightened",
+        "weight": 0.48974583871965544
+      },
+      {
+        "feature": "thought",
+        "weight": 0.4812078190326604
+      }
+    ],
+    "^2|E": [
+      {
+        "feature": "pleasurable feeling",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "pleasurable",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "fellowship and",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "love fellowship",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "love",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "calm",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "calm love",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "and pleasurable",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "fellowship",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "joy calm",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "joy",
+        "weight": 0.49361190806418176
+      },
+      {
+        "feature": "feeling",
+        "weight": 0.4373369162276225
+      }
+    ],
+    "^2|O": [
+      {
+        "feature": "parts",
+        "weight": 0.3958432670927908
+      },
+      {
+        "feature": "to",
+        "weight": 0.3857841435657652
+      },
+      {
+        "feature": "according to",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "design",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "complement",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "complement each",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "according",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "each other",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "function",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "to design",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "function according",
+        "weight": 0.3402252027832427
+      },
+      {
+        "feature": "well-fit parts",
+        "weight": 0.3402252027832427
+      }
+    ],
+    "^2|P": [
+      {
+        "feature": "to",
+        "weight": 0.3115127054279753
+      },
+      {
+        "feature": "soul",
+        "weight": 0.28240083022125795
+      },
+      {
+        "feature": "the soul",
+        "weight": 0.28240083022125795
+      },
+      {
+        "feature": "its",
+        "weight": 0.28240083022125795
+      },
+      {
+        "feature": "soul and",
+        "weight": 0.28240083022125795
+      },
+      {
+        "feature": "draws it",
+        "weight": 0.27175335885796464
+      },
+      {
+        "feature": "virtue that",
+        "weight": 0.27175335885796464
+      },
+      {
+        "feature": "virtue",
+        "weight": 0.27175335885796464
+      },
+      {
+        "feature": "that quiets",
+        "weight": 0.27175335885796464
+      },
+      {
+        "feature": "quiets the",
+        "weight": 0.27175335885796464
+      },
+      {
+        "feature": "or virtue",
+        "weight": 0.27175335885796464
+      },
+      {
+        "feature": "its highest",
+        "weight": 0.27175335885796464
+      }
+    ],
+    "^3|C": [
+      {
+        "feature": "thought",
+        "weight": 0.559741036236632
+      },
+      {
+        "feature": "pessimism or",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "or malicious",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "pessimism",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "dissonance pessimism",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "confusion indecision",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "dissonance",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "confusion",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "malicious",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "malicious thought",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "indecision",
+        "weight": 0.4860993845022732
+      },
+      {
+        "feature": "indecision dissonance",
+        "weight": 0.4860993845022732
+      }
+    ],
+    "^3|E": [
+      {
+        "feature": "anger",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "anger resentment",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "contempt loneliness",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "contempt",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "sadness",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "mixed",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "mixed pain",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "pain",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "or mixed",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "loneliness",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "loneliness hate",
+        "weight": 0.40129202598302327
+      },
+      {
+        "feature": "hate or",
+        "weight": 0.40129202598302327
+      }
+    ],
+    "^3|O": [
+      {
+        "feature": "parts",
+        "weight": 0.4919805728700194
+      },
+      {
+        "feature": "parts disorder",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "or broken",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "broken",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "misplaced parts",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "misplaced",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "broken symmetry",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "dysfunction or",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "disorder disease",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "dysfunction",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "symmetry",
+        "weight": 0.4303200668254566
+      },
+      {
+        "feature": "disease dysfunction",
+        "weight": 0.4303200668254566
+      }
+    ],
+    "^3|P": [
+      {
+        "feature": "soul and",
+        "weight": 0.313760689503063
+      },
+      {
+        "feature": "soul",
+        "weight": 0.313760689503063
+      },
+      {
+        "feature": "the soul",
+        "weight": 0.313760689503063
+      },
+      {
+        "feature": "its",
+        "weight": 0.313760689503063
+      },
+      {
+        "feature": "vice",
+        "weight": 0.30931363728121797
+      },
+      {
+        "feature": "vice fear",
+        "weight": 0.30931363728121797
+      },
+      {
+        "feature": "harmful influence",
+        "weight": 0.30931363728121797
+      },
+      {
+        "feature": "influence",
+        "weight": 0.30931363728121797
+      },
+      {
+        "feature": "troubles the",
+        "weight": 0.30931363728121797
+      },
+      {
+        "feature": "harmful",
+        "weight": 0.30931363728121797
+      },
+      {
+        "feature": "slows",
+        "weight": 0.30931363728121797
+      },
+      {
+        "feature": "slows its",
+        "weight": 0.30931363728121797
+      }
+    ],
+    "^4|C": [
+      {
+        "feature": "and the",
+        "weight": 0.434812444767204
+      },
+      {
+        "feature": "brainwave-like",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "brainwave-like resonance",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "unique psychic",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "psychic signature",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "psychic",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "resonance",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "resonance and",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "signature",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "signature of",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "unique",
+        "weight": 0.41313915122809786
+      },
+      {
+        "feature": "the unique",
+        "weight": 0.41313915122809786
+      }
+    ],
+    "^4|E": [
+      {
+        "feature": "and the",
+        "weight": 0.36298313290313117
+      },
+      {
+        "feature": "ambiance mood-energy",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "carried by",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "carried",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "by a",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "aura carried",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "event",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "place",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "place or",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "person",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "mood-energy and",
+        "weight": 0.3350311749262617
+      },
+      {
+        "feature": "or event",
+        "weight": 0.3350311749262617
+      }
+    ],
+    "^4|O": [
+      {
+        "feature": "electromagnetism or",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "light",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "heat",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "electromagnetism",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "heat electromagnetism",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "particle",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "oscillation",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "or particle",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "sound",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "sound radiation",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "particle oscillation",
+        "weight": 0.43674047639879854
+      },
+      {
+        "feature": "radiation heat",
+        "weight": 0.43674047639879854
+      }
+    ],
+    "^4|P": [
+      {
+        "feature": "purpose-frequency",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "purpose-frequency behind",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "and purpose-frequency",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "aura and",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "behind",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "aetheric energy",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "subtle aetheric",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "subtle",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "energy aura",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "behind a",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "aetheric",
+        "weight": 0.42216158543766813
+      },
+      {
+        "feature": "energy",
+        "weight": 0.42216158543766813
+      }
+    ],
+    "^5|C": [
+      {
+        "feature": "receptivity",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "imaginative",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "creativity and",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "subconscious receptivity",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "subconscious",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "creativity",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "openness",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "right-brain",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "right-brain creativity",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "openness right-brain",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "and subconscious",
+        "weight": 0.49335633495234577
+      },
+      {
+        "feature": "imaginative openness",
+        "weight": 0.49335633495234577
+      }
+    ],
+    "^5|E": [
+      {
+        "feature": "compassion sympathy",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "and receptive",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "compassion",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "receptive feeling",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "sensuality and",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "sensuality",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "acceptance",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "acceptance sensuality",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "sympathy acceptance",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "sympathy",
+        "weight": 0.510070842164387
+      },
+      {
+        "feature": "feeling",
+        "weight": 0.4725892600330104
+      },
+      {
+        "feature": "receptive",
+        "weight": 0.4625739332298651
+      }
+    ],
+    "^5|O": [
+      {
+        "feature": "womb",
+        "weight": 0.4309433442894691
+      },
+      {
+        "feature": "facilitator",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "facilitator that",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "and nurtures",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "accepts and",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "seed",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "a seed",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "that accepts",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "receiver",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "nurtures a",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "or facilitator",
+        "weight": 0.3739906626015701
+      },
+      {
+        "feature": "accepts",
+        "weight": 0.3739906626015701
+      }
+    ],
+    "^5|P": [
+      {
+        "feature": "womb",
+        "weight": 0.4523423951285571
+      },
+      {
+        "feature": "growth nurture",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "and protection",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "needed growth",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "needed",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "nurture and",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "nurture",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "receptive womb",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "soul's receptive",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "protection",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "for needed",
+        "weight": 0.38799009596597445
+      },
+      {
+        "feature": "womb for",
+        "weight": 0.38799009596597445
+      }
+    ],
+    "^6|C": [
+      {
+        "feature": "logic",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "left-brain logic",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "left-brain",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "conscious",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "criticism rigidity",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "criticism",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "conscious analysis",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "analysis",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "and conscious",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "rigidity and",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "rigidity",
+        "weight": 0.5110250331996452
+      },
+      {
+        "feature": "logic criticism",
+        "weight": 0.5110250331996452
+      }
+    ],
+    "^6|E": [
+      {
+        "feature": "pride dominance",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "pride",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "and forceful",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "forceful feeling",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "forceful",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "dominance and",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "dominance",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "aggression pride",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "aggression",
+        "weight": 0.5696500911983557
+      },
+      {
+        "feature": "feeling",
+        "weight": 0.5193932760920366
+      },
+      {
+        "feature": "where aggression",
+        "weight": 0.27154870499340183
+      },
+      {
+        "feature": "feeling b",
+        "weight": 0.1669823660838506
+      }
+    ],
+    "^6|O": [
+      {
+        "feature": "appendage",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "appendage seed-deliverer",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "projecting",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "projecting part",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "transmitter appendage",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "or outward",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "outward projecting",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "part",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "transmitter",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "outward",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "seed-deliverer",
+        "weight": 0.5045011742160329
+      },
+      {
+        "feature": "seed-deliverer or",
+        "weight": 0.5045011742160329
+      }
+    ],
+    "^6|P": [
+      {
+        "feature": "and trials",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "discipline for",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "austere",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "for the",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "discipline",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "austere practices",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "trials that",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "trials",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "practices",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "that transmit",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "practices and",
+        "weight": 0.36044140835762056
+      },
+      {
+        "feature": "soul's growth",
+        "weight": 0.36044140835762056
+      }
+    ],
+    "^7|C": [
+      {
+        "feature": "thought",
+        "weight": 0.6274617411503262
+      },
+      {
+        "feature": "pattern",
+        "weight": 0.45138525160188
+      },
+      {
+        "feature": "frequency",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "frequency of",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "transition",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "transition or",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "recurring",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "recurring thought",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "thought pattern",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "or frequency",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "ego-state",
+        "weight": 0.3683703791541036
+      },
+      {
+        "feature": "ego-state transition",
+        "weight": 0.3683703791541036
+      }
+    ],
+    "^7|E": [
+      {
+        "feature": "pattern",
+        "weight": 0.5191371344126251
+      },
+      {
+        "feature": "swing feeling-sequence",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "or emotional",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "emotional",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "emotional roller-coaster",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "feeling-sequence",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "mood",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "swing",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "roller-coaster",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "roller-coaster pattern",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "feeling-sequence or",
+        "weight": 0.5025676694768143
+      },
+      {
+        "feature": "mood swing",
+        "weight": 0.5025676694768143
+      }
+    ],
+    "^7|O": [
+      {
+        "feature": "routine or",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "dance",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "sequence",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "routine",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "exercise",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "timed physical",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "timed",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "exercise dance",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "dance sex",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "or timed",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "physical sequence",
+        "weight": 0.35656125184514054
+      },
+      {
+        "feature": "physical",
+        "weight": 0.35656125184514054
+      }
+    ],
+    "^7|P": [
+      {
+        "feature": "and fall",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "destiny pattern",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "destiny",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "fall",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "fall of",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "sacred",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "the rise",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "life-journey",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "sacred timing",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "a life-journey",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "rise",
+        "weight": 0.35972601639066487
+      },
+      {
+        "feature": "pattern or",
+        "weight": 0.35972601639066487
+      }
+    ],
+    "^8|C": [
+      {
+        "feature": "comprehension",
+        "weight": 0.4715726379860039
+      },
+      {
+        "feature": "brilliant intelligence",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "brilliant",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "contemplation of",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "contemplation",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "comprehension contemplation",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "complex comprehension",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "complex",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "and brilliant",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "important matters",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "important",
+        "weight": 0.40402872533048517
+      },
+      {
+        "feature": "matters",
+        "weight": 0.40402872533048517
+      }
+    ],
+    "^8|E": [
+      {
+        "feature": "after deep",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "and control",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "control",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "control over",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "feelings after",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "healed resolve",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "deep",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "healed",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "deep insight",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "over lower",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "resolve and",
+        "weight": 0.3825775142773175
+      },
+      {
+        "feature": "lower feelings",
+        "weight": 0.3825775142773175
+      }
+    ],
+    "^8|O": [
+      {
+        "feature": "high",
+        "weight": 0.7433846166377284
+      },
+      {
+        "feature": "grade good",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "good",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "good material",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "high grade",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "high social",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "height",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "height high",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "integrity or",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "or high",
+        "weight": 0.3431697259980556
+      },
+      {
+        "feature": "material integrity",
+        "weight": 0.3252712041648893
+      },
+      {
+        "feature": "integrity",
+        "weight": 0.3252712041648893
+      }
+    ],
+    "^8|P": [
+      {
+        "feature": "high",
+        "weight": 0.5009365159478031
+      },
+      {
+        "feature": "moral",
+        "weight": 0.4478954550645242
+      },
+      {
+        "feature": "esoteric reality",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "high moral",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "esoteric",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "initiation esoteric",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "initiation",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "inner meaning",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "reality",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "meaning",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "meaning initiation",
+        "weight": 0.38985128642756134
+      },
+      {
+        "feature": "moral insight",
+        "weight": 0.38985128642756134
+      }
+    ],
+    "^9|C": [
+      {
+        "feature": "comprehension",
+        "weight": 0.5481211537987413
+      },
+      {
+        "feature": "pondering",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "simplistic",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "or simplistic",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "limited comprehension",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "menial concern",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "menial",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "simplistic pondering",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "limited",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "concern",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "concern or",
+        "weight": 0.4721494577876118
+      },
+      {
+        "feature": "comprehension menial",
+        "weight": 0.4721494577876118
+      }
+    ],
+    "^9|E": [
+      {
+        "feature": "rather than",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "rather",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "overwhelmed and",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "and driven",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "overwhelmed",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "being",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "driven",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "feeling rather",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "holding it",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "holding",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "than holding",
+        "weight": 0.380864534212501
+      },
+      {
+        "feature": "than",
+        "weight": 0.380864534212501
+      }
+    ],
+    "^9|O": [
+      {
+        "feature": "low",
+        "weight": 0.6027697433848266
+      },
+      {
+        "feature": "position",
+        "weight": 0.5837346168983074
+      },
+      {
+        "feature": "material",
+        "weight": 0.3434171623714842
+      },
+      {
+        "feature": "integrity low",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "grade or",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "low grade",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "position poor",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "or low",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "lower position",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "low social",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "poor material",
+        "weight": 0.3013848716924133
+      },
+      {
+        "feature": "poor",
+        "weight": 0.3013848716924133
+      }
+    ],
+    "^9|P": [
+      {
+        "feature": "moral",
+        "weight": 0.42143007040372377
+      },
+      {
+        "feature": "shallow moral",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "shallow",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "shell",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "grasp or",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "exoteric",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "exoteric shell",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "empty appearance",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "outer",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "empty",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "shell shallow",
+        "weight": 0.35579310517902324
+      },
+      {
+        "feature": "outer symbol",
+        "weight": 0.35579310517902324
+      }
+    ]
+  }
+}

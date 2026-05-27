@@ -89,3 +89,8 @@ To promote TKS40 into a fuller Evidence Packet, merge this readout report with:
 For a future TKS40 headline claim, first build a hardened `tks40_balanced_v1`
 scenario library where compact class glosses are not repeated directly and the
 pre-registered text-baseline ceiling is `<= 60%`.
+
+Follow-up: the original Pythia-era Stage 9 40E fixture was regenerated from
+commit `be9b4a3` and passed the modern diagnostic at `49.24%` text-only
+accuracy. The blocked text-baseline issue is therefore specific to the new
+compact-gloss TKS40 v0 library, not to the original Stage 9 fixture design.

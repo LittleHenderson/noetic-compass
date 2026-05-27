@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Diagnose whether a TKS40 scenario library is too easy for text baselines.
+"""Diagnose whether a CAS scenario library is too easy for text baselines.
 
 This script is intentionally separate from the hidden-state evaluator. It uses
 an interpretable CountVectorizer, not HashingVectorizer, so the report can name
-the phrases that let a text-only classifier recover the 40-Element label.
+the phrases that let a text-only classifier recover the target label.
 """
 
 from __future__ import annotations
@@ -26,10 +26,11 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from probe_dataset_common import load_labeled_scenarios  # noqa: E402
+from probe_dataset_common import extract_labels  # noqa: E402
 
 
-SCHEMA_VERSION = "cas_harness_tks40_text_baseline_diagnostic.v1"
+SCHEMA_VERSION = "cas_harness_text_baseline_diagnostic.v2"
+PROMPT_KEYS = ("prompt", "prompt_text", "text", "english")
 
 
 def _strip_framing_tags(prompt: str) -> str:
@@ -37,6 +38,56 @@ def _strip_framing_tags(prompt: str) -> str:
     while s.startswith("[") and "]" in s:
         s = s.split("]", 1)[1].lstrip()
     return s
+
+
+def _load_items(path: Path) -> list[dict[str, Any]]:
+    if path.suffix.lower() == ".jsonl":
+        items = []
+        for line in path.read_text(encoding="utf-8").splitlines():
+            if line.strip():
+                item = json.loads(line)
+                if isinstance(item, dict):
+                    items.append(item)
+        return items
+
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    raw = payload.get("scenarios", payload) if isinstance(payload, dict) else payload
+    if not isinstance(raw, list):
+        raise RuntimeError("Scenario file must be a JSONL file, a list, or contain a scenarios list.")
+    return [item for item in raw if isinstance(item, dict)]
+
+
+def _get_path_value(item: dict[str, Any], path: str | None) -> Any:
+    if not path:
+        return None
+    current: Any = item
+    for part in path.split("."):
+        if not isinstance(current, dict):
+            return None
+        current = current.get(part)
+    return current
+
+
+def _prompt_for_item(item: dict[str, Any]) -> str:
+    for key in PROMPT_KEYS:
+        value = item.get(key)
+        if value is not None:
+            prompt = str(value).strip()
+            if prompt:
+                return prompt
+    return ""
+
+
+def _label_for_item(item: dict[str, Any], label_key: str) -> str:
+    labels = extract_labels(item)
+    if label_key in labels:
+        return labels[label_key]
+    direct = _get_path_value(item, label_key)
+    if direct is not None:
+        label = str(direct).strip()
+        if label:
+            return label
+    raise KeyError(f"item has no label for {label_key!r}")
 
 
 def _sample_by_label(
@@ -77,21 +128,59 @@ def diagnose(
     *,
     scenario_path: Path,
     output_path: Path,
+    label_key: str = "element",
+    axis_name: str | None = None,
+    group_key: str | None = None,
+    split_key: str | None = None,
+    test_split: str = "test",
     test_size: float = 0.2,
     seed: int = 2026,
     top_k: int = 8,
     samples_per_label: int = 2,
 ) -> dict[str, Any]:
-    scenarios = load_labeled_scenarios(scenario_path)
-    prompts = [scenario.prompt for scenario in scenarios]
-    labels = [scenario.labels["element"] for scenario in scenarios]
-    label_counts = dict(sorted(Counter(labels).items()))
+    items = _load_items(scenario_path)
+    prompts: list[str] = []
+    labels: list[str] = []
+    groups: list[str] = []
+    splits: list[str] = []
+    for index, item in enumerate(items):
+        prompt = _prompt_for_item(item)
+        if not prompt:
+            continue
+        try:
+            label = _label_for_item(item, label_key)
+        except KeyError:
+            continue
+        prompts.append(prompt)
+        labels.append(label)
+        group_value = _get_path_value(item, group_key) if group_key else None
+        groups.append(str(group_value or _strip_framing_tags(prompt)))
+        split_value = _get_path_value(item, split_key) if split_key else None
+        splits.append(str(split_value or ""))
 
-    groups = np.asarray([_strip_framing_tags(prompt) for prompt in prompts])
+    if not prompts:
+        raise RuntimeError(f"No scenarios with prompt text and {label_key!r} labels found.")
+
+    label_counts = dict(sorted(Counter(labels).items()))
+    axis = axis_name or label_key
+
+    groups = np.asarray(groups)
     y = np.asarray(labels)
 
-    splitter = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=seed)
-    train_idx, test_idx = next(splitter.split(np.asarray(prompts), y, groups=groups))
+    split_kind = "GroupShuffleSplit by stripped base prompt"
+    if split_key and any(splits):
+        split_arr = np.asarray(splits)
+        test_idx = np.flatnonzero(split_arr == test_split)
+        train_idx = np.flatnonzero((split_arr != test_split) & (split_arr != ""))
+        if len(train_idx) == 0 or len(test_idx) == 0:
+            raise RuntimeError(
+                f"Split key {split_key!r} with test split {test_split!r} did not produce train/test rows."
+            )
+        split_kind = f"fixed split by {split_key}; test_split={test_split}"
+    else:
+        splitter = GroupShuffleSplit(n_splits=1, test_size=test_size, random_state=seed)
+        train_idx, test_idx = next(splitter.split(np.asarray(prompts), y, groups=groups))
+
     train_groups = set(groups[train_idx].tolist())
     test_groups = set(groups[test_idx].tolist())
     group_overlap = sorted(train_groups & test_groups)
@@ -128,17 +217,29 @@ def diagnose(
     )
     test_accuracy = float(accuracy_score(y[test_idx], test_pred))
     test_macro_f1 = float(f1_score(y[test_idx], test_pred, average="macro", zero_division=0))
+    passes_text_ceiling = test_accuracy <= 0.60
+    claim_gate_reason = (
+        f"The text-only classifier stayed below the ceiling for {axis}. "
+        "This scenario library can be used as a meaningful text-baseline adversary."
+        if passes_text_ceiling
+        else (
+            f"A text-only classifier can recover the {axis} label too well. "
+            "Do not claim hidden-state readout beats surface text until the "
+            "scenario library is hardened and rerun."
+        )
+    )
 
     report = {
         "schema_version": SCHEMA_VERSION,
         "created_at": datetime.now(UTC).isoformat(),
         "scenario_path": str(scenario_path),
-        "axis": "40_element_operator_x_domain",
-        "n_scenarios": len(scenarios),
+        "axis": axis,
+        "label_key": label_key,
+        "n_scenarios": len(prompts),
         "n_classes": len(label_counts),
         "label_counts": label_counts,
         "split": {
-            "kind": "GroupShuffleSplit by stripped base prompt",
+            "kind": split_kind,
             "test_size": test_size,
             "seed": seed,
             "train_count": int(len(train_idx)),
@@ -155,19 +256,15 @@ def diagnose(
             "n_features": int(len(feature_names)),
         },
         "claim_gate": {
-            "cas_beats_text_claim_allowed": test_accuracy <= 0.60,
+            "cas_beats_text_claim_allowed": passes_text_ceiling,
             "target_text_baseline_ceiling": 0.60,
             "actual_text_baseline": test_accuracy,
             "status": (
                 "blocked_text_baseline_too_high"
-                if test_accuracy > 0.60
+                if not passes_text_ceiling
                 else "passes_text_baseline_ceiling"
             ),
-            "reason": (
-                "A text-only classifier can recover the TKS40 label too well. "
-                "Do not claim hidden-state readout beats surface text until the "
-                "scenario library is hardened and rerun."
-            ),
+            "reason": claim_gate_reason,
         },
         "top_predictive_features_per_class": top_features,
         "sample_prompts_per_class": _sample_by_label(
@@ -178,7 +275,7 @@ def diagnose(
         "template_prefix_counts": dict(repeated_template_counts.most_common(20)),
         "interpretation": (
             "If test_accuracy is near 1.0, the scenario text is too lexically separable "
-            "for a CAS-beats-text claim. Hidden-state readout can still be real, but "
+            "for a CAS-beats-text claim on this axis. Hidden-state readout can still be real, but "
             "the eval set is not a meaningful text adversary."
         ),
     }
@@ -191,6 +288,11 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--scenario", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--label-key", default="element")
+    parser.add_argument("--axis-name")
+    parser.add_argument("--group-key")
+    parser.add_argument("--split-key")
+    parser.add_argument("--test-split", default="test")
     parser.add_argument("--test-size", type=float, default=0.2)
     parser.add_argument("--seed", type=int, default=2026)
     parser.add_argument("--top-k", type=int, default=8)
@@ -200,6 +302,11 @@ def main() -> int:
     report = diagnose(
         scenario_path=args.scenario,
         output_path=args.output,
+        label_key=args.label_key,
+        axis_name=args.axis_name,
+        group_key=args.group_key,
+        split_key=args.split_key,
+        test_split=args.test_split,
         test_size=args.test_size,
         seed=args.seed,
         top_k=args.top_k,
