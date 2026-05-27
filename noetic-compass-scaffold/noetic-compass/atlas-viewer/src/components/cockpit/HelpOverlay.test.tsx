@@ -19,6 +19,17 @@ describe('HelpOverlay', () => {
     expect(faq).toHaveTextContent('not yet the final verdict layer');
   });
 
+  it('explains the TKS40 text-baseline guard without promoting the claim', () => {
+    render(<HelpOverlay open onClose={vi.fn()} />);
+
+    const faq = screen.getByTestId('tks40-text-baseline-faq');
+    expect(faq).toHaveTextContent('FAQ: TKS40 Text Baseline Guard');
+    expect(faq).toHaveTextContent('hidden states read the balanced TKS40 axis at 97.50%');
+    expect(faq).toHaveTextContent('text-only classifier also reached 100.00%');
+    expect(faq).toHaveTextContent('cannot support the claim that CAS beats text-only baselines yet');
+    expect(faq).toHaveTextContent('pre-registered text-baseline ceiling of 60% or lower');
+  });
+
   it('keeps the FAQ behind the help overlay and closes cleanly', () => {
     const closed = render(<HelpOverlay open={false} onClose={vi.fn()} />);
     expect(screen.queryByTestId('cas-harness-method-faq')).not.toBeInTheDocument();
