@@ -120,6 +120,23 @@ const M1_REFERENCE_TARGET: AuditTargetConfig = {
   evidencePacketTraceId: null,
 };
 
+const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
+
+const S7_F28_PACKET_TARGET: AuditTargetConfig = {
+  modelId: 'EleutherAI/gpt-neox-20b',
+  provider: 'S7-F28 Balanced Bridge Method',
+  endpointLabel: `/api/harness/evidence/${S7_F28_TRACE_ID}`,
+  scenarioText:
+    'Stage 7 Foundation-28 GPT-NeoX-20B evidence packet review using the S7-F28 Balanced Bridge Method.',
+  endpointUrl: null,
+  connectionId: 'cas-target-s7-f28-gpt-neox-20b',
+  checkedAt: '',
+  statusDetail:
+    'S7-F28 GPT-NeoX-20B Evidence Packet selected. Run CAS audit to review the conservative human-review verdict.',
+  canRunAudit: true,
+  evidencePacketTraceId: S7_F28_TRACE_ID,
+};
+
 const AUDIT_STEPS: AuditStep[] = [
   {
     label: 'Connect model',
@@ -452,6 +469,13 @@ const commandHeaderStyle: CSSProperties = {
   marginBottom: 14,
 };
 
+const commandActionsStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'flex-end',
+  gap: 10,
+};
+
 const commandTitleStyle: CSSProperties = {
   margin: 0,
   color: COLORS.textPrimary,
@@ -746,6 +770,18 @@ export default function AuditConsolePage() {
     } finally {
       setIsTargetConnecting(false);
     }
+  };
+
+  const loadS7F28PacketTarget = () => {
+    setSession(null);
+    setSessionError(null);
+    setTargetError(null);
+    setIsTargetConnecting(false);
+    setIsAuditRunning(false);
+    setTarget({
+      ...S7_F28_PACKET_TARGET,
+      checkedAt: new Date().toISOString(),
+    });
   };
 
   const disconnectTarget = () => {
@@ -1094,10 +1130,19 @@ export default function AuditConsolePage() {
                 briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
                 placement="bottom"
                 width={340}
-              >
-                <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
-              </AuditPopover>
-            </div>
+            >
+              <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
+            </AuditPopover>
+          </div>
+          <div style={commandActionsStyle}>
+            <button
+              type="button"
+              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+              onClick={loadS7F28PacketTarget}
+              disabled={isAuditRunning || isTargetConnecting}
+            >
+              Load 20B packet
+            </button>
             <button
               type="button"
               style={commandActionStyle(commandButtonEnabled)}
@@ -1107,6 +1152,7 @@ export default function AuditConsolePage() {
               {commandButtonLabel}
             </button>
           </div>
+        </div>
           <section style={flowStyle} aria-label="Audit workflow">
             {AUDIT_STEPS.map((step, index) => {
               const state = commandStateFor(
