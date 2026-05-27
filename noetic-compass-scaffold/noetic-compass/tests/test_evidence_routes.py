@@ -218,6 +218,37 @@ def test_evidence_get_s7_f28_packet_from_working_docs(client, auth_headers):
     assert body["output"]["probe_readable"]["delta_vs_none_mean"] == 0.596413
     assert body["verification"]["explicit_verifier_decision"]["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
     assert body["verification"]["explicit_verifier_decision"]["confidence"] == 0.803571
+    assert body["verification"]["packet_integrity"]["status"] == "present_only_not_verifier_clean"
+    assert any("Packet proof is present-only" in caveat for caveat in body["caveats"])
+
+
+def test_evidence_verify_s7_f28_packet_is_present_only_not_clean(client, auth_headers):
+    resp = client.post(f"/evidence/{_S7_F28_TRACE_ID}/verify", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["trace_id"] == _S7_F28_TRACE_ID
+    assert body["overall"] == "partial_mismatch"
+
+    corpus_check = next(
+        (check for check in body["checks"] if check["artifact"] == "corpus"),
+        None,
+    )
+    assert corpus_check is not None
+    assert corpus_check["match"] is False
+    assert corpus_check["actual"] is None
+    assert corpus_check["notes"] in {
+        "path is outside allowed roots",
+        "file not found locally",
+    }
+
+    code_commit_check = next(
+        (check for check in body["checks"] if check["artifact"] == "code_commit"),
+        None,
+    )
+    assert code_commit_check is not None
+    assert code_commit_check["match"] is False
+    assert "HEAD has moved" in code_commit_check["notes"]
 
 
 def test_evidence_verify_cas_harness_reference_packet_is_unavailable_not_mismatch(

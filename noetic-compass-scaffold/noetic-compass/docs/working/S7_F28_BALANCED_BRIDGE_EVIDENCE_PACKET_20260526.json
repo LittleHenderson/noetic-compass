@@ -70,7 +70,8 @@
     "The verdict is FLAG_FOR_HUMAN_REVIEW because the Stage 19/20/21 production verifier layer is not attached.",
     "The trace diagnostic uses a numeric layer-trace proxy, not yet the discrete cas-engine CognitiveFractal orbit classifier.",
     "Activation-cover ablation is measured on captured hidden states; it is not the same as a live forward-pass steering hook.",
-    "The packet records model identity and architecture, but no independent model-weight SHA is available in these artifacts."
+    "The packet records model identity and architecture, but no independent model-weight SHA is available in these artifacts.",
+    "Packet proof is present-only on this host: source artifact paths point to the local C:\\tmp run archive and the recorded source commit is not the current PR HEAD, so /evidence/{trace_id}/verify is expected to return partial_mismatch until artifacts are copied under allowed roots and the source commit is checked out."
   ],
   "claim_levels": [
     {
@@ -109,10 +110,10 @@
       "support_status": "supported"
     },
     {
-      "claim": "Evidence Packet proof: artifact hashes and method provenance are bound into this packet.",
-      "level": "packet_integrity",
-      "rationale": "SHA-256 hashes are recorded for the source reports used to assemble the packet.",
-      "support_rationale": "SHA-256 hashes are recorded for the source reports used to assemble the packet.",
+      "claim": "Evidence Packet proof: artifact hashes and method provenance are recorded in this packet; live hash verification is not clean on this host.",
+      "level": "packet_integrity_present_only",
+      "rationale": "SHA-256 hashes are recorded for the source reports used to assemble the packet, but the source artifacts are outside the API verifier's allowed roots in this checkout.",
+      "support_rationale": "SHA-256 hashes are recorded for the source reports used to assemble the packet, but this checkout can only treat packet proof as present until the source artifacts are copied under allowed roots.",
       "support_status": "supported"
     }
   ],
@@ -377,7 +378,7 @@
     },
     "explicit_verifier_decision": {
       "confidence": 0.803571,
-      "reason": "All S7-F28 evidence layers are present, but this packet is a large-model validation artifact. Final production ACCEPT/SUPPRESS still requires the Stage 19/20/21 verifier decision layer.",
+      "reason": "All S7-F28 evidence layers are present, but packet hash verification is present-only on this host and this packet is a large-model validation artifact. Final production ACCEPT/SUPPRESS still requires the Stage 19/20/21 verifier decision layer.",
       "source": "S7-F28-BALANCED-BRIDGE",
       "verdict": "FLAG_FOR_HUMAN_REVIEW"
     },
@@ -413,12 +414,17 @@
         "status": "verified"
       },
       {
-        "detail": "This Evidence Packet binds the run artifacts and SHA-256 hashes.",
+        "detail": "This Evidence Packet records run artifact SHA-256 hashes; live re-hash verification is present-only until source artifacts are copied under allowed roots.",
         "id": "packet_proof",
         "name": "Packet proof",
         "status": "present"
       }
     ],
+    "packet_integrity": {
+      "expected_verify_overall_on_this_host": "partial_mismatch",
+      "reason": "The S7-F28 packet records C:\\tmp source artifact paths and the source commit from the run, while the API verifier only reads allowed project roots and compares against the current checkout HEAD.",
+      "status": "present_only_not_verifier_clean"
+    },
     "trace_diagnostics": {
       "classifier_kind": "numeric_trace_proxy",
       "drive_lacunarity": 0.002752,
