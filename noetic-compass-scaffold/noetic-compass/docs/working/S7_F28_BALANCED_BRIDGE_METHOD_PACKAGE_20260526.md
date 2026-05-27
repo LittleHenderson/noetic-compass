@@ -124,12 +124,26 @@ The 20B result now has:
 
 This is strong 20B evidence.
 
-It is not yet a final CAS Harness verdict, because the Evidence Packet/verifier merge still needs to be built.
+The Evidence Packet merge is now built for this 20B run:
+
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
+
+Packet result:
+
+- Verdict: `FLAG_FOR_HUMAN_REVIEW`
+- Evidence confidence: `0.803571`
+- Formula: `min(balanced_logistic_heldout_accuracy, probe_readable_positive_fraction, causal_control_pass, trace_gate_pass)`
+
+It is still not a final CAS Harness ACCEPT/SUPPRESS verdict, because the Stage 19/20/21 production verifier decision layer is not attached yet.
 
 ## Relevant Files
 
 - `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py`
 - `live-trace-worker/scripts/run_open_weight_trace_diagnostics.py`
+- `live-trace-worker/scripts/merge_s7_f28_balanced_bridge_evidence_packet.py`
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
 - `docs/working/cas_harness_large_model_runpod_status_20260526.md`
 - `docs/working/cas_harness_foundation28_large_model_protocol_20260526.md`
 - `docs/working/S7_F28_BALANCED_BRIDGE_METHOD_PACKAGE_20260526.md`
@@ -138,6 +152,6 @@ It is not yet a final CAS Harness verdict, because the Evidence Packet/verifier 
 
 ## Next Gate
 
-Build the Evidence Packet merger for the exact Stage 7 GPT-NeoX-20B chain.
+Attach the Stage 19/20/21 production verifier decision layer, or port the exact same packet protocol to the next open-weight model family.
 
-The merger should bind readout, ablation, bridge, trace diagnostics, model metadata, hashes, confidence, coverage, and caveats into one packet before any final verdict is shown.
+The packet exists now and binds readout, ablation, bridge, trace diagnostics, model metadata, hashes, confidence, coverage, and caveats. Do not upgrade the packet to ACCEPT/SUPPRESS unless the verifier layer explicitly returns that decision.

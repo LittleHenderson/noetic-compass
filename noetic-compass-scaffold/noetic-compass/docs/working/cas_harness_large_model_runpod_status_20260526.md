@@ -356,11 +356,33 @@ So the current 20B drive-only forward pilot is a useful negative diagnostic, but
 
 Concrete protocol: `docs/working/cas_harness_foundation28_large_model_protocol_20260526.md`.
 
+### S7-F28 Evidence Packet merge
+
+The exact Stage 7 Foundation-28 GPT-NeoX-20B chain has now been merged into a real Evidence Packet.
+
+Packet files:
+
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
+
+Archive copies:
+
+- `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526\S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
+- `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526\S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
+
+Packet result:
+
+- Verdict: `FLAG_FOR_HUMAN_REVIEW`
+- Evidence confidence: `0.803571`
+- Confidence formula: `min(balanced_logistic_heldout_accuracy, probe_readable_positive_fraction, causal_control_pass, trace_gate_pass)`
+
+Why it is not `ACCEPT`: this packet proves the S7-F28 evidence chain is assembled and hash-bound, but the Stage 19/20/21 production ACCEPT/SUPPRESS verifier decision layer is not attached yet.
+
 ## What this proves
 
-This proves the new open-weight probe-shard runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit a non-fabricated evidence fragment, capture raw hidden vectors for labeled scenarios, train/evaluate heldout readout probes, run derived-axis checks, and run activation-level matched-control ablation over candidate covers.
+This proves the open-weight runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit non-fabricated evidence fragments, capture raw hidden vectors for labeled scenarios, train/evaluate heldout readout probes, run derived-axis checks, run activation-level matched-control ablation over candidate covers, run the original balanced-logistic eta-to-epsilon likelihood bridge, run trace diagnostics, and merge those artifacts into a hash-bound Evidence Packet.
 
-It does **not** yet prove CAS universality at 20B. The current evidence includes heldout readout, activation-level matched-control ablation, a corrected Foundation-28 run with a strong activation-level result, and a first genuine 27H-style forward-pass pilot. The forward-pass pilot is currently null against random controls, and the corrected Foundation-28 library has a 100% text baseline, so the behavioral/universality claim remains open.
+It does **not** yet prove CAS universality at 20B/100B/300B. The current positive 20B claim is narrower and stronger: under `S7-F28-BALANCED-BRIDGE`, GPT-NeoX-20B shows a strong Foundation-28 hidden readout, targeted activation-cover evidence versus matched controls, a probe-predicted eta-to-epsilon likelihood bridge pass, a trace-diagnostic pass, and an Evidence Packet with conservative human-review verdict. The earlier drive-only forward-pass pilot remains null and should not be used as the headline.
 
 ## Why the missing fields are good, not bad
 
@@ -380,15 +402,12 @@ That is the correct anti-fake behavior. The system can now say, "we captured rea
 5. Completed: train/evaluate the 28-Foundation readout and compare it against controls.
 6. Completed: run Foundation-level activation ablation with matched random and wrong-Foundation controls.
 7. Completed: run source-derived TKS40 (`A1..D10`) on GPT-NeoX-20B. Result: 40-Element hidden readout `40.00%` versus `2.50%` majority/chance, and label-specific activation cover drop `13.75 pp` versus approximately zero random/wrong controls.
-8. Next: rerun Foundation-28 with the same source-lineage discipline, then test whether text-separability can be reduced without dropping the TKS definitions.
-9. Only after the Foundation/Element readout and intervention gates are strong against controls, run the 27H-style likelihood/output bridge.
-10. Run the same scenario set with:
-   - probe readout
-   - ablation/intervention
-   - matched random/wrong-label controls
-   - output-effect prediction
-   - Evidence Packet merge
-11. Report accepted accuracy, coverage, confidence bands, and failures separately.
+8. Completed: rerun Foundation-28 with the exact Stage 7 source-lineage discipline and original balanced-logistic readout. Result: `86.8622%` heldout Foundation accuracy.
+9. Completed: run the Foundation-level eta-to-epsilon likelihood/output bridge. Result: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`, `+0.596413` probe-readable delta, `90/112` positive rows, sign-test p `3e-11`.
+10. Completed: run trace diagnostics. Result: `TRACE_DIAGNOSTICS_PASS`, lacunarity `0.006715`, numeric class `Amplifying`.
+11. Completed: merge the exact chain into an Evidence Packet. Result: `S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`, verdict `FLAG_FOR_HUMAN_REVIEW`, evidence confidence `0.803571`.
+12. Next: attach the Stage 19/20/21 production verifier decision layer before any ACCEPT/SUPPRESS product verdict.
+13. Next: run the same packet protocol on the next open-weight model family and separately on a real worker fleet for 100B/300B.
 
 ## 100B / 300B status
 

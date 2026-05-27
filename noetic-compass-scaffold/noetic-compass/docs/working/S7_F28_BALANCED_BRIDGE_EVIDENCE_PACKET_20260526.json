@@ -1,0 +1,435 @@
+{
+  "ablation": {
+    "axis": "Foundation-28",
+    "best_layer": 40,
+    "clean": {
+      "acc": 0.510369,
+      "macro_f1": 0.510863,
+      "mean_true_margin": -21.952646,
+      "median_true_margin": 12.621582
+    },
+    "important_limit": "This is real GPT hidden-state evidence, but it is activation-level post-hoc ablation on captured vectors. It is not yet a live forward-pass hook intervention on the model weights.",
+    "label_random_same_size_controls": {
+      "max_acc": 0.512673,
+      "max_drop_from_clean": 0.003457,
+      "max_margin_drop_from_clean": -0.739914,
+      "mean_acc": 0.50962,
+      "mean_drop_from_clean": 0.000749,
+      "mean_margin_drop_from_clean": -1.482304,
+      "min_acc": 0.506912,
+      "min_drop_from_clean": -0.002304,
+      "min_margin_drop_from_clean": -2.110248,
+      "trials": 20
+    },
+    "label_specific_cover_ablation": {
+      "acc": 0.385945,
+      "drop_from_clean": 0.124424,
+      "macro_f1": 0.386313,
+      "mean_label_cover_size": 256.0,
+      "mean_true_margin": -211.842422,
+      "median_true_margin": -185.507812,
+      "rows_without_label_cover": 0
+    },
+    "mode": "activation_level_train_mean_replacement",
+    "plain_english_read": "The true Foundation cover damages heldout readout far more than same-size random covers or wrong-Foundation covers.",
+    "result_summary": {
+      "interpretation": "candidate cover is stronger than matched controls at activation level",
+      "label_drop_exceeds_random_max": true,
+      "label_drop_minus_random_mean": 0.123675,
+      "label_margin_drop_from_clean": 189.889776,
+      "label_margin_drop_minus_random_mean": 191.37208,
+      "label_specific_drop_from_clean": 0.124424,
+      "label_specific_interpretation": "label-specific cover reduces heldout accuracy more than same-size random controls",
+      "union_drop_exceeds_random_max": true,
+      "union_drop_minus_random_mean": 0.066359,
+      "union_drop_minus_wrong_drop": 0.074885,
+      "union_margin_drop_from_clean": 56.031874,
+      "union_margin_drop_minus_random_max": 47.811834,
+      "union_margin_drop_minus_random_mean": 49.647492,
+      "union_margin_drop_minus_wrong_drop": 59.464253
+    },
+    "status": "verified",
+    "wrong_cover_control": {
+      "acc": 0.509217,
+      "drop_from_clean": 0.001152,
+      "macro_f1": 0.509377,
+      "mean_true_margin": -18.520267,
+      "mean_wrong_cover_size": 256.0,
+      "median_true_margin": 15.202637,
+      "rows_without_wrong_cover": 0
+    }
+  },
+  "cas_expression": {
+    "compiler_valid": true,
+    "grammar_category": "source_defined_foundation_axis",
+    "method_label": "S7-F28-BALANCED-BRIDGE",
+    "text": "Foundation-28 = F1..F7 x T/A/f/E"
+  },
+  "caveats": [
+    "This packet is a GPT-NeoX-20B S7-F28 validation artifact, not a universal 20B/100B/300B proof.",
+    "The verdict is FLAG_FOR_HUMAN_REVIEW because the Stage 19/20/21 production verifier layer is not attached.",
+    "The trace diagnostic uses a numeric layer-trace proxy, not yet the discrete cas-engine CognitiveFractal orbit classifier.",
+    "Activation-cover ablation is measured on captured hidden states; it is not the same as a live forward-pass steering hook.",
+    "The packet records model identity and architecture, but no independent model-weight SHA is available in these artifacts."
+  ],
+  "claim_levels": [
+    {
+      "claim": "CAS readout: balanced-logistic Foundation-28 hidden-state readout passed the trace gate.",
+      "level": "validated_run_artifact",
+      "rationale": "Heldout accuracy=0.868622; lacunarity=0.006715.",
+      "support_rationale": "Heldout accuracy=0.868622; lacunarity=0.006715.",
+      "support_status": "supported"
+    },
+    {
+      "claim": "Ablation/intervention causal proof: true Foundation cover removal damaged readout more than controls.",
+      "level": "validated_run_artifact",
+      "rationale": "Label-cover drop=0.124424.",
+      "support_rationale": "Label-cover drop=0.124424.",
+      "support_status": "supported"
+    },
+    {
+      "claim": "Matched control proof: random covers, wrong covers, and raw-symbol bridge controls did not explain the same effect.",
+      "level": "validated_run_artifact",
+      "rationale": "Random cover removal, wrong-cover removal, and raw CAS-symbol prefixes do not explain the same effect as the true readable Foundation bridge.",
+      "support_rationale": "Random cover removal, wrong-cover removal, and raw CAS-symbol prefixes do not explain the same effect as the true readable Foundation bridge.",
+      "support_status": "supported"
+    },
+    {
+      "claim": "Output likelihood proof: eta-to-epsilon readable bridge moved likelihood in the predicted Foundation direction.",
+      "level": "validated_run_artifact",
+      "rationale": "Probe-readable delta=0.596413; sign p=3e-11.",
+      "support_rationale": "Probe-readable delta=0.596413; sign p=3e-11.",
+      "support_status": "supported"
+    },
+    {
+      "claim": "Trace diagnostic proof: numeric layer trace passed the S7-F28 pre-steering gate.",
+      "level": "validated_run_artifact",
+      "rationale": "Trace status=TRACE_DIAGNOSTICS_PASS; numeric class=Amplifying.",
+      "support_rationale": "Trace status=TRACE_DIAGNOSTICS_PASS; numeric class=Amplifying.",
+      "support_status": "supported"
+    },
+    {
+      "claim": "Evidence Packet proof: artifact hashes and method provenance are bound into this packet.",
+      "level": "packet_integrity",
+      "rationale": "SHA-256 hashes are recorded for the source reports used to assemble the packet.",
+      "support_rationale": "SHA-256 hashes are recorded for the source reports used to assemble the packet.",
+      "support_status": "supported"
+    }
+  ],
+  "copy_slot_trace": [
+    {
+      "artifact_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_foundation_rolebound_activation_cover_ablation_report_top256.json",
+      "sha256": "8c5a3a7b1d5d8672af69f616526d149a873dc5c1b7e7a22e4ef6e84efa115f2f",
+      "slot": 1,
+      "source": "ablation_report"
+    },
+    {
+      "artifact_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_eta_epsilon_bridge_logistic.json",
+      "sha256": "94010bbd17ff2e6abd43a94ebe5ca68ba00ad94ee409e4add54ed85a759d8eeb",
+      "slot": 2,
+      "source": "bridge_report"
+    },
+    {
+      "artifact_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_foundation_rolebound_probe_eval_report_top256.json",
+      "sha256": "3f5706c33f67dac52c06a79390431850c4b13ba077e59346f81cfca29bc074c9",
+      "slot": 3,
+      "source": "eval_report"
+    },
+    {
+      "artifact_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\stage7_foundation_rolebound_pilot_20260526.json",
+      "sha256": "5b8aad738ca22afec11c60186981193ed3b951a4e13da3fd7bfd5f7acb54d46d",
+      "slot": 4,
+      "source": "scenario_path"
+    },
+    {
+      "artifact_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_trace_diagnostics_logistic.json",
+      "sha256": "01346fd74aeb73e56b2982e78a8e3db684b0e0a5c617c701399a3a5a8989c922",
+      "slot": 5,
+      "source": "trace_diagnostics_report"
+    }
+  ],
+  "generated_at": "2026-05-27T07:33:54Z",
+  "generation_readiness": {
+    "generation_readiness": "caveat",
+    "missing_for_accept_suppress": [
+      "Stage 19 verification-stack decision",
+      "Stage 20 generation-readiness action",
+      "production audit-session persistence"
+    ],
+    "reason": "Strong 20B evidence packet assembled; final product verifier merge remains pending.",
+    "risk_score": 0.803571
+  },
+  "hashes": {
+    "artifact_sha256": {
+      "ablation_report": "8c5a3a7b1d5d8672af69f616526d149a873dc5c1b7e7a22e4ef6e84efa115f2f",
+      "bridge_report": "94010bbd17ff2e6abd43a94ebe5ca68ba00ad94ee409e4add54ed85a759d8eeb",
+      "eval_report": "3f5706c33f67dac52c06a79390431850c4b13ba077e59346f81cfca29bc074c9",
+      "scenario_path": "5b8aad738ca22afec11c60186981193ed3b951a4e13da3fd7bfd5f7acb54d46d",
+      "trace_diagnostics_report": "01346fd74aeb73e56b2982e78a8e3db684b0e0a5c617c701399a3a5a8989c922"
+    },
+    "artifact_sizes_bytes": {
+      "ablation_report": 11227,
+      "bridge_report": 279931,
+      "eval_report": 26842,
+      "scenario_path": 5577212,
+      "trace_diagnostics_report": 74548
+    },
+    "corpus_sha256": "5b8aad738ca22afec11c60186981193ed3b951a4e13da3fd7bfd5f7acb54d46d",
+    "on_disk_paths": {
+      "ablation_report_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_foundation_rolebound_activation_cover_ablation_report_top256.json",
+      "bridge_report_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_eta_epsilon_bridge_logistic.json",
+      "corpus_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\stage7_foundation_rolebound_pilot_20260526.json",
+      "eval_report_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_foundation_rolebound_probe_eval_report_top256.json",
+      "scenario_path_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\stage7_foundation_rolebound_pilot_20260526.json",
+      "trace_diagnostics_report_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_trace_diagnostics_logistic.json"
+    },
+    "packet_content_sha256": "bf6c28bcce0096eaa208c17bda1704a3775c615fbe559c5c7f5d5675177d168f",
+    "tokenizer_hash": null,
+    "weights_sha": null
+  },
+  "input": {
+    "axis": "Foundation-28",
+    "method_label": "S7-F28-BALANCED-BRIDGE",
+    "method_name": "S7-F28 Balanced Bridge Method",
+    "scenario_set": {
+      "foundation_class_count": 28,
+      "per_foundation_count": {
+        "F1|A": 156,
+        "F1|E": 156,
+        "F1|T": 156,
+        "F1|f": 156,
+        "F2|A": 156,
+        "F2|E": 156,
+        "F2|T": 156,
+        "F2|f": 156,
+        "F3|A": 156,
+        "F3|E": 156,
+        "F3|T": 156,
+        "F3|f": 156,
+        "F4|A": 156,
+        "F4|E": 156,
+        "F4|T": 156,
+        "F4|f": 156,
+        "F5|A": 156,
+        "F5|E": 156,
+        "F5|T": 156,
+        "F5|f": 156,
+        "F6|A": 156,
+        "F6|E": 156,
+        "F6|T": 156,
+        "F6|f": 156,
+        "F7|A": 156,
+        "F7|E": 156,
+        "F7|T": 156,
+        "F7|f": 156
+      },
+      "scenario_count": 4368,
+      "split_counts": {
+        "test": 2352,
+        "train": 1344,
+        "val": 672
+      }
+    },
+    "text": "Stage 7 Foundation-28 role-bound scenario set; one packet summarizes the full run, not a single prompt."
+  },
+  "matched_controls": {
+    "activation_controls": {
+      "label_drop_exceeds_random_max": true,
+      "label_drop_minus_random_mean": 0.123675,
+      "same_size_random_controls": {
+        "max_acc": 0.512673,
+        "max_drop_from_clean": 0.003457,
+        "max_margin_drop_from_clean": -0.739914,
+        "mean_acc": 0.50962,
+        "mean_drop_from_clean": 0.000749,
+        "mean_margin_drop_from_clean": -1.482304,
+        "min_acc": 0.506912,
+        "min_drop_from_clean": -0.002304,
+        "min_margin_drop_from_clean": -2.110248,
+        "trials": 20
+      },
+      "wrong_cover_control": {
+        "acc": 0.509217,
+        "drop_from_clean": 0.001152,
+        "macro_f1": 0.509377,
+        "mean_true_margin": -18.520267,
+        "mean_wrong_cover_size": 256.0,
+        "median_true_margin": 15.202637,
+        "rows_without_wrong_cover": 0
+      }
+    },
+    "bridge_controls": {
+      "gold_raw_delta_vs_none": 0.002186,
+      "partner_readable_delta_vs_none": -0.648503,
+      "probe_raw_delta_vs_none": 0.002524,
+      "probe_readable_sign_p": 3e-11
+    },
+    "plain_english_read": "Random cover removal, wrong-cover removal, and raw CAS-symbol prefixes do not explain the same effect as the true readable Foundation bridge.",
+    "status": "verified"
+  },
+  "model": {
+    "architectures": [
+      "GPTNeoXForCausalLM"
+    ],
+    "device_map": "auto",
+    "hidden_size": 6144,
+    "model_key": "EleutherAI/gpt-neox-20b",
+    "model_revision": null,
+    "model_type": "gpt_neox",
+    "name": "EleutherAI/gpt-neox-20b",
+    "num_hidden_layers": 44,
+    "parameter_count": 20554567680,
+    "torch_dtype": "torch.float16"
+  },
+  "output": {
+    "gold_readable": {
+      "delta_vs_none_mean": 0.660065,
+      "positive_count": 93,
+      "positive_fraction": 0.830357,
+      "sign_p": 0.0
+    },
+    "important_limit": "Likelihood-level eta-to-epsilon bridge evidence. This is not an ACCEPT/SUPPRESS verdict until merged with verifier and Evidence Packet layers.",
+    "method": "eta_to_epsilon_likelihood_bridge",
+    "n_cases": 112,
+    "probe_prediction": {
+      "all_test_foundation_accuracy": 0.868622,
+      "selected_drive_accuracy": 0.9375,
+      "selected_foundation_accuracy": 0.857143
+    },
+    "probe_readable": {
+      "delta_vs_none_mean": 0.596413,
+      "minus_partner_readable_margin": 1.244917,
+      "positive_count": 90,
+      "positive_fraction": 0.803571,
+      "sign_p": 3e-11
+    },
+    "raw_symbol_controls": {
+      "gold_raw_delta_vs_none": 0.002186,
+      "probe_raw_delta_vs_none": 0.002524
+    },
+    "readout_layer": 40,
+    "readout_mode": "logistic_linear_probe",
+    "status": "PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS",
+    "text": "Probe-predicted readable CAS context moved GPT-NeoX-20B likelihood in the predicted Foundation direction.",
+    "verdict": "FLAG_FOR_HUMAN_REVIEW"
+  },
+  "provenance": {
+    "artifact_paths": {
+      "ablation_report": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_foundation_rolebound_activation_cover_ablation_report_top256.json",
+      "bridge_report": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_eta_epsilon_bridge_logistic.json",
+      "eval_report": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_foundation_rolebound_probe_eval_report_top256.json",
+      "scenario_path": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\stage7_foundation_rolebound_pilot_20260526.json",
+      "trace_diagnostics_report": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\gpt_neox_20b_stage7_trace_diagnostics_logistic.json"
+    },
+    "code_commit_sha": "03b7ce047035239deba6b7c10c918b8cb530707f",
+    "local_artifact_root": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526",
+    "method_label": "S7-F28-BALANCED-BRIDGE",
+    "runpod_workspace": "/workspace/cas-harness-large-eval",
+    "source_reports": [
+      "stage7_foundation_rolebound_probe_eval",
+      "stage7_foundation_rolebound_activation_cover_ablation",
+      "stage7_eta_epsilon_bridge_logistic",
+      "stage7_trace_diagnostics_logistic"
+    ],
+    "source_stage": "Stage 7 Foundation-28 large-model bridge"
+  },
+  "readout": {
+    "axis": "Foundation-28",
+    "balanced_probe": {
+      "C": 0.1,
+      "class_weight": "balanced",
+      "standardized": true
+    },
+    "drive_lacunarity": 0.002752,
+    "heldout_accuracy": 0.868622,
+    "heldout_macro_f1": 0.869944,
+    "kind": "balanced_logistic_linear_probe",
+    "lacunarity": 0.006715,
+    "lacunarity_passed": true,
+    "lacunarity_threshold": 0.05,
+    "layer": 40,
+    "legacy_centroid_context": {
+      "best_layer": 40,
+      "majority_class_test_acc": 0.035714,
+      "note": "Legacy centroid report is retained as cover-discovery context; the S7-F28 gate uses balanced logistic.",
+      "shuffled_label_hidden_centroid_mean_test_acc": 0.034044,
+      "test_acc": 0.510369,
+      "text_hash_centroid_test_acc": 0.422811
+    },
+    "method": "S7-F28-BALANCED-BRIDGE",
+    "register_lacunarity": 0.001283,
+    "status": "verified"
+  },
+  "schema_version": "cas_harness_evidence_packet_v1",
+  "trace_id": "s7-f28-balanced-bridge-gpt-neox-20b-20260526",
+  "verification": {
+    "evidence_gate_confidence": {
+      "formula": "min(balanced_logistic_heldout_accuracy, probe_readable_positive_fraction, causal_control_pass, trace_gate_pass)",
+      "important_limit": "This is a conservative evidence-gate score for this packet, not a mathematical certainty score and not a production ACCEPT/SUPPRESS confidence.",
+      "inputs": {
+        "balanced_logistic_heldout_accuracy": 0.868622,
+        "causal_control_pass": 1.0,
+        "probe_readable_positive_fraction": 0.803571,
+        "trace_gate_pass": 1.0
+      },
+      "label": "evidence-gate confidence",
+      "score": 0.803571
+    },
+    "explicit_verifier_decision": {
+      "confidence": 0.803571,
+      "reason": "All S7-F28 evidence layers are present, but this packet is a large-model validation artifact. Final production ACCEPT/SUPPRESS still requires the Stage 19/20/21 verifier decision layer.",
+      "source": "S7-F28-BALANCED-BRIDGE",
+      "verdict": "FLAG_FOR_HUMAN_REVIEW"
+    },
+    "proof_chips": [
+      {
+        "detail": "Model identity and architecture are recorded from the real GPT-NeoX-20B run.",
+        "id": "model_proof",
+        "name": "Model proof",
+        "status": "present"
+      },
+      {
+        "detail": "Balanced-logistic Foundation-28 readout and trace gate are recorded.",
+        "id": "cas_readout",
+        "name": "CAS readout",
+        "status": "verified"
+      },
+      {
+        "detail": "Targeted Foundation cover ablation is recorded.",
+        "id": "causal_proof",
+        "name": "Causal proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Matched random, wrong-cover, and bridge controls are recorded.",
+        "id": "control_proof",
+        "name": "Control proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Eta-to-epsilon likelihood bridge output-effect evidence is recorded.",
+        "id": "output_proof",
+        "name": "Output proof",
+        "status": "verified"
+      },
+      {
+        "detail": "This Evidence Packet binds the run artifacts and SHA-256 hashes.",
+        "id": "packet_proof",
+        "name": "Packet proof",
+        "status": "present"
+      }
+    ],
+    "trace_diagnostics": {
+      "classifier_kind": "numeric_trace_proxy",
+      "drive_lacunarity": 0.002752,
+      "foundation_lacunarity": 0.006715,
+      "gate_layer": 40,
+      "heldout_foundation_accuracy": 0.868622,
+      "important_limit": "This classifies the per-layer Foundation readout trajectory. It uses the CAS fractal vocabulary, but is not the discrete cas-engine orbit classifier over CognitiveFractal objects.",
+      "numeric_trace_class": "Amplifying",
+      "passed": true,
+      "register_lacunarity": 0.001283,
+      "status": "TRACE_DIAGNOSTICS_PASS"
+    }
+  }
+}

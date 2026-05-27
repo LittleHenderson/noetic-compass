@@ -222,6 +222,34 @@ Required packet fields:
 - confidence and coverage
 - explicit caveats
 
+Status as of 2026-05-26: completed for the GPT-NeoX-20B Stage 7 run.
+
+Packet files:
+
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
+
+Packet verdict:
+
+- `FLAG_FOR_HUMAN_REVIEW`
+
+Why: the packet binds the 20B readout, ablation, controls, likelihood bridge, trace diagnostics, hashes, and caveats, but the separate Stage 19/20/21 production ACCEPT/SUPPRESS verifier is not attached yet.
+
+Evidence confidence:
+
+- `0.803571`
+
+Formula:
+
+```text
+min(balanced_logistic_heldout_accuracy,
+    probe_readable_positive_fraction,
+    causal_control_pass,
+    trace_gate_pass)
+```
+
+This is an evidence-gate confidence for the packet, not a mathematical certainty score and not a production ACCEPT/SUPPRESS confidence.
+
 Fail condition:
 
 - No final ACCEPT/SUPPRESS for large-model universality without packet-backed proof.
@@ -247,8 +275,8 @@ What exists:
 
 What is missing:
 
-- Fresh full Evidence Packet.
 - Discrete `cas-engine` `CognitiveFractal` orbit-classifier packaging. The current fractal preflight is the numeric layer-trace proxy.
+- Stage 19/20/21 production verifier merge that can emit a final ACCEPT/SUPPRESS decision.
 
 The earlier 400-row GPT-NeoX-20B dataset can derive a 40-Element label from existing `operator x domain` labels, but it is imbalanced and has only 39 populated classes. That run is useful as a zero-new-GPU signal check, not a final 40-Element headline replication.
 
@@ -262,8 +290,9 @@ The UI and investor/demo language must use this distinction:
 Current 20B status: real model run, real activation capture, exact Stage 7 Foundation-28 readout/ablation pass, and source-derived TKS40 activation-level pass.
 Behavioral bridge status: probe-predicted eta-to-epsilon likelihood bridge PASS on GPT-NeoX-20B under the original balanced-logistic readout methodology.
 Trace diagnostic status: exact Stage 7 Foundation-28 lacunarity/fractal preflight PASS on GPT-NeoX-20B (`0.006715` lacunarity; numeric trace class `Amplifying`).
+Evidence Packet status: S7-F28 packet created with `FLAG_FOR_HUMAN_REVIEW` and evidence confidence `0.803571`.
 Not yet: full CAS Harness ACCEPT/SUPPRESS verdict, discrete cas-engine fractal-orbit packaging, or 100B/300B universality proof.
-Next gate: merge the exact Stage 7 20B chain into an Evidence Packet.
+Next gate: attach the Stage 19/20/21 production verifier layer or run the same packet protocol on the next open-weight model.
 ```
 
 ## Concrete Next Work
@@ -272,5 +301,5 @@ Next gate: merge the exact Stage 7 20B chain into an Evidence Packet.
 2. Completed: rerun GPT-NeoX-20B eta-to-epsilon on q25/q50/q75 high-confidence Foundation predictions and report kept coverage separately from pass accuracy.
 3. Completed: rerun GPT-NeoX-20B eta-to-epsilon with the original balanced-logistic readout. Result: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`.
 4. Completed: run lacunarity/fractal diagnostics on the exact Stage 7 Foundation-28 20B trace. Result: `TRACE_DIAGNOSTICS_PASS`.
-5. Build the Evidence Packet merger for the exact Stage 7 20B chain.
-6. Present 20B as behavioral likelihood-bridge + trace-diagnostic evidence, not yet as a full CAS Harness verdict until the Evidence Packet/verifier merge exists.
+5. Completed: build the Evidence Packet merger for the exact Stage 7 20B chain. Result: `S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`.
+6. Present 20B as behavioral likelihood-bridge + trace-diagnostic + Evidence Packet evidence, not yet as a full CAS Harness ACCEPT/SUPPRESS verdict until the Stage 19/20/21 verifier merge exists.
