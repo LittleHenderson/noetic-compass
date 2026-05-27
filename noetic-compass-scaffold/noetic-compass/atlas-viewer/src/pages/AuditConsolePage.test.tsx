@@ -4,6 +4,8 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
 import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
 
+const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
+
 function renderPage() {
   return render(
     <MemoryRouter initialEntries={['/audit-console']}>
@@ -448,6 +450,98 @@ describe('AuditConsolePage', () => {
     });
     expect(fetchMock).toHaveBeenNthCalledWith(
       3,
+      '/api/cas-harness/audit/session/cas-audit-test-session/run',
+      expect.objectContaining({ method: 'POST' }),
+    );
+  });
+
+  it('loads the S7-F28 20B evidence packet into the audit lifecycle', async () => {
+    const chips = allPresentChips();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            model_id: 'EleutherAI/gpt-neox-20b',
+            scenario_summary:
+              'Stage 7 Foundation-28 GPT-NeoX-20B evidence packet review using the S7-F28 Balanced Bridge Method.',
+            evidence_packet_trace_id: S7_F28_TRACE_ID,
+            provenance_chips: chips,
+            verifier_decision: {
+              verdict: 'FLAG_FOR_HUMAN_REVIEW',
+              confidence: 0.803571,
+              source: 'S7-F28-BALANCED-BRIDGE',
+              reason:
+                'S7-F28 packet is strong evidence but routes to human review until the final verifier merge layer closes.',
+            },
+          }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            status: 'COMPLETE',
+            model_id: 'EleutherAI/gpt-neox-20b',
+            verdict: 'FLAG_FOR_HUMAN_REVIEW',
+            confidence: 0.803571,
+            scenario_summary:
+              'Stage 7 Foundation-28 GPT-NeoX-20B evidence packet review using the S7-F28 Balanced Bridge Method.',
+            evidence_packet_trace_id: S7_F28_TRACE_ID,
+            atlas_deep_link: `/cockpit?trace_id=${S7_F28_TRACE_ID}`,
+            provenance_chips: chips,
+            verifier_decision: {
+              verdict: 'FLAG_FOR_HUMAN_REVIEW',
+              confidence: 0.803571,
+              source: 'S7-F28-BALANCED-BRIDGE',
+              reason:
+                'S7-F28 packet is strong evidence but routes to human review until the final verifier merge layer closes.',
+            },
+            updated_at: '2026-05-26T22:06:00Z',
+            lifecycle: [
+              {
+                status: 'DRAFT',
+                message: 'Audit session created with S7-F28 Evidence Packet.',
+                timestamp: '2026-05-26T22:05:00Z',
+              },
+              {
+                status: 'COMPLETE',
+                message:
+                  'S7-F28 Balanced Bridge packet returned a conservative human-review verdict.',
+                timestamp: '2026-05-26T22:06:00Z',
+              },
+            ],
+          }),
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Load 20B packet' }));
+
+    expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
+    expect(screen.getByText('S7-F28 Balanced Bridge Method')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+
+    expect(
+      await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' }),
+    ).toBeInTheDocument();
+    expect(screen.getByText('Confidence: 80%')).toBeInTheDocument();
+    expect(screen.getAllByText(S7_F28_TRACE_ID).length).toBeGreaterThan(0);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      1,
+      '/api/cas-harness/audit/session',
+      expect.objectContaining({ method: 'POST' }),
+    );
+    expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toMatchObject({
+      evidence_packet_trace_id: S7_F28_TRACE_ID,
+      model_id: 'EleutherAI/gpt-neox-20b',
+    });
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
       '/api/cas-harness/audit/session/cas-audit-test-session/run',
       expect.objectContaining({ method: 'POST' }),
     );

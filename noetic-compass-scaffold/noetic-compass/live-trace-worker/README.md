@@ -118,6 +118,67 @@ The real-mode endpoint must show:
 If it does not, the cockpit must say the model is not connected or not
 verified. It must not claim "actual weights."
 
+## Distributed fleet worker daemon
+
+The API fleet executor can now be driven by this worker process:
+
+```bash
+python scripts/run_fleet_worker.py \
+  --api-base-url https://noetic-compass-api.onrender.com \
+  --audit-id <cas-dist-id> \
+  --worker-id probe-worker-001 \
+  --model-id <exact-open-weight-model-id> \
+  --bearer-token "$CAS_HARNESS_API_TOKEN" \
+  -- python scripts/run_open_weight_probe_shard.py
+```
+
+The command after `--` is the real probe executor. It receives the assigned
+layer/shard job through environment variables such as `CAS_FLEET_LAYER_START`,
+`CAS_FLEET_LAYER_END`, `CAS_FLEET_ASSIGNED_METHODS_JSON`, and
+`CAS_FLEET_RESULT_PATH`. It must write:
+
+```json
+{
+  "produced_outputs": ["layer_activation_summary"],
+  "missing_outputs": ["cas_axis_readout"],
+  "error_message": null
+}
+```
+
+The daemon then writes a local Evidence Packet fragment and posts the
+content-addressed `cas-fragment://.../sha256:<digest>` receipt back to the API.
+
+For deployment smoke checks only, `--dry-run` can exercise the lease/receipt
+control plane without claiming model inference:
+
+```bash
+python scripts/run_fleet_worker.py ... --dry-run
+```
+
+Do not use dry-run output as customer audit evidence. A real large-model audit
+requires open weights, the actual probe command, assigned workers, receipts, a
+merged Evidence Packet, and the final verifier decision layer.
+
+The included open-weight shard command is strict about proof inputs:
+
+```bash
+CAS_FLEET_SCENARIO_PATH=/workspace/cas/scenarios/alpha_25.json \
+CAS_FLEET_PROBE_WEIGHTS_PATH=/workspace/cas/probes/gpt-neox-20b_probe.json \
+CAS_FLEET_COVER_MAP_PATH=/workspace/cas/covers/gpt-neox-20b_covers.json \
+python scripts/run_fleet_worker.py \
+  --api-base-url https://noetic-compass-api.onrender.com \
+  --audit-id <cas-dist-id> \
+  --worker-id probe-worker-001 \
+  --model-id EleutherAI/gpt-neox-20b \
+  --bearer-token "$CAS_HARNESS_API_TOKEN" \
+  -- python scripts/run_open_weight_probe_shard.py
+```
+
+If the model cannot load, the command writes a failed result. If probe weights
+or cover maps are missing, it does not fake `cas_axis_readout` or
+`blindspot_overlay`; it reports those outputs as missing so the verifier gate
+stays blocked.
+
 ## Security posture
 
 - **No public exposure.** The worker MUST sit on a private network or

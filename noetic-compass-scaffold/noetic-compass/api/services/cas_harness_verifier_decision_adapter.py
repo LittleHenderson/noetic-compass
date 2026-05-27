@@ -32,6 +32,10 @@ def verifier_decision_from_packet(packet: Mapping[str, Any]) -> VerifierDecision
     if packet.get("schema_version") != "cas_harness_evidence_packet_v1":
         return None
 
+    s7_decision = _s7_f28_balanced_bridge_decision(packet)
+    if s7_decision is not None:
+        return s7_decision
+
     if not _has_stage19_and_stage20_sources(packet):
         return None
 
@@ -76,6 +80,71 @@ def verifier_decision_from_packet(packet: Mapping[str, Any]) -> VerifierDecision
         )
 
     return None
+
+
+def _s7_f28_balanced_bridge_decision(packet: Mapping[str, Any]) -> VerifierDecision | None:
+    """Pass through the S7-F28 packet's conservative human-review decision.
+
+    This method packet is a large-model validation artifact, not a Stage 21
+    production row. It is allowed to return only FLAG_FOR_HUMAN_REVIEW. The
+    adapter must never upgrade an S7 packet to ACCEPT/SUPPRESS.
+    """
+
+    provenance = _mapping_or_empty(packet.get("provenance"))
+    if provenance.get("method_label") != "S7-F28-BALANCED-BRIDGE":
+        return None
+
+    verification = _mapping_or_empty(packet.get("verification"))
+    decision = _mapping_or_empty(verification.get("explicit_verifier_decision"))
+    if decision.get("verdict") != "FLAG_FOR_HUMAN_REVIEW":
+        return None
+    confidence = _confidence_or_none(decision.get("confidence"))
+    if confidence is None:
+        return None
+
+    proof_chips = verification.get("proof_chips")
+    if not _proof_chips_pass_ready(proof_chips):
+        return None
+
+    source = decision.get("source")
+    reason = decision.get("reason")
+    return VerifierDecision(
+        verdict="FLAG_FOR_HUMAN_REVIEW",
+        confidence=confidence,
+        source=source if isinstance(source, str) and source.strip() else "S7-F28-BALANCED-BRIDGE",
+        reason=(
+            reason
+            if isinstance(reason, str) and reason.strip()
+            else (
+                "S7-F28 packet assembled all evidence layers, but production "
+                "ACCEPT/SUPPRESS requires the Stage 19/20/21 verifier."
+            )
+        ),
+    )
+
+
+def _proof_chips_pass_ready(value: Any) -> bool:
+    if not isinstance(value, list):
+        return False
+    required = {
+        "model_proof",
+        "cas_readout",
+        "causal_proof",
+        "control_proof",
+        "output_proof",
+        "packet_proof",
+    }
+    by_id: dict[str, str] = {}
+    for row in value:
+        if not isinstance(row, Mapping):
+            continue
+        chip_id = row.get("id")
+        status = row.get("status")
+        if isinstance(chip_id, str) and isinstance(status, str):
+            by_id[chip_id] = status
+    return required.issubset(by_id) and all(
+        by_id[chip_id] in {"verified", "present"} for chip_id in required
+    )
 
 
 def _has_stage19_and_stage20_sources(packet: Mapping[str, Any]) -> bool:

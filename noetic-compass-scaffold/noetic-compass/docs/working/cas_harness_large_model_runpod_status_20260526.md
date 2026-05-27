@@ -1,0 +1,418 @@
+# CAS Harness Large-Model RunPod Status — 2026-05-26
+
+## Current RunPod
+
+- SSH: `root@31.24.80.42 -p 18251`
+- GPU: NVIDIA H100 80GB HBM3
+- Workspace volume: `/workspace`, 187 GB available
+- Atlas live worker: still running separately for Pythia-160M
+- Large-eval workspace: `/workspace/cas-harness-large-eval`
+
+## What genuinely ran
+
+### Pythia-160M smoke
+
+- Model: `EleutherAI/pythia-160m`
+- Status: real model forward completed
+- Layers: 0-2
+- Scenarios: 2
+- Output: `/workspace/cas-harness-large-eval/results/pythia_probe_smoke.json`
+- Produced: `layer_activation_summary`, `worker_evidence_manifest`
+- Missing by design: `cas_axis_readout`, `blindspot_overlay`
+
+### GPT-NeoX-20B full activation pass
+
+- Model: `EleutherAI/gpt-neox-20b`
+- Parameter count recorded by runner: `20,554,567,680`
+- Architecture: `GPTNeoXForCausalLM`
+- Hidden size: `6144`
+- Layers: `44`
+- Attention heads: `64`
+- Dtype: `torch.float16`
+- Device map: `auto`
+- Status: real model forward completed
+- Layers captured: 0-43
+- Scenarios: all 25 alpha scenarios
+- Output on RunPod: `/workspace/cas-harness-large-eval/results/gpt_neox_20b_full_activation_layers_0_43.json`
+- Local copy: `C:\tmp\gpt_neox_20b_full_activation_layers_0_43.json`
+- Produced: `layer_activation_summary`, `worker_evidence_manifest`
+- Missing by design: `cas_axis_readout`, `blindspot_overlay`
+
+### GPT-NeoX-20B probe dataset capture
+
+- Model: `EleutherAI/gpt-neox-20b`
+- Status: real model forward completed
+- Scenario source: `/workspace/cas-harness-large-eval/scenarios/augmented_library.json`
+- Labeled scenarios found: `400`
+- Layers captured: 0-43
+- Hidden size: `6144`
+- Feature shape: `[400, 44, 6144]`
+- Output on RunPod: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_augmented_400_layers_0_43.npz`
+- Metadata on RunPod: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_augmented_400_layers_0_43.metadata.json`
+- Local copies:
+  - `C:\tmp\gpt_neox_20b_augmented_400_layers_0_43.npz`
+  - `C:\tmp\gpt_neox_20b_augmented_400_layers_0_43.metadata.json`
+
+### GPT-NeoX-20B heldout readout evaluation
+
+- Evaluator: nearest-centroid readout over real hidden vectors
+- Report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_probe_eval_report.json`
+- Candidate cover map on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_candidate_cover_map.json`
+- Local copies:
+  - `C:\tmp\gpt_neox_20b_probe_eval_report.json`
+  - `C:\tmp\gpt_neox_20b_candidate_cover_map.json`
+
+Metric summary:
+
+| Axis | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain | 11 | 46.84% | 44.30% | 26.96% | 74.68% | Hidden beats weak controls; canonical English surface aliases are stronger here |
+| Drive | 31 | 35.80% | 22.22% | 15.19% | 74.07% | Hidden beats weak controls; canonical English surface aliases are stronger here |
+| Operator | 8 | 31.25% | 16.25% | 8.81% | 83.75% | Hidden beats weak controls; canonical English surface aliases are stronger here |
+
+Interpretation: GPT-NeoX-20B contains recoverable CAS-labeled structure in the hidden states on this canonical-English dataset. The strong text baseline should not be described as "label leakage" by default: CAS colloquialisms are approved English aliases for the axes, so a text baseline doing well is evidence that the surface aliases are predictive. What this run does **not** yet establish is the stronger causal claim: that a localized internal CAS subspace or cover is load-bearing after accounting for the surface text signal. The next proof step is ablation/intervention against the candidate covers, not removing the canonical colloquialisms.
+
+### GPT-NeoX-20B 40-Element derived-axis check
+
+The original Pythia-160M 40-Element readout was the strongest documented readout: `89.8%`, `+39.7 pp` over text baseline, with Stage 9.1 ablation listed as pending in the 2026-05-17 spec. 40 Elements means `10 Noetics/operators x 4 Domains`.
+
+The current 400-row GPT-NeoX-20B dataset already has `operator` and `domain` labels, so it can derive a first 40-Element label without new GPU capture. The class grid is not clean, though: it has 39 populated classes, with class counts ranging from 1 to 29. This is useful as a zero-new-GPU signal check, not a clean headline comparator against Pythia's balanced 40-Element result.
+
+Definition-source caveat: this derived-axis check does **not** use the TKS A1-D10 definitions as prompt source material. It only derives labels from the existing dataset's operator/domain annotations. A clean 40-Element replication needs a balanced scenario library grounded in the TKS spiritual/mental/emotional/physical Element definitions. Worker tooling now includes `live-trace-worker/scripts/build_tks40_scenarios.py`, which preserves the legacy `A1..D10` codes and current CAS `operator x domain` labels.
+
+Tooling: `live-trace-worker/scripts/derive_probe_dataset_axis.py` adds derived axes such as `element = operator|domain` to captured `.npz` datasets.
+
+Derived 40-Element result on the existing 400-row dataset:
+
+| Axis | Usable classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| 40 Elements (`operator x domain`) | 32 of 40 | 33 | 13.75% | 7.50% | 3.00% | 45.00% | Weak hidden signal above majority/noise, but far below text baseline and not comparable to balanced Pythia Stage 9 |
+
+Activation ablation on that imbalanced 40-Element derived axis reduced hidden readout from `13.75%` to `8.75%`; same-size random label controls had mean drop `0.00 pp`. This is a small activation-level signal, not a 40-Element replication claim.
+
+### GPT-NeoX-20B source-derived TKS40 run
+
+- Scenario source: `/workspace/cas-harness-large-eval/scenarios/tks40_balanced_v0_20260526.json`
+- Scenarios: `400`, exactly `10` per TKS40 class
+- Taxonomy: legacy `A1..D10` source codes mapped to current CAS `operator x domain` labels
+- Source profile: `source_derived_from_original_stage9_tks40_glosses`
+- Model: `EleutherAI/gpt-neox-20b`
+- Layers captured: `0-43`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_tks40_400_layers_0_43.npz`
+- Metadata: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_tks40_400_layers_0_43.metadata.json`
+- Eval report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_tks40_probe_eval_report_top256.json`
+- Ablation report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_tks40_activation_cover_ablation_report_top256.json`
+- Local copies: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Axis | Classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain slice | 4 | 38 | 78.75% | 25.00% | 24.75% | 100.00% | Strong hidden domain readout, but text is fully separable in this source-gloss library |
+| 40 Elements | 40 | 1 | 40.00% | 2.50% | 2.56% | 100.00% | Real 40-class hidden signal far above chance/noise; not above text baseline |
+| Noetic/operator slice | 10 | 41 | 40.00% | 10.00% | 9.88% | 100.00% | Real noetic/operator hidden signal above weak controls |
+
+Activation ablation:
+
+| Axis | Clean acc | Label-cover ablated acc | Label-cover drop | Mean random-control drop | Wrong-cover drop | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain slice | 78.75% | 70.00% | 8.75 pp | 1.50 pp | 1.25 pp | Label-specific cover reduces accuracy more than random mean, but the report's conservative summary says the candidate cover does not clear all matched controls |
+| 40 Elements | 40.00% | 26.25% | 13.75 pp | -0.06 pp | 0.00 pp | Positive activation-level result: candidate cover is stronger than matched controls |
+| Noetic/operator slice | 40.00% | 28.75% | 11.25 pp | 0.38 pp | -2.50 pp | Positive against random mean, but conservative report says it does not clear all controls |
+
+Interpretation: this is the first source-derived TKS40 large-model result. It is not a final universality proof because the source-gloss prompts remain fully text-separable, and the test is activation-level over captured vectors rather than live forward-pass intervention. It is still materially stronger than the earlier imbalanced 40-Element relabel check: balanced 40 classes, real GPT-NeoX-20B activations, hidden readout at `40.00%` against `2.50%` majority/chance, and a label-specific activation cover drop of `13.75 pp` versus approximately zero random/wrong-cover controls.
+
+### GPT-NeoX-20B Foundation-28 corrected run
+
+- Scenario source: `/workspace/cas-harness-large-eval/scenarios/foundation28_balanced_v0_20260526.json`
+- Scenarios: `280`, exactly `10` per Foundation class
+- Taxonomy: `7 Drives x 4 Registers = 28 Foundation classes`
+- Source-definition caveat: this v0 library used compact source-derived Stage-7/TKS28 glosses and now preserves the legacy `1a..7d` mapping in the builder. A final methodology run should still be treated as source-faithful only when the scenario library is generated from the original Stage 7 surface or the full TKS 28 Foundation text, not generic CAS drive/register wording.
+- Model: `EleutherAI/gpt-neox-20b`
+- Layers captured: `0-43`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_foundation28_280_layers_0_43.npz`
+- Eval report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_foundation28_probe_eval_report_top256.json`
+- Ablation report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_foundation28_activation_cover_ablation_report_top256.json`
+- Local artifact copy: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Axis | Classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Foundation-28 | 28 | 1 | 73.21% | 3.57% | 2.59% | 100.00% | Strong hidden readout above weak controls, but generated prompt wording is text-separable |
+| Drive slice | 7 | 41 | 71.43% | 14.29% | 14.20% | 100.00% | Useful slice, not the headline taxonomy |
+| Register slice | 4 | 38 | 98.21% | 25.00% | 26.25% | 100.00% | Register is very separable in this generated library |
+
+Foundation-28 activation ablation:
+
+| Test | Clean acc | Ablated acc | Mean random-control drop | Wrong-cover drop | Honest read |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Label-specific Foundation cover | 73.21% | 57.14% | 1.25 pp | 3.57 pp | True Foundation cover hurts readout much more than matched random/wrong controls |
+| Foundation union cover | 73.21% | 32.14% | 25.09 pp | 3.57 pp | Large effect, but union random controls also damage the model; label-specific result is cleaner |
+
+Interpretation: this is the best 20B result so far. It does **not** yet equal the original Pythia claim because the text baseline is too high on the generated scenario library and the library used compact source-derived Stage-7/TKS28 glosses rather than a full source-faithful definition library. It does show a real Foundation-28 hidden readout and an activation-level causal-control signal on GPT-NeoX-20B.
+
+### GPT-NeoX-20B exact original Stage 7 Foundation-28 rerun
+
+- Original builder: `research/cas_probe/build_stage7_foundation_fixture.py` from `experiment/cas-probe-pythia`
+- Original dependency: `research/cas_probe/build_stage6_role_bound_full.py` from `experiment/cas-probe-pythia`
+- Scenario source on RunPod: `/workspace/cas-harness-large-eval/scenarios/stage7_foundation_rolebound_pilot_20260526.json`
+- Scenario source in repo: `live-trace-worker/scenarios/stage7_foundation_rolebound_pilot_20260526.json`
+- Original JSONL source: `/workspace/cas-harness-large-eval/original_stage7/stage7_foundation_pilot_20260517.jsonl`
+- Original manifest: `/workspace/cas-harness-large-eval/original_stage7/stage7_foundation_pilot_manifest_20260517.json`
+- Scenarios: `4,368`, exactly `156` per Foundation class
+- Taxonomy: exact Stage 7 role-bound TKS 28 Foundations (`F1T/F1A/F1f/F1E...F7E`) mapped to `F1|T...F7|E`
+- Source profile: `exact_original_stage7_rolebound_fixture`
+- Model: `EleutherAI/gpt-neox-20b`
+- Layers captured: `0-43`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_stage7_foundation_rolebound_pilot_layers_0_43.npz`
+- Metadata: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_stage7_foundation_rolebound_pilot_layers_0_43.metadata.json`
+- Eval report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_foundation_rolebound_probe_eval_report_top256.json`
+- Ablation report: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_foundation_rolebound_activation_cover_ablation_report_top256.json`
+- Local copies: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Axis | Classes | Best layer | Hidden test acc | Majority control | Shuffled-label control | Text-hash baseline | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Drive slice | 7 | 1 | 66.63% | 14.29% | 14.70% | 68.00% | Hidden readout roughly matches text baseline; useful slice, not the headline taxonomy |
+| Foundation-28 | 28 | 40 | 51.04% | 3.57% | 3.40% | 42.28% | Positive exact-Stage-7 hidden readout: hidden beats text by 8.76 pp and far exceeds chance/noise |
+| Register slice | 4 | 40 | 76.15% | 25.00% | 24.69% | 86.35% | Register is recoverable but text is stronger on this slice |
+
+Activation ablation:
+
+| Axis | Clean acc | Label-cover ablated acc | Label-cover drop | Mean random-control drop | Wrong-cover drop | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Drive slice | 66.63% | 60.91% | 5.71 pp | -0.08 pp | -0.80 pp | Candidate cover weakened margin but did not clear the conservative accuracy gate |
+| Foundation-28 | 51.04% | 38.59% | 12.44 pp | 0.07 pp | 0.12 pp | Positive activation-level result: true Foundation cover beats random and wrong-cover controls |
+| Register slice | 76.15% | 70.18% | 5.96 pp | 0.19 pp | -0.80 pp | Positive activation-level result on register slice |
+
+Interpretation: this is the cleanest 20B Foundation-28 result because it uses the exact original Stage 7 role-bound fixture method rather than the simpler generated v0 library. It does not match Pythia-160M's `78.6% -> 3.57%` collapse, but it is a genuine same-method large-model replication signal: hidden Foundation readout beats text (`51.04%` vs `42.28%`) and true-cover activation ablation causes a `12.44 pp` drop while random/wrong controls do not.
+
+### GPT-NeoX-20B exact Stage 7 eta-to-epsilon bridge
+
+- Runner: `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py`
+- Protocol source: Stage 7.CPL2 full-loop shape from `experiment/cas-probe-pythia`
+- Model: `EleutherAI/gpt-neox-20b`
+- Scenario source: exact Stage 7 role-bound fixture, same as the Foundation-28 run above
+- Axis: `foundation`
+- Readout layer: `40`
+- Cases: `112` (`16` same-register drive-cycle test rows per drive)
+- Output report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_eta_epsilon_bridge_per_drive16.json`
+- Markdown report on RunPod: `/workspace/cas-harness-large-eval/reports/GPT_NEOX_20B_STAGE7_ETA_EPSILON_BRIDGE_PER_DRIVE16.md`
+- Local copies: `C:\tmp\gpt_neox_20b_foundation28_and_40element_20260526`
+
+Metric summary:
+
+| Condition | Mean margin | Mean delta vs none | Positive rows | Sign p | Honest read |
+| --- | ---: | ---: | ---: | ---: | --- |
+| none | 0.0674 | 0.0000 | 0/112 | 1.000000 | Baseline likelihood margin |
+| gold readable | 0.7274 | +0.6601 | 93/112 | ~0 | Epsilon/readable realization works strongly when the Foundation label is correct |
+| probe readable | 0.2647 | +0.1974 | 72/112 | 0.001608 | Positive and statistically directional, but misses the original strict `>0.20` delta gate by about `0.0026` |
+| partner readable | -0.5811 | -0.6485 | 26/112 | ~1.0 | Wrong readable prefix pushes the likelihood the wrong way, as expected |
+| gold raw | 0.0695 | +0.0022 | 59/112 | 0.318400 | Raw CAS symbols remain non-load-bearing |
+| probe raw | 0.0708 | +0.0035 | 59/112 | 0.318400 | Raw CAS symbols remain non-load-bearing |
+
+Status: `ORACLE_ETA_EPSILON_BRIDGE_PASS_PROBE_LOOP_WEAK`.
+
+Correctness-bucket diagnosis:
+
+| Bucket | Rows | Probe delta vs none | Probe minus partner | Gold delta vs none | Interpretation |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Foundation correct | 42 | +0.6517 | +1.3451 | +0.6517 | When the probe predicts the exact Foundation label, the full eta-to-epsilon loop works |
+| Drive correct | 68 | +0.7185 | +1.3742 | +0.6793 | Even a correct Drive with wrong register often carries the bridge |
+| Foundation wrong | 70 | -0.0752 | +0.5464 | +0.6651 | Wrong Foundation predictions are the bottleneck |
+
+Confidence-filter sweep:
+
+| Filter | Kept rows | Coverage | Foundation acc | Drive acc | Probe readable delta | Probe minus partner | Sign p | Status |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| none | 112/112 | 100% | 37.50% | 60.71% | +0.1974 | +0.8459 | 0.001608 | weak by delta gate |
+| q25 centroid-margin | 84/112 | 75% | 41.67% | 63.10% | +0.1276 | +0.7738 | n/a | weak |
+| q50 centroid-margin | 56/112 | 50% | 46.43% | 62.50% | +0.0693 | +0.6890 | n/a | weak |
+| q75 centroid-margin | 28/112 | 25% | 57.14% | 71.43% | +0.2775 | +0.7770 | 0.017849 | weak by sign-test gate |
+
+The q75 slice is informative but not a pass. It clears the effect-size line (`+0.2775`) and the partner-separation line (`+0.7770`), but misses the original sign-test gate (`p <= 0.01`) at only 28 kept rows. Its correctness buckets preserve the mechanism: Foundation-correct rows bridge strongly (`+0.5466`), Drive-correct rows bridge strongly (`+0.6118`), and Foundation-wrong rows do not (`-0.0814`).
+
+Interpretation: this is a real 20B behavioral likelihood result, but it is not a full 20B closure. The readable epsilon bridge itself works: gold-readable prefixes produce a large positive likelihood shift and wrong-readable prefixes push in the opposite direction. The raw-symbol control stays near zero, matching the original methodology. The current failure is the probe handoff: selected-row Foundation accuracy is only `37.50%` unfiltered and only `57.14%` at the q75 high-confidence slice. Simple centroid-margin confidence filtering is not enough. The next fix is a stronger Foundation readout or an explicitly downgraded Drive-level fallback mode, not changing the TKS definitions or abandoning the eta-to-epsilon mechanism.
+
+### GPT-NeoX-20B exact Stage 7 eta-to-epsilon bridge — balanced logistic correction
+
+Method label: `S7-F28-BALANCED-BRIDGE` — S7-F28 Balanced Bridge Method.
+
+The original Stage 7 closure methodology used balanced sklearn linear probes, not nearest-centroid probes. Re-running the exact Stage 7 bridge with `LogisticRegression(C=0.1, class_weight="balanced")` after `StandardScaler` closes the GPT-NeoX-20B probe-predicted bridge.
+
+- Runner: `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py --readout-kind logistic --probe-C 0.1 --probe-max-iter 1000`
+- Output report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_eta_epsilon_bridge_logistic.json`
+- Markdown report on RunPod: `/workspace/cas-harness-large-eval/reports/GPT_NEOX_20B_STAGE7_ETA_EPSILON_BRIDGE_LOGISTIC.md`
+- Local archive target: `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526`
+
+| Metric | Result | Read |
+| --- | ---: | --- |
+| Heldout Foundation readout | 86.8622% | Strong 28-class Stage 7 readout on real GPT-NeoX-20B activations |
+| Selected bridge-row Foundation accuracy | 85.7143% | Probe handoff fixed for the likelihood bridge set |
+| Selected bridge-row Drive accuracy | 93.75% | Drive-level handoff is very strong |
+| Probe-readable delta vs none | +0.596413 | Clears original `>0.20` effect-size gate |
+| Probe-readable positive rows | 90/112 | Directional on most rows |
+| Probe-readable sign p | 3e-11 | Clears original `p <= 0.01` gate |
+| Probe-readable minus partner-readable | +1.244917 | Clears original `>0.30` wrong-prefix separation gate |
+| Gold-readable delta vs none | +0.660065 | Oracle upper bound remains strong |
+| Gold-readable positive rows | 93/112 | Gold epsilon still behaves as expected |
+| Probe raw delta vs none | +0.002524 | Raw CAS symbols remain non-load-bearing |
+| Gold raw delta vs none | +0.002186 | Raw CAS symbols remain non-load-bearing |
+
+Status: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`.
+
+Interpretation: this closes the 20B Stage 7 likelihood-bridge tier under the original balanced-logistic readout methodology. It does not by itself create a CAS Harness ACCEPT/SUPPRESS verdict or a full Evidence Packet; it is the behavioral likelihood bridge evidence layer that should be merged with the activation readout/ablation results, trace diagnostics, and Evidence Packet verifier.
+
+### GPT-NeoX-20B exact Stage 7 trace diagnostics
+
+- Runner: `live-trace-worker/scripts/run_open_weight_trace_diagnostics.py`
+- Dataset: `/workspace/cas-harness-large-eval/datasets/gpt_neox_20b_stage7_foundation_rolebound_pilot_layers_0_43.npz`
+- Bridge context: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_eta_epsilon_bridge_logistic.json`
+- Ablation context: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_foundation_rolebound_activation_cover_ablation_report_top256.json`
+- Output report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_stage7_trace_diagnostics_logistic.json`
+- Markdown report on RunPod: `/workspace/cas-harness-large-eval/reports/GPT_NEOX_20B_STAGE7_TRACE_DIAGNOSTICS_LOGISTIC.md`
+- Local archive target: `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526`
+
+Metric summary:
+
+| Gate | GPT-NeoX-20B result | Comparator / threshold | Honest read |
+| --- | ---: | ---: | --- |
+| Gate-layer heldout Foundation accuracy | 86.8622% | Pythia-160M Foundation readout 78.6% | Strong readout on the exact Stage 7 Foundation axis under the original balanced-logistic probe |
+| Foundation lacunarity | 0.006715 | pass <= 0.05; Pythia-160M 0.021; Pythia-1B 0.015 | Pass; cleaner than the Pythia Foundation comparators |
+| Drive lacunarity inside Foundation grid | 0.002752 | lower is cleaner | Drive component is evenly distributed inside the Foundation readout |
+| Register lacunarity inside Foundation grid | 0.001283 | lower is cleaner | Register component is evenly distributed inside the Foundation readout |
+| Fractal preflight | Amplifying | pass classes: Stabilizing or Amplifying | Pass as a numeric layer-trace proxy |
+
+Status: `TRACE_DIAGNOSTICS_PASS`.
+
+Important limit: the fractal preflight is currently a numeric trace proxy over layer-by-layer Foundation readout accuracy. It uses the CAS fractal vocabulary, but it is not yet the discrete `cas-engine` `CognitiveFractal` orbit classifier.
+
+### GPT-NeoX-20B activation-level cover ablation
+
+- Evaluator: `live-trace-worker/scripts/ablate_probe_dataset.py`
+- Mode: activation-level train-mean replacement on already captured real GPT-NeoX-20B hidden vectors
+- Top-16 report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_activation_cover_ablation_report_top16.json`
+- Top-256 report on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_activation_cover_ablation_report_top256.json`
+- Top-256 cover map on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_candidate_cover_map_top256.json`
+- Local archive: `D:\tksCAS-archive\gpt_neox_20b_activation_cover_ablation_20260526`
+
+Metric summary:
+
+| Axis | Cover size | Clean acc | Label-cover ablated acc | Same-size random acc | Label-cover drop vs random | Honest read |
+| --- | ---: | ---: | ---: | ---: | ---: | --- |
+| Domain | 256/class | 46.84% | 43.04% | 46.90% mean | +3.86 pp | Label-specific cover beats same-size random; axis-union cover does not |
+| Drive | 256/class | 35.80% | 32.10% | 35.80% mean | +3.70 pp | Label-specific cover beats same-size random; axis-union cover does not |
+| Operator | 256/class | 31.25% | 28.75% | 31.25% mean | +2.50 pp | Label-specific cover beats same-size random; axis-union cover does not |
+
+Top-16 covers did **not** reduce heldout top-1 accuracy on any axis. They did weaken label-specific readout margins more than same-size random controls, but that is not strong enough to call a causal pass.
+
+Top-256 label-specific covers are the first 20B causal-control signal: replacing the true-label candidate cover dimensions hurt heldout accuracy more than same-size random replacements on domain, drive, and operator. This is promising, but it is still activation-level evidence only. It is **not** a live model-forward intervention, not a verifier verdict, and not a full CAS Harness ACCEPT on GPT-NeoX-20B.
+
+### GPT-NeoX-20B 27H-style forward-pass cover ablation pilot
+
+- Runner: `live-trace-worker/scripts/run_open_weight_cover_ablation.py`
+- Model: `EleutherAI/gpt-neox-20b`
+- Axis: `drive`
+- Cover map: top-256 candidate covers
+- Mode: suppress true-label cover coordinates during a fresh model forward pass, then score the true CAS drive verbalizer likelihood against wrong-cover and matched random-cover controls
+- Pilot output on RunPod: `/workspace/cas-harness-large-eval/reports/gpt_neox_20b_forward_cover_ablation_drive_balanced14.json`
+- Local copy: `C:\tmp\gpt_neox_20b_forward_cover_ablation_drive_balanced14.json`
+
+Metric summary:
+
+| Run | Rows | Drive balance | Mean target drop | Mean random drop | Target minus random | Target beats random mean | Honest read |
+| --- | ---: | --- | ---: | ---: | ---: | ---: | --- |
+| First pilot | 6 | skewed mostly F7 | -0.0479 | +0.0730 | -0.1209 | 1/6 | Not usable as a balanced result |
+| Balanced pilot | 14 | 2 rows each for F1-F7 | -0.0244 | +0.0140 | -0.0383 | 5/14 | Current cover does not pass 27H-style forward intervention |
+
+The balanced pilot is a genuine 20B forward-pass intervention, but it is **not** a positive 27H result. Suppressing the current candidate drive covers did not reduce the true-drive verbalizer likelihood more than matched random controls. The likely next move is not to overclaim the result; it is to improve the cover/rubric pair:
+
+1. build per-drive balanced scenarios specifically designed for 27H output scoring,
+2. test alternative cover sizes and selection methods,
+3. score against multiple verbalizers per drive instead of one sentence,
+4. only then rerun the 27H forward-pass gate.
+
+### Original-results audit correction
+
+Re-reading the original CAS Harness notes changes the 20B priority. The strongest original Pythia evidence was **not** drive-only forward steering. It was the 28-Foundation chain:
+
+- 28 Foundations readout: Pythia-160M `78.6%`, `+28.9 pp` over text baseline, p about `1e-95`.
+- Foundation subspace ablation: `78.6% -> 3.57%`, exact `1/28` chance.
+- Random same-rank ablations: clean/null.
+- 28-Foundation lacunarity: `0.021`, far cleaner than the noisier Noetic axis.
+- 40-Element readout: `89.8%`, `+39.7 pp` over text baseline.
+- Likelihood-tier eta-to-epsilon bridge: Pythia-160M `+0.283`, Pythia-1B `+0.554`.
+
+The same notes also record null or bounded results that must not be confused with the closed claim:
+
+- Stage 6.6 noetic generation steering: NULL.
+- Stage 7.3 drive-subspace generation steering: NULL, p = `1.0`.
+- Stage 7.LA late-layer additive steering: NULL.
+- Stage 27H / 27I prefix-plus-neuron steering: diagnostic/null at Pythia-160M scale, not free-form generation control.
+
+So the current 20B drive-only forward pilot is a useful negative diagnostic, but it is **not** the proper replication of the original success. The correct 20B proof path is to build a real 28-Foundation dataset (`drive x register`), train/evaluate 28-Foundation readouts, run matched ablation/intervention against those covers, and only then attempt the Foundation-level likelihood/output bridge.
+
+Concrete protocol: `docs/working/cas_harness_foundation28_large_model_protocol_20260526.md`.
+
+### S7-F28 Evidence Packet merge
+
+The exact Stage 7 Foundation-28 GPT-NeoX-20B chain has now been merged into a real Evidence Packet.
+
+Packet files:
+
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
+- `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
+
+Archive copies:
+
+- `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526\S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
+- `D:\tksCAS-archive\gpt_neox_20b_balanced_logistic_closure_20260526\S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
+
+Packet result:
+
+- Verdict: `FLAG_FOR_HUMAN_REVIEW`
+- Evidence confidence: `0.803571`
+- Confidence formula: `min(balanced_logistic_heldout_accuracy, probe_readable_positive_fraction, causal_control_pass, trace_gate_pass)`
+
+Why it is not `ACCEPT`: this packet proves the S7-F28 evidence chain is assembled and hash-bound, but the Stage 19/20/21 production ACCEPT/SUPPRESS verifier decision layer is not attached yet.
+
+## What this proves
+
+This proves the open-weight runner can load and run a real 20B open-weight transformer on H100, capture all transformer layers, emit non-fabricated evidence fragments, capture raw hidden vectors for labeled scenarios, train/evaluate heldout readout probes, run derived-axis checks, run activation-level matched-control ablation over candidate covers, run the original balanced-logistic eta-to-epsilon likelihood bridge, run trace diagnostics, and merge those artifacts into a hash-bound Evidence Packet.
+
+It does **not** yet prove CAS universality at 20B/100B/300B. The current positive 20B claim is narrower and stronger: under `S7-F28-BALANCED-BRIDGE`, GPT-NeoX-20B shows a strong Foundation-28 hidden readout, targeted activation-cover evidence versus matched controls, a probe-predicted eta-to-epsilon likelihood bridge pass, a trace-diagnostic pass, and an Evidence Packet with conservative human-review verdict. The earlier drive-only forward-pass pilot remains null and should not be used as the headline.
+
+## Why the missing fields are good, not bad
+
+The first-pass runner did not invent proof. Because no GPT-NeoX-20B probe weights or cover maps were supplied, it returned:
+
+- missing `cas_axis_readout`
+- missing `blindspot_overlay`
+
+That is the correct anti-fake behavior. The system can now say, "we captured real 20B activations and got a first heldout readout signal above weak controls." It cannot yet say, "CAS passed on 20B."
+
+## Next required proof steps for 20B
+
+1. Keep the canonical CAS colloquialisms; do not treat approved English aliases as contamination.
+2. Completed: run the 40-Element derived-axis check on the existing 400-row dataset. Result is weak and imbalanced; build a balanced 40-Element library before using it as a headline comparator.
+3. Completed: build a balanced 28-Foundation scenario set (`F1..F7 x T/A/f/E`) at `live-trace-worker/scenarios/foundation28_balanced_v0_20260526.json`.
+4. Completed: capture GPT-NeoX-20B hidden states for the Foundation-labeled set.
+5. Completed: train/evaluate the 28-Foundation readout and compare it against controls.
+6. Completed: run Foundation-level activation ablation with matched random and wrong-Foundation controls.
+7. Completed: run source-derived TKS40 (`A1..D10`) on GPT-NeoX-20B. Result: 40-Element hidden readout `40.00%` versus `2.50%` majority/chance, and label-specific activation cover drop `13.75 pp` versus approximately zero random/wrong controls.
+8. Completed: rerun Foundation-28 with the exact Stage 7 source-lineage discipline and original balanced-logistic readout. Result: `86.8622%` heldout Foundation accuracy.
+9. Completed: run the Foundation-level eta-to-epsilon likelihood/output bridge. Result: `PROBE_PREDICTED_ETA_EPSILON_BRIDGE_PASS`, `+0.596413` probe-readable delta, `90/112` positive rows, sign-test p `3e-11`.
+10. Completed: run trace diagnostics. Result: `TRACE_DIAGNOSTICS_PASS`, lacunarity `0.006715`, numeric class `Amplifying`.
+11. Completed: merge the exact chain into an Evidence Packet. Result: `S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`, verdict `FLAG_FOR_HUMAN_REVIEW`, evidence confidence `0.803571`.
+12. Next: attach the Stage 19/20/21 production verifier decision layer before any ACCEPT/SUPPRESS product verdict.
+13. Next: run the same packet protocol on the next open-weight model family and separately on a real worker fleet for 100B/300B.
+
+## 100B / 300B status
+
+No genuine 100B or 300B model eval has run yet.
+
+A single H100 80GB is not enough for a full 100B/300B open-weight audit in normal fp16/bf16 mode. Those runs require a fleet plan with multiple assigned workers, enough model storage, and returned receipts before the verifier is allowed to merge anything.
+
+The correct next step is not to fake a 100B/300B run. The correct next step is to add workers and execute the distributed fleet path already being prepared in PRs #97/#98.

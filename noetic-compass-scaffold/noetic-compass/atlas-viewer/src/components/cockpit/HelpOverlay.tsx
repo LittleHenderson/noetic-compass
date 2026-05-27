@@ -90,6 +90,24 @@ const bodyTextStyle: CSSProperties = {
   lineHeight: 1.6,
 };
 
+const orderedListStyle: CSSProperties = {
+  margin: '0 0 0 18px',
+  padding: 0,
+  color: COLORS.textSecondary,
+  fontSize: 13,
+  lineHeight: 1.55,
+};
+
+const listItemStyle: CSSProperties = {
+  marginBottom: 8,
+  paddingLeft: 4,
+};
+
+const inlineStrongStyle: CSSProperties = {
+  color: COLORS.textPrimary,
+  fontWeight: 700,
+};
+
 const kbdStyle: CSSProperties = {
   display: 'inline-block',
   padding: '1px 6px',
@@ -175,6 +193,47 @@ const SHORTCUTS: Array<{ keys: string[]; action: string }> = [
   { keys: ['?'], action: 'Open this help panel' },
   { keys: ['Esc'], action: 'Close help' },
 ];
+
+const CAS_HARNESS_METHOD_STEPS: Array<{ title: string; body: string }> = [
+  {
+    title: 'Use the original source-defined taxonomy.',
+    body:
+      'For the 20B replication, that means the exact Stage 7 TKS Foundation-28 grid: seven drives times four registers, with the legacy 1a..7d mapping preserved.',
+  },
+  {
+    title: 'Capture real hidden states from the open-weight model.',
+    body:
+      'Run the actual model weights, save layer-by-layer activations, and keep model id, revision, dtype, layer count, scenario hash, and label distribution.',
+  },
+  {
+    title: 'Read the CAS axis with the original balanced linear probe.',
+    body:
+      'Use StandardScaler plus LogisticRegression(C=0.1, class_weight="balanced"). On GPT-NeoX-20B Stage 7, layer 40 reached 86.8622% heldout Foundation accuracy.',
+  },
+  {
+    title: 'Run matched causal controls.',
+    body:
+      'Suppress the true Foundation cover, then compare against same-size random covers and wrong-Foundation covers. The true cover must damage the readout more than controls.',
+  },
+  {
+    title: 'Check the eta-to-epsilon behavioral bridge.',
+    body:
+      'Read the model state, realize it as readable English context, run the model again, and measure whether likelihood moves in the CAS-predicted direction. On 20B, probe-readable delta was +0.596413 with 90/112 positive rows.',
+  },
+  {
+    title: 'Run trace diagnostics before claiming closure.',
+    body:
+      'Compute Foundation lacunarity and layer-trace class. On 20B, lacunarity was 0.006715 against a <= 0.05 pass gate, with numeric trace class Amplifying.',
+  },
+  {
+    title: 'Only then merge an Evidence Packet.',
+    body:
+      'A final ACCEPT, SUPPRESS, or FLAG verdict requires the verifier and Evidence Packet. The current 20B result is strong evidence, not yet the final verdict layer.',
+  },
+];
+
+const CAS_METHOD_SUMMARY =
+  'Canonical label: S7-F28-BALANCED-BRIDGE. Plain name: S7-F28 Balanced Bridge Method. CAS Harness is not a pretty label overlay; this method means source-defined labels, real hidden states, balanced probe, targeted removal, matched controls, output-likelihood bridge, trace diagnostics, then Evidence Packet verdict.';
 
 const HOW_IT_RELATES = `The picture is the stimulus. The token stream is the model's response.
 The neural net shows how the response was built — which neurons fired
@@ -275,6 +334,18 @@ export default function HelpOverlay({ open, onClose }: HelpOverlayProps): JSX.El
                   ))}
                 </tbody>
               </table>
+            </section>
+
+            <section style={sectionStyle} data-testid="cas-harness-method-faq">
+              <h3 style={sectionHeaderStyle}>FAQ: S7-F28 Balanced Bridge Method</h3>
+              <p style={bodyTextStyle}>{CAS_METHOD_SUMMARY}</p>
+              <ol style={orderedListStyle}>
+                {CAS_HARNESS_METHOD_STEPS.map((step) => (
+                  <li key={step.title} style={listItemStyle}>
+                    <span style={inlineStrongStyle}>{step.title}</span> {step.body}
+                  </li>
+                ))}
+              </ol>
             </section>
 
             <section style={sectionStyle}>

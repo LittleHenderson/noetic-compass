@@ -26,6 +26,7 @@ import pytest
 
 _DEV_TRACE_ID = "dev_example_001"
 _CAS_HARNESS_REFERENCE_TRACE_ID = "cas_harness_reference_accept_001"
+_S7_F28_TRACE_ID = "s7-f28-balanced-bridge-gpt-neox-20b-20260526"
 _KNOWN_CHECKPOINT_DIR = (
     Path(__file__).resolve().parents[1]
     / ".tmp"
@@ -201,6 +202,53 @@ def test_evidence_get_cas_harness_reference_packet_has_verifier_contract(
     assert body["generation_readiness"]["generation_readiness"] == "allow"
     assert any("stage19" in report for report in body["provenance"]["source_reports"])
     assert any("stage20" in report for report in body["provenance"]["source_reports"])
+
+
+def test_evidence_get_s7_f28_packet_from_working_docs(client, auth_headers):
+    resp = client.get(f"/evidence/{_S7_F28_TRACE_ID}", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["schema_version"] == "cas_harness_evidence_packet_v1"
+    assert body["trace_id"] == _S7_F28_TRACE_ID
+    assert body["provenance"]["method_label"] == "S7-F28-BALANCED-BRIDGE"
+    assert body["model"]["name"] == "EleutherAI/gpt-neox-20b"
+    assert body["readout"]["heldout_accuracy"] == 0.868622
+    assert body["ablation"]["label_specific_cover_ablation"]["drop_from_clean"] == 0.124424
+    assert body["output"]["probe_readable"]["delta_vs_none_mean"] == 0.596413
+    assert body["verification"]["explicit_verifier_decision"]["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["verification"]["explicit_verifier_decision"]["confidence"] == 0.803571
+    assert body["verification"]["packet_integrity"]["status"] == "present_only_not_verifier_clean"
+    assert any("Packet proof is present-only" in caveat for caveat in body["caveats"])
+
+
+def test_evidence_verify_s7_f28_packet_is_present_only_not_clean(client, auth_headers):
+    resp = client.post(f"/evidence/{_S7_F28_TRACE_ID}/verify", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["trace_id"] == _S7_F28_TRACE_ID
+    assert body["overall"] == "partial_mismatch"
+
+    corpus_check = next(
+        (check for check in body["checks"] if check["artifact"] == "corpus"),
+        None,
+    )
+    assert corpus_check is not None
+    assert corpus_check["match"] is False
+    assert corpus_check["actual"] is None
+    assert corpus_check["notes"] in {
+        "path is outside allowed roots",
+        "file not found locally",
+    }
+
+    code_commit_check = next(
+        (check for check in body["checks"] if check["artifact"] == "code_commit"),
+        None,
+    )
+    assert code_commit_check is not None
+    assert code_commit_check["match"] is False
+    assert "HEAD has moved" in code_commit_check["notes"]
 
 
 def test_evidence_verify_cas_harness_reference_packet_is_unavailable_not_mismatch(
