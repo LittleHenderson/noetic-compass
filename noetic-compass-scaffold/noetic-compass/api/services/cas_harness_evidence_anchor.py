@@ -197,6 +197,7 @@ def _anchor_s3(manifest: Mapping[str, Any]) -> dict[str, Any]:
             retain_until = datetime.now(UTC) + timedelta(days=retention_days)
             put_kwargs["ObjectLockMode"] = object_lock_mode
             put_kwargs["ObjectLockRetainUntilDate"] = retain_until
+            put_kwargs["ContentMD5"] = base64.b64encode(hashlib.md5(body).digest()).decode("ascii")
         response = client.put_object(**put_kwargs)
     except Exception as exc:
         return _s3_failed(manifest, f"S3 anchor write failed: {type(exc).__name__}: {exc}")

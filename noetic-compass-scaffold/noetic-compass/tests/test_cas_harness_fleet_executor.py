@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+import base64
 import hashlib
 import json
 import sys
@@ -161,10 +162,12 @@ class _FakeS3Client:
     def __init__(self) -> None:
         self.objects: dict[tuple[str, str], bytes] = {}
         self.object_locks: dict[tuple[str, str], dict] = {}
+        self.put_calls: list[dict] = []
         self.get_calls: list[tuple[str, str]] = []
         self.head_calls: list[tuple[str, str]] = []
 
     def put_object(self, **kwargs) -> dict:
+        self.put_calls.append(dict(kwargs))
         bucket = kwargs["Bucket"]
         key = kwargs["Key"]
         body = kwargs["Body"]
@@ -569,6 +572,10 @@ def test_s3_anchor_object_lock_is_verified(client, auth_headers, monkeypatch, tm
     assert anchor["retention_days"] == 30
     assert anchor["object_lock_retain_until"]
     assert (anchor["bucket"], anchor["key"]) in fake_s3.object_locks
+    expected_md5 = base64.b64encode(
+        hashlib.md5(fake_s3.objects[(anchor["bucket"], anchor["key"])]).digest()
+    ).decode("ascii")
+    assert fake_s3.put_calls[0]["ContentMD5"] == expected_md5
 
     verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
 
