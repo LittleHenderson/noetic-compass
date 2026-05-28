@@ -4,7 +4,7 @@
 - Trace ID: `stage9-40e-original-baseline-readout-20260527`
 - Run ID: `gpt-neox-20b-stage9-original-40e-20260527`
 - Method: `S9-40E-ORIGINAL-BASELINE-READOUT`
-- Verdict: `FLAG_FOR_HUMAN_REVIEW`
+- Verdict: `ACCEPT`
 
 ## Tier Status
 
@@ -16,7 +16,7 @@
 | Causal proof | present |
 | Control proof | present |
 | Output/bridge proof | present |
-| Verifier | missing |
+| Verifier | present |
 
 ## Proof Chips
 
@@ -73,9 +73,19 @@
 | Probe-raw delta vs none | 0.013817 |
 | Probe-readable gate | passed |
 
+## Verifier Decision
+
+| Field | Value |
+| --- | --- |
+| Verdict | `ACCEPT` |
+| Confidence | 0.95625 |
+| Source | stage9_40e_packet_verifier |
+| Scope | stage9_40e_validation_packet |
+| Reason | all_stage9_40e_validation_gates_passed |
+
 ## Rationale
 
-Merged packet is review-only because required proof tiers are missing: verifier.
+All required proof chips are pass-ready and the attached verifier returned `ACCEPT` with confidence 0.95625.
 
 ## Caveats
 
