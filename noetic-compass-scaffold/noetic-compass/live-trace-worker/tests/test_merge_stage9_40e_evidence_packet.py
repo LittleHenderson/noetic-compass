@@ -171,9 +171,29 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
         tmp_path / "bridge.json",
         {
             "schema_version": "stage9_40e_bridge.v0",
-            "status": "completed",
+            "status": "PROBE_PREDICTED_40E_ETA_EPSILON_BRIDGE_PASS",
             "method_label": "bridge-fixture",
             "run_id": "bridge-run",
+            "n_cases": 80,
+            "per_element": 2,
+            "readout_layer": 2,
+            "readout_mode": "logistic_linear_probe",
+            "probe_prediction": {
+                "selected_element_accuracy": 0.975,
+                "selected_operator_accuracy": 0.975,
+                "selected_domain_accuracy": 1.0,
+                "all_test_element_accuracy": 0.952679,
+            },
+            "key_comparisons": {
+                "probe_readable_delta_vs_none": 1.41205,
+                "probe_readable_minus_partner_readable_margin": 2.881239,
+                "gold_readable_delta_vs_none": 1.497513,
+                "probe_raw_delta_vs_none": 0.013817,
+            },
+            "bridge_gates": {
+                "probe_readable": {"passed": True},
+                "gold_readable": {"passed": True},
+            },
             "provenance": {"bridge": "fixture"},
         },
     )
@@ -201,6 +221,14 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
     assert packet["control_proof"]["summary"]["selected_layer"] == 2
     assert packet["control_proof"]["summary"]["top_k"] == 8
     assert packet["output_bridge_proof"]["summary"]["run_id"] == "bridge-run"
+    assert packet["output_bridge_proof"]["summary"]["n_cases"] == 80
+    assert packet["output_bridge_proof"]["summary"]["probe_readable_gate_passed"] is True
+    assert packet["output_bridge_proof"]["summary"]["key_comparisons"][
+        "probe_readable_delta_vs_none"
+    ] == 1.41205
+    assert packet["output_bridge_proof"]["summary"]["probe_prediction"][
+        "selected_element_accuracy"
+    ] == 0.975
     assert packet["provenance"]["input_count"] == 4
     assert packet["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
 
@@ -270,3 +298,38 @@ def test_markdown_surfaces_causal_and_cover_numbers(tmp_path):
     assert "## Control / Cover Proof" in markdown
     assert "| Candidate classes | 1 |" in markdown
     assert "| Top-k neurons per class | 8 |" in markdown
+
+
+def test_markdown_surfaces_output_bridge_numbers(tmp_path):
+    readout = _write_json(tmp_path / "readout.json", _readout_fixture())
+    bridge = _write_json(
+        tmp_path / "bridge.json",
+        {
+            "schema_version": "stage9_40e_bridge.v0",
+            "status": "PROBE_PREDICTED_40E_ETA_EPSILON_BRIDGE_PASS",
+            "method_label": "bridge-fixture",
+            "n_cases": 80,
+            "probe_prediction": {"selected_element_accuracy": 0.975},
+            "key_comparisons": {
+                "probe_readable_delta_vs_none": 1.41205,
+                "probe_readable_minus_partner_readable_margin": 2.881239,
+                "gold_readable_delta_vs_none": 1.497513,
+                "probe_raw_delta_vs_none": 0.013817,
+            },
+            "bridge_gates": {"probe_readable": {"passed": True}},
+        },
+    )
+
+    packet = merge_stage9_40e_evidence_packet.build_packet(
+        readout_report=readout,
+        bridge_report=bridge,
+    )
+    markdown = merge_stage9_40e_evidence_packet.render_markdown(packet)
+
+    assert "## Output Bridge Proof" in markdown
+    assert "| Cases | 80 |" in markdown
+    assert "| Selected element accuracy | 0.975 |" in markdown
+    assert "| Probe-readable delta vs none | 1.41205 |" in markdown
+    assert "| Probe-readable minus partner | 2.88124 |" in markdown
+    assert "| Probe-raw delta vs none | 0.013817 |" in markdown
+    assert "| Probe-readable gate | passed |" in markdown

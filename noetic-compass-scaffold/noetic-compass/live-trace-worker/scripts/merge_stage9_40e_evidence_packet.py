@@ -422,6 +422,41 @@ def _make_report_summary(tier_name: str, report: dict[str, Any]) -> dict[str, An
         if "caveat" in report:
             summary["caveat"] = report["caveat"]
 
+    if tier_name == "output_bridge":
+        key_comparisons = report.get("key_comparisons")
+        bridge_gates = report.get("bridge_gates")
+        probe_prediction = report.get("probe_prediction")
+        if isinstance(key_comparisons, dict):
+            summary["key_comparisons"] = key_comparisons
+        if isinstance(bridge_gates, dict):
+            summary["bridge_gates"] = bridge_gates
+            summary["probe_readable_gate_passed"] = bool(
+                bridge_gates.get("probe_readable", {}).get("passed")
+            )
+            summary["gold_readable_gate_passed"] = bool(
+                bridge_gates.get("gold_readable", {}).get("passed")
+            )
+        if isinstance(probe_prediction, dict):
+            summary["probe_prediction"] = {
+                "selected_element_accuracy": probe_prediction.get(
+                    "selected_element_accuracy"
+                ),
+                "selected_operator_accuracy": probe_prediction.get(
+                    "selected_operator_accuracy"
+                ),
+                "selected_domain_accuracy": probe_prediction.get(
+                    "selected_domain_accuracy"
+                ),
+                "all_test_element_accuracy": probe_prediction.get(
+                    "all_test_element_accuracy"
+                ),
+            }
+        for key in ("n_cases", "per_element", "readout_layer", "readout_mode"):
+            if key in report:
+                summary[key] = report[key]
+        if "implication" in report:
+            summary["implication"] = report["implication"]
+
     return summary
 
 
@@ -608,6 +643,25 @@ def render_markdown(packet: dict[str, Any]) -> str:
 """
     else:
         control_rows = ""
+    bridge_summary = packet.get("output_bridge_proof", {}).get("summary", {})
+    bridge_key = bridge_summary.get("key_comparisons", {})
+    bridge_pred = bridge_summary.get("probe_prediction", {})
+    if bridge_key:
+        bridge_rows = f"""
+## Output Bridge Proof
+
+| Metric | Value |
+| --- | ---: |
+| Cases | {bridge_summary.get("n_cases")} |
+| Selected element accuracy | {float(bridge_pred.get("selected_element_accuracy", 0.0)):.6g} |
+| Probe-readable delta vs none | {float(bridge_key.get("probe_readable_delta_vs_none", 0.0)):.6g} |
+| Probe-readable minus partner | {float(bridge_key.get("probe_readable_minus_partner_readable_margin", 0.0)):.6g} |
+| Gold-readable delta vs none | {float(bridge_key.get("gold_readable_delta_vs_none", 0.0)):.6g} |
+| Probe-raw delta vs none | {float(bridge_key.get("probe_raw_delta_vs_none", 0.0)):.6g} |
+| Probe-readable gate | {'passed' if bridge_summary.get("probe_readable_gate_passed") else 'failed'} |
+"""
+    else:
+        bridge_rows = ""
     return f"""# Stage 9 40E Evidence Packet
 
 - Schema version: `{packet["schema_version"]}`
@@ -638,7 +692,7 @@ def render_markdown(packet: dict[str, Any]) -> str:
 | Shuffled-label mean | {baseline["shuffled_label_hidden_mean_test_acc_pct"]:.6g}% |
 | compact-gloss v0 | blocked at {baseline["compact_gloss_v0_text_only_acc_pct"]:.6g}% text-only |
 
-{causal_rows}{control_rows}
+{causal_rows}{control_rows}{bridge_rows}
 ## Rationale
 
 {packet["verdict_rationale"]}
