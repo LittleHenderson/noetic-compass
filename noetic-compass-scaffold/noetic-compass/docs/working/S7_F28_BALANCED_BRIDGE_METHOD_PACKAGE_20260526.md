@@ -142,7 +142,7 @@ It is still not a final CAS Harness ACCEPT/SUPPRESS verdict, because the Stage 1
 
 - Canonical label: `S9-40E-ORIGINAL-BASELINE-READOUT`
 - Plain-English name: **Stage 9 40-Element Original-Fixture Balanced Readout**
-- Scope: readout-tier replication only. It is not yet causal ablation, eta-to-epsilon bridge, or Evidence Packet verdict.
+- Current scope: verifier-attached Stage 9 40E validation packet. It is not a live customer-production row and it is not a 100B/300B universality claim.
 
 This is the corrected 40-Element baseline path. Compact-gloss TKS40 v0 is blocked because text-only reached `100.00%`. The original Stage 9 role-bound/counterfactual fixture passes the modern text-baseline guard and is the current claim-bearing 20B 40E readout:
 
@@ -163,6 +163,18 @@ This is the corrected 40-Element baseline path. Compact-gloss TKS40 v0 is blocke
 
 Rule: every future 40E scenario library must run the text-baseline diagnostic first. If text-only is above the pre-registered ceiling, the library can be used for diagnostics but cannot support a CAS-beats-text claim.
 
+Validation-packet status:
+
+- Evidence Packet: `docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json`
+- Trace ID: `stage9-40e-original-baseline-readout-20260527`
+- Verifier source: `stage9_40e_packet_verifier`
+- Verifier verdict: `ACCEPT`
+- Confidence: `0.95625`
+- Coverage: `80` validation cases across `40` classes
+- Audit Console target: `Load 20B ACCEPT packet`
+
+Boundary: this `ACCEPT` is evidence-bound to the Stage 9 40E validation packet. Do not reuse it for arbitrary live customer prompts, compact-gloss TKS40 v0, another model family, or a distributed fleet run without a fresh packet and verifier decision.
+
 ## Relevant Files
 
 - `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py`
@@ -181,6 +193,6 @@ Rule: every future 40E scenario library must run the text-baseline diagnostic fi
 
 ## Next Gate
 
-Attach the Stage 19/20/21 production verifier decision layer, or port the exact same packet protocol to the next open-weight model family.
+Port the exact same packet protocol to the next open-weight model family, and continue the customer-production verifier layer.
 
-The packet exists now and binds readout, ablation, bridge, trace diagnostics, model metadata, hashes, confidence, coverage, and caveats. Do not upgrade the packet to ACCEPT/SUPPRESS unless the verifier layer explicitly returns that decision.
+The Stage 9 packet now binds readout, ablation, bridge, model metadata, hashes, confidence, coverage, caveats, and an explicit packet-level verifier `ACCEPT`. The S7-F28 packet remains `FLAG_FOR_HUMAN_REVIEW` until its verifier layer explicitly returns a different decision.

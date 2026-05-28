@@ -53,14 +53,35 @@ This does not make canonical TKS language invalid. The issue is not "colloquiali
 
 Plain English: on the original Stage 9 40-Element task, GPT-NeoX-20B's hidden states carry the TKS40/CAS structure far more strongly than surface text alone.
 
+## Current Packet Status
+
+The Stage 9 40E result has been promoted from readout-only to a verifier-attached validation packet:
+
+- Evidence Packet: `docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json`
+- Trace ID: `stage9-40e-original-baseline-readout-20260527`
+- Verifier source: `stage9_40e_packet_verifier`
+- Verifier verdict: `ACCEPT`
+- Confidence: `0.95625`
+- Scope: `stage9_40e_validation_packet`
+- Coverage: `80` validation cases across `40` classes
+
+The packet includes readout, baseline, causal, control, output-bridge, and packet proof chips. It is visible in the Audit Console as `Load 20B ACCEPT packet`.
+
 ## Claim Boundary
 
-This is a readout-tier replication. It is not yet:
+Allowed claim:
 
-- causal ablation,
-- eta-to-epsilon bridge,
-- Evidence Packet verifier merge,
-- ACCEPT/SUPPRESS production verdict.
+- The original Stage 9 40E GPT-NeoX-20B validation packet passed the packet-level verifier and returned `ACCEPT` with confidence `0.95625`.
+
+Not allowed from this packet alone:
+
+- a live customer-production row verdict,
+- a universal claim over arbitrary open-weight models,
+- a 100B/300B result,
+- a complete neuron-by-neuron causal map,
+- an `ACCEPT` for compact-gloss TKS40 v0.
+
+Every new model, dataset, customer row, or distributed fleet run needs its own packet and verifier decision.
 
 ## Anti-Drift Checklist
 
@@ -69,3 +90,5 @@ This is a readout-tier replication. It is not yet:
 - Do not call source-derived TKS language "leakage" by default.
 - Do block the comparison claim if text-only is too high.
 - Do preserve split, grouping, hashes, and scenario provenance in the Evidence Packet.
+- Do state whether an `ACCEPT` is validation-packet scoped or live customer-production scoped.
+- Do not reuse the Stage 9 packet confidence for a different model, prompt set, or fleet run.
