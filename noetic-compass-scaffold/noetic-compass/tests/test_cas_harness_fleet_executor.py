@@ -108,6 +108,7 @@ def test_fleet_routes_registered(client):
     assert "/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/lease" in openapi["paths"]
     assert "/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/{job_id}/receipt" in openapi["paths"]
     assert "/api/cas-harness/audit/distributed/session/{audit_id}/fleet/merge" in openapi["paths"]
+    assert "/api/cas-harness/audit/distributed/session/{audit_id}/fleet/verifier" in openapi["paths"]
 
 
 def test_fleet_prepare_requires_dispatched_distributed_audit(client, auth_headers):
@@ -196,6 +197,49 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
         "Run the verifier decision layer over the merged Evidence Packet.",
     ]
     assert all(job["lease_token"] is None for job in merged_body["jobs"])
+
+    verifier = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/verifier",
+        headers=auth_headers,
+    )
+    assert verifier.status_code == 200
+    verifier_body = verifier.json()
+    assert verifier_body["audit_id"] == audit["audit_id"]
+    assert verifier_body["merged_packet_trace_id"] == f"{audit['audit_id']}-distributed-merge"
+    assert verifier_body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert verifier_body["confidence"] is None
+    assert verifier_body["source"] == "fleet_packet_verifier"
+    assert verifier_body["decision_scope"] == "distributed_fleet_merged_packet"
+    assert verifier_body["coverage"] == {
+        "basis": "fleet_worker_fragments",
+        "total_jobs": 1,
+        "completed_fragments": 1,
+        "failed_jobs": 0,
+        "missing_output_jobs": 0,
+        "distributed_merge_status": "complete",
+    }
+    assert verifier_body["proof_chip_gate"] == "blocked"
+    assert "no explicit proof-chip verifier decision" in " ".join(verifier_body["blockers"])
+    assert "FLAG FOR HUMAN REVIEW" in " ".join(verifier_body["next_actions"])
+
+
+def test_fleet_verifier_requires_merged_packet(client, auth_headers):
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    prepared = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    assert prepared.status_code == 200
+
+    verifier = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/verifier",
+        headers=auth_headers,
+    )
+
+    assert verifier.status_code == 409
+    assert "Merge fleet evidence before verifier review" in verifier.text
 
 
 def test_duplicate_worker_registration_is_rejected(client, auth_headers):

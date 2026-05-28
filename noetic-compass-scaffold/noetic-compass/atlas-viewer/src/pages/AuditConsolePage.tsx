@@ -28,12 +28,14 @@ import {
   registerCasHarnessFleetWorker,
   startCasHarnessAuditSession,
   submitCasHarnessFleetJobReceipt,
+  verifyCasHarnessFleetRun,
   verifyCasHarnessModelTarget,
   type CasHarnessAuditApiOptions,
   type CasHarnessAuditSession,
   type CasHarnessDistributedAudit,
   type CasHarnessFleetJob,
   type CasHarnessFleetRun,
+  type CasHarnessFleetVerifierDecision,
   type CasHarnessFleetWorker,
   type CasHarnessScalePlanRequest,
 } from '../lib/casHarnessAuditApi';
@@ -707,6 +709,8 @@ export default function AuditConsolePage() {
   const [registeredFleetWorker, setRegisteredFleetWorker] =
     useState<CasHarnessFleetWorker | null>(null);
   const [leasedFleetJob, setLeasedFleetJob] = useState<CasHarnessFleetJob | null>(null);
+  const [fleetVerifierDecision, setFleetVerifierDecision] =
+    useState<CasHarnessFleetVerifierDecision | null>(null);
   const [fleetAuthToken, setFleetAuthToken] = useState('');
   const [fleetExecutorError, setFleetExecutorError] = useState<string | null>(null);
   const [isFleetExecutorLoading, setIsFleetExecutorLoading] = useState(false);
@@ -753,6 +757,9 @@ export default function AuditConsolePage() {
         leasedFleetJob.lease_token,
     ) && !isFleetExecutorLoading;
   const canMergeFleet = canMergeFleetRun(fleetRun, isFleetExecutorLoading);
+  const canRunFleetVerifier =
+    Boolean(fleetRun?.merged_packet_trace_id && !fleetVerifierDecision) &&
+    !isFleetExecutorLoading;
 
   const connectReferenceTarget = async () => {
     setSession(null);
@@ -864,6 +871,7 @@ export default function AuditConsolePage() {
     setFleetRun(null);
     setRegisteredFleetWorker(null);
     setLeasedFleetJob(null);
+    setFleetVerifierDecision(null);
     setFleetExecutorError(null);
     setIsEnterprisePlanLoading(true);
     try {
@@ -885,6 +893,7 @@ export default function AuditConsolePage() {
     setFleetRun(null);
     setRegisteredFleetWorker(null);
     setLeasedFleetJob(null);
+    setFleetVerifierDecision(null);
     setFleetExecutorError(null);
     setIsDistributedAuditLoading(true);
     try {
@@ -951,6 +960,7 @@ export default function AuditConsolePage() {
       );
       setFleetRun(run);
       setLeasedFleetJob(null);
+      setFleetVerifierDecision(null);
     } catch (error) {
       setFleetExecutorError(
         error instanceof Error ? error.message : 'Fleet preparation failed',
@@ -981,6 +991,7 @@ export default function AuditConsolePage() {
         ],
       }, protectedAuditApiOptions);
       setRegisteredFleetWorker(worker);
+      setFleetVerifierDecision(null);
       setFleetRun((run) =>
         run
           ? {
@@ -1016,6 +1027,7 @@ export default function AuditConsolePage() {
         return;
       }
       setLeasedFleetJob(job);
+      setFleetVerifierDecision(null);
       setFleetRun((run) => (run ? replaceFleetJob(run, job) : run));
     } catch (error) {
       setFleetExecutorError(
@@ -1060,6 +1072,7 @@ export default function AuditConsolePage() {
       );
       setFleetRun(run);
       setLeasedFleetJob(null);
+      setFleetVerifierDecision(null);
     } catch (error) {
       setFleetExecutorError(
         error instanceof Error ? error.message : 'Fleet receipt submission failed',
@@ -1079,9 +1092,29 @@ export default function AuditConsolePage() {
         protectedAuditApiOptions,
       );
       setFleetRun(run);
+      setFleetVerifierDecision(null);
     } catch (error) {
       setFleetExecutorError(
         error instanceof Error ? error.message : 'Fleet evidence merge failed',
+      );
+    } finally {
+      setIsFleetExecutorLoading(false);
+    }
+  };
+
+  const runFleetVerifier = async () => {
+    if (!distributedAudit) return;
+    setFleetExecutorError(null);
+    setIsFleetExecutorLoading(true);
+    try {
+      const decision = await verifyCasHarnessFleetRun(
+        distributedAudit.audit_id,
+        protectedAuditApiOptions,
+      );
+      setFleetVerifierDecision(decision);
+    } catch (error) {
+      setFleetExecutorError(
+        error instanceof Error ? error.message : 'Fleet verifier decision failed',
       );
     } finally {
       setIsFleetExecutorLoading(false);
@@ -1328,6 +1361,16 @@ export default function AuditConsolePage() {
                 >
                   Merge fleet
                 </button>
+                <button
+                  type="button"
+                  style={commandActionStyle(canRunFleetVerifier)}
+                  disabled={!canRunFleetVerifier}
+                  onClick={() => {
+                    void runFleetVerifier();
+                  }}
+                >
+                  Run fleet verifier
+                </button>
               </div>
             </div>
             {isFleetExecutorLoading ? (
@@ -1344,6 +1387,37 @@ export default function AuditConsolePage() {
               <p role="status" style={fleetNoticeStyle}>
                 Merged Evidence Packet: {fleetRun.merged_packet_trace_id}
               </p>
+            ) : null}
+            {fleetVerifierDecision ? (
+              <div
+                data-testid="fleet-verifier-decision"
+                style={{
+                  display: 'grid',
+                  gap: 8,
+                  padding: 12,
+                  borderRadius: 8,
+                  border: '1px solid rgba(45, 212, 191, 0.28)',
+                  background: 'rgba(15, 23, 42, 0.54)',
+                }}
+              >
+                <p style={{ ...fleetNoticeStyle, color: COLORS.textPrimary, fontWeight: 800 }}>
+                  Fleet verifier decision:{' '}
+                  {fleetVerifierDecision.verdict.replace(/_/g, ' ')}
+                </p>
+                <p style={fleetNoticeStyle}>
+                  Confidence:{' '}
+                  {fleetVerifierDecision.confidence === null
+                    ? 'not available'
+                    : `${Math.round(fleetVerifierDecision.confidence * 100)}%`}
+                  {' '}· Proof chips: {fleetVerifierDecision.proof_chip_gate}
+                </p>
+                <p style={fleetNoticeStyle}>{fleetVerifierDecision.reason}</p>
+                {fleetVerifierDecision.blockers.length > 0 ? (
+                  <p style={fleetNoticeStyle}>
+                    Blocker: {fleetVerifierDecision.blockers.join(' ')}
+                  </p>
+                ) : null}
+              </div>
             ) : null}
             {fleetRun ? (
               <p style={fleetNoticeStyle}>

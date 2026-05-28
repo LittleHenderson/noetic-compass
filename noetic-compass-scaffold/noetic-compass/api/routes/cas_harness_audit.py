@@ -47,6 +47,10 @@ from api.services.cas_harness_fleet_executor import (
     register_worker,
     submit_job_receipt,
 )
+from api.services.cas_harness_fleet_verifier import (
+    FleetVerifierStateError,
+    verify_merged_fleet_packet,
+)
 from api.services.cas_harness_scale_planner import (
     ScalePlanRequest as PlannerScalePlanRequest,
     build_scale_plan,
@@ -544,6 +548,21 @@ class FleetRunListResponse(BaseModel):
     runs: list[FleetRunResponse]
 
 
+class FleetVerifierDecisionResponse(BaseModel):
+    audit_id: str
+    merged_packet_trace_id: str
+    verdict: Verdict
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    source: str = Field(..., min_length=1, max_length=160)
+    reason: str = Field(..., min_length=1, max_length=1000)
+    decision_scope: str = Field(..., min_length=1, max_length=160)
+    coverage: dict[str, object]
+    proof_chip_gate: Literal["passed", "blocked", "unavailable"]
+    blockers: list[str]
+    next_actions: list[str]
+    created_at: str
+
+
 class FleetLeaseRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -865,6 +884,40 @@ async def merge_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
     return FleetRunResponse.model_validate(run.to_dict())
 
 
+@router.post(
+    "/distributed/session/{audit_id}/fleet/verifier",
+    response_model=FleetVerifierDecisionResponse,
+)
+async def verify_distributed_fleet_packet(audit_id: str) -> FleetVerifierDecisionResponse:
+    """Run the verifier-owned decision gate over a merged fleet packet."""
+    packet_decision = None
+    packet_load_error = None
+    run = get_fleet_run(audit_id)
+    if run is None:
+        raise HTTPException(status_code=404, detail="Fleet run not found")
+    if not run.merged_packet_trace_id:
+        raise HTTPException(status_code=409, detail="Merge fleet evidence before verifier review.")
+
+    try:
+        packet_payload = _packet_payload_for_trace(run.merged_packet_trace_id)
+    except FileNotFoundError as exc:
+        packet_load_error = str(exc)
+    else:
+        packet_decision = verifier_decision_from_packet(packet_payload)
+
+    try:
+        decision = verify_merged_fleet_packet(
+            audit_id,
+            explicit_packet_decision=packet_decision,
+            packet_load_error=packet_load_error,
+        )
+    except FleetVerifierStateError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    if decision is None:
+        raise HTTPException(status_code=404, detail="Fleet run not found")
+    return FleetVerifierDecisionResponse.model_validate(decision.to_dict())
+
+
 @router.get("/distributed/session/{audit_id}/fleet", response_model=FleetRunResponse)
 async def get_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
     """Return fleet executor state for one distributed audit."""
@@ -918,16 +971,12 @@ async def list_audit_sessions() -> AuditSessionListResponse:
 
 def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
     try:
-        packet = build_packet_for_trace(trace_id)
-        packet_payload = packet.model_dump(mode="json")
+        packet_payload = _packet_payload_for_trace(trace_id)
     except FileNotFoundError:
-        try:
-            packet_payload = load_stage9_40e_packet_payload_for_trace(trace_id)
-        except FileNotFoundError:
-            raise HTTPException(
-                status_code=404,
-                detail=f"Evidence Packet trace_id not found: {trace_id}",
-            )
+        raise HTTPException(
+            status_code=404,
+            detail=f"Evidence Packet trace_id not found: {trace_id}",
+        )
 
     bridge = normalize_evidence_packet_for_audit(packet_payload)
     payload: dict[str, object] = {
@@ -937,6 +986,17 @@ def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
     if verifier_decision is not None:
         payload["verifier_decision"] = verifier_decision.to_dict()
     return payload
+
+
+def _packet_payload_for_trace(trace_id: str) -> dict[str, object]:
+    try:
+        packet = build_packet_for_trace(trace_id)
+        return packet.model_dump(mode="json")
+    except FileNotFoundError:
+        try:
+            return load_stage9_40e_packet_payload_for_trace(trace_id)
+        except FileNotFoundError:
+            raise FileNotFoundError(trace_id)
 
 
 def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerificationResponse:

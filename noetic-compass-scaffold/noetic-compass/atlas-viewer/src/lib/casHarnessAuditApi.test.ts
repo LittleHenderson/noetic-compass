@@ -18,6 +18,7 @@ import {
   mergeCasHarnessFleetRun,
   parseAuditSessionResponse,
   parseDistributedAuditResponse,
+  parseFleetVerifierDecisionResponse,
   parseFleetRunResponse,
   parseModelTargetVerificationResponse,
   parseNullableFleetJobResponse,
@@ -29,6 +30,7 @@ import {
   startCasHarnessAuditSession,
   submitCasHarnessFleetJobReceipt,
   submitCasHarnessDistributedWorkerEvidence,
+  verifyCasHarnessFleetRun,
   verifyCasHarnessModelTarget,
 } from './casHarnessAuditApi';
 
@@ -256,6 +258,37 @@ function fleetRun(overrides: Record<string, unknown> = {}): Record<string, unkno
       verifier_owned: true,
     },
     jobs: [fleetJob()],
+    ...overrides,
+  };
+}
+
+function fleetVerifierDecision(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    audit_id: 'cas-dist-unit',
+    merged_packet_trace_id: 'cas-dist-unit-fleet-merge',
+    verdict: 'FLAG_FOR_HUMAN_REVIEW',
+    confidence: null,
+    source: 'fleet_packet_verifier',
+    reason:
+      'Fleet receipts are merged, but ACCEPT/SUPPRESS requires an explicit verifier decision over the merged Evidence Packet.',
+    decision_scope: 'distributed_fleet_merged_packet',
+    coverage: {
+      basis: 'fleet_worker_fragments',
+      total_jobs: 1,
+      completed_fragments: 1,
+      failed_jobs: 0,
+      missing_output_jobs: 0,
+      distributed_merge_status: 'complete',
+    },
+    proof_chip_gate: 'blocked',
+    blockers: [
+      'Merged distributed packet has worker receipts but no explicit proof-chip verifier decision.',
+    ],
+    next_actions: [
+      'Attach Stage 19/20/21 verifier output or packet-level explicit_verifier_decision.',
+      'Keep the public verdict at FLAG FOR HUMAN REVIEW until proof chips pass.',
+    ],
+    created_at: '2026-05-26T10:05:00Z',
     ...overrides,
   };
 }
@@ -610,6 +643,7 @@ describe('casHarnessAuditApi', () => {
       .mockResolvedValueOnce(jsonResponse(leasedJob))
       .mockResolvedValueOnce(jsonResponse(readyRun))
       .mockResolvedValueOnce(jsonResponse(mergedRun))
+      .mockResolvedValueOnce(jsonResponse(fleetVerifierDecision()))
       .mockResolvedValueOnce(jsonResponse(mergedRun))
       .mockResolvedValueOnce(jsonResponse({ runs: [mergedRun] }));
 
@@ -634,6 +668,10 @@ describe('casHarnessAuditApi', () => {
       { baseUrl: '/api/cas-harness/audit', fetchImpl },
     );
     const merged = await mergeCasHarnessFleetRun('cas-dist-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+    const verified = await verifyCasHarnessFleetRun('cas-dist-unit', {
       baseUrl: '/api/cas-harness/audit',
       fetchImpl,
     });
@@ -667,6 +705,16 @@ describe('casHarnessAuditApi', () => {
     expect(merged.readiness.next_actions).toEqual([
       'Run the verifier decision layer over the merged Evidence Packet.',
     ]);
+    expect(verified).toMatchObject({
+      audit_id: 'cas-dist-unit',
+      merged_packet_trace_id: 'cas-dist-unit-fleet-merge',
+      verdict: 'FLAG_FOR_HUMAN_REVIEW',
+      confidence: null,
+      source: 'fleet_packet_verifier',
+      proof_chip_gate: 'blocked',
+    });
+    expect(verified.coverage.completed_fragments).toBe(1);
+    expect(verified.blockers.join(' ')).toMatch(/no explicit proof-chip verifier decision/i);
     expect(fetched.audit_id).toBe('cas-dist-unit');
     expect(listed.runs[0]?.status).toBe('COMPLETE');
     expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
@@ -674,6 +722,7 @@ describe('casHarnessAuditApi', () => {
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/lease',
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/fleet-job-01/receipt',
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/merge',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/verifier',
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet',
       '/api/cas-harness/audit/distributed/fleet/runs',
     ]);
@@ -928,6 +977,46 @@ describe('casHarnessAuditApi', () => {
         }),
       ],
     }))).toThrow(/ready_for_verifier cannot include missing job outputs/);
+  });
+
+  it('parses fleet verifier decisions separately from fleet executor state', () => {
+    const parsed = parseFleetVerifierDecisionResponse(fleetVerifierDecision({
+      proof_chip_gate: 'unavailable',
+      confidence: null,
+    }));
+
+    expect(parsed).toEqual({
+      audit_id: 'cas-dist-unit',
+      merged_packet_trace_id: 'cas-dist-unit-fleet-merge',
+      verdict: 'FLAG_FOR_HUMAN_REVIEW',
+      confidence: null,
+      source: 'fleet_packet_verifier',
+      reason:
+        'Fleet receipts are merged, but ACCEPT/SUPPRESS requires an explicit verifier decision over the merged Evidence Packet.',
+      decision_scope: 'distributed_fleet_merged_packet',
+      coverage: {
+        basis: 'fleet_worker_fragments',
+        total_jobs: 1,
+        completed_fragments: 1,
+        failed_jobs: 0,
+        missing_output_jobs: 0,
+        distributed_merge_status: 'complete',
+      },
+      proof_chip_gate: 'unavailable',
+      blockers: [
+        'Merged distributed packet has worker receipts but no explicit proof-chip verifier decision.',
+      ],
+      next_actions: [
+        'Attach Stage 19/20/21 verifier output or packet-level explicit_verifier_decision.',
+        'Keep the public verdict at FLAG FOR HUMAN REVIEW until proof chips pass.',
+      ],
+      created_at: '2026-05-26T10:05:00Z',
+    });
+    expect(() =>
+      parseFleetVerifierDecisionResponse(fleetVerifierDecision({
+        proof_chip_gate: 'pretend_passed',
+      })),
+    ).toThrow(/proof-chip gate/);
   });
 
   it('parses distributed worker receipt packet refs, missing outputs, and statuses explicitly', () => {

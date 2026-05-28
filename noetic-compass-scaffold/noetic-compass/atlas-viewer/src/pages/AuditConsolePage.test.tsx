@@ -292,6 +292,37 @@ function fleetRun(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function fleetVerifierDecision(overrides: Record<string, unknown> = {}) {
+  return {
+    audit_id: 'cas-dist-unit',
+    merged_packet_trace_id: 'cas-dist-unit-merged-packet',
+    verdict: 'FLAG_FOR_HUMAN_REVIEW',
+    confidence: null,
+    source: 'fleet_packet_verifier',
+    reason:
+      'Fleet receipts are merged, but ACCEPT/SUPPRESS requires an explicit verifier decision over the merged Evidence Packet.',
+    decision_scope: 'distributed_fleet_merged_packet',
+    coverage: {
+      basis: 'fleet_worker_fragments',
+      total_jobs: 1,
+      completed_fragments: 1,
+      failed_jobs: 0,
+      missing_output_jobs: 0,
+      distributed_merge_status: 'complete',
+    },
+    proof_chip_gate: 'blocked',
+    blockers: [
+      'Merged distributed packet has worker receipts but no explicit proof-chip verifier decision.',
+    ],
+    next_actions: [
+      'Attach Stage 19/20/21 verifier output or packet-level explicit_verifier_decision.',
+      'Keep the public verdict at FLAG FOR HUMAN REVIEW until proof chips pass.',
+    ],
+    created_at: '2026-05-26T10:05:00Z',
+    ...overrides,
+  };
+}
+
 async function fleetFragmentRef(
   overrides: Partial<Parameters<typeof buildCasHarnessFleetEvidenceFragmentRef>[0]> = {},
 ) {
@@ -769,6 +800,10 @@ describe('AuditConsolePage', () => {
       .mockResolvedValueOnce({
         ok: true,
         json: async () => mergedRun,
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => fleetVerifierDecision(),
       });
     vi.stubGlobal('fetch', fetchMock);
 
@@ -776,6 +811,7 @@ describe('AuditConsolePage', () => {
 
     expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Run fleet verifier' })).toBeDisabled();
     fireEvent.change(screen.getByLabelText('Protected API token'), {
       target: { value: 'fleet-jwt' },
     });
@@ -820,6 +856,15 @@ describe('AuditConsolePage', () => {
     expect(screen.getByTestId('fleet-readiness-actions')).toHaveTextContent(
       /Run the verifier decision layer over the merged Evidence Packet/i,
     );
+    expect(screen.getByRole('button', { name: 'Run fleet verifier' })).toBeEnabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Run fleet verifier' }));
+    expect(await screen.findByTestId('fleet-verifier-decision')).toHaveTextContent(
+      /Fleet verifier decision: FLAG FOR HUMAN REVIEW/i,
+    );
+    expect(screen.getByTestId('fleet-verifier-decision')).toHaveTextContent(
+      /no explicit proof-chip verifier decision/i,
+    );
 
     expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
       '/api/cas-harness/audit/distributed/session',
@@ -829,6 +874,7 @@ describe('AuditConsolePage', () => {
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/lease',
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/job/fleet-job-001/receipt',
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/merge',
+      '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet/verifier',
     ]);
     expect(JSON.parse(String((fetchMock.mock.calls[3][1] as RequestInit).body))).toMatchObject({
       worker_id: 'probe-worker-01',

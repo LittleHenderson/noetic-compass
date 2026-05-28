@@ -389,6 +389,30 @@ export interface CasHarnessFleetRun {
   jobs: CasHarnessFleetJob[];
 }
 
+export type CasHarnessFleetProofChipGate = 'passed' | 'blocked' | 'unavailable';
+
+export interface CasHarnessFleetVerifierDecision {
+  audit_id: string;
+  merged_packet_trace_id: string;
+  verdict: AuditVerdict;
+  confidence: number | null;
+  source: string;
+  reason: string;
+  decision_scope: string;
+  coverage: {
+    basis: string | null;
+    total_jobs: number | null;
+    completed_fragments: number | null;
+    failed_jobs: number | null;
+    missing_output_jobs: number | null;
+    distributed_merge_status: string | null;
+  };
+  proof_chip_gate: CasHarnessFleetProofChipGate;
+  blockers: string[];
+  next_actions: string[];
+  created_at: string;
+}
+
 export interface CasHarnessFleetRunList {
   runs: CasHarnessFleetRun[];
 }
@@ -697,6 +721,23 @@ export async function mergeCasHarnessFleetRun(
     options,
   );
   return parseFleetRunResponse(response);
+}
+
+export async function verifyCasHarnessFleetRun(
+  auditId: string,
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessFleetVerifierDecision> {
+  assertNonEmpty('auditId', auditId);
+  const response = await requestJson(
+    `${baseUrl(options)}/distributed/session/${encodeURIComponent(auditId)}/fleet/verifier`,
+    {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      signal: options?.signal,
+    },
+    options,
+  );
+  return parseFleetVerifierDecisionResponse(response);
 }
 
 export async function getCasHarnessFleetRun(
@@ -1200,6 +1241,35 @@ export function parseFleetReadinessResponse(raw: unknown): CasHarnessFleetReadin
   };
 }
 
+export function parseFleetVerifierDecisionResponse(
+  raw: unknown,
+): CasHarnessFleetVerifierDecision {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet verifier decision response was not an object');
+  }
+  const verdict = parseNullableVerdict(raw.verdict);
+  if (verdict === null) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet verifier decision verdict is required');
+  }
+  return {
+    audit_id: requiredString(raw.audit_id, 'fleet_verifier.audit_id'),
+    merged_packet_trace_id: requiredString(
+      raw.merged_packet_trace_id,
+      'fleet_verifier.merged_packet_trace_id',
+    ),
+    verdict,
+    confidence: parseNullableConfidence(raw.confidence),
+    source: requiredString(raw.source, 'fleet_verifier.source'),
+    reason: requiredString(raw.reason, 'fleet_verifier.reason'),
+    decision_scope: requiredString(raw.decision_scope, 'fleet_verifier.decision_scope'),
+    coverage: parseFleetVerifierCoverage(raw.coverage),
+    proof_chip_gate: parseFleetProofChipGate(raw.proof_chip_gate),
+    blockers: parseStringArray(raw.blockers, 'fleet_verifier.blockers'),
+    next_actions: parseStringArray(raw.next_actions, 'fleet_verifier.next_actions'),
+    created_at: requiredString(raw.created_at, 'fleet_verifier.created_at'),
+  };
+}
+
 export function parseFleetRunListResponse(raw: unknown): CasHarnessFleetRunList {
   if (!isRecord(raw) || !Array.isArray(raw.runs)) {
     throw new CasHarnessAuditApiError('CAS Harness fleet run list response was malformed');
@@ -1363,6 +1433,37 @@ function parseFleetReadinessStatus(raw: unknown): CasHarnessFleetReadinessStatus
   throw new CasHarnessAuditApiError(
     `Unsupported CAS Harness fleet readiness status: ${String(raw)}`,
   );
+}
+
+function parseFleetProofChipGate(raw: unknown): CasHarnessFleetProofChipGate {
+  if (raw === 'passed' || raw === 'blocked' || raw === 'unavailable') {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness fleet verifier proof-chip gate: ${String(raw)}`,
+  );
+}
+
+function parseFleetVerifierCoverage(
+  raw: unknown,
+): CasHarnessFleetVerifierDecision['coverage'] {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet verifier coverage was malformed');
+  }
+  return {
+    basis: nullableString(raw.basis),
+    total_jobs: nullableNumber(raw.total_jobs, 'fleet_verifier.coverage.total_jobs'),
+    completed_fragments: nullableNumber(
+      raw.completed_fragments,
+      'fleet_verifier.coverage.completed_fragments',
+    ),
+    failed_jobs: nullableNumber(raw.failed_jobs, 'fleet_verifier.coverage.failed_jobs'),
+    missing_output_jobs: nullableNumber(
+      raw.missing_output_jobs,
+      'fleet_verifier.coverage.missing_output_jobs',
+    ),
+    distributed_merge_status: nullableString(raw.distributed_merge_status),
+  };
 }
 
 function parseNullableDistributedMergeVerdict(
