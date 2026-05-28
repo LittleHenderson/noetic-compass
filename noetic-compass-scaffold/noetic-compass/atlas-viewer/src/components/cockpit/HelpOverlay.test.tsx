@@ -24,11 +24,13 @@ describe('HelpOverlay', () => {
 
     const faq = screen.getByTestId('tks40-text-baseline-faq');
     expect(faq).toHaveTextContent('FAQ: TKS40 Text Baseline Guard');
-    expect(faq).toHaveTextContent('hidden states read the compact-gloss TKS40 axis at 97.50%');
-    expect(faq).toHaveTextContent('text-only classifier also reached 100.00%');
-    expect(faq).toHaveTextContent('original Stage 9 40E fixture');
-    expect(faq).toHaveTextContent('49.24%');
-    expect(faq).toHaveTextContent('pre-registered text-baseline ceiling of 60% or lower');
+    expect(faq).toHaveTextContent('TKS40 compact-gloss v0 stays guarded');
+    expect(faq).toHaveTextContent('text-only reached 100.00%');
+    expect(faq).toHaveTextContent('GPT-NeoX-20B original Stage 9 40E run');
+    expect(faq).toHaveTextContent('hidden readout 95.625%');
+    expect(faq).toHaveTextContent('confirmed text baseline 49.241%');
+    expect(faq).toHaveTextContent('shuffled-label mean 2.619%');
+    expect(faq).toHaveTextContent('Every future 40E library must run the text-baseline diagnostic first');
   });
 
   it('keeps the FAQ behind the help overlay and closes cleanly', () => {

@@ -1,0 +1,459 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "activation_dataset_npz",
+      "artifact_type": "40e_activation_dataset_npz",
+      "byte_count": 4160353076,
+      "content_sha256": "5f9a14714dcad87991a04a8317119b4eeb8097af7377446e59efb1c65f428610",
+      "created_at": "2026-05-27T22:43:30.501675+00:00",
+      "redaction_class": "internal_eval_artifact",
+      "storage_uri": "data/gpt_neox_20b_stage9_original_40e_layers_0_43.npz"
+    },
+    {
+      "artifact_id": "metadata_json",
+      "artifact_type": "40e_capture_metadata_json",
+      "byte_count": 2471,
+      "content_sha256": "22d5e6c19c4dd25d549e82bc2509282634878df465967df1d68f11d90accf6ef",
+      "created_at": "2026-05-27T22:43:30.524147+00:00",
+      "redaction_class": "internal_eval_artifact",
+      "storage_uri": "data/gpt_neox_20b_stage9_original_40e_layers_0_43.metadata.json"
+    }
+  ],
+  "axis": "40_element_operator_x_domain",
+  "best_layer": {
+    "layer": 2,
+    "test_acc": 0.95625,
+    "test_macro_f1": 0.9561734767543545
+  },
+  "class_distribution": {
+    "^0|C": 208,
+    "^0|E": 208,
+    "^0|O": 208,
+    "^0|P": 208,
+    "^1|C": 208,
+    "^1|E": 208,
+    "^1|O": 208,
+    "^1|P": 208,
+    "^2|C": 208,
+    "^2|E": 208,
+    "^2|O": 208,
+    "^2|P": 208,
+    "^3|C": 208,
+    "^3|E": 208,
+    "^3|O": 208,
+    "^3|P": 208,
+    "^4|C": 208,
+    "^4|E": 208,
+    "^4|O": 208,
+    "^4|P": 208,
+    "^5|C": 208,
+    "^5|E": 208,
+    "^5|O": 208,
+    "^5|P": 208,
+    "^6|C": 208,
+    "^6|E": 208,
+    "^6|O": 208,
+    "^6|P": 208,
+    "^7|C": 208,
+    "^7|E": 208,
+    "^7|O": 208,
+    "^7|P": 208,
+    "^8|C": 208,
+    "^8|E": 208,
+    "^8|O": 208,
+    "^8|P": 208,
+    "^9|C": 208,
+    "^9|E": 208,
+    "^9|O": 208,
+    "^9|P": 208
+  },
+  "controls": {
+    "confirmed_text_baseline_report": {
+      "axis": "original_stage9_40e",
+      "cas_beats_text_claim_allowed": true,
+      "model": "CountVectorizer(1-2 grams) + LogisticRegression(class_weight='balanced')",
+      "source_report": "results/stage9_original_40e_text_baseline_diagnostic_20260527.json",
+      "status": "passes_text_baseline_ceiling",
+      "target_text_baseline_ceiling": 0.6,
+      "test_acc": 0.4924107142857143,
+      "test_macro_f1": 0.47763365799027147
+    },
+    "majority_class_label": "^0|C",
+    "majority_class_test_acc": 0.025,
+    "shuffled_label_hidden_best_layer": {
+      "all_trials": [
+        0.020089285714285716,
+        0.027232142857142858,
+        0.030357142857142857,
+        0.024553571428571428,
+        0.022767857142857142,
+        0.030133928571428572,
+        0.019419642857142858,
+        0.0234375,
+        0.028125,
+        0.027455357142857142,
+        0.022321428571428572,
+        0.03214285714285714,
+        0.027455357142857142,
+        0.033035714285714286,
+        0.020089285714285716,
+        0.027901785714285716,
+        0.026785714285714284,
+        0.026785714285714284,
+        0.024553571428571428,
+        0.02924107142857143
+      ],
+      "max_test_acc": 0.033035714285714286,
+      "mean_test_acc": 0.02619419642857143,
+      "std_test_acc": 0.0038476309582329425,
+      "trials": 20
+    },
+    "text_hash_baseline": {
+      "description": "HashingVectorizer(1-2 ngrams, 2^14 features) + LogisticRegression on prompt text",
+      "test_acc": 0.5,
+      "test_macro_f1": 0.4747324836021054
+    }
+  },
+  "created_at": "2026-05-27T23:36:56.432559+00:00",
+  "dataset": "data/gpt_neox_20b_stage9_original_40e_layers_0_43.npz",
+  "hidden_dim": 6144,
+  "important_limit": "Dataset has 40/40 cells populated, with 0 cells under the configured minimum of 10 samples. Sparse cells make probe claims undertrained. Fixed split by metadata.split; test_split=test was used; train/test group overlap is 0. Text-hash baseline measures whether prompt surface forms (which carry canonical CAS colloquialisms) encode the label. Canonical TKS English is valid framework language, but a high text-only score blocks the specific CAS-beats-surface-text claim until the fixture passes the baseline ceiling. Methodology minimum is 10 samples per cell; headline closure can be rerun with --min-samples-per-cell 25 for the stricter ~1000-scenario packet threshold.",
+  "metadata_path": "data/gpt_neox_20b_stage9_original_40e_layers_0_43.metadata.json",
+  "method_contract": {
+    "class_weight": "balanced",
+    "min_samples_per_cell": 10,
+    "probe_C": 0.1,
+    "probe_max_iter": 1000,
+    "readout": "StandardScaler + LogisticRegression",
+    "seed": 2026,
+    "shuffled_trials": 20,
+    "solver": "lbfgs",
+    "group_key": "metadata.counterfactual_pair_id",
+    "split": "fixed split by metadata.split; test_split=test",
+    "split_key": "metadata.split",
+    "test_split": "test"
+  },
+  "model_id": "EleutherAI/gpt-neox-20b",
+  "n_base_prompt_groups": 4160,
+  "n_layers": 44,
+  "n_samples": 8320,
+  "n_test": 4480,
+  "n_train": 3840,
+  "per_layer": [
+    {
+      "layer": 0,
+      "test_acc": 0.025,
+      "test_macro_f1": 0.0012195121951219512
+    },
+    {
+      "layer": 1,
+      "test_acc": 0.8689732142857143,
+      "test_macro_f1": 0.8749144210197264
+    },
+    {
+      "layer": 2,
+      "test_acc": 0.95625,
+      "test_macro_f1": 0.9561734767543545
+    },
+    {
+      "layer": 3,
+      "test_acc": 0.9450892857142857,
+      "test_macro_f1": 0.9467866600361861
+    },
+    {
+      "layer": 4,
+      "test_acc": 0.9506696428571428,
+      "test_macro_f1": 0.9510687091663037
+    },
+    {
+      "layer": 5,
+      "test_acc": 0.9352678571428571,
+      "test_macro_f1": 0.9376457413009988
+    },
+    {
+      "layer": 6,
+      "test_acc": 0.9439732142857142,
+      "test_macro_f1": 0.944795105179556
+    },
+    {
+      "layer": 7,
+      "test_acc": 0.9549107142857143,
+      "test_macro_f1": 0.9558927527202755
+    },
+    {
+      "layer": 8,
+      "test_acc": 0.925,
+      "test_macro_f1": 0.9284952263522512
+    },
+    {
+      "layer": 9,
+      "test_acc": 0.8857142857142857,
+      "test_macro_f1": 0.8992599205944426
+    },
+    {
+      "layer": 10,
+      "test_acc": 0.9024553571428572,
+      "test_macro_f1": 0.9087389415550632
+    },
+    {
+      "layer": 11,
+      "test_acc": 0.8792410714285714,
+      "test_macro_f1": 0.9007963031857035
+    },
+    {
+      "layer": 12,
+      "test_acc": 0.8803571428571428,
+      "test_macro_f1": 0.8960185093227763
+    },
+    {
+      "layer": 13,
+      "test_acc": 0.9044642857142857,
+      "test_macro_f1": 0.9103685870039046
+    },
+    {
+      "layer": 14,
+      "test_acc": 0.8803571428571428,
+      "test_macro_f1": 0.899149368024197
+    },
+    {
+      "layer": 15,
+      "test_acc": 0.8837053571428571,
+      "test_macro_f1": 0.8951915050180176
+    },
+    {
+      "layer": 16,
+      "test_acc": 0.9,
+      "test_macro_f1": 0.905280313782459
+    },
+    {
+      "layer": 17,
+      "test_acc": 0.8825892857142857,
+      "test_macro_f1": 0.8970538371300085
+    },
+    {
+      "layer": 18,
+      "test_acc": 0.88125,
+      "test_macro_f1": 0.9005608207868459
+    },
+    {
+      "layer": 19,
+      "test_acc": 0.8761160714285714,
+      "test_macro_f1": 0.8941351815427442
+    },
+    {
+      "layer": 20,
+      "test_acc": 0.8667410714285714,
+      "test_macro_f1": 0.9055309991952687
+    },
+    {
+      "layer": 21,
+      "test_acc": 0.871875,
+      "test_macro_f1": 0.9046030989623162
+    },
+    {
+      "layer": 22,
+      "test_acc": 0.871875,
+      "test_macro_f1": 0.9048080540409756
+    },
+    {
+      "layer": 23,
+      "test_acc": 0.8919642857142858,
+      "test_macro_f1": 0.9049298482771203
+    },
+    {
+      "layer": 24,
+      "test_acc": 0.8859375,
+      "test_macro_f1": 0.8997905090644942
+    },
+    {
+      "layer": 25,
+      "test_acc": 0.8725446428571428,
+      "test_macro_f1": 0.8943238073772427
+    },
+    {
+      "layer": 26,
+      "test_acc": 0.8645089285714286,
+      "test_macro_f1": 0.8967043745629013
+    },
+    {
+      "layer": 27,
+      "test_acc": 0.8747767857142857,
+      "test_macro_f1": 0.8947926676086796
+    },
+    {
+      "layer": 28,
+      "test_acc": 0.9004464285714285,
+      "test_macro_f1": 0.9123612922737786
+    },
+    {
+      "layer": 29,
+      "test_acc": 0.8993303571428571,
+      "test_macro_f1": 0.9112730488640347
+    },
+    {
+      "layer": 30,
+      "test_acc": 0.8801339285714286,
+      "test_macro_f1": 0.9013130730810721
+    },
+    {
+      "layer": 31,
+      "test_acc": 0.9044642857142857,
+      "test_macro_f1": 0.9097680715557803
+    },
+    {
+      "layer": 32,
+      "test_acc": 0.9042410714285715,
+      "test_macro_f1": 0.9125021608168868
+    },
+    {
+      "layer": 33,
+      "test_acc": 0.8995535714285714,
+      "test_macro_f1": 0.911057778303047
+    },
+    {
+      "layer": 34,
+      "test_acc": 0.9013392857142857,
+      "test_macro_f1": 0.9067145943620792
+    },
+    {
+      "layer": 35,
+      "test_acc": 0.9066964285714286,
+      "test_macro_f1": 0.9120437689966059
+    },
+    {
+      "layer": 36,
+      "test_acc": 0.9109375,
+      "test_macro_f1": 0.916981070228517
+    },
+    {
+      "layer": 37,
+      "test_acc": 0.9037946428571428,
+      "test_macro_f1": 0.908724721606894
+    },
+    {
+      "layer": 38,
+      "test_acc": 0.8979910714285714,
+      "test_macro_f1": 0.9097250779131208
+    },
+    {
+      "layer": 39,
+      "test_acc": 0.8941964285714286,
+      "test_macro_f1": 0.9031602644327025
+    },
+    {
+      "layer": 40,
+      "test_acc": 0.9040178571428571,
+      "test_macro_f1": 0.9100950456433843
+    },
+    {
+      "layer": 41,
+      "test_acc": 0.9158482142857143,
+      "test_macro_f1": 0.9206536665641878
+    },
+    {
+      "layer": 42,
+      "test_acc": 0.90625,
+      "test_macro_f1": 0.9090595030070165
+    },
+    {
+      "layer": 43,
+      "test_acc": 0.8941964285714286,
+      "test_macro_f1": 0.8995776533923134
+    }
+  ],
+  "populated_cells": 40,
+  "pythia_160m_comparator": {
+    "axis": "40-Element (10 Noetics x 4 Domains)",
+    "readout_test_acc": 0.898,
+    "source": "CAS_HARNESS_SPEC_SHEET_v1_5_20260519_409e9efe",
+    "text_baseline_gap_pp": 39.7
+  },
+  "readiness_gate": {
+    "axis": "40_element_operator_x_domain",
+    "blocking_reasons": [],
+    "expected_cells": 40,
+    "min_samples_per_cell_required": 10,
+    "missing_cells": [],
+    "packet_ready": true,
+    "populated_expected_cells": 40,
+    "required_artifact": {
+      "description": "A source-derived TKS40 activation dataset with every canonical ^0..^9 x P/C/E/O cell populated at or above the configured minimum sample count.",
+      "feature_shape": "[N_scenarios, N_layers, hidden_dim]",
+      "how_to_supply": "Capture or copy the balanced 40E .npz plus its metadata JSON, then run this evaluator with --dataset PATH --metadata PATH --output PATH. Use --require-balanced-40e to make packet assembly fail fast when the artifact is incomplete.",
+      "labels": [
+        "labels_operator",
+        "labels_domain"
+      ],
+      "name": "balanced_40_element_activation_dataset",
+      "required_npz_keys": [
+        "features",
+        "layers",
+        "labels_domain",
+        "labels_operator",
+        "prompts"
+      ]
+    },
+    "sparse_cells": {},
+    "status": "packet_ready",
+    "unexpected_cells": []
+  },
+  "result_summary": {
+    "hidden_probe_beats_confirmed_text_baseline": true,
+    "hidden_probe_beats_majority": true,
+    "hidden_probe_beats_text_baseline": true,
+    "hidden_probe_exceeds_shuffled_max": true,
+    "hidden_probe_minus_shuffled_mean_pp": 93.00558035714286,
+    "hidden_probe_test_acc": 0.95625,
+    "interpretation": "Pythia-160M closure target on 40-Element: 89.8% readout, +39.7pp over text baseline. This run replicates the readout protocol on GPT-NeoX-20B using the original Stage 9 role-bound/counterfactual fixture. Hidden readout beats the confirmed exact-fixture text baseline."
+  },
+  "schema_version": "cas_harness_40_element_probe_eval.v1",
+  "sparse_cells_lt_min_samples": 0,
+  "split": "fixed split by metadata.split; test_split=test",
+  "status": "packet_ready_evaluation_completed",
+  "test_class_distribution": {
+    "^0|C": 112,
+    "^0|E": 112,
+    "^0|O": 112,
+    "^0|P": 112,
+    "^1|C": 112,
+    "^1|E": 112,
+    "^1|O": 112,
+    "^1|P": 112,
+    "^2|C": 112,
+    "^2|E": 112,
+    "^2|O": 112,
+    "^2|P": 112,
+    "^3|C": 112,
+    "^3|E": 112,
+    "^3|O": 112,
+    "^3|P": 112,
+    "^4|C": 112,
+    "^4|E": 112,
+    "^4|O": 112,
+    "^4|P": 112,
+    "^5|C": 112,
+    "^5|E": 112,
+    "^5|O": 112,
+    "^5|P": 112,
+    "^6|C": 112,
+    "^6|E": 112,
+    "^6|O": 112,
+    "^6|P": 112,
+    "^7|C": 112,
+    "^7|E": 112,
+    "^7|O": 112,
+    "^7|P": 112,
+    "^8|C": 112,
+    "^8|E": 112,
+    "^8|O": 112,
+    "^8|P": 112,
+    "^9|C": 112,
+    "^9|E": 112,
+    "^9|O": 112,
+    "^9|P": 112
+  },
+  "test_size": 0.2,
+  "total_cells": 40,
+  "train_test_group_overlap_count": 0,
+  "train_test_group_overlap_examples": []
+}

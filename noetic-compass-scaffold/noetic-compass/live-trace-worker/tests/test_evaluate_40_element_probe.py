@@ -136,3 +136,80 @@ def test_require_balanced_40e_writes_guard_report_without_training(tmp_path, mon
     assert report["readiness_gate"]["missing_cells"]
     assert report["artifacts"][0]["artifact_id"] == "activation_dataset_npz"
     assert report["method_contract"]["readout"] == "StandardScaler + LogisticRegression"
+
+
+def test_fixed_split_uses_original_scenario_metadata(tmp_path):
+    scenario_path = tmp_path / "scenarios.json"
+    payload = {
+        "scenarios": [
+            {
+                "id": "s1",
+                "prompt": "A role; B role. Focus: A.",
+                "metadata": {"split": "train", "counterfactual_pair_id": "pair-1"},
+            },
+            {
+                "id": "s2",
+                "prompt": "A role; B role. Focus: B.",
+                "metadata": {"split": "test", "counterfactual_pair_id": "pair-2"},
+            },
+            {
+                "id": "s3",
+                "prompt": "C role; D role. Focus: A.",
+                "metadata": {"split": "val", "counterfactual_pair_id": "pair-3"},
+            },
+        ]
+    }
+    scenario_path.write_text(json.dumps(payload), encoding="utf-8")
+    meta = evaluate_40_element_probe._load_scenario_meta(scenario_path)
+
+    train_idx, test_idx = evaluate_40_element_probe._fixed_split_from_scenarios(
+        scenario_ids=np.asarray(["s1", "s2", "s3"]),
+        scenario_meta=meta,
+        split_key="metadata.split",
+        test_split="test",
+    )
+    groups = evaluate_40_element_probe._groups_for_rows(
+        prompts=np.asarray(["prompt 1", "prompt 2", "prompt 3"]),
+        scenario_ids=np.asarray(["s1", "s2", "s3"]),
+        scenario_meta=meta,
+        group_key="metadata.counterfactual_pair_id",
+    )
+
+    assert train_idx.tolist() == [0, 2]
+    assert test_idx.tolist() == [1]
+    assert groups.tolist() == ["pair-1", "pair-2", "pair-3"]
+
+
+def test_confirmed_text_baseline_report_loader(tmp_path):
+    report_path = tmp_path / "text-baseline.json"
+    report_path.write_text(
+        json.dumps(
+            {
+                "axis": "original_stage9_40e",
+                "text_baseline": {
+                    "model": "CountVectorizer + LogisticRegression",
+                    "test_accuracy": 0.4924,
+                    "test_macro_f1": 0.4776,
+                },
+                "claim_gate": {
+                    "cas_beats_text_claim_allowed": True,
+                    "status": "passes_text_baseline_ceiling",
+                    "target_text_baseline_ceiling": 0.6,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    baseline = evaluate_40_element_probe._load_confirmed_text_baseline(report_path)
+
+    assert baseline == {
+        "source_report": str(report_path),
+        "axis": "original_stage9_40e",
+        "model": "CountVectorizer + LogisticRegression",
+        "test_acc": 0.4924,
+        "test_macro_f1": 0.4776,
+        "cas_beats_text_claim_allowed": True,
+        "status": "passes_text_baseline_ceiling",
+        "target_text_baseline_ceiling": 0.6,
+    }
