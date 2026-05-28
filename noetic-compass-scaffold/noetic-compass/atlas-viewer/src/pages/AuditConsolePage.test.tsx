@@ -5,6 +5,7 @@ import AuditConsolePage from './AuditConsolePage';
 import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
 
 const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
+const STAGE9_40E_TRACE_ID = 'stage9-40e-original-baseline-readout-20260527';
 
 function renderPage() {
   return render(
@@ -138,6 +139,17 @@ function allPresentChips() {
     status: 'present',
     detail: `${id} present`,
   }));
+}
+
+function stage940EChips() {
+  return [
+    { id: 'model_proof', name: 'Model proof', status: 'present', detail: 'Model identity/hash evidence is recorded in the packet.' },
+    { id: 'cas_readout', name: 'CAS readout', status: 'verified', detail: 'Corrected Stage 9 40E hidden-state readout beats text and shuffled controls.' },
+    { id: 'causal_proof', name: 'Causal proof', status: 'verified', detail: 'Subspace ablation/control evidence is recorded for the Stage 9 40E readout.' },
+    { id: 'control_proof', name: 'Control proof', status: 'verified', detail: 'Candidate cover/control evidence is recorded for the Stage 9 40E run.' },
+    { id: 'output_proof', name: 'Output proof', status: 'verified', detail: 'Eta-to-epsilon readable bridge output evidence is recorded.' },
+    { id: 'packet_proof', name: 'Packet proof', status: 'present', detail: 'Evidence Packet schema, trace ID, and source artifact hashes are recorded.' },
+  ];
 }
 
 function scalePlan() {
@@ -517,7 +529,7 @@ describe('AuditConsolePage', () => {
 
     renderPage();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Load 20B packet' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Load 20B review packet' }));
 
     expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
     expect(screen.getByText('S7-F28 Balanced Bridge Method')).toBeInTheDocument();
@@ -538,6 +550,92 @@ describe('AuditConsolePage', () => {
     );
     expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toMatchObject({
       evidence_packet_trace_id: S7_F28_TRACE_ID,
+      model_id: 'EleutherAI/gpt-neox-20b',
+    });
+    expect(fetchMock).toHaveBeenNthCalledWith(
+      2,
+      '/api/cas-harness/audit/session/cas-audit-test-session/run',
+      expect.objectContaining({ method: 'POST' }),
+    );
+  });
+
+  it('loads the Stage 9 40E 20B ACCEPT packet and shows scope plus confidence basis', async () => {
+    const chips = stage940EChips();
+    const verifierDecision = {
+      verdict: 'ACCEPT',
+      confidence: 0.95625,
+      source: 'stage9_40e_packet_verifier',
+      reason: 'all_stage9_40e_validation_gates_passed',
+      decision_scope: 'stage9_40e_validation_packet',
+      coverage: {
+        basis: 'stage9_40e_validation_cases',
+        case_count: 80,
+        class_count: 40,
+      },
+    };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            model_id: 'EleutherAI/gpt-neox-20b',
+            scenario_summary:
+              'Stage 9 original 40-Element GPT-NeoX-20B validation packet with verifier-attached ACCEPT decision.',
+            evidence_packet_trace_id: STAGE9_40E_TRACE_ID,
+            provenance_chips: chips,
+            verifier_decision: verifierDecision,
+          }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            status: 'COMPLETE',
+            model_id: 'EleutherAI/gpt-neox-20b',
+            verdict: 'ACCEPT',
+            confidence: 0.95625,
+            scenario_summary:
+              'Stage 9 original 40-Element GPT-NeoX-20B validation packet with verifier-attached ACCEPT decision.',
+            evidence_packet_trace_id: STAGE9_40E_TRACE_ID,
+            atlas_deep_link: `/cockpit?trace_id=${STAGE9_40E_TRACE_ID}`,
+            provenance_chips: chips,
+            verifier_decision: verifierDecision,
+            updated_at: '2026-05-28T07:31:00Z',
+            lifecycle: [
+              {
+                status: 'DRAFT',
+                message: 'Audit session created with Stage 9 40E Evidence Packet.',
+                timestamp: '2026-05-28T07:30:00Z',
+              },
+              {
+                status: 'COMPLETE',
+                message:
+                  'M3 verdict runner returned the explicit verifier decision from the attached evidence contract.',
+                timestamp: '2026-05-28T07:31:00Z',
+              },
+            ],
+          }),
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Load 20B ACCEPT packet' }));
+
+    expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
+    expect(screen.getByText('Stage 9 original 40E verifier packet')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+
+    expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
+    expect(screen.getByText('Confidence: 96%')).toBeInTheDocument();
+    expect(screen.getByText('Scope: Stage 9 40E validation packet')).toBeInTheDocument();
+    expect(screen.getByText('Coverage: 80 cases / 40 classes')).toBeInTheDocument();
+    expect(screen.getAllByText(STAGE9_40E_TRACE_ID).length).toBeGreaterThan(0);
+    expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toMatchObject({
+      evidence_packet_trace_id: STAGE9_40E_TRACE_ID,
       model_id: 'EleutherAI/gpt-neox-20b',
     });
     expect(fetchMock).toHaveBeenNthCalledWith(

@@ -1654,11 +1654,34 @@ function parseNullableVerifierDecision(raw: unknown): VerifierDecision | null {
   if (confidence === null) {
     throw new CasHarnessAuditApiError('CAS Harness verifier decision confidence is required');
   }
-  return {
+  const parsed: VerifierDecision = {
     verdict,
     confidence,
     source: requiredString(raw.source, 'verifier_decision.source'),
     reason: requiredString(raw.reason, 'verifier_decision.reason'),
+  };
+  const decisionScope = nullableString(raw.decision_scope);
+  const coverage = parseNullableVerifierCoverage(raw.coverage);
+  if (decisionScope) {
+    parsed.decisionScope = decisionScope;
+  }
+  if (coverage) {
+    parsed.coverage = coverage;
+  }
+  return parsed;
+}
+
+function parseNullableVerifierCoverage(
+  raw: unknown,
+): VerifierDecision['coverage'] | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness verifier decision coverage was malformed');
+  }
+  return {
+    basis: nullableString(raw.basis),
+    caseCount: nullableNumber(raw.case_count, 'verifier_decision.coverage.case_count'),
+    classCount: nullableNumber(raw.class_count, 'verifier_decision.coverage.class_count'),
   };
 }
 
@@ -1713,6 +1736,14 @@ function parseStringArray(raw: unknown, field: string): string[] {
 function nullableString(raw: unknown): string | null {
   if (raw === null || raw === undefined) return null;
   return typeof raw === 'string' ? raw : null;
+}
+
+function nullableNumber(raw: unknown, field: string): number | null {
+  if (raw === null || raw === undefined) return null;
+  if (typeof raw === 'number' && Number.isFinite(raw)) return raw;
+  throw new CasHarnessAuditApiError(
+    `CAS Harness audit response field "${field}" must be null or a finite number`,
+  );
 }
 
 function nullableStringStrict(raw: unknown, field: string): string | null {

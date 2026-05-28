@@ -124,6 +124,14 @@ const compactLineStyle: CSSProperties = {
   lineHeight: 1.4,
 };
 
+const scopeLineStyle: CSSProperties = {
+  ...compactLineStyle,
+  padding: '9px 10px',
+  borderRadius: 6,
+  border: '1px solid rgba(45, 212, 191, 0.20)',
+  background: 'rgba(2, 6, 23, 0.26)',
+};
+
 const infoTipStyle: CSSProperties = {
   display: 'inline-flex',
   alignItems: 'center',
@@ -198,9 +206,13 @@ function verdictHeadline(
 function confidenceSource(
   verdict: AuditVerdict | null | undefined,
   confidence: number | null | undefined,
+  verifierDecision?: VerifierDecision | null,
 ): string {
   if (confidence == null) {
     return 'Confidence source: none. The gate blocked a final numeric trust score.';
+  }
+  if (verifierDecision?.source === 'stage9_40e_packet_verifier') {
+    return 'Confidence source: Stage 9 40E packet verifier; conservative minimum of hidden readout, bridge accuracy, and proof gates.';
   }
   if (verdict === 'ACCEPT') {
     return 'Confidence source: Stage 19 accepted_accuracy from the Verification Stack mode profile.';
@@ -228,6 +240,35 @@ function customerSentence(
   return `Tell the user: CAS flagged this for human review because ${blocked}/6 required proof chips were not pass-ready or the verifier requested review.`;
 }
 
+function verifierScopeLabel(verifierDecision?: VerifierDecision | null): string | null {
+  const scope = verifierDecision?.decisionScope;
+  if (!scope) return null;
+  if (scope === 'stage9_40e_validation_packet') {
+    return 'Scope: Stage 9 40E validation packet';
+  }
+  return `Scope: ${scope.replaceAll('_', ' ')}`;
+}
+
+function verifierCoverageLabel(verifierDecision?: VerifierDecision | null): string | null {
+  const coverage = verifierDecision?.coverage;
+  if (!coverage) return null;
+  const parts: string[] = [];
+  if (typeof coverage.caseCount === 'number') {
+    parts.push(`${coverage.caseCount} cases`);
+  }
+  if (typeof coverage.classCount === 'number') {
+    parts.push(`${coverage.classCount} classes`);
+  }
+  return parts.length > 0 ? `Coverage: ${parts.join(' / ')}` : null;
+}
+
+function verifierBoundary(verifierDecision?: VerifierDecision | null): string | null {
+  if (verifierDecision?.decisionScope === 'stage9_40e_validation_packet') {
+    return 'Boundary: this is a validation-packet verdict, not a live customer-production row.';
+  }
+  return null;
+}
+
 const CHIP_MEANING_TEXT: Record<ProvenanceChipId, string> = {
   model_proof: 'Which exact model or weight artifact was audited.',
   cas_readout: 'CAS found the model-internal signal it is judging.',
@@ -248,11 +289,17 @@ export function AuditVerdictExplainer({
   const byId = new Map(chips.map((chip) => [chip.id, chip]));
   const { passed } = proofSummary(chips);
   const confidenceText = confidencePercent(confidence);
+  const scopeLabel = verifierScopeLabel(verifierDecision);
+  const coverageLabel = verifierCoverageLabel(verifierDecision);
+  const boundaryLabel = verifierBoundary(verifierDecision);
   const decisionHelp = [
     customerSentence(verdict, chips),
-    `${confidenceSource(verdict, confidence)} Current confidence: ${confidenceText}.`,
+    `${confidenceSource(verdict, confidence, verifierDecision)} Current confidence: ${confidenceText}.`,
     verifierDecision ? verifierDecision.reason : lifecycleMessage,
     verifierDecision ? `Verifier source: ${verifierDecision.source}` : null,
+    scopeLabel,
+    coverageLabel,
+    boundaryLabel,
     'Rule: the UI does not create verdicts. It only explains what the backend runner returned after checking the Evidence Packet and proof chips.',
   ]
     .filter(Boolean)
@@ -281,6 +328,20 @@ export function AuditVerdictExplainer({
           </span>
         </AuditPopover>
       </p>
+
+      {scopeLabel || coverageLabel ? (
+        <p style={scopeLineStyle}>
+          {scopeLabel ? <span>{scopeLabel}</span> : null}
+          {coverageLabel ? <span>{coverageLabel}</span> : null}
+          {boundaryLabel ? (
+            <AuditPopover briefing={boundaryLabel} placement="right" width={360}>
+              <span aria-label={boundaryLabel} role="note" style={infoTipStyle}>
+                !
+              </span>
+            </AuditPopover>
+          ) : null}
+        </p>
+      ) : null}
 
       <div style={proofGridStyle} aria-label={`Required proof chips passed ${passed} of 6`}>
         {REQUIRED_ORDER.map((id) => {

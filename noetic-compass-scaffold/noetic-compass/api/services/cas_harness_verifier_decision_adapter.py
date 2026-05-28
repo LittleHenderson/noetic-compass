@@ -21,9 +21,11 @@ class VerifierDecision:
     confidence: float
     source: str
     reason: str
+    decision_scope: str | None = None
+    coverage: dict[str, Any] | None = None
 
     def to_dict(self) -> dict[str, Any]:
-        return asdict(self)
+        return {key: value for key, value in asdict(self).items() if value is not None}
 
 
 def verifier_decision_from_packet(packet: Mapping[str, Any]) -> VerifierDecision | None:
@@ -108,6 +110,7 @@ def _stage9_40e_decision(packet: Mapping[str, Any]) -> VerifierDecision | None:
 
     source = decision.get("source")
     reason = decision.get("reason")
+    coverage = decision.get("coverage")
     return VerifierDecision(
         verdict=verdict,
         confidence=confidence,
@@ -124,6 +127,8 @@ def _stage9_40e_decision(packet: Mapping[str, Any]) -> VerifierDecision | None:
                 "verifier decision."
             )
         ),
+        decision_scope=_string_or_none(decision.get("decision_scope")),
+        coverage=dict(coverage) if isinstance(coverage, Mapping) else None,
     )
 
 
@@ -253,6 +258,13 @@ def _confidence_or_none(value: Any) -> float | None:
     if not 0.0 <= out <= 1.0:
         return None
     return out
+
+
+def _string_or_none(value: Any) -> str | None:
+    if not isinstance(value, str):
+        return None
+    stripped = value.strip()
+    return stripped or None
 
 
 def _mapping_or_empty(value: Any) -> Mapping[str, Any]:

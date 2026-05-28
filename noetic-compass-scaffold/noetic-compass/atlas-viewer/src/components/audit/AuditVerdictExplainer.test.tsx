@@ -83,6 +83,42 @@ describe('AuditVerdictExplainer', () => {
     ).toBeInTheDocument();
   });
 
+  it('surfaces Stage 9 40E validation-packet scope and coverage', () => {
+    render(
+      <AuditVerdictExplainer
+        verdict="ACCEPT"
+        confidence={0.95625}
+        chips={completeChips()}
+        verifierDecision={{
+          verdict: 'ACCEPT',
+          confidence: 0.95625,
+          source: 'stage9_40e_packet_verifier',
+          reason: 'all_stage9_40e_validation_gates_passed',
+          decisionScope: 'stage9_40e_validation_packet',
+          coverage: {
+            basis: 'stage9_40e_validation_cases',
+            caseCount: 80,
+            classCount: 40,
+          },
+        }}
+      />,
+    );
+
+    expect(screen.getByText('Confidence: 96%')).toBeInTheDocument();
+    expect(screen.getByText('Scope: Stage 9 40E validation packet')).toBeInTheDocument();
+    expect(screen.getByText('Coverage: 80 cases / 40 classes')).toBeInTheDocument();
+    expect(
+      screen.getAllByRole('note', {
+        name: /validation-packet verdict, not a live customer-production row/i,
+      }).length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getByRole('note', {
+        name: /conservative minimum of hidden readout, bridge accuracy, and proof gates/i,
+      }),
+    ).toBeInTheDocument();
+  });
+
   it('explains human review when proof chips are missing', () => {
     const chips = completeChips();
     chips[3] = chip('control_proof', 'missing');

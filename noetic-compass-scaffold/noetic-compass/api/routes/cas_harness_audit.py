@@ -16,7 +16,7 @@ from urllib.parse import urlparse
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, SecretStr, field_validator, model_validator
 
-from api.routes.evidence import build_packet_for_trace
+from api.routes.evidence import build_packet_for_trace, load_stage9_40e_packet_payload_for_trace
 from api.services.cas_harness_audit_sessions import (
     create_session,
     get_session,
@@ -115,6 +115,8 @@ class VerifierDecision(BaseModel):
     confidence: float = Field(..., ge=0.0, le=1.0)
     source: str = Field(..., min_length=1, max_length=160)
     reason: str = Field(..., min_length=1, max_length=500)
+    decision_scope: str | None = Field(default=None, min_length=1, max_length=160)
+    coverage: dict[str, object] | None = None
 
 
 class ModelTargetConfig(BaseModel):
@@ -908,10 +910,16 @@ async def list_audit_sessions() -> AuditSessionListResponse:
 def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
     try:
         packet = build_packet_for_trace(trace_id)
+        packet_payload = packet.model_dump(mode="json")
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail=f"Evidence Packet trace_id not found: {trace_id}")
+        try:
+            packet_payload = load_stage9_40e_packet_payload_for_trace(trace_id)
+        except FileNotFoundError:
+            raise HTTPException(
+                status_code=404,
+                detail=f"Evidence Packet trace_id not found: {trace_id}",
+            )
 
-    packet_payload = packet.model_dump(mode="json")
     bridge = normalize_evidence_packet_for_audit(packet_payload)
     payload: dict[str, object] = {
         "provenance_chips": [chip.to_dict() for chip in bridge.chips],

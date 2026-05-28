@@ -331,6 +331,36 @@ def _load_checkpoint_manifest(manifest_path: Path) -> dict[str, Any] | None:
 
 _DEV_FIXTURE_TRACE_ID = "dev_example_001"
 _CAS_HARNESS_REFERENCE_TRACE_ID = "cas_harness_reference_accept_001"
+_STAGE9_40E_ORIGINAL_TRACE_ID = "stage9-40e-original-baseline-readout-20260527"
+_STAGE9_40E_ORIGINAL_PACKET_FILENAME = (
+    "gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json"
+)
+
+
+def load_stage9_40e_packet_payload_for_trace(trace_id: str) -> dict[str, Any]:
+    """Return the raw Stage 9 40E validation packet for audit-session use.
+
+    The Stage 9 40E packet is intentionally not forced into the older
+    ``EvidencePacket`` drawer schema. The Audit Console needs its raw verifier
+    fields so the verdict runner can pass through the explicit packet-level
+    decision without losing proof-chip scope.
+    """
+
+    if trace_id != _STAGE9_40E_ORIGINAL_TRACE_ID:
+        raise FileNotFoundError(trace_id)
+    packet_path = _scaffold_root() / "docs" / "working" / _STAGE9_40E_ORIGINAL_PACKET_FILENAME
+    try:
+        with packet_path.open("r", encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (json.JSONDecodeError, OSError) as exc:
+        raise FileNotFoundError(trace_id) from exc
+    if not isinstance(payload, dict):
+        raise FileNotFoundError(trace_id)
+    if payload.get("schema_version") != "cas_harness_stage9_40e_evidence_packet.v1":
+        raise FileNotFoundError(trace_id)
+    if payload.get("trace_id") != trace_id:
+        raise FileNotFoundError(trace_id)
+    return payload
 
 
 def _cas_harness_reference_packet() -> EvidencePacket:
