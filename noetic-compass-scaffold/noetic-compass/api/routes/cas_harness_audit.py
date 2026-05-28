@@ -507,6 +507,14 @@ class FleetJobResponse(BaseModel):
     updated_at: str
 
 
+class FleetReadinessResponse(BaseModel):
+    status: Literal["blocked", "waiting", "ready"]
+    headline: str = Field(..., min_length=1, max_length=240)
+    blockers: list[str]
+    next_actions: list[str]
+    verifier_owned: bool
+
+
 class FleetRunResponse(BaseModel):
     audit_id: str
     status: Literal["PREPARED", "LEASING", "MERGE_PENDING", "COMPLETE", "FAILED"]
@@ -528,6 +536,7 @@ class FleetRunResponse(BaseModel):
     failed_jobs: int
     registered_workers: int
     stale_workers: list[str]
+    readiness: FleetReadinessResponse
     jobs: list[FleetJobResponse]
 
 

@@ -33,6 +33,7 @@ FleetVerifierGateStatus = Literal[
     "blocked_missing_outputs",
     "ready_for_verifier",
 ]
+FleetReadinessStatus = Literal["blocked", "waiting", "ready"]
 
 DEFAULT_MAX_HEARTBEAT_AGE_SECONDS = 120
 
@@ -138,6 +139,13 @@ class FleetRunRecord:
             "failed_jobs": len(failed),
             "registered_workers": sum(1 for job in self.jobs if _job_has_ready_worker(job)),
             "stale_workers": stale_workers,
+            "readiness": _readiness_payload(
+                run=self,
+                stale_workers=stale_workers,
+                completed_jobs=completed,
+                failed_jobs=failed,
+                leased_jobs=leased,
+            ),
             "jobs": [job.to_dict(include_lease_token=False) for job in self.jobs],
         }
 
@@ -437,6 +445,79 @@ def _refresh_run_gate(run: FleetRunRecord) -> None:
             "All worker receipts are present; merge can assemble the distributed "
             "Evidence Packet for verifier review."
         )
+
+
+def _readiness_payload(
+    *,
+    run: FleetRunRecord,
+    stale_workers: list[str],
+    completed_jobs: list[FleetJobRecord],
+    failed_jobs: list[FleetJobRecord],
+    leased_jobs: list[FleetJobRecord],
+) -> dict[str, object]:
+    total_jobs = len(run.jobs)
+    ready_workers = sum(1 for job in run.jobs if _job_has_ready_worker(job))
+    missing_ready_workers = max(total_jobs - ready_workers, 0)
+    incomplete_jobs = [job for job in run.jobs if job.status not in {"completed", "failed"}]
+    missing_output_jobs = [job for job in run.jobs if job.missing_outputs]
+
+    blockers: list[str] = []
+    next_actions: list[str] = []
+    status: FleetReadinessStatus = "waiting"
+
+    if total_jobs == 0:
+        status = "blocked"
+        blockers.append("No fleet jobs exist for this distributed audit.")
+        next_actions.append("Dispatch the distributed audit, then prepare fleet jobs.")
+    elif missing_ready_workers or stale_workers:
+        status = "waiting"
+        if missing_ready_workers:
+            blockers.append(
+                f"{missing_ready_workers} assigned worker job(s) still need a registered, compatible, fresh-heartbeat worker."
+            )
+        if stale_workers:
+            blockers.append(f"{len(stale_workers)} assigned worker(s) have stale heartbeats.")
+        next_actions.append("Register or heartbeat every assigned Probe Worker.")
+        next_actions.append("Verify each worker model_id and supported methods match its assigned job.")
+    elif failed_jobs:
+        status = "blocked"
+        blockers.append(f"{len(failed_jobs)} worker job(s) failed.")
+        next_actions.append("Rerun failed jobs or route the merged packet to human review.")
+    elif incomplete_jobs:
+        status = "waiting"
+        receipt_gap = total_jobs - len(completed_jobs) - len(failed_jobs)
+        blockers.append(f"{receipt_gap} Evidence Packet fragment receipt(s) are still missing.")
+        if leased_jobs:
+            next_actions.append("Submit signed fragment receipts for the currently leased jobs.")
+        else:
+            next_actions.append("Lease queued jobs to their registered workers.")
+        next_actions.append("Each receipt must include the canonical content-addressed fragment ref.")
+    elif missing_output_jobs:
+        status = "blocked"
+        blockers.append(f"{len(missing_output_jobs)} completed receipt(s) are missing required outputs.")
+        next_actions.append("Rerun incomplete jobs with all expected outputs or route to human review.")
+    elif run.merged_packet_trace_id:
+        status = "ready"
+        next_actions.append("Run the verifier decision layer over the merged Evidence Packet.")
+    else:
+        status = "ready"
+        next_actions.append("Merge fleet evidence into one distributed Evidence Packet.")
+        next_actions.append("Then run the verifier decision layer; fleet merge alone cannot ACCEPT.")
+
+    if not blockers and status == "ready":
+        headline = "Large-model worker receipts are complete; verifier review is unblocked."
+    elif status == "blocked":
+        headline = "Large-model eval is blocked; the run cannot support ACCEPT."
+    else:
+        headline = "Large-model eval is waiting on workers or fragment receipts."
+
+    return {
+        "status": status,
+        "headline": headline,
+        "blockers": blockers,
+        "next_actions": next_actions,
+        "verifier_owned": True,
+    }
 
 
 def _assert_worker_can_run_job(worker: FleetWorkerRecord, job: FleetJobRecord) -> None:

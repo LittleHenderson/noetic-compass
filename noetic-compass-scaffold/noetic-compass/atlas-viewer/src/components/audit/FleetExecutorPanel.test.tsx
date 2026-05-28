@@ -19,6 +19,37 @@ describe('FleetExecutorPanel', () => {
     expect(screen.getByText(/cannot move forward from a scale plan alone/i)).toBeInTheDocument();
     expect(screen.getByTestId('fleet-executor-gate')).toHaveTextContent(/waiting for registered/i);
     expect(screen.getByTestId('fleet-executor-block')).toHaveTextContent(/assigned workers and returned receipts/i);
+    expect(screen.getByTestId('fleet-readiness-summary')).toHaveTextContent(/large-model eval readiness/i);
+    expect(screen.getByTestId('fleet-readiness-actions')).toHaveTextContent(/register workers/i);
+  });
+
+  it('renders backend readiness blockers and next actions directly', () => {
+    render(
+      <FleetExecutorPanel
+        registeredWorkers={1}
+        leasedJobs={0}
+        staleWorkers={0}
+        completedFragments={0}
+        totalJobs={25}
+        mergedPacketStatus="not_created"
+        verifierGateStatus="waiting_for_workers"
+        readiness={{
+          status: 'waiting',
+          headline: 'Large-model eval is waiting on workers or fragment receipts.',
+          blockers: ['24 assigned worker job(s) still need a registered, compatible, fresh-heartbeat worker.'],
+          next_actions: ['Register or heartbeat every assigned Probe Worker.'],
+          verifier_owned: true,
+        }}
+      />,
+    );
+
+    expect(screen.getByTestId('fleet-readiness-summary')).toHaveTextContent(
+      /waiting on workers or fragment receipts/i,
+    );
+    expect(screen.getByTestId('fleet-readiness-blockers')).toHaveTextContent(
+      /24 assigned worker job/i,
+    );
+    expect(screen.getByText(/cannot emit ACCEPT by themselves/i)).toBeInTheDocument();
   });
 
   it('shows lease, heartbeat, fragment, packet, and verifier readiness metrics', () => {
@@ -73,6 +104,7 @@ describe('FleetExecutorPanel', () => {
     );
 
     expect(screen.getByTestId('fleet-executor-gate')).toHaveTextContent(/merge can assemble/i);
+    expect(screen.getByTestId('fleet-readiness-summary')).toHaveTextContent(/verifier review is unblocked/i);
     expect(screen.queryByTestId('fleet-executor-block')).not.toBeInTheDocument();
   });
 });

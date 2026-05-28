@@ -280,6 +280,13 @@ function fleetRun(overrides: Record<string, unknown> = {}) {
     failed_jobs: 0,
     registered_workers: 0,
     stale_workers: [],
+    readiness: {
+      status: 'waiting',
+      headline: 'Large-model eval is waiting on workers or fragment receipts.',
+      blockers: ['1 assigned worker job(s) still need a registered, compatible, fresh-heartbeat worker.'],
+      next_actions: ['Register or heartbeat every assigned Probe Worker.'],
+      verifier_owned: true,
+    },
     jobs: [fleetJob()],
     ...overrides,
   };
@@ -695,6 +702,16 @@ describe('AuditConsolePage', () => {
       merge_reason: 'All worker Evidence Packet fragments returned; verifier gate is ready.',
       registered_workers: 1,
       completed_fragments: 1,
+      readiness: {
+        status: 'ready',
+        headline: 'Large-model worker receipts are complete; verifier review is unblocked.',
+        blockers: [],
+        next_actions: [
+          'Merge fleet evidence into one distributed Evidence Packet.',
+          'Then run the verifier decision layer; fleet merge alone cannot ACCEPT.',
+        ],
+        verifier_owned: true,
+      },
       jobs: [completedJob],
     });
     const mergedRun = fleetRun({
@@ -705,6 +722,13 @@ describe('AuditConsolePage', () => {
         'Merged packet ready for verifier decision. Final ACCEPT/SUPPRESS still requires verifier decision layer.',
       registered_workers: 1,
       completed_fragments: 1,
+      readiness: {
+        status: 'ready',
+        headline: 'Large-model worker receipts are complete; verifier review is unblocked.',
+        blockers: [],
+        next_actions: ['Run the verifier decision layer over the merged Evidence Packet.'],
+        verifier_owned: true,
+      },
       jobs: [completedJob],
     });
     const fetchMock = vi
@@ -765,6 +789,9 @@ describe('AuditConsolePage', () => {
     expect(await screen.findByTestId('fleet-executor-gate')).toHaveTextContent(
       /waiting for registered/i,
     );
+    expect(screen.getByTestId('fleet-readiness-summary')).toHaveTextContent(
+      /waiting on workers or fragment receipts/i,
+    );
     expect(screen.getByRole('button', { name: 'Lease one job' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
 
@@ -779,11 +806,20 @@ describe('AuditConsolePage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Submit one receipt' }));
     expect(await screen.findByText('ready for verifier')).toBeInTheDocument();
+    expect(screen.getByTestId('fleet-readiness-summary')).toHaveTextContent(
+      /verifier review is unblocked/i,
+    );
+    expect(screen.getByTestId('fleet-readiness-actions')).toHaveTextContent(
+      /fleet merge alone cannot ACCEPT/i,
+    );
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeEnabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Merge fleet' }));
     expect(await screen.findByText(/cas-dist-unit-merged-packet/)).toBeInTheDocument();
     expect(screen.getByText(/Final ACCEPT\/SUPPRESS still requires verifier decision layer/i)).toBeInTheDocument();
+    expect(screen.getByTestId('fleet-readiness-actions')).toHaveTextContent(
+      /Run the verifier decision layer over the merged Evidence Packet/i,
+    );
 
     expect(fetchMock.mock.calls.map((call) => call[0])).toEqual([
       '/api/cas-harness/audit/distributed/session',
@@ -835,6 +871,13 @@ describe('AuditConsolePage', () => {
       merge_reason: 'At least one worker receipt is missing required outputs; cannot ACCEPT.',
       registered_workers: 1,
       completed_fragments: 1,
+      readiness: {
+        status: 'blocked',
+        headline: 'Large-model eval is blocked; the run cannot support ACCEPT.',
+        blockers: ['1 completed receipt(s) are missing required outputs.'],
+        next_actions: ['Rerun incomplete jobs with all expected outputs or route to human review.'],
+        verifier_owned: true,
+      },
       jobs: [blockedJob],
     });
     const fetchMock = vi

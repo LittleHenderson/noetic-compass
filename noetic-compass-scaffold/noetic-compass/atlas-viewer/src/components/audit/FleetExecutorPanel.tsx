@@ -16,6 +16,15 @@ export type FleetVerifierGateStatus =
   | 'blocked_failed_worker'
   | 'blocked_missing_outputs'
   | 'ready_for_verifier';
+export type FleetReadinessStatus = 'blocked' | 'waiting' | 'ready';
+
+export interface FleetReadinessSummary {
+  status: FleetReadinessStatus;
+  headline: string;
+  blockers: string[];
+  next_actions: string[];
+  verifier_owned: boolean;
+}
 
 export interface FleetExecutorPanelProps {
   registeredWorkers: number;
@@ -25,6 +34,7 @@ export interface FleetExecutorPanelProps {
   totalJobs: number;
   mergedPacketStatus: 'not_created' | 'partial' | 'ready';
   verifierGateStatus: FleetVerifierGateStatus;
+  readiness?: FleetReadinessSummary | null;
 }
 
 const panelStyle: CSSProperties = {
@@ -120,6 +130,40 @@ const noticeStyle = (tone: 'info' | 'warning' | 'error'): CSSProperties => ({
   lineHeight: 1.45,
 });
 
+const readinessPanelStyle = (status: FleetReadinessStatus): CSSProperties => ({
+  display: 'grid',
+  gap: 8,
+  padding: '10px 11px',
+  borderRadius: RADIUS.md,
+  border:
+    status === 'ready'
+      ? '1px solid rgba(34, 197, 94, 0.34)'
+      : status === 'blocked'
+        ? '1px solid rgba(248, 113, 113, 0.34)'
+        : '1px solid rgba(251, 191, 36, 0.34)',
+  background:
+    status === 'ready'
+      ? 'rgba(34, 197, 94, 0.08)'
+      : status === 'blocked'
+        ? 'rgba(248, 113, 113, 0.08)'
+        : 'rgba(251, 191, 36, 0.08)',
+});
+
+const readinessTitleStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textPrimary,
+  fontSize: 13,
+  fontWeight: 900,
+};
+
+const readinessListStyle: CSSProperties = {
+  margin: 0,
+  paddingLeft: 18,
+  color: COLORS.textSecondary,
+  fontSize: 12,
+  lineHeight: 1.45,
+};
+
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div style={metricStyle}>
@@ -146,6 +190,24 @@ function gateCopy(status: FleetVerifierGateStatus): { tone: 'info' | 'warning' |
   }
 }
 
+function fallbackReadiness(
+  verifierGateStatus: FleetVerifierGateStatus,
+  complete: boolean,
+): FleetReadinessSummary {
+  const gate = gateCopy(verifierGateStatus);
+  return {
+    status: complete ? 'ready' : gate.tone === 'error' ? 'blocked' : 'waiting',
+    headline: complete
+      ? 'Large-model worker receipts are complete; verifier review is unblocked.'
+      : gate.text,
+    blockers: complete ? [] : [gate.text],
+    next_actions: complete
+      ? ['Merge fleet evidence, then run the verifier decision layer.']
+      : ['Register workers, lease jobs, and submit Evidence Packet fragment receipts.'],
+    verifier_owned: true,
+  };
+}
+
 export function FleetExecutorPanel({
   registeredWorkers,
   leasedJobs,
@@ -154,9 +216,11 @@ export function FleetExecutorPanel({
   totalJobs,
   mergedPacketStatus,
   verifierGateStatus,
+  readiness,
 }: FleetExecutorPanelProps) {
   const gate = gateCopy(verifierGateStatus);
   const complete = totalJobs > 0 && completedFragments === totalJobs && staleWorkers === 0;
+  const readinessSummary = readiness ?? fallbackReadiness(verifierGateStatus, complete);
 
   return (
     <GlassPanel
@@ -192,6 +256,30 @@ export function FleetExecutorPanel({
       <p data-testid="fleet-executor-gate" style={noticeStyle(gate.tone)}>
         {gate.text}
       </p>
+
+      <section
+        data-testid="fleet-readiness-summary"
+        style={readinessPanelStyle(readinessSummary.status)}
+        aria-label="Large-model eval readiness"
+      >
+        <h3 style={readinessTitleStyle}>Large-model eval readiness</h3>
+        <p style={bodyStyle}>{readinessSummary.headline}</p>
+        {readinessSummary.blockers.length > 0 ? (
+          <ul data-testid="fleet-readiness-blockers" style={readinessListStyle}>
+            {readinessSummary.blockers.map((blocker) => (
+              <li key={blocker}>{blocker}</li>
+            ))}
+          </ul>
+        ) : null}
+        <ul data-testid="fleet-readiness-actions" style={readinessListStyle}>
+          {readinessSummary.next_actions.map((action) => (
+            <li key={action}>{action}</li>
+          ))}
+        </ul>
+        {readinessSummary.verifier_owned ? (
+          <p style={bodyStyle}>Verifier-owned: fleet receipts can unblock review, but they cannot emit ACCEPT by themselves.</p>
+        ) : null}
+      </section>
 
       {!complete ? (
         <p data-testid="fleet-executor-block" style={noticeStyle('warning')}>

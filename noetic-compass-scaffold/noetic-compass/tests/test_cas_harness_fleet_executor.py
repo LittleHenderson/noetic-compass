@@ -138,6 +138,9 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     assert prepared.status_code == 200
     prepared_body = prepared.json()
     assert prepared_body["verifier_gate_status"] == "waiting_for_receipts"
+    assert prepared_body["readiness"]["status"] == "waiting"
+    assert prepared_body["readiness"]["verifier_owned"] is True
+    assert "fragment receipt" in " ".join(prepared_body["readiness"]["blockers"])
     assert prepared_body["registered_workers"] == 1
     assert prepared_body["total_jobs"] == 1
     assert all(job["lease_token"] is None for job in prepared_body["jobs"])
@@ -167,6 +170,16 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     receipt_body = receipt.json()
     assert receipt_body["completed_fragments"] == 1
     assert receipt_body["verifier_gate_status"] == "ready_for_verifier"
+    assert receipt_body["readiness"] == {
+        "status": "ready",
+        "headline": "Large-model worker receipts are complete; verifier review is unblocked.",
+        "blockers": [],
+        "next_actions": [
+            "Merge fleet evidence into one distributed Evidence Packet.",
+            "Then run the verifier decision layer; fleet merge alone cannot ACCEPT.",
+        ],
+        "verifier_owned": True,
+    }
     assert all(job["lease_token"] is None for job in receipt_body["jobs"])
 
     merged = client.post(
@@ -178,6 +191,10 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     assert merged_body["status"] == "COMPLETE"
     assert merged_body["merged_packet_trace_id"] == f"{audit['audit_id']}-distributed-merge"
     assert "does not fabricate ACCEPT" in merged_body["merge_reason"]
+    assert merged_body["readiness"]["status"] == "ready"
+    assert merged_body["readiness"]["next_actions"] == [
+        "Run the verifier decision layer over the merged Evidence Packet.",
+    ]
     assert all(job["lease_token"] is None for job in merged_body["jobs"])
 
 
@@ -311,6 +328,8 @@ def test_failed_job_receipt_can_return_no_outputs_if_error_is_present(client, au
     assert failed.status_code == 200
     body = failed.json()
     assert body["verifier_gate_status"] == "blocked_failed_worker"
+    assert body["readiness"]["status"] == "blocked"
+    assert "cannot support ACCEPT" in body["readiness"]["headline"]
     assert body["failed_jobs"] == 1
 
 
@@ -332,6 +351,8 @@ def test_300b_fleet_merge_blocks_until_every_assigned_job_has_receipt(client, au
     assert prepared.status_code == 200
     body = prepared.json()
     assert body["verifier_gate_status"] == "waiting_for_workers"
+    assert body["readiness"]["status"] == "waiting"
+    assert "registered, compatible, fresh-heartbeat worker" in " ".join(body["readiness"]["blockers"])
     assert body["registered_workers"] == 1
     assert body["total_jobs"] == 25
 
@@ -366,3 +387,5 @@ def test_stale_worker_blocks_verifier_gate(client, auth_headers):
         headers=auth_headers,
     ).json()
     assert run["verifier_gate_status"] == "waiting_for_workers"
+    assert run["readiness"]["status"] == "waiting"
+    assert "stale heartbeat" in " ".join(run["readiness"]["blockers"])

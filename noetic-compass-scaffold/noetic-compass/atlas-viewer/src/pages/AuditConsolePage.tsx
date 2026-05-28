@@ -1252,6 +1252,7 @@ export default function AuditConsolePage() {
             totalJobs={fleetTotalJobs}
             mergedPacketStatus={mergedPacketStatusFor(fleetRun)}
             verifierGateStatus={fleetRun?.verifier_gate_status ?? 'not_prepared'}
+            readiness={fleetRun?.readiness ?? null}
           />
           <section style={fleetControlPanelStyle} aria-label="Fleet executor controls">
             <div style={fleetControlHeaderStyle}>

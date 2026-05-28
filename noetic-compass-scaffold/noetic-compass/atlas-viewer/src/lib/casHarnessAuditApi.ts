@@ -289,6 +289,15 @@ export type CasHarnessFleetVerifierGateStatus =
   | 'blocked_failed_worker'
   | 'blocked_missing_outputs'
   | 'ready_for_verifier';
+export type CasHarnessFleetReadinessStatus = 'blocked' | 'waiting' | 'ready';
+
+export interface CasHarnessFleetReadiness {
+  status: CasHarnessFleetReadinessStatus;
+  headline: string;
+  blockers: string[];
+  next_actions: string[];
+  verifier_owned: boolean;
+}
 
 export interface CasHarnessFleetWorkerRegistrationRequest {
   worker_id: string;
@@ -376,6 +385,7 @@ export interface CasHarnessFleetRun {
   failed_jobs: number;
   registered_workers: number;
   stale_workers: string[];
+  readiness: CasHarnessFleetReadiness;
   jobs: CasHarnessFleetJob[];
 }
 
@@ -1139,6 +1149,7 @@ export function parseFleetRunResponse(raw: unknown): CasHarnessFleetRun {
   const failedJobs = requiredInteger(raw.failed_jobs, 'fleet_run.failed_jobs');
   const registeredWorkers = requiredInteger(raw.registered_workers, 'fleet_run.registered_workers');
   const staleWorkers = parseStringArray(raw.stale_workers, 'fleet_run.stale_workers');
+  const readiness = parseFleetReadinessResponse(raw.readiness);
   assertFleetRunReadiness({
     jobs,
     verifierGateStatus,
@@ -1166,7 +1177,26 @@ export function parseFleetRunResponse(raw: unknown): CasHarnessFleetRun {
     failed_jobs: failedJobs,
     registered_workers: registeredWorkers,
     stale_workers: staleWorkers,
+    readiness,
     jobs,
+  };
+}
+
+export function parseFleetReadinessResponse(raw: unknown): CasHarnessFleetReadiness {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet readiness response was not an object');
+  }
+  const status = parseFleetReadinessStatus(raw.status);
+  const verifierOwned = raw.verifier_owned;
+  if (typeof verifierOwned !== 'boolean') {
+    throw new CasHarnessAuditApiError('CAS Harness fleet readiness verifier_owned must be boolean');
+  }
+  return {
+    status,
+    headline: requiredString(raw.headline, 'fleet_readiness.headline'),
+    blockers: parseStringArray(raw.blockers, 'fleet_readiness.blockers'),
+    next_actions: parseStringArray(raw.next_actions, 'fleet_readiness.next_actions'),
+    verifier_owned: verifierOwned,
   };
 }
 
@@ -1323,6 +1353,15 @@ function parseFleetVerifierGateStatus(raw: unknown): CasHarnessFleetVerifierGate
   }
   throw new CasHarnessAuditApiError(
     `Unsupported CAS Harness fleet verifier gate status: ${String(raw)}`,
+  );
+}
+
+function parseFleetReadinessStatus(raw: unknown): CasHarnessFleetReadinessStatus {
+  if (raw === 'blocked' || raw === 'waiting' || raw === 'ready') {
+    return raw;
+  }
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness fleet readiness status: ${String(raw)}`,
   );
 }
 
