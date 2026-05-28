@@ -77,7 +77,7 @@ def verify_anchor(packet: Mapping[str, Any]) -> dict[str, Any]:
     if mode == "local":
         return _verify_local_anchor(packet, anchor)
     if mode == "s3":
-        return _verify_s3_anchor(anchor)
+        return _verify_s3_anchor(packet, anchor)
     return _anchor_check("anchored", _string(mode), False, "anchor mode is not verifiable")
 
 
@@ -239,15 +239,82 @@ def _verify_local_anchor(packet: Mapping[str, Any], anchor: Mapping[str, Any]) -
     )
 
 
-def _verify_s3_anchor(anchor: Mapping[str, Any]) -> dict[str, Any]:
-    # We do not perform network verification on the evidence route. The S3
-    # write receipt is still useful proof, and production can verify the object
-    # out-of-band by bucket/key plus manifest_sha256.
+def _verify_s3_anchor(packet: Mapping[str, Any], anchor: Mapping[str, Any]) -> dict[str, Any]:
+    bucket = _string(anchor.get("bucket"))
+    key = _string(anchor.get("key"))
+    expected_manifest_hash = _string(anchor.get("manifest_sha256"))
+    if not bucket or not key or not expected_manifest_hash:
+        return _anchor_check(
+            expected_manifest_hash,
+            None,
+            False,
+            "S3 anchor receipt is missing bucket, key, or manifest_sha256",
+        )
+
+    try:
+        import boto3  # type: ignore[import-not-found]
+    except ImportError:
+        return _anchor_check(
+            expected_manifest_hash,
+            None,
+            False,
+            "boto3 is not installed; S3 anchor object could not be re-read",
+        )
+
+    client_kwargs: dict[str, Any] = {}
+    region = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION", "").strip()
+    if region:
+        client_kwargs["region_name"] = region
+
+    try:
+        response = boto3.client("s3", **client_kwargs).get_object(Bucket=bucket, Key=key)
+        body = response["Body"].read()
+    except Exception as exc:
+        return _anchor_check(
+            expected_manifest_hash,
+            None,
+            False,
+            f"S3 anchor object re-read failed: {type(exc).__name__}: {exc}",
+        )
+
+    actual_manifest_hash = hashlib.sha256(body).hexdigest()
+    if actual_manifest_hash != expected_manifest_hash:
+        return _anchor_check(
+            expected_manifest_hash,
+            actual_manifest_hash,
+            False,
+            "S3 anchor object hash does not match packet manifest_sha256",
+        )
+
+    try:
+        manifest = json.loads(body.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        return _anchor_check(
+            expected_manifest_hash,
+            actual_manifest_hash,
+            False,
+            f"S3 anchor manifest is not valid canonical JSON: {exc}",
+        )
+    if not isinstance(manifest, Mapping):
+        return _anchor_check(
+            expected_manifest_hash,
+            actual_manifest_hash,
+            False,
+            "S3 anchor manifest is malformed",
+        )
+
+    hashes = packet.get("hashes")
+    packet_hash = _string(hashes.get("packet_without_hashes_sha256")) if isinstance(hashes, Mapping) else None
+    entry_hash = _string(hashes.get("hash_log_entry_sha256")) if isinstance(hashes, Mapping) else None
+    match = (
+        manifest.get("packet_without_hashes_sha256") == packet_hash
+        and manifest.get("hash_log_entry_sha256") == entry_hash
+    )
     return _anchor_check(
-        _string(anchor.get("manifest_sha256")),
-        _string(anchor.get("manifest_sha256")),
-        bool(anchor.get("bucket") and anchor.get("key") and anchor.get("manifest_sha256")),
-        "S3 anchor write receipt is present; object re-read is intentionally out-of-band",
+        expected_manifest_hash,
+        actual_manifest_hash,
+        match,
+        "S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry",
     )
 
 

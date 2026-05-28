@@ -218,6 +218,19 @@ AWS_SECRET_ACCESS_KEY=<secret-access-key>
 
 Important AWS naming rule: `CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET` is only the bucket name. Do not include `s3://`, and do not put a slash path in the bucket field. Put folder-like paths in `CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX`.
 
+The IAM user for these credentials needs S3 access on the selected prefix:
+
+```text
+s3:PutObject
+s3:GetObject
+```
+
+Scope both actions to:
+
+```text
+arn:aws:s3:::<bucket-name>/<prefix>/*
+```
+
 Optional object-lock retention:
 
 ```bash
@@ -238,6 +251,8 @@ python scripts/verify_evidence_anchor_deployed.py \
 
 The smoke creates one tiny distributed audit, merges an Evidence Packet, runs the verifier, fetches `/evidence/{trace_id}`, and checks `/evidence/{trace_id}/verify`. It does not run real model weights; it verifies the packet anchoring control plane.
 
+The `/verify` route re-reads the S3 anchor object, hashes it, and confirms that the anchor manifest commits to the packet hash and hash-log entry.
+
 Success means:
 
 - packet `hashes.external_anchor.mode` is `s3`
@@ -250,6 +265,7 @@ Failure labels:
 
 - `Anchor disabled`: Render is unset or mode is `disabled`.
 - `Anchor failed`: mode is `s3`, but the bucket, region, credentials, or object-lock settings are wrong.
+- `S3 anchor object re-read failed`: the write receipt exists, but the IAM key cannot `GetObject`, the object was deleted, or the bucket/key is unreachable.
 - `No external anchor proof`: old packet or packet generated before external anchor metadata was written.
 
 ## Vercel Deployment (Dashboard)

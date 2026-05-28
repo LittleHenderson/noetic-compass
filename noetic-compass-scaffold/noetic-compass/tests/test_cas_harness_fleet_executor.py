@@ -2,6 +2,10 @@ from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+import hashlib
+import json
+import sys
+import types
 
 import pytest
 
@@ -143,6 +147,35 @@ def _stage19_stage20_verifier_fragment() -> dict:
             "policy_version": "stage20_worker_fragment_v1",
         },
     }
+
+
+class _FakeS3Body:
+    def __init__(self, payload: bytes) -> None:
+        self._payload = payload
+
+    def read(self) -> bytes:
+        return self._payload
+
+
+class _FakeS3Client:
+    def __init__(self) -> None:
+        self.objects: dict[tuple[str, str], bytes] = {}
+        self.get_calls: list[tuple[str, str]] = []
+
+    def put_object(self, **kwargs) -> dict:
+        bucket = kwargs["Bucket"]
+        key = kwargs["Key"]
+        body = kwargs["Body"]
+        if isinstance(body, str):
+            body = body.encode("utf-8")
+        self.objects[(bucket, key)] = body
+        return {"ETag": f'"{hashlib.md5(body).hexdigest()}"'}
+
+    def get_object(self, **kwargs) -> dict:
+        bucket = kwargs["Bucket"]
+        key = kwargs["Key"]
+        self.get_calls.append((bucket, key))
+        return {"Body": _FakeS3Body(self.objects[(bucket, key)])}
 
 
 def test_fleet_routes_registered(client):
@@ -367,6 +400,114 @@ def test_fleet_packet_local_anchor_is_verified_and_tamper_detected(client, auth_
     assert any(
         check["artifact"] == "merged_packet_external_anchor" and check["match"] is False
         for check in tampered["checks"]
+    )
+
+
+def test_fleet_packet_s3_anchor_rereads_object_during_verify(client, auth_headers, monkeypatch, tmp_path):
+    fake_s3 = _FakeS3Client()
+    fake_boto3 = types.SimpleNamespace(client=lambda service, **kwargs: fake_s3)
+    monkeypatch.setitem(sys.modules, "boto3", fake_boto3)
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "cas-harness-test-anchor")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX", "test-prefix")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION", "us-east-1")
+
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    )
+    assert merged.status_code == 200
+    trace_id = merged.json()["merged_packet_trace_id"]
+
+    packet = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()
+    anchor = packet["hashes"]["external_anchor"]
+    assert anchor["status"] == "anchored"
+    assert anchor["mode"] == "s3"
+    assert anchor["bucket"] == "cas-harness-test-anchor"
+    assert (anchor["bucket"], anchor["key"]) in fake_s3.objects
+
+    verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
+    assert verified["overall"] == "all_match"
+    assert fake_s3.get_calls == [(anchor["bucket"], anchor["key"])]
+    external_anchor_check = next(
+        check for check in verified["checks"] if check["artifact"] == "merged_packet_external_anchor"
+    )
+    assert external_anchor_check["match"] is True
+    assert "re-read" in external_anchor_check["notes"]
+
+
+def test_s3_anchor_verify_detects_remote_object_tampering(client, auth_headers, monkeypatch, tmp_path):
+    fake_s3 = _FakeS3Client()
+    fake_boto3 = types.SimpleNamespace(client=lambda service, **kwargs: fake_s3)
+    monkeypatch.setitem(sys.modules, "boto3", fake_boto3)
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "cas-harness-test-anchor")
+
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    ).json()
+    trace_id = merged["merged_packet_trace_id"]
+    anchor = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()["hashes"]["external_anchor"]
+
+    fake_s3.objects[(anchor["bucket"], anchor["key"])] = b'{"tampered":true}'
+    verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
+
+    assert verified["overall"] == "partial_mismatch"
+    assert any(
+        check["artifact"] == "merged_packet_external_anchor"
+        and check["match"] is False
+        and "hash does not match" in check["notes"]
+        for check in verified["checks"]
     )
 
 
