@@ -136,9 +136,7 @@
     "tier": "subspace_ablation"
   },
   "caveats": [
-    "This Stage 9 40E merger scaffold is not an ACCEPT verdict.",
-    "This Stage 9 40E merger scaffold is not a SUPPRESS verdict.",
-    "Final ACCEPT/SUPPRESS requires present causal, control, and output/bridge proof tiers plus an attached verifier decision.",
+    "ACCEPT/SUPPRESS requires pass-ready proof chips and an attached explicit verifier decision.",
     "Readout-only packets preserve the corrected PR #102 baseline but remain flagged for human review."
   ],
   "control_proof": {
@@ -178,7 +176,7 @@
     },
     "tier": "cover_discovery"
   },
-  "generated_at": "2026-05-28T04:55:34.637857+00:00",
+  "generated_at": "2026-05-28T07:12:48.403918+00:00",
   "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
   "model_proof": {
     "input_provenance": null,
@@ -337,7 +335,8 @@
       }
     ],
     "input_count": 4,
-    "readout_report": "docs\\working\\gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json"
+    "readout_report": "docs\\working\\gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json",
+    "verifier_report": null
   },
   "readout_proof": {
     "baseline_note": "PR #102 corrected the Stage 9 original 40E readout baseline. This merger preserves that corrected baseline and does not promote the packet to ACCEPT or SUPPRESS.",
@@ -499,9 +498,52 @@
   "trace_id": "stage9-40e-original-baseline-readout-20260527",
   "verdict": "FLAG_FOR_HUMAN_REVIEW",
   "verdict_rationale": "Merged packet is review-only because required proof tiers are missing: verifier.",
+  "verification": {
+    "explicit_verifier_decision": null,
+    "proof_chip_gate": "passed",
+    "proof_chips": [
+      {
+        "detail": "Model identity/hash evidence is recorded in the packet.",
+        "id": "model_proof",
+        "name": "Model proof",
+        "status": "present"
+      },
+      {
+        "detail": "Corrected Stage 9 40E hidden-state readout beats text and shuffled controls.",
+        "id": "cas_readout",
+        "name": "CAS readout",
+        "status": "verified"
+      },
+      {
+        "detail": "Subspace ablation/control evidence is recorded for the Stage 9 40E readout.",
+        "id": "causal_proof",
+        "name": "Causal proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Candidate cover/control evidence is recorded for the Stage 9 40E run.",
+        "id": "control_proof",
+        "name": "Control proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Eta-to-epsilon readable bridge output evidence is recorded.",
+        "id": "output_proof",
+        "name": "Output proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Evidence Packet schema, trace ID, and source artifact hashes are recorded.",
+        "id": "packet_proof",
+        "name": "Packet proof",
+        "status": "present"
+      }
+    ]
+  },
   "verifier": {
     "blocking_reason": "No verifier decision layer is attached to this packet.",
     "required_for_final_verdict": true,
+    "source_report": null,
     "status": "missing"
   }
 }

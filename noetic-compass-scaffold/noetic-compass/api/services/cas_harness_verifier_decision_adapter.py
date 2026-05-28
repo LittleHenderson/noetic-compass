@@ -29,6 +29,9 @@ class VerifierDecision:
 def verifier_decision_from_packet(packet: Mapping[str, Any]) -> VerifierDecision | None:
     """Return a public verdict from a locked Stage 21 packet, if explicit."""
 
+    if packet.get("schema_version") == "cas_harness_stage9_40e_evidence_packet.v1":
+        return _stage9_40e_decision(packet)
+
     if packet.get("schema_version") != "cas_harness_evidence_packet_v1":
         return None
 
@@ -80,6 +83,80 @@ def verifier_decision_from_packet(packet: Mapping[str, Any]) -> VerifierDecision
         )
 
     return None
+
+
+def _stage9_40e_decision(packet: Mapping[str, Any]) -> VerifierDecision | None:
+    """Pass through a Stage 9 40E packet only when its own verifier is explicit.
+
+    Stage 9 packets are validation artifacts. They may surface ACCEPT/SUPPRESS
+    only after the packet merger has attached a verifier decision and all six
+    proof chips are pass-ready.
+    """
+
+    verification = _mapping_or_empty(packet.get("verification"))
+    decision = _mapping_or_empty(verification.get("explicit_verifier_decision"))
+    verdict = decision.get("verdict")
+    confidence = _confidence_or_none(decision.get("confidence"))
+    if verdict not in {"ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"}:
+        return None
+    if confidence is None:
+        return None
+    if not _stage9_proof_chips_pass_ready(verification.get("proof_chips")):
+        return None
+    if packet.get("verdict") != verdict:
+        return None
+
+    source = decision.get("source")
+    reason = decision.get("reason")
+    return VerifierDecision(
+        verdict=verdict,
+        confidence=confidence,
+        source=(
+            source
+            if isinstance(source, str) and source.strip()
+            else "stage9_40e_verifier_decision"
+        ),
+        reason=(
+            reason
+            if isinstance(reason, str) and reason.strip()
+            else (
+                "Stage 9 40E packet has pass-ready proof chips and an explicit "
+                "verifier decision."
+            )
+        ),
+    )
+
+
+def _stage9_proof_chips_pass_ready(value: Any) -> bool:
+    if not isinstance(value, list):
+        return False
+    required = {
+        "model_proof",
+        "cas_readout",
+        "causal_proof",
+        "control_proof",
+        "output_proof",
+        "packet_proof",
+    }
+    strict_verified = {
+        "cas_readout",
+        "causal_proof",
+        "control_proof",
+        "output_proof",
+    }
+    by_id: dict[str, str] = {}
+    for row in value:
+        if not isinstance(row, Mapping):
+            continue
+        chip_id = row.get("id")
+        status = row.get("status")
+        if isinstance(chip_id, str) and isinstance(status, str):
+            by_id[chip_id] = status
+    if not required.issubset(by_id):
+        return False
+    if any(by_id[chip_id] not in {"verified", "present"} for chip_id in required):
+        return False
+    return all(by_id[chip_id] == "verified" for chip_id in strict_verified)
 
 
 def _s7_f28_balanced_bridge_decision(packet: Mapping[str, Any]) -> VerifierDecision | None:

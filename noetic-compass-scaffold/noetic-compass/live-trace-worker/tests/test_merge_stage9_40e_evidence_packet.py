@@ -161,8 +161,8 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
             "run_id": "cover-run",
             "selected_layer": 2,
             "top_k": 8,
-            "cover_map": {"^0|P": {"true_cover": ["L2N1"]}, "^0|C": {"true_cover": ["L2N2"]}},
-            "true_cover_per_class": {"^0|P": ["L2N1"], "^0|C": ["L2N2"]},
+            "cover_map": {f"^{i}|P": {"true_cover": [f"L2N{i}"]} for i in range(40)},
+            "true_cover_per_class": {f"^{i}|P": [f"L2N{i}"] for i in range(40)},
             "caveat": "candidate covers need matched ablation validation",
             "hashes": {"cover_sha": "d" * 64},
         },
@@ -209,6 +209,8 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
     assert packet["tier_statuses"]["control"] == "present"
     assert packet["tier_statuses"]["output_bridge"] == "present"
     assert packet["tier_statuses"]["verifier"] == "missing"
+    assert packet["verification"]["proof_chip_gate"] == "passed"
+    assert packet["verification"]["explicit_verifier_decision"] is None
     assert packet["causal_proof"]["source_fields"]["provenance"] == {"worker": "fixture"}
     assert packet["control_proof"]["source_fields"]["hashes"] == {"cover_sha": "d" * 64}
     causal_primary = packet["causal_proof"]["summary"]["primary_result"]
@@ -217,7 +219,7 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
     assert causal_primary["true_disruption_pp"] == 28.727679
     assert causal_primary["random_same_rank_max_disruption_pp"] == 0.267857
     assert causal_primary["guard_status"] == "passed"
-    assert packet["control_proof"]["summary"]["class_count"] == 2
+    assert packet["control_proof"]["summary"]["class_count"] == 40
     assert packet["control_proof"]["summary"]["selected_layer"] == 2
     assert packet["control_proof"]["summary"]["top_k"] == 8
     assert packet["output_bridge_proof"]["summary"]["run_id"] == "bridge-run"
@@ -231,6 +233,163 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
     ] == 0.975
     assert packet["provenance"]["input_count"] == 4
     assert packet["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+
+
+def test_valid_verifier_report_can_emit_accept_when_proof_chips_pass(tmp_path):
+    readout = _write_json(tmp_path / "readout.json", _readout_fixture())
+    ablation = _write_json(
+        tmp_path / "ablation.json",
+        {
+            "status": "completed",
+            "primary_result": {
+                "layer": 2,
+                "original_accuracy": 0.95625,
+                "ablated_accuracy": 0.6689732142857143,
+                "true_disruption": 0.2872767857142857,
+                "chance_baseline_accuracy": 0.025,
+                "random_same_rank_mean_disruption": 0.0006808035714286175,
+                "random_same_rank_max_disruption": 0.002678571428571419,
+                "guard_status": "passed",
+            },
+        },
+    )
+    cover = _write_json(
+        tmp_path / "cover.json",
+        {
+            "status": "candidate_cover_discovery_completed",
+            "selected_layer": 2,
+            "top_k": 8,
+            "cover_map": {f"^{i}|P": {"true_cover": [f"L2N{i}"]} for i in range(40)},
+        },
+    )
+    bridge = _write_json(
+        tmp_path / "bridge.json",
+        {
+            "status": "PROBE_PREDICTED_40E_ETA_EPSILON_BRIDGE_PASS",
+            "n_cases": 80,
+            "probe_prediction": {"selected_element_accuracy": 0.975},
+            "key_comparisons": {"probe_readable_delta_vs_none": 1.41205},
+            "bridge_gates": {"probe_readable": {"passed": True}},
+        },
+    )
+    verifier = _write_json(
+        tmp_path / "verifier.json",
+        {
+            "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
+            "verdict": "ACCEPT",
+            "confidence": 0.91,
+            "source": "stage19_stage20_verifier_fixture",
+            "reason": "All fixture gates pass.",
+        },
+    )
+
+    packet = merge_stage9_40e_evidence_packet.build_packet(
+        readout_report=readout,
+        ablation_report=ablation,
+        cover_report=cover,
+        bridge_report=bridge,
+        verifier_report=verifier,
+    )
+
+    assert packet["tier_statuses"]["verifier"] == "present"
+    assert packet["verification"]["proof_chip_gate"] == "passed"
+    assert packet["verification"]["explicit_verifier_decision"]["verdict"] == "ACCEPT"
+    assert packet["verification"]["explicit_verifier_decision"]["confidence"] == 0.91
+    assert packet["verdict"] == "ACCEPT"
+    chips = {chip["id"]: chip["status"] for chip in packet["verification"]["proof_chips"]}
+    assert chips["cas_readout"] == "verified"
+    assert chips["causal_proof"] == "verified"
+    assert chips["control_proof"] == "verified"
+    assert chips["output_proof"] == "verified"
+
+
+def test_explicit_accept_is_blocked_when_required_proof_chip_fails(tmp_path):
+    readout = _write_json(tmp_path / "readout.json", _readout_fixture())
+    verifier = _write_json(
+        tmp_path / "verifier.json",
+        {
+            "verdict": "ACCEPT",
+            "confidence": 0.91,
+            "reason": "This must not override missing proof.",
+        },
+    )
+
+    packet = merge_stage9_40e_evidence_packet.build_packet(
+        readout_report=readout,
+        verifier_report=verifier,
+    )
+
+    assert packet["tier_statuses"]["verifier"] == "present"
+    assert packet["verification"]["proof_chip_gate"] == "blocked"
+    assert packet["verification"]["explicit_verifier_decision"]["verdict"] == "ACCEPT"
+    assert packet["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert "required proof tiers are missing" in packet["verdict_rationale"]
+
+
+def test_invalid_verifier_report_fails_closed(tmp_path):
+    readout = _write_json(tmp_path / "readout.json", _readout_fixture())
+    verifier = _write_json(
+        tmp_path / "verifier.json",
+        {"verdict": "ACCEPT", "confidence": "0.91"},
+    )
+
+    packet = merge_stage9_40e_evidence_packet.build_packet(
+        readout_report=readout,
+        verifier_report=verifier,
+    )
+
+    assert packet["tier_statuses"]["verifier"] == "failed"
+    assert packet["verification"]["explicit_verifier_decision"] is None
+    assert packet["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+
+
+def test_valid_verifier_report_can_emit_suppress_when_proof_chips_pass(tmp_path):
+    readout = _write_json(tmp_path / "readout.json", _readout_fixture())
+    ablation = _write_json(
+        tmp_path / "ablation.json",
+        {
+            "primary_result": {
+                "true_disruption": 0.2,
+                "random_same_rank_max_disruption": 0.01,
+                "guard_status": "passed",
+            },
+        },
+    )
+    cover = _write_json(
+        tmp_path / "cover.json",
+        {"cover_map": {f"^{i}|P": {"true_cover": [f"L2N{i}"]} for i in range(40)}},
+    )
+    bridge = _write_json(
+        tmp_path / "bridge.json",
+        {
+            "bridge_gates": {"probe_readable": {"passed": True}},
+            "key_comparisons": {"probe_readable_delta_vs_none": 1.0},
+        },
+    )
+    verifier = _write_json(
+        tmp_path / "verifier.json",
+        {
+            "explicit_verifier_decision": {
+                "verdict": "SUPPRESS",
+                "confidence": 0.87,
+                "source": "stage20_generation_readiness",
+                "reason": "Verifier found a blocking condition.",
+            }
+        },
+    )
+
+    packet = merge_stage9_40e_evidence_packet.build_packet(
+        readout_report=readout,
+        ablation_report=ablation,
+        cover_report=cover,
+        bridge_report=bridge,
+        verifier_report=verifier,
+    )
+
+    assert packet["verdict"] == "SUPPRESS"
+    assert packet["verification"]["explicit_verifier_decision"]["source"] == (
+        "stage20_generation_readiness"
+    )
 
 
 def test_writes_json_and_markdown_packet(tmp_path):

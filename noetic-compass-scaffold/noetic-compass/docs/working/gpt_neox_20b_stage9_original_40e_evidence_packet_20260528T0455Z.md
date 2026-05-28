@@ -18,6 +18,17 @@
 | Output/bridge proof | present |
 | Verifier | missing |
 
+## Proof Chips
+
+| Proof | Status | Detail |
+| --- | --- | --- |
+| Model proof | present | Model identity/hash evidence is recorded in the packet. |
+| CAS readout | verified | Corrected Stage 9 40E hidden-state readout beats text and shuffled controls. |
+| Causal proof | verified | Subspace ablation/control evidence is recorded for the Stage 9 40E readout. |
+| Control proof | verified | Candidate cover/control evidence is recorded for the Stage 9 40E run. |
+| Output proof | verified | Eta-to-epsilon readable bridge output evidence is recorded. |
+| Packet proof | present | Evidence Packet schema, trace ID, and source artifact hashes are recorded. |
+
 ## Baseline Proof
 
 | Metric | Corrected value |
@@ -68,7 +79,5 @@ Merged packet is review-only because required proof tiers are missing: verifier.
 
 ## Caveats
 
-- This Stage 9 40E merger scaffold is not an ACCEPT verdict.
-- This Stage 9 40E merger scaffold is not a SUPPRESS verdict.
-- Final ACCEPT/SUPPRESS requires present causal, control, and output/bridge proof tiers plus an attached verifier decision.
+- ACCEPT/SUPPRESS requires pass-ready proof chips and an attached explicit verifier decision.
 - Readout-only packets preserve the corrected PR #102 baseline but remain flagged for human review.

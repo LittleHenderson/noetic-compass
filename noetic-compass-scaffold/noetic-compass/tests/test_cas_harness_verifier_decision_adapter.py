@@ -59,6 +59,30 @@ def _s7_f28_packet() -> dict:
     }
 
 
+def _stage9_40e_packet() -> dict:
+    return {
+        "schema_version": "cas_harness_stage9_40e_evidence_packet.v1",
+        "trace_id": "trace-stage9-40e",
+        "verdict": "ACCEPT",
+        "verification": {
+            "explicit_verifier_decision": {
+                "verdict": "ACCEPT",
+                "confidence": 0.91,
+                "source": "stage9_40e_verifier_decision",
+                "reason": "All Stage 9 40E proof chips pass.",
+            },
+            "proof_chips": [
+                {"id": "model_proof", "status": "present"},
+                {"id": "cas_readout", "status": "verified"},
+                {"id": "causal_proof", "status": "verified"},
+                {"id": "control_proof", "status": "verified"},
+                {"id": "output_proof", "status": "verified"},
+                {"id": "packet_proof", "status": "present"},
+            ],
+        },
+    }
+
+
 def test_allow_and_accepted_maps_to_accept_with_accepted_accuracy():
     decision = verifier_decision_from_packet(_stage21_packet())
 
@@ -157,6 +181,43 @@ def test_s7_f28_packet_never_upgrades_to_accept():
 def test_s7_f28_packet_requires_pass_ready_proof_chips():
     packet = _s7_f28_packet()
     packet["verification"]["proof_chips"][3]["status"] = "missing"
+
+    assert verifier_decision_from_packet(packet) is None
+
+
+def test_stage9_40e_packet_can_pass_through_explicit_accept():
+    decision = verifier_decision_from_packet(_stage9_40e_packet())
+
+    assert decision is not None
+    assert decision.verdict == "ACCEPT"
+    assert decision.confidence == 0.91
+    assert decision.source == "stage9_40e_verifier_decision"
+
+
+def test_stage9_40e_packet_blocks_accept_when_packet_verdict_does_not_match():
+    packet = _stage9_40e_packet()
+    packet["verdict"] = "FLAG_FOR_HUMAN_REVIEW"
+
+    assert verifier_decision_from_packet(packet) is None
+
+
+def test_stage9_40e_packet_requires_pass_ready_proof_chips():
+    packet = _stage9_40e_packet()
+    packet["verification"]["proof_chips"][4]["status"] = "missing"
+
+    assert verifier_decision_from_packet(packet) is None
+
+
+def test_stage9_40e_packet_requires_core_chips_verified_not_merely_present():
+    packet = _stage9_40e_packet()
+    packet["verification"]["proof_chips"][3]["status"] = "present"
+
+    assert verifier_decision_from_packet(packet) is None
+
+
+def test_stage9_40e_packet_blocks_invalid_confidence():
+    packet = _stage9_40e_packet()
+    packet["verification"]["explicit_verifier_decision"]["confidence"] = 1.2
 
     assert verifier_decision_from_packet(packet) is None
 

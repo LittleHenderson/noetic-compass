@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Merge Stage 9 40E proof reports into a review-only Evidence Packet.
+"""Merge Stage 9 40E proof reports into an Evidence Packet.
 
-This scaffold intentionally does not emit ACCEPT or SUPPRESS. It preserves the
-corrected Stage 9 original 40E readout and records which downstream proof tiers
-are still missing until ablation, cover, bridge, and verifier artifacts exist.
+The merger refuses to invent ACCEPT/SUPPRESS. It can emit a final verdict only
+when all required proof tiers are present and a separate verifier report carries
+an explicit decision.
 """
 
 from __future__ import annotations
@@ -47,6 +47,30 @@ CORRECTED_BASELINE = {
 }
 
 REVIEW_VERDICT = "FLAG_FOR_HUMAN_REVIEW"
+FINAL_VERDICTS = {"ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"}
+PASSING_PROOF_STATUSES = {"present", "verified"}
+REQUIRED_PROOF_CHIPS = (
+    "model_proof",
+    "cas_readout",
+    "causal_proof",
+    "control_proof",
+    "output_proof",
+    "packet_proof",
+)
+STRICT_VERIFIED_PROOF_CHIPS = (
+    "cas_readout",
+    "causal_proof",
+    "control_proof",
+    "output_proof",
+)
+PROOF_CHIP_NAMES = {
+    "model_proof": "Model proof",
+    "cas_readout": "CAS readout",
+    "causal_proof": "Causal proof",
+    "control_proof": "Control proof",
+    "output_proof": "Output proof",
+    "packet_proof": "Packet proof",
+}
 INPUT_COPY_KEYS = (
     "schema_version",
     "status",
@@ -494,7 +518,204 @@ def _make_optional_proof(
     )
 
 
-def _verdict_rationale(tier_statuses: dict[str, str]) -> str:
+def _confidence_or_none(value: Any) -> float | None:
+    if not isinstance(value, (int, float)) or isinstance(value, bool):
+        return None
+    out = float(value)
+    if not 0.0 <= out <= 1.0:
+        return None
+    return out
+
+
+def _mapping_or_empty(value: Any) -> dict[str, Any]:
+    return value if isinstance(value, dict) else {}
+
+
+def _extract_explicit_decision(report: dict[str, Any]) -> dict[str, Any] | None:
+    candidate = report
+    if isinstance(report.get("explicit_verifier_decision"), dict):
+        candidate = report["explicit_verifier_decision"]
+    elif isinstance(report.get("verification"), dict) and isinstance(
+        report["verification"].get("explicit_verifier_decision"), dict
+    ):
+        candidate = report["verification"]["explicit_verifier_decision"]
+
+    verdict = candidate.get("verdict")
+    confidence = _confidence_or_none(candidate.get("confidence"))
+    if verdict not in FINAL_VERDICTS or confidence is None:
+        return None
+    return {
+        "verdict": verdict,
+        "confidence": confidence,
+        "source": str(candidate.get("source") or report.get("source") or "stage9_40e_verifier"),
+        "reason": str(candidate.get("reason") or report.get("reason") or ""),
+        "mode": candidate.get("mode") or report.get("mode"),
+        "coverage": candidate.get("coverage") or report.get("coverage"),
+        "decision_scope": (
+            candidate.get("decision_scope")
+            or report.get("decision_scope")
+            or "stage9_40e_validation_packet"
+        ),
+    }
+
+
+def _make_verifier_proof(
+    verifier_report: Path | None,
+) -> tuple[dict[str, Any], dict[str, Any] | None, dict[str, Any] | None]:
+    if verifier_report is None:
+        return (
+            {
+                "status": "missing",
+                "required_for_final_verdict": True,
+                "source_report": None,
+                "blocking_reason": "No verifier decision layer is attached to this packet.",
+            },
+            None,
+            None,
+        )
+
+    report = _load_json(verifier_report)
+    artifact = _report_artifact(
+        verifier_report,
+        "stage9_40e_verifier_report",
+        "stage9_40e_verifier_decision_report",
+    )
+    decision = _extract_explicit_decision(report)
+    if decision is None:
+        return (
+            {
+                "status": "failed",
+                "required_for_final_verdict": True,
+                "source_report": artifact,
+                "source_fields": _copy_known_fields(report),
+                "blocking_reason": (
+                    "Verifier report is present but does not carry a valid explicit "
+                    "verdict plus numeric confidence in [0, 1]."
+                ),
+            },
+            artifact,
+            None,
+        )
+
+    return (
+        {
+            "status": "present",
+            "required_for_final_verdict": True,
+            "source_report": artifact,
+            "source_fields": _copy_known_fields(report),
+            "explicit_verifier_decision": decision,
+        },
+        artifact,
+        decision,
+    )
+
+
+def _causal_chip_status(causal_proof: dict[str, Any]) -> str:
+    if causal_proof.get("status") != "present":
+        return "missing"
+    primary = _mapping_or_empty(_mapping_or_empty(causal_proof.get("summary")).get("primary_result"))
+    guard_passed = str(primary.get("guard_status")).lower() == "passed"
+    disruption = primary.get("true_disruption")
+    random_max = primary.get("random_same_rank_max_disruption")
+    if guard_passed and isinstance(disruption, (int, float)) and isinstance(random_max, (int, float)):
+        return "verified" if float(disruption) > float(random_max) else "failed"
+    return "present"
+
+
+def _output_chip_status(output_bridge_proof: dict[str, Any]) -> str:
+    if output_bridge_proof.get("status") != "present":
+        return "missing"
+    summary = _mapping_or_empty(output_bridge_proof.get("summary"))
+    if summary.get("probe_readable_gate_passed") is True:
+        return "verified"
+    if summary.get("probe_readable_gate_passed") is False:
+        return "failed"
+    return "present"
+
+
+def _control_chip_status(control_proof: dict[str, Any]) -> str:
+    if control_proof.get("status") != "present":
+        return "missing"
+    summary = _mapping_or_empty(control_proof.get("summary"))
+    class_count = summary.get("class_count")
+    if isinstance(class_count, int) and class_count >= 40:
+        return "verified"
+    return "present"
+
+
+def _readout_chip_status(baseline_proof: dict[str, Any]) -> str:
+    hidden = baseline_proof.get("hidden_probe_test_acc")
+    confirmed_text = baseline_proof.get("confirmed_text_test_acc")
+    shuffled = baseline_proof.get("shuffled_label_hidden_mean_test_acc")
+    if all(isinstance(value, (int, float)) for value in (hidden, confirmed_text, shuffled)):
+        if float(hidden) > float(confirmed_text) and float(hidden) > float(shuffled):
+            return "verified"
+        return "failed"
+    return "present"
+
+
+def _proof_chips(
+    *,
+    model_proof: dict[str, Any],
+    baseline_proof: dict[str, Any],
+    causal_proof: dict[str, Any],
+    control_proof: dict[str, Any],
+    output_bridge_proof: dict[str, Any],
+) -> list[dict[str, str]]:
+    statuses = {
+        "model_proof": "present" if model_proof.get("status") == "present" else "missing",
+        "cas_readout": _readout_chip_status(baseline_proof),
+        "causal_proof": _causal_chip_status(causal_proof),
+        "control_proof": _control_chip_status(control_proof),
+        "output_proof": _output_chip_status(output_bridge_proof),
+        "packet_proof": "present",
+    }
+    details = {
+        "model_proof": "Model identity/hash evidence is recorded in the packet.",
+        "cas_readout": "Corrected Stage 9 40E hidden-state readout beats text and shuffled controls.",
+        "causal_proof": "Subspace ablation/control evidence is recorded for the Stage 9 40E readout.",
+        "control_proof": "Candidate cover/control evidence is recorded for the Stage 9 40E run.",
+        "output_proof": "Eta-to-epsilon readable bridge output evidence is recorded.",
+        "packet_proof": "Evidence Packet schema, trace ID, and source artifact hashes are recorded.",
+    }
+    return [
+        {
+            "id": chip_id,
+            "name": PROOF_CHIP_NAMES[chip_id],
+            "status": statuses[chip_id],
+            "detail": details[chip_id],
+        }
+        for chip_id in REQUIRED_PROOF_CHIPS
+    ]
+
+
+def _proof_chips_pass(proof_chips: list[dict[str, str]]) -> bool:
+    by_id = {chip["id"]: chip["status"] for chip in proof_chips}
+    if not all(by_id.get(chip_id) in PASSING_PROOF_STATUSES for chip_id in REQUIRED_PROOF_CHIPS):
+        return False
+    return all(by_id.get(chip_id) == "verified" for chip_id in STRICT_VERIFIED_PROOF_CHIPS)
+
+
+def _final_verdict(
+    *,
+    proof_chips: list[dict[str, str]],
+    explicit_decision: dict[str, Any] | None,
+) -> str:
+    if explicit_decision is None:
+        return REVIEW_VERDICT
+    if not _proof_chips_pass(proof_chips):
+        return REVIEW_VERDICT
+    verdict = explicit_decision.get("verdict")
+    return str(verdict) if verdict in FINAL_VERDICTS else REVIEW_VERDICT
+
+
+def _verdict_rationale(
+    *,
+    tier_statuses: dict[str, str],
+    proof_chips: list[dict[str, str]],
+    explicit_decision: dict[str, Any] | None,
+    final_verdict: str,
+) -> str:
     missing = [
         tier
         for tier, status in tier_statuses.items()
@@ -506,9 +727,24 @@ def _verdict_rationale(tier_statuses: dict[str, str]) -> str:
             + ", ".join(missing)
             + "."
         )
+    weak_chips = [
+        chip["id"]
+        for chip in proof_chips
+        if chip["status"] not in PASSING_PROOF_STATUSES
+    ]
+    if weak_chips:
+        return (
+            "Verifier decision is not final because required proof chips are not "
+            "pass-ready: " + ", ".join(weak_chips) + "."
+        )
+    if explicit_decision is None:
+        return (
+            "All merger-side proof tiers are present, but no valid explicit verifier "
+            "decision is attached, so the packet remains human-review only."
+        )
     return (
-        "All merger-side proof tiers are present, but this scaffold still requires "
-        "an attached verifier decision before any final ACCEPT or SUPPRESS verdict."
+        f"All required proof chips are pass-ready and the attached verifier returned "
+        f"`{final_verdict}` with confidence {explicit_decision['confidence']:.6g}."
     )
 
 
@@ -518,6 +754,7 @@ def build_packet(
     ablation_report: Path | None = None,
     cover_report: Path | None = None,
     bridge_report: Path | None = None,
+    verifier_report: Path | None = None,
     generated_at: datetime | None = None,
 ) -> dict[str, Any]:
     readout = _load_json(readout_report)
@@ -545,6 +782,10 @@ def build_packet(
         artifact_id="stage9_40e_bridge_report",
         artifact_type="stage9_40e_bridge_report",
     )
+    verifier_proof, verifier_artifact, explicit_decision = _make_verifier_proof(verifier_report)
+    model_proof = _extract_model_proof(readout, readout_artifact)
+    readout_proof = _make_readout_proof(readout, readout_artifact)
+    baseline_proof = _make_baseline_proof(readout)
 
     tier_statuses = {
         "model": "present",
@@ -553,11 +794,28 @@ def build_packet(
         "causal": causal_proof["status"],
         "control": control_proof["status"],
         "output_bridge": output_bridge_proof["status"],
-        "verifier": "missing",
+        "verifier": verifier_proof["status"],
     }
+    proof_chips = _proof_chips(
+        model_proof=model_proof,
+        baseline_proof=baseline_proof,
+        causal_proof=causal_proof,
+        control_proof=control_proof,
+        output_bridge_proof=output_bridge_proof,
+    )
+    final_verdict = _final_verdict(
+        proof_chips=proof_chips,
+        explicit_decision=explicit_decision,
+    )
     input_artifacts = [
         artifact
-        for artifact in (readout_artifact, causal_artifact, control_artifact, bridge_artifact)
+        for artifact in (
+            readout_artifact,
+            causal_artifact,
+            control_artifact,
+            bridge_artifact,
+            verifier_artifact,
+        )
         if artifact is not None
     ]
 
@@ -567,26 +825,30 @@ def build_packet(
         "run_id": _extract_run_id(readout),
         "generated_at": generated.isoformat(),
         "method_label": METHOD_LABEL,
-        "model_proof": _extract_model_proof(readout, readout_artifact),
-        "readout_proof": _make_readout_proof(readout, readout_artifact),
-        "baseline_proof": _make_baseline_proof(readout),
+        "model_proof": model_proof,
+        "readout_proof": readout_proof,
+        "baseline_proof": baseline_proof,
         "causal_proof": causal_proof,
         "control_proof": control_proof,
         "output_bridge_proof": output_bridge_proof,
         "tier_statuses": tier_statuses,
-        "verifier": {
-            "status": "missing",
-            "required_for_final_verdict": True,
-            "blocking_reason": "No verifier decision layer is attached to this packet.",
+        "verifier": verifier_proof,
+        "verification": {
+            "proof_chips": proof_chips,
+            "explicit_verifier_decision": explicit_decision,
+            "proof_chip_gate": "passed" if _proof_chips_pass(proof_chips) else "blocked",
         },
-        "verdict": REVIEW_VERDICT,
-        "verdict_rationale": _verdict_rationale(tier_statuses),
+        "verdict": final_verdict,
+        "verdict_rationale": _verdict_rationale(
+            tier_statuses=tier_statuses,
+            proof_chips=proof_chips,
+            explicit_decision=explicit_decision,
+            final_verdict=final_verdict,
+        ),
         "caveats": [
-            "This Stage 9 40E merger scaffold is not an ACCEPT verdict.",
-            "This Stage 9 40E merger scaffold is not a SUPPRESS verdict.",
             (
-                "Final ACCEPT/SUPPRESS requires present causal, control, and "
-                "output/bridge proof tiers plus an attached verifier decision."
+                "ACCEPT/SUPPRESS requires pass-ready proof chips and an attached "
+                "explicit verifier decision."
             ),
             (
                 "Readout-only packets preserve the corrected PR #102 baseline "
@@ -600,6 +862,7 @@ def build_packet(
             "ablation_report": str(ablation_report) if ablation_report else None,
             "cover_report": str(cover_report) if cover_report else None,
             "bridge_report": str(bridge_report) if bridge_report else None,
+            "verifier_report": str(verifier_report) if verifier_report else None,
         },
     }
 
@@ -608,6 +871,31 @@ def render_markdown(packet: dict[str, Any]) -> str:
     baseline = packet["baseline_proof"]
     tiers = packet["tier_statuses"]
     caveats = "\n".join(f"- {caveat}" for caveat in packet["caveats"])
+    verification = _mapping_or_empty(packet.get("verification"))
+    proof_chips = verification.get("proof_chips")
+    if isinstance(proof_chips, list):
+        proof_rows = "\n".join(
+            f"| {chip.get('name', chip.get('id'))} | {chip.get('status')} | {chip.get('detail')} |"
+            for chip in proof_chips
+            if isinstance(chip, dict)
+        )
+    else:
+        proof_rows = ""
+    explicit = _mapping_or_empty(verification.get("explicit_verifier_decision"))
+    if explicit:
+        verifier_rows = f"""
+## Verifier Decision
+
+| Field | Value |
+| --- | --- |
+| Verdict | `{explicit.get("verdict")}` |
+| Confidence | {float(explicit.get("confidence", 0.0)):.6g} |
+| Source | {explicit.get("source")} |
+| Scope | {explicit.get("decision_scope")} |
+| Reason | {explicit.get("reason")} |
+"""
+    else:
+        verifier_rows = ""
     causal_primary = (
         packet.get("causal_proof", {})
         .get("summary", {})
@@ -682,6 +970,12 @@ def render_markdown(packet: dict[str, Any]) -> str:
 | Output/bridge proof | {tiers["output_bridge"]} |
 | Verifier | {tiers["verifier"]} |
 
+## Proof Chips
+
+| Proof | Status | Detail |
+| --- | --- | --- |
+{proof_rows}
+
 ## Baseline Proof
 
 | Metric | Corrected value |
@@ -692,7 +986,7 @@ def render_markdown(packet: dict[str, Any]) -> str:
 | Shuffled-label mean | {baseline["shuffled_label_hidden_mean_test_acc_pct"]:.6g}% |
 | compact-gloss v0 | blocked at {baseline["compact_gloss_v0_text_only_acc_pct"]:.6g}% text-only |
 
-{causal_rows}{control_rows}{bridge_rows}
+{causal_rows}{control_rows}{bridge_rows}{verifier_rows}
 ## Rationale
 
 {packet["verdict_rationale"]}
@@ -719,6 +1013,7 @@ def main() -> int:
     parser.add_argument("--ablation-report", type=Path)
     parser.add_argument("--cover-report", type=Path)
     parser.add_argument("--bridge-report", type=Path)
+    parser.add_argument("--verifier-report", type=Path)
     parser.add_argument("--output-json", type=Path, default=DEFAULT_OUTPUT_JSON)
     parser.add_argument("--output-markdown", type=Path, default=DEFAULT_OUTPUT_MARKDOWN)
     args = parser.parse_args()
@@ -728,6 +1023,7 @@ def main() -> int:
         ablation_report=args.ablation_report,
         cover_report=args.cover_report,
         bridge_report=args.bridge_report,
+        verifier_report=args.verifier_report,
     )
     write_packet(packet, args.output_json, args.output_markdown)
     print(f"wrote JSON packet: {args.output_json}")
