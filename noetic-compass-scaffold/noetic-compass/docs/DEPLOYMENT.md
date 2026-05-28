@@ -244,6 +244,7 @@ If Object Lock retention is enabled, the IAM user also needs permission to write
 
 ```text
 s3:PutObjectRetention
+s3:GetObjectRetention
 ```
 
 Only set `CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3` after the bucket, region, and credentials are valid. If mode is `s3` but the write fails, every new packet will honestly report `Anchor failed`.
@@ -261,7 +262,7 @@ The smoke creates one tiny distributed audit, merges an Evidence Packet, runs th
 
 The `/verify` route re-reads the S3 anchor object, hashes it, and confirms that the anchor manifest commits to the packet hash and hash-log entry.
 
-If Object Lock was requested in the anchor receipt, `/verify` also performs `HeadObject` and requires the expected lock mode plus a future `ObjectLockRetainUntilDate`. Without that check, the packet is S3 re-read verified but not WORM verified.
+If Object Lock was requested in the anchor receipt, the anchor upload includes the S3-required `Content-MD5`, and `/verify` also performs `HeadObject` and requires the expected lock mode plus a future `ObjectLockRetainUntilDate`. Without that check, the packet is S3 re-read verified but not WORM verified.
 
 To require WORM verification in the deployed smoke, use:
 
