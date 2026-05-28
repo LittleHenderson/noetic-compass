@@ -593,7 +593,18 @@ describe('casHarnessAuditApi', () => {
   });
 
   it('prepares, leases, receipts, merges, gets, and lists fleet runs without fabricating ACCEPT', async () => {
-    const fragmentRef = await fleetFragmentRef();
+    const evidencePacketFragmentPayload = {
+      fragments: [
+        {
+          output: 'layer_activation_summary',
+          digest: 'sha256:activation-summary',
+        },
+      ],
+      metadata: { schema_version: 'worker_fragment.v1' },
+    };
+    const fragmentRef = await fleetFragmentRef({
+      evidence_packet_fragment_payload: evidencePacketFragmentPayload,
+    });
     const leasedJob = fleetJob({
       status: 'leased',
       lease_token: 'lease-token-01',
@@ -664,6 +675,7 @@ describe('casHarnessAuditApi', () => {
         lease_token: 'lease-token-01',
         produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
         evidence_packet_fragment_ref: fragmentRef,
+        evidence_packet_fragment_payload: evidencePacketFragmentPayload,
       },
       { baseUrl: '/api/cas-harness/audit', fetchImpl },
     );
@@ -726,6 +738,13 @@ describe('casHarnessAuditApi', () => {
       '/api/cas-harness/audit/distributed/session/cas-dist-unit/fleet',
       '/api/cas-harness/audit/distributed/fleet/runs',
     ]);
+    expect(JSON.parse(String((fetchImpl.mock.calls[2][1] as RequestInit).body))).toEqual({
+      worker_id: 'probe-worker-01',
+      lease_token: 'lease-token-01',
+      produced_outputs: ['layer_activation_summary', 'worker_evidence_manifest'],
+      evidence_packet_fragment_ref: fragmentRef,
+      evidence_packet_fragment_payload: evidencePacketFragmentPayload,
+    });
   });
 
   it('builds canonical content-addressed fleet Evidence Packet fragment refs', async () => {
@@ -735,6 +754,36 @@ describe('casHarnessAuditApi', () => {
       /^cas-fragment:\/\/cas-dist-unit\/fleet-job-01\/probe-worker-01\/layers-000-009\/sha256:[a-f0-9]{64}$/,
     );
     expect(fragmentRef).not.toContain('evidence-fragment');
+  });
+
+  it('builds deterministic fleet Evidence Packet fragment refs with fragment payload hashes', async () => {
+    const fragmentPayload = {
+      zeta: ['worker_evidence_manifest', 'layer_activation_summary'],
+      alpha: {
+        shard_id: 'layers-000-009',
+        metrics: { b: 2, a: 1 },
+      },
+    };
+
+    const withPayload = await fleetFragmentRef({
+      evidence_packet_fragment_payload: fragmentPayload,
+    });
+    const withReorderedPayload = await fleetFragmentRef({
+      evidence_packet_fragment_payload: {
+        alpha: {
+          metrics: { a: 1, b: 2 },
+          shard_id: 'layers-000-009',
+        },
+        zeta: ['worker_evidence_manifest', 'layer_activation_summary'],
+      },
+    });
+    const withoutPayload = await fleetFragmentRef();
+
+    expect(withPayload).toBe(withReorderedPayload);
+    expect(withPayload).not.toBe(withoutPayload);
+    expect(withPayload).toMatch(
+      /^cas-fragment:\/\/cas-dist-unit\/fleet-job-01\/probe-worker-01\/layers-000-009\/sha256:[a-f0-9]{64}$/,
+    );
   });
 
   it('redacts lease tokens from fleet run responses while preserving lease responses', () => {

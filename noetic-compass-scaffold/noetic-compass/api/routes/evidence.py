@@ -84,6 +84,7 @@ class EvidencePacket(BaseModel):
     matched_controls: dict[str, Any] | None = None
     verification: dict[str, Any] | None = None
     generation_readiness: dict[str, Any] | None = None
+    distributed_fleet: dict[str, Any] | None = None
 
 
 class VerifyCheck(BaseModel):
@@ -888,6 +889,14 @@ def build_packet_for_trace(trace_id: str) -> EvidencePacket:
             return _dev_fixture_fallback_packet(f"{type(exc).__name__}: {exc}")
     if trace_id == _CAS_HARNESS_REFERENCE_TRACE_ID:
         return _cas_harness_reference_packet()
+    try:
+        from api.services.cas_harness_merged_evidence_packets import (
+            load_merged_fleet_evidence_packet_payload,
+        )
+
+        return EvidencePacket.model_validate(load_merged_fleet_evidence_packet_payload(trace_id))
+    except FileNotFoundError:
+        pass
     trace = _load_trace_artifact(trace_id)
     if trace is None:
         raise FileNotFoundError(trace_id)

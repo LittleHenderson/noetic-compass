@@ -354,6 +354,7 @@ export interface CasHarnessFleetJobReceiptRequest {
   produced_outputs?: string[];
   missing_outputs?: string[];
   evidence_packet_fragment_ref?: string | null;
+  evidence_packet_fragment_payload?: Record<string, unknown> | null;
   error_message?: string | null;
   job_status?: 'completed' | 'failed';
 }
@@ -369,6 +370,7 @@ export interface CasHarnessFleetEvidenceFragmentRefInput {
   expected_outputs: readonly string[];
   produced_outputs: readonly string[];
   missing_outputs?: readonly string[];
+  evidence_packet_fragment_payload?: Record<string, unknown> | null;
 }
 
 export interface CasHarnessFleetRun {
@@ -689,7 +691,7 @@ export async function buildCasHarnessFleetEvidenceFragmentRef(
     ...explicitMissingOutputs,
     ...expectedOutputs.filter((output) => !producedOutputs.includes(output)),
   ])).sort();
-  const payload = {
+  const payload: Record<string, unknown> = {
     schema_version: 'cas_harness_evidence_fragment.v1',
     audit_id: auditId,
     job_id: jobId,
@@ -702,6 +704,11 @@ export async function buildCasHarnessFleetEvidenceFragmentRef(
     produced_outputs: producedOutputs,
     missing_outputs: missingOutputs,
   };
+  if (input.evidence_packet_fragment_payload !== undefined && input.evidence_packet_fragment_payload !== null) {
+    payload.fragment_payload_sha256 = await sha256Hex(
+      stableJsonStringify(input.evidence_packet_fragment_payload),
+    );
+  }
   const digest = await sha256Hex(stableJsonStringify(payload));
   return `cas-fragment://${auditId}/${jobId}/${workerId}/${shardId}/sha256:${digest}`;
 }

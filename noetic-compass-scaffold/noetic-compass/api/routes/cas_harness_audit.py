@@ -505,6 +505,7 @@ class FleetJobResponse(BaseModel):
     lease_token: str | None = None
     lease_expires_at: str | None = None
     evidence_packet_fragment_ref: str | None = None
+    evidence_packet_fragment_payload_sha256: str | None = None
     produced_outputs: list[str]
     missing_outputs: list[str]
     error_message: str | None = None
@@ -586,6 +587,7 @@ class FleetJobReceiptRequest(BaseModel):
     produced_outputs: list[str] = Field(default_factory=list, max_length=32)
     missing_outputs: list[str] = Field(default_factory=list, max_length=32)
     evidence_packet_fragment_ref: str | None = Field(default=None, min_length=1, max_length=240)
+    evidence_packet_fragment_payload: dict[str, object] | None = None
     error_message: str | None = Field(default=None, min_length=1, max_length=500)
     job_status: Literal["completed", "failed"] = "completed"
 
@@ -860,6 +862,7 @@ async def submit_distributed_fleet_job_receipt(
             produced_outputs=req.produced_outputs,
             missing_outputs=req.missing_outputs,
             evidence_packet_fragment_ref=req.evidence_packet_fragment_ref,
+            evidence_packet_fragment_payload=req.evidence_packet_fragment_payload,
             error_message=req.error_message,
             job_status=req.job_status,
         )
