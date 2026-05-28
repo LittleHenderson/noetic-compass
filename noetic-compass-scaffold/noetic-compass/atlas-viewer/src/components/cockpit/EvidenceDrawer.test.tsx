@@ -64,6 +64,16 @@ const packet = {
   caveats: ['Unit fixture packet.'],
 };
 
+function packetWithHashes(hashes: Record<string, unknown>): Record<string, unknown> {
+  return {
+    ...packet,
+    hashes: {
+      ...packet.hashes,
+      ...hashes,
+    },
+  };
+}
+
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
@@ -109,6 +119,196 @@ describe('EvidenceDrawer', () => {
     expect(url).toBe('/api/evidence/trace-123');
     expect(init.method).toBe('GET');
     expect(init.headers).toMatchObject({ Accept: 'application/json' });
+  });
+
+  it('surfaces S3 anchor proof from the packet hashes block', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse(
+        packetWithHashes({
+          packet_without_hashes_sha256:
+            'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee11111111',
+          hash_log_entry_sha256:
+            '11111111112222222222333333333344444444445555555555aaaaaaaa',
+          external_anchor: {
+            status: 'anchored',
+            mode: 's3',
+            anchor_uri: 's3://cas-evidence-anchor/audit-1/hash-log.json',
+            manifest_sha256:
+              '99999999998888888888777777777766666666665555555555bbbbbbbb',
+          },
+        }),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'primitive',
+          title: 'Anchored packet',
+          evidence_ref: { trace_id: 'trace-123' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
+      'Anchored to S3',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
+      'configured S3 anchor target',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-uri')).toHaveTextContent(
+      's3://cas-evidence-anchor/audit-1/hash-log.json',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-hash-log')).toHaveTextContent(
+      '1111111111...aaaaaaaa',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-packet-hash')).toHaveTextContent(
+      'aaaaaaaaaa...11111111',
+    );
+  });
+
+  it('surfaces local anchor proof without claiming S3 durability', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse(
+        packetWithHashes({
+          hash_log_entry_sha256:
+            'abcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcdefabcd',
+          external_anchor: {
+            status: 'anchored',
+            mode: 'local',
+            anchor_uri: 'file:///var/lib/noetic/evidence-anchor/local.jsonl',
+            manifest_sha256:
+              '123456789012345678901234567890123456789012345678901234567890abcd',
+          },
+        }),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'primitive',
+          title: 'Local anchor packet',
+          evidence_ref: { trace_id: 'trace-123' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
+      'Anchored locally',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
+      'local anchor manifest',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-mode')).toHaveTextContent('local');
+  });
+
+  it('marks disabled external anchoring as a warning state', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse(
+        packetWithHashes({
+          hash_log_entry_sha256:
+            'fedcbafedcbafedcbafedcbafedcbafedcbafedcbafedcbafedcbafedcbaabcd',
+          external_anchor: {
+            status: 'disabled',
+            mode: 'disabled',
+            reason: 'CAS_HARNESS_EVIDENCE_ANCHOR_MODE=disabled',
+          },
+        }),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'primitive',
+          title: 'Disabled anchor packet',
+          evidence_ref: { trace_id: 'trace-123' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
+      'Anchor disabled',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
+      'external anchoring is disabled',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-hash-log')).toHaveTextContent(
+      'fedcbafedc...dcbaabcd',
+    );
+  });
+
+  it('marks failed external anchoring without hiding the local hash log', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse(
+        packetWithHashes({
+          hash_log_entry_sha256:
+            '012345678901234567890123456789012345678901234567890123456789abcd',
+          external_anchor: {
+            status: 'failed',
+            mode: 's3',
+            reason: 'S3 write denied',
+          },
+        }),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'primitive',
+          title: 'Failed anchor packet',
+          evidence_ref: { trace_id: 'trace-123' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
+      'Anchor failed',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
+      'locally hash-logged',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-hash-log')).toHaveTextContent(
+      '0123456789...6789abcd',
+    );
+  });
+
+  it('does not invent anchor proof for legacy packets', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(packet));
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'primitive',
+          title: 'Legacy packet',
+          evidence_ref: { trace_id: 'trace-123' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
+      'No external anchor proof',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
+      'does not declare an external hash-log anchor',
+    );
   });
 
   it('derives the Evidence Packet host from VITE_ATLAS_API_BASE_URL in hosted builds', async () => {
