@@ -85,7 +85,13 @@ def _register_worker(
     return resp.json()
 
 
-def _fragment_ref_for(audit: dict, job: dict, *, produced_outputs: list[str] | None = None) -> str:
+def _fragment_ref_for(
+    audit: dict,
+    job: dict,
+    *,
+    produced_outputs: list[str] | None = None,
+    evidence_packet_fragment_payload: dict | None = None,
+) -> str:
     produced = produced_outputs or job["expected_outputs"]
     return build_evidence_fragment_ref(
         audit_id=audit["audit_id"],
@@ -97,7 +103,41 @@ def _fragment_ref_for(audit: dict, job: dict, *, produced_outputs: list[str] | N
         shard_id=job["shard_id"],
         expected_outputs=job["expected_outputs"],
         produced_outputs=produced,
+        evidence_packet_fragment_payload=evidence_packet_fragment_payload,
     )
+
+
+def _stage19_stage20_verifier_fragment() -> dict:
+    return {
+        "schema_version": "cas_harness_evidence_fragment.v1",
+        "provenance": {
+            "source_reports": [
+                "stage19_verification_stack_worker_fragment.json",
+                "stage20_generation_readiness_worker_fragment.json",
+            ],
+        },
+        "verification": {
+            "accepted": True,
+            "mode": "BALANCED",
+            "mode_profile": {
+                "accepted_accuracy": 0.91,
+                "coverage": 0.74,
+            },
+            "proof_chips": [
+                {"id": "model_proof", "status": "verified", "detail": "Model shard loaded."},
+                {"id": "cas_readout", "status": "verified", "detail": "CAS readout present."},
+                {"id": "causal_proof", "status": "verified", "detail": "Causal proof present."},
+                {"id": "control_proof", "status": "verified", "detail": "Control proof present."},
+                {"id": "output_proof", "status": "verified", "detail": "Output proof present."},
+                {"id": "packet_proof", "status": "present", "detail": "Packet proof present."},
+            ],
+        },
+        "generation_readiness": {
+            "generation_readiness": "allow",
+            "risk_score": 0.09,
+            "policy_version": "stage20_worker_fragment_v1",
+        },
+    }
 
 
 def test_fleet_routes_registered(client):
@@ -218,9 +258,18 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
         "missing_output_jobs": 0,
         "distributed_merge_status": "complete",
     }
-    assert verifier_body["proof_chip_gate"] == "blocked"
+    assert verifier_body["proof_chip_gate"] == "unavailable"
     assert "no explicit proof-chip verifier decision" in " ".join(verifier_body["blockers"])
     assert "FLAG FOR HUMAN REVIEW" in " ".join(verifier_body["next_actions"])
+
+    packet = client.get(f"/evidence/{merged_body['merged_packet_trace_id']}", headers=auth_headers)
+    assert packet.status_code == 200
+    packet_body = packet.json()
+    assert packet_body["schema_version"] == "cas_harness_evidence_packet_v1"
+    assert packet_body["distributed_fleet"]["audit_id"] == audit["audit_id"]
+    assert packet_body["distributed_fleet"]["total_jobs"] == 1
+    assert packet_body["verification"]["proof_chips"]
+    assert packet_body["verification"]["accepted"] is None
 
 
 def test_fleet_verifier_requires_merged_packet(client, auth_headers):
@@ -240,6 +289,97 @@ def test_fleet_verifier_requires_merged_packet(client, auth_headers):
 
     assert verifier.status_code == 409
     assert "Merge fleet evidence before verifier review" in verifier.text
+
+
+def test_fleet_verifier_accepts_only_with_stage19_stage20_fragment_payload(client, auth_headers):
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    verifier_fragment = _stage19_stage20_verifier_fragment()
+    fragment_ref = _fragment_ref_for(
+        audit,
+        leased,
+        evidence_packet_fragment_payload=verifier_fragment,
+    )
+
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": verifier_fragment,
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    )
+    assert merged.status_code == 200
+    trace_id = merged.json()["merged_packet_trace_id"]
+
+    verifier = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/verifier",
+        headers=auth_headers,
+    )
+    assert verifier.status_code == 200
+    verifier_body = verifier.json()
+    assert verifier_body["verdict"] == "ACCEPT"
+    assert verifier_body["confidence"] == 0.91
+    assert verifier_body["proof_chip_gate"] == "passed"
+    assert verifier_body["source"] == "stage19_verification_stack+stage20_generation_readiness"
+
+    packet = client.get(f"/evidence/{trace_id}", headers=auth_headers)
+    assert packet.status_code == 200
+    packet_body = packet.json()
+    assert packet_body["verification"]["accepted"] is True
+    assert packet_body["generation_readiness"]["generation_readiness"] == "allow"
+    assert packet_body["distributed_fleet"]["jobs"][0]["evidence_packet_fragment_payload_sha256"]
+
+
+def test_fleet_receipt_rejects_payload_when_fragment_ref_omits_payload_hash(client, auth_headers):
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    verifier_fragment = _stage19_stage20_verifier_fragment()
+    fragment_ref_without_payload_hash = _fragment_ref_for(audit, leased)
+
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": fragment_ref_without_payload_hash,
+            "evidence_packet_fragment_payload": verifier_fragment,
+        },
+        headers=auth_headers,
+    )
+
+    assert receipt.status_code == 409
+    assert "fragment ref failed hash/assignment validation" in receipt.text
 
 
 def test_duplicate_worker_registration_is_rejected(client, auth_headers):

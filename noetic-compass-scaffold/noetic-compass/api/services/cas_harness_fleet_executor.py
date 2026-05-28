@@ -13,7 +13,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime, timedelta
 import hashlib
 import json
-from typing import Literal
+from typing import Any, Mapping, Literal
 
 from api.services.cas_harness_distributed_audits import (
     DistributedAuditStateError,
@@ -83,6 +83,7 @@ class FleetJobRecord:
     lease_token_hash: str | None = None
     lease_expires_at: str | None = None
     evidence_packet_fragment_ref: str | None = None
+    evidence_packet_fragment_payload: dict[str, Any] | None = None
     produced_outputs: tuple[str, ...] = ()
     missing_outputs: tuple[str, ...] = ()
     error_message: str | None = None
@@ -102,6 +103,11 @@ class FleetJobRecord:
             "lease_token": self.lease_token if include_lease_token else None,
             "lease_expires_at": self.lease_expires_at,
             "evidence_packet_fragment_ref": self.evidence_packet_fragment_ref,
+            "evidence_packet_fragment_payload_sha256": _fragment_payload_sha256(
+                self.evidence_packet_fragment_payload
+            )
+            if self.evidence_packet_fragment_payload is not None
+            else None,
             "produced_outputs": list(self.produced_outputs),
             "missing_outputs": list(self.missing_outputs),
             "error_message": self.error_message,
@@ -159,6 +165,11 @@ def reset_fleet_executor_for_tests() -> None:
     _WORKERS.clear()
     _FLEET_RUNS.clear()
     _FRAGMENT_REFS.clear()
+    from api.services.cas_harness_merged_evidence_packets import (
+        reset_merged_fleet_evidence_packets_for_tests,
+    )
+
+    reset_merged_fleet_evidence_packets_for_tests()
 
 
 def register_worker(
@@ -321,6 +332,7 @@ def submit_job_receipt(
     lease_token: str,
     produced_outputs: list[str],
     evidence_packet_fragment_ref: str | None = None,
+    evidence_packet_fragment_payload: dict[str, Any] | None = None,
     missing_outputs: list[str] | None = None,
     error_message: str | None = None,
     job_status: Literal["completed", "failed"] = "completed",
@@ -365,6 +377,7 @@ def submit_job_receipt(
             worker=worker,
             produced_outputs=produced,
             missing_outputs=missing,
+            evidence_packet_fragment_payload=evidence_packet_fragment_payload,
             fragment_ref=fragment_ref,
         )
 
@@ -372,6 +385,7 @@ def submit_job_receipt(
     job.produced_outputs = produced
     job.missing_outputs = missing
     job.evidence_packet_fragment_ref = fragment_ref if fragment_ref else None
+    job.evidence_packet_fragment_payload = evidence_packet_fragment_payload if fragment_ref else None
     job.error_message = error_message.strip() if error_message else None
     job.status = "failed" if job_status == "failed" else "completed"
     job.lease_token = None
@@ -406,12 +420,24 @@ def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
         distributed = merge_distributed_audit(audit_id)
         run.status = "FAILED" if run.verifier_gate_status == "blocked_failed_worker" else "COMPLETE"
         run.merged_packet_trace_id = distributed.evidence_packet_trace_id if distributed else None
+        if distributed is not None and run.merged_packet_trace_id:
+            from api.services.cas_harness_merged_evidence_packets import (
+                write_merged_fleet_evidence_packet,
+            )
+
+            write_merged_fleet_evidence_packet(run=run, distributed=distributed)
         run.updated_at = _utc_now()
         return run
 
     distributed = merge_distributed_audit(audit_id)
     run.status = "COMPLETE"
     run.merged_packet_trace_id = distributed.evidence_packet_trace_id if distributed else None
+    if distributed is not None and run.merged_packet_trace_id:
+        from api.services.cas_harness_merged_evidence_packets import (
+            write_merged_fleet_evidence_packet,
+        )
+
+        write_merged_fleet_evidence_packet(run=run, distributed=distributed)
     run.merge_reason = (
         "All fleet job fragments are present. Merged Evidence Packet is ready for "
         "the verifier decision layer; fleet executor does not fabricate ACCEPT."
@@ -635,6 +661,7 @@ def build_evidence_fragment_ref(
     expected_outputs: list[str] | tuple[str, ...],
     produced_outputs: list[str] | tuple[str, ...],
     missing_outputs: list[str] | tuple[str, ...] = (),
+    evidence_packet_fragment_payload: Mapping[str, Any] | None = None,
 ) -> str:
     payload = _canonical_fragment_payload(
         audit_id=audit_id,
@@ -647,6 +674,7 @@ def build_evidence_fragment_ref(
         expected_outputs=tuple(expected_outputs),
         produced_outputs=tuple(produced_outputs),
         missing_outputs=tuple(missing_outputs),
+        evidence_packet_fragment_payload=evidence_packet_fragment_payload,
     )
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
     return f"cas-fragment://{audit_id}/{job_id}/{worker_id}/{shard_id}/sha256:{digest}"
@@ -659,6 +687,7 @@ def _validate_fragment_ref(
     worker: FleetWorkerRecord,
     produced_outputs: tuple[str, ...],
     missing_outputs: tuple[str, ...],
+    evidence_packet_fragment_payload: dict[str, Any] | None,
     fragment_ref: str,
 ) -> None:
     expected = build_evidence_fragment_ref(
@@ -672,6 +701,7 @@ def _validate_fragment_ref(
         expected_outputs=job.expected_outputs,
         produced_outputs=produced_outputs,
         missing_outputs=missing_outputs,
+        evidence_packet_fragment_payload=evidence_packet_fragment_payload,
     )
     if fragment_ref != expected:
         raise FleetExecutorStateError(
@@ -693,8 +723,9 @@ def _canonical_fragment_payload(
     expected_outputs: tuple[str, ...],
     produced_outputs: tuple[str, ...],
     missing_outputs: tuple[str, ...],
+    evidence_packet_fragment_payload: Mapping[str, Any] | None = None,
 ) -> dict[str, object]:
-    return {
+    payload: dict[str, object] = {
         "schema_version": "cas_harness_evidence_fragment.v1",
         "audit_id": audit_id,
         "job_id": job_id,
@@ -707,6 +738,18 @@ def _canonical_fragment_payload(
         "produced_outputs": list(produced_outputs),
         "missing_outputs": list(missing_outputs),
     }
+    payload_sha = _fragment_payload_sha256(evidence_packet_fragment_payload)
+    if payload_sha is not None:
+        payload["fragment_payload_sha256"] = payload_sha
+    return payload
+
+
+def _fragment_payload_sha256(payload: Mapping[str, Any] | None) -> str | None:
+    if payload is None:
+        return None
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    ).hexdigest()
 
 
 def _dedupe_nonempty(values: list[str]) -> list[str]:
