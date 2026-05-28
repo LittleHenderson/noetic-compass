@@ -28,6 +28,27 @@ services:
         value: https://noeticcompass.com,https://www.noeticcompass.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
       - key: NC_CORS_ORIGIN_REGEX
         value: 'https://(.*\.)?noeticcompass\.com|https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?|http://127\.0\.0\.1(:\d+)?'
+      # CAS Harness Evidence Packet anchoring. Keep these dashboard-managed:
+      # setting mode=s3 without valid AWS credentials makes every new packet
+      # report Anchor failed. See docs/DEPLOYMENT.md for the smoke verifier.
+      - key: CAS_HARNESS_EVIDENCE_ANCHOR_MODE
+        sync: false
+      - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET
+        sync: false
+      - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX
+        sync: false
+      - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION
+        sync: false
+      - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE
+        sync: false
+      - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS
+        sync: false
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_SESSION_TOKEN
+        sync: false
       - key: NC_DATABASE_URL
         sync: false
       - key: NC_OPENAI_API_KEY

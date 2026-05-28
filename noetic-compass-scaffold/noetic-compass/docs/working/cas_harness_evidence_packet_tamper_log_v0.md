@@ -163,3 +163,17 @@ Beta v0 is acceptable when:
 - Prefer explicit schema migration over best-effort parsing once beta partners start storing packets.
 - Treat `trace_id` as run-scoped and `session_id` as conversation-scoped. Do not reuse `trace_id` across retries; link retries with `retry_of_trace_id`.
 - Store operator/admin access to packets as separate audit events. Reading the recorder should itself be auditable.
+
+## Current Beta Implementation Hook
+
+As of the CAS Harness fleet packet work, merged distributed Evidence Packets include canonical packet hashes, append-only log metadata, and an `external_anchor` receipt. The anchor can run in `disabled`, `local`, or `s3` mode. S3 mode records the bucket, key, manifest hash, and write receipt in the packet hash block so Atlas can distinguish `Anchored to S3`, `Anchor disabled`, `Anchor failed`, and `No external anchor proof`.
+
+Deployment verification is handled by:
+
+```bash
+python scripts/verify_evidence_anchor_deployed.py \
+  --base-url https://noetic-compass-api.onrender.com \
+  --require-anchor-mode s3
+```
+
+That smoke creates one tiny fleet packet, runs the verifier, fetches `/evidence/{trace_id}`, and requires the `/evidence/{trace_id}/verify` external-anchor check to match. It is not a model-quality eval; it is the production proof that the black-box flight-recorder artifact is being externally anchored.

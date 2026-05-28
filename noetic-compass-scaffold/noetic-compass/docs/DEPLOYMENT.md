@@ -201,6 +201,57 @@ railway domain add api.noetic-compass.com
 
 The Vercel dashboard routes `https://noeticcompass.com/api/*` to this Render API with `dashboard/vercel.json`.
 
+### CAS Harness Evidence Packet S3 Anchoring
+
+Evidence Packets can be written with a local hash-chain receipt or an external S3 anchor receipt. For the alpha production API, use S3 once the bucket and AWS credentials are ready.
+
+Set these on the Render `noetic-compass-api` service:
+
+```bash
+CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET=<bucket-name-only>
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX=cas-harness/evidence-anchors
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION=us-east-1
+AWS_ACCESS_KEY_ID=<access-key-id>
+AWS_SECRET_ACCESS_KEY=<secret-access-key>
+```
+
+Important AWS naming rule: `CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET` is only the bucket name. Do not include `s3://`, and do not put a slash path in the bucket field. Put folder-like paths in `CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX`.
+
+Optional object-lock retention:
+
+```bash
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=30
+```
+
+Only set `CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3` after the bucket, region, and credentials are valid. If mode is `s3` but the write fails, every new packet will honestly report `Anchor failed`.
+
+After setting the Render env vars and redeploying, run the deployed smoke verifier:
+
+```bash
+cd noetic-compass-scaffold/noetic-compass
+python scripts/verify_evidence_anchor_deployed.py \
+  --base-url https://noetic-compass-api.onrender.com \
+  --require-anchor-mode s3
+```
+
+The smoke creates one tiny distributed audit, merges an Evidence Packet, runs the verifier, fetches `/evidence/{trace_id}`, and checks `/evidence/{trace_id}/verify`. It does not run real model weights; it verifies the packet anchoring control plane.
+
+Success means:
+
+- packet `hashes.external_anchor.mode` is `s3`
+- packet `hashes.external_anchor.status` is `anchored`
+- `/evidence/{trace_id}/verify` returns `overall: all_match`
+- the `merged_packet_external_anchor` check matches
+- Atlas Evidence Drawer shows `Anchored to S3`
+
+Failure labels:
+
+- `Anchor disabled`: Render is unset or mode is `disabled`.
+- `Anchor failed`: mode is `s3`, but the bucket, region, credentials, or object-lock settings are wrong.
+- `No external anchor proof`: old packet or packet generated before external anchor metadata was written.
+
 ## Vercel Deployment (Dashboard)
 
 Deploy the dashboard as a static site on Vercel with zero-config HTTPS and global CDN.
