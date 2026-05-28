@@ -116,6 +116,15 @@ def write_merged_fleet_evidence_packet(
         hash_log_entry=hash_log_entry,
     )
     _write_packet_to_store(trace_id, packet)
+    from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
+
+    packet["hashes"]["external_anchor"] = anchor_hash_log_entry(
+        trace_id=trace_id,
+        hash_log_entry=hash_log_entry,
+        packet_path=_packet_path(trace_id),
+        hash_log_path=_hash_log_path(),
+    )
+    _write_packet_to_store(trace_id, packet)
     _MERGED_FLEET_PACKETS[trace_id] = packet
     return load_merged_fleet_evidence_packet_payload(trace_id)
 
