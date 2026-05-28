@@ -75,6 +75,18 @@ def test_main_fails_when_s3_is_required_but_anchor_is_disabled(monkeypatch: pyte
         verifier.main(["--base-url", "https://api.example.test", "--bearer-token", "cli-token"])
 
 
+def test_main_fails_when_s3_verify_did_not_reread_object(monkeypatch: pytest.MonkeyPatch) -> None:
+    api = _FakeAnchorApi(
+        anchor_status="anchored",
+        anchor_mode="s3",
+        verify_notes="S3 anchor write receipt is present; object re-read is intentionally out-of-band",
+    )
+    monkeypatch.setattr(verifier, "urlopen", api.urlopen)
+
+    with pytest.raises(verifier.AnchorSmokeFailure, match="expected /verify to re-read"):
+        verifier.main(["--base-url", "https://api.example.test", "--bearer-token", "cli-token"])
+
+
 class _FakeAnchorApi:
     def __init__(
         self,
@@ -82,10 +94,12 @@ class _FakeAnchorApi:
         anchor_status: str,
         anchor_mode: str,
         worker_already_registered: bool = False,
+        verify_notes: str = "S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry",
     ) -> None:
         self.anchor_status = anchor_status
         self.anchor_mode = anchor_mode
         self.worker_already_registered = worker_already_registered
+        self.verify_notes = verify_notes
         self.worker_heartbeat_count = 0
         self.audit_id = "audit-anchor-smoke"
         self.trace_id = f"{self.audit_id}-distributed-merge"
@@ -243,7 +257,7 @@ class _FakeAnchorApi:
                             "expected": "a" * 64,
                             "actual": "a" * 64,
                             "match": True,
-                            "notes": "S3 anchor write receipt is present",
+                            "notes": self.verify_notes,
                         }
                     ],
                 }

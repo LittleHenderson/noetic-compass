@@ -227,6 +227,17 @@ def main(argv: list[str] | None = None) -> int:
         verify.get("overall") == "all_match" and bool(verify_check.get("match")),
         f"expected /verify all_match with external anchor match; got {verify}",
     )
+    if anchor_mode == "s3":
+        verify_notes = verify_check.get("notes")
+        normalized_notes = verify_notes.lower() if isinstance(verify_notes, str) else ""
+        require_gate(
+            "anchor-reread",
+            "object was re-read" in normalized_notes and "manifest commits" in normalized_notes,
+            (
+                "expected /verify to re-read the S3 anchor object. "
+                f"External-anchor check notes were {verify_notes!r}."
+            ),
+        )
     ok(f"anchor status={anchor_status} mode={anchor_mode} uri={anchor_uri or '(none)'}")
     print()
     print("PASS: deployed Evidence Packet anchor smoke passed.")
