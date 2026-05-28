@@ -11,6 +11,10 @@ from api.services.cas_harness_fleet_executor import (
     list_workers,
     reset_fleet_executor_for_tests,
 )
+from api.services.cas_harness_merged_evidence_packets import (
+    load_merged_fleet_evidence_packet_payload,
+    reset_merged_fleet_evidence_packets_for_tests,
+)
 
 
 def setup_function() -> None:
@@ -167,7 +171,8 @@ def test_fleet_prepare_requires_dispatched_distributed_audit(client, auth_header
     assert "Dispatch the distributed audit" in resp.text
 
 
-def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_headers):
+def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_headers, monkeypatch, tmp_path):
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
     audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
     worker_assignment = audit["worker_evidence"][0]
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
@@ -270,6 +275,39 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     assert packet_body["distributed_fleet"]["total_jobs"] == 1
     assert packet_body["verification"]["proof_chips"]
     assert packet_body["verification"]["accepted"] is None
+    assert packet_body["hashes"]["hash_log_entry_sha256"]
+
+    reset_merged_fleet_evidence_packets_for_tests()
+    reloaded = load_merged_fleet_evidence_packet_payload(merged_body["merged_packet_trace_id"])
+    assert reloaded["trace_id"] == merged_body["merged_packet_trace_id"]
+
+    verified = client.post(f"/evidence/{merged_body['merged_packet_trace_id']}/verify", headers=auth_headers)
+    assert verified.status_code == 200
+    verify_body = verified.json()
+    assert verify_body["overall"] == "all_match"
+    assert {
+        check["artifact"]
+        for check in verify_body["checks"]
+    }.issuperset(
+        {
+            "merged_packet_payload",
+            "merged_packet_hash_log",
+            "merged_packet_hash_chain",
+        }
+    )
+
+    (tmp_path / "hash-log.jsonl").write_text(
+        (tmp_path / "hash-log.jsonl").read_text(encoding="utf-8") + "not-json\n",
+        encoding="utf-8",
+    )
+    tampered = client.post(f"/evidence/{merged_body['merged_packet_trace_id']}/verify", headers=auth_headers)
+    assert tampered.status_code == 200
+    tampered_body = tampered.json()
+    assert tampered_body["overall"] == "partial_mismatch"
+    assert any(
+        check["artifact"] == "merged_packet_hash_chain" and check["match"] is False
+        for check in tampered_body["checks"]
+    )
 
 
 def test_fleet_verifier_requires_merged_packet(client, auth_headers):
@@ -291,7 +329,13 @@ def test_fleet_verifier_requires_merged_packet(client, auth_headers):
     assert "Merge fleet evidence before verifier review" in verifier.text
 
 
-def test_fleet_verifier_accepts_only_with_stage19_stage20_fragment_payload(client, auth_headers):
+def test_fleet_verifier_accepts_only_with_stage19_stage20_fragment_payload(
+    client,
+    auth_headers,
+    monkeypatch,
+    tmp_path,
+):
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
     audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
     worker_assignment = audit["worker_evidence"][0]
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
