@@ -138,6 +138,16 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
             "status": "completed",
             "method_label": "subspace-ablation-fixture",
             "run_id": "ablation-run",
+            "primary_result": {
+                "layer": 2,
+                "original_accuracy": 0.95625,
+                "ablated_accuracy": 0.6689732142857143,
+                "true_disruption": 0.2872767857142857,
+                "chance_baseline_accuracy": 0.025,
+                "random_same_rank_mean_disruption": 0.0006808035714286175,
+                "random_same_rank_max_disruption": 0.002678571428571419,
+                "guard_status": "passed",
+            },
             "artifacts": [{"artifact_id": "ablation", "content_sha256": "c" * 64}],
             "provenance": {"worker": "fixture"},
         },
@@ -146,9 +156,14 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
         tmp_path / "cover.json",
         {
             "schema_version": "stage9_40e_cover.v0",
-            "status": "completed",
+            "status": "candidate_cover_discovery_completed",
             "method_label": "cover-discovery-fixture",
             "run_id": "cover-run",
+            "selected_layer": 2,
+            "top_k": 8,
+            "cover_map": {"^0|P": {"true_cover": ["L2N1"]}, "^0|C": {"true_cover": ["L2N2"]}},
+            "true_cover_per_class": {"^0|P": ["L2N1"], "^0|C": ["L2N2"]},
+            "caveat": "candidate covers need matched ablation validation",
             "hashes": {"cover_sha": "d" * 64},
         },
     )
@@ -176,6 +191,15 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
     assert packet["tier_statuses"]["verifier"] == "missing"
     assert packet["causal_proof"]["source_fields"]["provenance"] == {"worker": "fixture"}
     assert packet["control_proof"]["source_fields"]["hashes"] == {"cover_sha": "d" * 64}
+    causal_primary = packet["causal_proof"]["summary"]["primary_result"]
+    assert causal_primary["original_accuracy_pct"] == 95.625
+    assert causal_primary["ablated_accuracy_pct"] == 66.897321
+    assert causal_primary["true_disruption_pp"] == 28.727679
+    assert causal_primary["random_same_rank_max_disruption_pp"] == 0.267857
+    assert causal_primary["guard_status"] == "passed"
+    assert packet["control_proof"]["summary"]["class_count"] == 2
+    assert packet["control_proof"]["summary"]["selected_layer"] == 2
+    assert packet["control_proof"]["summary"]["top_k"] == 8
     assert packet["output_bridge_proof"]["summary"]["run_id"] == "bridge-run"
     assert packet["provenance"]["input_count"] == 4
     assert packet["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
@@ -196,3 +220,53 @@ def test_writes_json_and_markdown_packet(tmp_path):
     assert "| Causal proof | missing |" in markdown
     assert "95.625%" in markdown
     assert "49.241071%" in markdown
+
+
+def test_markdown_surfaces_causal_and_cover_numbers(tmp_path):
+    readout = _write_json(tmp_path / "readout.json", _readout_fixture())
+    ablation = _write_json(
+        tmp_path / "ablation.json",
+        {
+            "schema_version": "stage9_40e_ablation.v0",
+            "status": "completed",
+            "method_label": "subspace-ablation-fixture",
+            "primary_result": {
+                "layer": 2,
+                "original_accuracy": 0.95625,
+                "ablated_accuracy": 0.6689732142857143,
+                "true_disruption": 0.2872767857142857,
+                "chance_baseline_accuracy": 0.025,
+                "random_same_rank_mean_disruption": 0.0006808035714286175,
+                "random_same_rank_max_disruption": 0.002678571428571419,
+                "guard_status": "passed",
+            },
+        },
+    )
+    cover = _write_json(
+        tmp_path / "cover.json",
+        {
+            "schema_version": "stage9_40e_cover.v0",
+            "status": "candidate_cover_discovery_completed",
+            "method_label": "cover-discovery-fixture",
+            "selected_layer": 2,
+            "top_k": 8,
+            "cover_map": {"^0|P": {"true_cover": ["L2N1"]}},
+            "caveat": "candidate cover discovery",
+        },
+    )
+
+    packet = merge_stage9_40e_evidence_packet.build_packet(
+        readout_report=readout,
+        ablation_report=ablation,
+        cover_report=cover,
+    )
+    markdown = merge_stage9_40e_evidence_packet.render_markdown(packet)
+
+    assert "## Causal Proof" in markdown
+    assert "| After learned-subspace ablation | 66.8973% |" in markdown
+    assert "| True disruption | 28.7277 pp |" in markdown
+    assert "| Random same-rank max disruption | 0.267857 pp |" in markdown
+    assert "| Guard status | passed |" in markdown
+    assert "## Control / Cover Proof" in markdown
+    assert "| Candidate classes | 1 |" in markdown
+    assert "| Top-k neurons per class | 8 |" in markdown

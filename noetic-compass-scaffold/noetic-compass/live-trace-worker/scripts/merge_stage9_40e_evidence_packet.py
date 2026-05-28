@@ -347,6 +347,84 @@ def _make_baseline_proof(readout: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _pct(value: Any) -> float | None:
+    if value is None:
+        return None
+    try:
+        return round(float(value) * 100.0, 6)
+    except (TypeError, ValueError):
+        return None
+
+
+def _make_report_summary(tier_name: str, report: dict[str, Any]) -> dict[str, Any]:
+    summary: dict[str, Any] = {
+        "status": report.get("status"),
+        "method_label": report.get("method_label"),
+        "run_id": report.get("run_id"),
+        "trace_id": report.get("trace_id"),
+    }
+
+    if tier_name == "subspace_ablation":
+        primary = report.get("primary_result")
+        if isinstance(primary, dict):
+            summary["primary_result"] = {
+                "layer": primary.get("layer"),
+                "original_accuracy": primary.get("original_accuracy"),
+                "original_accuracy_pct": _pct(primary.get("original_accuracy")),
+                "ablated_accuracy": primary.get("ablated_accuracy"),
+                "ablated_accuracy_pct": _pct(primary.get("ablated_accuracy")),
+                "true_disruption": primary.get("true_disruption"),
+                "true_disruption_pp": _pct(primary.get("true_disruption")),
+                "chance_baseline_accuracy": primary.get("chance_baseline_accuracy"),
+                "chance_baseline_accuracy_pct": _pct(
+                    primary.get("chance_baseline_accuracy")
+                ),
+                "random_same_rank_mean_disruption": primary.get(
+                    "random_same_rank_mean_disruption"
+                ),
+                "random_same_rank_mean_disruption_pp": _pct(
+                    primary.get("random_same_rank_mean_disruption")
+                ),
+                "random_same_rank_max_disruption": primary.get(
+                    "random_same_rank_max_disruption"
+                ),
+                "random_same_rank_max_disruption_pp": _pct(
+                    primary.get("random_same_rank_max_disruption")
+                ),
+                "guard_status": primary.get("guard_status"),
+            }
+
+    if tier_name == "cover_discovery":
+        cover_map = report.get("cover_map")
+        true_cover_per_class = report.get("true_cover_per_class")
+        matched_controls = report.get("matched_controls")
+        if isinstance(cover_map, dict):
+            summary["class_count"] = len(cover_map)
+        elif isinstance(true_cover_per_class, dict):
+            summary["class_count"] = len(true_cover_per_class)
+        summary["selected_layer"] = report.get("selected_layer")
+        summary["top_k"] = report.get("top_k")
+        if isinstance(true_cover_per_class, dict):
+            summary["true_cover_classes"] = len(true_cover_per_class)
+        if isinstance(matched_controls, dict):
+            summary["matched_controls"] = {
+                "random_same_size_classes": len(
+                    matched_controls.get("random_same_size") or {}
+                )
+                if isinstance(matched_controls.get("random_same_size"), dict)
+                else None,
+                "wrong_class_reference_classes": len(
+                    matched_controls.get("wrong_class_references") or {}
+                )
+                if isinstance(matched_controls.get("wrong_class_references"), dict)
+                else None,
+            }
+        if "caveat" in report:
+            summary["caveat"] = report["caveat"]
+
+    return summary
+
+
 def _make_optional_proof(
     *,
     tier_name: str,
@@ -375,12 +453,7 @@ def _make_optional_proof(
             "required_for_final_verdict": True,
             "source_report": artifact,
             "source_fields": _copy_known_fields(report),
-            "summary": {
-                "status": report.get("status"),
-                "method_label": report.get("method_label"),
-                "run_id": report.get("run_id"),
-                "trace_id": report.get("trace_id"),
-            },
+            "summary": _make_report_summary(tier_name, report),
         },
         artifact,
     )
@@ -500,6 +573,41 @@ def render_markdown(packet: dict[str, Any]) -> str:
     baseline = packet["baseline_proof"]
     tiers = packet["tier_statuses"]
     caveats = "\n".join(f"- {caveat}" for caveat in packet["caveats"])
+    causal_primary = (
+        packet.get("causal_proof", {})
+        .get("summary", {})
+        .get("primary_result")
+    )
+    if causal_primary:
+        causal_rows = f"""
+## Causal Proof
+
+| Metric | Value |
+| --- | ---: |
+| Original hidden readout | {causal_primary["original_accuracy_pct"]:.6g}% |
+| After learned-subspace ablation | {causal_primary["ablated_accuracy_pct"]:.6g}% |
+| True disruption | {causal_primary["true_disruption_pp"]:.6g} pp |
+| Random same-rank mean disruption | {causal_primary["random_same_rank_mean_disruption_pp"]:.6g} pp |
+| Random same-rank max disruption | {causal_primary["random_same_rank_max_disruption_pp"]:.6g} pp |
+| Chance baseline | {causal_primary["chance_baseline_accuracy_pct"]:.6g}% |
+| Guard status | {causal_primary["guard_status"]} |
+"""
+    else:
+        causal_rows = ""
+    control_summary = packet.get("control_proof", {}).get("summary", {})
+    if control_summary.get("class_count") is not None:
+        control_rows = f"""
+## Control / Cover Proof
+
+| Metric | Value |
+| --- | ---: |
+| Candidate classes | {control_summary["class_count"]} |
+| Selected layer | {control_summary.get("selected_layer")} |
+| Top-k neurons per class | {control_summary.get("top_k")} |
+| Caveat | {control_summary.get("caveat", "candidate cover discovery")} |
+"""
+    else:
+        control_rows = ""
     return f"""# Stage 9 40E Evidence Packet
 
 - Schema version: `{packet["schema_version"]}`
@@ -530,6 +638,7 @@ def render_markdown(packet: dict[str, Any]) -> str:
 | Shuffled-label mean | {baseline["shuffled_label_hidden_mean_test_acc_pct"]:.6g}% |
 | compact-gloss v0 | blocked at {baseline["compact_gloss_v0_text_only_acc_pct"]:.6g}% text-only |
 
+{causal_rows}{control_rows}
 ## Rationale
 
 {packet["verdict_rationale"]}
