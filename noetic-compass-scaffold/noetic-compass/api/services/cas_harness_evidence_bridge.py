@@ -91,10 +91,21 @@ def normalize_evidence_packet_for_audit(
         "evidence_packet.v1",
         "cas_harness_evidence_packet_v1",
         "cas_harness_evidence_packet.v1",
+        "cas_harness_stage9_40e_evidence_packet.v1",
     }:
         warnings.append(
             "Packet schema is not a recognized CAS Evidence Packet schema; "
             "normalization used best-effort field checks only."
+        )
+
+    provided_chips = _provided_proof_chips(packet)
+    if provided_chips is not None:
+        return AuditEvidenceBridgeResult(
+            source_schema=source_schema,
+            trace_id=trace_id,
+            evidence_packet_trace_id=trace_id,
+            chips=provided_chips,
+            warnings=warnings,
         )
 
     chip_map: dict[ProofChipId, AuditEvidenceProofChip] = {
@@ -127,6 +138,33 @@ def normalize_evidence_packet_for_audit(
         chips=[chip_map[chip_id] for chip_id in _CHIP_ORDER],
         warnings=warnings,
     )
+
+
+def _provided_proof_chips(packet: Mapping[str, Any]) -> list[AuditEvidenceProofChip] | None:
+    verification = _mapping_or_empty(packet.get("verification"))
+    raw_chips = verification.get("proof_chips")
+    if not isinstance(raw_chips, list):
+        return None
+
+    by_id: dict[ProofChipId, AuditEvidenceProofChip] = {}
+    for row in raw_chips:
+        if not isinstance(row, Mapping):
+            continue
+        chip_id = row.get("id")
+        status = row.get("status")
+        detail = _string_or_none(row.get("detail")) or "Proof chip supplied by Evidence Packet."
+        if chip_id in _CHIP_NAMES and status in {
+            "verified",
+            "present",
+            "missing",
+            "failed",
+            "unavailable",
+        }:
+            by_id[chip_id] = _chip(chip_id, status, detail)
+
+    if not set(_CHIP_ORDER).issubset(by_id):
+        return None
+    return [by_id[chip_id] for chip_id in _CHIP_ORDER]
 
 
 def normalize_public_evidence_manifest_for_audit(

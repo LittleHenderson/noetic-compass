@@ -118,6 +118,32 @@ def test_product_style_packet_fields_are_mapped_without_inventing_verdict():
     assert "confidence" not in payload
 
 
+def test_stage9_packet_uses_embedded_verification_proof_chips():
+    packet = {
+        "schema_version": "cas_harness_stage9_40e_evidence_packet.v1",
+        "trace_id": "trace-stage9-40e",
+        "verification": {
+            "proof_chips": [
+                {"id": "model_proof", "status": "present", "detail": "model recorded"},
+                {"id": "cas_readout", "status": "verified", "detail": "readout passed"},
+                {"id": "causal_proof", "status": "verified", "detail": "ablation passed"},
+                {"id": "control_proof", "status": "verified", "detail": "controls passed"},
+                {"id": "output_proof", "status": "verified", "detail": "bridge passed"},
+                {"id": "packet_proof", "status": "present", "detail": "packet written"},
+            ]
+        },
+    }
+
+    result = normalize_evidence_packet_for_audit(packet)
+    chips = _chips_by_id(result)
+
+    assert result.warnings == []
+    assert chips["model_proof"].detail == "model recorded"
+    assert chips["cas_readout"].status == "verified"
+    assert chips["output_proof"].status == "verified"
+    assert chips["packet_proof"].status == "present"
+
+
 def test_missing_trace_and_explicit_null_model_are_not_upgraded():
     packet = {
         "schema_version": "evidence_packet.v1",
