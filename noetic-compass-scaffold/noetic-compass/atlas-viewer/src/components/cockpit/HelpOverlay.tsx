@@ -236,7 +236,7 @@ const CAS_METHOD_SUMMARY =
   'Canonical label: S7-F28-BALANCED-BRIDGE. Plain name: S7-F28 Balanced Bridge Method. CAS Harness is not a pretty label overlay; this method means source-defined labels, real hidden states, balanced probe, targeted removal, matched controls, output-likelihood bridge, trace diagnostics, then Evidence Packet verdict.';
 
 const TKS40_TEXT_BASELINE_SUMMARY =
-  'TKS40 v0 is guarded right now. GPT-NeoX-20B hidden states read the compact-gloss TKS40 axis at 97.50%, but a text-only classifier also reached 100.00%. The original Stage 9 40E fixture does not have that failure under the modern diagnostic: text-only scored 49.24%.';
+  'TKS40 compact-gloss v0 stays guarded: text-only reached 100.00%, so it cannot support a CAS-beats-text claim. The corrected GPT-NeoX-20B original Stage 9 40E run is the claim-bearing baseline: hidden readout 95.625%, confirmed text baseline 49.241%, text-hash 50.000%, shuffled-label mean 2.619%.';
 
 const TKS40_TEXT_BASELINE_STEPS: Array<{ title: string; body: string }> = [
   {
@@ -250,14 +250,14 @@ const TKS40_TEXT_BASELINE_STEPS: Array<{ title: string; body: string }> = [
       'If text alone gets every heldout label right, the scenario wording is acting like an answer key. Hidden readout can still be real, but it has not beaten a meaningful text adversary.',
   },
   {
-    title: 'What remains true.',
+    title: 'What the corrected 20B run proves.',
     body:
-      'The current compact-gloss TKS40 packet still shows a strong 20B hidden-state signal above majority and shuffled-label controls. It just cannot claim CAS beats surface text on that v0 library.',
+      'On the original Stage 9 role-bound/counterfactual fixture, GPT-NeoX-20B hidden states read the 40-Element grid far above surface text on the same fixed split: 95.625% hidden versus 49.241% text-only.',
   },
   {
-    title: 'What fixes it.',
+    title: 'What the permanent rule is.',
     body:
-      'Reuse the original Stage 9 role-bound counterfactual design for the next 20B capture, or build TKS40 v1 with concrete situations, lexical distractors, grouped paraphrases, and a pre-registered text-baseline ceiling of 60% or lower.',
+      'Every future 40E library must run the text-baseline diagnostic first. If text-only is above the pre-registered ceiling, the packet can show hidden-state signal but cannot claim CAS beats text.',
   },
 ];
 

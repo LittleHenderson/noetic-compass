@@ -20,6 +20,7 @@ Read this before proposing or changing CAS Harness large-model methodology.
 - Do not replace the original Stage 7 Foundation-28 axis with drive-only, domain-only, or operator-only results.
 - Do not replace the original balanced logistic readout with nearest-centroid and call it equivalent.
 - Do not remove the TKS source definitions or call canonical colloquialisms "label leakage" by default.
+- Do not use compact-gloss TKS40 v0 as a CAS-beats-text proof; its text-only baseline reached 100.00%.
 - Do not call a run a CAS Harness ACCEPT/SUPPRESS verdict until the Evidence Packet/verifier merge exists.
 - Do not present 20B results as 100B/300B universality proof.
 
@@ -43,8 +44,8 @@ Read this before proposing or changing CAS Harness large-model methodology.
 4. Compare against baselines and controls.
    - Majority/chance control.
    - Shuffled-label hidden-state control.
-   - Canonical-English surface/text baseline.
-   - Treat strong text baselines carefully: canonical CAS colloquialisms are approved English aliases, not automatic contamination.
+   - Exact-fixture canonical-English surface/text baseline.
+   - Treat strong text baselines carefully: canonical CAS colloquialisms are approved English aliases, not automatic contamination, but a text-only result above the pre-registered ceiling blocks the "CAS beats surface text" claim.
 
 5. Run targeted causal controls.
    - Suppress the true Foundation cover/subspace.
@@ -137,11 +138,39 @@ Packet result:
 
 It is still not a final CAS Harness ACCEPT/SUPPRESS verdict, because the Stage 19/20/21 production verifier decision layer is not attached yet.
 
+## Related 40E Readout Method
+
+- Canonical label: `S9-40E-ORIGINAL-BASELINE-READOUT`
+- Plain-English name: **Stage 9 40-Element Original-Fixture Balanced Readout**
+- Scope: readout-tier replication only. It is not yet causal ablation, eta-to-epsilon bridge, or Evidence Packet verdict.
+
+This is the corrected 40-Element baseline path. Compact-gloss TKS40 v0 is blocked because text-only reached `100.00%`. The original Stage 9 role-bound/counterfactual fixture passes the modern text-baseline guard and is the current claim-bearing 20B 40E readout:
+
+| Measure | Result |
+| --- | ---: |
+| Model | `EleutherAI/gpt-neox-20b` |
+| Rows | `8,320` |
+| Classes | `40` |
+| Samples per class | `208` |
+| Train / test | `3,840 / 4,480` |
+| Train/test group overlap | `0` |
+| Best layer | `2` |
+| Hidden readout accuracy | `95.625%` |
+| Confirmed CountVectorizer text baseline | `49.241071%` |
+| Evaluator text-hash baseline | `50.000%` |
+| Majority baseline | `2.500%` |
+| Shuffled-label mean | `2.619%` |
+
+Rule: every future 40E scenario library must run the text-baseline diagnostic first. If text-only is above the pre-registered ceiling, the library can be used for diagnostics but cannot support a CAS-beats-text claim.
+
 ## Relevant Files
 
 - `live-trace-worker/scripts/run_open_weight_eta_epsilon_bridge.py`
 - `live-trace-worker/scripts/run_open_weight_trace_diagnostics.py`
 - `live-trace-worker/scripts/merge_s7_f28_balanced_bridge_evidence_packet.py`
+- `live-trace-worker/scripts/evaluate_40_element_probe.py`
+- `docs/working/gpt_neox_20b_stage9_original_40e_closure_20260527.md`
+- `docs/working/gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json`
 - `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.json`
 - `docs/working/S7_F28_BALANCED_BRIDGE_EVIDENCE_PACKET_20260526.md`
 - `docs/working/cas_harness_large_model_runpod_status_20260526.md`

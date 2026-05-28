@@ -67,6 +67,95 @@ def _strip_framing_tags(prompt: str) -> str:
     return s
 
 
+def _get_path_value(item: dict, path: str | None):
+    if not path:
+        return None
+    current = item
+    for part in path.split("."):
+        if not isinstance(current, dict):
+            return None
+        current = current.get(part)
+    return current
+
+
+def _load_scenario_meta(path: Path | None) -> dict[str, dict]:
+    if path is None:
+        return {}
+    payload = json.loads(path.read_text(encoding="utf-8"))
+    scenarios = payload.get("scenarios", payload) if isinstance(payload, dict) else payload
+    if not isinstance(scenarios, list):
+        raise SystemExit("--scenario-path must be a list or contain a scenarios list")
+    out: dict[str, dict] = {}
+    for index, item in enumerate(scenarios):
+        if not isinstance(item, dict):
+            continue
+        scenario_id = str(item.get("id") or item.get("scenario_id") or f"scenario-{index + 1:04d}")
+        out[scenario_id] = item
+    return out
+
+
+def _fixed_split_from_scenarios(
+    *,
+    scenario_ids: np.ndarray,
+    scenario_meta: dict[str, dict],
+    split_key: str,
+    test_split: str,
+) -> tuple[np.ndarray, np.ndarray]:
+    train_idx: list[int] = []
+    test_idx: list[int] = []
+    missing: list[str] = []
+    for index, scenario_id in enumerate(scenario_ids.tolist()):
+        item = scenario_meta.get(str(scenario_id))
+        if item is None:
+            missing.append(str(scenario_id))
+            continue
+        split = str(_get_path_value(item, split_key) or "")
+        if split == test_split:
+            test_idx.append(index)
+        elif split:
+            train_idx.append(index)
+    if missing:
+        raise SystemExit(f"--scenario-path is missing {len(missing)} dataset scenario_ids, e.g. {missing[:5]}")
+    if not train_idx or not test_idx:
+        raise SystemExit(
+            f"--split-key {split_key!r} with --test-split {test_split!r} did not produce train/test rows"
+        )
+    return np.asarray(train_idx, dtype=int), np.asarray(test_idx, dtype=int)
+
+
+def _groups_for_rows(
+    *,
+    prompts: np.ndarray,
+    scenario_ids: np.ndarray,
+    scenario_meta: dict[str, dict],
+    group_key: str | None,
+) -> np.ndarray:
+    groups: list[str] = []
+    for prompt, scenario_id in zip(prompts.tolist(), scenario_ids.tolist()):
+        item = scenario_meta.get(str(scenario_id))
+        value = _get_path_value(item, group_key) if item is not None and group_key else None
+        groups.append(str(value or _strip_framing_tags(str(prompt))))
+    return np.asarray(groups)
+
+
+def _load_confirmed_text_baseline(path: Path | None) -> dict | None:
+    if path is None:
+        return None
+    report = json.loads(path.read_text(encoding="utf-8"))
+    baseline = report.get("text_baseline") or {}
+    gate = report.get("claim_gate") or {}
+    return {
+        "source_report": str(path),
+        "axis": report.get("axis"),
+        "model": baseline.get("model"),
+        "test_acc": baseline.get("test_accuracy"),
+        "test_macro_f1": baseline.get("test_macro_f1"),
+        "cas_beats_text_claim_allowed": gate.get("cas_beats_text_claim_allowed"),
+        "status": gate.get("status"),
+        "target_text_baseline_ceiling": gate.get("target_text_baseline_ceiling"),
+    }
+
+
 def _cell_sort_key(cell: str) -> tuple[int, int, str]:
     operator, _, domain = cell.partition("|")
     try:
@@ -196,6 +285,11 @@ def main() -> int:
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--metadata", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--scenario-path", type=Path)
+    parser.add_argument("--split-key")
+    parser.add_argument("--test-split", default="test")
+    parser.add_argument("--group-key")
+    parser.add_argument("--confirmed-text-baseline-report", type=Path)
     parser.add_argument("--test-size", type=float, default=0.2)
     parser.add_argument("--shuffled-trials", type=int, default=20)
     parser.add_argument("--probe-C", type=float, default=0.1)
@@ -227,6 +321,9 @@ def main() -> int:
     labels_domain = data["labels_domain"]
     labels_operator = data["labels_operator"]
     prompts = data["prompts"]
+    scenario_ids = data["scenario_ids"] if "scenario_ids" in data.files else np.asarray(
+        [f"scenario-{index + 1:04d}" for index in range(len(prompts))]
+    )
 
     if features.ndim != 3:
         raise SystemExit(f"features must be [N, num_layers, hidden_dim]; got {features.shape}")
@@ -270,7 +367,10 @@ def main() -> int:
         "solver": "lbfgs",
         "probe_C": float(args.probe_C),
         "probe_max_iter": int(args.probe_max_iter),
-        "split": "GroupShuffleSplit by base-prompt (strips leading [...] framing tags)",
+        "split": "not evaluated in guard-only mode",
+        "split_key": args.split_key,
+        "test_split": args.test_split,
+        "group_key": args.group_key,
         "seed": int(args.seed),
         "shuffled_trials": int(args.shuffled_trials),
         "min_samples_per_cell": int(args.min_samples_per_cell),
@@ -301,13 +401,34 @@ def main() -> int:
         return 2
 
     # --- Group-aware split by base-prompt --------------------------------
-    base_groups = np.array([_strip_framing_tags(p) for p in prompts])
+    scenario_meta = _load_scenario_meta(args.scenario_path)
+    base_groups = _groups_for_rows(
+        prompts=prompts,
+        scenario_ids=scenario_ids,
+        scenario_meta=scenario_meta,
+        group_key=args.group_key,
+    )
     n_unique_groups = len(set(base_groups.tolist()))
     print(f"base-prompt groups: {n_unique_groups}")
 
-    gss = GroupShuffleSplit(n_splits=1, test_size=args.test_size, random_state=args.seed)
-    train_idx, test_idx = next(gss.split(features, forty_element, groups=base_groups))
-    print(f"train={len(train_idx)}, test={len(test_idx)} (group-aware split)")
+    if args.scenario_path and args.split_key:
+        train_idx, test_idx = _fixed_split_from_scenarios(
+            scenario_ids=scenario_ids,
+            scenario_meta=scenario_meta,
+            split_key=args.split_key,
+            test_split=args.test_split,
+        )
+        split_kind = f"fixed split by {args.split_key}; test_split={args.test_split}"
+    else:
+        gss = GroupShuffleSplit(n_splits=1, test_size=args.test_size, random_state=args.seed)
+        train_idx, test_idx = next(gss.split(features, forty_element, groups=base_groups))
+        split_kind = "GroupShuffleSplit by base-prompt (strips leading [...] framing tags)"
+    method_contract["split"] = split_kind
+    train_groups = set(base_groups[train_idx].tolist())
+    test_groups = set(base_groups[test_idx].tolist())
+    group_overlap = sorted(train_groups & test_groups)
+    print(f"train={len(train_idx)}, test={len(test_idx)} ({split_kind})")
+    print(f"train/test group overlap={len(group_overlap)}")
 
     y_train = forty_element[train_idx]
     y_test = forty_element[test_idx]
@@ -381,6 +502,7 @@ def main() -> int:
     text_acc = float(accuracy_score(y_test, text_pred))
     text_f1 = float(f1_score(y_test, text_pred, average="macro", zero_division=0))
     print(f"text-hash: acc={text_acc*100:.2f}%  macro_f1={text_f1*100:.2f}%")
+    confirmed_text_baseline = _load_confirmed_text_baseline(args.confirmed_text_baseline_report)
 
     # --- Composite report -----------------------------------------------
     label_drop_minus_random_mean = best["test_acc"] - shuffled_mean
@@ -404,7 +526,9 @@ def main() -> int:
         "n_train": int(len(train_idx)),
         "n_test": int(len(test_idx)),
         "n_base_prompt_groups": int(n_unique_groups),
-        "split": "GroupShuffleSplit by base-prompt (strips leading [...] framing tags)",
+        "split": split_kind,
+        "train_test_group_overlap_count": len(group_overlap),
+        "train_test_group_overlap_examples": group_overlap[:10],
         "test_size": float(args.test_size),
         "axis": "40_element_operator_x_domain",
         "populated_cells": populated_cells,
@@ -430,6 +554,7 @@ def main() -> int:
                 "test_macro_f1": text_f1,
                 "description": "HashingVectorizer(1-2 ngrams, 2^14 features) + LogisticRegression on prompt text",
             },
+            "confirmed_text_baseline_report": confirmed_text_baseline,
         },
         "result_summary": {
             "hidden_probe_test_acc": best["test_acc"],
@@ -437,10 +562,17 @@ def main() -> int:
             "hidden_probe_exceeds_shuffled_max": best["test_acc"] > shuffled_max,
             "hidden_probe_beats_majority": best["test_acc"] > majority_test_acc,
             "hidden_probe_beats_text_baseline": best["test_acc"] > text_acc,
+            "hidden_probe_beats_confirmed_text_baseline": (
+                bool(best["test_acc"] > float(confirmed_text_baseline["test_acc"]))
+                if confirmed_text_baseline and confirmed_text_baseline.get("test_acc") is not None
+                else None
+            ),
             "interpretation": (
                 "Pythia-160M closure target on 40-Element: 89.8% readout, +39.7pp "
-                "over text baseline. This run replicates the protocol on a different "
-                "substrate using the existing dataset's operator + domain labels."
+                "over text baseline. This run replicates the readout protocol on a "
+                "different substrate using the dataset's operator + domain labels. "
+                "When --confirmed-text-baseline-report is supplied, the result summary "
+                "states whether hidden readout beats the exact-fixture text baseline."
             ),
         },
         "pythia_160m_comparator": {
@@ -452,11 +584,12 @@ def main() -> int:
         "important_limit": (
             f"Dataset has {populated_cells}/40 cells populated, with {sparse_cells} "
             f"cells under the configured minimum of {args.min_samples_per_cell} samples. "
-            "Probe is undertrained for sparse cells. "
-            "GroupShuffleSplit by base-prompt prevents augmentation leakage. "
+            "Sparse cells make probe claims undertrained. "
+            f"{split_kind} was used; train/test group overlap is {len(group_overlap)}. "
             "Text-hash baseline measures whether prompt surface forms (which carry "
-            "canonical CAS colloquialisms) encode the label. A high text baseline is "
-            "the framework's intended English surface, NOT a contamination control. "
+            "canonical CAS colloquialisms) encode the label. Canonical TKS English is "
+            "valid framework language, but a high text-only score blocks the specific "
+            "CAS-beats-surface-text claim until the fixture passes the baseline ceiling. "
             "Methodology minimum is 10 samples per cell; headline closure can be "
             "rerun with --min-samples-per-cell 25 for the stricter ~1000-scenario "
             "packet threshold."
