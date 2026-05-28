@@ -1033,6 +1033,29 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
                 )
             )
 
+    if packet.distributed_fleet is not None:
+        try:
+            from api.services.cas_harness_merged_evidence_packets import (
+                verify_merged_fleet_evidence_packet_payload,
+            )
+
+            checks.extend(
+                VerifyCheck.model_validate(check)
+                for check in verify_merged_fleet_evidence_packet_payload(
+                    packet.model_dump(mode="json", exclude_none=True)
+                )
+            )
+        except FileNotFoundError as exc:
+            checks.append(
+                VerifyCheck(
+                    artifact="merged_packet_hash_log",
+                    expected=(packet.hashes or {}).get("hash_log_entry_sha256"),
+                    actual=None,
+                    match=False,
+                    notes=f"merged packet hash log unavailable: {exc}",
+                )
+            )
+
     if not checks:
         overall = "unable_to_verify"
     elif all(c.match for c in checks):
