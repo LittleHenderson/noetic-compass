@@ -248,6 +248,13 @@ function fleetRun(overrides: Record<string, unknown> = {}): Record<string, unkno
     failed_jobs: 0,
     registered_workers: 1,
     stale_workers: [],
+    readiness: {
+      status: 'waiting',
+      headline: 'Large-model eval is waiting on workers or fragment receipts.',
+      blockers: ['1 Evidence Packet fragment receipt(s) are still missing.'],
+      next_actions: ['Lease queued jobs to their registered workers.'],
+      verifier_owned: true,
+    },
     jobs: [fleetJob()],
     ...overrides,
   };
@@ -569,6 +576,16 @@ describe('casHarnessAuditApi', () => {
       status: 'MERGE_PENDING',
       verifier_gate_status: 'ready_for_verifier',
       completed_fragments: 1,
+      readiness: {
+        status: 'ready',
+        headline: 'Large-model worker receipts are complete; verifier review is unblocked.',
+        blockers: [],
+        next_actions: [
+          'Merge fleet evidence into one distributed Evidence Packet.',
+          'Then run the verifier decision layer; fleet merge alone cannot ACCEPT.',
+        ],
+        verifier_owned: true,
+      },
       jobs: [completedJob],
     });
     const mergedRun = fleetRun({
@@ -578,6 +595,13 @@ describe('casHarnessAuditApi', () => {
       merge_reason:
         'All fleet job fragments are present. Merged Evidence Packet is ready for the verifier decision layer; fleet executor does not fabricate ACCEPT.',
       completed_fragments: 1,
+      readiness: {
+        status: 'ready',
+        headline: 'Large-model worker receipts are complete; verifier review is unblocked.',
+        blockers: [],
+        next_actions: ['Run the verifier decision layer over the merged Evidence Packet.'],
+        verifier_owned: true,
+      },
       jobs: [completedJob],
     });
     const fetchImpl = vi
@@ -623,11 +647,16 @@ describe('casHarnessAuditApi', () => {
     });
 
     expect(prepared.verifier_gate_status).toBe('waiting_for_receipts');
+    expect(prepared.readiness.status).toBe('waiting');
+    expect(prepared.readiness.verifier_owned).toBe(true);
     expect(leased).toMatchObject({
       status: 'leased',
       lease_token: 'lease-token-01',
     });
     expect(receipted.verifier_gate_status).toBe('ready_for_verifier');
+    expect(receipted.readiness.next_actions).toContain(
+      'Then run the verifier decision layer; fleet merge alone cannot ACCEPT.',
+    );
     expect(receipted.jobs[0]).toMatchObject({
       status: 'completed',
       evidence_packet_fragment_ref: fragmentRef,
@@ -635,6 +664,9 @@ describe('casHarnessAuditApi', () => {
     expect(merged.status).toBe('COMPLETE');
     expect(merged.merged_packet_trace_id).toBe('cas-dist-unit-fleet-merge');
     expect(merged.merge_reason).toMatch(/does not fabricate ACCEPT/);
+    expect(merged.readiness.next_actions).toEqual([
+      'Run the verifier decision layer over the merged Evidence Packet.',
+    ]);
     expect(fetched.audit_id).toBe('cas-dist-unit');
     expect(listed.runs[0]?.status).toBe('COMPLETE');
     expect(fetchImpl.mock.calls.map((call) => call[0])).toEqual([
