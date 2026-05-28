@@ -73,6 +73,19 @@ interface EvidencePacket {
   caveats?: unknown;
 }
 
+interface EvidenceVerifyCheck {
+  artifact?: unknown;
+  expected?: unknown;
+  actual?: unknown;
+  match?: unknown;
+  notes?: unknown;
+}
+
+interface EvidenceVerifyResponse {
+  overall?: unknown;
+  checks?: unknown;
+}
+
 type EvidenceAnchorTone = 'verified' | 'warning' | 'failed' | 'muted';
 
 interface EvidenceAnchorSummary {
@@ -85,6 +98,12 @@ interface EvidenceAnchorSummary {
   hashLogEntrySha256: string | null;
   packetSha256: string | null;
 }
+
+type VerifyState =
+  | { status: 'idle'; response?: undefined; error?: undefined }
+  | { status: 'loading'; response?: undefined; error?: undefined }
+  | { status: 'loaded'; response: EvidenceVerifyResponse; error?: undefined }
+  | { status: 'error'; response?: undefined; error: string };
 
 type PacketState =
   | { status: 'idle'; packet?: undefined; error?: undefined }
@@ -383,6 +402,10 @@ function evidencePacketUrl(traceId: string): string {
   return `${evidenceApiBaseUrl()}/evidence/${encodeURIComponent(traceId)}`;
 }
 
+function evidencePacketVerifyUrl(traceId: string): string {
+  return `${evidencePacketUrl(traceId)}/verify`;
+}
+
 function stringField(record: Record<string, unknown>, key: string): string | null {
   const value = record[key];
   return typeof value === 'string' && value.length > 0 ? value : null;
@@ -394,11 +417,34 @@ function shortHash(value: string | null): string | null {
   return `${value.slice(0, 10)}...${value.slice(-8)}`;
 }
 
-function evidenceAnchorSummary(packet: EvidencePacket): EvidenceAnchorSummary {
+function externalAnchorVerifyCheck(
+  verifyResponse?: EvidenceVerifyResponse,
+): EvidenceVerifyCheck | null {
+  const checks = verifyResponse?.checks;
+  if (!Array.isArray(checks)) return null;
+  for (const check of checks) {
+    if (isRecord(check) && check.artifact === 'merged_packet_external_anchor') {
+      return check;
+    }
+  }
+  return null;
+}
+
+function isS3RereadVerified(check: EvidenceVerifyCheck | null): boolean {
+  if (!check || check.match !== true || typeof check.notes !== 'string') return false;
+  const notes = check.notes.toLowerCase();
+  return notes.includes('object was re-read') && notes.includes('manifest commits');
+}
+
+function evidenceAnchorSummary(
+  packet: EvidencePacket,
+  verifyResponse?: EvidenceVerifyResponse,
+): EvidenceAnchorSummary {
   const hashes = isRecord(packet.hashes) ? packet.hashes : {};
   const packetSha256 = stringField(hashes, 'packet_without_hashes_sha256');
   const hashLogEntrySha256 = stringField(hashes, 'hash_log_entry_sha256');
   const anchor = isRecord(hashes.external_anchor) ? hashes.external_anchor : null;
+  const verifyCheck = externalAnchorVerifyCheck(verifyResponse);
 
   if (!anchor) {
     return {
@@ -420,10 +466,38 @@ function evidenceAnchorSummary(packet: EvidencePacket): EvidenceAnchorSummary {
   const manifestSha256 = stringField(anchor, 'manifest_sha256');
 
   if (status === 'anchored' && mode === 's3') {
+    if (isS3RereadVerified(verifyCheck)) {
+      return {
+        label: 'S3 object verified',
+        detail:
+          'The verifier re-read the S3 anchor object and confirmed it commits to this packet hash and hash-log entry.',
+        tone: 'verified',
+        mode,
+        anchorUri,
+        manifestSha256,
+        hashLogEntrySha256,
+        packetSha256,
+      };
+    }
+    if (verifyCheck?.match === false) {
+      const notes = typeof verifyCheck.notes === 'string'
+        ? verifyCheck.notes
+        : 'The S3 anchor verification check failed.';
+      return {
+        label: 'S3 verify failed',
+        detail: notes,
+        tone: 'failed',
+        mode,
+        anchorUri,
+        manifestSha256,
+        hashLogEntrySha256,
+        packetSha256,
+      };
+    }
     return {
       label: 'Anchored to S3',
       detail:
-        'The packet hash-log entry was written to the configured S3 anchor target.',
+        'The packet hash-log entry was written to the configured S3 anchor target. Run /verify to confirm the object can be re-read.',
       tone: 'verified',
       mode,
       anchorUri,
@@ -506,15 +580,18 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
   }, [wordTokens]);
   const dedupedMode7 = useMemo(() => dedupeMode7Edges(wordTokens), [wordTokens]);
   const [packetState, setPacketState] = useState<PacketState>({ status: 'idle' });
+  const [verifyState, setVerifyState] = useState<VerifyState>({ status: 'idle' });
 
   useEffect(() => {
     if (!open || !traceId) {
       setPacketState({ status: 'idle' });
+      setVerifyState({ status: 'idle' });
       return;
     }
 
     const controller = new AbortController();
     setPacketState({ status: 'loading' });
+    setVerifyState({ status: 'loading' });
 
     fetch(evidencePacketUrl(traceId), {
       method: 'GET',
@@ -535,6 +612,27 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
         if (controller.signal.aborted) return;
         const message = error instanceof Error ? error.message : 'Evidence Packet request failed';
         setPacketState({ status: 'error', error: message });
+      });
+
+    fetch(evidencePacketVerifyUrl(traceId), {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const body = await response.json().catch(() => null);
+        if (!response.ok) {
+          const detail = isRecord(body) && typeof body.detail === 'string'
+            ? body.detail
+            : `Evidence Packet verify failed (${response.status})`;
+          throw new Error(detail);
+        }
+        setVerifyState({ status: 'loaded', response: body as EvidenceVerifyResponse });
+      })
+      .catch((error: unknown) => {
+        if (controller.signal.aborted) return;
+        const message = error instanceof Error ? error.message : 'Evidence Packet verify failed';
+        setVerifyState({ status: 'error', error: message });
       });
 
     return () => controller.abort();
@@ -563,7 +661,10 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
     : null;
   const packetFailed = packetState.status === 'error';
   const anchorSummary = packetState.status === 'loaded'
-    ? evidenceAnchorSummary(packetState.packet)
+    ? evidenceAnchorSummary(
+        packetState.packet,
+        verifyState.status === 'loaded' ? verifyState.response : undefined,
+      )
     : null;
   const blindspots = payload?.blindspotInterpretations ?? [];
   const blindspotSection =

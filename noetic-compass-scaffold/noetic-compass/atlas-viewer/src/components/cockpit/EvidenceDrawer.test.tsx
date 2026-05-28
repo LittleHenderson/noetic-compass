@@ -74,6 +74,20 @@ function packetWithHashes(hashes: Record<string, unknown>): Record<string, unkno
   };
 }
 
+const s3VerifyResponse = {
+  overall: 'all_match',
+  checks: [
+    {
+      artifact: 'merged_packet_external_anchor',
+      expected: '99999999998888888888777777777766666666665555555555bbbbbbbb',
+      actual: '99999999998888888888777777777766666666665555555555bbbbbbbb',
+      match: true,
+      notes:
+        'S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry',
+    },
+  ],
+};
+
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
@@ -114,30 +128,32 @@ describe('EvidenceDrawer', () => {
       'cas_hard_trace',
     );
 
-    expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
     const [url, init] = fetchImpl.mock.calls[0] as [string, RequestInit];
     expect(url).toBe('/api/evidence/trace-123');
     expect(init.method).toBe('GET');
     expect(init.headers).toMatchObject({ Accept: 'application/json' });
+    const [verifyUrl, verifyInit] = fetchImpl.mock.calls[1] as [string, RequestInit];
+    expect(verifyUrl).toBe('/api/evidence/trace-123/verify');
+    expect(verifyInit.method).toBe('POST');
   });
 
   it('surfaces S3 anchor proof from the packet hashes block', async () => {
-    const fetchImpl = vi.fn(async () =>
-      jsonResponse(
-        packetWithHashes({
-          packet_without_hashes_sha256:
-            'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee11111111',
-          hash_log_entry_sha256:
-            '11111111112222222222333333333344444444445555555555aaaaaaaa',
-          external_anchor: {
-            status: 'anchored',
-            mode: 's3',
-            anchor_uri: 's3://cas-evidence-anchor/audit-1/hash-log.json',
-            manifest_sha256:
-              '99999999998888888888777777777766666666665555555555bbbbbbbb',
-          },
-        }),
-      ),
+    const anchoredPacket = packetWithHashes({
+      packet_without_hashes_sha256:
+        'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee11111111',
+      hash_log_entry_sha256:
+        '11111111112222222222333333333344444444445555555555aaaaaaaa',
+      external_anchor: {
+        status: 'anchored',
+        mode: 's3',
+        anchor_uri: 's3://cas-evidence-anchor/audit-1/hash-log.json',
+        manifest_sha256:
+          '99999999998888888888777777777766666666665555555555bbbbbbbb',
+      },
+    });
+    const fetchImpl = vi.fn(async (_url: string, init?: RequestInit) =>
+      jsonResponse(init?.method === 'POST' ? s3VerifyResponse : anchoredPacket),
     );
     vi.stubGlobal('fetch', fetchImpl);
 
@@ -154,10 +170,10 @@ describe('EvidenceDrawer', () => {
     );
 
     expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
-      'Anchored to S3',
+      'S3 object verified',
     );
     expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
-      'configured S3 anchor target',
+      'verifier re-read the S3 anchor object',
     );
     expect(screen.getByTestId('evidence-packet-anchor-uri')).toHaveTextContent(
       's3://cas-evidence-anchor/audit-1/hash-log.json',
@@ -334,6 +350,8 @@ describe('EvidenceDrawer', () => {
 
     const [url] = fetchImpl.mock.calls[0] as [string, RequestInit];
     expect(url).toBe('https://noetic-compass-api.onrender.com/evidence/trace-hosted');
+    const [verifyUrl] = fetchImpl.mock.calls[1] as [string, RequestInit];
+    expect(verifyUrl).toBe('https://noetic-compass-api.onrender.com/evidence/trace-hosted/verify');
   });
 
   it('labels neuron refs as local replay metadata when no trace_id is supplied', () => {
@@ -476,7 +494,7 @@ describe('EvidenceDrawer', () => {
     expect(await screen.findByTestId('evidence-packet-loaded')).toHaveTextContent(
       'evidence_packet.v1',
     );
-    expect(fetchImpl).toHaveBeenCalledOnce();
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
   });
 
   it('renders BlindspotInterpretation rows when the payload carries blindspotInterpretations', () => {
