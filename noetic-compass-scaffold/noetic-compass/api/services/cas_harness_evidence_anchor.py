@@ -1,0 +1,290 @@
+"""External anchoring for CAS Harness Evidence Packet hash-log entries.
+
+The local packet store is durable across process restarts, but it is still
+same-host storage. This module records whether each hash-log entry was also
+anchored to an external target. It never marks anchoring as successful unless
+the target write succeeds.
+"""
+
+from __future__ import annotations
+
+from datetime import UTC, datetime, timedelta
+import base64
+import hashlib
+import json
+import os
+from pathlib import Path
+from typing import Any, Mapping
+
+
+AnchorStatus = str
+
+
+def anchor_hash_log_entry(
+    *,
+    trace_id: str,
+    hash_log_entry: Mapping[str, Any],
+    packet_path: Path,
+    hash_log_path: Path,
+) -> dict[str, Any]:
+    """Anchor one hash-log entry according to environment configuration."""
+
+    mode = _anchor_mode()
+    manifest = _anchor_manifest(
+        trace_id=trace_id,
+        hash_log_entry=hash_log_entry,
+        packet_path=packet_path,
+        hash_log_path=hash_log_path,
+    )
+    if mode == "disabled":
+        return {
+            "status": "disabled",
+            "mode": "disabled",
+            "reason": "CAS_HARNESS_EVIDENCE_ANCHOR_MODE is disabled or unset.",
+            "manifest_sha256": _sha256_json(manifest),
+        }
+    if mode == "local":
+        return _anchor_local(manifest)
+    if mode == "s3":
+        return _anchor_s3(manifest)
+    return {
+        "status": "failed",
+        "mode": mode,
+        "reason": f"Unsupported CAS_HARNESS_EVIDENCE_ANCHOR_MODE: {mode}.",
+        "manifest_sha256": _sha256_json(manifest),
+    }
+
+
+def verify_anchor(packet: Mapping[str, Any]) -> dict[str, Any]:
+    """Verify the packet's external anchor, if one is declared."""
+
+    hashes = packet.get("hashes")
+    if not isinstance(hashes, Mapping):
+        return _anchor_check(None, None, False, "packet hashes block is missing")
+    anchor = hashes.get("external_anchor")
+    if not isinstance(anchor, Mapping):
+        return _anchor_check(None, None, False, "packet has no external_anchor declaration")
+
+    status = anchor.get("status")
+    if status == "disabled":
+        return _anchor_check("disabled", "disabled", True, "external anchoring was explicitly disabled")
+    if status == "failed":
+        return _anchor_check("anchored", "failed", False, _string(anchor.get("reason")) or "anchor write failed")
+    if status != "anchored":
+        return _anchor_check("anchored", _string(status), False, "anchor status is not anchored")
+
+    mode = anchor.get("mode")
+    if mode == "local":
+        return _verify_local_anchor(packet, anchor)
+    if mode == "s3":
+        return _verify_s3_anchor(anchor)
+    return _anchor_check("anchored", _string(mode), False, "anchor mode is not verifiable")
+
+
+def _anchor_manifest(
+    *,
+    trace_id: str,
+    hash_log_entry: Mapping[str, Any],
+    packet_path: Path,
+    hash_log_path: Path,
+) -> dict[str, Any]:
+    return {
+        "schema_version": "cas_harness_evidence_anchor.v1",
+        "trace_id": trace_id,
+        "audit_id": hash_log_entry.get("audit_id"),
+        "packet_without_hashes_sha256": hash_log_entry.get("packet_without_hashes_sha256"),
+        "hash_log_entry_sha256": hash_log_entry.get("entry_sha256"),
+        "hash_log_previous_entry_sha256": hash_log_entry.get("previous_entry_sha256"),
+        "packet_store_path": str(packet_path),
+        "hash_log_path": str(hash_log_path),
+        "anchored_at": datetime.now(UTC).isoformat(),
+    }
+
+
+def _anchor_local(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    target_dir = Path(
+        os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_LOCAL_DIR")
+        or os.environ.get("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", "")
+        or "."
+    )
+    trace_id = _string(manifest.get("trace_id")) or "unknown"
+    entry_hash = _string(manifest.get("hash_log_entry_sha256"))
+    if not entry_hash:
+        return {
+            "status": "failed",
+            "mode": "local",
+            "reason": "hash_log_entry_sha256 missing from anchor manifest.",
+            "manifest_sha256": _sha256_json(manifest),
+        }
+
+    path = target_dir / "anchors" / _safe(trace_id) / f"{entry_hash}.json"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    body = _canonical_json(manifest)
+    try:
+        with path.open("x", encoding="utf-8") as fh:
+            fh.write(body)
+    except FileExistsError:
+        existing = path.read_text(encoding="utf-8")
+        if existing != body:
+            return {
+                "status": "failed",
+                "mode": "local",
+                "reason": "local anchor already exists with different content.",
+                "manifest_sha256": _sha256_json(manifest),
+                "anchor_uri": str(path),
+            }
+    except OSError as exc:
+        return {
+            "status": "failed",
+            "mode": "local",
+            "reason": f"local anchor write failed: {exc}",
+            "manifest_sha256": _sha256_json(manifest),
+            "anchor_uri": str(path),
+        }
+
+    return {
+        "status": "anchored",
+        "mode": "local",
+        "anchor_uri": str(path),
+        "manifest_sha256": _sha256_json(manifest),
+        "anchored_at": _string(manifest.get("anchored_at")),
+    }
+
+
+def _anchor_s3(manifest: Mapping[str, Any]) -> dict[str, Any]:
+    bucket = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "").strip()
+    if not bucket:
+        return _s3_failed(manifest, "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET is required.")
+    entry_hash = _string(manifest.get("hash_log_entry_sha256"))
+    trace_id = _string(manifest.get("trace_id")) or "unknown"
+    if not entry_hash:
+        return _s3_failed(manifest, "hash_log_entry_sha256 missing from anchor manifest.")
+
+    prefix = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX", "cas-harness/evidence-anchors").strip("/")
+    key = f"{prefix}/{_safe(trace_id)}/{entry_hash}.json" if prefix else f"{_safe(trace_id)}/{entry_hash}.json"
+    body = _canonical_json(manifest).encode("utf-8")
+
+    try:
+        import boto3  # type: ignore[import-not-found]
+    except ImportError:
+        return _s3_failed(manifest, "boto3 is not installed; S3 anchoring could not run.")
+
+    client_kwargs: dict[str, Any] = {}
+    region = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION", "").strip()
+    if region:
+        client_kwargs["region_name"] = region
+
+    try:
+        client = boto3.client("s3", **client_kwargs)
+        put_kwargs: dict[str, Any] = {
+            "Bucket": bucket,
+            "Key": key,
+            "Body": body,
+            "ContentType": "application/json",
+            "Metadata": {
+                "trace-id": trace_id,
+                "hash-log-entry-sha256": entry_hash,
+                "packet-without-hashes-sha256": _string(manifest.get("packet_without_hashes_sha256")) or "",
+            },
+        }
+        object_lock_mode = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "").strip().upper()
+        retention_days_raw = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "").strip()
+        if object_lock_mode in {"GOVERNANCE", "COMPLIANCE"} and retention_days_raw:
+            retention_days = max(int(retention_days_raw), 1)
+            put_kwargs["ObjectLockMode"] = object_lock_mode
+            put_kwargs["ObjectLockRetainUntilDate"] = datetime.now(UTC) + timedelta(days=retention_days)
+        response = client.put_object(**put_kwargs)
+    except Exception as exc:
+        return _s3_failed(manifest, f"S3 anchor write failed: {type(exc).__name__}: {exc}")
+
+    return {
+        "status": "anchored",
+        "mode": "s3",
+        "anchor_uri": f"s3://{bucket}/{key}",
+        "bucket": bucket,
+        "key": key,
+        "etag": _string(response.get("ETag")) if isinstance(response, Mapping) else None,
+        "manifest_sha256": _sha256_json(manifest),
+        "anchored_at": _string(manifest.get("anchored_at")),
+        "object_lock_mode": object_lock_mode or None,
+        "retention_days": int(retention_days_raw) if retention_days_raw.isdigit() else None,
+    }
+
+
+def _verify_local_anchor(packet: Mapping[str, Any], anchor: Mapping[str, Any]) -> dict[str, Any]:
+    uri = _string(anchor.get("anchor_uri"))
+    if not uri:
+        return _anchor_check("anchored", None, False, "local anchor_uri is missing")
+    try:
+        manifest = json.loads(Path(uri).read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        return _anchor_check("anchored", None, False, f"local anchor read failed: {exc}")
+    if not isinstance(manifest, Mapping):
+        return _anchor_check("anchored", None, False, "local anchor manifest is malformed")
+
+    expected_manifest_hash = _string(anchor.get("manifest_sha256"))
+    actual_manifest_hash = _sha256_json(manifest)
+    packet_hash = _string((packet.get("hashes") or {}).get("packet_without_hashes_sha256")) if isinstance(packet.get("hashes"), Mapping) else None
+    entry_hash = _string((packet.get("hashes") or {}).get("hash_log_entry_sha256")) if isinstance(packet.get("hashes"), Mapping) else None
+    match = (
+        expected_manifest_hash == actual_manifest_hash
+        and manifest.get("packet_without_hashes_sha256") == packet_hash
+        and manifest.get("hash_log_entry_sha256") == entry_hash
+    )
+    return _anchor_check(
+        expected_manifest_hash,
+        actual_manifest_hash,
+        match,
+        "local anchor manifest commits to this packet hash and hash-log entry",
+    )
+
+
+def _verify_s3_anchor(anchor: Mapping[str, Any]) -> dict[str, Any]:
+    # We do not perform network verification on the evidence route. The S3
+    # write receipt is still useful proof, and production can verify the object
+    # out-of-band by bucket/key plus manifest_sha256.
+    return _anchor_check(
+        _string(anchor.get("manifest_sha256")),
+        _string(anchor.get("manifest_sha256")),
+        bool(anchor.get("bucket") and anchor.get("key") and anchor.get("manifest_sha256")),
+        "S3 anchor write receipt is present; object re-read is intentionally out-of-band",
+    )
+
+
+def _s3_failed(manifest: Mapping[str, Any], reason: str) -> dict[str, Any]:
+    return {
+        "status": "failed",
+        "mode": "s3",
+        "reason": reason,
+        "manifest_sha256": _sha256_json(manifest),
+    }
+
+
+def _anchor_check(expected: str | None, actual: str | None, match: bool, notes: str) -> dict[str, Any]:
+    return {
+        "artifact": "merged_packet_external_anchor",
+        "expected": expected,
+        "actual": actual,
+        "match": match,
+        "notes": notes,
+    }
+
+
+def _anchor_mode() -> AnchorStatus:
+    return os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "disabled").strip().lower() or "disabled"
+
+
+def _safe(value: str) -> str:
+    return value.replace("/", "_").replace("\\", "_").replace(":", "_")
+
+
+def _string(value: Any) -> str | None:
+    return value if isinstance(value, str) and value else None
+
+
+def _sha256_json(value: Any) -> str:
+    return hashlib.sha256(_canonical_json(value).encode("utf-8")).hexdigest()
+
+
+def _canonical_json(value: Any) -> str:
+    return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=True)

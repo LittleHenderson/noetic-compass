@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 
 import pytest
 
@@ -276,6 +277,7 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     assert packet_body["verification"]["proof_chips"]
     assert packet_body["verification"]["accepted"] is None
     assert packet_body["hashes"]["hash_log_entry_sha256"]
+    assert packet_body["hashes"]["external_anchor"]["status"] == "disabled"
 
     reset_merged_fleet_evidence_packets_for_tests()
     reloaded = load_merged_fleet_evidence_packet_payload(merged_body["merged_packet_trace_id"])
@@ -293,6 +295,7 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
             "merged_packet_payload",
             "merged_packet_hash_log",
             "merged_packet_hash_chain",
+            "merged_packet_external_anchor",
         }
     )
 
@@ -307,6 +310,63 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     assert any(
         check["artifact"] == "merged_packet_hash_chain" and check["match"] is False
         for check in tampered_body["checks"]
+    )
+
+
+def test_fleet_packet_local_anchor_is_verified_and_tamper_detected(client, auth_headers, monkeypatch, tmp_path):
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "local")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_LOCAL_DIR", str(tmp_path / "anchor-store"))
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    )
+    assert merged.status_code == 200
+    trace_id = merged.json()["merged_packet_trace_id"]
+
+    packet = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()
+    anchor = packet["hashes"]["external_anchor"]
+    assert anchor["status"] == "anchored"
+    assert anchor["mode"] == "local"
+    assert Path(anchor["anchor_uri"]).is_file()
+
+    verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
+    assert verified["overall"] == "all_match"
+    assert any(
+        check["artifact"] == "merged_packet_external_anchor" and check["match"] is True
+        for check in verified["checks"]
+    )
+
+    Path(anchor["anchor_uri"]).write_text("{}", encoding="utf-8")
+    tampered = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
+    assert tampered["overall"] == "partial_mismatch"
+    assert any(
+        check["artifact"] == "merged_packet_external_anchor" and check["match"] is False
+        for check in tampered["checks"]
     )
 
 

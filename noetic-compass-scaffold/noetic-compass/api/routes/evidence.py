@@ -1045,6 +1045,13 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
                     packet.model_dump(mode="json", exclude_none=True)
                 )
             )
+            from api.services.cas_harness_evidence_anchor import verify_anchor
+
+            checks.append(
+                VerifyCheck.model_validate(
+                    verify_anchor(packet.model_dump(mode="json", exclude_none=True))
+                )
+            )
         except FileNotFoundError as exc:
             checks.append(
                 VerifyCheck(
