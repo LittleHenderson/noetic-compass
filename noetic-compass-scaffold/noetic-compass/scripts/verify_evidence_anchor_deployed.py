@@ -9,7 +9,8 @@ noetic-compass-api service:
 4. merge the fleet Evidence Packet;
 5. run the verifier decision layer;
 6. fetch the packet and /verify response;
-7. fail unless the packet is externally anchored in the requested mode.
+7. fail unless the packet is externally anchored in the requested mode and
+   /verify can re-read the S3 anchor object when mode=s3.
 
 It does not load real model weights. Its purpose is deployment verification:
 prove that packet hash-log anchoring is configured and visible in production.
