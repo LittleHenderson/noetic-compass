@@ -160,7 +160,9 @@ class _FakeS3Body:
 class _FakeS3Client:
     def __init__(self) -> None:
         self.objects: dict[tuple[str, str], bytes] = {}
+        self.object_locks: dict[tuple[str, str], dict] = {}
         self.get_calls: list[tuple[str, str]] = []
+        self.head_calls: list[tuple[str, str]] = []
 
     def put_object(self, **kwargs) -> dict:
         bucket = kwargs["Bucket"]
@@ -169,6 +171,11 @@ class _FakeS3Client:
         if isinstance(body, str):
             body = body.encode("utf-8")
         self.objects[(bucket, key)] = body
+        if kwargs.get("ObjectLockMode") and kwargs.get("ObjectLockRetainUntilDate"):
+            self.object_locks[(bucket, key)] = {
+                "ObjectLockMode": kwargs["ObjectLockMode"],
+                "ObjectLockRetainUntilDate": kwargs["ObjectLockRetainUntilDate"],
+            }
         return {"ETag": f'"{hashlib.md5(body).hexdigest()}"'}
 
     def get_object(self, **kwargs) -> dict:
@@ -176,6 +183,12 @@ class _FakeS3Client:
         key = kwargs["Key"]
         self.get_calls.append((bucket, key))
         return {"Body": _FakeS3Body(self.objects[(bucket, key)])}
+
+    def head_object(self, **kwargs) -> dict:
+        bucket = kwargs["Bucket"]
+        key = kwargs["Key"]
+        self.head_calls.append((bucket, key))
+        return self.object_locks.get((bucket, key), {})
 
 
 def test_fleet_routes_registered(client):
@@ -509,6 +522,160 @@ def test_s3_anchor_verify_detects_remote_object_tampering(client, auth_headers, 
         and "hash does not match" in check["notes"]
         for check in verified["checks"]
     )
+
+
+def test_s3_anchor_object_lock_is_verified(client, auth_headers, monkeypatch, tmp_path):
+    fake_s3 = _FakeS3Client()
+    fake_boto3 = types.SimpleNamespace(client=lambda service, **kwargs: fake_s3)
+    monkeypatch.setitem(sys.modules, "boto3", fake_boto3)
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "cas-harness-test-anchor")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "30")
+
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    ).json()
+    trace_id = merged["merged_packet_trace_id"]
+    anchor = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()["hashes"]["external_anchor"]
+
+    assert anchor["status"] == "anchored"
+    assert anchor["object_lock_mode"] == "GOVERNANCE"
+    assert anchor["retention_days"] == 30
+    assert anchor["object_lock_retain_until"]
+    assert (anchor["bucket"], anchor["key"]) in fake_s3.object_locks
+
+    verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
+
+    assert verified["overall"] == "all_match"
+    assert fake_s3.head_calls == [(anchor["bucket"], anchor["key"])]
+    assert any(
+        check["artifact"] == "merged_packet_external_anchor"
+        and check["match"] is True
+        and "Object Lock GOVERNANCE retention is active" in check["notes"]
+        for check in verified["checks"]
+    )
+
+
+def test_s3_anchor_object_lock_metadata_missing_fails_verify(client, auth_headers, monkeypatch, tmp_path):
+    fake_s3 = _FakeS3Client()
+    fake_boto3 = types.SimpleNamespace(client=lambda service, **kwargs: fake_s3)
+    monkeypatch.setitem(sys.modules, "boto3", fake_boto3)
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "cas-harness-test-anchor")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "30")
+
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    ).json()
+    trace_id = merged["merged_packet_trace_id"]
+    anchor = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()["hashes"]["external_anchor"]
+    fake_s3.object_locks.pop((anchor["bucket"], anchor["key"]))
+
+    verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
+
+    assert verified["overall"] == "partial_mismatch"
+    assert any(
+        check["artifact"] == "merged_packet_external_anchor"
+        and check["match"] is False
+        and "Object Lock mode did not match" in check["notes"]
+        for check in verified["checks"]
+    )
+
+
+def test_s3_anchor_partial_object_lock_config_fails_loudly(client, auth_headers, monkeypatch, tmp_path):
+    fake_s3 = _FakeS3Client()
+    fake_boto3 = types.SimpleNamespace(client=lambda service, **kwargs: fake_s3)
+    monkeypatch.setitem(sys.modules, "boto3", fake_boto3)
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "cas-harness-test-anchor")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE")
+
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": _fragment_ref_for(audit, leased),
+        },
+        headers=auth_headers,
+    )
+    assert receipt.status_code == 200
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    ).json()
+    trace_id = merged["merged_packet_trace_id"]
+    anchor = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()["hashes"]["external_anchor"]
+
+    assert anchor["status"] == "failed"
+    assert anchor["mode"] == "s3"
+    assert "RETENTION_DAYS must be a positive integer" in anchor["reason"]
 
 
 def test_fleet_verifier_requires_merged_packet(client, auth_headers):

@@ -238,6 +238,14 @@ CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=30
 ```
 
+Only set these Object Lock variables when the bucket was created with Object Lock enabled. The API fails the anchor loudly if only one variable is set or if the retention value is invalid, so production cannot silently downgrade a requested WORM anchor into a plain S3 write.
+
+If Object Lock retention is enabled, the IAM user also needs permission to write object-retention metadata on the selected prefix:
+
+```text
+s3:PutObjectRetention
+```
+
 Only set `CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3` after the bucket, region, and credentials are valid. If mode is `s3` but the write fails, every new packet will honestly report `Anchor failed`.
 
 After setting the Render env vars and redeploying, run the deployed smoke verifier:
@@ -253,6 +261,18 @@ The smoke creates one tiny distributed audit, merges an Evidence Packet, runs th
 
 The `/verify` route re-reads the S3 anchor object, hashes it, and confirms that the anchor manifest commits to the packet hash and hash-log entry.
 
+If Object Lock was requested in the anchor receipt, `/verify` also performs `HeadObject` and requires the expected lock mode plus a future `ObjectLockRetainUntilDate`. Without that check, the packet is S3 re-read verified but not WORM verified.
+
+To require WORM verification in the deployed smoke, use:
+
+```bash
+cd noetic-compass-scaffold/noetic-compass
+python scripts/verify_evidence_anchor_deployed.py \
+  --base-url https://noetic-compass-api.onrender.com \
+  --require-anchor-mode s3 \
+  --require-object-lock
+```
+
 Success means:
 
 - packet `hashes.external_anchor.mode` is `s3`
@@ -261,11 +281,20 @@ Success means:
 - the `merged_packet_external_anchor` check matches
 - Atlas Evidence Drawer shows `Anchored to S3`
 
+Additional Object Lock success means:
+
+- packet `hashes.external_anchor.object_lock_mode` is `GOVERNANCE` or `COMPLIANCE`
+- packet `hashes.external_anchor.object_lock_retain_until` is present
+- `/evidence/{trace_id}/verify` confirms active Object Lock retention by re-reading S3 object metadata
+
+Current claim boundary: S3 anchoring plus `/verify` proves that the anchor object was written, re-read, hashed, and matched to the Evidence Packet. WORM language is only allowed after the `--require-object-lock` smoke passes against an Object-Lock-enabled bucket.
+
 Failure labels:
 
 - `Anchor disabled`: Render is unset or mode is `disabled`.
 - `Anchor failed`: mode is `s3`, but the bucket, region, credentials, or object-lock settings are wrong.
 - `S3 anchor object re-read failed`: the write receipt exists, but the IAM key cannot `GetObject`, the object was deleted, or the bucket/key is unreachable.
+- `Object Lock mode did not match`: the anchor receipt requested WORM retention, but the S3 object metadata does not prove the expected lock.
 - `No external anchor proof`: old packet or packet generated before external anchor metadata was written.
 
 ## Vercel Deployment (Dashboard)

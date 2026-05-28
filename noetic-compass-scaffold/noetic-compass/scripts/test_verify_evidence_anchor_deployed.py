@@ -87,6 +87,53 @@ def test_main_fails_when_s3_verify_did_not_reread_object(monkeypatch: pytest.Mon
         verifier.main(["--base-url", "https://api.example.test", "--bearer-token", "cli-token"])
 
 
+def test_main_accepts_required_object_lock_when_receipt_and_verify_notes_agree(
+    capsys: pytest.CaptureFixture[str],
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    api = _FakeAnchorApi(
+        anchor_status="anchored",
+        anchor_mode="s3",
+        object_lock_mode="GOVERNANCE",
+        retention_days=30,
+        verify_notes=(
+            "S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, "
+            "and Object Lock GOVERNANCE retention is active until 2026-06-27T00:00:00+00:00"
+        ),
+    )
+    monkeypatch.setattr(verifier, "urlopen", api.urlopen)
+
+    exit_code = verifier.main(
+        [
+            "--base-url",
+            "https://api.example.test",
+            "--bearer-token",
+            "cli-token",
+            "--require-object-lock",
+        ]
+    )
+    output = capsys.readouterr().out
+
+    assert exit_code == 0
+    assert "Require Object Lock: yes" in output
+
+
+def test_main_fails_required_object_lock_when_receipt_lacks_lock(monkeypatch: pytest.MonkeyPatch) -> None:
+    api = _FakeAnchorApi(anchor_status="anchored", anchor_mode="s3")
+    monkeypatch.setattr(verifier, "urlopen", api.urlopen)
+
+    with pytest.raises(verifier.AnchorSmokeFailure, match="expected Object Lock mode"):
+        verifier.main(
+            [
+                "--base-url",
+                "https://api.example.test",
+                "--bearer-token",
+                "cli-token",
+                "--require-object-lock",
+            ]
+        )
+
+
 class _FakeAnchorApi:
     def __init__(
         self,
@@ -95,11 +142,15 @@ class _FakeAnchorApi:
         anchor_mode: str,
         worker_already_registered: bool = False,
         verify_notes: str = "S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry",
+        object_lock_mode: str | None = None,
+        retention_days: int | None = None,
     ) -> None:
         self.anchor_status = anchor_status
         self.anchor_mode = anchor_mode
         self.worker_already_registered = worker_already_registered
         self.verify_notes = verify_notes
+        self.object_lock_mode = object_lock_mode
+        self.retention_days = retention_days
         self.worker_heartbeat_count = 0
         self.audit_id = "audit-anchor-smoke"
         self.trace_id = f"{self.audit_id}-distributed-merge"
@@ -242,6 +293,13 @@ class _FakeAnchorApi:
                             "bucket": "cas-harness-anchor" if self.anchor_mode == "s3" else None,
                             "key": "smoke/entry.json" if self.anchor_mode == "s3" else None,
                             "manifest_sha256": "a" * 64,
+                            "object_lock_mode": self.object_lock_mode,
+                            "object_lock_retain_until": (
+                                "2026-06-27T00:00:00+00:00"
+                                if self.object_lock_mode and self.retention_days
+                                else None
+                            ),
+                            "retention_days": self.retention_days,
                         }
                     },
                 }

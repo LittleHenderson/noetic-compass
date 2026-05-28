@@ -66,6 +66,11 @@ def main(argv: list[str] | None = None) -> int:
         default="s3",
         help="Required packet hashes.external_anchor.mode. Default: s3.",
     )
+    parser.add_argument(
+        "--require-object-lock",
+        action="store_true",
+        help="Fail unless the S3 anchor object has verified Object Lock retention metadata.",
+    )
     args = parser.parse_args(argv)
 
     base = args.base_url.rstrip("/")
@@ -79,6 +84,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Base URL: {base}")
     print(f"Authorization: bearer token from {token_source}")
     print(f"Required anchor mode: {args.require_anchor_mode}")
+    print(f"Require Object Lock: {'yes' if args.require_object_lock else 'no'}")
     print("Scope: packet anchoring/control-plane smoke only; no real model inference is performed.")
     print()
 
@@ -237,6 +243,33 @@ def main(argv: list[str] | None = None) -> int:
                 "expected /verify to re-read the S3 anchor object. "
                 f"External-anchor check notes were {verify_notes!r}."
             ),
+        )
+        if args.require_object_lock:
+            object_lock_mode = anchor.get("object_lock_mode")
+            retention_days = anchor.get("retention_days")
+            retain_until = anchor.get("object_lock_retain_until")
+            require_gate(
+                "object-lock-mode",
+                object_lock_mode in {"GOVERNANCE", "COMPLIANCE"},
+                f"expected Object Lock mode GOVERNANCE or COMPLIANCE, got {object_lock_mode!r}",
+            )
+            require_gate(
+                "object-lock-retention",
+                isinstance(retention_days, int) and retention_days >= 1 and isinstance(retain_until, str) and bool(retain_until),
+                (
+                    "expected positive retention_days and object_lock_retain_until "
+                    f"on anchor receipt, got retention_days={retention_days!r} retain_until={retain_until!r}"
+                ),
+            )
+            require_gate(
+                "object-lock-verify",
+                "object lock" in normalized_notes and "retention is active" in normalized_notes,
+                f"expected /verify to confirm active Object Lock retention, notes were {verify_notes!r}",
+            )
+    elif args.require_object_lock:
+        raise AnchorSmokeFailure(
+            "object-lock-mode",
+            f"Object Lock verification requires S3 anchor mode, got {anchor_mode!r}.",
         )
     ok(f"anchor status={anchor_status} mode={anchor_mode} uri={anchor_uri or '(none)'}")
     print()

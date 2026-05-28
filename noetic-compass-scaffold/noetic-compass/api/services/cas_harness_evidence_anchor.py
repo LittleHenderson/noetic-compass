@@ -187,12 +187,16 @@ def _anchor_s3(manifest: Mapping[str, Any]) -> dict[str, Any]:
                 "packet-without-hashes-sha256": _string(manifest.get("packet_without_hashes_sha256")) or "",
             },
         }
-        object_lock_mode = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "").strip().upper()
-        retention_days_raw = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "").strip()
-        if object_lock_mode in {"GOVERNANCE", "COMPLIANCE"} and retention_days_raw:
-            retention_days = max(int(retention_days_raw), 1)
+        object_lock = _object_lock_config()
+        if object_lock["error"]:
+            return _s3_failed(manifest, object_lock["error"])
+        object_lock_mode = object_lock["mode"]
+        retention_days = object_lock["retention_days"]
+        retain_until = None
+        if object_lock_mode and retention_days:
+            retain_until = datetime.now(UTC) + timedelta(days=retention_days)
             put_kwargs["ObjectLockMode"] = object_lock_mode
-            put_kwargs["ObjectLockRetainUntilDate"] = datetime.now(UTC) + timedelta(days=retention_days)
+            put_kwargs["ObjectLockRetainUntilDate"] = retain_until
         response = client.put_object(**put_kwargs)
     except Exception as exc:
         return _s3_failed(manifest, f"S3 anchor write failed: {type(exc).__name__}: {exc}")
@@ -207,7 +211,8 @@ def _anchor_s3(manifest: Mapping[str, Any]) -> dict[str, Any]:
         "manifest_sha256": _sha256_json(manifest),
         "anchored_at": _string(manifest.get("anchored_at")),
         "object_lock_mode": object_lock_mode or None,
-        "retention_days": int(retention_days_raw) if retention_days_raw.isdigit() else None,
+        "object_lock_retain_until": retain_until.isoformat() if retain_until else None,
+        "retention_days": retention_days,
     }
 
 
@@ -267,7 +272,8 @@ def _verify_s3_anchor(packet: Mapping[str, Any], anchor: Mapping[str, Any]) -> d
         client_kwargs["region_name"] = region
 
     try:
-        response = boto3.client("s3", **client_kwargs).get_object(Bucket=bucket, Key=key)
+        client = boto3.client("s3", **client_kwargs)
+        response = client.get_object(Bucket=bucket, Key=key)
         body = response["Body"].read()
     except Exception as exc:
         return _anchor_check(
@@ -306,15 +312,67 @@ def _verify_s3_anchor(packet: Mapping[str, Any], anchor: Mapping[str, Any]) -> d
     hashes = packet.get("hashes")
     packet_hash = _string(hashes.get("packet_without_hashes_sha256")) if isinstance(hashes, Mapping) else None
     entry_hash = _string(hashes.get("hash_log_entry_sha256")) if isinstance(hashes, Mapping) else None
-    match = (
+    manifest_match = (
         manifest.get("packet_without_hashes_sha256") == packet_hash
         and manifest.get("hash_log_entry_sha256") == entry_hash
     )
+    if not manifest_match:
+        return _anchor_check(
+            expected_manifest_hash,
+            actual_manifest_hash,
+            False,
+            "S3 anchor object was re-read, but its manifest does not commit to this packet hash and hash-log entry",
+        )
+
+    expected_object_lock_mode = _string(anchor.get("object_lock_mode"))
+    if expected_object_lock_mode:
+        try:
+            head = client.head_object(Bucket=bucket, Key=key)
+        except Exception as exc:
+            return _anchor_check(
+                expected_manifest_hash,
+                actual_manifest_hash,
+                False,
+                f"S3 anchor object was re-read, but Object Lock metadata check failed: {type(exc).__name__}: {exc}",
+            )
+        actual_object_lock_mode = _string(head.get("ObjectLockMode"))
+        retain_until = head.get("ObjectLockRetainUntilDate")
+        retain_until_text = _datetime_text(retain_until)
+        if actual_object_lock_mode != expected_object_lock_mode:
+            return _anchor_check(
+                expected_manifest_hash,
+                actual_manifest_hash,
+                False,
+                (
+                    "S3 anchor object was re-read, but Object Lock mode did not match: "
+                    f"expected {expected_object_lock_mode}, got {actual_object_lock_mode or 'none'}"
+                ),
+            )
+        if not _retain_until_is_future(retain_until):
+            return _anchor_check(
+                expected_manifest_hash,
+                actual_manifest_hash,
+                False,
+                (
+                    "S3 anchor object was re-read, but Object Lock retention is missing or expired: "
+                    f"{retain_until_text or 'none'}"
+                ),
+            )
+        return _anchor_check(
+            expected_manifest_hash,
+            actual_manifest_hash,
+            True,
+            (
+                "S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, "
+                f"and Object Lock {expected_object_lock_mode} retention is active until {retain_until_text}"
+            ),
+        )
+
     return _anchor_check(
         expected_manifest_hash,
         actual_manifest_hash,
-        match,
-        "S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry",
+        True,
+        "S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry; Object Lock was not requested",
     )
 
 
@@ -339,6 +397,49 @@ def _anchor_check(expected: str | None, actual: str | None, match: bool, notes: 
 
 def _anchor_mode() -> AnchorStatus:
     return os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "disabled").strip().lower() or "disabled"
+
+
+def _object_lock_config() -> dict[str, Any]:
+    mode_raw = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "").strip()
+    days_raw = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "").strip()
+    if not mode_raw and not days_raw:
+        return {"mode": None, "retention_days": None, "error": None}
+
+    mode = mode_raw.upper()
+    if mode not in {"GOVERNANCE", "COMPLIANCE"}:
+        return {
+            "mode": None,
+            "retention_days": None,
+            "error": (
+                "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE must be "
+                "GOVERNANCE or COMPLIANCE when Object Lock retention is configured."
+            ),
+        }
+    if not days_raw.isdigit() or int(days_raw) < 1:
+        return {
+            "mode": None,
+            "retention_days": None,
+            "error": "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS must be a positive integer when Object Lock mode is configured.",
+        }
+    return {"mode": mode, "retention_days": int(days_raw), "error": None}
+
+
+def _datetime_text(value: Any) -> str | None:
+    if isinstance(value, datetime):
+        return value.astimezone(UTC).isoformat()
+    return _string(value)
+
+
+def _retain_until_is_future(value: Any) -> bool:
+    if isinstance(value, datetime):
+        return value.astimezone(UTC) > datetime.now(UTC)
+    if isinstance(value, str):
+        try:
+            parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError:
+            return False
+        return parsed.astimezone(UTC) > datetime.now(UTC)
+    return False
 
 
 def _safe(value: str) -> str:

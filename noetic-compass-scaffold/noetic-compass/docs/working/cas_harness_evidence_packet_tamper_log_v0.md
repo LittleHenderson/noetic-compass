@@ -168,6 +168,13 @@ Beta v0 is acceptable when:
 
 As of the CAS Harness fleet packet work, merged distributed Evidence Packets include canonical packet hashes, append-only log metadata, and an `external_anchor` receipt. The anchor can run in `disabled`, `local`, or `s3` mode. S3 mode records the bucket, key, manifest hash, and write receipt in the packet hash block so Atlas can distinguish `Anchored to S3`, `Anchor disabled`, `Anchor failed`, and `No external anchor proof`.
 
+S3 anchoring has two distinct trust levels:
+
+- S3 re-read verified: `/evidence/{trace_id}/verify` fetches the S3 object, hashes it, and confirms that the manifest commits to the packet hash and hash-log entry.
+- WORM/Object Lock verified: the anchor receipt also contains `object_lock_mode`, `object_lock_retain_until`, and `retention_days`, and `/verify` confirms by `HeadObject` that the S3 object has the expected Object Lock mode and a future retention date.
+
+Do not use WORM language for a deployment unless the Object Lock-specific smoke passes. Without the Object Lock fields and metadata verification, the accurate claim is "S3 anchored and re-read verified," not "write-once retained."
+
 Deployment verification is handled by:
 
 ```bash
@@ -177,3 +184,12 @@ python scripts/verify_evidence_anchor_deployed.py \
 ```
 
 That smoke creates one tiny fleet packet, runs the verifier, fetches `/evidence/{trace_id}`, and requires the `/evidence/{trace_id}/verify` external-anchor check to match. It is not a model-quality eval; it is the production proof that the black-box flight-recorder artifact is being externally anchored.
+
+To verify WORM retention, run the stricter variant after enabling Object Lock on the bucket and setting `CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE` plus `CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS`:
+
+```bash
+python scripts/verify_evidence_anchor_deployed.py \
+  --base-url https://noetic-compass-api.onrender.com \
+  --require-anchor-mode s3 \
+  --require-object-lock
+```
