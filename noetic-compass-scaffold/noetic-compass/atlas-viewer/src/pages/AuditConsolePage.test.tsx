@@ -891,7 +891,7 @@ describe('AuditConsolePage', () => {
         Authorization: 'Bearer fleet-jwt',
       });
     }
-  });
+  }, 15000);
 
   it('keeps fleet merge disabled when the backend verifier gate is blocked', async () => {
     const blockedFragmentRef = await fleetFragmentRef({

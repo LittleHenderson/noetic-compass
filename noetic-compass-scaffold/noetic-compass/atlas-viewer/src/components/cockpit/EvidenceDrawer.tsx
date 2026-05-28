@@ -73,6 +73,19 @@ interface EvidencePacket {
   caveats?: unknown;
 }
 
+type EvidenceAnchorTone = 'verified' | 'warning' | 'failed' | 'muted';
+
+interface EvidenceAnchorSummary {
+  label: string;
+  detail: string;
+  tone: EvidenceAnchorTone;
+  mode: string | null;
+  anchorUri: string | null;
+  manifestSha256: string | null;
+  hashLogEntrySha256: string | null;
+  packetSha256: string | null;
+}
+
 type PacketState =
   | { status: 'idle'; packet?: undefined; error?: undefined }
   | { status: 'loading'; packet?: undefined; error?: undefined }
@@ -198,6 +211,57 @@ const sourceNoteStyle: CSSProperties = {
   lineHeight: 1.45,
 };
 
+const anchorCardStyle = (tone: EvidenceAnchorTone): CSSProperties => {
+  const border =
+    tone === 'verified'
+      ? 'rgba(45, 212, 191, 0.42)'
+      : tone === 'failed'
+        ? 'rgba(248, 113, 113, 0.42)'
+        : tone === 'warning'
+          ? 'rgba(251, 191, 36, 0.42)'
+          : 'rgba(148, 163, 184, 0.22)';
+  const background =
+    tone === 'verified'
+      ? 'rgba(20, 184, 166, 0.12)'
+      : tone === 'failed'
+        ? 'rgba(127, 29, 29, 0.18)'
+        : tone === 'warning'
+          ? 'rgba(146, 64, 14, 0.14)'
+          : 'rgba(15, 23, 42, 0.48)';
+
+  return {
+    display: 'grid',
+    gap: 7,
+    padding: 11,
+    borderRadius: 8,
+    border: `1px solid ${border}`,
+    background,
+  };
+};
+
+const anchorLabelStyle = (tone: EvidenceAnchorTone): CSSProperties => ({
+  margin: 0,
+  color:
+    tone === 'verified'
+      ? '#99f6e4'
+      : tone === 'failed'
+        ? '#fecaca'
+        : tone === 'warning'
+          ? '#fde68a'
+          : '#cbd5e1',
+  fontSize: 13,
+  fontWeight: 800,
+});
+
+const anchorMetaStyle: CSSProperties = {
+  display: 'grid',
+  gap: 4,
+  color: '#94a3b8',
+  fontSize: 11,
+  fontFamily: '"JetBrains Mono", Menlo, Consolas, monospace',
+  wordBreak: 'break-all',
+};
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
@@ -319,6 +383,111 @@ function evidencePacketUrl(traceId: string): string {
   return `${evidenceApiBaseUrl()}/evidence/${encodeURIComponent(traceId)}`;
 }
 
+function stringField(record: Record<string, unknown>, key: string): string | null {
+  const value = record[key];
+  return typeof value === 'string' && value.length > 0 ? value : null;
+}
+
+function shortHash(value: string | null): string | null {
+  if (!value) return null;
+  if (value.length <= 18) return value;
+  return `${value.slice(0, 10)}...${value.slice(-8)}`;
+}
+
+function evidenceAnchorSummary(packet: EvidencePacket): EvidenceAnchorSummary {
+  const hashes = isRecord(packet.hashes) ? packet.hashes : {};
+  const packetSha256 = stringField(hashes, 'packet_without_hashes_sha256');
+  const hashLogEntrySha256 = stringField(hashes, 'hash_log_entry_sha256');
+  const anchor = isRecord(hashes.external_anchor) ? hashes.external_anchor : null;
+
+  if (!anchor) {
+    return {
+      label: 'No external anchor proof',
+      detail:
+        'This packet may still have raw hashes, but it does not declare an external hash-log anchor.',
+      tone: 'muted',
+      mode: null,
+      anchorUri: null,
+      manifestSha256: null,
+      hashLogEntrySha256,
+      packetSha256,
+    };
+  }
+
+  const status = stringField(anchor, 'status');
+  const mode = stringField(anchor, 'mode');
+  const anchorUri = stringField(anchor, 'anchor_uri');
+  const manifestSha256 = stringField(anchor, 'manifest_sha256');
+
+  if (status === 'anchored' && mode === 's3') {
+    return {
+      label: 'Anchored to S3',
+      detail:
+        'The packet hash-log entry was written to the configured S3 anchor target.',
+      tone: 'verified',
+      mode,
+      anchorUri,
+      manifestSha256,
+      hashLogEntrySha256,
+      packetSha256,
+    };
+  }
+
+  if (status === 'anchored') {
+    return {
+      label: 'Anchored locally',
+      detail:
+        'The packet hash-log entry is mirrored to a local anchor manifest for tamper-evidence on this deployment.',
+      tone: 'verified',
+      mode,
+      anchorUri,
+      manifestSha256,
+      hashLogEntrySha256,
+      packetSha256,
+    };
+  }
+
+  if (status === 'disabled') {
+    return {
+      label: 'Anchor disabled',
+      detail:
+        'Packet hashes and the local hash log exist, but external anchoring is disabled for this deployment.',
+      tone: 'warning',
+      mode,
+      anchorUri,
+      manifestSha256,
+      hashLogEntrySha256,
+      packetSha256,
+    };
+  }
+
+  if (status === 'failed') {
+    return {
+      label: 'Anchor failed',
+      detail:
+        'External anchor write failed. Treat the packet as locally hash-logged, not externally anchored.',
+      tone: 'failed',
+      mode,
+      anchorUri,
+      manifestSha256,
+      hashLogEntrySha256,
+      packetSha256,
+    };
+  }
+
+  return {
+    label: 'Anchor status unknown',
+    detail:
+      'The packet declares an external anchor block, but this UI does not recognize its status.',
+    tone: 'muted',
+    mode,
+    anchorUri,
+    manifestSha256,
+    hashLogEntrySha256,
+    packetSha256,
+  };
+}
+
 export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element {
   const { open, payload, onClose } = props;
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
@@ -393,6 +562,9 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
     ? JSON.stringify(payload.detail, null, 2)
     : null;
   const packetFailed = packetState.status === 'error';
+  const anchorSummary = packetState.status === 'loaded'
+    ? evidenceAnchorSummary(packetState.packet)
+    : null;
   const blindspots = payload?.blindspotInterpretations ?? [];
   const blindspotSection =
     blindspots.length > 0 ? (
@@ -563,6 +735,52 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
                 <div style={noteStyle} data-testid="evidence-packet-loaded">
                   Loaded {packetState.packet.schema_version ?? 'Evidence Packet'}
                 </div>
+                {anchorSummary ? (
+                  <>
+                    <div style={sectionLabelStyle}>packet integrity</div>
+                    <div
+                      style={anchorCardStyle(anchorSummary.tone)}
+                      data-testid="evidence-packet-anchor"
+                    >
+                      <p
+                        style={anchorLabelStyle(anchorSummary.tone)}
+                        data-testid="evidence-packet-anchor-status"
+                      >
+                        {anchorSummary.label}
+                      </p>
+                      <p style={sourceNoteStyle} data-testid="evidence-packet-anchor-detail">
+                        {anchorSummary.detail}
+                      </p>
+                      <div style={anchorMetaStyle}>
+                        {anchorSummary.mode ? (
+                          <span data-testid="evidence-packet-anchor-mode">
+                            mode: {anchorSummary.mode}
+                          </span>
+                        ) : null}
+                        {anchorSummary.anchorUri ? (
+                          <span data-testid="evidence-packet-anchor-uri">
+                            anchor: {anchorSummary.anchorUri}
+                          </span>
+                        ) : null}
+                        {anchorSummary.manifestSha256 ? (
+                          <span data-testid="evidence-packet-anchor-manifest">
+                            manifest: {shortHash(anchorSummary.manifestSha256)}
+                          </span>
+                        ) : null}
+                        {anchorSummary.hashLogEntrySha256 ? (
+                          <span data-testid="evidence-packet-anchor-hash-log">
+                            hash log: {shortHash(anchorSummary.hashLogEntrySha256)}
+                          </span>
+                        ) : null}
+                        {anchorSummary.packetSha256 ? (
+                          <span data-testid="evidence-packet-anchor-packet-hash">
+                            packet: {shortHash(anchorSummary.packetSha256)}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </>
+                ) : null}
                 <div style={sectionLabelStyle}>input</div>
                 <pre style={codeBlockStyle} data-testid="evidence-packet-input">
                   {packetText(packetState.packet, 'input')}
