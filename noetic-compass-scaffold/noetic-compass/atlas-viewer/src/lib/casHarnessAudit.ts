@@ -30,6 +30,12 @@ export interface VerifierDecision {
   confidence: number;
   source: string;
   reason: string;
+  decisionScope?: string | null;
+  coverage?: {
+    basis?: string | null;
+    caseCount?: number | null;
+    classCount?: number | null;
+  } | null;
 }
 
 export interface AuditRuntimeProof {

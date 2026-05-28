@@ -531,6 +531,8 @@ def test_reference_target_trace_completes_evidence_backed_accept(client, auth_he
         "confidence": 0.9816,
         "source": "stage19_verification_stack+stage20_generation_readiness",
         "reason": "Stage 19 accepted the row and Stage 20 readiness action is allow.",
+        "decision_scope": None,
+        "coverage": None,
     }
     assert set(chips.values()) == {"present"}
     assert [event["status"] for event in body["lifecycle"]] == [
@@ -602,6 +604,8 @@ def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decis
         "confidence": 0.9816,
         "source": "stage19_verification_stack+stage20_generation_readiness",
         "reason": "Stage 19 accepted the row and Stage 20 readiness action is allow.",
+        "decision_scope": None,
+        "coverage": None,
     }
     assert set(chips.values()) == {"present"}
     assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
@@ -636,6 +640,56 @@ def test_run_route_uses_s7_f28_packet_as_conservative_human_review(client, auth_
     assert body["atlas_deep_link"] == f"/cockpit?trace_id={trace_id}"
     assert body["verifier_decision"]["source"] == "S7-F28-BALANCED-BRIDGE"
     assert set(chips.values()).issubset({"verified", "present"})
+    assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
+
+
+def test_run_route_uses_stage9_40e_packet_accept_from_working_docs(client, auth_headers):
+    trace_id = "stage9-40e-original-baseline-readout-20260527"
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "model_id": "EleutherAI/gpt-neox-20b",
+            "evidence_packet_trace_id": trace_id,
+        },
+        headers=auth_headers,
+    )
+    assert created.status_code == 200, created.text
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "ACCEPT"
+    assert body["confidence"] == 0.95625
+    assert body["evidence_packet_trace_id"] == trace_id
+    assert body["atlas_deep_link"] == f"/cockpit?trace_id={trace_id}"
+    assert body["verifier_decision"] == {
+        "verdict": "ACCEPT",
+        "confidence": 0.95625,
+        "source": "stage9_40e_packet_verifier",
+        "reason": "all_stage9_40e_validation_gates_passed",
+        "decision_scope": "stage9_40e_validation_packet",
+        "coverage": {
+            "basis": "stage9_40e_validation_cases",
+            "case_count": 80,
+            "class_count": 40,
+        },
+    }
+    assert chips == {
+        "model_proof": "present",
+        "cas_readout": "verified",
+        "causal_proof": "verified",
+        "control_proof": "verified",
+        "output_proof": "verified",
+        "packet_proof": "present",
+    }
     assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
 
 
@@ -674,6 +728,8 @@ def test_run_route_suppresses_only_when_complete_packet_has_explicit_rejection(
         "confidence": 0.9,
         "source": "stage19_verification_stack+stage20_generation_readiness",
         "reason": "Stage 19 rejected the row and Stage 20 readiness action is suppress.",
+        "decision_scope": None,
+        "coverage": None,
     }
 
 

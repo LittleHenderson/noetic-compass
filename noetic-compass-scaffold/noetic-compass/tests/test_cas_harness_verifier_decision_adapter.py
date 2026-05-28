@@ -70,6 +70,12 @@ def _stage9_40e_packet() -> dict:
                 "confidence": 0.91,
                 "source": "stage9_40e_verifier_decision",
                 "reason": "All Stage 9 40E proof chips pass.",
+                "decision_scope": "stage9_40e_validation_packet",
+                "coverage": {
+                    "basis": "stage9_40e_validation_cases",
+                    "case_count": 80,
+                    "class_count": 40,
+                },
             },
             "proof_chips": [
                 {"id": "model_proof", "status": "present"},
@@ -192,6 +198,12 @@ def test_stage9_40e_packet_can_pass_through_explicit_accept():
     assert decision.verdict == "ACCEPT"
     assert decision.confidence == 0.91
     assert decision.source == "stage9_40e_verifier_decision"
+    assert decision.decision_scope == "stage9_40e_validation_packet"
+    assert decision.coverage == {
+        "basis": "stage9_40e_validation_cases",
+        "case_count": 80,
+        "class_count": 40,
+    }
 
 
 def test_stage9_40e_packet_blocks_accept_when_packet_verdict_does_not_match():

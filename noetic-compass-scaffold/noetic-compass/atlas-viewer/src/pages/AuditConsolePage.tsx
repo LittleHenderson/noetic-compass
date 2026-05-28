@@ -121,6 +121,7 @@ const M1_REFERENCE_TARGET: AuditTargetConfig = {
 };
 
 const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
+const STAGE9_40E_TRACE_ID = 'stage9-40e-original-baseline-readout-20260527';
 
 const S7_F28_PACKET_TARGET: AuditTargetConfig = {
   modelId: 'EleutherAI/gpt-neox-20b',
@@ -135,6 +136,21 @@ const S7_F28_PACKET_TARGET: AuditTargetConfig = {
     'S7-F28 GPT-NeoX-20B Evidence Packet selected. Run CAS audit to review the conservative human-review verdict.',
   canRunAudit: true,
   evidencePacketTraceId: S7_F28_TRACE_ID,
+};
+
+const STAGE9_40E_PACKET_TARGET: AuditTargetConfig = {
+  modelId: 'EleutherAI/gpt-neox-20b',
+  provider: 'Stage 9 original 40E verifier packet',
+  endpointLabel: `/api/cas-harness/audit/session · ${STAGE9_40E_TRACE_ID}`,
+  scenarioText:
+    'Stage 9 original 40-Element GPT-NeoX-20B validation packet with verifier-attached ACCEPT decision.',
+  endpointUrl: null,
+  connectionId: 'cas-target-stage9-40e-gpt-neox-20b',
+  checkedAt: '',
+  statusDetail:
+    'Stage 9 40E GPT-NeoX-20B ACCEPT Evidence Packet selected. Run CAS audit to surface the verifier decision, proof chips, confidence basis, and validation-packet scope.',
+  canRunAudit: true,
+  evidencePacketTraceId: STAGE9_40E_TRACE_ID,
 };
 
 const AUDIT_STEPS: AuditStep[] = [
@@ -784,6 +800,18 @@ export default function AuditConsolePage() {
     });
   };
 
+  const loadStage940EPacketTarget = () => {
+    setSession(null);
+    setSessionError(null);
+    setTargetError(null);
+    setIsTargetConnecting(false);
+    setIsAuditRunning(false);
+    setTarget({
+      ...STAGE9_40E_PACKET_TARGET,
+      checkedAt: new Date().toISOString(),
+    });
+  };
+
   const disconnectTarget = () => {
     setTarget(null);
     setSession(null);
@@ -1138,10 +1166,18 @@ export default function AuditConsolePage() {
             <button
               type="button"
               style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+              onClick={loadStage940EPacketTarget}
+              disabled={isAuditRunning || isTargetConnecting}
+            >
+              Load 20B ACCEPT packet
+            </button>
+            <button
+              type="button"
+              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
               onClick={loadS7F28PacketTarget}
               disabled={isAuditRunning || isTargetConnecting}
             >
-              Load 20B packet
+              Load 20B review packet
             </button>
             <button
               type="button"

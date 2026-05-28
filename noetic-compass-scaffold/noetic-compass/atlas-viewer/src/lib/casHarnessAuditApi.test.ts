@@ -1055,6 +1055,12 @@ describe('casHarnessAuditApi', () => {
         confidence: 0.9816,
         source: 'stage19_verification_stack+stage20_generation_readiness',
         reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+        decision_scope: 'stage9_40e_validation_packet',
+        coverage: {
+          basis: 'stage9_40e_validation_cases',
+          case_count: 80,
+          class_count: 40,
+        },
       },
     }));
 
@@ -1063,6 +1069,12 @@ describe('casHarnessAuditApi', () => {
       confidence: 0.9816,
       source: 'stage19_verification_stack+stage20_generation_readiness',
       reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+      decisionScope: 'stage9_40e_validation_packet',
+      coverage: {
+        basis: 'stage9_40e_validation_cases',
+        caseCount: 80,
+        classCount: 40,
+      },
     });
   });
 
