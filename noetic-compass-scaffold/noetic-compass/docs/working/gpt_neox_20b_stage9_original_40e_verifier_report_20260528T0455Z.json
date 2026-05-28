@@ -1,0 +1,142 @@
+{
+  "confidence_basis": {
+    "components": {
+      "bridge_selected_element_accuracy": 0.975,
+      "causal_guard": 1.0,
+      "control_gate": 1.0,
+      "hidden_probe_test_acc": 0.95625,
+      "output_bridge_gate": 1.0,
+      "packet_gate": 1.0
+    },
+    "formula": "ACCEPT confidence = min(hidden_probe_test_acc, bridge_selected_element_accuracy, causal_guard, control_gate, output_bridge_gate, packet_gate). SUPPRESS confidence is a blocking-risk score. FLAG confidence is unavailable unless a risk score is present.",
+    "important_limit": "This is packet-level validation confidence, not mathematical certainty and not a per-customer row confidence unless the source packet is a production row."
+  },
+  "created_at": "2026-05-28T07:30:43.806513+00:00",
+  "explicit_verifier_decision": {
+    "confidence": 0.95625,
+    "coverage": {
+      "basis": "stage9_40e_validation_cases",
+      "case_count": 80,
+      "class_count": 40
+    },
+    "decision_scope": "stage9_40e_validation_packet",
+    "mode": "BALANCED",
+    "reason": "all_stage9_40e_validation_gates_passed",
+    "source": "stage9_40e_packet_verifier",
+    "verdict": "ACCEPT"
+  },
+  "generation_readiness": {
+    "generation_readiness": "allow",
+    "mode": "BALANCED",
+    "policy_version": "stage9_40e_packet_verifier_v1",
+    "reasons": [
+      "all_stage9_40e_validation_gates_passed"
+    ],
+    "risk_score": 0.0
+  },
+  "important_limit": "This verifier report is explicit and evidence-bound, but it is built over the Stage 9 40E validation packet. It does not claim live customer inference unless the packet source is a live production run.",
+  "mode": "BALANCED",
+  "rejected_claims": [
+    "raw_cas_symbol_understanding",
+    "complete_neuron_by_neuron_causal_map",
+    "per-customer production verdict from validation artifact alone"
+  ],
+  "run_id": "gpt-neox-20b-stage9-original-40e-20260527",
+  "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
+  "source_packet": "docs\\working\\gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json",
+  "source_packet_sha256": "5742d4033c3ae89c3b59fbe3234fd1540b7f8617d9d212ccda4ec00bb898f581",
+  "status": "STAGE9_40E_VERIFIER_ACCEPT",
+  "trace_id": "stage9-40e-original-baseline-readout-20260527",
+  "verification_stack": {
+    "gates": {
+      "causal": {
+        "guard_status": "passed",
+        "passed": true,
+        "random_same_rank_max_disruption": 0.002678571428571419,
+        "true_disruption": 0.2872767857142857,
+        "true_minus_random_max": 0.284598214286
+      },
+      "control": {
+        "caveat": "Cover discovery is candidate-only until matched ablation validates targeted drops against random same-size and wrong-class controls.",
+        "class_count": 40,
+        "passed": true,
+        "random_same_size_classes": 40,
+        "wrong_class_reference_classes": 40
+      },
+      "output_bridge": {
+        "n_cases": 80,
+        "passed": true,
+        "probe_raw_delta_vs_none": 0.013817,
+        "probe_readable_delta_vs_none": 1.41205,
+        "probe_readable_minus_partner_readable_margin": 2.881239,
+        "selected_element_accuracy": 0.975
+      },
+      "packet": {
+        "passed": true,
+        "run_id": "gpt-neox-20b-stage9-original-40e-20260527",
+        "schema_version": "cas_harness_stage9_40e_evidence_packet.v1",
+        "trace_id": "stage9-40e-original-baseline-readout-20260527"
+      },
+      "proof_chips": {
+        "core_not_verified": [],
+        "missing": [],
+        "non_passing": [],
+        "passed": true,
+        "statuses": {
+          "cas_readout": "verified",
+          "causal_proof": "verified",
+          "control_proof": "verified",
+          "model_proof": "present",
+          "output_proof": "verified",
+          "packet_proof": "present"
+        }
+      },
+      "readout": {
+        "confirmed_text_test_acc": 0.4924107142857143,
+        "hidden_minus_confirmed_text": 0.463839285714,
+        "hidden_probe_test_acc": 0.95625,
+        "passed": true,
+        "shuffled_label_hidden_mean_test_acc": 0.02619419642857143
+      }
+    },
+    "proof_chip_gate": "passed",
+    "proof_chips": [
+      {
+        "detail": "Model identity/hash evidence is recorded in the packet.",
+        "id": "model_proof",
+        "name": "Model proof",
+        "status": "present"
+      },
+      {
+        "detail": "Corrected Stage 9 40E hidden-state readout beats text and shuffled controls.",
+        "id": "cas_readout",
+        "name": "CAS readout",
+        "status": "verified"
+      },
+      {
+        "detail": "Subspace ablation/control evidence is recorded for the Stage 9 40E readout.",
+        "id": "causal_proof",
+        "name": "Causal proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Candidate cover/control evidence is recorded for the Stage 9 40E run.",
+        "id": "control_proof",
+        "name": "Control proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Eta-to-epsilon readable bridge output evidence is recorded.",
+        "id": "output_proof",
+        "name": "Output proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Evidence Packet schema, trace ID, and source artifact hashes are recorded.",
+        "id": "packet_proof",
+        "name": "Packet proof",
+        "status": "present"
+      }
+    ]
+  }
+}

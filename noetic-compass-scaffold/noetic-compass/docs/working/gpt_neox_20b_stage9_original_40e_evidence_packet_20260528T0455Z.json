@@ -176,7 +176,7 @@
     },
     "tier": "cover_discovery"
   },
-  "generated_at": "2026-05-28T07:12:48.403918+00:00",
+  "generated_at": "2026-05-28T07:30:55.755152+00:00",
   "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
   "model_proof": {
     "input_provenance": null,
@@ -332,11 +332,20 @@
         "created_at": "2026-05-28T04:54:01.212876+00:00",
         "redaction_class": "stage9_40e_internal_report",
         "storage_uri": "docs\\working\\gpt_neox_20b_stage9_original_40e_eta_epsilon_bridge_per2_20260528T0455Z.json"
+      },
+      {
+        "artifact_id": "stage9_40e_verifier_report",
+        "artifact_type": "stage9_40e_verifier_decision_report",
+        "byte_count": 5447,
+        "content_sha256": "79d140f0d5028578d8c776eb6069cbad53a4733e0553004aa9ecb8366374a5f0",
+        "created_at": "2026-05-28T07:30:43.815012+00:00",
+        "redaction_class": "stage9_40e_internal_report",
+        "storage_uri": "docs\\working\\gpt_neox_20b_stage9_original_40e_verifier_report_20260528T0455Z.json"
       }
     ],
-    "input_count": 4,
+    "input_count": 5,
     "readout_report": "docs\\working\\gpt_neox_20b_stage9_original_40e_probe_eval_report_20260527.json",
-    "verifier_report": null
+    "verifier_report": "docs\\working\\gpt_neox_20b_stage9_original_40e_verifier_report_20260528T0455Z.json"
   },
   "readout_proof": {
     "baseline_note": "PR #102 corrected the Stage 9 original 40E readout baseline. This merger preserves that corrected baseline and does not promote the packet to ACCEPT or SUPPRESS.",
@@ -493,13 +502,25 @@
     "model": "present",
     "output_bridge": "present",
     "readout": "present",
-    "verifier": "missing"
+    "verifier": "present"
   },
   "trace_id": "stage9-40e-original-baseline-readout-20260527",
-  "verdict": "FLAG_FOR_HUMAN_REVIEW",
-  "verdict_rationale": "Merged packet is review-only because required proof tiers are missing: verifier.",
+  "verdict": "ACCEPT",
+  "verdict_rationale": "All required proof chips are pass-ready and the attached verifier returned `ACCEPT` with confidence 0.95625.",
   "verification": {
-    "explicit_verifier_decision": null,
+    "explicit_verifier_decision": {
+      "confidence": 0.95625,
+      "coverage": {
+        "basis": "stage9_40e_validation_cases",
+        "case_count": 80,
+        "class_count": 40
+      },
+      "decision_scope": "stage9_40e_validation_packet",
+      "mode": "BALANCED",
+      "reason": "all_stage9_40e_validation_gates_passed",
+      "source": "stage9_40e_packet_verifier",
+      "verdict": "ACCEPT"
+    },
     "proof_chip_gate": "passed",
     "proof_chips": [
       {
@@ -541,9 +562,36 @@
     ]
   },
   "verifier": {
-    "blocking_reason": "No verifier decision layer is attached to this packet.",
+    "explicit_verifier_decision": {
+      "confidence": 0.95625,
+      "coverage": {
+        "basis": "stage9_40e_validation_cases",
+        "case_count": 80,
+        "class_count": 40
+      },
+      "decision_scope": "stage9_40e_validation_packet",
+      "mode": "BALANCED",
+      "reason": "all_stage9_40e_validation_gates_passed",
+      "source": "stage9_40e_packet_verifier",
+      "verdict": "ACCEPT"
+    },
     "required_for_final_verdict": true,
-    "source_report": null,
-    "status": "missing"
+    "source_fields": {
+      "created_at": "2026-05-28T07:30:43.806513+00:00",
+      "run_id": "gpt-neox-20b-stage9-original-40e-20260527",
+      "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
+      "status": "STAGE9_40E_VERIFIER_ACCEPT",
+      "trace_id": "stage9-40e-original-baseline-readout-20260527"
+    },
+    "source_report": {
+      "artifact_id": "stage9_40e_verifier_report",
+      "artifact_type": "stage9_40e_verifier_decision_report",
+      "byte_count": 5447,
+      "content_sha256": "79d140f0d5028578d8c776eb6069cbad53a4733e0553004aa9ecb8366374a5f0",
+      "created_at": "2026-05-28T07:30:43.815012+00:00",
+      "redaction_class": "stage9_40e_internal_report",
+      "storage_uri": "docs\\working\\gpt_neox_20b_stage9_original_40e_verifier_report_20260528T0455Z.json"
+    },
+    "status": "present"
   }
 }
