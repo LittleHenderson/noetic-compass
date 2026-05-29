@@ -261,6 +261,32 @@ const TKS40_TEXT_BASELINE_STEPS: Array<{ title: string; body: string }> = [
   },
 ];
 
+const EVIDENCE_PACKET_FLIGHT_RECORDER_SUMMARY =
+  'The Evidence Packet is the black-box flight recorder for a CAS Harness run: one trace_id-keyed record of what model was audited, what CAS saw, what verdict was returned, which proof chips supported it, and how the packet is integrity-checked afterward.';
+
+const EVIDENCE_PACKET_FLIGHT_RECORDER_STEPS: Array<{ title: string; body: string }> = [
+  {
+    title: 'What it records.',
+    body:
+      'Input, output, model metadata, audit config, proof chips, confidence basis, verifier decision, packet hash, hash-log entry, and external anchor receipt.',
+  },
+  {
+    title: 'What tamper-evidence means.',
+    body:
+      'Changing the packet changes its SHA-256 hash. Changing the hash-log entry breaks the recorded chain. The verifier re-reads the external S3 anchor object and checks that it commits to the same packet hash and hash-log entry.',
+  },
+  {
+    title: 'What WORM retained means now.',
+    body:
+      'Production strict smoke passed with S3 Object Lock required. New anchored packets are written with Object Lock GOVERNANCE retention and verified by HeadObject before the UI may show WORM retained.',
+  },
+  {
+    title: 'What it does not prove by itself.',
+    body:
+      'It does not prove the model is safe or objectively correct. It proves what CAS observed and decided under that audit configuration, and that the resulting record is hash-bound, externally anchored, and retention-protected.',
+  },
+];
+
 const HOW_IT_RELATES = `The picture is the stimulus. The token stream is the model's response.
 The neural net shows how the response was built — which neurons fired
 to land each token. The Mode 7 arcs link the token currently being
@@ -379,6 +405,18 @@ export default function HelpOverlay({ open, onClose }: HelpOverlayProps): JSX.El
               <p style={bodyTextStyle}>{TKS40_TEXT_BASELINE_SUMMARY}</p>
               <ol style={orderedListStyle}>
                 {TKS40_TEXT_BASELINE_STEPS.map((step) => (
+                  <li key={step.title} style={listItemStyle}>
+                    <span style={inlineStrongStyle}>{step.title}</span> {step.body}
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <section style={sectionStyle} data-testid="evidence-packet-flight-recorder-faq">
+              <h3 style={sectionHeaderStyle}>FAQ: Evidence Packet Flight Recorder</h3>
+              <p style={bodyTextStyle}>{EVIDENCE_PACKET_FLIGHT_RECORDER_SUMMARY}</p>
+              <ol style={orderedListStyle}>
+                {EVIDENCE_PACKET_FLIGHT_RECORDER_STEPS.map((step) => (
                   <li key={step.title} style={listItemStyle}>
                     <span style={inlineStrongStyle}>{step.title}</span> {step.body}
                   </li>
