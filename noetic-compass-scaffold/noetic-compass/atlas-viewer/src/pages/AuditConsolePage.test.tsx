@@ -597,7 +597,7 @@ describe('AuditConsolePage', () => {
     );
   });
 
-  it('loads the Stage 9 40E 20B ACCEPT packet and shows scope plus confidence basis', async () => {
+  it('loads the Stage 9 40E 20B validation packet and shows the WORM gate', async () => {
     const chips = stage940EChips();
     const verifierDecision = {
       verdict: 'ACCEPT',
@@ -619,7 +619,7 @@ describe('AuditConsolePage', () => {
           sessionResponse({
             model_id: 'EleutherAI/gpt-neox-20b',
             scenario_summary:
-              'Stage 9 original 40-Element GPT-NeoX-20B validation packet with verifier-attached ACCEPT decision.',
+              'Stage 9 original 40-Element GPT-NeoX-20B validation packet. It carries a verifier ACCEPT decision, but routes to review unless WORM packet proof is attached.',
             evidence_packet_trace_id: STAGE9_40E_TRACE_ID,
             provenance_chips: chips,
             verifier_decision: verifierDecision,
@@ -631,10 +631,10 @@ describe('AuditConsolePage', () => {
           sessionResponse({
             status: 'COMPLETE',
             model_id: 'EleutherAI/gpt-neox-20b',
-            verdict: 'ACCEPT',
-            confidence: 0.95625,
+            verdict: 'FLAG_FOR_HUMAN_REVIEW',
+            confidence: null,
             scenario_summary:
-              'Stage 9 original 40-Element GPT-NeoX-20B validation packet with verifier-attached ACCEPT decision.',
+              'Stage 9 original 40-Element GPT-NeoX-20B validation packet. It carries a verifier ACCEPT decision, but routes to review unless WORM packet proof is attached.',
             evidence_packet_trace_id: STAGE9_40E_TRACE_ID,
             atlas_deep_link: `/cockpit?trace_id=${STAGE9_40E_TRACE_ID}`,
             provenance_chips: chips,
@@ -649,7 +649,7 @@ describe('AuditConsolePage', () => {
               {
                 status: 'COMPLETE',
                 message:
-                  'M3 verdict runner returned the explicit verifier decision from the attached evidence contract.',
+                  'M3 verdict runner blocked the explicit verifier decision because final ACCEPT/SUPPRESS requires a WORM-retained Evidence Packet. Packet proof must be S3 re-read verified with active Object Lock retention.',
                 timestamp: '2026-05-28T07:31:00Z',
               },
             ],
@@ -659,18 +659,21 @@ describe('AuditConsolePage', () => {
 
     renderPage();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Load 20B ACCEPT packet' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Load 20B validation packet' }));
 
     expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
-    expect(screen.getByText('Stage 9 original 40E verifier packet')).toBeInTheDocument();
+    expect(screen.getByText('Stage 9 original 40E validation packet')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
-    expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
-    expect(screen.getByText('Confidence: 96%')).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' })).toBeInTheDocument();
+    expect(screen.getByText('Confidence: not available')).toBeInTheDocument();
     expect(screen.getByText('Scope: Stage 9 40E validation packet')).toBeInTheDocument();
     expect(screen.getByText('Coverage: 80 cases / 40 classes')).toBeInTheDocument();
+    expect(
+      screen.getByText('Flagged because the Evidence Packet is not WORM-retained yet.'),
+    ).toBeInTheDocument();
     expect(screen.getAllByText(STAGE9_40E_TRACE_ID).length).toBeGreaterThan(0);
     expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toMatchObject({
       evidence_packet_trace_id: STAGE9_40E_TRACE_ID,

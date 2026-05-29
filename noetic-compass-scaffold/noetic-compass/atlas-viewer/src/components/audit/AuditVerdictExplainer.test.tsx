@@ -142,4 +142,30 @@ describe('AuditVerdictExplainer', () => {
     ).toHaveAccessibleName(/Confidence source: none/i);
     expect(screen.getByText('Control proof')).toBeInTheDocument();
   });
+
+  it('explains human review when explicit verifier decision lacks WORM packet proof', () => {
+    render(
+      <AuditVerdictExplainer
+        verdict="FLAG_FOR_HUMAN_REVIEW"
+        confidence={null}
+        chips={completeChips()}
+        verifierDecision={{
+          verdict: 'ACCEPT',
+          confidence: 0.9816,
+          source: 'stage19_verification_stack+stage20_generation_readiness',
+          reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
+        }}
+        lifecycleMessage="M3 verdict runner blocked the explicit verifier decision because final ACCEPT/SUPPRESS requires a WORM-retained Evidence Packet. Packet proof must be S3 re-read verified with active Object Lock retention."
+      />,
+    );
+
+    expect(
+      screen.getByText('Flagged because the Evidence Packet is not WORM-retained yet.'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('note', {
+        name: /cannot become final until the Evidence Packet is S3 re-read verified and WORM\/Object-Lock retained/i,
+      }),
+    ).toBeInTheDocument();
+  });
 });
