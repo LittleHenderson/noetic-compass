@@ -179,10 +179,22 @@ function proofSummary(chips: ProvenanceChip[]): { passed: number; blocked: numbe
   return { passed, blocked };
 }
 
+function isWormGateBlocked(
+  verdict: AuditVerdict | null | undefined,
+  lifecycleMessage?: string | null,
+): boolean {
+  return (
+    verdict === 'FLAG_FOR_HUMAN_REVIEW' &&
+    typeof lifecycleMessage === 'string' &&
+    lifecycleMessage.toLowerCase().includes('worm-retained evidence packet')
+  );
+}
+
 function verdictHeadline(
   verdict: AuditVerdict | null | undefined,
   chips: ProvenanceChip[],
   verifierDecision?: VerifierDecision | null,
+  lifecycleMessage?: string | null,
 ): string {
   const { blocked } = proofSummary(chips);
   if (!verdict) {
@@ -193,6 +205,9 @@ function verdictHeadline(
   }
   if (verdict === 'SUPPRESS') {
     return 'Suppressed because the verifier rejected the row and Stage 20 readiness said suppress.';
+  }
+  if (isWormGateBlocked(verdict, lifecycleMessage)) {
+    return 'Flagged because the Evidence Packet is not WORM-retained yet.';
   }
   if (blocked > 0) {
     return 'Flagged because required proof is missing, unavailable, or failed.';
@@ -226,6 +241,7 @@ function confidenceSource(
 function customerSentence(
   verdict: AuditVerdict | null | undefined,
   chips: ProvenanceChip[],
+  lifecycleMessage?: string | null,
 ): string {
   const { passed, blocked } = proofSummary(chips);
   if (!verdict) {
@@ -236,6 +252,9 @@ function customerSentence(
   }
   if (verdict === 'SUPPRESS') {
     return `Tell the user: CAS suppressed this output because the verifier found a suppress condition and ${passed}/6 required proof chips passed.`;
+  }
+  if (isWormGateBlocked(verdict, lifecycleMessage)) {
+    return 'Tell the user: CAS found an explicit verifier decision, but it cannot become final until the Evidence Packet is S3 re-read verified and WORM/Object-Lock retained.';
   }
   return `Tell the user: CAS flagged this for human review because ${blocked}/6 required proof chips were not pass-ready or the verifier requested review.`;
 }
@@ -276,7 +295,8 @@ const CHIP_MEANING_TEXT: Record<ProvenanceChipId, string> = {
   control_proof:
     'Matched controls and baselines did not explain the same effect.',
   output_proof: 'The verdict is tied to observed model output.',
-  packet_proof: 'The audit trail is attached to an Evidence Packet.',
+  packet_proof:
+    'The audit trail is attached to an Evidence Packet. Final ACCEPT/SUPPRESS requires S3 re-read verification plus active Object Lock/WORM retention.',
 };
 
 export function AuditVerdictExplainer({
@@ -293,7 +313,7 @@ export function AuditVerdictExplainer({
   const coverageLabel = verifierCoverageLabel(verifierDecision);
   const boundaryLabel = verifierBoundary(verifierDecision);
   const decisionHelp = [
-    customerSentence(verdict, chips),
+    customerSentence(verdict, chips, lifecycleMessage),
     `${confidenceSource(verdict, confidence, verifierDecision)} Current confidence: ${confidenceText}.`,
     verifierDecision ? verifierDecision.reason : lifecycleMessage,
     verifierDecision ? `Verifier source: ${verifierDecision.source}` : null,
@@ -314,7 +334,7 @@ export function AuditVerdictExplainer({
         <p style={eyebrowStyle}>Why this verdict happened</p>
         <AuditPopover briefing={decisionHelp} block placement="bottom" width={420}>
           <h2 id="audit-verdict-explainer-heading" style={headlineStyle}>
-            {verdictHeadline(verdict, chips, verifierDecision)}
+            {verdictHeadline(verdict, chips, verifierDecision, lifecycleMessage)}
           </h2>
         </AuditPopover>
       </div>

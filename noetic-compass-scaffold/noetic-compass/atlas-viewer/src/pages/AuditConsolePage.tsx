@@ -143,15 +143,15 @@ const S7_F28_PACKET_TARGET: AuditTargetConfig = {
 
 const STAGE9_40E_PACKET_TARGET: AuditTargetConfig = {
   modelId: 'EleutherAI/gpt-neox-20b',
-  provider: 'Stage 9 original 40E verifier packet',
+  provider: 'Stage 9 original 40E validation packet',
   endpointLabel: `/api/cas-harness/audit/session · ${STAGE9_40E_TRACE_ID}`,
   scenarioText:
-    'Stage 9 original 40-Element GPT-NeoX-20B validation packet with verifier-attached ACCEPT decision.',
+    'Stage 9 original 40-Element GPT-NeoX-20B validation packet. It carries a verifier ACCEPT decision, but routes to review unless WORM packet proof is attached.',
   endpointUrl: null,
   connectionId: 'cas-target-stage9-40e-gpt-neox-20b',
   checkedAt: '',
   statusDetail:
-    'Stage 9 40E GPT-NeoX-20B ACCEPT Evidence Packet selected. Run CAS audit to surface the verifier decision, proof chips, confidence basis, and validation-packet scope.',
+    'Stage 9 40E GPT-NeoX-20B validation packet selected. Run CAS audit to surface the verifier decision, proof chips, confidence basis, and WORM gate.',
   canRunAudit: true,
   evidencePacketTraceId: STAGE9_40E_TRACE_ID,
 };
@@ -1203,7 +1203,7 @@ export default function AuditConsolePage() {
               onClick={loadStage940EPacketTarget}
               disabled={isAuditRunning || isTargetConnecting}
             >
-              Load 20B ACCEPT packet
+              Load 20B validation packet
             </button>
             <button
               type="button"
