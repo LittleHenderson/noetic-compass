@@ -24,6 +24,7 @@ REQUIRED_PROOF_CHIPS: tuple[str, ...] = (
     "packet_proof",
 )
 PASSING_PROOF_STATUSES = {"verified", "present"}
+WORM_PACKET_DETAIL_TERMS = ("worm retained", "object lock", "retention is active")
 
 
 @dataclass(frozen=True)
@@ -77,7 +78,7 @@ def run_evidence_gated_verdict(
     failed = tuple(
         chip_id
         for chip_id in REQUIRED_PROOF_CHIPS
-        if by_id.get(chip_id) == "failed"
+        if _chip_status(by_id.get(chip_id)) == "failed"
     )
     if failed:
         return VerdictRunnerResult(
@@ -94,7 +95,7 @@ def run_evidence_gated_verdict(
     missing_or_unavailable = tuple(
         chip_id
         for chip_id in REQUIRED_PROOF_CHIPS
-        if by_id.get(chip_id) not in PASSING_PROOF_STATUSES
+        if _chip_is_missing_or_unavailable(chip_id, by_id.get(chip_id))
     )
     if missing_or_unavailable:
         return VerdictRunnerResult(
@@ -123,6 +124,18 @@ def run_evidence_gated_verdict(
         )
 
     verdict, confidence = decision
+    if verdict in {"ACCEPT", "SUPPRESS"} and not packet_proof_is_worm_retained(proof_chips):
+        return VerdictRunnerResult(
+            status="COMPLETE",
+            verdict="FLAG_FOR_HUMAN_REVIEW",
+            confidence=None,
+            missing_or_unavailable=("packet_proof",),
+            message=(
+                "M3 verdict runner blocked the explicit verifier decision because "
+                "final ACCEPT/SUPPRESS requires a WORM-retained Evidence Packet. "
+                "Packet proof must be S3 re-read verified with active Object Lock retention."
+            ),
+        )
     return VerdictRunnerResult(
         status="COMPLETE",
         verdict=verdict,
@@ -134,8 +147,19 @@ def run_evidence_gated_verdict(
     )
 
 
-def _chips_by_id(proof_chips: list[Mapping[str, Any]]) -> dict[str, ProofChipStatus]:
-    by_id: dict[str, ProofChipStatus] = {}
+def packet_proof_is_worm_retained(proof_chips: list[Mapping[str, Any]]) -> bool:
+    chip = _chips_by_id(proof_chips).get("packet_proof")
+    if _chip_status(chip) != "verified":
+        return False
+    detail = chip.get("detail") if isinstance(chip, Mapping) else None
+    if not isinstance(detail, str):
+        return False
+    lowered = detail.lower()
+    return all(term in lowered for term in WORM_PACKET_DETAIL_TERMS)
+
+
+def _chips_by_id(proof_chips: list[Mapping[str, Any]]) -> dict[str, Mapping[str, Any]]:
+    by_id: dict[str, Mapping[str, Any]] = {}
     for chip in proof_chips:
         chip_id = chip.get("id")
         status = chip.get("status")
@@ -146,8 +170,22 @@ def _chips_by_id(proof_chips: list[Mapping[str, Any]]) -> dict[str, ProofChipSta
             "failed",
             "unavailable",
         }:
-            by_id[chip_id] = status
+            by_id[chip_id] = chip
     return by_id
+
+
+def _chip_status(chip: Mapping[str, Any] | None) -> ProofChipStatus | None:
+    status = chip.get("status") if isinstance(chip, Mapping) else None
+    if status in {"verified", "present", "missing", "failed", "unavailable"}:
+        return status
+    return None
+
+
+def _chip_is_missing_or_unavailable(
+    chip_id: str,
+    chip: Mapping[str, Any] | None,
+) -> bool:
+    return _chip_status(chip) not in PASSING_PROOF_STATUSES
 
 
 def _parse_explicit_decision(

@@ -710,7 +710,14 @@ def test_fleet_verifier_accepts_only_with_stage19_stage20_fragment_payload(
     monkeypatch,
     tmp_path,
 ):
-    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
+    fake_s3 = _FakeS3Client()
+    fake_boto3 = types.SimpleNamespace(client=lambda service, **kwargs: fake_s3)
+    monkeypatch.setitem(sys.modules, "boto3", fake_boto3)
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path / "packet-store"))
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "cas-harness-test-anchor")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "30")
     audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
     worker_assignment = audit["worker_evidence"][0]
     _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])

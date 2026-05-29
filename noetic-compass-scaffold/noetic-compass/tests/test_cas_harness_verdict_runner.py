@@ -1,14 +1,23 @@
 from __future__ import annotations
 
-from api.services.cas_harness_verdict_runner import run_evidence_gated_verdict
+from api.services.cas_harness_verdict_runner import (
+    packet_proof_is_worm_retained,
+    run_evidence_gated_verdict,
+)
 
 
 def _chip(chip_id: str, status: str) -> dict[str, str]:
+    detail = f"{chip_id} is {status}"
+    if chip_id == "packet_proof" and status == "verified":
+        detail = (
+            "Evidence Packet trace-123 is WORM retained: S3 anchor re-read matched "
+            "the packet/hash-log manifest and Object Lock GOVERNANCE retention is active."
+        )
     return {
         "id": chip_id,
         "name": chip_id,
         "status": status,
-        "detail": f"{chip_id} is {status}",
+        "detail": detail,
     }
 
 
@@ -78,7 +87,7 @@ def test_complete_proof_chips_still_do_not_create_accept_without_verifier_decisi
     assert "no explicit Stage 19/20/21 verifier decision" in result.message
 
 
-def test_explicit_verifier_decision_can_accept_when_required_proof_is_complete():
+def test_explicit_verifier_decision_can_accept_when_required_proof_is_worm_retained():
     result = run_evidence_gated_verdict(
         evidence_packet_trace_id="trace-123",
         proof_chips=_complete_chips("verified"),
@@ -88,6 +97,45 @@ def test_explicit_verifier_decision_can_accept_when_required_proof_is_complete()
     assert result.status == "COMPLETE"
     assert result.verdict == "ACCEPT"
     assert result.confidence == 0.91
+
+
+def test_explicit_accept_is_blocked_when_packet_is_not_worm_retained():
+    chips = _complete_chips("verified")
+    chips[-1]["detail"] = "Evidence Packet trace-123 is present and hash verification matched."
+
+    result = run_evidence_gated_verdict(
+        evidence_packet_trace_id="trace-123",
+        proof_chips=chips,
+        explicit_verifier_decision={"verdict": "ACCEPT", "confidence": 0.91},
+    )
+
+    assert result.verdict == "FLAG_FOR_HUMAN_REVIEW"
+    assert result.confidence is None
+    assert result.missing_or_unavailable == ("packet_proof",)
+    assert "WORM-retained Evidence Packet" in result.message
+
+
+def test_explicit_suppress_is_blocked_when_packet_is_not_worm_retained():
+    chips = _complete_chips("verified")
+    chips[-1]["status"] = "present"
+
+    result = run_evidence_gated_verdict(
+        evidence_packet_trace_id="trace-123",
+        proof_chips=chips,
+        explicit_verifier_decision={"verdict": "SUPPRESS", "confidence": 0.91},
+    )
+
+    assert result.verdict == "FLAG_FOR_HUMAN_REVIEW"
+    assert result.confidence is None
+    assert "WORM-retained Evidence Packet" in result.message
+
+
+def test_packet_worm_gate_requires_object_lock_and_active_retention_text():
+    chips = _complete_chips("verified")
+    assert packet_proof_is_worm_retained(chips) is True
+
+    chips[-1]["detail"] = "Evidence Packet trace-123 is S3 verified but Object Lock was not requested."
+    assert packet_proof_is_worm_retained(chips) is False
 
 
 def test_explicit_accept_is_blocked_when_required_proof_is_missing():
