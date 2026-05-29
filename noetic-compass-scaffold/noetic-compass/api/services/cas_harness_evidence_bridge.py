@@ -100,6 +100,10 @@ def normalize_evidence_packet_for_audit(
 
     provided_chips = _provided_proof_chips(packet)
     if provided_chips is not None:
+        if verify_hashes is not None:
+            by_id = {chip.id: chip for chip in provided_chips}
+            by_id["packet_proof"] = _packet_chip(packet, verify_hashes=verify_hashes)
+            provided_chips = [by_id[chip_id] for chip_id in _CHIP_ORDER]
         return AuditEvidenceBridgeResult(
             source_schema=source_schema,
             trace_id=trace_id,
@@ -266,16 +270,20 @@ def _packet_chip(
 
     verify_status = _verify_status(verify_hashes)
     if verify_status == "verified":
+        anchor_detail = _verified_anchor_detail(packet, verify_hashes)
         return _chip(
             "packet_proof",
             "verified",
-            f"Evidence Packet {trace_id} is present and hash verification matched.",
+            anchor_detail
+            or f"Evidence Packet {trace_id} is present and hash verification matched.",
         )
     if verify_status == "failed":
+        anchor_failure = _anchor_failure_detail(verify_hashes)
         return _chip(
             "packet_proof",
             "failed",
-            f"Evidence Packet {trace_id} is present but hash verification reported a mismatch.",
+            anchor_failure
+            or f"Evidence Packet {trace_id} is present but hash verification reported a mismatch.",
         )
     return _chip("packet_proof", "present", f"Evidence Packet {trace_id} is present.")
 
@@ -479,6 +487,72 @@ def _verify_status(verify_hashes: Mapping[str, Any] | None) -> ProofChipStatus |
     if overall == "unable_to_verify":
         return "unavailable"
     return None
+
+
+def _verified_anchor_detail(
+    packet: Mapping[str, Any],
+    verify_hashes: Mapping[str, Any] | None,
+) -> str | None:
+    anchor = _packet_external_anchor(packet)
+    if anchor is None:
+        return None
+    check = _external_anchor_check(verify_hashes)
+    notes = _string_or_none(check.get("notes")) if check is not None else None
+    notes_lower = notes.lower() if notes else ""
+    if not (check and check.get("match") is True and "object was re-read" in notes_lower):
+        return None
+
+    trace_id = _string_or_none(packet.get("trace_id")) or "unknown"
+    if _anchor_receipt_has_object_lock(anchor) and "object lock" in notes_lower and "retention is active" in notes_lower:
+        mode = _string_or_none(anchor.get("object_lock_mode")) or "Object Lock"
+        retain_until = _string_or_none(anchor.get("object_lock_retain_until"))
+        suffix = f" until {retain_until}" if retain_until else ""
+        return (
+            f"Evidence Packet {trace_id} is WORM retained: S3 anchor re-read matched "
+            f"the packet/hash-log manifest and Object Lock {mode} retention is active{suffix}."
+        )
+    return (
+        f"Evidence Packet {trace_id} is S3 verified: the anchor object was re-read "
+        "and matched to the packet hash and hash-log entry."
+    )
+
+
+def _anchor_failure_detail(verify_hashes: Mapping[str, Any] | None) -> str | None:
+    check = _external_anchor_check(verify_hashes)
+    if check is None or check.get("match") is not False:
+        return None
+    notes = _string_or_none(check.get("notes"))
+    if not notes:
+        return None
+    return f"Evidence Packet external anchor verification failed: {notes}"
+
+
+def _packet_external_anchor(packet: Mapping[str, Any]) -> Mapping[str, Any] | None:
+    hashes = _mapping_or_empty(packet.get("hashes"))
+    anchor = hashes.get("external_anchor")
+    return anchor if isinstance(anchor, Mapping) else None
+
+
+def _external_anchor_check(verify_hashes: Mapping[str, Any] | None) -> Mapping[str, Any] | None:
+    checks = verify_hashes.get("checks") if isinstance(verify_hashes, Mapping) else None
+    if not isinstance(checks, list):
+        return None
+    for check in checks:
+        if isinstance(check, Mapping) and check.get("artifact") == "merged_packet_external_anchor":
+            return check
+    return None
+
+
+def _anchor_receipt_has_object_lock(anchor: Mapping[str, Any]) -> bool:
+    mode = _string_or_none(anchor.get("object_lock_mode"))
+    retain_until = _string_or_none(anchor.get("object_lock_retain_until"))
+    retention_days = anchor.get("retention_days")
+    return (
+        mode in {"GOVERNANCE", "COMPLIANCE"}
+        and retain_until is not None
+        and isinstance(retention_days, int)
+        and retention_days > 0
+    )
 
 
 def _chip(

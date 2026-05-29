@@ -80,6 +80,85 @@ def test_hash_verification_upgrades_packet_and_model_only_when_all_match():
     assert chips["cas_readout"].status == "present"
 
 
+def test_packet_chip_surfaces_worm_retained_anchor_from_live_verify():
+    packet = _packet_fixture()
+    packet["hashes"]["external_anchor"] = {
+        "status": "anchored",
+        "mode": "s3",
+        "anchor_uri": "s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/trace-123/hash.json",
+        "manifest_sha256": "a" * 64,
+        "object_lock_mode": "GOVERNANCE",
+        "object_lock_retain_until": "2026-06-28T00:00:00+00:00",
+        "retention_days": 30,
+    }
+    packet["verification"] = {
+        "proof_chips": [
+            {"id": "model_proof", "status": "present", "detail": "model recorded"},
+            {"id": "cas_readout", "status": "verified", "detail": "readout passed"},
+            {"id": "causal_proof", "status": "verified", "detail": "ablation passed"},
+            {"id": "control_proof", "status": "verified", "detail": "controls passed"},
+            {"id": "output_proof", "status": "verified", "detail": "bridge passed"},
+            {"id": "packet_proof", "status": "present", "detail": "packet written"},
+        ]
+    }
+
+    result = normalize_evidence_packet_for_audit(
+        packet,
+        verify_hashes={
+            "overall": "all_match",
+            "checks": [
+                {
+                    "artifact": "merged_packet_external_anchor",
+                    "expected": "a" * 64,
+                    "actual": "a" * 64,
+                    "match": True,
+                    "notes": (
+                        "S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, "
+                        "and Object Lock GOVERNANCE retention is active until 2026-06-28T00:00:00+00:00"
+                    ),
+                }
+            ],
+        },
+    )
+    chips = _chips_by_id(result)
+
+    assert chips["cas_readout"].detail == "readout passed"
+    assert chips["packet_proof"].status == "verified"
+    assert "WORM retained" in chips["packet_proof"].detail
+    assert "Object Lock GOVERNANCE retention is active" in chips["packet_proof"].detail
+
+
+def test_packet_chip_distinguishes_s3_verified_without_worm_lock():
+    packet = _packet_fixture()
+    packet["hashes"]["external_anchor"] = {
+        "status": "anchored",
+        "mode": "s3",
+        "anchor_uri": "s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/trace-123/hash.json",
+        "manifest_sha256": "a" * 64,
+    }
+
+    result = normalize_evidence_packet_for_audit(
+        packet,
+        verify_hashes={
+            "overall": "all_match",
+            "checks": [
+                {
+                    "artifact": "merged_packet_external_anchor",
+                    "expected": "a" * 64,
+                    "actual": "a" * 64,
+                    "match": True,
+                    "notes": "S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry; Object Lock was not requested",
+                }
+            ],
+        },
+    )
+    chips = _chips_by_id(result)
+
+    assert chips["packet_proof"].status == "verified"
+    assert "S3 verified" in chips["packet_proof"].detail
+    assert "WORM retained" not in chips["packet_proof"].detail
+
+
 def test_hash_verification_mismatch_marks_hash_backed_chips_failed():
     result = normalize_evidence_packet_for_audit(
         _packet_fixture(),

@@ -27,4 +27,42 @@ describe('ProvenanceChips', () => {
     expect(screen.getByText('Verified')).toBeInTheDocument();
     expect(screen.getByText('Missing')).toBeInTheDocument();
   });
+
+  it('labels verified packet proof as WORM retained when Object Lock proof is present', () => {
+    render(
+      <ProvenanceChips
+        chips={[
+          {
+            id: 'packet_proof',
+            name: 'Packet proof',
+            status: 'verified',
+            detail:
+              'Evidence Packet trace-123 is WORM retained: S3 anchor re-read matched the packet/hash-log manifest and Object Lock GOVERNANCE retention is active.',
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('Packet proof')).toBeInTheDocument();
+    expect(screen.getByText('WORM retained')).toBeInTheDocument();
+  });
+
+  it('labels verified packet proof as S3 verified when retention is not proven', () => {
+    render(
+      <ProvenanceChips
+        chips={[
+          {
+            id: 'packet_proof',
+            name: 'Packet proof',
+            status: 'verified',
+            detail:
+              'Evidence Packet trace-123 is S3 verified: the anchor object was re-read and matched to the packet hash and hash-log entry.',
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByText('S3 verified')).toBeInTheDocument();
+    expect(screen.queryByText('WORM retained')).not.toBeInTheDocument();
+  });
 });

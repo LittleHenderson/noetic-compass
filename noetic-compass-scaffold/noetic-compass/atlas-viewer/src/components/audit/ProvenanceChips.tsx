@@ -190,6 +190,19 @@ function normalizeChips(
   return byId;
 }
 
+function visibleStateLabel(chip: NormalizedChip | undefined, state: AuditStatus | 'pending'): string {
+  if (chip?.id === 'packet_proof' && state === 'verified') {
+    const detail = chip.detail?.toLowerCase() ?? '';
+    if (detail.includes('worm retained') || detail.includes('object lock')) {
+      return 'WORM retained';
+    }
+    if (detail.includes('s3 verified')) {
+      return 'S3 verified';
+    }
+  }
+  return stateLabels[state];
+}
+
 export function ProvenanceChips({
   chips,
   proofs,
@@ -215,7 +228,7 @@ export function ProvenanceChips({
             >
               <span aria-hidden="true" style={dotStyle(state)} />
               <span>{chip?.name ?? proofLabels[id]}</span>
-              <span style={detailStyle}>{stateLabels[state]}</span>
+              <span style={detailStyle}>{visibleStateLabel(chip, state)}</span>
             </AuditPopover>
           </li>
         );
