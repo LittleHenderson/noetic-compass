@@ -33,6 +33,18 @@ describe('HelpOverlay', () => {
     expect(faq).toHaveTextContent('Every future 40E library must run the text-baseline diagnostic first');
   });
 
+  it('explains Evidence Packet WORM retention without claiming model truth', () => {
+    render(<HelpOverlay open onClose={vi.fn()} />);
+
+    const faq = screen.getByTestId('evidence-packet-flight-recorder-faq');
+    expect(faq).toHaveTextContent('FAQ: Evidence Packet Flight Recorder');
+    expect(faq).toHaveTextContent('black-box flight recorder');
+    expect(faq).toHaveTextContent('Changing the packet changes its SHA-256 hash');
+    expect(faq).toHaveTextContent('Production strict smoke passed with S3 Object Lock required');
+    expect(faq).toHaveTextContent('Object Lock GOVERNANCE retention');
+    expect(faq).toHaveTextContent('It does not prove the model is safe or objectively correct');
+  });
+
   it('keeps the FAQ behind the help overlay and closes cleanly', () => {
     const closed = render(<HelpOverlay open={false} onClose={vi.fn()} />);
     expect(screen.queryByTestId('cas-harness-method-faq')).not.toBeInTheDocument();

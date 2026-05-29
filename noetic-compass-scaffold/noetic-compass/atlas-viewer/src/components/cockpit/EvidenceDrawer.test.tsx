@@ -88,6 +88,20 @@ const s3VerifyResponse = {
   ],
 };
 
+const s3ObjectLockVerifyResponse = {
+  overall: 'all_match',
+  checks: [
+    {
+      artifact: 'merged_packet_external_anchor',
+      expected: 'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee11111111',
+      actual: 'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee11111111',
+      match: true,
+      notes:
+        'S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, and Object Lock GOVERNANCE retention is active until 2026-06-28T00:00:00+00:00',
+    },
+  ],
+};
+
 afterEach(() => {
   vi.unstubAllGlobals();
   vi.unstubAllEnvs();
@@ -183,6 +197,54 @@ describe('EvidenceDrawer', () => {
     );
     expect(screen.getByTestId('evidence-packet-anchor-packet-hash')).toHaveTextContent(
       'aaaaaaaaaa...11111111',
+    );
+  });
+
+  it('surfaces WORM-retained Object Lock proof only when /verify confirms retention', async () => {
+    const anchoredPacket = packetWithHashes({
+      packet_without_hashes_sha256:
+        'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee11111111',
+      hash_log_entry_sha256:
+        '11111111112222222222333333333344444444445555555555aaaaaaaa',
+      external_anchor: {
+        status: 'anchored',
+        mode: 's3',
+        anchor_uri: 's3://cas-evidence-anchor/audit-1/hash-log.json',
+        manifest_sha256:
+          '99999999998888888888777777777766666666665555555555bbbbbbbb',
+        object_lock_mode: 'GOVERNANCE',
+        object_lock_retain_until: '2026-06-28T00:00:00+00:00',
+        retention_days: 30,
+      },
+    });
+    const fetchImpl = vi.fn(async (_url: string, init?: RequestInit) =>
+      jsonResponse(init?.method === 'POST' ? s3ObjectLockVerifyResponse : anchoredPacket),
+    );
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'primitive',
+          title: 'WORM packet',
+          evidence_ref: { trace_id: 'trace-123' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
+      'WORM retained',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
+      'confirmed active Object Lock retention',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-object-lock')).toHaveTextContent(
+      'object lock: GOVERNANCE / 30d',
+    );
+    expect(screen.getByTestId('evidence-packet-anchor-retain-until')).toHaveTextContent(
+      '2026-06-28T00:00:00+00:00',
     );
   });
 

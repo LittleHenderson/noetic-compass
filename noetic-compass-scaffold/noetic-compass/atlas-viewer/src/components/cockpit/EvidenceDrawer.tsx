@@ -97,6 +97,9 @@ interface EvidenceAnchorSummary {
   manifestSha256: string | null;
   hashLogEntrySha256: string | null;
   packetSha256: string | null;
+  objectLockMode: string | null;
+  objectLockRetainUntil: string | null;
+  retentionDays: number | null;
 }
 
 type VerifyState =
@@ -436,6 +439,30 @@ function isS3RereadVerified(check: EvidenceVerifyCheck | null): boolean {
   return notes.includes('object was re-read') && notes.includes('manifest commits');
 }
 
+function numberField(record: Record<string, unknown>, key: string): number | null {
+  const value = record[key];
+  return typeof value === 'number' && Number.isFinite(value) ? value : null;
+}
+
+function isObjectLockVerified(
+  check: EvidenceVerifyCheck | null,
+  anchor: Record<string, unknown>,
+): boolean {
+  if (!isS3RereadVerified(check) || typeof check?.notes !== 'string') return false;
+  const objectLockMode = stringField(anchor, 'object_lock_mode');
+  const retainUntil = stringField(anchor, 'object_lock_retain_until');
+  const retentionDays = numberField(anchor, 'retention_days');
+  const notes = check.notes.toLowerCase();
+  return (
+    (objectLockMode === 'GOVERNANCE' || objectLockMode === 'COMPLIANCE') &&
+    Boolean(retainUntil) &&
+    typeof retentionDays === 'number' &&
+    retentionDays > 0 &&
+    notes.includes('object lock') &&
+    notes.includes('retention is active')
+  );
+}
+
 function evidenceAnchorSummary(
   packet: EvidencePacket,
   verifyResponse?: EvidenceVerifyResponse,
@@ -457,6 +484,9 @@ function evidenceAnchorSummary(
       manifestSha256: null,
       hashLogEntrySha256,
       packetSha256,
+      objectLockMode: null,
+      objectLockRetainUntil: null,
+      retentionDays: null,
     };
   }
 
@@ -464,9 +494,28 @@ function evidenceAnchorSummary(
   const mode = stringField(anchor, 'mode');
   const anchorUri = stringField(anchor, 'anchor_uri');
   const manifestSha256 = stringField(anchor, 'manifest_sha256');
+  const objectLockMode = stringField(anchor, 'object_lock_mode');
+  const objectLockRetainUntil = stringField(anchor, 'object_lock_retain_until');
+  const retentionDays = numberField(anchor, 'retention_days');
 
   if (status === 'anchored' && mode === 's3') {
     if (isS3RereadVerified(verifyCheck)) {
+      if (isObjectLockVerified(verifyCheck, anchor)) {
+        return {
+          label: 'WORM retained',
+          detail:
+            'The verifier re-read the S3 anchor object, matched it to this packet hash and hash-log entry, and confirmed active Object Lock retention.',
+          tone: 'verified',
+          mode,
+          anchorUri,
+          manifestSha256,
+          hashLogEntrySha256,
+          packetSha256,
+          objectLockMode,
+          objectLockRetainUntil,
+          retentionDays,
+        };
+      }
       return {
         label: 'S3 object verified',
         detail:
@@ -477,6 +526,9 @@ function evidenceAnchorSummary(
         manifestSha256,
         hashLogEntrySha256,
         packetSha256,
+        objectLockMode,
+        objectLockRetainUntil,
+        retentionDays,
       };
     }
     if (verifyCheck?.match === false) {
@@ -492,6 +544,9 @@ function evidenceAnchorSummary(
         manifestSha256,
         hashLogEntrySha256,
         packetSha256,
+        objectLockMode,
+        objectLockRetainUntil,
+        retentionDays,
       };
     }
     return {
@@ -504,6 +559,9 @@ function evidenceAnchorSummary(
       manifestSha256,
       hashLogEntrySha256,
       packetSha256,
+      objectLockMode,
+      objectLockRetainUntil,
+      retentionDays,
     };
   }
 
@@ -518,6 +576,9 @@ function evidenceAnchorSummary(
       manifestSha256,
       hashLogEntrySha256,
       packetSha256,
+      objectLockMode,
+      objectLockRetainUntil,
+      retentionDays,
     };
   }
 
@@ -532,6 +593,9 @@ function evidenceAnchorSummary(
       manifestSha256,
       hashLogEntrySha256,
       packetSha256,
+      objectLockMode,
+      objectLockRetainUntil,
+      retentionDays,
     };
   }
 
@@ -546,6 +610,9 @@ function evidenceAnchorSummary(
       manifestSha256,
       hashLogEntrySha256,
       packetSha256,
+      objectLockMode,
+      objectLockRetainUntil,
+      retentionDays,
     };
   }
 
@@ -559,6 +626,9 @@ function evidenceAnchorSummary(
     manifestSha256,
     hashLogEntrySha256,
     packetSha256,
+    objectLockMode,
+    objectLockRetainUntil,
+    retentionDays,
   };
 }
 
@@ -856,6 +926,17 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
                         {anchorSummary.mode ? (
                           <span data-testid="evidence-packet-anchor-mode">
                             mode: {anchorSummary.mode}
+                          </span>
+                        ) : null}
+                        {anchorSummary.objectLockMode ? (
+                          <span data-testid="evidence-packet-anchor-object-lock">
+                            object lock: {anchorSummary.objectLockMode}
+                            {anchorSummary.retentionDays ? ` / ${anchorSummary.retentionDays}d` : ''}
+                          </span>
+                        ) : null}
+                        {anchorSummary.objectLockRetainUntil ? (
+                          <span data-testid="evidence-packet-anchor-retain-until">
+                            retain until: {anchorSummary.objectLockRetainUntil}
                           </span>
                         ) : null}
                         {anchorSummary.anchorUri ? (

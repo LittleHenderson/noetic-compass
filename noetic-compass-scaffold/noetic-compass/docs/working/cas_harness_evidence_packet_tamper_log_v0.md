@@ -193,3 +193,15 @@ python scripts/verify_evidence_anchor_deployed.py \
   --require-anchor-mode s3 \
   --require-object-lock
 ```
+
+Production proof checkpoint:
+
+- Date: 2026-05-29
+- Bucket: `cas-harness-runpod-92754088`
+- Prefix: `cas-harness/evidence-anchors`
+- Smoke command: `python scripts/verify_evidence_anchor_deployed.py --base-url https://noetic-compass-api.onrender.com --require-anchor-mode s3 --require-object-lock`
+- Result: PASS
+- Trace ID: `cas-dist-9a08ca99d7fe2edb-distributed-merge`
+- Anchor object: `s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/cas-dist-9a08ca99d7fe2edb-distributed-merge/00e95655af7b15e187a4fedb99be86160d7e40d88f50d7d2a20f2905c5990dca.json`
+
+This closes the beta WORM claim for new production packet anchors emitted under the current Render environment: S3 object write, S3 re-read verification, packet/hash-log manifest match, and active Object Lock retention are all required by the smoke.
