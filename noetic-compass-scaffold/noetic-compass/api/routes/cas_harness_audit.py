@@ -16,7 +16,11 @@ from urllib.parse import urlparse
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, SecretStr, field_validator, model_validator
 
-from api.routes.evidence import build_packet_for_trace, load_stage9_40e_packet_payload_for_trace
+from api.routes.evidence import (
+    _verify_packet_hashes,
+    build_packet_for_trace,
+    load_stage9_40e_packet_payload_for_trace,
+)
 from api.services.cas_harness_audit_sessions import (
     create_session,
     get_session,
@@ -981,7 +985,10 @@ def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
             detail=f"Evidence Packet trace_id not found: {trace_id}",
         )
 
-    bridge = normalize_evidence_packet_for_audit(packet_payload)
+    bridge = normalize_evidence_packet_for_audit(
+        packet_payload,
+        verify_hashes=_verify_hashes_for_trace(trace_id),
+    )
     payload: dict[str, object] = {
         "provenance_chips": [chip.to_dict() for chip in bridge.chips],
     }
@@ -1000,6 +1007,20 @@ def _packet_payload_for_trace(trace_id: str) -> dict[str, object]:
             return load_stage9_40e_packet_payload_for_trace(trace_id)
         except FileNotFoundError:
             raise FileNotFoundError(trace_id)
+
+
+def _verify_hashes_for_trace(trace_id: str) -> dict[str, object] | None:
+    try:
+        packet = build_packet_for_trace(trace_id)
+    except FileNotFoundError:
+        return None
+    hashes = getattr(packet, "hashes", None)
+    if not isinstance(hashes, dict) or not isinstance(hashes.get("external_anchor"), dict):
+        return None
+    try:
+        return _verify_packet_hashes(packet).model_dump(mode="json")
+    except AttributeError:
+        return None
 
 
 def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerificationResponse:
