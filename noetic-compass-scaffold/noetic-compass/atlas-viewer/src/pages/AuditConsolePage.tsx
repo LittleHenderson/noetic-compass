@@ -7,6 +7,7 @@ import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummary
 import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
 import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
+import EvidencePacketVerificationPanel from '../components/audit/EvidencePacketVerificationPanel';
 import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
 import FleetExecutorPanel from '../components/audit/FleetExecutorPanel';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
@@ -1469,6 +1470,9 @@ export default function AuditConsolePage() {
                 verifierDecision={session?.verifier_decision ?? null}
                 lifecycleMessage={latestLifecycleMessage(session)}
               />
+            ) : null}
+            {session?.evidence_packet_trace_id ? (
+              <EvidencePacketVerificationPanel traceId={session.evidence_packet_trace_id} />
             ) : null}
           </div>
         </div>
