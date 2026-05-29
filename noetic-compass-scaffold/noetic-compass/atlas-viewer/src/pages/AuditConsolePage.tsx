@@ -8,6 +8,7 @@ import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
 import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
 import EvidencePacketVerificationPanel from '../components/audit/EvidencePacketVerificationPanel';
+import EvidencePacketFlightRecorderFaq from '../components/audit/EvidencePacketFlightRecorderFaq';
 import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
 import FleetExecutorPanel from '../components/audit/FleetExecutorPanel';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
@@ -1472,7 +1473,10 @@ export default function AuditConsolePage() {
               />
             ) : null}
             {session?.evidence_packet_trace_id ? (
-              <EvidencePacketVerificationPanel traceId={session.evidence_packet_trace_id} />
+              <>
+                <EvidencePacketVerificationPanel traceId={session.evidence_packet_trace_id} />
+                <EvidencePacketFlightRecorderFaq />
+              </>
             ) : null}
           </div>
         </div>
