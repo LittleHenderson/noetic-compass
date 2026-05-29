@@ -15,6 +15,7 @@ from typing import Any, Literal
 
 from api.services.cas_harness_distributed_audits import get_distributed_audit
 from api.services.cas_harness_fleet_executor import get_fleet_run
+from api.services.cas_harness_verdict_runner import packet_proof_is_worm_retained
 from api.services.cas_harness_verifier_decision_adapter import VerifierDecision
 
 
@@ -48,6 +49,7 @@ def verify_merged_fleet_packet(
     audit_id: str,
     *,
     explicit_packet_decision: VerifierDecision | None = None,
+    proof_chips: list[dict[str, Any]] | None = None,
     packet_load_error: str | None = None,
 ) -> FleetVerifierDecisionRecord | None:
     """Return the verifier-owned decision for a merged fleet packet.
@@ -72,6 +74,34 @@ def verify_merged_fleet_packet(
         "missing_output_jobs": sum(1 for job in run.jobs if job.missing_outputs),
         "distributed_merge_status": distributed.merge_status if distributed else None,
     }
+
+    if explicit_packet_decision is not None and explicit_packet_decision.verdict in {
+        "ACCEPT",
+        "SUPPRESS",
+    }:
+        if not packet_proof_is_worm_retained(proof_chips or []):
+            return FleetVerifierDecisionRecord(
+                audit_id=audit_id,
+                merged_packet_trace_id=run.merged_packet_trace_id,
+                verdict="FLAG_FOR_HUMAN_REVIEW",
+                confidence=None,
+                source="fleet_packet_verifier",
+                reason=(
+                    "Fleet verifier blocked the explicit ACCEPT/SUPPRESS decision because "
+                    "the merged Evidence Packet is not WORM-retained."
+                ),
+                decision_scope="distributed_fleet_merged_packet",
+                coverage=coverage,
+                proof_chip_gate="blocked",
+                blockers=[
+                    "Final ACCEPT/SUPPRESS requires packet_proof to be WORM retained: S3 re-read verified with active Object Lock retention."
+                ],
+                next_actions=[
+                    "Anchor the merged Evidence Packet to S3 with Object Lock retention.",
+                    "Re-run /evidence/{trace_id}/verify and retry the verifier gate.",
+                ],
+                created_at=_utc_now(),
+            )
 
     if explicit_packet_decision is not None:
         return FleetVerifierDecisionRecord(

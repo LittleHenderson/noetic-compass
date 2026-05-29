@@ -898,6 +898,7 @@ async def merge_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
 async def verify_distributed_fleet_packet(audit_id: str) -> FleetVerifierDecisionResponse:
     """Run the verifier-owned decision gate over a merged fleet packet."""
     packet_decision = None
+    packet_proof_chips = None
     packet_load_error = None
     run = get_fleet_run(audit_id)
     if run is None:
@@ -911,11 +912,19 @@ async def verify_distributed_fleet_packet(audit_id: str) -> FleetVerifierDecisio
         packet_load_error = str(exc)
     else:
         packet_decision = verifier_decision_from_packet(packet_payload)
+        packet_proof_chips = [
+            chip.to_dict()
+            for chip in normalize_evidence_packet_for_audit(
+                packet_payload,
+                verify_hashes=_verify_hashes_for_trace(run.merged_packet_trace_id),
+            ).chips
+        ]
 
     try:
         decision = verify_merged_fleet_packet(
             audit_id,
             explicit_packet_decision=packet_decision,
+            proof_chips=packet_proof_chips,
             packet_load_error=packet_load_error,
         )
     except FleetVerifierStateError as exc:

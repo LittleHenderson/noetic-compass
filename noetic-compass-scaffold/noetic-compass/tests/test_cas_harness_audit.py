@@ -66,6 +66,41 @@ def _complete_stage21_packet(*, action: str = "allow", accepted: bool = True) ->
     }
 
 
+def _attach_worm_anchor(packet: dict) -> dict:
+    packet.setdefault("hashes", {})["external_anchor"] = {
+        "status": "anchored",
+        "mode": "s3",
+        "anchor_uri": (
+            "s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/"
+            f"{packet['trace_id']}/anchor.json"
+        ),
+        "manifest_sha256": "a" * 64,
+        "object_lock_mode": "GOVERNANCE",
+        "object_lock_retain_until": "2026-06-28T00:00:00+00:00",
+        "retention_days": 30,
+    }
+    return packet
+
+
+def _worm_verify_hashes(trace_id: str) -> dict:
+    return {
+        "trace_id": trace_id,
+        "overall": "all_match",
+        "checks": [
+            {
+                "artifact": "merged_packet_external_anchor",
+                "expected": "a" * 64,
+                "actual": "a" * 64,
+                "match": True,
+                "notes": (
+                    "S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, "
+                    "and Object Lock GOVERNANCE retention is active until 2026-06-28T00:00:00+00:00"
+                ),
+            }
+        ],
+    }
+
+
 def test_audit_session_route_registered(client):
     openapi = client.get("/openapi.json").json()
 
@@ -492,7 +527,7 @@ def test_run_route_flags_attached_packet_when_required_proof_is_incomplete(clien
     assert "missing required proof" in body["lifecycle"][-1]["message"]
 
 
-def test_reference_target_trace_completes_evidence_backed_accept(client, auth_headers):
+def test_reference_target_trace_routes_to_review_without_worm_retention(client, auth_headers):
     verified = client.post(
         "/api/cas-harness/audit/target/verify",
         json={"target": {"kind": "demo_reference"}},
@@ -522,8 +557,8 @@ def test_reference_target_trace_completes_evidence_backed_accept(client, auth_he
     body = ran.json()
     chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
     assert body["status"] == "COMPLETE"
-    assert body["verdict"] == "ACCEPT"
-    assert body["confidence"] == 0.9816
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] is None
     assert body["evidence_packet_trace_id"] == "cas_harness_reference_accept_001"
     assert body["atlas_deep_link"] == "/cockpit?trace_id=cas_harness_reference_accept_001"
     assert body["verifier_decision"] == {
@@ -541,10 +576,10 @@ def test_reference_target_trace_completes_evidence_backed_accept(client, auth_he
         "RUNNING",
         "COMPLETE",
     ]
-    assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
+    assert "WORM-retained Evidence Packet" in body["lifecycle"][-1]["message"]
 
 
-def test_reference_target_trace_can_run_from_public_alpha_console(client):
+def test_reference_target_trace_from_public_alpha_console_stays_review_only_without_worm(client):
     verified = client.post(
         "/api/cas-harness/audit/target/verify",
         json={"target": {"kind": "demo_reference"}},
@@ -565,19 +600,20 @@ def test_reference_target_trace_can_run_from_public_alpha_console(client):
     assert verified.status_code == 200
     assert created.status_code == 200
     assert ran.status_code == 200
-    assert ran.json()["verdict"] == "ACCEPT"
+    assert ran.json()["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
 
 
-def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decision(
+def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decision_and_worm(
     client,
     auth_headers,
     monkeypatch,
 ):
-    packet = _complete_stage21_packet(action="allow", accepted=True)
+    packet = _attach_worm_anchor(_complete_stage21_packet(action="allow", accepted=True))
     monkeypatch.setattr(
         "api.routes.cas_harness_audit.build_packet_for_trace",
         lambda trace_id: _PacketStub(packet),
     )
+    monkeypatch.setattr("api.routes.cas_harness_audit._verify_hashes_for_trace", _worm_verify_hashes)
     created = client.post(
         "/api/cas-harness/audit/session",
         json={
@@ -607,7 +643,8 @@ def test_run_route_accepts_only_when_complete_packet_has_explicit_verifier_decis
         "decision_scope": None,
         "coverage": None,
     }
-    assert set(chips.values()) == {"present"}
+    assert set(chips.values()).issubset({"present", "verified"})
+    assert chips["packet_proof"] == "verified"
     assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
 
 
@@ -643,7 +680,7 @@ def test_run_route_uses_s7_f28_packet_as_conservative_human_review(client, auth_
     assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
 
 
-def test_run_route_uses_stage9_40e_packet_accept_from_working_docs(client, auth_headers):
+def test_run_route_uses_stage9_40e_packet_as_review_only_without_worm_anchor(client, auth_headers):
     trace_id = "stage9-40e-original-baseline-readout-20260527"
     created = client.post(
         "/api/cas-harness/audit/session",
@@ -666,8 +703,8 @@ def test_run_route_uses_stage9_40e_packet_accept_from_working_docs(client, auth_
     body = ran.json()
     chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
     assert body["status"] == "COMPLETE"
-    assert body["verdict"] == "ACCEPT"
-    assert body["confidence"] == 0.95625
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] is None
     assert body["evidence_packet_trace_id"] == trace_id
     assert body["atlas_deep_link"] == f"/cockpit?trace_id={trace_id}"
     assert body["verifier_decision"] == {
@@ -690,7 +727,7 @@ def test_run_route_uses_stage9_40e_packet_accept_from_working_docs(client, auth_
         "output_proof": "verified",
         "packet_proof": "present",
     }
-    assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
+    assert "WORM-retained Evidence Packet" in body["lifecycle"][-1]["message"]
 
 
 def test_run_route_suppresses_only_when_complete_packet_has_explicit_rejection(
@@ -698,11 +735,12 @@ def test_run_route_suppresses_only_when_complete_packet_has_explicit_rejection(
     auth_headers,
     monkeypatch,
 ):
-    packet = _complete_stage21_packet(action="suppress", accepted=False)
+    packet = _attach_worm_anchor(_complete_stage21_packet(action="suppress", accepted=False))
     monkeypatch.setattr(
         "api.routes.cas_harness_audit.build_packet_for_trace",
         lambda trace_id: _PacketStub(packet),
     )
+    monkeypatch.setattr("api.routes.cas_harness_audit._verify_hashes_for_trace", _worm_verify_hashes)
     created = client.post(
         "/api/cas-harness/audit/session",
         json={
