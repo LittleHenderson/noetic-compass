@@ -43,6 +43,7 @@ class MergeConfig:
     output: Path
     output_md: Path | None = None
     trace_id: str = TRACE_ID
+    model_provenance_path: Path | None = None
 
 
 def parse_args() -> Any:
@@ -55,6 +56,7 @@ def parse_args() -> Any:
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--output-md", type=Path)
     parser.add_argument("--trace-id", default=TRACE_ID)
+    parser.add_argument("--model-provenance-path", type=Path)
     return parser.parse_args()
 
 
@@ -69,6 +71,7 @@ def main() -> int:
         output=args.output,
         output_md=args.output_md,
         trace_id=args.trace_id,
+        model_provenance_path=args.model_provenance_path,
     )
     packet = build_evidence_packet(config)
     config.output.parent.mkdir(parents=True, exist_ok=True)
@@ -103,6 +106,7 @@ def build_evidence_packet(config: MergeConfig) -> dict[str, Any]:
     ablation_report = load_json(config.ablation_report)
     bridge_report = load_json(config.bridge_report)
     trace_report = load_json(config.trace_diagnostics_report)
+    model_provenance = load_json(config.model_provenance_path) if config.model_provenance_path else None
 
     readout = readout_summary(trace_report=trace_report, eval_report=eval_report)
     ablation = ablation_summary(ablation_report)
@@ -138,6 +142,7 @@ def build_evidence_packet(config: MergeConfig) -> dict[str, Any]:
             "text": "Stage 7 Foundation-28 role-bound scenario set; one packet summarizes the full run, not a single prompt.",
         },
         "model": model,
+        "model_provenance": model_provenance,
         "cas_expression": {
             "text": "Foundation-28 = F1..F7 x T/A/f/E",
             "compiler_valid": True,
@@ -157,6 +162,7 @@ def build_evidence_packet(config: MergeConfig) -> dict[str, Any]:
             ],
             "code_commit_sha": git_head_sha(),
             "artifact_paths": {name: str(path) for name, path in artifacts.items()},
+            "model_provenance_path": str(config.model_provenance_path) if config.model_provenance_path else None,
             "runpod_workspace": "/workspace/cas-harness-large-eval",
             "local_artifact_root": str(config.output.parent),
         },
