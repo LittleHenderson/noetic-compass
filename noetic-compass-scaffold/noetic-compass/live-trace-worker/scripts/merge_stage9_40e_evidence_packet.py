@@ -104,6 +104,12 @@ def _load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
+def _load_optional_json(path: Path | None) -> dict[str, Any] | None:
+    if path is None:
+        return None
+    return _load_json(path)
+
+
 def _sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as fh:
@@ -755,9 +761,11 @@ def build_packet(
     cover_report: Path | None = None,
     bridge_report: Path | None = None,
     verifier_report: Path | None = None,
+    model_provenance_path: Path | None = None,
     generated_at: datetime | None = None,
 ) -> dict[str, Any]:
     readout = _load_json(readout_report)
+    model_provenance = _load_optional_json(model_provenance_path)
     generated = generated_at or datetime.now(UTC)
     readout_artifact = _report_artifact(
         readout_report,
@@ -825,6 +833,7 @@ def build_packet(
         "run_id": _extract_run_id(readout),
         "generated_at": generated.isoformat(),
         "method_label": METHOD_LABEL,
+        "model_provenance": model_provenance,
         "model_proof": model_proof,
         "readout_proof": readout_proof,
         "baseline_proof": baseline_proof,
@@ -863,6 +872,7 @@ def build_packet(
             "cover_report": str(cover_report) if cover_report else None,
             "bridge_report": str(bridge_report) if bridge_report else None,
             "verifier_report": str(verifier_report) if verifier_report else None,
+            "model_provenance_path": str(model_provenance_path) if model_provenance_path else None,
         },
     }
 
@@ -1014,6 +1024,7 @@ def main() -> int:
     parser.add_argument("--cover-report", type=Path)
     parser.add_argument("--bridge-report", type=Path)
     parser.add_argument("--verifier-report", type=Path)
+    parser.add_argument("--model-provenance-path", type=Path)
     parser.add_argument("--output-json", type=Path, default=DEFAULT_OUTPUT_JSON)
     parser.add_argument("--output-markdown", type=Path, default=DEFAULT_OUTPUT_MARKDOWN)
     args = parser.parse_args()
@@ -1024,6 +1035,7 @@ def main() -> int:
         cover_report=args.cover_report,
         bridge_report=args.bridge_report,
         verifier_report=args.verifier_report,
+        model_provenance_path=args.model_provenance_path,
     )
     write_packet(packet, args.output_json, args.output_markdown)
     print(f"wrote JSON packet: {args.output_json}")
