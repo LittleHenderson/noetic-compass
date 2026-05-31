@@ -50,6 +50,7 @@ class AuditSessionRecord:
     model_status: ModelStatus
     model_id: str | None
     endpoint_url: str | None
+    provider: str | None
     audit_mode: str
     prompt_text: str | None
     scenario_text: str | None
@@ -96,6 +97,7 @@ def create_session(payload: dict[str, Any]) -> AuditSessionRecord:
             model_status="NOT_CONNECTED_MOCK",
             model_id=payload.get("model_id"),
             endpoint_url=payload.get("endpoint_url"),
+            provider=payload.get("provider"),
             audit_mode=payload["audit_mode"],
             prompt_text=payload.get("prompt"),
             scenario_text=payload.get("scenario_text"),

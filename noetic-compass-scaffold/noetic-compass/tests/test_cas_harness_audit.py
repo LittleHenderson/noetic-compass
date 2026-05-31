@@ -628,6 +628,59 @@ def test_run_route_calls_live_worker_for_hosted_pythia_and_routes_to_review(
     assert "missing required proof" in body["lifecycle"][-1]["message"]
 
 
+def test_run_route_calls_customer_api_and_routes_to_review(
+    client,
+    auth_headers,
+    tmp_path,
+    monkeypatch,
+):
+    # End-to-end through the real mock connector: a closed-API audit captures
+    # model I/O but no activations, so it must honestly land at human review.
+    monkeypatch.setenv("CAS_HARNESS_HARVEST_STORE_DIR", str(tmp_path / "harvest"))
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            "model_id": "mock-cas-v1",
+            "provider": "mock",
+            "endpoint_url": "https://api.example.com/v1/chat",
+            "audit_mode": "BALANCED",
+            "prompt": "Audit this customer model output.",
+            "selected_modules": ["active_trace", "confidence_margin"],
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+    assert created.json()["provider"] == "mock"
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] is None
+    assert body["evidence_packet_trace_id"].startswith("cas-api-")
+    assert chips == {
+        "model_proof": "present",
+        "cas_readout": "unavailable",
+        "causal_proof": "unavailable",
+        "control_proof": "unavailable",
+        "output_proof": "present",
+        "packet_proof": "present",
+    }
+    assert [event["status"] for event in body["lifecycle"]] == [
+        "DRAFT",
+        "EVIDENCE_READY",
+        "VALIDATING",
+        "RUNNING",
+        "COMPLETE",
+    ]
+
+
 def test_run_route_flags_attached_packet_when_required_proof_is_incomplete(client, auth_headers):
     created = client.post(
         "/api/cas-harness/audit/session",

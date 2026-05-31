@@ -1,5 +1,23 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness customer-API audit path — harvest closed-model I/O honestly (May 31, 2026)
+
+The Audit Console `/run` route can now audit a customer's **closed** model behind a provider API (OpenAI, Anthropic, Google, Meta, xAI, DeepSeek, Qwen — plus `mock` for end-to-end testing), not only the hosted open-weight Pythia worker. This is the second product path that harvests fresh CAS-labelled signal on a model we do not own — the first one that works against black-box commercial APIs, which is where most real customer demand sits.
+
+**Honest by construction — no fabricated ACCEPT.** A closed API exposes no activations, so this path captures real model I/O only. `model_proof` and `output_proof` are **present** (we really called the model and kept its output); `cas_readout`, `causal_proof`, and `control_proof` are **unavailable** by construction — we do not invent them. Because three of the six proof chips are unavailable, the evidence-gated verdict runner cannot reach ACCEPT/SUPPRESS and the audit honestly lands at `FLAG_FOR_HUMAN_REVIEW`. The audit prompt is sent to the customer's model as-is (no CAS system-prompt injection) so the capture reflects how their model actually responds.
+
+The harvest runs the moment the packet is built — before the verdict gate — and joins back on `trace_id`, exactly like the live-worker path. Mock-provider output is flagged `model_io_is_demo_fallback: true` so synthetic placeholder text can never silently enter a training corpus as real signal.
+
+### New pieces
+- `api/services/cas_harness_api_endpoint_runner.py` — `run_api_endpoint_audit` calls `get_connector(provider, model_id).generate(prompt)`, builds an output-only Evidence Packet (`method_label: cas_harness_api_endpoint_v1`, `runtime: customer_api_connector`, `trace_id` prefix `cas-api-`), persists it through the existing hash-log/store/anchor machinery, harvests it, and returns the six proof chips to the verdict gate.
+- `api/routes/cas_harness_audit.py` — `/session/{audit_id}/run` now detects API-provider sessions (`provider` set to a supported closed-API provider, no attached packet) via `_should_run_api_endpoint`, runs the customer-API runner, attaches the packet trace, then evaluates the verdict gate.
+- `AuditSessionRequest` / `AuditSessionResponse` / `AuditSessionRecord` gain an optional `provider` field so the run path knows which connector to use. Backward-compatible: sessions without `provider` keep prior behavior. Raw credentials are never persisted to the session store; connector keys resolve server-side from `settings`.
+
+### Tests
+- `tests/test_cas_harness_api_endpoint_runner.py` — end-to-end through the real mock connector: output-only packet, `readout/ablation/matched_controls` all `unavailable`, hash-verifies cleanly, pins real `code_commit_sha`, writes exactly one harvest record flagged demo-fallback; unknown-provider and connector-failure both surface as `ApiEndpointRunnerUnavailable`.
+- `tests/test_cas_harness_audit.py` — `/run` route calls the customer-API path for a `mock` provider session and correctly returns `FLAG_FOR_HUMAN_REVIEW` with the honest chip posture and lifecycle.
+- Focused backend run: 43 passed (runner + audit route + live-worker + harvest); broad harness/atlas-live selection 156 passed, no regressions. (Two unrelated modules — `test_turn_admissibility`, `test_type_constraints` — fail at collection on this worktree independent of this change.)
+
 ## CAS Harness harvest-capture layer — every live audit becomes CAS-Native training signal (May 31, 2026)
 
 The CAS Harness is not only a revenue product; every live audit it runs is a chance to harvest real-world, CAS-labelled signal on a model we do not own. Until now that signal lived only inside the `live_audit` block of an Evidence Packet — readable, but not a corpus. This change makes the capture-and-persist step **first-class**: every live-worker audit now also writes a `cas_harness_harvest.v1` record to an append-only JSONL corpus that is built to be joined, on `trace_id`, to the CAS SDG's `native_nl.v1` output. The Harness harvest and the synthetic-data generator feed **one** CAS-Native training pipeline instead of two disconnected ones.

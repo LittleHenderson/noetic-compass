@@ -61,6 +61,11 @@ from api.services.cas_harness_fleet_verifier import (
     FleetVerifierStateError,
     verify_merged_fleet_packet,
 )
+from api.services.cas_harness_api_endpoint_runner import (
+    API_ENDPOINT_PROVIDERS,
+    ApiEndpointRunnerUnavailable,
+    run_api_endpoint_audit,
+)
 from api.services.cas_harness_live_worker_runner import (
     HOSTED_OPEN_WEIGHT_MODEL_IDS,
     LiveAuditRunnerUnavailable,
@@ -250,6 +255,12 @@ class ModelTargetVerificationResponse(BaseModel):
 class AuditSessionRequest(BaseModel):
     model_id: str | None = Field(default=None, min_length=1, max_length=200)
     endpoint_url: HttpUrl | None = None
+    provider: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=120,
+        description="Closed-API provider (openai, anthropic, google, ...) for customer-API audit runs.",
+    )
     audit_mode: AuditMode = "BALANCED"
     prompt: str | None = Field(default=None, min_length=1, max_length=12000)
     scenario_text: str | None = Field(default=None, min_length=1, max_length=12000)
@@ -267,7 +278,9 @@ class AuditSessionRequest(BaseModel):
         description="Placeholder for future license validation; not billed or verified here.",
     )
 
-    @field_validator("model_id", "prompt", "scenario_text", "evidence_packet_trace_id", "license_key")
+    @field_validator(
+        "model_id", "provider", "prompt", "scenario_text", "evidence_packet_trace_id", "license_key"
+    )
     @classmethod
     def strip_optional_text(cls, value: str | None) -> str | None:
         if value is None:
@@ -306,6 +319,7 @@ class AuditSessionResponse(BaseModel):
     model_status: ModelStatus
     model_id: str | None
     endpoint_url: str | None
+    provider: str | None = None
     audit_mode: AuditMode
     prompt_summary: str | None
     scenario_summary: str | None
@@ -1013,6 +1027,35 @@ async def run_audit_session(audit_id: str) -> AuditSessionResponse:
         )
         if attached is None:
             raise HTTPException(status_code=404, detail="Audit session not found")
+    elif _should_run_api_endpoint(existing):
+        prompt = existing.prompt_text or existing.scenario_text or ""
+        try:
+            api_result = await run_api_endpoint_audit(
+                audit_id=audit_id,
+                provider=existing.provider or "",
+                model_id=existing.model_id or "",
+                prompt=prompt,
+                audit_mode=existing.audit_mode,
+                selected_modules=existing.selected_modules,
+                endpoint_url=existing.endpoint_url,
+            )
+        except ApiEndpointRunnerUnavailable as exc:
+            failed = fail_session(
+                audit_id,
+                message=f"Customer-API runner failed: {exc}",
+            )
+            if failed is None:
+                raise HTTPException(status_code=404, detail="Audit session not found")
+            return AuditSessionResponse.model_validate(failed.to_dict())
+        attached = attach_runner_evidence(
+            audit_id,
+            evidence_packet_trace_id=api_result.trace_id,
+            proof_chips=api_result.proof_chips,
+            verifier_decision=api_result.verifier_decision,
+            message=api_result.message,
+        )
+        if attached is None:
+            raise HTTPException(status_code=404, detail="Audit session not found")
 
     record = run_session(audit_id)
     if record is None:
@@ -1035,6 +1078,16 @@ def _should_run_hosted_open_weight(record) -> bool:
     if record.endpoint_url:
         return False
     return record.model_id in HOSTED_OPEN_WEIGHT_MODEL_IDS
+
+
+def _should_run_api_endpoint(record) -> bool:
+    if record.status in {"SCAFFOLD_PENDING_RUNNER", "COMPLETE", "FAILED"}:
+        return False
+    if record.evidence_packet_trace_id:
+        return False
+    if not getattr(record, "provider", None):
+        return False
+    return record.provider in API_ENDPOINT_PROVIDERS
 
 
 def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
