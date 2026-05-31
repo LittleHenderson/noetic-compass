@@ -38,6 +38,10 @@ from api.services.cas_harness_distributed_audits import (
     record_worker_evidence,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.cas_harness_static_evidence_anchor import (
+    load_anchored_static_packet_payload,
+    verify_anchored_static_packet,
+)
 from api.services.cas_harness_fleet_executor import (
     FleetExecutorStateError,
     get_fleet_run,
@@ -1012,6 +1016,9 @@ def _packet_payload_for_trace(trace_id: str) -> dict[str, object]:
         packet = build_packet_for_trace(trace_id)
         return packet.model_dump(mode="json")
     except FileNotFoundError:
+        anchored = load_anchored_static_packet_payload(trace_id)
+        if anchored is not None and _has_external_anchor(anchored):
+            return anchored
         try:
             return load_stage9_40e_packet_payload_for_trace(trace_id)
         except FileNotFoundError:
@@ -1022,6 +1029,9 @@ def _verify_hashes_for_trace(trace_id: str) -> dict[str, object] | None:
     try:
         packet = build_packet_for_trace(trace_id)
     except FileNotFoundError:
+        anchored = load_anchored_static_packet_payload(trace_id)
+        if anchored is not None and _has_external_anchor(anchored):
+            return verify_anchored_static_packet(anchored)
         return None
     hashes = getattr(packet, "hashes", None)
     if not isinstance(hashes, dict) or not isinstance(hashes.get("external_anchor"), dict):
@@ -1030,6 +1040,11 @@ def _verify_hashes_for_trace(trace_id: str) -> dict[str, object] | None:
         return _verify_packet_hashes(packet).model_dump(mode="json")
     except AttributeError:
         return None
+
+
+def _has_external_anchor(packet: dict[str, object]) -> bool:
+    hashes = packet.get("hashes")
+    return isinstance(hashes, dict) and isinstance(hashes.get("external_anchor"), dict)
 
 
 def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerificationResponse:

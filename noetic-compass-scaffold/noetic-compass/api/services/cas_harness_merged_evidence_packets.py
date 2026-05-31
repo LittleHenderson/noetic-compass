@@ -8,16 +8,39 @@ when a worker fragment submits them explicitly.
 
 from __future__ import annotations
 
+from contextlib import contextmanager
+from contextvars import ContextVar
 from datetime import UTC, datetime
 import hashlib
 import json
 import os
 from pathlib import Path
 import tempfile
-from typing import Any, Mapping
+from typing import Any, Iterator, Mapping
 
 
 _MERGED_FLEET_PACKETS: dict[str, dict[str, Any]] = {}
+
+# Active store sub-namespace. Fleet-merged packets live in the base store; a
+# statically anchored reference packet lives under its own sub-namespace so the
+# fleet loader (which validates every payload as an ``EvidencePacket``) never
+# picks up a packet that uses a different schema. ``None`` == base store.
+_STORE_SUBDIR: ContextVar[str | None] = ContextVar("cas_harness_store_subdir", default=None)
+
+
+@contextmanager
+def evidence_store_namespace(subdir: str | None) -> Iterator[None]:
+    """Scope all packet-store + hash-log I/O to a sub-namespace of the store.
+
+    Used by the static reference-packet anchorer so its packets and append-only
+    hash-log are physically isolated from the fleet-merged packet store.
+    """
+
+    token = _STORE_SUBDIR.set(subdir)
+    try:
+        yield
+    finally:
+        _STORE_SUBDIR.reset(token)
 
 
 def reset_merged_fleet_evidence_packets_for_tests() -> None:
@@ -30,6 +53,60 @@ def load_merged_fleet_evidence_packet_payload(trace_id: str) -> dict[str, Any]:
         packet = _load_packet_from_store(trace_id)
         _MERGED_FLEET_PACKETS[trace_id] = packet
     return json.loads(json.dumps(packet))
+
+
+# ---------------------------------------------------------------------------
+# Shared building blocks (also used by the static reference-packet anchorer).
+# These are thin, public wrappers over the append-only hash-log + packet-store
+# machinery so other modules can anchor a pre-computed Evidence Packet through
+# the exact same trusted path the fleet writer uses, without reaching into
+# private helpers.
+# ---------------------------------------------------------------------------
+
+
+def evidence_packet_without_hashes_sha256(packet: Mapping[str, Any]) -> str:
+    return _packet_without_hashes_sha256(packet)
+
+
+def append_evidence_packet_hash_log_entry(
+    *,
+    trace_id: str,
+    audit_id: Any,
+    packet_without_hashes_sha256: str,
+    operation: str,
+) -> dict[str, Any]:
+    return _append_hash_log_entry(
+        trace_id=trace_id,
+        audit_id=audit_id,
+        packet_without_hashes_sha256=packet_without_hashes_sha256,
+        operation=operation,
+    )
+
+
+def write_evidence_packet_to_store(trace_id: str, packet: Mapping[str, Any]) -> None:
+    _write_packet_to_store(trace_id, packet)
+
+
+def load_evidence_packet_from_store(trace_id: str) -> dict[str, Any]:
+    return _load_packet_from_store(trace_id)
+
+
+def evidence_packet_store_path(trace_id: str) -> Path:
+    return _packet_path(trace_id)
+
+
+def evidence_hash_log_path() -> Path:
+    return _hash_log_path()
+
+
+def verify_evidence_packet_hash_chain(packet: Mapping[str, Any]) -> list[dict[str, Any]]:
+    """Return packet-hash + hash-log + chain checks for any persisted packet.
+
+    These checks do not assume worker fragments, so they apply equally to a
+    fleet-merged packet and to a statically anchored reference packet.
+    """
+
+    return verify_merged_fleet_evidence_packet_payload(packet)
 
 
 def write_merged_fleet_evidence_packet(
@@ -378,8 +455,11 @@ def _packet_without_hashes_sha256(packet: Mapping[str, Any]) -> str:
 def _packet_store_dir() -> Path:
     configured = os.environ.get("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR")
     if configured:
-        return Path(configured)
-    return Path(tempfile.gettempdir()) / "noetic-compass" / "cas_harness_evidence_packets"
+        base = Path(configured)
+    else:
+        base = Path(tempfile.gettempdir()) / "noetic-compass" / "cas_harness_evidence_packets"
+    subdir = _STORE_SUBDIR.get()
+    return base / subdir if subdir else base
 
 
 def _safe_trace_id(trace_id: str) -> str:
@@ -418,6 +498,7 @@ def _append_hash_log_entry(
     trace_id: str,
     audit_id: Any,
     packet_without_hashes_sha256: str,
+    operation: str = "write_merged_fleet_evidence_packet",
 ) -> dict[str, Any]:
     path = _hash_log_path()
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -429,7 +510,7 @@ def _append_hash_log_entry(
         "packet_without_hashes_sha256": packet_without_hashes_sha256,
         "previous_entry_sha256": previous_hash,
         "created_at": datetime.now(UTC).isoformat(),
-        "operation": "write_merged_fleet_evidence_packet",
+        "operation": operation,
     }
     entry["entry_sha256"] = _hash_log_entry_sha256(entry)
     with path.open("a", encoding="utf-8", newline="\n") as fh:

@@ -2,12 +2,35 @@ from __future__ import annotations
 
 from typing import get_args
 
+import pytest
+
 from api.routes.cas_harness_audit import Verdict
 from api.services.cas_harness_audit_sessions import reset_audit_sessions_for_tests
+from api.services.cas_harness_merged_evidence_packets import (
+    reset_merged_fleet_evidence_packets_for_tests,
+)
 
 
 def setup_function() -> None:
     reset_audit_sessions_for_tests()
+
+
+@pytest.fixture(autouse=True)
+def _isolated_evidence_store(tmp_path, monkeypatch):
+    """Pin the Evidence Packet store to an empty per-test dir.
+
+    Without this, the route reads a developer machine's default temp store,
+    so a previously run anchor (e.g. ``scripts.anchor_stage9_40e_packet``)
+    would leak an anchored Stage-9 copy into these tests and flip packet_proof.
+    """
+
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
+    monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", raising=False)
+    monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", raising=False)
+    monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", raising=False)
+    reset_merged_fleet_evidence_packets_for_tests()
+    yield
+    reset_merged_fleet_evidence_packets_for_tests()
 
 
 def _valid_payload() -> dict:
@@ -752,6 +775,51 @@ def test_run_route_uses_stage9_40e_packet_as_review_only_without_worm_anchor(cli
         "packet_proof": "present",
     }
     assert "WORM-retained Evidence Packet" in body["lifecycle"][-1]["message"]
+
+
+def test_run_route_accepts_stage9_40e_packet_once_worm_anchored(client, auth_headers, monkeypatch):
+    from api.routes.evidence import load_stage9_40e_packet_payload_for_trace
+
+    trace_id = "stage9-40e-original-baseline-readout-20260527"
+    anchored = _attach_worm_anchor(load_stage9_40e_packet_payload_for_trace(trace_id))
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.load_anchored_static_packet_payload",
+        lambda tid: anchored if tid == trace_id else None,
+    )
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit._verify_hashes_for_trace",
+        lambda tid: _worm_verify_hashes(tid) if tid == trace_id else None,
+    )
+
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            **_valid_payload(),
+            "model_id": "EleutherAI/gpt-neox-20b",
+            "evidence_packet_trace_id": trace_id,
+        },
+        headers=auth_headers,
+    )
+    assert created.status_code == 200, created.text
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    # With a real WORM/S3 object-lock anchor re-read, the Stage 9 40E scoped
+    # validation packet's explicit ACCEPT is no longer withheld.
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "ACCEPT"
+    assert body["confidence"] == 0.95625
+    assert body["evidence_packet_trace_id"] == trace_id
+    assert chips["packet_proof"] == "verified"
+    assert set(chips.values()).issubset({"present", "verified"})
+    assert "explicit verifier decision" in body["lifecycle"][-1]["message"]
 
 
 def test_run_route_suppresses_only_when_complete_packet_has_explicit_rejection(

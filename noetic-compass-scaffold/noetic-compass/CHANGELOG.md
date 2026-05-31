@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## WORM-anchor path for the Stage 9 40E packet — the one honest step that can flip the verdict (May 31, 2026)
+
+The Audit Console can now turn the Stage 9 40E packet's headline from `FLAG_FOR_HUMAN_REVIEW` into a true green ACCEPT — **but only after a real, un-fakeable step runs**: writing the packet to an AWS S3 bucket that has Object Lock (WORM — write once, read many) turned on, then re-reading that object to confirm the lock is real and the retention date is in the future. No S3 write, no ACCEPT. That is the entire point of the gate.
+
+**What ships here is the plumbing, not a flipped verdict.** With no AWS configured (the default), the step still runs and still records an anchor — but the anchor's status is honestly `disabled`, the packet is *not* WORM-retained, and the console correctly stays at human review. `local` mode anchors to the same machine, which is also not WORM, and also stays at human review. Only a genuine `s3` + Object Lock write — re-read and confirmed — produces the "WORM retained … object lock … retention is active" proof the verdict runner requires.
+
+**How to actually flip it (the one runtime requirement).** Set `CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3` plus an Object-Lock-enabled bucket, region, lock mode (GOVERNANCE/COMPLIANCE), retention days, and AWS credentials, then run `python -m scripts.anchor_stage9_40e_packet --require-object-lock`. The bucket must have had Object Lock enabled at creation and the credentials must allow `s3:PutObject` with retention — neither can be faked locally. This stays a *scoped project validation* ACCEPT, never a per-customer production ACCEPT.
+
+### New pieces
+- `api/services/cas_harness_static_evidence_anchor.py` — anchors a static (non-fleet) packet through the *exact same* trusted append-only hash-log + external object-lock path the fleet writer uses, so its WORM retention is verified, never asserted. Functions: `anchor_static_evidence_packet`, `load_anchored_static_packet_payload`, `verify_anchored_static_packet`.
+- `scripts/anchor_stage9_40e_packet.py` — the operational entry point; `--require-object-lock` fails loudly unless the anchor is a real, re-read-confirmed S3 Object Lock write.
+- Audit route (`_packet_payload_for_trace` / `_verify_hashes_for_trace`) now prefers a genuinely anchored Stage-9 copy when one exists, and falls back to the bare bundled packet otherwise.
+
+### Store isolation fix (regression caught and closed)
+Static-anchored packets are now persisted under a dedicated store sub-namespace (`static-reference/`) via a new `evidence_store_namespace(...)` context manager. **Why:** the fleet packet loader validates every payload it reads as an `EvidencePacket`; a Stage-9 packet uses a different schema, so when an anchored copy landed in the *shared* store, the loader crashed on validation instead of falling through. Isolating the namespace means the fleet drawer physically cannot see static packets. The audit tests also gained an autouse fixture pinning the packet store to an empty per-test dir, so a developer who runs the anchor script no longer leaks an anchored copy into the suite.
+
+### Tests
+- `tests/test_cas_harness_static_evidence_anchor.py` — disabled-mode anchors-but-not-WORM, local-mode not-WORM (never claims object lock), round-trip from store, unanchored-returns-None, tamper → `partial_mismatch`, missing trace_id → `ValueError`.
+- `tests/test_cas_harness_audit.py` — WORM-anchored path asserts ACCEPT (confidence 0.95625, packet_proof verified); un-anchored path asserts the unchanged `FLAG_FOR_HUMAN_REVIEW`.
+- Full harness suite green: 130 cas_harness tests pass; targeted set 96 passed / 2 skipped.
+
 ## Audit Console reference target serves the real Stage 9 40E packet (May 31, 2026)
 
 The Audit Console's built-in `demo_reference` target stopped serving a synthetic placeholder packet (model `pythia-160m`, `hashes=None`, a fabricated Stage 19/20 verifier decision) and now points at the **real GPT-NeoX-20B Stage 9 40E validation packet** (`stage9-40e-original-baseline-readout-20260527`). The console now shows the genuine six proof chips (cas_readout / causal / control / output **verified**, model / packet **present**) and the real verifier decision (ACCEPT, confidence 0.95625, source `stage9_40e_packet_verifier`, 80 cases × 40 classes).
