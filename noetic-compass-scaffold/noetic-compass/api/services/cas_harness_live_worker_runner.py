@@ -24,6 +24,7 @@ import httpx
 
 from api.config import settings
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
+from api.services.cas_harness_harvest import capture_live_audit_harvest
 from api.services.cas_harness_merged_evidence_packets import (
     append_evidence_packet_hash_log_entry,
     evidence_hash_log_path,
@@ -93,6 +94,10 @@ async def run_live_worker_audit(
         worker_dump=worker_dump,
     )
     _persist_packet(packet)
+    # Harvest the real-world CAS-labelled signal the moment it exists. A hosted
+    # pod can disappear; the model I/O is the irreplaceable part. The verdict
+    # gate runs later and joins back on trace_id.
+    capture_live_audit_harvest(packet, verdict_status="pending_verdict_gate")
     proof_chips = _proof_chips_for_live_packet(packet)
     return LiveAuditRunnerResult(
         trace_id=str(packet["trace_id"]),

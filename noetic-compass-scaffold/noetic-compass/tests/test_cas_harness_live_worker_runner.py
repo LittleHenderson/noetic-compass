@@ -4,6 +4,7 @@ import pytest
 
 from api.config import settings
 from api.routes.evidence import _verify_packet_hashes, build_packet_for_trace
+from api.services.cas_harness_harvest import iter_harvest_records
 from api.services.cas_harness_live_worker_runner import (
     _code_commit_sha,
     run_live_worker_audit,
@@ -16,6 +17,7 @@ from api.services.cas_harness_merged_evidence_packets import (
 @pytest.fixture(autouse=True)
 def _isolated_packet_store(tmp_path, monkeypatch):
     monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
+    monkeypatch.setenv("CAS_HARNESS_HARVEST_STORE_DIR", str(tmp_path / "harvest"))
     monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", raising=False)
     reset_merged_fleet_evidence_packets_for_tests()
     yield
@@ -91,6 +93,16 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
     assert verify.overall == "all_match"
     assert packet.provenance["code_commit_sha"] == _code_commit_sha()
     assert packet.provenance["code_commit_sha"] != "unknown"
+
+    harvest = list(iter_harvest_records())
+    assert len(harvest) == 1
+    assert harvest[0]["trace_id"] == result.trace_id
+    assert harvest[0]["output"]["text"] == " Hello world"
+    assert harvest[0]["join"] == {"key": "trace_id", "pairs_with": "native_nl.v1"}
+    # The fake dump's manifest does not assert is_real_model, so the harvest
+    # record must conservatively flag it as demo fallback — never silently real.
+    assert harvest[0]["model_io_is_demo_fallback"] is True
+
     assert chips == {
         "model_proof": "present",
         "cas_readout": "present",

@@ -1,5 +1,24 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness harvest-capture layer — every live audit becomes CAS-Native training signal (May 31, 2026)
+
+The CAS Harness is not only a revenue product; every live audit it runs is a chance to harvest real-world, CAS-labelled signal on a model we do not own. Until now that signal lived only inside the `live_audit` block of an Evidence Packet — readable, but not a corpus. This change makes the capture-and-persist step **first-class**: every live-worker audit now also writes a `cas_harness_harvest.v1` record to an append-only JSONL corpus that is built to be joined, on `trace_id`, to the CAS SDG's `native_nl.v1` output. The Harness harvest and the synthetic-data generator feed **one** CAS-Native training pipeline instead of two disconnected ones.
+
+**Two honesty rules are baked in so nothing fake or mislabelled can slip into training:**
+- **Real-vs-demo provenance.** A record is certified as real model I/O only when the worker manifest reports `is_real_model`. Demo/fallback output is still captured (so nothing is silently dropped) but flagged `model_io_is_demo_fallback: true`. Absent or false `is_real_model` is treated conservatively as demo fallback — the harvest never certifies "real" unless the worker explicitly says so.
+- **Foreign-output retention is stamped, not assumed.** Each record carries an explicit policy stamp (`foreign_output_retained: true`, `answer_side_rule: "ablated"`, `answer_side_rule_changed_at: "2026-05-31"`) reflecting the current user directive that the "foreign answers never" rule is suspended. If that ban is re-enabled, the stamp lets us filter retained-foreign rows back out instead of guessing.
+
+The model I/O is captured the moment the packet is built — before the verdict gate runs — because a hosted pod can disappear and the I/O is the irreplaceable part. The later verdict and the SDG row both join back on `trace_id`.
+
+### New pieces
+- `api/services/cas_harness_harvest.py` — `capture_live_audit_harvest`, `iter_harvest_records`, `harvest_corpus_path`. Store dir resolves from `CAS_HARNESS_HARVEST_STORE_DIR` (or a stable tempdir), mirroring the Evidence Packet store convention.
+- `api/services/cas_harness_live_worker_runner.py` — now harvests every live audit immediately after persisting the Evidence Packet.
+
+### Tests
+- `tests/test_cas_harness_harvest.py` — real-flagged vs demo-fallback honesty (true / false / absent `is_real_model`), the explicit `trace_id` join key, verdict context capture, policy stamp, and store isolation.
+- `tests/test_cas_harness_live_worker_runner.py` — extended to assert the live run writes exactly one harvest record joinable on `trace_id` and conservatively flagged as demo fallback for a manifest that does not assert `is_real_model`.
+- Focused backend tests: 82 passed; broad harness/evidence/harvest selection 168 passed / 2 skipped, no regressions.
+
 ## CAS Harness live-worker run path (May 31, 2026)
 
 The Audit Console `/run` route can now call the hosted open-weight live worker for `EleutherAI/pythia-160m` sessions instead of only replaying attached/static packets. The first slice is intentionally conservative: it captures real model I/O, token/readout events, neuron-cover events, and the worker manifest; writes a packet-loadable Evidence Packet into the shared packet store/hash log; then sends that packet through the existing evidence-gated verdict runner.
