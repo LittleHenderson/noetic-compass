@@ -1,5 +1,30 @@
 # Noetic Compass — Progress Log
 
+## Live Pythia-160M worker deployed on GPU pod + end-to-end audit verified (May 31, 2026)
+
+The hosted open-weight audit path is no longer a code path waiting on a model — it now runs against **real Pythia-160M weights on a GPU pod**, end to end, with real activations captured. This closes the GPU lane that was blocking the live-trace half of the Harness.
+
+**What runs now.** The live-trace worker (`EleutherAI/pythia-160m`, `output_hidden_states=True`, `output_attentions=True`) is deployed on the RunPod pod and confirmed loading real weights — `/health/realmode` returns `REAL_PYTHIA_WEIGHTS_LOADED`, `is_real_model: true`. The worker stays **private** (only port 22 is exposed on the pod), so the API reaches it over an SSH tunnel, not a public URL.
+
+**End-to-end chain verified.** Driving `run_live_worker_audit` against the live worker through the tunnel produced, for the prompt *"The Eiffel Tower is located in"*:
+- real model output (*"the city of Eiffel, France…"*, 24 tokens) with a full event dump (`manifest`, `knob_resolution`, `neuron_covers`, 24×`token`, `word_spans`, `complete`) — the heavier 4-probe payload (`active_trace`, `blindspot_covers`, `mode7_attribution`, `confidence_margin`) ran without stalling;
+- an Evidence Packet with `audit_scope.kind = open_weight_live_trace`, `internal_activation_access: true`, verdict `held_for_human_review`;
+- proof chips honest by construction — model/CAS-readout/output/packet **present**, causal/control **unavailable** (no ablation or matched controls in this slice);
+- a harvest record joined on `trace_id` with `is_real_model: true`, `model_io_is_demo_fallback: false`, `verdict.status: pending_verdict_gate`.
+
+**Honesty held.** This is real model I/O + real activations + real readout — but **not** causal proof. Ablation and matched controls are still unavailable, so the verdict stays held for human review; the UI banner says exactly that. Nothing fabricates ACCEPT.
+
+**Persistence.** Worker source is staged on the pod's persistent `/workspace`, with a `/pre_start.sh` boot hook that forces port 8080, so the worker survives a pod restart.
+
+### Wiring (how the dashboard uses it)
+- `live-trace-worker/scripts/open_atlas_live_tunnel.sh` — opens the keepalive SSH tunnel `127.0.0.1:18080 → pod:8080` (`ServerAliveInterval`/`ExitOnForwardFailure`, after a `Connection reset by peer` without them). Pod host/port/key are env-overridable since RunPod reassigns them on pod recreation.
+- `.env.example` — documents `ATLAS_LIVE_WORKER_URL` (point at the local tunnel end, e.g. `http://127.0.0.1:18080`) and `ATLAS_LIVE_HTTP_TIMEOUT_SECONDS`. Blank = live path disabled and hosted open-weight audits fail honestly instead of fabricating.
+- The run path (`POST /session/{audit_id}/run` → `_should_run_hosted_open_weight` → `run_live_worker_audit`) was already wired; this commit makes the worker it calls real and the tunnel reproducible.
+
+### Tests
+- Backend focused run: 41 passed (`test_cas_harness_live_worker_runner` + `test_cas_harness_harvest` + `test_cas_harness_audit`).
+- Live end-to-end: real worker `/sessions/dump` through the tunnel produced the packet + harvest record above (verified by a throwaway driver, not committed).
+
 ## CAS Harness BYOK ephemeral key + honest audit-scope label in the UI (May 31, 2026)
 
 Two follow-ups that together let **any developer audit a model they pay for, on our platform, without us holding their secret** — and see, in plain words, exactly how much access the audit had.
