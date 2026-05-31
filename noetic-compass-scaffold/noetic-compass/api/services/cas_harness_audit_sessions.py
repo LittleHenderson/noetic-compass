@@ -51,6 +51,8 @@ class AuditSessionRecord:
     model_id: str | None
     endpoint_url: str | None
     audit_mode: str
+    prompt_text: str | None
+    scenario_text: str | None
     prompt_summary: str | None
     scenario_summary: str | None
     selected_modules: list[str]
@@ -95,6 +97,8 @@ def create_session(payload: dict[str, Any]) -> AuditSessionRecord:
             model_id=payload.get("model_id"),
             endpoint_url=payload.get("endpoint_url"),
             audit_mode=payload["audit_mode"],
+            prompt_text=payload.get("prompt"),
+            scenario_text=payload.get("scenario_text"),
             prompt_summary=_summary(payload.get("prompt")),
             scenario_summary=_summary(payload.get("scenario_text")),
             selected_modules=list(payload["selected_modules"]),
@@ -132,6 +136,41 @@ def get_session(audit_id: str) -> AuditSessionRecord | None:
 def list_sessions() -> list[AuditSessionRecord]:
     with _LOCK:
         return sorted(_SESSIONS.values(), key=lambda session: session.created_at)
+
+
+def attach_runner_evidence(
+    audit_id: str,
+    *,
+    evidence_packet_trace_id: str,
+    proof_chips: list[dict[str, str]],
+    verifier_decision: dict[str, Any] | None = None,
+    message: str,
+) -> AuditSessionRecord | None:
+    """Attach live-run evidence before the verdict gate evaluates it."""
+
+    with _LOCK:
+        record = _SESSIONS.get(audit_id)
+        if record is None:
+            return None
+        if record.evidence_packet_trace_id:
+            return record
+        record.evidence_packet_trace_id = evidence_packet_trace_id
+        record.atlas_deep_link = _atlas_deep_link(evidence_packet_trace_id)
+        record.provenance_chips = list(proof_chips)
+        record.verifier_decision = dict(verifier_decision) if verifier_decision else None
+        _append_event(record, status="EVIDENCE_READY", message=message)
+        return record
+
+
+def fail_session(audit_id: str, *, message: str) -> AuditSessionRecord | None:
+    """Move a session to FAILED when a real runner attempt errors."""
+
+    with _LOCK:
+        record = _SESSIONS.get(audit_id)
+        if record is None:
+            return None
+        _append_event(record, status="FAILED", message=message)
+        return record
 
 
 def run_session(audit_id: str) -> AuditSessionRecord | None:

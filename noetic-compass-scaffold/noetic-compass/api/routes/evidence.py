@@ -85,6 +85,7 @@ class EvidencePacket(BaseModel):
     verification: dict[str, Any] | None = None
     generation_readiness: dict[str, Any] | None = None
     distributed_fleet: dict[str, Any] | None = None
+    live_audit: dict[str, Any] | None = None
 
 
 class VerifyCheck(BaseModel):
@@ -1033,7 +1034,7 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
                 )
             )
 
-    if packet.distributed_fleet is not None:
+    if packet.distributed_fleet is not None or packet.live_audit is not None:
         try:
             from api.services.cas_harness_merged_evidence_packets import (
                 verify_merged_fleet_evidence_packet_payload,

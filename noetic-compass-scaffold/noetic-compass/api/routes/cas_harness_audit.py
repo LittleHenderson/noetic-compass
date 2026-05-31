@@ -22,7 +22,9 @@ from api.routes.evidence import (
     load_stage9_40e_packet_payload_for_trace,
 )
 from api.services.cas_harness_audit_sessions import (
+    attach_runner_evidence,
     create_session,
+    fail_session,
     get_session,
     list_sessions,
     run_session,
@@ -58,6 +60,11 @@ from api.services.cas_harness_fleet_executor import (
 from api.services.cas_harness_fleet_verifier import (
     FleetVerifierStateError,
     verify_merged_fleet_packet,
+)
+from api.services.cas_harness_live_worker_runner import (
+    HOSTED_OPEN_WEIGHT_MODEL_IDS,
+    LiveAuditRunnerUnavailable,
+    run_live_worker_audit,
 )
 from api.services.cas_harness_scale_planner import (
     ScalePlanRequest as PlannerScalePlanRequest,
@@ -975,7 +982,38 @@ async def get_audit_session_status(audit_id: str) -> AuditSessionResponse:
 
 @router.post("/session/{audit_id}/run", response_model=AuditSessionResponse)
 async def run_audit_session(audit_id: str) -> AuditSessionResponse:
-    """Advance the M1 lifecycle without fabricating a final CAS verdict."""
+    """Run live worker evidence when available, then apply the verdict gate."""
+    existing = get_session(audit_id)
+    if existing is None:
+        raise HTTPException(status_code=404, detail="Audit session not found")
+    if _should_run_hosted_open_weight(existing):
+        prompt = existing.prompt_text or existing.scenario_text or ""
+        try:
+            live_result = await run_live_worker_audit(
+                audit_id=audit_id,
+                model_id=existing.model_id or "",
+                prompt=prompt,
+                audit_mode=existing.audit_mode,
+                selected_modules=existing.selected_modules,
+            )
+        except LiveAuditRunnerUnavailable as exc:
+            failed = fail_session(
+                audit_id,
+                message=f"Live hosted open-weight runner failed: {exc}",
+            )
+            if failed is None:
+                raise HTTPException(status_code=404, detail="Audit session not found")
+            return AuditSessionResponse.model_validate(failed.to_dict())
+        attached = attach_runner_evidence(
+            audit_id,
+            evidence_packet_trace_id=live_result.trace_id,
+            proof_chips=live_result.proof_chips,
+            verifier_decision=live_result.verifier_decision,
+            message=live_result.message,
+        )
+        if attached is None:
+            raise HTTPException(status_code=404, detail="Audit session not found")
+
     record = run_session(audit_id)
     if record is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
@@ -987,6 +1025,16 @@ async def list_audit_sessions() -> AuditSessionListResponse:
     """List in-process M1 audit sessions for the current API process."""
     sessions = [AuditSessionResponse.model_validate(record.to_dict()) for record in list_sessions()]
     return AuditSessionListResponse(sessions=sessions)
+
+
+def _should_run_hosted_open_weight(record) -> bool:
+    if record.status in {"SCAFFOLD_PENDING_RUNNER", "COMPLETE", "FAILED"}:
+        return False
+    if record.evidence_packet_trace_id:
+        return False
+    if record.endpoint_url:
+        return False
+    return record.model_id in HOSTED_OPEN_WEIGHT_MODEL_IDS
 
 
 def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:

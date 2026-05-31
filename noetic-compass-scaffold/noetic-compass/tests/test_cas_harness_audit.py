@@ -525,6 +525,109 @@ def test_run_route_advances_lifecycle_without_inventing_verdict(client, auth_hea
     assert status.json() == body
 
 
+def test_run_route_calls_live_worker_for_hosted_pythia_and_routes_to_review(
+    client,
+    auth_headers,
+    monkeypatch,
+):
+    async def fake_live_worker_audit(**kwargs):
+        assert kwargs["model_id"] == "EleutherAI/pythia-160m"
+        assert kwargs["prompt"] == "Audit this live prompt."
+        return type(
+            "LiveResult",
+            (),
+            {
+                "trace_id": "cas-live-test-001",
+                "proof_chips": [
+                    {
+                        "id": "model_proof",
+                        "name": "Model proof",
+                        "status": "present",
+                        "detail": "Hosted open-weight live worker ran model target EleutherAI/pythia-160m.",
+                    },
+                    {
+                        "id": "cas_readout",
+                        "name": "CAS readout",
+                        "status": "present",
+                        "detail": "Live worker emitted token-level activation/readout events.",
+                    },
+                    {
+                        "id": "causal_proof",
+                        "name": "Causal proof",
+                        "status": "unavailable",
+                        "detail": "No ablation/intervention proof was run in this live-worker slice.",
+                    },
+                    {
+                        "id": "control_proof",
+                        "name": "Control proof",
+                        "status": "unavailable",
+                        "detail": "No matched-control proof was run in this live-worker slice.",
+                    },
+                    {
+                        "id": "output_proof",
+                        "name": "Output proof",
+                        "status": "present",
+                        "detail": "Live worker output text is recorded in the Evidence Packet.",
+                    },
+                    {
+                        "id": "packet_proof",
+                        "name": "Packet proof",
+                        "status": "present",
+                        "detail": "Live Evidence Packet cas-live-test-001 was written.",
+                    },
+                ],
+                "verifier_decision": None,
+                "message": "Live hosted open-weight worker ran and wrote an Evidence Packet.",
+            },
+        )()
+
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.run_live_worker_audit",
+        fake_live_worker_audit,
+    )
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            "model_id": "EleutherAI/pythia-160m",
+            "audit_mode": "BALANCED",
+            "prompt": "Audit this live prompt.",
+            "selected_modules": ["active_trace", "confidence_margin"],
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["confidence"] is None
+    assert body["evidence_packet_trace_id"] == "cas-live-test-001"
+    assert body["atlas_deep_link"] == "/cockpit?trace_id=cas-live-test-001"
+    assert chips == {
+        "model_proof": "present",
+        "cas_readout": "present",
+        "causal_proof": "unavailable",
+        "control_proof": "unavailable",
+        "output_proof": "present",
+        "packet_proof": "present",
+    }
+    assert [event["status"] for event in body["lifecycle"]] == [
+        "DRAFT",
+        "EVIDENCE_READY",
+        "VALIDATING",
+        "RUNNING",
+        "COMPLETE",
+    ]
+    assert "missing required proof" in body["lifecycle"][-1]["message"]
+
+
 def test_run_route_flags_attached_packet_when_required_proof_is_incomplete(client, auth_headers):
     created = client.post(
         "/api/cas-harness/audit/session",

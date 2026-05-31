@@ -1,5 +1,21 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness live-worker run path (May 31, 2026)
+
+The Audit Console `/run` route can now call the hosted open-weight live worker for `EleutherAI/pythia-160m` sessions instead of only replaying attached/static packets. The first slice is intentionally conservative: it captures real model I/O, token/readout events, neuron-cover events, and the worker manifest; writes a packet-loadable Evidence Packet into the shared packet store/hash log; then sends that packet through the existing evidence-gated verdict runner.
+
+**No fake ACCEPT.** The live path marks model/readout/output/packet proof as present, but causal ablation and matched controls remain unavailable in this first slice. The verdict therefore routes to `FLAG_FOR_HUMAN_REVIEW` until causal/control/verifier/WORM gates are satisfied. This is the first product path where a customer-style run harvests fresh CAS-native training signal instead of only opening a bundled reference packet.
+
+### New pieces
+- `api/services/cas_harness_live_worker_runner.py` - calls `ATLAS_LIVE_WORKER_URL /sessions/dump`, captures events, builds the live Evidence Packet, persists it through the existing hash-log/store/anchor machinery, and returns proof chips to the verdict gate.
+- `api/routes/cas_harness_audit.py` - `/session/{audit_id}/run` now detects hosted open-weight Pythia sessions with no attached packet, runs the live worker, attaches the new packet trace, and only then evaluates the verdict gate.
+- Evidence Packet schema now exposes `live_audit` and verifies live packets through the same packet-store hash-chain path used by merged fleet packets.
+
+### Tests
+- `tests/test_cas_harness_live_worker_runner.py` verifies a live worker dump writes a loadable packet, preserves output text + event counts, and hash-verifies cleanly.
+- `tests/test_cas_harness_audit.py` verifies the `/run` route calls the live worker for Pythia and correctly returns `FLAG_FOR_HUMAN_REVIEW` when causal/control proofs are unavailable.
+- Focused backend tests: 34 passed.
+
 ## WORM-anchor path for the Stage 9 40E packet — the one honest step that can flip the verdict (May 31, 2026)
 
 The Audit Console can now turn the Stage 9 40E packet's headline from `FLAG_FOR_HUMAN_REVIEW` into a true green ACCEPT — **but only after a real, un-fakeable step runs**: writing the packet to an AWS S3 bucket that has Object Lock (WORM — write once, read many) turned on, then re-reading that object to confirm the lock is real and the retention date is in the future. No S3 write, no ACCEPT. That is the entire point of the gate.
