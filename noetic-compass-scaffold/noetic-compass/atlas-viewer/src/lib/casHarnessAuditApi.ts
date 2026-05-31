@@ -122,12 +122,21 @@ export interface CasHarnessAuditLifecycleEvent {
   timestamp: string;
 }
 
+export interface CasHarnessAuditScope {
+  kind: string;
+  label: string;
+  internalActivationAccess: boolean;
+  verdictDisposition: string;
+  detail: string | null;
+}
+
 export interface CasHarnessAuditSession {
   audit_id: string;
   status: CasHarnessAuditSessionStatus;
   model_status: CasHarnessModelStatus;
   model_id: string | null;
   endpoint_url: string | null;
+  provider: string | null;
   audit_mode: CasHarnessAuditMode;
   prompt_summary: string | null;
   scenario_summary: string | null;
@@ -140,6 +149,7 @@ export interface CasHarnessAuditSession {
   atlas_deep_link: string | null;
   provenance_chips: ProvenanceChip[];
   verifier_decision: VerifierDecision | null;
+  audit_scope: CasHarnessAuditScope | null;
   lifecycle: CasHarnessAuditLifecycleEvent[];
 }
 
@@ -814,18 +824,36 @@ export async function listCasHarnessAuditSessions(
   };
 }
 
+export interface StartCasHarnessAuditSessionOptions extends CasHarnessAuditApiOptions {
+  /**
+   * Customer "bring-your-own-key" ephemeral secret. When provided it is sent
+   * request-scoped in the run body so the server can authenticate the provider
+   * call without server-side config. The server never persists it.
+   */
+  apiKey?: string | null;
+}
+
 export async function startCasHarnessAuditSession(
   auditId: string,
-  options?: CasHarnessAuditApiOptions,
+  options?: StartCasHarnessAuditSessionOptions,
 ): Promise<CasHarnessAuditSession> {
   assertNonEmpty('auditId', auditId);
+  const trimmedKey =
+    typeof options?.apiKey === 'string' && options.apiKey.trim().length > 0
+      ? options.apiKey.trim()
+      : null;
+  const init: RequestInit = {
+    method: 'POST',
+    headers: { Accept: 'application/json' },
+    signal: options?.signal,
+  };
+  if (trimmedKey) {
+    init.headers = { Accept: 'application/json', 'Content-Type': 'application/json' };
+    init.body = JSON.stringify({ api_key: trimmedKey });
+  }
   const response = await requestJson(
     `${baseUrl(options)}/session/${encodeURIComponent(auditId)}/run`,
-    {
-      method: 'POST',
-      headers: { Accept: 'application/json' },
-      signal: options?.signal,
-    },
+    init,
     options,
   );
   return parseAuditSessionResponse(response);
@@ -849,6 +877,7 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
     ? raw.provenance_chips.map(parseProvenanceChip)
     : [];
   const verifierDecision = parseNullableVerifierDecision(raw.verifier_decision);
+  const auditScope = parseNullableAuditScope(raw.audit_scope);
   const lifecycle = Array.isArray(raw.lifecycle)
     ? raw.lifecycle.map(parseLifecycleEvent)
     : [];
@@ -859,6 +888,7 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
     model_status: modelStatus,
     model_id: nullableString(raw.model_id),
     endpoint_url: nullableString(raw.endpoint_url),
+    provider: nullableString(raw.provider),
     audit_mode: auditMode,
     prompt_summary: nullableString(raw.prompt_summary),
     scenario_summary: nullableString(raw.scenario_summary),
@@ -873,6 +903,7 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
     atlas_deep_link: nullableString(raw.atlas_deep_link),
     provenance_chips: chips,
     verifier_decision: verifierDecision,
+    audit_scope: auditScope,
     lifecycle,
   };
 }
@@ -1785,6 +1816,20 @@ function parseProvenanceChip(raw: unknown): ProvenanceChip {
     status: 'unavailable',
     statusLabel: STATUS_LABELS.unavailable,
     detail: requiredString(raw.value, 'provenance_chips[].value'),
+  };
+}
+
+function parseNullableAuditScope(raw: unknown): CasHarnessAuditScope | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness audit scope was malformed');
+  }
+  return {
+    kind: requiredString(raw.kind, 'audit_scope.kind'),
+    label: requiredString(raw.label, 'audit_scope.label'),
+    internalActivationAccess: raw.internal_activation_access === true,
+    verdictDisposition: requiredString(raw.verdict_disposition, 'audit_scope.verdict_disposition'),
+    detail: nullableString(raw.detail),
   };
 }
 

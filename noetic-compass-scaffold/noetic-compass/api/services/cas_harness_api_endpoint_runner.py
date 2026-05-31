@@ -66,6 +66,7 @@ class ApiEndpointRunnerResult:
     proof_chips: list[dict[str, str]]
     verifier_decision: dict[str, Any] | None
     message: str
+    audit_scope: dict[str, Any] | None = None
 
 
 class ApiEndpointRunnerUnavailable(RuntimeError):
@@ -81,15 +82,24 @@ async def run_api_endpoint_audit(
     audit_mode: str,
     selected_modules: list[str],
     endpoint_url: str | None = None,
+    api_key: str | None = None,
 ) -> ApiEndpointRunnerResult:
-    """Call a customer's closed-API model once and persist an output-only packet."""
+    """Call a customer's closed-API model once and persist an output-only packet.
+
+    ``api_key`` is the customer bring-your-own-key (BYOK) ephemeral secret. When
+    supplied, it flows through to the connector for this single call only and is
+    never persisted — not to the session store, the Evidence Packet, or the
+    harvest record. Only the *credential mode* (how the call was authenticated)
+    is recorded, never the secret itself.
+    """
 
     if provider not in API_ENDPOINT_PROVIDERS:
         raise ApiEndpointRunnerUnavailable(
             f"{provider!r} is not a supported customer-API provider"
         )
+    credential_mode = _credential_mode(provider, api_key)
     try:
-        connector = get_connector(provider, model_id or None)
+        connector = get_connector(provider, model_id or None, api_key_override=api_key)
     except LLMError as exc:
         raise ApiEndpointRunnerUnavailable(
             f"connector unavailable for provider {provider!r}: {exc}"
@@ -118,6 +128,7 @@ async def run_api_endpoint_audit(
         selected_modules=selected_modules,
         endpoint_url=endpoint_url,
         response=response,
+        credential_mode=credential_mode,
     )
     _persist_packet(packet)
     # Harvest the irreplaceable part (real model I/O on a model we don't own) the
@@ -129,6 +140,7 @@ async def run_api_endpoint_audit(
         evidence_packet=packet,
         proof_chips=proof_chips,
         verifier_decision=None,
+        audit_scope=packet.get("audit_scope"),
         message=(
             f"Customer API target {provider}/{model_id} ran and wrote an "
             "output-only Evidence Packet. A closed API exposes no activations, so "
@@ -136,6 +148,20 @@ async def run_api_endpoint_audit(
             "human review."
         ),
     )
+
+
+def _credential_mode(provider: str, api_key: str | None) -> str:
+    """How this call authenticated — recorded in the packet, the secret never is.
+
+    - ``customer_ephemeral_key``: a BYOK request-scoped key was supplied.
+    - ``server_config``: the call used a server-side configured key.
+    - ``none``: no credential involved (mock connector).
+    """
+    if provider == "mock":
+        return "none"
+    if api_key and api_key.strip():
+        return "customer_ephemeral_key"
+    return "server_config"
 
 
 def _packet_from_api_response(
@@ -148,6 +174,7 @@ def _packet_from_api_response(
     selected_modules: list[str],
     endpoint_url: str | None,
     response: LLMResponse,
+    credential_mode: str = "server_config",
 ) -> dict[str, Any]:
     output_text = response.text or ""
     is_real_model = provider != "mock"
@@ -173,6 +200,7 @@ def _packet_from_api_response(
                 "model_id": model_id,
                 "endpoint_url": endpoint_url,
                 "access": "closed_api",
+                "credential_mode": credential_mode,
             },
         },
         "output": {
@@ -244,6 +272,7 @@ def _packet_from_api_response(
             "model_id": model_id,
             "endpoint_url": endpoint_url,
             "response_model": response.model,
+            "credential_mode": credential_mode,
             "usage": dict(response.usage) if isinstance(response.usage, Mapping) else {},
             "latency_ms": response.latency_ms,
         },

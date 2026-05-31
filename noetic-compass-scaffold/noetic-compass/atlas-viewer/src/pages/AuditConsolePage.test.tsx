@@ -505,6 +505,64 @@ describe('AuditConsolePage', () => {
     );
   });
 
+  it('sends a customer BYOK key in the run body and surfaces the honest audit scope label', async () => {
+    const chips = allPresentChips();
+    const scope = {
+      kind: 'output_only_api_harvest',
+      label: 'Output-only harvest · no internal activation access · verdict held for review',
+      internal_activation_access: false,
+      verdict_disposition: 'held_for_human_review',
+      detail: 'Closed API target. No weights or activations were accessible.',
+    };
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => targetVerification() })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            evidence_packet_trace_id: 'cas_harness_byok_001',
+            provenance_chips: chips,
+            audit_scope: scope,
+          }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            status: 'EVIDENCE_PENDING',
+            evidence_packet_trace_id: 'cas_harness_byok_001',
+            provenance_chips: chips,
+            audit_scope: scope,
+            updated_at: '2026-05-25T11:01:00Z',
+          }),
+      });
+    vi.stubGlobal('fetch', fetchMock);
+
+    renderPage();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
+
+    fireEvent.change(
+      screen.getByLabelText('Bring your own provider API key (optional)'),
+      { target: { value: 'sk-customer-secret' } },
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+
+    expect(
+      await screen.findByText(
+        'Output-only harvest · no internal activation access · verdict held for review',
+      ),
+    ).toBeInTheDocument();
+
+    const runCall = fetchMock.mock.calls[2];
+    expect(runCall[0]).toBe('/api/cas-harness/audit/session/cas-audit-test-session/run');
+    expect(JSON.parse(String((runCall[1] as RequestInit).body))).toEqual({
+      api_key: 'sk-customer-secret',
+    });
+  });
+
   it('loads the S7-F28 20B evidence packet into the audit lifecycle', async () => {
     const chips = allPresentChips();
     const fetchMock = vi

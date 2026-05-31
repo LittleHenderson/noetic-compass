@@ -143,6 +143,19 @@ class VerifierDecision(BaseModel):
     coverage: dict[str, object] | None = None
 
 
+class AuditScope(BaseModel):
+    """Plain-language statement of how much access an audit actually had.
+
+    Surfaced so the UI never implies internal inspection the audit did not do.
+    """
+
+    kind: str = Field(..., min_length=1, max_length=80)
+    label: str = Field(..., min_length=1, max_length=240)
+    internal_activation_access: bool
+    verdict_disposition: str = Field(..., min_length=1, max_length=80)
+    detail: str | None = Field(default=None, min_length=1, max_length=1000)
+
+
 class ModelTargetConfig(BaseModel):
     """User-submitted model target config for the Audit Console connect step."""
 
@@ -313,6 +326,33 @@ class AuditSessionRequest(BaseModel):
         return self
 
 
+class RunAuditSessionRequest(BaseModel):
+    """Optional run-time body for POST /session/{audit_id}/run.
+
+    Carries the customer bring-your-own-key (BYOK) ephemeral secret. It is
+    supplied per-run, used for that single connector call, and never persisted:
+    it is not stored on the session record, the Evidence Packet, or the harvest.
+    Sessions created without a server-side key can still run by supplying the
+    key here at run time.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    api_key: SecretStr | None = Field(
+        default=None,
+        min_length=1,
+        max_length=4096,
+        description="One-request customer API key; used only for this run and never persisted.",
+    )
+
+    @field_validator("api_key")
+    @classmethod
+    def strip_optional_secret(cls, value: SecretStr | None) -> SecretStr | None:
+        if value is None:
+            return None
+        return value if value.get_secret_value().strip() else None
+
+
 class AuditSessionResponse(BaseModel):
     audit_id: str
     status: AuditStatus
@@ -332,6 +372,7 @@ class AuditSessionResponse(BaseModel):
     atlas_deep_link: str | None
     provenance_chips: list[ProvenanceChip]
     verifier_decision: VerifierDecision | None = None
+    audit_scope: AuditScope | None = None
     lifecycle: list[AuditLifecycleEvent]
 
 
@@ -995,11 +1036,21 @@ async def get_audit_session_status(audit_id: str) -> AuditSessionResponse:
 
 
 @router.post("/session/{audit_id}/run", response_model=AuditSessionResponse)
-async def run_audit_session(audit_id: str) -> AuditSessionResponse:
-    """Run live worker evidence when available, then apply the verdict gate."""
+async def run_audit_session(
+    audit_id: str,
+    req: RunAuditSessionRequest | None = None,
+) -> AuditSessionResponse:
+    """Run live worker evidence when available, then apply the verdict gate.
+
+    An optional body may carry a customer bring-your-own-key (BYOK) ephemeral
+    secret used only for this run (closed-API targets) and never persisted.
+    """
     existing = get_session(audit_id)
     if existing is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
+    ephemeral_api_key = (
+        req.api_key.get_secret_value() if req is not None and req.api_key is not None else None
+    )
     if _should_run_hosted_open_weight(existing):
         prompt = existing.prompt_text or existing.scenario_text or ""
         try:
@@ -1023,6 +1074,7 @@ async def run_audit_session(audit_id: str) -> AuditSessionResponse:
             evidence_packet_trace_id=live_result.trace_id,
             proof_chips=live_result.proof_chips,
             verifier_decision=live_result.verifier_decision,
+            audit_scope=live_result.audit_scope,
             message=live_result.message,
         )
         if attached is None:
@@ -1038,6 +1090,7 @@ async def run_audit_session(audit_id: str) -> AuditSessionResponse:
                 audit_mode=existing.audit_mode,
                 selected_modules=existing.selected_modules,
                 endpoint_url=existing.endpoint_url,
+                api_key=ephemeral_api_key,
             )
         except ApiEndpointRunnerUnavailable as exc:
             failed = fail_session(
@@ -1052,6 +1105,7 @@ async def run_audit_session(audit_id: str) -> AuditSessionResponse:
             evidence_packet_trace_id=api_result.trace_id,
             proof_chips=api_result.proof_chips,
             verifier_decision=api_result.verifier_decision,
+            audit_scope=api_result.audit_scope,
             message=api_result.message,
         )
         if attached is None:

@@ -577,6 +577,15 @@ def test_run_route_calls_live_worker_for_hosted_pythia_and_routes_to_review(
                     },
                 ],
                 "verifier_decision": None,
+                "audit_scope": {
+                    "kind": "open_weight_live_trace",
+                    "label": (
+                        "Open-weight live trace · activations + readout captured · "
+                        "causal/control not yet run · verdict held for review"
+                    ),
+                    "internal_activation_access": True,
+                    "verdict_disposition": "held_for_human_review",
+                },
                 "message": "Live hosted open-weight worker ran and wrote an Evidence Packet.",
             },
         )()
@@ -610,6 +619,8 @@ def test_run_route_calls_live_worker_for_hosted_pythia_and_routes_to_review(
     assert body["confidence"] is None
     assert body["evidence_packet_trace_id"] == "cas-live-test-001"
     assert body["atlas_deep_link"] == "/cockpit?trace_id=cas-live-test-001"
+    assert body["audit_scope"]["kind"] == "open_weight_live_trace"
+    assert body["audit_scope"]["internal_activation_access"] is True
     assert chips == {
         "model_proof": "present",
         "cas_readout": "present",
@@ -664,6 +675,9 @@ def test_run_route_calls_customer_api_and_routes_to_review(
     assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
     assert body["confidence"] is None
     assert body["evidence_packet_trace_id"].startswith("cas-api-")
+    assert body["audit_scope"]["kind"] == "output_only_api_harvest"
+    assert body["audit_scope"]["internal_activation_access"] is False
+    assert "Output-only harvest" in body["audit_scope"]["label"]
     assert chips == {
         "model_proof": "present",
         "cas_readout": "unavailable",
@@ -679,6 +693,69 @@ def test_run_route_calls_customer_api_and_routes_to_review(
         "RUNNING",
         "COMPLETE",
     ]
+
+
+def test_run_route_threads_byok_key_to_connector_and_never_echoes_it(
+    client,
+    auth_headers,
+    tmp_path,
+    monkeypatch,
+):
+    # BYOK: the customer supplies their own API key on the run call. It must
+    # reach the connector for that one run but never be persisted or echoed.
+    from api.llm_connectors.mock_connector import MockLLMConnector
+
+    captured: dict[str, object] = {}
+
+    def fake_get_connector(provider, model=None, *, api_key_override=None):
+        captured["provider"] = provider
+        captured["api_key_override"] = api_key_override
+        return MockLLMConnector()
+
+    monkeypatch.setenv("CAS_HARNESS_HARVEST_STORE_DIR", str(tmp_path / "harvest"))
+    monkeypatch.setattr(
+        "api.services.cas_harness_api_endpoint_runner.get_connector",
+        fake_get_connector,
+    )
+
+    secret = "sk-customer-byok-route-do-not-store-7q7q"
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            "model_id": "gpt-4",
+            "provider": "openai",
+            "endpoint_url": "https://api.example.com/v1/chat",
+            "audit_mode": "BALANCED",
+            "prompt": "Audit this customer model output.",
+            "selected_modules": ["active_trace"],
+        },
+        headers=auth_headers,
+    )
+    audit_id = created.json()["audit_id"]
+    # The create-session call carried no key — nothing to leak there.
+    assert secret not in created.text
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run",
+        json={"api_key": secret},
+        headers=auth_headers,
+    )
+    assert ran.status_code == 200
+    body = ran.json()
+    assert body["status"] == "COMPLETE"
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+
+    # The ephemeral key reached the connector...
+    assert captured["api_key_override"] == secret
+    assert captured["provider"] == "openai"
+
+    # ...but is never echoed in the run response or the stored session status.
+    assert secret not in ran.text
+    status = client.get(
+        f"/api/cas-harness/audit/session/{audit_id}/status",
+        headers=auth_headers,
+    )
+    assert secret not in status.text
 
 
 def test_run_route_flags_attached_packet_when_required_proof_is_incomplete(client, auth_headers):

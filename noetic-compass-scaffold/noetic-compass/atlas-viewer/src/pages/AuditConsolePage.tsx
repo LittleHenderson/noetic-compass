@@ -33,6 +33,7 @@ import {
   verifyCasHarnessFleetRun,
   verifyCasHarnessModelTarget,
   type CasHarnessAuditApiOptions,
+  type CasHarnessAuditScope,
   type CasHarnessAuditSession,
   type CasHarnessDistributedAudit,
   type CasHarnessFleetJob,
@@ -52,6 +53,7 @@ import {
   ACCENT_CYAN,
   ACCENT_TEAL,
   COLORS,
+  FONT_FAMILY,
   THEME,
 } from '../lib/designTokens';
 
@@ -689,6 +691,47 @@ const verdictLabelStyle: CSSProperties = {
   color: COLORS.textPrimary,
 };
 
+function AuditScopeBanner({ scope }: { scope: CasHarnessAuditScope }) {
+  const hasInternalAccess = scope.internalActivationAccess;
+  const accent = hasInternalAccess ? ACCENT_TEAL : '#fbbf24';
+  return (
+    <div
+      role="note"
+      aria-label="Audit scope"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 4,
+        padding: '10px 14px',
+        borderRadius: 8,
+        border: `1px solid ${accent}33`,
+        background: `${accent}14`,
+        fontFamily: FONT_FAMILY,
+      }}
+    >
+      <span
+        style={{
+          fontSize: 11,
+          fontWeight: 600,
+          letterSpacing: 0.4,
+          textTransform: 'uppercase',
+          color: accent,
+        }}
+      >
+        Audit scope
+      </span>
+      <span style={{ fontSize: 13, color: COLORS.textPrimary, fontWeight: 500 }}>
+        {scope.label}
+      </span>
+      {scope.detail ? (
+        <span style={{ fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.45 }}>
+          {scope.detail}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
 export default function AuditConsolePage() {
   const navigate = useNavigate();
   const [target, setTarget] = useState<AuditTargetConfig | null>(null);
@@ -697,6 +740,7 @@ export default function AuditConsolePage() {
   const [targetError, setTargetError] = useState<string | null>(null);
   const [isTargetConnecting, setIsTargetConnecting] = useState(false);
   const [isAuditRunning, setIsAuditRunning] = useState(false);
+  const [byokApiKey, setByokApiKey] = useState('');
   const [enterprisePlanSize, setEnterprisePlanSize] =
     useState<EnterpriseScalePlanSize>('100B');
   const [enterprisePlan, setEnterprisePlan] =
@@ -845,7 +889,11 @@ export default function AuditConsolePage() {
         evidence_packet_trace_id: target.evidencePacketTraceId ?? undefined,
       });
       setSession(created);
-      const started = await startCasHarnessAuditSession(created.audit_id);
+      const trimmedKey = byokApiKey.trim();
+      const started = await startCasHarnessAuditSession(
+        created.audit_id,
+        trimmedKey ? { apiKey: trimmedKey } : undefined,
+      );
       setSession(started);
     } catch (error) {
       setSessionError(
@@ -1214,6 +1262,27 @@ export default function AuditConsolePage() {
             >
               Load 20B review packet
             </button>
+            <input
+              type="password"
+              aria-label="Bring your own provider API key (optional)"
+              autoComplete="off"
+              spellCheck={false}
+              value={byokApiKey}
+              onChange={(event) => setByokApiKey(event.target.value)}
+              placeholder="Your provider API key (optional, sent once, never stored)"
+              disabled={isAuditRunning || isTargetConnecting}
+              style={{
+                flex: '1 1 240px',
+                minWidth: 220,
+                padding: '8px 12px',
+                borderRadius: 6,
+                border: `1px solid ${COLORS.borderStrong}`,
+                background: COLORS.bgPanel,
+                color: COLORS.textPrimary,
+                fontFamily: THEME.fontMono,
+                fontSize: 12,
+              }}
+            />
             <button
               type="button"
               style={commandActionStyle(commandButtonEnabled)}
@@ -1447,6 +1516,9 @@ export default function AuditConsolePage() {
               evidencePacketId={session.evidence_packet_trace_id}
               updatedAt={session.updated_at}
             />
+          ) : null}
+          {session?.audit_scope ? (
+            <AuditScopeBanner scope={session.audit_scope} />
           ) : null}
         </div>
 

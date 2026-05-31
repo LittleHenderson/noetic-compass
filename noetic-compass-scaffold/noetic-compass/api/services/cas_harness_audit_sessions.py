@@ -65,6 +65,7 @@ class AuditSessionRecord:
     atlas_deep_link: str | None = None
     provenance_chips: list[dict[str, str]] = field(default_factory=list)
     verifier_decision: dict[str, Any] | None = None
+    audit_scope: dict[str, Any] | None = None
     lifecycle: list[AuditLifecycleEvent] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
@@ -146,6 +147,7 @@ def attach_runner_evidence(
     evidence_packet_trace_id: str,
     proof_chips: list[dict[str, str]],
     verifier_decision: dict[str, Any] | None = None,
+    audit_scope: dict[str, Any] | None = None,
     message: str,
 ) -> AuditSessionRecord | None:
     """Attach live-run evidence before the verdict gate evaluates it."""
@@ -160,6 +162,7 @@ def attach_runner_evidence(
         record.atlas_deep_link = _atlas_deep_link(evidence_packet_trace_id)
         record.provenance_chips = list(proof_chips)
         record.verifier_decision = dict(verifier_decision) if verifier_decision else None
+        record.audit_scope = dict(audit_scope) if audit_scope else None
         _append_event(record, status="EVIDENCE_READY", message=message)
         return record
 

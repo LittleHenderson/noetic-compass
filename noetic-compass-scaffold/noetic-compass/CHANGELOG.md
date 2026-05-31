@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness BYOK ephemeral key + honest audit-scope label in the UI (May 31, 2026)
+
+Two follow-ups that together let **any developer audit a model they pay for, on our platform, without us holding their secret** — and see, in plain words, exactly how much access the audit had.
+
+**Bring-your-own-key (BYOK), ephemeral by construction.** A customer can now paste their own provider API key into the Audit Console run control. The key flows **only** in the body of the `POST /session/{audit_id}/run` request — never through create-session, never into the session store, the Evidence Packet, or the harvest record. It is handed request-scoped to a single `get_connector(..., api_key_override=…)` call and then forgotten. The audit records only a `credential_mode` (`customer_ephemeral_key` / `server_config` / `none`) so we can tell *how* a call authenticated without ever keeping *what* authenticated it. This is the monetization-enabling primitive: the customer pays their own provider, we run the audit.
+
+**Honest scope label, surfaced.** The `audit_scope` block already baked into every packet now rides through the session response and renders on the audit card as a labelled banner — amber when there was no internal access (closed API, output-only), teal when activations were captured (open-weight live trace). Both say "verdict held for review" so the UI never implies inspection it did not do.
+
+### Pieces
+- `api/llm_connectors/registry.py` — `get_connector(provider, model=None, *, api_key_override=None)`. A request-scoped override takes precedence over server `settings`; `mock` ignores it. Keyword-only, backward-compatible.
+- `api/services/cas_harness_api_endpoint_runner.py` — `run_api_endpoint_audit(..., api_key=None)` threads the override to the connector and stamps `credential_mode` into the packet manifest and `live_audit` block. The secret itself is never written.
+- `api/routes/cas_harness_audit.py` — new `RunAuditSessionRequest` (`extra="forbid"`, `api_key: SecretStr | None`, stripped); `/run` extracts the secret request-scoped and passes it to the runner. `AuditSessionResponse` gains a typed `AuditScope` field.
+- `api/services/cas_harness_audit_sessions.py` — `audit_scope` carried on the session record and through `attach_runner_evidence`.
+- `atlas-viewer/src/lib/casHarnessAuditApi.ts` — `CasHarnessAuditScope` type + `audit_scope`/`provider` on the session; `parseNullableAuditScope`; `startCasHarnessAuditSession(auditId, { apiKey })` sends the key in the run body only when present.
+- `atlas-viewer/src/pages/AuditConsolePage.tsx` — optional password-type BYOK input in the run controls; `AuditScopeBanner` renders the honest label on the audit card.
+
+### Tests
+- Backend focused run: 40 passed (`test_cas_harness_api_endpoint_runner` + `test_cas_harness_live_worker_runner` + `test_cas_harness_audit`), including a BYOK test that asserts the key reaches the connector but appears nowhere in the packet, harvest, or HTTP response.
+- Frontend: 52 passed (`casHarnessAuditApi.test.ts` + `AuditConsolePage.test.tsx`) — BYOK body threading, whitespace-only key omitted, `audit_scope`/`provider` parsing, and the scope banner rendering on the card. `tsc -b` clean.
+
 ## CAS Harness customer-API audit path — harvest closed-model I/O honestly (May 31, 2026)
 
 The Audit Console `/run` route can now audit a customer's **closed** model behind a provider API (OpenAI, Anthropic, Google, Meta, xAI, DeepSeek, Qwen — plus `mock` for end-to-end testing), not only the hosted open-weight Pythia worker. This is the second product path that harvests fresh CAS-labelled signal on a model we do not own — the first one that works against black-box commercial APIs, which is where most real customer demand sits.

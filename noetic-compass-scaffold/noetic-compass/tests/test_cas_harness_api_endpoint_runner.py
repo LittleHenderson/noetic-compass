@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import json
+
 import pytest
 
 from api.errors import LLMError
@@ -95,8 +97,55 @@ async def test_api_runner_rejects_unknown_provider():
 
 
 @pytest.mark.asyncio
+async def test_api_runner_threads_byok_key_to_connector_without_persisting(monkeypatch):
+    # Bring-your-own-key: the customer's ephemeral secret must reach the
+    # connector for this one call but never land in the packet or harvest.
+    from api.llm_connectors.mock_connector import MockLLMConnector
+
+    captured: dict[str, object] = {}
+
+    def fake_get_connector(provider, model=None, *, api_key_override=None):
+        captured["provider"] = provider
+        captured["model"] = model
+        captured["api_key_override"] = api_key_override
+        return MockLLMConnector()
+
+    monkeypatch.setattr(
+        "api.services.cas_harness_api_endpoint_runner.get_connector",
+        fake_get_connector,
+    )
+
+    secret = "sk-customer-byok-do-not-store-9z9z9z"
+    result = await run_api_endpoint_audit(
+        audit_id="cas-audit-byok01",
+        provider="openai",
+        model_id="gpt-4",
+        prompt="Audit this closed model with my own key.",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+        endpoint_url="https://api.example.com/v1/chat",
+        api_key=secret,
+    )
+
+    # The ephemeral key reached the connector for this single call.
+    assert captured["api_key_override"] == secret
+    assert captured["provider"] == "openai"
+
+    packet = build_packet_for_trace(result.trace_id)
+    # Credential MODE is recorded; the secret itself is not.
+    assert packet.model["manifest"]["credential_mode"] == "customer_ephemeral_key"
+    assert packet.live_audit["credential_mode"] == "customer_ephemeral_key"
+
+    # The secret must appear nowhere in the persisted packet or harvest corpus.
+    assert secret not in json.dumps(packet.model_dump(mode="json"))
+    harvest = list(iter_harvest_records())
+    assert len(harvest) == 1
+    assert secret not in json.dumps(harvest[0])
+
+
+@pytest.mark.asyncio
 async def test_api_runner_surfaces_connector_failure_as_unavailable(monkeypatch):
-    def boom(provider, model=None):
+    def boom(provider, model=None, *, api_key_override=None):
         raise LLMError("Anthropic API key not configured", provider="anthropic")
 
     monkeypatch.setattr(

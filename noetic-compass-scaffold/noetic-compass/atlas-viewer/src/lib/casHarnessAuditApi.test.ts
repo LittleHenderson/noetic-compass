@@ -909,6 +909,63 @@ describe('casHarnessAuditApi', () => {
     expect(result.status).toBe('RUNNING');
     expect(fetchImpl.mock.calls[0][0]).toBe('/api/cas-harness/audit/session/cas-audit-unit/run');
     expect(fetchImpl.mock.calls[0][1]).toMatchObject({ method: 'POST' });
+    // No BYOK key supplied → no JSON body is sent.
+    expect(fetchImpl.mock.calls[0][1].body).toBeUndefined();
+  });
+
+  it('threads a BYOK ephemeral key into the run body without persisting it', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(pendingSession({ status: 'RUNNING' })));
+
+    await startCasHarnessAuditSession('cas-audit-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+      apiKey: '  sk-customer-secret  ',
+    });
+
+    const init = fetchImpl.mock.calls[0][1] as RequestInit;
+    expect(init.method).toBe('POST');
+    expect(JSON.parse(String(init.body))).toEqual({ api_key: 'sk-customer-secret' });
+    expect((init.headers as Record<string, string>)['Content-Type']).toBe('application/json');
+  });
+
+  it('omits the run body when the BYOK key is only whitespace', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(pendingSession({ status: 'RUNNING' })));
+
+    await startCasHarnessAuditSession('cas-audit-unit', {
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+      apiKey: '   ',
+    });
+
+    expect((fetchImpl.mock.calls[0][1] as RequestInit).body).toBeUndefined();
+  });
+
+  it('parses the honest audit_scope label and provider off the session response', () => {
+    const parsed = parseAuditSessionResponse(pendingSession({
+      provider: 'openai',
+      audit_scope: {
+        kind: 'output_only_api_harvest',
+        label: 'Output-only harvest · no internal activation access · verdict held for review',
+        internal_activation_access: false,
+        verdict_disposition: 'held_for_human_review',
+        detail: 'Closed API target. No weights or activations were accessible.',
+      },
+    }));
+
+    expect(parsed.provider).toBe('openai');
+    expect(parsed.audit_scope).toEqual({
+      kind: 'output_only_api_harvest',
+      label: 'Output-only harvest · no internal activation access · verdict held for review',
+      internalActivationAccess: false,
+      verdictDisposition: 'held_for_human_review',
+      detail: 'Closed API target. No weights or activations were accessible.',
+    });
+  });
+
+  it('defaults audit_scope and provider to null when absent', () => {
+    const parsed = parseAuditSessionResponse(pendingSession());
+    expect(parsed.audit_scope).toBeNull();
+    expect(parsed.provider).toBeNull();
   });
 
   it('turns non-OK backend responses into useful API errors', async () => {

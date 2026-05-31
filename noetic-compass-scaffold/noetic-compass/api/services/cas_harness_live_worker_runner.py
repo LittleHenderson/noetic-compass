@@ -44,6 +44,7 @@ class LiveAuditRunnerResult:
     proof_chips: list[dict[str, str]]
     verifier_decision: dict[str, Any] | None
     message: str
+    audit_scope: dict[str, Any] | None = None
 
 
 class LiveAuditRunnerUnavailable(RuntimeError):
@@ -104,6 +105,7 @@ async def run_live_worker_audit(
         evidence_packet=packet,
         proof_chips=proof_chips,
         verifier_decision=None,
+        audit_scope=packet.get("audit_scope"),
         message=(
             "Live hosted open-weight worker ran and wrote an Evidence Packet. "
             "Final ACCEPT/SUPPRESS remains blocked until causal, control, verifier, "
