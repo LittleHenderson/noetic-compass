@@ -21,28 +21,32 @@ recoverable than coherent same-size non-CAS opponents?*
 
 ---
 
-## TWO $0 pre-steps are REQUIRED before the paid run (honest blocker)
+## TWO $0 pre-steps — REQUIRED before the paid run — both now DONE ✅
 
-The existing harness does **not** ingest the Condition-3 fixture as-is. Both fixes are
-local, free, and must land before spending a GPU dollar:
+The existing harness does **not** ingest the Condition-3 fixture as-is. Both fixes were
+local, free, and independently tested before any GPU dollar. **Both have landed:**
 
-1. **Fixture → capture-schema adapter.** `capture_open_weight_probe_dataset.py` loads
-   prompts via `load_labeled_scenarios`, which reads `prompt`/`text` + `id`/`scenario_id`
-   + `expected_cas_axes`/`target_*` label fields. The Condition-3 fixture uses
-   `english` / `sample_id` / `element_label`. **As-is the loader silently skips all 1440
-   rows** ("No labeled scenarios found"). Need a ~20-line emitter that rewrites the
-   fixture into `{id: sample_id, prompt: english, expected_cas_axes:{element:…}, split,
-   control_semantic:{topic_40,frame_40,topic_7,function_4}}`.
+1. **Fixture → capture-schema adapter — DONE.**
+   `build_condition3_capture_view.py` rewrites the Condition-3 fixture
+   (`english` / `sample_id` / `element_label`) into the schema
+   `capture_open_weight_probe_dataset.py`'s `load_labeled_scenarios` accepts
+   (`{id: sample_id, prompt: english, expected_cas_axes:{element:"^n|D",domain,noetic},
+   split, control_semantic}`). Output is a JSON **array** —
+   `mtc_condition3_capture_view_20260531.json` (NOT jsonl: the loader reads the whole
+   file with `json.loads`). Loader round-trip **VALIDATION PASS**: 1440/1440 scenarios
+   survive, 40 element classes, all prompts non-empty, all ids are `c3_…` sample_ids.
 
-2. **Comparator Control-C extension.** `run_mtc_dual_labeled_comparator.py` currently
-   probes only Control B (`topic_40|frame_40`). Add the Control C arm
-   (`topic_7|function_4`) **restricted to the 1008 sample_ids in
-   `control_c_nc28_balanced_view_20260531.json`**, and point its `load()` at the
-   Condition-3 control fields. ~30 lines.
+2. **Comparator Control-C extension — DONE.**
+   `run_mtc_dual_labeled_comparator.py` now (a) builds `control_c` = `topic_7|function_4`
+   in `load()`, and (b) takes an optional `--control-c-view` flag that adds a rows-matched
+   arm (`cas_element` vs `matched_control_nc40` vs `matched_control_nc28`) restricted to
+   the 1008 sample_ids in `control_c_nc28_balanced_view_20260531.json`. Offline join
+   check against the real fixture + view JSON: **504 train / 504 test, 28 NC28 classes in
+   each split, 18/cell balanced, every view id resolves.** The original 4 full-set arms
+   are unchanged and the new flag is optional, so dual_labeled usage stays
+   backward-compatible.
 
-I can build both on authorization (they're CPU/$0 and independently testable before any
-GPU spend), or you can have them reviewed first. Until they exist, the GPU command below
-will produce an empty/garbage dataset.
+Both adapters are CPU/$0 and committed. The GPU command below is now valid.
 
 ---
 
@@ -54,7 +58,7 @@ will produce an empty/garbage dataset.
 # on the RunPod pod, repo synced, HF cache warm or model on a network volume
 python noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/capture_open_weight_probe_dataset.py \
   --model-id EleutherAI/gpt-neox-20b \
-  --scenario-path docs/working/mtc_matched_taxonomy_20260530/mtc_condition3_capture_view_20260531.jsonl \
+  --scenario-path docs/working/mtc_matched_taxonomy_20260530/mtc_condition3_capture_view_20260531.json \
   --output docs/working/mtc_matched_taxonomy_20260530/condition3_gptneox20b_activations_20260531.npz \
   --torch-dtype float16 \
   --device-map auto \
@@ -64,7 +68,7 @@ python noetic-compass-scaffold/noetic-compass/live-trace-worker/scripts/capture_
 - Captures last-token MLP output for **all 44 layers** (default `--layer-start 0`,
   `--layer-end = num_layers-1`). Hidden size 6144 → `features` shape ≈ (1440, 44, 6144)
   fp16 ≈ **0.78 GB raw** (compressed npz ~0.5–0.7 GB to download).
-- `mtc_condition3_capture_view_20260531.jsonl` is the output of pre-step 1.
+- `mtc_condition3_capture_view_20260531.json` (JSON array) is the output of pre-step 1.
 
 ### Step 2 — CPU comparator ($0, runs on pod CPU or locally)
 
