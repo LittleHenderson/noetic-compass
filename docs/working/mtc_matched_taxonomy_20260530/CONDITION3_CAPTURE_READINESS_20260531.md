@@ -121,6 +121,31 @@ re-score; the answer key and scorer are already in place.
   prereg, that capture can now PASS/FAIL the comparative gate rather than landing
   `BLOCKED_FIXTURE_NOT_ELIGIBLE` the way a Condition-2 capture would.
 - Recommended before launch: (a) optional independent human MP rating per the caveat
-  above; (b) materialize Control C (`NC28_TOPIC_FUNCTION_NESTED_V1`) balance from the
-  secondary `topic_7`/`function_4` fields (note: `public_safety` folds into
-  `human_services`, flagged approximate — NC28 is the secondary opponent).
+  above; (b) ~~materialize Control C~~ **DONE (2026-05-31).**
+
+## Control C (NC28) — materialized (2026-05-31)
+
+Control C (`NC28_TOPIC_FUNCTION_NESTED_V1` = 7 `topic_7` × 4 `function_4` = 28 cells)
+is the SECONDARY same-size opponent. It cannot be balanced on the full 1440-row
+fixture because the fold is many-to-one (`customer_support`+`public_safety` →
+`human_services`; `procedure`+`tradeoff_decision` → `choose_action`), which yields
+18/36/72-row cells, AND 720 is not divisible by 28. So it is materialized as a
+**balanced view**: every cell downsampled to the minimum (18/cell × 28 = **504 rows
+per split, 1008 total**) via a CAS-blind seeded shuffle (selector never reads any CAS
+field). All 40 CAS elements remain covered in both splits (6–17 train / 9–15 test).
+
+The local Control-C gate (`materialize_control_c_condition3.py` →
+`control_c_nc28_balanced_view_20260531.json`) is **ELIGIBLE_SECONDARY** — all four
+checks pass on the view:
+
+| Check | Result |
+|---|---|
+| Reconstructs from `topic_7`+`function_4` only | 28/28 cells, exact set match |
+| Balanced per split | 18/cell, 7 topics + 4 functions uniform |
+| Orthogonal to CAS (null band) | NMI 0.1675 ≤ null p97.5 0.1833 |
+| Ordinary content present in text | topic_7 100%, function_4 100% recoverable |
+
+The view JSON records the exact `sample_id`s so the GPU Control-C arm runs on
+precisely this balanced 1008-row set. NC28 remains the *secondary* opponent (the
+`public_safety`→`human_services` fold is genuinely approximate); Control B (NC40) is
+the primary opponent and balances on the full fixture.
