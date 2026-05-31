@@ -1,5 +1,32 @@
 # Noetic Compass — Progress Log
 
+## Live worker restart-resilience: found the holes, hardened, proved cold start (May 31, 2026)
+
+A read-only audit of the live-worker deploy flagged that "persistence is staged on `/workspace`" was only half-true. Verifying it before trusting it caught a real gap that a naive restart test would have hit — without risking the pod.
+
+**What was actually broken.** On the RunPod pod, `/` is an ephemeral overlay and only `/workspace` (the network volume) persists. Three things the worker needs were sitting on the ephemeral `/`:
+- **the `/pre_start.sh` boot hook itself** — `/start.sh` (baked into the image) runs it only `if [[ -f ]]`, so after a real restart the hook is gone and the pod comes up with **no worker at all**;
+- **the venv** (`/root/atlas-live-worker-venv`) — wiped, rebuilt via pip at boot;
+- **the HuggingFace model cache** (360MB) — wiped, so **Pythia re-downloads from HuggingFace at boot**.
+
+So a real restart would either leave the worker dead (hook gone) or, at best, self-heal slowly while depending on PyPI + HuggingFace being reachable at boot. Not launch-grade.
+
+**Hardened (what now persists on `/workspace`).**
+- Built the venv at `/workspace/atlas-live-worker-venv` (`--system-site-packages`, so the CUDA torch `2.4.1+cu124` stays the image's, only the HF + FastAPI stack installs on top).
+- Copied the model cache to `/workspace/.cache/huggingface`.
+- Rewrote the boot hook to pin `HF_HOME` + `ATLAS_LIVE_VENV_DIR` to those paths, force port 8080 (8888 is jupyter), and staged the canonical copy at `/workspace/pre_start.sh`.
+
+**Proved it — definitive cold-start test.** Killed the worker and moved the ephemeral `/root` venv, HF cache, and start script *aside* (simulating a wiped `/root`), then ran the hook. Result: recovered to `REAL_PYTHIA_WEIGHTS_LOADED` in **25 seconds**, worker running with `HF_HOME=/workspace/.cache/huggingface`, **no pip install, no model re-download, zero PyPI/HuggingFace dependency at boot**. Post-recovery heavy-probe inference returned real output; the API SSH tunnel transparently reached the restarted worker (new PID, same port).
+
+**Honest residual (one user action).** The hook can't make *itself* persist on `/`. Full auto-recovery after a real power-cycle needs the pod's RunPod start / Docker command set once (in the console — not reachable over SSH) to restore the hook from `/workspace` before `/start.sh` runs:
+```
+bash -c '[ -f /workspace/pre_start.sh ] && cp /workspace/pre_start.sh /pre_start.sh; /start.sh'
+```
+Documented inline in `live-trace-worker/scripts/runpod_pre_start.sh`. The deeper launch-grade answer (custom image with the worker + deps + model baked in, HTTP port exposed, no SSH tunnel) remains the separate connectivity item.
+
+### Pieces
+- `live-trace-worker/scripts/runpod_pre_start.sh` — pins persistent venv + `HF_HOME`, port 8080, documents the restart-restore command and the overlay-vs-`/workspace` persistence model.
+
 ## Live Pythia-160M worker deployed on GPU pod + end-to-end audit verified (May 31, 2026)
 
 The hosted open-weight audit path is no longer a code path waiting on a model — it now runs against **real Pythia-160M weights on a GPU pod**, end to end, with real activations captured. This closes the GPU lane that was blocking the live-trace half of the Harness.
