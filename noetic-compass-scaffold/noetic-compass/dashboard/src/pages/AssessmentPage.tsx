@@ -647,13 +647,14 @@ export function AssessmentPage() {
                 <p className="mt-1 text-sm font-medium text-slate-200">{resolvedScorerModel ?? 'Not provided'}</p>
               </div>
             </div>
-            <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-400">
-              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
-                {getScoringMethodDescription(scoringMethod)}
-              </span>
-              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
-                Heuristic risk signals included
-              </span>
+            <div className="mt-4 space-y-2 text-sm text-slate-400">
+              <p>{getScoringMethodDescription(scoringMethod)}</p>
+              <Disclosure summary="What's measured vs. not validated">
+                <p>
+                  Social engineering resistance and bias-flag counts are measured as heuristic risk signals.
+                  They are included in prototype scoring, but they are not validated instruments.
+                </p>
+              </Disclosure>
               {scoringMethod === 'self_reported' && (
                 <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1.5 text-amber-300">
                   Self-score
