@@ -86,6 +86,7 @@ class EvidencePacket(BaseModel):
     generation_readiness: dict[str, Any] | None = None
     distributed_fleet: dict[str, Any] | None = None
     live_audit: dict[str, Any] | None = None
+    audit_scope: dict[str, Any] | None = None
 
 
 class VerifyCheck(BaseModel):

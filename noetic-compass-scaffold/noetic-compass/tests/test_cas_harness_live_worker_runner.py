@@ -94,6 +94,12 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
     assert packet.provenance["code_commit_sha"] == _code_commit_sha()
     assert packet.provenance["code_commit_sha"] != "unknown"
 
+    # Honest scope label: activations captured, but causal/control not yet run.
+    assert packet.audit_scope["kind"] == "open_weight_live_trace"
+    assert packet.audit_scope["internal_activation_access"] is True
+    assert packet.audit_scope["verdict_disposition"] == "held_for_human_review"
+    assert "causal/control not yet run" in packet.audit_scope["label"]
+
     harvest = list(iter_harvest_records())
     assert len(harvest) == 1
     assert harvest[0]["trace_id"] == result.trace_id

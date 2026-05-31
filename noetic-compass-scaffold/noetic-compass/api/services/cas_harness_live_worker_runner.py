@@ -241,6 +241,18 @@ def _packet_from_worker_dump(
             "events": events,
             "event_counts": _event_counts(events),
         },
+        "audit_scope": {
+            "kind": "open_weight_live_trace",
+            "label": "Open-weight live trace · activations + readout captured · causal/control not yet run · verdict held for review",
+            "internal_activation_access": True,
+            "verdict_disposition": "held_for_human_review",
+            "detail": (
+                "This audit ran a hosted open-weight model and captured real "
+                "activations and CAS readout. Causal ablation and matched controls "
+                "were not run in this slice, so causal/control proofs are not yet "
+                "available and the verdict is held for human review."
+            ),
+        },
         "caveats": [
             "Live worker Evidence Packet: this is real model I/O and live trace capture, not a final production ACCEPT/SUPPRESS verdict.",
             "Causal/intervention and matched-control probes are not run by this first live path.",

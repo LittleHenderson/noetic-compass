@@ -53,6 +53,12 @@ async def test_api_runner_writes_output_only_packet_and_harvest_record():
     assert verify.overall == "all_match"
     assert packet.provenance["code_commit_sha"] == _code_commit_sha()
 
+    # Honest scope label so the UI never implies internal access on a closed API.
+    assert packet.audit_scope["kind"] == "output_only_api_harvest"
+    assert packet.audit_scope["internal_activation_access"] is False
+    assert packet.audit_scope["verdict_disposition"] == "held_for_human_review"
+    assert "Output-only harvest" in packet.audit_scope["label"]
+
     # Honest proof-chip posture: model + output present, the three activation-
     # dependent proofs unavailable. This keeps the verdict gate at human review.
     assert chips == {

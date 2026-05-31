@@ -247,6 +247,18 @@ def _packet_from_api_response(
             "usage": dict(response.usage) if isinstance(response.usage, Mapping) else {},
             "latency_ms": response.latency_ms,
         },
+        "audit_scope": {
+            "kind": "output_only_api_harvest",
+            "label": "Output-only harvest · no internal activation access · verdict held for review",
+            "internal_activation_access": False,
+            "verdict_disposition": "held_for_human_review",
+            "detail": (
+                "This audit called a closed-API model and captured its output only. "
+                "No activations, CAS readout, causal ablation, or matched controls "
+                "are available from a black-box API, so the verdict is held for "
+                "human review rather than auto-accepted."
+            ),
+        },
         "caveats": [
             "Customer-API Evidence Packet: real model I/O captured from a closed "
             "API, not a final production ACCEPT/SUPPRESS verdict.",

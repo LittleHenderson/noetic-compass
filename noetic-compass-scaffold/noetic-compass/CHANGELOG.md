@@ -13,8 +13,15 @@ The harvest runs the moment the packet is built — before the verdict gate — 
 - `api/routes/cas_harness_audit.py` — `/session/{audit_id}/run` now detects API-provider sessions (`provider` set to a supported closed-API provider, no attached packet) via `_should_run_api_endpoint`, runs the customer-API runner, attaches the packet trace, then evaluates the verdict gate.
 - `AuditSessionRequest` / `AuditSessionResponse` / `AuditSessionRecord` gain an optional `provider` field so the run path knows which connector to use. Backward-compatible: sessions without `provider` keep prior behavior. Raw credentials are never persisted to the session store; connector keys resolve server-side from `settings`.
 
+### Honest scope label on every packet (follow-up)
+Every Evidence Packet now carries an `audit_scope` block so the UI can state, in plain words, exactly how much access the audit had — never implying internal inspection it did not have.
+- **Customer-API (closed) packet:** `kind: output_only_api_harvest`, label **"Output-only harvest · no internal activation access · verdict held for review"**, `internal_activation_access: false`, `verdict_disposition: held_for_human_review`.
+- **Live-worker (open-weight) packet:** `kind: open_weight_live_trace`, label **"Open-weight live trace · activations + readout captured · causal/control not yet run · verdict held for review"**, `internal_activation_access: true`, `verdict_disposition: held_for_human_review`.
+- `audit_scope` is an additive optional field on the `EvidencePacket` model — older packets without it stay valid.
+
 ### Tests
-- `tests/test_cas_harness_api_endpoint_runner.py` — end-to-end through the real mock connector: output-only packet, `readout/ablation/matched_controls` all `unavailable`, hash-verifies cleanly, pins real `code_commit_sha`, writes exactly one harvest record flagged demo-fallback; unknown-provider and connector-failure both surface as `ApiEndpointRunnerUnavailable`.
+- `tests/test_cas_harness_api_endpoint_runner.py` — end-to-end through the real mock connector: output-only packet, `readout/ablation/matched_controls` all `unavailable`, asserts the `output_only_api_harvest` scope label, hash-verifies cleanly, pins real `code_commit_sha`, writes exactly one harvest record flagged demo-fallback; unknown-provider and connector-failure both surface as `ApiEndpointRunnerUnavailable`.
+- `tests/test_cas_harness_live_worker_runner.py` — asserts the `open_weight_live_trace` scope label (activations captured, causal/control not yet run, verdict held).
 - `tests/test_cas_harness_audit.py` — `/run` route calls the customer-API path for a `mock` provider session and correctly returns `FLAG_FOR_HUMAN_REVIEW` with the honest chip posture and lifecycle.
 - Focused backend run: 43 passed (runner + audit route + live-worker + harvest); broad harness/atlas-live selection 156 passed, no regressions. (Two unrelated modules — `test_turn_admissibility`, `test_type_constraints` — fail at collection on this worktree independent of this change.)
 
