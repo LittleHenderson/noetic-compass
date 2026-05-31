@@ -12,6 +12,15 @@ description, mode-guidance, and scorer-provider notes collapsed into a "Scoring 
 disclosure. `tsc -b` clean; 143 dashboard vitest tests pass (worker-pool startup timeouts are
 environment flakiness, not assertion failures). Branch `wave5.5/harness-launch-declutter`.
 
+**Pass 2.** Audited the rest of the Explore punch list and found most "verbose" surfaces were
+already correctly gated — the Atlas `HelpOverlay` opens behind the `?` key (the help panel is
+where detail belongs) and the EvidencePacket "5-step reviewer playbook" is already behind a
+"How to audit this" toggle (default off). Did not manufacture changes there. Collapsed the two
+genuinely always-visible blocks that remained: the Assessment results "Social engineering /
+bias-flag" caveat (now a "What's measured vs. not validated" disclosure) and the Validation
+page's always-on "Protocol Note" card + "Calibration Session" intro paragraph (now disclosures).
+`tsc -b` clean.
+
 ## Session 62: Condition-3 MTC.1 comparative capture — honest negative (May 31, 2026)
 
 **Headline.** Ran the authorized GPT-NeoX-20B comparative capture on the Condition-3

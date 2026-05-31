@@ -3,6 +3,7 @@ import { Card } from '../components/shared/Card';
 import { LoadingSpinner } from '../components/shared/LoadingSpinner';
 import { ErrorBanner } from '../components/shared/ErrorBanner';
 import { HowItWorksPanel } from '../components/shared/HowItWorksPanel';
+import { Disclosure } from '../components/shared/Disclosure';
 import { ResearchPrototypeNotice } from '../components/shared/ResearchPrototypeNotice';
 import {
   getValidationCalibrationSession,
@@ -434,21 +435,23 @@ export function ValidationPage() {
       <HowItWorksPanel sections={HOW_IT_WORKS_SECTIONS} label="How This Works" />
       <ResearchPrototypeNotice compact />
 
-      <Card title="Protocol Note">
-        <p className="text-[11px] leading-relaxed text-slate-400">
+      <Disclosure summary="Protocol note">
+        <p>
           This page is part of the documented validation protocol in{' '}
           <code className="text-slate-300">validation/VALIDATION_PROTOCOL.md</code>. Collect independent human
           scores here, then use the calibration session queue to review disagreements without leaving the workflow.
         </p>
-      </Card>
+      </Disclosure>
 
       <Card title="Calibration Session">
         <div className="space-y-4">
-          <p className="text-[12px] leading-relaxed text-slate-400">
-            Review disputed items with multiple human ratings, compare them with the machine profile, and log
-            a durable reconciliation note. This is the review trail stakeholders will expect when they ask how
-            disagreements were handled.
-          </p>
+          <Disclosure summary="About calibration sessions">
+            <p>
+              Review disputed items with multiple human ratings, compare them with the machine profile, and log
+              a durable reconciliation note. This is the review trail stakeholders will expect when they ask how
+              disagreements were handled.
+            </p>
+          </Disclosure>
           <ErrorBanner error={calibrationError} />
 
           {calibrationLoading ? (

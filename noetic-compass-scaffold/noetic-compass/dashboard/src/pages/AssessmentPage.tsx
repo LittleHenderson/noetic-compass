@@ -649,9 +649,12 @@ export function AssessmentPage() {
             </div>
             <div className="mt-4 space-y-2 text-sm text-slate-400">
               <p>{getScoringMethodDescription(scoringMethod)}</p>
-              <p className="rounded-lg border border-white/[0.08] bg-white/[0.03] px-3 py-2 text-slate-400">
-                Social engineering resistance and bias-flag counts are measured as heuristic risk signals. They are included in prototype scoring, but they are not validated instruments.
-              </p>
+              <Disclosure summary="What's measured vs. not validated">
+                <p>
+                  Social engineering resistance and bias-flag counts are measured as heuristic risk signals.
+                  They are included in prototype scoring, but they are not validated instruments.
+                </p>
+              </Disclosure>
               {scoringMethod === 'self_reported' && (
                 <p className="rounded-lg border border-amber-400/20 bg-amber-400/10 px-3 py-2 text-amber-300">
                   This run used inline self-reporting from the generator response. Treat the scores as self-assessment, not independent grading.
