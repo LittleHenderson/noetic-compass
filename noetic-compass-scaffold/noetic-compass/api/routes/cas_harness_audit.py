@@ -99,9 +99,9 @@ ProofChipId = Literal[
 ]
 ProofChipStatus = Literal["verified", "present", "missing", "failed", "unavailable"]
 
-REFERENCE_TARGET_MODEL_ID = "EleutherAI/pythia-160m"
+REFERENCE_TARGET_MODEL_ID = "EleutherAI/gpt-neox-20b"
 REFERENCE_TARGET_PROVIDER = "cas_harness_reference"
-REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID = "cas_harness_reference_accept_001"
+REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID = "stage9-40e-original-baseline-readout-20260527"
 _LOCAL_HTTP_HOSTS = {"localhost", "127.0.0.1", "::1"}
 
 
@@ -1048,18 +1048,21 @@ def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerifica
         can_run_audit=True,
         target=verified,
         detail=(
-            "CAS Harness reference target verified locally. No external model call, "
-            "credential, or audit verdict was created. A bundled reference "
-            "Evidence Packet is available for the beta run step."
+            "CAS Harness reference target verified locally against the bundled "
+            "Stage 9 40E scoped validation packet (EleutherAI/gpt-neox-20b). No "
+            "external model call, credential, or audit verdict was created. This is "
+            "a scoped project validation record, not a per-customer production "
+            "ACCEPT. The pre-computed Evidence Packet is available for the beta run step."
         ),
         checked_at=_utc_now(),
         provenance_chip=ProvenanceChip(
             id="model_proof",
             name="Model proof",
-            status="verified",
+            status="present",
             detail=(
-                f"Reference target {REFERENCE_TARGET_MODEL_ID} is available for "
-                "non-secret Audit Console demos. This is target verification only."
+                f"Reference target {REFERENCE_TARGET_MODEL_ID} maps to the bundled "
+                "Stage 9 40E scoped validation packet. This is target verification "
+                "only: no live model call and no weight-hash verification."
             ),
         ),
         reference_evidence_packet_trace_id=REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID,

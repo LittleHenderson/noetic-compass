@@ -1,5 +1,15 @@
 # Noetic Compass — Progress Log
 
+## Audit Console reference target serves the real Stage 9 40E packet (May 31, 2026)
+
+The Audit Console's built-in `demo_reference` target stopped serving a synthetic placeholder packet (model `pythia-160m`, `hashes=None`, a fabricated Stage 19/20 verifier decision) and now points at the **real GPT-NeoX-20B Stage 9 40E validation packet** (`stage9-40e-original-baseline-readout-20260527`). The console now shows the genuine six proof chips (cas_readout / causal / control / output **verified**, model / packet **present**) and the real verifier decision (ACCEPT, confidence 0.95625, source `stage9_40e_packet_verifier`, 80 cases × 40 classes).
+
+**The honesty gate is preserved, on purpose.** This is a *scoped project validation* ACCEPT, not a per-customer production ACCEPT — and because the packet has no WORM/S3 object-lock anchor, the verdict runner correctly withholds the final ACCEPT and the console headline stays `FLAG_FOR_HUMAN_REVIEW`. Reference-target copy now labels the record as the "Stage 9 40E scoped validation packet … not a per-customer production ACCEPT," and the model_proof target chip is `present` (no live call, no weight-hash verification), not `verified`. Flipping the headline to a true green ACCEPT is a separate step: WORM-anchor this packet to S3 object lock.
+
+### Tests
+- `tests/test_cas_harness_audit.py` reference-flow tests updated to assert the real packet, real verifier decision, real chip mix, and the unchanged `FLAG_FOR_HUMAN_REVIEW` headline.
+- Full harness suite green: 150 passed, 2 skipped (audit, evidence bridge, verdict runner, verifier adapter, evidence routes, distributed/fleet, scale planner, mode7 persistence).
+
 ## Wave 5.5/5.6 (integration): clickable words + interpretable blindspots (May 24, 2026)
 
 Two cockpit lanes shipped together because they both reshape the LIVE event stream — merging them independently would have left the schema half-typed. This release is the integrated version.

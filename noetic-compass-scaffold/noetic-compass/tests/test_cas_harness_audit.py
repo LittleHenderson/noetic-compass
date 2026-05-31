@@ -128,20 +128,24 @@ def test_verify_reference_model_target_success_without_secret(client, auth_heade
     assert body["target"] == {
         "kind": "demo_reference",
         "provider": "cas_harness_reference",
-        "model_id": "EleutherAI/pythia-160m",
+        "model_id": "EleutherAI/gpt-neox-20b",
         "endpoint_url": None,
         "credential_mode": "none",
         "timeout_ms": 10000,
     }
     assert body["provenance_chip"]["id"] == "model_proof"
-    assert body["provenance_chip"]["status"] == "verified"
+    assert body["provenance_chip"]["status"] == "present"
     assert body["verdict"] is None
     assert body["confidence"] is None
     assert body["evidence_packet_trace_id"] is None
-    assert body["reference_evidence_packet_trace_id"] == "cas_harness_reference_accept_001"
+    assert (
+        body["reference_evidence_packet_trace_id"]
+        == "stage9-40e-original-baseline-readout-20260527"
+    )
     assert body["atlas_deep_link"] is None
     assert "No external model call" in body["detail"]
-    assert "bundled reference Evidence Packet" in body["detail"]
+    assert "Stage 9 40E scoped validation packet" in body["detail"]
+    assert "not a per-customer production" in body["detail"]
 
 
 def test_scale_plan_returns_open_weight_enterprise_worker_plan(client):
@@ -192,8 +196,11 @@ def test_verify_reference_model_target_public_for_alpha_console(client):
 
     assert resp.status_code == 200
     body = resp.json()
-    assert body["target"]["model_id"] == "EleutherAI/pythia-160m"
-    assert body["reference_evidence_packet_trace_id"] == "cas_harness_reference_accept_001"
+    assert body["target"]["model_id"] == "EleutherAI/gpt-neox-20b"
+    assert (
+        body["reference_evidence_packet_trace_id"]
+        == "stage9-40e-original-baseline-readout-20260527"
+    )
     assert body["verdict"] is None
     assert body["confidence"] is None
 
@@ -540,7 +547,7 @@ def test_reference_target_trace_routes_to_review_without_worm_retention(client, 
         "/api/cas-harness/audit/session",
         json={
             **_valid_payload(),
-            "model_id": "EleutherAI/pythia-160m",
+            "model_id": "EleutherAI/gpt-neox-20b",
             "evidence_packet_trace_id": trace_id,
         },
         headers=auth_headers,
@@ -557,19 +564,36 @@ def test_reference_target_trace_routes_to_review_without_worm_retention(client, 
     body = ran.json()
     chips = {chip["id"]: chip["status"] for chip in body["provenance_chips"]}
     assert body["status"] == "COMPLETE"
+    # The real Stage 9 40E packet carries a genuine scoped-validation ACCEPT
+    # decision, but with no WORM/S3 anchor the runner correctly withholds the
+    # final ACCEPT and routes to human review.
     assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
     assert body["confidence"] is None
-    assert body["evidence_packet_trace_id"] == "cas_harness_reference_accept_001"
-    assert body["atlas_deep_link"] == "/cockpit?trace_id=cas_harness_reference_accept_001"
+    assert body["evidence_packet_trace_id"] == "stage9-40e-original-baseline-readout-20260527"
+    assert (
+        body["atlas_deep_link"]
+        == "/cockpit?trace_id=stage9-40e-original-baseline-readout-20260527"
+    )
     assert body["verifier_decision"] == {
         "verdict": "ACCEPT",
-        "confidence": 0.9816,
-        "source": "stage19_verification_stack+stage20_generation_readiness",
-        "reason": "Stage 19 accepted the row and Stage 20 readiness action is allow.",
-        "decision_scope": None,
-        "coverage": None,
+        "confidence": 0.95625,
+        "source": "stage9_40e_packet_verifier",
+        "reason": "all_stage9_40e_validation_gates_passed",
+        "decision_scope": "stage9_40e_validation_packet",
+        "coverage": {
+            "basis": "stage9_40e_validation_cases",
+            "case_count": 80,
+            "class_count": 40,
+        },
     }
-    assert set(chips.values()) == {"present"}
+    assert chips == {
+        "model_proof": "present",
+        "cas_readout": "verified",
+        "causal_proof": "verified",
+        "control_proof": "verified",
+        "output_proof": "verified",
+        "packet_proof": "present",
+    }
     assert [event["status"] for event in body["lifecycle"]] == [
         "DRAFT",
         "VALIDATING",
@@ -590,7 +614,7 @@ def test_reference_target_trace_from_public_alpha_console_stays_review_only_with
         "/api/cas-harness/audit/session",
         json={
             **_valid_payload(),
-            "model_id": "EleutherAI/pythia-160m",
+            "model_id": "EleutherAI/gpt-neox-20b",
             "evidence_packet_trace_id": trace_id,
         },
     )
