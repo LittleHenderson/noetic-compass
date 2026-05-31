@@ -1,0 +1,15 @@
+{
+  "checks": {
+    "assignment_uses_non_cas_fields_only": true,
+    "nc40_balanced_per_split": true,
+    "nc40_orthogonal_within_null_band": true,
+    "nc40_reconstructs_from_non_cas_fields_only": true,
+    "ordinary_topic_frame_content_present_in_text": true
+  },
+  "fixture": "mtc_condition3_topical_scenarios_20260531.jsonl",
+  "frame40_text_acc": 1.0,
+  "nmi_null_p975": 0.1738,
+  "nmi_real": 0.1651,
+  "topic40_text_acc": 1.0,
+  "verdict": "ELIGIBLE"
+}

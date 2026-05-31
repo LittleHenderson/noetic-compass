@@ -93,7 +93,7 @@
     }
   },
   "out_jsonl": "mtc_condition3_topical_scenarios_20260531.jsonl",
-  "out_jsonl_sha256": "0a52db5f54bf9f2608ddd25f0012935cb1063e6fcc3fd7700d21fe108900de24",
+  "out_jsonl_sha256": "0d51e747d36624f2e81806d8b27af654628b3fe5b806e266c7d11a2ab7f3068a",
   "schema_version": "mtc_condition3_fixture_manifest.v1",
   "split_counts": {
     "test": 720,

@@ -30,13 +30,14 @@ Design (one prompt simultaneously satisfies all four constraints):
 
 CRITICAL honesty property -- ORTHOGONALITY:
   The (topic, frame) scaffold is assigned INDEPENDENTLY of the CAS element via a
-  hash-decorrelated, coprime-stride balanced assignment per split. If topic/frame
-  were correlated with (domain, noetic), the surface scenario keywords would leak
-  the CAS label and the Surface Gate would fail. Orthogonality guarantees the
-  ordinary content is useless for recovering the CAS label, so the coherent
-  opponent is real AND the CAS surface stays near chance. The builder MEASURES
-  this (normalized mutual information + per-cell balance) and refuses to write if
-  balance is off.
+  CAS-BLIND seeded shuffle of a balanced 40-cell multiset per split (the shuffle
+  key knows nothing about the base's domain/noetic). If topic/frame were correlated
+  with (domain, noetic), the surface scenario keywords would leak the CAS label and
+  the Surface Gate would fail. Orthogonality guarantees the ordinary content is
+  useless for recovering the CAS label, so the coherent opponent is real AND the
+  CAS surface stays near chance. The builder MEASURES this (normalized mutual
+  information calibrated against a permutation null + per-cell balance) and refuses
+  to write if balance is off or real NMI exceeds the null's 97.5th percentile.
 """
 from __future__ import annotations
 import argparse, hashlib, json, math, re
@@ -356,7 +357,7 @@ def build_rows() -> list[dict[str, Any]]:
                     "frame_40": frame,
                     "topic_7": _TOPIC40_TO_TOPIC7[topic],
                     "function_4": _FRAME40_TO_FUNCTION4[frame],
-                    "assignment": "orthogonal_to_cas_hash_decorrelated_coprime_stride",
+                    "assignment": "cas_blind_seeded_shuffle_balanced_per_split_null_calibrated",
                 },
                 "scene_topic_text": topic_text,
                 "scene_frame_text": frame_text,
