@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## Session 62: Condition-3 MTC.1 comparative capture — honest negative (May 31, 2026)
+
+**Headline.** Ran the authorized GPT-NeoX-20B comparative capture on the Condition-3
+fixture (8×H200 pod, model pre-cached → ~$0 marginal). Clean capture (1440/1440, shape
+(1440,44,6144) fp16, no NaN/Inf, 0 all-zero layers, fingerprint 44 layers / hidden 6144).
+**Verdict: FAIL of the comparative-specificity gate — an honest negative.** CAS element is
+linearly recoverable from 20B last-token hidden states at only **6.53%** (text baseline
+6.25%, lift +0.28pp) vs the prereg **≥20pp** PASS bar, while coherent same-size non-CAS
+taxonomies recover at 82–85% (NC40 84.72%, NC28 84.72%) and the scrambled null sits at
+3.47% (~chance, pipeline calibrated). Specificity readout: **CAS − matched control =
+−78.19pp**. Interpretation: probed linearly at the last token, 20B does not encode the CAS
+40-element partition for Condition-3 in a linearly-separable way — a consequence of
+Condition-3 killing surface leakage (surface gate 6.25%); the meaning is human-recoverable
+(MP 100%) but invisible to both bag-of-words (6.25%) and a linear probe (6.53%). Two
+comparator bugs fixed en route (JSONL fixture loader; sklearn-1.8 `multi_class` removal).
+Full set backed up to `D:\tksCAS-archive\condition3_mtc_capture_20260531\` (3 sha256
+confirmations, npz pod==archive). Outcome recorded in `decisions.md` 2026-05-31T07:40Z;
+threshold not retuned after seeing result. Scope: one model, one fixture, one probe — does
+not test non-linear/pooled readout or other scales.
+
 ## Session 61: B-4 cas_prefix_mask fix + v1 retrain proof + post-gen pipeline (May 8-9, 2026)
 
 **Headline.** This session changed the project state materially. The B-4 architectural fix (cas_prefix_mask) **solved the source-binding bottleneck** that B-4.1 audit had flagged as the v0 failure mode. v1 PREFIX128 5-epoch retrain on the Wave 4 corpus hit content correctness 0/8 → 5/8 (strict/strong). Two follow-up libraries landed for the residual gaps: identifier_repair (Ω-name copy at 100%, coefficient at 67% gen-ceiling) and cas_routing (compilability-based task routing that bypasses the rpm_chain misroute). **Corpus was not the blocker; conditioning and symbolic copy/routing were.**

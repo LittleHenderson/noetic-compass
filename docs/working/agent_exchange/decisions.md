@@ -1174,3 +1174,63 @@ Cumulative Stage 4 spend (Stage 4B pilot + v0+v0.1+v0.2): **~$1.68**. Hard cap u
 Per "backup IF it promotes": local-archive scp NOT executed.
 
 Codex review pending (`inbox_claude.md` 2026-05-14T20:15Z) on next-lever sequence. My recommendation: Stage 4B v2 expansion (~$5-7 API to generate 1500-2500 more records targeting under-represented categories), then v0.3 at 20-25% mix.
+
+## 2026-05-31T07:20Z — Condition-3 GPU comparative-capture (MTC.1)
+
+DECISION: Launch Step 1 GPU activation extraction — GPT-NeoX-20B forward over the 1440 Condition-3 capture-view prompts → npz — then the $0 Step 2 matched-taxonomy comparator (CAS element vs Control B NC40 vs Control C NC28 vs lexical-kmeans vs scrambled null). Per chat "YES GO" (2026-05-31T07:20Z) + readiness report (pod 8xH200, neox cached 39G = $0 download, loader pre-flight PASS 1440/1440/40-classes).
+AUTHORIZED: yes
+RATIFIED-BY: user (chat "YES GO")
+CONTEXT: docs/working/mtc_matched_taxonomy_20260530/CONDITION3_GPU_CAPTURE_AUTHORIZATION_BRIEF_20260531.md
+
+Run on pod root@213.181.104.235:15509, single H200 (CUDA_VISIBLE_DEVICES=0), HF_HOME=/workspace/hf-cache.
+Abort conditions live-watched: <1440 scenarios, NaN/all-zero layers, num_layers!=44 / hidden!=6144, truncation blow-up, wall >90min.
+Back up npz + metadata + comparator result + commit hash to D:\tksCAS-archive\ immediately on success (standing rule).
+
+---
+
+### OUTCOME — 2026-05-31T07:40Z  (Condition-3 MTC.1 capture)
+
+Capture clean (1440/1440, shape (1440,44,6144) fp16, no NaN/Inf, 0 all-zero layers,
+tokens 61-72, fingerprint 44 layers / hidden 6144). No abort condition tripped.
+
+**VERDICT: FAIL of the comparative-specificity gate at 20B on Condition-3 — honest negative.**
+
+| label set | hidden | text | lift |
+|---|---|---|---|
+| CAS element (full) | 6.53% | 6.25% | +0.28pp |
+| CAS element (NC28 view, 504/504) | 6.55% | 5.95% | +0.60pp |
+| Matched control NC40 (full) | 84.72% | 94.44% | -9.72pp |
+| Matched control NC40 (view) | 82.14% | 92.06% | -9.92pp |
+| Matched control NC28 (view) | 84.72% | 94.64% | -9.92pp |
+| Lexical kmeans40 | 22.64% | - | - |
+| Scrambled null | 3.47% | - | ~chance 2.5% (pipeline calibrated) |
+
+Specificity readout: CAS - matched control = **-78.19pp**; CAS - lexical = -16.11pp.
+
+CAS hidden readout (6.53%) misses the prereg >=20pp PASS bar by a wide margin and is
+only +0.28pp above its own near-chance text baseline. Coherent same-size non-CAS
+taxonomies (NC40, NC28) are recovered at 82-85%. The scrambled null at 3.47% (~chance)
+confirms the probe pipeline is calibrated, so the near-zero CAS signal is a real
+finding, not an execution artifact.
+
+Honest interpretation: probed linearly at the last token, GPT-NeoX-20B does NOT encode
+the CAS 40-element partition for Condition-3 in a linearly-separable way. This follows
+from Condition-3 succeeding at killing surface leakage (surface gate 6.25%): the CAS
+meaning is human-recoverable (MP 100%) but invisible to both bag-of-words (6.25%) and a
+linear probe of 20B last-token activations (6.53%), while lexically-present ordinary
+content is strongly recoverable by both. The comparative MTC gate returns a negative for
+CAS specificity at this scale/probe/fixture. Threshold NOT retuned after seeing result.
+
+Artifacts (commit + backup): result `condition3_mtc_comparator_result_20260531.json`;
+npz + metadata + logs + PROVENANCE.txt at
+`D:\tksCAS-archive\condition3_mtc_capture_20260531\` (3 sha256 confirmations,
+npz pod==archive `17a1c880...`). Cost: ~$0 marginal (model pre-cached; ran on an
+already-running pod; ~1 min model load + ~1 min forward + ~8 min comparator).
+
+What this does NOT claim: it is one model (20B), one fixture (Condition-3), one probe
+(last-token MLP linear). It does not test non-linear readout, mean-pooled or
+mid-sequence states, or other scales. It does not bear on Condition-2 (hidden-vs-text
+only). It does bear on the comparative-specificity PASS the project was chasing: not
+demonstrated at 20B on Condition-3.
+
+---

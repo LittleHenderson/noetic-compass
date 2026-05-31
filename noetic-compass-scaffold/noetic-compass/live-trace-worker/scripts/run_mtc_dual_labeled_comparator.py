@@ -41,8 +41,12 @@ def load(npz_path, fixture_path):
     prompts = [str(x) for x in npz["prompts"]]
     cas = [str(x) for x in npz["labels_element"]]
 
-    fx = json.load(open(fixture_path, encoding="utf-8"))
-    recs = fx["records"] if isinstance(fx, dict) and "records" in fx else fx
+    text = open(fixture_path, encoding="utf-8").read()
+    try:                                   # JSON array, or {"records": [...]}
+        fx = json.loads(text)
+        recs = fx["records"] if isinstance(fx, dict) and "records" in fx else fx
+    except json.JSONDecodeError:           # JSONL (one record per line)
+        recs = [json.loads(ln) for ln in text.splitlines() if ln.strip()]
     by_id = {}
     for r in recs:
         rid = str(r.get("id") or r.get("sample_id"))
@@ -73,7 +77,7 @@ def hidden_sweep(feats, layers, y, tr, te, tag):
         sc = StandardScaler().fit(Xtr)
         Xtr, Xte = sc.transform(Xtr), sc.transform(Xte)
         clf = LogisticRegression(C=0.1, class_weight="balanced",
-                                 solver="lbfgs", max_iter=2000, multi_class="multinomial")
+                                 solver="lbfgs", max_iter=2000)
         clf.fit(Xtr, yenc[tr])
         pred = clf.predict(Xte)
         acc = accuracy_score(yenc[te], pred)
@@ -95,7 +99,7 @@ def text_baseline(prompts, y, tr, te, tag):
     vec = CountVectorizer(ngram_range=(1, 2), max_features=2 ** 14)
     Xtr = vec.fit_transform(P[tr]); Xte = vec.transform(P[te])
     clf = LogisticRegression(C=1.0, class_weight="balanced",
-                             solver="lbfgs", max_iter=2000, multi_class="multinomial")
+                             solver="lbfgs", max_iter=2000)
     clf.fit(Xtr, yenc[tr])
     pred = clf.predict(Xte)
     acc = accuracy_score(yenc[te], pred)
