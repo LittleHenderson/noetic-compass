@@ -11,10 +11,13 @@ The Audit Console `/run` route can now call the hosted open-weight live worker f
 - `api/routes/cas_harness_audit.py` - `/session/{audit_id}/run` now detects hosted open-weight Pythia sessions with no attached packet, runs the live worker, attaches the new packet trace, and only then evaluates the verdict gate.
 - Evidence Packet schema now exposes `live_audit` and verifies live packets through the same packet-store hash-chain path used by merged fleet packets.
 
+### Audit repair (May 31, 2026)
+- Closed a traceability gap: the live packet's `provenance.code_commit_sha` was hardcoded `"unknown"`. It now resolves the real `git rev-parse HEAD` of the running tree (falling back to `"unknown"` only when git is genuinely unavailable), so every harvested live packet pins the exact code that produced it. A regression assertion in the runner test prevents the placeholder from returning.
+
 ### Tests
-- `tests/test_cas_harness_live_worker_runner.py` verifies a live worker dump writes a loadable packet, preserves output text + event counts, and hash-verifies cleanly.
+- `tests/test_cas_harness_live_worker_runner.py` verifies a live worker dump writes a loadable packet, preserves output text + event counts, hash-verifies cleanly, and pins a real `code_commit_sha`.
 - `tests/test_cas_harness_audit.py` verifies the `/run` route calls the live worker for Pythia and correctly returns `FLAG_FOR_HUMAN_REVIEW` when causal/control proofs are unavailable.
-- Focused backend tests: 34 passed.
+- Focused backend tests: 77 passed (runner + audit + evidence-bridge + verdict + static-anchor + verifier-adapter suites).
 
 ## WORM-anchor path for the Stage 9 40E packet — the one honest step that can flip the verdict (May 31, 2026)
 

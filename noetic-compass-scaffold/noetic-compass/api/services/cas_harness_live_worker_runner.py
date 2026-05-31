@@ -14,8 +14,10 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, datetime
+from pathlib import Path
 import hashlib
 import json
+import subprocess
 from typing import Any, Mapping
 
 import httpx
@@ -208,7 +210,7 @@ def _packet_from_worker_dump(
             "model_checkpoint_id": model_id,
             "method_label": "cas_harness_live_worker_v1",
             "source_reports": ["atlas_live_worker_sessions_dump"],
-            "code_commit_sha": "unknown",
+            "code_commit_sha": _code_commit_sha(),
         },
         "claim_levels": [
             {
@@ -363,6 +365,29 @@ def _mean(values: list[float]) -> float | None:
     if not values:
         return None
     return sum(values) / len(values)
+
+
+def _code_commit_sha() -> str:
+    """Resolve the current git HEAD sha so every live packet is reproducible.
+
+    Falls back to ``"unknown"`` only when git is unavailable — the packet is
+    still written, but the traceability gap is recorded honestly rather than
+    claimed.
+    """
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=str(Path(__file__).resolve().parent),
+            capture_output=True,
+            text=True,
+            timeout=5,
+            check=False,
+        )
+    except (FileNotFoundError, OSError, subprocess.TimeoutExpired):
+        return "unknown"
+    if result.returncode != 0:
+        return "unknown"
+    return result.stdout.strip() or "unknown"
 
 
 def _trace_id_for(

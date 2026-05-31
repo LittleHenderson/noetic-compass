@@ -4,7 +4,10 @@ import pytest
 
 from api.config import settings
 from api.routes.evidence import _verify_packet_hashes, build_packet_for_trace
-from api.services.cas_harness_live_worker_runner import run_live_worker_audit
+from api.services.cas_harness_live_worker_runner import (
+    _code_commit_sha,
+    run_live_worker_audit,
+)
 from api.services.cas_harness_merged_evidence_packets import (
     reset_merged_fleet_evidence_packets_for_tests,
 )
@@ -86,6 +89,8 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
         "complete": 1,
     }
     assert verify.overall == "all_match"
+    assert packet.provenance["code_commit_sha"] == _code_commit_sha()
+    assert packet.provenance["code_commit_sha"] != "unknown"
     assert chips == {
         "model_proof": "present",
         "cas_readout": "present",
