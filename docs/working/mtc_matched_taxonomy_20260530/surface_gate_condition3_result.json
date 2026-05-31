@@ -1,0 +1,48 @@
+{
+  "cas_label_verdict": "PASS",
+  "fixture": "mtc_condition3_topical_scenarios_20260531.jsonl",
+  "results": {
+    "cas_domain": {
+      "acc": 0.2611,
+      "acc_over_chance": 1.04,
+      "chance": 0.25,
+      "macro_f1": 0.2087,
+      "n_cls": 4
+    },
+    "cas_full": {
+      "acc": 0.0625,
+      "acc_over_chance": 2.5,
+      "chance": 0.025,
+      "macro_f1": 0.0598,
+      "n_cls": 40
+    },
+    "cas_noetic": {
+      "acc": 0.375,
+      "acc_over_chance": 3.75,
+      "chance": 0.1,
+      "macro_f1": 0.3776,
+      "n_cls": 10
+    },
+    "frame_40": {
+      "acc": 1.0,
+      "acc_over_chance": 5.0,
+      "chance": 0.2,
+      "macro_f1": 1.0,
+      "n_cls": 5
+    },
+    "nc40_cell": {
+      "acc": 0.9444,
+      "acc_over_chance": 37.78,
+      "chance": 0.025,
+      "macro_f1": 0.9416,
+      "n_cls": 40
+    },
+    "topic_40": {
+      "acc": 1.0,
+      "acc_over_chance": 8.0,
+      "chance": 0.125,
+      "macro_f1": 1.0,
+      "n_cls": 8
+    }
+  }
+}

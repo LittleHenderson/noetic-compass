@@ -1,0 +1,103 @@
+{
+  "control_b_fields": [
+    "control_semantic.topic_40",
+    "control_semantic.frame_40"
+  ],
+  "control_c_note": "public_safety folds into human_services (no clean topic_7); NC28 balance approximate (secondary)",
+  "control_c_secondary_fields": [
+    "control_semantic.topic_7",
+    "control_semantic.function_4"
+  ],
+  "date": "20260531",
+  "design": "real CAS meaning (noetic dynamic + domain-as-register, no gloss, train/test-disjoint) embedded in ordinary scenarios that carry an ORTHOGONAL topic/frame scaffold for Control B NC40_TOPIC_FRAME_V1",
+  "fixture_eligibility_target": "NC40 materializes balanced from non-CAS fields only (no CAS field read)",
+  "label_counts": {
+    "A1": 36,
+    "A10": 36,
+    "A2": 36,
+    "A3": 36,
+    "A4": 36,
+    "A5": 36,
+    "A6": 36,
+    "A7": 36,
+    "A8": 36,
+    "A9": 36,
+    "B1": 36,
+    "B10": 36,
+    "B2": 36,
+    "B3": 36,
+    "B4": 36,
+    "B5": 36,
+    "B6": 36,
+    "B7": 36,
+    "B8": 36,
+    "B9": 36,
+    "C1": 36,
+    "C10": 36,
+    "C2": 36,
+    "C3": 36,
+    "C4": 36,
+    "C5": 36,
+    "C6": 36,
+    "C7": 36,
+    "C8": 36,
+    "C9": 36,
+    "D1": 36,
+    "D10": 36,
+    "D2": 36,
+    "D3": 36,
+    "D4": 36,
+    "D5": 36,
+    "D6": 36,
+    "D7": 36,
+    "D8": 36,
+    "D9": 36
+  },
+  "n_elements": 40,
+  "n_rows": 1440,
+  "orthogonality_and_balance": {
+    "frame40_counts": {
+      "causal_explanation": 288,
+      "classification": 288,
+      "procedure": 288,
+      "risk_mitigation": 288,
+      "tradeoff_decision": 288
+    },
+    "nc40_cell_counts_per_split_min_max_ndistinct": {
+      "test": [
+        18,
+        18,
+        40
+      ],
+      "train": [
+        18,
+        18,
+        40
+      ]
+    },
+    "nmi_cas_domain_vs_topic40": 0.0047,
+    "nmi_cas_element_vs_nc40_cell": 0.1651,
+    "nmi_cas_element_vs_nc40_null_mean": 0.1654,
+    "nmi_cas_element_vs_nc40_null_p975": 0.1738,
+    "nmi_cas_noetic_vs_frame40": 0.0118,
+    "orthogonal_within_independence_band": true,
+    "topic40_counts": {
+      "commerce_finance": 180,
+      "customer_support": 180,
+      "education": 180,
+      "healthcare": 180,
+      "law_governance": 180,
+      "logistics_operations": 180,
+      "public_safety": 180,
+      "software_data": 180
+    }
+  },
+  "out_jsonl": "mtc_condition3_topical_scenarios_20260531.jsonl",
+  "out_jsonl_sha256": "0a52db5f54bf9f2608ddd25f0012935cb1063e6fcc3fd7700d21fe108900de24",
+  "schema_version": "mtc_condition3_fixture_manifest.v1",
+  "split_counts": {
+    "test": 720,
+    "train": 720
+  },
+  "surface_gate_target": "local CAS-label text baseline near-chance (~2.5% for 40 classes)"
+}
