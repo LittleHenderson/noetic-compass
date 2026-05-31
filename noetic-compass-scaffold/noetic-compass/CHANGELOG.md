@@ -1,5 +1,17 @@
 # Noetic Compass — Progress Log
 
+## Session 63: Public-launch declutter pass 1 — inline Disclosure primitive (May 31, 2026)
+
+**Headline.** Started the CAS Harness public-launch UI cleanup: tuck always-visible
+explanatory wordiness behind one-line dropdowns so the default view is uncluttered.
+Added a reusable `Disclosure` inline-collapsible (`dashboard/src/components/shared/Disclosure.tsx`)
+— the missing primitive for "wordiness behind a dropdown." First application: the Assessment
+page scoring-guidance block (was ~5 always-on paragraphs under the Assess button) now shows
+only the one-line scoring-method label plus the self-reported safety warning, with the method
+description, mode-guidance, and scorer-provider notes collapsed into a "Scoring method details"
+disclosure. `tsc -b` clean; 143 dashboard vitest tests pass (worker-pool startup timeouts are
+environment flakiness, not assertion failures). Branch `wave5.5/harness-launch-declutter`.
+
 ## Session 62: Condition-3 MTC.1 comparative capture — honest negative (May 31, 2026)
 
 **Headline.** Ran the authorized GPT-NeoX-20B comparative capture on the Condition-3
