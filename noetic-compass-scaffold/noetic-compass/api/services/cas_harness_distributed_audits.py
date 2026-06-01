@@ -22,6 +22,12 @@ from api.services.cas_harness_architecture_adapter import (
     summarize_architecture_adapter,
     validate_frontier_architecture,
 )
+from api.services.cas_harness_compute_feasibility import (
+    ComputeEnvelopeDeclaration,
+    ComputeFeasibilitySummary,
+    summarize_compute_feasibility,
+    validate_frontier_compute_feasibility,
+)
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest,
     ProvenanceSummary,
@@ -103,6 +109,7 @@ class DistributedAuditRecord:
     provenance: ProvenanceSummary | None = None
     architecture: ArchitectureAdapterSummary | None = None
     probe: ProbeCompatibilitySummary | None = None
+    compute: ComputeFeasibilitySummary | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -117,6 +124,7 @@ class DistributedAuditRecord:
             "provenance": self.provenance.to_dict() if self.provenance is not None else None,
             "architecture": self.architecture.to_dict() if self.architecture is not None else None,
             "probe": self.probe.to_dict() if self.probe is not None else None,
+            "compute": self.compute.to_dict() if self.compute is not None else None,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "plan": self.plan.to_dict(),
@@ -141,6 +149,7 @@ def create_distributed_audit(
     provenance: ModelProvenanceManifest | None = None,
     architecture: ModelArchitectureDeclaration | None = None,
     probe: ProbeReadoutSpecification | None = None,
+    compute: ComputeEnvelopeDeclaration | None = None,
 ) -> DistributedAuditRecord:
     plan = build_scale_plan(request)
 
@@ -192,6 +201,23 @@ def create_distributed_audit(
     elif probe is not None:
         probe_summary = summarize_probe_compatibility(specification=probe)
 
+    # Frontier run-gate (3): gates (5)-(7) confirmed the *model* is auditable; this gate
+    # confirms the declared *hardware* can physically hold it. The planner provisions only
+    # USABLE_MEMORY_FRACTION of each accelerator and silently clamps the probe-worker
+    # fan-out to MAX_WORKER_FANOUT, so a frontier model can get a plan that looks
+    # schedulable while every shard is asked to hold more than one accelerator can fit. The
+    # gate compares the plan's own estimated_total_runtime_gb against the capped fleet's
+    # aggregate usable memory and refuses (ValueError -> HTTP 422) when the declared envelope
+    # cannot cover it -- a too-small per-accelerator size (needs more than MAX_WORKER_FANOUT
+    # workers) or simply too few accelerators. A sufficient envelope lands at
+    # COMPUTE_FEASIBILITY_DECLARED (the real resident-set fit is confirmed fleet-side). Below
+    # the frontier rung the envelope is optional and recorded, never a blocker.
+    compute_summary: ComputeFeasibilitySummary | None = None
+    if plan.validation_status == "EXPERIMENTAL_NOT_VALIDATED":
+        compute_summary = validate_frontier_compute_feasibility(plan=plan, envelope=compute)
+    elif compute is not None:
+        compute_summary = summarize_compute_feasibility(plan=plan, envelope=compute)
+
     now = datetime.now(UTC).isoformat()
     audit_id = _audit_id_for(plan)
 
@@ -218,6 +244,7 @@ def create_distributed_audit(
         provenance=provenance_summary,
         architecture=architecture_summary,
         probe=probe_summary,
+        compute=compute_summary,
     )
     _DISTRIBUTED_AUDITS[audit_id] = record
     return record

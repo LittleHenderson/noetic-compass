@@ -87,6 +87,22 @@ def _probe_payload(*, schema_version: str = "cas_probe_linear_v1") -> dict:
     }
 
 
+def _compute_payload(*, accelerator_count: int = 64, accelerator_memory_gb: float = 80.0) -> dict:
+    """A compute envelope that can physically hold the frontier plan's model.
+
+    A 405B bf16 model needs ~956 GB of resident memory; 64 x 80 GB accelerators
+    offer ``64 x 80 x 0.62 = 3174.4 GB`` usable, comfortably above the need -- so a
+    declared-only envelope lands at COMPUTE_FEASIBILITY_DECLARED (the real
+    resident-set fit is confirmed fleet-side). Overrides poke individual fields.
+    """
+
+    return {
+        "accelerator_count": accelerator_count,
+        "accelerator_memory_gb": accelerator_memory_gb,
+        "accelerator_type": "H100-80GB",
+    }
+
+
 def test_distributed_routes_registered(client):
     openapi = client.get("/openapi.json").json()
 
@@ -428,6 +444,9 @@ def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, aut
     # Gate 7: a frontier run also needs a structurally loadable CAS probe spec, or
     # the run's central CAS readout would come back missing. A good spec clears it.
     payload["probe"] = _probe_payload()
+    # Gate 3: a frontier run also needs a compute envelope that can physically hold
+    # the model. A 64 x 80 GB fleet clears the planner's own memory math.
+    payload["compute"] = _compute_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -438,6 +457,14 @@ def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, aut
     assert resp.status_code == 200
     body = resp.json()
     assert body["plan"]["validation_status"] == "EXPERIMENTAL_NOT_VALIDATED"
+    compute = body["compute"]
+    # Honest: declared-only compute is DECLARED, never VERIFIED -- the real resident
+    # set is sharded and confirmed fleet-side, not at the API tier.
+    assert compute["status"] == "COMPUTE_FEASIBILITY_DECLARED"
+    assert compute["memory_sufficient"] is True
+    assert compute["fit_verified"] is False
+    assert compute["effective_accelerator_count"] == 64
+    assert compute["accelerators_required"] <= 64
     prov = body["provenance"]
     # Honest: a declared-only manifest never claims VERIFIED at the API tier.
     assert prov["status"] == "PROVENANCE_DECLARED_NOT_VERIFIED"
@@ -583,6 +610,7 @@ def test_frontier_run_supported_architecture_is_adapter_available(client, auth_h
     payload["provenance"] = _provenance_payload(payload["model_id"])
     payload["architecture"] = _architecture_payload("qwen2")
     payload["probe"] = _probe_payload()
+    payload["compute"] = _compute_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -606,6 +634,7 @@ def test_frontier_run_resolves_architecture_from_architectures_class(client, aut
     payload["provenance"] = _provenance_payload(payload["model_id"])
     payload["architecture"] = {"architectures": ["LlamaForCausalLM"]}
     payload["probe"] = _probe_payload()
+    payload["compute"] = _compute_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -626,6 +655,7 @@ def test_frontier_run_gpt_neox_architecture_is_empirically_validated(client, aut
     payload["provenance"] = _provenance_payload(payload["model_id"])
     payload["architecture"] = _architecture_payload("gpt_neox")
     payload["probe"] = _probe_payload()
+    payload["compute"] = _compute_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -765,6 +795,7 @@ def test_frontier_run_with_loadable_probe_is_declared(client, auth_headers):
     payload["provenance"] = _provenance_payload(payload["model_id"])
     payload["architecture"] = _architecture_payload("llama")
     payload["probe"] = _probe_payload()
+    payload["compute"] = _compute_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -832,3 +863,144 @@ def test_below_frontier_run_records_unsupported_probe_without_gating(client, aut
     assert probe is not None
     assert probe["status"] == "PROBE_COMPATIBILITY_UNSUPPORTED"
     assert probe["probe_loadable"] is False
+
+
+# --- Frontier run-gate (3): compute feasibility ---
+
+
+def _frontier_gated_payload(parameter_count_b: int = 405, num_layers: int = 120) -> dict:
+    """A frontier payload with gates 5/6/7 already satisfied, ready for gate 3.
+
+    Lets the compute-feasibility tests vary only the compute envelope, so the 422
+    (or 200) they assert is unambiguously the gate-3 decision and not an earlier gate.
+    """
+
+    payload = _frontier_payload(parameter_count_b, num_layers)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("llama")
+    payload["probe"] = _probe_payload()
+    return payload
+
+
+def test_frontier_run_refused_without_compute_envelope(client, auth_headers):
+    # Provenance (5), architecture (6), and probe (7) are cleared, but a real
+    # frontier run also needs a compute envelope that can physically hold the model.
+    # With the three prior gates satisfied, the 422 we assert is the compute gate.
+    payload = _frontier_gated_payload()
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "compute envelope" in resp.text.lower()
+
+
+def test_frontier_run_rejects_insufficient_compute(client, auth_headers):
+    # A 405B bf16 model needs ~956 GB resident; 4 x 80 GB offers only 198.4 GB
+    # usable. The gate refuses and names the count the caller actually needs.
+    payload = _frontier_gated_payload()
+    payload["compute"] = _compute_payload(accelerator_count=4)
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "insufficient compute" in resp.text.lower()
+    assert "Declare at least 20 accelerators" in resp.text
+
+
+def test_frontier_run_rejects_per_accelerator_too_small_for_fanout_cap(client, auth_headers):
+    # 2 GB cards can never hold this model no matter how many are declared: the
+    # model needs more accelerators than the planner's worker fan-out cap, so the
+    # planner would silently clamp and under-resource every shard. Distinct refusal.
+    payload = _frontier_gated_payload()
+    payload["compute"] = _compute_payload(accelerator_count=100_000, accelerator_memory_gb=2.0)
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "fan-out cap" in resp.text
+    assert "Declare larger accelerators" in resp.text
+
+
+def test_frontier_run_with_sufficient_compute_is_declared(client, auth_headers):
+    payload = _frontier_gated_payload()
+    payload["compute"] = _compute_payload()
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    compute = resp.json()["compute"]
+    assert compute["status"] == "COMPUTE_FEASIBILITY_DECLARED"
+    assert compute["memory_sufficient"] is True
+    assert compute["effective_accelerator_count"] == 64
+    assert compute["needed_runtime_gb"] == pytest.approx(955.8)
+    assert compute["accelerators_required"] == 20
+    # Honest: declared, never VERIFIED -- the resident set is confirmed fleet-side.
+    assert compute["fit_verified"] is False
+
+
+def test_below_frontier_run_does_not_require_compute(client, auth_headers):
+    # A 100B run is ENGINEERED_NOT_VALIDATED, not frontier -- a compute envelope is
+    # optional there and its absence must never block the run.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(100, 20),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    assert resp.json()["compute"] is None
+
+
+def test_below_frontier_run_records_optional_compute_summary(client, auth_headers):
+    # If a below-frontier caller volunteers a sufficient envelope, we record the
+    # honest summary without gating on it.
+    payload = _scale_payload(100, 20)
+    payload["compute"] = _compute_payload()
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    compute = resp.json()["compute"]
+    assert compute is not None
+    assert compute["status"] == "COMPUTE_FEASIBILITY_DECLARED"
+    assert compute["memory_sufficient"] is True
+
+
+def test_below_frontier_run_records_insufficient_compute_without_gating(client, auth_headers):
+    # A volunteered but too-small envelope below frontier is recorded as
+    # INSUFFICIENT for traceability but does NOT block the run -- the gate only
+    # refuses at frontier scale.
+    payload = _scale_payload(100, 20)
+    payload["compute"] = _compute_payload(accelerator_count=1, accelerator_memory_gb=8.0)
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    compute = resp.json()["compute"]
+    assert compute is not None
+    assert compute["status"] == "COMPUTE_FEASIBILITY_INSUFFICIENT"
+    assert compute["memory_sufficient"] is False

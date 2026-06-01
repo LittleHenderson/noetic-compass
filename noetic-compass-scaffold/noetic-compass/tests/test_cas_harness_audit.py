@@ -344,13 +344,41 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert refused_no_probe.status_code == 422
     assert "probe" in refused_no_probe.text.lower()
 
+    # Provenance + architecture + a loadable probe still is NOT enough on its own:
+    # a real frontier run also needs a compute envelope that can physically hold
+    # the model (frontier run-gate 3). The planner silently provisions only 62% of
+    # each accelerator and clamps worker fan-out to 512, so a 1T model can get a
+    # plan that LOOKS schedulable while every shard is asked to hold more than one
+    # accelerator can fit. Without a declared envelope the run is refused 422. The
+    # three prior gates are satisfied here, so the 422 we assert is the compute gate.
+    refused_no_compute = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "frontier/open-1t",
+            "parameter_count_b": 1000,
+            "accept_experimental_frontier": True,
+            "provenance": valid_provenance,
+            "architecture": {"model_type": "llama"},
+            "probe": {
+                "schema_version": "cas_probe_linear_v1",
+                "axes": ["F1", "F2", "F3"],
+                "feature_dimension": 200,
+            },
+        },
+        headers=auth_headers,
+    )
+    assert refused_no_compute.status_code == 422
+    assert "compute" in refused_no_compute.text.lower()
+
     # Ack + a well-formed, identity-matching, open-weight-licensed manifest + a
     # declared architecture that resolves to a supported probe adapter + a
-    # structurally loadable CAS probe spec is enough to CREATE the run. The hashes
-    # are declared (not recomputed), the layout is confirmed worker-side at load
-    # time, and the probe is actually loaded and run worker-side, so the honest
-    # statuses are PROVENANCE_DECLARED_NOT_VERIFIED + ARCHITECTURE_ADAPTER_AVAILABLE
-    # + PROBE_COMPATIBILITY_DECLARED -- never a verdict.
+    # structurally loadable CAS probe spec + a compute envelope that can physically
+    # hold the model is enough to CREATE the run. The hashes are declared (not
+    # recomputed), the layout is confirmed worker-side at load time, the probe is
+    # actually loaded and run worker-side, and the fit is computed from the planner's
+    # own memory math (never verified at the API tier), so the honest statuses are
+    # PROVENANCE_DECLARED_NOT_VERIFIED + ARCHITECTURE_ADAPTER_AVAILABLE +
+    # PROBE_COMPATIBILITY_DECLARED + COMPUTE_FEASIBILITY_DECLARED -- never a verdict.
     allowed = client.post(
         "/api/cas-harness/audit/distributed/session",
         json={
@@ -363,6 +391,11 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
                 "schema_version": "cas_probe_linear_v1",
                 "axes": ["F1", "F2", "F3"],
                 "feature_dimension": 200,
+            },
+            "compute": {
+                "accelerator_count": 64,
+                "accelerator_memory_gb": 80,
+                "accelerator_type": "H100-80GB",
             },
         },
         headers=auth_headers,
@@ -379,6 +412,9 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert body["probe"]["status"] == "PROBE_COMPATIBILITY_DECLARED"
     assert body["probe"]["probe_loadable"] is True
     assert body["probe"]["weights_hash_verified"] is False
+    assert body["compute"]["status"] == "COMPUTE_FEASIBILITY_DECLARED"
+    assert body["compute"]["memory_sufficient"] is True
+    assert body["compute"]["fit_verified"] is False
 
 
 def test_verify_reference_model_target_public_for_alpha_console(client):

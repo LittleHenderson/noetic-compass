@@ -37,6 +37,24 @@ _BYTES_PER_PARAM: dict[Precision, float] = {
 }
 
 
+# Fraction of a declared accelerator's memory the planner is willing to treat as
+# usable for model weights + activations. The remainder is left for the runtime,
+# fragmentation, KV cache headroom, and the CAS capture buffers. This is the same
+# number the compute-feasibility gate uses when it asks "can the declared hardware
+# physically hold this model", so the two must never drift -- a gate that judged
+# feasibility against a more generous fraction than the planner provisions for
+# would pass runs the planner then silently under-resources.
+USABLE_MEMORY_FRACTION = 0.62
+
+# Hard cap on the probe-worker fan-out. The planner clamps to this many workers no
+# matter how large the model is, which means a frontier model can be handed a plan
+# that *looks* schedulable while quietly exceeding what the declared accelerators
+# can hold. The compute-feasibility gate reuses this cap to compute the real
+# aggregate memory ceiling (cap x per-accelerator usable GB) and refuse the run
+# when even a fully fanned-out fleet cannot fit the model.
+MAX_WORKER_FANOUT = 512
+
+
 # --- Scale validation ladder (single source of truth) ----------------------
 #
 # The planner must never let a deployment plan imply more proof than CAS Harness
@@ -277,8 +295,10 @@ def _validate_request(request: ScalePlanRequest) -> None:
         raise ValueError("available_gpu_memory_gb must be positive when provided")
     if request.minimum_worker_count is not None and request.minimum_worker_count <= 0:
         raise ValueError("minimum_worker_count must be positive when provided")
-    if request.minimum_worker_count is not None and request.minimum_worker_count > 512:
-        raise ValueError("minimum_worker_count currently supports up to 512 Probe Workers")
+    if request.minimum_worker_count is not None and request.minimum_worker_count > MAX_WORKER_FANOUT:
+        raise ValueError(
+            f"minimum_worker_count currently supports up to {MAX_WORKER_FANOUT} Probe Workers"
+        )
 
 
 def _scale_tier(parameter_count_b: float) -> ScaleTier:
@@ -331,10 +351,13 @@ def _recommended_worker_count(
     size_floor = max(1, ceil(parameter_count_b / 12))
     memory_floor = 1
     if available_gpu_memory_gb:
-        usable_gb = max(1.0, available_gpu_memory_gb * 0.62)
+        usable_gb = max(1.0, available_gpu_memory_gb * USABLE_MEMORY_FRACTION)
         memory_floor = ceil(memory_estimate.estimated_total_runtime_gb / usable_gb)
 
-    return min(512, max(layer_floor, size_floor, memory_floor, minimum_worker_count or 1))
+    return min(
+        MAX_WORKER_FANOUT,
+        max(layer_floor, size_floor, memory_floor, minimum_worker_count or 1),
+    )
 
 
 def _memory_estimate(

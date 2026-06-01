@@ -46,6 +46,9 @@ from api.services.cas_harness_architecture_adapter import (
 from api.services.cas_harness_probe_compatibility import (
     ProbeReadoutSpecification as ServiceProbeReadoutSpecification,
 )
+from api.services.cas_harness_compute_feasibility import (
+    ComputeEnvelopeDeclaration as ServiceComputeEnvelopeDeclaration,
+)
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest as ServiceModelProvenanceManifest,
     WeightFileRef as ServiceWeightFileRef,
@@ -526,6 +529,35 @@ class ProbeReadoutSpecificationRequest(BaseModel):
         )
 
 
+class ComputeEnvelopeDeclarationRequest(BaseModel):
+    """Caller-supplied compute envelope (frontier run-gate 3).
+
+    Required to create a real frontier-scale (300B-4T) distributed run. The planner
+    provisions only a fraction of each accelerator's memory and silently clamps the
+    probe-worker fan-out, so a frontier model can be handed a plan that *looks*
+    schedulable while every shard is asked to hold more than one accelerator can fit.
+    The gate refuses the run with HTTP 422 unless the declared fleet -- accelerator
+    count (capped at the planner's fan-out) times per-accelerator memory times the
+    usable fraction -- can cover the plan's estimated runtime memory. The real
+    resident-set fit is confirmed fleet-side, so at create time a sufficient envelope
+    is recorded as COMPUTE_FEASIBILITY_DECLARED. ``accelerator_type`` is a free-form
+    label carried for traceability only; the gate never infers memory from the name.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    accelerator_count: int = Field(..., gt=0, le=1_000_000)
+    accelerator_memory_gb: float = Field(..., gt=0, le=8192)
+    accelerator_type: str | None = Field(default=None, max_length=128)
+
+    def to_service_declaration(self) -> ServiceComputeEnvelopeDeclaration:
+        return ServiceComputeEnvelopeDeclaration(
+            accelerator_count=self.accelerator_count,
+            accelerator_memory_gb=self.accelerator_memory_gb,
+            accelerator_type=self.accelerator_type,
+        )
+
+
 class ScalePlanRequest(BaseModel):
     """Open-weight enterprise planning request.
 
@@ -583,6 +615,16 @@ class ScalePlanRequest(BaseModel):
             "/distributed/session -- the run is refused unless the probe is structurally "
             "loadable, because the CAS axis readout is the run's central deliverable. "
             "Ignored by the planning-only /scale-plan endpoint. Frontier run-gate (7)."
+        ),
+    )
+    compute: ComputeEnvelopeDeclarationRequest | None = Field(
+        default=None,
+        description=(
+            "Compute envelope (accelerator_count / accelerator_memory_gb). Required to "
+            "CREATE a real frontier-scale (300B-4T) distributed run via /distributed/session "
+            "-- the run is refused unless the declared hardware can physically hold the "
+            "model under the planner's own memory model and worker fan-out cap. Ignored by "
+            "the planning-only /scale-plan endpoint. Frontier run-gate (3)."
         ),
     )
 
@@ -696,6 +738,30 @@ class ProbeCompatibilitySummaryResponse(BaseModel):
     reasons: list[str]
 
 
+class ComputeFeasibilitySummaryResponse(BaseModel):
+    status: Literal[
+        "COMPUTE_FEASIBILITY_VERIFIED",
+        "COMPUTE_FEASIBILITY_DECLARED",
+        "COMPUTE_FEASIBILITY_INSUFFICIENT",
+    ]
+    accelerator_type: str | None = None
+    declared_accelerator_count: int | None = None
+    declared_accelerator_memory_gb: float | None = None
+    usable_memory_fraction: float
+    fanout_cap: int
+    per_accelerator_usable_gb: float | None = None
+    effective_accelerator_count: int | None = None
+    fanout_capped: bool
+    needed_runtime_gb: float
+    available_aggregate_gb: float | None = None
+    memory_headroom_gb: float | None = None
+    accelerators_required: int | None = None
+    memory_sufficient: bool | None = None
+    fit_verified: bool
+    notice: str
+    reasons: list[str]
+
+
 class DistributedAuditResponse(BaseModel):
     audit_id: str
     plan_id: str
@@ -708,6 +774,7 @@ class DistributedAuditResponse(BaseModel):
     provenance: ModelProvenanceSummaryResponse | None = None
     architecture: ModelArchitectureAdapterSummaryResponse | None = None
     probe: ProbeCompatibilitySummaryResponse | None = None
+    compute: ComputeFeasibilitySummaryResponse | None = None
     created_at: str
     updated_at: str
     plan: ScalePlanResponse
@@ -985,8 +1052,9 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
     Carries the same frontier gates as ``/scale-plan`` and more: a 300B-4T run is
     refused 422 unless ``accept_experimental_frontier`` is set, unless a valid model
     provenance manifest is attached (gate 5), unless the declared architecture resolves
-    to a probe adapter the worker can hook (gate 6), and unless a structurally loadable
-    CAS probe-readout specification is attached (gate 7). >4T is always refused.
+    to a probe adapter the worker can hook (gate 6), unless a structurally loadable
+    CAS probe-readout specification is attached (gate 7), and unless the declared compute
+    envelope can physically hold the model (gate 3). >4T is always refused.
     """
     try:
         record = create_distributed_audit(
@@ -1008,6 +1076,9 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
             else None,
             probe=req.probe.to_service_specification()
             if req.probe is not None
+            else None,
+            compute=req.compute.to_service_declaration()
+            if req.compute is not None
             else None,
         )
     except ValueError as exc:
