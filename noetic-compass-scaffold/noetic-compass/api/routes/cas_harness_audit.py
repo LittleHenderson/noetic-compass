@@ -600,6 +600,19 @@ class ScalePlanRequest(BaseModel):
             "probe, provenance, or data-handling readiness for the run."
         ),
     )
+    accept_frontier_compute_cost: bool = Field(
+        default=False,
+        description=(
+            "Required to CREATE a real frontier-scale (300B-4T) distributed run via "
+            "/distributed/session. A frontier run commits the plan's recommended worker "
+            "fleet to hold a model of this size for a duration CAS Harness does NOT "
+            "estimate, at a dollar cost it does NOT quote, bill, meter, or cap -- the "
+            "compute is entirely the caller's, for a result already labelled "
+            "EXPERIMENTAL_NOT_VALIDATED. This acknowledges that caller-owned, unquoted "
+            "cost; CAS Harness never invents a price. Ignored by the planning-only "
+            "/scale-plan endpoint. Frontier run-gate (4)."
+        ),
+    )
     provenance: ModelProvenanceManifestRequest | None = Field(
         default=None,
         description=(
@@ -786,6 +799,23 @@ class ModelAccessSummaryResponse(BaseModel):
     reasons: list[str]
 
 
+class CostExposureSummaryResponse(BaseModel):
+    status: Literal[
+        "COST_METERED",
+        "COST_ACKNOWLEDGED",
+        "COST_NOT_ACKNOWLEDGED",
+    ]
+    acknowledged: bool
+    cost_metered: bool
+    recommended_worker_count: int | None = None
+    estimated_total_runtime_gb: float | None = None
+    declared_accelerator_count: int | None = None
+    declared_accelerator_memory_gb: float | None = None
+    effective_accelerator_count: int | None = None
+    notice: str
+    reasons: list[str]
+
+
 class DistributedAuditResponse(BaseModel):
     audit_id: str
     plan_id: str
@@ -800,6 +830,7 @@ class DistributedAuditResponse(BaseModel):
     architecture: ModelArchitectureAdapterSummaryResponse | None = None
     probe: ProbeCompatibilitySummaryResponse | None = None
     compute: ComputeFeasibilitySummaryResponse | None = None
+    cost: CostExposureSummaryResponse | None = None
     created_at: str
     updated_at: str
     plan: ScalePlanResponse
@@ -1079,8 +1110,10 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
     refused 422 unless ``accept_experimental_frontier`` is set, unless a valid model
     provenance manifest is attached (gate 5), unless the declared architecture resolves
     to a probe adapter the worker can hook (gate 6), unless a structurally loadable
-    CAS probe-readout specification is attached (gate 7), and unless the declared compute
-    envelope can physically hold the model (gate 3). >4T is always refused.
+    CAS probe-readout specification is attached (gate 7), unless the declared compute
+    envelope can physically hold the model (gate 3), and unless the caller acknowledges
+    the run's caller-owned, unquoted compute cost (gate 4). A non-open-weight access
+    mode is refused at every size (gate 2). >4T is always refused.
     """
     try:
         record = create_distributed_audit(
@@ -1107,6 +1140,7 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
             compute=req.compute.to_service_declaration()
             if req.compute is not None
             else None,
+            cost_acknowledged=req.accept_frontier_compute_cost,
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))

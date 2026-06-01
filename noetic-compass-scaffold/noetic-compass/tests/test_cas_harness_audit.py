@@ -375,21 +375,57 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert refused_no_compute.status_code == 422
     assert "compute" in refused_no_compute.text.lower()
 
+    # Provenance + architecture + probe + a sufficient compute envelope still is NOT
+    # enough on its own: a real frontier run also needs the caller to acknowledge its
+    # caller-owned, unquoted compute cost (frontier run-gate 4). The planner models no
+    # duration, throughput, or dollar rate, so the gate quotes no price -- it surfaces
+    # the real committed magnitude and requires explicit acknowledgement for an
+    # EXPERIMENTAL_NOT_VALIDATED result. The four prior gates are satisfied here, so
+    # the 422 we assert is the cost gate firing, and it never quotes a price.
+    refused_no_cost = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "frontier/open-1t",
+            "parameter_count_b": 1000,
+            "accept_experimental_frontier": True,
+            "provenance": valid_provenance,
+            "architecture": {"model_type": "llama"},
+            "probe": {
+                "schema_version": "cas_probe_linear_v1",
+                "axes": ["F1", "F2", "F3"],
+                "feature_dimension": 200,
+            },
+            "compute": {
+                "accelerator_count": 64,
+                "accelerator_memory_gb": 80,
+                "accelerator_type": "H100-80GB",
+            },
+        },
+        headers=auth_headers,
+    )
+    assert refused_no_cost.status_code == 422
+    assert "cost not acknowledged" in refused_no_cost.text.lower()
+    assert "accept_frontier_compute_cost" in refused_no_cost.text
+    assert "$" not in refused_no_cost.text
+
     # Ack + a well-formed, identity-matching, open-weight-licensed manifest + a
     # declared architecture that resolves to a supported probe adapter + a
     # structurally loadable CAS probe spec + a compute envelope that can physically
-    # hold the model is enough to CREATE the run. The hashes are declared (not
-    # recomputed), the layout is confirmed worker-side at load time, the probe is
-    # actually loaded and run worker-side, and the fit is computed from the planner's
-    # own memory math (never verified at the API tier), so the honest statuses are
+    # hold the model + an explicit cost acknowledgement is enough to CREATE the run.
+    # The hashes are declared (not recomputed), the layout is confirmed worker-side at
+    # load time, the probe is actually loaded and run worker-side, the fit is computed
+    # from the planner's own memory math, and the cost is acknowledged (never metered)
+    # -- all at the API tier, which touches no weights -- so the honest statuses are
     # PROVENANCE_DECLARED_NOT_VERIFIED + ARCHITECTURE_ADAPTER_AVAILABLE +
-    # PROBE_COMPATIBILITY_DECLARED + COMPUTE_FEASIBILITY_DECLARED -- never a verdict.
+    # PROBE_COMPATIBILITY_DECLARED + COMPUTE_FEASIBILITY_DECLARED + COST_ACKNOWLEDGED
+    # -- never a verdict.
     allowed = client.post(
         "/api/cas-harness/audit/distributed/session",
         json={
             "model_id": "frontier/open-1t",
             "parameter_count_b": 1000,
             "accept_experimental_frontier": True,
+            "accept_frontier_compute_cost": True,
             "provenance": valid_provenance,
             "architecture": {"model_type": "llama"},
             "probe": {
@@ -420,6 +456,12 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert body["compute"]["status"] == "COMPUTE_FEASIBILITY_DECLARED"
     assert body["compute"]["memory_sufficient"] is True
     assert body["compute"]["fit_verified"] is False
+    # Run-gate (4): the caller acknowledged the run's caller-owned, unquoted compute
+    # cost. Acknowledged is enough to CREATE the run but is never METERED at the API
+    # tier -- real accelerator-hours are metered fleet-side, where compute runs.
+    assert body["cost"]["status"] == "COST_ACKNOWLEDGED"
+    assert body["cost"]["acknowledged"] is True
+    assert body["cost"]["cost_metered"] is False
     # Run-gate (2) rides along on every distributed run: an open-weight target is
     # mechanistically reachable, so the access receipt is DECLARED -- never
     # VERIFIED at the API tier, which touches no weights.

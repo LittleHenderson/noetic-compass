@@ -28,6 +28,11 @@ from api.services.cas_harness_compute_feasibility import (
     summarize_compute_feasibility,
     validate_frontier_compute_feasibility,
 )
+from api.services.cas_harness_cost_acknowledgment import (
+    CostExposureSummary,
+    summarize_cost_exposure,
+    validate_frontier_cost_acknowledgment,
+)
 from api.services.cas_harness_model_access import (
     ModelAccessSummary,
     summarize_model_access,
@@ -115,6 +120,7 @@ class DistributedAuditRecord:
     architecture: ArchitectureAdapterSummary | None = None
     probe: ProbeCompatibilitySummary | None = None
     compute: ComputeFeasibilitySummary | None = None
+    cost: CostExposureSummary | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -131,6 +137,7 @@ class DistributedAuditRecord:
             "architecture": self.architecture.to_dict() if self.architecture is not None else None,
             "probe": self.probe.to_dict() if self.probe is not None else None,
             "compute": self.compute.to_dict() if self.compute is not None else None,
+            "cost": self.cost.to_dict() if self.cost is not None else None,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "plan": self.plan.to_dict(),
@@ -156,6 +163,7 @@ def create_distributed_audit(
     architecture: ModelArchitectureDeclaration | None = None,
     probe: ProbeReadoutSpecification | None = None,
     compute: ComputeEnvelopeDeclaration | None = None,
+    cost_acknowledged: bool = False,
 ) -> DistributedAuditRecord:
     plan = build_scale_plan(request)
 
@@ -230,6 +238,26 @@ def create_distributed_audit(
     elif compute is not None:
         compute_summary = summarize_compute_feasibility(plan=plan, envelope=compute)
 
+    # Frontier run-gate (4): gates (5)-(7)+(3) confirmed the run *can* run; this gate
+    # confirms the caller accepts what running it *costs*. A frontier run commits the
+    # plan's recommended worker fleet to hold a 300B-4T model for a duration CAS Harness
+    # does not estimate, at a dollar cost it does not quote, bill, or cap -- for a result
+    # already labelled EXPERIMENTAL_NOT_VALIDATED. The gate refuses (ValueError -> HTTP 422)
+    # unless the caller explicitly acknowledges that caller-owned, unquoted cost; it never
+    # invents a price (the system models no duration or rate it could honestly quote). It
+    # runs after compute so the receipt can surface the now-validated fleet's real size.
+    # Below the frontier rung the committed fleet is modest, so a volunteered
+    # acknowledgement is recorded for traceability, but its absence never blocks the run.
+    cost_summary: CostExposureSummary | None = None
+    if plan.validation_status == "EXPERIMENTAL_NOT_VALIDATED":
+        cost_summary = validate_frontier_cost_acknowledgment(
+            plan=plan, compute=compute_summary, acknowledged=cost_acknowledged
+        )
+    elif cost_acknowledged:
+        cost_summary = summarize_cost_exposure(
+            plan=plan, compute=compute_summary, acknowledged=cost_acknowledged
+        )
+
     now = datetime.now(UTC).isoformat()
     audit_id = _audit_id_for(plan)
 
@@ -257,6 +285,7 @@ def create_distributed_audit(
         provenance=provenance_summary,
         architecture=architecture_summary,
         probe=probe_summary,
+        cost=cost_summary,
         compute=compute_summary,
     )
     _DISTRIBUTED_AUDITS[audit_id] = record

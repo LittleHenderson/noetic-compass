@@ -51,11 +51,19 @@ def _provenance_payload(model_id: str, *, license_id: str = "apache-2.0") -> dic
 
 
 def _frontier_payload(parameter_count_b: int = 405, num_layers: int = 120) -> dict:
-    """A frontier-lane (300B-4T -> EXPERIMENTAL_NOT_VALIDATED) run request body."""
+    """A frontier-lane (300B-4T -> EXPERIMENTAL_NOT_VALIDATED) run request body.
+
+    Bundles both frontier acknowledgement flags a real run needs: the gate-1 risk
+    ack (``accept_experimental_frontier``) and the gate-4 cost ack
+    (``accept_frontier_compute_cost``). A frontier run is refused without either, so
+    a happy-path frontier body carries both. Tests that exercise a *missing* cost ack
+    pop ``accept_frontier_compute_cost`` back off.
+    """
 
     return {
         **_scale_payload(parameter_count_b, num_layers),
         "accept_experimental_frontier": True,
+        "accept_frontier_compute_cost": True,
     }
 
 
@@ -1034,3 +1042,107 @@ def test_below_frontier_run_records_insufficient_compute_without_gating(client, 
     assert compute is not None
     assert compute["status"] == "COMPUTE_FEASIBILITY_INSUFFICIENT"
     assert compute["memory_sufficient"] is False
+
+
+# --- Frontier run-gate (4): cost acknowledgment ---
+
+
+def _frontier_costed_payload(parameter_count_b: int = 405, num_layers: int = 120) -> dict:
+    """A frontier payload with gates 5/6/7/3 all cleared, ready for gate 4.
+
+    Lets the cost-acknowledgment tests vary only the cost ack, so the 422 (or 200)
+    they assert is unambiguously the gate-4 decision and not an earlier gate. The
+    cost ack itself rides in from ``_frontier_payload``; tests that want it absent
+    pop ``accept_frontier_compute_cost``.
+    """
+
+    payload = _frontier_gated_payload(parameter_count_b, num_layers)
+    payload["compute"] = _compute_payload()
+    return payload
+
+
+def test_frontier_run_refused_without_cost_acknowledgment(client, auth_headers):
+    # Provenance (5), architecture (6), probe (7), and compute (3) are all cleared,
+    # but a real frontier run also needs the caller to acknowledge its caller-owned,
+    # unquoted compute cost. With the four prior gates satisfied and the cost ack
+    # removed, the 422 we assert is unambiguously the cost gate firing.
+    payload = _frontier_costed_payload()
+    payload.pop("accept_frontier_compute_cost")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    text = resp.text.lower()
+    assert "cost not acknowledged" in text
+    assert "accept_frontier_compute_cost" in resp.text
+    # The refusal surfaces the real committed magnitude, never an invented price.
+    assert "$" not in resp.text
+    assert "per hour" not in text
+
+
+def test_frontier_run_with_cost_acknowledgment_is_acknowledged(client, auth_headers):
+    # The four prior gates are cleared and the cost ack rides in from
+    # _frontier_payload, so the run is created and carries an honest cost receipt.
+    payload = _frontier_costed_payload()
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    cost = resp.json()["cost"]
+    assert cost is not None
+    assert cost["status"] == "COST_ACKNOWLEDGED"
+    assert cost["acknowledged"] is True
+    # Honest: acknowledged is never METERED at the API tier -- real accelerator-hours
+    # are metered fleet-side, where the compute actually runs.
+    assert cost["cost_metered"] is False
+    # The receipt surfaces real planner / gate-(3) magnitudes, none invented.
+    assert cost["recommended_worker_count"] > 0
+    assert cost["estimated_total_runtime_gb"] > 0
+    assert cost["declared_accelerator_count"] == 64
+    assert cost["declared_accelerator_memory_gb"] == 80.0
+    assert cost["effective_accelerator_count"] == 64
+
+
+def test_below_frontier_run_does_not_require_cost_acknowledgment(client, auth_headers):
+    # A 100B run is ENGINEERED_NOT_VALIDATED, not frontier -- the committed fleet is
+    # modest, so a cost ack is optional there and its absence must never block the run.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(100, 20),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    assert resp.json()["cost"] is None
+
+
+def test_below_frontier_run_records_optional_cost_acknowledgment(client, auth_headers):
+    # If a below-frontier caller volunteers a cost ack, we record the honest receipt
+    # for traceability without ever having required it.
+    payload = _scale_payload(100, 20)
+    payload["accept_frontier_compute_cost"] = True
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    cost = resp.json()["cost"]
+    assert cost is not None
+    assert cost["status"] == "COST_ACKNOWLEDGED"
+    assert cost["acknowledged"] is True
+    assert cost["cost_metered"] is False
+    # Below frontier with no volunteered envelope, the fleet fields are honestly null
+    # while the plan magnitudes stay real.
+    assert cost["recommended_worker_count"] > 0
+    assert cost["declared_accelerator_count"] is None
