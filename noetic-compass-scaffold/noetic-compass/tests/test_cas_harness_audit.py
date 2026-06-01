@@ -211,6 +211,88 @@ def test_scale_plan_rejects_black_box_or_output_only_access(client):
     assert "open_weight" in resp.text
 
 
+def test_scale_plan_exposes_validation_status_for_validated_lane(client):
+    resp = client.post(
+        "/api/cas-harness/audit/scale-plan",
+        json={"model_id": "open-20b", "parameter_count_b": 20, "num_layers": 40},
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["validation_status"] == "EMPIRICALLY_VALIDATED"
+    assert "empirically validated" in body["validation_notice"].lower()
+
+
+def test_scale_plan_refuses_frontier_model_without_experimental_ack(client):
+    # 300B-4T is the experimental frontier lane; without the acknowledgement the
+    # public API must refuse the request (422) instead of quietly planning it.
+    resp = client.post(
+        "/api/cas-harness/audit/scale-plan",
+        json={"model_id": "frontier/open-405b", "parameter_count_b": 405},
+    )
+
+    assert resp.status_code == 422
+    assert "accept_experimental_frontier" in resp.text
+
+
+def test_scale_plan_allows_frontier_model_with_experimental_ack(client):
+    resp = client.post(
+        "/api/cas-harness/audit/scale-plan",
+        json={
+            "model_id": "frontier/open-405b",
+            "parameter_count_b": 405,
+            "accept_experimental_frontier": True,
+        },
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["scale_tier"] == "frontier_experimental_open_weight"
+    assert body["validation_status"] == "EXPERIMENTAL_NOT_VALIDATED"
+    assert "customer risk" in body["validation_notice"].lower()
+    assert any("EXPERIMENTAL_NOT_VALIDATED" in item for item in body["limitations"])
+
+
+def test_scale_plan_hard_refuses_above_four_trillion(client):
+    resp = client.post(
+        "/api/cas-harness/audit/scale-plan",
+        json={
+            "model_id": "frontier/too-large",
+            "parameter_count_b": 5000,
+            "accept_experimental_frontier": True,
+        },
+    )
+
+    assert resp.status_code == 422
+
+
+def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
+    # The control-plane run path must honour the same experimental gate.
+    # Unlike /scale-plan (a public demo prefix), /distributed/session is JWT
+    # protected because it can register workers, lease jobs, and submit
+    # evidence receipts -- so these calls carry auth_headers and the 422 we
+    # assert is the frontier gate firing, not the auth layer.
+    refused = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={"model_id": "frontier/open-1t", "parameter_count_b": 1000},
+        headers=auth_headers,
+    )
+    assert refused.status_code == 422
+    assert "accept_experimental_frontier" in refused.text
+
+    allowed = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "frontier/open-1t",
+            "parameter_count_b": 1000,
+            "accept_experimental_frontier": True,
+        },
+        headers=auth_headers,
+    )
+    assert allowed.status_code == 200
+    assert allowed.json()["plan"]["validation_status"] == "EXPERIMENTAL_NOT_VALIDATED"
+
+
 def test_verify_reference_model_target_public_for_alpha_console(client):
     resp = client.post(
         "/api/cas-harness/audit/target/verify",

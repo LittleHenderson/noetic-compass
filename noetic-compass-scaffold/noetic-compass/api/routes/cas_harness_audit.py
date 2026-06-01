@@ -88,6 +88,12 @@ ScalePlanTier = Literal[
     "small_distributed_open_weight",
     "distributed_open_weight",
     "enterprise_distributed_open_weight",
+    "frontier_experimental_open_weight",
+]
+ScalePlanValidationStatus = Literal[
+    "EMPIRICALLY_VALIDATED",
+    "ENGINEERED_NOT_VALIDATED",
+    "EXPERIMENTAL_NOT_VALIDATED",
 ]
 AuditStatus = Literal[
     "DRAFT",
@@ -411,12 +417,23 @@ class ScalePlanRequest(BaseModel):
         default="open_weight",
         description="CAS Harness beta enterprise planning is open-weight/internal-access only.",
     )
-    parameter_count_b: float = Field(..., gt=0, le=300)
+    parameter_count_b: float = Field(..., gt=0, le=4000)
     num_layers: int | None = Field(default=None, gt=0, le=4096)
     precision: ScalePlanPrecision = "bf16"
     available_gpu_memory_gb: int | None = Field(default=None, gt=0, le=2048)
     audit_depth: ScalePlanAuditDepth = "FULL_INTERNAL"
     minimum_worker_count: int | None = Field(default=None, gt=0, le=512)
+    accept_experimental_frontier: bool = Field(
+        default=False,
+        description=(
+            "Required to plan a 300B-4T frontier-scale model. Those runs are "
+            "EXPERIMENTAL_NOT_VALIDATED: architected frontier-lane support only, offered "
+            "at customer risk with no warranty of correctness or completeness. Without "
+            "this acknowledgement a >300B request is refused with HTTP 422. This flag only "
+            "unlocks the request path; it does not by itself guarantee compute, adapter, "
+            "probe, provenance, or data-handling readiness for the run."
+        ),
+    )
 
     @field_validator("model_id")
     @classmethod
@@ -433,6 +450,8 @@ class ScalePlanResponse(BaseModel):
     parameter_count_b: float
     num_layers: int
     scale_tier: ScalePlanTier
+    validation_status: ScalePlanValidationStatus
+    validation_notice: str
     recommended_worker_count: int
     orchestration_pattern: str
     worker_assignments: list[ScalePlanWorkerAssignment]
@@ -713,35 +732,51 @@ async def verify_model_target(
 
 @router.post("/scale-plan", response_model=ScalePlanResponse)
 async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
-    """Return an open-weight distributed CAS Harness plan for 1B-300B models."""
-    plan = build_scale_plan(
-        PlannerScalePlanRequest(
-            model_id=req.model_id,
-            parameter_count_b=req.parameter_count_b,
-            num_layers=req.num_layers,
-            precision=req.precision,
-            available_gpu_memory_gb=req.available_gpu_memory_gb,
-            audit_depth=req.audit_depth,
-            minimum_worker_count=req.minimum_worker_count,
+    """Return an open-weight distributed CAS Harness plan for 1B-4T models.
+
+    300B-4T is the EXPERIMENTAL_NOT_VALIDATED frontier lane and is refused with
+    HTTP 422 unless ``accept_experimental_frontier`` is set; >4T is always refused.
+    """
+    try:
+        plan = build_scale_plan(
+            PlannerScalePlanRequest(
+                model_id=req.model_id,
+                parameter_count_b=req.parameter_count_b,
+                num_layers=req.num_layers,
+                precision=req.precision,
+                available_gpu_memory_gb=req.available_gpu_memory_gb,
+                audit_depth=req.audit_depth,
+                minimum_worker_count=req.minimum_worker_count,
+                accept_experimental_frontier=req.accept_experimental_frontier,
+            )
         )
-    )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
     return ScalePlanResponse.model_validate(plan.to_dict())
 
 
 @router.post("/distributed/session", response_model=DistributedAuditResponse)
 async def create_distributed_audit_session(req: ScalePlanRequest) -> DistributedAuditResponse:
-    """Create a real distributed audit control-plane run from an open-weight plan."""
-    record = create_distributed_audit(
-        PlannerScalePlanRequest(
-            model_id=req.model_id,
-            parameter_count_b=req.parameter_count_b,
-            num_layers=req.num_layers,
-            precision=req.precision,
-            available_gpu_memory_gb=req.available_gpu_memory_gb,
-            audit_depth=req.audit_depth,
-            minimum_worker_count=req.minimum_worker_count,
+    """Create a real distributed audit control-plane run from an open-weight plan.
+
+    Carries the same frontier gate as ``/scale-plan``: a 300B-4T run is refused 422
+    unless ``accept_experimental_frontier`` is set, and >4T is always refused.
+    """
+    try:
+        record = create_distributed_audit(
+            PlannerScalePlanRequest(
+                model_id=req.model_id,
+                parameter_count_b=req.parameter_count_b,
+                num_layers=req.num_layers,
+                precision=req.precision,
+                available_gpu_memory_gb=req.available_gpu_memory_gb,
+                audit_depth=req.audit_depth,
+                minimum_worker_count=req.minimum_worker_count,
+                accept_experimental_frontier=req.accept_experimental_frontier,
+            )
         )
-    )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
     return DistributedAuditResponse.model_validate(record.to_dict())
 
 

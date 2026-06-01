@@ -20,6 +20,12 @@ ScaleTier = Literal[
     "small_distributed_open_weight",
     "distributed_open_weight",
     "enterprise_distributed_open_weight",
+    "frontier_experimental_open_weight",
+]
+ValidationStatus = Literal[
+    "EMPIRICALLY_VALIDATED",
+    "ENGINEERED_NOT_VALIDATED",
+    "EXPERIMENTAL_NOT_VALIDATED",
 ]
 
 
@@ -31,6 +37,75 @@ _BYTES_PER_PARAM: dict[Precision, float] = {
 }
 
 
+# --- Scale validation ladder (single source of truth) ----------------------
+#
+# The planner must never let a deployment plan imply more proof than CAS Harness
+# actually holds. Three honest rungs, anchored to what has really been run:
+#
+#   * EMPIRICALLY_VALIDATED   -- we have actually executed an open-weight audit at
+#       this scale. Pythia-160M was reproduced end-to-end on CPU and prior runs
+#       go up to 20B, so the empirical ceiling is 20B.
+#   * ENGINEERED_NOT_VALIDATED -- the layer/shard architecture is engineered for
+#       this scale (20B-300B) but no run of that size has been executed. The plan
+#       is architecture-validated, not size-validated.
+#   * EXPERIMENTAL_NOT_VALIDATED -- the frontier lane (300B-4T). The same
+#       architecture *should* extend here, but it is unproven, so a plan is only
+#       produced when the caller explicitly accepts experimental-risk terms.
+#
+# "1T and a 4T model differ from a 300B model only in scale" is the working
+# hypothesis behind the frontier lane -- but a hypothesis is not a validation, so
+# the claim is labelled honestly rather than sold as supported.
+_EMPIRICAL_VALIDATION_CEILING_B = 20.0
+_ENGINEERED_PLANNING_CEILING_B = 300.0
+_FRONTIER_PLANNING_CEILING_B = 4000.0  # 4 trillion parameters
+
+
+def scale_validation_status(parameter_count_b: float) -> ValidationStatus:
+    """Return the honest validation rung for a declared model size.
+
+    This is the single source of truth shared by the planner, the HTTP scale-plan
+    endpoint, and the distributed-audit control plane, so no surface can quietly
+    upgrade a frontier claim to "supported".
+    """
+
+    if parameter_count_b <= _EMPIRICAL_VALIDATION_CEILING_B:
+        return "EMPIRICALLY_VALIDATED"
+    if parameter_count_b <= _ENGINEERED_PLANNING_CEILING_B:
+        return "ENGINEERED_NOT_VALIDATED"
+    return "EXPERIMENTAL_NOT_VALIDATED"
+
+
+def frontier_scale_disclaimer() -> str:
+    """The experimental-risk waiver attached to every 300B-4T frontier plan."""
+
+    return (
+        "1T-4T audits are not yet validated production lanes. They are offered only "
+        "as experimental frontier-scale runs, at customer risk, with no warranty of "
+        "correctness or completeness; all results are marked EXPERIMENTAL_NOT_VALIDATED. "
+        "Runtime behaviour, memory pressure, throughput, and capture completeness may "
+        "differ materially from validated smaller-scale runs. Frontier-scale runs "
+        "require customer approval of compute cost, model license/provenance, and "
+        "experimental-risk terms before execution."
+    )
+
+
+def scale_validation_notice(status: ValidationStatus) -> str:
+    """Human-readable claim text for each validation rung."""
+
+    if status == "EMPIRICALLY_VALIDATED":
+        return (
+            "Open-weight CAS Harness has been empirically validated at this scale "
+            "(<=20B; Pythia-160M reproduced on CPU). This is a proven lane."
+        )
+    if status == "ENGINEERED_NOT_VALIDATED":
+        return (
+            "The layer/shard deployment architecture is engineered for this scale "
+            "(20B-300B) but has not been executed at this size. Treat the plan as "
+            "architecture-validated, not size-validated."
+        )
+    return frontier_scale_disclaimer()
+
+
 @dataclass(frozen=True)
 class ScalePlanRequest:
     model_id: str
@@ -40,6 +115,10 @@ class ScalePlanRequest:
     available_gpu_memory_gb: int | None = None
     audit_depth: AuditDepth = "FULL_INTERNAL"
     minimum_worker_count: int | None = None
+    # Above 300B is the experimental frontier lane. Planning one is refused unless
+    # the caller explicitly accepts experimental-risk terms, so a 1T-4T plan can
+    # never be produced by accident.
+    accept_experimental_frontier: bool = False
 
 
 @dataclass(frozen=True)
@@ -77,6 +156,8 @@ class ScalePlan:
     parameter_count_b: float
     num_layers: int
     scale_tier: ScaleTier
+    validation_status: ValidationStatus
+    validation_notice: str
     recommended_worker_count: int
     orchestration_pattern: str
     worker_assignments: tuple[WorkerAssignment, ...]
@@ -92,6 +173,8 @@ class ScalePlan:
             "parameter_count_b": self.parameter_count_b,
             "num_layers": self.num_layers,
             "scale_tier": self.scale_tier,
+            "validation_status": self.validation_status,
+            "validation_notice": self.validation_notice,
             "recommended_worker_count": self.recommended_worker_count,
             "orchestration_pattern": self.orchestration_pattern,
             "worker_assignments": [assignment.to_dict() for assignment in self.worker_assignments],
@@ -113,6 +196,7 @@ def build_scale_plan(request: ScalePlanRequest) -> ScalePlan:
     _validate_request(request)
     num_layers = request.num_layers or _estimated_layers(request.parameter_count_b)
     scale_tier = _scale_tier(request.parameter_count_b)
+    validation_status = scale_validation_status(request.parameter_count_b)
     worker_count = _recommended_worker_count(
         parameter_count_b=request.parameter_count_b,
         num_layers=num_layers,
@@ -137,6 +221,8 @@ def build_scale_plan(request: ScalePlanRequest) -> ScalePlan:
         parameter_count_b=round(request.parameter_count_b, 3),
         num_layers=num_layers,
         scale_tier=scale_tier,
+        validation_status=validation_status,
+        validation_notice=scale_validation_notice(validation_status),
         recommended_worker_count=worker_count,
         orchestration_pattern=(
             "CAS Orchestrator + distributed Probe Workers assigned by contiguous "
@@ -167,8 +253,20 @@ def _validate_request(request: ScalePlanRequest) -> None:
         raise ValueError("model_id is required")
     if request.parameter_count_b <= 0:
         raise ValueError("parameter_count_b must be positive")
-    if request.parameter_count_b > 300:
-        raise ValueError("enterprise planner currently supports open-weight models up to 300B parameters")
+    if request.parameter_count_b > _FRONTIER_PLANNING_CEILING_B:
+        raise ValueError(
+            "CAS Harness plans open-weight models up to 4T parameters (4000B); "
+            f"{request.parameter_count_b}B exceeds the frontier ceiling"
+        )
+    if (
+        request.parameter_count_b > _ENGINEERED_PLANNING_CEILING_B
+        and not request.accept_experimental_frontier
+    ):
+        raise ValueError(
+            "models above 300B are an experimental frontier-scale lane "
+            "(EXPERIMENTAL_NOT_VALIDATED); set accept_experimental_frontier=True to plan "
+            "one at customer risk. " + frontier_scale_disclaimer()
+        )
     if request.num_layers is not None and request.num_layers <= 0:
         raise ValueError("num_layers must be positive when provided")
     if request.precision not in _BYTES_PER_PARAM:
@@ -190,7 +288,9 @@ def _scale_tier(parameter_count_b: float) -> ScaleTier:
         return "small_distributed_open_weight"
     if parameter_count_b <= 70:
         return "distributed_open_weight"
-    return "enterprise_distributed_open_weight"
+    if parameter_count_b <= _ENGINEERED_PLANNING_CEILING_B:
+        return "enterprise_distributed_open_weight"
+    return "frontier_experimental_open_weight"
 
 
 def _estimated_layers(parameter_count_b: float) -> int:
@@ -202,7 +302,13 @@ def _estimated_layers(parameter_count_b: float) -> int:
         return 80
     if parameter_count_b <= 150:
         return 120
-    return 160
+    if parameter_count_b <= 300:
+        return 160
+    if parameter_count_b <= 1000:
+        return 200
+    if parameter_count_b <= 2000:
+        return 240
+    return 320
 
 
 def _recommended_worker_count(
@@ -219,6 +325,7 @@ def _recommended_worker_count(
         "small_distributed_open_weight": max(2, ceil(num_layers / 20)),
         "distributed_open_weight": max(4, ceil(num_layers / 14)),
         "enterprise_distributed_open_weight": max(8, ceil(num_layers / 10)),
+        "frontier_experimental_open_weight": max(16, ceil(num_layers / 8)),
     }[scale_tier]
 
     size_floor = max(1, ceil(parameter_count_b / 12))
@@ -346,4 +453,18 @@ def _limitations(scale_tier: ScaleTier, audit_depth: AuditDepth) -> tuple[str, .
         limitations.append("layer-sample mode reduces cost but cannot claim full-layer coverage")
     if scale_tier == "enterprise_distributed_open_weight":
         limitations.append("70B-300B audits require enterprise GPU scheduling and an orchestrator merge step")
+    if scale_tier == "frontier_experimental_open_weight":
+        limitations.append(
+            "frontier-scale (300B-4T) is EXPERIMENTAL_NOT_VALIDATED: no audit of this size "
+            "has been executed; offered at customer risk with no warranty of correctness or "
+            "completeness"
+        )
+        limitations.append(
+            "worker counts, memory estimates, and capture completeness at frontier scale are "
+            "theoretical projections and may differ materially in practice"
+        )
+        limitations.append(
+            "frontier-scale runs require customer approval of compute cost, model "
+            "license/provenance, and experimental-risk terms before execution"
+        )
     return tuple(limitations)

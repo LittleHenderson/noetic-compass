@@ -5,6 +5,7 @@ import pytest
 from api.services.cas_harness_scale_planner import (
     ScalePlanRequest,
     build_scale_plan,
+    scale_validation_status,
 )
 
 
@@ -105,6 +106,77 @@ def test_rejects_output_only_or_black_box_style_mode():
         )
 
 
-def test_rejects_models_above_current_300b_boundary():
-    with pytest.raises(ValueError, match="up to 300B"):
-        build_scale_plan(ScalePlanRequest(model_id="too-large", parameter_count_b=405))
+def test_models_up_to_300b_are_engineered_not_validated():
+    # 20B-300B is the engineered (architecture-validated, not size-validated) band.
+    plan = build_scale_plan(ScalePlanRequest(model_id="customer/open-100b", parameter_count_b=100))
+
+    assert plan.validation_status == "ENGINEERED_NOT_VALIDATED"
+    assert "architecture-validated, not size-validated" in plan.validation_notice
+
+
+def test_at_or_below_20b_is_empirically_validated():
+    plan = build_scale_plan(ScalePlanRequest(model_id="open-20b", parameter_count_b=20, num_layers=40))
+
+    assert plan.validation_status == "EMPIRICALLY_VALIDATED"
+    assert "empirically validated" in plan.validation_notice.lower()
+
+
+def test_405b_without_frontier_ack_is_refused():
+    # 300B-4T is the experimental frontier lane: a plan must not be produced unless
+    # the caller explicitly accepts experimental-risk terms.
+    with pytest.raises(ValueError, match="experimental frontier-scale lane"):
+        build_scale_plan(ScalePlanRequest(model_id="frontier/open-405b", parameter_count_b=405))
+
+
+def test_405b_with_frontier_ack_plans_experimental_not_validated_lane():
+    plan = build_scale_plan(
+        ScalePlanRequest(
+            model_id="frontier/open-405b",
+            parameter_count_b=405,
+            accept_experimental_frontier=True,
+        )
+    )
+
+    assert plan.scale_tier == "frontier_experimental_open_weight"
+    assert plan.validation_status == "EXPERIMENTAL_NOT_VALIDATED"
+    # The honest frontier waiver must travel with the plan.
+    notice = plan.validation_notice.lower()
+    assert "experimental_not_validated" in notice
+    assert "customer risk" in notice
+    assert any("EXPERIMENTAL_NOT_VALIDATED" in item for item in plan.limitations)
+    # A frontier plan still produces real layer/shard worker assignments.
+    assert plan.recommended_worker_count >= 16
+    assert plan.worker_assignments[0].layer_start == 0
+
+
+def test_one_trillion_with_frontier_ack_is_experimental_not_validated():
+    plan = build_scale_plan(
+        ScalePlanRequest(
+            model_id="frontier/open-1t",
+            parameter_count_b=1000,
+            accept_experimental_frontier=True,
+        )
+    )
+
+    assert plan.scale_tier == "frontier_experimental_open_weight"
+    assert plan.validation_status == "EXPERIMENTAL_NOT_VALIDATED"
+
+
+def test_above_4t_is_hard_refused_even_with_frontier_ack():
+    # >4T is refused outright; the experimental acknowledgement cannot unlock it.
+    with pytest.raises(ValueError, match="up to 4T"):
+        build_scale_plan(
+            ScalePlanRequest(
+                model_id="frontier/too-large",
+                parameter_count_b=5000,
+                accept_experimental_frontier=True,
+            )
+        )
+
+
+def test_validation_ladder_is_the_single_source_of_truth():
+    assert scale_validation_status(20) == "EMPIRICALLY_VALIDATED"
+    assert scale_validation_status(20.0001) == "ENGINEERED_NOT_VALIDATED"
+    assert scale_validation_status(300) == "ENGINEERED_NOT_VALIDATED"
+    assert scale_validation_status(300.0001) == "EXPERIMENTAL_NOT_VALIDATED"
+    assert scale_validation_status(4000) == "EXPERIMENTAL_NOT_VALIDATED"
