@@ -70,6 +70,23 @@ def _architecture_payload(model_type: str = "llama") -> dict:
     return {"model_type": model_type}
 
 
+def _probe_payload(*, schema_version: str = "cas_probe_linear_v1") -> dict:
+    """A CAS probe-readout specification the worker can structurally load.
+
+    ``schema_version`` is the exact string compute_cas_axis_readout requires, the
+    axes are non-empty, and feature_dimension is positive -- so a declared-only spec
+    lands at PROBE_COMPATIBILITY_DECLARED (the real dimensional match is confirmed
+    worker-side at readout time).
+    """
+
+    return {
+        "schema_version": schema_version,
+        "axes": ["F1", "F2", "F3"],
+        "feature_dimension": 200,
+        "probe_id": "cas-linear-probe-v1",
+    }
+
+
 def test_distributed_routes_registered(client):
     openapi = client.get("/openapi.json").json()
 
@@ -408,6 +425,9 @@ def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, aut
     # Gate 6: a frontier run also needs a probe-hookable architecture. A llama
     # declaration resolves to the llama_like adapter so the run can be created.
     payload["architecture"] = _architecture_payload("llama")
+    # Gate 7: a frontier run also needs a structurally loadable CAS probe spec, or
+    # the run's central CAS readout would come back missing. A good spec clears it.
+    payload["probe"] = _probe_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -433,6 +453,15 @@ def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, aut
     assert arch["resolved_model_type"] == "llama"
     assert arch["adapter_family"] == "llama_like"
     assert arch["adapter_available"] is True
+    probe = body["probe"]
+    # Honest: declared-only probe is DECLARED, never VERIFIED -- the probe is
+    # actually loaded and run worker-side, not at the API tier.
+    assert probe["status"] == "PROBE_COMPATIBILITY_DECLARED"
+    assert probe["schema_version"] == "cas_probe_linear_v1"
+    assert probe["axis_count"] == 3
+    assert probe["declared_feature_dimension"] == 200
+    assert probe["probe_loadable"] is True
+    assert probe["weights_hash_verified"] is False
 
 
 def test_frontier_run_rejects_provenance_with_mismatched_model_id(client, auth_headers):
@@ -553,6 +582,7 @@ def test_frontier_run_supported_architecture_is_adapter_available(client, auth_h
     payload = _frontier_payload(405, 120)
     payload["provenance"] = _provenance_payload(payload["model_id"])
     payload["architecture"] = _architecture_payload("qwen2")
+    payload["probe"] = _probe_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -575,6 +605,7 @@ def test_frontier_run_resolves_architecture_from_architectures_class(client, aut
     payload = _frontier_payload(405, 120)
     payload["provenance"] = _provenance_payload(payload["model_id"])
     payload["architecture"] = {"architectures": ["LlamaForCausalLM"]}
+    payload["probe"] = _probe_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -594,6 +625,7 @@ def test_frontier_run_gpt_neox_architecture_is_empirically_validated(client, aut
     payload = _frontier_payload(405, 120)
     payload["provenance"] = _provenance_payload(payload["model_id"])
     payload["architecture"] = _architecture_payload("gpt_neox")
+    payload["probe"] = _probe_payload()
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -659,3 +691,144 @@ def test_below_frontier_run_records_unsupported_architecture_without_gating(clie
     assert arch is not None
     assert arch["status"] == "ARCHITECTURE_ADAPTER_UNSUPPORTED"
     assert arch["adapter_available"] is False
+
+
+# --- Frontier run-gate (7): CAS probe-readout compatibility ---
+
+
+def test_frontier_run_refused_without_probe_specification(client, auth_headers):
+    # Provenance (gate 5) and a hookable architecture (gate 6) are cleared, but a
+    # real frontier run also needs a loadable CAS probe (gate 7). The CAS axis
+    # readout is the run's central deliverable; without a probe it would silently
+    # come back missing, so refuse 422. With both prior gates satisfied, the 422
+    # we assert is precisely the probe gate firing.
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("llama")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "probe" in resp.text.lower()
+
+
+def test_frontier_run_rejects_incompatible_probe_schema(client, auth_headers):
+    # The worker's compute_cas_axis_readout rejects any schema_version other than
+    # 'cas_probe_linear_v1' with a RuntimeError, so a wrong-schema probe could
+    # never produce the readout. Refuse the run honestly.
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("llama")
+    payload["probe"] = _probe_payload(schema_version="cas_probe_linear_v2")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "probe" in resp.text.lower()
+    assert "cas_probe_linear_v1" in resp.text
+
+
+def test_frontier_run_rejects_probe_dimension_mismatch(client, auth_headers):
+    # If the caller declares the run's pooled-feature dimension and it disagrees
+    # with the probe's per-axis vector length, the worker would raise
+    # "incompatible hidden size" and abort the shard. Refuse now instead.
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("llama")
+    payload["probe"] = {
+        "schema_version": "cas_probe_linear_v1",
+        "axes": ["F1", "F2"],
+        "feature_dimension": 200,
+        "expected_pooled_features": 384,
+    }
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "incompatible hidden size" in resp.text
+
+
+def test_frontier_run_with_loadable_probe_is_declared(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("llama")
+    payload["probe"] = _probe_payload()
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    probe = resp.json()["probe"]
+    assert probe["status"] == "PROBE_COMPATIBILITY_DECLARED"
+    assert probe["schema_version"] == "cas_probe_linear_v1"
+    assert probe["axis_count"] == 3
+    assert probe["probe_loadable"] is True
+    # No declared pooled dimension -> the final match is confirmed worker-side.
+    assert probe["dimension_consistent"] is None
+
+
+def test_below_frontier_run_does_not_require_probe(client, auth_headers):
+    # A 100B run is ENGINEERED_NOT_VALIDATED, not frontier -- a probe spec is
+    # optional there and its absence must never block the run.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(100, 20),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    assert resp.json()["probe"] is None
+
+
+def test_below_frontier_run_records_optional_probe_summary(client, auth_headers):
+    # If a below-frontier caller volunteers a probe, we record the honest summary
+    # without gating on it.
+    payload = _scale_payload(100, 20)
+    payload["probe"] = _probe_payload()
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    probe = resp.json()["probe"]
+    assert probe is not None
+    assert probe["status"] == "PROBE_COMPATIBILITY_DECLARED"
+    assert probe["probe_loadable"] is True
+
+
+def test_below_frontier_run_records_unsupported_probe_without_gating(client, auth_headers):
+    # A volunteered but unloadable probe below frontier is recorded as UNSUPPORTED
+    # for traceability but does NOT block the run -- the gate only refuses at
+    # frontier scale.
+    payload = _scale_payload(100, 20)
+    payload["probe"] = _probe_payload(schema_version="cas_probe_linear_v2")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    probe = resp.json()["probe"]
+    assert probe is not None
+    assert probe["status"] == "PROBE_COMPATIBILITY_UNSUPPORTED"
+    assert probe["probe_loadable"] is False

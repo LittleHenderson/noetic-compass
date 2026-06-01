@@ -43,6 +43,9 @@ from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_f
 from api.services.cas_harness_architecture_adapter import (
     ModelArchitectureDeclaration as ServiceModelArchitectureDeclaration,
 )
+from api.services.cas_harness_probe_compatibility import (
+    ProbeReadoutSpecification as ServiceProbeReadoutSpecification,
+)
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest as ServiceModelProvenanceManifest,
     WeightFileRef as ServiceWeightFileRef,
@@ -487,6 +490,42 @@ class ModelArchitectureDeclarationRequest(BaseModel):
         )
 
 
+class ProbeReadoutSpecificationRequest(BaseModel):
+    """Caller-supplied CAS probe-readout specification (frontier run-gate 7).
+
+    Required to create a real frontier-scale (300B-4T) distributed run. The CAS axis
+    readout is the run's central deliverable -- every shard declares it in
+    ``expected_outputs`` -- and the probe worker can only produce it from a probe whose
+    ``schema_version`` is ``'cas_probe_linear_v1'``, with a non-empty ``axes`` set and
+    per-axis vectors of length ``feature_dimension``. The gate refuses the run with HTTP
+    422 if this is missing or malformed: a missing probe makes the CAS readout come back
+    *missing* (dishonest by omission) and a malformed one aborts the shard. The probe is
+    actually loaded and run worker-side, so at create time a loadable spec is recorded as
+    PROBE_COMPATIBILITY_DECLARED. ``expected_pooled_features`` is optional: supply it (the
+    run's ``scenarios x assigned-layers x top_k``) to run the worker's exact dimensional
+    check now instead of letting a shard abort.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    schema_version: str = Field(..., min_length=1, max_length=128)
+    axes: list[str] = Field(default_factory=list, max_length=256)
+    feature_dimension: int | None = Field(default=None, gt=0, le=8_388_608)
+    probe_id: str | None = Field(default=None, max_length=200)
+    weights_sha256: str | None = Field(default=None, min_length=1, max_length=128)
+    expected_pooled_features: int | None = Field(default=None, gt=0, le=8_388_608)
+
+    def to_service_specification(self) -> ServiceProbeReadoutSpecification:
+        return ServiceProbeReadoutSpecification(
+            schema_version=self.schema_version,
+            axes=tuple(self.axes),
+            feature_dimension=self.feature_dimension,
+            probe_id=self.probe_id,
+            weights_sha256=self.weights_sha256,
+            expected_pooled_features=self.expected_pooled_features,
+        )
+
+
 class ScalePlanRequest(BaseModel):
     """Open-weight enterprise planning request.
 
@@ -534,6 +573,16 @@ class ScalePlanRequest(BaseModel):
             "/distributed/session -- the run is refused unless the architecture resolves to "
             "a probe adapter the worker can mechanically hook. Ignored by the planning-only "
             "/scale-plan endpoint. Frontier run-gate (6)."
+        ),
+    )
+    probe: ProbeReadoutSpecificationRequest | None = Field(
+        default=None,
+        description=(
+            "CAS probe-readout specification (schema_version / axes / feature_dimension). "
+            "Required to CREATE a real frontier-scale (300B-4T) distributed run via "
+            "/distributed/session -- the run is refused unless the probe is structurally "
+            "loadable, because the CAS axis readout is the run's central deliverable. "
+            "Ignored by the planning-only /scale-plan endpoint. Frontier run-gate (7)."
         ),
     )
 
@@ -627,6 +676,26 @@ class ModelArchitectureAdapterSummaryResponse(BaseModel):
     declared_num_attention_heads: int | None = None
 
 
+class ProbeCompatibilitySummaryResponse(BaseModel):
+    status: Literal[
+        "PROBE_COMPATIBILITY_VERIFIED",
+        "PROBE_COMPATIBILITY_DECLARED",
+        "PROBE_COMPATIBILITY_UNSUPPORTED",
+    ]
+    schema_version: str | None = None
+    probe_id: str | None = None
+    axis_count: int
+    axes: list[str]
+    declared_feature_dimension: int | None = None
+    expected_pooled_features: int | None = None
+    dimension_consistent: bool | None = None
+    weights_sha256: str | None = None
+    weights_hash_verified: bool
+    probe_loadable: bool
+    notice: str
+    reasons: list[str]
+
+
 class DistributedAuditResponse(BaseModel):
     audit_id: str
     plan_id: str
@@ -638,6 +707,7 @@ class DistributedAuditResponse(BaseModel):
     merge_reason: str
     provenance: ModelProvenanceSummaryResponse | None = None
     architecture: ModelArchitectureAdapterSummaryResponse | None = None
+    probe: ProbeCompatibilitySummaryResponse | None = None
     created_at: str
     updated_at: str
     plan: ScalePlanResponse
@@ -914,8 +984,9 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
 
     Carries the same frontier gates as ``/scale-plan`` and more: a 300B-4T run is
     refused 422 unless ``accept_experimental_frontier`` is set, unless a valid model
-    provenance manifest is attached (gate 5), and unless the declared architecture
-    resolves to a probe adapter the worker can hook (gate 6). >4T is always refused.
+    provenance manifest is attached (gate 5), unless the declared architecture resolves
+    to a probe adapter the worker can hook (gate 6), and unless a structurally loadable
+    CAS probe-readout specification is attached (gate 7). >4T is always refused.
     """
     try:
         record = create_distributed_audit(
@@ -934,6 +1005,9 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
             else None,
             architecture=req.architecture.to_service_declaration()
             if req.architecture is not None
+            else None,
+            probe=req.probe.to_service_specification()
+            if req.probe is not None
             else None,
         )
     except ValueError as exc:

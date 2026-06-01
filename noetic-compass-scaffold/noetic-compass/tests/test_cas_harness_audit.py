@@ -324,12 +324,33 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert refused_no_architecture.status_code == 422
     assert "architecture" in refused_no_architecture.text.lower()
 
+    # Provenance + a hookable architecture still is NOT enough on its own: a real
+    # frontier run also needs a structurally loadable CAS probe-readout spec
+    # (frontier run-gate 7). The CAS axis readout is the run's central deliverable
+    # -- declared in every shard's expected_outputs -- so without a loadable probe
+    # it would silently come back missing. The two prior gates are satisfied here,
+    # so the 422 we assert is the probe gate firing.
+    refused_no_probe = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "frontier/open-1t",
+            "parameter_count_b": 1000,
+            "accept_experimental_frontier": True,
+            "provenance": valid_provenance,
+            "architecture": {"model_type": "llama"},
+        },
+        headers=auth_headers,
+    )
+    assert refused_no_probe.status_code == 422
+    assert "probe" in refused_no_probe.text.lower()
+
     # Ack + a well-formed, identity-matching, open-weight-licensed manifest + a
-    # declared architecture that resolves to a supported probe adapter is enough
-    # to CREATE the run. The hashes are declared (not recomputed) and the layout
-    # is confirmed worker-side at load time, so the honest statuses are
-    # PROVENANCE_DECLARED_NOT_VERIFIED + ARCHITECTURE_ADAPTER_AVAILABLE -- never a
-    # verdict.
+    # declared architecture that resolves to a supported probe adapter + a
+    # structurally loadable CAS probe spec is enough to CREATE the run. The hashes
+    # are declared (not recomputed), the layout is confirmed worker-side at load
+    # time, and the probe is actually loaded and run worker-side, so the honest
+    # statuses are PROVENANCE_DECLARED_NOT_VERIFIED + ARCHITECTURE_ADAPTER_AVAILABLE
+    # + PROBE_COMPATIBILITY_DECLARED -- never a verdict.
     allowed = client.post(
         "/api/cas-harness/audit/distributed/session",
         json={
@@ -338,6 +359,11 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
             "accept_experimental_frontier": True,
             "provenance": valid_provenance,
             "architecture": {"model_type": "llama"},
+            "probe": {
+                "schema_version": "cas_probe_linear_v1",
+                "axes": ["F1", "F2", "F3"],
+                "feature_dimension": 200,
+            },
         },
         headers=auth_headers,
     )
@@ -350,6 +376,9 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert body["architecture"]["status"] == "ARCHITECTURE_ADAPTER_AVAILABLE"
     assert body["architecture"]["resolved_model_type"] == "llama"
     assert body["architecture"]["adapter_available"] is True
+    assert body["probe"]["status"] == "PROBE_COMPATIBILITY_DECLARED"
+    assert body["probe"]["probe_loadable"] is True
+    assert body["probe"]["weights_hash_verified"] is False
 
 
 def test_verify_reference_model_target_public_for_alpha_console(client):

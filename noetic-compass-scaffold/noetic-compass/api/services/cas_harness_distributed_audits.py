@@ -28,6 +28,12 @@ from api.services.cas_harness_model_provenance import (
     summarize_model_provenance,
     validate_frontier_provenance,
 )
+from api.services.cas_harness_probe_compatibility import (
+    ProbeCompatibilitySummary,
+    ProbeReadoutSpecification,
+    summarize_probe_compatibility,
+    validate_frontier_probe_compatibility,
+)
 from api.services.cas_harness_scale_planner import ScalePlan, ScalePlanRequest, build_scale_plan
 
 
@@ -96,6 +102,7 @@ class DistributedAuditRecord:
     merge_reason: str = "Distributed audit planned; no worker evidence has been merged yet."
     provenance: ProvenanceSummary | None = None
     architecture: ArchitectureAdapterSummary | None = None
+    probe: ProbeCompatibilitySummary | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -109,6 +116,7 @@ class DistributedAuditRecord:
             "merge_reason": self.merge_reason,
             "provenance": self.provenance.to_dict() if self.provenance is not None else None,
             "architecture": self.architecture.to_dict() if self.architecture is not None else None,
+            "probe": self.probe.to_dict() if self.probe is not None else None,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "plan": self.plan.to_dict(),
@@ -132,6 +140,7 @@ def create_distributed_audit(
     *,
     provenance: ModelProvenanceManifest | None = None,
     architecture: ModelArchitectureDeclaration | None = None,
+    probe: ProbeReadoutSpecification | None = None,
 ) -> DistributedAuditRecord:
     plan = build_scale_plan(request)
 
@@ -166,6 +175,23 @@ def create_distributed_audit(
     elif architecture is not None:
         architecture_summary = summarize_architecture_adapter(declaration=architecture)
 
+    # Frontier run-gate (7): gate (6) confirmed the worker can *locate and hook* the
+    # decoder stack; this gate confirms it can turn those activations into the CAS axis
+    # readout -- the run's central deliverable, declared in every shard's expected_outputs.
+    # The worker's compute_cas_axis_readout requires a probe whose schema_version is
+    # 'cas_probe_linear_v1', a non-empty axis set, and per-axis vectors that match the
+    # pooled-activation feature dimension; a missing probe makes the CAS readout come back
+    # *missing* (dishonest by omission) and a malformed one aborts the whole shard. So a
+    # real 300B-4T run is refused here (ValueError -> HTTP 422) without a structurally
+    # loadable probe spec; a good spec lands at PROBE_COMPATIBILITY_DECLARED (the worker
+    # confirms the final dimensional match at readout time). Below the frontier rung the
+    # spec is optional and recorded, never a blocker.
+    probe_summary: ProbeCompatibilitySummary | None = None
+    if plan.validation_status == "EXPERIMENTAL_NOT_VALIDATED":
+        probe_summary = validate_frontier_probe_compatibility(specification=probe)
+    elif probe is not None:
+        probe_summary = summarize_probe_compatibility(specification=probe)
+
     now = datetime.now(UTC).isoformat()
     audit_id = _audit_id_for(plan)
 
@@ -191,6 +217,7 @@ def create_distributed_audit(
         updated_at=now,
         provenance=provenance_summary,
         architecture=architecture_summary,
+        probe=probe_summary,
     )
     _DISTRIBUTED_AUDITS[audit_id] = record
     return record
