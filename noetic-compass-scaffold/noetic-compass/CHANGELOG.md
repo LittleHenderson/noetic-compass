@@ -1,5 +1,31 @@
 # Noetic Compass — Progress Log
 
+## Real-weights causal ablation validated on the GPU pod — the first causal slice is now genuinely causal (May 31, 2026)
+
+The prior launch-hardening entry left one honest gap: the ablation probe was "validated on a synthetic `nn.Module` (real-weights ablation is a deploy-gated follow-up)." This entry closes that follow-up. A single-target ablation now runs on **real Pythia-160M weights on the GPU pod**, and the `causal_proof` chip flips to `present` end-to-end **because a real next-token effect was measured** — not because a request asked for it.
+
+**What changed (deploy, not code).** The ablation-capable worker `app/` was deployed to the pod's persistent source (`/workspace/atlas-live-worker-current/app`) and run dir. The deployed worker now **accepts** the `causal_ablation` probe (HTTP 200; the old `m2` worker rejected it with 422) and emits an `ablation_effect` event flagged `is_real_model: true`. No API or runner code changed — the runner was already ablation-aware, and the graceful-degradation prediction from the prior entry held exactly: deploying an ablation-capable worker **auto-upgraded** `causal_proof` from `unavailable` to a real measured ablation with **no API redeploy**.
+
+**The measurement (honest, including the un-flashy parts).** For the runner's declared target — layer 0, unit 0, `zero` — on prompt *"Audit this live prompt end to end."*: `is_real_model: true`, `logit_delta: -0.0047`, `confidence_delta: 0.001`, `top_token_changed: false` (baseline and ablated top token both `'\n'`, id 187). Small but non-zero, and reported as-is — no token flip was manufactured.
+
+**Depth sweep — the effect is mechanistically real, not a constant.** Sweeping 48 units (layers 2/6/10 × units 0…720 step 48) on *"The capital of France is"*: **48/48 `is_real_model: true`**, **47/48 non-zero** `logit_delta`, **0 token flips**, and clearly **depth-graded** — every one of the top-5 strongest effects is in the deepest layer swept (layer 10), peak `|logit_delta| = 0.126` (L10 U432). A late-layer MLP unit moving the next-token logit more than an early one is the signature of a genuine forward-pass intervention, not a schema-valid no-op.
+
+**End-to-end product proof (all three legs green).**
+- **Worker contract** — posting the runner's *exact* payload to `/sessions/dump` returns the `ablation_effect` event with `is_real_model: true`.
+- **Runner** — `run_live_worker_audit` against the live worker writes an Evidence Packet with `ablation.status: present`, `is_real_model: true`, audit-scope label upgraded to *"live model I/O + readout + real single-target causal ablation,"* and proof chips `causal_proof: present` / `control_proof: unavailable`.
+- **HTTP route** — driving create → run through `/api/cas-harness/audit/session/{id}/run` returns `verdict: FLAG_FOR_HUMAN_REVIEW` (never a fabricated ACCEPT) with `causal_proof: present`. The live-worker e2e test passes against the real pod; its causal-proof assertion is a biconditional tied to `packet.ablation.status`, so it required **no edit** to accept the now-present proof — it simply held in the other direction.
+
+**Honest framing (unchanged).** This is the **first causal slice** — one declared single-target MLP-output ablation — not a full causal map and **not** a matched-control-confirmed result (`control_proof` stays `unavailable`). It does **not** create an ACCEPT: the live open-weight path still lands at human review pending control/verifier/WORM gates. The worker's `/health` still reports `worker_version: m2-real-pythia` (the version string was not bumped), so the real capability signal is `causal_ablation` returning 200 with `is_real_model: true`, not the version label.
+
+### Pieces
+- No source change in `api/` or the runner (already ablation-aware); the change is the pod deployment of the ablation-capable `live-trace-worker/app/` plus this validation pass.
+- Pod-side backup `app.bak-20260601T011800Z` retained for one-command rollback.
+
+### Tests
+- Live real-Pythia e2e (`tests/test_cas_harness_live_worker_e2e.py`) **passes against the deployed pod worker** through the tunnel (auto-selects the live worker source; honesty invariant holds with `causal_proof` now `present`).
+- Direct runner + HTTP-route drivers both confirm `causal_proof: present`, `verdict: FLAG_FOR_HUMAN_REVIEW`.
+- Worker stable across 48 sequential ablation calls (the sweep) with no errors.
+
 ## Live-worker launch-hardening: four parallel work-streams consolidated + a live-path regression caught and fixed (May 31, 2026)
 
 Following the read-only audit ("a real milestone, but not yet launch-complete"), four advice items were worked **in parallel** and consolidated onto the live-worker branch in one pass. Consolidating revealed a real regression that the end-to-end test caught against the actual deployed worker — so this entry is as much about the catch as the features.
