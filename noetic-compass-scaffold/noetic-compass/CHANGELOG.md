@@ -1,5 +1,36 @@
 # Noetic Compass — Progress Log
 
+## The general WORM anchor becomes a production *service* — `POST /evidence/{trace_id}/anchor`, model-size-independent, with one shared honesty gate for CLI and HTTP (Jun 1, 2026)
+
+The previous entry de-hard-coded the anchor *loader* into a discovery registry and left the user's point (2) — a real HTTP anchor endpoint — explicitly as "partial / follow-on": the CLI was general but there was no service surface. This entry closes that leg. It is pure engineering (no AWS needed to write or test the code — the endpoint honestly reports whatever the configured anchor mode yields), so per the standing directive it was built without waiting.
+
+**1) `POST /evidence/{trace_id}/anchor` exists and is general by construction.** The endpoint resolves `trace_id` through the same `stage9_40e_packet_path_registry()`, so any model size's Stage-9 40E packet — 160M, 20B, 70B, 300B, 1T, 3T — anchors through one route with no per-model code (the small-truck/huge-truck/same-checkpoint design, now as an HTTP surface). It loads the packet, runs the real `anchor_static_evidence_packet` → `verify_anchored_static_packet`, and returns an honest `AnchorEvidenceResponse`: `worm_retained`, `console_state` (`accept_scoped_validation` iff retained, else `flag_for_human_review`), the anchor status/mode/URI, the verify rollup, and `decision_scope: stage9_40e_validation_packet`. It fabricates nothing — with no S3 object-lock bucket configured it returns `worm_retained: false` / `anchor_status: disabled` and the console correctly stays at human review. A trace that is not a discoverable Stage-9 40E packet (including the dev fixture and S7/F28 packets) returns **404** — the endpoint is scoped to genuine Stage-9 40E validation packets. The route inherits the app's JWT auth (anchoring is privileged): unauthenticated calls get **401**.
+
+**2) `require_object_lock=true` is a real promotion gate.** When set and the anchor did not reach verified WORM retention, the endpoint returns **409** with a structured `anchor_not_worm_retained` detail — so a promotion pipeline refuses to advance a packet on a non-WORM anchor rather than silently accepting it. This mirrors the CLI's `--require-object-lock` exit-1 behaviour.
+
+**3) One source of truth for "is this WORM-retained," shared by CLI and HTTP.** The boolean that decides retention used to live only inside `anchor_stage9_40e_packet.py`. It is now `summarize_static_anchor_worm_status()` in the anchor service: status=anchored ∧ mode=s3 ∧ verify all_match ∧ external-anchor check match ∧ the re-read note independently confirms *object was re-read* + *object lock* + *retention is active*. Both the CLI (refactored to call it) and the new endpoint use this one function, so the two surfaces can never drift on what "retained" means. The CLI's disabled-mode smoke still prints the honest "OK (not WORM)" path and exits 0.
+
+**Honest done/pending against the user's 7-point production WORM design — point (2) now flips to done.**
+- (1) **General packet registry** — *done* (Stage-9 40E lane; cross-lane unification still follow-on).
+- (2) **General WORM anchor endpoint** — **now *done***: `POST /evidence/{trace_id}/anchor`, any model size by trace_id, honest receipt, auth-gated, with a 409 promotion gate. (Was "partial: CLI only" last entry.)
+- (3) **Model-size-independent schema** — *already true* (`parameter_scale`).
+- (4) **Storage separation** — *already the design*; explicit S3 activation-store wiring for >20B still follow-on.
+- (5) **Per-packet WORM proof** — *already enforced*, now via the shared summarizer used by both surfaces.
+- (6) **Queue-based anchoring** — *pending*: the endpoint is synchronous; an async job + worker for large audits is the next real follow-on.
+- (7) **Claim gating** — *already enforced*: ACCEPT-on-console still requires a real per-packet WORM anchor; the endpoint honestly returns `flag_for_human_review` until then.
+
+**Where this leaves the gate.** The general WORM anchor is now both a CLI *and* an HTTP service, model-size-independent, with a single shared honesty gate. The two remaining production items are queue-based async anchoring (6) and cross-lane registry/schema unification (1) + S3 activation-store wiring for >20B (4). The one operational step to a true-green console for the Pythia packet is unchanged and non-engineering: run the anchor (CLI or this endpoint with `require_object_lock`) from production/Render against the S3 Object-Lock bucket `cas-harness-runpod-92754088`, where the immutable write actually happens.
+
+### Pieces (this entry)
+- `api/routes/evidence.py` — `POST /{trace_id}/anchor` + `AnchorEvidenceResponse`; resolves via the registry, honest receipt, 404 for non-Stage-9 traces, 409 under `require_object_lock` when not WORM. Module docstring updated (the anchor route is the one deliberate side effect).
+- `api/services/cas_harness_static_evidence_anchor.py` — `summarize_static_anchor_worm_status()` + `external_anchor_check()`: the shared single source of truth for WORM retention.
+- `scripts/anchor_stage9_40e_packet.py` — refactored to call the shared summarizer (behaviour unchanged; disabled-mode smoke verified).
+
+### Tests (this entry)
+- `tests/test_evidence_routes.py` — anchor endpoint: auth 401, unknown-trace 404, non-Stage-9 (dev fixture) 404, disabled-mode honest-not-WORM 200, **generality across 20B + 160M through the same endpoint**, and the `require_object_lock` 409 gate.
+- `tests/test_cas_harness_static_evidence_anchor.py` — direct coverage of `summarize_static_anchor_worm_status` (disabled + local both not-retained; tolerates a missing anchor block).
+- Full local validation: `test_evidence_routes.py` + `test_cas_harness_static_evidence_anchor.py` (39 passed / 2 real-S3-skipped), audit + verdict-runner + evidence-bridge (55), live-worker runner/e2e/api-endpoint/fleet-executor (33). The 2 unrelated collection errors (`test_turn_admissibility`, `test_type_constraints`) are pre-existing imports in `api.notation` / `cas-native`, untouched by this work.
+
 ## Gate 3 closed on engineering — η→ε output-bridge run on CPU, packet reaches a *scoped-validation* ACCEPT, and the anchor loader is de-hard-coded into a general registry (May 31, 2026)
 
 The entry below assembled the Pythia packet honestly and parked it at `FLAG_FOR_HUMAN_REVIEW` for two named reasons: the **output-bridge (η→ε) proof leg was not run**, and **no real WORM anchor existed**. This entry runs the missing leg, re-assembles the packet to its genuine final state, and fixes the production-architecture smell the user flagged in the anchor path. Two distinct results — keep them distinct:

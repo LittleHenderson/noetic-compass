@@ -56,6 +56,7 @@ if str(_REPO_ROOT) not in sys.path:
 from api.routes.evidence import load_stage9_40e_packet_payload_for_trace  # noqa: E402
 from api.services.cas_harness_static_evidence_anchor import (  # noqa: E402
     anchor_static_evidence_packet,
+    summarize_static_anchor_worm_status,
     verify_anchored_static_packet,
 )
 
@@ -112,7 +113,6 @@ def main(argv: list[str] | None = None) -> int:
     verify = verify_anchored_static_packet(anchored)
     anchor_check = _find_check(verify, "merged_packet_external_anchor")
     notes = anchor_check.get("notes")
-    notes_lower = notes.lower() if isinstance(notes, str) else ""
 
     print(f"Anchor status: {anchor.get('status')}  mode: {anchor.get('mode')}")
     print(f"Anchor URI:    {anchor.get('anchor_uri') or '(none)'}")
@@ -121,14 +121,10 @@ def main(argv: list[str] | None = None) -> int:
     print(f"External-anchor notes: {notes}")
     print()
 
-    worm_retained = (
-        anchor.get("status") == "anchored"
-        and anchor.get("mode") == "s3"
-        and verify.get("overall") == "all_match"
-        and anchor_check.get("match") is True
-        and "object was re-read" in notes_lower
-        and "object lock" in notes_lower
-        and "retention is active" in notes_lower
+    # Single source of truth shared with POST /evidence/{trace_id}/anchor so the
+    # CLI gate and the HTTP gate can never disagree on what "WORM-retained" means.
+    worm_retained = bool(
+        summarize_static_anchor_worm_status(anchored, verify)["worm_retained"]
     )
 
     if args.require_object_lock and not worm_retained:

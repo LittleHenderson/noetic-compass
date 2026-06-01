@@ -5,11 +5,14 @@ dashboard. Reads on-disk artifacts only; nothing is written.
 
 Schema authority: ``docs/working/evidence_packet_2026_05_15/SPEC.md``.
 
-Two endpoints:
+Three endpoints:
 
 * ``GET  /api/evidence/{trace_id}``        → full ``EvidencePacket`` JSON.
 * ``POST /api/evidence/{trace_id}/verify`` → re-hash on-disk artifacts and
   compare against the SHAs recorded in the packet.
+* ``POST /api/evidence/{trace_id}/anchor`` → WORM-anchor a Stage 9 40E
+  validation packet (any model size, by trace_id) and return an honest anchor
+  receipt. This is the one deliberate side effect in the module (see below).
 
 The packet is assembled from three sources:
 
@@ -35,8 +38,12 @@ Claim-level taxonomy (SPEC §2):
                                — Mode 7 mechanistic attribution data; this
                                  is evidence, not proof.
 
-This module is intentionally side-effect free: no DB, no global state, no
-new dependencies. ``hashlib`` (stdlib) is used for sha256.
+The GET/verify endpoints are intentionally side-effect free: no DB, no global
+state, reads only. The ``/anchor`` endpoint is the one deliberate exception --
+anchoring is an explicit operational write, never triggered by a normal read,
+and it fabricates nothing: the receipt comes straight from the configured anchor
+mode (disabled/local = NOT WORM; s3 + object-lock = real WORM). ``hashlib``
+(stdlib) is used for sha256.
 """
 
 from __future__ import annotations
@@ -51,6 +58,12 @@ from typing import Any
 
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, Field
+
+from api.services.cas_harness_static_evidence_anchor import (
+    anchor_static_evidence_packet,
+    summarize_static_anchor_worm_status,
+    verify_anchored_static_packet,
+)
 
 router = APIRouter(prefix="/evidence", tags=["evidence"])
 
@@ -109,6 +122,40 @@ class VerifyHashesResponse(BaseModel):
     verified_at: str
     checks: list[VerifyCheck]
     overall: str  # "all_match" | "partial_mismatch" | "unable_to_verify"
+
+
+class AnchorEvidenceResponse(BaseModel):
+    """Honest receipt for a per-packet WORM anchor attempt.
+
+    Model-size-independent by construction: any Stage 9 40E packet discoverable in
+    the registry — 160M, 20B, 70B, 300B, 1T, 3T — anchors through this one endpoint
+    by its own ``trace_id`` with no per-model code. The receipt is never
+    fabricated; it reflects exactly what the configured anchor mode produced.
+    """
+
+    trace_id: str
+    anchored_at: str
+    worm_retained: bool = Field(
+        description=(
+            "True ONLY when a real S3 object-lock write was re-read and confirmed. "
+            "disabled/local/partial anchors are honestly False."
+        )
+    )
+    console_state: str = Field(
+        description=(
+            "What the Audit Console shows for this packet after this anchor: "
+            "'accept_scoped_validation' iff worm_retained, else 'flag_for_human_review'."
+        )
+    )
+    anchor_status: str | None = None
+    anchor_mode: str | None = None
+    anchor_uri: str | None = None
+    verify_overall: str | None = None
+    external_anchor_match: bool | None = None
+    external_anchor_notes: str | None = None
+    hash_log_path: str | None = None
+    decision_scope: str = "stage9_40e_validation_packet"
+    message: str
 
 
 # ---------------------------------------------------------------------------
@@ -1199,3 +1246,87 @@ async def verify_evidence_packet(trace_id: str) -> VerifyHashesResponse:
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="trace_id not found")
     return _verify_packet_hashes(packet)
+
+
+@router.post("/{trace_id}/anchor", response_model=AnchorEvidenceResponse)
+async def anchor_evidence_packet(
+    trace_id: str,
+    require_object_lock: bool = False,
+) -> AnchorEvidenceResponse:
+    """WORM-anchor the Stage 9 40E validation packet for ``trace_id``.
+
+    General by construction: ``trace_id`` is resolved through
+    ``stage9_40e_packet_path_registry`` so ANY model size's Stage 9 40E packet —
+    160M, 20B, 70B, 300B, 1T, 3T — anchors through this one endpoint with no
+    per-model code (the small-truck/huge-truck-same-checkpoint design). A trace
+    that is not a discoverable Stage 9 40E packet returns 404.
+
+    The receipt is honest. With no S3 object-lock bucket configured the packet is
+    anchored at mode ``disabled``/``local`` (NOT WORM) and the console correctly
+    stays at FLAG_FOR_HUMAN_REVIEW; ``worm_retained`` is False. Only a real S3
+    object-lock write — re-read and confirmed — flips ``worm_retained`` to True and
+    the console to a SCOPED-VALIDATION ACCEPT (never a per-customer production
+    ACCEPT).
+
+    ``require_object_lock=true`` turns the endpoint into a gate: if the anchor did
+    not reach verified WORM retention it returns 409, so a promotion pipeline can
+    refuse to advance the packet rather than silently accept a non-WORM anchor.
+    """
+
+    try:
+        packet = load_stage9_40e_packet_payload_for_trace(trace_id)
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail="trace_id not found")
+
+    anchored = anchor_static_evidence_packet(packet)
+    verify = verify_anchored_static_packet(anchored)
+    summary = summarize_static_anchor_worm_status(anchored, verify)
+    worm_retained = bool(summary["worm_retained"])
+
+    hashes = anchored.get("hashes") if isinstance(anchored, dict) else None
+    hash_log_path = hashes.get("hash_log_path") if isinstance(hashes, dict) else None
+
+    if worm_retained:
+        console_state = "accept_scoped_validation"
+        message = (
+            "Packet is WORM-retained. The Audit Console will show a SCOPED-VALIDATION "
+            "ACCEPT for this packet (decision_scope stage9_40e_validation_packet) — "
+            "NOT a per-customer production ACCEPT."
+        )
+    else:
+        console_state = "flag_for_human_review"
+        message = (
+            f"Packet anchored at mode {summary['anchor_mode']!r} (status "
+            f"{summary['anchor_status']!r}); this is NOT WORM retention, so the console "
+            "correctly stays at FLAG_FOR_HUMAN_REVIEW. Set "
+            "CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3 with an Object-Lock bucket + AWS "
+            "credentials, then re-run to produce a real per-packet WORM anchor."
+        )
+
+    if require_object_lock and not worm_retained:
+        raise HTTPException(
+            status_code=409,
+            detail={
+                "error": "anchor_not_worm_retained",
+                "trace_id": trace_id,
+                "anchor_mode": summary["anchor_mode"],
+                "anchor_status": summary["anchor_status"],
+                "verify_overall": summary["verify_overall"],
+                "message": message,
+            },
+        )
+
+    return AnchorEvidenceResponse(
+        trace_id=trace_id,
+        anchored_at=_now_iso_utc(),
+        worm_retained=worm_retained,
+        console_state=console_state,
+        anchor_status=summary["anchor_status"],
+        anchor_mode=summary["anchor_mode"],
+        anchor_uri=summary["anchor_uri"],
+        verify_overall=summary["verify_overall"],
+        external_anchor_match=summary["external_anchor_match"],
+        external_anchor_notes=summary["external_anchor_notes"],
+        hash_log_path=hash_log_path if isinstance(hash_log_path, str) else None,
+        message=message,
+    )

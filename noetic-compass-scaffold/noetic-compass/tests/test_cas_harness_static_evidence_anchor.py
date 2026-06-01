@@ -10,6 +10,7 @@ from api.services.cas_harness_merged_evidence_packets import (
 from api.services.cas_harness_static_evidence_anchor import (
     anchor_static_evidence_packet,
     load_anchored_static_packet_payload,
+    summarize_static_anchor_worm_status,
     verify_anchored_static_packet,
 )
 
@@ -98,3 +99,36 @@ def test_tampering_with_anchored_packet_breaks_verification():
 def test_anchor_requires_trace_id():
     with pytest.raises(ValueError):
         anchor_static_evidence_packet({"schema_version": "x", "verdict": "ACCEPT"})
+
+
+def test_summarize_worm_status_disabled_is_not_retained():
+    anchored = anchor_static_evidence_packet(_static_packet("static-validation-summary"))
+    verify = verify_anchored_static_packet(anchored)
+
+    summary = summarize_static_anchor_worm_status(anchored, verify)
+    assert summary["worm_retained"] is False
+    assert summary["anchor_status"] == "disabled"
+    assert summary["anchor_mode"] == "disabled"
+    assert summary["verify_overall"] == "all_match"
+    # The shared summarizer is the single source of truth for the CLI and the
+    # HTTP anchor endpoint; a disabled anchor must never claim WORM retention.
+    notes = (summary["external_anchor_notes"] or "").lower()
+    assert not all(term in notes for term in _WORM_TERMS)
+
+
+def test_summarize_worm_status_local_is_not_retained(monkeypatch):
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "local")
+    anchored = anchor_static_evidence_packet(_static_packet("static-validation-summary-local"))
+    verify = verify_anchored_static_packet(anchored)
+
+    summary = summarize_static_anchor_worm_status(anchored, verify)
+    assert summary["worm_retained"] is False
+    assert summary["anchor_mode"] == "local"
+
+
+def test_summarize_worm_status_tolerates_missing_anchor_block():
+    # A packet with no hashes/external_anchor must summarize as not-retained, not crash.
+    summary = summarize_static_anchor_worm_status({}, {"overall": "unable_to_verify", "checks": []})
+    assert summary["worm_retained"] is False
+    assert summary["anchor_status"] is None
+    assert summary["anchor_mode"] is None

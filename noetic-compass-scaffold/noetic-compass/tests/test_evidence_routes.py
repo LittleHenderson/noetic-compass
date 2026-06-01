@@ -27,6 +27,11 @@ import pytest
 _DEV_TRACE_ID = "dev_example_001"
 _CAS_HARNESS_REFERENCE_TRACE_ID = "cas_harness_reference_accept_001"
 _S7_F28_TRACE_ID = "s7-f28-balanced-bridge-gpt-neox-20b-20260526"
+# Stage 9 40E packets resolved through the general by-trace_id anchor registry.
+# Two different model sizes go through the SAME anchor endpoint (the small-truck /
+# huge-truck / same-checkpoint design): a 20B packet and a 160M packet.
+_STAGE9_40E_20B_TRACE_ID = "stage9-40e-original-baseline-readout-20260527"
+_STAGE9_40E_PYTHIA_TRACE_ID = "pythia-160m-stage9-40e-readout-20260531"
 _KNOWN_CHECKPOINT_DIR = (
     Path(__file__).resolve().parents[1]
     / ".tmp"
@@ -46,6 +51,11 @@ def test_evidence_get_requires_auth(client):
 
 def test_evidence_verify_requires_auth(client):
     resp = client.post(f"/evidence/{_DEV_TRACE_ID}/verify")
+    assert resp.status_code == 401
+
+
+def test_evidence_anchor_requires_auth(client):
+    resp = client.post(f"/evidence/{_STAGE9_40E_20B_TRACE_ID}/anchor")
     assert resp.status_code == 401
 
 
@@ -524,3 +534,105 @@ def test_build_packet_for_trace_unknown_raises_filenotfound():
 
     with pytest.raises(FileNotFoundError):
         build_packet_for_trace("this_does_not_exist_xyz")
+
+
+# ---------------------------------------------------------------------------
+# Anchor endpoint — POST /evidence/{trace_id}/anchor.
+#
+# The endpoint is general by trace_id: any model size's Stage 9 40E packet goes
+# through the same checkpoint. With no S3 object-lock bucket configured the anchor
+# is honestly NOT WORM and the console correctly stays at human review; only a
+# real object-lock write would flip it. These tests exercise the honest default
+# (no AWS needed) plus the registry generality and the gate behaviour.
+# ---------------------------------------------------------------------------
+
+
+@pytest.fixture
+def isolated_anchor_store(tmp_path, monkeypatch):
+    """Isolate the evidence-packet store and force the safe default anchor mode.
+
+    Anchoring writes the anchored copy to the packet store, so point it at a tmp
+    dir (tests never touch the real store) and clear the S3 anchor envs so the
+    mode is the honest default (disabled = NOT WORM).
+    """
+    from api.services.cas_harness_merged_evidence_packets import (
+        reset_merged_fleet_evidence_packets_for_tests,
+    )
+
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
+    for var in (
+        "CAS_HARNESS_EVIDENCE_ANCHOR_MODE",
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET",
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE",
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS",
+    ):
+        monkeypatch.delenv(var, raising=False)
+    reset_merged_fleet_evidence_packets_for_tests()
+    yield tmp_path
+    reset_merged_fleet_evidence_packets_for_tests()
+
+
+def test_evidence_anchor_disabled_mode_is_honest_not_worm(
+    client, auth_headers, isolated_anchor_store
+):
+    resp = client.post(
+        f"/evidence/{_STAGE9_40E_PYTHIA_TRACE_ID}/anchor", headers=auth_headers
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["trace_id"] == _STAGE9_40E_PYTHIA_TRACE_ID
+    # Honest default: no S3 object-lock bucket configured -> not WORM.
+    assert body["worm_retained"] is False
+    assert body["console_state"] == "flag_for_human_review"
+    assert body["anchor_status"] == "disabled"
+    assert body["decision_scope"] == "stage9_40e_validation_packet"
+    assert "FLAG_FOR_HUMAN_REVIEW" in body["message"]
+
+
+def test_evidence_anchor_is_general_across_model_sizes(
+    client, auth_headers, isolated_anchor_store
+):
+    """The SAME anchor endpoint resolves both a 20B packet and a 160M packet by
+    their own trace_id, with no per-model code. This is the load-bearing
+    generality requirement: any model size goes through the same checkpoint."""
+    for trace_id in (_STAGE9_40E_20B_TRACE_ID, _STAGE9_40E_PYTHIA_TRACE_ID):
+        resp = client.post(f"/evidence/{trace_id}/anchor", headers=auth_headers)
+        assert resp.status_code == 200, resp.text
+        body = resp.json()
+        assert body["trace_id"] == trace_id
+        assert body["worm_retained"] is False
+        assert body["console_state"] == "flag_for_human_review"
+
+
+def test_evidence_anchor_require_object_lock_conflicts_when_not_worm(
+    client, auth_headers, isolated_anchor_store
+):
+    """``require_object_lock=true`` is a gate: a non-WORM anchor returns 409 so a
+    promotion pipeline refuses to advance the packet rather than silently accept
+    a non-WORM anchor."""
+    resp = client.post(
+        f"/evidence/{_STAGE9_40E_PYTHIA_TRACE_ID}/anchor",
+        params={"require_object_lock": "true"},
+        headers=auth_headers,
+    )
+    assert resp.status_code == 409, resp.text
+    detail = resp.json()["detail"]
+    assert detail["error"] == "anchor_not_worm_retained"
+    assert detail["trace_id"] == _STAGE9_40E_PYTHIA_TRACE_ID
+
+
+def test_evidence_anchor_unknown_trace_id_404(client, auth_headers):
+    resp = client.post(
+        "/evidence/this_trace_id_does_not_exist_xyz_42/anchor", headers=auth_headers
+    )
+    assert resp.status_code == 404
+    assert resp.json()["detail"] == "trace_id not found"
+
+
+def test_evidence_anchor_non_stage9_trace_is_404(client, auth_headers):
+    """The dev fixture is a valid GET trace but NOT a Stage 9 40E packet, so the
+    anchor registry must not resolve it (404). The anchor endpoint is scoped to
+    genuine Stage 9 40E validation packets."""
+    resp = client.post(f"/evidence/{_DEV_TRACE_ID}/anchor", headers=auth_headers)
+    assert resp.status_code == 404

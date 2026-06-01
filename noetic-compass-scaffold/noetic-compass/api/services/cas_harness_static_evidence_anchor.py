@@ -128,3 +128,76 @@ def verify_anchored_static_packet(packet: Mapping[str, Any]) -> dict[str, Any]:
         "overall": overall,
         "checks": checks,
     }
+
+
+_EXTERNAL_ANCHOR_ARTIFACT = "merged_packet_external_anchor"
+
+# The independent facts a verify re-read must report before a static packet may be
+# called WORM-retained. Kept as one tuple so the CLI anchor step and the HTTP
+# anchor endpoint can never drift apart on what "retained" means.
+_WORM_RETENTION_NOTE_TERMS = (
+    "object was re-read",
+    "object lock",
+    "retention is active",
+)
+
+
+def external_anchor_check(verify_response: Mapping[str, Any]) -> dict[str, Any]:
+    """Return the external object-lock anchor check from a verify response.
+
+    Returns an empty mapping when the check is absent so callers can treat
+    "no anchor check" and "anchor check failed" uniformly -- both are non-WORM.
+    """
+
+    checks = verify_response.get("checks")
+    if isinstance(checks, list):
+        for check in checks:
+            if isinstance(check, Mapping) and check.get("artifact") == _EXTERNAL_ANCHOR_ARTIFACT:
+                return dict(check)
+    return {}
+
+
+def summarize_static_anchor_worm_status(
+    anchored: Mapping[str, Any],
+    verify_response: Mapping[str, Any],
+) -> dict[str, Any]:
+    """Return the honest WORM-retention summary for an anchored static packet.
+
+    Single source of truth shared by the CLI anchor step
+    (``scripts/anchor_stage9_40e_packet``) and the HTTP anchor endpoint
+    (``POST /evidence/{trace_id}/anchor``) so the two surfaces can never disagree
+    about whether a packet is WORM-retained.
+
+    A packet is WORM-retained ONLY when a real S3 object-lock write was re-read and
+    confirmed: status ``anchored``, mode ``s3``, every integrity check matched, and
+    the re-read note independently confirms the object was re-read, object lock is
+    set, and retention is active. Anything weaker (disabled / local / partial
+    verify) is honestly NOT retained, and the console correctly stays at human
+    review. This function fabricates nothing; it only reads the receipt + verify.
+    """
+
+    hashes = anchored.get("hashes")
+    anchor = hashes.get("external_anchor") if isinstance(hashes, Mapping) else None
+    if not isinstance(anchor, Mapping):
+        anchor = {}
+    check = external_anchor_check(verify_response)
+    notes = check.get("notes")
+    notes_lower = notes.lower() if isinstance(notes, str) else ""
+
+    worm_retained = bool(
+        anchor.get("status") == "anchored"
+        and anchor.get("mode") == "s3"
+        and verify_response.get("overall") == "all_match"
+        and check.get("match") is True
+        and all(term in notes_lower for term in _WORM_RETENTION_NOTE_TERMS)
+    )
+
+    return {
+        "worm_retained": worm_retained,
+        "anchor_status": anchor.get("status"),
+        "anchor_mode": anchor.get("mode"),
+        "anchor_uri": anchor.get("anchor_uri"),
+        "verify_overall": verify_response.get("overall"),
+        "external_anchor_match": check.get("match"),
+        "external_anchor_notes": notes,
+    }
