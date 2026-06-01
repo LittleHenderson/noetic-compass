@@ -254,6 +254,107 @@ class AblationEffectEvent(BaseModel):
     )
 
 
+class AblationControlEffectEvent(BaseModel):
+    """Matched-control selectivity test for the single-target ablation.
+
+    Emitted ONCE per session immediately AFTER ``AblationEffectEvent`` (and
+    before ``word_spans``) whenever an ablation was requested. It answers the
+    question the single-target ablation alone cannot: *was the chosen unit's
+    next-token effect actually selective, or would ablating ANY sibling unit in
+    the same layer have moved the distribution just as much?*
+
+    Method (real mode): re-run the SAME zero/mean ablation on ``n_controls``
+    randomly-sampled OTHER units in the SAME layer, each measured by the change
+    in the baseline-top-token's logit (the same metric as the ablation event).
+    The target's absolute logit change is compared against the control
+    distribution. ``selectivity_passed`` is True only when the target moved that
+    token strictly more than the largest control move — the single-unit
+    forward-pass analog of the Stage-9 'beat random same-rank controls' guard.
+
+    Scope honesty (load-bearing): this is a SINGLE-UNIT, next-token selectivity
+    control. It is NOT the 40-Element subspace matched-control (that is a
+    separate, readout-level proof produced by the offline Stage-9 pipeline).
+    Both are real matched controls, but they make different-strength claims, and
+    this event's ``detail`` states which one it is.
+
+    Honesty contract (mirrors AblationEffectEvent):
+
+    * ``is_real_model`` is True ONLY when the control deltas were measured on
+      real loaded weights AND at least one control unit was actually ablated.
+      In demo mode (or when no sibling unit could be sampled) the event is
+      schema-valid but ``is_real_model`` is False and every numeric field is
+      None — it reports "no matched control was measured", never a fabricated
+      number.
+    * The runner flips its ``control_proof`` chip to ``present`` ONLY when it
+      sees an ``ablation_control_effect`` event with ``is_real_model = True``.
+      ``control_proof = present`` means a real matched control RAN; whether the
+      target beat the controls is carried separately in ``selectivity_passed``
+      for the verifier / human reviewer to weigh.
+    """
+
+    type: Literal["ablation_control_effect"] = "ablation_control_effect"
+    target: dict[str, int] = Field(
+        ...,
+        description="The ablated target unit the random controls are compared against.",
+    )
+    mode: Literal["zero", "mean"] = "zero"
+    is_real_model: bool = Field(
+        default=False,
+        description=(
+            "True only when control deltas were measured on real loaded weights "
+            "with at least one control unit ablated. False => demo-mode "
+            "stand-in; numeric fields are None."
+        ),
+    )
+    n_controls: int = Field(
+        default=0,
+        ge=0,
+        description="Number of random same-layer control units actually measured.",
+    )
+    control_units: list[int] | None = Field(
+        default=None,
+        description="The sampled control unit indices (same layer as the target).",
+    )
+    target_abs_logit_delta: float | None = Field(
+        default=None,
+        description=(
+            "Absolute change in the baseline-top-token's logit when the TARGET "
+            "unit is ablated (|ablated - baseline|). None in demo mode."
+        ),
+    )
+    control_mean_abs_logit_delta: float | None = Field(
+        default=None,
+        description="Mean |logit delta| across the random control units. None in demo mode.",
+    )
+    control_max_abs_logit_delta: float | None = Field(
+        default=None,
+        description="Largest |logit delta| across the random control units. None in demo mode.",
+    )
+    margin_over_control_max: float | None = Field(
+        default=None,
+        description=(
+            "target_abs_logit_delta - control_max_abs_logit_delta. Positive "
+            "means the target moved the baseline-top token more than every "
+            "control did. None in demo mode."
+        ),
+    )
+    selectivity_passed: bool | None = Field(
+        default=None,
+        description=(
+            "True iff the target's |logit delta| strictly exceeds every "
+            "control's. None in demo mode (no measurement was taken)."
+        ),
+    )
+    seed: int | None = Field(
+        default=None,
+        description="RNG seed used to sample the control units (reproducibility).",
+    )
+    detail: str | None = Field(
+        default=None,
+        description="Human-readable note, e.g. why a demo event carries no measurement.",
+    )
+
+
 class CompleteEvent(BaseModel):
     """Last event on a successful session."""
 
@@ -383,6 +484,7 @@ LiveTraceEvent = (
     | TokenEvent
     | NeuronCoversEvent
     | AblationEffectEvent
+    | AblationControlEffectEvent
     | WordSpansEvent
     | ErrorEvent
     | CompleteEvent

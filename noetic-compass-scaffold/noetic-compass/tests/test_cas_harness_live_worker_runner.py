@@ -12,6 +12,7 @@ from api.services.cas_harness_live_worker_runner import (
     LiveAuditRunnerUnavailable,
     _ablation_block_from_events,
     _code_commit_sha,
+    _control_block_from_events,
     _post_worker_dump,
     _proof_chips_for_live_packet,
     run_live_worker_audit,
@@ -167,6 +168,44 @@ def _demo_ablation_event() -> dict:
     }
 
 
+def _real_control_event() -> dict:
+    """A worker ablation_control_effect event flagged as a REAL measurement."""
+    return {
+        "type": "ablation_control_effect",
+        "target": {"layer": 0, "unit": 0},
+        "mode": "zero",
+        "is_real_model": True,
+        "n_controls": 8,
+        "control_units": [3, 11, 42, 100, 256, 500, 900, 1500],
+        "target_abs_logit_delta": 1.4567,
+        "control_mean_abs_logit_delta": 0.3210,
+        "control_max_abs_logit_delta": 0.6789,
+        "margin_over_control_max": 0.7778,
+        "selectivity_passed": True,
+        "seed": 42,
+        "detail": "Single-unit selectivity control (zero) for layer 0 unit 0.",
+    }
+
+
+def _demo_control_event() -> dict:
+    """A worker ablation_control_effect event flagged as demo (no real weights)."""
+    return {
+        "type": "ablation_control_effect",
+        "target": {"layer": 0, "unit": 0},
+        "mode": "zero",
+        "is_real_model": False,
+        "n_controls": 0,
+        "control_units": None,
+        "target_abs_logit_delta": None,
+        "control_mean_abs_logit_delta": None,
+        "control_max_abs_logit_delta": None,
+        "margin_over_control_max": None,
+        "selectivity_passed": None,
+        "seed": None,
+        "detail": "Demo mode: no real weights loaded, so no matched control.",
+    }
+
+
 @pytest.mark.asyncio
 async def test_real_flagged_ablation_flips_causal_proof_present(monkeypatch):
     """A worker dump carrying a REAL ablation_effect event must produce
@@ -319,6 +358,174 @@ def test_ablation_block_honesty_invariant():
     assert _causal(real_block) == "present"
     assert _causal(demo_block) == "unavailable"
     assert _causal(absent_block) == "unavailable"
+
+
+# ---------------------------------------------------------------------------
+# Matched-control consumption — the first control proof, plumbed honestly.
+# ---------------------------------------------------------------------------
+
+
+@pytest.mark.asyncio
+async def test_real_flagged_control_flips_control_proof_present(monkeypatch):
+    """A worker dump carrying a REAL ablation_control_effect event must produce
+    packet['matched_controls'].status == 'present' (with measured selectivity
+    deltas) AND flip the control_proof chip to 'present'. The causal_proof chip
+    also flips because a real ablation_effect event is present in the same dump."""
+
+    async def fake_dump(worker_base, payload):  # noqa: ARG001
+        return {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "runtime": "real_pythia",
+                        "is_real_model": True,
+                    },
+                },
+                {
+                    "type": "token",
+                    "token_index": 0,
+                    "token": " Hi",
+                    "confidence": 0.9,
+                    "top_activated_neurons": [],
+                    "mode7_attribution": [],
+                },
+                _real_ablation_event(),
+                _real_control_event(),
+                {"type": "complete", "total_tokens": 1},
+            ]
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump",
+        fake_dump,
+    )
+
+    result = await run_live_worker_audit(
+        audit_id="cas-audit-ctrl-real",
+        model_id="EleutherAI/pythia-160m",
+        prompt="Audit this.",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+    )
+
+    packet = build_packet_for_trace(result.trace_id)
+    chips = {chip["id"]: chip["status"] for chip in result.proof_chips}
+
+    # Control block present, carrying the REAL measured selectivity deltas.
+    assert packet.matched_controls["status"] == "present"
+    assert packet.matched_controls["is_real_model"] is True
+    assert packet.matched_controls["selectivity_passed"] is True
+    assert packet.matched_controls["target_abs_logit_delta"] == pytest.approx(1.4567)
+    assert packet.matched_controls["margin_over_control_max"] == pytest.approx(0.7778)
+    assert packet.matched_controls["control_units"] == [3, 11, 42, 100, 256, 500, 900, 1500]
+    assert packet.matched_controls["target"] == {"layer": 0, "unit": 0}
+
+    # Both causal AND control proofs flip to present (both real events present).
+    assert chips["causal_proof"] == "present"
+    assert chips["control_proof"] == "present"
+
+    # Scope label honestly mentions the single-unit matched-control selectivity.
+    assert "real single-target causal ablation" in packet.audit_scope["label"]
+    assert "matched-control selectivity" in packet.audit_scope["label"]
+
+
+@pytest.mark.asyncio
+async def test_demo_flagged_control_keeps_control_proof_unavailable(monkeypatch):
+    """A demo-flagged ablation_control_effect event (is_real_model False) must NOT
+    flip the control_proof chip — status stays 'unavailable' and no deltas leak,
+    even though a real ablation_effect event flips causal_proof in the same dump."""
+
+    async def fake_dump(worker_base, payload):  # noqa: ARG001
+        return {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": True,
+                    },
+                },
+                {
+                    "type": "token",
+                    "token_index": 0,
+                    "token": " Hi",
+                    "confidence": 0.9,
+                    "top_activated_neurons": [],
+                    "mode7_attribution": [],
+                },
+                _real_ablation_event(),
+                _demo_control_event(),
+                {"type": "complete", "total_tokens": 1},
+            ]
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump",
+        fake_dump,
+    )
+
+    result = await run_live_worker_audit(
+        audit_id="cas-audit-ctrl-demo",
+        model_id="EleutherAI/pythia-160m",
+        prompt="Audit this.",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+    )
+
+    packet = build_packet_for_trace(result.trace_id)
+    chips = {chip["id"]: chip["status"] for chip in result.proof_chips}
+
+    assert packet.matched_controls["status"] == "unavailable"
+    assert packet.matched_controls.get("is_real_model") is False
+    # No fabricated selectivity numbers in an unavailable block.
+    assert "target_abs_logit_delta" not in packet.matched_controls
+    # Causal proof still flips (real ablation), control proof does not (demo).
+    assert chips["causal_proof"] == "present"
+    assert chips["control_proof"] == "unavailable"
+
+
+def test_control_block_honesty_invariant():
+    """Unit-level invariant: _control_block_from_events returns 'present' iff a
+    real (is_real_model True) ablation_control_effect event exists; demo/absent →
+    'unavailable'. And the proof-chip helper mirrors this exactly."""
+
+    # Real → present, selectivity deltas carried.
+    real_block = _control_block_from_events([_real_control_event()])
+    assert real_block["status"] == "present"
+    assert real_block["selectivity_passed"] is True
+    assert real_block["target_abs_logit_delta"] == pytest.approx(1.4567)
+
+    # Demo → unavailable, no deltas.
+    demo_block = _control_block_from_events([_demo_control_event()])
+    assert demo_block["status"] == "unavailable"
+    assert "target_abs_logit_delta" not in demo_block
+
+    # Absent → unavailable.
+    absent_block = _control_block_from_events(
+        [{"type": "token", "token_index": 0, "token": "x"}]
+    )
+    assert absent_block["status"] == "unavailable"
+
+    # Chip mirror: present block → control_proof present; otherwise unavailable.
+    def _control(block: dict) -> str:
+        chips = _proof_chips_for_live_packet(
+            {
+                "trace_id": "t",
+                "model": {"model_key": "EleutherAI/pythia-160m"},
+                "output": {"text": "x"},
+                "readout": {"status": "present"},
+                "matched_controls": block,
+            }
+        )
+        return next(c["status"] for c in chips if c["id"] == "control_proof")
+
+    assert _control(real_block) == "present"
+    assert _control(demo_block) == "unavailable"
+    assert _control(absent_block) == "unavailable"
 
 
 # ---------------------------------------------------------------------------

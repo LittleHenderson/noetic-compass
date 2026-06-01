@@ -1,5 +1,27 @@
 # Noetic Compass — Progress Log
 
+## Matched-control selectivity — the live worker's first control proof, plumbed honestly (May 31, 2026)
+
+The previous entry closed the causal-proof gap (a real single-target ablation moves the next-token logit on loaded weights) but left `control_proof` honestly `unavailable`: a single unit moving the distribution does not prove the move is *selective*. This entry adds the live worker's **first control proof** — a single-unit selectivity test — and flips `control_proof` from `unavailable` to `present` end-to-end **iff a real matched control actually ran**, never because a request asked for it.
+
+**What it measures.** Alongside the target-unit ablation, the worker now ablates up to 8 random *other* units in the *same* layer (same mode), scores each by the identical metric the causal slice uses (change in the baseline-top token's own logit), and reports whether the target moved that token strictly more than every control. This is the single-unit forward-pass analog of the offline Stage-9 "beat random same-rank controls" guard. It is deliberately **not** the 40-Element subspace matched control (a separate, later slice) — every surface that reports it says so in those words.
+
+**Honesty invariant (one place, mirrored from the causal one).** `control_proof` is `present` **iff** an `ablation_control_effect` event exists *and* `is_real_model` is true (`_control_block_from_events`). Demo mode, a layer with no spare sibling units, or a failed measurement → `is_real_model: false`, every numeric delta `None`, `control_proof` stays `unavailable`. The pass/fail of the test (`selectivity_passed`) is carried as data; the chip flips on whether a real control *ran*, not on whether the target won — an honest "we measured it and the target did NOT beat the controls" is still a real control proof and must not be hidden.
+
+**Still not an ACCEPT.** This adds one more real proof leg to the live open-weight packet; the verdict still lands at `FLAG_FOR_HUMAN_REVIEW` pending verifier + WORM gates. `matched_controls` in the packet now carries the single-unit selectivity block (real deltas or an honest unavailable), and the audit-scope label upgrades to "… + single-unit matched-control selectivity" only when a real control ran.
+
+### Pieces
+- `live-trace-worker/app/schemas/events.py` — new `AblationControlEffectEvent` (`type: ablation_control_effect`) added to the `LiveTraceEvent` union; docstring scopes it as single-unit next-token selectivity, not the subspace control.
+- `live-trace-worker/app/runtime/ablation_probe.py` — `run_real_ablation_control` (real measurement: target vs random same-layer controls, seeded), `_capture_target_mlp_width` (one baseline forward captures MLP width so controls can be sampled; `None` → no real control claimed), `demo_ablation_control` (schema-valid, all deltas `None`).
+- `live-trace-worker/app/runtime/event_stream.py` — demo and real streams both emit the control event (demo-flagged vs real); the real path degrades to a demo-flagged control on any measurement error, never failing the trace.
+- `live-trace-worker/app/runtime/__init__.py` — export the two new symbols.
+- `api/services/cas_harness_live_worker_runner.py` — `_control_block_from_events` (the single gate), `packet["matched_controls"]` now carries it, `control_present` threaded into the proof chips, the hardcoded `control_proof: unavailable` flipped to conditional, plus an honest control claim-level / caveat / scope label.
+
+### Tests
+- Worker-side (`test_ablation_probe.py`, 14 pass): demo control has no numbers; real control on the tiny `nn.Module` measures real selectivity (7 same-layer controls, target beats the max, `selectivity_passed: true`, positive margin); out-of-range layer degrades to demo-flagged; demo + real streams emit the control event in the right order.
+- API-side (`test_cas_harness_live_worker_runner.py`, 9 pass): a real `ablation_control_effect` flips `control_proof` to `present` and fills `matched_controls`; a demo-flagged one keeps it `unavailable` with no leaked deltas while `causal_proof` still flips; unit-level honesty invariant mirrored.
+- No regression across the evidence/packet/proof-chip consumers (86 pass, 2 skip) or the worker schema/stream/session/control suites (33 pass).
+
 ## Real-weights causal ablation validated on the GPU pod — the first causal slice is now genuinely causal (May 31, 2026)
 
 The prior launch-hardening entry left one honest gap: the ablation probe was "validated on a synthetic `nn.Module` (real-weights ablation is a deploy-gated follow-up)." This entry closes that follow-up. A single-target ablation now runs on **real Pythia-160M weights on the GPU pod**, and the `causal_proof` chip flips to `present` end-to-end **because a real next-token effect was measured** — not because a request asked for it.

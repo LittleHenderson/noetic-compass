@@ -33,7 +33,7 @@ import logging
 from contextlib import contextmanager
 from typing import Any, Iterator
 
-from ..schemas.events import AblationEffectEvent
+from ..schemas.events import AblationControlEffectEvent, AblationEffectEvent
 from ..schemas.requests import AblationTargetRequest, CreateSessionRequest
 from .probe_runner import _get_pythia_layers, _softmax_margin
 
@@ -195,6 +195,160 @@ def run_real_ablation_effect(
 
 
 # ---------------------------------------------------------------------------
+# Matched-control selectivity — the live worker's FIRST control proof.
+#
+# The single-target ablation tells us the chosen unit moves the next-token
+# distribution. It does NOT tell us whether that move is *selective* — maybe
+# ablating any sibling unit moves it just as much. This runner answers that by
+# ablating the target AND a set of random same-layer control units, scoring
+# each by the same metric (change in the baseline-top token's logit), and
+# reporting whether the target beat every control. This is the single-unit
+# forward-pass analog of the offline Stage-9 'beat random same-rank controls'
+# guard; it is NOT the 40-Element subspace control (a separate, later proof).
+# ---------------------------------------------------------------------------
+
+
+def _capture_target_mlp_width(
+    model: Any,
+    n_layers: int,
+    target: AblationTargetRequest,
+    input_ids: Any,
+) -> tuple[Any, int | None]:
+    """Run one baseline forward, capturing the target MLP's output width.
+
+    Returns ``(baseline_last_token_logits, width)``. ``width`` is ``None`` when
+    the target layer / MLP is out of range, which signals the caller that no
+    real control could be sampled (so no control proof is claimed).
+    """
+    layers = _get_pythia_layers(model)
+    captured: dict[str, int] = {}
+    handle: Any = None
+    if layers is not None and 0 <= target.layer < min(n_layers, len(layers)):
+        mlp = getattr(layers[target.layer], "mlp", None)
+        if mlp is not None:
+
+            def _capture(_module: Any, _inputs: Any, output: Any) -> Any:
+                try:
+                    if output is not None:
+                        captured["width"] = int(output.shape[-1])
+                except Exception:  # pragma: no cover — defensive
+                    logger.exception("ablation control: width capture failed")
+                return output
+
+            handle = mlp.register_forward_hook(_capture)
+    try:
+        logits = _last_token_logits(model, input_ids)
+    finally:
+        if handle is not None:
+            try:
+                handle.remove()
+            except Exception:  # pragma: no cover — defensive cleanup
+                logger.exception("ablation control: width hook removal failed")
+    return logits, captured.get("width")
+
+
+def run_real_ablation_control(
+    req: CreateSessionRequest,
+    model: Any,
+    tokenizer: Any,
+    n_layers: int,
+    target: AblationTargetRequest,
+    n_controls: int = 8,
+    seed: int = 42,
+) -> AblationControlEffectEvent:
+    """Measure single-unit ablation selectivity vs random same-layer controls.
+
+    Ablates the target unit and up to ``n_controls`` random OTHER units in the
+    SAME layer (same mode), each scored by the change in the baseline-top
+    token's logit. Reports whether the target moved that token strictly more
+    than every control. The model is NOT mutated: each hook is attached only
+    for its own ablated forward pass and removed afterwards.
+
+    Honesty: ``is_real_model`` is True ONLY when at least one control unit was
+    actually ablated on real weights. If the target layer is out of range or no
+    sibling unit can be sampled, this returns an ``is_real_model = False`` event
+    with no numeric deltas — the matched control did not run, so no control
+    proof is claimed.
+    """
+    import numpy as np
+    import torch
+
+    device = next(model.parameters()).device
+    input_ids = tokenizer(req.prompt, return_tensors="pt").input_ids.to(device)
+
+    with torch.no_grad():
+        baseline_logits, width = _capture_target_mlp_width(
+            model, n_layers, target, input_ids
+        )
+        baseline_vec = baseline_logits.float().detach().cpu()
+        baseline_id = int(torch.argmax(baseline_logits).item())
+        baseline_top_logit = float(baseline_vec[baseline_id].item())
+
+        if width is None or width <= 1:
+            return demo_ablation_control(
+                target,
+                detail=(
+                    "No matched control ran: target layer "
+                    f"{target.layer} unit {target.unit} is out of range or its "
+                    "layer has no spare units to sample as controls, so no real "
+                    "control proof is claimed."
+                ),
+            )
+
+        # Real target effect (identical metric to run_real_ablation_effect).
+        with _ablate_mlp_unit(model, n_layers, target):
+            target_logits = _last_token_logits(model, input_ids)
+        target_logit = float(target_logits.float().detach().cpu()[baseline_id].item())
+        target_abs = abs(target_logit - baseline_top_logit)
+
+        # Sample random control units in the same layer, excluding the target.
+        rng = np.random.default_rng(seed)
+        candidates = [u for u in range(int(width)) if u != int(target.unit)]
+        k = min(int(n_controls), len(candidates))
+        control_units = sorted(
+            int(u) for u in rng.choice(candidates, size=k, replace=False)
+        )
+
+        control_abs_deltas: list[float] = []
+        for unit in control_units:
+            control_target = AblationTargetRequest(
+                layer=int(target.layer), unit=int(unit), mode=target.mode
+            )
+            with _ablate_mlp_unit(model, n_layers, control_target):
+                control_logits = _last_token_logits(model, input_ids)
+            control_logit = float(
+                control_logits.float().detach().cpu()[baseline_id].item()
+            )
+            control_abs_deltas.append(abs(control_logit - baseline_top_logit))
+
+    control_mean_abs = float(sum(control_abs_deltas) / len(control_abs_deltas))
+    control_max_abs = float(max(control_abs_deltas))
+    margin = float(target_abs - control_max_abs)
+    selectivity_passed = bool(target_abs > control_max_abs)
+
+    return AblationControlEffectEvent(
+        target={"layer": int(target.layer), "unit": int(target.unit)},
+        mode=target.mode,
+        is_real_model=True,
+        n_controls=len(control_units),
+        control_units=control_units,
+        target_abs_logit_delta=round(target_abs, 4),
+        control_mean_abs_logit_delta=round(control_mean_abs, 4),
+        control_max_abs_logit_delta=round(control_max_abs, 4),
+        margin_over_control_max=round(margin, 4),
+        selectivity_passed=selectivity_passed,
+        seed=int(seed),
+        detail=(
+            f"Single-unit selectivity control ({target.mode}) for layer "
+            f"{target.layer} unit {target.unit}: target |logit delta| "
+            f"{target_abs:.4f} vs {len(control_units)} random same-layer "
+            f"controls (max {control_max_abs:.4f}). Single-unit next-token "
+            "control, NOT the 40-Element subspace control."
+        ),
+    )
+
+
+# ---------------------------------------------------------------------------
 # Demo ablation — schema-valid, explicitly NOT a real measurement.
 # ---------------------------------------------------------------------------
 
@@ -222,5 +376,37 @@ def demo_ablation_effect(target: AblationTargetRequest) -> AblationEffectEvent:
             "Demo mode: no real weights loaded, so no causal ablation was "
             "measured. This event is a schema-valid placeholder — it carries "
             "no measured deltas and must not be read as a real causal proof."
+        ),
+    )
+
+
+def demo_ablation_control(
+    target: AblationTargetRequest,
+    detail: str | None = None,
+) -> AblationControlEffectEvent:
+    """Schema-valid matched-control event for demo mode — no real measurement.
+
+    Mirrors ``demo_ablation_effect``: every numeric field is ``None`` and
+    ``is_real_model`` is ``False``. Demo mode (or a real run where no sibling
+    control unit could be sampled) must never present synthetic numbers as a
+    real matched control; it reports honestly that no control ran.
+    """
+    return AblationControlEffectEvent(
+        target={"layer": int(target.layer), "unit": int(target.unit)},
+        mode=target.mode,
+        is_real_model=False,
+        n_controls=0,
+        control_units=None,
+        target_abs_logit_delta=None,
+        control_mean_abs_logit_delta=None,
+        control_max_abs_logit_delta=None,
+        margin_over_control_max=None,
+        selectivity_passed=None,
+        seed=None,
+        detail=detail
+        or (
+            "Demo mode: no real weights loaded, so no matched-control ablation "
+            "was measured. This event is a schema-valid placeholder — it carries "
+            "no measured deltas and must not be read as a real control proof."
         ),
     )

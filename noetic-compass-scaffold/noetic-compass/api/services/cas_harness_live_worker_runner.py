@@ -216,6 +216,7 @@ def _packet_from_worker_dump(
         cover_classes = len(covers_event["per_class_neuron_covers"])
     manifest = next((event.get("manifest") for event in events if event.get("type") == "manifest"), None)
     ablation_block = _ablation_block_from_events(events)
+    control_block = _control_block_from_events(events)
     trace_id = _trace_id_for(audit_id, model_id, prompt, events)
     now = datetime.now(UTC).isoformat()
 
@@ -249,10 +250,7 @@ def _packet_from_worker_dump(
             "event_count": len(events),
         },
         "ablation": ablation_block,
-        "matched_controls": {
-            "status": "unavailable",
-            "detail": "Live worker path did not run matched controls in this first slice.",
-        },
+        "matched_controls": control_block,
         "verification": {
             "accepted": None,
             "proof_chips": _proof_chips_for_live_fields(
@@ -261,6 +259,7 @@ def _packet_from_worker_dump(
                 has_output=bool(output_text),
                 has_readout=bool(token_events or covers_event),
                 ablation_present=ablation_block.get("status") == "present",
+                control_present=control_block.get("status") == "present",
             ),
         },
         "provenance": {
@@ -281,9 +280,14 @@ def _packet_from_worker_dump(
                 "support_status": "supported" if token_events else "partially_supported",
             },
             _causal_claim_level(ablation_block),
+            _control_claim_level(control_block),
             {
                 "level": "runner_boundary",
-                "claim": "This packet does not include matched controls or verifier-owned ACCEPT/SUPPRESS.",
+                "claim": (
+                    "This packet does not include the 40-element subspace matched "
+                    "control or verifier-owned ACCEPT/SUPPRESS; the verdict is held "
+                    "for human review."
+                ),
                 "support_status": "not_applicable",
             },
         ],
@@ -296,15 +300,15 @@ def _packet_from_worker_dump(
         },
         "audit_scope": {
             "kind": "open_weight_live_trace",
-            "label": _audit_scope_label(ablation_block),
+            "label": _audit_scope_label(ablation_block, control_block),
             "internal_activation_access": True,
             "verdict_disposition": "held_for_human_review",
-            "detail": _audit_scope_detail(ablation_block),
+            "detail": _audit_scope_detail(ablation_block, control_block),
         },
         "caveats": [
             "Live worker Evidence Packet: this is real model I/O and live trace capture, not a final production ACCEPT/SUPPRESS verdict.",
             _causal_caveat(ablation_block),
-            "Matched-control probes are not run by this live path (separate slice).",
+            _control_caveat(control_block),
             "Foreign model output is retained as harvest data per current CAS-Native data policy.",
         ],
     }
@@ -436,14 +440,34 @@ def _causal_claim_level(ablation_block: Mapping[str, Any]) -> dict[str, str]:
     }
 
 
-def _audit_scope_label(ablation_block: Mapping[str, Any]) -> str:
+def _audit_scope_label(
+    ablation_block: Mapping[str, Any],
+    control_block: Mapping[str, Any] | None = None,
+) -> str:
+    control_present = bool(control_block) and control_block.get("status") == "present"
     if ablation_block.get("status") == "present":
-        return "live model I/O + readout + real single-target causal ablation"
+        label = "live model I/O + readout + real single-target causal ablation"
+        if control_present:
+            label += " + single-unit matched-control selectivity"
+        return label
     return "live model I/O + readout; causal/control not yet run"
 
 
-def _audit_scope_detail(ablation_block: Mapping[str, Any]) -> str:
+def _audit_scope_detail(
+    ablation_block: Mapping[str, Any],
+    control_block: Mapping[str, Any] | None = None,
+) -> str:
+    control_present = bool(control_block) and control_block.get("status") == "present"
     if ablation_block.get("status") == "present":
+        if control_present:
+            return (
+                "Live worker captured real model output, token-level readout, a "
+                "measured single-target ablation effect on loaded weights, AND a "
+                "single-unit matched-control selectivity test (target unit vs "
+                "random same-layer units). The 40-element subspace matched control "
+                "and verifier-owned ACCEPT/SUPPRESS remain separate proof "
+                "requirements; the verdict is held for human review."
+            )
         return (
             "Live worker captured real model output, token-level readout, and a "
             "measured single-target ablation effect on loaded weights. Matched "
@@ -470,16 +494,143 @@ def _causal_caveat(ablation_block: Mapping[str, Any]) -> str:
     )
 
 
+# ---------------------------------------------------------------------------
+# Matched control (single-unit selectivity) — the live worker's FIRST control
+# proof, consumed honestly from the worker dump.
+#
+# Honesty invariant enforced here:
+#   packet["matched_controls"]["status"] == "present"
+#       ⟺ an ablation_control_effect event exists AND is_real_model is True.
+# Demo-mode / failed-measurement control events (is_real_model False) keep the
+# status "unavailable" and carry NO measured deltas. This is the single place
+# that decides whether the control_proof chip is allowed to flip to "present".
+#
+# Scope honesty: this is the SINGLE-UNIT next-token selectivity control (target
+# unit vs random same-layer units), NOT the 40-element subspace matched control
+# (a separate, later proof slice).
+# ---------------------------------------------------------------------------
+
+_CONTROL_DELTA_KEYS = (
+    "n_controls",
+    "control_units",
+    "target_abs_logit_delta",
+    "control_mean_abs_logit_delta",
+    "control_max_abs_logit_delta",
+    "margin_over_control_max",
+    "selectivity_passed",
+    "seed",
+)
+
+
+def _control_block_from_events(events: list[Mapping[str, Any]]) -> dict[str, Any]:
+    """Build packet["matched_controls"] from the worker's ablation_control_effect
+    event.
+
+    Returns status "present" with the measured selectivity deltas ONLY when the
+    worker emitted an ablation_control_effect event flagged
+    ``is_real_model == True``. Any other case (no event, or a demo/failed event
+    with is_real_model False) is reported as "unavailable" — never as a real
+    control proof, and never carrying fabricated numbers.
+    """
+    event = next(
+        (e for e in events if e.get("type") == "ablation_control_effect"),
+        None,
+    )
+    if not isinstance(event, Mapping):
+        return {
+            "status": "unavailable",
+            "detail": (
+                "Live worker did not emit an ablation_control_effect event in "
+                "this slice."
+            ),
+        }
+
+    is_real = event.get("is_real_model") is True
+    target = event.get("target") if isinstance(event.get("target"), Mapping) else {}
+    if not is_real:
+        # A demo-flagged or failed-measurement control is NOT a control proof.
+        return {
+            "status": "unavailable",
+            "is_real_model": False,
+            "target": {"layer": target.get("layer"), "unit": target.get("unit")},
+            "mode": event.get("mode"),
+            "detail": (
+                "Matched-control event was demo-flagged (is_real_model=False): no "
+                "real control units were ablated, so no control proof is claimed. "
+                + str(event.get("detail") or "")
+            ).strip(),
+        }
+
+    block: dict[str, Any] = {
+        "status": "present",
+        "is_real_model": True,
+        "control_kind": "single_unit_next_token_selectivity",
+        "target": {"layer": target.get("layer"), "unit": target.get("unit")},
+        "mode": event.get("mode"),
+        "detail": str(
+            event.get("detail")
+            or "Single-unit selectivity control measured on loaded weights."
+        ),
+    }
+    for key in _CONTROL_DELTA_KEYS:
+        block[key] = event.get(key)
+    return block
+
+
+def _control_claim_level(control_block: Mapping[str, Any]) -> dict[str, str]:
+    """Claim-level entry describing the matched-control status honestly."""
+    if control_block.get("status") == "present":
+        outcome = "passed" if control_block.get("selectivity_passed") else "did NOT pass"
+        return {
+            "level": "live_matched_control",
+            "claim": (
+                "A single-unit selectivity control was measured on loaded weights "
+                "(target unit vs random same-layer units); selectivity "
+                f"{outcome}. This is a single-unit next-token control, not the "
+                "40-element subspace matched control."
+            ),
+            "support_status": "supported",
+        }
+    return {
+        "level": "live_matched_control",
+        "claim": (
+            "No real matched-control selectivity test was measured in this live "
+            "slice (demo-flagged or not run); control proof is not claimed."
+        ),
+        "support_status": "not_applicable",
+    }
+
+
+def _control_caveat(control_block: Mapping[str, Any]) -> str:
+    if control_block.get("status") == "present":
+        return (
+            "Control proof here is a single-unit selectivity test: the ablated "
+            "target unit was scored against random same-layer control units. This "
+            "is the single-unit next-token control, NOT the 40-element subspace "
+            "matched control (a separate, later slice)."
+        )
+    return (
+        "No real matched-control selectivity test was run in this live path "
+        "(demo mode or not run), so the control-proof chip stays unavailable."
+    )
+
+
 def _proof_chips_for_live_packet(packet: Mapping[str, Any]) -> list[dict[str, str]]:
     trace_id = str(packet.get("trace_id") or "unknown")
     model = packet.get("model") if isinstance(packet.get("model"), Mapping) else {}
     ablation = packet.get("ablation") if isinstance(packet.get("ablation"), Mapping) else {}
+    control = (
+        packet.get("matched_controls")
+        if isinstance(packet.get("matched_controls"), Mapping)
+        else {}
+    )
     return _proof_chips_for_live_fields(
         trace_id=trace_id,
         model_id=str(model.get("model_key") or "unknown"),
         has_output=bool((packet.get("output") or {}).get("text")) if isinstance(packet.get("output"), Mapping) else False,
         has_readout=bool(packet.get("readout")),
         ablation_present=ablation.get("status") == "present",
+        control_present=control.get("status") == "present",
     )
 
 
@@ -490,6 +641,7 @@ def _proof_chips_for_live_fields(
     has_output: bool,
     has_readout: bool,
     ablation_present: bool = False,
+    control_present: bool = False,
 ) -> list[dict[str, str]]:
     return [
         _chip(
@@ -522,10 +674,23 @@ def _proof_chips_for_live_fields(
                 "live-worker slice."
             ),
         ),
+        # Honesty invariant: control_proof flips to "present" ONLY when a REAL,
+        # measured matched-control selectivity event exists (is_real_model true).
+        # ``control_present`` is derived solely from _control_block_from_events,
+        # which gates "present" on is_real_model — so this chip can never claim a
+        # control proof for a demo-flagged or absent control. Scope: single-unit
+        # next-token selectivity, NOT the 40-element subspace matched control.
         _chip(
             "control_proof",
-            "unavailable",
-            "No matched-control proof was run in this live-worker slice.",
+            "present" if control_present else "unavailable",
+            (
+                "Single-unit selectivity control measured on loaded weights "
+                "(target unit vs random same-layer units); see packet "
+                "matched_controls block. Single-unit next-token control, not the "
+                "40-element subspace matched control."
+                if control_present
+                else "No matched-control proof was run in this live-worker slice."
+            ),
         ),
         _chip(
             "output_proof",
