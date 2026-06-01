@@ -40,6 +40,10 @@ from api.services.cas_harness_distributed_audits import (
     record_worker_evidence,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.cas_harness_model_provenance import (
+    ModelProvenanceManifest as ServiceModelProvenanceManifest,
+    WeightFileRef as ServiceWeightFileRef,
+)
 from api.services.cas_harness_static_evidence_anchor import (
     load_anchored_static_packet_payload,
     verify_anchored_static_packet,
@@ -403,6 +407,53 @@ class ScalePlanMemoryEstimate(BaseModel):
     estimated_memory_per_worker_gb: float
 
 
+class ModelProvenanceWeightFileRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    path: str = Field(..., min_length=1, max_length=512)
+    sha256: str = Field(..., min_length=1, max_length=256)
+    size_bytes: int | None = Field(default=None, ge=0)
+
+
+class ModelProvenanceManifestRequest(BaseModel):
+    """Caller-supplied model provenance/license/weight-hash manifest.
+
+    Required to create a real frontier-scale (300B-4T) distributed run. The gate
+    refuses the run with HTTP 422 if this is missing, the model_id does not match
+    the requested model, the license is not a recognized open-weight license, or a
+    declared SHA-256 is malformed. Weight-hash *recompute* happens worker-side; at
+    create time a well-formed manifest is recorded as DECLARED_NOT_VERIFIED.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    model_id: str = Field(..., min_length=1, max_length=200)
+    source_uri: str = Field(..., min_length=1, max_length=1024)
+    license_id: str = Field(..., min_length=1, max_length=128)
+    weight_files: list[ModelProvenanceWeightFileRequest] = Field(
+        ..., min_length=1, max_length=4096
+    )
+    revision: str | None = Field(default=None, max_length=200)
+    total_size_bytes: int | None = Field(default=None, ge=0)
+    publisher: str | None = Field(default=None, max_length=200)
+    signed_by: str | None = Field(default=None, max_length=200)
+
+    def to_service_manifest(self) -> ServiceModelProvenanceManifest:
+        return ServiceModelProvenanceManifest(
+            model_id=self.model_id,
+            source_uri=self.source_uri,
+            license_id=self.license_id,
+            weight_files=tuple(
+                ServiceWeightFileRef(path=f.path, sha256=f.sha256, size_bytes=f.size_bytes)
+                for f in self.weight_files
+            ),
+            revision=self.revision,
+            total_size_bytes=self.total_size_bytes,
+            publisher=self.publisher,
+            signed_by=self.signed_by,
+        )
+
+
 class ScalePlanRequest(BaseModel):
     """Open-weight enterprise planning request.
 
@@ -432,6 +483,14 @@ class ScalePlanRequest(BaseModel):
             "this acknowledgement a >300B request is refused with HTTP 422. This flag only "
             "unlocks the request path; it does not by itself guarantee compute, adapter, "
             "probe, provenance, or data-handling readiness for the run."
+        ),
+    )
+    provenance: ModelProvenanceManifestRequest | None = Field(
+        default=None,
+        description=(
+            "Model provenance/license/weight-hash manifest. Required to CREATE a real "
+            "frontier-scale (300B-4T) distributed run via /distributed/session; ignored by "
+            "the planning-only /scale-plan endpoint. Frontier run-gate (5)."
         ),
     )
 
@@ -476,6 +535,34 @@ class DistributedWorkerEvidenceResponse(BaseModel):
     updated_at: str
 
 
+class ModelProvenanceFileVerificationResponse(BaseModel):
+    path: str
+    declared_sha256: str
+    verified: bool
+    recomputed_sha256: str | None = None
+    note: str
+
+
+class ModelProvenanceSummaryResponse(BaseModel):
+    status: Literal[
+        "PROVENANCE_VERIFIED",
+        "PROVENANCE_DECLARED_NOT_VERIFIED",
+        "PROVENANCE_REJECTED",
+    ]
+    model_id: str | None = None
+    license_id: str | None = None
+    license_recognized: bool
+    source_uri: str | None = None
+    revision: str | None = None
+    weight_file_count: int
+    verified_file_count: int
+    all_hashes_verified: bool
+    manifest_content_digest: str | None = None
+    notice: str
+    reasons: list[str]
+    file_verifications: list[ModelProvenanceFileVerificationResponse]
+
+
 class DistributedAuditResponse(BaseModel):
     audit_id: str
     plan_id: str
@@ -485,6 +572,7 @@ class DistributedAuditResponse(BaseModel):
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     evidence_packet_trace_id: str | None = None
     merge_reason: str
+    provenance: ModelProvenanceSummaryResponse | None = None
     created_at: str
     updated_at: str
     plan: ScalePlanResponse
@@ -773,7 +861,10 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
                 audit_depth=req.audit_depth,
                 minimum_worker_count=req.minimum_worker_count,
                 accept_experimental_frontier=req.accept_experimental_frontier,
-            )
+            ),
+            provenance=req.provenance.to_service_manifest()
+            if req.provenance is not None
+            else None,
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))

@@ -280,7 +280,10 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert refused.status_code == 422
     assert "accept_experimental_frontier" in refused.text
 
-    allowed = client.post(
+    # Accepting experimental risk unlocks the request path but is NOT enough on
+    # its own: a real frontier run also needs a model provenance/license/hash
+    # manifest (frontier run-gate 5). Without it the run is refused 422.
+    refused_no_provenance = client.post(
         "/api/cas-harness/audit/distributed/session",
         json={
             "model_id": "frontier/open-1t",
@@ -289,8 +292,37 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
         },
         headers=auth_headers,
     )
+    assert refused_no_provenance.status_code == 422
+    assert "provenance" in refused_no_provenance.text.lower()
+
+    # Ack + a well-formed, identity-matching, open-weight-licensed manifest is
+    # enough to CREATE the run. The hashes are declared, not yet recomputed, so
+    # the honest status is PROVENANCE_DECLARED_NOT_VERIFIED -- never a verdict.
+    allowed = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "frontier/open-1t",
+            "parameter_count_b": 1000,
+            "accept_experimental_frontier": True,
+            "provenance": {
+                "model_id": "frontier/open-1t",
+                "source_uri": "https://huggingface.co/frontier/open-1t",
+                "license_id": "apache-2.0",
+                "weight_files": [
+                    {"path": "model-00001-of-00002.safetensors", "sha256": "a" * 64},
+                    {"path": "model-00002-of-00002.safetensors", "sha256": "b" * 64},
+                ],
+                "revision": "main",
+            },
+        },
+        headers=auth_headers,
+    )
     assert allowed.status_code == 200
-    assert allowed.json()["plan"]["validation_status"] == "EXPERIMENTAL_NOT_VALIDATED"
+    body = allowed.json()
+    assert body["plan"]["validation_status"] == "EXPERIMENTAL_NOT_VALIDATED"
+    assert body["provenance"]["status"] == "PROVENANCE_DECLARED_NOT_VERIFIED"
+    assert body["provenance"]["license_recognized"] is True
+    assert body["provenance"]["all_hashes_verified"] is False
 
 
 def test_verify_reference_model_target_public_for_alpha_console(client):

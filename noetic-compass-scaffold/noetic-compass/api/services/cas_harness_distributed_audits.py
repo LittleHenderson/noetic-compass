@@ -16,6 +16,12 @@ import json
 from typing import Literal
 from uuid import uuid4
 
+from api.services.cas_harness_model_provenance import (
+    ModelProvenanceManifest,
+    ProvenanceSummary,
+    summarize_model_provenance,
+    validate_frontier_provenance,
+)
 from api.services.cas_harness_scale_planner import ScalePlan, ScalePlanRequest, build_scale_plan
 
 
@@ -82,6 +88,7 @@ class DistributedAuditRecord:
     confidence: float | None = None
     evidence_packet_trace_id: str | None = None
     merge_reason: str = "Distributed audit planned; no worker evidence has been merged yet."
+    provenance: ProvenanceSummary | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -93,6 +100,7 @@ class DistributedAuditRecord:
             "confidence": self.confidence,
             "evidence_packet_trace_id": self.evidence_packet_trace_id,
             "merge_reason": self.merge_reason,
+            "provenance": self.provenance.to_dict() if self.provenance is not None else None,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "plan": self.plan.to_dict(),
@@ -111,8 +119,30 @@ def reset_distributed_audits_for_tests() -> None:
     _DISTRIBUTED_AUDITS.clear()
 
 
-def create_distributed_audit(request: ScalePlanRequest) -> DistributedAuditRecord:
+def create_distributed_audit(
+    request: ScalePlanRequest,
+    *,
+    provenance: ModelProvenanceManifest | None = None,
+) -> DistributedAuditRecord:
     plan = build_scale_plan(request)
+
+    # Frontier run-gate (5): a real 300B-4T run (the EXPERIMENTAL_NOT_VALIDATED rung)
+    # must carry a valid model provenance/license/weight-hash manifest, or it is
+    # refused here (the caller converts this ValueError to HTTP 422). At create time
+    # no weights are loaded in this tier, so a good manifest lands at
+    # DECLARED_NOT_VERIFIED; the probe workers recompute the hashes downstream.
+    # Below the frontier rung a manifest is optional -- if one is supplied we record
+    # its honest summary, but we never block the validated/engineered lanes on it.
+    provenance_summary: ProvenanceSummary | None = None
+    if plan.validation_status == "EXPERIMENTAL_NOT_VALIDATED":
+        provenance_summary = validate_frontier_provenance(
+            expected_model_id=plan.model_id, manifest=provenance
+        )
+    elif provenance is not None:
+        provenance_summary = summarize_model_provenance(
+            manifest=provenance, expected_model_id=plan.model_id
+        )
+
     now = datetime.now(UTC).isoformat()
     audit_id = _audit_id_for(plan)
 
@@ -136,6 +166,7 @@ def create_distributed_audit(request: ScalePlanRequest) -> DistributedAuditRecor
         worker_evidence=worker_evidence,
         created_at=now,
         updated_at=now,
+        provenance=provenance_summary,
     )
     _DISTRIBUTED_AUDITS[audit_id] = record
     return record

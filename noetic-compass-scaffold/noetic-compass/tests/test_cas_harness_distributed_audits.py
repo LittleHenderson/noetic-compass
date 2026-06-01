@@ -30,6 +30,35 @@ def _scale_payload(parameter_count_b: int = 100, num_layers: int = 20) -> dict:
     }
 
 
+def _provenance_payload(model_id: str, *, license_id: str = "apache-2.0") -> dict:
+    """A well-formed model provenance/license/weight-hash manifest body.
+
+    ``model_id`` must match the run request's model_id or the gate rejects it.
+    The SHA-256 values are well-formed but declared-only (no bytes on disk at
+    the API tier), so a good manifest lands at PROVENANCE_DECLARED_NOT_VERIFIED.
+    """
+
+    return {
+        "model_id": model_id,
+        "source_uri": f"https://huggingface.co/{model_id}",
+        "license_id": license_id,
+        "weight_files": [
+            {"path": "model-00001-of-00002.safetensors", "sha256": "a" * 64},
+            {"path": "model-00002-of-00002.safetensors", "sha256": "b" * 64},
+        ],
+        "revision": "main",
+    }
+
+
+def _frontier_payload(parameter_count_b: int = 405, num_layers: int = 120) -> dict:
+    """A frontier-lane (300B-4T -> EXPERIMENTAL_NOT_VALIDATED) run request body."""
+
+    return {
+        **_scale_payload(parameter_count_b, num_layers),
+        "accept_experimental_frontier": True,
+    }
+
+
 def test_distributed_routes_registered(client):
     openapi = client.get("/openapi.json").json()
 
@@ -344,3 +373,121 @@ def test_distributed_endpoint_rejects_black_box_customer_models(client, auth_hea
 
     assert resp.status_code == 422
     assert "open_weight" in resp.text
+
+
+# --- Frontier run-gate (5): model provenance / license / weight-hash manifest ---
+
+
+def test_frontier_run_refused_without_provenance_manifest(client, auth_headers):
+    # Accepting experimental risk is necessary but not sufficient: a real
+    # frontier run also needs a provenance manifest. Without one, refuse 422.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_frontier_payload(405, 120),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "provenance" in resp.text.lower()
+
+
+def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["plan"]["validation_status"] == "EXPERIMENTAL_NOT_VALIDATED"
+    prov = body["provenance"]
+    # Honest: a declared-only manifest never claims VERIFIED at the API tier.
+    assert prov["status"] == "PROVENANCE_DECLARED_NOT_VERIFIED"
+    assert prov["license_recognized"] is True
+    assert prov["weight_file_count"] == 2
+    assert prov["verified_file_count"] == 0
+    assert prov["all_hashes_verified"] is False
+    assert prov["manifest_content_digest"]
+
+
+def test_frontier_run_rejects_provenance_with_mismatched_model_id(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    # Manifest is for a different model than the one being audited.
+    payload["provenance"] = _provenance_payload("someone-else/other-405b")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "does not match the requested" in resp.text
+
+
+def test_frontier_run_rejects_unrecognized_license(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(
+        payload["model_id"], license_id="proprietary-closed-weights"
+    )
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "open-weight" in resp.text.lower()
+
+
+def test_frontier_run_rejects_malformed_weight_hash(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    provenance = _provenance_payload(payload["model_id"])
+    provenance["weight_files"][0]["sha256"] = "not-a-valid-sha256"
+    payload["provenance"] = provenance
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "SHA-256" in resp.text
+
+
+def test_below_frontier_run_does_not_require_provenance(client, auth_headers):
+    # A 100B run is ENGINEERED_NOT_VALIDATED, not frontier -- provenance is
+    # optional there and its absence must never block the run.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(100, 20),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    assert resp.json()["provenance"] is None
+
+
+def test_below_frontier_run_records_optional_provenance_summary(client, auth_headers):
+    # If a below-frontier caller volunteers a manifest, we record the honest
+    # summary without gating on it.
+    payload = _scale_payload(100, 20)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    prov = resp.json()["provenance"]
+    assert prov is not None
+    assert prov["status"] == "PROVENANCE_DECLARED_NOT_VERIFIED"
+    assert prov["license_recognized"] is True
