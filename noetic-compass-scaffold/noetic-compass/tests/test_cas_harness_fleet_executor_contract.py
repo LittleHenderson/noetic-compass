@@ -45,7 +45,10 @@ def _create_dispatched_audit(
             precision="int4" if parameter_count_b == 300 else "bf16",
             available_gpu_memory_gb=80,
             minimum_worker_count=minimum_worker_count,
-        )
+        ),
+        # A fleet run is a real distributed run, so it acknowledges the audit's data
+        # capture (universal run-gate 8) -- the harvest happens at every size.
+        data_capture_acknowledged=True,
     )
     dispatched = dispatch_distributed_audit(audit.audit_id)
     assert dispatched is not None

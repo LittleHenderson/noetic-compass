@@ -38,6 +38,10 @@ def auth_headers(request) -> dict[str, str]:
 
 
 def _scale_payload(parameter_count_b: int = 20, num_layers: int = 8, **overrides) -> dict:
+    # A fleet run is a real distributed run, so it must acknowledge the audit's data
+    # capture (universal run-gate 8): every distributed run harvests the model's signal
+    # to the immutable store regardless of size. The base body carries the ack; overrides
+    # can still pop or flip it for tests that exercise a missing acknowledgment.
     payload = {
         "model_id": f"customer/open-weight-{parameter_count_b}b",
         "weight_access": "open_weight",
@@ -45,6 +49,7 @@ def _scale_payload(parameter_count_b: int = 20, num_layers: int = 8, **overrides
         "num_layers": num_layers,
         "precision": "int4" if parameter_count_b == 300 else "bf16",
         "available_gpu_memory_gb": 80,
+        "accept_audit_data_capture": True,
     }
     payload.update(overrides)
     return payload

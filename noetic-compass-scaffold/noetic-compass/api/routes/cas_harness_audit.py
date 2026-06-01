@@ -613,6 +613,21 @@ class ScalePlanRequest(BaseModel):
             "/scale-plan endpoint. Frontier run-gate (4)."
         ),
     )
+    accept_audit_data_capture: bool = Field(
+        default=False,
+        description=(
+            "Required to CREATE *any* real distributed run via /distributed/session, "
+            "frontier or not. Every distributed audit captures the target model's "
+            "inputs/outputs, the pooled hidden-state activations the probe hooks, the CAS "
+            "axis readout each shard emits, and the verdict, and commits them to an "
+            "immutable write-once store reused as CAS-Native training signal. This "
+            "acknowledges that capture, indefinite WORM retention, and reuse. It is "
+            "universal (not frontier-only): the harvest is intrinsic to the method and "
+            "does not scale with model size, so a 20B run requires it exactly as a 1T one. "
+            "Ignored by the planning-only /scale-plan endpoint, which captures nothing. "
+            "Run-gate (8)."
+        ),
+    )
     provenance: ModelProvenanceManifestRequest | None = Field(
         default=None,
         description=(
@@ -816,6 +831,21 @@ class CostExposureSummaryResponse(BaseModel):
     reasons: list[str]
 
 
+class DataCaptureSummaryResponse(BaseModel):
+    status: Literal[
+        "DATA_CAPTURE_WORM_COMMITTED",
+        "DATA_CAPTURE_ACKNOWLEDGED",
+        "DATA_CAPTURE_NOT_ACKNOWLEDGED",
+    ]
+    acknowledged: bool
+    capture_committed: bool
+    captured_signal_classes: list[str]
+    retention_model: str
+    reuse_purpose: str
+    notice: str
+    reasons: list[str]
+
+
 class DistributedAuditResponse(BaseModel):
     audit_id: str
     plan_id: str
@@ -831,6 +861,7 @@ class DistributedAuditResponse(BaseModel):
     probe: ProbeCompatibilitySummaryResponse | None = None
     compute: ComputeFeasibilitySummaryResponse | None = None
     cost: CostExposureSummaryResponse | None = None
+    data_capture: DataCaptureSummaryResponse | None = None
     created_at: str
     updated_at: str
     plan: ScalePlanResponse
@@ -1112,8 +1143,10 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
     to a probe adapter the worker can hook (gate 6), unless a structurally loadable
     CAS probe-readout specification is attached (gate 7), unless the declared compute
     envelope can physically hold the model (gate 3), and unless the caller acknowledges
-    the run's caller-owned, unquoted compute cost (gate 4). A non-open-weight access
-    mode is refused at every size (gate 2). >4T is always refused.
+    the run's caller-owned, unquoted compute cost (gate 4). Two gates apply at every
+    size: a non-open-weight access mode is refused (gate 2), and *any* run is refused
+    unless the caller acknowledges that the audit captures the model's signal to an
+    immutable store reused as CAS-Native training data (gate 8). >4T is always refused.
     """
     try:
         record = create_distributed_audit(
@@ -1141,6 +1174,7 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
             if req.compute is not None
             else None,
             cost_acknowledged=req.accept_frontier_compute_cost,
+            data_capture_acknowledged=req.accept_audit_data_capture,
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))

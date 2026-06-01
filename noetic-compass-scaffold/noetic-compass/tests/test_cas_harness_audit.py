@@ -408,17 +408,52 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert "accept_frontier_compute_cost" in refused_no_cost.text
     assert "$" not in refused_no_cost.text
 
+    # All five frontier gates cleared -- including the cost ack -- still is NOT enough on
+    # its own: every distributed run is also a data *harvest* (run-gate 8, UNIVERSAL).
+    # The audit captures the model's I/O, the pooled activations the probe hooks, the CAS
+    # axis readout, and the verdict, and commits them to an immutable write-once store
+    # reused as CAS-Native training signal. The caller must acknowledge that capture. Gate
+    # (8) runs LAST, so with all earlier gates satisfied here the 422 we assert is
+    # unambiguously the data-capture gate firing.
+    refused_no_data = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "frontier/open-1t",
+            "parameter_count_b": 1000,
+            "accept_experimental_frontier": True,
+            "accept_frontier_compute_cost": True,
+            "provenance": valid_provenance,
+            "architecture": {"model_type": "llama"},
+            "probe": {
+                "schema_version": "cas_probe_linear_v1",
+                "axes": ["F1", "F2", "F3"],
+                "feature_dimension": 200,
+            },
+            "compute": {
+                "accelerator_count": 64,
+                "accelerator_memory_gb": 80,
+                "accelerator_type": "H100-80GB",
+            },
+        },
+        headers=auth_headers,
+    )
+    assert refused_no_data.status_code == 422
+    assert "data capture not acknowledged" in refused_no_data.text.lower()
+    assert "accept_audit_data_capture" in refused_no_data.text
+
     # Ack + a well-formed, identity-matching, open-weight-licensed manifest + a
     # declared architecture that resolves to a supported probe adapter + a
     # structurally loadable CAS probe spec + a compute envelope that can physically
-    # hold the model + an explicit cost acknowledgement is enough to CREATE the run.
+    # hold the model + an explicit cost acknowledgement + an explicit data-capture
+    # acknowledgement is enough to CREATE the run.
     # The hashes are declared (not recomputed), the layout is confirmed worker-side at
     # load time, the probe is actually loaded and run worker-side, the fit is computed
-    # from the planner's own memory math, and the cost is acknowledged (never metered)
-    # -- all at the API tier, which touches no weights -- so the honest statuses are
+    # from the planner's own memory math, the cost is acknowledged (never metered), and
+    # the data capture is acknowledged (never WORM-committed) -- all at the API tier,
+    # which touches no weights -- so the honest statuses are
     # PROVENANCE_DECLARED_NOT_VERIFIED + ARCHITECTURE_ADAPTER_AVAILABLE +
-    # PROBE_COMPATIBILITY_DECLARED + COMPUTE_FEASIBILITY_DECLARED + COST_ACKNOWLEDGED
-    # -- never a verdict.
+    # PROBE_COMPATIBILITY_DECLARED + COMPUTE_FEASIBILITY_DECLARED + COST_ACKNOWLEDGED +
+    # DATA_CAPTURE_ACKNOWLEDGED -- never a verdict.
     allowed = client.post(
         "/api/cas-harness/audit/distributed/session",
         json={
@@ -426,6 +461,7 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
             "parameter_count_b": 1000,
             "accept_experimental_frontier": True,
             "accept_frontier_compute_cost": True,
+            "accept_audit_data_capture": True,
             "provenance": valid_provenance,
             "architecture": {"model_type": "llama"},
             "probe": {
@@ -462,6 +498,14 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert body["cost"]["status"] == "COST_ACKNOWLEDGED"
     assert body["cost"]["acknowledged"] is True
     assert body["cost"]["cost_metered"] is False
+    # Run-gate (8): the caller acknowledged the run's data capture. Acknowledged is enough
+    # to CREATE the run but is never WORM_COMMITTED at the API tier -- the immutable write
+    # happens fleet-side, when the workers run and the model actually executes. The receipt
+    # surfaces the real captured-signal classes, never an invented capture scope.
+    assert body["data_capture"]["status"] == "DATA_CAPTURE_ACKNOWLEDGED"
+    assert body["data_capture"]["acknowledged"] is True
+    assert body["data_capture"]["capture_committed"] is False
+    assert "pooled_hidden_state_activations" in body["data_capture"]["captured_signal_classes"]
     # Run-gate (2) rides along on every distributed run: an open-weight target is
     # mechanistically reachable, so the access receipt is DECLARED -- never
     # VERIFIED at the API tier, which touches no weights.

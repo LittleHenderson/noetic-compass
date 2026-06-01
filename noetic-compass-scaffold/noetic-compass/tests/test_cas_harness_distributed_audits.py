@@ -20,6 +20,9 @@ def auth_headers(request) -> dict[str, str]:
 
 
 def _scale_payload(parameter_count_b: int = 100, num_layers: int = 20) -> dict:
+    # Every distributed run -- frontier or not -- must acknowledge audit data capture
+    # (universal run-gate 8), so the base body carries it. Tests that exercise a
+    # *missing* data-capture ack pop ``accept_audit_data_capture`` back off.
     return {
         "model_id": f"customer/open-weight-{parameter_count_b}b",
         "weight_access": "open_weight",
@@ -27,6 +30,7 @@ def _scale_payload(parameter_count_b: int = 100, num_layers: int = 20) -> dict:
         "num_layers": num_layers,
         "precision": "int4" if parameter_count_b == 300 else "bf16",
         "available_gpu_memory_gb": 80,
+        "accept_audit_data_capture": True,
     }
 
 
@@ -1146,3 +1150,120 @@ def test_below_frontier_run_records_optional_cost_acknowledgment(client, auth_he
     # while the plan magnitudes stay real.
     assert cost["recommended_worker_count"] > 0
     assert cost["declared_accelerator_count"] is None
+
+
+# --- Distributed run-gate (8): data-capture acknowledgment (UNIVERSAL) ---
+
+
+def test_below_frontier_run_refused_without_data_capture_acknowledgment(client, auth_headers):
+    # The universal-enforcement proof: gate (8) is NOT frontier-only. A 100B run is
+    # ENGINEERED_NOT_VALIDATED -- below the frontier, so gates (3)-(7) never fire -- yet
+    # it still harvests the model's real signal (I/O + pooled activations + readout +
+    # verdict) to the immutable store exactly as a 1T run does. So the data-capture ack
+    # is required here too; with it popped, the only remaining run gate is gate (8), so
+    # the 422 we assert is unambiguously the data-capture gate firing on a small run.
+    payload = _scale_payload(100, 20)
+    payload.pop("accept_audit_data_capture")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    text = resp.text.lower()
+    assert "data capture not acknowledged" in text
+    assert "accept_audit_data_capture" in resp.text
+    # The refusal names what is actually captured and where it is retained.
+    assert "activations" in text
+    assert "write-once" in text
+
+
+def test_below_frontier_run_with_data_capture_ack_surfaces_real_scope(client, auth_headers):
+    # With the data-capture ack present (it rides in from _scale_payload), the below-
+    # frontier run is created and carries an honest capture receipt that surfaces the
+    # REAL classes the audit harvests -- never an invented capture scope.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(100, 20),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    data_capture = resp.json()["data_capture"]
+    assert data_capture is not None
+    assert data_capture["status"] == "DATA_CAPTURE_ACKNOWLEDGED"
+    assert data_capture["acknowledged"] is True
+    # Honest: acknowledged is never WORM_COMMITTED at the API tier -- the immutable write
+    # happens fleet-side, when the workers run and a model has actually executed.
+    assert data_capture["capture_committed"] is False
+    # Every captured class is real signal the audit already produces.
+    assert data_capture["captured_signal_classes"] == [
+        "model_input_output",
+        "pooled_hidden_state_activations",
+        "cas_axis_readout",
+        "audit_verdict",
+    ]
+    assert data_capture["retention_model"] == "write_once_read_many"
+    assert data_capture["reuse_purpose"] == "cas_native_training_corpus"
+    assert data_capture["reasons"] == []
+
+
+def test_frontier_run_refused_without_data_capture_acknowledgment(client, auth_headers):
+    # Gate (8) is universal, so it applies at the frontier exactly as below it. With
+    # gates (2)/(5)/(6)/(7)/(3)/(4) all cleared and only the data-capture ack removed, the
+    # 422 we assert is unambiguously gate (8) -- the last gate -- firing.
+    payload = _frontier_costed_payload()
+    payload.pop("accept_audit_data_capture")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "data capture not acknowledged" in resp.text.lower()
+    assert "accept_audit_data_capture" in resp.text
+
+
+def test_data_capture_gate_fires_last_after_the_cost_gate(client, auth_headers):
+    # Gate-ordering proof: data capture (8) is the LAST gate, firing after cost (4). With
+    # BOTH the cost ack and the data ack removed from an otherwise complete frontier run,
+    # the gate that fires is cost (4), not data capture (8) -- so the refusal names cost
+    # and stays silent about data capture, pinning gate (8) as the very last to run.
+    payload = _frontier_costed_payload()
+    payload.pop("accept_frontier_compute_cost")
+    payload.pop("accept_audit_data_capture")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    text = resp.text.lower()
+    assert "cost not acknowledged" in text
+    assert "data capture not acknowledged" not in text
+
+
+def test_frontier_run_with_all_gates_surfaces_data_capture_receipt(client, auth_headers):
+    # A fully-gated frontier run (gates 2/5/6/7/3/4 cleared, data ack present) is created
+    # and carries the same honest capture receipt -- the harvest is identical at the
+    # frontier, never WORM_COMMITTED at the API tier where no model has executed yet.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_frontier_costed_payload(),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    data_capture = resp.json()["data_capture"]
+    assert data_capture is not None
+    assert data_capture["status"] == "DATA_CAPTURE_ACKNOWLEDGED"
+    assert data_capture["acknowledged"] is True
+    assert data_capture["capture_committed"] is False
+    assert "pooled_hidden_state_activations" in data_capture["captured_signal_classes"]
+    assert "cas_axis_readout" in data_capture["captured_signal_classes"]

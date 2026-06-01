@@ -33,6 +33,10 @@ from api.services.cas_harness_cost_acknowledgment import (
     summarize_cost_exposure,
     validate_frontier_cost_acknowledgment,
 )
+from api.services.cas_harness_data_governance import (
+    DataCaptureSummary,
+    validate_distributed_data_capture,
+)
 from api.services.cas_harness_model_access import (
     ModelAccessSummary,
     summarize_model_access,
@@ -121,6 +125,7 @@ class DistributedAuditRecord:
     probe: ProbeCompatibilitySummary | None = None
     compute: ComputeFeasibilitySummary | None = None
     cost: CostExposureSummary | None = None
+    data_capture: DataCaptureSummary | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -138,6 +143,7 @@ class DistributedAuditRecord:
             "probe": self.probe.to_dict() if self.probe is not None else None,
             "compute": self.compute.to_dict() if self.compute is not None else None,
             "cost": self.cost.to_dict() if self.cost is not None else None,
+            "data_capture": self.data_capture.to_dict() if self.data_capture is not None else None,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "plan": self.plan.to_dict(),
@@ -164,6 +170,7 @@ def create_distributed_audit(
     probe: ProbeReadoutSpecification | None = None,
     compute: ComputeEnvelopeDeclaration | None = None,
     cost_acknowledged: bool = False,
+    data_capture_acknowledged: bool = False,
 ) -> DistributedAuditRecord:
     plan = build_scale_plan(request)
 
@@ -258,6 +265,22 @@ def create_distributed_audit(
             plan=plan, compute=compute_summary, acknowledged=cost_acknowledged
         )
 
+    # Run-gate (8): every distributed run -- frontier or not -- is a data *harvest*. It
+    # captures the target model's I/O, the pooled activations the probe hooks, the CAS
+    # axis readout each shard emits, and the verdict, and commits them to an immutable
+    # write-once store reused as CAS-Native training signal. This gate refuses
+    # (ValueError -> HTTP 422) unless the caller acknowledges that capture, retention,
+    # and reuse. It is UNIVERSAL, not frontier-only (mirroring gate (2)): the harvest is
+    # intrinsic to the method and does not scale with model size, so the acknowledgment is
+    # required for a 20B run exactly as for a 1T one. It runs last, after the frontier
+    # gates, so a still-unmet earlier gate surfaces first; for a below-frontier run, where
+    # none of the frontier gates fire, this is the one run gate that still applies. It is a
+    # run gate, not a plan gate -- a planning-only /scale-plan preview captures nothing, so
+    # it is never enforced there (build_scale_plan above does not run it).
+    data_capture_summary = validate_distributed_data_capture(
+        acknowledged=data_capture_acknowledged
+    )
+
     now = datetime.now(UTC).isoformat()
     audit_id = _audit_id_for(plan)
 
@@ -287,6 +310,7 @@ def create_distributed_audit(
         probe=probe_summary,
         cost=cost_summary,
         compute=compute_summary,
+        data_capture=data_capture_summary,
     )
     _DISTRIBUTED_AUDITS[audit_id] = record
     return record
