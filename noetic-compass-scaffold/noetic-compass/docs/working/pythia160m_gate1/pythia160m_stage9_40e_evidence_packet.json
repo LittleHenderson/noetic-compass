@@ -1,0 +1,489 @@
+{
+  "baseline_proof": {
+    "compact_gloss_v0": {
+      "note": "compact-gloss v0 is blocked because it is 100% text-only.",
+      "status": "blocked_text_only",
+      "text_only_acc": 1.0,
+      "text_only_acc_pct": 100.0
+    },
+    "compact_gloss_v0_text_only_acc": 1.0,
+    "compact_gloss_v0_text_only_acc_pct": 100.0,
+    "confirmed_text_test_acc": 0.4924107142857143,
+    "confirmed_text_test_acc_pct": 49.241071,
+    "hidden_probe_test_acc": 0.95625,
+    "hidden_probe_test_acc_pct": 95.625,
+    "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
+    "observed_source_fields": {
+      "compact_gloss_v0_status": null,
+      "compact_gloss_v0_text_only_acc": null,
+      "confirmed_text_test_acc": null,
+      "hidden_probe_test_acc": 0.9171875,
+      "shuffled_label_hidden_mean_test_acc": 0.02482142857142857,
+      "text_hash_test_acc": 0.5
+    },
+    "shuffled_label_hidden_mean_test_acc": 0.02619419642857143,
+    "shuffled_label_hidden_mean_test_acc_pct": 2.619,
+    "source": "PR #102 corrected 20B Stage 9 original 40E readout",
+    "source_field_checks": {
+      "compact_gloss_v0_status": "not_present_in_source_report",
+      "compact_gloss_v0_text_only_acc": "not_present_in_source_report",
+      "confirmed_text_test_acc": "not_present_in_source_report",
+      "hidden_probe_test_acc": "differs_from_corrected_baseline",
+      "shuffled_label_hidden_mean_test_acc": "differs_from_corrected_baseline",
+      "text_hash_test_acc": "matches_corrected_baseline"
+    },
+    "status": "present",
+    "text_hash_test_acc": 0.5,
+    "text_hash_test_acc_pct": 50.0
+  },
+  "causal_proof": {
+    "required_for_final_verdict": true,
+    "source_fields": {
+      "created_at": "2026-06-01T04:32:09.678540+00:00",
+      "method_contract": {
+        "ablation": "remove projection onto learned class/logit subspace, invert scaler, retrain readout",
+        "class_weight": "balanced",
+        "group_key": "metadata.counterfactual_pair_id",
+        "guard_margin_pp": 5.0,
+        "probe_C": 0.1,
+        "probe_max_iter": 1000,
+        "projection_coordinate_space": "standardized_hidden_state",
+        "random_control": "same-rank random orthonormal projection ablation in standardized hidden state",
+        "random_control_trials": 20,
+        "readout": "StandardScaler + LogisticRegression",
+        "shuffled_trials": 0,
+        "solver": "lbfgs",
+        "split_key": "metadata.split",
+        "subspace_source": "trained logistic regression class/logit coefficients",
+        "test_split": "test"
+      },
+      "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT + LOGIT-SUBSPACE-PROJECTION-ABLATION",
+      "provenance": {
+        "artifacts": [
+          {
+            "artifact_id": "activation_dataset_npz",
+            "artifact_type": "stage9_40e_activation_dataset_npz",
+            "byte_count": 132376150,
+            "content_sha256": "f3a3d186f9aecac7fde19d33895bb05c76260a12812cd00cdd60e85b8102d2f5",
+            "created_at": "2026-06-01T03:41:27.131424+00:00",
+            "redaction_class": "internal_eval_artifact",
+            "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz"
+          },
+          {
+            "artifact_id": "metadata_json",
+            "artifact_type": "stage9_40e_metadata_json",
+            "byte_count": 2427,
+            "content_sha256": "d7e6123ee239b740f73f9da0d44f88e4e6d693ac771a3f9ed981e570e30a00a0",
+            "created_at": "2026-06-01T03:41:27.166424+00:00",
+            "redaction_class": "internal_eval_artifact",
+            "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json"
+          },
+          {
+            "artifact_id": "scenario_json",
+            "artifact_type": "stage9_40e_scenario_json",
+            "byte_count": 9138320,
+            "content_sha256": "cba4f46300f630f4ee2da8c8f66adcaaf91c390fb186d1b87df937784586fed1",
+            "created_at": "2026-06-01T02:53:49.759087+00:00",
+            "redaction_class": "internal_eval_artifact",
+            "storage_uri": "docs\\working\\pythia160m_gate1\\stage9_40e_scenarios_pilot.json"
+          },
+          {
+            "artifact_id": "probe_eval_report_json",
+            "artifact_type": "stage9_40e_original_probe_eval_report",
+            "byte_count": 9111,
+            "content_sha256": "87891c3fce908056e1d071bd9ac7d5d914653128ac97d95afd6bad0b3b02bf2d",
+            "created_at": "2026-06-01T03:45:49.964060+00:00",
+            "redaction_class": "internal_eval_artifact",
+            "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json"
+          }
+        ]
+      },
+      "schema_version": "cas_harness_stage9_40e_subspace_ablation.v1",
+      "status": "completed"
+    },
+    "source_report": {
+      "artifact_id": "stage9_40e_subspace_ablation_report",
+      "artifact_type": "stage9_40e_subspace_ablation_report",
+      "byte_count": 14170,
+      "content_sha256": "d0201b0d55abfc023867bb4377633c29a43aa1897cbd39b67a568cf88133c5c2",
+      "created_at": "2026-06-01T04:32:09.906726+00:00",
+      "redaction_class": "stage9_40e_internal_report",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_subspace_ablation_report.json"
+    },
+    "status": "present",
+    "summary": {
+      "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT + LOGIT-SUBSPACE-PROJECTION-ABLATION",
+      "primary_result": {
+        "ablated_accuracy": 0.4772321428571429,
+        "ablated_accuracy_pct": 47.723214,
+        "chance_baseline_accuracy": 0.025,
+        "chance_baseline_accuracy_pct": 2.5,
+        "guard_status": "passed",
+        "layer": 3,
+        "original_accuracy": 0.9171875,
+        "original_accuracy_pct": 91.71875,
+        "random_same_rank_max_disruption": 0.006026785714285721,
+        "random_same_rank_max_disruption_pp": 0.602679,
+        "random_same_rank_mean_disruption": 0.0008705357142857528,
+        "random_same_rank_mean_disruption_pp": 0.087054,
+        "true_disruption": 0.43995535714285716,
+        "true_disruption_pp": 43.995536
+      },
+      "run_id": null,
+      "status": "completed",
+      "trace_id": null
+    },
+    "tier": "subspace_ablation"
+  },
+  "caveats": [
+    "ACCEPT/SUPPRESS requires pass-ready proof chips and an attached explicit verifier decision.",
+    "Readout-only packets preserve the corrected PR #102 baseline but remain flagged for human review."
+  ],
+  "control_proof": {
+    "required_for_final_verdict": true,
+    "source_fields": {
+      "created_at": "2026-06-01T04:51:13.615101+00:00",
+      "dataset": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz",
+      "metadata_path": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json",
+      "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
+      "schema_version": "stage9_40e_neuron_cover_discovery.v1",
+      "status": "candidate_cover_discovery_completed"
+    },
+    "source_report": {
+      "artifact_id": "stage9_40e_cover_discovery_report",
+      "artifact_type": "stage9_40e_cover_discovery_report",
+      "byte_count": 413646,
+      "content_sha256": "e585d119dd7db2592f4b635bce40f785176f4681ecdcf012197da83ebe7ab828",
+      "created_at": "2026-06-01T04:51:13.641488+00:00",
+      "redaction_class": "stage9_40e_internal_report",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_neuron_covers.json"
+    },
+    "status": "present",
+    "summary": {
+      "caveat": "Cover discovery is candidate-only until matched ablation validates targeted drops against random same-size and wrong-class controls.",
+      "class_count": 40,
+      "matched_controls": {
+        "random_same_size_classes": 40,
+        "wrong_class_reference_classes": 40
+      },
+      "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
+      "run_id": null,
+      "selected_layer": 3,
+      "status": "candidate_cover_discovery_completed",
+      "top_k": 8,
+      "trace_id": null,
+      "true_cover_classes": 40
+    },
+    "tier": "cover_discovery"
+  },
+  "generated_at": "2026-06-01T05:01:47.944755+00:00",
+  "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
+  "model_proof": {
+    "input_provenance": null,
+    "model_family": "gpt_neox",
+    "model_id": "EleutherAI/pythia-160m",
+    "model_weight_hash": null,
+    "parameter_scale": "160M",
+    "source_report": {
+      "artifact_id": "stage9_40e_readout_report",
+      "artifact_type": "stage9_40e_original_baseline_readout_report",
+      "byte_count": 9111,
+      "content_sha256": "87891c3fce908056e1d071bd9ac7d5d914653128ac97d95afd6bad0b3b02bf2d",
+      "created_at": "2026-06-01T03:45:49.964060+00:00",
+      "redaction_class": "stage9_40e_internal_report",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json"
+    },
+    "status": "present"
+  },
+  "output_bridge_proof": {
+    "blocking_reason": "output_bridge report was not supplied",
+    "required_for_final_verdict": true,
+    "source_report": null,
+    "status": "missing",
+    "tier": "output_bridge"
+  },
+  "provenance": {
+    "ablation_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_subspace_ablation_report.json",
+    "bridge_report": null,
+    "cover_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_neuron_covers.json",
+    "input_artifacts": [
+      {
+        "artifact_id": "stage9_40e_readout_report",
+        "artifact_type": "stage9_40e_original_baseline_readout_report",
+        "byte_count": 9111,
+        "content_sha256": "87891c3fce908056e1d071bd9ac7d5d914653128ac97d95afd6bad0b3b02bf2d",
+        "created_at": "2026-06-01T03:45:49.964060+00:00",
+        "redaction_class": "stage9_40e_internal_report",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json"
+      },
+      {
+        "artifact_id": "stage9_40e_subspace_ablation_report",
+        "artifact_type": "stage9_40e_subspace_ablation_report",
+        "byte_count": 14170,
+        "content_sha256": "d0201b0d55abfc023867bb4377633c29a43aa1897cbd39b67a568cf88133c5c2",
+        "created_at": "2026-06-01T04:32:09.906726+00:00",
+        "redaction_class": "stage9_40e_internal_report",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_subspace_ablation_report.json"
+      },
+      {
+        "artifact_id": "stage9_40e_cover_discovery_report",
+        "artifact_type": "stage9_40e_cover_discovery_report",
+        "byte_count": 413646,
+        "content_sha256": "e585d119dd7db2592f4b635bce40f785176f4681ecdcf012197da83ebe7ab828",
+        "created_at": "2026-06-01T04:51:13.641488+00:00",
+        "redaction_class": "stage9_40e_internal_report",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_neuron_covers.json"
+      },
+      {
+        "artifact_id": "stage9_40e_verifier_report",
+        "artifact_type": "stage9_40e_verifier_decision_report",
+        "byte_count": 5400,
+        "content_sha256": "cce74e195814cd6e3bd3addc9f42f6a6b9221ca209a949ab80ca48be62635be3",
+        "created_at": "2026-06-01T05:01:39.205640+00:00",
+        "redaction_class": "stage9_40e_internal_report",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_verifier_report.json"
+      }
+    ],
+    "input_count": 4,
+    "readout_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json",
+    "verifier_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_verifier_report.json"
+  },
+  "readout_proof": {
+    "baseline_note": "PR #102 corrected the Stage 9 original 40E readout baseline. This merger preserves that corrected baseline and does not promote the packet to ACCEPT or SUPPRESS.",
+    "best_layer": {
+      "layer": 3,
+      "test_acc": 0.9171875,
+      "test_macro_f1": 0.9204827870659675
+    },
+    "controls": {
+      "confirmed_text_baseline_report": null,
+      "majority_class_label": "^0|C",
+      "majority_class_test_acc": 0.025,
+      "shuffled_label_hidden_best_layer": {
+        "all_trials": [
+          0.016517857142857143,
+          0.025223214285714286,
+          0.040848214285714286,
+          0.01875,
+          0.016517857142857143,
+          0.025892857142857145,
+          0.021651785714285714,
+          0.019196428571428573,
+          0.02075892857142857,
+          0.025,
+          0.021205357142857144,
+          0.029017857142857144,
+          0.018973214285714284,
+          0.027678571428571427,
+          0.02075892857142857,
+          0.0328125,
+          0.031919642857142855,
+          0.025223214285714286,
+          0.030133928571428572,
+          0.028348214285714286
+        ],
+        "max_test_acc": 0.040848214285714286,
+        "mean_test_acc": 0.02482142857142857,
+        "std_test_acc": 0.006065352789762993,
+        "trials": 20
+      },
+      "text_hash_baseline": {
+        "description": "HashingVectorizer(1-2 ngrams, 2^14 features) + LogisticRegression on prompt text",
+        "test_acc": 0.5,
+        "test_macro_f1": 0.4747324836021054
+      }
+    },
+    "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
+    "readiness_gate": {
+      "axis": "40_element_operator_x_domain",
+      "blocking_reasons": [],
+      "expected_cells": 40,
+      "min_samples_per_cell_required": 10,
+      "missing_cells": [],
+      "packet_ready": true,
+      "populated_expected_cells": 40,
+      "required_artifact": {
+        "description": "A source-derived TKS40 activation dataset with every canonical ^0..^9 x P/C/E/O cell populated at or above the configured minimum sample count.",
+        "feature_shape": "[N_scenarios, N_layers, hidden_dim]",
+        "how_to_supply": "Capture or copy the balanced 40E .npz plus its metadata JSON, then run this evaluator with --dataset PATH --metadata PATH --output PATH. Use --require-balanced-40e to make packet assembly fail fast when the artifact is incomplete.",
+        "labels": [
+          "labels_operator",
+          "labels_domain"
+        ],
+        "name": "balanced_40_element_activation_dataset",
+        "required_npz_keys": [
+          "features",
+          "layers",
+          "labels_domain",
+          "labels_operator",
+          "prompts"
+        ]
+      },
+      "sparse_cells": {},
+      "status": "packet_ready",
+      "unexpected_cells": []
+    },
+    "result_summary": {
+      "hidden_probe_beats_confirmed_text_baseline": null,
+      "hidden_probe_beats_majority": true,
+      "hidden_probe_beats_text_baseline": true,
+      "hidden_probe_exceeds_shuffled_max": true,
+      "hidden_probe_minus_shuffled_mean_pp": 89.23660714285715,
+      "hidden_probe_test_acc": 0.9171875,
+      "interpretation": "Pythia-160M closure target on 40-Element: 89.8% readout, +39.7pp over text baseline. This run replicates the readout protocol on a different substrate using the dataset's operator + domain labels. When --confirmed-text-baseline-report is supplied, the result summary states whether hidden readout beats the exact-fixture text baseline."
+    },
+    "source_fields": {
+      "artifacts": [
+        {
+          "artifact_id": "activation_dataset_npz",
+          "artifact_type": "40e_activation_dataset_npz",
+          "byte_count": 132376150,
+          "content_sha256": "f3a3d186f9aecac7fde19d33895bb05c76260a12812cd00cdd60e85b8102d2f5",
+          "created_at": "2026-06-01T03:41:27.131424+00:00",
+          "redaction_class": "internal_eval_artifact",
+          "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz"
+        },
+        {
+          "artifact_id": "metadata_json",
+          "artifact_type": "40e_capture_metadata_json",
+          "byte_count": 2427,
+          "content_sha256": "d7e6123ee239b740f73f9da0d44f88e4e6d693ac771a3f9ed981e570e30a00a0",
+          "created_at": "2026-06-01T03:41:27.166424+00:00",
+          "redaction_class": "internal_eval_artifact",
+          "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json"
+        }
+      ],
+      "created_at": "2026-06-01T03:45:49.962866+00:00",
+      "dataset": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz",
+      "metadata_path": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json",
+      "method_contract": {
+        "class_weight": "balanced",
+        "group_key": "metadata.counterfactual_pair_id",
+        "min_samples_per_cell": 10,
+        "probe_C": 0.1,
+        "probe_max_iter": 1000,
+        "readout": "StandardScaler + LogisticRegression",
+        "seed": 2026,
+        "shuffled_trials": 20,
+        "solver": "lbfgs",
+        "split": "fixed split by metadata.split; test_split=test",
+        "split_key": "metadata.split",
+        "test_split": "test"
+      },
+      "model_id": "EleutherAI/pythia-160m",
+      "schema_version": "cas_harness_40_element_probe_eval.v1",
+      "status": "packet_ready_evaluation_completed"
+    },
+    "source_report": {
+      "artifact_id": "stage9_40e_readout_report",
+      "artifact_type": "stage9_40e_original_baseline_readout_report",
+      "byte_count": 9111,
+      "content_sha256": "87891c3fce908056e1d071bd9ac7d5d914653128ac97d95afd6bad0b3b02bf2d",
+      "created_at": "2026-06-01T03:45:49.964060+00:00",
+      "redaction_class": "stage9_40e_internal_report",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json"
+    },
+    "status": "present"
+  },
+  "run_id": "pythia-160m-stage9-40e-20260531",
+  "schema_version": "cas_harness_stage9_40e_evidence_packet.v1",
+  "tier_statuses": {
+    "baseline": "present",
+    "causal": "present",
+    "control": "present",
+    "model": "present",
+    "output_bridge": "missing",
+    "readout": "present",
+    "verifier": "present"
+  },
+  "trace_id": "pythia-160m-stage9-40e-readout-20260531",
+  "verdict": "FLAG_FOR_HUMAN_REVIEW",
+  "verdict_rationale": "Merged packet is review-only because required proof tiers are missing: output_bridge.",
+  "verification": {
+    "explicit_verifier_decision": {
+      "confidence": 0.9,
+      "coverage": {
+        "basis": "stage9_40e_validation_cases",
+        "case_count": null,
+        "class_count": 40
+      },
+      "decision_scope": "stage9_40e_validation_packet",
+      "mode": "BALANCED",
+      "reason": "output_bridge_gate_failed",
+      "source": "stage9_40e_packet_verifier",
+      "verdict": "SUPPRESS"
+    },
+    "proof_chip_gate": "blocked",
+    "proof_chips": [
+      {
+        "detail": "Model identity/hash evidence is recorded in the packet.",
+        "id": "model_proof",
+        "name": "Model proof",
+        "status": "present"
+      },
+      {
+        "detail": "Corrected Stage 9 40E hidden-state readout beats text and shuffled controls.",
+        "id": "cas_readout",
+        "name": "CAS readout",
+        "status": "verified"
+      },
+      {
+        "detail": "Subspace ablation/control evidence is recorded for the Stage 9 40E readout.",
+        "id": "causal_proof",
+        "name": "Causal proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Candidate cover/control evidence is recorded for the Stage 9 40E run.",
+        "id": "control_proof",
+        "name": "Control proof",
+        "status": "verified"
+      },
+      {
+        "detail": "Eta-to-epsilon readable bridge output evidence is recorded.",
+        "id": "output_proof",
+        "name": "Output proof",
+        "status": "missing"
+      },
+      {
+        "detail": "Evidence Packet schema, trace ID, and source artifact hashes are recorded.",
+        "id": "packet_proof",
+        "name": "Packet proof",
+        "status": "present"
+      }
+    ]
+  },
+  "verifier": {
+    "explicit_verifier_decision": {
+      "confidence": 0.9,
+      "coverage": {
+        "basis": "stage9_40e_validation_cases",
+        "case_count": null,
+        "class_count": 40
+      },
+      "decision_scope": "stage9_40e_validation_packet",
+      "mode": "BALANCED",
+      "reason": "output_bridge_gate_failed",
+      "source": "stage9_40e_packet_verifier",
+      "verdict": "SUPPRESS"
+    },
+    "required_for_final_verdict": true,
+    "source_fields": {
+      "created_at": "2026-06-01T05:01:39.203067+00:00",
+      "run_id": "pythia-160m-stage9-40e-20260531",
+      "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
+      "status": "STAGE9_40E_VERIFIER_SUPPRESS",
+      "trace_id": "pythia-160m-stage9-40e-readout-20260531"
+    },
+    "source_report": {
+      "artifact_id": "stage9_40e_verifier_report",
+      "artifact_type": "stage9_40e_verifier_decision_report",
+      "byte_count": 5400,
+      "content_sha256": "cce74e195814cd6e3bd3addc9f42f6a6b9221ca209a949ab80ca48be62635be3",
+      "created_at": "2026-06-01T05:01:39.205640+00:00",
+      "redaction_class": "stage9_40e_internal_report",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_verifier_report.json"
+    },
+    "status": "present"
+  }
+}

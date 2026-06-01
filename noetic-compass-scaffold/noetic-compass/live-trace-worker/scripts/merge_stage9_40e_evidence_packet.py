@@ -284,7 +284,11 @@ def _extract_run_id(readout: dict[str, Any]) -> str:
     return "gpt-neox-20b-stage9-original-40e-20260527"
 
 
-def _extract_model_proof(readout: dict[str, Any], readout_artifact: dict[str, Any]) -> dict[str, Any]:
+def _extract_model_proof(
+    readout: dict[str, Any],
+    readout_artifact: dict[str, Any],
+    parameter_scale_override: str | None = None,
+) -> dict[str, Any]:
     model_id = _first_present(
         readout,
         (
@@ -316,7 +320,8 @@ def _extract_model_proof(readout: dict[str, Any], readout_artifact: dict[str, An
             ),
         )
         or "gpt_neox",
-        "parameter_scale": _first_present(
+        "parameter_scale": parameter_scale_override
+        or _first_present(
             readout,
             (
                 ("parameter_scale",),
@@ -756,6 +761,9 @@ def build_packet(
     bridge_report: Path | None = None,
     verifier_report: Path | None = None,
     generated_at: datetime | None = None,
+    trace_id_override: str | None = None,
+    run_id_override: str | None = None,
+    parameter_scale_override: str | None = None,
 ) -> dict[str, Any]:
     readout = _load_json(readout_report)
     generated = generated_at or datetime.now(UTC)
@@ -783,7 +791,9 @@ def build_packet(
         artifact_type="stage9_40e_bridge_report",
     )
     verifier_proof, verifier_artifact, explicit_decision = _make_verifier_proof(verifier_report)
-    model_proof = _extract_model_proof(readout, readout_artifact)
+    model_proof = _extract_model_proof(
+        readout, readout_artifact, parameter_scale_override=parameter_scale_override
+    )
     readout_proof = _make_readout_proof(readout, readout_artifact)
     baseline_proof = _make_baseline_proof(readout)
 
@@ -821,8 +831,8 @@ def build_packet(
 
     return {
         "schema_version": SCHEMA_VERSION,
-        "trace_id": _extract_trace_id(readout),
-        "run_id": _extract_run_id(readout),
+        "trace_id": trace_id_override or _extract_trace_id(readout),
+        "run_id": run_id_override or _extract_run_id(readout),
         "generated_at": generated.isoformat(),
         "method_label": METHOD_LABEL,
         "model_proof": model_proof,
@@ -1016,6 +1026,31 @@ def main() -> int:
     parser.add_argument("--verifier-report", type=Path)
     parser.add_argument("--output-json", type=Path, default=DEFAULT_OUTPUT_JSON)
     parser.add_argument("--output-markdown", type=Path, default=DEFAULT_OUTPUT_MARKDOWN)
+    parser.add_argument(
+        "--trace-id",
+        default=None,
+        help=(
+            "Override the packet trace_id. Defaults to the readout report's trace_id, "
+            "else the bundled Stage 9 40E static identity. Set this when the source "
+            "reports come from a different substrate (e.g. a Pythia-160M reproduction) "
+            "so the packet self-labels its true provenance instead of inheriting the "
+            "20B scaffold identity."
+        ),
+    )
+    parser.add_argument(
+        "--run-id",
+        default=None,
+        help="Override the packet run_id (see --trace-id for when to use this).",
+    )
+    parser.add_argument(
+        "--parameter-scale",
+        default=None,
+        help=(
+            "Override the model parameter_scale label (e.g. '160M'). Defaults to the "
+            "readout report's value, else '20B'. Set this so a non-20B reproduction "
+            "packet does not inherit the 20B scale label."
+        ),
+    )
     args = parser.parse_args()
 
     packet = build_packet(
@@ -1024,6 +1059,9 @@ def main() -> int:
         cover_report=args.cover_report,
         bridge_report=args.bridge_report,
         verifier_report=args.verifier_report,
+        trace_id_override=args.trace_id,
+        run_id_override=args.run_id,
+        parameter_scale_override=args.parameter_scale,
     )
     write_packet(packet, args.output_json, args.output_markdown)
     print(f"wrote JSON packet: {args.output_json}")
