@@ -176,7 +176,7 @@
     },
     "tier": "cover_discovery"
   },
-  "generated_at": "2026-06-01T05:01:47.944755+00:00",
+  "generated_at": "2026-06-01T06:18:29.178305+00:00",
   "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
   "model_proof": {
     "input_provenance": null,
@@ -196,15 +196,105 @@
     "status": "present"
   },
   "output_bridge_proof": {
-    "blocking_reason": "output_bridge report was not supplied",
     "required_for_final_verdict": true,
-    "source_report": null,
-    "status": "missing",
+    "source_fields": {
+      "created_at": "2026-06-01T06:01:14.568050+00:00",
+      "dataset": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz",
+      "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT::ETA-EPSILON-BRIDGE",
+      "model_id": "EleutherAI/pythia-160m",
+      "schema_version": "cas_harness_stage9_40e_eta_epsilon_bridge.v1",
+      "status": "PROBE_PREDICTED_40E_ETA_EPSILON_BRIDGE_PASS"
+    },
+    "source_report": {
+      "artifact_id": "stage9_40e_bridge_report",
+      "artifact_type": "stage9_40e_bridge_report",
+      "byte_count": 220479,
+      "content_sha256": "7be2cfcf95ecc04ad5d946f980a126e61d84b8211d11157a86910f82ccfd31c6",
+      "created_at": "2026-06-01T06:01:14.922946+00:00",
+      "redaction_class": "stage9_40e_internal_report",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_eta_epsilon_bridge_report.json"
+    },
+    "status": "present",
+    "summary": {
+      "bridge_gates": {
+        "gold_readable": {
+          "checks": {
+            "delta_positive_sign_p": {
+              "operator": "<=",
+              "passed": true,
+              "threshold": 0.01,
+              "value": 0.0
+            },
+            "delta_vs_none": {
+              "operator": ">",
+              "passed": true,
+              "threshold": 0.1,
+              "value": 1.717088
+            },
+            "minus_partner_readable_margin": {
+              "operator": ">",
+              "passed": true,
+              "threshold": 0.1,
+              "value": 3.408577
+            }
+          },
+          "passed": true
+        },
+        "probe_readable": {
+          "checks": {
+            "delta_positive_sign_p": {
+              "operator": "<=",
+              "passed": true,
+              "threshold": 0.01,
+              "value": 0.0
+            },
+            "delta_vs_none": {
+              "operator": ">",
+              "passed": true,
+              "threshold": 0.1,
+              "value": 1.534844
+            },
+            "minus_partner_readable_margin": {
+              "operator": ">",
+              "passed": true,
+              "threshold": 0.1,
+              "value": 3.226334
+            }
+          },
+          "passed": true
+        }
+      },
+      "gold_readable_gate_passed": true,
+      "implication": "The 40E eta-to-epsilon loop passes this likelihood assay: the model's own hidden-state 40-Element readout can be realized as readable CAS context, and that context moves paired likelihood in the intended direction. Raw CAS-symbol prefixes remain non-load-bearing.",
+      "key_comparisons": {
+        "gold_raw_delta_vs_none": -0.000662,
+        "gold_readable_delta_vs_none": 1.717088,
+        "gold_readable_minus_partner_readable_margin": 3.408577,
+        "probe_raw_delta_vs_none": -0.000626,
+        "probe_readable_delta_vs_none": 1.534844,
+        "probe_readable_minus_partner_readable_margin": 3.226334
+      },
+      "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT::ETA-EPSILON-BRIDGE",
+      "n_cases": 80,
+      "per_element": 2,
+      "probe_prediction": {
+        "all_test_element_accuracy": 0.914062,
+        "selected_domain_accuracy": 0.9625,
+        "selected_element_accuracy": 0.95,
+        "selected_operator_accuracy": 0.975
+      },
+      "probe_readable_gate_passed": true,
+      "readout_layer": 3,
+      "readout_mode": "logistic_linear_probe",
+      "run_id": null,
+      "status": "PROBE_PREDICTED_40E_ETA_EPSILON_BRIDGE_PASS",
+      "trace_id": null
+    },
     "tier": "output_bridge"
   },
   "provenance": {
     "ablation_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_subspace_ablation_report.json",
-    "bridge_report": null,
+    "bridge_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_eta_epsilon_bridge_report.json",
     "cover_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_neuron_covers.json",
     "input_artifacts": [
       {
@@ -235,16 +325,25 @@
         "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_neuron_covers.json"
       },
       {
+        "artifact_id": "stage9_40e_bridge_report",
+        "artifact_type": "stage9_40e_bridge_report",
+        "byte_count": 220479,
+        "content_sha256": "7be2cfcf95ecc04ad5d946f980a126e61d84b8211d11157a86910f82ccfd31c6",
+        "created_at": "2026-06-01T06:01:14.922946+00:00",
+        "redaction_class": "stage9_40e_internal_report",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_eta_epsilon_bridge_report.json"
+      },
+      {
         "artifact_id": "stage9_40e_verifier_report",
         "artifact_type": "stage9_40e_verifier_decision_report",
-        "byte_count": 5400,
-        "content_sha256": "cce74e195814cd6e3bd3addc9f42f6a6b9221ca209a949ab80ca48be62635be3",
-        "created_at": "2026-06-01T05:01:39.205640+00:00",
+        "byte_count": 5405,
+        "content_sha256": "17f7a8cf6bb8aab5b06cfe658f8cedf16b8d8b9e42504877e57820a9b619603d",
+        "created_at": "2026-06-01T06:18:16.599817+00:00",
         "redaction_class": "stage9_40e_internal_report",
         "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_verifier_report.json"
       }
     ],
-    "input_count": 4,
+    "input_count": 5,
     "readout_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json",
     "verifier_report": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_verifier_report.json"
   },
@@ -392,28 +491,28 @@
     "causal": "present",
     "control": "present",
     "model": "present",
-    "output_bridge": "missing",
+    "output_bridge": "present",
     "readout": "present",
     "verifier": "present"
   },
   "trace_id": "pythia-160m-stage9-40e-readout-20260531",
-  "verdict": "FLAG_FOR_HUMAN_REVIEW",
-  "verdict_rationale": "Merged packet is review-only because required proof tiers are missing: output_bridge.",
+  "verdict": "ACCEPT",
+  "verdict_rationale": "All required proof chips are pass-ready and the attached verifier returned `ACCEPT` with confidence 0.95.",
   "verification": {
     "explicit_verifier_decision": {
-      "confidence": 0.9,
+      "confidence": 0.95,
       "coverage": {
         "basis": "stage9_40e_validation_cases",
-        "case_count": null,
+        "case_count": 80,
         "class_count": 40
       },
       "decision_scope": "stage9_40e_validation_packet",
       "mode": "BALANCED",
-      "reason": "output_bridge_gate_failed",
+      "reason": "all_stage9_40e_validation_gates_passed",
       "source": "stage9_40e_packet_verifier",
-      "verdict": "SUPPRESS"
+      "verdict": "ACCEPT"
     },
-    "proof_chip_gate": "blocked",
+    "proof_chip_gate": "passed",
     "proof_chips": [
       {
         "detail": "Model identity/hash evidence is recorded in the packet.",
@@ -443,7 +542,7 @@
         "detail": "Eta-to-epsilon readable bridge output evidence is recorded.",
         "id": "output_proof",
         "name": "Output proof",
-        "status": "missing"
+        "status": "verified"
       },
       {
         "detail": "Evidence Packet schema, trace ID, and source artifact hashes are recorded.",
@@ -455,32 +554,32 @@
   },
   "verifier": {
     "explicit_verifier_decision": {
-      "confidence": 0.9,
+      "confidence": 0.95,
       "coverage": {
         "basis": "stage9_40e_validation_cases",
-        "case_count": null,
+        "case_count": 80,
         "class_count": 40
       },
       "decision_scope": "stage9_40e_validation_packet",
       "mode": "BALANCED",
-      "reason": "output_bridge_gate_failed",
+      "reason": "all_stage9_40e_validation_gates_passed",
       "source": "stage9_40e_packet_verifier",
-      "verdict": "SUPPRESS"
+      "verdict": "ACCEPT"
     },
     "required_for_final_verdict": true,
     "source_fields": {
-      "created_at": "2026-06-01T05:01:39.203067+00:00",
+      "created_at": "2026-06-01T06:18:16.596343+00:00",
       "run_id": "pythia-160m-stage9-40e-20260531",
       "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
-      "status": "STAGE9_40E_VERIFIER_SUPPRESS",
+      "status": "STAGE9_40E_VERIFIER_ACCEPT",
       "trace_id": "pythia-160m-stage9-40e-readout-20260531"
     },
     "source_report": {
       "artifact_id": "stage9_40e_verifier_report",
       "artifact_type": "stage9_40e_verifier_decision_report",
-      "byte_count": 5400,
-      "content_sha256": "cce74e195814cd6e3bd3addc9f42f6a6b9221ca209a949ab80ca48be62635be3",
-      "created_at": "2026-06-01T05:01:39.205640+00:00",
+      "byte_count": 5405,
+      "content_sha256": "17f7a8cf6bb8aab5b06cfe658f8cedf16b8d8b9e42504877e57820a9b619603d",
+      "created_at": "2026-06-01T06:18:16.599817+00:00",
       "redaction_class": "stage9_40e_internal_report",
       "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_verifier_report.json"
     },

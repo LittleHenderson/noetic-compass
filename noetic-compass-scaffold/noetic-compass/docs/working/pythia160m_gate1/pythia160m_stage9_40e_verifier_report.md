@@ -1,8 +1,8 @@
 # Stage 9 40E Verifier Report
 
-- Status: `STAGE9_40E_VERIFIER_SUPPRESS`
-- Verdict: `SUPPRESS`
-- Confidence: `0.9`
+- Status: `STAGE9_40E_VERIFIER_ACCEPT`
+- Verdict: `ACCEPT`
+- Confidence: `0.95`
 - Source: `stage9_40e_packet_verifier`
 - Trace ID: `pythia-160m-stage9-40e-readout-20260531`
 - Mode: `BALANCED`
@@ -12,25 +12,26 @@
 | Gate | Status |
 | --- | --- |
 | packet | passed |
-| proof_chips | blocked |
+| proof_chips | passed |
 | readout | passed |
 | causal | passed |
 | control | passed |
-| output_bridge | blocked |
+| output_bridge | passed |
 
 ## Confidence Components
 
 | Component | Value |
 | --- | ---: |
 | hidden_probe_test_acc | 0.95625 |
+| bridge_selected_element_accuracy | 0.95 |
 | causal_guard | 1 |
 | control_gate | 1 |
-| output_bridge_gate | 0 |
+| output_bridge_gate | 1 |
 | packet_gate | 1 |
 
 ## Reason
 
-output_bridge_gate_failed
+all_stage9_40e_validation_gates_passed
 
 ## Boundary
 

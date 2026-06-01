@@ -1,9 +1,18 @@
-"""WORM-anchor the GPT-NeoX-20B Stage 9 40E scoped-validation Evidence Packet.
+"""WORM-anchor a Stage 9 40E scoped-validation Evidence Packet by trace_id.
 
 This is the one operational step that lets the Audit Console show a *true* green
-ACCEPT for the bundled Stage 9 40E packet instead of FLAG_FOR_HUMAN_REVIEW.
+ACCEPT for a Stage 9 40E packet instead of FLAG_FOR_HUMAN_REVIEW.
 
-It loads the static Stage 9 40E packet, runs it through the same append-only
+The packet is resolved through the general Stage 9 40E registry
+(``stage9_40e_packet_path_registry``), so ``--trace-id`` works for ANY model
+size's packet that is discoverable on disk — 160M, 20B, 70B, 300B, 1T, 3T — not
+just one hard-coded bundled file. A small truck and a huge truck go through the
+same checkpoint. Examples:
+
+    python -m scripts.anchor_stage9_40e_packet  # default: bundled 20B packet
+    python -m scripts.anchor_stage9_40e_packet --trace-id pythia-160m-stage9-40e-readout-20260531
+
+It loads the resolved Stage 9 40E packet, runs it through the same append-only
 hash-log + external object-lock anchor that fleet-merged packets use, persists the
 anchored copy into the Evidence Packet store, then re-reads the anchor to verify it.
 

@@ -1,37 +1,38 @@
 {
   "confidence_basis": {
     "components": {
+      "bridge_selected_element_accuracy": 0.95,
       "causal_guard": 1.0,
       "control_gate": 1.0,
       "hidden_probe_test_acc": 0.95625,
-      "output_bridge_gate": 0.0,
+      "output_bridge_gate": 1.0,
       "packet_gate": 1.0
     },
     "formula": "ACCEPT confidence = min(hidden_probe_test_acc, bridge_selected_element_accuracy, causal_guard, control_gate, output_bridge_gate, packet_gate). SUPPRESS confidence is a blocking-risk score. FLAG confidence is unavailable unless a risk score is present.",
     "important_limit": "This is packet-level validation confidence, not mathematical certainty and not a per-customer row confidence unless the source packet is a production row."
   },
-  "created_at": "2026-06-01T05:01:39.203067+00:00",
+  "created_at": "2026-06-01T06:18:16.596343+00:00",
   "explicit_verifier_decision": {
-    "confidence": 0.9,
+    "confidence": 0.95,
     "coverage": {
       "basis": "stage9_40e_validation_cases",
-      "case_count": null,
+      "case_count": 80,
       "class_count": 40
     },
     "decision_scope": "stage9_40e_validation_packet",
     "mode": "BALANCED",
-    "reason": "output_bridge_gate_failed",
+    "reason": "all_stage9_40e_validation_gates_passed",
     "source": "stage9_40e_packet_verifier",
-    "verdict": "SUPPRESS"
+    "verdict": "ACCEPT"
   },
   "generation_readiness": {
-    "generation_readiness": "suppress",
+    "generation_readiness": "allow",
     "mode": "BALANCED",
     "policy_version": "stage9_40e_packet_verifier_v1",
     "reasons": [
-      "output_bridge_gate_failed"
+      "all_stage9_40e_validation_gates_passed"
     ],
-    "risk_score": 0.9
+    "risk_score": 0.0
   },
   "important_limit": "This verifier report is explicit and evidence-bound, but it is built over the Stage 9 40E validation packet. It does not claim live customer inference unless the packet source is a live production run.",
   "mode": "BALANCED",
@@ -43,8 +44,8 @@
   "run_id": "pythia-160m-stage9-40e-20260531",
   "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
   "source_packet": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_evidence_packet.json",
-  "source_packet_sha256": "88d8a15b423f4275778a3916b4b9c57d01a2ffa79084275fc3882b774ce68635",
-  "status": "STAGE9_40E_VERIFIER_SUPPRESS",
+  "source_packet_sha256": "a714f0aa92070161ef9afd32f7a9cbe2d3de2a1342307640eff4a50cac171a47",
+  "status": "STAGE9_40E_VERIFIER_ACCEPT",
   "trace_id": "pythia-160m-stage9-40e-readout-20260531",
   "verification_stack": {
     "gates": {
@@ -63,12 +64,12 @@
         "wrong_class_reference_classes": 40
       },
       "output_bridge": {
-        "n_cases": null,
-        "passed": false,
-        "probe_raw_delta_vs_none": null,
-        "probe_readable_delta_vs_none": null,
-        "probe_readable_minus_partner_readable_margin": null,
-        "selected_element_accuracy": null
+        "n_cases": 80,
+        "passed": true,
+        "probe_raw_delta_vs_none": -0.000626,
+        "probe_readable_delta_vs_none": 1.534844,
+        "probe_readable_minus_partner_readable_margin": 3.226334,
+        "selected_element_accuracy": 0.95
       },
       "packet": {
         "passed": true,
@@ -77,20 +78,16 @@
         "trace_id": "pythia-160m-stage9-40e-readout-20260531"
       },
       "proof_chips": {
-        "core_not_verified": [
-          "output_proof"
-        ],
+        "core_not_verified": [],
         "missing": [],
-        "non_passing": [
-          "output_proof"
-        ],
-        "passed": false,
+        "non_passing": [],
+        "passed": true,
         "statuses": {
           "cas_readout": "verified",
           "causal_proof": "verified",
           "control_proof": "verified",
           "model_proof": "present",
-          "output_proof": "missing",
+          "output_proof": "verified",
           "packet_proof": "present"
         }
       },
@@ -102,7 +99,7 @@
         "shuffled_label_hidden_mean_test_acc": 0.02619419642857143
       }
     },
-    "proof_chip_gate": "blocked",
+    "proof_chip_gate": "passed",
     "proof_chips": [
       {
         "detail": "Model identity/hash evidence is recorded in the packet.",
@@ -132,7 +129,7 @@
         "detail": "Eta-to-epsilon readable bridge output evidence is recorded.",
         "id": "output_proof",
         "name": "Output proof",
-        "status": "missing"
+        "status": "verified"
       },
       {
         "detail": "Evidence Packet schema, trace ID, and source artifact hashes are recorded.",

@@ -43,6 +43,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -339,6 +340,85 @@ _STAGE9_40E_ORIGINAL_PACKET_FILENAME = (
     "gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json"
 )
 
+_STAGE9_40E_PACKET_SCHEMA = "cas_harness_stage9_40e_evidence_packet.v1"
+
+# Seed packets we always know about even before on-disk discovery runs. These are
+# *scoped project-validation* packets (NOT per-customer production ACCEPTs): the
+# bundled GPT-NeoX-20B packet and the from-scratch Pythia-160M CPU reproduction.
+# Seeds are only a deterministic floor — the registry below generalizes resolution
+# so ANY model size's Stage 9 40E packet is anchorable by its own trace_id with no
+# code edit. A small truck and a huge truck go through the same checkpoint.
+_STAGE9_40E_SEED_PACKET_PATH_PARTS_BY_TRACE: dict[str, tuple[str, ...]] = {
+    _STAGE9_40E_ORIGINAL_TRACE_ID: (
+        "docs",
+        "working",
+        _STAGE9_40E_ORIGINAL_PACKET_FILENAME,
+    ),
+    "pythia-160m-stage9-40e-readout-20260531": (
+        "docs",
+        "working",
+        "pythia160m_gate1",
+        "pythia160m_stage9_40e_evidence_packet.json",
+    ),
+}
+
+
+def _stage9_40e_trace_for_packet_file(path: Path) -> str | None:
+    """Return a packet file's self-declared trace_id iff it is a Stage 9 40E packet.
+
+    Schema-gated so the registry only indexes genuine Stage 9 40E packets and
+    ignores unrelated JSON that happens to sit under the same trees.
+    """
+
+    try:
+        with path.open("r", encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except (json.JSONDecodeError, OSError):
+        return None
+    if not isinstance(payload, dict):
+        return None
+    if payload.get("schema_version") != _STAGE9_40E_PACKET_SCHEMA:
+        return None
+    trace_id = payload.get("trace_id")
+    if not isinstance(trace_id, str) or not trace_id:
+        return None
+    return trace_id
+
+
+def _stage9_40e_packet_registry_roots() -> list[Path]:
+    """Directories scanned for Stage 9 40E packets, in precedence order."""
+
+    roots = [_scaffold_root() / "docs" / "working"]
+    store_dir = os.environ.get("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR")
+    if store_dir:
+        roots.append(Path(store_dir))
+    return roots
+
+
+def stage9_40e_packet_path_registry() -> dict[str, Path]:
+    """Index every discoverable Stage 9 40E packet by its self-declared trace_id.
+
+    This is the general registry that replaces hard-coded, per-model anchor
+    wiring (the "filing clerk who knows only one folder" anti-pattern). Seeds win
+    deterministically; anything else dropped under the registry roots is indexed
+    by reading its own ``trace_id``, so the anchor path resolves any model size's
+    packet — 160M, 20B, 70B, 300B, 1T, 3T — without a code change.
+    """
+
+    index: dict[str, Path] = {}
+    for trace_id, parts in _STAGE9_40E_SEED_PACKET_PATH_PARTS_BY_TRACE.items():
+        seeded = _scaffold_root().joinpath(*parts)
+        if seeded.is_file():
+            index.setdefault(trace_id, seeded)
+    for root in _stage9_40e_packet_registry_roots():
+        if not root.is_dir():
+            continue
+        for candidate in sorted(root.glob("**/*evidence_packet*.json")):
+            discovered = _stage9_40e_trace_for_packet_file(candidate)
+            if discovered is not None:
+                index.setdefault(discovered, candidate)
+    return index
+
 
 def load_stage9_40e_packet_payload_for_trace(trace_id: str) -> dict[str, Any]:
     """Return the raw Stage 9 40E validation packet for audit-session use.
@@ -347,11 +427,16 @@ def load_stage9_40e_packet_payload_for_trace(trace_id: str) -> dict[str, Any]:
     ``EvidencePacket`` drawer schema. The Audit Console needs its raw verifier
     fields so the verdict runner can pass through the explicit packet-level
     decision without losing proof-chip scope.
+
+    Resolution is registry-driven (``stage9_40e_packet_path_registry``): an
+    unknown ``trace_id`` raises ``FileNotFoundError`` exactly as before, and a
+    discoverable one is loaded and validated against the Stage 9 40E schema with a
+    trace self-consistency check. This is model-size-independent by construction.
     """
 
-    if trace_id != _STAGE9_40E_ORIGINAL_TRACE_ID:
+    packet_path = stage9_40e_packet_path_registry().get(trace_id)
+    if packet_path is None:
         raise FileNotFoundError(trace_id)
-    packet_path = _scaffold_root() / "docs" / "working" / _STAGE9_40E_ORIGINAL_PACKET_FILENAME
     try:
         with packet_path.open("r", encoding="utf-8") as fh:
             payload = json.load(fh)
@@ -359,7 +444,7 @@ def load_stage9_40e_packet_payload_for_trace(trace_id: str) -> dict[str, Any]:
         raise FileNotFoundError(trace_id) from exc
     if not isinstance(payload, dict):
         raise FileNotFoundError(trace_id)
-    if payload.get("schema_version") != "cas_harness_stage9_40e_evidence_packet.v1":
+    if payload.get("schema_version") != _STAGE9_40E_PACKET_SCHEMA:
         raise FileNotFoundError(trace_id)
     if payload.get("trace_id") != trace_id:
         raise FileNotFoundError(trace_id)

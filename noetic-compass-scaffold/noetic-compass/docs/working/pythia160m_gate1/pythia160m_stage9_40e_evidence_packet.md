@@ -4,7 +4,7 @@
 - Trace ID: `pythia-160m-stage9-40e-readout-20260531`
 - Run ID: `pythia-160m-stage9-40e-20260531`
 - Method: `S9-40E-ORIGINAL-BASELINE-READOUT`
-- Verdict: `FLAG_FOR_HUMAN_REVIEW`
+- Verdict: `ACCEPT`
 
 ## Tier Status
 
@@ -15,7 +15,7 @@
 | Baseline proof | present |
 | Causal proof | present |
 | Control proof | present |
-| Output/bridge proof | missing |
+| Output/bridge proof | present |
 | Verifier | present |
 
 ## Proof Chips
@@ -26,7 +26,7 @@
 | CAS readout | verified | Corrected Stage 9 40E hidden-state readout beats text and shuffled controls. |
 | Causal proof | verified | Subspace ablation/control evidence is recorded for the Stage 9 40E readout. |
 | Control proof | verified | Candidate cover/control evidence is recorded for the Stage 9 40E run. |
-| Output proof | missing | Eta-to-epsilon readable bridge output evidence is recorded. |
+| Output proof | verified | Eta-to-epsilon readable bridge output evidence is recorded. |
 | Packet proof | present | Evidence Packet schema, trace ID, and source artifact hashes are recorded. |
 
 ## Baseline Proof
@@ -61,19 +61,31 @@
 | Top-k neurons per class | 8 |
 | Caveat | Cover discovery is candidate-only until matched ablation validates targeted drops against random same-size and wrong-class controls. |
 
+## Output Bridge Proof
+
+| Metric | Value |
+| --- | ---: |
+| Cases | 80 |
+| Selected element accuracy | 0.95 |
+| Probe-readable delta vs none | 1.53484 |
+| Probe-readable minus partner | 3.22633 |
+| Gold-readable delta vs none | 1.71709 |
+| Probe-raw delta vs none | -0.000626 |
+| Probe-readable gate | passed |
+
 ## Verifier Decision
 
 | Field | Value |
 | --- | --- |
-| Verdict | `SUPPRESS` |
-| Confidence | 0.9 |
+| Verdict | `ACCEPT` |
+| Confidence | 0.95 |
 | Source | stage9_40e_packet_verifier |
 | Scope | stage9_40e_validation_packet |
-| Reason | output_bridge_gate_failed |
+| Reason | all_stage9_40e_validation_gates_passed |
 
 ## Rationale
 
-Merged packet is review-only because required proof tiers are missing: output_bridge.
+All required proof chips are pass-ready and the attached verifier returned `ACCEPT` with confidence 0.95.
 
 ## Caveats
 

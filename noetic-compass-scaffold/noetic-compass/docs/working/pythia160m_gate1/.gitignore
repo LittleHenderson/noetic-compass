@@ -8,5 +8,6 @@
 #     --torch-dtype float32 --device-map cpu --max-scenarios 0 --max-length 192
 *.npz
 full_capture.log
+eta_epsilon_bridge_run.log
 stage9_40e_scenarios_pilot.json
 # Keep: *.metadata.json and *_report.json (small, provenance + results)
