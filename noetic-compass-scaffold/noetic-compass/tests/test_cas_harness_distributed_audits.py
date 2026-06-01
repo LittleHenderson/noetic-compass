@@ -59,6 +59,17 @@ def _frontier_payload(parameter_count_b: int = 405, num_layers: int = 120) -> di
     }
 
 
+def _architecture_payload(model_type: str = "llama") -> dict:
+    """A model architecture declaration that resolves to a supported probe adapter.
+
+    ``llama`` maps to the llama_like decoder family whose ``model.layers`` stack
+    the probe worker can mechanically locate and whose ``.mlp`` submodule it hooks
+    -- so a declared-only architecture lands at ARCHITECTURE_ADAPTER_AVAILABLE.
+    """
+
+    return {"model_type": model_type}
+
+
 def test_distributed_routes_registered(client):
     openapi = client.get("/openapi.json").json()
 
@@ -394,6 +405,9 @@ def test_frontier_run_refused_without_provenance_manifest(client, auth_headers):
 def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, auth_headers):
     payload = _frontier_payload(405, 120)
     payload["provenance"] = _provenance_payload(payload["model_id"])
+    # Gate 6: a frontier run also needs a probe-hookable architecture. A llama
+    # declaration resolves to the llama_like adapter so the run can be created.
+    payload["architecture"] = _architecture_payload("llama")
 
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
@@ -412,6 +426,13 @@ def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, aut
     assert prov["verified_file_count"] == 0
     assert prov["all_hashes_verified"] is False
     assert prov["manifest_content_digest"]
+    arch = body["architecture"]
+    # Honest: declared-only architecture is AVAILABLE, never VERIFIED -- the real
+    # layout is confirmed worker-side at load time, not at the API tier.
+    assert arch["status"] == "ARCHITECTURE_ADAPTER_AVAILABLE"
+    assert arch["resolved_model_type"] == "llama"
+    assert arch["adapter_family"] == "llama_like"
+    assert arch["adapter_available"] is True
 
 
 def test_frontier_run_rejects_provenance_with_mismatched_model_id(client, auth_headers):
@@ -491,3 +512,150 @@ def test_below_frontier_run_records_optional_provenance_summary(client, auth_hea
     assert prov is not None
     assert prov["status"] == "PROVENANCE_DECLARED_NOT_VERIFIED"
     assert prov["license_recognized"] is True
+
+
+def test_frontier_run_refused_without_architecture_declaration(client, auth_headers):
+    # A valid provenance manifest clears gate 5 but a real frontier run also needs
+    # a probe-hookable architecture (gate 6). With provenance valid and no
+    # architecture declared, the 422 we assert is the architecture gate firing.
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "architecture" in resp.text.lower()
+
+
+def test_frontier_run_rejects_unsupported_architecture(client, auth_headers):
+    # mamba is a state-space architecture: the probe worker cannot locate a
+    # transformer decoder stack at any of its four hardcoded attribute paths, so
+    # it would raise rather than emit activations. Refuse the run honestly.
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("mamba")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "architecture" in resp.text.lower()
+
+
+def test_frontier_run_supported_architecture_is_adapter_available(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("qwen2")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    arch = resp.json()["architecture"]
+    assert arch["status"] == "ARCHITECTURE_ADAPTER_AVAILABLE"
+    assert arch["resolved_model_type"] == "qwen2"
+    assert arch["adapter_family"] == "llama_like"
+    assert arch["adapter_available"] is True
+
+
+def test_frontier_run_resolves_architecture_from_architectures_class(client, auth_headers):
+    # A caller may pass only the HF architectures class (e.g. from config.json)
+    # without an explicit model_type. The gate strips the ForCausalLM suffix and
+    # resolves "LlamaForCausalLM" -> "llama" -> the llama_like adapter.
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = {"architectures": ["LlamaForCausalLM"]}
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    arch = resp.json()["architecture"]
+    assert arch["status"] == "ARCHITECTURE_ADAPTER_AVAILABLE"
+    assert arch["resolved_model_type"] == "llama"
+
+
+def test_frontier_run_gpt_neox_architecture_is_empirically_validated(client, auth_headers):
+    # gpt_neox is the reference family the readout was actually validated on, so
+    # its adapter carries the stronger empirically_validated marker.
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("gpt_neox")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    arch = resp.json()["architecture"]
+    assert arch["status"] == "ARCHITECTURE_ADAPTER_AVAILABLE"
+    assert arch["adapter_family"] == "gpt_neox"
+    assert arch["adapter_validation"] == "empirically_validated"
+
+
+def test_below_frontier_run_does_not_require_architecture(client, auth_headers):
+    # A 100B run is ENGINEERED_NOT_VALIDATED, not frontier -- architecture is
+    # optional there and its absence must never block the run.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(100, 20),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    assert resp.json()["architecture"] is None
+
+
+def test_below_frontier_run_records_optional_architecture_summary(client, auth_headers):
+    # If a below-frontier caller volunteers an architecture, we record the honest
+    # summary without gating on it.
+    payload = _scale_payload(100, 20)
+    payload["architecture"] = _architecture_payload("mistral")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    arch = resp.json()["architecture"]
+    assert arch is not None
+    assert arch["status"] == "ARCHITECTURE_ADAPTER_AVAILABLE"
+    assert arch["resolved_model_type"] == "mistral"
+    assert arch["adapter_family"] == "llama_like"
+
+
+def test_below_frontier_run_records_unsupported_architecture_without_gating(client, auth_headers):
+    # A volunteered but unsupported architecture below frontier is recorded as
+    # UNSUPPORTED for traceability but does NOT block the run -- the gate only
+    # refuses at frontier scale.
+    payload = _scale_payload(100, 20)
+    payload["architecture"] = _architecture_payload("mamba")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    arch = resp.json()["architecture"]
+    assert arch is not None
+    assert arch["status"] == "ARCHITECTURE_ADAPTER_UNSUPPORTED"
+    assert arch["adapter_available"] is False

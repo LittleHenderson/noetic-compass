@@ -40,6 +40,9 @@ from api.services.cas_harness_distributed_audits import (
     record_worker_evidence,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.cas_harness_architecture_adapter import (
+    ModelArchitectureDeclaration as ServiceModelArchitectureDeclaration,
+)
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest as ServiceModelProvenanceManifest,
     WeightFileRef as ServiceWeightFileRef,
@@ -454,6 +457,36 @@ class ModelProvenanceManifestRequest(BaseModel):
         )
 
 
+class ModelArchitectureDeclarationRequest(BaseModel):
+    """Caller-supplied model architecture declaration (frontier run-gate 6).
+
+    Required to create a real frontier-scale (300B-4T) distributed run. The gate
+    refuses the run with HTTP 422 if this is missing or its ``model_type`` (or an
+    inferred architecture class) does not resolve to a probe adapter CAS Harness
+    can mechanically hook -- the probe worker can only locate decoder stacks at
+    ``gpt_neox.layers`` / ``model.layers`` / ``transformer.h`` / ``transformer.blocks``.
+    The real model layout is confirmed worker-side at load time, so at create time
+    a supported declaration is recorded as ARCHITECTURE_ADAPTER_AVAILABLE.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    model_type: str | None = Field(default=None, max_length=128)
+    architectures: list[str] = Field(default_factory=list, max_length=16)
+    num_hidden_layers: int | None = Field(default=None, gt=0, le=4096)
+    hidden_size: int | None = Field(default=None, gt=0, le=1_048_576)
+    num_attention_heads: int | None = Field(default=None, gt=0, le=8192)
+
+    def to_service_declaration(self) -> ServiceModelArchitectureDeclaration:
+        return ServiceModelArchitectureDeclaration(
+            model_type=self.model_type,
+            architectures=tuple(self.architectures),
+            num_hidden_layers=self.num_hidden_layers,
+            hidden_size=self.hidden_size,
+            num_attention_heads=self.num_attention_heads,
+        )
+
+
 class ScalePlanRequest(BaseModel):
     """Open-weight enterprise planning request.
 
@@ -491,6 +524,16 @@ class ScalePlanRequest(BaseModel):
             "Model provenance/license/weight-hash manifest. Required to CREATE a real "
             "frontier-scale (300B-4T) distributed run via /distributed/session; ignored by "
             "the planning-only /scale-plan endpoint. Frontier run-gate (5)."
+        ),
+    )
+    architecture: ModelArchitectureDeclarationRequest | None = Field(
+        default=None,
+        description=(
+            "Model architecture declaration (model_type / architectures / dims). Required "
+            "to CREATE a real frontier-scale (300B-4T) distributed run via "
+            "/distributed/session -- the run is refused unless the architecture resolves to "
+            "a probe adapter the worker can mechanically hook. Ignored by the planning-only "
+            "/scale-plan endpoint. Frontier run-gate (6)."
         ),
     )
 
@@ -563,6 +606,27 @@ class ModelProvenanceSummaryResponse(BaseModel):
     file_verifications: list[ModelProvenanceFileVerificationResponse]
 
 
+class ModelArchitectureAdapterSummaryResponse(BaseModel):
+    status: Literal[
+        "ARCHITECTURE_ADAPTER_VERIFIED",
+        "ARCHITECTURE_ADAPTER_AVAILABLE",
+        "ARCHITECTURE_ADAPTER_UNSUPPORTED",
+    ]
+    declared_model_type: str | None = None
+    declared_architectures: list[str]
+    resolved_model_type: str | None = None
+    adapter_family: str | None = None
+    layer_stack_attr: str | None = None
+    hook_submodule: str | None = None
+    adapter_validation: str | None = None
+    adapter_available: bool
+    notice: str
+    reasons: list[str]
+    declared_num_hidden_layers: int | None = None
+    declared_hidden_size: int | None = None
+    declared_num_attention_heads: int | None = None
+
+
 class DistributedAuditResponse(BaseModel):
     audit_id: str
     plan_id: str
@@ -573,6 +637,7 @@ class DistributedAuditResponse(BaseModel):
     evidence_packet_trace_id: str | None = None
     merge_reason: str
     provenance: ModelProvenanceSummaryResponse | None = None
+    architecture: ModelArchitectureAdapterSummaryResponse | None = None
     created_at: str
     updated_at: str
     plan: ScalePlanResponse
@@ -847,8 +912,10 @@ async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
 async def create_distributed_audit_session(req: ScalePlanRequest) -> DistributedAuditResponse:
     """Create a real distributed audit control-plane run from an open-weight plan.
 
-    Carries the same frontier gate as ``/scale-plan``: a 300B-4T run is refused 422
-    unless ``accept_experimental_frontier`` is set, and >4T is always refused.
+    Carries the same frontier gates as ``/scale-plan`` and more: a 300B-4T run is
+    refused 422 unless ``accept_experimental_frontier`` is set, unless a valid model
+    provenance manifest is attached (gate 5), and unless the declared architecture
+    resolves to a probe adapter the worker can hook (gate 6). >4T is always refused.
     """
     try:
         record = create_distributed_audit(
@@ -864,6 +931,9 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
             ),
             provenance=req.provenance.to_service_manifest()
             if req.provenance is not None
+            else None,
+            architecture=req.architecture.to_service_declaration()
+            if req.architecture is not None
             else None,
         )
     except ValueError as exc:

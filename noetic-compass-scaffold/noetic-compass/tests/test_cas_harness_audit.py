@@ -295,25 +295,49 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert refused_no_provenance.status_code == 422
     assert "provenance" in refused_no_provenance.text.lower()
 
-    # Ack + a well-formed, identity-matching, open-weight-licensed manifest is
-    # enough to CREATE the run. The hashes are declared, not yet recomputed, so
-    # the honest status is PROVENANCE_DECLARED_NOT_VERIFIED -- never a verdict.
+    # A valid provenance manifest still is NOT enough on its own: a real frontier
+    # run also needs a declared model architecture that resolves to a probe
+    # adapter the worker can mechanically hook (frontier run-gate 6). The probe
+    # worker can only locate decoder stacks at four hardcoded attribute paths, so
+    # an unknown architecture would make it raise rather than emit activations.
+    # Provenance is valid here, so the 422 we assert is the architecture gate.
+    valid_provenance = {
+        "model_id": "frontier/open-1t",
+        "source_uri": "https://huggingface.co/frontier/open-1t",
+        "license_id": "apache-2.0",
+        "weight_files": [
+            {"path": "model-00001-of-00002.safetensors", "sha256": "a" * 64},
+            {"path": "model-00002-of-00002.safetensors", "sha256": "b" * 64},
+        ],
+        "revision": "main",
+    }
+    refused_no_architecture = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "frontier/open-1t",
+            "parameter_count_b": 1000,
+            "accept_experimental_frontier": True,
+            "provenance": valid_provenance,
+        },
+        headers=auth_headers,
+    )
+    assert refused_no_architecture.status_code == 422
+    assert "architecture" in refused_no_architecture.text.lower()
+
+    # Ack + a well-formed, identity-matching, open-weight-licensed manifest + a
+    # declared architecture that resolves to a supported probe adapter is enough
+    # to CREATE the run. The hashes are declared (not recomputed) and the layout
+    # is confirmed worker-side at load time, so the honest statuses are
+    # PROVENANCE_DECLARED_NOT_VERIFIED + ARCHITECTURE_ADAPTER_AVAILABLE -- never a
+    # verdict.
     allowed = client.post(
         "/api/cas-harness/audit/distributed/session",
         json={
             "model_id": "frontier/open-1t",
             "parameter_count_b": 1000,
             "accept_experimental_frontier": True,
-            "provenance": {
-                "model_id": "frontier/open-1t",
-                "source_uri": "https://huggingface.co/frontier/open-1t",
-                "license_id": "apache-2.0",
-                "weight_files": [
-                    {"path": "model-00001-of-00002.safetensors", "sha256": "a" * 64},
-                    {"path": "model-00002-of-00002.safetensors", "sha256": "b" * 64},
-                ],
-                "revision": "main",
-            },
+            "provenance": valid_provenance,
+            "architecture": {"model_type": "llama"},
         },
         headers=auth_headers,
     )
@@ -323,6 +347,9 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert body["provenance"]["status"] == "PROVENANCE_DECLARED_NOT_VERIFIED"
     assert body["provenance"]["license_recognized"] is True
     assert body["provenance"]["all_hashes_verified"] is False
+    assert body["architecture"]["status"] == "ARCHITECTURE_ADAPTER_AVAILABLE"
+    assert body["architecture"]["resolved_model_type"] == "llama"
+    assert body["architecture"]["adapter_available"] is True
 
 
 def test_verify_reference_model_target_public_for_alpha_console(client):

@@ -16,6 +16,12 @@ import json
 from typing import Literal
 from uuid import uuid4
 
+from api.services.cas_harness_architecture_adapter import (
+    ArchitectureAdapterSummary,
+    ModelArchitectureDeclaration,
+    summarize_architecture_adapter,
+    validate_frontier_architecture,
+)
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest,
     ProvenanceSummary,
@@ -89,6 +95,7 @@ class DistributedAuditRecord:
     evidence_packet_trace_id: str | None = None
     merge_reason: str = "Distributed audit planned; no worker evidence has been merged yet."
     provenance: ProvenanceSummary | None = None
+    architecture: ArchitectureAdapterSummary | None = None
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -101,6 +108,7 @@ class DistributedAuditRecord:
             "evidence_packet_trace_id": self.evidence_packet_trace_id,
             "merge_reason": self.merge_reason,
             "provenance": self.provenance.to_dict() if self.provenance is not None else None,
+            "architecture": self.architecture.to_dict() if self.architecture is not None else None,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
             "plan": self.plan.to_dict(),
@@ -123,6 +131,7 @@ def create_distributed_audit(
     request: ScalePlanRequest,
     *,
     provenance: ModelProvenanceManifest | None = None,
+    architecture: ModelArchitectureDeclaration | None = None,
 ) -> DistributedAuditRecord:
     plan = build_scale_plan(request)
 
@@ -142,6 +151,20 @@ def create_distributed_audit(
         provenance_summary = summarize_model_provenance(
             manifest=provenance, expected_model_id=plan.model_id
         )
+
+    # Frontier run-gate (6): a real 300B-4T run must declare an architecture whose
+    # model_type resolves to a probe adapter the worker can mechanically hook (one of
+    # the four decoder-stack paths in locate_transformer_layers). An architecture the
+    # worker cannot locate would raise rather than produce activations, so it is refused
+    # here (ValueError -> HTTP 422). At create time the declaration is checked against the
+    # adapter registry only -- the real model layout is confirmed worker-side at load
+    # time -- so a supported declaration lands at ARCHITECTURE_ADAPTER_AVAILABLE. Below the
+    # frontier rung the declaration is optional and recorded, never a blocker.
+    architecture_summary: ArchitectureAdapterSummary | None = None
+    if plan.validation_status == "EXPERIMENTAL_NOT_VALIDATED":
+        architecture_summary = validate_frontier_architecture(declaration=architecture)
+    elif architecture is not None:
+        architecture_summary = summarize_architecture_adapter(declaration=architecture)
 
     now = datetime.now(UTC).isoformat()
     audit_id = _audit_id_for(plan)
@@ -167,6 +190,7 @@ def create_distributed_audit(
         created_at=now,
         updated_at=now,
         provenance=provenance_summary,
+        architecture=architecture_summary,
     )
     _DISTRIBUTED_AUDITS[audit_id] = record
     return record
