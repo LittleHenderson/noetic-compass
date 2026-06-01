@@ -12,6 +12,11 @@ from dataclasses import asdict, dataclass
 from math import ceil
 from typing import Literal
 
+from api.services.cas_harness_model_access import (
+    ModelAccessMode,
+    validate_distributed_model_access,
+)
+
 
 Precision = Literal["fp16", "bf16", "int8", "int4"]
 AuditDepth = Literal["FULL_INTERNAL", "LAYER_SAMPLE"]
@@ -137,6 +142,11 @@ class ScalePlanRequest:
     # the caller explicitly accepts experimental-risk terms, so a 1T-4T plan can
     # never be produced by accident.
     accept_experimental_frontier: bool = False
+    # Run-gate (2): the mechanistic probe can only audit open-weight / internal-access
+    # models. A non-open-weight mode is refused in _validate_request for every size,
+    # because mechanistic reachability is a precondition of the method, not a frontier
+    # concern. Defaults to open_weight so existing open-weight callers are unaffected.
+    weight_access: ModelAccessMode = "open_weight"
 
 
 @dataclass(frozen=True)
@@ -269,6 +279,11 @@ def build_scale_plan(request: ScalePlanRequest) -> ScalePlan:
 def _validate_request(request: ScalePlanRequest) -> None:
     if not request.model_id.strip():
         raise ValueError("model_id is required")
+    # Run-gate (2): refuse a model the mechanistic probe cannot reach before doing any
+    # size/risk reasoning. The distributed audit hooks decoder layers to pool hidden-state
+    # activations, so a hosted/black-box/output-only target (which exposes no hidden states)
+    # is refused here -- for every size, since reachability is a precondition of the method.
+    validate_distributed_model_access(declared_mode=request.weight_access)
     if request.parameter_count_b <= 0:
         raise ValueError("parameter_count_b must be positive")
     if request.parameter_count_b > _FRONTIER_PLANNING_CEILING_B:

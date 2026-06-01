@@ -49,6 +49,9 @@ from api.services.cas_harness_probe_compatibility import (
 from api.services.cas_harness_compute_feasibility import (
     ComputeEnvelopeDeclaration as ServiceComputeEnvelopeDeclaration,
 )
+from api.services.cas_harness_model_access import (
+    ModelAccessMode as ServiceModelAccessMode,
+)
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest as ServiceModelProvenanceManifest,
     WeightFileRef as ServiceWeightFileRef,
@@ -568,9 +571,17 @@ class ScalePlanRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     model_id: str = Field(..., min_length=1, max_length=200)
-    weight_access: Literal["open_weight"] = Field(
+    weight_access: ServiceModelAccessMode = Field(
         default="open_weight",
-        description="CAS Harness beta enterprise planning is open-weight/internal-access only.",
+        description=(
+            "Model access modality. The distributed CAS Harness audit is a mechanistic probe: "
+            "it hooks the model's decoder layers and pools hidden-state activations to compute "
+            "the CAS axis readout, so it requires open-weight (locally loadable) access. A "
+            "hosted_api / black_box / output_only target exposes no hidden states, so it is "
+            "refused with HTTP 422 and an explanation pointing at the behavioral target/verify "
+            "path. Universal run-gate (2): enforced at every size, not just the frontier, "
+            "because mechanistic reachability is a precondition of the method itself."
+        ),
     )
     parameter_count_b: float = Field(..., gt=0, le=4000)
     num_layers: int | None = Field(default=None, gt=0, le=4096)
@@ -762,6 +773,19 @@ class ComputeFeasibilitySummaryResponse(BaseModel):
     reasons: list[str]
 
 
+class ModelAccessSummaryResponse(BaseModel):
+    status: Literal[
+        "MODEL_ACCESS_VERIFIED",
+        "MODEL_ACCESS_DECLARED",
+        "MODEL_ACCESS_UNSUPPORTED",
+    ]
+    declared_mode: str
+    mechanistic_probe_supported: bool
+    access_verified: bool
+    notice: str
+    reasons: list[str]
+
+
 class DistributedAuditResponse(BaseModel):
     audit_id: str
     plan_id: str
@@ -771,6 +795,7 @@ class DistributedAuditResponse(BaseModel):
     confidence: float | None = Field(default=None, ge=0.0, le=1.0)
     evidence_packet_trace_id: str | None = None
     merge_reason: str
+    access: ModelAccessSummaryResponse | None = None
     provenance: ModelProvenanceSummaryResponse | None = None
     architecture: ModelArchitectureAdapterSummaryResponse | None = None
     probe: ProbeCompatibilitySummaryResponse | None = None
@@ -1031,6 +1056,7 @@ async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
         plan = build_scale_plan(
             PlannerScalePlanRequest(
                 model_id=req.model_id,
+                weight_access=req.weight_access,
                 parameter_count_b=req.parameter_count_b,
                 num_layers=req.num_layers,
                 precision=req.precision,
@@ -1060,6 +1086,7 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
         record = create_distributed_audit(
             PlannerScalePlanRequest(
                 model_id=req.model_id,
+                weight_access=req.weight_access,
                 parameter_count_b=req.parameter_count_b,
                 num_layers=req.num_layers,
                 precision=req.precision,

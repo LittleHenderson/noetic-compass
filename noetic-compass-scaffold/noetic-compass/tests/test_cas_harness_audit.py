@@ -197,18 +197,23 @@ def test_scale_plan_returns_open_weight_enterprise_worker_plan(client):
     assert any("does not support black-box" in item for item in body["limitations"])
 
 
-def test_scale_plan_rejects_black_box_or_output_only_access(client):
+@pytest.mark.parametrize("mode", ["hosted_api", "black_box", "output_only"])
+def test_scale_plan_rejects_non_mechanistic_access_modes(client, mode):
+    # Run-gate (2) is universal: a hosted/black-box/output-only target exposes no
+    # hidden states, so the mechanistic probe cannot reach it at ANY size. The
+    # refusal names the open_weight remedy and points at the behavioral fallback.
     resp = client.post(
         "/api/cas-harness/audit/scale-plan",
         json={
             "model_id": "closed-api-only",
-            "weight_access": "black_box",
+            "weight_access": mode,
             "parameter_count_b": 20,
         },
     )
 
     assert resp.status_code == 422
     assert "open_weight" in resp.text
+    assert "target/verify" in resp.text
 
 
 def test_scale_plan_exposes_validation_status_for_validated_lane(client):
@@ -415,6 +420,12 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
     assert body["compute"]["status"] == "COMPUTE_FEASIBILITY_DECLARED"
     assert body["compute"]["memory_sufficient"] is True
     assert body["compute"]["fit_verified"] is False
+    # Run-gate (2) rides along on every distributed run: an open-weight target is
+    # mechanistically reachable, so the access receipt is DECLARED -- never
+    # VERIFIED at the API tier, which touches no weights.
+    assert body["access"]["status"] == "MODEL_ACCESS_DECLARED"
+    assert body["access"]["mechanistic_probe_supported"] is True
+    assert body["access"]["access_verified"] is False
 
 
 def test_verify_reference_model_target_public_for_alpha_console(client):

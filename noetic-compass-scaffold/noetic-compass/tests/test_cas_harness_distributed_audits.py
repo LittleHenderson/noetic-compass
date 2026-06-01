@@ -405,18 +405,48 @@ def test_completed_worker_receipt_requires_evidence_packet_ref(client, auth_head
     assert "evidence_packet_ref" in resp.text
 
 
-def test_distributed_endpoint_rejects_black_box_customer_models(client, auth_headers):
+# --- Run-gate (2): model-access modality (UNIVERSAL, not frontier-stricter) ---
+
+
+@pytest.mark.parametrize("mode", ["hosted_api", "black_box", "output_only"])
+def test_distributed_endpoint_rejects_non_mechanistic_access_modes(client, auth_headers, mode):
+    # The distributed audit is a mechanistic probe (hook decoder layers -> pool
+    # hidden states -> cas_axis_readout). A hosted/black-box/output-only target
+    # exposes no hidden states, so it is refused for EVERY size, frontier or not.
     resp = client.post(
         "/api/cas-harness/audit/distributed/session",
         json={
             **_scale_payload(100, 20),
-            "weight_access": "black_box",
+            "weight_access": mode,
         },
         headers=auth_headers,
     )
 
     assert resp.status_code == 422
-    assert "open_weight" in resp.text
+    body = resp.text
+    assert "open_weight" in body
+    # The refusal points the caller at the behavioral fallback, not a dead end.
+    assert "target/verify" in body
+
+
+def test_distributed_open_weight_run_carries_declared_access_summary(client, auth_headers):
+    # A below-frontier open-weight run still carries the honest access receipt:
+    # DECLARED (enough to create a run), never VERIFIED at the API tier.
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=_scale_payload(100, 20),
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 200
+    access = resp.json()["access"]
+    assert access is not None
+    assert access["status"] == "MODEL_ACCESS_DECLARED"
+    assert access["mechanistic_probe_supported"] is True
+    # No weights are touched at the API tier, so loadability is never confirmed here.
+    assert access["access_verified"] is False
+    assert access["declared_mode"] == "open_weight"
+    assert access["reasons"] == []
 
 
 # --- Frontier run-gate (5): model provenance / license / weight-hash manifest ---

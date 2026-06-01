@@ -28,6 +28,10 @@ from api.services.cas_harness_compute_feasibility import (
     summarize_compute_feasibility,
     validate_frontier_compute_feasibility,
 )
+from api.services.cas_harness_model_access import (
+    ModelAccessSummary,
+    summarize_model_access,
+)
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest,
     ProvenanceSummary,
@@ -106,6 +110,7 @@ class DistributedAuditRecord:
     confidence: float | None = None
     evidence_packet_trace_id: str | None = None
     merge_reason: str = "Distributed audit planned; no worker evidence has been merged yet."
+    access: ModelAccessSummary | None = None
     provenance: ProvenanceSummary | None = None
     architecture: ArchitectureAdapterSummary | None = None
     probe: ProbeCompatibilitySummary | None = None
@@ -121,6 +126,7 @@ class DistributedAuditRecord:
             "confidence": self.confidence,
             "evidence_packet_trace_id": self.evidence_packet_trace_id,
             "merge_reason": self.merge_reason,
+            "access": self.access.to_dict() if self.access is not None else None,
             "provenance": self.provenance.to_dict() if self.provenance is not None else None,
             "architecture": self.architecture.to_dict() if self.architecture is not None else None,
             "probe": self.probe.to_dict() if self.probe is not None else None,
@@ -152,6 +158,12 @@ def create_distributed_audit(
     compute: ComputeEnvelopeDeclaration | None = None,
 ) -> DistributedAuditRecord:
     plan = build_scale_plan(request)
+
+    # Run-gate (2): build_scale_plan already refused any non-open-weight access mode
+    # (the mechanistic probe cannot reach a hosted/black-box target at any size), so by
+    # here the plan is open-weight by construction. Record the honest access receipt --
+    # DECLARED, never VERIFIED at this tier -- so every run carries it for traceability.
+    access_summary = summarize_model_access(declared_mode=plan.weight_access)
 
     # Frontier run-gate (5): a real 300B-4T run (the EXPERIMENTAL_NOT_VALIDATED rung)
     # must carry a valid model provenance/license/weight-hash manifest, or it is
@@ -241,6 +253,7 @@ def create_distributed_audit(
         worker_evidence=worker_evidence,
         created_at=now,
         updated_at=now,
+        access=access_summary,
         provenance=provenance_summary,
         architecture=architecture_summary,
         probe=probe_summary,
