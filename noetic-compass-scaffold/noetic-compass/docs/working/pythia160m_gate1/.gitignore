@@ -1,0 +1,12 @@
+# Large/reproducible Gate-1 capture artifacts — do NOT commit.
+# Regenerate the activation dataset with:
+#   python live-trace-worker/scripts/capture_open_weight_probe_dataset.py \
+#     --model-id EleutherAI/pythia-160m \
+#     --scenario-path docs/working/pythia160m_gate1/stage9_40e_scenarios_pilot.json \
+#     --output docs/working/pythia160m_gate1/pythia160m_stage9_40e.npz \
+#     --metadata-output docs/working/pythia160m_gate1/pythia160m_stage9_40e.metadata.json \
+#     --torch-dtype float32 --device-map cpu --max-scenarios 0 --max-length 192
+*.npz
+full_capture.log
+stage9_40e_scenarios_pilot.json
+# Keep: *.metadata.json and *_report.json (small, provenance + results)

@@ -1,0 +1,290 @@
+{
+  "artifacts": [
+    {
+      "artifact_id": "activation_dataset_npz",
+      "artifact_type": "40e_activation_dataset_npz",
+      "byte_count": 132376150,
+      "content_sha256": "f3a3d186f9aecac7fde19d33895bb05c76260a12812cd00cdd60e85b8102d2f5",
+      "created_at": "2026-06-01T03:41:27.131424+00:00",
+      "redaction_class": "internal_eval_artifact",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz"
+    },
+    {
+      "artifact_id": "metadata_json",
+      "artifact_type": "40e_capture_metadata_json",
+      "byte_count": 2427,
+      "content_sha256": "d7e6123ee239b740f73f9da0d44f88e4e6d693ac771a3f9ed981e570e30a00a0",
+      "created_at": "2026-06-01T03:41:27.166424+00:00",
+      "redaction_class": "internal_eval_artifact",
+      "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json"
+    }
+  ],
+  "axis": "40_element_operator_x_domain",
+  "best_layer": {
+    "layer": 3,
+    "test_acc": 0.9171875,
+    "test_macro_f1": 0.9204827870659675
+  },
+  "class_distribution": {
+    "^0|C": 208,
+    "^0|E": 208,
+    "^0|O": 208,
+    "^0|P": 208,
+    "^1|C": 208,
+    "^1|E": 208,
+    "^1|O": 208,
+    "^1|P": 208,
+    "^2|C": 208,
+    "^2|E": 208,
+    "^2|O": 208,
+    "^2|P": 208,
+    "^3|C": 208,
+    "^3|E": 208,
+    "^3|O": 208,
+    "^3|P": 208,
+    "^4|C": 208,
+    "^4|E": 208,
+    "^4|O": 208,
+    "^4|P": 208,
+    "^5|C": 208,
+    "^5|E": 208,
+    "^5|O": 208,
+    "^5|P": 208,
+    "^6|C": 208,
+    "^6|E": 208,
+    "^6|O": 208,
+    "^6|P": 208,
+    "^7|C": 208,
+    "^7|E": 208,
+    "^7|O": 208,
+    "^7|P": 208,
+    "^8|C": 208,
+    "^8|E": 208,
+    "^8|O": 208,
+    "^8|P": 208,
+    "^9|C": 208,
+    "^9|E": 208,
+    "^9|O": 208,
+    "^9|P": 208
+  },
+  "controls": {
+    "confirmed_text_baseline_report": null,
+    "majority_class_label": "^0|C",
+    "majority_class_test_acc": 0.025,
+    "shuffled_label_hidden_best_layer": {
+      "all_trials": [
+        0.016517857142857143,
+        0.025223214285714286,
+        0.040848214285714286,
+        0.01875,
+        0.016517857142857143,
+        0.025892857142857145,
+        0.021651785714285714,
+        0.019196428571428573,
+        0.02075892857142857,
+        0.025,
+        0.021205357142857144,
+        0.029017857142857144,
+        0.018973214285714284,
+        0.027678571428571427,
+        0.02075892857142857,
+        0.0328125,
+        0.031919642857142855,
+        0.025223214285714286,
+        0.030133928571428572,
+        0.028348214285714286
+      ],
+      "max_test_acc": 0.040848214285714286,
+      "mean_test_acc": 0.02482142857142857,
+      "std_test_acc": 0.006065352789762993,
+      "trials": 20
+    },
+    "text_hash_baseline": {
+      "description": "HashingVectorizer(1-2 ngrams, 2^14 features) + LogisticRegression on prompt text",
+      "test_acc": 0.5,
+      "test_macro_f1": 0.4747324836021054
+    }
+  },
+  "created_at": "2026-06-01T03:45:49.962866+00:00",
+  "dataset": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz",
+  "hidden_dim": 768,
+  "important_limit": "Dataset has 40/40 cells populated, with 0 cells under the configured minimum of 10 samples. Sparse cells make probe claims undertrained. fixed split by metadata.split; test_split=test was used; train/test group overlap is 0. Text-hash baseline measures whether prompt surface forms (which carry canonical CAS colloquialisms) encode the label. Canonical TKS English is valid framework language, but a high text-only score blocks the specific CAS-beats-surface-text claim until the fixture passes the baseline ceiling. Methodology minimum is 10 samples per cell; headline closure can be rerun with --min-samples-per-cell 25 for the stricter ~1000-scenario packet threshold.",
+  "metadata_path": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json",
+  "method_contract": {
+    "class_weight": "balanced",
+    "group_key": "metadata.counterfactual_pair_id",
+    "min_samples_per_cell": 10,
+    "probe_C": 0.1,
+    "probe_max_iter": 1000,
+    "readout": "StandardScaler + LogisticRegression",
+    "seed": 2026,
+    "shuffled_trials": 20,
+    "solver": "lbfgs",
+    "split": "fixed split by metadata.split; test_split=test",
+    "split_key": "metadata.split",
+    "test_split": "test"
+  },
+  "model_id": "EleutherAI/pythia-160m",
+  "n_base_prompt_groups": 4160,
+  "n_layers": 12,
+  "n_samples": 8320,
+  "n_test": 4480,
+  "n_train": 3840,
+  "per_layer": [
+    {
+      "layer": 0,
+      "test_acc": 0.04888392857142857,
+      "test_macro_f1": 0.010589901600849903
+    },
+    {
+      "layer": 1,
+      "test_acc": 0.8834821428571429,
+      "test_macro_f1": 0.8945773509320645
+    },
+    {
+      "layer": 2,
+      "test_acc": 0.8986607142857143,
+      "test_macro_f1": 0.9070666140545006
+    },
+    {
+      "layer": 3,
+      "test_acc": 0.9171875,
+      "test_macro_f1": 0.9204827870659675
+    },
+    {
+      "layer": 4,
+      "test_acc": 0.9073660714285714,
+      "test_macro_f1": 0.9108548736901525
+    },
+    {
+      "layer": 5,
+      "test_acc": 0.9100446428571428,
+      "test_macro_f1": 0.9186397312388543
+    },
+    {
+      "layer": 6,
+      "test_acc": 0.8533482142857143,
+      "test_macro_f1": 0.8724641439176292
+    },
+    {
+      "layer": 7,
+      "test_acc": 0.8450892857142858,
+      "test_macro_f1": 0.8683288088409208
+    },
+    {
+      "layer": 8,
+      "test_acc": 0.8779017857142857,
+      "test_macro_f1": 0.8840047100100688
+    },
+    {
+      "layer": 9,
+      "test_acc": 0.8736607142857142,
+      "test_macro_f1": 0.8794179644872291
+    },
+    {
+      "layer": 10,
+      "test_acc": 0.8676339285714286,
+      "test_macro_f1": 0.8765766231248324
+    },
+    {
+      "layer": 11,
+      "test_acc": 0.8736607142857142,
+      "test_macro_f1": 0.8816380557060473
+    }
+  ],
+  "populated_cells": 40,
+  "pythia_160m_comparator": {
+    "axis": "40-Element (10 Noetics x 4 Domains)",
+    "readout_test_acc": 0.898,
+    "source": "CAS_HARNESS_SPEC_SHEET_v1_5_20260519_409e9efe",
+    "text_baseline_gap_pp": 39.7
+  },
+  "readiness_gate": {
+    "axis": "40_element_operator_x_domain",
+    "blocking_reasons": [],
+    "expected_cells": 40,
+    "min_samples_per_cell_required": 10,
+    "missing_cells": [],
+    "packet_ready": true,
+    "populated_expected_cells": 40,
+    "required_artifact": {
+      "description": "A source-derived TKS40 activation dataset with every canonical ^0..^9 x P/C/E/O cell populated at or above the configured minimum sample count.",
+      "feature_shape": "[N_scenarios, N_layers, hidden_dim]",
+      "how_to_supply": "Capture or copy the balanced 40E .npz plus its metadata JSON, then run this evaluator with --dataset PATH --metadata PATH --output PATH. Use --require-balanced-40e to make packet assembly fail fast when the artifact is incomplete.",
+      "labels": [
+        "labels_operator",
+        "labels_domain"
+      ],
+      "name": "balanced_40_element_activation_dataset",
+      "required_npz_keys": [
+        "features",
+        "layers",
+        "labels_domain",
+        "labels_operator",
+        "prompts"
+      ]
+    },
+    "sparse_cells": {},
+    "status": "packet_ready",
+    "unexpected_cells": []
+  },
+  "result_summary": {
+    "hidden_probe_beats_confirmed_text_baseline": null,
+    "hidden_probe_beats_majority": true,
+    "hidden_probe_beats_text_baseline": true,
+    "hidden_probe_exceeds_shuffled_max": true,
+    "hidden_probe_minus_shuffled_mean_pp": 89.23660714285715,
+    "hidden_probe_test_acc": 0.9171875,
+    "interpretation": "Pythia-160M closure target on 40-Element: 89.8% readout, +39.7pp over text baseline. This run replicates the readout protocol on a different substrate using the dataset's operator + domain labels. When --confirmed-text-baseline-report is supplied, the result summary states whether hidden readout beats the exact-fixture text baseline."
+  },
+  "schema_version": "cas_harness_40_element_probe_eval.v1",
+  "sparse_cells_lt_min_samples": 0,
+  "split": "fixed split by metadata.split; test_split=test",
+  "status": "packet_ready_evaluation_completed",
+  "test_class_distribution": {
+    "^0|C": 112,
+    "^0|E": 112,
+    "^0|O": 112,
+    "^0|P": 112,
+    "^1|C": 112,
+    "^1|E": 112,
+    "^1|O": 112,
+    "^1|P": 112,
+    "^2|C": 112,
+    "^2|E": 112,
+    "^2|O": 112,
+    "^2|P": 112,
+    "^3|C": 112,
+    "^3|E": 112,
+    "^3|O": 112,
+    "^3|P": 112,
+    "^4|C": 112,
+    "^4|E": 112,
+    "^4|O": 112,
+    "^4|P": 112,
+    "^5|C": 112,
+    "^5|E": 112,
+    "^5|O": 112,
+    "^5|P": 112,
+    "^6|C": 112,
+    "^6|E": 112,
+    "^6|O": 112,
+    "^6|P": 112,
+    "^7|C": 112,
+    "^7|E": 112,
+    "^7|O": 112,
+    "^7|P": 112,
+    "^8|C": 112,
+    "^8|E": 112,
+    "^8|O": 112,
+    "^8|P": 112,
+    "^9|C": 112,
+    "^9|E": 112,
+    "^9|O": 112,
+    "^9|P": 112
+  },
+  "test_size": 0.2,
+  "total_cells": 40,
+  "train_test_group_overlap_count": 0,
+  "train_test_group_overlap_examples": []
+}

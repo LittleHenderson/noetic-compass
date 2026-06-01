@@ -1,0 +1,423 @@
+{
+  "ablation_tier": "LOGIT-SUBSPACE-PROJECTION-ABLATION",
+  "axis": "40_element_operator_x_domain",
+  "base_method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
+  "chance_baseline": {
+    "accuracy": 0.025,
+    "formula": "1/40",
+    "label_space": "canonical_40_element_operator_x_domain"
+  },
+  "created_at": "2026-06-01T04:32:09.678540+00:00",
+  "dataset_summary": {
+    "class_distribution": {
+      "^0|C": 208,
+      "^0|E": 208,
+      "^0|O": 208,
+      "^0|P": 208,
+      "^1|C": 208,
+      "^1|E": 208,
+      "^1|O": 208,
+      "^1|P": 208,
+      "^2|C": 208,
+      "^2|E": 208,
+      "^2|O": 208,
+      "^2|P": 208,
+      "^3|C": 208,
+      "^3|E": 208,
+      "^3|O": 208,
+      "^3|P": 208,
+      "^4|C": 208,
+      "^4|E": 208,
+      "^4|O": 208,
+      "^4|P": 208,
+      "^5|C": 208,
+      "^5|E": 208,
+      "^5|O": 208,
+      "^5|P": 208,
+      "^6|C": 208,
+      "^6|E": 208,
+      "^6|O": 208,
+      "^6|P": 208,
+      "^7|C": 208,
+      "^7|E": 208,
+      "^7|O": 208,
+      "^7|P": 208,
+      "^8|C": 208,
+      "^8|E": 208,
+      "^8|O": 208,
+      "^8|P": 208,
+      "^9|C": 208,
+      "^9|E": 208,
+      "^9|O": 208,
+      "^9|P": 208
+    },
+    "dataset": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz",
+    "hidden_dim": 768,
+    "layers": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "metadata": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json",
+    "model_id": "EleutherAI/pythia-160m",
+    "n_base_prompt_groups": 4160,
+    "n_layers": 12,
+    "n_samples": 8320,
+    "n_test": 4480,
+    "n_train": 3840,
+    "scenario_summary": {
+      "scenario_count": 8320,
+      "scenario_key": "scenarios",
+      "shape": "object",
+      "top_level_keys": [
+        "axis",
+        "created_at",
+        "important_limit",
+        "mode",
+        "scenario_count",
+        "scenarios",
+        "schema_version",
+        "source_builder",
+        "source_commit"
+      ]
+    },
+    "scenarios": "docs\\working\\pythia160m_gate1\\stage9_40e_scenarios_pilot.json",
+    "selected_layers": [
+      3
+    ],
+    "train_test_group_overlap_count": 0,
+    "train_test_group_overlap_examples": []
+  },
+  "important_limit": "This is a causal-subspace diagnostic report, not a packet verdict. It tests whether ablating the learned readout subspace causes materially larger readout collapse than same-rank random projection controls.",
+  "method_contract": {
+    "ablation": "remove projection onto learned class/logit subspace, invert scaler, retrain readout",
+    "class_weight": "balanced",
+    "group_key": "metadata.counterfactual_pair_id",
+    "guard_margin_pp": 5.0,
+    "probe_C": 0.1,
+    "probe_max_iter": 1000,
+    "projection_coordinate_space": "standardized_hidden_state",
+    "random_control": "same-rank random orthonormal projection ablation in standardized hidden state",
+    "random_control_trials": 20,
+    "readout": "StandardScaler + LogisticRegression",
+    "shuffled_trials": 0,
+    "solver": "lbfgs",
+    "split_key": "metadata.split",
+    "subspace_source": "trained logistic regression class/logit coefficients",
+    "test_split": "test"
+  },
+  "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT + LOGIT-SUBSPACE-PROJECTION-ABLATION",
+  "packet_decision": "not_applicable_ablation_diagnostic_only",
+  "per_layer": [
+    {
+      "ablated_accuracy": 0.4772321428571429,
+      "ablated_macro_f1": 0.48211112899977115,
+      "guard": {
+        "description": "true learned-subspace ablation must disrupt accuracy materially more than random same-rank controls",
+        "margin_over_random_max_disruption": 0.43392857142857144,
+        "random_max_disruption": 0.006026785714285721,
+        "required_margin_pp": 5.0,
+        "status": "passed",
+        "true_disruption": 0.43995535714285716
+      },
+      "layer": 3,
+      "original_accuracy": 0.9171875,
+      "original_macro_f1": 0.9204827870659675,
+      "random_same_rank_controls": {
+        "all_trials": [
+          {
+            "ablated_accuracy": 0.9162946428571429,
+            "ablated_macro_f1": 0.9197896129891134,
+            "disruption": 0.0008928571428571397,
+            "rank": 39,
+            "trial": 1
+          },
+          {
+            "ablated_accuracy": 0.9160714285714285,
+            "ablated_macro_f1": 0.9197768938022908,
+            "disruption": 0.0011160714285715079,
+            "rank": 39,
+            "trial": 2
+          },
+          {
+            "ablated_accuracy": 0.9169642857142857,
+            "ablated_macro_f1": 0.9203930815765691,
+            "disruption": 0.0002232142857143682,
+            "rank": 39,
+            "trial": 3
+          },
+          {
+            "ablated_accuracy": 0.9158482142857143,
+            "ablated_macro_f1": 0.919598490321859,
+            "disruption": 0.001339285714285765,
+            "rank": 39,
+            "trial": 4
+          },
+          {
+            "ablated_accuracy": 0.9167410714285714,
+            "ablated_macro_f1": 0.9199558880783918,
+            "disruption": 0.00044642857142862535,
+            "rank": 39,
+            "trial": 5
+          },
+          {
+            "ablated_accuracy": 0.9158482142857143,
+            "ablated_macro_f1": 0.9192977281791517,
+            "disruption": 0.001339285714285765,
+            "rank": 39,
+            "trial": 6
+          },
+          {
+            "ablated_accuracy": 0.9160714285714285,
+            "ablated_macro_f1": 0.919246191439224,
+            "disruption": 0.0011160714285715079,
+            "rank": 39,
+            "trial": 7
+          },
+          {
+            "ablated_accuracy": 0.9176339285714286,
+            "ablated_macro_f1": 0.9216191968982784,
+            "disruption": -0.00044642857142851433,
+            "rank": 39,
+            "trial": 8
+          },
+          {
+            "ablated_accuracy": 0.9162946428571429,
+            "ablated_macro_f1": 0.9199396980226606,
+            "disruption": 0.0008928571428571397,
+            "rank": 39,
+            "trial": 9
+          },
+          {
+            "ablated_accuracy": 0.9180803571428572,
+            "ablated_macro_f1": 0.9214166663464269,
+            "disruption": -0.0008928571428571397,
+            "rank": 39,
+            "trial": 10
+          },
+          {
+            "ablated_accuracy": 0.9176339285714286,
+            "ablated_macro_f1": 0.9206137769073148,
+            "disruption": -0.00044642857142851433,
+            "rank": 39,
+            "trial": 11
+          },
+          {
+            "ablated_accuracy": 0.9178571428571428,
+            "ablated_macro_f1": 0.9206191601200073,
+            "disruption": -0.0006696428571427715,
+            "rank": 39,
+            "trial": 12
+          },
+          {
+            "ablated_accuracy": 0.9111607142857143,
+            "ablated_macro_f1": 0.9153106314812117,
+            "disruption": 0.006026785714285721,
+            "rank": 39,
+            "trial": 13
+          },
+          {
+            "ablated_accuracy": 0.9176339285714286,
+            "ablated_macro_f1": 0.9209110263983883,
+            "disruption": -0.00044642857142851433,
+            "rank": 39,
+            "trial": 14
+          },
+          {
+            "ablated_accuracy": 0.9138392857142857,
+            "ablated_macro_f1": 0.9173462481074905,
+            "disruption": 0.0033482142857143016,
+            "rank": 39,
+            "trial": 15
+          },
+          {
+            "ablated_accuracy": 0.9171875,
+            "ablated_macro_f1": 0.9199277540476771,
+            "disruption": 0.0,
+            "rank": 39,
+            "trial": 16
+          },
+          {
+            "ablated_accuracy": 0.9167410714285714,
+            "ablated_macro_f1": 0.9202129084618853,
+            "disruption": 0.00044642857142862535,
+            "rank": 39,
+            "trial": 17
+          },
+          {
+            "ablated_accuracy": 0.9183035714285714,
+            "ablated_macro_f1": 0.9212414281871659,
+            "disruption": -0.0011160714285713969,
+            "rank": 39,
+            "trial": 18
+          },
+          {
+            "ablated_accuracy": 0.9138392857142857,
+            "ablated_macro_f1": 0.9171455784127944,
+            "disruption": 0.0033482142857143016,
+            "rank": 39,
+            "trial": 19
+          },
+          {
+            "ablated_accuracy": 0.9162946428571429,
+            "ablated_macro_f1": 0.9193744918275932,
+            "disruption": 0.0008928571428571397,
+            "rank": 39,
+            "trial": 20
+          }
+        ],
+        "control_type": "random_same_rank_projection_in_standardized_hidden_state",
+        "max_ablated_accuracy": 0.9183035714285714,
+        "max_disruption": 0.006026785714285721,
+        "mean_ablated_accuracy": 0.9163169642857142,
+        "mean_disruption": 0.0008705357142857528,
+        "min_ablated_accuracy": 0.9111607142857143,
+        "rank": 39,
+        "trials": 20
+      },
+      "shuffled_baseline": {
+        "max_accuracy": 0.040848214285714286,
+        "mean_accuracy": 0.02482142857142857,
+        "source": "probe_report.controls.shuffled_label_hidden_best_layer",
+        "std_accuracy": 0.006065352789762993,
+        "trials": 20
+      },
+      "subspace": {
+        "coef_shape": [
+          40,
+          768
+        ],
+        "coordinate_space": "standardized_hidden_state",
+        "numeric_rank": 39,
+        "rank": 39,
+        "requested_rank": null,
+        "singular_value_tolerance": 1e-08,
+        "singular_values": [
+          2.3302371085396913,
+          2.206307659409536,
+          2.14982852019212,
+          2.0855050901366057,
+          1.9720597722788966,
+          1.9214370690732887,
+          1.803635519717666,
+          1.7196780966143694,
+          1.6988039171033424,
+          1.6460278733735234,
+          1.5985393261726837,
+          1.559495392784469,
+          1.551662712034526,
+          1.487385456190131,
+          1.4286320916788426,
+          1.3886522866303037,
+          1.364304532589594,
+          1.3423182087073169,
+          1.2673856906730931,
+          1.2065369122760834,
+          1.1887084042307712,
+          1.182225011497721,
+          1.1442317358117342,
+          1.1127431106432657,
+          1.0869922653836883,
+          1.0713826925874785,
+          1.048165669056639,
+          1.0268632588016229,
+          1.0031630156791729,
+          0.9317084366534306,
+          0.9100310312395833,
+          0.9071799122342414,
+          0.8584716562908516,
+          0.8252165470919208,
+          0.7526315303721616,
+          0.7327269814910836,
+          0.6962837515849291,
+          0.680401518112945,
+          0.649230828560778,
+          1.0348331562946861e-15
+        ],
+        "source": "centered_multiclass_logistic_coefficients"
+      },
+      "true_disruption": 0.43995535714285716
+    }
+  ],
+  "primary_result": {
+    "ablated_accuracy": 0.4772321428571429,
+    "chance_baseline_accuracy": 0.025,
+    "guard_status": "passed",
+    "layer": 3,
+    "original_accuracy": 0.9171875,
+    "random_same_rank_max_disruption": 0.006026785714285721,
+    "random_same_rank_mean_disruption": 0.0008705357142857528,
+    "true_disruption": 0.43995535714285716
+  },
+  "provenance": {
+    "artifacts": [
+      {
+        "artifact_id": "activation_dataset_npz",
+        "artifact_type": "stage9_40e_activation_dataset_npz",
+        "byte_count": 132376150,
+        "content_sha256": "f3a3d186f9aecac7fde19d33895bb05c76260a12812cd00cdd60e85b8102d2f5",
+        "created_at": "2026-06-01T03:41:27.131424+00:00",
+        "redaction_class": "internal_eval_artifact",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.npz"
+      },
+      {
+        "artifact_id": "metadata_json",
+        "artifact_type": "stage9_40e_metadata_json",
+        "byte_count": 2427,
+        "content_sha256": "d7e6123ee239b740f73f9da0d44f88e4e6d693ac771a3f9ed981e570e30a00a0",
+        "created_at": "2026-06-01T03:41:27.166424+00:00",
+        "redaction_class": "internal_eval_artifact",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e.metadata.json"
+      },
+      {
+        "artifact_id": "scenario_json",
+        "artifact_type": "stage9_40e_scenario_json",
+        "byte_count": 9138320,
+        "content_sha256": "cba4f46300f630f4ee2da8c8f66adcaaf91c390fb186d1b87df937784586fed1",
+        "created_at": "2026-06-01T02:53:49.759087+00:00",
+        "redaction_class": "internal_eval_artifact",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\stage9_40e_scenarios_pilot.json"
+      },
+      {
+        "artifact_id": "probe_eval_report_json",
+        "artifact_type": "stage9_40e_original_probe_eval_report",
+        "byte_count": 9111,
+        "content_sha256": "87891c3fce908056e1d071bd9ac7d5d914653128ac97d95afd6bad0b3b02bf2d",
+        "created_at": "2026-06-01T03:45:49.964060+00:00",
+        "redaction_class": "internal_eval_artifact",
+        "storage_uri": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json"
+      }
+    ]
+  },
+  "reference_probe_report": {
+    "original_accuracy": {
+      "accuracy": 0.9171875,
+      "source": "best_layer.test_acc"
+    },
+    "path": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_40_element_probe_eval_report.json",
+    "shuffled_baseline": {
+      "max_accuracy": 0.040848214285714286,
+      "mean_accuracy": 0.02482142857142857,
+      "source": "probe_report.controls.shuffled_label_hidden_best_layer",
+      "std_accuracy": 0.006065352789762993,
+      "trials": 20
+    }
+  },
+  "schema_version": "cas_harness_stage9_40e_subspace_ablation.v1",
+  "split": {
+    "group_key": "metadata.counterfactual_pair_id",
+    "split_key": "metadata.split",
+    "test_split": "test",
+    "type": "fixed_scenario_split"
+  },
+  "status": "completed"
+}

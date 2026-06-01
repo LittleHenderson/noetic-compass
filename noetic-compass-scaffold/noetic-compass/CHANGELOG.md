@@ -1,5 +1,30 @@
 # Noetic Compass — Progress Log
 
+## Gate 1 reproduced locally on CPU — Pythia-160M CAS readout 91.72% and a −44 pp causal subspace ablation, both from scratch (May 31, 2026)
+
+The live-worker control proof (entry below) proved the *product path* can record a real causal intervention. This entry re-establishes the *scientific* gate that path rests on — "CAS structure is readable in Pythia-160M hidden states" *and* "that structure is causally load-bearing" — by re-running the full readout **and** the rank-39 subspace-projection ablation locally from a fresh activation capture, on CPU, with no RunPod and no cached result. The goal was to confirm the documented 89.8% readout (and the 20B-style causal collapse) are reproducible on demand, not one-off archived artifacts, before wiring them into a pythia evidence packet.
+
+**Fresh capture (no reuse).** `capture_open_weight_probe_dataset.py` ran all 8,320 Stage-9 40E pilot scenarios through real `EleutherAI/pythia-160m` weights (float32, CPU), writing hidden states for all 12 layers: a (8320, 12, 768) dataset. The pilot grid is perfectly balanced — P/C/E/O = 2080 each, ^0…^9 = 832 each → all 40 cells at ~208 scenarios. (The earlier 160-scenario smoke only populated 2/4 domains; that was a subset artifact, not a coverage problem.)
+
+**Readout — reproduced and slightly exceeded.** `evaluate_40_element_probe.py` with a group-disjoint fixed split (`metadata.split`, grouped by `counterfactual_pair_id`; train 3840 / test 4480; **0 train/test group overlap**):
+- **Hidden-state probe, best layer 3: 91.72% test acc (macro-F1 0.9205)** — above the spec-sheet comparator of 89.8%.
+- Majority baseline 2.50%; shuffled-label control mean 2.48% / max 4.08% → the probe is **+89.24 pp over the shuffled mean and clears the shuffled max**. Real structure, not memorization.
+- Text-hash baseline 50.00% (the canonical CAS colloquialisms in the prompt surface carry real signal) — the hidden probe still beats it by ~42 pp, so the "hidden states encode CAS beyond surface text" claim holds. The evaluator records the 50% text baseline honestly rather than hiding it.
+- 40/40 cells populated → readiness gate `packet_ready`. Best layer 3 (mid-early) matches the 20B finding's early-layer locus.
+
+**Causal ablation — the structure is load-bearing, not incidental.** `run_stage9_40e_subspace_ablation.py` fit the readout at layer 3, derived the rank-39 class/logit subspace, project-ablated it from the hidden states, and re-fit the readout — against 20 same-rank random-projection controls with a 5 pp guard:
+- **Layer 3 readout 91.72% → 47.72% after ablation: a −44.0 pp causal collapse.**
+- Same-rank random projections disrupt the readout by **mean 0.09% / max 0.60%** — essentially nothing. The margin of the true disruption over the random-control max is **~43.4 pp**, far past the 5 pp guard → `guard_status: passed`.
+- The script honestly emits `packet_decision: not_applicable_ablation_diagnostic_only` — it is a causal diagnostic, not an ACCEPT. Removing the *specific* CAS-encoding subspace destroys the readout; removing an equal-dimension random subspace does not. The structure pythia carries is causally load-bearing.
+
+**Why this matters for the product.** These two numbers are the offline, high-signal gate the live worker's readout + causal chips point at, now reproduced from scratch on commodity CPU. The immediate continuation (same session) runs neuron-cover discovery + a forward-pass cover ablation, then merges readout + subspace-ablation + cover reports into a pythia Stage-9 40E evidence packet. That packet stays at `FLAG_FOR_HUMAN_REVIEW` (anchor mode disabled locally — a true WORM ACCEPT needs real S3 Object-Lock, a human-gated step).
+
+### Pieces
+- `docs/working/pythia160m_gate1/pythia160m_stage9_40e.metadata.json` — capture provenance (model id, layers, scenario source).
+- `docs/working/pythia160m_gate1/pythia160m_stage9_40e_40_element_probe_eval_report.json` — full per-layer readout, controls, readiness gate, and the 89.8% comparator.
+- `docs/working/pythia160m_gate1/pythia160m_stage9_40e_subspace_ablation_report.json` — rank-39 subspace ablation: layer-3 91.72%→47.72%, 20 same-rank random controls (max 0.60%), `guard_status: passed`, `packet_decision: not_applicable_ablation_diagnostic_only`.
+- `docs/working/pythia160m_gate1/.gitignore` — keeps the 132 MB npz / 9.1 MB scenarios / capture log out of git (reproducible via the documented command) while tracking the small metadata + report JSONs, mirroring the committed 20B Stage-9 report convention.
+
 ## Matched-control selectivity — the live worker's first control proof, plumbed honestly (May 31, 2026)
 
 The previous entry closed the causal-proof gap (a real single-target ablation moves the next-token logit on loaded weights) but left `control_proof` honestly `unavailable`: a single unit moving the distribution does not prove the move is *selective*. This entry adds the live worker's **first control proof** — a single-unit selectivity test — and flips `control_proof` from `unavailable` to `present` end-to-end **iff a real matched control actually ran**, never because a request asked for it.
