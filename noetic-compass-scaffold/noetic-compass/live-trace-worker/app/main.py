@@ -15,6 +15,7 @@ from typing import AsyncIterator
 
 from fastapi import FastAPI
 
+from .auth import WorkerTokenMiddleware
 from .routes import health, live_trace
 from .runtime import warm_load
 
@@ -48,6 +49,12 @@ def create_app() -> FastAPI:
         ),
         lifespan=_lifespan,
     )
+    # Optional app-level auth. No-op unless ATLAS_LIVE_WORKER_TOKEN is set, so
+    # local dev / CI / the existing SSH-tunnel deploy are unaffected. When the
+    # worker's HTTP port is exposed (RunPod proxy), set the env var on both the
+    # worker and the API so only our API can reach it. See
+    # docs/working/atlas_live_worker_launch_grade_exposure_2026_05_31.md.
+    app.add_middleware(WorkerTokenMiddleware)
     app.include_router(health.router, tags=["health"])
     app.include_router(live_trace.router, tags=["live-trace"])
     return app

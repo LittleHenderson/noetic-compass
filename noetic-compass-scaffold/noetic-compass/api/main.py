@@ -27,6 +27,7 @@ from api.routes import (
     batch,
     benchmark,
     cas_harness_audit,
+    cas_harness_live_worker_health,
     cohort,
     config,
     evidence,
@@ -121,6 +122,7 @@ app.include_router(wrap.router)
 app.include_router(batch.router)
 app.include_router(benchmark.router)
 app.include_router(cas_harness_audit.router)
+app.include_router(cas_harness_live_worker_health.router)
 app.include_router(cohort.router)
 app.include_router(config.router)
 app.include_router(export.router)

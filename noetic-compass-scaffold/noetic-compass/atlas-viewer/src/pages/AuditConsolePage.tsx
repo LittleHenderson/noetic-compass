@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
@@ -23,6 +23,7 @@ import {
   createCasHarnessScalePlan,
   createCasHarnessAuditSession,
   dispatchCasHarnessDistributedAudit,
+  fetchLiveWorkerHealth,
   leaseCasHarnessFleetJob,
   mergeCasHarnessDistributedAudit,
   mergeCasHarnessFleetRun,
@@ -40,6 +41,7 @@ import {
   type CasHarnessFleetRun,
   type CasHarnessFleetVerifierDecision,
   type CasHarnessFleetWorker,
+  type CasHarnessLiveWorkerHealth,
   type CasHarnessScalePlanRequest,
 } from '../lib/casHarnessAuditApi';
 import {
@@ -50,6 +52,7 @@ import {
   type EnterpriseScalePlanSize,
 } from '../lib/enterpriseScalePlan';
 import {
+  ACCENT_AMBER,
   ACCENT_CYAN,
   ACCENT_TEAL,
   COLORS,
@@ -470,6 +473,53 @@ const topGridStyle: CSSProperties = {
   alignItems: 'start',
 };
 
+const liveWorkerChipBaseStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 7,
+  alignSelf: 'center',
+  padding: '6px 11px',
+  borderRadius: 999,
+  fontFamily: FONT_FAMILY,
+  fontSize: 11.5,
+  fontWeight: 650,
+  letterSpacing: 0.2,
+  whiteSpace: 'nowrap',
+};
+
+const liveWorkerDotStyle = (color: string): CSSProperties => ({
+  width: 8,
+  height: 8,
+  borderRadius: 999,
+  background: color,
+  flex: '0 0 auto',
+});
+
+type LiveWorkerChipView = {
+  accent: string;
+  label: string;
+};
+
+// Resolve the honest connection-state presentation for the live-worker chip.
+// Teal ONLY when real Pythia weights are confirmed; amber for reachable-demo
+// AND unreachable (both are "no real audit" states the user must not mistake
+// for a live run); muted/gray for not-configured and the pre-fetch unknown
+// state. Never render teal off anything but confirmed real weights.
+function liveWorkerChipView(
+  health: CasHarnessLiveWorkerHealth | null,
+): LiveWorkerChipView {
+  if (health === null) {
+    return { accent: COLORS.textMuted, label: 'Checking live worker…' };
+  }
+  if (!health.configured) {
+    return { accent: COLORS.textMuted, label: health.label };
+  }
+  if (health.real_weights) {
+    return { accent: ACCENT_TEAL, label: health.label };
+  }
+  return { accent: ACCENT_AMBER, label: health.label };
+}
+
 type CommandState = 'active' | 'ready' | 'done' | 'waiting' | 'blocked';
 
 const commandCenterStyle: CSSProperties = {
@@ -760,6 +810,27 @@ export default function AuditConsolePage() {
   const [fleetAuthToken, setFleetAuthToken] = useState('');
   const [fleetExecutorError, setFleetExecutorError] = useState<string | null>(null);
   const [isFleetExecutorLoading, setIsFleetExecutorLoading] = useState(false);
+  const [liveWorkerHealth, setLiveWorkerHealth] =
+    useState<CasHarnessLiveWorkerHealth | null>(null);
+
+  // Probe the live-trace worker once on mount so the run controls can show an
+  // honest connection-state chip. Never block the page: if the probe fails
+  // (network/parse), we leave the chip in its calm "checking" state.
+  useEffect(() => {
+    const controller = new AbortController();
+    let active = true;
+    fetchLiveWorkerHealth({ signal: controller.signal })
+      .then((health) => {
+        if (active) setLiveWorkerHealth(health);
+      })
+      .catch(() => {
+        // Fail soft — the indicator stays in its unknown/checking state.
+      });
+    return () => {
+      active = false;
+      controller.abort();
+    };
+  }, []);
 
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
@@ -777,6 +848,10 @@ export default function AuditConsolePage() {
         ? 'Verdict ready'
         : 'Run CAS audit';
   const showVerdictExplainer = Boolean(session?.verdict || session?.verifier_decision);
+  const liveWorkerChip = useMemo(
+    () => liveWorkerChipView(liveWorkerHealth),
+    [liveWorkerHealth],
+  );
   const protectedAuditApiOptions = useMemo<CasHarnessAuditApiOptions | undefined>(() => {
     const authToken = fleetAuthToken.trim();
     return authToken ? { authToken } : undefined;
@@ -1246,6 +1321,20 @@ export default function AuditConsolePage() {
             </AuditPopover>
           </div>
           <div style={commandActionsStyle}>
+            <span
+              role="status"
+              aria-label={`Live worker status: ${liveWorkerChip.label}`}
+              title={liveWorkerChip.label}
+              style={{
+                ...liveWorkerChipBaseStyle,
+                border: `1px solid ${liveWorkerChip.accent}59`,
+                background: `${liveWorkerChip.accent}1f`,
+                color: liveWorkerChip.accent,
+              }}
+            >
+              <span style={liveWorkerDotStyle(liveWorkerChip.accent)} aria-hidden="true" />
+              {liveWorkerChip.label}
+            </span>
             <button
               type="button"
               style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}

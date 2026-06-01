@@ -1,6 +1,40 @@
-tests/
-fixtures/
+# Keep the build context lean. The Dockerfile only COPYs requirements.txt and
+# app/, so everything else here is excluded to speed up `docker build` and to
+# avoid baking research data / tests / docs into the image.
+
+# Python caches + build artifacts
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+*.egg-info/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+
+# Local virtualenvs
+.venv/
+venv/
+env/
+
+# Tests + fixtures (not needed at runtime; demo-mode fallback is covered)
+tests/
+fixtures/
+
+# Docs / markdown / acceptance notes
 *.md
+
+# Research + ops surface area not used by the FastAPI app at runtime
+scripts/
+scenarios/
+
+# Editor / OS noise
+.git/
+.gitignore
+.DS_Store
+*.swp
+*.log

@@ -184,6 +184,76 @@ class ErrorEvent(BaseModel):
     retryable: bool = Field(default=False)
 
 
+class AblationEffectEvent(BaseModel):
+    """Result of a single-target causal ablation / intervention probe.
+
+    Emitted ONCE per session (after the token stream, before ``word_spans``)
+    when an ablation was requested via ``CreateSessionRequest.ablation_target``
+    or a ``"causal_ablation"`` probe. This is the FIRST causal proof the live
+    worker produces: the model is run once normally and once with the target
+    MLP-output unit ablated, and the deltas are the measured causal effect of
+    that unit on the next-token distribution.
+
+    Honesty contract (load-bearing — the whole product depends on it):
+
+    * ``is_real_model`` is ``True`` ONLY when these deltas were measured on
+      actual loaded weights (``LoadedModel.is_real``). In demo mode the worker
+      still emits a schema-valid event so downstream parsers don't break, but
+      ``is_real_model`` is ``False`` AND the numeric deltas are ``None`` (a
+      demo event reports "no causal measurement", never a fabricated number).
+    * The runner flips its ``causal_proof`` chip to ``present`` ONLY when it
+      sees an ``ablation_effect`` event with ``is_real_model = True``. A
+      demo-mode event must never read as a real causal proof.
+
+    ``baseline_top_token`` / ``ablated_top_token`` are the greedy argmax tokens
+    of the un-ablated vs ablated last-token logits. ``logit_delta`` is the
+    change in the baseline-top-token's own logit (ablated minus baseline), so a
+    negative value means ablating the unit *suppressed* the token the model
+    would otherwise have produced. ``confidence_delta`` is the change in the
+    softmax-margin confidence (ablated minus baseline).
+    """
+
+    type: Literal["ablation_effect"] = "ablation_effect"
+    target: dict[str, int] = Field(
+        ...,
+        description="The ablated unit, e.g. {'layer': 5, 'unit': 1234}.",
+    )
+    mode: Literal["zero", "mean"] = "zero"
+    is_real_model: bool = Field(
+        default=False,
+        description=(
+            "True only when the deltas were measured on real loaded weights. "
+            "False => demo-mode stand-in; numeric deltas are None."
+        ),
+    )
+    baseline_top_token: str | None = Field(default=None)
+    ablated_top_token: str | None = Field(default=None)
+    baseline_top_token_id: int | None = Field(default=None)
+    ablated_top_token_id: int | None = Field(default=None)
+    logit_delta: float | None = Field(
+        default=None,
+        description=(
+            "Change in the baseline-top-token's logit under ablation "
+            "(ablated - baseline). None in demo mode."
+        ),
+    )
+    confidence_delta: float | None = Field(
+        default=None,
+        description=(
+            "Change in softmax-margin confidence under ablation "
+            "(ablated - baseline). None in demo mode."
+        ),
+    )
+    top_token_changed: bool | None = Field(
+        default=None,
+        description="Whether ablation changed the greedy top token. None in demo mode.",
+    )
+    detail: str | None = Field(
+        default=None,
+        description="Human-readable note, e.g. why a demo event carries no measurement.",
+    )
+
+
 class CompleteEvent(BaseModel):
     """Last event on a successful session."""
 
@@ -312,6 +382,7 @@ LiveTraceEvent = (
     | KnobResolutionEvent
     | TokenEvent
     | NeuronCoversEvent
+    | AblationEffectEvent
     | WordSpansEvent
     | ErrorEvent
     | CompleteEvent

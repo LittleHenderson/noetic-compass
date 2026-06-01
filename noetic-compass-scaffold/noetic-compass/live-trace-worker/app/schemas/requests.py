@@ -7,6 +7,36 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field
 
 
+class AblationTargetRequest(BaseModel):
+    """A single-target causal ablation/intervention request.
+
+    When present on a ``CreateSessionRequest`` (or when ``"causal_ablation"``
+    appears in ``probes``), the real-Pythia runner runs the forward pass once
+    normally and once with the target MLP-output unit ablated, then emits one
+    ``AblationEffectEvent`` carrying the measured logit/confidence deltas.
+
+    ``mode``:
+      * ``"zero"``    — set the target unit's last-token MLP-output to 0.
+      * ``"mean"``    — patch the target unit to the running per-position mean
+        of the same unit across the prompt positions (mean-ablation).
+
+    This is the FIRST causal proof the live worker can produce. It is
+    intentionally a single-target probe; matched controls are a separate,
+    later slice and are NOT produced here.
+    """
+
+    layer: int = Field(..., ge=0, description="Transformer block index to hook.")
+    unit: int = Field(
+        ...,
+        ge=0,
+        description="Index into the layer's MLP-output (intermediate) dimension.",
+    )
+    mode: Literal["zero", "mean"] = Field(
+        default="zero",
+        description="Ablation style: hard-zero or mean-patch the target unit.",
+    )
+
+
 class CreateSessionRequest(BaseModel):
     """Body for POST /sessions on the worker.
 
@@ -32,7 +62,21 @@ class CreateSessionRequest(BaseModel):
         "blindspots_f1",
         "mode7_attribution",
         "confidence_margin",
+        # Causal single-target ablation. When present, the runner also expects
+        # ``ablation_target`` to be set (a bare "causal_ablation" probe with no
+        # target defaults to layer 0 / unit 0). Backward-compatible: absent =>
+        # no ablation runs, exactly as before.
+        "causal_ablation",
     ]] = Field(default_factory=list)
+    ablation_target: AblationTargetRequest | None = Field(
+        default=None,
+        description=(
+            "Optional single-target causal ablation. When set (or when "
+            "'causal_ablation' is in probes), the real runner emits one "
+            "AblationEffectEvent with measured logit/confidence deltas. "
+            "None => no ablation (backward-compatible default)."
+        ),
+    )
     method_config: dict[str, Any] = Field(
         default_factory=dict,
         description="Live testing-module controls forwarded by Atlas Viewer.",

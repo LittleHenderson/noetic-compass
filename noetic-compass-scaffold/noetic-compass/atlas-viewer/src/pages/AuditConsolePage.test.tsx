@@ -1,8 +1,49 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
 import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
+
+const LIVE_WORKER_HEALTH_PATH = '/api/cas-harness/live-worker/health';
+
+function liveWorkerHealthResponse(overrides: Record<string, unknown> = {}) {
+  return {
+    configured: false,
+    reachable: false,
+    real_weights: false,
+    model_id: null,
+    worker_version: null,
+    label: 'Live worker not configured',
+    ...overrides,
+  };
+}
+
+function isLiveWorkerHealthCall(input: unknown): boolean {
+  return typeof input === 'string' && input.endsWith(LIVE_WORKER_HEALTH_PATH);
+}
+
+/**
+ * Install a global fetch that answers the Audit Console's mount-time
+ * live-worker health probe separately, then delegates every other request to
+ * `orderedMock`. Tests keep asserting against `orderedMock`, so its call
+ * indices and counts stay unaffected by the health probe.
+ */
+function stubFetchWithLiveWorker(
+  orderedMock: ReturnType<typeof vi.fn>,
+  healthOverrides: Record<string, unknown> = {},
+) {
+  const router = vi.fn((input: unknown, init?: unknown) => {
+    if (isLiveWorkerHealthCall(input)) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => liveWorkerHealthResponse(healthOverrides),
+      });
+    }
+    return orderedMock(input, init);
+  });
+  vi.stubGlobal('fetch', router);
+  return router;
+}
 
 const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
 const STAGE9_40E_TRACE_ID = 'stage9-40e-original-baseline-readout-20260527';
@@ -342,6 +383,24 @@ async function fleetFragmentRef(
 }
 
 describe('AuditConsolePage', () => {
+  beforeEach(() => {
+    // Default global fetch answers only the mount-time live-worker health
+    // probe so render-only tests have a deterministic, non-throwing stub.
+    // Flow tests override this via stubFetchWithLiveWorker(...) before acting.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn((input: unknown) => {
+        if (isLiveWorkerHealthCall(input)) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => liveWorkerHealthResponse(),
+          });
+        }
+        return Promise.reject(new Error(`unexpected fetch: ${String(input)}`));
+      }),
+    );
+  });
+
   afterEach(() => {
     vi.unstubAllGlobals();
   });
@@ -466,7 +525,7 @@ describe('AuditConsolePage', () => {
             ],
           }),
       });
-    vi.stubGlobal('fetch', fetchMock);
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -537,7 +596,9 @@ describe('AuditConsolePage', () => {
             updated_at: '2026-05-25T11:01:00Z',
           }),
       });
-    vi.stubGlobal('fetch', fetchMock);
+    // Route the mount-time live-worker health probe away from the ordered mock
+    // so the BYOK call sequence (verify -> session -> run) keeps its indices.
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -621,7 +682,7 @@ describe('AuditConsolePage', () => {
             ],
           }),
       });
-    vi.stubGlobal('fetch', fetchMock);
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -713,7 +774,7 @@ describe('AuditConsolePage', () => {
             ],
           }),
       });
-    vi.stubGlobal('fetch', fetchMock);
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -755,7 +816,7 @@ describe('AuditConsolePage', () => {
         ok: true,
         json: async () => distributedAudit({ status: 'DISPATCHED' }),
       });
-    vi.stubGlobal('fetch', fetchMock);
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -866,7 +927,7 @@ describe('AuditConsolePage', () => {
         ok: true,
         json: async () => fleetVerifierDecision(),
       });
-    vi.stubGlobal('fetch', fetchMock);
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -995,7 +1056,7 @@ describe('AuditConsolePage', () => {
       .mockResolvedValueOnce({ ok: true, json: async () => fleetWorker() })
       .mockResolvedValueOnce({ ok: true, json: async () => leasedJob })
       .mockResolvedValueOnce({ ok: true, json: async () => blockedRun });
-    vi.stubGlobal('fetch', fetchMock);
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -1066,7 +1127,7 @@ describe('AuditConsolePage', () => {
             ],
           }),
       });
-    vi.stubGlobal('fetch', fetchMock);
+    stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
 
@@ -1081,5 +1142,94 @@ describe('AuditConsolePage', () => {
     expect(
       screen.getByRole('note', { name: /Stage 19 accepted the row and Stage 20 readiness action is allow/i }),
     ).toBeInTheDocument();
+  });
+
+  describe('live-worker status chip', () => {
+    function renderWithLiveWorkerHealth(
+      overrides: Record<string, unknown>,
+    ) {
+      stubFetchWithLiveWorker(vi.fn(), overrides);
+      renderPage();
+    }
+
+    function findLiveWorkerChip() {
+      return screen.findByRole('status', { name: /Live worker status:/i });
+    }
+
+    it('shows a teal "real Pythia weights" chip only when real weights are confirmed', async () => {
+      renderWithLiveWorkerHealth({
+        configured: true,
+        reachable: true,
+        real_weights: true,
+        model_id: 'EleutherAI/pythia-160m',
+        worker_version: 'm2-real-pythia',
+        label: 'Live worker connected · real Pythia weights',
+      });
+
+      const chip = await findLiveWorkerChip();
+      expect(chip).toHaveTextContent('Live worker connected · real Pythia weights');
+      // ACCENT_TEAL = #2dd4bf -> rgb(45, 212, 191)
+      expect(chip).toHaveStyle({ color: 'rgb(45, 212, 191)' });
+    });
+
+    it('shows an amber chip for a reachable-but-demo worker (no real weights)', async () => {
+      renderWithLiveWorkerHealth({
+        configured: true,
+        reachable: true,
+        real_weights: false,
+        model_id: 'EleutherAI/pythia-160m',
+        worker_version: 'm2-real-pythia',
+        label: 'Live worker reachable · demo mode (not real weights)',
+      });
+
+      const chip = await findLiveWorkerChip();
+      expect(chip).toHaveTextContent('Live worker reachable · demo mode (not real weights)');
+      // ACCENT_AMBER = #fbbf24 -> rgb(251, 191, 36)
+      expect(chip).toHaveStyle({ color: 'rgb(251, 191, 36)' });
+    });
+
+    it('shows an amber chip when the worker is configured but unreachable', async () => {
+      renderWithLiveWorkerHealth({
+        configured: true,
+        reachable: false,
+        real_weights: false,
+        model_id: null,
+        worker_version: null,
+        label: 'Live worker unavailable · no live audit will run',
+      });
+
+      const chip = await findLiveWorkerChip();
+      expect(chip).toHaveTextContent('Live worker unavailable · no live audit will run');
+      expect(chip).toHaveStyle({ color: 'rgb(251, 191, 36)' });
+    });
+
+    it('shows a muted chip when the live worker is not configured', async () => {
+      renderWithLiveWorkerHealth({
+        configured: false,
+        reachable: false,
+        real_weights: false,
+        model_id: null,
+        worker_version: null,
+        label: 'Live worker not configured',
+      });
+
+      const chip = await findLiveWorkerChip();
+      expect(chip).toHaveTextContent('Live worker not configured');
+      // COLORS.textMuted = #64748b -> rgb(100, 116, 139)
+      expect(chip).toHaveStyle({ color: 'rgb(100, 116, 139)' });
+    });
+
+    it('renders a calm "checking" chip before the health probe resolves and never blocks the page', () => {
+      // A health probe that never settles leaves the chip in its unknown state.
+      vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})));
+
+      renderPage();
+
+      const chip = screen.getByRole('status', { name: /Live worker status:/i });
+      expect(chip).toHaveTextContent('Checking live worker…');
+      expect(chip).toHaveStyle({ color: 'rgb(100, 116, 139)' });
+      // Page still renders its core controls.
+      expect(screen.getByRole('button', { name: 'Run audit' })).toBeInTheDocument();
+    });
   });
 });

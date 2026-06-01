@@ -7,6 +7,7 @@ import {
   createCasHarnessDistributedAudit,
   createCasHarnessScalePlan,
   dispatchCasHarnessDistributedAudit,
+  fetchLiveWorkerHealth,
   getCasHarnessAuditSessionStatus,
   getCasHarnessFleetRun,
   heartbeatCasHarnessFleetWorker,
@@ -1354,5 +1355,90 @@ describe('casHarnessAuditApi', () => {
       getCasHarnessAuditSessionStatus('  ', { fetchImpl }),
     ).rejects.toBeInstanceOf(CasHarnessAuditApiError);
     expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it('fetches live-worker health from the live-worker sibling of the audit base', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({
+        configured: true,
+        reachable: true,
+        real_weights: true,
+        model_id: 'EleutherAI/pythia-160m',
+        worker_version: 'm2-real-pythia',
+        label: 'Live worker connected · real Pythia weights',
+      }),
+    );
+
+    const health = await fetchLiveWorkerHealth({
+      baseUrl: '/api/cas-harness/audit',
+      fetchImpl,
+    });
+
+    expect(health.configured).toBe(true);
+    expect(health.reachable).toBe(true);
+    expect(health.real_weights).toBe(true);
+    expect(health.model_id).toBe('EleutherAI/pythia-160m');
+    expect(health.worker_version).toBe('m2-real-pythia');
+    expect(health.label).toBe('Live worker connected · real Pythia weights');
+    expect(fetchImpl).toHaveBeenCalledOnce();
+    const [url, init] = fetchImpl.mock.calls[0];
+    expect(url).toBe('/api/cas-harness/live-worker/health');
+    expect(init).toMatchObject({ method: 'GET', headers: { Accept: 'application/json' } });
+  });
+
+  it('derives the live-worker URL even when the audit base has a trailing slash', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({
+        configured: false,
+        reachable: false,
+        real_weights: false,
+        model_id: null,
+        worker_version: null,
+        label: 'Live worker not configured',
+      }),
+    );
+
+    const health = await fetchLiveWorkerHealth({
+      baseUrl: '/api/cas-harness/audit/',
+      fetchImpl,
+    });
+
+    expect(health.configured).toBe(false);
+    expect(health.label).toBe('Live worker not configured');
+    expect(fetchImpl.mock.calls[0][0]).toBe('/api/cas-harness/live-worker/health');
+  });
+
+  it('parses a reachable-but-demo live-worker health response without claiming real weights', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({
+        configured: true,
+        reachable: true,
+        real_weights: false,
+        model_id: 'EleutherAI/pythia-160m',
+        worker_version: 'm2-real-pythia',
+        label: 'Live worker reachable · demo mode (not real weights)',
+      }),
+    );
+
+    const health = await fetchLiveWorkerHealth({ fetchImpl });
+
+    expect(health.reachable).toBe(true);
+    expect(health.real_weights).toBe(false);
+    expect(health.label).toBe('Live worker reachable · demo mode (not real weights)');
+  });
+
+  it('rejects a malformed live-worker health payload', async () => {
+    const fetchImpl = vi.fn(async () =>
+      jsonResponse({
+        configured: true,
+        reachable: 'yes',
+        real_weights: false,
+        label: 'Live worker reachable · demo mode (not real weights)',
+      }),
+    );
+
+    await expect(
+      fetchLiveWorkerHealth({ fetchImpl }),
+    ).rejects.toBeInstanceOf(CasHarnessAuditApiError);
   });
 });

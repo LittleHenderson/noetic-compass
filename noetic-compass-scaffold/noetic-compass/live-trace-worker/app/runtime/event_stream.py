@@ -18,6 +18,7 @@ import random
 from typing import AsyncIterator
 
 from ..schemas.events import (
+    AblationEffectEvent,
     CompleteEvent,
     ErrorEvent,
     KnobResolutionEvent,
@@ -29,6 +30,11 @@ from ..schemas.events import (
     TokenEvent,
 )
 from ..schemas.requests import CreateSessionRequest
+from .ablation_probe import (
+    ablation_requested,
+    demo_ablation_effect,
+    resolve_ablation_target,
+)
 from .cover_library import cover_members_for_scope
 from .knob_resolution import (
     enabled_methods as _resolve_enabled_methods,
@@ -219,6 +225,11 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         )
         emitted_tokens.append((i, tok))
         await asyncio.sleep(0.04)
+    if ablation_requested(req):
+        # Demo mode cannot measure a real causal effect (no weights loaded),
+        # so emit a schema-valid event flagged is_real_model=False with no
+        # numeric deltas. The runner keeps causal_proof unavailable for this.
+        yield demo_ablation_effect(resolve_ablation_target(req))
     yield build_word_spans(emitted_tokens)
     yield CompleteEvent(total_tokens=max_new)
 
@@ -263,6 +274,23 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
             retryable=True,
         )
         return
+
+    if ablation_requested(req):
+        target = resolve_ablation_target(req)
+        try:
+            # Import locally so demo mode never needs torch to import this module.
+            from .ablation_probe import run_real_ablation_effect
+
+            yield run_real_ablation_effect(
+                req, loaded.model, loaded.tokenizer, n_layers, target
+            )
+        except Exception:  # pragma: no cover — measurement-time failures
+            # A failed measurement is NOT a real causal proof. Degrade to a
+            # schema-valid demo-flagged event (is_real_model=False, no deltas)
+            # so the runner keeps causal_proof unavailable rather than the
+            # whole trace failing.
+            logger.exception("stream_real_trace: ablation probe raised")
+            yield demo_ablation_effect(target)
 
     yield build_word_spans(emitted_tokens)
     yield CompleteEvent(total_tokens=emitted)

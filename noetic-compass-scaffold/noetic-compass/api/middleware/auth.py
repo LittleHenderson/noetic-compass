@@ -31,6 +31,7 @@ PUBLIC_PATH_PREFIXES = (
     "/api/cas-harness/audit/scale-plan",
     "/api/cas-harness/audit/session",
     "/api/cas-harness/audit/sessions",
+    "/api/cas-harness/live-worker/health",
 )
 
 

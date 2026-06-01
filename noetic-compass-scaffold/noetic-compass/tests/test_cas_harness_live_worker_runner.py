@@ -1,12 +1,19 @@
 from __future__ import annotations
 
+import json
+
+import httpx
 import pytest
 
 from api.config import settings
 from api.routes.evidence import _verify_packet_hashes, build_packet_for_trace
 from api.services.cas_harness_harvest import iter_harvest_records
 from api.services.cas_harness_live_worker_runner import (
+    LiveAuditRunnerUnavailable,
+    _ablation_block_from_events,
     _code_commit_sha,
+    _post_worker_dump,
+    _proof_chips_for_live_packet,
     run_live_worker_audit,
 )
 from api.services.cas_harness_merged_evidence_packets import (
@@ -117,3 +124,290 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
         "output_proof": "present",
         "packet_proof": "present",
     }
+
+
+# ---------------------------------------------------------------------------
+# Causal ablation consumption — the first causal proof, plumbed honestly.
+# ---------------------------------------------------------------------------
+
+
+def _real_ablation_event() -> dict:
+    """A worker ablation_effect event flagged as a REAL measurement."""
+    return {
+        "type": "ablation_effect",
+        "target": {"layer": 0, "unit": 0},
+        "mode": "zero",
+        "is_real_model": True,
+        "baseline_top_token": " the",
+        "ablated_top_token": " a",
+        "baseline_top_token_id": 510,
+        "ablated_top_token_id": 247,
+        "logit_delta": -1.2345,
+        "confidence_delta": -0.05,
+        "top_token_changed": True,
+        "detail": "Measured single-target ablation (zero) of layer 0 unit 0.",
+    }
+
+
+def _demo_ablation_event() -> dict:
+    """A worker ablation_effect event flagged as demo (no real weights)."""
+    return {
+        "type": "ablation_effect",
+        "target": {"layer": 0, "unit": 0},
+        "mode": "zero",
+        "is_real_model": False,
+        "baseline_top_token": None,
+        "ablated_top_token": None,
+        "baseline_top_token_id": None,
+        "ablated_top_token_id": None,
+        "logit_delta": None,
+        "confidence_delta": None,
+        "top_token_changed": None,
+        "detail": "Demo mode: no real weights loaded, so no causal ablation.",
+    }
+
+
+@pytest.mark.asyncio
+async def test_real_flagged_ablation_flips_causal_proof_present(monkeypatch):
+    """A worker dump carrying a REAL ablation_effect event must produce
+    packet['ablation'].status == 'present' (with measured deltas) AND flip the
+    causal_proof chip to 'present'."""
+
+    async def fake_dump(worker_base, payload):  # noqa: ARG001
+        return {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "runtime": "real_pythia",
+                        "is_real_model": True,
+                    },
+                },
+                {
+                    "type": "token",
+                    "token_index": 0,
+                    "token": " Hi",
+                    "confidence": 0.9,
+                    "top_activated_neurons": [],
+                    "mode7_attribution": [],
+                },
+                _real_ablation_event(),
+                {"type": "complete", "total_tokens": 1},
+            ]
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump",
+        fake_dump,
+    )
+
+    result = await run_live_worker_audit(
+        audit_id="cas-audit-abl-real",
+        model_id="EleutherAI/pythia-160m",
+        prompt="Audit this.",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+    )
+
+    packet = build_packet_for_trace(result.trace_id)
+    chips = {chip["id"]: chip["status"] for chip in result.proof_chips}
+
+    # Ablation block present, carrying the REAL measured deltas.
+    assert packet.ablation["status"] == "present"
+    assert packet.ablation["is_real_model"] is True
+    assert packet.ablation["logit_delta"] == pytest.approx(-1.2345)
+    assert packet.ablation["top_token_changed"] is True
+    assert packet.ablation["target"] == {"layer": 0, "unit": 0}
+
+    # Honesty invariant: causal_proof flips to present ONLY here.
+    assert chips["causal_proof"] == "present"
+    # Matched controls remain unavailable — not faked.
+    assert chips["control_proof"] == "unavailable"
+    assert packet.matched_controls["status"] == "unavailable"
+
+    # Audit scope + caveats reflect the real causal slice honestly.
+    assert "real single-target causal ablation" in packet.audit_scope["label"]
+    assert "causal/control not yet run" not in packet.audit_scope["label"]
+
+
+@pytest.mark.asyncio
+async def test_demo_flagged_ablation_keeps_causal_proof_unavailable(monkeypatch):
+    """A demo-flagged ablation_effect event (is_real_model False) must NOT flip
+    the causal_proof chip — status stays 'unavailable' and no deltas leak."""
+
+    async def fake_dump(worker_base, payload):  # noqa: ARG001
+        return {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {"model_id": "EleutherAI/pythia-160m"},
+                },
+                {
+                    "type": "token",
+                    "token_index": 0,
+                    "token": " Hi",
+                    "confidence": 0.9,
+                    "top_activated_neurons": [],
+                    "mode7_attribution": [],
+                },
+                _demo_ablation_event(),
+                {"type": "complete", "total_tokens": 1},
+            ]
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump",
+        fake_dump,
+    )
+
+    result = await run_live_worker_audit(
+        audit_id="cas-audit-abl-demo",
+        model_id="EleutherAI/pythia-160m",
+        prompt="Audit this.",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+    )
+
+    packet = build_packet_for_trace(result.trace_id)
+    chips = {chip["id"]: chip["status"] for chip in result.proof_chips}
+
+    assert packet.ablation["status"] == "unavailable"
+    assert packet.ablation.get("is_real_model") is False
+    # No fabricated deltas in an unavailable block.
+    assert "logit_delta" not in packet.ablation
+    assert chips["causal_proof"] == "unavailable"
+    assert "causal/control not yet run" in packet.audit_scope["label"]
+
+
+def test_ablation_block_honesty_invariant():
+    """Unit-level invariant: _ablation_block_from_events returns 'present' iff
+    a real (is_real_model True) ablation_effect event exists; demo/absent →
+    'unavailable'. And the proof-chip helper mirrors this exactly."""
+
+    # Real → present, deltas carried.
+    real_block = _ablation_block_from_events([_real_ablation_event()])
+    assert real_block["status"] == "present"
+    assert real_block["logit_delta"] == pytest.approx(-1.2345)
+
+    # Demo → unavailable, no deltas.
+    demo_block = _ablation_block_from_events([_demo_ablation_event()])
+    assert demo_block["status"] == "unavailable"
+    assert "logit_delta" not in demo_block
+
+    # Absent → unavailable.
+    absent_block = _ablation_block_from_events(
+        [{"type": "token", "token_index": 0, "token": "x"}]
+    )
+    assert absent_block["status"] == "unavailable"
+
+    # Chip mirror: present block → causal_proof present; otherwise unavailable.
+    def _causal(block: dict) -> str:
+        chips = _proof_chips_for_live_packet(
+            {
+                "trace_id": "t",
+                "model": {"model_key": "EleutherAI/pythia-160m"},
+                "output": {"text": "x"},
+                "readout": {"status": "present"},
+                "ablation": block,
+            }
+        )
+        return next(c["status"] for c in chips if c["id"] == "causal_proof")
+
+    assert _causal(real_block) == "present"
+    assert _causal(demo_block) == "unavailable"
+    assert _causal(absent_block) == "unavailable"
+
+
+# ---------------------------------------------------------------------------
+# Graceful degradation — a worker that predates the causal-ablation probe must
+# NOT break the live trace. The runner retries once with the ablation slice
+# removed so real model I/O + harvest still land; causal_proof then stays
+# 'unavailable' (event-derived), never fabricated. This is the exact state of
+# the currently deployed m2-real-pythia worker, which 422s the unknown probe.
+# ---------------------------------------------------------------------------
+
+
+def _mock_async_client(monkeypatch, handler):
+    """Point the runner's httpx.AsyncClient at a MockTransport handler."""
+    transport = httpx.MockTransport(handler)
+    real_async_client = httpx.AsyncClient
+    monkeypatch.setattr(
+        httpx,
+        "AsyncClient",
+        lambda **kwargs: real_async_client(transport=transport, **kwargs),
+    )
+
+
+@pytest.mark.asyncio
+async def test_post_worker_dump_retries_without_ablation_on_unsupported_probe(monkeypatch):
+    seen: list[dict] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        payload = json.loads(request.content)
+        seen.append(payload)
+        if "causal_ablation" in payload.get("probes", []):
+            # Mirrors the deployed m2-real-pythia worker rejecting the unknown
+            # probe value with a 422 that names `causal_ablation` as the input.
+            return httpx.Response(
+                422,
+                json={
+                    "detail": [
+                        {
+                            "type": "literal_error",
+                            "loc": ["body", "probes", 4],
+                            "input": "causal_ablation",
+                        }
+                    ]
+                },
+            )
+        return httpx.Response(200, json={"events": [{"type": "complete", "total_tokens": 0}]})
+
+    _mock_async_client(monkeypatch, handler)
+
+    payload = {
+        "prompt": "p",
+        "model_id": "EleutherAI/pythia-160m",
+        "probes": ["active_trace", "causal_ablation"],
+        "ablation_target": {"layer": 0, "unit": 0, "mode": "zero"},
+    }
+    body = await _post_worker_dump("http://worker.test", payload)
+
+    assert body == {"events": [{"type": "complete", "total_tokens": 0}]}
+    # Exactly two attempts: with ablation (422) then without (200).
+    assert len(seen) == 2
+    assert "causal_ablation" in seen[0]["probes"]
+    assert "ablation_target" in seen[0]
+    # The retry drops both the probe and the now-meaningless target.
+    assert "causal_ablation" not in seen[1]["probes"]
+    assert "active_trace" in seen[1]["probes"]
+    assert "ablation_target" not in seen[1]
+
+
+@pytest.mark.asyncio
+async def test_post_worker_dump_does_not_retry_unrelated_422(monkeypatch):
+    seen: list[dict] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen.append(json.loads(request.content))
+        # A 422 with nothing to do with the ablation slice must surface, not be
+        # silently downgraded — otherwise real validation errors get masked.
+        return httpx.Response(
+            422,
+            json={"detail": [{"loc": ["body", "model_id"], "input": "bad-model"}]},
+        )
+
+    _mock_async_client(monkeypatch, handler)
+
+    payload = {
+        "prompt": "p",
+        "model_id": "EleutherAI/pythia-160m",
+        "probes": ["active_trace", "causal_ablation"],
+        "ablation_target": {"layer": 0, "unit": 0, "mode": "zero"},
+    }
+    with pytest.raises(LiveAuditRunnerUnavailable):
+        await _post_worker_dump("http://worker.test", payload)
+    # No silent retry: only the single original attempt was made.
+    assert len(seen) == 1

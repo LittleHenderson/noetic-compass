@@ -1,5 +1,34 @@
 # Noetic Compass — Progress Log
 
+## Live-worker launch-hardening: four parallel work-streams consolidated + a live-path regression caught and fixed (May 31, 2026)
+
+Following the read-only audit ("a real milestone, but not yet launch-complete"), four advice items were worked **in parallel** and consolidated onto the live-worker branch in one pass. Consolidating revealed a real regression that the end-to-end test caught against the actual deployed worker — so this entry is as much about the catch as the features.
+
+**The four streams (mapped to the audit's advice).**
+- **Causal proof, plumbed honestly (advice #3).** The runner now asks the worker for the first causal slice — a declared single-target ablation (`layer 0, unit 0, zero`) — and consumes an `ablation_effect` event. Honesty invariant, enforced in one place (`_ablation_block_from_events`): `causal_proof` is `present` **iff** a real `ablation_effect` event exists *and* `is_real_model` is true. Demo-flagged or absent ablation → `unavailable` with **no fabricated deltas**; matched controls stay `unavailable`. The worker side gained the ablation probe + schema; validated on a synthetic `nn.Module` (real-weights ablation is a deploy-gated follow-up).
+- **A visible connection state (advice #5).** New public `GET /api/cas-harness/live-worker/health` route + an Audit Console status chip that reports, in plain words, whether the live worker is configured / reachable / serving real weights — the console no longer hides worker outages. The route is on the auth allow-list (it's a status surface) and fails soft (`reachable: false`, never throws).
+- **Launch-grade exposure groundwork (advice #2).** A worker `Dockerfile` + `.dockerignore` and an **optional, off-by-default** token-auth shim (`X-Atlas-Worker-Token`; unset = pass-through, `/health*` always exempt, constant-time compare), plus a design doc for replacing the dev SSH tunnel with a baked image + exposed HTTP port. No behavior change until a token is set.
+- **A real run from the dashboard (advice #4).** An end-to-end test that drives create → run → packet → harvest through the API surface against the most-real worker available, asserting the honesty invariant and never fabricating ACCEPT; plus a dashboard run runbook.
+
+**The regression the e2e test caught.** Consolidating the ablation-aware runner against the **currently deployed** `m2-real-pythia` worker (which predates the ablation probe) broke the live path: the worker rejects the unknown `causal_ablation` probe with `HTTP 422`, the runner treated that as a hard failure, and the run returned **no Evidence Packet** (`trace_id: None`). That would have shipped a live path that 404s its own audit against the real pod — and silently dropped the irreplaceable harvest signal (real model I/O).
+
+**The fix — degrade, never drop.** `_post_worker_dump` now retries **once** with the ablation slice removed when (and only when) a 422 specifically names `causal_ablation`/`ablation_target` as the rejected input. Real model I/O + readout + harvest still land; `causal_proof` stays honestly `unavailable` (it's event-derived, never request-derived); unrelated 422s still surface immediately. It **auto-upgrades to a real measured ablation the moment an ablation-capable worker is deployed — no API redeploy**. Re-ran the e2e against the live real-Pythia worker through the tunnel: packet persists, honesty invariant holds.
+
+**Dev-proxy fix (dashboard could not reach the audit API in `vite dev`).** The `cas_harness_audit` router mounts at `/api/cas-harness/audit` (prefix already includes `/api`) while `atlas_live` mounts at `/atlas/live` (no `/api`). The single Vite `/api` strip rule turned `/api/cas-harness/audit/x` into `/cas-harness/audit/x` → 404. Added a more-specific, no-rewrite `/api/cas-harness` proxy rule ordered **before** the strip rule. Production was never affected (no proxy there).
+
+### Pieces
+- `api/services/cas_harness_live_worker_runner.py` — ablation request + event consumption; `_post_worker_dump` graceful-degradation retry; `_ablation_probe_rejected` / `_payload_without_ablation` helpers.
+- `api/routes/cas_harness_live_worker_health.py`, `api/main.py`, `api/middleware/auth.py` — health route + wiring + allow-list.
+- `atlas-viewer/src/lib/casHarnessAuditApi.ts`, `src/pages/AuditConsolePage.tsx` (+ tests) — health-chip client + mount-time probe; BYOK option preserved through the 3-way merge.
+- `atlas-viewer/vite.config.ts` — dev-only `/api/cas-harness` no-strip proxy rule.
+- `live-trace-worker/` — `Dockerfile`, `.dockerignore`, `app/auth.py` (optional token shim), `app/main.py`, ablation probe + schemas + runtime, design doc.
+- Docs: `atlas_live_worker_launch_grade_exposure_2026_05_31.md`, `atlas_live_dashboard_run_runbook_2026_05_31.md`.
+
+### Tests
+- Frontend (`atlas-viewer`): `tsc -b` clean; **532 passed, 2 skipped** (49 files). The 3-way merge surfaced one ordering break — the pre-existing BYOK test still used the raw fetch stub and the new mount-time health probe ate its first mock; fixed to use the shared `stubFetchWithLiveWorker` helper like every other flow test.
+- Live-worker (`live-trace-worker/tests`): **206 passed** (excl. 2 known cross-package files that import the root `api` package); new ablation-probe + token-auth tests **17 passed**.
+- API (`tests/`): new live-worker runner/health/e2e **14 passed** (incl. 2 new graceful-degradation tests + the live real-Pythia e2e). Full-suite `tests/` shows **41 pre-existing failures + 2 collection errors** — verified independent of this work: every sampled failing file passes in isolation, and the failed count is identical with these new test files excluded (rate-limiter accumulation + shared in-memory stores across the whole-suite run; the 2 errors are the known `api`-package cross-import quirk).
+
 ## Live worker restart-resilience: found the holes, hardened, proved cold start (May 31, 2026)
 
 A read-only audit of the live-worker deploy flagged that "persistence is staged on `/workspace`" was only half-true. Verifying it before trusting it caught a real gap that a naive restart test would have hit — without risking the pod.

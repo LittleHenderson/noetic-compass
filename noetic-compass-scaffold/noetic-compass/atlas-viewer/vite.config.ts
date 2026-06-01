@@ -14,6 +14,21 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      // ORDER MATTERS: Vite matches proxy keys in object-insertion order and the
+      // first prefix match wins, so the more-specific /api/cas-harness rule must
+      // come BEFORE the general /api rule.
+      //
+      // The two backend routers mount asymmetrically:
+      //   - cas_harness_audit router prefix = "/api/cas-harness/audit" (already
+      //     includes /api), so its path must be forwarded UNCHANGED.
+      //   - atlas_live router prefix = "/atlas/live" (no /api), so /api must be
+      //     stripped: /api/atlas/x -> backend /atlas/x.
+      // A single /api strip rule would turn /api/cas-harness/audit/x into
+      // /cas-harness/audit/x and 404. Keep cas-harness un-rewritten.
+      '/api/cas-harness': {
+        target: API_BASE_URL,
+        changeOrigin: true,
+      },
       // Frontend client hits /api/atlas/...; FastAPI mounts /atlas/... under the
       // root. Strip /api when forwarding so /api/atlas/x -> backend /atlas/x.
       // Override with ATLAS_API_BASE_URL env var for non-default backend ports.

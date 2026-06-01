@@ -164,6 +164,21 @@ export interface CasHarnessAuditApiOptions {
   authToken?: string | null;
 }
 
+/**
+ * Honest live-trace worker connection state for the Audit Console.
+ *
+ * `real_weights` is true ONLY when the worker reports it is actually serving
+ * real Pythia weights; reachable-but-demo and unreachable both report false.
+ */
+export interface CasHarnessLiveWorkerHealth {
+  configured: boolean;
+  reachable: boolean;
+  real_weights: boolean;
+  model_id: string | null;
+  worker_version: string | null;
+  label: string;
+}
+
 export type CasHarnessScalePlanPrecision = 'fp16' | 'bf16' | 'int8' | 'int4';
 export type CasHarnessScalePlanAuditDepth = 'FULL_INTERNAL' | 'LAYER_SAMPLE';
 export type CasHarnessScalePlanTier =
@@ -831,6 +846,29 @@ export interface StartCasHarnessAuditSessionOptions extends CasHarnessAuditApiOp
    * call without server-side config. The server never persists it.
    */
   apiKey?: string | null;
+}
+
+/**
+ * Fetch the honest live-trace worker connection state for the Audit Console.
+ *
+ * The backend route never throws on a worker outage — it reports
+ * `reachable: false` with a plain label — so callers can render a calm status
+ * chip without special-casing failure. Network/parse failures here still
+ * reject; the UI is expected to fail soft (e.g. keep the prior/unknown state).
+ */
+export async function fetchLiveWorkerHealth(
+  options?: CasHarnessAuditApiOptions,
+): Promise<CasHarnessLiveWorkerHealth> {
+  const response = await requestJson(
+    `${liveWorkerBaseUrl(options)}/health`,
+    {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      signal: options?.signal,
+    },
+    options,
+  );
+  return parseLiveWorkerHealthResponse(response);
 }
 
 export async function startCasHarnessAuditSession(
@@ -2049,6 +2087,41 @@ function deriveAuditBaseUrlFromAtlasBase(atlasBase: string): string {
 
 function trimTrailingSlash(url: string): string {
   return url.endsWith('/') ? url.slice(0, -1) : url;
+}
+
+/**
+ * Resolve the `/api/cas-harness/live-worker` base from the audit base.
+ *
+ * The live-worker health route is a sibling of the audit router under the
+ * shared `/api/cas-harness` root, so we swap the trailing `/audit` segment for
+ * `/live-worker`. This keeps custom `baseUrl` and `VITE_ATLAS_API_BASE_URL`
+ * overrides working without a second config knob.
+ */
+function liveWorkerBaseUrl(options?: CasHarnessAuditApiOptions): string {
+  const audit = trimTrailingSlash(baseUrl(options));
+  if (audit.endsWith('/audit')) {
+    return `${audit.slice(0, -'/audit'.length)}/live-worker`;
+  }
+  return `${audit}/live-worker`;
+}
+
+function parseLiveWorkerHealthResponse(response: unknown): CasHarnessLiveWorkerHealth {
+  if (!isRecord(response)) {
+    throw new CasHarnessAuditApiError('CAS Harness live-worker health response was malformed');
+  }
+  return {
+    configured: requiredBoolean(response.configured, 'configured'),
+    reachable: requiredBoolean(response.reachable, 'reachable'),
+    real_weights: requiredBoolean(response.real_weights, 'real_weights'),
+    model_id: nullableString(response.model_id),
+    worker_version: nullableString(response.worker_version),
+    label: requiredString(response.label, 'label'),
+  };
+}
+
+function requiredBoolean(raw: unknown, field: string): boolean {
+  if (typeof raw === 'boolean') return raw;
+  throw new CasHarnessAuditApiError(`CAS Harness audit response field "${field}" must be a boolean`);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {

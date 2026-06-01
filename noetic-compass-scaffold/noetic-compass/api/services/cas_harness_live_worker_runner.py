@@ -36,6 +36,13 @@ from api.services.cas_harness_merged_evidence_packets import (
 
 HOSTED_OPEN_WEIGHT_MODEL_IDS = {"EleutherAI/pythia-160m"}
 
+# Declared single-target ablation for the first causal slice. The runner sends
+# this to the worker; on real weights the worker measures the next-token effect
+# of zeroing this MLP-output unit. The target is fixed + recorded (not inferred)
+# so the proof is reproducible. A future slice will sweep targets / add matched
+# controls; this is deliberately the smallest honest causal probe.
+LIVE_ABLATION_TARGET = {"layer": 0, "unit": 0, "mode": "zero"}
+
 
 @dataclass(frozen=True)
 class LiveAuditRunnerResult:
@@ -77,7 +84,14 @@ async def run_live_worker_audit(
             "blindspot_covers",
             "mode7_attribution",
             "confidence_margin",
+            # Ask the worker for the first causal proof: a single-target
+            # ablation. On real weights the worker returns measured deltas;
+            # in demo mode it returns a schema-valid event flagged
+            # is_real_model=False (no deltas) and causal_proof stays
+            # unavailable. The target is declared, not inferred, for this slice.
+            "causal_ablation",
         ],
+        "ablation_target": dict(LIVE_ABLATION_TARGET),
         "method_config": {
             "audit_mode": audit_mode,
             "selected_modules": selected_modules,
@@ -116,9 +130,20 @@ async def run_live_worker_audit(
 
 async def _post_worker_dump(worker_base: str, payload: Mapping[str, Any]) -> dict[str, Any]:
     timeout = httpx.Timeout(settings.atlas_live_http_timeout_seconds)
+    url = f"{worker_base}/sessions/dump"
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.post(f"{worker_base}/sessions/dump", json=dict(payload))
+            resp = await client.post(url, json=dict(payload))
+            # Graceful degradation for a worker that predates the causal-ablation
+            # probe: it rejects the request with a 422 naming `causal_ablation`
+            # (or `ablation_target`) as the offending input. Retry once with the
+            # ablation slice removed so the real live trace + harvest still run.
+            # causal_proof then stays honestly `unavailable` — it is derived from
+            # the worker's emitted events, never from the request — and upgrades
+            # to a real measured ablation the moment an ablation-capable worker is
+            # deployed, with no API redeploy needed.
+            if resp.status_code == 422 and _ablation_probe_rejected(resp, payload):
+                resp = await client.post(url, json=_payload_without_ablation(payload))
     except httpx.HTTPError as exc:
         raise LiveAuditRunnerUnavailable(f"live worker unavailable: {exc}") from exc
     if resp.status_code >= 400:
@@ -132,6 +157,32 @@ async def _post_worker_dump(worker_base: str, payload: Mapping[str, Any]) -> dic
     if not isinstance(body, dict) or not isinstance(body.get("events"), list):
         raise LiveAuditRunnerUnavailable("live worker dump did not include events[]")
     return body
+
+
+def _ablation_probe_rejected(resp: httpx.Response, payload: Mapping[str, Any]) -> bool:
+    """True only when a 422 is the worker refusing the causal-ablation slice.
+
+    Guards the graceful retry: it fires only when we actually requested
+    ``causal_ablation`` AND the worker's validation error names the ablation
+    probe/target as the offending input, so unrelated 422s still surface
+    immediately instead of being silently downgraded.
+    """
+    if "causal_ablation" not in list(payload.get("probes") or []):
+        return False
+    try:
+        detail = resp.json().get("detail")
+    except ValueError:
+        return False
+    blob = json.dumps(detail, default=str)
+    return "causal_ablation" in blob or "ablation_target" in blob
+
+
+def _payload_without_ablation(payload: Mapping[str, Any]) -> dict[str, Any]:
+    """Copy of the worker request with the causal-ablation slice stripped out."""
+    out = dict(payload)
+    out["probes"] = [p for p in list(payload.get("probes") or []) if p != "causal_ablation"]
+    out.pop("ablation_target", None)
+    return out
 
 
 def _packet_from_worker_dump(
@@ -164,6 +215,7 @@ def _packet_from_worker_dump(
     if isinstance(covers_event, Mapping) and isinstance(covers_event.get("per_class_neuron_covers"), Mapping):
         cover_classes = len(covers_event["per_class_neuron_covers"])
     manifest = next((event.get("manifest") for event in events if event.get("type") == "manifest"), None)
+    ablation_block = _ablation_block_from_events(events)
     trace_id = _trace_id_for(audit_id, model_id, prompt, events)
     now = datetime.now(UTC).isoformat()
 
@@ -196,10 +248,7 @@ def _packet_from_worker_dump(
             "cover_class_count": cover_classes,
             "event_count": len(events),
         },
-        "ablation": {
-            "status": "unavailable",
-            "detail": "Live worker path did not run ablation/intervention in this first slice.",
-        },
+        "ablation": ablation_block,
         "matched_controls": {
             "status": "unavailable",
             "detail": "Live worker path did not run matched controls in this first slice.",
@@ -211,6 +260,7 @@ def _packet_from_worker_dump(
                 model_id=model_id,
                 has_output=bool(output_text),
                 has_readout=bool(token_events or covers_event),
+                ablation_present=ablation_block.get("status") == "present",
             ),
         },
         "provenance": {
@@ -230,9 +280,10 @@ def _packet_from_worker_dump(
                 "claim": "The worker emitted token-level activation/readout events for this prompt.",
                 "support_status": "supported" if token_events else "partially_supported",
             },
+            _causal_claim_level(ablation_block),
             {
                 "level": "runner_boundary",
-                "claim": "This packet does not include causal ablation, matched controls, or verifier-owned ACCEPT/SUPPRESS.",
+                "claim": "This packet does not include matched controls or verifier-owned ACCEPT/SUPPRESS.",
                 "support_status": "not_applicable",
             },
         ],
@@ -245,19 +296,15 @@ def _packet_from_worker_dump(
         },
         "audit_scope": {
             "kind": "open_weight_live_trace",
-            "label": "Open-weight live trace · activations + readout captured · causal/control not yet run · verdict held for review",
+            "label": _audit_scope_label(ablation_block),
             "internal_activation_access": True,
             "verdict_disposition": "held_for_human_review",
-            "detail": (
-                "This audit ran a hosted open-weight model and captured real "
-                "activations and CAS readout. Causal ablation and matched controls "
-                "were not run in this slice, so causal/control proofs are not yet "
-                "available and the verdict is held for human review."
-            ),
+            "detail": _audit_scope_detail(ablation_block),
         },
         "caveats": [
             "Live worker Evidence Packet: this is real model I/O and live trace capture, not a final production ACCEPT/SUPPRESS verdict.",
-            "Causal/intervention and matched-control probes are not run by this first live path.",
+            _causal_caveat(ablation_block),
+            "Matched-control probes are not run by this live path (separate slice).",
             "Foreign model output is retained as harvest data per current CAS-Native data policy.",
         ],
     }
@@ -287,14 +334,152 @@ def _persist_packet(packet: dict[str, Any]) -> None:
     write_evidence_packet_to_store(str(packet["trace_id"]), packet)
 
 
+# ---------------------------------------------------------------------------
+# Ablation (first causal proof) — consumed honestly from the worker dump.
+#
+# Honesty invariant enforced here:
+#   packet["ablation"]["status"] == "present"
+#       ⟺ an ablation_effect event exists AND is_real_model is True.
+# Demo-mode / failed-measurement ablation events (is_real_model False) keep the
+# status "unavailable" and carry NO measured deltas. This is the single place
+# that decides whether the causal_proof chip is allowed to flip to "present".
+# ---------------------------------------------------------------------------
+
+_ABLATION_DELTA_KEYS = (
+    "baseline_top_token",
+    "ablated_top_token",
+    "baseline_top_token_id",
+    "ablated_top_token_id",
+    "logit_delta",
+    "confidence_delta",
+    "top_token_changed",
+)
+
+
+def _ablation_block_from_events(events: list[Mapping[str, Any]]) -> dict[str, Any]:
+    """Build packet["ablation"] from the worker's ablation_effect event.
+
+    Returns status "present" with the measured deltas ONLY when the worker
+    emitted an ablation_effect event flagged ``is_real_model == True``. Any
+    other case (no event, or a demo/failed event with is_real_model False) is
+    reported as "unavailable" — never as a real causal proof, and never
+    carrying fabricated numbers.
+    """
+    event = next(
+        (e for e in events if e.get("type") == "ablation_effect"),
+        None,
+    )
+    if not isinstance(event, Mapping):
+        return {
+            "status": "unavailable",
+            "detail": (
+                "Live worker did not emit an ablation_effect event in this slice."
+            ),
+        }
+
+    is_real = event.get("is_real_model") is True
+    target = event.get("target") if isinstance(event.get("target"), Mapping) else {}
+    if not is_real:
+        # A demo-flagged or failed-measurement ablation is NOT a causal proof.
+        # Record that the path ran but produced no real measurement.
+        return {
+            "status": "unavailable",
+            "is_real_model": False,
+            "target": {
+                "layer": target.get("layer"),
+                "unit": target.get("unit"),
+            },
+            "mode": event.get("mode"),
+            "detail": (
+                "Ablation event was demo-flagged (is_real_model=False): no real "
+                "weights were ablated, so no causal proof is claimed. "
+                + str(event.get("detail") or "")
+            ).strip(),
+        }
+
+    block: dict[str, Any] = {
+        "status": "present",
+        "is_real_model": True,
+        "target": {
+            "layer": target.get("layer"),
+            "unit": target.get("unit"),
+        },
+        "mode": event.get("mode"),
+        "detail": str(
+            event.get("detail")
+            or "Single-target ablation measured on loaded weights."
+        ),
+    }
+    for key in _ABLATION_DELTA_KEYS:
+        block[key] = event.get(key)
+    return block
+
+
+def _causal_claim_level(ablation_block: Mapping[str, Any]) -> dict[str, str]:
+    """Claim-level entry describing the causal-ablation status honestly."""
+    if ablation_block.get("status") == "present":
+        return {
+            "level": "live_causal_ablation",
+            "claim": (
+                "A single-target ablation was measured on the loaded model "
+                "weights and produced a real next-token effect."
+            ),
+            "support_status": "supported",
+        }
+    return {
+        "level": "live_causal_ablation",
+        "claim": (
+            "No real single-target ablation effect was measured in this live "
+            "slice (demo-flagged or not run); causal proof is not claimed."
+        ),
+        "support_status": "not_applicable",
+    }
+
+
+def _audit_scope_label(ablation_block: Mapping[str, Any]) -> str:
+    if ablation_block.get("status") == "present":
+        return "live model I/O + readout + real single-target causal ablation"
+    return "live model I/O + readout; causal/control not yet run"
+
+
+def _audit_scope_detail(ablation_block: Mapping[str, Any]) -> str:
+    if ablation_block.get("status") == "present":
+        return (
+            "Live worker captured real model output, token-level readout, and a "
+            "measured single-target ablation effect on loaded weights. Matched "
+            "controls and verifier-owned ACCEPT/SUPPRESS remain separate proof "
+            "requirements; the verdict is held for human review."
+        )
+    return (
+        "Live worker captured real model output and token-level readout. No real "
+        "causal ablation or matched-control proof was produced in this slice; the "
+        "verdict is held for human review."
+    )
+
+
+def _causal_caveat(ablation_block: Mapping[str, Any]) -> str:
+    if ablation_block.get("status") == "present":
+        return (
+            "Causal proof here is a single-target ablation effect measured on "
+            "loaded weights; it is the first causal slice, not a full causal map "
+            "or a matched-control-confirmed result."
+        )
+    return (
+        "No real causal ablation was measured in this slice (demo mode or not "
+        "run), so the causal-proof chip stays unavailable."
+    )
+
+
 def _proof_chips_for_live_packet(packet: Mapping[str, Any]) -> list[dict[str, str]]:
     trace_id = str(packet.get("trace_id") or "unknown")
     model = packet.get("model") if isinstance(packet.get("model"), Mapping) else {}
+    ablation = packet.get("ablation") if isinstance(packet.get("ablation"), Mapping) else {}
     return _proof_chips_for_live_fields(
         trace_id=trace_id,
         model_id=str(model.get("model_key") or "unknown"),
         has_output=bool((packet.get("output") or {}).get("text")) if isinstance(packet.get("output"), Mapping) else False,
         has_readout=bool(packet.get("readout")),
+        ablation_present=ablation.get("status") == "present",
     )
 
 
@@ -304,6 +489,7 @@ def _proof_chips_for_live_fields(
     model_id: str,
     has_output: bool,
     has_readout: bool,
+    ablation_present: bool = False,
 ) -> list[dict[str, str]]:
     return [
         _chip(
@@ -320,10 +506,21 @@ def _proof_chips_for_live_fields(
                 else "Live worker returned no token/readout events."
             ),
         ),
+        # Honesty invariant: causal_proof flips to "present" ONLY when a REAL,
+        # measured ablation effect exists (is_real_model true AND deltas present).
+        # ``ablation_present`` is derived solely from _ablation_block_from_events,
+        # which gates "present" on is_real_model — so this chip can never claim a
+        # causal proof for a demo-flagged or absent ablation.
         _chip(
             "causal_proof",
-            "unavailable",
-            "No ablation/intervention proof was run in this live-worker slice.",
+            "present" if ablation_present else "unavailable",
+            (
+                "Single-target ablation measured a real next-token effect on "
+                "loaded weights (see packet ablation block)."
+                if ablation_present
+                else "No real ablation/intervention proof was run in this "
+                "live-worker slice."
+            ),
         ),
         _chip(
             "control_proof",
