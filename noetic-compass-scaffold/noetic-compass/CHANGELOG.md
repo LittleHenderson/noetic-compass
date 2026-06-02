@@ -1,5 +1,23 @@
 # Noetic Compass — Progress Log
 
+## Hosted state-ledger shadow enable, **VERIFIED on Render production branch** — merged `codex/cas-harness-live-run` into `master`, pushed `a9f519b..f32a650`, waited for Render to roll forward, and ran the hosted verifier against `https://noetic-compass-api.onrender.com`: `enabled_shadow_dict_authoritative`, `reads_compared 0->95`, `divergences_found 0`, fleet merge `COMPLETE` / `ready_for_verifier`. Read-authority stayed false and Phase 4 stayed held (Jun 2, 2026)
+
+This is the hosted counterpart to doc 14. The first verifier attempt after the push still returned `404` for `/api/state-ledger/status`, which correctly meant Render was still serving the old build. After rollout, the same verifier passed against the hosted service. This changes the ledger status from "local real-HTTP shadow proof only" to "hosted shadow proof complete."
+
+**1) Production branch release.** `master` was fast-forwarded to current `origin/master`, then fast-forward merged with `codex/cas-harness-live-run`, then pushed: `a9f519b..f32a650`. No conflict resolution was needed. The merged branch includes the state-ledger bootstrap, `GET /api/state-ledger/status`, the hosted verifier, and CRM capture seam.
+
+**2) Hosted shadow proof.** `scripts/verify_state_ledger_enabled.py --base-url https://noetic-compass-api.onrender.com --require-posture shadow` passed. The verifier minted a hosted JWT via `/auth/token`, created a real distributed audit, dispatched it, registered workers, prepared fleet jobs, leased and receipted both jobs, merged the fleet packet, then touched the ledger-mirrored read sites. The result: `posture=enabled_shadow_dict_authoritative`, `reads_compared=0->95`, `divergences_found=0`, `last_divergence=None`, `audit_id=cas-dist-3a9e11fe091aa1f2`, `workers=2`, `receipts=2`, `merge status=COMPLETE`, `gate=ready_for_verifier`.
+
+**3) Honesty boundary.** This is still shadow mode. `NC_STATE_LEDGER_READ_AUTHORITY` stayed false, so dicts still served reads while the ledger compared them. Phase 4 deleted nothing. Render free-plan storage remains ephemeral, so this proves hosted shadow correctness for one uptime, not host-loss durability. The next ledger gate is a separate owner-approved hosted read-authority run that watches `reads_served`, not `reads_compared`.
+
+### Pieces (this entry)
+- `docs/working/production_readiness/16_hosted_shadow_enable_evidence_2026_06_02.md` *(new)* — hosted evidence record: branch action, verifier command, status snapshots, proof boundary, and next gate.
+- `CHANGELOG.md` *(edit)* — this entry.
+
+### Tests / verification (this entry)
+- Pre-push production-branch tests: **112 passed, 5 skipped** across CRM + state-ledger + state-substrate; **181 passed, 2 skipped** across CAS Harness audit/distributed/fleet/evidence route surfaces.
+- Hosted verifier: **PASS** on `https://noetic-compass-api.onrender.com`, `reads_compared 0->95`, `divergences_found 0`.
+
 ## CRM lead capture, **BUILT and WIRED, capture-only** — a public form can POST a lead, it is validated, captured, and (with a durable path set) persisted to an append-only JSONL store; what it does **not** do yet is land leads in an external CRM of record (Airtable/HubSpot), **by design**. The load-bearing honesty rule is `captured` ≠ `synced`: a real provider with a genuine `external_id` is the *only* thing that can claim a landing. Dark by default (in-memory store + null provider); production syncs **nothing** until a real provider is wired (Jun 2, 2026)
 
 This is the first slice of directive #4 ("start the CRM now — not operational yet, required before public launch"), built to the same declared-vs-verified discipline as the rest of the platform. It captures leads on **our** side and is honest, at every layer, that capturing a lead is not the same act as landing it in the external CRM. It changes no existing behaviour: the service is dark by default and the public endpoint is the only new unauthenticated surface (scoped to a `/public` subtree).
