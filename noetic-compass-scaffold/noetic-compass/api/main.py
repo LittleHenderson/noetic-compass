@@ -30,6 +30,7 @@ from api.routes import (
     cas_harness_live_worker_health,
     cohort,
     config,
+    crm,
     evidence,
     export,
     forecast,
@@ -90,6 +91,17 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         logger.info("state ledger: ENABLED, LEDGER READ-AUTHORITATIVE")
     else:
         logger.info("state ledger: ENABLED, dual-write+shadow, dict-authoritative")
+
+    # CRM lead capture: build the service from settings and stash it for the routes. Dark by
+    # default (in-memory store + null provider) unless NC_CRM_LEAD_STORE_PATH / NC_CRM_PROVIDER are
+    # set. build_crm_service fails loud for a provider we have not implemented, so a misconfigured
+    # CRM surfaces at startup rather than silently syncing nothing.
+    from api.services.crm import build_crm_service
+
+    app.state.crm = build_crm_service(settings)
+    _crm_store = type(app.state.crm.store).__name__
+    _crm_provider = getattr(app.state.crm.provider, "provider_name", "unknown")
+    logger.info("crm lead capture: store=%s provider=%s", _crm_store, _crm_provider)
 
     yield
 
@@ -153,3 +165,4 @@ app.include_router(evidence.router)
 app.include_router(atlas_live.router)
 app.include_router(visual_grounding.router)
 app.include_router(state_ledger_status.router)
+app.include_router(crm.router)

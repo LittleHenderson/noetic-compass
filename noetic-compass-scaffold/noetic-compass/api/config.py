@@ -27,6 +27,18 @@ class Settings(BaseSettings):
     state_ledger_path: str = "state_ledger.db"
     state_ledger_read_authority: bool = False
 
+    # CRM lead capture (go-to-market workstream). Dark-by-default and honest about it:
+    #   NC_CRM_PROVIDER (default "null") -> which external CRM leads sync to. "null" captures
+    #     leads locally and syncs NOTHING (the honest default until a real CRM is wired);
+    #     "airtable"/"hubspot" are declared seams that currently FAIL LOUD at startup because no
+    #     real integration has been built — refusing to look like sync works when it does not.
+    #   NC_CRM_LEAD_STORE_PATH (default unset) -> when set, leads persist to a durable append-only
+    #     JSONL file (single-host durable, survives restart). Unset uses an in-memory store that
+    #     forgets on restart and never pretends otherwise — a production deployment that means to
+    #     keep its leads MUST set this. See api/services/crm/.
+    crm_provider: str = "null"
+    crm_lead_store_path: str | None = None
+
     # JWT Auth
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"

@@ -32,6 +32,9 @@ PUBLIC_PATH_PREFIXES = (
     "/api/cas-harness/audit/session",
     "/api/cas-harness/audit/sessions",
     "/api/cas-harness/live-worker/health",
+    # Public lead capture: an anonymous prospect's form posts here. Only the /public subtree is
+    # open; the authed sales views (/api/crm/leads...) stay protected by JWT.
+    "/api/crm/public",
 )
 
 
