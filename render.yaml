@@ -36,6 +36,28 @@ services:
         value: enterprise
       - key: NC_RATE_LIMIT_RPM
         value: "120"
+      # State-ledger operational enable (strangler-fig steps 1-3 posture).
+      # ENABLED=true installs the SqliteStateStore + LedgerMirror so every
+      # mirrored read is dual-written and shadow-compared, while the in-RAM
+      # dicts STILL serve every read (READ_AUTHORITY=false). This is the safe
+      # production posture verified locally under real HTTP traffic in
+      # docs/working/production_readiness/14_operational_enable_evidence_2026_06_02.md.
+      # Step 4 (flip READ_AUTHORITY=true) and Phase 4 (dict deletion) stay HELD.
+      #
+      # FREE-TIER HONESTY: this service is plan:free, which has an EPHEMERAL
+      # filesystem (no persistent disk). NC_STATE_LEDGER_PATH therefore points at
+      # /tmp and is wiped on every deploy / restart / idle spin-down. That is fine
+      # for the divergence watch (dict-vs-ledger shadow-compare is live, in-process,
+      # within one uptime) but it does NOT prove cross-restart durability. Durability
+      # was proven separately on multi-host Postgres (commit c32f639, PG 16.4, 10/10).
+      # For real hosted durability, move to a paid instance with a persistent disk at
+      # /var/data and set NC_STATE_LEDGER_PATH=/var/data/state_ledger.db.
+      - key: NC_STATE_LEDGER_ENABLED
+        value: "true"
+      - key: NC_STATE_LEDGER_READ_AUTHORITY
+        value: "false"
+      - key: NC_STATE_LEDGER_PATH
+        value: /tmp/state_ledger.db
       # NC_CORS_ORIGINS — explicit allowlist. The Atlas Viewer alpha entries
       # (atlas-viewer-app.onrender.com + the future atlas.noeticcompass.com
       # custom domain) are listed alongside the original Compass dashboard

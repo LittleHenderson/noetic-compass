@@ -66,8 +66,9 @@ def ledger_status(handle: Optional[Any]) -> dict[str, object]:
                      | "enabled_ledger_read_authoritative",
           "audit_count": <int>,          # distributed-audit records rehydrated on startup
           "fleet_counts": {<str>: <int>},# fleet record counts rehydrated on startup
-          "divergence_tally": {          # the live Phase-2 watch numbers (mirror.tally())
-            "reads_compared": <int>,
+          "divergence_tally": {          # the live watch numbers (mirror.tally())
+            "reads_compared": <int>,     # Phase-2 shadow-compare odometer
+            "reads_served": <int>,       # Phase-3 authoritative-read odometer
             "divergences_found": <int>,
             "last_divergence": <small detail dict> | None,
           },

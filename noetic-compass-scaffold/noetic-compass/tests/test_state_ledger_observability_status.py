@@ -84,6 +84,7 @@ def test_enabled_shadow_posture_when_read_authority_off():
     # Fresh mirror: real measured zero (a compare path exists and reported 0), not a guess.
     assert status["divergence_tally"] == {
         "reads_compared": 0,
+        "reads_served": 0,
         "divergences_found": 0,
         "last_divergence": None,
     }
@@ -94,6 +95,24 @@ def test_enabled_read_authority_posture_when_flip_applied():
     status = ledger_status(handle)
     assert status["posture"] == POSTURE_ENABLED_READ_AUTHORITY
     assert status["audit_count"] == 2
+
+
+def test_status_surfaces_reads_served_odometer_under_read_authority():
+    # The Phase-3 watch: once read-authority is flipped, reads_compared freezes and the
+    # operator watches reads_served climb (paired with divergences_found == 0). The status
+    # surface must expose that odometer so the window does not look dead after the flip.
+    handle = _enabled_handle(read_authority=True)
+    mirror = handle.mirror
+    mirror.mirror_put("run", "run-1", {"status": "RUNNING"}, source="svc")
+
+    # Authoritative reads -- exactly what the live get_* / list_* serve under read-authority.
+    mirror.read_payload("run", "run-1")
+    mirror.read_all_payloads("run")
+
+    tally = ledger_status(handle)["divergence_tally"]
+    assert tally["reads_served"] == 2
+    assert tally["reads_compared"] == 0, "no shadow-compare runs under read-authority"
+    assert tally["divergences_found"] == 0
 
 
 def test_tally_reflects_real_shadow_compares_after_build():

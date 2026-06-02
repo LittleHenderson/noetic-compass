@@ -147,12 +147,26 @@ class LedgerMirror:
         # Bounded, queryable observability counters (operator surface; see tally()).
         # These are pure accounting -- they change nothing about what serves reads --
         # and they only ever do work when a mirror is actually installed and called
-        # (shadow_compare / _record). With no mirror installed (production's dark
-        # default) none of these increment, so the dark path stays byte-for-byte the
-        # same. Counts are cheap ints; the only retained *detail* is the LAST
-        # divergence (kind + record_id + reason, never a payload), so memory is O(1)
-        # regardless of traffic. Guarded by the same lock as the divergence log.
+        # (shadow_compare / the authoritative read_* methods / _record). With no mirror
+        # installed (production's dark default) none of these increment, so the dark
+        # path stays byte-for-byte the same. Counts are cheap ints; the only retained
+        # *detail* is the LAST divergence (kind + record_id + reason, never a payload),
+        # so memory is O(1) regardless of traffic. Guarded by the same lock as the
+        # divergence log.
+        #
+        # Two read odometers, one per phase, because the read path differs by phase and a
+        # "0 divergences" number is unreadable without the denominator of *how many reads*
+        # produced it (the same readability rationale documented on shadow_compare):
+        #   * reads_compared -- Phase-2 shadow-compares run (dicts authoritative).
+        #   * reads_served   -- Phase-3 authoritative reads the ledger served (ledger
+        #                       authoritative).
+        # One of the two is necessarily frozen at any moment: flipping read-authority
+        # moves the live read sites off shadow_compare and onto read_payload /
+        # read_all_payloads, so reads_compared stops climbing exactly as reads_served
+        # starts. Watching only reads_compared after the Phase-3 flip would look (wrongly)
+        # like "nothing is happening"; reads_served is that phase's live denominator.
         self._reads_compared = 0
+        self._reads_served = 0
         self._divergences_found = 0
         self._last_divergence: Optional[Divergence] = None
         # Phase 3 read-authority switch. Dark by default: while False, the live
@@ -340,19 +354,37 @@ class LedgerMirror:
         to log). An authoritative read **must not** hide a backend failure: when the
         ledger *is* the truth, a read that cannot reach it has to fail the request, not
         fabricate an answer. So ``StateStoreError`` propagates here by design.
+
+        Observability: a *successful* serve bumps the ``reads_served`` odometer (the
+        Phase-3 read-authority denominator -- see :meth:`tally`). The bump is *after* the
+        store read returns, so a propagating ``StateStoreError`` is NOT counted as a
+        serve -- a read the ledger could not answer is a failed request, surfaced as such,
+        never a silent tick. A ``None`` (no such record) *is* a serve: the ledger
+        authoritatively answered "no such record", mirroring how :meth:`shadow_compare`
+        counts its missing-record case.
         """
 
         record = self._store.get(INTERIM_TENANT, kind, record_id)
+        with self._lock:
+            self._reads_served += 1
         return None if record is None else record.payload
 
     def read_all_payloads(self, kind: Kind) -> dict[RecordId, Mapping[str, object]]:
         """Authoritative list read: every stored payload of a ``kind``, keyed by record id.
 
         Backs the live ``list_*`` calls under read-authority. Like :meth:`read_payload`,
-        a backend failure propagates rather than being swallowed.
+        a backend failure propagates rather than being swallowed, and a *successful* list
+        serve bumps the ``reads_served`` odometer by one (the read-authority denominator;
+        see :meth:`tally`). The unit is one *read operation*, not one record: a list that
+        returns fifty rows is one authoritative read the ledger served, counted once. The
+        operator watch only needs a reliably-climbing denominator while the ledger is the
+        read authority, not a per-row tally.
         """
 
-        return {rec.record_id: rec.payload for rec in self._store.list(INTERIM_TENANT, kind)}
+        payloads = {rec.record_id: rec.payload for rec in self._store.list(INTERIM_TENANT, kind)}
+        with self._lock:
+            self._reads_served += 1
+        return payloads
 
     # --- divergence accounting ---------------------------------------------
 
@@ -367,12 +399,21 @@ class LedgerMirror:
         """A bounded, plain-dict snapshot of shadow-compare accounting for operators.
 
         This is the cheap, always-safe counterpart to :meth:`divergences` (which copies
-        the whole log): it answers "how many shadow-compares have run, and how many
-        diverged" in O(1) without materialising the log, which is exactly the number the
-        Phase-2 zero-divergence watch needs on live traffic. Fields:
+        the whole log): it answers "how many reads have run -- shadow-compared in Phase 2,
+        ledger-served in Phase 3 -- and how many diverged" in O(1) without materialising
+        the log, which is exactly the number the zero-divergence watch needs on live
+        traffic. Fields:
 
         * ``reads_compared`` -- total :meth:`shadow_compare` attempts, agreements included
-          (the denominator; a divergence count is meaningless without it).
+          (the Phase-2 denominator; a divergence count is meaningless without it). Stops
+          climbing once read-authority is flipped, because the live read sites stop
+          shadow-comparing -- watch ``reads_served`` from that point.
+        * ``reads_served`` -- total authoritative reads the ledger served via
+          :meth:`read_payload` / :meth:`read_all_payloads`, one tick per read operation.
+          The Phase-3 denominator: what climbs *after* the read-authority flip, when
+          ``reads_compared`` necessarily stops. Zero throughout Phase 2 (no authoritative
+          read runs while the dicts serve reads), so the pair reads as a clean handoff --
+          one freezes exactly as the other starts.
         * ``divergences_found`` -- total divergences recorded from every source
           (shadow-read mismatches AND :meth:`mirror_put` write failures).
         * ``last_divergence`` -- a small detail dict for the most recent divergence
@@ -398,6 +439,7 @@ class LedgerMirror:
             )
             return {
                 "reads_compared": self._reads_compared,
+                "reads_served": self._reads_served,
                 "divergences_found": self._divergences_found,
                 "last_divergence": last_detail,
             }
@@ -423,9 +465,10 @@ class LedgerMirror:
         Also resets the divergence half of the observability tally -- the count and the
         ``last_divergence`` detail -- so a cleared log and its tally never disagree (a
         ``last_divergence`` still pointing at a forgotten entry would be a lie). The
-        ``reads_compared`` odometer is deliberately *not* reset: it is cumulative
-        throughput ("how much shadow traffic has this mirror seen"), independent of
-        whether the disagreements found so far have been acknowledged and cleared.
+        ``reads_compared`` / ``reads_served`` odometers are deliberately *not* reset: they
+        are cumulative throughput ("how much shadow / authoritative-read traffic has this
+        mirror seen"), independent of whether the disagreements found so far have been
+        acknowledged and cleared.
         """
 
         with self._lock:

@@ -35,7 +35,9 @@ async def get_state_ledger_status(request: Request) -> dict[str, object]:
     touches nothing. When enabled, reports the posture
     (``enabled_shadow_dict_authoritative`` or ``enabled_ledger_read_authoritative``),
     the rehydrated ``audit_count`` / ``fleet_counts``, and the real measured
-    ``divergence_tally`` (``reads_compared`` / ``divergences_found`` / ``last_divergence``).
+    ``divergence_tally`` (``reads_compared`` / ``reads_served`` / ``divergences_found`` /
+    ``last_divergence``). ``reads_compared`` is the Phase-2 shadow odometer; ``reads_served``
+    is the Phase-3 authoritative-read odometer that climbs once read-authority is flipped.
     """
 
     handle = getattr(request.app.state, "state_ledger", None)
