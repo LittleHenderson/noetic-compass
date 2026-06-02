@@ -21,7 +21,7 @@ from api.services.cas_harness_distributed_audits import (
     merge_distributed_audit,
     record_worker_evidence,
 )
-from api.services.production.state_substrate import LedgerMirror
+from api.services.production.state_substrate import INTERIM_TENANT, LedgerMirror, StateStore
 
 
 FleetWorkerStatus = Literal["active", "stale", "offline"]
@@ -205,19 +205,55 @@ def _worker_ledger_payload(worker: FleetWorkerRecord) -> dict[str, object]:
     }
 
 
+def _job_ledger_payload(job: FleetJobRecord) -> dict[str, object]:
+    """Durable job STATE -- the stable projection a run row stores and a restart rebuilds.
+
+    Two fields ``FleetJobRecord.to_dict`` renders are deliberately excluded because they
+    are not durable state of the job:
+
+    * ``lease_token`` -- a secret capability, never persisted (``to_dict`` already redacts
+      it under ``include_lease_token=False``); a lease cannot survive a restart, so the
+      token is not state to keep.
+    * ``evidence_packet_fragment_payload_sha256`` -- a derived digest of the raw
+      ``evidence_packet_fragment_payload``, which the ledger does NOT own. The durable,
+      content-addressed handle is ``evidence_packet_fragment_ref`` (kept below); the raw
+      payload lives in the WORM evidence store. A digest of bytes the run-ledger does not
+      hold is a view, not state, so storing it would be storing something a cold reload
+      cannot reproduce.
+
+    Everything else is the job's own state and round-trips through rehydrate."""
+    return {
+        "job_id": job.job_id,
+        "audit_id": job.audit_id,
+        "assigned_worker_id": job.assigned_worker_id,
+        "layer_start": job.layer_start,
+        "layer_end": job.layer_end,
+        "shard_id": job.shard_id,
+        "assigned_methods": list(job.assigned_methods),
+        "expected_outputs": list(job.expected_outputs),
+        "status": job.status,
+        "lease_expires_at": job.lease_expires_at,
+        "evidence_packet_fragment_ref": job.evidence_packet_fragment_ref,
+        "produced_outputs": list(job.produced_outputs),
+        "missing_outputs": list(job.missing_outputs),
+        "error_message": job.error_message,
+        "updated_at": job.updated_at,
+    }
+
+
 def _run_ledger_payload(run: FleetRunRecord) -> dict[str, object]:
     """Durable run STATE. verifier_gate_status / merge_reason and the to_dict()
     aggregates (readiness, stale_workers, registered_workers, counts) are all
     recomputed from jobs + workers + clock on read, so they are views, not state, and
-    are excluded. Each job's own fields (status, lease_expires_at, fragment ref,
-    produced/missing) ARE state and are kept via the stable job projection."""
+    are excluded. Each job's own fields are kept via :func:`_job_ledger_payload` (which
+    likewise drops the job's two derived/secret fields)."""
     return {
         "audit_id": run.audit_id,
         "status": run.status,
         "merged_packet_trace_id": run.merged_packet_trace_id,
         "created_at": run.created_at,
         "updated_at": run.updated_at,
-        "jobs": [job.to_dict(include_lease_token=False) for job in run.jobs],
+        "jobs": [_job_ledger_payload(job) for job in run.jobs],
     }
 
 
@@ -265,6 +301,137 @@ def reset_fleet_executor_for_tests() -> None:
     )
 
     reset_merged_fleet_evidence_packets_for_tests()
+
+
+# --- rehydrate-on-startup (docs 10 Phase-3 prerequisite) -------------------
+# A restart loses _WORKERS / _FLEET_RUNS / _FRAGMENT_REFS -- the only place this
+# single-process design holds fleet state. Before read-authority can move off the
+# dicts, a restarted process must rebuild them from the durable ledger. These are the
+# read inverses of the dual-write projections (_worker_ledger_payload, _run_ledger_payload
+# / _job_ledger_payload, and the fragment_ref rows).
+
+
+def _worker_from_ledger_payload(
+    payload: Mapping[str, object], *, cutoff: datetime
+) -> FleetWorkerRecord:
+    """Rebuild a worker from its durable row and RE-DERIVE its staleness view.
+
+    ``status`` is a function of (last_heartbeat_at, now) and is excluded from the stored
+    projection, so it is recomputed here exactly as :func:`_mark_stale_worker_if_expired`
+    would -- but inline, without that helper's lease-expiry side effect (rehydrated leases
+    are already dropped, see :func:`_job_from_ledger_payload`)."""
+    worker = FleetWorkerRecord(
+        worker_id=payload["worker_id"],
+        model_id=payload["model_id"],
+        worker_url=payload["worker_url"],
+        gpu_type=payload["gpu_type"],
+        capacity=payload["capacity"],
+        supported_methods=tuple(payload["supported_methods"]),
+        registered_at=payload["registered_at"],
+        last_heartbeat_at=payload["last_heartbeat_at"],
+    )
+    worker.status = "stale" if _parse_utc(worker.last_heartbeat_at) < cutoff else "active"
+    return worker
+
+
+def _job_from_ledger_payload(payload: Mapping[str, object]) -> FleetJobRecord:
+    """Rebuild a job from its durable row, honestly dropping any in-flight lease.
+
+    The lease token was never persisted (it is a secret capability redacted from the
+    projection), so a lease cannot survive a restart: a stored ``leased`` job comes back
+    ``expired`` -- a worker must re-lease to resume it, and nothing is left looking held
+    by a token no one has. The raw ``evidence_packet_fragment_payload`` is likewise not in
+    the run ledger (only its content-addressed ref is), so it reloads as ``None``; the
+    durable ``evidence_packet_fragment_ref`` is preserved."""
+    stored_status = payload["status"]
+    status = "expired" if stored_status == "leased" else stored_status
+    return FleetJobRecord(
+        job_id=payload["job_id"],
+        audit_id=payload["audit_id"],
+        assigned_worker_id=payload["assigned_worker_id"],
+        layer_start=payload["layer_start"],
+        layer_end=payload["layer_end"],
+        shard_id=payload["shard_id"],
+        assigned_methods=tuple(payload["assigned_methods"]),
+        expected_outputs=tuple(payload["expected_outputs"]),
+        status=status,
+        lease_token=None,
+        lease_token_hash=None,
+        lease_expires_at=payload["lease_expires_at"],
+        evidence_packet_fragment_ref=payload["evidence_packet_fragment_ref"],
+        evidence_packet_fragment_payload=None,
+        produced_outputs=tuple(payload["produced_outputs"]),
+        missing_outputs=tuple(payload["missing_outputs"]),
+        error_message=payload["error_message"],
+        updated_at=payload["updated_at"],
+    )
+
+
+def _run_from_ledger_payload(payload: Mapping[str, object]) -> FleetRunRecord:
+    """Rebuild a run shell from its durable row; gate views are re-derived afterwards.
+
+    ``verifier_gate_status`` and ``merge_reason`` are recomputed views excluded from the
+    stored projection, so a neutral placeholder is installed and :func:`_refresh_run_gate`
+    re-derives both once the workers are back in ``_WORKERS``."""
+    return FleetRunRecord(
+        audit_id=payload["audit_id"],
+        status=payload["status"],
+        verifier_gate_status="waiting_for_workers",
+        jobs=[_job_from_ledger_payload(job) for job in payload["jobs"]],
+        created_at=payload["created_at"],
+        updated_at=payload["updated_at"],
+        merged_packet_trace_id=payload["merged_packet_trace_id"],
+    )
+
+
+def rehydrate_from_ledger(store: StateStore) -> dict[str, int]:
+    """Rebuild _WORKERS / _FLEET_RUNS / _FRAGMENT_REFS from the durable ledger.
+
+    Returns the count restored per kind. Like the distributed-audit rehydrate, this is the
+    read inverse of the dual-write: it does NOT swallow backend errors (a half-restored
+    fleet must fail loudly, not look authoritative) and it builds into fresh containers
+    swapped in only once every row rebuilds.
+
+    Order is load-bearing: workers first, then runs, then re-derive the run-gate views --
+    because :func:`_refresh_run_gate` reads ``_WORKERS`` to decide each run's gate, the
+    workers must be installed before the gate is computed. Two honest restart consequences
+    are baked in: a worker's staleness is re-derived from its heartbeat (``status`` is not
+    stored), and any in-flight lease is dropped (the token was never persisted), so a
+    previously ``leased`` job returns ``expired``.
+
+    This is the read side of the docs-10 cutover prerequisite. It makes the dicts
+    survivable; it does not move read authority onto the ledger -- that is a later,
+    separately gated step.
+    """
+    cutoff = datetime.now(UTC) - timedelta(seconds=DEFAULT_MAX_HEARTBEAT_AGE_SECONDS)
+
+    workers: dict[str, FleetWorkerRecord] = {}
+    for record in store.list(INTERIM_TENANT, _WORKER_KIND):
+        worker = _worker_from_ledger_payload(record.payload, cutoff=cutoff)
+        workers[worker.worker_id] = worker
+
+    runs: dict[str, FleetRunRecord] = {}
+    for record in store.list(INTERIM_TENANT, _RUN_KIND):
+        run = _run_from_ledger_payload(record.payload)
+        runs[run.audit_id] = run
+
+    fragments = {record.record_id for record in store.list(INTERIM_TENANT, _FRAGMENT_KIND)}
+
+    _WORKERS.clear()
+    _WORKERS.update(workers)
+    _FLEET_RUNS.clear()
+    _FLEET_RUNS.update(runs)
+    _FRAGMENT_REFS.clear()
+    _FRAGMENT_REFS.update(fragments)
+
+    for run in _FLEET_RUNS.values():
+        _refresh_run_gate(run)
+
+    return {
+        "workers": len(_WORKERS),
+        "fleet_runs": len(_FLEET_RUNS),
+        "fragment_refs": len(_FRAGMENT_REFS),
+    }
 
 
 def register_worker(

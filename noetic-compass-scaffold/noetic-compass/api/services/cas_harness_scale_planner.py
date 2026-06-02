@@ -10,7 +10,7 @@ from __future__ import annotations
 
 from dataclasses import asdict, dataclass
 from math import ceil
-from typing import Literal
+from typing import Literal, Mapping
 
 from api.services.cas_harness_model_access import (
     ModelAccessMode,
@@ -164,6 +164,19 @@ class WorkerAssignment:
         payload["expected_outputs"] = list(self.expected_outputs)
         return payload
 
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, object]) -> "WorkerAssignment":
+        """Exact inverse of :meth:`to_dict` -- reconstruct an assignment from a ledger
+        row so a restarted process can rebuild its plan (docs 10 rehydrate-on-startup)."""
+        return cls(
+            worker_id=payload["worker_id"],
+            layer_start=payload["layer_start"],
+            layer_end=payload["layer_end"],
+            shard_id=payload["shard_id"],
+            assigned_methods=tuple(payload["assigned_methods"]),
+            expected_outputs=tuple(payload["expected_outputs"]),
+        )
+
 
 @dataclass(frozen=True)
 class MemoryEstimate:
@@ -175,6 +188,17 @@ class MemoryEstimate:
 
     def to_dict(self) -> dict[str, object]:
         return asdict(self)
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, object]) -> "MemoryEstimate":
+        """Exact inverse of :meth:`to_dict` (docs 10 rehydrate-on-startup)."""
+        return cls(
+            precision=payload["precision"],
+            total_weight_memory_gb=payload["total_weight_memory_gb"],
+            activation_overhead_gb=payload["activation_overhead_gb"],
+            estimated_total_runtime_gb=payload["estimated_total_runtime_gb"],
+            estimated_memory_per_worker_gb=payload["estimated_memory_per_worker_gb"],
+        )
 
 
 @dataclass(frozen=True)
@@ -211,6 +235,37 @@ class ScalePlan:
             "evidence_requirements": list(self.evidence_requirements),
             "limitations": list(self.limitations),
         }
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, object]) -> "ScalePlan":
+        """Exact inverse of :meth:`to_dict`.
+
+        The plan is immutable durable state computed once at audit-create time. On a
+        process restart the distributed-audit service rebuilds each audit from its
+        ledger row (docs 10 rehydrate-on-startup), and the plan must come back
+        faithfully because downstream code reads ``plan.model_id`` and re-serves
+        ``plan.to_dict()``. Every field in the dataclass is present in ``to_dict`` and
+        maps back 1:1, so the round-trip ``from_dict(to_dict(p)) == p`` holds.
+        """
+        return cls(
+            model_id=payload["model_id"],
+            weight_access=payload["weight_access"],
+            parameter_count_b=payload["parameter_count_b"],
+            num_layers=payload["num_layers"],
+            scale_tier=payload["scale_tier"],
+            validation_status=payload["validation_status"],
+            validation_notice=payload["validation_notice"],
+            recommended_worker_count=payload["recommended_worker_count"],
+            orchestration_pattern=payload["orchestration_pattern"],
+            worker_assignments=tuple(
+                WorkerAssignment.from_dict(assignment)
+                for assignment in payload["worker_assignments"]
+            ),
+            memory_estimate=MemoryEstimate.from_dict(payload["memory_estimate"]),
+            expected_capability=tuple(payload["expected_capability"]),
+            evidence_requirements=tuple(payload["evidence_requirements"]),
+            limitations=tuple(payload["limitations"]),
+        )
 
 
 def build_scale_plan(request: ScalePlanRequest) -> ScalePlan:

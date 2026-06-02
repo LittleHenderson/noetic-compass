@@ -1,6 +1,6 @@
 # 10 — State Substrate Migration
 
-**Workstream:** 10 of 11 · **Status:** Phases 0–2 implemented behind the `LedgerMirror` seam (dual-write + shadow-read, **zero divergence** proven on `InMemoryStateStore`); Phase 3 cutover blocked on workstream 11 · **Date:** Jun 1, 2026
+**Workstream:** 10 of 11 · **Status:** Phases 0–2 implemented behind the `LedgerMirror` seam (dual-write + shadow-read, **zero divergence** proven on `InMemoryStateStore`); single-host durability **and rehydrate-on-startup** proven on `SqliteStateStore`; Phase 3 cutover (flip read-authority off the dicts + multi-host) still gated on workstream 11 · **Date:** Jun 1, 2026
 **Owner seam:** the cutover that moves run/worker/fleet/fragment state out of process-global Python
 dicts and onto the durable, tenant-scoped, version-checked `StateStore` ledger.
 
@@ -272,15 +272,23 @@ remains only as dead scaffolding to be deleted in Phase 4.
   partial receipts), restart, and confirm the audit, its fleet run, leases (or honest expiry), and the
   `_FRAGMENT_REFS` dedup set are all recovered from the ledger with **zero lost or double-counted
   receipts** (cross-check the merged fragment set is exactly complete, no dupes — the same proof
-  workstream 03 Phase D requires). A first slice of this is **already demonstrated**:
-  `test_mirrored_ledger_survives_a_single_host_restart` drives the real flow through `SqliteStateStore`,
-  drops the in-RAM dicts, reopens the file, and recovers the full record set from the ledger — so the
-  *storage* survives a single-host restart today. What the cutover still owes is the other half:
-  **rehydrating the in-RAM view from those ledger rows on startup** and flipping reads onto the ledger
-  (until then a restarted process recovers the bytes but does not yet serve from them). Plus a
-  **multi-host smoke**: two API replicas against one shared (SQLite-single-host first, then Postgres)
-  backend cooperate on one run — host A prepares, host B merges. That half is impossible on
-  `InMemoryStateStore` and needs the durable multi-host backend from workstream 11.
+  workstream 03 Phase D requires). **Two of the three slices are now demonstrated.** (i) *Storage
+  survival*: `test_mirrored_ledger_survives_a_single_host_restart` drives the real flow through
+  `SqliteStateStore`, drops the in-RAM dicts, reopens the file, and recovers the full record set from the
+  ledger — the *bytes* survive a single-host restart. (ii) *Rehydrate-on-startup*: `rehydrate_from_ledger`
+  on both live services reads those surviving rows back into `_DISTRIBUTED_AUDITS` / `_WORKERS` /
+  `_FLEET_RUNS` / `_FRAGMENT_REFS`, and the three `test_rehydrate_*` tests prove a restarted process then
+  *serves the same records* — byte-identical audit render, byte-identical durable run projection (and a
+  re-derived gate that lands where it was), re-derived worker staleness — with **zero lost or
+  double-counted** fragment refs, and with the two honest restart consequences made explicit (an in-flight
+  lease drops `leased`→`expired` and is then immediately re-leasable; the non-durable fragment-payload
+  digest drops while the content-addressed ref survives). What the cutover still owes is the **third slice
+  — the flip itself**: moving read-authority off the dicts and onto the ledger (rehydrate makes the dicts
+  *survivable*; it does not yet make the ledger *authoritative* — that is the separately gated step the
+  directive pins behind "only after that passes"), plus a **multi-host smoke**: two API replicas against
+  one shared (SQLite-single-host first, then Postgres) backend cooperate on one run — host A prepares, host
+  B merges. That last half is impossible on `InMemoryStateStore` and needs the durable multi-host backend
+  from workstream 11.
 - **Kill:** if a resumed run ever double-counts or loses a receipt, the durable-state model is unsafe —
   revert to the dicts (which are honest for single-host) and do not ship the cutover.
 
@@ -340,6 +348,26 @@ clearing a module global.
 >   *evidence* Phase 3's single-host half needs, on the one backend whose own tests earn "durable on a
 >   single host" — it is **not** the cutover (the dicts are still authoritative on the serving path) and
 >   **not** multi-host (that is workstream 11).
+> - **Rehydrate-on-startup is now implemented and proven (the read inverse of the dual-write).**
+>   `rehydrate_from_ledger(store)` on both live services rebuilds the four in-RAM containers from the
+>   durable ledger. The distributed-audit service reconstructs each `DistributedAuditRecord` — plan via
+>   `ScalePlan.from_dict`, the *mutated* `worker_evidence` rows via `WorkerEvidenceRecord.from_dict`, and
+>   the 7 immutable, only-rendered summaries as faithful `to_dict()` re-servers (a stored dict re-served
+>   byte-identically, which is both more faithful and less code than field-by-field reconstruction). The
+>   fleet service rebuilds workers, runs, and the fragment-ref dedup set, then re-derives each run's gate
+>   via `_refresh_run_gate` **after** workers are back (the order is load-bearing — the gate reads
+>   `_WORKERS`). Unlike the non-authoritative mirror it **fails loud**: a `StateStoreError` propagates
+>   (a half-restored service must not look authoritative) and it builds into fresh containers swapped in
+>   only once every row rebuilds, so a malformed row cannot leave a service half-populated. Two honest
+>   restart consequences are baked in and tested: a `leased` job rehydrates `expired` (the lease token is
+>   a secret capability never written to the ledger) yet is immediately re-leasable, and the
+>   fragment-payload `sha256` rehydrates null (the raw payload lives in the WORM store, not the run
+>   ledger) while its durable content-addressed ref survives. Proven by the three `test_rehydrate_*` tests
+>   in `tests/test_state_substrate_live_migration.py`, which snapshot what the services serve, simulate a
+>   restart (close the SQLite file + erase the dicts), rehydrate from a freshly reopened store, **close it
+>   before asserting** (proving rehydrate is a full copy into RAM, not a lazy handle), and assert the
+>   served records match. This is the cutover **prerequisite** the directive names, **not** the cutover:
+>   the dicts remain authoritative on the serving path until the separately gated read-authority flip.
 
 ---
 

@@ -18,6 +18,16 @@ What is deliberately exercised beyond the happy path:
   view: a worker going stale must NOT register as a divergence, because ``status`` is a
   recomputed view excluded from the stored projection.
 
+Phase-3 prerequisite proved here too: the ledger does not just AGREE with and SURVIVE a
+restart -- a restarted process can REBUILD the live dicts from it. The final three tests
+drive the real flow through the durable SqliteStateStore, drop the in-RAM dicts (all a
+restart loses), and call ``rehydrate_from_ledger`` on both services, then assert the
+services serve the same records -- with two honest restart consequences made explicit: an
+in-flight lease is dropped (``leased`` -> ``expired``; the token is never persisted) and
+the non-durable fragment-payload digest is dropped (the content-addressed ref survives).
+This is the gate for the read-authority cutover, NOT the cutover: the dicts stay
+authoritative on the serving path until a separate, gated step moves read authority.
+
 Run ONLY this file:
     C:/Python314/python.exe -m pytest tests/test_state_substrate_live_migration.py -q
 """
@@ -307,5 +317,262 @@ def test_mirrored_ledger_survives_a_single_host_restart(tmp_path):
         reopened.close()
 
     # Leave no mirror installed for sibling tests.
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()
+
+
+def test_rehydrate_rebuilds_every_dict_from_the_ledger(tmp_path):
+    # docs 10 Phase-3 cutover PREREQUISITE. The sibling test proved the ledger SURVIVES a
+    # restart; this proves the read inverse -- rehydrate_from_ledger reads that surviving
+    # ledger back into _DISTRIBUTED_AUDITS / _WORKERS / _FLEET_RUNS / _FRAGMENT_REFS so the
+    # two live services serve byte-identical durable state afterwards. This is exactly the
+    # gate named: "when the service restarts, it reads the ledger and rebuilds [the four
+    # dicts]. Only after that passes should we move read-authority off the dicts." It is the
+    # prerequisite, NOT the cutover -- the dicts are still authoritative on the serving path.
+    db = tmp_path / "rehydrate_ledger.db"
+
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()
+    store = SqliteStateStore(db)
+    m = LedgerMirror(store)
+    da.set_state_mirror(m)
+    fe.set_state_mirror(m)
+    try:
+        audit_id = _drive_full_flow()
+        m.assert_no_divergence()
+
+        # Snapshot exactly what the services SERVE before the restart.
+        #  * the audit's rendered view is fully clock-independent durable state, so it must
+        #    round-trip byte-for-byte (reconstructed via ScalePlan.from_dict + faithful
+        #    summary re-servers);
+        #  * the run is captured two ways -- its durable projection (the contract the ledger
+        #    stores) and its full rendered view (durable state PLUS the gate / readiness views
+        #    recomputed on read), which must also reproduce because every input to those views
+        #    (jobs, active workers) round-trips;
+        #  * worker `status` is a derived staleness view, re-derived from the durable heartbeat
+        #    (fresh here -> 'active').
+        audit_before = da.get_distributed_audit(audit_id).to_dict()
+        audit_list_before = [a.audit_id for a in da.list_distributed_audits()]
+        run_durable_before = fe._run_ledger_payload(fe.get_fleet_run(audit_id))
+        run_rendered_before = fe.get_fleet_run(audit_id).to_dict()
+        workers_before = {w.worker_id: w.to_dict() for w in fe.list_workers()}
+        fragments_before = set(fe._FRAGMENT_REFS)
+        assert workers_before and fragments_before
+        assert run_rendered_before["verifier_gate_status"] == "ready_for_verifier"
+    finally:
+        # Process-restart analogue: detach the mirror, close the file, erase the dicts.
+        da.set_state_mirror(None)
+        fe.set_state_mirror(None)
+        store.close()
+        da.reset_distributed_audits_for_tests()
+        fe.reset_fleet_executor_for_tests()
+
+    # The dicts are gone -- a restart lost every live record ...
+    assert da.get_distributed_audit(audit_id) is None
+    assert fe.get_fleet_run(audit_id) is None
+    assert fe.list_workers() == []
+
+    # ... so rehydrate from the durable ledger exactly as startup would, then drop the store
+    # handle. Closing it BEFORE the assertions proves rehydrate fully copied into RAM and does
+    # not lazily depend on the store still being open.
+    reopened = SqliteStateStore(db)
+    try:
+        audit_count = da.rehydrate_from_ledger(reopened)
+        fleet_counts = fe.rehydrate_from_ledger(reopened)
+    finally:
+        reopened.close()
+
+    assert audit_count == 1
+    assert fleet_counts == {
+        "workers": len(workers_before),
+        "fleet_runs": 1,
+        "fragment_refs": len(fragments_before),
+    }
+
+    # The audit serves byte-identically: its to_dict() is clock-independent durable state.
+    assert da.get_distributed_audit(audit_id).to_dict() == audit_before
+    assert [a.audit_id for a in da.list_distributed_audits()] == audit_list_before
+
+    # The run's DURABLE state round-trips exactly, and its full served view -- including the
+    # gate / readiness recomputed on read -- reproduces too.
+    rehydrated_run = fe.get_fleet_run(audit_id)
+    assert fe._run_ledger_payload(rehydrated_run) == run_durable_before
+    assert rehydrated_run.to_dict() == run_rendered_before
+
+    # Workers serve identically, including the re-derived 'active' status (fresh heartbeat).
+    workers_after = {w.worker_id: w.to_dict() for w in fe.list_workers()}
+    assert workers_after == workers_before
+    assert all(w["status"] == "active" for w in workers_after.values())
+
+    # Every content-addressed fragment ref is back.
+    assert set(fe._FRAGMENT_REFS) == fragments_before
+
+    # Leave no mirror installed for sibling tests.
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()
+
+
+def test_rehydrate_drops_in_flight_leases_honestly(tmp_path):
+    # Honest restart consequence #1: an in-flight lease cannot survive a restart. The lease
+    # token is a secret capability redacted from the durable projection (never written to the
+    # ledger), so a process that crashes mid-lease must NOT come back believing a job is held
+    # by a token no one has. rehydrate maps a stored 'leased' job to 'expired' -- and because
+    # lease_next_job re-leases 'expired' jobs, the work is recoverable, not stranded.
+    db = tmp_path / "rehydrate_lease.db"
+
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()
+    store = SqliteStateStore(db)
+    m = LedgerMirror(store)
+    da.set_state_mirror(m)
+    fe.set_state_mirror(m)
+    try:
+        audit = da.create_distributed_audit(_request(), data_capture_acknowledged=True)
+        audit_id = audit.audit_id
+        da.dispatch_distributed_audit(audit_id)
+        model_id = audit.plan.model_id
+        for worker in audit.worker_evidence:
+            fe.register_worker(
+                worker_id=worker.worker_id,
+                model_id=model_id,
+                worker_url=f"https://{worker.worker_id}.workers.example",
+                gpu_type="H100-80GB",
+                supported_methods=list(worker.assigned_methods),
+            )
+        run = fe.prepare_fleet_for_audit(audit_id)
+        target = run.jobs[0]
+        leased = fe.lease_next_job(audit_id=audit_id, worker_id=target.assigned_worker_id)
+        assert leased is not None and leased.lease_token, "precondition: a live, held lease"
+        assert leased.status == "leased"
+        leased_worker_id = leased.assigned_worker_id
+        leased_job_id = leased.job_id
+        m.assert_no_divergence()
+    finally:
+        da.set_state_mirror(None)
+        fe.set_state_mirror(None)
+        store.close()
+        da.reset_distributed_audits_for_tests()
+        fe.reset_fleet_executor_for_tests()
+
+    reopened = SqliteStateStore(db)
+    try:
+        da.rehydrate_from_ledger(reopened)
+        fe.rehydrate_from_ledger(reopened)
+    finally:
+        reopened.close()
+
+    # The lease did not survive: the job is back as 'expired', with no token left behind.
+    rehydrated = fe.get_fleet_run(audit_id)
+    job = next(j for j in rehydrated.jobs if j.job_id == leased_job_id)
+    assert job.status == "expired", "a stored 'leased' job must rehydrate as 'expired'"
+    assert job.lease_token is None and job.lease_token_hash is None, "the token is never persisted"
+    # the redacted token is absent from the rendered view too (it always is, but assert it).
+    job_view = next(j for j in rehydrated.to_dict()["jobs"] if j["job_id"] == leased_job_id)
+    assert job_view["lease_token"] is None
+
+    # ... and the work is recoverable: the same worker can re-lease the expired job.
+    re_leased = fe.lease_next_job(audit_id=audit_id, worker_id=leased_worker_id)
+    assert re_leased is not None and re_leased.job_id == leased_job_id
+    assert re_leased.status == "leased" and re_leased.lease_token
+
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()
+
+
+def test_rehydrate_drops_the_non_durable_fragment_payload_digest(tmp_path):
+    # Honest restart consequence #2: the raw fragment-payload digest is not durable run-ledger
+    # state, so it does not survive a restart -- but the content-addressed ref that locates the
+    # payload in the WORM evidence store DOES. A completed receipt may carry a raw
+    # evidence_packet_fragment_payload whose sha256 the job view renders; that digest is a view
+    # of bytes the run ledger does not own. So the projection keeps the ref and drops the digest:
+    # after a restart the job serves the same ref with a null payload digest, and its durable
+    # projection is byte-identical to before.
+    db = tmp_path / "rehydrate_payload.db"
+    payload = {"probe": "hidden_state_l12", "norm": 1.5, "tokens": [7, 8, 9]}
+
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()
+    store = SqliteStateStore(db)
+    m = LedgerMirror(store)
+    da.set_state_mirror(m)
+    fe.set_state_mirror(m)
+    try:
+        audit = da.create_distributed_audit(_request(), data_capture_acknowledged=True)
+        audit_id = audit.audit_id
+        da.dispatch_distributed_audit(audit_id)
+        model_id = audit.plan.model_id
+        for worker in audit.worker_evidence:
+            fe.register_worker(
+                worker_id=worker.worker_id,
+                model_id=model_id,
+                worker_url=f"https://{worker.worker_id}.workers.example",
+                gpu_type="H100-80GB",
+                supported_methods=list(worker.assigned_methods),
+            )
+        run = fe.prepare_fleet_for_audit(audit_id)
+        target = run.jobs[0]
+        leased = fe.lease_next_job(audit_id=audit_id, worker_id=target.assigned_worker_id)
+        assert leased is not None
+        # Bind the raw payload into the ref's digest AND submit it, so the live job actually
+        # holds the payload and renders a real sha256.
+        ref = fe.build_evidence_fragment_ref(
+            audit_id=audit_id,
+            job_id=leased.job_id,
+            worker_id=leased.assigned_worker_id,
+            model_id=model_id,
+            layer_start=leased.layer_start,
+            layer_end=leased.layer_end,
+            shard_id=leased.shard_id,
+            expected_outputs=leased.expected_outputs,
+            produced_outputs=list(leased.expected_outputs),
+            evidence_packet_fragment_payload=payload,
+        )
+        fe.submit_job_receipt(
+            audit_id=audit_id,
+            job_id=leased.job_id,
+            worker_id=leased.assigned_worker_id,
+            lease_token=leased.lease_token,
+            produced_outputs=list(leased.expected_outputs),
+            evidence_packet_fragment_ref=ref,
+            evidence_packet_fragment_payload=payload,
+        )
+        target_job_id = leased.job_id
+
+        live_job = next(j for j in fe.get_fleet_run(audit_id).jobs if j.job_id == target_job_id)
+        assert live_job.evidence_packet_fragment_payload == payload
+        live_view = next(
+            j for j in fe.get_fleet_run(audit_id).to_dict()["jobs"] if j["job_id"] == target_job_id
+        )
+        assert live_view["evidence_packet_fragment_payload_sha256"] is not None
+        assert live_view["evidence_packet_fragment_ref"] == ref
+        job_durable_before = fe._job_ledger_payload(live_job)
+        m.assert_no_divergence()
+    finally:
+        da.set_state_mirror(None)
+        fe.set_state_mirror(None)
+        store.close()
+        da.reset_distributed_audits_for_tests()
+        fe.reset_fleet_executor_for_tests()
+
+    reopened = SqliteStateStore(db)
+    try:
+        da.rehydrate_from_ledger(reopened)
+        fe.rehydrate_from_ledger(reopened)
+    finally:
+        reopened.close()
+
+    rehydrated = fe.get_fleet_run(audit_id)
+    job = next(j for j in rehydrated.jobs if j.job_id == target_job_id)
+    # The durable ref survives; the raw payload (WORM-owned) does not, so its digest is null.
+    assert job.evidence_packet_fragment_ref == ref, "the content-addressed ref is durable state"
+    assert job.evidence_packet_fragment_payload is None, "the raw payload is not run-ledger state"
+    view = next(j for j in rehydrated.to_dict()["jobs"] if j["job_id"] == target_job_id)
+    assert view["evidence_packet_fragment_payload_sha256"] is None
+    assert view["evidence_packet_fragment_ref"] == ref
+    # The job's durable projection is byte-identical: the dropped digest was never in it.
+    assert fe._job_ledger_payload(job) == job_durable_before
+    # And the fragment ref itself rehydrated into the dedupe set.
+    assert ref in fe._FRAGMENT_REFS
+
     da.reset_distributed_audits_for_tests()
     fe.reset_fleet_executor_for_tests()

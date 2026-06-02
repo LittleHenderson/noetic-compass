@@ -9,11 +9,12 @@ merged worker evidence plus a later verifier decision layer.
 
 from __future__ import annotations
 
+import copy
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 import hashlib
 import json
-from typing import Literal
+from typing import Literal, Mapping
 from uuid import uuid4
 
 from api.services.cas_harness_architecture_adapter import (
@@ -54,7 +55,7 @@ from api.services.cas_harness_probe_compatibility import (
     validate_frontier_probe_compatibility,
 )
 from api.services.cas_harness_scale_planner import ScalePlan, ScalePlanRequest, build_scale_plan
-from api.services.production.state_substrate import LedgerMirror
+from api.services.production.state_substrate import INTERIM_TENANT, LedgerMirror, StateStore
 
 
 DistributedAuditStatus = Literal[
@@ -104,6 +105,27 @@ class WorkerEvidenceRecord:
             "error_message": self.error_message,
             "updated_at": self.updated_at,
         }
+
+    @classmethod
+    def from_dict(cls, payload: Mapping[str, object]) -> "WorkerEvidenceRecord":
+        """Exact inverse of :meth:`to_dict` -- rebuild a worker-evidence row from the
+        ledger on restart (docs 10 rehydrate-on-startup). Unlike the immutable plan and
+        summaries, this record IS mutated downstream (dispatch, evidence receipts, merge),
+        so it must come back as a real typed dataclass, not a faithful re-server."""
+        return cls(
+            worker_id=payload["worker_id"],
+            layer_start=payload["layer_start"],
+            layer_end=payload["layer_end"],
+            shard_id=payload["shard_id"],
+            assigned_methods=tuple(payload["assigned_methods"]),
+            expected_outputs=tuple(payload["expected_outputs"]),
+            worker_status=payload["worker_status"],
+            produced_outputs=tuple(payload["produced_outputs"]),
+            missing_outputs=tuple(payload["missing_outputs"]),
+            evidence_packet_ref=payload["evidence_packet_ref"],
+            error_message=payload["error_message"],
+            updated_at=payload["updated_at"],
+        )
 
 
 @dataclass
@@ -201,6 +223,105 @@ def reset_distributed_audits_for_tests() -> None:
     # The mirror is test-only scaffolding; clearing it here keeps it from leaking
     # across tests via the shared reset fixture.
     set_state_mirror(None)
+
+
+# --- rehydrate-on-startup (docs 10 Phase-3 prerequisite) -------------------
+# A restart loses the in-RAM dicts -- the only thing the current single-process
+# design keeps the state in. Before read-authority can move off the dicts, a
+# restarted process must rebuild _DISTRIBUTED_AUDITS from the durable ledger and
+# serve the same audits it served before. rehydrate_from_ledger does that read.
+# It is the inverse of the dual-write in _mirror_audit: mirror_put wrote
+# record.to_dict(); this reads those rows back and reconstructs the records.
+
+
+@dataclass(frozen=True)
+class _RehydratedSummary:
+    """A faithfully reloaded immutable audit summary.
+
+    The seven audit summaries (access / provenance / architecture / probe / compute /
+    cost / data_capture) are DECLARED receipts computed once at create_distributed_audit
+    time and never mutated afterwards. The only thing any downstream code ever does with
+    them is re-serve them via ``to_dict()`` (the HTTP layer renders the record; nothing
+    reads their typed fields). So the honest, highest-fidelity way to survive a restart
+    is to reload the exact serialization the ledger holds and re-serve it verbatim -- NOT
+    to recompute the summary (which could drift from what the original run actually
+    recorded) and NOT to fabricate a richer typed object than the durable ledger stored.
+    This carrier is that faithful re-server: it holds the stored dict and returns an
+    independent copy of it, satisfying the same ``.to_dict()`` contract the real summary
+    did, so :meth:`DistributedAuditRecord.to_dict` renders byte-identically after a
+    restart. The payload is deep-copied so a mutation of a served dict can never reach
+    back into the carrier (or, via an aliased in-memory ledger row, the store)."""
+
+    _payload: Mapping[str, object]
+
+    def to_dict(self) -> dict[str, object]:
+        return copy.deepcopy(dict(self._payload))
+
+
+def _rehydrated_summary(value: object) -> _RehydratedSummary | None:
+    """Wrap a stored summary dict in a faithful re-server, or pass through ``None``."""
+    if value is None:
+        return None
+    return _RehydratedSummary(copy.deepcopy(value))
+
+
+def _audit_from_ledger_payload(payload: Mapping[str, object]) -> DistributedAuditRecord:
+    """Reconstruct a :class:`DistributedAuditRecord` from its stored ledger payload.
+
+    The stored payload is ``record.to_dict()``. Its scalar fields copy back directly;
+    the plan is rebuilt via :meth:`ScalePlan.from_dict`; each worker-evidence row via
+    :meth:`WorkerEvidenceRecord.from_dict`; the immutable summaries via the faithful
+    re-server above. The derived aggregates ``to_dict`` folds in (``ready_workers``,
+    ``failed_workers``, ``total_workers``, ``missing_outputs``) are deliberately ignored
+    here: they are pure functions of ``worker_evidence`` and ``to_dict`` recomputes them,
+    so reconstructing from the reconstructed worker_evidence reproduces them exactly."""
+    return DistributedAuditRecord(
+        audit_id=payload["audit_id"],
+        plan_id=payload["plan_id"],
+        plan=ScalePlan.from_dict(payload["plan"]),
+        status=payload["status"],
+        merge_status=payload["merge_status"],
+        worker_evidence=[
+            WorkerEvidenceRecord.from_dict(worker) for worker in payload["worker_evidence"]
+        ],
+        created_at=payload["created_at"],
+        updated_at=payload["updated_at"],
+        verdict=payload["verdict"],
+        confidence=payload["confidence"],
+        evidence_packet_trace_id=payload["evidence_packet_trace_id"],
+        merge_reason=payload["merge_reason"],
+        access=_rehydrated_summary(payload["access"]),
+        provenance=_rehydrated_summary(payload["provenance"]),
+        architecture=_rehydrated_summary(payload["architecture"]),
+        probe=_rehydrated_summary(payload["probe"]),
+        compute=_rehydrated_summary(payload["compute"]),
+        cost=_rehydrated_summary(payload["cost"]),
+        data_capture=_rehydrated_summary(payload["data_capture"]),
+    )
+
+
+def rehydrate_from_ledger(store: StateStore) -> int:
+    """Rebuild ``_DISTRIBUTED_AUDITS`` from the durable ledger; return the count restored.
+
+    Reads every ``distributed_audit`` row under :data:`INTERIM_TENANT` and reconstructs
+    the in-RAM record for each. Unlike the non-authoritative mirror, this does NOT swallow
+    backend errors: a failed rehydrate means we cannot honestly claim to have restored the
+    pre-restart state, so the ``StateStoreError`` propagates and startup fails loudly rather
+    than coming up with a silently empty view that looks authoritative. Reconstruction is
+    done into a fresh dict and swapped in only once every row rebuilds, so a malformed row
+    cannot leave the service half-populated.
+
+    This is the read side of the docs-10 cutover prerequisite. It does not move read
+    authority off the dicts -- it makes the dicts survivable so that a later, separately
+    gated step can.
+    """
+    rebuilt: dict[str, DistributedAuditRecord] = {}
+    for record in store.list(INTERIM_TENANT, _MIRROR_KIND):
+        audit = _audit_from_ledger_payload(record.payload)
+        rebuilt[audit.audit_id] = audit
+    _DISTRIBUTED_AUDITS.clear()
+    _DISTRIBUTED_AUDITS.update(rebuilt)
+    return len(rebuilt)
 
 
 def create_distributed_audit(
