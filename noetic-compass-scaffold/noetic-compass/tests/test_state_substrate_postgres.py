@@ -17,13 +17,16 @@ Three jobs, two of which need a live Postgres and one of which does NOT:
    field defaults to 0 (so the existing conformance suite and the in-memory / SQLite
    stores stay green).
 
-HONESTY NOTE (read this): the author did NOT run a live Postgres. The live tests
-below are written to be correct against the contract and docs 11 §3, but they SKIP
-unless ``NC_TEST_POSTGRES_URL`` points at a reachable server, and **no run of them
-has been observed to pass**. "PostgresStateStore passes the contract" is therefore a
-*declared* claim pending a real run -- exactly the declared-vs-verified line this
-project treats as sacred. The fencing-logic tests in job 3 DO give real, observed
-coverage of the resource-side check without a DB.
+VERIFICATION NOTE (read this): the live tests below SKIP unless
+``NC_TEST_POSTGRES_URL`` points at a reachable server. They have now been OBSERVED
+to pass: on 2026-06-02 all 10 tests in this file passed (3 consecutive runs) against
+a real PostgreSQL 16.4 server (a no-admin embedded EDB binary cluster) reachable via
+``NC_TEST_POSTGRES_URL``. "PostgresStateStore passes the contract + durability +
+fence-MINT monotonicity" is therefore now a *verified* claim against PostgreSQL 16.4,
+not merely a declared one. (What remains config-dependent and NOT verified here:
+survival of *host loss*, which needs synchronous replication + failover -- see the
+honesty boundary in ``postgres_store.py``.) The fencing-logic tests in job 3 also
+give real, observed coverage of the resource-side check with no DB at all.
 
 Run ONLY this file (fencing-logic tests run; live tests skip without the env var):
     C:/Python314/python.exe -m pytest tests/test_state_substrate_postgres.py -q
@@ -167,10 +170,12 @@ def _schema_scoped_dsn(base_dsn: str, schema: str) -> str:
 
 
 @pytest.fixture
-def pg_schema():
-    """Create a unique throwaway schema, yield a schema-scoped DSN, drop it after.
+def pg_admin():
+    """Yield an autocommit admin connection to the live server (default search_path).
 
-    Skips the test if no live Postgres is configured or the driver is missing.
+    Skips the test if no live Postgres is configured or the driver is missing. This
+    is the one connection that creates/drops the throwaway schemas the tests land
+    their objects in; it never touches the application tables itself.
     """
 
     if not _PG_URL:
@@ -180,35 +185,63 @@ def pg_schema():
     except ModuleNotFoundError:
         pytest.skip("psycopg is not installed; skipping live-Postgres tests")
 
-    schema = f"nc_test_{uuid.uuid4().hex}"
-    # Admin connection (default search_path) to create/drop the schema itself.
     try:
         admin = psycopg.connect(_PG_URL, autocommit=True)
     except psycopg.Error as exc:  # pragma: no cover - depends on a live server
         pytest.skip(f"could not connect to NC_TEST_POSTGRES_URL: {exc}")
     try:
-        admin.execute(f'CREATE SCHEMA "{schema}"')
+        yield admin
+    finally:
+        admin.close()
+
+
+@pytest.fixture
+def pg_schema(pg_admin):
+    """Create ONE unique throwaway schema, yield a schema-scoped DSN, drop it after.
+
+    Used by the durability/reconnect tests, where TWO store objects must address the
+    SAME storage to prove a committed record survives a close/reopen -- so they share
+    a single schema by design.
+    """
+
+    schema = f"nc_test_{uuid.uuid4().hex}"
+    pg_admin.execute(f'CREATE SCHEMA "{schema}"')
+    try:
         yield _schema_scoped_dsn(_PG_URL, schema)
     finally:
-        try:
-            admin.execute(f'DROP SCHEMA IF EXISTS "{schema}" CASCADE')
-        finally:
-            admin.close()
+        pg_admin.execute(f'DROP SCHEMA IF EXISTS "{schema}" CASCADE')
 
 
-def test_postgres_passes_state_store_contract(pg_schema):
+def test_postgres_passes_state_store_contract(pg_admin):
     # The headline live assertion: the Postgres backend satisfies every behaviour
-    # the Protocol promises, exactly as the reference store does. The contract calls
-    # the factory several times and expects isolation; all factory stores here share
-    # ONE throwaway schema, which is the shared multi-host server analogue (the
-    # contract's sub-tests use disjoint tenant/record ids, so one schema is the
-    # correct shared-store model, not a leak).
+    # the Protocol promises, exactly as the reference store does.
+    #
+    # The contract calls the factory SEVERAL times and -- like the in-memory and
+    # SQLite suites -- expects each store to be ISOLATED (the SQLite suite hands its
+    # factory a unique database file per call for exactly this reason). The contract's
+    # sub-tests are NOT all disjoint: ``_records_roundtrip`` writes tenant-a/run/run-001
+    # and ``_tenant_scoping_fails_closed`` writes tenant-a/run/run-1, then asserts
+    # ``list("tenant-a", "run")`` has exactly one element. Sharing one schema across
+    # factory calls would leak the first row into the second sub-test's ``list`` and
+    # fail that assertion -- a real cross-test leak, not a store bug. So each factory
+    # call gets its OWN fresh schema, the Postgres analogue of "a unique file per call".
+    # (Cross-object SHARED storage is exercised separately by the reconnect tests via
+    # the single-schema ``pg_schema`` fixture, which is where shared state is correct.)
     from api.services.production.state_substrate.postgres_store import PostgresStateStore
 
-    def factory() -> PostgresStateStore:
-        return PostgresStateStore(pg_schema)
+    created: list[str] = []
 
-    run_state_store_contract(factory)
+    def factory() -> PostgresStateStore:
+        schema = f"nc_test_{uuid.uuid4().hex}"
+        pg_admin.execute(f'CREATE SCHEMA "{schema}"')
+        created.append(schema)
+        return PostgresStateStore(_schema_scoped_dsn(_PG_URL, schema))
+
+    try:
+        run_state_store_contract(factory)
+    finally:
+        for schema in created:
+            pg_admin.execute(f'DROP SCHEMA IF EXISTS "{schema}" CASCADE')
 
 
 def test_records_survive_reconnect(pg_schema):

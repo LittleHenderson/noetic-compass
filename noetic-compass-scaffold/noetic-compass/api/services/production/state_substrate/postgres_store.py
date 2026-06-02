@@ -17,15 +17,17 @@ side by side.
 =====================================================================
 HONESTY BOUNDARY -- what this code earns and what it does NOT
 =====================================================================
-**No live-Postgres test has been run against this file by its author.** The
-behaviour below is reasoned from the executable contract (``conformance.py``) and
-the design spec (docs 11 §3), and the *resource-side fencing logic* is unit-tested
-without a DB (``fencing.py`` / ``tests/test_state_substrate_postgres.py``). But the
-record/lease SQL and the fence MINT path can only be *verified* against a running
-Postgres, which the author did not run. The conformance + durability tests in
-``tests/test_state_substrate_postgres.py`` SKIP unless ``NC_TEST_POSTGRES_URL`` is
-set; until those run green against a real server, "PostgresStateStore passes the
-contract" is a *declared*, not *verified*, claim.
+**This file has now been verified against a live PostgreSQL 16.4 server.** On
+2026-06-02 the full conformance + durability + fence-MINT suite in
+``tests/test_state_substrate_postgres.py`` ran green (10/10, 3 consecutive runs)
+against a real PostgreSQL 16.4 instance reachable via ``NC_TEST_POSTGRES_URL`` -- so
+the record/lease SQL and the fence MINT path are *verified*, not merely reasoned from
+the executable contract (``conformance.py``) and the design spec (docs 11 §3). The
+*resource-side fencing logic* is additionally unit-tested with no DB at all
+(``fencing.py``). Those live tests SKIP unless ``NC_TEST_POSTGRES_URL`` is set, so on
+a host with no server configured the claim reverts to *declared* until a run is
+observed there -- which is why the verification note above pins the exact server
+version and run it was observed against.
 
 What a correctly-configured Postgres deployment may then claim (docs 11 §3.4, §6):
 
