@@ -1,6 +1,6 @@
 # 10 — State Substrate Migration
 
-**Workstream:** 10 of 11 · **Status:** Phases 0–2 implemented behind the `LedgerMirror` seam (dual-write + shadow-read, **zero divergence** proven on `InMemoryStateStore`); single-host durability **and rehydrate-on-startup** proven on `SqliteStateStore`; Phase 3 read-authority flip **mechanism built dark** — reversible, fail-closed, proven by clearing the dicts and still serving from the ledger; its operational enable in a durable deployment, the multi-host smoke, and Phase 4 still gated on workstream 11 · **Date:** Jun 1, 2026
+**Workstream:** 10 of 11 · **Status:** Phases 0–2 implemented behind the `LedgerMirror` seam (dual-write + shadow-read, **zero divergence** proven on `InMemoryStateStore`); single-host durability **and rehydrate-on-startup** proven on `SqliteStateStore`; Phase 3 read-authority flip **mechanism built dark** — reversible, fail-closed, proven by clearing the dicts and still serving from the ledger; the **operational enable now exists** (`api/state_ledger_bootstrap.py`: two **default-off** flags, `NC_STATE_LEDGER_ENABLED` for dual-write+rehydrate then `NC_STATE_LEDGER_READ_AUTHORITY` for the read flip — an unconfigured deployment stays dark, an operator turns durability on deliberately and reversibly); what remains is the operational **turn-on in a real durable deployment** (earn zero-divergence on real traffic before the flip), the **multi-host live smoke** (workstream 11), and **Phase 4** (deleting the now-shadow dicts) · **Date:** Jun 1, 2026
 **Owner seam:** the cutover that moves run/worker/fleet/fragment state out of process-global Python
 dicts and onto the durable, tenant-scoped, version-checked `StateStore` ledger.
 
@@ -289,7 +289,13 @@ remains only as dead scaffolding to be deleted in Phase 4.
   (`disable_ledger_reads()` returns to the dicts, which the dual-write keeps current as a write-through
   cache for instant rollback) and **fail-closed** (the `_STATE_MIRROR is not None and read_from_ledger`
   guard means production, which installs no mirror, can never engage it). What the cutover still owes is
-  therefore not the mechanism but the **operational enable** — turning it on in a real durable deployment is
+  therefore **not the mechanism, and no longer the wiring to enable it either**: `install_state_ledger`
+  (`api/state_ledger_bootstrap.py`), keyed off two **default-off** flags (`NC_STATE_LEDGER_ENABLED`, then
+  `NC_STATE_LEDGER_READ_AUTHORITY`), installs a `SqliteStateStore` + `LedgerMirror` into both live services,
+  rehydrates the four dicts on startup, and calls `enable_ledger_reads()` only when the second flag is also
+  set — failing **loud** if the install cannot complete rather than silently degrading to dict-only while
+  claiming durability. What still owes is the **operational act** of turning those flags on in a real durable
+  deployment (earn zero-divergence on real traffic under the first flag before ever setting the second) —
   the separate human-gated step the directive pins behind "only after that passes" — plus a **multi-host
   smoke**: two API replicas against one shared (SQLite-single-host first, then Postgres) backend cooperate
   on one run, host A prepares, host B merges. That last half is impossible on `InMemoryStateStore` and needs
@@ -392,8 +398,11 @@ clearing a module global.
 >   clearing each backing dict and still serving byte-identical state from the ledger; the switch reversible
 >   and dark by default (an installed-but-disabled mirror still serves the dict, not the ledger); and the
 >   write-through keeping the dict current so rollback loses nothing. This is the **mechanism**, dark by
->   default — the operational enable in a durable deployment, and Phase 4 (deleting the dicts), remain
->   separate human-gated steps; multi-host durability is still workstream 11.
+>   default. The **operational enable** that turns it on now exists too — `api/state_ledger_bootstrap.py`,
+>   two default-off flags (`NC_STATE_LEDGER_ENABLED` for dual-write + rehydrate, then
+>   `NC_STATE_LEDGER_READ_AUTHORITY` for the read flip) — so enabling durability in a real durable deployment
+>   is a deliberate, reversible operator act, not a code change. That act, and Phase 4 (deleting the dicts),
+>   remain the human-gated steps; multi-host durability is still workstream 11.
 
 ---
 

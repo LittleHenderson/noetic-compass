@@ -12,6 +12,21 @@ class Settings(BaseSettings):
     # Database (None = in-memory fallback)
     database_url: str | None = None
 
+    # Durable state ledger (operational enable for the strangler-fig migration seam).
+    # Dark by default: with both flags False, NO LedgerMirror is installed, the ledger
+    # is never written or read, and the process-global dicts stay authoritative -- the
+    # current production behaviour, byte-for-byte. See api/state_ledger_bootstrap.py.
+    #   NC_STATE_LEDGER_ENABLED=true  -> install SqliteStateStore + LedgerMirror into both
+    #     live services and rehydrate on startup (Phases 1-2: dual-write + shadow-compare),
+    #     but the dicts REMAIN the read authority.
+    #   NC_STATE_LEDGER_READ_AUTHORITY=true (only meaningful when enabled) -> also flip read
+    #     authority onto the ledger (Phase 3). Kept a separate flag so an operator can run the
+    #     mirror live in production, earning real-traffic zero-divergence evidence, BEFORE ever
+    #     moving reads. Default off preserves dark-by-default.
+    state_ledger_enabled: bool = False
+    state_ledger_path: str = "state_ledger.db"
+    state_ledger_read_authority: bool = False
+
     # JWT Auth
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"

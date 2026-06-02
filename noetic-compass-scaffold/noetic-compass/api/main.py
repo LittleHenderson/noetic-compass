@@ -58,7 +58,7 @@ def _parse_cors_origins(raw: str) -> list[str]:
 
 
 @asynccontextmanager
-async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     import logging
 
     logger = logging.getLogger("noetic.startup")
@@ -76,9 +76,24 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
     await init_db()
 
+    # Durable state ledger: dark by default (no mirror installed) unless an operator sets
+    # NC_STATE_LEDGER_ENABLED. All logic lives in the bootstrap module; the lifespan only
+    # installs, stashes the handle for shutdown, and logs the honest serving posture.
+    from api.state_ledger_bootstrap import install_state_ledger, teardown_state_ledger
+
+    handle = install_state_ledger(settings)
+    app.state.state_ledger = handle
+    if handle is None:
+        logger.info("state ledger: dark (dict-authoritative)")
+    elif handle.read_authority:
+        logger.info("state ledger: ENABLED, LEDGER READ-AUTHORITATIVE")
+    else:
+        logger.info("state ledger: ENABLED, dual-write+shadow, dict-authoritative")
+
     yield
 
-    # Shutdown: close database connection pool
+    # Shutdown: uninstall the ledger mirror (returns to dark) and close the database pool.
+    teardown_state_ledger(handle)
     await close_db()
 
 
