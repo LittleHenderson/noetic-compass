@@ -1,6 +1,6 @@
 # 10 — State Substrate Migration
 
-**Workstream:** 10 of 11 · **Status:** design + migration blueprint (not implemented) · **Date:** Jun 1, 2026
+**Workstream:** 10 of 11 · **Status:** Phases 0–2 implemented behind the `LedgerMirror` seam (dual-write + shadow-read, **zero divergence** proven on `InMemoryStateStore`); Phase 3 cutover blocked on workstream 11 · **Date:** Jun 1, 2026
 **Owner seam:** the cutover that moves run/worker/fleet/fragment state out of process-global Python
 dicts and onto the durable, tenant-scoped, version-checked `StateStore` ledger.
 
@@ -173,10 +173,35 @@ fragment refs) is unbroken.
 
 - **Validate:** a pure unit test maps each existing record into a `LedgerRecord.new(...)` and back, with
   zero id churn — every `audit_id`/`worker_id`/fragment-ref round-trips byte-identical. The `payload` is
-  the record's existing `to_dict()` output, so no field is dropped.
-- **Kill:** if any record's `to_dict()` cannot serialise into a `Mapping[str, object]` payload without
+  the record's **durable intrinsic projection**: for `distributed_audit` that is exactly its `to_dict()`
+  (a pure own-data view); for `worker` and `fleet_run` it is a payload *narrower* than `to_dict()` (see
+  the refinement immediately below), because their renders fold in clock/foreign-derived view fields that
+  must not be stored.
+- **Kill:** if any record's intrinsic state cannot serialise into a `Mapping[str, object]` payload without
   loss (e.g. a non-JSON-able field), fix the record shape before any dual-write — a lossy payload would
   make the ledger a downgrade.
+
+**Phase 0 refinement (as implemented) — the ledger stores durable STATE, never the rendered VIEW.** The
+Phase-0 payload is *not always* `to_dict()`. A record's `to_dict()` is a *render*: it can fold in state
+derived from the clock or from sibling records, recomputed fresh on every read. Persisting that render
+would store a stale lie — and, worse, would manufacture **false divergences**, because the same record
+re-rendered a few milliseconds later (after a worker ages, or `now` advances) no longer matches the bytes
+the ledger holds, even though nothing the record *owns* has changed. So the mirror stores each record's
+*intrinsic projection* — the fields the record actually owns — and excludes every recomputed view:
+
+| `kind` | Stored payload (intrinsic state) | Deliberately excluded (recomputed view) | Implemented as |
+|---|---|---|---|
+| `distributed_audit` | its full `to_dict()` — already a pure own-data projection (plan, the 8 receipts, status, `worker_evidence`, computed counts) | *(nothing — no clock/foreign state in the render)* | mirrored as-is |
+| `worker` | `worker_id / model_id / worker_url / gpu_type / capacity / supported_methods / registered_at / last_heartbeat_at` | **`status`** — a pure function of `(last_heartbeat_at, now)`; a worker aging `active→stale` changes *only* this view | `_worker_ledger_payload` |
+| `fleet_run` | `audit_id / status / merged_packet_trace_id / created_at / updated_at / jobs[…]` (each job's intrinsic fields, lease token redacted) | **`verifier_gate_status` / `merge_reason` / `readiness` / `stale_workers` / aggregates** — all recomputed from jobs+workers+clock by `_refresh_run_gate` on every read | `_run_ledger_payload` |
+| `fragment_ref` | `{audit_id, job_id, worker_id, shard_id}` provenance of the content-addressed ref | *(none)* | `_mirror_fragment` |
+
+This is exactly the projection a Phase-3 reload would have to recompute: a durable backend persists the
+intrinsic state and re-derives `status` / gate / readiness from the clock and siblings at read time, just
+as `to_dict()` does now. The exclusion is proven *behaviourally*, not by assertion:
+`test_worker_going_stale_is_not_a_divergence` ages every worker into `stale` (re-mirroring the durable
+`last_heartbeat_at` so only the derived view is free to move) and asserts the shadow ledger still shows
+**zero divergence** — the view flipped, the stored state did not.
 
 ### Phase 1 — dual-write (write BOTH dict and ledger; reads still from the dict)
 
@@ -272,6 +297,35 @@ clearing a module global.
 > claims `InMemoryStateStore` cannot make (`__init__.py:30-34`). The dicts stay until Phase 3's restart
 > proof passes — removing them earlier would trade an honest single-host store for a ledger not yet
 > proven durable.
+
+> **Implementation status (Jun 1, 2026).** Phases 0–2 are built and green against `InMemoryStateStore`,
+> behind a single dual-write / shadow-read seam, `LedgerMirror`
+> (`api/services/production/state_substrate/migration.py`):
+> - **Dark by default.** Each live service holds a module-global `_STATE_MIRROR: LedgerMirror | None`,
+>   installed only via `set_state_mirror(...)`. Production and every pre-existing test run with it `None`,
+>   so the wiring is a **no-op with zero behaviour change** — proven by `test_mirror_is_dark_when_uninstalled`
+>   and by the full distributed/fleet suites passing unchanged with the mirror uninstalled.
+> - **Non-authoritative.** `mirror_put` never raises into the caller: a backend `StateStoreError` is
+>   swallowed and *recorded as a divergence* (a record we failed to mirror IS a place the ledger and the
+>   dict disagree); `VersionConflict` retries, then exhaustion is itself a divergence. The dict stays the
+>   sole source of truth throughout Phases 1–2.
+> - **Dual-write** fires one `_mirror_*(record)` at every creation/mutation site — helpers return the
+>   *same* object so callers' in-place mutation is preserved — including the *indirect*, clock-triggered
+>   paths `_expire_stale_leases` / `_expire_worker_leases`, which mutate run state outside a run's own
+>   mutators and so re-mirror the affected run. **Shadow-read** sits at every `get_*` / `list_*` via
+>   `shadow_compare` / `shadow_compare_all`.
+> - **One unified ledger, partitioned by `kind`.** Both services share a single `StateStore` under one
+>   `INTERIM_TENANT = "default"`; `distributed_audit` and `fleet_run` reuse one `audit_id`, kept distinct
+>   by the `(tenant, kind, record_id)` triple.
+> - **Not yet wired: the substrate lease primitive.** Phase 1/2 mirror the in-line lease state *inside*
+>   the `fleet_run` payload (token redacted); the durable single-holder `acquire_lease` / `release_lease`
+>   mapping (§3 Phase 1, §5) stays on the in-process token and is deferred to Phase 3, where cross-host
+>   racing is what makes the substrate lease load-bearing.
+> - **The Phase-2 gate is met (on `InMemoryStateStore`).** `tests/test_state_substrate_live_migration.py`
+>   drives both live services through their real service-layer flow (create→dispatch→register→prepare→
+>   lease→submit→merge, plus clock-triggered lease-expiry) and asserts `LedgerMirror.assert_no_divergence()`
+>   — **zero divergence**. This proves the *wiring*, not durability: the same suite re-run on a
+>   workstream-11 backend that earns a close/reopen-survival claim is what Phase 3 requires.
 
 ---
 

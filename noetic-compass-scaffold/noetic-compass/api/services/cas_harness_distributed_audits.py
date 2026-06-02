@@ -54,6 +54,7 @@ from api.services.cas_harness_probe_compatibility import (
     validate_frontier_probe_compatibility,
 )
 from api.services.cas_harness_scale_planner import ScalePlan, ScalePlanRequest, build_scale_plan
+from api.services.production.state_substrate import LedgerMirror
 
 
 DistributedAuditStatus = Literal[
@@ -157,9 +158,49 @@ class DistributedAuditRecord:
 
 _DISTRIBUTED_AUDITS: dict[str, DistributedAuditRecord] = {}
 
+# --- durable state substrate mirror (docs 10 strangler-fig migration) ------
+# Dark by default: with no mirror installed, _mirror_audit/_shadow_audit are
+# no-ops, so production and every existing test see zero behaviour change. The
+# Phase 1/2 migration test installs an InMemoryStateStore-backed mirror to prove
+# the ledger faithfully shadows _DISTRIBUTED_AUDITS before any cutover. The
+# record's audit_id doubles as the ledger trace_id -- it is the correlation id
+# threading a distributed run's worker evidence together.
+_STATE_MIRROR: LedgerMirror | None = None
+_MIRROR_KIND = "distributed_audit"
+_MIRROR_SOURCE = "cas_harness_distributed_audits"
+
+
+def set_state_mirror(mirror: LedgerMirror | None) -> None:
+    """Install (or clear) the dual-write/shadow-read ledger mirror for this service."""
+    global _STATE_MIRROR
+    _STATE_MIRROR = mirror
+
+
+def _mirror_audit(record: DistributedAuditRecord) -> DistributedAuditRecord:
+    """Phase 1 dual-write: shadow this audit into the ledger and return ``record`` so
+    mutators can ``return _mirror_audit(record)`` at each exit. Non-authoritative -- a
+    ledger failure is logged as a divergence inside the mirror, never raised here."""
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.mirror_put(
+            _MIRROR_KIND, record.audit_id, record.to_dict(),
+            source=_MIRROR_SOURCE, trace_id=record.audit_id,
+        )
+    return record
+
+
+def _shadow_audit(record: DistributedAuditRecord) -> DistributedAuditRecord:
+    """Phase 2 shadow-read: compare the dict-served record against the ledger. Returns
+    the SAME record object so in-place mutation by callers is preserved."""
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.shadow_compare(_MIRROR_KIND, record.audit_id, record.to_dict())
+    return record
+
 
 def reset_distributed_audits_for_tests() -> None:
     _DISTRIBUTED_AUDITS.clear()
+    # The mirror is test-only scaffolding; clearing it here keeps it from leaking
+    # across tests via the shared reset fixture.
+    set_state_mirror(None)
 
 
 def create_distributed_audit(
@@ -313,15 +354,21 @@ def create_distributed_audit(
         data_capture=data_capture_summary,
     )
     _DISTRIBUTED_AUDITS[audit_id] = record
-    return record
+    return _mirror_audit(record)
 
 
 def get_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
-    return _DISTRIBUTED_AUDITS.get(audit_id)
+    record = _DISTRIBUTED_AUDITS.get(audit_id)
+    return _shadow_audit(record) if record is not None else None
 
 
 def list_distributed_audits() -> list[DistributedAuditRecord]:
-    return list(_DISTRIBUTED_AUDITS.values())
+    records = list(_DISTRIBUTED_AUDITS.values())
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.shadow_compare_all(
+            _MIRROR_KIND, {r.audit_id: r.to_dict() for r in records}
+        )
+    return records
 
 
 def dispatch_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
@@ -338,6 +385,7 @@ def dispatch_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
             if worker.worker_status == "queued":
                 worker.worker_status = "assigned"
                 worker.updated_at = now
+        return _mirror_audit(record)
     return record
 
 
@@ -359,7 +407,7 @@ def mark_worker_running(audit_id: str, worker_id: str) -> DistributedAuditRecord
     record.status = "RUNNING"
     record.updated_at = worker.updated_at
     record.merge_reason = "At least one Probe Worker is running."
-    return record
+    return _mirror_audit(record)
 
 
 def record_worker_evidence(
@@ -406,7 +454,7 @@ def record_worker_evidence(
     record.status = "MERGE_PENDING"
     record.merge_status = "partial"
     record.merge_reason = "Worker evidence receipt recorded; merge not finalized yet."
-    return record
+    return _mirror_audit(record)
 
 
 def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
@@ -437,14 +485,14 @@ def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
         record.verdict = "FLAG_FOR_HUMAN_REVIEW"
         record.confidence = None
         record.merge_reason = f"Distributed audit has failed worker evidence: {', '.join(failed)}."
-        return record
+        return _mirror_audit(record)
     if incomplete:
         record.status = "MERGE_PENDING"
         record.merge_status = "partial"
         record.verdict = None
         record.confidence = None
         record.merge_reason = f"Waiting for worker evidence from: {', '.join(incomplete)}."
-        return record
+        return _mirror_audit(record)
     if missing_packet_refs:
         record.status = "COMPLETE"
         record.merge_status = "partial"
@@ -454,7 +502,7 @@ def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
             "Distributed audit completed with worker receipts missing Evidence Packet refs; "
             f"cannot ACCEPT. Missing refs: {', '.join(missing_packet_refs)}."
         )
-        return record
+        return _mirror_audit(record)
     if missing:
         record.status = "COMPLETE"
         record.merge_status = "partial"
@@ -464,7 +512,7 @@ def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
             "Distributed audit completed with missing worker outputs; cannot ACCEPT. "
             f"Missing outputs: {', '.join(missing)}."
         )
-        return record
+        return _mirror_audit(record)
 
     record.status = "COMPLETE"
     record.merge_status = "complete"
@@ -475,7 +523,7 @@ def merge_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
         "All distributed worker evidence receipts merged. Final ACCEPT/SUPPRESS still "
         "requires the verifier decision layer over the merged Evidence Packet."
     )
-    return record
+    return _mirror_audit(record)
 
 
 def _audit_id_for(plan: ScalePlan) -> str:

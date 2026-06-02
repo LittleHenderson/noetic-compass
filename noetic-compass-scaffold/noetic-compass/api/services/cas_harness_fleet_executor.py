@@ -21,6 +21,7 @@ from api.services.cas_harness_distributed_audits import (
     merge_distributed_audit,
     record_worker_evidence,
 )
+from api.services.production.state_substrate import LedgerMirror
 
 
 FleetWorkerStatus = Literal["active", "stale", "offline"]
@@ -160,11 +161,105 @@ _WORKERS: dict[str, FleetWorkerRecord] = {}
 _FLEET_RUNS: dict[str, FleetRunRecord] = {}
 _FRAGMENT_REFS: set[str] = set()
 
+# --- durable state substrate mirror (docs 10 strangler-fig migration) ------
+# Dark by default: with no mirror installed the _mirror_*/_shadow_* helpers are
+# no-ops, so production and every existing test see zero behaviour change. The
+# Phase 1/2 migration test installs an InMemoryStateStore-backed mirror to prove
+# the ledger faithfully shadows _WORKERS / _FLEET_RUNS / _FRAGMENT_REFS.
+#
+# Phase-0 mapping decision (honest projection, not the rendered view): a record's
+# to_dict() folds in DERIVED fields -- worker `status` is a function of
+# (last_heartbeat_at, now); a run's verifier_gate_status / merge_reason / readiness /
+# stale_workers are recomputed from jobs + workers + clock on every read. Storing a
+# derived view in a durable ledger would be storing a stale snapshot. So the ledger
+# keeps only durable STATE (the heartbeat fact, the run's own status, each job's own
+# fields) and lets the views be recomputed at read time -- exactly what a Phase-3
+# reload from the ledger would have to do. This also keeps dual-write tractable:
+# read-triggered staleness marking no longer perturbs a record's stored payload.
+_STATE_MIRROR: LedgerMirror | None = None
+_WORKER_KIND = "worker"
+_RUN_KIND = "fleet_run"
+_FRAGMENT_KIND = "fragment_ref"
+_MIRROR_SOURCE = "cas_harness_fleet_executor"
+
+
+def set_state_mirror(mirror: LedgerMirror | None) -> None:
+    """Install (or clear) the dual-write/shadow-read ledger mirror for this service."""
+    global _STATE_MIRROR
+    _STATE_MIRROR = mirror
+
+
+def _worker_ledger_payload(worker: FleetWorkerRecord) -> dict[str, object]:
+    """Durable worker STATE. `status` is a derived view of (last_heartbeat_at, now),
+    recomputed on read, so it is deliberately excluded -- the ledger stores the
+    heartbeat fact, not a staleness snapshot."""
+    return {
+        "worker_id": worker.worker_id,
+        "model_id": worker.model_id,
+        "worker_url": worker.worker_url,
+        "gpu_type": worker.gpu_type,
+        "capacity": worker.capacity,
+        "supported_methods": list(worker.supported_methods),
+        "registered_at": worker.registered_at,
+        "last_heartbeat_at": worker.last_heartbeat_at,
+    }
+
+
+def _run_ledger_payload(run: FleetRunRecord) -> dict[str, object]:
+    """Durable run STATE. verifier_gate_status / merge_reason and the to_dict()
+    aggregates (readiness, stale_workers, registered_workers, counts) are all
+    recomputed from jobs + workers + clock on read, so they are views, not state, and
+    are excluded. Each job's own fields (status, lease_expires_at, fragment ref,
+    produced/missing) ARE state and are kept via the stable job projection."""
+    return {
+        "audit_id": run.audit_id,
+        "status": run.status,
+        "merged_packet_trace_id": run.merged_packet_trace_id,
+        "created_at": run.created_at,
+        "updated_at": run.updated_at,
+        "jobs": [job.to_dict(include_lease_token=False) for job in run.jobs],
+    }
+
+
+def _mirror_worker(worker: FleetWorkerRecord) -> FleetWorkerRecord:
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.mirror_put(
+            _WORKER_KIND, worker.worker_id, _worker_ledger_payload(worker),
+            source=_MIRROR_SOURCE, trace_id=worker.worker_id,
+        )
+    return worker
+
+
+def _mirror_run(run: FleetRunRecord) -> FleetRunRecord:
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.mirror_put(
+            _RUN_KIND, run.audit_id, _run_ledger_payload(run),
+            source=_MIRROR_SOURCE, trace_id=run.audit_id, parent_ids=(run.audit_id,),
+        )
+    return run
+
+
+def _mirror_fragment(fragment_ref: str, *, audit_id: str, job_id: str) -> None:
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.mirror_put(
+            _FRAGMENT_KIND, fragment_ref, {"fragment_ref": fragment_ref},
+            source=_MIRROR_SOURCE, trace_id=audit_id, parent_ids=(audit_id, job_id),
+        )
+
+
+def _shadow_run(run: FleetRunRecord) -> FleetRunRecord:
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.shadow_compare(_RUN_KIND, run.audit_id, _run_ledger_payload(run))
+    return run
+
 
 def reset_fleet_executor_for_tests() -> None:
     _WORKERS.clear()
     _FLEET_RUNS.clear()
     _FRAGMENT_REFS.clear()
+    # The mirror is test-only scaffolding; clearing it here keeps it from leaking
+    # across tests via the shared reset fixture.
+    set_state_mirror(None)
     from api.services.cas_harness_merged_evidence_packets import (
         reset_merged_fleet_evidence_packets_for_tests,
     )
@@ -206,7 +301,7 @@ def register_worker(
         last_heartbeat_at=now,
     )
     _WORKERS[record.worker_id] = record
-    return record
+    return _mirror_worker(record)
 
 
 def heartbeat_worker(worker_id: str) -> FleetWorkerRecord | None:
@@ -217,11 +312,16 @@ def heartbeat_worker(worker_id: str) -> FleetWorkerRecord | None:
         _expire_worker_leases(worker.worker_id)
     worker.status = "active"
     worker.last_heartbeat_at = _utc_now()
-    return worker
+    return _mirror_worker(worker)
 
 
 def list_workers() -> list[FleetWorkerRecord]:
-    return list(_WORKERS.values())
+    workers = list(_WORKERS.values())
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.shadow_compare_all(
+            _WORKER_KIND, {w.worker_id: _worker_ledger_payload(w) for w in workers}
+        )
+    return workers
 
 
 def mark_stale_workers(*, max_heartbeat_age_seconds: int = DEFAULT_MAX_HEARTBEAT_AGE_SECONDS) -> list[FleetWorkerRecord]:
@@ -246,7 +346,7 @@ def prepare_fleet_for_audit(audit_id: str) -> FleetRunRecord | None:
 
     existing = _FLEET_RUNS.get(audit_id)
     if existing is not None:
-        return existing
+        return _shadow_run(existing)
 
     now = _utc_now()
     jobs = [
@@ -273,20 +373,26 @@ def prepare_fleet_for_audit(audit_id: str) -> FleetRunRecord | None:
     )
     _FLEET_RUNS[audit_id] = record
     _refresh_run_gate(record)
-    return record
+    return _mirror_run(record)
 
 
 def get_fleet_run(audit_id: str) -> FleetRunRecord | None:
     run = _FLEET_RUNS.get(audit_id)
     if run is not None:
         _refresh_run_gate(run)
-    return run
+        return _shadow_run(run)
+    return None
 
 
 def list_fleet_runs() -> list[FleetRunRecord]:
-    for run in _FLEET_RUNS.values():
+    runs = list(_FLEET_RUNS.values())
+    for run in runs:
         _refresh_run_gate(run)
-    return list(_FLEET_RUNS.values())
+    if _STATE_MIRROR is not None:
+        _STATE_MIRROR.shadow_compare_all(
+            _RUN_KIND, {r.audit_id: _run_ledger_payload(r) for r in runs}
+        )
+    return runs
 
 
 def lease_next_job(
@@ -320,6 +426,7 @@ def lease_next_job(
             run.status = "LEASING"
             run.updated_at = job.updated_at
             _refresh_run_gate(run)
+            _mirror_run(run)
             return job
     return None
 
@@ -393,6 +500,7 @@ def submit_job_receipt(
     job.updated_at = now
     if job.evidence_packet_fragment_ref:
         _FRAGMENT_REFS.add(job.evidence_packet_fragment_ref)
+        _mirror_fragment(job.evidence_packet_fragment_ref, audit_id=audit_id, job_id=job.job_id)
 
     record_worker_evidence(
         audit_id,
@@ -406,7 +514,7 @@ def submit_job_receipt(
     run.status = "MERGE_PENDING"
     run.updated_at = now
     _refresh_run_gate(run)
-    return run
+    return _mirror_run(run)
 
 
 def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
@@ -427,7 +535,7 @@ def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
 
             write_merged_fleet_evidence_packet(run=run, distributed=distributed)
         run.updated_at = _utc_now()
-        return run
+        return _mirror_run(run)
 
     distributed = merge_distributed_audit(audit_id)
     run.status = "COMPLETE"
@@ -443,7 +551,7 @@ def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
         "the verifier decision layer; fleet executor does not fabricate ACCEPT."
     )
     run.updated_at = _utc_now()
-    return run
+    return _mirror_run(run)
 
 
 def _refresh_run_gate(run: FleetRunRecord) -> None:
@@ -561,12 +669,18 @@ def _assert_worker_can_run_job(worker: FleetWorkerRecord, job: FleetJobRecord) -
 
 def _expire_stale_leases(run: FleetRunRecord) -> None:
     now = datetime.now(UTC)
+    changed = False
     for job in run.jobs:
         if job.status == "leased" and job.lease_expires_at and _parse_utc(job.lease_expires_at) < now:
             job.status = "expired"
             job.lease_token = None
             job.lease_token_hash = None
             job.updated_at = now.isoformat()
+            changed = True
+    if changed:
+        # Clock-triggered job-state change outside the run's own mutators: re-mirror so
+        # the shadow ledger does not go stale against the dict.
+        _mirror_run(run)
 
 
 def _expire_worker_leases(worker_id: str) -> None:
@@ -582,6 +696,8 @@ def _expire_worker_leases(worker_id: str) -> None:
                 changed = True
         if changed:
             run.updated_at = now
+            # Heartbeat/staleness can expire leases across any run; re-mirror each one.
+            _mirror_run(run)
 
 
 def _stale_assigned_workers(run: FleetRunRecord) -> list[str]:

@@ -66,6 +66,7 @@ from .interface import (
     utc_now,
 )
 from .memory_store import InMemoryStateStore
+from .migration import INTERIM_TENANT, Divergence, LedgerMirror
 
 __all__ = [
     # interface
@@ -89,4 +90,8 @@ __all__ = [
     "InMemoryStateStore",
     # contract
     "run_state_store_contract",
+    # strangler-fig migration seam (docs 10: dual-write / shadow-read)
+    "LedgerMirror",
+    "Divergence",
+    "INTERIM_TENANT",
 ]
