@@ -34,6 +34,7 @@ from api.services.production.state_substrate import (
     InMemoryStateStore,
     LedgerMirror,
 )
+from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 
 
 @pytest.fixture
@@ -236,3 +237,75 @@ def test_mirror_is_dark_when_uninstalled():
     audit_id = _drive_full_flow()  # must complete with no mirror installed
     assert da.get_distributed_audit(audit_id) is not None
     assert fe.get_fleet_run(audit_id) is not None
+
+
+def test_mirrored_ledger_survives_a_single_host_restart(tmp_path):
+    # Phase 2 (the tests above) proved the shadow ledger AGREES with the live dicts --
+    # on the deliberately non-durable InMemoryStateStore. This is the next honest
+    # question, and the single-host half of doc 10's Phase-3 gate: does the mirrored
+    # ledger SURVIVE what a process restart destroys? Drive the real flow through the
+    # durable SqliteStateStore, then simulate a restart -- drop the in-RAM dicts (the
+    # ONLY thing a restart loses) and reopen a brand-new store on the same DB file --
+    # and confirm every mirrored record is still there.
+    #
+    # Honesty boundary: this is single-host durability only (one SQLite file on one
+    # disk; multi-host survival is workstream 11), and it is NOT the cutover -- the
+    # dicts are still authoritative on the serving path. It is the durability evidence
+    # the cutover will require, demonstrated on the one backend whose tests earn the
+    # word "durable on a single host".
+    db = tmp_path / "live_ledger.db"
+
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()
+    store = SqliteStateStore(db)
+    m = LedgerMirror(store)
+    da.set_state_mirror(m)
+    fe.set_state_mirror(m)
+    try:
+        audit_id = _drive_full_flow()
+        m.assert_no_divergence()  # the real payloads also serialise + round-trip through SQLite
+        worker_ids = [w.worker_id for w in fe.list_workers()]
+        fragment_ids = {r.record_id for r in store.list(INTERIM_TENANT, "fragment_ref")}
+        run_row_live = store.get(INTERIM_TENANT, "fleet_run", audit_id)
+        assert worker_ids and fragment_ids and run_row_live is not None
+        job_count = len(run_row_live.payload["jobs"])
+    finally:
+        # --- process-restart analogue: detach the mirror, close the file, and erase
+        # the in-RAM dicts, which is exactly the state a restart leaves behind. ---
+        da.set_state_mirror(None)
+        fe.set_state_mirror(None)
+        store.close()
+        da.reset_distributed_audits_for_tests()
+        fe.reset_fleet_executor_for_tests()
+
+    # The dicts are gone: a restart lost every live record (this is what makes the
+    # current single-process design fatal for a public product) ...
+    assert da.get_distributed_audit(audit_id) is None
+    assert fe.get_fleet_run(audit_id) is None
+    assert fe.list_workers() == []
+
+    # ... but the durable ledger kept all of it. Reopen on the same file and read back
+    # the audit, its fleet run (with every job), every worker, and every fragment ref.
+    reopened = SqliteStateStore(db)
+    try:
+        audit_row = reopened.get(INTERIM_TENANT, "distributed_audit", audit_id)
+        assert audit_row is not None, "the audit must survive the restart in the ledger"
+        assert audit_row.source == "cas_harness_distributed_audits"
+        assert audit_row.trace_id == audit_id
+
+        run_row = reopened.get(INTERIM_TENANT, "fleet_run", audit_id)
+        assert run_row is not None and run_row.parent_ids == (audit_id,)
+        assert len(run_row.payload["jobs"]) == job_count, "every job survived the restart"
+
+        for worker_id in worker_ids:
+            assert reopened.get(INTERIM_TENANT, "worker", worker_id) is not None, worker_id
+
+        survived = {r.record_id for r in reopened.list(INTERIM_TENANT, "fragment_ref")}
+        assert survived == fragment_ids, "every content-addressed fragment ref is durable"
+        assert len(survived) == job_count, "one fragment ref per completed job, all recovered"
+    finally:
+        reopened.close()
+
+    # Leave no mirror installed for sibling tests.
+    da.reset_distributed_audits_for_tests()
+    fe.reset_fleet_executor_for_tests()

@@ -272,10 +272,15 @@ remains only as dead scaffolding to be deleted in Phase 4.
   partial receipts), restart, and confirm the audit, its fleet run, leases (or honest expiry), and the
   `_FRAGMENT_REFS` dedup set are all recovered from the ledger with **zero lost or double-counted
   receipts** (cross-check the merged fragment set is exactly complete, no dupes — the same proof
-  workstream 03 Phase D requires). Plus a **multi-host smoke**: two API replicas against one shared
-  (SQLite-single-host first, then Postgres) backend cooperate on one run — host A prepares, host B
-  merges. This gate is impossible to pass on `InMemoryStateStore`; it requires a durable backend from
-  workstream 11.
+  workstream 03 Phase D requires). A first slice of this is **already demonstrated**:
+  `test_mirrored_ledger_survives_a_single_host_restart` drives the real flow through `SqliteStateStore`,
+  drops the in-RAM dicts, reopens the file, and recovers the full record set from the ledger — so the
+  *storage* survives a single-host restart today. What the cutover still owes is the other half:
+  **rehydrating the in-RAM view from those ledger rows on startup** and flipping reads onto the ledger
+  (until then a restarted process recovers the bytes but does not yet serve from them). Plus a
+  **multi-host smoke**: two API replicas against one shared (SQLite-single-host first, then Postgres)
+  backend cooperate on one run — host A prepares, host B merges. That half is impossible on
+  `InMemoryStateStore` and needs the durable multi-host backend from workstream 11.
 - **Kill:** if a resumed run ever double-counts or loses a receipt, the durable-state model is unsafe —
   revert to the dicts (which are honest for single-host) and do not ship the cutover.
 
@@ -324,8 +329,17 @@ clearing a module global.
 > - **The Phase-2 gate is met (on `InMemoryStateStore`).** `tests/test_state_substrate_live_migration.py`
 >   drives both live services through their real service-layer flow (create→dispatch→register→prepare→
 >   lease→submit→merge, plus clock-triggered lease-expiry) and asserts `LedgerMirror.assert_no_divergence()`
->   — **zero divergence**. This proves the *wiring*, not durability: the same suite re-run on a
->   workstream-11 backend that earns a close/reopen-survival claim is what Phase 3 requires.
+>   — **zero divergence**. This proves the *wiring*, not durability.
+> - **Single-host restart-survival is now demonstrated (on `SqliteStateStore`).** The same live flow,
+>   driven through the durable SQLite backend, then a simulated restart — detach the mirror, **close the DB
+>   file, and erase the in-RAM dicts** (the only thing a process restart loses) — and reopen a fresh store
+>   on the same file: the audit, its fleet run (every job), every worker, and every fragment ref are **all
+>   recovered from the ledger**, while the dicts come back empty
+>   (`test_mirrored_ledger_survives_a_single_host_restart`). The real mirrored payloads also serialise and
+>   round-trip through SQLite (a stricter check than the in-memory store's). This is the durability
+>   *evidence* Phase 3's single-host half needs, on the one backend whose own tests earn "durable on a
+>   single host" — it is **not** the cutover (the dicts are still authoritative on the serving path) and
+>   **not** multi-host (that is workstream 11).
 
 ---
 
