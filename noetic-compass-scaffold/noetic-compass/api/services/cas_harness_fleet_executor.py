@@ -257,8 +257,15 @@ def _run_ledger_payload(run: FleetRunRecord) -> dict[str, object]:
     }
 
 
+# Phase 3 write-through (see _mirror_audit in the distributed-audits service for the
+# full rationale): when a mirror is installed, each dual-write also (re)assigns the dict
+# entry, so under read-authority -- where get_*/list_* return fresh ledger
+# reconstructions rather than the dict instance -- the dict stays a faithful cache and
+# rollback to dict-authority is always safe. Guarded by `_STATE_MIRROR is not None`, so
+# production (no mirror) is byte-for-byte unchanged.
 def _mirror_worker(worker: FleetWorkerRecord) -> FleetWorkerRecord:
     if _STATE_MIRROR is not None:
+        _WORKERS[worker.worker_id] = worker
         _STATE_MIRROR.mirror_put(
             _WORKER_KIND, worker.worker_id, _worker_ledger_payload(worker),
             source=_MIRROR_SOURCE, trace_id=worker.worker_id,
@@ -268,6 +275,7 @@ def _mirror_worker(worker: FleetWorkerRecord) -> FleetWorkerRecord:
 
 def _mirror_run(run: FleetRunRecord) -> FleetRunRecord:
     if _STATE_MIRROR is not None:
+        _FLEET_RUNS[run.audit_id] = run
         _STATE_MIRROR.mirror_put(
             _RUN_KIND, run.audit_id, _run_ledger_payload(run),
             source=_MIRROR_SOURCE, trace_id=run.audit_id, parent_ids=(run.audit_id,),
@@ -277,6 +285,7 @@ def _mirror_run(run: FleetRunRecord) -> FleetRunRecord:
 
 def _mirror_fragment(fragment_ref: str, *, audit_id: str, job_id: str) -> None:
     if _STATE_MIRROR is not None:
+        _FRAGMENT_REFS.add(fragment_ref)
         _STATE_MIRROR.mirror_put(
             _FRAGMENT_KIND, fragment_ref, {"fragment_ref": fragment_ref},
             source=_MIRROR_SOURCE, trace_id=audit_id, parent_ids=(audit_id, job_id),
@@ -483,6 +492,13 @@ def heartbeat_worker(worker_id: str) -> FleetWorkerRecord | None:
 
 
 def list_workers() -> list[FleetWorkerRecord]:
+    # Phase 3 read-authority: reconstruct workers from the ledger, re-deriving each one's
+    # staleness from its heartbeat against the same cutoff rehydrate uses (status is a
+    # view, never stored). Dark by default (no mirror -> the dict path below).
+    if _STATE_MIRROR is not None and _STATE_MIRROR.read_from_ledger:
+        cutoff = datetime.now(UTC) - timedelta(seconds=DEFAULT_MAX_HEARTBEAT_AGE_SECONDS)
+        payloads = _STATE_MIRROR.read_all_payloads(_WORKER_KIND)
+        return [_worker_from_ledger_payload(payload, cutoff=cutoff) for payload in payloads.values()]
     workers = list(_WORKERS.values())
     if _STATE_MIRROR is not None:
         _STATE_MIRROR.shadow_compare_all(
@@ -544,6 +560,18 @@ def prepare_fleet_for_audit(audit_id: str) -> FleetRunRecord | None:
 
 
 def get_fleet_run(audit_id: str) -> FleetRunRecord | None:
+    # Phase 3 read-authority: reconstruct the run's STORED state (status, jobs,
+    # timestamps) from the ledger, then re-derive its gate exactly as the dict path does
+    # -- _refresh_run_gate reads the worker cache, which the write-through keeps identical
+    # to the ledger (zero divergence). The gate is a derived view in BOTH modes; this flip
+    # moves authority for stored state, not the ACCEPT-gating logic. Dark by default.
+    if _STATE_MIRROR is not None and _STATE_MIRROR.read_from_ledger:
+        payload = _STATE_MIRROR.read_payload(_RUN_KIND, audit_id)
+        if payload is None:
+            return None
+        run = _run_from_ledger_payload(payload)
+        _refresh_run_gate(run)
+        return run
     run = _FLEET_RUNS.get(audit_id)
     if run is not None:
         _refresh_run_gate(run)
@@ -552,6 +580,12 @@ def get_fleet_run(audit_id: str) -> FleetRunRecord | None:
 
 
 def list_fleet_runs() -> list[FleetRunRecord]:
+    if _STATE_MIRROR is not None and _STATE_MIRROR.read_from_ledger:
+        payloads = _STATE_MIRROR.read_all_payloads(_RUN_KIND)
+        runs = [_run_from_ledger_payload(payload) for payload in payloads.values()]
+        for run in runs:
+            _refresh_run_gate(run)
+        return runs
     runs = list(_FLEET_RUNS.values())
     for run in runs:
         _refresh_run_gate(run)

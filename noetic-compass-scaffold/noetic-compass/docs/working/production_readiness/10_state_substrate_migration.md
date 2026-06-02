@@ -1,6 +1,6 @@
 # 10 — State Substrate Migration
 
-**Workstream:** 10 of 11 · **Status:** Phases 0–2 implemented behind the `LedgerMirror` seam (dual-write + shadow-read, **zero divergence** proven on `InMemoryStateStore`); single-host durability **and rehydrate-on-startup** proven on `SqliteStateStore`; Phase 3 cutover (flip read-authority off the dicts + multi-host) still gated on workstream 11 · **Date:** Jun 1, 2026
+**Workstream:** 10 of 11 · **Status:** Phases 0–2 implemented behind the `LedgerMirror` seam (dual-write + shadow-read, **zero divergence** proven on `InMemoryStateStore`); single-host durability **and rehydrate-on-startup** proven on `SqliteStateStore`; Phase 3 read-authority flip **mechanism built dark** — reversible, fail-closed, proven by clearing the dicts and still serving from the ledger; its operational enable in a durable deployment, the multi-host smoke, and Phase 4 still gated on workstream 11 · **Date:** Jun 1, 2026
 **Owner seam:** the cutover that moves run/worker/fleet/fragment state out of process-global Python
 dicts and onto the durable, tenant-scoped, version-checked `StateStore` ledger.
 
@@ -272,7 +272,7 @@ remains only as dead scaffolding to be deleted in Phase 4.
   partial receipts), restart, and confirm the audit, its fleet run, leases (or honest expiry), and the
   `_FRAGMENT_REFS` dedup set are all recovered from the ledger with **zero lost or double-counted
   receipts** (cross-check the merged fragment set is exactly complete, no dupes — the same proof
-  workstream 03 Phase D requires). **Two of the three slices are now demonstrated.** (i) *Storage
+  workstream 03 Phase D requires). **All three slices now have a built, tested mechanism.** (i) *Storage
   survival*: `test_mirrored_ledger_survives_a_single_host_restart` drives the real flow through
   `SqliteStateStore`, drops the in-RAM dicts, reopens the file, and recovers the full record set from the
   ledger — the *bytes* survive a single-host restart. (ii) *Rehydrate-on-startup*: `rehydrate_from_ledger`
@@ -282,13 +282,18 @@ remains only as dead scaffolding to be deleted in Phase 4.
   re-derived gate that lands where it was), re-derived worker staleness — with **zero lost or
   double-counted** fragment refs, and with the two honest restart consequences made explicit (an in-flight
   lease drops `leased`→`expired` and is then immediately re-leasable; the non-durable fragment-payload
-  digest drops while the content-addressed ref survives). What the cutover still owes is the **third slice
-  — the flip itself**: moving read-authority off the dicts and onto the ledger (rehydrate makes the dicts
-  *survivable*; it does not yet make the ledger *authoritative* — that is the separately gated step the
-  directive pins behind "only after that passes"), plus a **multi-host smoke**: two API replicas against
-  one shared (SQLite-single-host first, then Postgres) backend cooperate on one run — host A prepares, host
-  B merges. That last half is impossible on `InMemoryStateStore` and needs the durable multi-host backend
-  from workstream 11.
+  digest drops while the content-addressed ref survives). (iii) *The flip itself* is now **built and tested,
+  shipped dark**: `enable_ledger_reads()` moves read-authority onto the ledger so the public `get_*` /
+  `list_*` reconstruct each record's stored state from the durable rows instead of the dicts — proven by
+  clearing the dicts and still serving byte-identical state — and it is **reversible**
+  (`disable_ledger_reads()` returns to the dicts, which the dual-write keeps current as a write-through
+  cache for instant rollback) and **fail-closed** (the `_STATE_MIRROR is not None and read_from_ledger`
+  guard means production, which installs no mirror, can never engage it). What the cutover still owes is
+  therefore not the mechanism but the **operational enable** — turning it on in a real durable deployment is
+  the separate human-gated step the directive pins behind "only after that passes" — plus a **multi-host
+  smoke**: two API replicas against one shared (SQLite-single-host first, then Postgres) backend cooperate
+  on one run, host A prepares, host B merges. That last half is impossible on `InMemoryStateStore` and needs
+  the durable multi-host backend from workstream 11.
 - **Kill:** if a resumed run ever double-counts or loses a receipt, the durable-state model is unsafe —
   revert to the dicts (which are honest for single-host) and do not ship the cutover.
 
@@ -368,6 +373,27 @@ clearing a module global.
 >   before asserting** (proving rehydrate is a full copy into RAM, not a lazy handle), and assert the
 >   served records match. This is the cutover **prerequisite** the directive names, **not** the cutover:
 >   the dicts remain authoritative on the serving path until the separately gated read-authority flip.
+> - **The read-authority flip itself is now built and proven, shipped dark (Phase 3's third slice).**
+>   `LedgerMirror` carries a `read_from_ledger` switch (default `False`); `enable_ledger_reads()` /
+>   `disable_ledger_reads()` toggle it. While off, every `get_*` / `list_*` serves the dict and
+>   shadow-compares (Phase 2). While on, they reconstruct each record's *stored* state from the ledger via
+>   `read_payload` / `read_all_payloads` (the same `_*_from_ledger_payload` reconstructions rehydrate uses),
+>   re-deriving the excluded *views* on read — worker staleness from the heartbeat, and the run's verifier
+>   gate via `_refresh_run_gate` against the worker cache, which is a derived view in **both** modes, so the
+>   flip moves authority for *stored state*, not the ACCEPT-gating logic. Three properties make it safe to
+>   ship dark: (a) **fail-closed** — the read sites gate on `_STATE_MIRROR is not None and
+>   _STATE_MIRROR.read_from_ledger`, so production (no mirror) is structurally pinned to the dicts and
+>   cannot enable the ledger by accident; (b) **reversible** — the dual-write now also writes the dict back
+>   (a write-through cache), so under ledger-reads a mutate-then-mirror keeps the dict current and
+>   `disable_ledger_reads()` is an instant, lossless rollback; (c) **authoritative reads fail loud** —
+>   `read_payload` / `read_all_payloads` propagate `StateStoreError` (when the ledger IS the truth, an
+>   unreachable ledger must fail the request, not fabricate an answer — the opposite of the swallow-and-record
+>   shadow path). Proven by the three new cutover tests in `tests/test_state_substrate_live_migration.py`:
+>   clearing each backing dict and still serving byte-identical state from the ledger; the switch reversible
+>   and dark by default (an installed-but-disabled mirror still serves the dict, not the ledger); and the
+>   write-through keeping the dict current so rollback loses nothing. This is the **mechanism**, dark by
+>   default — the operational enable in a durable deployment, and Phase 4 (deleting the dicts), remain
+>   separate human-gated steps; multi-host durability is still workstream 11.
 
 ---
 

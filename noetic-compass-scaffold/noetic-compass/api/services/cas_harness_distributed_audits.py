@@ -201,8 +201,17 @@ def set_state_mirror(mirror: LedgerMirror | None) -> None:
 def _mirror_audit(record: DistributedAuditRecord) -> DistributedAuditRecord:
     """Phase 1 dual-write: shadow this audit into the ledger and return ``record`` so
     mutators can ``return _mirror_audit(record)`` at each exit. Non-authoritative -- a
-    ledger failure is logged as a divergence inside the mirror, never raised here."""
+    ledger failure is logged as a divergence inside the mirror, never raised here.
+
+    Phase 3 write-through: when a mirror is installed, also (re)assign the dict entry.
+    In dict-authority mode that is a harmless same-instance write (mutators already hold
+    the dict object). Under read-authority, ``get_distributed_audit`` returns a *fresh*
+    reconstruction from the ledger, so a mutator that mutates-then-mirrors would
+    otherwise leave the dict stale; this keeps the dict a faithful cache so rollback to
+    dict-authority is always safe. Guarded by ``_STATE_MIRROR is not None`` so production
+    (no mirror) is byte-for-byte unchanged."""
     if _STATE_MIRROR is not None:
+        _DISTRIBUTED_AUDITS[record.audit_id] = record
         _STATE_MIRROR.mirror_put(
             _MIRROR_KIND, record.audit_id, record.to_dict(),
             source=_MIRROR_SOURCE, trace_id=record.audit_id,
@@ -479,11 +488,21 @@ def create_distributed_audit(
 
 
 def get_distributed_audit(audit_id: str) -> DistributedAuditRecord | None:
+    # Phase 3 read-authority: reconstruct the audit from the durable ledger, the same
+    # faithful reconstruction rehydrate-on-startup uses. The dict is no longer consulted
+    # for the answer -- proven by the live-migration test, which clears the dict and
+    # still serves the right audit. Dark by default (no mirror -> the dict path below).
+    if _STATE_MIRROR is not None and _STATE_MIRROR.read_from_ledger:
+        payload = _STATE_MIRROR.read_payload(_MIRROR_KIND, audit_id)
+        return _audit_from_ledger_payload(payload) if payload is not None else None
     record = _DISTRIBUTED_AUDITS.get(audit_id)
     return _shadow_audit(record) if record is not None else None
 
 
 def list_distributed_audits() -> list[DistributedAuditRecord]:
+    if _STATE_MIRROR is not None and _STATE_MIRROR.read_from_ledger:
+        payloads = _STATE_MIRROR.read_all_payloads(_MIRROR_KIND)
+        return [_audit_from_ledger_payload(payload) for payload in payloads.values()]
     records = list(_DISTRIBUTED_AUDITS.values())
     if _STATE_MIRROR is not None:
         _STATE_MIRROR.shadow_compare_all(

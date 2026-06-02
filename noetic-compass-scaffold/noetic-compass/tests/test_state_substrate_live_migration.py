@@ -18,15 +18,25 @@ What is deliberately exercised beyond the happy path:
   view: a worker going stale must NOT register as a divergence, because ``status`` is a
   recomputed view excluded from the stored projection.
 
-Phase-3 prerequisite proved here too: the ledger does not just AGREE with and SURVIVE a
-restart -- a restarted process can REBUILD the live dicts from it. The final three tests
-drive the real flow through the durable SqliteStateStore, drop the in-RAM dicts (all a
-restart loses), and call ``rehydrate_from_ledger`` on both services, then assert the
-services serve the same records -- with two honest restart consequences made explicit: an
-in-flight lease is dropped (``leased`` -> ``expired``; the token is never persisted) and
-the non-durable fragment-payload digest is dropped (the content-addressed ref survives).
-This is the gate for the read-authority cutover, NOT the cutover: the dicts stay
-authoritative on the serving path until a separate, gated step moves read authority.
+Phase-3 prerequisites proved here too: the ledger does not just AGREE with and SURVIVE a
+restart -- a restarted process can REBUILD the live dicts from it. Three tests drive the
+real flow through the durable SqliteStateStore, drop the in-RAM dicts (all a restart
+loses), and call ``rehydrate_from_ledger`` on both services, then assert the services serve
+the same records -- with two honest restart consequences made explicit: an in-flight lease
+is dropped (``leased`` -> ``expired``; the token is never persisted) and the non-durable
+fragment-payload digest is dropped (the content-addressed ref survives).
+
+The cutover itself -- the read-authority flip -- is proved in the final block. With
+``enable_ledger_reads`` the public ``get_*`` / ``list_*`` reconstruct each record's stored
+state from the ledger instead of the dict, demonstrated by clearing the dict and still
+serving byte-identical state; the flip is reversible (``disable_ledger_reads`` returns to
+dict-authority), dark by default (the switch is the only thing that serves the ledger, and
+it starts off), and rollback-safe (the dual-write writes the dict back, so it stays a
+faithful cache the instant we revert). This is the MECHANISM, shipped dark: production
+installs no mirror, so the ``_STATE_MIRROR is not None and read_from_ledger`` guard can
+never engage there -- the serving path stays structurally pinned to the dicts. Turning it
+on in a durable deployment, and Phase 4 (deleting the dicts), remain separate human-gated
+steps; multi-host durability is still workstream 11.
 
 Run ONLY this file:
     C:/Python314/python.exe -m pytest tests/test_state_substrate_live_migration.py -q
@@ -576,3 +586,147 @@ def test_rehydrate_drops_the_non_durable_fragment_payload_digest(tmp_path):
 
     da.reset_distributed_audits_for_tests()
     fe.reset_fleet_executor_for_tests()
+
+
+# ---------------------------------------------------------------------------
+# Phase 3: the read-authority cutover (the flip itself), shipped DARK.
+#
+# The tests above prove the prerequisites -- the ledger AGREES with the dicts
+# (Phase 2) and SURVIVES + can REBUILD them across a restart. These three prove
+# the cutover MECHANISM: with read_from_ledger enabled the public get_*/list_*
+# reconstruct each record's stored state from the ledger instead of the dict
+# (shown by clearing the dict and still serving correctly), and the flip is
+# reversible, dark by default, and rollback-safe via the write-through.
+#
+# Still DARK, still NOT the operational cutover: production installs no mirror,
+# so `_STATE_MIRROR is not None and read_from_ledger` can never be true there --
+# the serving path is structurally pinned to the dicts. Enabling this in a durable
+# deployment (and Phase 4, deleting the dicts) remain separate, human-gated steps;
+# multi-host durability is still workstream 11.
+# ---------------------------------------------------------------------------
+
+
+def test_ledger_reads_serve_stored_state_after_clearing_the_backing_dicts(mirror):
+    # The headline cutover proof. Under dict-authority the dicts ARE the answer, so the
+    # honest test that read-authority has truly MOVED is to make the ledger serve a read
+    # whose dict is empty. Drive the real flow (the dual-write populates the ledger), flip
+    # enable_ledger_reads(), then clear each backing dict and assert the public read still
+    # returns byte-identical state -- it can only be coming from the ledger now.
+    #
+    # Order is the honest scope boundary. A run's verifier gate is a DERIVED view recomputed
+    # from the worker cache in BOTH modes (the flip moves authority for STORED state, not the
+    # ACCEPT-gating logic). So clear the run dict while the worker cache is still intact --
+    # proving the run's stored state comes from the ledger with the gate reproducing exactly
+    # -- and only then clear the workers.
+    store, m = mirror
+    audit_id = _drive_full_flow()
+    m.assert_no_divergence()
+
+    # Ground truth: exactly what the services serve under dict-authority.
+    audit_before = da.get_distributed_audit(audit_id).to_dict()
+    audit_list_before = sorted(a.audit_id for a in da.list_distributed_audits())
+    run_rendered_before = fe.get_fleet_run(audit_id).to_dict()
+    run_list_before = sorted(r.audit_id for r in fe.list_fleet_runs())
+    workers_before = {w.worker_id: w.to_dict() for w in fe.list_workers()}
+    assert run_rendered_before["verifier_gate_status"] == "ready_for_verifier"
+    assert workers_before
+
+    m.enable_ledger_reads()
+
+    # With the dicts still intact the ledger read must agree exactly (zero divergence
+    # guarantees ledger == dict). This isolates "we switched source" from "we changed data".
+    assert da.get_distributed_audit(audit_id).to_dict() == audit_before
+    assert fe.get_fleet_run(audit_id).to_dict() == run_rendered_before
+    assert {w.worker_id: w.to_dict() for w in fe.list_workers()} == workers_before
+
+    # Now the pointed proof, one kind at a time. Audit first: self-contained, no cross-dict
+    # derivation. Clear its dict; the read can ONLY come from the ledger.
+    da._DISTRIBUTED_AUDITS.clear()
+    assert da.get_distributed_audit(audit_id).to_dict() == audit_before
+    assert sorted(a.audit_id for a in da.list_distributed_audits()) == audit_list_before
+
+    # Run next, workers still intact so the derived gate recomputes identically.
+    fe._FLEET_RUNS.clear()
+    served_run = fe.get_fleet_run(audit_id)
+    assert served_run.to_dict() == run_rendered_before
+    assert served_run.verifier_gate_status == "ready_for_verifier"
+    assert sorted(r.audit_id for r in fe.list_fleet_runs()) == run_list_before
+
+    # Workers last: clear the worker cache and the ledger still serves every worker, with
+    # 'active' re-derived from the durable fresh heartbeat (status is a view, never stored).
+    fe._WORKERS.clear()
+    workers_after = {w.worker_id: w.to_dict() for w in fe.list_workers()}
+    assert workers_after == workers_before
+    assert all(w["status"] == "active" for w in workers_after.values())
+
+    # Every dict is now empty, yet every public read served correctly: read-authority has
+    # moved onto the ledger -- the reads consult it, never the emptied dicts.
+    assert da._DISTRIBUTED_AUDITS == {}
+    assert fe._FLEET_RUNS == {} and fe._WORKERS == {}
+
+
+def test_ledger_read_switch_is_reversible_and_dark_by_default(mirror):
+    # The switch -- not merely the mirror's presence -- decides the read source, and it
+    # defaults OFF. An installed-but-not-enabled mirror is still Phase 2 (shadow only): reads
+    # come from the dict. enable_ledger_reads() moves authority to the ledger;
+    # disable_ledger_reads() moves it straight back. Proven by toggling the switch with the
+    # dict deliberately emptied, so the two sources give visibly different answers.
+    store, m = mirror
+    audit_id = _drive_full_flow()
+    m.assert_no_divergence()
+    served = da.get_distributed_audit(audit_id).to_dict()
+
+    # Default: a mirror IS installed but read_from_ledger is False -> dict-authority.
+    assert m.read_from_ledger is False
+
+    # Empty the dict. Under dict-authority the read must now MISS -- it did NOT fall through
+    # to the ledger, which still holds the record. This is what "dark by default" means even
+    # with a mirror present: Phase 2 shadows, it does not serve.
+    da._DISTRIBUTED_AUDITS.clear()
+    assert da.get_distributed_audit(audit_id) is None
+
+    # Flip to ledger-authority: the very same emptied-dict read now serves from the ledger.
+    m.enable_ledger_reads()
+    assert m.read_from_ledger is True
+    assert da.get_distributed_audit(audit_id).to_dict() == served
+
+    # Flip back: dict-authority again, dict still empty -> the read misses once more. The
+    # switch is the only thing that changed, and it fully controls the read source.
+    m.disable_ledger_reads()
+    assert da.get_distributed_audit(audit_id) is None
+
+
+def test_write_through_keeps_the_dict_current_for_instant_rollback(mirror):
+    # The rollback-safety invariant. Under read-authority get_distributed_audit returns a
+    # FRESH reconstruction from the ledger, not the dict's instance -- so a mutator that read
+    # the ledger, mutated that fresh object, and mirrored it would leave the dict STALE unless
+    # the dual-write also writes the dict back. _mirror_audit does exactly that write-through.
+    # Here we mutate through the real service API while ledger reads are live, then
+    # disable_ledger_reads() and confirm the dict-authority read sees the same mutation -- i.e.
+    # reverting to the dicts loses nothing, which is what makes the flip instantly reversible.
+    store, m = mirror
+    audit = da.create_distributed_audit(_request(), data_capture_acknowledged=True)
+    audit_id = audit.audit_id
+    assert da._DISTRIBUTED_AUDITS[audit_id].status == "PLANNED"
+
+    m.enable_ledger_reads()
+    # Under ledger-reads the served object is a fresh reconstruction, not the dict's instance.
+    assert da.get_distributed_audit(audit_id) is not da._DISTRIBUTED_AUDITS.get(audit_id)
+
+    # Mutate through the real mutator: it get()s from the ledger (fresh PLANNED), flips the
+    # status to DISPATCHED, and dual-writes -- mirror_put to the ledger AND write-through to
+    # the dict.
+    da.dispatch_distributed_audit(audit_id)
+
+    # The ledger (the live read source) reflects the mutation ...
+    assert da.get_distributed_audit(audit_id).status == "DISPATCHED"
+    # ... and so does the dict, because the write-through kept it current.
+    assert da._DISTRIBUTED_AUDITS[audit_id].status == "DISPATCHED"
+
+    # Instant rollback: flip read-authority back to the dicts. The mutation made under
+    # ledger-reads is already there -- nothing lost, no rehydrate needed.
+    m.disable_ledger_reads()
+    assert da.get_distributed_audit(audit_id).status == "DISPATCHED"
+
+    # And the two views never disagreed throughout (the post-rollback read shadow-compares).
+    m.assert_no_divergence()

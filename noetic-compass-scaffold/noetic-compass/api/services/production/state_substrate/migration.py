@@ -15,9 +15,16 @@ ledger ever deciding anything. That is the whole strangler-fig discipline from
   :meth:`LedgerMirror.shadow_compare` and records any disagreement. The proof
   obligation for cutover is **zero divergence** across the real test suites
   (:meth:`assert_no_divergence`).
-* **Phase 3 (cutover).** Only once the ledger provably mirrors the dicts -- *and*
-  only on a durable multi-host backend (workstream 11) -- does the ledger become
-  authoritative and the dicts become the fallback. That step is out of scope here.
+* **Phase 3 (cutover).** Once the ledger provably mirrors the dicts (Phase 2) and the
+  dicts are survivable (rehydrate-on-startup), read-authority moves onto the ledger:
+  :meth:`enable_ledger_reads` flips the :meth:`read_from_ledger` switch and the live
+  ``get_*`` / ``list_*`` reconstruct records from the store via :meth:`read_payload` /
+  :meth:`read_all_payloads` instead of the dicts. The switch is **dark by default**
+  (production installs no mirror, so it can never engage), **reversible**
+  (:meth:`disable_ledger_reads`; the dual-write keeps the dicts current for instant
+  rollback), and **fail-closed** (no mirror, no ledger reads). This module is the
+  mechanism; *enabling* it in a durable deployment -- and Phase 4, deleting the dicts --
+  remain separate gated steps, and multi-host durability is still workstream 11.
 
 Why "non-authoritative" is load-bearing, not a hedge
 ----------------------------------------------------
@@ -137,6 +144,13 @@ class LedgerMirror:
         self._max_retries = max_write_retries
         self._divergences: list[Divergence] = []
         self._lock = threading.Lock()
+        # Phase 3 read-authority switch. Dark by default: while False, the live
+        # services serve every read from their dicts and merely *shadow-compare*
+        # the ledger (Phase 2). Flipping it to True makes the ledger the read
+        # authority -- see enable_ledger_reads / read_payload below. It is a plain
+        # bool, not a lock-guarded one, because it is flipped once at cutover (or
+        # in a test), never raced per-request.
+        self._read_from_ledger = False
 
     # --- Phase 1: dual-write ------------------------------------------------
 
@@ -266,6 +280,62 @@ class LedgerMirror:
                 )
             )
         return tuple(found)
+
+    # --- Phase 3: read-authority cutover -----------------------------------
+
+    @property
+    def read_from_ledger(self) -> bool:
+        """Whether the ledger is the read authority (Phase 3) or just a shadow (Phase 2).
+
+        The live read sites gate on this: ``_STATE_MIRROR is not None and
+        _STATE_MIRROR.read_from_ledger``. Because a service with no mirror installed
+        can never satisfy the first half, production -- which installs no mirror -- is
+        *structurally* pinned to dict-authority. You cannot read from a ledger that is
+        not there; the cutover is impossible to enable by accident.
+        """
+
+        return self._read_from_ledger
+
+    def enable_ledger_reads(self) -> None:
+        """Make the ledger the read authority. The deliberate Phase-3 flip.
+
+        Precondition the caller owns: the ledger must already mirror the dicts (Phase 2
+        proved zero divergence) and must be durable enough to *be* the truth. This
+        method does not re-check that -- it is the lever, not the gate. After this, the
+        live ``get_*`` / ``list_*`` reconstruct records from this store instead of the
+        dicts. Reversible: :meth:`disable_ledger_reads` returns to dict-authority, and
+        the dual-write keeps the dicts current the whole time so rollback is instant.
+        """
+
+        self._read_from_ledger = True
+
+    def disable_ledger_reads(self) -> None:
+        """Return read-authority to the dicts. The Phase-3 rollback lever."""
+
+        self._read_from_ledger = False
+
+    def read_payload(self, kind: Kind, record_id: RecordId) -> Optional[Mapping[str, object]]:
+        """Authoritative single read: the ledger's stored payload for one record, or ``None``.
+
+        This is the read counterpart of :meth:`mirror_put`, and it is deliberately the
+        *opposite* of :meth:`shadow_compare` about failure. A shadow read swallows a
+        ``StateStoreError`` (the dict already answered; the failure is only a divergence
+        to log). An authoritative read **must not** hide a backend failure: when the
+        ledger *is* the truth, a read that cannot reach it has to fail the request, not
+        fabricate an answer. So ``StateStoreError`` propagates here by design.
+        """
+
+        record = self._store.get(INTERIM_TENANT, kind, record_id)
+        return None if record is None else record.payload
+
+    def read_all_payloads(self, kind: Kind) -> dict[RecordId, Mapping[str, object]]:
+        """Authoritative list read: every stored payload of a ``kind``, keyed by record id.
+
+        Backs the live ``list_*`` calls under read-authority. Like :meth:`read_payload`,
+        a backend failure propagates rather than being swallowed.
+        """
+
+        return {rec.record_id: rec.payload for rec in self._store.list(INTERIM_TENANT, kind)}
 
     # --- divergence accounting ---------------------------------------------
 
