@@ -10,9 +10,17 @@ services:
     rootDir: noetic-compass-scaffold/noetic-compass
     dockerfilePath: ./Dockerfile.api
     dockerContext: .
-    plan: free
+    plan: starter
     autoDeployTrigger: commit
     healthCheckPath: /health
+    # Persistent disk = durable single-host storage for the state ledger + CRM leads.
+    # Render disks attach only to PAID instance types (starter/standard/pro), ~$0.25/GB/mo.
+    # Pins the service to ONE instance + disables zero-downtime deploys. See repo-root
+    # render.yaml for the full note.
+    disk:
+      name: noetic-data
+      mountPath: /var/data
+      sizeGB: 1
     envVars:
       - key: NC_JWT_SECRET
         generateValue: true
@@ -25,16 +33,23 @@ services:
       - key: NC_RATE_LIMIT_RPM
         value: "120"
       # State-ledger operational enable (step 4 posture). See the repo-root
-      # render.yaml for the full free-tier ephemerality note. ENABLED=true installs
-      # the SqliteStateStore + LedgerMirror; READ_AUTHORITY=true makes the ledger
-      # serve public get/list reads. /tmp is wiped on every restart on plan:free —
-      # fine for the read-authority watch, NOT host-loss durability. Phase 4 stays held.
+      # render.yaml for the full durable-posture note. ENABLED=true installs the
+      # SqliteStateStore + LedgerMirror; READ_AUTHORITY=true makes the ledger serve
+      # public get/list reads. This service now runs on a PAID instance with a
+      # persistent disk at /var/data (see the `disk:` block above), so the served
+      # ledger state survives restart / redeploy / idle spin-down — single-host
+      # durable. Phase 4 (dict deletion) stays held.
       - key: NC_STATE_LEDGER_ENABLED
         value: "true"
       - key: NC_STATE_LEDGER_READ_AUTHORITY
         value: "true"
       - key: NC_STATE_LEDGER_PATH
-        value: /tmp/state_ledger.db
+        value: /var/data/state_ledger.db
+      # CRM lead capture durability: append-only JSONL on the durable disk; unset
+      # falls back to the in-memory store that forgets every restart. See repo-root
+      # render.yaml for the full note.
+      - key: NC_CRM_LEAD_STORE_PATH
+        value: /var/data/leads.jsonl
       - key: NC_CORS_ORIGINS
         value: https://noeticcompass.com,https://www.noeticcompass.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
       - key: NC_CORS_ORIGIN_REGEX

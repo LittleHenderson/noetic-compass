@@ -22,9 +22,19 @@ services:
     rootDir: noetic-compass-scaffold/noetic-compass
     dockerfilePath: ./Dockerfile.api
     dockerContext: .
-    plan: free
+    plan: starter
     autoDeployTrigger: commit
     healthCheckPath: /health
+    # Persistent disk = durable single-host storage for the state ledger + CRM leads.
+    # Render disks attach only to PAID instance types (starter/standard/pro), billed
+    # separately at ~$0.25/GB/mo (a 1 GB disk is ~25 cents/month). A disk pins the
+    # service to ONE instance and disables zero-downtime deploys (Render stops the old
+    # instance to move the disk) — acceptable pre-launch, a reason to move to Postgres
+    # before scaling to multiple instances.
+    disk:
+      name: noetic-data
+      mountPath: /var/data
+      sizeGB: 1
     envVars:
       - key: NC_JWT_SECRET
         generateValue: true
@@ -43,20 +53,28 @@ services:
       # proof in docs/working/production_readiness/16_hosted_shadow_enable_evidence_2026_06_02.md.
       # Phase 4 (dict deletion) stays HELD.
       #
-      # FREE-TIER HONESTY: this service is plan:free, which has an EPHEMERAL
-      # filesystem (no persistent disk). NC_STATE_LEDGER_PATH therefore points at
-      # /tmp and is wiped on every deploy / restart / idle spin-down. That is fine
-      # for the divergence watch (dict-vs-ledger shadow-compare is live, in-process,
-      # within one uptime) but it does NOT prove cross-restart durability. Durability
-      # was proven separately on multi-host Postgres (commit c32f639, PG 16.4, 10/10).
-      # For real hosted durability, move to a paid instance with a persistent disk at
-      # /var/data and set NC_STATE_LEDGER_PATH=/var/data/state_ledger.db.
+      # DURABLE POSTURE: this service now runs on a PAID instance with a persistent
+      # disk mounted at /var/data (see the `disk:` block above). With READ_AUTHORITY=true
+      # the ledger SERVES public reads, so its durability is load-bearing — the disk is
+      # what lets that served state survive deploy / restart / idle spin-down instead of
+      # resetting to empty on every cold start (the prior /tmp free-tier behaviour, which
+      # showed as audit_count=0 after each spin-down). This is single-host durability. It
+      # is NOT multi-host durability: that needs the PostgresStateStore (built + verified
+      # at commit c32f639, PG 16.4, 10/10) wired into install_state_ledger, which still
+      # hard-codes SqliteStateStore. Phase 4 (dict deletion) stays HELD.
       - key: NC_STATE_LEDGER_ENABLED
         value: "true"
       - key: NC_STATE_LEDGER_READ_AUTHORITY
         value: "true"
       - key: NC_STATE_LEDGER_PATH
-        value: /tmp/state_ledger.db
+        value: /var/data/state_ledger.db
+      # CRM lead capture durability: persist captured leads to the durable disk as an
+      # append-only JSONL file. Unset (the prior hosted state) falls back to the
+      # in-memory store that forgets EVERY restart — a captured lead is a revenue record,
+      # so production must keep them. JsonlFileLeadStore is single-host durable; a real
+      # database is the eventual backend behind the unchanged LeadStore seam.
+      - key: NC_CRM_LEAD_STORE_PATH
+        value: /var/data/leads.jsonl
       # NC_CORS_ORIGINS — explicit allowlist. The Atlas Viewer alpha entries
       # (atlas-viewer-app.onrender.com + the future atlas.noeticcompass.com
       # custom domain) are listed alongside the original Compass dashboard
