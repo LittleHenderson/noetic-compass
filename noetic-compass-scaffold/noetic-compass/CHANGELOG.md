@@ -1,5 +1,23 @@
 # Noetic Compass — Progress Log
 
+## Hosted state-ledger read-authority, **VERIFIED on Render production branch** — flipped `NC_STATE_LEDGER_READ_AUTHORITY=true`, pushed `02b6f9c..f1e572e`, waited for Render to roll forward, and ran the hosted verifier against `https://noetic-compass-api.onrender.com`: `enabled_ledger_read_authoritative`, `reads_served 0->92`, `divergences_found 0`, fleet merge `COMPLETE` / `ready_for_verifier`. Phase 4 stays held (Jun 2, 2026)
+
+This is step 4 of the state-ledger rollout. The hosted shadow gate had already passed in doc 16 (`reads_compared 0->95`, zero divergences while dicts served reads). This entry records the separate read-authority flip: the ledger now serves public get/list reads, and the verifier watches `reads_served`, the Phase-3 odometer.
+
+**1) Hosted read-authority release.** `render.yaml` and `infra/render.yaml` changed `NC_STATE_LEDGER_READ_AUTHORITY` from `"false"` to `"true"` and kept `NC_STATE_LEDGER_ENABLED=true`. The release was committed as `f1e572e` and pushed to `master`: `02b6f9c..f1e572e`.
+
+**2) Hosted read-authority proof.** `scripts/verify_state_ledger_enabled.py --base-url https://noetic-compass-api.onrender.com --require-posture read-authority` passed. The verifier minted a hosted JWT via `/auth/token`, created a real distributed audit, dispatched it, registered workers, prepared fleet jobs, leased and receipted both jobs, merged the fleet packet, then touched every ledger-mirrored read site. The result: `posture=enabled_ledger_read_authoritative`, `reads_served=0->92`, `reads_compared=0`, `divergences_found=0`, `last_divergence=None`, `audit_id=cas-dist-bb51e79a414a9e62`, `workers=2`, `receipts=2`, `merge status=COMPLETE`, `gate=ready_for_verifier`.
+
+**3) Honesty boundary.** `reads_compared` stayed 0 by design: it is the shadow-mode counter. In read-authority posture the ledger serves reads directly, so `reads_served` is the live odometer. Phase 4 deleted nothing. Render free-plan storage remains ephemeral, so this proves hosted read-authority correctness for one uptime, not host-loss durability.
+
+### Pieces (this entry)
+- `render.yaml` / `infra/render.yaml` *(edit)* — `NC_STATE_LEDGER_READ_AUTHORITY=true`, with comments updated to state this is step 4 and Phase 4 remains held.
+- `docs/working/production_readiness/17_hosted_read_authority_evidence_2026_06_02.md` *(new)* — hosted read-authority evidence record: release action, verifier command, status snapshots, proof boundary, and next gate.
+- `CHANGELOG.md` *(edit)* — this entry.
+
+### Tests / verification (this entry)
+- Hosted verifier: **PASS** on `https://noetic-compass-api.onrender.com`, `reads_served 0->92`, `divergences_found 0`, fleet merge `COMPLETE` / `ready_for_verifier`.
+
 ## Hosted state-ledger shadow enable, **VERIFIED on Render production branch** — merged `codex/cas-harness-live-run` into `master`, pushed `a9f519b..f32a650`, waited for Render to roll forward, and ran the hosted verifier against `https://noetic-compass-api.onrender.com`: `enabled_shadow_dict_authoritative`, `reads_compared 0->95`, `divergences_found 0`, fleet merge `COMPLETE` / `ready_for_verifier`. Read-authority stayed false and Phase 4 stayed held (Jun 2, 2026)
 
 This is the hosted counterpart to doc 14. The first verifier attempt after the push still returned `404` for `/api/state-ledger/status`, which correctly meant Render was still serving the old build. After rollout, the same verifier passed against the hosted service. This changes the ledger status from "local real-HTTP shadow proof only" to "hosted shadow proof complete."
