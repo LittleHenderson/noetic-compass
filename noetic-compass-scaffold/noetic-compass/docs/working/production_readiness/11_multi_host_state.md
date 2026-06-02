@@ -1,6 +1,6 @@
 # 11 — Multi-Host State Substrate
 
-**Workstream:** 11 (state-substrate extension) · **Status:** design + gap blueprint (not implemented) · **Date:** Jun 1, 2026
+**Workstream:** 11 (state-substrate extension) · **Status:** Postgres backend + fencing IMPLEMENTED against the locked Protocol; conformance/durability tests are skip-guarded and **not yet run against a live cluster** · **Date:** Jun 1, 2026
 **Owner seam:** the durable run/worker/tenant ledger (`api/services/production/state_substrate/`) — taking the
 `StateStore` Protocol from *durable-on-one-host* (SQLite) to *durable-across-hosts* (Postgres / Redis) **behind the
 identical interface**.
@@ -12,6 +12,28 @@ identical interface**.
 > When in doubt: workstream 10 migrates the live global dicts onto the substrate; 04 builds a durable *queue* on top of
 > the same kind of backend; 11 is the answer to "what does the durable layer **underneath** all of them actually have to
 > be, across hosts, without lying about it?"
+
+> **Implementation status (added Jun 1, 2026).** The §3 Postgres backend is now implemented behind the locked Protocol:
+> `api/services/production/state_substrate/postgres_store.py` (`PostgresStateStore`, **psycopg 3 / synchronous** to match the
+> synchronous Protocol — see the driver note below) realizes records (§3.1), the conditional-reclaim leases (§3.2), and the
+> **fencing token** (§5.2) as a monotonic Postgres `BIGINT` sequence stamped into each `Lease`. The fencing fix is wired as
+> the additive, interface-compatible strengthening §5.2 describes: a defaulted `fence: int = 0` field on the `Lease`
+> dataclass (no Protocol method changed; the in-memory and SQLite stores and the existing `run_state_store_contract` stay
+> green because the field defaults), plus a backend-agnostic resource-side guard (`fencing.py`: `FencingGuard` /
+> `reject_stale_fence`, raising the new `StaleFenceToken`) that a protected resource uses to reject a stale stalled-holder
+> write. Tests live in `tests/test_state_substrate_postgres.py`.
+>
+> **What this does NOT yet earn — read honestly.** The live conformance + close/reopen-durability + fence-mint tests
+> **skip** unless `NC_TEST_POSTGRES_URL` is set, and **they have not been run against a real Postgres** by the implementer.
+> So "`PostgresStateStore` passes the contract" is currently a *declared*, not *verified*, claim. Only the resource-side
+> fencing logic has real, DB-free coverage (the `FencingGuard` / `reject_stale_fence` unit tests, which do run). Crucially,
+> **"durable across hosts" remains a per-config claim** (§3.4, §6): it is earned only by a live, replicated, synchronously
+> committing cluster (`synchronous_commit = on` + `synchronous_standby_names` + a synchronous replica + failover routing) —
+> *none of which has been stood up or exercised here.* A single instance, once the tests pass against it, earns "survives
+> restart"; it does **not** earn "survives host loss" without that replication config. The §6 table below is unchanged and
+> remains the authority on which claim each configuration earns. Redis (§4) is **deferred**, consistent with this doc's
+> own §7 leaning — *"Postgres-for-both as the honest default"*; no `RedisStateStore` was implemented, so nothing here
+> claims a Redis backend was built or tested.
 
 ---
 

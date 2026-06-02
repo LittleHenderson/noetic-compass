@@ -147,6 +147,32 @@ class UnknownLease(StateStoreError):
     """Tried to renew or release a lease token the store has never issued (or already released)."""
 
 
+class StaleFenceToken(StateStoreError):
+    """A protected resource rejected a write carrying a stale (non-monotonic) fence.
+
+    This is the *resource-side* half of the fencing-token defence (docs 11 §5.2).
+    A lease's ``token`` proves ownership but not recency; the monotonic ``fence``
+    minted at acquire time proves recency. A resource guards itself by remembering
+    the highest fence it has acted on and rejecting any operation whose fence is
+    less-than-or-equal to that high-water mark -- which is exactly how a stalled
+    holder that wakes *after* its lease lapsed is stopped at the point of effect
+    (the only place it can be stopped, since the lease layer has already, and
+    correctly, handed the lease to a newer holder).
+
+    Per Kleppmann ("How to do distributed locking"): fencing is "a property of the
+    resource, not of the lock." This exception is the resource saying "your fence
+    is older than one I've already honoured; I will not let you act."
+    """
+
+    def __init__(self, *, highest_seen: int, incoming: int) -> None:
+        self.highest_seen = highest_seen
+        self.incoming = incoming
+        super().__init__(
+            f"stale fence token: incoming fence {incoming} is not strictly greater "
+            f"than the highest already honoured ({highest_seen}); refusing the write"
+        )
+
+
 # --- records ---------------------------------------------------------------
 
 
@@ -238,6 +264,21 @@ class Lease:
     token: str
     acquired_at: datetime
     expires_at: datetime
+    # --- fencing token (multi-host hazard fix; see docs 11 §5.2) ------------
+    # ``token`` proves *ownership* but is a random uuid -- it carries no notion of
+    # order, so a stalled holder that wakes after its lease lapsed cannot be told
+    # apart from the live holder by token alone. ``fence`` is a *monotonically
+    # increasing* integer minted at acquire time: every successful acquire of a
+    # given resource gets a strictly larger fence than every prior acquire of that
+    # resource. A protected resource (a WORM writer, a DB row) rejects any write
+    # carrying a fence <= the highest it has already seen (see ``fencing.py`` and
+    # the ``StaleFenceToken`` exception). It is an ADDITIVE field with a default of
+    # 0, so every existing ``Lease(...)`` construction stays valid and the
+    # in-memory / SQLite reference backends -- which do not fence -- simply leave it
+    # at 0. Only a multi-host backend (Postgres) mints a real fence. This is an
+    # interface-compatible strengthening, NOT a Protocol method change (docs 11
+    # §5.2: "additive strengthening, not a Protocol change").
+    fence: int = 0
 
     def is_expired(self, *, now: Optional[datetime] = None) -> bool:
         """True once wall-clock has passed ``expires_at``.

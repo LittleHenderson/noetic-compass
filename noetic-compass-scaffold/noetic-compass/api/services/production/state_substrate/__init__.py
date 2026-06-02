@@ -47,6 +47,7 @@ one risky sweep.
 from __future__ import annotations
 
 from .conformance import run_state_store_contract
+from .fencing import FencingGuard, reject_stale_fence
 from .interface import (
     Kind,
     Lease,
@@ -54,6 +55,7 @@ from .interface import (
     LeaseHeld,
     LedgerRecord,
     RecordId,
+    StaleFenceToken,
     StateStore,
     StateStoreError,
     TenantId,
@@ -67,6 +69,14 @@ from .interface import (
 )
 from .memory_store import InMemoryStateStore
 from .migration import INTERIM_TENANT, Divergence, LedgerMirror
+
+# NOTE: ``PostgresStateStore`` (in ``postgres_store``) is intentionally NOT
+# re-exported here, mirroring ``SqliteStateStore``: a durable backend is imported
+# from its own module by the deployment that has the driver, so importing this
+# package never requires psycopg to be installed. The fencing primitives
+# (``FencingGuard`` / ``reject_stale_fence`` / ``StaleFenceToken``) ARE exported
+# because they are backend-agnostic, pure-Python, and used at the protected
+# resource regardless of which store minted the fence (docs 11 §5.2).
 
 __all__ = [
     # interface
@@ -83,6 +93,7 @@ __all__ = [
     "LeaseHeld",
     "LeaseExpired",
     "UnknownLease",
+    "StaleFenceToken",
     "require_tenant",
     "utc_now",
     "new_record_id",
@@ -90,6 +101,9 @@ __all__ = [
     "InMemoryStateStore",
     # contract
     "run_state_store_contract",
+    # fencing (multi-host resource-side guard; docs 11 §5.2)
+    "FencingGuard",
+    "reject_stale_fence",
     # strangler-fig migration seam (docs 10: dual-write / shadow-read)
     "LedgerMirror",
     "Divergence",
