@@ -39,6 +39,7 @@ from api.routes import (
     notation,
     reproducibility,
     scenarios,
+    state_ledger_status,
     validation,
     atlas_live,
     visual_grounding,
@@ -151,3 +152,4 @@ app.include_router(mode7.router)
 app.include_router(evidence.router)
 app.include_router(atlas_live.router)
 app.include_router(visual_grounding.router)
+app.include_router(state_ledger_status.router)

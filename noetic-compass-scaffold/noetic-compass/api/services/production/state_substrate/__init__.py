@@ -69,6 +69,12 @@ from .interface import (
 )
 from .memory_store import InMemoryStateStore
 from .migration import INTERIM_TENANT, Divergence, LedgerMirror
+from .observability import (
+    POSTURE_DARK,
+    POSTURE_ENABLED_READ_AUTHORITY,
+    POSTURE_ENABLED_SHADOW,
+    ledger_status,
+)
 
 # NOTE: ``PostgresStateStore`` (in ``postgres_store``) is intentionally NOT
 # re-exported here, mirroring ``SqliteStateStore``: a durable backend is imported
@@ -108,4 +114,9 @@ __all__ = [
     "LedgerMirror",
     "Divergence",
     "INTERIM_TENANT",
+    # operator observability surface (pure status over the bootstrap handle)
+    "ledger_status",
+    "POSTURE_DARK",
+    "POSTURE_ENABLED_SHADOW",
+    "POSTURE_ENABLED_READ_AUTHORITY",
 ]

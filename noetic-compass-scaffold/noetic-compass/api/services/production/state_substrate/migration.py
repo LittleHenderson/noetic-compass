@@ -144,6 +144,17 @@ class LedgerMirror:
         self._max_retries = max_write_retries
         self._divergences: list[Divergence] = []
         self._lock = threading.Lock()
+        # Bounded, queryable observability counters (operator surface; see tally()).
+        # These are pure accounting -- they change nothing about what serves reads --
+        # and they only ever do work when a mirror is actually installed and called
+        # (shadow_compare / _record). With no mirror installed (production's dark
+        # default) none of these increment, so the dark path stays byte-for-byte the
+        # same. Counts are cheap ints; the only retained *detail* is the LAST
+        # divergence (kind + record_id + reason, never a payload), so memory is O(1)
+        # regardless of traffic. Guarded by the same lock as the divergence log.
+        self._reads_compared = 0
+        self._divergences_found = 0
+        self._last_divergence: Optional[Divergence] = None
         # Phase 3 read-authority switch. Dark by default: while False, the live
         # services serve every read from their dicts and merely *shadow-compare*
         # the ledger (Phase 2). Flipping it to True makes the ledger the read
@@ -231,6 +242,12 @@ class LedgerMirror:
         shadow read can never break the request that triggered it.
         """
 
+        # Count every compare attempt -- agreements included. ``reads_compared`` is the
+        # denominator the operator watches: "N shadow-compares ran, M diverged". Without
+        # counting the clean reads too, a "0 divergences" number is unreadable (0 of how
+        # many?). Done once here, before either outcome branch, so each call counts once.
+        with self._lock:
+            self._reads_compared += 1
         try:
             existing = self._store.get(INTERIM_TENANT, kind, record_id)
         except StateStoreError as exc:
@@ -346,6 +363,45 @@ class LedgerMirror:
         with self._lock:
             return tuple(self._divergences)
 
+    def tally(self) -> dict[str, object]:
+        """A bounded, plain-dict snapshot of shadow-compare accounting for operators.
+
+        This is the cheap, always-safe counterpart to :meth:`divergences` (which copies
+        the whole log): it answers "how many shadow-compares have run, and how many
+        diverged" in O(1) without materialising the log, which is exactly the number the
+        Phase-2 zero-divergence watch needs on live traffic. Fields:
+
+        * ``reads_compared`` -- total :meth:`shadow_compare` attempts, agreements included
+          (the denominator; a divergence count is meaningless without it).
+        * ``divergences_found`` -- total divergences recorded from every source
+          (shadow-read mismatches AND :meth:`mirror_put` write failures).
+        * ``last_divergence`` -- a small detail dict for the most recent divergence
+          (``kind`` / ``record_id`` / ``reason`` / ``at`` ISO-8601), or ``None`` if there
+          has been none. Deliberately **never** the payloads: enough to point an operator
+          at *what* disagreed, not a snapshot of the data. One entry, not a list, so this
+          stays O(1) however much traffic flows.
+
+        Taken under the divergence lock so the three fields are a consistent snapshot.
+        """
+
+        with self._lock:
+            last = self._last_divergence
+            last_detail: Optional[dict[str, object]] = (
+                None
+                if last is None
+                else {
+                    "kind": last.kind,
+                    "record_id": last.record_id,
+                    "reason": last.reason,
+                    "at": last.at.isoformat(),
+                }
+            )
+            return {
+                "reads_compared": self._reads_compared,
+                "divergences_found": self._divergences_found,
+                "last_divergence": last_detail,
+            }
+
     def assert_no_divergence(self) -> None:
         """The Phase-2 cutover gate: raise if the ledger ever disagreed with a dict.
 
@@ -362,10 +418,20 @@ class LedgerMirror:
             )
 
     def clear_divergences(self) -> None:
-        """Forget recorded divergences (e.g. between phases of a multi-stage test)."""
+        """Forget recorded divergences (e.g. between phases of a multi-stage test).
+
+        Also resets the divergence half of the observability tally -- the count and the
+        ``last_divergence`` detail -- so a cleared log and its tally never disagree (a
+        ``last_divergence`` still pointing at a forgotten entry would be a lie). The
+        ``reads_compared`` odometer is deliberately *not* reset: it is cumulative
+        throughput ("how much shadow traffic has this mirror seen"), independent of
+        whether the disagreements found so far have been acknowledged and cleared.
+        """
 
         with self._lock:
             self._divergences.clear()
+            self._divergences_found = 0
+            self._last_divergence = None
 
     # --- internals ----------------------------------------------------------
 
@@ -373,4 +439,12 @@ class LedgerMirror:
         divergence = Divergence(kind=kind, record_id=record_id, reason=reason, detail=detail)
         with self._lock:
             self._divergences.append(divergence)
+            # Mirror the append into the bounded observability counters, under the same
+            # lock so the tally is always self-consistent. Every divergence source flows
+            # through _record (shadow_compare AND the mirror_put write-failure paths), so
+            # this is the single correct accounting point. ``_last_divergence`` keeps only
+            # this one object (kind/record_id/reason -- the Divergence itself, no extra
+            # copy), never a growing list, so the surface stays O(1) under load.
+            self._divergences_found += 1
+            self._last_divergence = divergence
         return divergence
