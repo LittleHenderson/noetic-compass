@@ -20,6 +20,10 @@ The first pipeline-status endpoint was correct on the happy path, but review fou
 - Compile: CRM models, store, service, exports, and route.
 - Targeted CRM: `tests/test_crm_lead_capture.py` **55 passed**.
 - Focused CRM/config/startup sweep: **71 passed**.
+- Hosted smoke after deploy: authed `PATCH /api/crm/leads/lead-121dc923f575416d/pipeline-status`
+  with `{"pipeline_status":" Qualified "}` returned `200`, normalized to
+  `pipeline_status: "qualified"`, bumped the lead to `version: 4`, and preserved
+  `sync_status: "sync_pending"` / `external_id: null`.
 
 ## CRM pipeline status endpoint, **BUILT as an authed sales workflow slice** - captured leads can now move through `new` / `contacted` / `qualified` / `won` / `lost` without changing their external-sync claim (Jun 3, 2026)
 

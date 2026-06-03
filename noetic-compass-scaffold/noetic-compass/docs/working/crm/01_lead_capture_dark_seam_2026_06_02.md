@@ -151,6 +151,12 @@ Hosted pipeline-status smoke after `6aeb19f`: authed
 to `pipeline_status: "contacted"`, bumped it to `version: 3`, and preserved
 `sync_status: "sync_pending"` / `external_id: null`.
 
+Hosted pipeline-status hardening smoke after `ad83151`: authed
+`PATCH /api/crm/leads/lead-121dc923f575416d/pipeline-status` with
+`{"pipeline_status":" Qualified "}` returned `200`, normalized the status to
+`pipeline_status: "qualified"`, bumped it to `version: 4`, and preserved
+`sync_status: "sync_pending"` / `external_id: null`.
+
 ## Public endpoint anti-abuse
 
 `POST /api/crm/public/leads` is intentionally anonymous, so it cannot use the API-key limiter. The
