@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Hosted paid-disk durability, **VERIFIED on Render** — attached `noetic-data` at `/var/data`, corrected live env vars to point the state ledger and CRM store at that disk, forced a Render deploy/restart, and proved both the pre-restart CRM lead and the pre-restart state-ledger audit/fleet state came back after the new process started (Jun 3, 2026)
+
+This closes the single-host durability gate that the free-tier `/tmp` posture could not earn. The key correction was not just paying for the workspace: Render reported the service itself was still `plan: free` and had no disk. After the service moved to a paid instance (`plan: standard`, one instance), disk `dsk-d8fomrd8nd3s738rnee0` (`noetic-data`, 1 GB, `/var/data`) was attached, and the live env vars were corrected to `NC_STATE_LEDGER_PATH=/var/data/state_ledger.db` and `NC_CRM_LEAD_STORE_PATH=/var/data/leads.jsonl`.
+
+**1) The failed pre-check was useful.** Before the env correction, the hosted app was healthy but still wrote to `/tmp`; a restart lost lead `lead-b0aaa211f4b54b45`, and `audit_count` / `fleet_counts` returned to zero. That failure prevented a false durability claim.
+
+**2) The paid-disk baseline.** After the disk and `/var/data` env vars were live, the public CRM endpoint captured lead `lead-3c5d8d3268754c1a` (`sync_status: sync_pending`), and the hosted state-ledger verifier created audit `cas-dist-3aa09bc1ad35fcee` with `reads_served 0->92`, `divergences_found: 0`, two workers, two receipts, and fleet merge `COMPLETE` / `ready_for_verifier`.
+
+**3) Restart-survival proof.** A Render API deploy (`dep-d8foqnhkh4rs73cque1g`) went live at `2026-06-03T02:12:31.995960Z`. After that new process started, the CRM lead was still readable (`lead_count: 1`), and the state ledger reported `audit_count: 1`, `fleet_counts: {workers: 2, fleet_runs: 1, fragment_refs: 2}`. A fresh hosted verifier then passed again with audit `cas-dist-2521a6be75c79773`, `reads_served 0->110`, and `divergences_found: 0`.
+
+**4) Honesty boundary.** This earns hosted **single-instance restart durability** for the local state ledger and CRM lead capture. It does not earn host-loss durability, multi-instance durability, external CRM sync, or Phase 4 dictionary deletion. The service currently reports `plan: standard` (not `starter`); that is a cost/instance-size posture, not a correctness problem.
+
+### Pieces (this entry)
+- `docs/working/production_readiness/18_hosted_paid_disk_durability_evidence_2026_06_03.md` *(new)* — evidence record with Render service/disk/env metadata, the failed `/tmp` pre-check, corrected `/var/data` baseline, restart deploy ID, and post-restart CRM/ledger proof.
+- `CHANGELOG.md` *(edit)* — this entry.
+
+### Tests / verification (this entry)
+- Hosted CRM proof: `lead-3c5d8d3268754c1a` created before restart and readable after restart; `lead_count: 1`.
+- Hosted state-ledger proof: pre-restart audit/fleet state rehydrated after restart (`audit_count: 1`, `workers: 2`, `fleet_runs: 1`, `fragment_refs: 2`).
+- Hosted verifier after restart: **PASS** on `https://noetic-compass-api.onrender.com`, `reads_served 0->110`, `divergences_found 0`, fleet merge `COMPLETE` / `ready_for_verifier`.
+
 ## State-ledger Postgres backend, **WIRED as a dark seam, not activated** — the enable now selects its durable store: `PostgresStateStore` when `NC_DATABASE_URL` is set, else the single-host SQLite file (the unchanged default). Production posture is **byte-for-byte unchanged** — nothing routes at Postgres until an operator sets the DSN, exactly as the two ledger flags gate the rest of the rollout. This is the *code-side* "if it blows up" insurance: the multi-host rung is now one env var away, but it is **not** turned on, and on Render free-tier storage is still ephemeral (Jun 2, 2026)
 
 This closes the last hard-coded line in the state-ledger bootstrap. `PostgresStateStore` was already built and **verified against real PostgreSQL 16.4** (`test_state_substrate_postgres.py`), `api/config.py` already carried `database_url` (env `NC_DATABASE_URL`), and `requirements.txt` already pinned `psycopg[binary]` (lazily imported). The only gap was that `install_state_ledger` constructed `SqliteStateStore` directly, so a configured DSN could never take effect. This entry adds the selector and routes the enable through it — the wire-up the prior entries left at "90% done."
