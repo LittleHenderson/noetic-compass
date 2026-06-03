@@ -144,7 +144,9 @@ class AnchorEvidenceResponse(BaseModel):
     console_state: str = Field(
         description=(
             "What the Audit Console shows for this packet after this anchor: "
-            "'accept_scoped_validation' iff worm_retained, else 'flag_for_human_review'."
+            "'accept_scoped_validation' only when the packet's own verdict is ACCEPT/"
+            "SUPPRESS and the packet is WORM-retained; WORM-retained FLAG packets "
+            "stay 'flag_for_human_review'."
         )
     )
     anchor_status: str | None = None
@@ -1219,16 +1221,21 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
 # ---------------------------------------------------------------------------
 
 
-@router.get("/{trace_id}", response_model=EvidencePacket)
-async def get_evidence_packet(trace_id: str) -> EvidencePacket:
+@router.get("/{trace_id}")
+async def get_evidence_packet(trace_id: str) -> dict[str, Any]:
     """Return the full Evidence Packet for ``trace_id``.
 
-    The dev fixture id ``dev_example_001`` is always available. Any other
-    id requires a per-trace JSON artifact on disk in one of the
-    conventional locations (see ``_candidate_trace_paths``).
+    The Stage 9 40E packet registry is checked first so the raw scoped-validation
+    packets served by the anchor endpoint are also inspectable before the
+    irreversible Object-Lock write. Other traces fall back to the older
+    ``EvidencePacket`` drawer schema.
     """
     try:
-        return build_packet_for_trace(trace_id)
+        return load_stage9_40e_packet_payload_for_trace(trace_id)
+    except FileNotFoundError:
+        pass
+    try:
+        return build_packet_for_trace(trace_id).model_dump()
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="trace_id not found")
 

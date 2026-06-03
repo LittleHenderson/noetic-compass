@@ -8,11 +8,15 @@ The Pythia packet and route fix were correct in source, but the Docker runtime i
 
 **2) The irreversible anchor remains gated.** The real Pythia S3 Object-Lock write still waits until hosted `GET /evidence/pythia-160m-stage9-40e-readout-20260531` returns the deployed `FLAG_FOR_HUMAN_REVIEW` packet.
 
+**3) The read path now uses the same registry as the anchor path.** `GET /evidence/{trace_id}` checks the Stage 9 40E packet registry first, so a packet that can be anchored can also be inspected read-only before the irreversible write.
+
 ### Pieces (this entry)
 - `Dockerfile.api` *(edit)* - include registry-backed Stage 9 static packet artifacts in the runtime image.
+- `api/routes/evidence.py` *(edit)* - expose raw Stage 9 scoped-validation packets through the read-only evidence route and correct the `console_state` field description.
+- `tests/test_evidence_routes.py` *(edit)* - pin the Pythia read-only preflight as `FLAG_FOR_HUMAN_REVIEW`.
 
 ### Tests / verification (this entry)
-- Evidence routes: `tests/test_evidence_routes.py` **31 passed, 2 skipped**.
+- Evidence routes: `tests/test_evidence_routes.py` **32 passed, 2 skipped**.
 
 ## Hosted Object-Lock anchor smoke, **VERIFIED on Render** - a throwaway distributed Evidence Packet was anchored through the live S3 Object-Lock path, re-read by `/verify`, and confirmed under `GOVERNANCE` retention (Jun 3, 2026)
 

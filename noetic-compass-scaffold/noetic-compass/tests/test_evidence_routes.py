@@ -75,6 +75,26 @@ def test_evidence_get_dev_fixture_200(client, auth_headers):
     assert body["generated_at"].endswith("Z"), "generated_at must be ISO-8601 UTC"
 
 
+def test_evidence_get_stage9_pythia_packet_preflight_is_flag(client, auth_headers):
+    """The irreversible Object-Lock anchor is gated by a read-only preflight: the
+    hosted packet must be inspectable and must already say FLAG before anchoring.
+    Stage 9 packets use the raw scoped-validation schema, not the older drawer
+    ``EvidencePacket`` schema.
+    """
+    resp = client.get(f"/evidence/{_STAGE9_40E_PYTHIA_TRACE_ID}", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["schema_version"] == "cas_harness_stage9_40e_evidence_packet.v1"
+    assert body["trace_id"] == _STAGE9_40E_PYTHIA_TRACE_ID
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["verification"]["proof_chip_gate"] == "blocked"
+    assert body["verification"]["explicit_verifier_decision"]["verdict"] == (
+        "FLAG_FOR_HUMAN_REVIEW"
+    )
+    assert body["model_proof"]["parameter_scale"] == "160M"
+
+
 def test_evidence_get_dev_fixture_has_all_seven_sections(client, auth_headers):
     resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200, resp.text
