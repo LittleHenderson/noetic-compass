@@ -75,6 +75,21 @@ services:
       # database is the eventual backend behind the unchanged LeadStore seam.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      # External CRM sync. Default app behavior is capture-only (`NC_CRM_PROVIDER=null`).
+      # To actually land leads in Airtable, set these dashboard-managed values together:
+      # NC_CRM_PROVIDER=airtable, NC_AIRTABLE_TOKEN, NC_AIRTABLE_BASE_ID, and optionally
+      # NC_AIRTABLE_TABLE_NAME (defaults to "Leads"). A half-configured provider fails
+      # startup loudly rather than pretending sync works.
+      - key: NC_CRM_PROVIDER
+        sync: false
+      - key: NC_AIRTABLE_TOKEN
+        sync: false
+      - key: NC_AIRTABLE_BASE_ID
+        sync: false
+      - key: NC_AIRTABLE_TABLE_NAME
+        sync: false
+      - key: NC_AIRTABLE_API_BASE_URL
+        sync: false
       # NC_CORS_ORIGINS — explicit allowlist. The Atlas Viewer alpha entries
       # (atlas-viewer-app.onrender.com + the future atlas.noeticcompass.com
       # custom domain) are listed alongside the original Compass dashboard

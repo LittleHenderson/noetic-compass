@@ -50,6 +50,17 @@ services:
       # render.yaml for the full note.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      # External CRM sync; dashboard-managed. Default app behavior is capture-only.
+      - key: NC_CRM_PROVIDER
+        sync: false
+      - key: NC_AIRTABLE_TOKEN
+        sync: false
+      - key: NC_AIRTABLE_BASE_ID
+        sync: false
+      - key: NC_AIRTABLE_TABLE_NAME
+        sync: false
+      - key: NC_AIRTABLE_API_BASE_URL
+        sync: false
       - key: NC_CORS_ORIGINS
         value: https://noeticcompass.com,https://www.noeticcompass.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
       - key: NC_CORS_ORIGIN_REGEX

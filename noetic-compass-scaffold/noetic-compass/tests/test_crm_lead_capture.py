@@ -14,12 +14,14 @@ HTTP round-trip.
 
 from __future__ import annotations
 
+import json
 from uuid import uuid4
 
 import pytest
 
 from api.middleware.auth import create_token
 from api.services.crm import (
+    AirtableCRMProvider,
     CRMConfigError,
     CRMService,
     CRMStateError,
@@ -250,15 +252,115 @@ def test_null_provider_never_reports_a_landing() -> None:
 
 
 class _Settings:
-    def __init__(self, provider: str) -> None:
+    def __init__(
+        self,
+        provider: str,
+        *,
+        airtable_token: str = "",
+        airtable_base_id: str = "",
+        airtable_table_name: str = "Leads",
+        airtable_api_base_url: str = "https://api.airtable.com/v0",
+    ) -> None:
         self.crm_provider = provider
+        self.crm_airtable_token = airtable_token
+        self.crm_airtable_base_id = airtable_base_id
+        self.crm_airtable_table_name = airtable_table_name
+        self.crm_airtable_api_base_url = airtable_api_base_url
 
 
 def test_build_provider_default_is_null() -> None:
     assert isinstance(build_crm_provider(_Settings("null")), NullCRMProvider)
 
 
-@pytest.mark.parametrize("provider", ["airtable", "hubspot"])
+def test_build_provider_fails_loud_for_airtable_without_credentials() -> None:
+    """Airtable is implemented, but half-configured sync must fail at startup."""
+    with pytest.raises(CRMConfigError, match="NC_AIRTABLE_TOKEN"):
+        build_crm_provider(_Settings("airtable"))
+
+
+def test_build_provider_airtable_with_credentials() -> None:
+    provider = build_crm_provider(
+        _Settings(
+            "airtable",
+            airtable_token="pat-secret",
+            airtable_base_id="app123",
+            airtable_table_name="Leads",
+        )
+    )
+    assert isinstance(provider, AirtableCRMProvider)
+
+
+def test_airtable_provider_posts_record_and_reports_external_id() -> None:
+    """A lead earns synced only when Airtable returns a real record id."""
+    captured_requests = []
+
+    class _Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def read(self):
+            return b'{"records":[{"id":"recAirtable123","fields":{}}]}'
+
+    def fake_open(request, timeout):
+        captured_requests.append((request, timeout))
+        return _Response()
+
+    provider = AirtableCRMProvider(
+        token="pat-secret",
+        base_id="app123",
+        table_name="Leads Table",
+        http_open=fake_open,
+    )
+    lead = Lead.from_submission(
+        _submission(metadata={"campaign": "alpha"}).validated(),
+        source="public_web_form",
+        trace_id="req-airtable",
+    )
+
+    result = provider.sync_lead(lead)
+
+    assert result.synced is True
+    assert result.is_real is True
+    assert result.external_id == "recAirtable123"
+    request, timeout = captured_requests[0]
+    assert timeout == 15
+    assert request.full_url.endswith("/app123/Leads%20Table")
+    assert request.get_method() == "POST"
+    assert request.get_header("Authorization") == "Bearer pat-secret"
+    payload = json.loads(request.data.decode("utf-8"))
+    fields = payload["records"][0]["fields"]
+    assert fields["Email"] == "lead@example.com"
+    assert fields["Lead ID"] == lead.lead_id
+    assert fields["Trace ID"] == "req-airtable"
+    assert fields["Metadata JSON"] == '{"campaign":"alpha"}'
+
+
+def test_airtable_provider_requires_record_id() -> None:
+    class _Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+        def read(self):
+            return b'{"records":[{"fields":{}}]}'
+
+    provider = AirtableCRMProvider(
+        token="pat-secret",
+        base_id="app123",
+        table_name="Leads",
+        http_open=lambda request, timeout: _Response(),
+    )
+    lead = Lead.from_submission(_submission().validated(), source="public_web_form", trace_id=None)
+    with pytest.raises(RuntimeError, match="record id"):
+        provider.sync_lead(lead)
+
+
+@pytest.mark.parametrize("provider", ["hubspot"])
 def test_build_provider_fails_loud_for_unimplemented(provider: str) -> None:
     """Asking for a real CRM we have not built must raise, not silently no-op."""
     with pytest.raises(CRMConfigError, match="not yet implemented"):

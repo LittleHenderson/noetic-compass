@@ -36,6 +36,7 @@ from api.services.crm.store import (
     LeadStore,
 )
 from api.services.crm.sync import (
+    AirtableCRMProvider,
     CRMConfigError,
     CRMSyncProvider,
     NullCRMProvider,
@@ -44,6 +45,7 @@ from api.services.crm.sync import (
 
 __all__ = [
     "CRM_SCHEMA_VERSION",
+    "AirtableCRMProvider",
     "CRMConfigError",
     "CRMService",
     "CRMStateError",

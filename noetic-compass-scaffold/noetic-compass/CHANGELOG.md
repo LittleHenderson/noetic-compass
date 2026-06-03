@@ -1,5 +1,27 @@
 # Noetic Compass — Progress Log
 
+## CRM Airtable provider, **BUILT but not hosted-active** - the CRM seam can now sync a captured lead to Airtable and mark it `synced` only when Airtable returns a real record id; hosted production remains capture-only until `NC_CRM_PROVIDER=airtable` plus Airtable token/base/table env vars are configured and a hosted lead proves an external landing (Jun 3, 2026)
+
+This turns the CRM from "local capture only" into "one real provider exists behind the seam," while preserving the same honesty rule that launched the CRM: `captured` is not `synced`. The default remains `NC_CRM_PROVIDER=null`, so the deployed app keeps capturing leads durably under `/var/data/leads.jsonl` and reports `sync_pending` until an operator deliberately enables Airtable.
+
+**1) Airtable is real, but not automatic.** `AirtableCRMProvider` POSTs one lead record to Airtable's REST create-record endpoint with bearer-token auth. The lead earns `sync_status: "synced"` only when Airtable returns a non-empty record id, which becomes the lead's `external_id`. HTTP errors, network errors, malformed JSON, or a response with no record id are sync failures, not lost leads.
+
+**2) Half-configured sync fails loud.** `NC_CRM_PROVIDER=airtable` now requires `NC_AIRTABLE_TOKEN`, `NC_AIRTABLE_BASE_ID`, and `NC_AIRTABLE_TABLE_NAME`. Missing values raise `CRMConfigError` at startup. That is intentional: a half-configured Airtable integration would look like external sync while only capturing locally.
+
+**3) The default production posture is unchanged.** `null` remains the provider default. `hubspot` is still a declared but unimplemented seam that fails loud. Render blueprints now declare the Airtable env vars as dashboard-managed secrets/settings, but they do not turn Airtable on.
+
+### Pieces (this entry)
+- `api/services/crm/sync.py` *(edit)* - adds `AirtableCRMProvider`, provider selection for `airtable`, and startup validation for token/base/table settings.
+- `api/config.py` *(edit)* - adds Airtable settings with `NC_AIRTABLE_*` aliases.
+- `api/services/crm/__init__.py` *(edit)* - exports `AirtableCRMProvider`.
+- `tests/test_crm_lead_capture.py` *(edit)* - adds Airtable construction, request-shape, record-id, and fail-loud tests.
+- `render.yaml` / `infra/render.yaml` *(edit)* - declare dashboard-managed Airtable env vars without enabling them.
+- `docs/working/crm/01_lead_capture_dark_seam_2026_06_02.md` *(edit)* - updates the CRM setup note from capture-only to Airtable-provider-built, hosted-sync-not-yet-enabled.
+
+### Tests / verification (this entry)
+- Targeted CRM: `tests/test_crm_lead_capture.py` **40 passed**.
+- Focused regression: CRM + config + state-ledger operational enable tests **56 passed**.
+
 ## Hosted paid-disk durability, **VERIFIED on Render** — attached `noetic-data` at `/var/data`, corrected live env vars to point the state ledger and CRM store at that disk, forced a Render deploy/restart, and proved both the pre-restart CRM lead and the pre-restart state-ledger audit/fleet state came back after the new process started (Jun 3, 2026)
 
 This closes the single-host durability gate that the free-tier `/tmp` posture could not earn. The key correction was not just paying for the workspace: Render reported the service itself was still `plan: free` and had no disk. After the service moved to a paid instance (`plan: standard`, one instance), disk `dsk-d8fomrd8nd3s738rnee0` (`noetic-data`, 1 GB, `/var/data`) was attached, and the live env vars were corrected to `NC_STATE_LEDGER_PATH=/var/data/state_ledger.db` and `NC_CRM_LEAD_STORE_PATH=/var/data/leads.jsonl`.
