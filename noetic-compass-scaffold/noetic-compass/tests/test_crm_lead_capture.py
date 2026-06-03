@@ -30,6 +30,7 @@ from api.services.crm import (
     InMemoryLeadStore,
     JsonlFileLeadStore,
     Lead,
+    PublicLeadAbuseGuard,
     LeadSubmission,
     LeadValidationError,
     NullCRMProvider,
@@ -39,6 +40,24 @@ from api.services.crm import (
     normalize_email,
 )
 from api.services.crm.models import _now_iso
+
+
+_MISSING = object()
+
+
+@pytest.fixture(autouse=True)
+def _isolate_public_lead_abuse_guard(client):
+    """Keep route tests deterministic despite the process-local public lead limiter."""
+    old_guard = getattr(client.app.state, "crm_public_abuse_guard", _MISSING)
+    client.app.state.crm_public_abuse_guard = PublicLeadAbuseGuard(
+        max_submissions=1000,
+        window_seconds=3600,
+    )
+    yield
+    if old_guard is _MISSING:
+        delattr(client.app.state, "crm_public_abuse_guard")
+    else:
+        client.app.state.crm_public_abuse_guard = old_guard
 
 
 # ---------------------------------------------------------------------------
@@ -449,6 +468,45 @@ def test_public_capture_needs_no_auth_and_does_not_overclaim(client) -> None:
 def test_public_capture_rejects_bad_email(client) -> None:
     resp = client.post("/api/crm/public/leads", json={"email": "not-an-email"})
     assert resp.status_code == 422
+
+
+def test_public_capture_honeypot_rejects_before_capture(client) -> None:
+    """Bots filling the hidden website field are rejected before any lead is persisted."""
+    email = f"honeypot-{uuid4().hex}@example.com"
+    resp = client.post(
+        "/api/crm/public/leads",
+        json={
+            "email": email,
+            "name": "Bot Lead",
+            "website": "https://spam.example",
+        },
+    )
+    assert resp.status_code == 400
+    listing = client.get("/api/crm/leads", headers=_auth_headers())
+    assert email not in {lead["email"] for lead in listing.json()["leads"]}
+
+
+def test_public_capture_rate_limit_is_separate_from_api_key_limiter(client) -> None:
+    """The public endpoint is anonymous, so it has its own per-client limiter."""
+    client.app.state.crm_public_abuse_guard = PublicLeadAbuseGuard(
+        max_submissions=1,
+        window_seconds=60,
+        now=lambda: 1000.0,
+    )
+    first = client.post(
+        "/api/crm/public/leads",
+        json={"email": f"first-{uuid4().hex}@example.com"},
+        headers={"X-Forwarded-For": "203.0.113.10"},
+    )
+    assert first.status_code == 200, first.text
+
+    second = client.post(
+        "/api/crm/public/leads",
+        json={"email": f"second-{uuid4().hex}@example.com"},
+        headers={"X-Forwarded-For": "203.0.113.10"},
+    )
+    assert second.status_code == 429
+    assert second.headers["Retry-After"] == "60"
 
 
 def test_public_capture_records_trace_id(client) -> None:

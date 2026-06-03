@@ -49,6 +49,19 @@ class Settings(BaseSettings):
         default="https://api.airtable.com/v0",
         validation_alias=AliasChoices("NC_AIRTABLE_API_BASE_URL", "AIRTABLE_API_BASE_URL"),
     )
+    crm_public_lead_rate_limit_max: int = Field(
+        default=5,
+        ge=0,
+        validation_alias=AliasChoices("NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX", "CRM_PUBLIC_LEAD_RATE_LIMIT_MAX"),
+    )
+    crm_public_lead_rate_limit_window_seconds: int = Field(
+        default=3600,
+        ge=0,
+        validation_alias=AliasChoices(
+            "NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS",
+            "CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS",
+        ),
+    )
 
     # JWT Auth
     jwt_secret: str = "change-me-in-production"

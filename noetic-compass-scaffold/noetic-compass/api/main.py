@@ -96,12 +96,20 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     # default (in-memory store + null provider) unless NC_CRM_LEAD_STORE_PATH / NC_CRM_PROVIDER are
     # set. build_crm_service fails loud for a provider we have not implemented, so a misconfigured
     # CRM surfaces at startup rather than silently syncing nothing.
-    from api.services.crm import build_crm_service
+    from api.services.crm import build_crm_service, build_public_lead_abuse_guard
 
     app.state.crm = build_crm_service(settings)
+    app.state.crm_public_abuse_guard = build_public_lead_abuse_guard(settings)
     _crm_store = type(app.state.crm.store).__name__
     _crm_provider = getattr(app.state.crm.provider, "provider_name", "unknown")
-    logger.info("crm lead capture: store=%s provider=%s", _crm_store, _crm_provider)
+    _crm_abuse = app.state.crm_public_abuse_guard
+    logger.info(
+        "crm lead capture: store=%s provider=%s public_limit=%s/%ss",
+        _crm_store,
+        _crm_provider,
+        _crm_abuse.max_submissions,
+        _crm_abuse.window_seconds,
+    )
 
     yield
 

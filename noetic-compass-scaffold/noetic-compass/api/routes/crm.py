@@ -23,8 +23,10 @@ from typing import Mapping
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
+from api.services.crm.abuse import PublicLeadAbuseGuard, build_public_lead_abuse_guard
 from api.services.crm.models import LeadSubmission, LeadValidationError
 from api.services.crm.service import CRMService, build_dark_crm_service
+from api.config import settings
 
 router = APIRouter(prefix="/api/crm", tags=["crm"])
 
@@ -32,6 +34,7 @@ router = APIRouter(prefix="/api/crm", tags=["crm"])
 # test client). Built once on first use; in-memory and null-provider, so it captures but never
 # claims a sync it cannot make.
 _FALLBACK_SERVICE: CRMService | None = None
+_FALLBACK_ABUSE_GUARD: PublicLeadAbuseGuard | None = None
 
 
 def _service(request: Request) -> CRMService:
@@ -43,6 +46,27 @@ def _service(request: Request) -> CRMService:
     if _FALLBACK_SERVICE is None:
         _FALLBACK_SERVICE = build_dark_crm_service()
     return _FALLBACK_SERVICE
+
+
+def _abuse_guard(request: Request) -> PublicLeadAbuseGuard:
+    """Return the installed public-lead abuse guard, or a configured in-process fallback."""
+    guard = getattr(request.app.state, "crm_public_abuse_guard", None)
+    if guard is not None:
+        return guard
+    global _FALLBACK_ABUSE_GUARD
+    if _FALLBACK_ABUSE_GUARD is None:
+        _FALLBACK_ABUSE_GUARD = build_public_lead_abuse_guard(settings)
+    return _FALLBACK_ABUSE_GUARD
+
+
+def _client_key(request: Request) -> str:
+    """Best-effort anonymous client key for public lead throttling."""
+    forwarded_for = request.headers.get("x-forwarded-for", "")
+    if forwarded_for.strip():
+        return forwarded_for.split(",", 1)[0].strip()
+    if request.client is not None and request.client.host:
+        return request.client.host
+    return "unknown"
 
 
 class LeadSubmissionRequest(BaseModel):
@@ -59,6 +83,9 @@ class LeadSubmissionRequest(BaseModel):
     interest: str = Field(default="", max_length=120)
     source: str = Field(default="public_web_form", min_length=1, max_length=120)
     metadata: dict[str, str] = Field(default_factory=dict)
+    # Hidden form field. Real users leave it blank; simple bots fill it and are rejected before
+    # persistence. It is intentionally excluded from LeadSubmission.
+    website: str = Field(default="", max_length=500)
 
 
 class LeadCaptureResponse(BaseModel):
@@ -91,6 +118,19 @@ async def capture_public_lead(request: Request, payload: LeadSubmissionRequest) 
     Returns 422 if the email is unusable (we refuse to capture an uncontactable lead). The
     ``trace_id`` is the request's ``X-Request-ID`` so the captured lead walks back to this request.
     """
+    decision = _abuse_guard(request).check(
+        client_key=_client_key(request),
+        honeypot_value=payload.website,
+    )
+    if not decision.allowed:
+        if decision.reason == "rate_limit":
+            raise HTTPException(
+                status_code=429,
+                detail="too many public lead submissions from this client; retry later",
+                headers={"Retry-After": str(decision.retry_after_seconds)},
+            )
+        raise HTTPException(status_code=400, detail="lead rejected by anti-abuse gate")
+
     service = _service(request)
     submission = LeadSubmission(
         email=payload.email,

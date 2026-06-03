@@ -35,6 +35,13 @@ from api.services.crm.store import (
     JsonlFileLeadStore,
     LeadStore,
 )
+from api.services.crm.abuse import (
+    LeadAbuseRejected,
+    PublicLeadAbuseDecision,
+    PublicLeadAbuseGuard,
+    PublicLeadRateLimitExceeded,
+    build_public_lead_abuse_guard,
+)
 from api.services.crm.sync import (
     AirtableCRMProvider,
     CRMConfigError,
@@ -53,6 +60,7 @@ __all__ = [
     "CRMSyncResult",
     "InMemoryLeadStore",
     "JsonlFileLeadStore",
+    "LeadAbuseRejected",
     "Lead",
     "LeadPipelineStatus",
     "LeadStore",
@@ -60,9 +68,13 @@ __all__ = [
     "LeadSyncStatus",
     "LeadValidationError",
     "NullCRMProvider",
+    "PublicLeadAbuseDecision",
+    "PublicLeadAbuseGuard",
+    "PublicLeadRateLimitExceeded",
     "build_crm_provider",
     "build_crm_service",
     "build_dark_crm_service",
     "build_lead_store",
+    "build_public_lead_abuse_guard",
     "normalize_email",
 ]

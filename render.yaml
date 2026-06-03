@@ -90,6 +90,12 @@ services:
         sync: false
       - key: NC_AIRTABLE_API_BASE_URL
         sync: false
+      # Anonymous public lead-capture abuse guard. This is separate from the API-key rate
+      # limiter because /api/crm/public is intentionally unauthenticated.
+      - key: NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX
+        value: "5"
+      - key: NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS
+        value: "3600"
       # NC_CORS_ORIGINS — explicit allowlist. The Atlas Viewer alpha entries
       # (atlas-viewer-app.onrender.com + the future atlas.noeticcompass.com
       # custom domain) are listed alongside the original Compass dashboard

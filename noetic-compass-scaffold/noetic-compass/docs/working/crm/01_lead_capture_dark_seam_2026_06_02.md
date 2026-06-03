@@ -68,6 +68,8 @@ All CRM config is dark by default.
 - `NC_AIRTABLE_BASE_ID`
 - `NC_AIRTABLE_TABLE_NAME` (default `Leads`)
 - `NC_AIRTABLE_API_BASE_URL` (default `https://api.airtable.com/v0`)
+- `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX` (default `5`)
+- `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS` (default `3600`)
 
 The Airtable provider fails startup when `NC_CRM_PROVIDER=airtable` is set without token/base/table.
 That is intentional: a half-configured provider would capture locally while looking externally synced.
@@ -131,9 +133,22 @@ external CRM sync is still not enabled. To turn it on:
 Until that hosted proof passes, the honest production posture is: **captured durably, not externally
 synced**.
 
+## Public endpoint anti-abuse
+
+`POST /api/crm/public/leads` is intentionally anonymous, so it cannot use the API-key limiter. The
+route now has its own narrow guard before persistence:
+
+- a hidden `website` field acts as a honeypot; non-empty values are rejected before capture;
+- a per-client sliding-window limiter defaults to 5 submissions per hour;
+- the client key is best-effort from `X-Forwarded-For` first, then the socket client host.
+
+This is enough to avoid launching a completely unguarded anonymous write endpoint. It is honestly
+not a full WAF, distributed bot defense, captcha, or edge-rate-limit system.
+
 ## Still not done
 
 1. Hosted Airtable credentials are not configured yet.
 2. No HubSpot provider exists.
 3. No sales transition endpoint exists for `pipeline_status`.
-4. The public endpoint still needs anti-abuse controls before broad public launch.
+4. The public endpoint has an in-process honeypot + per-client limiter, but broad public launch still
+   needs edge-level abuse controls if traffic becomes hostile.

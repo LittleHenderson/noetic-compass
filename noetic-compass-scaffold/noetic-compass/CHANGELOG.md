@@ -1,5 +1,27 @@
 # Noetic Compass — Progress Log
 
+## CRM public lead anti-abuse, **BUILT as an in-process guard** - the anonymous `POST /api/crm/public/leads` endpoint now rejects honeypot-filled bot submissions before persistence and has a per-client sliding-window limiter, separate from the API-key limiter that public paths intentionally bypass (Jun 3, 2026)
+
+The public lead endpoint has to stay unauthenticated, but it cannot be an unlimited anonymous write path. This entry adds the first production guard while keeping the boundary clear: this is an in-process app guard, not a WAF, captcha, or distributed bot-defense system.
+
+**1) Reject before capture.** `LeadSubmissionRequest` now includes a hidden `website` honeypot field. Real users leave it blank; simple bots fill it. A non-empty value returns `400` before `CRMService.capture`, so no junk lead is persisted.
+
+**2) Separate public limiter.** `PublicLeadAbuseGuard` tracks submissions by best-effort client key (`X-Forwarded-For` first, then socket client host) and returns `429` with `Retry-After` once the anonymous client exceeds the configured sliding-window cap. Render defaults are explicit: `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX=5` and `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS=3600`.
+
+**3) Honest boundary.** This closes the "completely unguarded public CRM write endpoint" gap. It does not claim hostile-traffic protection at the edge, and it is process-local. If the public form gets real hostile traffic, the next rung is edge-level rate limiting/captcha.
+
+### Pieces (this entry)
+- `api/services/crm/abuse.py` *(new)* - in-process honeypot + sliding-window public lead guard.
+- `api/routes/crm.py` *(edit)* - runs the guard before capture; rejected submissions never hit the lead store.
+- `api/config.py` / `api/main.py` / `api/services/crm/__init__.py` *(edit)* - configurable defaults, startup wiring, and exports.
+- `render.yaml` / `infra/render.yaml` *(edit)* - visible hosted defaults for the public lead cap.
+- `tests/test_crm_lead_capture.py` *(edit)* - proves honeypot rejection and public limiter behavior.
+- `docs/working/crm/01_lead_capture_dark_seam_2026_06_02.md` *(edit)* - documents the anti-abuse posture and remaining edge-control boundary.
+
+### Tests / verification (this entry)
+- Compile: `api/services/crm/abuse.py`, `api/routes/crm.py`, `api/config.py`, `api/main.py`.
+- Focused CRM/config: **49 passed**.
+
 ## CRM Airtable provider, **BUILT but not hosted-active** - the CRM seam can now sync a captured lead to Airtable and mark it `synced` only when Airtable returns a real record id; hosted production remains capture-only until `NC_CRM_PROVIDER=airtable` plus Airtable token/base/table env vars are configured and a hosted lead proves an external landing (Jun 3, 2026)
 
 This turns the CRM from "local capture only" into "one real provider exists behind the seam," while preserving the same honesty rule that launched the CRM: `captured` is not `synced`. The default remains `NC_CRM_PROVIDER=null`, so the deployed app keeps capturing leads durably under `/var/data/leads.jsonl` and reports `sync_pending` until an operator deliberately enables Airtable.
