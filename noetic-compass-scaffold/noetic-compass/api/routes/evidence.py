@@ -61,6 +61,7 @@ from pydantic import BaseModel, Field
 
 from api.services.cas_harness_static_evidence_anchor import (
     anchor_static_evidence_packet,
+    load_anchored_static_packet_payload,
     summarize_static_anchor_worm_status,
     verify_anchored_static_packet,
 )
@@ -1251,7 +1252,16 @@ async def verify_evidence_packet(trace_id: str) -> VerifyHashesResponse:
     try:
         packet = build_packet_for_trace(trace_id)
     except FileNotFoundError:
-        raise HTTPException(status_code=404, detail="trace_id not found")
+        static_packet = load_anchored_static_packet_payload(trace_id)
+        if static_packet is None:
+            raise HTTPException(status_code=404, detail="trace_id not found")
+        verify = verify_anchored_static_packet(static_packet)
+        return VerifyHashesResponse(
+            trace_id=str(verify.get("trace_id") or trace_id),
+            verified_at=_now_iso_utc(),
+            checks=verify.get("checks") if isinstance(verify.get("checks"), list) else [],
+            overall=str(verify.get("overall") or "unable_to_verify"),
+        )
     return _verify_packet_hashes(packet)
 
 

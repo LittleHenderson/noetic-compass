@@ -610,6 +610,32 @@ def test_evidence_anchor_disabled_mode_is_honest_not_worm(
     assert "FLAG_FOR_HUMAN_REVIEW" in body["message"]
 
 
+def test_evidence_verify_static_anchor_after_anchor(
+    client, auth_headers, isolated_anchor_store
+):
+    """Static Stage 9 anchors persist under a static-reference store namespace.
+    After the explicit anchor write, `/verify` must be able to re-read that stored
+    copy and report its hash-chain / external-anchor checks.
+    """
+    anchor = client.post(
+        f"/evidence/{_STAGE9_40E_PYTHIA_TRACE_ID}/anchor", headers=auth_headers
+    )
+    assert anchor.status_code == 200, anchor.text
+
+    resp = client.post(
+        f"/evidence/{_STAGE9_40E_PYTHIA_TRACE_ID}/verify", headers=auth_headers
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["trace_id"] == _STAGE9_40E_PYTHIA_TRACE_ID
+    assert body["overall"] in {"all_match", "partial_mismatch"}
+    assert any(
+        check["artifact"] == "merged_packet_external_anchor"
+        for check in body["checks"]
+    )
+
+
 def test_evidence_anchor_is_general_across_model_sizes(
     client, auth_headers, isolated_anchor_store
 ):
