@@ -12,6 +12,8 @@ This closes the single-host durability gate that the free-tier `/tmp` posture co
 
 **4) Honesty boundary.** This earns hosted **single-instance restart durability** for the local state ledger and CRM lead capture. It does not earn host-loss durability, multi-instance durability, external CRM sync, or Phase 4 dictionary deletion. The service currently reports `plan: standard` (not `starter`); that is a cost/instance-size posture, not a correctness problem.
 
+**5) Starter cost/posture correction.** After the durability proof, the service was corrected from `standard` to the intended `starter` plan through the Render API. The disk remained attached at `/var/data`, the env vars stayed pointed at `/var/data`, and deploy `dep-d8fp5v57vvec739eu010` went live at `2026-06-03T02:36:40.390737Z`. The same CRM lead survived, the ledger rehydrated `audit_count: 2`, `workers: 2`, `fleet_runs: 2`, `fragment_refs: 4`, and the hosted verifier passed again with audit `cas-dist-addaf4804fe2f41a`, `reads_served 0->128`, `divergences_found: 0`.
+
 ### Pieces (this entry)
 - `docs/working/production_readiness/18_hosted_paid_disk_durability_evidence_2026_06_03.md` *(new)* — evidence record with Render service/disk/env metadata, the failed `/tmp` pre-check, corrected `/var/data` baseline, restart deploy ID, and post-restart CRM/ledger proof.
 - `CHANGELOG.md` *(edit)* — this entry.
@@ -20,6 +22,7 @@ This closes the single-host durability gate that the free-tier `/tmp` posture co
 - Hosted CRM proof: `lead-3c5d8d3268754c1a` created before restart and readable after restart; `lead_count: 1`.
 - Hosted state-ledger proof: pre-restart audit/fleet state rehydrated after restart (`audit_count: 1`, `workers: 2`, `fleet_runs: 1`, `fragment_refs: 2`).
 - Hosted verifier after restart: **PASS** on `https://noetic-compass-api.onrender.com`, `reads_served 0->110`, `divergences_found 0`, fleet merge `COMPLETE` / `ready_for_verifier`.
+- Hosted Starter proof after cost correction: **PASS**, lead `lead-3c5d8d3268754c1a` still readable, `audit_count: 2`, `fleet_runs: 2`, `fragment_refs: 4`, `reads_served 0->128`, `divergences_found 0`.
 
 ## State-ledger Postgres backend, **WIRED as a dark seam, not activated** — the enable now selects its durable store: `PostgresStateStore` when `NC_DATABASE_URL` is set, else the single-host SQLite file (the unchanged default). Production posture is **byte-for-byte unchanged** — nothing routes at Postgres until an operator sets the DSN, exactly as the two ledger flags gate the rest of the rollout. This is the *code-side* "if it blows up" insurance: the multi-host rung is now one env var away, but it is **not** turned on, and on Render free-tier storage is still ephemeral (Jun 2, 2026)
 

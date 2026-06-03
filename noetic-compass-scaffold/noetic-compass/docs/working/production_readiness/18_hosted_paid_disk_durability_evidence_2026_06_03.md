@@ -193,3 +193,71 @@ This does **not** earn:
 - External CRM sync. The lead remains `sync_pending`; it was captured locally, not landed in HubSpot/Airtable/etc.
 - Phase 4 deletion of process-global dicts. That remains held.
 
+## Starter Instance Correction
+
+After the first proof, Render reported the service on `plan: standard`, not the intended `starter`. The service plan was corrected through the Render API:
+
+```json
+{
+  "id": "srv-d82ph683kofs73d210e0",
+  "name": "noetic-compass-api",
+  "plan": "starter",
+  "buildPlan": "starter",
+  "updatedAt": "2026-06-03T02:35:06.648377Z"
+}
+```
+
+The disk and env vars remained correct:
+
+```json
+{
+  "disk": {
+    "id": "dsk-d8fomrd8nd3s738rnee0",
+    "name": "noetic-data",
+    "mountPath": "/var/data",
+    "sizeGB": 1
+  },
+  "env": [
+    {"key": "NC_STATE_LEDGER_PATH", "value": "/var/data/state_ledger.db"},
+    {"key": "NC_CRM_LEAD_STORE_PATH", "value": "/var/data/leads.jsonl"},
+    {"key": "NC_STATE_LEDGER_ENABLED", "value": "true"},
+    {"key": "NC_STATE_LEDGER_READ_AUTHORITY", "value": "true"}
+  ]
+}
+```
+
+Then deploy `dep-d8fp5v57vvec739eu010` went live at `2026-06-03T02:36:40.390737Z`. After that Starter deploy:
+
+```json
+{
+  "lead": {
+    "ok": true,
+    "lead_id": "lead-3c5d8d3268754c1a"
+  },
+  "lead_count": 1,
+  "status": {
+    "posture": "enabled_ledger_read_authoritative",
+    "audit_count": 2,
+    "fleet_counts": {
+      "workers": 2,
+      "fleet_runs": 2,
+      "fragment_refs": 4
+    }
+  }
+}
+```
+
+The hosted verifier also passed after the Starter deploy:
+
+```json
+{
+  "audit_id": "cas-dist-addaf4804fe2f41a",
+  "reads_served": "0->128",
+  "divergences_found": 0,
+  "workers": 2,
+  "receipts": 2,
+  "pass": true
+}
+```
+
+So the final paid-disk posture is the intended one: `starter` + 1 GB disk at `/var/data`, verified after restart.
