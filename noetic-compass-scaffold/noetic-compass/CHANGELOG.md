@@ -20,7 +20,11 @@ The CRM now has a first usable sales workflow, not just public capture. The endp
 
 ### Tests / verification (this entry)
 - Compile: CRM models, service, exports, and route.
-- Targeted CRM: `tests/test_crm_lead_capture.py` **52 passed**.
+- Targeted CRM: `tests/test_crm_lead_capture.py` **52 passed**; focused CRM/config/startup sweep
+  **68 passed**.
+- Hosted smoke after deploy: authed `PATCH /api/crm/leads/lead-121dc923f575416d/pipeline-status`
+  returned `200`, `pipeline_status: "contacted"`, `version: 3`, and preserved
+  `sync_status: "sync_pending"` / `external_id: null`.
 
 ## CRM public lead anti-abuse, **BUILT as an in-process guard** - the anonymous `POST /api/crm/public/leads` endpoint now rejects honeypot-filled bot submissions before persistence and has a per-client sliding-window limiter, separate from the API-key limiter that public paths intentionally bypass (Jun 3, 2026)
 

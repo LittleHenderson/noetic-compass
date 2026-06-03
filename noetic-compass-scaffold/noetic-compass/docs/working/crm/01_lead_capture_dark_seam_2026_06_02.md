@@ -140,6 +140,11 @@ external CRM sync is still not enabled. To turn it on:
 Until that hosted proof passes, the honest production posture is: **captured durably, not externally
 synced**.
 
+Hosted pipeline-status smoke after `6aeb19f`: authed
+`PATCH /api/crm/leads/lead-121dc923f575416d/pipeline-status` returned `200`, moved that smoke lead
+to `pipeline_status: "contacted"`, bumped it to `version: 3`, and preserved
+`sync_status: "sync_pending"` / `external_id: null`.
+
 ## Public endpoint anti-abuse
 
 `POST /api/crm/public/leads` is intentionally anonymous, so it cannot use the API-key limiter. The
