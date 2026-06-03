@@ -1,5 +1,23 @@
 # Noetic Compass — Progress Log
 
+## TKS definition runtime lock, **BUILT and route/probe-enforced** - customer audits now fail closed unless the owner definitions are loaded (Jun 3, 2026)
+
+The launch risk was not another TODO; it was any future agent, fixture, or probe path silently using paraphrased CAS labels instead of the owner-provided TKS 40 Element and 28 Foundation definitions. This entry turns that from a memory problem into a runtime gate.
+
+**1) The app now carries the locked owner definitions.** `api/resources/tks_owner_locked_definitions_20260603.json` is the packaged runtime copy of the source-locked TKS definitions. Its SHA-256 must remain `a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0`.
+
+**2) Customer audit creation is fail-closed.** `api/services/cas_harness_tks_definition_lock.py` verifies both the packaged definitions and the active probe-bundle manifest before audit work starts. The live audit routes now refuse `503` if the definitions are missing, edited, or paired with a manifest carrying the wrong `definition_sha256`.
+
+**3) Customer-supplied probes are also locked.** Frontier probe specs must now include `definition_sha256` equal to the locked TKS owner hash. Missing or different hashes are `PROBE_COMPATIBILITY_UNSUPPORTED` and the public route returns HTTP 422, so a customer or future agent cannot supply a probe trained/evaluated against another vocabulary and still call it a CAS Harness audit.
+
+**4) The current probe manifest stays honest.** `api/resources/tks_definition_probe_bundle_manifest.v1.json` deliberately says `definition_fixture_locked_no_trained_probe_claim`. This locks the required definitions for audit creation without pretending a trained production probe is verified.
+
+**5) Tests pin the failure mode.** New route tests monkeypatch the definition lock to fail and prove both the standard and distributed audit creation endpoints refuse work. Probe-compatibility and route tests prove missing/wrong `definition_sha256` is rejected. Fixture tests still prove the generated 40E/F28 dataset uses TKS labels (`A1-D10`, `1a-7d`) and not fallback notation labels.
+
+**Pieces:** `api/resources/tks_owner_locked_definitions_20260603.json`, `api/resources/tks_definition_probe_bundle_manifest.v1.json`, `api/services/cas_harness_tks_definition_lock.py`, `api/services/cas_harness_probe_compatibility.py`, audit-route gating, `tests/test_tks_definition_lock.py`, and `docs/working/production_readiness/26_tks_definition_runtime_lock_2026_06_03.md`.
+
+**Tests:** `pytest -q tests\test_cas_harness_probe_compatibility.py tests\test_tks_definition_lock.py tests\test_definition_locked_tks_fixture.py` -> 34 passed; `pytest -q tests\test_cas_harness_audit.py tests\test_cas_harness_distributed_audits.py` -> 98 passed. This does not change the Pythia verdict; it remains `FLAG_FOR_HUMAN_REVIEW`.
+
 ## Definition-locked TKS/CAS 40E/F28 fixture source-locked, **BUILT and test-guarded** - next run can test the actual owner-provided definitions (Jun 3, 2026)
 
 The Condition-3 comparator audit exposed a definition boundary: it used CAS 40E

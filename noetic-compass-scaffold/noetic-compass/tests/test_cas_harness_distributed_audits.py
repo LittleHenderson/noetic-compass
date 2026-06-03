@@ -4,6 +4,7 @@ import pytest
 
 from api.middleware.auth import create_token
 from api.services.cas_harness_distributed_audits import reset_distributed_audits_for_tests
+from api.services.cas_harness_tks_definition_lock import LOCKED_TKS_DEFINITION_SHA256
 
 
 def setup_function() -> None:
@@ -96,6 +97,7 @@ def _probe_payload(*, schema_version: str = "cas_probe_linear_v1") -> dict:
         "axes": ["F1", "F2", "F3"],
         "feature_dimension": 200,
         "probe_id": "cas-linear-probe-v1",
+        "definition_sha256": LOCKED_TKS_DEFINITION_SHA256,
     }
 
 
@@ -529,6 +531,8 @@ def test_frontier_run_with_valid_provenance_is_declared_not_verified(client, aut
     assert probe["schema_version"] == "cas_probe_linear_v1"
     assert probe["axis_count"] == 3
     assert probe["declared_feature_dimension"] == 200
+    assert probe["definition_sha256"] == LOCKED_TKS_DEFINITION_SHA256
+    assert probe["tks_definition_locked"] is True
     assert probe["probe_loadable"] is True
     assert probe["weights_hash_verified"] is False
 
@@ -808,6 +812,42 @@ def test_frontier_run_rejects_incompatible_probe_schema(client, auth_headers):
     assert "cas_probe_linear_v1" in resp.text
 
 
+def test_frontier_run_rejects_probe_without_tks_definition_hash(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("llama")
+    payload["probe"] = _probe_payload()
+    payload["probe"].pop("definition_sha256")
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "definition_sha256" in resp.text
+    assert LOCKED_TKS_DEFINITION_SHA256 in resp.text
+
+
+def test_frontier_run_rejects_probe_with_wrong_tks_definition_hash(client, auth_headers):
+    payload = _frontier_payload(405, 120)
+    payload["provenance"] = _provenance_payload(payload["model_id"])
+    payload["architecture"] = _architecture_payload("llama")
+    payload["probe"] = _probe_payload()
+    payload["probe"]["definition_sha256"] = "0" * 64
+
+    resp = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json=payload,
+        headers=auth_headers,
+    )
+
+    assert resp.status_code == 422
+    assert "definition_sha256" in resp.text
+    assert LOCKED_TKS_DEFINITION_SHA256 in resp.text
+
+
 def test_frontier_run_rejects_probe_dimension_mismatch(client, auth_headers):
     # If the caller declares the run's pooled-feature dimension and it disagrees
     # with the probe's per-axis vector length, the worker would raise
@@ -819,6 +859,7 @@ def test_frontier_run_rejects_probe_dimension_mismatch(client, auth_headers):
         "schema_version": "cas_probe_linear_v1",
         "axes": ["F1", "F2"],
         "feature_dimension": 200,
+        "definition_sha256": LOCKED_TKS_DEFINITION_SHA256,
         "expected_pooled_features": 384,
     }
 
@@ -850,6 +891,8 @@ def test_frontier_run_with_loadable_probe_is_declared(client, auth_headers):
     assert probe["status"] == "PROBE_COMPATIBILITY_DECLARED"
     assert probe["schema_version"] == "cas_probe_linear_v1"
     assert probe["axis_count"] == 3
+    assert probe["definition_sha256"] == LOCKED_TKS_DEFINITION_SHA256
+    assert probe["tks_definition_locked"] is True
     assert probe["probe_loadable"] is True
     # No declared pooled dimension -> the final match is confirmed worker-side.
     assert probe["dimension_consistent"] is None

@@ -42,8 +42,9 @@ Honesty contract (mirrors gates 5 and 6 -- declared vs verified):
   consistent. Enough to *create* a run; the final dimensional match against real
   pooled activations is confirmed worker-side.
 * ``PROBE_COMPATIBILITY_UNSUPPORTED`` -- missing at frontier / wrong schema / empty
-  axes / non-positive feature dimension / a declared pooled-feature dimension that
-  contradicts the probe's vector length / a malformed artifact hash. Refuses the run.
+  axes / missing or wrong TKS definition hash / non-positive feature dimension /
+  a declared pooled-feature dimension that contradicts the probe's vector length /
+  a malformed artifact hash. Refuses the run.
 
 Scope (kept deliberately narrow, so the gate stays honest): it certifies the probe
 is mechanically *loadable and dimensionally self-consistent*. It does **not**
@@ -59,6 +60,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 import re
 from typing import Literal
+
+from api.services.cas_harness_tks_definition_lock import LOCKED_TKS_DEFINITION_SHA256
 
 ProbeCompatibilityStatus = Literal[
     "PROBE_COMPATIBILITY_VERIFIED",
@@ -84,7 +87,9 @@ class ProbeReadoutSpecification:
     knows the run's pooling shape (``scenarios x assigned-layers x top_k``), the
     gate can perform the worker's exact dimensional check at create time instead
     of letting a shard abort. ``weights_sha256`` is an optional integrity hash of
-    the probe artifact (declared here, recomputed worker-side).
+    the probe artifact (declared here, recomputed worker-side). ``definition_sha256``
+    must match the owner-locked TKS definitions; a probe tied to any other
+    vocabulary is refused before work is scheduled.
     """
 
     schema_version: str
@@ -92,6 +97,7 @@ class ProbeReadoutSpecification:
     feature_dimension: int | None = None
     probe_id: str | None = None
     weights_sha256: str | None = None
+    definition_sha256: str | None = None
     expected_pooled_features: int | None = None
 
     def to_dict(self) -> dict[str, object]:
@@ -101,6 +107,7 @@ class ProbeReadoutSpecification:
             "feature_dimension": self.feature_dimension,
             "probe_id": self.probe_id,
             "weights_sha256": self.weights_sha256,
+            "definition_sha256": self.definition_sha256,
             "expected_pooled_features": self.expected_pooled_features,
         }
 
@@ -118,6 +125,8 @@ class ProbeCompatibilitySummary:
     expected_pooled_features: int | None
     dimension_consistent: bool | None
     weights_sha256: str | None
+    definition_sha256: str | None
+    tks_definition_locked: bool
     weights_hash_verified: bool
     probe_loadable: bool
     notice: str
@@ -140,6 +149,8 @@ class ProbeCompatibilitySummary:
             "expected_pooled_features": self.expected_pooled_features,
             "dimension_consistent": self.dimension_consistent,
             "weights_sha256": self.weights_sha256,
+            "definition_sha256": self.definition_sha256,
+            "tks_definition_locked": self.tks_definition_locked,
             "weights_hash_verified": self.weights_hash_verified,
             "probe_loadable": self.probe_loadable,
             "notice": self.notice,
@@ -167,6 +178,7 @@ def _unsupported(
     declared_feature_dimension: int | None,
     expected_pooled_features: int | None,
     weights_sha256: str | None,
+    definition_sha256: str | None,
     dimension_consistent: bool | None = None,
 ) -> ProbeCompatibilitySummary:
     return ProbeCompatibilitySummary(
@@ -179,6 +191,8 @@ def _unsupported(
         expected_pooled_features=expected_pooled_features,
         dimension_consistent=dimension_consistent,
         weights_sha256=weights_sha256,
+        definition_sha256=definition_sha256,
+        tks_definition_locked=False,
         weights_hash_verified=False,
         probe_loadable=False,
         notice=(
@@ -213,6 +227,7 @@ def summarize_probe_compatibility(
             declared_feature_dimension=None,
             expected_pooled_features=None,
             weights_sha256=None,
+            definition_sha256=None,
         )
 
     schema_version = (specification.schema_version or "").strip() or None
@@ -221,6 +236,7 @@ def summarize_probe_compatibility(
     feature_dimension = specification.feature_dimension
     expected_pooled_features = specification.expected_pooled_features
     weights_sha256 = (specification.weights_sha256 or "").strip().lower() or None
+    definition_sha256 = (specification.definition_sha256 or "").strip().lower() or None
 
     reasons: list[str] = []
 
@@ -235,7 +251,15 @@ def summarize_probe_compatibility(
     if not axes:
         reasons.append("probe declares no CAS axes (axes is empty)")
 
-    # 3) a positive per-axis feature dimension is required: it is the vector
+    # 3) the probe must be tied to the owner-provided TKS definitions. This is
+    #    the production vocabulary gate: no alternate taxonomy may pass.
+    if definition_sha256 != LOCKED_TKS_DEFINITION_SHA256:
+        reasons.append(
+            "probe definition_sha256 must match the locked owner-provided TKS definitions "
+            f"({LOCKED_TKS_DEFINITION_SHA256}); declared: {definition_sha256 or 'missing'}"
+        )
+
+    # 4) a positive per-axis feature dimension is required: it is the vector
     #    length the worker matches against the pooled activation dimension.
     if feature_dimension is None:
         reasons.append(
@@ -245,11 +269,11 @@ def summarize_probe_compatibility(
     elif feature_dimension <= 0:
         reasons.append(f"probe feature_dimension must be positive (declared: {feature_dimension})")
 
-    # 4) optional integrity hash, when present, must be well-formed (64 hex).
+    # 5) optional integrity hash, when present, must be well-formed (64 hex).
     if weights_sha256 is not None and not _SHA256_RE.match(weights_sha256):
         reasons.append("probe weights_sha256 is not a well-formed lowercase SHA-256 (64 hex chars)")
 
-    # 5) if the caller declares the run's pooled-feature dimension, run the
+    # 6) if the caller declares the run's pooled-feature dimension, run the
     #    worker's exact check now -- a mismatch is precisely the RuntimeError the
     #    worker would raise ("incompatible hidden size"), so refuse honestly.
     dimension_consistent: bool | None = None
@@ -276,6 +300,7 @@ def summarize_probe_compatibility(
             declared_feature_dimension=feature_dimension,
             expected_pooled_features=expected_pooled_features,
             weights_sha256=weights_sha256,
+            definition_sha256=definition_sha256,
             dimension_consistent=dimension_consistent,
         )
 
@@ -309,6 +334,8 @@ def summarize_probe_compatibility(
         expected_pooled_features=expected_pooled_features,
         dimension_consistent=dimension_consistent,
         weights_sha256=weights_sha256,
+        definition_sha256=definition_sha256,
+        tks_definition_locked=True,
         weights_hash_verified=False,
         probe_loadable=True,
         notice=notice,

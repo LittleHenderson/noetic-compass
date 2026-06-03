@@ -31,6 +31,7 @@ from api.services.cas_harness_probe_compatibility import (
     summarize_probe_compatibility,
     validate_frontier_probe_compatibility,
 )
+from api.services.cas_harness_tks_definition_lock import LOCKED_TKS_DEFINITION_SHA256
 
 
 def _good_spec(**overrides: object) -> ProbeReadoutSpecification:
@@ -40,6 +41,7 @@ def _good_spec(**overrides: object) -> ProbeReadoutSpecification:
         "schema_version": REQUIRED_PROBE_SCHEMA_VERSION,
         "axes": ("F1", "F2", "F3"),
         "feature_dimension": 200,
+        "definition_sha256": LOCKED_TKS_DEFINITION_SHA256,
     }
     base.update(overrides)
     return ProbeReadoutSpecification(**base)  # type: ignore[arg-type]
@@ -77,6 +79,26 @@ def test_empty_axes_is_unsupported():
     assert summary.status == "PROBE_COMPATIBILITY_UNSUPPORTED"
     assert summary.axis_count == 0
     assert any("axes" in reason for reason in summary.reasons)
+
+
+def test_missing_definition_sha256_is_unsupported():
+    summary = summarize_probe_compatibility(
+        specification=_good_spec(definition_sha256=None)
+    )
+
+    assert summary.status == "PROBE_COMPATIBILITY_UNSUPPORTED"
+    assert summary.tks_definition_locked is False
+    assert any("definition_sha256" in reason for reason in summary.reasons)
+
+
+def test_wrong_definition_sha256_is_unsupported():
+    summary = summarize_probe_compatibility(
+        specification=_good_spec(definition_sha256="0" * 64)
+    )
+
+    assert summary.status == "PROBE_COMPATIBILITY_UNSUPPORTED"
+    assert summary.tks_definition_locked is False
+    assert any(LOCKED_TKS_DEFINITION_SHA256 in reason for reason in summary.reasons)
 
 
 def test_whitespace_only_axes_are_treated_as_empty():
@@ -159,6 +181,8 @@ def test_good_spec_is_declared_not_verified():
     assert summary.schema_version == REQUIRED_PROBE_SCHEMA_VERSION
     assert summary.axis_count == 3
     assert summary.declared_feature_dimension == 200
+    assert summary.definition_sha256 == LOCKED_TKS_DEFINITION_SHA256
+    assert summary.tks_definition_locked is True
     assert summary.reasons == ()
     # Worker-side load is the only place VERIFIED can be claimed.
     assert summary.status != "PROBE_COMPATIBILITY_VERIFIED"
@@ -233,6 +257,8 @@ def test_summary_to_dict_round_trips_keys():
     assert data["axis_count"] == 3
     assert isinstance(data["axes"], list)
     assert data["probe_loadable"] is True
+    assert data["definition_sha256"] == LOCKED_TKS_DEFINITION_SHA256
+    assert data["tks_definition_locked"] is True
     assert data["weights_hash_verified"] is False
     assert isinstance(data["reasons"], list)
 

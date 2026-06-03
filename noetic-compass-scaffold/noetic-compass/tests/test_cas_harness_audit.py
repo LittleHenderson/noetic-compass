@@ -9,6 +9,7 @@ from api.services.cas_harness_audit_sessions import reset_audit_sessions_for_tes
 from api.services.cas_harness_merged_evidence_packets import (
     reset_merged_fleet_evidence_packets_for_tests,
 )
+from api.services.cas_harness_tks_definition_lock import LOCKED_TKS_DEFINITION_SHA256
 
 
 def setup_function() -> None:
@@ -368,6 +369,7 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
                 "schema_version": "cas_probe_linear_v1",
                 "axes": ["F1", "F2", "F3"],
                 "feature_dimension": 200,
+                "definition_sha256": LOCKED_TKS_DEFINITION_SHA256,
             },
         },
         headers=auth_headers,
@@ -394,6 +396,7 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
                 "schema_version": "cas_probe_linear_v1",
                 "axes": ["F1", "F2", "F3"],
                 "feature_dimension": 200,
+                "definition_sha256": LOCKED_TKS_DEFINITION_SHA256,
             },
             "compute": {
                 "accelerator_count": 64,
@@ -428,6 +431,7 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
                 "schema_version": "cas_probe_linear_v1",
                 "axes": ["F1", "F2", "F3"],
                 "feature_dimension": 200,
+                "definition_sha256": LOCKED_TKS_DEFINITION_SHA256,
             },
             "compute": {
                 "accelerator_count": 64,
@@ -468,6 +472,7 @@ def test_distributed_session_carries_the_frontier_gate(client, auth_headers):
                 "schema_version": "cas_probe_linear_v1",
                 "axes": ["F1", "F2", "F3"],
                 "feature_dimension": 200,
+                "definition_sha256": LOCKED_TKS_DEFINITION_SHA256,
             },
             "compute": {
                 "accelerator_count": 64,

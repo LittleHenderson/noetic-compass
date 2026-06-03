@@ -91,6 +91,11 @@ from api.services.cas_harness_scale_planner import (
     ScalePlanRequest as PlannerScalePlanRequest,
     build_scale_plan,
 )
+from api.services.cas_harness_tks_definition_lock import (
+    LOCKED_TKS_DEFINITION_SHA256,
+    TKSDefinitionLockError,
+    assert_tks_definition_lock_for_audit,
+)
 from api.services.cas_harness_verifier_decision_adapter import verifier_decision_from_packet
 
 
@@ -141,6 +146,16 @@ REFERENCE_TARGET_MODEL_ID = "EleutherAI/gpt-neox-20b"
 REFERENCE_TARGET_PROVIDER = "cas_harness_reference"
 REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID = "stage9-40e-original-baseline-readout-20260527"
 _LOCAL_HTTP_HOSTS = {"localhost", "127.0.0.1", "::1"}
+
+
+def _require_locked_tks_definitions() -> None:
+    try:
+        assert_tks_definition_lock_for_audit()
+    except TKSDefinitionLockError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"TKS definition lock failed; audit creation is refused: {exc}",
+        ) from exc
 
 
 class ProvenanceChip(BaseModel):
@@ -509,7 +524,8 @@ class ProbeReadoutSpecificationRequest(BaseModel):
     actually loaded and run worker-side, so at create time a loadable spec is recorded as
     PROBE_COMPATIBILITY_DECLARED. ``expected_pooled_features`` is optional: supply it (the
     run's ``scenarios x assigned-layers x top_k``) to run the worker's exact dimensional
-    check now instead of letting a shard abort.
+    check now instead of letting a shard abort. ``definition_sha256`` is mandatory for
+    platform audits: it must equal the locked owner-provided TKS definitions hash.
     """
 
     model_config = ConfigDict(extra="forbid")
@@ -519,6 +535,15 @@ class ProbeReadoutSpecificationRequest(BaseModel):
     feature_dimension: int | None = Field(default=None, gt=0, le=8_388_608)
     probe_id: str | None = Field(default=None, max_length=200)
     weights_sha256: str | None = Field(default=None, min_length=1, max_length=128)
+    definition_sha256: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=128,
+        description=(
+            "SHA-256 of the TKS definition source used to train/evaluate this probe. "
+            f"Must equal {LOCKED_TKS_DEFINITION_SHA256}; alternate definitions are refused."
+        ),
+    )
     expected_pooled_features: int | None = Field(default=None, gt=0, le=8_388_608)
 
     def to_service_specification(self) -> ServiceProbeReadoutSpecification:
@@ -528,6 +553,7 @@ class ProbeReadoutSpecificationRequest(BaseModel):
             feature_dimension=self.feature_dimension,
             probe_id=self.probe_id,
             weights_sha256=self.weights_sha256,
+            definition_sha256=self.definition_sha256,
             expected_pooled_features=self.expected_pooled_features,
         )
 
@@ -771,6 +797,8 @@ class ProbeCompatibilitySummaryResponse(BaseModel):
     expected_pooled_features: int | None = None
     dimension_consistent: bool | None = None
     weights_sha256: str | None = None
+    definition_sha256: str | None = None
+    tks_definition_locked: bool
     weights_hash_verified: bool
     probe_loadable: bool
     notice: str
@@ -1148,6 +1176,7 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
     unless the caller acknowledges that the audit captures the model's signal to an
     immutable store reused as CAS-Native training data (gate 8). >4T is always refused.
     """
+    _require_locked_tks_definitions()
     try:
         record = create_distributed_audit(
             PlannerScalePlanRequest(
@@ -1456,6 +1485,7 @@ async def list_distributed_fleet_runs() -> FleetRunListResponse:
 @router.post("/session", response_model=AuditSessionResponse)
 async def create_audit_session(req: AuditSessionRequest) -> AuditSessionResponse:
     """Validate the CAS Harness audit contract and create a stored M1 session."""
+    _require_locked_tks_definitions()
     payload = req.model_dump(mode="json")
     if req.evidence_packet_trace_id:
         payload.update(_audit_evidence_for_trace(req.evidence_packet_trace_id))
@@ -1481,6 +1511,7 @@ async def run_audit_session(
     An optional body may carry a customer bring-your-own-key (BYOK) ephemeral
     secret used only for this run (closed-API targets) and never persisted.
     """
+    _require_locked_tks_definitions()
     existing = get_session(audit_id)
     if existing is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
