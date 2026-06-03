@@ -118,13 +118,7 @@ class CRMService:
         fabricates an external CRM landing; it only writes a new version of the same lead when the
         status actually changes. ``None`` means the lead id is unknown.
         """
-        lead = self._store.get(lead_id)
-        if lead is None:
-            return None
-        updated = lead.with_pipeline_status(pipeline_status)
-        if updated is lead:
-            return lead
-        return self._store.save(updated)
+        return self._store.update_pipeline_status(lead_id, pipeline_status)
 
 
 def build_lead_store(settings) -> LeadStore:

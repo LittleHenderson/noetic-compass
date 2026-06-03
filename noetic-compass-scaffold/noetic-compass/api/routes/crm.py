@@ -24,7 +24,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from api.services.crm.abuse import PublicLeadAbuseGuard, build_public_lead_abuse_guard
-from api.services.crm.models import LeadPipelineStatus, LeadSubmission, LeadValidationError
+from api.services.crm.models import LeadSubmission, LeadValidationError
 from api.services.crm.service import CRMService, build_dark_crm_service
 from api.config import settings
 
@@ -102,7 +102,7 @@ class LeadCaptureResponse(BaseModel):
 class LeadPipelineStatusUpdateRequest(BaseModel):
     """Authed sales-team update for the pipeline stage of one captured lead."""
 
-    pipeline_status: LeadPipelineStatus
+    pipeline_status: str = Field(..., min_length=1, max_length=80)
 
 
 def _receipt_message(sync_status: str) -> str:
@@ -189,7 +189,10 @@ async def update_lead_pipeline_status(
 ) -> dict[str, object]:
     """Move one captured lead through the sales pipeline. Authed (sales view)."""
     service = _service(request)
-    lead = service.update_pipeline_status(lead_id, payload.pipeline_status)
+    try:
+        lead = service.update_pipeline_status(lead_id, payload.pipeline_status)
+    except LeadValidationError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
     if lead is None:
         raise HTTPException(status_code=404, detail=f"lead {lead_id!r} not found")
     return lead.to_dict()

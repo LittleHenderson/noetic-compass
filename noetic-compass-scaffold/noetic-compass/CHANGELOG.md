@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## CRM pipeline status hardening, **BUILT after code review** - sales status updates now use one domain validation path and store-level atomic writes, closing the three review findings on the first pipeline endpoint (Jun 3, 2026)
+
+The first pipeline-status endpoint was correct on the happy path, but review found three real edge problems: get-then-save could lose concurrent updates, the HTTP route rejected title-case labels even though the domain normalizer accepted them, and loosening the route later would have exposed an uncaught `LeadValidationError`. This entry closes all three.
+
+**1) Atomic at the store boundary.** `LeadStore.update_pipeline_status()` now owns the read-modify-write under the backend lock. `InMemoryLeadStore` updates the in-memory index atomically; `JsonlFileLeadStore` appends exactly one new version while holding its lock. The service delegates to that method instead of doing `get()` then `save()`.
+
+**2) One validator.** The route body now accepts `str` and the domain layer normalizes it (`" Contacted "` -> `contacted`). Unknown statuses use the same `LeadValidationError` message in every path instead of a separate Pydantic `Literal` contract.
+
+**3) HTTP errors stay 4xx.** The route catches `LeadValidationError` and returns HTTP 422, matching the public capture route. A future route-shape change cannot accidentally turn a bad pipeline status into a 500.
+
+### Pieces (this entry)
+- `api/services/crm/store.py` *(edit)* - adds atomic pipeline-status update to the `LeadStore` seam and both shipped stores.
+- `api/services/crm/service.py` *(edit)* - delegates pipeline updates to the store-owned atomic method.
+- `api/routes/crm.py` *(edit)* - accepts string input, uses the domain validator, and maps domain validation failures to 422.
+- `tests/test_crm_lead_capture.py` *(edit)* - adds concurrency, JSONL append, human-label normalization, and domain-error assertions.
+
+### Tests / verification (this entry)
+- Compile: CRM models, store, service, exports, and route.
+- Targeted CRM: `tests/test_crm_lead_capture.py` **55 passed**.
+- Focused CRM/config/startup sweep: **71 passed**.
+
 ## CRM pipeline status endpoint, **BUILT as an authed sales workflow slice** - captured leads can now move through `new` / `contacted` / `qualified` / `won` / `lost` without changing their external-sync claim (Jun 3, 2026)
 
 The CRM now has a first usable sales workflow, not just public capture. The endpoint is deliberately narrow: it changes the lead's `pipeline_status`, writes a new immutable lead version when the status changes, and leaves `sync_status` / `external_id` untouched so a sales action can never launder a locally captured lead into an externally synced one.

@@ -15,6 +15,7 @@ HTTP round-trip.
 from __future__ import annotations
 
 import json
+import threading
 from uuid import uuid4
 
 import pytest
@@ -256,6 +257,31 @@ def test_in_memory_find_by_email_is_normalized() -> None:
     assert [l.lead_id for l in store.find_by_email("  ADA@example.COM ")] == [lead.lead_id]
 
 
+def test_in_memory_pipeline_status_update_is_atomic_under_concurrent_writes() -> None:
+    store = InMemoryLeadStore()
+    captured = Lead.from_submission(_submission().validated(), source="t", trace_id=None)
+    annotated = captured.with_sync_result(NullCRMProvider().sync_lead(captured))
+    store.save(annotated)
+    barrier = threading.Barrier(2)
+
+    def update(status: str) -> None:
+        barrier.wait(timeout=5)
+        store.update_pipeline_status(annotated.lead_id, status)
+
+    first = threading.Thread(target=update, args=("contacted",))
+    second = threading.Thread(target=update, args=("qualified",))
+    first.start()
+    second.start()
+    first.join(timeout=5)
+    second.join(timeout=5)
+
+    held = store.get(annotated.lead_id)
+    assert held is not None
+    assert held.version == annotated.version + 2
+    assert held.pipeline_status in {"contacted", "qualified"}
+    assert held.sync_status == annotated.sync_status
+
+
 # ---------------------------------------------------------------------------
 # store — durable JSONL: survives a restart, append-only lineage
 # ---------------------------------------------------------------------------
@@ -284,6 +310,22 @@ def test_jsonl_store_is_append_only(tmp_path) -> None:
     store.save(captured.with_sync_result(NullCRMProvider().sync_lead(captured)))
     lines = [ln for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
     assert len(lines) == 2  # nothing overwritten
+
+
+def test_jsonl_pipeline_status_update_appends_one_new_version(tmp_path) -> None:
+    path = tmp_path / "leads.jsonl"
+    store = JsonlFileLeadStore(path)
+    lead = Lead.from_submission(_submission().validated(), source="t", trace_id=None)
+    annotated = lead.with_sync_result(NullCRMProvider().sync_lead(lead))
+    store.save(annotated)
+
+    updated = store.update_pipeline_status(lead.lead_id, "Contacted")
+
+    assert updated is not None
+    assert updated.pipeline_status == "contacted"
+    assert updated.version == annotated.version + 1
+    lines = [ln for ln in path.read_text(encoding="utf-8").splitlines() if ln.strip()]
+    assert len(lines) == 2
 
 
 # ---------------------------------------------------------------------------
@@ -645,6 +687,25 @@ def test_pipeline_status_update_rejects_unknown_status(client) -> None:
     )
 
     assert resp.status_code == 422
+    assert "expected one of" in resp.json()["detail"]
+
+
+def test_pipeline_status_update_normalizes_human_label(client) -> None:
+    headers = _auth_headers()
+    created = client.post(
+        "/api/crm/public/leads",
+        json={"email": f"pipeline-label-{uuid4().hex}@example.com"},
+    )
+    lead_id = created.json()["lead_id"]
+
+    resp = client.patch(
+        f"/api/crm/leads/{lead_id}/pipeline-status",
+        json={"pipeline_status": " Contacted "},
+        headers=headers,
+    )
+
+    assert resp.status_code == 200, resp.text
+    assert resp.json()["pipeline_status"] == "contacted"
 
 
 def test_pipeline_status_update_returns_404_for_missing_lead(client) -> None:

@@ -50,6 +50,8 @@ class LeadStore(Protocol):
 
     def find_by_email(self, email: str) -> list[Lead]: ...
 
+    def update_pipeline_status(self, lead_id: str, pipeline_status: str) -> Lead | None: ...
+
 
 def _supersedes(incoming: Lead, existing: Lead | None) -> bool:
     """True if ``incoming`` is a write we should keep over ``existing``.
@@ -104,6 +106,18 @@ class InMemoryLeadStore:
         with self._lock:
             matches = [lead for lead in self._by_id.values() if lead.email == target]
         return sorted(matches, key=lambda lead: lead.created_at)
+
+    def update_pipeline_status(self, lead_id: str, pipeline_status: str) -> Lead | None:
+        """Atomically move one lead through the sales pipeline."""
+        with self._lock:
+            lead = self._by_id.get(lead_id)
+            if lead is None:
+                return None
+            updated = lead.with_pipeline_status(pipeline_status)
+            if updated is lead:
+                return lead
+            self._by_id[lead_id] = updated
+            return updated
 
 
 class JsonlFileLeadStore:
@@ -191,3 +205,16 @@ class JsonlFileLeadStore:
         with self._lock:
             matches = [lead for lead in self._by_id.values() if lead.email == target]
         return sorted(matches, key=lambda lead: lead.created_at)
+
+    def update_pipeline_status(self, lead_id: str, pipeline_status: str) -> Lead | None:
+        """Atomically move one lead through the sales pipeline and append the new version."""
+        with self._lock:
+            lead = self._by_id.get(lead_id)
+            if lead is None:
+                return None
+            updated = lead.with_pipeline_status(pipeline_status)
+            if updated is lead:
+                return lead
+            self._append(updated)
+            self._by_id[lead_id] = updated
+            return updated

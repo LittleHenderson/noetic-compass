@@ -51,6 +51,8 @@ Wiring: `api/main.py` builds the service at startup (`build_crm_service(settings
 - `GET /api/crm/leads/{lead_id}` - authed. One lead, or `404`.
 - `PATCH /api/crm/leads/{lead_id}/pipeline-status` - authed. Moves one captured lead through the
   supported sales workflow stages: `new`, `contacted`, `qualified`, `won`, `lost`.
+  The HTTP route accepts human labels such as `" Contacted "` and normalizes them through the
+  domain validator; unsupported statuses return `422` with the CRM validation message.
 
 The captured lead carries the request's `X-Request-ID` as `trace_id`, so a sales record can be traced
 back to the HTTP request that created it.
@@ -116,10 +118,14 @@ If Airtable rejects the schema or credentials, the lead remains locally captured
 - the public endpoint requires no auth and the sales views require auth.
 - pipeline status updates require auth, bump the lead version, preserve `sync_status` / `external_id`,
   reject unknown stages, persist to the store, and return `404` for missing leads.
+- pipeline status hardening proves store-level atomicity for concurrent updates, JSONL appends one
+  new version per status change, and route validation uses the same domain normalizer as the model.
 
 Targeted verification for the Airtable slice: `40 passed` in `tests/test_crm_lead_capture.py`.
 Targeted verification after the pipeline-status slice: `52 passed` in
 `tests/test_crm_lead_capture.py`.
+Targeted verification after the pipeline-status hardening pass: `55 passed` in
+`tests/test_crm_lead_capture.py`; focused CRM/config/startup sweep: `71 passed`.
 
 ## Hosted production status
 
