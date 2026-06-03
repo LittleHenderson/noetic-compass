@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## Condition-3 MTC 20B capture completed, **VERIFIED on H200 pod** - claim-neutral activations are archived, comparator still gated (Jun 3, 2026)
+
+The replacement H200 pod completed the GPT-NeoX-20B Condition-3 activation capture for the MTC uniqueness track. This is the measurement file the comparator will read later; it is not the comparator verdict.
+
+**1) The capture finished on the second pod.** The pod at `root@212.247.220.166 -p 18611` loaded `EleutherAI/gpt-neox-20b` from 46 safetensor shards and captured all 1,440 Condition-3 rows. The output dataset is `720117672` bytes.
+
+**2) The fixture adapter was corrected before capture.** The capture loader expects one JSON document, not JSONL, and uses `scenario_id` / `id` for row identity. The adapted fixture was converted to one JSON list, preserving each `sample_id` as `scenario_id`. Validation before capture: 1,440 rows, 40 elements, 36 per element, train/test 720/720.
+
+**3) The environment issue was fixed without changing the claim.** `transformers 5.10.1` failed before capture because it expected a Torch float8 type absent from `torch 2.4.1+cu124`. The pod was set to `transformers 4.44.2` and `accelerate 0.34.2`; the capture then completed.
+
+### Pieces (this entry)
+- `docs/working/production_readiness/22_condition3_mtc_20b_capture_2026_06_03.md` *(new)* - evidence record with pod, command, archive path, and hashes.
+- `D:\tksCAS-archive\condition3_mtc_capture_20260603` *(archive copy)* - NPZ, metadata, converted fixture, JSONL fixture, log, and provenance.
+
+### Tests / verification (this entry)
+- Capture log reached `1440/1440` and wrote `/workspace/condition3_gptneox20b_activations.npz`.
+- Local archive SHA-256 matched pod provenance for the NPZ, metadata, fixture, and log.
+
+Honesty boundary: this is claim-neutral capture only. The matched-taxonomy comparator has not run, the A1 prereg amendment is not frozen, and the Pythia-160M packet remains `FLAG_FOR_HUMAN_REVIEW`.
+
 ## Pythia-160M activation matched-ablation completed, **VERIFIED locally** - stored activations passed matched controls, but uniqueness remains open (Jun 3, 2026)
 
 The archived Pythia-160M Stage 9 40E run now has the missing activation-level matched-ablation computation. This did not rerun the model: it reused the archived `.npz` hidden-state activations under `D:\tksCAS-archive\pythia160m_gate1_reproduction_20260531\`.
