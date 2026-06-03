@@ -52,6 +52,15 @@ def _packet_fixture() -> dict:
                 },
             },
         },
+        "matched_taxonomy_proof": {
+            "status": "matched_taxonomy_validated",
+            "summary": {
+                "condition3_passed": True,
+                "control_b_passed": True,
+                "control_c_passed": True,
+                "reason": "matched taxonomy controls passed",
+            },
+        },
         "output_bridge_proof": {
             "status": "present",
             "summary": {
@@ -95,6 +104,7 @@ def test_balanced_packet_with_all_gates_passes_to_accept(tmp_path: Path):
     assert decision["decision_scope"] == "stage9_40e_validation_packet"
     assert report["generation_readiness"]["generation_readiness"] == "allow"
     assert report["verification_stack"]["proof_chip_gate"] == "passed"
+    assert report["verification_stack"]["gates"]["uniqueness"]["passed"] is True
 
 
 def test_triage_mode_flags_even_when_all_gates_pass(tmp_path: Path):
@@ -112,6 +122,42 @@ def test_triage_mode_flags_even_when_all_gates_pass(tmp_path: Path):
     assert report["generation_readiness"]["reasons"] == [
         "max_coverage_triage_does_not_emit_final_accept"
     ]
+
+
+def test_missing_uniqueness_proof_flags_not_accept(tmp_path: Path):
+    payload = _packet_fixture()
+    del payload["matched_taxonomy_proof"]
+    packet = _write_json(tmp_path / "packet.json", payload)
+
+    report = build_stage9_40e_verifier_report.build_report(packet_path=packet)
+
+    decision = report["explicit_verifier_decision"]
+    assert decision["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert decision["confidence"] == 0.0
+    assert report["verification_stack"]["gates"]["uniqueness"]["passed"] is None
+    assert report["generation_readiness"]["reasons"] == ["uniqueness_gate_unavailable"]
+
+
+def test_failed_uniqueness_proof_suppresses(tmp_path: Path):
+    payload = _packet_fixture()
+    payload["matched_taxonomy_proof"] = {
+        "status": "matched_taxonomy_failed",
+        "summary": {
+            "condition3_passed": False,
+            "control_b_passed": False,
+            "control_c_passed": True,
+            "reason": "wrong-class controls carried the same lift",
+        },
+    }
+    packet = _write_json(tmp_path / "packet.json", payload)
+
+    report = build_stage9_40e_verifier_report.build_report(packet_path=packet)
+
+    decision = report["explicit_verifier_decision"]
+    assert decision["verdict"] == "SUPPRESS"
+    assert decision["confidence"] == 0.9
+    assert report["verification_stack"]["gates"]["uniqueness"]["passed"] is False
+    assert report["generation_readiness"]["reasons"] == ["uniqueness_gate_failed"]
 
 
 def test_missing_core_verified_chip_flags_not_accept(tmp_path: Path):

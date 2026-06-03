@@ -49,6 +49,14 @@ CORRECTED_BASELINE = {
 REVIEW_VERDICT = "FLAG_FOR_HUMAN_REVIEW"
 FINAL_VERDICTS = {"ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"}
 PASSING_PROOF_STATUSES = {"present", "verified"}
+PASSING_UNIQUENESS_STATUSES = {
+    "matched_taxonomy_validated",
+    "uniqueness_validated",
+    "condition3_validated",
+    "condition_3_validated",
+    "passed",
+    "verified",
+}
 REQUIRED_PROOF_CHIPS = (
     "model_proof",
     "cas_readout",
@@ -486,6 +494,30 @@ def _make_report_summary(tier_name: str, report: dict[str, Any]) -> dict[str, An
         if "implication" in report:
             summary["implication"] = report["implication"]
 
+    if tier_name == "matched_taxonomy":
+        source_summary = _mapping_or_empty(report.get("summary"))
+        for key in (
+            "condition3_passed",
+            "condition_3_passed",
+            "matched_taxonomy_gate_passed",
+            "uniqueness_gate_passed",
+            "control_b_passed",
+            "control_c_passed",
+            "reason",
+        ):
+            if key in report:
+                summary[key] = report[key]
+            elif key in source_summary:
+                summary[key] = source_summary[key]
+        for key in ("control_b", "control_c"):
+            value = report.get(key, source_summary.get(key))
+            if isinstance(value, dict):
+                summary[key] = {
+                    "status": value.get("status"),
+                    "passed": value.get("passed"),
+                    "reason": value.get("reason"),
+                }
+
     return summary
 
 
@@ -719,9 +751,36 @@ def _proof_chips_pass(proof_chips: list[dict[str, str]]) -> bool:
     return all(by_id.get(chip_id) == "verified" for chip_id in STRICT_VERIFIED_PROOF_CHIPS)
 
 
+def _uniqueness_gate_passed(uniqueness_proof: dict[str, Any]) -> bool:
+    if uniqueness_proof.get("status") != "present":
+        return False
+    summary = _mapping_or_empty(uniqueness_proof.get("summary"))
+    source = _mapping_or_empty(uniqueness_proof.get("source_fields"))
+    status = str(
+        source.get("status")
+        or summary.get("status")
+        or ""
+    ).lower()
+    condition3 = summary.get("condition3_passed")
+    if condition3 is None:
+        condition3 = summary.get("condition_3_passed")
+    if condition3 is None:
+        condition3 = summary.get("matched_taxonomy_gate_passed")
+    if condition3 is None:
+        condition3 = summary.get("uniqueness_gate_passed")
+    control_b = summary.get("control_b_passed")
+    control_c = summary.get("control_c_passed")
+    if status in PASSING_UNIQUENESS_STATUSES:
+        return True
+    if condition3 is True:
+        return True
+    return control_b is True and control_c is True
+
+
 def _final_verdict(
     *,
     proof_chips: list[dict[str, str]],
+    uniqueness_proof: dict[str, Any],
     explicit_decision: dict[str, Any] | None,
 ) -> str:
     if explicit_decision is None:
@@ -729,6 +788,8 @@ def _final_verdict(
     if not _proof_chips_pass(proof_chips):
         return REVIEW_VERDICT
     verdict = explicit_decision.get("verdict")
+    if verdict == "ACCEPT" and not _uniqueness_gate_passed(uniqueness_proof):
+        return REVIEW_VERDICT
     return str(verdict) if verdict in FINAL_VERDICTS else REVIEW_VERDICT
 
 
@@ -736,6 +797,7 @@ def _verdict_rationale(
     *,
     tier_statuses: dict[str, str],
     proof_chips: list[dict[str, str]],
+    uniqueness_proof: dict[str, Any],
     explicit_decision: dict[str, Any] | None,
     final_verdict: str,
 ) -> str:
@@ -760,6 +822,15 @@ def _verdict_rationale(
             "Verifier decision is not final because required proof chips are not "
             "pass-ready: " + ", ".join(weak_chips) + "."
         )
+    if (
+        explicit_decision is not None
+        and explicit_decision.get("verdict") == "ACCEPT"
+        and not _uniqueness_gate_passed(uniqueness_proof)
+    ):
+        return (
+            "Verifier decision is not final because matched-taxonomy/uniqueness "
+            "proof has not passed."
+        )
     if explicit_decision is None:
         return (
             "All merger-side proof tiers are present, but no valid explicit verifier "
@@ -777,6 +848,7 @@ def build_packet(
     ablation_report: Path | None = None,
     cover_report: Path | None = None,
     bridge_report: Path | None = None,
+    uniqueness_report: Path | None = None,
     verifier_report: Path | None = None,
     generated_at: datetime | None = None,
     trace_id_override: str | None = None,
@@ -808,6 +880,12 @@ def build_packet(
         artifact_id="stage9_40e_bridge_report",
         artifact_type="stage9_40e_bridge_report",
     )
+    uniqueness_proof, uniqueness_artifact = _make_optional_proof(
+        tier_name="matched_taxonomy",
+        report_path=uniqueness_report,
+        artifact_id="stage9_40e_matched_taxonomy_report",
+        artifact_type="stage9_40e_matched_taxonomy_uniqueness_report",
+    )
     verifier_proof, verifier_artifact, explicit_decision = _make_verifier_proof(verifier_report)
     model_proof = _extract_model_proof(
         readout, readout_artifact, parameter_scale_override=parameter_scale_override
@@ -822,6 +900,7 @@ def build_packet(
         "causal": causal_proof["status"],
         "control": control_proof["status"],
         "output_bridge": output_bridge_proof["status"],
+        "uniqueness": uniqueness_proof["status"],
         "verifier": verifier_proof["status"],
     }
     proof_chips = _proof_chips(
@@ -833,6 +912,7 @@ def build_packet(
     )
     final_verdict = _final_verdict(
         proof_chips=proof_chips,
+        uniqueness_proof=uniqueness_proof,
         explicit_decision=explicit_decision,
     )
     input_artifacts = [
@@ -842,6 +922,7 @@ def build_packet(
             causal_artifact,
             control_artifact,
             bridge_artifact,
+            uniqueness_artifact,
             verifier_artifact,
         )
         if artifact is not None
@@ -859,6 +940,7 @@ def build_packet(
         "causal_proof": causal_proof,
         "control_proof": control_proof,
         "output_bridge_proof": output_bridge_proof,
+        "matched_taxonomy_proof": uniqueness_proof,
         "tier_statuses": tier_statuses,
         "verifier": verifier_proof,
         "verification": {
@@ -870,6 +952,7 @@ def build_packet(
         "verdict_rationale": _verdict_rationale(
             tier_statuses=tier_statuses,
             proof_chips=proof_chips,
+            uniqueness_proof=uniqueness_proof,
             explicit_decision=explicit_decision,
             final_verdict=final_verdict,
         ),
@@ -882,6 +965,10 @@ def build_packet(
                 "Readout-only packets preserve the corrected PR #102 baseline "
                 "but remain flagged for human review."
             ),
+            (
+                "ACCEPT additionally requires matched-taxonomy/uniqueness proof; "
+                "matched-ablation controls alone do not close that gate."
+            ),
         ],
         "provenance": {
             "input_artifacts": input_artifacts,
@@ -890,6 +977,7 @@ def build_packet(
             "ablation_report": str(ablation_report) if ablation_report else None,
             "cover_report": str(cover_report) if cover_report else None,
             "bridge_report": str(bridge_report) if bridge_report else None,
+            "uniqueness_report": str(uniqueness_report) if uniqueness_report else None,
             "verifier_report": str(verifier_report) if verifier_report else None,
         },
     }
@@ -996,6 +1084,7 @@ def render_markdown(packet: dict[str, Any]) -> str:
 | Causal proof | {tiers["causal"]} |
 | Control proof | {tiers["control"]} |
 | Output/bridge proof | {tiers["output_bridge"]} |
+| Matched-taxonomy proof | {tiers["uniqueness"]} |
 | Verifier | {tiers["verifier"]} |
 
 ## Proof Chips
@@ -1041,6 +1130,7 @@ def main() -> int:
     parser.add_argument("--ablation-report", type=Path)
     parser.add_argument("--cover-report", type=Path)
     parser.add_argument("--bridge-report", type=Path)
+    parser.add_argument("--uniqueness-report", type=Path)
     parser.add_argument("--verifier-report", type=Path)
     parser.add_argument("--output-json", type=Path, default=DEFAULT_OUTPUT_JSON)
     parser.add_argument("--output-markdown", type=Path, default=DEFAULT_OUTPUT_MARKDOWN)
@@ -1076,6 +1166,7 @@ def main() -> int:
         ablation_report=args.ablation_report,
         cover_report=args.cover_report,
         bridge_report=args.bridge_report,
+        uniqueness_report=args.uniqueness_report,
         verifier_report=args.verifier_report,
         trace_id_override=args.trace_id,
         run_id_override=args.run_id,

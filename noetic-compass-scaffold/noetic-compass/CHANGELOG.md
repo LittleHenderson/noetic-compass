@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Stage 9 40E ACCEPT gate now requires uniqueness proof, **BUILT** - matched ablation alone cannot mint a final `ACCEPT` (Jun 3, 2026)
+
+The Pythia archive audit exposed a real memory hazard: the historical packet at `D:\tksCAS-archive\pythia160m_gate1_reproduction_20260531\` is the same run as the WORM-retained packet, but its old `ACCEPT` verdict came from the pre-fix control-chip overclaim. This entry hardens the next gate so future tooling cannot treat matched-ablation/control presence alone as enough for final `ACCEPT`.
+
+**1) The verifier report builder has a uniqueness gate.** `build_stage9_40e_verifier_report.py` now looks for explicit matched-taxonomy / uniqueness proof. If it is present and passed, `ACCEPT` can still be emitted when all other gates pass. If it is missing, the report stays `FLAG_FOR_HUMAN_REVIEW`. If it is explicitly failed, the report returns `SUPPRESS`.
+
+**2) The packet merger also enforces the gate.** `merge_stage9_40e_evidence_packet.py` now accepts an optional `--uniqueness-report` and records `matched_taxonomy_proof` in the packet. Even if a verifier report says `ACCEPT`, the merger keeps the packet at `FLAG_FOR_HUMAN_REVIEW` unless matched-taxonomy/uniqueness proof has passed. `SUPPRESS` remains allowed for genuine blocking findings.
+
+**3) The Pythia archive is not reinterpreted as a pass.** The correct reading is now explicit: the archive is the canonical source for the stored activations/reports and should prevent rerunning Pythia, but its `"verdict": "ACCEPT"` packet is the pre-fix overclaim. The honest production verdict for trace `pythia-160m-stage9-40e-readout-20260531` remains WORM-retained `FLAG_FOR_HUMAN_REVIEW`.
+
+### Pieces (this entry)
+- `live-trace-worker/scripts/build_stage9_40e_verifier_report.py` *(edit)* - add the tri-state uniqueness gate to the verifier report.
+- `live-trace-worker/scripts/merge_stage9_40e_evidence_packet.py` *(edit)* - add optional `--uniqueness-report`, packet `matched_taxonomy_proof`, and merger-side `ACCEPT` blocking when uniqueness proof is absent.
+- `live-trace-worker/tests/test_build_stage9_40e_verifier_report.py` *(edit)* - pin accept/pass, missing-proof FLAG, and failed-proof SUPPRESS behavior.
+- `live-trace-worker/tests/test_merge_stage9_40e_evidence_packet.py` *(edit)* - pin that explicit verifier `ACCEPT` is not final without uniqueness proof.
+
+### Tests / verification (this entry)
+- Stage 9 verifier + merger: `live-trace-worker/tests/test_build_stage9_40e_verifier_report.py live-trace-worker/tests/test_merge_stage9_40e_evidence_packet.py` **20 passed**.
+
+Honesty boundary: this does not run the missing matched-ablation or matched-taxonomy computation for Pythia-160M. It only prevents the software from treating those absent proofs as a final `ACCEPT`.
+
 ## Pythia-160M Stage 9 packet anchored under Object Lock, **VERIFIED on Render** - the real packet is now WORM-retained as `FLAG_FOR_HUMAN_REVIEW`, not `ACCEPT` (Jun 3, 2026)
 
 This is the irreversible production WORM step for the Pythia-160M Stage 9 40E packet. The hosted service first served the packet read-only as `FLAG_FOR_HUMAN_REVIEW`, then anchored it with `require_object_lock=true`, then re-read the stored static anchor through `/verify`.

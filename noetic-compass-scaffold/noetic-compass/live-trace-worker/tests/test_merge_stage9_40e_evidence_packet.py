@@ -23,6 +23,22 @@ def _write_json(path: Path, payload: dict) -> Path:
     return path
 
 
+def _uniqueness_report() -> dict:
+    return {
+        "schema_version": "stage9_40e_matched_taxonomy.v0",
+        "status": "matched_taxonomy_validated",
+        "method_label": "matched-taxonomy-fixture",
+        "run_id": "uniqueness-run",
+        "trace_id": "trace-stage9-40e",
+        "summary": {
+            "condition3_passed": True,
+            "control_b_passed": True,
+            "control_c_passed": True,
+            "reason": "matched taxonomy controls passed",
+        },
+    }
+
+
 def _readout_fixture() -> dict:
     return {
         "schema_version": "cas_harness_40_element_probe_eval.v1",
@@ -79,6 +95,7 @@ def test_readout_only_packet_is_review_flag_and_never_final_verdict(tmp_path):
         "causal": "missing",
         "control": "missing",
         "output_bridge": "missing",
+        "uniqueness": "missing",
         "verifier": "missing",
     }
     assert packet["causal_proof"]["blocking_reason"] == (
@@ -208,6 +225,7 @@ def test_optional_reports_upgrade_tier_statuses_without_final_verdict(tmp_path):
     assert packet["tier_statuses"]["causal"] == "present"
     assert packet["tier_statuses"]["control"] == "present"
     assert packet["tier_statuses"]["output_bridge"] == "present"
+    assert packet["tier_statuses"]["uniqueness"] == "missing"
     assert packet["tier_statuses"]["verifier"] == "missing"
     # Candidate-only cover discovery records the control tier as evidence but is
     # NOT verified, so the strict-verified proof-chip gate stays blocked.
@@ -283,6 +301,7 @@ def test_valid_verifier_report_can_emit_accept_when_proof_chips_pass(tmp_path):
             "bridge_gates": {"probe_readable": {"passed": True}},
         },
     )
+    uniqueness = _write_json(tmp_path / "uniqueness.json", _uniqueness_report())
     verifier = _write_json(
         tmp_path / "verifier.json",
         {
@@ -299,10 +318,12 @@ def test_valid_verifier_report_can_emit_accept_when_proof_chips_pass(tmp_path):
         ablation_report=ablation,
         cover_report=cover,
         bridge_report=bridge,
+        uniqueness_report=uniqueness,
         verifier_report=verifier,
     )
 
     assert packet["tier_statuses"]["verifier"] == "present"
+    assert packet["tier_statuses"]["uniqueness"] == "present"
     assert packet["verification"]["proof_chip_gate"] == "passed"
     assert packet["verification"]["explicit_verifier_decision"]["verdict"] == "ACCEPT"
     assert packet["verification"]["explicit_verifier_decision"]["confidence"] == 0.91
@@ -312,6 +333,62 @@ def test_valid_verifier_report_can_emit_accept_when_proof_chips_pass(tmp_path):
     assert chips["causal_proof"] == "verified"
     assert chips["control_proof"] == "verified"
     assert chips["output_proof"] == "verified"
+
+
+def test_explicit_accept_is_blocked_when_uniqueness_proof_is_missing(tmp_path):
+    readout = _write_json(tmp_path / "readout.json", _readout_fixture())
+    ablation = _write_json(
+        tmp_path / "ablation.json",
+        {
+            "status": "completed",
+            "primary_result": {
+                "true_disruption": 0.2872767857142857,
+                "random_same_rank_max_disruption": 0.002678571428571419,
+                "guard_status": "passed",
+            },
+        },
+    )
+    cover = _write_json(
+        tmp_path / "cover.json",
+        {
+            "status": "matched_ablation_validated",
+            "selected_layer": 2,
+            "top_k": 8,
+            "cover_map": {f"^{i}|P": {"true_cover": [f"L2N{i}"]} for i in range(40)},
+        },
+    )
+    bridge = _write_json(
+        tmp_path / "bridge.json",
+        {
+            "status": "PROBE_PREDICTED_40E_ETA_EPSILON_BRIDGE_PASS",
+            "n_cases": 80,
+            "probe_prediction": {"selected_element_accuracy": 0.975},
+            "key_comparisons": {"probe_readable_delta_vs_none": 1.41205},
+            "bridge_gates": {"probe_readable": {"passed": True}},
+        },
+    )
+    verifier = _write_json(
+        tmp_path / "verifier.json",
+        {
+            "verdict": "ACCEPT",
+            "confidence": 0.91,
+            "reason": "All old fixture gates pass, but uniqueness is missing.",
+        },
+    )
+
+    packet = merge_stage9_40e_evidence_packet.build_packet(
+        readout_report=readout,
+        ablation_report=ablation,
+        cover_report=cover,
+        bridge_report=bridge,
+        verifier_report=verifier,
+    )
+
+    assert packet["verification"]["proof_chip_gate"] == "passed"
+    assert packet["tier_statuses"]["uniqueness"] == "missing"
+    assert packet["verification"]["explicit_verifier_decision"]["verdict"] == "ACCEPT"
+    assert packet["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert "matched-taxonomy/uniqueness proof has not passed" in packet["verdict_rationale"]
 
 
 def test_candidate_only_cover_blocks_accept_and_keeps_control_chip_present(tmp_path):
@@ -353,6 +430,7 @@ def test_candidate_only_cover_blocks_accept_and_keeps_control_chip_present(tmp_p
             "bridge_gates": {"probe_readable": {"passed": True}},
         },
     )
+    uniqueness = _write_json(tmp_path / "uniqueness.json", _uniqueness_report())
     verifier = _write_json(
         tmp_path / "verifier.json",
         {
@@ -367,6 +445,7 @@ def test_candidate_only_cover_blocks_accept_and_keeps_control_chip_present(tmp_p
         ablation_report=ablation,
         cover_report=cover,
         bridge_report=bridge,
+        uniqueness_report=uniqueness,
         verifier_report=verifier,
     )
 

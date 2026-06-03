@@ -34,6 +34,22 @@ DEFAULT_OUTPUT_MARKDOWN = DEFAULT_OUTPUT_JSON.with_suffix(".md")
 FINAL_VERDICTS = {"ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"}
 LICENSE_GRADE_MODES = {"HIGH_PRECISION", "BALANCED"}
 PASSING_PROOF_STATUSES = {"present", "verified"}
+PASSING_UNIQUENESS_STATUSES = {
+    "matched_taxonomy_validated",
+    "uniqueness_validated",
+    "condition3_validated",
+    "condition_3_validated",
+    "passed",
+    "verified",
+}
+FAILING_UNIQUENESS_STATUSES = {
+    "failed",
+    "blocked",
+    "matched_taxonomy_failed",
+    "uniqueness_failed",
+    "condition3_failed",
+    "condition_3_failed",
+}
 STRICT_VERIFIED_PROOF_CHIPS = {
     "cas_readout",
     "causal_proof",
@@ -236,6 +252,98 @@ def _packet_gate(packet: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _bool_or_none(value: Any) -> bool | None:
+    return value if isinstance(value, bool) else None
+
+
+def _nested_bool(mapping: dict[str, Any], *names: str) -> bool | None:
+    for name in names:
+        value = _bool_or_none(mapping.get(name))
+        if value is not None:
+            return value
+    return None
+
+
+def _control_status_bool(summary: dict[str, Any], *names: str) -> bool | None:
+    for name in names:
+        value = summary.get(name)
+        if isinstance(value, dict):
+            direct = _bool_or_none(value.get("passed"))
+            if direct is not None:
+                return direct
+            status = str(value.get("status") or "").lower()
+            if status in PASSING_UNIQUENESS_STATUSES:
+                return True
+            if status in FAILING_UNIQUENESS_STATUSES:
+                return False
+        direct = _bool_or_none(value)
+        if direct is not None:
+            return direct
+    return None
+
+
+def _uniqueness_gate(packet: dict[str, Any]) -> dict[str, Any]:
+    proof_key = None
+    proof: dict[str, Any] = {}
+    for candidate in (
+        "matched_taxonomy_proof",
+        "uniqueness_proof",
+        "condition3_proof",
+        "condition_3_proof",
+    ):
+        candidate_proof = _mapping_or_empty(packet.get(candidate))
+        if candidate_proof:
+            proof_key = candidate
+            proof = candidate_proof
+            break
+    if not proof:
+        return {
+            "passed": None,
+            "proof_key": None,
+            "status": "missing",
+            "reason": "matched-taxonomy/uniqueness proof was not supplied",
+        }
+
+    summary = _mapping_or_empty(proof.get("summary"))
+    status = str(
+        proof.get("status")
+        or summary.get("status")
+        or proof.get("verdict")
+        or ""
+    ).lower()
+    condition3 = _nested_bool(
+        summary,
+        "condition3_passed",
+        "condition_3_passed",
+        "matched_taxonomy_gate_passed",
+        "uniqueness_gate_passed",
+    )
+    control_b = _control_status_bool(summary, "control_b", "control_b_passed")
+    control_c = _control_status_bool(summary, "control_c", "control_c_passed")
+
+    failed_flag = any(value is False for value in (condition3, control_b, control_c))
+    if status in FAILING_UNIQUENESS_STATUSES or failed_flag:
+        passed: bool | None = False
+    elif (
+        status in PASSING_UNIQUENESS_STATUSES
+        or condition3 is True
+        or (control_b is True and control_c is True)
+    ):
+        passed = True
+    else:
+        passed = None
+
+    return {
+        "passed": passed,
+        "proof_key": proof_key,
+        "status": status or "present",
+        "condition3_passed": condition3,
+        "control_b_passed": control_b,
+        "control_c_passed": control_c,
+        "reason": summary.get("reason") or proof.get("reason"),
+    }
+
+
 def _confidence_components(gates: dict[str, dict[str, Any]]) -> dict[str, float]:
     components: dict[str, float] = {}
     readout_acc = gates["readout"].get("hidden_probe_test_acc")
@@ -246,6 +354,7 @@ def _confidence_components(gates: dict[str, dict[str, Any]]) -> dict[str, float]
         components["bridge_selected_element_accuracy"] = selected_acc
     components["causal_guard"] = 1.0 if gates["causal"]["passed"] else 0.0
     components["control_gate"] = 1.0 if gates["control"]["passed"] else 0.0
+    components["uniqueness_gate"] = 1.0 if gates["uniqueness"]["passed"] is True else 0.0
     components["output_bridge_gate"] = 1.0 if gates["output_bridge"]["passed"] else 0.0
     components["packet_gate"] = 1.0 if gates["packet"]["passed"] else 0.0
     return components
@@ -268,6 +377,14 @@ def _decide(*, mode: str, gates: dict[str, dict[str, Any]]) -> tuple[str, float 
 
     if gates["proof_chips"]["passed"] is False:
         reasons.append("proof_chip_gate_blocked")
+        return "FLAG_FOR_HUMAN_REVIEW", 0.0, reasons
+
+    if gates["uniqueness"]["passed"] is False:
+        reasons.append("uniqueness_gate_failed")
+        return "SUPPRESS", 0.9, reasons
+
+    if gates["uniqueness"]["passed"] is not True:
+        reasons.append("uniqueness_gate_unavailable")
         return "FLAG_FOR_HUMAN_REVIEW", 0.0, reasons
 
     if mode not in LICENSE_GRADE_MODES:
@@ -301,6 +418,7 @@ def build_report(
         "readout": _readout_gate(packet),
         "causal": _causal_gate(packet),
         "control": _control_gate(packet),
+        "uniqueness": _uniqueness_gate(packet),
         "output_bridge": _bridge_gate(packet),
     }
     verdict, confidence, reasons = _decide(mode=mode, gates=gates)
@@ -349,7 +467,7 @@ def build_report(
             "formula": (
                 "ACCEPT confidence = min(hidden_probe_test_acc, "
                 "bridge_selected_element_accuracy, causal_guard, control_gate, "
-                "output_bridge_gate, packet_gate). SUPPRESS confidence is a "
+                "uniqueness_gate, output_bridge_gate, packet_gate). SUPPRESS confidence is a "
                 "blocking-risk score. FLAG confidence is unavailable unless a "
                 "risk score is present."
             ),
