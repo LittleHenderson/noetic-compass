@@ -1263,10 +1263,13 @@ async def anchor_evidence_packet(
 
     The receipt is honest. With no S3 object-lock bucket configured the packet is
     anchored at mode ``disabled``/``local`` (NOT WORM) and the console correctly
-    stays at FLAG_FOR_HUMAN_REVIEW; ``worm_retained`` is False. Only a real S3
-    object-lock write — re-read and confirmed — flips ``worm_retained`` to True and
-    the console to a SCOPED-VALIDATION ACCEPT (never a per-customer production
-    ACCEPT).
+    stays at FLAG_FOR_HUMAN_REVIEW; ``worm_retained`` is False. A real S3
+    object-lock write — re-read and confirmed — flips ``worm_retained`` to True, but
+    WORM retention records the packet's verdict immutably; it never changes it. The
+    console shows a SCOPED-VALIDATION ACCEPT only when the packet's own verdict is
+    ACCEPT/SUPPRESS *and* the packet is WORM-retained (never a per-customer
+    production ACCEPT); a WORM-retained FLAG_FOR_HUMAN_REVIEW packet stays at
+    FLAG_FOR_HUMAN_REVIEW.
 
     ``require_object_lock=true`` turns the endpoint into a gate: if the anchor did
     not reach verified WORM retention it returns 409, so a promotion pipeline can
@@ -1286,12 +1289,27 @@ async def anchor_evidence_packet(
     hashes = anchored.get("hashes") if isinstance(anchored, dict) else None
     hash_log_path = hashes.get("hash_log_path") if isinstance(hashes, dict) else None
 
-    if worm_retained:
+    packet_verdict = (
+        str(packet.get("verdict", "")).strip().upper()
+        if isinstance(packet, dict)
+        else ""
+    )
+    verdict_is_accept = packet_verdict in {"ACCEPT", "SUPPRESS"}
+
+    if worm_retained and verdict_is_accept:
         console_state = "accept_scoped_validation"
         message = (
             "Packet is WORM-retained. The Audit Console will show a SCOPED-VALIDATION "
             "ACCEPT for this packet (decision_scope stage9_40e_validation_packet) — "
             "NOT a per-customer production ACCEPT."
+        )
+    elif worm_retained:
+        console_state = "flag_for_human_review"
+        message = (
+            "Packet is WORM-retained (immutably anchored), but its verdict is "
+            f"{packet_verdict or 'FLAG_FOR_HUMAN_REVIEW'}, so the Audit Console "
+            "correctly stays at FLAG_FOR_HUMAN_REVIEW. WORM anchoring records a "
+            "verdict immutably; it never upgrades a FLAG to an ACCEPT."
         )
     else:
         console_state = "flag_for_human_review"

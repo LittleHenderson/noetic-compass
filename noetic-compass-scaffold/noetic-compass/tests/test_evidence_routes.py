@@ -622,6 +622,49 @@ def test_evidence_anchor_require_object_lock_conflicts_when_not_worm(
     assert detail["trace_id"] == _STAGE9_40E_PYTHIA_TRACE_ID
 
 
+def test_evidence_anchor_worm_retained_flag_packet_stays_flag(
+    client, auth_headers, isolated_anchor_store, monkeypatch
+):
+    """A WORM-retained packet whose verdict is FLAG must NOT be relabeled an
+    ACCEPT. Anchoring records a verdict immutably; it never upgrades a FLAG to an
+    ACCEPT. The Pythia-160M Stage 9 40E packet's honest verdict is
+    FLAG_FOR_HUMAN_REVIEW (control_proof is candidate-only, not verified), so even
+    a successful Object-Lock write must keep the console at FLAG_FOR_HUMAN_REVIEW.
+    Without this, console_state keyed on worm_retained alone and silently upgraded
+    a FLAG to a SCOPED-VALIDATION ACCEPT on lock."""
+    import api.routes.evidence as evidence_route
+
+    def _fake_worm_retained(_anchored, _verify):
+        return {
+            "worm_retained": True,
+            "anchor_status": "anchored",
+            "anchor_mode": "s3",
+            "anchor_uri": "s3://test-bucket/cas-harness/evidence-anchors/x.json",
+            "verify_overall": "all_match",
+            "external_anchor_match": True,
+            "external_anchor_notes": (
+                "object was re-read; object lock GOVERNANCE; retention is active"
+            ),
+        }
+
+    monkeypatch.setattr(
+        evidence_route, "summarize_static_anchor_worm_status", _fake_worm_retained
+    )
+
+    resp = client.post(
+        f"/evidence/{_STAGE9_40E_PYTHIA_TRACE_ID}/anchor",
+        params={"require_object_lock": "true"},
+        headers=auth_headers,
+    )
+    # require_object_lock passes (the lock succeeded), so no 409 ...
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+    assert body["worm_retained"] is True
+    # ... but the FLAG verdict must hold: NOT accept_scoped_validation.
+    assert body["console_state"] == "flag_for_human_review"
+    assert "never upgrades a FLAG to an ACCEPT" in body["message"]
+
+
 def test_evidence_anchor_unknown_trace_id_404(client, auth_headers):
     resp = client.post(
         "/evidence/this_trace_id_does_not_exist_xyz_42/anchor", headers=auth_headers

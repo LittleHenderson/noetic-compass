@@ -11,9 +11,9 @@
     "formula": "ACCEPT confidence = min(hidden_probe_test_acc, bridge_selected_element_accuracy, causal_guard, control_gate, output_bridge_gate, packet_gate). SUPPRESS confidence is a blocking-risk score. FLAG confidence is unavailable unless a risk score is present.",
     "important_limit": "This is packet-level validation confidence, not mathematical certainty and not a per-customer row confidence unless the source packet is a production row."
   },
-  "created_at": "2026-06-01T06:18:16.596343+00:00",
+  "created_at": "2026-06-03T15:26:49.042404+00:00",
   "explicit_verifier_decision": {
-    "confidence": 0.95,
+    "confidence": 0.0,
     "coverage": {
       "basis": "stage9_40e_validation_cases",
       "case_count": 80,
@@ -21,16 +21,16 @@
     },
     "decision_scope": "stage9_40e_validation_packet",
     "mode": "BALANCED",
-    "reason": "all_stage9_40e_validation_gates_passed",
+    "reason": "proof_chip_gate_blocked",
     "source": "stage9_40e_packet_verifier",
-    "verdict": "ACCEPT"
+    "verdict": "FLAG_FOR_HUMAN_REVIEW"
   },
   "generation_readiness": {
-    "generation_readiness": "allow",
+    "generation_readiness": "caveat",
     "mode": "BALANCED",
     "policy_version": "stage9_40e_packet_verifier_v1",
     "reasons": [
-      "all_stage9_40e_validation_gates_passed"
+      "proof_chip_gate_blocked"
     ],
     "risk_score": 0.0
   },
@@ -44,8 +44,8 @@
   "run_id": "pythia-160m-stage9-40e-20260531",
   "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
   "source_packet": "docs\\working\\pythia160m_gate1\\pythia160m_stage9_40e_evidence_packet.json",
-  "source_packet_sha256": "a714f0aa92070161ef9afd32f7a9cbe2d3de2a1342307640eff4a50cac171a47",
-  "status": "STAGE9_40E_VERIFIER_ACCEPT",
+  "source_packet_sha256": "527f21d20ef90c7e7a91ffa55aabd8a05716ffbe30d63ac9a54db9d504aa226f",
+  "status": "STAGE9_40E_VERIFIER_FLAG_FOR_HUMAN_REVIEW",
   "trace_id": "pythia-160m-stage9-40e-readout-20260531",
   "verification_stack": {
     "gates": {
@@ -78,14 +78,16 @@
         "trace_id": "pythia-160m-stage9-40e-readout-20260531"
       },
       "proof_chips": {
-        "core_not_verified": [],
+        "core_not_verified": [
+          "control_proof"
+        ],
         "missing": [],
         "non_passing": [],
-        "passed": true,
+        "passed": false,
         "statuses": {
           "cas_readout": "verified",
           "causal_proof": "verified",
-          "control_proof": "verified",
+          "control_proof": "present",
           "model_proof": "present",
           "output_proof": "verified",
           "packet_proof": "present"
@@ -99,7 +101,7 @@
         "shuffled_label_hidden_mean_test_acc": 0.02619419642857143
       }
     },
-    "proof_chip_gate": "passed",
+    "proof_chip_gate": "blocked",
     "proof_chips": [
       {
         "detail": "Model identity/hash evidence is recorded in the packet.",
@@ -123,7 +125,7 @@
         "detail": "Candidate cover/control evidence is recorded for the Stage 9 40E run.",
         "id": "control_proof",
         "name": "Control proof",
-        "status": "verified"
+        "status": "present"
       },
       {
         "detail": "Eta-to-epsilon readable bridge output evidence is recorded.",

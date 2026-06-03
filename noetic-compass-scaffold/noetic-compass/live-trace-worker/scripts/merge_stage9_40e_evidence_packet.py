@@ -643,7 +643,25 @@ def _control_chip_status(control_proof: dict[str, Any]) -> str:
         return "missing"
     summary = _mapping_or_empty(control_proof.get("summary"))
     class_count = summary.get("class_count")
-    if isinstance(class_count, int) and class_count >= 40:
+    if not (isinstance(class_count, int) and class_count >= 40):
+        return "present"
+    # Cover discovery that is still candidate-only (no matched-ablation
+    # validation against random same-size and wrong-class controls) is recorded
+    # evidence but is NOT verified. Having 40 candidate cover classes is not the
+    # same as a validated control: a "verified" control chip requires the cover
+    # report to declare that matched-ablation validation actually ran and passed.
+    source_status = str(
+        _mapping_or_empty(control_proof.get("source_fields")).get("status")
+        or summary.get("status")
+        or ""
+    ).lower()
+    if "candidate" in source_status:
+        return "present"
+    if source_status in {
+        "matched_ablation_validated",
+        "control_validation_completed",
+        "controls_validated",
+    }:
         return "verified"
     return "present"
 

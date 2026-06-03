@@ -4,7 +4,7 @@
 - Trace ID: `pythia-160m-stage9-40e-readout-20260531`
 - Run ID: `pythia-160m-stage9-40e-20260531`
 - Method: `S9-40E-ORIGINAL-BASELINE-READOUT`
-- Verdict: `ACCEPT`
+- Verdict: `FLAG_FOR_HUMAN_REVIEW`
 
 ## Tier Status
 
@@ -25,7 +25,7 @@
 | Model proof | present | Model identity/hash evidence is recorded in the packet. |
 | CAS readout | verified | Corrected Stage 9 40E hidden-state readout beats text and shuffled controls. |
 | Causal proof | verified | Subspace ablation/control evidence is recorded for the Stage 9 40E readout. |
-| Control proof | verified | Candidate cover/control evidence is recorded for the Stage 9 40E run. |
+| Control proof | present | Candidate cover/control evidence is recorded for the Stage 9 40E run. |
 | Output proof | verified | Eta-to-epsilon readable bridge output evidence is recorded. |
 | Packet proof | present | Evidence Packet schema, trace ID, and source artifact hashes are recorded. |
 
@@ -77,15 +77,15 @@
 
 | Field | Value |
 | --- | --- |
-| Verdict | `ACCEPT` |
-| Confidence | 0.95 |
+| Verdict | `FLAG_FOR_HUMAN_REVIEW` |
+| Confidence | 0 |
 | Source | stage9_40e_packet_verifier |
 | Scope | stage9_40e_validation_packet |
-| Reason | all_stage9_40e_validation_gates_passed |
+| Reason | proof_chip_gate_blocked |
 
 ## Rationale
 
-All required proof chips are pass-ready and the attached verifier returned `ACCEPT` with confidence 0.95.
+All required proof chips are pass-ready and the attached verifier returned `FLAG_FOR_HUMAN_REVIEW` with confidence 0.
 
 ## Caveats
 
