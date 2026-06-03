@@ -154,7 +154,7 @@ class _FakeAnchorApi:
         self.worker_heartbeat_count = 0
         self.audit_id = "audit-anchor-smoke"
         self.trace_id = f"{self.audit_id}-distributed-merge"
-        self.model_id = "deploy-check/open-weight-anchor-smoke-1b"
+        self.model_id = "deploy-check/open-weight-ledger-watch-20b"
         self.protected_headers: list[dict[str, str]] = []
         self.receipt_fragment_ref: str | None = None
         self.worker = {
@@ -209,6 +209,8 @@ class _FakeAnchorApi:
             return _JsonResponse({"token": "fetched-token", "expires_in_minutes": 60})
 
         if path == "/api/cas-harness/audit/distributed/session":
+            assert payload is not None
+            assert payload["accept_audit_data_capture"] is True
             return _JsonResponse({"audit_id": self.audit_id, "total_workers": 1})
 
         if path == f"/api/cas-harness/audit/distributed/session/{self.audit_id}/dispatch":

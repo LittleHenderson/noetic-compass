@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Hosted Object-Lock anchor smoke, **VERIFIED on Render** - a throwaway distributed Evidence Packet was anchored through the live S3 Object-Lock path, re-read by `/verify`, and confirmed under `GOVERNANCE` retention (Jun 3, 2026)
+
+This closes the wiring question around the Object-Lock bucket before touching the real Pythia packet. The smoke used hosted production, wrote a throwaway deploy-check packet, and required both S3 mode and active Object Lock retention.
+
+**1) The deploy smoke now matches current gates.** `scripts/verify_evidence_anchor_deployed.py` now sends `accept_audit_data_capture=true`, because gate 8 is a real run-creation requirement. It also handles multi-worker plans instead of assuming the old one-worker shape; hosted persistent state already has `probe-worker-01` and `probe-worker-02` registered for `deploy-check/open-weight-ledger-watch-20b`.
+
+**2) Hosted Object Lock is proven, not assumed.** The smoke produced trace `cas-dist-ecb55108b0a964da-distributed-merge`, anchored it at `s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/cas-dist-ecb55108b0a964da-distributed-merge/bc9bec027c1d528aff55d97382fa6b12e36ca41e8ded90a78c70d8b3ae4b2179.json`, and `/verify` reported `overall: all_match`.
+
+**3) Retention is active.** The anchor receipt reported `object_lock_mode: "GOVERNANCE"`, `retention_days: 30`, and `object_lock_retain_until: "2026-07-03T14:56:13.157525+00:00"`. The external-anchor verify note said the S3 object was re-read and Object Lock retention is active until `2026-07-03T14:56:13+00:00`.
+
+### Pieces (this entry)
+- `scripts/verify_evidence_anchor_deployed.py` *(edit)* - current gate payload, durable hosted worker namespace, and multi-worker receipt drain.
+- `scripts/test_verify_evidence_anchor_deployed.py` *(edit)* - pins the data-capture acknowledgement and keeps the verifier contract green.
+- `docs/working/production_readiness/19_hosted_object_lock_anchor_smoke_2026_06_03.md` *(new)* - evidence record with the hosted trace id, S3 URI, receipt fields, and `/verify` note.
+
+### Tests / verification (this entry)
+- Verifier unit tests: `scripts/test_verify_evidence_anchor_deployed.py` **7 passed**.
+- Hosted deploy smoke: **PASS** against `https://noetic-compass-api.onrender.com` with `--require-anchor-mode s3 --require-object-lock`.
+
+Honesty boundary: this proves hosted S3 Object-Lock wiring with throwaway deploy-check data. It does not yet anchor the real Pythia-160M packet.
+
 ## CRM pipeline status hardening, **BUILT after code review** - sales status updates now use one domain validation path and store-level atomic writes, closing the three review findings on the first pipeline endpoint (Jun 3, 2026)
 
 The first pipeline-status endpoint was correct on the happy path, but review found three real edge problems: get-then-save could lose concurrent updates, the HTTP route rejected title-case labels even though the domain normalizer accepted them, and loosening the route later would have exposed an uncaught `LeadValidationError`. This entry closes all three.

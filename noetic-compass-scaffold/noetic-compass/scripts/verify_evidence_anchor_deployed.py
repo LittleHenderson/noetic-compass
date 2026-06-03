@@ -88,28 +88,30 @@ def main(argv: list[str] | None = None) -> int:
     print("Scope: packet anchoring/control-plane smoke only; no real model inference is performed.")
     print()
 
-    step(1, "Create a one-worker distributed audit")
+    step(1, "Create a distributed audit")
     audit = post_json(
         base,
         "/api/cas-harness/audit/distributed/session",
         {
-            "model_id": "deploy-check/open-weight-anchor-smoke-1b",
+            "model_id": "deploy-check/open-weight-ledger-watch-20b",
             "weight_access": "open_weight",
-            "parameter_count_b": 1,
-            "num_layers": 1,
+            "parameter_count_b": 20,
+            "num_layers": 8,
             "precision": "bf16",
             "available_gpu_memory_gb": 80,
             "minimum_worker_count": 1,
+            "accept_audit_data_capture": True,
         },
         bearer_token=token,
     )
     audit_id = required_string(audit, "audit_id", "create-audit")
+    total_workers = audit.get("total_workers")
     require_gate(
         "create-audit",
-        audit.get("total_workers") == 1,
-        f"expected one worker, got {audit.get('total_workers')!r}",
+        isinstance(total_workers, int) and total_workers >= 1,
+        f"expected at least one worker, got {total_workers!r}",
     )
-    ok(f"created {audit_id}")
+    ok(f"created {audit_id} with {total_workers} planned worker(s)")
 
     step(2, "Dispatch and prepare fleet")
     dispatched = post_json(
@@ -118,10 +120,12 @@ def main(argv: list[str] | None = None) -> int:
         None,
         bearer_token=token,
     )
-    worker = required_list(dispatched, "worker_evidence", "dispatch-workers")[0]
+    workers = required_list(dispatched, "worker_evidence", "dispatch-workers")
     plan = required_mapping(dispatched, "plan", "dispatch-workers")
     model_id = required_string(plan, "model_id", "dispatch-workers")
-    register_worker(base, worker, model_id, bearer_token=token)
+    for worker in workers:
+        require_gate("dispatch-workers", isinstance(worker, Mapping), "worker entry must be an object")
+        register_worker(base, worker, model_id, bearer_token=token)
     prepared = post_json(
         base,
         f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/prepare",
@@ -130,54 +134,64 @@ def main(argv: list[str] | None = None) -> int:
     )
     require_gate(
         "prepare-fleet",
-        prepared.get("total_jobs") == 1,
-        f"expected one fleet job, got {prepared.get('total_jobs')!r}",
+        prepared.get("total_jobs") == len(workers),
+        f"expected {len(workers)} fleet job(s), got {prepared.get('total_jobs')!r}",
     )
     ok("fleet prepared")
 
-    step(3, "Lease one job and submit a verifier fragment receipt")
-    worker_id = required_string(worker, "worker_id", "dispatch-workers")
-    leased = post_json(
-        base,
-        f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/lease",
-        {"worker_id": worker_id},
-        bearer_token=token,
-    )
-    job_id = required_string(leased, "job_id", "lease-job")
-    lease_token = required_string(leased, "lease_token", "lease-job")
-    expected_outputs = required_string_list(leased, "expected_outputs", "lease-job")
+    step(3, "Lease every job and submit verifier fragment receipts")
     verifier_fragment = stage19_stage20_verifier_fragment()
-    fragment_ref = build_evidence_fragment_ref(
-        audit_id=audit_id,
-        job_id=job_id,
-        worker_id=worker_id,
-        model_id=model_id,
-        layer_start=required_int(leased, "layer_start", "lease-job"),
-        layer_end=required_int(leased, "layer_end", "lease-job"),
-        shard_id=required_string(leased, "shard_id", "lease-job"),
-        expected_outputs=expected_outputs,
-        produced_outputs=expected_outputs,
-        missing_outputs=[],
-        evidence_packet_fragment_payload=verifier_fragment,
-    )
-    receipt = post_json(
-        base,
-        f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/{job_id}/receipt",
-        {
-            "worker_id": worker_id,
-            "lease_token": lease_token,
-            "produced_outputs": expected_outputs,
-            "evidence_packet_fragment_ref": fragment_ref,
-            "evidence_packet_fragment_payload": verifier_fragment,
-        },
-        bearer_token=token,
-    )
+    final_gate_status = None
+    submitted_receipts = 0
+    for worker in workers:
+        worker_id = required_string(worker, "worker_id", "dispatch-workers")
+        leased = post_json(
+            base,
+            f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/lease",
+            {"worker_id": worker_id},
+            bearer_token=token,
+        )
+        job_id = required_string(leased, "job_id", "lease-job")
+        lease_token = required_string(leased, "lease_token", "lease-job")
+        expected_outputs = required_string_list(leased, "expected_outputs", "lease-job")
+        fragment_ref = build_evidence_fragment_ref(
+            audit_id=audit_id,
+            job_id=job_id,
+            worker_id=worker_id,
+            model_id=model_id,
+            layer_start=required_int(leased, "layer_start", "lease-job"),
+            layer_end=required_int(leased, "layer_end", "lease-job"),
+            shard_id=required_string(leased, "shard_id", "lease-job"),
+            expected_outputs=expected_outputs,
+            produced_outputs=expected_outputs,
+            missing_outputs=[],
+            evidence_packet_fragment_payload=verifier_fragment,
+        )
+        receipt = post_json(
+            base,
+            f"/api/cas-harness/audit/distributed/session/{audit_id}/fleet/job/{job_id}/receipt",
+            {
+                "worker_id": worker_id,
+                "lease_token": lease_token,
+                "produced_outputs": expected_outputs,
+                "evidence_packet_fragment_ref": fragment_ref,
+                "evidence_packet_fragment_payload": verifier_fragment,
+            },
+            bearer_token=token,
+        )
+        final_gate_status = receipt.get("verifier_gate_status")
+        require_gate(
+            "submit-receipt",
+            final_gate_status in {"waiting_for_receipts", "ready_for_verifier"},
+            f"unexpected verifier gate status after receipt: {final_gate_status!r}",
+        )
+        submitted_receipts += 1
     require_gate(
         "submit-receipt",
-        receipt.get("verifier_gate_status") == "ready_for_verifier",
-        f"expected ready_for_verifier, got {receipt.get('verifier_gate_status')!r}",
+        final_gate_status == "ready_for_verifier",
+        f"expected ready_for_verifier after all receipts, got {final_gate_status!r}",
     )
-    ok("receipt accepted")
+    ok(f"{submitted_receipts} receipt(s) accepted")
 
     step(4, "Merge packet and run verifier")
     merged = post_json(
