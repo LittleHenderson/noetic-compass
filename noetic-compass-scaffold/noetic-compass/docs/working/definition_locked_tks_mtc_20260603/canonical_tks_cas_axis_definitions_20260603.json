@@ -1,0 +1,168 @@
+{
+  "created_at": "2026-06-03T21:30:56.170191+00:00",
+  "domains": [
+    {
+      "definition": "The highest level of the cognitive architecture: axioms, non-negotiables, core identity, universal truths, intent, integrity, the why, and the always.",
+      "domain": "P",
+      "name": "Principled"
+    },
+    {
+      "definition": "The map-room level: facts, logic, data, categories, strategy, systemic planning, accuracy, efficiency, the how, and the what.",
+      "domain": "C",
+      "name": "Cognitive"
+    },
+    {
+      "definition": "The value-and-weight level: subjective value, emotional resonance, aesthetic weight, meaning, consequence, tradeoff friction, and what it costs.",
+      "domain": "E",
+      "name": "Evaluative"
+    },
+    {
+      "definition": "The concrete execution level: physical action, immediate sensory feedback, material substrate, result, impact, the now, and the doing.",
+      "domain": "O",
+      "name": "Operational"
+    }
+  ],
+  "drives": [
+    {
+      "definition": "the drive toward wholeness, coherence, reconciliation, and integration across particulars",
+      "drive": "F1",
+      "name": "Unity"
+    },
+    {
+      "definition": "the drive toward understanding, evidence, learning, comprehension, and insight",
+      "drive": "F2",
+      "name": "Wisdom"
+    },
+    {
+      "definition": "the drive toward life, energy, thriving, safety, health, and aliveness",
+      "drive": "F3",
+      "name": "Vitality"
+    },
+    {
+      "definition": "the drive toward relationship, empathy, mutual attunement, and social coherence",
+      "drive": "F4",
+      "name": "Connection"
+    },
+    {
+      "definition": "the drive toward choice, action, responsibility, control, and execution authority",
+      "drive": "F5",
+      "name": "Agency"
+    },
+    {
+      "definition": "the drive toward order, rules, boundaries, safeguards, constraints, and system design",
+      "drive": "F6",
+      "name": "Structure"
+    },
+    {
+      "definition": "the drive toward meaning, long-term goals, calling, direction, and larger consequences",
+      "drive": "F7",
+      "name": "Purpose"
+    }
+  ],
+  "element_count": 40,
+  "foundation_count": 28,
+  "honesty_boundary": "The 10 Noetic definitions are verbatim canonical from CAS_FOUNDATIONAL_CLARIFICATIONS. Domains/registers/drives are the current CAS v7.5/v7.7 translation layer. The original TKS 28 Foundations source text is not fully populated in the repository.",
+  "noetics": [
+    {
+      "co": "CO-0",
+      "definition": "All things in and outside the Mind.",
+      "name": "Idea",
+      "operator": "^0"
+    },
+    {
+      "co": "CO-1",
+      "definition": "Various degrees of awareness that processes, stores, outputs, and intakes Ideas.",
+      "name": "Mind",
+      "operator": "^1"
+    },
+    {
+      "co": "CO-2",
+      "definition": "An Idea the Mind has an affinity for and is attracted toward.",
+      "name": "Positive",
+      "operator": "^2"
+    },
+    {
+      "co": "CO-3",
+      "definition": "An Idea the Mind is adverse to and repelled by.",
+      "name": "Negative",
+      "operator": "^3"
+    },
+    {
+      "co": "CO-4",
+      "definition": "The degree to which an Idea resonates with the Mind, its impression.",
+      "name": "Vibration",
+      "operator": "^4"
+    },
+    {
+      "co": "CO-5",
+      "definition": "A Mind impregnated with an Idea, the Ideas a Mind is composed of.",
+      "name": "Female",
+      "operator": "^5"
+    },
+    {
+      "co": "CO-6",
+      "definition": "An Idea impregnated with another Idea, the Ideas an Idea is composed of.",
+      "name": "Male",
+      "operator": "^6"
+    },
+    {
+      "co": "CO-7",
+      "definition": "The rate and pattern a Mind is exposed to an Idea, entraining/conditioning it.",
+      "name": "Rhythm",
+      "operator": "^7"
+    },
+    {
+      "co": "CO-8",
+      "definition": "An Idea that triggers a different Idea than itself to come to Mind.",
+      "name": "Above/Cause",
+      "operator": "^8"
+    },
+    {
+      "co": "CO-9",
+      "definition": "The Idea brought to Mind by an Above/Cause trigger.",
+      "name": "Below/Effect",
+      "operator": "^9"
+    }
+  ],
+  "registers": [
+    {
+      "definition": "high-abstraction, purpose-orienting, integrative-across-particulars",
+      "name": "Transcendent",
+      "register": "T"
+    },
+    {
+      "definition": "explicit, sequential, logical, reason-based",
+      "name": "Analytical",
+      "register": "A"
+    },
+    {
+      "definition": "value-laden, feeling-toned",
+      "name": "Affective",
+      "register": "f"
+    },
+    {
+      "definition": "sensorimotor, concrete, direct engagement with material or physical substrate",
+      "name": "Embodied",
+      "register": "E"
+    }
+  ],
+  "schema_version": "cas_harness_canonical_axis_definitions.v1",
+  "sources": [
+    {
+      "path": "docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md",
+      "role": "authoritative 10 Noetic definitions and register axis"
+    },
+    {
+      "path": "noetic-compass-scaffold/noetic-compass/CLAUDE.md",
+      "role": "current implementation-facing CAS ontology summary"
+    },
+    {
+      "path": "docs/reference/tks_28_foundations_translation_key.md",
+      "role": "CAS v7.5 TKS 28 Foundations translation key"
+    },
+    {
+      "path": "book/manuscript/Chapter_03_The_Four_Processing_Domains.md",
+      "role": "domain-definition prose source"
+    }
+  ]
+}

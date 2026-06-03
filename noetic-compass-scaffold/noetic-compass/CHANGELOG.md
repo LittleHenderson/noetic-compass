@@ -1,5 +1,42 @@
 # Noetic Compass — Progress Log
 
+## Definition-locked TKS/CAS 40E/F28 fixture built, **BUILT and schema-validated** - next run can test definitions directly (Jun 3, 2026)
+
+The Condition-3 comparator audit exposed a definition boundary: it used CAS 40E
+fixture labels, but it did not directly test the locked TKS/CAS definitions of
+the 40 Elements and 28 Foundations. This entry builds the missing
+definition-derived fixture.
+
+**1) The 40E lane is definition-derived.** The fixture generates all 40
+`Noetic x Domain` classes from the verbatim canonical Noetic definitions in
+`docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` plus the current CAS domain
+definitions.
+
+**2) The F28 lane is explicit about its source.** The fixture generates all 28
+`Drive x Register` classes from the current CAS v7.5 translation key. It does
+not claim the original TKS 28 Foundations prose is fully recovered, because
+`docs/reference/tks_28_foundations_translation_key.md` still marks those source
+fields as pending.
+
+**3) The fixture is usable by the capture path.** The live repo's
+`probe_dataset_common` loader accepts the generated JSON fixture: 816 rows, 40
+element classes, 28 foundation classes, exactly 12 rows per class, and 8/4
+train/test balance per class.
+
+### Pieces (this entry)
+- `live-trace-worker/scripts/build_definition_locked_tks_fixture.py` *(new)* - reproducible generator.
+- `docs/working/definition_locked_tks_mtc_20260603/` *(new)* - definitions, JSON fixture, JSONL fixture, manifest, and README.
+- `docs/working/production_readiness/25_definition_locked_tks_fixture_2026_06_03.md` *(new)* - evidence record with sources, validation, archive path, and hashes.
+
+### Tests / verification (this entry)
+- Generator wrote 816 rows: 480 40E and 336 F28.
+- Capture loader validation: `loaded 816`, `element_classes 40 minmax 12 12`, `foundation_classes 28 minmax 12 12`.
+- Split validation: 68 classes, 8 train / 4 test per class.
+
+Honesty boundary: this is a fixture build, not a model run or comparator
+verdict. It does not change the Pythia-160M packet from
+`FLAG_FOR_HUMAN_REVIEW`.
+
 ## Condition-3 MTC 20B comparator completed, **VERIFIED on H200 pod** - verdict is `GREY`, uniqueness remains open (Jun 3, 2026)
 
 The GPT-NeoX-20B Condition-3 matched-taxonomy comparator has now run against
