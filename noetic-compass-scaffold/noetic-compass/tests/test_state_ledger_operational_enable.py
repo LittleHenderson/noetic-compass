@@ -33,8 +33,10 @@ from api.config import Settings
 from api.services import cas_harness_distributed_audits as da
 from api.services import cas_harness_fleet_executor as fe
 from api.services.cas_harness_scale_planner import ScalePlanRequest
+from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.state_ledger_bootstrap import (
     StateLedgerHandle,
+    _build_state_store,
     install_state_ledger,
     teardown_state_ledger,
 )
@@ -42,18 +44,23 @@ from api.state_ledger_bootstrap import (
 
 @dataclass(frozen=True)
 class _FakeSettings:
-    """Minimal stand-in carrying only the three fields the bootstrap reads.
+    """Minimal stand-in carrying only the four fields the bootstrap reads.
 
     The bootstrap keys entirely off ``state_ledger_enabled`` / ``state_ledger_path`` /
-    ``state_ledger_read_authority``, so a tiny object with those attributes drives it exactly
-    as a real :class:`Settings` would -- and keeps these tests independent of process env or a
-    stray ``.env`` file. One test below also exercises a real ``Settings`` instance to prove the
-    actual config fields wire through.
+    ``state_ledger_read_authority`` / ``database_url``, so a tiny object with those attributes
+    drives it exactly as a real :class:`Settings` would -- and keeps these tests independent of
+    process env or a stray ``.env`` file. One test below also exercises a real ``Settings``
+    instance to prove the actual config fields wire through.
+
+    ``database_url`` defaults to ``None`` (env ``NC_DATABASE_URL`` unset), so every existing test
+    selects the SQLite backend exactly as before; the backend-selection tests set it to choose
+    Postgres.
     """
 
     state_ledger_enabled: bool = False
     state_ledger_path: str = "state_ledger.db"
     state_ledger_read_authority: bool = False
+    database_url: str | None = None
 
 
 @pytest.fixture(autouse=True)
@@ -347,3 +354,58 @@ def test_teardown_restores_dark_state(tmp_path):
     teardown_state_ledger(handle)
     teardown_state_ledger(None)
     assert da._STATE_MIRROR is None and fe._STATE_MIRROR is None
+
+
+# ---------------------------------------------------------------------------
+# 6. Backend selection -- which durable store the enable builds.
+# ---------------------------------------------------------------------------
+
+
+def test_build_state_store_selects_sqlite_when_no_database_url(tmp_path):
+    # The default, production's posture: no DSN -> the single-host SQLite file on
+    # state_ledger_path. Built for real (no mock) on a tmp path, then closed.
+    store = _build_state_store(
+        _FakeSettings(database_url=None, state_ledger_path=str(tmp_path / "select.db"))
+    )
+    try:
+        assert isinstance(store, SqliteStateStore)
+    finally:
+        store.close()
+
+
+def test_build_state_store_treats_empty_database_url_as_sqlite(tmp_path):
+    # An empty string (NC_DATABASE_URL set but blank) is falsy -> SQLite, not a doomed connect
+    # to an empty DSN. Guards the "unset OR blank -> single-host" intent so a stray empty env
+    # var can never silently route the enable at a Postgres that was never configured.
+    store = _build_state_store(
+        _FakeSettings(database_url="", state_ledger_path=str(tmp_path / "blank.db"))
+    )
+    try:
+        assert isinstance(store, SqliteStateStore)
+    finally:
+        store.close()
+
+
+def test_build_state_store_selects_postgres_when_database_url_set(monkeypatch):
+    # A configured DSN -> the multi-host Postgres backend, constructed with that EXACT DSN.
+    # PostgresStateStore's real constructor would connect to a live server; patch it with a spy
+    # so the SELECTION is what is under test here, not a database. (The live Postgres backend is
+    # itself verified against real PostgreSQL 16.4 in test_state_substrate_postgres.py.)
+    import api.state_ledger_bootstrap as boot
+
+    captured = {}
+
+    class _SpyPostgresStateStore:
+        def __init__(self, dsn):
+            captured["dsn"] = dsn
+
+        def close(self):  # pragma: no cover - not closed in this selection test
+            captured["closed"] = True
+
+    monkeypatch.setattr(boot, "PostgresStateStore", _SpyPostgresStateStore)
+
+    dsn = "postgresql://user:pw@db.internal:5432/noetic"
+    store = boot._build_state_store(_FakeSettings(database_url=dsn))
+
+    assert isinstance(store, _SpyPostgresStateStore)
+    assert captured["dsn"] == dsn

@@ -27,9 +27,10 @@ Why two separate flags (this separation is load-bearing)
 --------------------------------------------------------
 The enable is split across two flags that map onto the migration's phases:
 
-* ``state_ledger_enabled`` brings Phases 1-2 live: it installs a :class:`SqliteStateStore` +
-  :class:`LedgerMirror` into BOTH live services and rehydrates the dicts from the durable file
-  on startup. Dual-write and shadow-compare are now running against real traffic -- but the
+* ``state_ledger_enabled`` brings Phases 1-2 live: it installs the durable store (a
+  :class:`SqliteStateStore` by default, or a :class:`PostgresStateStore` when ``database_url`` is
+  set) + :class:`LedgerMirror` into BOTH live services and rehydrates the dicts from the durable
+  file on startup. Dual-write and shadow-compare are now running against real traffic -- but the
   DICTS REMAIN THE READ AUTHORITY. This is the posture in which an operator earns
   *zero-divergence evidence on production traffic* (the migration's Phase-2 proof obligation)
   before trusting the ledger to answer anything.
@@ -63,6 +64,7 @@ from dataclasses import dataclass
 from api.services import cas_harness_distributed_audits as da
 from api.services import cas_harness_fleet_executor as fe
 from api.services.production.state_substrate import LedgerMirror, StateStore
+from api.services.production.state_substrate.postgres_store import PostgresStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 
 
@@ -85,6 +87,34 @@ class StateLedgerHandle:
     read_authority: bool
 
 
+def _build_state_store(settings) -> StateStore:
+    """Select the durable backend the ledger runs on: Postgres when a DSN is configured, else
+    the single-host SQLite file.
+
+    Both classes realize the SAME locked ``StateStore`` Protocol, so everything downstream of this
+    choice -- the :class:`LedgerMirror`, the rehydrate, the two-flag phasing, the fail-loud and
+    teardown discipline -- is identical regardless of which backend is built. That is the whole
+    point of the seam: the backend is a swap behind one interface, not a fork in the control flow.
+
+    The choice keys off ``settings.database_url`` (env ``NC_DATABASE_URL``). Unset/empty -- the
+    default, and production's posture -- builds a :class:`SqliteStateStore` on
+    ``settings.state_ledger_path``: single-host durable, correct while exactly one instance owns
+    the disk. A non-empty DSN builds a :class:`PostgresStateStore`: the first *multi-host* rung,
+    one logical record-of-truth every instance reaches. Nothing cuts over to Postgres until an
+    operator sets the DSN -- keeping each durability escalation an explicit, separate act, exactly
+    as the two ledger flags do.
+
+    Fail-loud is the caller's to surface: a Postgres backend with an unreachable or misconfigured
+    server raises :class:`StateStoreError` from its constructor, which propagates up through
+    :func:`install_state_ledger` so startup fails visibly rather than degrading to a backend the
+    operator did not ask for.
+    """
+
+    if settings.database_url:
+        return PostgresStateStore(settings.database_url)
+    return SqliteStateStore(settings.state_ledger_path)
+
+
 def install_state_ledger(settings) -> StateLedgerHandle | None:
     """Install + rehydrate the durable ledger per the two flags, or stay dark.
 
@@ -92,8 +122,10 @@ def install_state_ledger(settings) -> StateLedgerHandle | None:
     posture), install nothing and return ``None``. No mirror is set on either service, so the
     serving path stays structurally pinned to the dicts -- byte-for-byte the current behaviour.
 
-    Enabled path: build a :class:`SqliteStateStore` on ``settings.state_ledger_path``, wrap it in
-    one :class:`LedgerMirror`, install that single mirror into BOTH live services (they partition
+    Enabled path: build the durable store via :func:`_build_state_store` (a
+    :class:`PostgresStateStore` when ``settings.database_url`` is set, else a
+    :class:`SqliteStateStore` on ``settings.state_ledger_path``), wrap it in one
+    :class:`LedgerMirror`, install that single mirror into BOTH live services (they partition
     the one store by record ``kind``, so they coexist in it), and rehydrate each service's dicts
     from the durable file so a restarted process serves the state it served before. When
     ``settings.state_ledger_read_authority`` is ALSO set, apply the Phase-3 flip
@@ -111,9 +143,11 @@ def install_state_ledger(settings) -> StateLedgerHandle | None:
         # The dark default: no mirror installed, ledger untouched, dicts authoritative.
         return None
 
-    # Construct the durable store first. If the path is unwritable or the file is corrupt,
-    # this raises before any mirror is installed -- the cleanest possible failure point.
-    store = SqliteStateStore(settings.state_ledger_path)
+    # Construct the durable store first -- Postgres if a DSN is configured, else the SQLite file
+    # (see _build_state_store). If the store cannot be built (unwritable path, corrupt file, or an
+    # unreachable / misconfigured Postgres) this raises before any mirror is installed -- the
+    # cleanest possible failure point, and the fail-loud contract the module docstring promises.
+    store = _build_state_store(settings)
     mirror = LedgerMirror(store)
 
     # From here a mirror may already be set on a service when a later step throws, so any
