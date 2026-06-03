@@ -32,7 +32,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
-from typing import Literal, Mapping
+from typing import Literal, Mapping, cast
 from uuid import uuid4
 
 
@@ -50,6 +50,13 @@ LeadSyncStatus = Literal["captured", "sync_pending", "synced", "sync_failed"]
 # Pipeline stage, managed by the sales team after capture. Orthogonal to sync status: a lead
 # can be ``new`` in the pipeline and ``synced`` to the CRM at the same time.
 LeadPipelineStatus = Literal["new", "contacted", "qualified", "won", "lost"]
+VALID_PIPELINE_STATUSES: tuple[LeadPipelineStatus, ...] = (
+    "new",
+    "contacted",
+    "qualified",
+    "won",
+    "lost",
+)
 
 
 class LeadValidationError(ValueError):
@@ -66,6 +73,22 @@ class CRMStateError(ValueError):
     The canonical case: marking a lead ``synced`` without a real provider ``external_id`` to back
     it. That is dishonesty-by-construction and is refused, not papered over.
     """
+
+
+def normalize_pipeline_status(raw: str) -> LeadPipelineStatus:
+    """Return a canonical pipeline status or raise ``LeadValidationError``.
+
+    The first CRM slice intentionally has a small status vocabulary. Unknown sales stages are
+    refused rather than persisted as free-form text, so list/filter/report views can rely on the
+    value being one of the supported stages.
+    """
+    status = raw.strip().lower().replace(" ", "_")
+    if status not in VALID_PIPELINE_STATUSES:
+        allowed = ", ".join(VALID_PIPELINE_STATUSES)
+        raise LeadValidationError(
+            f"pipeline_status {raw!r} is not supported; expected one of: {allowed}"
+        )
+    return cast(LeadPipelineStatus, status)
 
 
 # --------------------------------------------------------------------------
@@ -256,6 +279,36 @@ class Lead:
             sync_status=new_status,
             pipeline_status=self.pipeline_status,
             external_id=result.external_id if result.synced else self.external_id,
+            schema_version=self.schema_version,
+        )
+
+    def with_pipeline_status(self, pipeline_status: str) -> "Lead":
+        """Return a new lead version with a sales-managed pipeline status.
+
+        This is orthogonal to sync status: moving a lead from ``new`` to ``contacted`` must never
+        make it look more externally synced than it really is. A no-op transition returns ``self``
+        so repeated clicks do not bloat the append-only lead log.
+        """
+        normalized = normalize_pipeline_status(pipeline_status)
+        if normalized == self.pipeline_status:
+            return self
+        return Lead(
+            email=self.email,
+            lead_id=self.lead_id,
+            created_at=self.created_at,
+            updated_at=_now_iso(),
+            version=self.version + 1,
+            source=self.source,
+            trace_id=self.trace_id,
+            parent_ids=self.parent_ids,
+            name=self.name,
+            organization=self.organization,
+            message=self.message,
+            interest=self.interest,
+            metadata=dict(self.metadata),
+            sync_status=self.sync_status,
+            pipeline_status=normalized,
+            external_id=self.external_id,
             schema_version=self.schema_version,
         )
 

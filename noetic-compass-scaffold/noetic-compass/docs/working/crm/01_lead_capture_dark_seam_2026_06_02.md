@@ -2,9 +2,10 @@
 
 **Status: BUILT and WIRED, with Airtable provider code built but not yet enabled in hosted
 production.** The lead-capture pipeline is live in the app: a public form can POST a lead, it is
-validated, captured, and (with a durable store configured) persisted. Airtable sync now exists, but
-hosted production still remains capture-only until the Airtable env vars are configured and a real
-hosted lead returns `sync_status: "synced"` with an Airtable record id.
+validated, captured, and (with a durable store configured) persisted. Authed sales users can now
+move captured leads through the first pipeline stages. Airtable sync exists, but hosted production
+still remains capture-only until the Airtable env vars are configured and a real hosted lead returns
+`sync_status: "synced"` with an Airtable record id.
 
 This is the first CRM slice of the public-production path. It follows the same declared-vs-verified
 discipline as the state ledger and billing seams.
@@ -33,7 +34,7 @@ api/services/crm/
   store.py        LeadStore seam: InMemoryLeadStore (dark) + JsonlFileLeadStore (durable)
   sync.py         CRMSyncProvider ABC + NullCRMProvider + AirtableCRMProvider + factory
   service.py      CRMService.capture(): validate -> capture -> sync -> annotate
-api/routes/crm.py public capture endpoint + authed sales views
+api/routes/crm.py public capture endpoint + authed sales views + pipeline status updates
 tests/test_crm_lead_capture.py
 ```
 
@@ -48,6 +49,8 @@ Wiring: `api/main.py` builds the service at startup (`build_crm_service(settings
   `{lead_id, captured, sync_status, synced, schema_version, message}`.
 - `GET /api/crm/leads` - authed. Sales list view, newest first.
 - `GET /api/crm/leads/{lead_id}` - authed. One lead, or `404`.
+- `PATCH /api/crm/leads/{lead_id}/pipeline-status` - authed. Moves one captured lead through the
+  supported sales workflow stages: `new`, `contacted`, `qualified`, `won`, `lost`.
 
 The captured lead carries the request's `X-Request-ID` as `trace_id`, so a sales record can be traced
 back to the HTTP request that created it.
@@ -111,8 +114,12 @@ If Airtable rejects the schema or credentials, the lead remains locally captured
 - a sync failure leaves the lead captured locally and annotated `sync_failed`;
 - the durable JSONL store survives simulated restart;
 - the public endpoint requires no auth and the sales views require auth.
+- pipeline status updates require auth, bump the lead version, preserve `sync_status` / `external_id`,
+  reject unknown stages, persist to the store, and return `404` for missing leads.
 
 Targeted verification for the Airtable slice: `40 passed` in `tests/test_crm_lead_capture.py`.
+Targeted verification after the pipeline-status slice: `52 passed` in
+`tests/test_crm_lead_capture.py`.
 
 ## Hosted production status
 
@@ -149,6 +156,8 @@ not a full WAF, distributed bot defense, captcha, or edge-rate-limit system.
 
 1. Hosted Airtable credentials are not configured yet.
 2. No HubSpot provider exists.
-3. No sales transition endpoint exists for `pipeline_status`.
+3. Pipeline workflow is still minimal: `pipeline_status` can move through the first five stages, but
+   there is no task/follow-up scheduler, notes timeline, owner assignment, NDA flag, or deal-value
+   workflow yet.
 4. The public endpoint has an in-process honeypot + per-client limiter, but broad public launch still
    needs edge-level abuse controls if traffic becomes hostile.

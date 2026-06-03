@@ -111,6 +111,21 @@ class CRMService:
     def list_leads(self) -> list[Lead]:
         return self._store.list_all()
 
+    def update_pipeline_status(self, lead_id: str, pipeline_status: str) -> Lead | None:
+        """Move a captured lead through the sales pipeline, preserving sync honesty.
+
+        Pipeline status is a sales workflow field. It never upgrades ``sync_status`` and never
+        fabricates an external CRM landing; it only writes a new version of the same lead when the
+        status actually changes. ``None`` means the lead id is unknown.
+        """
+        lead = self._store.get(lead_id)
+        if lead is None:
+            return None
+        updated = lead.with_pipeline_status(pipeline_status)
+        if updated is lead:
+            return lead
+        return self._store.save(updated)
+
 
 def build_lead_store(settings) -> LeadStore:
     """Pick the lead store from config: durable file if a path is set, else in-memory (dark).

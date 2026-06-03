@@ -22,7 +22,9 @@ from api.services.crm.models import (
     LeadSubmission,
     LeadSyncStatus,
     LeadValidationError,
+    VALID_PIPELINE_STATUSES,
     normalize_email,
+    normalize_pipeline_status,
 )
 from api.services.crm.service import (
     CRMService,
@@ -77,4 +79,6 @@ __all__ = [
     "build_lead_store",
     "build_public_lead_abuse_guard",
     "normalize_email",
+    "normalize_pipeline_status",
+    "VALID_PIPELINE_STATUSES",
 ]

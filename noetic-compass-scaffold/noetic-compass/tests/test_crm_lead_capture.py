@@ -38,6 +38,7 @@ from api.services.crm import (
     build_crm_service,
     build_dark_crm_service,
     normalize_email,
+    normalize_pipeline_status,
 )
 from api.services.crm.models import _now_iso
 
@@ -203,6 +204,33 @@ def test_lead_dict_round_trips() -> None:
     )
     again = Lead.from_dict(lead.to_dict())
     assert again == lead
+
+
+def test_normalize_pipeline_status_accepts_supported_values() -> None:
+    assert normalize_pipeline_status(" Contacted ") == "contacted"
+    assert normalize_pipeline_status("qualified") == "qualified"
+
+
+def test_normalize_pipeline_status_refuses_unknown_values() -> None:
+    with pytest.raises(LeadValidationError, match="pipeline_status"):
+        normalize_pipeline_status("demo_scheduled")
+
+
+def test_with_pipeline_status_bumps_version_without_changing_sync_status() -> None:
+    captured = Lead.from_submission(_submission().validated(), source="t", trace_id="req-1")
+    annotated = captured.with_sync_result(NullCRMProvider().sync_lead(captured))
+
+    contacted = annotated.with_pipeline_status("contacted")
+
+    assert contacted.pipeline_status == "contacted"
+    assert contacted.sync_status == annotated.sync_status == "sync_pending"
+    assert contacted.external_id == annotated.external_id
+    assert contacted.version == annotated.version + 1
+
+
+def test_with_pipeline_status_noop_does_not_bump_version() -> None:
+    lead = Lead.from_submission(_submission().validated(), source="t", trace_id=None)
+    assert lead.with_pipeline_status("new") is lead
 
 
 # ---------------------------------------------------------------------------
@@ -435,6 +463,25 @@ def test_repeat_submission_is_linked_to_its_predecessor() -> None:
     assert second.parent_ids == (first.lead_id,)
 
 
+def test_update_pipeline_status_persists_a_new_sales_version() -> None:
+    service = build_dark_crm_service()
+    lead = service.capture(_submission(), source="web", trace_id="req-pipeline")
+
+    updated = service.update_pipeline_status(lead.lead_id, "contacted")
+
+    assert updated is not None
+    assert updated.pipeline_status == "contacted"
+    assert updated.version == lead.version + 1
+    assert updated.sync_status == lead.sync_status
+    fetched = service.get_lead(lead.lead_id)
+    assert fetched is not None and fetched.pipeline_status == "contacted"
+
+
+def test_update_pipeline_status_returns_none_for_missing_lead() -> None:
+    service = build_dark_crm_service()
+    assert service.update_pipeline_status("lead-missing", "contacted") is None
+
+
 def test_build_crm_service_default_is_dark() -> None:
     """Default settings => in-memory store + null provider (dark, capture-only)."""
     service = build_crm_service(_Settings("null"))
@@ -539,3 +586,72 @@ def test_authed_list_and_get_404(client) -> None:
     assert lead_id in {lead["lead_id"] for lead in listing.json()["leads"]}
 
     assert client.get(f"/api/crm/leads/{uuid4().hex}", headers=headers).status_code == 404
+
+
+def test_pipeline_status_update_requires_auth(client) -> None:
+    created = client.post(
+        "/api/crm/public/leads",
+        json={"email": f"pipeline-auth-{uuid4().hex}@example.com"},
+    )
+    lead_id = created.json()["lead_id"]
+
+    resp = client.patch(
+        f"/api/crm/leads/{lead_id}/pipeline-status",
+        json={"pipeline_status": "contacted"},
+    )
+
+    assert resp.status_code == 401
+
+
+def test_authed_pipeline_status_update_changes_only_sales_status(client) -> None:
+    headers = _auth_headers()
+    created = client.post(
+        "/api/crm/public/leads",
+        json={"email": f"pipeline-{uuid4().hex}@example.com"},
+    )
+    lead_id = created.json()["lead_id"]
+
+    before = client.get(f"/api/crm/leads/{lead_id}", headers=headers).json()
+    updated = client.patch(
+        f"/api/crm/leads/{lead_id}/pipeline-status",
+        json={"pipeline_status": "contacted"},
+        headers=headers,
+    )
+
+    assert updated.status_code == 200, updated.text
+    body = updated.json()
+    assert body["lead_id"] == lead_id
+    assert body["pipeline_status"] == "contacted"
+    assert body["sync_status"] == before["sync_status"]
+    assert body["external_id"] == before["external_id"]
+    assert body["version"] == before["version"] + 1
+
+    fetched = client.get(f"/api/crm/leads/{lead_id}", headers=headers)
+    assert fetched.json()["pipeline_status"] == "contacted"
+
+
+def test_pipeline_status_update_rejects_unknown_status(client) -> None:
+    headers = _auth_headers()
+    created = client.post(
+        "/api/crm/public/leads",
+        json={"email": f"pipeline-invalid-{uuid4().hex}@example.com"},
+    )
+    lead_id = created.json()["lead_id"]
+
+    resp = client.patch(
+        f"/api/crm/leads/{lead_id}/pipeline-status",
+        json={"pipeline_status": "demo_scheduled"},
+        headers=headers,
+    )
+
+    assert resp.status_code == 422
+
+
+def test_pipeline_status_update_returns_404_for_missing_lead(client) -> None:
+    resp = client.patch(
+        f"/api/crm/leads/lead-missing-{uuid4().hex}/pipeline-status",
+        json={"pipeline_status": "contacted"},
+        headers=_auth_headers(),
+    )
+
+    assert resp.status_code == 404

@@ -1,5 +1,27 @@
 # Noetic Compass — Progress Log
 
+## CRM pipeline status endpoint, **BUILT as an authed sales workflow slice** - captured leads can now move through `new` / `contacted` / `qualified` / `won` / `lost` without changing their external-sync claim (Jun 3, 2026)
+
+The CRM now has a first usable sales workflow, not just public capture. The endpoint is deliberately narrow: it changes the lead's `pipeline_status`, writes a new immutable lead version when the status changes, and leaves `sync_status` / `external_id` untouched so a sales action can never launder a locally captured lead into an externally synced one.
+
+**1) Status vocabulary is enforced.** `normalize_pipeline_status()` accepts only the supported first-rung stages (`new`, `contacted`, `qualified`, `won`, `lost`). Unknown stages return a validation error instead of becoming free-form CRM state that list/filter/report views cannot trust.
+
+**2) Sales updates are versioned.** `Lead.with_pipeline_status()` preserves the original lead identity and sync fields, bumps `version` only on a real status change, and relies on the existing append-only lead store to retain the sales history.
+
+**3) The route is protected.** `PATCH /api/crm/leads/{lead_id}/pipeline-status` is an authenticated sales view, parallel to the existing list/get endpoints. Public prospects can submit leads; only authenticated users can move them through the pipeline.
+
+### Pieces (this entry)
+- `api/services/crm/models.py` *(edit)* - adds pipeline-status normalization and immutable status-transition helper.
+- `api/services/crm/service.py` *(edit)* - adds `CRMService.update_pipeline_status()`.
+- `api/routes/crm.py` *(edit)* - adds the authenticated `PATCH /api/crm/leads/{lead_id}/pipeline-status` route.
+- `api/services/crm/__init__.py` *(edit)* - exports the pipeline-status helper surface.
+- `tests/test_crm_lead_capture.py` *(edit)* - adds model, service, and route tests for sales status updates.
+- `docs/working/crm/01_lead_capture_dark_seam_2026_06_02.md` *(edit)* - updates the CRM status and remaining workflow gaps.
+
+### Tests / verification (this entry)
+- Compile: CRM models, service, exports, and route.
+- Targeted CRM: `tests/test_crm_lead_capture.py` **52 passed**.
+
 ## CRM public lead anti-abuse, **BUILT as an in-process guard** - the anonymous `POST /api/crm/public/leads` endpoint now rejects honeypot-filled bot submissions before persistence and has a per-client sliding-window limiter, separate from the API-key limiter that public paths intentionally bypass (Jun 3, 2026)
 
 The public lead endpoint has to stay unauthenticated, but it cannot be an unlimited anonymous write path. This entry adds the first production guard while keeping the boundary clear: this is an in-process app guard, not a WAF, captcha, or distributed bot-defense system.
