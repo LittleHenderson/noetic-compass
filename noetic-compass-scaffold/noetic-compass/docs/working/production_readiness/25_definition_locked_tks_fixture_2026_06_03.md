@@ -1,30 +1,35 @@
 # Definition-Locked TKS/CAS Fixture Evidence - 2026-06-03
 
-**Status: BUILT and schema-validated.** A definition-derived fixture now exists
-for the next 40E / F28 probe pass. It is an input dataset, not a model run and
-not a verdict.
+**Status: BUILT, source-locked, and test-guarded.** A definition-derived
+fixture now exists for the next 40E / F28 probe pass. It is an input dataset,
+not a model run and not a verdict.
 
 This was built in response to the audit finding that the Condition-3 comparator
 used CAS 40E fixture labels and a non-CAS `NC28` control, but did not directly
 test the locked TKS/CAS definitions of the 40 Elements and 28 Foundations.
 
-## Canonical Sources Used
+## Locked Sources Used
 
 ```text
+docs/reference/tks_owner_locked_definitions_20260603.json
+conversation:user_provided_tks_definitions_2026_06_03
 docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md
-noetic-compass-scaffold/noetic-compass/CLAUDE.md
-docs/reference/tks_28_foundations_translation_key.md
-book/manuscript/Chapter_03_The_Four_Processing_Domains.md
 ```
 
-The 10 Noetic definitions are verbatim canonical from
-`docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`.
+The repo now contains a locked source file:
 
-The F28 lane uses the current CAS v7.5 `Drive x Register` translation key. The
-translation-key document explicitly says the original TKS 28 Foundations source
-population remains pending, so this fixture must be described as a
-definition-locked CAS/TKS translation fixture, not as fully populated original
-TKS 28 prose.
+```text
+C:\tmp\evidence-merge\docs\reference\tks_owner_locked_definitions_20260603.json
+```
+
+That file contains the owner-provided TKS `A1-D10` 40 Element definitions and
+the owner-provided TKS `1a-7d` 28 Foundation definitions supplied on
+2026-06-03. The fixture generator reads that file as the authority. It no longer
+uses the CAS v7.5 `Drive x Register` translation key as the F28 source.
+
+The CAS foundational clarification file is used only to map element numbers to
+canonical noetic names such as `Mind`, `Positive`, `Negative`, `Vibration`,
+`Female`, `Male`, `Rhythm`, `Above/Cause`, `Below/Effect`, and `Idea`.
 
 ## Generated Artifacts
 
@@ -56,6 +61,12 @@ Generator:
 live-trace-worker/scripts/build_definition_locked_tks_fixture.py
 ```
 
+Locked source file:
+
+```text
+docs/reference/tks_owner_locked_definitions_20260603.json
+```
+
 ## Counts
 
 ```text
@@ -74,30 +85,48 @@ The fixture loads through the live repo's `probe_dataset_common` capture loader:
 
 ```text
 loaded 816
-axes ['domain', 'drive', 'element', 'foundation', 'noetic', 'operator', 'register']
 element_classes 40 minmax 12 12
 foundation_classes 28 minmax 12 12
-operator_classes 10 domain_classes 4 drive_classes 7 register_classes 4
-split_balance_ok classes 68 train/test 8/4
+sample_elements ['A1', 'A10', 'A2'] ['D7', 'D8', 'D9']
+sample_foundations ['1a', '1b', '1c'] ['7b', '7c', '7d']
+split_balance_bad [] count 0
 ```
+
+Regression tests now pin this behavior:
+
+```text
+pytest -q tests\test_definition_locked_tks_fixture.py
+5 passed
+```
+
+Those tests fail if:
+
+- the locked source file is missing the owner-provided TKS definitions;
+- the generator stops being source-driven;
+- the committed fixture drifts from the source file;
+- the live loader fails to preserve `A1-D10` and `1a-7d` labels;
+- someone substitutes fallback labels such as `^1|P` or `F1|T`.
 
 ## Archive Hashes
 
 ```text
+docs/reference/tks_owner_locked_definitions_20260603.json
+A124302ED93C7B8571B24A5CDF14433ADF904EB94FD65895C6FD25FAE58E28A0
+
 canonical_tks_cas_axis_definitions_20260603.json
-04122B2EDE0B37F3E714F20251D59C6BC6626592076CAC7FAA479281C5BE69C6
+A124302ED93C7B8571B24A5CDF14433ADF904EB94FD65895C6FD25FAE58E28A0
 
 definition_locked_tks40_f28_fixture_20260603.json
-E8C23AAEFE07E2A65AABD1F875655A3B524145476535FF26D2202D71FAC3871C
+812B4A73C2C4C70C36C52500897E8A7AFABB29430E2F93EB06823A2AD38BB1BF
 
 definition_locked_tks40_f28_fixture_20260603.jsonl
-3D7A4BD5784CC224B97F204A6A06C49D887B74905E2897E0F852A196C42D4B58
+23141C91D0A136B9129016E9D663B13BC03419788105F6C80AD801B4A7DD40DC
 
 definition_locked_tks40_f28_manifest_20260603.json
-2F3C655784A3476DAFB203F1AF3C86ACB7E81ABAF78CAACFE3E7CB4268C2E489
+1C3A01AF1E7E10F6BECC0DB34110943AF3957F3A830F2952592A28630DE08503
 
 README.md
-D7786D4DC9D0E1CEA892700B5408F29944E7BECF52005C2F400CABC0CEFE77D1
+F034A281B71413BBF61375401346A455A3544DD3D6D8DF416834EE0BCE46FB94
 ```
 
 ## Claim Boundary
@@ -106,4 +135,3 @@ This closes the missing fixture-build step only. It does not run GPT-NeoX-20B,
 does not run Pythia-160M, does not emit `PASS`, `GREY`, `FALSIFY`, or
 `BLOCKED`, and does not change the Pythia-160M packet from
 `FLAG_FOR_HUMAN_REVIEW`.
-

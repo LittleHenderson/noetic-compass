@@ -2,9 +2,9 @@
 
 Status: built as an input fixture, not a verdict.
 
-This directory contains the first definition-locked fixture for the next
-matched-taxonomy / uniqueness pass. It is intentionally sourced from the locked
-CAS/TKS definition documents instead of the Condition-3 topical scenario text.
+This directory contains the definition-locked fixture for the next
+matched-taxonomy / uniqueness pass. It is sourced from the owner-provided TKS
+40 Element and TKS 28 Foundation definitions supplied on 2026-06-03.
 
 ## Contents
 
@@ -29,16 +29,15 @@ train/test per class: 8/4
 
 ## Honesty Boundary
 
-The 10 Noetic definitions are verbatim canonical from
-`docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md`.
+This is an input fixture. It is not a model capture, not a comparator result,
+and not a CAS Harness `ACCEPT`.
 
-The 40E state labels are generated as `Noetic x Domain`.
+The 40E rows are generated from explicit TKS Element definitions `A1` through
+`D10`.
 
-The F28 labels are generated as `Drive x Register`, following the current CAS
-v7.5 translation key in `docs/reference/tks_28_foundations_translation_key.md`.
-That reference explicitly says the original TKS 28 Foundations source
-population remains pending. Therefore this fixture locks the current CAS
-Drive/Register translation layer; it does not claim the full original TKS 28
-Foundation prose has been recovered.
+The F28 rows are generated from explicit TKS Foundation definitions `1a`
+through `7d`.
 
-Run the generator to refresh hashes printed to stdout.
+The source text intentionally contains the TKS titles in many definitions. This
+fixture therefore tests definition grounding and axis recovery from source
+definitions; by itself it is not a blind semantic generalization proof.

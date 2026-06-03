@@ -11,6 +11,8 @@ from typing import Any
 
 DOMAIN_VALUES = {"P", "C", "E", "O"}
 REGISTER_VALUES = {"T", "A", "f", "E"}
+TKS_40_ELEMENT_VALUES = {f"{letter}{number}" for letter in "ABCD" for number in range(1, 11)}
+TKS_28_FOUNDATION_VALUES = {f"{number}{letter}" for letter in "abcd" for number in range(1, 8)}
 
 
 @dataclass(frozen=True)
@@ -157,6 +159,8 @@ def _normalise_foundation(value: Any) -> str | None:
     text = _clean_label(value)
     if not text:
         return None
+    if text in TKS_28_FOUNDATION_VALUES:
+        return text
     if "|" in text:
         drive, register = text.split("|", 1)
         if drive.startswith("F") and register in REGISTER_VALUES:
@@ -173,6 +177,8 @@ def _normalise_element(value: Any) -> str | None:
     text = _clean_label(value)
     if not text:
         return None
+    if text in TKS_40_ELEMENT_VALUES:
+        return text
     if "|" in text:
         operator, domain = text.split("|", 1)
         if operator.startswith("^") and domain in DOMAIN_VALUES:

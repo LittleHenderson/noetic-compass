@@ -1,37 +1,40 @@
 # Noetic Compass — Progress Log
 
-## Definition-locked TKS/CAS 40E/F28 fixture built, **BUILT and schema-validated** - next run can test definitions directly (Jun 3, 2026)
+## Definition-locked TKS/CAS 40E/F28 fixture source-locked, **BUILT and test-guarded** - next run can test the actual owner-provided definitions (Jun 3, 2026)
 
 The Condition-3 comparator audit exposed a definition boundary: it used CAS 40E
-fixture labels, but it did not directly test the locked TKS/CAS definitions of
-the 40 Elements and 28 Foundations. This entry builds the missing
-definition-derived fixture.
+fixture labels, but it did not directly test the locked TKS definitions of the
+40 Elements and 28 Foundations. The first definition fixture still used a CAS
+translation layer for the F28 side. This entry corrects that: the fixture is now
+generated from an explicit owner-provided TKS source file and guarded by tests.
 
-**1) The 40E lane is definition-derived.** The fixture generates all 40
-`Noetic x Domain` classes from the verbatim canonical Noetic definitions in
-`docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` plus the current CAS domain
-definitions.
+**1) The source file is locked.** `docs/reference/tks_owner_locked_definitions_20260603.json`
+contains the owner-provided `A1-D10` TKS 40 Element definitions and `1a-7d` TKS
+28 Foundation definitions supplied on 2026-06-03. The generator now reads that
+file as authority instead of carrying hidden definitions in code.
 
-**2) The F28 lane is explicit about its source.** The fixture generates all 28
-`Drive x Register` classes from the current CAS v7.5 translation key. It does
-not claim the original TKS 28 Foundations prose is fully recovered, because
-`docs/reference/tks_28_foundations_translation_key.md` still marks those source
-fields as pending.
+**2) The generated labels are TKS labels.** The 40E rows use `A1-D10`; the F28
+rows use `1a-7d`. They no longer use fallback labels like `^1|P` or `F1|T`, and
+the live loader now preserves those TKS codes as first-class labels.
 
-**3) The fixture is usable by the capture path.** The live repo's
-`probe_dataset_common` loader accepts the generated JSON fixture: 816 rows, 40
-element classes, 28 foundation classes, exactly 12 rows per class, and 8/4
-train/test balance per class.
+**3) The failure mode is now tested.** The regression suite fails if the locked
+source is missing the owner-provided definitions, if the generator stops being
+source-driven, if the committed fixture drifts from the source file, or if the
+live loader fails to preserve `A1-D10` / `1a-7d`.
 
 ### Pieces (this entry)
-- `live-trace-worker/scripts/build_definition_locked_tks_fixture.py` *(new)* - reproducible generator.
-- `docs/working/definition_locked_tks_mtc_20260603/` *(new)* - definitions, JSON fixture, JSONL fixture, manifest, and README.
-- `docs/working/production_readiness/25_definition_locked_tks_fixture_2026_06_03.md` *(new)* - evidence record with sources, validation, archive path, and hashes.
+- `docs/reference/tks_owner_locked_definitions_20260603.json` *(new)* - locked owner-provided TKS source definitions.
+- `live-trace-worker/scripts/build_definition_locked_tks_fixture.py` - generator now consumes the locked source file.
+- `live-trace-worker/scripts/probe_dataset_common.py` - live loader now accepts TKS `A1-D10` and `1a-7d` labels.
+- `tests/test_definition_locked_tks_fixture.py` *(new)* - regression guard against definition substitution and loader label loss.
+- `docs/working/definition_locked_tks_mtc_20260603/` - regenerated definitions, JSON fixture, JSONL fixture, manifest, and README.
+- `docs/working/production_readiness/25_definition_locked_tks_fixture_2026_06_03.md` - evidence record updated with source-lock, tests, archive path, and hashes.
 
 ### Tests / verification (this entry)
 - Generator wrote 816 rows: 480 40E and 336 F28.
-- Capture loader validation: `loaded 816`, `element_classes 40 minmax 12 12`, `foundation_classes 28 minmax 12 12`.
+- Capture loader validation: `loaded 816`, `element_classes 40 minmax 12 12`, `foundation_classes 28 minmax 12 12`, with labels preserved as `A1-D10` and `1a-7d`.
 - Split validation: 68 classes, 8 train / 4 test per class.
+- `pytest -q tests\test_definition_locked_tks_fixture.py` -> 5 passed.
 
 Honesty boundary: this is a fixture build, not a model run or comparator
 verdict. It does not change the Pythia-160M packet from
