@@ -1,5 +1,37 @@
 # Noetic Compass — Progress Log
 
+## Condition-3 MTC 20B comparator completed, **VERIFIED on H200 pod** - verdict is `GREY`, uniqueness remains open (Jun 3, 2026)
+
+The GPT-NeoX-20B Condition-3 matched-taxonomy comparator has now run against
+the captured activation dataset. It completed cleanly and emitted `GREY`, not
+`PASS`, `FALSIFY`, or `BLOCKED`.
+
+**1) CAS passed two internal gates.** The CAS 40E hidden readout beat its text
+baseline by 43.75 percentage points, and CAS flat lacunarity was cleaner than
+the best coherent matched taxonomy (`0.04394354424923896` versus
+`0.1160894894797089`).
+
+**2) CAS failed the matched-readout margin.** The coherent NC40 control taxonomy
+read out at 1.0 accuracy, while CAS read out at `0.5347222222222222`. The
+pre-registered margin required CAS to beat the matched control by +5pp; observed
+margin was `-46.52777777777778pp`.
+
+**3) The verdict stays honest.** The comparator result says `GREY` with
+`pass: false`, `falsify: false`, and `blocked: false`. The Pythia-160M
+WORM-retained packet remains `FLAG_FOR_HUMAN_REVIEW`; this 20B result does not
+turn it into `ACCEPT`.
+
+### Pieces (this entry)
+- `docs/working/production_readiness/24_condition3_mtc_20b_comparator_2026_06_03.md` *(new)* - evidence record with command, metrics, verdict, archive path, and hashes.
+- `D:\tksCAS-archive\condition3_mtc_comparator_20260603` *(archive copy)* - result JSON, comparator log, and row-level manifest.
+
+### Tests / verification (this entry)
+- Comparator process completed on `root@212.247.220.166 -p 18611` and wrote `/workspace/condition3_mtc_20b_comparator_result_20260603.json`.
+- Result JSON hash: `860956BA3C0267AB2A3EE9A56643A0B115064F7AE4B9430F9040F88CC3DFC274`.
+
+Honesty boundary: this is a completed 20B Stage X.1 `GREY` result. It keeps
+matched-taxonomy / uniqueness open and does not upgrade any Pythia-160M packet.
+
 ## Condition-3 MTC 20B capture completed, **VERIFIED on H200 pod** - claim-neutral activations are archived, comparator still gated (Jun 3, 2026)
 
 The replacement H200 pod completed the GPT-NeoX-20B Condition-3 activation capture for the MTC uniqueness track. This is the measurement file the comparator will read later; it is not the comparator verdict.
