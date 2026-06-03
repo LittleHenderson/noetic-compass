@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Pythia-160M Stage 9 packet anchored under Object Lock, **VERIFIED on Render** - the real packet is now WORM-retained as `FLAG_FOR_HUMAN_REVIEW`, not `ACCEPT` (Jun 3, 2026)
+
+This is the irreversible production WORM step for the Pythia-160M Stage 9 40E packet. The hosted service first served the packet read-only as `FLAG_FOR_HUMAN_REVIEW`, then anchored it with `require_object_lock=true`, then re-read the stored static anchor through `/verify`.
+
+**1) The packet stayed honest.** Hosted preflight returned `verdict: "FLAG_FOR_HUMAN_REVIEW"`, `parameter_scale: "160M"`, `verification.proof_chip_gate: "blocked"`, and `verification.explicit_verifier_decision.verdict: "FLAG_FOR_HUMAN_REVIEW"`. The anchor response kept `console_state: "flag_for_human_review"` and said WORM anchoring records a verdict immutably; it never upgrades a FLAG to an ACCEPT.
+
+**2) Object Lock is active.** The packet anchored to `s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/pythia-160m-stage9-40e-readout-20260531/fb02b1683b52cd02d6a7112fcce89019a42ccb8764a184fe8d8f9891c7750507.json`; `worm_retained: true`, `anchor_mode: "s3"`, `anchor_status: "anchored"`, `external_anchor_match: true`, and retention is active until `2026-07-03T16:25:16+00:00`.
+
+**3) `/verify` re-read the stored static anchor.** `POST /evidence/pythia-160m-stage9-40e-readout-20260531/verify` returned `overall: "all_match"` with matching packet payload hash, hash-log entry hash, hash-chain validity, and external S3 anchor manifest hash.
+
+### Pieces (this entry)
+- `docs/working/production_readiness/20_pythia160m_object_lock_anchor_2026_06_03.md` *(new)* - full production evidence record.
+- `D:\tksCAS-archive\pythia160m_object_lock_anchor_20260603` *(archive copy)* - packet and verifier artifacts copied outside the repo.
+
+### Tests / verification (this entry)
+- Hosted Render deploy: `bbb755d7db75500a10977a42212d67b807667ba2` live before anchor.
+- Hosted anchor: `POST /evidence/pythia-160m-stage9-40e-readout-20260531/anchor?require_object_lock=true` **200**, `worm_retained: true`.
+- Hosted verify: `POST /evidence/pythia-160m-stage9-40e-readout-20260531/verify` **overall: all_match**.
+
+Honesty boundary: this closes the real Pythia packet's production Object-Lock write. It does not close matched controls or turn the packet into a production `ACCEPT`.
+
 ## Static Stage 9 packet artifacts now ship in the API image, **BUILT** - hosted `/evidence/{trace_id}` can resolve the Pythia packet before the irreversible Object-Lock anchor (Jun 3, 2026)
 
 The Pythia packet and route fix were correct in source, but the Docker runtime image only copied `api/`, `cas-native/`, `scenarios/`, and `validation/`. That meant the hosted container could not see `docs/working/pythia160m_gate1`, so `GET /evidence/pythia-160m-stage9-40e-readout-20260531` returned 404 even after commit `337d0c2`.
