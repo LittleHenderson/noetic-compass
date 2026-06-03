@@ -21,6 +21,9 @@ The public lead endpoint has to stay unauthenticated, but it cannot be an unlimi
 ### Tests / verification (this entry)
 - Compile: `api/services/crm/abuse.py`, `api/routes/crm.py`, `api/config.py`, `api/main.py`.
 - Focused CRM/config: **49 passed**.
+- Hosted smoke after deploy: `/health` recovered to 200; normal public lead `lead-121dc923f575416d`
+  captured with `sync_status: sync_pending`; honeypot-filled submission returned `400` with
+  `lead rejected by anti-abuse gate`.
 
 ## CRM Airtable provider, **BUILT but not hosted-active** - the CRM seam can now sync a captured lead to Airtable and mark it `synced` only when Airtable returns a real record id; hosted production remains capture-only until `NC_CRM_PROVIDER=airtable` plus Airtable token/base/table env vars are configured and a hosted lead proves an external landing (Jun 3, 2026)
 
