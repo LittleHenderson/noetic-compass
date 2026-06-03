@@ -1,5 +1,19 @@
 # Noetic Compass — Progress Log
 
+## Static Stage 9 packet artifacts now ship in the API image, **BUILT** - hosted `/evidence/{trace_id}` can resolve the Pythia packet before the irreversible Object-Lock anchor (Jun 3, 2026)
+
+The Pythia packet and route fix were correct in source, but the Docker runtime image only copied `api/`, `cas-native/`, `scenarios/`, and `validation/`. That meant the hosted container could not see `docs/working/pythia160m_gate1`, so `GET /evidence/pythia-160m-stage9-40e-readout-20260531` returned 404 even after commit `337d0c2`.
+
+**1) The package boundary is fixed narrowly.** `Dockerfile.api` now copies the Pythia-160M Stage 9 40E artifact directory plus the original 20B Stage 9 static packet into `/app/docs/working/...`. This exposes only the static Evidence Packet assets the route registry needs, not the whole documentation tree.
+
+**2) The irreversible anchor remains gated.** The real Pythia S3 Object-Lock write still waits until hosted `GET /evidence/pythia-160m-stage9-40e-readout-20260531` returns the deployed `FLAG_FOR_HUMAN_REVIEW` packet.
+
+### Pieces (this entry)
+- `Dockerfile.api` *(edit)* - include registry-backed Stage 9 static packet artifacts in the runtime image.
+
+### Tests / verification (this entry)
+- Evidence routes: `tests/test_evidence_routes.py` **31 passed, 2 skipped**.
+
 ## Hosted Object-Lock anchor smoke, **VERIFIED on Render** - a throwaway distributed Evidence Packet was anchored through the live S3 Object-Lock path, re-read by `/verify`, and confirmed under `GOVERNANCE` retention (Jun 3, 2026)
 
 This closes the wiring question around the Object-Lock bucket before touching the real Pythia packet. The smoke used hosted production, wrote a throwaway deploy-check packet, and required both S3 mode and active Object Lock retention.
