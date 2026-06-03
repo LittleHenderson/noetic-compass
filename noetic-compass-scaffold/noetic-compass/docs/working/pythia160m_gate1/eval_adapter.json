@@ -1,0 +1,13 @@
+{
+  "axes": {
+    "element": {
+      "best_layer": {
+        "layer": 3,
+        "test_acc": 0.9171875,
+        "test_macro_f1": 0.9204827870659675
+      }
+    }
+  },
+  "schema_version": "cas_harness_probe_eval_report.v1",
+  "source_report": "D:\\tksCAS-archive\\pythia160m_gate1_reproduction_20260531\\pythia160m_stage9_40e_40_element_probe_eval_report.json"
+}

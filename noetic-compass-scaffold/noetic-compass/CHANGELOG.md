@@ -1,5 +1,27 @@
 # Noetic Compass — Progress Log
 
+## Pythia-160M activation matched-ablation completed, **VERIFIED locally** - stored activations passed matched controls, but uniqueness remains open (Jun 3, 2026)
+
+The archived Pythia-160M Stage 9 40E run now has the missing activation-level matched-ablation computation. This did not rerun the model: it reused the archived `.npz` hidden-state activations under `D:\tksCAS-archive\pythia160m_gate1_reproduction_20260531\`.
+
+**1) The candidate cover beat matched controls inside the ablation runner.** The activation-level report evaluated the `element` axis at layer 3 over 1,680 heldout examples. Label-specific cover ablation dropped accuracy by `0.054762`; wrong-cover control dropped by `0.003572`; same-size random controls across 20 trials maxed out at `0.005953`. The union cover drop was `0.108334`, above the union random-control max of `0.0`.
+
+**2) The archived run stopped being a rerun target.** The stored activation dataset, original eval report, and original cover map were enough to run this gate locally. The result was copied into both the repo evidence directory and `D:\tksCAS-archive\pythia160m_activation_cover_ablation_20260603\`.
+
+**3) The packet still stays at `FLAG_FOR_HUMAN_REVIEW`.** This closes activation-level matched ablation only. It does not prove matched-taxonomy / uniqueness, and the hardened Stage 9 40E gate still requires explicit uniqueness proof before final `ACCEPT`.
+
+### Pieces (this entry)
+- `docs/working/pythia160m_gate1/pythia160m_activation_cover_ablation_report.json` *(new)* - activation-level matched-ablation report.
+- `docs/working/pythia160m_gate1/eval_adapter.json` *(new)* - adapter from the archived Stage 9 eval report into the generic ablation runner schema.
+- `docs/working/pythia160m_gate1/cover_adapter.json` *(new)* - adapter from the archived cover report into the generic ablation runner schema.
+- `docs/working/production_readiness/21_pythia160m_activation_matched_ablation_2026_06_03.md` *(new)* - evidence record with command, metrics, hashes, and claim boundary.
+
+### Tests / verification (this entry)
+- Ablation command: `live-trace-worker\scripts\ablate_probe_dataset.py` over the archived `.npz`, `--random-trials 20`, `--seed 42`.
+- Report hash: `8093B49935FB37C7498956DE4960308D4126C1A3AEC428D602FC75678DE4860F`.
+
+Honesty boundary: this is not a production `ACCEPT`. The WORM-retained production packet remains `FLAG_FOR_HUMAN_REVIEW` until the matched-taxonomy / uniqueness gate also passes.
+
 ## Stage 9 40E ACCEPT gate now requires uniqueness proof, **BUILT** - matched ablation alone cannot mint a final `ACCEPT` (Jun 3, 2026)
 
 The Pythia archive audit exposed a real memory hazard: the historical packet at `D:\tksCAS-archive\pythia160m_gate1_reproduction_20260531\` is the same run as the WORM-retained packet, but its old `ACCEPT` verdict came from the pre-fix control-chip overclaim. This entry hardens the next gate so future tooling cannot treat matched-ablation/control presence alone as enough for final `ACCEPT`.
