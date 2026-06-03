@@ -54,6 +54,7 @@ def _packet_fixture() -> dict:
         },
         "matched_taxonomy_proof": {
             "status": "matched_taxonomy_validated",
+            "definition_sha256": build_stage9_40e_verifier_report.LOCKED_TKS_DEFINITION_SHA256,
             "summary": {
                 "condition3_passed": True,
                 "control_b_passed": True,
@@ -105,6 +106,7 @@ def test_balanced_packet_with_all_gates_passes_to_accept(tmp_path: Path):
     assert report["generation_readiness"]["generation_readiness"] == "allow"
     assert report["verification_stack"]["proof_chip_gate"] == "passed"
     assert report["verification_stack"]["gates"]["uniqueness"]["passed"] is True
+    assert report["verification_stack"]["gates"]["uniqueness"]["tks_definition_locked"] is True
 
 
 def test_triage_mode_flags_even_when_all_gates_pass(tmp_path: Path):
@@ -135,6 +137,22 @@ def test_missing_uniqueness_proof_flags_not_accept(tmp_path: Path):
     assert decision["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
     assert decision["confidence"] == 0.0
     assert report["verification_stack"]["gates"]["uniqueness"]["passed"] is None
+    assert report["generation_readiness"]["reasons"] == ["uniqueness_gate_unavailable"]
+
+
+def test_unbound_comparator_proof_does_not_close_uniqueness_gate(tmp_path: Path):
+    payload = _packet_fixture()
+    del payload["matched_taxonomy_proof"]["definition_sha256"]
+    packet = _write_json(tmp_path / "packet.json", payload)
+
+    report = build_stage9_40e_verifier_report.build_report(packet_path=packet)
+
+    decision = report["explicit_verifier_decision"]
+    uniqueness = report["verification_stack"]["gates"]["uniqueness"]
+    assert decision["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert uniqueness["passed"] is None
+    assert uniqueness["tks_definition_locked"] is False
+    assert uniqueness["definition_sha256"] is None
     assert report["generation_readiness"]["reasons"] == ["uniqueness_gate_unavailable"]
 
 

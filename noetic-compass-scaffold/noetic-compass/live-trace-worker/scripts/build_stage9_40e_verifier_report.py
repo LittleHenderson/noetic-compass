@@ -21,6 +21,7 @@ from typing import Any
 
 SCHEMA_VERSION = "cas_harness_stage9_40e_verifier_decision.v1"
 SOURCE_PACKET_SCHEMA = "cas_harness_stage9_40e_evidence_packet.v1"
+LOCKED_TKS_DEFINITION_SHA256 = "a124302ed93c7b8571b24a5cdf14433adf904eb94fd65895c6fd25fae58e28a0"
 DEFAULT_PACKET = (
     Path(__file__).resolve().parents[2]
     / "docs"
@@ -282,6 +283,32 @@ def _control_status_bool(summary: dict[str, Any], *names: str) -> bool | None:
     return None
 
 
+def _clean_sha(value: Any) -> str | None:
+    cleaned = str(value or "").strip().lower()
+    return cleaned or None
+
+
+def _uniqueness_definition_sha(proof: dict[str, Any], summary: dict[str, Any]) -> str | None:
+    for mapping in (
+        proof,
+        summary,
+        _mapping_or_empty(proof.get("definition_lock")),
+        _mapping_or_empty(summary.get("definition_lock")),
+        _mapping_or_empty(proof.get("cas_probe")),
+        _mapping_or_empty(summary.get("cas_probe")),
+    ):
+        for key in (
+            "definition_sha256",
+            "tks_definition_sha256",
+            "cas_definition_sha256",
+            "source_definition_sha256",
+        ):
+            cleaned = _clean_sha(mapping.get(key))
+            if cleaned:
+                return cleaned
+    return None
+
+
 def _uniqueness_gate(packet: dict[str, Any]) -> dict[str, Any]:
     proof_key = None
     proof: dict[str, Any] = {}
@@ -320,10 +347,14 @@ def _uniqueness_gate(packet: dict[str, Any]) -> dict[str, Any]:
     )
     control_b = _control_status_bool(summary, "control_b", "control_b_passed")
     control_c = _control_status_bool(summary, "control_c", "control_c_passed")
+    definition_sha256 = _uniqueness_definition_sha(proof, summary)
+    tks_definition_locked = definition_sha256 == LOCKED_TKS_DEFINITION_SHA256
 
     failed_flag = any(value is False for value in (condition3, control_b, control_c))
     if status in FAILING_UNIQUENESS_STATUSES or failed_flag:
         passed: bool | None = False
+    elif not tks_definition_locked:
+        passed = None
     elif (
         status in PASSING_UNIQUENESS_STATUSES
         or condition3 is True
@@ -332,6 +363,9 @@ def _uniqueness_gate(packet: dict[str, Any]) -> dict[str, Any]:
         passed = True
     else:
         passed = None
+    reason = summary.get("reason") or proof.get("reason")
+    if passed is None and not tks_definition_locked:
+        reason = "matched-taxonomy/uniqueness proof is not tied to the locked TKS definitions"
 
     return {
         "passed": passed,
@@ -340,7 +374,9 @@ def _uniqueness_gate(packet: dict[str, Any]) -> dict[str, Any]:
         "condition3_passed": condition3,
         "control_b_passed": control_b,
         "control_c_passed": control_c,
-        "reason": summary.get("reason") or proof.get("reason"),
+        "definition_sha256": definition_sha256,
+        "tks_definition_locked": tks_definition_locked,
+        "reason": reason,
     }
 
 

@@ -88,6 +88,23 @@ locked TKS definition hash. The public route converts that into HTTP 422. This
 closes the remaining bypass where the app had the right definitions but a
 caller-supplied probe could omit which vocabulary it was trained/evaluated on.
 
+## Comparator / Control Boundary
+
+The lock does not forbid non-CAS comparisons. It forbids non-CAS comparisons from
+being treated as the claim-bearing CAS probe.
+
+Users still need matched controls and non-CAS framework comparisons to test
+whether CAS is special. Those results are valid only as labeled comparator or
+control evidence. They cannot become the primary CAS probe, and they cannot close
+the matched-taxonomy / uniqueness gate toward `ACCEPT` unless the CAS lane itself
+is tied to the locked owner TKS definitions.
+
+The Stage 9 40E verifier builder now enforces that distinction: a passing
+matched-taxonomy / uniqueness proof must carry the same locked
+`definition_sha256` before the uniqueness gate can pass. An unbound passing
+comparator stays unavailable for promotion; an explicit failure can still
+suppress.
+
 ## Tests
 
 ```text
@@ -99,6 +116,9 @@ pytest -q tests\test_cas_harness_audit.py tests\test_cas_harness_distributed_aud
 
 pytest -q tests\test_cas_harness_probe_compatibility.py tests\test_tks_definition_lock.py tests\test_definition_locked_tks_fixture.py
 34 passed
+
+pytest -q live-trace-worker\tests\test_build_stage9_40e_verifier_report.py
+8 passed
 ```
 
 The lock tests prove:
@@ -108,6 +128,7 @@ The lock tests prove:
 - a manifest with the wrong definition hash is rejected;
 - a caller-supplied probe spec without the locked `definition_sha256` is rejected;
 - a caller-supplied probe spec with a wrong `definition_sha256` is rejected;
+- an unbound passing comparator proof cannot close the Stage 9 40E uniqueness gate;
 - audit session creation refuses when the lock fails;
 - distributed audit creation refuses when the lock fails;
 - the fixture generator/loader still preserves `A1-D10` and `1a-7d`.
