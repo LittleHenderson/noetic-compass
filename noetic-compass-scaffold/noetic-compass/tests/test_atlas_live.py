@@ -12,6 +12,7 @@ def reset_live_state(monkeypatch):
     atlas_live._code_opens.clear()
     monkeypatch.setattr(atlas_live.settings, "atlas_live_invite_codes", "alpha-code")
     monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_url", "https://worker.example")
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_token", "")
     monkeypatch.setattr(atlas_live.settings, "atlas_live_session_rate_limit_per_ip_hour", 3)
     monkeypatch.setattr(atlas_live.settings, "atlas_live_invite_daily_limit", 10)
 
@@ -77,6 +78,44 @@ def test_live_session_forwards_method_config_to_worker(client, monkeypatch):
     assert seen["payload"]["probes"] == ["active_trace"]
     assert seen["payload"]["method_config"]["enabled_methods"] == ["foundation_probe"]
     assert seen["payload"]["method_config"]["knobs"]["foundation_probe"]["layer_range"] == ["5"]
+
+
+def test_live_session_sends_worker_token_header(client, monkeypatch):
+    seen: dict[str, str | None] = {}
+
+    class _Resp:
+        status_code = 200
+
+        def json(self):
+            return {"session_id": "worker-session-token"}
+
+    class _Client:
+        def __init__(self, *args, **kwargs):
+            pass
+
+        async def __aenter__(self):
+            return self
+
+        async def __aexit__(self, *args):
+            return False
+
+        async def post(self, url, **kwargs):
+            seen["url"] = url
+            seen["token"] = kwargs.get("headers", {}).get("X-Atlas-Worker-Token")
+            return _Resp()
+
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_token", "worker-secret")
+    monkeypatch.setattr(atlas_live.httpx, "AsyncClient", _Client)
+
+    resp = client.post(
+        "/atlas/live/session",
+        headers={"X-Atlas-Invite-Code": "alpha-code"},
+        json={"prompt": "hello"},
+    )
+
+    assert resp.status_code == 200
+    assert seen["url"].endswith("/sessions")
+    assert seen["token"] == "worker-secret"
 
 
 def test_live_session_rate_limits_by_ip(client, monkeypatch):

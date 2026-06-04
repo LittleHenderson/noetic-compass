@@ -131,6 +131,10 @@ class Settings(BaseSettings):
         default="",
         validation_alias=AliasChoices("ATLAS_LIVE_WORKER_URL", "NC_ATLAS_LIVE_WORKER_URL"),
     )
+    atlas_live_worker_token: str = Field(
+        default="",
+        validation_alias=AliasChoices("ATLAS_LIVE_WORKER_TOKEN", "NC_ATLAS_LIVE_WORKER_TOKEN"),
+    )
     atlas_live_invite_codes: str = Field(
         default="",
         validation_alias=AliasChoices("ATLAS_LIVE_INVITE_CODES", "NC_ATLAS_LIVE_INVITE_CODES"),
