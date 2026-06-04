@@ -21,6 +21,11 @@ PUBLIC_PATHS = {
     "/health/db",
     "/health/ready",
     "/auth/token",
+    # Invite redemption is public: a brand-new user has no token yet, so the redeem endpoint must
+    # be reachable unauthenticated. It is fail-closed on the invite code itself (the store rejects
+    # any invalid/used/expired code), and creates only a single account. Invite CREATION
+    # (/accounts/invite) is deliberately NOT public — it stays behind the JWT + operator gate.
+    "/accounts/invite/redeem",
     "/docs",
     "/openapi.json",
     "/redoc",
@@ -84,12 +89,38 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         return await call_next(request)
 
 
-def create_token(sub: str, api_key: str = "default", exp_minutes: int | None = None) -> str:
-    """Create a JWT token (utility for testing)."""
+def create_token(
+    sub: str,
+    api_key: str = "default",
+    exp_minutes: int | None = None,
+    *,
+    account_id: str | None = None,
+    tenant_id: str | None = None,
+    role: str | None = None,
+) -> str:
+    """Create a JWT token.
+
+    Backward-compatible by construction: with no ``account_id``/``tenant_id``/``role`` supplied the
+    payload is exactly the historical ``{sub, api_key, exp}`` and every existing caller/token is
+    unchanged. When the identity-login path (``api/routes/auth.py``) supplies SERVER-DERIVED
+    account claims, they are embedded ADDITIVELY as ``account_id``/``tenant_id``/``role``.
+
+    These claims are only ever passed in by the server after an account lookup; they are never read
+    from a request body. The dispatch-side enforcement that *consumes* them (session/jti checks,
+    disabled-account lockout at the chokepoint, ``require_role``) is deferred to the NEXT spine PR
+    -- this PR only mints the claims so the account they describe is recorded in the token.
+    """
     from datetime import timedelta
 
     expires = datetime.now(tz=timezone.utc) + timedelta(
         minutes=exp_minutes or settings.jwt_expiry_minutes
     )
-    payload = {"sub": sub, "api_key": api_key, "exp": expires}
+    payload: dict[str, object] = {"sub": sub, "api_key": api_key, "exp": expires}
+    # Additive, optional claims. Only present when the server derived them from an account record.
+    if account_id is not None:
+        payload["account_id"] = account_id
+    if tenant_id is not None:
+        payload["tenant_id"] = tenant_id
+    if role is not None:
+        payload["role"] = role
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)
