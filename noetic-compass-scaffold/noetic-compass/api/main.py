@@ -65,6 +65,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     logger = logging.getLogger("noetic.startup")
 
+    # Fail loud in production on the default JWT secret. With debug=False a real deployment
+    # MUST set NC_JWT_SECRET; otherwise every issued token is signed with a public, known
+    # secret and is trivially forgeable. Refuse to start rather than serve a forgeable auth.
+    # (CAS Harness scoped-beta Phase 1 — see api/routes/auth.py and api/config.py.)
+    if not settings.debug and settings.jwt_secret == "change-me-in-production":
+        raise RuntimeError(
+            "Refusing to start: NC_JWT_SECRET is still the default 'change-me-in-production' "
+            "with debug=False. Set a real secret (NC_JWT_SECRET) before running in production."
+        )
+
     # Startup: verify cas_engine is importable (non-fatal if missing)
     try:
         import cas_engine  # noqa: F401

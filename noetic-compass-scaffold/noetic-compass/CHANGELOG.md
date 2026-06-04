@@ -1,5 +1,33 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness scoped-beta Phase 1 — tenant-scoped audit sessions + /auth/token mint lock (Jun 4, 2026)
+
+**Headline.** Two minimal security fixes for the invite-only scoped beta, integrated onto the
+launch consolidation branch (`launch/scoped-beta`, off master + the declutter port). Neither
+depends on the unbuilt accounts system — both use existing JWT identity + config.
+
+- **Tenant-scope audit sessions.** `GET /api/cas-harness/audit/sessions` (and get/create/run)
+  now scope to the caller's identity (`owner_sub`/`owner_api_key`, derived from `request.state`
+  or a best-effort Bearer decode, since the session routes sit on the auth public-path prefixes).
+  Listing/reads fail closed; the owner key folds into the deterministic `audit_id`; `to_dict()`
+  strips owner identity. Closes the prior cross-tenant read of the sessions list.
+- **Lock `POST /auth/token`.** Previously minted a JWT for ANY username with no credential. Now a
+  shared `NC_AUTH_MINT_SECRET` is required in production (X-Auth-Mint-Secret header or `mint_secret`
+  body, constant-time compare) → 401 otherwise; the open mint survives only in `debug` for local
+  dev. Startup fails loud if `debug=False` and `jwt_secret` is still the default. `render.yaml`
+  registers `NC_AUTH_MINT_SECRET` (operator-set, sync:false); `NC_JWT_SECRET` already uses
+  `generateValue:true` so the new startup guard never fires on Render. Phase-2 seam documented
+  for per-account issued keys.
+
+Tests: `test_cas_harness_audit.py` (48) + `test_middleware.py` (15) = 63 passed; cross-surface
+sweep adding distributed-audits + CRM = 174 passed. New root `conftest.py` runs the suite in an
+honest dev posture (NC_DEBUG=true + a real NC_JWT_SECRET); prod-path tests override via monkeypatch.
+
+**Deploy action (applies only when merged to master → Render auto-deploys):** set
+`NC_AUTH_MINT_SECRET` in the Render env AND have the dashboard / Atlas client send it, or dashboard
+login (which mints via `/auth/token`) returns 401. This is the intended invite-only-beta posture,
+not a silent break.
+
 ## TKS definition runtime lock, **BUILT and route/probe-enforced** - customer audits now fail closed unless the owner definitions are loaded (Jun 3, 2026)
 ## Session 63: Public-launch declutter pass 1 — inline Disclosure primitive (May 31, 2026)
 

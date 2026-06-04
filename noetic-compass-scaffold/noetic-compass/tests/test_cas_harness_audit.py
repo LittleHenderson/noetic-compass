@@ -1516,3 +1516,147 @@ def test_duplicate_payload_reuses_existing_deterministic_session(client, auth_he
     ).json()
 
     assert second == first
+
+
+# --------------------------------------------------------------------------- #
+# Phase-1 tenant-scope isolation (close the cross-tenant audit-session leak)
+# --------------------------------------------------------------------------- #
+
+
+def _headers_for(sub: str, api_key: str) -> dict[str, str]:
+    """Auth headers for a specific caller identity (sub + api_key)."""
+    from api.middleware.auth import create_token
+
+    return {"Authorization": f"Bearer {create_token(sub=sub, api_key=api_key)}"}
+
+
+def test_list_sessions_scoped_to_caller_identity(client):
+    # Caller A creates a session; caller B creates their own. Each /sessions
+    # listing must return ONLY that caller's own session, never the other's.
+    headers_a = _headers_for("caller-a", "key-a")
+    headers_b = _headers_for("caller-b", "key-b")
+
+    a_created = client.post(
+        "/api/cas-harness/audit/session", json=_valid_payload(), headers=headers_a
+    ).json()
+    b_created = client.post(
+        "/api/cas-harness/audit/session",
+        json={**_valid_payload(), "prompt": "Caller B private scenario."},
+        headers=headers_b,
+    ).json()
+
+    a_list = client.get("/api/cas-harness/audit/sessions", headers=headers_a)
+    b_list = client.get("/api/cas-harness/audit/sessions", headers=headers_b)
+
+    assert a_list.status_code == 200
+    assert b_list.status_code == 200
+    a_ids = {s["audit_id"] for s in a_list.json()["sessions"]}
+    b_ids = {s["audit_id"] for s in b_list.json()["sessions"]}
+
+    # A sees only A's session; B sees only B's. Neither sees the other's.
+    assert a_ids == {a_created["audit_id"]}
+    assert b_ids == {b_created["audit_id"]}
+    assert b_created["audit_id"] not in a_ids
+    assert a_created["audit_id"] not in b_ids
+
+
+def test_get_session_status_denied_across_callers(client):
+    # Caller B must not be able to fetch caller A's session by id: it reads as
+    # 404 (fail closed), indistinguishable from a session that does not exist.
+    headers_a = _headers_for("caller-a", "key-a")
+    headers_b = _headers_for("caller-b", "key-b")
+
+    a_created = client.post(
+        "/api/cas-harness/audit/session", json=_valid_payload(), headers=headers_a
+    ).json()
+    audit_id = a_created["audit_id"]
+
+    # The owner can read their own session.
+    owner_view = client.get(
+        f"/api/cas-harness/audit/session/{audit_id}/status", headers=headers_a
+    )
+    assert owner_view.status_code == 200
+    assert owner_view.json()["audit_id"] == audit_id
+
+    # A different caller cannot.
+    cross = client.get(
+        f"/api/cas-harness/audit/session/{audit_id}/status", headers=headers_b
+    )
+    assert cross.status_code == 404
+    assert cross.json()["detail"] == "Audit session not found"
+
+
+def test_run_session_denied_across_callers(client):
+    # Caller B must not be able to run caller A's session by id.
+    headers_a = _headers_for("caller-a", "key-a")
+    headers_b = _headers_for("caller-b", "key-b")
+
+    a_created = client.post(
+        "/api/cas-harness/audit/session", json=_valid_payload(), headers=headers_a
+    ).json()
+    audit_id = a_created["audit_id"]
+
+    cross_run = client.post(
+        f"/api/cas-harness/audit/session/{audit_id}/run", headers=headers_b
+    )
+    assert cross_run.status_code == 404
+    assert cross_run.json()["detail"] == "Audit session not found"
+
+
+def test_unauthenticated_caller_cannot_see_authenticated_sessions(client):
+    # An identity-less caller must NOT see an authenticated caller's sessions,
+    # and must not be able to fetch one by id. Fail closed.
+    headers_a = _headers_for("caller-a", "key-a")
+
+    a_created = client.post(
+        "/api/cas-harness/audit/session", json=_valid_payload(), headers=headers_a
+    ).json()
+    audit_id = a_created["audit_id"]
+
+    # No Authorization header at all.
+    anon_list = client.get("/api/cas-harness/audit/sessions")
+    assert anon_list.status_code == 200
+    anon_ids = {s["audit_id"] for s in anon_list.json()["sessions"]}
+    assert audit_id not in anon_ids
+    assert anon_ids == set()
+
+    anon_get = client.get(f"/api/cas-harness/audit/session/{audit_id}/status")
+    assert anon_get.status_code == 404
+
+
+def test_anonymous_callers_share_only_the_anonymous_bucket(client):
+    # Two identity-less callers both land in the anonymous-owned bucket, so an
+    # anonymous list returns anonymous-created sessions (own-only) but still
+    # never an authenticated caller's session.
+    headers_a = _headers_for("caller-a", "key-a")
+
+    anon_created = client.post(
+        "/api/cas-harness/audit/session", json=_valid_payload()
+    ).json()
+    auth_created = client.post(
+        "/api/cas-harness/audit/session",
+        json={**_valid_payload(), "prompt": "Authenticated-only scenario."},
+        headers=headers_a,
+    ).json()
+
+    anon_list = client.get("/api/cas-harness/audit/sessions")
+    assert anon_list.status_code == 200
+    anon_ids = {s["audit_id"] for s in anon_list.json()["sessions"]}
+
+    assert anon_created["audit_id"] in anon_ids
+    assert auth_created["audit_id"] not in anon_ids
+
+
+def test_audit_session_response_never_leaks_owner_identity(client):
+    # The owner identity is an internal access-control field and must never
+    # appear in the public audit-session response payload.
+    headers_a = _headers_for("caller-a", "key-a")
+    created = client.post(
+        "/api/cas-harness/audit/session", json=_valid_payload(), headers=headers_a
+    )
+    assert created.status_code == 200
+    body = created.json()
+    assert "owner_sub" not in body
+    assert "owner_api_key" not in body
+    assert "caller-a" not in created.text
+    assert "key-a" not in created.text
