@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeAll, afterAll, afterEach } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll, afterEach, vi } from 'vitest';
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
 import { apiFetch, ApiError } from '../../api/client';
@@ -18,6 +18,7 @@ beforeAll(() => server.listen());
 afterEach(() => {
   server.resetHandlers();
   clearToken();
+  vi.unstubAllEnvs();
 });
 afterAll(() => server.close());
 
@@ -102,6 +103,34 @@ describe('apiFetch', () => {
 
     expect(result.ok).toBe(true);
     expect(authHeaders).toEqual(['Bearer stale-jwt', 'Bearer fresh-jwt']);
+    expect(getToken()).toBe('fresh-jwt');
+  });
+
+  it('sends the configured mint secret when refreshing the dashboard token', async () => {
+    vi.stubEnv('VITE_AUTH_MINT_SECRET', 'mint-secret-123');
+    setToken('stale-jwt');
+    let capturedMintSecret = '';
+    server.use(
+      http.post('/api/auth/token', ({ request }) => {
+        capturedMintSecret = request.headers.get('X-Auth-Mint-Secret') ?? '';
+        return HttpResponse.json({ token: 'fresh-jwt' });
+      }),
+      http.get('/api/config', ({ request }) => {
+        const auth = request.headers.get('Authorization') ?? '';
+        if (auth !== 'Bearer fresh-jwt') {
+          return HttpResponse.json(
+            { detail: 'Missing or invalid Authorization header', error_type: 'auth_error' },
+            { status: 401 },
+          );
+        }
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+
+    const result = await apiFetch<{ ok: boolean }>('/config');
+
+    expect(result.ok).toBe(true);
+    expect(capturedMintSecret).toBe('mint-secret-123');
     expect(getToken()).toBe('fresh-jwt');
   });
 

@@ -1,5 +1,5 @@
 import { clearToken, getToken, setToken } from './auth';
-import { API_BASE } from './config';
+import { API_BASE, authMintHeaders } from './config';
 
 export class ApiError extends Error {
   status: number;
@@ -38,7 +38,7 @@ async function refreshDashboardToken(): Promise<boolean> {
   try {
     const res = await fetch(`${API_BASE}/auth/token`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authMintHeaders() },
       body: JSON.stringify({ username: freshDashboardUsername() }),
     });
     if (!res.ok) return false;

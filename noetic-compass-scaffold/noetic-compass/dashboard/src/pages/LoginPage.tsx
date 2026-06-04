@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { setToken } from '../api/auth';
-import { API_BASE } from '../api/config';
+import { API_BASE, authMintHeaders } from '../api/config';
 import { BrandTagline } from '../components/shared/BrandTagline';
 import { PatentPendingBadge } from '../components/shared/PatentPendingBadge';
 
@@ -20,7 +20,7 @@ export function LoginPage() {
     try {
       const res = await fetch(`${API_BASE}/auth/token`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authMintHeaders() },
         body: JSON.stringify({ username: name }),
       });
 
