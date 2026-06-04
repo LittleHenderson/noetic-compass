@@ -1,5 +1,48 @@
 # Noetic Compass — Progress Log
 
+## PAID-user security spine — account half: durable accounts + invite redemption + identity login (Jun 4, 2026)
+
+**Headline.** First PR of the PAID-user security spine (`launch/paid-security-spine`). Adds a real
+account entity and a fail-closed invite-redemption flow on the existing durable `StateStore`, plus
+an identity-login branch on `/auth/token`. Flag-gated behind `NC_ACCOUNTS_ENABLED` (default OFF):
+with the flag off, the app behaves byte-for-byte as today — the shared-secret mint (`_authorize_mint`)
+and the current internal smoke flow are untouched.
+
+- **Account + InviteCode models** (`api/services/accounts/models.py`). `Account(account_id,
+  email_or_username[unique], display_name, role, tenant_id, status[active|disabled], created_at,
+  updated_at)` and `InviteCode(code, target_email, role, tenant_id, expires_at, max_uses, uses,
+  redeemed_by, redeemed_at, created_at)`. Roles owner/admin/member/support/operator/system;
+  invite-created accounts default to `member`. Extends the `billing.py` Account *shape* (does NOT
+  import the stub). Unknown/forward status coerces to `disabled` (fail closed).
+- **Durable store** (`api/services/accounts/store.py`). Persists via the StateStore Protocol as
+  record kinds `account` / `invite` / `account_email_index`, reusing the `LedgerRecord` envelope +
+  optimistic `VersionConflict`. `redeem_invite` is atomic and fail-closed: invalid/expired/used/
+  over-limit codes are rejected and create nothing; the invite use-count is advanced with
+  `put(expected_version=<version read>)` so a single-use code cannot be redeemed twice under a
+  race; email uniqueness is enforced by an index record created at `expected_version=0`. Account
+  ids are deterministic in `(code, email)` so re-delivery is idempotent (exactly one account).
+- **Cryptographic invites** (`api/services/accounts/invites.py`). `secrets.token_urlsafe` (256-bit
+  default); pure `is_expired` / `uses_remaining` / `is_redeemable` predicates.
+- **Routes** (`api/routes/accounts.py`). `POST /accounts/invite/redeem` (public, fail-closed,
+  non-enumerable — one identical 400 for every failure) and `POST /accounts/invite` (gated behind
+  debug/operator-secret; full RBAC is a later PR, TODO noted). Server-derived claims only: the
+  redeem body has no role/tenant/account_id field, so a client cannot inject them.
+- **Identity login** (`api/routes/auth.py`). When `accounts_enabled` and an account exists for the
+  supplied identity, the minted token is bound to that account's SERVER-DERIVED
+  `account_id`/`tenant_id`/`role`. `_authorize_mint` is preserved unchanged as the credential gate.
+  Unknown identity → 401; disabled account → 401.
+- **Token claims** (`api/middleware/auth.py`). `create_token` additively accepts optional
+  server-derived `account_id`/`tenant_id`/`role`; the `{sub, api_key, exp}` fallback is unchanged.
+- **Durable-or-absent wiring** (`api/main.py`, `api/config.py`). The account store is opened at
+  lifespan via the same backend selection as the state ledger (Postgres when `NC_DATABASE_URL`,
+  else SQLite) and FAILS LOUD if enabled but no durable backend can be built — never in-memory.
+- **Deferred to next PR:** session/jti + revocation + dispatch-side status checks, `require_role`,
+  quota/billing enforcement, per-customer tenant threading on distributed/fleet/evidence routes.
+
+Tests: `tests/test_accounts_invites.py` (new) + `tests/test_middleware.py` (extended) +
+`tests/test_cas_harness_audit.py` — 82 passed. State-substrate sqlite/migration + production
+billing suites — 42 passed. `accounts_enabled=False` default path verified unchanged.
+
 ## CAS Harness worker token send — API can call a locked RunPod worker (Jun 4, 2026)
 
 **Headline.** The live worker already had an optional `X-Atlas-Worker-Token` gate, but the API

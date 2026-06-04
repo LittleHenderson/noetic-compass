@@ -22,6 +22,7 @@ from api.middleware.rate_limit import RateLimitMiddleware
 from api.middleware.audit import AuditLogMiddleware
 from api.middleware.request_id import RequestIdMiddleware
 from api.routes import (
+    accounts,
     assess,
     auth,
     batch,
@@ -102,6 +103,19 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     else:
         logger.info("state ledger: ENABLED, dual-write+shadow, dict-authoritative")
 
+    # Durable account/invite store (PAID-user security spine — account half). Dark by default
+    # (accounts_enabled off => None => /accounts/* return 503, /auth/token keeps the shared-secret
+    # mint). When enabled, build_account_store selects the SAME durable backend as the state ledger
+    # (Postgres when NC_DATABASE_URL set, else SQLite) and FAILS LOUD if no durable backend can be
+    # built — account state is durable or absent, never silently in-memory.
+    from api.services.accounts import build_account_store
+
+    app.state.account_store = build_account_store(settings)
+    if app.state.account_store is None:
+        logger.info("accounts: dark (shared-secret mint only)")
+    else:
+        logger.info("accounts: ENABLED, durable account store installed")
+
     # CRM lead capture: build the service from settings and stash it for the routes. Dark by
     # default (in-memory store + null provider) unless NC_CRM_LEAD_STORE_PATH / NC_CRM_PROVIDER are
     # set. build_crm_service fails loud for a provider we have not implemented, so a misconfigured
@@ -163,6 +177,7 @@ app.add_exception_handler(PipelineStageError, pipeline_stage_error_handler)  # t
 # Routes
 app.include_router(health.router)
 app.include_router(auth.router)
+app.include_router(accounts.router)
 app.include_router(assess.router)
 app.include_router(wrap.router)
 app.include_router(batch.router)

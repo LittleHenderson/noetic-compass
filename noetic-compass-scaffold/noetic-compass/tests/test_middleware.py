@@ -58,6 +58,32 @@ def test_create_token_roundtrip():
     assert "exp" in payload
 
 
+def test_create_token_omits_account_claims_by_default():
+    """Backward-compat: with no account args, the payload is exactly {sub, api_key, exp}."""
+    token = create_token(sub="user1", api_key="key1")
+    payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+    assert set(payload.keys()) == {"sub", "api_key", "exp"}
+    assert "account_id" not in payload
+    assert "tenant_id" not in payload
+    assert "role" not in payload
+
+
+def test_create_token_embeds_server_derived_account_claims():
+    """When the server supplies account claims, they are embedded additively."""
+    token = create_token(
+        sub="member@example.com",
+        api_key="account:acct-123",
+        account_id="acct-123",
+        tenant_id="tenant-L",
+        role="member",
+    )
+    payload = jwt.decode(token, settings.jwt_secret, algorithms=[settings.jwt_algorithm])
+    assert payload["sub"] == "member@example.com"
+    assert payload["account_id"] == "acct-123"
+    assert payload["tenant_id"] == "tenant-L"
+    assert payload["role"] == "member"
+
+
 def test_auth_token_route_uses_per_username_api_key(client):
     # The suite runs with NC_DEBUG=true (see root conftest), so the credential-free
     # local/dev mint path is open. This documents that dev-only behavior.
