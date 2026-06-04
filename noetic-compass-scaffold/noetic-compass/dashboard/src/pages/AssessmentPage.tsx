@@ -10,6 +10,7 @@ import { ErrorBanner } from '../components/shared/ErrorBanner';
 import { CertBadge } from '../components/shared/CertBadge';
 import { ExportButton } from '../components/shared/ExportButton';
 import { ExplainPanel } from '../components/shared/ExplainPanel';
+import { Disclosure } from '../components/shared/Disclosure';
 import { ExecutiveSummary } from '../components/shared/ExecutiveSummary';
 import { AiBriefing } from '../components/shared/AiBriefing';
 import { AiResponsePanel } from '../components/shared/AiResponsePanel';
@@ -563,31 +564,33 @@ export function AssessmentPage() {
               </button>
             </div>
             {assessMode === 'single' && (
-              <div className="space-y-1 rounded-lg border border-white/[0.08] bg-white/[0.02] px-4 py-3">
-                <p className="text-[11px] font-medium text-slate-300">{getScoringMethodLabel(scoringMode)}</p>
-                <p className="text-[11px] leading-relaxed text-slate-500">
-                  {getScoringMethodDescription(scoringMode)}
-                </p>
-                <div className="flex flex-wrap gap-2 rounded-lg border border-white/[0.06] bg-dark-900/30 px-3 py-2 text-[10px] text-slate-500">
-                  <span className="rounded-full bg-white/[0.04] px-2 py-1 text-slate-300">Baseline: heuristic_fallback</span>
-                  <span className="rounded-full bg-emerald-400/10 px-2 py-1 text-emerald-300">Recommended: secondary_llm</span>
-                  <span className="rounded-full bg-amber-400/10 px-2 py-1 text-amber-300">Avoid for demos: self_reported</span>
+              <div className="space-y-2">
+                <div className="flex items-center justify-between gap-3 rounded-lg border border-white/[0.08] bg-white/[0.02] px-4 py-2">
+                  <p className="text-[11px] font-medium text-slate-300">{getScoringMethodLabel(scoringMode)}</p>
                 </div>
-                {provider !== 'mock' && scoringMode === 'secondary_llm' && (
-                  <p className="text-[10px] text-emerald-300/80">
-                    Recommended for live assessments.
-                  </p>
-                )}
-                {scoringMode === 'secondary_llm' && (
-                  <p className="text-[10px] text-slate-500">
-                    Auto selects an available separate scorer.
-                  </p>
-                )}
                 {scoringMode === 'self_reported' && (
-                  <p className="text-[10px] text-amber-400/80">
-                    Self-score. Do not use for stakeholder comparisons.
+                  <p className="rounded-lg border border-amber-400/20 bg-amber-400/[0.08] px-3 py-2 text-[10px] text-amber-300">
+                    Self-reported mode lets the generator grade its own response. Treat it as self-assessment only.
                   </p>
                 )}
+                <Disclosure summary="Scoring method details">
+                  <p>{getScoringMethodDescription(scoringMode)}</p>
+                  <p>
+                    Least-biased automated baseline: <span className="text-slate-300">heuristic_fallback</span>.
+                    Best overall current mode: <span className="text-slate-300">secondary_llm</span> with a separate scorer.
+                    Worst stakeholder comparison mode: <span className="text-slate-300">self_reported</span>.
+                  </p>
+                  {provider !== 'mock' && scoringMode === 'secondary_llm' && (
+                    <p className="text-emerald-300/80">
+                      Recommended default for live providers: a separate scorer reduces self-grading risk and makes report provenance clearer.
+                    </p>
+                  )}
+                  {scoringMode === 'secondary_llm' && (
+                    <p>
+                      Auto prefers a different scorer provider when one is configured and available. Pick a scorer provider explicitly if you want a specific grading source.
+                    </p>
+                  )}
+                </Disclosure>
               </div>
             )}
           </div>
@@ -644,13 +647,14 @@ export function AssessmentPage() {
                 <p className="mt-1 text-sm font-medium text-slate-200">{resolvedScorerModel ?? 'Not provided'}</p>
               </div>
             </div>
-            <div className="mt-4 flex flex-wrap gap-2 text-xs text-slate-400">
-              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
-                {getScoringMethodDescription(scoringMethod)}
-              </span>
-              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3 py-1.5">
-                Heuristic risk signals included
-              </span>
+            <div className="mt-4 space-y-2 text-sm text-slate-400">
+              <p>{getScoringMethodDescription(scoringMethod)}</p>
+              <Disclosure summary="What's measured vs. not validated">
+                <p>
+                  Social engineering resistance and bias-flag counts are measured as heuristic risk signals.
+                  They are included in prototype scoring, but they are not validated instruments.
+                </p>
+              </Disclosure>
               {scoringMethod === 'self_reported' && (
                 <span className="rounded-full border border-amber-400/20 bg-amber-400/10 px-3 py-1.5 text-amber-300">
                   Self-score

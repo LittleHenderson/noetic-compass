@@ -59,6 +59,15 @@ class AuditSessionRecord:
     selected_modules: list[str]
     created_at: str
     updated_at: str
+    # Phase-1 identity-scope stopgap: the requesting identity that owns this
+    # session, captured from the JWT auth context at create time (``sub`` claim
+    # and/or ``api_key``). It scopes list/get so one beta caller cannot see
+    # another caller's audit sessions. This is an interim per-identity owner key;
+    # it upgrades to a real ``tenant_id`` when the account/tenant model lands.
+    # NOTE: not serialised by ``to_dict`` — owner identity is an internal access
+    # control field, never part of the public audit-session response contract.
+    owner_sub: str | None = None
+    owner_api_key: str | None = None
     verdict: str | None = None
     confidence: float | None = None
     evidence_packet_trace_id: str | None = None
@@ -71,11 +80,50 @@ class AuditSessionRecord:
     def to_dict(self) -> dict[str, Any]:
         payload = asdict(self)
         payload["lifecycle"] = [asdict(event) for event in self.lifecycle]
+        # Owner identity is an internal access-control field; never leak it in
+        # the public audit-session response payload.
+        payload.pop("owner_sub", None)
+        payload.pop("owner_api_key", None)
         return payload
 
 
 _SESSIONS: dict[str, AuditSessionRecord] = {}
 _LOCK = Lock()
+
+# Sentinel identity values. The JWT auth middleware defaults an unauthenticated
+# caller's ``sub``/``api_key`` to these strings, and other middleware mirrors the
+# same defaults. For ownership we treat them as "no real identity": a session
+# owned only by these (or by ``None``/empty) is anonymous-owned, and an
+# authenticated caller must never be able to see it, nor it them.
+_ANONYMOUS_SUB = "anonymous"
+_DEFAULT_API_KEY = "default"
+
+
+def _normalize_identity(value: str | None) -> str | None:
+    """Collapse blank / sentinel identity claims to ``None`` (no identity)."""
+    if value is None:
+        return None
+    stripped = value.strip()
+    if not stripped or stripped in {_ANONYMOUS_SUB, _DEFAULT_API_KEY}:
+        return None
+    return stripped
+
+
+def _owner_key(owner_sub: str | None, owner_api_key: str | None) -> str:
+    """Build a stable owner key for tenant-scoping list/get.
+
+    Phase-1 identity-scope stopgap: the key is derived from the requesting
+    identity (``sub`` claim and/or ``api_key``). Callers with no real identity
+    collapse to a single dedicated ``anonymous`` bucket, so they can only ever
+    see other anonymous-owned sessions (own-only) and never an authenticated
+    caller's sessions. Upgrades to a real ``tenant_id`` when the account/tenant
+    model lands.
+    """
+    sub = _normalize_identity(owner_sub)
+    api_key = _normalize_identity(owner_api_key)
+    if sub is None and api_key is None:
+        return "anon"
+    return json.dumps({"sub": sub, "api_key": api_key}, sort_keys=True)
 
 
 def reset_audit_sessions_for_tests() -> None:
@@ -84,8 +132,18 @@ def reset_audit_sessions_for_tests() -> None:
         _SESSIONS.clear()
 
 
-def create_session(payload: dict[str, Any]) -> AuditSessionRecord:
-    audit_id = _audit_id_for(payload)
+def create_session(
+    payload: dict[str, Any],
+    *,
+    owner_sub: str | None = None,
+    owner_api_key: str | None = None,
+) -> AuditSessionRecord:
+    # Phase-1 identity-scope stopgap: fold the owner key into the deterministic
+    # audit_id so two different callers submitting the same payload get distinct
+    # sessions (a record therefore always belongs to exactly one owner), while a
+    # single caller still dedups on identical payloads.
+    owner_key = _owner_key(owner_sub, owner_api_key)
+    audit_id = _audit_id_for(payload, owner_key=owner_key)
     now = _utc_now()
     with _LOCK:
         existing = _SESSIONS.get(audit_id)
@@ -107,6 +165,8 @@ def create_session(payload: dict[str, Any]) -> AuditSessionRecord:
             selected_modules=list(payload["selected_modules"]),
             created_at=now,
             updated_at=now,
+            owner_sub=_normalize_identity(owner_sub),
+            owner_api_key=_normalize_identity(owner_api_key),
             evidence_packet_trace_id=payload.get("evidence_packet_trace_id"),
             atlas_deep_link=_atlas_deep_link(payload.get("evidence_packet_trace_id")),
             verifier_decision=(
@@ -131,14 +191,47 @@ def create_session(payload: dict[str, Any]) -> AuditSessionRecord:
         return record
 
 
-def get_session(audit_id: str) -> AuditSessionRecord | None:
-    with _LOCK:
-        return _SESSIONS.get(audit_id)
+def _owns(record: AuditSessionRecord, owner_key: str) -> bool:
+    """True when ``record`` is owned by the caller identified by ``owner_key``."""
+    return _owner_key(record.owner_sub, record.owner_api_key) == owner_key
 
 
-def list_sessions() -> list[AuditSessionRecord]:
+def get_session(
+    audit_id: str,
+    *,
+    owner_sub: str | None = None,
+    owner_api_key: str | None = None,
+) -> AuditSessionRecord | None:
+    """Return a session only if the caller owns it.
+
+    Phase-1 identity-scope stopgap: fail CLOSED. A caller who does not own the
+    session (including a caller with no identity asking for an authenticated
+    caller's session) gets ``None`` — indistinguishable from "not found" — so a
+    cross-tenant read cannot enumerate or confirm another caller's sessions.
+    """
+    owner_key = _owner_key(owner_sub, owner_api_key)
     with _LOCK:
-        return sorted(_SESSIONS.values(), key=lambda session: session.created_at)
+        record = _SESSIONS.get(audit_id)
+        if record is None or not _owns(record, owner_key):
+            return None
+        return record
+
+
+def list_sessions(
+    *,
+    owner_sub: str | None = None,
+    owner_api_key: str | None = None,
+) -> list[AuditSessionRecord]:
+    """List only the sessions owned by the requesting identity.
+
+    Phase-1 identity-scope stopgap: fail CLOSED. A caller only ever sees their
+    own sessions; a caller with no real identity sees only the anonymous-owned
+    bucket, never every process-wide session.
+    """
+    owner_key = _owner_key(owner_sub, owner_api_key)
+    with _LOCK:
+        owned = [record for record in _SESSIONS.values() if _owns(record, owner_key)]
+    return sorted(owned, key=lambda session: session.created_at)
 
 
 def attach_runner_evidence(
@@ -222,10 +315,15 @@ def _append_event(record: AuditSessionRecord, *, status: AuditStatus, message: s
     record.lifecycle.append(AuditLifecycleEvent(status=status, message=message, timestamp=now))
 
 
-def _audit_id_for(payload: dict[str, Any]) -> str:
+def _audit_id_for(payload: dict[str, Any], *, owner_key: str = "anon") -> str:
     public_payload = dict(payload)
     public_payload.pop("license_key", None)
-    digest = hashlib.sha256(json.dumps(public_payload, sort_keys=True).encode("utf-8")).hexdigest()
+    # Phase-1 identity-scope stopgap: bind the deterministic id to the owner key
+    # so the same payload from two different callers yields two distinct sessions
+    # and a record can never be co-owned. The owner key is identity-derived, so
+    # the id reveals nothing about the payload of any other tenant.
+    keyed_payload = {"owner_key": owner_key, "payload": public_payload}
+    digest = hashlib.sha256(json.dumps(keyed_payload, sort_keys=True).encode("utf-8")).hexdigest()
     return f"cas-audit-{digest[:16]}"
 
 

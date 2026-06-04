@@ -38,6 +38,17 @@ services:
     envVars:
       - key: NC_JWT_SECRET
         generateValue: true
+      # CAS Harness scoped-beta Phase 1 — POST /auth/token mint lock (api/routes/auth.py).
+      # In production (debug=False) the mint REQUIRES this shared secret, presented as the
+      # X-Auth-Mint-Secret header or `mint_secret` body field, or it returns HTTP 401 —
+      # closing the prior anonymous-mint hole (any username, no credential). Operator-set
+      # (dashboard-managed); the dashboard / Atlas Viewer client must send it to mint a
+      # login token. Left UNSET in production, the mint refuses entirely (production is
+      # never an open mint). Local dev (debug=True) keeps the frictionless open mint
+      # regardless of this value. Phase 2 replaces this single shared secret with
+      # per-account issued API keys.
+      - key: NC_AUTH_MINT_SECRET
+        sync: false
       - key: NC_DEFAULT_LLM_PROVIDER
         value: mock
       - key: NC_MOCK_LLM

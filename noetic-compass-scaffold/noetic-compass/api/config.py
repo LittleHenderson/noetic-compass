@@ -68,6 +68,22 @@ class Settings(BaseSettings):
     jwt_algorithm: str = "HS256"
     jwt_expiry_minutes: int = 60
 
+    # Auth-token mint lock (CAS Harness scoped-beta Phase 1 — close the open mint).
+    # Phase 1 ONLY: this is a single SHARED mint credential, not per-account identity.
+    # Full per-account issued-API-key auth (each account holds its own key, tokens scoped
+    # to that account) is Phase 2 — see the seam in api/routes/auth.py. Until then:
+    #   NC_AUTH_MINT_SECRET (default "") -> a shared secret a /auth/token request must present
+    #     (X-Auth-Mint-Secret header or `mint_secret` body field) to mint a JWT for any identity.
+    #     * If SET, the secret is REQUIRED in every environment (debug or prod). Mismatch/absence
+    #       -> HTTP 401. This is the closed posture.
+    #     * If UNSET (""), the open mint (any username, no credential) is allowed ONLY when
+    #       `debug` is True (local dev/demo). In non-debug (production) an unset secret means
+    #       the mint refuses entirely (HTTP 401) — prod is NEVER an open mint.
+    auth_mint_secret: str = Field(
+        default="",
+        validation_alias=AliasChoices("NC_AUTH_MINT_SECRET", "AUTH_MINT_SECRET"),
+    )
+
     # Rate limiting
     rate_limit_rpm: int = 60
     rate_limit_tier: str = "community"  # community | professional | enterprise

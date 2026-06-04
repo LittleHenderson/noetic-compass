@@ -13,8 +13,11 @@ import json
 from typing import Literal
 from urllib.parse import urlparse
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
+from jose import JWTError, jwt
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, SecretStr, field_validator, model_validator
+
+from api.config import settings
 
 from api.routes.evidence import (
     _verify_packet_hashes,
@@ -156,6 +159,51 @@ def _require_locked_tks_definitions() -> None:
             status_code=503,
             detail=f"TKS definition lock failed; audit creation is refused: {exc}",
         ) from exc
+
+
+def _caller_identity(request: Request) -> tuple[str | None, str | None]:
+    """Resolve the requesting identity (``sub``, ``api_key``) for tenant scoping.
+
+    Phase-1 identity-scope stopgap. Owner identity is whatever the caller
+    actually presents:
+
+    1. If the JWT auth middleware already attached identity to ``request.state``
+       (it does for protected paths), use that. This keeps the scoping correct
+       for free if these audit-session routes are later moved off the public
+       allowlist and behind the middleware.
+    2. Otherwise — these session routes are currently on the auth middleware's
+       PUBLIC_PATH allowlist, so it never decodes their token — best-effort
+       decode the ``Authorization: Bearer`` JWT here using the same secret and
+       algorithm. A missing / malformed / expired token is non-fatal and simply
+       yields no identity.
+
+    Fails CLOSED: when no usable identity can be resolved, returns ``(None,
+    None)`` and the store collapses that to the anonymous-owned bucket, so the
+    caller can never list or fetch another (identified) caller's sessions.
+
+    Upgrades to a real ``tenant_id`` lookup when the account/tenant model lands.
+    """
+    state = request.state
+    state_sub = getattr(state, "user", None)
+    state_api_key = getattr(state, "api_key", None)
+    if state_sub is not None or state_api_key is not None:
+        return state_sub, state_api_key
+
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        return None, None
+    token = auth_header[7:]
+    try:
+        payload = jwt.decode(
+            token,
+            settings.jwt_secret,
+            algorithms=[settings.jwt_algorithm],
+        )
+    except JWTError:
+        # Unverifiable token → no identity. Fail closed; never raise here, the
+        # session routes stay reachable but the caller is treated as anonymous.
+        return None, None
+    return payload.get("sub"), payload.get("api_key")
 
 
 class ProvenanceChip(BaseModel):
@@ -1483,19 +1531,26 @@ async def list_distributed_fleet_runs() -> FleetRunListResponse:
 
 
 @router.post("/session", response_model=AuditSessionResponse)
-async def create_audit_session(req: AuditSessionRequest) -> AuditSessionResponse:
+async def create_audit_session(req: AuditSessionRequest, request: Request) -> AuditSessionResponse:
     """Validate the CAS Harness audit contract and create a stored M1 session."""
     _require_locked_tks_definitions()
+    owner_sub, owner_api_key = _caller_identity(request)
     payload = req.model_dump(mode="json")
     if req.evidence_packet_trace_id:
         payload.update(_audit_evidence_for_trace(req.evidence_packet_trace_id))
-    return AuditSessionResponse.model_validate(create_session(payload).to_dict())
+    record = create_session(payload, owner_sub=owner_sub, owner_api_key=owner_api_key)
+    return AuditSessionResponse.model_validate(record.to_dict())
 
 
 @router.get("/session/{audit_id}/status", response_model=AuditSessionResponse)
-async def get_audit_session_status(audit_id: str) -> AuditSessionResponse:
-    """Return the stored session state instead of fabricating by audit id."""
-    record = get_session(audit_id)
+async def get_audit_session_status(audit_id: str, request: Request) -> AuditSessionResponse:
+    """Return the stored session state instead of fabricating by audit id.
+
+    Phase-1 identity-scope stopgap: a caller can only read a session they own;
+    another caller's session reads as 404, never disclosed.
+    """
+    owner_sub, owner_api_key = _caller_identity(request)
+    record = get_session(audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key)
     if record is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
     return AuditSessionResponse.model_validate(record.to_dict())
@@ -1504,15 +1559,20 @@ async def get_audit_session_status(audit_id: str) -> AuditSessionResponse:
 @router.post("/session/{audit_id}/run", response_model=AuditSessionResponse)
 async def run_audit_session(
     audit_id: str,
+    request: Request,
     req: RunAuditSessionRequest | None = None,
 ) -> AuditSessionResponse:
     """Run live worker evidence when available, then apply the verdict gate.
 
     An optional body may carry a customer bring-your-own-key (BYOK) ephemeral
     secret used only for this run (closed-API targets) and never persisted.
+
+    Phase-1 identity-scope stopgap: the run is gated on ownership — a caller
+    cannot run (or even confirm) another caller's session.
     """
     _require_locked_tks_definitions()
-    existing = get_session(audit_id)
+    owner_sub, owner_api_key = _caller_identity(request)
+    existing = get_session(audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key)
     if existing is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
     ephemeral_api_key = (
@@ -1585,9 +1645,18 @@ async def run_audit_session(
 
 
 @router.get("/sessions", response_model=AuditSessionListResponse)
-async def list_audit_sessions() -> AuditSessionListResponse:
-    """List in-process M1 audit sessions for the current API process."""
-    sessions = [AuditSessionResponse.model_validate(record.to_dict()) for record in list_sessions()]
+async def list_audit_sessions(request: Request) -> AuditSessionListResponse:
+    """List the in-process M1 audit sessions owned by the requesting caller.
+
+    Phase-1 identity-scope stopgap: scoped to the caller identity so one beta
+    user cannot enumerate another user's audit sessions. Fails closed — a caller
+    with no identity sees only the anonymous-owned bucket, never every session.
+    """
+    owner_sub, owner_api_key = _caller_identity(request)
+    sessions = [
+        AuditSessionResponse.model_validate(record.to_dict())
+        for record in list_sessions(owner_sub=owner_sub, owner_api_key=owner_api_key)
+    ]
     return AuditSessionListResponse(sessions=sessions)
 
 
