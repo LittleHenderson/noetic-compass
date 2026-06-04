@@ -1,5 +1,28 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness evidence smoke hardening — raw Stage 9 reads cannot leak ACCEPT; static anchors persist on disk (Jun 4, 2026)
+
+**Headline.** Production smoke found two real launch-surface gaps after the scoped-beta merge:
+the historical GPT-NeoX-20B Stage 9 packet could be read directly from `/evidence/{trace_id}`
+with raw `verdict: ACCEPT`, and the Pythia `/verify` endpoint returned `trace_id not found`
+after deploy when the static-anchor receipt was not present in the temp store.
+
+- **Public Stage 9 read gate.** `GET /evidence/{trace_id}` now serves a product-safe Stage 9
+  packet view. If the raw packet says `ACCEPT` or `SUPPRESS` but this deployment cannot verify
+  a persisted WORM/Object-Lock static anchor for it, the served top-level verdict and nested
+  verifier decision are downgraded to `FLAG_FOR_HUMAN_REVIEW` with `public_read_gate` metadata.
+  Audit-session execution already blocked this path; the lower-level packet endpoint now matches.
+- **Verify fails soft for discoverable Stage 9 packets.** If a Stage 9 packet is bundled and
+  readable but no persisted static-reference anchor receipt exists, `/verify` returns `200` with
+  `overall: unable_to_verify` and an explicit `static_reference_anchor` check instead of a 404.
+- **Render persistence fixed.** Root and mirror `render.yaml` now set
+  `CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR=/var/data/evidence_packets`, so future static anchor
+  receipts and hash logs live on the paid disk beside the state ledger and CRM lead store.
+
+Tests: `tests/test_evidence_routes.py` 35 passed / 2 skipped; `tests/test_cas_harness_audit.py`
+48 passed; `tests/test_cas_harness_static_evidence_anchor.py` +
+`tests/test_cas_harness_verdict_runner.py` 19 passed.
+
 ## CAS Harness scoped-beta Phase 1 — tenant-scoped audit sessions + /auth/token mint lock (Jun 4, 2026)
 
 **Headline.** Two minimal security fixes for the invite-only scoped beta, integrated onto the

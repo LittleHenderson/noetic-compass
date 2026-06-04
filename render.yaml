@@ -86,6 +86,12 @@ services:
       # database is the eventual backend behind the unchanged LeadStore seam.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      # CAS Harness Evidence Packet store durability: persisted hash logs and static
+      # anchor receipts must survive deploy/restart so /evidence/{trace_id}/verify can
+      # re-read the receipt after an Object-Lock anchor. Without this env var the store
+      # defaults to temp storage, which is not a production verification surface.
+      - key: CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR
+        value: /var/data/evidence_packets
       # External CRM sync. Default app behavior is capture-only (`NC_CRM_PROVIDER=null`).
       # To actually land leads in Airtable, set these dashboard-managed values together:
       # NC_CRM_PROVIDER=airtable, NC_AIRTABLE_TOKEN, NC_AIRTABLE_BASE_ID, and optionally
