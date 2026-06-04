@@ -23,6 +23,7 @@ from jose import JWTError, jwt
 from pydantic import BaseModel, Field
 
 from api.config import settings
+from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
 
 
 router = APIRouter(prefix="/atlas/live", tags=["atlas_live"])
@@ -144,7 +145,11 @@ def _verify_stream_token(session_id: str, token: str | None) -> None:
 async def _create_worker_session(req: LiveSessionRequest) -> dict:
     timeout = httpx.Timeout(settings.atlas_live_http_timeout_seconds)
     async with httpx.AsyncClient(timeout=timeout) as client:
-        resp = await client.post(f"{_worker_base_url()}/sessions", json=req.model_dump())
+        resp = await client.post(
+            f"{_worker_base_url()}/sessions",
+            json=req.model_dump(),
+            headers=atlas_worker_auth_headers(),
+        )
     if resp.status_code >= 400:
         raise HTTPException(
             status_code=502,
@@ -158,7 +163,10 @@ async def _iter_worker_events(session_id: str) -> AsyncIterator[bytes]:
         async with client.stream(
             "GET",
             f"{_worker_base_url()}/sessions/{session_id}/events",
-            headers={"Accept": "text/event-stream"},
+            headers={
+                "Accept": "text/event-stream",
+                **atlas_worker_auth_headers(),
+            },
         ) as resp:
             if resp.status_code >= 400:
                 payload = (
@@ -180,7 +188,7 @@ async def _proxy_worker_get(path: str) -> dict:
     timeout = httpx.Timeout(settings.atlas_live_http_timeout_seconds)
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.get(f"{base}{path}")
+            resp = await client.get(f"{base}{path}", headers=atlas_worker_auth_headers())
     except httpx.HTTPError as exc:
         raise HTTPException(
             status_code=503,

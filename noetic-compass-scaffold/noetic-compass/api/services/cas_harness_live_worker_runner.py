@@ -23,6 +23,7 @@ from typing import Any, Mapping
 import httpx
 
 from api.config import settings
+from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
 from api.services.cas_harness_harvest import capture_live_audit_harvest
 from api.services.cas_harness_merged_evidence_packets import (
@@ -133,7 +134,8 @@ async def _post_worker_dump(worker_base: str, payload: Mapping[str, Any]) -> dic
     url = f"{worker_base}/sessions/dump"
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
-            resp = await client.post(url, json=dict(payload))
+            headers = atlas_worker_auth_headers()
+            resp = await client.post(url, json=dict(payload), headers=headers)
             # Graceful degradation for a worker that predates the causal-ablation
             # probe: it rejects the request with a 422 naming `causal_ablation`
             # (or `ablation_target`) as the offending input. Retry once with the
@@ -143,7 +145,11 @@ async def _post_worker_dump(worker_base: str, payload: Mapping[str, Any]) -> dic
             # to a real measured ablation the moment an ablation-capable worker is
             # deployed, with no API redeploy needed.
             if resp.status_code == 422 and _ablation_probe_rejected(resp, payload):
-                resp = await client.post(url, json=_payload_without_ablation(payload))
+                resp = await client.post(
+                    url,
+                    json=_payload_without_ablation(payload),
+                    headers=headers,
+                )
     except httpx.HTTPError as exc:
         raise LiveAuditRunnerUnavailable(f"live worker unavailable: {exc}") from exc
     if resp.status_code >= 400:

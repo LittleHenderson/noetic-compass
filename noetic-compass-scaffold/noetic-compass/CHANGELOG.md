@@ -1,5 +1,24 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness worker token send — API can call a locked RunPod worker (Jun 4, 2026)
+
+**Headline.** The live worker already had an optional `X-Atlas-Worker-Token` gate, but the API
+did not send that header. Once the worker token was turned on, the browser proxy and audit runner
+would hit `401` even with a healthy worker. The API now has the matching send-side seam.
+
+- **Shared send-side helper.** `ATLAS_LIVE_WORKER_TOKEN` / `NC_ATLAS_LIVE_WORKER_TOKEN` is now
+  read by the API, trimmed, and sent as `X-Atlas-Worker-Token` only when configured. Empty token
+  preserves local/dev pass-through behavior.
+- **Audit runner protected.** `run_live_worker_audit` sends the header to `/sessions/dump`,
+  including the no-ablation retry path, so the CAS Harness run button can talk to a locked worker.
+- **Atlas LIVE proxy protected.** `/atlas/live/session`, `/atlas/live/session/{id}/events`, and
+  proxied worker health calls now send the same worker token, keeping the cockpit proxy and audit
+  runner on one auth contract.
+
+Tests: `tests/test_atlas_live_worker_auth.py`, `tests/test_atlas_live.py`,
+`tests/test_cas_harness_live_worker_runner.py`, and `tests/test_cas_harness_live_worker_health.py`
+35 passed; `tests/test_cas_harness_audit.py` 48 passed.
+
 ## CAS Harness evidence smoke hardening — raw Stage 9 reads cannot leak ACCEPT; static anchors persist on disk (Jun 4, 2026)
 
 **Headline.** Production smoke found two real launch-surface gaps after the scoped-beta merge:

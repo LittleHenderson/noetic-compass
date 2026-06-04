@@ -549,6 +549,26 @@ def _mock_async_client(monkeypatch, handler):
 
 
 @pytest.mark.asyncio
+async def test_post_worker_dump_sends_worker_token_header(monkeypatch):
+    seen_headers: list[str | None] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        seen_headers.append(request.headers.get("X-Atlas-Worker-Token"))
+        return httpx.Response(200, json={"events": [{"type": "complete", "total_tokens": 0}]})
+
+    monkeypatch.setattr(settings, "atlas_live_worker_token", "worker-secret")
+    _mock_async_client(monkeypatch, handler)
+
+    body = await _post_worker_dump(
+        "http://worker.test",
+        {"prompt": "p", "model_id": "EleutherAI/pythia-160m", "probes": ["active_trace"]},
+    )
+
+    assert body == {"events": [{"type": "complete", "total_tokens": 0}]}
+    assert seen_headers == ["worker-secret"]
+
+
+@pytest.mark.asyncio
 async def test_post_worker_dump_retries_without_ablation_on_unsupported_probe(monkeypatch):
     seen: list[dict] = []
 
