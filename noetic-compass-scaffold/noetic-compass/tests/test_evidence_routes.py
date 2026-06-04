@@ -95,6 +95,33 @@ def test_evidence_get_stage9_pythia_packet_preflight_is_flag(client, auth_header
     assert body["model_proof"]["parameter_scale"] == "160M"
 
 
+def test_evidence_get_stage9_20b_packet_public_read_downgrades_unwormed_accept(
+    client, auth_headers, isolated_anchor_store
+):
+    """Raw historical Stage 9 20B JSON carries a scoped-validation ACCEPT, but
+    product reads must not expose that as the active packet verdict until a
+    WORM-retained static anchor is persisted and re-verifiable.
+    """
+    resp = client.get(f"/evidence/{_STAGE9_40E_20B_TRACE_ID}", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["schema_version"] == "cas_harness_stage9_40e_evidence_packet.v1"
+    assert body["trace_id"] == _STAGE9_40E_20B_TRACE_ID
+    assert body["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert body["verification"]["proof_chip_gate"] == "blocked"
+    assert body["verification"]["explicit_verifier_decision"]["verdict"] == (
+        "FLAG_FOR_HUMAN_REVIEW"
+    )
+    assert body["verifier"]["explicit_verifier_decision"]["verdict"] == (
+        "FLAG_FOR_HUMAN_REVIEW"
+    )
+    assert (
+        body["verification"]["public_read_gate"]["reason"]
+        == "public_read_gate_requires_worm_retention"
+    )
+
+
 def test_evidence_get_dev_fixture_has_all_seven_sections(client, auth_headers):
     resp = client.get(f"/evidence/{_DEV_TRACE_ID}", headers=auth_headers)
     assert resp.status_code == 200, resp.text
@@ -634,6 +661,36 @@ def test_evidence_verify_static_anchor_after_anchor(
         check["artifact"] == "merged_packet_external_anchor"
         for check in body["checks"]
     )
+
+
+def test_evidence_verify_stage9_packet_without_persisted_anchor_is_unable_not_404(
+    client, auth_headers, isolated_anchor_store
+):
+    """A discoverable Stage 9 packet should not vanish from /verify just because
+    its static-anchor receipt is missing. The honest answer is 200 with
+    unable_to_verify, not 404 trace_id not found.
+    """
+    resp = client.post(
+        f"/evidence/{_STAGE9_40E_PYTHIA_TRACE_ID}/verify", headers=auth_headers
+    )
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["trace_id"] == _STAGE9_40E_PYTHIA_TRACE_ID
+    assert body["overall"] == "unable_to_verify"
+    assert body["checks"] == [
+        {
+            "artifact": "static_reference_anchor",
+            "expected": "persisted static-reference anchor receipt",
+            "actual": None,
+            "match": False,
+            "notes": (
+                "Stage 9 40E packet is bundled and readable, but no persisted "
+                "static-reference anchor receipt exists in "
+                "CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR for this deployment."
+            ),
+        }
+    ]
 
 
 def test_evidence_anchor_is_general_across_model_sizes(

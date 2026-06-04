@@ -501,6 +501,74 @@ def load_stage9_40e_packet_payload_for_trace(trace_id: str) -> dict[str, Any]:
     return payload
 
 
+def public_stage9_40e_packet_payload_for_trace(trace_id: str) -> dict[str, Any]:
+    """Return a Stage 9 packet view safe for public/product reads.
+
+    Historical Stage 9 packets can contain an explicit scoped-validation
+    ``ACCEPT`` inside their raw JSON. The product gate is stricter: a normal read
+    must not expose that as the packet's active verdict unless the packet has a
+    persisted, re-verifiable WORM/Object-Lock anchor. Audit-session execution
+    already applies the verdict runner; this view applies the same safety rule to
+    the lower-level GET endpoint.
+    """
+
+    raw = load_stage9_40e_packet_payload_for_trace(trace_id)
+    anchored = load_anchored_static_packet_payload(trace_id)
+    payload = anchored if isinstance(anchored, dict) else raw
+    if not _stage9_40e_packet_is_worm_retained(anchored):
+        return _stage9_40e_review_projection(payload)
+    return json.loads(json.dumps(payload))
+
+
+def _stage9_40e_packet_is_worm_retained(packet: dict[str, Any] | None) -> bool:
+    if not isinstance(packet, dict):
+        return False
+    try:
+        verify = verify_anchored_static_packet(packet)
+    except Exception:
+        return False
+    return bool(summarize_static_anchor_worm_status(packet, verify).get("worm_retained"))
+
+
+def _stage9_40e_review_projection(packet: dict[str, Any]) -> dict[str, Any]:
+    projected = json.loads(json.dumps(packet))
+    verdict = str(projected.get("verdict", "")).strip().upper()
+    if verdict not in {"ACCEPT", "SUPPRESS"}:
+        return projected
+
+    reason = "public_read_gate_requires_worm_retention"
+    message = (
+        "Public read gate: this static Stage 9 40E packet is not currently "
+        "verified as WORM-retained on this deployment, so ACCEPT/SUPPRESS is "
+        "withheld and the served verdict remains FLAG_FOR_HUMAN_REVIEW."
+    )
+    gated_decision = {
+        "schema_version": "cas_harness_stage9_40e_verifier_decision.v1",
+        "verdict": "FLAG_FOR_HUMAN_REVIEW",
+        "confidence": 0.0,
+        "source": "evidence_route_public_read_gate",
+        "reason": reason,
+        "decision_scope": "stage9_40e_validation_packet",
+        "coverage": None,
+    }
+
+    projected["verdict"] = "FLAG_FOR_HUMAN_REVIEW"
+    projected["verdict_rationale"] = message
+    verification = projected.get("verification")
+    if isinstance(verification, dict):
+        verification["explicit_verifier_decision"] = dict(gated_decision)
+        verification["proof_chip_gate"] = "blocked"
+        verification["public_read_gate"] = {
+            "status": "blocked",
+            "reason": reason,
+            "requires": "verified WORM-retained Evidence Packet",
+        }
+    verifier = projected.get("verifier")
+    if isinstance(verifier, dict):
+        verifier["explicit_verifier_decision"] = dict(gated_decision)
+    return projected
+
+
 def _cas_harness_reference_packet() -> EvidencePacket:
     """Evidence-backed reference packet for the Audit Console beta path.
 
@@ -1232,7 +1300,7 @@ async def get_evidence_packet(trace_id: str) -> dict[str, Any]:
     ``EvidencePacket`` drawer schema.
     """
     try:
-        return load_stage9_40e_packet_payload_for_trace(trace_id)
+        return public_stage9_40e_packet_payload_for_trace(trace_id)
     except FileNotFoundError:
         pass
     try:
@@ -1254,7 +1322,28 @@ async def verify_evidence_packet(trace_id: str) -> VerifyHashesResponse:
     except FileNotFoundError:
         static_packet = load_anchored_static_packet_payload(trace_id)
         if static_packet is None:
-            raise HTTPException(status_code=404, detail="trace_id not found")
+            try:
+                load_stage9_40e_packet_payload_for_trace(trace_id)
+            except FileNotFoundError:
+                raise HTTPException(status_code=404, detail="trace_id not found")
+            return VerifyHashesResponse(
+                trace_id=trace_id,
+                verified_at=_now_iso_utc(),
+                checks=[
+                    VerifyCheck(
+                        artifact="static_reference_anchor",
+                        expected="persisted static-reference anchor receipt",
+                        actual=None,
+                        match=False,
+                        notes=(
+                            "Stage 9 40E packet is bundled and readable, but no "
+                            "persisted static-reference anchor receipt exists in "
+                            "CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR for this deployment."
+                        ),
+                    )
+                ],
+                overall="unable_to_verify",
+            )
         verify = verify_anchored_static_packet(static_packet)
         return VerifyHashesResponse(
             trace_id=str(verify.get("trace_id") or trace_id),

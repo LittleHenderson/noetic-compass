@@ -50,6 +50,10 @@ services:
       # render.yaml for the full note.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      # Evidence Packet static-anchor receipts and hash logs must also live on
+      # the durable disk, or /evidence/{trace_id}/verify loses them after deploy.
+      - key: CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR
+        value: /var/data/evidence_packets
       # External CRM sync; dashboard-managed. Default app behavior is capture-only.
       - key: NC_CRM_PROVIDER
         sync: false
