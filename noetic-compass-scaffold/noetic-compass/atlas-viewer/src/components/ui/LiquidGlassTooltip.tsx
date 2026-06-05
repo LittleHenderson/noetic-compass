@@ -35,7 +35,16 @@ export interface LiquidGlassTooltipProps {
 const triggerStyle = (block: boolean): CSSProperties => ({
   position: 'relative',
   display: block ? 'block' : 'inline-flex',
-  width: block ? '100%' : undefined,
+  // The trigger must HUG its content (e.g. a 22px "?" glyph), never stretch. When it is a
+  // grid/flex ITEM, default item stretch — plus an inline-flex display being blockified to flex
+  // inside a grid/flex parent — balloons the wrapper to the full cell width (observed: a 22px "?"
+  // in a 768px-wide wrapper). A `right`-placed popover then anchors off that far edge and reads as
+  // "far away" from the visible "?". fit-content width + start self-alignment keep the wrapper
+  // tight around the glyph in every parent type (block / flex / grid). Block triggers (detail
+  // tiles) still fill their row as intended.
+  width: block ? '100%' : 'fit-content',
+  justifySelf: block ? undefined : 'start',
+  alignSelf: block ? undefined : 'flex-start',
   outline: 'none',
 });
 

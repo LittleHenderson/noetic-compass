@@ -105,4 +105,30 @@ describe('AuditPopover', () => {
     expect(tip.style.right).not.toBe('');
     expect(tip.style.left).toBe('');
   });
+
+  it('keeps an inline trigger hugging its content so the popover anchors to the glyph', () => {
+    // Regression (Model-connection "?"): in a grid/flex parent the inline trigger was
+    // stretched to the full cell width (a 22px "?" inside a 768px wrapper), so a
+    // right-placed popover anchored off the wrapper's far edge, ~750px from the glyph.
+    // The trigger must shrink-wrap (fit-content + start self-alignment) so its box — and
+    // thus the popover anchor — stays tight around the visible glyph.
+    const { rerender } = render(
+      <AuditPopover briefing="x">
+        <span>?</span>
+      </AuditPopover>,
+    );
+    const inlineTrigger = screen.getByText('?').parentElement as HTMLElement;
+    expect(inlineTrigger.style.width).toBe('fit-content');
+    expect(inlineTrigger.style.alignSelf).toBe('flex-start');
+    expect(inlineTrigger.style.justifySelf).toBe('start');
+
+    // A block trigger (detail tiles) still fills its row as intended.
+    rerender(
+      <AuditPopover briefing="x" block>
+        <span>block child</span>
+      </AuditPopover>,
+    );
+    const blockTrigger = screen.getByText('block child').parentElement as HTMLElement;
+    expect(blockTrigger.style.width).toBe('100%');
+  });
 });

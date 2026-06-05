@@ -1,5 +1,28 @@
 # Noetic Compass — Progress Log
 
+## Fix: help "?" popover REALLY far away — stretched trigger wrapper (browser-verified) (Jun 5, 2026)
+
+**Headline.** The Model-connection "?" briefing was still landing ~750px from the "?" even after the
+flip fix. Root cause found by **measuring in a real browser** (not jsdom): the visible "?" glyph is
+22px wide, but its `LiquidGlassTooltip` trigger *wrapper* was **768px wide** — it sits in a CSS
+**grid** parent, where an `inline-flex` trigger is blockified to `flex` and stretched to fill the
+cell. `placement="right"` then anchored off the wrapper's far edge (`rect.right = 1333`), not the
+glyph (`right = 587`). The earlier flip never engaged because the popover *did* fit to the right of
+that far edge.
+
+- **Fix (`components/ui/LiquidGlassTooltip.tsx`).** The non-block trigger now shrink-wraps its content:
+  `width: 'fit-content'` + `justifySelf: 'start'` + `alignSelf: 'flex-start'`. In any parent type
+  (block / flex / grid) the wrapper stays tight around the glyph, so the popover anchors to the glyph.
+  Block triggers (detail tiles) keep `width: 100%`.
+- **Browser-verified** on the running `:5174` preview via `preview_eval` measurement: trigger wrapper
+  768px → **22px**; the right-placed briefing moved from `left: 1343` (≈750px away) to `left: 597` —
+  a **10px gap**, same row as the "?". Screenshot confirms it sits beside the glyph.
+- **Tests.** New `AuditPopover.test.tsx` case asserts the inline trigger carries
+  `width: fit-content` + `align-self: flex-start` + `justify-self: start` (and a block trigger keeps
+  `width: 100%`). tsc clean; AuditPopover (5) + ModelConnectionCard + AuditTerm pass.
+- **Lesson:** jsdom has no layout, so the prior "verified" claims couldn't catch a CSS-stretch bug.
+  Real-browser measurement was required — and is now the standard for any tooltip-positioning change.
+
 ## Fix: help "?" popover — edge-flip placement + instant show/hide (Jun 5, 2026)
 
 **Headline.** Follow-up to the portal fix, addressing three founder-reported issues on the
