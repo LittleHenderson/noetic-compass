@@ -33,6 +33,7 @@ from api.routes import (
     config,
     crm,
     evidence,
+    explainer,
     export,
     forecast,
     health,
@@ -195,6 +196,7 @@ app.include_router(reproducibility.router)
 app.include_router(idea_atlas.router)
 app.include_router(mode7.router)
 app.include_router(evidence.router)
+app.include_router(explainer.router)
 app.include_router(atlas_live.router)
 app.include_router(visual_grounding.router)
 app.include_router(state_ledger_status.router)

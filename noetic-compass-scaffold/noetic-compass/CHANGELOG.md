@@ -1,5 +1,33 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness Guide — floating chat widget on the console (replaces the separate page) (Jun 5, 2026)
+
+**Headline.** Collapsed the Gemini-backed CAS Harness "Guide" explainer from a separate `/explainer`
+page into a clean FLOATING chat widget that lives ON the audit console — users get help without
+leaving the page. The explainer backend + client had been built (uncommitted) on `wave5.5`; the
+redesigned console lives here on `launch/ui-audit-bench`, so this consolidates them onto the redesign
+branch.
+
+- **Widget** (`atlas-viewer/src/components/audit/GuideChatWidget.tsx`): a small fixed bottom-right
+  launcher (52px, teal glass, Tree-of-Life mark — restrained, not gaudy) opens a compact ~380px glass
+  panel (header + scrollable transcript + composer) matching the `LiquidGlassTooltip` aesthetic.
+  Reuses `lib/explainerApi.askExplainer` → `POST /explainer/chat`. Thinking state, `Source:` chips on
+  answers, calm error bubble on failure, Escape/✕ close, snappy ~120ms open/close, `z-index` 1200
+  (above the tooltip layer), full aria. Mounted once in `components/shell/AuditAppFrame.tsx` so it
+  floats over the whole console (not login/cockpit). `position: fixed` → no parent-layout dependence.
+- **Honesty (load-bearing):** a persistent line in BOTH header and footer — "Answers come only from
+  the public CAS Harness guide — not internal scoring, probes, or source." Backend stays locked to the
+  curated `docs/explainer/*.md` KB; never source, scoring logic, probes, prompts, or keys.
+- **Backend ported onto this branch:** `api/routes/explainer.py`, `api/services/explainer.py`,
+  `docs/explainer/`, `tests/test_explainer.py`, `lib/explainerApi.ts`; registered in `api/main.py`
+  (router) + `api/config.py` (`gemini_explainer_model`; Gemini key stays server-side via
+  NC_GOOGLE_API_KEY, never reaches the browser).
+- **No separate page** added here (the old `/explainer` page exists only on wave5.5 and is superseded
+  by the widget).
+- **Verified:** `pytest tests/test_explainer.py` → 5 passed; `tsc -b` clean; vitest
+  `GuideChatWidget.test.tsx` → 8 passed (launcher renders, opens, honesty line, send→answer+source
+  chip, Enter/Shift+Enter, calm error bubble, ✕/Escape close); full audit suite 24 files / 101 tests.
+
 ## Fix: help "?" popover REALLY far away — stretched trigger wrapper (browser-verified) (Jun 5, 2026)
 
 **Headline.** The Model-connection "?" briefing was still landing ~750px from the "?" even after the

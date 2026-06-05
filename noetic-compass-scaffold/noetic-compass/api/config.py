@@ -192,6 +192,13 @@ class Settings(BaseSettings):
     scoring_provider: str = ""
     scoring_model: str = ""
 
+    # Gemini-powered CAS Harness explainer. Key stays server-side via NC_GOOGLE_API_KEY /
+    # GOOGLE_API_KEY. The explainer route sends only curated docs/explainer KB text to Gemini.
+    gemini_explainer_model: str = Field(
+        default="gemini-2.5-flash",
+        validation_alias=AliasChoices("NC_GEMINI_EXPLAINER_MODEL", "GEMINI_EXPLAINER_MODEL"),
+    )
+
     # Docker Compose DB credentials (used only by docker-compose.yml)
     db_user: str = "noetic"
     db_password: str = "noetic_dev"

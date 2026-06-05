@@ -1,5 +1,6 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { COLORS } from '../../lib/designTokens';
+import { GuideChatWidget } from '../audit/GuideChatWidget';
 
 export interface AuditAppFrameProps {
   /** Left navigation rail (AuditRail). */
@@ -137,6 +138,10 @@ export function AuditAppFrame({
           <div className="audit-frame__evidence">{evidence}</div>
         </div>
       </div>
+      {/* Floating CAS Harness Guide — mounted once at the console shell level so it
+          persists across every console tab/section and floats over the whole console
+          (it is position:fixed, so it never affects the grid layout). */}
+      <GuideChatWidget />
     </div>
   );
 }
