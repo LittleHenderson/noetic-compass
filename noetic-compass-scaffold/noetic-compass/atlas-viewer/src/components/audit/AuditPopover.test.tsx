@@ -67,4 +67,42 @@ describe('AuditPopover', () => {
     expect(tip.style.position).toBe('fixed');
     expect(tip.style.zIndex).toBe('1000');
   });
+
+  it('flips a right-placed briefing to the other side when there is no room on the right', () => {
+    // Regression (Model-connection "?"): a right-placed popover whose trigger sits in a
+    // right-side card has no room to its right, so it used to be clamped clear across
+    // the screen and read as "far away." It must instead FLIP to the left of the
+    // trigger — anchored by its right edge — so it stays adjacent.
+    Object.defineProperty(window, 'innerWidth', {
+      configurable: true,
+      value: 1024,
+    });
+    render(
+      <AuditPopover briefing="Pinned near the right edge." placement="right">
+        <span>?</span>
+      </AuditPopover>,
+    );
+
+    const trigger = screen.getByText('?').parentElement as HTMLElement;
+    // Trigger pinned against the right edge: a 300px popover cannot fit to its right.
+    trigger.getBoundingClientRect = () =>
+      ({
+        left: 1000,
+        right: 1016,
+        top: 120,
+        bottom: 136,
+        width: 16,
+        height: 16,
+        x: 1000,
+        y: 120,
+        toJSON: () => ({}),
+      }) as DOMRect;
+
+    fireEvent.mouseEnter(trigger);
+
+    const tip = screen.getByRole('tooltip');
+    // Flipped: anchored by the right edge (sits to the LEFT of the "?"), never the left.
+    expect(tip.style.right).not.toBe('');
+    expect(tip.style.left).toBe('');
+  });
 });

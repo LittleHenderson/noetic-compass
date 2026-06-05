@@ -9,7 +9,7 @@ import {
   type SyntheticEvent,
 } from 'react';
 import { createPortal } from 'react-dom';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import {
   ACCENT_CYAN,
@@ -69,8 +69,11 @@ const popoverBaseStyle: CSSProperties = {
   pointerEvents: 'none',
 };
 
+// A popover is anchored by whichever edges are set: `left` OR `right` horizontally
+// (right = flipped to the other side of the trigger), `top` OR `bottom` vertically.
 interface PopoverCoords {
-  left: number;
+  left?: number;
+  right?: number;
   top?: number;
   bottom?: number;
 }
@@ -132,7 +135,17 @@ export function LiquidGlassTooltip({
       Math.max(VIEWPORT_MARGIN, Math.min(x, vw - w - VIEWPORT_MARGIN));
 
     if (placement === 'right') {
-      setCoords({ left: clampLeft(rect.right + TRIGGER_GAP), top: rect.top });
+      // Sit immediately to the RIGHT of the trigger when there is room. If the trigger
+      // is near the right edge (e.g. the Model-connection "?" lives in a right-side
+      // card), the popover would otherwise be clamped clear across the screen and read
+      // as "far away" — so FLIP it to the LEFT, anchored by its right edge, so it sits
+      // adjacent on the other side of the trigger.
+      const fitsRight = rect.right + TRIGGER_GAP + w <= vw - VIEWPORT_MARGIN;
+      if (fitsRight) {
+        setCoords({ left: rect.right + TRIGGER_GAP, top: rect.top });
+      } else {
+        setCoords({ right: vw - rect.left + TRIGGER_GAP, top: rect.top });
+      }
     } else if (placement === 'bottom') {
       setCoords({ left: clampLeft(rect.left), top: rect.bottom + TRIGGER_GAP });
     } else {
@@ -171,33 +184,37 @@ export function LiquidGlassTooltip({
 
   const popoverStyle = {
     ...popoverBaseStyle,
-    left: coords.left,
+    ...(coords.left !== undefined ? { left: coords.left } : {}),
+    ...(coords.right !== undefined ? { right: coords.right } : {}),
     ...(coords.top !== undefined ? { top: coords.top } : {}),
     ...(coords.bottom !== undefined ? { bottom: coords.bottom } : {}),
     '--liquid-tooltip-width': `${width}px`,
   } as CSSProperties;
 
-  const popover = (
-    <AnimatePresence>
-      {open ? (
-        <motion.span
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: placement === 'top' ? 4 : -4, scale: 0.985 }}
-          id={id}
-          initial={{ opacity: 0, y: placement === 'top' ? 4 : -4, scale: 0.985 }}
-          role="tooltip"
-          style={popoverStyle}
-          transition={{ duration: 0.11, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <span aria-hidden="true" style={glowStyle} />
-          <span style={{ position: 'relative' }}>
-            <span style={eyebrowStyle}>Briefing</span>
-            <span style={bodyStyle}>{briefing}</span>
-          </span>
-        </motion.span>
-      ) : null}
-    </AnimatePresence>
-  );
+  // Snappy by design: appears on hover with a ~70ms opacity fade (no slow-settling
+  // scale/translate that reads as lag), and — because there is NO AnimatePresence
+  // wrapper — it UNMOUNTS THE INSTANT the pointer leaves (no lingering exit animation).
+  // Show feels immediate; hide is immediate.
+  const popover =
+    open && typeof document !== 'undefined'
+      ? createPortal(
+          <motion.span
+            animate={{ opacity: 1 }}
+            id={id}
+            initial={{ opacity: 0 }}
+            role="tooltip"
+            style={popoverStyle}
+            transition={{ duration: 0.07, ease: 'easeOut' }}
+          >
+            <span aria-hidden="true" style={glowStyle} />
+            <span style={{ position: 'relative' }}>
+              <span style={eyebrowStyle}>Briefing</span>
+              <span style={bodyStyle}>{briefing}</span>
+            </span>
+          </motion.span>,
+          document.body,
+        )
+      : null;
 
   return (
     <Trigger
@@ -214,9 +231,7 @@ export function LiquidGlassTooltip({
       tabIndex={focusable ? 0 : undefined}
     >
       {children}
-      {typeof document !== 'undefined'
-        ? createPortal(popover, document.body)
-        : null}
+      {popover}
     </Trigger>
   );
 }

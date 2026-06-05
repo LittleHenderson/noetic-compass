@@ -1,5 +1,28 @@
 # Noetic Compass — Progress Log
 
+## Fix: help "?" popover — edge-flip placement + instant show/hide (Jun 5, 2026)
+
+**Headline.** Follow-up to the portal fix, addressing three founder-reported issues on the
+Model-connection "?" briefing (and every "?" — same shared `LiquidGlassTooltip`): it appeared *far*
+from the "?", lagged on show, and lingered on hide.
+
+- **Far from the "?" → edge-aware flip (`components/ui/LiquidGlassTooltip.tsx`).** The Model-connection
+  "?" uses `placement="right"`, but that card sits on the right side of the workspace, so a 300px
+  popover has no room to its right; the viewport clamp then yanked it clear across the screen, reading
+  as "far away." Now, when a `right`-placed popover doesn't fit on the right, it **flips to the LEFT
+  of the trigger** (anchored by its right edge) so it stays adjacent — the "other side" the founder
+  asked for. `PopoverCoords` gained an optional `right` anchor.
+- **Lag on show → ~70ms opacity fade.** The entry was a 110ms ease with a slow-settling
+  scale+translate that read as lag. Replaced with a pure ~70ms opacity fade (no scale/translate), so
+  the briefing reads as immediate on hover.
+- **Lingers on hide → instant unmount.** Dropped the `AnimatePresence` wrapper: with no exit
+  animation the popover UNMOUNTS the instant the pointer leaves the "?", instead of running a 110ms
+  exit. Hide is now immediate.
+- **Tests.** New `AuditPopover.test.tsx` case: a right-placed popover whose trigger is pinned against
+  the right edge of a 1024px viewport flips to a right-anchored (left-side) position — `style.right`
+  set, `style.left` empty. tsc clean; vitest `src/components/audit src/components/ui` → 24 files /
+  101 tests pass (the prior portal/fixed/z regression test still holds).
+
 ## Fix: help "?" briefings rendered behind/clipped by adjacent panels (Jun 5, 2026)
 
 **Headline.** Hovering a "?" help icon in the audit console showed its briefing *behind*
