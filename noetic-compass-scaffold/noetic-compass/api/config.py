@@ -100,6 +100,19 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("NC_ACCOUNTS_ENABLED", "ACCOUNTS_ENABLED"),
     )
 
+    # Per-tenant usage quotas (PAID-user metering spine). Dark by default — the engine is INERT.
+    #   NC_QUOTAS_ENABLED=false (default) -> NO metering. The quota engine
+    #     (api/services/quotas.py) is never consulted, no usage counter is ever written or read,
+    #     and app behaviour is byte-for-byte the current behaviour. Engine inert.
+    #   NC_QUOTAS_ENABLED=true -> a per-tenant monthly audit quota is enforced (route wiring lands
+    #     in a SEPARATE PR; this flag only arms the engine). Quotas are PER-ACCOUNT, so this REQUIRES
+    #     accounts_enabled: enabling quotas without accounts is a config error and FAILS LOUD at
+    #     startup (see api/main.py lifespan) — there is no tenant to meter without identity.
+    quotas_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices("NC_QUOTAS_ENABLED", "QUOTAS_ENABLED"),
+    )
+
     # Rate limiting
     rate_limit_rpm: int = 60
     rate_limit_tier: str = "community"  # community | professional | enterprise

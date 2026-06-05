@@ -1,5 +1,35 @@
 # Noetic Compass — Progress Log
 
+## PAID-tenant security — per-tenant usage-quota ENGINE (inert; route wiring pending) (Jun 5, 2026)
+
+**Headline.** The metering primitive for paid accounts (`launch/paid-quotas`, stacked on tenant-iso):
+storage + check/increment logic for a per-tenant monthly audit quota, fully unit-tested. **Inert by
+default** — with `NC_QUOTAS_ENABLED=false` (the default) nothing reaches these functions, no counter
+is read or written, behavior is byte-for-byte unchanged. Route enforcement is a SEPARATE change that
+depends on the audit-route identity upgrade (`launch/paid-audit-identity`), so this PR ships the
+engine + tests only. Verified: 56 passed (16 quota + 40 regression).
+
+- **Config flag (`api/config.py`).** `quotas_enabled: bool` (default False; aliases
+  `NC_QUOTAS_ENABLED`/`QUOTAS_ENABLED`), mirroring `accounts_enabled`. Honest comment: off = inert; on
+  = per-tenant monthly cap (route wiring pending); REQUIRES accounts.
+- **Startup fail-loud (`api/main.py` lifespan).** `if settings.quotas_enabled and not
+  settings.accounts_enabled: raise RuntimeError(...)` — quotas are per-account; enabling them without
+  identity is a config error (there is no tenant to meter), so we refuse to start rather than silently
+  meter nothing. Honest log line for the dark/armed posture.
+- **Engine (`api/services/quotas.py`, new — FastAPI-free pure functions over the StateStore).**
+  `USAGE_COUNTER_KIND="usage_counter"`; `DEFAULT_AUDITS_PER_MONTH=100`; `get_quota_limit(plan_id=None)`
+  (honest stub — one number until a subscription/plan record lands; Account has no plan field yet);
+  `monthly_period_key(now)` → `"audits:YYYY-MM"` (takes `now` for deterministic tests) + a
+  `current_monthly_period_key()` UTC wrapper; `get_usage`; `increment_usage` (read-modify-write with
+  bounded `VersionConflict` retry); `consume_quota` (the route entry point — raises `QuotaExceeded`
+  carrying tenant_id/limit/count, consumes nothing on decline). Tenant isolation leans on the store's
+  mandatory tenant partitioning (a cross-tenant counter reads as absent), exactly like
+  `evidence_ownership`. Race-safety: `consume_quota` RE-CHECKS the limit after every conflict re-read,
+  so concurrent callers can never push the count past the cap.
+- **Tests (`tests/test_quotas.py`, 16).** zero-when-absent; increment/get; consume up-to-limit then
+  `QuotaExceeded`; decline consumes nothing; cross-tenant counter independence; period-key format;
+  VersionConflict retry converges without double-counting or exceeding the cap; default limit.
+
 ## PAID-tenant security — evidence isolation enforcement + conditional anchor role-gate (Jun 5, 2026)
 
 **Headline.** Third layer of the PAID-user security spine (`launch/paid-tenant-isolation`, stacked on
