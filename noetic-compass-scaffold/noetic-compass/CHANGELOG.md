@@ -31,6 +31,22 @@ engine + tests only. Verified: 56 passed (16 quota + 40 regression).
   VersionConflict retry converges without double-counting or exceeding the cap; default limit.
 
 ## PAID-tenant security — evidence isolation enforcement + conditional anchor role-gate (Jun 5, 2026)
+## PAID-tenant security - audit-route identity + evidence-ownership write (Jun 5, 2026)
+
+**Headline.** Completes the tenant-isolation write path by making CAS Harness audit-session routes
+authenticated when `NC_ACCOUNTS_ENABLED=true`, deriving tenant/account identity from the server-side
+account and session records, and recording ownership for every produced evidence `trace_id`. The dark
+default remains unchanged: when accounts are disabled, the existing public demo flow stays available.
+
+- **Conditional auth boundary.** Audit-session routes remain public only in legacy/dark mode. Account
+  mode routes pass through JWT/session validation and receive server-derived tenant/account/role state.
+- **Ownership write.** Successful live-worker and customer-API audit runs record evidence ownership in
+  the durable state ledger before account-mode evidence reads are allowed.
+- **Fail-closed behavior.** Missing identity, ledger, or ownership never becomes cross-tenant access.
+  Evidence existence remains non-enumerable through the existing uniform 404 response.
+- **Verification.** `tests/test_audit_identity_scope.py` covers both auth postures and proves that a
+  completed account-mode audit writes ownership only for the authenticated tenant.
+
 
 **Headline.** Third layer of the PAID-user security spine (`launch/paid-tenant-isolation`, stacked on
 PR #2 `launch/paid-security-sessions`). Closes the cross-tenant evidence leak: once per-account

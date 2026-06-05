@@ -30,21 +30,42 @@ PUBLIC_PATHS = {
     "/openapi.json",
     "/redoc",
 }
-PUBLIC_PATH_PREFIXES = (
+# ALWAYS public, in EVERY posture: these never carry per-tenant evidence ownership, so identity is
+# never required for them. Atlas LIVE has its own invite-code/session-token gate; target/verify and
+# scale-plan are stateless validators/planners; live-worker/health is a liveness probe; /api/crm/public
+# is anonymous lead capture (only the /public subtree is open — the authed sales views
+# /api/crm/leads... stay protected by JWT).
+ALWAYS_PUBLIC_PREFIXES = (
     "/atlas/live",
     "/api/cas-harness/audit/target/verify",
     "/api/cas-harness/audit/scale-plan",
+    "/api/cas-harness/live-worker/health",
+    "/api/crm/public",
+)
+# Backwards-compatible alias: external code (and older imports) referenced PUBLIC_PATH_PREFIXES as the
+# always-public tuple. It now names exactly the always-public set, so any startswith check over it is
+# unchanged for these prefixes.
+PUBLIC_PATH_PREFIXES = ALWAYS_PUBLIC_PREFIXES
+# Account-GATED public prefixes: the audit-session create/run/get/list routes. Public ONLY in the
+# legacy/dark posture (accounts OFF — the live production default), so the deployed console keeps
+# calling them without a login exactly as today. Once accounts are enabled they leave the allowlist
+# and require identity, so the auth middleware decodes the jti token and sets
+# request.state.tenant_id/account_id — the seam the per-tenant evidence-ownership write consumes.
+ACCOUNT_GATED_PUBLIC_PREFIXES = (
     "/api/cas-harness/audit/session",
     "/api/cas-harness/audit/sessions",
-    "/api/cas-harness/live-worker/health",
-    # Public lead capture: an anonymous prospect's form posts here. Only the /public subtree is
-    # open; the authed sales views (/api/crm/leads...) stay protected by JWT.
-    "/api/crm/public",
 )
 
 
 def is_public_path(path: str) -> bool:
-    return path in PUBLIC_PATHS or any(path.startswith(prefix) for prefix in PUBLIC_PATH_PREFIXES)
+    if path in PUBLIC_PATHS or any(path.startswith(p) for p in ALWAYS_PUBLIC_PREFIXES):
+        return True
+    # The audit-session routes are public ONLY in the legacy/dark posture. Once accounts are
+    # enabled they require identity so the middleware sets request.state.tenant_id (the seam the
+    # ownership write below consumes). Read settings.accounts_enabled at call time.
+    if not settings.accounts_enabled:
+        return any(path.startswith(p) for p in ACCOUNT_GATED_PUBLIC_PREFIXES)
+    return False
 
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
