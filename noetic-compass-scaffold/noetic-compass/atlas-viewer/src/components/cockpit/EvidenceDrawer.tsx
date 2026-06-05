@@ -284,6 +284,61 @@ const anchorMetaStyle: CSSProperties = {
   wordBreak: 'break-all',
 };
 
+const tabRowStyle: CSSProperties = {
+  display: 'inline-flex',
+  gap: 4,
+  padding: 3,
+  borderRadius: 8,
+  border: '1px solid rgba(255,255,255,0.08)',
+  background: 'rgba(2, 6, 23, 0.5)',
+};
+
+const tabButtonStyle = (active: boolean): CSSProperties => ({
+  minHeight: 28,
+  padding: '5px 12px',
+  borderRadius: 6,
+  border: active ? '1px solid rgba(45, 212, 191, 0.42)' : '1px solid transparent',
+  background: active ? 'rgba(45, 212, 191, 0.12)' : 'transparent',
+  color: active ? '#ccfbf1' : '#94a3b8',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: 12,
+  fontWeight: 700,
+});
+
+const summaryListStyle: CSSProperties = {
+  display: 'grid',
+  gap: 8,
+  margin: 0,
+  padding: 0,
+  listStyle: 'none',
+};
+
+const summaryRowStyle: CSSProperties = {
+  display: 'grid',
+  gap: 2,
+  padding: '8px 10px',
+  borderRadius: 6,
+  border: '1px solid rgba(255,255,255,0.06)',
+  background: 'rgba(2, 6, 23, 0.34)',
+};
+
+const summaryLabelStyle: CSSProperties = {
+  color: '#94a3b8',
+  fontSize: 10.5,
+  fontWeight: 700,
+  textTransform: 'uppercase',
+  letterSpacing: '0.04em',
+};
+
+const summaryValueStyle = (mono: boolean): CSSProperties => ({
+  color: '#e2e8f0',
+  fontSize: 12.5,
+  lineHeight: 1.45,
+  fontFamily: mono ? '"JetBrains Mono", Menlo, Consolas, monospace' : undefined,
+  wordBreak: mono ? 'break-all' : 'normal',
+});
+
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
@@ -371,6 +426,54 @@ function stringify(value: unknown): string {
 
 function packetText(packet: EvidencePacket, key: keyof EvidencePacket): string {
   return stringify(packet[key]);
+}
+
+// Pull one short, human-readable string field out of a nested packet section
+// (e.g. input.text, output.text). Returns null when absent so the summary can
+// omit the row rather than render "(none)".
+function nestedString(value: unknown, key: string): string | null {
+  if (!isRecord(value)) return null;
+  const field = value[key];
+  return typeof field === 'string' && field.trim().length > 0 ? field : null;
+}
+
+interface PacketSummaryRow {
+  label: string;
+  value: string;
+  mono?: boolean;
+}
+
+// Build a plain-English summary of the packet so the default tab reads like a
+// record a human can scan, not a JSON dump. Every row is sourced from a real
+// packet field; nothing is invented.
+function packetSummaryRows(packet: EvidencePacket): PacketSummaryRow[] {
+  const rows: PacketSummaryRow[] = [];
+  if (packet.schema_version) {
+    rows.push({ label: 'Packet schema', value: packet.schema_version, mono: true });
+  }
+  if (packet.trace_id) {
+    rows.push({ label: 'Trace ID', value: packet.trace_id, mono: true });
+  }
+  const inputText = nestedString(packet.input, 'text');
+  if (inputText) rows.push({ label: 'Input', value: inputText });
+  const casText = nestedString(packet.cas_expression, 'text');
+  if (casText) rows.push({ label: 'CAS expression', value: casText, mono: true });
+  const outputText = nestedString(packet.output, 'text');
+  if (outputText) rows.push({ label: 'Output', value: outputText });
+  const checkpoint =
+    nestedString(packet.provenance, 'checkpoint_label') ??
+    nestedString(packet.provenance, 'model_checkpoint_id');
+  if (checkpoint) rows.push({ label: 'Model checkpoint', value: checkpoint, mono: true });
+  const commit = nestedString(packet.provenance, 'code_commit_sha');
+  if (commit) rows.push({ label: 'Code commit', value: commit, mono: true });
+  if (Array.isArray(packet.claim_levels)) {
+    const n = packet.claim_levels.length;
+    rows.push({ label: 'Claims recorded', value: `${n} claim${n === 1 ? '' : 's'}` });
+  }
+  if (Array.isArray(packet.caveats) && packet.caveats.length > 0) {
+    rows.push({ label: 'Caveats', value: packet.caveats.map(String).join(' ') });
+  }
+  return rows;
 }
 
 function localSourceLabel(source?: EvidenceDrawerPayload['source']): string {
@@ -651,8 +754,12 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
   const dedupedMode7 = useMemo(() => dedupeMode7Edges(wordTokens), [wordTokens]);
   const [packetState, setPacketState] = useState<PacketState>({ status: 'idle' });
   const [verifyState, setVerifyState] = useState<VerifyState>({ status: 'idle' });
+  // Human-readable summary is the DEFAULT view; raw JSON is a secondary tab.
+  const [packetTab, setPacketTab] = useState<'summary' | 'json'>('summary');
 
   useEffect(() => {
+    // Reopening or switching trace always lands on the human summary first.
+    setPacketTab('summary');
     if (!open || !traceId) {
       setPacketState({ status: 'idle' });
       setVerifyState({ status: 'idle' });
@@ -963,30 +1070,85 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
                     </div>
                   </>
                 ) : null}
-                <div style={sectionLabelStyle}>input</div>
-                <pre style={codeBlockStyle} data-testid="evidence-packet-input">
-                  {packetText(packetState.packet, 'input')}
-                </pre>
-                <div style={sectionLabelStyle}>cas_expression</div>
-                <pre style={codeBlockStyle} data-testid="evidence-packet-cas">
-                  {packetText(packetState.packet, 'cas_expression')}
-                </pre>
-                <div style={sectionLabelStyle}>output</div>
-                <pre style={codeBlockStyle} data-testid="evidence-packet-output">
-                  {packetText(packetState.packet, 'output')}
-                </pre>
-                <div style={sectionLabelStyle}>provenance</div>
-                <pre style={codeBlockStyle} data-testid="evidence-packet-provenance">
-                  {packetText(packetState.packet, 'provenance')}
-                </pre>
-                <div style={sectionLabelStyle}>hashes</div>
-                <pre style={codeBlockStyle} data-testid="evidence-packet-hashes">
-                  {packetText(packetState.packet, 'hashes')}
-                </pre>
-                <div style={sectionLabelStyle}>claim_levels</div>
-                <pre style={codeBlockStyle} data-testid="evidence-packet-claim-levels">
-                  {packetText(packetState.packet, 'claim_levels')}
-                </pre>
+                <div
+                  role="tablist"
+                  aria-label="Evidence Packet view"
+                  style={tabRowStyle}
+                  data-testid="evidence-packet-tabs"
+                >
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={packetTab === 'summary'}
+                    data-testid="evidence-packet-tab-summary"
+                    style={tabButtonStyle(packetTab === 'summary')}
+                    onClick={() => setPacketTab('summary')}
+                  >
+                    Summary
+                  </button>
+                  <button
+                    type="button"
+                    role="tab"
+                    aria-selected={packetTab === 'json'}
+                    data-testid="evidence-packet-tab-json"
+                    style={tabButtonStyle(packetTab === 'json')}
+                    onClick={() => setPacketTab('json')}
+                  >
+                    Raw packet (JSON)
+                  </button>
+                </div>
+
+                {/* DEFAULT: human-readable summary. Plain rows a reviewer can
+                    scan — no raw JSON. */}
+                <div
+                  role="tabpanel"
+                  aria-label="Evidence Packet summary"
+                  data-testid="evidence-packet-summary"
+                  hidden={packetTab !== 'summary'}
+                >
+                  <ul style={summaryListStyle}>
+                    {packetSummaryRows(packetState.packet).map((row) => (
+                      <li key={row.label} style={summaryRowStyle}>
+                        <span style={summaryLabelStyle}>{row.label}</span>
+                        <span style={summaryValueStyle(Boolean(row.mono))}>{row.value}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* SECONDARY: raw JSON. Kept mounted (hidden) so it stays an
+                    expert escape hatch without becoming the primary view. */}
+                <div
+                  role="tabpanel"
+                  aria-label="Raw Evidence Packet JSON"
+                  data-testid="evidence-packet-json"
+                  hidden={packetTab !== 'json'}
+                >
+                  <div style={sectionLabelStyle}>input</div>
+                  <pre style={codeBlockStyle} data-testid="evidence-packet-input">
+                    {packetText(packetState.packet, 'input')}
+                  </pre>
+                  <div style={sectionLabelStyle}>cas_expression</div>
+                  <pre style={codeBlockStyle} data-testid="evidence-packet-cas">
+                    {packetText(packetState.packet, 'cas_expression')}
+                  </pre>
+                  <div style={sectionLabelStyle}>output</div>
+                  <pre style={codeBlockStyle} data-testid="evidence-packet-output">
+                    {packetText(packetState.packet, 'output')}
+                  </pre>
+                  <div style={sectionLabelStyle}>provenance</div>
+                  <pre style={codeBlockStyle} data-testid="evidence-packet-provenance">
+                    {packetText(packetState.packet, 'provenance')}
+                  </pre>
+                  <div style={sectionLabelStyle}>hashes</div>
+                  <pre style={codeBlockStyle} data-testid="evidence-packet-hashes">
+                    {packetText(packetState.packet, 'hashes')}
+                  </pre>
+                  <div style={sectionLabelStyle}>claim_levels</div>
+                  <pre style={codeBlockStyle} data-testid="evidence-packet-claim-levels">
+                    {packetText(packetState.packet, 'claim_levels')}
+                  </pre>
+                </div>
               </>
             ) : (
               <>

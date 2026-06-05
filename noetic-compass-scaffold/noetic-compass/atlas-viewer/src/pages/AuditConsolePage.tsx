@@ -5,17 +5,14 @@ import { AuditSessionProgress } from '../components/audit/AuditSessionProgress';
 import type { AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
 import { AuditStageLadder } from '../components/audit/AuditStageLadder';
 import { AuditRunTranscript } from '../components/audit/AuditRunTranscript';
-import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
-import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
-import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
-import EvidencePacketFlightRecorderFaq from '../components/audit/EvidencePacketFlightRecorderFaq';
-import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
-import FleetExecutorPanel from '../components/audit/FleetExecutorPanel';
-import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
-import { AuditPopover } from '../components/audit/AuditPopover';
+import { AuditRunHeader } from '../components/audit/AuditRunHeader';
+import { AuditComposer } from '../components/audit/AuditComposer';
+import { AuditScaleFleetTab } from '../components/audit/AuditScaleFleetTab';
+import { MethodologyDrawer } from '../components/audit/MethodologyDrawer';
 import { AuditAppFrame } from '../components/shell/AuditAppFrame';
 import { AuditRail } from '../components/shell/AuditRail';
 import { EvidenceRail } from '../components/shell/EvidenceRail';
+import { Disclosure } from '../components/ui/Disclosure';
 import {
   buildDefaultProvenanceChips,
   isSessionCustomerSafe,
@@ -56,20 +53,12 @@ import {
   type EnterpriseScalePlan,
   type EnterpriseScalePlanSize,
 } from '../lib/enterpriseScalePlan';
+import { TreeOfLifeMark } from '../components/brand/TreeOfLifeMark';
 import {
   ACCENT_AMBER,
-  ACCENT_CYAN,
   ACCENT_TEAL,
   COLORS,
-  FONT_FAMILY,
-  THEME,
 } from '../lib/designTokens';
-
-interface AuditStep {
-  label: string;
-  detail: string;
-  command: string;
-}
 
 interface AuditTargetConfig {
   modelId: string;
@@ -166,24 +155,6 @@ const STAGE9_40E_PACKET_TARGET: AuditTargetConfig = {
   canRunAudit: true,
   evidencePacketTraceId: STAGE9_40E_TRACE_ID,
 };
-
-const AUDIT_STEPS: AuditStep[] = [
-  {
-    label: 'Connect model',
-    detail: 'Verify the model target, API route, and license gate.',
-    command: 'CONNECT',
-  },
-  {
-    label: 'Run CAS audit',
-    detail: 'Run readout, causal, control, output, and packet checks.',
-    command: 'RUN',
-  },
-  {
-    label: 'Return verdict + evidence',
-    detail: 'Return ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips.',
-    command: 'VERDICT',
-  },
-];
 
 const pendingChips = buildDefaultProvenanceChips({
   modelProof: {
@@ -292,40 +263,6 @@ function latestLifecycleMessage(session: CasHarnessAuditSession | null): string 
   return session.lifecycle[session.lifecycle.length - 1]?.message ?? null;
 }
 
-function commandStateFor(
-  index: number,
-  hasTarget: boolean,
-  session: CasHarnessAuditSession | null,
-  isAuditRunning: boolean,
-  error: string | null,
-): CommandState {
-  if (error) return index < 2 ? 'done' : 'blocked';
-  if (index === 0) return hasTarget ? 'done' : 'active';
-  if (index === 1) {
-    if (!hasTarget) return 'waiting';
-    if (isAuditRunning) return 'active';
-    return session ? 'done' : 'ready';
-  }
-  if (!session) return hasTarget ? 'waiting' : 'waiting';
-  if (session.verdict) return 'done';
-  return 'blocked';
-}
-
-function commandStatusLabel(state: CommandState): string {
-  switch (state) {
-    case 'active':
-      return 'active';
-    case 'ready':
-      return 'ready';
-    case 'done':
-      return 'done';
-    case 'blocked':
-      return 'blocked';
-    case 'waiting':
-      return 'waiting';
-  }
-}
-
 function replaceFleetJob(
   run: CasHarnessFleetRun,
   job: CasHarnessFleetJob,
@@ -394,77 +331,6 @@ function canMergeFleetRun(run: CasHarnessFleetRun | null, isLoading: boolean): b
   );
 }
 
-const headingStyle: CSSProperties = {
-  margin: 0,
-  fontSize: 34,
-  lineHeight: 1.1,
-  fontWeight: 750,
-  letterSpacing: 0,
-  color: COLORS.textPrimary,
-};
-
-const headingWaveStyle: CSSProperties = {
-  ...headingStyle,
-  color: 'transparent',
-  backgroundImage:
-    `linear-gradient(90deg, ${ACCENT_TEAL} 0%, ${ACCENT_CYAN} 50%, ${ACCENT_TEAL} 100%)`,
-  backgroundSize: '280% 100%',
-  backgroundClip: 'text',
-  WebkitBackgroundClip: 'text',
-  WebkitTextFillColor: 'transparent',
-  animation: 'cas-heading-wave 4.8s linear infinite',
-};
-
-const headingWaveCss = `
-@keyframes cas-heading-wave {
-  0% {
-    background-position: 0% 50%;
-  }
-
-  100% {
-    background-position: 280% 50%;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cas-heading-wave {
-    animation: none !important;
-    background-position: 50% 50%;
-  }
-}
-`;
-
-const eyebrowStyle: CSSProperties = {
-  margin: '0 0 10px 0',
-  fontSize: 11,
-  fontWeight: 700,
-  letterSpacing: 1.2,
-  textTransform: 'uppercase',
-  color: ACCENT_TEAL,
-};
-
-const liveWorkerChipBaseStyle: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  gap: 7,
-  alignSelf: 'center',
-  padding: '6px 11px',
-  borderRadius: 999,
-  fontFamily: FONT_FAMILY,
-  fontSize: 11.5,
-  fontWeight: 650,
-  letterSpacing: 0.2,
-  whiteSpace: 'nowrap',
-};
-
-const liveWorkerDotStyle = (color: string): CSSProperties => ({
-  width: 8,
-  height: 8,
-  borderRadius: 999,
-  background: color,
-  flex: '0 0 auto',
-});
-
 type LiveWorkerChipView = {
   accent: string;
   label: string;
@@ -490,245 +356,53 @@ function liveWorkerChipView(
   return { accent: ACCENT_AMBER, label: health.label };
 }
 
-type CommandState = 'active' | 'ready' | 'done' | 'waiting' | 'blocked';
-
-const commandCenterStyle: CSSProperties = {
-  marginTop: 20,
-  padding: 18,
-  borderRadius: 8,
-  border: '1px solid rgba(45, 212, 191, 0.34)',
-  background:
-    'linear-gradient(135deg, rgba(45, 212, 191, 0.16), rgba(2, 6, 23, 0.82) 42%, rgba(34, 211, 238, 0.10))',
-  boxShadow: '0 24px 80px rgba(0, 0, 0, 0.28)',
-};
-
-const commandHeaderStyle: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'space-between',
-  alignItems: 'flex-start',
-  gap: 12,
-  marginBottom: 14,
-};
-
-const commandActionsStyle: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'flex-end',
-  gap: 10,
-};
-
-const commandTitleStyle: CSSProperties = {
-  margin: 0,
-  color: COLORS.textPrimary,
-  fontSize: 20,
-  fontWeight: 900,
-  letterSpacing: 0,
-};
-
-const commandSubtitleStyle: CSSProperties = {
-  margin: '5px 0 0',
-  color: COLORS.textSecondary,
-  fontSize: 13,
-  lineHeight: 1.45,
-};
-
-const commandActionStyle = (enabled: boolean): CSSProperties => ({
-  minHeight: 42,
-  padding: '9px 15px',
-  borderRadius: 6,
-  border: enabled
-    ? '1px solid rgba(45, 212, 191, 0.56)'
-    : '1px solid rgba(148, 163, 184, 0.24)',
-  background: enabled ? 'rgba(45, 212, 191, 0.16)' : 'rgba(148, 163, 184, 0.06)',
-  color: enabled ? '#ccfbf1' : COLORS.textMuted,
-  cursor: enabled ? 'pointer' : 'not-allowed',
-  fontFamily: 'inherit',
-  fontSize: 13,
-  fontWeight: 900,
-  letterSpacing: 0.4,
-  textTransform: 'uppercase',
-});
-
-const flowStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(190px, 1fr))',
-  gap: 12,
-};
-
-const stepStyle = (state: CommandState): CSSProperties => ({
-  minHeight: 148,
-  padding: 15,
-  borderRadius: 8,
-  border:
-    state === 'done'
-      ? '1px solid rgba(34, 197, 94, 0.46)'
-      : state === 'active' || state === 'ready'
-        ? '1px solid rgba(45, 212, 191, 0.56)'
-        : state === 'blocked'
-          ? '1px solid rgba(251, 191, 36, 0.42)'
-          : '1px solid rgba(148, 163, 184, 0.20)',
-  background:
-    state === 'done'
-      ? 'linear-gradient(180deg, rgba(34, 197, 94, 0.13), rgba(255, 255, 255, 0.025))'
-      : state === 'active' || state === 'ready'
-        ? 'linear-gradient(180deg, rgba(45, 212, 191, 0.16), rgba(255, 255, 255, 0.03))'
-        : state === 'blocked'
-          ? 'linear-gradient(180deg, rgba(251, 191, 36, 0.12), rgba(255, 255, 255, 0.025))'
-          : 'rgba(2, 6, 23, 0.38)',
-  boxShadow:
-    state === 'active' || state === 'ready'
-      ? '0 0 0 1px rgba(45, 212, 191, 0.10), 0 16px 42px rgba(45, 212, 191, 0.08)'
-      : 'none',
-});
-
-const stepNumberStyle: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  width: 34,
-  height: 34,
-  borderRadius: 6,
-  border: '1px solid rgba(45, 212, 191, 0.40)',
-  color: '#ccfbf1',
-  background: 'rgba(45, 212, 191, 0.12)',
-  fontSize: 13,
-  fontWeight: 900,
-  fontFamily: THEME.fontMono,
-};
-
-const stepLabelStyle: CSSProperties = {
-  margin: '12px 0 6px 0',
-  fontSize: 18,
-  fontWeight: 900,
-  color: COLORS.textPrimary,
-};
-
-const commandBadgeStyle = (state: CommandState): CSSProperties => ({
-  display: 'inline-flex',
-  alignItems: 'center',
-  minHeight: 24,
-  marginTop: 12,
-  padding: '3px 7px',
-  borderRadius: 5,
-  color:
-    state === 'done'
-      ? '#bbf7d0'
-      : state === 'active' || state === 'ready'
-        ? '#ccfbf1'
-        : state === 'blocked'
-          ? '#fef3c7'
-          : COLORS.textMuted,
-  background:
-    state === 'done'
-      ? 'rgba(34, 197, 94, 0.14)'
-      : state === 'active' || state === 'ready'
-        ? 'rgba(45, 212, 191, 0.14)'
-        : state === 'blocked'
-          ? 'rgba(251, 191, 36, 0.12)'
-          : 'rgba(148, 163, 184, 0.08)',
-  fontFamily: THEME.fontMono,
-  fontSize: 11,
-  fontWeight: 900,
-  textTransform: 'uppercase',
-});
-
-const fleetControlPanelStyle: CSSProperties = {
-  display: 'grid',
-  gap: 12,
-  padding: 16,
-  borderRadius: 8,
-  border: '1px solid rgba(45, 212, 191, 0.22)',
-  background: 'rgba(2, 6, 23, 0.40)',
-};
-
-const fleetControlHeaderStyle: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  gap: 12,
-};
-
-const fleetControlTitleStyle: CSSProperties = {
-  margin: 0,
-  color: COLORS.textPrimary,
-  fontSize: 17,
-  fontWeight: 900,
-};
-
-const fleetButtonRowStyle: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  gap: 8,
-};
-
-const fleetAuthInputStyle: CSSProperties = {
-  width: 'min(100%, 360px)',
-  minHeight: 38,
-  padding: '8px 10px',
-  borderRadius: 6,
-  border: '1px solid rgba(148, 163, 184, 0.26)',
-  background: 'rgba(2, 6, 23, 0.48)',
-  color: COLORS.textPrimary,
-  fontFamily: THEME.fontMono,
-  fontSize: 12,
-  outline: 'none',
-};
-
-const fleetNoticeStyle: CSSProperties = {
-  margin: 0,
-  color: COLORS.textSecondary,
-  fontSize: 12,
-  lineHeight: 1.45,
-};
-
-const verdictLabelStyle: CSSProperties = {
-  display: 'block',
-  marginBottom: 4,
-  fontSize: 12,
-  fontWeight: 800,
-  letterSpacing: 0.4,
-  fontFamily: THEME.fontMono,
-  color: COLORS.textPrimary,
-};
-
 const workspaceCardStyle: CSSProperties = {
   display: 'grid',
   gap: 18,
 };
 
-const monikerStyle: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  marginTop: 12,
-  padding: '7px 10px',
-  border: '1px solid rgba(45, 212, 191, 0.30)',
-  borderRadius: 6,
-  background: 'rgba(45, 212, 191, 0.08)',
-  color: COLORS.textPrimary,
-  fontSize: 12,
-  fontWeight: 750,
-  letterSpacing: 0.6,
-  textTransform: 'uppercase',
-};
-
-const runHeaderStyle: CSSProperties = {
+const ladderHeaderStyle: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 12,
+  gap: 10,
 };
 
-const runHeaderMetaStyle: CSSProperties = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  alignItems: 'center',
-  gap: 10,
+const whyVerdictButtonStyle: CSSProperties = {
+  minHeight: 30,
+  padding: '5px 11px',
+  borderRadius: 6,
+  border: '1px solid rgba(45, 212, 191, 0.42)',
+  background: 'rgba(45, 212, 191, 0.10)',
+  color: '#ccfbf1',
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: 12,
+  fontWeight: 700,
+};
+
+const composerEmptyStateStyle: CSSProperties = {
+  display: 'grid',
+  justifyItems: 'center',
+  gap: 8,
+  padding: '10px 8px 6px',
+  textAlign: 'center',
+};
+
+const composerEmptyTitleStyle: CSSProperties = {
+  margin: '4px 0 0',
+  color: COLORS.textPrimary,
+  fontSize: 16,
+  fontWeight: 850,
+};
+
+const composerEmptyBodyStyle: CSSProperties = {
+  margin: 0,
+  maxWidth: 360,
   color: COLORS.textSecondary,
   fontSize: 12.5,
-  fontFamily: THEME.fontMono,
+  lineHeight: 1.5,
 };
 
 const ladderCardStyle: CSSProperties = {
@@ -781,6 +455,9 @@ export default function AuditConsolePage() {
     useState<CasHarnessLiveWorkerHealth | null>(null);
   // Bumped after a run resolves so the left-rail Recent Runs list refetches.
   const [recentReloadKey, setRecentReloadKey] = useState(0);
+  // "Why this verdict" methodology drawer (the only home for Stage-19/20/21,
+  // accepted_accuracy, Generation Readiness, and the full proof prose).
+  const [isMethodologyOpen, setIsMethodologyOpen] = useState(false);
 
   // Probe the live-trace worker once on mount so the run controls can show an
   // honest connection-state chip. Never block the page: if the probe fails
@@ -1268,7 +945,7 @@ export default function AuditConsolePage() {
       activeSessionId={session?.audit_id ?? null}
       onNewAudit={startNewAudit}
       onSelectSession={selectRecentSession}
-      onHelp={() => navigate('/cockpit')}
+      onHelp={() => setIsMethodologyOpen(true)}
       onSettings={() => navigate('/model-config')}
       reloadKey={recentReloadKey}
     />
@@ -1287,176 +964,95 @@ export default function AuditConsolePage() {
     />
   );
 
+  const connectionStatus = isTargetConnecting
+    ? 'connecting'
+    : targetError
+      ? 'error'
+      : isConfigured
+        ? 'connected'
+        : 'disconnected';
+
+  const composerEmptyState = !session && !isConfigured ? (
+    <div style={composerEmptyStateStyle}>
+      <TreeOfLifeMark size={72} animated title="CAS Harness" />
+      <p style={composerEmptyTitleStyle}>Start an audit</p>
+      <p style={composerEmptyBodyStyle}>
+        Connect a model or load a demo packet, then run a CAS audit to get a
+        verdict with evidence.
+      </p>
+    </div>
+  ) : null;
+
   const centerNode = (
     <>
-      <style>{headingWaveCss}</style>
-      <GlassPanel intensity="regular" padding={22} ariaLabel="CAS Harness Audit Console">
+      <AuditRunHeader
+        auditId={session?.audit_id ?? null}
+        modelTarget={session?.model_id ?? target?.modelId ?? null}
+        mode={session?.audit_mode ?? (isConfigured ? 'BALANCED' : null)}
+        status={lifecycleStatus}
+      />
+
+      <AuditComposer
+        connectionStatus={connectionStatus}
+        modelName={target?.modelId ?? 'No model connected'}
+        provider={target?.provider ?? 'License/API connector pending'}
+        endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
+        statusDetail={
+          targetError
+            ? targetError
+            : isConfigured
+              ? target.statusDetail
+              : 'Connect a supported target before running a CAS Harness audit.'
+        }
+        lastChecked={
+          session
+            ? 'Backend session accepted'
+            : target?.checkedAt
+              ? 'Target verified'
+              : undefined
+        }
+        canRunAudit={Boolean(target?.canRunAudit)}
+        onConnect={connectReferenceTarget}
+        onDisconnect={disconnectTarget}
+        mode="BALANCED"
+        presets={[
+          {
+            id: 'stage9-40e',
+            label: 'Load 20B validation packet',
+            onSelect: loadStage940EPacketTarget,
+          },
+          {
+            id: 's7-f28',
+            label: 'Load 20B review packet',
+            onSelect: loadS7F28PacketTarget,
+          },
+        ]}
+        byokApiKey={byokApiKey}
+        onByokApiKeyChange={setByokApiKey}
+        isAuditRunning={isAuditRunning}
+        isTargetConnecting={isTargetConnecting}
+        onRun={runPrimaryCommand}
+        runEnabled={commandButtonEnabled}
+        runLabel={commandButtonLabel}
+        liveChip={liveWorkerChip}
+        emptyState={composerEmptyState}
+      />
+
+      <GlassPanel intensity="regular" padding={20} ariaLabel="Audit run progress and advanced tools">
         <div style={workspaceCardStyle}>
-          <div style={runHeaderStyle}>
-            <div>
-              <p style={eyebrowStyle}>CAS Harness Audit Console</p>
-              <AuditPopover
-                briefing="Licensed users attach a model, run the audit, and receive ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips."
-                block
-                placement="bottom"
-                width={360}
-              >
-                <h1 className="cas-heading-wave" style={{ ...headingWaveStyle, fontSize: 24 }}>
-                  Connect a model. Run a CAS audit. Return a verdict with evidence.
-                </h1>
-              </AuditPopover>
-              <AuditPopover
-                briefing="The console keeps the visible path simple. Deeper explanations open only when the reviewer asks for them."
-                placement="bottom"
-                width={330}
-              >
-                <p style={monikerStyle}>TURN YOUR BLACK BOX INTO A GLASS HOUSE</p>
-              </AuditPopover>
-            </div>
-            <div style={runHeaderMetaStyle} aria-label="Active run status">
-              {session ? (
-                <span>Run in progress</span>
-              ) : (
-                <span style={{ color: COLORS.textMuted }}>No active run</span>
-              )}
-            </div>
-          </div>
-
-          <ModelConnectionCard
-            status={
-              isTargetConnecting
-                ? 'connecting'
-                : targetError
-                  ? 'error'
-                  : isConfigured
-                    ? 'connected'
-                    : 'disconnected'
-            }
-            modelName={target?.modelId ?? 'No model connected'}
-            provider={target?.provider ?? 'License/API connector pending'}
-            endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
-            statusDetail={
-              targetError
-                ? targetError
-                : isConfigured
-                  ? target.statusDetail
-                  : 'Connect a supported target before running a CAS Harness audit.'
-            }
-            lastChecked={
-              session
-                ? 'Backend session accepted'
-                : target?.checkedAt
-                  ? 'Target verified'
-                  : undefined
-            }
-            isAuditRunning={isAuditRunning}
-            canRunAudit={Boolean(target?.canRunAudit)}
-            onConnect={connectReferenceTarget}
-            onDisconnect={disconnectTarget}
-            onRunAudit={runAudit}
-          />
-
-          <section style={commandCenterStyle} aria-label="CAS audit command center">
-            <div style={commandHeaderStyle}>
-              <div>
-                <h2 style={commandTitleStyle}>Audit command center</h2>
-                <AuditPopover
-                  briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
-                  placement="bottom"
-                  width={340}
-                >
-                  <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
-                </AuditPopover>
-              </div>
-              <div style={commandActionsStyle}>
-                <span
-                  role="status"
-                  aria-label={`Live worker status: ${liveWorkerChip.label}`}
-                  title={liveWorkerChip.label}
-                  style={{
-                    ...liveWorkerChipBaseStyle,
-                    border: `1px solid ${liveWorkerChip.accent}59`,
-                    background: `${liveWorkerChip.accent}1f`,
-                    color: liveWorkerChip.accent,
-                  }}
-                >
-                  <span style={liveWorkerDotStyle(liveWorkerChip.accent)} aria-hidden="true" />
-                  {liveWorkerChip.label}
-                </span>
-                <button
-                  type="button"
-                  style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-                  onClick={loadStage940EPacketTarget}
-                  disabled={isAuditRunning || isTargetConnecting}
-                >
-                  Load 20B validation packet
-                </button>
-                <button
-                  type="button"
-                  style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-                  onClick={loadS7F28PacketTarget}
-                  disabled={isAuditRunning || isTargetConnecting}
-                >
-                  Load 20B review packet
-                </button>
-                <input
-                  type="password"
-                  aria-label="Bring your own provider API key (optional)"
-                  autoComplete="off"
-                  spellCheck={false}
-                  value={byokApiKey}
-                  onChange={(event) => setByokApiKey(event.target.value)}
-                  placeholder="Your provider API key (optional, sent once, never stored)"
-                  disabled={isAuditRunning || isTargetConnecting}
-                  style={{
-                    flex: '1 1 240px',
-                    minWidth: 220,
-                    padding: '8px 12px',
-                    borderRadius: 6,
-                    border: `1px solid ${COLORS.borderStrong}`,
-                    background: COLORS.bgPanel,
-                    color: COLORS.textPrimary,
-                    fontFamily: THEME.fontMono,
-                    fontSize: 12,
-                  }}
-                />
-                <button
-                  type="button"
-                  style={commandActionStyle(commandButtonEnabled)}
-                  onClick={runPrimaryCommand}
-                  disabled={!commandButtonEnabled}
-                >
-                  {commandButtonLabel}
-                </button>
-              </div>
-            </div>
-            <section style={flowStyle} aria-label="Audit workflow">
-              {AUDIT_STEPS.map((step, index) => {
-                const state = commandStateFor(
-                  index,
-                  isConfigured,
-                  session,
-                  isAuditRunning,
-                  sessionError,
-                );
-                return (
-                  <article key={step.label} style={stepStyle(state)}>
-                    <AuditPopover briefing={step.detail} block placement="bottom">
-                      <span style={stepNumberStyle}>{index + 1}</span>
-                      <h2 style={stepLabelStyle}>{step.command}</h2>
-                      <p style={verdictLabelStyle}>{step.label}</p>
-                      <span style={commandBadgeStyle(state)}>
-                        {commandStatusLabel(state)}
-                      </span>
-                    </AuditPopover>
-                  </article>
-                );
-              })}
-            </section>
-          </section>
-
           <section style={ladderCardStyle} aria-label="Audit progress">
-            <p style={sectionEyebrowStyle}>Audit progress</p>
+            <div style={ladderHeaderStyle}>
+              <p style={sectionEyebrowStyle}>Audit progress</p>
+              {showVerdictExplainer ? (
+                <button
+                  type="button"
+                  style={whyVerdictButtonStyle}
+                  onClick={() => setIsMethodologyOpen(true)}
+                >
+                  ? Why this verdict
+                </button>
+              ) : null}
+            </div>
             <AuditStageLadder
               status={lifecycleStatus}
               verdict={session?.verdict ?? null}
@@ -1470,207 +1066,79 @@ export default function AuditConsolePage() {
             errorMessage={activeError}
           />
 
-          {session ? (
-            <AuditSessionSummaryCard
-              auditId={session.audit_id}
-              modelTarget={session.model_id ?? target?.modelId}
-              mode={session.audit_mode}
-              selectedModulesCount={session.selected_modules.length}
-              status={lifecycleStatus}
-              verdict={session.verdict ?? null}
-              confidence={session.confidence ?? null}
-              evidencePacketId={session.evidence_packet_trace_id}
-              updatedAt={session.updated_at}
-            />
-          ) : null}
-
-          {showVerdictExplainer ? (
-            <AuditVerdictExplainer
-              verdict={session?.verdict ?? null}
-              confidence={session?.confidence ?? null}
-              chips={sessionChips}
-              verifierDecision={session?.verifier_decision ?? null}
-              lifecycleMessage={latestLifecycleMessage(session)}
-            />
-          ) : null}
-
-          {session?.evidence_packet_trace_id ? <EvidencePacketFlightRecorderFaq /> : null}
-
-          <div style={{ display: 'grid', gap: 16 }}>
-            <EnterpriseScalePlanCard
-              plan={enterprisePlan}
-              selectedSize={enterprisePlanSize}
-              isLoading={isEnterprisePlanLoading}
-              error={enterprisePlanError}
+          <Disclosure summary="Scale & fleet (advanced)">
+            <AuditScaleFleetTab
+              enterprisePlan={enterprisePlan}
+              enterprisePlanSize={enterprisePlanSize}
+              isEnterprisePlanLoading={isEnterprisePlanLoading}
+              enterprisePlanError={enterprisePlanError}
               onSelectSize={(size) => {
                 void loadEnterprisePlan(size);
               }}
-            />
-            <DistributedAuditRunPanel
-              audit={distributedAudit}
-              isLoading={isDistributedAuditLoading}
-              error={distributedAuditError}
-              onCreateRun={() => {
+              distributedAudit={distributedAudit}
+              isDistributedAuditLoading={isDistributedAuditLoading}
+              distributedAuditError={distributedAuditError}
+              onCreateDistributedRun={() => {
                 void createDistributedRun();
               }}
-              onDispatchRun={() => {
+              onDispatchDistributedRun={() => {
                 void dispatchDistributedRun();
               }}
-              onMergeRun={() => {
+              onMergeDistributedRun={() => {
                 void mergeDistributedRun();
               }}
+              fleetRegisteredWorkers={fleetRegisteredWorkers}
+              fleetLeasedJobs={fleetRun?.leased_jobs ?? 0}
+              fleetStaleWorkers={fleetRun?.stale_workers.length ?? 0}
+              fleetCompletedFragments={fleetRun?.completed_fragments ?? 0}
+              fleetTotalJobs={fleetTotalJobs}
+              fleetMergedPacketStatus={mergedPacketStatusFor(fleetRun)}
+              fleetVerifierGateStatus={fleetRun?.verifier_gate_status ?? 'not_prepared'}
+              fleetReadiness={fleetRun?.readiness ?? null}
+              fleetAuthToken={fleetAuthToken}
+              onFleetAuthTokenChange={setFleetAuthToken}
+              isFleetExecutorLoading={isFleetExecutorLoading}
+              fleetExecutorError={fleetExecutorError}
+              fleetRun={fleetRun}
+              fleetVerifierDecision={fleetVerifierDecision}
+              canPrepareFleet={canPrepareFleet}
+              canRegisterFleetWorker={canRegisterFleetWorker}
+              canLeaseFleetJob={canLeaseFleetJob}
+              canSubmitFleetReceipt={canSubmitFleetReceipt}
+              canMergeFleet={canMergeFleet}
+              canRunFleetVerifier={canRunFleetVerifier}
+              onPrepareFleet={() => {
+                void prepareFleet();
+              }}
+              onRegisterFleetWorker={() => {
+                void registerDemoFleetWorker();
+              }}
+              onLeaseFleetJob={() => {
+                void leaseOneFleetJob();
+              }}
+              onSubmitFleetReceipt={() => {
+                void submitOneFleetReceipt();
+              }}
+              onMergeFleet={() => {
+                void mergeFleet();
+              }}
+              onRunFleetVerifier={() => {
+                void runFleetVerifier();
+              }}
             />
-            <FleetExecutorPanel
-                registeredWorkers={fleetRegisteredWorkers}
-                leasedJobs={fleetRun?.leased_jobs ?? 0}
-                staleWorkers={fleetRun?.stale_workers.length ?? 0}
-                completedFragments={fleetRun?.completed_fragments ?? 0}
-                totalJobs={fleetTotalJobs}
-                mergedPacketStatus={mergedPacketStatusFor(fleetRun)}
-                verifierGateStatus={fleetRun?.verifier_gate_status ?? 'not_prepared'}
-                readiness={fleetRun?.readiness ?? null}
-              />
-              <section style={fleetControlPanelStyle} aria-label="Fleet executor controls">
-                <div style={fleetControlHeaderStyle}>
-                  <div>
-                    <h2 style={fleetControlTitleStyle}>Fleet executor controls</h2>
-                    <p style={fleetNoticeStyle}>
-                      These controls exercise the real fleet API path. Fleet merge
-                      stays blocked until a leased job returns an Evidence Packet
-                      fragment.
-                    </p>
-                    <label htmlFor="fleet-auth-token" style={verdictLabelStyle}>
-                      Protected API token
-                    </label>
-                    <input
-                      id="fleet-auth-token"
-                      type="password"
-                      autoComplete="off"
-                      spellCheck={false}
-                      value={fleetAuthToken}
-                      onChange={(event) => setFleetAuthToken(event.target.value)}
-                      placeholder="Optional bearer token"
-                      style={fleetAuthInputStyle}
-                    />
-                  </div>
-                  <div style={fleetButtonRowStyle}>
-                    <button
-                      type="button"
-                      style={commandActionStyle(canPrepareFleet)}
-                      disabled={!canPrepareFleet}
-                      onClick={() => {
-                        void prepareFleet();
-                      }}
-                    >
-                      Prepare fleet
-                    </button>
-                    <button
-                      type="button"
-                      style={commandActionStyle(canRegisterFleetWorker)}
-                      disabled={!canRegisterFleetWorker}
-                      onClick={() => {
-                        void registerDemoFleetWorker();
-                      }}
-                    >
-                      Register demo worker
-                    </button>
-                    <button
-                      type="button"
-                      style={commandActionStyle(canLeaseFleetJob)}
-                      disabled={!canLeaseFleetJob}
-                      onClick={() => {
-                        void leaseOneFleetJob();
-                      }}
-                    >
-                      Lease one job
-                    </button>
-                    <button
-                      type="button"
-                      style={commandActionStyle(canSubmitFleetReceipt)}
-                      disabled={!canSubmitFleetReceipt}
-                      onClick={() => {
-                        void submitOneFleetReceipt();
-                      }}
-                    >
-                      Submit one receipt
-                    </button>
-                    <button
-                      type="button"
-                      style={commandActionStyle(canMergeFleet)}
-                      disabled={!canMergeFleet}
-                      onClick={() => {
-                        void mergeFleet();
-                      }}
-                    >
-                      Merge fleet
-                    </button>
-                    <button
-                      type="button"
-                      style={commandActionStyle(canRunFleetVerifier)}
-                      disabled={!canRunFleetVerifier}
-                      onClick={() => {
-                        void runFleetVerifier();
-                      }}
-                    >
-                      Run fleet verifier
-                    </button>
-                  </div>
-                </div>
-                {isFleetExecutorLoading ? (
-                  <p role="status" style={fleetNoticeStyle}>
-                    Fleet executor request in flight...
-                  </p>
-                ) : null}
-                {fleetExecutorError ? (
-                  <p role="status" style={{ ...fleetNoticeStyle, color: '#fecaca' }}>
-                    {fleetExecutorError}
-                  </p>
-                ) : null}
-                {fleetRun?.merged_packet_trace_id ? (
-                  <p role="status" style={fleetNoticeStyle}>
-                    Merged Evidence Packet: {fleetRun.merged_packet_trace_id}
-                  </p>
-                ) : null}
-                {fleetVerifierDecision ? (
-                  <div
-                    data-testid="fleet-verifier-decision"
-                    style={{
-                      display: 'grid',
-                      gap: 8,
-                      padding: 12,
-                      borderRadius: 8,
-                      border: '1px solid rgba(45, 212, 191, 0.28)',
-                      background: 'rgba(15, 23, 42, 0.54)',
-                    }}
-                  >
-                    <p style={{ ...fleetNoticeStyle, color: COLORS.textPrimary, fontWeight: 800 }}>
-                      Fleet verifier decision:{' '}
-                      {fleetVerifierDecision.verdict.replace(/_/g, ' ')}
-                    </p>
-                    <p style={fleetNoticeStyle}>
-                      Confidence:{' '}
-                      {fleetVerifierDecision.confidence === null
-                        ? 'not available'
-                        : `${Math.round(fleetVerifierDecision.confidence * 100)}%`}
-                      {' '}· Proof chips: {fleetVerifierDecision.proof_chip_gate}
-                    </p>
-                    <p style={fleetNoticeStyle}>{fleetVerifierDecision.reason}</p>
-                    {fleetVerifierDecision.blockers.length > 0 ? (
-                      <p style={fleetNoticeStyle}>
-                        Blocker: {fleetVerifierDecision.blockers.join(' ')}
-                      </p>
-                    ) : null}
-                  </div>
-                ) : null}
-                {fleetRun ? (
-                  <p style={fleetNoticeStyle}>
-                    Fleet merge reason: {fleetRun.merge_reason}
-                  </p>
-                ) : null}
-              </section>
-          </div>
+          </Disclosure>
         </div>
       </GlassPanel>
+
+      <MethodologyDrawer
+        open={isMethodologyOpen}
+        onClose={() => setIsMethodologyOpen(false)}
+        verdict={session?.verdict ?? null}
+        confidence={session?.confidence ?? null}
+        chips={sessionChips}
+        verifierDecision={session?.verifier_decision ?? null}
+        lifecycleMessage={latestLifecycleMessage(session)}
+      />
     </>
   );
 

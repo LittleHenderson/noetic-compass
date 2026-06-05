@@ -1,5 +1,57 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness "Audit Bench" UI redesign — second pass (composer consolidation + scale/fleet off-screen + methodology drawer + JSON demotion) (Jun 5, 2026)
+
+**Headline.** Second pass of the Audit Console redesign (`launch/ui-audit-bench`), per
+`docs/working/cas_harness_ui_redesign_plan_20260604.md` §6 steps 5–7 — the decluttering polish layered
+on top of the first pass. The center column now reads run header → composer → stage ladder →
+transcript; the enterprise/distributed/fleet machinery moves off the default view behind a "Scale &
+fleet (advanced)" disclosure; and a "Why this verdict" methodology drawer carries the deep prose +
+the plain-language relabel legend. No API contract changes; every field name and claim word
+(`ACCEPT`/`FLAG_FOR_HUMAN_REVIEW`/`SUPPRESS`/`LICENSED`/`NOT LICENSED`/`OPEN`/`unavailable`/`present`/
+`verified`/`missing`/`failed`) preserved verbatim. The first pass's honesty gates are intact.
+
+- **Composer consolidation (step 5).** New `components/audit/AuditComposer.tsx` absorbs
+  `ModelConnectionCard` + the old command-center button soup + the BYOK key field + the live-worker
+  chip into ONE surface: target → mode → modules → Run. New `components/audit/AuditRunHeader.tsx` is a
+  calm one-row status header (audit_id / model / mode / status word) replacing the large animated H1.
+  The live-worker chip is relabeled "live trace" (aria-label `Live trace status:`); its displayed
+  text stays the honest backend `health.label`, and it is teal ONLY for confirmed real weights.
+- **Scale & fleet off the default screen (step 6).** New `components/audit/AuditScaleFleetTab.tsx`
+  relocates `EnterpriseScalePlanCard` + `DistributedAuditRunPanel` + `FleetExecutorPanel` + the inline
+  fleet-button row. It renders ONLY inside the center `Disclosure` ("Scale & fleet (advanced)"), never
+  on the default audit view. The fleet verifier decision is rendered verbatim (always
+  `FLAG_FOR_HUMAN_REVIEW` server-side; the UI only displays it); `data-testid="fleet-verifier-decision"`
+  preserved.
+- **Methodology drawer + relabel + JSON demotion (step 7).** New
+  `components/audit/MethodologyDrawer.tsx` (a `?` / "Why this verdict" drawer, opened from the ladder
+  header and the left-rail Help button) absorbs the `AuditVerdictExplainer` prose +
+  `EvidencePacketFlightRecorderFaq` + an honesty legend mapping each plain console label to its
+  internal term. Stage-19/20/21 / `accepted_accuracy` / Generation-Readiness vocabulary now lives
+  ONLY inside the drawer. The customer-surface relabel is applied: `ProofChipRail` shows
+  "CAS readout (model-internal signal)" / "Causal check (ablation)" / "Matched control" /
+  "Output match" / "Evidence packet" (the API chip `id` + status words are untouched). In
+  `components/cockpit/EvidenceDrawer.tsx`, a human-readable Summary tab is now the DEFAULT and the raw
+  `<pre>` JSON is demoted to a secondary "Raw packet (JSON)" tab (kept mounted-but-hidden so existing
+  packet testids still resolve). The packet-integrity (anchor) block stays visible above the tabs.
+- **Page is now a thin orchestrator.** `pages/AuditConsolePage.tsx` keeps ALL state + handlers + API
+  calls + the live-worker `useEffect` probe; the 8-section render body is replaced by run header →
+  composer → ladder/transcript → `AuditSessionProgress` → `Scale & fleet` disclosure →
+  `MethodologyDrawer`. Dead command-center/step-card/heading-wave styles + helpers removed. No API
+  signature touched.
+- **Honesty preserved.** Clean teal ACCEPT still only via `isAuditResultCustomerSafe`; ACCEPT vs FLAG
+  keep distinct chrome; missing/OPEN controls still render the literal status word (never teal); the
+  evidence packet panel still uses only the honest `statusLabel`; NO raw JSON on the console surface
+  (only the cockpit drawer's secondary tab); the 10-dot brand mark + CAS color identity intact (the
+  composer empty state shows the breathing 72px mark).
+- **Tests.** New: `AuditComposer.test.tsx`, `AuditRunHeader.test.tsx`, `MethodologyDrawer.test.tsx`,
+  `AuditScaleFleetTab.test.tsx`. Extended: `EvidenceDrawer.test.tsx` (asserts Summary is the default
+  tab and JSON is secondary, with the `<pre>` blocks still mounted). `AuditConsolePage.test.tsx`
+  rewritten for the new structure — flow tests open the methodology drawer for the deep prose and the
+  "Scale & fleet (advanced)" disclosure for fleet controls, while preserving every fetch-sequence /
+  request-body / claim-word assertion. `npx tsc -b` clean; targeted vitest (audit + cockpit + pages)
+  green: 39 files / 278 passed / 2 pre-existing skips.
+
 ## CAS Harness "Audit Bench" UI redesign — first pass (branded 3-zone shell + stage ladder + honest evidence rail) (Jun 4, 2026)
 
 **Headline.** First pass of the Audit Console redesign (`launch/ui-audit-bench`), per

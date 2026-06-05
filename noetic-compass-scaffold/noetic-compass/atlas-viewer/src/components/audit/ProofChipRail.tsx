@@ -25,11 +25,13 @@ const REQUIRED_ORDER: ProvenanceChipId[] = [
 ];
 
 // Customer-facing relabels (plan §5). Internal Stage-19/20/21 vocabulary stays
-// out of this surface; only these plain names appear.
+// out of this surface; only these plain names appear. These labels intentionally
+// WIN over the backend chip.name on this customer surface so the rail reads in
+// plain language; the API chip id + status words are untouched.
 const CHIP_LABEL: Record<ProvenanceChipId, string> = {
   model_proof: 'Model proof',
-  cas_readout: 'CAS readout',
-  causal_proof: 'Causal check',
+  cas_readout: 'CAS readout (model-internal signal)',
+  causal_proof: 'Causal check (ablation)',
   control_proof: 'Matched control',
   output_proof: 'Output match',
   packet_proof: 'Evidence packet',
@@ -162,7 +164,7 @@ export function ProofChipRail({ chips, className }: ProofChipRailProps): JSX.Ele
           const state = chipState(chip);
           return (
             <li key={id} style={rowStyle(state)} data-state={state}>
-              <span style={nameStyle}>{chip?.name ?? CHIP_LABEL[id]}</span>
+              <span style={nameStyle}>{CHIP_LABEL[id]}</span>
               <span style={statusWordStyle(state)}>{chipStatusWord(chip)}</span>
             </li>
           );

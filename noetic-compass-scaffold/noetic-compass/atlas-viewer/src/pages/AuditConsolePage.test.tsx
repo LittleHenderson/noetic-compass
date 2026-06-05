@@ -426,53 +426,69 @@ describe('AuditConsolePage', () => {
     vi.unstubAllGlobals();
   });
 
-  it('presents the CAS audit workflow without the old explanatory clutter', () => {
+  it('presents the consolidated composer center without the old command-center clutter', () => {
     renderPage();
 
-    const heading = screen.getByRole('heading', {
-      name: 'Connect a model. Run a CAS audit. Return a verdict with evidence.',
-    });
-    expect(heading).toHaveClass('cas-heading-wave');
-    expect(heading).not.toHaveAttribute('title');
-    expect(screen.getByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Audit command center' })).toBeInTheDocument();
-    expect(screen.getByText(/Worker evidence, not planner theater/i)).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'CONNECT' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'RUN' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'VERDICT' })).toBeInTheDocument();
-    expect(screen.getAllByText('Run CAS audit').length).toBeGreaterThan(0);
-    expect(screen.getByText('Return verdict + evidence')).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Proof chips' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('heading', { name: 'Hover help' })).not.toBeInTheDocument();
-    expect(screen.queryByText('License/API')).not.toBeInTheDocument();
-    expect(screen.queryByText('Audit mode')).not.toBeInTheDocument();
-    expect(screen.queryByText('Inspect in Atlas')).not.toBeInTheDocument();
-    expect(screen.queryByText('Evidence count')).not.toBeInTheDocument();
-    expect(screen.queryByText('Verdict vocabulary')).not.toBeInTheDocument();
-
-    expect(screen.getByRole('button', { name: 'Run audit' })).toBeDisabled();
-    expect(screen.getByRole('heading', { name: 'Audit not started' })).toBeInTheDocument();
+    // The calm run header replaces the giant animated marketing H1.
     expect(
-      screen.getByRole('note', {
-        name: 'Connect a supported target before running an audit.',
-      }),
-    ).toBeInTheDocument();
+      screen.queryByText(
+        'Connect a model. Run a CAS audit. Return a verdict with evidence.',
+      ),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Audit command center' })).not.toBeInTheDocument();
+    expect(screen.queryByText(/Worker evidence, not planner theater/i)).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'CONNECT' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'RUN' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'VERDICT' })).not.toBeInTheDocument();
+
+    // The new composer surface is present.
+    expect(screen.getByRole('heading', { name: 'Set up an audit' })).toBeInTheDocument();
+    expect(screen.getByLabelText('Audit run header')).toBeInTheDocument();
+    expect(screen.getByText('Start an audit')).toBeInTheDocument();
+
+    // The pending verdict chip lives in the right rail.
+    expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
+
+    // The ModelConnectionCard "Run audit" button is disabled before a target is
+    // connected; the composer primary action invites connecting the target.
+    expect(screen.getByRole('button', { name: 'Run audit' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Prepare target' })).toBeEnabled();
   });
 
-  it('keeps explanatory wording on hover targets instead of visible paragraphs', () => {
+  it('hides the enterprise / distributed / fleet machinery behind the advanced disclosure', () => {
     renderPage();
 
+    // None of the scale/fleet controls render on the default audit view.
+    expect(screen.queryByRole('button', { name: 'Create run' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Prepare fleet' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Run fleet verifier' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: 'Fleet executor controls' })).not.toBeInTheDocument();
+
+    // They live behind the "Scale & fleet (advanced)" disclosure.
+    const disclosure = screen.getByRole('button', { name: /Scale & fleet \(advanced\)/i });
+    expect(disclosure).toHaveAttribute('aria-expanded', 'false');
+    fireEvent.click(disclosure);
+    expect(screen.getByRole('button', { name: 'Create run' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeInTheDocument();
+  });
+
+  it('opens the "Why this verdict" methodology drawer only after a verdict exists', async () => {
+    renderPage();
+
+    // No verdict yet -> no "Why this verdict" affordance, and the Stage-19/20/21
+    // methodology vocabulary is NOT on the default surface.
     expect(
-      screen.queryByText(/the UI shows ACCEPT or SUPPRESS only when the/i),
+      screen.queryByRole('button', { name: /Why this verdict/i }),
     ).not.toBeInTheDocument();
-    expect(screen.queryByText(/Audit Console is the decision workflow/i)).not.toBeInTheDocument();
-    const commandSubtitle = screen.getByText('Connect. Run. Decide.');
-    expect(commandSubtitle).not.toHaveAttribute('title');
-    fireEvent.mouseEnter(commandSubtitle);
-    expect(screen.getByRole('tooltip')).toHaveTextContent(
-      'connect the target, run CAS, then return a verdict',
-    );
+    expect(screen.queryByText(/Stage 19 accepted_accuracy/i)).not.toBeInTheDocument();
+    // The left-rail Help button opens the same drawer.
+    fireEvent.click(screen.getByRole('button', { name: '? Help' }));
+    expect(await screen.findByTestId('methodology-drawer')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Why this verdict' })).toBeInTheDocument();
+    // The internal scoring vocabulary lives inside the drawer.
+    expect(screen.getByText(/Stage 19 \/ accepted_accuracy/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId('methodology-drawer-close'));
   });
 
   it('keeps the pending verdict compact', () => {
@@ -480,8 +496,6 @@ describe('AuditConsolePage', () => {
 
     expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
     expect(screen.queryByText(/No verdict yet\. Run a CAS audit/i)).not.toBeInTheDocument();
-    expect(screen.queryByText('Not created')).not.toBeInTheDocument();
-    expect(screen.queryByText('Not available')).not.toBeInTheDocument();
   });
 
   it('creates a reference-backed backend session and shows the evidence-gated verdict', async () => {
@@ -557,10 +571,12 @@ describe('AuditConsolePage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
-    expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
+    expect(await screen.findByText(/Audit cas-audit-test-session/)).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Audit complete' })).toBeInTheDocument();
-    expect(screen.getByText('Confidence: 98%')).toBeInTheDocument();
+    // Confidence detail lives in the methodology drawer now.
+    fireEvent.click(screen.getByRole('button', { name: /Why this verdict/i }));
+    expect(await screen.findByText('Confidence: 98%')).toBeInTheDocument();
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
       '/api/cas-harness/audit/target/verify',
@@ -713,7 +729,7 @@ describe('AuditConsolePage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Load 20B review packet' }));
 
-    expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
+    expect(screen.getAllByText('EleutherAI/gpt-neox-20b').length).toBeGreaterThan(0);
     expect(screen.getByText('S7-F28 Balanced Bridge Method')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
 
@@ -722,7 +738,9 @@ describe('AuditConsolePage', () => {
     expect(
       await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Confidence: 80%')).toBeInTheDocument();
+    // Confidence detail lives in the methodology drawer now.
+    fireEvent.click(screen.getByRole('button', { name: /Why this verdict/i }));
+    expect(await screen.findByText('Confidence: 80%')).toBeInTheDocument();
     expect(screen.getAllByText(S7_F28_TRACE_ID).length).toBeGreaterThan(0);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     expect(fetchMock).toHaveBeenNthCalledWith(
@@ -805,19 +823,20 @@ describe('AuditConsolePage', () => {
 
     fireEvent.click(screen.getByRole('button', { name: 'Load 20B validation packet' }));
 
-    expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
+    expect(screen.getAllByText('EleutherAI/gpt-neox-20b').length).toBeGreaterThan(0);
     expect(screen.getByText('Stage 9 original 40E validation packet')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
 
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' })).toBeInTheDocument();
-    expect(screen.getByText('Confidence: not available')).toBeInTheDocument();
-    // The scope label now appears in both the right-rail ScopeRibbon and the
-    // methodology explainer, so assert at least one instance is present.
+    // The scope label is on the persistent right-rail ScopeRibbon (no drawer needed).
     expect(
       screen.getAllByText('Scope: Stage 9 40E validation packet').length,
     ).toBeGreaterThan(0);
+    // Confidence basis, coverage, and the WORM-gate prose live in the drawer.
+    fireEvent.click(screen.getByRole('button', { name: /Why this verdict/i }));
+    expect(await screen.findByText('Confidence: not available')).toBeInTheDocument();
     expect(screen.getByText('Coverage: 80 cases / 40 classes')).toBeInTheDocument();
     expect(
       screen.getByText('Flagged because the Evidence Packet is not WORM-retained yet.'),
@@ -848,6 +867,7 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    fireEvent.click(screen.getByRole('button', { name: /Scale & fleet \(advanced\)/i }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
     expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
@@ -959,6 +979,7 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    fireEvent.click(screen.getByRole('button', { name: /Scale & fleet \(advanced\)/i }));
 
     expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
@@ -1088,6 +1109,7 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    fireEvent.click(screen.getByRole('button', { name: /Scale & fleet \(advanced\)/i }));
 
     fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
     expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
@@ -1165,7 +1187,11 @@ describe('AuditConsolePage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
     expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
-    expect(screen.getByText(/Accepted because the verifier explicitly allowed it/i)).toBeInTheDocument();
+    // The verifier reason + proof prose live behind the "Why this verdict" drawer.
+    fireEvent.click(screen.getByRole('button', { name: /Why this verdict/i }));
+    expect(
+      await screen.findByText(/Accepted because the verifier explicitly allowed it/i),
+    ).toBeInTheDocument();
     expect(screen.getByText('Proof chips ready: 6/6')).toBeInTheDocument();
     expect(screen.getByText('Confidence: 98%')).toBeInTheDocument();
     expect(
@@ -1182,7 +1208,7 @@ describe('AuditConsolePage', () => {
     }
 
     function findLiveWorkerChip() {
-      return screen.findByRole('status', { name: /Live worker status:/i });
+      return screen.findByRole('status', { name: /Live trace status:/i });
     }
 
     it('shows a teal "real Pythia weights" chip only when real weights are confirmed', async () => {
@@ -1254,7 +1280,7 @@ describe('AuditConsolePage', () => {
 
       renderPage();
 
-      const chip = screen.getByRole('status', { name: /Live worker status:/i });
+      const chip = screen.getByRole('status', { name: /Live trace status:/i });
       expect(chip).toHaveTextContent('Checking live worker…');
       expect(chip).toHaveStyle({ color: 'rgb(100, 116, 139)' });
       // Page still renders its core controls.

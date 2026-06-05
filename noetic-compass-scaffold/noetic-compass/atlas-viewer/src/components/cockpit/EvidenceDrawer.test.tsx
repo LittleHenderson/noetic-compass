@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 
 import EvidenceDrawer from './EvidenceDrawer';
 
@@ -620,6 +620,48 @@ describe('EvidenceDrawer', () => {
 
     expect(screen.queryByTestId('evidence-drawer-blindspots')).toBeNull();
     expect(screen.queryByTestId('blindspot-interpretation')).toBeNull();
+  });
+
+  it('defaults to a human-readable summary tab and demotes raw JSON to a secondary tab', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(packet));
+    vi.stubGlobal('fetch', fetchImpl);
+
+    render(
+      <EvidenceDrawer
+        open={true}
+        payload={{
+          source: 'primitive',
+          title: 'Summary-first packet',
+          evidence_ref: { trace_id: 'trace-123' },
+        }}
+        onClose={() => {}}
+      />,
+    );
+
+    // Both tabs exist; the human summary is selected by default.
+    const summaryTab = await screen.findByTestId('evidence-packet-tab-summary');
+    const jsonTab = screen.getByTestId('evidence-packet-tab-json');
+    expect(summaryTab).toHaveAttribute('aria-selected', 'true');
+    expect(jsonTab).toHaveAttribute('aria-selected', 'false');
+
+    // The default summary panel is visible and reads as plain rows.
+    const summaryPanel = screen.getByTestId('evidence-packet-summary');
+    expect(summaryPanel).not.toHaveAttribute('hidden');
+    expect(summaryPanel).toHaveTextContent('What does ^3^P|A mean?');
+    expect(summaryPanel).toHaveTextContent('principled aversion');
+
+    // The raw JSON panel is mounted (existing testids resolve) but hidden.
+    const jsonPanel = screen.getByTestId('evidence-packet-json');
+    expect(jsonPanel).toHaveAttribute('hidden');
+    expect(screen.getByTestId('evidence-packet-input')).toHaveTextContent(
+      'What does ^3^P|A mean?',
+    );
+
+    // Switching to the JSON tab reveals the raw <pre> blocks.
+    fireEvent.click(jsonTab);
+    expect(jsonTab).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByTestId('evidence-packet-json')).not.toHaveAttribute('hidden');
+    expect(screen.getByTestId('evidence-packet-summary')).toHaveAttribute('hidden');
   });
 
   it('falls back to the local reference when packet fetch fails', async () => {
