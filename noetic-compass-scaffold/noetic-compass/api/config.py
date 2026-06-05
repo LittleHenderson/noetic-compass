@@ -91,10 +91,10 @@ class Settings(BaseSettings):
     #   NC_ACCOUNTS_ENABLED=true -> a durable account/invite store is opened at startup (Postgres
     #     when NC_DATABASE_URL is set, else SQLite) and /auth/token gains an identity-login branch:
     #     when an account exists for the supplied identity, the minted token is bound to that
-    #     account's SERVER-DERIVED account_id/tenant_id/role. The shared-secret mint remains the
-    #     fallback. If enabled but no durable backend can be built, startup FAILS LOUD (account
-    #     state is durable or absent, never silently in-memory). Session/jti/revocation, RBAC, and
-    #     quota enforcement are later PRs.
+    #     account's SERVER-DERIVED account_id/tenant_id/role and opens a durable jti/session that
+    #     can be revoked at the request chokepoint. If enabled but no durable account/session
+    #     backend can be built, startup FAILS LOUD (identity state is durable or absent, never
+    #     silently in-memory). Tenant isolation and quota enforcement are later PRs.
     accounts_enabled: bool = Field(
         default=False,
         validation_alias=AliasChoices("NC_ACCOUNTS_ENABLED", "ACCOUNTS_ENABLED"),

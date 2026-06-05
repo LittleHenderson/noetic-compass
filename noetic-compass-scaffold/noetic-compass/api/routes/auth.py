@@ -27,8 +27,9 @@ per-key verification and the debug-gated open path should be removed.
 import hmac
 
 from pydantic import BaseModel
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 
+from api.dependencies.authz import require_role
 from api.middleware.auth import create_token
 
 router = APIRouter(tags=["auth"])
@@ -117,14 +118,20 @@ async def generate_token(body: TokenRequest, request: Request) -> TokenResponse:
 
 
 def _mint_for_account(request: Request, identity: str) -> TokenResponse:
-    """Identity-login branch (accounts_enabled=True): bind the token to a real account.
+    """Identity-login branch (accounts_enabled=True): bind the token to a real account + session.
 
     Fails closed: an identity with no account, or a disabled account, is refused with 401 -- an
-    unknown or disabled user cannot obtain a token. On success the token carries the account's
-    SERVER-DERIVED ``account_id``/``tenant_id``/``role`` claims (from the stored record), so a
-    client can neither choose its own tenant/role nor mint an identity that does not exist.
+    unknown or disabled user cannot obtain a token. On success the login OPENS A DURABLE SESSION and
+    the token carries the account's SERVER-DERIVED ``account_id``/``tenant_id``/``role`` claims plus
+    the session id as ``jti`` (from the stored records), so a client can neither choose its own
+    tenant/role nor mint an identity that does not exist. The ``jti`` is what makes this token
+    revocable + chokepoint-expirable: the dispatch middleware looks the session up on every request
+    and rejects a revoked/expired one (see ``api/middleware/auth.py``).
     """
+    from datetime import timedelta
+
     from api.config import settings
+    from api.services.production.state_substrate import utc_now
 
     store = getattr(request.app.state, "account_store", None)
     if store is None:
@@ -144,12 +151,108 @@ def _mint_for_account(request: Request, identity: str) -> TokenResponse:
         # Disabled account: locked out at login.
         raise HTTPException(status_code=401, detail="This account is disabled.")
 
-    token = create_token(
-        sub=account.email_or_username,
-        api_key=f"account:{account.account_id}",
-        exp_minutes=settings.jwt_expiry_minutes,
+    # Open a durable session. Its id becomes the token ``jti``; its expiry mirrors the token's so a
+    # session never outlives the credential it backs. The session is what the chokepoint revokes
+    # against -- without it the token would only be checkable at issue time.
+    session_store = getattr(request.app.state, "session_store", None)
+    if session_store is None:
+        # accounts_enabled=True but no session store -> the token could not be revoked at the
+        # chokepoint, defeating logout/disable enforcement. Refuse rather than mint an
+        # unrevokable account-mode token. (Startup fails loud in this case; this is the backstop.)
+        raise HTTPException(
+            status_code=503,
+            detail="Account login is enabled but the session store is unavailable.",
+        )
+
+    expiry_minutes = settings.jwt_expiry_minutes
+    session_expires_at = (utc_now() + timedelta(minutes=expiry_minutes)).isoformat()
+    session = session_store.create_session(
         account_id=account.account_id,
         tenant_id=account.tenant_id,
         role=account.role,
+        expires_at=session_expires_at,
     )
-    return TokenResponse(token=token, expires_in_minutes=settings.jwt_expiry_minutes)
+
+    token = create_token(
+        sub=account.email_or_username,
+        api_key=f"account:{account.account_id}",
+        exp_minutes=expiry_minutes,
+        account_id=account.account_id,
+        tenant_id=account.tenant_id,
+        role=account.role,
+        jti=session.session_id,
+    )
+    return TokenResponse(token=token, expires_in_minutes=expiry_minutes)
+
+
+# --- logout / revoke -------------------------------------------------------
+
+
+class LogoutResponse(BaseModel):
+    revoked: bool
+
+
+def _session_store(request: Request):
+    """Return the installed durable session store, or 503.
+
+    Mirrors the accounts route's fail-closed durability posture: session state is never served from
+    an ephemeral fallback. A missing store means account-mode is not enabled/installed, and the
+    honest response is "unavailable", not a fabricated success.
+    """
+    store = getattr(request.app.state, "session_store", None)
+    if store is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Sessions are not enabled on this deployment.",
+        )
+    return store
+
+
+@router.post("/auth/logout", response_model=LogoutResponse)
+async def logout(request: Request) -> LogoutResponse:
+    """Revoke the caller's CURRENT session (the one its bearer token names).
+
+    The session id is taken from ``request.state.session_id`` -- set by the dispatch middleware from
+    the verified token's ``jti``, NEVER from the request body -- so a caller can only ever log
+    *itself* out, not someone else. After this returns, the next request bearing the same token is
+    rejected at the dispatch chokepoint (the session is now revoked). Idempotent: logging out an
+    already-revoked (or unknown) session still returns ``revoked: true`` -- the post-condition (this
+    token's session is dead) holds.
+
+    This endpoint is NOT public: it sits behind the JWT middleware, and only an account-mode token
+    (one carrying a ``jti``) establishes a ``session_id`` to revoke. A token with no session id (a
+    legacy shared-secret token) has no server-side session to revoke and gets a 400.
+    """
+    store = _session_store(request)
+    session_id = getattr(request.state, "session_id", None)
+    if not session_id:
+        # Authenticated by the middleware, but this token has no session to revoke (not an
+        # account-mode token). Nothing to do; tell the caller plainly rather than pretend.
+        raise HTTPException(
+            status_code=400,
+            detail="This token has no server-side session to revoke.",
+        )
+    store.revoke_session(str(session_id))
+    return LogoutResponse(revoked=True)
+
+
+@router.post("/auth/sessions/{session_id}/revoke", response_model=LogoutResponse)
+async def revoke_session_admin(
+    session_id: str,
+    request: Request,
+    _role: str = Depends(require_role("admin", "owner", "operator")),
+) -> LogoutResponse:
+    """Revoke ANY session by id -- a privileged admin/operator action (role-gated).
+
+    Gated by :func:`require_role`: a member-role token is refused with 403; an unauthenticated
+    request is 401. The role is read from the SERVER-SET ``request.state.role`` (never the body).
+    Idempotent -- revoking an unknown or already-revoked session returns ``revoked: true``.
+
+    NOTE (Phase 3 follow-on): this revoke does not yet check that the target session belongs to the
+    caller's tenant -- per-tenant scoping of session records is part of the tenant-isolation phase.
+    Until then the gate is role-based (operator/admin/owner), which is the launch-grade posture for
+    an invite-only beta.
+    """
+    store = _session_store(request)
+    store.revoke_session(session_id)
+    return LogoutResponse(revoked=True)

@@ -127,6 +127,21 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     else:
         logger.info("accounts: ENABLED, durable account store installed")
 
+    # Durable session store (PAID-user security spine — session half). Shares the accounts_enabled
+    # flag: a session is only meaningful once identity login is on. Dark by default
+    # (accounts_enabled off => None => no jti is embedded and the dispatch middleware does no session
+    # lookup, so legacy no-jti tokens flow byte-for-byte as today). When enabled, build_session_store
+    # selects the SAME durable backend as the state ledger and FAILS LOUD if no durable backend can
+    # be built — session state is durable or absent (a forgetful session store would silently log
+    # every user out on redeploy AND make a revoked session forgettable).
+    from api.services.sessions import build_session_store
+
+    app.state.session_store = build_session_store(settings)
+    if app.state.session_store is None:
+        logger.info("sessions: dark (no session enforcement)")
+    else:
+        logger.info("sessions: ENABLED, durable session store installed")
+
     # CRM lead capture: build the service from settings and stash it for the routes. Dark by
     # default (in-memory store + null provider) unless NC_CRM_LEAD_STORE_PATH / NC_CRM_PROVIDER are
     # set. build_crm_service fails loud for a provider we have not implemented, so a misconfigured
