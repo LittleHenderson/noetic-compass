@@ -1,4 +1,14 @@
-import { useId, useState, type CSSProperties, type ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+  type SyntheticEvent,
+} from 'react';
+import { createPortal } from 'react-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import {
@@ -29,9 +39,21 @@ const triggerStyle = (block: boolean): CSSProperties => ({
   outline: 'none',
 });
 
+// The popover is rendered through a PORTAL onto document.body with position:fixed.
+// That is deliberate, and it is the fix for "the briefing pops up behind the next
+// panel": an absolutely-positioned popover lives inside its trigger's stacking
+// context and is clipped by any ancestor with overflow:hidden/auto (the scrollable
+// rails/cards). A portal + fixed positioning escapes BOTH — every ancestor stacking
+// context and every overflow clip — so zIndex finally means what it says. zIndex sits
+// above the highest in-app surface (MethodologyDrawer overlay = 70) so a briefing is
+// never obscured by a sibling panel again.
+const POPOVER_Z = 1000;
+const VIEWPORT_MARGIN = 8; // keep the popover this far from the viewport edge
+const TRIGGER_GAP = 10; // gap between the trigger and the popover
+
 const popoverBaseStyle: CSSProperties = {
-  position: 'absolute',
-  zIndex: 90,
+  position: 'fixed',
+  zIndex: POPOVER_Z,
   width: 'min(var(--liquid-tooltip-width, 300px), calc(100vw - 48px))',
   padding: '13px 14px',
   borderRadius: 14,
@@ -47,20 +69,11 @@ const popoverBaseStyle: CSSProperties = {
   pointerEvents: 'none',
 };
 
-const placementStyle: Record<LiquidGlassTooltipPlacement, CSSProperties> = {
-  top: {
-    left: 0,
-    bottom: 'calc(100% + 10px)',
-  },
-  bottom: {
-    left: 0,
-    top: 'calc(100% + 10px)',
-  },
-  right: {
-    left: 'calc(100% + 10px)',
-    top: 0,
-  },
-};
+interface PopoverCoords {
+  left: number;
+  top?: number;
+  bottom?: number;
+}
 
 const eyebrowStyle: CSSProperties = {
   display: 'block',
@@ -101,11 +114,90 @@ export function LiquidGlassTooltip({
   focusable = true,
 }: LiquidGlassTooltipProps): JSX.Element {
   const [open, setOpen] = useState(false);
+  const [coords, setCoords] = useState<PopoverCoords>({ left: 0 });
+  // Captured from the hover/focus event's currentTarget (the trigger element) so the
+  // popover can be positioned from, and stay glued to, the real on-screen trigger
+  // without attaching a ref to the dynamic span/div tag.
+  const triggerRef = useRef<HTMLElement | null>(null);
   const id = useId();
   const Trigger = block ? 'div' : 'span';
 
-  const show = () => setOpen(true);
-  const hide = () => setOpen(false);
+  const measure = useCallback(() => {
+    const el = triggerRef.current;
+    if (!el || typeof window === 'undefined') return;
+    const rect = el.getBoundingClientRect();
+    const vw = window.innerWidth;
+    const w = Math.min(width, vw - 48);
+    const clampLeft = (x: number) =>
+      Math.max(VIEWPORT_MARGIN, Math.min(x, vw - w - VIEWPORT_MARGIN));
+
+    if (placement === 'right') {
+      setCoords({ left: clampLeft(rect.right + TRIGGER_GAP), top: rect.top });
+    } else if (placement === 'bottom') {
+      setCoords({ left: clampLeft(rect.left), top: rect.bottom + TRIGGER_GAP });
+    } else {
+      // 'top': anchor by the BOTTOM edge (distance from viewport bottom) so the
+      // popover grows upward off the trigger without needing to know its own height.
+      setCoords({
+        left: clampLeft(rect.left),
+        bottom: window.innerHeight - rect.top + TRIGGER_GAP,
+      });
+    }
+  }, [placement, width]);
+
+  const show = useCallback(
+    (event: SyntheticEvent) => {
+      triggerRef.current = event.currentTarget as HTMLElement;
+      measure();
+      setOpen(true);
+    },
+    [measure],
+  );
+  const hide = useCallback(() => setOpen(false), []);
+
+  // While open, keep the fixed-position popover glued to the trigger if the page
+  // scrolls or the window resizes (scroll uses capture so it catches scrolling on any
+  // ancestor, not just the window).
+  useEffect(() => {
+    if (!open) return undefined;
+    const reflow = () => measure();
+    window.addEventListener('scroll', reflow, true);
+    window.addEventListener('resize', reflow);
+    return () => {
+      window.removeEventListener('scroll', reflow, true);
+      window.removeEventListener('resize', reflow);
+    };
+  }, [open, measure]);
+
+  const popoverStyle = {
+    ...popoverBaseStyle,
+    left: coords.left,
+    ...(coords.top !== undefined ? { top: coords.top } : {}),
+    ...(coords.bottom !== undefined ? { bottom: coords.bottom } : {}),
+    '--liquid-tooltip-width': `${width}px`,
+  } as CSSProperties;
+
+  const popover = (
+    <AnimatePresence>
+      {open ? (
+        <motion.span
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0, y: placement === 'top' ? 4 : -4, scale: 0.985 }}
+          id={id}
+          initial={{ opacity: 0, y: placement === 'top' ? 4 : -4, scale: 0.985 }}
+          role="tooltip"
+          style={popoverStyle}
+          transition={{ duration: 0.11, ease: [0.16, 1, 0.3, 1] }}
+        >
+          <span aria-hidden="true" style={glowStyle} />
+          <span style={{ position: 'relative' }}>
+            <span style={eyebrowStyle}>Briefing</span>
+            <span style={bodyStyle}>{briefing}</span>
+          </span>
+        </motion.span>
+      ) : null}
+    </AnimatePresence>
+  );
 
   return (
     <Trigger
@@ -122,31 +214,9 @@ export function LiquidGlassTooltip({
       tabIndex={focusable ? 0 : undefined}
     >
       {children}
-      <AnimatePresence>
-        {open ? (
-          <motion.span
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: placement === 'top' ? 4 : -4, scale: 0.985 }}
-            id={id}
-            initial={{ opacity: 0, y: placement === 'top' ? 4 : -4, scale: 0.985 }}
-            role="tooltip"
-            style={
-              {
-                ...popoverBaseStyle,
-                ...placementStyle[placement],
-                '--liquid-tooltip-width': `${width}px`,
-              } as CSSProperties
-            }
-            transition={{ duration: 0.11, ease: [0.16, 1, 0.3, 1] }}
-          >
-            <span aria-hidden="true" style={glowStyle} />
-            <span style={{ position: 'relative' }}>
-              <span style={eyebrowStyle}>Briefing</span>
-              <span style={bodyStyle}>{briefing}</span>
-            </span>
-          </motion.span>
-        ) : null}
-      </AnimatePresence>
+      {typeof document !== 'undefined'
+        ? createPortal(popover, document.body)
+        : null}
     </Trigger>
   );
 }

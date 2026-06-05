@@ -1,5 +1,30 @@
 # Noetic Compass — Progress Log
 
+## Fix: help "?" briefings rendered behind/clipped by adjacent panels (Jun 5, 2026)
+
+**Headline.** Hovering a "?" help icon in the audit console showed its briefing *behind*
+the next panel — unreadable. Root cause: `LiquidGlassTooltip` (aliased `AuditPopover`,
+and the engine behind `AuditTerm` — **18 call sites**) rendered the popover
+`position: absolute` INSIDE its trigger, so it lived in the trigger's stacking context
+and was clipped by any `overflow: hidden/auto` ancestor (the scrollable rails/cards). A
+`zIndex` bump can't fix that — sibling panels compare z-index at the panel level, and an
+overflow ancestor clips regardless of z-index.
+
+**Fix (one shared component — `components/ui/LiquidGlassTooltip.tsx`).** The popover now
+renders through a React **portal onto `document.body`** with `position: fixed`,
+positioned from the trigger's `getBoundingClientRect()` (placement top/bottom/right),
+viewport-clamped so it never runs off-screen, and re-measured on scroll/resize so it
+stays glued to the trigger. `zIndex` 1000 — above the highest in-app surface
+(MethodologyDrawer overlay = 70). Identical props API, so all 18 consumers (every "?"
+briefing + `AuditTerm` definitions) are fixed with zero call-site changes.
+
+**Verified.** `npx tsc -b` clean; vitest `src/components/audit src/components/ui` → 24
+files / 99 tests pass. New regression test in `AuditPopover.test.tsx` asserts the
+structural guarantee that defeats the bug: the popover is portaled OUT of the trigger
+(`trigger.contains(tip) === false`), is a descendant of `document.body`,
+`position: fixed`, `zIndex 1000`. (jsdom can't prove "not visually obscured," so the test
+locks the *mechanism* — portal + fixed + high z — that makes obscuring impossible.)
+
 ## CAS Harness "Audit Bench" UI redesign — third pass (polish: long-label wrap + calm composer→run motion; light mode deferred) (Jun 5, 2026)
 
 **Headline.** Third, polish-only pass of the Audit Console redesign (`launch/ui-audit-bench`),
