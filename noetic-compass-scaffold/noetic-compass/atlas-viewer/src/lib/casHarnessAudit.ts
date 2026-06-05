@@ -232,6 +232,58 @@ export function verdictCopy(
   };
 }
 
+// Structural shape of the session fields the customer-safe gate needs. Kept
+// local so this module does not import the API session type.
+interface CustomerSafeSessionLike {
+  verdict?: AuditVerdict | string | null;
+  confidence?: number | null;
+  provenance_chips?: ProvenanceChip[] | null;
+  runtimeProof?: AuditRuntimeProof | null;
+  model_id?: string | null;
+}
+
+/**
+ * Build an AuditSessionSummary from a session-like object so the customer-safe
+ * gate can be evaluated at the console surface. The CAS Harness session does
+ * NOT carry a separate runtime-proof block, so `runtimeProof` defaults to null;
+ * in that case `isAuditResultCustomerSafe` correctly falls back to requiring a
+ * verified `model_proof` chip (it never invents a real-weights claim).
+ */
+export function summaryFromSession(
+  session: CustomerSafeSessionLike | null | undefined,
+): AuditSessionSummary | null {
+  if (!session || session.verdict == null || session.confidence == null) return null;
+  let verdict: AuditVerdict;
+  try {
+    verdict = normalizeAuditVerdict(session.verdict);
+  } catch {
+    return null;
+  }
+  return {
+    request: {
+      mode: 'live',
+      prompt: '',
+      modelId: session.model_id ?? null,
+    },
+    verdict,
+    confidence: session.confidence,
+    confidenceLabel: formatAuditConfidence(session.confidence),
+    provenanceChips: session.provenance_chips ?? [],
+    runtimeProof: session.runtimeProof ?? null,
+  };
+}
+
+/**
+ * Convenience wrapper: is this session a clean, customer-safe result? Returns
+ * false whenever a summary cannot be built (no verdict/confidence yet).
+ */
+export function isSessionCustomerSafe(
+  session: CustomerSafeSessionLike | null | undefined,
+): boolean {
+  const summary = summaryFromSession(session);
+  return summary ? isAuditResultCustomerSafe(summary) : false;
+}
+
 export function isAuditResultCustomerSafe(summary: AuditSessionSummary): boolean {
   let verdict: AuditVerdict;
   let confidence: number;
@@ -270,6 +322,211 @@ export function isAuditResultCustomerSafe(summary: AuditSessionSummary): boolean
   }
 
   return hasModelProof;
+}
+
+// ---------------------------------------------------------------------------
+// Run transcript adapter (Audit Bench)
+//
+// `lifecycleToTranscript` maps a session's lifecycle entries into plain-English
+// transcript rows for the run log. It NEVER JSON.stringifies — each row is a
+// sentence a reviewer can read. When a lifecycle entry carries no message we
+// fall back to a stage description keyed off the backend status.
+// ---------------------------------------------------------------------------
+
+export type TranscriptGlyphState = 'done' | 'active' | 'pending' | 'failed';
+
+export interface TranscriptRow {
+  id: string;
+  /** Pre-formatted clock label (HH:MM), or '—' when no timestamp is present. */
+  time: string;
+  /** Plain-English sentence describing what happened at this step. */
+  text: string;
+  state: TranscriptGlyphState;
+}
+
+// Structural shape of a lifecycle entry — kept local so this module does not
+// import the API session type (which itself depends on this module).
+interface LifecycleEntryLike {
+  status?: string | null;
+  message?: string | null;
+  timestamp?: string | null;
+}
+
+interface SessionLifecycleLike {
+  status?: string | null;
+  lifecycle?: LifecycleEntryLike[] | null;
+}
+
+// Plain-English fallback copy per backend lifecycle status. Mirrors the
+// AuditSessionProgress step descriptions without importing the component.
+const LIFECYCLE_STATUS_SENTENCE: Record<string, string> = {
+  DRAFT: 'Preparing the model, scenario, and audit modules…',
+  VALIDATING: 'Validating model access, license limits, and runtime proof…',
+  RUNNING: 'Running CAS modules against the model output…',
+  SCAFFOLD_PENDING_RUNNER:
+    'Session created, but the real audit runner is not connected yet.',
+  EVIDENCE_PENDING: 'Building the evidence packet (audit trail and anchor)…',
+  EVIDENCE_READY: 'Evidence packet assembled; finalizing the verdict…',
+  COMPLETE: 'Audit complete — verdict and evidence are ready to review.',
+  FAILED: 'Audit stopped before an evidence-gated verdict was produced.',
+};
+
+// Terminal statuses map to a glyph directly; everything else is resolved by
+// position relative to the session's current status.
+const TERMINAL_GLYPH: Record<string, TranscriptGlyphState> = {
+  COMPLETE: 'done',
+  FAILED: 'failed',
+};
+
+const LIFECYCLE_ORDER: Record<string, number> = {
+  DRAFT: 0,
+  VALIDATING: 1,
+  RUNNING: 2,
+  SCAFFOLD_PENDING_RUNNER: 3,
+  EVIDENCE_PENDING: 4,
+  EVIDENCE_READY: 5,
+  COMPLETE: 6,
+  FAILED: -1,
+};
+
+function transcriptTime(timestamp: string | null | undefined): string {
+  if (!timestamp) return '—';
+  const parsed = new Date(timestamp);
+  if (Number.isNaN(parsed.getTime())) return '—';
+  const hh = String(parsed.getHours()).padStart(2, '0');
+  const mm = String(parsed.getMinutes()).padStart(2, '0');
+  return `${hh}:${mm}`;
+}
+
+function transcriptSentence(entry: LifecycleEntryLike): string {
+  const message = typeof entry.message === 'string' ? entry.message.trim() : '';
+  if (message.length > 0) return message;
+  const status = typeof entry.status === 'string' ? entry.status : '';
+  return LIFECYCLE_STATUS_SENTENCE[status] ?? 'Audit step recorded.';
+}
+
+function transcriptGlyph(
+  entryStatus: string,
+  currentStatus: string,
+  isLast: boolean,
+): TranscriptGlyphState {
+  const terminal = TERMINAL_GLYPH[entryStatus];
+  if (terminal) return terminal;
+  if (currentStatus === 'FAILED') {
+    // On a failed run, earlier steps are settled; the failure row is rendered
+    // from its own FAILED status above.
+    return 'done';
+  }
+  if (isLast) return 'active';
+  const entryRank = LIFECYCLE_ORDER[entryStatus] ?? 0;
+  const currentRank = LIFECYCLE_ORDER[currentStatus] ?? 0;
+  return entryRank < currentRank ? 'done' : 'pending';
+}
+
+export function lifecycleToTranscript(
+  session: SessionLifecycleLike | null | undefined,
+): TranscriptRow[] {
+  const entries = session?.lifecycle ?? [];
+  if (!Array.isArray(entries) || entries.length === 0) return [];
+  const currentStatus = typeof session?.status === 'string' ? session.status : '';
+  return entries.map((entry, index) => {
+    const entryStatus = typeof entry.status === 'string' ? entry.status : '';
+    const isLast = index === entries.length - 1;
+    return {
+      id: `${index}-${entryStatus || 'step'}`,
+      time: transcriptTime(entry.timestamp),
+      text: transcriptSentence(entry),
+      state: transcriptGlyph(entryStatus, currentStatus, isLast),
+    };
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Scope ribbon adapter (Audit Bench)
+//
+// Promotes the previously-buried verifier scope + boundary strings to a
+// persistent ribbon. Wording is preserved EXACTLY from AuditVerdictExplainer's
+// verifierScopeLabel/verifierBoundary so the validation-vs-production boundary
+// reads identically wherever it appears.
+// ---------------------------------------------------------------------------
+
+export interface ScopeRibbonModel {
+  /** e.g. "Scope: Stage 9 40E validation packet" (null when no scope). */
+  scopeLabel: string | null;
+  /** The validation-packet boundary caveat (null unless a validation packet). */
+  boundaryLabel: string | null;
+  /** A short scope/disposition line sourced from audit_scope, when present. */
+  dispositionLabel: string | null;
+  /** True when this is a validation (not live customer-production) packet. */
+  isValidationPacket: boolean;
+}
+
+// Minimal structural shapes so this module does not import the API types.
+interface VerifierDecisionLike {
+  decisionScope?: string | null;
+}
+
+interface AuditScopeLike {
+  label?: string | null;
+  detail?: string | null;
+  verdictDisposition?: string | null;
+}
+
+export function scopeRibbonModel(
+  verifierDecision: VerifierDecisionLike | null | undefined,
+  auditScope: AuditScopeLike | null | undefined,
+): ScopeRibbonModel {
+  const scope = verifierDecision?.decisionScope ?? null;
+  const isValidationPacket = scope === 'stage9_40e_validation_packet';
+
+  let scopeLabel: string | null = null;
+  if (scope) {
+    scopeLabel = isValidationPacket
+      ? 'Scope: Stage 9 40E validation packet'
+      : `Scope: ${scope.replace(/_/g, ' ')}`;
+  } else if (auditScope?.label) {
+    scopeLabel = `Scope: ${auditScope.label}`;
+  }
+
+  const boundaryLabel = isValidationPacket
+    ? 'Boundary: this is a validation-packet verdict, not a live customer-production row.'
+    : null;
+
+  const dispositionLabel = auditScope?.detail ?? null;
+
+  return { scopeLabel, boundaryLabel, dispositionLabel, isValidationPacket };
+}
+
+// ---------------------------------------------------------------------------
+// License state adapter (Audit Bench)
+//
+// `licenseStateFor` derives a persistent LICENSED / NOT LICENSED / LICENSE
+// UNKNOWN chip state from whatever real entitlement signal is available. It
+// NEVER speculatively returns LICENSED — only an explicit positive signal
+// (resolved === true / a redeemed entitlement) yields LICENSED; an explicit
+// negative yields NOT LICENSED; anything unresolved is LICENSE UNKNOWN (muted).
+// ---------------------------------------------------------------------------
+
+export type LicenseState = 'LICENSED' | 'NOT LICENSED' | 'LICENSE UNKNOWN';
+
+export interface LicenseSignal {
+  /** Explicit entitlement resolution, when the backend/account has answered. */
+  entitled?: boolean | null;
+  /** A non-empty bearer/license token counts as a positive entitlement signal. */
+  authToken?: string | null;
+  /** A redeemed invite/license key counts as a positive entitlement signal. */
+  redeemedKey?: string | null;
+}
+
+export function licenseStateFor(signal: LicenseSignal | null | undefined): LicenseState {
+  if (!signal) return 'LICENSE UNKNOWN';
+  if (signal.entitled === true) return 'LICENSED';
+  if (signal.entitled === false) return 'NOT LICENSED';
+  const token = typeof signal.authToken === 'string' ? signal.authToken.trim() : '';
+  if (token.length > 0) return 'LICENSED';
+  const key = typeof signal.redeemedKey === 'string' ? signal.redeemedKey.trim() : '';
+  if (key.length > 0) return 'LICENSED';
+  return 'LICENSE UNKNOWN';
 }
 
 function resolveChipEvidence(input: ChipEvidenceInput): {

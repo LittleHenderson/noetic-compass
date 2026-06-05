@@ -5,6 +5,7 @@ import AuditConsolePage from './AuditConsolePage';
 import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
 
 const LIVE_WORKER_HEALTH_PATH = '/api/cas-harness/live-worker/health';
+const SESSION_LIST_PATH = '/api/cas-harness/audit/sessions';
 
 function liveWorkerHealthResponse(overrides: Record<string, unknown> = {}) {
   return {
@@ -22,11 +23,19 @@ function isLiveWorkerHealthCall(input: unknown): boolean {
   return typeof input === 'string' && input.endsWith(LIVE_WORKER_HEALTH_PATH);
 }
 
+// The left rail's Recent Runs probe (GET /sessions) fires on every mount. Like
+// the live-worker health probe, it must be answered out-of-band so the ordered
+// flow mocks keep their call indices.
+function isSessionListCall(input: unknown): boolean {
+  return typeof input === 'string' && input.endsWith(SESSION_LIST_PATH);
+}
+
 /**
  * Install a global fetch that answers the Audit Console's mount-time
- * live-worker health probe separately, then delegates every other request to
- * `orderedMock`. Tests keep asserting against `orderedMock`, so its call
- * indices and counts stay unaffected by the health probe.
+ * live-worker health probe AND the left-rail Recent Runs probe separately,
+ * then delegates every other request to `orderedMock`. Tests keep asserting
+ * against `orderedMock`, so its call indices and counts stay unaffected by
+ * the two mount-time probes.
  */
 function stubFetchWithLiveWorker(
   orderedMock: ReturnType<typeof vi.fn>,
@@ -37,6 +46,12 @@ function stubFetchWithLiveWorker(
       return Promise.resolve({
         ok: true,
         json: async () => liveWorkerHealthResponse(healthOverrides),
+      });
+    }
+    if (isSessionListCall(input)) {
+      return Promise.resolve({
+        ok: true,
+        json: async () => ({ sessions: [] }),
       });
     }
     return orderedMock(input, init);
@@ -396,6 +411,12 @@ describe('AuditConsolePage', () => {
             json: async () => liveWorkerHealthResponse(),
           });
         }
+        if (isSessionListCall(input)) {
+          return Promise.resolve({
+            ok: true,
+            json: async () => ({ sessions: [] }),
+          });
+        }
         return Promise.reject(new Error(`unexpected fetch: ${String(input)}`));
       }),
     );
@@ -611,11 +632,15 @@ describe('AuditConsolePage', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
 
+    // The honest scope label is now surfaced as a persistent "Scope: …" chip
+    // (left rail) and ScopeRibbon (right rail), replacing the old inline banner.
     expect(
-      await screen.findByText(
-        'Output-only harvest · no internal activation access · verdict held for review',
-      ),
-    ).toBeInTheDocument();
+      (
+        await screen.findAllByText(
+          'Scope: Output-only harvest · no internal activation access · verdict held for review',
+        )
+      ).length,
+    ).toBeGreaterThan(0);
 
     const runCall = fetchMock.mock.calls[2];
     expect(runCall[0]).toBe('/api/cas-harness/audit/session/cas-audit-test-session/run');
@@ -788,7 +813,11 @@ describe('AuditConsolePage', () => {
 
     expect(await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' })).toBeInTheDocument();
     expect(screen.getByText('Confidence: not available')).toBeInTheDocument();
-    expect(screen.getByText('Scope: Stage 9 40E validation packet')).toBeInTheDocument();
+    // The scope label now appears in both the right-rail ScopeRibbon and the
+    // methodology explainer, so assert at least one instance is present.
+    expect(
+      screen.getAllByText('Scope: Stage 9 40E validation packet').length,
+    ).toBeGreaterThan(0);
     expect(screen.getByText('Coverage: 80 cases / 40 classes')).toBeInTheDocument();
     expect(
       screen.getByText('Flagged because the Evidence Packet is not WORM-retained yet.'),

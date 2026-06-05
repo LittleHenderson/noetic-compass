@@ -1,20 +1,26 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
-import { PageShell } from '../components/ui/PageShell';
-import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
+import { AuditSessionProgress } from '../components/audit/AuditSessionProgress';
+import type { AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
+import { AuditStageLadder } from '../components/audit/AuditStageLadder';
+import { AuditRunTranscript } from '../components/audit/AuditRunTranscript';
 import { AuditSessionSummaryCard } from '../components/audit/AuditSessionSummaryCard';
-import { AuditVerdictCard } from '../components/audit/AuditVerdictCard';
 import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer';
 import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
-import EvidencePacketVerificationPanel from '../components/audit/EvidencePacketVerificationPanel';
 import EvidencePacketFlightRecorderFaq from '../components/audit/EvidencePacketFlightRecorderFaq';
 import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
 import FleetExecutorPanel from '../components/audit/FleetExecutorPanel';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
 import { AuditPopover } from '../components/audit/AuditPopover';
+import { AuditAppFrame } from '../components/shell/AuditAppFrame';
+import { AuditRail } from '../components/shell/AuditRail';
+import { EvidenceRail } from '../components/shell/EvidenceRail';
 import {
   buildDefaultProvenanceChips,
+  isSessionCustomerSafe,
+  licenseStateFor,
+  scopeRibbonModel,
   type ProvenanceChip,
 } from '../lib/casHarnessAudit';
 import {
@@ -34,7 +40,6 @@ import {
   verifyCasHarnessFleetRun,
   verifyCasHarnessModelTarget,
   type CasHarnessAuditApiOptions,
-  type CasHarnessAuditScope,
   type CasHarnessAuditSession,
   type CasHarnessDistributedAudit,
   type CasHarnessFleetJob,
@@ -287,19 +292,6 @@ function latestLifecycleMessage(session: CasHarnessAuditSession | null): string 
   return session.lifecycle[session.lifecycle.length - 1]?.message ?? null;
 }
 
-function verdictSummaryFor(session: CasHarnessAuditSession | null): string {
-  if (!session?.verdict) {
-    return 'No verdict yet. Run a CAS audit to create an evidence-gated decision.';
-  }
-  if (session.verdict === 'ACCEPT') {
-    return 'Accepted: the verifier allowed it and required proof chips passed.';
-  }
-  if (session.verdict === 'SUPPRESS') {
-    return 'Suppressed: the verifier rejected it under the active proof gate.';
-  }
-  return 'Human review: proof is missing/failed or the verifier requested review.';
-}
-
 function commandStateFor(
   index: number,
   hasTarget: boolean,
@@ -449,28 +441,6 @@ const eyebrowStyle: CSSProperties = {
   letterSpacing: 1.2,
   textTransform: 'uppercase',
   color: ACCENT_TEAL,
-};
-
-const monikerStyle: CSSProperties = {
-  display: 'inline-flex',
-  alignItems: 'center',
-  marginTop: 14,
-  padding: '7px 10px',
-  border: '1px solid rgba(45, 212, 191, 0.30)',
-  borderRadius: 6,
-  background: 'rgba(45, 212, 191, 0.08)',
-  color: COLORS.textPrimary,
-  fontSize: 12,
-  fontWeight: 750,
-  letterSpacing: 0.6,
-  textTransform: 'uppercase',
-};
-
-const topGridStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'minmax(0, 1.15fr) minmax(300px, 0.85fr)',
-  gap: 18,
-  alignItems: 'start',
 };
 
 const liveWorkerChipBaseStyle: CSSProperties = {
@@ -663,19 +633,6 @@ const commandBadgeStyle = (state: CommandState): CSSProperties => ({
   textTransform: 'uppercase',
 });
 
-const lowerGridStyle: CSSProperties = {
-  display: 'grid',
-  gridTemplateColumns: 'minmax(0, 0.95fr) minmax(300px, 1.05fr)',
-  gap: 16,
-  marginTop: 16,
-};
-
-const singleColumnStyle: CSSProperties = {
-  display: 'grid',
-  gap: 16,
-  marginTop: 16,
-};
-
 const fleetControlPanelStyle: CSSProperties = {
   display: 'grid',
   gap: 12,
@@ -726,11 +683,6 @@ const fleetNoticeStyle: CSSProperties = {
   lineHeight: 1.45,
 };
 
-const verdictStackStyle: CSSProperties = {
-  display: 'grid',
-  gap: 16,
-};
-
 const verdictLabelStyle: CSSProperties = {
   display: 'block',
   marginBottom: 4,
@@ -741,46 +693,61 @@ const verdictLabelStyle: CSSProperties = {
   color: COLORS.textPrimary,
 };
 
-function AuditScopeBanner({ scope }: { scope: CasHarnessAuditScope }) {
-  const hasInternalAccess = scope.internalActivationAccess;
-  const accent = hasInternalAccess ? ACCENT_TEAL : '#fbbf24';
-  return (
-    <div
-      role="note"
-      aria-label="Audit scope"
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 4,
-        padding: '10px 14px',
-        borderRadius: 8,
-        border: `1px solid ${accent}33`,
-        background: `${accent}14`,
-        fontFamily: FONT_FAMILY,
-      }}
-    >
-      <span
-        style={{
-          fontSize: 11,
-          fontWeight: 600,
-          letterSpacing: 0.4,
-          textTransform: 'uppercase',
-          color: accent,
-        }}
-      >
-        Audit scope
-      </span>
-      <span style={{ fontSize: 13, color: COLORS.textPrimary, fontWeight: 500 }}>
-        {scope.label}
-      </span>
-      {scope.detail ? (
-        <span style={{ fontSize: 12, color: COLORS.textSecondary, lineHeight: 1.45 }}>
-          {scope.detail}
-        </span>
-      ) : null}
-    </div>
-  );
-}
+const workspaceCardStyle: CSSProperties = {
+  display: 'grid',
+  gap: 18,
+};
+
+const monikerStyle: CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  marginTop: 12,
+  padding: '7px 10px',
+  border: '1px solid rgba(45, 212, 191, 0.30)',
+  borderRadius: 6,
+  background: 'rgba(45, 212, 191, 0.08)',
+  color: COLORS.textPrimary,
+  fontSize: 12,
+  fontWeight: 750,
+  letterSpacing: 0.6,
+  textTransform: 'uppercase',
+};
+
+const runHeaderStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  gap: 12,
+};
+
+const runHeaderMetaStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: 10,
+  color: COLORS.textSecondary,
+  fontSize: 12.5,
+  fontFamily: THEME.fontMono,
+};
+
+const ladderCardStyle: CSSProperties = {
+  display: 'grid',
+  gap: 14,
+  padding: 16,
+  borderRadius: 10,
+  border: `1px solid ${COLORS.borderSubtle}`,
+  background: 'rgba(2, 6, 23, 0.34)',
+};
+
+const sectionEyebrowStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textSecondary,
+  fontSize: 11,
+  fontWeight: 800,
+  letterSpacing: 0.6,
+  textTransform: 'uppercase',
+};
 
 export default function AuditConsolePage() {
   const navigate = useNavigate();
@@ -812,6 +779,8 @@ export default function AuditConsolePage() {
   const [isFleetExecutorLoading, setIsFleetExecutorLoading] = useState(false);
   const [liveWorkerHealth, setLiveWorkerHealth] =
     useState<CasHarnessLiveWorkerHealth | null>(null);
+  // Bumped after a run resolves so the left-rail Recent Runs list refetches.
+  const [recentReloadKey, setRecentReloadKey] = useState(0);
 
   // Probe the live-trace worker once on mount so the run controls can show an
   // honest connection-state chip. Never block the page: if the probe fails
@@ -882,6 +851,34 @@ export default function AuditConsolePage() {
     Boolean(fleetRun?.merged_packet_trace_id && !fleetVerifierDecision) &&
     !isFleetExecutorLoading;
 
+  // --- Audit Bench derived values ---------------------------------------
+  // Customer-safe gate for the verdict chip. A clean teal ACCEPT only renders
+  // when this is true; otherwise an ACCEPT shows the amber scoped band.
+  const sessionCustomerSafe = useMemo(
+    () => isSessionCustomerSafe(session),
+    [session],
+  );
+  // Persistent scope model (validation-vs-production). Drives the left-rail
+  // scope chip and the right-rail ScopeRibbon from real verifier/scope signals.
+  const scopeModel = useMemo(
+    () => scopeRibbonModel(session?.verifier_decision ?? null, session?.audit_scope ?? null),
+    [session],
+  );
+  const railScopeChip = scopeModel.scopeLabel
+    ? { label: scopeModel.scopeLabel, validation: scopeModel.isValidationPacket }
+    : null;
+  // License state from the real entitlement signal available in this UI: a
+  // protected bearer token, or the BYOK provider key. Unresolved => UNKNOWN
+  // (never speculatively LICENSED).
+  const licenseState = useMemo(
+    () =>
+      licenseStateFor({
+        authToken: fleetAuthToken,
+        redeemedKey: byokApiKey,
+      }),
+    [fleetAuthToken, byokApiKey],
+  );
+
   const connectReferenceTarget = async () => {
     setSession(null);
     setSessionError(null);
@@ -949,6 +946,22 @@ export default function AuditConsolePage() {
     setIsAuditRunning(false);
   };
 
+  // Reset the workspace to a fresh audit (left-rail "+ New Audit" / brand mark).
+  const startNewAudit = () => {
+    disconnectTarget();
+  };
+
+  // Load a prior run from the left-rail Recent Runs list. The session already
+  // carries its verdict / chips / scope, so we hydrate state directly without a
+  // re-run. We do NOT fabricate a target; the run header reads from the session.
+  const selectRecentSession = (recent: CasHarnessAuditSession) => {
+    setSessionError(null);
+    setTargetError(null);
+    setIsTargetConnecting(false);
+    setIsAuditRunning(false);
+    setSession(recent);
+  };
+
   const runAudit = async () => {
     if (!target) return;
     setSessionError(null);
@@ -976,6 +989,8 @@ export default function AuditConsolePage() {
       );
     } finally {
       setIsAuditRunning(false);
+      // Refresh the Recent Runs list now that a session exists/resolved.
+      setRecentReloadKey((key) => key + 1);
     }
   };
 
@@ -1246,31 +1261,65 @@ export default function AuditConsolePage() {
     }
   };
 
-  return (
+  const railNode = (
+    <AuditRail
+      licenseState={licenseState}
+      scopeChip={railScopeChip}
+      activeSessionId={session?.audit_id ?? null}
+      onNewAudit={startNewAudit}
+      onSelectSession={selectRecentSession}
+      onHelp={() => navigate('/cockpit')}
+      onSettings={() => navigate('/model-config')}
+      reloadKey={recentReloadKey}
+    />
+  );
+
+  const evidenceNode = (
+    <EvidenceRail
+      verdict={session?.verdict ?? null}
+      confidence={session?.confidence ?? null}
+      customerSafe={sessionCustomerSafe}
+      chips={sessionChips}
+      verifierDecision={session?.verifier_decision ?? null}
+      auditScope={session?.audit_scope ?? null}
+      evidencePacketTraceId={session?.evidence_packet_trace_id ?? null}
+      onInspectInAtlas={session ? () => navigate('/cockpit') : undefined}
+    />
+  );
+
+  const centerNode = (
     <>
       <style>{headingWaveCss}</style>
-      <PageShell cardMaxWidth={1180}>
-      <GlassPanel intensity="regular" padding={24} ariaLabel="CAS Harness Audit Console">
-        <div style={topGridStyle}>
-          <div>
-            <p style={eyebrowStyle}>CAS Harness Audit Console</p>
-            <AuditPopover
-              briefing="Licensed users attach a model, run the audit, and receive ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips."
-              block
-              placement="bottom"
-              width={360}
-            >
-              <h1 className="cas-heading-wave" style={headingWaveStyle}>
-                Connect a model. Run a CAS audit. Return a verdict with evidence.
-              </h1>
-            </AuditPopover>
-            <AuditPopover
-              briefing="The console keeps the visible path simple. Deeper explanations open only when the reviewer asks for them."
-              placement="bottom"
-              width={330}
-            >
-              <p style={monikerStyle}>TURN YOUR BLACK BOX INTO A GLASS HOUSE</p>
-            </AuditPopover>
+      <GlassPanel intensity="regular" padding={22} ariaLabel="CAS Harness Audit Console">
+        <div style={workspaceCardStyle}>
+          <div style={runHeaderStyle}>
+            <div>
+              <p style={eyebrowStyle}>CAS Harness Audit Console</p>
+              <AuditPopover
+                briefing="Licensed users attach a model, run the audit, and receive ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips."
+                block
+                placement="bottom"
+                width={360}
+              >
+                <h1 className="cas-heading-wave" style={{ ...headingWaveStyle, fontSize: 24 }}>
+                  Connect a model. Run a CAS audit. Return a verdict with evidence.
+                </h1>
+              </AuditPopover>
+              <AuditPopover
+                briefing="The console keeps the visible path simple. Deeper explanations open only when the reviewer asks for them."
+                placement="bottom"
+                width={330}
+              >
+                <p style={monikerStyle}>TURN YOUR BLACK BOX INTO A GLASS HOUSE</p>
+              </AuditPopover>
+            </div>
+            <div style={runHeaderMetaStyle} aria-label="Active run status">
+              {session ? (
+                <span>Run in progress</span>
+              ) : (
+                <span style={{ color: COLORS.textMuted }}>No active run</span>
+              )}
+            </div>
           </div>
 
           <ModelConnectionCard
@@ -1306,293 +1355,121 @@ export default function AuditConsolePage() {
             onDisconnect={disconnectTarget}
             onRunAudit={runAudit}
           />
-        </div>
 
-        <section style={commandCenterStyle} aria-label="CAS audit command center">
-          <div style={commandHeaderStyle}>
-            <div>
-              <h2 style={commandTitleStyle}>Audit command center</h2>
-              <AuditPopover
-                briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
-                placement="bottom"
-                width={340}
-            >
-              <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
-            </AuditPopover>
-          </div>
-          <div style={commandActionsStyle}>
-            <span
-              role="status"
-              aria-label={`Live worker status: ${liveWorkerChip.label}`}
-              title={liveWorkerChip.label}
-              style={{
-                ...liveWorkerChipBaseStyle,
-                border: `1px solid ${liveWorkerChip.accent}59`,
-                background: `${liveWorkerChip.accent}1f`,
-                color: liveWorkerChip.accent,
-              }}
-            >
-              <span style={liveWorkerDotStyle(liveWorkerChip.accent)} aria-hidden="true" />
-              {liveWorkerChip.label}
-            </span>
-            <button
-              type="button"
-              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-              onClick={loadStage940EPacketTarget}
-              disabled={isAuditRunning || isTargetConnecting}
-            >
-              Load 20B validation packet
-            </button>
-            <button
-              type="button"
-              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-              onClick={loadS7F28PacketTarget}
-              disabled={isAuditRunning || isTargetConnecting}
-            >
-              Load 20B review packet
-            </button>
-            <input
-              type="password"
-              aria-label="Bring your own provider API key (optional)"
-              autoComplete="off"
-              spellCheck={false}
-              value={byokApiKey}
-              onChange={(event) => setByokApiKey(event.target.value)}
-              placeholder="Your provider API key (optional, sent once, never stored)"
-              disabled={isAuditRunning || isTargetConnecting}
-              style={{
-                flex: '1 1 240px',
-                minWidth: 220,
-                padding: '8px 12px',
-                borderRadius: 6,
-                border: `1px solid ${COLORS.borderStrong}`,
-                background: COLORS.bgPanel,
-                color: COLORS.textPrimary,
-                fontFamily: THEME.fontMono,
-                fontSize: 12,
-              }}
-            />
-            <button
-              type="button"
-              style={commandActionStyle(commandButtonEnabled)}
-              onClick={runPrimaryCommand}
-              disabled={!commandButtonEnabled}
-            >
-              {commandButtonLabel}
-            </button>
-          </div>
-        </div>
-          <section style={flowStyle} aria-label="Audit workflow">
-            {AUDIT_STEPS.map((step, index) => {
-              const state = commandStateFor(
-                index,
-                isConfigured,
-                session,
-                isAuditRunning,
-                sessionError,
-              );
-              return (
-                <article key={step.label} style={stepStyle(state)}>
-                  <AuditPopover briefing={step.detail} block placement="bottom">
-                    <span style={stepNumberStyle}>{index + 1}</span>
-                    <h2 style={stepLabelStyle}>{step.command}</h2>
-                    <p style={verdictLabelStyle}>{step.label}</p>
-                    <span style={commandBadgeStyle(state)}>
-                      {commandStatusLabel(state)}
-                    </span>
-                  </AuditPopover>
-                </article>
-              );
-            })}
-          </section>
-        </section>
-
-        <div style={singleColumnStyle}>
-          <EnterpriseScalePlanCard
-            plan={enterprisePlan}
-            selectedSize={enterprisePlanSize}
-            isLoading={isEnterprisePlanLoading}
-            error={enterprisePlanError}
-            onSelectSize={(size) => {
-              void loadEnterprisePlan(size);
-            }}
-          />
-        </div>
-
-        <div style={singleColumnStyle}>
-          <DistributedAuditRunPanel
-            audit={distributedAudit}
-            isLoading={isDistributedAuditLoading}
-            error={distributedAuditError}
-            onCreateRun={() => {
-              void createDistributedRun();
-            }}
-            onDispatchRun={() => {
-              void dispatchDistributedRun();
-            }}
-            onMergeRun={() => {
-              void mergeDistributedRun();
-            }}
-          />
-        </div>
-
-        <div style={singleColumnStyle}>
-          <FleetExecutorPanel
-            registeredWorkers={fleetRegisteredWorkers}
-            leasedJobs={fleetRun?.leased_jobs ?? 0}
-            staleWorkers={fleetRun?.stale_workers.length ?? 0}
-            completedFragments={fleetRun?.completed_fragments ?? 0}
-            totalJobs={fleetTotalJobs}
-            mergedPacketStatus={mergedPacketStatusFor(fleetRun)}
-            verifierGateStatus={fleetRun?.verifier_gate_status ?? 'not_prepared'}
-            readiness={fleetRun?.readiness ?? null}
-          />
-          <section style={fleetControlPanelStyle} aria-label="Fleet executor controls">
-            <div style={fleetControlHeaderStyle}>
+          <section style={commandCenterStyle} aria-label="CAS audit command center">
+            <div style={commandHeaderStyle}>
               <div>
-                <h2 style={fleetControlTitleStyle}>Fleet executor controls</h2>
-                <p style={fleetNoticeStyle}>
-                  These controls exercise the real fleet API path. Fleet merge
-                  stays blocked until a leased job returns an Evidence Packet
-                  fragment.
-                </p>
-                <label htmlFor="fleet-auth-token" style={verdictLabelStyle}>
-                  Protected API token
-                </label>
+                <h2 style={commandTitleStyle}>Audit command center</h2>
+                <AuditPopover
+                  briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
+                  placement="bottom"
+                  width={340}
+                >
+                  <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
+                </AuditPopover>
+              </div>
+              <div style={commandActionsStyle}>
+                <span
+                  role="status"
+                  aria-label={`Live worker status: ${liveWorkerChip.label}`}
+                  title={liveWorkerChip.label}
+                  style={{
+                    ...liveWorkerChipBaseStyle,
+                    border: `1px solid ${liveWorkerChip.accent}59`,
+                    background: `${liveWorkerChip.accent}1f`,
+                    color: liveWorkerChip.accent,
+                  }}
+                >
+                  <span style={liveWorkerDotStyle(liveWorkerChip.accent)} aria-hidden="true" />
+                  {liveWorkerChip.label}
+                </span>
+                <button
+                  type="button"
+                  style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+                  onClick={loadStage940EPacketTarget}
+                  disabled={isAuditRunning || isTargetConnecting}
+                >
+                  Load 20B validation packet
+                </button>
+                <button
+                  type="button"
+                  style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+                  onClick={loadS7F28PacketTarget}
+                  disabled={isAuditRunning || isTargetConnecting}
+                >
+                  Load 20B review packet
+                </button>
                 <input
-                  id="fleet-auth-token"
                   type="password"
+                  aria-label="Bring your own provider API key (optional)"
                   autoComplete="off"
                   spellCheck={false}
-                  value={fleetAuthToken}
-                  onChange={(event) => setFleetAuthToken(event.target.value)}
-                  placeholder="Optional bearer token"
-                  style={fleetAuthInputStyle}
+                  value={byokApiKey}
+                  onChange={(event) => setByokApiKey(event.target.value)}
+                  placeholder="Your provider API key (optional, sent once, never stored)"
+                  disabled={isAuditRunning || isTargetConnecting}
+                  style={{
+                    flex: '1 1 240px',
+                    minWidth: 220,
+                    padding: '8px 12px',
+                    borderRadius: 6,
+                    border: `1px solid ${COLORS.borderStrong}`,
+                    background: COLORS.bgPanel,
+                    color: COLORS.textPrimary,
+                    fontFamily: THEME.fontMono,
+                    fontSize: 12,
+                  }}
                 />
-              </div>
-              <div style={fleetButtonRowStyle}>
                 <button
                   type="button"
-                  style={commandActionStyle(canPrepareFleet)}
-                  disabled={!canPrepareFleet}
-                  onClick={() => {
-                    void prepareFleet();
-                  }}
+                  style={commandActionStyle(commandButtonEnabled)}
+                  onClick={runPrimaryCommand}
+                  disabled={!commandButtonEnabled}
                 >
-                  Prepare fleet
-                </button>
-                <button
-                  type="button"
-                  style={commandActionStyle(canRegisterFleetWorker)}
-                  disabled={!canRegisterFleetWorker}
-                  onClick={() => {
-                    void registerDemoFleetWorker();
-                  }}
-                >
-                  Register demo worker
-                </button>
-                <button
-                  type="button"
-                  style={commandActionStyle(canLeaseFleetJob)}
-                  disabled={!canLeaseFleetJob}
-                  onClick={() => {
-                    void leaseOneFleetJob();
-                  }}
-                >
-                  Lease one job
-                </button>
-                <button
-                  type="button"
-                  style={commandActionStyle(canSubmitFleetReceipt)}
-                  disabled={!canSubmitFleetReceipt}
-                  onClick={() => {
-                    void submitOneFleetReceipt();
-                  }}
-                >
-                  Submit one receipt
-                </button>
-                <button
-                  type="button"
-                  style={commandActionStyle(canMergeFleet)}
-                  disabled={!canMergeFleet}
-                  onClick={() => {
-                    void mergeFleet();
-                  }}
-                >
-                  Merge fleet
-                </button>
-                <button
-                  type="button"
-                  style={commandActionStyle(canRunFleetVerifier)}
-                  disabled={!canRunFleetVerifier}
-                  onClick={() => {
-                    void runFleetVerifier();
-                  }}
-                >
-                  Run fleet verifier
+                  {commandButtonLabel}
                 </button>
               </div>
             </div>
-            {isFleetExecutorLoading ? (
-              <p role="status" style={fleetNoticeStyle}>
-                Fleet executor request in flight...
-              </p>
-            ) : null}
-            {fleetExecutorError ? (
-              <p role="status" style={{ ...fleetNoticeStyle, color: '#fecaca' }}>
-                {fleetExecutorError}
-              </p>
-            ) : null}
-            {fleetRun?.merged_packet_trace_id ? (
-              <p role="status" style={fleetNoticeStyle}>
-                Merged Evidence Packet: {fleetRun.merged_packet_trace_id}
-              </p>
-            ) : null}
-            {fleetVerifierDecision ? (
-              <div
-                data-testid="fleet-verifier-decision"
-                style={{
-                  display: 'grid',
-                  gap: 8,
-                  padding: 12,
-                  borderRadius: 8,
-                  border: '1px solid rgba(45, 212, 191, 0.28)',
-                  background: 'rgba(15, 23, 42, 0.54)',
-                }}
-              >
-                <p style={{ ...fleetNoticeStyle, color: COLORS.textPrimary, fontWeight: 800 }}>
-                  Fleet verifier decision:{' '}
-                  {fleetVerifierDecision.verdict.replace(/_/g, ' ')}
-                </p>
-                <p style={fleetNoticeStyle}>
-                  Confidence:{' '}
-                  {fleetVerifierDecision.confidence === null
-                    ? 'not available'
-                    : `${Math.round(fleetVerifierDecision.confidence * 100)}%`}
-                  {' '}· Proof chips: {fleetVerifierDecision.proof_chip_gate}
-                </p>
-                <p style={fleetNoticeStyle}>{fleetVerifierDecision.reason}</p>
-                {fleetVerifierDecision.blockers.length > 0 ? (
-                  <p style={fleetNoticeStyle}>
-                    Blocker: {fleetVerifierDecision.blockers.join(' ')}
-                  </p>
-                ) : null}
-              </div>
-            ) : null}
-            {fleetRun ? (
-              <p style={fleetNoticeStyle}>
-                Fleet merge reason: {fleetRun.merge_reason}
-              </p>
-            ) : null}
+            <section style={flowStyle} aria-label="Audit workflow">
+              {AUDIT_STEPS.map((step, index) => {
+                const state = commandStateFor(
+                  index,
+                  isConfigured,
+                  session,
+                  isAuditRunning,
+                  sessionError,
+                );
+                return (
+                  <article key={step.label} style={stepStyle(state)}>
+                    <AuditPopover briefing={step.detail} block placement="bottom">
+                      <span style={stepNumberStyle}>{index + 1}</span>
+                      <h2 style={stepLabelStyle}>{step.command}</h2>
+                      <p style={verdictLabelStyle}>{step.label}</p>
+                      <span style={commandBadgeStyle(state)}>
+                        {commandStatusLabel(state)}
+                      </span>
+                    </AuditPopover>
+                  </article>
+                );
+              })}
+            </section>
           </section>
-        </div>
 
-        <div style={session ? lowerGridStyle : singleColumnStyle}>
+          <section style={ladderCardStyle} aria-label="Audit progress">
+            <p style={sectionEyebrowStyle}>Audit progress</p>
+            <AuditStageLadder
+              status={lifecycleStatus}
+              verdict={session?.verdict ?? null}
+            />
+            <AuditRunTranscript session={session} />
+          </section>
+
           <AuditSessionProgress
             status={lifecycleStatus}
             detail={progressDetail(lifecycleStatus, isConfigured)}
             errorMessage={activeError}
           />
+
           {session ? (
             <AuditSessionSummaryCard
               auditId={session.audit_id}
@@ -1606,43 +1483,202 @@ export default function AuditConsolePage() {
               updatedAt={session.updated_at}
             />
           ) : null}
-          {session?.audit_scope ? (
-            <AuditScopeBanner scope={session.audit_scope} />
-          ) : null}
-        </div>
 
-        <div style={singleColumnStyle}>
-          <div style={verdictStackStyle}>
-            <AuditVerdictCard
+          {showVerdictExplainer ? (
+            <AuditVerdictExplainer
               verdict={session?.verdict ?? null}
               confidence={session?.confidence ?? null}
-              summary={session?.verdict ? verdictSummaryFor(session) : undefined}
-              evidencePacket={
-                session?.evidence_packet_trace_id
-                  ? { packetId: session.evidence_packet_trace_id }
-                  : undefined
-              }
-              onInspectInAtlas={session ? () => navigate('/cockpit') : undefined}
+              chips={sessionChips}
+              verifierDecision={session?.verifier_decision ?? null}
+              lifecycleMessage={latestLifecycleMessage(session)}
             />
-            {showVerdictExplainer ? (
-              <AuditVerdictExplainer
-                verdict={session?.verdict ?? null}
-                confidence={session?.confidence ?? null}
-                chips={sessionChips}
-                verifierDecision={session?.verifier_decision ?? null}
-                lifecycleMessage={latestLifecycleMessage(session)}
+          ) : null}
+
+          {session?.evidence_packet_trace_id ? <EvidencePacketFlightRecorderFaq /> : null}
+
+          <div style={{ display: 'grid', gap: 16 }}>
+            <EnterpriseScalePlanCard
+              plan={enterprisePlan}
+              selectedSize={enterprisePlanSize}
+              isLoading={isEnterprisePlanLoading}
+              error={enterprisePlanError}
+              onSelectSize={(size) => {
+                void loadEnterprisePlan(size);
+              }}
+            />
+            <DistributedAuditRunPanel
+              audit={distributedAudit}
+              isLoading={isDistributedAuditLoading}
+              error={distributedAuditError}
+              onCreateRun={() => {
+                void createDistributedRun();
+              }}
+              onDispatchRun={() => {
+                void dispatchDistributedRun();
+              }}
+              onMergeRun={() => {
+                void mergeDistributedRun();
+              }}
+            />
+            <FleetExecutorPanel
+                registeredWorkers={fleetRegisteredWorkers}
+                leasedJobs={fleetRun?.leased_jobs ?? 0}
+                staleWorkers={fleetRun?.stale_workers.length ?? 0}
+                completedFragments={fleetRun?.completed_fragments ?? 0}
+                totalJobs={fleetTotalJobs}
+                mergedPacketStatus={mergedPacketStatusFor(fleetRun)}
+                verifierGateStatus={fleetRun?.verifier_gate_status ?? 'not_prepared'}
+                readiness={fleetRun?.readiness ?? null}
               />
-            ) : null}
-            {session?.evidence_packet_trace_id ? (
-              <>
-                <EvidencePacketVerificationPanel traceId={session.evidence_packet_trace_id} />
-                <EvidencePacketFlightRecorderFaq />
-              </>
-            ) : null}
+              <section style={fleetControlPanelStyle} aria-label="Fleet executor controls">
+                <div style={fleetControlHeaderStyle}>
+                  <div>
+                    <h2 style={fleetControlTitleStyle}>Fleet executor controls</h2>
+                    <p style={fleetNoticeStyle}>
+                      These controls exercise the real fleet API path. Fleet merge
+                      stays blocked until a leased job returns an Evidence Packet
+                      fragment.
+                    </p>
+                    <label htmlFor="fleet-auth-token" style={verdictLabelStyle}>
+                      Protected API token
+                    </label>
+                    <input
+                      id="fleet-auth-token"
+                      type="password"
+                      autoComplete="off"
+                      spellCheck={false}
+                      value={fleetAuthToken}
+                      onChange={(event) => setFleetAuthToken(event.target.value)}
+                      placeholder="Optional bearer token"
+                      style={fleetAuthInputStyle}
+                    />
+                  </div>
+                  <div style={fleetButtonRowStyle}>
+                    <button
+                      type="button"
+                      style={commandActionStyle(canPrepareFleet)}
+                      disabled={!canPrepareFleet}
+                      onClick={() => {
+                        void prepareFleet();
+                      }}
+                    >
+                      Prepare fleet
+                    </button>
+                    <button
+                      type="button"
+                      style={commandActionStyle(canRegisterFleetWorker)}
+                      disabled={!canRegisterFleetWorker}
+                      onClick={() => {
+                        void registerDemoFleetWorker();
+                      }}
+                    >
+                      Register demo worker
+                    </button>
+                    <button
+                      type="button"
+                      style={commandActionStyle(canLeaseFleetJob)}
+                      disabled={!canLeaseFleetJob}
+                      onClick={() => {
+                        void leaseOneFleetJob();
+                      }}
+                    >
+                      Lease one job
+                    </button>
+                    <button
+                      type="button"
+                      style={commandActionStyle(canSubmitFleetReceipt)}
+                      disabled={!canSubmitFleetReceipt}
+                      onClick={() => {
+                        void submitOneFleetReceipt();
+                      }}
+                    >
+                      Submit one receipt
+                    </button>
+                    <button
+                      type="button"
+                      style={commandActionStyle(canMergeFleet)}
+                      disabled={!canMergeFleet}
+                      onClick={() => {
+                        void mergeFleet();
+                      }}
+                    >
+                      Merge fleet
+                    </button>
+                    <button
+                      type="button"
+                      style={commandActionStyle(canRunFleetVerifier)}
+                      disabled={!canRunFleetVerifier}
+                      onClick={() => {
+                        void runFleetVerifier();
+                      }}
+                    >
+                      Run fleet verifier
+                    </button>
+                  </div>
+                </div>
+                {isFleetExecutorLoading ? (
+                  <p role="status" style={fleetNoticeStyle}>
+                    Fleet executor request in flight...
+                  </p>
+                ) : null}
+                {fleetExecutorError ? (
+                  <p role="status" style={{ ...fleetNoticeStyle, color: '#fecaca' }}>
+                    {fleetExecutorError}
+                  </p>
+                ) : null}
+                {fleetRun?.merged_packet_trace_id ? (
+                  <p role="status" style={fleetNoticeStyle}>
+                    Merged Evidence Packet: {fleetRun.merged_packet_trace_id}
+                  </p>
+                ) : null}
+                {fleetVerifierDecision ? (
+                  <div
+                    data-testid="fleet-verifier-decision"
+                    style={{
+                      display: 'grid',
+                      gap: 8,
+                      padding: 12,
+                      borderRadius: 8,
+                      border: '1px solid rgba(45, 212, 191, 0.28)',
+                      background: 'rgba(15, 23, 42, 0.54)',
+                    }}
+                  >
+                    <p style={{ ...fleetNoticeStyle, color: COLORS.textPrimary, fontWeight: 800 }}>
+                      Fleet verifier decision:{' '}
+                      {fleetVerifierDecision.verdict.replace(/_/g, ' ')}
+                    </p>
+                    <p style={fleetNoticeStyle}>
+                      Confidence:{' '}
+                      {fleetVerifierDecision.confidence === null
+                        ? 'not available'
+                        : `${Math.round(fleetVerifierDecision.confidence * 100)}%`}
+                      {' '}· Proof chips: {fleetVerifierDecision.proof_chip_gate}
+                    </p>
+                    <p style={fleetNoticeStyle}>{fleetVerifierDecision.reason}</p>
+                    {fleetVerifierDecision.blockers.length > 0 ? (
+                      <p style={fleetNoticeStyle}>
+                        Blocker: {fleetVerifierDecision.blockers.join(' ')}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+                {fleetRun ? (
+                  <p style={fleetNoticeStyle}>
+                    Fleet merge reason: {fleetRun.merge_reason}
+                  </p>
+                ) : null}
+              </section>
           </div>
         </div>
       </GlassPanel>
-      </PageShell>
     </>
+  );
+
+  return (
+    <AuditAppFrame
+      rail={railNode}
+      center={centerNode}
+      evidence={evidenceNode}
+    />
   );
 }

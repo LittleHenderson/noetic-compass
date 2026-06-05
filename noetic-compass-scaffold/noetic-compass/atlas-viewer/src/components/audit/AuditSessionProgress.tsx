@@ -24,13 +24,13 @@ export interface AuditSessionProgressProps {
   className?: string;
 }
 
-interface ProgressStep {
+export interface ProgressStep {
   id: AuditLifecycleStatus;
   label: string;
   description: string;
 }
 
-const progressSteps: ProgressStep[] = [
+export const progressSteps: ProgressStep[] = [
   {
     id: 'draft',
     label: 'Draft',
@@ -63,13 +63,13 @@ const progressSteps: ProgressStep[] = [
   },
 ];
 
-const failedStep: ProgressStep = {
+export const failedStep: ProgressStep = {
   id: 'failed',
   label: 'Failed',
   description: 'The audit stopped before an evidence-gated verdict was produced.',
 };
 
-const statusCopy: Record<AuditLifecycleStatus, { headline: string; body: string }> = {
+export const statusCopy: Record<AuditLifecycleStatus, { headline: string; body: string }> = {
   draft: {
     headline: 'Audit not started',
     body: 'Connect the model and choose the modules before running CAS.',
@@ -100,7 +100,7 @@ const statusCopy: Record<AuditLifecycleStatus, { headline: string; body: string 
   },
 };
 
-const statusOrder: Record<AuditLifecycleStatus, number> = {
+export const statusOrder: Record<AuditLifecycleStatus, number> = {
   draft: 0,
   validating: 1,
   running: 2,
@@ -261,7 +261,7 @@ const stepLabelStyle: CSSProperties = {
   lineHeight: 1.25,
 };
 
-function stepState(
+export function stepState(
   step: AuditLifecycleStatus,
   current: AuditLifecycleStatus,
 ): 'done' | 'active' | 'pending' | 'failed' {

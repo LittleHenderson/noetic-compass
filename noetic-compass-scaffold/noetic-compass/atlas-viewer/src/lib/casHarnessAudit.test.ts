@@ -4,8 +4,13 @@ import {
   buildDefaultProvenanceChips,
   formatAuditConfidence,
   isAuditResultCustomerSafe,
+  isSessionCustomerSafe,
+  licenseStateFor,
+  lifecycleToTranscript,
   normalizeAuditConfidence,
   normalizeAuditVerdict,
+  scopeRibbonModel,
+  summaryFromSession,
   validateAuditConfidence,
   verdictCopy,
   type AuditSessionSummary,
@@ -240,5 +245,150 @@ describe('isAuditResultCustomerSafe', () => {
         }),
       }),
     ).toBe(true);
+  });
+});
+
+describe('lifecycleToTranscript', () => {
+  it('maps lifecycle entries to plain sentences without JSON.stringify', () => {
+    const rows = lifecycleToTranscript({
+      status: 'RUNNING',
+      lifecycle: [
+        { status: 'VALIDATING', message: 'Validating model access.', timestamp: '2026-06-04T12:04:00Z' },
+        { status: 'RUNNING', message: 'Running CAS modules.', timestamp: '2026-06-04T12:05:00Z' },
+      ],
+    });
+
+    expect(rows).toHaveLength(2);
+    expect(rows[0].text).toBe('Validating model access.');
+    expect(rows[1].text).toBe('Running CAS modules.');
+    // No row text is ever a JSON dump of the entry.
+    rows.forEach((row) => {
+      expect(row.text).not.toContain('{"');
+      expect(row.text).not.toContain('"status"');
+    });
+  });
+
+  it('falls back to a status sentence when an entry has no message', () => {
+    const rows = lifecycleToTranscript({
+      status: 'EVIDENCE_PENDING',
+      lifecycle: [{ status: 'EVIDENCE_PENDING', message: null, timestamp: null }],
+    });
+    expect(rows[0].text).toBe('Building the evidence packet (audit trail and anchor)…');
+    expect(rows[0].time).toBe('—');
+  });
+
+  it('marks the last entry active and earlier entries done', () => {
+    const rows = lifecycleToTranscript({
+      status: 'RUNNING',
+      lifecycle: [
+        { status: 'VALIDATING', message: 'a', timestamp: null },
+        { status: 'RUNNING', message: 'b', timestamp: null },
+      ],
+    });
+    expect(rows[0].state).toBe('done');
+    expect(rows[1].state).toBe('active');
+  });
+
+  it('returns an empty list for a null session or empty lifecycle', () => {
+    expect(lifecycleToTranscript(null)).toEqual([]);
+    expect(lifecycleToTranscript({ status: 'DRAFT', lifecycle: [] })).toEqual([]);
+  });
+});
+
+describe('licenseStateFor', () => {
+  it('returns LICENSE UNKNOWN when no signal resolves entitlement', () => {
+    expect(licenseStateFor(null)).toBe('LICENSE UNKNOWN');
+    expect(licenseStateFor({})).toBe('LICENSE UNKNOWN');
+    expect(licenseStateFor({ authToken: '   ' })).toBe('LICENSE UNKNOWN');
+  });
+
+  it('never speculatively reports LICENSED', () => {
+    // No positive signal at all -> UNKNOWN, not LICENSED.
+    expect(licenseStateFor({ entitled: null })).toBe('LICENSE UNKNOWN');
+  });
+
+  it('reads explicit and token-based positive signals as LICENSED', () => {
+    expect(licenseStateFor({ entitled: true })).toBe('LICENSED');
+    expect(licenseStateFor({ authToken: 'bearer-xyz' })).toBe('LICENSED');
+    expect(licenseStateFor({ redeemedKey: 'invite-123' })).toBe('LICENSED');
+  });
+
+  it('reads an explicit negative entitlement as NOT LICENSED', () => {
+    expect(licenseStateFor({ entitled: false })).toBe('NOT LICENSED');
+  });
+});
+
+describe('scopeRibbonModel', () => {
+  it('promotes the validation-packet scope and boundary strings verbatim', () => {
+    const model = scopeRibbonModel({ decisionScope: 'stage9_40e_validation_packet' }, null);
+    expect(model.scopeLabel).toBe('Scope: Stage 9 40E validation packet');
+    expect(model.boundaryLabel).toBe(
+      'Boundary: this is a validation-packet verdict, not a live customer-production row.',
+    );
+    expect(model.isValidationPacket).toBe(true);
+  });
+
+  it('has no boundary caveat for a non-validation scope', () => {
+    const model = scopeRibbonModel({ decisionScope: 'live_customer_production' }, null);
+    expect(model.scopeLabel).toBe('Scope: live customer production');
+    expect(model.boundaryLabel).toBeNull();
+    expect(model.isValidationPacket).toBe(false);
+  });
+
+  it('falls back to audit_scope.label when no verifier scope is present', () => {
+    const model = scopeRibbonModel(null, { label: 'Reference smoke', detail: 'demo' });
+    expect(model.scopeLabel).toBe('Scope: Reference smoke');
+    expect(model.dispositionLabel).toBe('demo');
+  });
+});
+
+describe('summaryFromSession / isSessionCustomerSafe', () => {
+  const chips = buildDefaultProvenanceChips({
+    modelProof: true,
+    casReadout: true,
+    causalProof: true,
+    controlProof: true,
+    outputProof: true,
+    packetProof: true,
+  });
+
+  it('returns null when the session has no verdict or confidence', () => {
+    expect(summaryFromSession({ verdict: null, confidence: null })).toBeNull();
+    expect(summaryFromSession(null)).toBeNull();
+  });
+
+  it('builds a summary with runtimeProof defaulting to null', () => {
+    const summary = summaryFromSession({
+      verdict: 'ACCEPT',
+      confidence: 0.84,
+      provenance_chips: chips,
+      model_id: 'EleutherAI/pythia-160m',
+    });
+    expect(summary?.runtimeProof).toBeNull();
+    expect(summary?.verdict).toBe('ACCEPT');
+  });
+
+  it('treats a verified model_proof as customer-safe under the null-runtime fallback', () => {
+    expect(
+      isSessionCustomerSafe({ verdict: 'ACCEPT', confidence: 0.84, provenance_chips: chips }),
+    ).toBe(true);
+  });
+
+  it('is not customer-safe when ACCEPT chips are not all usable', () => {
+    const scopedChips = buildDefaultProvenanceChips({
+      modelProof: true,
+      casReadout: true,
+      causalProof: { status: 'unavailable' },
+      controlProof: { status: 'missing' },
+      outputProof: true,
+      packetProof: { status: 'missing' },
+    });
+    expect(
+      isSessionCustomerSafe({ verdict: 'ACCEPT', confidence: 0.7, provenance_chips: scopedChips }),
+    ).toBe(false);
+  });
+
+  it('is not customer-safe when there is no session', () => {
+    expect(isSessionCustomerSafe(null)).toBe(false);
   });
 });

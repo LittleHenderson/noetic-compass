@@ -36,3 +36,41 @@ button {
   background: rgba(59, 130, 246, 0.35);
   color: #f8fafc;
 }
+
+/*
+ * Audit Bench brand + progress motion.
+ *
+ * `tks-breathe` is ported verbatim from the dashboard 10-dot Tree-of-Life mark
+ * (dashboard/src/index.css). It is the ONLY motion the brand mark performs:
+ * a restrained opacity 0.65 -> 1 swell with a soft drop-shadow. No comet sweep,
+ * no entrance flash, no per-dot color cycle. The mark breathes; it does not
+ * perform.
+ *
+ * `cas-step-breathe` is the stage-ladder heartbeat. It shares the mark's 2.5s
+ * tempo so "currently happening" and the brand pulse read as one motion
+ * language. Only the single active node/row uses it.
+ *
+ * Both are gated behind prefers-reduced-motion: under reduced motion the mark
+ * dots sit static at full opacity and the active node holds a steady ring.
+ */
+@keyframes tks-breathe {
+  0%   { opacity: 0.65; filter: drop-shadow(0 0 2px currentColor); }
+  100% { opacity: 1;    filter: drop-shadow(0 0 6px currentColor); }
+}
+
+@keyframes cas-step-breathe {
+  0%   { opacity: 0.72; }
+  100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tks-breathe-dot {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  .cas-step-breathe {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+}

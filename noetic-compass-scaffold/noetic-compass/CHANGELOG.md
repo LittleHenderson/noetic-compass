@@ -1,5 +1,50 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness "Audit Bench" UI redesign — first pass (branded 3-zone shell + stage ladder + honest evidence rail) (Jun 4, 2026)
+
+**Headline.** First pass of the Audit Console redesign (`launch/ui-audit-bench`), per
+`docs/working/cas_harness_ui_redesign_plan_20260604.md` §6 steps 1–4. Replaces the centered
+single-column card flow on `/audit-console` with a full-width 3-zone app frame (left rail / center
+workspace / right evidence rail), ports the 10-dot Tree-of-Life brand mark, splits progress into a
+horizontal stage ladder + plain-English transcript, and consolidates the decision surface into an
+evidence rail gated by the existing `isAuditResultCustomerSafe` honesty logic. No API contract
+changes; every field name and claim word is preserved verbatim. Steps 5–7 (composer consolidation,
+moving the enterprise/distributed/fleet machinery off-screen, methodology drawer) are deliberately
+deferred.
+
+- **Foundations (additive).** `components/brand/TreeOfLifeMark.tsx` ports the 10-dot SVG + staggered
+  `tks-breathe` from the dashboard `CompilerPage` (props `size`/`animated`; breathing only — opacity
+  0.65→1, top→bottom stagger, `prefers-reduced-motion`-safe via a `.tks-breathe-dot` guard).
+  `components/ui/Disclosure.tsx` is a shared controlled/uncontrolled collapse primitive.
+  `lib/designTokens.ts` gains `ACCENT_ROSE`, `BRAND_DOT_TEAL`, `TONE_TINT`, `VERDICT_TONE`,
+  `STAGE_TONE`. `styles/global.css` adds `@keyframes tks-breathe` + `@keyframes cas-step-breathe`,
+  both behind `prefers-reduced-motion`.
+- **Shell.** `components/shell/AuditAppFrame.tsx` (3-zone CSS-grid, ~240px / fluid / ~360px sticky;
+  collapses to one column < 1100px) + `components/shell/AuditRail.tsx` (brand mark + `CAS HARNESS`
+  wordmark, `+ New Audit`, Recent Runs via the existing `GET /sessions`, persistent scope + license
+  chips, help/settings). The center wraps the existing page body.
+- **Progress.** `AuditSessionProgress` now exports `progressSteps` / `statusCopy` / `statusOrder` /
+  `failedStep` / `stepState` (component + test kept green). `components/audit/AuditStageLadder.tsx`
+  maps the unchanged lifecycle onto six public nodes (Queued → Validating → Running → Verifying →
+  Anchoring → Completed) with the `runner_pending` interrupt pill, FLAG → "Needs human review", and
+  failed → rose terminal. `components/audit/AuditRunTranscript.tsx` renders an append-only
+  plain-English log from `session.lifecycle[]` via a new pure `lifecycleToTranscript(session)` in
+  `lib/casHarnessAudit.ts` — never `JSON.stringify`.
+- **Evidence rail.** `components/shell/EvidenceRail.tsx` = verdict chip + `ScopeRibbon` +
+  `ProofChipRail` + compact packet panel. New `AuditVerdictChip` renders a clean teal ACCEPT ONLY
+  when `isAuditResultCustomerSafe(summary) === true`; otherwise it shows the word `ACCEPT` with a
+  persistent amber "scoped — not a customer-production ACCEPT" band (mirrors the Stage 9 40E rule).
+  `ScopeRibbon` promotes the verbatim verifier scope/boundary strings; `ProofChipRail` renders the
+  literal status word for missing/unavailable/failed (never teal); `LicenseChip` returns
+  `LICENSE UNKNOWN` when entitlement is unresolvable (never speculatively `LICENSED`).
+- **Pure adapters** added to `lib/casHarnessAudit.ts`: `lifecycleToTranscript`, `licenseStateFor`,
+  `scopeRibbonModel`, `summaryFromSession`, `isSessionCustomerSafe` — all structurally typed to avoid
+  importing the API session type.
+- **Tests.** New: `AuditStageLadder.test.tsx`, `AuditRunTranscript.test.tsx` (asserts no JSON dump),
+  `ScopeRibbon.test.tsx`, `LicenseChip.test.tsx`, `AuditVerdictChip.test.tsx` (ACCEPT scoped-band
+  gate), plus lib-helper tests in `casHarnessAudit.test.ts`. `AuditConsolePage.test.tsx` updated for
+  the new layout (rail `/sessions` probe routed out-of-band; scope/trace now multi-surface).
+
 ## PAID-user security spine — account half: durable accounts + invite redemption + identity login (Jun 4, 2026)
 
 **Headline.** First PR of the PAID-user security spine (`launch/paid-security-spine`). Adds a real
