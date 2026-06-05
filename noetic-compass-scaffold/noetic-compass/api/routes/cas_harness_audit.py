@@ -1572,6 +1572,16 @@ async def run_audit_session(
     """
     _require_locked_tks_definitions()
     owner_sub, owner_api_key = _caller_identity(request)
+    # TODO(tenant-iso): call record_evidence_ownership here once the account-mode audit-run owner is
+    # threaded through. The evidence trace_id is produced just below by attach_runner_evidence(...)
+    # (live_result.trace_id / api_result.trace_id), which is the natural moment to assert tenant
+    # ownership of that trace. It is DEFERRED, not wired, on purpose: these audit-session routes are
+    # on the auth middleware's PUBLIC_PATH allowlist, so the middleware never decodes their token and
+    # never sets request.state.tenant_id/account_id; _caller_identity yields only (sub, api_key), not
+    # a server-derived (tenant_id, account_id). Guessing a tenant here would be a security-critical
+    # write keyed on an unverified identity. Wire this (guarded by `if settings.accounts_enabled:`)
+    # only after these routes carry a real account-mode tenant -- i.e. when _caller_identity is
+    # upgraded to the account/tenant model it already flags as a Phase-1 stopgap.
     existing = get_session(audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key)
     if existing is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
