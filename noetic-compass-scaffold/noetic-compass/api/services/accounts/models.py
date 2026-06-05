@@ -23,6 +23,7 @@ a billing entitlement.
 
 from __future__ import annotations
 
+import hashlib
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Literal, Mapping, Optional
@@ -53,6 +54,15 @@ DEFAULT_INVITE_ROLE: Role = "member"
 # Account lifecycle. ``active`` may log in; ``disabled`` is locked out at login (the disabled-user
 # lockout the spine acceptance gate requires).
 AccountStatus = Literal["active", "disabled"]
+
+
+def invite_code_hash(code: str) -> str:
+    """Stable digest for an invite code.
+
+    The invite code is a bearer credential while it is unredeemed. Store records keep only this
+    digest, never the raw code, so a database read does not reveal usable invite credentials.
+    """
+    return hashlib.sha256(f"invite:{code}".encode("utf-8")).hexdigest()
 
 
 def _utc_now_iso() -> str:
@@ -138,16 +148,19 @@ class Account:
 class InviteCode:
     """A server-issued, single-or-limited-use credential that redeems into exactly one account.
 
-    The ``code`` is cryptographically random (see ``invites.py``). ``role``/``tenant_id`` are the
-    server-side facts a redeemed account inherits -- they are decided at invite-creation time and
-    are NOT overridable by the redeeming client. ``target_email`` optionally pins the invite to a
-    single address. ``uses``/``max_uses`` are the use-limit counters; ``redeemed_by``/
-    ``redeemed_at`` record the FIRST redemption for traceability.
+    The ``code`` is cryptographically random (see ``invites.py``) and exists in memory only long
+    enough to return it from the create endpoint. Persisted invite payloads keep ``code_hash`` only:
+    unredeemed invite codes are bearer credentials, so the raw code must not sit in the database.
+    ``role``/``tenant_id`` are the server-side facts a redeemed account inherits -- they are decided
+    at invite-creation time and are NOT overridable by the redeeming client. ``target_email``
+    optionally pins the invite to a single address. ``uses``/``max_uses`` are the use-limit counters;
+    ``redeemed_by``/``redeemed_at`` record the FIRST redemption for traceability.
     """
 
     code: str
     role: Role
     tenant_id: str
+    code_hash: Optional[str] = None
     target_email: Optional[str] = None
     expires_at: Optional[str] = None  # ISO-8601 UTC; None == no expiry
     max_uses: int = 1
@@ -156,9 +169,16 @@ class InviteCode:
     redeemed_at: Optional[str] = None
     created_at: str = field(default_factory=_utc_now_iso)
 
-    def to_dict(self) -> dict[str, Any]:
-        return {
-            "code": self.code,
+    @property
+    def persisted_code_hash(self) -> str:
+        """Digest written to storage. Falls back to hashing the in-memory code at create time."""
+        if self.code_hash:
+            return self.code_hash
+        return invite_code_hash(self.code)
+
+    def to_dict(self, *, include_code: bool = False) -> dict[str, Any]:
+        payload = {
+            "code_hash": self.persisted_code_hash,
             "role": self.role,
             "tenant_id": self.tenant_id,
             "target_email": self.target_email,
@@ -169,18 +189,28 @@ class InviteCode:
             "redeemed_at": self.redeemed_at,
             "created_at": self.created_at,
         }
+        if include_code:
+            payload["code"] = self.code
+        return payload
 
     def to_payload(self) -> dict[str, Any]:
-        payload = self.to_dict()
+        payload = self.to_dict(include_code=False)
         payload["schema_version"] = INVITE_SCHEMA_VERSION
         return payload
 
     @classmethod
     def from_payload(cls, payload: Mapping[str, Any]) -> "InviteCode":
+        legacy_code = _opt_str(payload.get("code"))
+        code_hash = _opt_str(payload.get("code_hash"))
+        if code_hash is None and legacy_code is not None:
+            # Backward-compatible read for any v1 records written before raw invite codes were
+            # removed from payloads. We never re-expose the raw value on the model.
+            code_hash = invite_code_hash(legacy_code)
         return cls(
-            code=str(payload["code"]),
+            code="",
             role=normalize_role(payload["role"]),
             tenant_id=str(payload["tenant_id"]),
+            code_hash=code_hash,
             target_email=_opt_str(payload.get("target_email")),
             expires_at=_opt_str(payload.get("expires_at")),
             max_uses=int(payload.get("max_uses", 1)),

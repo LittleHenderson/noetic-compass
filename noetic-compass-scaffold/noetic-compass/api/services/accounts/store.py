@@ -56,6 +56,7 @@ from .models import (
     Account,
     InviteCode,
     Role,
+    invite_code_hash,
     normalize_role,
 )
 
@@ -117,8 +118,10 @@ class AccountStore:
             raise ValueError("max_uses must be >= 1")
         role = normalize_role(role)
         granted_tenant = (tenant_id or DEFAULT_GRANTED_TENANT).strip() or DEFAULT_GRANTED_TENANT
+        raw_code = code or generate_invite_code()
         invite = InviteCode(
-            code=code or generate_invite_code(),
+            code=raw_code,
+            code_hash=invite_code_hash(raw_code),
             role=role,
             tenant_id=granted_tenant,
             target_email=normalize_email(target_email) if target_email else None,
@@ -278,7 +281,8 @@ class AccountStore:
         #    put is version-checked against the version we read in step 1, so a concurrent redeem
         #    that already advanced the invite makes THIS put raise VersionConflict.
         redeemed_invite = InviteCode(
-            code=invite.code,
+            code="",
+            code_hash=invite.code_hash,
             role=invite.role,
             tenant_id=invite.tenant_id,
             target_email=invite.target_email,
@@ -371,7 +375,7 @@ def _invite_record_id(code: str) -> str:
     The code itself is the secret; the record-id is a non-secret digest so the code is not stored
     in the id slot in the clear while remaining a stable lookup key.
     """
-    digest = hashlib.sha256(f"invite:{code}".encode("utf-8")).hexdigest()[:32]
+    digest = invite_code_hash(code)[:32]
     return f"{_INVITE_ID_PREFIX}-{digest}"
 
 
