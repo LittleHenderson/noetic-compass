@@ -1,3 +1,5 @@
+> **SUPERSEDED 2026-06-04 by v2.1** — adds §9.8.1 uniqueness claim posture (probabilistic speciality; absolute uniqueness over all frameworks is disclaimed and not the target). All five v2.0 corrected claim boundaries are unchanged. Use v2.1 for distribution.
+
 # CAS Harness — Product Specification Sheet
 ## Investor / Strategic Partner Distribution (NDA Required)
 
