@@ -1,5 +1,56 @@
 # Noetic Compass — Progress Log
 
+## PAID-tenant security — evidence isolation enforcement + conditional anchor role-gate (Jun 5, 2026)
+
+**Headline.** Third layer of the PAID-user security spine (`launch/paid-tenant-isolation`, stacked on
+PR #2 `launch/paid-security-sessions`). Closes the cross-tenant evidence leak: once per-account
+identity is on, a tenant can no longer read / verify / anchor another tenant's evidence trace, and
+WORM-anchoring becomes an operator/admin/owner action. **Dark-default invariant preserved
+byte-for-byte:** with `NC_ACCOUNTS_ENABLED=false` (the default) every dependency added here is a
+complete no-op — the evidence routes behave exactly as before, gated only by the legacy Bearer token.
+Verified: the 35 existing `tests/test_evidence_routes.py` tests pass unchanged (independently re-run:
+75 passed / 2 skipped across ownership + evidence + accounts).
+
+- **Conditional role gate (`api/dependencies/authz.py`, additive).** New
+  `require_role_in_account_mode(*roles)` — the conditional sibling of `require_role`. Reads
+  `settings.accounts_enabled` at request time: accounts OFF → returns `None`, NO role check (legacy
+  posture; an unconditional `require_role` would 401 every legacy caller because dispatch sets no
+  role in dark mode); accounts ON → identical to `require_role` (401 no identity / 403 wrong role).
+  Empty-roles programming error is caught eagerly at route-definition time, like `require_role`.
+- **Ownership ledger (`api/services/evidence_ownership.py`, new).** `record_evidence_ownership(...)`
+  and `tenant_owns_trace(...)` over the existing durable `StateStore`. Isolation is NOT a hand-rolled
+  tenant comparison — it leans on the StateStore's mandatory tenant partitioning: an ownership row
+  written under tenant A's id is simply invisible to `get(tenant_B, …)` (returns `None`,
+  indistinguishable from absent). Ownership rows carry the full traceability envelope
+  (`created_at`/`version`/`source`/`trace_id`). The write is idempotent (get-first; `VersionConflict`
+  on a concurrent create is swallowed — the post-condition "this tenant owns this trace" holds either
+  way).
+- **Route enforcement (`api/routes/evidence.py`).** A `_require_evidence_access` dependency on GET
+  `/{trace_id}`, POST `/{trace_id}/verify`, POST `/{trace_id}/anchor`: dark mode → pass-through;
+  account mode → resolve the SERVER-set tenant (`current_tenant`), and 404 `trace_id not found` if the
+  tenant doesn't own the trace (same status+detail as a genuinely-absent trace, so a cross-tenant
+  probe never leaks existence via a 403-vs-404 divergence; never a 500). Fail-closed: account-mode on
+  but no ownership store installed → 404, never a silent allow. Anchor additionally carries
+  `require_role_in_account_mode("operator","admin","owner")`. Handler bodies, verdict words, WORM
+  semantics, and honesty messaging are untouched.
+- **Ownership-WRITE hook DEFERRED, not guessed (`api/routes/cas_harness_audit.py`, comment only).**
+  The point that should record ownership is where an audit run produces its evidence `trace_id`. But
+  the audit-session routes are on the auth middleware's PUBLIC_PATH allowlist, so the middleware never
+  decodes their token and never sets `request.state.tenant_id`/`account_id` — `_caller_identity`
+  yields only `(sub, api_key)`, an unverified Phase-1 stopgap identity, not a server-derived tenant.
+  Wiring a security-critical ownership write keyed on an unverified identity would be wrong, so it is
+  left as a precise `TODO(tenant-iso)` at the exact seam. **Consequence (honest):** this layer ships
+  the enforcement MECHANISM (fail-closed, fully tested) but ownership rows are not yet populated; in
+  account mode evidence reads fail closed (404) until the audit-session routes carry a real
+  account-mode tenant. That identity upgrade — moving the audit-session routes off the PUBLIC_PATH
+  allowlist onto account-mode auth — is the next sub-step before `NC_ACCOUNTS_ENABLED=true`.
+- **Tests (`tests/test_evidence_ownership.py`, new — 18 tests).** Store unit tests (cross-tenant
+  isolation, idempotency, traceability envelope); gate unit tests (accounts-off no-op vs accounts-on
+  enforcement vs empty-roles refusal); dark-mode no-regression (GET/verify/anchor still reachable with
+  the legacy token); account-mode integration (owner reads 200; other tenant 404 not 403; no identity
+  401; member-role anchor 403; operator anchor not role-blocked). Maintainer-run:
+  `python -m pytest tests/test_evidence_ownership.py tests/test_evidence_routes.py tests/test_accounts_invites.py -q` → 75 passed, 2 skipped.
+
 ## PAID-user security spine — account half: durable accounts + invite redemption + identity login (Jun 4, 2026)
 
 **Headline.** First PR of the PAID-user security spine (`launch/paid-security-spine`). Adds a real

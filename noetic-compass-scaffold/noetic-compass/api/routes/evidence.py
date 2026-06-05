@@ -56,17 +56,90 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
+from api.config import settings
+from api.dependencies.authz import current_tenant, require_role_in_account_mode
 from api.services.cas_harness_static_evidence_anchor import (
     anchor_static_evidence_packet,
     load_anchored_static_packet_payload,
     summarize_static_anchor_worm_status,
     verify_anchored_static_packet,
 )
+from api.services.evidence_ownership import tenant_owns_trace
 
 router = APIRouter(prefix="/evidence", tags=["evidence"])
+
+
+# ---------------------------------------------------------------------------
+# Per-tenant evidence isolation (PAID-tenant security spine).
+#
+# Dark-default invariant: when ``settings.accounts_enabled`` is False (the legacy shared-secret
+# posture, and the default), every dependency below is a COMPLETE no-op -- the evidence routes
+# behave byte-for-byte as before, gated only by the legacy Bearer token the auth middleware already
+# validated. Enforcement turns on ONLY when per-account identity is enabled.
+# ---------------------------------------------------------------------------
+
+# 404 contract: a trace this tenant does not own is reported as "not found", never as 403. The
+# evidence routes already answer an unknown trace with exactly this status + detail (see the
+# handlers' ``raise HTTPException(status_code=404, detail="trace_id not found")``). Matching it here
+# means a cross-tenant probe is indistinguishable from a genuinely-absent trace -- existence is never
+# leaked via a 403-vs-404 divergence.
+_NOT_FOUND_DETAIL = "trace_id not found"
+
+
+def _evidence_state_store(request: Request):
+    """Return the durable ``StateStore`` the ownership ledger lives in, or ``None`` if absent.
+
+    Mirrors how the auth middleware reaches its stores: off ``request.app.state``. The state ledger
+    is stashed at startup as ``app.state.state_ledger`` -- a ``StateLedgerHandle`` whose ``.store``
+    is the ``StateStore`` (see ``api/state_ledger_bootstrap.py`` and ``api/main.py`` lifespan). It is
+    ``None`` when the ledger is dark. We read it defensively (``getattr``) so a TestClient that never
+    ran the lifespan, or a deployment with the ledger dark, simply yields ``None`` rather than
+    raising. The CALLER decides what ``None`` means; in account mode the guard fails closed (404).
+    """
+    handle = getattr(request.app.state, "state_ledger", None)
+    if handle is None:
+        return None
+    return getattr(handle, "store", None)
+
+
+def _require_evidence_access(request: Request) -> None:
+    """Per-tenant ownership guard for an evidence ``trace_id`` route.
+
+    * ``settings.accounts_enabled`` False (dark default) -> return ``None`` immediately. NO identity
+      read, NO store lookup, NO new failure mode: the route is gated exactly as it is today.
+    * ``settings.accounts_enabled`` True -> resolve the SERVER-set tenant (``current_tenant`` raises
+      401 when no account-mode identity is present, which is the correct answer in account mode),
+      obtain the ``StateStore``, and require that this tenant OWNS the trace. If not -- including the
+      fail-closed case where account-mode is on but no store is installed -- raise **404**
+      ``trace_id not found`` (never 403, never 500). The ``trace_id`` is the path parameter.
+
+    Read at request time off ``settings`` (the singleton the rest of ``api/`` uses) so the flag flip
+    in tests/deployments takes effect per call.
+    """
+    if not settings.accounts_enabled:
+        # Dark default: complete no-op. Legacy shared-secret posture, byte-for-byte unchanged.
+        return None
+
+    # Account mode: a real, server-derived tenant must be present (else 401 -- "who are you?").
+    tenant_id = current_tenant(request)
+
+    # Resolve the trace_id straight from the matched path params (server-side, never the body).
+    trace_id = str(request.path_params.get("trace_id", "")).strip()
+
+    store = _evidence_state_store(request)
+    if store is None:
+        # Fail CLOSED: account-mode enforcement is on but the ownership ledger is unavailable. We do
+        # NOT silently allow; we deny exactly as we would for an unowned trace (404, no existence
+        # leak). A misconfigured deployment that wanted enforcement gets denial, not a bypass.
+        raise HTTPException(status_code=404, detail=_NOT_FOUND_DETAIL)
+
+    if not tenant_owns_trace(store, tenant_id=tenant_id, trace_id=trace_id):
+        raise HTTPException(status_code=404, detail=_NOT_FOUND_DETAIL)
+
+    return None
 
 
 # ---------------------------------------------------------------------------
@@ -1290,7 +1363,7 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
 # ---------------------------------------------------------------------------
 
 
-@router.get("/{trace_id}")
+@router.get("/{trace_id}", dependencies=[Depends(_require_evidence_access)])
 async def get_evidence_packet(trace_id: str) -> dict[str, Any]:
     """Return the full Evidence Packet for ``trace_id``.
 
@@ -1309,7 +1382,11 @@ async def get_evidence_packet(trace_id: str) -> dict[str, Any]:
         raise HTTPException(status_code=404, detail="trace_id not found")
 
 
-@router.post("/{trace_id}/verify", response_model=VerifyHashesResponse)
+@router.post(
+    "/{trace_id}/verify",
+    response_model=VerifyHashesResponse,
+    dependencies=[Depends(_require_evidence_access)],
+)
 async def verify_evidence_packet(trace_id: str) -> VerifyHashesResponse:
     """Re-hash on-disk artifacts referenced by the packet for ``trace_id``.
 
@@ -1354,7 +1431,18 @@ async def verify_evidence_packet(trace_id: str) -> VerifyHashesResponse:
     return _verify_packet_hashes(packet)
 
 
-@router.post("/{trace_id}/anchor", response_model=AnchorEvidenceResponse)
+@router.post(
+    "/{trace_id}/anchor",
+    response_model=AnchorEvidenceResponse,
+    dependencies=[
+        # Ownership 404 (dark-default no-op) AND a role gate that is LIVE only in account mode.
+        # Anchoring is an operational WORM write, so once accounts are on it is operator/admin/owner
+        # only (a member-role identity gets 403). In dark mode both are pass-throughs, so the legacy
+        # token still anchors with HTTP 200 exactly as before.
+        Depends(_require_evidence_access),
+        Depends(require_role_in_account_mode("operator", "admin", "owner")),
+    ],
+)
 async def anchor_evidence_packet(
     trace_id: str,
     require_object_lock: bool = False,

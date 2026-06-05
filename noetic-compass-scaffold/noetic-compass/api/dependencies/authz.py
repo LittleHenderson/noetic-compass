@@ -33,6 +33,8 @@ from typing import Callable, Optional
 
 from fastapi import HTTPException, Request
 
+from api.config import settings
+
 
 def _server_role(request: Request) -> Optional[str]:
     """Return the SERVER-SET role for this request, or ``None`` when no identity was established.
@@ -114,3 +116,42 @@ def current_tenant(request: Request) -> str:
     if not text:
         raise HTTPException(status_code=401, detail="Authentication required.")
     return text
+
+
+def require_role_in_account_mode(*roles: str) -> Callable[[Request], Optional[str]]:
+    """Build a role gate that is LIVE only when accounts are enabled, and a no-op otherwise.
+
+    This is the conditional sibling of :func:`require_role`. It exists for routes that are
+    unconditionally reachable today under the legacy shared-secret posture and must STAY reachable
+    there byte-for-byte, but that become operator-only once per-account identity is turned on.
+
+    Semantics:
+
+    * ``settings.accounts_enabled`` is False (the dark default) -> the dependency returns ``None``
+      and performs NO role check. In that posture the dispatch path never sets ``request.state.role``
+      (there are no roles to honour), so an unconditional :func:`require_role` here would 401 every
+      legacy caller. Returning ``None`` preserves the exact legacy behaviour: the route is gated only
+      by the legacy Bearer token the middleware already validated.
+    * ``settings.accounts_enabled`` is True -> the dependency behaves EXACTLY like
+      ``require_role(*roles)``: no server-set identity -> **401**; identity present but role not in
+      ``roles`` -> **403**; otherwise the caller's role is returned.
+
+    ``settings.accounts_enabled`` is read at REQUEST time (per call), not captured at
+    dependency-build time, so flipping the flag (as the test fixtures do) takes effect immediately.
+    The allowed ``roles`` are a fixed server-side allowlist baked into the route definition; passing
+    none is the same programming error :func:`require_role` refuses, and is refused here too at
+    build time rather than silently admitting everyone once accounts come on.
+    """
+    # Build the underlying live gate eagerly so the "no roles" programming error is caught at
+    # import/route-definition time (loudly), exactly as ``require_role`` does -- not deferred to the
+    # first account-mode request.
+    live_gate = require_role(*roles)
+
+    def _dependency(request: Request) -> Optional[str]:
+        if not settings.accounts_enabled:
+            # Dark default: complete no-op. No role check, no new failure mode -- legacy posture.
+            return None
+        # Account-mode: identical to require_role (401 no identity / 403 not permitted / role).
+        return live_gate(request)
+
+    return _dependency
