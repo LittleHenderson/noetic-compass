@@ -201,6 +201,33 @@ railway domain add api.noetic-compass.com
 
 The Vercel dashboard routes `https://noeticcompass.com/api/*` to this Render API with `dashboard/vercel.json`.
 
+### Scaling & High Availability — pre-scale checklist
+
+The blueprint runs **one free-plan instance**. That is correct for the beta (a single instance plus
+the in-app gateway middleware — JWT auth, `RateLimitMiddleware` tiers, RBAC, tenant isolation, quota
+engine — is enough), but it has **no high availability** (one restart = brief downtime) and **cannot
+be scaled just by adding instances as-is**. Full rationale: [`docs/architecture/ADR-0001-edge-proxy-load-balancing-and-api-gateway.md`](architecture/ADR-0001-edge-proxy-load-balancing-and-api-gateway.md).
+
+You do **not** need to add a reverse proxy, a load balancer (HAProxy / AWS ALB·NLB), or a dedicated
+API-gateway product. Render's edge already terminates TLS, hides the origin, and routes; and the
+moment the service runs **≥2 instances, Render's platform load balancer distributes across them with
+`/health` checks + automatic failover** — no strategy to hand-pick, and no IP-hash sticky sessions.
+
+Before scaling beyond a handful of concurrent users, **in this order**:
+
+1. **Leave the free single instance** — move `noetic-compass-api` to a paid Render plan with
+   `numInstances ≥ 2`. (Free web services are single-instance and sleep on inactivity → cold starts.)
+2. **Make the app stateless FIRST** — relocate per-process in-memory state onto durable
+   Postgres/StateStore (`NC_DATABASE_URL`), or a second instance will not see state created on the
+   first. Known in-memory spots: audit-run sessions (`_SESSIONS` in
+   `api/services/cas_harness_audit_sessions.py`), the assessment-store fallback (`api/store.py`),
+   `api/routes/idea_atlas.py`, and `api/routes/visual_grounding.py`. This is also the change that
+   closes the deferred tenant-isolation evidence-ownership write. Tracked as a separate pre-scale
+   task — **not** a beta blocker.
+3. **Then raise the instance count** — Render handles balancing, health, and failover automatically.
+
+Until steps 1–2 are done, keep `noetic-compass-api` at a single instance.
+
 ## Vercel Deployment (Dashboard)
 
 Deploy the dashboard as a static site on Vercel with zero-config HTTPS and global CDN.

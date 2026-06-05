@@ -19,6 +19,10 @@ the ACTUAL deploy (`render.yaml`: one free-plan `noetic-compass-api` instance), 
   ≥2 instances would break. Before scaling: move that state onto durable StateStore/Postgres
   (`NC_DATABASE_URL`) → stateless. This also closes the deferred tenant-iso ownership-write. Tracked
   as a separate pre-scale task. Beta launch is unaffected (single instance is fine).
+- **Folded into launch docs:** added a "Scaling & High Availability — pre-scale checklist" section to
+  `docs/DEPLOYMENT.md` (right after the Render section), cross-linked to ADR-0001 — the 3-step ordered
+  checklist (paid multi-instance → stateless → raise instance count) now lives where ops/launch
+  readiness is documented.
 
 ## Session 63: Public-launch declutter pass 1 — inline Disclosure primitive (May 31, 2026)
 
