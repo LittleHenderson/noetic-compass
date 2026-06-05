@@ -1,5 +1,25 @@
 # Noetic Compass — Progress Log
 
+## ADR-0001 — edge layers (reverse proxy / load balancer / API gateway) decision (Jun 5, 2026)
+
+**Headline.** Recorded `docs/architecture/ADR-0001-edge-proxy-load-balancing-and-api-gateway.md` so
+the recurring "do we need a reverse proxy / load balancer / API gateway?" question is settled against
+the ACTUAL deploy (`render.yaml`: one free-plan `noetic-compass-api` instance), not a generic diagram.
+
+- **Reverse proxy:** already provided by Render's edge (TLS termination, origin hiding, routing) + the
+  dashboard's own `nginx.conf`. Do NOT run our own.
+- **Load balancer:** none today (single instance). Render auto-balances + health-checks + fails over
+  the moment we run ≥2 instances — no HAProxy/ALB/NLB, no hand-picked strategy. IP-hash sticky
+  sessions explicitly rejected.
+- **API gateway:** the jobs (JWT auth, `RateLimitMiddleware` tiers, RBAC, tenant isolation, quota
+  engine) are already in-app; correct for one modular-monolith service. Dedicated gateway only if we
+  split into microservices or open a broad public developer API.
+- **Real scale/HA prerequisite (the thing the edge layers do NOT solve):** the app holds per-process
+  in-memory state (`_SESSIONS` audit sessions, `api/store.py`, `idea_atlas`, `visual_grounding`), so
+  ≥2 instances would break. Before scaling: move that state onto durable StateStore/Postgres
+  (`NC_DATABASE_URL`) → stateless. This also closes the deferred tenant-iso ownership-write. Tracked
+  as a separate pre-scale task. Beta launch is unaffected (single instance is fine).
+
 ## Session 63: Public-launch declutter pass 1 — inline Disclosure primitive (May 31, 2026)
 
 **Headline.** Started the CAS Harness public-launch UI cleanup: tuck always-visible
