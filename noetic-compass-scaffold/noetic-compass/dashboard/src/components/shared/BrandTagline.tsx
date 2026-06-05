@@ -24,9 +24,9 @@ export function BrandTagline({
   return (
     <div className={`flex flex-col ${alignmentClass}`}>
       <p className={taglineClass}>
-        <span>Measure How </span>
+        <span>Measure How</span>
         <span className="brand-tagline-ai">Ai</span>
-        <span> Thinks</span>
+        <span>Thinks</span>
       </p>
       {showCompass && (
         <div className={compassClass}>
