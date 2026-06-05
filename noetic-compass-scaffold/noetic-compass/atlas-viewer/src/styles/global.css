@@ -50,8 +50,14 @@ button {
  * tempo so "currently happening" and the brand pulse read as one motion
  * language. Only the single active node/row uses it.
  *
- * Both are gated behind prefers-reduced-motion: under reduced motion the mark
- * dots sit static at full opacity and the active node holds a steady ring.
+ * `cas-fade-in` is the calm composer -> run transition: transcript rows fade in
+ * as they append and the run header settles in when an audit begins. A short
+ * 260ms ease, a few px of upward drift — restrained, no slide/bounce. It is a
+ * one-shot (forwards) animation, never a loop.
+ *
+ * All three are gated behind prefers-reduced-motion: under reduced motion the
+ * mark dots sit static at full opacity, the active node holds a steady ring,
+ * and faded-in content appears immediately with no transform.
  */
 @keyframes tks-breathe {
   0%   { opacity: 0.65; filter: drop-shadow(0 0 2px currentColor); }
@@ -63,6 +69,15 @@ button {
   100% { opacity: 1; }
 }
 
+@keyframes cas-fade-in {
+  0%   { opacity: 0; transform: translateY(3px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.cas-fade-in {
+  animation: cas-fade-in 0.26s cubic-bezier(0.33, 1, 0.68, 1) both;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .tks-breathe-dot {
     animation: none !important;
@@ -72,5 +87,11 @@ button {
   .cas-step-breathe {
     animation: none !important;
     opacity: 1 !important;
+  }
+
+  .cas-fade-in {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

@@ -973,7 +973,7 @@ export default function AuditConsolePage() {
         : 'disconnected';
 
   const composerEmptyState = !session && !isConfigured ? (
-    <div style={composerEmptyStateStyle}>
+    <div className="cas-fade-in" style={composerEmptyStateStyle}>
       <TreeOfLifeMark size={72} animated title="CAS Harness" />
       <p style={composerEmptyTitleStyle}>Start an audit</p>
       <p style={composerEmptyBodyStyle}>
@@ -983,14 +983,22 @@ export default function AuditConsolePage() {
     </div>
   ) : null;
 
+  // Calm setup -> run transition: the run header fades in once when the
+  // workspace crosses from the empty/setup state into an active run (keyed on
+  // that boundary so it settles in, never replaying on every status tick).
+  // prefers-reduced-motion freezes the fade via the global guard.
+  const runPhaseKey = session || isConfigured ? 'run' : 'setup';
+
   const centerNode = (
     <>
-      <AuditRunHeader
-        auditId={session?.audit_id ?? null}
-        modelTarget={session?.model_id ?? target?.modelId ?? null}
-        mode={session?.audit_mode ?? (isConfigured ? 'BALANCED' : null)}
-        status={lifecycleStatus}
-      />
+      <div key={runPhaseKey} className="cas-fade-in">
+        <AuditRunHeader
+          auditId={session?.audit_id ?? null}
+          modelTarget={session?.model_id ?? target?.modelId ?? null}
+          mode={session?.audit_mode ?? (isConfigured ? 'BALANCED' : null)}
+          status={lifecycleStatus}
+        />
+      </div>
 
       <AuditComposer
         connectionStatus={connectionStatus}

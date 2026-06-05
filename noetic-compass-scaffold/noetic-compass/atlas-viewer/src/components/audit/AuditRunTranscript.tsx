@@ -124,7 +124,12 @@ export function AuditRunTranscript({
           {transcript.map((row) => {
             const active = row.state === 'active';
             return (
-              <li key={row.id} style={rowStyle(active)} data-state={row.state}>
+              <li
+                key={row.id}
+                className="cas-fade-in"
+                style={rowStyle(active)}
+                data-state={row.state}
+              >
                 <span
                   aria-hidden="true"
                   className={active ? 'cas-step-breathe' : undefined}

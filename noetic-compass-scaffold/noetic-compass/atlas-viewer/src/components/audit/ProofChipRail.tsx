@@ -108,7 +108,9 @@ const rowStyle = (state: ChipState): CSSProperties => {
   const tone = state === 'pass' ? TONE_TINT.teal : state === 'blocked' ? TONE_TINT.amber : TONE_TINT.muted;
   return {
     display: 'flex',
-    alignItems: 'center',
+    // Align to the top so a wrapped two-line label keeps the status word pinned
+    // to the first line rather than vertically centering against tall content.
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     gap: 10,
     padding: '7px 10px',
@@ -119,15 +121,26 @@ const rowStyle = (state: ChipState): CSSProperties => {
 };
 
 const nameStyle: CSSProperties = {
+  // The relabeled names (e.g. "CAS readout (model-internal signal)") are long
+  // for the 360px rail. Let them wrap cleanly to a second line instead of
+  // overflowing: min-width 0 lets the flex item shrink, overflowWrap breaks the
+  // longest token if needed. The full label is also exposed via `title`.
+  flex: '1 1 auto',
+  minWidth: 0,
   color: COLORS.textPrimary,
   fontSize: 12.5,
   fontWeight: 700,
+  lineHeight: 1.3,
+  overflowWrap: 'anywhere',
 };
 
 const statusWordStyle = (state: ChipState): CSSProperties => {
   const tone = state === 'pass' ? TONE_TINT.teal : state === 'blocked' ? TONE_TINT.amber : TONE_TINT.muted;
   return {
     flex: '0 0 auto',
+    // Nudge down so the pill optically aligns with the first line of a wrapped
+    // (flex-start) label rather than sitting above the cap height.
+    marginTop: 1,
     padding: '2px 7px',
     borderRadius: 4,
     color: state === 'unknown' ? COLORS.textMuted : tone.text,
@@ -137,6 +150,7 @@ const statusWordStyle = (state: ChipState): CSSProperties => {
     fontWeight: 800,
     textTransform: 'uppercase',
     letterSpacing: 0.3,
+    whiteSpace: 'nowrap',
   };
 };
 
@@ -164,7 +178,9 @@ export function ProofChipRail({ chips, className }: ProofChipRailProps): JSX.Ele
           const state = chipState(chip);
           return (
             <li key={id} style={rowStyle(state)} data-state={state}>
-              <span style={nameStyle}>{CHIP_LABEL[id]}</span>
+              <span style={nameStyle} title={CHIP_LABEL[id]}>
+                {CHIP_LABEL[id]}
+              </span>
               <span style={statusWordStyle(state)}>{chipStatusWord(chip)}</span>
             </li>
           );

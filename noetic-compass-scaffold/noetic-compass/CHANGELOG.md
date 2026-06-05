@@ -1,5 +1,53 @@
 # Noetic Compass — Progress Log
 
+## CAS Harness "Audit Bench" UI redesign — third pass (polish: long-label wrap + calm composer→run motion; light mode deferred) (Jun 5, 2026)
+
+**Headline.** Third, polish-only pass of the Audit Console redesign (`launch/ui-audit-bench`),
+refining the first/second passes without restructuring. Three scoped items: (1) the relabeled proof-
+chip rows now wrap/truncate gracefully in the 360px right rail; (2) the composer→run transition is a
+restrained, `prefers-reduced-motion`-gated fade; (3) light mode was assessed and **deferred** — the
+token system would need a CSS-variable refactor first (see below). No API contract changes; every
+field name and claim word (`ACCEPT`/`FLAG_FOR_HUMAN_REVIEW`/`SUPPRESS`/`LICENSED`/`NOT LICENSED`/`OPEN`/
+`unavailable`/`present`/`verified`/`missing`/`failed`) preserved verbatim. All passes 1–2 honesty
+gates intact.
+
+- **Long-label wrap fix (`components/audit/ProofChipRail.tsx`).** The long relabeled names (e.g.
+  "CAS readout (model-internal signal)") no longer overflow the 360px rail. The name span now gets
+  `flex: 1 1 auto` + `minWidth: 0` + `overflowWrap: 'anywhere'` so it wraps cleanly to a second line;
+  the status pill stays `whiteSpace: 'nowrap'` and is top-aligned (`alignItems: 'flex-start'` + a 1px
+  nudge) so it pins to the first line. The full label is exposed via a `title` tooltip as the
+  truncation fallback. The verdict chip word (`textWrap: 'balance'`) and scope ribbon already wrap;
+  verified tidy, no change needed.
+- **Calm composer→run motion (`styles/global.css` + `AuditRunTranscript.tsx` + `AuditConsolePage.tsx`).**
+  New `@keyframes cas-fade-in` (opacity 0→1, 3px upward drift, 260ms `EASE_OUT_CUBIC`, `both` fill,
+  one-shot — never a loop) and a `.cas-fade-in` class, both added to `global.css` and gated under the
+  existing `prefers-reduced-motion` block (animation none, opacity 1, transform none when reduced).
+  Transcript rows now carry `cas-fade-in` so a newly appended row fades in once (stable `index-status`
+  key means existing rows don't replay). The run header fades in once at the setup→run boundary via a
+  `runPhaseKey` (`session || isConfigured`) keyed wrapper. The empty-state 10-dot mark also fades in.
+  The stage-ladder active node + active transcript-row breathe on the existing `cas-step-breathe` 2.5s
+  heartbeat (already present from passes 1–2; reused, not re-added). No new loud keyframes; no
+  slides/bounces.
+- **Light mode — assessed, DEFERRED (not half-built).** atlas-viewer is dark-native. The `COLORS` /
+  `TONE_TINT` tokens in `lib/designTokens.ts` are plain JS constants resolved at module-load, and
+  there are ~499 hard-coded `rgba()`/hex color literals across 42 component files (plus the hard-coded
+  dark backdrop in `AuditAppFrame.tsx` and `:root { color-scheme: dark }` in `global.css`). A cohesive
+  light theme would require converting the token system to runtime-swappable CSS custom properties and
+  touching all 42 files — a token-system refactor, not a polish-pass toggle. A class/`data-theme`
+  toggle that only flipped the backdrop would leave the 499 literals dark and visibly break. Per the
+  brief ("favor not-breaking over feature-completeness"), light mode is left out this pass. **Light
+  mode deferred: needs token-system refactor (JS color constants → CSS variables across ~42 files).**
+- **Tests.** New `ProofChipRail.test.tsx` (long relabeled name renders in full + `title` tooltip +
+  `overflowWrap`/`minWidth` wrap styles; ready-counter; blocked chips surface the literal status word,
+  never "pass"). Extended `AuditRunTranscript.test.tsx` (each appended row carries `cas-fade-in`).
+  Motion is CSS-only and reduced-motion-gated, so the assertion is on the class hook, not animation
+  frames. **Verified by the maintainer** (the agent session had no shell access): `npx tsc -b` clean
+  (exit 0) and targeted vitest `src/components/audit src/pages --no-file-parallelism` → **24 files / 107
+  tests passed, 0 failures**. (One agent-authored assertion in `ProofChipRail.test.tsx` expected
+  `minWidth` `'0px'`; jsdom serializes the numeric `minWidth: 0` style as the unitless `'0'`, so the
+  assertion was corrected to `'0'` — a test-expectation fix, not a source change.) No source logic
+  changed beyond the additive wrap styles, the fade class hook, and the keyed wrapper.
+
 ## CAS Harness "Audit Bench" UI redesign — second pass (composer consolidation + scale/fleet off-screen + methodology drawer + JSON demotion) (Jun 5, 2026)
 
 **Headline.** Second pass of the Audit Console redesign (`launch/ui-audit-bench`), per

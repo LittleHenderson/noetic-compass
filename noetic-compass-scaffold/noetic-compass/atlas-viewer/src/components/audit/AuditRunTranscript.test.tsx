@@ -73,4 +73,17 @@ describe('AuditRunTranscript', () => {
       screen.getByText(/No run activity yet/i),
     ).toBeInTheDocument();
   });
+
+  it('gives each appended row the cas-fade-in class for the calm append motion', () => {
+    // Motion is CSS-only and gated by prefers-reduced-motion in global.css; the
+    // component just tags rows so a newly appended row fades in once. Each row
+    // has a stable key (index-status), so existing rows do not replay.
+    render(<AuditRunTranscript session={sessionWithLifecycle} />);
+    const log = screen.getByLabelText('Audit run log');
+    const rows = within(log).getAllByRole('listitem');
+    expect(rows.length).toBeGreaterThan(0);
+    rows.forEach((row) => {
+      expect(row.classList.contains('cas-fade-in')).toBe(true);
+    });
+  });
 });
