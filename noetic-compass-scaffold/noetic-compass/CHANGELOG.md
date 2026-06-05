@@ -1,5 +1,36 @@
 # Noetic Compass — Progress Log
 
+## PAID-tenant security — audit-route identity + evidence-ownership write (completes tenant-iso) (Jun 5, 2026)
+
+**Headline.** Completes the tenant-isolation layer (`launch/paid-audit-identity`, stacked on it) by
+giving the CAS-Harness audit-session routes a SERVER-derived tenant identity in account mode and
+wiring the previously-deferred `record_evidence_ownership`. Those routes were on the auth middleware's
+public allowlist (no login), so they carried no verified tenant — which is exactly why the ownership
+write was left a TODO. They now leave the allowlist ONLY when accounts are enabled. **Dark default
+preserved byte-for-byte:** with `NC_ACCOUNTS_ENABLED=false` (production default) `is_public_path`
+returns the identical set as before, so the live console keeps calling these routes without a login.
+Verified: 156 passed / 2 skipped across the audit/auth/accounts/evidence suites.
+
+- **Conditional public allowlist (`api/middleware/auth.py`).** Split into `ALWAYS_PUBLIC_PREFIXES`
+  (atlas/live, target/verify, scale-plan, live-worker/health, crm/public — unchanged) and
+  `ACCOUNT_GATED_PUBLIC_PREFIXES` (`/api/cas-harness/audit/session[s]`). `is_public_path` returns the
+  always-public set in every posture, and the account-gated set ONLY when `settings.accounts_enabled`
+  is False — so dark mode reproduces the original behavior exactly, while account mode forces the
+  session routes through auth → middleware sets `request.state.tenant_id/account_id`.
+  `PUBLIC_PATH_PREFIXES` retained as a back-compat alias of the always-public tuple.
+- **Ownership write wired (`api/routes/cas_harness_audit.py`).** New guarded
+  `_record_audit_evidence_ownership(request, trace_id)` is called at both RUN points (live-worker +
+  customer-API) after evidence is attached. Dark mode → immediate no-op. Account mode → records that
+  the caller's server-derived tenant owns the produced evidence trace; a missing tenant/store/trace or
+  any store error safely skips (log-and-continue — ownership recording never breaks an audit run).
+  Store resolved exactly as the evidence route does (`app.state.state_ledger.store`).
+- **Note — rate-limit coupling.** `api/middleware/rate_limit.py` shares `is_public_path`, so in
+  ACCOUNT mode the audit-session routes also become rate-limit-gated (per-api-key) — consistent and
+  intended (they are no longer public). Dark mode unchanged. Flagged for awareness.
+- **Tests (`tests/test_audit_identity_scope.py`).** Both postures of `is_public_path`; dark-mode
+  reachability without a token; account-mode 401 without a token; full account-mode run records
+  ownership for the produced trace under the caller's tenant (and not another tenant's).
+
 ## PAID-tenant security — evidence isolation enforcement + conditional anchor role-gate (Jun 5, 2026)
 
 **Headline.** Third layer of the PAID-user security spine (`launch/paid-tenant-isolation`, stacked on
