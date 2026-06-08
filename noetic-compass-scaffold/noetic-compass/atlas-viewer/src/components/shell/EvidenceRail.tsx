@@ -6,6 +6,8 @@ import { ProofChipRail } from '../audit/ProofChipRail';
 import EvidencePacketVerificationPanel from '../audit/EvidencePacketVerificationPanel';
 import { COLORS, FONT_FAMILY, FONT_MONO, TONE_TINT } from '../../lib/designTokens';
 import type { AuditVerdict, ProvenanceChip } from '../../lib/casHarnessAudit';
+import { requestPacketExplanation } from '../../lib/packetExplainerBus';
+import { epFieldAnchorProps } from '../../lib/packetExplainerLinks';
 
 interface VerifierDecisionLike {
   decisionScope?: string | null;
@@ -76,6 +78,22 @@ const inspectButtonStyle: CSSProperties = {
   width: '100%',
 };
 
+// The "Explain this packet (plain English)" action. Teal-accented like the
+// other primary evidence affordances; only rendered once a packet trace exists.
+const explainButtonStyle: CSSProperties = {
+  minHeight: 36,
+  padding: '8px 12px',
+  borderRadius: 6,
+  border: `1px solid ${TONE_TINT.teal.border}`,
+  background: TONE_TINT.teal.fill,
+  color: TONE_TINT.teal.text,
+  cursor: 'pointer',
+  fontFamily: 'inherit',
+  fontSize: 12.5,
+  fontWeight: 800,
+  width: '100%',
+};
+
 const dividerStyle: CSSProperties = {
   height: 1,
   background: COLORS.borderSubtle,
@@ -109,26 +127,46 @@ export function EvidenceRail({
       ariaLabel="Audit evidence rail"
     >
       <div style={railStyle}>
-        <AuditVerdictChip
-          verdict={verdict}
-          confidence={confidence}
-          customerSafe={customerSafe}
-        />
+        {/* Anchored so a ref-chip for `verdict` / `verdict_echo` scrolls here. */}
+        <div {...epFieldAnchorProps('verdict')}>
+          <AuditVerdictChip
+            verdict={verdict}
+            confidence={confidence}
+            customerSafe={customerSafe}
+          />
+        </div>
 
         <ScopeRibbon verifierDecision={verifierDecision} auditScope={auditScope} />
 
         <hr style={dividerStyle} />
 
-        <ProofChipRail chips={chips} />
+        {/* Each proof chip row is anchored by its id so a ref-chip for
+            `proof_chips.<id>.status` scrolls to that exact chip. */}
+        <ProofChipRail chips={chips} anchorRef={epFieldAnchorProps} />
 
         <hr style={dividerStyle} />
 
-        <div style={packetPanelStyle}>
+        {/* Anchored so a ref-chip for `anchor.status` scrolls to the packet
+            / WORM-anchor panel. */}
+        <div style={packetPanelStyle} {...epFieldAnchorProps('anchor.status')}>
           <p style={packetEyebrowStyle}>Evidence packet</p>
           {evidencePacketTraceId ? (
             <>
               <p style={{ ...packetIdStyle, color: COLORS.textSecondary }}>Packet trace ID</p>
               <p style={packetIdStyle}>{evidencePacketTraceId}</p>
+              <button
+                type="button"
+                style={explainButtonStyle}
+                onClick={() =>
+                  requestPacketExplanation({
+                    traceId: evidencePacketTraceId,
+                    epVerdict: verdict ?? '',
+                  })
+                }
+                data-testid="explain-packet-button"
+              >
+                Explain this packet (plain English)
+              </button>
               <EvidencePacketVerificationPanel traceId={evidencePacketTraceId} />
             </>
           ) : (

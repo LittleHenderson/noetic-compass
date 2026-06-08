@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { COLORS } from '../../lib/designTokens';
 import { GuideChatWidget } from '../audit/GuideChatWidget';
+import { PacketExplainerPanel } from '../audit/PacketExplainerPanel';
 
 export interface AuditAppFrameProps {
   /** Left navigation rail (AuditRail). */
@@ -142,6 +143,10 @@ export function AuditAppFrame({
           persists across every console tab/section and floats over the whole console
           (it is position:fixed, so it never affects the grid layout). */}
       <GuideChatWidget />
+      {/* Floating "Explain this packet" reading aid — also mounted once here so it
+          floats over the console (left edge, clear of the Guide). Opens when an
+          Evidence Packet view's "Explain this packet" button fires its request. */}
+      <PacketExplainerPanel />
     </div>
   );
 }

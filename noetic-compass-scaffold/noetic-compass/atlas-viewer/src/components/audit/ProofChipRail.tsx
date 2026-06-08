@@ -13,6 +13,13 @@ import type {
 export interface ProofChipRailProps {
   chips: ProvenanceChip[];
   className?: string;
+  /**
+   * Optional anchor-prop factory. When provided, each chip row is stamped with
+   * the props returned for `proof_chips.<chipId>.status`, so the packet
+   * explainer's ref-chips can scroll to that exact chip. Kept generic so this
+   * shared component never imports the explainer link module directly.
+   */
+  anchorRef?: (ref: string) => Record<string, string>;
 }
 
 const REQUIRED_ORDER: ProvenanceChipId[] = [
@@ -160,7 +167,7 @@ const statusWordStyle = (state: ChipState): CSSProperties => {
  * verified/present are a pass (teal); missing/unavailable/failed render the
  * literal status word in amber, never teal. Color is never the only signal.
  */
-export function ProofChipRail({ chips, className }: ProofChipRailProps): JSX.Element {
+export function ProofChipRail({ chips, className, anchorRef }: ProofChipRailProps): JSX.Element {
   const byId = new Map(chips.map((chip) => [chip.id, chip]));
   const ready = readyCount(chips);
 
@@ -176,8 +183,9 @@ export function ProofChipRail({ chips, className }: ProofChipRailProps): JSX.Ele
         {REQUIRED_ORDER.map((id) => {
           const chip = byId.get(id);
           const state = chipState(chip);
+          const anchorProps = anchorRef ? anchorRef(`proof_chips.${id}.status`) : null;
           return (
-            <li key={id} style={rowStyle(state)} data-state={state}>
+            <li key={id} style={rowStyle(state)} data-state={state} {...anchorProps}>
               <span style={nameStyle} title={CHIP_LABEL[id]}>
                 {CHIP_LABEL[id]}
               </span>
