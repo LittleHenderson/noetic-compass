@@ -30,21 +30,42 @@ PUBLIC_PATHS = {
     "/openapi.json",
     "/redoc",
 }
-PUBLIC_PATH_PREFIXES = (
+# ALWAYS public, in EVERY posture: these never carry per-tenant evidence ownership, so identity is
+# never required for them. Atlas LIVE has its own invite-code/session-token gate; target/verify and
+# scale-plan are stateless validators/planners; live-worker/health is a liveness probe; /api/crm/public
+# is anonymous lead capture (only the /public subtree is open — the authed sales views
+# /api/crm/leads... stay protected by JWT).
+ALWAYS_PUBLIC_PREFIXES = (
     "/atlas/live",
     "/api/cas-harness/audit/target/verify",
     "/api/cas-harness/audit/scale-plan",
+    "/api/cas-harness/live-worker/health",
+    "/api/crm/public",
+)
+# Backwards-compatible alias: external code (and older imports) referenced PUBLIC_PATH_PREFIXES as the
+# always-public tuple. It now names exactly the always-public set, so any startswith check over it is
+# unchanged for these prefixes.
+PUBLIC_PATH_PREFIXES = ALWAYS_PUBLIC_PREFIXES
+# Account-GATED public prefixes: the audit-session create/run/get/list routes. Public ONLY in the
+# legacy/dark posture (accounts OFF — the live production default), so the deployed console keeps
+# calling them without a login exactly as today. Once accounts are enabled they leave the allowlist
+# and require identity, so the auth middleware decodes the jti token and sets
+# request.state.tenant_id/account_id — the seam the per-tenant evidence-ownership write consumes.
+ACCOUNT_GATED_PUBLIC_PREFIXES = (
     "/api/cas-harness/audit/session",
     "/api/cas-harness/audit/sessions",
-    "/api/cas-harness/live-worker/health",
-    # Public lead capture: an anonymous prospect's form posts here. Only the /public subtree is
-    # open; the authed sales views (/api/crm/leads...) stay protected by JWT.
-    "/api/crm/public",
 )
 
 
 def is_public_path(path: str) -> bool:
-    return path in PUBLIC_PATHS or any(path.startswith(prefix) for prefix in PUBLIC_PATH_PREFIXES)
+    if path in PUBLIC_PATHS or any(path.startswith(p) for p in ALWAYS_PUBLIC_PREFIXES):
+        return True
+    # The audit-session routes are public ONLY in the legacy/dark posture. Once accounts are
+    # enabled they require identity so the middleware sets request.state.tenant_id (the seam the
+    # ownership write below consumes). Read settings.accounts_enabled at call time.
+    if not settings.accounts_enabled:
+        return any(path.startswith(p) for p in ACCOUNT_GATED_PUBLIC_PREFIXES)
+    return False
 
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
@@ -86,6 +107,54 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         request.state.user = payload.get("sub", "anonymous")
         request.state.api_key = payload.get("api_key", "default")
 
+        # --- account-mode enforcement (session + account-status) ---------------------------------
+        # A token MINTED by the identity-login path carries a ``jti`` (its session id) and the
+        # SERVER-DERIVED account_id/tenant_id/role claims. ONLY such tokens get the extra checks
+        # below. A token with NO ``jti`` is a legacy shared-secret token (minted when accounts are
+        # off); it MUST flow exactly as before this PR -- no session lookup, no new failure mode --
+        # which is what preserves the default-off smoke flow byte-for-byte.
+        jti = payload.get("jti")
+        session_store = getattr(request.app.state, "session_store", None)
+        if (
+            jti is not None
+            and settings.accounts_enabled
+            and session_store is not None
+        ):
+            # Session must exist and be live (not revoked, not expired). A revoked session (logout /
+            # admin revoke) or an expired one fails the NEXT request here -- enforcement at the
+            # chokepoint, not merely at login.
+            session = session_store.get_session(str(jti))
+            if session is None or not session.is_live():
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Session is no longer valid"},
+                )
+            # Re-check account status so a DISABLE takes effect on the next request, even though the
+            # role/tenant were copied into the session at login. A missing account store while
+            # account-mode is on is an honest failure, not a silent pass.
+            account_store = getattr(request.app.state, "account_store", None)
+            if account_store is None:
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Account verification is unavailable"},
+                )
+            account = account_store.get_account_by_id(session.account_id)
+            if account is None or not account.is_active:
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Account is disabled"},
+                )
+            # Attach SERVER-DERIVED identity for the central authz dependency. Sourced from the
+            # session/account records, never from the request body -- ``require_role`` reads exactly
+            # these. Role comes from the live account record (authoritative now), tenant from the
+            # session (the granted tenant fixed at login).
+            request.state.account_id = session.account_id
+            request.state.tenant_id = session.tenant_id
+            request.state.role = account.role
+            request.state.session_id = session.session_id
+            # Best-effort last-seen; never blocks or fails the request.
+            session_store.touch_session(session.session_id)
+
         return await call_next(request)
 
 
@@ -97,18 +166,25 @@ def create_token(
     account_id: str | None = None,
     tenant_id: str | None = None,
     role: str | None = None,
+    jti: str | None = None,
 ) -> str:
     """Create a JWT token.
 
-    Backward-compatible by construction: with no ``account_id``/``tenant_id``/``role`` supplied the
-    payload is exactly the historical ``{sub, api_key, exp}`` and every existing caller/token is
-    unchanged. When the identity-login path (``api/routes/auth.py``) supplies SERVER-DERIVED
-    account claims, they are embedded ADDITIVELY as ``account_id``/``tenant_id``/``role``.
+    Backward-compatible by construction: with no ``account_id``/``tenant_id``/``role``/``jti``
+    supplied the payload is exactly the historical ``{sub, api_key, exp}`` and every existing
+    caller/token is unchanged. When the identity-login path (``api/routes/auth.py``) supplies
+    SERVER-DERIVED account claims, they are embedded ADDITIVELY as ``account_id``/``tenant_id``/
+    ``role``, and the session it opened is embedded as ``jti``.
 
-    These claims are only ever passed in by the server after an account lookup; they are never read
-    from a request body. The dispatch-side enforcement that *consumes* them (session/jti checks,
-    disabled-account lockout at the chokepoint, ``require_role``) is deferred to the NEXT spine PR
-    -- this PR only mints the claims so the account they describe is recorded in the token.
+    ``jti`` is the session id the login created (see ``api/services/sessions``). Its PRESENCE is the
+    signal the dispatch path uses to tell an account-mode token from a legacy shared-secret token: a
+    token with a ``jti`` gets the session-live + account-not-disabled checks at the chokepoint; a
+    token with NO ``jti`` (the legacy ``dashboard:<user>`` mint used when accounts are off) flows
+    exactly as before, with no session lookup. This is what keeps the default-off smoke flow
+    byte-for-byte unchanged.
+
+    All of these claims are only ever passed in by the server after an account lookup; they are never
+    read from a request body.
     """
     from datetime import timedelta
 
@@ -123,4 +199,7 @@ def create_token(
         payload["tenant_id"] = tenant_id
     if role is not None:
         payload["role"] = role
+    # Session id (== session record id). Its presence marks the token as account-mode at dispatch.
+    if jti is not None:
+        payload["jti"] = jti
     return jwt.encode(payload, settings.jwt_secret, algorithm=settings.jwt_algorithm)

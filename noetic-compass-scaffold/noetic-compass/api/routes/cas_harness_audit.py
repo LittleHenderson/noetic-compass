@@ -10,6 +10,7 @@ from __future__ import annotations
 from datetime import UTC, datetime
 import hashlib
 import json
+import logging
 from typing import Literal
 from urllib.parse import urlparse
 
@@ -43,6 +44,7 @@ from api.services.cas_harness_distributed_audits import (
     record_worker_evidence,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.evidence_ownership import record_evidence_ownership
 from api.services.cas_harness_architecture_adapter import (
     ModelArchitectureDeclaration as ServiceModelArchitectureDeclaration,
 )
@@ -103,6 +105,8 @@ from api.services.cas_harness_verifier_decision_adapter import verifier_decision
 
 
 router = APIRouter(prefix="/api/cas-harness/audit", tags=["cas_harness_audit"])
+
+logger = logging.getLogger(__name__)
 
 AuditMode = Literal["BALANCED", "HIGH_PRECISION", "MAX_COVERAGE_TRIAGE"]
 ScalePlanPrecision = Literal["fp16", "bf16", "int8", "int4"]
@@ -204,6 +208,57 @@ def _caller_identity(request: Request) -> tuple[str | None, str | None]:
         # session routes stay reachable but the caller is treated as anonymous.
         return None, None
     return payload.get("sub"), payload.get("api_key")
+
+
+def _audit_evidence_state_store(request: Request):
+    """Return the durable ``StateStore`` the evidence-ownership ledger lives in, or ``None``.
+
+    Resolved EXACTLY as ``api/routes/evidence.py``'s ``_evidence_state_store`` does: off
+    ``request.app.state.state_ledger.store`` (a ``StateLedgerHandle`` stashed at startup; see
+    ``api/state_ledger_bootstrap.py`` and ``api/main.py`` lifespan). Both getattrs are defensive so a
+    TestClient that never ran the lifespan, or a deployment with the ledger dark, yields ``None``
+    rather than raising. The caller decides what ``None`` means; here a missing store simply skips the
+    ownership write (it never breaks an audit run).
+    """
+    handle = getattr(request.app.state, "state_ledger", None)
+    if handle is None:
+        return None
+    return getattr(handle, "store", None)
+
+
+def _record_audit_evidence_ownership(request: Request, trace_id: str | None) -> None:
+    """Record per-tenant ownership of a just-produced evidence ``trace_id`` — account mode only.
+
+    Dark default (``settings.accounts_enabled`` False): a complete no-op. No identity read, no store
+    lookup, no new failure mode — the live audit-session routes behave byte-for-byte as today.
+
+    Account mode: the audit-session routes have left the public allowlist, so the auth middleware
+    decoded the jti token and set ``request.state.tenant_id``/``account_id`` (the seam). We assert
+    that the caller's tenant owns the trace the runner just produced, so a later evidence GET/verify/
+    anchor by that tenant is admitted and another tenant's is 404'd. Guarded so an account-mode token
+    that is NOT a jti/login token (no tenant_id on state), an absent store, or a missing trace_id all
+    SAFELY skip the write rather than crash. Ownership recording must never break an audit run, so any
+    store error is logged-and-swallowed (idempotency for re-runs is handled inside
+    ``record_evidence_ownership``).
+    """
+    if not settings.accounts_enabled:
+        return
+    tenant_id = getattr(request.state, "tenant_id", None)
+    account_id = getattr(request.state, "account_id", None)
+    store = _audit_evidence_state_store(request)
+    if tenant_id and account_id and store is not None and trace_id:
+        try:
+            record_evidence_ownership(
+                store, tenant_id=tenant_id, account_id=account_id, trace_id=trace_id
+            )
+        except Exception:
+            # Ownership recording must never break an audit run; log-and-continue.
+            logger.warning(
+                "evidence ownership write failed for trace_id=%s tenant_id=%s",
+                trace_id,
+                tenant_id,
+                exc_info=True,
+            )
 
 
 class ProvenanceChip(BaseModel):
@@ -1572,6 +1627,13 @@ async def run_audit_session(
     """
     _require_locked_tks_definitions()
     owner_sub, owner_api_key = _caller_identity(request)
+    # Per-tenant evidence ownership is now WIRED (see _record_audit_evidence_ownership, called at each
+    # RUN-point below once the evidence trace_id is known). In account mode these routes have left the
+    # auth allowlist, so the middleware decoded the jti token and set request.state.tenant_id/
+    # account_id — a SERVER-derived identity, not a guess — which the ownership write keys on. In dark
+    # mode (the default) the write is a complete no-op. Wired at the RUN point (not at create_session)
+    # because the trace is produced HERE by attach_runner_evidence(...); create_session only attaches a
+    # pre-existing evidence_packet_trace_id supplied by the caller and produces no new trace to own.
     existing = get_session(audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key)
     if existing is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
@@ -1606,6 +1668,9 @@ async def run_audit_session(
         )
         if attached is None:
             raise HTTPException(status_code=404, detail="Audit session not found")
+        # Account mode only: assert this tenant owns the just-produced live-trace evidence. No-op in
+        # dark mode.
+        _record_audit_evidence_ownership(request, live_result.trace_id)
     elif _should_run_api_endpoint(existing):
         prompt = existing.prompt_text or existing.scenario_text or ""
         try:
@@ -1637,6 +1702,9 @@ async def run_audit_session(
         )
         if attached is None:
             raise HTTPException(status_code=404, detail="Audit session not found")
+        # Account mode only: assert this tenant owns the just-produced customer-API evidence. No-op in
+        # dark mode.
+        _record_audit_evidence_ownership(request, api_result.trace_id)
 
     record = run_session(audit_id)
     if record is None:

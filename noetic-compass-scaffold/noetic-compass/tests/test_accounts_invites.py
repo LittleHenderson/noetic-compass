@@ -27,9 +27,11 @@ from fastapi.testclient import TestClient
 from jose import jwt
 
 from api.config import settings
-from api.services.accounts.models import ACCOUNT_KIND
+from api.middleware.auth import create_token
+from api.services.accounts.models import ACCOUNT_KIND, INVITE_KIND, invite_code_hash
 from api.services.accounts.store import AccountStore, InviteRedemptionError
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
+from api.services.sessions import SessionStore
 
 
 # --- store-layer fixtures --------------------------------------------------
@@ -126,6 +128,26 @@ def test_valid_invite_activates_exactly_one_account(store):
     assert accounts[0].payload["tenant_id"] == "tenant-X"
 
 
+def test_invite_payload_stores_hash_not_raw_code(store):
+    invite = store.create_invite(code="raw-bearer-secret", role="member", tenant_id="tenant-hash")
+
+    records = store._store.list(store._tenant, INVITE_KIND)
+    assert len(records) == 1
+    payload = records[0].payload
+    assert "code" not in payload
+    assert payload["code_hash"] == invite_code_hash(invite.code)
+    assert "raw-bearer-secret" not in repr(payload)
+
+    # Lookup/redeem still works because the caller presents the raw code and the store resolves the
+    # digest-backed record id; the stored payload never has to reveal the bearer credential.
+    refreshed = store.get_invite(invite.code)
+    assert refreshed is not None
+    assert refreshed.code == ""
+    assert refreshed.code_hash == invite_code_hash(invite.code)
+    account = store.redeem_invite(code=invite.code, email_or_username="hash@example.com")
+    assert account.tenant_id == "tenant-hash"
+
+
 def test_redeem_is_idempotent_for_same_code_and_email(store):
     # A re-delivery of the SAME (code, email) returns the SAME account and never mints a second.
     invite = store.create_invite(code="idem", max_uses=1)
@@ -186,24 +208,31 @@ def test_get_account_by_email_resolves_server_derived_identity(store):
 
 @pytest.fixture
 def accounts_login_client(tmp_path, monkeypatch):
-    """A TestClient with accounts_enabled=True and a durable account store on app.state.
+    """A TestClient with accounts_enabled=True and durable account/session stores on app.state.
 
-    Yields ``(client, store)``. We enter the app with the flag still OFF so the lifespan installs
-    NO store (and writes no stray ledger file), then flip ``accounts_enabled`` on and install our
-    temp-path store directly. The route/login code reads ``settings.accounts_enabled`` per request,
-    so the post-startup flip takes effect for every call in the test.
+    Yields ``(client, account_store, session_store)``. We enter the app with the flag still OFF so
+    the lifespan installs NO store (and writes no stray ledger file), then flip ``accounts_enabled``
+    on and install temp-path stores directly. The route/login/middleware code reads
+    ``settings.accounts_enabled`` per request, so the post-startup flip takes effect for every call
+    in the test.
     """
     from api.main import app
 
     backend = SqliteStateStore(tmp_path / f"{uuid.uuid4().hex}.db")
     acct_store = AccountStore(backend)
+    session_store = SessionStore(backend)
 
     # debug stays True (root conftest) so _authorize_mint's open path is permitted; the account
     # existence check is what gates identity in this posture.
     with TestClient(app) as client:
         monkeypatch.setattr(settings, "accounts_enabled", True)
         app.state.account_store = acct_store
-        yield client, acct_store
+        app.state.session_store = session_store
+        try:
+            yield client, acct_store, session_store
+        finally:
+            app.state.account_store = None
+            app.state.session_store = None
 
 
 def _decode(token: str) -> dict:
@@ -211,14 +240,14 @@ def _decode(token: str) -> dict:
 
 
 def test_unknown_user_cannot_log_in_when_accounts_enabled(accounts_login_client):
-    client, _store = accounts_login_client
+    client, _store, _sessions = accounts_login_client
     resp = client.post("/auth/token", json={"username": "ghost@example.com"})
     assert resp.status_code == 401
     assert "no account" in resp.json()["detail"].lower()
 
 
 def test_valid_login_binds_server_derived_claims(accounts_login_client):
-    client, store = accounts_login_client
+    client, store, sessions = accounts_login_client
     invite = store.create_invite(code="login-good", role="member", tenant_id="tenant-L")
     account = store.redeem_invite(code=invite.code, email_or_username="member@example.com")
 
@@ -230,10 +259,17 @@ def test_valid_login_binds_server_derived_claims(accounts_login_client):
     assert claims["tenant_id"] == "tenant-L"
     assert claims["role"] == "member"
     assert claims["sub"] == "member@example.com"
+    assert claims["jti"]
+
+    session = sessions.get_session(claims["jti"])
+    assert session is not None
+    assert session.is_live()
+    assert session.account_id == account.account_id
+    assert session.tenant_id == "tenant-L"
 
 
 def test_disabled_account_cannot_log_in(accounts_login_client, tmp_path):
-    client, store = accounts_login_client
+    client, store, _sessions = accounts_login_client
     invite = store.create_invite(code="to-disable", role="member", tenant_id="t-dis")
     account = store.redeem_invite(code=invite.code, email_or_username="disable-me@example.com")
 
@@ -251,7 +287,7 @@ def test_disabled_account_cannot_log_in(accounts_login_client, tmp_path):
 
 
 def test_body_supplied_tenant_and_role_are_ignored_on_login(accounts_login_client):
-    client, store = accounts_login_client
+    client, store, _sessions = accounts_login_client
     invite = store.create_invite(code="no-inject", role="member", tenant_id="real-tenant")
     store.redeem_invite(code=invite.code, email_or_username="honest@example.com")
 
@@ -277,7 +313,7 @@ def test_body_supplied_tenant_and_role_are_ignored_on_login(accounts_login_clien
 
 
 def test_redeem_route_creates_one_account_and_is_fail_closed(accounts_login_client):
-    client, store = accounts_login_client
+    client, store, _sessions = accounts_login_client
     invite = store.create_invite(code="route-code", role="member", tenant_id="t-route")
 
     # Body tries to inject role/tenant — the redeem model has no such fields, so they are ignored.
@@ -302,3 +338,122 @@ def test_redeem_route_creates_one_account_and_is_fail_closed(accounts_login_clie
         json={"code": invite.code, "email_or_username": "late@example.com"},
     )
     assert bad.status_code == 400
+
+
+# --- session enforcement + role gate --------------------------------------
+
+
+def _login_token(client: TestClient, identity: str) -> tuple[str, dict]:
+    resp = client.post("/auth/token", json={"username": identity})
+    assert resp.status_code == 200, resp.text
+    token = resp.json()["token"]
+    return token, _decode(token)
+
+
+def _auth(token: str) -> dict[str, str]:
+    return {"Authorization": f"Bearer {token}"}
+
+
+def _disable_account(store: AccountStore, account_id: str) -> None:
+    backend = store._store
+    rec = backend.get(store._tenant, ACCOUNT_KIND, account_id)
+    assert rec is not None
+    disabled_payload = dict(rec.payload)
+    disabled_payload["status"] = "disabled"
+    backend.put(rec.with_payload(disabled_payload), expected_version=rec.version)
+
+
+def test_logout_revokes_current_session_and_blocks_next_request(accounts_login_client):
+    client, store, sessions = accounts_login_client
+    invite = store.create_invite(code="logout-code", role="member", tenant_id="tenant-logout")
+    store.redeem_invite(code=invite.code, email_or_username="logout@example.com")
+    token, claims = _login_token(client, "logout@example.com")
+
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 200
+    logout = client.post("/auth/logout", headers=_auth(token))
+    assert logout.status_code == 200
+    assert logout.json() == {"revoked": True}
+
+    session = sessions.get_session(claims["jti"])
+    assert session is not None
+    assert session.is_revoked
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 401
+
+
+def test_admin_revoke_blocks_target_session_next_request(accounts_login_client):
+    client, store, sessions = accounts_login_client
+    member_invite = store.create_invite(code="member-session", role="member", tenant_id="tenant-r")
+    operator_invite = store.create_invite(
+        code="operator-session", role="operator", tenant_id="tenant-r"
+    )
+    store.redeem_invite(code=member_invite.code, email_or_username="member-r@example.com")
+    store.redeem_invite(code=operator_invite.code, email_or_username="operator-r@example.com")
+    member_token, member_claims = _login_token(client, "member-r@example.com")
+    operator_token, _operator_claims = _login_token(client, "operator-r@example.com")
+
+    revoke = client.post(
+        f"/auth/sessions/{member_claims['jti']}/revoke",
+        headers=_auth(operator_token),
+    )
+    assert revoke.status_code == 200
+    assert revoke.json() == {"revoked": True}
+
+    session = sessions.get_session(member_claims["jti"])
+    assert session is not None
+    assert session.is_revoked
+    assert client.get("/notation/grammar", headers=_auth(member_token)).status_code == 401
+
+
+def test_disabled_account_is_rejected_on_next_request(accounts_login_client):
+    client, store, _sessions = accounts_login_client
+    invite = store.create_invite(code="disable-next", role="member", tenant_id="tenant-disable")
+    account = store.redeem_invite(code=invite.code, email_or_username="next-disable@example.com")
+    token, _claims = _login_token(client, "next-disable@example.com")
+
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 200
+    _disable_account(store, account.account_id)
+    blocked = client.get("/notation/grammar", headers=_auth(token))
+    assert blocked.status_code == 401
+    assert "disabled" in blocked.json()["detail"].lower()
+
+
+def test_invite_create_requires_account_role_not_legacy_mint_secret(accounts_login_client):
+    client, store, _sessions = accounts_login_client
+
+    anonymous = client.post("/accounts/invite", json={"role": "member"})
+    assert anonymous.status_code == 401
+
+    legacy_token = create_token(sub="legacy", api_key="dashboard:legacy")
+    legacy = client.post("/accounts/invite", json={"role": "member"}, headers=_auth(legacy_token))
+    assert legacy.status_code == 401
+
+    member_invite = store.create_invite(code="member-role", role="member", tenant_id="tenant-gate")
+    operator_invite = store.create_invite(
+        code="operator-role", role="operator", tenant_id="tenant-gate"
+    )
+    store.redeem_invite(code=member_invite.code, email_or_username="member-gate@example.com")
+    store.redeem_invite(code=operator_invite.code, email_or_username="operator-gate@example.com")
+    member_token, _member_claims = _login_token(client, "member-gate@example.com")
+    operator_token, _operator_claims = _login_token(client, "operator-gate@example.com")
+
+    denied = client.post("/accounts/invite", json={"role": "member"}, headers=_auth(member_token))
+    assert denied.status_code == 403
+
+    ok = client.post(
+        "/accounts/invite",
+        json={"role": "member", "tenant_id": "tenant-created"},
+        headers=_auth(operator_token),
+    )
+    assert ok.status_code == 200
+    body = ok.json()
+    assert body["code"]
+    assert body["role"] == "member"
+    assert body["tenant_id"] == "tenant-created"
+
+    records = store._store.list(store._tenant, INVITE_KIND)
+    created_payloads = [
+        rec.payload for rec in records if rec.payload.get("tenant_id") == "tenant-created"
+    ]
+    assert len(created_payloads) == 1
+    assert "code" not in created_payloads[0]
+    assert created_payloads[0]["code_hash"] == invite_code_hash(body["code"])

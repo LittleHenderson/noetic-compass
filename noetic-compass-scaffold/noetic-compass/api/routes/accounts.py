@@ -9,9 +9,13 @@ stashed on ``app.state.account_store`` -- see ``api/main.py``):
   caller cannot tell "no such code" from "used code" from "expired code"). It returns the account's
   PUBLIC projection only -- no secret, and it never mints a token here (login is ``/auth/token``).
 
-* ``POST /accounts/invite`` -- **gated**. Creates an invite. Full RBAC (an operator/admin role
-  check) is a LATER PR; for now this is restricted to debug OR a presented operator secret
-  (the existing shared mint secret, reused as a coarse operator gate). See the TODO below.
+* ``POST /accounts/invite`` -- **role-gated**. Creates an invite. Requires a real
+  operator/admin/owner ACCOUNT token (``require_role("operator","admin","owner")`` reading the
+  SERVER-SET ``request.state.role``) -- a member-role token is refused with 403, an unauthenticated
+  request with 401. This closes the enable-blocker where the prior gate accepted the
+  bundle-readable ``X-Auth-Mint-Secret`` shared secret: a shared secret shipped in the dashboard
+  bundle could mint invites, so invite creation is now an authenticated privileged action, not a
+  secret anyone with the bundle holds.
 
 Durability is NON-NEGOTIABLE for account state: unlike the CRM route, this endpoint does NOT fall
 back to an in-memory store. If no durable account store was installed (``accounts_enabled`` off, or
@@ -21,13 +25,12 @@ state. Account/invite records must be durable or absent -- never silently in-mem
 
 from __future__ import annotations
 
-import hmac
 from typing import Optional
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
-from api.config import settings
+from api.dependencies.authz import require_role
 from api.services.accounts.models import DEFAULT_INVITE_ROLE, ROLE_VALUES, Role
 from api.services.accounts.store import AccountStore, InviteRedemptionError
 
@@ -119,34 +122,20 @@ class CreateInviteResponse(BaseModel):
     created_at: str
 
 
-def _authorize_invite_create(request: Request) -> None:
-    """Coarse gate for invite creation until real RBAC lands.
-
-    TODO(Phase 5 / RBAC): replace this with a ``require_role("operator"|"admin")`` dependency once
-    the role-claim + central authz dependency exist. For now, restrict invite creation to:
-      * a debug deployment (local dev/demo), OR
-      * a request presenting the operator secret (the shared ``NC_AUTH_MINT_SECRET``, reused here
-        purely as a coarse operator credential) via ``X-Auth-Mint-Secret``.
-    With no operator secret configured and debug off, invite creation is refused (fail closed).
-    """
-    if settings.debug:
-        return
-    configured = settings.auth_mint_secret
-    presented = request.headers.get("X-Auth-Mint-Secret", "")
-    if configured and hmac.compare_digest(
-        presented.encode("utf-8"), configured.encode("utf-8")
-    ):
-        return
-    raise HTTPException(
-        status_code=403,
-        detail="Invite creation requires operator authorization.",
-    )
-
-
 @router.post("/invite", response_model=CreateInviteResponse)
-async def create_invite(body: CreateInviteRequest, request: Request) -> CreateInviteResponse:
-    """Create an invite code. Gated (debug or operator secret) until RBAC lands."""
-    _authorize_invite_create(request)
+async def create_invite(
+    body: CreateInviteRequest,
+    request: Request,
+    _role: str = Depends(require_role("operator", "admin", "owner")),
+) -> CreateInviteResponse:
+    """Create an invite code. Requires an operator/admin/owner account token (role-gated).
+
+    The role gate (:func:`require_role`) reads the SERVER-SET ``request.state.role`` attached by the
+    dispatch middleware from the caller's account+session records -- never the body. A member-role
+    token is refused with 403; an unauthenticated request with 401. This replaced the prior
+    ``X-Auth-Mint-Secret`` shared-secret gate, which a dashboard-bundle reader could satisfy
+    (enable-blocker #1).
+    """
     store = _account_store(request)
     if body.role not in ROLE_VALUES:
         raise HTTPException(status_code=422, detail=f"invalid role {body.role!r}")
