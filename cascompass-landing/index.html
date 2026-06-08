@@ -42,10 +42,15 @@
   }
   @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 
-  .mark{width:74px;height:104px;margin:0 auto 26px;display:block;opacity:.96}
-  .mark .edge{stroke:rgba(45,212,191,.32);stroke-width:1.4;fill:none}
-  .mark .node{fill:#0a1422;stroke:var(--teal);stroke-width:2}
-  .mark .node.lit{fill:var(--teal)}
+  /* Canonical Noetic Compass mark (matches the product favicon/app icon), animated. */
+  .mark{width:98px;height:98px;margin:0 auto 24px;display:block;overflow:visible}
+  .mark .spin{transform-origin:96px 96px;animation:cc-spin 28s linear infinite}
+  .mark .glowring{animation:cc-breathe 5s ease-in-out infinite}
+  .mark .node{animation:cc-pulse 3.6s ease-in-out infinite}
+  @keyframes cc-spin{to{transform:rotate(360deg)}}
+  @keyframes cc-pulse{0%,100%{opacity:.5}50%{opacity:1}}
+  @keyframes cc-breathe{0%,100%{opacity:.4}50%{opacity:.95}}
+  @media (prefers-reduced-motion:reduce){.mark *{animation:none !important}}
 
   .eyebrow{
     font-size:12px; font-weight:800; letter-spacing:.28em;
@@ -92,32 +97,49 @@
 </head>
 <body>
   <main class="wrap">
-    <!-- 10-node Tree-of-Life mark = the 10 Noetics -->
-    <svg class="mark" viewBox="0 0 100 140" aria-label="Noetic Compass AI mark" role="img">
-      <g class="edge">
-        <line x1="50" y1="14" x2="26" y2="40"/><line x1="50" y1="14" x2="74" y2="40"/>
-        <line x1="26" y1="40" x2="74" y2="40"/>
-        <line x1="26" y1="40" x2="26" y2="76"/><line x1="74" y1="40" x2="74" y2="76"/>
-        <line x1="26" y1="40" x2="50" y2="58"/><line x1="74" y1="40" x2="50" y2="58"/>
-        <line x1="26" y1="76" x2="74" y2="76"/>
-        <line x1="26" y1="76" x2="50" y2="58"/><line x1="74" y1="76" x2="50" y2="58"/>
-        <line x1="26" y1="76" x2="50" y2="98"/><line x1="74" y1="76" x2="50" y2="98"/>
-        <line x1="50" y1="58" x2="50" y2="98"/>
-        <line x1="50" y1="98" x2="50" y2="124"/>
-        <line x1="26" y1="76" x2="50" y2="124"/><line x1="74" y1="76" x2="50" y2="124"/>
+    <!-- Canonical Noetic Compass mark: compass ring + 8 neural nodes + needle (animated) -->
+    <svg class="mark" viewBox="0 0 192 192" aria-label="Noetic Compass AI" role="img">
+      <defs>
+        <linearGradient id="teal" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#2dd4bf"/><stop offset="100%" stop-color="#22d3ee"/>
+        </linearGradient>
+        <linearGradient id="glow" x1="0.5" y1="0" x2="0.5" y2="1">
+          <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.3"/><stop offset="100%" stop-color="#22d3ee" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <!-- compass ring + cardinal ticks + needle: slow rotation -->
+      <g class="spin">
+        <circle class="glowring" cx="96" cy="96" r="72" fill="none" stroke="url(#glow)" stroke-width="6"/>
+        <circle cx="96" cy="96" r="62" fill="none" stroke="url(#teal)" stroke-width="2" opacity="0.6"/>
+        <line x1="96" y1="26" x2="96" y2="38" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="96" y1="154" x2="96" y2="166" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="26" y1="96" x2="38" y2="96" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="154" y1="96" x2="166" y2="96" stroke="#2dd4bf" stroke-width="2.5" stroke-linecap="round"/>
+        <polygon points="96,44 92,68 96,62 100,68" fill="#2dd4bf" opacity="0.9"/>
+        <polygon points="96,148 92,124 96,130 100,124" fill="#22d3ee" opacity="0.5"/>
       </g>
-      <g>
-        <circle class="node lit" cx="50" cy="14" r="5.6"/>
-        <circle class="node" cx="26" cy="40" r="5.6"/>
-        <circle class="node" cx="74" cy="40" r="5.6"/>
-        <circle class="node" cx="26" cy="76" r="5.6"/>
-        <circle class="node" cx="74" cy="76" r="5.6"/>
-        <circle class="node lit" cx="50" cy="58" r="5.6"/>
-        <circle class="node" cx="26" cy="98" r="0"/>
-        <circle class="node" cx="50" cy="98" r="5.6"/>
-        <circle class="node" cx="74" cy="98" r="0"/>
-        <circle class="node lit" cx="50" cy="124" r="5.6"/>
+      <!-- neural connections -->
+      <g stroke="#2dd4bf" stroke-width="1" opacity="0.32">
+        <line x1="96" y1="56" x2="130" y2="72"/><line x1="130" y1="72" x2="140" y2="96"/>
+        <line x1="140" y1="96" x2="130" y2="120"/><line x1="130" y1="120" x2="96" y2="136"/>
+        <line x1="96" y1="136" x2="62" y2="120"/><line x1="62" y1="120" x2="52" y2="96"/>
+        <line x1="52" y1="96" x2="62" y2="72"/><line x1="62" y1="72" x2="96" y2="56"/>
+        <line x1="96" y1="56" x2="140" y2="96"/><line x1="96" y1="56" x2="52" y2="96"/>
+        <line x1="96" y1="136" x2="140" y2="96"/><line x1="96" y1="136" x2="52" y2="96"/>
+        <line x1="62" y1="72" x2="130" y2="120"/><line x1="130" y1="72" x2="62" y2="120"/>
       </g>
+      <!-- 8 neural nodes (pulse) -->
+      <circle class="node" cx="96" cy="56" r="4" fill="#2dd4bf"/>
+      <circle class="node" cx="130" cy="72" r="3.5" fill="#22d3ee"/>
+      <circle class="node" cx="140" cy="96" r="4" fill="#2dd4bf"/>
+      <circle class="node" cx="130" cy="120" r="3.5" fill="#22d3ee"/>
+      <circle class="node" cx="96" cy="136" r="4" fill="#2dd4bf"/>
+      <circle class="node" cx="62" cy="120" r="3.5" fill="#22d3ee"/>
+      <circle class="node" cx="52" cy="96" r="4" fill="#2dd4bf"/>
+      <circle class="node" cx="62" cy="72" r="3.5" fill="#22d3ee"/>
+      <!-- center hub -->
+      <circle cx="96" cy="96" r="8" fill="url(#teal)"/>
+      <circle cx="96" cy="96" r="3.5" fill="#05080f"/>
     </svg>
 
     <div class="eyebrow">Noetic Compass AI</div>
