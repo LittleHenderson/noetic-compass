@@ -55,3 +55,50 @@ Open questions added for Codex:
 AUTHORIZED: — (assessment + handoff; no launch-pipeline code or pod action until Codex audits + user "go".)
 
 ---
+
+## 2026-06-09 (final) — claude: injection-detection spike OUTCOME — three findings LOCKED (user-ratified)
+
+The bounded two-bridge spike ran to completion on the user's RunPod A4500 (3 runs, ~$1-2 total).
+Full scientific record: `docs/working/injection_two_bridge_spike_log.md` (commits `e821096` framing-first,
+`fedfa3a` results). Raw artifacts in `C:\Users\wakil\Downloads\`: `spike_results.json` (Run 1),
+`spike_v2_results.json` (Run 2), `spike_v3_qwen_results.json` (Run 3, per-prompt outputs + cos_dist),
+`disambiguate.py` (offline behavioral split). Pod stopped after Run 3 (user action).
+
+**Three findings — LOCKED by user directive 2026-06-09. These are the guardrails that stop anyone
+(future Claude, Codex, or an eager salesperson) from quietly rounding this work up to "we detect
+prompt injection." Any launch copy, spec sheet, EP chip, or customer-facing claim must respect them:**
+
+1. **Injectable-substrate requirement.** The method only has something to detect on a model big
+   enough (and instruction-tuned enough) to actually be injectable. Pythia-160M showed 0% injection
+   compliance → both 160M runs were GREY **by construction** (substrate failure, not method failure).
+   Qwen2.5-1.5B-Instruct showed ~45% compliance → separation appeared (p=9e-5, rank-biserial 0.695).
+   **Implication for gap #1:** the Pythia-160M worker is a valid substrate for η-profile plumbing,
+   WORM smoke, and the live-trace pipeline — but it is NOT a valid substrate for ANY
+   injection-detection validation or demo. Those need an instruct model ≥~1.5B.
+
+2. **What exists today is a behavioral-divergence detector, NOT a hijack detector.** The crude
+   raw-hidden trajectory readout fires on off-task behavior of EITHER sign: hijack-complied
+   (rank-biserial 0.80 vs clean) AND safe-refusal (0.88 vs clean) both separate; injected-but-ignored
+   sits at the clean baseline (0.40 n.s.). The signal is real behavior, not a text-structure confound
+   (the matched CLEAN_INSTRUCTION control + the ignored-group flatness kill that objection) — but it
+   cannot distinguish "model was hijacked" from "model safely refused." A fire alarm that rings
+   equally for a fire and for someone putting the fire out is not sellable as a fire alarm.
+
+3. **The typed-probe hijack-vs-refusal test is the GATE.** Before anyone makes a production
+   injection-detection claim: build the CAS-typed Qwen probe (the registered two-bridge method —
+   typed semantic classes carry content; a refusal η-profile should differ from a compliance
+   η-profile) and run a hijack/refuse/ignore/clean design at adequate n. The gate PASSES only if the
+   typed method separates hijack from refusal. Until then the permitted claim ceiling is:
+   "exploratory evidence of internal behavioral-divergence signal on an injectable instruct model."
+   No 40 GB / 20B spend before the typed method passes at small scale. This experiment is scheduled
+   for a fresh deliberate session (user directive: not run tired).
+
+**Status note for Codex:** all three runs were EXPLORATORY (logged as such BEFORE execution, framing
+commit `e821096`). Nothing here validates the pre-registered H1/H2/H3; nothing here is a customer
+verdict. The registered method (CAS-typed probe, two-bridge internal-vs-externalized) remains
+UNTESTED — that is open question #6's context: whoever owns the milestone-2 η-runner inherits finding
+#1 (substrate must be injectable) and finding #3 (the gate) as design constraints.
+
+AUTHORIZED: — (record only; no launch-pipeline code or pod action until Codex audits + user "go".)
+
+---
