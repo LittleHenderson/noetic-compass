@@ -102,6 +102,13 @@ from api.services.cas_harness_tks_definition_lock import (
     assert_tks_definition_lock_for_audit,
 )
 from api.services.cas_harness_verifier_decision_adapter import verifier_decision_from_packet
+from api.services.production.state_substrate import StateStore, StateStoreError
+from api.services.quotas import (
+    QuotaExceeded,
+    consume_quota,
+    current_monthly_period_key,
+    get_quota_limit,
+)
 
 
 router = APIRouter(prefix="/api/cas-harness/audit", tags=["cas_harness_audit"])
@@ -208,6 +215,112 @@ def _caller_identity(request: Request) -> tuple[str | None, str | None]:
         # session routes stay reachable but the caller is treated as anonymous.
         return None, None
     return payload.get("sub"), payload.get("api_key")
+
+
+def _consume_audit_creation_quota(request: Request, *, source: str) -> None:
+    """Consume one monthly audit quota unit when quota enforcement is enabled.
+
+    Dark default: ``NC_QUOTAS_ENABLED=false`` returns immediately and leaves the
+    legacy audit-session routes unchanged. Enabled path is account-mode only:
+    meter against the server-derived tenant from middleware when present, or
+    validate the durable ``jti`` session here when the route is reached directly.
+    """
+    if not settings.quotas_enabled:
+        return
+
+    tenant_id = _quota_tenant_id(request)
+    store = _quota_state_store(request)
+    limit = get_quota_limit()
+    period_key = current_monthly_period_key()
+    try:
+        consume_quota(
+            store,
+            tenant_id=tenant_id,
+            period_key=period_key,
+            limit=limit,
+            source=source,
+        )
+    except QuotaExceeded as exc:
+        raise HTTPException(
+            status_code=429,
+            detail={
+                "error": "quota_exceeded",
+                "tenant_id": exc.tenant_id,
+                "period": period_key,
+                "limit": exc.limit,
+                "count": exc.count,
+            },
+        ) from exc
+    except StateStoreError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail=f"Quota store is unavailable: {exc}",
+        ) from exc
+
+
+def _quota_state_store(request: Request) -> StateStore:
+    account_store = getattr(request.app.state, "account_store", None)
+    store = getattr(account_store, "_store", None)
+    if store is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Quota enforcement requires the durable account StateStore.",
+        )
+    return store
+
+
+def _quota_tenant_id(request: Request) -> str:
+    state_tenant = getattr(request.state, "tenant_id", None)
+    if state_tenant is not None and str(state_tenant).strip():
+        return str(state_tenant).strip()
+
+    auth_header = request.headers.get("Authorization", "")
+    if not auth_header.startswith("Bearer "):
+        raise HTTPException(
+            status_code=401,
+            detail="Account-mode authentication is required for metered audit creation.",
+        )
+
+    try:
+        payload = jwt.decode(
+            auth_header[7:],
+            settings.jwt_secret,
+            algorithms=[settings.jwt_algorithm],
+        )
+    except JWTError as exc:
+        raise HTTPException(status_code=401, detail=f"Invalid token: {exc}") from exc
+
+    session_id = str(payload.get("jti") or "").strip()
+    if not session_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Account-mode session token is required for metered audit creation.",
+        )
+
+    session_store = getattr(request.app.state, "session_store", None)
+    account_store = getattr(request.app.state, "account_store", None)
+    if session_store is None or account_store is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Account/session stores are unavailable for quota enforcement.",
+        )
+
+    session = session_store.get_session(session_id)
+    if session is None or not session.is_live():
+        raise HTTPException(status_code=401, detail="Session is no longer valid")
+
+    account = account_store.get_account_by_id(session.account_id)
+    if account is None or not account.is_active:
+        raise HTTPException(status_code=401, detail="Account is disabled")
+
+    request.state.user = account.email_or_username
+    request.state.api_key = f"account:{account.account_id}"
+    request.state.account_id = account.account_id
+    request.state.tenant_id = session.tenant_id
+    request.state.role = account.role
+    request.state.session_id = session.session_id
+    session_store.touch_session(session.session_id)
+    return session.tenant_id
 
 
 def _audit_evidence_state_store(request: Request):
@@ -1265,7 +1378,10 @@ async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
 
 
 @router.post("/distributed/session", response_model=DistributedAuditResponse)
-async def create_distributed_audit_session(req: ScalePlanRequest) -> DistributedAuditResponse:
+async def create_distributed_audit_session(
+    req: ScalePlanRequest,
+    request: Request,
+) -> DistributedAuditResponse:
     """Create a real distributed audit control-plane run from an open-weight plan.
 
     Carries the same frontier gates as ``/scale-plan`` and more: a 300B-4T run is
@@ -1280,6 +1396,7 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
     immutable store reused as CAS-Native training data (gate 8). >4T is always refused.
     """
     _require_locked_tks_definitions()
+    _consume_audit_creation_quota(request, source="cas_harness_distributed_audit")
     try:
         record = create_distributed_audit(
             PlannerScalePlanRequest(
@@ -1593,6 +1710,7 @@ async def create_audit_session(req: AuditSessionRequest, request: Request) -> Au
     payload = req.model_dump(mode="json")
     if req.evidence_packet_trace_id:
         payload.update(_audit_evidence_for_trace(req.evidence_packet_trace_id))
+    _consume_audit_creation_quota(request, source="cas_harness_audit_session")
     record = create_session(payload, owner_sub=owner_sub, owner_api_key=owner_api_key)
     return AuditSessionResponse.model_validate(record.to_dict())
 

@@ -1,6 +1,7 @@
-import { useState, type CSSProperties, type FormEvent } from 'react';
+import { useEffect, useState, type CSSProperties, type FormEvent } from 'react';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAccountAuth } from '../components/auth/AccountAuthProvider';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import {
@@ -14,7 +15,7 @@ const headingStyle: CSSProperties = {
   margin: 0,
   fontSize: 24,
   fontWeight: 700,
-  letterSpacing: -0.3,
+  letterSpacing: 0,
   color: COLORS.textPrimary,
 };
 
@@ -52,9 +53,6 @@ const inputStyle: CSSProperties = {
   outline: 'none',
 };
 
-// Bordered ghost button matching the production noeticcompass nav style:
-// transparent fill, 1 px hairline border, teal text + teal-tinted hover fill.
-// No gradient, no glow, no drop shadow.
 const buttonStyle: CSSProperties = {
   width: '100%',
   marginTop: 8,
@@ -70,23 +68,61 @@ const buttonStyle: CSSProperties = {
   cursor: 'pointer',
 };
 
-const footnoteStyle: CSSProperties = {
-  marginTop: 20,
-  paddingTop: 16,
-  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-  fontSize: 11.5,
-  lineHeight: 1.55,
-  color: COLORS.textMuted,
-};
+const statusStyle = (kind: 'error' | 'muted'): CSSProperties => ({
+  marginTop: 14,
+  padding: '10px 12px',
+  borderRadius: 6,
+  border:
+    kind === 'error'
+      ? '1px solid rgba(251, 113, 133, 0.35)'
+      : '1px solid rgba(148, 163, 184, 0.14)',
+  background:
+    kind === 'error'
+      ? 'rgba(251, 113, 133, 0.09)'
+      : 'rgba(148, 163, 184, 0.05)',
+  color: kind === 'error' ? '#ffe4e6' : COLORS.textSecondary,
+  fontSize: 12.5,
+  lineHeight: 1.5,
+});
+
+function redirectTarget(from: unknown): string {
+  if (typeof from === 'string' && from.startsWith('/') && from !== '/login') {
+    return from;
+  }
+  return '/license';
+}
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { session, login } = useAccountAuth();
   const [email, setEmail] = useState('');
   const [code, setCode] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const from = (location.state as { from?: unknown } | null)?.from;
+  const nextPath = redirectTarget(from);
+
+  useEffect(() => {
+    if (session) navigate(nextPath, { replace: true });
+  }, [navigate, nextPath, session]);
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    navigate('/license');
+    setError(null);
+    setPending(true);
+    try {
+      await login({
+        email,
+        inviteCode: code,
+      });
+      navigate(nextPath, { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Sign in failed.');
+    } finally {
+      setPending(false);
+    }
   };
 
   return (
@@ -94,8 +130,8 @@ export default function LoginPage() {
       <GlassPanel intensity="regular" padding={24} ariaLabel="Sign in to Atlas Viewer">
         <h1 style={headingStyle}>Sign in</h1>
         <p style={subheadingStyle}>
-          Private alpha preview. Access is by invitation only — your email and
-          invite code are reviewed before we provision a license.
+          Sign in with the email on your invite. Add the invite code the first
+          time you use this account.
         </p>
 
         <form onSubmit={handleSubmit}>
@@ -123,17 +159,21 @@ export default function LoginPage() {
               id="login-code"
               type="text"
               autoComplete="one-time-code"
-              placeholder="alpha-•••• ••••"
+              placeholder="atlas-alpha-..."
               value={code}
               onChange={(event) => setCode(event.target.value)}
               style={inputStyle}
-              required
             />
           </div>
 
           <motion.button
             type="submit"
-            style={buttonStyle}
+            style={{
+              ...buttonStyle,
+              opacity: pending ? 0.65 : 1,
+              cursor: pending ? 'not-allowed' : 'pointer',
+            }}
+            disabled={pending}
             whileHover={{
               background: 'rgba(45, 212, 191, 0.16)',
               borderColor: '#5eead4',
@@ -141,15 +181,25 @@ export default function LoginPage() {
             whileTap={{ scale: 0.99 }}
             transition={SPRING_SNAPPY}
           >
-            Continue
+            {pending ? 'Signing in' : 'Sign in'}
           </motion.button>
         </form>
 
-        <p style={footnoteStyle}>
-          Alpha v0 — auth flow is not yet wired to the licensing backend.
-          Continue advances to the license step without verification.
-          Tracked as roadmap item #5.
-        </p>
+        {error ? (
+          <motion.div
+            role="alert"
+            style={statusStyle('error')}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={SPRING_SNAPPY}
+          >
+            {error}
+          </motion.div>
+        ) : (
+          <p style={statusStyle('muted')}>
+            Returning users can leave the invite code blank.
+          </p>
+        )}
       </GlassPanel>
     </PageShell>
   );

@@ -10,7 +10,7 @@ function jsonResponse(body: unknown, status = 200): Response {
 }
 
 describe('EvidencePacketVerificationPanel', () => {
-  it('verifies a WORM-retained packet from the audit console', async () => {
+  it('verifies an Object Lock retained packet from the audit console', async () => {
     const fetchImpl = vi.fn().mockResolvedValue(
       jsonResponse({
         trace_id: 'trace-123',
@@ -34,7 +34,7 @@ describe('EvidencePacketVerificationPanel', () => {
     expect(screen.getByText('Not checked')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Verify packet' }));
 
-    expect(await screen.findByText('WORM retained')).toBeInTheDocument();
+    expect(await screen.findByText('Object Lock GOVERNANCE')).toBeInTheDocument();
     expect(screen.getByText(/Object Lock GOVERNANCE retention is active/i)).toBeInTheDocument();
     expect(fetchImpl).toHaveBeenCalledWith('/api/evidence/trace-123/verify', {
       method: 'POST',
@@ -66,6 +66,6 @@ describe('EvidencePacketVerificationPanel', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Verify packet' }));
 
     expect(await screen.findByText('S3 verified')).toBeInTheDocument();
-    expect(screen.queryByText('WORM retained')).not.toBeInTheDocument();
+    expect(screen.queryByText('Object Lock GOVERNANCE')).not.toBeInTheDocument();
   });
 });

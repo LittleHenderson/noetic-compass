@@ -12,6 +12,7 @@ export interface PageShellProps {
 const STEPS: Array<{ to: string; label: string }> = [
   { to: '/login', label: 'Sign in' },
   { to: '/license', label: 'License' },
+  { to: '/legal', label: 'Legal' },
   { to: '/model-config', label: 'Model' },
   { to: '/audit-console', label: 'Audit' },
   { to: '/cockpit', label: 'Cockpit' },

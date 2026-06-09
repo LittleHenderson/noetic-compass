@@ -28,6 +28,7 @@ export interface EvidenceRailProps {
   verifierDecision?: VerifierDecisionLike | null;
   auditScope?: AuditScopeLike | null;
   evidencePacketTraceId?: string | null;
+  authToken?: string | null;
   onInspectInAtlas?: () => void;
   className?: string;
 }
@@ -115,6 +116,7 @@ export function EvidenceRail({
   verifierDecision = null,
   auditScope = null,
   evidencePacketTraceId = null,
+  authToken = null,
   onInspectInAtlas,
   className,
 }: EvidenceRailProps): JSX.Element {
@@ -167,7 +169,10 @@ export function EvidenceRail({
               >
                 Explain this packet (plain English)
               </button>
-              <EvidencePacketVerificationPanel traceId={evidencePacketTraceId} />
+              <EvidencePacketVerificationPanel
+                traceId={evidencePacketTraceId}
+                authToken={authToken}
+              />
             </>
           ) : (
             <p style={{ ...packetIdStyle, color: COLORS.textMuted }}>

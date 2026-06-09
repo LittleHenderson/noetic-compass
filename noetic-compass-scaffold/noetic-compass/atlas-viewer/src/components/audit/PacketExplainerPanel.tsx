@@ -392,7 +392,7 @@ function SegmentBubble({
  *
  * Mount ONCE at the console shell level alongside the Guide widget.
  */
-export function PacketExplainerPanel(): JSX.Element {
+export function PacketExplainerPanel({ authToken }: { authToken?: string | null }): JSX.Element {
   const [open, setOpen] = useState(false);
   const [context, setContext] = useState<PacketExplainerOpenDetail | null>(null);
   const [load, setLoad] = useState<LoadState>({ status: 'idle' });
@@ -415,7 +415,9 @@ export function PacketExplainerPanel(): JSX.Element {
     setOpen(true);
     setLoad({ status: 'loading' });
     try {
-      const response = await askExplainerForPacket(detail.traceId);
+      const response = authToken
+        ? await askExplainerForPacket(detail.traceId, { authToken })
+        : await askExplainerForPacket(detail.traceId);
       // §7 verdict-echo guard: the AI's echoed verdict MUST equal the packet's
       // own verdict. Any drift → discard and fail closed.
       if (response.verdict_echo !== detail.epVerdict) {
@@ -429,7 +431,7 @@ export function PacketExplainerPanel(): JSX.Element {
         detail: err instanceof Error ? err.message : String(err),
       });
     }
-  }, []);
+  }, [authToken]);
 
   // Listen for open-requests from any EP view's "Explain this packet" button.
   useEffect(() => {

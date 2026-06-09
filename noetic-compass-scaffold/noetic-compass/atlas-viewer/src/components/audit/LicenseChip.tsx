@@ -7,7 +7,7 @@ import {
 } from '../../lib/casHarnessAudit';
 
 export interface LicenseChipProps {
-  /** Real entitlement signal. When omitted, the chip reads LICENSE UNKNOWN. */
+  /** Real entitlement signal. When omitted, the chip reads OPEN. */
   signal?: LicenseSignal | null;
   /** Pre-resolved state (e.g. from a parent). Overrides `signal` when set. */
   state?: LicenseState;
@@ -49,10 +49,10 @@ function toneFor(state: LicenseState): 'teal' | 'rose' | 'muted' {
 }
 
 /**
- * Persistent license chip — LICENSED / NOT LICENSED / LICENSE UNKNOWN, always
+ * Persistent license chip — LICENSED / NOT LICENSED / OPEN, always
  * a status WORD plus a color. Derives from a real entitlement signal and never
- * speculatively reports LICENSED; an unresolved signal reads LICENSE UNKNOWN
- * (muted). Color is never the only signal.
+ * speculatively reports LICENSED; an unresolved signal reads OPEN (muted).
+ * Color is never the only signal.
  */
 export function LicenseChip({ signal, state, className }: LicenseChipProps): JSX.Element {
   const resolved = state ?? licenseStateFor(signal);

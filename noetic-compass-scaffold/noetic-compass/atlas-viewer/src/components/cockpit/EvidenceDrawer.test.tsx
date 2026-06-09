@@ -200,7 +200,7 @@ describe('EvidenceDrawer', () => {
     );
   });
 
-  it('surfaces WORM-retained Object Lock proof only when /verify confirms retention', async () => {
+  it('surfaces mode-specific Object Lock proof only when /verify confirms retention', async () => {
     const anchoredPacket = packetWithHashes({
       packet_without_hashes_sha256:
         'aaaaaaaaaabbbbbbbbbbccccccccccddddddddddeeeeeeeeee11111111',
@@ -235,7 +235,7 @@ describe('EvidenceDrawer', () => {
     );
 
     expect(await screen.findByTestId('evidence-packet-anchor-status')).toHaveTextContent(
-      'WORM retained',
+      'Object Lock GOVERNANCE',
     );
     expect(screen.getByTestId('evidence-packet-anchor-detail')).toHaveTextContent(
       'confirmed active Object Lock retention',

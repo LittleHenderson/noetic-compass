@@ -296,15 +296,15 @@ describe('lifecycleToTranscript', () => {
 });
 
 describe('licenseStateFor', () => {
-  it('returns LICENSE UNKNOWN when no signal resolves entitlement', () => {
-    expect(licenseStateFor(null)).toBe('LICENSE UNKNOWN');
-    expect(licenseStateFor({})).toBe('LICENSE UNKNOWN');
-    expect(licenseStateFor({ authToken: '   ' })).toBe('LICENSE UNKNOWN');
+  it('returns OPEN when no signal resolves entitlement', () => {
+    expect(licenseStateFor(null)).toBe('OPEN');
+    expect(licenseStateFor({})).toBe('OPEN');
+    expect(licenseStateFor({ authToken: '   ' })).toBe('OPEN');
   });
 
   it('never speculatively reports LICENSED', () => {
-    // No positive signal at all -> UNKNOWN, not LICENSED.
-    expect(licenseStateFor({ entitled: null })).toBe('LICENSE UNKNOWN');
+    // No positive signal at all -> OPEN, not LICENSED.
+    expect(licenseStateFor({ entitled: null })).toBe('OPEN');
   });
 
   it('reads explicit and token-based positive signals as LICENSED', () => {

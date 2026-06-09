@@ -9,6 +9,7 @@ interface ImportMetaEnv {
    * can call api.noeticcompass.com directly without a same-origin proxy.
    */
   readonly VITE_ATLAS_API_BASE_URL?: string;
+  readonly VITE_AUTH_MINT_SECRET?: string;
 }
 
 interface ImportMeta {

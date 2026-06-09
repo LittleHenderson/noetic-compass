@@ -1,11 +1,13 @@
 import { lazy, Suspense, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import LoginPage from './pages/LoginPage';
 import LicensePage from './pages/LicensePage';
+import LegalPage from './pages/LegalPage';
 import ModelConfigPage from './pages/ModelConfigPage';
 import AuditConsolePage from './pages/AuditConsolePage';
+import { AccountAuthProvider, useAccountAuth } from './components/auth/AccountAuthProvider';
 import { GlassPanel } from './components/ui/GlassPanel';
 import { ACCENT_BLUE, COLORS, THEME } from './lib/designTokens';
 
@@ -14,6 +16,11 @@ import { ACCENT_BLUE, COLORS, THEME } from './lib/designTokens';
 const CockpitPage = lazy(() => import('./pages/CockpitPage'));
 
 function AuthGate({ children }: { children: ReactNode }) {
+  const { session } = useAccountAuth();
+  const location = useLocation();
+  if (!session) {
+    return <Navigate to="/login" replace state={{ from: location.pathname }} />;
+  }
   return <>{children}</>;
 }
 
@@ -65,44 +72,49 @@ function CockpitSuspenseFallback() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/license"
-        element={
-          <AuthGate>
-            <LicensePage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/model-config"
-        element={
-          <AuthGate>
-            <ModelConfigPage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/audit-console"
-        element={
-          <AuthGate>
-            <AuditConsolePage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/cockpit"
-        element={
-          <AuthGate>
-            <Suspense fallback={<CockpitSuspenseFallback />}>
-              <CockpitPage />
-            </Suspense>
-          </AuthGate>
-        }
-      />
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
+    <AccountAuthProvider>
+      <Routes>
+        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/license"
+          element={
+            <AuthGate>
+              <LicensePage />
+            </AuthGate>
+          }
+        />
+        <Route path="/legal" element={<LegalPage />} />
+        <Route path="/privacy" element={<LegalPage />} />
+        <Route path="/terms" element={<LegalPage />} />
+        <Route
+          path="/model-config"
+          element={
+            <AuthGate>
+              <ModelConfigPage />
+            </AuthGate>
+          }
+        />
+        <Route
+          path="/audit-console"
+          element={
+            <AuthGate>
+              <AuditConsolePage />
+            </AuthGate>
+          }
+        />
+        <Route
+          path="/cockpit"
+          element={
+            <AuthGate>
+              <Suspense fallback={<CockpitSuspenseFallback />}>
+                <CockpitPage />
+              </Suspense>
+            </AuthGate>
+          }
+        />
+        <Route path="*" element={<Navigate to="/login" replace />} />
+      </Routes>
+    </AccountAuthProvider>
   );
 }

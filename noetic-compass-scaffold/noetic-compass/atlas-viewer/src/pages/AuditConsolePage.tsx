@@ -13,6 +13,7 @@ import { AuditAppFrame } from '../components/shell/AuditAppFrame';
 import { AuditRail } from '../components/shell/AuditRail';
 import { EvidenceRail } from '../components/shell/EvidenceRail';
 import { Disclosure } from '../components/ui/Disclosure';
+import { useAccountAuth } from '../components/auth/AccountAuthProvider';
 import {
   buildDefaultProvenanceChips,
   isSessionCustomerSafe,
@@ -425,6 +426,7 @@ const sectionEyebrowStyle: CSSProperties = {
 
 export default function AuditConsolePage() {
   const navigate = useNavigate();
+  const accountAuth = useAccountAuth();
   const [target, setTarget] = useState<AuditTargetConfig | null>(null);
   const [session, setSession] = useState<CasHarnessAuditSession | null>(null);
   const [sessionError, setSessionError] = useState<string | null>(null);
@@ -458,6 +460,8 @@ export default function AuditConsolePage() {
   // "Why this verdict" methodology drawer (the only home for Stage-19/20/21,
   // accepted_accuracy, Generation Readiness, and the full proof prose).
   const [isMethodologyOpen, setIsMethodologyOpen] = useState(false);
+  const accountAuthToken = accountAuth.session?.token ?? '';
+  const accountLabel = accountAuth.session?.account?.email_or_username ?? accountAuth.session?.email ?? null;
 
   // Probe the live-trace worker once on mount so the run controls can show an
   // honest connection-state chip. Never block the page: if the probe fails
@@ -465,7 +469,10 @@ export default function AuditConsolePage() {
   useEffect(() => {
     const controller = new AbortController();
     let active = true;
-    fetchLiveWorkerHealth({ signal: controller.signal })
+    fetchLiveWorkerHealth({
+      signal: controller.signal,
+      authToken: accountAuthToken || undefined,
+    })
       .then((health) => {
         if (active) setLiveWorkerHealth(health);
       })
@@ -476,7 +483,7 @@ export default function AuditConsolePage() {
       active = false;
       controller.abort();
     };
-  }, []);
+  }, [accountAuthToken]);
 
   const isConfigured = target !== null;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
@@ -499,9 +506,10 @@ export default function AuditConsolePage() {
     [liveWorkerHealth],
   );
   const protectedAuditApiOptions = useMemo<CasHarnessAuditApiOptions | undefined>(() => {
-    const authToken = fleetAuthToken.trim();
+    const authToken = accountAuthToken.trim() || fleetAuthToken.trim();
     return authToken ? { authToken } : undefined;
-  }, [fleetAuthToken]);
+  }, [accountAuthToken, fleetAuthToken]);
+  const effectiveAuthToken = protectedAuditApiOptions?.authToken ?? null;
   const fleetRegisteredWorkers = fleetRun
     ? Math.max(fleetRun.registered_workers, registeredFleetWorker ? 1 : 0)
     : registeredFleetWorker
@@ -545,15 +553,15 @@ export default function AuditConsolePage() {
     ? { label: scopeModel.scopeLabel, validation: scopeModel.isValidationPacket }
     : null;
   // License state from the real entitlement signal available in this UI: a
-  // protected bearer token, or the BYOK provider key. Unresolved => UNKNOWN
+  // protected bearer token, or the BYOK provider key. Unresolved => OPEN
   // (never speculatively LICENSED).
   const licenseState = useMemo(
     () =>
       licenseStateFor({
-        authToken: fleetAuthToken,
+        authToken: effectiveAuthToken,
         redeemedKey: byokApiKey,
       }),
-    [fleetAuthToken, byokApiKey],
+    [effectiveAuthToken, byokApiKey],
   );
 
   const connectReferenceTarget = async () => {
@@ -564,7 +572,7 @@ export default function AuditConsolePage() {
     try {
       const verification = await verifyCasHarnessModelTarget({
         target: { kind: 'demo_reference' },
-      });
+      }, protectedAuditApiOptions);
       setTarget({
         ...M1_REFERENCE_TARGET,
         modelId: verification.target.model_id,
@@ -652,12 +660,15 @@ export default function AuditConsolePage() {
         scenario_text: target.scenarioText,
         selected_modules: SELECTED_MODULES,
         evidence_packet_trace_id: target.evidencePacketTraceId ?? undefined,
-      });
+      }, protectedAuditApiOptions);
       setSession(created);
       const trimmedKey = byokApiKey.trim();
       const started = await startCasHarnessAuditSession(
         created.audit_id,
-        trimmedKey ? { apiKey: trimmedKey } : undefined,
+        {
+          ...protectedAuditApiOptions,
+          apiKey: trimmedKey || undefined,
+        },
       );
       setSession(started);
     } catch (error) {
@@ -692,7 +703,10 @@ export default function AuditConsolePage() {
     setFleetExecutorError(null);
     setIsEnterprisePlanLoading(true);
     try {
-      const plan = await createCasHarnessScalePlan(SCALE_PLAN_REQUESTS[size]);
+      const plan = await createCasHarnessScalePlan(
+        SCALE_PLAN_REQUESTS[size],
+        protectedAuditApiOptions,
+      );
       setEnterprisePlan(enterpriseScalePlanFromApi(plan));
     } catch (error) {
       setEnterprisePlanError(
@@ -938,6 +952,11 @@ export default function AuditConsolePage() {
     }
   };
 
+  const logoutAccount = async (): Promise<void> => {
+    await accountAuth.logout();
+    navigate('/login', { replace: true });
+  };
+
   const railNode = (
     <AuditRail
       licenseState={licenseState}
@@ -948,6 +967,11 @@ export default function AuditConsolePage() {
       onHelp={() => setIsMethodologyOpen(true)}
       onSettings={() => navigate('/model-config')}
       reloadKey={recentReloadKey}
+      authToken={effectiveAuthToken}
+      accountLabel={accountLabel}
+      onLogout={() => {
+        void logoutAccount();
+      }}
     />
   );
 
@@ -960,6 +984,7 @@ export default function AuditConsolePage() {
       verifierDecision={session?.verifier_decision ?? null}
       auditScope={session?.audit_scope ?? null}
       evidencePacketTraceId={session?.evidence_packet_trace_id ?? null}
+      authToken={effectiveAuthToken}
       onInspectInAtlas={session ? () => navigate('/cockpit') : undefined}
     />
   );
@@ -1155,6 +1180,7 @@ export default function AuditConsolePage() {
       rail={railNode}
       center={centerNode}
       evidence={evidenceNode}
+      authToken={effectiveAuthToken}
     />
   );
 }

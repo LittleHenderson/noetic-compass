@@ -1,11 +1,13 @@
-import { useState, type CSSProperties, type FormEvent } from 'react';
+import { useState, type CSSProperties } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import { useAccountAuth } from '../components/auth/AccountAuthProvider';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import {
   ACCENT_TEAL,
   COLORS,
+  FONT_MONO,
   SPRING_SNAPPY,
   THEME,
 } from '../lib/designTokens';
@@ -14,7 +16,7 @@ const headingStyle: CSSProperties = {
   margin: 0,
   fontSize: 24,
   fontWeight: 700,
-  letterSpacing: -0.3,
+  letterSpacing: 0,
   color: COLORS.textPrimary,
 };
 
@@ -25,38 +27,41 @@ const subheadingStyle: CSSProperties = {
   color: COLORS.textSecondary,
 };
 
-const fieldGroupStyle: CSSProperties = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: 6,
-  marginBottom: 12,
+const detailGridStyle: CSSProperties = {
+  display: 'grid',
+  gap: 8,
+  padding: 14,
+  borderRadius: 8,
+  border: '1px solid rgba(255, 255, 255, 0.08)',
+  background: 'rgba(255, 255, 255, 0.03)',
+};
+
+const detailRowStyle: CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: '92px minmax(0, 1fr)',
+  gap: 10,
+  alignItems: 'center',
+  fontSize: 12.5,
 };
 
 const labelStyle: CSSProperties = {
-  fontSize: 10.5,
-  fontWeight: 600,
-  letterSpacing: 1,
-  textTransform: 'uppercase',
   color: COLORS.textMuted,
+  fontSize: 10.5,
+  fontWeight: 700,
+  letterSpacing: 0.7,
+  textTransform: 'uppercase',
 };
 
-const inputStyle: CSSProperties = {
-  width: '100%',
-  padding: '10px 12px',
-  borderRadius: 6,
-  border: '1px solid rgba(255, 255, 255, 0.08)',
-  background: 'rgba(255, 255, 255, 0.02)',
+const valueStyle: CSSProperties = {
   color: COLORS.textPrimary,
-  fontSize: 14,
-  fontFamily: THEME.fontMono,
-  letterSpacing: 0.3,
-  outline: 'none',
+  fontFamily: FONT_MONO,
+  overflowWrap: 'anywhere',
 };
 
 const buttonRowStyle: CSSProperties = {
   display: 'flex',
   gap: 8,
-  marginTop: 8,
+  marginTop: 16,
 };
 
 const primaryButtonStyle: CSSProperties = {
@@ -86,125 +91,117 @@ const ghostButtonStyle: CSSProperties = {
   cursor: 'pointer',
 };
 
-const statusStyle = (kind: 'idle' | 'ok' | 'warn'): CSSProperties => ({
+const statusStyle: CSSProperties = {
   marginTop: 14,
   padding: '10px 12px',
   borderRadius: 6,
   fontSize: 12.5,
   lineHeight: 1.5,
-  background:
-    kind === 'ok'
-      ? 'rgba(34, 197, 94, 0.06)'
-      : kind === 'warn'
-      ? 'rgba(234, 179, 8, 0.06)'
-      : 'rgba(148, 163, 184, 0.04)',
-  border:
-    kind === 'ok'
-      ? '1px solid rgba(34, 197, 94, 0.25)'
-      : kind === 'warn'
-      ? '1px solid rgba(234, 179, 8, 0.25)'
-      : '1px solid rgba(148, 163, 184, 0.12)',
-  color:
-    kind === 'ok'
-      ? '#86efac'
-      : kind === 'warn'
-      ? '#fde68a'
-      : COLORS.textSecondary,
-});
-
-const footnoteStyle: CSSProperties = {
-  marginTop: 20,
-  paddingTop: 16,
-  borderTop: '1px solid rgba(255, 255, 255, 0.05)',
-  fontSize: 11.5,
-  lineHeight: 1.55,
-  color: COLORS.textMuted,
+  background: 'rgba(251, 113, 133, 0.09)',
+  border: '1px solid rgba(251, 113, 133, 0.35)',
+  color: '#ffe4e6',
 };
 
 export default function LicensePage() {
   const navigate = useNavigate();
-  const [key, setKey] = useState('');
-  const [status, setStatus] = useState<'idle' | 'ok' | 'warn'>('idle');
+  const { session, logout } = useAccountAuth();
+  const [error, setError] = useState<string | null>(null);
+  const [pendingLogout, setPendingLogout] = useState(false);
 
-  const handleValidate = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setStatus(key.trim().length > 0 ? 'ok' : 'warn');
+  const account = session?.account;
+  const accountLabel = account?.email_or_username ?? session?.email ?? 'Account session';
+  const tenantLabel = account?.tenant_id ?? 'tenant available after invite redemption';
+  const roleLabel = account?.role ?? 'member';
+  const expiresLabel = session?.expiresAt ?? 'current browser session';
+
+  const handleLogout = async (): Promise<void> => {
+    setError(null);
+    setPendingLogout(true);
+    try {
+      await logout();
+      navigate('/login', { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Logout failed.');
+    } finally {
+      setPendingLogout(false);
+    }
   };
 
   return (
     <PageShell>
-      <GlassPanel intensity="regular" padding={24} ariaLabel="License key">
-        <h1 style={headingStyle}>License key</h1>
+      <GlassPanel intensity="regular" padding={24} ariaLabel="Account session">
+        <h1 style={headingStyle}>Account ready</h1>
         <p style={subheadingStyle}>
-          Paste the alpha license key from your invite email. During alpha the
-          key is accepted on shape only — full validation against the licensing
-          backend lands with roadmap item #11.
+          Your account session is active for CAS Harness audit and evidence
+          calls.
         </p>
 
-        <form onSubmit={handleValidate}>
-          <div style={fieldGroupStyle}>
-            <label htmlFor="license-key" style={labelStyle}>
-              License key
-            </label>
-            <input
-              id="license-key"
-              type="text"
-              spellCheck={false}
-              placeholder="atlas-alpha-•••• •••• •••• ••••"
-              value={key}
-              onChange={(event) => setKey(event.target.value)}
-              style={inputStyle}
-            />
+        <div style={detailGridStyle}>
+          <div style={detailRowStyle}>
+            <span style={labelStyle}>Account</span>
+            <span style={valueStyle}>{accountLabel}</span>
           </div>
-
-          <div style={buttonRowStyle}>
-            <motion.button
-              type="submit"
-              style={primaryButtonStyle}
-              whileHover={{
-                background: 'rgba(45, 212, 191, 0.16)',
-                borderColor: '#5eead4',
-              }}
-              whileTap={{ scale: 0.99 }}
-              transition={SPRING_SNAPPY}
-            >
-              Validate
-            </motion.button>
-            <motion.button
-              type="button"
-              style={ghostButtonStyle}
-              whileHover={{
-                background: 'rgba(255, 255, 255, 0.06)',
-                color: COLORS.textPrimary,
-              }}
-              whileTap={{ scale: 0.99 }}
-              transition={SPRING_SNAPPY}
-              onClick={() => navigate('/model-config')}
-            >
-              Continue
-            </motion.button>
+          <div style={detailRowStyle}>
+            <span style={labelStyle}>Tenant</span>
+            <span style={valueStyle}>{tenantLabel}</span>
           </div>
-        </form>
+          <div style={detailRowStyle}>
+            <span style={labelStyle}>Role</span>
+            <span style={valueStyle}>{roleLabel}</span>
+          </div>
+          <div style={detailRowStyle}>
+            <span style={labelStyle}>Expires</span>
+            <span style={valueStyle}>{expiresLabel}</span>
+          </div>
+        </div>
 
-        {status !== 'idle' ? (
+        <div style={buttonRowStyle}>
+          <motion.button
+            type="button"
+            style={primaryButtonStyle}
+            whileHover={{
+              background: 'rgba(45, 212, 191, 0.16)',
+              borderColor: '#5eead4',
+            }}
+            whileTap={{ scale: 0.99 }}
+            transition={SPRING_SNAPPY}
+            onClick={() => navigate('/audit-console')}
+          >
+            Continue
+          </motion.button>
+          <motion.button
+            type="button"
+            style={{
+              ...ghostButtonStyle,
+              opacity: pendingLogout ? 0.65 : 1,
+              cursor: pendingLogout ? 'not-allowed' : 'pointer',
+            }}
+            disabled={pendingLogout}
+            whileHover={{
+              background: 'rgba(255, 255, 255, 0.06)',
+              color: COLORS.textPrimary,
+            }}
+            whileTap={{ scale: 0.99 }}
+            transition={SPRING_SNAPPY}
+            onClick={() => {
+              void handleLogout();
+            }}
+          >
+            {pendingLogout ? 'Signing out' : 'Sign out'}
+          </motion.button>
+        </div>
+
+        {error ? (
           <motion.div
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={SPRING_SNAPPY}
-            style={statusStyle(status)}
-            role="status"
+            style={statusStyle}
+            role="alert"
           >
-            {status === 'ok'
-              ? 'License accepted (alpha shape-check). Continue to model selection.'
-              : 'Enter a license key, or press Continue to proceed without one.'}
+            {error}
           </motion.div>
         ) : null}
-
-        <p style={footnoteStyle}>
-          Alpha v0 — no key is required to reach the cockpit. Full license
-          enforcement, expiry, and seat counting are part of the licensing
-          rollout (item #11).
-        </p>
       </GlassPanel>
     </PageShell>
   );

@@ -19,6 +19,7 @@ export interface EvidencePacketVerificationOptions {
   baseUrl?: string;
   fetchImpl?: typeof fetch;
   signal?: AbortSignal;
+  authToken?: string | null;
 }
 
 export class EvidencePacketVerificationError extends Error {
@@ -68,7 +69,7 @@ export async function verifyEvidencePacket(
   try {
     response = await fetchImpl(evidencePacketVerifyUrl(trimmed, options?.baseUrl), {
       method: 'POST',
-      headers: { Accept: 'application/json' },
+      headers: authHeaders(options?.authToken),
       signal: options?.signal,
     });
   } catch (error) {
@@ -97,6 +98,15 @@ export async function verifyEvidencePacket(
   }
 
   return parseEvidenceVerifyResponse(body);
+}
+
+function authHeaders(authToken?: string | null): Record<string, string> {
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  const trimmed = authToken?.trim();
+  if (trimmed) {
+    headers.Authorization = /^Bearer\s+/i.test(trimmed) ? trimmed : `Bearer ${trimmed}`;
+  }
+  return headers;
 }
 
 function parseEvidenceVerifyResponse(raw: unknown): EvidenceVerifyResponse {

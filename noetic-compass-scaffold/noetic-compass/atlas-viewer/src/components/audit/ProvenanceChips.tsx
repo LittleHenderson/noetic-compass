@@ -194,7 +194,9 @@ function visibleStateLabel(chip: NormalizedChip | undefined, state: AuditStatus 
   if (chip?.id === 'packet_proof' && state === 'verified') {
     const detail = chip.detail?.toLowerCase() ?? '';
     if (detail.includes('worm retained') || detail.includes('object lock')) {
-      return 'WORM retained';
+      if (detail.includes('object lock compliance')) return 'Object Lock COMPLIANCE';
+      if (detail.includes('object lock governance')) return 'Object Lock GOVERNANCE';
+      return 'Object Lock retained';
     }
     if (detail.includes('s3 verified')) {
       return 'S3 verified';

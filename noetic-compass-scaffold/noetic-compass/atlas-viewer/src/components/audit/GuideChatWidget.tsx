@@ -291,7 +291,7 @@ const typingStyle: CSSProperties = {
  *
  * Mount ONCE at the console shell level so it floats over the whole console.
  */
-export function GuideChatWidget(): JSX.Element {
+export function GuideChatWidget({ authToken }: { authToken?: string | null }): JSX.Element {
   const [open, setOpen] = useState(false);
   const [pending, setPending] = useState(false);
   const [draft, setDraft] = useState('');
@@ -336,7 +336,9 @@ export function GuideChatWidget(): JSX.Element {
     setDraft('');
     setPending(true);
     try {
-      const response = await askExplainer(question);
+      const response = authToken
+        ? await askExplainer(question, { authToken })
+        : await askExplainer(question);
       setMessages((prev) => [
         ...prev,
         {
@@ -357,7 +359,7 @@ export function GuideChatWidget(): JSX.Element {
     } finally {
       setPending(false);
     }
-  }, [draft, pending]);
+  }, [authToken, draft, pending]);
 
   const onTextareaKeyDown = useCallback(
     (event: KeyboardEvent<HTMLTextAreaElement>) => {

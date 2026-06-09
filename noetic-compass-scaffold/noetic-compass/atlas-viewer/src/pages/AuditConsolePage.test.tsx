@@ -2,6 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
+import { AccountAuthProvider } from '../components/auth/AccountAuthProvider';
 import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
 
 const LIVE_WORKER_HEALTH_PATH = '/api/cas-harness/live-worker/health';
@@ -66,7 +67,9 @@ const STAGE9_40E_TRACE_ID = 'stage9-40e-original-baseline-readout-20260527';
 function renderPage() {
   return render(
     <MemoryRouter initialEntries={['/audit-console']}>
-      <AuditConsolePage />
+      <AccountAuthProvider>
+        <AuditConsolePage />
+      </AccountAuthProvider>
     </MemoryRouter>
   );
 }
@@ -811,7 +814,7 @@ describe('AuditConsolePage', () => {
               {
                 status: 'COMPLETE',
                 message:
-                  'M3 verdict runner blocked the explicit verifier decision because final ACCEPT/SUPPRESS requires a WORM-retained Evidence Packet. Packet proof must be S3 re-read verified with active Object Lock retention.',
+                  'M3 verdict runner blocked the explicit verifier decision because final ACCEPT/SUPPRESS requires an Evidence Packet with active Object Lock retention. Packet proof must be S3 re-read verified with active Object Lock retention.',
                 timestamp: '2026-05-28T07:31:00Z',
               },
             ],
@@ -839,7 +842,9 @@ describe('AuditConsolePage', () => {
     expect(await screen.findByText('Confidence: not available')).toBeInTheDocument();
     expect(screen.getByText('Coverage: 80 cases / 40 classes')).toBeInTheDocument();
     expect(
-      screen.getByText('Flagged because the Evidence Packet is not WORM-retained yet.'),
+      screen.getByText(
+        'Flagged because the Evidence Packet does not have active Object Lock retention yet.',
+      ),
     ).toBeInTheDocument();
     expect(screen.getAllByText(STAGE9_40E_TRACE_ID).length).toBeGreaterThan(0);
     expect(JSON.parse(String((fetchMock.mock.calls[0][1] as RequestInit).body))).toMatchObject({

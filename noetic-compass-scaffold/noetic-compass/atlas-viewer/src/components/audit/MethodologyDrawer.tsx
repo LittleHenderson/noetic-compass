@@ -49,7 +49,7 @@ const RELABEL_LEGEND: ReadonlyArray<{ plain: string; meaning: string }> = [
   {
     plain: 'Evidence packet',
     meaning:
-      'packet_proof — the audit trail attached to an Evidence Packet. Final ACCEPT/SUPPRESS requires S3 re-read plus active Object Lock/WORM retention.',
+      'packet_proof — the audit trail attached to an Evidence Packet. Final ACCEPT/SUPPRESS requires S3 re-read plus active Object Lock retention.',
   },
   {
     plain: 'Live trace',

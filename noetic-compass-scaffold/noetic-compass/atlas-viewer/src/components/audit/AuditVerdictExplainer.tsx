@@ -179,14 +179,15 @@ function proofSummary(chips: ProvenanceChip[]): { passed: number; blocked: numbe
   return { passed, blocked };
 }
 
-function isWormGateBlocked(
+function isObjectLockGateBlocked(
   verdict: AuditVerdict | null | undefined,
   lifecycleMessage?: string | null,
 ): boolean {
+  const message = lifecycleMessage?.toLowerCase() ?? '';
   return (
     verdict === 'FLAG_FOR_HUMAN_REVIEW' &&
-    typeof lifecycleMessage === 'string' &&
-    lifecycleMessage.toLowerCase().includes('worm-retained evidence packet')
+    (message.includes('active object lock retention') ||
+      message.includes('worm-retained evidence packet'))
   );
 }
 
@@ -206,8 +207,8 @@ function verdictHeadline(
   if (verdict === 'SUPPRESS') {
     return 'Suppressed because the verifier rejected the row and Stage 20 readiness said suppress.';
   }
-  if (isWormGateBlocked(verdict, lifecycleMessage)) {
-    return 'Flagged because the Evidence Packet is not WORM-retained yet.';
+  if (isObjectLockGateBlocked(verdict, lifecycleMessage)) {
+    return 'Flagged because the Evidence Packet does not have active Object Lock retention yet.';
   }
   if (blocked > 0) {
     return 'Flagged because required proof is missing, unavailable, or failed.';
@@ -253,8 +254,8 @@ function customerSentence(
   if (verdict === 'SUPPRESS') {
     return `Tell the user: CAS suppressed this output because the verifier found a suppress condition and ${passed}/6 required proof chips passed.`;
   }
-  if (isWormGateBlocked(verdict, lifecycleMessage)) {
-    return 'Tell the user: CAS found an explicit verifier decision, but it cannot become final until the Evidence Packet is S3 re-read verified and WORM/Object-Lock retained.';
+  if (isObjectLockGateBlocked(verdict, lifecycleMessage)) {
+    return 'Tell the user: CAS found an explicit verifier decision, but it cannot become final until the Evidence Packet is S3 re-read verified with active Object Lock retention.';
   }
   return `Tell the user: CAS flagged this for human review because ${blocked}/6 required proof chips were not pass-ready or the verifier requested review.`;
 }
@@ -296,7 +297,7 @@ const CHIP_MEANING_TEXT: Record<ProvenanceChipId, string> = {
     'Matched controls and baselines did not explain the same effect.',
   output_proof: 'The verdict is tied to observed model output.',
   packet_proof:
-    'The audit trail is attached to an Evidence Packet. Final ACCEPT/SUPPRESS requires S3 re-read verification plus active Object Lock/WORM retention.',
+    'The audit trail is attached to an Evidence Packet. Final ACCEPT/SUPPRESS requires S3 re-read verification plus active Object Lock retention.',
 };
 
 export function AuditVerdictExplainer({

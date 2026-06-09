@@ -117,6 +117,21 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     else:
         logger.info("accounts: ENABLED, durable account store installed")
 
+    # Per-tenant usage quotas (PAID-user metering spine). Dark by default -- the quota gate
+    # is INERT unless NC_QUOTAS_ENABLED is set. When set, CAS Harness audit-session creation
+    # consumes one per-tenant monthly unit via api/services/quotas.py. Quotas are PER-ACCOUNT,
+    # so enabling them without identity is a config error: there is no tenant to meter without
+    # accounts. Fail loud rather than silently meter nothing.
+    if settings.quotas_enabled and not settings.accounts_enabled:
+        raise RuntimeError(
+            "Refusing to start: NC_QUOTAS_ENABLED=true requires NC_ACCOUNTS_ENABLED=true "
+            "(quotas are per-account)."
+        )
+    if settings.quotas_enabled:
+        logger.info("quotas: ENABLED, per-tenant monthly audit quota enforced on audit creation")
+    else:
+        logger.info("quotas: dark (engine inert, no metering)")
+
     # Durable session store (PAID-user security spine — session half). Shares the accounts_enabled
     # flag: a session is only meaningful once identity login is on. Dark by default
     # (accounts_enabled off => None => no jti is embedded and the dispatch middleware does no session

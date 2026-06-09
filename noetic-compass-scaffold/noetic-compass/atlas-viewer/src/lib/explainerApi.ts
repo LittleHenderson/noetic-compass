@@ -1,5 +1,3 @@
-const TOKEN_STORAGE_KEY = 'atlasViewerAuthToken';
-
 export interface ExplainerChatResponse {
   answer: string;
   sources: string[];
@@ -37,33 +35,21 @@ export interface ExplainPacketResponse {
   disclaimer: string;
 }
 
-async function ensureAuthToken(): Promise<string> {
-  const existing = window.sessionStorage.getItem(TOKEN_STORAGE_KEY);
-  if (existing) return existing;
-
-  const response = await fetch('/api/auth/token', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username: 'atlas-explainer-user' }),
-  });
-  if (!response.ok) {
-    throw new Error(`Unable to mint explainer session (${response.status})`);
-  }
-  const payload = (await response.json()) as { token?: string };
-  if (!payload.token) {
-    throw new Error('Explainer session response did not include a token.');
-  }
-  window.sessionStorage.setItem(TOKEN_STORAGE_KEY, payload.token);
-  return payload.token;
+export interface ExplainerApiOptions {
+  authToken?: string | null;
+  fetchImpl?: typeof fetch;
 }
 
-export async function askExplainer(question: string): Promise<ExplainerChatResponse> {
-  const token = await ensureAuthToken();
-  const response = await fetch('/api/explainer/chat', {
+export async function askExplainer(
+  question: string,
+  options?: ExplainerApiOptions,
+): Promise<ExplainerChatResponse> {
+  const fetchImpl = fetchForExplainer(options);
+  const response = await fetchImpl('/api/explainer/chat', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`,
+      Authorization: requiredAuthorizationHeader(options?.authToken),
     },
     body: JSON.stringify({ question }),
   });
@@ -77,8 +63,8 @@ export async function askExplainer(question: string): Promise<ExplainerChatRespo
 
 /**
  * Ask the AI explainer for a plain-English, cited reading of one Evidence Packet
- * (spec §7–§9). Reuses the same session-token mint + Bearer auth as the free
- * Guide chat. The backend resolves the EP only if the caller's tenant owns the
+ * (spec §7–§9). Reuses the same account-mode Bearer auth as the free Guide
+ * chat. The backend resolves the EP only if the caller's tenant owns the
  * trace (G3) and returns a redacted, allow-list-only projection — this client
  * never sees CAS scoring internals or probe methodology.
  *
@@ -87,19 +73,20 @@ export async function askExplainer(question: string): Promise<ExplainerChatRespo
  */
 export async function askExplainerForPacket(
   traceId: string,
+  options?: ExplainerApiOptions,
 ): Promise<ExplainPacketResponse> {
   const trimmed = traceId.trim();
   if (!trimmed) {
     throw new Error('A packet trace_id is required to explain a packet.');
   }
-  const token = await ensureAuthToken();
-  const response = await fetch(
+  const fetchImpl = fetchForExplainer(options);
+  const response = await fetchImpl(
     `/api/explainer/evidence/${encodeURIComponent(trimmed)}`,
     {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
+        Authorization: requiredAuthorizationHeader(options?.authToken),
       },
     },
   );
@@ -111,4 +98,20 @@ export async function askExplainerForPacket(
     );
   }
   return (await response.json()) as ExplainPacketResponse;
+}
+
+function fetchForExplainer(options?: ExplainerApiOptions): typeof fetch {
+  const fetchImpl = options?.fetchImpl ?? (typeof fetch !== 'undefined' ? fetch : undefined);
+  if (!fetchImpl) {
+    throw new Error('Explainer API requires fetch support.');
+  }
+  return fetchImpl;
+}
+
+function requiredAuthorizationHeader(authToken?: string | null): string {
+  const trimmed = authToken?.trim();
+  if (!trimmed) {
+    throw new Error('Account session is required for the CAS Harness Guide.');
+  }
+  return /^Bearer\s+/i.test(trimmed) ? trimmed : `Bearer ${trimmed}`;
 }

@@ -15,6 +15,7 @@ import {
 export interface EvidencePacketVerificationPanelProps {
   traceId: string | null | undefined;
   fetchImpl?: typeof fetch;
+  authToken?: string | null;
 }
 
 type VerifyState =
@@ -145,6 +146,13 @@ function isWormRetained(check: EvidenceVerifyCheck | null): boolean {
   return check?.match === true && notes.includes('object lock') && notes.includes('retention is active');
 }
 
+function objectLockMode(check: EvidenceVerifyCheck | null): 'GOVERNANCE' | 'COMPLIANCE' | null {
+  const notes = check?.notes?.toUpperCase() ?? '';
+  if (notes.includes('OBJECT LOCK COMPLIANCE')) return 'COMPLIANCE';
+  if (notes.includes('OBJECT LOCK GOVERNANCE')) return 'GOVERNANCE';
+  return null;
+}
+
 function isS3Verified(check: EvidenceVerifyCheck | null): boolean {
   const notes = check?.notes?.toLowerCase() ?? '';
   return check?.match === true && notes.includes('object was re-read');
@@ -155,7 +163,10 @@ function statusLabel(state: VerifyState): { label: string; tone: 'verified' | 'w
   if (state.status === 'loading') return { label: 'Checking', tone: 'muted' };
   if (state.status === 'error') return { label: 'Verify failed', tone: 'failed' };
   const anchor = externalAnchorCheck(state.response);
-  if (isWormRetained(anchor)) return { label: 'WORM retained', tone: 'verified' };
+  if (isWormRetained(anchor)) {
+    const mode = objectLockMode(anchor);
+    return { label: mode ? `Object Lock ${mode}` : 'Object Lock retained', tone: 'verified' };
+  }
   if (isS3Verified(anchor)) return { label: 'S3 verified', tone: 'verified' };
   if (state.response.overall === 'all_match') return { label: 'Hashes match', tone: 'verified' };
   if (state.response.overall === 'partial_mismatch') return { label: 'Mismatch', tone: 'failed' };
@@ -174,13 +185,18 @@ function summaryText(state: VerifyState): string {
   }
   const anchor = externalAnchorCheck(state.response);
   if (isWormRetained(anchor)) {
-    return anchor?.notes ?? 'S3 anchor re-read matched and Object Lock retention is active.';
+    const mode = objectLockMode(anchor);
+    const modeText = mode ? `${mode} ` : '';
+    return (
+      anchor?.notes ??
+      `S3 anchor re-read matched and Object Lock ${modeText}retention is active.`
+    );
   }
   if (isS3Verified(anchor)) {
     return anchor?.notes ?? 'S3 anchor object was re-read and matched the packet manifest.';
   }
   if (state.response.overall === 'all_match') {
-    return 'All available packet hashes matched. No WORM-retention proof was returned for this packet.';
+    return 'All available packet hashes matched. No Object Lock retention proof was returned for this packet.';
   }
   return 'Verification did not fully pass. Inspect failed checks before trusting this packet as tamper-evident.';
 }
@@ -188,6 +204,7 @@ function summaryText(state: VerifyState): string {
 export function EvidencePacketVerificationPanel({
   traceId,
   fetchImpl,
+  authToken,
 }: EvidencePacketVerificationPanelProps): JSX.Element | null {
   const [state, setState] = useState<VerifyState>({ status: 'idle' });
   const cleanedTraceId = traceId?.trim() ?? '';
@@ -204,7 +221,10 @@ export function EvidencePacketVerificationPanel({
     if (!canVerify) return;
     setState({ status: 'loading' });
     try {
-      const response = await verifyEvidencePacket(cleanedTraceId, { fetchImpl });
+      const response = await verifyEvidencePacket(cleanedTraceId, {
+        fetchImpl,
+        authToken,
+      });
       setState({ status: 'loaded', response });
     } catch (error) {
       setState({
@@ -220,7 +240,7 @@ export function EvidencePacketVerificationPanel({
         <div>
           <p style={eyebrowStyle}>Evidence Packet verification</p>
           <AuditPopover
-            briefing="This re-runs the backend packet verifier. It proves whether stored artifacts still hash-match and whether the S3 anchor is protected by active Object Lock retention."
+            briefing="This re-runs the backend packet verifier. It proves whether stored artifacts still hash-match and whether the S3 anchor reports active Object Lock retention, including the returned mode when available."
             placement="bottom"
             width={380}
           >

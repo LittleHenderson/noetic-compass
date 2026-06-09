@@ -3,18 +3,18 @@ import { render, screen } from '@testing-library/react';
 import { LicenseChip } from './LicenseChip';
 
 describe('LicenseChip', () => {
-  it('returns LICENSE UNKNOWN when the entitlement signal is unresolvable', () => {
+  it('returns OPEN when the entitlement signal is unresolvable', () => {
     render(<LicenseChip signal={{}} />);
-    expect(screen.getByText('LICENSE UNKNOWN')).toBeInTheDocument();
+    expect(screen.getByText('OPEN')).toBeInTheDocument();
     expect(screen.getByRole('status')).toHaveAttribute(
       'aria-label',
-      'License status: LICENSE UNKNOWN',
+      'License status: OPEN',
     );
   });
 
-  it('returns LICENSE UNKNOWN when no signal is provided at all', () => {
+  it('returns OPEN when no signal is provided at all', () => {
     render(<LicenseChip />);
-    expect(screen.getByText('LICENSE UNKNOWN')).toBeInTheDocument();
+    expect(screen.getByText('OPEN')).toBeInTheDocument();
   });
 
   it('reads LICENSED from an explicit entitlement', () => {

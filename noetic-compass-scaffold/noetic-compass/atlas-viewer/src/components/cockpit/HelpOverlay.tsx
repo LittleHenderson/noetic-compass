@@ -255,7 +255,7 @@ const TKS40_TEXT_BASELINE_STEPS: Array<{ title: string; body: string }> = [
       'On the original Stage 9 role-bound/counterfactual fixture, GPT-NeoX-20B hidden states read the 40-Element grid far above surface text on the same fixed split: 95.625% hidden versus 49.241% text-only.',
   },
   {
-    title: 'What the permanent rule is.',
+    title: 'What the standing rule is.',
     body:
       'Every future 40E library must run the text-baseline diagnostic first. If text-only is above the pre-registered ceiling, the packet can show hidden-state signal but cannot claim CAS beats text.',
   },
@@ -276,9 +276,9 @@ const EVIDENCE_PACKET_FLIGHT_RECORDER_STEPS: Array<{ title: string; body: string
       'Changing the packet changes its SHA-256 hash. Changing the hash-log entry breaks the recorded chain. The verifier re-reads the external S3 anchor object and checks that it commits to the same packet hash and hash-log entry.',
   },
   {
-    title: 'What WORM retained means now.',
+    title: 'What Object Lock retained means now.',
     body:
-      'Production strict smoke passed with S3 Object Lock required. New anchored packets are written with Object Lock GOVERNANCE retention and verified by HeadObject before the UI may show WORM retained.',
+      'Production strict smoke passed with S3 Object Lock required. New anchored packets are written with Object Lock GOVERNANCE retention and verified by HeadObject before the UI may show Object Lock GOVERNANCE.',
   },
   {
     title: 'What it does not prove by itself.',

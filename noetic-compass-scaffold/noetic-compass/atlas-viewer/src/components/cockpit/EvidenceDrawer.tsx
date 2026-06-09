@@ -604,8 +604,11 @@ function evidenceAnchorSummary(
   if (status === 'anchored' && mode === 's3') {
     if (isS3RereadVerified(verifyCheck)) {
       if (isObjectLockVerified(verifyCheck, anchor)) {
+        const normalizedObjectLockMode = objectLockMode?.toUpperCase() ?? null;
         return {
-          label: 'WORM retained',
+          label: normalizedObjectLockMode
+            ? `Object Lock ${normalizedObjectLockMode}`
+            : 'Object Lock retained',
           detail:
             'The verifier re-read the S3 anchor object, matched it to this packet hash and hash-log entry, and confirmed active Object Lock retention.',
           tone: 'verified',
@@ -614,7 +617,7 @@ function evidenceAnchorSummary(
           manifestSha256,
           hashLogEntrySha256,
           packetSha256,
-          objectLockMode,
+          objectLockMode: normalizedObjectLockMode ?? objectLockMode,
           objectLockRetainUntil,
           retentionDays,
         };

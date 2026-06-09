@@ -155,16 +155,18 @@ describe('AuditVerdictExplainer', () => {
           source: 'stage19_verification_stack+stage20_generation_readiness',
           reason: 'Stage 19 accepted the row and Stage 20 readiness action is allow.',
         }}
-        lifecycleMessage="M3 verdict runner blocked the explicit verifier decision because final ACCEPT/SUPPRESS requires a WORM-retained Evidence Packet. Packet proof must be S3 re-read verified with active Object Lock retention."
+        lifecycleMessage="M3 verdict runner blocked the explicit verifier decision because final ACCEPT/SUPPRESS requires an Evidence Packet with active Object Lock retention. Packet proof must be S3 re-read verified with active Object Lock retention."
       />,
     );
 
     expect(
-      screen.getByText('Flagged because the Evidence Packet is not WORM-retained yet.'),
+      screen.getByText(
+        'Flagged because the Evidence Packet does not have active Object Lock retention yet.',
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getByRole('note', {
-        name: /cannot become final until the Evidence Packet is S3 re-read verified and WORM\/Object-Lock retained/i,
+        name: /cannot become final until the Evidence Packet is S3 re-read verified with active Object Lock retention/i,
       }),
     ).toBeInTheDocument();
   });

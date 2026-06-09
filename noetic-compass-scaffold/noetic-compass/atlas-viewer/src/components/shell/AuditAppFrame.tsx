@@ -16,6 +16,7 @@ export interface AuditAppFrameProps {
    * desktop where the full evidence rail carries it. Optional.
    */
   pinned?: ReactNode;
+  authToken?: string | null;
 }
 
 // Breakpoint matches plan §1: below 1100px the rails collapse and the right
@@ -124,6 +125,7 @@ export function AuditAppFrame({
   center,
   evidence,
   pinned,
+  authToken,
 }: AuditAppFrameProps): JSX.Element {
   return (
     <div style={backdropStyle}>
@@ -142,11 +144,11 @@ export function AuditAppFrame({
       {/* Floating CAS Harness Guide — mounted once at the console shell level so it
           persists across every console tab/section and floats over the whole console
           (it is position:fixed, so it never affects the grid layout). */}
-      <GuideChatWidget />
+      <GuideChatWidget authToken={authToken} />
       {/* Floating "Explain this packet" reading aid — also mounted once here so it
           floats over the console (left edge, clear of the Guide). Opens when an
           Evidence Packet view's "Explain this packet" button fires its request. */}
-      <PacketExplainerPanel />
+      <PacketExplainerPanel authToken={authToken} />
     </div>
   );
 }

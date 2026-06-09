@@ -500,14 +500,14 @@ export function scopeRibbonModel(
 // ---------------------------------------------------------------------------
 // License state adapter (Audit Bench)
 //
-// `licenseStateFor` derives a persistent LICENSED / NOT LICENSED / LICENSE
-// UNKNOWN chip state from whatever real entitlement signal is available. It
+// `licenseStateFor` derives a persistent LICENSED / NOT LICENSED / OPEN chip
+// state from whatever real entitlement signal is available. It
 // NEVER speculatively returns LICENSED — only an explicit positive signal
 // (resolved === true / a redeemed entitlement) yields LICENSED; an explicit
-// negative yields NOT LICENSED; anything unresolved is LICENSE UNKNOWN (muted).
+// negative yields NOT LICENSED; anything unresolved is OPEN (muted).
 // ---------------------------------------------------------------------------
 
-export type LicenseState = 'LICENSED' | 'NOT LICENSED' | 'LICENSE UNKNOWN';
+export type LicenseState = 'LICENSED' | 'NOT LICENSED' | 'OPEN';
 
 export interface LicenseSignal {
   /** Explicit entitlement resolution, when the backend/account has answered. */
@@ -519,14 +519,14 @@ export interface LicenseSignal {
 }
 
 export function licenseStateFor(signal: LicenseSignal | null | undefined): LicenseState {
-  if (!signal) return 'LICENSE UNKNOWN';
+  if (!signal) return 'OPEN';
   if (signal.entitled === true) return 'LICENSED';
   if (signal.entitled === false) return 'NOT LICENSED';
   const token = typeof signal.authToken === 'string' ? signal.authToken.trim() : '';
   if (token.length > 0) return 'LICENSED';
   const key = typeof signal.redeemedKey === 'string' ? signal.redeemedKey.trim() : '';
   if (key.length > 0) return 'LICENSED';
-  return 'LICENSE UNKNOWN';
+  return 'OPEN';
 }
 
 function resolveChipEvidence(input: ChipEvidenceInput): {

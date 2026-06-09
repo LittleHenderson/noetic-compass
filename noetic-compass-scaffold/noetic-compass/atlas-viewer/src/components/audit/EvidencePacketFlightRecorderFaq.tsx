@@ -22,9 +22,9 @@ export const EVIDENCE_PACKET_FLIGHT_RECORDER_STEPS: Array<{ title: string; body:
       'Changing the packet changes its SHA-256 hash. Changing the hash-log entry breaks the recorded chain. The verifier re-reads the external S3 anchor object and checks that it commits to the same packet hash and hash-log entry.',
   },
   {
-    title: 'What WORM retained means.',
+    title: 'What Object Lock retained means.',
     body:
-      'The packet anchor is written to S3 with Object Lock retention. The backend must re-read that anchor and confirm active retention before the product can trust ACCEPT or SUPPRESS as a final verdict.',
+      'The packet anchor is written to S3 with Object Lock retention. The backend must re-read that anchor and confirm active retention and the returned mode, such as GOVERNANCE or COMPLIANCE, before the product can trust ACCEPT or SUPPRESS as a final verdict.',
   },
   {
     title: 'What it tells senior research and engineering reviewers.',
@@ -151,7 +151,7 @@ export function EvidencePacketFlightRecorderFaq(): JSX.Element {
       </div>
 
       <p style={textStyle}>
-        Final verdicts depend on a traceable packet: model, evidence, decision, hashes, S3 anchor, and active WORM retention.
+        Final verdicts depend on a traceable packet: model, evidence, decision, hashes, S3 anchor, and active Object Lock retention.
       </p>
 
       {expanded ? (

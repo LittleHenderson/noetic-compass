@@ -25,7 +25,7 @@ describe('EvidencePacketFlightRecorderFaq', () => {
 
     const faq = screen.getByTestId('evidence-packet-flight-recorder-faq');
     expect(faq).toHaveTextContent('black-box flight recorder');
-    expect(faq).toHaveTextContent('What WORM retained means.');
+    expect(faq).toHaveTextContent('What Object Lock retained means.');
     expect(faq).toHaveTextContent('senior research and engineering reviewers');
 
     fireEvent.doubleClick(faq);

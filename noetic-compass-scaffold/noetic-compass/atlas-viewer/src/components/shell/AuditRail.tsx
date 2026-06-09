@@ -36,6 +36,9 @@ export interface AuditRailProps {
   onSettings?: () => void;
   /** Refetch token — bump to reload Recent Runs after a run completes. */
   reloadKey?: number;
+  authToken?: string | null;
+  accountLabel?: string | null;
+  onLogout?: () => void;
 }
 
 const railStyle: CSSProperties = {
@@ -184,6 +187,16 @@ const helpRowStyle: CSSProperties = {
   gap: 8,
 };
 
+const accountLabelStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textMuted,
+  fontFamily: FONT_MONO,
+  fontSize: 10.5,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+};
+
 const helpButtonStyle: CSSProperties = {
   flex: 1,
   minHeight: 32,
@@ -219,6 +232,9 @@ export function AuditRail({
   onHelp,
   onSettings,
   reloadKey = 0,
+  authToken = null,
+  accountLabel = null,
+  onLogout,
 }: AuditRailProps): JSX.Element {
   const [recent, setRecent] = useState<CasHarnessAuditSession[] | null>(null);
   const [recentFailed, setRecentFailed] = useState(false);
@@ -227,7 +243,7 @@ export function AuditRail({
     const controller = new AbortController();
     let active = true;
     setRecentFailed(false);
-    listCasHarnessAuditSessions({ signal: controller.signal })
+    listCasHarnessAuditSessions({ signal: controller.signal, authToken })
       .then((list) => {
         if (active) setRecent(list.sessions);
       })
@@ -239,7 +255,7 @@ export function AuditRail({
       active = false;
       controller.abort();
     };
-  }, [reloadKey]);
+  }, [authToken, reloadKey]);
 
   return (
     <nav style={railStyle} aria-label="CAS Harness navigation">
@@ -308,6 +324,7 @@ export function AuditRail({
           </span>
         ) : null}
         <LicenseChip state={licenseState} />
+        {accountLabel ? <p style={accountLabelStyle}>{accountLabel}</p> : null}
         <div style={helpRowStyle}>
           <button type="button" style={helpButtonStyle} onClick={onHelp}>
             ? Help
@@ -316,6 +333,11 @@ export function AuditRail({
             ⚙ Settings
           </button>
         </div>
+        {onLogout ? (
+          <button type="button" style={helpButtonStyle} onClick={onLogout}>
+            Sign out
+          </button>
+        ) : null}
       </div>
     </nav>
   );
