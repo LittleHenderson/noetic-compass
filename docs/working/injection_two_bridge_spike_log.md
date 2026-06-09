@@ -34,6 +34,31 @@ hypothesis. None of these are customer verdicts or the 20B headline. The matched
   model; build the Qwen CAS probe + run the registered method"; clean null → "method/operationalization
   problem, not scale; stop before the 40 GB spend."
 
+### Run 3 — RESULTS (executed 2026-06-09)
+- **Verify-overt gate PASSED — Qwen is injectable.** ~45% overt compliance (≈10 complied incl. a
+  system-prompt leak, ≈6 ignored, ≈4 refused) vs Pythia-160M's 0%. Substrate diagnosis holds.
+- **Headline (assigned arms):** cosine distance INJECTED_OVERT median 0.749 vs CLEAN_INSTRUCTION 0.692;
+  Mann-Whitney p=9e-5, rank-biserial 0.695 → **SEPARATION** (flips the two 160M GREYs).
+- **Disambiguation by realized behavior (offline, free; tiny n — DIRECTIONAL only):**
+  complied vs clean rank-biserial **0.80** (median 0.768); ignored vs clean **0.40 n.s.** (median 0.708
+  ≈ clean 0.692); refused vs clean **0.88** (median 0.780, n=4, noisy).
+- **Interpretation (honest):** the separation is **real behavioral signal, NOT a text-structure
+  confound** — injection-style text the model IGNORES sits on the clean baseline. BUT the crude
+  raw-hidden readout **conflates HIJACK (complied) with REFUSAL (refused)** — both are "off-task
+  behavioral divergence"; only on-task (ignored) stays near clean. So this is a
+  **behavioral-divergence detector, NOT a hijack detector.**
+- **Still EXPLORATORY; still NOT CAS injection-detection.** The readout cannot yet distinguish
+  "hijacked" (bad) from "safely refused" (good).
+- **Decision → NEXT:** build the **CAS-typed Qwen probe** (the registered method) — typed semantic
+  classes carry content (a refusal profile ≠ a compliance profile) and may separate hijack from refusal
+  where raw-vector cosine cannot — with larger n and a hijack/refuse/ignore/clean design. Spend on the
+  40 GB / 20B only after the typed method shows the hijack-vs-refusal separation at small scale.
+
 ---
-*Standing conclusion: Pythia-160M is not a valid injection-detection substrate (not injectable). The
-two-bridge method remains UNTESTED on a valid substrate — NOT falsified.*
+*Standing conclusion (updated 2026-06-09): On a non-injectable base model (Pythia-160M) the two-bridge
+is GREY by construction (0% injection compliance). On an injectable instruct model
+(Qwen2.5-1.5B-Instruct) a crude raw-hidden trajectory readout finds REAL off-task-behavior signal that
+is NOT a text-structure confound — but it conflates hijack with refusal, so it is a
+behavioral-divergence detector, not a hijack detector. The CAS-typed probe (the registered method)
+remains UNTESTED; whether it can separate hijack from refusal is the next decision gate. Nothing here
+is a customer verdict.*
