@@ -1,0 +1,269 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAS Compass Legal Notices</title>
+<meta name="description" content="CAS Compass legal, privacy, terms, and CAS Harness beta claim-status definitions." />
+<meta name="theme-color" content="#05080f" />
+<style>
+  :root{
+    --bg:#05080f;
+    --panel:rgba(8,13,27,.78);
+    --teal:#2dd4bf;
+    --cyan:#22d3ee;
+    --ink:#e9f6f4;
+    --muted:#a4b8bd;
+    --soft:#7a9097;
+    --line:rgba(255,255,255,.12);
+    --font:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,Helvetica,Arial,sans-serif;
+    --mono:"SFMono-Regular",Consolas,"Liberation Mono",Menlo,monospace;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    min-height:100%;
+    font-family:var(--font);
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 700px at 50% -10%, rgba(45,212,191,.10), transparent 60%),
+      linear-gradient(160deg,#080d1b 0%, var(--bg) 62%, #04060d 100%);
+    padding:36px 18px;
+    -webkit-font-smoothing:antialiased;
+  }
+  main{
+    width:min(760px,100%);
+    margin:0 auto;
+    display:grid;
+    gap:18px;
+  }
+  header,.panel{
+    border:1px solid var(--line);
+    border-radius:10px;
+    background:var(--panel);
+    box-shadow:0 24px 90px rgba(0,0,0,.32);
+    padding:22px;
+    overflow:visible;
+  }
+  nav{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:18px;
+  }
+  a{color:#8bded5;text-decoration:none;font-weight:800}
+  a:hover{text-decoration:underline}
+  .eyebrow{
+    color:var(--teal);
+    font-family:var(--mono);
+    font-size:11px;
+    font-weight:900;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  h1{font-size:32px;line-height:1.1;margin-top:8px}
+  h2{font-size:18px;margin-bottom:10px}
+  p{color:var(--muted);font-size:14px;line-height:1.65}
+  .notice-line{margin-top:8px}
+  .status-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+    margin-top:16px;
+  }
+  .status-chip{
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    min-height:34px;
+    appearance:none;
+    border:1px solid var(--line);
+    border-radius:8px;
+    padding:8px 10px;
+    background:rgba(15,23,42,.48);
+    color:var(--cyan);
+    font-family:var(--mono);
+    font-size:12px;
+    font-weight:900;
+    cursor:help;
+    outline:none;
+    transition:background .14s ease,border-color .14s ease,box-shadow .14s ease,transform .14s ease;
+  }
+  .status-chip:hover,
+  .status-chip:focus,
+  .status-chip.is-open{
+    background:rgba(13,148,136,.14);
+    border-color:rgba(45,212,191,.58);
+    box-shadow:0 0 0 3px rgba(45,212,191,.12), inset 0 1px 0 rgba(255,255,255,.14);
+    transform:translateY(-1px);
+  }
+  .tip{
+    position:absolute;
+    z-index:20;
+    left:50%;
+    bottom:calc(100% + 10px);
+    width:min(360px,calc(100vw - 36px));
+    padding:14px 15px;
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:14px;
+    background:
+      linear-gradient(145deg,rgba(15,23,42,.76),rgba(8,13,27,.58)),
+      linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.02));
+    box-shadow:
+      0 24px 80px rgba(0,0,0,.46),
+      inset 0 1px 0 rgba(255,255,255,.18),
+      inset 0 -1px 0 rgba(45,212,191,.10),
+      0 0 0 1px rgba(45,212,191,.12);
+    -webkit-backdrop-filter:blur(24px) saturate(1.35);
+    backdrop-filter:blur(24px) saturate(1.35);
+    color:#e5fffb;
+    font-family:var(--font);
+    font-size:13px;
+    font-weight:650;
+    line-height:1.45;
+    opacity:0;
+    pointer-events:none;
+    transform:translate(-50%,8px);
+    transition:opacity .12s ease,transform .12s ease,visibility .12s ease;
+    visibility:hidden;
+    overflow:hidden;
+  }
+  .tip::before{
+    content:"";
+    position:absolute;
+    inset:1px;
+    border-radius:13px;
+    background:
+      linear-gradient(115deg,rgba(255,255,255,.20),transparent 34%),
+      linear-gradient(245deg,rgba(45,212,191,.14),transparent 42%);
+    opacity:.82;
+    pointer-events:none;
+  }
+  .status-chip:hover .tip,
+  .status-chip:focus .tip,
+  .status-chip.is-open .tip{
+    opacity:1;
+    transform:translate(-50%,0);
+    visibility:visible;
+  }
+  .tip::after{
+    content:"";
+    position:absolute;
+    left:50%;
+    top:100%;
+    width:10px;
+    height:10px;
+    background:rgba(10,18,31,.78);
+    border-bottom:1px solid rgba(255,255,255,.22);
+    border-right:1px solid rgba(255,255,255,.22);
+    -webkit-backdrop-filter:blur(18px) saturate(1.25);
+    backdrop-filter:blur(18px) saturate(1.25);
+    transform:translate(-50%,-5px) rotate(45deg);
+  }
+  .tip-text{
+    position:relative;
+    z-index:1;
+  }
+  footer{
+    color:var(--soft);
+    font-size:12px;
+    text-align:center;
+    padding:12px;
+  }
+</style>
+</head>
+<body>
+  <main>
+    <header>
+      <p class="eyebrow">CAS Compass legal notices</p>
+      <h1>Public Beta Legal, Privacy, And Terms</h1>
+      <p>
+        CAS Compass is the early-access surface for CAS Harness beta requests.
+        These notices keep product claims tied to live evidence and leave
+        unresolved launch work as OPEN.
+      </p>
+      <nav aria-label="Legal notice sections">
+        <a href="index.html">Home</a>
+        <a href="#legal">Legal</a>
+        <a href="#privacy">Privacy</a>
+        <a href="#terms">Terms</a>
+        <a href="mailto:hello@cascompass.ai">hello@cascompass.ai</a>
+      </nav>
+    </header>
+
+    <section class="panel" id="legal">
+      <p class="eyebrow">Legal</p>
+      <h2>Scoped Public Beta</h2>
+      <p class="notice-line">
+        Evidence-backed beta outputs. Not legal advice, safety certification,
+        regulatory approval, or an automatic customer-production `ACCEPT`.
+      </p>
+    </section>
+
+    <section class="panel" id="privacy">
+      <p class="eyebrow">Privacy</p>
+      <h2>Beta Data Boundaries</h2>
+      <p class="notice-line">
+        Beta audit inputs may be processed to run and verify CAS Harness.
+        Regulated data, confidential data, and production secrets require a
+        separate written agreement.
+      </p>
+    </section>
+
+    <section class="panel" id="terms">
+      <p class="eyebrow">Terms</p>
+      <h2>Evaluation Access</h2>
+      <p class="notice-line">
+        Beta access is for evaluation and feedback. Features may change while
+        account-mode auth, quotas, billing, support, and hosted smoke coverage
+        remain OPEN.
+      </p>
+    </section>
+
+    <section class="panel" aria-label="Claim status legend">
+      <p class="eyebrow">Claim Status Legend</p>
+      <p class="notice-line">Hover or keyboard-focus a status for the definition.</p>
+      <div class="status-list">
+        <button class="status-chip" type="button">ACCEPT<span class="tip" role="tooltip"><span class="tip-text">Verifier-backed product decision. Not for research-only or unresolved customer-production claims.</span></span></button>
+        <button class="status-chip" type="button">FLAG_FOR_HUMAN_REVIEW<span class="tip" role="tooltip"><span class="tip-text">Signal is preserved and escalated, but a human reviewer must decide before it becomes ACCEPT.</span></span></button>
+        <button class="status-chip" type="button">LICENSED<span class="tip" role="tooltip"><span class="tip-text">A positive entitlement signal is present for the account, model, or run.</span></span></button>
+        <button class="status-chip" type="button">NOT LICENSED<span class="tip" role="tooltip"><span class="tip-text">The entitlement check explicitly failed or returned a negative license signal.</span></span></button>
+        <button class="status-chip" type="button">OPEN<span class="tip" role="tooltip"><span class="tip-text">Unresolved launch work or an unfinished claim boundary. Do not present it as complete.</span></span></button>
+        <button class="status-chip" type="button">present<span class="tip" role="tooltip"><span class="tip-text">The proof artifact or service signal was observed in this packet or run.</span></span></button>
+        <button class="status-chip" type="button">unavailable<span class="tip" role="tooltip"><span class="tip-text">The proof artifact or service signal was not returned or could not be checked.</span></span></button>
+      </div>
+    </section>
+
+    <footer>
+      CAS Compass beta contact: <a href="mailto:hello@cascompass.ai">hello@cascompass.ai</a>
+    </footer>
+  </main>
+  <script>
+    const statusChips = Array.from(document.querySelectorAll('.status-chip'));
+    const closeOtherStatusTips = (active) => {
+      statusChips.forEach((chip) => {
+        if (chip !== active) chip.classList.remove('is-open');
+      });
+    };
+    statusChips.forEach((chip) => {
+      chip.addEventListener('mouseenter', () => {
+        closeOtherStatusTips(chip);
+        chip.classList.add('is-open');
+      });
+      chip.addEventListener('mouseleave', () => {
+        if (document.activeElement !== chip) chip.classList.remove('is-open');
+      });
+      chip.addEventListener('focus', () => {
+        closeOtherStatusTips(chip);
+        chip.classList.add('is-open');
+      });
+      chip.addEventListener('blur', () => {
+        chip.classList.remove('is-open');
+      });
+      chip.addEventListener('click', () => {
+        closeOtherStatusTips(chip);
+        chip.classList.add('is-open');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -88,6 +88,12 @@
     color:#5c7178; letter-spacing:.02em;
   }
   footer .sep{opacity:.45; padding:0 7px}
+  .legal-links{
+    display:flex; justify-content:center; flex-wrap:wrap; gap:0;
+    margin-top:8px;
+  }
+  .legal-links a{color:#8bded5; text-decoration:none}
+  .legal-links a:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -131,6 +137,13 @@
       © 2026 Noetic Compass AI
       <span class="sep">·</span> Built on the Cognitive Architecture System (CAS)
       <span class="sep">·</span> Patent pending
+      <nav class="legal-links" aria-label="Legal links">
+        <a href="legal.html">Legal</a>
+        <span class="sep">&middot;</span>
+        <a href="legal.html#privacy">Privacy</a>
+        <span class="sep">&middot;</span>
+        <a href="legal.html#terms">Terms</a>
+      </nav>
     </footer>
   </main>
 </body>
