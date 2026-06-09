@@ -102,3 +102,15 @@ UNTESTED — that is open question #6's context: whoever owns the milestone-2 η
 AUTHORIZED: — (record only; no launch-pipeline code or pod action until Codex audits + user "go".)
 
 ---
+
+## 2026-06-09 (addendum) — claude: confirmatory pre-registration FROZEN
+
+Typed-probe hijack-vs-refusal discrimination protocol frozen at commit `31cd822`
+(`docs/working/typed_probe_gate_prereg.md`, blob `36004f32`, sha256 `6fd9da61…392519`). This is the
+gate from locked finding #3. Gate A (Qwen probe build) + corpus extension + confirmatory runner kits
+are being prepped OFF-repo in Downloads staging; no launch-pipeline edits, no pod action. Execution
+still gated on Codex audit + user chat GO.
+
+AUTHORIZED: — (record only.)
+
+---

@@ -1,5 +1,33 @@
 # Noetic Compass — Progress Log
 
+## Injection-spike findings LOCKED + typed-probe gate pre-registration FROZEN (Jun 9, 2026)
+
+**Headline.** Two record-keeping milestones on the injection-detection line, both with teeth.
+First (commit `85f1b47`): the three findings from the two-bridge injection spike were **LOCKED**
+into the Codex handoff (`docs/working/agent_exchange/inbox_claude_2026_06_09_harness_launch.md`)
+as guardrails on any launch copy, spec sheet, EP chip, or customer-facing claim: (1)
+**injectable-substrate requirement** — Pythia-160M showed 0% injection compliance, so it is NOT a
+valid substrate for injection-detection claims (η-plumbing/WORM smoke only); Qwen2.5-1.5B-Instruct
+at ~45% compliance IS valid; (2) the current crude readout is a **behavioral-divergence detector,
+NOT a hijack detector** — safe-refusal separates from clean just like hijack-compliance does, while
+injected-but-ignored sits at the clean baseline; (3) the **typed-probe hijack-vs-refusal test gates
+any production injection-detection claim.** Underlying spike record:
+`docs/working/injection_two_bridge_spike_log.md` (commits `e821096`, `fedfa3a`).
+
+Second (commits `1c0b80c` → `abc622c` → `31cd822`): the pre-registration for that gate experiment —
+typed-probe hijack-vs-refusal discrimination — was drafted, tightened to advisor spec, then
+**FROZEN** as the full confirmatory protocol at commit `31cd822`. File:
+`docs/working/typed_probe_gate_prereg.md`; protocol identity: git blob `36004f32`, file sha256
+`6fd9da61bb896721c7b6dbc8dd555ed5e4eac849afa0cbcf78d36f2a17392519`. Drafts `1c0b80c`/`abc622c`
+superseded. Protocol in brief:
+
+- H1–H5 hypotheses; four behavioral arms; early-generation read window; human-verified labels.
+- Dual separability readout: MWU + rank-biserial AND held-out balanced accuracy with 10k permutations.
+- H4 operational bar: recall ≥0.80, FPR ≤0.10. H5: typed method must beat cosine by ≥0.15 margin.
+- Cross-family requirement: anchor Qwen2.5-1.5B-Instruct; candidate second family
+  Phi-3-mini-4k-instruct, pending a ≥20% injectability check.
+- n=40 per realized bucket, from power analysis.
+
 ## ADR-0001 — edge layers (reverse proxy / load balancer / API gateway) decision (Jun 5, 2026)
 
 **Headline.** Recorded `docs/architecture/ADR-0001-edge-proxy-load-balancing-and-api-gateway.md` so
