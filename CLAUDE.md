@@ -6,6 +6,13 @@
 - **Framework**: Cognitive Architecture System (CAS) v7.7 — Register Multiplicity and Operator Discipline Extension (prior: v7.6 Stoichiometric Production Semantics Extension; prior: v7.5 Phenomenological Register Extension; prior: v7.4 Corrected Edition)
 - **Classification**: Confidential
 
+## Patent / IP Filing Status (CONFIRMED)
+- **Application No. 64/037,173** — Utility—Provisional, filed **04/13/2026** (Conf# **1346**, Patent Center# **75259715**), status: received by USPTO.
+- `64/037,173` is the **REAL, valid** number: US provisional series codes advance over time (60→61→62→63→**64**); by 2026 provisionals are **series 64**. **Never flag it as suspect** anywhere (repo, docs, marketing, memory).
+- **Conversion deadline ~04/13/2027** (12-month rule): a utility or PCT application claiming priority to 64/037,173 must be filed by then or the priority date is lost.
+- **New-matter caveat**: CAS v7.5 / v7.6 / v7.7 and the Fleet / 300B sharded-audit architecture were added after 04/13/2026 and are **NOT** covered by this provisional. New matter needs its own provisional or inclusion in the utility filing.
+- Full facts: `docs/reference/PATENT_FILING_STATUS.md`.
+
 ## Authoritative Noetic Definitions (READ FIRST)
 
 - **Always** read `docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md` before producing any CAS description, incident analysis, taxonomy extension, pedagogical material, marketing copy, or regulator-facing document.
