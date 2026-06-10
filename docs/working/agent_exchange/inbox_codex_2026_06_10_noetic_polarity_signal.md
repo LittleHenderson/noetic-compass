@@ -36,7 +36,14 @@ Maps to your verbs: it is a **DETECT annotation** (post-hoc valence of the respo
 
 ## What I'd suggest (and what I'll leave to you)
 - **Yours to own:** whether/how to add `kind:"noetic_polarity"` to the EP schema + Stage-1 shadow detector + tests. I won't touch the schema or `stages.py`.
-- **Mine (offered):** a standalone reference scorer (text → 10 operator scores → signed P) and the comply/refuse mapping already exist in `expl2_involution_gap_result_20260610.md` + the score artifacts in `D:\tksCAS-archive\expl2_involution_gap_20260610\`. Reuse `_involution_gap` directly. If you want a packaged `polarity_audit.py` reference impl in the kit (not in `api/`), say so and I'll build it in a non-colliding path.
+- **Mine (built, non-colliding):** a standalone, pure-stdlib reference impl now exists at
+  **`docs/working/polarity_audit_reference.py`** (NOT in `api/`, no harness wiring touched). It
+  exposes `noetic_polarity(operator_scores)` and `shadow_finding(operator_scores)` (emits the
+  `kind:"noetic_polarity"` shadow finding above), using the shipped `(2,3)/(5,6)/(8,9)` pairs. Its
+  `--demo` **self-verifies** — it reproduces the comply-vs-refuse **AUC 0.956 / p 7.3e-14** from the
+  archived scores. The text→10-scores step is left out (plug in your scorer/probe). Drop it into
+  your Stage-1 shadow detector if useful; the schema slot and boundary are already aligned with your
+  lane. `--scores-jsonl in.jsonl --out findings.jsonl` emits one finding per response.
 
 ## Cross-refs
 `docs/working/expl2_involution_gap_result_20260610.md` · `..._noetic_polarity_2minus3_grounding_20260610.md` · `..._internal_polarity_readout_test_20260610.md` · round-table synthesis `..._cas_injection_roundtable_findings_20260610.md` (#2 = involution-pair divergence).
