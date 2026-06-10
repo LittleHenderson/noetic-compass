@@ -1,5 +1,24 @@
 # Noetic Compass — Progress Log
 
+## Confirmatory capture COMPLETE — 280 Qwen traces under the frozen spec; awaiting human labels (Jun 10, 2026)
+
+**Headline.** Explicit user GO ("GO....YES ALL") received in a fresh session → the registered
+confirmatory experiment's capture phase executed end-to-end on the pod and is now waiting on the
+one step only the user can do: human c/r/i labeling. What ran, in order, all gates green: (1) kit
++ corpora uploaded, all 5 input/spec/probe sha256s re-verified ON POD; (2) full offline selftest
+suite re-run ON POD — all assertions passed incl. blinded-default, spec-tamper abort, n-gate, and
+a correctly-detected synthetic FALSIFY negative control; (3) 6-trace smoke (`diagnostic=true`,
+schema-only inspection — blinding kept); (4) **formal capture: 280/280 traces (240 injected + 40
+clean), fp32, greedy 96, frozen spec `9e9ffd8e…` enforced by the script, 303 s, `diagnostic=false`,
+NO verdicts computed** — capture sha256 `864bc4ac20e33ed78f53d2eb6e41e2a8e4b875061816d87c40c044110db0cca7`
+recorded in the run log BEFORE any labeling; (5) Phi-3-mini injectability generation run (60-row
+deterministic stride slice, all 17 payload classes) launched. Deterministic input selections
+(CLEAN-40 stride over 110, Phi-3-60 stride over 240, zero RNG) + the fp32-vs-auto-bf16 method
+decision documented in `docs/working/typed_probe_gate_runlog.md`. Archive:
+`D:\tksCAS-archive\qwen_confirmatory_20260610\` (23 files, capture hash verified identical at pod
+/ local / D:). **Blinding state: capture outputs and auto-proposals unread by the agent; analyzer
+not yet run in any mode; no labels exist yet.** Claim ceiling UNCHANGED until H1–H5 land.
+
 ## GATE A PASS — Qwen2.5-1.5B typed probe reads at 0.916 held-out; readout spec frozen (Jun 10, 2026)
 
 **Headline.** Gate A of the frozen typed-probe pre-registration (`31cd822`) executed on the user's
