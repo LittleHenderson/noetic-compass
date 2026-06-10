@@ -1,5 +1,22 @@
 # Noetic Compass — Progress Log
 
+## GATE A PASS — Qwen2.5-1.5B typed probe reads at 0.916 held-out; readout spec frozen (Jun 10, 2026)
+
+**Headline.** Gate A of the frozen typed-probe pre-registration (`31cd822`) executed on the user's
+pod (user-supplied SSH line = the agreed GO; A4500, ~15 min, <$1): **`GATE_A: PASS (layer 14,
+acc 0.916)`** — the 10-class typed probe reads Qwen2.5-1.5B-Instruct hidden states at 91.6%
+held-out accuracy (bar: 0.85; layer selected on val only). This removes the probe/model mismatch
+that locked finding #3 named: the instrument now exists on an injectable model. Immediately after,
+the §4 readout spec was FROZEN before any arm generation — **READOUT-SPEC LOCK HASH
+`9e9ffd8efa454610898880acdc2bf761cdfaa681b69be1dab811cff232031cae`** (layer 14, token window [0,8),
+greedy/96, probe snapshot `fa445f48…eb1c9`). Full per-layer table, baselines (incl. the honest
+McNemar p=0.289 vs TF-IDF caveat), six artifact sha256s, archive paths, and the
+exactly-equal-to-Pythia-test-acc coincidence note: `docs/working/typed_probe_gate_runlog.md` (new —
+the prereg's official run log). Archive: `D:\tksCAS-archive\qwen_gate_a_20260610\` (8 files, hashes
+verified against provenance). **Claim ceiling UNCHANGED** — Gate A is plumbing, not the experiment;
+the confirmatory run still requires explicit GO + fresh session + human c/r/i labels, and
+cross-family PASS still needs Phi-3-mini injectability ≥20% human-verified plus its own Gate A.
+
 ## Injection-spike findings LOCKED + typed-probe gate pre-registration FROZEN (Jun 9, 2026)
 
 **Headline.** Two record-keeping milestones on the injection-detection line, both with teeth.

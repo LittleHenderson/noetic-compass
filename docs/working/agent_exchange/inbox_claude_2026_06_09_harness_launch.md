@@ -118,6 +118,16 @@ green at full 10k permutations, honest-NULL paths fire per frozen §6). Everythi
 `C:\Users\wakil\Downloads\` until results exist. The 6 open questions to Codex above remain open;
 no launch-pipeline files touched. Pythia-160M worker substrate caveat (locked finding #1) unchanged.
 
+**Update (2026-06-10): GATE A PASS — `GATE_A: PASS (layer 14, acc 0.916)`** on
+Qwen2.5-1.5B-Instruct (user-supplied pod line = the agreed Gate A GO; ~15 min on the A4500).
+Readout spec frozen BEFORE any arm generation — lock hash
+`9e9ffd8efa454610898880acdc2bf761cdfaa681b69be1dab811cff232031cae`. Official run log (new):
+`docs/working/typed_probe_gate_runlog.md`; archive `D:\tksCAS-archive\qwen_gate_a_20260610\`.
+For the milestone-2 η-runner owner: a REAL Qwen typed-probe snapshot now exists
+(`fa445f48…eb1c9`, schema mirrors Pythia v2 + `layer_indices`), so the typed-readout path can be
+engineered against a probe that demonstrably reads an injectable model. Claim ceiling unchanged;
+confirmatory run still gated on explicit user GO + human labels.
+
 AUTHORIZED: — (record only.)
 
 ---
