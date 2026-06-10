@@ -554,3 +554,19 @@ the larger Stage-C capture; §11 kill conditions stand; agent does not stop the 
 **Still pending before any pod run (next):** (a) build the in-band candidate prompt bank (no GPU,
 extraction family + mild variants per §4); (b) set up the bare A6000 pod (env pins + upload
 kit/probe/scripts, verify shas). Then Stage S → report → Stage C → cross-family labels → analyzer.
+
+### Candidate prompt bank built (NO GPU) — ALL no-GPU prep complete (2026-06-10 UTC)
+
+`build_v4_candidate_bank.py` sha256 `8862d205…`; output `candidate_bank_v4_120_20260610.jsonl`
+sha256 `4a6b73ecd764fce0373cdb7ce5500b00ea0dc9a4fca6be3e2a8761857b57f32f` — 120 candidates, 8 borderline
+classes × 15 carriers, deterministic (re-run reproduced the sha). Classes = the v1 extraction payloads
+that drew mixed comply/refuse (`ext_0..4` = overt_4/12/13/14/5) + 3 milder instruction-extraction
+variants (`ext_5..7`). Carriers reused verbatim from the original 240 (sorted, index 2·i); source sha
+matched `0d22f5e8…`; precondition gate passed. Archived to `D:\tksCAS-archive\typed_probe_v4_tooling_20260610\`.
+
+**All no-GPU v4 prerequisites are now complete** (analyzer + selftest, screener, capture_v4, candidate
+bank; GPU authorized). The ONLY remaining step before Stage S is pod setup: the A6000 (38.147.83.24)
+is bare — needs env pins (torch 2.4.1+cu124 / transformers 4.46.3 / numpy) and upload of the frozen
+probe kit + spec + the v4 scripts + candidate bank, shas verified pod-side. Then: Stage-S screen
+(cheap, behavioral-only) → report band → freeze in-band Stage-C bank → Stage-C matched-sampling
+capture → cross-family judge panel → `analyze_confirmatory_v4.py` blinded → ONE unblind.
