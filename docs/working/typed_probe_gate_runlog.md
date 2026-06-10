@@ -147,3 +147,95 @@ user's c/r/i pass.
 4. Gate A for the second family (same bar, same discipline) + its own readout-spec freeze —
    only if injectability passes.
 5. Blinded analysis (counts/n-gate) → single unblind → H1–H5 + verdict recorded here.
+
+## Labeling under prereg v2 amendment — 3-judge LLM panel (executed 2026-06-10/11 UTC)
+
+User declined the 300-trace bulk human pass and directed agent labeling. The v2 labeling
+amendment (`typed_probe_gate_prereg_v2_labeling_amendment.md`) was FROZEN at commit `701eb6e`
+BEFORE any judge was spawned, before any output text was read, before any analyzer mode ran.
+v1 itself is untouched; v1's human-only formal tier is NOT MET by v2 labels and is never claimed.
+
+**Judge inputs (mechanical, probe-stripped, built by `build_judge_inputs.py`
+`194aef909b205ae58e11e9addc58b8e857ab21a995bc0795e10f50690c07a179`):**
+
+| file | traces | sha256 |
+|---|---|---|
+| judge_input_qwen_20260610.jsonl | 240 | `c70eebdb717b6eb3ac13c4bbe3975b80c582dbce37b450e0f9b4b17c4defe4b9` |
+| judge_input_phi3_20260610.jsonl | 60 | `bfb0bba3402bbccb9ad8be84ef0641bfc2e34b79c4541d6515bdc083efe35f34` |
+
+Strip check asserted: no typed profiles, raw vectors, cos_dist, or auto-proposals in judge
+inputs. Both files verified 240/240 and 60/60 UNIQUE trace_ids (a judge's claim of an input
+duplicate was mechanically refuted — it was that judge's own read-window confusion).
+
+**Panel:** three independent background agents, distinct Claude tiers (opus / sonnet / haiku),
+each given ONLY the fixed v2 §4 rubric + its input file. No probe signals, no project context,
+no knowledge of which result would be convenient.
+
+| judge label file | lines | sha256 |
+|---|---|---|
+| judge_labels_opus_qwen_20260610.jsonl | 240 | `5c5aebeaa096c41294553fe876d9f08dc5bd6f1601cfce1d678ac7908ec43fbd` |
+| judge_labels_sonnet_qwen_20260610.jsonl | 240 | `a4f3a530b6e3ac71a050960b964b843ebb3b496ac1e95ade43aeedc84404fc3f` |
+| judge_labels_haiku_qwen_20260610.jsonl | 242 (2 dup lines) | `0505efca136c7db494ae54fe1916293ea71f1e544f82d06754f3f0e83bff5fd9` |
+| judge_labels_opus_phi3_20260610.jsonl | 60 | `6f13d7aff4c954dbd8b695f4ecfd2f95be18abd6657da8b08b1c43f6d46668fb` |
+| judge_labels_sonnet_phi3_20260610.jsonl | 60 | `464961433bbe8320384c68fa47ec4db6c738c8b94e4d594e685ba4d8d202cc49` |
+| judge_labels_haiku_phi3_20260610.jsonl (original) | 60 | `03b51d3bcc6de0d21c1b8b37e56eb3e35872f8b87b8a79cc19affa4a29002583` |
+| judge_labels_haiku_phi3_20260610_idpatched.jsonl | 60 | `9141181b9dd6423ee23b927d6b6aff479b1393978eccdc5fc98e0c784ed08b0b` |
+
+**Two judge-file defects, both mechanically resolved and disclosed:**
+1. haiku Qwen file: 2 duplicate trace_id lines — merger drops duplicates deterministically
+   (FIRST occurrence wins); coverage then exact (240/240).
+2. haiku Phi-3 file: ONE corrupted trace_id (`…679b32dc9e33a` written for `…679b34364513d`;
+   identical 24-char prefix). Repair positionally FORCED: the file matches the input order at
+   59/60 positions and the single mismatch sits exactly at the input position of the missing id
+   (pos 17). Patched copy created (id corrected, label `c` + reason untouched; original
+   preserved). Merge hard-errored on the defect first — the coverage validator works.
+
+**Merge (`merge_consensus.py` `f9c4a8292b114a7cca141fec47cad1ddb3b4b8616611100f9fc6428b66f35838`;
+synthetic selftest `selftest_merge.py` `97b362820b2d0d9114e37ccf95a993355f94904ec165ddc26667ac968006c5fe`
+13/13 PASS incl. dedup-first-wins, u-handling, no-majority exclusion, meta passthrough):**
+
+Qwen (240): consensus 181 = COMPLIED 146 / IGNORED 35 / REFUSED 0; adjudication pile 59.
+Vote patterns: ccc 146, cci 16, ccr 1, cii 3, cir 1, iii 35, iir 20, irr 18.
+- consensus_labels_qwen_20260610.jsonl `f28e932d2281d3ca3c3a647ed45e8e5c77b8193a341cedc34c30dfe417fc5b2c`
+- adjudication_captures_qwen_20260610.jsonl (59 traces + meta) `72383457eafd7f2b5e2ada105ee1999641a45812c274b80b6a19d52df8ad8371`
+- judge_votes_qwen_20260610.jsonl `55b18a603c424b3c8b982924c1f7b41d6012d8de6f58579aab01cfa351d76266`
+
+Phi-3 (60): consensus 45 = COMPLIED 39 / IGNORED 6 / REFUSED 0; adjudication pile 15.
+Vote patterns: ccc 39, cci 10, cii 4, iii 6, irr 1.
+- consensus_labels_phi3_20260610.jsonl `745dd76e64a5e6c3dafa0d0ea4d700fb62a269075f820d726e25ce6bca6b8f9a`
+- adjudication_captures_phi3_20260610.jsonl (15 traces + meta) `3bee415893319bb27de2fa1b8ff5b00dc13beb60be87bb698073ff614bdee1fa`
+- judge_votes_phi3_20260610.jsonl `f7b7c5be7aae03392d537dec654dc74cf16bb7a399b689e9d02ff66135fdd5c8`
+- unanimous_c_captures_phi3_20260610.jsonl (39 traces + meta, v2 §3.6 option) `ce004b07f2efe2fd0fa828c281be2641cd8d1f81a9f5f9330d5c96a54f62385a`
+
+**Analyzer change (the ONE change v2 §6 sanctions):** `load_labels` in
+`analyze_confirmatory.py` now accepts verifiers {`human`:prio 2, `llm_consensus_3of3`:1,
+`llm_majority_2of3`:1}; higher priority supersedes regardless of file order (a human label is
+never overwritten by an LLM label); unknown verifiers rejected loudly; docstring invariant I5
+updated to match. Full selftest suite re-run after the edit: ALL PASS (305s; PASS / FALSIFY
+negative control / NULL-improvement scenarios all return expected verdicts; all honesty gates
+hold).
+
+**Orchestrator blinding state:** the orchestrating agent has read NO output text and NO
+per-trace label joined to probe signals. Seen (and recorded honestly): per-judge aggregate
+label distributions and judge final-message summaries that described behavior at
+payload-class level (e.g. which payload classes tended to comply). This is aggregate,
+corpus-design-level information; per-trace blinding for the analysis remains intact. The
+Phi-3 provisional aggregate from the capture phase was already on record.
+
+**Phi-3 injectability arithmetic (gate still UNDECIDED pending path choice):** unanimous
+complies alone = 39/60 = 65% >= 20%. The bar is cleared under ANY adjudication path; what the
+path decides is the LABEL TIER (human-verified formal v1 gate via §3.6, or v2
+LLM-consensus tier).
+
+**Qwen REFUSED-bucket arithmetic (decision-relevant, no stats computed):** unanimous REFUSED =
+0; r-containing vote patterns total 40 traces (irr 18 + iir 20 + ccr 1 + cir 1). Even if ALL
+40 adjudicated to REFUSED the bucket would reach exactly the n>=40 floor; realistically some
+land IGNORED, so REFUSED < 40 is the likely outcome under EVERY path — i.e. H3 (the decisive
+COMPLIED-vs-REFUSED test) is heading for INSUFFICIENT_N on Qwen because the model rarely
+refused, not because of any probe property. INSUFFICIENT_N is a frozen prereg verdict:
+not falsified, not passed, bucket too small at the frozen bar.
+
+**Pending user decision (v2 §3.4/§3.5/§3.6):** Path A (human adjudicates 59+15=74 traces via
+verify_labels_cli) vs Path B (pre-declared 2/3-majority fallback, no human, exclusions
+disclosed); plus the §3.6 Phi-3 option (verify only the 39 unanimous-c traces to keep the v1
+human-verified injectability gate formal).

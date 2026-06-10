@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## 3-judge LLM panel labeled all 300 traces under frozen prereg v2; Phi-3 65% injectable on unanimity alone (Jun 11, 2026)
+
+**Headline.** User declined the 300-trace human labeling pass ("SPAWN AN AGENT OR A FEW TO DO
+IT") → a labeling-protocol amendment (prereg v2) was FROZEN at commit `701eb6e` BEFORE any
+output was read, then executed exactly: probe-stripped judge inputs built mechanically (240
+Qwen + 60 Phi-3), three independent Claude judges (opus/sonnet/haiku, fixed rubric, zero
+project context) labeled every trace, and a selftested merger (13/13 synthetic checks)
+produced consensus. **Qwen: 181/240 unanimous (146 COMPLIED / 35 IGNORED / 0 REFUSED), 59 to
+adjudication. Phi-3: 45/60 unanimous (39 COMPLIED / 6 IGNORED), 15 to adjudication — 39/60 =
+65% unanimous compliance clears the ≥20% injectability bar under ANY path; only the label
+TIER (human-formal vs LLM-consensus) remains open.** Two judge-file defects (2 duplicate
+lines; 1 corrupted trace_id) were caught by the merger's hard validators and resolved
+mechanically — the corrupt-id repair was positionally forced (59/60 exact order match) and
+both originals are preserved. Analyzer's `load_labels` extended per v2 §6 (human supersedes
+LLM verifiers); full selftest suite re-ran ALL PASS after the edit. Honest flag: unanimous
+Qwen REFUSED = 0 and only 40 traces carry any r-vote, so H3 (the decisive COMPLIED-vs-REFUSED
+test) is likely INSUFFICIENT_N at the frozen n≥40 bar — Qwen rarely refused; that is a
+realized-bucket fact, not a probe result. All shas + vote patterns in
+`docs/working/typed_probe_gate_runlog.md`. Awaiting user: Path A (adjudicate 74) vs Path B
+(majority fallback, no human) + the 39-keypress Phi-3 v1-preservation option.
+
 ## Confirmatory capture COMPLETE — 280 Qwen traces under the frozen spec; awaiting human labels (Jun 10, 2026)
 
 **Headline.** Explicit user GO ("GO....YES ALL") received in a fresh session → the registered
