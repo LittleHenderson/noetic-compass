@@ -21,6 +21,22 @@ We are past "does the idea work?" and now at "turn the working pieces into a rel
 
 The next step is not more random experiments. The next step is a gated production build.
 
+## 2026-06-10 Foundational Topos / Instruction Integrity Round Table
+
+Codex ran a four-lane agent round table over local TKS v7.4, Noetic Topos, existing code hooks, and product-security claim boundaries. The resulting design brief is `docs/working/cas_harness_topos_instruction_integrity_roundtable_20260610.md`.
+
+Key product direction: build a CAS Harness "Instruction Integrity" lane around a Topos Integrity Gate. Treat hallucination and prompt injection as local-to-global failures: a generated claim, instruction, tool call, or answer segment must glue back to source evidence, task intent, policy hierarchy, D/W/P prerequisites, admissible transitions, and Evidence Packet provenance. Missing support, task drift, policy override, or lacunarity spikes should route to `UNDETERMINED`, `SUPPRESS`, or `FLAG_FOR_HUMAN_REVIEW`, not customer-facing `ACCEPT`.
+
+Reusable local foundations found:
+
+- TKS v7.4: evidence spans, confidence, "no hidden semantic jumps," lacunarity as gaps/contradictions/missing D/W/P links, and CAS-as-source-of-truth claim discipline.
+- Noetic Topos: coverage, gluing, pullback stability, domain precedence (`P > C > E > O`), admissibility guards, and 3-valued `Valid` / `Invalid` / `Undetermined` logic.
+- Existing code: RPM gate, domain coherence, inversion scan, refusal/social-engineering heuristics, public explainer firewall, partial CAS inversion, Evidence Packet verifier gates, and WORM-backed verdict discipline.
+
+Claim boundary remains strict: prompt-injection detection/prevention and hallucination prevention are `OPEN` and `NOT LICENSED` as public claims. Current evidence supports a design/prototype direction and shadow-mode flags, not a production hijack detector. The Qwen injection spike remains behavioral-divergence evidence only; typed-probe v4 still must prove clean/refused/complied separation with grouped prompt folds before any internal-state hijack claim.
+
+Recommended next move: draft `docs/working/cas_harness_instruction_integrity_spec.md`, then implement a shadow-only Evidence Packet schema addition with `instruction_integrity.findings[]` and `claim_grounding[]`. Initial enforcement must be limited to `FLAG_FOR_HUMAN_REVIEW` until tests, benchmarks, thresholds, and WORM-backed verifier proof exist. CAS-owned AI surfaces such as the Guide and Evidence Packet explainer can later quarantine detected untrusted spans from active context while preserving raw spans in the packet.
+
 ## 2026-06-09 Codex Public-Launch Diagnostic Checkpoint
 
 Full launch diagnostic ran against the clean `launch/integration` worktree at `37fb7a4` after `git fetch --all --prune`. The main desktop worktree is still on `wave5.5/harness-launch-declutter` and remains very dirty; do not diagnose or deploy public CAS Harness from that surface. `launch/integration` is the best current launch-candidate branch: it contains the Audit Bench UI, Guide widget, account/session/RBAC work, tenant evidence ownership, conditional anchor role gate, and the "Explain this packet" Evidence Packet explainer. It is not merged to `master`, and Render auto-deploys `master`, so hosted production is not running this launch candidate yet.
