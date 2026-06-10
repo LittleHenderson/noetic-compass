@@ -409,6 +409,50 @@ class AuditScope(BaseModel):
     detail: str | None = Field(default=None, min_length=1, max_length=1000)
 
 
+class InstructionIntegrityFindingResponse(BaseModel):
+    kind: str = Field(..., min_length=1, max_length=80)
+    severity: Literal["low", "medium", "high"]
+    source: str = Field(..., min_length=1, max_length=80)
+    span_hash: str = Field(..., min_length=1, max_length=96)
+    span_excerpt: str = Field(..., min_length=1, max_length=240)
+    authority_level: str = Field(..., min_length=1, max_length=120)
+    gate: str = Field(..., min_length=1, max_length=120)
+    decision: str = Field(..., min_length=1, max_length=120)
+    repair: str = Field(..., min_length=1, max_length=160)
+    reason: str = Field(..., min_length=1, max_length=500)
+    evidence_refs: list[str] = Field(default_factory=list, max_length=16)
+
+
+class InstructionIntegrityClaimGroundingResponse(BaseModel):
+    claim_hash: str = Field(..., min_length=1, max_length=96)
+    claim_excerpt: str = Field(..., min_length=1, max_length=240)
+    support_status: Literal["present", "unavailable"]
+    decision: str = Field(..., min_length=1, max_length=160)
+    reason: str = Field(..., min_length=1, max_length=500)
+    evidence_refs: list[str] = Field(default_factory=list, max_length=16)
+
+
+class InstructionIntegrityGluingResponse(BaseModel):
+    coverage_status: Literal["present", "incomplete"]
+    lacunarity_flags: list[str] = Field(default_factory=list, max_length=24)
+    truth_state: Literal["VALID", "UNDETERMINED"]
+    evidence_packet_trace_id: str | None = None
+
+
+class InstructionIntegrityResponse(BaseModel):
+    schema_version: Literal["cas_harness_instruction_integrity.v0.shadow"]
+    mode: Literal["shadow"]
+    status: Literal["present", "FLAG_FOR_HUMAN_REVIEW"]
+    truth_state: Literal["VALID", "UNDETERMINED"]
+    verdict_effect: Literal["none_shadow_only"]
+    findings: list[InstructionIntegrityFindingResponse] = Field(default_factory=list, max_length=64)
+    claim_grounding: list[InstructionIntegrityClaimGroundingResponse] = Field(
+        default_factory=list,
+        max_length=64,
+    )
+    gluing: InstructionIntegrityGluingResponse
+
+
 class ModelTargetConfig(BaseModel):
     """User-submitted model target config for the Audit Console connect step."""
 
@@ -626,6 +670,7 @@ class AuditSessionResponse(BaseModel):
     provenance_chips: list[ProvenanceChip]
     verifier_decision: VerifierDecision | None = None
     audit_scope: AuditScope | None = None
+    instruction_integrity: InstructionIntegrityResponse | None = None
     lifecycle: list[AuditLifecycleEvent]
 
 

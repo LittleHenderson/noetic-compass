@@ -9,6 +9,7 @@ import json
 from threading import Lock
 from typing import Any, Literal
 
+from api.services.cas_harness_instruction_integrity import build_instruction_integrity_report
 from api.services.cas_harness_verdict_runner import run_evidence_gated_verdict
 
 
@@ -75,6 +76,7 @@ class AuditSessionRecord:
     provenance_chips: list[dict[str, str]] = field(default_factory=list)
     verifier_decision: dict[str, Any] | None = None
     audit_scope: dict[str, Any] | None = None
+    instruction_integrity: dict[str, Any] | None = None
     lifecycle: list[AuditLifecycleEvent] = field(default_factory=list)
 
     def to_dict(self) -> dict[str, Any]:
@@ -174,6 +176,7 @@ def create_session(
                 if isinstance(payload.get("verifier_decision"), dict)
                 else None
             ),
+            instruction_integrity=_instruction_integrity_payload(payload),
             provenance_chips=(
                 list(payload["provenance_chips"])
                 if isinstance(payload.get("provenance_chips"), list)
@@ -256,6 +259,12 @@ def attach_runner_evidence(
         record.provenance_chips = list(proof_chips)
         record.verifier_decision = dict(verifier_decision) if verifier_decision else None
         record.audit_scope = dict(audit_scope) if audit_scope else None
+        record.instruction_integrity = build_instruction_integrity_report(
+            prompt_text=record.prompt_text,
+            scenario_text=record.scenario_text,
+            evidence_packet_trace_id=evidence_packet_trace_id,
+            proof_chips=proof_chips,
+        ).to_dict()
         _append_event(record, status="EVIDENCE_READY", message=message)
         return record
 
@@ -369,6 +378,25 @@ def _proof_chip(chip_id: str, status: ProofChipStatus, detail: str) -> dict[str,
         "status": status,
         "detail": detail,
     }
+
+
+def _instruction_integrity_payload(payload: dict[str, Any]) -> dict[str, Any]:
+    existing = payload.get("instruction_integrity")
+    if isinstance(existing, dict):
+        return dict(existing)
+    proof_chips = payload.get("provenance_chips")
+    return build_instruction_integrity_report(
+        prompt_text=payload.get("prompt") if isinstance(payload.get("prompt"), str) else None,
+        scenario_text=(
+            payload.get("scenario_text") if isinstance(payload.get("scenario_text"), str) else None
+        ),
+        evidence_packet_trace_id=(
+            payload.get("evidence_packet_trace_id")
+            if isinstance(payload.get("evidence_packet_trace_id"), str)
+            else None
+        ),
+        proof_chips=proof_chips if isinstance(proof_chips, list) else None,
+    ).to_dict()
 
 
 def _draft_message(evidence_packet_trace_id: str | None) -> str:
