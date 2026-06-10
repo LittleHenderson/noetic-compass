@@ -28,6 +28,21 @@ superseded. Protocol in brief:
   Phi-3-mini-4k-instruct, pending a ≥20% injectability check.
 - n=40 per realized bucket, from power analysis.
 
+**Addendum (later 2026-06-09) — execution kits staged OFF-repo, validated by execution.** A 5-agent
+fleet built everything runnable without the pod, in `C:\Users\wakil\Downloads\` staging (deliberately
+off-repo until results exist): (1) corpus extension — 160 new INJECTED_OVERT rows → combined 240-row
+pool (deterministic generator, matched lengths, 0 arm-label leaks; the legacy `overt_2` "INJECTED"
+leak in 10 ORIGINAL rows is documented, not replicated); (2) Gate A Qwen probe kit — capture/train/
+snapshot scripts whose trainer reproduced the Pythia v2 gold standard bit-exactly (layer 4, acc
+0.9156, max coef diff 0.0); (3) confirmatory runner kit — freeze-spec → capture → human-label CLI →
+injectability check → blinded analyzer, validated end-to-end by a synthetic three-world selftest at
+full 10,000 permutations (H3-pass world → PASS; COMPLIED≡REFUSED world → FALSIFY_FOR_HIJACK;
+typed≈cosine world → NULL_IMPROVEMENT; n=39 → INSUFFICIENT_N; analyzer is blinded by default,
+`--unblind` required for any p-value/verdict). Labeled probe corpus confirmed fully recoverable from
+git `e52a160` (sha256 match vs training report). NOTHING here is a result: the registered method
+remains UNTESTED; claim ceiling unchanged. Next: Gate A on the pod (~$0.50), then the confirmatory
+session on explicit GO with the human in the label-verification loop.
+
 ## ADR-0001 — edge layers (reverse proxy / load balancer / API gateway) decision (Jun 5, 2026)
 
 **Headline.** Recorded `docs/architecture/ADR-0001-edge-proxy-load-balancing-and-api-gateway.md` so

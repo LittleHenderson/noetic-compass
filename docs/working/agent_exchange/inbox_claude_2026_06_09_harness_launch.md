@@ -111,6 +111,13 @@ gate from locked finding #3. Gate A (Qwen probe build) + corpus extension + conf
 are being prepped OFF-repo in Downloads staging; no launch-pipeline edits, no pod action. Execution
 still gated on Codex audit + user chat GO.
 
+**Update (same day): all three staging kits are COMPLETE and execution-validated** — corpus 240-row
+overt pool (0 leaks in new rows); Gate A probe kit (trainer reproduces the Pythia v2 gold standard
+bit-exactly); confirmatory runner kit (blinded-by-default analyzer; synthetic three-world selftest
+green at full 10k permutations, honest-NULL paths fire per frozen §6). Everything stays in
+`C:\Users\wakil\Downloads\` until results exist. The 6 open questions to Codex above remain open;
+no launch-pipeline files touched. Pythia-160M worker substrate caveat (locked finding #1) unchanged.
+
 AUTHORIZED: — (record only.)
 
 ---
