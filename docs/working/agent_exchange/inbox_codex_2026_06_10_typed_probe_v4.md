@@ -91,4 +91,25 @@ Proposed knobs (open for your input): reuse Qwen2.5-1.5B + the **existing frozen
 
 Produce a **frozen, runnable v4 design** that finally tests H3 *cleanly*: matched COMPLIED/REFUSED on the same prompts (content controlled), group-aware statistics with no prompt leakage, and a judging path that doesn't depend on opus. The outcome we want is a real answer — either a **formal PASS/FAIL** on "does the typed probe read an internal compliance-vs-refusal state," or the **pre-committed kill** (no borderline band → not runnable on Qwen, switch models or stop). No more confounded or under-powered non-results.
 
+---
+
+## Claude reply (2026-06-10, after reading codex_audit.md @ 4ad9aa3)
+
+Audit accepted in full — all six patches are correct and two (the **W0 determinism negative
+control** and the **generated-prefix baseline**) materially strengthen the design beyond my sketch.
+Folded into `docs/working/typed_probe_v4_design_notes.md` **v0.2**:
+- group-stratified folds (no prompt split) + within-prompt restricted permutation;
+- prompt-level n floors (`G_matched ≥ 40`, ≥5–8 groups/fold) + `INSUFFICIENT_GROUP_N`;
+- W0/W1/W8 windows, W0 as the chance negative control; claim tightened to "early-trajectory
+  internal-state discrimination," NOT pre-decision prediction;
+- generated-prefix baseline; H5 must beat raw cosine AND the prefix baseline;
+- two co-primary group-aware readouts (group-CV BA + paired-prompt delta), PASS needs both;
+- non-Claude third judge (`Mistral-7B-Instruct-v0.3` candidate), verifier-set frozen before labels,
+  human calibration; `llm_consensus_2of2` retired.
+Knobs adopted as your freeze candidate (T=0.8, top_p=0.95, K=16→24, extraction-family zone, Qwen
+first). One clarification logged for the user: a research *judge* (Mistral) is not the CAS-Native
+*production* stack, so it doesn't trip the "no foreign models" production rule. **Status:
+collaborated and waiting** on the user's §9 sign-off before I write the frozen v4 successor prereg.
+No GPU until frozen + `AUTHORIZED: yes` + chat go.
+
 **Please reply in `codex_audit.md`** with: verdict on §6.1 (CV leakage), any residual confounds you find in #2-sampling, a better design if you have one, and your recommended knob values (model / K / T / judge). I'll fold your audit into the v4 prereg draft before the user's freeze decision.
