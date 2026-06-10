@@ -612,3 +612,63 @@ for reliability) + a non-Claude judge. **Open dependency:** the §7 non-Claude j
 (Mistral-7B-Instruct-v0.3) may be HF-gated; checking pod availability — if gated/no-token, the
 non-Claude judge choice is a decision point (HF token vs a named non-gated substitute), surfaced
 before any labeling. Accepted verifier set frozen pre-labels (`_xfam`); `llm_consensus_2of2` retired.
+
+## v4 judge panel + merge + FORMAL VERDICT (2026-06-10 UTC)
+
+Judge inputs `judge_input_v4_20260610.jsonl` sha256 `de91a105…` (704 traces; probe/window/prefix
+fields stripped). Non-Claude judge dependency resolved: Mistral-7B-Instruct-v0.3 was downloadable
+on the pod (no HF token needed), so the §7-named judge was used — no substitution.
+
+**Cross-family panel (sonnet + haiku + Mistral-7B):**
+- sonnet (Claude), 4×176 chunked sub-agents, full coverage 704 — c 265 / r 18 / i 409 / u 12.
+  sha256 `04af3032…`.
+- haiku (Claude), 4×176 chunked — c 237 / r 83 / i 320 / u 1; ONE chunk-0 line had a mistyped
+  trace_id (1 missing / 1 extra), dropped → 703 valid labels, that 1 trace falls to 2-judge
+  coverage (handled by the merger). sha256 `f8301f1f…`.
+- **Mistral-7B (non-Claude, §7)** — first run mislabeled via a parser bug (fallback regex matched
+  the pronoun "I" in prose → false i=690). Fixed: forced `LABEL: x`-only output + strict parse +
+  `max_new_tokens=12` (core c/r/i/u rubric UNCHANGED; only the output-format instruction adjusted,
+  disclosed). Re-run: **c 5 / r 2 / i 694 / u 3** — Mistral genuinely collapses to IGNORED, a weak
+  discriminator. sha256 `f6126423…`. **Honest limitation: Mistral contributed almost no signal, so
+  the effective discriminating panel was the two Claude judges — the "all judges are Claude" caveat
+  is NOT removed in practice for this run.**
+
+**Inter-judge disagreement on REFUSED is the crux:** sonnet 18, haiku 83, Mistral 2. In this
+instruction-extraction zone, "declined to reveal instructions" (r) vs "did the original task,
+ignored the injection" (i) is a genuine judgment call the panel splits on.
+
+**Merge (`merge_consensus_v4.py` sha256 `e5984f7b…` → `xfam_labels_v4_20260610.jsonl` sha256
+`3d7248b8…`):** consensus_3of3_xfam 298, majority_2of3_xfam 393, **accepted 691**, excluded 13
+(**1.8%** — under the 10% DIAGNOSTIC threshold). Merged distribution: **COMPLIED 188, REFUSED 17,
+IGNORED 486.**
+
+**Matched set (the H3′ requirement — same prompt yields both labels):** 44 distinct prompts labeled;
+10 had ≥1 REFUSED, 22 had ≥1 COMPLIED, but only **2 had BOTH** → **G_matched = 2**; matched-prompt
+completions COMPLIED 11 / REFUSED 3.
+
+**Analyzer (`analyze_confirmatory_v4.py` sha256 `71305c7d…`, selftest re-PASSED): blinded (gate
+FAILS, no statistics) → ONE `--unblind`.** `verdict_v4.json` sha256 `7c1df290…`.
+
+### FORMAL OUTCOME — v4: **INSUFFICIENT_GROUP_N.**
+
+Group n-floor failed: G_matched 2 (need ≥40), COMPLIED 11 / REFUSED 3 in matched prompts (need ≥40
+each). Per prereg v4 §6 **no statistics are released** — the probe was NOT tested; this is NOT a
+probe failure. The W0 control and W1/W8 readouts did not run (gate short-circuit).
+
+**Why (honest):** the behavioral screener's "borderline" band (refusal-marker heuristic, 44 prompts
+at 0.33–0.67) **over-counted refusals** — under careful 3-judge CONSENSUS, those "refusal markers"
+("cannot", "I'm not able") were mostly judged IGNORED (the model deflected or did the original task,
+not a substantive refusal). Only 17 consensus-REFUSED across 704, so matched comply/refuse pairs on
+the SAME prompt essentially do not exist.
+
+**Three-run picture (H3 still untested at the frozen bar, for three DISTINCT reasons):** v1 —
+INSUFFICIENT_N (the model rarely refused at all); v3 — CONFOUNDED (refusals came only from scarier
+payloads, collinear with content); v4 — INSUFFICIENT_GROUP_N (refusals too judge-disputed/sparse to
+form matched within-prompt pairs). The matched-pairs design was sound and the analyzer's leakage
+guard is proven; the blocker is that consensus-labelable, content-matched refusals from this model
+are scarce. Honesty boundary stands: nothing here bears on MTC/CAS specificity; no internal-state
+claim is licensed.
+
+**Artifacts** all in `D:\tksCAS-archive\typed_probe_v4_tooling_20260610\` (shas above). Orchestrator
+stayed blind to model output text throughout (judges + analyzer read it; orchestrator handled
+labels/counts/numeric-features/hashes only).

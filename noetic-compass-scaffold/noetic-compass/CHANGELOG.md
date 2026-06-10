@@ -1,5 +1,36 @@
 # Noetic Compass — Progress Log
 
+## Typed-probe v4 matched-sampling run CLOSED: verdict INSUFFICIENT_GROUP_N — the same prompt almost never both complies and refuses under consensus labeling (Jun 10, 2026)
+
+**Headline.** v4 was the confound-free redesign Codex and I built: sample the SAME borderline prompt
+16× so some completions comply and some refuse, making the comply-vs-refuse contrast content-matched;
+the prompt (not the completion) is the unit, with group-by-prompt folds whose self-test proved they
+won't hand back a false PASS. It ran end-to-end on a fresh A6000: Stage-S behavioral screen found 44
+prompts that flip-flop (refusal heuristic 0.33–0.67, clearing the ≥40 floor); Stage-C captured 44×16
+= 704 matched-sampling traces (W0/W1/W8 reads + prefix, three-way sha-verified); a cross-family judge
+panel (sonnet + haiku + Mistral-7B) labeled all 704.
+
+**Verdict: INSUFFICIENT_GROUP_N** (formal, from the analyzer, blinded → one unblind; `verdict_v4.json`
+`7c1df290`). Merged labels: COMPLIED 188 / REFUSED 17 / IGNORED 486 (consensus 298, majority 393,
+1.8% excluded). The catch: only **17 consensus-REFUSED across 704**, so only **2 of 44 prompts** had
+*both* a COMPLIED and a REFUSED completion — far below the ≥40-matched-prompts floor. The probe was
+not tested; this is not a probe failure. **Why:** the screener's refusal-marker heuristic over-counted
+refusals — under careful 3-judge consensus, "cannot / I'm not able" on these instruction-extraction
+prompts was mostly judged IGNORED (the model deflected or did the task, not a substantive refusal).
+Also honest: Mistral-7B collapsed to ~constant IGNORED (weak third judge; a parser bug that mislabeled
+via the pronoun "I" was found + fixed), so the effective panel was the two Claude judges — the
+all-Claude caveat stands for this run.
+
+**Three honest non-results, three distinct reasons** H3 (does the probe read an internal
+comply-vs-refuse state?) remains untested at the frozen bar: v1 INSUFFICIENT_N (model rarely refused),
+v3 CONFOUNDED (refusals only from scarier payloads), v4 INSUFFICIENT_GROUP_N (consensus refusals too
+sparse to form content-matched pairs). The matched-pairs method and the leakage-proof analyzer are
+sound and reusable; the blocker is that consensus-labelable, content-matched refusals from
+Qwen2.5-1.5B are scarce. A v5 would need a model/condition that produces more unambiguous refusals on
+the same prompts (its own successor prereg), or this probe-validation line is parked with the method
+banked. Detail: `docs/working/typed_probe_gate_runlog.md`; tooling + verdict in
+`D:\tksCAS-archive\typed_probe_v4_tooling_20260610\`.
+
 ## Typed-probe v3 refusal-capture extension CLOSED: verdict CONFOUNDED / NON-FORMAL — refusals came from scarier payloads, so the refusal label is collinear with payload content (Jun 10, 2026)
 
 **Headline.** To make H3 testable (v1 starved the REFUSED bucket at 24<40), a frozen v3 successor
