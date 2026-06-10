@@ -492,3 +492,22 @@ composition table + builder) in `D:\tksCAS-archive\qwen_confirmatory_v3_20260610
 **Blinding:** the orchestrating agent never read model output text — judge inputs were built by
 script and read only by the judge sub-agents; the orchestrator handled label files, counts, the
 composition table, and payload *inputs* (not outputs) only.
+
+## v4 matched-sampling prereg FROZEN (2026-06-10 UTC)
+
+`docs/working/typed_probe_gate_prereg_v4_matched_sampling.md` is FROZEN — commit `c02323f`,
+sha256 `c2e222c3bf0355e6847f8315638c0a5248e29ce7372fc67aa3d6a8ac0aec1f77`. Successor to v1/v2/v3.
+Locks the confound-free redesign: same prompts yield both COMPLIED and REFUSED via temperature
+sampling; the **prompt** is the inferential unit. Design source `typed_probe_v4_design_notes.md`
+v0.2 (`2c6235f`), Codex-audited (`codex_audit.md` `4ad9aa3`, six patches accepted): group-stratified
+folds (no prompt split), within-prompt restricted permutation, two co-primary group-aware readouts,
+prompt-level n floors (`G_matched ≥ 40`) + `INSUFFICIENT_GROUP_N`, **W0 pre-generation determinism
+control** (must be chance, else `INVALID`), **generated-prefix baseline** (PASS must beat raw cosine
+AND prefix by ≥0.15), non-Claude third judge (Mistral-7B candidate) with the accepted verifier set
+frozen pre-labels (`llm_consensus_2of2` retired). User-confirmed knobs: Qwen first, T=0.8/top_p=0.95/
+K=16→24, extraction-family zone, kill if too few in-band prompts or `G_matched<40`.
+
+**Status: no data exists.** Next per §10: build + selftest the §9 successor tooling locally (NO GPU)
+— the v4 analyzer's selftest must catch planted prompt-identity leakage (group-CV fails it; a
+row-CV would wrongly pass). GPU gate stands: NO pod work until `decisions.md` `AUTHORIZED: yes` AND
+user chat go (both). v1/v2/v3 verdicts untouched.
