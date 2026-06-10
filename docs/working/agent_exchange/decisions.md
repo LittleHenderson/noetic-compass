@@ -1234,3 +1234,29 @@ only). It does bear on the comparative-specificity PASS the project was chasing:
 demonstrated at 20B on Condition-3.
 
 ---
+
+## 2026-06-10 — Typed-Probe v4 GPU run: AUTHORIZED: yes
+
+**AUTHORIZED: yes** — for the Typed-Probe v4 matched-sampling run on the user-provided
+RTX A6000 pod (38.147.83.24:14970).
+
+Basis (both gate keys + preconditions satisfied):
+- **User chat GO (explicit, repeated, 2026-06-10):** "go" (write v4 tooling), "use it",
+  "use gpu if needed" — recorded by Claude on the user's behalf; this is the user's
+  authorization, not agent self-authorization.
+- **Codex audit complete and accepted:** `codex_audit.md` commit `4ad9aa3` (all six v4
+  patches folded into the design and the frozen prereg).
+- **Prereg frozen:** `typed_probe_gate_prereg_v4_matched_sampling.md` commit `c02323f`,
+  sha256 `c2e222c3…`.
+- **No-GPU tooling built + verified:** `analyze_confirmatory_v4.py` (`b37306a2`, selftest
+  PASSED — group-CV removes the row-CV false-PASS leak), `run_screen_v4.py` (`f4764398`),
+  `run_confirmatory_capture_v4.py` (`3a33acf3`) — all compile-clean.
+
+Scope of this authorization: Stage-S behavioral screen, then (if the band yields ≥40
+matched prompts) Stage-C matched-sampling capture, on Qwen2.5-1.5B with the frozen probe.
+Steward discipline still applies: run the cheap Stage-S screen first and report before the
+larger Stage-C capture; honor the §11 kill conditions; the agent does NOT stop the pod
+(user stops it). Still pending before capture: build the in-band candidate prompt bank
+(no-GPU) and set up the bare pod (env pins + upload kit/probe/scripts, verify shas).
+
+---

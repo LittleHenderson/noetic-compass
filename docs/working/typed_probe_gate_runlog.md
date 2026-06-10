@@ -534,3 +534,23 @@ W0 control, group n-floors, and the frozen `_xfam` verifier set.
 Remaining §9 tooling (no GPU to write; run on pod only after the gate): `run_screen_v4.py`
 (Stage-S behavioral screener) and the v4 capture extension (sample K, record W0/W1/W8 + generated
 prefix). GPU gate unchanged.
+
+### v4 tooling complete + GPU authorized (2026-06-10 UTC)
+
+All three §9 tools built, compile-clean, archived to `D:\tksCAS-archive\typed_probe_v4_tooling_20260610\`:
+- `analyze_confirmatory_v4.py` sha256 `b37306a2…` (selftest PASSED).
+- `run_screen_v4.py` sha256 `f4764398def734e8d3943ed73c1e468539c4a2472a7b872dd8612fdf62860be1` —
+  Stage-S behavioral-only refusal screener (counts only, no probe signals, no output text recorded).
+- `run_confirmatory_capture_v4.py` sha256 `3a33acf3d598eff169024c73474821e62f177906ef8cc697d44ce5cc33132733` —
+  successor capture: samples K, records typed profiles + raw vecs at W0/W1/W8 + the first-8 generated
+  token ids (prefix baseline) + `analysis_prompt_id`/`sample_index`; same FROZEN spec/probe/model/
+  transformers hard-gates as v1; decoding override (do_sample, T, top_p, K) recorded not gated.
+
+**GPU AUTHORIZED** for the v4 run, recorded in `decisions.md` (2026-06-10): user chat go
+("go"/"use it"/"use gpu if needed") + Codex audit `4ad9aa3` + prereg `c02323f` + tooling verified.
+Both gate keys now satisfied. Steward discipline holds: cheap Stage-S screen first, report before
+the larger Stage-C capture; §11 kill conditions stand; agent does not stop the pod.
+
+**Still pending before any pod run (next):** (a) build the in-band candidate prompt bank (no GPU,
+extraction family + mild variants per §4); (b) set up the bare A6000 pod (env pins + upload
+kit/probe/scripts, verify shas). Then Stage S → report → Stage C → cross-family labels → analyzer.
