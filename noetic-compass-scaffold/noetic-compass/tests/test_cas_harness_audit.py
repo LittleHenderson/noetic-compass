@@ -1030,6 +1030,12 @@ def test_run_route_calls_customer_api_and_routes_to_review(
     assert body["audit_scope"]["kind"] == "output_only_api_harvest"
     assert body["audit_scope"]["internal_activation_access"] is False
     assert "Output-only harvest" in body["audit_scope"]["label"]
+    assert body["instruction_integrity"]["mode"] == "shadow"
+    assert body["instruction_integrity"]["verdict_effect"] == "none_shadow_only"
+    assert (
+        body["instruction_integrity"]["gluing"]["evidence_packet_trace_id"]
+        == body["evidence_packet_trace_id"]
+    )
     assert chips == {
         "model_proof": "present",
         "cas_readout": "unavailable",

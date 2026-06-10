@@ -177,6 +177,7 @@ def build_instruction_integrity_report(
     *,
     prompt_text: str | None = None,
     scenario_text: str | None = None,
+    output_text: str | None = None,
     evidence_packet_trace_id: str | None = None,
     evidence_packet: Mapping[str, Any] | None = None,
     proof_chips: Iterable[Mapping[str, Any]] | None = None,
@@ -191,6 +192,7 @@ def build_instruction_integrity_report(
     sources = [
         ("prompt", prompt_text),
         ("scenario_text", scenario_text),
+        ("model_output", output_text),
     ]
     findings: list[InstructionIntegrityFinding] = []
     claim_grounding: list[ClaimGrounding] = []

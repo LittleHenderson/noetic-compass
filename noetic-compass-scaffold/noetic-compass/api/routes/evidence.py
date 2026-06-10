@@ -171,6 +171,7 @@ class EvidencePacket(BaseModel):
     ablation: dict[str, Any] | None = None
     matched_controls: dict[str, Any] | None = None
     verification: dict[str, Any] | None = None
+    instruction_integrity: dict[str, Any] | None = None
     generation_readiness: dict[str, Any] | None = None
     distributed_fleet: dict[str, Any] | None = None
     live_audit: dict[str, Any] | None = None

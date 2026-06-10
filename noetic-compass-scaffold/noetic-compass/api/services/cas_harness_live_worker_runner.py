@@ -26,6 +26,7 @@ from api.config import settings
 from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
 from api.services.cas_harness_harvest import capture_live_audit_harvest
+from api.services.cas_harness_instruction_integrity import build_instruction_integrity_report
 from api.services.cas_harness_merged_evidence_packets import (
     append_evidence_packet_hash_log_entry,
     evidence_hash_log_path,
@@ -225,6 +226,14 @@ def _packet_from_worker_dump(
     control_block = _control_block_from_events(events)
     trace_id = _trace_id_for(audit_id, model_id, prompt, events)
     now = datetime.now(UTC).isoformat()
+    proof_chips = _proof_chips_for_live_fields(
+        trace_id=trace_id,
+        model_id=model_id,
+        has_output=bool(output_text),
+        has_readout=bool(token_events or covers_event),
+        ablation_present=ablation_block.get("status") == "present",
+        control_present=control_block.get("status") == "present",
+    )
 
     return {
         "schema_version": "cas_harness_evidence_packet_v1",
@@ -259,15 +268,13 @@ def _packet_from_worker_dump(
         "matched_controls": control_block,
         "verification": {
             "accepted": None,
-            "proof_chips": _proof_chips_for_live_fields(
-                trace_id=trace_id,
-                model_id=model_id,
-                has_output=bool(output_text),
-                has_readout=bool(token_events or covers_event),
-                ablation_present=ablation_block.get("status") == "present",
-                control_present=control_block.get("status") == "present",
-            ),
+            "proof_chips": proof_chips,
         },
+        "instruction_integrity": build_instruction_integrity_report(
+            prompt_text=prompt,
+            output_text=output_text,
+            evidence_packet_trace_id=trace_id,
+        ).to_dict(),
         "provenance": {
             "model_checkpoint_id": model_id,
             "method_label": "cas_harness_live_worker_v1",

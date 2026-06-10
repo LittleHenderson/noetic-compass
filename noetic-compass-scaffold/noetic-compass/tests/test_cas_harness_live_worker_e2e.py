@@ -277,6 +277,12 @@ def _assert_live_audit_honesty(*, body: dict[str, Any], trace_id: str) -> None:
     assert verify.overall == "all_match"
 
     packet_dict = packet.model_dump() if hasattr(packet, "model_dump") else dict(packet.__dict__)
+    packet_integrity = packet_dict.get("instruction_integrity")
+    assert isinstance(packet_integrity, dict)
+    assert packet_integrity["mode"] == "shadow"
+    assert packet_integrity["verdict_effect"] == "none_shadow_only"
+    assert packet_integrity["gluing"]["evidence_packet_trace_id"] == trace_id
+    assert body.get("instruction_integrity") == packet_integrity
 
     # (c) Audit scope is the honest open-weight live-trace label.
     audit_scope = body.get("audit_scope") or {}

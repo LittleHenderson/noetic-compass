@@ -1827,6 +1827,11 @@ async def run_audit_session(
             proof_chips=live_result.proof_chips,
             verifier_decision=live_result.verifier_decision,
             audit_scope=live_result.audit_scope,
+            instruction_integrity=(
+                getattr(live_result, "evidence_packet", {}).get("instruction_integrity")
+                if isinstance(getattr(live_result, "evidence_packet", None), dict)
+                else None
+            ),
             message=live_result.message,
         )
         if attached is None:
@@ -1861,6 +1866,11 @@ async def run_audit_session(
             proof_chips=api_result.proof_chips,
             verifier_decision=api_result.verifier_decision,
             audit_scope=api_result.audit_scope,
+            instruction_integrity=(
+                getattr(api_result, "evidence_packet", {}).get("instruction_integrity")
+                if isinstance(getattr(api_result, "evidence_packet", None), dict)
+                else None
+            ),
             message=api_result.message,
         )
         if attached is None:

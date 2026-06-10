@@ -244,6 +244,7 @@ def attach_runner_evidence(
     proof_chips: list[dict[str, str]],
     verifier_decision: dict[str, Any] | None = None,
     audit_scope: dict[str, Any] | None = None,
+    instruction_integrity: dict[str, Any] | None = None,
     message: str,
 ) -> AuditSessionRecord | None:
     """Attach live-run evidence before the verdict gate evaluates it."""
@@ -259,12 +260,15 @@ def attach_runner_evidence(
         record.provenance_chips = list(proof_chips)
         record.verifier_decision = dict(verifier_decision) if verifier_decision else None
         record.audit_scope = dict(audit_scope) if audit_scope else None
-        record.instruction_integrity = build_instruction_integrity_report(
-            prompt_text=record.prompt_text,
-            scenario_text=record.scenario_text,
-            evidence_packet_trace_id=evidence_packet_trace_id,
-            proof_chips=proof_chips,
-        ).to_dict()
+        if instruction_integrity:
+            record.instruction_integrity = dict(instruction_integrity)
+        else:
+            record.instruction_integrity = build_instruction_integrity_report(
+                prompt_text=record.prompt_text,
+                scenario_text=record.scenario_text,
+                evidence_packet_trace_id=evidence_packet_trace_id,
+                proof_chips=proof_chips,
+            ).to_dict()
         _append_event(record, status="EVIDENCE_READY", message=message)
         return record
 

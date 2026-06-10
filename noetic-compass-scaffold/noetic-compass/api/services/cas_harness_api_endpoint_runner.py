@@ -35,6 +35,7 @@ from api.llm_connectors.base import LLMResponse
 from api.llm_connectors.registry import get_connector
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
 from api.services.cas_harness_harvest import capture_live_audit_harvest
+from api.services.cas_harness_instruction_integrity import build_instruction_integrity_report
 from api.services.cas_harness_merged_evidence_packets import (
     append_evidence_packet_hash_log_entry,
     evidence_hash_log_path,
@@ -180,6 +181,12 @@ def _packet_from_api_response(
     is_real_model = provider != "mock"
     trace_id = _trace_id_for(audit_id, provider, model_id, prompt, output_text)
     now = datetime.now(UTC).isoformat()
+    proof_chips = _proof_chips_for_api_fields(
+        trace_id=trace_id,
+        provider=provider,
+        model_id=model_id,
+        has_output=bool(output_text),
+    )
 
     return {
         "schema_version": "cas_harness_evidence_packet_v1",
@@ -226,13 +233,13 @@ def _packet_from_api_response(
         },
         "verification": {
             "accepted": None,
-            "proof_chips": _proof_chips_for_api_fields(
-                trace_id=trace_id,
-                provider=provider,
-                model_id=model_id,
-                has_output=bool(output_text),
-            ),
+            "proof_chips": proof_chips,
         },
+        "instruction_integrity": build_instruction_integrity_report(
+            prompt_text=prompt,
+            output_text=output_text,
+            evidence_packet_trace_id=trace_id,
+        ).to_dict(),
         "provenance": {
             "model_checkpoint_id": model_id,
             "method_label": "cas_harness_api_endpoint_v1",

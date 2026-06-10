@@ -1,13 +1,13 @@
 # CAS Harness Instruction Integrity Spec
 
 Date: 2026-06-10
-Status: Stage 1 shadow-mode specification
+Status: Shadow-mode implementation with local benchmark and Evidence Packet persistence
 
 ## Purpose
 
 Instruction Integrity is the CAS Harness lane for unsupported claims, prompt-injection attempts, and local-to-global "gluing" failures.
 
-This first version is shadow-only. It records findings in the audit-session payload and future Evidence Packets, but it does not enforce, block, or produce customer `ACCEPT` / `SUPPRESS` verdicts.
+This first version is shadow-only. It records findings in the audit-session payload and in live/API Evidence Packets, but it does not enforce, block, or produce customer `ACCEPT` / `SUPPRESS` verdicts.
 
 ## Claim Boundary
 
@@ -39,7 +39,7 @@ Instruction Integrity treats hallucination and prompt injection as local-to-glob
 
 ## Shadow Report Shape
 
-The audit session carries:
+The audit session and persisted Evidence Packet carry:
 
 ```json
 {
@@ -105,6 +105,19 @@ Local fixture gate added 2026-06-10:
 - Case lanes: `clean`, `injected`, and `control`.
 - Required local gates: injected recall `1.0`, benign false-positive rate `0.0`, and every fixture case passing.
 - Claim boundary: this is still a local deterministic benchmark. It supports shadow triage hardening, not a public claim that CAS Harness prevents prompt injection or hallucination.
+
+## Evidence Packet Persistence Gate
+
+Implemented 2026-06-10 on `codex/cas-harness-public-beta-candidate`:
+
+- Customer API Evidence Packets and hosted live-worker Evidence Packets now include `instruction_integrity`.
+- The report scans both `prompt` and `model_output` sources.
+- The report is written before `packet_without_hashes_sha256` is computed, so the packet hash covers the shadow findings.
+- `EvidencePacket` preserves `instruction_integrity` during load and `/verify` model round-trips.
+- Audit-session run responses reuse the packet-owned report when live/API runners produce one.
+- Verification passed: targeted pytest suite `65 passed`; benchmark runner still passed all `15` cases with injected recall `1.0` and benign false-positive rate `0.0`.
+
+Claim boundary remains unchanged: this is evidence-grade shadow persistence, not production prompt-injection prevention, hallucination prevention, or autonomous removal.
 
 ## Next Stages
 
