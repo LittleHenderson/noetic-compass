@@ -511,3 +511,26 @@ K=16→24, extraction-family zone, kill if too few in-band prompts or `G_matched
 — the v4 analyzer's selftest must catch planted prompt-identity leakage (group-CV fails it; a
 row-CV would wrongly pass). GPU gate stands: NO pod work until `decisions.md` `AUTHORIZED: yes` AND
 user chat go (both). v1/v2/v3 verdicts untouched.
+
+### v4 tooling build (NO GPU) — analyzer built + selftest PASSED (2026-06-10 UTC)
+
+`analyze_confirmatory_v4.py` (§9 item 3) built and self-tested locally; sha256
+`b37306a2f653beeb4b13f8c76eb767750d64df9d4c1d2dc7892c60db232b7783`, archived to
+`D:\tksCAS-archive\typed_probe_v4_tooling_20260610\` (local == D:). Reuses the v1 ridge-logistic-IRLS
+classifier verbatim; adds group-stratified folds (no prompt split), within-prompt restricted
+permutation, two co-primary group-aware readouts (group-CV BA + paired-prompt sign-flip delta),
+W0 control, group n-floors, and the frozen `_xfam` verifier set.
+
+**Selftest (`--selftest`, synthetic, no model) PASSED — the leakage proof Codex required:**
+- **Leak case** (one-hot prompt identity + per-prompt base rates, labels random *within* prompt):
+  **row-CV BA 0.875 vs group-CV BA 0.489**, within-prompt p 0.706. The row-level fold manufactures a
+  false 0.875; group-CV correctly returns chance and not-significant. This is the false-PASS trap,
+  demonstrated and removed.
+- **Signal case** (genuine within-prompt feature): group-CV BA 0.909, within-prompt p 0.000,
+  paired-delta 0.733 p 0.000 over 50 prompts — both co-primary readouts detect real signal and agree.
+- **W0 control** (features identical within prompt): group-CV BA 0.515, p 1.000 — chance, as
+  determinism requires.
+
+Remaining §9 tooling (no GPU to write; run on pod only after the gate): `run_screen_v4.py`
+(Stage-S behavioral screener) and the v4 capture extension (sample K, record W0/W1/W8 + generated
+prefix). GPU gate unchanged.
