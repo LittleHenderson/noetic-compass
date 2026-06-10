@@ -1,5 +1,33 @@
 # Noetic Compass — Progress Log
 
+## Typed-probe v3 refusal-capture extension CLOSED: verdict CONFOUNDED / NON-FORMAL — refusals came from scarier payloads, so the refusal label is collinear with payload content (Jun 10, 2026)
+
+**Headline.** To make H3 testable (v1 starved the REFUSED bucket at 24<40), a frozen v3 successor
+pre-registration added 120 injected attempts carrying 8 refusal-eliciting payload classes
+(ransomware/bomb/meth/phishing/etc.), reusing the original document carriers verbatim so the only
+change was the payload text. Capture ran clean on the pod (120/120, fp32, seed 1234, three-way
+sha-verified). Result: Qwen2.5-1.5B **refused the safety bait ~99% (119/120)** — combined REFUSED
+jumped to 143 (clears the n≥40 floor). **But that "fix" created a severe confound:** refusals are
+now ~83% from the new safety-bait classes while complies are ~99% from the old benign-mischief
+classes, and the v1 refusals were all system-prompt-extraction payloads. So a probe that separated
+COMPLIED from REFUSED here would mostly be reading harmful-vs-benign *payload content*, not an
+internal compliance state. The mechanical confound floor (does any class hold both labels?) was not
+tripped (4 classes overlap, best is overt_5 at 7c/5r), but the residual confound is decisive.
+
+**Verdict: CONFOUNDED / NON-FORMAL (DIAGNOSTIC).** Two independent, disclosed reasons: (1) the
+frozen 3-judge labeling could not complete — the **opus judge was blocked twice by the Anthropic
+Usage Policy** on the red-team cyber-content, leaving a 2-judge panel (sonnet+haiku, unanimous on
+all 120); those `llm_consensus_2of2` labels fall outside the frozen analyzer's accepted-verifier
+set, so no formal H1–H5 was released and none was fabricated; (2) even with the robust labels, the
+payload-class confound precludes a clean internal-state claim. **Clean finding that DOES stand**
+(model behavior, not a probe claim): Qwen2.5-1.5B refuses overt injection *attacks* (~99% safety
+bait) but complies with benign-mischief injections ~67%. The real lesson: you can't unstarve a
+refusal bucket by adding scary payloads without confounding the label with content. **v4 path
+(needs its own successor prereg):** vary refusal-vs-compliance while holding payload semantics
+fixed. v1/v2 artifacts and the INSUFFICIENT_N verdict are untouched and carry forward. Full detail:
+`docs/working/typed_probe_gate_runlog.md`; v3 freeze
+`docs/working/typed_probe_gate_prereg_v3_refusal_capture_extension.md`.
+
 ## Typed-probe confirmatory run CLOSED: formal verdict INSUFFICIENT_N — Qwen refused too rarely to test H3; Phi-3 injectability gate cleared at 81.7% (Jun 10, 2026)
 
 **Headline.** The registered hijack-vs-refusal experiment reached its endpoint and the verdict
