@@ -353,3 +353,41 @@ the frozen bar.
 Next per freeze §7: pod upload + hash-verify + `--limit 3` DIAGNOSTIC smoke → formal 120-row
 capture (fp32, seed 1234, greedy 96) → v2 labeling on the new batch only → composition table →
 blinded → ONE unblind on combined data.
+
+## v3 capture executed — pod upload, smoke, formal 120-row capture (2026-06-10 UTC)
+
+**Pre-run gates, all green (same frozen pipeline, capture script UNCHANGED):**
+- Pod env pins verified: torch 2.4.1+cu124 / transformers 4.46.3 / numpy 2.4.6 / CUDA available.
+- Inputs uploaded + pod-side sha256 verified identical to local: corpus
+  `injected_overt_v3r_120_20260610.jsonl` = `e8b09df0…`, empty clean
+  `clean_instruction_v3_EMPTY_20260610.jsonl` = `e3b0c442…`, generator = `aeff02b0…`.
+- Probe selected by the locked spec (`probe_npz_filename` / `probe_npz_sha256`):
+  `qwen2p5_1p5b_noetic_probes_snapshot_v1_20260610.npz`, pod sha256 confirmed `fa445f48…`.
+- `--limit 3` DIAGNOSTIC smoke: EXIT 0, dtype=float32, captured 3/3, all `diagnostic=true`,
+  no gate/traceback. Blinding-safe schema check: 1 meta + 3 traces, key set identical to v1,
+  trace[0] id `code_comment-cache-INJECTED_OVERT_V3R-0018` (confirms v3 corpus loaded).
+
+**Formal capture:** 120/120 INJECTED traces (0 CLEAN — empty clean corpus by design), 81 s,
+`--dtype float32` explicit (matches v1 / Gate A probe-training conditions), greedy max_new_tokens
+96, seed 1234. EXIT 0, no errors. Output `captures_qwen_v3r_20260610.jsonl`.
+
+| field | value |
+|---|---|
+| capture sha256 (pod == local == D:, three-way verified) | `b97b6b9318b84a76078fba29ea1c5db879f70941cd6d3690487feb3de5616830` |
+| meta corpus_sha256 | `e8b09df0a919ac3170a94120fbde12afc45dd2fa17163979f8e582ff4bae8410` |
+| meta clean_corpus_sha256 | `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` |
+| meta probe_npz_sha256 | `fa445f48c64e522d24c2f5e4a897c8fa05dbd8fca36fbf368d078711ed9eb1c9` |
+| meta spec_sha256 | `9e9ffd8efa454610898880acdc2bf761cdfaa681b69be1dab811cff232031cae` |
+| meta dtype / seed / diagnostic | torch.float32 / 1234 / **false** |
+
+Blinding-safe content check: 121 records (1 meta + 120 traces), **all 120 traces
+`diagnostic=false`**, all 120 prompt_ids contain `INJECTED_OVERT_V3R`, 120 unique trace_ids.
+Archived to `D:\tksCAS-archive\qwen_confirmatory_v3_20260610\` (corpus + empty clean + generator +
+capture; shas verified). The original Qwen capture, CLEAN-40, and all v1/v2 labels are untouched
+and carry forward.
+
+**Blinding state as of this entry:** capture output text NOT read by the agent — only the meta
+provenance block, `diagnostic` flags, and prompt_ids were inspected (mechanically, named-field
+filter). Auto-proposals NOT read; analyzer NOT run (not even blinded). No v3 labels exist. Next:
+v2 labeling protocol on the **new 120-trace batch only** (3 judges opus/sonnet/haiku, §4 rubric,
+consensus 3/3, Path A offer once → Path B fallback).
