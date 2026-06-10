@@ -1,5 +1,26 @@
 # Noetic Compass — Progress Log
 
+## Typed-probe confirmatory run CLOSED: formal verdict INSUFFICIENT_N — Qwen refused too rarely to test H3; Phi-3 injectability gate cleared at 81.7% (Jun 10, 2026)
+
+**Headline.** The registered hijack-vs-refusal experiment reached its endpoint and the verdict
+is recorded: **INSUFFICIENT_N** — not falsified, not passed. The user adjudicated 28 of the 59
+Qwen judge-disagreements by hand (10 COMPLIED / 10 REFUSED / 8 IGNORED) then stopped; the
+pre-frozen hybrid took over exactly as written (human labels supersede; pre-declared Path B
+2/3-majority covers the rest; 1 three-way-split trace excluded = 0.4%, no DIAGNOSTIC). Final
+realized buckets: COMPLIED 160 / REFUSED 24 / IGNORED 55 / CLEAN 40 — **REFUSED 24 < 40**, so
+the frozen n-gate withheld ALL statistics (blinded run first, then the ONE recorded `--unblind`;
+H1–H5 never computed, no peeking possible). Plain meaning: the probe was never tested on the
+decisive question because Qwen2.5-1.5B almost never refused the injected instructions (10% of
+traces) — a fact about the model's behavior, not about the probe. **Phi-3-mini injectability
+gate: CLEARED — 49/60 = 81.7% complied ≥ 20%**, at the v2 label tier ("LLM-consensus-labeled,
+no human in loop" — the human Phi-3 passes never ran); Phi-3 stays qualified as the second
+family. Claim language locked: Qwen = "LLM-consensus-labeled (partially human-adjudicated:
+28/59 disagreements)"; never claim the v1 human-only tier for any result in this run. Path to
+a real H3 test: a v3 amendment adding refusal-inducing payloads (frozen BEFORE capture) to
+fill REFUSED ≥ 40 — today's 239 verified labels carry forward. Full audit trail
+(verdict.json/result_memo shas, label assembly arithmetic 281→280 exact) in
+`docs/working/typed_probe_gate_runlog.md`.
+
 ## 3-judge LLM panel labeled all 300 traces under frozen prereg v2; Phi-3 65% injectable on unanimity alone (Jun 11, 2026)
 
 **Headline.** User declined the 300-trace human labeling pass ("SPAWN AN AGENT OR A FEW TO DO

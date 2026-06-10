@@ -239,3 +239,75 @@ not falsified, not passed, bucket too small at the frozen bar.
 verify_labels_cli) vs Path B (pre-declared 2/3-majority fallback, no human, exclusions
 disclosed); plus the §3.6 Phi-3 option (verify only the 39 unanimous-c traces to keep the v1
 human-verified injectability gate formal).
+
+## Adjudication outcome + blinded → unblind analysis — FINAL VERDICT (executed 2026-06-10 UTC)
+
+**User decision & what actually happened:** user accepted Path A AND the §3.6 Phi-3 option,
+conditioned on a usable console. Built `START_LABELING.bat`
+(`09cd04bf925f680ffb4908f80f8ef01968ac2b8366637ffd51db7f97a33815bd`; 3 passes, on-screen
+rubric identical to the judges' §4 rubric, resumable). User completed **28 unique
+adjudications of the 59 Qwen disagreements** (10 COMPLIED / 10 REFUSED / 8 IGNORED in
+`adjudication_captures_qwen_20260610.verified_labels.jsonl`
+`7046b229e5649f20d1a465502e524fb83f40e64882eefefce87101501e47ae15`), then stopped. Passes 2
+and 3 (Phi-3) were never started — no Phi-3 human labels exist.
+
+**Hybrid resolution (both mechanisms pre-frozen in v2; no improvisation):** human labels
+supersede wherever present (verifier `human`, prio 2); pre-declared Path B 2/3-majority
+covers the remainder (verifier `llm_majority_2of3`, prio 1). The §3.6 v1-preservation option
+was NOT achieved — the Phi-3 gate stands at the v2 tier only.
+
+Path B merge outputs (deterministic; re-run byte-identical):
+- majority_labels_qwen_20260610.jsonl — 58 labels (17 C / 23 I / 18 R); 1 trace excluded
+  (3-way `cir` split; 0.4% of family, < 10% → no DIAGNOSTIC downgrade)
+  `88329a93fc17f50b872bca9486464352359214588061376c7d0f298958d255f5`
+- majority_labels_phi3_20260610.jsonl — 15 labels (10 C / 4 I / 1 R); 0 excluded
+  `9fbca23549cd9aaee9950511ac7ccfdc794abfa421b5b8d82916b4b690bf9198`
+
+Final Qwen label assembly fed to the analyzer: consensus 181 + majority 58 + human 28
+(superseding 28 of the 58 majority labels — verdict.json `label_overwrites_last_wins: 28`,
+`labels_rejected_non_human: 0`). The one excluded trace remained unlabeled and was dropped by
+the analyzer as unverified-injected (`unverified_injected_dropped: 1`; 281 lines → 280 gated
+records — arithmetic exact).
+
+**Blinded run (first):** `analyze_confirmatory.py --captures captures_qwen_20260610.jsonl
+--verified-labels consensus + majority + human --spec readout_spec_qwen2p5_1p5b.locked.json`
+→ `confirmatory_analysis_blinded_20260611/blinded_status.json`
+`e9ae1536b6c3350610539fcfdcc79b818fcc10b38e3b0ae68c95b151c8f420fe`. Result: **INSUFFICIENT_N
+— REFUSED = 24 < 40**; statistics withheld per prereg Appendix C.
+
+**THE one unblind act (v2 §7 step 6; same inputs + `--unblind --n-perm 10000 --seed
+20260609`):** gate aborts before statistics, as designed. Outputs:
+- `confirmatory_analysis_unblind_20260611/verdict.json`
+  `230f3ad53fc1e59d7b830aaf8973ff050777c9ddfb9f5d963fce793497626706`
+- `confirmatory_analysis_unblind_20260611/result_memo.md`
+  `6b6f8f10c74cfc8e22f8d452dc6a1d5f9620cbad14e396b8f89d1fb6ecac36f1`
+- analyzer code fingerprint `0ee0a2f9fac2b6f0c5a96d4ec581fa2611c478fd8934b579acbcf77e0a05e965`;
+  criteria hash `5b8d564a508dde27fddc014c633acead7288bd29e42c9391deb3fcb0247f82bb`; spec lock
+  `9e9ffd8efa454610898880acdc2bf761cdfaa681b69be1dab811cff232031cae` verified at gate.
+
+**FORMAL VERDICT — Qwen2.5-1.5B-Instruct family: `INSUFFICIENT_N`.**
+Realized counts {COMPLIED 160, REFUSED 24, IGNORED 55, CLEAN 40}; realized rates
+{COMPLIED 66.9%, REFUSED 10.0%, IGNORED 23.0%}. H1–H5 were **NOT EVALUATED** — no
+permutation tests, no balanced accuracies, no thresholds were computed or seen by anyone.
+Registered meaning: **not falsified, not passed**. The decisive H3 bucket starved because the
+model rarely refused (24/239 labeled injected) — a model-behavior fact established by the
+labels, not a probe property. Auto-proposal (string-matcher) agreement with final labels:
+51.0% — confirms the panel/human labeling layer was load-bearing, not cosmetic.
+
+**Phi-3-mini injectability gate: CLEARED at v2 tier.** 39 unanimous-c + 10 majority-c =
+49/60 = **81.7% complied ≥ 20%**. Label tier: **LLM-consensus-labeled (no human in loop)** —
+the §3.6 human pass never ran. NEVER report this gate as human-verified. Phi-3 remains
+QUALIFIED as a second family for any future arm (which would still need its own Gate A probe
++ §4 spec freeze before capture).
+
+**Claim-language register (v2 §4, binding on all downstream artifacts):**
+- Qwen labels: "LLM-consensus-labeled (partially human-adjudicated: 28 of 59 disagreements)".
+- Phi-3 labels: "LLM-consensus-labeled (no human in loop)".
+- Same-model-family caveat stands: all three judges and the orchestrator are Claude models.
+- The v1 human-only tier is NOT claimable for any result in this run.
+
+**Successor path (NOT started; requires a frozen v3 amendment BEFORE any new capture):** a
+refusal-inducing capture extension (payload classes designed to elicit refusals) to bring
+REFUSED ≥ 40. Today's 239 verified labels + consensus/majority/human files carry forward
+unchanged; only new traces would need labeling. Without it, H3 on Qwen stays untestable at
+the frozen bar.
