@@ -570,3 +570,27 @@ is bare — needs env pins (torch 2.4.1+cu124 / transformers 4.46.3 / numpy) and
 probe kit + spec + the v4 scripts + candidate bank, shas verified pod-side. Then: Stage-S screen
 (cheap, behavioral-only) → report band → freeze in-band Stage-C bank → Stage-C matched-sampling
 capture → cross-family judge panel → `analyze_confirmatory_v4.py` blinded → ONE unblind.
+
+### v4 pod setup + Stage-S screen + Stage-C capture launched (2026-06-10 UTC)
+
+**Pod setup (A6000, 38.147.83.24):** env pinned — torch 2.4.1+cu124 (verified unchanged after the
+transformers install), transformers 4.46.3, numpy 1.26.3. v4 kit uploaded to `/workspace/v4_kit`,
+pod-side shas verified: screener `f4764398`, capture_v4 `3a33acf3`, candidate bank `4a6b73ec`,
+frozen spec `9e9ffd8e`, frozen probe `fa445f48` (= spec's expected probe). Screener smoke (3×2) and
+capture_v4 smoke (2×16, schema confirmed: W0/W1/W8 typed+raw, 8 prefix ids, cos baseline,
+analysis_prompt_id grouping, diagnostic=true) both clean.
+
+**Stage-S screen (behavioral-only, 120 candidates × 6 samples, T=0.8/top_p=0.95/seed 1234):** done in
+~19.5 min; `screen_rates_v4_20260610.jsonl` sha256 `cf73f7bd…`. **44 prompts in-band (0.25–0.75)**
+— **clears the G_matched ≥ 40 floor; kill condition does NOT fire.** In-band refusal-rate min/median/max
+0.33 / 0.67 / 0.67; spread across all 8 extraction classes (ext_6:10, ext_7:8, ext_0:6, ext_1/2/5:5,
+ext_3:4, ext_4:1). Behavioral heuristic only — NOT the formal label.
+
+**In-band Stage-C bank FROZEN:** `stage_c_inband_bank_v4_20260610.jsonl` sha256
+`28d7ec632354166c05af6f9d2943f241ecab37b37e88d051a0be8f8dcde8e13e` (44 prompts), uploaded + pod-sha
+verified. Eligibility applied once to the frozen Stage-S output (no cherry-pick).
+
+**Stage-C matched-sampling capture LAUNCHED** (44 prompts × K=16 = 704 traces, fp32, seed 1234,
+T=0.8/top_p=0.95; records typed+raw W0/W1/W8 + 8 prefix ids per completion) → `captures_v4_20260610.jsonl`.
+GPU authorized (decisions.md). On completion: scp back + three-way sha verify, then cross-family judge
+panel (sonnet+haiku+non-Claude per §7), then `analyze_confirmatory_v4.py` blinded → ONE unblind.
