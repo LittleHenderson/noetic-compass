@@ -594,3 +594,21 @@ verified. Eligibility applied once to the frozen Stage-S output (no cherry-pick)
 T=0.8/top_p=0.95; records typed+raw W0/W1/W8 + 8 prefix ids per completion) → `captures_v4_20260610.jsonl`.
 GPU authorized (decisions.md). On completion: scp back + three-way sha verify, then cross-family judge
 panel (sonnet+haiku+non-Claude per §7), then `analyze_confirmatory_v4.py` blinded → ONE unblind.
+
+### Stage-C capture COMPLETE + verified (2026-06-10 UTC)
+
+44/44 prompts × K=16 = **704 traces** captured in ~22 min, EXIT 0. `captures_v4_20260610.jsonl`
+sha256 `1c16f2fb84105b0a2ff854a498eae25505adb215e4b184bae2726c79a599e12a` — **three-way verified
+(pod == local == D:)**. Blinding-safe content check: 1 meta + 704 captures, **all `diagnostic=False`**,
+all 704 carry W0/W1/W8 typed profiles, exactly **44 distinct `analysis_prompt_id` × 16 samples each**,
+704 unique trace_ids. Meta provenance shas all match the frozen inputs (corpus `28d7ec63`, probe
+`fa445f48`, spec `9e9ffd8e`; K=16, sample T=0.8 top_p=0.95). Archived to
+`D:\tksCAS-archive\typed_probe_v4_tooling_20260610\`. Orchestrator read only meta + field-names +
+flags — never output text.
+
+**Next: cross-family judge panel (§7).** Build judge inputs (mechanical, strip all probe/window/prefix
+fields → prompt+goal+output only), then label all 704 with sonnet + haiku (Claude sub-agents, chunked
+for reliability) + a non-Claude judge. **Open dependency:** the §7 non-Claude judge candidate
+(Mistral-7B-Instruct-v0.3) may be HF-gated; checking pod availability — if gated/no-token, the
+non-Claude judge choice is a decision point (HF token vs a named non-gated substitute), surfaced
+before any labeling. Accepted verifier set frozen pre-labels (`_xfam`); `llm_consensus_2of2` retired.
