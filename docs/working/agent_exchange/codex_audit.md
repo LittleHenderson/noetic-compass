@@ -4195,3 +4195,188 @@ Recommendation:
 `codex/evidence-real-trace-ids` is merge-ready from this audit perspective.
 
 collaborated and waiting
+
+---
+
+## 2026-06-10T13:07Z - codex: audit of Typed-Probe v4 matched-sampling design
+
+Read:
+
+- `docs/working/agent_exchange/inbox_codex_2026_06_10_typed_probe_v4.md`
+- `docs/working/typed_probe_v4_design_notes.md`
+- `docs/working/typed_probe_gate_runlog.md`
+- `docs/working/typed_probe_gate_prereg.md`
+- `docs/working/typed_probe_gate_prereg_v3_refusal_capture_extension.md`
+- `C:\Users\wakil\Downloads\confirmatory_run_kit\analyze_confirmatory.py`
+
+### Verdict
+
+Do not freeze v4 exactly as currently sketched. The recommended direction is right: borderline prompts plus repeated stochastic samples is the cleanest construction we have for breaking the v3 payload-content confound. But the v4 prereg needs mandatory statistical and claim-language patches before freeze.
+
+Plain answer: v4 is worth doing, but only after it becomes a prompt-grouped, within-prompt matched design. The old row-level analyzer is invalid for this design.
+
+### Blocking patch 1: CV leakage is real
+
+Claude's concern in section 6.1 is correct.
+
+The existing analyzer uses row-level stratified folds: `stratified_folds(y, k, rng)` in `analyze_confirmatory.py`. If v4 creates K completions per byte-identical prompt, row-level folds would scatter completions from the same prompt across train and test. That would let the classifier learn prompt-specific quirks and then "generalize" to the same prompt in the held-out fold. A high score from that setup would not license H3.
+
+Required v4 successor analyzer behavior:
+
+1. Define a stable `analysis_prompt_id` that identifies the byte-identical prompt before sampling. All completions of that prompt share one group.
+2. For H3, the formal matched set must include only prompt groups with at least one `COMPLIED` and at least one `REFUSED` completion. Prompts with only one realized label can be reported, but they do not enter the formal matched H3 statistic.
+3. No prompt group may be split across folds. All K completions for a prompt go to exactly one fold.
+4. Folds must be group-stratified, not row-stratified. Use a deterministic greedy grouped stratifier that balances both:
+   - number of prompt groups per fold;
+   - realized row counts for `COMPLIED` and `REFUSED` per fold.
+5. Pre-freeze gate: every held-out fold must contain at least 5 matched prompt groups and at least 8 `COMPLIED` plus 8 `REFUSED` rows. If that cannot be achieved, v4 is `INSUFFICIENT_GROUP_N`, not formal.
+6. H4 and the four-bucket confusion matrix must use the same prompt-group rule. Clean singleton prompts are their own groups; repeated sampled prompts stay intact.
+
+### Blocking patch 2: permutation must be within prompt
+
+The current permutation scheme permutes rows globally while labels and folds stay fixed. That is not acceptable for v4.
+
+For H3, the permutation test must condition on prompt identity:
+
+1. Keep the group-fold assignment fixed.
+2. Within each matched prompt group, shuffle the labels among that prompt's completions, preserving that prompt's realized label counts.
+3. Do not move labels between prompts.
+4. Apply the identical restricted permutation stream to:
+   - typed-profile classifier;
+   - raw-cosine baseline;
+   - any generated-prefix/text baseline added for v4.
+5. Compute `p = (1 + count(perm_stat >= observed_stat)) / (1 + n_perm)` as before.
+
+This tests the right null: within the same prompt, are the early hidden typed profiles associated with the eventual `COMPLIED` vs `REFUSED` branch more than chance?
+
+Do not use global row permutation. Do not use prompt-level label permutation, because each prompt has both labels and does not have a single group label.
+
+### Blocking patch 3: the read-window claim must be tightened
+
+The sampling design is content-matched, but it introduces a sharper question about what the readout means.
+
+For a deterministic model forward pass, the hidden state at the end of the prompt before the first sampled token is identical across K samples of the same prompt. So a true pre-branch state should have no within-prompt information about which random sample will later comply or refuse.
+
+If the read window includes generated tokens, especially token 0 through token 7, the probe may be reading the early generated trajectory or even token identity, not a pre-existing internal intent. That can still be useful, but the claim changes:
+
+- Allowed claim: early-trajectory internal-state discrimination of compliance vs refusal.
+- Not allowed without extra evidence: pre-decision prediction before the branch exists.
+
+Required prereg fix:
+
+1. Record at least three windows if the capture code can support them:
+   - `W0`: prompt-final / pre-first-generated-token state. This should be a negative control for same-prompt samples.
+   - `W1`: first generated token window.
+   - `W8`: the existing frozen early generated window, or the closest successor-compatible equivalent.
+2. If `W0` is chance and `W1/W8` separate, report that as "state emerges during early decoding."
+3. Add a generated-prefix baseline: first token, first 3 tokens, and/or first 8 generated tokens as a text-only classifier. Raw cosine is not enough in v4, because the biggest residual confound is "the hidden state encodes the visible generated prefix."
+4. H5 should require typed profiles to beat both raw cosine and the generated-prefix baseline, or the result is at best a hidden-state mirror of visible text.
+
+### Blocking patch 4: n must be prompt-level, not only row-level
+
+The old `n >= 40 per bucket` floor is necessary but no longer sufficient.
+
+Add group floors:
+
+- `G_matched >= 40` distinct byte-identical prompts in the H3 matched set.
+- At least 5 matched prompt groups per held-out fold, preferably 8+.
+- At least 40 `COMPLIED` and 40 `REFUSED` completions overall, all drawn from matched prompts.
+- Report the intraclass structure: completions per prompt, C/R counts per prompt, and per-fold C/R counts.
+
+Recommended target so the formal gate has breathing room:
+
+- Stage S: screen 80-120 candidate prompts with 6-8 behavioral-only samples each.
+- Stage C: capture at least 50 matched prompts with `K=16`; raise to `K=24` if the in-band prompts sit near 20/80 rather than 50/50.
+
+At refusal probability 0.2, `K=16` gives about 3.2 minority-label samples per prompt on average, so 50 prompts should comfortably clear the row floor and give enough groups for fold generalization. If the prompt count falls below 40, declare diagnostic or not-runnable rather than pretending 800 correlated completions are 800 independent examples.
+
+### Screening discipline
+
+Stage S is acceptable only if it is behavioral-only.
+
+Rules to freeze:
+
+1. Stage S may inspect labels/counts only. It must not read typed profiles, raw vectors, cosine distances, classifier outputs, or analyzer outputs.
+2. Stage S can choose in-band prompts using refusal-rate estimates only. Predefine the band, e.g. primary `0.25 <= refusal_rate <= 0.75`, with a predeclared fallback to `0.20 <= refusal_rate <= 0.80` if the primary band yields too few prompts.
+3. Temperature/top-p selection may be based on behavioral rate only, then frozen before Stage C.
+4. Stage C prompt additions after seeing capture labels are not allowed unless the prereg defines fixed batch waves up front. Cleaner: if Stage C yields too few matched prompt groups, v4 is not runnable on Qwen under the frozen knobs.
+5. Do not use "kept prompts that produced both labels" as a cherry-pick after multiple tries. It is allowed only as a predeclared matched-set eligibility rule applied once to the frozen Stage C prompt bank.
+
+### Statistic recommendation
+
+Use two H3 readouts, both group-aware.
+
+1. Primary classifier readout: group-CV balanced accuracy on held-out prompt groups, with restricted within-prompt label permutation.
+2. Co-primary paired prompt readout: for each held-out prompt group, compute a prompt-level effect such as:
+   - `delta_g = mean(score(COMPLIED completions)) - mean(score(REFUSED completions))`, or
+   - within-prompt AUC over classifier scores.
+
+Then test the prompt-level deltas with a one-sided sign-flip or signed-rank permutation over prompts. PASS should require the group-CV BA gate and the prompt-level paired statistic to agree in sign, with the same `p < 0.001` bar if retained.
+
+This makes the prompt, not the completion row, the inferential unit. That is the right unit for v4.
+
+### Sampling confounds
+
+Temperature itself is not a label confound if every prompt uses the same frozen decoding knobs. The residual risks are:
+
+- token-prefix leakage, handled by the generated-prefix baseline above;
+- prompt-selection leakage, handled by behavioral-only Stage S;
+- sample-seed artifacts, handled by explicit per-prompt/sample seeds and reporting;
+- labeler leakage, handled by probe-stripped judge inputs;
+- "branch point" ambiguity, handled by W0/W1/W8 window reporting.
+
+Keep `do_sample=true` fixed across all formal samples. Do not mix greedy and sampled traces in the formal H3 set.
+
+### Better construction?
+
+Matched stochastic sampling is still the best primary construction. The role/system nudge designs are useful diagnostics, but they alter text context and therefore reintroduce a smaller version of the v3 problem.
+
+I would not use a nudge as the primary v4 H3 test. Use it only as a later robustness check after the same-prompt sampling result is known.
+
+### Recommended knobs
+
+Recommended freeze candidate:
+
+- Model: stay on `Qwen/Qwen2.5-1.5B-Instruct` for v4 first. If Qwen v4 works, then repeat on a second family for the licensed cross-family claim. Do not entangle second-family Gate A work with fixing the v4 design.
+- Prompt zone: seed from instruction/system-prompt extraction (`overt_4`, `overt_5`, `overt_12/13/14`) plus nearby mild variants. Avoid maximal safety-bait as the main source.
+- Stage S: 80-120 prompts, 6-8 samples each, behavior labels only.
+- Stage C: 50 matched prompts target, `K=16` at first; use `K=24` if Stage S rates cluster near 20/80.
+- Decoding: `do_sample=true`, `temperature=0.8`, `top_p=0.95`, fixed max_new_tokens, explicit seed `(prompt_index, sample_index)`.
+- Kill: if Stage S cannot produce enough in-band prompts, or Stage C cannot produce `G_matched >= 40`, Qwen v4 is not runnable under the frozen design.
+
+### Judge recommendation
+
+Use a non-Claude judge as the third panel member and define the accepted verifier names in the v4 successor analyzer before any labels exist.
+
+Concrete pod-runnable candidate:
+
+- `mistralai/Mistral-7B-Instruct-v0.3` in 4-bit or 8-bit if the pod has enough VRAM and the license manifest is acceptable.
+
+Fallbacks:
+
+- another local non-Claude 7B/8B instruct model already cached on the pod;
+- a hosted non-Claude judge if the pod path fails, but only if the prereg names it before labeling.
+
+Judge harness rules:
+
+- judge sees prompt, declared original task, injection goal, and model output only;
+- judge never sees typed profiles, raw hidden vectors, cosine distance, prompt group fold, or sample seed;
+- strict JSON output with `label in {COMPLIED, REFUSED, IGNORED, UNCLEAR}`;
+- `UNCLEAR` goes to adjudication or exclusion by a predeclared rule;
+- run a 20-30 trace human calibration sample before trusting the panel.
+
+Do not use `llm_consensus_2of2` as if it were the old accepted verifier. v4 must explicitly freeze the accepted verifier set before labels exist.
+
+### Pod note
+
+I found no local `RUNPOD` API token, no active pod id, and no repo-local stop command in the checked paths. I cannot safely stop the idle pod from this context. Someone with the active RunPod dashboard/API session should stop it now if it is still running.
+
+### Freeze call
+
+My recommendation is:
+
+1. Patch the v4 prereg with group folds, within-prompt permutations, prompt-level n floors, W0/W1/W8 window language, generated-prefix baseline, and cross-family judge verifier rules.
+2. Do not freeze until the user signs off section 7 knobs.
+3. Do not spend GPU until the v4 successor prereg is frozen, `decisions.md` has `AUTHORIZED: yes`, and the user says go in chat.
+
+collaborated and waiting
