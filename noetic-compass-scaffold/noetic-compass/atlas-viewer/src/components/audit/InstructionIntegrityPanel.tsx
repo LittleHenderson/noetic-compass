@@ -1,0 +1,217 @@
+import type { CSSProperties } from 'react';
+import {
+  COLORS,
+  FONT_FAMILY,
+  FONT_MONO,
+  TONE_TINT,
+} from '../../lib/designTokens';
+import type { CasHarnessInstructionIntegrityReport } from '../../lib/casHarnessAuditApi';
+
+export interface InstructionIntegrityPanelProps {
+  report: CasHarnessInstructionIntegrityReport | null;
+}
+
+const panelStyle = (flagged: boolean): CSSProperties => {
+  const tone = flagged ? TONE_TINT.amber : TONE_TINT.teal;
+  return {
+    display: 'grid',
+    gap: 12,
+    padding: 16,
+    borderRadius: 8,
+    border: `1px solid ${tone.borderSoft}`,
+    background: flagged ? 'rgba(251, 191, 36, 0.055)' : 'rgba(45, 212, 191, 0.055)',
+    fontFamily: FONT_FAMILY,
+  };
+};
+
+const headerStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'flex-start',
+  justifyContent: 'space-between',
+  gap: 12,
+};
+
+const titleWrapStyle: CSSProperties = {
+  display: 'grid',
+  gap: 4,
+};
+
+const eyebrowStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textSecondary,
+  fontSize: 11,
+  fontWeight: 800,
+  letterSpacing: 0.6,
+  textTransform: 'uppercase',
+};
+
+const titleStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textPrimary,
+  fontSize: 15,
+  fontWeight: 850,
+};
+
+const subcopyStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textSecondary,
+  fontSize: 12,
+  lineHeight: 1.45,
+};
+
+const statusPillStyle = (flagged: boolean): CSSProperties => {
+  const tone = flagged ? TONE_TINT.amber : TONE_TINT.teal;
+  return {
+    flex: '0 0 auto',
+    padding: '4px 8px',
+    borderRadius: 6,
+    border: `1px solid ${tone.borderSoft}`,
+    background: tone.fillSoft,
+    color: tone.text,
+    fontFamily: FONT_MONO,
+    fontSize: 10,
+    fontWeight: 850,
+    lineHeight: 1.2,
+    textTransform: 'uppercase',
+    whiteSpace: 'nowrap',
+  };
+};
+
+const listStyle: CSSProperties = {
+  display: 'grid',
+  gap: 8,
+  margin: 0,
+  padding: 0,
+  listStyle: 'none',
+};
+
+const findingStyle: CSSProperties = {
+  display: 'grid',
+  gap: 5,
+  padding: '9px 10px',
+  borderRadius: 6,
+  border: `1px solid ${COLORS.borderSubtle}`,
+  background: 'rgba(2, 6, 23, 0.30)',
+};
+
+const findingTopStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'baseline',
+  justifyContent: 'space-between',
+  gap: 8,
+};
+
+const findingKindStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textPrimary,
+  fontSize: 12.5,
+  fontWeight: 800,
+};
+
+const metaStyle: CSSProperties = {
+  color: COLORS.textMuted,
+  fontFamily: FONT_MONO,
+  fontSize: 10.5,
+  fontWeight: 800,
+  textTransform: 'uppercase',
+};
+
+const excerptStyle: CSSProperties = {
+  margin: 0,
+  color: COLORS.textSecondary,
+  fontSize: 12,
+  lineHeight: 1.45,
+  overflowWrap: 'anywhere',
+};
+
+const flagWrapStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 6,
+};
+
+const flagStyle: CSSProperties = {
+  padding: '3px 7px',
+  borderRadius: 5,
+  border: `1px solid ${TONE_TINT.muted.borderSoft}`,
+  background: TONE_TINT.muted.fillSoft,
+  color: COLORS.textSecondary,
+  fontFamily: FONT_MONO,
+  fontSize: 10.5,
+  fontWeight: 800,
+};
+
+function displayKind(kind: string): string {
+  return kind.replace(/_/g, ' ');
+}
+
+export function InstructionIntegrityPanel({
+  report,
+}: InstructionIntegrityPanelProps): JSX.Element | null {
+  if (!report) return null;
+
+  const flagged = report.status === 'FLAG_FOR_HUMAN_REVIEW';
+  const visibleFindings = report.findings.slice(0, 4);
+  const hiddenFindingCount = Math.max(0, report.findings.length - visibleFindings.length);
+  const flags = report.gluing.lacunarity_flags;
+
+  return (
+    <section
+      style={panelStyle(flagged)}
+      aria-label="Instruction integrity shadow scan"
+      data-testid="instruction-integrity-panel"
+    >
+      <div style={headerStyle}>
+        <div style={titleWrapStyle}>
+          <p style={eyebrowStyle}>Instruction integrity</p>
+          <p style={titleStyle}>Shadow scan</p>
+          <p style={subcopyStyle}>
+            {flagged
+              ? 'Potential instruction-integrity risk was routed to FLAG_FOR_HUMAN_REVIEW.'
+              : 'No shadow findings were recorded for this session.'}
+          </p>
+        </div>
+        <span style={statusPillStyle(flagged)}>{report.status}</span>
+      </div>
+
+      <div style={flagWrapStyle} aria-label="Instruction integrity metadata">
+        <span style={flagStyle}>truth: {report.truth_state}</span>
+        <span style={flagStyle}>effect: {report.verdict_effect}</span>
+        <span style={flagStyle}>coverage: {report.gluing.coverage_status}</span>
+      </div>
+
+      {flags.length > 0 ? (
+        <div style={flagWrapStyle} aria-label="Instruction integrity lacunarity flags">
+          {flags.map((flag) => (
+            <span key={flag} style={flagStyle}>
+              {flag}
+            </span>
+          ))}
+        </div>
+      ) : null}
+
+      {visibleFindings.length > 0 ? (
+        <ul style={listStyle} role="list">
+          {visibleFindings.map((finding) => (
+            <li key={`${finding.kind}-${finding.span_hash}`} style={findingStyle}>
+              <div style={findingTopStyle}>
+                <p style={findingKindStyle}>{displayKind(finding.kind)}</p>
+                <span style={metaStyle}>{finding.severity}</span>
+              </div>
+              <p style={excerptStyle}>{finding.span_excerpt}</p>
+              <p style={excerptStyle}>{finding.reason}</p>
+            </li>
+          ))}
+          {hiddenFindingCount > 0 ? (
+            <li style={findingStyle}>
+              <p style={excerptStyle}>{hiddenFindingCount} more shadow finding(s) recorded.</p>
+            </li>
+          ) : null}
+        </ul>
+      ) : null}
+    </section>
+  );
+}
+
+export default InstructionIntegrityPanel;

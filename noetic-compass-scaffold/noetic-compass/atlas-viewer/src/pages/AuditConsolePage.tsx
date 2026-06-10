@@ -8,6 +8,7 @@ import { AuditRunTranscript } from '../components/audit/AuditRunTranscript';
 import { AuditRunHeader } from '../components/audit/AuditRunHeader';
 import { AuditComposer } from '../components/audit/AuditComposer';
 import { AuditScaleFleetTab } from '../components/audit/AuditScaleFleetTab';
+import { InstructionIntegrityPanel } from '../components/audit/InstructionIntegrityPanel';
 import { MethodologyDrawer } from '../components/audit/MethodologyDrawer';
 import { AuditAppFrame } from '../components/shell/AuditAppFrame';
 import { AuditRail } from '../components/shell/AuditRail';
@@ -1098,6 +1099,8 @@ export default function AuditConsolePage() {
             detail={progressDetail(lifecycleStatus, isConfigured)}
             errorMessage={activeError}
           />
+
+          <InstructionIntegrityPanel report={session?.instruction_integrity ?? null} />
 
           <Disclosure summary="Scale & fleet (advanced)">
             <AuditScaleFleetTab

@@ -130,6 +130,51 @@ export interface CasHarnessAuditScope {
   detail: string | null;
 }
 
+export type CasHarnessInstructionIntegrityStatus = 'present' | 'FLAG_FOR_HUMAN_REVIEW';
+export type CasHarnessInstructionIntegrityTruthState = 'VALID' | 'UNDETERMINED';
+export type CasHarnessInstructionIntegritySeverity = 'low' | 'medium' | 'high';
+
+export interface CasHarnessInstructionIntegrityFinding {
+  kind: string;
+  severity: CasHarnessInstructionIntegritySeverity;
+  source: string;
+  span_hash: string;
+  span_excerpt: string;
+  authority_level: string;
+  gate: string;
+  decision: string;
+  repair: string;
+  reason: string;
+  evidence_refs: string[];
+}
+
+export interface CasHarnessInstructionIntegrityClaimGrounding {
+  claim_hash: string;
+  claim_excerpt: string;
+  support_status: 'present' | 'unavailable';
+  decision: string;
+  reason: string;
+  evidence_refs: string[];
+}
+
+export interface CasHarnessInstructionIntegrityGluing {
+  coverage_status: 'present' | 'incomplete';
+  lacunarity_flags: string[];
+  truth_state: CasHarnessInstructionIntegrityTruthState;
+  evidence_packet_trace_id: string | null;
+}
+
+export interface CasHarnessInstructionIntegrityReport {
+  schema_version: 'cas_harness_instruction_integrity.v0.shadow';
+  mode: 'shadow';
+  status: CasHarnessInstructionIntegrityStatus;
+  truth_state: CasHarnessInstructionIntegrityTruthState;
+  verdict_effect: 'none_shadow_only';
+  findings: CasHarnessInstructionIntegrityFinding[];
+  claim_grounding: CasHarnessInstructionIntegrityClaimGrounding[];
+  gluing: CasHarnessInstructionIntegrityGluing;
+}
+
 export interface CasHarnessAuditSession {
   audit_id: string;
   status: CasHarnessAuditSessionStatus;
@@ -150,6 +195,7 @@ export interface CasHarnessAuditSession {
   provenance_chips: ProvenanceChip[];
   verifier_decision: VerifierDecision | null;
   audit_scope: CasHarnessAuditScope | null;
+  instruction_integrity: CasHarnessInstructionIntegrityReport | null;
   lifecycle: CasHarnessAuditLifecycleEvent[];
 }
 
@@ -916,6 +962,7 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
     : [];
   const verifierDecision = parseNullableVerifierDecision(raw.verifier_decision);
   const auditScope = parseNullableAuditScope(raw.audit_scope);
+  const instructionIntegrity = parseNullableInstructionIntegrity(raw.instruction_integrity);
   const lifecycle = Array.isArray(raw.lifecycle)
     ? raw.lifecycle.map(parseLifecycleEvent)
     : [];
@@ -942,6 +989,7 @@ export function parseAuditSessionResponse(raw: unknown): CasHarnessAuditSession 
     provenance_chips: chips,
     verifier_decision: verifierDecision,
     audit_scope: auditScope,
+    instruction_integrity: instructionIntegrity,
     lifecycle,
   };
 }
@@ -1869,6 +1917,153 @@ function parseNullableAuditScope(raw: unknown): CasHarnessAuditScope | null {
     verdictDisposition: requiredString(raw.verdict_disposition, 'audit_scope.verdict_disposition'),
     detail: nullableString(raw.detail),
   };
+}
+
+function parseNullableInstructionIntegrity(raw: unknown): CasHarnessInstructionIntegrityReport | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity was malformed');
+  }
+  const schemaVersion = requiredString(raw.schema_version, 'instruction_integrity.schema_version');
+  if (schemaVersion !== 'cas_harness_instruction_integrity.v0.shadow') {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity schema_version is unsupported');
+  }
+  const mode = requiredString(raw.mode, 'instruction_integrity.mode');
+  if (mode !== 'shadow') {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity mode must be shadow');
+  }
+  const status = parseInstructionIntegrityStatus(raw.status);
+  const truthState = parseInstructionIntegrityTruthState(raw.truth_state);
+  const verdictEffect = requiredString(raw.verdict_effect, 'instruction_integrity.verdict_effect');
+  if (verdictEffect !== 'none_shadow_only') {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity verdict_effect must be none_shadow_only',
+    );
+  }
+  return {
+    schema_version: schemaVersion,
+    mode,
+    status,
+    truth_state: truthState,
+    verdict_effect: verdictEffect,
+    findings: parseInstructionIntegrityFindings(raw.findings),
+    claim_grounding: parseInstructionIntegrityClaimGrounding(raw.claim_grounding),
+    gluing: parseInstructionIntegrityGluing(raw.gluing),
+  };
+}
+
+function parseInstructionIntegrityFindings(raw: unknown): CasHarnessInstructionIntegrityFinding[] {
+  if (!Array.isArray(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity findings must be an array');
+  }
+  return raw.map((finding, index) => {
+    if (!isRecord(finding)) {
+      throw new CasHarnessAuditApiError('CAS Harness instruction_integrity finding was malformed');
+    }
+    return {
+      kind: requiredString(finding.kind, `instruction_integrity.findings[${index}].kind`),
+      severity: parseInstructionIntegritySeverity(finding.severity),
+      source: requiredString(finding.source, `instruction_integrity.findings[${index}].source`),
+      span_hash: requiredString(finding.span_hash, `instruction_integrity.findings[${index}].span_hash`),
+      span_excerpt: requiredString(
+        finding.span_excerpt,
+        `instruction_integrity.findings[${index}].span_excerpt`,
+      ),
+      authority_level: requiredString(
+        finding.authority_level,
+        `instruction_integrity.findings[${index}].authority_level`,
+      ),
+      gate: requiredString(finding.gate, `instruction_integrity.findings[${index}].gate`),
+      decision: requiredString(finding.decision, `instruction_integrity.findings[${index}].decision`),
+      repair: requiredString(finding.repair, `instruction_integrity.findings[${index}].repair`),
+      reason: requiredString(finding.reason, `instruction_integrity.findings[${index}].reason`),
+      evidence_refs: parseStringArray(
+        finding.evidence_refs,
+        `instruction_integrity.findings[${index}].evidence_refs`,
+      ),
+    };
+  });
+}
+
+function parseInstructionIntegrityClaimGrounding(
+  raw: unknown,
+): CasHarnessInstructionIntegrityClaimGrounding[] {
+  if (!Array.isArray(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity claim_grounding must be an array');
+  }
+  return raw.map((claim, index) => {
+    if (!isRecord(claim)) {
+      throw new CasHarnessAuditApiError('CAS Harness instruction_integrity claim_grounding row was malformed');
+    }
+    return {
+      claim_hash: requiredString(
+        claim.claim_hash,
+        `instruction_integrity.claim_grounding[${index}].claim_hash`,
+      ),
+      claim_excerpt: requiredString(
+        claim.claim_excerpt,
+        `instruction_integrity.claim_grounding[${index}].claim_excerpt`,
+      ),
+      support_status: parseInstructionIntegritySupportStatus(claim.support_status),
+      decision: requiredString(
+        claim.decision,
+        `instruction_integrity.claim_grounding[${index}].decision`,
+      ),
+      reason: requiredString(claim.reason, `instruction_integrity.claim_grounding[${index}].reason`),
+      evidence_refs: parseStringArray(
+        claim.evidence_refs,
+        `instruction_integrity.claim_grounding[${index}].evidence_refs`,
+      ),
+    };
+  });
+}
+
+function parseInstructionIntegrityGluing(raw: unknown): CasHarnessInstructionIntegrityGluing {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity gluing was malformed');
+  }
+  return {
+    coverage_status: parseInstructionIntegrityCoverageStatus(raw.coverage_status),
+    lacunarity_flags: parseStringArray(
+      raw.lacunarity_flags,
+      'instruction_integrity.gluing.lacunarity_flags',
+    ),
+    truth_state: parseInstructionIntegrityTruthState(raw.truth_state),
+    evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
+  };
+}
+
+function parseInstructionIntegrityStatus(raw: unknown): CasHarnessInstructionIntegrityStatus {
+  if (raw === 'present' || raw === 'FLAG_FOR_HUMAN_REVIEW') return raw;
+  throw new CasHarnessAuditApiError(`Unsupported CAS Harness instruction_integrity status: ${String(raw)}`);
+}
+
+function parseInstructionIntegrityTruthState(raw: unknown): CasHarnessInstructionIntegrityTruthState {
+  if (raw === 'VALID' || raw === 'UNDETERMINED') return raw;
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness instruction_integrity truth_state: ${String(raw)}`,
+  );
+}
+
+function parseInstructionIntegritySeverity(raw: unknown): CasHarnessInstructionIntegritySeverity {
+  if (raw === 'low' || raw === 'medium' || raw === 'high') return raw;
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness instruction_integrity severity: ${String(raw)}`,
+  );
+}
+
+function parseInstructionIntegritySupportStatus(raw: unknown): 'present' | 'unavailable' {
+  if (raw === 'present' || raw === 'unavailable') return raw;
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness instruction_integrity support_status: ${String(raw)}`,
+  );
+}
+
+function parseInstructionIntegrityCoverageStatus(raw: unknown): 'present' | 'incomplete' {
+  if (raw === 'present' || raw === 'incomplete') return raw;
+  throw new CasHarnessAuditApiError(
+    `Unsupported CAS Harness instruction_integrity coverage_status: ${String(raw)}`,
+  );
 }
 
 function parseNullableVerifierDecision(raw: unknown): VerifierDecision | null {
