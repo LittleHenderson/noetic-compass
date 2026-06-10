@@ -1,5 +1,13 @@
 # Noetic Compass — Progress Log
 
+## CAS foundations round table — theory-grounded injection detect/reverse/replace mechanisms mined from v7.4 + Noetic Topos (Jun 10, 2026)
+
+**Headline.** An 11-agent round table (5 CAS-subsystem seats → cross-critique → moderator synthesis) mined the frozen foundations for ways to detect / remove / reverse / invert / replace prompt injections, citing the actual text. Findings: `docs/working/cas_injection_roundtable_findings_20260610.md`; raw archived `D:\tksCAS-archive\cas_injection_roundtable_20260610\`. Bottom line: CAS *does* give principled mechanisms, with one clear load-bearing gap and one doc bug to fix.
+- **Runnable TODAY (recommended next experiment):** N-axis **Involution-Pair Divergence** detector (#2) — score the model's clean-task vs injected-task answers across the 10 operators; a successful hijack collapses one pole of an involution pair (CO-2↔CO-3 etc.) and floods its opposite. Reuses shipped engine code (`InversionScanner.detect_operator_inversion`, `involute()`); behavioral/paired, no new theory, no NL→CAS encoder. Directly tests "does ANY CAS signal separate hijacked from clean output?"
+- **Most-promising real detector (3-seat consensus, #1):** treat "ignore previous instructions / developer mode" as **prerequisite-stripping** on the RPM chain (A0→Dn→Wn→Pn→Outcome); the RPM gate is built to reject an Outcome whose Principled/Wisdom prerequisites were never satisfied. **Blocker = the load-bearing missing piece across #1/#3/#5: an NL→CAS-type encoder** (parse text into operator/source/target triples / which prerequisite it nulls). The shipped Stage-2 gate is currently RNG-driven.
+- **Reverse/invert reality-check (highest-confidence finding, #6):** an injection's effect is reversible ONLY if its operator is a bijection (a unitary channel); most aren't → for most injections you **cannot reverse**, only **replace/overwrite** (force corrective `^3^P` aversion via the Dial system — currently unwired). "Compose with the involution to cancel it" is *erasure*, not *restoration*.
+- **Doc bug to reconcile:** the foundations contradict themselves on involution pairs — Table 38.2 / Inversion Scan / CLAUDE.md use (2↔3),(5↔6),(8↔9) with exact collapse to 0, but the algebra section uses (2,7),(3,6),(4,5) "summing to 9" with only approximate identity. Several mechanisms depend on which is canonical.
+
 ## Typed-probe v4 matched-sampling run CLOSED: verdict INSUFFICIENT_GROUP_N — the same prompt almost never both complies and refuses under consensus labeling (Jun 10, 2026)
 
 **Headline.** v4 was the confound-free redesign Codex and I built: sample the SAME borderline prompt
