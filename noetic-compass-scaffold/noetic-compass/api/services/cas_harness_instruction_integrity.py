@@ -151,6 +151,26 @@ _UNSUPPORTED_CLAIM_PATTERNS: tuple[re.Pattern[str], ...] = (
 _SECRET_VALUE_RE = re.compile(
     r"\b([A-Za-z0-9_\-]{24,}|sk-[A-Za-z0-9_\-]+|ghp_[A-Za-z0-9_]+)\b"
 )
+_NEGATED_INSTRUCTION_PREFIX_RE = re.compile(
+    r"\b(do not|don't|never|must not|should not|cannot|can't|refus(?:e|ed|es|ing) to)\s*$",
+    re.IGNORECASE,
+)
+_BENIGN_QUOTED_CONTEXT_RE = re.compile(
+    r"\b(quoted|quote|phrase|example|sample|transcript|classify|summari[sz]e|"
+    r"analy[sz]e|label|refusal|refused|safety policy)\b",
+    re.IGNORECASE,
+)
+_BENIGN_FORMAT_TARGET_RE = re.compile(
+    r"\b(json|yaml|xml|csv|schema|fields?|bullets?|markdown|one sentence|"
+    r"short answer|audit report)\b",
+    re.IGNORECASE,
+)
+_NEGATED_OR_GOVERNANCE_CLAIM_RE = re.compile(
+    r"\b(do not|don't|never|must not|should not|cannot|can't|does not|is not|"
+    r"not yet|avoid claiming|do not claim|do not market|do not say)\b"
+    r".{0,80}$",
+    re.IGNORECASE | re.DOTALL,
+)
 
 
 def build_instruction_integrity_report(
@@ -217,6 +237,8 @@ def _find_instruction_risks(source_name: str, text: str) -> list[InstructionInte
     seen: set[tuple[str, str]] = set()
     for spec in _FINDING_PATTERNS:
         for match in spec.pattern.finditer(text):
+            if _is_benign_instruction_mention(text, match.start(), match.end(), spec.kind):
+                continue
             matched = match.group(0)
             key = (spec.kind, _span_hash(source_name, matched))
             if key in seen:
@@ -254,6 +276,8 @@ def _find_unsupported_claims(
 
     for pattern in _UNSUPPORTED_CLAIM_PATTERNS:
         for match in pattern.finditer(text):
+            if _is_negated_or_governance_claim_mention(text, match.start()):
+                continue
             matched = match.group(0)
             claims.append(
                 ClaimGrounding(
@@ -319,6 +343,29 @@ def _has_present_packet_proof(proof_chips: Iterable[Mapping[str, Any]] | None) -
         if chip.get("id") == "packet_proof" and chip.get("status") in {"present", "verified"}:
             return True
     return False
+
+
+def _is_benign_instruction_mention(text: str, start: int, end: int, kind: str) -> bool:
+    prefix = text[max(0, start - 120) : start]
+    suffix = text[end : min(len(text), end + 120)]
+    local_prefix = text[max(0, start - 40) : start]
+    if _NEGATED_INSTRUCTION_PREFIX_RE.search(local_prefix):
+        return True
+    if _is_inside_double_or_backtick_quote(text, start) and _BENIGN_QUOTED_CONTEXT_RE.search(prefix):
+        return True
+    if kind == "task_replacement" and _BENIGN_FORMAT_TARGET_RE.search(suffix):
+        return True
+    return False
+
+
+def _is_negated_or_governance_claim_mention(text: str, start: int) -> bool:
+    prefix = text[max(0, start - 120) : start]
+    return bool(_NEGATED_OR_GOVERNANCE_CLAIM_RE.search(prefix))
+
+
+def _is_inside_double_or_backtick_quote(text: str, index: int) -> bool:
+    prefix = text[:index]
+    return prefix.count('"') % 2 == 1 or prefix.count("`") % 2 == 1
 
 
 def _span_hash(source_name: str, span: str) -> str:

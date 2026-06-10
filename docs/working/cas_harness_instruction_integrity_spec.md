@@ -96,11 +96,21 @@ Stage 1 must satisfy:
 6. Missing evidence never becomes `ACCEPT`.
 7. Tests prove risky prompts produce instruction-integrity findings while final verdict behavior remains unchanged.
 
+## Stage 3 Benchmark Gate
+
+Local fixture gate added 2026-06-10:
+
+- Fixture: `noetic-compass-scaffold/noetic-compass/scenarios/instruction_integrity_benchmark_v0.json`.
+- Runner: `noetic-compass-scaffold/noetic-compass/scripts/run_instruction_integrity_benchmark.py`.
+- Case lanes: `clean`, `injected`, and `control`.
+- Required local gates: injected recall `1.0`, benign false-positive rate `0.0`, and every fixture case passing.
+- Claim boundary: this is still a local deterministic benchmark. It supports shadow triage hardening, not a public claim that CAS Harness prevents prompt injection or hallucination.
+
 ## Next Stages
 
 Stage 2 can quarantine detected untrusted spans from CAS-owned explainer contexts, while preserving raw packet evidence.
 
-Stage 3 can add matched clean/injected/control adversarial fixtures.
+Stage 3 can expand matched clean/injected/control adversarial fixtures beyond the local v0 suite, including external red-team examples and hosted audit-session proof.
 
 Stage 4 can connect typed-probe hijack/refusal separation after grouped-prompt confirmatory validation.
 
