@@ -37,6 +37,25 @@ Claim boundary remains strict: prompt-injection detection/prevention and halluci
 
 Recommended next move: draft `docs/working/cas_harness_instruction_integrity_spec.md`, then implement a shadow-only Evidence Packet schema addition with `instruction_integrity.findings[]` and `claim_grounding[]`. Initial enforcement must be limited to `FLAG_FOR_HUMAN_REVIEW` until tests, benchmarks, thresholds, and WORM-backed verifier proof exist. CAS-owned AI surfaces such as the Guide and Evidence Packet explainer can later quarantine detected untrusted spans from active context while preserving raw spans in the packet.
 
+## 2026-06-10 Instruction Integrity Stage 1 Shadow Implementation
+
+Codex began the Instruction Integrity build in the clean beta-candidate worktree `C:\Users\wakil\OneDrive\Desktop\tksCAS\.claude\worktrees\integration` on branch `codex/cas-harness-public-beta-candidate`. Stage 1 is now implemented as a shadow-only audit-session report, not an enforcement gate.
+
+Implemented in the beta-candidate branch:
+
+- New spec: `docs/working/cas_harness_instruction_integrity_spec.md`.
+- New deterministic service: `noetic-compass-scaffold/noetic-compass/api/services/cas_harness_instruction_integrity.py`.
+- Audit-session records/responses now carry `instruction_integrity` with `schema_version`, `mode: shadow`, `status`, `truth_state`, `verdict_effect: none_shadow_only`, `findings[]`, `claim_grounding[]`, and `gluing`.
+- Initial findings cover authority override, secret exfiltration, role confusion, task replacement, and unsupported prompt-injection/hallucination prevention claims.
+- The report records span hashes and redacted excerpts; raw secret-like values are not echoed.
+- `attach_runner_evidence()` recomputes the shadow report after live/API runner proof chips are attached.
+
+Verification in the beta-candidate worktree: `python -m pytest tests/test_cas_harness_instruction_integrity.py tests/test_cas_harness_audit.py -q` passed `54 passed`.
+
+Claim boundary remains unchanged: this is `OPEN` / `NOT LICENSED` for public prompt-injection detection/prevention or hallucination prevention claims. Stage 1 can say only that CAS Harness runs a shadow scan and can flag potential instruction-integrity or unsupported-claim risks for `FLAG_FOR_HUMAN_REVIEW`. The implementation has no final verdict effect and cannot mint `ACCEPT` or `SUPPRESS`.
+
+Recommended next move: surface `instruction_integrity` in the Audit Console/Evidence Packet UI as a shadow finding panel, then add fixture-backed clean/injected/control benchmarks before any enforcement or stronger public wording.
+
 ## 2026-06-09 Codex Public-Launch Diagnostic Checkpoint
 
 Full launch diagnostic ran against the clean `launch/integration` worktree at `37fb7a4` after `git fetch --all --prune`. The main desktop worktree is still on `wave5.5/harness-launch-declutter` and remains very dirty; do not diagnose or deploy public CAS Harness from that surface. `launch/integration` is the best current launch-candidate branch: it contains the Audit Bench UI, Guide widget, account/session/RBAC work, tenant evidence ownership, conditional anchor role gate, and the "Explain this packet" Evidence Packet explainer. It is not merged to `master`, and Render auto-deploys `master`, so hosted production is not running this launch candidate yet.
