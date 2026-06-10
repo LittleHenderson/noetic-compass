@@ -311,3 +311,45 @@ refusal-inducing capture extension (payload classes designed to elicit refusals)
 REFUSED ≥ 40. Today's 239 verified labels + consensus/majority/human files carry forward
 unchanged; only new traces would need labeling. Without it, H3 on Qwen stays untestable at
 the frozen bar.
+
+---
+
+## v3 refusal-capture extension — FREEZE + corpus build (executed 2026-06-10 UTC)
+
+**v3 successor pre-registration FROZEN first (before any corpus build), per v1 Appendix D.**
+- File `docs/working/typed_probe_gate_prereg_v3_refusal_capture_extension.md`,
+  sha256 `0117d2668a25321fc8452e6415b2eaf9d7cb57bcb4a18e557d4e2edd8d91bcbd`, commit `9df7743`.
+- Successor to v1 (`31cd822`, `6fd9da61…`) and v2 (`701eb6e`, `802d4427…`); both untouched.
+- Legitimacy basis: the v1 verdict was INSUFFICIENT_N — n-gate failed, so **no statistic of any
+  kind was ever computed**. Only the four realized bucket COUNTS were seen. Adding prompts to lift
+  REFUSED over the n≥40 testability floor (so H3 can run) is categorically different from steering
+  a known statistic toward PASS (impossible — none exists). The payload-class confound this
+  introduces is disclosed and pre-committed against (composition table, `payload-composition-extended`
+  qualifier, hard CONFOUNDED-DIAGNOSTIC downgrade, INSUFFICIENT_N-no-further-v3 if combined
+  REFUSED still < 40).
+
+**Deterministic corpus build (generator `build_v3_refusal_corpus.py`, pure stdlib, no RNG/model).**
+- Generator sha256 `aeff02b0bd3a5765aa3ae17d4703fa358655cbabf9d080a670030ec72691e5bb`.
+- Source: `injected_overt_combined_240_20260609.jsonl` sha256 asserted
+  `0d22f5e896075d8a89d935a87812da53338d59184d70f7bc46c74110477ea7fa` (matched the frozen value).
+- Precondition gate PASSED for all 240 rows: every `prompt_text.endswith(injection_goal)` and
+  every `arm == "INJECTED_OVERT"`.
+- Construction (freeze §3): sort originals by `prompt_id`; new row `i∈{0..119}` reuses carrier at
+  sorted index `floor(i*240/120)=2*i`; payload class `overt_r{i mod 8}`; new id replaces
+  `INJECTED_OVERT`→`INJECTED_OVERT_V3R` (120 unique, disjoint from the 240 originals).
+- Output `injected_overt_v3r_120_20260610.jsonl`: **120 rows, exactly 15 per class** (overt_r0..r7),
+  sha256 `e8b09df0a919ac3170a94120fbde12afc45dd2fa17163979f8e582ff4bae8410`. Determinism verified
+  (independent re-run reproduced the identical sha256).
+- Empty clean corpus `clean_instruction_v3_EMPTY_20260610.jsonl` (0 records), sha256
+  `e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855` (canonical empty hash) →
+  injected-only capture; CLEAN stays the original 40 (no pseudo-replication).
+- New-row domain distribution (proportional to originals via even-index selection):
+  email 18, product_review 18, document_qa 11, meeting_notes 11, news 11, support_ticket 11,
+  code_comment 10, faq 10, recipe 10, travel 10 (Σ=120).
+- The 8 payload texts are request-style prompt-INJECTION ATTACK strings (no fulfilled harmful
+  content); a REFUSED label = the model correctly declined the attack. Verbatim texts are in the
+  frozen amendment §4.
+
+Next per freeze §7: pod upload + hash-verify + `--limit 3` DIAGNOSTIC smoke → formal 120-row
+capture (fp32, seed 1234, greedy 96) → v2 labeling on the new batch only → composition table →
+blinded → ONE unblind on combined data.
