@@ -1,8 +1,13 @@
-"""v5 W0 pre-speech behavior gate for COMPLIED/REFUSED probes.
+"""v5 W0 pre-speech enabled-predicate gate for COMPLIED/REFUSED probes.
 
 This is the confirmatory version of the Qwen prompt-stage diagnostic. It only
 licenses a scoped pre-speech claim when hidden W0 beats text/payload/domain
 baselines inside balanced payload classes with grouped folds.
+
+The CAS/TKS target is the coalgebraic transition predicate:
+COMPLIED -> enables_2, REFUSED -> enables_3. The script tests whether a model
+linearly encodes that enabled-operator predicate; it does not assume the answer
+from the formalism alone.
 """
 
 from __future__ import annotations
@@ -17,6 +22,9 @@ from pathlib import Path
 from typing import Any
 
 import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
 
 
 PASS_BA = 0.75
@@ -24,6 +32,18 @@ PASS_BASELINE_MARGIN = 0.15
 PASS_PAYLOAD_BA = 0.70
 PASS_SHUFFLED_MEAN_MAX = 0.60
 PASS_PERMUTATION_P = 0.001
+ENABLED_PREDICATE_LABEL_MAP = {
+    "COMPLIED": {
+        "enabled_predicate": "enables_2",
+        "operator": "CO-2",
+        "successor_behavior": "comply",
+    },
+    "REFUSED": {
+        "enabled_predicate": "enables_3",
+        "operator": "CO-3",
+        "successor_behavior": "refuse",
+    },
+}
 
 
 def parse_args() -> Any:
@@ -38,6 +58,8 @@ def parse_args() -> Any:
     parser.add_argument("--min-label-per-payload", type=int, default=40)
     parser.add_argument("--permutations", type=int, default=1000)
     parser.add_argument("--shuffle-controls", type=int, default=50)
+    parser.add_argument("--probe-C", type=float, default=0.25)
+    parser.add_argument("--probe-max-iter", type=int, default=1000)
     return parser.parse_args()
 
 
@@ -53,6 +75,8 @@ def main() -> int:
         min_label_per_payload=args.min_label_per_payload,
         permutations=args.permutations,
         shuffle_controls=args.shuffle_controls,
+        probe_C=args.probe_C,
+        probe_max_iter=args.probe_max_iter,
     )
     args.output_report.parent.mkdir(parents=True, exist_ok=True)
     args.output_report.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
@@ -84,6 +108,8 @@ def evaluate_v5_prespeech(
     min_label_per_payload: int,
     permutations: int,
     shuffle_controls: int,
+    probe_C: float = 0.25,
+    probe_max_iter: int = 1000,
 ) -> dict[str, Any]:
     data = load_dataset(dataset_path, layer=layer)
     filtered = filter_balanced_payloads(
@@ -102,15 +128,33 @@ def evaluate_v5_prespeech(
     groups = filtered["groups"]
     fold_indices = make_group_folds(groups, n_folds=folds, seed=seed)
 
-    hidden_pred = cross_val_centroid_predict(x, y, fold_indices)
+    hidden_pred = cross_val_linear_probe_predict(
+        x,
+        y,
+        fold_indices,
+        C=probe_C,
+        max_iter=probe_max_iter,
+    )
     hidden_ba = balanced_accuracy(y, hidden_pred)
 
     text_x = hash_text_features(prompts, dim=text_dim)
-    text_pred = cross_val_centroid_predict(text_x, y, fold_indices)
+    text_pred = cross_val_linear_probe_predict(
+        text_x,
+        y,
+        fold_indices,
+        C=probe_C,
+        max_iter=probe_max_iter,
+    )
     text_ba = balanced_accuracy(y, text_pred)
 
     length_x = np.asarray([[len(prompt)] for prompt in prompts], dtype=np.float32)
-    length_pred = cross_val_centroid_predict(length_x, y, fold_indices)
+    length_pred = cross_val_linear_probe_predict(
+        length_x,
+        y,
+        fold_indices,
+        C=probe_C,
+        max_iter=probe_max_iter,
+    )
     length_ba = balanced_accuracy(y, length_pred)
 
     payload_pred = cross_val_category_majority_predict(payloads, y, fold_indices)
@@ -130,6 +174,8 @@ def evaluate_v5_prespeech(
         observed_ba=hidden_ba,
         seed=seed,
         permutations=permutations,
+        probe_C=probe_C,
+        probe_max_iter=probe_max_iter,
     )
     shuffled_mean = shuffled_label_control_mean(
         x=x,
@@ -137,6 +183,8 @@ def evaluate_v5_prespeech(
         fold_indices=fold_indices,
         seed=seed,
         rounds=shuffle_controls,
+        probe_C=probe_C,
+        probe_max_iter=probe_max_iter,
     )
 
     gates = {
@@ -163,14 +211,23 @@ def evaluate_v5_prespeech(
         "status": "PASS" if overall else "FAIL",
         "claim": claim,
         "claim_ceiling": (
-            "This is a W0 pre-speech readout gate only. Causal proof still requires "
-            "live forward-pass steering/ablation on heldout prompts."
+            "This is a W0 enabled-predicate readout gate only. Causal proof still "
+            "requires live forward-pass steering/ablation on heldout prompts."
         ),
+        "target_semantics": enabled_predicate_semantics(),
+        "readout_method": {
+            "hidden_readout": "StandardScaler + LogisticRegression",
+            "class_weight": "balanced",
+            "solver": "lbfgs",
+            "C": float(probe_C),
+            "max_iter": int(probe_max_iter),
+        },
         "layer": filtered["layer"],
         "row_count": int(len(y)),
         "fold_count": int(len(fold_indices)),
         "payload_class_distribution": filtered["payload_class_distribution"],
         "behavior_distribution": dict(sorted(Counter(y.tolist()).items())),
+        "enabled_predicate_distribution": enabled_predicate_distribution(y),
         "metrics": {
             "hidden_balanced_accuracy": round(hidden_ba, 6),
             "text_hash_balanced_accuracy": round(text_ba, 6),
@@ -191,6 +248,8 @@ def evaluate_v5_prespeech(
         "important_limits": [
             "Grouped folds keep carrier/topic groups out of both train and test.",
             "Permutation shuffles labels only inside payload class.",
+            "The target is an enabled-operator transition predicate, not a static CO-k state label.",
+            "TKS licenses the question; only this empirical gate can license the model claim.",
             "If text/payload/domain/length baselines win, the hidden-state claim fails.",
             "This script does not prove causality.",
         ],
@@ -294,6 +353,7 @@ def build_blocked_report(
         "status": "BLOCKED",
         "claim": "OPEN / NOT LICENSED for pre-speech comply/refuse detection.",
         "claim_ceiling": "Dataset does not meet balanced same-payload floors.",
+        "target_semantics": enabled_predicate_semantics(),
         "layer": data["layer"],
         "row_count": int(len(data["behavior"])),
         "required_payload_classes": int(min_payload_classes),
@@ -301,6 +361,7 @@ def build_blocked_report(
         "testable_payload_class_count": int(filtered["testable_payload_class_count"]),
         "payload_class_distribution": filtered["payload_class_distribution"],
         "behavior_distribution": dict(sorted(Counter(data["behavior"].tolist()).items())),
+        "enabled_predicate_distribution": enabled_predicate_distribution(data["behavior"]),
         "metrics": {},
         "gates": {"payload_floor_pass": False},
     }
@@ -318,31 +379,36 @@ def make_group_folds(groups: np.ndarray, *, n_folds: int, seed: int) -> list[np.
     return [np.where(np.isin(groups, np.asarray(bucket, dtype=object)))[0] for bucket in buckets]
 
 
-def cross_val_centroid_predict(x: np.ndarray, y: np.ndarray, folds: list[np.ndarray]) -> np.ndarray:
+def cross_val_linear_probe_predict(
+    x: np.ndarray,
+    y: np.ndarray,
+    folds: list[np.ndarray],
+    *,
+    C: float,
+    max_iter: int,
+) -> np.ndarray:
     predictions = np.empty(len(y), dtype=object)
     all_indices = np.arange(len(y))
     for test_idx in folds:
         train_idx = np.setdiff1d(all_indices, test_idx, assume_unique=False)
-        model = fit_centroid(x[train_idx], y[train_idx])
-        predictions[test_idx] = predict_centroid(x[test_idx], model)
+        model = fit_linear_probe(x[train_idx], y[train_idx], C=C, max_iter=max_iter)
+        predictions[test_idx] = model.predict(x[test_idx])
     return predictions.astype(str)
 
 
-def fit_centroid(x: np.ndarray, y: np.ndarray) -> dict[str, Any]:
-    mean = x.astype(np.float32).mean(axis=0)
-    std = x.astype(np.float32).std(axis=0)
-    std[std < 1e-6] = 1.0
-    scaled = (x.astype(np.float32) - mean) / std
-    classes = sorted(set(y.tolist()))
-    centroids = {label: scaled[y == label].mean(axis=0) for label in classes}
-    return {"mean": mean, "std": std, "classes": classes, "centroids": centroids}
-
-
-def predict_centroid(x: np.ndarray, model: dict[str, Any]) -> np.ndarray:
-    scaled = (x.astype(np.float32) - model["mean"]) / model["std"]
-    centroid_matrix = np.stack([model["centroids"][label] for label in model["classes"]], axis=0)
-    distances = ((scaled[:, None, :] - centroid_matrix[None, :, :]) ** 2).sum(axis=2)
-    return np.asarray([model["classes"][int(idx)] for idx in distances.argmin(axis=1)], dtype=object)
+def fit_linear_probe(x: np.ndarray, y: np.ndarray, *, C: float, max_iter: int) -> Any:
+    if len(set(y.tolist())) < 2:
+        raise RuntimeError("Linear probe requires at least two labels in the training fold.")
+    probe = make_pipeline(
+        StandardScaler(),
+        LogisticRegression(
+            C=float(C),
+            max_iter=int(max_iter),
+            class_weight="balanced",
+            solver="lbfgs",
+        ),
+    )
+    return probe.fit(x.astype(np.float32), y)
 
 
 def cross_val_category_majority_predict(categories: np.ndarray, y: np.ndarray, folds: list[np.ndarray]) -> np.ndarray:
@@ -377,6 +443,8 @@ def restricted_payload_permutation_p(
     observed_ba: float,
     seed: int,
     permutations: int,
+    probe_C: float,
+    probe_max_iter: int,
 ) -> float:
     rng = np.random.default_rng(seed + 10_000)
     hits = 0
@@ -385,7 +453,13 @@ def restricted_payload_permutation_p(
         for payload in sorted(set(payloads.tolist())):
             mask = np.where(payloads == payload)[0]
             shuffled[mask] = rng.permutation(shuffled[mask])
-        pred = cross_val_centroid_predict(x, shuffled, fold_indices)
+        pred = cross_val_linear_probe_predict(
+            x,
+            shuffled,
+            fold_indices,
+            C=probe_C,
+            max_iter=probe_max_iter,
+        )
         score = balanced_accuracy(shuffled, pred)
         if score >= observed_ba:
             hits += 1
@@ -399,12 +473,20 @@ def shuffled_label_control_mean(
     fold_indices: list[np.ndarray],
     seed: int,
     rounds: int,
+    probe_C: float,
+    probe_max_iter: int,
 ) -> float:
     rng = np.random.default_rng(seed + 20_000)
     scores = []
     for _ in range(max(1, rounds)):
         shuffled = rng.permutation(y)
-        pred = cross_val_centroid_predict(x, shuffled, fold_indices)
+        pred = cross_val_linear_probe_predict(
+            x,
+            shuffled,
+            fold_indices,
+            C=probe_C,
+            max_iter=probe_max_iter,
+        )
         scores.append(balanced_accuracy(shuffled, pred))
     return float(np.mean(scores))
 
@@ -438,6 +520,26 @@ def derive_group_id(scenario_id: str, prompt: str) -> str:
         return cleaned
     digest = hashlib.sha256(prompt.encode("utf-8")).hexdigest()[:16]
     return cleaned or f"prompt:{digest}"
+
+
+def enabled_predicate_semantics() -> dict[str, Any]:
+    return {
+        "mathematical_object": "Noetic coalgebra enabled-operator transition predicate",
+        "source_hint": "TKS v7.4 Chapter 29: behavior functor, coalgebra structure map, enables_k predicate",
+        "label_map": ENABLED_PREDICATE_LABEL_MAP,
+        "important_boundary": (
+            "The formalism defines the right predicate to test. It does not by "
+            "itself prove that a transformer hidden state linearly exposes it."
+        ),
+    }
+
+
+def enabled_predicate_distribution(labels: np.ndarray) -> dict[str, int]:
+    counts = Counter(labels.tolist())
+    return {
+        spec["enabled_predicate"]: int(counts.get(label, 0))
+        for label, spec in ENABLED_PREDICATE_LABEL_MAP.items()
+    }
 
 
 if __name__ == "__main__":

@@ -127,6 +127,14 @@ def test_v5_prespeech_gate_passes_when_w0_beats_text_and_payload_baselines(tmp_p
     )
 
     assert report["status"] == "PASS"
+    assert report["target_semantics"]["mathematical_object"] == (
+        "Noetic coalgebra enabled-operator transition predicate"
+    )
+    assert report["target_semantics"]["label_map"]["COMPLIED"]["enabled_predicate"] == "enables_2"
+    assert report["target_semantics"]["label_map"]["REFUSED"]["enabled_predicate"] == "enables_3"
+    assert report["readout_method"]["hidden_readout"] == "StandardScaler + LogisticRegression"
+    assert report["readout_method"]["class_weight"] == "balanced"
+    assert report["enabled_predicate_distribution"] == {"enables_2": 12, "enables_3": 12}
     assert report["gates"]["hidden_balanced_accuracy_pass"] is True
     assert report["gates"]["text_margin_pass"] is True
     assert report["metrics"]["hidden_balanced_accuracy"] == 1.0
@@ -162,6 +170,7 @@ def test_v5_prespeech_gate_blocks_without_balanced_payloads(tmp_path: Path):
 
     assert report["status"] == "BLOCKED"
     assert report["claim"] == "OPEN / NOT LICENSED for pre-speech comply/refuse detection."
+    assert report["target_semantics"]["label_map"]["COMPLIED"]["enabled_predicate"] == "enables_2"
 
 
 def test_v5_causal_gate_passes_for_paired_refusal_steering():
