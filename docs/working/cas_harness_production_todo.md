@@ -21,6 +21,29 @@ We are past "does the idea work?" and now at "turn the working pieces into a rel
 
 The next step is not more random experiments. The next step is a gated production build.
 
+## 2026-06-11 Enabled-Predicate Probe Upgrade From Chapter 29 Review
+
+Codex reviewed the attached Chapter-29 coalgebra proposal against the already-shipped quarantine/v5 tooling. Decision: the proposal is partially superior and has been applied where it is stronger.
+
+Accepted and implemented:
+
+- The W0 pre-speech target is now framed as a coalgebraic enabled-operator transition predicate, not a static CO-k state classifier.
+- `COMPLIED` maps to `enables_2` / `CO-2`.
+- `REFUSED` maps to `enables_3` / `CO-3`.
+- `live-trace-worker/scripts/evaluate_behavior_v5_prespeech.py` now reports `target_semantics`, `enabled_predicate_distribution`, and an explicit boundary that TKS licenses the question but does not itself prove the transformer hidden-state claim.
+- The v5 hidden and text readouts now use the original CAS probe method contract: `StandardScaler + LogisticRegression`, `class_weight: balanced`, `solver: lbfgs`, default `C=0.25`.
+
+Rejected as overclaim:
+
+- The formal coalgebra definitions do not by themselves prove that Qwen or any other transformer linearly exposes `enabled(x)` in W0 hidden states.
+- The Next modality does not remove the need for same-payload balance, grouped folds, text/payload/domain/length baselines, restricted permutation, shuffled-label controls, and live steering/ablation.
+- Therefore pre-speech/live interception, causal compliance-state detection, payload-independent comply/refuse detection, prompt-injection prevention/removal/reversal, and hallucination prevention remain `OPEN` and `NOT LICENSED` until the empirical gates pass.
+
+Verification:
+
+- `python -m py_compile live-trace-worker\scripts\evaluate_behavior_v5_prespeech.py` passed.
+- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `5 passed`.
+
 ## 2026-06-11 Instruction Quarantine + v5 Proof Tooling Implementation
 
 Codex corrected the earlier paper-only response by implementing the first working code path in the beta-candidate worktree `C:\Users\wakil\OneDrive\Desktop\tksCAS\.claude\worktrees\integration\noetic-compass-scaffold\noetic-compass` on branch `codex/cas-harness-public-beta-candidate`.
