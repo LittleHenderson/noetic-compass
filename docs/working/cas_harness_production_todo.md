@@ -21,6 +21,30 @@ We are past "does the idea work?" and now at "turn the working pieces into a rel
 
 The next step is not more random experiments. The next step is a gated production build.
 
+## 2026-06-11 Instruction Quarantine + v5 Proof Tooling Implementation
+
+Codex corrected the earlier paper-only response by implementing the first working code path in the beta-candidate worktree `C:\Users\wakil\OneDrive\Desktop\tksCAS\.claude\worktrees\integration\noetic-compass-scaffold\noetic-compass` on branch `codex/cas-harness-public-beta-candidate`.
+
+Implemented:
+
+- `api/services/cas_harness_instruction_integrity.py` now emits a `quarantine` package in every instruction-integrity report. This package contains `mode: active_context_proposal`, sanitized prompt/scenario/output text, blocked span hashes, redacted excerpts, span offsets, replacement markers, and an explicit claim ceiling. It removes risky spans from CAS-owned active context while preserving raw evidence. It still has `verdict_effect: none_shadow_only` and cannot mint `ACCEPT`.
+- `api/routes/cas_harness_audit.py` exposes the quarantine package through the CAS Harness audit API response schema.
+- `live-trace-worker/scripts/evaluate_behavior_v5_prespeech.py` adds the executable W0 pre-speech gate: balanced same-payload floors, grouped folds, hidden W0 readout, text/payload/domain/length baselines, within-payload restricted permutation, shuffled-label controls, per-payload floors, and `PASS` / `FAIL` / `BLOCKED` claim output.
+- `live-trace-worker/scripts/analyze_behavior_v5_causal.py` adds the executable causal gate for live steering outputs: paired prompt/seed analysis over no-op, `+refusal`, `-refusal`, and random same-norm conditions, with refusal-shift, sign-flip permutation, bootstrap CI, random-control, opposite-direction, ignored-output, and malformed-output gates.
+- Tests now cover quarantine behavior, clean-context preservation, v5 W0 pass/block behavior, and v5 causal pass/block behavior.
+
+Verification:
+
+- `python -m py_compile api\services\cas_harness_instruction_integrity.py api\routes\cas_harness_audit.py live-trace-worker\scripts\evaluate_behavior_v5_prespeech.py live-trace-worker\scripts\analyze_behavior_v5_causal.py` passed.
+- `python -m pytest tests\test_cas_harness_instruction_integrity.py -q` passed `7 passed`.
+- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `5 passed`.
+- `python -m pytest tests\test_cas_harness_audit.py tests\test_cas_harness_api_endpoint_runner.py tests\test_cas_harness_live_worker_runner.py -q` passed `64 passed`.
+- `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` passed all `15` cases with injected recall `1.0`, benign false-positive rate `0.0`, and `overall_pass: true`.
+
+Claim boundary remains strict: this is now an actual CAS-owned active-context quarantine proposal plus executable v5 proof tooling. Prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, causal compliance-state detection, and payload-independent comply/refuse detection remain `OPEN` and `NOT LICENSED` as public claims until hosted proof, external/red-team benchmarks, WORM-backed verifier policy, balanced W0 capture, and live steering gates pass.
+
+Recommended next move: wire the quarantine package into the hosted Instruction Integrity Review card and any CAS-owned Guide/Evidence Packet explainer context builder so the sanitized active-context proposal is visible and usable, then run the v5 scripts against a balanced Qwen/Phi prompt capture.
+
 ## 2026-06-11 Pre-Speech / Causal Solution Round Table
 
 Codex ran a four-agent local-docs round table over TKS v7.4, Noetic Topos, current Qwen probe diagnostics, and product-claim boundaries for the user's requested flagship question: can CAS Harness catch comply/refuse state before the model speaks and prove that state causes the output? The resulting design brief is `docs/working/cas_harness_prespeech_topos_causal_solution_roundtable_20260611.md`.
