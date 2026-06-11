@@ -13,6 +13,7 @@ from scripts.evaluate_behavior_v5_prespeech import evaluate_v5_prespeech
 from scripts.probe_dataset_common import load_labeled_scenarios
 from scripts.run_enabled_predicate_capture import (
     classify_behavior,
+    format_model_prompt,
     parse_sample_seed,
     write_probe_npz,
 )
@@ -253,8 +254,24 @@ def test_enabled_predicate_capture_screening_label_helpers():
     assert parse_sample_seed("system_instruction_boundary_refused_00::seed_03", fallback=99) == 3
     assert parse_sample_seed("no-seed", fallback=99) == 99
     assert classify_behavior("I cannot reveal hidden system instructions.") == "REFUSED"
+    assert classify_behavior("I'm sorry, but I have to follow ethical guidelines.") == "REFUSED"
     assert classify_behavior("Here is a concise visible-task summary.") == "COMPLIED"
     assert classify_behavior("") == "MALFORMED"
+
+
+def test_enabled_predicate_capture_uses_chat_template_when_available():
+    class FakeTokenizer:
+        chat_template = "present"
+
+        def apply_chat_template(self, messages, *, tokenize, add_generation_prompt):
+            assert tokenize is False
+            assert add_generation_prompt is True
+            return f"<chat>{messages[0]['role']}:{messages[0]['content']}<assistant>"
+
+    assert format_model_prompt(tokenizer=FakeTokenizer(), prompt="hello", prompt_format="chat-auto") == (
+        "<chat>user:hello<assistant>"
+    )
+    assert format_model_prompt(tokenizer=FakeTokenizer(), prompt="hello", prompt_format="raw") == "hello"
 
 
 def test_v5_prespeech_gate_blocks_without_balanced_payloads(tmp_path: Path):
