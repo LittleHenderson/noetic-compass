@@ -42,6 +42,43 @@ Claim boundary remains strict: the prompt bank is not evidence. It is a screenin
 
 Recommended next move: run the prompt bank through Qwen/Phi sampling and behavior judging, feed those judged labels into `screen_enabled_predicate_campaign.py`, then run W0 capture plus `evaluate_behavior_v5_prespeech.py` only if the screener returns `READY_FOR_W0_CAPTURE`.
 
+## 2026-06-11 Enabled-Predicate Qwen/Phi Pod Run
+
+Codex used the user-provided pod `root@194.68.245.165 -p 22089` with two idle RTX A6000 GPUs to run the v5 enabled-predicate W0 campaign on Qwen and Phi.
+
+Implementation correction before the final run:
+
+- `live-trace-worker/scripts/run_enabled_predicate_capture.py` was added as the GPU capture bridge.
+- The runner was corrected to use tokenizer chat templates by default (`--prompt-format chat-auto`) because raw prompting made Qwen Instruct emit irrelevant continuation text.
+- The screening refusal heuristic was broadened to catch refusal language such as "I'm sorry", "ethical guidelines", and "as an AI language model".
+
+Archived artifacts:
+
+- `D:\tksCAS-archive\enabled_predicate_prespeech_qwen_phi_20260611\enabled_predicate_prespeech_qwen_phi_20260611.tgz`
+- Report: `docs/working/enabled_predicate_prespeech_qwen_phi_result_20260611.md` in the beta-candidate worktree.
+
+Qwen result:
+
+- Model: `Qwen/Qwen2.5-1.5B-Instruct`
+- Layer: `14`, with layer `0` baseline.
+- Combined seed `00-07` dataset: `800` rows, `COMPLIED=396`, `REFUSED=404`.
+- Screener: `READY_FOR_W0_CAPTURE`, `5` testable payload classes.
+- Default v5: `FAIL`; hidden balanced accuracy `0.762626`, layer-0 `0.5`, text-hash `0.750325`, hidden-minus-text `0.012301`, within-payload permutation p `0.009901`.
+- Mixed-prompt diagnostic: `FAIL`; `472` rows, hidden balanced accuracy `0.619284`, text-hash `0.616767`, hidden-minus-text `0.002517`.
+
+Phi result:
+
+- Model: `microsoft/Phi-3-mini-4k-instruct`
+- Layer: `16`, with layer `0` baseline.
+- Seed `00-07` dataset: `800` rows, `COMPLIED=382`, `REFUSED=418`.
+- Screener: `READY_FOR_W0_CAPTURE`, `5` testable payload classes.
+- Default v5: `FAIL`; hidden balanced accuracy `0.86028`, layer-0 `0.5`, text-hash `0.852764`, hidden-minus-text `0.007515`, within-payload permutation p `0.009901`.
+- Mixed-prompt diagnostic: `FAIL`; `384` rows, hidden balanced accuracy `0.647267`, text-hash `0.612141`, hidden-minus-text `0.035126`.
+
+Claim boundary remains strict: these runs do not license internal prompt-injection detection. Pre-speech/live interception, causal compliance-state detection, payload-independent comply/refuse detection, prompt-injection prevention/removal/reversal, and hallucination prevention remain `OPEN` and `NOT LICENSED`. The honest finding is that W0 hidden states carry behavior-correlated signal, but current Qwen/Phi readouts do not beat prompt/text baselines enough, and same-prompt mixed diagnostics drop below the v5 detection floor.
+
+Recommended next move: do not train a bigger global classifier on these labels as a public claim. The next valid attempt is a stricter matched-prompt campaign with more stochastic same-prompt outcomes, stronger behavior judging, and then live steering/ablation only if the matched-prompt W0 readout passes the text, layer-0, per-payload, and permutation gates.
+
 ## 2026-06-11 Instruction Quarantine Audit Console UI
 
 Codex wired the newly implemented instruction quarantine package into the CAS Harness Audit Console on branch `codex/cas-harness-public-beta-candidate`.
