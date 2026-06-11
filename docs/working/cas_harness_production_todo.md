@@ -21,6 +21,27 @@ We are past "does the idea work?" and now at "turn the working pieces into a rel
 
 The next step is not more random experiments. The next step is a gated production build.
 
+## 2026-06-11 Enabled-Predicate Campaign Implementation
+
+Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
+
+Implemented:
+
+- `live-trace-worker/scripts/evaluate_behavior_v5_prespeech.py` now requires a layer-0 embedding leakage baseline for any W0 pre-speech `PASS`. The hidden target layer must beat layer 0 by the configured margin, or the pre-speech hidden-state claim remains `OPEN` / `NOT LICENSED`.
+- `live-trace-worker/scripts/build_enabled_predicate_prompt_bank.py` builds the v5 prompt bank from safe/redacted structural adversarial templates.
+- `live-trace-worker/scenarios/enabled_predicate_prespeech_prompt_bank_v0.json` is the generated campaign bank: `400` screening scenarios, `100` prompt groups, `5` payload classes, and intended `40` `COMPLIED` / `40` `REFUSED` opportunities per payload class.
+- `live-trace-worker/scripts/screen_enabled_predicate_campaign.py` screens judged model behavior labels before W0 capture. It reports `READY_FOR_W0_CAPTURE` only when the refusal floor, balanced same-payload floor, and known scenario mapping gates pass.
+- `docs/working/enabled_predicate_prespeech_prompt_bank_v0_summary.json` records the generated bank summary.
+
+Verification:
+
+- `python -m py_compile live-trace-worker\scripts\evaluate_behavior_v5_prespeech.py live-trace-worker\scripts\build_enabled_predicate_prompt_bank.py live-trace-worker\scripts\screen_enabled_predicate_campaign.py` passed.
+- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `7 passed`.
+
+Claim boundary remains strict: the prompt bank is not evidence. It is a screening campaign. Pre-speech/live interception, causal compliance-state detection, payload-independent comply/refuse detection, prompt-injection prevention/removal/reversal, and hallucination prevention remain `OPEN` and `NOT LICENSED` until judged model outputs pass the screener, W0 hidden capture includes layer 0, the v5 evaluator passes all leakage/baseline controls, live steering/ablation passes, and the resulting Evidence Packets are retained/verifiable.
+
+Recommended next move: run the prompt bank through Qwen/Phi sampling and behavior judging, feed those judged labels into `screen_enabled_predicate_campaign.py`, then run W0 capture plus `evaluate_behavior_v5_prespeech.py` only if the screener returns `READY_FOR_W0_CAPTURE`.
+
 ## 2026-06-11 Instruction Quarantine Audit Console UI
 
 Codex wired the newly implemented instruction quarantine package into the CAS Harness Audit Console on branch `codex/cas-harness-public-beta-candidate`.
