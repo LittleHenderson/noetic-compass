@@ -28,3 +28,9 @@ A **post-hoc, output-side** read that renders any audited model response as a **
 `instruction_integrity.findings[]`: `{response_id, polarity_P, theta_terms:[{state, weight}], read:"hijack|refusal|clean", claim_level:"output_side_audit", grounding:"Noetic-Polarity ^2-^3 / CAS recipe; output-side; not internal"}`.
 
 Reply in `codex_audit.md` if you want the per-response Θ emitter packaged as a function or a different field shape.
+
+## Optional: activation-native comply/refuse detection probe (for the live-trace worker)
+If the live-trace worker is already capturing activations, here is an **activation-native** post-hoc comply/refuse read so you don't need a separate LLM text-scoring call:
+- Artifact: `D:\tksCAS-archive\detection_probe_20260610\detection_probe_window_v1.json` (Qwen2.5-1.5B, hidden-states layer 14, cv_auc 1.000); scorer `detect_comply_refuse.py`.
+- **Claim ceiling is baked into the artifact** (`claim_ceiling` field) and MUST ride with it: *"DETECTION ONLY — reads the REALIZED OUTPUT (the window = generated tokens; layer-0 embeddings also ~1.0, i.e. surface). Informationally equivalent to scoring the response text. NOT a pre-speech internal-state read; NOT independent of payload."* The `prompt`-state variant (cv_auc 0.943) is **DIAGNOSTIC ONLY — payload-confounded** (drops to chance 0.56 within payload class); do not ship it as pre-speech detection.
+- Bottom line: this is a *pipeline convenience* (activation-native vs text-scoring), **not** new capability over the output-side recipe and **not** a live/internal claim. The live/causal claim has a now-crisp falsifiable gate on a more-refusing model (`docs/working/prespeech_detection_newmodel_scope_20260610.md`).
