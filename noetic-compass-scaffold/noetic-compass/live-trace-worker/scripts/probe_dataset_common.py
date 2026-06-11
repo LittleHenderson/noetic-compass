@@ -13,6 +13,7 @@ DOMAIN_VALUES = {"P", "C", "E", "O"}
 REGISTER_VALUES = {"T", "A", "f", "E"}
 TKS_40_ELEMENT_VALUES = {f"{letter}{number}" for letter in "ABCD" for number in range(1, 11)}
 TKS_28_FOUNDATION_VALUES = {f"{number}{letter}" for letter in "abcd" for number in range(1, 8)}
+BEHAVIOR_VALUES = {"COMPLIED", "REFUSED", "IGNORED", "CLEAN"}
 
 
 @dataclass(frozen=True)
@@ -51,6 +52,20 @@ def load_labeled_scenarios(path: Path) -> list[LabeledProbeScenario]:
 
 def extract_labels(item: dict[str, Any]) -> dict[str, str]:
     labels: dict[str, str] = {}
+    behavior = _normalise_behavior(
+        _first_clean(
+            item.get("expected_behavior"),
+            item.get("target_behavior"),
+            item.get("behavior"),
+            item.get("label"),
+        )
+    )
+    payload_class = _clean_label(item.get("payload_class"))
+    if behavior:
+        labels["behavior"] = behavior
+    if payload_class:
+        labels["payload_class"] = payload_class
+
     expected = item.get("expected_cas_axes")
     if isinstance(expected, dict):
         domain = _clean_label(expected.get("domain"))
@@ -153,6 +168,25 @@ def _clean_label(value: Any) -> str | None:
         return None
     text = str(value).strip()
     return text or None
+
+
+def _normalise_behavior(value: str | None) -> str | None:
+    if not value:
+        return None
+    text = value.strip().upper()
+    if text in BEHAVIOR_VALUES:
+        return text
+    aliases = {
+        "COMPLY": "COMPLIED",
+        "COMPLIANCE": "COMPLIED",
+        "C": "COMPLIED",
+        "REFUSE": "REFUSED",
+        "REFUSAL": "REFUSED",
+        "R": "REFUSED",
+        "IGNORE": "IGNORED",
+        "I": "IGNORED",
+    }
+    return aliases.get(text)
 
 
 def _normalise_foundation(value: Any) -> str | None:

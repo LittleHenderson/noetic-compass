@@ -74,6 +74,20 @@ def test_extract_labels_supports_augmented_schema():
     }
 
 
+def test_extract_labels_supports_behavior_payload_schema():
+    labels = extract_labels(
+        {
+            "prompt": "x",
+            "expected_behavior": "refusal",
+            "payload_class": "system_prompt_extraction",
+        }
+    )
+    assert labels == {
+        "behavior": "REFUSED",
+        "payload_class": "system_prompt_extraction",
+    }
+
+
 def test_evaluate_axis_reports_hidden_vs_controls():
     # 12 samples, 2 layers, 4 hidden dims. Layer 1 cleanly separates labels.
     labels = np.asarray(["F1"] * 6 + ["F2"] * 6)
