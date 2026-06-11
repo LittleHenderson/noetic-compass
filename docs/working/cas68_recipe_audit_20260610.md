@@ -30,3 +30,9 @@ From the standardized logistic weights:
 ## Bottom line
 - **Works (output-side):** the 40-Element/recipe audit cleanly separates hijack from refusal and, more importantly, yields a **traceable CAS formula** per response — the product's traceability spine, and exactly "the noetic as an equation."
 - **Unchanged:** this is post-hoc (after the model answers), not a live internal interceptor; the internal detector remains unvalidated (Path B was leakage; matched-pair data still needed).
+
+## Cross-family robustness — non-Claude (Mistral-7B) re-score
+To check the recipe is not a Claude-scorer artifact, a **non-Claude** model (Mistral-7B-Instruct, on the pod) re-scored the 280 responses on the 10 key states (280/280, 0 unparsed). Result: **the core recipe direction REPLICATES; the magnitude and one term do not.**
+- Mean scores by label (Mistral): REFUSED **P3 0.7 / C3 0.7** vs COMPLIED P3 0.3 / C3 0.2 — the **Principled + Cognitive Negative pole is elevated in refusals**, same direction as Claude. COMPLIED **O2 7.3 / O9 4.4** vs REFUSED O2 5.5 / O9 2.7 — **Operational activity elevated in compliance**, same direction.
+- AUC is much weaker with the weaker scorer: signed polarity 0.701, 10-state logistic CV 0.757 (vs Claude ~1.0). And **E3 (Evaluative Negative) does NOT replicate** (Mistral sees no E3 elevation in refusals) — that term is scorer-dependent.
+- **Verdict:** the **core structure (refusal = upper-domain Negative P3/C3; compliance = Operational O2/O9) is real and cross-family** — a much weaker, different-family model still recovers it (AUC 0.75), so it is **not** a Claude language artifact. The full strength (~1.0) and the E3 component are scorer-quality-dependent; for production replication use a stronger non-Claude scorer (the Gemini connector), not Mistral-7B. Mistral scores archived to `D:\tksCAS-archive\cas68_recipe_audit_20260610\mistral_recipe_scores.jsonl`.
