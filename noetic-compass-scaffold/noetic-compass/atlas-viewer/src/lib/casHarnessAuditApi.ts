@@ -140,6 +140,8 @@ export interface CasHarnessInstructionIntegrityFinding {
   source: string;
   span_hash: string;
   span_excerpt: string;
+  span_start: number | null;
+  span_end: number | null;
   authority_level: string;
   gate: string;
   decision: string;
@@ -164,6 +166,32 @@ export interface CasHarnessInstructionIntegrityGluing {
   evidence_packet_trace_id: string | null;
 }
 
+export interface CasHarnessInstructionQuarantineSpan {
+  kind: string;
+  severity: CasHarnessInstructionIntegritySeverity;
+  source: string;
+  span_hash: string;
+  span_excerpt: string;
+  span_start: number;
+  span_end: number;
+  action: string;
+  replacement: string;
+  reason: string;
+}
+
+export interface CasHarnessInstructionQuarantine {
+  schema_version: 'cas_harness_instruction_quarantine.v0';
+  mode: 'active_context_proposal';
+  status: CasHarnessInstructionIntegrityStatus;
+  verdict_effect: 'none_shadow_only';
+  applies_to: string;
+  sanitized_prompt_text: string | null;
+  sanitized_scenario_text: string | null;
+  sanitized_output_text: string | null;
+  blocked_spans: CasHarnessInstructionQuarantineSpan[];
+  claim_ceiling: string;
+}
+
 export interface CasHarnessInstructionIntegrityReport {
   schema_version: 'cas_harness_instruction_integrity.v0.shadow';
   mode: 'shadow';
@@ -173,6 +201,7 @@ export interface CasHarnessInstructionIntegrityReport {
   findings: CasHarnessInstructionIntegrityFinding[];
   claim_grounding: CasHarnessInstructionIntegrityClaimGrounding[];
   gluing: CasHarnessInstructionIntegrityGluing;
+  quarantine: CasHarnessInstructionQuarantine | null;
 }
 
 export interface CasHarnessAuditSession {
@@ -1949,6 +1978,7 @@ function parseNullableInstructionIntegrity(raw: unknown): CasHarnessInstructionI
     findings: parseInstructionIntegrityFindings(raw.findings),
     claim_grounding: parseInstructionIntegrityClaimGrounding(raw.claim_grounding),
     gluing: parseInstructionIntegrityGluing(raw.gluing),
+    quarantine: parseNullableInstructionQuarantine(raw.quarantine),
   };
 }
 
@@ -1968,6 +1998,14 @@ function parseInstructionIntegrityFindings(raw: unknown): CasHarnessInstructionI
       span_excerpt: requiredString(
         finding.span_excerpt,
         `instruction_integrity.findings[${index}].span_excerpt`,
+      ),
+      span_start: nullableNumber(
+        finding.span_start,
+        `instruction_integrity.findings[${index}].span_start`,
+      ),
+      span_end: nullableNumber(
+        finding.span_end,
+        `instruction_integrity.findings[${index}].span_end`,
       ),
       authority_level: requiredString(
         finding.authority_level,
@@ -2030,6 +2068,70 @@ function parseInstructionIntegrityGluing(raw: unknown): CasHarnessInstructionInt
     ),
     truth_state: parseInstructionIntegrityTruthState(raw.truth_state),
     evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
+  };
+}
+
+function parseNullableInstructionQuarantine(raw: unknown): CasHarnessInstructionQuarantine | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity quarantine was malformed');
+  }
+  const schemaVersion = requiredString(raw.schema_version, 'instruction_integrity.quarantine.schema_version');
+  if (schemaVersion !== 'cas_harness_instruction_quarantine.v0') {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity quarantine schema_version is unsupported');
+  }
+  const mode = requiredString(raw.mode, 'instruction_integrity.quarantine.mode');
+  if (mode !== 'active_context_proposal') {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity quarantine mode is unsupported');
+  }
+  const verdictEffect = requiredString(raw.verdict_effect, 'instruction_integrity.quarantine.verdict_effect');
+  if (verdictEffect !== 'none_shadow_only') {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity quarantine verdict_effect must be none_shadow_only',
+    );
+  }
+  const blockedSpans = raw.blocked_spans;
+  if (!Array.isArray(blockedSpans)) {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity quarantine blocked_spans must be an array');
+  }
+  return {
+    schema_version: schemaVersion,
+    mode,
+    status: parseInstructionIntegrityStatus(raw.status),
+    verdict_effect: verdictEffect,
+    applies_to: requiredString(raw.applies_to, 'instruction_integrity.quarantine.applies_to'),
+    sanitized_prompt_text: nullableString(raw.sanitized_prompt_text),
+    sanitized_scenario_text: nullableString(raw.sanitized_scenario_text),
+    sanitized_output_text: nullableString(raw.sanitized_output_text),
+    blocked_spans: blockedSpans.map((span, index) => parseInstructionQuarantineSpan(span, index)),
+    claim_ceiling: requiredString(raw.claim_ceiling, 'instruction_integrity.quarantine.claim_ceiling'),
+  };
+}
+
+function parseInstructionQuarantineSpan(
+  raw: unknown,
+  index: number,
+): CasHarnessInstructionQuarantineSpan {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness instruction_integrity quarantine span was malformed');
+  }
+  return {
+    kind: requiredString(raw.kind, `instruction_integrity.quarantine.blocked_spans[${index}].kind`),
+    severity: parseInstructionIntegritySeverity(raw.severity),
+    source: requiredString(raw.source, `instruction_integrity.quarantine.blocked_spans[${index}].source`),
+    span_hash: requiredString(raw.span_hash, `instruction_integrity.quarantine.blocked_spans[${index}].span_hash`),
+    span_excerpt: requiredString(
+      raw.span_excerpt,
+      `instruction_integrity.quarantine.blocked_spans[${index}].span_excerpt`,
+    ),
+    span_start: requiredNumber(raw.span_start, `instruction_integrity.quarantine.blocked_spans[${index}].span_start`),
+    span_end: requiredNumber(raw.span_end, `instruction_integrity.quarantine.blocked_spans[${index}].span_end`),
+    action: requiredString(raw.action, `instruction_integrity.quarantine.blocked_spans[${index}].action`),
+    replacement: requiredString(
+      raw.replacement,
+      `instruction_integrity.quarantine.blocked_spans[${index}].replacement`,
+    ),
+    reason: requiredString(raw.reason, `instruction_integrity.quarantine.blocked_spans[${index}].reason`),
   };
 }
 

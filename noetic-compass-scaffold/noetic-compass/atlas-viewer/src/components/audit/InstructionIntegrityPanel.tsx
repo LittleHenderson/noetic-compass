@@ -125,6 +125,38 @@ const excerptStyle: CSSProperties = {
   overflowWrap: 'anywhere',
 };
 
+const quarantineStyle: CSSProperties = {
+  display: 'grid',
+  gap: 10,
+  padding: '10px 12px',
+  borderRadius: 6,
+  border: `1px solid ${TONE_TINT.amber.borderSoft}`,
+  background: 'rgba(251, 191, 36, 0.075)',
+};
+
+const quarantineHeaderStyle: CSSProperties = {
+  display: 'flex',
+  alignItems: 'baseline',
+  justifyContent: 'space-between',
+  gap: 8,
+};
+
+const sanitizedTextStyle: CSSProperties = {
+  margin: 0,
+  maxHeight: 118,
+  overflow: 'auto',
+  padding: '8px 9px',
+  borderRadius: 6,
+  border: `1px solid ${COLORS.borderSubtle}`,
+  background: 'rgba(2, 6, 23, 0.42)',
+  color: COLORS.textSecondary,
+  fontFamily: FONT_MONO,
+  fontSize: 11,
+  lineHeight: 1.45,
+  overflowWrap: 'anywhere',
+  whiteSpace: 'pre-wrap',
+};
+
 const flagWrapStyle: CSSProperties = {
   display: 'flex',
   flexWrap: 'wrap',
@@ -146,6 +178,17 @@ function displayKind(kind: string): string {
   return kind.replace(/_/g, ' ');
 }
 
+function firstSanitizedText(report: CasHarnessInstructionIntegrityReport): string | null {
+  const quarantine = report.quarantine;
+  if (!quarantine) return null;
+  return (
+    quarantine.sanitized_prompt_text ??
+    quarantine.sanitized_scenario_text ??
+    quarantine.sanitized_output_text ??
+    null
+  );
+}
+
 export function InstructionIntegrityPanel({
   report,
 }: InstructionIntegrityPanelProps): JSX.Element | null {
@@ -155,6 +198,11 @@ export function InstructionIntegrityPanel({
   const visibleFindings = report.findings.slice(0, 4);
   const hiddenFindingCount = Math.max(0, report.findings.length - visibleFindings.length);
   const flags = report.gluing.lacunarity_flags;
+  const quarantine = report.quarantine;
+  const blockedSpans = quarantine?.blocked_spans ?? [];
+  const visibleBlockedSpans = blockedSpans.slice(0, 3);
+  const hiddenBlockedSpanCount = Math.max(0, blockedSpans.length - visibleBlockedSpans.length);
+  const sanitizedText = firstSanitizedText(report);
 
   return (
     <section
@@ -209,6 +257,47 @@ export function InstructionIntegrityPanel({
             </li>
           ) : null}
         </ul>
+      ) : null}
+
+      {quarantine ? (
+        <div style={quarantineStyle} aria-label="Instruction quarantine active-context proposal">
+          <div style={quarantineHeaderStyle}>
+            <div style={titleWrapStyle}>
+              <p style={eyebrowStyle}>Active context</p>
+              <p style={titleStyle}>Quarantine proposal</p>
+            </div>
+            <span style={statusPillStyle(quarantine.status === 'FLAG_FOR_HUMAN_REVIEW')}>
+              {blockedSpans.length} blocked
+            </span>
+          </div>
+
+          {visibleBlockedSpans.length > 0 ? (
+            <ul style={listStyle} role="list" aria-label="Blocked instruction spans">
+              {visibleBlockedSpans.map((span) => (
+                <li key={`${span.kind}-${span.span_hash}`} style={findingStyle}>
+                  <div style={findingTopStyle}>
+                    <p style={findingKindStyle}>{displayKind(span.kind)}</p>
+                    <span style={metaStyle}>{span.replacement}</span>
+                  </div>
+                  <p style={excerptStyle}>{span.span_excerpt}</p>
+                </li>
+              ))}
+              {hiddenBlockedSpanCount > 0 ? (
+                <li style={findingStyle}>
+                  <p style={excerptStyle}>{hiddenBlockedSpanCount} more blocked span(s) recorded.</p>
+                </li>
+              ) : null}
+            </ul>
+          ) : null}
+
+          {sanitizedText ? (
+            <p style={sanitizedTextStyle} aria-label="Sanitized active-context text">
+              {sanitizedText}
+            </p>
+          ) : null}
+
+          <p style={subcopyStyle}>{quarantine.claim_ceiling}</p>
+        </div>
       ) : null}
     </section>
   );
