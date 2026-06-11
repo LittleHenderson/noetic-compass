@@ -21,6 +21,22 @@ We are past "does the idea work?" and now at "turn the working pieces into a rel
 
 The next step is not more random experiments. The next step is a gated production build.
 
+## 2026-06-11 Pre-Speech / Causal Solution Round Table
+
+Codex ran a four-agent local-docs round table over TKS v7.4, Noetic Topos, current Qwen probe diagnostics, and product-claim boundaries for the user's requested flagship question: can CAS Harness catch comply/refuse state before the model speaks and prove that state causes the output? The resulting design brief is `docs/working/cas_harness_prespeech_topos_causal_solution_roundtable_20260611.md`.
+
+Key conclusion: the foundations point to a working two-lane solution, but not to an already-proven hidden-state claim.
+
+- Product lane now: build CAS Harness Instruction Integrity Review around a Topos Integrity Gate. Treat hallucination and prompt-injection risk as local-to-global failures: evidence, task, policy hierarchy, provenance, D/W/P prerequisites, admissibility, and generated claim/action must glue before trust. Missing coverage, task replacement, policy override, lacunarity, or leakage should route to `FLAG_FOR_HUMAN_REVIEW` in shadow mode.
+- Research lane next: run a v5 Pre-Realization Refusal Recipe Probe. Do not probe a crude global `COMPLIED` / `REFUSED` bit. Estimate a refusal-readiness recipe using `^3^P|T`, `^3^P|A`, `^3^P|f`, `^8^P|T`, polarity margin, D/W/P prerequisites, coverage/gluing, lacunarity, leakage, and limiting-reagent features.
+- Causal lane next: prove behavior change by live prompt-final W0 steering on heldout prompts, with paired seeds, no-op, `+refusal`, `-refusal`, random same-norm control, projection ablation, cross-family judgment, and prompt-level statistics.
+
+The current Qwen diagnostic remains blocked for public pre-speech or causal claims: global W0 hidden readout looked strong, but text-hash baseline beat it; the within-payload gate was insufficient; v4 matched prompts had only `G_matched=2` versus the needed `G_matched>=40`. The sharper data blocker is balanced `COMPLIED` and `REFUSED` examples inside the same payload classes, not just more refusals.
+
+Claim boundary remains strict: pre-speech/live interception, causal compliance-state detection, payload-independent comply/refuse detection, prompt-injection prevention/removal/reversal, harmful-instruction repair, and hallucination prevention remain `OPEN` and `NOT LICENSED`. The marketable slice is shadow Instruction Integrity Review with Evidence Packet persistence and `FLAG_FOR_HUMAN_REVIEW` routing until hosted proof, external/red-team benchmarks, WORM-backed verifier policy, and v5 probe/intervention gates pass.
+
+Recommended next move: build the hosted Instruction Integrity Review card in the deployed CAS Harness path, then implement v5 tooling in the beta-candidate branch: balanced same-payload prompt-bank screener, group-aware W0 analyzer with text/payload/domain baselines, Qwen live steering capture, paired causal statistics, and blinded judge merge with degeneration checks.
+
 ## 2026-06-10 Foundational Topos / Instruction Integrity Round Table
 
 Codex ran a four-lane agent round table over local TKS v7.4, Noetic Topos, existing code hooks, and product-security claim boundaries. The resulting design brief is `docs/working/cas_harness_topos_instruction_integrity_roundtable_20260610.md`.
