@@ -159,11 +159,21 @@ export interface CasHarnessInstructionIntegrityClaimGrounding {
   evidence_refs: string[];
 }
 
+export interface CasHarnessInstructionRpmReasonContinuity {
+  status: CasHarnessInstructionIntegrityStatus;
+  mode: string;
+  break_count: number;
+  lacunarity_spike: boolean;
+  upstream_risk_kinds: string[];
+  claim_ceiling: string;
+}
+
 export interface CasHarnessInstructionIntegrityGluing {
   coverage_status: 'present' | 'incomplete';
   lacunarity_flags: string[];
   truth_state: CasHarnessInstructionIntegrityTruthState;
   evidence_packet_trace_id: string | null;
+  rpm_reason_continuity?: CasHarnessInstructionRpmReasonContinuity | null;
 }
 
 export interface CasHarnessInstructionQuarantineSpan {
@@ -2068,6 +2078,40 @@ function parseInstructionIntegrityGluing(raw: unknown): CasHarnessInstructionInt
     ),
     truth_state: parseInstructionIntegrityTruthState(raw.truth_state),
     evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
+    rpm_reason_continuity: parseNullableInstructionRpmReasonContinuity(
+      raw.rpm_reason_continuity,
+    ),
+  };
+}
+
+function parseNullableInstructionRpmReasonContinuity(
+  raw: unknown,
+): CasHarnessInstructionRpmReasonContinuity | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity rpm_reason_continuity was malformed',
+    );
+  }
+  return {
+    status: parseInstructionIntegrityStatus(raw.status),
+    mode: requiredString(raw.mode, 'instruction_integrity.gluing.rpm_reason_continuity.mode'),
+    break_count: requiredNumber(
+      raw.break_count,
+      'instruction_integrity.gluing.rpm_reason_continuity.break_count',
+    ),
+    lacunarity_spike: requiredBoolean(
+      raw.lacunarity_spike,
+      'instruction_integrity.gluing.rpm_reason_continuity.lacunarity_spike',
+    ),
+    upstream_risk_kinds: parseStringArray(
+      raw.upstream_risk_kinds,
+      'instruction_integrity.gluing.rpm_reason_continuity.upstream_risk_kinds',
+    ),
+    claim_ceiling: requiredString(
+      raw.claim_ceiling,
+      'instruction_integrity.gluing.rpm_reason_continuity.claim_ceiling',
+    ),
   };
 }
 

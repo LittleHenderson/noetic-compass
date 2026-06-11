@@ -198,6 +198,12 @@ export function InstructionIntegrityPanel({
   const visibleFindings = report.findings.slice(0, 4);
   const hiddenFindingCount = Math.max(0, report.findings.length - visibleFindings.length);
   const flags = report.gluing.lacunarity_flags;
+  const rpmReasonContinuity = report.gluing.rpm_reason_continuity;
+  const showRpmContinuity = Boolean(
+    rpmReasonContinuity &&
+      (rpmReasonContinuity.status === 'FLAG_FOR_HUMAN_REVIEW' ||
+        rpmReasonContinuity.upstream_risk_kinds.length > 0),
+  );
   const quarantine = report.quarantine;
   const blockedSpans = quarantine?.blocked_spans ?? [];
   const visibleBlockedSpans = blockedSpans.slice(0, 3);
@@ -236,6 +242,22 @@ export function InstructionIntegrityPanel({
               {flag}
             </span>
           ))}
+        </div>
+      ) : null}
+
+      {showRpmContinuity && rpmReasonContinuity ? (
+        <div style={findingStyle} aria-label="RPM reason continuity">
+          <div style={findingTopStyle}>
+            <p style={findingKindStyle}>RPM reason continuity</p>
+            <span style={metaStyle}>{rpmReasonContinuity.status}</span>
+          </div>
+          <div style={flagWrapStyle}>
+            <span style={flagStyle}>breaks: {rpmReasonContinuity.break_count}</span>
+            <span style={flagStyle}>
+              lacunarity spike: {rpmReasonContinuity.lacunarity_spike ? 'true' : 'false'}
+            </span>
+          </div>
+          <p style={excerptStyle}>{rpmReasonContinuity.claim_ceiling}</p>
         </div>
       ) : null}
 

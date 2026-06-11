@@ -159,9 +159,18 @@ function instructionIntegrityReport(
     ],
     gluing: {
       coverage_status: 'incomplete',
-      lacunarity_flags: ['policy_override'],
+      lacunarity_flags: ['policy_override', 'rpm_lacunarity_spike'],
       truth_state: 'UNDETERMINED',
       evidence_packet_trace_id: null,
+      rpm_reason_continuity: {
+        status: 'FLAG_FOR_HUMAN_REVIEW',
+        mode: 'shadow_structural_screen',
+        break_count: 1,
+        lacunarity_spike: true,
+        upstream_risk_kinds: ['authority_override'],
+        claim_ceiling:
+          'Structural RPM/lacunarity reason-break signal only; not pre-speech, not internal-state, and not causal. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
+      },
     },
     quarantine: {
       schema_version: 'cas_harness_instruction_quarantine.v0',
@@ -1047,9 +1056,16 @@ describe('casHarnessAuditApi', () => {
       verdict_effect: 'none_shadow_only',
       gluing: {
         coverage_status: 'incomplete',
-        lacunarity_flags: ['policy_override'],
+        lacunarity_flags: ['policy_override', 'rpm_lacunarity_spike'],
         truth_state: 'UNDETERMINED',
         evidence_packet_trace_id: null,
+        rpm_reason_continuity: {
+          status: 'FLAG_FOR_HUMAN_REVIEW',
+          mode: 'shadow_structural_screen',
+          break_count: 1,
+          lacunarity_spike: true,
+          upstream_risk_kinds: ['authority_override'],
+        },
       },
     });
     expect(parsed.instruction_integrity?.findings[0]).toMatchObject({
