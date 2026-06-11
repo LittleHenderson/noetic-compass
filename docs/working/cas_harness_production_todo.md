@@ -21,6 +21,32 @@ We are past "does the idea work?" and now at "turn the working pieces into a rel
 
 The next step is not more random experiments. The next step is a gated production build.
 
+## 2026-06-11 RPM/Lacunarity Reason-Break Implementation
+
+Codex implemented the user's RPM + lacunarity product pivot in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
+
+Implemented:
+
+- `api/services/cas_harness_instruction_integrity.py` now emits `rpm_reason_break` findings when an upstream untrusted instruction risk is followed by a model output that appears to adopt the injected task, disclose/echo protected material, or jump away from the original task/evidence chain.
+- The instruction-integrity `gluing` package now includes `rpm_reason_continuity` with `status`, `break_count`, `lacunarity_spike`, upstream risk kinds, and a strict claim ceiling.
+- `build_instruction_quarantine()` now quarantines output spans involved in an RPM reason break from CAS-owned active context while preserving raw evidence.
+- `atlas-viewer/src/lib/casHarnessAuditApi.ts` parses the new `rpm_reason_continuity` contract.
+- `atlas-viewer/src/components/audit/InstructionIntegrityPanel.tsx` surfaces RPM reason continuity in the Audit Console.
+
+Verification:
+
+- `python -m py_compile api\services\cas_harness_instruction_integrity.py` passed.
+- `python -m pytest tests\test_cas_harness_instruction_integrity.py -q` passed `10 passed`.
+- `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` passed all `15` cases with injected recall `1.0`, benign false-positive rate `0.0`, and `overall_pass: true`.
+- `python -m pytest tests\test_cas_harness_audit.py tests\test_cas_harness_api_endpoint_runner.py tests\test_cas_harness_live_worker_runner.py -q` passed `64 passed`.
+- `npx vitest run src\components\audit\InstructionIntegrityPanel.test.tsx src\lib\casHarnessAuditApi.test.ts --no-file-parallelism --reporter=dot` passed `50 passed`.
+- `npx tsc -b` passed.
+- `npm run build` passed. Existing large `three` chunk warning remains.
+
+Claim boundary remains strict: this is a marketable shadow structural screen for a break in reason, not a hidden-state or pre-speech detector. It can route suspicious task drift to `FLAG_FOR_HUMAN_REVIEW` and propose CAS-owned active-context quarantine, but prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, causal compliance-state detection, and payload-independent comply/refuse detection remain `OPEN` and `NOT LICENSED` until hosted proof, external/red-team benchmarks, WORM-backed verifier policy, balanced W0 capture, and live steering gates pass.
+
+Recommended next move: feed the strongest injection and hallucination-risk examples through the hosted Audit Console path and verify the UI exposes `rpm_reason_break`, `rpm_lacunarity_spike`, and the quarantine proposal in real Evidence Packet sessions.
+
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
 Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
