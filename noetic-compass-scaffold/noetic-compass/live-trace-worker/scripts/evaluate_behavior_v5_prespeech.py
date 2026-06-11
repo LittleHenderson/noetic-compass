@@ -1,8 +1,9 @@
 """v5 W0 pre-speech enabled-predicate gate for COMPLIED/REFUSED probes.
 
 This is the confirmatory version of the Qwen prompt-stage diagnostic. It only
-licenses a scoped pre-speech claim when hidden W0 beats text/payload/domain
-baselines inside balanced payload classes with grouped folds.
+licenses a scoped pre-speech claim when hidden W0 beats layer-0
+token-identity leakage plus text/payload/domain baselines inside balanced
+payload classes with grouped folds.
 
 The CAS/TKS target is the coalgebraic transition predicate:
 COMPLIED -> enables_2, REFUSED -> enables_3. The script tests whether a model
@@ -137,6 +138,19 @@ def evaluate_v5_prespeech(
     )
     hidden_ba = balanced_accuracy(y, hidden_pred)
 
+    l0_x = layer_zero_features(filtered)
+    if l0_x is not None and int(filtered["layer"]) != 0:
+        l0_pred = cross_val_linear_probe_predict(
+            l0_x,
+            y,
+            fold_indices,
+            C=probe_C,
+            max_iter=probe_max_iter,
+        )
+        l0_ba: float | None = balanced_accuracy(y, l0_pred)
+    else:
+        l0_ba = None
+
     text_x = hash_text_features(prompts, dim=text_dim)
     text_pred = cross_val_linear_probe_predict(
         text_x,
@@ -189,6 +203,8 @@ def evaluate_v5_prespeech(
 
     gates = {
         "payload_floor_pass": filtered["testable_payload_class_count"] >= min_payload_classes,
+        "l0_baseline_present_pass": l0_ba is not None,
+        "l0_margin_pass": l0_ba is not None and hidden_ba - l0_ba >= PASS_BASELINE_MARGIN,
         "hidden_balanced_accuracy_pass": hidden_ba >= PASS_BA,
         "within_payload_permutation_pass": permutation_p < PASS_PERMUTATION_P,
         "text_margin_pass": hidden_ba - text_ba >= PASS_BASELINE_MARGIN,
@@ -230,10 +246,14 @@ def evaluate_v5_prespeech(
         "enabled_predicate_distribution": enabled_predicate_distribution(y),
         "metrics": {
             "hidden_balanced_accuracy": round(hidden_ba, 6),
+            "l0_embedding_balanced_accuracy": round(l0_ba, 6) if l0_ba is not None else None,
             "text_hash_balanced_accuracy": round(text_ba, 6),
             "payload_majority_balanced_accuracy": round(payload_ba, 6),
             "domain_majority_balanced_accuracy": round(domain_ba, 6),
             "length_balanced_accuracy": round(length_ba, 6),
+            "hidden_minus_l0_embedding_balanced_accuracy": (
+                round(hidden_ba - l0_ba, 6) if l0_ba is not None else None
+            ),
             "hidden_minus_text_balanced_accuracy": round(hidden_ba - text_ba, 6),
             "hidden_minus_payload_balanced_accuracy": round(hidden_ba - payload_ba, 6),
             "hidden_minus_domain_balanced_accuracy": round(hidden_ba - domain_ba, 6),
@@ -247,6 +267,7 @@ def evaluate_v5_prespeech(
         "gates": gates,
         "important_limits": [
             "Grouped folds keep carrier/topic groups out of both train and test.",
+            "Layer-0 embedding leakage is a mandatory baseline; if it wins or ties, the hidden-state claim fails.",
             "Permutation shuffles labels only inside payload class.",
             "The target is an enabled-operator transition predicate, not a static CO-k state label.",
             "TKS licenses the question; only this empirical gate can license the model claim.",
@@ -287,6 +308,8 @@ def load_dataset(path: Path, *, layer: int | None) -> dict[str, Any]:
             resolved_layer = int(layer)
     return {
         "features": features[:, layer_position, :],
+        "features_by_layer": features,
+        "layers": layers,
         "layer": resolved_layer,
         "behavior": behavior,
         "payload_class": payload_class,
@@ -337,6 +360,17 @@ def filter_balanced_payloads(
         payload: distribution[payload] for payload in keep_payloads
     }
     return out
+
+
+def layer_zero_features(filtered: dict[str, Any]) -> np.ndarray | None:
+    layers = np.asarray(filtered.get("layers", []), dtype=int)
+    matches = np.where(layers == 0)[0]
+    if len(matches) == 0:
+        return None
+    features_by_layer = filtered.get("features_by_layer")
+    if not isinstance(features_by_layer, np.ndarray) or features_by_layer.ndim != 3:
+        return None
+    return features_by_layer[:, int(matches[0]), :]
 
 
 def build_blocked_report(

@@ -1,0 +1,40 @@
+{
+  "expected_behavior_distribution": {
+    "COMPLIED": 200,
+    "REFUSED": 200
+  },
+  "payload_behavior_distribution": {
+    "credential_secret_boundary": {
+      "COMPLIED": 40,
+      "REFUSED": 40
+    },
+    "harmful_action_boundary": {
+      "COMPLIED": 40,
+      "REFUSED": 40
+    },
+    "private_data_boundary": {
+      "COMPLIED": 40,
+      "REFUSED": 40
+    },
+    "system_instruction_boundary": {
+      "COMPLIED": 40,
+      "REFUSED": 40
+    },
+    "tool_authority_boundary": {
+      "COMPLIED": 40,
+      "REFUSED": 40
+    }
+  },
+  "payload_class_count": 5,
+  "payload_class_distribution": {
+    "credential_secret_boundary": 80,
+    "harmful_action_boundary": 80,
+    "private_data_boundary": 80,
+    "system_instruction_boundary": 80,
+    "tool_authority_boundary": 80
+  },
+  "prompt_group_count": 100,
+  "samples_per_prompt": 4,
+  "scenario_count": 400,
+  "v5_default_floor_projection": "The bank contains enough intended candidates for the default v5 floor of 5 payload classes x 40 COMPLIED and 40 REFUSED rows, but actual readiness depends on judged model behavior after sampling."
+}
