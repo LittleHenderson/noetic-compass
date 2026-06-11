@@ -21,6 +21,24 @@ We are past "does the idea work?" and now at "turn the working pieces into a rel
 
 The next step is not more random experiments. The next step is a gated production build.
 
+## 2026-06-11 Instruction Quarantine Audit Console UI
+
+Codex wired the newly implemented instruction quarantine package into the CAS Harness Audit Console on branch `codex/cas-harness-public-beta-candidate`.
+
+Implemented in the beta-candidate worktree:
+
+- `atlas-viewer/src/lib/casHarnessAuditApi.ts` now parses `instruction_integrity.quarantine`, including schema/version checks, `mode: active_context_proposal`, `verdict_effect: none_shadow_only`, sanitized prompt/scenario/output text, blocked span hashes, offsets, replacement markers, and claim ceiling.
+- `atlas-viewer/src/components/audit/InstructionIntegrityPanel.tsx` now shows an Active Context / Quarantine Proposal section with blocked spans, replacement markers such as `[CAS_QUARANTINED:...]`, sanitized active-context text, and the `OPEN` / `NOT LICENSED` claim ceiling.
+- `atlas-viewer/src/pages/AuditConsolePage.test.tsx` now proves the full Audit Console surfaces the quarantine proposal while keeping the verdict lane at `FLAG_FOR_HUMAN_REVIEW` and `none_shadow_only`.
+
+Verification:
+
+- `npx vitest run src\components\audit\InstructionIntegrityPanel.test.tsx src\lib\casHarnessAuditApi.test.ts src\pages\AuditConsolePage.test.tsx --no-file-parallelism --reporter=dot` passed `68 passed`. Existing React Router future-flag and React `act(...)` warnings remain.
+- `npx tsc -b` passed.
+- `npm run build` passed. Existing large `three` chunk warning remains.
+
+Claim boundary remains strict: this makes the quarantine/sanitized-context proposal visible and usable in the UI, but prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, causal compliance-state detection, and payload-independent comply/refuse detection remain `OPEN` and `NOT LICENSED` until hosted proof, external/red-team benchmarks, WORM-backed verifier policy, balanced W0 capture, and live steering gates pass.
+
 ## 2026-06-11 Enabled-Predicate Probe Upgrade From Chapter 29 Review
 
 Codex reviewed the attached Chapter-29 coalgebra proposal against the already-shipped quarantine/v5 tooling. Decision: the proposal is partially superior and has been applied where it is stronger.
