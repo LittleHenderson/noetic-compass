@@ -1036,6 +1036,7 @@ def test_run_route_calls_customer_api_and_routes_to_review(
         body["instruction_integrity"]["gluing"]["evidence_packet_trace_id"]
         == body["evidence_packet_trace_id"]
     )
+    assert body["instruction_integrity"]["gluing"]["activation_detection"]["status"] == "unavailable"
     assert chips == {
         "model_proof": "present",
         "cas_readout": "unavailable",

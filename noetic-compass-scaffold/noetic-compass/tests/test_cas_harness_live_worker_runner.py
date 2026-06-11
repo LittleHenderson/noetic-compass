@@ -101,6 +101,11 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
     assert verify.overall == "all_match"
     assert packet.provenance["code_commit_sha"] == _code_commit_sha()
     assert packet.provenance["code_commit_sha"] != "unknown"
+    activation_detection = packet.instruction_integrity["gluing"]["activation_detection"]
+    assert activation_detection["status"] == "unavailable"
+    assert "did not emit" in activation_detection["reason"]
+    assert "DETECTION ONLY" in activation_detection["claim_ceiling"]
+    assert activation_detection["model_id"] == "EleutherAI/pythia-160m"
 
     # Honest scope label: activations captured, but causal/control not yet run.
     assert packet.audit_scope["kind"] == "open_weight_live_trace"

@@ -119,6 +119,20 @@ Implemented 2026-06-10 on `codex/cas-harness-public-beta-candidate`:
 
 Claim boundary remains unchanged: this is evidence-grade shadow persistence, not production prompt-injection prevention, hallucination prevention, or autonomous removal.
 
+## Activation Detection Probe Plumbing
+
+Implemented 2026-06-10 on `codex/cas-harness-public-beta-candidate` after the Path-B detection probe handoff:
+
+- New service: `api/services/cas_harness_comply_refuse_detection.py`.
+- The service can score a compatible realized-output activation vector with a window probe, but only when the packet model matches the probe model and the artifact carries the required `DETECTION ONLY` claim ceiling.
+- The prompt-state probe remains diagnostic-only and is refused by this production helper.
+- Customer API packets record `activation_detection.status: unavailable` because closed APIs expose no activation window.
+- Hosted live-worker packets record `activation_detection.status: unavailable` unless the worker emits a compatible post-hoc activation-window comply/refuse event.
+- Pythia-160M live packets must not use the archived Qwen probe; model mismatch stays `unavailable`.
+- Verification passed: focused backend suite `81 passed`; instruction-integrity benchmark remained `15` / `15` with injected recall `1.0` and benign false-positive rate `0.0`.
+
+Claim boundary: this is a packet/claim-honesty guard for a post-hoc detection convenience. It is not pre-speech detection, not causal evidence, not payload-independent, and not a public prompt-injection prevention or hallucination-prevention claim.
+
 ## Next Stages
 
 Stage 2 can quarantine detected untrusted spans from CAS-owned explainer contexts, while preserving raw packet evidence.

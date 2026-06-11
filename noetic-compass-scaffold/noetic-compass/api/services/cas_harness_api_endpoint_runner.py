@@ -33,6 +33,9 @@ import subprocess
 from api.errors import LLMError
 from api.llm_connectors.base import LLMResponse
 from api.llm_connectors.registry import get_connector
+from api.services.cas_harness_comply_refuse_detection import (
+    build_unavailable_comply_refuse_detection,
+)
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
 from api.services.cas_harness_harvest import capture_live_audit_harvest
 from api.services.cas_harness_instruction_integrity import build_instruction_integrity_report
@@ -187,6 +190,11 @@ def _packet_from_api_response(
         model_id=model_id,
         has_output=bool(output_text),
     )
+    activation_detection = build_unavailable_comply_refuse_detection(
+        reason="closed API exposes no activation window for activation-native comply/refuse detection",
+        evidence_packet_trace_id=trace_id,
+        model_id=model_id,
+    )
 
     return {
         "schema_version": "cas_harness_evidence_packet_v1",
@@ -239,6 +247,7 @@ def _packet_from_api_response(
             prompt_text=prompt,
             output_text=output_text,
             evidence_packet_trace_id=trace_id,
+            activation_detection=activation_detection,
         ).to_dict(),
         "provenance": {
             "model_checkpoint_id": model_id,

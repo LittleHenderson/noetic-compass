@@ -24,6 +24,9 @@ import httpx
 
 from api.config import settings
 from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
+from api.services.cas_harness_comply_refuse_detection import (
+    comply_refuse_detection_from_worker_events,
+)
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
 from api.services.cas_harness_harvest import capture_live_audit_harvest
 from api.services.cas_harness_instruction_integrity import build_instruction_integrity_report
@@ -234,6 +237,11 @@ def _packet_from_worker_dump(
         ablation_present=ablation_block.get("status") == "present",
         control_present=control_block.get("status") == "present",
     )
+    activation_detection = comply_refuse_detection_from_worker_events(
+        events,
+        model_id=model_id,
+        evidence_packet_trace_id=trace_id,
+    )
 
     return {
         "schema_version": "cas_harness_evidence_packet_v1",
@@ -274,6 +282,7 @@ def _packet_from_worker_dump(
             prompt_text=prompt,
             output_text=output_text,
             evidence_packet_trace_id=trace_id,
+            activation_detection=activation_detection,
         ).to_dict(),
         "provenance": {
             "model_checkpoint_id": model_id,

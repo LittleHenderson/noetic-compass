@@ -11,7 +11,7 @@ from datetime import UTC, datetime
 import hashlib
 import json
 import logging
-from typing import Literal
+from typing import Any, Literal
 from urllib.parse import urlparse
 
 from fastapi import APIRouter, HTTPException, Request
@@ -437,6 +437,7 @@ class InstructionIntegrityGluingResponse(BaseModel):
     lacunarity_flags: list[str] = Field(default_factory=list, max_length=24)
     truth_state: Literal["VALID", "UNDETERMINED"]
     evidence_packet_trace_id: str | None = None
+    activation_detection: dict[str, Any] | None = None
 
 
 class InstructionIntegrityResponse(BaseModel):

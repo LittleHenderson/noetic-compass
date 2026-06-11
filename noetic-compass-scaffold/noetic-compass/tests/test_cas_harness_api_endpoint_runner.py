@@ -63,6 +63,10 @@ async def test_api_runner_writes_output_only_packet_and_harvest_record():
     assert packet.instruction_integrity["truth_state"] == "VALID"
     assert packet.instruction_integrity["verdict_effect"] == "none_shadow_only"
     assert packet.instruction_integrity["gluing"]["evidence_packet_trace_id"] == result.trace_id
+    activation_detection = packet.instruction_integrity["gluing"]["activation_detection"]
+    assert activation_detection["status"] == "unavailable"
+    assert "closed API exposes no activation window" in activation_detection["reason"]
+    assert "DETECTION ONLY" in activation_detection["claim_ceiling"]
     assert result.evidence_packet["instruction_integrity"] == packet.instruction_integrity
 
     # Honest scope label so the UI never implies internal access on a closed API.

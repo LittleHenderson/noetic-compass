@@ -181,6 +181,7 @@ def build_instruction_integrity_report(
     evidence_packet_trace_id: str | None = None,
     evidence_packet: Mapping[str, Any] | None = None,
     proof_chips: Iterable[Mapping[str, Any]] | None = None,
+    activation_detection: Mapping[str, Any] | None = None,
 ) -> InstructionIntegrityReport:
     """Build a shadow-only instruction-integrity report.
 
@@ -216,6 +217,14 @@ def build_instruction_integrity_report(
     truth_state: TruthState = "UNDETERMINED" if flagged else "VALID"
     status: IntegrityStatus = "FLAG_FOR_HUMAN_REVIEW" if flagged else "present"
     coverage_status = "incomplete" if flagged else "present"
+    gluing: dict[str, Any] = {
+        "coverage_status": coverage_status,
+        "lacunarity_flags": lacunarity_flags,
+        "truth_state": truth_state,
+        "evidence_packet_trace_id": evidence_packet_trace_id,
+    }
+    if activation_detection is not None:
+        gluing["activation_detection"] = dict(activation_detection)
 
     return InstructionIntegrityReport(
         schema_version=SCHEMA_VERSION,
@@ -225,12 +234,7 @@ def build_instruction_integrity_report(
         verdict_effect="none_shadow_only",
         findings=findings,
         claim_grounding=claim_grounding,
-        gluing={
-            "coverage_status": coverage_status,
-            "lacunarity_flags": lacunarity_flags,
-            "truth_state": truth_state,
-            "evidence_packet_trace_id": evidence_packet_trace_id,
-        },
+        gluing=gluing,
     )
 
 
