@@ -440,6 +440,35 @@ class InstructionIntegrityGluingResponse(BaseModel):
     activation_detection: dict[str, Any] | None = None
 
 
+class InstructionQuarantineSpanResponse(BaseModel):
+    kind: str = Field(..., min_length=1, max_length=80)
+    severity: Literal["low", "medium", "high"]
+    source: str = Field(..., min_length=1, max_length=80)
+    span_hash: str = Field(..., min_length=1, max_length=96)
+    span_excerpt: str = Field(..., min_length=1, max_length=240)
+    span_start: int = Field(..., ge=0)
+    span_end: int = Field(..., ge=0)
+    action: str = Field(..., min_length=1, max_length=160)
+    replacement: str = Field(..., min_length=1, max_length=120)
+    reason: str = Field(..., min_length=1, max_length=500)
+
+
+class InstructionQuarantineResponse(BaseModel):
+    schema_version: Literal["cas_harness_instruction_quarantine.v0"]
+    mode: Literal["active_context_proposal"]
+    status: Literal["present", "FLAG_FOR_HUMAN_REVIEW"]
+    verdict_effect: Literal["none_shadow_only"]
+    applies_to: str = Field(..., min_length=1, max_length=500)
+    sanitized_prompt_text: str | None = None
+    sanitized_scenario_text: str | None = None
+    sanitized_output_text: str | None = None
+    blocked_spans: list[InstructionQuarantineSpanResponse] = Field(
+        default_factory=list,
+        max_length=64,
+    )
+    claim_ceiling: str = Field(..., min_length=1, max_length=500)
+
+
 class InstructionIntegrityResponse(BaseModel):
     schema_version: Literal["cas_harness_instruction_integrity.v0.shadow"]
     mode: Literal["shadow"]
@@ -452,6 +481,7 @@ class InstructionIntegrityResponse(BaseModel):
         max_length=64,
     )
     gluing: InstructionIntegrityGluingResponse
+    quarantine: InstructionQuarantineResponse | None = None
 
 
 class ModelTargetConfig(BaseModel):

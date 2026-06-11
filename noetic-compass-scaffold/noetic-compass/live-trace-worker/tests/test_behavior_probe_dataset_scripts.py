@@ -3,8 +3,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import numpy as np
+
+from scripts.analyze_behavior_v5_causal import analyze_causal_rows
 from scripts.build_behavior_probe_dataset import build_behavior_probe_dataset
 from scripts.evaluate_behavior_within_payload import evaluate_behavior_within_payload
+from scripts.evaluate_behavior_v5_prespeech import evaluate_v5_prespeech
 
 
 def _write_jsonl(path: Path, rows: list[dict]):
@@ -74,3 +78,151 @@ def test_behavior_dataset_builder_and_within_payload_evaluator(tmp_path: Path):
 
     assert report["status"] == "evaluated_within_payload_diagnostic"
     assert report["testable_payload_class_count"] == 2
+
+
+def test_v5_prespeech_gate_passes_when_w0_beats_text_and_payload_baselines(tmp_path: Path):
+    features = []
+    behavior = []
+    payloads = []
+    domains = []
+    prompts = []
+    scenario_ids = []
+    trace_ids = []
+    for payload_index in range(3):
+        payload = f"payload_{payload_index}"
+        for label_index, label in enumerate(["COMPLIED", "REFUSED"]):
+            for row_index in range(4):
+                value = 5.0 if label == "COMPLIED" else -5.0
+                features.append([[value, float(payload_index), float(row_index)]])
+                behavior.append(label)
+                payloads.append(payload)
+                domains.append("shared_domain")
+                prompts.append(f"Assess the same neutral request for {payload}.")
+                scenario_ids.append(f"{payload}_carrier_{label_index}_{row_index}")
+                trace_ids.append(f"trace_{payload_index}_{label_index}_{row_index}")
+    dataset_path = tmp_path / "v5_dataset.npz"
+    np.savez_compressed(
+        dataset_path,
+        features=np.asarray(features, dtype=np.float32),
+        layers=np.asarray([14], dtype=np.int64),
+        prompts=np.asarray(prompts, dtype=object),
+        scenario_ids=np.asarray(scenario_ids, dtype=object),
+        trace_ids=np.asarray(trace_ids, dtype=object),
+        axis_names=np.asarray(["behavior", "payload_class", "domain"], dtype=object),
+        labels_behavior=np.asarray(behavior, dtype=object),
+        labels_payload_class=np.asarray(payloads, dtype=object),
+        labels_domain=np.asarray(domains, dtype=object),
+    )
+
+    report = evaluate_v5_prespeech(
+        dataset_path=dataset_path,
+        layer=14,
+        folds=3,
+        seed=7,
+        text_dim=64,
+        min_payload_classes=3,
+        min_label_per_payload=4,
+        permutations=1000,
+        shuffle_controls=10,
+    )
+
+    assert report["status"] == "PASS"
+    assert report["gates"]["hidden_balanced_accuracy_pass"] is True
+    assert report["gates"]["text_margin_pass"] is True
+    assert report["metrics"]["hidden_balanced_accuracy"] == 1.0
+    assert report["metrics"]["within_payload_permutation_p"] < 0.001
+
+
+def test_v5_prespeech_gate_blocks_without_balanced_payloads(tmp_path: Path):
+    dataset_path = tmp_path / "blocked_dataset.npz"
+    np.savez_compressed(
+        dataset_path,
+        features=np.asarray([[[1.0]], [[-1.0]]], dtype=np.float32),
+        layers=np.asarray([14], dtype=np.int64),
+        prompts=np.asarray(["a", "b"], dtype=object),
+        scenario_ids=np.asarray(["a", "b"], dtype=object),
+        trace_ids=np.asarray(["ta", "tb"], dtype=object),
+        axis_names=np.asarray(["behavior", "payload_class", "domain"], dtype=object),
+        labels_behavior=np.asarray(["COMPLIED", "REFUSED"], dtype=object),
+        labels_payload_class=np.asarray(["only", "only"], dtype=object),
+        labels_domain=np.asarray(["d", "d"], dtype=object),
+    )
+
+    report = evaluate_v5_prespeech(
+        dataset_path=dataset_path,
+        layer=14,
+        folds=2,
+        seed=7,
+        text_dim=16,
+        min_payload_classes=3,
+        min_label_per_payload=4,
+        permutations=10,
+        shuffle_controls=2,
+    )
+
+    assert report["status"] == "BLOCKED"
+    assert report["claim"] == "OPEN / NOT LICENSED for pre-speech comply/refuse detection."
+
+
+def test_v5_causal_gate_passes_for_paired_refusal_steering():
+    rows = []
+    for prompt_index in range(12):
+        for seed in range(4):
+            baseline_label = "REFUSED" if seed % 2 else "COMPLIED"
+            rows.extend(
+                [
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "no_op",
+                        "label": baseline_label,
+                    },
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "+refusal",
+                        "label": "REFUSED",
+                    },
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "-refusal",
+                        "label": "COMPLIED",
+                    },
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "random",
+                        "label": baseline_label,
+                    },
+                ]
+            )
+
+    report = analyze_causal_rows(
+        rows,
+        source_path=None,
+        seed=5,
+        permutations=1000,
+        bootstrap=1000,
+    )
+
+    assert report["status"] == "PASS"
+    assert report["gates"]["plus_refusal_shift_pass"] is True
+    assert report["gates"]["plus_beats_random_pass"] is True
+    assert report["metrics"]["plus_refusal_refused_shift"] == 0.5
+
+
+def test_v5_causal_gate_blocks_without_complete_condition_blocks():
+    report = analyze_causal_rows(
+        [
+            {"prompt_id": "p1", "seed": 1, "condition": "no_op", "label": "COMPLIED"},
+            {"prompt_id": "p1", "seed": 1, "condition": "+refusal", "label": "REFUSED"},
+        ],
+        source_path=None,
+        seed=5,
+        permutations=10,
+        bootstrap=10,
+    )
+
+    assert report["status"] == "BLOCKED"
+    assert report["gates"]["complete_prompt_condition_blocks_pass"] is False
