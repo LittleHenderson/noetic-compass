@@ -99,6 +99,33 @@ Verification in the beta-candidate worktree:
 
 Claim boundary remains strict: this is a post-hoc detection convenience only. Pre-speech/live interception, causal compliance-state detection, payload-independent detection, prompt-injection prevention/removal, harmful-instruction inversion, and hallucination prevention remain `OPEN` and `NOT LICENSED` as public claims.
 
+## 2026-06-10 Qwen Pre-Speech Behavior Probe Diagnostic
+
+Codex built and ran the local prompt-stage behavior diagnostic on branch `codex/cas-harness-public-beta-candidate`. This does not use new GPU spend; it converts the archived Qwen prompt-stage vectors into the standard probe dataset format and evaluates the COMPLIED/REFUSED readout with a payload-controlled gate.
+
+Implemented in the beta-candidate branch:
+
+- New dataset converter: `live-trace-worker/scripts/build_behavior_probe_dataset.py`.
+- New payload-control evaluator: `live-trace-worker/scripts/evaluate_behavior_within_payload.py`.
+- Scenario loading now accepts `behavior` / `expected_behavior` and `payload_class` labels.
+- Diagnostic memo: `docs/working/prespeech_qwen_behavior_probe_diagnostic_20260610.md`.
+
+Artifacts produced:
+
+- Dataset: `D:\tksCAS-archive\qwen_prespeech_behavior_probe_20260610\qwen_prompt_behavior_raw_prompt_vec.npz`.
+- Manifest: `D:\tksCAS-archive\qwen_prespeech_behavior_probe_20260610\qwen_prompt_behavior_raw_prompt_vec_manifest.json`.
+- Global eval: `D:\tksCAS-archive\qwen_prespeech_behavior_probe_20260610\qwen_prompt_behavior_eval_report.json`.
+- Within-payload eval: `D:\tksCAS-archive\qwen_prespeech_behavior_probe_20260610\qwen_prompt_behavior_within_payload_report.json`.
+
+Result:
+
+- Global prompt-stage dataset: `304` rows, `COMPLIED=161`, `REFUSED=143`, feature `raw_prompt_vec`, layer `14`.
+- Global hidden readout: test accuracy `0.852459`, macro F1 `0.851018`, majority baseline `0.524590`, shuffled-label control `0.517213`.
+- Text-hash baseline: `0.885246`, which beats the hidden readout by `0.032787`.
+- Within-payload gate: `blocked_insufficient_within_payload_n`; only `overt_5` had both labels with at least three examples (`COMPLIED=7`, `REFUSED=5`) and its within-payload test accuracy was `0.5`.
+
+Claim boundary remains strict: prompt-stage behavior detection, live interception, payload-independent compliance-state detection, causal proof, prompt-injection prevention/removal, harmful-instruction inversion, and hallucination prevention remain `OPEN` and `NOT LICENSED`. The sharper blocker is no longer only "not enough refusals"; it is "not enough COMPLIED and REFUSED examples inside the same payload classes." Next capture should target at least three mixed payload classes with `COMPLIED >= 8` and `REFUSED >= 8` each, preferably five classes at `10/10`, before any causal/live ablation claim is attempted.
+
 ## 2026-06-09 Codex Public-Launch Diagnostic Checkpoint
 
 Full launch diagnostic ran against the clean `launch/integration` worktree at `37fb7a4` after `git fetch --all --prune`. The main desktop worktree is still on `wave5.5/harness-launch-declutter` and remains very dirty; do not diagnose or deploy public CAS Harness from that surface. `launch/integration` is the best current launch-candidate branch: it contains the Audit Bench UI, Guide widget, account/session/RBAC work, tenant evidence ownership, conditional anchor role gate, and the "Explain this packet" Evidence Packet explainer. It is not merged to `master`, and Render auto-deploys `master`, so hosted production is not running this launch candidate yet.
@@ -820,6 +847,7 @@ Clean public story to earn:
 
 ## Update Log
 
+- 2026-06-10: Qwen pre-speech behavior probe diagnostic completed on branch `codex/cas-harness-public-beta-candidate`. Archived prompt-stage vectors were converted into a standard behavior probe dataset (`304` rows, `COMPLIED=161`, `REFUSED=143`, `raw_prompt_vec`, layer `14`) and evaluated locally. Global hidden readout separated behavior (`test_acc: 0.852459`) but text-hash baseline was stronger (`0.885246`), and the payload-controlled gate blocked the claim: only `overt_5` had both labels with at least three examples and its within-payload test accuracy was `0.5`. Pre-speech/live interception, causal compliance-state detection, payload-independent detection, prompt-injection prevention/removal, harmful-instruction inversion, and hallucination prevention remain `OPEN` and `NOT LICENSED`. Next data gate is mixed payload balance, not just more refusals: target at least three payload classes with `COMPLIED >= 8` and `REFUSED >= 8` each, preferably five classes at `10/10`, before causal/live ablation claims.
 - 2026-06-10: Instruction Integrity Evidence Packet persistence gate added on branch `codex/cas-harness-public-beta-candidate`. Customer API and hosted live-worker Evidence Packets now carry `instruction_integrity`, scan both `prompt` and `model_output`, preserve the report through `EvidencePacket` load and `/verify`, and write it before `packet_without_hashes_sha256` so the shadow report is hash-covered. Audit-session run responses reuse the packet-owned report. Verification: targeted backend suite passed (`65 passed`), `python scripts/run_instruction_integrity_benchmark.py --fail-on-gate` still passed all `15` cases with injected recall `1.0` and benign false-positive rate `0.0`, and touched modules compiled. Public prevention/removal claims remain `OPEN` and `NOT LICENSED`; next gates are hosted authenticated proof, external/red-team fixture expansion, and verifier policy.
 - 2026-06-10: Instruction Integrity activation detection probe plumbing added on branch `codex/cas-harness-public-beta-candidate`. Added a claim-honest comply/refuse detection service and packet gluing lane that can score only compatible realized-output activation-window vectors with the required `DETECTION ONLY` claim ceiling. Closed API and current Pythia live packets record the lane as `unavailable`; the archived Qwen probe is blocked on model mismatch for Pythia. Verification: focused backend suite passed (`81 passed`), benchmark remained `15` / `15`, and touched modules compiled. Pre-speech/live interception and causal/payload-independent detection remain `OPEN` and `NOT LICENSED`.
 - 2026-06-10: Instruction Integrity Stage 3 local benchmark gate added on branch `codex/cas-harness-public-beta-candidate`. Added a fixture-backed clean/injected/control suite (`15` cases: `4` clean, `6` injected, `5` control), a benchmark runner, and regression tests. Tightened benign-mention handling so quoted injection examples, refusal transcripts, safety-policy text, legitimate JSON format constraints, and negative claim-boundary language stay `present` instead of false-positive `FLAG_FOR_HUMAN_REVIEW`. Verification: `python -m pytest tests/test_cas_harness_instruction_integrity.py tests/test_cas_harness_instruction_integrity_benchmark.py tests/test_cas_harness_audit.py -q` passed (`58 passed`); `python scripts/run_instruction_integrity_benchmark.py --fail-on-gate` passed with injected recall `1.0`, benign false-positive rate `0.0`, and all gates passing; frontend focused Vitest still passed (`68 passed`). This does not close the public prevention/removal claim: hosted authenticated audit proof, external/red-team fixture expansion, and verifier policy remain open.
