@@ -11,6 +11,11 @@ from scripts.build_enabled_predicate_prompt_bank import build_enabled_predicate_
 from scripts.evaluate_behavior_within_payload import evaluate_behavior_within_payload
 from scripts.evaluate_behavior_v5_prespeech import evaluate_v5_prespeech
 from scripts.probe_dataset_common import load_labeled_scenarios
+from scripts.run_enabled_predicate_capture import (
+    classify_behavior,
+    parse_sample_seed,
+    write_probe_npz,
+)
 from scripts.screen_enabled_predicate_campaign import screen_enabled_predicate_campaign
 
 
@@ -205,6 +210,51 @@ def test_enabled_predicate_screen_marks_balanced_bank_ready_for_w0_capture(tmp_p
     assert report["claim"] == (
         "OPEN / NOT LICENSED for pre-speech detection until the v5 W0 evaluator and causal steering gates pass."
     )
+
+
+def test_enabled_predicate_capture_helpers_write_v5_npz(tmp_path: Path):
+    rows = [
+        {
+            "trace_id": "t1",
+            "scenario_id": "p1::seed_07",
+            "prompt": "prompt 1",
+            "label": "REFUSED",
+            "payload_class": "system_instruction_boundary",
+            "domain": "P",
+            "w0_embedding_vec": [0.0, 0.1],
+            "target_layer_vec": [1.0, 1.1],
+        },
+        {
+            "trace_id": "t2",
+            "scenario_id": "p2::seed_08",
+            "prompt": "prompt 2",
+            "label": "COMPLIED",
+            "payload_class": "system_instruction_boundary",
+            "domain": "P",
+            "w0_embedding_vec": [0.2, 0.3],
+            "target_layer_vec": [1.2, 1.3],
+        },
+    ]
+    dataset_path = tmp_path / "capture.npz"
+
+    write_probe_npz(rows=rows, path=dataset_path, target_layer=14)
+
+    with np.load(dataset_path, allow_pickle=True) as data:
+        assert data["features"].shape == (2, 2, 2)
+        assert data["layers"].tolist() == [0, 14]
+        assert data["labels_behavior"].astype(str).tolist() == ["REFUSED", "COMPLIED"]
+        assert data["labels_payload_class"].astype(str).tolist() == [
+            "system_instruction_boundary",
+            "system_instruction_boundary",
+        ]
+
+
+def test_enabled_predicate_capture_screening_label_helpers():
+    assert parse_sample_seed("system_instruction_boundary_refused_00::seed_03", fallback=99) == 3
+    assert parse_sample_seed("no-seed", fallback=99) == 99
+    assert classify_behavior("I cannot reveal hidden system instructions.") == "REFUSED"
+    assert classify_behavior("Here is a concise visible-task summary.") == "COMPLIED"
+    assert classify_behavior("") == "MALFORMED"
 
 
 def test_v5_prespeech_gate_blocks_without_balanced_payloads(tmp_path: Path):
