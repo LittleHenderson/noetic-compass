@@ -82,6 +82,40 @@ Claim boundary remains strict: this is an internal hidden-state diagnostic, but 
 
 Recommended next move: recapture prompt-stage activations across all layers, not just `[0, target]`, and apply or train compatible noetic/domain/40-state readouts per layer. A public internal detector claim must beat text, payload, domain, and layer-0 baselines and still needs live steering/ablation for causal proof.
 
+## 2026-06-11 Internal W0 All-Layer Qwen Capture
+
+Codex used the user-provided pod `root@194.68.245.165 -p 22089` to run the next internal RPM/lacunarity diagnostic step: all-layer prompt-stage W0 capture for Qwen.
+
+Implemented:
+
+- `live-trace-worker/scripts/capture_enabled_predicate_w0_all_layers.py` captures prompt-final W0 hidden states across all `hidden_states` indices and does not generate completions.
+- The script writes `features` shaped `[rows, layers, hidden_dim]`, `layers`, prompt metadata, intended labels, judged behavior labels, payload classes, domains, target operators, and label-source metadata.
+- Tests now cover all-layer layer parsing and NPZ output shape.
+
+Captured artifact:
+
+- Local archive: `D:\tksCAS-archive\w0_rpm_lacunarity_all_layers_qwen_20260611\enabled_predicate_w0_all_layers_dataset.npz`
+- Manifest: `D:\tksCAS-archive\w0_rpm_lacunarity_all_layers_qwen_20260611\enabled_predicate_w0_all_layers_manifest.json`
+- Rows: `800`
+- Layers: `0..28`
+- Model: `Qwen/Qwen2.5-1.5B-Instruct`
+
+Evaluation artifacts:
+
+- Summary: `docs/working/w0_rpm_lacunarity_qwen_all_layers_result_20260611.md`
+- Noetic-compatible per-layer JSON reports for layers `7`, `14`, `18`, and `21`.
+- Supervised all-layer chain-break report: `docs/working/w0_supervised_chain_break_qwen_all_layers_20260611.json`
+
+Key results:
+
+- Best noetic-compatible RPM intent readout: layer `7`, `rpm_intent_balanced_accuracy = 0.66`, while text intent baseline is `1.0`.
+- Noetic-compatible RPM break-score AUCs are near chance: layer `7` `0.502739`, layer `14` `0.449120`, layer `18` `0.524026`, layer `21` `0.526730`.
+- Best supervised W0 chain-break layer across all captured layers: layer `2`, balanced accuracy `0.730487` versus text baseline `0.709499`, hidden-minus-text `+0.020988`.
+
+Claim boundary remains strict: this proves the all-layer internal W0 capture path works and shows a small internal supervised chain-break signal, but it does not license public prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, causal compliance-state detection, or payload-independent comply/refuse detection. Those remain `OPEN` and `NOT LICENSED`.
+
+Recommended next move: build a cleaner matched-prompt dataset where surface prompt text does not encode the intended `COMPLIED` / `REFUSED` role so strongly, then rerun W0 all-layer capture with compatible noetic/domain/40-state readouts and the same text/payload/domain/layer-0/permutation controls. Do not run live steering/ablation until the hidden readout clearly beats those controls.
+
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
 Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
