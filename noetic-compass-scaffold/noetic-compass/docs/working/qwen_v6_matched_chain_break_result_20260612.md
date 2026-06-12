@@ -18,6 +18,7 @@ Strengthen the internal W0 prompt-injection / RPM-lacunarity program by moving f
   - Keeps sample-specific branch prediction `OPEN` / `NOT LICENSED` because exact repeated prompts share the same prompt-stage W0 vector under ordinary deterministic forward capture.
 - `live-trace-worker/scripts/run_enabled_predicate_capture.py`
   - Fast two-layer captures now preserve `labels_expected_behavior`, `labels_target_operator`, and `labels_target_enabled_predicate` in the NPZ.
+  - Continuation update: captures now support `--scenario-offset`, per-row checkpoint JSONL files, `use_cache=False`, and `--generation-max-time` so one slow or wedged generation does not erase all partial screening labels.
 
 ## Local Verification
 
@@ -75,15 +76,27 @@ Remote smoke:
 - `2` Qwen rows completed and wrote a two-layer W0 NPZ with the new expected-behavior metadata.
 - The full calibrated run was stopped after stalling on the pod; no product claim is made from that smoke.
 
+Continuation diagnostics:
+
+- Generated `matched_prompt_chain_break_calibrated_bank_v1_s4.json`: `320` rows, `80` exact prompt groups, `5` payload classes, `4` samples per exact prompt.
+- Added capture checkpoint/resume controls and a per-generation time cap.
+- Phi-3-mini calibrated capture was attempted in `float16` and `float32`; both failed with `RuntimeError: probability tensor contains either inf, nan or element < 0`.
+- Qwen calibrated long-token sampling without a time cap stalled on specific rows.
+- Qwen short-token sampling completed rows but truncated too hard; labels were all `COMPLIED`, so it was not a valid balance screen.
+- Qwen `max_new_tokens=12` / `generation_max_time=10` partial screen was stopped after the labels still showed only `BROKEN=17`, `INTACT=0`, `mixed_prompt_group_count=0`.
+- Result: calibrated follow-up remains `BLOCKED`. It does not authorize W0 all-layer capture or internal detector claims.
+
 ## Archive
 
 Local archive:
 
 - `D:\tksCAS-archive\qwen_v6_matched_chain_break_20260612\qwen_v6_matched_chain_break_20260612.tgz`
+- `D:\tksCAS-archive\qwen_v6_calibrated_continuation_20260612\qwen_v6_calibrated_continuation_20260612.tgz`
 
 SHA-256:
 
 - `11F20F856329CCF788C27003E3D63446E01D9DE5DD78E7F0C16BEF4F66C5865F`
+- `BB030F1B57B2E511129E824E5E419F49F5D32F1210978E0839FE34B57B25DC44`
 
 ## Claim Boundary
 
@@ -93,4 +106,4 @@ The implemented v6 tooling is a stronger gate and campaign harness. The first re
 
 ## Next Move
 
-Run the calibrated bank with a more reliable short-generation capture profile or a more refusal-stable model, then screen again. Only run all-layer W0 capture and v6 W0 evaluation after the matched screener reports enough exact prompt groups, payload balance, and both `BROKEN` / `INTACT` rows.
+Do not spend on all-layer W0 capture yet. The next valid attempt is either a stronger external/human judge over longer completed outputs, or a revised bank seeded from the v0 prompt groups that actually produced `INTACT` behavior. Only run all-layer W0 capture and v6 W0 evaluation after the matched screener reports enough exact prompt groups, payload balance, and both `BROKEN` / `INTACT` rows.
