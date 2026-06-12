@@ -4,12 +4,14 @@ import json
 from pathlib import Path
 
 import numpy as np
+import pytest
 
 from scripts.analyze_behavior_v5_causal import analyze_causal_rows
 from scripts.build_behavior_probe_dataset import build_behavior_probe_dataset
 from scripts.build_enabled_predicate_prompt_bank import build_enabled_predicate_prompt_bank
 from scripts.evaluate_behavior_within_payload import evaluate_behavior_within_payload
 from scripts.evaluate_behavior_v5_prespeech import evaluate_v5_prespeech
+from scripts.evaluate_w0_rpm_lacunarity import evaluate_w0_rpm_lacunarity
 from scripts.probe_dataset_common import load_labeled_scenarios
 from scripts.run_enabled_predicate_capture import (
     classify_behavior,
@@ -304,6 +306,114 @@ def test_v5_prespeech_gate_blocks_without_balanced_payloads(tmp_path: Path):
     assert report["status"] == "BLOCKED"
     assert report["claim"] == "OPEN / NOT LICENSED for pre-speech comply/refuse detection."
     assert report["target_semantics"]["label_map"]["COMPLIED"]["enabled_predicate"] == "enables_2"
+
+
+def test_w0_rpm_lacunarity_reads_hidden_states_without_output_text(tmp_path: Path):
+    features = []
+    prompts = []
+    scenario_ids = []
+    trace_ids = []
+    behavior = []
+    payloads = []
+    domains = []
+    for row_index in range(24):
+        intended = "COMPLIED" if row_index % 2 == 0 else "REFUSED"
+        x = 4.0 if intended == "COMPLIED" else -4.0
+        domain_value = "P" if row_index % 4 < 2 else "C"
+        payload = "system_instruction_boundary" if row_index < 12 else "credential_secret_boundary"
+        features.append([[0.0, 0.0, 0.0], [x, 1.0 if domain_value == "P" else -1.0, 0.0]])
+        prompts.append(f"Prompt carrier {row_index % 6} with no model output text.")
+        scenario_ids.append(f"{payload}_{intended.lower()}_{row_index // 2:02d}::seed_{row_index % 4}")
+        trace_ids.append(f"trace_{row_index}")
+        behavior.append("REFUSED" if row_index == 0 else intended)
+        payloads.append(payload)
+        domains.append(domain_value)
+    dataset_path = tmp_path / "w0_dataset.npz"
+    np.savez_compressed(
+        dataset_path,
+        features=np.asarray(features, dtype=np.float32),
+        layers=np.asarray([0, 14], dtype=np.int64),
+        prompts=np.asarray(prompts, dtype=object),
+        scenario_ids=np.asarray(scenario_ids, dtype=object),
+        trace_ids=np.asarray(trace_ids, dtype=object),
+        axis_names=np.asarray(["behavior", "payload_class", "domain"], dtype=object),
+        labels_behavior=np.asarray(behavior, dtype=object),
+        labels_payload_class=np.asarray(payloads, dtype=object),
+        labels_domain=np.asarray(domains, dtype=object),
+    )
+    probe_path = tmp_path / "noetic_probe.npz"
+    coefs = np.zeros((1, 10, 3), dtype=np.float32)
+    coefs[0, 2, 0] = 1.0
+    coefs[0, 3, 0] = -1.0
+    intercepts = np.full((1, 10), -8.0, dtype=np.float32)
+    intercepts[0, 2] = 0.0
+    intercepts[0, 3] = 0.0
+    np.savez_compressed(
+        probe_path,
+        coefs=coefs,
+        intercepts=intercepts,
+        scaler_mean=np.zeros((1, 3), dtype=np.float32),
+        scaler_scale=np.ones((1, 3), dtype=np.float32),
+        classes_seen=np.asarray([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]], dtype=np.int64),
+        layer_indices=np.asarray([14], dtype=np.int64),
+    )
+
+    report = evaluate_w0_rpm_lacunarity(
+        dataset_path=dataset_path,
+        noetic_probe_path=probe_path,
+        output_report_path=None,
+        layer=14,
+        folds=3,
+        seed=7,
+        text_dim=64,
+    )
+
+    assert report["schema_version"] == "cas_harness_w0_rpm_lacunarity_eval.v1"
+    assert report["input_access"]["reads_prompt_stage_hidden_states"] is True
+    assert report["input_access"]["reads_model_output_text_as_feature"] is False
+    assert report["metrics"]["rpm_intent_balanced_accuracy"] == 1.0
+    assert report["metrics"]["outcome_mismatch_count"] == 1
+    assert report["gates"]["frozen_40e_head_present"] is False
+    assert report["gates"]["causal_intervention_present"] is False
+    assert report["profile_method"]["rpm_chain"] == (
+        "^2/^3 intended-operator satisfaction from W0 noetic probabilities."
+    )
+
+
+def test_w0_rpm_lacunarity_rejects_incompatible_noetic_probe(tmp_path: Path):
+    dataset_path = tmp_path / "w0_dataset.npz"
+    np.savez_compressed(
+        dataset_path,
+        features=np.asarray([[[0.0, 0.0], [1.0, 1.0]]], dtype=np.float32),
+        layers=np.asarray([0, 14], dtype=np.int64),
+        prompts=np.asarray(["prompt"], dtype=object),
+        scenario_ids=np.asarray(["case_complied_00::seed_00"], dtype=object),
+        trace_ids=np.asarray(["trace"], dtype=object),
+        labels_behavior=np.asarray(["COMPLIED"], dtype=object),
+        labels_payload_class=np.asarray(["payload"], dtype=object),
+        labels_domain=np.asarray(["P"], dtype=object),
+    )
+    probe_path = tmp_path / "bad_probe.npz"
+    np.savez_compressed(
+        probe_path,
+        coefs=np.zeros((1, 10, 3), dtype=np.float32),
+        intercepts=np.zeros((1, 10), dtype=np.float32),
+        scaler_mean=np.zeros((1, 3), dtype=np.float32),
+        scaler_scale=np.ones((1, 3), dtype=np.float32),
+        classes_seen=np.asarray([[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]], dtype=np.int64),
+        layer_indices=np.asarray([14], dtype=np.int64),
+    )
+
+    with pytest.raises(RuntimeError, match="Feature dimension"):
+        evaluate_w0_rpm_lacunarity(
+            dataset_path=dataset_path,
+            noetic_probe_path=probe_path,
+            output_report_path=None,
+            layer=14,
+            folds=2,
+            seed=7,
+            text_dim=16,
+        )
 
 
 def test_v5_causal_gate_passes_for_paired_refusal_steering():
