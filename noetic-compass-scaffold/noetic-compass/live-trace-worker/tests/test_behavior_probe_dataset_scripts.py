@@ -9,6 +9,10 @@ import pytest
 from scripts.analyze_behavior_v5_causal import analyze_causal_rows
 from scripts.build_behavior_probe_dataset import build_behavior_probe_dataset
 from scripts.build_enabled_predicate_prompt_bank import build_enabled_predicate_prompt_bank
+from scripts.capture_enabled_predicate_w0_all_layers import (
+    parse_layers_arg,
+    write_npz as write_all_layer_npz,
+)
 from scripts.evaluate_behavior_within_payload import evaluate_behavior_within_payload
 from scripts.evaluate_behavior_v5_prespeech import evaluate_v5_prespeech
 from scripts.evaluate_w0_rpm_lacunarity import evaluate_w0_rpm_lacunarity
@@ -274,6 +278,62 @@ def test_enabled_predicate_capture_uses_chat_template_when_available():
         "<chat>user:hello<assistant>"
     )
     assert format_model_prompt(tokenizer=FakeTokenizer(), prompt="hello", prompt_format="raw") == "hello"
+
+
+def test_enabled_predicate_all_layer_capture_helpers_write_npz(tmp_path: Path):
+    assert parse_layers_arg("all", hidden_state_count=4) == [0, 1, 2, 3]
+    assert parse_layers_arg("0,2,3", hidden_state_count=4) == [0, 2, 3]
+    with pytest.raises(RuntimeError, match="outside hidden_states"):
+        parse_layers_arg("4", hidden_state_count=4)
+
+    rows = [
+        {
+            "trace_id": "t1",
+            "scenario_id": "p1::seed_00",
+            "prompt": "prompt 1",
+            "label": "REFUSED",
+            "expected_behavior": "REFUSED",
+            "payload_class": "system_instruction_boundary",
+            "domain": "P",
+            "target_operator": "^3",
+            "target_enabled_predicate": "enables_3",
+            "label_source": "label_jsonl",
+            "prompt_token_count": 11,
+        },
+        {
+            "trace_id": "t2",
+            "scenario_id": "p2::seed_01",
+            "prompt": "prompt 2",
+            "label": "COMPLIED",
+            "expected_behavior": "COMPLIED",
+            "payload_class": "system_instruction_boundary",
+            "domain": "P",
+            "target_operator": "^2",
+            "target_enabled_predicate": "enables_2",
+            "label_source": "label_jsonl",
+            "prompt_token_count": 12,
+        },
+    ]
+    output_path = tmp_path / "all_layers.npz"
+    write_all_layer_npz(
+        rows=rows,
+        features=np.asarray(
+            [
+                [[0.0, 0.1], [1.0, 1.1], [2.0, 2.1]],
+                [[0.2, 0.3], [1.2, 1.3], [2.2, 2.3]],
+            ],
+            dtype=np.float32,
+        ),
+        layers=np.asarray([0, 1, 2], dtype=np.int64),
+        path=output_path,
+    )
+
+    with np.load(output_path, allow_pickle=True) as data:
+        assert data["features"].shape == (2, 3, 2)
+        assert data["layers"].tolist() == [0, 1, 2]
+        assert data["labels_behavior"].astype(str).tolist() == ["REFUSED", "COMPLIED"]
+        assert data["labels_expected_behavior"].astype(str).tolist() == ["REFUSED", "COMPLIED"]
+        assert data["labels_target_operator"].astype(str).tolist() == ["^3", "^2"]
 
 
 def test_v5_prespeech_gate_blocks_without_balanced_payloads(tmp_path: Path):

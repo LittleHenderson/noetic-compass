@@ -1,0 +1,165 @@
+{
+  "best_layer": {
+    "hidden_minus_text": 0.020988,
+    "layer": 2,
+    "supervised_w0_chain_break_balanced_accuracy": 0.730487
+  },
+  "claim": "Diagnostic only. Public internal prompt-injection detection remains OPEN / NOT LICENSED unless hidden beats text/payload/domain/layer-0 controls and causal gates pass.",
+  "dataset": "D:\\tksCAS-archive\\w0_rpm_lacunarity_all_layers_qwen_20260611\\enabled_predicate_w0_all_layers_dataset.npz",
+  "input_access": {
+    "behavior_labels_used_as_evaluation_target": true,
+    "reads_model_output_text_as_feature": false,
+    "reads_prompt_stage_hidden_states": true
+  },
+  "layers": [
+    {
+      "hidden_minus_text": -0.209499,
+      "layer": 0,
+      "supervised_w0_chain_break_balanced_accuracy": 0.5
+    },
+    {
+      "hidden_minus_text": 0.000957,
+      "layer": 1,
+      "supervised_w0_chain_break_balanced_accuracy": 0.710456
+    },
+    {
+      "hidden_minus_text": 0.020988,
+      "layer": 2,
+      "supervised_w0_chain_break_balanced_accuracy": 0.730487
+    },
+    {
+      "hidden_minus_text": -0.003636,
+      "layer": 3,
+      "supervised_w0_chain_break_balanced_accuracy": 0.705863
+    },
+    {
+      "hidden_minus_text": 0.017735,
+      "layer": 4,
+      "supervised_w0_chain_break_balanced_accuracy": 0.727234
+    },
+    {
+      "hidden_minus_text": 0.010909,
+      "layer": 5,
+      "supervised_w0_chain_break_balanced_accuracy": 0.720408
+    },
+    {
+      "hidden_minus_text": -0.016905,
+      "layer": 6,
+      "supervised_w0_chain_break_balanced_accuracy": 0.692594
+    },
+    {
+      "hidden_minus_text": 0.007272,
+      "layer": 7,
+      "supervised_w0_chain_break_balanced_accuracy": 0.716771
+    },
+    {
+      "hidden_minus_text": 0.003636,
+      "layer": 8,
+      "supervised_w0_chain_break_balanced_accuracy": 0.713135
+    },
+    {
+      "hidden_minus_text": -0.014609,
+      "layer": 9,
+      "supervised_w0_chain_break_balanced_accuracy": 0.69489
+    },
+    {
+      "hidden_minus_text": 0.002233,
+      "layer": 10,
+      "supervised_w0_chain_break_balanced_accuracy": 0.711732
+    },
+    {
+      "hidden_minus_text": -0.017352,
+      "layer": 11,
+      "supervised_w0_chain_break_balanced_accuracy": 0.692147
+    },
+    {
+      "hidden_minus_text": 0.002233,
+      "layer": 12,
+      "supervised_w0_chain_break_balanced_accuracy": 0.711732
+    },
+    {
+      "hidden_minus_text": -0.013716,
+      "layer": 13,
+      "supervised_w0_chain_break_balanced_accuracy": 0.695783
+    },
+    {
+      "hidden_minus_text": -0.00504,
+      "layer": 14,
+      "supervised_w0_chain_break_balanced_accuracy": 0.704459
+    },
+    {
+      "hidden_minus_text": -0.022838,
+      "layer": 15,
+      "supervised_w0_chain_break_balanced_accuracy": 0.686661
+    },
+    {
+      "hidden_minus_text": -0.010079,
+      "layer": 16,
+      "supervised_w0_chain_break_balanced_accuracy": 0.699419
+    },
+    {
+      "hidden_minus_text": -0.011419,
+      "layer": 17,
+      "supervised_w0_chain_break_balanced_accuracy": 0.69808
+    },
+    {
+      "hidden_minus_text": -0.012823,
+      "layer": 18,
+      "supervised_w0_chain_break_balanced_accuracy": 0.696676
+    },
+    {
+      "hidden_minus_text": -0.041976,
+      "layer": 19,
+      "supervised_w0_chain_break_balanced_accuracy": 0.667523
+    },
+    {
+      "hidden_minus_text": -0.026921,
+      "layer": 20,
+      "supervised_w0_chain_break_balanced_accuracy": 0.682578
+    },
+    {
+      "hidden_minus_text": -0.024178,
+      "layer": 21,
+      "supervised_w0_chain_break_balanced_accuracy": 0.685321
+    },
+    {
+      "hidden_minus_text": -0.006379,
+      "layer": 22,
+      "supervised_w0_chain_break_balanced_accuracy": 0.70312
+    },
+    {
+      "hidden_minus_text": -0.018245,
+      "layer": 23,
+      "supervised_w0_chain_break_balanced_accuracy": 0.691254
+    },
+    {
+      "hidden_minus_text": -0.020988,
+      "layer": 24,
+      "supervised_w0_chain_break_balanced_accuracy": 0.688511
+    },
+    {
+      "hidden_minus_text": -0.018245,
+      "layer": 25,
+      "supervised_w0_chain_break_balanced_accuracy": 0.691254
+    },
+    {
+      "hidden_minus_text": -0.025071,
+      "layer": 26,
+      "supervised_w0_chain_break_balanced_accuracy": 0.684428
+    },
+    {
+      "hidden_minus_text": 0.013205,
+      "layer": 27,
+      "supervised_w0_chain_break_balanced_accuracy": 0.722704
+    },
+    {
+      "hidden_minus_text": 0.002233,
+      "layer": 28,
+      "supervised_w0_chain_break_balanced_accuracy": 0.711732
+    }
+  ],
+  "row_count": 800,
+  "schema_version": "cas_harness_w0_supervised_chain_break_all_layers.v1",
+  "target": "BROKEN if observed behavior label differs from intended ^2/^3 prompt role, else INTACT",
+  "text_baseline_balanced_accuracy": 0.709499
+}
