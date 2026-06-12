@@ -92,6 +92,7 @@ def parse_args() -> Any:
     parser.add_argument("--model-revision")
     parser.add_argument("--torch-dtype", default="float16")
     parser.add_argument("--device-map", default="auto")
+    parser.add_argument("--scenario-offset", type=int, default=0)
     parser.add_argument("--max-scenarios", type=int, default=0)
     parser.add_argument("--max-length", type=int, default=256)
     parser.add_argument("--max-new-tokens", type=int, default=96)
@@ -112,6 +113,7 @@ def main() -> int:
         model_revision=args.model_revision,
         torch_dtype=args.torch_dtype,
         device_map=args.device_map,
+        scenario_offset=args.scenario_offset,
         max_scenarios=args.max_scenarios,
         max_length=args.max_length,
         max_new_tokens=args.max_new_tokens,
@@ -133,6 +135,7 @@ def run_enabled_predicate_capture(
     model_revision: str | None,
     torch_dtype: str,
     device_map: str,
+    scenario_offset: int,
     max_scenarios: int,
     max_length: int,
     max_new_tokens: int,
@@ -142,6 +145,10 @@ def run_enabled_predicate_capture(
     trust_remote_code: bool,
 ) -> dict[str, Any]:
     scenarios = load_prompt_bank(prompt_bank_path)
+    if scenario_offset < 0:
+        raise ValueError("scenario_offset must be non-negative")
+    if scenario_offset:
+        scenarios = scenarios[scenario_offset:]
     if max_scenarios > 0:
         scenarios = scenarios[:max_scenarios]
     model, tokenizer, model_info = load_model(
@@ -157,8 +164,12 @@ def run_enabled_predicate_capture(
     labels_path = output_dir / "enabled_predicate_labels.jsonl"
     dataset_path = output_dir / "enabled_predicate_w0_dataset.npz"
     metadata_path = output_dir / "enabled_predicate_capture_manifest.json"
+    checkpoint_rows_path = output_dir / "enabled_predicate_checkpoint_rows.jsonl"
 
     rows: list[dict[str, Any]] = []
+    generations_path.write_text("", encoding="utf-8")
+    labels_path.write_text("", encoding="utf-8")
+    checkpoint_rows_path.write_text("", encoding="utf-8")
     for index, scenario in enumerate(scenarios, 1):
         sample_seed = parse_sample_seed(str(scenario["id"]), fallback=index)
         model_prompt = format_model_prompt(
@@ -205,6 +216,9 @@ def run_enabled_predicate_capture(
             "target_layer_vec": vectors["target"].tolist(),
         }
         rows.append(row)
+        append_jsonl(generations_path, [generation_row(row, model_id=model_id, target_layer=target_layer)])
+        append_jsonl(labels_path, [label_row(row)])
+        append_jsonl(checkpoint_rows_path, [checkpoint_row(row)])
         print(
             f"[enabled-capture] {index}/{len(scenarios)} {scenario['id']} "
             f"label={label} prompt_tokens={token_count} new_tokens={continuation_tokens}",
@@ -220,11 +234,13 @@ def run_enabled_predicate_capture(
         model_revision=model_revision,
         model_info=model_info,
         prompt_bank_path=prompt_bank_path,
+        scenario_offset=scenario_offset,
         target_layer=target_layer,
         prompt_format=prompt_format,
         generations_path=generations_path,
         labels_path=labels_path,
         dataset_path=dataset_path,
+        checkpoint_rows_path=checkpoint_rows_path,
     )
     metadata_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
     print(f"[enabled-capture] wrote {generations_path}")
@@ -347,6 +363,7 @@ def generate_continuation(
         "max_new_tokens": int(max_new_tokens),
         "pad_token_id": tokenizer.pad_token_id or tokenizer.eos_token_id,
         "eos_token_id": tokenizer.eos_token_id,
+        "use_cache": False,
     }
     if temperature > 0:
         generation_kwargs.update({"do_sample": True, "temperature": float(temperature), "top_p": float(top_p)})
@@ -482,9 +499,35 @@ def label_row(row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def checkpoint_row(row: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "trace_id": row["trace_id"],
+        "scenario_id": row["scenario_id"],
+        "prompt_group_id": row["prompt_group_id"],
+        "payload_class": row["payload_class"],
+        "domain": row["domain"],
+        "label": row["label"],
+        "expected_behavior": row.get("expected_behavior"),
+        "target_enabled_predicate": row.get("target_enabled_predicate"),
+        "target_operator": row.get("target_operator"),
+        "verifier": row["verifier"],
+        "sample_seed": row["sample_seed"],
+        "prompt_token_count": row["prompt_token_count"],
+        "continuation_token_count": row["continuation_token_count"],
+    }
+
+
 def write_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in rows), encoding="utf-8")
+
+
+def append_jsonl(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a", encoding="utf-8") as handle:
+        for row in rows:
+            handle.write(json.dumps(row, sort_keys=True) + "\n")
+        handle.flush()
 
 
 def build_summary(
@@ -495,10 +538,12 @@ def build_summary(
     model_info: dict[str, Any],
     prompt_bank_path: Path,
     target_layer: int,
+    scenario_offset: int,
     prompt_format: str,
     generations_path: Path,
     labels_path: Path,
     dataset_path: Path,
+    checkpoint_rows_path: Path,
 ) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
@@ -507,6 +552,7 @@ def build_summary(
         "model_revision": model_revision,
         "model_info": model_info,
         "prompt_bank": str(prompt_bank_path),
+        "scenario_offset": int(scenario_offset),
         "prompt_format": prompt_format,
         "target_layer": int(target_layer),
         "layers": [0, int(target_layer)],
@@ -516,6 +562,7 @@ def build_summary(
         "generations": str(generations_path),
         "labels": str(labels_path),
         "dataset": str(dataset_path),
+        "checkpoint_rows": str(checkpoint_rows_path),
         "claim": "OPEN / NOT LICENSED for pre-speech detection.",
         "important_limit": (
             "This capture uses heuristic labels for screening unless replaced by a "
