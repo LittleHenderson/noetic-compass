@@ -116,6 +116,45 @@ Claim boundary remains strict: this proves the all-layer internal W0 capture pat
 
 Recommended next move: build a cleaner matched-prompt dataset where surface prompt text does not encode the intended `COMPLIED` / `REFUSED` role so strongly, then rerun W0 all-layer capture with compatible noetic/domain/40-state readouts and the same text/payload/domain/layer-0/permutation controls. Do not run live steering/ablation until the hidden readout clearly beats those controls.
 
+## 2026-06-12 v6 Matched-Prompt Chain-Break Tooling
+
+Codex implemented the stronger v6 matched-prompt chain-break workstream in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
+
+Implemented:
+
+- `live-trace-worker/scripts/build_matched_prompt_chain_break_bank.py` builds exact repeated prompt groups for W0 chain-break campaigns. The default `borderline` bank has `40` exact prompt groups and `640` rows. The `calibrated` variant has `80` exact prompt groups and `640` rows split between borderline and anchored-safe prompts.
+- `live-trace-worker/scripts/screen_matched_prompt_chain_break_campaign.py` converts judged `COMPLIED` / `REFUSED` labels into `BROKEN` / `INTACT` and blocks W0 capture unless exact prompt grouping, same-prompt mixed outcomes, payload balance, and `BROKEN` / `INTACT` floors pass.
+- `live-trace-worker/scripts/evaluate_behavior_v6_matched_prespeech.py` separates prompt-level W0 chain-break risk from sample-specific stochastic branch prediction. It keeps sample-specific branch prediction `OPEN` / `NOT LICENSED` because exact repeated prompts share the same prompt-stage W0 vector under ordinary deterministic forward capture.
+- `live-trace-worker/scripts/run_enabled_predicate_capture.py` now preserves `labels_expected_behavior`, `labels_target_operator`, and `labels_target_enabled_predicate` in fast two-layer capture NPZ files.
+- Generated banks:
+  - `live-trace-worker/scenarios/matched_prompt_chain_break_bank_v0.json`
+  - `live-trace-worker/scenarios/matched_prompt_chain_break_calibrated_bank_v1.json`
+- Result note: `docs/working/qwen_v6_matched_chain_break_result_20260612.md`
+
+Verification:
+
+- `python -m py_compile live-trace-worker\scripts\run_enabled_predicate_capture.py live-trace-worker\scripts\build_matched_prompt_chain_break_bank.py live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py live-trace-worker\scripts\evaluate_behavior_v6_matched_prespeech.py` passed.
+- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `17 passed`.
+
+Real Qwen v6 screen:
+
+- Pod: `root@194.68.245.165 -p 22089`
+- Model: `Qwen/Qwen2.5-1.5B-Instruct`
+- Bank: `matched_prompt_chain_break_bank_v0.json`
+- Rows: `640`
+- Exact prompt groups: `40`
+- Screen status: `BLOCKED`
+- `BROKEN`: `555`
+- `INTACT`: `85`
+- Mixed exact prompt groups: `22 / 40`
+- Testable payload classes: `3 / 5`
+- Archive: `D:\tksCAS-archive\qwen_v6_matched_chain_break_20260612\qwen_v6_matched_chain_break_20260612.tgz`
+- Archive SHA-256: `11F20F856329CCF788C27003E3D63446E01D9DE5DD78E7F0C16BEF4F66C5865F`
+
+Claim boundary remains strict: this is stronger tooling and a useful blocked screen, not a public internal detector pass. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` and `NOT LICENSED`.
+
+Recommended next move: run the calibrated bank with a more reliable short-generation capture profile or a more refusal-stable model, then screen again. Only run all-layer W0 capture and v6 W0 evaluation after the matched screener reports enough exact prompt groups, payload balance, and both `BROKEN` / `INTACT` rows.
+
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
 Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
