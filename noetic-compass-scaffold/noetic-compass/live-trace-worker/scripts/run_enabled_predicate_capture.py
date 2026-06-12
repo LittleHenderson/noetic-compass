@@ -96,6 +96,7 @@ def parse_args() -> Any:
     parser.add_argument("--max-scenarios", type=int, default=0)
     parser.add_argument("--max-length", type=int, default=256)
     parser.add_argument("--max-new-tokens", type=int, default=96)
+    parser.add_argument("--generation-max-time", type=float, default=0.0)
     parser.add_argument("--temperature", type=float, default=0.7)
     parser.add_argument("--top-p", type=float, default=0.95)
     parser.add_argument("--prompt-format", choices=("chat-auto", "raw"), default="chat-auto")
@@ -117,6 +118,7 @@ def main() -> int:
         max_scenarios=args.max_scenarios,
         max_length=args.max_length,
         max_new_tokens=args.max_new_tokens,
+        generation_max_time=args.generation_max_time,
         temperature=args.temperature,
         top_p=args.top_p,
         prompt_format=args.prompt_format,
@@ -139,6 +141,7 @@ def run_enabled_predicate_capture(
     max_scenarios: int,
     max_length: int,
     max_new_tokens: int,
+    generation_max_time: float,
     temperature: float,
     top_p: float,
     prompt_format: str,
@@ -191,6 +194,7 @@ def run_enabled_predicate_capture(
             seed=sample_seed,
             max_length=max_length,
             max_new_tokens=max_new_tokens,
+            generation_max_time=generation_max_time,
             temperature=temperature,
             top_p=top_p,
         )
@@ -346,6 +350,7 @@ def generate_continuation(
     seed: int,
     max_length: int,
     max_new_tokens: int,
+    generation_max_time: float,
     temperature: float,
     top_p: float,
 ) -> tuple[str, int]:
@@ -365,6 +370,8 @@ def generate_continuation(
         "eos_token_id": tokenizer.eos_token_id,
         "use_cache": False,
     }
+    if generation_max_time > 0:
+        generation_kwargs["max_time"] = float(generation_max_time)
     if temperature > 0:
         generation_kwargs.update({"do_sample": True, "temperature": float(temperature), "top_p": float(top_p)})
     else:
