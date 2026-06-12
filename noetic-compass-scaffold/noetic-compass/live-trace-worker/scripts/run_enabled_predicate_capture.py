@@ -411,10 +411,19 @@ def write_probe_npz(*, rows: list[dict[str, Any]], path: Path, target_layer: int
         prompts=np.asarray([row["prompt"] for row in rows], dtype=object),
         scenario_ids=np.asarray([row["scenario_id"] for row in rows], dtype=object),
         trace_ids=np.asarray([row["trace_id"] for row in rows], dtype=object),
-        axis_names=np.asarray(["behavior", "payload_class", "domain"], dtype=object),
+        axis_names=np.asarray(
+            ["behavior", "expected_behavior", "payload_class", "domain", "target_operator"],
+            dtype=object,
+        ),
         labels_behavior=np.asarray([row["label"] for row in rows], dtype=object),
+        labels_expected_behavior=np.asarray([row.get("expected_behavior", "") for row in rows], dtype=object),
         labels_payload_class=np.asarray([row["payload_class"] for row in rows], dtype=object),
         labels_domain=np.asarray([row["domain"] for row in rows], dtype=object),
+        labels_target_operator=np.asarray([row.get("target_operator", "") for row in rows], dtype=object),
+        labels_target_enabled_predicate=np.asarray(
+            [row.get("target_enabled_predicate", "") for row in rows],
+            dtype=object,
+        ),
     )
 
 
