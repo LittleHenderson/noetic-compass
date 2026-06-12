@@ -155,6 +155,20 @@ Claim boundary remains strict: this is stronger tooling and a useful blocked scr
 
 Recommended next move: run the calibrated bank with a more reliable short-generation capture profile or a more refusal-stable model, then screen again. Only run all-layer W0 capture and v6 W0 evaluation after the matched screener reports enough exact prompt groups, payload balance, and both `BROKEN` / `INTACT` rows.
 
+Continuation update:
+
+- `live-trace-worker/scripts/run_enabled_predicate_capture.py` now supports `--scenario-offset`, per-row checkpoint JSONL files, `use_cache=False`, and `--generation-max-time` so partial screening labels survive slow or wedged generations.
+- Generated `matched_prompt_chain_break_calibrated_bank_v1_s4.json`: `320` rows, `80` exact prompt groups, `5` payload classes, `4` samples per exact prompt.
+- Local verification stayed green: `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `17 passed`.
+- Phi-3-mini calibrated capture was attempted in `float16` and `float32`; both failed with `RuntimeError: probability tensor contains either inf, nan or element < 0`.
+- Qwen calibrated long-token sampling without a time cap stalled on specific rows.
+- Qwen short-token sampling completed rows but truncated too hard; labels were all `COMPLIED`, so it was not a valid balance screen.
+- Qwen `max_new_tokens=12` / `generation_max_time=10` partial screen was stopped after the labels still showed only `BROKEN=17`, `INTACT=0`, and `mixed_prompt_group_count=0`.
+- Continuation archive: `D:\tksCAS-archive\qwen_v6_calibrated_continuation_20260612\qwen_v6_calibrated_continuation_20260612.tgz`
+- Continuation archive SHA-256: `BB030F1B57B2E511129E824E5E419F49F5D32F1210978E0839FE34B57B25DC44`
+
+Updated recommended next move: do not spend on all-layer W0 capture yet. The next valid attempt is either a stronger external/human judge over longer completed outputs, or a revised bank seeded from the v0 prompt groups that actually produced `INTACT` behavior. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` and `NOT LICENSED`.
+
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
 Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
