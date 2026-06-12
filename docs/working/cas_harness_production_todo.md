@@ -47,6 +47,41 @@ Claim boundary remains strict: this is a marketable shadow structural screen for
 
 Recommended next move: feed the strongest injection and hallucination-risk examples through the hosted Audit Console path and verify the UI exposes `rpm_reason_break`, `rpm_lacunarity_spike`, and the quarantine proposal in real Evidence Packet sessions.
 
+## 2026-06-11 Internal W0 RPM/Lacunarity Diagnostic
+
+Codex implemented and ran the internal hidden-state version of the user's RPM/lacunarity idea in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
+
+Implemented:
+
+- `live-trace-worker/scripts/evaluate_w0_rpm_lacunarity.py` reads prompt-stage W0 hidden-state vectors from a captured NPZ and never uses model output text as an input feature.
+- The evaluator applies the Qwen Gate-A noetic-10 probe to layer-14 W0 vectors, computes `^2/^3` RPM intended-operator satisfaction, computes noetic-10 lacunarity, trains an internal W0 domain readout, composes a 10x4 state-profile proxy, and reports Axis-A pathway disruption.
+- It optionally uses generated behavior labels only as post-hoc evaluation labels for outcome mismatch / chain-break scoring.
+- Result artifacts:
+  - JSON: `docs/working/w0_rpm_lacunarity_qwen_result_20260611.json`
+  - Summary: `docs/working/w0_rpm_lacunarity_qwen_result_20260611.md`
+
+Verification:
+
+- `python -m py_compile live-trace-worker\scripts\evaluate_w0_rpm_lacunarity.py` passed.
+- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `12 passed`.
+- Real Qwen 800-row W0 run completed using `D:\tksCAS-archive\qwen_gate_a_20260610\qwen2p5_1p5b_noetic_probes_v1_20260610.npz`.
+
+Qwen result:
+
+- `rpm_intent_balanced_accuracy`: `0.5`
+- `text_intent_balanced_accuracy`: `1.0`
+- `hidden_minus_text_intent_balanced_accuracy`: `-0.5`
+- `outcome_mismatch_count`: `214 / 800`
+- `rpm_break_score_outcome_mismatch_auc`: `0.494402`
+- `lacunarity_outcome_mismatch_auc`: `0.395801`
+- `supervised_w0_chain_break_balanced_accuracy`: `0.686661`
+- `supervised_text_chain_break_balanced_accuracy`: `0.709499`
+- `supervised_w0_minus_text_chain_break_balanced_accuracy`: `-0.022838`
+
+Claim boundary remains strict: this is an internal hidden-state diagnostic, but the current Qwen W0 artifact does not show a winning internal RPM/lacunarity detector. Prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, causal compliance-state detection, and payload-independent comply/refuse detection remain `OPEN` and `NOT LICENSED`.
+
+Recommended next move: recapture prompt-stage activations across all layers, not just `[0, target]`, and apply or train compatible noetic/domain/40-state readouts per layer. A public internal detector claim must beat text, payload, domain, and layer-0 baselines and still needs live steering/ablation for causal proof.
+
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
 Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
