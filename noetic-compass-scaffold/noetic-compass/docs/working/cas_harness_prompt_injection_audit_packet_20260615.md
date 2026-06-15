@@ -76,6 +76,8 @@ Current evidence:
 - Commit: `23a9dc140b6aea2d413072bbf9bab0ce0fb787bf`
 - Relabel verifier: `cas_boundary_intact_v1`
 - Prompt bank: `live-trace-worker/scenarios/matched_prompt_chain_break_bank_v0_s32.json`
+- Combined gate runner: `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py`
+- Combined gate manifest: `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615/combined_gate_manifest.json`
 - Relabel report: `docs/working/qwen_v6_matched_chain_break_boundary_relabel_report_seed00_15_20260615.json`
 - Screen report: `docs/working/qwen_v6_matched_chain_break_boundary_screen_report_seed00_15_20260615.json`
 
@@ -94,6 +96,17 @@ Screen result:
 - `balanced_payload_floor_pass`: `true`
 - `same_prompt_mixed_group_floor_pass`: `false`
 
+Combined gate result:
+
+- `status`: `BLOCKED`
+- `rows_relabelled`: `640`
+- `rows_accepted_by_screen`: `640`
+- `BROKEN`: `161`
+- `INTACT`: `479`
+- `testable_payload_class_count`: `5`
+- `mixed_prompt_group_count`: `36`
+- `same_prompt_mixed_group_floor_pass`: `false`
+
 Meaning:
 
 The relabeler fixed a real measurement problem: safe boundary-preserving answers were being mislabeled as `COMPLIED` when they did not use stock refusal wording. But the matched-prompt screen still does not authorize all-layer W0 capture or internal detector claims.
@@ -102,14 +115,16 @@ Verification commands:
 
 ```powershell
 python -m py_compile live-trace-worker\scripts\relabel_matched_prompt_chain_break_generations.py live-trace-worker\scripts\sample_matched_prompt_chain_break_generations.py live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py
+python -m py_compile live-trace-worker\scripts\run_matched_chain_break_combined_gate.py live-trace-worker\scripts\relabel_matched_prompt_chain_break_generations.py live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py
 python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q
 python live-trace-worker\scripts\relabel_matched_prompt_chain_break_generations.py --prompt-bank live-trace-worker\scenarios\matched_prompt_chain_break_bank_v0_s32.json --generations D:\tksCAS-archive\qwen_v6_matched_chain_break_20260612\remote_full_generations\enabled_predicate_generations.jsonl --output-labels docs\working\qwen_v6_matched_chain_break_boundary_labels_v1_seed00_15_20260615.jsonl --output-report docs\working\qwen_v6_matched_chain_break_boundary_relabel_report_seed00_15_20260615.json
 python live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py --prompt-bank live-trace-worker\scenarios\matched_prompt_chain_break_bank_v0_s32.json --labels docs\working\qwen_v6_matched_chain_break_boundary_labels_v1_seed00_15_20260615.jsonl --output-report docs\working\qwen_v6_matched_chain_break_boundary_screen_report_seed00_15_20260615.json
+python live-trace-worker\scripts\run_matched_chain_break_combined_gate.py --prompt-bank live-trace-worker\scenarios\matched_prompt_chain_break_bank_v0_s32.json --generations D:\tksCAS-archive\qwen_v6_matched_chain_break_20260612\remote_full_generations\enabled_predicate_generations.jsonl --output-dir docs\working\qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615
 ```
 
 Observed test result:
 
-- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
+- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `20 passed`.
 
 ## Artifact Hashes
 
@@ -135,6 +150,14 @@ Key file hashes:
   - SHA-256: `12F5232435B941AD413ED234107CB968263CF0B61F6ECF354B3D4E8D555A0ABE`
 - `live-trace-worker/scripts/sample_matched_prompt_chain_break_generations.py`
   - SHA-256: `4185C03A8BFB6EE34D48A890BDBFB1CE767DC8DD4DD83934A1D9320C40B8D270`
+- `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py`
+  - SHA-256: `F1C1B797DCB8C457F8F45BF40EDBBDABF030B94AA5CA4FD824C1C0A3940DCD5B`
+- `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615/combined_gate_manifest.json`
+  - SHA-256: `9AF7D8983298E076F63A4ED1F801FD92C7F2766C1689CA31FF2AB9521294C28D`
+- `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615/combined_boundary_relabel_report.json`
+  - SHA-256: `F6386D9C0BBB40D120DF4C964389FC78F7FE4B9DCE24D6A087EB1064F3BD0377`
+- `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615/combined_matched_screen_report.json`
+  - SHA-256: `C2FAE2B7BAE89A0D2972F5AA880A6D6B1518B0F89DA71743547E9FC24F1F9A09`
 
 ## Auditor Checklist
 
@@ -149,7 +172,7 @@ An auditor should verify:
 
 ## Next Gate
 
-Recover or rerun the Qwen seed `16..31` generation-only campaign, relabel it with `cas_boundary_intact_v1`, combine it with seed `00..15`, and screen the combined labels against `matched_prompt_chain_break_bank_v0_s32.json`.
+Recover or rerun the Qwen seed `16..31` generation-only campaign, then run `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py` with both seed `00..15` and seed `16..31` generation files against `matched_prompt_chain_break_bank_v0_s32.json`.
 
 Only if the combined screen reports `READY_FOR_W0_CAPTURE` should CAS Harness spend on all-layer W0 capture and `evaluate_behavior_v6_matched_prespeech.py`.
 

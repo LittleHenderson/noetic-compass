@@ -96,13 +96,21 @@ Boundary-judge continuation:
 
 - Pulled the full saved Qwen seed `00-15` generations from the pod path recorded in the v6 manifest.
 - The first heuristic had mislabeled many safe chain-preserving outputs as `COMPLIED` because they did not contain stock refusal phrases.
+- Added `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py`, a one-command gate runner that relabels saved generations, screens the combined labels, and writes a manifest with the data-readiness claim ceiling.
 - `cas_boundary_intact_v1` relabel result:
   - Original behavior distribution: `COMPLIED=555`, `REFUSED=85`.
   - Boundary relabel distribution: `COMPLIED=161`, `REFUSED=479`.
   - Chain distribution: `BROKEN=161`, `INTACT=479`.
   - Payload balance recovered: all `5` payload classes now have at least `10` `BROKEN` and `10` `INTACT` rows.
   - Same-prompt mixed groups: `36 / 40`.
-- Boundary relabel screen remains `BLOCKED` because the required same-prompt mixed group floor is `40`.
+- Combined gate artifact: `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615/combined_gate_manifest.json`.
+- Combined gate status: `BLOCKED`.
+- Combined gate metrics:
+  - `BROKEN=161`, `INTACT=479`.
+  - `testable_payload_class_count=5`.
+  - `mixed_prompt_group_count=36`.
+  - `same_prompt_mixed_group_floor_pass=false`.
+- The combined seed `00..15` gate remains `BLOCKED` because the required same-prompt mixed group floor is `40`.
 - Generated seed banks:
   - `live-trace-worker/scenarios/matched_prompt_chain_break_bank_v0_s32.json`: `1280` rows, seeds `0..31`.
   - `live-trace-worker/scenarios/matched_prompt_chain_break_bank_v0_seed16_s16.json`: `640` rows, seeds `16..31`.
@@ -115,9 +123,11 @@ Audit packet:
 - Purpose: give an auditor the exact claim boundary, evidence files, verification commands, hashes, and next gate.
 - 2026-06-15 verification rerun:
   - `python -m py_compile api\services\cas_harness_instruction_integrity.py live-trace-worker\scripts\relabel_matched_prompt_chain_break_generations.py live-trace-worker\scripts\sample_matched_prompt_chain_break_generations.py live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py` passed.
+  - `python -m py_compile live-trace-worker\scripts\run_matched_chain_break_combined_gate.py live-trace-worker\scripts\relabel_matched_prompt_chain_break_generations.py live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py` passed.
   - `python -m pytest tests\test_cas_harness_instruction_integrity.py -q` passed `10 passed`.
   - `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` passed `15 / 15`, with `injected_recall=1.0`, `benign_false_positive_rate=0.0`, and `overall_pass=true`.
-  - `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
+  - `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `20 passed`.
+  - `python live-trace-worker\scripts\run_matched_chain_break_combined_gate.py --prompt-bank live-trace-worker\scenarios\matched_prompt_chain_break_bank_v0_s32.json --generations D:\tksCAS-archive\qwen_v6_matched_chain_break_20260612\remote_full_generations\enabled_predicate_generations.jsonl --output-dir docs\working\qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615` passed and wrote a `BLOCKED` manifest.
   - Pod recovery attempts to `194.68.245.165:22089` and `194.68.245.165:22046` timed out, so seed `16..31` remains unrecovered.
 
 ## Archive
@@ -142,4 +152,4 @@ The implemented v6 tooling is a stronger gate and campaign harness. The first re
 
 ## Next Move
 
-Do not spend on all-layer W0 capture yet. First recover or rerun the seed `16..31` generation-only screen, relabel with `cas_boundary_intact_v1`, and screen the combined seed `0..31` labels against `matched_prompt_chain_break_bank_v0_s32.json`. Only run all-layer W0 capture and v6 W0 evaluation after the matched screener reports enough exact prompt groups, payload balance, and both `BROKEN` / `INTACT` rows.
+Do not spend on all-layer W0 capture yet. First recover or rerun the seed `16..31` generation-only screen, then run `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py` with both seed `00..15` and seed `16..31` generation files against `matched_prompt_chain_break_bank_v0_s32.json`. Only run all-layer W0 capture and v6 W0 evaluation after the combined gate reports `READY_FOR_W0_CAPTURE`.
