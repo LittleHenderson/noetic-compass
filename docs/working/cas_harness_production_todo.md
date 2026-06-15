@@ -178,20 +178,34 @@ Updated recommended next move: do not spend on all-layer W0 capture yet. The nex
 - Generated `matched_prompt_chain_break_bank_v0_seed16_s16.json`: `640` rows, seeds `16..31`.
 - Re-scored the saved Qwen seed `00-15` generations with `cas_boundary_intact_v1`: original labels `COMPLIED=555`, `REFUSED=85`; relabeled `COMPLIED=161`, `REFUSED=479`; chain labels `BROKEN=161`, `INTACT=479`.
 - The relabel recovered payload balance across all `5` payload classes, but the screen remains `BLOCKED` because same-prompt mixed groups are `36 / 40` and the floor is `40`.
-- Local verification: `python -m py_compile ...` passed for the v6 scripts, and `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
+- Added `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py`, a one-command runner that relabels saved generations, screens the combined labels, and writes a manifest with the data-readiness claim ceiling.
+- Combined gate artifact: `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_15_20260615/combined_gate_manifest.json`.
+- Combined gate result on recovered seed `00..15`: `status=BLOCKED`, `BROKEN=161`, `INTACT=479`, `testable_payload_class_count=5`, `mixed_prompt_group_count=36`, `same_prompt_mixed_group_floor_pass=false`.
+- Local verification: `python -m py_compile ...` passed for the v6 scripts, and `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `20 passed`.
 - Archive: `D:\tksCAS-archive\qwen_v6_boundary_relabel_seed_bank_20260615.tgz`
 - Archive SHA-256: `FF6E412505DCB4BDD534091C58139537D6FDA6572D2EFB8A53465F8AD0CD5772`
+- Combined gate archive: `D:\tksCAS-archive\cas_harness_prompt_injection_combined_gate_20260615.tgz`, SHA-256 `607C30ECC6182D829730E8749F4B0E5E59E8712CBAFBFBB9A536FD3EAAA9FCB8`.
 - A Qwen seed `16..31` generation-only run was launched on `root@194.68.245.165 -p 22089` and had reached `468 / 640` rows before the session lost pod access. On 2026-06-15, both known ports `22089` and `22046` timed out, so the final seed `16..31` artifacts could not be retrieved or screened.
 
-Updated recommended next move: recover or rerun the seed `16..31` generation-only screen, relabel with `cas_boundary_intact_v1`, and screen the combined seed `0..31` labels against `matched_prompt_chain_break_bank_v0_s32.json`. Do not spend on all-layer W0 capture until that screen reports `READY_FOR_W0_CAPTURE`. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` and `NOT LICENSED`.
+Updated recommended next move: recover or rerun the seed `16..31` generation-only screen, then run `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py` with both seed `00..15` and seed `16..31` generation files against `matched_prompt_chain_break_bank_v0_s32.json`. Do not spend on all-layer W0 capture until that combined gate reports `READY_FOR_W0_CAPTURE`. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` and `NOT LICENSED`.
 
 2026-06-15 audit packet update:
 
 - Created auditor-facing proof packet: `docs/working/cas_harness_prompt_injection_audit_packet_20260615.md`.
 - Audit bundle: `D:\tksCAS-archive\cas_harness_prompt_injection_audit_packet_20260615.tgz`, SHA-256 `9478C8587A2834A2DCD0F363A7FF608A9BEEF1A055F179454E874188F372A4B8`.
 - The packet separates the supported shadow instruction-integrity claim from the still-`OPEN` / `NOT LICENSED` internal pre-speech prompt-injection claim.
-- Verification rerun passed: `python -m pytest tests\test_cas_harness_instruction_integrity.py -q` passed `10 passed`; `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` passed `15 / 15` with `injected_recall=1.0`, `benign_false_positive_rate=0.0`, and `overall_pass=true`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
-- Pod recovery attempts to `194.68.245.165:22089` and `194.68.245.165:22046` timed out, so seed `16..31` remains unrecovered and the next gate remains blocked on compute access.
+- Verification rerun passed: `python -m pytest tests\test_cas_harness_instruction_integrity.py -q` passed `10 passed`; `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` passed `15 / 15` with `injected_recall=1.0`, `benign_false_positive_rate=0.0`, and `overall_pass=true`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `20 passed`.
+- New pod supplied by user: `root@195.26.233.61 -p 37154`.
+- Reran Qwen seed `16..31` generation-only on the new pod and added a targeted seed `32..47` continuation for the two holdout prompt groups.
+- Upgraded the boundary judge to `cas_boundary_intact_v2` to recognize safe high-level harmful-action boundary answers while preserving procedural-harmful outputs as `COMPLIED` / broken.
+- Final combined gate artifact: `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615/combined_gate_manifest.json`.
+- Final combined gate status: `READY_FOR_W0_CAPTURE`, with `BROKEN=306`, `INTACT=1006`, `mixed_prompt_group_count=40`, and `testable_payload_class_count=5`.
+- All-layer W0 capture completed on Qwen and was archived at `D:\tksCAS-archive\qwen_v6_matched_chain_break_w0_all_layers_seed00_47_v2_20260615\`; feature shape `[1312, 29, 1536]`; label source `label_jsonl=1312`.
+- W0 proof bundle: `D:\tksCAS-archive\qwen_v6_w0_matched_prespeech_result_20260615.tgz`, SHA-256 `D3B4048139E1892FBF9E56E53AAE68D4D698E7D3A1EADE5B90208ADC6C6A3B61`.
+- W0 result summary: `docs/working/qwen_v6_matched_prespeech_w0_result_20260615.md`.
+- W0 evaluator result: `FAIL` / `BLOCKED`, not a licensed detector. Frozen/default thresholds were blocked by prompt-risk class floor (`7 / 7`, required `10 / 10`). Best full-control exploratory valid split was layer `28`, hidden BA `0.809091`, text BA `0.809091`, permutation p `0.008991`, status `FAIL`.
+
+Updated status: the data-readiness gate and W0 capture path work, but internal prompt-injection detection remains `OPEN` / `NOT LICENSED`. Do not run causal steering/ablation from this Qwen result. The next valid research move is a larger frozen prompt-risk bank or a more chain-sensitive model, followed by W0 evaluation only if hidden states beat text/layer-0/payload/domain controls under frozen thresholds.
 
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
