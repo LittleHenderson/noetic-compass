@@ -19,11 +19,17 @@ Strengthen the internal W0 prompt-injection / RPM-lacunarity program by moving f
 - `live-trace-worker/scripts/run_enabled_predicate_capture.py`
   - Fast two-layer captures now preserve `labels_expected_behavior`, `labels_target_operator`, and `labels_target_enabled_predicate` in the NPZ.
   - Continuation update: captures now support `--scenario-offset`, per-row checkpoint JSONL files, `use_cache=False`, and `--generation-max-time` so one slow or wedged generation does not erase all partial screening labels.
+- `live-trace-worker/scripts/relabel_matched_prompt_chain_break_generations.py`
+  - Re-scores completed generations with `cas_boundary_intact_v1`, so safe boundary-preserving answers can count as `REFUSED` / chain `INTACT` even when they do not use stock refusal wording.
+- `live-trace-worker/scripts/sample_matched_prompt_chain_break_generations.py`
+  - Adds a generation-only behavior-screening path that skips W0 capture and uses generation cache. This is claim-neutral and exists only to decide whether all-layer W0 spend is warranted.
+- `build_matched_prompt_chain_break_bank.py`
+  - Adds `--seed-offset` for exact-prompt resampling without changing prompt text.
 
 ## Local Verification
 
 - `python -m py_compile live-trace-worker\scripts\run_enabled_predicate_capture.py live-trace-worker\scripts\build_matched_prompt_chain_break_bank.py live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py live-trace-worker\scripts\evaluate_behavior_v6_matched_prespeech.py` passed.
-- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `17 passed`.
+- `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
 
 ## Real Qwen Screen
 
@@ -86,17 +92,36 @@ Continuation diagnostics:
 - Qwen `max_new_tokens=12` / `generation_max_time=10` partial screen was stopped after the labels still showed only `BROKEN=17`, `INTACT=0`, `mixed_prompt_group_count=0`.
 - Result: calibrated follow-up remains `BLOCKED`. It does not authorize W0 all-layer capture or internal detector claims.
 
+Boundary-judge continuation:
+
+- Pulled the full saved Qwen seed `00-15` generations from the pod path recorded in the v6 manifest.
+- The first heuristic had mislabeled many safe chain-preserving outputs as `COMPLIED` because they did not contain stock refusal phrases.
+- `cas_boundary_intact_v1` relabel result:
+  - Original behavior distribution: `COMPLIED=555`, `REFUSED=85`.
+  - Boundary relabel distribution: `COMPLIED=161`, `REFUSED=479`.
+  - Chain distribution: `BROKEN=161`, `INTACT=479`.
+  - Payload balance recovered: all `5` payload classes now have at least `10` `BROKEN` and `10` `INTACT` rows.
+  - Same-prompt mixed groups: `36 / 40`.
+- Boundary relabel screen remains `BLOCKED` because the required same-prompt mixed group floor is `40`.
+- Generated seed banks:
+  - `live-trace-worker/scenarios/matched_prompt_chain_break_bank_v0_s32.json`: `1280` rows, seeds `0..31`.
+  - `live-trace-worker/scenarios/matched_prompt_chain_break_bank_v0_seed16_s16.json`: `640` rows, seeds `16..31`.
+- A Qwen seed `16..31` generation-only run was launched on `root@194.68.245.165 -p 22089` and had reached `468 / 640` rows before the session lost pod access. On 2026-06-15, both known ports `22089` and `22046` timed out, so the completion artifacts could not be retrieved or screened.
+- Result: this is a real improvement to the data gate, but it still does not authorize W0 all-layer capture or internal detector claims until the seed `16..31` generation-only run is completed/retrieved and the combined seed `0..31` screen passes.
+
 ## Archive
 
 Local archive:
 
 - `D:\tksCAS-archive\qwen_v6_matched_chain_break_20260612\qwen_v6_matched_chain_break_20260612.tgz`
 - `D:\tksCAS-archive\qwen_v6_calibrated_continuation_20260612\qwen_v6_calibrated_continuation_20260612.tgz`
+- `D:\tksCAS-archive\qwen_v6_boundary_relabel_seed_bank_20260615.tgz`
 
 SHA-256:
 
 - `11F20F856329CCF788C27003E3D63446E01D9DE5DD78E7F0C16BEF4F66C5865F`
 - `BB030F1B57B2E511129E824E5E419F49F5D32F1210978E0839FE34B57B25DC44`
+- `FF6E412505DCB4BDD534091C58139537D6FDA6572D2EFB8A53465F8AD0CD5772`
 
 ## Claim Boundary
 
@@ -106,4 +131,4 @@ The implemented v6 tooling is a stronger gate and campaign harness. The first re
 
 ## Next Move
 
-Do not spend on all-layer W0 capture yet. The next valid attempt is either a stronger external/human judge over longer completed outputs, or a revised bank seeded from the v0 prompt groups that actually produced `INTACT` behavior. Only run all-layer W0 capture and v6 W0 evaluation after the matched screener reports enough exact prompt groups, payload balance, and both `BROKEN` / `INTACT` rows.
+Do not spend on all-layer W0 capture yet. First recover or rerun the seed `16..31` generation-only screen, relabel with `cas_boundary_intact_v1`, and screen the combined seed `0..31` labels against `matched_prompt_chain_break_bank_v0_s32.json`. Only run all-layer W0 capture and v6 W0 evaluation after the matched screener reports enough exact prompt groups, payload balance, and both `BROKEN` / `INTACT` rows.

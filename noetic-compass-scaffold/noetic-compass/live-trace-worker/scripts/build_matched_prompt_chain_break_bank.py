@@ -25,6 +25,7 @@ from typing import Any
 SCHEMA_VERSION = "cas_harness_matched_prompt_chain_break_bank.v1"
 DEFAULT_SAMPLES_PER_PROMPT = 16
 DEFAULT_VARIANT = "borderline"
+DEFAULT_SEED_OFFSET = 0
 
 
 @dataclass(frozen=True)
@@ -165,6 +166,12 @@ def parse_args() -> Any:
     parser.add_argument("--summary-output", type=Path)
     parser.add_argument("--samples-per-prompt", type=int, default=DEFAULT_SAMPLES_PER_PROMPT)
     parser.add_argument(
+        "--seed-offset",
+        type=int,
+        default=DEFAULT_SEED_OFFSET,
+        help="First sample_seed value to emit; use this to resample an existing exact prompt bank.",
+    )
+    parser.add_argument(
         "--variant",
         choices=("borderline", "calibrated"),
         default=DEFAULT_VARIANT,
@@ -177,6 +184,7 @@ def main() -> int:
     args = parse_args()
     payload = build_matched_prompt_chain_break_bank(
         samples_per_prompt=args.samples_per_prompt,
+        seed_offset=args.seed_offset,
         variant=args.variant,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -194,10 +202,13 @@ def main() -> int:
 def build_matched_prompt_chain_break_bank(
     *,
     samples_per_prompt: int = DEFAULT_SAMPLES_PER_PROMPT,
+    seed_offset: int = DEFAULT_SEED_OFFSET,
     variant: str = DEFAULT_VARIANT,
 ) -> dict[str, Any]:
     if samples_per_prompt <= 1:
         raise ValueError("samples_per_prompt must be greater than 1 for matched-prompt sampling")
+    if seed_offset < 0:
+        raise ValueError("seed_offset must be non-negative")
     template_specs = template_specs_for_variant(variant)
 
     scenarios: list[dict[str, Any]] = []
@@ -209,7 +220,7 @@ def build_matched_prompt_chain_break_bank(
                 group_id = f"v6_matched_{family.payload_class}_refused_{prompt_index:02d}"
             else:
                 group_id = f"v6_matched_{family.payload_class}_refused_{template_kind}_{prompt_index:02d}"
-            for sample_seed in range(samples_per_prompt):
+            for sample_seed in range(seed_offset, seed_offset + samples_per_prompt):
                 scenario_id = f"{group_id}::seed_{sample_seed:02d}"
                 scenarios.append(
                     {
@@ -243,7 +254,12 @@ def build_matched_prompt_chain_break_bank(
                     }
                 )
 
-    summary = summarize_scenarios(scenarios, samples_per_prompt=samples_per_prompt, variant=variant)
+    summary = summarize_scenarios(
+        scenarios,
+        samples_per_prompt=samples_per_prompt,
+        seed_offset=seed_offset,
+        variant=variant,
+    )
     return {
         "schema_version": SCHEMA_VERSION,
         "created_at": datetime.now(UTC).isoformat(),
@@ -257,6 +273,7 @@ def build_matched_prompt_chain_break_bank(
             "matched-prompt W0 evaluation, leakage controls, and causal steering gates pass."
         ),
         "samples_per_prompt": int(samples_per_prompt),
+        "seed_offset": int(seed_offset),
         "variant": variant,
         "scenarios": scenarios,
         "summary": summary,
@@ -287,6 +304,7 @@ def summarize_scenarios(
     scenarios: list[dict[str, Any]],
     *,
     samples_per_prompt: int,
+    seed_offset: int,
     variant: str,
 ) -> dict[str, Any]:
     payload_counts = Counter(str(row["payload_class"]) for row in scenarios)
@@ -302,6 +320,8 @@ def summarize_scenarios(
         "exact_prompt_group_count": int(exact_prompt_group_count),
         "payload_class_count": int(len(payload_counts)),
         "samples_per_prompt": int(samples_per_prompt),
+        "seed_offset": int(seed_offset),
+        "seed_range": [int(seed_offset), int(seed_offset + samples_per_prompt - 1)],
         "variant": variant,
         "payload_class_distribution": dict(sorted(payload_counts.items())),
         "template_kind_distribution": dict(sorted(template_kind_counts.items())),
