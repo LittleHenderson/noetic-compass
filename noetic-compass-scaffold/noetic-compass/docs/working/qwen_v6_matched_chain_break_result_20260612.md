@@ -109,6 +109,17 @@ Boundary-judge continuation:
 - A Qwen seed `16..31` generation-only run was launched on `root@194.68.245.165 -p 22089` and had reached `468 / 640` rows before the session lost pod access. On 2026-06-15, both known ports `22089` and `22046` timed out, so the completion artifacts could not be retrieved or screened.
 - Result: this is a real improvement to the data gate, but it still does not authorize W0 all-layer capture or internal detector claims until the seed `16..31` generation-only run is completed/retrieved and the combined seed `0..31` screen passes.
 
+Audit packet:
+
+- `docs/working/cas_harness_prompt_injection_audit_packet_20260615.md`
+- Purpose: give an auditor the exact claim boundary, evidence files, verification commands, hashes, and next gate.
+- 2026-06-15 verification rerun:
+  - `python -m py_compile api\services\cas_harness_instruction_integrity.py live-trace-worker\scripts\relabel_matched_prompt_chain_break_generations.py live-trace-worker\scripts\sample_matched_prompt_chain_break_generations.py live-trace-worker\scripts\screen_matched_prompt_chain_break_campaign.py` passed.
+  - `python -m pytest tests\test_cas_harness_instruction_integrity.py -q` passed `10 passed`.
+  - `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` passed `15 / 15`, with `injected_recall=1.0`, `benign_false_positive_rate=0.0`, and `overall_pass=true`.
+  - `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
+  - Pod recovery attempts to `194.68.245.165:22089` and `194.68.245.165:22046` timed out, so seed `16..31` remains unrecovered.
+
 ## Archive
 
 Local archive:
