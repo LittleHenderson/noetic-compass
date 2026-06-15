@@ -185,6 +185,14 @@ Updated recommended next move: do not spend on all-layer W0 capture yet. The nex
 
 Updated recommended next move: recover or rerun the seed `16..31` generation-only screen, relabel with `cas_boundary_intact_v1`, and screen the combined seed `0..31` labels against `matched_prompt_chain_break_bank_v0_s32.json`. Do not spend on all-layer W0 capture until that screen reports `READY_FOR_W0_CAPTURE`. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` and `NOT LICENSED`.
 
+2026-06-15 audit packet update:
+
+- Created auditor-facing proof packet: `docs/working/cas_harness_prompt_injection_audit_packet_20260615.md`.
+- Audit bundle: `D:\tksCAS-archive\cas_harness_prompt_injection_audit_packet_20260615.tgz`, SHA-256 `9478C8587A2834A2DCD0F363A7FF608A9BEEF1A055F179454E874188F372A4B8`.
+- The packet separates the supported shadow instruction-integrity claim from the still-`OPEN` / `NOT LICENSED` internal pre-speech prompt-injection claim.
+- Verification rerun passed: `python -m pytest tests\test_cas_harness_instruction_integrity.py -q` passed `10 passed`; `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` passed `15 / 15` with `injected_recall=1.0`, `benign_false_positive_rate=0.0`, and `overall_pass=true`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
+- Pod recovery attempts to `194.68.245.165:22089` and `194.68.245.165:22046` timed out, so seed `16..31` remains unrecovered and the next gate remains blocked on compute access.
+
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
 Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
