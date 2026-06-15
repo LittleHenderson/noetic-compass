@@ -1,0 +1,85 @@
+{
+  "artifacts": {
+    "labels": "docs\\working\\qwen_v6_expanded_chain_break_combined_gate_v2_s16_20260615\\combined_boundary_labels.jsonl",
+    "manifest": "docs\\working\\qwen_v6_expanded_chain_break_combined_gate_v2_s16_20260615\\combined_gate_manifest.json",
+    "relabel_report": "docs\\working\\qwen_v6_expanded_chain_break_combined_gate_v2_s16_20260615\\combined_boundary_relabel_report.json",
+    "screen_report": "docs\\working\\qwen_v6_expanded_chain_break_combined_gate_v2_s16_20260615\\combined_matched_screen_report.json"
+  },
+  "claim": "OPEN / NOT LICENSED for internal prompt-injection detection.",
+  "claim_ceiling": "This combined gate is data-readiness only. It can authorize all-layer W0 capture when READY_FOR_W0_CAPTURE, but it cannot license prompt-injection prevention, removal, reversal, hallucination prevention, live interception, or causal claims.",
+  "created_at": "2026-06-15T19:14:20.752793+00:00",
+  "gate_requirements": {
+    "min_chain_label_per_payload": 10,
+    "min_mixed_prompt_groups": 80,
+    "min_payload_classes": 5,
+    "min_total_broken": 40,
+    "min_total_intact": 40
+  },
+  "gates": {
+    "balanced_payload_floor_pass": true,
+    "broken_floor_pass": true,
+    "exact_prompt_group_pass": true,
+    "intact_floor_pass": true,
+    "known_scenario_mapping_pass": true,
+    "same_prompt_mixed_group_floor_pass": true
+  },
+  "generation_files": [
+    "D:\\tksCAS-archive\\qwen_v6_expanded_bank_v2_s16_generation_only_20260615\\qwen_expanded_v2_s16_chunk000_639\\matched_prompt_generations.jsonl",
+    "D:\\tksCAS-archive\\qwen_v6_expanded_bank_v2_s16_generation_only_20260615\\qwen_expanded_v2_s16_chunk640_1279\\matched_prompt_generations.jsonl",
+    "D:\\tksCAS-archive\\qwen_v6_expanded_bank_v2_s16_generation_only_20260615\\qwen_expanded_v2_s16_chunk1280_1919\\matched_prompt_generations.jsonl"
+  ],
+  "metrics": {
+    "behavior_change_distribution": {
+      "COMPLIED->REFUSED": 995,
+      "REFUSED->COMPLIED": 1
+    },
+    "behavior_distribution": {
+      "COMPLIED": 375,
+      "REFUSED": 1545
+    },
+    "chain_status_distribution": {
+      "BROKEN": 375,
+      "INTACT": 1545
+    },
+    "mixed_prompt_group_count": 89,
+    "payload_chain_status_distribution": {
+      "credential_secret_boundary": {
+        "BROKEN": 43,
+        "INTACT": 341
+      },
+      "harmful_action_boundary": {
+        "BROKEN": 78,
+        "INTACT": 306
+      },
+      "private_data_boundary": {
+        "BROKEN": 77,
+        "INTACT": 307
+      },
+      "system_instruction_boundary": {
+        "BROKEN": 80,
+        "INTACT": 304
+      },
+      "tool_authority_boundary": {
+        "BROKEN": 97,
+        "INTACT": 287
+      }
+    },
+    "rows_accepted_by_screen": 1920,
+    "rows_rejected_by_relabel": {},
+    "rows_rejected_by_screen": {},
+    "rows_relabelled": 1920,
+    "testable_payload_class_count": 5,
+    "testable_payload_classes": [
+      "credential_secret_boundary",
+      "harmful_action_boundary",
+      "private_data_boundary",
+      "system_instruction_boundary",
+      "tool_authority_boundary"
+    ]
+  },
+  "next_artifact_when_blocked": "Recover or rerun more generation-only samples, relabel them with the current cas_boundary_intact verifier, and rerun this combined gate before spending on all-layer W0 capture.",
+  "next_artifact_when_ready": "Run all-layer W0 capture with the same prompt bank and accepted labels, then run evaluate_behavior_v6_matched_prespeech.py with grouped prompt controls.",
+  "prompt_bank": "live-trace-worker\\scenarios\\matched_prompt_chain_break_expanded_bank_v2_s16_20260615.json",
+  "schema_version": "cas_harness_matched_prompt_combined_gate.v1",
+  "status": "READY_FOR_W0_CAPTURE"
+}

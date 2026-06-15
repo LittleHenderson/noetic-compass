@@ -1,0 +1,1423 @@
+{
+  "baselines": {
+    "domain_ba": 0.542129,
+    "l0_ba": 0.5,
+    "length_ba": 0.432927,
+    "payload_ba": 0.542129,
+    "text_ba": 0.650776
+  },
+  "claim": "OPEN / NOT LICENSED for matched-prompt W0 chain-break risk detection.",
+  "dataset": "D:\\tksCAS-archive\\qwen_v6_expanded_bank_v2_s16_w0_all_layers_20260615\\enabled_predicate_w0_all_layers_dataset.npz",
+  "layers": [
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 0,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": false,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.5,
+      "hidden_minus_domain": -0.042129,
+      "hidden_minus_l0": 0.0,
+      "hidden_minus_length": 0.067073,
+      "hidden_minus_payload": -0.042129,
+      "hidden_minus_text": -0.150776,
+      "l0_ba": 0.5,
+      "layer": 0,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.5,
+        "private_data_boundary": 0.5,
+        "system_instruction_boundary": 0.5,
+        "tool_authority_boundary": 0.5
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.650776,
+      "hidden_minus_domain": 0.108647,
+      "hidden_minus_l0": 0.150776,
+      "hidden_minus_length": 0.217849,
+      "hidden_minus_payload": 0.108647,
+      "hidden_minus_text": 0.0,
+      "l0_ba": 0.5,
+      "layer": 1,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.464286,
+        "private_data_boundary": 0.588889,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.607143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.67184,
+      "hidden_minus_domain": 0.129712,
+      "hidden_minus_l0": 0.17184,
+      "hidden_minus_length": 0.238914,
+      "hidden_minus_payload": 0.129712,
+      "hidden_minus_text": 0.021064,
+      "l0_ba": 0.5,
+      "layer": 2,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.589286,
+        "private_data_boundary": 0.633333,
+        "system_instruction_boundary": 0.733333,
+        "tool_authority_boundary": 0.535714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.708426,
+      "hidden_minus_domain": 0.166297,
+      "hidden_minus_l0": 0.208426,
+      "hidden_minus_length": 0.275499,
+      "hidden_minus_payload": 0.166297,
+      "hidden_minus_text": 0.05765,
+      "l0_ba": 0.5,
+      "layer": 3,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.410714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.638581,
+      "hidden_minus_domain": 0.096452,
+      "hidden_minus_l0": 0.138581,
+      "hidden_minus_length": 0.205654,
+      "hidden_minus_payload": 0.096452,
+      "hidden_minus_text": -0.012195,
+      "l0_ba": 0.5,
+      "layer": 4,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.588889,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.535714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.673503,
+      "hidden_minus_domain": 0.131375,
+      "hidden_minus_l0": 0.173503,
+      "hidden_minus_length": 0.240576,
+      "hidden_minus_payload": 0.131375,
+      "hidden_minus_text": 0.022727,
+      "l0_ba": 0.5,
+      "layer": 5,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.588889,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.535714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.650776,
+      "hidden_minus_domain": 0.108647,
+      "hidden_minus_l0": 0.150776,
+      "hidden_minus_length": 0.217849,
+      "hidden_minus_payload": 0.108647,
+      "hidden_minus_text": 0.0,
+      "l0_ba": 0.5,
+      "layer": 6,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.588889,
+        "tool_authority_boundary": 0.410714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.662971,
+      "hidden_minus_domain": 0.120843,
+      "hidden_minus_l0": 0.162971,
+      "hidden_minus_length": 0.230044,
+      "hidden_minus_payload": 0.120843,
+      "hidden_minus_text": 0.012195,
+      "l0_ba": 0.5,
+      "layer": 7,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.588889,
+        "tool_authority_boundary": 0.535714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.638581,
+      "hidden_minus_domain": 0.096452,
+      "hidden_minus_l0": 0.138581,
+      "hidden_minus_length": 0.205654,
+      "hidden_minus_payload": 0.096452,
+      "hidden_minus_text": -0.012195,
+      "l0_ba": 0.5,
+      "layer": 8,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.633333,
+        "tool_authority_boundary": 0.464286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.638581,
+      "hidden_minus_domain": 0.096452,
+      "hidden_minus_l0": 0.138581,
+      "hidden_minus_length": 0.205654,
+      "hidden_minus_payload": 0.096452,
+      "hidden_minus_text": -0.012195,
+      "l0_ba": 0.5,
+      "layer": 9,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.533333,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.535714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.593126,
+      "hidden_minus_domain": 0.050998,
+      "hidden_minus_l0": 0.093126,
+      "hidden_minus_length": 0.1602,
+      "hidden_minus_payload": 0.050998,
+      "hidden_minus_text": -0.05765,
+      "l0_ba": 0.5,
+      "layer": 10,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.433333,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.464286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.603659,
+      "hidden_minus_domain": 0.06153,
+      "hidden_minus_l0": 0.103659,
+      "hidden_minus_length": 0.170732,
+      "hidden_minus_payload": 0.06153,
+      "hidden_minus_text": -0.047118,
+      "l0_ba": 0.5,
+      "layer": 11,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.433333,
+        "system_instruction_boundary": 0.633333,
+        "tool_authority_boundary": 0.535714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.603659,
+      "hidden_minus_domain": 0.06153,
+      "hidden_minus_l0": 0.103659,
+      "hidden_minus_length": 0.170732,
+      "hidden_minus_payload": 0.06153,
+      "hidden_minus_text": -0.047118,
+      "l0_ba": 0.5,
+      "layer": 12,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.433333,
+        "system_instruction_boundary": 0.733333,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.650776,
+      "hidden_minus_domain": 0.108647,
+      "hidden_minus_l0": 0.150776,
+      "hidden_minus_length": 0.217849,
+      "hidden_minus_payload": 0.108647,
+      "hidden_minus_text": 0.0,
+      "l0_ba": 0.5,
+      "layer": 13,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.533333,
+        "system_instruction_boundary": 0.733333,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 0,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": false,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.582594,
+      "hidden_minus_domain": 0.040466,
+      "hidden_minus_l0": 0.082594,
+      "hidden_minus_length": 0.149667,
+      "hidden_minus_payload": 0.040466,
+      "hidden_minus_text": -0.068182,
+      "l0_ba": 0.5,
+      "layer": 14,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.607143,
+        "private_data_boundary": 0.433333,
+        "system_instruction_boundary": 0.633333,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.603659,
+      "hidden_minus_domain": 0.06153,
+      "hidden_minus_l0": 0.103659,
+      "hidden_minus_length": 0.170732,
+      "hidden_minus_payload": 0.06153,
+      "hidden_minus_text": -0.047118,
+      "l0_ba": 0.5,
+      "layer": 15,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.607143,
+        "private_data_boundary": 0.577778,
+        "system_instruction_boundary": 0.633333,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 1,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": false,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.593126,
+      "hidden_minus_domain": 0.050998,
+      "hidden_minus_l0": 0.093126,
+      "hidden_minus_length": 0.1602,
+      "hidden_minus_payload": 0.050998,
+      "hidden_minus_text": -0.05765,
+      "l0_ba": 0.5,
+      "layer": 16,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.433333,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.662971,
+      "hidden_minus_domain": 0.120843,
+      "hidden_minus_l0": 0.162971,
+      "hidden_minus_length": 0.230044,
+      "hidden_minus_payload": 0.120843,
+      "hidden_minus_text": 0.012195,
+      "l0_ba": 0.5,
+      "layer": 17,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.844444,
+        "system_instruction_boundary": 0.433333,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.673503,
+      "hidden_minus_domain": 0.131375,
+      "hidden_minus_l0": 0.173503,
+      "hidden_minus_length": 0.240576,
+      "hidden_minus_payload": 0.131375,
+      "hidden_minus_text": 0.022727,
+      "l0_ba": 0.5,
+      "layer": 18,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.433333,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.720621,
+      "hidden_minus_domain": 0.178492,
+      "hidden_minus_l0": 0.220621,
+      "hidden_minus_length": 0.287694,
+      "hidden_minus_payload": 0.178492,
+      "hidden_minus_text": 0.069845,
+      "l0_ba": 0.5,
+      "layer": 19,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.844444,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.696231,
+      "hidden_minus_domain": 0.154102,
+      "hidden_minus_l0": 0.196231,
+      "hidden_minus_length": 0.263304,
+      "hidden_minus_payload": 0.154102,
+      "hidden_minus_text": 0.045455,
+      "l0_ba": 0.5,
+      "layer": 20,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.785714,
+        "private_data_boundary": 0.733333,
+        "system_instruction_boundary": 0.588889,
+        "tool_authority_boundary": 0.660714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.696231,
+      "hidden_minus_domain": 0.154102,
+      "hidden_minus_l0": 0.196231,
+      "hidden_minus_length": 0.263304,
+      "hidden_minus_payload": 0.154102,
+      "hidden_minus_text": 0.045455,
+      "l0_ba": 0.5,
+      "layer": 21,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.785714,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.433333,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.697894,
+      "hidden_minus_domain": 0.155765,
+      "hidden_minus_l0": 0.197894,
+      "hidden_minus_length": 0.264967,
+      "hidden_minus_payload": 0.155765,
+      "hidden_minus_text": 0.047118,
+      "l0_ba": 0.5,
+      "layer": 22,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.744444,
+        "tool_authority_boundary": 0.660714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.685698,
+      "hidden_minus_domain": 0.14357,
+      "hidden_minus_l0": 0.185698,
+      "hidden_minus_length": 0.252772,
+      "hidden_minus_payload": 0.14357,
+      "hidden_minus_text": 0.034922,
+      "l0_ba": 0.5,
+      "layer": 23,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.733333,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.660714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.662971,
+      "hidden_minus_domain": 0.120843,
+      "hidden_minus_l0": 0.162971,
+      "hidden_minus_length": 0.230044,
+      "hidden_minus_payload": 0.120843,
+      "hidden_minus_text": 0.012195,
+      "l0_ba": 0.5,
+      "layer": 24,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.533333,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 2,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": false,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": false,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.675166,
+      "hidden_minus_domain": 0.133038,
+      "hidden_minus_l0": 0.175166,
+      "hidden_minus_length": 0.242239,
+      "hidden_minus_payload": 0.133038,
+      "hidden_minus_text": 0.02439,
+      "l0_ba": 0.5,
+      "layer": 25,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.588889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.697894,
+      "hidden_minus_domain": 0.155765,
+      "hidden_minus_l0": 0.197894,
+      "hidden_minus_length": 0.264967,
+      "hidden_minus_payload": 0.155765,
+      "hidden_minus_text": 0.047118,
+      "l0_ba": 0.5,
+      "layer": 26,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.732816,
+      "hidden_minus_domain": 0.190687,
+      "hidden_minus_l0": 0.232816,
+      "hidden_minus_length": 0.299889,
+      "hidden_minus_payload": 0.190687,
+      "hidden_minus_text": 0.08204,
+      "l0_ba": 0.5,
+      "layer": 27,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.745011,
+      "hidden_minus_domain": 0.202882,
+      "hidden_minus_l0": 0.245011,
+      "hidden_minus_length": 0.312084,
+      "hidden_minus_payload": 0.202882,
+      "hidden_minus_text": 0.094235,
+      "l0_ba": 0.5,
+      "layer": 28,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    }
+  ],
+  "mixed_prompt_group_count": 89,
+  "risk_group_count": 63,
+  "risk_group_distribution": {
+    "HIGH_BREAK_RISK": 22,
+    "LOW_BREAK_RISK": 41
+  },
+  "row_chain_status_distribution": {
+    "BROKEN": 375,
+    "INTACT": 1545
+  },
+  "status": "CANDIDATE_SCAN_ONLY",
+  "top_by_hidden_ba": [
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.745011,
+      "hidden_minus_domain": 0.202882,
+      "hidden_minus_l0": 0.245011,
+      "hidden_minus_length": 0.312084,
+      "hidden_minus_payload": 0.202882,
+      "hidden_minus_text": 0.094235,
+      "l0_ba": 0.5,
+      "layer": 28,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.732816,
+      "hidden_minus_domain": 0.190687,
+      "hidden_minus_l0": 0.232816,
+      "hidden_minus_length": 0.299889,
+      "hidden_minus_payload": 0.190687,
+      "hidden_minus_text": 0.08204,
+      "l0_ba": 0.5,
+      "layer": 27,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.720621,
+      "hidden_minus_domain": 0.178492,
+      "hidden_minus_l0": 0.220621,
+      "hidden_minus_length": 0.287694,
+      "hidden_minus_payload": 0.178492,
+      "hidden_minus_text": 0.069845,
+      "l0_ba": 0.5,
+      "layer": 19,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.844444,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.708426,
+      "hidden_minus_domain": 0.166297,
+      "hidden_minus_l0": 0.208426,
+      "hidden_minus_length": 0.275499,
+      "hidden_minus_payload": 0.166297,
+      "hidden_minus_text": 0.05765,
+      "l0_ba": 0.5,
+      "layer": 3,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.410714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.697894,
+      "hidden_minus_domain": 0.155765,
+      "hidden_minus_l0": 0.197894,
+      "hidden_minus_length": 0.264967,
+      "hidden_minus_payload": 0.155765,
+      "hidden_minus_text": 0.047118,
+      "l0_ba": 0.5,
+      "layer": 22,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.744444,
+        "tool_authority_boundary": 0.660714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.697894,
+      "hidden_minus_domain": 0.155765,
+      "hidden_minus_l0": 0.197894,
+      "hidden_minus_length": 0.264967,
+      "hidden_minus_payload": 0.155765,
+      "hidden_minus_text": 0.047118,
+      "l0_ba": 0.5,
+      "layer": 26,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.696231,
+      "hidden_minus_domain": 0.154102,
+      "hidden_minus_l0": 0.196231,
+      "hidden_minus_length": 0.263304,
+      "hidden_minus_payload": 0.154102,
+      "hidden_minus_text": 0.045455,
+      "l0_ba": 0.5,
+      "layer": 20,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.785714,
+        "private_data_boundary": 0.733333,
+        "system_instruction_boundary": 0.588889,
+        "tool_authority_boundary": 0.660714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.696231,
+      "hidden_minus_domain": 0.154102,
+      "hidden_minus_l0": 0.196231,
+      "hidden_minus_length": 0.263304,
+      "hidden_minus_payload": 0.154102,
+      "hidden_minus_text": 0.045455,
+      "l0_ba": 0.5,
+      "layer": 21,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.785714,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.433333,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    }
+  ],
+  "top_by_hidden_minus_text": [
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.745011,
+      "hidden_minus_domain": 0.202882,
+      "hidden_minus_l0": 0.245011,
+      "hidden_minus_length": 0.312084,
+      "hidden_minus_payload": 0.202882,
+      "hidden_minus_text": 0.094235,
+      "l0_ba": 0.5,
+      "layer": 28,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.732143,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.732816,
+      "hidden_minus_domain": 0.190687,
+      "hidden_minus_l0": 0.232816,
+      "hidden_minus_length": 0.299889,
+      "hidden_minus_payload": 0.190687,
+      "hidden_minus_text": 0.08204,
+      "l0_ba": 0.5,
+      "layer": 27,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.720621,
+      "hidden_minus_domain": 0.178492,
+      "hidden_minus_l0": 0.220621,
+      "hidden_minus_length": 0.287694,
+      "hidden_minus_payload": 0.178492,
+      "hidden_minus_text": 0.069845,
+      "l0_ba": 0.5,
+      "layer": 19,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.416667,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.844444,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.589286
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.708426,
+      "hidden_minus_domain": 0.166297,
+      "hidden_minus_l0": 0.208426,
+      "hidden_minus_length": 0.275499,
+      "hidden_minus_payload": 0.166297,
+      "hidden_minus_text": 0.05765,
+      "l0_ba": 0.5,
+      "layer": 3,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.5,
+        "harmful_action_boundary": 0.857143,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.688889,
+        "tool_authority_boundary": 0.410714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.697894,
+      "hidden_minus_domain": 0.155765,
+      "hidden_minus_l0": 0.197894,
+      "hidden_minus_length": 0.264967,
+      "hidden_minus_payload": 0.155765,
+      "hidden_minus_text": 0.047118,
+      "l0_ba": 0.5,
+      "layer": 22,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.744444,
+        "tool_authority_boundary": 0.660714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.697894,
+      "hidden_minus_domain": 0.155765,
+      "hidden_minus_l0": 0.197894,
+      "hidden_minus_length": 0.264967,
+      "hidden_minus_payload": 0.155765,
+      "hidden_minus_text": 0.047118,
+      "l0_ba": 0.5,
+      "layer": 26,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.660714,
+        "private_data_boundary": 0.688889,
+        "system_instruction_boundary": 0.644444,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.696231,
+      "hidden_minus_domain": 0.154102,
+      "hidden_minus_l0": 0.196231,
+      "hidden_minus_length": 0.263304,
+      "hidden_minus_payload": 0.154102,
+      "hidden_minus_text": 0.045455,
+      "l0_ba": 0.5,
+      "layer": 20,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.785714,
+        "private_data_boundary": 0.733333,
+        "system_instruction_boundary": 0.588889,
+        "tool_authority_boundary": 0.660714
+      },
+      "text_ba": 0.650776
+    },
+    {
+      "candidate_gate_count_without_permutation_or_shuffle": 4,
+      "domain_ba": 0.542129,
+      "gates_without_permutation_or_shuffle": {
+        "risk_domain_margin_pass": true,
+        "risk_hidden_balanced_accuracy_pass": false,
+        "risk_l0_margin_pass": true,
+        "risk_length_margin_pass": true,
+        "risk_payload_margin_pass": true,
+        "risk_per_payload_floor_pass": false,
+        "risk_text_margin_pass": false
+      },
+      "hidden_ba": 0.696231,
+      "hidden_minus_domain": 0.154102,
+      "hidden_minus_l0": 0.196231,
+      "hidden_minus_length": 0.263304,
+      "hidden_minus_payload": 0.154102,
+      "hidden_minus_text": 0.045455,
+      "l0_ba": 0.5,
+      "layer": 21,
+      "length_ba": 0.432927,
+      "payload_ba": 0.542129,
+      "per_payload_hidden_ba": {
+        "credential_secret_boundary": 0.458333,
+        "harmful_action_boundary": 0.785714,
+        "private_data_boundary": 0.788889,
+        "system_instruction_boundary": 0.433333,
+        "tool_authority_boundary": 0.732143
+      },
+      "text_ba": 0.650776
+    }
+  ]
+}

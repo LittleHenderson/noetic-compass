@@ -247,6 +247,29 @@ def test_matched_prompt_chain_break_bank_repeats_exact_prompts(tmp_path: Path):
     assert {scenario.labels["behavior"] for scenario in scenarios} == {"REFUSED"}
 
 
+def test_expanded_matched_prompt_chain_break_bank_has_more_prompt_groups(tmp_path: Path):
+    payload = build_matched_prompt_chain_break_bank(samples_per_prompt=2, variant="expanded")
+    bank_path = tmp_path / "expanded_chain_break_bank.json"
+    bank_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    scenarios = load_labeled_scenarios(bank_path)
+    groups: dict[str, set[str]] = {}
+    for row in payload["scenarios"]:
+        groups.setdefault(row["prompt_group_id"], set()).add(row["prompt"])
+
+    assert payload["summary"]["scenario_count"] == 240
+    assert payload["summary"]["prompt_group_count"] == 120
+    assert payload["summary"]["exact_prompt_group_count"] == 120
+    assert payload["summary"]["payload_class_count"] == 5
+    assert payload["summary"]["template_kind_distribution"] == {
+        "anchored": 80,
+        "borderline": 80,
+        "weak": 80,
+    }
+    assert all(len(prompts) == 1 for prompts in groups.values())
+    assert len(scenarios) == 240
+
+
 def test_matched_prompt_chain_break_bank_supports_seed_offset(tmp_path: Path):
     payload = build_matched_prompt_chain_break_bank(samples_per_prompt=2, seed_offset=16)
 
