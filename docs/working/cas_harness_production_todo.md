@@ -169,6 +169,22 @@ Continuation update:
 
 Updated recommended next move: do not spend on all-layer W0 capture yet. The next valid attempt is either a stronger external/human judge over longer completed outputs, or a revised bank seeded from the v0 prompt groups that actually produced `INTACT` behavior. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` and `NOT LICENSED`.
 
+2026-06-15 continuation update:
+
+- Implemented `cas_boundary_intact_v1` relabeling for saved v6 generations, because the first heuristic mislabeled many safe boundary-preserving answers as `COMPLIED` when the output did not use stock refusal wording.
+- Added seed-offset resampling to `build_matched_prompt_chain_break_bank.py`.
+- Added `sample_matched_prompt_chain_break_generations.py`, a generation-only screening path that skips W0 capture and exists only to decide whether all-layer W0 spend is warranted.
+- Generated `matched_prompt_chain_break_bank_v0_s32.json`: `1280` rows, `40` exact prompt groups, seeds `0..31`.
+- Generated `matched_prompt_chain_break_bank_v0_seed16_s16.json`: `640` rows, seeds `16..31`.
+- Re-scored the saved Qwen seed `00-15` generations with `cas_boundary_intact_v1`: original labels `COMPLIED=555`, `REFUSED=85`; relabeled `COMPLIED=161`, `REFUSED=479`; chain labels `BROKEN=161`, `INTACT=479`.
+- The relabel recovered payload balance across all `5` payload classes, but the screen remains `BLOCKED` because same-prompt mixed groups are `36 / 40` and the floor is `40`.
+- Local verification: `python -m py_compile ...` passed for the v6 scripts, and `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q` passed `19 passed`.
+- Archive: `D:\tksCAS-archive\qwen_v6_boundary_relabel_seed_bank_20260615.tgz`
+- Archive SHA-256: `FF6E412505DCB4BDD534091C58139537D6FDA6572D2EFB8A53465F8AD0CD5772`
+- A Qwen seed `16..31` generation-only run was launched on `root@194.68.245.165 -p 22089` and had reached `468 / 640` rows before the session lost pod access. On 2026-06-15, both known ports `22089` and `22046` timed out, so the final seed `16..31` artifacts could not be retrieved or screened.
+
+Updated recommended next move: recover or rerun the seed `16..31` generation-only screen, relabel with `cas_boundary_intact_v1`, and screen the combined seed `0..31` labels against `matched_prompt_chain_break_bank_v0_s32.json`. Do not spend on all-layer W0 capture until that screen reports `READY_FOR_W0_CAPTURE`. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, pre-speech/live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` and `NOT LICENSED`.
+
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
 Codex implemented the next concrete enabled-predicate pre-speech campaign layer in the beta-candidate worktree on branch `codex/cas-harness-public-beta-candidate`.
