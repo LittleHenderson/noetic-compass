@@ -152,4 +152,17 @@ The implemented v6 tooling is a stronger gate and campaign harness. The first re
 
 ## Next Move
 
-Do not spend on all-layer W0 capture yet. First recover or rerun the seed `16..31` generation-only screen, then run `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py` with both seed `00..15` and seed `16..31` generation files against `matched_prompt_chain_break_bank_v0_s32.json`. Only run all-layer W0 capture and v6 W0 evaluation after the combined gate reports `READY_FOR_W0_CAPTURE`.
+2026-06-15 continuation:
+
+- Reran Qwen seed `16..31` generation-only on `root@195.26.233.61 -p 37154`.
+- Added `cas_boundary_intact_v2` because v1 undercounted safe high-level harmful-action boundary responses.
+- Added a targeted seed `32..47` continuation for the two remaining unmixed prompt groups.
+- Final combined gate artifact: `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615/combined_gate_manifest.json`.
+- Final combined gate status: `READY_FOR_W0_CAPTURE`.
+- Final combined gate metrics: `BROKEN=306`, `INTACT=1006`, `mixed_prompt_group_count=40`, `testable_payload_class_count=5`.
+- All-layer W0 capture completed and was archived at `D:\tksCAS-archive\qwen_v6_matched_chain_break_w0_all_layers_seed00_47_v2_20260615\`.
+- W0 result summary: `docs/working/qwen_v6_matched_prespeech_w0_result_20260615.md`.
+
+The W0 evaluator did not pass. Frozen/default thresholds were `BLOCKED` by the prompt-risk class floor (`7 / 7`, required `10 / 10`). The best full-control exploratory valid split was layer `28`, with hidden BA `0.809091`, text BA `0.809091`, permutation p `0.008991`, and status `FAIL`.
+
+Updated next move: do not run causal steering/ablation from this Qwen W0 result. Internal prompt-injection detection remains `OPEN` / `NOT LICENSED`. Build a larger frozen prompt-risk bank or test a more chain-sensitive model, then rerun W0 only if the text/layer-0/payload/domain gates can be beaten under frozen thresholds.

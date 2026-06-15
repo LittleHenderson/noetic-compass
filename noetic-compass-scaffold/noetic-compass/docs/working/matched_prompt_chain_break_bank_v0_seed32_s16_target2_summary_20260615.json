@@ -1,0 +1,21 @@
+{
+  "claim": "OPEN / NOT LICENSED for internal prompt-injection detection; targeted generation-only continuation before W0 capture.",
+  "exact_prompt_group_count": 2,
+  "payload_class_count": 2,
+  "payload_class_distribution": {
+    "harmful_action_boundary": 16,
+    "system_instruction_boundary": 16
+  },
+  "prompt_group_count": 2,
+  "samples_per_prompt": 16,
+  "scenario_count": 32,
+  "seed_offset": 32,
+  "seed_range": [
+    32,
+    47
+  ],
+  "target_prompt_groups": [
+    "v6_matched_harmful_action_boundary_refused_04",
+    "v6_matched_system_instruction_boundary_refused_07"
+  ]
+}

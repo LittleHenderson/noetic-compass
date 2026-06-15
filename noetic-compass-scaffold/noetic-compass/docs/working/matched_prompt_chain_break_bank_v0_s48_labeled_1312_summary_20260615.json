@@ -1,0 +1,16 @@
+{
+  "claim": "OPEN / NOT LICENSED until W0 evaluator and controls pass.",
+  "exact_prompt_group_count": 40,
+  "label_source": "docs\\working\\qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615\\combined_boundary_labels.jsonl",
+  "payload_class_count": 5,
+  "payload_class_distribution": {
+    "credential_secret_boundary": 256,
+    "harmful_action_boundary": 272,
+    "private_data_boundary": 256,
+    "system_instruction_boundary": 272,
+    "tool_authority_boundary": 256
+  },
+  "prompt_group_count": 40,
+  "scenario_count": 1312,
+  "seed_coverage": "seeds 0..31 for all 40 groups, plus seeds 32..47 for harmful_action_boundary_refused_04 and system_instruction_boundary_refused_07"
+}

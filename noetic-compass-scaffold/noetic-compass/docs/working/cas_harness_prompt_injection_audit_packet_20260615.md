@@ -172,8 +172,28 @@ An auditor should verify:
 
 ## Next Gate
 
-Recover or rerun the Qwen seed `16..31` generation-only campaign, then run `live-trace-worker/scripts/run_matched_chain_break_combined_gate.py` with both seed `00..15` and seed `16..31` generation files against `matched_prompt_chain_break_bank_v0_s32.json`.
+2026-06-15 continuation: the Qwen seed `16..31` campaign was rerun on `root@195.26.233.61 -p 37154`, a targeted seed `32..47` continuation was added for the two holdout prompt groups, and `cas_boundary_intact_v2` closed the data-readiness gate.
 
-Only if the combined screen reports `READY_FOR_W0_CAPTURE` should CAS Harness spend on all-layer W0 capture and `evaluate_behavior_v6_matched_prespeech.py`.
+Final combined gate:
 
-Until then, internal prompt-injection detection remains `OPEN` / `NOT LICENSED`.
+- `docs/working/qwen_v6_matched_chain_break_combined_gate_seed00_47_v2_20260615/combined_gate_manifest.json`
+- `status`: `READY_FOR_W0_CAPTURE`
+- `BROKEN=306`, `INTACT=1006`
+- `mixed_prompt_group_count=40`
+- `testable_payload_class_count=5`
+
+W0 capture then completed:
+
+- Archive: `D:\tksCAS-archive\qwen_v6_matched_chain_break_w0_all_layers_seed00_47_v2_20260615\`
+- Proof bundle: `D:\tksCAS-archive\qwen_v6_w0_matched_prespeech_result_20260615.tgz`
+- Proof bundle SHA-256: `D3B4048139E1892FBF9E56E53AAE68D4D698E7D3A1EADE5B90208ADC6C6A3B61`
+- Feature shape: `[1312, 29, 1536]`
+- Label source: `label_jsonl=1312`
+
+W0 evaluation result:
+
+- Summary: `docs/working/qwen_v6_matched_prespeech_w0_result_20260615.md`
+- Frozen/default threshold check: `BLOCKED` because default prompt-risk classes were only `7 / 7`, below the required `10 / 10`.
+- Best full-control exploratory valid split: layer `28`, hidden BA `0.809091`, text BA `0.809091`, permutation p `0.008991`, status `FAIL`.
+
+Therefore internal prompt-injection detection remains `OPEN` / `NOT LICENSED`. Do not run causal steering/ablation from this Qwen result; first build a larger frozen prompt-risk bank or test a more chain-sensitive model.

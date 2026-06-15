@@ -158,7 +158,8 @@ def run_combined_gate(
             "evaluate_behavior_v6_matched_prespeech.py with grouped prompt controls."
         ),
         "next_artifact_when_blocked": (
-            "Recover or rerun more generation-only samples, relabel them with cas_boundary_intact_v1, "
+            "Recover or rerun more generation-only samples, relabel them with the current "
+            "cas_boundary_intact verifier, "
             "and rerun this combined gate before spending on all-layer W0 capture."
         ),
     }
