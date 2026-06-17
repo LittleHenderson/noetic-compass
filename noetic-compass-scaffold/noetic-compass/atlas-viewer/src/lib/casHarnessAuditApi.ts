@@ -168,12 +168,33 @@ export interface CasHarnessInstructionRpmReasonContinuity {
   claim_ceiling: string;
 }
 
+export interface CasHarnessCjtPcbaDiagnostic {
+  kind: string;
+  source: string;
+  board: string;
+  test_point: string;
+  region: string;
+  decision: string;
+  claim_ceiling: string;
+  claim_excerpt?: string | null;
+}
+
+export interface CasHarnessCjtPcbaDiagnostics {
+  status: CasHarnessInstructionIntegrityStatus;
+  mode: string;
+  diagnostic_count: number;
+  surface_finding_count: number;
+  diagnostics: CasHarnessCjtPcbaDiagnostic[];
+  claim_ceiling: string;
+}
+
 export interface CasHarnessInstructionIntegrityGluing {
   coverage_status: 'present' | 'incomplete';
   lacunarity_flags: string[];
   truth_state: CasHarnessInstructionIntegrityTruthState;
   evidence_packet_trace_id: string | null;
   rpm_reason_continuity?: CasHarnessInstructionRpmReasonContinuity | null;
+  cjt_pcba_diagnostics?: CasHarnessCjtPcbaDiagnostics | null;
 }
 
 export interface CasHarnessInstructionQuarantineSpan {
@@ -2081,6 +2102,9 @@ function parseInstructionIntegrityGluing(raw: unknown): CasHarnessInstructionInt
     rpm_reason_continuity: parseNullableInstructionRpmReasonContinuity(
       raw.rpm_reason_continuity,
     ),
+    cjt_pcba_diagnostics: parseNullableInstructionCjtPcbaDiagnostics(
+      raw.cjt_pcba_diagnostics,
+    ),
   };
 }
 
@@ -2111,6 +2135,77 @@ function parseNullableInstructionRpmReasonContinuity(
     claim_ceiling: requiredString(
       raw.claim_ceiling,
       'instruction_integrity.gluing.rpm_reason_continuity.claim_ceiling',
+    ),
+  };
+}
+
+function parseNullableInstructionCjtPcbaDiagnostics(
+  raw: unknown,
+): CasHarnessCjtPcbaDiagnostics | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity cjt_pcba_diagnostics was malformed',
+    );
+  }
+  const diagnosticsRaw = raw.diagnostics;
+  if (!Array.isArray(diagnosticsRaw)) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity cjt_pcba_diagnostics diagnostics must be an array',
+    );
+  }
+  return {
+    status: parseInstructionIntegrityStatus(raw.status),
+    mode: requiredString(raw.mode, 'instruction_integrity.gluing.cjt_pcba_diagnostics.mode'),
+    diagnostic_count: requiredNumber(
+      raw.diagnostic_count,
+      'instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostic_count',
+    ),
+    surface_finding_count: requiredNumber(
+      raw.surface_finding_count,
+      'instruction_integrity.gluing.cjt_pcba_diagnostics.surface_finding_count',
+    ),
+    diagnostics: diagnosticsRaw.map((diagnostic, index) => {
+      if (!isRecord(diagnostic)) {
+        throw new CasHarnessAuditApiError(
+          'CAS Harness instruction_integrity cjt_pcba_diagnostics diagnostic was malformed',
+        );
+      }
+      return {
+        kind: requiredString(
+          diagnostic.kind,
+          `instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostics[${index}].kind`,
+        ),
+        source: requiredString(
+          diagnostic.source,
+          `instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostics[${index}].source`,
+        ),
+        board: requiredString(
+          diagnostic.board,
+          `instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostics[${index}].board`,
+        ),
+        test_point: requiredString(
+          diagnostic.test_point,
+          `instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostics[${index}].test_point`,
+        ),
+        region: requiredString(
+          diagnostic.region,
+          `instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostics[${index}].region`,
+        ),
+        decision: requiredString(
+          diagnostic.decision,
+          `instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostics[${index}].decision`,
+        ),
+        claim_ceiling: requiredString(
+          diagnostic.claim_ceiling,
+          `instruction_integrity.gluing.cjt_pcba_diagnostics.diagnostics[${index}].claim_ceiling`,
+        ),
+        claim_excerpt: nullableString(diagnostic.claim_excerpt),
+      };
+    }),
+    claim_ceiling: requiredString(
+      raw.claim_ceiling,
+      'instruction_integrity.gluing.cjt_pcba_diagnostics.claim_ceiling',
     ),
   };
 }

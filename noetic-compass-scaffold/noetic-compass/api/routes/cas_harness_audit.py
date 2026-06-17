@@ -437,6 +437,8 @@ class InstructionIntegrityGluingResponse(BaseModel):
     lacunarity_flags: list[str] = Field(default_factory=list, max_length=24)
     truth_state: Literal["VALID", "UNDETERMINED"]
     evidence_packet_trace_id: str | None = None
+    rpm_reason_continuity: dict[str, Any] | None = None
+    cjt_pcba_diagnostics: dict[str, Any] | None = None
     activation_detection: dict[str, Any] | None = None
 
 

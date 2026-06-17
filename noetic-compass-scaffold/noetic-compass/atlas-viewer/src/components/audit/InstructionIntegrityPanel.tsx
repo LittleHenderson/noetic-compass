@@ -199,11 +199,18 @@ export function InstructionIntegrityPanel({
   const hiddenFindingCount = Math.max(0, report.findings.length - visibleFindings.length);
   const flags = report.gluing.lacunarity_flags;
   const rpmReasonContinuity = report.gluing.rpm_reason_continuity;
+  const cjtPcbaDiagnostics = report.gluing.cjt_pcba_diagnostics;
   const showRpmContinuity = Boolean(
     rpmReasonContinuity &&
       (rpmReasonContinuity.status === 'FLAG_FOR_HUMAN_REVIEW' ||
         rpmReasonContinuity.upstream_risk_kinds.length > 0),
   );
+  const showCjtPcbaDiagnostics = Boolean(
+    cjtPcbaDiagnostics &&
+      (cjtPcbaDiagnostics.status === 'FLAG_FOR_HUMAN_REVIEW' ||
+        cjtPcbaDiagnostics.surface_finding_count > 0),
+  );
+  const visibleCjtPcbaDiagnostics = cjtPcbaDiagnostics?.diagnostics.slice(0, 3) ?? [];
   const quarantine = report.quarantine;
   const blockedSpans = quarantine?.blocked_spans ?? [];
   const visibleBlockedSpans = blockedSpans.slice(0, 3);
@@ -258,6 +265,40 @@ export function InstructionIntegrityPanel({
             </span>
           </div>
           <p style={excerptStyle}>{rpmReasonContinuity.claim_ceiling}</p>
+        </div>
+      ) : null}
+
+      {showCjtPcbaDiagnostics && cjtPcbaDiagnostics ? (
+        <div style={findingStyle} aria-label="CJT PCBA diagnostics">
+          <div style={findingTopStyle}>
+            <p style={findingKindStyle}>CJT/PCBA diagnostics</p>
+            <span style={metaStyle}>{cjtPcbaDiagnostics.status}</span>
+          </div>
+          <div style={flagWrapStyle}>
+            <span style={flagStyle}>diagnostics: {cjtPcbaDiagnostics.diagnostic_count}</span>
+            <span style={flagStyle}>
+              decoded surfaces: {cjtPcbaDiagnostics.surface_finding_count}
+            </span>
+          </div>
+          {visibleCjtPcbaDiagnostics.length > 0 ? (
+            <ul style={listStyle} role="list" aria-label="CJT PCBA diagnostic rows">
+              {visibleCjtPcbaDiagnostics.map((diagnostic) => (
+                <li
+                  key={`${diagnostic.kind}-${diagnostic.source}-${diagnostic.region}`}
+                  style={findingStyle}
+                >
+                  <div style={findingTopStyle}>
+                    <p style={findingKindStyle}>{displayKind(diagnostic.kind)}</p>
+                    <span style={metaStyle}>
+                      {diagnostic.board} {diagnostic.test_point}
+                    </span>
+                  </div>
+                  <p style={excerptStyle}>{diagnostic.region}</p>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+          <p style={excerptStyle}>{cjtPcbaDiagnostics.claim_ceiling}</p>
         </div>
       ) : null}
 

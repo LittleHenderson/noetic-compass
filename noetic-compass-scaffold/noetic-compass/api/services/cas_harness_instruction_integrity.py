@@ -7,10 +7,14 @@ CAS Harness verdicts.
 
 from __future__ import annotations
 
+import base64
+import binascii
 from dataclasses import asdict, dataclass
 import hashlib
+import html
 import re
 from typing import Any, Iterable, Literal, Mapping
+import urllib.parse
 
 
 IntegrityStatus = Literal["present", "FLAG_FOR_HUMAN_REVIEW"]
@@ -19,6 +23,13 @@ Severity = Literal["low", "medium", "high"]
 
 SCHEMA_VERSION = "cas_harness_instruction_integrity.v0.shadow"
 SPAN_EXCERPT_LIMIT = 160
+CJT_PCBA_CLAIM_CEILING = (
+    "CJT/PCBA diagnostics are shadow-only. They can expose visible/hidden/"
+    "encoded instruction-integrity risk and route to FLAG_FOR_HUMAN_REVIEW, "
+    "but internal W0 prompt-injection detection, live pre-speech interception, "
+    "prompt-injection prevention/removal/reversal, hallucination prevention, "
+    "CjtPredictionHead claims, and causal proof remain OPEN / NOT LICENSED."
+)
 
 
 @dataclass(frozen=True)
@@ -146,6 +157,15 @@ class _RiskSpan:
     @property
     def span_hash(self) -> str:
         return _span_hash(self.source_name, self.text)
+
+
+@dataclass(frozen=True)
+class _PcbaSurface:
+    name: str
+    text: str
+    source_text: str
+    source_start: int
+    source_end: int
 
 
 _FINDING_PATTERNS: tuple[_PatternSpec, ...] = (
@@ -276,6 +296,13 @@ _NEGATED_OR_GOVERNANCE_CLAIM_RE = re.compile(
     r".{0,80}$",
     re.IGNORECASE | re.DOTALL,
 )
+_ZERO_WIDTH_RE = re.compile(r"[\u200b\u200c\u200d\ufeff]")
+_BASE64_TOKEN_RE = re.compile(r"\b[A-Za-z0-9+/]{24,}={0,2}\b")
+_PRINTABLE_RE = re.compile(r"^[\t\r\n\x20-\x7e]+$")
+_URL_ENCODED_CHUNK_RE = re.compile(
+    r"(?:[A-Za-z0-9._~!$&'()*+,;=:@/\-]*%[0-9A-Fa-f]{2}){2,}"
+    r"[A-Za-z0-9._~!$&'()*+,;=:@/%\-]*"
+)
 
 
 def build_instruction_integrity_report(
@@ -307,6 +334,7 @@ def build_instruction_integrity_report(
         if not value:
             continue
         findings.extend(_find_instruction_risks(source_name, value))
+        findings.extend(_find_pcba_surface_instruction_risks(source_name, value))
         claim_grounding.extend(
             _find_unsupported_claims(
                 source_name=source_name,
@@ -336,6 +364,7 @@ def build_instruction_integrity_report(
         "truth_state": truth_state,
         "evidence_packet_trace_id": evidence_packet_trace_id,
         "rpm_reason_continuity": _rpm_reason_continuity_summary(findings),
+        "cjt_pcba_diagnostics": _cjt_pcba_diagnostics(findings, claim_grounding),
     }
     if activation_detection is not None:
         gluing["activation_detection"] = dict(activation_detection)
@@ -383,6 +412,7 @@ def build_instruction_quarantine(
             sanitized[source_name] = value
             continue
         spans = _collect_instruction_risks(source_name, value)
+        spans.extend(_collect_pcba_encoded_risks(source_name, value))
         if source_name == "model_output":
             spans.extend(
                 _collect_rpm_reason_break_risks(
@@ -443,6 +473,42 @@ def _find_instruction_risks(source_name: str, text: str) -> list[InstructionInte
                 evidence_refs=[],
             )
         )
+    return findings
+
+
+def _find_pcba_surface_instruction_risks(
+    source_name: str,
+    text: str,
+) -> list[InstructionIntegrityFinding]:
+    findings: list[InstructionIntegrityFinding] = []
+    seen: set[tuple[str, str, str]] = set()
+    for surface in _pcba_derived_surfaces(text):
+        surface_source = f"{source_name}:{surface.name}"
+        for risk in _collect_instruction_risks(surface_source, surface.text):
+            key = (risk.spec.kind, risk.span_hash, surface.source_text)
+            if key in seen:
+                continue
+            seen.add(key)
+            findings.append(
+                InstructionIntegrityFinding(
+                    kind=risk.spec.kind,
+                    severity=risk.spec.severity,
+                    source=surface_source,
+                    span_hash=risk.span_hash,
+                    span_excerpt=_safe_excerpt(risk.text),
+                    span_start=risk.start,
+                    span_end=risk.end,
+                    authority_level="untrusted_encoded_or_hidden_context",
+                    gate=f"{risk.spec.gate}:pcba_surface_decode",
+                    decision="FLAG_FOR_HUMAN_REVIEW",
+                    repair=risk.spec.repair,
+                    reason=(
+                        f"{risk.spec.reason} Detected after PCBA surface "
+                        f"normalization ({surface.name})."
+                    ),
+                    evidence_refs=[_span_hash(source_name, surface.source_text)],
+                )
+            )
     return findings
 
 
@@ -508,6 +574,36 @@ def _collect_instruction_risks(source_name: str, text: str) -> list[_RiskSpan]:
     return sorted(risks, key=lambda item: (item.start, item.end))
 
 
+def _collect_pcba_encoded_risks(source_name: str, text: str) -> list[_RiskSpan]:
+    risks: list[_RiskSpan] = []
+    seen: set[tuple[str, str, int, int]] = set()
+    for surface in _pcba_derived_surfaces(text):
+        decoded_risks = _collect_instruction_risks(
+            f"{source_name}:{surface.name}",
+            surface.text,
+        )
+        for decoded_risk in decoded_risks:
+            key = (
+                decoded_risk.spec.kind,
+                surface.source_text,
+                surface.source_start,
+                surface.source_end,
+            )
+            if key in seen:
+                continue
+            seen.add(key)
+            risks.append(
+                _RiskSpan(
+                    spec=decoded_risk.spec,
+                    source_name=f"{source_name}:{surface.name}",
+                    text=surface.source_text,
+                    start=surface.source_start,
+                    end=surface.source_end,
+                )
+            )
+    return sorted(risks, key=lambda item: (item.start, item.end))
+
+
 def _collect_upstream_instruction_risks(
     *,
     prompt_text: str | None,
@@ -516,8 +612,10 @@ def _collect_upstream_instruction_risks(
     risks: list[_RiskSpan] = []
     if prompt_text:
         risks.extend(_collect_instruction_risks("prompt", prompt_text))
+        risks.extend(_collect_pcba_encoded_risks("prompt", prompt_text))
     if scenario_text:
         risks.extend(_collect_instruction_risks("scenario_text", scenario_text))
+        risks.extend(_collect_pcba_encoded_risks("scenario_text", scenario_text))
     return risks
 
 
@@ -708,6 +806,66 @@ def _lacunarity_flags(
     return sorted(flags)
 
 
+def _cjt_pcba_diagnostics(
+    findings: list[InstructionIntegrityFinding],
+    claim_grounding: list[ClaimGrounding],
+) -> dict[str, Any]:
+    diagnostics: list[dict[str, Any]] = []
+    for finding in findings:
+        diagnostic = _cjt_pcba_diagnostic_for_finding(finding)
+        if diagnostic is not None:
+            diagnostics.append(diagnostic)
+    for claim in claim_grounding:
+        if claim.support_status != "unavailable":
+            continue
+        diagnostics.append(
+            {
+                "kind": "claim_grounding_gap",
+                "source": "claim_grounding",
+                "board": "CGB",
+                "test_point": "TP4",
+                "region": "missing_evidence_span",
+                "decision": "FLAG_FOR_HUMAN_REVIEW",
+                "claim_excerpt": claim.claim_excerpt,
+                "claim_ceiling": CJT_PCBA_CLAIM_CEILING,
+            }
+        )
+    surface_finding_count = sum(1 for finding in findings if ":" in finding.source)
+    return {
+        "status": "FLAG_FOR_HUMAN_REVIEW" if diagnostics else "present",
+        "mode": "shadow_cjt_pcba_surface_screen",
+        "diagnostic_count": len(diagnostics),
+        "surface_finding_count": surface_finding_count,
+        "diagnostics": diagnostics[:12],
+        "claim_ceiling": CJT_PCBA_CLAIM_CEILING,
+    }
+
+
+def _cjt_pcba_diagnostic_for_finding(
+    finding: InstructionIntegrityFinding,
+) -> dict[str, Any] | None:
+    map_by_kind: dict[str, tuple[str, str, str]] = {
+        "authority_override": ("CSB", "TP2", "authority_breakdown_risk"),
+        "secret_exfiltration": ("CSB", "TP3", "secret_boundary_breakdown"),
+        "role_confusion": ("CSB", "TP2", "role_authority_confusion"),
+        "task_replacement": ("CSB", "TP4", "task_gluing_break"),
+        "rpm_reason_break": ("CSB", "TP5", "reason_continuity_break"),
+    }
+    mapped = map_by_kind.get(finding.kind)
+    if mapped is None:
+        return None
+    board, test_point, region = mapped
+    return {
+        "kind": finding.kind,
+        "source": finding.source,
+        "board": board,
+        "test_point": test_point,
+        "region": region,
+        "decision": "FLAG_FOR_HUMAN_REVIEW",
+        "claim_ceiling": CJT_PCBA_CLAIM_CEILING,
+    }
+
+
 def _rpm_reason_continuity_summary(
     findings: list[InstructionIntegrityFinding],
 ) -> dict[str, Any]:
@@ -716,7 +874,7 @@ def _rpm_reason_continuity_summary(
         {
             finding.kind
             for finding in findings
-            if finding.source in {"prompt", "scenario_text"}
+            if finding.source.split(":", 1)[0] in {"prompt", "scenario_text"}
             and finding.kind
             in {"authority_override", "secret_exfiltration", "role_confusion", "task_replacement"}
         }
@@ -734,6 +892,86 @@ def _rpm_reason_continuity_summary(
             "and external/red-team gates pass."
         ),
     }
+
+
+def _pcba_derived_surfaces(text: str) -> list[_PcbaSurface]:
+    surfaces: list[_PcbaSurface] = []
+    seen: set[tuple[str, str, int, int]] = set()
+
+    def add_surface(
+        name: str,
+        surface_text: str,
+        source_text: str,
+        source_start: int,
+        source_end: int,
+    ) -> None:
+        normalized = _ZERO_WIDTH_RE.sub("", surface_text)
+        if normalized == text or not normalized.strip():
+            return
+        key = (name, normalized, source_start, source_end)
+        if key in seen:
+            return
+        seen.add(key)
+        surfaces.append(
+            _PcbaSurface(
+                name=name,
+                text=normalized,
+                source_text=source_text,
+                source_start=source_start,
+                source_end=source_end,
+            )
+        )
+
+    zero_width_removed = _ZERO_WIDTH_RE.sub("", text)
+    if zero_width_removed != text:
+        add_surface("zero_width_removed", zero_width_removed, text, 0, len(text))
+
+    html_unescaped = html.unescape(text)
+    if html_unescaped != text:
+        add_surface("html_unescaped", html_unescaped, text, 0, len(text))
+
+    url_decoded = urllib.parse.unquote_plus(text)
+
+    for match_index, match in enumerate(_URL_ENCODED_CHUNK_RE.finditer(text)):
+        decoded = urllib.parse.unquote_plus(match.group(0))
+        add_surface(
+            f"url_decoded:{match_index}",
+            decoded,
+            match.group(0),
+            match.start(),
+            match.end(),
+        )
+
+    base_texts = [text, zero_width_removed, html_unescaped, url_decoded]
+    for base_index, candidate_text in enumerate(base_texts):
+        for match_index, match in enumerate(_BASE64_TOKEN_RE.finditer(candidate_text)):
+            decoded = _decode_base64_text(match.group(0))
+            if decoded is None:
+                continue
+            source_text = match.group(0)
+            source_start = match.start() if base_index == 0 else 0
+            source_end = match.end() if base_index == 0 else len(text)
+            add_surface(
+                f"base64_decoded:{base_index}:{match_index}",
+                decoded,
+                source_text if base_index == 0 else text,
+                source_start,
+                source_end,
+            )
+    return surfaces
+
+
+def _decode_base64_text(token: str) -> str | None:
+    padded = token + ("=" * (-len(token) % 4))
+    try:
+        decoded_bytes = base64.b64decode(padded, validate=True)
+        decoded = decoded_bytes.decode("utf-8")
+    except (binascii.Error, UnicodeDecodeError):
+        return None
+    decoded = _ZERO_WIDTH_RE.sub("", decoded).strip()
+    if len(decoded) < 8 or not _PRINTABLE_RE.match(decoded):
+        return None
+    return decoded
 
 
 def _extract_task_replacement_targets(*values: str | None) -> list[str]:

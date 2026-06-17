@@ -171,6 +171,26 @@ function instructionIntegrityReport(
         claim_ceiling:
           'Structural RPM/lacunarity reason-break signal only; not pre-speech, not internal-state, and not causal. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
       },
+      cjt_pcba_diagnostics: {
+        status: 'FLAG_FOR_HUMAN_REVIEW',
+        mode: 'shadow_cjt_pcba_surface_screen',
+        diagnostic_count: 1,
+        surface_finding_count: 1,
+        diagnostics: [
+          {
+            kind: 'authority_override',
+            source: 'prompt:base64_decoded:0:0',
+            board: 'CSB',
+            test_point: 'TP2',
+            region: 'authority_breakdown_risk',
+            decision: 'FLAG_FOR_HUMAN_REVIEW',
+            claim_ceiling:
+              'CJT/PCBA diagnostics are shadow-only. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
+          },
+        ],
+        claim_ceiling:
+          'CJT/PCBA diagnostics are shadow-only. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
+      },
     },
     quarantine: {
       schema_version: 'cas_harness_instruction_quarantine.v0',
@@ -1065,6 +1085,12 @@ describe('casHarnessAuditApi', () => {
           break_count: 1,
           lacunarity_spike: true,
           upstream_risk_kinds: ['authority_override'],
+        },
+        cjt_pcba_diagnostics: {
+          status: 'FLAG_FOR_HUMAN_REVIEW',
+          mode: 'shadow_cjt_pcba_surface_screen',
+          diagnostic_count: 1,
+          surface_finding_count: 1,
         },
       },
     });

@@ -158,4 +158,47 @@ describe('InstructionIntegrityPanel', () => {
     expect(panel).toHaveTextContent('Summarize the evidence.');
     expect(panel).toHaveTextContent('OPEN / NOT LICENSED');
   });
+
+  it('surfaces CJT PCBA diagnostics without changing the verdict effect', () => {
+    const baseReport = report();
+
+    render(
+      <InstructionIntegrityPanel
+        report={{
+          ...baseReport,
+          gluing: {
+            ...baseReport.gluing,
+            cjt_pcba_diagnostics: {
+              status: 'FLAG_FOR_HUMAN_REVIEW',
+              mode: 'shadow_cjt_pcba_surface_screen',
+              diagnostic_count: 1,
+              surface_finding_count: 1,
+              diagnostics: [
+                {
+                  kind: 'authority_override',
+                  source: 'prompt:base64_decoded:0:0',
+                  board: 'CSB',
+                  test_point: 'TP2',
+                  region: 'authority_breakdown_risk',
+                  decision: 'FLAG_FOR_HUMAN_REVIEW',
+                  claim_ceiling:
+                    'CJT/PCBA diagnostics are shadow-only. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
+                },
+              ],
+              claim_ceiling:
+                'CJT/PCBA diagnostics are shadow-only. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
+            },
+          },
+        }}
+      />,
+    );
+
+    const panel = screen.getByTestId('instruction-integrity-panel');
+    expect(panel).toHaveTextContent('CJT/PCBA diagnostics');
+    expect(panel).toHaveTextContent('decoded surfaces: 1');
+    expect(panel).toHaveTextContent('CSB TP2');
+    expect(panel).toHaveTextContent('authority_breakdown_risk');
+    expect(panel).toHaveTextContent('effect: none_shadow_only');
+    expect(panel).toHaveTextContent('OPEN / NOT LICENSED');
+  });
 });
