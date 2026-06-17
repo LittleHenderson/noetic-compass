@@ -8,6 +8,7 @@ from pathlib import Path
 from api.services.cas_harness_goal_claim_auditor import (
     DEFAULT_W0_DATA_READINESS_MANIFEST,
     DEFAULT_W0_FULL_CONTROL_REPORT,
+    W0_REPORT_SCHEMA_VERSION,
     W0_REQUIRED_GATES,
     audit_active_goal_claims,
 )
@@ -34,6 +35,11 @@ def test_active_goal_auditor_keeps_current_claims_open_not_licensed():
     assert w0["observed_metrics"]["layer"] == 28
     assert w0["observed_metrics"]["risk_hidden_balanced_accuracy"] == 0.745011
     assert w0["observed_metrics"]["risk_hidden_minus_text_balanced_accuracy"] == 0.094235
+    assert w0["observed_metrics"]["existing_w0_report_count"] > 1
+    assert w0["observed_metrics"]["passing_w0_report_count"] == 0
+    assert (
+        w0["observed_metrics"]["best_existing_w0_candidate"]["license_eligible"] is False
+    )
     assert {
         "risk_hidden_balanced_accuracy_pass",
         "risk_text_margin_pass",
@@ -51,6 +57,7 @@ def test_active_goal_auditor_only_licenses_w0_when_all_frozen_gates_pass(tmp_pat
     report_path.write_text(
         json.dumps(
             {
+                "schema_version": W0_REPORT_SCHEMA_VERSION,
                 "status": "PASS",
                 "layer": 28,
                 "gates": {gate: True for gate in W0_REQUIRED_GATES},
@@ -79,6 +86,11 @@ def test_active_goal_auditor_only_licenses_w0_when_all_frozen_gates_pass(tmp_pat
     assert w0["claim_status"] == "LICENSED"
     assert w0["license_status"] == "LICENSED"
     assert w0["failing_gates"] == []
+    assert w0["observed_metrics"]["existing_w0_report_count"] == 1
+    assert w0["observed_metrics"]["passing_w0_report_count"] == 1
+    assert (
+        w0["observed_metrics"]["best_existing_w0_candidate"]["license_eligible"] is True
+    )
     assert audit["goal_complete"] is False
     assert rows["causal_proof"]["license_status"] == "NOT LICENSED"
 
@@ -109,4 +121,3 @@ def test_active_goal_auditor_cli_writes_report_and_can_fail_on_open(tmp_path):
 
     assert failed.returncode == 2
     assert json.loads(out_path.read_text(encoding="utf-8"))["goal_complete"] is False
-

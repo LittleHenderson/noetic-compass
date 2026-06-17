@@ -18,8 +18,27 @@
       ],
       "license_status": "NOT LICENSED",
       "observed_metrics": {
+        "best_existing_w0_candidate": {
+          "failing_gates": [
+            "risk_text_margin_pass",
+            "risk_within_payload_permutation_pass"
+          ],
+          "gate_pass_count": 12,
+          "gate_total": 14,
+          "layer": 28,
+          "license_eligible": false,
+          "ref": "docs\\working\\qwen_v6_matched_prespeech_eval_seed00_47_v2_20260615\\layer_28_exploratory_threshold_low0125_high030_full.json",
+          "risk_hidden_balanced_accuracy": 0.809091,
+          "risk_hidden_minus_text_balanced_accuracy": 0.0,
+          "risk_text_hash_balanced_accuracy": 0.809091,
+          "risk_within_payload_permutation_p": 0.008991,
+          "sha256": "35BFB919547F376D956F2E3D41706053BAE1DDC1C31F0176BC8D9D88AAAECE1C",
+          "status": "FAIL"
+        },
         "data_readiness_status": "READY_FOR_W0_CAPTURE",
+        "existing_w0_report_count": 61,
         "layer": 28,
+        "passing_w0_report_count": 0,
         "risk_domain_majority_balanced_accuracy": 0.542129,
         "risk_hidden_balanced_accuracy": 0.745011,
         "risk_hidden_minus_text_balanced_accuracy": 0.094235,
@@ -37,7 +56,7 @@
         "risk_within_payload_permutation_p": 0.000999,
         "status": "FAIL"
       },
-      "reason": "Current W0 full-control report does not license the internal prompt-injection detector claim. Missing gates: risk_hidden_balanced_accuracy_pass, risk_text_margin_pass, risk_per_payload_floor_pass",
+      "reason": "No current W0 prespeech report licenses the internal prompt-injection detector claim. Headline report missing gates: risk_hidden_balanced_accuracy_pass, risk_text_margin_pass, risk_per_payload_floor_pass",
       "required_evidence": [
         "exact_prompt_group_pass",
         "prompt_risk_class_floor_pass",
@@ -170,7 +189,7 @@
       ]
     }
   ],
-  "created_at": "2026-06-17T23:36:04.717957+00:00",
+  "created_at": "2026-06-17T23:39:17.924369+00:00",
   "goal_complete": false,
   "schema_version": "cas_harness_active_goal_claim_audit.v0",
   "summary": {
