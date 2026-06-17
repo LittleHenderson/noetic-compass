@@ -1,0 +1,112 @@
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+from api.services.cas_harness_goal_claim_auditor import (
+    DEFAULT_W0_DATA_READINESS_MANIFEST,
+    DEFAULT_W0_FULL_CONTROL_REPORT,
+    W0_REQUIRED_GATES,
+    audit_active_goal_claims,
+)
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_active_goal_auditor_keeps_current_claims_open_not_licensed():
+    audit = audit_active_goal_claims(ROOT)
+    rows = {row["claim_id"]: row for row in audit["claims"]}
+    w0 = rows["internal_w0_prompt_injection_detection"]
+
+    assert audit["schema_version"] == "cas_harness_active_goal_claim_audit.v0"
+    assert audit["goal_complete"] is False
+    assert audit["summary"]["claims_total"] == 6
+    assert audit["summary"]["claims_licensed"] == 0
+    assert set(audit["summary"]["unlicensed_claim_ids"]) == set(rows)
+    assert {row["license_status"] for row in rows.values()} == {"NOT LICENSED"}
+    assert {row["claim_status"] for row in rows.values()} == {"OPEN"}
+
+    assert w0["evidence_status"] == "failed"
+    assert w0["observed_metrics"]["status"] == "FAIL"
+    assert w0["observed_metrics"]["layer"] == 28
+    assert w0["observed_metrics"]["risk_hidden_balanced_accuracy"] == 0.745011
+    assert w0["observed_metrics"]["risk_hidden_minus_text_balanced_accuracy"] == 0.094235
+    assert {
+        "risk_hidden_balanced_accuracy_pass",
+        "risk_text_margin_pass",
+        "risk_per_payload_floor_pass",
+    }.issubset(set(w0["failing_gates"]))
+    assert "OPEN / NOT LICENSED" in audit["claim_ceiling"]
+
+
+def test_active_goal_auditor_only_licenses_w0_when_all_frozen_gates_pass(tmp_path):
+    report_path = tmp_path / DEFAULT_W0_FULL_CONTROL_REPORT
+    manifest_path = tmp_path / DEFAULT_W0_DATA_READINESS_MANIFEST
+    report_path.parent.mkdir(parents=True)
+    manifest_path.parent.mkdir(parents=True)
+    manifest_path.write_text(json.dumps({"status": "READY_FOR_W0_CAPTURE"}), encoding="utf-8")
+    report_path.write_text(
+        json.dumps(
+            {
+                "status": "PASS",
+                "layer": 28,
+                "gates": {gate: True for gate in W0_REQUIRED_GATES},
+                "metrics": {
+                    "risk_hidden_balanced_accuracy": 0.82,
+                    "risk_text_hash_balanced_accuracy": 0.61,
+                    "risk_hidden_minus_text_balanced_accuracy": 0.21,
+                    "risk_l0_embedding_balanced_accuracy": 0.5,
+                    "risk_payload_majority_balanced_accuracy": 0.5,
+                    "risk_domain_majority_balanced_accuracy": 0.5,
+                    "risk_length_balanced_accuracy": 0.48,
+                    "risk_within_payload_permutation_p": 0.001,
+                    "risk_per_payload_hidden_balanced_accuracy": {
+                        "system_instruction_boundary": 0.78
+                    },
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    audit = audit_active_goal_claims(tmp_path)
+    rows = {row["claim_id"]: row for row in audit["claims"]}
+    w0 = rows["internal_w0_prompt_injection_detection"]
+
+    assert w0["claim_status"] == "LICENSED"
+    assert w0["license_status"] == "LICENSED"
+    assert w0["failing_gates"] == []
+    assert audit["goal_complete"] is False
+    assert rows["causal_proof"]["license_status"] == "NOT LICENSED"
+
+
+def test_active_goal_auditor_cli_writes_report_and_can_fail_on_open(tmp_path):
+    out_path = tmp_path / "active_goal_audit.json"
+    script = ROOT / "scripts" / "audit_cas_harness_active_goal_claims.py"
+
+    ok = subprocess.run(
+        [sys.executable, str(script), "--out", str(out_path)],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    payload = json.loads(out_path.read_text(encoding="utf-8"))
+
+    assert payload["goal_complete"] is False
+    assert "internal_w0_prompt_injection_detection" in ok.stdout
+
+    failed = subprocess.run(
+        [sys.executable, str(script), "--out", str(out_path), "--fail-on-open"],
+        cwd=ROOT,
+        text=True,
+        capture_output=True,
+        check=False,
+    )
+
+    assert failed.returncode == 2
+    assert json.loads(out_path.read_text(encoding="utf-8"))["goal_complete"] is False
+
