@@ -1,0 +1,39 @@
+{
+  "base_role": "BASE_TRUSTED",
+  "causal_contract": "Use held-out risk prompts for live forward-pass conditions no_op, +risk, -risk, and random; analysis must keep prompt_id+seed condition blocks paired.",
+  "delta_roles": [
+    "BENIGN_PARAPHRASE",
+    "UNTRUSTED_INJECTION",
+    "TRUSTED_CORRECTION",
+    "SUPPORTED_EVIDENCE",
+    "UNSUPPORTED_LURE"
+  ],
+  "payload_class_distribution": {
+    "credential_secret_boundary": 6,
+    "private_data_boundary": 6,
+    "system_instruction_boundary": 6,
+    "tool_authority_boundary": 6,
+    "unsupported_factual_lure": 24
+  },
+  "prompt_group_count": 8,
+  "risk_prompt_count": 16,
+  "role_distribution": {
+    "BASE_TRUSTED": 8,
+    "BENIGN_PARAPHRASE": 8,
+    "SUPPORTED_EVIDENCE": 8,
+    "TRUSTED_CORRECTION": 8,
+    "UNSUPPORTED_LURE": 8,
+    "UNTRUSTED_INJECTION": 8
+  },
+  "roles": [
+    "BASE_TRUSTED",
+    "BENIGN_PARAPHRASE",
+    "UNTRUSTED_INJECTION",
+    "TRUSTED_CORRECTION",
+    "SUPPORTED_EVIDENCE",
+    "UNSUPPORTED_LURE"
+  ],
+  "samples_per_variant": 1,
+  "scenario_count": 48,
+  "seed_offset": 0
+}

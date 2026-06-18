@@ -1,0 +1,16 @@
+{
+  "alpha": 10.0,
+  "claim": "OPEN / NOT LICENSED for PCBA/CJT causal proof until paired-seed analysis passes. Auto-labels should be audited before public claim upgrades.",
+  "condition_count": 4,
+  "created_at": "2026-06-18T18:07:08.686840+00:00",
+  "direction": "/root/cas_harness_hidden_pi_w0/out/cjt_bias_vibration_causal_qwen_20260618/cjt_bias_vibration_risk_direction_layer18.npy",
+  "layer": 18,
+  "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "output_jsonl": "/root/cas_harness_hidden_pi_w0/out/cjt_bias_vibration_causal_qwen_20260618/cjt_causal_rows_alpha10_seed4.jsonl",
+  "prompt_bank": "live-trace-worker/scenarios/cjt_bias_vibration_causal_bank_v0_20260618.json",
+  "prompt_count": 16,
+  "rows_written": 256,
+  "schema_version": "cas_harness_cjt_bias_vibration_causal_experiment.v0",
+  "seeds": 4,
+  "status": "OUTPUTS_GENERATED_AND_AUTO_LABELED"
+}

@@ -143,5 +143,103 @@ try:
                 self._handle.remove()
                 self._handle = None
 
+
+    class CausalLayerInterventionHook:
+        """Add +/- alpha*d at a transformer layer during prompt prefill only.
+
+        The hidden_state_layer number follows Hugging Face hidden-state
+        indexing: 0 is embeddings, 1 is after block 0, and so on. A passing W0
+        readout at hidden-state layer 18 therefore hooks transformer block 17.
+        """
+
+        VALID = ("no_op", "+risk", "-risk", "random")
+
+        def __init__(
+            self,
+            model: Any,
+            direction_vec: "torch.Tensor",
+            alpha: float,
+            *,
+            hidden_state_layer: int,
+        ):
+            if hidden_state_layer <= 0:
+                raise ValueError("hidden_state_layer must be >= 1 for a transformer block hook")
+            self.model = model
+            self.d = direction_vec / direction_vec.norm()
+            self.alpha = float(alpha)
+            self.hidden_state_layer = int(hidden_state_layer)
+            self.block_index = int(hidden_state_layer) - 1
+            self.condition = "no_op"
+            self._handle: Any = None
+            self._random_dir: Any = None
+            self._applied = False
+
+        def set_condition(self, condition: str) -> None:
+            if condition not in self.VALID:
+                raise ValueError(f"invalid condition {condition!r}")
+            self.condition = condition
+            self._applied = False
+            if condition == "random":
+                r = torch.randn_like(self.d)
+                self._random_dir = r / r.norm()
+
+        def _hook(self, _module: Any, _inp: Any, output: Any) -> Any:
+            if self.condition == "no_op" or self._applied:
+                return output
+            hidden = output[0] if isinstance(output, tuple) else output
+            if not hasattr(hidden, "shape") or len(hidden.shape) != 3:
+                return output
+            if int(hidden.shape[1]) <= 1:
+                return output
+            patched = hidden.clone()
+            last = patched[:, -1:, :]
+            d = self.d.to(last.device, dtype=last.dtype)
+            if self.condition == "+risk":
+                last = last + self.alpha * d
+            elif self.condition == "-risk":
+                last = last - self.alpha * d
+            elif self.condition == "random":
+                last = last + self.alpha * self._random_dir.to(last.device, dtype=last.dtype)
+            patched[:, -1:, :] = last
+            self._applied = True
+            if isinstance(output, tuple):
+                return (patched, *output[1:])
+            return patched
+
+        def attach(self) -> None:
+            blocks = resolve_transformer_blocks(self.model)
+            if self.block_index >= len(blocks):
+                raise ValueError(
+                    f"hidden_state_layer {self.hidden_state_layer} maps to block "
+                    f"{self.block_index}, but model exposes only {len(blocks)} blocks"
+                )
+            self._handle = blocks[self.block_index].register_forward_hook(self._hook)
+
+        def remove(self) -> None:
+            if self._handle is not None:
+                self._handle.remove()
+                self._handle = None
+
+
+    def resolve_transformer_blocks(model: Any) -> Any:
+        """Return the model's ordered transformer blocks for common HF layouts."""
+
+        candidates = [
+            ("model", "layers"),
+            ("gpt_neox", "layers"),
+            ("transformer", "h"),
+            ("transformer", "layers"),
+        ]
+        for parent_name, child_name in candidates:
+            parent = getattr(model, parent_name, None)
+            blocks = getattr(parent, child_name, None) if parent is not None else None
+            if blocks is not None:
+                return blocks
+        blocks = getattr(model, "layers", None)
+        if blocks is not None:
+            return blocks
+        raise ValueError("Could not locate transformer blocks on model")
+
 except ImportError:  # pragma: no cover
     CausalInterventionHook = None  # type: ignore
+    CausalLayerInterventionHook = None  # type: ignore

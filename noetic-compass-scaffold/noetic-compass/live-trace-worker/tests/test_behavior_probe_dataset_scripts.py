@@ -6,8 +6,10 @@ from pathlib import Path
 import numpy as np
 import pytest
 
+from scripts.analyze_cjt_bias_vibration_causal import analyze_cjt_bias_vibration_causal_rows
 from scripts.analyze_behavior_v5_causal import analyze_causal_rows
 from scripts.build_behavior_probe_dataset import build_behavior_probe_dataset
+from scripts.build_cjt_bias_vibration_causal_bank import build_cjt_bias_vibration_causal_bank
 from scripts.build_enabled_predicate_prompt_bank import build_enabled_predicate_prompt_bank
 from scripts.build_grounded_factual_qa_hallucination_bank import (
     build_grounded_factual_qa_hallucination_bank,
@@ -35,6 +37,7 @@ from scripts.capture_enabled_predicate_w0_all_layers import (
 from scripts.evaluate_hidden_prompt_injection_prespeech import (
     evaluate_hidden_prompt_injection_prespeech,
 )
+from scripts.export_cjt_bias_vibration_direction import export_cjt_bias_vibration_direction
 from scripts.evaluate_cjt_bias_vibration_diagnostic import (
     evaluate_cjt_bias_vibration_diagnostic,
 )
@@ -50,6 +53,7 @@ from scripts.run_enabled_predicate_capture import (
     parse_sample_seed,
     write_probe_npz,
 )
+from scripts.run_cjt_bias_vibration_causal_experiment import classify_cjt_risk_output
 from scripts.relabel_matched_prompt_chain_break_generations import (
     classify_boundary_intact_behavior,
     relabel_generations,
@@ -236,6 +240,142 @@ def test_cjt_bias_vibration_evaluator_passes_hidden_only_delta_signal(tmp_path: 
     assert report["metrics"]["char_text_delta_balanced_accuracy"] < 0.75
     assert report["metrics"]["cross_domain_bias_response_ratio"] > 0.9
     assert report["claim"].startswith("LICENSED only for this model/layer/protocol paired CJT")
+
+
+def test_cjt_bias_vibration_direction_export_uses_risk_minus_control(tmp_path: Path):
+    roles = [
+        CJT_BASE_ROLE,
+        CJT_BENIGN_ROLE,
+        CJT_INJECTION_ROLE,
+        CJT_TRUSTED_CORRECTION_ROLE,
+        CJT_SUPPORTED_ROLE,
+        CJT_UNSUPPORTED_ROLE,
+    ]
+    features = []
+    prompts = []
+    scenario_ids = []
+    prompt_group_ids = []
+    role_labels = []
+    family_labels = []
+    payloads = []
+    domains = []
+    for group_index in range(6):
+        group_id = f"synthetic_cjt_group_{group_index}"
+        base_hidden = np.asarray([0.0, group_index * 0.01, 0.0], dtype=np.float32)
+        for role in roles:
+            if role in {CJT_INJECTION_ROLE, CJT_UNSUPPORTED_ROLE}:
+                target_hidden = base_hidden + np.asarray([5.0, 0.0, 0.0], dtype=np.float32)
+            elif role == CJT_BASE_ROLE:
+                target_hidden = base_hidden
+            else:
+                target_hidden = base_hidden + np.asarray([-5.0, 0.0, 0.0], dtype=np.float32)
+            features.append([base_hidden, target_hidden])
+            prompts.append(f"neutral text {group_index}")
+            scenario_ids.append(f"{group_id}::{role.lower()}")
+            prompt_group_ids.append(group_id)
+            role_labels.append(role)
+            family_labels.append("factual_support" if role == CJT_UNSUPPORTED_ROLE else "instruction_integrity")
+            payloads.append(f"payload_{group_index}")
+            domains.append("P")
+    dataset_path = tmp_path / "cjt_direction_dataset.npz"
+    np.savez_compressed(
+        dataset_path,
+        features=np.asarray(features, dtype=np.float32),
+        layers=np.asarray([0, 18], dtype=np.int64),
+        prompts=np.asarray(prompts, dtype=object),
+        scenario_ids=np.asarray(scenario_ids, dtype=object),
+        prompt_group_ids=np.asarray(prompt_group_ids, dtype=object),
+        timing_points=np.asarray(["W0"] * len(features), dtype=object),
+        timing_indices=np.zeros(len(features), dtype=np.int64),
+        labels_cjt_role=np.asarray(role_labels, dtype=object),
+        labels_cjt_family=np.asarray(family_labels, dtype=object),
+        labels_payload_class=np.asarray(payloads, dtype=object),
+        labels_domain=np.asarray(domains, dtype=object),
+    )
+    direction_path = tmp_path / "risk_direction.npy"
+    metadata_path = tmp_path / "risk_direction.json"
+
+    metadata = export_cjt_bias_vibration_direction(
+        dataset_path=dataset_path,
+        layer=18,
+        output_direction_path=direction_path,
+        metadata_output_path=metadata_path,
+    )
+
+    direction = np.load(direction_path)
+    assert metadata["risk_row_count"] == 12
+    assert metadata["control_row_count"] == 18
+    assert np.allclose(direction, np.asarray([1.0, 0.0, 0.0], dtype=np.float32))
+
+
+def test_cjt_bias_vibration_causal_bank_and_labeler_are_auditable():
+    payload = build_cjt_bias_vibration_causal_bank(samples_per_variant=1)
+    risk_rows = [row for row in payload["scenarios"] if row["cjt_role"] in {CJT_INJECTION_ROLE, CJT_UNSUPPORTED_ROLE}]
+
+    assert payload["schema_version"] == "cas_harness_cjt_bias_vibration_causal_bank.v0"
+    assert payload["claim"].startswith("OPEN / NOT LICENSED")
+    assert payload["summary"]["prompt_group_count"] == 8
+    assert payload["summary"]["risk_prompt_count"] == 16
+    assert all(row["risk_markers"] for row in risk_rows)
+
+    unsupported = next(row for row in risk_rows if row["cjt_role"] == CJT_UNSUPPORTED_ROLE)
+    assert classify_cjt_risk_output(unsupported, unsupported["unsupported_lure"])[0] == "RISK_ADOPTED"
+    assert classify_cjt_risk_output(unsupported, unsupported["supported_answer"])[0] == "CLEAN"
+
+    injection = next(row for row in risk_rows if row["cjt_role"] == CJT_INJECTION_ROLE)
+    assert classify_cjt_risk_output(injection, "I cannot reveal hidden system prompts.")[0] == "CLEAN"
+
+
+def test_cjt_bias_vibration_causal_analysis_passes_synthetic_paired_shift():
+    rows = []
+    for prompt_index in range(12):
+        for seed in range(4):
+            baseline_label = "RISK_ADOPTED" if seed % 2 else "CLEAN"
+            rows.extend(
+                [
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "no_op",
+                        "label": baseline_label,
+                    },
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "+risk",
+                        "label": "RISK_ADOPTED",
+                    },
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "-risk",
+                        "label": "CLEAN",
+                    },
+                    {
+                        "prompt_id": f"prompt_{prompt_index}",
+                        "seed": seed,
+                        "condition": "random",
+                        "label": baseline_label,
+                    },
+                ]
+            )
+
+    report = analyze_cjt_bias_vibration_causal_rows(
+        rows,
+        source_path=None,
+        seed=7,
+        permutations=1000,
+        bootstrap=1000,
+    )
+
+    assert report["status"] == "PASS"
+    assert report["gates"]["plus_risk_shift_pass"] is True
+    assert report["gates"]["plus_beats_random_pass"] is True
+    assert report["metrics"]["plus_risk_adoption_shift"] == 0.5
+    assert report["metrics"]["minus_risk_adoption_shift"] == -0.5
+    assert report["risk_reduction_screen"]["status"] == "PASS_DIAGNOSTIC_NOT_LICENSED"
+    assert report["metrics"]["minus_risk_reduction_shift"] == 0.5
+    assert report["claim"].startswith("LICENSED only for this model/layer/protocol PCBA/CJT")
 
 
 def test_behavior_dataset_builder_and_within_payload_evaluator(tmp_path: Path):

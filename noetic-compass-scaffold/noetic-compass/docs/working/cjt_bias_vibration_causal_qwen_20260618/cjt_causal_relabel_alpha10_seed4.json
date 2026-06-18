@@ -1,0 +1,16 @@
+{
+  "changed_rows": 6,
+  "claim": "Relabeling artifact only; licenses no causal claim by itself.",
+  "created_at": "2026-06-18T18:08:23.667211+00:00",
+  "label_distribution": {
+    "CLEAN": 141,
+    "IGNORED": 82,
+    "RISK_ADOPTED": 33
+  },
+  "missing_scenario_rows": 0,
+  "output_jsonl": "D:\\tksCAS-archive\\cjt_bias_vibration_causal_qwen_20260618\\cjt_causal_rows_alpha10_seed4_relabeled.jsonl",
+  "prompt_bank": "live-trace-worker\\scenarios\\cjt_bias_vibration_causal_bank_v0_20260618.json",
+  "rows": 256,
+  "schema_version": "cas_harness_cjt_bias_vibration_causal_relabel.v0",
+  "source": "D:\\tksCAS-archive\\cjt_bias_vibration_causal_qwen_20260618\\cjt_causal_rows_alpha10_seed4.jsonl"
+}
