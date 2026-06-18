@@ -9,7 +9,7 @@
       "evidence_refs": [
         "docs\\working\\qwen_v6_expanded_prespeech_eval_v2_s16_20260615\\layer_28_full_controls.json",
         "docs\\working\\qwen_v6_expanded_chain_break_combined_gate_v2_s16_20260615\\combined_gate_manifest.json",
-        "docs\\working\\hidden_prompt_injection_surface_screen_v0_20260617.json"
+        "docs\\working\\hidden_prompt_injection_surface_screen_large_v1_20260617.json"
       ],
       "evidence_status": "failed",
       "failing_gates": [
@@ -36,21 +36,24 @@
           "sha256": "35BFB919547F376D956F2E3D41706053BAE1DDC1C31F0176BC8D9D88AAAECE1C",
           "status": "FAIL"
         },
+        "best_hidden_injection_w0_candidate": null,
         "data_readiness_status": "READY_FOR_W0_CAPTURE",
+        "existing_hidden_injection_w0_report_count": 0,
         "existing_w0_report_count": 61,
         "layer": 28,
         "next_hidden_injection_surface_screen": {
           "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
-          "domain_majority_balanced_accuracy": 0.2875,
-          "encoding_majority_balanced_accuracy": 0.3875,
-          "length_balanced_accuracy": 0.425,
-          "payload_majority_balanced_accuracy": 0.2625,
-          "prompt_group_count": 80,
-          "row_count": 640,
+          "domain_majority_balanced_accuracy": 0.40625,
+          "encoding_majority_balanced_accuracy": 0.45,
+          "length_balanced_accuracy": 0.459375,
+          "payload_majority_balanced_accuracy": 0.403125,
+          "prompt_group_count": 320,
+          "row_count": 2560,
           "status": "READY_FOR_W0_CAPTURE",
           "testable_payload_class_count": 5,
-          "text_hash_balanced_accuracy": 0.4
+          "text_hash_balanced_accuracy": 0.503125
         },
+        "passing_hidden_injection_w0_report_count": 0,
         "passing_w0_report_count": 0,
         "risk_domain_majority_balanced_accuracy": 0.542129,
         "risk_hidden_balanced_accuracy": 0.745011,
@@ -202,7 +205,7 @@
       ]
     }
   ],
-  "created_at": "2026-06-17T23:59:07.113807+00:00",
+  "created_at": "2026-06-18T00:07:02.057272+00:00",
   "goal_complete": false,
   "schema_version": "cas_harness_active_goal_claim_audit.v0",
   "summary": {

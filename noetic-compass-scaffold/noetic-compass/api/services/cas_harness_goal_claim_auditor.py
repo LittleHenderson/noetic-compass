@@ -35,9 +35,12 @@ DEFAULT_W0_DATA_READINESS_MANIFEST = (
 DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN = (
     Path("docs")
     / "working"
-    / "hidden_prompt_injection_surface_screen_v0_20260617.json"
+    / "hidden_prompt_injection_surface_screen_large_v1_20260617.json"
 )
 W0_REPORT_SCHEMA_VERSION = "cas_harness_behavior_v6_matched_prespeech_eval.v1"
+HIDDEN_INJECTION_W0_REPORT_SCHEMA_VERSION = (
+    "cas_harness_hidden_prompt_injection_prespeech_eval.v1"
+)
 
 W0_REQUIRED_GATES = (
     "exact_prompt_group_pass",
@@ -54,6 +57,23 @@ W0_REQUIRED_GATES = (
     "risk_shuffled_control_pass",
     "risk_within_payload_permutation_pass",
     "risk_per_payload_floor_pass",
+)
+
+HIDDEN_INJECTION_REQUIRED_GATES = (
+    "exact_prompt_group_pass",
+    "payload_floor_pass",
+    "label_per_payload_floor_pass",
+    "hidden_balanced_accuracy_pass",
+    "l0_baseline_present_pass",
+    "l0_margin_pass",
+    "text_margin_pass",
+    "payload_margin_pass",
+    "domain_margin_pass",
+    "encoding_margin_pass",
+    "length_margin_pass",
+    "shuffled_control_pass",
+    "within_payload_permutation_pass",
+    "per_payload_floor_pass",
 )
 
 ACTIVE_GOAL_CLAIMS = (
@@ -94,6 +114,7 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
     )
     w0_report = _load_artifact(root_path, DEFAULT_W0_FULL_CONTROL_REPORT)
     w0_scan = _scan_existing_w0_reports(root_path)
+    hidden_injection_w0_scan = _scan_existing_hidden_injection_w0_reports(root_path)
 
     rows = [
         _audit_internal_w0_detection(
@@ -101,6 +122,7 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
             data_readiness,
             w0_scan,
             hidden_injection_surface_screen,
+            hidden_injection_w0_scan,
         ),
         _static_not_licensed_row(
             claim_id="live_pre_speech_interception",
@@ -208,6 +230,7 @@ def _audit_internal_w0_detection(
     data_readiness_artifact: dict[str, Any],
     w0_scan: dict[str, Any],
     hidden_injection_surface_artifact: dict[str, Any],
+    hidden_injection_w0_scan: dict[str, Any],
 ) -> GoalClaimAuditRow:
     report = w0_report_artifact.get("json")
     manifest = data_readiness_artifact.get("json")
@@ -236,6 +259,43 @@ def _audit_internal_w0_detection(
         for candidate in w0_scan.get("candidates", [])
         if candidate.get("license_eligible") is True
     ]
+    passing_hidden_injection_reports = [
+        candidate
+        for candidate in hidden_injection_w0_scan.get("candidates", [])
+        if candidate.get("license_eligible") is True
+    ]
+    if passing_hidden_injection_reports:
+        best_hidden = passing_hidden_injection_reports[0]
+        return GoalClaimAuditRow(
+            claim_id="internal_w0_prompt_injection_detection",
+            claim_status="LICENSED",
+            license_status="LICENSED",
+            evidence_status="present",
+            decision="LICENSED",
+            reason=(
+                "A hidden/encoded prompt-injection W0 prespeech report passed "
+                "every frozen gate."
+            ),
+            required_evidence=list(HIDDEN_INJECTION_REQUIRED_GATES),
+            evidence_refs=[str(best_hidden.get("ref"))],
+            failing_gates=[],
+            observed_metrics={
+                "existing_w0_report_count": w0_scan.get("report_count", 0),
+                "passing_w0_report_count": len(passing_reports),
+                "best_existing_w0_candidate": w0_scan.get("best_candidate"),
+                "existing_hidden_injection_w0_report_count": hidden_injection_w0_scan.get(
+                    "report_count",
+                    0,
+                ),
+                "passing_hidden_injection_w0_report_count": len(
+                    passing_hidden_injection_reports
+                ),
+                "best_hidden_injection_w0_candidate": best_hidden,
+                "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
+                    hidden_injection_surface
+                ),
+            },
+        )
     if passing_reports:
         best_passing = passing_reports[0]
         return GoalClaimAuditRow(
@@ -252,6 +312,16 @@ def _audit_internal_w0_detection(
                 "existing_w0_report_count": w0_scan.get("report_count", 0),
                 "passing_w0_report_count": len(passing_reports),
                 "best_existing_w0_candidate": best_passing,
+                "existing_hidden_injection_w0_report_count": hidden_injection_w0_scan.get(
+                    "report_count",
+                    0,
+                ),
+                "passing_hidden_injection_w0_report_count": len(
+                    passing_hidden_injection_reports
+                ),
+                "best_hidden_injection_w0_candidate": hidden_injection_w0_scan.get(
+                    "best_candidate"
+                ),
                 "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
                     hidden_injection_surface
                 ),
@@ -295,6 +365,16 @@ def _audit_internal_w0_detection(
         "existing_w0_report_count": w0_scan.get("report_count", 0),
         "passing_w0_report_count": len(passing_reports),
         "best_existing_w0_candidate": w0_scan.get("best_candidate"),
+        "existing_hidden_injection_w0_report_count": hidden_injection_w0_scan.get(
+            "report_count",
+            0,
+        ),
+        "passing_hidden_injection_w0_report_count": len(
+            passing_hidden_injection_reports
+        ),
+        "best_hidden_injection_w0_candidate": hidden_injection_w0_scan.get(
+            "best_candidate"
+        ),
         "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
             hidden_injection_surface
         ),
@@ -436,6 +516,64 @@ def _scan_existing_w0_reports(root: Path) -> dict[str, Any]:
             int(item["gate_pass_count"]),
             _float_or_low(item.get("risk_hidden_minus_text_balanced_accuracy")),
             _float_or_low(item.get("risk_hidden_balanced_accuracy")),
+        ),
+        reverse=True,
+    )
+    return {
+        "report_count": len(candidates),
+        "candidates": candidates,
+        "best_candidate": candidates[0] if candidates else None,
+    }
+
+
+def _scan_existing_hidden_injection_w0_reports(root: Path) -> dict[str, Any]:
+    docs_working = root / "docs" / "working"
+    if not docs_working.exists():
+        return {"report_count": 0, "candidates": [], "best_candidate": None}
+
+    candidates: list[dict[str, Any]] = []
+    for path in docs_working.rglob("*.json"):
+        artifact = _load_json_path(path)
+        parsed = artifact.get("json")
+        if not isinstance(parsed, Mapping):
+            continue
+        if parsed.get("schema_version") != HIDDEN_INJECTION_W0_REPORT_SCHEMA_VERSION:
+            continue
+        gates = parsed.get("gates") if isinstance(parsed.get("gates"), Mapping) else {}
+        metrics = parsed.get("metrics") if isinstance(parsed.get("metrics"), Mapping) else {}
+        failing_gates = [
+            gate_name
+            for gate_name in HIDDEN_INJECTION_REQUIRED_GATES
+            if gates.get(gate_name) is not True
+        ]
+        gate_pass_count = len(HIDDEN_INJECTION_REQUIRED_GATES) - len(failing_gates)
+        status = str(parsed.get("status") or "UNKNOWN")
+        candidate = {
+            "ref": str(path.relative_to(root)),
+            "sha256": artifact["sha256"],
+            "status": status,
+            "layer": parsed.get("layer"),
+            "gate_pass_count": gate_pass_count,
+            "gate_total": len(HIDDEN_INJECTION_REQUIRED_GATES),
+            "license_eligible": status == "PASS" and not failing_gates,
+            "failing_gates": failing_gates,
+            "hidden_balanced_accuracy": metrics.get("hidden_balanced_accuracy"),
+            "text_hash_balanced_accuracy": metrics.get("text_hash_balanced_accuracy"),
+            "hidden_minus_text_balanced_accuracy": metrics.get(
+                "hidden_minus_text_balanced_accuracy"
+            ),
+            "within_payload_permutation_p": metrics.get(
+                "within_payload_permutation_p"
+            ),
+        }
+        candidates.append(candidate)
+
+    candidates.sort(
+        key=lambda item: (
+            bool(item["license_eligible"]),
+            int(item["gate_pass_count"]),
+            _float_or_low(item.get("hidden_minus_text_balanced_accuracy")),
+            _float_or_low(item.get("hidden_balanced_accuracy")),
         ),
         reverse=True,
     )

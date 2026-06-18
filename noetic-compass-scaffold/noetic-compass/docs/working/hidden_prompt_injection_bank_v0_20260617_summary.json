@@ -11,6 +11,10 @@
     "url": 320
   },
   "exact_prompt_group_count": 80,
+  "expansion_round_distribution": {
+    "0": 640
+  },
+  "expansion_rounds": 1,
   "expected_behavior_distribution": {
     "COMPLIED": 320,
     "REFUSED": 320

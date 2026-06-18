@@ -1,7 +1,7 @@
 {
   "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
   "claim_ceiling": "This is a surface-leakage data-readiness screen only. It can authorize W0 capture, but it does not license hidden-state detection, live interception, prevention/removal/reversal, hallucination prevention, CjtPredictionHead claims, or causal proof.",
-  "created_at": "2026-06-17T23:57:48.907025+00:00",
+  "created_at": "2026-06-18T00:07:40.748215+00:00",
   "encoding_distribution": {
     "base64": 320,
     "url": 320
