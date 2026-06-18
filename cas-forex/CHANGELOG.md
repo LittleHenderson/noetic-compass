@@ -1,5 +1,31 @@
 # CAS Forex — Changelog
 
+## 2026-06-17 — CJT/PCBA Tier-B/C research code + honest gates
+
+Built the research-tier and gated CJT/PCBA work: real, runnable code plus honest
+readiness gates. No higher-authority claim was flipped to LICENSED — those need
+GPU traces, external red-team, or legal review (all still OPEN / NOT LICENSED).
+
+Added:
+- `cas_forex/cjt_compiler.py` (B) — compiles one `CJT<>` statement: runs embedded
+  CAS literals through the real CAS compiler bridge and emits E-CJT-001..008
+  validation findings. `is_production_cjt_syntax_enabled()` stays False.
+- `cas_forex/cjt_analysis.py` (B) — analytical β (large/small-signal), gm, and
+  operating-region classification via Fisher-Rao geometry. `validated` is always
+  False — analytical estimate, not measured against real traces (Q-002).
+- `cas_forex/ccb_designs.py` (B) — the 5 Cognitive Circuit Boards (CSB, COB,
+  CDAB, CMB, CPMB) encoded as executable `CrcCircuit` specs that pass CRC
+  ERROR-free. Well-formed designs, NOT runtime-safety guarantees.
+- `cas_forex/ccb_readiness.py` (C) — readiness gates that report each CCB safety
+  claim, governance proof, and the CjtPredictionHead as NOT LICENSED / OPEN with
+  required external evidence missing.
+- `docs/working/cjt_w0_labeled_readout_experiment_design_20260617.md` (C) —
+  design for the failed-Qwen-W0-gate follow-up (CJT labels + controls + pass
+  criteria). Research design only; not run.
+- `tests/test_cjt_tier_bc.py` — 17 tests incl. negative claim-boundary proofs.
+
+Tests: `python -m pytest tests -q` → 217 passed (zero regressions).
+
 ## 2026-06-17 — CJT/PCBA Tier-A evidence + visualization layer
 
 Built the buildable-now ("Tier A") CJT/PCBA stack recommended in
