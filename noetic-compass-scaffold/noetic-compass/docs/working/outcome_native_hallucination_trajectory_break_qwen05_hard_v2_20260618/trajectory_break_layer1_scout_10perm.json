@@ -1,0 +1,246 @@
+{
+  "alignment": {
+    "contract": "Every W0 row must be the same scenario/trajectory as W1 and W8, with matching label, prompt group, prompt, and forced continuation identity when present.",
+    "excluded_by_timing_counts": {
+      "W0": 0,
+      "W1": 0,
+      "W8": 11
+    },
+    "excluded_by_timing_examples": {
+      "W0": [],
+      "W1": [],
+      "W8": [
+        "outcome_native_hard_qa_supply_chain_counts_05_seed_00",
+        "outcome_native_hard_qa_supply_chain_counts_05_seed_04",
+        "outcome_native_hard_qa_supply_chain_counts_06_seed_04",
+        "outcome_native_hard_qa_supply_chain_counts_14_seed_05",
+        "outcome_native_hard_qa_supply_chain_counts_21_seed_00",
+        "outcome_native_hard_qa_supply_chain_counts_21_seed_04",
+        "outcome_native_hard_qa_supply_chain_counts_29_seed_04",
+        "outcome_native_hard_qa_supply_chain_counts_30_seed_04",
+        "outcome_native_hard_qa_supply_chain_counts_30_seed_05",
+        "outcome_native_hard_qa_supply_chain_counts_37_seed_00"
+      ]
+    },
+    "excluded_label_distribution_by_timing": {
+      "W0": {},
+      "W1": {},
+      "W8": {
+        "SUPPORTED": 8,
+        "UNSUPPORTED": 3
+      }
+    },
+    "extra_by_timing_counts": {
+      "W0": 0,
+      "W1": 0,
+      "W8": 0
+    },
+    "extra_by_timing_examples": {
+      "W0": [],
+      "W1": [],
+      "W8": []
+    },
+    "forced_continuation_identity_pass": true,
+    "identity_fields_checked": [
+      "model_output_sha256s",
+      "judged_answer_sha256s"
+    ],
+    "original_timing_row_counts": {
+      "W0": 1392,
+      "W1": 1392,
+      "W8": 1381
+    },
+    "retained_trajectory_count": 1381,
+    "retention_fraction": 0.992098,
+    "row_alignment_pass": true,
+    "row_intersection_mode": true,
+    "row_intersection_retention_pass": true,
+    "trajectory_count": 1381
+  },
+  "claim": "OPEN / NOT LICENSED for timing-trajectory hidden-state detection.",
+  "claim_ceiling": "This is detection only. It tests whether W0->W1->W8 hidden-state movement carries a label signal beyond text, metadata, W0-static, layer-0, and shuffled-time controls. It does not license live interception, prompt-injection prevention/removal/reversal, hallucination prevention, or causal proof.",
+  "created_at": "2026-06-18T21:49:17.690816+00:00",
+  "cross_validation": {
+    "contract": "All rows for one prompt_group_id stay inside exactly one test fold.",
+    "fold_count": 5,
+    "fold_group_counts": [
+      40,
+      40,
+      40,
+      40,
+      40
+    ],
+    "fold_sizes": [
+      258,
+      276,
+      275,
+      278,
+      294
+    ],
+    "train_test_group_overlap_count": 0
+  },
+  "datasets": {
+    "W0": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\.tmp\\trajectory_break_extract\\outcome_native_hallucination_w0_prompt_risk_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz",
+    "W1": "D:\\tksCAS-archive\\outcome_native_hallucination_qwen05_hard_v2_20260618\\outcome_native_hallucination_w1_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz",
+    "W8": "D:\\tksCAS-archive\\outcome_native_hallucination_qwen05_hard_v2_20260618\\outcome_native_hallucination_w8_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz"
+  },
+  "fold_count": 5,
+  "gates": {
+    "challenge_mode_margin_pass": true,
+    "domain_margin_pass": true,
+    "evidence_source_margin_pass": true,
+    "exact_prompt_group_pass": true,
+    "forced_continuation_identity_pass": true,
+    "generated_prefix_char_text_margin_pass": false,
+    "generated_prefix_text_margin_pass": false,
+    "grouped_prompt_fold_pass": true,
+    "l0_baseline_present_pass": true,
+    "l0_trajectory_margin_pass": false,
+    "label_per_stratum_floor_pass": true,
+    "payload_class_margin_pass": true,
+    "per_stratum_floor_pass": false,
+    "prefix_length_margin_pass": false,
+    "prompt_char_text_margin_pass": false,
+    "prompt_length_margin_pass": true,
+    "prompt_text_margin_pass": true,
+    "retrieval_condition_margin_pass": true,
+    "retrieval_score_bucket_margin_pass": true,
+    "row_alignment_pass": true,
+    "row_intersection_retention_pass": true,
+    "same_prompt_mixed_group_floor_pass": true,
+    "shuffled_label_control_pass": true,
+    "shuffled_time_control_margin_pass": true,
+    "strata_floor_pass": true,
+    "strata_margin_pass": true,
+    "trajectory_balanced_accuracy_pass": true,
+    "w0_static_control_margin_pass": false,
+    "within_stratum_permutation_pass": false
+  },
+  "important_limits": [
+    "W0, W1, and W8 rows must align by trajectory ID before evaluation.",
+    "Forced-continuation/output identity hashes must match across timing captures when present.",
+    "Grouped folds keep exact prompt carriers out of both train and test.",
+    "Same-prompt mixed groups are required; otherwise the evaluator can only learn prompt content.",
+    "Prompt text, generated-prefix text, metadata, length, W0-static, layer-0, shuffled-time, shuffled-label, and within-stratum permutation controls must lose by margin.",
+    "This script does not run an intervention and therefore does not prove causality."
+  ],
+  "label_distribution": {
+    "SUPPORTED": 1200,
+    "UNSUPPORTED": 181
+  },
+  "layer": 1,
+  "metrics": {
+    "challenge_mode_majority_balanced_accuracy": 0.516529,
+    "domain_majority_balanced_accuracy": 0.5,
+    "evidence_source_majority_balanced_accuracy": 0.5,
+    "generated_prefix_char_text_hash_balanced_accuracy": 0.734484,
+    "generated_prefix_text_hash_balanced_accuracy": 0.667785,
+    "l0_trajectory_balanced_accuracy": 0.706876,
+    "payload_class_majority_balanced_accuracy": 0.5,
+    "per_stratum_trajectory_balanced_accuracy": {
+      "clinical_measurements": 0.651671,
+      "finance_amounts": 0.713995,
+      "regulatory_dates": 0.910816,
+      "software_versions": 0.813272,
+      "supply_chain_counts": 0.846207
+    },
+    "prefix_length_balanced_accuracy": 0.670718,
+    "prompt_char_text_hash_balanced_accuracy": 0.707217,
+    "prompt_length_balanced_accuracy": 0.533897,
+    "prompt_text_hash_balanced_accuracy": 0.614282,
+    "retrieval_condition_majority_balanced_accuracy": 0.5,
+    "retrieval_score_bucket_majority_balanced_accuracy": 0.5,
+    "shuffled_label_trajectory_mean_balanced_accuracy": 0.485252,
+    "shuffled_time_hidden_balanced_accuracy": 0.621628,
+    "strata_majority_balanced_accuracy": 0.5,
+    "trajectory_hidden_balanced_accuracy": 0.789687,
+    "trajectory_minus_generated_prefix_char_text_balanced_accuracy": 0.055203,
+    "trajectory_minus_generated_prefix_text_balanced_accuracy": 0.121901,
+    "trajectory_minus_l0_balanced_accuracy": 0.082811,
+    "trajectory_minus_prompt_char_text_balanced_accuracy": 0.08247,
+    "trajectory_minus_prompt_text_balanced_accuracy": 0.175405,
+    "trajectory_minus_shuffled_time_balanced_accuracy": 0.168059,
+    "trajectory_minus_strata_balanced_accuracy": 0.289687,
+    "trajectory_minus_w0_hidden_balanced_accuracy": 0.054259,
+    "w0_static_hidden_balanced_accuracy": 0.735428,
+    "within_stratum_permutation_p": 0.090909
+  },
+  "mixed_prompt_group_count": 97,
+  "prompt_group_contract": {
+    "contract": "Every prompt group must hold one exact prompt/evidence setup, and enough groups must contain both SUPPORTED and UNSUPPORTED outcomes.",
+    "exact_prompt_group_count": 200,
+    "mixed_prompt_group_count": 97,
+    "mixed_prompt_group_examples": [
+      "outcome_native_hard_qa_clinical_measurements_00",
+      "outcome_native_hard_qa_clinical_measurements_05",
+      "outcome_native_hard_qa_clinical_measurements_06",
+      "outcome_native_hard_qa_clinical_measurements_07",
+      "outcome_native_hard_qa_clinical_measurements_08",
+      "outcome_native_hard_qa_clinical_measurements_10",
+      "outcome_native_hard_qa_clinical_measurements_11",
+      "outcome_native_hard_qa_clinical_measurements_12",
+      "outcome_native_hard_qa_clinical_measurements_14",
+      "outcome_native_hard_qa_clinical_measurements_15"
+    ],
+    "non_exact_prompt_group_count": 0,
+    "non_exact_prompt_group_examples": [],
+    "prompt_group_count": 200,
+    "singleton_prompt_group_count": 4,
+    "singleton_prompt_group_examples": [
+      "outcome_native_hard_qa_finance_amounts_20",
+      "outcome_native_hard_qa_regulatory_dates_04",
+      "outcome_native_hard_qa_regulatory_dates_20",
+      "outcome_native_hard_qa_regulatory_dates_28"
+    ]
+  },
+  "prompt_group_count": 200,
+  "readout_method": {
+    "C": 0.25,
+    "allow_row_intersection": true,
+    "class_weight": "balanced",
+    "control_jobs": 4,
+    "grouped_folds": "prompt_group_id / exact prompt carrier",
+    "hidden_readout": "StandardScaler + LogisticRegression",
+    "max_iter": 1000,
+    "min_row_retention": 0.95,
+    "progress_every": 0,
+    "solver": "lbfgs",
+    "trajectory_features": "concat(W1-W0, W8-W1, W8-W0, delta norms, pairwise cosine similarities)"
+  },
+  "row_count": 1381,
+  "schema_version": "cas_harness_timing_trajectory_break_eval.v0",
+  "status": "FAIL",
+  "strata_axis": "topic",
+  "strata_distribution": {
+    "clinical_measurements": {
+      "SUPPORTED": 237,
+      "UNSUPPORTED": 37
+    },
+    "finance_amounts": {
+      "SUPPORTED": 184,
+      "UNSUPPORTED": 32
+    },
+    "regulatory_dates": {
+      "SUPPORTED": 247,
+      "UNSUPPORTED": 35
+    },
+    "software_versions": {
+      "SUPPORTED": 324,
+      "UNSUPPORTED": 32
+    },
+    "supply_chain_counts": {
+      "SUPPORTED": 208,
+      "UNSUPPORTED": 45
+    }
+  },
+  "target": {
+    "label_axis": "support_status",
+    "labels": [
+      "SUPPORTED",
+      "UNSUPPORTED"
+    ],
+    "negative_label": "SUPPORTED",
+    "positive_label": "UNSUPPORTED",
+    "trajectory": "W0 -> W1 -> W8 hidden-state movement before the final answer is shown"
+  }
+}

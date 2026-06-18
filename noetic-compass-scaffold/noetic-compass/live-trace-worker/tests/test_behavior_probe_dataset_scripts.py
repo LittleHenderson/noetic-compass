@@ -1323,6 +1323,36 @@ def test_timing_trajectory_break_blocks_on_forced_continuation_mismatch(tmp_path
     assert report["claim"] == "OPEN / NOT LICENSED for timing-trajectory hidden-state detection."
 
 
+def test_timing_trajectory_break_allows_disclosed_small_row_intersection(tmp_path: Path):
+    w0_path, w1_path, w8_path = _write_trajectory_break_npzs(tmp_path, drop_w8_row=True)
+
+    report = evaluate_timing_trajectory_break(
+        w0_dataset_path=w0_path,
+        w1_dataset_path=w1_path,
+        w8_dataset_path=w8_path,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_strata_classes=5,
+        min_label_per_stratum=7,
+        min_mixed_prompt_groups=20,
+        permutations=10,
+        shuffle_controls=2,
+        allow_row_intersection=True,
+        min_row_retention=0.95,
+    )
+
+    assert report["status"] in {"PASS", "FAIL"}
+    assert report["gates"]["row_alignment_pass"] is True
+    assert report["gates"]["row_intersection_retention_pass"] is True
+    assert report["alignment"]["row_intersection_mode"] is True
+    assert report["alignment"]["original_timing_row_counts"]["W0"] == 80
+    assert report["alignment"]["original_timing_row_counts"]["W8"] == 79
+    assert report["alignment"]["retained_trajectory_count"] == 79
+    assert report["alignment"]["excluded_by_timing_counts"]["W8"] == 1
+
+
 def test_pre_answer_timing_resolves_before_answer_token():
     class FakeTokenizer:
         def decode(self, token_ids, *, skip_special_tokens):
@@ -1561,6 +1591,7 @@ def _write_trajectory_break_npzs(
     *,
     prefix_leaky: bool = False,
     continuation_mismatch: bool = False,
+    drop_w8_row: bool = False,
 ) -> tuple[Path, Path, Path]:
     paths = {
         "W0": tmp_path / "trajectory_w0.npz",
@@ -1624,37 +1655,43 @@ def _write_trajectory_break_npzs(
 
     for timing, path in paths.items():
         timing_model_hashes = list(model_hashes)
+        row_indices = list(range(len(statuses)))
+        if timing == "W8" and drop_w8_row:
+            row_indices = row_indices[1:]
         if timing == "W8" and continuation_mismatch:
             timing_model_hashes[0] = "different-continuation-hash"
         timing_index = {"W0": 0, "W1": 1, "W8": 8}[timing]
         np.savez_compressed(
             path,
-            features=np.asarray(rows_by_timing[timing], dtype=np.float32),
+            features=np.asarray([rows_by_timing[timing][index] for index in row_indices], dtype=np.float32),
             layers=np.asarray([0, 14], dtype=np.int64),
-            prompts=np.asarray(prompts, dtype=object),
-            scenario_ids=np.asarray(scenario_ids, dtype=object),
-            trajectory_ids=np.asarray(scenario_ids, dtype=object),
-            prompt_group_ids=np.asarray(prompt_group_ids, dtype=object),
-            trace_ids=np.asarray(trace_ids, dtype=object),
-            labels_support_status=np.asarray(statuses, dtype=object),
-            labels_topic=np.asarray(topics, dtype=object),
-            labels_payload_class=np.asarray(topics, dtype=object),
-            labels_domain=np.asarray(["shared_domain"] * len(statuses), dtype=object),
-            labels_evidence_source=np.asarray(["shared_evidence_source"] * len(statuses), dtype=object),
+            prompts=np.asarray([prompts[index] for index in row_indices], dtype=object),
+            scenario_ids=np.asarray([scenario_ids[index] for index in row_indices], dtype=object),
+            trajectory_ids=np.asarray([scenario_ids[index] for index in row_indices], dtype=object),
+            prompt_group_ids=np.asarray([prompt_group_ids[index] for index in row_indices], dtype=object),
+            trace_ids=np.asarray([trace_ids[index] for index in row_indices], dtype=object),
+            labels_support_status=np.asarray([statuses[index] for index in row_indices], dtype=object),
+            labels_topic=np.asarray([topics[index] for index in row_indices], dtype=object),
+            labels_payload_class=np.asarray([topics[index] for index in row_indices], dtype=object),
+            labels_domain=np.asarray(["shared_domain"] * len(row_indices), dtype=object),
+            labels_evidence_source=np.asarray(["shared_evidence_source"] * len(row_indices), dtype=object),
             labels_retrieval_condition=np.asarray(
-                ["shared_retrieval_condition"] * len(statuses),
+                ["shared_retrieval_condition"] * len(row_indices),
                 dtype=object,
             ),
             labels_retrieval_score_bucket=np.asarray(
-                ["shared_retrieval_score_bucket"] * len(statuses),
+                ["shared_retrieval_score_bucket"] * len(row_indices),
                 dtype=object,
             ),
-            labels_challenge_mode=np.asarray(["shared_challenge_mode"] * len(statuses), dtype=object),
-            generated_prefix_texts=np.asarray(prefix_text_by_timing[timing], dtype=object),
-            model_output_sha256s=np.asarray(timing_model_hashes, dtype=object),
-            judged_answer_sha256s=np.asarray(judged_hashes, dtype=object),
-            timing_points=np.asarray([timing] * len(statuses), dtype=object),
-            timing_indices=np.asarray([timing_index] * len(statuses), dtype=np.int64),
+            labels_challenge_mode=np.asarray(["shared_challenge_mode"] * len(row_indices), dtype=object),
+            generated_prefix_texts=np.asarray(
+                [prefix_text_by_timing[timing][index] for index in row_indices],
+                dtype=object,
+            ),
+            model_output_sha256s=np.asarray([timing_model_hashes[index] for index in row_indices], dtype=object),
+            judged_answer_sha256s=np.asarray([judged_hashes[index] for index in row_indices], dtype=object),
+            timing_points=np.asarray([timing] * len(row_indices), dtype=object),
+            timing_indices=np.asarray([timing_index] * len(row_indices), dtype=np.int64),
         )
     return paths["W0"], paths["W1"], paths["W8"]
 

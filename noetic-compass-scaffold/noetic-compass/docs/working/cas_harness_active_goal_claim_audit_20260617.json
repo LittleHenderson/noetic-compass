@@ -169,7 +169,7 @@
       "claim_status": "OPEN",
       "decision": "keep_OPEN_NOT_LICENSED",
       "evidence_refs": [
-        "docs\\working\\outcome_native_hallucination_preanswer_qwen05_hard_v2_20260618\\layer_14_prefix_residual_hardened_50perm.json"
+        "docs\\working\\outcome_native_hallucination_trajectory_break_qwen05_hard_v2_20260618\\trajectory_break_layer14_scout_10perm.json"
       ],
       "evidence_status": "unavailable",
       "failing_gates": [
@@ -218,6 +218,41 @@
           "best_candidate_ref": "docs\\working\\outcome_native_hallucination_preanswer_qwen05_hard_v2_20260618\\layer_14_prefix_residual_hardened_50perm.json",
           "passing_report_count": 0,
           "report_count": 101
+        },
+        "hallucination_trajectory_break_detection": {
+          "best_candidate": {
+            "failing_gates": [
+              "generated_prefix_char_text_margin_pass",
+              "l0_trajectory_margin_pass",
+              "per_stratum_floor_pass",
+              "prefix_length_margin_pass",
+              "prompt_char_text_margin_pass",
+              "w0_static_control_margin_pass",
+              "within_stratum_permutation_pass"
+            ],
+            "gate_pass_count": 22,
+            "gate_total": 29,
+            "generated_prefix_char_text_hash_balanced_accuracy": 0.734484,
+            "l0_trajectory_balanced_accuracy": 0.706876,
+            "layer": 14,
+            "license_eligible": false,
+            "prompt_char_text_hash_balanced_accuracy": 0.707217,
+            "ref": "docs\\working\\outcome_native_hallucination_trajectory_break_qwen05_hard_v2_20260618\\trajectory_break_layer14_scout_10perm.json",
+            "retained_trajectory_count": 1381,
+            "retention_fraction": 0.992098,
+            "sha256": "25D8002A30FF5B063662740ACB4EE88E90C2F9EE2ECCEF236E175A2C1C65D1CC",
+            "status": "FAIL",
+            "trajectory_hidden_balanced_accuracy": 0.819487,
+            "trajectory_minus_generated_prefix_char_text_balanced_accuracy": 0.085002,
+            "trajectory_minus_l0_balanced_accuracy": 0.11261,
+            "trajectory_minus_prompt_char_text_balanced_accuracy": 0.11227,
+            "trajectory_minus_w0_hidden_balanced_accuracy": 0.104846,
+            "w0_static_hidden_balanced_accuracy": 0.714641,
+            "within_stratum_permutation_p": 0.090909
+          },
+          "best_candidate_ref": "docs\\working\\outcome_native_hallucination_trajectory_break_qwen05_hard_v2_20260618\\trajectory_break_layer14_scout_10perm.json",
+          "passing_report_count": 0,
+          "report_count": 3
         },
         "next_hallucination_surface_screen": {
           "char_text_hash_balanced_accuracy": 0.5,
@@ -301,7 +336,7 @@
       ]
     }
   ],
-  "created_at": "2026-06-18T15:55:32.004334+00:00",
+  "created_at": "2026-06-18T21:52:59.761463+00:00",
   "goal_complete": false,
   "schema_version": "cas_harness_active_goal_claim_audit.v0",
   "summary": {

@@ -81,6 +81,16 @@ def parse_args() -> Any:
     parser.add_argument("--shuffle-controls", type=int, default=50)
     parser.add_argument("--control-jobs", type=int, default=1)
     parser.add_argument("--progress-every", type=int, default=0)
+    parser.add_argument(
+        "--allow-row-intersection",
+        action="store_true",
+        help=(
+            "Evaluate only trajectory IDs present at all timing points when a later timing "
+            "capture is missing a small number of rows. The retained fraction is reported "
+            "and must clear --min-row-retention."
+        ),
+    )
+    parser.add_argument("--min-row-retention", type=float, default=0.95)
     parser.add_argument("--probe-C", type=float, default=0.25)
     parser.add_argument("--probe-max-iter", type=int, default=1000)
     return parser.parse_args()
@@ -107,6 +117,8 @@ def main() -> int:
         shuffle_controls=args.shuffle_controls,
         control_jobs=args.control_jobs,
         progress_every=args.progress_every,
+        allow_row_intersection=args.allow_row_intersection,
+        min_row_retention=args.min_row_retention,
         probe_C=args.probe_C,
         probe_max_iter=args.probe_max_iter,
     )
@@ -153,6 +165,8 @@ def evaluate_timing_trajectory_break(
     shuffle_controls: int = 50,
     control_jobs: int = 1,
     progress_every: int = 0,
+    allow_row_intersection: bool = False,
+    min_row_retention: float = 0.95,
     probe_C: float = 0.25,
     probe_max_iter: int = 1000,
 ) -> dict[str, Any]:
@@ -185,7 +199,11 @@ def evaluate_timing_trajectory_break(
                 strata_axis=strata_axis,
             ),
         }
-        aligned = align_timing_datasets(datasets)
+        aligned = align_timing_datasets(
+            datasets,
+            allow_row_intersection=allow_row_intersection,
+            min_row_retention=min_row_retention,
+        )
     except TrajectoryAlignmentError as exc:
         return blocked_report(
             w0_dataset_path=w0_dataset_path,
@@ -404,6 +422,9 @@ def evaluate_timing_trajectory_break(
         "forced_continuation_identity_pass": bool(
             prepared["alignment"].get("forced_continuation_identity_pass", False)
         ),
+        "row_intersection_retention_pass": bool(
+            prepared["alignment"].get("row_intersection_retention_pass", False)
+        ),
         "grouped_prompt_fold_pass": cross_validation["train_test_group_overlap_count"] == 0,
         "exact_prompt_group_pass": prompt_contract["non_exact_prompt_group_count"] == 0,
         "same_prompt_mixed_group_floor_pass": (
@@ -489,6 +510,8 @@ def evaluate_timing_trajectory_break(
             "grouped_folds": "prompt_group_id / exact prompt carrier",
             "control_jobs": int(control_jobs),
             "progress_every": int(progress_every),
+            "allow_row_intersection": bool(allow_row_intersection),
+            "min_row_retention": float(min_row_retention),
         },
         "layer": int(prepared["layer"]),
         "row_count": int(len(y)),
@@ -665,18 +688,25 @@ def load_timing_dataset(
         }
 
 
-def align_timing_datasets(datasets: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def align_timing_datasets(
+    datasets: dict[str, dict[str, Any]],
+    *,
+    allow_row_intersection: bool,
+    min_row_retention: float,
+) -> dict[str, Any]:
     w0_ids = datasets["W0"]["trajectory_ids"].tolist()
     if len(set(w0_ids)) != len(w0_ids):
         duplicates = sorted([key for key, count in Counter(w0_ids).items() if count > 1])
         raise TrajectoryAlignmentError(f"W0 has duplicate trajectory IDs: {duplicates[:5]}")
     order: dict[str, dict[str, int]] = {}
+    id_sets: dict[str, set[str]] = {}
     for timing, dataset in datasets.items():
         ids = dataset["trajectory_ids"].tolist()
         if len(set(ids)) != len(ids):
             duplicates = sorted([key for key, count in Counter(ids).items() if count > 1])
             raise TrajectoryAlignmentError(f"{timing} has duplicate trajectory IDs: {duplicates[:5]}")
-        if set(ids) != set(w0_ids):
+        id_sets[timing] = set(ids)
+        if set(ids) != set(w0_ids) and not allow_row_intersection:
             missing = sorted(set(w0_ids) - set(ids))[:5]
             extra = sorted(set(ids) - set(w0_ids))[:5]
             raise TrajectoryAlignmentError(
@@ -684,13 +714,70 @@ def align_timing_datasets(datasets: dict[str, dict[str, Any]]) -> dict[str, Any]
             )
         order[timing] = {str(value): index for index, value in enumerate(ids)}
 
+    common_ids = set(w0_ids)
+    for values in id_sets.values():
+        common_ids &= values
+    retained_ids = [str(row_id) for row_id in w0_ids if str(row_id) in common_ids]
+    if not retained_ids:
+        raise TrajectoryAlignmentError("No trajectory IDs are present at all W0/W1/W8 timing points.")
+    retention_fraction = len(retained_ids) / max(1, len(w0_ids))
+    if retention_fraction < float(min_row_retention):
+        raise TrajectoryAlignmentError(
+            "Timing row intersection retained "
+            f"{len(retained_ids)}/{len(w0_ids)} rows ({retention_fraction:.6f}), "
+            f"below required {float(min_row_retention):.6f}."
+        )
+    if len(retained_ids) != len(w0_ids) and not allow_row_intersection:
+        raise TrajectoryAlignmentError(
+            f"Timing datasets do not have identical trajectory IDs; retained {len(retained_ids)}/{len(w0_ids)}."
+        )
+
+    w0_label_by_id = {
+        str(row_id): str(label)
+        for row_id, label in zip(
+            datasets["W0"]["trajectory_ids"].tolist(),
+            datasets["W0"]["labels"].tolist(),
+            strict=True,
+        )
+    }
+    excluded_by_timing: dict[str, list[str]] = {}
+    excluded_label_distribution: dict[str, dict[str, int]] = {}
+    extra_by_timing: dict[str, list[str]] = {}
+    for timing, ids in id_sets.items():
+        excluded = sorted(set(w0_ids) - ids)
+        excluded_by_timing[timing] = excluded
+        excluded_label_distribution[timing] = dict(
+            sorted(Counter(w0_label_by_id.get(row_id, "unknown") for row_id in excluded).items())
+        )
+        extra_by_timing[timing] = sorted(ids - set(w0_ids))
+
     aligned: dict[str, Any] = {
         "layer": int(datasets["W0"]["layer"]),
-        "trajectory_ids": np.asarray(w0_ids, dtype=object).astype(str),
+        "trajectory_ids": np.asarray(retained_ids, dtype=object).astype(str),
         "alignment": {
             "row_alignment_pass": True,
+            "row_intersection_mode": bool(allow_row_intersection),
+            "row_intersection_retention_pass": retention_fraction >= float(min_row_retention),
+            "original_timing_row_counts": {
+                timing: int(len(values)) for timing, values in id_sets.items()
+            },
+            "retained_trajectory_count": int(len(retained_ids)),
+            "retention_fraction": round(float(retention_fraction), 6),
+            "excluded_by_timing_counts": {
+                timing: int(len(values)) for timing, values in excluded_by_timing.items()
+            },
+            "excluded_by_timing_examples": {
+                timing: values[:10] for timing, values in excluded_by_timing.items()
+            },
+            "excluded_label_distribution_by_timing": excluded_label_distribution,
+            "extra_by_timing_counts": {
+                timing: int(len(values)) for timing, values in extra_by_timing.items()
+            },
+            "extra_by_timing_examples": {
+                timing: values[:10] for timing, values in extra_by_timing.items()
+            },
             "forced_continuation_identity_pass": True,
-            "trajectory_count": int(len(w0_ids)),
+            "trajectory_count": int(len(retained_ids)),
             "identity_fields_checked": [],
             "contract": (
                 "Every W0 row must be the same scenario/trajectory as W1 and W8, "
@@ -699,7 +786,7 @@ def align_timing_datasets(datasets: dict[str, dict[str, Any]]) -> dict[str, Any]
         },
     }
     for timing, dataset in datasets.items():
-        positions = np.asarray([order[timing][str(row_id)] for row_id in w0_ids], dtype=np.int64)
+        positions = np.asarray([order[timing][str(row_id)] for row_id in retained_ids], dtype=np.int64)
         aligned[timing] = subset_dataset(dataset, positions)
 
     for timing in ("W1", "W8"):

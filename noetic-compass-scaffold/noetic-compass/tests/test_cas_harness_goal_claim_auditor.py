@@ -18,6 +18,8 @@ from api.services.cas_harness_goal_claim_auditor import (
     HALLUCINATION_PRESPEECH_REQUIRED_GATES,
     HIDDEN_INJECTION_REQUIRED_GATES,
     HIDDEN_INJECTION_W0_REPORT_SCHEMA_VERSION,
+    TRAJECTORY_BREAK_REPORT_SCHEMA_VERSION,
+    TRAJECTORY_BREAK_REQUIRED_GATES,
     W0_REPORT_SCHEMA_VERSION,
     W0_REQUIRED_GATES,
     audit_active_goal_claims,
@@ -301,11 +303,18 @@ def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_pr
         / "working"
         / "hallucination_prespeech_eval_synthetic_pass.json"
     )
+    trajectory_path = (
+        tmp_path
+        / "docs"
+        / "working"
+        / "trajectory_break_eval_synthetic_pass.json"
+    )
     report_path.parent.mkdir(parents=True)
     manifest_path.parent.mkdir(parents=True)
     hidden_screen_path.parent.mkdir(parents=True, exist_ok=True)
     hallucination_screen_path.parent.mkdir(parents=True, exist_ok=True)
     hallucination_path.parent.mkdir(parents=True, exist_ok=True)
+    trajectory_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps({"status": "READY_FOR_W0_CAPTURE"}), encoding="utf-8")
     hidden_screen_path.write_text(
         json.dumps(
@@ -371,6 +380,29 @@ def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_pr
         ),
         encoding="utf-8",
     )
+    trajectory_path.write_text(
+        json.dumps(
+            {
+                "schema_version": TRAJECTORY_BREAK_REPORT_SCHEMA_VERSION,
+                "status": "PASS",
+                "layer": 15,
+                "alignment": {
+                    "retained_trajectory_count": 120,
+                    "retention_fraction": 1.0,
+                },
+                "gates": {gate: True for gate in TRAJECTORY_BREAK_REQUIRED_GATES},
+                "metrics": {
+                    "trajectory_hidden_balanced_accuracy": 0.84,
+                    "w0_static_hidden_balanced_accuracy": 0.55,
+                    "generated_prefix_char_text_hash_balanced_accuracy": 0.52,
+                    "trajectory_minus_w0_hidden_balanced_accuracy": 0.29,
+                    "trajectory_minus_generated_prefix_char_text_balanced_accuracy": 0.32,
+                    "within_stratum_permutation_p": 0.0005,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
 
     audit = audit_active_goal_claims(tmp_path)
     rows = {row["claim_id"]: row for row in audit["claims"]}
@@ -381,6 +413,9 @@ def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_pr
     detection = hallucination["observed_metrics"]["hallucination_prespeech_detection"]
     assert detection["passing_report_count"] == 1
     assert detection["best_candidate"]["license_eligible"] is True
+    trajectory = hallucination["observed_metrics"]["hallucination_trajectory_break_detection"]
+    assert trajectory["passing_report_count"] == 1
+    assert trajectory["best_candidate"]["license_eligible"] is True
     surface = hallucination["observed_metrics"]["next_hallucination_surface_screen"]
     assert surface["status"] == "READY_FOR_W0_CAPTURE"
     assert surface["claim"] == "OPEN / NOT LICENSED for internal W0 hallucination-risk detection."

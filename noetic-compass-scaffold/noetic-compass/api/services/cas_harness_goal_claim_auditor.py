@@ -53,6 +53,9 @@ BEHAVIOR_V5_CAUSAL_REPORT_SCHEMA_VERSION = "cas_harness_behavior_v5_causal_analy
 HALLUCINATION_PRESPEECH_REPORT_SCHEMA_VERSION = (
     "cas_harness_hallucination_prespeech_eval.v1"
 )
+TRAJECTORY_BREAK_REPORT_SCHEMA_VERSION = (
+    "cas_harness_timing_trajectory_break_eval.v0"
+)
 
 W0_REQUIRED_GATES = (
     "exact_prompt_group_pass",
@@ -144,6 +147,38 @@ HALLUCINATION_PRESPEECH_REQUIRED_GATES = (
     "per_topic_floor_pass",
 )
 
+TRAJECTORY_BREAK_REQUIRED_GATES = (
+    "row_alignment_pass",
+    "forced_continuation_identity_pass",
+    "row_intersection_retention_pass",
+    "grouped_prompt_fold_pass",
+    "exact_prompt_group_pass",
+    "same_prompt_mixed_group_floor_pass",
+    "strata_floor_pass",
+    "label_per_stratum_floor_pass",
+    "trajectory_balanced_accuracy_pass",
+    "w0_static_control_margin_pass",
+    "shuffled_time_control_margin_pass",
+    "l0_baseline_present_pass",
+    "l0_trajectory_margin_pass",
+    "prompt_text_margin_pass",
+    "prompt_char_text_margin_pass",
+    "generated_prefix_text_margin_pass",
+    "generated_prefix_char_text_margin_pass",
+    "strata_margin_pass",
+    "payload_class_margin_pass",
+    "domain_margin_pass",
+    "evidence_source_margin_pass",
+    "retrieval_condition_margin_pass",
+    "retrieval_score_bucket_margin_pass",
+    "challenge_mode_margin_pass",
+    "prompt_length_margin_pass",
+    "prefix_length_margin_pass",
+    "per_stratum_floor_pass",
+    "shuffled_label_control_pass",
+    "within_stratum_permutation_pass",
+)
+
 ACTIVE_GOAL_CLAIMS = (
     "internal_w0_prompt_injection_detection",
     "live_pre_speech_interception",
@@ -190,6 +225,7 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
     behavior_v5_prespeech_scan = _scan_existing_behavior_v5_prespeech_reports(root_path)
     behavior_v5_causal_scan = _scan_existing_behavior_v5_causal_reports(root_path)
     hallucination_prespeech_scan = _scan_existing_hallucination_prespeech_reports(root_path)
+    trajectory_break_scan = _scan_existing_trajectory_break_reports(root_path)
 
     rows = [
         _audit_internal_w0_detection(
@@ -234,6 +270,7 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
         ),
         _audit_hallucination_prevention(
             hallucination_prespeech_scan,
+            trajectory_break_scan,
             hallucination_surface_screen,
         ),
         _static_not_licensed_row(
@@ -491,6 +528,7 @@ def _hidden_injection_surface_metrics(artifact: Any) -> dict[str, Any]:
 
 def _audit_hallucination_prevention(
     hallucination_prespeech_scan: dict[str, Any],
+    trajectory_break_scan: dict[str, Any],
     hallucination_surface_artifact: dict[str, Any],
 ) -> GoalClaimAuditRow:
     hallucination_surface = hallucination_surface_artifact.get("json")
@@ -499,13 +537,23 @@ def _audit_hallucination_prevention(
         for candidate in hallucination_prespeech_scan.get("candidates", [])
         if candidate.get("license_eligible") is True
     ]
+    passing_trajectory_detection = [
+        candidate
+        for candidate in trajectory_break_scan.get("candidates", [])
+        if candidate.get("license_eligible") is True
+    ]
+    all_passing_detection = passing_detection + passing_trajectory_detection
     best_detection = (
-        passing_detection[0]
-        if passing_detection
-        else hallucination_prespeech_scan.get("best_candidate")
+        all_passing_detection[0]
+        if all_passing_detection
+        else (
+            trajectory_break_scan.get("best_candidate")
+            or hallucination_prespeech_scan.get("best_candidate")
+        )
     )
     detection_summary = _scan_summary(hallucination_prespeech_scan)
-    if passing_detection:
+    trajectory_summary = _scan_summary(trajectory_break_scan)
+    if all_passing_detection:
         reason = (
             "A hallucination-risk timing detection report is present, but the active "
             "claim is hallucination prevention. Prevention still needs a separate "
@@ -557,6 +605,7 @@ def _audit_hallucination_prevention(
         failing_gates=failing_gates,
         observed_metrics={
             "hallucination_prespeech_detection": detection_summary,
+            "hallucination_trajectory_break_detection": trajectory_summary,
             "next_hallucination_surface_screen": _hallucination_surface_metrics(
                 hallucination_surface
             ),
@@ -1069,6 +1118,91 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
             _float_or_low(item.get("hidden_minus_generated_prefix_char_text_balanced_accuracy")),
             _float_or_low(item.get("hidden_minus_char_text_balanced_accuracy")),
             _float_or_low(item.get("hidden_balanced_accuracy")),
+        ),
+        reverse=True,
+    )
+    return {
+        "report_count": len(candidates),
+        "candidates": candidates,
+        "best_candidate": candidates[0] if candidates else None,
+    }
+
+
+def _scan_existing_trajectory_break_reports(root: Path) -> dict[str, Any]:
+    docs_working = root / "docs" / "working"
+    if not docs_working.exists():
+        return {"report_count": 0, "candidates": [], "best_candidate": None}
+
+    candidates: list[dict[str, Any]] = []
+    for path in docs_working.rglob("*.json"):
+        artifact = _load_json_path(path)
+        parsed = artifact.get("json")
+        if not isinstance(parsed, Mapping):
+            continue
+        if parsed.get("schema_version") != TRAJECTORY_BREAK_REPORT_SCHEMA_VERSION:
+            continue
+        gates = parsed.get("gates") if isinstance(parsed.get("gates"), Mapping) else {}
+        metrics = parsed.get("metrics") if isinstance(parsed.get("metrics"), Mapping) else {}
+        required_failing_gates = [
+            gate_name
+            for gate_name in TRAJECTORY_BREAK_REQUIRED_GATES
+            if gates.get(gate_name) is not True
+        ]
+        false_report_gates = [gate_name for gate_name, passed in gates.items() if passed is not True]
+        failing_gates = sorted(set(required_failing_gates + false_report_gates))
+        gate_total = max(len(TRAJECTORY_BREAK_REQUIRED_GATES), len(gates))
+        gate_pass_count = gate_total - len(failing_gates)
+        status = str(parsed.get("status") or "UNKNOWN")
+        alignment = parsed.get("alignment") if isinstance(parsed.get("alignment"), Mapping) else {}
+        candidate = {
+            "ref": str(path.relative_to(root)),
+            "sha256": artifact["sha256"],
+            "status": status,
+            "layer": parsed.get("layer"),
+            "gate_pass_count": gate_pass_count,
+            "gate_total": gate_total,
+            "license_eligible": status == "PASS" and not failing_gates,
+            "failing_gates": failing_gates,
+            "trajectory_hidden_balanced_accuracy": metrics.get(
+                "trajectory_hidden_balanced_accuracy"
+            ),
+            "w0_static_hidden_balanced_accuracy": metrics.get(
+                "w0_static_hidden_balanced_accuracy"
+            ),
+            "generated_prefix_char_text_hash_balanced_accuracy": metrics.get(
+                "generated_prefix_char_text_hash_balanced_accuracy"
+            ),
+            "prompt_char_text_hash_balanced_accuracy": metrics.get(
+                "prompt_char_text_hash_balanced_accuracy"
+            ),
+            "l0_trajectory_balanced_accuracy": metrics.get(
+                "l0_trajectory_balanced_accuracy"
+            ),
+            "trajectory_minus_w0_hidden_balanced_accuracy": metrics.get(
+                "trajectory_minus_w0_hidden_balanced_accuracy"
+            ),
+            "trajectory_minus_generated_prefix_char_text_balanced_accuracy": metrics.get(
+                "trajectory_minus_generated_prefix_char_text_balanced_accuracy"
+            ),
+            "trajectory_minus_prompt_char_text_balanced_accuracy": metrics.get(
+                "trajectory_minus_prompt_char_text_balanced_accuracy"
+            ),
+            "trajectory_minus_l0_balanced_accuracy": metrics.get(
+                "trajectory_minus_l0_balanced_accuracy"
+            ),
+            "within_stratum_permutation_p": metrics.get("within_stratum_permutation_p"),
+            "retention_fraction": alignment.get("retention_fraction"),
+            "retained_trajectory_count": alignment.get("retained_trajectory_count"),
+        }
+        candidates.append(candidate)
+
+    candidates.sort(
+        key=lambda item: (
+            bool(item["license_eligible"]),
+            int(item["gate_pass_count"]),
+            _float_or_low(item.get("trajectory_minus_generated_prefix_char_text_balanced_accuracy")),
+            _float_or_low(item.get("trajectory_minus_w0_hidden_balanced_accuracy")),
+            _float_or_low(item.get("trajectory_hidden_balanced_accuracy")),
         ),
         reverse=True,
     )
