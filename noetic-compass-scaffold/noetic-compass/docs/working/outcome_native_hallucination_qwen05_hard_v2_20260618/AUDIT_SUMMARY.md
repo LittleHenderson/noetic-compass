@@ -74,6 +74,22 @@ The failed margins are the blocker:
 
 The frozen margin requirement is `0.15`, so W16 is not licensed.
 
+## Residual-Over-Prefix Diagnostic
+
+Residual diagnostic report: `w16_layer15_prefix_residual_diagnostic.json`
+
+This diagnostic asks a sharper question: after a fold-local model learns what the generated prefix can explain about the hidden state, does the leftover hidden-state signal still predict `SUPPORTED` versus `UNSUPPORTED`?
+
+Result:
+
+- hidden BA before residualization: `0.888633`
+- generated-prefix char BA in this diagnostic run: `0.840450`
+- hidden minus generated-prefix char: `0.048183`
+- prefix-residual hidden BA: `0.686017`
+- prefix-residual hidden minus generated-prefix char: `-0.154433`
+
+Plain English: once the early generated prefix is accounted for, the hidden-state-only leftover drops below the `0.75` floor. That strengthens the negative conclusion. The current W16 signal is mostly trajectory/prefix-tied, not clean hidden-state hallucination detection.
+
 ## Claim Boundary
 
 Licensed product-safe wording:

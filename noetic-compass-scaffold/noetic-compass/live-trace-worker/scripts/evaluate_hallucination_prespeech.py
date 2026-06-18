@@ -21,6 +21,8 @@ import sys
 from typing import Any
 
 import numpy as np
+from sklearn.linear_model import LogisticRegression, Ridge
+from sklearn.preprocessing import StandardScaler
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
@@ -65,6 +67,21 @@ def parse_args() -> Any:
     parser.add_argument("--progress-every", type=int, default=0)
     parser.add_argument("--probe-C", type=float, default=0.25)
     parser.add_argument("--probe-max-iter", type=int, default=1000)
+    parser.add_argument(
+        "--prefix-residual-control",
+        action="store_true",
+        help=(
+            "Also test whether hidden states still predict labels after fold-local "
+            "linear residualization against generated-prefix word+char features."
+        ),
+    )
+    parser.add_argument("--prefix-residual-alpha", type=float, default=10.0)
+    parser.add_argument(
+        "--prefix-residual-dim",
+        type=int,
+        default=256,
+        help="Hash dimension per generated-prefix word/char channel for the residual diagnostic.",
+    )
     return parser.parse_args()
 
 
@@ -85,6 +102,9 @@ def main() -> int:
         progress_every=args.progress_every,
         probe_C=args.probe_C,
         probe_max_iter=args.probe_max_iter,
+        prefix_residual_control=args.prefix_residual_control,
+        prefix_residual_alpha=args.prefix_residual_alpha,
+        prefix_residual_dim=args.prefix_residual_dim,
     )
     args.output_report.parent.mkdir(parents=True, exist_ok=True)
     args.output_report.write_text(json.dumps(report, indent=2, sort_keys=True), encoding="utf-8")
@@ -123,6 +143,9 @@ def evaluate_hallucination_prespeech(
     progress_every: int = 0,
     probe_C: float = 0.25,
     probe_max_iter: int = 1000,
+    prefix_residual_control: bool = False,
+    prefix_residual_alpha: float = 10.0,
+    prefix_residual_dim: int = 256,
 ) -> dict[str, Any]:
     data = load_dataset(dataset_path, layer=layer)
     prepared = filter_balanced_topics(
@@ -191,10 +214,15 @@ def evaluate_hallucination_prespeech(
     else:
         l0_ba = None
 
+    prompt_word_x = hash_text_features(prompts, dim=text_dim)
+    prompt_char_x = hash_char_ngram_features(prompts, dim=text_dim)
+    generated_prefix_word_x = hash_text_features(generated_prefix_texts, dim=text_dim)
+    generated_prefix_char_x = hash_char_ngram_features(generated_prefix_texts, dim=text_dim)
+
     text_ba = balanced_accuracy(
         y,
         cross_val_linear_probe_predict(
-            hash_text_features(prompts, dim=text_dim),
+            prompt_word_x,
             y,
             fold_indices,
             C=probe_C,
@@ -204,7 +232,7 @@ def evaluate_hallucination_prespeech(
     char_text_ba = balanced_accuracy(
         y,
         cross_val_linear_probe_predict(
-            hash_char_ngram_features(prompts, dim=text_dim),
+            prompt_char_x,
             y,
             fold_indices,
             C=probe_C,
@@ -214,7 +242,7 @@ def evaluate_hallucination_prespeech(
     generated_prefix_text_ba = balanced_accuracy(
         y,
         cross_val_linear_probe_predict(
-            hash_text_features(generated_prefix_texts, dim=text_dim),
+            generated_prefix_word_x,
             y,
             fold_indices,
             C=probe_C,
@@ -224,13 +252,38 @@ def evaluate_hallucination_prespeech(
     generated_prefix_char_text_ba = balanced_accuracy(
         y,
         cross_val_linear_probe_predict(
-            hash_char_ngram_features(generated_prefix_texts, dim=text_dim),
+            generated_prefix_char_x,
             y,
             fold_indices,
             C=probe_C,
             max_iter=probe_max_iter,
         ),
     )
+    prefix_residual_ba: float | None = None
+    prefix_residual_minus_prefix_char_ba: float | None = None
+    if prefix_residual_control:
+        residual_dim = max(16, int(prefix_residual_dim))
+        residual_prefix_word_x = hash_text_features(generated_prefix_texts, dim=residual_dim)
+        residual_prefix_char_x = hash_char_ngram_features(
+            generated_prefix_texts,
+            dim=residual_dim,
+        )
+        generated_prefix_joint_x = np.hstack(
+            [residual_prefix_word_x, residual_prefix_char_x],
+        ).astype(np.float32)
+        prefix_residual_pred = cross_val_prefix_residual_probe_predict(
+            hidden_x=x,
+            prefix_x=generated_prefix_joint_x,
+            y=y,
+            fold_indices=fold_indices,
+            C=probe_C,
+            max_iter=probe_max_iter,
+            ridge_alpha=prefix_residual_alpha,
+        )
+        prefix_residual_ba = balanced_accuracy(y, prefix_residual_pred)
+        prefix_residual_minus_prefix_char_ba = (
+            prefix_residual_ba - generated_prefix_char_text_ba
+        )
     length_x = np.asarray([[len(prompt)] for prompt in prompts], dtype=np.float32)
     prompt_length_ba = balanced_accuracy(
         y,
@@ -368,6 +421,15 @@ def evaluate_hallucination_prespeech(
             "grouped_folds": "prompt_group_id / derived exact prompt carrier",
             "min_mixed_prompt_groups": int(min_mixed_prompt_groups),
             "generated_prefix_controls": "word and character n-gram baselines over generated_prefix_texts",
+            "prefix_residual_control": bool(prefix_residual_control),
+            "prefix_residual_control_method": (
+                "Fold-local Ridge residualization of hidden states against generated-prefix "
+                "word+char features, followed by logistic probe on hidden residuals."
+                if prefix_residual_control
+                else "not_run"
+            ),
+            "prefix_residual_alpha": float(prefix_residual_alpha),
+            "prefix_residual_dim_per_channel": int(max(16, prefix_residual_dim)),
         },
         "layer": prepared["layer"],
         "row_count": int(len(y)),
@@ -390,6 +452,14 @@ def evaluate_hallucination_prespeech(
             "char_text_hash_balanced_accuracy": round(char_text_ba, 6),
             "generated_prefix_text_hash_balanced_accuracy": round(generated_prefix_text_ba, 6),
             "generated_prefix_char_text_hash_balanced_accuracy": round(generated_prefix_char_text_ba, 6),
+            "prefix_residual_hidden_balanced_accuracy": (
+                round(prefix_residual_ba, 6) if prefix_residual_ba is not None else None
+            ),
+            "prefix_residual_hidden_minus_generated_prefix_char_text_balanced_accuracy": (
+                round(prefix_residual_minus_prefix_char_ba, 6)
+                if prefix_residual_minus_prefix_char_ba is not None
+                else None
+            ),
             "topic_majority_balanced_accuracy": round(topic_ba, 6),
             "domain_majority_balanced_accuracy": round(domain_ba, 6),
             "evidence_source_majority_balanced_accuracy": round(evidence_source_ba, 6),
@@ -435,6 +505,7 @@ def evaluate_hallucination_prespeech(
             "For W1/W8 pre-display states, generated-prefix word and character text baselines must also lose by margin.",
             "Permutation shuffles labels only inside topic.",
             "This script does not prove prevention or causality.",
+            "The optional prefix-residual control is diagnostic unless separately added to frozen licensing gates.",
         ],
     }
 
@@ -638,6 +709,48 @@ def layer_zero_features(prepared: dict[str, Any]) -> np.ndarray | None:
     if not isinstance(features_by_layer, np.ndarray) or features_by_layer.ndim != 3:
         return None
     return features_by_layer[:, int(matches[0]), :]
+
+
+def cross_val_prefix_residual_probe_predict(
+    *,
+    hidden_x: np.ndarray,
+    prefix_x: np.ndarray,
+    y: np.ndarray,
+    fold_indices: list[np.ndarray],
+    C: float,
+    max_iter: int,
+    ridge_alpha: float,
+) -> np.ndarray:
+    """Predict from hidden signal left after removing generated-prefix explainers.
+
+    Each fold fits the prefix-to-hidden residualizer only on train rows. This
+    keeps the generated-prefix control honest: test-row hidden vectors are
+    residualized by a model that has never seen that exact prompt group.
+    """
+
+    predictions = np.empty(len(y), dtype=object)
+    all_indices = np.arange(len(y))
+    for test_idx in fold_indices:
+        train_idx = np.setdiff1d(all_indices, test_idx)
+        prefix_scaler = StandardScaler()
+        hidden_scaler = StandardScaler()
+        prefix_train = prefix_scaler.fit_transform(prefix_x[train_idx])
+        prefix_test = prefix_scaler.transform(prefix_x[test_idx])
+        hidden_train = hidden_scaler.fit_transform(hidden_x[train_idx])
+        hidden_test = hidden_scaler.transform(hidden_x[test_idx])
+        residualizer = Ridge(alpha=float(ridge_alpha), solver="svd")
+        residualizer.fit(prefix_train, hidden_train)
+        residual_train = hidden_train - residualizer.predict(prefix_train)
+        residual_test = hidden_test - residualizer.predict(prefix_test)
+        clf = LogisticRegression(
+            C=C,
+            class_weight="balanced",
+            max_iter=max_iter,
+            solver="lbfgs",
+        )
+        clf.fit(residual_train, y[train_idx])
+        predictions[test_idx] = clf.predict(residual_test)
+    return predictions.astype(str)
 
 
 def summarize_prompt_group_contract(

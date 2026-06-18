@@ -868,6 +868,9 @@ def test_hallucination_timing_evaluator_fails_when_generated_prefix_separates(tm
         min_mixed_prompt_groups=20,
         permutations=10,
         shuffle_controls=2,
+        prefix_residual_control=True,
+        prefix_residual_alpha=1.0,
+        prefix_residual_dim=32,
     )
 
     assert report["status"] == "FAIL"
@@ -876,6 +879,8 @@ def test_hallucination_timing_evaluator_fails_when_generated_prefix_separates(tm
     assert report["gates"]["hidden_balanced_accuracy_pass"] is True
     assert report["gates"]["generated_prefix_char_text_margin_pass"] is False
     assert report["metrics"]["generated_prefix_char_text_hash_balanced_accuracy"] >= 0.75
+    assert report["readout_method"]["prefix_residual_control"] is True
+    assert report["metrics"]["prefix_residual_hidden_balanced_accuracy"] is not None
     assert report["claim"] == "OPEN / NOT LICENSED for internal hallucination-risk timing detection."
 
 

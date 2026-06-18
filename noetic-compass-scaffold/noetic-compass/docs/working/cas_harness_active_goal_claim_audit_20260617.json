@@ -213,7 +213,7 @@
           },
           "best_candidate_ref": "docs\\working\\outcome_native_hallucination_qwen05_hard_v2_20260618\\w16_best_layer_15_confirm.json",
           "passing_report_count": 0,
-          "report_count": 98
+          "report_count": 99
         },
         "next_hallucination_surface_screen": {
           "char_text_hash_balanced_accuracy": 0.5,
@@ -297,7 +297,7 @@
       ]
     }
   ],
-  "created_at": "2026-06-18T13:28:04.300651+00:00",
+  "created_at": "2026-06-18T13:43:14.027358+00:00",
   "goal_complete": false,
   "schema_version": "cas_harness_active_goal_claim_audit.v0",
   "summary": {
