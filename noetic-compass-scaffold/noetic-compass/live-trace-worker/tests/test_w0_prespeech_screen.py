@@ -45,12 +45,13 @@ def test_screen_event_is_shadow_only_and_not_licensed():
     assert event.type == "w0_prespeech_screen"
     assert event.route == "FLAG_FOR_HUMAN_REVIEW"
     assert event.verdict_effect == "none_shadow_only"
-    assert event.claim_ceiling == "NOT LICENSED"
+    assert event.claim_ceiling == "NOT LICENSED AS INTERNAL DETECTION"
     assert event.w0_capture_enabled is True
 
     clean = build_w0_prespeech_screen_event("hello world", target_layer=4, w0_capture_enabled=False)
     assert clean.route == "none"
-    assert clean.claim_ceiling == "NOT LICENSED"  # still bounded, even when not flagged
+    # Still bounded, even when not flagged.
+    assert clean.claim_ceiling == "NOT LICENSED AS INTERNAL DETECTION"
 
 
 def test_screen_is_emitted_after_manifest_and_before_first_token():

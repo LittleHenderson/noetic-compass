@@ -12,7 +12,8 @@ HONESTY BOUNDARY — this is shadow-only and makes NO internal-detection claim:
 - So the only signal here is a TRANSPARENT surface indicator (density of
   encoded-looking text), not an internal detector.
 - ``verdict_effect`` is always ``none_shadow_only`` — it never alters, blocks, or
-  intercepts output. ``claim_ceiling`` is always ``NOT LICENSED``.
+  intercepts output. ``claim_ceiling`` is always
+  ``NOT LICENSED AS INTERNAL DETECTION``.
 
 The W0 hidden states the worker captures pre-generation are recorded for future
 research (the surface-clean re-license experiment), NOT used to make a verdict.

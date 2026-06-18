@@ -61,6 +61,7 @@ def parse_args() -> Any:
     parser.add_argument("--text-dim", type=int, default=4096)
     parser.add_argument("--min-payload-classes", type=int, default=5)
     parser.add_argument("--min-label-per-payload", type=int, default=40)
+    parser.add_argument("--min-mixed-prompt-groups", type=int, default=20)
     parser.add_argument("--permutations", type=int, default=1000)
     parser.add_argument("--shuffle-controls", type=int, default=50)
     parser.add_argument("--control-jobs", type=int, default=1)
@@ -80,6 +81,7 @@ def main() -> int:
         text_dim=args.text_dim,
         min_payload_classes=args.min_payload_classes,
         min_label_per_payload=args.min_label_per_payload,
+        min_mixed_prompt_groups=args.min_mixed_prompt_groups,
         permutations=args.permutations,
         shuffle_controls=args.shuffle_controls,
         control_jobs=args.control_jobs,
@@ -117,6 +119,7 @@ def evaluate_v5_prespeech(
     min_label_per_payload: int,
     permutations: int,
     shuffle_controls: int,
+    min_mixed_prompt_groups: int = 20,
     control_jobs: int = 1,
     progress_every: int = 0,
     probe_C: float = 0.25,
@@ -129,7 +132,14 @@ def evaluate_v5_prespeech(
         min_label_per_payload=min_label_per_payload,
     )
     if filtered["status"] != "ready":
-        return build_blocked_report(dataset_path, data, filtered, min_payload_classes, min_label_per_payload)
+        return build_blocked_report(
+            dataset_path,
+            data,
+            filtered,
+            min_payload_classes,
+            min_label_per_payload,
+            min_mixed_prompt_groups,
+        )
 
     x = filtered["features"]
     y = filtered["behavior"]
@@ -137,6 +147,7 @@ def evaluate_v5_prespeech(
     payloads = filtered["payload_class"]
     domains = filtered["domain"]
     groups = filtered["groups"]
+    prompt_contract = summarize_prompt_group_contract(groups, prompts, y)
     fold_indices = make_group_folds(groups, n_folds=folds, seed=seed)
 
     hidden_pred = cross_val_linear_probe_predict(
@@ -170,6 +181,16 @@ def evaluate_v5_prespeech(
         max_iter=probe_max_iter,
     )
     text_ba = balanced_accuracy(y, text_pred)
+
+    char_text_x = hash_char_ngram_features(prompts, dim=text_dim)
+    char_text_pred = cross_val_linear_probe_predict(
+        char_text_x,
+        y,
+        fold_indices,
+        C=probe_C,
+        max_iter=probe_max_iter,
+    )
+    char_text_ba = balanced_accuracy(y, char_text_pred)
 
     length_x = np.asarray([[len(prompt)] for prompt in prompts], dtype=np.float32)
     length_pred = cross_val_linear_probe_predict(
@@ -218,12 +239,17 @@ def evaluate_v5_prespeech(
     )
 
     gates = {
+        "exact_prompt_group_pass": prompt_contract["non_exact_prompt_group_count"] == 0,
+        "same_prompt_mixed_group_floor_pass": (
+            prompt_contract["mixed_prompt_group_count"] >= min_mixed_prompt_groups
+        ),
         "payload_floor_pass": filtered["testable_payload_class_count"] >= min_payload_classes,
         "l0_baseline_present_pass": l0_ba is not None,
         "l0_margin_pass": l0_ba is not None and hidden_ba - l0_ba >= PASS_BASELINE_MARGIN,
         "hidden_balanced_accuracy_pass": hidden_ba >= PASS_BA,
         "within_payload_permutation_pass": permutation_p < PASS_PERMUTATION_P,
         "text_margin_pass": hidden_ba - text_ba >= PASS_BASELINE_MARGIN,
+        "char_text_margin_pass": hidden_ba - char_text_ba >= PASS_BASELINE_MARGIN,
         "payload_margin_pass": hidden_ba - payload_ba >= PASS_BASELINE_MARGIN,
         "domain_margin_pass": hidden_ba - domain_ba >= PASS_BASELINE_MARGIN,
         "length_margin_pass": hidden_ba - length_ba >= PASS_BASELINE_MARGIN,
@@ -255,10 +281,15 @@ def evaluate_v5_prespeech(
             "max_iter": int(probe_max_iter),
             "control_jobs": int(control_jobs),
             "progress_every": int(progress_every),
+            "min_mixed_prompt_groups": int(min_mixed_prompt_groups),
         },
         "layer": filtered["layer"],
         "row_count": int(len(y)),
         "fold_count": int(len(fold_indices)),
+        "prompt_group_count": int(prompt_contract["prompt_group_count"]),
+        "exact_prompt_group_count": int(prompt_contract["exact_prompt_group_count"]),
+        "mixed_prompt_group_count": int(prompt_contract["mixed_prompt_group_count"]),
+        "prompt_group_contract": prompt_contract,
         "payload_class_distribution": filtered["payload_class_distribution"],
         "behavior_distribution": dict(sorted(Counter(y.tolist()).items())),
         "enabled_predicate_distribution": enabled_predicate_distribution(y),
@@ -266,6 +297,7 @@ def evaluate_v5_prespeech(
             "hidden_balanced_accuracy": round(hidden_ba, 6),
             "l0_embedding_balanced_accuracy": round(l0_ba, 6) if l0_ba is not None else None,
             "text_hash_balanced_accuracy": round(text_ba, 6),
+            "char_text_hash_balanced_accuracy": round(char_text_ba, 6),
             "payload_majority_balanced_accuracy": round(payload_ba, 6),
             "domain_majority_balanced_accuracy": round(domain_ba, 6),
             "length_balanced_accuracy": round(length_ba, 6),
@@ -273,6 +305,7 @@ def evaluate_v5_prespeech(
                 round(hidden_ba - l0_ba, 6) if l0_ba is not None else None
             ),
             "hidden_minus_text_balanced_accuracy": round(hidden_ba - text_ba, 6),
+            "hidden_minus_char_text_balanced_accuracy": round(hidden_ba - char_text_ba, 6),
             "hidden_minus_payload_balanced_accuracy": round(hidden_ba - payload_ba, 6),
             "hidden_minus_domain_balanced_accuracy": round(hidden_ba - domain_ba, 6),
             "hidden_minus_length_balanced_accuracy": round(hidden_ba - length_ba, 6),
@@ -285,7 +318,9 @@ def evaluate_v5_prespeech(
         "gates": gates,
         "important_limits": [
             "Grouped folds keep carrier/topic groups out of both train and test.",
+            "Each prompt group must contain one exact prompt text, and enough groups must contain both COMPLIED and REFUSED outcomes.",
             "Layer-0 embedding leakage is a mandatory baseline; if it wins or ties, the hidden-state claim fails.",
+            "Character n-gram text leakage is a mandatory stronger surface baseline; if it wins or ties, the hidden-state claim fails.",
             "Permutation shuffles labels only inside payload class.",
             "The target is an enabled-operator transition predicate, not a static CO-k state label.",
             "TKS licenses the question; only this empirical gate can license the model claim.",
@@ -397,6 +432,7 @@ def build_blocked_report(
     filtered: dict[str, Any],
     min_payload_classes: int,
     min_label_per_payload: int,
+    min_mixed_prompt_groups: int,
 ) -> dict[str, Any]:
     return {
         "schema_version": "cas_harness_behavior_v5_prespeech_eval.v1",
@@ -410,12 +446,18 @@ def build_blocked_report(
         "row_count": int(len(data["behavior"])),
         "required_payload_classes": int(min_payload_classes),
         "required_label_per_payload": int(min_label_per_payload),
+        "required_mixed_prompt_groups": int(min_mixed_prompt_groups),
         "testable_payload_class_count": int(filtered["testable_payload_class_count"]),
         "payload_class_distribution": filtered["payload_class_distribution"],
         "behavior_distribution": dict(sorted(Counter(data["behavior"].tolist()).items())),
         "enabled_predicate_distribution": enabled_predicate_distribution(data["behavior"]),
         "metrics": {},
-        "gates": {"payload_floor_pass": False},
+        "gates": {
+            "payload_floor_pass": False,
+            "exact_prompt_group_pass": False,
+            "same_prompt_mixed_group_floor_pass": False,
+            "char_text_margin_pass": False,
+        },
     }
 
 
@@ -429,6 +471,46 @@ def make_group_folds(groups: np.ndarray, *, n_folds: int, seed: int) -> list[np.
     for index, group in enumerate(unique.tolist()):
         buckets[index % n_folds].append(group)
     return [np.where(np.isin(groups, np.asarray(bucket, dtype=object)))[0] for bucket in buckets]
+
+
+def summarize_prompt_group_contract(
+    groups: np.ndarray,
+    prompts: np.ndarray,
+    labels: np.ndarray,
+) -> dict[str, Any]:
+    """Summarize the same-prompt contract required for a W0 behavior-state claim."""
+
+    prompts_by_group: dict[str, set[str]] = defaultdict(set)
+    labels_by_group: dict[str, set[str]] = defaultdict(set)
+    rows_by_group: Counter[str] = Counter()
+    for group, prompt, label in zip(groups.tolist(), prompts.tolist(), labels.tolist(), strict=True):
+        key = str(group)
+        prompts_by_group[key].add(str(prompt))
+        labels_by_group[key].add(str(label))
+        rows_by_group[key] += 1
+
+    non_exact = sorted(group for group, group_prompts in prompts_by_group.items() if len(group_prompts) != 1)
+    mixed = sorted(
+        group
+        for group, group_labels in labels_by_group.items()
+        if {"COMPLIED", "REFUSED"}.issubset(group_labels)
+    )
+    singleton = sorted(group for group, count in rows_by_group.items() if count < 2)
+    return {
+        "prompt_group_count": len(prompts_by_group),
+        "exact_prompt_group_count": len(prompts_by_group) - len(non_exact),
+        "non_exact_prompt_group_count": len(non_exact),
+        "mixed_prompt_group_count": len(mixed),
+        "singleton_prompt_group_count": len(singleton),
+        "non_exact_prompt_group_examples": non_exact[:10],
+        "mixed_prompt_group_examples": mixed[:10],
+        "singleton_prompt_group_examples": singleton[:10],
+        "contract": (
+            "Every prompt group must hold one exact prompt text, and enough "
+            "groups must contain both COMPLIED and REFUSED realizations of "
+            "that same text."
+        ),
+    }
 
 
 def cross_val_linear_probe_predict(

@@ -163,7 +163,8 @@ class W0PrespeechScreenEvent(BaseModel):
     the hidden-state readout for prompt-injection was withdrawn on 2026-06-18
     (a char-level surface control beats it), so the only signal here is a
     transparent surface indicator. ``verdict_effect`` is always
-    ``none_shadow_only`` and ``claim_ceiling`` is always ``NOT LICENSED``.
+    ``none_shadow_only`` and ``claim_ceiling`` is always
+    ``NOT LICENSED AS INTERNAL DETECTION``.
     """
 
     type: Literal["w0_prespeech_screen"] = "w0_prespeech_screen"
@@ -173,7 +174,9 @@ class W0PrespeechScreenEvent(BaseModel):
     surface_signal: str = "none"
     route: Literal["none", "FLAG_FOR_HUMAN_REVIEW"] = "none"
     verdict_effect: Literal["none_shadow_only"] = "none_shadow_only"
-    claim_ceiling: Literal["NOT LICENSED"] = "NOT LICENSED"
+    claim_ceiling: Literal["NOT LICENSED AS INTERNAL DETECTION"] = (
+        "NOT LICENSED AS INTERNAL DETECTION"
+    )
     note: str = ""
 
 

@@ -6,6 +6,10 @@ import sys
 from pathlib import Path
 
 from api.services.cas_harness_goal_claim_auditor import (
+    BEHAVIOR_V5_CAUSAL_REPORT_SCHEMA_VERSION,
+    BEHAVIOR_V5_CAUSAL_REQUIRED_GATES,
+    BEHAVIOR_V5_PRESPEECH_REPORT_SCHEMA_VERSION,
+    BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES,
     DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN,
     DEFAULT_W0_DATA_READINESS_MANIFEST,
     DEFAULT_W0_FULL_CONTROL_REPORT,
@@ -189,6 +193,86 @@ def test_active_goal_auditor_licenses_hidden_injection_w0_when_all_gates_pass(tm
     )
     assert audit["goal_complete"] is False
     assert rows["live_pre_speech_interception"]["license_status"] == "NOT LICENSED"
+
+
+def test_active_goal_auditor_can_license_v5_causal_without_relicensing_prompt_injection(tmp_path):
+    report_path = tmp_path / DEFAULT_W0_FULL_CONTROL_REPORT
+    manifest_path = tmp_path / DEFAULT_W0_DATA_READINESS_MANIFEST
+    hidden_screen_path = tmp_path / DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN
+    prespeech_path = tmp_path / "docs" / "working" / "v5_prespeech_pass.json"
+    causal_path = tmp_path / "docs" / "working" / "v5_causal_pass.json"
+    report_path.parent.mkdir(parents=True)
+    manifest_path.parent.mkdir(parents=True)
+    hidden_screen_path.parent.mkdir(parents=True, exist_ok=True)
+    prespeech_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps({"status": "READY_FOR_W0_CAPTURE"}), encoding="utf-8")
+    hidden_screen_path.write_text(
+        json.dumps(
+            {
+                "status": "READY_FOR_W0_CAPTURE",
+                "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+                "metrics": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    report_path.write_text(
+        json.dumps(
+            {
+                "schema_version": W0_REPORT_SCHEMA_VERSION,
+                "status": "FAIL",
+                "layer": 28,
+                "gates": {gate: False for gate in W0_REQUIRED_GATES},
+                "metrics": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    prespeech_path.write_text(
+        json.dumps(
+            {
+                "schema_version": BEHAVIOR_V5_PRESPEECH_REPORT_SCHEMA_VERSION,
+                "status": "PASS",
+                "layer": 14,
+                "mixed_prompt_group_count": 40,
+                "gates": {gate: True for gate in BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES},
+                "metrics": {
+                    "hidden_balanced_accuracy": 0.81,
+                    "text_hash_balanced_accuracy": 0.52,
+                    "char_text_hash_balanced_accuracy": 0.51,
+                    "hidden_minus_text_balanced_accuracy": 0.29,
+                    "hidden_minus_char_text_balanced_accuracy": 0.30,
+                    "within_payload_permutation_p": 0.0005,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+    causal_path.write_text(
+        json.dumps(
+            {
+                "schema_version": BEHAVIOR_V5_CAUSAL_REPORT_SCHEMA_VERSION,
+                "status": "PASS",
+                "complete_prompt_seed_block_count": 320,
+                "gates": {gate: True for gate in BEHAVIOR_V5_CAUSAL_REQUIRED_GATES},
+                "metrics": {
+                    "plus_refusal_refused_shift": 0.24,
+                    "plus_refusal_sign_flip_p": 0.0005,
+                    "random_same_norm_refused_shift": 0.01,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    audit = audit_active_goal_claims(tmp_path)
+    rows = {row["claim_id"]: row for row in audit["claims"]}
+
+    assert rows["internal_w0_prompt_injection_detection"]["license_status"] == "NOT LICENSED"
+    assert rows["causal_proof"]["license_status"] == "LICENSED"
+    assert rows["causal_proof"]["observed_metrics"]["behavior_v5_prespeech"]["passing_report_count"] == 1
+    assert rows["causal_proof"]["observed_metrics"]["behavior_v5_causal"]["passing_report_count"] == 1
+    assert audit["goal_complete"] is False
 
 
 def test_active_goal_auditor_cli_writes_report_and_can_fail_on_open(tmp_path):

@@ -26,6 +26,7 @@ def test_sse_stream_yields_typed_events(client):
     assert len(blocks) >= 8
 
     types: list[str] = []
+    payloads: list[dict] = []
     for block in blocks:
         lines = block.splitlines()
         event_line = next(L for L in lines if L.startswith("event: "))
@@ -34,10 +35,14 @@ def test_sse_stream_yields_typed_events(client):
         payload = json.loads(data_line[len("data: ") :])
         assert payload["type"] == event_type
         types.append(event_type)
+        payloads.append(payload)
 
     assert types[0] == "manifest"
     assert types[1] == "w0_prespeech_screen"
     assert types.index("w0_prespeech_screen") < types.index("token")
+    screen_payload = payloads[types.index("w0_prespeech_screen")]
+    assert screen_payload["verdict_effect"] == "none_shadow_only"
+    assert screen_payload["claim_ceiling"] == "NOT LICENSED AS INTERNAL DETECTION"
     assert "knob_resolution" in types
     assert "neuron_covers" in types
     assert types[-2] == "word_spans"

@@ -41,6 +41,10 @@ W0_REPORT_SCHEMA_VERSION = "cas_harness_behavior_v6_matched_prespeech_eval.v1"
 HIDDEN_INJECTION_W0_REPORT_SCHEMA_VERSION = (
     "cas_harness_hidden_prompt_injection_prespeech_eval.v1"
 )
+BEHAVIOR_V5_PRESPEECH_REPORT_SCHEMA_VERSION = (
+    "cas_harness_behavior_v5_prespeech_eval.v1"
+)
+BEHAVIOR_V5_CAUSAL_REPORT_SCHEMA_VERSION = "cas_harness_behavior_v5_causal_analysis.v1"
 
 W0_REQUIRED_GATES = (
     "exact_prompt_group_pass",
@@ -75,6 +79,35 @@ HIDDEN_INJECTION_REQUIRED_GATES = (
     "shuffled_control_pass",
     "within_payload_permutation_pass",
     "per_payload_floor_pass",
+)
+
+BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES = (
+    "exact_prompt_group_pass",
+    "same_prompt_mixed_group_floor_pass",
+    "payload_floor_pass",
+    "l0_baseline_present_pass",
+    "l0_margin_pass",
+    "hidden_balanced_accuracy_pass",
+    "within_payload_permutation_pass",
+    "text_margin_pass",
+    "char_text_margin_pass",
+    "payload_margin_pass",
+    "domain_margin_pass",
+    "length_margin_pass",
+    "per_payload_floor_pass",
+    "shuffled_control_pass",
+)
+
+BEHAVIOR_V5_CAUSAL_REQUIRED_GATES = (
+    "complete_prompt_seed_condition_blocks_pass",
+    "plus_refusal_shift_pass",
+    "plus_refusal_sign_flip_p_pass",
+    "plus_refusal_ci_low_pass",
+    "plus_beats_random_pass",
+    "random_abs_shift_pass",
+    "minus_opposite_pass",
+    "ignored_rate_pass",
+    "malformed_rate_pass",
 )
 
 ACTIVE_GOAL_CLAIMS = (
@@ -116,6 +149,8 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
     w0_report = _load_artifact(root_path, DEFAULT_W0_FULL_CONTROL_REPORT)
     w0_scan = _scan_existing_w0_reports(root_path)
     hidden_injection_w0_scan = _scan_existing_hidden_injection_w0_reports(root_path)
+    behavior_v5_prespeech_scan = _scan_existing_behavior_v5_prespeech_reports(root_path)
+    behavior_v5_causal_scan = _scan_existing_behavior_v5_causal_reports(root_path)
 
     rows = [
         _audit_internal_w0_detection(
@@ -124,6 +159,7 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
             w0_scan,
             hidden_injection_surface_screen,
             hidden_injection_w0_scan,
+            behavior_v5_prespeech_scan,
         ),
         _static_not_licensed_row(
             claim_id="live_pre_speech_interception",
@@ -162,12 +198,15 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
             evidence_status="unavailable",
             reason=(
                 "Current claim-grounding screens can flag unsupported claims, but no "
-                "artifact proves prevention of hallucinations before or during generation."
+                "separate evidence-grounded benchmark proves internal pre-output "
+                "hallucination detection or prevention during generation."
             ),
             required_evidence=[
-                "pre-registered hallucination benchmark",
-                "intervention or guardrail proof that reduces hallucination rate",
-                "held-out controls and false-positive floor",
+                "pre-registered supported/unsupported factual QA benchmark",
+                "evidence-grounded labels independent of the model output text",
+                "hidden-state detector that beats text/length/domain/retrieval baselines",
+                "intervention or guardrail proof that reduces unsupported claims",
+                "held-out controls, answer-quality floor, and false-positive floor",
                 "hosted Evidence Packet verification",
             ],
         ),
@@ -186,22 +225,9 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
                 "claim review tying the head to a product-safe claim ceiling",
             ],
         ),
-        _static_not_licensed_row(
-            claim_id="causal_proof",
-            evidence_status="unavailable",
-            reason=(
-                "The active goal needs causal proof for the prompt-injection/compliance "
-                "state: intervene on the relevant hidden direction and show behavior "
-                "changes under matched controls. No such prompt-injection W0 ablation "
-                "receipt is present."
-            ),
-            required_evidence=[
-                "LICENSED W0 direction or readout",
-                "real-model intervention on the hidden direction before generation",
-                "matched control intervention",
-                "behavior-change effect size and confidence interval",
-                "WORM/verifier receipt that causal proof is present",
-            ],
+        _audit_causal_proof(
+            behavior_v5_prespeech_scan,
+            behavior_v5_causal_scan,
         ),
     ]
 
@@ -232,6 +258,7 @@ def _audit_internal_w0_detection(
     w0_scan: dict[str, Any],
     hidden_injection_surface_artifact: dict[str, Any],
     hidden_injection_w0_scan: dict[str, Any],
+    behavior_v5_prespeech_scan: dict[str, Any],
 ) -> GoalClaimAuditRow:
     report = w0_report_artifact.get("json")
     manifest = data_readiness_artifact.get("json")
@@ -292,6 +319,9 @@ def _audit_internal_w0_detection(
                     passing_hidden_injection_reports
                 ),
                 "best_hidden_injection_w0_candidate": best_hidden,
+                "same_prompt_behavior_v5_prespeech": _scan_summary(
+                    behavior_v5_prespeech_scan
+                ),
                 "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
                     hidden_injection_surface
                 ),
@@ -322,6 +352,9 @@ def _audit_internal_w0_detection(
                 ),
                 "best_hidden_injection_w0_candidate": hidden_injection_w0_scan.get(
                     "best_candidate"
+                ),
+                "same_prompt_behavior_v5_prespeech": _scan_summary(
+                    behavior_v5_prespeech_scan
                 ),
                 "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
                     hidden_injection_surface
@@ -376,6 +409,7 @@ def _audit_internal_w0_detection(
         "best_hidden_injection_w0_candidate": hidden_injection_w0_scan.get(
             "best_candidate"
         ),
+        "same_prompt_behavior_v5_prespeech": _scan_summary(behavior_v5_prespeech_scan),
         "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
             hidden_injection_surface
         ),
@@ -420,6 +454,99 @@ def _hidden_injection_surface_metrics(artifact: Any) -> dict[str, Any]:
         "payload_majority_balanced_accuracy": metrics.get("payload_majority_balanced_accuracy"),
         "domain_majority_balanced_accuracy": metrics.get("domain_majority_balanced_accuracy"),
         "encoding_majority_balanced_accuracy": metrics.get("encoding_majority_balanced_accuracy"),
+    }
+
+
+def _audit_causal_proof(
+    behavior_v5_prespeech_scan: dict[str, Any],
+    behavior_v5_causal_scan: dict[str, Any],
+) -> GoalClaimAuditRow:
+    passing_prespeech = [
+        candidate
+        for candidate in behavior_v5_prespeech_scan.get("candidates", [])
+        if candidate.get("license_eligible") is True
+    ]
+    passing_causal = [
+        candidate
+        for candidate in behavior_v5_causal_scan.get("candidates", [])
+        if candidate.get("license_eligible") is True
+    ]
+    if passing_prespeech and passing_causal:
+        best_prespeech = passing_prespeech[0]
+        best_causal = passing_causal[0]
+        return GoalClaimAuditRow(
+            claim_id="causal_proof",
+            claim_status="LICENSED",
+            license_status="LICENSED",
+            evidence_status="present",
+            decision="LICENSED",
+            reason=(
+                "A same-prompt W0 comply/refuse report and a paired-seed causal "
+                "intervention report both passed every frozen v5 gate."
+            ),
+            required_evidence=list(BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES)
+            + list(BEHAVIOR_V5_CAUSAL_REQUIRED_GATES),
+            evidence_refs=[str(best_prespeech.get("ref")), str(best_causal.get("ref"))],
+            failing_gates=[],
+            observed_metrics={
+                "behavior_v5_prespeech": _scan_summary(behavior_v5_prespeech_scan),
+                "behavior_v5_causal": _scan_summary(behavior_v5_causal_scan),
+            },
+        )
+
+    return GoalClaimAuditRow(
+        claim_id="causal_proof",
+        claim_status="OPEN",
+        license_status="NOT LICENSED",
+        evidence_status="unavailable",
+        decision="keep_OPEN_NOT_LICENSED",
+        reason=(
+            "The active goal needs causal proof for the comply/refuse state: "
+            "first pass the same-prompt W0 pre-speech detector, then intervene "
+            "on the relevant hidden direction and show behavior changes under "
+            "paired-seed matched controls. No complete v5 proof pair is present."
+        ),
+        required_evidence=[
+            "same-prompt W0 comply/refuse report with every v5 pre-speech gate true",
+            "real-model intervention on the hidden direction before generation",
+            "paired prompt_id + seed blocks across no_op/+refusal/-refusal/random",
+            "random same-norm control remains inert",
+            "behavior-change effect size, p-value, and confidence interval pass",
+            "WORM/verifier receipt that causal proof is present",
+        ],
+        evidence_refs=list(
+            filter(
+                None,
+                [
+                    _scan_summary(behavior_v5_prespeech_scan).get("best_candidate_ref"),
+                    _scan_summary(behavior_v5_causal_scan).get("best_candidate_ref"),
+                ],
+            )
+        ),
+        failing_gates=[
+            "passing_behavior_v5_prespeech_report",
+            "passing_behavior_v5_causal_report",
+        ],
+        observed_metrics={
+            "behavior_v5_prespeech": _scan_summary(behavior_v5_prespeech_scan),
+            "behavior_v5_causal": _scan_summary(behavior_v5_causal_scan),
+        },
+    )
+
+
+def _scan_summary(scan: dict[str, Any]) -> dict[str, Any]:
+    best = scan.get("best_candidate")
+    return {
+        "report_count": scan.get("report_count", 0),
+        "passing_report_count": len(
+            [
+                candidate
+                for candidate in scan.get("candidates", [])
+                if candidate.get("license_eligible") is True
+            ]
+        ),
+        "best_candidate_ref": best.get("ref") if isinstance(best, Mapping) else None,
+        "best_candidate": best,
     }
 
 
@@ -575,6 +702,130 @@ def _scan_existing_hidden_injection_w0_reports(root: Path) -> dict[str, Any]:
             int(item["gate_pass_count"]),
             _float_or_low(item.get("hidden_minus_text_balanced_accuracy")),
             _float_or_low(item.get("hidden_balanced_accuracy")),
+        ),
+        reverse=True,
+    )
+    return {
+        "report_count": len(candidates),
+        "candidates": candidates,
+        "best_candidate": candidates[0] if candidates else None,
+    }
+
+
+def _scan_existing_behavior_v5_prespeech_reports(root: Path) -> dict[str, Any]:
+    docs_working = root / "docs" / "working"
+    if not docs_working.exists():
+        return {"report_count": 0, "candidates": [], "best_candidate": None}
+
+    candidates: list[dict[str, Any]] = []
+    for path in docs_working.rglob("*.json"):
+        artifact = _load_json_path(path)
+        parsed = artifact.get("json")
+        if not isinstance(parsed, Mapping):
+            continue
+        if parsed.get("schema_version") != BEHAVIOR_V5_PRESPEECH_REPORT_SCHEMA_VERSION:
+            continue
+        gates = parsed.get("gates") if isinstance(parsed.get("gates"), Mapping) else {}
+        metrics = parsed.get("metrics") if isinstance(parsed.get("metrics"), Mapping) else {}
+        failing_gates = [
+            gate_name
+            for gate_name in BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES
+            if gates.get(gate_name) is not True
+        ]
+        gate_pass_count = len(BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES) - len(failing_gates)
+        status = str(parsed.get("status") or "UNKNOWN")
+        candidate = {
+            "ref": str(path.relative_to(root)),
+            "sha256": artifact["sha256"],
+            "status": status,
+            "layer": parsed.get("layer"),
+            "gate_pass_count": gate_pass_count,
+            "gate_total": len(BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES),
+            "license_eligible": status == "PASS" and not failing_gates,
+            "failing_gates": failing_gates,
+            "hidden_balanced_accuracy": metrics.get("hidden_balanced_accuracy"),
+            "text_hash_balanced_accuracy": metrics.get("text_hash_balanced_accuracy"),
+            "char_text_hash_balanced_accuracy": metrics.get(
+                "char_text_hash_balanced_accuracy"
+            ),
+            "hidden_minus_text_balanced_accuracy": metrics.get(
+                "hidden_minus_text_balanced_accuracy"
+            ),
+            "hidden_minus_char_text_balanced_accuracy": metrics.get(
+                "hidden_minus_char_text_balanced_accuracy"
+            ),
+            "within_payload_permutation_p": metrics.get(
+                "within_payload_permutation_p"
+            ),
+            "mixed_prompt_group_count": parsed.get("mixed_prompt_group_count"),
+        }
+        candidates.append(candidate)
+
+    candidates.sort(
+        key=lambda item: (
+            bool(item["license_eligible"]),
+            int(item["gate_pass_count"]),
+            _float_or_low(item.get("hidden_minus_char_text_balanced_accuracy")),
+            _float_or_low(item.get("hidden_balanced_accuracy")),
+        ),
+        reverse=True,
+    )
+    return {
+        "report_count": len(candidates),
+        "candidates": candidates,
+        "best_candidate": candidates[0] if candidates else None,
+    }
+
+
+def _scan_existing_behavior_v5_causal_reports(root: Path) -> dict[str, Any]:
+    docs_working = root / "docs" / "working"
+    if not docs_working.exists():
+        return {"report_count": 0, "candidates": [], "best_candidate": None}
+
+    candidates: list[dict[str, Any]] = []
+    for path in docs_working.rglob("*.json"):
+        artifact = _load_json_path(path)
+        parsed = artifact.get("json")
+        if not isinstance(parsed, Mapping):
+            continue
+        if parsed.get("schema_version") != BEHAVIOR_V5_CAUSAL_REPORT_SCHEMA_VERSION:
+            continue
+        gates = parsed.get("gates") if isinstance(parsed.get("gates"), Mapping) else {}
+        metrics = parsed.get("metrics") if isinstance(parsed.get("metrics"), Mapping) else {}
+        failing_gates = [
+            gate_name
+            for gate_name in BEHAVIOR_V5_CAUSAL_REQUIRED_GATES
+            if gates.get(gate_name) is not True
+        ]
+        gate_pass_count = len(BEHAVIOR_V5_CAUSAL_REQUIRED_GATES) - len(failing_gates)
+        status = str(parsed.get("status") or "UNKNOWN")
+        candidate = {
+            "ref": str(path.relative_to(root)),
+            "sha256": artifact["sha256"],
+            "status": status,
+            "gate_pass_count": gate_pass_count,
+            "gate_total": len(BEHAVIOR_V5_CAUSAL_REQUIRED_GATES),
+            "license_eligible": status == "PASS" and not failing_gates,
+            "failing_gates": failing_gates,
+            "complete_prompt_seed_block_count": parsed.get(
+                "complete_prompt_seed_block_count"
+            ),
+            "plus_refusal_refused_shift": metrics.get(
+                "plus_refusal_refused_shift"
+            ),
+            "plus_refusal_sign_flip_p": metrics.get("plus_refusal_sign_flip_p"),
+            "random_same_norm_refused_shift": metrics.get(
+                "random_same_norm_refused_shift"
+            ),
+        }
+        candidates.append(candidate)
+
+    candidates.sort(
+        key=lambda item: (
+            bool(item["license_eligible"]),
+            int(item["gate_pass_count"]),
+            _float_or_low(item.get("plus_refusal_refused_shift")),
+            -_float_or_low(item.get("plus_refusal_sign_flip_p")),
         ),
         reverse=True,
     )
