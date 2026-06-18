@@ -1,0 +1,91 @@
+{
+  "report_id": "76ca69b2-2d15-4ab4-a43b-481bfbbf0c75",
+  "semantics_version": "pcba-safety-semantics-v0.1",
+  "formal_pcba_safety_semantics": true,
+  "negative_safety_eval_pass": true,
+  "evidence_anchor_pass": true,
+  "cases": [
+    {
+      "case_id": "invalid_threshold_rejected",
+      "description": "Fuse threshold outside [0, 1] is rejected.",
+      "passed": true,
+      "evidence": {
+        "error": "1 validation error for PcbaComponentNode\n  Value error, Parameter 'threshold' must be between 0 and 1 [type=value_error, input_value={'name': None, 'kind': <P...: 2, 'action': 'block'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error"
+      }
+    },
+    {
+      "case_id": "invalid_embedded_cas_rejected",
+      "description": "Embedded invalid CAS state fails compiler integration.",
+      "passed": true,
+      "evidence": {
+        "source_expression": "Resistor< ^2^Z_{F2}|A, R=50 >",
+        "component_name": "Resistor",
+        "compiler_available": true,
+        "checked_expressions": [
+          {
+            "expression": "^2^Z_{F2}|A",
+            "valid": false,
+            "is_clean": false,
+            "error": "parsing@3: expected DOMAIN, got IDENT",
+            "admissible": null,
+            "domain_descent_ok": null
+          }
+        ],
+        "skipped_shorthand": [],
+        "valid": false,
+        "reason": "One or more embedded CAS expressions failed compilation."
+      }
+    },
+    {
+      "case_id": "shorthand_not_production",
+      "description": "Bare shorthand syntax remains diagnostic and not production-compiler evidence.",
+      "passed": true,
+      "evidence": {
+        "source_expression": "Diode< ^P -> ^C >",
+        "component_name": "Diode",
+        "compiler_available": true,
+        "checked_expressions": [],
+        "skipped_shorthand": [
+          "^C",
+          "^P"
+        ],
+        "valid": false,
+        "reason": "No compiler-checkable CAS expressions found in PCBA component."
+      }
+    },
+    {
+      "case_id": "diagnostic_accept_blocked",
+      "description": "PCBA diagnostics cannot claim broker ACCEPT authority.",
+      "passed": true,
+      "evidence": {
+        "error": "1 validation error for PcbaComponentDiagnostic\n  Value error, PCBA diagnostics cannot create broker ACCEPT [type=value_error, input_value={'diagnostic_id': 'unsafe...te_broker_accept': True}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error"
+      }
+    },
+    {
+      "case_id": "broker_accept_non_licensable",
+      "description": "PCBA broker ACCEPT creation remains NOT LICENSED even when no-ACCEPT evidence is present.",
+      "passed": true,
+      "evidence": {
+        "feature": "broker_accept_creation",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "no_pcba_to_accept_route",
+          "auditor_accept_requires_gate_passes",
+          "broker_accept_negative_tests_pass"
+        ],
+        "present_evidence": [
+          "no_pcba_to_accept_route",
+          "auditor_accept_requires_gate_passes",
+          "broker_accept_negative_tests_pass"
+        ],
+        "missing_evidence": [],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "PCBA broker ACCEPT creation is intentionally non-licensable; ACCEPT must come only from the CAS Forex auditor/broker path."
+      }
+    }
+  ],
+  "failure_reasons": []
+}

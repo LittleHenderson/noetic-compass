@@ -1,0 +1,13 @@
+# Secrets — never commit
+.env
+
+# Python caches / build
+__pycache__/
+*.pyc
+*.egg-info/
+.pytest_cache/
+
+# Local scratch / generated artifacts
+tmppcba-pytest/
+tmp_output.txt
+evidence_runs/

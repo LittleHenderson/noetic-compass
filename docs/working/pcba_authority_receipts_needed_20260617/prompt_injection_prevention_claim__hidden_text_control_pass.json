@@ -1,0 +1,18 @@
+{
+  "evidence_key": "hidden_text_control_pass",
+  "feature": "prompt_injection_prevention_claim",
+  "approved": true,
+  "operator_id": "codex_gpt5_local_reviewer_20260617",
+  "signed_reason": "I reviewed the PCBA hidden-text control evaluation and raw repeated-run evidence; the scoped hidden, encoded, markdown, nested-document, and benign-control cases passed.",
+  "signature": "codex-gpt5-local-attestation: pcba hidden-text control pass on 2026-06-17",
+  "artifact_refs": [
+    "docs\\working\\pcba_hidden_text_control_eval_20260617.md",
+    "docs\\working\\pcba_hidden_text_control_eval_20260617.jsonl"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\pcba_hidden_text_control_eval_20260617.md": "0fadbe0f473fbdc4c65f9fc4bc98c70eb1ab2751013ebc3f08d12e2b21bb8e0c",
+    "docs\\working\\pcba_hidden_text_control_eval_20260617.jsonl": "43b8de1a665608aba36ebb4903b592c1b8b0a0b3528466ade1b6bd86ec4872f6"
+  },
+  "created_at": "2026-06-17T23:17:02.587766+00:00",
+  "receipt_hash": "ef18fb302038959dbd2726d38a5475c0a9390727ae1ff0a0f74e0139f5088bc5"
+}

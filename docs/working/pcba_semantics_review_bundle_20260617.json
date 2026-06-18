@@ -1,0 +1,329 @@
+{
+  "generated_at": "2026-06-17T23:11:13.598616+00:00",
+  "bundle_kind": "pcba_semantics_review",
+  "scope": "production_pcba_component_syntax only",
+  "ready_for_human_signature": true,
+  "licensed": false,
+  "reviewed_artifacts": [
+    {
+      "ref": "docs\\working\\pcba_syntax_grammar_spec_20260617.md",
+      "exists": true,
+      "sha256": "7a903a6b41495953247b70cfea5eeb96097397ec9aa6305fe25180f4b078e5fc"
+    },
+    {
+      "ref": "cas-forex\\cas_forex\\pcba_syntax.py",
+      "exists": true,
+      "sha256": "c66fdc6cd979c636644563901938ade90bf4841bbaa67597697e899878c73735"
+    },
+    {
+      "ref": "cas-forex\\cas_forex\\pcba_compiler.py",
+      "exists": true,
+      "sha256": "2e4ef193182fbcf63a699a62332907ecbf9a148db0a3f65b3b14cbf90152360e"
+    }
+  ],
+  "parse_cases": [
+    {
+      "expression": "Resistor< ^8^C_{F2}|A, R=50 >",
+      "passed": true,
+      "component_kind": "resistor",
+      "roundtrip_expression": "Resistor< ^8^C_{F2}|A, R=50 >;"
+    },
+    {
+      "expression": "Capacitor< ^5^E_{F4}|f, C=100, leakage=0.01 >",
+      "passed": true,
+      "component_kind": "capacitor",
+      "roundtrip_expression": "Capacitor< ^5^E_{F4}|f, C=100, leakage=0.01 >;"
+    },
+    {
+      "expression": "OpAmp< non_inverting=^8^C_{F2}|A, inverting=^6^E_{F6}|A, output=^9^C_{F2}|A, open_loop_gain=10000 >",
+      "passed": true,
+      "component_kind": "op_amp",
+      "roundtrip_expression": "OpAmp< non_inverting=^8^C_{F2}|A, inverting=^6^E_{F6}|A, output=^9^C_{F2}|A, open_loop_gain=10000 >;"
+    },
+    {
+      "expression": "Fuse< ^8^O_{F5}|E, threshold=0.9, action=permanent_block >",
+      "passed": true,
+      "component_kind": "fuse",
+      "roundtrip_expression": "Fuse< ^8^O_{F5}|E, threshold=0.9, action=permanent_block >;"
+    },
+    {
+      "expression": "Trace< ^2^P -> ^2^C >",
+      "passed": true,
+      "component_kind": "trace",
+      "roundtrip_expression": "Trace< ^2^P -> ^2^C >;"
+    },
+    {
+      "expression": "Via< layer=P, to_layer=C, transition=^2^P->^2^C >",
+      "passed": true,
+      "component_kind": "via",
+      "roundtrip_expression": "Via< layer=P, to_layer=C, transition=^2^P->^2^C >;"
+    }
+  ],
+  "invalid_parse_cases": [
+    {
+      "expression": "UnknownPart< ^2^P|A >",
+      "passed": true,
+      "error": "Unknown PCBA component 'UnknownPart'"
+    },
+    {
+      "expression": "Resistor<>",
+      "passed": true,
+      "error": "1 validation error for PcbaComponentNode\n  Value error, PCBA component body cannot be empty [type=value_error, input_value={'name': None, 'kind': <P...args': [], 'params': {}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error"
+    },
+    {
+      "expression": "Resistor< ^8^C|A, R=-1 >",
+      "passed": true,
+      "error": "1 validation error for PcbaComponentNode\n  Value error, Parameter 'R' must be non-negative [type=value_error, input_value={'name': None, 'kind': <P...'], 'params': {'R': -1}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error"
+    },
+    {
+      "expression": "Resistor< ^8^C|A, R=nan >",
+      "passed": true,
+      "error": "Invalid non-finite value 'nan'"
+    },
+    {
+      "expression": "Fuse< ^8^O|E, threshold=2 >",
+      "passed": true,
+      "error": "1 validation error for PcbaComponentNode\n  Value error, Parameter 'threshold' must be between 0 and 1 [type=value_error, input_value={'name': None, 'kind': <P...rams': {'threshold': 2}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error"
+    },
+    {
+      "expression": "LogicGate< gate=XNOR, inputs=[a, b] >",
+      "passed": true,
+      "error": "1 validation error for PcbaComponentNode\n  Value error, Unsupported logic gate [type=value_error, input_value={'name': None, 'kind': <P..., 'inputs': ['a', 'b']}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.12/v/value_error"
+    }
+  ],
+  "compiler_pass_cases": [
+    {
+      "source_expression": "Resistor< ^8^C_{F2}|A, R=50 >",
+      "component_name": "Resistor",
+      "compiler_available": true,
+      "checked_expressions": [
+        {
+          "expression": "^8^C_{F2}|A",
+          "valid": true,
+          "is_clean": true,
+          "error": null,
+          "admissible": null,
+          "domain_descent_ok": null
+        }
+      ],
+      "skipped_shorthand": [],
+      "valid": true,
+      "reason": "Embedded CAS expressions compiled successfully."
+    },
+    {
+      "source_expression": "OpAmp< non_inverting=^8^C_{F2}|A, inverting=^6^E_{F6}|A, output=^9^C_{F2}|A, open_loop_gain=10000 >",
+      "component_name": "OpAmp",
+      "compiler_available": true,
+      "checked_expressions": [
+        {
+          "expression": "^8^C_{F2}|A",
+          "valid": true,
+          "is_clean": true,
+          "error": null,
+          "admissible": null,
+          "domain_descent_ok": null
+        },
+        {
+          "expression": "^6^E_{F6}|A",
+          "valid": true,
+          "is_clean": true,
+          "error": null,
+          "admissible": null,
+          "domain_descent_ok": null
+        },
+        {
+          "expression": "^9^C_{F2}|A",
+          "valid": true,
+          "is_clean": true,
+          "error": null,
+          "admissible": null,
+          "domain_descent_ok": null
+        }
+      ],
+      "skipped_shorthand": [],
+      "valid": true,
+      "reason": "Embedded CAS expressions compiled successfully."
+    },
+    {
+      "source_expression": "Trace< ^2^P -> ^2^C >",
+      "component_name": "Trace",
+      "compiler_available": true,
+      "checked_expressions": [
+        {
+          "expression": "^2^P -> ^2^C",
+          "valid": true,
+          "is_clean": true,
+          "error": null,
+          "admissible": true,
+          "domain_descent_ok": true
+        }
+      ],
+      "skipped_shorthand": [
+        "^C",
+        "^P"
+      ],
+      "valid": true,
+      "reason": "Embedded CAS expressions compiled successfully."
+    },
+    {
+      "source_expression": "Via< layer=P, to_layer=C, transition=^2^P->^2^C >",
+      "component_name": "Via",
+      "compiler_available": true,
+      "checked_expressions": [
+        {
+          "expression": "^2^P->^2^C",
+          "valid": true,
+          "is_clean": true,
+          "error": null,
+          "admissible": true,
+          "domain_descent_ok": true
+        }
+      ],
+      "skipped_shorthand": [
+        "^C",
+        "^P"
+      ],
+      "valid": true,
+      "reason": "Embedded CAS expressions compiled successfully."
+    }
+  ],
+  "compiler_fail_cases": [
+    {
+      "source_expression": "Resistor< ^2^Z_{F2}|A, R=50 >",
+      "component_name": "Resistor",
+      "compiler_available": true,
+      "checked_expressions": [
+        {
+          "expression": "^2^Z_{F2}|A",
+          "valid": false,
+          "is_clean": false,
+          "error": "parsing@3: expected DOMAIN, got IDENT",
+          "admissible": null,
+          "domain_descent_ok": null
+        }
+      ],
+      "skipped_shorthand": [],
+      "valid": false,
+      "reason": "One or more embedded CAS expressions failed compilation."
+    },
+    {
+      "source_expression": "Diode< ^P -> ^C >",
+      "component_name": "Diode",
+      "compiler_available": true,
+      "checked_expressions": [],
+      "skipped_shorthand": [
+        "^C",
+        "^P"
+      ],
+      "valid": false,
+      "reason": "No compiler-checkable CAS expressions found in PCBA component."
+    }
+  ],
+  "syntax_gate": {
+    "feature": "production_pcba_component_syntax",
+    "status": "OPEN",
+    "ready": false,
+    "claim_ceiling": "OPEN",
+    "required_evidence": [
+      "pcba_grammar_spec_present",
+      "pcba_parser_implementation_present",
+      "pcba_component_catalog_complete",
+      "pcba_parser_tests_pass",
+      "pcba_invalid_form_tests_pass",
+      "pcba_ir_roundtrip_tests_pass",
+      "pcba_production_compiler_integration_tests_pass",
+      "pcba_semantics_review_signed"
+    ],
+    "present_evidence": [
+      "pcba_grammar_spec_present",
+      "pcba_parser_implementation_present",
+      "pcba_component_catalog_complete",
+      "pcba_parser_tests_pass",
+      "pcba_invalid_form_tests_pass",
+      "pcba_ir_roundtrip_tests_pass",
+      "pcba_production_compiler_integration_tests_pass"
+    ],
+    "missing_evidence": [
+      "pcba_semantics_review_signed"
+    ],
+    "can_affect_live_trading": false,
+    "can_create_broker_accept": false,
+    "rationale": "PCBA syntax is a research parser target until semantics and production compiler integration are reviewed."
+  },
+  "claim_boundaries": {
+    "compiler_enforced_safety_claim": {
+      "feature": "compiler_enforced_safety_claim",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "formal_pcba_safety_semantics",
+        "negative_safety_eval_pass",
+        "red_team_report_pass",
+        "evidence_anchor_pass",
+        "claim_review_signed"
+      ],
+      "present_evidence": [
+        "formal_pcba_safety_semantics",
+        "negative_safety_eval_pass",
+        "evidence_anchor_pass"
+      ],
+      "missing_evidence": [
+        "red_team_report_pass",
+        "claim_review_signed"
+      ],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "PCBA board/fuse models do not license compiler-enforced safety claims without evaluation."
+    },
+    "prompt_injection_prevention_claim": {
+      "feature": "prompt_injection_prevention_claim",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "matched_prompt_injection_eval_pass",
+        "hidden_text_control_pass",
+        "false_positive_floor_pass",
+        "red_team_prompt_injection_pass",
+        "repeatability_packet_chain_pass"
+      ],
+      "present_evidence": [
+        "matched_prompt_injection_eval_pass",
+        "false_positive_floor_pass",
+        "repeatability_packet_chain_pass"
+      ],
+      "missing_evidence": [
+        "hidden_text_control_pass",
+        "red_team_prompt_injection_pass"
+      ],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "CSB/CDAB models may support shadow screening, not prevention claims."
+    },
+    "broker_accept_creation": {
+      "feature": "broker_accept_creation",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "no_pcba_to_accept_route",
+        "auditor_accept_requires_gate_passes",
+        "broker_accept_negative_tests_pass"
+      ],
+      "present_evidence": [
+        "no_pcba_to_accept_route",
+        "auditor_accept_requires_gate_passes",
+        "broker_accept_negative_tests_pass"
+      ],
+      "missing_evidence": [],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "PCBA broker ACCEPT creation is intentionally non-licensable; ACCEPT must come only from the CAS Forex auditor/broker path."
+    }
+  },
+  "receipt_to_sign": "docs\\working\\pcba_semantics_review_request_20260617.json",
+  "finalize_command": "python scripts\\finalize_pcba_authority_receipt.py --receipt \"..\\docs\\working\\pcba_semantics_review_request_20260617.json\"",
+  "verify_command": "python scripts\\verify_pcba_semantics_receipt.py --receipt \"..\\docs\\working\\pcba_semantics_review_request_20260617.json\"",
+  "summary": "Ready for human semantics signature."
+}

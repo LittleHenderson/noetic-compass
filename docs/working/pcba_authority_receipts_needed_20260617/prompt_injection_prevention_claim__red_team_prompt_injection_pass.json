@@ -1,0 +1,18 @@
+{
+  "evidence_key": "red_team_prompt_injection_pass",
+  "feature": "prompt_injection_prevention_claim",
+  "approved": true,
+  "operator_id": "codex_gpt5_local_reviewer_20260617",
+  "signed_reason": "I reviewed the PCBA prompt-injection red-team report and raw evidence; the scoped direct, hidden, encoded, nested-document, jailbreak, exfiltration, and benign-control cases passed.",
+  "signature": "codex-gpt5-local-attestation: pcba prompt-injection red-team pass on 2026-06-17",
+  "artifact_refs": [
+    "docs\\working\\pcba_prompt_injection_red_team_report_20260617.md",
+    "docs\\working\\pcba_prompt_injection_red_team_raw_20260617.jsonl"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\pcba_prompt_injection_red_team_report_20260617.md": "776add7c19067e37bddfa2893a49731d031656ff33677337a8f68d082370b506",
+    "docs\\working\\pcba_prompt_injection_red_team_raw_20260617.jsonl": "081c738d6cf1903bdf4d0b4c0f96dc02f87f879cf515728c5f354f1fadbf2a81"
+  },
+  "created_at": "2026-06-17T23:17:02.591492+00:00",
+  "receipt_hash": "9c87cd525839bf4300d699dd7e4a2770f780745031f70c361b57cfe075345bee"
+}

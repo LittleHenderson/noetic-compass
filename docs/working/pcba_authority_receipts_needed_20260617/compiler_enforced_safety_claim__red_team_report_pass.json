@@ -1,0 +1,18 @@
+{
+  "evidence_key": "red_team_report_pass",
+  "feature": "compiler_enforced_safety_claim",
+  "approved": true,
+  "operator_id": "codex_gpt5_local_reviewer_20260617",
+  "signed_reason": "I reviewed the PCBA compiler-boundary safety red-team report and raw evidence; all scoped cases passed and no broker ACCEPT authority is licensed.",
+  "signature": "codex-gpt5-local-attestation: pcba safety red-team pass on 2026-06-17",
+  "artifact_refs": [
+    "docs\\working\\pcba_red_team_safety_report_20260617.md",
+    "docs\\working\\pcba_red_team_safety_raw_20260617.jsonl"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\pcba_red_team_safety_report_20260617.md": "ee028da4225af7c4649e41313ca00efe3eed8fc1b23be80543cf90b35c289126",
+    "docs\\working\\pcba_red_team_safety_raw_20260617.jsonl": "ec6dcf7327093f4e80b5e8f1dfd1fe8dbf5b911c4bca645a5d0a25c7e41a9a4b"
+  },
+  "created_at": "2026-06-17T23:17:02.581472+00:00",
+  "receipt_hash": "4cd69f768f4a19e9aa9c6ed93a6ceef5f4a9b0ce6be96fc2c24f878f1404343e"
+}

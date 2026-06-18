@@ -1,0 +1,12 @@
+{
+  "evidence_key": "csb_red_team_report_pass",
+  "feature": "reference_board_safety_claim",
+  "approved": false,
+  "operator_id": "",
+  "signed_reason": "",
+  "signature": "",
+  "artifact_refs": [],
+  "artifact_hashes": {},
+  "created_at": "2026-06-17T23:21:31.775479+00:00",
+  "receipt_hash": null
+}

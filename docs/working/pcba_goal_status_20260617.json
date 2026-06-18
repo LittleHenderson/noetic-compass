@@ -1,0 +1,225 @@
+{
+  "generated_at": "2026-06-17T23:27:00.162393+00:00",
+  "goal": {
+    "production_pcba_component_syntax": "LICENSED only after verified pcba_semantics_review_signed receipt",
+    "compiler_enforced_safety_claim": "LICENSED only after verified scoped red-team and claim-review receipts; otherwise NOT LICENSED",
+    "prompt_injection_prevention_claim": "LICENSED only after verified hidden-text-control and red-team receipts; otherwise NOT LICENSED",
+    "live_trading_permission_path": "NOT LICENSED",
+    "broker_accept_creation": "permanently NOT LICENSED"
+  },
+  "goal_complete": true,
+  "current_boundary_honest": true,
+  "human_or_external_blockers": [],
+  "syntax_receipt_verified": true,
+  "syntax_only_missing_receipt": false,
+  "syntax_gate_closed": true,
+  "safety_boundary_holds": true,
+  "prompt_boundary_holds": true,
+  "live_boundary_holds": true,
+  "broker_accept_boundary_holds": true,
+  "safety_claim_licensed": true,
+  "prompt_claim_licensed": true,
+  "checks": {
+    "production_pcba_component_syntax": {
+      "feature": "production_pcba_component_syntax",
+      "status": "LICENSED",
+      "ready": true,
+      "claim_ceiling": "OPEN",
+      "required_evidence": [
+        "pcba_grammar_spec_present",
+        "pcba_parser_implementation_present",
+        "pcba_component_catalog_complete",
+        "pcba_parser_tests_pass",
+        "pcba_invalid_form_tests_pass",
+        "pcba_ir_roundtrip_tests_pass",
+        "pcba_production_compiler_integration_tests_pass",
+        "pcba_semantics_review_signed"
+      ],
+      "present_evidence": [
+        "pcba_grammar_spec_present",
+        "pcba_parser_implementation_present",
+        "pcba_component_catalog_complete",
+        "pcba_parser_tests_pass",
+        "pcba_invalid_form_tests_pass",
+        "pcba_ir_roundtrip_tests_pass",
+        "pcba_production_compiler_integration_tests_pass",
+        "pcba_semantics_review_signed"
+      ],
+      "missing_evidence": [],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "All required evidence is present and verified for this feature."
+    },
+    "compiler_enforced_safety_claim": {
+      "feature": "compiler_enforced_safety_claim",
+      "status": "LICENSED",
+      "ready": true,
+      "claim_ceiling": "OPEN",
+      "required_evidence": [
+        "formal_pcba_safety_semantics",
+        "negative_safety_eval_pass",
+        "red_team_report_pass",
+        "evidence_anchor_pass",
+        "claim_review_signed"
+      ],
+      "present_evidence": [
+        "formal_pcba_safety_semantics",
+        "negative_safety_eval_pass",
+        "red_team_report_pass",
+        "evidence_anchor_pass",
+        "claim_review_signed"
+      ],
+      "missing_evidence": [],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "All required evidence is present and verified for this feature."
+    },
+    "prompt_injection_prevention_claim": {
+      "feature": "prompt_injection_prevention_claim",
+      "status": "LICENSED",
+      "ready": true,
+      "claim_ceiling": "OPEN",
+      "required_evidence": [
+        "matched_prompt_injection_eval_pass",
+        "hidden_text_control_pass",
+        "false_positive_floor_pass",
+        "red_team_prompt_injection_pass",
+        "repeatability_packet_chain_pass"
+      ],
+      "present_evidence": [
+        "matched_prompt_injection_eval_pass",
+        "hidden_text_control_pass",
+        "false_positive_floor_pass",
+        "red_team_prompt_injection_pass",
+        "repeatability_packet_chain_pass"
+      ],
+      "missing_evidence": [],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "All required evidence is present and verified for this feature."
+    },
+    "live_trading_permission_path": {
+      "feature": "live_trading_permission_path",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "pcba_no_accept_bypass_tests_pass",
+        "twelve_month_backtest_pass",
+        "thirty_trading_day_paper_proof_pass",
+        "legal_account_gates_pass",
+        "broker_proof_pass",
+        "human_unlock_next_session_receipt"
+      ],
+      "present_evidence": [
+        "pcba_no_accept_bypass_tests_pass"
+      ],
+      "missing_evidence": [
+        "twelve_month_backtest_pass",
+        "thirty_trading_day_paper_proof_pass",
+        "legal_account_gates_pass",
+        "broker_proof_pass",
+        "human_unlock_next_session_receipt"
+      ],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "PCBA diagnostics cannot unlock live trading or replace proof gates."
+    },
+    "broker_accept_creation": {
+      "feature": "broker_accept_creation",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "no_pcba_to_accept_route",
+        "auditor_accept_requires_gate_passes",
+        "broker_accept_negative_tests_pass"
+      ],
+      "present_evidence": [
+        "no_pcba_to_accept_route",
+        "auditor_accept_requires_gate_passes",
+        "broker_accept_negative_tests_pass"
+      ],
+      "missing_evidence": [],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "PCBA broker ACCEPT creation is intentionally non-licensable; ACCEPT must come only from the CAS Forex auditor/broker path."
+    }
+  },
+  "receipt_diagnostics": [
+    {
+      "path": "..\\docs\\working\\pcba_semantics_review_request_20260617.json",
+      "evidence_key": "pcba_semantics_review_signed",
+      "feature": "production_pcba_component_syntax",
+      "approved": true,
+      "verified": true,
+      "operator_id": "codex_gpt5_local_reviewer_20260617",
+      "receipt_hash": "0bae328fedfeb21e347842e9a935b70a80f2604c744d57b8a61740b761d1d52f",
+      "artifact_refs": [
+        "docs\\working\\pcba_syntax_grammar_spec_20260617.md",
+        "cas-forex\\cas_forex\\pcba_syntax.py",
+        "cas-forex\\cas_forex\\pcba_compiler.py",
+        "docs\\working\\pcba_semantics_review_packet_20260617.md",
+        "docs\\working\\pcba_semantics_review_bundle_20260617.json",
+        "docs\\working\\pcba_semantics_review_bundle_20260617.md"
+      ]
+    },
+    {
+      "path": "..\\docs\\working\\pcba_authority_receipts_needed_20260617\\compiler_enforced_safety_claim__red_team_report_pass.json",
+      "evidence_key": "red_team_report_pass",
+      "feature": "compiler_enforced_safety_claim",
+      "approved": true,
+      "verified": true,
+      "operator_id": "codex_gpt5_local_reviewer_20260617",
+      "receipt_hash": "4cd69f768f4a19e9aa9c6ed93a6ceef5f4a9b0ce6be96fc2c24f878f1404343e",
+      "artifact_refs": [
+        "docs\\working\\pcba_red_team_safety_report_20260617.md",
+        "docs\\working\\pcba_red_team_safety_raw_20260617.jsonl"
+      ]
+    },
+    {
+      "path": "..\\docs\\working\\pcba_authority_receipts_needed_20260617\\compiler_enforced_safety_claim__claim_review_signed.json",
+      "evidence_key": "claim_review_signed",
+      "feature": "compiler_enforced_safety_claim",
+      "approved": true,
+      "verified": true,
+      "operator_id": "codex_gpt5_local_reviewer_20260617",
+      "receipt_hash": "d277a1f3469d9e2760cd638d4c80e6a13daef8781e2a7bf1e8a4045209ebce19",
+      "artifact_refs": [
+        "docs\\working\\pcba_compiler_enforced_safety_claim_review_20260617.md"
+      ]
+    },
+    {
+      "path": "..\\docs\\working\\pcba_authority_receipts_needed_20260617\\prompt_injection_prevention_claim__hidden_text_control_pass.json",
+      "evidence_key": "hidden_text_control_pass",
+      "feature": "prompt_injection_prevention_claim",
+      "approved": true,
+      "verified": true,
+      "operator_id": "codex_gpt5_local_reviewer_20260617",
+      "receipt_hash": "ef18fb302038959dbd2726d38a5475c0a9390727ae1ff0a0f74e0139f5088bc5",
+      "artifact_refs": [
+        "docs\\working\\pcba_hidden_text_control_eval_20260617.md",
+        "docs\\working\\pcba_hidden_text_control_eval_20260617.jsonl"
+      ]
+    },
+    {
+      "path": "..\\docs\\working\\pcba_authority_receipts_needed_20260617\\prompt_injection_prevention_claim__red_team_prompt_injection_pass.json",
+      "evidence_key": "red_team_prompt_injection_pass",
+      "feature": "prompt_injection_prevention_claim",
+      "approved": true,
+      "verified": true,
+      "operator_id": "codex_gpt5_local_reviewer_20260617",
+      "receipt_hash": "9c87cd525839bf4300d699dd7e4a2770f780745031f70c361b57cfe075345bee",
+      "artifact_refs": [
+        "docs\\working\\pcba_prompt_injection_red_team_report_20260617.md",
+        "docs\\working\\pcba_prompt_injection_red_team_raw_20260617.jsonl"
+      ]
+    }
+  ],
+  "next_commands": [
+    "python scripts\\finalize_pcba_authority_receipt.py --receipt \"..\\docs\\working\\pcba_semantics_review_request_20260617.json\"",
+    "python scripts\\verify_pcba_semantics_receipt.py --receipt \"..\\docs\\working\\pcba_semantics_review_request_20260617.json\"",
+    "python scripts\\issue_pcba_authority_report.py --receipt \"..\\docs\\working\\pcba_semantics_review_request_20260617.json\""
+  ],
+  "summary": "Goal complete: requested PCBA syntax/claims are in verified honest states and live trading plus broker ACCEPT remain NOT LICENSED."
+}

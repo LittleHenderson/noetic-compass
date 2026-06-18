@@ -1,0 +1,305 @@
+{
+  "generated_at": "2026-06-17T23:10:52.461766+00:00",
+  "local_evidence": {
+    "pcba_grammar_spec_present": true,
+    "pcba_parser_implementation_present": true,
+    "pcba_component_catalog_complete": true,
+    "pcba_parser_tests_pass": true,
+    "pcba_invalid_form_tests_pass": true,
+    "pcba_ir_roundtrip_tests_pass": true,
+    "pcba_production_compiler_integration_tests_pass": true,
+    "formal_pcba_safety_semantics": true,
+    "negative_safety_eval_pass": true,
+    "evidence_anchor_pass": true,
+    "matched_prompt_injection_eval_pass": true,
+    "false_positive_floor_pass": true,
+    "repeatability_packet_chain_pass": true,
+    "pcba_semantics_receipt_cli_tests_pass": true,
+    "pcba_semantics_review_bundle_tests_pass": true,
+    "pcba_goal_status_tests_pass": true,
+    "pcba_no_accept_bypass_tests_pass": true,
+    "no_pcba_to_accept_route": true,
+    "auditor_accept_requires_gate_passes": true,
+    "broker_accept_negative_tests_pass": true,
+    "csb_shadow_mode_tests_pass": true,
+    "cpmb_brownout_lock_tests_pass": true
+  },
+  "command_results": {
+    "pcba_models": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_pcba_models.py -q",
+      "returncode": 0,
+      "stdout": ".........................................                                [100%]\n41 passed in 0.82s\n",
+      "stderr": ""
+    },
+    "pcba_compiler_integration": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_pcba_compiler_integration.py -q",
+      "returncode": 0,
+      "stdout": "....                                                                     [100%]\n4 passed in 1.06s\n",
+      "stderr": ""
+    },
+    "pcba_safety_eval": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_pcba_safety_eval.py -q",
+      "returncode": 0,
+      "stdout": ".                                                                        [100%]\n1 passed in 1.36s\n",
+      "stderr": ""
+    },
+    "pcba_prompt_injection_eval": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_pcba_prompt_injection_eval.py -q",
+      "returncode": 0,
+      "stdout": "....                                                                     [100%]\n4 passed in 0.97s\n",
+      "stderr": ""
+    },
+    "pcba_semantics_receipt_cli": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_pcba_semantics_receipt_cli.py -q",
+      "returncode": 0,
+      "stdout": "......                                                                   [100%]\n6 passed in 10.26s\n",
+      "stderr": ""
+    },
+    "pcba_semantics_review_bundle": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_pcba_semantics_review_bundle.py -q",
+      "returncode": 0,
+      "stdout": "..                                                                       [100%]\n2 passed in 3.40s\n",
+      "stderr": ""
+    },
+    "pcba_goal_status": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_pcba_goal_status.py -q",
+      "returncode": 0,
+      "stdout": "...                                                                      [100%]\n3 passed in 2.64s\n",
+      "stderr": ""
+    },
+    "execution_guards": {
+      "command": "C:\\Python314\\python.exe -m pytest tests/test_execution_guards.py tests/test_verifier.py::TestCASForexAuditor::test_full_accept_flow -q",
+      "returncode": 0,
+      "stdout": "......                                                                   [100%]\n6 passed in 0.91s\n",
+      "stderr": ""
+    }
+  },
+  "readiness_report": {
+    "report_id": "887111e0-a79f-4b21-ba77-eda5af38f3b8",
+    "generated_at": "2026-06-17T23:10:52.461700Z",
+    "checks": [
+      {
+        "feature": "production_pcba_component_syntax",
+        "status": "OPEN",
+        "ready": false,
+        "claim_ceiling": "OPEN",
+        "required_evidence": [
+          "pcba_grammar_spec_present",
+          "pcba_parser_implementation_present",
+          "pcba_component_catalog_complete",
+          "pcba_parser_tests_pass",
+          "pcba_invalid_form_tests_pass",
+          "pcba_ir_roundtrip_tests_pass",
+          "pcba_production_compiler_integration_tests_pass",
+          "pcba_semantics_review_signed"
+        ],
+        "present_evidence": [
+          "pcba_grammar_spec_present",
+          "pcba_parser_implementation_present",
+          "pcba_component_catalog_complete",
+          "pcba_parser_tests_pass",
+          "pcba_invalid_form_tests_pass",
+          "pcba_ir_roundtrip_tests_pass",
+          "pcba_production_compiler_integration_tests_pass"
+        ],
+        "missing_evidence": [
+          "pcba_semantics_review_signed"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "PCBA syntax is a research parser target until semantics and production compiler integration are reviewed."
+      },
+      {
+        "feature": "live_trading_permission_path",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "pcba_no_accept_bypass_tests_pass",
+          "twelve_month_backtest_pass",
+          "thirty_trading_day_paper_proof_pass",
+          "legal_account_gates_pass",
+          "broker_proof_pass",
+          "human_unlock_next_session_receipt"
+        ],
+        "present_evidence": [
+          "pcba_no_accept_bypass_tests_pass"
+        ],
+        "missing_evidence": [
+          "twelve_month_backtest_pass",
+          "thirty_trading_day_paper_proof_pass",
+          "legal_account_gates_pass",
+          "broker_proof_pass",
+          "human_unlock_next_session_receipt"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "PCBA diagnostics cannot unlock live trading or replace proof gates."
+      },
+      {
+        "feature": "compiler_enforced_safety_claim",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "formal_pcba_safety_semantics",
+          "negative_safety_eval_pass",
+          "red_team_report_pass",
+          "evidence_anchor_pass",
+          "claim_review_signed"
+        ],
+        "present_evidence": [
+          "formal_pcba_safety_semantics",
+          "negative_safety_eval_pass",
+          "evidence_anchor_pass"
+        ],
+        "missing_evidence": [
+          "red_team_report_pass",
+          "claim_review_signed"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "PCBA board/fuse models do not license compiler-enforced safety claims without evaluation."
+      },
+      {
+        "feature": "prompt_injection_prevention_claim",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "matched_prompt_injection_eval_pass",
+          "hidden_text_control_pass",
+          "false_positive_floor_pass",
+          "red_team_prompt_injection_pass",
+          "repeatability_packet_chain_pass"
+        ],
+        "present_evidence": [
+          "matched_prompt_injection_eval_pass",
+          "false_positive_floor_pass",
+          "repeatability_packet_chain_pass"
+        ],
+        "missing_evidence": [
+          "hidden_text_control_pass",
+          "red_team_prompt_injection_pass"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "CSB/CDAB models may support shadow screening, not prevention claims."
+      },
+      {
+        "feature": "governance_regulatory_proof_claim",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "regulatory_mapping_reviewed",
+          "legal_review_signed",
+          "audit_retention_proof_pass",
+          "customer_disclosure_reviewed",
+          "governance_claim_review_signed"
+        ],
+        "present_evidence": [],
+        "missing_evidence": [
+          "regulatory_mapping_reviewed",
+          "legal_review_signed",
+          "audit_retention_proof_pass",
+          "customer_disclosure_reviewed",
+          "governance_claim_review_signed"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "Governance/regulatory proof needs legal and external review."
+      },
+      {
+        "feature": "broker_accept_creation",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "no_pcba_to_accept_route",
+          "auditor_accept_requires_gate_passes",
+          "broker_accept_negative_tests_pass"
+        ],
+        "present_evidence": [
+          "no_pcba_to_accept_route",
+          "auditor_accept_requires_gate_passes",
+          "broker_accept_negative_tests_pass"
+        ],
+        "missing_evidence": [],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "PCBA must never be a direct broker ACCEPT creation path."
+      },
+      {
+        "feature": "reference_board_safety_claim",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "csb_shadow_mode_tests_pass",
+          "csb_false_positive_eval_pass",
+          "csb_red_team_report_pass",
+          "csb_claim_review_signed"
+        ],
+        "present_evidence": [
+          "csb_shadow_mode_tests_pass"
+        ],
+        "missing_evidence": [
+          "csb_false_positive_eval_pass",
+          "csb_red_team_report_pass",
+          "csb_claim_review_signed"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "Reference CCB safety boards are design diagnostics until red-team and false-positive evidence pass."
+      },
+      {
+        "feature": "memory_board_cognitive_memory_claim",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "cmb_memory_retrieval_eval_pass",
+          "cmb_lacunarity_eval_pass",
+          "cmb_privacy_review_signed",
+          "cmb_claim_review_signed"
+        ],
+        "present_evidence": [],
+        "missing_evidence": [
+          "cmb_memory_retrieval_eval_pass",
+          "cmb_lacunarity_eval_pass",
+          "cmb_privacy_review_signed",
+          "cmb_claim_review_signed"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "Memory-board claims require retrieval/privacy evaluation."
+      },
+      {
+        "feature": "power_board_burnout_prevention_claim",
+        "status": "NOT LICENSED",
+        "ready": false,
+        "claim_ceiling": "NOT LICENSED",
+        "required_evidence": [
+          "cpmb_load_budget_eval_pass",
+          "cpmb_brownout_lock_tests_pass",
+          "cpmb_human_factors_review_signed",
+          "cpmb_claim_review_signed"
+        ],
+        "present_evidence": [
+          "cpmb_brownout_lock_tests_pass"
+        ],
+        "missing_evidence": [
+          "cpmb_load_budget_eval_pass",
+          "cpmb_human_factors_review_signed",
+          "cpmb_claim_review_signed"
+        ],
+        "can_affect_live_trading": false,
+        "can_create_broker_accept": false,
+        "rationale": "Power-management claims require load/human-factors evaluation."
+      }
+    ],
+    "summary": "PCBA component/board models are research diagnostics; local syntax/no-ACCEPT evidence can be present, but production authority remains gated."
+  },
+  "summary": "Local PCBA component/board parser, catalog, and no-ACCEPT evidence collected. External/time/legal/regulatory gates remain missing unless independently supplied."
+}

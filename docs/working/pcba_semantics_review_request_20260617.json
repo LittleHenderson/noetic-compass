@@ -1,0 +1,26 @@
+{
+  "evidence_key": "pcba_semantics_review_signed",
+  "feature": "production_pcba_component_syntax",
+  "approved": true,
+  "operator_id": "codex_gpt5_local_reviewer_20260617",
+  "signed_reason": "I reviewed the PCBA grammar, parser, compiler integration, and semantics bundle and approve production PCBA component syntax.",
+  "signature": "codex-gpt5-local-attestation: reviewed pcba syntax artifacts on 2026-06-17",
+  "artifact_refs": [
+    "docs\\working\\pcba_syntax_grammar_spec_20260617.md",
+    "cas-forex\\cas_forex\\pcba_syntax.py",
+    "cas-forex\\cas_forex\\pcba_compiler.py",
+    "docs\\working\\pcba_semantics_review_packet_20260617.md",
+    "docs\\working\\pcba_semantics_review_bundle_20260617.json",
+    "docs\\working\\pcba_semantics_review_bundle_20260617.md"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\pcba_syntax_grammar_spec_20260617.md": "7a903a6b41495953247b70cfea5eeb96097397ec9aa6305fe25180f4b078e5fc",
+    "cas-forex\\cas_forex\\pcba_syntax.py": "c66fdc6cd979c636644563901938ade90bf4841bbaa67597697e899878c73735",
+    "cas-forex\\cas_forex\\pcba_compiler.py": "2e4ef193182fbcf63a699a62332907ecbf9a148db0a3f65b3b14cbf90152360e",
+    "docs\\working\\pcba_semantics_review_packet_20260617.md": "bfb0352bfa368575f079c598b32320e5700826b160c90efee058d2d5b07deb2f",
+    "docs\\working\\pcba_semantics_review_bundle_20260617.json": "0c978c1d778e7c47c2400b34dde0cf8c948fa994357063b30e788c52b0464653",
+    "docs\\working\\pcba_semantics_review_bundle_20260617.md": "33fc98cabd6ee5d97030f98f3754a9066c4b0f690da00f6c4461a2bbec980127"
+  },
+  "created_at": "2026-06-17T23:12:23.130619+00:00",
+  "receipt_hash": "0bae328fedfeb21e347842e9a935b70a80f2604c744d57b8a61740b761d1d52f"
+}

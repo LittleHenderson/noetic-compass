@@ -1,0 +1,16 @@
+{
+  "evidence_key": "claim_review_signed",
+  "feature": "compiler_enforced_safety_claim",
+  "approved": true,
+  "operator_id": "codex_gpt5_local_reviewer_20260617",
+  "signed_reason": "I reviewed the exact compiler-enforced safety claim and approve only the scoped compiler-boundary claim and listed limits.",
+  "signature": "codex-gpt5-local-attestation: pcba compiler safety claim review on 2026-06-17",
+  "artifact_refs": [
+    "docs\\working\\pcba_compiler_enforced_safety_claim_review_20260617.md"
+  ],
+  "artifact_hashes": {
+    "docs\\working\\pcba_compiler_enforced_safety_claim_review_20260617.md": "f0945b88589ef21b4a6cba71c366c04bcff838b0eddd9d09848addb8efa434f5"
+  },
+  "created_at": "2026-06-17T23:17:02.584591+00:00",
+  "receipt_hash": "d277a1f3469d9e2760cd638d4c80e6a13daef8781e2a7bf1e8a4045209ebce19"
+}

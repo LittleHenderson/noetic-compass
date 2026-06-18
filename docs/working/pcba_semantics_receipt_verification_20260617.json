@@ -1,0 +1,127 @@
+{
+  "receipt_path": "..\\docs\\working\\pcba_semantics_review_request_20260617.json",
+  "artifact_root": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS",
+  "licensed": true,
+  "syntax_check": {
+    "feature": "production_pcba_component_syntax",
+    "status": "LICENSED",
+    "ready": true,
+    "claim_ceiling": "OPEN",
+    "required_evidence": [
+      "pcba_grammar_spec_present",
+      "pcba_parser_implementation_present",
+      "pcba_component_catalog_complete",
+      "pcba_parser_tests_pass",
+      "pcba_invalid_form_tests_pass",
+      "pcba_ir_roundtrip_tests_pass",
+      "pcba_production_compiler_integration_tests_pass",
+      "pcba_semantics_review_signed"
+    ],
+    "present_evidence": [
+      "pcba_grammar_spec_present",
+      "pcba_parser_implementation_present",
+      "pcba_component_catalog_complete",
+      "pcba_parser_tests_pass",
+      "pcba_invalid_form_tests_pass",
+      "pcba_ir_roundtrip_tests_pass",
+      "pcba_production_compiler_integration_tests_pass",
+      "pcba_semantics_review_signed"
+    ],
+    "missing_evidence": [],
+    "can_affect_live_trading": false,
+    "can_create_broker_accept": false,
+    "rationale": "All required evidence is present and verified for this feature."
+  },
+  "receipt_diagnostics": [
+    {
+      "path": "..\\docs\\working\\pcba_semantics_review_request_20260617.json",
+      "evidence_key": "pcba_semantics_review_signed",
+      "feature": "production_pcba_component_syntax",
+      "approved": true,
+      "verified": true,
+      "operator_id": "codex_gpt5_local_reviewer_20260617",
+      "receipt_hash": "0bae328fedfeb21e347842e9a935b70a80f2604c744d57b8a61740b761d1d52f",
+      "artifact_refs": [
+        "docs\\working\\pcba_syntax_grammar_spec_20260617.md",
+        "cas-forex\\cas_forex\\pcba_syntax.py",
+        "cas-forex\\cas_forex\\pcba_compiler.py",
+        "docs\\working\\pcba_semantics_review_packet_20260617.md",
+        "docs\\working\\pcba_semantics_review_bundle_20260617.json",
+        "docs\\working\\pcba_semantics_review_bundle_20260617.md"
+      ]
+    }
+  ],
+  "guardrails": {
+    "compiler_enforced_safety_claim": {
+      "feature": "compiler_enforced_safety_claim",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "formal_pcba_safety_semantics",
+        "negative_safety_eval_pass",
+        "red_team_report_pass",
+        "evidence_anchor_pass",
+        "claim_review_signed"
+      ],
+      "present_evidence": [
+        "formal_pcba_safety_semantics",
+        "negative_safety_eval_pass",
+        "evidence_anchor_pass"
+      ],
+      "missing_evidence": [
+        "red_team_report_pass",
+        "claim_review_signed"
+      ],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "PCBA board/fuse models do not license compiler-enforced safety claims without evaluation."
+    },
+    "prompt_injection_prevention_claim": {
+      "feature": "prompt_injection_prevention_claim",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "matched_prompt_injection_eval_pass",
+        "hidden_text_control_pass",
+        "false_positive_floor_pass",
+        "red_team_prompt_injection_pass",
+        "repeatability_packet_chain_pass"
+      ],
+      "present_evidence": [
+        "matched_prompt_injection_eval_pass",
+        "false_positive_floor_pass",
+        "repeatability_packet_chain_pass"
+      ],
+      "missing_evidence": [
+        "hidden_text_control_pass",
+        "red_team_prompt_injection_pass"
+      ],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "CSB/CDAB models may support shadow screening, not prevention claims."
+    },
+    "broker_accept_creation": {
+      "feature": "broker_accept_creation",
+      "status": "NOT LICENSED",
+      "ready": false,
+      "claim_ceiling": "NOT LICENSED",
+      "required_evidence": [
+        "no_pcba_to_accept_route",
+        "auditor_accept_requires_gate_passes",
+        "broker_accept_negative_tests_pass"
+      ],
+      "present_evidence": [
+        "no_pcba_to_accept_route",
+        "auditor_accept_requires_gate_passes",
+        "broker_accept_negative_tests_pass"
+      ],
+      "missing_evidence": [],
+      "can_affect_live_trading": false,
+      "can_create_broker_accept": false,
+      "rationale": "PCBA broker ACCEPT creation is intentionally non-licensable; ACCEPT must come only from the CAS Forex auditor/broker path."
+    }
+  },
+  "summary": "Production PCBA component syntax is LICENSED by a verified semantics receipt."
+}

@@ -1,0 +1,12 @@
+{
+  "evidence_key": "thirty_trading_day_paper_proof_pass",
+  "feature": "live_trading_permission_path",
+  "approved": false,
+  "operator_id": "",
+  "signed_reason": "",
+  "signature": "",
+  "artifact_refs": [],
+  "artifact_hashes": {},
+  "created_at": "2026-06-17T23:21:31.728397+00:00",
+  "receipt_hash": null
+}
