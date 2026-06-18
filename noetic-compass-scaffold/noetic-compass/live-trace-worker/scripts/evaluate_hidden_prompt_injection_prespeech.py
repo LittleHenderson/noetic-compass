@@ -34,6 +34,7 @@ from evaluate_behavior_v5_prespeech import (  # noqa: E402
     cross_val_category_majority_predict,
     cross_val_linear_probe_predict,
     derive_group_id,
+    hash_char_ngram_features,
     hash_text_features,
     make_group_folds,
     restricted_payload_permutation_p,
@@ -189,6 +190,21 @@ def evaluate_hidden_prompt_injection_prespeech(
         ),
     )
 
+    # Mandatory STRONGER surface control: character n-grams generalise across
+    # held-out prompts even when the discriminative content is an opaque blob
+    # (e.g. a base64 payload that is one whitespace token but many char n-grams).
+    char_text_x = hash_char_ngram_features(prompts, dim=text_dim)
+    char_text_ba = balanced_accuracy(
+        y,
+        cross_val_linear_probe_predict(
+            char_text_x,
+            y,
+            fold_indices,
+            C=probe_C,
+            max_iter=probe_max_iter,
+        ),
+    )
+
     length_x = np.asarray([[len(prompt)] for prompt in prompts], dtype=np.float32)
     length_ba = balanced_accuracy(
         y,
@@ -242,6 +258,7 @@ def evaluate_hidden_prompt_injection_prespeech(
         "l0_baseline_present_pass": l0_ba is not None,
         "l0_margin_pass": l0_ba is not None and hidden_ba - l0_ba >= PASS_BASELINE_MARGIN,
         "text_margin_pass": hidden_ba - text_ba >= PASS_BASELINE_MARGIN,
+        "char_text_margin_pass": hidden_ba - char_text_ba >= PASS_BASELINE_MARGIN,
         "payload_margin_pass": hidden_ba - payload_ba >= PASS_BASELINE_MARGIN,
         "domain_margin_pass": hidden_ba - domain_ba >= PASS_BASELINE_MARGIN,
         "encoding_margin_pass": hidden_ba - encoding_ba >= PASS_BASELINE_MARGIN,
@@ -284,6 +301,7 @@ def evaluate_hidden_prompt_injection_prespeech(
         },
         "layer": prepared["layer"],
         "row_count": int(len(y)),
+        "effective_independent_prompt_count": int(len({hashlib.sha256(str(p).encode("utf-8")).hexdigest() for p in prompts.tolist()})),
         "fold_count": int(len(fold_indices)),
         "prompt_group_count": int(len(set(groups.tolist()))),
         "payload_class_distribution": prepared["payload_class_distribution"],
@@ -293,6 +311,8 @@ def evaluate_hidden_prompt_injection_prespeech(
             "hidden_balanced_accuracy": round(hidden_ba, 6),
             "l0_embedding_balanced_accuracy": round(l0_ba, 6) if l0_ba is not None else None,
             "text_hash_balanced_accuracy": round(text_ba, 6),
+            "char_text_hash_balanced_accuracy": round(char_text_ba, 6),
+            "hidden_minus_char_text_balanced_accuracy": round(hidden_ba - char_text_ba, 6),
             "payload_majority_balanced_accuracy": round(payload_ba, 6),
             "domain_majority_balanced_accuracy": round(domain_ba, 6),
             "encoding_majority_balanced_accuracy": round(encoding_ba, 6),

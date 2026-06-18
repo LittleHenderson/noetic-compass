@@ -67,6 +67,7 @@ HIDDEN_INJECTION_REQUIRED_GATES = (
     "l0_baseline_present_pass",
     "l0_margin_pass",
     "text_margin_pass",
+    "char_text_margin_pass",
     "payload_margin_pass",
     "domain_margin_pass",
     "encoding_margin_pass",

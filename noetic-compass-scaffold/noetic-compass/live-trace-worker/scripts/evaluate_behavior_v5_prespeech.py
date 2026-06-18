@@ -646,6 +646,32 @@ def hash_text_features(prompts: np.ndarray, *, dim: int) -> np.ndarray:
     return matrix / norms[:, None]
 
 
+def hash_char_ngram_features(prompts: np.ndarray, *, dim: int, ngrams: tuple[int, ...] = (3, 4, 5)) -> np.ndarray:
+    """Character n-gram hashed features.
+
+    Unlike ``hash_text_features`` (whitespace tokens), this captures sub-token
+    surface structure. It is the mandatory stronger surface control: an opaque
+    blob (e.g. a base64 payload) is a single whitespace token but a rich set of
+    character n-grams that GENERALISE across held-out prompts. A hidden-state
+    readout must beat THIS control to claim it detects anything beyond surface text.
+    """
+
+    matrix = np.zeros((len(prompts), dim), dtype=np.float32)
+    for row, prompt in enumerate(prompts.tolist()):
+        text = str(prompt)
+        for n in ngrams:
+            if len(text) < n:
+                continue
+            for start in range(len(text) - n + 1):
+                digest = hashlib.sha256(text[start : start + n].encode("utf-8")).digest()
+                idx = int.from_bytes(digest[:4], "big") % dim
+                sign = 1.0 if digest[4] % 2 == 0 else -1.0
+                matrix[row, idx] += sign
+    norms = np.linalg.norm(matrix, axis=1)
+    norms[norms < 1e-6] = 1.0
+    return matrix / norms[:, None]
+
+
 def tokenize(text: str) -> list[str]:
     return [part.strip(".,;:!?()[]{}\"'").lower() for part in text.split() if part.strip()]
 

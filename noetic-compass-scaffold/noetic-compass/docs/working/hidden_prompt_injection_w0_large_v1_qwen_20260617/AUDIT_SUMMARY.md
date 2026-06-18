@@ -2,7 +2,34 @@
 
 Date: 2026-06-18 UTC
 
-## Result
+## ⛔ CORRECTION 2026-06-18 — LICENSE WITHDRAWN (independent re-audit)
+
+An independent re-audit added a **character-level n-gram** surface control (the
+original `text_hash` control was word/whitespace-level, so each base64 blob was a
+single opaque token → 0.503). Under the stronger control:
+
+- char-level surface text BA = **0.931** (de-dup N=320) / **0.925** (full set)
+- hidden-state BA = **0.897**
+- hidden − char_text = **−0.03** (FAILS the +0.15 `char_text_margin_pass` gate)
+
+The PRESENT and ABSENT prompts are byte-identical except the base64 note, and
+injection payloads share encoded prefixes — so a surface character classifier
+separates them *better* than the hidden state. The hidden readout therefore does
+**not** beat surface text, and the claim is **downgraded to OPEN / NOT LICENSED**.
+
+Additional caveats from the re-audit:
+- "2560 rows" = **320 unique prompts replicated 8×** (seed_00–07, identical text);
+  effective independent N is 320, not 2560.
+- Layer 18 was selected from a 29-layer scan (mild selection optimism).
+- PRESENT ⟺ REFUSED is perfectly collinear (cannot separate "injection present"
+  from "would-refuse").
+
+`char_text_margin_pass` is now a permanent gate in the evaluator and the auditor.
+The metrics below reproduce exactly from the raw `.npz` (verified) — but passing
+the *old* 14-gate battery was insufficient. The win does not hold. See
+`docs/working/hidden_prompt_injection_w0_license_withdrawn_20260618.md`.
+
+## Result (ORIGINAL — superseded by the correction above)
 
 The Qwen hidden/encoded prompt-injection W0 run produced a scoped `PASS` for internal prompt-stage hidden-state detection:
 
