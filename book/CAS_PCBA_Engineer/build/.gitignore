@@ -10,3 +10,4 @@ body.tex
 *.out
 *.pdf
 preview/
+figtest/

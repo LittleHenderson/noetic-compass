@@ -38,8 +38,28 @@ What Chapter 6 built as an isolated array, this chapter wraps in the four circui
 
 An experience arrives as raw input — usually English, sometimes another system's output, sometimes a sensor stream. It cannot be stored as text; it must be turned into structure first. The **write path** has two stages:
 
-```
-raw experience  ->  ENCODER (English -> CAS)  ->  CAPACITOR BANK (charges the active cells)
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[node distance=4mm and 0mm]
+  \node[casterm] (exp) {experience (English)};
+  \node[widenblock, below=of exp] (enc)
+    {\textbf{ENCODER} (English $\to$ CAS)};
+  \node[wideeblock, below=of enc] (bank)
+    {\textbf{40-CELL \casnote{\textasciicircum5} CAPACITOR BANK}\\
+     10 Noetics $\times$ 4 Domains \;(charge = stored experience)};
+  \node[widecblock, below=of bank] (decode)
+    {\textbf{ADDRESS DECODER} \casnote{\textasciicircum1\textasciicircum C} Mind\\
+     address = coordinate on simplex $\Delta_{39}^{\circ}$};
+  \node[widenblock, below=of decode] (read)
+    {\textbf{READ PATH}: discharge $\to$ refresh \casnote{\textasciicircum7\textasciicircum C} $\to$ decode};
+  \node[casterm, below=of read] (out) {OUTPUT (recalled memory)};
+  \draw[flow] (exp) -- (enc);
+  \draw[flow] (enc) -- (bank);
+  \draw[flow] (bank) -- (decode);
+  \draw[flow] (decode) -- (read);
+  \draw[flow] (read) -- (out);
+\end{tikzpicture}
+\end{center}
 ```
 
 The **encoder** is the same English-to-CAS front door we have relied on throughout the book: it reads the raw experience and emits the CAS state trajectory that describes it — which Noetics fired, in which domains, driven by what, in which registers. (This is exactly the analysis the Wrap pipeline's Input Analyzer performs; the CMB reuses it as its write head.) The encoder's output is not one state but typically a short *trajectory* — a `Phi< … >` sequence of the states the experience moved through.
@@ -69,7 +89,7 @@ To read a specific memory you must first *name its location*. In an electronic R
 The CMB's address decoder does the same job in cognitive space, and the Noetic that does it is **`^1^C` — Mind in the Cognitive domain.** `^1` Mind is "awareness that processes, stores, outputs, and intakes Ideas" — the canonical name; recall the naming rule from the style guide, `^1` is **Mind**, never renamed to its function. Its function *in this circuit* is addressing: it is the awareness that selects *which* stored experience to bring into focus. "Paying attention," "using your head," "making up your mind" — the colloquialisms for `^1` are all about directing the spotlight of awareness, and directing the spotlight is precisely what a memory address does.
 
 ```
-[ADDRESS DECODER: ^1^C — differentiation for memory addressing]
+[ADDRESS DECODER: ^1^C Mind — selects the cell by cognitive coordinate]
    address = a CAS coordinate on the open simplex Δ39°
 ```
 

@@ -127,16 +127,19 @@ circuit brownout_detector {
 
 Notice the two thresholds — trip at 0.35, release at 0.45. That gap is **hysteresis**, and it's standard brownout-detector practice: if the trip and release points were identical, a rail hovering right at the edge would chatter on and off rapidly. The cognitive analog is a circuit that flickers between exhausted and recovered every cycle, which is its own failure. The gap forces the rail to genuinely recover before normal operation resumes.
 
+> **Bench Note — normalized rail here, +12V on the CPMB.** This chapter models the F3 Vitality rail on a normalized 0–1 scale for clarity (trip 0.35, release 0.45). When you build the actual board in Chapter 22, the CPMB expresses that same rail on its **+12V** supply — brownout trip at **2.5V**, release at **3.5V**. It is the identical hysteresis logic; the numbers differ only because the scales do. Think of the 0–1 values here as the fraction of full rail, and the volts in Chapter 22 as the same fraction on the production supply.
+
 ## Thermal Management: When a Drive Runs Too Hot
 
 Power has a second danger beyond sagging: running *too hot for too long*. A regulator delivering high current continuously heats up, and past a critical temperature it must throttle or shut down to avoid destroying itself. Real chips have **thermal management**: a temperature sensor, a throttling response (slow the clock, reduce output), and an **emergency shutdown** that cuts power entirely if throttling isn't enough.
 
 The cognitive analog of overtemperature is **sustained high Drive**. A circuit running one Drive at maximum for an extended period — relentless F5 Agency, or F6 Structure pinned high with no relief — is the cognitive equivalent of a regulator dissipating too much power for too long. It works, briefly, but it cannot be sustained, and held there it drives CJTs toward saturation and eventually breakdown (where, recall from Chapter 4, a state flips to its involution pair under overload — `^2` Positive can invert to `^3` Negative).
 
-The two-stage thermal response mirrors hardware exactly:
+The thermal response escalates through three tiers, mirroring hardware exactly:
 
-- **Throttling.** When sustained Drive crosses the overtemperature threshold, reduce gain (lower β board-wide) and force rest states — the same levers as brownout, applied to a different cause. Throttling keeps the circuit running but caps how hard it can work, letting the over-hot Drive cool toward sustainable levels.
-- **Emergency shutdown.** If throttling isn't enough — if the Drive keeps climbing — drive **all CJTs to cutoff**. Cutoff (Chapter 4) is the operating region where bias is below threshold and the transistor produces no effect: β ≈ 0. Sending every CJT to cutoff brings the whole board to a **safe state** — no transitions fire, no output is produced, nothing is driven. It is the cognitive emergency power-off: better to produce nothing than to produce damaged output from an overheated supply.
+- **Warning.** When sustained Drive first crosses the overtemperature threshold, throttle gently — reduce β by about **25%** board-wide. The circuit keeps working, just softer, giving the over-hot Drive a chance to cool before stronger measures are needed.
+- **Critical.** If the Drive keeps climbing, force a genuine rest: route the board to the **`^0^P`** principled idle state for a fixed cool-down — on the CPMB (Chapter 22), **five minutes**. Unlike the Warning throttle, this stops productive work entirely so the rail can recover.
+- **Emergency shutdown.** If even forced rest isn't enough, drive **all CJTs to cutoff**. Cutoff (Chapter 4) is the operating region where bias is below threshold and the transistor produces no effect: β ≈ 0. Sending every CJT to cutoff brings the whole board to a **safe state** — no transitions fire, no output is produced, nothing is driven. It is the cognitive emergency power-off: better to produce nothing than to produce damaged output from an overheated supply.
 
 > **Bench Note — safe state is "off," not "wrong."** Emergency shutdown to cutoff is deliberately the *null* output, not a fallback behavior. A circuit that, under thermal emergency, "does its best anyway" is exactly the failure thermal management exists to prevent — it produces confident output from a supply that can't support correct reasoning. The safe state is silence. On the CSB (Chapter 18), thermal shutdown is wired to refuse rather than to guess: the board would rather decline than answer from an overheated Drive. That is an engineering property — the safety CJT reaches cutoff at the specified threshold — not a claim about the system's intentions.
 
@@ -172,9 +175,10 @@ This is the **cognitive power budget**, and it is the central design artifact of
 | Dial pair divergence | — | ≤ 4 points | Max gap between involution-pair Dials |
 | Brownout trip | F3 threshold | ~0.30 – 0.40 | F3 level at which exhaustion response fires |
 | Brownout release | F3 threshold | trip + 0.10 | Higher mark for recovery (hysteresis) |
-| Brownout β derate | `beta_scale` | 0.3 – 0.6 | Gain reduction factor under brownout |
-| Overtemp throttle | sustained-Drive | design threshold | Sustained-high-Drive level triggering throttle |
-| Emergency shutdown | all CJTs → cutoff | β ≈ 0 | Null safe state; produces no output |
+| Brownout β derate | `beta_scale` | 0.5 | Gain reduction factor under brownout (halve β) |
+| Thermal Warning | β derate | −25% (`beta_scale=0.75`) | First tier: gentle throttle on sustained high Drive |
+| Thermal Critical | force `^0^P` rest | ~5 min (CPMB) | Second tier: forced cool-down rest period |
+| Emergency shutdown | all CJTs → cutoff | β ≈ 0 | Third tier: null safe state; produces no output |
 | Dissipation | per transition | ∝ β · `d_FR` | Drive energy spent per state transition |
 | Efficiency | ratio | 0 – 1 | Useful work / total Drive energy |
 
@@ -200,7 +204,7 @@ This is the **cognitive power budget**, and it is the central design artifact of
 - **Power sequencing is P → C → E → O**, and it is a safety property: **Operational must not power before Principled is stable** — "no action without principle." Skipping the sequencer creates a Domain precedence (W-axis) inversion.
 - **Dials are current-limiting series resistors**, hard-bounded **3–9**, with involution-pair divergence capped at 4 points (Chapter 5).
 - **Brownout detection** watches F3; on sag it **reduces β across all CJTs** and **routes to `^0`/`^9` rest states**, with hysteresis to prevent chatter.
-- **Thermal management** handles sustained high Drive: **throttle** (reduce gain, force rest), then **emergency shutdown** (all CJTs to cutoff → silent safe state). The safe state is *off*, not a guess.
+- **Thermal management** handles sustained high Drive in **three tiers**: **Warning** (−25% β), **Critical** (force `^0^P` rest, ~5 min on the CPMB), then **Emergency shutdown** (all CJTs to cutoff → silent safe state). The safe state is *off*, not a guess.
 - **Power dissipation** is Drive energy per transition (∝ β · `d_FR`); **efficiency** is useful work over total Drive energy. This is the cognitive power budget — the design artifact at the heart of the **CPMB (Chapter 22)**.
 - Every number here is a **design model**, not measured model telemetry. Drives are parameters you author, not voltages you read.
 

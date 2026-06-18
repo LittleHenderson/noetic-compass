@@ -24,37 +24,33 @@ Three requirements, three subsystems. The rest of the chapter builds each one an
 
 Here is the board as a block diagram. Read it top to bottom: Drive energy enters at the rails, is regulated per domain, current-limited by Dials, watched by the brownout detector, ordered by the sequencer, and protected by the thermal manager.
 
-```
-   ┌──────────────────────────────────────────────────────────────┐
-   │  DRIVE RAILS                                                   │
-   │  F1=+5V  F2=+3.3V  F3=+12V  F4=+9V  F5=+9V  F6=+5V  F7=+12V    │
-   └───────────────────────────────┬──────────────────────────────┘
-                                    │
-   ┌────────────────────────────────▼─────────────────────────────┐
-   │  PER-DOMAIN REGULATORS    P   C   E   O                        │
-   │  (line regulation · load regulation · dropout voltage)        │
-   └───────────────────────────────┬──────────────────────────────┘
-                                    │
-   ┌────────────────────────────────▼─────────────────────────────┐
-   │  CURRENT LIMITERS   Dials as series resistors   3 ≤ Dial ≤ 9  │
-   └───────────────────────────────┬──────────────────────────────┘
-                                    │
-   ┌────────────────────────────────▼─────────────────────────────┐
-   │  BROWNOUT DETECTOR   F3 (Vitality) < 2.5V                     │
-   │    → reduce all β by 50% · route to ^0 / ^9 rest · alert      │
-   └───────────────────────────────┬──────────────────────────────┘
-                                    │
-   ┌────────────────────────────────▼─────────────────────────────┐
-   │  POWER SEQUENCER   enforce P → C → E → O                      │
-   │    O held LOW until P, C, E report power-good                 │
-   └───────────────────────────────┬──────────────────────────────┘
-                                    │
-   ┌────────────────────────────────▼─────────────────────────────┐
-   │  THERMAL MANAGEMENT   temp ∝ sustained Drive × time          │
-   │    Warning:   −25% β                                          │
-   │    Critical:  force ^0^P rest 5 min                          │
-   │    Emergency: all CJTs cutoff → safe state                   │
-   └──────────────────────────────────────────────────────────────┘
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[node distance=3.5mm and 0mm]
+  \node[widenblock, text width=70mm] (rails)
+    {\textbf{DRIVE RAILS} \;(F1--F7)\\
+     F3 Vitality \& F7 Purpose $= +12$V (master)};
+  \node[widepblock, text width=70mm, below=of rails] (reg)
+    {\textbf{PER-DOMAIN REGULATORS} \;(P\,C\,E\,O)\\
+     line / load regulation \;$\cdot$\; dropout};
+  \node[widenblock, text width=70mm, below=of reg] (lim)
+    {\textbf{CURRENT LIMITERS} (Dials, $3 \le$ Dial $\le 9$)};
+  \node[wideeblock, text width=70mm, below=of lim] (bo)
+    {\textbf{BROWNOUT DETECTOR} (F3 $<$ 2.5V)\\
+     $-50\%\ \beta$ \;$\cdot$\; rest \casnote{\textasciicircum0}/\casnote{\textasciicircum9} \;$\cdot$\; alert};
+  \node[widepblock, text width=70mm, below=of bo] (seq)
+    {\textbf{POWER SEQUENCER} (P $\to$ C $\to$ E $\to$ O)\\
+     O held LOW until P,C,E power-good};
+  \node[wideeblock, text width=70mm, below=of seq] (therm)
+    {\textbf{THERMAL MGMT} (temp $\propto$ Drive $\times$ time)\\
+     Warn $-25\%\ \beta$ \;/\; Crit \casnote{\textasciicircum0\textasciicircum P} rest \;/\; Emerg cutoff};
+  \draw[flow] (rails) -- (reg);
+  \draw[flow] (reg) -- (lim);
+  \draw[flow] (lim) -- (bo);
+  \draw[flow] (bo) -- (seq);
+  \draw[flow] (seq) -- (therm);
+\end{tikzpicture}
+\end{center}
 ```
 
 Everything below builds these blocks in CCDL and explains the engineering choices behind each one.

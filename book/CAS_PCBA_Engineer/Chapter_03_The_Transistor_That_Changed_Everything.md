@@ -70,6 +70,25 @@ This is the table from the Style Guide, and it is worth tattooing somewhere visi
 | **E — Effect** | Emitter (output) | the Idea produced — typically a `^9` Below/Effect state |
 | **β — Gain** | Ic / Ib | how strongly the bias amplifies the cause → effect transition |
 
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[node distance=0pt]
+  \node[nblock, minimum width=20mm, minimum height=20mm,
+        font=\sffamily\small\bfseries] (cjt) at (0,0) {CJT};
+  \node[cblock, text width=30mm, anchor=south] (cause) at (0,2.0)
+       {\textbf{C --- Cause}\\\casnote{collector (input)}\\\casnote{\textasciicircum8 Above/Cause}};
+  \node[pblock, text width=30mm, anchor=east] (bias) at (-2.6,0)
+       {\textbf{B --- Bias}\\\casnote{base (control)}\\\casnote{\textasciicircum5 Female}};
+  \node[oblock, text width=30mm, anchor=north] (effect) at (0,-2.0)
+       {\textbf{E --- Effect}\\\casnote{emitter (output)}\\\casnote{\textasciicircum9 Below/Effect}};
+  \draw[flow] (cause.south) -- (cjt.north);
+  \draw[flow] (bias.east) -- (cjt.west);
+  \draw[flow] (cjt.south) -- (effect.north);
+  \node[flowlbl, anchor=west] at (cjt.east) {gain $\beta$ \;($C\!\to\!E$)};
+\end{tikzpicture}
+\end{center}
+```
+
 ### The four regions, in a mind
 
 Now the payoff. Those four transistor regions are not electronic curiosities. Each one names a real cognitive condition you have experienced.

@@ -30,27 +30,31 @@ The habit's natural frequency is `f0 = 1/(2π√(LC))`, and its Q is the *sharpn
 
 The COB is a four-stage signal chain. The block diagram below is the topology you will build to; read it top to bottom as the path a rhythmic cognition takes from internal clock to observable behavior.
 
-```
-[ CLOCK:  ^7^O|E  — Rhythm as master oscillator ]   (f = Drive-weighted)
-        |
-        v
-[ Phi<> LC TANK ]
-    L = Inductor< Phi_sequence, L = F6_weight >   // structure = inductance (resists change)
-    C = Capacitor< ^5^E,        C = F4_weight >   // connection = capacitance (stores emotion)
-    f0 = 1 / (2π√(LC))    ;    Q = habit sharpness
-        |
-        v
-[ PHASE-LOCKED LOOP (PLL) ]
-    Phase detector: ^1^C   // Mind compares internal rhythm vs external rhythm
-    Loop filter:    ^4^E   // Vibration integrates the phase error
-    VCO:            ^3^O   // adjust behavioral output to match
-    lock range  /  capture range
-        |
-        v
-[ DUTY-CYCLE MODULATOR ]   F5 Agency high -> longer ON ; F6 Structure high -> disciplined cycle
-        |
-        v
-[ OUTPUT:  regular behavioral pattern ]
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[node distance=4mm and 0mm]
+  \node[wideoblock, text width=66mm] (clock)
+    {\textbf{CLOCK} \casnote{\textasciicircum7\textasciicircum O|E} --- Rhythm master oscillator\\
+     ($f$ = Drive-weighted)};
+  \node[widenblock, below=of clock] (tank)
+    {\textbf{LC TANK}\\
+     L = Inductor \;($L = $ F6 Structure)\\
+     C = Capacitor \casnote{\textasciicircum5\textasciicircum E} \;($C = $ F4 Connection)\\
+     $f_0 = 1/(2\pi\sqrt{LC}\,)$ \quad $Q$ = habit sharpness};
+  \node[widecblock, below=of tank] (pll)
+    {\textbf{PHASE-LOCKED LOOP}\\
+     phase det.\ \casnote{\textasciicircum1\textasciicircum C} \;/\; loop filt.\ \casnote{\textasciicircum4\textasciicircum E} \;/\; VCO \casnote{\textasciicircum3\textasciicircum O}\\
+     capture range $<$ lock range};
+  \node[widenblock, below=of pll] (duty)
+    {\textbf{DUTY-CYCLE MODULATOR}\\
+     F5 Agency $\uparrow$ longer ON \;/\; F6 Structure $\uparrow$ disciplined};
+  \node[casterm, below=of duty] (out) {OUTPUT: regular behavioral pattern};
+  \draw[flow] (clock) -- (tank);
+  \draw[flow] (tank) -- (pll);
+  \draw[flow] (pll) -- (duty);
+  \draw[flow] (duty) -- (out);
+\end{tikzpicture}
+\end{center}
 ```
 
 ### Stage 1 — The master clock (`^7^O|E`)

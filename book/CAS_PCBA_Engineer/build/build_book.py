@@ -172,6 +172,14 @@ def patch_preamble() -> None:
         "\\AtBeginEnvironment{tabular}{\\small}\n"
         "\\appto\\UrlBreaks{\\do\\^\\do\\|\\do\\<\\do\\>\\do\\_}\n"
     )
+    # --- TikZ vector schematics (replace the ASCII block diagrams) ---------
+    # figures_preamble.tex is a hand-written, preamble-safe file (TikZ + color
+    # defs + reusable block/flow \tikzset styles) used by the {=latex} figure
+    # blocks embedded in chapters 3, 18, 19, 20, 21, 22, 25.
+    p += (
+        "\n% --- CAS PCBA Engineer build: TikZ figure styles ---\n"
+        "\\input{figures_preamble.tex}\n"
+    )
     (BUILD / "preamble_pcba.tex").write_text(p, encoding="utf-8")
 
 

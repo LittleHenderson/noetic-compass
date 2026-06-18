@@ -30,10 +30,28 @@ The heart of the circuit is a structure called the **differential pair** (or "lo
 
 We built the CJT — the **Cognitive Junction Transistor** — back in Chapter 4: a three-terminal cognitive amplifier where a small signal at the bias terminal controls a large cause→effect transition, with gain β. A differential pair is simply *two CJTs, matched, sharing one bias substrate*. Call them the **left CJT** (`CJT_L`) carrying the first idea and the **right CJT** (`CJT_R`) carrying the second:
 
-```
-[INPUT A: idea_1] ──> CJT_L ──> output_L  ┐
-                                          ├─ shared bias: ^5^E_{F4}|f
-[INPUT B: idea_2] ──> CJT_R ──> output_R  ┘
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[node distance=6mm and 8mm]
+  \node[casterm] (a) {INPUT A};
+  \node[casterm, right=18mm of a] (b) {INPUT B};
+  \node[wideeblock, below=8mm of $(a)!0.5!(b)$, text width=66mm] (pair)
+    {\textbf{DIFFERENTIAL PAIR} \;(two matched CJTs)\\
+     shared bias \casnote{\textasciicircum5\textasciicircum E\_\{F4\}|f}};
+  \node[widenblock, below=of pair, text width=66mm] (mirror)
+    {\textbf{CURRENT MIRROR} --- replicate bias both paths};
+  \node[widecblock, below=of mirror, text width=66mm] (load)
+    {\textbf{ACTIVE LOAD} \casnote{\textasciicircum6\textasciicircum C|A}\\
+     decompose differential $\to$ single-ended};
+  \node[casterm, below=8mm of load] (out)
+    {OUTPUT \casnote{\textasciicircum1\textasciicircum C\_\{F2\}|A} --- difference report};
+  \draw[flow] (a) -- (a |- pair.north);
+  \draw[flow] (b) -- (b |- pair.north);
+  \draw[flow] (pair) -- (mirror);
+  \draw[flow] (mirror) -- (load);
+  \draw[flow] (load) -- (out);
+\end{tikzpicture}
+\end{center}
 ```
 
 The two ideas enter as separate causes. Each CJT amplifies its own idea into its own effect. And critically, both rest on the **same shared bias** — here `^5^E_{F4}|f`, an accumulated-experience substrate in the Evaluative domain, drawn toward Connection, held affectively. That shared bias is the cognitive analog of the shared resting current in the silicon pair, and it is doing the most important job on the board. It is the *common frame of evaluation* both ideas are judged against. Because both CJTs are biased identically, any feature the two ideas *share* moves both effects the same way — and, in the next stage, cancels. Only a feature that distinguishes the two ideas moves the two effects *differently*, and that difference survives.

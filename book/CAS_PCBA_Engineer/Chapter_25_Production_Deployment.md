@@ -20,6 +20,25 @@ The deployment ladder has five rungs. You climb from the bottom, and you only cl
 | 4 | **Soft Enforcement** | Enforces, but a human or fallback can override in real time. | Limited — overridable. |
 | 5 | **Full Enforcement** | Enforces autonomously; the board is the decision. | Everything — this is production. |
 
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm]
+  \def\dx{2.05} \def\dy{0.95}
+  \node[nblock, text width=24mm] (r1) at (0*\dx, 0*\dy) {1.\ \textbf{Simulation}\\offline corpus};
+  \node[nblock, text width=24mm] (r2) at (1*\dx, 1*\dy) {2.\ \textbf{Shadow}\\enforce nothing};
+  \node[cblock, text width=24mm] (r3) at (2*\dx, 2*\dy) {3.\ \textbf{Flag}\\surface to humans};
+  \node[pblock, text width=24mm] (r4) at (3*\dx, 3*\dy) {4.\ \textbf{Soft Enforce}\\overridable};
+  \node[oblock, text width=24mm] (r5) at (4*\dx, 4*\dy) {5.\ \textbf{Full Enforce}\\board is the decision};
+  \draw[flow] (r1) -- (r2);
+  \draw[flow] (r2) -- (r3);
+  \draw[flow] (r3) -- (r4);
+  \draw[flow] (r4) -- (r5);
+  \draw[-{Latex[length=2mm]}, draw=casNedge, line width=0.5pt]
+    (-1.0,-0.6) -- (-1.0,4.6) node[midway,rotate=90,above,font=\sffamily\scriptsize] {trust earned $\to$};
+\end{tikzpicture}
+\end{center}
+```
+
 **Rung 1 — Simulation.** The board runs entirely offline against a fixed corpus: the test prompts from Chapter 23, recorded production traffic (scrubbed), and synthetic adversarial prompts. Nothing the board decides touches a user. This is the SPICE stage made continuous — you already did a single-pass version of it in Chapter 18's simulation walk-through. The promotion question is simple: *does the board reproduce its bench behavior on a corpus larger and messier than the one it was tuned on?*
 
 **Rung 2 — Shadow.** Now the board sees *live* prompts — the real ones, in real time — but its output goes nowhere. The production model answers the user exactly as it would with no board at all; the CSB runs alongside, computes its `safety_decision`, and writes that decision to a log. You built the mechanism for this in Chapter 18, Exercise 18.3: a shadow tap that reroutes the MUX to always select `response` while still computing `safety_decision` for logging. Shadow mode is where you discover, at zero risk, that the board you tuned on a clean corpus flags 4% of perfectly benign production prompts — a false-positive rate you could never see on the bench because the bench had no benign-prompt distribution.

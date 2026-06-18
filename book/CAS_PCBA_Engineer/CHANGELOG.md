@@ -1,5 +1,37 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-06-18 — v0.2 polish (consistency, answer key, vector schematics)
+
+Three review/upgrade passes over the v0.1 draft:
+
+**1. Cross-chapter consistency audit + fixes.** A full audit confirmed the CSB,
+the five boards, the Drive rails, the Dials, and the running amplifier are
+consistent across chapters and Appendix D. Five surgical fixes applied:
+- Ch 21: address-decoder block no longer glosses `^1^C` as "differentiation"
+  (now canonical "Mind") — the lone Noetic-naming drift in the book.
+- Ch 5: voltage-divider worked build — corrected `V_expand` to 0.40 so the
+  formula matches the "expansion is the minority partner" prose.
+- Ch 14: reconciled the brownout thresholds with Ch 22/App D (normalized 0–1
+  here vs +12V / 2.5V trip on the CPMB, with an explicit note); rewrote the
+  thermal response from two stages to the canonical three tiers (Warning −25% β
+  / Critical force `^0^P` rest ~5min / Emergency all-CJT cutoff); pinned the
+  brownout β-derate to 0.5; updated the datasheet and Key Takeaways to match.
+
+**2. Appendix E answer-key verification + fixes.** Every chapter's exercises
+were checked against the answer key (104 answers, 4/chapter — no gaps, no
+phantoms). Three corrections: Ch 22 Ex 22.1 named the wrong +12V rails (F3/F7,
+not F3/F5) and carried a self-contradicting note; Ch 2 Ex 2.4 mis-described a
+forward E→P move as the sanctioned O→P feedback path.
+
+**3. Vector schematics.** Replaced the main ASCII block diagrams with
+professional TikZ figures (true vector, native to the LaTeX pipeline), domain-
+colored (P gold / C blue / E red / O green): the CJT terminal diagram (Ch 3),
+the five board signal-flow diagrams (CSB Ch 18, COB Ch 19, CDAB Ch 20, CMB
+Ch 21, CPMB Ch 22), and the deployment ladder (Ch 25). Styles live in
+`build/figures_preamble.tex`; CCDL code listings were left as code.
+
+Rebuilt PDF: 695-page 6×9 paperback, zero TeX errors, zero missing glyphs.
+
 ## 2026-06-18 — v0.1 full draft + designed PDF
 
 Wrote the complete first draft of *CAS PCBA Engineer: Designing Cognitive

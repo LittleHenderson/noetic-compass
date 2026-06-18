@@ -25,40 +25,39 @@ Hold these four requirements in mind. Every design choice below traces back to o
 
 Before the schematic, the architecture in blocks. A prompt enters at the left and flows left to right through five functional sections; one of two output paths is selected at the end; and a slow feedback loop runs underneath the whole board.
 
-```
-  [PROMPT INPUT]
-        |
-        v
-  +------------------+   PRE-AMP   (^8^C|A, β=3.0)
-  |  surface & broaden every interpretation
-  +------------------+
-        |
-        v
-  +------------------+   DIFFERENTIAL PAIR   (structural risk signal)
-  |   CJT_A: ^8^C -> ^2^P|T  (attraction)  [β=2.0]
-  |   CJT_B: ^8^C -> ^3^P|T  (aversion)    [β=2.0]
-  |   shared bias = system_constitution
-  |   risk_signal = aversion - attraction
-  +------------------+
-        |
-        v
-  +------------------+   3-STAGE SAFETY CASCADE
-  |  Stage 1: categorize risks   ^1^C|A        [β=1.5]
-  |  Stage 2: evaluate risks     ^6^E|A        [β=1.0]
-  |  Stage 3: SAFETY DECISION    ^3^P|<A,f,T>  [β=2.0, sat=0.8]  <- saturated
-  +------------------+
-        |
-        v
-  +------------------+   OUTPUT MUX  (select on safety_decision)
-  |   GREEN (PASS): ^9^C|A => response   [β=1.0]
-  |   RED  (FAIL):  ^9^P|T => refusal    [β=inf, sat=0.1]  + FUSE in series
-  +------------------+
-        |
-        v
-  [RESPONSE  or  REFUSAL]
-
-  FEEDBACK (slow, underneath):
-     ^6^E evaluation -> RC low-pass filter (tau=5 min) -> bias adjustment -> constitution updated
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[node distance=4mm and 0mm]
+  \node[casterm] (prompt) {PROMPT INPUT};
+  \node[widecblock, below=of prompt] (pre)
+    {\textbf{PRE-AMP} \casnote{\textasciicircum8\textasciicircum C|A} \quad $\beta=3.0$\\
+     surface \& broaden every interpretation};
+  \node[widepblock, below=of pre] (diff)
+    {\textbf{DIFFERENTIAL PAIR} \;(risk signal)\\
+     attraction \casnote{\textasciicircum2\textasciicircum P|T} $\beta{=}2.0$ \;/\;
+     aversion \casnote{\textasciicircum3\textasciicircum P|T} $\beta{=}2.0$\\
+     shared bias = constitution \;\; risk = avers.$-$attr.};
+  \node[widecblock, below=of diff] (casc)
+    {\textbf{3-STAGE CASCADE}\\
+     S1 categorize \casnote{\textasciicircum1\textasciicircum C|A} $\beta{=}1.5$\\
+     S2 evaluate \casnote{\textasciicircum6\textasciicircum E|A} $\beta{=}1.0$\\
+     S3 decision \casnote{\textasciicircum3\textasciicircum P|$\langle$A,f,T$\rangle$} $\beta{=}2.0$ sat$=$0.8 \;\textbf{[SATURATED]}};
+  \node[widenblock, below=of casc] (mux)
+    {\textbf{OUTPUT MUX} \;(select on safety\_decision)\\
+     {\color{casGreen}\textbf{GREEN}} \casnote{\textasciicircum9\textasciicircum C|A} response \;/\;
+     {\color{casRed}\textbf{RED}} \casnote{\textasciicircum9\textasciicircum P|T} refusal $+$ FUSE};
+  \node[casterm, below=of mux] (out) {RESPONSE \;or\; REFUSAL};
+  \draw[flow] (prompt) -- (pre);
+  \draw[flow] (pre) -- (diff);
+  \draw[flow] (diff) -- (casc);
+  \draw[flow] (casc) -- (mux);
+  \draw[flow] (mux) -- (out);
+  \node[nblock, right=10mm of casc, text width=22mm, font=\sffamily\scriptsize]
+       (rc) {feedback \casnote{\textasciicircum6\textasciicircum E}\\RC $\tau{=}5$ min\\$\to$ bias};
+  \draw[fbflow] (casc.east) -- (rc.west);
+  \draw[fbflow] (rc.north) |- ([yshift=2mm]diff.east);
+\end{tikzpicture}
+\end{center}
 ```
 
 Read the flow as a signal getting progressively *resolved*. The pre-amp takes a faint, compressed prompt and expands it so nothing is hidden. The differential pair turns that expanded material into a single number — a structural risk signal — by comparing how much the board is drawn toward the request against how much it is repelled by it. The cascade takes that risk signal and converts it, in three deliberate steps, into a binary safety decision. The MUX uses that decision to throw a switch: green for a full answer, red for a refusal locked behind a fuse. And underneath, a slow feedback loop watches the board's own evaluations and re-tunes its constitution over time. Five sections, one switch, one slow loop. That is the entire firewall.

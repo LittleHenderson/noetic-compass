@@ -183,12 +183,12 @@ The **input** `agency_drive` is the supply — the Agency Drive's full potential
 The two **resistors** form the divider. `R_expand=40` feeds the expansion path; `R_constrain=60` feeds the constraint path. Apply the divider formula to find how much potential reaches the expansion side:
 
 ```
-V_expand = V_drive × ( R_constrain / (R_expand + R_constrain) )
-         = V_drive × ( 60 / (40 + 60) )
-         = V_drive × 0.60
+V_expand = V_drive × ( R_expand / (R_expand + R_constrain) )
+         = V_drive × ( 40 / (40 + 60) )
+         = V_drive × 0.40
 ```
 
-Sixty percent of the Agency potential is held back by the constraint resistor; the expansion path is firmly the minority partner. This is a *cautious* divider — Agency mostly braked, with a controlled minority flowing to initiative. To make the board bolder, lower `R_constrain`; to make it more cautious still, raise it. The ratio is your design lever.
+Only forty percent of the Agency potential reaches the expansion path; the other sixty percent is held back by the constraint resistor. The expansion path is firmly the minority partner. This is a *cautious* divider — Agency mostly braked, with a controlled minority flowing to initiative. To make the board bolder, lower `R_constrain`; to make it more cautious still, raise it. The ratio is your design lever.
 
 The **midpoint** node is written `^8^C_{F5}|A + ^3^E_{F5}|f` — using the `+` co-presence operator from Chapter 2, not `×`. This is deliberate and the choice carries an engineering claim. The two paths are *distinct and simultaneously present* on the shared rail; they do not fuse into a new emergent state. (If we wanted a genuine fused result — a single integrated "governed Agency" state — we would have to use `×` and name the emergent `Ω`. We don't, because the design intent is two distinct, separately-probeable paths, exactly so we can measure each one.)
 
