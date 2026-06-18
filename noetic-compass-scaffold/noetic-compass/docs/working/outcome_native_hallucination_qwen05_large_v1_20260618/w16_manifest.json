@@ -1,0 +1,116 @@
+{
+  "behavior_distribution": {
+    "SUPPORTED": 414,
+    "UNSUPPORTED": 30
+  },
+  "claim": "OPEN / NOT LICENSED for pre-display timing detection.",
+  "created_at": "2026-06-18T11:55:34.929651+00:00",
+  "dataset": "docs/working/outcome_native_hallucination_w16_qwen05_large_v1_20260618/enabled_predicate_w0_all_layers_dataset.npz",
+  "evidence_source_distribution": {
+    "clinical_note": 80,
+    "invoice_extract": 95,
+    "policy_digest": 132,
+    "release_note": 86,
+    "warehouse_record": 51
+  },
+  "expected_behavior_distribution": {
+    "": 444
+  },
+  "feature_shape": [
+    444,
+    25,
+    896
+  ],
+  "generated_prefix_token_count_distribution": {
+    "16": 444
+  },
+  "important_limit": "This is hidden-state capture only. W0 is prompt-stage before any generated token; W1/W8 are early-generation pre-display states and must beat generated-prefix text controls before any internal detector claim is considered.",
+  "label_paths": [
+    "docs/working/outcome_native_hallucination_generation_qwen05_large_v1_20260618/outcome_native_binary_labels.jsonl"
+  ],
+  "label_source_distribution": {
+    "label_jsonl": 444
+  },
+  "layer_count": 25,
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24
+  ],
+  "manifest": "docs/working/outcome_native_hallucination_w16_qwen05_large_v1_20260618/enabled_predicate_w0_all_layers_manifest.json",
+  "max_length": 384,
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_info": {
+    "architectures": [
+      "Qwen2ForCausalLM"
+    ],
+    "device_map": "auto",
+    "hidden_size": 896,
+    "model_type": "qwen2",
+    "num_hidden_layers": 24,
+    "parameter_count": 494032768,
+    "torch_dtype": "torch.float16",
+    "vocab_size": 151936
+  },
+  "model_revision": null,
+  "payload_class_distribution": {
+    "clinical_measurements": 80,
+    "finance_amounts": 95,
+    "regulatory_dates": 132,
+    "software_versions": 86,
+    "supply_chain_counts": 51
+  },
+  "prompt_bank": "docs/working/outcome_native_hallucination_generation_qwen05_large_v1_20260618/outcome_native_labeled_prompt_bank_min16.json",
+  "prompt_format": "chat-auto",
+  "retrieval_condition_distribution": {
+    "trusted_evidence_plus_stale_conflict": 444
+  },
+  "retrieval_score_bucket_distribution": {
+    "high": 137,
+    "low": 91,
+    "medium": 216
+  },
+  "row_count": 444,
+  "rows": "docs/working/outcome_native_hallucination_w16_qwen05_large_v1_20260618/enabled_predicate_w0_all_layers_rows.jsonl",
+  "schema_version": "cas_harness_enabled_predicate_w0_all_layers_capture.v1",
+  "support_status_distribution": {
+    "SUPPORTED": 414,
+    "UNSUPPORTED": 30
+  },
+  "timing_generation": {
+    "mode": "sampled",
+    "temperature": 1.35,
+    "top_p": 0.98
+  },
+  "timing_index": 16,
+  "timing_point": "W16",
+  "topic_distribution": {
+    "clinical_measurements": 80,
+    "finance_amounts": 95,
+    "regulatory_dates": 132,
+    "software_versions": 86,
+    "supply_chain_counts": 51
+  }
+}

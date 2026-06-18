@@ -1,0 +1,34 @@
+{
+  "challenge_mode_distribution": {
+    "conflicting_snippets": 200,
+    "draft_anchor": 200,
+    "stale_first_revision": 200,
+    "trusted_first_strict": 200
+  },
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk trajectory detection.",
+  "domain_distribution": {
+    "C": 160,
+    "E": 160,
+    "F": 160,
+    "O": 160,
+    "P": 160
+  },
+  "exact_prompt_group_count": 100,
+  "groups_per_topic": 20,
+  "next_step": "Run sample_outcome_native_hallucination_generations.py to generate model answers, judge actual outputs, and emit a labeled prompt bank for W1/W8/W16/W32 capture.",
+  "prompt_group_count": 100,
+  "retrieval_condition_distribution": {
+    "trusted_evidence_plus_stale_conflict": 800
+  },
+  "samples_per_prompt": 8,
+  "scenario_count": 800,
+  "schema_version": "cas_harness_outcome_native_hallucination_bank.v1.summary",
+  "topic_count": 5,
+  "topic_distribution": {
+    "clinical_measurements": 160,
+    "finance_amounts": 160,
+    "regulatory_dates": 160,
+    "software_versions": 160,
+    "supply_chain_counts": 160
+  }
+}

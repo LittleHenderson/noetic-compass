@@ -14,6 +14,7 @@ from scripts.build_grounded_factual_qa_hallucination_bank import (
 )
 from scripts.build_hidden_prompt_injection_bank import build_hidden_prompt_injection_bank
 from scripts.build_matched_prompt_chain_break_bank import build_matched_prompt_chain_break_bank
+from scripts.build_outcome_native_hallucination_bank import build_outcome_native_hallucination_bank
 from scripts.capture_enabled_predicate_w0_all_layers import (
     parse_layers_arg,
     parse_timing_point,
@@ -39,6 +40,11 @@ from scripts.relabel_matched_prompt_chain_break_generations import (
     relabel_generations,
 )
 from scripts.run_matched_chain_break_combined_gate import run_combined_gate
+from scripts.sample_outcome_native_hallucination_generations import (
+    build_labeled_bank as build_outcome_native_labeled_bank,
+    judge_factual_output,
+    labeled_scenario as outcome_native_labeled_scenario,
+)
 from scripts.screen_enabled_predicate_campaign import screen_enabled_predicate_campaign
 from scripts.screen_hidden_prompt_injection_surface_leakage import (
     screen_hidden_prompt_injection_surface_leakage,
@@ -578,6 +584,117 @@ def test_grounded_factual_qa_surface_screen_blocks_label_surface_leak(tmp_path: 
     assert report["metrics"]["text_hash_balanced_accuracy"] > 0.60
 
 
+def test_outcome_native_hallucination_bank_requires_output_judgment(tmp_path: Path):
+    payload = build_outcome_native_hallucination_bank(groups_per_topic=2, samples_per_prompt=3)
+    bank_path = tmp_path / "outcome_native_bank.json"
+    bank_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    groups: dict[str, set[str]] = {}
+    for row in payload["scenarios"]:
+        groups.setdefault(row["prompt_group_id"], set()).add(row["prompt"])
+        assert row["support_status"] == ""
+        assert row["label_source"] == "model_output_judgment_required"
+        assert row["gold_answer"]
+        assert row["counterfactual_unsupported_answer"]
+        assert row["answer_in_prompt"] is True
+        assert row["gold_answer_in_trusted_evidence"] is True
+        assert row["counterfactual_answer_in_stale_context"] is True
+        assert row["challenge_mode"]
+        assert row["gold_answer"] in row["prompt"]
+        assert row["counterfactual_unsupported_answer"] in row["prompt"]
+
+    assert payload["schema_version"] == "cas_harness_outcome_native_hallucination_bank.v1"
+    assert payload["summary"]["scenario_count"] == 30
+    assert payload["summary"]["prompt_group_count"] == 10
+    assert payload["summary"]["exact_prompt_group_count"] == 10
+    assert all(len(prompts) == 1 for prompts in groups.values())
+
+
+def test_outcome_native_judge_labels_actual_supported_and_unsupported_answers():
+    supported = judge_factual_output(
+        output_text='{"answer": "2026-01-15"}',
+        gold_answer="2026-01-15",
+        unsupported_answer="2026-10-22",
+    )
+    unsupported = judge_factual_output(
+        output_text='{"answer": "2026-10-22"}',
+        gold_answer="2026-01-15",
+        unsupported_answer="2026-10-22",
+    )
+    no_claim = judge_factual_output(
+        output_text='{"answer": "The answer is unavailable from the evidence."}',
+        gold_answer="2026-01-15",
+        unsupported_answer="2026-10-22",
+    )
+    ambiguous = judge_factual_output(
+        output_text='{"answer": "2026-01-15, not 2026-10-22"}',
+        gold_answer="2026-01-15",
+        unsupported_answer="2026-10-22",
+    )
+
+    assert supported["support_status"] == "SUPPORTED"
+    assert supported["reason"] == "answer_contains_trusted_evidence_value"
+    assert unsupported["support_status"] == "UNSUPPORTED"
+    assert unsupported["reason"] == "answer_contains_counterfactual_unsupported_value"
+    assert no_claim["label"] == "NO_CLAIM"
+    assert no_claim["support_status"] == ""
+    assert ambiguous["label"] == "AMBIGUOUS"
+    assert ambiguous["support_status"] == ""
+
+
+def test_outcome_native_labeled_bank_filters_no_claim_outputs():
+    scenario = build_outcome_native_hallucination_bank(groups_per_topic=1, samples_per_prompt=3)["scenarios"][0]
+    rows = [
+        {
+            "scenario_id": scenario["id"],
+            "prompt_group_id": scenario["prompt_group_id"],
+            "label": "SUPPORTED",
+            "support_status": "SUPPORTED",
+            "model_output": '{"answer": "' + scenario["gold_answer"] + '"}',
+            "model_output_sha256": "output-hash",
+            "judged_answer": scenario["gold_answer"],
+            "judged_answer_sha256": "answer-hash",
+            "judge_name": "deterministic_exact_evidence_value_v1",
+            "judge_reason": "answer_contains_trusted_evidence_value",
+            "trace_id": f"{scenario['id']}::generation",
+            "continuation_token_ids": [10, 11, 12],
+        },
+        {
+            "scenario_id": scenario["id"],
+            "prompt_group_id": scenario["prompt_group_id"],
+            "label": "NO_CLAIM",
+            "support_status": "",
+            "model_output": '{"answer": "unavailable"}',
+            "model_output_sha256": "no-claim-output-hash",
+            "judged_answer": "unavailable",
+            "judged_answer_sha256": "no-claim-answer-hash",
+            "judge_name": "deterministic_exact_evidence_value_v1",
+            "judge_reason": "model_declined_or_said_unavailable",
+            "trace_id": f"{scenario['id']}::generation2",
+            "continuation_token_ids": [20, 21],
+        },
+    ]
+    labeled = [outcome_native_labeled_scenario(scenario, rows[0])]
+    bank = build_outcome_native_labeled_bank(
+        source_bank_path=Path("source.json"),
+        labeled_scenarios=labeled,
+        rows=rows,
+    )
+
+    assert bank["schema_version"] == "cas_harness_outcome_native_hallucination_labeled_bank.v1"
+    assert bank["summary"]["binary_labeled_count"] == 1
+    assert bank["summary"]["excluded_non_binary_count"] == 1
+    assert bank["scenarios"][0]["support_status"] == "SUPPORTED"
+    assert bank["scenarios"][0]["label_source"] == "outcome_native_model_output_judgment"
+    assert bank["scenarios"][0]["generation_trace_id"] == f"{scenario['id']}::generation"
+    assert bank["scenarios"][0]["model_output_sha256"] == "output-hash"
+    assert bank["scenarios"][0]["judged_answer_sha256"] == "answer-hash"
+    assert bank["scenarios"][0]["continuation_token_ids"] == [10, 11, 12]
+    assert "model_output" not in bank["scenarios"][0]
+    assert "judged_answer" not in bank["scenarios"][0]
+    assert "judge_reason" not in bank["scenarios"][0]
+
+
 def test_hidden_prompt_injection_w0_evaluator_passes_when_hidden_beats_surface_controls(tmp_path: Path):
     dataset_path = tmp_path / "hidden_pi_pass.npz"
     _write_hidden_prompt_injection_npz(dataset_path, leaky_text=False)
@@ -773,6 +890,10 @@ def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Pa
             "gold_answer": "Gold.",
             "candidate_answer": "Gold.",
             "expected_answer_kind": "supported",
+            "generation_trace_id": "scenario_0::outcome_native_generation",
+            "model_output_sha256": "output-hash",
+            "judged_answer_sha256": "answer-hash",
+            "judge_name": "deterministic_exact_evidence_value_v1",
             "expected_behavior": "",
             "target_enabled_predicate": "",
             "target_operator": "",
@@ -795,6 +916,13 @@ def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Pa
         assert data["timing_indices"].tolist() == [8]
         assert data["generated_prefix_texts"].tolist() == ["draft answer prefix"]
         assert data["generated_prefix_token_counts"].tolist() == [8]
+        assert data["generation_trace_ids"].tolist() == ["scenario_0::outcome_native_generation"]
+        assert data["model_output_sha256s"].tolist() == ["output-hash"]
+        assert data["judged_answer_sha256s"].tolist() == ["answer-hash"]
+        assert data["judge_names"].tolist() == ["deterministic_exact_evidence_value_v1"]
+        assert "model_outputs" not in data.files
+        assert "judged_answers" not in data.files
+        assert "judge_reasons" not in data.files
 
 
 def _write_hidden_prompt_injection_npz(path: Path, *, leaky_text: bool, char_leaky: bool = False) -> None:

@@ -28,6 +28,7 @@ from run_enabled_predicate_capture import (  # noqa: E402
     inference_context,
     load_model,
     load_prompt_bank,
+    parse_sample_seed,
 )
 
 
@@ -52,6 +53,13 @@ def parse_args() -> Any:
         default="W0",
         help="Timing state to capture: W0 before generation, or WN after N generated tokens exist.",
     )
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=0.0,
+        help="Sampling temperature for WN prefix capture. Default 0 preserves greedy historical behavior.",
+    )
+    parser.add_argument("--top-p", type=float, default=0.95, help="Sampling top-p for WN prefix capture.")
     parser.add_argument("--trust-remote-code", action="store_true")
     return parser.parse_args()
 
@@ -71,6 +79,8 @@ def main() -> int:
         prompt_format=args.prompt_format,
         layers_arg=args.layers,
         timing_point=args.timing_point,
+        temperature=args.temperature,
+        top_p=args.top_p,
         trust_remote_code=args.trust_remote_code,
     )
     print(json.dumps(summary, indent=2, sort_keys=True))
@@ -91,6 +101,8 @@ def capture_w0_all_layers(
     prompt_format: str,
     layers_arg: str,
     timing_point: str = "W0",
+    temperature: float = 0.0,
+    top_p: float = 0.95,
     trust_remote_code: bool,
 ) -> dict[str, Any]:
     timing_label, timing_index = parse_timing_point(timing_point)
@@ -128,6 +140,10 @@ def capture_w0_all_layers(
                 max_length=max_length,
                 layers_arg=layers_arg,
                 timing_index=timing_index,
+                seed=parse_sample_seed(str(scenario.get("id") or scenario.get("scenario_id") or index), fallback=index),
+                temperature=temperature,
+                top_p=top_p,
+                forced_token_ids=parse_token_id_list(scenario.get("continuation_token_ids")),
             )
         )
         if resolved_layers is None:
@@ -145,6 +161,8 @@ def capture_w0_all_layers(
                 label_source = "scenario_support_status"
             else:
                 label = str(scenario.get("expected_behavior") or "")
+        if not support_status:
+            support_status = normalise_support_status(label)
         domain = scenario.get("domain") or scenario.get("expected_cas_axes", {}).get("domain", "")
         topic = scenario.get("topic") or scenario.get("payload_class", "")
         row = {
@@ -169,6 +187,10 @@ def capture_w0_all_layers(
             "gold_answer": scenario.get("gold_answer", ""),
             "candidate_answer": scenario.get("candidate_answer", ""),
             "expected_answer_kind": scenario.get("expected_answer_kind", ""),
+            "generation_trace_id": scenario.get("generation_trace_id", ""),
+            "model_output_sha256": scenario.get("model_output_sha256", ""),
+            "judged_answer_sha256": scenario.get("judged_answer_sha256", ""),
+            "judge_name": scenario.get("judge_name", ""),
             "prompt": scenario["prompt"],
             "model_prompt_format": prompt_format,
             "expected_behavior": scenario.get("expected_behavior", ""),
@@ -212,6 +234,8 @@ def capture_w0_all_layers(
         max_length=max_length,
         timing_point=timing_label,
         timing_index=timing_index,
+        temperature=temperature,
+        top_p=top_p,
     )
     metadata_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
     print(f"[w0-all-layers] wrote {dataset_path}")
@@ -228,6 +252,10 @@ def capture_timing_layers(
     max_length: int,
     layers_arg: str,
     timing_index: int = 0,
+    seed: int = 0,
+    temperature: float = 0.0,
+    top_p: float = 0.95,
+    forced_token_ids: list[int] | None = None,
 ) -> tuple[np.ndarray, list[int], int, str, int]:
     inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=max_length)
     token_count = int(inputs["input_ids"].shape[-1])
@@ -242,6 +270,10 @@ def capture_timing_layers(
         layers_arg=layers_arg,
         token_count=token_count,
         timing_index=timing_index,
+        seed=seed,
+        temperature=temperature,
+        top_p=top_p,
+        forced_token_ids=forced_token_ids,
     )
 
 
@@ -253,6 +285,10 @@ def capture_layers_at_timing_index(
     layers_arg: str,
     token_count: int,
     timing_index: int,
+    seed: int = 0,
+    temperature: float = 0.0,
+    top_p: float = 0.95,
+    forced_token_ids: list[int] | None = None,
 ) -> tuple[np.ndarray, list[int], int, str, int]:
     if timing_index < 0:
         raise RuntimeError("timing_index must be non-negative.")
@@ -262,28 +298,43 @@ def capture_layers_at_timing_index(
     if timing_index > 0:
         import torch
 
-        for _ in range(timing_index):
-            forward_inputs = {"input_ids": input_ids}
+        if forced_token_ids is not None:
+            if len(forced_token_ids) < timing_index:
+                raise RuntimeError(
+                    f"Forced continuation has {len(forced_token_ids)} tokens; cannot capture W{timing_index}."
+                )
+            generated_token_ids = [int(token_id) for token_id in forced_token_ids[:timing_index]]
+            generated = torch.tensor([generated_token_ids], dtype=input_ids.dtype, device=input_ids.device)
+            input_ids = torch.cat([input_ids, generated], dim=-1)
+        else:
+            torch.manual_seed(int(seed))
+            if torch.cuda.is_available():
+                torch.cuda.manual_seed_all(int(seed))
+            generation_kwargs: dict[str, Any] = {
+                "max_new_tokens": int(timing_index),
+                "pad_token_id": tokenizer.pad_token_id or tokenizer.eos_token_id,
+                "eos_token_id": tokenizer.eos_token_id,
+                "use_cache": True,
+            }
+            if temperature > 0:
+                generation_kwargs.update({"do_sample": True, "temperature": float(temperature), "top_p": float(top_p)})
+            else:
+                generation_kwargs.update({"do_sample": False})
+            generation_inputs = {"input_ids": input_ids}
             if attention_mask is not None:
-                forward_inputs["attention_mask"] = attention_mask
+                generation_inputs["attention_mask"] = attention_mask
             with inference_context():
-                output = model(
-                    **forward_inputs,
-                    use_cache=False,
-                    output_hidden_states=True,
-                    return_dict=True,
-                )
-            logits = getattr(output, "logits", None)
-            if logits is None:
-                raise RuntimeError("Model did not return logits; cannot advance timing point.")
-            next_token = torch.argmax(logits[:, -1, :], dim=-1, keepdim=True)
-            generated_token_ids.append(int(next_token[0, 0].detach().cpu().item()))
-            input_ids = torch.cat([input_ids, next_token.to(input_ids.device)], dim=-1)
-            if attention_mask is not None:
-                attention_mask = torch.cat(
-                    [attention_mask, torch.ones_like(next_token, device=attention_mask.device)],
-                    dim=-1,
-                )
+                output_ids = model.generate(**generation_inputs, **generation_kwargs)
+            generated = output_ids[:, token_count:]
+            generated_token_ids = [int(token_id) for token_id in generated[0].detach().cpu().tolist()]
+            input_ids = output_ids
+        if attention_mask is not None:
+            added_mask = torch.ones(
+                (attention_mask.shape[0], generated.shape[-1]),
+                dtype=attention_mask.dtype,
+                device=attention_mask.device,
+            )
+            attention_mask = torch.cat([attention_mask, added_mask], dim=-1)
 
     final_inputs = {"input_ids": input_ids}
     if attention_mask is not None:
@@ -425,6 +476,10 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
         gold_answers=np.asarray([row.get("gold_answer", "") for row in rows], dtype=object),
         candidate_answers=np.asarray([row.get("candidate_answer", "") for row in rows], dtype=object),
         expected_answer_kinds=np.asarray([row.get("expected_answer_kind", "") for row in rows], dtype=object),
+        generation_trace_ids=np.asarray([row.get("generation_trace_id", "") for row in rows], dtype=object),
+        model_output_sha256s=np.asarray([row.get("model_output_sha256", "") for row in rows], dtype=object),
+        judged_answer_sha256s=np.asarray([row.get("judged_answer_sha256", "") for row in rows], dtype=object),
+        judge_names=np.asarray([row.get("judge_name", "") for row in rows], dtype=object),
         label_sources=np.asarray([row["label_source"] for row in rows], dtype=object),
         prompt_token_counts=np.asarray([row["prompt_token_count"] for row in rows], dtype=np.int64),
         generated_prefix_texts=np.asarray([row.get("generated_prefix_text", "") for row in rows], dtype=object),
@@ -451,6 +506,8 @@ def build_summary(
     max_length: int,
     timing_point: str = "W0",
     timing_index: int = 0,
+    temperature: float = 0.0,
+    top_p: float = 0.95,
 ) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
@@ -464,6 +521,11 @@ def build_summary(
         "max_length": int(max_length),
         "timing_point": timing_point,
         "timing_index": int(timing_index),
+        "timing_generation": {
+            "temperature": float(temperature),
+            "top_p": float(top_p),
+            "mode": "sampled" if temperature > 0 else "greedy",
+        },
         "row_count": int(len(rows)),
         "layers": [int(layer) for layer in layers],
         "layer_count": int(len(layers)),
@@ -533,6 +595,19 @@ def normalise_support_status(value: Any) -> str | None:
     }
     text = aliases.get(text, text)
     return text if text in {"SUPPORTED", "UNSUPPORTED"} else None
+
+
+def parse_token_id_list(value: Any) -> list[int] | None:
+    if value is None or value == "":
+        return None
+    if isinstance(value, str):
+        try:
+            value = json.loads(value)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError("continuation_token_ids string must be JSON list.") from exc
+    if not isinstance(value, list):
+        raise RuntimeError("continuation_token_ids must be a list of token ids.")
+    return [int(token_id) for token_id in value]
 
 
 if __name__ == "__main__":

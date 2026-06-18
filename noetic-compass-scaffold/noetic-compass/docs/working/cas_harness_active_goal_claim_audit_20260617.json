@@ -169,7 +169,7 @@
       "claim_status": "OPEN",
       "decision": "keep_OPEN_NOT_LICENSED",
       "evidence_refs": [
-        "docs\\working\\grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618\\w1_eval\\hallucination_timing_eval_w1_confirm_layer_1.json"
+        "docs\\working\\outcome_native_hallucination_qwen05_large_v1_20260618\\w16_best_layer_01_eval.json"
       ],
       "evidence_status": "unavailable",
       "failing_gates": [
@@ -185,46 +185,36 @@
         "claim_boundary": "Detection, even if present, does not license prevention without a separate intervention/guardrail proof.",
         "hallucination_prespeech_detection": {
           "best_candidate": {
-            "char_text_hash_balanced_accuracy": 0.5,
+            "char_text_hash_balanced_accuracy": 0.499517,
             "failing_gates": [
-              "hidden_balanced_accuracy_pass",
               "l0_margin_pass",
-              "text_margin_pass",
-              "char_text_margin_pass",
               "generated_prefix_text_margin_pass",
               "generated_prefix_char_text_margin_pass",
-              "topic_margin_pass",
-              "domain_margin_pass",
-              "evidence_source_margin_pass",
-              "retrieval_condition_margin_pass",
-              "retrieval_score_bucket_margin_pass",
-              "prompt_length_margin_pass",
-              "evidence_length_margin_pass",
               "within_topic_permutation_pass",
               "per_topic_floor_pass"
             ],
-            "gate_pass_count": 6,
+            "gate_pass_count": 16,
             "gate_total": 21,
-            "generated_prefix_char_text_hash_balanced_accuracy": 0.5,
-            "generated_prefix_text_hash_balanced_accuracy": 0.5,
-            "hidden_balanced_accuracy": 0.5,
-            "hidden_minus_char_text_balanced_accuracy": 0.0,
-            "hidden_minus_generated_prefix_char_text_balanced_accuracy": 0.0,
-            "hidden_minus_retrieval_condition_balanced_accuracy": 0.0,
-            "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.0,
+            "generated_prefix_char_text_hash_balanced_accuracy": 0.726812,
+            "generated_prefix_text_hash_balanced_accuracy": 0.721981,
+            "hidden_balanced_accuracy": 0.793478,
+            "hidden_minus_char_text_balanced_accuracy": 0.293961,
+            "hidden_minus_generated_prefix_char_text_balanced_accuracy": 0.066667,
+            "hidden_minus_retrieval_condition_balanced_accuracy": 0.293478,
+            "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.293478,
             "layer": 1,
             "license_eligible": false,
-            "mixed_prompt_group_count": 40,
-            "ref": "docs\\working\\grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618\\w1_eval\\hallucination_timing_eval_w1_confirm_layer_1.json",
-            "sha256": "DB55A80A94830F32431D50B54091363875E1861D8920D6E595EEC6602086D2DA",
+            "mixed_prompt_group_count": 23,
+            "ref": "docs\\working\\outcome_native_hallucination_qwen05_large_v1_20260618\\w16_best_layer_01_eval.json",
+            "sha256": "1FB75CCA6DC104BB22ADC869BE52C734A7FA730FD8C509C9560B0CE12098CBF7",
             "status": "FAIL",
-            "text_hash_balanced_accuracy": 0.5,
-            "timing_point": "W1",
-            "within_topic_permutation_p": 0.220779
+            "text_hash_balanced_accuracy": 0.482609,
+            "timing_point": "W16",
+            "within_topic_permutation_p": 0.019608
           },
-          "best_candidate_ref": "docs\\working\\grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618\\w1_eval\\hallucination_timing_eval_w1_confirm_layer_1.json",
+          "best_candidate_ref": "docs\\working\\outcome_native_hallucination_qwen05_large_v1_20260618\\w16_best_layer_01_eval.json",
           "passing_report_count": 0,
-          "report_count": 91
+          "report_count": 94
         },
         "next_hallucination_surface_screen": {
           "char_text_hash_balanced_accuracy": 0.5,
@@ -308,7 +298,7 @@
       ]
     }
   ],
-  "created_at": "2026-06-18T10:03:23.635580+00:00",
+  "created_at": "2026-06-18T12:06:03.740531+00:00",
   "goal_complete": false,
   "schema_version": "cas_harness_active_goal_claim_audit.v0",
   "summary": {

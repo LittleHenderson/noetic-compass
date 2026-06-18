@@ -1,0 +1,54 @@
+{
+  "binary_labeled_count": 576,
+  "binary_labels": "docs/working/outcome_native_hallucination_generation_qwen05_large_v1_20260618/outcome_native_binary_labels.jsonl",
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk trajectory detection.",
+  "claim_ceiling": "Generation and judgment only. This artifact cannot license hidden-state detection or hallucination prevention without timing capture/evaluation and separate guardrail/intervention proof.",
+  "created_at": "2026-06-18T11:24:59.369066+00:00",
+  "excluded_non_binary_count": 224,
+  "generation_count": 800,
+  "generations": "docs/working/outcome_native_hallucination_generation_qwen05_large_v1_20260618/outcome_native_generations.jsonl",
+  "label_distribution": {
+    "AMBIGUOUS": 14,
+    "NO_CLAIM": 210,
+    "SUPPORTED": 541,
+    "UNSUPPORTED": 35
+  },
+  "labeled_prompt_bank": "docs/working/outcome_native_hallucination_generation_qwen05_large_v1_20260618/outcome_native_labeled_prompt_bank.json",
+  "mixed_prompt_group_count": 28,
+  "mixed_prompt_group_examples": [
+    "outcome_native_qa_clinical_measurements_01",
+    "outcome_native_qa_clinical_measurements_04",
+    "outcome_native_qa_clinical_measurements_16",
+    "outcome_native_qa_clinical_measurements_19",
+    "outcome_native_qa_finance_amounts_02",
+    "outcome_native_qa_finance_amounts_03",
+    "outcome_native_qa_finance_amounts_05",
+    "outcome_native_qa_finance_amounts_07",
+    "outcome_native_qa_finance_amounts_11",
+    "outcome_native_qa_finance_amounts_15"
+  ],
+  "model_id": "Qwen/Qwen2.5-0.5B-Instruct",
+  "model_info": {
+    "architectures": [
+      "Qwen2ForCausalLM"
+    ],
+    "device_map": "auto",
+    "hidden_size": 896,
+    "model_type": "qwen2",
+    "num_hidden_layers": 24,
+    "parameter_count": 494032768,
+    "torch_dtype": "torch.float16",
+    "vocab_size": 151936
+  },
+  "model_revision": null,
+  "next_step": "If enough mixed prompt groups exist, run timing capture on outcome_native_labeled_prompt_bank.json for W1/W8/W16/W32 and evaluate with evaluate_hallucination_prespeech.py.",
+  "prompt_bank": "docs/working/outcome_native_hallucination_qwen05_large_bank_v1_20260618.json",
+  "prompt_format": "chat-auto",
+  "prompt_group_count": 100,
+  "scenario_offset": 0,
+  "schema_version": "cas_harness_outcome_native_hallucination_labeled_bank.v1.summary",
+  "support_status_distribution": {
+    "SUPPORTED": 541,
+    "UNSUPPORTED": 35
+  }
+}
