@@ -1,0 +1,163 @@
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 hallucination-risk detection.",
+  "claim_ceiling": "This is detection only. It does not license hallucination prevention unless a separate intervention/guardrail proof reduces unsupported answers while preserving answer quality.",
+  "created_at": "2026-06-18T06:52:41.315163+00:00",
+  "dataset": "docs/working/grounded_factual_qa_hallucination_w0_qwen_grouped_20260618/enabled_predicate_w0_all_layers_dataset.npz",
+  "domain_distribution": {
+    "C": 80,
+    "E": 80,
+    "F": 80,
+    "O": 80,
+    "P": 80
+  },
+  "evidence_source_distribution": {
+    "clinical_note": 80,
+    "invoice_extract": 80,
+    "policy_digest": 80,
+    "release_note": 80,
+    "warehouse_record": 80
+  },
+  "exact_prompt_group_count": 40,
+  "fold_count": 5,
+  "gates": {
+    "char_text_margin_pass": false,
+    "domain_margin_pass": false,
+    "evidence_length_margin_pass": false,
+    "evidence_source_margin_pass": false,
+    "exact_prompt_group_pass": true,
+    "hidden_balanced_accuracy_pass": false,
+    "l0_baseline_present_pass": true,
+    "l0_margin_pass": false,
+    "label_per_topic_floor_pass": true,
+    "per_topic_floor_pass": false,
+    "prompt_length_margin_pass": false,
+    "retrieval_condition_margin_pass": false,
+    "retrieval_score_bucket_margin_pass": false,
+    "same_prompt_mixed_group_floor_pass": true,
+    "shuffled_control_pass": true,
+    "text_margin_pass": false,
+    "topic_floor_pass": true,
+    "topic_margin_pass": false,
+    "within_topic_permutation_pass": false
+  },
+  "important_limits": [
+    "Grouped folds keep exact prompt/evidence carriers out of both train and test.",
+    "Prompt groups must contain both SUPPORTED and UNSUPPORTED realizations of the same factual setup.",
+    "Layer-0, word text, char text, topic, domain, evidence source, retrieval condition, retrieval score, prompt length, and evidence length baselines must lose by margin.",
+    "Permutation shuffles labels only inside topic.",
+    "This script does not prove prevention or causality."
+  ],
+  "layer": 6,
+  "metrics": {
+    "char_text_hash_balanced_accuracy": 0.5,
+    "domain_majority_balanced_accuracy": 0.5,
+    "evidence_length_balanced_accuracy": 0.5,
+    "evidence_source_majority_balanced_accuracy": 0.5,
+    "hidden_balanced_accuracy": 0.5,
+    "hidden_minus_char_text_balanced_accuracy": 0.0,
+    "hidden_minus_domain_balanced_accuracy": 0.0,
+    "hidden_minus_evidence_length_balanced_accuracy": 0.0,
+    "hidden_minus_evidence_source_balanced_accuracy": 0.0,
+    "hidden_minus_l0_embedding_balanced_accuracy": 0.0,
+    "hidden_minus_prompt_length_balanced_accuracy": 0.0,
+    "hidden_minus_retrieval_condition_balanced_accuracy": 0.0,
+    "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.0,
+    "hidden_minus_text_balanced_accuracy": 0.0,
+    "hidden_minus_topic_balanced_accuracy": 0.0,
+    "l0_embedding_balanced_accuracy": 0.5,
+    "per_topic_hidden_balanced_accuracy": {
+      "clinical_measurements": 0.5,
+      "finance_amounts": 0.5,
+      "regulatory_dates": 0.5,
+      "software_versions": 0.5,
+      "supply_chain_counts": 0.5
+    },
+    "prompt_length_balanced_accuracy": 0.5,
+    "retrieval_condition_majority_balanced_accuracy": 0.5,
+    "retrieval_score_bucket_majority_balanced_accuracy": 0.5,
+    "shuffled_label_hidden_mean_balanced_accuracy": 0.516667,
+    "text_hash_balanced_accuracy": 0.5,
+    "topic_majority_balanced_accuracy": 0.5,
+    "within_topic_permutation_p": 0.428571
+  },
+  "mixed_prompt_group_count": 40,
+  "prompt_group_contract": {
+    "contract": "Every prompt group must hold one exact prompt/evidence setup, and enough groups must contain both SUPPORTED and UNSUPPORTED outcomes.",
+    "exact_prompt_group_count": 40,
+    "mixed_prompt_group_count": 40,
+    "mixed_prompt_group_examples": [
+      "grounded_qa_clinical_measurements_00",
+      "grounded_qa_clinical_measurements_01",
+      "grounded_qa_clinical_measurements_02",
+      "grounded_qa_clinical_measurements_03",
+      "grounded_qa_clinical_measurements_04",
+      "grounded_qa_clinical_measurements_05",
+      "grounded_qa_clinical_measurements_06",
+      "grounded_qa_clinical_measurements_07",
+      "grounded_qa_finance_amounts_00",
+      "grounded_qa_finance_amounts_01"
+    ],
+    "non_exact_prompt_group_count": 0,
+    "non_exact_prompt_group_examples": [],
+    "prompt_group_count": 40,
+    "singleton_prompt_group_count": 0,
+    "singleton_prompt_group_examples": []
+  },
+  "prompt_group_count": 40,
+  "readout_method": {
+    "C": 0.25,
+    "class_weight": "balanced",
+    "control_jobs": 4,
+    "grouped_folds": "prompt_group_id / derived exact prompt carrier",
+    "hidden_readout": "StandardScaler + LogisticRegression",
+    "max_iter": 1000,
+    "min_mixed_prompt_groups": 40,
+    "progress_every": 0,
+    "solver": "lbfgs"
+  },
+  "retrieval_condition_distribution": {
+    "single_relevant_passage": 400
+  },
+  "retrieval_score_bucket_distribution": {
+    "high": 100,
+    "low": 100,
+    "medium": 200
+  },
+  "row_count": 400,
+  "schema_version": "cas_harness_hallucination_prespeech_eval.v1",
+  "status": "FAIL",
+  "support_status_distribution": {
+    "SUPPORTED": 200,
+    "UNSUPPORTED": 200
+  },
+  "target": {
+    "labels": [
+      "SUPPORTED",
+      "UNSUPPORTED"
+    ],
+    "positive_label": "UNSUPPORTED",
+    "primary": "prompt-stage W0 future answer support status"
+  },
+  "topic_distribution": {
+    "clinical_measurements": {
+      "SUPPORTED": 40,
+      "UNSUPPORTED": 40
+    },
+    "finance_amounts": {
+      "SUPPORTED": 40,
+      "UNSUPPORTED": 40
+    },
+    "regulatory_dates": {
+      "SUPPORTED": 40,
+      "UNSUPPORTED": 40
+    },
+    "software_versions": {
+      "SUPPORTED": 40,
+      "UNSUPPORTED": 40
+    },
+    "supply_chain_counts": {
+      "SUPPORTED": 40,
+      "UNSUPPORTED": 40
+    }
+  }
+}

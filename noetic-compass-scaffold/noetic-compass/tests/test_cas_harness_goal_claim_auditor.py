@@ -10,6 +10,7 @@ from api.services.cas_harness_goal_claim_auditor import (
     BEHAVIOR_V5_CAUSAL_REQUIRED_GATES,
     BEHAVIOR_V5_PRESPEECH_REPORT_SCHEMA_VERSION,
     BEHAVIOR_V5_PRESPEECH_REQUIRED_GATES,
+    DEFAULT_HALLUCINATION_SURFACE_SCREEN,
     DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN,
     DEFAULT_W0_DATA_READINESS_MANIFEST,
     DEFAULT_W0_FULL_CONTROL_REPORT,
@@ -287,6 +288,7 @@ def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_pr
     report_path = tmp_path / DEFAULT_W0_FULL_CONTROL_REPORT
     manifest_path = tmp_path / DEFAULT_W0_DATA_READINESS_MANIFEST
     hidden_screen_path = tmp_path / DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN
+    hallucination_screen_path = tmp_path / DEFAULT_HALLUCINATION_SURFACE_SCREEN
     hallucination_path = (
         tmp_path
         / "docs"
@@ -296,6 +298,7 @@ def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_pr
     report_path.parent.mkdir(parents=True)
     manifest_path.parent.mkdir(parents=True)
     hidden_screen_path.parent.mkdir(parents=True, exist_ok=True)
+    hallucination_screen_path.parent.mkdir(parents=True, exist_ok=True)
     hallucination_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps({"status": "READY_FOR_W0_CAPTURE"}), encoding="utf-8")
     hidden_screen_path.write_text(
@@ -304,6 +307,27 @@ def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_pr
                 "status": "READY_FOR_W0_CAPTURE",
                 "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
                 "metrics": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    hallucination_screen_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "cas_harness_grounded_factual_qa_surface_screen.v1",
+                "status": "READY_FOR_W0_CAPTURE",
+                "claim": "OPEN / NOT LICENSED for internal W0 hallucination-risk detection.",
+                "row_count": 400,
+                "prompt_group_count": 40,
+                "mixed_prompt_group_count": 40,
+                "testable_topic_count": 5,
+                "metrics": {
+                    "text_hash_balanced_accuracy": 0.5,
+                    "char_text_hash_balanced_accuracy": 0.5,
+                    "topic_majority_balanced_accuracy": 0.5,
+                    "retrieval_condition_majority_balanced_accuracy": 0.5,
+                    "retrieval_score_bucket_majority_balanced_accuracy": 0.5,
+                },
             }
         ),
         encoding="utf-8",
@@ -351,6 +375,9 @@ def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_pr
     detection = hallucination["observed_metrics"]["hallucination_prespeech_detection"]
     assert detection["passing_report_count"] == 1
     assert detection["best_candidate"]["license_eligible"] is True
+    surface = hallucination["observed_metrics"]["next_hallucination_surface_screen"]
+    assert surface["status"] == "READY_FOR_W0_CAPTURE"
+    assert surface["claim"] == "OPEN / NOT LICENSED for internal W0 hallucination-risk detection."
     assert "guardrail/intervention proof" in hallucination["reason"]
     assert audit["goal_complete"] is False
 

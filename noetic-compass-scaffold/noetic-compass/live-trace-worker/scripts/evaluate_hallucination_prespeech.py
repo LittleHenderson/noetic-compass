@@ -418,6 +418,11 @@ def load_dataset(path: Path, *, layer: int | None) -> dict[str, Any]:
         )
         prompts = np.asarray(data["prompts"], dtype=object).astype(str)
         scenario_ids = np.asarray(data["scenario_ids"], dtype=object).astype(str)
+        prompt_group_ids = (
+            np.asarray(data["prompt_group_ids"], dtype=object).astype(str)
+            if "prompt_group_ids" in data.files
+            else None
+        )
         trace_ids = (
             np.asarray(data["trace_ids"], dtype=object).astype(str)
             if "trace_ids" in data.files
@@ -449,7 +454,9 @@ def load_dataset(path: Path, *, layer: int | None) -> dict[str, Any]:
         "prompts": prompts,
         "scenario_ids": scenario_ids,
         "trace_ids": trace_ids,
-        "groups": np.asarray(
+        "groups": prompt_group_ids
+        if prompt_group_ids is not None
+        else np.asarray(
             [derive_group_id(sid, prompt) for sid, prompt in zip(scenario_ids, prompts, strict=True)],
             dtype=object,
         ),

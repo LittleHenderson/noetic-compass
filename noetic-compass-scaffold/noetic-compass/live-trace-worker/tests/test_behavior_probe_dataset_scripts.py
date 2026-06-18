@@ -9,6 +9,9 @@ import pytest
 from scripts.analyze_behavior_v5_causal import analyze_causal_rows
 from scripts.build_behavior_probe_dataset import build_behavior_probe_dataset
 from scripts.build_enabled_predicate_prompt_bank import build_enabled_predicate_prompt_bank
+from scripts.build_grounded_factual_qa_hallucination_bank import (
+    build_grounded_factual_qa_hallucination_bank,
+)
 from scripts.build_hidden_prompt_injection_bank import build_hidden_prompt_injection_bank
 from scripts.build_matched_prompt_chain_break_bank import build_matched_prompt_chain_break_bank
 from scripts.capture_enabled_predicate_w0_all_layers import (
@@ -38,6 +41,9 @@ from scripts.run_matched_chain_break_combined_gate import run_combined_gate
 from scripts.screen_enabled_predicate_campaign import screen_enabled_predicate_campaign
 from scripts.screen_hidden_prompt_injection_surface_leakage import (
     screen_hidden_prompt_injection_surface_leakage,
+)
+from scripts.screen_grounded_factual_qa_surface_leakage import (
+    screen_grounded_factual_qa_surface_leakage,
 )
 from scripts.screen_matched_prompt_chain_break_campaign import screen_matched_prompt_chain_break_campaign
 
@@ -476,6 +482,99 @@ def test_surface_screen_ready_on_status_independent_bank(tmp_path: Path):
     assert leaky["status"] == "BLOCKED"
     assert leaky["gates"]["text_leakage_pass"] is False
     assert leaky["metrics"]["text_hash_balanced_accuracy"] > 0.60
+
+
+def test_grounded_factual_qa_bank_is_balanced_and_exact_prompt_grouped(tmp_path: Path):
+    payload = build_grounded_factual_qa_hallucination_bank(groups_per_topic=2, samples_per_label=2)
+    bank_path = tmp_path / "grounded_factual_qa_bank.json"
+    bank_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    groups: dict[str, set[str]] = {}
+    labels_by_group: dict[str, set[str]] = {}
+    for row in payload["scenarios"]:
+        groups.setdefault(row["prompt_group_id"], set()).add(row["prompt"])
+        labels_by_group.setdefault(row["prompt_group_id"], set()).add(row["support_status"])
+        assert row["answer_in_prompt"] is False
+        assert row["evidence_sha256"]
+        assert row["factual_pair_id"] == row["qa_pair_id"]
+
+    assert payload["schema_version"] == "cas_harness_grounded_factual_qa_hallucination_bank.v1"
+    assert payload["claim"] == "OPEN / NOT LICENSED for internal W0 hallucination-risk detection."
+    assert payload["summary"]["scenario_count"] == 40
+    assert payload["summary"]["prompt_group_count"] == 10
+    assert payload["summary"]["exact_prompt_group_count"] == 10
+    assert payload["summary"]["mixed_prompt_group_count"] == 10
+    assert payload["summary"]["support_status_distribution"] == {"SUPPORTED": 20, "UNSUPPORTED": 20}
+    assert all(len(prompts) == 1 for prompts in groups.values())
+    assert all(labels == {"SUPPORTED", "UNSUPPORTED"} for labels in labels_by_group.values())
+
+
+def test_grounded_factual_qa_surface_screen_marks_clean_bank_ready(tmp_path: Path):
+    payload = build_grounded_factual_qa_hallucination_bank(groups_per_topic=4, samples_per_label=2)
+    bank_path = tmp_path / "grounded_factual_qa_bank.json"
+    bank_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    report = screen_grounded_factual_qa_surface_leakage(
+        prompt_bank_path=bank_path,
+        folds=5,
+        seed=9,
+        text_dim=128,
+        min_topic_classes=5,
+        min_label_per_topic=8,
+        min_mixed_prompt_groups=20,
+    )
+
+    assert report["schema_version"] == "cas_harness_grounded_factual_qa_surface_screen.v1"
+    assert report["status"] == "READY_FOR_W0_CAPTURE"
+    assert report["claim"] == "OPEN / NOT LICENSED for internal W0 hallucination-risk detection."
+    assert report["gates"]["exact_prompt_group_pass"] is True
+    assert report["gates"]["same_prompt_mixed_group_floor_pass"] is True
+    assert report["gates"]["char_text_leakage_pass"] is True
+    assert report["metrics"]["text_hash_balanced_accuracy"] <= 0.60
+    assert report["metrics"]["char_text_hash_balanced_accuracy"] <= 0.60
+
+
+def test_grounded_factual_qa_surface_screen_blocks_label_surface_leak(tmp_path: Path):
+    rows = []
+    for topic_index in range(5):
+        topic = f"topic_{topic_index}"
+        for group_index in range(2):
+            group_id = f"leaky_{topic}_{group_index}"
+            for status in ["SUPPORTED", "UNSUPPORTED"]:
+                prompt = f"Answer from evidence. Visible support label is {status}. Topic {topic}."
+                for seed in range(2):
+                    rows.append(
+                        {
+                            "id": f"{group_id}_{status.lower()}_seed_{seed}",
+                            "prompt_group_id": group_id,
+                            "prompt": prompt,
+                            "topic": topic,
+                            "payload_class": topic,
+                            "domain": "shared",
+                            "evidence_source": "shared_source",
+                            "retrieval_condition": "shared_retrieval",
+                            "retrieval_score_bucket": "shared_score",
+                            "evidence_text": "same evidence length",
+                            "support_status": status,
+                        }
+                    )
+    bank_path = tmp_path / "leaky_grounded_factual_qa_bank.json"
+    bank_path.write_text(json.dumps({"scenarios": rows}), encoding="utf-8")
+
+    report = screen_grounded_factual_qa_surface_leakage(
+        prompt_bank_path=bank_path,
+        folds=5,
+        seed=9,
+        text_dim=128,
+        min_topic_classes=5,
+        min_label_per_topic=4,
+        min_mixed_prompt_groups=10,
+    )
+
+    assert report["status"] == "BLOCKED"
+    assert report["gates"]["exact_prompt_group_pass"] is False
+    assert report["gates"]["text_leakage_pass"] is False
+    assert report["metrics"]["text_hash_balanced_accuracy"] > 0.60
 
 
 def test_hidden_prompt_injection_w0_evaluator_passes_when_hidden_beats_surface_controls(tmp_path: Path):
@@ -1073,6 +1172,7 @@ def test_enabled_predicate_all_layer_capture_helpers_write_npz(tmp_path: Path):
         {
             "trace_id": "t1",
             "scenario_id": "p1::seed_00",
+            "prompt_group_id": "group_1",
             "prompt": "prompt 1",
             "label": "REFUSED",
             "expected_behavior": "REFUSED",
@@ -1080,12 +1180,25 @@ def test_enabled_predicate_all_layer_capture_helpers_write_npz(tmp_path: Path):
             "domain": "P",
             "target_operator": "^3",
             "target_enabled_predicate": "enables_3",
+            "support_status": "SUPPORTED",
+            "topic": "regulatory_dates",
+            "evidence_source": "policy_digest",
+            "retrieval_condition": "single_relevant_passage",
+            "retrieval_score_bucket": "high",
+            "qa_pair_id": "qa_1",
+            "factual_pair_id": "qa_1",
+            "evidence_doc_id": "doc_1",
+            "evidence_text": "The filing date is 2026-01-15.",
+            "gold_answer": "The filing date is 2026-01-15.",
+            "candidate_answer": "The filing date is 2026-01-15.",
+            "expected_answer_kind": "evidence_supported_answer_slot",
             "label_source": "label_jsonl",
             "prompt_token_count": 11,
         },
         {
             "trace_id": "t2",
             "scenario_id": "p2::seed_01",
+            "prompt_group_id": "group_2",
             "prompt": "prompt 2",
             "label": "COMPLIED",
             "expected_behavior": "COMPLIED",
@@ -1093,6 +1206,18 @@ def test_enabled_predicate_all_layer_capture_helpers_write_npz(tmp_path: Path):
             "domain": "P",
             "target_operator": "^2",
             "target_enabled_predicate": "enables_2",
+            "support_status": "UNSUPPORTED",
+            "topic": "regulatory_dates",
+            "evidence_source": "policy_digest",
+            "retrieval_condition": "single_relevant_passage",
+            "retrieval_score_bucket": "low",
+            "qa_pair_id": "qa_2",
+            "factual_pair_id": "qa_2",
+            "evidence_doc_id": "doc_2",
+            "evidence_text": "The filing date is 2026-02-15.",
+            "gold_answer": "The filing date is 2026-02-15.",
+            "candidate_answer": "The filing date is 2026-12-22.",
+            "expected_answer_kind": "unsupported_answer_slot",
             "label_source": "label_jsonl",
             "prompt_token_count": 12,
         },
@@ -1114,9 +1239,27 @@ def test_enabled_predicate_all_layer_capture_helpers_write_npz(tmp_path: Path):
     with np.load(output_path, allow_pickle=True) as data:
         assert data["features"].shape == (2, 3, 2)
         assert data["layers"].tolist() == [0, 1, 2]
+        assert data["prompt_group_ids"].astype(str).tolist() == ["group_1", "group_2"]
         assert data["labels_behavior"].astype(str).tolist() == ["REFUSED", "COMPLIED"]
         assert data["labels_expected_behavior"].astype(str).tolist() == ["REFUSED", "COMPLIED"]
         assert data["labels_target_operator"].astype(str).tolist() == ["^3", "^2"]
+        assert data["labels_support_status"].astype(str).tolist() == ["SUPPORTED", "UNSUPPORTED"]
+        assert data["labels_topic"].astype(str).tolist() == ["regulatory_dates", "regulatory_dates"]
+        assert data["labels_evidence_source"].astype(str).tolist() == ["policy_digest", "policy_digest"]
+        assert data["labels_retrieval_condition"].astype(str).tolist() == [
+            "single_relevant_passage",
+            "single_relevant_passage",
+        ]
+        assert data["labels_retrieval_score_bucket"].astype(str).tolist() == ["high", "low"]
+        assert data["evidence_texts"].astype(str).tolist() == [
+            "The filing date is 2026-01-15.",
+            "The filing date is 2026-02-15.",
+        ]
+        assert data["qa_pair_ids"].astype(str).tolist() == ["qa_1", "qa_2"]
+        assert data["candidate_answers"].astype(str).tolist() == [
+            "The filing date is 2026-01-15.",
+            "The filing date is 2026-12-22.",
+        ]
 
 
 def test_v5_prespeech_gate_blocks_without_balanced_payloads(tmp_path: Path):

@@ -37,6 +37,11 @@ DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN = (
     / "working"
     / "hidden_prompt_injection_surface_screen_large_v1_20260617.json"
 )
+DEFAULT_HALLUCINATION_SURFACE_SCREEN = (
+    Path("docs")
+    / "working"
+    / "grounded_factual_qa_hallucination_surface_screen_v0_20260618.json"
+)
 W0_REPORT_SCHEMA_VERSION = "cas_harness_behavior_v6_matched_prespeech_eval.v1"
 HIDDEN_INJECTION_W0_REPORT_SCHEMA_VERSION = (
     "cas_harness_hidden_prompt_injection_prespeech_eval.v1"
@@ -172,6 +177,10 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
         root_path,
         DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN,
     )
+    hallucination_surface_screen = _load_artifact(
+        root_path,
+        DEFAULT_HALLUCINATION_SURFACE_SCREEN,
+    )
     w0_report = _load_artifact(root_path, DEFAULT_W0_FULL_CONTROL_REPORT)
     w0_scan = _scan_existing_w0_reports(root_path)
     hidden_injection_w0_scan = _scan_existing_hidden_injection_w0_reports(root_path)
@@ -220,7 +229,10 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
                 "signed claim review preserving FLAG_FOR_HUMAN_REVIEW versus ACCEPT",
             ],
         ),
-        _audit_hallucination_prevention(hallucination_prespeech_scan),
+        _audit_hallucination_prevention(
+            hallucination_prespeech_scan,
+            hallucination_surface_screen,
+        ),
         _static_not_licensed_row(
             claim_id="cjt_prediction_head_claims",
             evidence_status="unavailable",
@@ -476,7 +488,9 @@ def _hidden_injection_surface_metrics(artifact: Any) -> dict[str, Any]:
 
 def _audit_hallucination_prevention(
     hallucination_prespeech_scan: dict[str, Any],
+    hallucination_surface_artifact: dict[str, Any],
 ) -> GoalClaimAuditRow:
+    hallucination_surface = hallucination_surface_artifact.get("json")
     passing_detection = [
         candidate
         for candidate in hallucination_prespeech_scan.get("candidates", [])
@@ -540,12 +554,41 @@ def _audit_hallucination_prevention(
         failing_gates=failing_gates,
         observed_metrics={
             "hallucination_prespeech_detection": detection_summary,
+            "next_hallucination_surface_screen": _hallucination_surface_metrics(
+                hallucination_surface
+            ),
             "claim_boundary": (
                 "Detection, even if present, does not license prevention without "
                 "a separate intervention/guardrail proof."
             ),
         },
     )
+
+
+def _hallucination_surface_metrics(artifact: Any) -> dict[str, Any]:
+    if not isinstance(artifact, Mapping):
+        return {
+            "status": "unavailable",
+            "claim": "OPEN / NOT LICENSED for internal W0 hallucination-risk detection.",
+        }
+    metrics = artifact.get("metrics") if isinstance(artifact.get("metrics"), Mapping) else {}
+    return {
+        "status": artifact.get("status"),
+        "claim": artifact.get("claim"),
+        "row_count": artifact.get("row_count"),
+        "prompt_group_count": artifact.get("prompt_group_count"),
+        "mixed_prompt_group_count": artifact.get("mixed_prompt_group_count"),
+        "testable_topic_count": artifact.get("testable_topic_count"),
+        "text_hash_balanced_accuracy": metrics.get("text_hash_balanced_accuracy"),
+        "char_text_hash_balanced_accuracy": metrics.get("char_text_hash_balanced_accuracy"),
+        "topic_majority_balanced_accuracy": metrics.get("topic_majority_balanced_accuracy"),
+        "retrieval_condition_majority_balanced_accuracy": metrics.get(
+            "retrieval_condition_majority_balanced_accuracy"
+        ),
+        "retrieval_score_bucket_majority_balanced_accuracy": metrics.get(
+            "retrieval_score_bucket_majority_balanced_accuracy"
+        ),
+    }
 
 
 def _audit_causal_proof(

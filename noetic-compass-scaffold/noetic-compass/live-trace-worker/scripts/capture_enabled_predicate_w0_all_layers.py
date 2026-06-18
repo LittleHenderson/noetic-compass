@@ -125,18 +125,37 @@ def capture_w0_all_layers(
             raise RuntimeError(f"Layer set changed during capture: {resolved_layers} vs {layer_indices}")
         features.append(layer_vectors)
         scenario_id = str(scenario["id"])
+        support_status = normalise_support_status(scenario.get("support_status") or scenario.get("target_support_status"))
         label = label_map.get(scenario_id) or label_map.get(f"{scenario_id}::capture")
         label_source = "label_jsonl" if label else "expected_behavior"
         if not label:
-            label = str(scenario.get("expected_behavior") or "")
+            if support_status:
+                label = support_status
+                label_source = "scenario_support_status"
+            else:
+                label = str(scenario.get("expected_behavior") or "")
+        domain = scenario.get("domain") or scenario.get("expected_cas_axes", {}).get("domain", "")
+        topic = scenario.get("topic") or scenario.get("payload_class", "")
         row = {
             "trace_id": f"{scenario_id}::w0_all_layers",
             "scenario_id": scenario_id,
             "prompt_group_id": scenario.get("prompt_group_id", derive_prompt_group_id(scenario_id)),
             "payload_class": scenario.get("payload_class", ""),
-            "domain": scenario.get("expected_cas_axes", {}).get("domain", ""),
+            "domain": domain,
             "encoding": scenario.get("encoding", ""),
             "prompt_injection_status": scenario.get("prompt_injection_status", ""),
+            "support_status": support_status or "",
+            "topic": topic,
+            "evidence_source": scenario.get("evidence_source", ""),
+            "retrieval_condition": scenario.get("retrieval_condition", ""),
+            "retrieval_score_bucket": scenario.get("retrieval_score_bucket", ""),
+            "qa_pair_id": scenario.get("qa_pair_id") or scenario.get("factual_pair_id", ""),
+            "factual_pair_id": scenario.get("factual_pair_id") or scenario.get("qa_pair_id", ""),
+            "evidence_doc_id": scenario.get("evidence_doc_id") or scenario.get("evidence_id", ""),
+            "evidence_text": scenario.get("evidence_text", ""),
+            "gold_answer": scenario.get("gold_answer", ""),
+            "candidate_answer": scenario.get("candidate_answer", ""),
+            "expected_answer_kind": scenario.get("expected_answer_kind", ""),
             "prompt": scenario["prompt"],
             "model_prompt_format": prompt_format,
             "expected_behavior": scenario.get("expected_behavior", ""),
@@ -252,6 +271,7 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
         layers=layers,
         prompts=np.asarray([row["prompt"] for row in rows], dtype=object),
         scenario_ids=np.asarray([row["scenario_id"] for row in rows], dtype=object),
+        prompt_group_ids=np.asarray([row.get("prompt_group_id", row["scenario_id"]) for row in rows], dtype=object),
         trace_ids=np.asarray([row["trace_id"] for row in rows], dtype=object),
         axis_names=np.asarray(
             [
@@ -261,6 +281,11 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
                 "domain",
                 "encoding",
                 "prompt_injection_status",
+                "support_status",
+                "topic",
+                "evidence_source",
+                "retrieval_condition",
+                "retrieval_score_bucket",
                 "target_operator",
             ],
             dtype=object,
@@ -274,11 +299,26 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
             [row.get("prompt_injection_status", "") for row in rows],
             dtype=object,
         ),
+        labels_support_status=np.asarray([row.get("support_status", "") for row in rows], dtype=object),
+        labels_topic=np.asarray([row.get("topic", row.get("payload_class", "")) for row in rows], dtype=object),
+        labels_evidence_source=np.asarray([row.get("evidence_source", "") for row in rows], dtype=object),
+        labels_retrieval_condition=np.asarray([row.get("retrieval_condition", "") for row in rows], dtype=object),
+        labels_retrieval_score_bucket=np.asarray(
+            [row.get("retrieval_score_bucket", "") for row in rows],
+            dtype=object,
+        ),
         labels_target_operator=np.asarray([row["target_operator"] for row in rows], dtype=object),
         labels_target_enabled_predicate=np.asarray(
             [row["target_enabled_predicate"] for row in rows],
             dtype=object,
         ),
+        qa_pair_ids=np.asarray([row.get("qa_pair_id", "") for row in rows], dtype=object),
+        factual_pair_ids=np.asarray([row.get("factual_pair_id", "") for row in rows], dtype=object),
+        evidence_doc_ids=np.asarray([row.get("evidence_doc_id", "") for row in rows], dtype=object),
+        evidence_texts=np.asarray([row.get("evidence_text", "") for row in rows], dtype=object),
+        gold_answers=np.asarray([row.get("gold_answer", "") for row in rows], dtype=object),
+        candidate_answers=np.asarray([row.get("candidate_answer", "") for row in rows], dtype=object),
+        expected_answer_kinds=np.asarray([row.get("expected_answer_kind", "") for row in rows], dtype=object),
         label_sources=np.asarray([row["label_source"] for row in rows], dtype=object),
         prompt_token_counts=np.asarray([row["prompt_token_count"] for row in rows], dtype=np.int64),
     )
@@ -316,6 +356,31 @@ def build_summary(
         "behavior_distribution": dict(sorted(Counter(row["label"] for row in rows).items())),
         "expected_behavior_distribution": dict(sorted(Counter(row["expected_behavior"] for row in rows).items())),
         "payload_class_distribution": dict(sorted(Counter(row["payload_class"] for row in rows).items())),
+        "support_status_distribution": dict(
+            sorted(Counter(row.get("support_status", "") for row in rows if row.get("support_status", "")).items())
+        ),
+        "topic_distribution": dict(
+            sorted(Counter(row.get("topic", "") for row in rows if row.get("topic", "")).items())
+        ),
+        "evidence_source_distribution": dict(
+            sorted(Counter(row.get("evidence_source", "") for row in rows if row.get("evidence_source", "")).items())
+        ),
+        "retrieval_condition_distribution": dict(
+            sorted(
+                Counter(
+                    row.get("retrieval_condition", "") for row in rows if row.get("retrieval_condition", "")
+                ).items()
+            )
+        ),
+        "retrieval_score_bucket_distribution": dict(
+            sorted(
+                Counter(
+                    row.get("retrieval_score_bucket", "")
+                    for row in rows
+                    if row.get("retrieval_score_bucket", "")
+                ).items()
+            )
+        ),
         "label_source_distribution": dict(sorted(Counter(row["label_source"] for row in rows).items())),
         "dataset": str(dataset_path),
         "rows": str(rows_path),
@@ -330,6 +395,21 @@ def build_summary(
 
 def derive_prompt_group_id(scenario_id: str) -> str:
     return str(scenario_id).split("::", 1)[0]
+
+
+def normalise_support_status(value: Any) -> str | None:
+    text = str(value or "").strip().upper()
+    aliases = {
+        "SUPPORT": "SUPPORTED",
+        "GROUNDED": "SUPPORTED",
+        "TRUE_SUPPORTED": "SUPPORTED",
+        "UNSUPPORT": "UNSUPPORTED",
+        "UNSUPPORTED_CLAIM": "UNSUPPORTED",
+        "HALLUCINATED": "UNSUPPORTED",
+        "HALLUCINATION": "UNSUPPORTED",
+    }
+    text = aliases.get(text, text)
+    return text if text in {"SUPPORTED", "UNSUPPORTED"} else None
 
 
 if __name__ == "__main__":

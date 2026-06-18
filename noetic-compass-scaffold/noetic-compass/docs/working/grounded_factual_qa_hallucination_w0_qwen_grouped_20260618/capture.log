@@ -1,0 +1,514 @@
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/338 [00:00<?, ?it/s]Loading weights:   0%|          | 1/338 [00:00<00:34,  9.64it/s]Loading weights:  19%|█▊        | 63/338 [00:00<00:00, 358.89it/s]Loading weights:  33%|███▎      | 112/338 [00:00<00:00, 416.03it/s]Loading weights:  46%|████▋     | 157/338 [00:00<00:00, 428.92it/s]Loading weights:  59%|█████▉    | 201/338 [00:00<00:00, 413.24it/s]Loading weights:  74%|███████▍  | 251/338 [00:00<00:00, 440.89it/s]Loading weights:  88%|████████▊ | 296/338 [00:00<00:00, 370.43it/s]Loading weights: 100%|██████████| 338/338 [00:00<00:00, 411.47it/s]
+[w0-all-layers] 1/400 grounded_qa_regulatory_dates_00_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 2/400 grounded_qa_regulatory_dates_00_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 3/400 grounded_qa_regulatory_dates_00_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 4/400 grounded_qa_regulatory_dates_00_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 5/400 grounded_qa_regulatory_dates_00_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 6/400 grounded_qa_regulatory_dates_00_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 7/400 grounded_qa_regulatory_dates_00_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 8/400 grounded_qa_regulatory_dates_00_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 9/400 grounded_qa_regulatory_dates_00_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 10/400 grounded_qa_regulatory_dates_00_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 11/400 grounded_qa_regulatory_dates_01_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 12/400 grounded_qa_regulatory_dates_01_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 13/400 grounded_qa_regulatory_dates_01_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 14/400 grounded_qa_regulatory_dates_01_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 15/400 grounded_qa_regulatory_dates_01_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 16/400 grounded_qa_regulatory_dates_01_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 17/400 grounded_qa_regulatory_dates_01_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 18/400 grounded_qa_regulatory_dates_01_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 19/400 grounded_qa_regulatory_dates_01_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 20/400 grounded_qa_regulatory_dates_01_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 21/400 grounded_qa_regulatory_dates_02_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 22/400 grounded_qa_regulatory_dates_02_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 23/400 grounded_qa_regulatory_dates_02_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 24/400 grounded_qa_regulatory_dates_02_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 25/400 grounded_qa_regulatory_dates_02_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 26/400 grounded_qa_regulatory_dates_02_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 27/400 grounded_qa_regulatory_dates_02_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 28/400 grounded_qa_regulatory_dates_02_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 29/400 grounded_qa_regulatory_dates_02_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 30/400 grounded_qa_regulatory_dates_02_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 31/400 grounded_qa_regulatory_dates_03_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 32/400 grounded_qa_regulatory_dates_03_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 33/400 grounded_qa_regulatory_dates_03_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 34/400 grounded_qa_regulatory_dates_03_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 35/400 grounded_qa_regulatory_dates_03_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 36/400 grounded_qa_regulatory_dates_03_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 37/400 grounded_qa_regulatory_dates_03_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 38/400 grounded_qa_regulatory_dates_03_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 39/400 grounded_qa_regulatory_dates_03_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 40/400 grounded_qa_regulatory_dates_03_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 41/400 grounded_qa_regulatory_dates_04_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 42/400 grounded_qa_regulatory_dates_04_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 43/400 grounded_qa_regulatory_dates_04_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 44/400 grounded_qa_regulatory_dates_04_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 45/400 grounded_qa_regulatory_dates_04_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 46/400 grounded_qa_regulatory_dates_04_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 47/400 grounded_qa_regulatory_dates_04_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 48/400 grounded_qa_regulatory_dates_04_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 49/400 grounded_qa_regulatory_dates_04_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 50/400 grounded_qa_regulatory_dates_04_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 51/400 grounded_qa_regulatory_dates_05_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 52/400 grounded_qa_regulatory_dates_05_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 53/400 grounded_qa_regulatory_dates_05_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 54/400 grounded_qa_regulatory_dates_05_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 55/400 grounded_qa_regulatory_dates_05_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 56/400 grounded_qa_regulatory_dates_05_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 57/400 grounded_qa_regulatory_dates_05_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 58/400 grounded_qa_regulatory_dates_05_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 59/400 grounded_qa_regulatory_dates_05_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 60/400 grounded_qa_regulatory_dates_05_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 61/400 grounded_qa_regulatory_dates_06_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 62/400 grounded_qa_regulatory_dates_06_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 63/400 grounded_qa_regulatory_dates_06_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 64/400 grounded_qa_regulatory_dates_06_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 65/400 grounded_qa_regulatory_dates_06_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 66/400 grounded_qa_regulatory_dates_06_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 67/400 grounded_qa_regulatory_dates_06_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 68/400 grounded_qa_regulatory_dates_06_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 69/400 grounded_qa_regulatory_dates_06_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 70/400 grounded_qa_regulatory_dates_06_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 71/400 grounded_qa_regulatory_dates_07_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 72/400 grounded_qa_regulatory_dates_07_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 73/400 grounded_qa_regulatory_dates_07_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 74/400 grounded_qa_regulatory_dates_07_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 75/400 grounded_qa_regulatory_dates_07_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 76/400 grounded_qa_regulatory_dates_07_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 77/400 grounded_qa_regulatory_dates_07_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 78/400 grounded_qa_regulatory_dates_07_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 79/400 grounded_qa_regulatory_dates_07_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 80/400 grounded_qa_regulatory_dates_07_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=111
+[w0-all-layers] 81/400 grounded_qa_clinical_measurements_00_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 82/400 grounded_qa_clinical_measurements_00_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 83/400 grounded_qa_clinical_measurements_00_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 84/400 grounded_qa_clinical_measurements_00_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 85/400 grounded_qa_clinical_measurements_00_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 86/400 grounded_qa_clinical_measurements_00_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 87/400 grounded_qa_clinical_measurements_00_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 88/400 grounded_qa_clinical_measurements_00_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 89/400 grounded_qa_clinical_measurements_00_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 90/400 grounded_qa_clinical_measurements_00_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 91/400 grounded_qa_clinical_measurements_01_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 92/400 grounded_qa_clinical_measurements_01_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 93/400 grounded_qa_clinical_measurements_01_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 94/400 grounded_qa_clinical_measurements_01_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 95/400 grounded_qa_clinical_measurements_01_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 96/400 grounded_qa_clinical_measurements_01_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 97/400 grounded_qa_clinical_measurements_01_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 98/400 grounded_qa_clinical_measurements_01_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 99/400 grounded_qa_clinical_measurements_01_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 100/400 grounded_qa_clinical_measurements_01_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 101/400 grounded_qa_clinical_measurements_02_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 102/400 grounded_qa_clinical_measurements_02_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 103/400 grounded_qa_clinical_measurements_02_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 104/400 grounded_qa_clinical_measurements_02_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 105/400 grounded_qa_clinical_measurements_02_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 106/400 grounded_qa_clinical_measurements_02_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 107/400 grounded_qa_clinical_measurements_02_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 108/400 grounded_qa_clinical_measurements_02_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 109/400 grounded_qa_clinical_measurements_02_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 110/400 grounded_qa_clinical_measurements_02_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 111/400 grounded_qa_clinical_measurements_03_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 112/400 grounded_qa_clinical_measurements_03_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 113/400 grounded_qa_clinical_measurements_03_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 114/400 grounded_qa_clinical_measurements_03_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 115/400 grounded_qa_clinical_measurements_03_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 116/400 grounded_qa_clinical_measurements_03_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 117/400 grounded_qa_clinical_measurements_03_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 118/400 grounded_qa_clinical_measurements_03_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 119/400 grounded_qa_clinical_measurements_03_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 120/400 grounded_qa_clinical_measurements_03_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 121/400 grounded_qa_clinical_measurements_04_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 122/400 grounded_qa_clinical_measurements_04_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 123/400 grounded_qa_clinical_measurements_04_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 124/400 grounded_qa_clinical_measurements_04_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 125/400 grounded_qa_clinical_measurements_04_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 126/400 grounded_qa_clinical_measurements_04_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 127/400 grounded_qa_clinical_measurements_04_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 128/400 grounded_qa_clinical_measurements_04_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 129/400 grounded_qa_clinical_measurements_04_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 130/400 grounded_qa_clinical_measurements_04_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 131/400 grounded_qa_clinical_measurements_05_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 132/400 grounded_qa_clinical_measurements_05_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 133/400 grounded_qa_clinical_measurements_05_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 134/400 grounded_qa_clinical_measurements_05_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 135/400 grounded_qa_clinical_measurements_05_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 136/400 grounded_qa_clinical_measurements_05_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 137/400 grounded_qa_clinical_measurements_05_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 138/400 grounded_qa_clinical_measurements_05_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 139/400 grounded_qa_clinical_measurements_05_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 140/400 grounded_qa_clinical_measurements_05_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 141/400 grounded_qa_clinical_measurements_06_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 142/400 grounded_qa_clinical_measurements_06_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 143/400 grounded_qa_clinical_measurements_06_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 144/400 grounded_qa_clinical_measurements_06_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 145/400 grounded_qa_clinical_measurements_06_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 146/400 grounded_qa_clinical_measurements_06_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 147/400 grounded_qa_clinical_measurements_06_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 148/400 grounded_qa_clinical_measurements_06_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 149/400 grounded_qa_clinical_measurements_06_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 150/400 grounded_qa_clinical_measurements_06_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 151/400 grounded_qa_clinical_measurements_07_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 152/400 grounded_qa_clinical_measurements_07_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 153/400 grounded_qa_clinical_measurements_07_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 154/400 grounded_qa_clinical_measurements_07_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 155/400 grounded_qa_clinical_measurements_07_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 156/400 grounded_qa_clinical_measurements_07_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 157/400 grounded_qa_clinical_measurements_07_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 158/400 grounded_qa_clinical_measurements_07_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 159/400 grounded_qa_clinical_measurements_07_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 160/400 grounded_qa_clinical_measurements_07_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=108
+[w0-all-layers] 161/400 grounded_qa_finance_amounts_00_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 162/400 grounded_qa_finance_amounts_00_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 163/400 grounded_qa_finance_amounts_00_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 164/400 grounded_qa_finance_amounts_00_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 165/400 grounded_qa_finance_amounts_00_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 166/400 grounded_qa_finance_amounts_00_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 167/400 grounded_qa_finance_amounts_00_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 168/400 grounded_qa_finance_amounts_00_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 169/400 grounded_qa_finance_amounts_00_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 170/400 grounded_qa_finance_amounts_00_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 171/400 grounded_qa_finance_amounts_01_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 172/400 grounded_qa_finance_amounts_01_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 173/400 grounded_qa_finance_amounts_01_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 174/400 grounded_qa_finance_amounts_01_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 175/400 grounded_qa_finance_amounts_01_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 176/400 grounded_qa_finance_amounts_01_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 177/400 grounded_qa_finance_amounts_01_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 178/400 grounded_qa_finance_amounts_01_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 179/400 grounded_qa_finance_amounts_01_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 180/400 grounded_qa_finance_amounts_01_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 181/400 grounded_qa_finance_amounts_02_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 182/400 grounded_qa_finance_amounts_02_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 183/400 grounded_qa_finance_amounts_02_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 184/400 grounded_qa_finance_amounts_02_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 185/400 grounded_qa_finance_amounts_02_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 186/400 grounded_qa_finance_amounts_02_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 187/400 grounded_qa_finance_amounts_02_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 188/400 grounded_qa_finance_amounts_02_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 189/400 grounded_qa_finance_amounts_02_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 190/400 grounded_qa_finance_amounts_02_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 191/400 grounded_qa_finance_amounts_03_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 192/400 grounded_qa_finance_amounts_03_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 193/400 grounded_qa_finance_amounts_03_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 194/400 grounded_qa_finance_amounts_03_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 195/400 grounded_qa_finance_amounts_03_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 196/400 grounded_qa_finance_amounts_03_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 197/400 grounded_qa_finance_amounts_03_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 198/400 grounded_qa_finance_amounts_03_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 199/400 grounded_qa_finance_amounts_03_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 200/400 grounded_qa_finance_amounts_03_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 201/400 grounded_qa_finance_amounts_04_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 202/400 grounded_qa_finance_amounts_04_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 203/400 grounded_qa_finance_amounts_04_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 204/400 grounded_qa_finance_amounts_04_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 205/400 grounded_qa_finance_amounts_04_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 206/400 grounded_qa_finance_amounts_04_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 207/400 grounded_qa_finance_amounts_04_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 208/400 grounded_qa_finance_amounts_04_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 209/400 grounded_qa_finance_amounts_04_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 210/400 grounded_qa_finance_amounts_04_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 211/400 grounded_qa_finance_amounts_05_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 212/400 grounded_qa_finance_amounts_05_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 213/400 grounded_qa_finance_amounts_05_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 214/400 grounded_qa_finance_amounts_05_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 215/400 grounded_qa_finance_amounts_05_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 216/400 grounded_qa_finance_amounts_05_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 217/400 grounded_qa_finance_amounts_05_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 218/400 grounded_qa_finance_amounts_05_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 219/400 grounded_qa_finance_amounts_05_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 220/400 grounded_qa_finance_amounts_05_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 221/400 grounded_qa_finance_amounts_06_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 222/400 grounded_qa_finance_amounts_06_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 223/400 grounded_qa_finance_amounts_06_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 224/400 grounded_qa_finance_amounts_06_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 225/400 grounded_qa_finance_amounts_06_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 226/400 grounded_qa_finance_amounts_06_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 227/400 grounded_qa_finance_amounts_06_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 228/400 grounded_qa_finance_amounts_06_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 229/400 grounded_qa_finance_amounts_06_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 230/400 grounded_qa_finance_amounts_06_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 231/400 grounded_qa_finance_amounts_07_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 232/400 grounded_qa_finance_amounts_07_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 233/400 grounded_qa_finance_amounts_07_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 234/400 grounded_qa_finance_amounts_07_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 235/400 grounded_qa_finance_amounts_07_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 236/400 grounded_qa_finance_amounts_07_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 237/400 grounded_qa_finance_amounts_07_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 238/400 grounded_qa_finance_amounts_07_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 239/400 grounded_qa_finance_amounts_07_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 240/400 grounded_qa_finance_amounts_07_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 241/400 grounded_qa_software_versions_00_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 242/400 grounded_qa_software_versions_00_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 243/400 grounded_qa_software_versions_00_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 244/400 grounded_qa_software_versions_00_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 245/400 grounded_qa_software_versions_00_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 246/400 grounded_qa_software_versions_00_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 247/400 grounded_qa_software_versions_00_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 248/400 grounded_qa_software_versions_00_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 249/400 grounded_qa_software_versions_00_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 250/400 grounded_qa_software_versions_00_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 251/400 grounded_qa_software_versions_01_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 252/400 grounded_qa_software_versions_01_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 253/400 grounded_qa_software_versions_01_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 254/400 grounded_qa_software_versions_01_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 255/400 grounded_qa_software_versions_01_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 256/400 grounded_qa_software_versions_01_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 257/400 grounded_qa_software_versions_01_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 258/400 grounded_qa_software_versions_01_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 259/400 grounded_qa_software_versions_01_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 260/400 grounded_qa_software_versions_01_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 261/400 grounded_qa_software_versions_02_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 262/400 grounded_qa_software_versions_02_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 263/400 grounded_qa_software_versions_02_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 264/400 grounded_qa_software_versions_02_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 265/400 grounded_qa_software_versions_02_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 266/400 grounded_qa_software_versions_02_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 267/400 grounded_qa_software_versions_02_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 268/400 grounded_qa_software_versions_02_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 269/400 grounded_qa_software_versions_02_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 270/400 grounded_qa_software_versions_02_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 271/400 grounded_qa_software_versions_03_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 272/400 grounded_qa_software_versions_03_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 273/400 grounded_qa_software_versions_03_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 274/400 grounded_qa_software_versions_03_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 275/400 grounded_qa_software_versions_03_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 276/400 grounded_qa_software_versions_03_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 277/400 grounded_qa_software_versions_03_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 278/400 grounded_qa_software_versions_03_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 279/400 grounded_qa_software_versions_03_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 280/400 grounded_qa_software_versions_03_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 281/400 grounded_qa_software_versions_04_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 282/400 grounded_qa_software_versions_04_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 283/400 grounded_qa_software_versions_04_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 284/400 grounded_qa_software_versions_04_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 285/400 grounded_qa_software_versions_04_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 286/400 grounded_qa_software_versions_04_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 287/400 grounded_qa_software_versions_04_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 288/400 grounded_qa_software_versions_04_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 289/400 grounded_qa_software_versions_04_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 290/400 grounded_qa_software_versions_04_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 291/400 grounded_qa_software_versions_05_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 292/400 grounded_qa_software_versions_05_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 293/400 grounded_qa_software_versions_05_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 294/400 grounded_qa_software_versions_05_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 295/400 grounded_qa_software_versions_05_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 296/400 grounded_qa_software_versions_05_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 297/400 grounded_qa_software_versions_05_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 298/400 grounded_qa_software_versions_05_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 299/400 grounded_qa_software_versions_05_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 300/400 grounded_qa_software_versions_05_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 301/400 grounded_qa_software_versions_06_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 302/400 grounded_qa_software_versions_06_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 303/400 grounded_qa_software_versions_06_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 304/400 grounded_qa_software_versions_06_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 305/400 grounded_qa_software_versions_06_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 306/400 grounded_qa_software_versions_06_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 307/400 grounded_qa_software_versions_06_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 308/400 grounded_qa_software_versions_06_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 309/400 grounded_qa_software_versions_06_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 310/400 grounded_qa_software_versions_06_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 311/400 grounded_qa_software_versions_07_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 312/400 grounded_qa_software_versions_07_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 313/400 grounded_qa_software_versions_07_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 314/400 grounded_qa_software_versions_07_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 315/400 grounded_qa_software_versions_07_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 316/400 grounded_qa_software_versions_07_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 317/400 grounded_qa_software_versions_07_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 318/400 grounded_qa_software_versions_07_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 319/400 grounded_qa_software_versions_07_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 320/400 grounded_qa_software_versions_07_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=105
+[w0-all-layers] 321/400 grounded_qa_supply_chain_counts_00_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 322/400 grounded_qa_supply_chain_counts_00_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 323/400 grounded_qa_supply_chain_counts_00_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 324/400 grounded_qa_supply_chain_counts_00_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 325/400 grounded_qa_supply_chain_counts_00_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 326/400 grounded_qa_supply_chain_counts_00_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 327/400 grounded_qa_supply_chain_counts_00_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 328/400 grounded_qa_supply_chain_counts_00_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 329/400 grounded_qa_supply_chain_counts_00_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 330/400 grounded_qa_supply_chain_counts_00_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 331/400 grounded_qa_supply_chain_counts_01_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 332/400 grounded_qa_supply_chain_counts_01_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 333/400 grounded_qa_supply_chain_counts_01_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 334/400 grounded_qa_supply_chain_counts_01_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 335/400 grounded_qa_supply_chain_counts_01_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 336/400 grounded_qa_supply_chain_counts_01_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 337/400 grounded_qa_supply_chain_counts_01_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 338/400 grounded_qa_supply_chain_counts_01_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 339/400 grounded_qa_supply_chain_counts_01_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 340/400 grounded_qa_supply_chain_counts_01_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 341/400 grounded_qa_supply_chain_counts_02_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 342/400 grounded_qa_supply_chain_counts_02_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 343/400 grounded_qa_supply_chain_counts_02_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 344/400 grounded_qa_supply_chain_counts_02_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 345/400 grounded_qa_supply_chain_counts_02_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 346/400 grounded_qa_supply_chain_counts_02_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 347/400 grounded_qa_supply_chain_counts_02_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 348/400 grounded_qa_supply_chain_counts_02_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 349/400 grounded_qa_supply_chain_counts_02_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 350/400 grounded_qa_supply_chain_counts_02_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 351/400 grounded_qa_supply_chain_counts_03_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 352/400 grounded_qa_supply_chain_counts_03_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 353/400 grounded_qa_supply_chain_counts_03_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 354/400 grounded_qa_supply_chain_counts_03_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 355/400 grounded_qa_supply_chain_counts_03_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 356/400 grounded_qa_supply_chain_counts_03_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 357/400 grounded_qa_supply_chain_counts_03_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 358/400 grounded_qa_supply_chain_counts_03_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 359/400 grounded_qa_supply_chain_counts_03_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 360/400 grounded_qa_supply_chain_counts_03_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 361/400 grounded_qa_supply_chain_counts_04_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 362/400 grounded_qa_supply_chain_counts_04_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 363/400 grounded_qa_supply_chain_counts_04_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 364/400 grounded_qa_supply_chain_counts_04_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 365/400 grounded_qa_supply_chain_counts_04_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 366/400 grounded_qa_supply_chain_counts_04_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 367/400 grounded_qa_supply_chain_counts_04_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 368/400 grounded_qa_supply_chain_counts_04_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 369/400 grounded_qa_supply_chain_counts_04_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 370/400 grounded_qa_supply_chain_counts_04_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 371/400 grounded_qa_supply_chain_counts_05_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 372/400 grounded_qa_supply_chain_counts_05_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 373/400 grounded_qa_supply_chain_counts_05_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 374/400 grounded_qa_supply_chain_counts_05_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 375/400 grounded_qa_supply_chain_counts_05_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 376/400 grounded_qa_supply_chain_counts_05_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 377/400 grounded_qa_supply_chain_counts_05_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 378/400 grounded_qa_supply_chain_counts_05_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 379/400 grounded_qa_supply_chain_counts_05_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 380/400 grounded_qa_supply_chain_counts_05_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 381/400 grounded_qa_supply_chain_counts_06_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 382/400 grounded_qa_supply_chain_counts_06_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 383/400 grounded_qa_supply_chain_counts_06_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 384/400 grounded_qa_supply_chain_counts_06_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 385/400 grounded_qa_supply_chain_counts_06_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 386/400 grounded_qa_supply_chain_counts_06_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 387/400 grounded_qa_supply_chain_counts_06_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 388/400 grounded_qa_supply_chain_counts_06_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 389/400 grounded_qa_supply_chain_counts_06_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 390/400 grounded_qa_supply_chain_counts_06_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 391/400 grounded_qa_supply_chain_counts_07_supported_slot_seed_00 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 392/400 grounded_qa_supply_chain_counts_07_supported_slot_seed_01 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 393/400 grounded_qa_supply_chain_counts_07_supported_slot_seed_02 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 394/400 grounded_qa_supply_chain_counts_07_supported_slot_seed_03 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 395/400 grounded_qa_supply_chain_counts_07_supported_slot_seed_04 label=SUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 396/400 grounded_qa_supply_chain_counts_07_unsupported_slot_seed_00 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 397/400 grounded_qa_supply_chain_counts_07_unsupported_slot_seed_01 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 398/400 grounded_qa_supply_chain_counts_07_unsupported_slot_seed_02 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 399/400 grounded_qa_supply_chain_counts_07_unsupported_slot_seed_03 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] 400/400 grounded_qa_supply_chain_counts_07_unsupported_slot_seed_04 label=UNSUPPORTED layers=29 prompt_tokens=101
+[w0-all-layers] wrote docs/working/grounded_factual_qa_hallucination_w0_qwen_grouped_20260618/enabled_predicate_w0_all_layers_dataset.npz
+[w0-all-layers] wrote docs/working/grounded_factual_qa_hallucination_w0_qwen_grouped_20260618/enabled_predicate_w0_all_layers_rows.jsonl
+[w0-all-layers] wrote docs/working/grounded_factual_qa_hallucination_w0_qwen_grouped_20260618/enabled_predicate_w0_all_layers_manifest.json
+{
+  "behavior_distribution": {
+    "SUPPORTED": 200,
+    "UNSUPPORTED": 200
+  },
+  "claim": "OPEN / NOT LICENSED for pre-speech detection.",
+  "created_at": "2026-06-18T06:51:39.739679+00:00",
+  "dataset": "docs/working/grounded_factual_qa_hallucination_w0_qwen_grouped_20260618/enabled_predicate_w0_all_layers_dataset.npz",
+  "evidence_source_distribution": {
+    "clinical_note": 80,
+    "invoice_extract": 80,
+    "policy_digest": 80,
+    "release_note": 80,
+    "warehouse_record": 80
+  },
+  "expected_behavior_distribution": {
+    "": 400
+  },
+  "feature_shape": [
+    400,
+    29,
+    1536
+  ],
+  "important_limit": "This is prompt-stage hidden-state capture only. It is not a detector, prevention claim, or causal proof until evaluated against text/layer-0 baselines and live steering gates.",
+  "label_paths": [],
+  "label_source_distribution": {
+    "scenario_support_status": 400
+  },
+  "layer_count": 29,
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "manifest": "docs/working/grounded_factual_qa_hallucination_w0_qwen_grouped_20260618/enabled_predicate_w0_all_layers_manifest.json",
+  "max_length": 256,
+  "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_info": {
+    "architectures": [
+      "Qwen2ForCausalLM"
+    ],
+    "device_map": "auto",
+    "hidden_size": 1536,
+    "model_type": "qwen2",
+    "num_hidden_layers": 28,
+    "parameter_count": 1543714304,
+    "torch_dtype": "torch.float16",
+    "vocab_size": 151936
+  },
+  "model_revision": null,
+  "payload_class_distribution": {
+    "clinical_measurements": 80,
+    "finance_amounts": 80,
+    "regulatory_dates": 80,
+    "software_versions": 80,
+    "supply_chain_counts": 80
+  },
+  "prompt_bank": "live-trace-worker/scenarios/grounded_factual_qa_hallucination_bank_v0_20260618.json",
+  "prompt_format": "chat-auto",
+  "retrieval_condition_distribution": {
+    "single_relevant_passage": 400
+  },
+  "retrieval_score_bucket_distribution": {
+    "high": 100,
+    "low": 100,
+    "medium": 200
+  },
+  "row_count": 400,
+  "rows": "docs/working/grounded_factual_qa_hallucination_w0_qwen_grouped_20260618/enabled_predicate_w0_all_layers_rows.jsonl",
+  "schema_version": "cas_harness_enabled_predicate_w0_all_layers_capture.v1",
+  "support_status_distribution": {
+    "SUPPORTED": 200,
+    "UNSUPPORTED": 200
+  },
+  "topic_distribution": {
+    "clinical_measurements": 80,
+    "finance_amounts": 80,
+    "regulatory_dates": 80,
+    "software_versions": 80,
+    "supply_chain_counts": 80
+  }
+}

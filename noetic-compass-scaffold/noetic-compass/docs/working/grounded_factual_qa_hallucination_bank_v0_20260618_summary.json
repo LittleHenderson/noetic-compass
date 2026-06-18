@@ -1,0 +1,45 @@
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 hallucination-risk detection.",
+  "domain_distribution": {
+    "C": 80,
+    "E": 80,
+    "F": 80,
+    "O": 80,
+    "P": 80
+  },
+  "evidence_source_distribution": {
+    "clinical_note": 80,
+    "invoice_extract": 80,
+    "policy_digest": 80,
+    "release_note": 80,
+    "warehouse_record": 80
+  },
+  "exact_prompt_group_count": 40,
+  "groups_per_topic": 8,
+  "mixed_prompt_group_count": 40,
+  "next_step": "Run screen_grounded_factual_qa_surface_leakage.py. Only if READY_FOR_W0_CAPTURE, capture W0 activations and evaluate with evidence-grounded SUPPORTED/UNSUPPORTED labels.",
+  "prompt_group_count": 40,
+  "retrieval_condition_distribution": {
+    "single_relevant_passage": 400
+  },
+  "retrieval_score_bucket_distribution": {
+    "high": 100,
+    "low": 100,
+    "medium": 200
+  },
+  "samples_per_label": 5,
+  "scenario_count": 400,
+  "schema_version": "cas_harness_grounded_factual_qa_hallucination_bank.v1.summary",
+  "support_status_distribution": {
+    "SUPPORTED": 200,
+    "UNSUPPORTED": 200
+  },
+  "topic_count": 5,
+  "topic_distribution": {
+    "clinical_measurements": 80,
+    "finance_amounts": 80,
+    "regulatory_dates": 80,
+    "software_versions": 80,
+    "supply_chain_counts": 80
+  }
+}
