@@ -6,6 +6,7 @@ import sys
 from pathlib import Path
 
 from api.services.cas_harness_goal_claim_auditor import (
+    DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN,
     DEFAULT_W0_DATA_READINESS_MANIFEST,
     DEFAULT_W0_FULL_CONTROL_REPORT,
     W0_REPORT_SCHEMA_VERSION,
@@ -38,6 +39,16 @@ def test_active_goal_auditor_keeps_current_claims_open_not_licensed():
     assert w0["observed_metrics"]["existing_w0_report_count"] > 1
     assert w0["observed_metrics"]["passing_w0_report_count"] == 0
     assert (
+        w0["observed_metrics"]["next_hidden_injection_surface_screen"]["status"]
+        == "READY_FOR_W0_CAPTURE"
+    )
+    assert (
+        w0["observed_metrics"]["next_hidden_injection_surface_screen"][
+            "text_hash_balanced_accuracy"
+        ]
+        == 0.4
+    )
+    assert (
         w0["observed_metrics"]["best_existing_w0_candidate"]["license_eligible"] is False
     )
     assert {
@@ -51,9 +62,24 @@ def test_active_goal_auditor_keeps_current_claims_open_not_licensed():
 def test_active_goal_auditor_only_licenses_w0_when_all_frozen_gates_pass(tmp_path):
     report_path = tmp_path / DEFAULT_W0_FULL_CONTROL_REPORT
     manifest_path = tmp_path / DEFAULT_W0_DATA_READINESS_MANIFEST
+    hidden_screen_path = tmp_path / DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN
     report_path.parent.mkdir(parents=True)
     manifest_path.parent.mkdir(parents=True)
+    hidden_screen_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps({"status": "READY_FOR_W0_CAPTURE"}), encoding="utf-8")
+    hidden_screen_path.write_text(
+        json.dumps(
+            {
+                "status": "READY_FOR_W0_CAPTURE",
+                "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+                "row_count": 640,
+                "prompt_group_count": 80,
+                "testable_payload_class_count": 5,
+                "metrics": {"text_hash_balanced_accuracy": 0.4},
+            }
+        ),
+        encoding="utf-8",
+    )
     report_path.write_text(
         json.dumps(
             {

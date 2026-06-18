@@ -32,6 +32,11 @@ DEFAULT_W0_DATA_READINESS_MANIFEST = (
     / "qwen_v6_expanded_chain_break_combined_gate_v2_s16_20260615"
     / "combined_gate_manifest.json"
 )
+DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN = (
+    Path("docs")
+    / "working"
+    / "hidden_prompt_injection_surface_screen_v0_20260617.json"
+)
 W0_REPORT_SCHEMA_VERSION = "cas_harness_behavior_v6_matched_prespeech_eval.v1"
 
 W0_REQUIRED_GATES = (
@@ -83,11 +88,20 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
 
     root_path = Path(root)
     data_readiness = _load_artifact(root_path, DEFAULT_W0_DATA_READINESS_MANIFEST)
+    hidden_injection_surface_screen = _load_artifact(
+        root_path,
+        DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN,
+    )
     w0_report = _load_artifact(root_path, DEFAULT_W0_FULL_CONTROL_REPORT)
     w0_scan = _scan_existing_w0_reports(root_path)
 
     rows = [
-        _audit_internal_w0_detection(w0_report, data_readiness, w0_scan),
+        _audit_internal_w0_detection(
+            w0_report,
+            data_readiness,
+            w0_scan,
+            hidden_injection_surface_screen,
+        ),
         _static_not_licensed_row(
             claim_id="live_pre_speech_interception",
             evidence_status="unavailable",
@@ -193,15 +207,18 @@ def _audit_internal_w0_detection(
     w0_report_artifact: dict[str, Any],
     data_readiness_artifact: dict[str, Any],
     w0_scan: dict[str, Any],
+    hidden_injection_surface_artifact: dict[str, Any],
 ) -> GoalClaimAuditRow:
     report = w0_report_artifact.get("json")
     manifest = data_readiness_artifact.get("json")
+    hidden_injection_surface = hidden_injection_surface_artifact.get("json")
     evidence_refs = list(
         filter(
             None,
             [
                 w0_report_artifact.get("ref"),
                 data_readiness_artifact.get("ref"),
+                hidden_injection_surface_artifact.get("ref"),
             ],
         )
     )
@@ -235,6 +252,9 @@ def _audit_internal_w0_detection(
                 "existing_w0_report_count": w0_scan.get("report_count", 0),
                 "passing_w0_report_count": len(passing_reports),
                 "best_existing_w0_candidate": best_passing,
+                "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
+                    hidden_injection_surface
+                ),
             },
         )
 
@@ -275,6 +295,9 @@ def _audit_internal_w0_detection(
         "existing_w0_report_count": w0_scan.get("report_count", 0),
         "passing_w0_report_count": len(passing_reports),
         "best_existing_w0_candidate": w0_scan.get("best_candidate"),
+        "next_hidden_injection_surface_screen": _hidden_injection_surface_metrics(
+            hidden_injection_surface
+        ),
     }
     return GoalClaimAuditRow(
         claim_id="internal_w0_prompt_injection_detection",
@@ -296,6 +319,27 @@ def _audit_internal_w0_detection(
         failing_gates=failing_gates,
         observed_metrics=observed_metrics,
     )
+
+
+def _hidden_injection_surface_metrics(artifact: Any) -> dict[str, Any]:
+    if not isinstance(artifact, Mapping):
+        return {
+            "status": "unavailable",
+            "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+        }
+    metrics = artifact.get("metrics") if isinstance(artifact.get("metrics"), Mapping) else {}
+    return {
+        "status": artifact.get("status"),
+        "claim": artifact.get("claim"),
+        "row_count": artifact.get("row_count"),
+        "prompt_group_count": artifact.get("prompt_group_count"),
+        "testable_payload_class_count": artifact.get("testable_payload_class_count"),
+        "text_hash_balanced_accuracy": metrics.get("text_hash_balanced_accuracy"),
+        "length_balanced_accuracy": metrics.get("length_balanced_accuracy"),
+        "payload_majority_balanced_accuracy": metrics.get("payload_majority_balanced_accuracy"),
+        "domain_majority_balanced_accuracy": metrics.get("domain_majority_balanced_accuracy"),
+        "encoding_majority_balanced_accuracy": metrics.get("encoding_majority_balanced_accuracy"),
+    }
 
 
 def _static_not_licensed_row(

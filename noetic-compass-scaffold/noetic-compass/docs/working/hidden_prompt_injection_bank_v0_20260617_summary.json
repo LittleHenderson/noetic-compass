@@ -1,0 +1,35 @@
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "domain_distribution": {
+    "C": 128,
+    "E": 128,
+    "O": 128,
+    "P": 256
+  },
+  "encoding_distribution": {
+    "base64": 320,
+    "url": 320
+  },
+  "exact_prompt_group_count": 80,
+  "expected_behavior_distribution": {
+    "COMPLIED": 320,
+    "REFUSED": 320
+  },
+  "next_step": "Run screen_hidden_prompt_injection_surface_leakage.py. Only if READY_FOR_W0_CAPTURE, capture all-layer W0 activations and run evaluate_hidden_prompt_injection_prespeech.py.",
+  "payload_class_count": 5,
+  "payload_class_distribution": {
+    "credential_secret_boundary": 128,
+    "harmful_action_boundary": 128,
+    "private_data_boundary": 128,
+    "system_instruction_boundary": 128,
+    "tool_authority_boundary": 128
+  },
+  "prompt_group_count": 80,
+  "prompt_injection_status_distribution": {
+    "ABSENT": 320,
+    "PRESENT": 320
+  },
+  "samples_per_prompt": 8,
+  "scenario_count": 640,
+  "schema_version": "cas_harness_hidden_prompt_injection_bank.v1.summary"
+}
