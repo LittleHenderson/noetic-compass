@@ -15,6 +15,7 @@ from app.runtime.fleet_worker import (
     DryRunFleetJobExecutor,
     FleetApiClient,
     FleetJob,
+    FleetJobExecutionResult,
     FleetWorkerConfig,
     FleetWorkerDaemon,
     build_evidence_fragment_ref,
@@ -126,6 +127,80 @@ def test_daemon_leases_runs_writes_fragment_and_posts_receipt(tmp_path: Path):
     fragment_path = tmp_path / f"{leased_job['job_id']}.evidence-fragment.json"
     fragment = json.loads(fragment_path.read_text(encoding="utf-8"))
     assert fragment["execution_mode"] == "dry_run_control_plane"
+    assert fragment["fragment_ref"] == result.evidence_packet_fragment_ref
+
+
+def test_daemon_posts_evidence_payload_under_fragment_hash(tmp_path: Path):
+    config = _config(tmp_path)
+    leased_job = _leased_job_payload(config)
+    evidence_payload = {
+        "schema_version": "cas_harness_open_weight_probe_shard.v1",
+        "structural_monitoring": {
+            "schema_version": "cas_harness_structural_monitoring.v0.shadow",
+            "mode": "shadow",
+            "status": "present",
+            "verdict_effect": "none_shadow_only",
+            "basis": "measured",
+            "drift_score": 0.03,
+            "drift_threshold": 0.2,
+            "claim_ceiling": "Structural signal only; verdict_effect none_shadow_only.",
+        },
+    }
+    seen: dict[str, Any] = {"receipt": None}
+
+    class PayloadExecutor:
+        execution_mode = "payload_probe"
+
+        async def run(self, job: FleetJob, config: FleetWorkerConfig) -> FleetJobExecutionResult:
+            return FleetJobExecutionResult(
+                produced_outputs=job.expected_outputs,
+                evidence_payload=evidence_payload,
+            )
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        if request.url.path == "/api/cas-harness/audit/distributed/fleet/worker/register":
+            return httpx.Response(200, json=_worker_payload(config))
+        if request.url.path == f"/api/cas-harness/audit/distributed/fleet/worker/{config.worker_id}/heartbeat":
+            return httpx.Response(200, json=_worker_payload(config))
+        if request.url.path == f"/api/cas-harness/audit/distributed/session/{config.audit_id}/fleet/job/lease":
+            return httpx.Response(200, json=leased_job)
+        if request.url.path == (
+            f"/api/cas-harness/audit/distributed/session/{config.audit_id}"
+            f"/fleet/job/{leased_job['job_id']}/receipt"
+        ):
+            payload = json.loads(request.content.decode("utf-8"))
+            seen["receipt"] = payload
+            expected_ref = build_evidence_fragment_ref(
+                audit_id=config.audit_id,
+                job_id=leased_job["job_id"],
+                worker_id=config.worker_id,
+                model_id=config.model_id,
+                layer_start=leased_job["layer_start"],
+                layer_end=leased_job["layer_end"],
+                shard_id=leased_job["shard_id"],
+                expected_outputs=leased_job["expected_outputs"],
+                produced_outputs=leased_job["expected_outputs"],
+                missing_outputs=[],
+                evidence_packet_fragment_payload=evidence_payload,
+            )
+            assert payload["evidence_packet_fragment_ref"] == expected_ref
+            assert payload["evidence_packet_fragment_payload"] == evidence_payload
+            return httpx.Response(200, json={"verifier_gate_status": "waiting_for_receipts"})
+        raise AssertionError(f"unexpected path {request.url.path}")
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    daemon = FleetWorkerDaemon(
+        config,
+        PayloadExecutor(),
+        api_client=FleetApiClient(config, client=client),
+    )
+
+    result = asyncio.run(daemon.run_once())
+
+    assert result.status == "completed"
+    assert seen["receipt"]["evidence_packet_fragment_payload"] == evidence_payload
+    fragment = json.loads((tmp_path / f"{leased_job['job_id']}.evidence-fragment.json").read_text(encoding="utf-8"))
+    assert fragment["evidence_payload"] == evidence_payload
     assert fragment["fragment_ref"] == result.evidence_packet_fragment_ref
 
 

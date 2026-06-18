@@ -155,6 +155,32 @@ def _stage19_stage20_verifier_fragment() -> dict:
     }
 
 
+def _structural_monitoring_fragment_payload(
+    *,
+    drift_score: float = 0.03,
+    drift_threshold: float = 0.2,
+    basis: str = "measured",
+) -> dict:
+    return {
+        "schema_version": "cas_harness_evidence_fragment.v1",
+        "structural_monitoring": {
+            "schema_version": "cas_harness_structural_monitoring.v0.shadow",
+            "mode": "shadow",
+            "status": "present",
+            "verdict_effect": "none_shadow_only",
+            "route": "none",
+            "scope": "fleet_worker_shard",
+            "basis": basis,
+            "id": "probe-worker-structural-signal",
+            "current_signature_sha256": "a" * 64,
+            "baseline_signature_sha256": "b" * 64,
+            "drift_score": drift_score,
+            "drift_threshold": drift_threshold,
+            "claim_ceiling": "Structural signal only; verdict_effect none_shadow_only.",
+        },
+    }
+
+
 class _FakeS3Body:
     def __init__(self, payload: bytes) -> None:
         self._payload = payload
@@ -328,6 +354,11 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
     assert packet_body["schema_version"] == "cas_harness_evidence_packet_v1"
     assert packet_body["distributed_fleet"]["audit_id"] == audit["audit_id"]
     assert packet_body["distributed_fleet"]["total_jobs"] == 1
+    structural = packet_body["distributed_fleet"]["structural_monitoring"]
+    assert structural["schema_version"] == "cas_harness_structural_monitoring.v0.shadow"
+    assert structural["status"] == "unavailable"
+    assert structural["verdict_effect"] == "none_shadow_only"
+    assert structural["summary"]["missing_signal_count"] == 1
     assert packet_body["verification"]["proof_chips"]
     assert packet_body["verification"]["accepted"] is None
     assert packet_body["hashes"]["hash_log_entry_sha256"]
@@ -365,6 +396,82 @@ def test_worker_registration_job_lease_receipt_and_merge_path(client, auth_heade
         check["artifact"] == "merged_packet_hash_chain" and check["match"] is False
         for check in tampered_body["checks"]
     )
+
+
+def test_structural_monitoring_payload_is_hash_bound_and_routes_review(
+    client,
+    auth_headers,
+    monkeypatch,
+    tmp_path,
+):
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
+    audit = _create_dispatched_audit(client, auth_headers, parameter_count_b=1, num_layers=1)
+    worker_assignment = audit["worker_evidence"][0]
+    _register_worker(client, auth_headers, worker_assignment, model_id=audit["plan"]["model_id"])
+    client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/prepare",
+        headers=auth_headers,
+    )
+    leased = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/lease",
+        json={"worker_id": worker_assignment["worker_id"]},
+        headers=auth_headers,
+    ).json()
+    fragment_payload = _structural_monitoring_fragment_payload(drift_score=0.42, drift_threshold=0.2)
+    fragment_ref = _fragment_ref_for(
+        audit,
+        leased,
+        evidence_packet_fragment_payload=fragment_payload,
+    )
+
+    receipt = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/job/{leased['job_id']}/receipt",
+        json={
+            "worker_id": worker_assignment["worker_id"],
+            "lease_token": leased["lease_token"],
+            "produced_outputs": leased["expected_outputs"],
+            "evidence_packet_fragment_ref": fragment_ref,
+            "evidence_packet_fragment_payload": fragment_payload,
+        },
+        headers=auth_headers,
+    )
+
+    assert receipt.status_code == 200
+    structural = receipt.json()["structural_monitoring"]
+    assert structural["status"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert structural["verdict_effect"] == "none_shadow_only"
+    assert structural["summary"]["measured_signal_count"] == 1
+    assert structural["summary"]["drifted_signal_count"] == 1
+    assert "structural drift_score exceeded drift_threshold" in structural["review_reasons"]
+
+    merged = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/merge",
+        headers=auth_headers,
+    )
+    assert merged.status_code == 200
+    trace_id = merged.json()["merged_packet_trace_id"]
+
+    packet = client.get(f"/evidence/{trace_id}", headers=auth_headers)
+    assert packet.status_code == 200
+    packet_body = packet.json()
+    packet_structural = packet_body["distributed_fleet"]["structural_monitoring"]
+    assert packet_structural["status"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert packet_structural["route"] == "FLAG_FOR_HUMAN_REVIEW"
+    assert packet_structural["signals"][0]["evidence_packet_fragment_ref"] == fragment_ref
+    assert packet_structural["signals"][0]["verdict_effect"] == "none_shadow_only"
+    assert "does not mint ACCEPT/SUPPRESS" in packet_structural["claim_ceiling"]
+    assert "shadow review signal" in " ".join(packet_body["caveats"])
+
+    verifier = client.post(
+        f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}/fleet/verifier",
+        headers=auth_headers,
+    )
+    assert verifier.status_code == 200
+    assert verifier.json()["verdict"] == "FLAG_FOR_HUMAN_REVIEW"
+
+    verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers)
+    assert verified.status_code == 200
+    assert verified.json()["overall"] == "all_match"
 
 
 def test_fleet_packet_local_anchor_is_verified_and_tamper_detected(client, auth_headers, monkeypatch, tmp_path):

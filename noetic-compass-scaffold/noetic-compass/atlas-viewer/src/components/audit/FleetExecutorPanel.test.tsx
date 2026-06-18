@@ -73,6 +73,41 @@ describe('FleetExecutorPanel', () => {
     expect(screen.getByText('waiting for receipts')).toBeInTheDocument();
   });
 
+  it('renders structural monitoring as a shadow-only review lane', () => {
+    render(
+      <FleetExecutorPanel
+        registeredWorkers={25}
+        leasedJobs={25}
+        staleWorkers={0}
+        completedFragments={25}
+        totalJobs={25}
+        mergedPacketStatus="ready"
+        verifierGateStatus="ready_for_verifier"
+        structuralMonitoring={{
+          status: 'FLAG_FOR_HUMAN_REVIEW',
+          verdict_effect: 'none_shadow_only',
+          route: 'FLAG_FOR_HUMAN_REVIEW',
+          basis: 'measured',
+          summary: {
+            signal_count: 1,
+            measured_signal_count: 1,
+            missing_signal_count: 0,
+            drifted_signal_count: 1,
+            max_drift_score: 0.42,
+          },
+          review_reasons: ['structural drift_score exceeded drift_threshold'],
+          claim_ceiling:
+            'Structural/fleet monitoring is shadow-only evidence review and cannot mint ACCEPT/SUPPRESS.',
+        }}
+      />,
+    );
+
+    expect(screen.getByTestId('fleet-structural-monitoring')).toHaveTextContent(/shadow structural signal/i);
+    expect(screen.getByTestId('fleet-structural-monitoring')).toHaveTextContent(/FLAG_FOR_HUMAN_REVIEW/);
+    expect(screen.getByTestId('fleet-structural-monitoring-reasons')).toHaveTextContent(/drift_score exceeded/i);
+    expect(screen.getByTestId('fleet-structural-monitoring-claim')).toHaveTextContent(/cannot mint ACCEPT\/SUPPRESS/i);
+  });
+
   it('warns when worker failure blocks ACCEPT', () => {
     render(
       <FleetExecutorPanel

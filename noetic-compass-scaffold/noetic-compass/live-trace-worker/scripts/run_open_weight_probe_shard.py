@@ -18,6 +18,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import UTC, datetime
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -166,6 +167,7 @@ def run_probe_shard(config: ProbeShardConfig) -> dict[str, Any]:
             config.cover_map_path,
             model_id=config.model_id,
         )
+    evidence_payload["structural_monitoring"] = build_structural_monitoring_snapshot(evidence_payload)
 
     produced, missing = classify_outputs(config.expected_outputs, evidence_payload)
     return {
@@ -353,6 +355,43 @@ def load_blindspot_cover_map(path: Path, *, model_id: str) -> dict[str, Any]:
     if "covers" not in payload:
         raise RuntimeError("Blindspot cover map requires covers.")
     return payload
+
+
+def build_structural_monitoring_snapshot(evidence_payload: dict[str, Any]) -> dict[str, Any]:
+    signature_payload = {
+        "model_id": evidence_payload.get("model_id"),
+        "model_revision": evidence_payload.get("model_revision"),
+        "shard_id": evidence_payload.get("shard_id"),
+        "layer_start": evidence_payload.get("layer_start"),
+        "layer_end": evidence_payload.get("layer_end"),
+        "activation_summary": evidence_payload.get("activation_summary"),
+        "cas_axis_readout": evidence_payload.get("cas_axis_readout"),
+    }
+    current_signature = hashlib.sha256(
+        json.dumps(signature_payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    ).hexdigest()
+    return {
+        "schema_version": "cas_harness_structural_monitoring.v0.shadow",
+        "mode": "shadow",
+        "status": "present",
+        "verdict_effect": "none_shadow_only",
+        "route": "none",
+        "scope": "fleet_worker_shard",
+        "basis": "measured",
+        "id": f"{evidence_payload.get('worker_id')}:{evidence_payload.get('shard_id')}",
+        "measurement_source": "real_open_weight_activation_summary",
+        "measurement_timing": "post_forward_shard_summary",
+        "model_id": evidence_payload.get("model_id"),
+        "current_signature_sha256": current_signature,
+        "baseline_signature_sha256": None,
+        "drift_score": 0.0,
+        "drift_threshold": 0.2,
+        "claim_ceiling": (
+            "Measured shard structural signature only; verdict_effect none_shadow_only. "
+            "This is not internal W0 detection, prevention/removal/reversal, hallucination "
+            "prevention, live interception, certification, or causal proof."
+        ),
+    }
 
 
 def classify_outputs(expected_outputs: tuple[str, ...], evidence_payload: dict[str, Any]) -> tuple[list[str], list[str]]:

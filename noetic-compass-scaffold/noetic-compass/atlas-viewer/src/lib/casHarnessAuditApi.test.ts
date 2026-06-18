@@ -353,6 +353,33 @@ function fleetJob(overrides: Record<string, unknown> = {}): Record<string, unkno
   };
 }
 
+function fleetStructuralMonitoring(overrides: Record<string, unknown> = {}): Record<string, unknown> {
+  return {
+    schema_version: 'cas_harness_structural_monitoring.v0.shadow',
+    mode: 'shadow',
+    status: 'unavailable',
+    verdict_effect: 'none_shadow_only',
+    route: 'none',
+    scope: 'distributed_fleet',
+    basis: 'unavailable',
+    summary: {
+      total_jobs: 1,
+      completed_fragments: 0,
+      signal_count: 0,
+      measured_signal_count: 0,
+      assigned_signal_count: 0,
+      missing_signal_count: 0,
+      drifted_signal_count: 0,
+      max_drift_score: null,
+    },
+    review_reasons: [],
+    signals: [],
+    claim_ceiling:
+      'Structural/fleet monitoring is shadow-only evidence review and cannot mint ACCEPT/SUPPRESS.',
+    ...overrides,
+  };
+}
+
 function fleetRun(overrides: Record<string, unknown> = {}): Record<string, unknown> {
   return {
     audit_id: 'cas-dist-unit',
@@ -375,6 +402,7 @@ function fleetRun(overrides: Record<string, unknown> = {}): Record<string, unkno
       next_actions: ['Lease queued jobs to their registered workers.'],
       verifier_owned: true,
     },
+    structural_monitoring: fleetStructuralMonitoring(),
     jobs: [fleetJob()],
     ...overrides,
   };
@@ -927,6 +955,33 @@ describe('casHarnessAuditApi', () => {
     expect(parsedLease?.lease_token).toBe('immediate-lease-token');
   });
 
+  it('parses fleet structural monitoring as a shadow-only review signal', () => {
+    const parsed = parseFleetRunResponse(fleetRun({
+      structural_monitoring: fleetStructuralMonitoring({
+        status: 'FLAG_FOR_HUMAN_REVIEW',
+        route: 'FLAG_FOR_HUMAN_REVIEW',
+        basis: 'measured',
+        summary: {
+          total_jobs: 1,
+          completed_fragments: 1,
+          signal_count: 1,
+          measured_signal_count: 1,
+          drifted_signal_count: 1,
+          max_drift_score: 0.42,
+        },
+        review_reasons: ['structural drift_score exceeded drift_threshold'],
+        signals: [{ id: 'probe-worker-01:layers-000-009', verdict_effect: 'none_shadow_only' }],
+      }),
+    }));
+
+    expect(parsed.structural_monitoring.status).toBe('FLAG_FOR_HUMAN_REVIEW');
+    expect(parsed.structural_monitoring.verdict_effect).toBe('none_shadow_only');
+    expect(parsed.structural_monitoring.summary.measured_signal_count).toBe(1);
+    expect(parsed.structural_monitoring.review_reasons).toContain(
+      'structural drift_score exceeded drift_threshold',
+    );
+  });
+
   it('verifies an API endpoint target using a credential reference', async () => {
     const fetchImpl = vi.fn(async () =>
       jsonResponse(targetVerification({
@@ -1301,6 +1356,12 @@ describe('casHarnessAuditApi', () => {
     expect(() => parseFleetRunResponse(fleetRun({
       confidence: 0.91,
     }))).toThrow(/fleet executor confidence must be null/);
+
+    expect(() => parseFleetRunResponse(fleetRun({
+      structural_monitoring: fleetStructuralMonitoring({
+        verdict_effect: 'changes_final_verdict',
+      }),
+    }))).toThrow(/structural_monitoring cannot affect final verdicts/);
 
     expect(() => parseFleetRunResponse(fleetRun({
       jobs: [

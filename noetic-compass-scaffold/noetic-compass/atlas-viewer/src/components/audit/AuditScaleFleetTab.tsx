@@ -238,6 +238,7 @@ export function AuditScaleFleetTab({
         mergedPacketStatus={fleetMergedPacketStatus}
         verifierGateStatus={fleetVerifierGateStatus}
         readiness={fleetReadiness}
+        structuralMonitoring={fleetRun?.structural_monitoring ?? null}
       />
 
       <section style={fleetControlPanelStyle} aria-label="Fleet executor controls">

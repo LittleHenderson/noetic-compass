@@ -1308,6 +1308,20 @@ class FleetReadinessResponse(BaseModel):
     verifier_owned: bool
 
 
+class FleetStructuralMonitoringResponse(BaseModel):
+    schema_version: Literal["cas_harness_structural_monitoring.v0.shadow"]
+    mode: Literal["shadow"]
+    status: Literal["present", "FLAG_FOR_HUMAN_REVIEW", "unavailable"]
+    verdict_effect: Literal["none_shadow_only"]
+    route: Literal["none", "FLAG_FOR_HUMAN_REVIEW"]
+    scope: Literal["distributed_fleet"]
+    basis: str = Field(..., min_length=1, max_length=80)
+    summary: dict[str, Any]
+    review_reasons: list[str] = Field(default_factory=list, max_length=64)
+    signals: list[dict[str, Any]] = Field(default_factory=list, max_length=512)
+    claim_ceiling: str = Field(..., min_length=1, max_length=1000)
+
+
 class FleetRunResponse(BaseModel):
     audit_id: str
     status: Literal["PREPARED", "LEASING", "MERGE_PENDING", "COMPLETE", "FAILED"]
@@ -1330,6 +1344,7 @@ class FleetRunResponse(BaseModel):
     registered_workers: int
     stale_workers: list[str]
     readiness: FleetReadinessResponse
+    structural_monitoring: FleetStructuralMonitoringResponse
     jobs: list[FleetJobResponse]
 
 

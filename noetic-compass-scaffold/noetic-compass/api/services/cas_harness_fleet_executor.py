@@ -21,6 +21,9 @@ from api.services.cas_harness_distributed_audits import (
     merge_distributed_audit,
     record_worker_evidence,
 )
+from api.services.cas_harness_structural_monitoring import (
+    fleet_structural_monitoring_summary,
+)
 from api.services.production.state_substrate import INTERIM_TENANT, LedgerMirror, StateStore
 
 
@@ -132,6 +135,7 @@ class FleetRunRecord:
         completed = [job for job in self.jobs if job.status == "completed"]
         failed = [job for job in self.jobs if job.status == "failed"]
         leased = [job for job in self.jobs if job.status == "leased"]
+        structural_monitoring = fleet_structural_monitoring_summary(self.jobs)
         return {
             "audit_id": self.audit_id,
             "status": self.status,
@@ -153,6 +157,7 @@ class FleetRunRecord:
                 failed_jobs=failed,
                 leased_jobs=leased,
             ),
+            "structural_monitoring": structural_monitoring,
             "jobs": [job.to_dict(include_lease_token=False) for job in self.jobs],
         }
 

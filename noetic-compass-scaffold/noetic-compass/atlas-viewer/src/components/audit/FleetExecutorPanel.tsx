@@ -26,6 +26,16 @@ export interface FleetReadinessSummary {
   verifier_owned: boolean;
 }
 
+export interface FleetStructuralMonitoringSummary {
+  status: 'present' | 'FLAG_FOR_HUMAN_REVIEW' | 'unavailable';
+  verdict_effect: 'none_shadow_only';
+  route: 'none' | 'FLAG_FOR_HUMAN_REVIEW';
+  basis: string;
+  summary: Record<string, unknown>;
+  review_reasons: string[];
+  claim_ceiling: string;
+}
+
 export interface FleetExecutorPanelProps {
   registeredWorkers: number;
   leasedJobs: number;
@@ -35,6 +45,7 @@ export interface FleetExecutorPanelProps {
   mergedPacketStatus: 'not_created' | 'partial' | 'ready';
   verifierGateStatus: FleetVerifierGateStatus;
   readiness?: FleetReadinessSummary | null;
+  structuralMonitoring?: FleetStructuralMonitoringSummary | null;
 }
 
 const panelStyle: CSSProperties = {
@@ -164,6 +175,12 @@ const readinessListStyle: CSSProperties = {
   lineHeight: 1.45,
 };
 
+const structuralMetricGridStyle: CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(118px, 1fr))',
+  gap: 8,
+};
+
 function Metric({ label, value }: { label: string; value: string }) {
   return (
     <div style={metricStyle}>
@@ -171,6 +188,24 @@ function Metric({ label, value }: { label: string; value: string }) {
       <span style={valueStyle}>{value}</span>
     </div>
   );
+}
+
+function summaryValue(
+  structuralMonitoring: FleetStructuralMonitoringSummary,
+  key: string,
+): string {
+  const value = structuralMonitoring.summary[key];
+  if (typeof value === 'number' && Number.isFinite(value)) return String(value);
+  if (value === null || value === undefined) return 'n/a';
+  return String(value);
+}
+
+function structuralTone(
+  status: FleetStructuralMonitoringSummary['status'],
+): 'info' | 'warning' | 'error' {
+  if (status === 'FLAG_FOR_HUMAN_REVIEW') return 'warning';
+  if (status === 'unavailable') return 'info';
+  return 'info';
 }
 
 function gateCopy(status: FleetVerifierGateStatus): { tone: 'info' | 'warning' | 'error'; text: string } {
@@ -217,6 +252,7 @@ export function FleetExecutorPanel({
   mergedPacketStatus,
   verifierGateStatus,
   readiness,
+  structuralMonitoring,
 }: FleetExecutorPanelProps) {
   const gate = gateCopy(verifierGateStatus);
   const complete = totalJobs > 0 && completedFragments === totalJobs && staleWorkers === 0;
@@ -276,10 +312,47 @@ export function FleetExecutorPanel({
             <li key={action}>{action}</li>
           ))}
         </ul>
-        {readinessSummary.verifier_owned ? (
+      {readinessSummary.verifier_owned ? (
           <p style={bodyStyle}>Verifier-owned: fleet receipts can unblock review, but they cannot emit ACCEPT by themselves.</p>
         ) : null}
       </section>
+
+      {structuralMonitoring ? (
+        <section
+          data-testid="fleet-structural-monitoring"
+          style={readinessPanelStyle(
+            structuralMonitoring.status === 'present' ? 'ready' : 'waiting',
+          )}
+          aria-label="Fleet structural monitoring"
+        >
+          <h3 style={readinessTitleStyle}>Structural monitoring</h3>
+          <p style={bodyStyle}>
+            Shadow structural signal - Effect: {structuralMonitoring.verdict_effect} - Route:{' '}
+            {structuralMonitoring.route}
+          </p>
+          <div style={structuralMetricGridStyle}>
+            <Metric label="Basis" value={structuralMonitoring.basis.replaceAll('_', ' ')} />
+            <Metric label="Signals" value={summaryValue(structuralMonitoring, 'signal_count')} />
+            <Metric label="Measured" value={summaryValue(structuralMonitoring, 'measured_signal_count')} />
+            <Metric label="Missing" value={summaryValue(structuralMonitoring, 'missing_signal_count')} />
+            <Metric label="Drifted" value={summaryValue(structuralMonitoring, 'drifted_signal_count')} />
+            <Metric label="Max drift" value={summaryValue(structuralMonitoring, 'max_drift_score')} />
+          </div>
+          {structuralMonitoring.review_reasons.length > 0 ? (
+            <ul data-testid="fleet-structural-monitoring-reasons" style={readinessListStyle}>
+              {structuralMonitoring.review_reasons.map((reason) => (
+                <li key={reason}>{reason}</li>
+              ))}
+            </ul>
+          ) : null}
+          <p
+            data-testid="fleet-structural-monitoring-claim"
+            style={noticeStyle(structuralTone(structuralMonitoring.status))}
+          >
+            Claim ceiling: {structuralMonitoring.claim_ceiling}
+          </p>
+        </section>
+      ) : null}
 
       {!complete ? (
         <p data-testid="fleet-executor-block" style={noticeStyle('warning')}>

@@ -124,6 +124,11 @@ def write_merged_fleet_evidence_packet(
         for payload in (getattr(job, "evidence_packet_fragment_payload", None) for job in jobs)
         if isinstance(payload, Mapping)
     ]
+    from api.services.cas_harness_structural_monitoring import (
+        fleet_structural_monitoring_summary,
+    )
+
+    structural_monitoring = fleet_structural_monitoring_summary(jobs)
     verifier_fragment = _first_stage19_stage20_fragment(fragment_payloads)
     now = datetime.now(UTC).isoformat()
     model_id = getattr(getattr(distributed, "plan", None), "model_id", "unknown")
@@ -173,9 +178,13 @@ def write_merged_fleet_evidence_packet(
             "total_jobs": len(jobs),
             "completed_fragments": sum(1 for job in jobs if getattr(job, "status", None) == "completed"),
             "failed_jobs": sum(1 for job in jobs if getattr(job, "status", None) == "failed"),
+            "structural_monitoring": structural_monitoring,
             "jobs": [_job_packet_row(job) for job in jobs],
         },
-        "caveats": _caveats(verifier_attached=verifier_fragment is not None),
+        "caveats": _caveats(
+            verifier_attached=verifier_fragment is not None,
+            structural_monitoring=structural_monitoring,
+        ),
     }
     if generation_readiness:
         packet["generation_readiness"] = generation_readiness
@@ -415,14 +424,26 @@ def _source_reports(fragment: Mapping[str, Any]) -> list[str]:
     return [report.strip() for report in reports if isinstance(report, str) and report.strip()]
 
 
-def _caveats(*, verifier_attached: bool) -> list[str]:
+def _caveats(
+    *,
+    verifier_attached: bool,
+    structural_monitoring: Mapping[str, Any] | None = None,
+) -> list[str]:
+    structural_caveat = (
+        "Structural/fleet monitoring is a shadow review signal with verdict_effect "
+        "none_shadow_only; it cannot produce ACCEPT/SUPPRESS or license prevention, "
+        "removal/reversal, live interception, hallucination prevention, hidden-state "
+        "detection, or causal-proof claims."
+    )
     if verifier_attached:
         return [
             "Packet was assembled from worker-submitted fragments; verifier fields were copied from an explicit Stage 19/20 fragment.",
+            structural_caveat,
         ]
     return [
         "Packet records worker receipt provenance, but no explicit Stage 19/20 verifier decision was attached.",
         "Fleet merge alone cannot produce ACCEPT or SUPPRESS.",
+        structural_caveat,
     ]
 
 

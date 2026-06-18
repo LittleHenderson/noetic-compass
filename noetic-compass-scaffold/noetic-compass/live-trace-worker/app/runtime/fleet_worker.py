@@ -293,6 +293,8 @@ class FleetApiClient:
         }
         if result.status == "completed":
             payload["evidence_packet_fragment_ref"] = evidence_packet_fragment_ref
+            if result.evidence_payload is not None:
+                payload["evidence_packet_fragment_payload"] = result.evidence_payload
         else:
             payload["error_message"] = result.error_message or "Probe worker failed."
         return await self._post(
@@ -404,6 +406,7 @@ def write_evidence_fragment(
         expected_outputs=job.expected_outputs,
         produced_outputs=result.produced_outputs,
         missing_outputs=result.missing_outputs,
+        evidence_packet_fragment_payload=result.evidence_payload,
     )
     payload = {
         "schema_version": "cas_harness_worker_evidence_fragment.v1",
@@ -441,6 +444,7 @@ def build_evidence_fragment_ref(
     expected_outputs: tuple[str, ...] | list[str],
     produced_outputs: tuple[str, ...] | list[str],
     missing_outputs: tuple[str, ...] | list[str] = (),
+    evidence_packet_fragment_payload: dict[str, Any] | None = None,
 ) -> str:
     payload = {
         "schema_version": "cas_harness_evidence_fragment.v1",
@@ -455,8 +459,19 @@ def build_evidence_fragment_ref(
         "produced_outputs": list(produced_outputs),
         "missing_outputs": list(missing_outputs),
     }
+    payload_sha = _fragment_payload_sha256(evidence_packet_fragment_payload)
+    if payload_sha is not None:
+        payload["fragment_payload_sha256"] = payload_sha
     digest = hashlib.sha256(json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
     return f"cas-fragment://{audit_id}/{job_id}/{worker_id}/{shard_id}/sha256:{digest}"
+
+
+def _fragment_payload_sha256(payload: dict[str, Any] | None) -> str | None:
+    if payload is None:
+        return None
+    return hashlib.sha256(
+        json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    ).hexdigest()
 
 
 def _parse_command_result(path: Path, job: FleetJob) -> FleetJobExecutionResult:

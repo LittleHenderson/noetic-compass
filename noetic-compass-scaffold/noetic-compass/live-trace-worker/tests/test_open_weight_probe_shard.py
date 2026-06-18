@@ -126,6 +126,35 @@ def test_compute_cas_axis_readout_requires_compatible_probe_weights(tmp_path: Pa
     assert readout["scores"] == {"F1": 0.3, "F2": 0.3}
 
 
+def test_structural_monitoring_snapshot_is_measured_shadow_only():
+    payload = {
+        "model_id": "EleutherAI/gpt-neox-20b",
+        "model_revision": "main",
+        "worker_id": "probe-worker-001",
+        "shard_id": "layers-000-003",
+        "layer_start": 0,
+        "layer_end": 3,
+        "activation_summary": [
+            {
+                "scenario_id": "alpha_001",
+                "layers": [
+                    {"layer": 0, "mean_abs_activation": 0.1, "top_neurons": []},
+                ],
+            }
+        ],
+    }
+
+    snapshot = shard.build_structural_monitoring_snapshot(payload)
+
+    assert snapshot["schema_version"] == "cas_harness_structural_monitoring.v0.shadow"
+    assert snapshot["mode"] == "shadow"
+    assert snapshot["basis"] == "measured"
+    assert snapshot["verdict_effect"] == "none_shadow_only"
+    assert snapshot["drift_score"] == 0.0
+    assert len(snapshot["current_signature_sha256"]) == 64
+    assert "not internal W0 detection" in snapshot["claim_ceiling"]
+
+
 def test_blindspot_cover_map_must_match_model_id(tmp_path: Path):
     cover_path = tmp_path / "covers.json"
     cover_path.write_text(

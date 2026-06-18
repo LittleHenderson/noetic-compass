@@ -449,6 +449,20 @@ export interface CasHarnessFleetReadiness {
   verifier_owned: boolean;
 }
 
+export interface CasHarnessFleetStructuralMonitoring {
+  schema_version: 'cas_harness_structural_monitoring.v0.shadow';
+  mode: 'shadow';
+  status: 'present' | 'FLAG_FOR_HUMAN_REVIEW' | 'unavailable';
+  verdict_effect: 'none_shadow_only';
+  route: 'none' | 'FLAG_FOR_HUMAN_REVIEW';
+  scope: 'distributed_fleet';
+  basis: string;
+  summary: Record<string, unknown>;
+  review_reasons: string[];
+  signals: Record<string, unknown>[];
+  claim_ceiling: string;
+}
+
 export interface CasHarnessFleetWorkerRegistrationRequest {
   worker_id: string;
   model_id: string;
@@ -538,6 +552,7 @@ export interface CasHarnessFleetRun {
   registered_workers: number;
   stale_workers: string[];
   readiness: CasHarnessFleetReadiness;
+  structural_monitoring: CasHarnessFleetStructuralMonitoring;
   jobs: CasHarnessFleetJob[];
 }
 
@@ -1394,6 +1409,7 @@ export function parseFleetRunResponse(raw: unknown): CasHarnessFleetRun {
   const registeredWorkers = requiredInteger(raw.registered_workers, 'fleet_run.registered_workers');
   const staleWorkers = parseStringArray(raw.stale_workers, 'fleet_run.stale_workers');
   const readiness = parseFleetReadinessResponse(raw.readiness);
+  const structuralMonitoring = parseFleetStructuralMonitoringResponse(raw.structural_monitoring);
   assertFleetRunReadiness({
     jobs,
     verifierGateStatus,
@@ -1422,7 +1438,53 @@ export function parseFleetRunResponse(raw: unknown): CasHarnessFleetRun {
     registered_workers: registeredWorkers,
     stale_workers: staleWorkers,
     readiness,
+    structural_monitoring: structuralMonitoring,
     jobs,
+  };
+}
+
+export function parseFleetStructuralMonitoringResponse(raw: unknown): CasHarnessFleetStructuralMonitoring {
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring response was not an object');
+  }
+  if (raw.schema_version !== 'cas_harness_structural_monitoring.v0.shadow') {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring schema was unsupported');
+  }
+  if (raw.mode !== 'shadow') {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring must stay shadow mode');
+  }
+  if (raw.verdict_effect !== 'none_shadow_only') {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring cannot affect final verdicts');
+  }
+  const status = raw.status;
+  if (status !== 'present' && status !== 'FLAG_FOR_HUMAN_REVIEW' && status !== 'unavailable') {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring status was unsupported');
+  }
+  const route = raw.route;
+  if (route !== 'none' && route !== 'FLAG_FOR_HUMAN_REVIEW') {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring route was unsupported');
+  }
+  if (raw.scope !== 'distributed_fleet') {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring scope was unsupported');
+  }
+  if (!isRecord(raw.summary)) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring summary was malformed');
+  }
+  if (!Array.isArray(raw.signals) || raw.signals.some((signal) => !isRecord(signal))) {
+    throw new CasHarnessAuditApiError('CAS Harness fleet structural_monitoring signals were malformed');
+  }
+  return {
+    schema_version: 'cas_harness_structural_monitoring.v0.shadow',
+    mode: 'shadow',
+    status,
+    verdict_effect: 'none_shadow_only',
+    route,
+    scope: 'distributed_fleet',
+    basis: requiredString(raw.basis, 'fleet_structural_monitoring.basis'),
+    summary: { ...raw.summary },
+    review_reasons: parseStringArray(raw.review_reasons, 'fleet_structural_monitoring.review_reasons'),
+    signals: raw.signals.map((signal) => ({ ...(signal as Record<string, unknown>) })),
+    claim_ceiling: requiredString(raw.claim_ceiling, 'fleet_structural_monitoring.claim_ceiling'),
   };
 }
 
