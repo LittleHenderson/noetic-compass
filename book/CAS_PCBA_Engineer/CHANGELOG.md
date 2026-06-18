@@ -1,5 +1,24 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-06-18 — v0.5 (two more worked recipes: COB + CDAB)
+
+Extended the recipe/limiting-reagent tooling (Ch 14) onto two more boards:
+- **Ch 19 (COB)** — new "Recipe View: What Produces Entrainment": the PLL
+  outcome `Ω_entrainment` as `Θ = 1·^1^C + 1·^4^E + 2·^3^O`. Worked case shows a
+  high-insight, high-Q compulsion where behavioral plasticity (`^3^O`, the VCO)
+  is the limiting reagent (`Y_T=0.30`) — the structural form of "I understand it
+  and still can't stop." Therapy = feeding the bottleneck (lower L widens the
+  lock range = raises effective `^3^O`); lock-range = the η-preserving operating
+  condition; steady reference = catalyst, chaos = inhibitor.
+- **Ch 20 (CDAB)** — new "Recipe View: What Produces a Synthesis": `Ω_synthesis`
+  (a `×` fusion) as `Θ = 1·^1^C + 2·^4^P + 1·^6^C`. Worked stalemate case where
+  the integrative drive (`^4^P|T`, will-to-unify) is the limiting reagent
+  (`Y_T=0.25`) — the well-characterized disagreement that never resolves. Names
+  the **leakage** path too: poor CMRR contaminates the difference signal (present
+  but wrong = `Λ`), so good CMRR is a precondition for sound synthesis.
+
+Rebuilt PDF (6×9). Canonical Noetic names preserved; CCDL listings unchanged.
+
 ## 2026-06-18 — v0.4 (recipes / production semantics developed)
 
 Paid off the Chapter 2 recipe forward-promise and made recipes a first-class

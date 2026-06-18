@@ -184,6 +184,30 @@ The therapeutic arc is therefore: **sweep to characterize → capture with a nea
 
 > **Bench Note — why "gradual" is non-negotiable.** A jump from 12/day to 4/day is a 67% drop, well outside any sane lock range. Attempt it and the PLL loses lock; the high-Q tank, unentrained, rings straight back to 12/day. The frustration of "I tried to quit cold and it came right back" is, in this model, simply a lock-range violation. The fix is not more willpower; it is a smaller step that stays inside the lock range.
 
+## Recipe View: What Produces Entrainment
+
+We built the COB as a circuit. Chapter 14 gave us a second way to read any board's output — as a **production target** with a recipe, a theoretical yield, and a limiting reagent. Run the COB's therapeutic outcome through that lens and the reason entrainment therapy succeeds or stalls collapses to a single number.
+
+The outcome is `Ω_entrainment`: the internal habit-rhythm locked, and held, in step with a healthier external one. Three ingredients produce it — the three PLL parts from Stage 3:
+
+```
+Θ(Ω_entrainment) = 1.0·^1^C_{F2}|A + 1.0·^4^E_{F4}|f + 2.0·^3^O_{F5}|E → Ω_entrainment
+```
+
+— one part phase detection (`^1^C` Mind: *noticing* the rhythm is off), one part loop-filter integration (`^4^E` Vibration: the steady, accumulating impression of how far off it is), and two parts VCO behavioral adjustment (`^3^O`: actually *moving* the behavior toward the reference). The VCO carries the heaviest weight because changing behavior is the hard part; noticing is cheap.
+
+Now take the case that frustrates every clinician: a high-Q compulsion in someone with complete insight. The state vector:
+
+| Ingredient | required `aᵢ` | available `xᵢ` | `xᵢ / aᵢ` |
+|---|---|---|---|
+| `^1^C` phase detection | 1.0 | 1.8 | 1.80 |
+| `^4^E` loop integration | 1.0 | 1.2 | 1.20 |
+| `^3^O` VCO adjustment | 2.0 | 0.6 | **0.30** |
+
+`Y_T = min(1.80, 1.20, 0.30) = 0.30`, limiting reagent = `^3^O`. The patient is insight-rich and change-poor: the recipe says entrainment will barely take, no matter how much more insight you pour in. This is the structural form of *"I understand my compulsion perfectly and still can't stop"* — and it is why insight-only therapy stalls. Adding `^1^C` only grows excess capacity against a `^3^O` ceiling.
+
+The therapy from the previous section is, in recipe terms, *feeding the limiting reagent.* Lowering `L` (the F6 Structure weight) loosens the habit and **widens the lock range** — which is exactly raising the effective supply of `^3^O`, the behavioral plasticity that was the bottleneck. Capturing at a nearby rate and dragging slowly is the operating condition that keeps `η` high: leave the lock range and actual yield collapses even though the ingredients are all present (the loop snaps back to its old f0). A steady, attractive external rhythm is a **catalyst** `κ`; a chaotic environment with no stable reference is an **inhibitor** `ι`. Find the limiting reagent first — here, plasticity, not insight — and feed *that*. (Weights and supplies are design choices, not measured quantities.)
+
 ## Datasheet — COB Parameters
 
 | Parameter | Symbol | Set by | Meaning | Typical design range |

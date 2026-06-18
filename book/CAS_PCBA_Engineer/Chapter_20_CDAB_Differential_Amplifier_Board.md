@@ -197,6 +197,32 @@ The CDAB is a general-purpose comparison engine, and four applications recur oft
 - **Bias audit.** Run the same prompt through two configurations of a system — two different constitutions, two different Drive settings, two fine-tuning corpora — and compare the outputs on a CDAB. Because the inputs are identical, *everything that survives the common-mode rejection is attributable to the configuration difference*. The structural difference report tells you exactly how the bias change altered the system's cognition: not "the outputs differ" but "configuration A pulls toward `^5^P` principled stability while configuration B drifts toward `^9^O` operational compliance." That is a bias audit with a typed, traceable result.
 - **A/B testing.** The everyday case: two candidate responses, two design options, two model versions. The CDAB reports not which is "better" — that needs a separate judgment — but *how they structurally differ*, so the better/worse call is made on a clear statement of the actual divergence rather than a vague impression that the two "feel different."
 
+## Recipe View: What Produces a Synthesis
+
+The Applications above noted something important: the CDAB produces a *difference report*, not a synthesis — it "tells you precisely what a synthesis has to reconcile," but the reconciling is a further step. Chapter 14's recipe machinery names exactly what that step needs, and why it so often fails.
+
+The target is `Ω_synthesis`: a third position that genuinely *resolves* the opposition the CDAB found, rather than splitting the difference. Because it fuses two opposed inputs into a new emergent state, it is a `×` integration in the v7.7 sense (Chapter 2) — and producing that fusion has a recipe, with the prerequisites in proportion (`+` for prerequisite co-presence, as always):
+
+```
+Θ(Ω_synthesis) = 1.0·^1^C_{F2}|A + 2.0·^4^P_{F1}|T + 1.0·^6^C|A → Ω_synthesis
+```
+
+— one part **difference report** (`^1^C_{F2}|A`, the CDAB's own structural output: knowing exactly how the two positions diverge), two parts **integrative drive** (`^4^P_{F1}|T` — Vibration in the Principled domain, driven by Unity, transcendent: the orienting *pull toward unifying* the opposition), and one part **recombination** (`^6^C|A`, the analytical decomposition-and-reassembly that constructs the third position — the board's own active-load Noetic, reused). The integrative drive carries the heaviest weight, because *wanting to unify* is what turns analysis into resolution.
+
+Take a sharp, well-run debate with no shared goal — two parties who have mapped their disagreement precisely and have no wish to reconcile it:
+
+| Ingredient | required `aᵢ` | available `xᵢ` | `xᵢ / aᵢ` |
+|---|---|---|---|
+| `^1^C` difference report | 1.0 | 1.6 | 1.60 |
+| `^4^P` integrative drive | 2.0 | 0.5 | **0.25** |
+| `^6^C` recombination | 1.0 | 1.4 | 1.40 |
+
+`Y_T = min(1.60, 0.25, 1.40) = 0.25`, limiting reagent = `^4^P`. The synthesis barely forms: this is the well-characterized stalemate — the disagreement understood in perfect structural detail and resolved not at all. Sharpening the difference report (more `^1^C`) or adding analytical horsepower (more `^6^C`) only grows excess capacity; the bottleneck is the *will to integrate.*
+
+There is also a **leakage** path worth naming. If the board's CMRR is poor (the CMRR section above), shared assumptions survive the common-mode rejection and contaminate the difference signal — the `^1^C` ingredient is then *present but wrong* (`Λ`, leakage — distinct from absent or inverted). A synthesis built on a corrupted difference report resolves a tension that isn't the real one. Good CMRR is therefore a precondition for sound synthesis, not just for a clean report.
+
+The fixes follow Chapter 14: feed the limiting reagent — supply integrative drive (a genuine super-ordinate goal both positions serve is a **catalyst** `κ`; zero-sum framing is an **inhibitor** `ι`) — and hold CMRR high so the difference signal feeding the synthesis is the *real* difference. As always, the weights and supplies here are design choices, not measured quantities.
+
 ## Datasheet: CDAB Parameters
 
 The following are **design choices** for the worked build, not measured results.
