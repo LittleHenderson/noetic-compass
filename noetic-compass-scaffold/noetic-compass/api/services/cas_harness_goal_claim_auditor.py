@@ -45,6 +45,9 @@ BEHAVIOR_V5_PRESPEECH_REPORT_SCHEMA_VERSION = (
     "cas_harness_behavior_v5_prespeech_eval.v1"
 )
 BEHAVIOR_V5_CAUSAL_REPORT_SCHEMA_VERSION = "cas_harness_behavior_v5_causal_analysis.v1"
+HALLUCINATION_PRESPEECH_REPORT_SCHEMA_VERSION = (
+    "cas_harness_hallucination_prespeech_eval.v1"
+)
 
 W0_REQUIRED_GATES = (
     "exact_prompt_group_pass",
@@ -53,6 +56,7 @@ W0_REQUIRED_GATES = (
     "same_prompt_mixed_group_floor_pass",
     "risk_hidden_balanced_accuracy_pass",
     "risk_text_margin_pass",
+    "risk_char_text_margin_pass",
     "risk_l0_baseline_present_pass",
     "risk_l0_margin_pass",
     "risk_payload_margin_pass",
@@ -110,6 +114,28 @@ BEHAVIOR_V5_CAUSAL_REQUIRED_GATES = (
     "malformed_rate_pass",
 )
 
+HALLUCINATION_PRESPEECH_REQUIRED_GATES = (
+    "exact_prompt_group_pass",
+    "same_prompt_mixed_group_floor_pass",
+    "topic_floor_pass",
+    "label_per_topic_floor_pass",
+    "hidden_balanced_accuracy_pass",
+    "l0_baseline_present_pass",
+    "l0_margin_pass",
+    "text_margin_pass",
+    "char_text_margin_pass",
+    "topic_margin_pass",
+    "domain_margin_pass",
+    "evidence_source_margin_pass",
+    "retrieval_condition_margin_pass",
+    "retrieval_score_bucket_margin_pass",
+    "prompt_length_margin_pass",
+    "evidence_length_margin_pass",
+    "shuffled_control_pass",
+    "within_topic_permutation_pass",
+    "per_topic_floor_pass",
+)
+
 ACTIVE_GOAL_CLAIMS = (
     "internal_w0_prompt_injection_detection",
     "live_pre_speech_interception",
@@ -151,6 +177,7 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
     hidden_injection_w0_scan = _scan_existing_hidden_injection_w0_reports(root_path)
     behavior_v5_prespeech_scan = _scan_existing_behavior_v5_prespeech_reports(root_path)
     behavior_v5_causal_scan = _scan_existing_behavior_v5_causal_reports(root_path)
+    hallucination_prespeech_scan = _scan_existing_hallucination_prespeech_reports(root_path)
 
     rows = [
         _audit_internal_w0_detection(
@@ -193,23 +220,7 @@ def audit_active_goal_claims(root: Path | str) -> dict[str, Any]:
                 "signed claim review preserving FLAG_FOR_HUMAN_REVIEW versus ACCEPT",
             ],
         ),
-        _static_not_licensed_row(
-            claim_id="hallucination_prevention",
-            evidence_status="unavailable",
-            reason=(
-                "Current claim-grounding screens can flag unsupported claims, but no "
-                "separate evidence-grounded benchmark proves internal pre-output "
-                "hallucination detection or prevention during generation."
-            ),
-            required_evidence=[
-                "pre-registered supported/unsupported factual QA benchmark",
-                "evidence-grounded labels independent of the model output text",
-                "hidden-state detector that beats text/length/domain/retrieval baselines",
-                "intervention or guardrail proof that reduces unsupported claims",
-                "held-out controls, answer-quality floor, and false-positive floor",
-                "hosted Evidence Packet verification",
-            ],
-        ),
+        _audit_hallucination_prevention(hallucination_prespeech_scan),
         _static_not_licensed_row(
             claim_id="cjt_prediction_head_claims",
             evidence_status="unavailable",
@@ -377,8 +388,14 @@ def _audit_internal_w0_detection(
         ),
         "risk_hidden_balanced_accuracy": metrics.get("risk_hidden_balanced_accuracy"),
         "risk_text_hash_balanced_accuracy": metrics.get("risk_text_hash_balanced_accuracy"),
+        "risk_char_text_hash_balanced_accuracy": metrics.get(
+            "risk_char_text_hash_balanced_accuracy"
+        ),
         "risk_hidden_minus_text_balanced_accuracy": metrics.get(
             "risk_hidden_minus_text_balanced_accuracy"
+        ),
+        "risk_hidden_minus_char_text_balanced_accuracy": metrics.get(
+            "risk_hidden_minus_char_text_balanced_accuracy"
         ),
         "risk_l0_embedding_balanced_accuracy": metrics.get(
             "risk_l0_embedding_balanced_accuracy"
@@ -455,6 +472,80 @@ def _hidden_injection_surface_metrics(artifact: Any) -> dict[str, Any]:
         "domain_majority_balanced_accuracy": metrics.get("domain_majority_balanced_accuracy"),
         "encoding_majority_balanced_accuracy": metrics.get("encoding_majority_balanced_accuracy"),
     }
+
+
+def _audit_hallucination_prevention(
+    hallucination_prespeech_scan: dict[str, Any],
+) -> GoalClaimAuditRow:
+    passing_detection = [
+        candidate
+        for candidate in hallucination_prespeech_scan.get("candidates", [])
+        if candidate.get("license_eligible") is True
+    ]
+    best_detection = (
+        passing_detection[0]
+        if passing_detection
+        else hallucination_prespeech_scan.get("best_candidate")
+    )
+    detection_summary = _scan_summary(hallucination_prespeech_scan)
+    if passing_detection:
+        reason = (
+            "A W0 hallucination-risk detection report is present, but the active "
+            "claim is hallucination prevention. Prevention still needs a separate "
+            "guardrail/intervention proof that reduces unsupported answers without "
+            "destroying supported-answer quality."
+        )
+        evidence_status: EvidenceStatus = "present"
+        failing_gates = [
+            "hallucination_guardrail_or_intervention_proof",
+            "unsupported_claim_reduction_effect",
+            "supported_answer_quality_floor",
+            "false_positive_floor",
+            "hosted_evidence_packet_verification",
+        ]
+    else:
+        reason = (
+            "Current claim-grounding screens can flag unsupported claims, but no "
+            "passing evidence-grounded W0 report proves internal pre-output "
+            "hallucination-risk detection, and no guardrail/intervention proof "
+            "shows prevention during generation."
+        )
+        evidence_status = "unavailable"
+        failing_gates = [
+            "passing_hallucination_prespeech_report",
+            "hallucination_guardrail_or_intervention_proof",
+            "unsupported_claim_reduction_effect",
+            "supported_answer_quality_floor",
+            "false_positive_floor",
+            "hosted_evidence_packet_verification",
+        ]
+    return GoalClaimAuditRow(
+        claim_id="hallucination_prevention",
+        claim_status="OPEN",
+        license_status="NOT LICENSED",
+        evidence_status=evidence_status,
+        decision="keep_OPEN_NOT_LICENSED",
+        reason=reason,
+        required_evidence=[
+            "pre-registered supported/unsupported factual QA benchmark",
+            "evidence-grounded labels independent of the model output text",
+            "hidden-state detector that beats text/char/length/domain/retrieval baselines",
+            "intervention or guardrail proof that reduces unsupported claims",
+            "held-out controls, answer-quality floor, and false-positive floor",
+            "hosted Evidence Packet verification",
+        ],
+        evidence_refs=(
+            [str(best_detection.get("ref"))] if isinstance(best_detection, Mapping) else []
+        ),
+        failing_gates=failing_gates,
+        observed_metrics={
+            "hallucination_prespeech_detection": detection_summary,
+            "claim_boundary": (
+                "Detection, even if present, does not license prevention without "
+                "a separate intervention/guardrail proof."
+            ),
+        },
+    )
 
 
 def _audit_causal_proof(
@@ -629,8 +720,14 @@ def _scan_existing_w0_reports(root: Path) -> dict[str, Any]:
             "risk_text_hash_balanced_accuracy": metrics.get(
                 "risk_text_hash_balanced_accuracy"
             ),
+            "risk_char_text_hash_balanced_accuracy": metrics.get(
+                "risk_char_text_hash_balanced_accuracy"
+            ),
             "risk_hidden_minus_text_balanced_accuracy": metrics.get(
                 "risk_hidden_minus_text_balanced_accuracy"
+            ),
+            "risk_hidden_minus_char_text_balanced_accuracy": metrics.get(
+                "risk_hidden_minus_char_text_balanced_accuracy"
             ),
             "risk_within_payload_permutation_p": metrics.get(
                 "risk_within_payload_permutation_p"
@@ -642,6 +739,7 @@ def _scan_existing_w0_reports(root: Path) -> dict[str, Any]:
         key=lambda item: (
             bool(item["license_eligible"]),
             int(item["gate_pass_count"]),
+            _float_or_low(item.get("risk_hidden_minus_char_text_balanced_accuracy")),
             _float_or_low(item.get("risk_hidden_minus_text_balanced_accuracy")),
             _float_or_low(item.get("risk_hidden_balanced_accuracy")),
         ),
@@ -826,6 +924,72 @@ def _scan_existing_behavior_v5_causal_reports(root: Path) -> dict[str, Any]:
             int(item["gate_pass_count"]),
             _float_or_low(item.get("plus_refusal_refused_shift")),
             -_float_or_low(item.get("plus_refusal_sign_flip_p")),
+        ),
+        reverse=True,
+    )
+    return {
+        "report_count": len(candidates),
+        "candidates": candidates,
+        "best_candidate": candidates[0] if candidates else None,
+    }
+
+
+def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]:
+    docs_working = root / "docs" / "working"
+    if not docs_working.exists():
+        return {"report_count": 0, "candidates": [], "best_candidate": None}
+
+    candidates: list[dict[str, Any]] = []
+    for path in docs_working.rglob("*.json"):
+        artifact = _load_json_path(path)
+        parsed = artifact.get("json")
+        if not isinstance(parsed, Mapping):
+            continue
+        if parsed.get("schema_version") != HALLUCINATION_PRESPEECH_REPORT_SCHEMA_VERSION:
+            continue
+        gates = parsed.get("gates") if isinstance(parsed.get("gates"), Mapping) else {}
+        metrics = parsed.get("metrics") if isinstance(parsed.get("metrics"), Mapping) else {}
+        failing_gates = [
+            gate_name
+            for gate_name in HALLUCINATION_PRESPEECH_REQUIRED_GATES
+            if gates.get(gate_name) is not True
+        ]
+        gate_pass_count = len(HALLUCINATION_PRESPEECH_REQUIRED_GATES) - len(failing_gates)
+        status = str(parsed.get("status") or "UNKNOWN")
+        candidate = {
+            "ref": str(path.relative_to(root)),
+            "sha256": artifact["sha256"],
+            "status": status,
+            "layer": parsed.get("layer"),
+            "gate_pass_count": gate_pass_count,
+            "gate_total": len(HALLUCINATION_PRESPEECH_REQUIRED_GATES),
+            "license_eligible": status == "PASS" and not failing_gates,
+            "failing_gates": failing_gates,
+            "hidden_balanced_accuracy": metrics.get("hidden_balanced_accuracy"),
+            "text_hash_balanced_accuracy": metrics.get("text_hash_balanced_accuracy"),
+            "char_text_hash_balanced_accuracy": metrics.get(
+                "char_text_hash_balanced_accuracy"
+            ),
+            "hidden_minus_char_text_balanced_accuracy": metrics.get(
+                "hidden_minus_char_text_balanced_accuracy"
+            ),
+            "hidden_minus_retrieval_condition_balanced_accuracy": metrics.get(
+                "hidden_minus_retrieval_condition_balanced_accuracy"
+            ),
+            "hidden_minus_retrieval_score_bucket_balanced_accuracy": metrics.get(
+                "hidden_minus_retrieval_score_bucket_balanced_accuracy"
+            ),
+            "within_topic_permutation_p": metrics.get("within_topic_permutation_p"),
+            "mixed_prompt_group_count": parsed.get("mixed_prompt_group_count"),
+        }
+        candidates.append(candidate)
+
+    candidates.sort(
+        key=lambda item: (
+            bool(item["license_eligible"]),
+            int(item["gate_pass_count"]),
+            _float_or_low(item.get("hidden_minus_char_text_balanced_accuracy")),
+            _float_or_low(item.get("hidden_balanced_accuracy")),
         ),
         reverse=True,
     )

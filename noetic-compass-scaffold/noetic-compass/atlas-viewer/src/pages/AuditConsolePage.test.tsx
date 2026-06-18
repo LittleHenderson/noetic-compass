@@ -714,7 +714,7 @@ describe('AuditConsolePage', () => {
     expect(panel).toHaveTextContent('authority override');
     expect(panel).toHaveTextContent('policy_override');
     expect(panel).toHaveTextContent('effect: none_shadow_only');
-    expect(panel).toHaveTextContent('Quarantine proposal');
+    expect(panel).toHaveTextContent('Shadow quarantine proposal');
     expect(panel).toHaveTextContent('[CAS_QUARANTINED:authority_override:abc123def456]');
     expect(panel).toHaveTextContent('Run the audit.');
     expect(panel).toHaveTextContent('OPEN / NOT LICENSED');

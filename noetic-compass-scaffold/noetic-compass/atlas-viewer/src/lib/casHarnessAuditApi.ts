@@ -188,6 +188,24 @@ export interface CasHarnessCjtPcbaDiagnostics {
   claim_ceiling: string;
 }
 
+export interface CasHarnessActivationDetection {
+  schema_version: 'cas_harness_comply_refuse_detection.v0';
+  mode: 'shadow';
+  status: 'present' | 'unavailable';
+  read: 'activation_native_post_hoc_window';
+  claim_level: 'detection_only_post_hoc';
+  verdict_effect: 'none_shadow_only';
+  claim_ceiling: string;
+  label: 'COMPLIED' | 'REFUSED' | null;
+  score: number | null;
+  p_complied: number | null;
+  reason: string;
+  model_id: string | null;
+  probe_model: string | null;
+  evidence_packet_trace_id: string | null;
+  probe?: Record<string, unknown> | null;
+}
+
 export interface CasHarnessInstructionIntegrityGluing {
   coverage_status: 'present' | 'incomplete';
   lacunarity_flags: string[];
@@ -195,6 +213,7 @@ export interface CasHarnessInstructionIntegrityGluing {
   evidence_packet_trace_id: string | null;
   rpm_reason_continuity?: CasHarnessInstructionRpmReasonContinuity | null;
   cjt_pcba_diagnostics?: CasHarnessCjtPcbaDiagnostics | null;
+  activation_detection?: CasHarnessActivationDetection | null;
 }
 
 export interface CasHarnessInstructionQuarantineSpan {
@@ -2105,6 +2124,9 @@ function parseInstructionIntegrityGluing(raw: unknown): CasHarnessInstructionInt
     cjt_pcba_diagnostics: parseNullableInstructionCjtPcbaDiagnostics(
       raw.cjt_pcba_diagnostics,
     ),
+    activation_detection: parseNullableInstructionActivationDetection(
+      raw.activation_detection,
+    ),
   };
 }
 
@@ -2207,6 +2229,111 @@ function parseNullableInstructionCjtPcbaDiagnostics(
       raw.claim_ceiling,
       'instruction_integrity.gluing.cjt_pcba_diagnostics.claim_ceiling',
     ),
+  };
+}
+
+function parseNullableInstructionActivationDetection(
+  raw: unknown,
+): CasHarnessActivationDetection | null {
+  if (raw === null || raw === undefined) return null;
+  if (!isRecord(raw)) {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity activation_detection was malformed',
+    );
+  }
+  const schemaVersion = requiredString(
+    raw.schema_version,
+    'instruction_integrity.gluing.activation_detection.schema_version',
+  );
+  if (schemaVersion !== 'cas_harness_comply_refuse_detection.v0') {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity activation_detection schema_version is unsupported',
+    );
+  }
+  const mode = requiredString(
+    raw.mode,
+    'instruction_integrity.gluing.activation_detection.mode',
+  );
+  if (mode !== 'shadow') {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness instruction_integrity activation_detection mode must be shadow',
+    );
+  }
+  const status = requiredString(
+    raw.status,
+    'instruction_integrity.gluing.activation_detection.status',
+  );
+  if (status !== 'present' && status !== 'unavailable') {
+    throw new CasHarnessAuditApiError(
+      `Unsupported CAS Harness activation_detection status: ${String(raw.status)}`,
+    );
+  }
+  const read = requiredString(
+    raw.read,
+    'instruction_integrity.gluing.activation_detection.read',
+  );
+  if (read !== 'activation_native_post_hoc_window') {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness activation_detection read must be activation_native_post_hoc_window',
+    );
+  }
+  const claimLevel = requiredString(
+    raw.claim_level,
+    'instruction_integrity.gluing.activation_detection.claim_level',
+  );
+  if (claimLevel !== 'detection_only_post_hoc') {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness activation_detection claim_level must be detection_only_post_hoc',
+    );
+  }
+  const verdictEffect = requiredString(
+    raw.verdict_effect,
+    'instruction_integrity.gluing.activation_detection.verdict_effect',
+  );
+  if (verdictEffect !== 'none_shadow_only') {
+    throw new CasHarnessAuditApiError(
+      'CAS Harness activation_detection verdict_effect must be none_shadow_only',
+    );
+  }
+  const claimCeiling = requiredString(
+    raw.claim_ceiling,
+    'instruction_integrity.gluing.activation_detection.claim_ceiling',
+  );
+  for (const marker of ['DETECTION ONLY', 'REALIZED OUTPUT', 'NOT a pre-speech']) {
+    if (!claimCeiling.includes(marker)) {
+      throw new CasHarnessAuditApiError(
+        'CAS Harness activation_detection claim_ceiling must preserve the detection-only boundary',
+      );
+    }
+  }
+  const label = raw.label === null || raw.label === undefined ? null : requiredString(
+    raw.label,
+    'instruction_integrity.gluing.activation_detection.label',
+  );
+  if (label !== null && label !== 'COMPLIED' && label !== 'REFUSED') {
+    throw new CasHarnessAuditApiError(
+      `Unsupported CAS Harness activation_detection label: ${String(raw.label)}`,
+    );
+  }
+  return {
+    schema_version: schemaVersion,
+    mode,
+    status,
+    read,
+    claim_level: claimLevel,
+    verdict_effect: verdictEffect,
+    claim_ceiling: claimCeiling,
+    label,
+    score: nullableNumber(raw.score, 'instruction_integrity.gluing.activation_detection.score'),
+    p_complied: nullableNumber(
+      raw.p_complied,
+      'instruction_integrity.gluing.activation_detection.p_complied',
+    ),
+    reason: requiredString(raw.reason, 'instruction_integrity.gluing.activation_detection.reason'),
+    model_id: nullableString(raw.model_id),
+    probe_model: nullableString(raw.probe_model),
+    evidence_packet_trace_id: nullableString(raw.evidence_packet_trace_id),
+    probe: isRecord(raw.probe) ? { ...raw.probe } : null,
   };
 }
 

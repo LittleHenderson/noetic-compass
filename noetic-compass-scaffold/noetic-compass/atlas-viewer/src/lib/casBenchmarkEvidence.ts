@@ -12,7 +12,7 @@ export const CAS_BENCHMARK_HEADLINE =
   'CAS beats the baseline on the validated jobs below.';
 
 export const CAS_BENCHMARK_SUBHEAD =
-  'This is the direct product claim: CAS is not just naming states. In the validated tests, CAS labels predict internal labels, causal removals, output shifts, and accept/suppress decisions better than the control methods listed here.';
+  'Scoped benchmark evidence: on the validated tests below, CAS labels beat the listed controls for internal labels, ablation checks, output shifts, and verifier triage. Open safety claims remain governed by the active claim audit.';
 
 export const CAS_BENCHMARK_EVIDENCE: readonly CasBenchmarkEvidence[] = [
   {

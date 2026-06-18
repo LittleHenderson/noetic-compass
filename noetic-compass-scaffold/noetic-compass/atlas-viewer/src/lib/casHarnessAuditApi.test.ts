@@ -191,6 +191,23 @@ function instructionIntegrityReport(
         claim_ceiling:
           'CJT/PCBA diagnostics are shadow-only. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
       },
+      activation_detection: {
+        schema_version: 'cas_harness_comply_refuse_detection.v0',
+        mode: 'shadow',
+        status: 'unavailable',
+        read: 'activation_native_post_hoc_window',
+        claim_level: 'detection_only_post_hoc',
+        verdict_effect: 'none_shadow_only',
+        claim_ceiling:
+          'DETECTION ONLY: reads the REALIZED OUTPUT (window = generated tokens). Informationally equivalent to scoring response text. NOT a pre-speech internal-state read; NOT independent of payload.',
+        label: null,
+        score: null,
+        p_complied: null,
+        reason: 'closed API exposes no activation window for activation-native comply/refuse detection',
+        model_id: 'gpt-4o-mini',
+        probe_model: null,
+        evidence_packet_trace_id: 'cas-audit-unit',
+      },
     },
     quarantine: {
       schema_version: 'cas_harness_instruction_quarantine.v0',
@@ -1092,6 +1109,12 @@ describe('casHarnessAuditApi', () => {
           diagnostic_count: 1,
           surface_finding_count: 1,
         },
+        activation_detection: {
+          status: 'unavailable',
+          read: 'activation_native_post_hoc_window',
+          claim_level: 'detection_only_post_hoc',
+          verdict_effect: 'none_shadow_only',
+        },
       },
     });
     expect(parsed.instruction_integrity?.findings[0]).toMatchObject({
@@ -1119,6 +1142,17 @@ describe('casHarnessAuditApi', () => {
       replacement: '[CAS_QUARANTINED:authority_override:abc123def456]',
       span_start: 4,
       span_end: 68,
+    });
+    expect(parsed.instruction_integrity?.gluing.activation_detection).toMatchObject({
+      schema_version: 'cas_harness_comply_refuse_detection.v0',
+      mode: 'shadow',
+      status: 'unavailable',
+      read: 'activation_native_post_hoc_window',
+      claim_level: 'detection_only_post_hoc',
+      verdict_effect: 'none_shadow_only',
+      label: null,
+      score: null,
+      p_complied: null,
     });
     expect(parsed.verdict).toBeNull();
   });
@@ -1158,6 +1192,21 @@ describe('casHarnessAuditApi', () => {
         }),
       })),
     ).toThrow(/quarantine verdict_effect must be none_shadow_only/);
+
+    expect(() =>
+      parseAuditSessionResponse(pendingSession({
+        instruction_integrity: instructionIntegrityReport({
+          gluing: {
+            ...(instructionIntegrityReport().gluing as Record<string, unknown>),
+            activation_detection: {
+              ...((instructionIntegrityReport().gluing as Record<string, unknown>)
+                .activation_detection as Record<string, unknown>),
+              verdict_effect: 'blocks_verdict',
+            },
+          },
+        }),
+      })),
+    ).toThrow(/activation_detection verdict_effect must be none_shadow_only/);
   });
 
   it('defaults audit_scope and provider to null when absent', () => {

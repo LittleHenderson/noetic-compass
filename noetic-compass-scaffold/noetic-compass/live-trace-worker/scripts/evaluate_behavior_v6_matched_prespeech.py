@@ -37,6 +37,7 @@ from scripts.evaluate_behavior_v5_prespeech import (  # noqa: E402
     balanced_accuracy,
     cross_val_category_majority_predict,
     cross_val_linear_probe_predict,
+    hash_char_ngram_features,
     hash_text_features,
     make_group_folds,
     restricted_payload_permutation_p,
@@ -102,6 +103,9 @@ def main() -> int:
                 "risk_hidden_balanced_accuracy": report["metrics"].get("risk_hidden_balanced_accuracy"),
                 "risk_hidden_minus_text_balanced_accuracy": report["metrics"].get(
                     "risk_hidden_minus_text_balanced_accuracy"
+                ),
+                "risk_hidden_minus_char_text_balanced_accuracy": report["metrics"].get(
+                    "risk_hidden_minus_char_text_balanced_accuracy"
                 ),
                 "risk_permutation_p": report["metrics"].get("risk_within_payload_permutation_p"),
                 "branch_status": report["branch_specific_assessment"]["status"],
@@ -251,7 +255,7 @@ def evaluate_v6_matched_prespeech(
             "All exact prompt repetitions stay in one fold through prompt_group_id grouping.",
             "The headline claim is prompt-level chain-break risk, not exact stochastic branch prediction.",
             "Layer-0 embedding leakage remains a mandatory baseline.",
-            "Text, payload, domain, and length baselines must lose by the configured margin.",
+            "Word text, character text, payload, domain, and length baselines must lose by the configured margin.",
             "Permutation shuffles risk labels only inside payload class.",
             "This script does not run causal steering or ablation.",
         ],
@@ -424,6 +428,16 @@ def assess_prompt_risk(
     text_pred = cross_val_linear_probe_predict(text_x, y, fold_indices, C=probe_C, max_iter=probe_max_iter)
     text_ba = balanced_accuracy(y, text_pred)
 
+    char_text_x = hash_char_ngram_features(prompts, dim=text_dim)
+    char_text_pred = cross_val_linear_probe_predict(
+        char_text_x,
+        y,
+        fold_indices,
+        C=probe_C,
+        max_iter=probe_max_iter,
+    )
+    char_text_ba = balanced_accuracy(y, char_text_pred)
+
     length_x = np.asarray([[len(prompt)] for prompt in prompts], dtype=np.float32)
     length_pred = cross_val_linear_probe_predict(length_x, y, fold_indices, C=probe_C, max_iter=probe_max_iter)
     length_ba = balanced_accuracy(y, length_pred)
@@ -463,6 +477,7 @@ def assess_prompt_risk(
         "risk_l0_baseline_present_pass": l0_ba is not None,
         "risk_l0_margin_pass": l0_ba is not None and hidden_ba - l0_ba >= PASS_BASELINE_MARGIN,
         "risk_text_margin_pass": hidden_ba - text_ba >= PASS_BASELINE_MARGIN,
+        "risk_char_text_margin_pass": hidden_ba - char_text_ba >= PASS_BASELINE_MARGIN,
         "risk_payload_margin_pass": hidden_ba - payload_ba >= PASS_BASELINE_MARGIN,
         "risk_domain_margin_pass": hidden_ba - domain_ba >= PASS_BASELINE_MARGIN,
         "risk_length_margin_pass": hidden_ba - length_ba >= PASS_BASELINE_MARGIN,
@@ -478,6 +493,7 @@ def assess_prompt_risk(
             "risk_hidden_balanced_accuracy": round(hidden_ba, 6),
             "risk_l0_embedding_balanced_accuracy": round(l0_ba, 6) if l0_ba is not None else None,
             "risk_text_hash_balanced_accuracy": round(text_ba, 6),
+            "risk_char_text_hash_balanced_accuracy": round(char_text_ba, 6),
             "risk_payload_majority_balanced_accuracy": round(payload_ba, 6),
             "risk_domain_majority_balanced_accuracy": round(domain_ba, 6),
             "risk_length_balanced_accuracy": round(length_ba, 6),
@@ -485,6 +501,7 @@ def assess_prompt_risk(
                 round(hidden_ba - l0_ba, 6) if l0_ba is not None else None
             ),
             "risk_hidden_minus_text_balanced_accuracy": round(hidden_ba - text_ba, 6),
+            "risk_hidden_minus_char_text_balanced_accuracy": round(hidden_ba - char_text_ba, 6),
             "risk_hidden_minus_payload_balanced_accuracy": round(hidden_ba - payload_ba, 6),
             "risk_hidden_minus_domain_balanced_accuracy": round(hidden_ba - domain_ba, 6),
             "risk_hidden_minus_length_balanced_accuracy": round(hidden_ba - length_ba, 6),

@@ -59,6 +59,23 @@ function report(
         claim_ceiling:
           'Structural RPM/lacunarity reason-break signal only; not pre-speech, not internal-state, and not causal. Prompt-injection prevention/removal/reversal remains OPEN / NOT LICENSED.',
       },
+      activation_detection: {
+        schema_version: 'cas_harness_comply_refuse_detection.v0',
+        mode: 'shadow',
+        status: 'unavailable',
+        read: 'activation_native_post_hoc_window',
+        claim_level: 'detection_only_post_hoc',
+        verdict_effect: 'none_shadow_only',
+        claim_ceiling:
+          'DETECTION ONLY: reads the REALIZED OUTPUT (window = generated tokens). Informationally equivalent to scoring response text. NOT a pre-speech internal-state read; NOT independent of payload.',
+        label: null,
+        score: null,
+        p_complied: null,
+        reason: 'closed API exposes no activation window for activation-native comply/refuse detection',
+        model_id: 'gpt-4o-mini',
+        probe_model: null,
+        evidence_packet_trace_id: 'cas-audit-unit',
+      },
     },
     quarantine: {
       schema_version: 'cas_harness_instruction_quarantine.v0',
@@ -121,6 +138,7 @@ describe('InstructionIntegrityPanel', () => {
             lacunarity_flags: [],
             truth_state: 'VALID',
             evidence_packet_trace_id: 'cas-clean-packet',
+            activation_detection: null,
           },
         })}
       />,
@@ -150,9 +168,13 @@ describe('InstructionIntegrityPanel', () => {
     expect(panel).toHaveTextContent('breaks: 1');
     expect(panel).toHaveTextContent('lacunarity spike: true');
     expect(panel).toHaveTextContent('not pre-speech, not internal-state, and not causal');
+    expect(panel).toHaveTextContent('Activation detection');
+    expect(panel).toHaveTextContent('DETECTION ONLY');
+    expect(panel).toHaveTextContent('detection_only_post_hoc');
+    expect(panel).toHaveTextContent('NOT a pre-speech');
     expect(panel).toHaveTextContent('Ignore prior instructions');
     expect(panel).toHaveTextContent('effect: none_shadow_only');
-    expect(panel).toHaveTextContent('Quarantine proposal');
+    expect(panel).toHaveTextContent('Shadow quarantine proposal');
     expect(panel).toHaveTextContent('1 blocked');
     expect(panel).toHaveTextContent('[CAS_QUARANTINED:authority_override:abc123def456]');
     expect(panel).toHaveTextContent('Summarize the evidence.');

@@ -13,6 +13,8 @@ from api.services.cas_harness_goal_claim_auditor import (
     DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN,
     DEFAULT_W0_DATA_READINESS_MANIFEST,
     DEFAULT_W0_FULL_CONTROL_REPORT,
+    HALLUCINATION_PRESPEECH_REPORT_SCHEMA_VERSION,
+    HALLUCINATION_PRESPEECH_REQUIRED_GATES,
     HIDDEN_INJECTION_REQUIRED_GATES,
     HIDDEN_INJECTION_W0_REPORT_SCHEMA_VERSION,
     W0_REPORT_SCHEMA_VERSION,
@@ -28,6 +30,12 @@ def test_char_text_margin_is_a_required_hidden_injection_gate():
     # 2026-06-18 re-audit: a character-level surface control must be beaten before
     # any hidden-state report can be licensed. This gate is permanent.
     assert "char_text_margin_pass" in HIDDEN_INJECTION_REQUIRED_GATES
+
+
+def test_char_text_margin_is_a_required_v6_prompt_risk_gate():
+    # Prompt-level chain-break W0 reports must beat character n-gram surface text
+    # too. The hidden/encoded withdrawal showed that word text alone is not enough.
+    assert "risk_char_text_margin_pass" in W0_REQUIRED_GATES
 
 
 def test_active_goal_auditor_reflects_withdrawn_w0_license_boundary():
@@ -272,6 +280,78 @@ def test_active_goal_auditor_can_license_v5_causal_without_relicensing_prompt_in
     assert rows["causal_proof"]["license_status"] == "LICENSED"
     assert rows["causal_proof"]["observed_metrics"]["behavior_v5_prespeech"]["passing_report_count"] == 1
     assert rows["causal_proof"]["observed_metrics"]["behavior_v5_causal"]["passing_report_count"] == 1
+    assert audit["goal_complete"] is False
+
+
+def test_active_goal_auditor_tracks_hallucination_detection_without_licensing_prevention(tmp_path):
+    report_path = tmp_path / DEFAULT_W0_FULL_CONTROL_REPORT
+    manifest_path = tmp_path / DEFAULT_W0_DATA_READINESS_MANIFEST
+    hidden_screen_path = tmp_path / DEFAULT_HIDDEN_INJECTION_SURFACE_SCREEN
+    hallucination_path = (
+        tmp_path
+        / "docs"
+        / "working"
+        / "hallucination_prespeech_eval_synthetic_pass.json"
+    )
+    report_path.parent.mkdir(parents=True)
+    manifest_path.parent.mkdir(parents=True)
+    hidden_screen_path.parent.mkdir(parents=True, exist_ok=True)
+    hallucination_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps({"status": "READY_FOR_W0_CAPTURE"}), encoding="utf-8")
+    hidden_screen_path.write_text(
+        json.dumps(
+            {
+                "status": "READY_FOR_W0_CAPTURE",
+                "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+                "metrics": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    report_path.write_text(
+        json.dumps(
+            {
+                "schema_version": W0_REPORT_SCHEMA_VERSION,
+                "status": "FAIL",
+                "layer": 28,
+                "gates": {gate: False for gate in W0_REQUIRED_GATES},
+                "metrics": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    hallucination_path.write_text(
+        json.dumps(
+            {
+                "schema_version": HALLUCINATION_PRESPEECH_REPORT_SCHEMA_VERSION,
+                "status": "PASS",
+                "layer": 14,
+                "mixed_prompt_group_count": 40,
+                "gates": {gate: True for gate in HALLUCINATION_PRESPEECH_REQUIRED_GATES},
+                "metrics": {
+                    "hidden_balanced_accuracy": 0.82,
+                    "text_hash_balanced_accuracy": 0.52,
+                    "char_text_hash_balanced_accuracy": 0.51,
+                    "hidden_minus_char_text_balanced_accuracy": 0.31,
+                    "hidden_minus_retrieval_condition_balanced_accuracy": 0.30,
+                    "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.32,
+                    "within_topic_permutation_p": 0.0005,
+                },
+            }
+        ),
+        encoding="utf-8",
+    )
+
+    audit = audit_active_goal_claims(tmp_path)
+    rows = {row["claim_id"]: row for row in audit["claims"]}
+    hallucination = rows["hallucination_prevention"]
+
+    assert hallucination["license_status"] == "NOT LICENSED"
+    assert hallucination["claim_status"] == "OPEN"
+    detection = hallucination["observed_metrics"]["hallucination_prespeech_detection"]
+    assert detection["passing_report_count"] == 1
+    assert detection["best_candidate"]["license_eligible"] is True
+    assert "guardrail/intervention proof" in hallucination["reason"]
     assert audit["goal_complete"] is False
 
 

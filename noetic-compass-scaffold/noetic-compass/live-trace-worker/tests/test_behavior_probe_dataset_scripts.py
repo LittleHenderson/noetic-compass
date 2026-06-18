@@ -18,6 +18,7 @@ from scripts.capture_enabled_predicate_w0_all_layers import (
 from scripts.evaluate_hidden_prompt_injection_prespeech import (
     evaluate_hidden_prompt_injection_prespeech,
 )
+from scripts.evaluate_hallucination_prespeech import evaluate_hallucination_prespeech
 from scripts.evaluate_behavior_v6_matched_prespeech import evaluate_v6_matched_prespeech
 from scripts.evaluate_behavior_within_payload import evaluate_behavior_within_payload
 from scripts.evaluate_behavior_v5_prespeech import evaluate_v5_prespeech
@@ -555,6 +556,62 @@ def test_hidden_prompt_injection_w0_evaluator_fails_when_text_ties_hidden(tmp_pa
     assert report["claim"] == "OPEN / NOT LICENSED for internal W0 prompt-injection detection."
 
 
+def test_hallucination_w0_evaluator_passes_when_hidden_beats_surface_controls(tmp_path: Path):
+    dataset_path = tmp_path / "hallucination_pass.npz"
+    _write_hallucination_prespeech_npz(dataset_path, leaky_text=False)
+
+    report = evaluate_hallucination_prespeech(
+        dataset_path=dataset_path,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_topic_classes=5,
+        min_label_per_topic=8,
+        min_mixed_prompt_groups=20,
+        permutations=1000,
+        shuffle_controls=10,
+    )
+
+    assert report["status"] == "PASS"
+    assert report["claim"].startswith("LICENSED only for this model/layer/protocol")
+    assert report["claim_ceiling"].startswith("This is detection only")
+    assert report["gates"]["same_prompt_mixed_group_floor_pass"] is True
+    assert report["gates"]["hidden_balanced_accuracy_pass"] is True
+    assert report["gates"]["char_text_margin_pass"] is True
+    assert report["gates"]["evidence_source_margin_pass"] is True
+    assert report["gates"]["retrieval_condition_margin_pass"] is True
+    assert report["gates"]["retrieval_score_bucket_margin_pass"] is True
+    assert report["gates"]["evidence_length_margin_pass"] is True
+    assert report["metrics"]["hidden_balanced_accuracy"] == 1.0
+    assert report["metrics"]["char_text_hash_balanced_accuracy"] < 0.75
+    assert report["metrics"]["within_topic_permutation_p"] < 0.001
+
+
+def test_hallucination_w0_evaluator_fails_when_char_surface_separates(tmp_path: Path):
+    dataset_path = tmp_path / "hallucination_char_leak.npz"
+    _write_hallucination_prespeech_npz(dataset_path, leaky_text=True)
+
+    report = evaluate_hallucination_prespeech(
+        dataset_path=dataset_path,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_topic_classes=5,
+        min_label_per_topic=8,
+        min_mixed_prompt_groups=20,
+        permutations=10,
+        shuffle_controls=2,
+    )
+
+    assert report["status"] == "FAIL"
+    assert report["gates"]["hidden_balanced_accuracy_pass"] is True
+    assert report["gates"]["char_text_margin_pass"] is False
+    assert report["metrics"]["char_text_hash_balanced_accuracy"] >= 0.75
+    assert report["claim"] == "OPEN / NOT LICENSED for internal W0 hallucination-risk detection."
+
+
 def _write_hidden_prompt_injection_npz(path: Path, *, leaky_text: bool, char_leaky: bool = False) -> None:
     features = []
     statuses = []
@@ -609,6 +666,64 @@ def _write_hidden_prompt_injection_npz(path: Path, *, leaky_text: bool, char_lea
         labels_payload_class=np.asarray(payloads, dtype=object),
         labels_domain=np.asarray(domains, dtype=object),
         labels_encoding=np.asarray(encodings, dtype=object),
+    )
+
+
+def _write_hallucination_prespeech_npz(path: Path, *, leaky_text: bool) -> None:
+    features = []
+    statuses = []
+    topics = []
+    domains = []
+    evidence_sources = []
+    retrieval_conditions = []
+    retrieval_score_buckets = []
+    evidence_texts = []
+    prompts = []
+    scenario_ids = []
+    trace_ids = []
+    for topic_index in range(5):
+        topic = f"topic_{topic_index}"
+        for group_index in range(4):
+            group_key = f"halluc_{topic}_{group_index}"
+            clean_prompt = (
+                f"Answer the factual claim using only the supplied evidence. "
+                f"Topic {topic_index}, source packet {group_index}."
+            )
+            for status_index, status in enumerate(["SUPPORTED", "UNSUPPORTED"]):
+                if leaky_text:
+                    code = "aaaaa" if status == "SUPPORTED" else "zzzzz"
+                    prompt = f"{clean_prompt} auditdigest{code}{topic_index}{group_index}"
+                else:
+                    prompt = clean_prompt
+                for seed in range(2):
+                    signal = -5.0 if status == "SUPPORTED" else 5.0
+                    l0_control = [0.0, float(topic_index), float(group_index), 0.0]
+                    hidden_signal = [signal, float(topic_index), float(group_index), 0.0]
+                    features.append([l0_control, hidden_signal])
+                    statuses.append(status)
+                    topics.append(topic)
+                    domains.append("shared_domain")
+                    evidence_sources.append("shared_evidence_source")
+                    retrieval_conditions.append("shared_retrieval_condition")
+                    retrieval_score_buckets.append("shared_retrieval_score_bucket")
+                    evidence_texts.append("same length evidence block")
+                    prompts.append(prompt)
+                    scenario_ids.append(f"{group_key}::status_{status.lower()}_seed_{seed}")
+                    trace_ids.append(f"halluc_trace_{topic_index}_{group_index}_{status_index}_{seed}")
+    np.savez_compressed(
+        path,
+        features=np.asarray(features, dtype=np.float32),
+        layers=np.asarray([0, 14], dtype=np.int64),
+        prompts=np.asarray(prompts, dtype=object),
+        scenario_ids=np.asarray(scenario_ids, dtype=object),
+        trace_ids=np.asarray(trace_ids, dtype=object),
+        labels_support_status=np.asarray(statuses, dtype=object),
+        labels_topic=np.asarray(topics, dtype=object),
+        labels_domain=np.asarray(domains, dtype=object),
+        labels_evidence_source=np.asarray(evidence_sources, dtype=object),
+        labels_retrieval_condition=np.asarray(retrieval_conditions, dtype=object),
+        labels_retrieval_score_bucket=np.asarray(retrieval_score_buckets, dtype=object),
+        evidence_texts=np.asarray(evidence_texts, dtype=object),
     )
 
 
@@ -867,8 +982,10 @@ def test_v6_matched_prespeech_passes_prompt_risk_gate_and_keeps_branch_diagnosti
     assert report["status"] == "PASS"
     assert report["gates"]["same_prompt_mixed_group_floor_pass"] is True
     assert report["gates"]["risk_hidden_balanced_accuracy_pass"] is True
+    assert report["gates"]["risk_char_text_margin_pass"] is True
     assert report["metrics"]["risk_hidden_balanced_accuracy"] == 1.0
     assert report["metrics"]["risk_hidden_minus_text_balanced_accuracy"] >= 0.15
+    assert report["metrics"]["risk_hidden_minus_char_text_balanced_accuracy"] >= 0.15
     assert report["branch_specific_assessment"]["status"] == "DIAGNOSTIC_ONLY"
     assert report["branch_specific_assessment"]["claim"] == (
         "OPEN / NOT LICENSED for sample-specific branch prediction. Repeated exact prompts "

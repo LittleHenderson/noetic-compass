@@ -200,6 +200,7 @@ export function InstructionIntegrityPanel({
   const flags = report.gluing.lacunarity_flags;
   const rpmReasonContinuity = report.gluing.rpm_reason_continuity;
   const cjtPcbaDiagnostics = report.gluing.cjt_pcba_diagnostics;
+  const activationDetection = report.gluing.activation_detection;
   const showRpmContinuity = Boolean(
     rpmReasonContinuity &&
       (rpmReasonContinuity.status === 'FLAG_FOR_HUMAN_REVIEW' ||
@@ -302,6 +303,25 @@ export function InstructionIntegrityPanel({
         </div>
       ) : null}
 
+      {activationDetection ? (
+        <div style={findingStyle} aria-label="Activation detection boundary">
+          <div style={findingTopStyle}>
+            <p style={findingKindStyle}>Activation detection</p>
+            <span style={metaStyle}>{activationDetection.status}</span>
+          </div>
+          <div style={flagWrapStyle}>
+            <span style={flagStyle}>DETECTION ONLY</span>
+            <span style={flagStyle}>{activationDetection.claim_level}</span>
+            <span style={flagStyle}>effect: {activationDetection.verdict_effect}</span>
+            {activationDetection.label ? (
+              <span style={flagStyle}>label: {activationDetection.label}</span>
+            ) : null}
+          </div>
+          <p style={excerptStyle}>{activationDetection.reason}</p>
+          <p style={excerptStyle}>{activationDetection.claim_ceiling}</p>
+        </div>
+      ) : null}
+
       {visibleFindings.length > 0 ? (
         <ul style={listStyle} role="list">
           {visibleFindings.map((finding) => (
@@ -327,7 +347,7 @@ export function InstructionIntegrityPanel({
           <div style={quarantineHeaderStyle}>
             <div style={titleWrapStyle}>
               <p style={eyebrowStyle}>Active context</p>
-              <p style={titleStyle}>Quarantine proposal</p>
+              <p style={titleStyle}>Shadow quarantine proposal</p>
             </div>
             <span style={statusPillStyle(quarantine.status === 'FLAG_FOR_HUMAN_REVIEW')}>
               {blockedSpans.length} blocked
