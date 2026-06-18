@@ -15,8 +15,9 @@ from datetime import UTC, datetime
 import hashlib
 import json
 from pathlib import Path
+import re
 import sys
-from typing import Any
+from typing import Any, Mapping
 
 import numpy as np
 
@@ -46,6 +47,7 @@ SCHEMA_VERSION = "cas_harness_timing_trajectory_break_eval.v0"
 DEFAULT_LABEL_AXIS = "support_status"
 DEFAULT_POSITIVE_LABEL = "UNSUPPORTED"
 DEFAULT_NEGATIVE_LABEL = "SUPPORTED"
+PASS_ROW_RETENTION_FOR_LICENSE = 0.95
 IDENTITY_FIELDS = (
     "model_output_sha256s",
     "judged_answer_sha256s",
@@ -54,6 +56,7 @@ IDENTITY_FIELDS = (
     "continuation_token_sha256s",
     "forced_continuation_sha256s",
 )
+TIMING_LABEL_RE = re.compile(r"^W(?P<index>\d+)$", re.IGNORECASE)
 
 
 class TrajectoryAlignmentError(RuntimeError):
@@ -65,6 +68,16 @@ def parse_args() -> Any:
     parser.add_argument("--w0-dataset", required=True, type=Path)
     parser.add_argument("--w1-dataset", required=True, type=Path)
     parser.add_argument("--w8-dataset", type=Path, default=None)
+    parser.add_argument(
+        "--timing-dataset",
+        action="append",
+        default=[],
+        help=(
+            "Additional timing capture as LABEL=PATH, for example "
+            "W16=D:\\archive\\w16\\enabled_predicate_w0_all_layers_dataset.npz. "
+            "Labels are sorted by timing index after W0/W1."
+        ),
+    )
     parser.add_argument("--output-report", required=True, type=Path)
     parser.add_argument("--layer", type=int, default=None)
     parser.add_argument("--folds", type=int, default=5)
@@ -102,6 +115,7 @@ def main() -> int:
         w0_dataset_path=args.w0_dataset,
         w1_dataset_path=args.w1_dataset,
         w8_dataset_path=args.w8_dataset,
+        extra_timing_dataset_paths=parse_timing_dataset_args(args.timing_dataset),
         layer=args.layer,
         folds=args.folds,
         seed=args.seed,
@@ -167,6 +181,7 @@ def evaluate_timing_trajectory_break(
     progress_every: int = 0,
     allow_row_intersection: bool = False,
     min_row_retention: float = 0.95,
+    extra_timing_dataset_paths: Mapping[str, Path] | None = None,
     probe_C: float = 0.25,
     probe_max_iter: int = 1000,
 ) -> dict[str, Any]:
@@ -200,6 +215,17 @@ def evaluate_timing_trajectory_break(
                 negative_label=negative,
                 strata_axis=strata_axis,
             )
+        for timing, dataset_path in sorted_timing_items(extra_timing_dataset_paths or {}):
+            if timing in datasets:
+                raise TrajectoryAlignmentError(f"Duplicate timing dataset supplied for {timing}.")
+            datasets[timing] = load_timing_dataset(
+                dataset_path,
+                layer=layer,
+                label_axis=label_axis,
+                positive_label=positive,
+                negative_label=negative,
+                strata_axis=strata_axis,
+            )
         aligned = align_timing_datasets(
             datasets,
             allow_row_intersection=allow_row_intersection,
@@ -210,6 +236,7 @@ def evaluate_timing_trajectory_break(
             w0_dataset_path=w0_dataset_path,
             w1_dataset_path=w1_dataset_path,
             w8_dataset_path=w8_dataset_path,
+            extra_timing_dataset_paths=extra_timing_dataset_paths,
             layer=layer,
             label_axis=label_axis,
             positive_label=positive,
@@ -230,6 +257,7 @@ def evaluate_timing_trajectory_break(
             w0_dataset_path=w0_dataset_path,
             w1_dataset_path=w1_dataset_path,
             w8_dataset_path=w8_dataset_path,
+            extra_timing_dataset_paths=extra_timing_dataset_paths,
             layer=aligned["layer"],
             label_axis=label_axis,
             positive_label=positive,
@@ -428,6 +456,10 @@ def evaluate_timing_trajectory_break(
         "row_intersection_retention_pass": bool(
             prepared["alignment"].get("row_intersection_retention_pass", False)
         ),
+        "row_intersection_license_retention_pass": (
+            float(prepared["alignment"].get("retention_fraction", 0.0))
+            >= PASS_ROW_RETENTION_FOR_LICENSE
+        ),
         "grouped_prompt_fold_pass": cross_validation["train_test_group_overlap_count"] == 0,
         "exact_prompt_group_pass": prompt_contract["non_exact_prompt_group_count"] == 0,
         "same_prompt_mixed_group_floor_pass": (
@@ -483,6 +515,11 @@ def evaluate_timing_trajectory_break(
             "W0": str(w0_dataset_path),
             "W1": str(w1_dataset_path),
             **({"W8": str(w8_dataset_path)} if w8_dataset_path is not None else {}),
+            **{
+                timing: str(path)
+                for timing, path in sorted_timing_items(extra_timing_dataset_paths or {})
+                if timing not in {"W0", "W1", "W8"}
+            },
         },
         "status": "PASS" if overall else "FAIL",
         "claim": (
@@ -515,6 +552,7 @@ def evaluate_timing_trajectory_break(
             "progress_every": int(progress_every),
             "allow_row_intersection": bool(allow_row_intersection),
             "min_row_retention": float(min_row_retention),
+            "min_row_retention_for_license": float(PASS_ROW_RETENTION_FOR_LICENSE),
         },
         "layer": int(prepared["layer"]),
         "row_count": int(len(y)),
@@ -699,7 +737,13 @@ def align_timing_datasets(
     allow_row_intersection: bool,
     min_row_retention: float,
 ) -> dict[str, Any]:
-    timing_order = [timing for timing in ("W0", "W1", "W8") if timing in datasets]
+    if "W0" not in datasets or "W1" not in datasets:
+        raise TrajectoryAlignmentError("Timing datasets must include W0 and W1.")
+    timing_order = sorted(datasets.keys(), key=timing_sort_key)
+    if timing_order[:2] != ["W0", "W1"]:
+        raise TrajectoryAlignmentError(
+            f"Timing datasets must begin W0 -> W1; received {' -> '.join(timing_order)}."
+        )
     w0_ids = datasets["W0"]["trajectory_ids"].tolist()
     if len(set(w0_ids)) != len(w0_ids):
         duplicates = sorted([key for key, count in Counter(w0_ids).items() if count > 1])
@@ -1032,6 +1076,7 @@ def blocked_report(
     w0_dataset_path: Path,
     w1_dataset_path: Path,
     w8_dataset_path: Path | None,
+    extra_timing_dataset_paths: Mapping[str, Path] | None = None,
     layer: int | None,
     label_axis: str,
     positive_label: str,
@@ -1052,17 +1097,29 @@ def blocked_report(
     timing_order = (
         list(aligned.get("timing_order", []))
         if isinstance(aligned, dict) and aligned.get("timing_order")
-        else (["W0", "W1", "W8"] if w8_dataset_path is not None else ["W0", "W1"])
+        else sorted(
+            [
+                "W0",
+                "W1",
+                *(["W8"] if w8_dataset_path is not None else []),
+                *list((extra_timing_dataset_paths or {}).keys()),
+            ],
+            key=timing_sort_key,
+        )
     )
     trajectory_label = " -> ".join(timing_order)
+    dataset_refs = {
+        "W0": str(w0_dataset_path),
+        "W1": str(w1_dataset_path),
+    }
+    if w8_dataset_path is not None:
+        dataset_refs["W8"] = str(w8_dataset_path)
+    for timing, path in sorted_timing_items(extra_timing_dataset_paths or {}):
+        dataset_refs.setdefault(timing, str(path))
     return {
         "schema_version": SCHEMA_VERSION,
         "created_at": datetime.now(UTC).isoformat(),
-        "datasets": {
-            "W0": str(w0_dataset_path),
-            "W1": str(w1_dataset_path),
-            **({"W8": str(w8_dataset_path)} if w8_dataset_path is not None else {}),
-        },
+        "datasets": dict(sorted(dataset_refs.items(), key=lambda item: timing_sort_key(item[0]))),
         "status": "BLOCKED",
         "claim": "OPEN / NOT LICENSED for timing-trajectory hidden-state detection.",
         "claim_ceiling": f"Dataset cannot be evaluated as a {trajectory_label} trajectory-break gate.",
@@ -1093,11 +1150,48 @@ def blocked_report(
         "gates": {
             "row_alignment_pass": False,
             "forced_continuation_identity_pass": False,
+            "row_intersection_license_retention_pass": False,
             "strata_floor_pass": False,
             "label_per_stratum_floor_pass": False,
             "same_prompt_mixed_group_floor_pass": False,
         },
     }
+
+
+def parse_timing_dataset_args(values: list[str]) -> dict[str, Path]:
+    parsed: dict[str, Path] = {}
+    for value in values or []:
+        if "=" not in value:
+            raise RuntimeError("--timing-dataset must be supplied as LABEL=PATH, for example W16=dataset.npz.")
+        raw_label, raw_path = value.split("=", 1)
+        label = normalise_timing_label(raw_label)
+        if label in {"W0", "W1"}:
+            raise RuntimeError("--w0-dataset and --w1-dataset are required separately.")
+        if label in parsed:
+            raise RuntimeError(f"Duplicate timing dataset supplied for {label}.")
+        parsed[label] = Path(raw_path)
+    return parsed
+
+
+def normalise_timing_label(value: Any) -> str:
+    text = str(value or "").strip().upper()
+    if not TIMING_LABEL_RE.match(text):
+        raise RuntimeError(f"Unsupported timing label {text!r}; use W<number>, for example W16.")
+    return text
+
+
+def timing_sort_key(label: str) -> tuple[int, str]:
+    text = normalise_timing_label(label)
+    match = TIMING_LABEL_RE.match(text)
+    assert match is not None
+    return (int(match.group("index")), text)
+
+
+def sorted_timing_items(mapping: Mapping[str, Path]) -> list[tuple[str, Path]]:
+    return sorted(
+        ((normalise_timing_label(label), Path(path)) for label, path in mapping.items()),
+        key=lambda item: timing_sort_key(item[0]),
+    )
 
 
 def load_label_array(

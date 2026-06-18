@@ -1,0 +1,43 @@
+{
+  "alignment": {
+    "forced_continuation_identity_pass": false,
+    "row_alignment_pass": false
+  },
+  "blocker": "Timing row intersection retained 328/1392 rows (0.235632), below required 0.950000.",
+  "claim": "OPEN / NOT LICENSED for timing-trajectory hidden-state detection.",
+  "claim_ceiling": "Dataset cannot be evaluated as a W0 -> W1 -> W8 -> W16 -> W32 trajectory-break gate.",
+  "created_at": "2026-06-18T22:24:09.434906+00:00",
+  "datasets": {
+    "W0": "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\.tmp\\trajectory_break_extract\\outcome_native_hallucination_w0_prompt_risk_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz",
+    "W1": "D:\\tksCAS-archive\\outcome_native_hallucination_qwen05_hard_v2_20260618\\outcome_native_hallucination_w1_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz",
+    "W16": "D:\\tksCAS-archive\\outcome_native_hallucination_qwen05_hard_v2_20260618\\outcome_native_hallucination_w16_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz",
+    "W32": "D:\\tksCAS-archive\\outcome_native_hallucination_qwen05_hard_v2_20260618\\outcome_native_hallucination_w32_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz",
+    "W8": "D:\\tksCAS-archive\\outcome_native_hallucination_qwen05_hard_v2_20260618\\outcome_native_hallucination_w8_qwen05_hard_v2_20260618\\enabled_predicate_w0_all_layers_dataset.npz"
+  },
+  "gates": {
+    "forced_continuation_identity_pass": false,
+    "label_per_stratum_floor_pass": false,
+    "row_alignment_pass": false,
+    "row_intersection_license_retention_pass": false,
+    "same_prompt_mixed_group_floor_pass": false,
+    "strata_floor_pass": false
+  },
+  "label_distribution": {},
+  "layer": 15,
+  "metrics": {},
+  "required_label_per_stratum": 0,
+  "required_mixed_prompt_groups": 0,
+  "required_strata_classes": 0,
+  "row_count": 0,
+  "schema_version": "cas_harness_timing_trajectory_break_eval.v0",
+  "status": "BLOCKED",
+  "strata_axis": "topic",
+  "strata_distribution": {},
+  "target": {
+    "label_axis": "support_status",
+    "negative_label": "SUPPORTED",
+    "positive_label": "UNSUPPORTED",
+    "trajectory": "W0 -> W1 -> W8 -> W16 -> W32 hidden-state movement before the final answer is shown"
+  },
+  "testable_strata_count": 0
+}

@@ -151,6 +151,7 @@ TRAJECTORY_BREAK_REQUIRED_GATES = (
     "row_alignment_pass",
     "forced_continuation_identity_pass",
     "row_intersection_retention_pass",
+    "row_intersection_license_retention_pass",
     "grouped_prompt_fold_pass",
     "exact_prompt_group_pass",
     "same_prompt_mixed_group_floor_pass",

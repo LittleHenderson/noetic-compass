@@ -1380,6 +1380,34 @@ def test_timing_trajectory_break_supports_w0_w1_early_mode(tmp_path: Path):
     assert report["metrics"]["trajectory_hidden_balanced_accuracy"] == 1.0
 
 
+def test_timing_trajectory_break_accepts_additional_timing_points(tmp_path: Path):
+    w0_path, w1_path, w8_path = _write_trajectory_break_npzs(tmp_path, extra_timings=("W16",))
+    w16_path = tmp_path / "trajectory_w16.npz"
+
+    report = evaluate_timing_trajectory_break(
+        w0_dataset_path=w0_path,
+        w1_dataset_path=w1_path,
+        w8_dataset_path=w8_path,
+        extra_timing_dataset_paths={"W16": w16_path},
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_strata_classes=5,
+        min_label_per_stratum=8,
+        min_mixed_prompt_groups=20,
+        permutations=10,
+        shuffle_controls=2,
+    )
+
+    assert report["trajectory_timing_points"] == ["W0", "W1", "W8", "W16"]
+    assert report["generated_prefix_control_timing_point"] == "W16"
+    assert report["datasets"]["W16"] == str(w16_path)
+    assert report["alignment"]["original_timing_row_counts"]["W16"] == 80
+    assert report["gates"]["row_alignment_pass"] is True
+    assert report["gates"]["forced_continuation_identity_pass"] is True
+
+
 def test_pre_answer_timing_resolves_before_answer_token():
     class FakeTokenizer:
         def decode(self, token_ids, *, skip_special_tokens):
@@ -1619,13 +1647,11 @@ def _write_trajectory_break_npzs(
     prefix_leaky: bool = False,
     continuation_mismatch: bool = False,
     drop_w8_row: bool = False,
+    extra_timings: tuple[str, ...] = (),
 ) -> tuple[Path, Path, Path]:
-    paths = {
-        "W0": tmp_path / "trajectory_w0.npz",
-        "W1": tmp_path / "trajectory_w1.npz",
-        "W8": tmp_path / "trajectory_w8.npz",
-    }
-    rows_by_timing: dict[str, list[list[list[float]]]] = {"W0": [], "W1": [], "W8": []}
+    timing_labels = ("W0", "W1", "W8", *extra_timings)
+    paths = {timing: tmp_path / f"trajectory_{timing.lower()}.npz" for timing in timing_labels}
+    rows_by_timing: dict[str, list[list[list[float]]]] = {timing: [] for timing in timing_labels}
     statuses: list[str] = []
     topics: list[str] = []
     prompts: list[str] = []
@@ -1634,7 +1660,7 @@ def _write_trajectory_break_npzs(
     trace_ids: list[str] = []
     model_hashes: list[str] = []
     judged_hashes: list[str] = []
-    prefix_text_by_timing: dict[str, list[str]] = {"W0": [], "W1": [], "W8": []}
+    prefix_text_by_timing: dict[str, list[str]] = {timing: [] for timing in timing_labels}
 
     for topic_index in range(5):
         topic = f"topic_{topic_index}"
@@ -1654,14 +1680,14 @@ def _write_trajectory_break_npzs(
                 continuation_hash = f"continuation-{topic_index}-{group_index}-{status.lower()}"
                 judged_hash = f"judged-{topic_index}-{group_index}-{status.lower()}"
                 l0_base = [float(topic_index), float(group_index), 0.0, 0.0]
-                target_w0 = base
-                target_w1 = base + np.asarray([4.0 * sign, 0.0, 0.0, 0.0], dtype=np.float32)
-                target_w8 = base + np.asarray([8.0 * sign, 0.0, 0.0, 0.0], dtype=np.float32)
-                for timing, target in (
-                    ("W0", target_w0),
-                    ("W1", target_w1),
-                    ("W8", target_w8),
-                ):
+                targets = {
+                    timing: base
+                    if timing == "W0"
+                    else base
+                    + np.asarray([float(timing[1:]) * sign, 0.0, 0.0, 0.0], dtype=np.float32)
+                    for timing in timing_labels
+                }
+                for timing, target in targets.items():
                     rows_by_timing[timing].append([l0_base, target.astype(float).tolist()])
                 statuses.append(status)
                 topics.append(topic)
@@ -1673,12 +1699,15 @@ def _write_trajectory_break_npzs(
                 judged_hashes.append(judged_hash)
                 prefix_text_by_timing["W0"].append("")
                 prefix_text_by_timing["W1"].append("neutral prefix")
-                if prefix_leaky:
-                    prefix_text_by_timing["W8"].append(
-                        "prefix aaaaa" if status == "SUPPORTED" else "prefix zzzzz"
-                    )
-                else:
-                    prefix_text_by_timing["W8"].append("neutral prefix continued")
+                for timing in timing_labels:
+                    if timing in {"W0", "W1"}:
+                        continue
+                    if prefix_leaky and timing == "W8":
+                        prefix_text_by_timing[timing].append(
+                            "prefix aaaaa" if status == "SUPPORTED" else "prefix zzzzz"
+                        )
+                    else:
+                        prefix_text_by_timing[timing].append("neutral prefix continued")
 
     for timing, path in paths.items():
         timing_model_hashes = list(model_hashes)
@@ -1687,7 +1716,7 @@ def _write_trajectory_break_npzs(
             row_indices = row_indices[1:]
         if timing == "W8" and continuation_mismatch:
             timing_model_hashes[0] = "different-continuation-hash"
-        timing_index = {"W0": 0, "W1": 1, "W8": 8}[timing]
+        timing_index = int(timing[1:])
         np.savez_compressed(
             path,
             features=np.asarray([rows_by_timing[timing][index] for index in row_indices], dtype=np.float32),
