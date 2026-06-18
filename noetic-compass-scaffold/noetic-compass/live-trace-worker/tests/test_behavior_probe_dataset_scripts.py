@@ -610,6 +610,22 @@ def test_outcome_native_hallucination_bank_requires_output_judgment(tmp_path: Pa
     assert all(len(prompts) == 1 for prompts in groups.values())
 
 
+def test_outcome_native_hard_profile_uses_stale_draft_traps():
+    payload = build_outcome_native_hallucination_bank(
+        groups_per_topic=8,
+        samples_per_prompt=2,
+        profile="hard",
+    )
+    modes = {row["challenge_mode"] for row in payload["scenarios"]}
+
+    assert payload["summary"]["profile"] == "hard"
+    assert "cached_answer_bias" in modes
+    assert "stale_majority_vote" in modes
+    assert "draft_json_repair" in modes
+    assert "answer_slot_autocomplete" in modes
+    assert payload["summary"]["challenge_mode_distribution"]["answer_slot_autocomplete"] == 10
+
+
 def test_outcome_native_judge_labels_actual_supported_and_unsupported_answers():
     supported = judge_factual_output(
         output_text='{"answer": "2026-01-15"}',
@@ -883,6 +899,7 @@ def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Pa
             "evidence_source": "unit",
             "retrieval_condition": "shared",
             "retrieval_score_bucket": "shared",
+            "challenge_mode": "draft_anchor",
             "qa_pair_id": "qa_0",
             "factual_pair_id": "qa_0",
             "evidence_doc_id": "doc_0",
@@ -916,6 +933,7 @@ def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Pa
         assert data["timing_indices"].tolist() == [8]
         assert data["generated_prefix_texts"].tolist() == ["draft answer prefix"]
         assert data["generated_prefix_token_counts"].tolist() == [8]
+        assert data["labels_challenge_mode"].tolist() == ["draft_anchor"]
         assert data["generation_trace_ids"].tolist() == ["scenario_0::outcome_native_generation"]
         assert data["model_output_sha256s"].tolist() == ["output-hash"]
         assert data["judged_answer_sha256s"].tolist() == ["answer-hash"]

@@ -136,6 +136,7 @@ HALLUCINATION_PRESPEECH_REQUIRED_GATES = (
     "evidence_source_margin_pass",
     "retrieval_condition_margin_pass",
     "retrieval_score_bucket_margin_pass",
+    "challenge_mode_margin_pass",
     "prompt_length_margin_pass",
     "evidence_length_margin_pass",
     "shuffled_control_pass",
@@ -1032,6 +1033,12 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
             ),
             "hidden_minus_retrieval_score_bucket_balanced_accuracy": metrics.get(
                 "hidden_minus_retrieval_score_bucket_balanced_accuracy"
+            ),
+            "challenge_mode_majority_balanced_accuracy": metrics.get(
+                "challenge_mode_majority_balanced_accuracy"
+            ),
+            "hidden_minus_challenge_mode_balanced_accuracy": metrics.get(
+                "hidden_minus_challenge_mode_balanced_accuracy"
             ),
             "within_topic_permutation_p": metrics.get("within_topic_permutation_p"),
             "mixed_prompt_group_count": parsed.get("mixed_prompt_group_count"),

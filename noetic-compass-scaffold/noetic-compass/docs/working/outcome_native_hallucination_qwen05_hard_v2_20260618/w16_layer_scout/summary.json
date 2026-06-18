@@ -1,0 +1,414 @@
+[
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "challenge_mode_margin_pass",
+      "char_text_margin_pass",
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "hidden_balanced_accuracy_pass",
+      "l0_baseline_present_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.698968,
+    "layer": 0,
+    "p": 0.019608,
+    "pass_count": 12,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.841475,
+    "layer": 1,
+    "p": 0.019608,
+    "pass_count": 17,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.834489,
+    "layer": 2,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.84014,
+    "layer": 3,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.846922,
+    "layer": 4,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.851029,
+    "layer": 5,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.85935,
+    "layer": 6,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.855447,
+    "layer": 7,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.856064,
+    "layer": 8,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.859044,
+    "layer": 9,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.874147,
+    "layer": 10,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.877948,
+    "layer": 11,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.881749,
+    "layer": 12,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.877846,
+    "layer": 13,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.882366,
+    "layer": 14,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.888633,
+    "layer": 15,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.886784,
+    "layer": 16,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.864797,
+    "layer": 17,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.860379,
+    "layer": 18,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.854112,
+    "layer": 19,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.863666,
+    "layer": 20,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.854728,
+    "layer": 21,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.852777,
+    "layer": 22,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.850311,
+    "layer": 23,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  },
+  {
+    "challenge_ba": 0.57458,
+    "char_ba": 0.682946,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.861098,
+    "layer": 24,
+    "p": 0.019608,
+    "pass_count": 19,
+    "prefix_char_ba": 0.838805,
+    "status": "FAIL",
+    "text_ba": 0.67144
+  }
+]

@@ -1,0 +1,449 @@
+[
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "challenge_mode_margin_pass",
+      "char_text_margin_pass",
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "hidden_balanced_accuracy_pass",
+      "l0_baseline_present_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "text_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.740283,
+    "layer": 0,
+    "p": 0.019608,
+    "pass_count": 12,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "challenge_mode_margin_pass",
+      "char_text_margin_pass",
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.763968,
+    "layer": 1,
+    "p": 0.019608,
+    "pass_count": 15,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.812337,
+    "layer": 2,
+    "p": 0.019608,
+    "pass_count": 17,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.815504,
+    "layer": 3,
+    "p": 0.019608,
+    "pass_count": 17,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "char_text_margin_pass",
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.805223,
+    "layer": 4,
+    "p": 0.019608,
+    "pass_count": 16,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.808867,
+    "layer": 5,
+    "p": 0.019608,
+    "pass_count": 17,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "char_text_margin_pass",
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.803011,
+    "layer": 6,
+    "p": 0.019608,
+    "pass_count": 16,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "challenge_mode_margin_pass",
+      "char_text_margin_pass",
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.795896,
+    "layer": 7,
+    "p": 0.019608,
+    "pass_count": 15,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.821664,
+    "layer": 8,
+    "p": 0.019608,
+    "pass_count": 17,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.810602,
+    "layer": 9,
+    "p": 0.019608,
+    "pass_count": 17,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.829256,
+    "layer": 10,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.844742,
+    "layer": 11,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.854546,
+    "layer": 12,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.855501,
+    "layer": 13,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.846174,
+    "layer": 14,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.859448,
+    "layer": 15,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.854069,
+    "layer": 16,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.823876,
+    "layer": 17,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.825612,
+    "layer": 18,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.816762,
+    "layer": 19,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "per_topic_floor_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.812815,
+    "layer": 20,
+    "p": 0.019608,
+    "pass_count": 17,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.811556,
+    "layer": 21,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.827043,
+    "layer": 22,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.824354,
+    "layer": 23,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  },
+  {
+    "challenge_ba": 0.647102,
+    "char_ba": 0.656472,
+    "failures": [
+      "generated_prefix_char_text_margin_pass",
+      "generated_prefix_text_margin_pass",
+      "l0_margin_pass",
+      "within_topic_permutation_pass"
+    ],
+    "hidden_ba": 0.825785,
+    "layer": 24,
+    "p": 0.019608,
+    "pass_count": 18,
+    "prefix_char_ba": 0.833203,
+    "status": "FAIL",
+    "text_ba": 0.591966
+  }
+]

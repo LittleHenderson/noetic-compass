@@ -170,6 +170,7 @@ def sample_and_judge_generations(
             "topic": scenario.get("topic") or scenario.get("payload_class", ""),
             "payload_class": scenario.get("payload_class", scenario.get("topic", "")),
             "domain": scenario.get("domain", ""),
+            "challenge_mode": scenario.get("challenge_mode", ""),
             "prompt": scenario.get("prompt", ""),
             "model_prompt_format": prompt_format,
             "model_output": output_text,
@@ -363,6 +364,7 @@ def label_row(row: dict[str, Any]) -> dict[str, Any]:
         "prompt_group_id": row["prompt_group_id"],
         "payload_class": row["payload_class"],
         "topic": row["topic"],
+        "challenge_mode": row.get("challenge_mode", ""),
         "label": row["support_status"],
         "support_status": row["support_status"],
         "judge_name": row["judge_name"],
@@ -427,6 +429,14 @@ def summarize_labeled(*, rows: list[dict[str, Any]], labeled_scenarios: list[dic
         "label_distribution": dict(sorted(Counter(str(row["label"]) for row in rows).items())),
         "support_status_distribution": dict(
             sorted(Counter(str(row["support_status"]) for row in rows if row.get("support_status")).items())
+        ),
+        "challenge_mode_label_distribution": dict(
+            sorted(
+                Counter(
+                    f"{row.get('challenge_mode', 'unknown')}::{row.get('label', '')}"
+                    for row in rows
+                ).items()
+            )
         ),
         "prompt_group_count": int(len(labels_by_group)),
         "mixed_prompt_group_count": int(len(mixed)),

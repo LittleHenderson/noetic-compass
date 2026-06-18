@@ -165,6 +165,7 @@ def evaluate_hallucination_prespeech(
     evidence_sources = prepared["evidence_source"]
     retrieval_conditions = prepared["retrieval_condition"]
     retrieval_score_buckets = prepared["retrieval_score_bucket"]
+    challenge_modes = prepared["challenge_mode"]
     evidence_lengths = prepared["evidence_length"]
     fold_indices = make_group_folds(groups, n_folds=folds, seed=seed)
 
@@ -266,6 +267,10 @@ def evaluate_hallucination_prespeech(
         y,
         cross_val_category_majority_predict(retrieval_score_buckets, y, fold_indices),
     )
+    challenge_mode_ba = balanced_accuracy(
+        y,
+        cross_val_category_majority_predict(challenge_modes, y, fold_indices),
+    )
     topic_breakdown = {
         topic: balanced_accuracy(y[topics == topic], hidden_pred[topics == topic])
         for topic in sorted(set(topics.tolist()))
@@ -318,6 +323,7 @@ def evaluate_hallucination_prespeech(
         "evidence_source_margin_pass": hidden_ba - evidence_source_ba >= PASS_BASELINE_MARGIN,
         "retrieval_condition_margin_pass": hidden_ba - retrieval_condition_ba >= PASS_BASELINE_MARGIN,
         "retrieval_score_bucket_margin_pass": hidden_ba - retrieval_score_bucket_ba >= PASS_BASELINE_MARGIN,
+        "challenge_mode_margin_pass": hidden_ba - challenge_mode_ba >= PASS_BASELINE_MARGIN,
         "prompt_length_margin_pass": hidden_ba - prompt_length_ba >= PASS_BASELINE_MARGIN,
         "evidence_length_margin_pass": hidden_ba - evidence_length_ba >= PASS_BASELINE_MARGIN,
         "shuffled_control_pass": shuffled_mean <= PASS_SHUFFLED_MEAN_MAX,
@@ -376,6 +382,7 @@ def evaluate_hallucination_prespeech(
         "evidence_source_distribution": dict(sorted(Counter(evidence_sources.tolist()).items())),
         "retrieval_condition_distribution": dict(sorted(Counter(retrieval_conditions.tolist()).items())),
         "retrieval_score_bucket_distribution": dict(sorted(Counter(retrieval_score_buckets.tolist()).items())),
+        "challenge_mode_distribution": dict(sorted(Counter(challenge_modes.tolist()).items())),
         "metrics": {
             "hidden_balanced_accuracy": round(hidden_ba, 6),
             "l0_embedding_balanced_accuracy": round(l0_ba, 6) if l0_ba is not None else None,
@@ -388,6 +395,7 @@ def evaluate_hallucination_prespeech(
             "evidence_source_majority_balanced_accuracy": round(evidence_source_ba, 6),
             "retrieval_condition_majority_balanced_accuracy": round(retrieval_condition_ba, 6),
             "retrieval_score_bucket_majority_balanced_accuracy": round(retrieval_score_bucket_ba, 6),
+            "challenge_mode_majority_balanced_accuracy": round(challenge_mode_ba, 6),
             "prompt_length_balanced_accuracy": round(prompt_length_ba, 6),
             "evidence_length_balanced_accuracy": round(evidence_length_ba, 6),
             "hidden_minus_l0_embedding_balanced_accuracy": (
@@ -410,6 +418,7 @@ def evaluate_hallucination_prespeech(
             "hidden_minus_retrieval_score_bucket_balanced_accuracy": (
                 round(hidden_ba - retrieval_score_bucket_ba, 6)
             ),
+            "hidden_minus_challenge_mode_balanced_accuracy": round(hidden_ba - challenge_mode_ba, 6),
             "hidden_minus_prompt_length_balanced_accuracy": round(hidden_ba - prompt_length_ba, 6),
             "hidden_minus_evidence_length_balanced_accuracy": round(hidden_ba - evidence_length_ba, 6),
             "within_topic_permutation_p": round(permutation_p, 6),
@@ -422,7 +431,7 @@ def evaluate_hallucination_prespeech(
         "important_limits": [
             "Grouped folds keep exact prompt/evidence carriers out of both train and test.",
             "Prompt groups must contain both SUPPORTED and UNSUPPORTED realizations of the same factual setup.",
-            "Layer-0, word text, char text, topic, domain, evidence source, retrieval condition, retrieval score, prompt length, and evidence length baselines must lose by margin.",
+            "Layer-0, word text, char text, topic, domain, evidence source, retrieval condition, retrieval score, challenge mode, prompt length, and evidence length baselines must lose by margin.",
             "For W1/W8 pre-display states, generated-prefix word and character text baselines must also lose by margin.",
             "Permutation shuffles labels only inside topic.",
             "This script does not prove prevention or causality.",
@@ -452,6 +461,12 @@ def load_dataset(path: Path, *, layer: int | None) -> dict[str, Any]:
         retrieval_score_bucket = load_string_array(
             data,
             "labels_retrieval_score_bucket",
+            default="unknown",
+            count=len(support_status),
+        )
+        challenge_mode = load_string_array(
+            data,
+            "labels_challenge_mode",
             default="unknown",
             count=len(support_status),
         )
@@ -512,6 +527,7 @@ def load_dataset(path: Path, *, layer: int | None) -> dict[str, Any]:
         "evidence_source": evidence_source,
         "retrieval_condition": retrieval_condition,
         "retrieval_score_bucket": retrieval_score_bucket,
+        "challenge_mode": challenge_mode,
         "evidence_length": np.asarray([len(text) for text in evidence_text.tolist()], dtype=np.float32),
         "generated_prefix_texts": generated_prefix_texts,
         "timing_points": timing_points,

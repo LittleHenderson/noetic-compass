@@ -1,0 +1,206 @@
+{
+  "challenge_mode_distribution": {
+    "answer_slot_autocomplete": 72,
+    "cached_answer_bias": 24,
+    "conflicting_snippets": 45,
+    "draft_anchor": 3,
+    "draft_json_repair": 37,
+    "stale_first_revision": 51,
+    "stale_majority_vote": 75,
+    "trusted_first_strict": 21
+  },
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "claim_ceiling": "This is detection only. It does not license hallucination prevention unless a separate intervention/guardrail proof reduces unsupported answers while preserving answer quality.",
+  "created_at": "2026-06-18T13:19:41.154122+00:00",
+  "dataset": "docs/working/outcome_native_hallucination_w32_qwen05_hard_v2_20260618/enabled_predicate_w0_all_layers_dataset.npz",
+  "domain_distribution": {
+    "C": 55,
+    "E": 60,
+    "F": 66,
+    "O": 98,
+    "P": 49
+  },
+  "evidence_source_distribution": {
+    "clinical_note": 60,
+    "invoice_extract": 66,
+    "policy_digest": 49,
+    "release_note": 55,
+    "warehouse_record": 98
+  },
+  "exact_prompt_group_count": 145,
+  "fold_count": 5,
+  "gates": {
+    "challenge_mode_margin_pass": true,
+    "char_text_margin_pass": true,
+    "domain_margin_pass": true,
+    "evidence_length_margin_pass": true,
+    "evidence_source_margin_pass": true,
+    "exact_prompt_group_pass": true,
+    "generated_prefix_char_text_margin_pass": false,
+    "generated_prefix_text_margin_pass": false,
+    "hidden_balanced_accuracy_pass": true,
+    "l0_baseline_present_pass": true,
+    "l0_margin_pass": false,
+    "label_per_topic_floor_pass": true,
+    "per_topic_floor_pass": true,
+    "prompt_length_margin_pass": true,
+    "retrieval_condition_margin_pass": true,
+    "retrieval_score_bucket_margin_pass": true,
+    "same_prompt_mixed_group_floor_pass": true,
+    "shuffled_control_pass": true,
+    "text_margin_pass": true,
+    "topic_floor_pass": true,
+    "topic_margin_pass": true,
+    "within_topic_permutation_pass": false
+  },
+  "important_limits": [
+    "Grouped folds keep exact prompt/evidence carriers out of both train and test.",
+    "Prompt groups must contain both SUPPORTED and UNSUPPORTED realizations of the same factual setup.",
+    "Layer-0, word text, char text, topic, domain, evidence source, retrieval condition, retrieval score, challenge mode, prompt length, and evidence length baselines must lose by margin.",
+    "For W1/W8 pre-display states, generated-prefix word and character text baselines must also lose by margin.",
+    "Permutation shuffles labels only inside topic.",
+    "This script does not prove prevention or causality."
+  ],
+  "layer": 15,
+  "metrics": {
+    "challenge_mode_majority_balanced_accuracy": 0.647102,
+    "char_text_hash_balanced_accuracy": 0.656472,
+    "domain_majority_balanced_accuracy": 0.5,
+    "evidence_length_balanced_accuracy": 0.51553,
+    "evidence_source_majority_balanced_accuracy": 0.5,
+    "generated_prefix_char_text_hash_balanced_accuracy": 0.833203,
+    "generated_prefix_text_hash_balanced_accuracy": 0.847432,
+    "hidden_balanced_accuracy": 0.859448,
+    "hidden_minus_challenge_mode_balanced_accuracy": 0.212346,
+    "hidden_minus_char_text_balanced_accuracy": 0.202976,
+    "hidden_minus_domain_balanced_accuracy": 0.359448,
+    "hidden_minus_evidence_length_balanced_accuracy": 0.343918,
+    "hidden_minus_evidence_source_balanced_accuracy": 0.359448,
+    "hidden_minus_generated_prefix_char_text_balanced_accuracy": 0.026245,
+    "hidden_minus_generated_prefix_text_balanced_accuracy": 0.012016,
+    "hidden_minus_l0_embedding_balanced_accuracy": 0.119165,
+    "hidden_minus_prompt_length_balanced_accuracy": 0.315808,
+    "hidden_minus_retrieval_condition_balanced_accuracy": 0.359448,
+    "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.359448,
+    "hidden_minus_text_balanced_accuracy": 0.267482,
+    "hidden_minus_topic_balanced_accuracy": 0.359448,
+    "l0_embedding_balanced_accuracy": 0.740283,
+    "per_topic_hidden_balanced_accuracy": {
+      "clinical_measurements": 0.745006,
+      "finance_amounts": 0.84478,
+      "regulatory_dates": 0.903153,
+      "software_versions": 0.826625,
+      "supply_chain_counts": 0.93414
+    },
+    "prompt_length_balanced_accuracy": 0.54364,
+    "retrieval_condition_majority_balanced_accuracy": 0.5,
+    "retrieval_score_bucket_majority_balanced_accuracy": 0.5,
+    "shuffled_label_hidden_mean_balanced_accuracy": 0.502169,
+    "text_hash_balanced_accuracy": 0.591966,
+    "topic_majority_balanced_accuracy": 0.5,
+    "within_topic_permutation_p": 0.019608
+  },
+  "mixed_prompt_group_count": 50,
+  "prompt_group_contract": {
+    "contract": "Every prompt group must hold one exact prompt/evidence setup, and enough groups must contain both SUPPORTED and UNSUPPORTED outcomes.",
+    "exact_prompt_group_count": 145,
+    "mixed_prompt_group_count": 50,
+    "mixed_prompt_group_examples": [
+      "outcome_native_hard_qa_clinical_measurements_06",
+      "outcome_native_hard_qa_clinical_measurements_07",
+      "outcome_native_hard_qa_clinical_measurements_12",
+      "outcome_native_hard_qa_clinical_measurements_14",
+      "outcome_native_hard_qa_clinical_measurements_15",
+      "outcome_native_hard_qa_clinical_measurements_18",
+      "outcome_native_hard_qa_clinical_measurements_22",
+      "outcome_native_hard_qa_clinical_measurements_28",
+      "outcome_native_hard_qa_clinical_measurements_29",
+      "outcome_native_hard_qa_clinical_measurements_30"
+    ],
+    "non_exact_prompt_group_count": 0,
+    "non_exact_prompt_group_examples": [],
+    "prompt_group_count": 145,
+    "singleton_prompt_group_count": 52,
+    "singleton_prompt_group_examples": [
+      "outcome_native_hard_qa_clinical_measurements_08",
+      "outcome_native_hard_qa_clinical_measurements_10",
+      "outcome_native_hard_qa_clinical_measurements_11",
+      "outcome_native_hard_qa_clinical_measurements_13",
+      "outcome_native_hard_qa_clinical_measurements_16",
+      "outcome_native_hard_qa_clinical_measurements_19",
+      "outcome_native_hard_qa_clinical_measurements_21",
+      "outcome_native_hard_qa_clinical_measurements_24",
+      "outcome_native_hard_qa_clinical_measurements_26",
+      "outcome_native_hard_qa_clinical_measurements_37"
+    ]
+  },
+  "prompt_group_count": 145,
+  "readout_method": {
+    "C": 0.25,
+    "class_weight": "balanced",
+    "control_jobs": 8,
+    "generated_prefix_controls": "word and character n-gram baselines over generated_prefix_texts",
+    "grouped_folds": "prompt_group_id / derived exact prompt carrier",
+    "hidden_readout": "StandardScaler + LogisticRegression",
+    "max_iter": 1000,
+    "min_mixed_prompt_groups": 40,
+    "progress_every": 0,
+    "solver": "lbfgs"
+  },
+  "retrieval_condition_distribution": {
+    "trusted_evidence_plus_stale_conflict": 328
+  },
+  "retrieval_score_bucket_distribution": {
+    "high": 126,
+    "low": 117,
+    "medium": 85
+  },
+  "row_count": 328,
+  "schema_version": "cas_harness_hallucination_prespeech_eval.v1",
+  "status": "FAIL",
+  "support_status_distribution": {
+    "SUPPORTED": 226,
+    "UNSUPPORTED": 102
+  },
+  "target": {
+    "labels": [
+      "SUPPORTED",
+      "UNSUPPORTED"
+    ],
+    "positive_label": "UNSUPPORTED",
+    "primary": "W32 early-generation pre-display support status",
+    "timing": {
+      "contract": "W0 means before any generated token exists. W1/W8 mean early generated prefix states before the answer is displayed to the user.",
+      "pre_display": true,
+      "primary_timing_point": "W32",
+      "timing_index_distribution": {
+        "32": 328
+      },
+      "timing_point_distribution": {
+        "W32": 328
+      }
+    }
+  },
+  "topic_distribution": {
+    "clinical_measurements": {
+      "SUPPORTED": 37,
+      "UNSUPPORTED": 23
+    },
+    "finance_amounts": {
+      "SUPPORTED": 52,
+      "UNSUPPORTED": 14
+    },
+    "regulatory_dates": {
+      "SUPPORTED": 37,
+      "UNSUPPORTED": 12
+    },
+    "software_versions": {
+      "SUPPORTED": 38,
+      "UNSUPPORTED": 17
+    },
+    "supply_chain_counts": {
+      "SUPPORTED": 62,
+      "UNSUPPORTED": 36
+    }
+  }
+}

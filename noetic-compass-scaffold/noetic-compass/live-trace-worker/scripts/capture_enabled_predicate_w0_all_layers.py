@@ -180,6 +180,7 @@ def capture_w0_all_layers(
             "evidence_source": scenario.get("evidence_source", ""),
             "retrieval_condition": scenario.get("retrieval_condition", ""),
             "retrieval_score_bucket": scenario.get("retrieval_score_bucket", ""),
+            "challenge_mode": scenario.get("challenge_mode", ""),
             "qa_pair_id": scenario.get("qa_pair_id") or scenario.get("factual_pair_id", ""),
             "factual_pair_id": scenario.get("factual_pair_id") or scenario.get("qa_pair_id", ""),
             "evidence_doc_id": scenario.get("evidence_doc_id") or scenario.get("evidence_id", ""),
@@ -443,6 +444,7 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
                 "evidence_source",
                 "retrieval_condition",
                 "retrieval_score_bucket",
+                "challenge_mode",
                 "target_operator",
             ],
             dtype=object,
@@ -464,6 +466,7 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
             [row.get("retrieval_score_bucket", "") for row in rows],
             dtype=object,
         ),
+        labels_challenge_mode=np.asarray([row.get("challenge_mode", "") for row in rows], dtype=object),
         labels_target_operator=np.asarray([row["target_operator"] for row in rows], dtype=object),
         labels_target_enabled_predicate=np.asarray(
             [row["target_enabled_predicate"] for row in rows],
@@ -557,6 +560,9 @@ def build_summary(
                     if row.get("retrieval_score_bucket", "")
                 ).items()
             )
+        ),
+        "challenge_mode_distribution": dict(
+            sorted(Counter(row.get("challenge_mode", "") for row in rows if row.get("challenge_mode", "")).items())
         ),
         "label_source_distribution": dict(sorted(Counter(row["label_source"] for row in rows).items())),
         "generated_prefix_token_count_distribution": dict(

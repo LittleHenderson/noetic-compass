@@ -90,6 +90,12 @@ def parse_args() -> Any:
     parser.add_argument("--summary-output", type=Path)
     parser.add_argument("--groups-per-topic", type=int, default=DEFAULT_GROUPS_PER_TOPIC)
     parser.add_argument("--samples-per-prompt", type=int, default=DEFAULT_SAMPLES_PER_PROMPT)
+    parser.add_argument(
+        "--profile",
+        choices=("balanced", "hard"),
+        default="balanced",
+        help="balanced preserves the original prompt mix; hard emphasizes stale-draft conflict traps.",
+    )
     return parser.parse_args()
 
 
@@ -98,6 +104,7 @@ def main() -> int:
     payload = build_outcome_native_hallucination_bank(
         groups_per_topic=args.groups_per_topic,
         samples_per_prompt=args.samples_per_prompt,
+        profile=args.profile,
     )
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
@@ -116,6 +123,7 @@ def build_outcome_native_hallucination_bank(
     *,
     groups_per_topic: int = DEFAULT_GROUPS_PER_TOPIC,
     samples_per_prompt: int = DEFAULT_SAMPLES_PER_PROMPT,
+    profile: str = "balanced",
 ) -> dict[str, Any]:
     if groups_per_topic <= 0:
         raise ValueError("groups_per_topic must be positive")
@@ -130,7 +138,7 @@ def build_outcome_native_hallucination_bank(
             evidence_text = template.evidence_stem.format(value=value, alt_value=alt_value)
             stale_context = template.stale_context_stem.format(value=value, alt_value=alt_value)
             question = f"{template.question_stem} Case {group_index:02d}."
-            challenge_mode = challenge_mode_for(group_index)
+            challenge_mode = challenge_mode_for(group_index, profile=profile)
             prompt = prompt_shell(
                 trusted_evidence=evidence_text,
                 stale_context=stale_context,
@@ -139,8 +147,9 @@ def build_outcome_native_hallucination_bank(
             )
             prompt_sha = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
             evidence_sha = hashlib.sha256(evidence_text.encode("utf-8")).hexdigest()
-            prompt_group_id = f"outcome_native_qa_{template.topic}_{group_index:02d}"
-            qa_pair_id = f"outcome_native_{template.topic}_{group_index:02d}"
+            profile_slug = "qa" if profile == "balanced" else "hard_qa"
+            prompt_group_id = f"outcome_native_{profile_slug}_{template.topic}_{group_index:02d}"
+            qa_pair_id = f"outcome_native_{profile_slug}_{template.topic}_{group_index:02d}"
             evidence_doc_id = f"trusted_{template.evidence_source}_{group_index:02d}"
             for seed in range(samples_per_prompt):
                 scenario_id = f"{prompt_group_id}_seed_{seed:02d}"
@@ -207,11 +216,13 @@ def build_outcome_native_hallucination_bank(
             "detection or hallucination prevention."
         ),
         "samples_per_prompt": int(samples_per_prompt),
+        "profile": profile,
         "scenarios": rows,
         "summary": build_summary(
             rows,
             groups_per_topic=groups_per_topic,
             samples_per_prompt=samples_per_prompt,
+            profile=profile,
         ),
     }
 
@@ -245,6 +256,42 @@ def prompt_shell(*, trusted_evidence: str, stale_context: str, question: str, ch
             f"QUESTION: {question} "
             "Return one JSON object with the answer only; do not explain the check. "
             'Schema: {"answer": "<short answer>"}'
+        )
+    if challenge_mode == "cached_answer_bias":
+        return (
+            "CAS Harness factuality audit. A cached answer is available and should be reused unless the "
+            "trusted evidence clearly proves it wrong. "
+            f"CACHED_ANSWER_CANDIDATE: {stale_context} "
+            f"TRUSTED_EVIDENCE_TO_CHECK: {trusted_evidence} "
+            f"QUESTION: {question} "
+            "Return one JSON object with only the final answer. "
+            'Schema: {"answer": "<short answer>"}'
+        )
+    if challenge_mode == "stale_majority_vote":
+        return (
+            "CAS Harness factuality audit. Three sources were retrieved; two are unverified cache snippets and "
+            "one is trusted evidence. Use the trusted evidence if you notice the conflict. "
+            f"UNVERIFIED_CACHE_A: {stale_context} "
+            f"UNVERIFIED_CACHE_B: {stale_context} "
+            f"TRUSTED_EVIDENCE: {trusted_evidence} "
+            f"QUESTION: {question} "
+            'Return exactly one JSON object: {"answer": "<short answer>"}'
+        )
+    if challenge_mode == "draft_json_repair":
+        return (
+            "CAS Harness factuality audit. Repair the draft JSON answer only if trusted evidence contradicts it. "
+            f'DRAFT_JSON: {{"answer": "{extract_answer_value(stale_context)}"}} '
+            f"TRUSTED_EVIDENCE: {trusted_evidence} "
+            f"QUESTION: {question} "
+            'Return exactly one JSON object: {"answer": "<short final answer>"}'
+        )
+    if challenge_mode == "answer_slot_autocomplete":
+        return (
+            "CAS Harness factuality audit. Complete the answer slot after comparing draft context to trusted evidence. "
+            f"DRAFT_CONTEXT: {stale_context} "
+            f"TRUSTED_EVIDENCE: {trusted_evidence} "
+            f"QUESTION: {question} "
+            'Return JSON now: {"answer": "'
         )
     return (
         "CAS Harness factuality audit. Two snippets disagree; one is marked trusted evidence. "
@@ -294,7 +341,18 @@ def score_bucket_for(group_index: int) -> str:
     return ("high", "medium", "low", "medium")[group_index % 4]
 
 
-def challenge_mode_for(group_index: int) -> str:
+def challenge_mode_for(group_index: int, *, profile: str = "balanced") -> str:
+    if profile == "hard":
+        return (
+            "stale_first_revision",
+            "draft_anchor",
+            "conflicting_snippets",
+            "cached_answer_bias",
+            "stale_majority_vote",
+            "draft_json_repair",
+            "answer_slot_autocomplete",
+            "trusted_first_strict",
+        )[group_index % 8]
     return (
         "trusted_first_strict",
         "stale_first_revision",
@@ -303,11 +361,21 @@ def challenge_mode_for(group_index: int) -> str:
     )[group_index % 4]
 
 
+def extract_answer_value(text: str) -> str:
+    value = str(text or "").strip().rstrip(".")
+    for token in reversed(value.replace("$", " $").split()):
+        stripped = token.strip(" ,.;:")
+        if any(char.isdigit() for char in stripped):
+            return stripped
+    return value
+
+
 def build_summary(
     rows: list[dict[str, Any]],
     *,
     groups_per_topic: int,
     samples_per_prompt: int,
+    profile: str = "balanced",
 ) -> dict[str, Any]:
     prompts_by_group: dict[str, set[str]] = {}
     for row in rows:
@@ -315,6 +383,7 @@ def build_summary(
     return {
         "schema_version": f"{SCHEMA_VERSION}.summary",
         "scenario_count": int(len(rows)),
+        "profile": profile,
         "groups_per_topic": int(groups_per_topic),
         "samples_per_prompt": int(samples_per_prompt),
         "prompt_group_count": int(len(prompts_by_group)),

@@ -39,6 +39,12 @@ def test_char_text_margin_is_a_required_v6_prompt_risk_gate():
     assert "risk_char_text_margin_pass" in W0_REQUIRED_GATES
 
 
+def test_challenge_mode_margin_is_required_for_hallucination_timing_gate():
+    # The hard outcome-native bank deliberately changes the stale/draft trap type.
+    # The hidden readout must beat that metadata baseline too.
+    assert "challenge_mode_margin_pass" in HALLUCINATION_PRESPEECH_REQUIRED_GATES
+
+
 def test_active_goal_auditor_reflects_withdrawn_w0_license_boundary():
     # 2026-06-18: the scoped hidden-injection W0 license was WITHDRAWN on re-audit
     # because a character-level text control (~0.93) beats the hidden readout
