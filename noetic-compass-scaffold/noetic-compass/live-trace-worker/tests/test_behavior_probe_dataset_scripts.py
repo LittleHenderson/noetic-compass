@@ -42,6 +42,7 @@ from scripts.evaluate_cjt_bias_vibration_diagnostic import (
     evaluate_cjt_bias_vibration_diagnostic,
 )
 from scripts.evaluate_hallucination_prespeech import evaluate_hallucination_prespeech
+from scripts.evaluate_timing_trajectory_break import evaluate_timing_trajectory_break
 from scripts.evaluate_behavior_v6_matched_prespeech import evaluate_v6_matched_prespeech
 from scripts.evaluate_behavior_within_payload import evaluate_behavior_within_payload
 from scripts.evaluate_behavior_v5_prespeech import evaluate_v5_prespeech
@@ -1236,6 +1237,92 @@ def test_hallucination_timing_evaluator_fails_when_generated_prefix_separates(tm
     assert report["claim"] == "OPEN / NOT LICENSED for internal hallucination-risk timing detection."
 
 
+def test_timing_trajectory_break_passes_when_internal_movement_beats_controls(tmp_path: Path):
+    w0_path, w1_path, w8_path = _write_trajectory_break_npzs(tmp_path)
+
+    report = evaluate_timing_trajectory_break(
+        w0_dataset_path=w0_path,
+        w1_dataset_path=w1_path,
+        w8_dataset_path=w8_path,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_strata_classes=5,
+        min_label_per_stratum=8,
+        min_mixed_prompt_groups=20,
+        permutations=1000,
+        shuffle_controls=10,
+    )
+
+    assert report["status"] == "PASS"
+    assert report["claim"].startswith("LICENSED only for this model/layer/protocol")
+    assert report["claim_ceiling"].startswith("This is detection only")
+    assert report["gates"]["row_alignment_pass"] is True
+    assert report["gates"]["forced_continuation_identity_pass"] is True
+    assert report["gates"]["grouped_prompt_fold_pass"] is True
+    assert report["gates"]["w0_static_control_margin_pass"] is True
+    assert report["gates"]["shuffled_time_control_margin_pass"] is True
+    assert report["gates"]["generated_prefix_char_text_margin_pass"] is True
+    assert report["cross_validation"]["train_test_group_overlap_count"] == 0
+    assert report["metrics"]["trajectory_hidden_balanced_accuracy"] == 1.0
+    assert report["metrics"]["w0_static_hidden_balanced_accuracy"] < 0.75
+    assert report["metrics"]["generated_prefix_char_text_hash_balanced_accuracy"] < 0.75
+    assert report["metrics"]["within_stratum_permutation_p"] < 0.001
+
+
+def test_timing_trajectory_break_fails_when_generated_prefix_char_text_separates(tmp_path: Path):
+    w0_path, w1_path, w8_path = _write_trajectory_break_npzs(tmp_path, prefix_leaky=True)
+
+    report = evaluate_timing_trajectory_break(
+        w0_dataset_path=w0_path,
+        w1_dataset_path=w1_path,
+        w8_dataset_path=w8_path,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_strata_classes=5,
+        min_label_per_stratum=8,
+        min_mixed_prompt_groups=20,
+        permutations=10,
+        shuffle_controls=2,
+    )
+
+    assert report["status"] == "FAIL"
+    assert report["gates"]["trajectory_balanced_accuracy_pass"] is True
+    assert report["gates"]["generated_prefix_char_text_margin_pass"] is False
+    assert report["metrics"]["generated_prefix_char_text_hash_balanced_accuracy"] >= 0.75
+    assert report["claim"] == "OPEN / NOT LICENSED for timing-trajectory hidden-state detection."
+
+
+def test_timing_trajectory_break_blocks_on_forced_continuation_mismatch(tmp_path: Path):
+    w0_path, w1_path, w8_path = _write_trajectory_break_npzs(
+        tmp_path,
+        continuation_mismatch=True,
+    )
+
+    report = evaluate_timing_trajectory_break(
+        w0_dataset_path=w0_path,
+        w1_dataset_path=w1_path,
+        w8_dataset_path=w8_path,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_strata_classes=5,
+        min_label_per_stratum=8,
+        min_mixed_prompt_groups=20,
+        permutations=10,
+        shuffle_controls=2,
+    )
+
+    assert report["status"] == "BLOCKED"
+    assert "model_output_sha256s mismatch" in report["blocker"]
+    assert report["gates"]["row_alignment_pass"] is False
+    assert report["claim"] == "OPEN / NOT LICENSED for timing-trajectory hidden-state detection."
+
+
 def test_pre_answer_timing_resolves_before_answer_token():
     class FakeTokenizer:
         def decode(self, token_ids, *, skip_special_tokens):
@@ -1467,6 +1554,109 @@ def _write_hallucination_prespeech_npz(
         timing_points=np.asarray([timing_point] * len(statuses), dtype=object),
         timing_indices=np.asarray([timing_index] * len(statuses), dtype=np.int64),
     )
+
+
+def _write_trajectory_break_npzs(
+    tmp_path: Path,
+    *,
+    prefix_leaky: bool = False,
+    continuation_mismatch: bool = False,
+) -> tuple[Path, Path, Path]:
+    paths = {
+        "W0": tmp_path / "trajectory_w0.npz",
+        "W1": tmp_path / "trajectory_w1.npz",
+        "W8": tmp_path / "trajectory_w8.npz",
+    }
+    rows_by_timing: dict[str, list[list[list[float]]]] = {"W0": [], "W1": [], "W8": []}
+    statuses: list[str] = []
+    topics: list[str] = []
+    prompts: list[str] = []
+    scenario_ids: list[str] = []
+    prompt_group_ids: list[str] = []
+    trace_ids: list[str] = []
+    model_hashes: list[str] = []
+    judged_hashes: list[str] = []
+    prefix_text_by_timing: dict[str, list[str]] = {"W0": [], "W1": [], "W8": []}
+
+    for topic_index in range(5):
+        topic = f"topic_{topic_index}"
+        for group_index in range(8):
+            group_id = f"trajectory_{topic}_{group_index}"
+            prompt = (
+                "Use only the supplied evidence and preserve the system instruction. "
+                f"Topic {topic_index}, packet {group_index}."
+            )
+            base = np.asarray(
+                [float(topic_index) * 0.02, float(group_index) * 0.01, 0.0, 0.0],
+                dtype=np.float32,
+            )
+            for status in ("SUPPORTED", "UNSUPPORTED"):
+                sign = -1.0 if status == "SUPPORTED" else 1.0
+                scenario_id = f"{group_id}::{status.lower()}::seed_00"
+                continuation_hash = f"continuation-{topic_index}-{group_index}-{status.lower()}"
+                judged_hash = f"judged-{topic_index}-{group_index}-{status.lower()}"
+                l0_base = [float(topic_index), float(group_index), 0.0, 0.0]
+                target_w0 = base
+                target_w1 = base + np.asarray([4.0 * sign, 0.0, 0.0, 0.0], dtype=np.float32)
+                target_w8 = base + np.asarray([8.0 * sign, 0.0, 0.0, 0.0], dtype=np.float32)
+                for timing, target in (
+                    ("W0", target_w0),
+                    ("W1", target_w1),
+                    ("W8", target_w8),
+                ):
+                    rows_by_timing[timing].append([l0_base, target.astype(float).tolist()])
+                statuses.append(status)
+                topics.append(topic)
+                prompts.append(prompt)
+                scenario_ids.append(scenario_id)
+                prompt_group_ids.append(group_id)
+                trace_ids.append(f"trace_{topic_index}_{group_index}_{status.lower()}")
+                model_hashes.append(continuation_hash)
+                judged_hashes.append(judged_hash)
+                prefix_text_by_timing["W0"].append("")
+                prefix_text_by_timing["W1"].append("neutral prefix")
+                if prefix_leaky:
+                    prefix_text_by_timing["W8"].append(
+                        "prefix aaaaa" if status == "SUPPORTED" else "prefix zzzzz"
+                    )
+                else:
+                    prefix_text_by_timing["W8"].append("neutral prefix continued")
+
+    for timing, path in paths.items():
+        timing_model_hashes = list(model_hashes)
+        if timing == "W8" and continuation_mismatch:
+            timing_model_hashes[0] = "different-continuation-hash"
+        timing_index = {"W0": 0, "W1": 1, "W8": 8}[timing]
+        np.savez_compressed(
+            path,
+            features=np.asarray(rows_by_timing[timing], dtype=np.float32),
+            layers=np.asarray([0, 14], dtype=np.int64),
+            prompts=np.asarray(prompts, dtype=object),
+            scenario_ids=np.asarray(scenario_ids, dtype=object),
+            trajectory_ids=np.asarray(scenario_ids, dtype=object),
+            prompt_group_ids=np.asarray(prompt_group_ids, dtype=object),
+            trace_ids=np.asarray(trace_ids, dtype=object),
+            labels_support_status=np.asarray(statuses, dtype=object),
+            labels_topic=np.asarray(topics, dtype=object),
+            labels_payload_class=np.asarray(topics, dtype=object),
+            labels_domain=np.asarray(["shared_domain"] * len(statuses), dtype=object),
+            labels_evidence_source=np.asarray(["shared_evidence_source"] * len(statuses), dtype=object),
+            labels_retrieval_condition=np.asarray(
+                ["shared_retrieval_condition"] * len(statuses),
+                dtype=object,
+            ),
+            labels_retrieval_score_bucket=np.asarray(
+                ["shared_retrieval_score_bucket"] * len(statuses),
+                dtype=object,
+            ),
+            labels_challenge_mode=np.asarray(["shared_challenge_mode"] * len(statuses), dtype=object),
+            generated_prefix_texts=np.asarray(prefix_text_by_timing[timing], dtype=object),
+            model_output_sha256s=np.asarray(timing_model_hashes, dtype=object),
+            judged_answer_sha256s=np.asarray(judged_hashes, dtype=object),
+            timing_points=np.asarray([timing] * len(statuses), dtype=object),
+            timing_indices=np.asarray([timing_index] * len(statuses), dtype=np.int64),
+        )
+    return paths["W0"], paths["W1"], paths["W8"]
 
 
 def test_matched_prompt_screen_requires_same_prompt_mixed_outcomes(tmp_path: Path):
