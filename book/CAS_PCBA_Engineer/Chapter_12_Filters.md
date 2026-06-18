@@ -131,6 +131,38 @@ The cognitive application is the most clinically interesting filter in this chap
 
 > **Bench Note — notch the rhythm, not the content.** A notch filter suppresses a *frequency*, never a topic. It can't tell what the compulsion is *about*; it only knows the rate it repeats. That's the right level of intervention — you damp the runaway `^7` Rhythm (the entraining repetition) without censoring the underlying Idea. But it also means a compulsion that varies its timing will partly evade a fixed notch. For drifting frequencies you need an adaptive notch, which is op-amp territory — see active filters next.
 
+The four filter shapes, laid over a single cognitive-frequency axis, make the difference plain: low-pass keeps the slow and rolls off the fast; high-pass does the mirror; band-pass passes a window around a center frequency `f₀`; notch cuts that same band out and passes everything else. The `−3 dB` line marks each filter's edge; `f_c` is the low-/high-pass cutoff, `f₀` the band-pass/notch center.
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+    xlabel={cognitive frequency (log)}, ylabel={magnitude},
+    xmode=log, xmin=0.01, xmax=100, log basis x=10,
+    xtick={0.01,0.1,1,10,100}, xticklabels={very low,low,mid,high,very high},
+    ymin=0, ymax=1.15, ytick={0,0.5,0.707,1.0}, yticklabels={0,0.5,0.707,1.0},
+    legend pos=south west, legend columns=2,
+  ]
+  \addplot[casCedge, solid, line width=1pt, domain=0.01:100, samples=120]
+    {1/sqrt(1+(x/1)^2)};                              % low-pass
+  \addplot[casOedge, dashed, line width=1pt, domain=0.01:100, samples=120]
+    {(x/1)/sqrt(1+(x/1)^2)};                          % high-pass
+  \addplot[casEedge, dashdotted, line width=1pt, domain=0.01:100, samples=160]
+    {1/sqrt(1+(2.5*(x/3 - 3/x))^2)};                  % band-pass (f0=3)
+  \addplot[black, densely dotted, line width=1pt, domain=0.01:100, samples=200]
+    {abs(2.5*(x/3 - 3/x))/sqrt(1+(2.5*(x/3 - 3/x))^2)}; % notch (f0=3)
+  \legend{low-pass, high-pass, band-pass, notch}
+  \draw[casNedge, line width=0.4pt, densely dashed] (axis cs:0.01,0.707) -- (axis cs:100,0.707);
+  \node[font=\sffamily\scriptsize, anchor=south west] at (axis cs:0.012,0.71) {$-3$\,dB};
+  \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:1,0) -- (axis cs:1,1.15);
+  \node[font=\sffamily\scriptsize, anchor=south east] at (axis cs:0.92,1.04) {$f_c$ (LP/HP)};
+  \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:3,0) -- (axis cs:3,1.15);
+  \node[font=\sffamily\scriptsize, anchor=south west] at (axis cs:3.3,1.04) {$f_0$ (BP/notch)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+```
+
 ## Active Filters: Sharper Edges, Adjustable on the Fly
 
 Everything so far has been **passive** — built only from resistors, capacitors, and inductors, with no power source of its own. Passive filters are cheap and reliable, but they have two limits: their cutoffs are gentle (frequencies near the edge are only partly attenuated, fading out gradually rather than dropping off a cliff), and their parameters are fixed once you pick the components.

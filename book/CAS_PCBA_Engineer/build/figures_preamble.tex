@@ -19,6 +19,28 @@
 \usepackage{tikz}
 \usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit,backgrounds}
 
+% --- pgfplots for the vector charts (CJT curves, Bode, filters, decay) --
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepgfplotslibrary{groupplots}            % stacked Bode panels share an x-axis
+\pgfplotsset{
+  % Shared house style for the analytic charts: light grid, sans labels,
+  % measure-friendly default size, grayscale-legible line cycle.
+  casaxis/.style={
+    width=10.6cm, height=6.2cm,
+    font=\sffamily\footnotesize,
+    axis line style={draw=casNedge, line width=0.5pt},
+    tick label style={font=\sffamily\scriptsize},
+    label style={font=\sffamily\footnotesize},
+    title style={font=\sffamily\footnotesize\bfseries},
+    every axis grid/.style={draw=casNedge!25, line width=0.3pt},
+    grid=both, tick align=outside, tickpos=left,
+    legend cell align=left,
+    legend style={font=\sffamily\scriptsize, draw=casNedge, fill=white,
+      inner sep=2pt, row sep=0.5pt}
+  }
+}
+
 % --- Domain palette (light fills, dark borders) ------------------------
 \definecolor{casPfill}{RGB}{255,243,205}   % amber tint  (Principled)
 \definecolor{casPedge}{RGB}{153,110,0}     % dark amber

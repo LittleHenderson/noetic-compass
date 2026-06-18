@@ -1,5 +1,27 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-06-18 — v0.3 (vector charts + multilayer-board diagram)
+
+Added five more vector figures, replacing ASCII sketches / filling gaps where
+the text described a chart but had none. Charts use `pgfplots` (added to
+`build/figures_preamble.tex`); all are grayscale-legible (color + line style):
+- **Ch 9** — CJT characteristic-curve family: effect-vs-cause traces at bias
+  {0.2, 0.4, 0.6, 0.8}, with the load line (`R=30`) and the labelled Q-point
+  (0.43, 0.45), cutoff/active-region/saturation-knee annotations.
+- **Ch 16** — two-panel Bode plot: magnitude roll-off to the 0 dB crossover and
+  phase to −180°, with gain margin (~20 dB) and phase margin (~30°) marked.
+- **Ch 12** — four filter frequency responses (low-pass / high-pass / band-pass
+  / notch) on one log-frequency axis, with the −3 dB line and fc/f0 markers.
+- **Ch 6** — forgetting curve: stored charge vs time under the chapter's
+  `(1−leakage)^t` model, a deep memory (leakage 0.001) vs a leaky one (0.05),
+  half-life marked.
+- **Ch 17** — multilayer cognitive-board illustration (TikZ): the four Domain
+  layers (P/C/E/O) with descent vias v1–v3 and the distinct upward feedback
+  via v4 (`^9^O→^0^P`). The CCDL `board { … }` listing was left as code.
+
+Book now carries **12 vector figures**. Rebuilt PDF: 699-page 6×9, zero TeX
+errors, zero missing glyphs.
+
 ## 2026-06-18 — v0.2 polish (consistency, answer key, vector schematics)
 
 Three review/upgrade passes over the v0.1 draft:

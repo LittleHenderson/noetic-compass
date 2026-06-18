@@ -94,23 +94,51 @@ Here is why it matters from first principles. Negative feedback works by *opposi
 
 A single corner (one pole — the frequency where a stage's gain starts falling) contributes a gain slope of −20 dB per decade and asymptotically −90° of phase. *One* corner can never reach −180°, so a single-pole amplifier is unconditionally stable — it cannot oscillate, no matter how much feedback you apply. The trouble starts with *two* corners. Two poles can stack to −180°, and now stability is a real question. A two-stage amplifier — like the two-stage CJT amplifier in this chapter's marquee exercise — has at least two poles, and is exactly where Bode analysis earns its keep.
 
-```
-  Gain (dB)
-   60 |————————\____                         (flat, then −20 dB/dec
-   40 |             \____                      after first corner,
-   20 |                  \____                 steeper after second)
-    0 |———————————————————————\————  ← crosses 0 dB here
-  -20 |                          \____
-      +----+----+----+----+----+----+--→ frequency (log)
-      10   1k   10k  100k  1M   10M
-
- Phase (°)
-    0 |————\__                                (0°, falling −90° per
-  -45 |       \___                             corner)
-  -90 |           \____
- -135 |                \____
- -180 |———————————————————————\———  ← reaches −180° here
-      +----+----+----+----+----+----+--→ frequency (log)
+```{=latex}
+\begin{center}
+\begin{tikzpicture}
+\begin{groupplot}[
+    group style={group size=1 by 2, vertical sep=6mm,
+      xticklabels at=edge bottom, x descriptions at=edge bottom},
+    casaxis, width=10.6cm, height=4.4cm,
+    xmode=log, xmin=10, xmax=1e7, log basis x=10,
+    xtick={10,100,1000,1e4,1e5,1e6,1e7},
+    xticklabels={10,100,1k,10k,100k,1M,10M},
+  ]
+  % TOP: magnitude (dB) -- flat 60 dB to 1k, -20 dB/dec to 100k, -40 dB/dec above
+  \nextgroupplot[ylabel={magnitude (dB)}, ymin=-50, ymax=70,
+      ytick={-40,-20,0,20,40,60}]
+    \addplot[casCedge, line width=1.1pt] coordinates {
+      (10,60) (1000,60) (1e5,20) (1e7,-60) };
+    \draw[casNedge, line width=0.4pt, densely dashed] (axis cs:10,0) -- (axis cs:1e7,0);
+    \addplot[only marks, mark=*, mark size=1.6pt, black] coordinates {(3.16e5,0)};
+    \node[font=\sffamily\scriptsize, anchor=south west] at (axis cs:3.4e5,1) {0\,dB crossover};
+    \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:1e6,-50) -- (axis cs:1e6,70);
+    \addplot[only marks, mark=square*, mark size=1.6pt, casEedge] coordinates {(1e6,-20)};
+    \draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]}, casEedge, line width=0.7pt]
+      (axis cs:1e6,0) -- (axis cs:1e6,-20);
+    \node[casEedge, font=\sffamily\scriptsize, anchor=east] at (axis cs:8e5,-10)
+      {gain margin $\approx$ 20\,dB};
+    \node[font=\sffamily\scriptsize\bfseries, anchor=north west] at (axis cs:12,68) {Gain};
+  % BOTTOM: phase (deg) -- 0 to -45 at 1k, -135 at 100k, -180 ~1M
+  \nextgroupplot[ylabel={phase (deg)}, xlabel={frequency (log)},
+      ymin=-200, ymax=10, ytick={0,-45,-90,-135,-180}]
+    \addplot[casOedge, line width=1.1pt, smooth] coordinates {
+      (10,0) (100,-3) (1000,-45) (1e4,-78) (1e5,-135) (1e6,-177) (1e7,-180) };
+    \draw[casNedge, line width=0.4pt, densely dashed] (axis cs:10,-180) -- (axis cs:1e7,-180);
+    \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:1e6,-200) -- (axis cs:1e6,10);
+    \addplot[only marks, mark=*, mark size=1.6pt, black] coordinates {(1e6,-177)};
+    \node[font=\sffamily\scriptsize, anchor=south east] at (axis cs:9e5,-175)
+      {$-180^\circ$ crossing ($\approx$1\,MHz)};
+    \addplot[only marks, mark=triangle*, mark size=1.8pt, casCedge] coordinates {(3.16e5,-150)};
+    \draw[{Latex[length=1.6mm]}-{Latex[length=1.6mm]}, casCedge, line width=0.7pt]
+      (axis cs:3.16e5,-180) -- (axis cs:3.16e5,-150);
+    \node[casCedge, font=\sffamily\scriptsize, anchor=east] at (axis cs:2.4e5,-115)
+      {phase margin $\approx$ 30$^\circ$};
+    \node[font=\sffamily\scriptsize\bfseries, anchor=north west] at (axis cs:12,5) {Phase};
+\end{groupplot}
+\end{tikzpicture}
+\end{center}
 ```
 
 Lay the two graphs over each other and the stability question becomes geometric: at the frequency where the gain curve crosses 0 dB (gain = 1), *how far is the phase from −180°?* And at the frequency where the phase hits −180°, *how far is the gain below 0 dB?* Those two distances have names.

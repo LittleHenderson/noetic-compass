@@ -80,6 +80,34 @@ Leakage is **forgetting.** Not deliberate recall, not overwriting — just the s
 
 > **Honesty callout.** The discharge and forgetting curves in this chapter are **design models you compute from C and leakage** — clean exponentials derived from the parameters you choose. They are not measurements pulled from a real AI model or a real brain. When this book prints a number like "37% after one τ," that is arithmetic on a chosen `leakage` value, not an empirical retention statistic. Size the parameters to model the behavior you intend; do not present the resulting curve as observed data.
 
+The forgetting curve makes the design choice vivid. Both curves below follow the chapter's per-unit-time decay `charge(t) = (1 − leakage)^t`, charged to full at `t = 0`. A **deep, near-permanent** memory (`leakage = 0.001` — a core commitment) barely fades across a week; a **shallow, leaky** memory (`leakage = 0.05` — a stray association) is half-gone in about thirteen hours and effectively empty in three days. Same equation, two leakage values, two completely different fates — which is exactly why you size leakage to the durability you intend.
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[casaxis,
+    xlabel={time (hours)}, ylabel={stored charge (fraction of initial)},
+    xmin=0, xmax=168, ymin=0, ymax=1.05,
+    xtick={0,24,48,72,96,120,144,168},
+    ytick={0,0.25,0.5,0.75,1.0},
+    legend pos=north east,
+  ]
+  \addplot[casPedge, solid, line width=1.1pt, domain=0:168, samples=120]
+    {(1-0.001)^x};                       % deep / near-permanent
+  \addplot[casEedge, dashed, line width=1.1pt, domain=0:168, samples=160]
+    {(1-0.05)^x};                        % shallow / leaky
+  \legend{deep memory (leakage 0.001), leaky memory (leakage 0.05)}
+  % half-life of leaky curve: ln(0.5)/ln(0.95) ~ 13.5 h
+  \draw[casNedge, line width=0.4pt, densely dashed] (axis cs:0,0.5) -- (axis cs:13.5,0.5);
+  \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:13.5,0) -- (axis cs:13.5,0.5);
+  \addplot[only marks, mark=*, mark size=2pt, casEedge] coordinates {(13.5,0.5)};
+  \node[font=\sffamily\scriptsize, anchor=south west] at (axis cs:14,0.5)
+    {half-life $\approx$ 13.5\,h (leaky)};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+```
+
 ## The Capacitor Bank: A 40-Cell Memory Array
 
 One capacitor stores one kind of experience. A real Mind stores many kinds at once, and so does a real circuit: banks of capacitors, each sized for its own job, wired in parallel. CAS gives us a natural array size, because the cognitive state space has a natural array size.

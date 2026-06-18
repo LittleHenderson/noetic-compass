@@ -111,7 +111,54 @@ You are checking the *shape* of the behavior, not asserting a measured result. (
 
 A schematic says *what connects to what.* A **layout** says *where everything physically sits and how the wires actually run.* Real boards are multilayer: copper signal layers stacked with insulation between them, connected by **vias** — plated holes that carry a signal from one layer to another. A four-layer board might put power on one layer, ground on another, and signals on two more; a via is how a trace jumps between them.
 
-A CCB is multilayer too, and its layers are the four **Domains**. Each Domain is a layer of the board; signals within a Domain route on that layer; and a **via** is a cross-domain connection — a signal passing from one Domain layer to another, exactly the Domain Descent (and feedback) paths from Chapter 2. Here is our thread expressed as a layered layout:
+A CCB is multilayer too, and its layers are the four **Domains**. Each Domain is a layer of the board; signals within a Domain route on that layer; and a **via** is a cross-domain connection — a signal passing from one Domain layer to another, exactly the Domain Descent (and feedback) paths from Chapter 2. The picture below shows the idea: four stacked Domain planes in descent order (P on top, then C, E, O), each holding a few representative states, with vias as the vertical connectors between planes. Three vias run *downward* with Domain Descent (`v1: ^2^P→^2^C`, `v2: ^6^C→^6^E`, `v3: ^4^E→^3^O`); the lone upward via `v4: ^9^O→^0^P` is the feedback path, drawn distinct because it runs against descent.
+
+```{=latex}
+\begin{center}
+\begin{tikzpicture}[x=1cm,y=1cm,
+    statechip/.style={rectangle, rounded corners=2pt, draw, line width=0.5pt,
+      fill=white, inner sep=2pt, font=\ttfamily\scriptsize, minimum height=5mm}]
+  \def\lw{8.4}      % layer width
+  \def\lh{1.1}      % layer height
+  \foreach \dom/\edge/\yc/\lbl in {%
+      P/casPedge/6.0/{P --- Principled},
+      C/casCedge/4.2/{C --- Cognitive},
+      E/casEedge/2.4/{E --- Evaluative},
+      O/casOedge/0.6/{O --- Operational}}{
+    \filldraw[fill=\edge!22, draw=\edge, line width=1pt, rounded corners=3pt]
+      (0,\yc-\lh/2) rectangle (\lw,\yc+\lh/2);
+    \node[anchor=east, font=\sffamily\scriptsize\bfseries, text=\edge]
+      at (-0.2,\yc) {\lbl};
+  }
+  \node[statechip, draw=casPedge] (P0) at (1.3,6.0) {\textasciicircum0\textasciicircum P};
+  \node[statechip, draw=casPedge] (P2) at (3.1,6.0) {\textasciicircum2\textasciicircum P};
+  \node[statechip, draw=casPedge] (P3) at (4.9,6.0) {\textasciicircum3\textasciicircum P};
+  \node[statechip, draw=casPedge] (P7) at (6.7,6.0) {\textasciicircum7\textasciicircum P};
+  \node[statechip, draw=casCedge] (C1) at (1.8,4.2) {\textasciicircum1\textasciicircum C};
+  \node[statechip, draw=casCedge] (C2) at (3.1,4.2) {\textasciicircum2\textasciicircum C};
+  \node[statechip, draw=casCedge] (C6) at (4.6,4.2) {\textasciicircum6\textasciicircum C};
+  \node[statechip, draw=casCedge] (C8) at (6.0,4.2) {\textasciicircum8\textasciicircum C};
+  \node[statechip, draw=casEedge] (E4) at (2.3,2.4) {\textasciicircum4\textasciicircum E};
+  \node[statechip, draw=casEedge] (E5) at (3.7,2.4) {\textasciicircum5\textasciicircum E};
+  \node[statechip, draw=casEedge] (E6) at (4.6,2.4) {\textasciicircum6\textasciicircum E};
+  \node[statechip, draw=casOedge] (O3) at (2.8,0.6) {\textasciicircum3\textasciicircum O};
+  \node[statechip, draw=casOedge] (O9) at (4.6,0.6) {\textasciicircum9\textasciicircum O};
+  % vias (downward descent, solid)
+  \draw[-{Latex[length=2mm]}, casNedge, line width=1pt]
+    (P2.south) -- (C2.north) node[midway,right=1pt,font=\sffamily\scriptsize\bfseries] {v1};
+  \draw[-{Latex[length=2mm]}, casNedge, line width=1pt]
+    (C6.south) -- (E6.north) node[midway,right=1pt,font=\sffamily\scriptsize\bfseries] {v2};
+  \draw[-{Latex[length=2mm]}, casNedge, line width=1pt]
+    (E4.south) -- (O3.north) node[midway,right=1pt,font=\sffamily\scriptsize\bfseries] {v3};
+  % feedback via (upward, dashed + red): O9 -> P0, routed around the right
+  \draw[-{Latex[length=2mm]}, casRed, line width=1pt, dashed]
+    (O9.east) -- ++(3.0,0) |- (P0.east)
+    node[pos=0.28, right=1pt, font=\sffamily\scriptsize\bfseries, text=casRed] {v4 (feedback)};
+\end{tikzpicture}
+\end{center}
+```
+
+Here is our thread expressed as a layered layout in CCDL:
 
 ```cas
 board csb_v0 {

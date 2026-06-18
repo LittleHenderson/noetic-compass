@@ -60,32 +60,46 @@ Each individual curve has the same shape, and the shape has four named parts:
 - **Saturation knee.** The curve bends sharply — the "knee" — and flattens. This is where the effect hits its `sat` ceiling. Past the knee, the curve is nearly horizontal: pour in more cause, get essentially no more effect. The knee is the most important single point on the curve, because it marks the boundary between "amplifying" and "maxed out."
 - **Early effect (the upward slope).** In a real transistor the saturated part of the curve is not perfectly flat — it slopes gently *upward* to the right. This is the **Early effect**, named for James Early: at high output, the device's effective gain creeps up. The cognitive analog is direct and important: **strong outputs feed back.** A powerful effect (`^6^E` — an Idea decomposing into a strong evaluative output) becomes itself a new trigger (`^8^C` — an Above/Cause that surfaces further Ideas): `^6^E → ^8^C`. The very strength of the output re-enters the system as new cause. That upward slope is the structural seed of thermal runaway, which we treat below.
 
-Here is the family — four bias levels, the construct asked for in this chapter's marquee exercise — sketched in ASCII. Bias rises from the bottom curve to the top.
+Here is the family — four bias levels, the construct asked for in this chapter's marquee exercise. Bias rises from the bottom curve to the top.
 
-```
- effect
-  1.0 |                              ___________----  bias=0.8  (sat≈0.95, early slope ↑)
-      |                       ______/
-      |                  ____/  ← knee (b=0.8)
-  0.8 |                _/                ___________--  bias=0.6  (sat≈0.78)
-      |              _/           ______/
-      |            _/        ____/  ← knee (b=0.6)
-  0.6 |          _/        _/
-      |        _/       __/              ___________  bias=0.4  (sat≈0.55)
-      |      _/      __/          ______/
-  0.4 |     /     __/        ____/  ← knee (b=0.4)
-      |    /   __/       ___/
-      |   / __/      ___/             _______________ bias=0.2 (sat≈0.30)
-  0.2 |  /_/     ___/        ________/
-      | //   ___/    _______/  ← knee (b=0.2)
-      |//__/_______/
-  0.0 |________________________________________________ cause
-      0.0    0.2    0.4    0.6    0.8    1.0
-
-  ← cutoff →|←      active region (slope = β)      →|← saturation →
-   (low bias                                          (effect plateaus;
-    floor; effect                                      early-effect slope
-    pinned near 0)                                     ↑ to the right)
+```{=latex}
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[casaxis, width=8.8cm, height=6.0cm,
+    xlabel={cause activation}, ylabel={effect activation},
+    xmin=0, xmax=1.0, ymin=0, ymax=1.0,
+    xtick={0,0.2,0.4,0.6,0.8,1.0}, ytick={0,0.2,0.4,0.6,0.8,1.0},
+    legend style={at={(1.02,1.0)}, anchor=north west}, legend columns=1,
+    clip mode=individual,
+  ]
+  % four bias curves: cutoff at 0.1, linear active (slope rises w/ bias),
+  % saturation knee (plateau 0.30/0.55/0.78/0.95), slight early-effect slope.
+  \addplot[black, densely dotted, line width=1pt, domain=0.1:1, samples=120]
+    {(x<0.6455)*(0.55*(x-0.1)) + (x>=0.6455)*(0.30 + 0.05*(x-0.6455))};
+  \addplot[casCedge, dashed, line width=1pt, domain=0.1:1, samples=120]
+    {(x<0.6789)*(0.95*(x-0.1)) + (x>=0.6789)*(0.55 + 0.06*(x-0.6789))};
+  \addplot[casOedge, dashdotted, line width=1.1pt, domain=0.1:1, samples=120]
+    {(x<0.6778)*(1.35*(x-0.1)) + (x>=0.6778)*(0.78 + 0.07*(x-0.6778))};
+  \addplot[casEedge, solid, line width=1.1pt, domain=0.1:1, samples=120]
+    {(x<0.6429)*(1.75*(x-0.1)) + (x>=0.6429)*(0.95 + 0.04*(x-0.6429))};
+  \legend{bias=0.2, bias=0.4, bias=0.6, bias=0.8}
+  % load line (R=30), crosses the bias=0.6 curve at the Q-point (~0.43, ~0.45)
+  \addplot[casNedge, line width=0.9pt, domain=0:0.93, samples=2] {0.837 - 0.9*x};
+  \node[casNedge, font=\sffamily\scriptsize, anchor=north west] at (axis cs:0.6,0.30) {load line ($R{=}30$)};
+  \addplot[only marks, mark=*, mark size=2pt, black] coordinates {(0.43,0.45)};
+  \node[font=\sffamily\scriptsize\bfseries, anchor=south east] at (axis cs:0.42,0.46) {Q};
+  \node[font=\sffamily\scriptsize, anchor=north east] at (axis cs:0.42,0.44) {(0.43, 0.45)};
+  \node[font=\sffamily\scriptsize\itshape, anchor=north] at (axis cs:0.1,0.12) {cutoff};
+  \draw[casNedge, line width=0.4pt, densely dotted] (axis cs:0.1,0) -- (axis cs:0.1,1.0);
+  \node[font=\sffamily\scriptsize\itshape, anchor=south] at (axis cs:0.2,0.78) {active region};
+  \draw[-{Latex[length=1.6mm]}, casNedge, line width=0.4pt]
+    (axis cs:0.2,0.76) -- (axis cs:0.27,0.55);
+  \node[font=\sffamily\scriptsize\itshape, anchor=south] at (axis cs:0.62,0.99) {saturation knee};
+  \draw[-{Latex[length=1.6mm]}, casNedge, line width=0.4pt]
+    (axis cs:0.62,0.98) -- (axis cs:0.645,0.83);
+\end{axis}
+\end{tikzpicture}
+\end{center}
 ```
 
 Read it the way an engineer reads it. The **bias=0.2** curve barely lifts off the axis and saturates early and low — a near-cutoff device, low gain, an early knee, a low ceiling. The **bias=0.8** curve rises steeply (high β), holds its linear active region far across the cause axis, and saturates high (sat≈0.95) with a visible early-effect upslope past the knee. The higher the bias, the steeper the active slope, the later and higher the knee, the more the strong-output feedback shows. That single picture contains the whole datasheet: gain (slope), cutoff (where the curve leaves the axis), saturation (the knee height), and the runaway seed (the post-knee upslope).
