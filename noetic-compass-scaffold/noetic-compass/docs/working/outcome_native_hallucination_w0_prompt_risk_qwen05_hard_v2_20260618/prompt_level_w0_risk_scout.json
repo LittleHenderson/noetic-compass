@@ -1,0 +1,199 @@
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 hallucination-risk detection.",
+  "claim_ceiling": "Prompt-level W0 risk is a different target from row-level outcome prediction and still must beat text controls before any internal claim.",
+  "created_at": "2026-06-18T15:51:14.170136+00:00",
+  "dataset": "docs/working/outcome_native_hallucination_w0_prompt_risk_qwen05_hard_v2_20260618/enabled_predicate_w0_all_layers_dataset.npz",
+  "group_count": 120,
+  "important_limits": [
+    "This scout aggregates repeated generations to prompt-level unsupported rates.",
+    "It reads W0 hidden states with zero generated-prefix tokens.",
+    "The best hidden layer does not beat the word text baseline, so it is not an internal hidden-state detector claim.",
+    "A product warning can use prompt/evidence text risk features, but that is a surface/evidence risk lane, not a hidden-state proof."
+  ],
+  "layers": [
+    {
+      "hidden_balanced_accuracy": 0.5,
+      "hidden_minus_char_text_balanced_accuracy": -0.321008,
+      "hidden_minus_text_balanced_accuracy": -0.343697,
+      "layer": 0
+    },
+    {
+      "hidden_balanced_accuracy": 0.835294,
+      "hidden_minus_char_text_balanced_accuracy": 0.014286,
+      "hidden_minus_text_balanced_accuracy": -0.008403,
+      "layer": 1
+    },
+    {
+      "hidden_balanced_accuracy": 0.792437,
+      "hidden_minus_char_text_balanced_accuracy": -0.028571,
+      "hidden_minus_text_balanced_accuracy": -0.051261,
+      "layer": 2
+    },
+    {
+      "hidden_balanced_accuracy": 0.792437,
+      "hidden_minus_char_text_balanced_accuracy": -0.028571,
+      "hidden_minus_text_balanced_accuracy": -0.051261,
+      "layer": 3
+    },
+    {
+      "hidden_balanced_accuracy": 0.792437,
+      "hidden_minus_char_text_balanced_accuracy": -0.028571,
+      "hidden_minus_text_balanced_accuracy": -0.051261,
+      "layer": 4
+    },
+    {
+      "hidden_balanced_accuracy": 0.798319,
+      "hidden_minus_char_text_balanced_accuracy": -0.022689,
+      "hidden_minus_text_balanced_accuracy": -0.045378,
+      "layer": 5
+    },
+    {
+      "hidden_balanced_accuracy": 0.786555,
+      "hidden_minus_char_text_balanced_accuracy": -0.034454,
+      "hidden_minus_text_balanced_accuracy": -0.057143,
+      "layer": 6
+    },
+    {
+      "hidden_balanced_accuracy": 0.815126,
+      "hidden_minus_char_text_balanced_accuracy": -0.005882,
+      "hidden_minus_text_balanced_accuracy": -0.028571,
+      "layer": 7
+    },
+    {
+      "hidden_balanced_accuracy": 0.786555,
+      "hidden_minus_char_text_balanced_accuracy": -0.034454,
+      "hidden_minus_text_balanced_accuracy": -0.057143,
+      "layer": 8
+    },
+    {
+      "hidden_balanced_accuracy": 0.809244,
+      "hidden_minus_char_text_balanced_accuracy": -0.011765,
+      "hidden_minus_text_balanced_accuracy": -0.034454,
+      "layer": 9
+    },
+    {
+      "hidden_balanced_accuracy": 0.77479,
+      "hidden_minus_char_text_balanced_accuracy": -0.046218,
+      "hidden_minus_text_balanced_accuracy": -0.068908,
+      "layer": 10
+    },
+    {
+      "hidden_balanced_accuracy": 0.789076,
+      "hidden_minus_char_text_balanced_accuracy": -0.031933,
+      "hidden_minus_text_balanced_accuracy": -0.054622,
+      "layer": 11
+    },
+    {
+      "hidden_balanced_accuracy": 0.77479,
+      "hidden_minus_char_text_balanced_accuracy": -0.046218,
+      "hidden_minus_text_balanced_accuracy": -0.068908,
+      "layer": 12
+    },
+    {
+      "hidden_balanced_accuracy": 0.823529,
+      "hidden_minus_char_text_balanced_accuracy": 0.002521,
+      "hidden_minus_text_balanced_accuracy": -0.020168,
+      "layer": 13
+    },
+    {
+      "hidden_balanced_accuracy": 0.806723,
+      "hidden_minus_char_text_balanced_accuracy": -0.014286,
+      "hidden_minus_text_balanced_accuracy": -0.036975,
+      "layer": 14
+    },
+    {
+      "hidden_balanced_accuracy": 0.786555,
+      "hidden_minus_char_text_balanced_accuracy": -0.034454,
+      "hidden_minus_text_balanced_accuracy": -0.057143,
+      "layer": 15
+    },
+    {
+      "hidden_balanced_accuracy": 0.815126,
+      "hidden_minus_char_text_balanced_accuracy": -0.005882,
+      "hidden_minus_text_balanced_accuracy": -0.028571,
+      "layer": 16
+    },
+    {
+      "hidden_balanced_accuracy": 0.821008,
+      "hidden_minus_char_text_balanced_accuracy": 0.0,
+      "hidden_minus_text_balanced_accuracy": -0.022689,
+      "layer": 17
+    },
+    {
+      "hidden_balanced_accuracy": 0.821008,
+      "hidden_minus_char_text_balanced_accuracy": 0.0,
+      "hidden_minus_text_balanced_accuracy": -0.022689,
+      "layer": 18
+    },
+    {
+      "hidden_balanced_accuracy": 0.806723,
+      "hidden_minus_char_text_balanced_accuracy": -0.014286,
+      "hidden_minus_text_balanced_accuracy": -0.036975,
+      "layer": 19
+    },
+    {
+      "hidden_balanced_accuracy": 0.821008,
+      "hidden_minus_char_text_balanced_accuracy": 0.0,
+      "hidden_minus_text_balanced_accuracy": -0.022689,
+      "layer": 20
+    },
+    {
+      "hidden_balanced_accuracy": 0.826891,
+      "hidden_minus_char_text_balanced_accuracy": 0.005882,
+      "hidden_minus_text_balanced_accuracy": -0.016807,
+      "layer": 21
+    },
+    {
+      "hidden_balanced_accuracy": 0.821008,
+      "hidden_minus_char_text_balanced_accuracy": 0.0,
+      "hidden_minus_text_balanced_accuracy": -0.022689,
+      "layer": 22
+    },
+    {
+      "hidden_balanced_accuracy": 0.82437,
+      "hidden_minus_char_text_balanced_accuracy": 0.003361,
+      "hidden_minus_text_balanced_accuracy": -0.019328,
+      "layer": 23
+    },
+    {
+      "hidden_balanced_accuracy": 0.818487,
+      "hidden_minus_char_text_balanced_accuracy": -0.002521,
+      "hidden_minus_text_balanced_accuracy": -0.02521,
+      "layer": 24
+    }
+  ],
+  "metrics": {
+    "best_layer": {
+      "hidden_balanced_accuracy": 0.835294,
+      "hidden_minus_char_text_balanced_accuracy": 0.014286,
+      "hidden_minus_text_balanced_accuracy": -0.008403,
+      "layer": 1
+    },
+    "char_text_hash_balanced_accuracy": 0.821008,
+    "domain_majority_balanced_accuracy": 0.5,
+    "evidence_source_majority_balanced_accuracy": 0.5,
+    "text_hash_balanced_accuracy": 0.843697,
+    "topic_majority_balanced_accuracy": 0.5
+  },
+  "risk_label_distribution": {
+    "HIGH_RISK": 35,
+    "LOW_RISK": 85
+  },
+  "schema_version": "cas_harness_hallucination_w0_prompt_level_risk_scout.v1",
+  "skipped_group_count": 80,
+  "status": "FAIL",
+  "target": {
+    "high_threshold": 0.25,
+    "label": "HIGH_RISK if unsupported_rate >= 0.25; LOW_RISK if unsupported_rate == 0.0",
+    "low_threshold": 0.0,
+    "min_samples_per_prompt_group": 5,
+    "unit": "prompt_group_id"
+  },
+  "topic_distribution": {
+    "clinical_measurements": 18,
+    "finance_amounts": 25,
+    "regulatory_dates": 26,
+    "software_versions": 24,
+    "supply_chain_counts": 27
+  }
+}

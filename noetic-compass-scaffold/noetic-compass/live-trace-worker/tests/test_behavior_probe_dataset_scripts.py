@@ -17,7 +17,9 @@ from scripts.build_matched_prompt_chain_break_bank import build_matched_prompt_c
 from scripts.build_outcome_native_hallucination_bank import build_outcome_native_hallucination_bank
 from scripts.capture_enabled_predicate_w0_all_layers import (
     parse_layers_arg,
+    parse_timing_mode,
     parse_timing_point,
+    resolve_scenario_timing,
     write_npz as write_all_layer_npz,
 )
 from scripts.evaluate_hidden_prompt_injection_prespeech import (
@@ -878,10 +880,41 @@ def test_hallucination_timing_evaluator_fails_when_generated_prefix_separates(tm
     assert report["target"]["timing"]["pre_display"] is True
     assert report["gates"]["hidden_balanced_accuracy_pass"] is True
     assert report["gates"]["generated_prefix_char_text_margin_pass"] is False
+    assert report["gates"]["prefix_residual_control_run_pass"] is True
+    assert isinstance(report["gates"]["prefix_residual_hidden_balanced_accuracy_pass"], bool)
+    assert report["gates"]["prefix_residual_generated_prefix_char_margin_pass"] is False
     assert report["metrics"]["generated_prefix_char_text_hash_balanced_accuracy"] >= 0.75
     assert report["readout_method"]["prefix_residual_control"] is True
+    assert report["readout_method"]["prefix_residual_required_for_license"] is True
     assert report["metrics"]["prefix_residual_hidden_balanced_accuracy"] is not None
     assert report["claim"] == "OPEN / NOT LICENSED for internal hallucination-risk timing detection."
+
+
+def test_pre_answer_timing_resolves_before_answer_token():
+    class FakeTokenizer:
+        def decode(self, token_ids, *, skip_special_tokens):
+            assert skip_special_tokens is True
+            pieces = {10: '{"answer": "', 11: "2026", 12: "-04-15", 13: '"}'}
+            return "".join(pieces.get(int(token_id), "") for token_id in token_ids)
+
+    scenario = {
+        "continuation_token_ids": [10, 11, 12, 13],
+        "gold_answer": "2026-04-15",
+        "counterfactual_unsupported_answer": "2026-10-22",
+    }
+
+    timing = resolve_scenario_timing(
+        tokenizer=FakeTokenizer(),
+        scenario=scenario,
+        timing_mode=parse_timing_mode("PRE_ANSWER"),
+        support_status="SUPPORTED",
+    )
+
+    assert timing["timing_mode"] == "pre_answer"
+    assert timing["timing_point"] == "PRE_ANSWER"
+    assert timing["answer_boundary_found"] is True
+    assert timing["answer_boundary_token_index"] == 3
+    assert timing["timing_index"] == 2
 
 
 def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Path):
@@ -895,6 +928,11 @@ def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Pa
             "trace_id": "scenario_0::w8_all_layers",
             "timing_point": "W8",
             "timing_index": 8,
+            "timing_mode": "fixed",
+            "answer_boundary_token_index": -1,
+            "answer_boundary_found": False,
+            "answer_boundary_target_label": "",
+            "answer_boundary_target_sha256": "",
             "payload_class": "",
             "domain": "test",
             "encoding": "",
@@ -936,6 +974,9 @@ def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Pa
     with np.load(dataset_path, allow_pickle=True) as data:
         assert data["timing_points"].tolist() == ["W8"]
         assert data["timing_indices"].tolist() == [8]
+        assert data["timing_modes"].tolist() == ["fixed"]
+        assert data["answer_boundary_token_indices"].tolist() == [-1]
+        assert data["answer_boundary_founds"].tolist() == [False]
         assert data["generated_prefix_texts"].tolist() == ["draft answer prefix"]
         assert data["generated_prefix_token_counts"].tolist() == [8]
         assert data["labels_challenge_mode"].tolist() == ["draft_anchor"]

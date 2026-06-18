@@ -995,12 +995,15 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
             continue
         gates = parsed.get("gates") if isinstance(parsed.get("gates"), Mapping) else {}
         metrics = parsed.get("metrics") if isinstance(parsed.get("metrics"), Mapping) else {}
-        failing_gates = [
+        required_failing_gates = [
             gate_name
             for gate_name in HALLUCINATION_PRESPEECH_REQUIRED_GATES
             if gates.get(gate_name) is not True
         ]
-        gate_pass_count = len(HALLUCINATION_PRESPEECH_REQUIRED_GATES) - len(failing_gates)
+        false_report_gates = [gate_name for gate_name, passed in gates.items() if passed is not True]
+        failing_gates = sorted(set(required_failing_gates + false_report_gates))
+        gate_total = max(len(HALLUCINATION_PRESPEECH_REQUIRED_GATES), len(gates))
+        gate_pass_count = gate_total - len(failing_gates)
         status = str(parsed.get("status") or "UNKNOWN")
         candidate = {
             "ref": str(path.relative_to(root)),
@@ -1008,7 +1011,7 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
             "status": status,
             "layer": parsed.get("layer"),
             "gate_pass_count": gate_pass_count,
-            "gate_total": len(HALLUCINATION_PRESPEECH_REQUIRED_GATES),
+            "gate_total": gate_total,
             "license_eligible": status == "PASS" and not failing_gates,
             "failing_gates": failing_gates,
             "hidden_balanced_accuracy": metrics.get("hidden_balanced_accuracy"),
@@ -1027,6 +1030,14 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
             ),
             "hidden_minus_generated_prefix_char_text_balanced_accuracy": metrics.get(
                 "hidden_minus_generated_prefix_char_text_balanced_accuracy"
+            ),
+            "prefix_residual_hidden_balanced_accuracy": metrics.get(
+                "prefix_residual_hidden_balanced_accuracy"
+            ),
+            "prefix_residual_hidden_minus_generated_prefix_char_text_balanced_accuracy": (
+                metrics.get(
+                    "prefix_residual_hidden_minus_generated_prefix_char_text_balanced_accuracy"
+                )
             ),
             "hidden_minus_retrieval_condition_balanced_accuracy": metrics.get(
                 "hidden_minus_retrieval_condition_balanced_accuracy"

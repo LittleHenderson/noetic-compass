@@ -355,6 +355,7 @@ def evaluate_hallucination_prespeech(
         progress_every=progress_every,
     )
 
+    pre_display_requires_residual = timing_summary["primary_timing_point"] != "W0"
     gates = {
         "exact_prompt_group_pass": prompt_contract["non_exact_prompt_group_count"] == 0,
         "same_prompt_mixed_group_floor_pass": (
@@ -383,6 +384,19 @@ def evaluate_hallucination_prespeech(
         "within_topic_permutation_pass": permutation_p < PASS_PERMUTATION_P,
         "per_topic_floor_pass": all(score >= PASS_PAYLOAD_BA for score in topic_breakdown.values()),
     }
+    if pre_display_requires_residual:
+        gates.update(
+            {
+                "prefix_residual_control_run_pass": prefix_residual_ba is not None,
+                "prefix_residual_hidden_balanced_accuracy_pass": (
+                    prefix_residual_ba is not None and prefix_residual_ba >= PASS_BA
+                ),
+                "prefix_residual_generated_prefix_char_margin_pass": (
+                    prefix_residual_minus_prefix_char_ba is not None
+                    and prefix_residual_minus_prefix_char_ba >= PASS_BASELINE_MARGIN
+                ),
+            }
+        )
     overall = all(gates.values())
     return {
         "schema_version": SCHEMA_VERSION,
@@ -422,6 +436,7 @@ def evaluate_hallucination_prespeech(
             "min_mixed_prompt_groups": int(min_mixed_prompt_groups),
             "generated_prefix_controls": "word and character n-gram baselines over generated_prefix_texts",
             "prefix_residual_control": bool(prefix_residual_control),
+            "prefix_residual_required_for_license": bool(pre_display_requires_residual),
             "prefix_residual_control_method": (
                 "Fold-local Ridge residualization of hidden states against generated-prefix "
                 "word+char features, followed by logistic probe on hidden residuals."
@@ -503,9 +518,10 @@ def evaluate_hallucination_prespeech(
             "Prompt groups must contain both SUPPORTED and UNSUPPORTED realizations of the same factual setup.",
             "Layer-0, word text, char text, topic, domain, evidence source, retrieval condition, retrieval score, challenge mode, prompt length, and evidence length baselines must lose by margin.",
             "For W1/W8 pre-display states, generated-prefix word and character text baselines must also lose by margin.",
+            "For non-W0 pre-display states, prefix-residual hidden features must still pass after generated-prefix word+char signal is removed.",
             "Permutation shuffles labels only inside topic.",
             "This script does not prove prevention or causality.",
-            "The optional prefix-residual control is diagnostic unless separately added to frozen licensing gates.",
+            "The prefix-residual control is a licensing gate whenever generated prefix text exists.",
         ],
     }
 

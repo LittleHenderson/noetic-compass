@@ -1,0 +1,255 @@
+{
+  "challenge_mode_distribution": {
+    "answer_slot_autocomplete": 159,
+    "cached_answer_bias": 205,
+    "conflicting_snippets": 132,
+    "draft_anchor": 221,
+    "draft_json_repair": 173,
+    "stale_first_revision": 183,
+    "stale_majority_vote": 95,
+    "trusted_first_strict": 224
+  },
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "claim_ceiling": "This is detection only. It does not license hallucination prevention unless a separate intervention/guardrail proof reduces unsupported answers while preserving answer quality.",
+  "created_at": "2026-06-18T15:47:05.048638+00:00",
+  "dataset": "docs/working/outcome_native_hallucination_preanswer_qwen05_hard_v2_20260618/enabled_predicate_w0_all_layers_dataset.npz",
+  "domain_distribution": {
+    "C": 356,
+    "E": 274,
+    "F": 216,
+    "O": 264,
+    "P": 282
+  },
+  "evidence_source_distribution": {
+    "clinical_note": 274,
+    "invoice_extract": 216,
+    "policy_digest": 282,
+    "release_note": 356,
+    "warehouse_record": 264
+  },
+  "exact_prompt_group_count": 200,
+  "fold_count": 5,
+  "gates": {
+    "challenge_mode_margin_pass": true,
+    "char_text_margin_pass": true,
+    "domain_margin_pass": true,
+    "evidence_length_margin_pass": true,
+    "evidence_source_margin_pass": true,
+    "exact_prompt_group_pass": true,
+    "generated_prefix_char_text_margin_pass": false,
+    "generated_prefix_text_margin_pass": true,
+    "hidden_balanced_accuracy_pass": true,
+    "l0_baseline_present_pass": true,
+    "l0_margin_pass": true,
+    "label_per_topic_floor_pass": true,
+    "per_topic_floor_pass": true,
+    "prefix_residual_control_run_pass": true,
+    "prefix_residual_generated_prefix_char_margin_pass": false,
+    "prefix_residual_hidden_balanced_accuracy_pass": false,
+    "prompt_length_margin_pass": true,
+    "retrieval_condition_margin_pass": true,
+    "retrieval_score_bucket_margin_pass": true,
+    "same_prompt_mixed_group_floor_pass": true,
+    "shuffled_control_pass": true,
+    "text_margin_pass": true,
+    "topic_floor_pass": true,
+    "topic_margin_pass": true,
+    "within_topic_permutation_pass": false
+  },
+  "important_limits": [
+    "Grouped folds keep exact prompt/evidence carriers out of both train and test.",
+    "Prompt groups must contain both SUPPORTED and UNSUPPORTED realizations of the same factual setup.",
+    "Layer-0, word text, char text, topic, domain, evidence source, retrieval condition, retrieval score, challenge mode, prompt length, and evidence length baselines must lose by margin.",
+    "For W1/W8 pre-display states, generated-prefix word and character text baselines must also lose by margin.",
+    "For non-W0 pre-display states, prefix-residual hidden features must still pass after generated-prefix word+char signal is removed.",
+    "Permutation shuffles labels only inside topic.",
+    "This script does not prove prevention or causality.",
+    "The prefix-residual control is a licensing gate whenever generated prefix text exists."
+  ],
+  "layer": 14,
+  "metrics": {
+    "challenge_mode_majority_balanced_accuracy": 0.5,
+    "char_text_hash_balanced_accuracy": 0.643536,
+    "domain_majority_balanced_accuracy": 0.5,
+    "evidence_length_balanced_accuracy": 0.513245,
+    "evidence_source_majority_balanced_accuracy": 0.5,
+    "generated_prefix_char_text_hash_balanced_accuracy": 0.866776,
+    "generated_prefix_text_hash_balanced_accuracy": 0.824953,
+    "hidden_balanced_accuracy": 1.0,
+    "hidden_minus_challenge_mode_balanced_accuracy": 0.5,
+    "hidden_minus_char_text_balanced_accuracy": 0.356464,
+    "hidden_minus_domain_balanced_accuracy": 0.5,
+    "hidden_minus_evidence_length_balanced_accuracy": 0.486755,
+    "hidden_minus_evidence_source_balanced_accuracy": 0.5,
+    "hidden_minus_generated_prefix_char_text_balanced_accuracy": 0.133224,
+    "hidden_minus_generated_prefix_text_balanced_accuracy": 0.175047,
+    "hidden_minus_l0_embedding_balanced_accuracy": 0.346998,
+    "hidden_minus_prompt_length_balanced_accuracy": 0.459167,
+    "hidden_minus_retrieval_condition_balanced_accuracy": 0.5,
+    "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.5,
+    "hidden_minus_text_balanced_accuracy": 0.317539,
+    "hidden_minus_topic_balanced_accuracy": 0.5,
+    "l0_embedding_balanced_accuracy": 0.653002,
+    "per_topic_hidden_balanced_accuracy": {
+      "clinical_measurements": 1.0,
+      "finance_amounts": 1.0,
+      "regulatory_dates": 1.0,
+      "software_versions": 1.0,
+      "supply_chain_counts": 1.0
+    },
+    "prefix_residual_hidden_balanced_accuracy": 0.65185,
+    "prefix_residual_hidden_minus_generated_prefix_char_text_balanced_accuracy": -0.214926,
+    "prompt_length_balanced_accuracy": 0.540833,
+    "retrieval_condition_majority_balanced_accuracy": 0.5,
+    "retrieval_score_bucket_majority_balanced_accuracy": 0.5,
+    "shuffled_label_hidden_mean_balanced_accuracy": 0.509189,
+    "text_hash_balanced_accuracy": 0.682461,
+    "topic_majority_balanced_accuracy": 0.5,
+    "within_topic_permutation_p": 0.019608
+  },
+  "mixed_prompt_group_count": 97,
+  "prompt_group_contract": {
+    "contract": "Every prompt group must hold one exact prompt/evidence setup, and enough groups must contain both SUPPORTED and UNSUPPORTED outcomes.",
+    "exact_prompt_group_count": 200,
+    "mixed_prompt_group_count": 97,
+    "mixed_prompt_group_examples": [
+      "outcome_native_hard_qa_clinical_measurements_00",
+      "outcome_native_hard_qa_clinical_measurements_05",
+      "outcome_native_hard_qa_clinical_measurements_06",
+      "outcome_native_hard_qa_clinical_measurements_07",
+      "outcome_native_hard_qa_clinical_measurements_08",
+      "outcome_native_hard_qa_clinical_measurements_10",
+      "outcome_native_hard_qa_clinical_measurements_11",
+      "outcome_native_hard_qa_clinical_measurements_12",
+      "outcome_native_hard_qa_clinical_measurements_14",
+      "outcome_native_hard_qa_clinical_measurements_15"
+    ],
+    "non_exact_prompt_group_count": 0,
+    "non_exact_prompt_group_examples": [],
+    "prompt_group_count": 200,
+    "singleton_prompt_group_count": 4,
+    "singleton_prompt_group_examples": [
+      "outcome_native_hard_qa_finance_amounts_20",
+      "outcome_native_hard_qa_regulatory_dates_04",
+      "outcome_native_hard_qa_regulatory_dates_20",
+      "outcome_native_hard_qa_regulatory_dates_28"
+    ]
+  },
+  "prompt_group_count": 200,
+  "readout_method": {
+    "C": 0.25,
+    "class_weight": "balanced",
+    "control_jobs": 8,
+    "generated_prefix_controls": "word and character n-gram baselines over generated_prefix_texts",
+    "grouped_folds": "prompt_group_id / derived exact prompt carrier",
+    "hidden_readout": "StandardScaler + LogisticRegression",
+    "max_iter": 1000,
+    "min_mixed_prompt_groups": 40,
+    "prefix_residual_alpha": 10.0,
+    "prefix_residual_control": true,
+    "prefix_residual_control_method": "Fold-local Ridge residualization of hidden states against generated-prefix word+char features, followed by logistic probe on hidden residuals.",
+    "prefix_residual_dim_per_channel": 256,
+    "prefix_residual_required_for_license": true,
+    "progress_every": 10,
+    "solver": "lbfgs"
+  },
+  "retrieval_condition_distribution": {
+    "trusted_evidence_plus_stale_conflict": 1392
+  },
+  "retrieval_score_bucket_distribution": {
+    "high": 278,
+    "low": 291,
+    "medium": 823
+  },
+  "row_count": 1392,
+  "schema_version": "cas_harness_hallucination_prespeech_eval.v1",
+  "status": "FAIL",
+  "support_status_distribution": {
+    "SUPPORTED": 1208,
+    "UNSUPPORTED": 184
+  },
+  "target": {
+    "labels": [
+      "SUPPORTED",
+      "UNSUPPORTED"
+    ],
+    "positive_label": "UNSUPPORTED",
+    "primary": "PRE_ANSWER early-generation pre-display support status",
+    "timing": {
+      "contract": "W0 means before any generated token exists. W1/W8 mean early generated prefix states before the answer is displayed to the user.",
+      "pre_display": true,
+      "primary_timing_point": "PRE_ANSWER",
+      "timing_index_distribution": {
+        "1": 2,
+        "10": 171,
+        "11": 70,
+        "12": 67,
+        "13": 184,
+        "14": 12,
+        "15": 141,
+        "16": 36,
+        "17": 19,
+        "18": 55,
+        "19": 24,
+        "2": 9,
+        "20": 15,
+        "21": 16,
+        "22": 22,
+        "23": 2,
+        "24": 17,
+        "25": 8,
+        "26": 17,
+        "27": 31,
+        "28": 10,
+        "29": 8,
+        "30": 12,
+        "31": 5,
+        "32": 9,
+        "33": 13,
+        "34": 6,
+        "35": 11,
+        "36": 19,
+        "37": 10,
+        "38": 9,
+        "39": 11,
+        "40": 15,
+        "41": 4,
+        "43": 10,
+        "44": 8,
+        "45": 4,
+        "46": 11,
+        "47": 13,
+        "5": 47,
+        "6": 84,
+        "7": 35,
+        "8": 86,
+        "9": 34
+      },
+      "timing_point_distribution": {
+        "PRE_ANSWER": 1392
+      }
+    }
+  },
+  "topic_distribution": {
+    "clinical_measurements": {
+      "SUPPORTED": 237,
+      "UNSUPPORTED": 37
+    },
+    "finance_amounts": {
+      "SUPPORTED": 184,
+      "UNSUPPORTED": 32
+    },
+    "regulatory_dates": {
+      "SUPPORTED": 247,
+      "UNSUPPORTED": 35
+    },
+    "software_versions": {
+      "SUPPORTED": 324,
+      "UNSUPPORTED": 32
+    },
+    "supply_chain_counts": {
+      "SUPPORTED": 216,
+      "UNSUPPORTED": 48
+    }
+  }
+}

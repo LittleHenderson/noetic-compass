@@ -14,6 +14,8 @@ from datetime import UTC, datetime
 import json
 from pathlib import Path
 import sys
+import hashlib
+import re
 from typing import Any
 
 import numpy as np
@@ -51,7 +53,10 @@ def parse_args() -> Any:
     parser.add_argument(
         "--timing-point",
         default="W0",
-        help="Timing state to capture: W0 before generation, or WN after N generated tokens exist.",
+        help=(
+            "Timing state to capture: W0 before generation, WN after N generated tokens, "
+            "or PRE_ANSWER immediately before the judged answer value appears in the forced continuation."
+        ),
     )
     parser.add_argument(
         "--temperature",
@@ -105,7 +110,7 @@ def capture_w0_all_layers(
     top_p: float = 0.95,
     trust_remote_code: bool,
 ) -> dict[str, Any]:
-    timing_label, timing_index = parse_timing_point(timing_point)
+    timing_mode = parse_timing_mode(timing_point)
     scenarios = load_prompt_bank(prompt_bank_path)
     if max_scenarios > 0:
         scenarios = scenarios[:max_scenarios]
@@ -132,6 +137,13 @@ def capture_w0_all_layers(
             prompt=str(scenario["prompt"]),
             prompt_format=prompt_format,
         )
+        support_status = normalise_support_status(scenario.get("support_status") or scenario.get("target_support_status"))
+        row_timing = resolve_scenario_timing(
+            tokenizer=tokenizer,
+            scenario=scenario,
+            timing_mode=timing_mode,
+            support_status=support_status,
+        )
         layer_vectors, layer_indices, token_count, generated_prefix_text, generated_prefix_token_count = (
             capture_timing_layers(
                 model=model,
@@ -139,7 +151,7 @@ def capture_w0_all_layers(
                 prompt=model_prompt,
                 max_length=max_length,
                 layers_arg=layers_arg,
-                timing_index=timing_index,
+                timing_index=row_timing["timing_index"],
                 seed=parse_sample_seed(str(scenario.get("id") or scenario.get("scenario_id") or index), fallback=index),
                 temperature=temperature,
                 top_p=top_p,
@@ -152,7 +164,6 @@ def capture_w0_all_layers(
             raise RuntimeError(f"Layer set changed during capture: {resolved_layers} vs {layer_indices}")
         features.append(layer_vectors)
         scenario_id = str(scenario["id"])
-        support_status = normalise_support_status(scenario.get("support_status") or scenario.get("target_support_status"))
         label = label_map.get(scenario_id) or label_map.get(f"{scenario_id}::capture")
         label_source = "label_jsonl" if label else "expected_behavior"
         if not label:
@@ -166,10 +177,15 @@ def capture_w0_all_layers(
         domain = scenario.get("domain") or scenario.get("expected_cas_axes", {}).get("domain", "")
         topic = scenario.get("topic") or scenario.get("payload_class", "")
         row = {
-            "trace_id": f"{scenario_id}::{timing_label.lower()}_all_layers",
+            "trace_id": f"{scenario_id}::{row_timing['timing_point'].lower()}_all_layers",
             "scenario_id": scenario_id,
-            "timing_point": timing_label,
-            "timing_index": timing_index,
+            "timing_point": row_timing["timing_point"],
+            "timing_index": row_timing["timing_index"],
+            "timing_mode": row_timing["timing_mode"],
+            "answer_boundary_token_index": row_timing.get("answer_boundary_token_index", -1),
+            "answer_boundary_found": row_timing.get("answer_boundary_found", False),
+            "answer_boundary_target_label": row_timing.get("answer_boundary_target_label", ""),
+            "answer_boundary_target_sha256": row_timing.get("answer_boundary_target_sha256", ""),
             "prompt_group_id": scenario.get("prompt_group_id", derive_prompt_group_id(scenario_id)),
             "payload_class": scenario.get("payload_class", ""),
             "domain": domain,
@@ -206,7 +222,8 @@ def capture_w0_all_layers(
         rows.append(row)
         print(
             f"[w0-all-layers] {index}/{len(scenarios)} {scenario_id} "
-            f"timing={timing_label} label={label} layers={len(layer_indices)} "
+            f"timing={row_timing['timing_point']} index={row_timing['timing_index']} "
+            f"label={label} layers={len(layer_indices)} "
             f"prompt_tokens={token_count} generated_prefix_tokens={generated_prefix_token_count}",
             flush=True,
         )
@@ -233,8 +250,8 @@ def capture_w0_all_layers(
         rows_path=rows_path,
         layers=resolved_layers,
         max_length=max_length,
-        timing_point=timing_label,
-        timing_index=timing_index,
+        timing_point=timing_mode["label"],
+        timing_index=timing_mode["index"],
         temperature=temperature,
         top_p=top_p,
     )
@@ -387,6 +404,98 @@ def parse_timing_point(value: Any) -> tuple[str, int]:
     return f"W{index}", index
 
 
+def parse_timing_mode(value: Any) -> dict[str, Any]:
+    text = str(value or "W0").strip().upper().replace("-", "_")
+    if text in {"PREANSWER", "PRE_ANSWER", "BEFORE_ANSWER", "PRE_ANSWER_TOKEN"}:
+        return {
+            "mode": "pre_answer",
+            "label": "PRE_ANSWER",
+            "index": -1,
+        }
+    label, index = parse_timing_point(text)
+    return {
+        "mode": "fixed",
+        "label": label,
+        "index": index,
+    }
+
+
+def resolve_scenario_timing(
+    *,
+    tokenizer: Any,
+    scenario: dict[str, Any],
+    timing_mode: dict[str, Any],
+    support_status: str | None,
+) -> dict[str, Any]:
+    if timing_mode["mode"] != "pre_answer":
+        return {
+            "timing_mode": "fixed",
+            "timing_point": timing_mode["label"],
+            "timing_index": int(timing_mode["index"]),
+            "answer_boundary_token_index": -1,
+            "answer_boundary_found": False,
+            "answer_boundary_target_label": "",
+            "answer_boundary_target_sha256": "",
+        }
+    token_ids = parse_token_id_list(scenario.get("continuation_token_ids"))
+    if not token_ids:
+        raise RuntimeError("PRE_ANSWER timing requires scenario continuation_token_ids.")
+    target_label, target_answer = answer_target_for_pre_answer(
+        scenario=scenario,
+        support_status=support_status,
+    )
+    if not target_answer:
+        raise RuntimeError("PRE_ANSWER timing requires gold/counterfactual answer metadata.")
+    boundary_index = first_answer_token_boundary(
+        tokenizer=tokenizer,
+        token_ids=token_ids,
+        target_answer=target_answer,
+    )
+    timing_index = max(0, boundary_index - 1)
+    return {
+        "timing_mode": "pre_answer",
+        "timing_point": "PRE_ANSWER",
+        "timing_index": int(timing_index),
+        "answer_boundary_token_index": int(boundary_index),
+        "answer_boundary_found": True,
+        "answer_boundary_target_label": target_label,
+        "answer_boundary_target_sha256": sha256_text(str(target_answer)),
+    }
+
+
+def answer_target_for_pre_answer(*, scenario: dict[str, Any], support_status: str | None) -> tuple[str, str]:
+    label = normalise_support_status(support_status)
+    if label == "UNSUPPORTED":
+        return "UNSUPPORTED", str(scenario.get("counterfactual_unsupported_answer") or "")
+    if label == "SUPPORTED":
+        return "SUPPORTED", str(scenario.get("gold_answer") or "")
+    return "", ""
+
+
+def first_answer_token_boundary(*, tokenizer: Any, token_ids: list[int], target_answer: str) -> int:
+    target_norm = normalize_answer_for_match(target_answer)
+    if not target_norm:
+        raise RuntimeError("PRE_ANSWER target answer normalizes to empty string.")
+    for index in range(1, len(token_ids) + 1):
+        prefix_text = tokenizer.decode(token_ids[:index], skip_special_tokens=True)
+        if target_norm in normalize_answer_for_match(prefix_text):
+            return index
+    raise RuntimeError(
+        "Could not locate answer value in continuation_token_ids for PRE_ANSWER timing."
+    )
+
+
+def normalize_answer_for_match(value: Any) -> str:
+    text = str(value or "").lower()
+    text = text.replace("$", " ")
+    text = re.sub(r"[^a-z0-9.\-]+", " ", text)
+    return " ".join(text.split())
+
+
+def sha256_text(value: str) -> str:
+    return hashlib.sha256(str(value or "").encode("utf-8")).hexdigest()
+
+
 def parse_layers_arg(layers_arg: str, *, hidden_state_count: int) -> list[int]:
     value = str(layers_arg or "all").strip().lower()
     if value == "all":
@@ -431,6 +540,23 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
         trace_ids=np.asarray([row["trace_id"] for row in rows], dtype=object),
         timing_points=np.asarray([row.get("timing_point", "W0") for row in rows], dtype=object),
         timing_indices=np.asarray([row.get("timing_index", 0) for row in rows], dtype=np.int64),
+        timing_modes=np.asarray([row.get("timing_mode", "fixed") for row in rows], dtype=object),
+        answer_boundary_token_indices=np.asarray(
+            [row.get("answer_boundary_token_index", -1) for row in rows],
+            dtype=np.int64,
+        ),
+        answer_boundary_founds=np.asarray(
+            [bool(row.get("answer_boundary_found", False)) for row in rows],
+            dtype=bool,
+        ),
+        answer_boundary_target_labels=np.asarray(
+            [row.get("answer_boundary_target_label", "") for row in rows],
+            dtype=object,
+        ),
+        answer_boundary_target_sha256s=np.asarray(
+            [row.get("answer_boundary_target_sha256", "") for row in rows],
+            dtype=object,
+        ),
         axis_names=np.asarray(
             [
                 "behavior",
@@ -529,6 +655,24 @@ def build_summary(
             "top_p": float(top_p),
             "mode": "sampled" if temperature > 0 else "greedy",
         },
+        "timing_mode_distribution": dict(
+            sorted(Counter(row.get("timing_mode", "fixed") for row in rows).items())
+        ),
+        "answer_boundary_found_distribution": dict(
+            sorted(Counter(bool(row.get("answer_boundary_found", False)) for row in rows).items())
+        ),
+        "answer_boundary_token_index_distribution": dict(
+            sorted(
+                Counter(
+                    int(row.get("answer_boundary_token_index", -1))
+                    for row in rows
+                    if int(row.get("answer_boundary_token_index", -1)) >= 0
+                ).items()
+            )
+        ),
+        "timing_index_distribution": dict(
+            sorted(Counter(int(row.get("timing_index", 0)) for row in rows).items())
+        ),
         "row_count": int(len(rows)),
         "layers": [int(layer) for layer in layers],
         "layer_count": int(len(layers)),
@@ -578,8 +722,9 @@ def build_summary(
         ),
         "important_limit": (
             "This is hidden-state capture only. W0 is prompt-stage before any generated token; "
-            "W1/W8 are early-generation pre-display states and must beat generated-prefix text "
-            "controls before any internal detector claim is considered."
+            "W1/W8 are early-generation pre-display states; PRE_ANSWER is the state immediately "
+            "before the judged answer value appears in the forced continuation. All timing states "
+            "must beat generated-prefix text controls before any internal detector claim is considered."
         ),
     }
 
