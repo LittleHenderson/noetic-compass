@@ -20,6 +20,7 @@ from scripts.build_cjt_bias_vibration_bank import (
     SUPPORTED_ROLE as CJT_SUPPORTED_ROLE,
     TRUSTED_CORRECTION_ROLE as CJT_TRUSTED_CORRECTION_ROLE,
     UNSUPPORTED_ROLE as CJT_UNSUPPORTED_ROLE,
+    VARIANT_COUNTERBALANCED as CJT_VARIANT_COUNTERBALANCED,
     build_cjt_bias_vibration_bank,
 )
 from scripts.build_matched_prompt_chain_break_bank import build_matched_prompt_chain_break_bank
@@ -131,6 +132,32 @@ def test_cjt_bias_vibration_surface_screen_blocks_leaky_role_text(tmp_path: Path
     assert report["gates"]["length_leakage_pass"] is False
     assert report["metrics"]["length_delta_balanced_accuracy"] > 0.60
     assert report["claim"] == "OPEN / NOT LICENSED for CJT bias/vibration hidden response detection."
+
+
+def test_cjt_bias_vibration_counterbalanced_bank_passes_surface_screen(tmp_path: Path):
+    payload = build_cjt_bias_vibration_bank(
+        samples_per_variant=2,
+        seed_offset=0,
+        variant=CJT_VARIANT_COUNTERBALANCED,
+    )
+    bank_path = tmp_path / "cjt_bank_counterbalanced.json"
+    bank_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    report = screen_cjt_bias_vibration_surface_leakage(
+        bank_path=bank_path,
+        folds=5,
+        seed=42,
+        text_dim=512,
+        max_baseline_ba=0.60,
+    )
+
+    assert report["status"] == "READY_FOR_W0_CAPTURE"
+    assert report["gates"]["word_text_leakage_pass"] is True
+    assert report["gates"]["char_text_leakage_pass"] is True
+    assert report["gates"]["length_leakage_pass"] is True
+    assert report["gates"]["active_channel_leakage_pass"] is True
+    assert report["metrics"]["word_text_delta_balanced_accuracy"] <= 0.60
+    assert report["metrics"]["char_text_delta_balanced_accuracy"] <= 0.60
 
 
 def test_cjt_bias_vibration_evaluator_passes_hidden_only_delta_signal(tmp_path: Path):

@@ -149,6 +149,10 @@ def screen_cjt_bias_vibration_surface_leakage(
         y,
         cross_val_category_majority_predict(delta_rows["family"], y, fold_indices),
     )
+    active_channel_ba = balanced_accuracy(
+        y,
+        cross_val_category_majority_predict(delta_rows["active_channel"], y, fold_indices),
+    )
     gates = {
         "paired_delta_rows_ready_pass": True,
         "word_text_leakage_pass": word_ba <= max_baseline_ba,
@@ -157,6 +161,7 @@ def screen_cjt_bias_vibration_surface_leakage(
         "payload_leakage_pass": payload_ba <= max_baseline_ba,
         "domain_leakage_pass": domain_ba <= max_baseline_ba,
         "family_leakage_pass": family_ba <= max_baseline_ba,
+        "active_channel_leakage_pass": active_channel_ba <= max_baseline_ba,
     }
     return {
         "schema_version": SCHEMA_VERSION,
@@ -176,6 +181,7 @@ def screen_cjt_bias_vibration_surface_leakage(
             "payload_class_balanced_accuracy": float(payload_ba),
             "domain_balanced_accuracy": float(domain_ba),
             "family_balanced_accuracy": float(family_ba),
+            "active_channel_balanced_accuracy": float(active_channel_ba),
             "max_baseline_ba": float(max_baseline_ba),
         },
     }
@@ -217,6 +223,7 @@ def build_prompt_delta_rows(scenarios: list[dict[str, Any]]) -> dict[str, Any]:
                     "label": RISK_LABEL if role in RISK_ROLES else CONTROL_LABEL,
                     "payload_class": str(sample.get("payload_class") or "unknown"),
                     "domain": str(sample.get("domain") or "unknown"),
+                    "active_channel": str(sample.get("cjt_active_channel") or "unknown"),
                     "base_prompt": base_prompt,
                     "variant_prompt": str(sample.get("prompt") or ""),
                 }
@@ -237,6 +244,7 @@ def build_prompt_delta_rows(scenarios: list[dict[str, Any]]) -> dict[str, Any]:
         "label": labels,
         "payload_class": np.asarray([row["payload_class"] for row in rows], dtype=object),
         "domain": np.asarray([row["domain"] for row in rows], dtype=object),
+        "active_channel": np.asarray([row["active_channel"] for row in rows], dtype=object),
         "base_prompts": np.asarray([row["base_prompt"] for row in rows], dtype=object),
         "variant_prompts": np.asarray([row["variant_prompt"] for row in rows], dtype=object),
     }
