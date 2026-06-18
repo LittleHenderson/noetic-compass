@@ -1,0 +1,32 @@
+{
+  "bank": "live-trace-worker\\scenarios\\cjt_bias_vibration_bank_v0_20260618.json",
+  "claim": "OPEN / NOT LICENSED for CJT bias/vibration hidden response detection.",
+  "claim_ceiling": "Surface preflight only. It does not use hidden states and licenses no internal claim.",
+  "created_at": "2026-06-18T17:01:54.161943+00:00",
+  "gates": {
+    "char_text_leakage_pass": false,
+    "domain_leakage_pass": true,
+    "family_leakage_pass": true,
+    "length_leakage_pass": false,
+    "paired_delta_rows_ready_pass": true,
+    "payload_leakage_pass": true,
+    "word_text_leakage_pass": false
+  },
+  "metrics": {
+    "char_text_delta_balanced_accuracy": 0.9583333333333333,
+    "delta_label_distribution": {
+      "CONTROL_PERTURBATION": 18,
+      "RISK_PERTURBATION": 12
+    },
+    "delta_row_count": 30,
+    "domain_balanced_accuracy": 0.5,
+    "family_balanced_accuracy": 0.5,
+    "length_delta_balanced_accuracy": 0.9722222222222222,
+    "max_baseline_ba": 0.6,
+    "payload_class_balanced_accuracy": 0.5,
+    "prompt_group_count": 6,
+    "word_text_delta_balanced_accuracy": 0.9166666666666667
+  },
+  "schema_version": "cas_harness_cjt_bias_vibration_surface_screen.v0",
+  "status": "BLOCKED_SURFACE_LEAKAGE"
+}

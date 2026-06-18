@@ -1,0 +1,547 @@
+{
+  "best_char_margin_layer": {
+    "char_ba": 0.9583333333333333,
+    "failed": [
+      "char_text_margin_pass",
+      "length_margin_pass",
+      "text_margin_pass"
+    ],
+    "gate_count": 13,
+    "gate_total": 16,
+    "hidden_ba": 1.0,
+    "hidden_minus_char": 0.04166666666666674,
+    "l0_ba": 0.5,
+    "layer": 1,
+    "length_ba": 0.9722222222222222,
+    "perm_p": 0.000999000999000999,
+    "status": "FAIL",
+    "word_ba": 0.9166666666666667
+  },
+  "best_hidden_layer": {
+    "char_ba": 0.9583333333333333,
+    "failed": [
+      "char_text_margin_pass",
+      "length_margin_pass",
+      "text_margin_pass"
+    ],
+    "gate_count": 13,
+    "gate_total": 16,
+    "hidden_ba": 1.0,
+    "hidden_minus_char": 0.04166666666666674,
+    "l0_ba": 0.5,
+    "layer": 1,
+    "length_ba": 0.9722222222222222,
+    "perm_p": 0.000999000999000999,
+    "status": "FAIL",
+    "word_ba": 0.9166666666666667
+  },
+  "passing_layers": [],
+  "report_count": 28,
+  "rows": [
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 1,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 2,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 3,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 4,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 5,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 6,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 7,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 8,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 9,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 10,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 11,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 12,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 13,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9722222222222222,
+      "hidden_minus_char": 0.01388888888888895,
+      "l0_ba": 0.5,
+      "layer": 14,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9722222222222222,
+      "hidden_minus_char": 0.01388888888888895,
+      "l0_ba": 0.5,
+      "layer": 15,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 16,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9444444444444444,
+      "hidden_minus_char": -0.01388888888888884,
+      "l0_ba": 0.5,
+      "layer": 17,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 18,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 19,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 20,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 21,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9722222222222222,
+      "hidden_minus_char": 0.01388888888888895,
+      "l0_ba": 0.5,
+      "layer": 22,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9444444444444444,
+      "hidden_minus_char": -0.01388888888888884,
+      "l0_ba": 0.5,
+      "layer": 23,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9444444444444444,
+      "hidden_minus_char": -0.01388888888888884,
+      "l0_ba": 0.5,
+      "layer": 24,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9444444444444444,
+      "hidden_minus_char": -0.01388888888888884,
+      "l0_ba": 0.5,
+      "layer": 25,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 0.9722222222222222,
+      "hidden_minus_char": 0.01388888888888895,
+      "l0_ba": 0.5,
+      "layer": 26,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 27,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    },
+    {
+      "char_ba": 0.9583333333333333,
+      "failed": [
+        "char_text_margin_pass",
+        "length_margin_pass",
+        "text_margin_pass"
+      ],
+      "gate_count": 13,
+      "gate_total": 16,
+      "hidden_ba": 1.0,
+      "hidden_minus_char": 0.04166666666666674,
+      "l0_ba": 0.5,
+      "layer": 28,
+      "length_ba": 0.9722222222222222,
+      "perm_p": 0.000999000999000999,
+      "status": "FAIL",
+      "word_ba": 0.9166666666666667
+    }
+  ],
+  "schema_version": "cas_harness_cjt_bias_vibration_layer_sweep_summary.v0"
+}

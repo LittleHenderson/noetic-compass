@@ -63,6 +63,9 @@ from scripts.screen_enabled_predicate_campaign import screen_enabled_predicate_c
 from scripts.screen_hidden_prompt_injection_surface_leakage import (
     screen_hidden_prompt_injection_surface_leakage,
 )
+from scripts.screen_cjt_bias_vibration_surface_leakage import (
+    screen_cjt_bias_vibration_surface_leakage,
+)
 from scripts.screen_grounded_factual_qa_surface_leakage import (
     screen_grounded_factual_qa_surface_leakage,
 )
@@ -108,6 +111,26 @@ def test_cjt_bias_vibration_bank_has_complete_paired_roles():
         CJT_TRUSTED_CORRECTION_ROLE,
         CJT_UNSUPPORTED_ROLE,
     }
+
+
+def test_cjt_bias_vibration_surface_screen_blocks_leaky_role_text(tmp_path: Path):
+    payload = build_cjt_bias_vibration_bank(samples_per_variant=2, seed_offset=0)
+    bank_path = tmp_path / "cjt_bank.json"
+    bank_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    report = screen_cjt_bias_vibration_surface_leakage(
+        bank_path=bank_path,
+        folds=5,
+        seed=42,
+        text_dim=512,
+        max_baseline_ba=0.60,
+    )
+
+    assert report["status"] == "BLOCKED_SURFACE_LEAKAGE"
+    assert report["gates"]["paired_delta_rows_ready_pass"] is True
+    assert report["gates"]["length_leakage_pass"] is False
+    assert report["metrics"]["length_delta_balanced_accuracy"] > 0.60
+    assert report["claim"] == "OPEN / NOT LICENSED for CJT bias/vibration hidden response detection."
 
 
 def test_cjt_bias_vibration_evaluator_passes_hidden_only_delta_signal(tmp_path: Path):
