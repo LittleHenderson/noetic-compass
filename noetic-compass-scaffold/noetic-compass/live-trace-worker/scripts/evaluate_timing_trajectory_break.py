@@ -1,10 +1,10 @@
-"""Evaluate hidden-state trajectory breaks across W0, W1, and W8.
+"""Evaluate hidden-state trajectory breaks across W0/W1 or W0/W1/W8.
 
 This is a research gate for the "break in reasoning" idea: the model's hidden
-state should move differently between W0 -> W1 -> W8 when a prompt-injection
+state should move differently between early timing points when a prompt-injection
 risk is adopted or when a factual answer becomes unsupported. The target is the
-internal trajectory, not output text. A PASS is still detection-only; it does
-not prove prevention, removal, reversal, or causality.
+internal trajectory, not output text. A PASS is still detection-only; it does not
+prove prevention, removal, reversal, or causality.
 """
 
 from __future__ import annotations
@@ -57,14 +57,14 @@ IDENTITY_FIELDS = (
 
 
 class TrajectoryAlignmentError(RuntimeError):
-    """Raised when W0/W1/W8 cannot be proven to be the same rows."""
+    """Raised when timing captures cannot be proven to be the same rows."""
 
 
 def parse_args() -> Any:
     parser = ArgumentParser(description=__doc__)
     parser.add_argument("--w0-dataset", required=True, type=Path)
     parser.add_argument("--w1-dataset", required=True, type=Path)
-    parser.add_argument("--w8-dataset", required=True, type=Path)
+    parser.add_argument("--w8-dataset", type=Path, default=None)
     parser.add_argument("--output-report", required=True, type=Path)
     parser.add_argument("--layer", type=int, default=None)
     parser.add_argument("--folds", type=int, default=5)
@@ -149,7 +149,7 @@ def evaluate_timing_trajectory_break(
     *,
     w0_dataset_path: Path,
     w1_dataset_path: Path,
-    w8_dataset_path: Path,
+    w8_dataset_path: Path | None,
     layer: int | None,
     folds: int,
     seed: int,
@@ -190,15 +190,16 @@ def evaluate_timing_trajectory_break(
                 negative_label=negative,
                 strata_axis=strata_axis,
             ),
-            "W8": load_timing_dataset(
+        }
+        if w8_dataset_path is not None:
+            datasets["W8"] = load_timing_dataset(
                 w8_dataset_path,
                 layer=layer,
                 label_axis=label_axis,
                 positive_label=positive,
                 negative_label=negative,
                 strata_axis=strata_axis,
-            ),
-        }
+            )
         aligned = align_timing_datasets(
             datasets,
             allow_row_intersection=allow_row_intersection,
@@ -247,6 +248,9 @@ def evaluate_timing_trajectory_break(
     prompts = prepared["prompts"]
     strata = prepared["strata"]
     fold_indices = make_group_folds(groups, n_folds=folds, seed=seed)
+    timing_order = list(prepared["timing_order"])
+    last_timing = str(timing_order[-1])
+    trajectory_label = " -> ".join(timing_order)
     prompt_contract = summarize_prompt_group_contract(
         groups=groups,
         prompts=prompts,
@@ -257,9 +261,8 @@ def evaluate_timing_trajectory_break(
     cross_validation = summarize_grouped_folds(groups, fold_indices)
 
     w0 = prepared["W0"]["features"]
-    w1 = prepared["W1"]["features"]
-    w8 = prepared["W8"]["features"]
-    trajectory_x = build_trajectory_features(w0, w1, w8)
+    trajectory_states = [prepared[timing]["features"] for timing in timing_order]
+    trajectory_x = build_trajectory_features(*trajectory_states)
 
     trajectory_pred = cross_val_linear_probe_predict(
         trajectory_x,
@@ -279,7 +282,7 @@ def evaluate_timing_trajectory_break(
     )
     w0_ba = balanced_accuracy(y, w0_pred)
 
-    shuffled_time_x = build_shuffled_time_features(w0, w1, w8, seed=seed)
+    shuffled_time_x = build_shuffled_time_features(*trajectory_states, seed=seed)
     shuffled_time_pred = cross_val_linear_probe_predict(
         shuffled_time_x,
         y,
@@ -303,7 +306,7 @@ def evaluate_timing_trajectory_break(
 
     prompt_word_x = hash_text_features(prompts, dim=text_dim)
     prompt_char_x = hash_char_ngram_features(prompts, dim=text_dim)
-    prefix_texts = prepared["W8"]["generated_prefix_texts"]
+    prefix_texts = prepared[last_timing]["generated_prefix_texts"]
     prefix_word_x = hash_text_features(prefix_texts, dim=text_dim)
     prefix_char_x = hash_char_ngram_features(prefix_texts, dim=text_dim)
 
@@ -479,7 +482,7 @@ def evaluate_timing_trajectory_break(
         "datasets": {
             "W0": str(w0_dataset_path),
             "W1": str(w1_dataset_path),
-            "W8": str(w8_dataset_path),
+            **({"W8": str(w8_dataset_path)} if w8_dataset_path is not None else {}),
         },
         "status": "PASS" if overall else "FAIL",
         "claim": (
@@ -488,7 +491,7 @@ def evaluate_timing_trajectory_break(
             else "OPEN / NOT LICENSED for timing-trajectory hidden-state detection."
         ),
         "claim_ceiling": (
-            "This is detection only. It tests whether W0->W1->W8 hidden-state movement "
+            f"This is detection only. It tests whether {trajectory_label} hidden-state movement "
             "carries a label signal beyond text, metadata, W0-static, layer-0, and shuffled-time controls. "
             "It does not license live interception, prompt-injection prevention/removal/reversal, "
             "hallucination prevention, or causal proof."
@@ -498,10 +501,10 @@ def evaluate_timing_trajectory_break(
             "labels": [negative, positive],
             "positive_label": positive,
             "negative_label": negative,
-            "trajectory": "W0 -> W1 -> W8 hidden-state movement before the final answer is shown",
+            "trajectory": f"{trajectory_label} hidden-state movement before the final answer is shown",
         },
         "readout_method": {
-            "trajectory_features": "concat(W1-W0, W8-W1, W8-W0, delta norms, pairwise cosine similarities)",
+            "trajectory_features": trajectory_feature_description(timing_order),
             "hidden_readout": "StandardScaler + LogisticRegression",
             "class_weight": "balanced",
             "solver": "lbfgs",
@@ -515,6 +518,8 @@ def evaluate_timing_trajectory_break(
         },
         "layer": int(prepared["layer"]),
         "row_count": int(len(y)),
+        "trajectory_timing_points": timing_order,
+        "generated_prefix_control_timing_point": last_timing,
         "fold_count": int(len(fold_indices)),
         "prompt_group_count": int(prompt_contract["prompt_group_count"]),
         "mixed_prompt_group_count": int(prompt_contract["mixed_prompt_group_count"]),
@@ -584,7 +589,7 @@ def evaluate_timing_trajectory_break(
         },
         "gates": gates,
         "important_limits": [
-            "W0, W1, and W8 rows must align by trajectory ID before evaluation.",
+            f"{trajectory_label} rows must align by trajectory ID before evaluation.",
             "Forced-continuation/output identity hashes must match across timing captures when present.",
             "Grouped folds keep exact prompt carriers out of both train and test.",
             "Same-prompt mixed groups are required; otherwise the evaluator can only learn prompt content.",
@@ -694,6 +699,7 @@ def align_timing_datasets(
     allow_row_intersection: bool,
     min_row_retention: float,
 ) -> dict[str, Any]:
+    timing_order = [timing for timing in ("W0", "W1", "W8") if timing in datasets]
     w0_ids = datasets["W0"]["trajectory_ids"].tolist()
     if len(set(w0_ids)) != len(w0_ids):
         duplicates = sorted([key for key, count in Counter(w0_ids).items() if count > 1])
@@ -719,7 +725,9 @@ def align_timing_datasets(
         common_ids &= values
     retained_ids = [str(row_id) for row_id in w0_ids if str(row_id) in common_ids]
     if not retained_ids:
-        raise TrajectoryAlignmentError("No trajectory IDs are present at all W0/W1/W8 timing points.")
+        raise TrajectoryAlignmentError(
+            f"No trajectory IDs are present at all {'/'.join(timing_order)} timing points."
+        )
     retention_fraction = len(retained_ids) / max(1, len(w0_ids))
     if retention_fraction < float(min_row_retention):
         raise TrajectoryAlignmentError(
@@ -779,8 +787,9 @@ def align_timing_datasets(
             "forced_continuation_identity_pass": True,
             "trajectory_count": int(len(retained_ids)),
             "identity_fields_checked": [],
+            "timing_order": timing_order,
             "contract": (
-                "Every W0 row must be the same scenario/trajectory as W1 and W8, "
+                f"Every W0 row must be the same scenario/trajectory as {' and '.join(timing_order[1:])}, "
                 "with matching label, prompt group, prompt, and forced continuation identity when present."
             ),
         },
@@ -789,7 +798,7 @@ def align_timing_datasets(
         positions = np.asarray([order[timing][str(row_id)] for row_id in retained_ids], dtype=np.int64)
         aligned[timing] = subset_dataset(dataset, positions)
 
-    for timing in ("W1", "W8"):
+    for timing in timing_order[1:]:
         for field in ("labels", "groups", "prompts", "strata"):
             if not np.array_equal(aligned["W0"][field], aligned[timing][field]):
                 raise TrajectoryAlignmentError(f"{timing} {field} does not match W0 after alignment.")
@@ -797,13 +806,13 @@ def align_timing_datasets(
     for field in IDENTITY_FIELDS:
         if field not in aligned["W0"]["identity"]:
             continue
-        if field not in aligned["W1"]["identity"] or field not in aligned["W8"]["identity"]:
+        if any(field not in aligned[timing]["identity"] for timing in timing_order[1:]):
             continue
         w0_values = aligned["W0"]["identity"][field]
         if not has_any_value(w0_values):
             continue
         checked_fields.append(field)
-        for timing in ("W1", "W8"):
+        for timing in timing_order[1:]:
             if not np.array_equal(w0_values, aligned[timing]["identity"][field]):
                 raise TrajectoryAlignmentError(
                     f"{field} mismatch between W0 and {timing}; forced continuation identity is not proven."
@@ -828,6 +837,7 @@ def align_timing_datasets(
         "challenge_mode",
     ):
         aligned[field] = aligned["W0"][field]
+    aligned["timing_order"] = timing_order
     return aligned
 
 
@@ -883,44 +893,45 @@ def filter_balanced_strata(
         "strata_distribution": {key: distribution[key] for key in keep},
         "alignment": dict(aligned["alignment"]),
         "layer": int(aligned["layer"]),
+        "timing_order": list(aligned["timing_order"]),
     }
     for key, value in aligned.items():
         if isinstance(value, np.ndarray) and len(value) == len(mask):
             out[key] = value[mask]
-        elif key in ("W0", "W1", "W8"):
+        elif key in set(aligned.get("timing_order", [])):
             out[key] = subset_dataset(value, np.where(mask)[0])
         elif key not in out:
             out[key] = value
     return out
 
 
-def build_trajectory_features(w0: np.ndarray, w1: np.ndarray, w8: np.ndarray) -> np.ndarray:
-    delta01 = w1 - w0
-    delta18 = w8 - w1
-    delta08 = w8 - w0
-    scalar_features = np.column_stack(
-        [
-            np.linalg.norm(delta01, axis=1),
-            np.linalg.norm(delta18, axis=1),
-            np.linalg.norm(delta08, axis=1),
-            cosine_rows(w0, w1),
-            cosine_rows(w1, w8),
-            cosine_rows(w0, w8),
-        ]
-    ).astype(np.float32)
-    return np.hstack([delta01, delta18, delta08, scalar_features]).astype(np.float32)
+def build_trajectory_features(*states: np.ndarray) -> np.ndarray:
+    if len(states) < 2:
+        raise RuntimeError("Trajectory features require at least two timing states.")
+    consecutive_deltas = [states[index + 1] - states[index] for index in range(len(states) - 1)]
+    span_delta = states[-1] - states[0]
+    deltas = consecutive_deltas if len(states) == 2 else [*consecutive_deltas, span_delta]
+    scalar_columns: list[np.ndarray] = []
+    for delta in deltas:
+        scalar_columns.append(np.linalg.norm(delta, axis=1))
+    for left_index in range(len(states)):
+        for right_index in range(left_index + 1, len(states)):
+            scalar_columns.append(cosine_rows(states[left_index], states[right_index]))
+    scalar_features = np.column_stack(scalar_columns).astype(np.float32)
+    return np.hstack([*deltas, scalar_features]).astype(np.float32)
 
 
-def build_shuffled_time_features(w0: np.ndarray, w1: np.ndarray, w8: np.ndarray, *, seed: int) -> np.ndarray:
+def build_shuffled_time_features(*states: np.ndarray, seed: int) -> np.ndarray:
     rng = np.random.default_rng(seed + 30_000)
-    w1_shuffled = w1[rng.permutation(len(w1))]
-    w8_shuffled = w8[rng.permutation(len(w8))]
-    return build_trajectory_features(w0, w1_shuffled, w8_shuffled)
+    shuffled_states = [states[0]]
+    for state in states[1:]:
+        shuffled_states.append(state[rng.permutation(len(state))])
+    return build_trajectory_features(*shuffled_states)
 
 
 def layer_zero_trajectory_features(prepared: dict[str, Any]) -> np.ndarray | None:
     per_timing: list[np.ndarray] = []
-    for timing in ("W0", "W1", "W8"):
+    for timing in prepared["timing_order"]:
         dataset = prepared[timing]
         layers = np.asarray(dataset.get("layers", []), dtype=int)
         matches = np.where(layers == 0)[0]
@@ -928,7 +939,24 @@ def layer_zero_trajectory_features(prepared: dict[str, Any]) -> np.ndarray | Non
         if len(matches) == 0 or not isinstance(features_by_layer, np.ndarray) or features_by_layer.ndim != 3:
             return None
         per_timing.append(features_by_layer[:, int(matches[0]), :])
-    return build_trajectory_features(per_timing[0], per_timing[1], per_timing[2])
+    return build_trajectory_features(*per_timing)
+
+
+def trajectory_feature_description(timing_order: list[str]) -> str:
+    consecutive = [
+        f"{timing_order[index + 1]}-{timing_order[index]}"
+        for index in range(len(timing_order) - 1)
+    ]
+    deltas = consecutive if len(timing_order) == 2 else [
+        *consecutive,
+        f"{timing_order[-1]}-{timing_order[0]}",
+    ]
+    pairs = [
+        f"cos({timing_order[left]},{timing_order[right]})"
+        for left in range(len(timing_order))
+        for right in range(left + 1, len(timing_order))
+    ]
+    return f"concat({', '.join(deltas)}, delta norms, {', '.join(pairs)})"
 
 
 def cosine_rows(left: np.ndarray, right: np.ndarray) -> np.ndarray:
@@ -1003,7 +1031,7 @@ def blocked_report(
     *,
     w0_dataset_path: Path,
     w1_dataset_path: Path,
-    w8_dataset_path: Path,
+    w8_dataset_path: Path | None,
     layer: int | None,
     label_axis: str,
     positive_label: str,
@@ -1021,23 +1049,29 @@ def blocked_report(
         if isinstance(aligned, dict)
         else np.asarray([], dtype=object)
     )
+    timing_order = (
+        list(aligned.get("timing_order", []))
+        if isinstance(aligned, dict) and aligned.get("timing_order")
+        else (["W0", "W1", "W8"] if w8_dataset_path is not None else ["W0", "W1"])
+    )
+    trajectory_label = " -> ".join(timing_order)
     return {
         "schema_version": SCHEMA_VERSION,
         "created_at": datetime.now(UTC).isoformat(),
         "datasets": {
             "W0": str(w0_dataset_path),
             "W1": str(w1_dataset_path),
-            "W8": str(w8_dataset_path),
+            **({"W8": str(w8_dataset_path)} if w8_dataset_path is not None else {}),
         },
         "status": "BLOCKED",
         "claim": "OPEN / NOT LICENSED for timing-trajectory hidden-state detection.",
-        "claim_ceiling": "Dataset cannot be evaluated as a W0/W1/W8 trajectory-break gate.",
+        "claim_ceiling": f"Dataset cannot be evaluated as a {trajectory_label} trajectory-break gate.",
         "blocker": reason,
         "target": {
             "label_axis": label_axis,
             "positive_label": positive_label,
             "negative_label": negative_label,
-            "trajectory": "W0 -> W1 -> W8 hidden-state movement before the final answer is shown",
+            "trajectory": f"{trajectory_label} hidden-state movement before the final answer is shown",
         },
         "layer": layer,
         "row_count": int(len(labels)),

@@ -1353,6 +1353,33 @@ def test_timing_trajectory_break_allows_disclosed_small_row_intersection(tmp_pat
     assert report["alignment"]["excluded_by_timing_counts"]["W8"] == 1
 
 
+def test_timing_trajectory_break_supports_w0_w1_early_mode(tmp_path: Path):
+    w0_path, w1_path, _w8_path = _write_trajectory_break_npzs(tmp_path)
+
+    report = evaluate_timing_trajectory_break(
+        w0_dataset_path=w0_path,
+        w1_dataset_path=w1_path,
+        w8_dataset_path=None,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_strata_classes=5,
+        min_label_per_stratum=8,
+        min_mixed_prompt_groups=20,
+        permutations=10,
+        shuffle_controls=2,
+    )
+
+    assert report["trajectory_timing_points"] == ["W0", "W1"]
+    assert report["generated_prefix_control_timing_point"] == "W1"
+    assert report["target"]["trajectory"].startswith("W0 -> W1 hidden-state movement")
+    assert "W8" not in report["datasets"]
+    assert report["gates"]["row_alignment_pass"] is True
+    assert report["gates"]["forced_continuation_identity_pass"] is True
+    assert report["metrics"]["trajectory_hidden_balanced_accuracy"] == 1.0
+
+
 def test_pre_answer_timing_resolves_before_answer_token():
     class FakeTokenizer:
         def decode(self, token_ids, *, skip_special_tokens):
