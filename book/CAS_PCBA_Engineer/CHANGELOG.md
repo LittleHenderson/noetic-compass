@@ -1,5 +1,30 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-06-18 — v0.4 (recipes / production semantics developed)
+
+Paid off the Chapter 2 recipe forward-promise and made recipes a first-class
+circuit-design tool:
+- **Ch 14** — new section *"Recipes and the Limiting Reagent: What Caps the
+  Outcome"* developing the full v7.6 production semantics as circuit analysis:
+  recipe `Θ`, state vector `S`, **theoretical yield** `Y_T = minᵢ(xᵢ/aᵢ)`,
+  **limiting reagent** `L`, **actual yield** `Y_A`, **efficiency** `η`, **excess
+  capacity** `ε`, **leakage/side-reaction** `Λ` (vs lacunarity vs inversion), and
+  **catalyst/inhibitor** `κ/ι` — tied to the chapter's power-budget/efficiency
+  material. Includes a worked **CSB refusal recipe** showing that the Chapter 18
+  starvation attack is exactly a limiting-reagent failure (principled aversion
+  starved below the saturation-lock threshold), with the redundant-register fix
+  reframed as raising the floor on the limiting reagent.
+- **Ch 2** — the recipe forward-reference now points concretely to Chapter 14
+  and names the limiting reagent.
+- **Ch 14 exercises** — added the long-promised power-dissipation exercise (14.4,
+  which Appendix E already answered but the chapter had never listed — a
+  pre-existing phantom-answer gap, now closed) and a new limiting-reagent
+  exercise (14.5); Appendix E gains the 14.5 worked answer.
+- **Appendix G** — the Recipe (Θ) glossary entry expanded to define the whole
+  production-semantics family.
+
+Rebuilt PDF (6×9). CCDL code listings unchanged; canonical Noetic names preserved.
+
 ## 2026-06-18 — v0.3 (vector charts + multilayer-board diagram)
 
 Added five more vector figures, replacing ASCII sketches / filling gaps where

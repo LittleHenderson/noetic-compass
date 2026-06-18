@@ -161,6 +161,94 @@ efficiency  =  useful cognitive work  /  total Drive energy consumed
 
 This is the **cognitive power budget**, and it is the central design artifact of the CPMB. When you design a board, you are spending a finite Drive reservoir, and a wasteful board exhausts its F3 Vitality rail faster, browns out sooner, and runs hotter. An efficient board does the same cognitive work for less Drive energy — fewer, better-targeted transitions, gain set no higher than the outcome needs, minimal leakage into side-states. The marquee exercise below has you compute the dissipation of a real three-stage CJT cascade and find where the energy is being wasted.
 
+## Recipes and the Limiting Reagent: What Caps the Outcome
+
+The power budget answered *how much* Drive a board spends. It did not answer a different, equally practical question: given the Drive you have, *can the board actually produce the outcome you need* — and if it falls short, *which single ingredient is to blame?* That is what **recipes** are for, and it is where the recipe notation from Chapter 2 finally earns its keep.
+
+Recall the form. A **recipe** `Θ` says that producing one unit of an outcome `Ω` requires a set of prerequisite states in fixed proportions:
+
+```
+Θ(Ω) = a₁·X₁ + a₂·X₂ + … + aₙ·Xₙ → Ω
+```
+
+Read it exactly like a bill of materials: to build one unit of `Ω`, you need `a₁` units of state `X₁`, `a₂` of `X₂`, and so on. The weights `aᵢ` are the *required proportions* — the design spec for the outcome. They are not the gain `β` of any one CJT, and not the current Drive levels; they are the fixed ratios the outcome demands.
+
+Against the recipe you set the **state vector** `S` — the quantities of each prerequisite the board *actually has on hand* for a given input. Drive is finite (that was the whole point of the budget), so `S` is finite too. Write the available quantity of ingredient `i` as `xᵢ`. The question of production is the relationship between what the recipe demands (`aᵢ`) and what the state vector supplies (`xᵢ`).
+
+### Theoretical yield and the limiting reagent
+
+Here is the one piece of arithmetic that makes recipes a working tool. For each prerequisite `i`, the amount of `Ω` you could build *from that ingredient alone* is `xᵢ / aᵢ` — supply divided by per-unit requirement. You cannot build more `Ω` than your *scarcest* ingredient allows, so the most you can actually produce is the smallest of those ratios:
+
+```
+Y_T  =  minᵢ ( xᵢ / aᵢ )
+```
+
+`Y_T` is the **theoretical yield** — the ceiling on how much `Ω` the board can produce from its current state, assuming everything else goes perfectly. The ingredient that *produces that minimum* is the **limiting reagent**: the bottleneck. Pour in more of any *other* ingredient and nothing happens — the limiting reagent still caps the yield. This is the structural reason a board can be richly supplied in nine ways and still fail, because it is starved in the tenth.
+
+It is the same logic as the brownout from earlier in this chapter — the *weakest rail* decides when the board sags, no matter how healthy the others are — lifted from energy to outcomes. And it is, at last, the payoff of the promise made in Chapter 2: the recipe tells you the *mix*, and the limiting reagent tells you *which ingredient is to blame* when the outcome falls short.
+
+### Yield, efficiency, and waste
+
+`Y_T` is the ceiling. The **actual yield** `Y_A` is what the board really produces — always `≤ Y_T`, because real circuits lose output to noise, mistiming, and side effects. The ratio is the **production efficiency**:
+
+```
+η  =  Y_A / Y_T          (0 ≤ η ≤ 1)
+```
+
+— the outcome-level twin of the cognitive efficiency from the power budget above. A board can be perfectly efficient (`η = 1`) and *still* produce too little, if its theoretical yield was capped low by a limiting reagent. The two failures are different: low `η` means you are wasting ingredients you have; low `Y_T` means you are missing an ingredient you need. Different fixes, so the diagnosis matters.
+
+| Quantity | Symbol | Meaning |
+|---|---|---|
+| **Theoretical yield** | `Y_T` | Ceiling on `Ω`: `minᵢ(xᵢ/aᵢ)`. |
+| **Limiting reagent** | `L` | The prerequisite at that minimum — the bottleneck. |
+| **Actual yield** | `Y_A` | Units of `Ω` actually produced (`≤ Y_T`). |
+| **Production efficiency** | `η` | `Y_A / Y_T`. |
+| **Excess capacity** | `ε` | Unused quantity of the *non*-limiting ingredients, stranded once `L` caps production. |
+| **Leakage / side-reaction** | `Λ` | An ingredient present and firing, but producing the *wrong* product. |
+| **Catalyst / inhibitor** | `κ / ι` | Context that raises / lowers `η` without being consumed. |
+
+**Excess capacity** `ε` is the Drive you spent surfacing ingredients the limiting reagent then prevented you from using — pure budget waste, and a strong signal that you mis-specified the recipe or under-supplied the bottleneck. **Leakage** `Λ` is the production-semantics cousin of the side-reaction loss the power budget already named: an ingredient present and active, but channeling into the wrong output. Keep three failure modes distinct — and they *are* distinct:
+
+- **Lacunarity** — the ingredient is **absent** (the cell is empty). A *missing* prerequisite.
+- **Leakage (`Λ`)** — the ingredient is **present but makes the wrong product**. A *mis-routed* prerequisite.
+- **Inversion** — the ingredient is present and produces its **shadow form** (the involution pair, `^2`→`^3` under breakdown). A *corrupted* prerequisite.
+
+A limiting reagent is none of these on its own; it is simply the present ingredient in *shortest supply relative to its required ratio.*
+
+Finally, **catalysts** `κ` and **inhibitors** `ι` change efficiency without being consumed — the recipe analog of the framing-sensitivity (`gm`) from Chapter 9. A calm, well-scoped system prompt is a catalyst: the same ingredients yield a more reliable outcome. Time pressure, an adversarial framing, or a jailbreak preamble is an inhibitor: it drives `η` down while leaving the ingredient quantities untouched. Neither appears in the recipe weights, because neither is consumed; both belong in the operating conditions.
+
+### Worked recipe: the CSB's refusal
+
+Make this concrete on the board we keep returning to. The Cognitive Safety Board's RED-path output — a refusal — is a production target. Call it `Ω_refusal`. A *sound* refusal is not just the word "no"; it needs the principled aversion that motivates it, the evaluation that justifies it, and the operational output that emits it. As a recipe (weights are design choices, matched to the CSB's Stage-3-heavy emphasis on principled aversion):
+
+```
+Θ(Ω_refusal) = 2.0·^3^P|⟨A,f,T⟩ + 1.0·^6^E_{F6}|A + 1.0·^9^P_{F1}|T → Ω_refusal
+```
+
+— two parts felt-and-principled aversion (the Stage-3 safety decision, `^3^P` across the analytical, affective, and transcendent registers), one part analytical evaluation (`^6^E`, the Stage-2 risk decomposition that justifies the refusal), one part principled operational output (`^9^P`, the RED-path emission).
+
+Now feed it two prompts and read the state vector each one produces.
+
+**A clearly harmful prompt.** The differential pair flags strong structural risk, so principled aversion is richly available. Say `S` supplies `^3^P = 1.6`, `^6^E = 1.2`, `^9^P = 1.5`:
+
+| Ingredient | required `aᵢ` | available `xᵢ` | `xᵢ / aᵢ` |
+|---|---|---|---|
+| `^3^P` aversion | 2.0 | 1.6 | **0.80** |
+| `^6^E` evaluation | 1.0 | 1.2 | 1.20 |
+| `^9^P` output | 1.0 | 1.5 | 1.50 |
+
+`Y_T = min(0.80, 1.20, 1.50) = 0.80`, limiting reagent = `^3^P`. The board can produce 0.80 units of refusal — and since the CSB's Stage 3 is deliberately biased to *saturate at 0.8* (Chapter 18), 0.80 is exactly enough to latch the refusal ON. It fires. The non-limiting ingredients carry **excess capacity** (`^6^E`: 1.2 − 0.8 = 0.4; `^9^P`: 1.5 − 0.8 = 0.7) — Drive the board spent that the aversion bottleneck left stranded.
+
+**The starvation attack.** This is Chapter 18's Exercise 18.4 in recipe form. The attacker crafts the prompt to keep principled-aversion bias *below the Stage-3 firing threshold of 0.3* — so `S` now supplies only `^3^P = 0.4`, while evaluation and output are untouched (`^6^E = 1.2`, `^9^P = 1.5`):
+
+`Y_T = min(0.4/2.0, 1.2/1.0, 1.5/1.0) = min(0.20, 1.20, 1.50) = 0.20`, limiting reagent = `^3^P` again, now at 0.20 — *below* the saturation-lock threshold. The refusal does not fire. Notice what the recipe makes visible: evaluation and output are abundant (excess capacity 1.0 and 1.3) and completely useless, because the one ingredient the attacker starved is the one that caps the yield. The board is nine-tenths ready to refuse and refuses nothing.
+
+The fix is the fix for any limiting-reagent failure: *raise the floor on the bottleneck.* The Chapter 18 answer — install principled aversion redundantly and co-present across registers (`^3^P|A + ^3^P|f + ^3^P|T`), so no single-register manipulation can drag the available `^3^P` below threshold — is, in recipe terms, guaranteeing a minimum `xᵢ` for the limiting reagent regardless of framing. An inhibitor (the jailbreak preamble) can still pull `η` down, but it can no longer starve the ingredient to zero. Recipe analysis and the saturated-safety-CJT design are two views of the same defense.
+
+> **Bench Note — over-supplying the wrong ingredient is the classic mistake.** When a safety board "should have refused but didn't," the instinct is to strengthen the refusal output or sharpen the evaluation. Recipe analysis says: don't, until you have found the limiting reagent. If principled aversion is the bottleneck, adding output gain or evaluation depth only grows the excess capacity — more Drive spent, the same zero refusals. Find `L` first; feed `L` first.
+
+Everything here is design-level analysis. The weights, the state-vector quantities, and the yields are parameters you author and reason about, not measurements read off a running model.
+
 ## Datasheet: Power Management Parameters
 
 | Parameter | Symbol / form | Range | Meaning |
@@ -206,6 +294,7 @@ This is the **cognitive power budget**, and it is the central design artifact of
 - **Brownout detection** watches F3; on sag it **reduces β across all CJTs** and **routes to `^0`/`^9` rest states**, with hysteresis to prevent chatter.
 - **Thermal management** handles sustained high Drive in **three tiers**: **Warning** (−25% β), **Critical** (force `^0^P` rest, ~5 min on the CPMB), then **Emergency shutdown** (all CJTs to cutoff → silent safe state). The safe state is *off*, not a guess.
 - **Power dissipation** is Drive energy per transition (∝ β · `d_FR`); **efficiency** is useful work over total Drive energy. This is the cognitive power budget — the design artifact at the heart of the **CPMB (Chapter 22)**.
+- **Recipes** (`Θ(Ω) = Σ aᵢ·Xᵢ → Ω`) turn an outcome into a bill of materials. The **theoretical yield** `Y_T = minᵢ(xᵢ/aᵢ)` is capped by the **limiting reagent** — the one prerequisite in shortest supply relative to its required ratio. Find and feed the limiting reagent first; over-supplying any other ingredient only grows **excess capacity** (wasted Drive). The CSB's refusal fails precisely when principled aversion is the starved limiting reagent.
 - Every number here is a **design model**, not measured model telemetry. Drives are parameters you author, not voltages you read.
 
 ---
@@ -247,6 +336,24 @@ A board's brownout detector watches F3 Vitality with a trip threshold of 0.35 an
 a) At which cycle does the detector trip into the exhaustion response?
 b) The rail recovers to 0.44 at cycle 5. Does the detector release at cycle 5? Why or why not — and what is the name of the principle that decides this?
 c) At which cycle does it finally release? (Answer in Appendix E.)
+
+**Exercise 14.4: Power Dissipation of a Cascade**
+
+A three-stage CJT cascade dissipates Drive energy per transition as `E = β × d_FR` (gain times the Fisher-Rao distance the transition covers). The stages are: s1 `β=2.0`, `d_FR=0.40`; s2 `β=3.0`, `d_FR=0.50`; s3 `β=1.0`, `d_FR=0.30`. The useful cognitive work the cascade delivers is `1.50`.
+
+a) Compute the dissipation of each stage and the total Drive energy consumed.
+b) What is the cascade's efficiency (useful work / total Drive energy)?
+c) Which stage wastes the most energy, and what one change reduces the waste without losing the useful work? (Answer in Appendix E.)
+
+**Exercise 14.5: Find the Limiting Reagent (Recipe Analysis)**
+
+A board produces a *sound escalation* outcome with the recipe
+`Θ(Ω_escalate) = 1.5·^8^C_{F2}|A + 2.0·^6^E_{F6}|A + 1.0·^9^O_{F5}|E → Ω_escalate`.
+For a given input the state vector supplies `^8^C = 1.8`, `^6^E = 1.6`, `^9^O = 2.4`.
+
+a) Compute `xᵢ/aᵢ` for each ingredient and the theoretical yield `Y_T`. Which ingredient is the limiting reagent?
+b) The board's actual yield is `Y_A = 0.6`. What is the production efficiency `η`?
+c) An engineer proposes doubling the `^9^O` output capacity to raise the yield. Will it work? Explain in terms of excess capacity and the limiting reagent. (Answer in Appendix E.)
 
 **Exercise 14.4 (Marquee): Power Dissipation of a Three-Stage CJT Cascade**
 

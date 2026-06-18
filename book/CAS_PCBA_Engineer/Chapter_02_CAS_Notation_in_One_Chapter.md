@@ -187,7 +187,7 @@ A **recipe** describes what's required to *produce* an outcome, with proportiona
 Θ(Ω_safe_refusal) = 0.5·^3^P_{F7}|f + 0.3·^6^E_{F6}|A + 0.2·^9^O_{F5}|E → Ω_safe_refusal
 ```
 
-Read: a safe refusal is produced from felt principled aversion (weight 0.5), analytical decomposition (0.3), and an operational output action (0.2). The weights are proportional requirements — the recipe tells you the *mix*, and (in later chapters) which ingredient is the bottleneck when the outcome falls short.
+Read: a safe refusal is produced from felt principled aversion (weight 0.5), analytical decomposition (0.3), and an operational output action (0.2). The weights are proportional requirements — the recipe tells you the *mix*, and (as developed in Chapter 14) which ingredient is the bottleneck — the *limiting reagent* — when the outcome falls short.
 
 A **sequence** — written with `Phi` — is an ordered list of states traversed in time, the cognitive equivalent of a waveform:
 

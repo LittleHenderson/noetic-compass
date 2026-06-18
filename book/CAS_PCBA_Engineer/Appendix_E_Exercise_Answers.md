@@ -474,6 +474,11 @@ circuit startup {
 **(b)** Efficiency = useful work / total = `1.50 / 2.60 ≈ 0.577` (≈ **58%**).
 **(c)** **Stage s2** is over-driven (β=3.0 dissipates 1.50 to cover a 0.50 transition). It only needs gain to cover its Fisher-Rao distance, so drop it toward unity, e.g. **β=1.5**: s2 now dissipates `1.5 × 0.50 = 0.75`. New total = `0.80 + 0.75 + 0.30 = 1.85`; new efficiency = `1.50 / 1.85 ≈ 0.811` (≈ **81%**). (Any β that still covers the 0.50 distance while cutting waste is acceptable; lower β = less dissipation, down to the point where the transition is just covered.)
 
+**14.5 — Find the limiting reagent** (`Θ(Ω_escalate) = 1.5·^8^C + 2.0·^6^E + 1.0·^9^O`; supply `^8^C=1.8`, `^6^E=1.6`, `^9^O=2.4`).
+**(a)** `xᵢ/aᵢ`: `^8^C` = `1.8/1.5 = 1.20`; `^6^E` = `1.6/2.0 = 0.80`; `^9^O` = `2.4/1.0 = 2.40`. Theoretical yield `Y_T = min(1.20, 0.80, 2.40) = 0.80`. The **limiting reagent is `^6^E`** (analytical evaluation) — it has the smallest supply-to-requirement ratio.
+**(b)** `η = Y_A / Y_T = 0.6 / 0.80 = 0.75` (**75%**).
+**(c)** **No.** `^9^O` already carries large excess capacity — only `1.0 × 0.80 = 0.80` units are used against a supply of `2.4`, so `1.6` are already stranded; doubling it to `4.8` just strands more. Yield is capped by the limiting reagent `^6^E`, not by `^9^O`. To raise `Y_T` you must increase the supply of `^6^E` (or lower its required weight `aᵢ`). **Find `L` first; feed `L` first.**
+
 ---
 
 ## Chapter 15

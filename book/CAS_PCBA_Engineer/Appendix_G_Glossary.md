@@ -342,8 +342,18 @@ sharply a cognitive path is tuned to a specific activation.
 proportional weights — read like a chemistry equation. Notation:
 `Θ(Ω) = a·X₁ + b·X₂ + … → Ω`, e.g.
 `Θ(Ω_safe_refusal) = 0.5·^3^P_{F7}|f + 0.3·^6^E_{F6}|A + 0.2·^9^O_{F5}|E → Ω_safe_refusal`.
-The weights are proportional requirements; later analysis identifies which ingredient
-is the bottleneck (limiting reagent) when the outcome falls short.
+The weights are proportional requirements (the design *bill of materials* for the
+outcome), not gains or current Drive levels. The associated production-semantics
+family (developed in Chapter 14): the **state vector** `S` is the quantity `xᵢ` of
+each prerequisite actually on hand; the **theoretical yield** `Y_T = minᵢ(xᵢ/aᵢ)` is
+the ceiling on how much `Ω` can be produced; the **limiting reagent** `L` is the
+prerequisite at that minimum — the bottleneck (over-supplying any other ingredient
+cannot raise the yield); **actual yield** `Y_A` is what is really produced (`≤ Y_T`);
+**production efficiency** `η = Y_A/Y_T`; **excess capacity** `ε` is the stranded,
+unused quantity of the non-limiting ingredients; **leakage / side-reaction** `Λ` is a
+prerequisite present but producing the *wrong* product (distinct from *lacunarity* =
+absent, and *inversion* = shadow form); a **catalyst** `κ` / **inhibitor** `ι` raises
+/ lowers `η` without being consumed.
 
 **Register** — The CAS axis answering *how* a cognitive operation operates — its
 operational character. Four values written with a trailing pipe: **`|T`** *Transcendent*,
