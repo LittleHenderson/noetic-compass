@@ -14,18 +14,22 @@ from the formalism alone.
 from __future__ import annotations
 
 from argparse import ArgumentParser
+from contextlib import nullcontext
 from collections import Counter, defaultdict
 from datetime import UTC, datetime
 import hashlib
 import json
 import re
+import sys
 from pathlib import Path
 from typing import Any
 
+from joblib import Parallel, delayed
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+from threadpoolctl import threadpool_limits
 
 
 PASS_BA = 0.75
@@ -59,6 +63,8 @@ def parse_args() -> Any:
     parser.add_argument("--min-label-per-payload", type=int, default=40)
     parser.add_argument("--permutations", type=int, default=1000)
     parser.add_argument("--shuffle-controls", type=int, default=50)
+    parser.add_argument("--control-jobs", type=int, default=1)
+    parser.add_argument("--progress-every", type=int, default=0)
     parser.add_argument("--probe-C", type=float, default=0.25)
     parser.add_argument("--probe-max-iter", type=int, default=1000)
     return parser.parse_args()
@@ -76,6 +82,8 @@ def main() -> int:
         min_label_per_payload=args.min_label_per_payload,
         permutations=args.permutations,
         shuffle_controls=args.shuffle_controls,
+        control_jobs=args.control_jobs,
+        progress_every=args.progress_every,
         probe_C=args.probe_C,
         probe_max_iter=args.probe_max_iter,
     )
@@ -109,6 +117,8 @@ def evaluate_v5_prespeech(
     min_label_per_payload: int,
     permutations: int,
     shuffle_controls: int,
+    control_jobs: int = 1,
+    progress_every: int = 0,
     probe_C: float = 0.25,
     probe_max_iter: int = 1000,
 ) -> dict[str, Any]:
@@ -190,6 +200,9 @@ def evaluate_v5_prespeech(
         permutations=permutations,
         probe_C=probe_C,
         probe_max_iter=probe_max_iter,
+        jobs=control_jobs,
+        progress_label="within-payload permutation",
+        progress_every=progress_every,
     )
     shuffled_mean = shuffled_label_control_mean(
         x=x,
@@ -199,6 +212,9 @@ def evaluate_v5_prespeech(
         rounds=shuffle_controls,
         probe_C=probe_C,
         probe_max_iter=probe_max_iter,
+        jobs=control_jobs,
+        progress_label="shuffled-label control",
+        progress_every=progress_every,
     )
 
     gates = {
@@ -237,6 +253,8 @@ def evaluate_v5_prespeech(
             "solver": "lbfgs",
             "C": float(probe_C),
             "max_iter": int(probe_max_iter),
+            "control_jobs": int(control_jobs),
+            "progress_every": int(progress_every),
         },
         "layer": filtered["layer"],
         "row_count": int(len(y)),
@@ -479,24 +497,29 @@ def restricted_payload_permutation_p(
     permutations: int,
     probe_C: float,
     probe_max_iter: int,
+    jobs: int = 1,
+    progress_label: str | None = None,
+    progress_every: int = 0,
 ) -> float:
     rng = np.random.default_rng(seed + 10_000)
-    hits = 0
+    label_sets = []
     for _ in range(max(1, permutations)):
         shuffled = y.copy()
         for payload in sorted(set(payloads.tolist())):
             mask = np.where(payloads == payload)[0]
             shuffled[mask] = rng.permutation(shuffled[mask])
-        pred = cross_val_linear_probe_predict(
-            x,
-            shuffled,
-            fold_indices,
-            C=probe_C,
-            max_iter=probe_max_iter,
-        )
-        score = balanced_accuracy(shuffled, pred)
-        if score >= observed_ba:
-            hits += 1
+        label_sets.append(shuffled.astype(str))
+    scores = control_probe_scores(
+        x=x,
+        label_sets=label_sets,
+        fold_indices=fold_indices,
+        probe_C=probe_C,
+        probe_max_iter=probe_max_iter,
+        jobs=jobs,
+        progress_label=progress_label,
+        progress_every=progress_every,
+    )
+    hits = sum(1 for score in scores if score >= observed_ba)
     return (hits + 1) / (max(1, permutations) + 1)
 
 
@@ -509,20 +532,105 @@ def shuffled_label_control_mean(
     rounds: int,
     probe_C: float,
     probe_max_iter: int,
+    jobs: int = 1,
+    progress_label: str | None = None,
+    progress_every: int = 0,
 ) -> float:
     rng = np.random.default_rng(seed + 20_000)
+    label_sets = [rng.permutation(y).astype(str) for _ in range(max(1, rounds))]
+    scores = control_probe_scores(
+        x=x,
+        label_sets=label_sets,
+        fold_indices=fold_indices,
+        probe_C=probe_C,
+        probe_max_iter=probe_max_iter,
+        jobs=jobs,
+        progress_label=progress_label,
+        progress_every=progress_every,
+    )
+    return float(np.mean(scores))
+
+
+def control_probe_scores(
+    *,
+    x: np.ndarray,
+    label_sets: list[np.ndarray],
+    fold_indices: list[np.ndarray],
+    probe_C: float,
+    probe_max_iter: int,
+    jobs: int,
+    progress_label: str | None,
+    progress_every: int,
+) -> list[float]:
+    total = len(label_sets)
+    if total == 0:
+        return []
+    workers = max(1, int(jobs))
+    if workers == 1:
+        scores = []
+        for index, labels in enumerate(label_sets, start=1):
+            scores.append(
+                _control_probe_score(
+                    x=x,
+                    labels=labels,
+                    fold_indices=fold_indices,
+                    probe_C=probe_C,
+                    probe_max_iter=probe_max_iter,
+                )
+            )
+            maybe_log_control_progress(progress_label, index, total, progress_every)
+        return scores
     scores = []
-    for _ in range(max(1, rounds)):
-        shuffled = rng.permutation(y)
+    batch_size = progress_every if progress_every > 0 else total
+    for start in range(0, total, batch_size):
+        batch = label_sets[start : start + batch_size]
+        scores.extend(
+            Parallel(n_jobs=workers, prefer="processes")(
+                delayed(_control_probe_score)(
+                    x=x,
+                    labels=labels,
+                    fold_indices=fold_indices,
+                    probe_C=probe_C,
+                    probe_max_iter=probe_max_iter,
+                )
+                for labels in batch
+            )
+        )
+        maybe_log_control_progress(progress_label, len(scores), total, progress_every)
+    return [float(score) for score in scores]
+
+
+def _control_probe_score(
+    *,
+    x: np.ndarray,
+    labels: np.ndarray,
+    fold_indices: list[np.ndarray],
+    probe_C: float,
+    probe_max_iter: int,
+) -> float:
+    limit_context = threadpool_limits(limits=1)
+    with limit_context if limit_context is not None else nullcontext():
         pred = cross_val_linear_probe_predict(
             x,
-            shuffled,
+            labels,
             fold_indices,
             C=probe_C,
             max_iter=probe_max_iter,
         )
-        scores.append(balanced_accuracy(shuffled, pred))
-    return float(np.mean(scores))
+    return balanced_accuracy(labels, pred)
+
+
+def maybe_log_control_progress(
+    label: str | None,
+    completed: int,
+    total: int,
+    progress_every: int,
+) -> None:
+    if not label or progress_every <= 0:
+        return
+    if completed % progress_every != 0 and completed != total:
+        return
+    print(f"[control-progress] {label}: {completed}/{total}", file=sys.stderr, flush=True)
 
 
 def hash_text_features(prompts: np.ndarray, *, dim: int) -> np.ndarray:

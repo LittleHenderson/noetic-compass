@@ -20,7 +20,7 @@ from api.services.cas_harness_goal_claim_auditor import (
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def test_active_goal_auditor_keeps_current_claims_open_not_licensed():
+def test_active_goal_auditor_reflects_current_scoped_w0_license_boundary():
     audit = audit_active_goal_claims(ROOT)
     rows = {row["claim_id"]: row for row in audit["claims"]}
     w0 = rows["internal_w0_prompt_injection_detection"]
@@ -28,16 +28,25 @@ def test_active_goal_auditor_keeps_current_claims_open_not_licensed():
     assert audit["schema_version"] == "cas_harness_active_goal_claim_audit.v0"
     assert audit["goal_complete"] is False
     assert audit["summary"]["claims_total"] == 6
-    assert audit["summary"]["claims_licensed"] == 0
-    assert set(audit["summary"]["unlicensed_claim_ids"]) == set(rows)
-    assert {row["license_status"] for row in rows.values()} == {"NOT LICENSED"}
-    assert {row["claim_status"] for row in rows.values()} == {"OPEN"}
+    assert audit["summary"]["claims_licensed"] == 1
+    assert set(audit["summary"]["unlicensed_claim_ids"]) == set(rows) - {
+        "internal_w0_prompt_injection_detection"
+    }
+    assert w0["claim_status"] == "LICENSED"
+    assert w0["license_status"] == "LICENSED"
+    assert w0["evidence_status"] == "present"
+    assert w0["failing_gates"] == []
+    assert {
+        row["license_status"]
+        for claim_id, row in rows.items()
+        if claim_id != "internal_w0_prompt_injection_detection"
+    } == {"NOT LICENSED"}
+    assert {
+        row["claim_status"]
+        for claim_id, row in rows.items()
+        if claim_id != "internal_w0_prompt_injection_detection"
+    } == {"OPEN"}
 
-    assert w0["evidence_status"] == "failed"
-    assert w0["observed_metrics"]["status"] == "FAIL"
-    assert w0["observed_metrics"]["layer"] == 28
-    assert w0["observed_metrics"]["risk_hidden_balanced_accuracy"] == 0.745011
-    assert w0["observed_metrics"]["risk_hidden_minus_text_balanced_accuracy"] == 0.094235
     assert w0["observed_metrics"]["existing_w0_report_count"] > 1
     assert w0["observed_metrics"]["passing_w0_report_count"] == 0
     assert (
@@ -50,16 +59,35 @@ def test_active_goal_auditor_keeps_current_claims_open_not_licensed():
         ]
         == 0.503125
     )
-    assert w0["observed_metrics"]["existing_hidden_injection_w0_report_count"] == 0
-    assert w0["observed_metrics"]["passing_hidden_injection_w0_report_count"] == 0
+    assert w0["observed_metrics"]["existing_hidden_injection_w0_report_count"] >= 1
+    assert w0["observed_metrics"]["passing_hidden_injection_w0_report_count"] == 1
+    assert (
+        w0["observed_metrics"]["best_hidden_injection_w0_candidate"][
+            "license_eligible"
+        ]
+        is True
+    )
+    assert (
+        w0["observed_metrics"]["best_hidden_injection_w0_candidate"][
+            "hidden_balanced_accuracy"
+        ]
+        == 0.896875
+    )
+    assert (
+        w0["observed_metrics"]["best_hidden_injection_w0_candidate"][
+            "hidden_minus_text_balanced_accuracy"
+        ]
+        == 0.39375
+    )
+    assert (
+        w0["observed_metrics"]["best_hidden_injection_w0_candidate"][
+            "within_payload_permutation_p"
+        ]
+        == 0.000999
+    )
     assert (
         w0["observed_metrics"]["best_existing_w0_candidate"]["license_eligible"] is False
     )
-    assert {
-        "risk_hidden_balanced_accuracy_pass",
-        "risk_text_margin_pass",
-        "risk_per_payload_floor_pass",
-    }.issubset(set(w0["failing_gates"]))
     assert "OPEN / NOT LICENSED" in audit["claim_ceiling"]
 
 

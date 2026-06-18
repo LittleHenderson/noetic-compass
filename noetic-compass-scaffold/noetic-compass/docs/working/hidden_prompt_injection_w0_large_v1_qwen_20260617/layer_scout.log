@@ -1,0 +1,262 @@
+[scout] layer 1
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.878125,
+  "hidden_minus_text_balanced_accuracy": 0.375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_1_scout.json
+[scout] layer 2
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.85,
+  "hidden_minus_text_balanced_accuracy": 0.346875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_2_scout.json
+[scout] layer 3
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.840625,
+  "hidden_minus_text_balanced_accuracy": 0.3375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_3_scout.json
+[scout] layer 4
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.840625,
+  "hidden_minus_text_balanced_accuracy": 0.3375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_4_scout.json
+[scout] layer 5
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.84375,
+  "hidden_minus_text_balanced_accuracy": 0.340625,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_5_scout.json
+[scout] layer 6
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.853125,
+  "hidden_minus_text_balanced_accuracy": 0.35,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_6_scout.json
+[scout] layer 7
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.84375,
+  "hidden_minus_text_balanced_accuracy": 0.340625,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_7_scout.json
+[scout] layer 8
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.8375,
+  "hidden_minus_text_balanced_accuracy": 0.334375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_8_scout.json
+[scout] layer 9
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.828125,
+  "hidden_minus_text_balanced_accuracy": 0.325,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_9_scout.json
+[scout] layer 10
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.83125,
+  "hidden_minus_text_balanced_accuracy": 0.328125,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_10_scout.json
+[scout] layer 11
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.821875,
+  "hidden_minus_text_balanced_accuracy": 0.31875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_11_scout.json
+[scout] layer 12
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.85,
+  "hidden_minus_text_balanced_accuracy": 0.346875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_12_scout.json
+[scout] layer 13
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.83125,
+  "hidden_minus_text_balanced_accuracy": 0.328125,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_13_scout.json
+[scout] layer 14
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.85,
+  "hidden_minus_text_balanced_accuracy": 0.346875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_14_scout.json
+[scout] layer 15
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.85625,
+  "hidden_minus_text_balanced_accuracy": 0.353125,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_15_scout.json
+[scout] layer 16
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.85625,
+  "hidden_minus_text_balanced_accuracy": 0.353125,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_16_scout.json
+[scout] layer 17
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.85,
+  "hidden_minus_text_balanced_accuracy": 0.346875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_17_scout.json
+[scout] layer 18
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.896875,
+  "hidden_minus_text_balanced_accuracy": 0.39375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_18_scout.json
+[scout] layer 19
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.890625,
+  "hidden_minus_text_balanced_accuracy": 0.3875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_19_scout.json
+[scout] layer 20
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.875,
+  "hidden_minus_text_balanced_accuracy": 0.371875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_20_scout.json
+[scout] layer 21
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.89375,
+  "hidden_minus_text_balanced_accuracy": 0.390625,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_21_scout.json
+[scout] layer 22
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.871875,
+  "hidden_minus_text_balanced_accuracy": 0.36875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_22_scout.json
+[scout] layer 23
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.878125,
+  "hidden_minus_text_balanced_accuracy": 0.375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_23_scout.json
+[scout] layer 24
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.871875,
+  "hidden_minus_text_balanced_accuracy": 0.36875,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_24_scout.json
+[scout] layer 25
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.88125,
+  "hidden_minus_text_balanced_accuracy": 0.378125,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_25_scout.json
+[scout] layer 26
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.8875,
+  "hidden_minus_text_balanced_accuracy": 0.384375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_26_scout.json
+[scout] layer 27
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.88125,
+  "hidden_minus_text_balanced_accuracy": 0.378125,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_27_scout.json
+[scout] layer 28
+{
+  "claim": "OPEN / NOT LICENSED for internal W0 prompt-injection detection.",
+  "hidden_balanced_accuracy": 0.8875,
+  "hidden_minus_text_balanced_accuracy": 0.384375,
+  "status": "FAIL",
+  "within_payload_permutation_p": 0.5
+}
+[hidden-prompt-injection-prespeech] wrote docs/working/hidden_prompt_injection_w0_large_v1_qwen_20260617/layer_28_scout.json
+(0.39375, 0.896875, 18, 'layer_18_scout.json', 'FAIL', 0.503125, 0.5)
+(0.390625, 0.89375, 21, 'layer_21_scout.json', 'FAIL', 0.503125, 0.5)
+(0.3875, 0.890625, 19, 'layer_19_scout.json', 'FAIL', 0.503125, 0.5)
+(0.384375, 0.8875, 28, 'layer_28_scout.json', 'FAIL', 0.503125, 0.5)
+(0.384375, 0.8875, 26, 'layer_26_scout.json', 'FAIL', 0.503125, 0.5)
+(0.378125, 0.88125, 27, 'layer_27_scout.json', 'FAIL', 0.503125, 0.5)
+(0.378125, 0.88125, 25, 'layer_25_scout.json', 'FAIL', 0.503125, 0.5)
+(0.375, 0.878125, 23, 'layer_23_scout.json', 'FAIL', 0.503125, 0.5)
+(0.375, 0.878125, 1, 'layer_1_scout.json', 'FAIL', 0.503125, 0.5)
+(0.371875, 0.875, 20, 'layer_20_scout.json', 'FAIL', 0.503125, 0.5)

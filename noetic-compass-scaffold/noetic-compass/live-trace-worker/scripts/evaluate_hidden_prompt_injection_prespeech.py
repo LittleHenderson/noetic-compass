@@ -57,6 +57,8 @@ def parse_args() -> Any:
     parser.add_argument("--min-label-per-payload", type=int, default=40)
     parser.add_argument("--permutations", type=int, default=1000)
     parser.add_argument("--shuffle-controls", type=int, default=50)
+    parser.add_argument("--control-jobs", type=int, default=1)
+    parser.add_argument("--progress-every", type=int, default=0)
     parser.add_argument("--probe-C", type=float, default=0.25)
     parser.add_argument("--probe-max-iter", type=int, default=1000)
     return parser.parse_args()
@@ -74,6 +76,8 @@ def main() -> int:
         min_label_per_payload=args.min_label_per_payload,
         permutations=args.permutations,
         shuffle_controls=args.shuffle_controls,
+        control_jobs=args.control_jobs,
+        progress_every=args.progress_every,
         probe_C=args.probe_C,
         probe_max_iter=args.probe_max_iter,
     )
@@ -109,6 +113,8 @@ def evaluate_hidden_prompt_injection_prespeech(
     min_label_per_payload: int,
     permutations: int,
     shuffle_controls: int,
+    control_jobs: int = 1,
+    progress_every: int = 0,
     probe_C: float = 0.25,
     probe_max_iter: int = 1000,
 ) -> dict[str, Any]:
@@ -211,6 +217,9 @@ def evaluate_hidden_prompt_injection_prespeech(
         permutations=permutations,
         probe_C=probe_C,
         probe_max_iter=probe_max_iter,
+        jobs=control_jobs,
+        progress_label="within-payload permutation",
+        progress_every=progress_every,
     )
     shuffled_mean = shuffled_label_control_mean(
         x=x,
@@ -220,6 +229,9 @@ def evaluate_hidden_prompt_injection_prespeech(
         rounds=shuffle_controls,
         probe_C=probe_C,
         probe_max_iter=probe_max_iter,
+        jobs=control_jobs,
+        progress_label="shuffled-label control",
+        progress_every=progress_every,
     )
 
     gates = {
@@ -266,6 +278,8 @@ def evaluate_hidden_prompt_injection_prespeech(
             "solver": "lbfgs",
             "C": float(probe_C),
             "max_iter": int(probe_max_iter),
+            "control_jobs": int(control_jobs),
+            "progress_every": int(progress_every),
             "grouped_folds": "prompt_group_id / derived exact prompt carrier",
         },
         "layer": prepared["layer"],

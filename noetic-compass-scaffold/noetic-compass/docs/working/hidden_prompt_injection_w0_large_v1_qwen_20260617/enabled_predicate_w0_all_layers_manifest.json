@@ -1,0 +1,83 @@
+{
+  "behavior_distribution": {
+    "COMPLIED": 1280,
+    "REFUSED": 1280
+  },
+  "claim": "OPEN / NOT LICENSED for pre-speech detection.",
+  "created_at": "2026-06-18T00:17:06.467657+00:00",
+  "dataset": "/root/cas_harness_hidden_pi_w0/out/qwen_hidden_pi_w0_large_v1_20260617/enabled_predicate_w0_all_layers_dataset.npz",
+  "expected_behavior_distribution": {
+    "COMPLIED": 1280,
+    "REFUSED": 1280
+  },
+  "feature_shape": [
+    2560,
+    29,
+    1536
+  ],
+  "important_limit": "This is prompt-stage hidden-state capture only. It is not a detector, prevention claim, or causal proof until evaluated against text/layer-0 baselines and live steering gates.",
+  "label_paths": [],
+  "label_source_distribution": {
+    "expected_behavior": 2560
+  },
+  "layer_count": 29,
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "manifest": "/root/cas_harness_hidden_pi_w0/out/qwen_hidden_pi_w0_large_v1_20260617/enabled_predicate_w0_all_layers_manifest.json",
+  "max_length": 256,
+  "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_info": {
+    "architectures": [
+      "Qwen2ForCausalLM"
+    ],
+    "device_map": "auto",
+    "hidden_size": 1536,
+    "model_type": "qwen2",
+    "num_hidden_layers": 28,
+    "parameter_count": 1543714304,
+    "torch_dtype": "torch.float16",
+    "vocab_size": 151936
+  },
+  "model_revision": null,
+  "payload_class_distribution": {
+    "credential_secret_boundary": 512,
+    "harmful_action_boundary": 512,
+    "private_data_boundary": 512,
+    "system_instruction_boundary": 512,
+    "tool_authority_boundary": 512
+  },
+  "prompt_bank": "live-trace-worker/scenarios/hidden_prompt_injection_bank_large_v1_20260617.json",
+  "prompt_format": "chat-auto",
+  "row_count": 2560,
+  "rows": "/root/cas_harness_hidden_pi_w0/out/qwen_hidden_pi_w0_large_v1_20260617/enabled_predicate_w0_all_layers_rows.jsonl",
+  "schema_version": "cas_harness_enabled_predicate_w0_all_layers_capture.v1"
+}
