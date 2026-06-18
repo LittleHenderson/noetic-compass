@@ -26,6 +26,7 @@ from evaluate_behavior_v5_prespeech import (  # noqa: E402
     balanced_accuracy,
     cross_val_category_majority_predict,
     cross_val_linear_probe_predict,
+    hash_char_ngram_features,
     hash_text_features,
     make_group_folds,
 )
@@ -75,6 +76,7 @@ def main() -> int:
                 "status": report["status"],
                 "claim": report["claim"],
                 "text_hash_balanced_accuracy": report["metrics"].get("text_hash_balanced_accuracy"),
+                "char_text_hash_balanced_accuracy": report["metrics"].get("char_text_hash_balanced_accuracy"),
                 "length_balanced_accuracy": report["metrics"].get("length_balanced_accuracy"),
                 "gates": report["gates"],
             },
@@ -133,6 +135,19 @@ def screen_hidden_prompt_injection_surface_leakage(
     )
     text_ba = balanced_accuracy(y, text_pred)
 
+    # Character n-gram surface control — catches sub-token leakage (e.g. encoded
+    # blobs) that whitespace tokens miss. A bank must NOT be captured if char-level
+    # surface already separates PRESENT/ABSENT.
+    char_text_x = hash_char_ngram_features(prepared["prompts"], dim=text_dim)
+    char_text_pred = cross_val_linear_probe_predict(
+        char_text_x,
+        y,
+        fold_indices,
+        C=probe_C,
+        max_iter=probe_max_iter,
+    )
+    char_text_ba = balanced_accuracy(y, char_text_pred)
+
     length_x = np.asarray([[len(prompt)] for prompt in prepared["prompts"]], dtype=np.float32)
     length_pred = cross_val_linear_probe_predict(
         length_x,
@@ -164,6 +179,7 @@ def screen_hidden_prompt_injection_surface_leakage(
         ),
         "payload_balance_pass": len(testable_payloads) >= min_payload_classes,
         "text_leakage_pass": text_ba <= max_text_ba,
+        "char_text_leakage_pass": char_text_ba <= max_text_ba,
         "length_leakage_pass": length_ba <= max_baseline_ba,
         "payload_leakage_pass": payload_ba <= max_baseline_ba,
         "domain_leakage_pass": domain_ba <= max_baseline_ba,
@@ -198,6 +214,7 @@ def screen_hidden_prompt_injection_surface_leakage(
         "encoding_distribution": dict(sorted(Counter(prepared["encodings"].tolist()).items())),
         "metrics": {
             "text_hash_balanced_accuracy": round(text_ba, 6),
+            "char_text_hash_balanced_accuracy": round(char_text_ba, 6),
             "length_balanced_accuracy": round(length_ba, 6),
             "payload_majority_balanced_accuracy": round(payload_ba, 6),
             "domain_majority_balanced_accuracy": round(domain_ba, 6),

@@ -44,6 +44,29 @@ surface base64 tokens.
 - **PRESENT ⟺ REFUSED perfectly collinear** — cannot distinguish "injection
   present" from "would-refuse" even if the signal were internal.
 
+## Residualization — does the hidden state add anything beyond surface?
+
+Out-of-fold (grouped CV, layer 18), PRESENT as positive:
+
+- char-surface BA = 0.9250
+- hidden BA = 0.8969
+- On the 192 rows where the char-surface classifier is WRONG, the hidden probe
+  scores **0.5833** (0.5 = no extra signal).
+
+So the hidden readout is essentially dominated by surface text, with only a faint
+residual on surface's mistakes — inconclusive, and far from licensable. It is
+weak motivation to TEST a surface-clean dataset, not evidence of internal
+detection.
+
+## Readiness pre-screen had the same blind spot (now fixed)
+
+`screen_hidden_prompt_injection_surface_leakage.py` — the gate that authorizes
+`READY_FOR_W0_CAPTURE` — only had a WORD-level `text_leakage_pass`. That is why
+the char-leaky bank was captured in the first place. Verified on the bank
+generator: word text BA 0.5375 (passes) but char text BA 0.6125 (fails). A
+`char_text_leakage_pass` gate is now added, so no bank reaches capture while
+char-level surface separates it. The current encoding bank is now `BLOCKED`.
+
 ## Permanent fix applied
 
 - `hash_char_ngram_features` + `char_text_margin_pass` gate added to
