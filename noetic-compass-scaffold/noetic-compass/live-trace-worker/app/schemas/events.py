@@ -154,6 +154,29 @@ class TokenEvent(BaseModel):
     verification_invalid_mode: str | None = Field(default=None)
 
 
+class W0PrespeechScreenEvent(BaseModel):
+    """Shadow pre-speech screen, emitted once after manifest, BEFORE the first token.
+
+    This reads the prompt (and notes whether prompt-stage W0 hidden states are
+    being captured) before any token is generated, and routes suspicious prompts
+    to human review. It is SHADOW-ONLY and makes NO internal-detection claim:
+    the hidden-state readout for prompt-injection was withdrawn on 2026-06-18
+    (a char-level surface control beats it), so the only signal here is a
+    transparent surface indicator. ``verdict_effect`` is always
+    ``none_shadow_only`` and ``claim_ceiling`` is always ``NOT LICENSED``.
+    """
+
+    type: Literal["w0_prespeech_screen"] = "w0_prespeech_screen"
+    target_layer: int = Field(..., ge=0)
+    w0_capture_enabled: bool = False
+    surface_indicator: float = Field(..., ge=0.0, le=1.0)
+    surface_signal: str = "none"
+    route: Literal["none", "FLAG_FOR_HUMAN_REVIEW"] = "none"
+    verdict_effect: Literal["none_shadow_only"] = "none_shadow_only"
+    claim_ceiling: Literal["NOT LICENSED"] = "NOT LICENSED"
+    note: str = ""
+
+
 class NeuronCoversEvent(BaseModel):
     """One-shot cover-set emission (typically sent once after manifest).
 
@@ -481,6 +504,7 @@ class WordSpansEvent(BaseModel):
 LiveTraceEvent = (
     ManifestEvent
     | KnobResolutionEvent
+    | W0PrespeechScreenEvent
     | TokenEvent
     | NeuronCoversEvent
     | AblationEffectEvent

@@ -43,6 +43,7 @@ from .knob_resolution import (
 )
 from .model_loader import get_loaded_model
 from .probe_runner import resolve_probes
+from .w0_prespeech_screen import build_w0_prespeech_screen_event
 from .word_spans import build_word_spans
 
 logger = logging.getLogger(__name__)
@@ -186,6 +187,12 @@ async def stream_fake_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
     """
     loaded = get_loaded_model()
     yield ManifestEvent(manifest=loaded.manifest)
+    # Shadow pre-speech screen, BEFORE the first token (no real capture in demo).
+    yield build_w0_prespeech_screen_event(
+        req.prompt,
+        target_layer=min(18, max(0, loaded.manifest.model_arch.n_layers - 1)),
+        w0_capture_enabled=False,
+    )
     yield _knob_resolution_event(req)
     probes = _requested_probes(req)
     yield _cover_event(req)
@@ -256,6 +263,15 @@ async def stream_real_trace(req: CreateSessionRequest) -> AsyncIterator[LiveTrac
         return
 
     yield ManifestEvent(manifest=loaded.manifest)
+    # Shadow pre-speech screen, BEFORE the first generated token. The real runner
+    # captures prompt-stage W0 activations during generation; this screen records
+    # that capture is enabled and emits the transparent surface indicator. It does
+    # NOT use hidden states for a verdict (internal detection is NOT LICENSED).
+    yield build_w0_prespeech_screen_event(
+        req.prompt,
+        target_layer=min(18, max(0, loaded.manifest.model_arch.n_layers - 1)),
+        w0_capture_enabled=True,
+    )
     yield _knob_resolution_event(req)
     yield _cover_event(req)
 

@@ -27,6 +27,28 @@ wires only the honest, shadow-only pieces.
    NO model internals. If wired, it must be labeled a SURFACE screen, route only
    to `FLAG_FOR_HUMAN_REVIEW`, and carry `verdict_effect: none_shadow_only`.
 
+### BUILT 2026-06-18 (shadow-only)
+
+A shadow `w0_prespeech_screen` event is now emitted by the live worker AFTER the
+manifest and BEFORE the first generated token, in both `stream_fake_trace` and
+`stream_real_trace` (`app/runtime/event_stream.py`). It is produced by
+`app/runtime/w0_prespeech_screen.py`:
+
+- It reads the prompt pre-speech and emits a TRANSPARENT surface indicator
+  (encoded-text density), routing to `FLAG_FOR_HUMAN_REVIEW` above threshold.
+- In the real path it records `w0_capture_enabled=True` (prompt-stage activations
+  are captured), but it does NOT use hidden states for a verdict — internal
+  detection is `NOT LICENSED`.
+- `verdict_effect` is always `none_shadow_only`; `claim_ceiling` is always
+  `NOT LICENSED`. It never alters or intercepts output.
+- Tests: `tests/test_w0_prespeech_screen.py` proves the surface indicator, the
+  shadow boundary, and that the event is emitted after the manifest and strictly
+  before the first token.
+
+This is the honest version of "wire it so it reads W0 before the first generated
+token": the wiring exists and is pre-speech, but the only signal exposed is
+surface, and licensing of internal detection stays OPEN.
+
 ## What MUST NOT be claimed or done
 
 - No "internal W0 detection" claim from the current readout.
