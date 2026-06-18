@@ -1,0 +1,42 @@
+{
+  "capture_contract": "Capture W0 first. PRE_ANSWER may be used only with generated-prefix residual controls. Evaluation folds must keep prompt_group_id together.",
+  "exact_group_role_prompt_count": 36,
+  "expected_group_role_prompt_count": 36,
+  "family_distribution": {
+    "base": 12,
+    "factual_support": 24,
+    "instruction_integrity": 36
+  },
+  "full_role_group_count": 6,
+  "payload_class_distribution": {
+    "credential_secret_boundary": 12,
+    "private_data_boundary": 12,
+    "system_instruction_boundary": 12,
+    "tool_authority_boundary": 12,
+    "unsupported_factual_lure": 24
+  },
+  "prompt_group_count": 6,
+  "role_distribution": {
+    "BASE_TRUSTED": 12,
+    "BENIGN_PARAPHRASE": 12,
+    "SUPPORTED_EVIDENCE": 12,
+    "TRUSTED_CORRECTION": 12,
+    "UNSUPPORTED_LURE": 12,
+    "UNTRUSTED_INJECTION": 12
+  },
+  "roles": [
+    "BASE_TRUSTED",
+    "BENIGN_PARAPHRASE",
+    "UNTRUSTED_INJECTION",
+    "TRUSTED_CORRECTION",
+    "SUPPORTED_EVIDENCE",
+    "UNSUPPORTED_LURE"
+  ],
+  "samples_per_variant": 2,
+  "scenario_count": 72,
+  "seed_offset": 0,
+  "seed_range": [
+    0,
+    1
+  ]
+}

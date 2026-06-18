@@ -13,6 +13,15 @@ from scripts.build_grounded_factual_qa_hallucination_bank import (
     build_grounded_factual_qa_hallucination_bank,
 )
 from scripts.build_hidden_prompt_injection_bank import build_hidden_prompt_injection_bank
+from scripts.build_cjt_bias_vibration_bank import (
+    BASE_ROLE as CJT_BASE_ROLE,
+    BENIGN_ROLE as CJT_BENIGN_ROLE,
+    INJECTION_ROLE as CJT_INJECTION_ROLE,
+    SUPPORTED_ROLE as CJT_SUPPORTED_ROLE,
+    TRUSTED_CORRECTION_ROLE as CJT_TRUSTED_CORRECTION_ROLE,
+    UNSUPPORTED_ROLE as CJT_UNSUPPORTED_ROLE,
+    build_cjt_bias_vibration_bank,
+)
 from scripts.build_matched_prompt_chain_break_bank import build_matched_prompt_chain_break_bank
 from scripts.build_outcome_native_hallucination_bank import build_outcome_native_hallucination_bank
 from scripts.capture_enabled_predicate_w0_all_layers import (
@@ -24,6 +33,9 @@ from scripts.capture_enabled_predicate_w0_all_layers import (
 )
 from scripts.evaluate_hidden_prompt_injection_prespeech import (
     evaluate_hidden_prompt_injection_prespeech,
+)
+from scripts.evaluate_cjt_bias_vibration_diagnostic import (
+    evaluate_cjt_bias_vibration_diagnostic,
 )
 from scripts.evaluate_hallucination_prespeech import evaluate_hallucination_prespeech
 from scripts.evaluate_behavior_v6_matched_prespeech import evaluate_v6_matched_prespeech
@@ -62,6 +74,118 @@ def _write_jsonl(path: Path, rows: list[dict]):
         "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows),
         encoding="utf-8",
     )
+
+
+def test_cjt_bias_vibration_bank_has_complete_paired_roles():
+    payload = build_cjt_bias_vibration_bank(samples_per_variant=2, seed_offset=3)
+
+    assert payload["schema_version"] == "cas_harness_cjt_bias_vibration_bank.v0"
+    assert payload["claim"].startswith("OPEN / NOT LICENSED")
+    assert payload["summary"]["scenario_count"] == 72
+    assert payload["summary"]["prompt_group_count"] == 6
+    assert payload["summary"]["full_role_group_count"] == 6
+    assert payload["summary"]["exact_group_role_prompt_count"] == 36
+    assert payload["summary"]["role_distribution"] == {
+        CJT_BASE_ROLE: 12,
+        CJT_BENIGN_ROLE: 12,
+        CJT_INJECTION_ROLE: 12,
+        CJT_SUPPORTED_ROLE: 12,
+        CJT_TRUSTED_CORRECTION_ROLE: 12,
+        CJT_UNSUPPORTED_ROLE: 12,
+    }
+
+    first_group = "cjt_bv_system_boundary_release_notes"
+    first_roles = {
+        row["cjt_role"]
+        for row in payload["scenarios"]
+        if row["prompt_group_id"] == first_group
+    }
+    assert first_roles == {
+        CJT_BASE_ROLE,
+        CJT_BENIGN_ROLE,
+        CJT_INJECTION_ROLE,
+        CJT_SUPPORTED_ROLE,
+        CJT_TRUSTED_CORRECTION_ROLE,
+        CJT_UNSUPPORTED_ROLE,
+    }
+
+
+def test_cjt_bias_vibration_evaluator_passes_hidden_only_delta_signal(tmp_path: Path):
+    roles = [
+        CJT_BASE_ROLE,
+        CJT_BENIGN_ROLE,
+        CJT_INJECTION_ROLE,
+        CJT_TRUSTED_CORRECTION_ROLE,
+        CJT_SUPPORTED_ROLE,
+        CJT_UNSUPPORTED_ROLE,
+    ]
+    features = []
+    prompts = []
+    scenario_ids = []
+    prompt_group_ids = []
+    role_labels = []
+    family_labels = []
+    payloads = []
+    domains = []
+    for group_index in range(6):
+        group_id = f"synthetic_cjt_group_{group_index}"
+        base_hidden = np.asarray([0.0, group_index * 0.01, 0.0], dtype=np.float32)
+        for role in roles:
+            if role in {CJT_INJECTION_ROLE, CJT_UNSUPPORTED_ROLE}:
+                target_hidden = base_hidden + np.asarray([5.0, 0.0, 0.0], dtype=np.float32)
+            elif role == CJT_BASE_ROLE:
+                target_hidden = base_hidden
+            else:
+                target_hidden = base_hidden + np.asarray([-5.0, 0.0, 0.0], dtype=np.float32)
+            layer_zero = np.asarray([0.0, group_index * 0.01, 0.0], dtype=np.float32)
+            features.append([layer_zero, target_hidden])
+            prompts.append(f"same neutral text for group {group_index}")
+            scenario_ids.append(f"{group_id}::{role.lower()}")
+            prompt_group_ids.append(group_id)
+            role_labels.append(role)
+            family_labels.append(
+                "factual_support"
+                if role in {CJT_SUPPORTED_ROLE, CJT_UNSUPPORTED_ROLE}
+                else "instruction_integrity"
+            )
+            payloads.append(f"payload_{group_index % 3}")
+            domains.append("P" if group_index % 2 == 0 else "E")
+
+    dataset_path = tmp_path / "cjt_bias_vibration_dataset.npz"
+    np.savez_compressed(
+        dataset_path,
+        features=np.asarray(features, dtype=np.float32),
+        layers=np.asarray([0, 14], dtype=np.int64),
+        prompts=np.asarray(prompts, dtype=object),
+        scenario_ids=np.asarray(scenario_ids, dtype=object),
+        prompt_group_ids=np.asarray(prompt_group_ids, dtype=object),
+        timing_points=np.asarray(["W0"] * len(features), dtype=object),
+        timing_indices=np.zeros(len(features), dtype=np.int64),
+        labels_cjt_role=np.asarray(role_labels, dtype=object),
+        labels_cjt_family=np.asarray(family_labels, dtype=object),
+        labels_payload_class=np.asarray(payloads, dtype=object),
+        labels_domain=np.asarray(domains, dtype=object),
+    )
+
+    report = evaluate_cjt_bias_vibration_diagnostic(
+        dataset_path=dataset_path,
+        layer=14,
+        folds=3,
+        seed=9,
+        text_dim=64,
+        min_prompt_groups=6,
+        min_delta_rows_per_label=12,
+        permutations=1000,
+        shuffle_controls=10,
+    )
+
+    assert report["status"] == "PASS"
+    assert report["gates"]["l0_baseline_present_pass"] is True
+    assert report["gates"]["char_text_margin_pass"] is True
+    assert report["metrics"]["hidden_balanced_accuracy"] == 1.0
+    assert report["metrics"]["char_text_delta_balanced_accuracy"] < 0.75
+    assert report["metrics"]["cross_domain_bias_response_ratio"] > 0.9
+    assert report["claim"].startswith("LICENSED only for this model/layer/protocol paired CJT")
 
 
 def test_behavior_dataset_builder_and_within_payload_evaluator(tmp_path: Path):
