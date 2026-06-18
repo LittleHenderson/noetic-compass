@@ -1,0 +1,633 @@
+[timing-eval] SCOUT START W1 2026-06-18T09:49:00+00:00
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.079208
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_0.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.277228
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_1.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.306931
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_2.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.188119
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_3.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.257426
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_4.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.227723
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_5.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.19802
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_6.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.237624
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_7.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.237624
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_8.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.326733
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_9.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.267327
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_10.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.287129
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_11.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.257426
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_12.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.306931
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_13.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.227723
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_14.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.227723
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_15.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.306931
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_16.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.316832
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_17.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.29703
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_18.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.277228
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_19.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.237624
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_20.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.316832
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_21.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.267327
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_22.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.29703
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_23.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.346535
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_24.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.336634
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_25.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.356436
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_26.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.376238
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_27.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.277228
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_scout_layer_28.json
+[timing-eval] CONFIRM START W1 layer=1 2026-06-18T09:55:00+00:00
+[control-progress] within-topic permutation: 100/1000
+[control-progress] within-topic permutation: 200/1000
+[control-progress] within-topic permutation: 300/1000
+[control-progress] within-topic permutation: 400/1000
+[control-progress] within-topic permutation: 500/1000
+[control-progress] within-topic permutation: 600/1000
+[control-progress] within-topic permutation: 700/1000
+[control-progress] within-topic permutation: 800/1000
+[control-progress] within-topic permutation: 900/1000
+[control-progress] within-topic permutation: 1000/1000
+[control-progress] shuffled-label control: 50/50
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.220779
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_confirm_layer_1.json
+[timing-eval] DONE W1 layer=1 2026-06-18T09:55:36+00:00
+[timing-eval] SCOUT START W8 2026-06-18T09:55:36+00:00
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.009901
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_0.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.089109
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_1.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.118812
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_2.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.168317
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_3.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.227723
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_4.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.19802
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_5.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.257426
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_6.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.247525
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_7.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.267327
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_8.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.267327
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_9.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.277228
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_10.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.287129
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_11.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.257426
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_12.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.267327
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_13.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.247525
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_14.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.227723
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_15.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.217822
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_16.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.247525
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_17.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.217822
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_18.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.237624
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_19.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.217822
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_20.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.227723
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_21.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.207921
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_22.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.207921
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_23.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.247525
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_24.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.227723
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_25.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.316832
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_26.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.257426
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_27.json
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.217822
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_scout_layer_28.json
+[timing-eval] CONFIRM START W8 layer=1 2026-06-18T10:00:50+00:00
+[control-progress] within-topic permutation: 100/1000
+[control-progress] within-topic permutation: 200/1000
+[control-progress] within-topic permutation: 300/1000
+[control-progress] within-topic permutation: 400/1000
+[control-progress] within-topic permutation: 500/1000
+[control-progress] within-topic permutation: 600/1000
+[control-progress] within-topic permutation: 700/1000
+[control-progress] within-topic permutation: 800/1000
+[control-progress] within-topic permutation: 900/1000
+[control-progress] within-topic permutation: 1000/1000
+[control-progress] shuffled-label control: 50/50
+{
+  "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+  "hidden_balanced_accuracy": 0.5,
+  "hidden_minus_char_text_balanced_accuracy": 0.0,
+  "status": "FAIL",
+  "within_topic_permutation_p": 0.083916
+}
+[hallucination-prespeech] wrote docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_confirm_layer_1.json
+[timing-eval] DONE W8 layer=1 2026-06-18T10:01:23+00:00
+{
+  "schema_version": "cas_harness_hallucination_timing_run_summary.v1",
+  "timings": {
+    "W1": {
+      "best_layer": 1,
+      "confirm_claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+      "confirm_failing_gates": [
+        "char_text_margin_pass",
+        "domain_margin_pass",
+        "evidence_length_margin_pass",
+        "evidence_source_margin_pass",
+        "generated_prefix_char_text_margin_pass",
+        "generated_prefix_text_margin_pass",
+        "hidden_balanced_accuracy_pass",
+        "l0_margin_pass",
+        "per_topic_floor_pass",
+        "prompt_length_margin_pass",
+        "retrieval_condition_margin_pass",
+        "retrieval_score_bucket_margin_pass",
+        "text_margin_pass",
+        "topic_margin_pass",
+        "within_topic_permutation_pass"
+      ],
+      "confirm_metrics": {
+        "char_text_hash_balanced_accuracy": 0.5,
+        "domain_majority_balanced_accuracy": 0.5,
+        "evidence_length_balanced_accuracy": 0.5,
+        "evidence_source_majority_balanced_accuracy": 0.5,
+        "generated_prefix_char_text_hash_balanced_accuracy": 0.5,
+        "generated_prefix_text_hash_balanced_accuracy": 0.5,
+        "hidden_balanced_accuracy": 0.5,
+        "hidden_minus_char_text_balanced_accuracy": 0.0,
+        "hidden_minus_domain_balanced_accuracy": 0.0,
+        "hidden_minus_evidence_length_balanced_accuracy": 0.0,
+        "hidden_minus_evidence_source_balanced_accuracy": 0.0,
+        "hidden_minus_generated_prefix_char_text_balanced_accuracy": 0.0,
+        "hidden_minus_generated_prefix_text_balanced_accuracy": 0.0,
+        "hidden_minus_l0_embedding_balanced_accuracy": 0.0,
+        "hidden_minus_prompt_length_balanced_accuracy": 0.0,
+        "hidden_minus_retrieval_condition_balanced_accuracy": 0.0,
+        "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.0,
+        "hidden_minus_text_balanced_accuracy": 0.0,
+        "hidden_minus_topic_balanced_accuracy": 0.0,
+        "l0_embedding_balanced_accuracy": 0.5,
+        "per_topic_hidden_balanced_accuracy": {
+          "clinical_measurements": 0.5,
+          "finance_amounts": 0.5,
+          "regulatory_dates": 0.5,
+          "software_versions": 0.5,
+          "supply_chain_counts": 0.5
+        },
+        "prompt_length_balanced_accuracy": 0.5,
+        "retrieval_condition_majority_balanced_accuracy": 0.5,
+        "retrieval_score_bucket_majority_balanced_accuracy": 0.5,
+        "shuffled_label_hidden_mean_balanced_accuracy": 0.5029,
+        "text_hash_balanced_accuracy": 0.5,
+        "topic_majority_balanced_accuracy": 0.5,
+        "within_topic_permutation_p": 0.220779
+      },
+      "confirm_report": "docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w1_eval/hallucination_timing_eval_w1_confirm_layer_1.json",
+      "confirm_status": "FAIL",
+      "scout_best_status": "FAIL"
+    },
+    "W8": {
+      "best_layer": 1,
+      "confirm_claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+      "confirm_failing_gates": [
+        "char_text_margin_pass",
+        "domain_margin_pass",
+        "evidence_length_margin_pass",
+        "evidence_source_margin_pass",
+        "generated_prefix_char_text_margin_pass",
+        "generated_prefix_text_margin_pass",
+        "hidden_balanced_accuracy_pass",
+        "l0_margin_pass",
+        "per_topic_floor_pass",
+        "prompt_length_margin_pass",
+        "retrieval_condition_margin_pass",
+        "retrieval_score_bucket_margin_pass",
+        "text_margin_pass",
+        "topic_margin_pass",
+        "within_topic_permutation_pass"
+      ],
+      "confirm_metrics": {
+        "char_text_hash_balanced_accuracy": 0.5,
+        "domain_majority_balanced_accuracy": 0.5,
+        "evidence_length_balanced_accuracy": 0.5,
+        "evidence_source_majority_balanced_accuracy": 0.5,
+        "generated_prefix_char_text_hash_balanced_accuracy": 0.5,
+        "generated_prefix_text_hash_balanced_accuracy": 0.5,
+        "hidden_balanced_accuracy": 0.5,
+        "hidden_minus_char_text_balanced_accuracy": 0.0,
+        "hidden_minus_domain_balanced_accuracy": 0.0,
+        "hidden_minus_evidence_length_balanced_accuracy": 0.0,
+        "hidden_minus_evidence_source_balanced_accuracy": 0.0,
+        "hidden_minus_generated_prefix_char_text_balanced_accuracy": 0.0,
+        "hidden_minus_generated_prefix_text_balanced_accuracy": 0.0,
+        "hidden_minus_l0_embedding_balanced_accuracy": 0.0,
+        "hidden_minus_prompt_length_balanced_accuracy": 0.0,
+        "hidden_minus_retrieval_condition_balanced_accuracy": 0.0,
+        "hidden_minus_retrieval_score_bucket_balanced_accuracy": 0.0,
+        "hidden_minus_text_balanced_accuracy": 0.0,
+        "hidden_minus_topic_balanced_accuracy": 0.0,
+        "l0_embedding_balanced_accuracy": 0.5,
+        "per_topic_hidden_balanced_accuracy": {
+          "clinical_measurements": 0.5,
+          "finance_amounts": 0.5,
+          "regulatory_dates": 0.5,
+          "software_versions": 0.5,
+          "supply_chain_counts": 0.5
+        },
+        "prompt_length_balanced_accuracy": 0.5,
+        "retrieval_condition_majority_balanced_accuracy": 0.5,
+        "retrieval_score_bucket_majority_balanced_accuracy": 0.5,
+        "shuffled_label_hidden_mean_balanced_accuracy": 0.5043,
+        "text_hash_balanced_accuracy": 0.5,
+        "topic_majority_balanced_accuracy": 0.5,
+        "within_topic_permutation_p": 0.083916
+      },
+      "confirm_report": "docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8_eval/hallucination_timing_eval_w8_confirm_layer_1.json",
+      "confirm_status": "FAIL",
+      "scout_best_status": "FAIL"
+    }
+  }
+}

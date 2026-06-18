@@ -1,9 +1,9 @@
-"""Capture all prompt-stage W0 hidden-state layers for an enabled-predicate bank.
+"""Capture all W0/W1/W8 timing hidden-state layers for an enabled-predicate bank.
 
-This script performs forward passes only. It does not generate completions and
-does not label behavior from model output text. Labels are copied from an
-existing judged/screened label JSONL when provided, or from expected behavior
-metadata as a fallback for diagnostics.
+By default this records prompt-final W0 before any answer token exists. It can
+also record W1/W8 early-generation pre-display states. W1/W8 do generate a
+short internal prefix, but that prefix is saved as a control so evaluators can
+reject hidden-state claims that are merely reading early output text.
 """
 
 from __future__ import annotations
@@ -47,6 +47,11 @@ def parse_args() -> Any:
     parser.add_argument("--max-length", type=int, default=256)
     parser.add_argument("--prompt-format", choices=("chat-auto", "raw"), default="chat-auto")
     parser.add_argument("--layers", default="all", help="'all' or comma-separated hidden_states indices")
+    parser.add_argument(
+        "--timing-point",
+        default="W0",
+        help="Timing state to capture: W0 before generation, or WN after N generated tokens exist.",
+    )
     parser.add_argument("--trust-remote-code", action="store_true")
     return parser.parse_args()
 
@@ -65,6 +70,7 @@ def main() -> int:
         max_length=args.max_length,
         prompt_format=args.prompt_format,
         layers_arg=args.layers,
+        timing_point=args.timing_point,
         trust_remote_code=args.trust_remote_code,
     )
     print(json.dumps(summary, indent=2, sort_keys=True))
@@ -84,8 +90,10 @@ def capture_w0_all_layers(
     max_length: int,
     prompt_format: str,
     layers_arg: str,
+    timing_point: str = "W0",
     trust_remote_code: bool,
 ) -> dict[str, Any]:
+    timing_label, timing_index = parse_timing_point(timing_point)
     scenarios = load_prompt_bank(prompt_bank_path)
     if max_scenarios > 0:
         scenarios = scenarios[:max_scenarios]
@@ -112,12 +120,15 @@ def capture_w0_all_layers(
             prompt=str(scenario["prompt"]),
             prompt_format=prompt_format,
         )
-        layer_vectors, layer_indices, token_count = capture_prompt_final_layers(
-            model=model,
-            tokenizer=tokenizer,
-            prompt=model_prompt,
-            max_length=max_length,
-            layers_arg=layers_arg,
+        layer_vectors, layer_indices, token_count, generated_prefix_text, generated_prefix_token_count = (
+            capture_timing_layers(
+                model=model,
+                tokenizer=tokenizer,
+                prompt=model_prompt,
+                max_length=max_length,
+                layers_arg=layers_arg,
+                timing_index=timing_index,
+            )
         )
         if resolved_layers is None:
             resolved_layers = layer_indices
@@ -137,8 +148,10 @@ def capture_w0_all_layers(
         domain = scenario.get("domain") or scenario.get("expected_cas_axes", {}).get("domain", "")
         topic = scenario.get("topic") or scenario.get("payload_class", "")
         row = {
-            "trace_id": f"{scenario_id}::w0_all_layers",
+            "trace_id": f"{scenario_id}::{timing_label.lower()}_all_layers",
             "scenario_id": scenario_id,
+            "timing_point": timing_label,
+            "timing_index": timing_index,
             "prompt_group_id": scenario.get("prompt_group_id", derive_prompt_group_id(scenario_id)),
             "payload_class": scenario.get("payload_class", ""),
             "domain": domain,
@@ -164,11 +177,14 @@ def capture_w0_all_layers(
             "label": str(label),
             "label_source": label_source,
             "prompt_token_count": token_count,
+            "generated_prefix_text": generated_prefix_text,
+            "generated_prefix_token_count": generated_prefix_token_count,
         }
         rows.append(row)
         print(
             f"[w0-all-layers] {index}/{len(scenarios)} {scenario_id} "
-            f"label={label} layers={len(layer_indices)} prompt_tokens={token_count}",
+            f"timing={timing_label} label={label} layers={len(layer_indices)} "
+            f"prompt_tokens={token_count} generated_prefix_tokens={generated_prefix_token_count}",
             flush=True,
         )
 
@@ -194,12 +210,101 @@ def capture_w0_all_layers(
         rows_path=rows_path,
         layers=resolved_layers,
         max_length=max_length,
+        timing_point=timing_label,
+        timing_index=timing_index,
     )
     metadata_path.write_text(json.dumps(summary, indent=2, sort_keys=True), encoding="utf-8")
     print(f"[w0-all-layers] wrote {dataset_path}")
     print(f"[w0-all-layers] wrote {rows_path}")
     print(f"[w0-all-layers] wrote {metadata_path}")
     return summary
+
+
+def capture_timing_layers(
+    *,
+    model: Any,
+    tokenizer: Any,
+    prompt: str,
+    max_length: int,
+    layers_arg: str,
+    timing_index: int = 0,
+) -> tuple[np.ndarray, list[int], int, str, int]:
+    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=max_length)
+    token_count = int(inputs["input_ids"].shape[-1])
+    device = first_real_parameter_device(model)
+    if device is not None:
+        inputs = {key: value.to(device) for key, value in inputs.items()}
+
+    return capture_layers_at_timing_index(
+        model=model,
+        tokenizer=tokenizer,
+        inputs=inputs,
+        layers_arg=layers_arg,
+        token_count=token_count,
+        timing_index=timing_index,
+    )
+
+
+def capture_layers_at_timing_index(
+    *,
+    model: Any,
+    tokenizer: Any,
+    inputs: dict[str, Any],
+    layers_arg: str,
+    token_count: int,
+    timing_index: int,
+) -> tuple[np.ndarray, list[int], int, str, int]:
+    if timing_index < 0:
+        raise RuntimeError("timing_index must be non-negative.")
+    input_ids = inputs["input_ids"]
+    attention_mask = inputs.get("attention_mask")
+    generated_token_ids: list[int] = []
+    if timing_index > 0:
+        import torch
+
+        for _ in range(timing_index):
+            forward_inputs = {"input_ids": input_ids}
+            if attention_mask is not None:
+                forward_inputs["attention_mask"] = attention_mask
+            with inference_context():
+                output = model(
+                    **forward_inputs,
+                    use_cache=False,
+                    output_hidden_states=True,
+                    return_dict=True,
+                )
+            logits = getattr(output, "logits", None)
+            if logits is None:
+                raise RuntimeError("Model did not return logits; cannot advance timing point.")
+            next_token = torch.argmax(logits[:, -1, :], dim=-1, keepdim=True)
+            generated_token_ids.append(int(next_token[0, 0].detach().cpu().item()))
+            input_ids = torch.cat([input_ids, next_token.to(input_ids.device)], dim=-1)
+            if attention_mask is not None:
+                attention_mask = torch.cat(
+                    [attention_mask, torch.ones_like(next_token, device=attention_mask.device)],
+                    dim=-1,
+                )
+
+    final_inputs = {"input_ids": input_ids}
+    if attention_mask is not None:
+        final_inputs["attention_mask"] = attention_mask
+    with inference_context():
+        output = model(**final_inputs, use_cache=False, output_hidden_states=True, return_dict=True)
+    hidden_states = getattr(output, "hidden_states", None)
+    if hidden_states is None:
+        raise RuntimeError("Model did not return hidden_states; cannot capture timing layers.")
+    layer_indices = parse_layers_arg(layers_arg, hidden_state_count=len(hidden_states))
+    vectors = np.stack(
+        [
+            hidden_states[layer][0, -1].detach().float().cpu().numpy().astype(np.float32)
+            for layer in layer_indices
+        ],
+        axis=0,
+    )
+    generated_prefix_text = ""
+    if generated_token_ids:
+        generated_prefix_text = tokenizer.decode(generated_token_ids, skip_special_tokens=False)
+    return vectors, layer_indices, token_count, generated_prefix_text, len(generated_token_ids)
 
 
 def capture_prompt_final_layers(
@@ -210,25 +315,24 @@ def capture_prompt_final_layers(
     max_length: int,
     layers_arg: str,
 ) -> tuple[np.ndarray, list[int], int]:
-    inputs = tokenizer(prompt, return_tensors="pt", truncation=True, max_length=max_length)
-    token_count = int(inputs["input_ids"].shape[-1])
-    device = first_real_parameter_device(model)
-    if device is not None:
-        inputs = {key: value.to(device) for key, value in inputs.items()}
-    with inference_context():
-        output = model(**inputs, use_cache=False, output_hidden_states=True, return_dict=True)
-    hidden_states = getattr(output, "hidden_states", None)
-    if hidden_states is None:
-        raise RuntimeError("Model did not return hidden_states; cannot capture W0 layers.")
-    layer_indices = parse_layers_arg(layers_arg, hidden_state_count=len(hidden_states))
-    vectors = np.stack(
-        [
-            hidden_states[layer][0, -1].detach().float().cpu().numpy().astype(np.float32)
-            for layer in layer_indices
-        ],
-        axis=0,
+    vectors, layer_indices, token_count, _, _ = capture_timing_layers(
+        model=model,
+        tokenizer=tokenizer,
+        prompt=prompt,
+        max_length=max_length,
+        layers_arg=layers_arg,
     )
     return vectors, layer_indices, token_count
+
+
+def parse_timing_point(value: Any) -> tuple[str, int]:
+    text = str(value or "W0").strip().upper()
+    if not text.startswith("W") or not text[1:].isdigit():
+        raise RuntimeError(f"Timing point must look like W0, W1, or W8; got {value!r}.")
+    index = int(text[1:])
+    if index < 0:
+        raise RuntimeError(f"Timing point must be non-negative; got {value!r}.")
+    return f"W{index}", index
 
 
 def parse_layers_arg(layers_arg: str, *, hidden_state_count: int) -> list[int]:
@@ -273,6 +377,8 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
         scenario_ids=np.asarray([row["scenario_id"] for row in rows], dtype=object),
         prompt_group_ids=np.asarray([row.get("prompt_group_id", row["scenario_id"]) for row in rows], dtype=object),
         trace_ids=np.asarray([row["trace_id"] for row in rows], dtype=object),
+        timing_points=np.asarray([row.get("timing_point", "W0") for row in rows], dtype=object),
+        timing_indices=np.asarray([row.get("timing_index", 0) for row in rows], dtype=np.int64),
         axis_names=np.asarray(
             [
                 "behavior",
@@ -321,6 +427,11 @@ def write_npz(*, rows: list[dict[str, Any]], features: np.ndarray, layers: np.nd
         expected_answer_kinds=np.asarray([row.get("expected_answer_kind", "") for row in rows], dtype=object),
         label_sources=np.asarray([row["label_source"] for row in rows], dtype=object),
         prompt_token_counts=np.asarray([row["prompt_token_count"] for row in rows], dtype=np.int64),
+        generated_prefix_texts=np.asarray([row.get("generated_prefix_text", "") for row in rows], dtype=object),
+        generated_prefix_token_counts=np.asarray(
+            [row.get("generated_prefix_token_count", 0) for row in rows],
+            dtype=np.int64,
+        ),
     )
 
 
@@ -338,6 +449,8 @@ def build_summary(
     rows_path: Path,
     layers: list[int],
     max_length: int,
+    timing_point: str = "W0",
+    timing_index: int = 0,
 ) -> dict[str, Any]:
     return {
         "schema_version": SCHEMA_VERSION,
@@ -349,6 +462,8 @@ def build_summary(
         "label_paths": [str(path) for path in label_paths],
         "prompt_format": prompt_format,
         "max_length": int(max_length),
+        "timing_point": timing_point,
+        "timing_index": int(timing_index),
         "row_count": int(len(rows)),
         "layers": [int(layer) for layer in layers],
         "layer_count": int(len(layers)),
@@ -382,13 +497,21 @@ def build_summary(
             )
         ),
         "label_source_distribution": dict(sorted(Counter(row["label_source"] for row in rows).items())),
+        "generated_prefix_token_count_distribution": dict(
+            sorted(Counter(int(row.get("generated_prefix_token_count", 0)) for row in rows).items())
+        ),
         "dataset": str(dataset_path),
         "rows": str(rows_path),
         "manifest": str(metadata_path),
-        "claim": "OPEN / NOT LICENSED for pre-speech detection.",
+        "claim": (
+            "OPEN / NOT LICENSED for pre-speech detection."
+            if timing_point == "W0"
+            else "OPEN / NOT LICENSED for pre-display timing detection."
+        ),
         "important_limit": (
-            "This is prompt-stage hidden-state capture only. It is not a detector, prevention claim, "
-            "or causal proof until evaluated against text/layer-0 baselines and live steering gates."
+            "This is hidden-state capture only. W0 is prompt-stage before any generated token; "
+            "W1/W8 are early-generation pre-display states and must beat generated-prefix text "
+            "controls before any internal detector claim is considered."
         ),
     }
 

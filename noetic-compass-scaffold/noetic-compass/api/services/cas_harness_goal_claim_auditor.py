@@ -129,6 +129,8 @@ HALLUCINATION_PRESPEECH_REQUIRED_GATES = (
     "l0_margin_pass",
     "text_margin_pass",
     "char_text_margin_pass",
+    "generated_prefix_text_margin_pass",
+    "generated_prefix_char_text_margin_pass",
     "topic_margin_pass",
     "domain_margin_pass",
     "evidence_source_margin_pass",
@@ -504,7 +506,7 @@ def _audit_hallucination_prevention(
     detection_summary = _scan_summary(hallucination_prespeech_scan)
     if passing_detection:
         reason = (
-            "A W0 hallucination-risk detection report is present, but the active "
+            "A hallucination-risk timing detection report is present, but the active "
             "claim is hallucination prevention. Prevention still needs a separate "
             "guardrail/intervention proof that reduces unsupported answers without "
             "destroying supported-answer quality."
@@ -520,7 +522,7 @@ def _audit_hallucination_prevention(
     else:
         reason = (
             "Current claim-grounding screens can flag unsupported claims, but no "
-            "passing evidence-grounded W0 report proves internal pre-output "
+            "passing evidence-grounded W0/W1/W8 timing report proves internal pre-output "
             "hallucination-risk detection, and no guardrail/intervention proof "
             "shows prevention during generation."
         )
@@ -543,7 +545,7 @@ def _audit_hallucination_prevention(
         required_evidence=[
             "pre-registered supported/unsupported factual QA benchmark",
             "evidence-grounded labels independent of the model output text",
-            "hidden-state detector that beats text/char/length/domain/retrieval baselines",
+            "hidden-state detector that beats text/char/generated-prefix/length/domain/retrieval baselines",
             "intervention or guardrail proof that reduces unsupported claims",
             "held-out controls, answer-quality floor, and false-positive floor",
             "hosted Evidence Packet verification",
@@ -1013,8 +1015,17 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
             "char_text_hash_balanced_accuracy": metrics.get(
                 "char_text_hash_balanced_accuracy"
             ),
+            "generated_prefix_text_hash_balanced_accuracy": metrics.get(
+                "generated_prefix_text_hash_balanced_accuracy"
+            ),
+            "generated_prefix_char_text_hash_balanced_accuracy": metrics.get(
+                "generated_prefix_char_text_hash_balanced_accuracy"
+            ),
             "hidden_minus_char_text_balanced_accuracy": metrics.get(
                 "hidden_minus_char_text_balanced_accuracy"
+            ),
+            "hidden_minus_generated_prefix_char_text_balanced_accuracy": metrics.get(
+                "hidden_minus_generated_prefix_char_text_balanced_accuracy"
             ),
             "hidden_minus_retrieval_condition_balanced_accuracy": metrics.get(
                 "hidden_minus_retrieval_condition_balanced_accuracy"
@@ -1024,6 +1035,12 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
             ),
             "within_topic_permutation_p": metrics.get("within_topic_permutation_p"),
             "mixed_prompt_group_count": parsed.get("mixed_prompt_group_count"),
+            "timing_point": (
+                parsed.get("target", {}).get("timing", {}).get("primary_timing_point")
+                if isinstance(parsed.get("target"), Mapping)
+                and isinstance(parsed.get("target", {}).get("timing"), Mapping)
+                else None
+            ),
         }
         candidates.append(candidate)
 
@@ -1031,6 +1048,7 @@ def _scan_existing_hallucination_prespeech_reports(root: Path) -> dict[str, Any]
         key=lambda item: (
             bool(item["license_eligible"]),
             int(item["gate_pass_count"]),
+            _float_or_low(item.get("hidden_minus_generated_prefix_char_text_balanced_accuracy")),
             _float_or_low(item.get("hidden_minus_char_text_balanced_accuracy")),
             _float_or_low(item.get("hidden_balanced_accuracy")),
         ),

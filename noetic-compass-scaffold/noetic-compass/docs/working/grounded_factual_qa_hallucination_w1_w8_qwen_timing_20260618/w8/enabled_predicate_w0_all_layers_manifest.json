@@ -1,0 +1,113 @@
+{
+  "behavior_distribution": {
+    "SUPPORTED": 200,
+    "UNSUPPORTED": 200
+  },
+  "claim": "OPEN / NOT LICENSED for pre-display timing detection.",
+  "created_at": "2026-06-18T09:48:14.018248+00:00",
+  "dataset": "docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8/enabled_predicate_w0_all_layers_dataset.npz",
+  "evidence_source_distribution": {
+    "clinical_note": 80,
+    "invoice_extract": 80,
+    "policy_digest": 80,
+    "release_note": 80,
+    "warehouse_record": 80
+  },
+  "expected_behavior_distribution": {
+    "": 400
+  },
+  "feature_shape": [
+    400,
+    29,
+    1536
+  ],
+  "generated_prefix_token_count_distribution": {
+    "8": 400
+  },
+  "important_limit": "This is hidden-state capture only. W0 is prompt-stage before any generated token; W1/W8 are early-generation pre-display states and must beat generated-prefix text controls before any internal detector claim is considered.",
+  "label_paths": [],
+  "label_source_distribution": {
+    "scenario_support_status": 400
+  },
+  "layer_count": 29,
+  "layers": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28
+  ],
+  "manifest": "docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8/enabled_predicate_w0_all_layers_manifest.json",
+  "max_length": 256,
+  "model_id": "Qwen/Qwen2.5-1.5B-Instruct",
+  "model_info": {
+    "architectures": [
+      "Qwen2ForCausalLM"
+    ],
+    "device_map": "auto",
+    "hidden_size": 1536,
+    "model_type": "qwen2",
+    "num_hidden_layers": 28,
+    "parameter_count": 1543714304,
+    "torch_dtype": "torch.float16",
+    "vocab_size": 151936
+  },
+  "model_revision": null,
+  "payload_class_distribution": {
+    "clinical_measurements": 80,
+    "finance_amounts": 80,
+    "regulatory_dates": 80,
+    "software_versions": 80,
+    "supply_chain_counts": 80
+  },
+  "prompt_bank": "live-trace-worker/scenarios/grounded_factual_qa_hallucination_bank_v0_20260618.json",
+  "prompt_format": "chat-auto",
+  "retrieval_condition_distribution": {
+    "single_relevant_passage": 400
+  },
+  "retrieval_score_bucket_distribution": {
+    "high": 100,
+    "low": 100,
+    "medium": 200
+  },
+  "row_count": 400,
+  "rows": "docs/working/grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618/w8/enabled_predicate_w0_all_layers_rows.jsonl",
+  "schema_version": "cas_harness_enabled_predicate_w0_all_layers_capture.v1",
+  "support_status_distribution": {
+    "SUPPORTED": 200,
+    "UNSUPPORTED": 200
+  },
+  "timing_index": 8,
+  "timing_point": "W8",
+  "topic_distribution": {
+    "clinical_measurements": 80,
+    "finance_amounts": 80,
+    "regulatory_dates": 80,
+    "software_versions": 80,
+    "supply_chain_counts": 80
+  }
+}

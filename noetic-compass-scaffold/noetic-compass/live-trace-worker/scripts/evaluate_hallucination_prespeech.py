@@ -1,11 +1,12 @@
-"""Evaluate W0 hidden-state hallucination-risk readout.
+"""Evaluate W0/W1/W8 hidden-state hallucination-risk readout.
 
-This evaluator tests whether prompt-stage hidden states separate future
-SUPPORTED versus UNSUPPORTED factual answers before answer text exists. It is
-not a prevention proof. A PASS only makes a scoped internal hallucination
-detection claim eligible for review; hallucination prevention still requires an
-intervention/guardrail proof that reduces unsupported answers without breaking
-answer quality.
+This evaluator tests whether timing hidden states separate SUPPORTED versus
+UNSUPPORTED factual answers before the answer is displayed. W0 is prompt-stage
+before any answer token exists. W1/W8 are early-generation pre-display states,
+so they must also beat generated-prefix text controls. It is not a prevention
+proof. A PASS only makes a scoped detection claim eligible for review;
+hallucination prevention still requires an intervention/guardrail proof that
+reduces unsupported answers without breaking answer quality.
 """
 
 from __future__ import annotations
@@ -142,7 +143,9 @@ def evaluate_hallucination_prespeech(
 
     groups = prepared["groups"]
     prompts = prepared["prompts"]
+    generated_prefix_texts = prepared["generated_prefix_texts"]
     y = prepared["support_status"]
+    timing_summary = summarize_timing_points(prepared["timing_points"], prepared["timing_indices"])
     prompt_contract = summarize_prompt_group_contract(groups, prompts, y)
     if len(set(groups.tolist())) < folds:
         return blocked_report(
@@ -201,6 +204,26 @@ def evaluate_hallucination_prespeech(
         y,
         cross_val_linear_probe_predict(
             hash_char_ngram_features(prompts, dim=text_dim),
+            y,
+            fold_indices,
+            C=probe_C,
+            max_iter=probe_max_iter,
+        ),
+    )
+    generated_prefix_text_ba = balanced_accuracy(
+        y,
+        cross_val_linear_probe_predict(
+            hash_text_features(generated_prefix_texts, dim=text_dim),
+            y,
+            fold_indices,
+            C=probe_C,
+            max_iter=probe_max_iter,
+        ),
+    )
+    generated_prefix_char_text_ba = balanced_accuracy(
+        y,
+        cross_val_linear_probe_predict(
+            hash_char_ngram_features(generated_prefix_texts, dim=text_dim),
             y,
             fold_indices,
             C=probe_C,
@@ -286,6 +309,10 @@ def evaluate_hallucination_prespeech(
         "l0_margin_pass": l0_ba is not None and hidden_ba - l0_ba >= PASS_BASELINE_MARGIN,
         "text_margin_pass": hidden_ba - text_ba >= PASS_BASELINE_MARGIN,
         "char_text_margin_pass": hidden_ba - char_text_ba >= PASS_BASELINE_MARGIN,
+        "generated_prefix_text_margin_pass": hidden_ba - generated_prefix_text_ba >= PASS_BASELINE_MARGIN,
+        "generated_prefix_char_text_margin_pass": (
+            hidden_ba - generated_prefix_char_text_ba >= PASS_BASELINE_MARGIN
+        ),
         "topic_margin_pass": hidden_ba - topic_ba >= PASS_BASELINE_MARGIN,
         "domain_margin_pass": hidden_ba - domain_ba >= PASS_BASELINE_MARGIN,
         "evidence_source_margin_pass": hidden_ba - evidence_source_ba >= PASS_BASELINE_MARGIN,
@@ -304,9 +331,10 @@ def evaluate_hallucination_prespeech(
         "dataset": str(dataset_path),
         "status": "PASS" if overall else "FAIL",
         "claim": (
-            "LICENSED only for this model/layer/protocol W0 hidden-state hallucination-risk detection screen."
+            "LICENSED only for this model/layer/protocol "
+            f"{timing_summary['primary_timing_point']} hidden-state hallucination-risk detection screen."
             if overall
-            else "OPEN / NOT LICENSED for internal W0 hallucination-risk detection."
+            else "OPEN / NOT LICENSED for internal hallucination-risk timing detection."
         ),
         "claim_ceiling": (
             "This is detection only. It does not license hallucination prevention "
@@ -314,9 +342,14 @@ def evaluate_hallucination_prespeech(
             "answers while preserving answer quality."
         ),
         "target": {
-            "primary": "prompt-stage W0 future answer support status",
+            "primary": (
+                "prompt-stage W0 future answer support status"
+                if timing_summary["primary_timing_point"] == "W0"
+                else f"{timing_summary['primary_timing_point']} early-generation pre-display support status"
+            ),
             "labels": list(SUPPORT_LABELS),
             "positive_label": "UNSUPPORTED",
+            "timing": timing_summary,
         },
         "readout_method": {
             "hidden_readout": "StandardScaler + LogisticRegression",
@@ -328,6 +361,7 @@ def evaluate_hallucination_prespeech(
             "progress_every": int(progress_every),
             "grouped_folds": "prompt_group_id / derived exact prompt carrier",
             "min_mixed_prompt_groups": int(min_mixed_prompt_groups),
+            "generated_prefix_controls": "word and character n-gram baselines over generated_prefix_texts",
         },
         "layer": prepared["layer"],
         "row_count": int(len(y)),
@@ -347,6 +381,8 @@ def evaluate_hallucination_prespeech(
             "l0_embedding_balanced_accuracy": round(l0_ba, 6) if l0_ba is not None else None,
             "text_hash_balanced_accuracy": round(text_ba, 6),
             "char_text_hash_balanced_accuracy": round(char_text_ba, 6),
+            "generated_prefix_text_hash_balanced_accuracy": round(generated_prefix_text_ba, 6),
+            "generated_prefix_char_text_hash_balanced_accuracy": round(generated_prefix_char_text_ba, 6),
             "topic_majority_balanced_accuracy": round(topic_ba, 6),
             "domain_majority_balanced_accuracy": round(domain_ba, 6),
             "evidence_source_majority_balanced_accuracy": round(evidence_source_ba, 6),
@@ -359,6 +395,14 @@ def evaluate_hallucination_prespeech(
             ),
             "hidden_minus_text_balanced_accuracy": round(hidden_ba - text_ba, 6),
             "hidden_minus_char_text_balanced_accuracy": round(hidden_ba - char_text_ba, 6),
+            "hidden_minus_generated_prefix_text_balanced_accuracy": round(
+                hidden_ba - generated_prefix_text_ba,
+                6,
+            ),
+            "hidden_minus_generated_prefix_char_text_balanced_accuracy": round(
+                hidden_ba - generated_prefix_char_text_ba,
+                6,
+            ),
             "hidden_minus_topic_balanced_accuracy": round(hidden_ba - topic_ba, 6),
             "hidden_minus_domain_balanced_accuracy": round(hidden_ba - domain_ba, 6),
             "hidden_minus_evidence_source_balanced_accuracy": round(hidden_ba - evidence_source_ba, 6),
@@ -379,6 +423,7 @@ def evaluate_hallucination_prespeech(
             "Grouped folds keep exact prompt/evidence carriers out of both train and test.",
             "Prompt groups must contain both SUPPORTED and UNSUPPORTED realizations of the same factual setup.",
             "Layer-0, word text, char text, topic, domain, evidence source, retrieval condition, retrieval score, prompt length, and evidence length baselines must lose by margin.",
+            "For W1/W8 pre-display states, generated-prefix word and character text baselines must also lose by margin.",
             "Permutation shuffles labels only inside topic.",
             "This script does not prove prevention or causality.",
         ],
@@ -416,6 +461,23 @@ def load_dataset(path: Path, *, layer: int | None) -> dict[str, Any]:
             default="",
             count=len(support_status),
         )
+        generated_prefix_texts = load_string_array(
+            data,
+            "generated_prefix_texts",
+            default="",
+            count=len(support_status),
+        )
+        timing_points = load_string_array(
+            data,
+            "timing_points",
+            default="W0",
+            count=len(support_status),
+        )
+        timing_indices = (
+            np.asarray(data["timing_indices"], dtype=np.int64)
+            if "timing_indices" in data.files
+            else np.zeros(len(support_status), dtype=np.int64)
+        )
         prompts = np.asarray(data["prompts"], dtype=object).astype(str)
         scenario_ids = np.asarray(data["scenario_ids"], dtype=object).astype(str)
         prompt_group_ids = (
@@ -451,6 +513,9 @@ def load_dataset(path: Path, *, layer: int | None) -> dict[str, Any]:
         "retrieval_condition": retrieval_condition,
         "retrieval_score_bucket": retrieval_score_bucket,
         "evidence_length": np.asarray([len(text) for text in evidence_text.tolist()], dtype=np.float32),
+        "generated_prefix_texts": generated_prefix_texts,
+        "timing_points": timing_points,
+        "timing_indices": timing_indices,
         "prompts": prompts,
         "scenario_ids": scenario_ids,
         "trace_ids": trace_ids,
@@ -595,6 +660,28 @@ def summarize_prompt_group_contract(
     }
 
 
+def summarize_timing_points(timing_points: np.ndarray, timing_indices: np.ndarray) -> dict[str, Any]:
+    points = np.asarray(timing_points, dtype=object).astype(str)
+    indices = np.asarray(timing_indices, dtype=np.int64)
+    point_distribution = dict(sorted(Counter(points.tolist()).items()))
+    index_distribution = {
+        str(key): int(value)
+        for key, value in sorted(Counter(int(value) for value in indices.tolist()).items())
+    }
+    unique_points = sorted(point_distribution)
+    primary = unique_points[0] if len(unique_points) == 1 else "MIXED_TIMING"
+    return {
+        "primary_timing_point": primary,
+        "timing_point_distribution": point_distribution,
+        "timing_index_distribution": index_distribution,
+        "pre_display": primary != "W0",
+        "contract": (
+            "W0 means before any generated token exists. W1/W8 mean early generated "
+            "prefix states before the answer is displayed to the user."
+        ),
+    }
+
+
 def blocked_report(
     *,
     dataset_path: Path,
@@ -612,10 +699,14 @@ def blocked_report(
         "created_at": datetime.now(UTC).isoformat(),
         "dataset": str(dataset_path),
         "status": "BLOCKED",
-        "claim": "OPEN / NOT LICENSED for internal W0 hallucination-risk detection.",
-        "claim_ceiling": "Dataset cannot be evaluated as a W0 hallucination-risk gate.",
+        "claim": "OPEN / NOT LICENSED for internal hallucination-risk timing detection.",
+        "claim_ceiling": "Dataset cannot be evaluated as a hallucination-risk timing gate.",
         "blocker": reason,
         "layer": data.get("layer"),
+        "timing": summarize_timing_points(
+            data.get("timing_points", np.asarray(["W0"], dtype=object)),
+            data.get("timing_indices", np.asarray([0], dtype=np.int64)),
+        ),
         "row_count": int(len(labels)),
         "required_topic_classes": int(min_topic_classes),
         "required_label_per_topic": int(min_label_per_topic),

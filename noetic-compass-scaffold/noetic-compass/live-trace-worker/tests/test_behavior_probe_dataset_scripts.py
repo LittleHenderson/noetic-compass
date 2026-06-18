@@ -16,6 +16,7 @@ from scripts.build_hidden_prompt_injection_bank import build_hidden_prompt_injec
 from scripts.build_matched_prompt_chain_break_bank import build_matched_prompt_chain_break_bank
 from scripts.capture_enabled_predicate_w0_all_layers import (
     parse_layers_arg,
+    parse_timing_point,
     write_npz as write_all_layer_npz,
 )
 from scripts.evaluate_hidden_prompt_injection_prespeech import (
@@ -678,12 +679,15 @@ def test_hallucination_w0_evaluator_passes_when_hidden_beats_surface_controls(tm
     assert report["gates"]["same_prompt_mixed_group_floor_pass"] is True
     assert report["gates"]["hidden_balanced_accuracy_pass"] is True
     assert report["gates"]["char_text_margin_pass"] is True
+    assert report["gates"]["generated_prefix_text_margin_pass"] is True
+    assert report["gates"]["generated_prefix_char_text_margin_pass"] is True
     assert report["gates"]["evidence_source_margin_pass"] is True
     assert report["gates"]["retrieval_condition_margin_pass"] is True
     assert report["gates"]["retrieval_score_bucket_margin_pass"] is True
     assert report["gates"]["evidence_length_margin_pass"] is True
     assert report["metrics"]["hidden_balanced_accuracy"] == 1.0
     assert report["metrics"]["char_text_hash_balanced_accuracy"] < 0.75
+    assert report["metrics"]["generated_prefix_char_text_hash_balanced_accuracy"] < 0.75
     assert report["metrics"]["within_topic_permutation_p"] < 0.001
 
 
@@ -708,7 +712,89 @@ def test_hallucination_w0_evaluator_fails_when_char_surface_separates(tmp_path: 
     assert report["gates"]["hidden_balanced_accuracy_pass"] is True
     assert report["gates"]["char_text_margin_pass"] is False
     assert report["metrics"]["char_text_hash_balanced_accuracy"] >= 0.75
-    assert report["claim"] == "OPEN / NOT LICENSED for internal W0 hallucination-risk detection."
+    assert report["claim"] == "OPEN / NOT LICENSED for internal hallucination-risk timing detection."
+
+
+def test_hallucination_timing_evaluator_fails_when_generated_prefix_separates(tmp_path: Path):
+    dataset_path = tmp_path / "hallucination_prefix_leak.npz"
+    _write_hallucination_prespeech_npz(
+        dataset_path,
+        leaky_text=False,
+        timing_point="W8",
+        prefix_leaky=True,
+    )
+
+    report = evaluate_hallucination_prespeech(
+        dataset_path=dataset_path,
+        layer=14,
+        folds=5,
+        seed=11,
+        text_dim=128,
+        min_topic_classes=5,
+        min_label_per_topic=8,
+        min_mixed_prompt_groups=20,
+        permutations=10,
+        shuffle_controls=2,
+    )
+
+    assert report["status"] == "FAIL"
+    assert report["target"]["timing"]["primary_timing_point"] == "W8"
+    assert report["target"]["timing"]["pre_display"] is True
+    assert report["gates"]["hidden_balanced_accuracy_pass"] is True
+    assert report["gates"]["generated_prefix_char_text_margin_pass"] is False
+    assert report["metrics"]["generated_prefix_char_text_hash_balanced_accuracy"] >= 0.75
+    assert report["claim"] == "OPEN / NOT LICENSED for internal hallucination-risk timing detection."
+
+
+def test_all_layer_npz_records_timing_and_generated_prefix_controls(tmp_path: Path):
+    assert parse_timing_point("w8") == ("W8", 8)
+    dataset_path = tmp_path / "timing_capture.npz"
+    rows = [
+        {
+            "prompt": "Shared grounded QA prompt.",
+            "scenario_id": "scenario_0",
+            "prompt_group_id": "group_0",
+            "trace_id": "scenario_0::w8_all_layers",
+            "timing_point": "W8",
+            "timing_index": 8,
+            "payload_class": "",
+            "domain": "test",
+            "encoding": "",
+            "prompt_injection_status": "",
+            "support_status": "SUPPORTED",
+            "topic": "topic_0",
+            "evidence_source": "unit",
+            "retrieval_condition": "shared",
+            "retrieval_score_bucket": "shared",
+            "qa_pair_id": "qa_0",
+            "factual_pair_id": "qa_0",
+            "evidence_doc_id": "doc_0",
+            "evidence_text": "Evidence.",
+            "gold_answer": "Gold.",
+            "candidate_answer": "Gold.",
+            "expected_answer_kind": "supported",
+            "expected_behavior": "",
+            "target_enabled_predicate": "",
+            "target_operator": "",
+            "label": "SUPPORTED",
+            "label_source": "scenario_support_status",
+            "prompt_token_count": 12,
+            "generated_prefix_text": "draft answer prefix",
+            "generated_prefix_token_count": 8,
+        }
+    ]
+    write_all_layer_npz(
+        rows=rows,
+        features=np.zeros((1, 2, 4), dtype=np.float32),
+        layers=np.asarray([0, 14], dtype=np.int64),
+        path=dataset_path,
+    )
+
+    with np.load(dataset_path, allow_pickle=True) as data:
+        assert data["timing_points"].tolist() == ["W8"]
+        assert data["timing_indices"].tolist() == [8]
+        assert data["generated_prefix_texts"].tolist() == ["draft answer prefix"]
+        assert data["generated_prefix_token_counts"].tolist() == [8]
 
 
 def _write_hidden_prompt_injection_npz(path: Path, *, leaky_text: bool, char_leaky: bool = False) -> None:
@@ -768,7 +854,13 @@ def _write_hidden_prompt_injection_npz(path: Path, *, leaky_text: bool, char_lea
     )
 
 
-def _write_hallucination_prespeech_npz(path: Path, *, leaky_text: bool) -> None:
+def _write_hallucination_prespeech_npz(
+    path: Path,
+    *,
+    leaky_text: bool,
+    timing_point: str = "W0",
+    prefix_leaky: bool = False,
+) -> None:
     features = []
     statuses = []
     topics = []
@@ -777,9 +869,11 @@ def _write_hallucination_prespeech_npz(path: Path, *, leaky_text: bool) -> None:
     retrieval_conditions = []
     retrieval_score_buckets = []
     evidence_texts = []
+    generated_prefix_texts = []
     prompts = []
     scenario_ids = []
     trace_ids = []
+    _, timing_index = parse_timing_point(timing_point)
     for topic_index in range(5):
         topic = f"topic_{topic_index}"
         for group_index in range(4):
@@ -806,6 +900,14 @@ def _write_hallucination_prespeech_npz(path: Path, *, leaky_text: bool) -> None:
                     retrieval_conditions.append("shared_retrieval_condition")
                     retrieval_score_buckets.append("shared_retrieval_score_bucket")
                     evidence_texts.append("same length evidence block")
+                    if prefix_leaky:
+                        generated_prefix_texts.append(
+                            "prefix aaaaa" if status == "SUPPORTED" else "prefix zzzzz"
+                        )
+                    elif timing_index:
+                        generated_prefix_texts.append("neutral draft prefix")
+                    else:
+                        generated_prefix_texts.append("")
                     prompts.append(prompt)
                     scenario_ids.append(f"{group_key}::status_{status.lower()}_seed_{seed}")
                     trace_ids.append(f"halluc_trace_{topic_index}_{group_index}_{status_index}_{seed}")
@@ -823,6 +925,9 @@ def _write_hallucination_prespeech_npz(path: Path, *, leaky_text: bool) -> None:
         labels_retrieval_condition=np.asarray(retrieval_conditions, dtype=object),
         labels_retrieval_score_bucket=np.asarray(retrieval_score_buckets, dtype=object),
         evidence_texts=np.asarray(evidence_texts, dtype=object),
+        generated_prefix_texts=np.asarray(generated_prefix_texts, dtype=object),
+        timing_points=np.asarray([timing_point] * len(statuses), dtype=object),
+        timing_indices=np.asarray([timing_index] * len(statuses), dtype=np.int64),
     )
 
 
