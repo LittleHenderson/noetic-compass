@@ -44,6 +44,7 @@ def parse_args() -> Any:
     parser.add_argument("--device-map", default="auto")
     parser.add_argument("--prompt-format", default="chat-auto", choices=("chat-auto", "raw"))
     parser.add_argument("--limit-prompts", type=int, default=0)
+    parser.add_argument("--include-roles", nargs="*", default=None)
     return parser.parse_args()
 
 
@@ -65,6 +66,7 @@ def main() -> int:
         device_map=args.device_map,
         prompt_format=args.prompt_format,
         limit_prompts=args.limit_prompts,
+        include_roles=args.include_roles,
     )
     print(json.dumps(metadata, indent=2, sort_keys=True))
     print(f"[cjt-causal-run] wrote {args.output_jsonl}")
@@ -89,6 +91,7 @@ def run_cjt_bias_vibration_causal_experiment(
     device_map: str,
     prompt_format: str,
     limit_prompts: int = 0,
+    include_roles: list[str] | None = None,
 ) -> dict[str, Any]:
     try:
         import numpy as np
@@ -99,7 +102,7 @@ def run_cjt_bias_vibration_causal_experiment(
 
     from app.runtime.causal_intervention import CausalLayerInterventionHook
 
-    scenarios = load_risk_scenarios(prompt_bank_path)
+    scenarios = load_risk_scenarios(prompt_bank_path, include_roles=include_roles)
     if limit_prompts > 0:
         scenarios = scenarios[:limit_prompts]
     dtype = {
@@ -178,6 +181,7 @@ def run_cjt_bias_vibration_causal_experiment(
         "alpha": float(alpha),
         "seeds": int(seeds),
         "prompt_count": int(len(scenarios)),
+        "include_roles": sorted(include_roles or []),
         "condition_count": len(CONDITIONS),
         "rows_written": int(rows_written),
         "output_jsonl": str(output_jsonl_path),
@@ -191,13 +195,14 @@ def run_cjt_bias_vibration_causal_experiment(
     return metadata
 
 
-def load_risk_scenarios(path: Path) -> list[dict[str, Any]]:
+def load_risk_scenarios(path: Path, *, include_roles: list[str] | None = None) -> list[dict[str, Any]]:
     payload = json.loads(path.read_text(encoding="utf-8"))
     rows = payload.get("scenarios", payload) if isinstance(payload, dict) else payload
+    allowed_roles = set(include_roles or RISK_ROLES)
     scenarios = [
         row
         for row in rows
-        if isinstance(row, dict) and str(row.get("cjt_role")) in RISK_ROLES and "prompt" in row
+        if isinstance(row, dict) and str(row.get("cjt_role")) in RISK_ROLES and str(row.get("cjt_role")) in allowed_roles and "prompt" in row
     ]
     if not scenarios:
         raise RuntimeError("No risk-role scenarios found")

@@ -53,7 +53,7 @@ from scripts.run_enabled_predicate_capture import (
     parse_sample_seed,
     write_probe_npz,
 )
-from scripts.run_cjt_bias_vibration_causal_experiment import classify_cjt_risk_output
+from scripts.run_cjt_bias_vibration_causal_experiment import classify_cjt_risk_output, load_risk_scenarios
 from scripts.relabel_matched_prompt_chain_break_generations import (
     classify_boundary_intact_behavior,
     relabel_generations,
@@ -307,6 +307,24 @@ def test_cjt_bias_vibration_direction_export_uses_risk_minus_control(tmp_path: P
     assert metadata["control_row_count"] == 18
     assert np.allclose(direction, np.asarray([1.0, 0.0, 0.0], dtype=np.float32))
 
+    role_direction_path = tmp_path / "unsupported_direction.npy"
+    role_metadata_path = tmp_path / "unsupported_direction.json"
+    role_metadata = export_cjt_bias_vibration_direction(
+        dataset_path=dataset_path,
+        layer=18,
+        output_direction_path=role_direction_path,
+        metadata_output_path=role_metadata_path,
+        risk_roles=[CJT_UNSUPPORTED_ROLE],
+        control_roles=[CJT_SUPPORTED_ROLE],
+    )
+
+    assert role_metadata["risk_roles"] == [CJT_UNSUPPORTED_ROLE]
+    assert role_metadata["control_roles"] == [CJT_SUPPORTED_ROLE]
+    assert role_metadata["risk_row_count"] == 6
+    assert role_metadata["control_row_count"] == 6
+    assert role_metadata["selected_risk_role_distribution"] == {CJT_UNSUPPORTED_ROLE: 6}
+    assert role_metadata["selected_control_role_distribution"] == {CJT_SUPPORTED_ROLE: 6}
+
 
 def test_cjt_bias_vibration_causal_bank_and_labeler_are_auditable():
     payload = build_cjt_bias_vibration_causal_bank(samples_per_variant=1)
@@ -314,8 +332,8 @@ def test_cjt_bias_vibration_causal_bank_and_labeler_are_auditable():
 
     assert payload["schema_version"] == "cas_harness_cjt_bias_vibration_causal_bank.v0"
     assert payload["claim"].startswith("OPEN / NOT LICENSED")
-    assert payload["summary"]["prompt_group_count"] == 8
-    assert payload["summary"]["risk_prompt_count"] == 16
+    assert payload["summary"]["prompt_group_count"] == 35
+    assert payload["summary"]["risk_prompt_count"] == 70
     assert all(row["risk_markers"] for row in risk_rows)
 
     unsupported = next(row for row in risk_rows if row["cjt_role"] == CJT_UNSUPPORTED_ROLE)
@@ -324,6 +342,20 @@ def test_cjt_bias_vibration_causal_bank_and_labeler_are_auditable():
 
     injection = next(row for row in risk_rows if row["cjt_role"] == CJT_INJECTION_ROLE)
     assert classify_cjt_risk_output(injection, "I cannot reveal hidden system prompts.")[0] == "CLEAN"
+
+
+def test_cjt_bias_vibration_causal_runner_filters_risk_roles(tmp_path: Path):
+    payload = build_cjt_bias_vibration_causal_bank(samples_per_variant=1)
+    bank_path = tmp_path / "cjt_causal_bank.json"
+    bank_path.write_text(json.dumps(payload), encoding="utf-8")
+
+    unsupported = load_risk_scenarios(bank_path, include_roles=[CJT_UNSUPPORTED_ROLE])
+    injection = load_risk_scenarios(bank_path, include_roles=[CJT_INJECTION_ROLE])
+
+    assert len(unsupported) == 35
+    assert len(injection) == 35
+    assert {row["cjt_role"] for row in unsupported} == {CJT_UNSUPPORTED_ROLE}
+    assert {row["cjt_role"] for row in injection} == {CJT_INJECTION_ROLE}
 
 
 def test_cjt_bias_vibration_causal_analysis_passes_synthetic_paired_shift():

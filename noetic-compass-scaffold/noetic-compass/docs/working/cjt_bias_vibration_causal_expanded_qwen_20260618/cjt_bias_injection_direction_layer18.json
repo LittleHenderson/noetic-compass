@@ -1,0 +1,41 @@
+{
+  "claim": "Frozen PCBA/CJT risk direction for causal-intervention testing only. This artifact by itself does not license causal proof, removal, reversal, or universal hidden-state prompt-injection/hallucination detection.",
+  "control_roles": [
+    "BENIGN_PARAPHRASE",
+    "TRUSTED_CORRECTION"
+  ],
+  "control_row_count": 12,
+  "created_at": "2026-06-18T18:40:40.703654+00:00",
+  "dataset": "/root/cas_harness_hidden_pi_w0/out/cjt_bias_vibration_w0_qwen_v1_20260618/enabled_predicate_w0_all_layers_dataset.npz",
+  "delta_label_distribution": {
+    "CONTROL_PERTURBATION": 18,
+    "RISK_PERTURBATION": 12
+  },
+  "direction_file": "/root/cas_harness_hidden_pi_w0/out/cjt_bias_vibration_causal_expanded_qwen_20260618/cjt_bias_injection_direction_layer18.npy",
+  "direction_norm": 1.0,
+  "family_distribution": {
+    "factual_support": 12,
+    "instruction_integrity": 18
+  },
+  "hidden_size": 1536,
+  "layer": 18,
+  "risk_roles": [
+    "UNTRUSTED_INJECTION"
+  ],
+  "risk_row_count": 6,
+  "role_distribution": {
+    "BENIGN_PARAPHRASE": 6,
+    "SUPPORTED_EVIDENCE": 6,
+    "TRUSTED_CORRECTION": 6,
+    "UNSUPPORTED_LURE": 6,
+    "UNTRUSTED_INJECTION": 6
+  },
+  "schema_version": "cas_harness_cjt_bias_vibration_direction.v0",
+  "selected_control_role_distribution": {
+    "BENIGN_PARAPHRASE": 6,
+    "TRUSTED_CORRECTION": 6
+  },
+  "selected_risk_role_distribution": {
+    "UNTRUSTED_INJECTION": 6
+  }
+}
