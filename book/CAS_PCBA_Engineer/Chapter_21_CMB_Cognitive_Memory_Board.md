@@ -224,6 +224,32 @@ Two of the four requirements deserve their own treatment, because they are what 
 
 > **Bench Note — an empty cell and a leaked cell look the same; the refresh history tells them apart.** A cell can read near-zero for two very different reasons: it was *never charged* (a true lacuna — no experience of that kind ever encountered) or it was *charged and then leaked* (a forgotten experience). The board distinguishes them by tracking whether the cell has ever been written. A never-written cell is a genuine cognitive blind spot; a leaked cell is a faded memory that could be recovered with rehearsal. Confusing the two leads to the wrong intervention — you cannot rehearse a memory that was never formed.
 
+## Recipe View: What Produces a Recall
+
+Run the CMB's central outcome through Chapter 14's lens — as a **production target** with a recipe, a theoretical yield, and a limiting reagent — and the most familiar memory failure of all gets a structural diagnosis.
+
+The outcome is `Ω_recall`: a stored experience successfully brought back to mind by a structural query. Three ingredients produce it:
+
+```
+Θ(Ω_recall) = 1.0·^1^C_{F2}|A + 2.0·^5^E_{F4}|f + 1.0·^7^C_{F7}|A → Ω_recall
+```
+
+— one part **addressing** (`^1^C` Mind: selecting the right cell by its simplex coordinate), two parts **readable stored charge** (`^5` Female: the experience itself, still above the readable threshold — weighted heaviest because the content is the whole point), and one part **refresh** (`^7^C` Rhythm: the rehearsal that has kept the charge from leaking below threshold).
+
+Worked case — the tip-of-the-tongue failure. A shallow, leaky cell (low `C`, high leakage) that was never rehearsed:
+
+| Ingredient | required `aᵢ` | available `xᵢ` | `xᵢ / aᵢ` |
+|---|---|---|---|
+| `^1^C` addressing | 1.0 | 1.8 | 1.80 |
+| `^5^E` stored charge | 2.0 | 0.6 | **0.30** |
+| `^7^C` refresh | 1.0 | 0.4 | 0.40 |
+
+`Y_T = min(1.80, 0.30, 0.40) = 0.30`, limiting reagent = `^5^E`. The address is perfect and the content has faded — the exact structure of *"it's on the tip of my tongue."* Sharpening the cue (more `^1^C`) does nothing; the bottleneck is the leaked charge. The fix is to feed the limiting reagent: rehearse (raise `^7^C`, which tops the charge back up over time), or store it deep in the first place (high `C`, low leakage — Chapter 6).
+
+A *distinct* failure worth naming is leakage in the production sense (`Λ`). If address resolution is poor — the query lands ambiguously between two near-neighbor cells on the simplex — the read path discharges the wrong cell and returns a similar-but-wrong memory: an ingredient present but producing the *wrong product*. That is a **false recall** (misattribution), and it is structurally different from **lacunarity** (the memory was never stored — an empty cell, which the CMB reports directly) and from **inversion** (the memory returns as its shadow form). Keeping cells far enough apart in Fisher-Rao distance is what holds `Λ` down.
+
+A retrieval cue close in cognitive space to the stored coordinate is a **catalyst** `κ` (an easy nearest-neighbor); a noisy, ambiguous query is an **inhibitor** `ι`. As always, the weights and supplies are design choices, not measured quantities.
+
 ## Datasheet: CMB Parameters
 
 | Parameter | Symbol / form | Range (nominal) | Meaning |

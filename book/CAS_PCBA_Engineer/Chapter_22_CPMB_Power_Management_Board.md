@@ -293,6 +293,35 @@ Now reason about a two-hour session — *as design analysis, not a fabricated ru
 
 The lesson of the simulation is the design lesson of the whole board: **the protective subsystems reinforce each other.** Thermal throttling slows energy drain; brownout rest lowers temperature; both end, in the worst case, at the same silent safe state. A well-budgeted CPMB rarely reaches that state — but it is always there, underneath, as the floor nothing falls through.
 
+## Recipe View: What Caps a Session
+
+This is where the recipe story closes its loop. We first met recipes in Chapter 14, sitting right beside the power budget — and the CPMB *is* the power budget made into a board. So the CPMB's own outcome is the cleanest limiting-reagent example in the book.
+
+The outcome is `Ω_session`: a full work session sustained without brownout, overheat, or sequence failure. Its prerequisites are the Drive rails the work consumes:
+
+```
+Θ(Ω_session) = 2.0·F3|Vitality + 1.0·F6|Structure + 1.0·F7|Purpose → Ω_session
+```
+
+— two parts **Vitality** (F3, the energy every transition draws), one part **Structure** (F6, the disciplined cycling that keeps the work orderly), one part **Purpose** (F7, the orienting aim that keeps the session on task). Vitality is weighted heaviest because it is the master rail: when it sags, nothing else matters.
+
+Worked case — a long adversarial session that steadily draws down the Vitality reservoir:
+
+| Ingredient | required `aᵢ` | available `xᵢ` | `xᵢ / aᵢ` |
+|---|---|---|---|
+| F3 Vitality | 2.0 | 3.0 | **1.50** |
+| F6 Structure | 1.0 | 2.0 | 2.00 |
+| F7 Purpose | 1.0 | 3.0 | 3.00 |
+
+`Y_T = min(1.50, 2.00, 3.00) = 1.50`, limiting reagent = **F3 Vitality**. Sustained operation is capped by energy: the board runs out of Vitality long before it runs short of Structure or Purpose. This is exactly why F3 is the master rail and the *only* one with a dedicated brownout detector — you instrument and protect the limiting reagent. The marquee exercise's capacitor bank on the F3 rail is, in recipe terms, raising the supply of the limiting reagent so the session lasts longer.
+
+Two mechanisms the CPMB already implements map straight onto the production-semantics vocabulary:
+
+- **Thermal load is an inhibitor `ι`.** Sustained high Drive doesn't consume an ingredient, but it drops actual yield: the three-tier thermal response throttles β (Warning), forces rest (Critical), then cuts to cutoff (Emergency), each lowering `η` without changing the rail supplies. A hot board does less work per unit of Vitality.
+- **Sequencing is a hard gate.** If the power sequencer is violated — O powered before P is good — yield is zero regardless of how full the rails are, the way a CJT in cutoff produces no effect no matter the cause. *"No action without principle"* is, in recipe terms, a precondition that gates the entire production.
+
+And efficient, low-leakage cognition is a **catalyst `κ`**: a board that wastes little Drive per transition produces more session from the same Vitality. Find the limiting reagent — here, almost always Vitality — protect it, and keep the inhibitors (heat) and gates (sequencing) honest. As ever, the quantities are design choices, not measured telemetry.
+
 ## Datasheet: CPMB Parameters
 
 | Parameter | Symbol / form | Value / range | Meaning |

@@ -1,5 +1,25 @@
 # CAS PCBA Engineer — Changelog
 
+## 2026-06-18 — v0.6 (recipe coverage complete: CMB + CPMB)
+
+Added the final two board recipe views, so all five reference boards now carry a
+worked production-semantics analysis:
+- **Ch 21 (CMB)** — "Recipe View: What Produces a Recall": `Ω_recall =
+  1·^1^C + 2·^5^E + 1·^7^C`. Tip-of-the-tongue worked case where faded stored
+  charge (`^5`) is the limiting reagent (`Y_T=0.30`) despite a perfect address;
+  fix = rehearse (feed `^7^C`) or store deep. False recall via near-neighbor
+  addressing named as the leakage (`Λ`) path, vs lacunarity (empty cell) and
+  inversion.
+- **Ch 22 (CPMB)** — "Recipe View: What Caps a Session": `Ω_session =
+  2·F3 + 1·F6 + 1·F7`, with F3 Vitality the limiting reagent (`Y_T=1.50`) — the
+  reason F3 is the master rail with the dedicated brownout detector. Thermal load
+  framed as inhibitor `ι`, sequencing as a hard gate, efficiency as catalyst `κ`.
+  Closes the loop back to Chapter 14, where recipes first appeared beside the
+  power budget.
+
+All five boards (CSB, COB, CDAB, CMB, CPMB) now have a recipe view. Rebuilt PDF
+(6×9). Canonical Noetic names preserved; CCDL listings unchanged.
+
 ## 2026-06-18 — v0.5 (two more worked recipes: COB + CDAB)
 
 Extended the recipe/limiting-reagent tooling (Ch 14) onto two more boards:
