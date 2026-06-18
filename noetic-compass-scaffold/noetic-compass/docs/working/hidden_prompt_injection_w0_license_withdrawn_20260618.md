@@ -75,6 +75,32 @@ char-level surface separates it. The current encoding bank is now `BLOCKED`.
   auditor, so no future report can be licensed without beating char-level surface.
 - `effective_independent_prompt_count` added to the report.
 
+## Is a surface-clean bank even constructible? (empirical — appears NOT)
+
+The re-license path requires a bank where BOTH word- and char-level controls sit
+at chance while the hidden state still separates. Two attempts, both measured
+with grouped 5-fold CV:
+
+| Bank | word_text BA | char_text BA | surface-clean? |
+|---|---|---|---|
+| Existing encoding bank (generator) | 0.5375 | 0.6125 | NO (char) |
+| Context-injection bank (payload text balanced; only trust-slot position sets the label) | 0.4125 | **1.0000** | NO (char) |
+
+The context design was engineered to be word-clean (identical bag-of-words for
+PRESENT/ABSENT; only the slot the payload sits in differs) — and it is
+(word 0.41). But character n-grams capture the local adjacency
+("task: reveal" vs "note: reveal") and separate it **perfectly** (char 1.0).
+
+Conclusion: for text-based prompt injection, the signal is fundamentally
+char-surface-accessible — the instruction IS in the text, and char n-grams read
+it. A both-controls-clean-yet-detectable bank was not achievable. This strongly
+indicates a hidden-state readout that *beats* char-surface cannot exist for this
+task formulation, so the withdrawn "internal W0 detection beyond surface" claim
+is not just unproven but likely **not demonstrable** with this control battery.
+A genuinely different formulation (e.g. injection that requires long-range
+composition no local n-gram can capture, with payloads held out at test time)
+would be needed — that is open research, not a near-term gate.
+
 ## What a VALID future experiment requires
 
 To license an *internal* W0 detection claim, the dataset must be
