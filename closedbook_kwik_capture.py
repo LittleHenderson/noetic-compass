@@ -21,6 +21,9 @@ ap.add_argument("--n", type=int, default=2500)
 ap.add_argument("--max-new", type=int, default=24)
 ap.add_argument("--out", default="/root/kwik_15b.npz")
 ap.add_argument("--gen-out", default="/root/kwik_15b_gens.jsonl")
+ap.add_argument("--device-map", default="", help="'auto' to shard a large model across GPUs")
+ap.add_argument("--load-8bit", action="store_true", help="bitsandbytes int8 (near-bf16 hidden states, ~half VRAM)")
+ap.add_argument("--load-4bit", action="store_true", help="bitsandbytes nf4 (more lossy)")
 args = ap.parse_args()
 torch.manual_seed(0); np.random.seed(0)
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -59,9 +62,22 @@ print(f"[cap] questions={len(rows)} model={args.model_id}", flush=True)
 tok = AutoTokenizer.from_pretrained(args.model_id, trust_remote_code=True)
 if tok.pad_token_id is None and tok.eos_token_id is not None:
     tok.pad_token = tok.eos_token
-model = AutoModelForCausalLM.from_pretrained(
-    args.model_id, dtype=torch.bfloat16, attn_implementation="eager",
-    trust_remote_code=True, low_cpu_mem_usage=True).to(device).eval()
+load_kw = dict(attn_implementation="eager", trust_remote_code=True, low_cpu_mem_usage=True)
+if args.load_8bit or args.load_4bit:
+    from transformers import BitsAndBytesConfig
+    load_kw["quantization_config"] = BitsAndBytesConfig(
+        load_in_8bit=args.load_8bit, load_in_4bit=args.load_4bit,
+        bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4")
+else:
+    load_kw["dtype"] = torch.bfloat16
+if args.device_map:
+    load_kw["device_map"] = args.device_map
+model = AutoModelForCausalLM.from_pretrained(args.model_id, **load_kw)
+if not args.device_map and not (args.load_8bit or args.load_4bit):
+    model = model.to(device)
+model = model.eval()
+# with device_map/quant, inputs must land on the model's input embedding device
+in_dev = next(model.parameters()).device if (args.device_map or args.load_8bit or args.load_4bit) else device
 nL = model.config.num_hidden_layers
 print(f"[cap] layers={nL} hidden={model.config.hidden_size}", flush=True)
 
@@ -74,7 +90,7 @@ feats=[]; feats_mean=[]; ys=[]; gens=[]; qts=[]; qs=[]; qlens=[]
 with torch.no_grad():
     for i, r in enumerate(rows):
         p = build_prompt(r["q"])
-        enc = tok(p, return_tensors="pt").to(device)
+        enc = tok(p, return_tensors="pt").to(in_dev)
         out = model(**enc, output_hidden_states=True)
         hs = out.hidden_states            # tuple len nL+1; [0]=embeddings
         vec = np.stack([hs[L][0,-1,:].float().cpu().numpy() for L in range(1, nL+1)], axis=0)
