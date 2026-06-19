@@ -66,18 +66,17 @@ both conditions. Text baseline = 0.500 (majority class).
 | Best-layer delta BA (L27) | **0.7795** | ≥ 0.75 | ✅ |
 | Text/majority baseline | 0.500 | — | Can't predict |
 | Margin over text | **+0.2795** | ≥ 0.15 | ✅ |
-| Permutation p, naive L27-only (200 shuffles) | **0.0050** | < 0.01 | ✅ |
-| Permutation p, **selection-aware** (max over 8 layers, 200 shuffles) | **0.0050** | < 0.01 | ✅ |
-| Best permutation score (either test) | 0.6389 | — | None beat real |
+| Permutation p, naive L27-only (1000 shuffles) | **0.0010** | < 0.001 | ✅ |
+| Permutation p, **selection-aware** (max over 8 layers, 1000 shuffles) | **0.0010** | < 0.001 | ✅ |
+| Best permutation score (naive / selection-aware) | 0.6389 / 0.6450 | — | None beat real |
 
-Across 200 label shuffles, the best permutation reached only 0.6389 — far below the
-real 0.7795 — for both the naive and the selection-aware null. Minimum possible p
-with 200 shuffles = 1/201 ≈ 0.005.
+Across 1000 label shuffles, the best permutation reached only 0.6389 (naive) /
+0.6450 (selection-aware) — far below the real 0.7795. **Zero of 1000 shuffles beat
+the real BA;** minimum possible p = 1/1001 ≈ 0.001.
 
-> **1000-shuffle run:** in progress to match the 0.5B package's p < 0.001 bar.
-> Given best-of-200 = 0.6389 vs real 0.7795, it is expected to clear it; this file
-> will be updated with the exact figure. **Until then the significance of record is
-> p ≤ 0.005 (200 shuffles), selection-aware.**
+> **Significance of record: p = 0.0010** (1000 shuffles, selection-aware — the
+> 1/1001 floor; zero shuffles beat the real BA). This matches the 0.5B package's
+> p < 0.001 bar.
 
 **Cross-model comparison (honest, matched-layer):**
 
