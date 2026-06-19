@@ -75,6 +75,26 @@ overfit; the shortfall is a genuine *information ceiling*, not a generalization 
 (0.7345), margin (+0.116), and residual (0.667) still fail. Coupled detector is a HYBRID (reads
 generations), recorded as such. Verdict: still **NOT LICENSED**. Report: `lic_report_coupled_14b.json`.
 
+## More data + stronger probe (N=8000, PCA-256, concat readouts) — floor now PASSES
+
+Pushed the two cheap levers I had earlier dismissed: 3× the data (N=8000) and a stronger probe
+(PCA-256 on concat[last,mean] per layer). Result moved every gate up; two now pass.
+
+| Gate | N=2500 | N=8000 | Need | Status |
+|---|---|---|---|---|
+| accuracy_floor | 0.748 | **0.7553** (L46) | 0.75 | **PASS** |
+| margin_over_text | +0.121 | **+0.1307** (text 0.6246) | 0.15 | fail by 0.019 |
+| residual | 0.676 | **0.692** | 0.75 | fail by 0.058 |
+| held-out | 0.737 | **0.7392** | 0.75 | fail by 0.011 |
+
+Correction to the earlier "flat curve" claim: more data DID help (floor crossed 0.75; all gaps
+tightened). The binding wall is now **residual (0.692)** — the hidden signal orthogonal to question
+text. Cheap levers add ~0.01-0.015 each and won't bridge 0.058 alone; that needs a stronger
+parametric "do-I-know-this" signal, i.e. a bigger model in full precision (32B/72B). Plausibly
+bigger models help residual *specifically*: a small model encodes "this looks hard" (text-correlated,
+stripped by residual); a large model encodes "I know/don't know this fact" (text-orthogonal, survives).
+Report: `lic_report_fast_14b_n8k.json`. Next lever: bigger model on a bigger GPU (A100/H100) pod.
+
 ## What this means — it is a wall, not a lack of effort
 
 Levers exhausted: best framing (closed-book KWIK) · scale 1.5B→7B→14B · readout last-token +
