@@ -76,13 +76,40 @@ first-token text leak. Under leakage-safe grouped CV with hard controls the sign
 collapses to ~0.63 and **loses to text**. `docs/working/HALLUCINATION_AUDIT_PACKAGE_QWEN1.5B.md`
 is corrected/superseded accordingly.
 
-## What would legitimately license it (requires NEW data)
+## Why this framing cannot license a pre-answer detector (structural, not just empirical)
 
-A **teacher-forced identical-prefix capture**: force *both* conditions to emit a
-byte-identical answer prefix (same template **and** same first token), and capture
-the hidden state at the position **right before the answer-value token**, with the
-value's groundedness as the label. That neutralizes every text control (prompt,
-prefix, token all identical) and isolates whether the hidden state encodes
-groundedness *before the value is revealed*. If hidden BA ≥ 0.75 with margin ≥ 0.15
-there, the claim licenses honestly. That capture does not exist yet and cannot be
-fabricated; it is the required next experiment.
+The generator (`/root/scripts/sample_outcome_native_hallucination_generations.py`)
+**samples** completions (temperature 0.8) and labels each by whether the **sampled
+value** matches the evidence. So the label is *created by the act of sampling the
+value* — which is the visible text.
+
+Consequence: before the value token is sampled, the model's hidden state is
+**identical** regardless of which value will be drawn (same prefix → same state →
+then a stochastic draw decides SUPPORTED vs UNSUPPORTED). There is therefore **no
+pre-value hidden state that can predict the label** — the label does not exist yet.
+The signal only appears at/after the value token, where the value *text* reveals the
+label too. That is why the margin is ≤ 0 at every window:
+
+- **A teacher-forced identical-prefix capture does NOT fix this.** Pre-value the
+  state is identical across outcomes; post-value the text leaks. Running it would be
+  wasted GPU. (Earlier drafts of this file proposed it — that was wrong.)
+
+For this **outcome-native sampling** framing, a hidden-state detector that beats text
+is impossible by construction.
+
+## The genuinely tractable reframe (a DIFFERENT, licensable claim)
+
+Make the label a **deterministic function of the input**, not of a sample:
+
+1. Decode **greedily** (`do_sample=False`) so each prompt+evidence has ONE outcome.
+2. Judge it; label the **prompt** by that deterministic outcome
+   ("will this input be answered SUPPORTED or UNSUPPORTED under greedy decoding?").
+3. Test the **W0 (pre-generation)** hidden state — which encodes prompt+evidence —
+   against the same hard text-control panel and gates.
+
+This is a different product claim ("predict an input's hallucination-proneness")
+than "detect that this output is a hallucination," and it is not structurally barred,
+because W0 now legitimately differs by label across prompts. It requires a new greedy
+generation + relabel pass (tooling exists on the pod). It is the honest next
+experiment; it may still fail the margin gate, but unlike teacher-forcing it is not
+futile by construction.
