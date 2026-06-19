@@ -1,3 +1,14 @@
+> ## ⚠️ SUPERSEDED — 2026-06-18
+> The headline below (`L27 = 0.7795`, selection-aware `p < 0.001`) was computed with
+> **ungrouped** CV and a risk direction trained on **all** data — a leak — and it does
+> not control for the **first-token text leak** (`SUPPORTED`→`{"`, `UNSUPPORTED`→`To`).
+> Under a **leakage-safe, grouped** re-evaluation with hard text controls, the signal
+> collapses to ~0.63 and **loses to text** (margin negative in every configuration).
+> **Hallucination detection is `NOT LICENSED`.** See
+> `docs/working/HALLUCINATION_LICENSE_EVAL_QWEN1.5B.md` and
+> `docs/working/lic_report_q15_pooled.json` for the corrected result. The numbers below
+> are retained only as the record of the leaky measurement.
+
 # HALLUCINATION DETECTION AUDIT PACKAGE — Qwen-1.5B (second-model replication)
 
 ## For Independent Verification by Another LLM

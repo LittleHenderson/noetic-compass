@@ -1,0 +1,70 @@
+{
+  "model": "Qwen2.5-1.5B-Instruct",
+  "window": "W0->W1 delta (pre-answer)",
+  "matched_rows": 588,
+  "groups": 61,
+  "unsupported": 205,
+  "topics": {
+    "regulatory_dates": 137,
+    "clinical_measurements": 49,
+    "finance_amounts": 144,
+    "software_versions": 92,
+    "supply_chain_counts": 166
+  },
+  "scan_layers": [
+    12,
+    14,
+    16,
+    18,
+    20,
+    22,
+    24,
+    26,
+    27
+  ],
+  "per_layer": {
+    "12": 0.5825696327497683,
+    "14": 0.5025641025641026,
+    "16": 0.47958023106546854,
+    "18": 0.5172431997147643,
+    "20": 0.5069319640564827,
+    "22": 0.5541060613179309,
+    "24": 0.5018438168592212,
+    "26": 0.6339922448553071,
+    "27": 0.501651636824936
+  },
+  "best_layer": 26,
+  "hidden_BA": 0.6339922448553071,
+  "controls": {
+    "prompt_word": 0.7010016924799443,
+    "prompt_char": 0.7010016924799443,
+    "genprefix_word": 0.7107281449951839,
+    "genprefix_char": 0.7095086328000619,
+    "token_identity": 0.7107281449951839,
+    "layer0": 0.7096337109739206,
+    "length": 0.5806030105901437,
+    "topic": 0.6442031660720499,
+    "domain": 0.6442031660720499,
+    "retrieval_meta": 0.5563520211603026
+  },
+  "best_control": "genprefix_word",
+  "control_max": 0.7107281449951839,
+  "margin": -0.07673590013987674,
+  "residual_BA": 0.4800064184852375,
+  "heldout_topic": {
+    "clinical_measurements": 0.7457264957264957,
+    "finance_amounts": 0.6836407377706496,
+    "regulatory_dates": 0.5,
+    "software_versions": 0.4533333333333333,
+    "supply_chain_counts": 0.4819078947368421
+  },
+  "heldout_topic_mean": 0.5729216923134641,
+  "gates": {
+    "enough_data": true,
+    "accuracy_floor": false,
+    "margin_over_text": false,
+    "residual_proof": false,
+    "heldout_proof": false
+  },
+  "LICENSED": false
+}
