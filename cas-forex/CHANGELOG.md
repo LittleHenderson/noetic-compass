@@ -1,5 +1,30 @@
 # CAS Forex — Changelog
 
+## 2026-06-19 — Closed-book KWIK hallucination probe: measured ceiling, NOT LICENSED
+
+Ran the decisive pre-answer hidden-state hallucination experiment in the one framing where
+text controls are structurally weak — closed-book "knows-what-it-knows" (TriviaQA no-context,
+hidden state captured at the last prompt token before any answer is emitted, label = did the
+model's own greedy answer match). This is the literature SOTA direction (SAPLMA / semantic
+entropy) and the only honest route to a real +0.15 margin.
+
+Result (REAL, leakage-safe, N=2500 each): the framing **works** — residual signal climbed off
+the chance floor (grounded 0.45 → KWIK 0.68), proving the hidden state carries genuine
+text-independent "do I know this" information. But it **plateaus below the license gate**:
+hidden BA ≈ 0.75, margin ≈ +0.12 over text, residual 0.68 — short of +0.15 / 0.75. The wall is
+flat: 7B → 14B moved the margin +0.000, and a nonlinear MLP + layer ensemble land on the same
+~0.75. This matches the published ceiling (~0.7–0.85 AUROC) for pre-answer hidden-state probes.
+
+Verdict: hallucination detection remains **OPEN / NOT LICENSED** at the specified bars — now a
+*measured* ceiling, not an untested assumption. No fabrication.
+
+Added:
+- `closedbook_kwik_capture.py` — KWIK capture (last-token + mean-pool hidden, greedy label).
+- `lic_eval_closedbook.py` — leakage-safe gate (readout×layer selection, residual, held-out,
+  selection-aware 1000-perm).
+- `kwik_enhanced_probe.py` — ceiling check (ensemble + MLP) confirming the plateau.
+- `docs/working/hallucination_kwik_ceiling_findings_20260619.md` — full findings + A/B/C fork.
+
 ## 2026-06-17 — CJT/PCBA Tier-B/C research code + honest gates
 
 Built the research-tier and gated CJT/PCBA work: real, runnable code plus honest
