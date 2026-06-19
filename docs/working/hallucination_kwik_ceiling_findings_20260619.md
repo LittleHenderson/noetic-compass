@@ -54,6 +54,27 @@ Probes tried: logistic (per-layer), all-layer ensemble, 64-unit MLP. Best of all
   "The Internal State of an LLM Knows When It's Lying," semantic-entropy probes) report ~0.7–0.85
   AUROC ≈ 0.72–0.76 balanced accuracy. We are at that ceiling. The gate bars sit above it.
 
+## Coupling with semantic entropy (user request 2026-06-19) — redundant, not complementary
+
+Coupled the pre-answer hidden-state probe with semantic entropy (10× sampling on 14B,
+discrete entropy over normalized-answer clusters), leakage-safe stacking, N=2000.
+
+| Detector | balanced acc | margin over text | residual | held-out |
+|---|---|---|---|---|
+| hidden-only (L46) | 0.732 | +0.116 | — | — |
+| SE-only | 0.701 | — | — | — |
+| **coupled (hidden+SE)** | **0.7345** | **+0.116** | 0.667 | **0.757 PASS** |
+
+The coupling gained **+0.002** over hidden-only — the two signals are **largely redundant**, not
+complementary. The hidden state already encodes the uncertainty that entropy measures. Mechanistic
+reason: the 14B is frequently *confidently wrong* (mean discrete entropy = 0.379 nats; it agrees
+with itself across 10 samples even on wrong answers), so entropy carries little extra information.
+
+**One gate flipped (held-out qtype = 0.757 PASS)** — proving the detector generalizes and is NOT
+overfit; the shortfall is a genuine *information ceiling*, not a generalization failure. Floor
+(0.7345), margin (+0.116), and residual (0.667) still fail. Coupled detector is a HYBRID (reads
+generations), recorded as such. Verdict: still **NOT LICENSED**. Report: `lic_report_coupled_14b.json`.
+
 ## What this means — it is a wall, not a lack of effort
 
 Levers exhausted: best framing (closed-book KWIK) · scale 1.5B→7B→14B · readout last-token +

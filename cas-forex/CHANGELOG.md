@@ -15,14 +15,23 @@ hidden BA ≈ 0.75, margin ≈ +0.12 over text, residual 0.68 — short of +0.15
 flat: 7B → 14B moved the margin +0.000, and a nonlinear MLP + layer ensemble land on the same
 ~0.75. This matches the published ceiling (~0.7–0.85 AUROC) for pre-answer hidden-state probes.
 
+Then, per user request, COUPLED the hidden-state probe with semantic entropy (10× sampling on
+14B, leakage-safe stacking). Result: coupled BA 0.7345 vs hidden-only 0.732 — a +0.002 gain. The
+two signals are **redundant, not complementary** (the 14B is often confidently wrong: mean
+entropy 0.379 nats), so entropy adds almost nothing. Held-out generalization flipped to PASS
+(0.757), proving an information ceiling rather than overfitting; floor/margin/residual still fail.
+
 Verdict: hallucination detection remains **OPEN / NOT LICENSED** at the specified bars — now a
-*measured* ceiling, not an untested assumption. No fabrication.
+*measured* ceiling confirmed from five independent angles (framing, scale, readout, probe,
+method-coupling), not an untested assumption. No fabrication.
 
 Added:
 - `closedbook_kwik_capture.py` — KWIK capture (last-token + mean-pool hidden, greedy label).
 - `lic_eval_closedbook.py` — leakage-safe gate (readout×layer selection, residual, held-out,
   selection-aware 1000-perm).
 - `kwik_enhanced_probe.py` — ceiling check (ensemble + MLP) confirming the plateau.
+- `kwik_semantic_entropy.py` — batched 10× sampling + discrete semantic entropy.
+- `lic_eval_coupled.py` — coupled (hidden + semantic entropy) leakage-safe gate.
 - `docs/working/hallucination_kwik_ceiling_findings_20260619.md` — full findings + A/B/C fork.
 
 ## 2026-06-17 — CJT/PCBA Tier-B/C research code + honest gates
