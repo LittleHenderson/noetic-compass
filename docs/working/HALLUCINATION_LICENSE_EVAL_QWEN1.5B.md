@@ -109,7 +109,23 @@ Make the label a **deterministic function of the input**, not of a sample:
 
 This is a different product claim ("predict an input's hallucination-proneness")
 than "detect that this output is a hallucination," and it is not structurally barred,
-because W0 now legitimately differs by label across prompts. It requires a new greedy
-generation + relabel pass (tooling exists on the pod). It is the honest next
-experiment; it may still fail the margin gate, but unlike teacher-forcing it is not
-futile by construction.
+because W0 now legitimately differs by label across prompts.
+
+**Reframe tested on existing data (majority-label proxy) — also fails the gate.**
+Labeling each of the 200 prompts by its majority sampled outcome (18 hallucination-prone,
+182 not) and predicting from W0:
+
+| | W0-hidden (best, L26) | prompt text | margin |
+|---|---|---|---|
+| per-input proneness | 0.958 | 0.947 | **+0.011** |
+
+The prompt **text** already predicts which inputs are risky at 0.947; the hidden state
+adds only +0.011 — far below +0.15 (and with only 18 positives, even that is noise).
+So the hidden state adds essentially nothing beyond visible text in *this* framing too.
+
+**Bottom line across all framings:** the hidden state never beats text by the required
+margin — output-detection margins are negative; the input-proneness margin is +0.011.
+A genuinely licensable input-risk detector would need a *new* dataset: greedy
+(deterministic) labels, many more hallucination-prone inputs (balanced), and topics
+chosen so prompt text alone does not already predict the risk. That is real new data
+collection, not a re-analysis. Until then: `NOT LICENSED`.
