@@ -24,6 +24,7 @@ ap.add_argument("--gen-out", default="/root/kwik_15b_gens.jsonl")
 ap.add_argument("--device-map", default="", help="'auto' to shard a large model across GPUs")
 ap.add_argument("--load-8bit", action="store_true", help="bitsandbytes int8 (near-bf16 hidden states, ~half VRAM)")
 ap.add_argument("--load-4bit", action="store_true", help="bitsandbytes nf4 (more lossy)")
+ap.add_argument("--prequantized", action="store_true", help="model is already AWQ/GPTQ quantized; load as-is")
 args = ap.parse_args()
 torch.manual_seed(0); np.random.seed(0)
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -63,21 +64,23 @@ tok = AutoTokenizer.from_pretrained(args.model_id, trust_remote_code=True)
 if tok.pad_token_id is None and tok.eos_token_id is not None:
     tok.pad_token = tok.eos_token
 load_kw = dict(attn_implementation="eager", trust_remote_code=True, low_cpu_mem_usage=True)
+quantized = args.load_8bit or args.load_4bit or args.prequantized
 if args.load_8bit or args.load_4bit:
     from transformers import BitsAndBytesConfig
     load_kw["quantization_config"] = BitsAndBytesConfig(
         load_in_8bit=args.load_8bit, load_in_4bit=args.load_4bit,
         bnb_4bit_compute_dtype=torch.bfloat16, bnb_4bit_quant_type="nf4")
-else:
+elif not args.prequantized:
     load_kw["dtype"] = torch.bfloat16
-if args.device_map:
-    load_kw["device_map"] = args.device_map
+# prequantized (AWQ/GPTQ): config carries quantization_config; just load (+device_map)
+if args.device_map or args.prequantized:
+    load_kw["device_map"] = args.device_map or "auto"
 model = AutoModelForCausalLM.from_pretrained(args.model_id, **load_kw)
-if not args.device_map and not (args.load_8bit or args.load_4bit):
+if not load_kw.get("device_map") and not quantized:
     model = model.to(device)
 model = model.eval()
 # with device_map/quant, inputs must land on the model's input embedding device
-in_dev = next(model.parameters()).device if (args.device_map or args.load_8bit or args.load_4bit) else device
+in_dev = next(model.parameters()).device if (load_kw.get("device_map") or quantized) else device
 nL = model.config.num_hidden_layers
 print(f"[cap] layers={nL} hidden={model.config.hidden_size}", flush=True)
 
