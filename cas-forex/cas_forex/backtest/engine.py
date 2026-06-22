@@ -350,11 +350,15 @@ class BacktestEngine:
         closes = [c["close"] for c in candles]
         current = closes[-1]
 
+        sl_mult, tp_mult = 1.5, 2.0  # default ATR stop/target multiples
         if self.signal_fn is not None:
             sig = self.signal_fn(closes)
             if sig is None:
                 return None
-            direction, confidence = sig
+            # Signal may return (dir, conf) or (dir, conf, sl_mult, tp_mult).
+            direction, confidence = sig[0], sig[1]
+            if len(sig) >= 4:
+                sl_mult, tp_mult = float(sig[2]), float(sig[3])
             model_source = self.signal_model_source
             rationale = self.signal_rationale
         else:
@@ -375,11 +379,11 @@ class BacktestEngine:
             return None
 
         if direction == Direction.LONG:
-            sl = current - atr * 1.5
-            tp = current + atr * 2.0
+            sl = current - atr * sl_mult
+            tp = current + atr * tp_mult
         else:
-            sl = current + atr * 1.5
-            tp = current - atr * 2.0
+            sl = current + atr * sl_mult
+            tp = current - atr * tp_mult
 
         # Guard the ForecastProposal SL/TP validators when ATR is degenerate.
         if not (sl > 0 and tp > 0 and sl != current and tp != current):
@@ -509,11 +513,16 @@ class BacktestEngine:
             margin_level_pct=(self.balance / max(margin_used, 1) * 100),
             daily_drawdown_pct=daily_dd,
             weekly_drawdown_pct=weekly_dd,
+            max_daily_drawdown_pct=config.max_daily_drawdown_pct,
+            max_weekly_drawdown_pct=config.max_weekly_drawdown_pct,
             proposed_position_size_lots=self.position_size,
+            max_position_size_lots=config.max_position_lots,
             risk_per_trade_pct=risk_per_trade,
             max_risk_per_trade_pct=config.max_risk_per_trade_pct,
             open_positions_count=len(self.open_positions),
+            max_open_positions=config.max_open_positions,
             total_exposure_lots=self.position_size * len(self.open_positions),
+            max_total_exposure_lots=config.max_total_exposure_lots,
             correlated_exposure_lots=self.position_size * len(self.open_positions),
             max_correlated_exposure_lots=config.max_correlated_exposure_lots,
         )

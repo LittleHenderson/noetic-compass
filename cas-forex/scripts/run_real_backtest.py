@@ -102,12 +102,15 @@ def buy_hold_metrics(candles: List[dict], symbol: str) -> Dict[str, float]:
 
 def run_variant(candles: List[dict], symbol: str, store: Optional[EvidenceStore],
                 run_id: str, gated: bool, signal_fn=None,
-                model_source: ModelSource = ModelSource.TECHNICAL) -> BacktestResult:
+                model_source: ModelSource = ModelSource.TECHNICAL,
+                initial_balance: float = 10000.0,
+                position_lots: float = 0.05) -> BacktestResult:
     auditor = CASForexAuditor() if gated else PassThroughAuditor()
     engine = BacktestEngine(
         auditor=auditor, evidence_store=store, run_id=run_id,
+        initial_balance=initial_balance, position_size_lots=position_lots,
         signal_fn=signal_fn, signal_model_source=model_source,
-        signal_rationale=f"{model_source.value} next-step directional forecast",
+        signal_rationale=f"{model_source.value} directional signal",
     )
     warmup = min(60, max(50, len(candles) // 10))
     return engine.run(candles, symbol=symbol, warmup_bars=warmup)
@@ -125,12 +128,47 @@ def main() -> int:
     parser.add_argument("--interval", default="1d", help="yfinance interval (1d recommended for multi-year)")
     parser.add_argument("--symbols", nargs="*", default=SYMBOLS)
     parser.add_argument("--output-dir", default="evidence_runs/real_backtest")
-    parser.add_argument("--model", default="sma", choices=["sma", "chronos"],
-                        help="directional signal: built-in SMA or Chronos-Bolt")
+    parser.add_argument("--model", default="sma",
+                        choices=["sma", "chronos", "meanrev", "breakout"],
+                        help="directional signal source")
     parser.add_argument("--chronos-model", default="amazon/chronos-bolt-tiny")
     parser.add_argument("--min-move-bps", type=float, default=2.0,
                         help="Chronos: ignore predicted moves smaller than this (bps)")
+    # mean-reversion params
+    parser.add_argument("--mr-lookback", type=int, default=20)
+    parser.add_argument("--mr-z", type=float, default=2.0, help="z-score entry threshold")
+    parser.add_argument("--mr-sl-mult", type=float, default=2.0, help="stop = N x ATR")
+    parser.add_argument("--mr-tp-mult", type=float, default=1.0, help="target = N x ATR")
+    parser.add_argument("--mr-trend-filter", action="store_true",
+                        help="mean-rev: skip fades that fight a strong trend")
+    parser.add_argument("--mr-trend-lookback", type=int, default=60)
+    parser.add_argument("--mr-trend-skip-bps", type=float, default=150.0)
+    # ---- RISK BUDGET (user-controllable) ----
+    parser.add_argument("--starting-balance", type=float, default=10000.0)
+    parser.add_argument("--position-lots", type=float, default=0.05)
+    parser.add_argument("--risk-per-trade-pct", type=float, default=None,
+                        help="max risk per trade as %% of balance (default: config 0.5)")
+    parser.add_argument("--max-daily-dd", type=float, default=None,
+                        help="max daily drawdown %% before trades suppressed (default 2.0)")
+    parser.add_argument("--max-weekly-dd", type=float, default=None,
+                        help="max weekly drawdown %% (default 5.0)")
+    parser.add_argument("--max-open-positions", type=int, default=None)
+    parser.add_argument("--max-position-lots", type=float, default=None)
     args = parser.parse_args()
+
+    # Apply risk-budget overrides to the shared config (single source of truth
+    # the risk gate reads). Only override what the user explicitly set.
+    from cas_forex.config import config as _cfg
+    if args.risk_per_trade_pct is not None:
+        _cfg.max_risk_per_trade_pct = args.risk_per_trade_pct
+    if args.max_daily_dd is not None:
+        _cfg.max_daily_drawdown_pct = args.max_daily_dd
+    if args.max_weekly_dd is not None:
+        _cfg.max_weekly_drawdown_pct = args.max_weekly_dd
+    if args.max_open_positions is not None:
+        _cfg.max_open_positions = args.max_open_positions
+    if args.max_position_lots is not None:
+        _cfg.max_position_lots = args.max_position_lots
 
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -146,6 +184,20 @@ def main() -> int:
         )
         model_source = ModelSource.CHRONOS
         print("[chronos] ready", flush=True)
+    elif args.model == "meanrev":
+        from cas_forex.forecast.strategies import make_mean_reversion_signal
+        signal_fn = make_mean_reversion_signal(
+            lookback=args.mr_lookback, z_entry=args.mr_z,
+            sl_mult=args.mr_sl_mult, tp_mult=args.mr_tp_mult,
+            trend_filter=args.mr_trend_filter,
+            trend_lookback=args.mr_trend_lookback,
+            trend_skip_bps=args.mr_trend_skip_bps,
+        )
+        model_source = ModelSource.TECHNICAL
+    elif args.model == "breakout":
+        from cas_forex.forecast.strategies import make_donchian_breakout_signal
+        signal_fn = make_donchian_breakout_signal(lookback=args.mr_lookback)
+        model_source = ModelSource.TECHNICAL
 
     report = BacktestEvidenceReport(
         report_id=f"report-{run_id}",
@@ -179,9 +231,13 @@ def main() -> int:
 
         gated_store = EvidenceStore(out_dir / f"{run_id}-{symbol.replace('/', '')}-gated.jsonl", run_id=run_id)
         gated = run_variant(candles, symbol, gated_store, run_id, gated=True,
-                            signal_fn=signal_fn, model_source=model_source)
+                            signal_fn=signal_fn, model_source=model_source,
+                            initial_balance=args.starting_balance,
+                            position_lots=args.position_lots)
         raw = run_variant(candles, symbol, None, run_id, gated=False,
-                          signal_fn=signal_fn, model_source=model_source)
+                          signal_fn=signal_fn, model_source=model_source,
+                          initial_balance=args.starting_balance,
+                          position_lots=args.position_lots)
         bh = buy_hold_metrics(candles, symbol)
 
         chain_ok = chain_ok and gated.evidence_chain_verified
@@ -260,6 +316,9 @@ def main() -> int:
     # ---- Human-readable table ----
     print("\n" + "=" * 78)
     print(f"CAS FOREX REAL-DATA BACKTEST  model={args.model}  run_id={run_id}")
+    print(f"RISK BUDGET: start ${args.starting_balance:,.0f}/symbol | {args.position_lots} lots/trade | "
+          f"risk/trade<={_cfg.max_risk_per_trade_pct}% | daily DD<={_cfg.max_daily_drawdown_pct}% | "
+          f"weekly DD<={_cfg.max_weekly_drawdown_pct}% | max open {_cfg.max_open_positions}")
     print("=" * 78)
     hdr = f"{'symbol':9} {'gated%':>8} {'raw%':>8} {'b&h%':>8} {'gTr':>4} {'gSup':>5} {'rTr':>4} {'gDD%':>6} {'rDD%':>6}"
     print(hdr)
@@ -270,7 +329,7 @@ def main() -> int:
               f"{r['gated_dd']:>6.2f} {r['raw_dd']:>6.2f}")
     print("-" * 78)
     print(f"PORTFOLIO  gated P&L ${port['gated_pnl']:>10}  raw P&L ${port['raw_pnl']:>10}  "
-          f"(start $10,000/symbol)")
+          f"(start ${args.starting_balance:,.0f}/symbol)")
     print(f"           gated trades {port['gated_trades']} (suppressed {port['gated_suppressed']})  "
           f"raw trades {port['raw_trades']}")
     print(f"           avg max DD: gated {port['gated_dd_avg']}%  raw {port['raw_dd_avg']}%")

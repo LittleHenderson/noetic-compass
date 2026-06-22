@@ -1,5 +1,46 @@
 # CAS Forex — Changelog
 
+## 2026-06-21 — Strategy pivot: mean-reversion + trend filter = first POSITIVE backtest (thin)
+
+Acted on the research insight that FX majors range 70-80% of the time, so our
+trend-follower was the wrong strategy class (it lost most on the most mean-reverting
+pair, USD/CAD). Added rule-based strategies + user-controllable risk budget and
+re-ran the same real-data harness (5y daily, 5 majors).
+
+Progression (portfolio P&L on $50k, gated):
+- Trend SMA:               -$15,098   (avg max DD 41%)
+- Chronos:                 -$15,574   (avg max DD 49%)
+- Mean-reversion (z-fade):    -$523    (avg max DD 6%)   <- ~30x less bad, ~break-even
+- Mean-reversion + trend filter: +$105.62 (avg max DD 3.5%)  <- FIRST passed=True
+
+The trend filter (skip fades that fight a >150bps move over 60 bars — a theory-backed
+fix, not curve-fitting) made it net positive: 3/5 pairs clearly positive (EUR/USD
++1.56%, GBP/USD +3.47%, AUD/USD +3.26%), beating buy-and-hold on every ranging pair.
+Only USD/CAD (-6.1%) still loses (it trended up). Evidence chains verified.
+
+CRITICAL honesty caveat — the edge is razor-thin and NOT yet deployable:
+- +$105.62 over 286 gated trades = ~$0.37/trade = ~0.74 pip/trade edge.
+- The backtest already charges a 1-pip spread; ONE more pip of real cost
+  (commission + slippage) is ~$143 across 286 trades and FLIPS IT NEGATIVE.
+- So this is positive-after-1-pip-spread, NOT positive-after-realistic-costs.
+- One parameter set, one dataset, in-sample. Needs out-of-sample / walk-forward
+  validation + realistic cost modeling before ANY capital. report.passed is a
+  research signal, not a license. Live trading remains NOT LICENSED.
+
+Real progress nonetheless: we moved from "definitely loses" to "plausibly
+break-even with low drawdown," and confirmed the lever is strategy class + regime
+filter, not forecaster sophistication.
+
+Added/changed:
+- `forecast/strategies.py` — mean-reversion (z-fade, optional trend filter) and
+  Donchian breakout signals; no martingale / grid / no-stop modes (real money).
+- `backtest/engine.py` — signals may set ATR stop/target multiples; risk limits now
+  all sourced from config (single source of truth for the risk budget).
+- `scripts/run_real_backtest.py` — `--model meanrev|breakout`, mean-rev params, and
+  RISK BUDGET flags (`--starting-balance --position-lots --risk-per-trade-pct
+  --max-daily-dd --max-weekly-dd --max-open-positions --max-position-lots`).
+- 217 tests pass throughout.
+
 ## 2026-06-21 — Chronos-Bolt re-run confirms NO edge across TWO forecasters
 
 Wired Amazon Chronos-Bolt (`forecast/chronos_signal.py`) as a pluggable directional
