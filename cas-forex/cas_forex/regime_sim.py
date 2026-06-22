@@ -157,6 +157,104 @@ def nested_lacunarity(cells: List[CellResult]) -> Dict[str, float]:
     return out
 
 
+# ---- Live regime detection + strategy switching ----
+
+# Default routing derived from the simulator's RPM seed: regime -> strategy name
+# (None = lacuna, sit out). Overridable.
+DEFAULT_ROUTING: Dict[str, Optional[str]] = {
+    "trend_up": "breakout",
+    "trend_down": "breakout",
+    "high_vol": "breakout",
+    "low_vol": "trend_sma",
+    "range": "meanrev",
+    "shock": "meanrev",
+    "vol_cluster": None,  # no validated edge -> do not trade
+}
+
+
+def detect_regime(
+    closes: List[float],
+    window: int = 60,
+    baseline: int = 180,
+    er_trend: float = 0.35,
+    shock_z: float = 4.0,
+    hi_vol: float = 1.5,
+    lo_vol: float = 0.6,
+) -> str:
+    """Classify the current market regime from real trailing closes.
+
+    Features (all standard, robust): Kaufman efficiency ratio (trend vs chop),
+    realized vol vs a longer baseline (high/low vol), last-bar return z-score
+    (shock), and vol-of-vol (clustering). Returns one of REGIMES.
+    """
+    w = np.asarray(closes[-window:], dtype=float)
+    if len(w) < 10 or np.any(w <= 0):
+        return "range"
+    rets = np.diff(np.log(w))
+    vol = float(rets.std())
+    if vol <= 0:
+        return "low_vol"
+    net = abs(w[-1] - w[0])
+    path = float(np.abs(np.diff(w)).sum())
+    er = net / path if path > 0 else 0.0  # efficiency ratio in [0,1]
+    bw = np.asarray(closes[-baseline:], dtype=float) if len(closes) >= baseline else w
+    bvol = float(np.diff(np.log(bw)).std()) or vol
+    vol_ratio = vol / bvol
+    last_z = abs(rets[-1]) / vol
+
+    if last_z > shock_z:
+        return "shock"
+    if er > er_trend:
+        return "trend_up" if w[-1] > w[0] else "trend_down"
+    if vol_ratio > hi_vol:
+        half = len(rets) // 2
+        early = float(rets[:half].std())
+        late = float(rets[half:].std())
+        if early > 0 and late / early > 1.8:
+            return "vol_cluster"
+        return "high_vol"
+    if vol_ratio < lo_vol:
+        return "low_vol"
+    return "range"
+
+
+def make_regime_switching_signal(
+    sub_signals: Dict[str, object],
+    routing: Optional[Dict[str, Optional[str]]] = None,
+    detect_window: int = 60,
+    **detect_kwargs,
+):
+    """Build a signal_fn that detects the regime each bar and routes to the
+    matching sub-strategy (or sits out where the routing is a lacuna).
+
+    The returned function carries a ``regime_counts`` dict so the caller can see
+    the regime distribution and the sit-out rate after a run.
+    """
+    routing = routing or DEFAULT_ROUTING
+    from collections import Counter
+    counts: "Counter" = Counter()
+
+    def signal(closes: List[float]):
+        if len(closes) < detect_window:
+            return None
+        regime = detect_regime(closes, window=detect_window, **detect_kwargs)
+        strat = routing.get(regime)
+        counts[regime] += 1
+        if not strat:
+            counts["__sit_out__"] += 1
+            return None
+        sub = sub_signals.get(strat)
+        if sub is None:
+            return None
+        result = sub(closes)
+        if result is None:
+            counts["__no_signal__"] += 1
+        return result
+
+    signal.regime_counts = counts  # type: ignore[attr-defined]
+    return signal
+
+
 def best_strategy_per_regime(cells: List[CellResult]) -> Dict[str, Optional[str]]:
     """RPM seed: for each regime, the non-gap strategy with the best gain (beta).
 

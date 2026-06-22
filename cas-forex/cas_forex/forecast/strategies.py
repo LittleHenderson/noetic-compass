@@ -76,6 +76,33 @@ def make_mean_reversion_signal(
     return signal
 
 
+def make_sma_trend_signal(
+    fast: int = 5, mid: int = 20, slow: int = 50, max_confidence: float = 0.75,
+) -> Callable[[List[float]], SignalResult]:
+    """SMA5/20/50 trend signal as a composable signal_fn (mirrors the engine's
+    built-in trend logic, so it can be routed to by the regime switcher)."""
+
+    def signal(closes: List[float]) -> SignalResult:
+        if len(closes) < mid:
+            return None
+        cur = closes[-1]
+        sma_f = float(np.mean(closes[-fast:]))
+        sma_m = float(np.mean(closes[-mid:]))
+        sma_s = float(np.mean(closes[-slow:])) if len(closes) >= slow else sma_m
+        if sma_f > sma_m > sma_s:
+            direction = Direction.LONG
+        elif sma_f < sma_m < sma_s:
+            direction = Direction.SHORT
+        else:
+            return None
+        confidence = min(abs(sma_f - sma_m) / cur * 500, max_confidence)
+        if confidence < 0.3:
+            return None
+        return direction, round(confidence, 4)
+
+    return signal
+
+
 def make_donchian_breakout_signal(
     lookback: int = 20,
     sl_mult: float = 1.5,

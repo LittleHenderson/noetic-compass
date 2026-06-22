@@ -1,5 +1,32 @@
 # CAS Forex — Changelog
 
+## 2026-06-21 — Regime detector + switching on REAL data: switching does NOT beat the best single strategy (on daily)
+
+Built the live regime detector + RPM switching and tested it on real 5y daily data
+against every single strategy.
+
+- `forecast/strategies.py` — `make_sma_trend_signal` (composable SMA, routable).
+- `regime_sim.py` — `detect_regime` (Kaufman efficiency ratio + vol-vs-baseline +
+  shock z-score + vol-of-vol), `DEFAULT_ROUTING` (sim's RPM seed), and
+  `make_regime_switching_signal` (detect each bar -> route -> sit out on lacuna).
+- `scripts/run_switching_backtest.py` — SWITCH vs each single strategy on real data.
+
+Result (real 5y daily, cost 1.5p, $50k):
+  trend_sma  -$15,055 | meanrev -$729 | meanrev_tf +$3.72 | breakout -$8,144 |
+  SWITCH     -$2,048
+Best = meanrev_tf (+$3.72). SWITCH did NOT beat it (-$2,048).
+
+Why (the mechanism): the detector classifies **97% of real daily bars as "range"**,
+so SWITCH ~= plain meanrev, plus rare trend/breakout detours that lost money. Daily
+bars are too coarse/homogeneous for hard switching to add value — there isn't enough
+regime variety, and the trend calls aren't reliable/timely on daily.
+
+Honest read: the regime-switching MACHINERY works end-to-end, but on daily data the
+useful "regime intelligence" is the lightweight trend FILTER already baked into
+meanrev_tf (a soft regime-awareness), not a separate hard switch. Switching's real
+shot is INTRADAY, where regimes vary and change more (ties to the multi-timeframe
+requirement). meanrev_tf remains the incumbent (break-even). NOT LICENSED. 217 tests pass.
+
 ## 2026-06-21 — Strategy-condition simulator (CAS-SDG for regimes): CJT + nested lacunarity + RPM routing
 
 Built the user's idea: a market-REGIME simulator that plays every strategy across
