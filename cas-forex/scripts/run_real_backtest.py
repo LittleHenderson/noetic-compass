@@ -36,7 +36,7 @@ from cas_forex.backtest.engine import BacktestEngine, BacktestResult
 from cas_forex.evidence_store import EvidenceStore
 from cas_forex.schemas.decision import CASDecision, Verdict
 from cas_forex.schemas.evidence import BacktestEvidenceReport
-from cas_forex.schemas.forecast import pip_multiplier
+from cas_forex.schemas.forecast import ModelSource, pip_multiplier
 from cas_forex.time_utils import utc_now
 from cas_forex.verifier.auditor import CASForexAuditor
 
@@ -101,9 +101,14 @@ def buy_hold_metrics(candles: List[dict], symbol: str) -> Dict[str, float]:
 
 
 def run_variant(candles: List[dict], symbol: str, store: Optional[EvidenceStore],
-                run_id: str, gated: bool) -> BacktestResult:
+                run_id: str, gated: bool, signal_fn=None,
+                model_source: ModelSource = ModelSource.TECHNICAL) -> BacktestResult:
     auditor = CASForexAuditor() if gated else PassThroughAuditor()
-    engine = BacktestEngine(auditor=auditor, evidence_store=store, run_id=run_id)
+    engine = BacktestEngine(
+        auditor=auditor, evidence_store=store, run_id=run_id,
+        signal_fn=signal_fn, signal_model_source=model_source,
+        signal_rationale=f"{model_source.value} next-step directional forecast",
+    )
     warmup = min(60, max(50, len(candles) // 10))
     return engine.run(candles, symbol=symbol, warmup_bars=warmup)
 
@@ -120,11 +125,27 @@ def main() -> int:
     parser.add_argument("--interval", default="1d", help="yfinance interval (1d recommended for multi-year)")
     parser.add_argument("--symbols", nargs="*", default=SYMBOLS)
     parser.add_argument("--output-dir", default="evidence_runs/real_backtest")
+    parser.add_argument("--model", default="sma", choices=["sma", "chronos"],
+                        help="directional signal: built-in SMA or Chronos-Bolt")
+    parser.add_argument("--chronos-model", default="amazon/chronos-bolt-tiny")
+    parser.add_argument("--min-move-bps", type=float, default=2.0,
+                        help="Chronos: ignore predicted moves smaller than this (bps)")
     args = parser.parse_args()
 
     out_dir = Path(args.output_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    run_id = f"real-{utc_now().strftime('%Y%m%d%H%M%S')}"
+    run_id = f"real-{args.model}-{utc_now().strftime('%Y%m%d%H%M%S')}"
+
+    signal_fn = None
+    model_source = ModelSource.TECHNICAL
+    if args.model == "chronos":
+        from cas_forex.forecast.chronos_signal import make_chronos_signal_fn
+        print(f"[chronos] loading {args.chronos_model} (one-time) ...", flush=True)
+        signal_fn = make_chronos_signal_fn(
+            model_id=args.chronos_model, min_move_bps=args.min_move_bps,
+        )
+        model_source = ModelSource.CHRONOS
+        print("[chronos] ready", flush=True)
 
     report = BacktestEvidenceReport(
         report_id=f"report-{run_id}",
@@ -157,8 +178,10 @@ def main() -> int:
         print(f"  {len(candles)} real bars {first_ts} -> {last_ts}", flush=True)
 
         gated_store = EvidenceStore(out_dir / f"{run_id}-{symbol.replace('/', '')}-gated.jsonl", run_id=run_id)
-        gated = run_variant(candles, symbol, gated_store, run_id, gated=True)
-        raw = run_variant(candles, symbol, None, run_id, gated=False)
+        gated = run_variant(candles, symbol, gated_store, run_id, gated=True,
+                            signal_fn=signal_fn, model_source=model_source)
+        raw = run_variant(candles, symbol, None, run_id, gated=False,
+                          signal_fn=signal_fn, model_source=model_source)
         bh = buy_hold_metrics(candles, symbol)
 
         chain_ok = chain_ok and gated.evidence_chain_verified
@@ -236,7 +259,7 @@ def main() -> int:
 
     # ---- Human-readable table ----
     print("\n" + "=" * 78)
-    print(f"CAS FOREX REAL-DATA BACKTEST  run_id={run_id}")
+    print(f"CAS FOREX REAL-DATA BACKTEST  model={args.model}  run_id={run_id}")
     print("=" * 78)
     hdr = f"{'symbol':9} {'gated%':>8} {'raw%':>8} {'b&h%':>8} {'gTr':>4} {'gSup':>5} {'rTr':>4} {'gDD%':>6} {'rDD%':>6}"
     print(hdr)

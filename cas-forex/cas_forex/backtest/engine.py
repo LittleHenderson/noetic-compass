@@ -149,7 +149,16 @@ class BacktestEngine:
         spread_pips: float = 1.0,
         evidence_store: Optional[EvidenceStore] = None,
         run_id: str = "backtest",
+        signal_fn=None,
+        signal_model_source: ModelSource = ModelSource.TECHNICAL,
+        signal_rationale: str = "external signal",
     ):
+        # Optional injected directional signal. When provided, it replaces the
+        # built-in SMA trend signal but SL/TP stay ATR-based and identical, so
+        # the directional signal is the only variable under comparison.
+        self.signal_fn = signal_fn
+        self.signal_model_source = signal_model_source
+        self.signal_rationale = signal_rationale
         self.auditor = auditor or CASForexAuditor()
         self.initial_balance = initial_balance
         self.position_size = position_size_lots
@@ -329,29 +338,51 @@ class BacktestEngine:
     def _generate_proposal(
         self, symbol: str, candles: List[dict], horizon: int, atr: float,
     ) -> Optional[ForecastProposal]:
-        """Generate trade proposal from simple technical analysis."""
+        """Generate a trade proposal.
+
+        Uses an injected directional signal (e.g. Chronos) when one was provided
+        to the engine; otherwise falls back to the built-in SMA5/20/50 trend
+        signal. SL/TP are ATR-based and identical regardless of signal source.
+        """
         if len(candles) < 20:
             return None
 
         closes = [c["close"] for c in candles]
         current = closes[-1]
-        sma20 = np.mean(closes[-20:])
-        sma5 = np.mean(closes[-5:])
-        sma50 = np.mean(closes[-50:]) if len(closes) >= 50 else sma20
 
-        if sma5 > sma20 > sma50:
-            direction = Direction.LONG
-            sl = current - atr * 1.5
-            tp = current + atr * 2.0
-        elif sma5 < sma20 < sma50:
-            direction = Direction.SHORT
-            sl = current + atr * 1.5
-            tp = current - atr * 2.0
+        if self.signal_fn is not None:
+            sig = self.signal_fn(closes)
+            if sig is None:
+                return None
+            direction, confidence = sig
+            model_source = self.signal_model_source
+            rationale = self.signal_rationale
         else:
+            sma20 = np.mean(closes[-20:])
+            sma5 = np.mean(closes[-5:])
+            sma50 = np.mean(closes[-50:]) if len(closes) >= 50 else sma20
+            if sma5 > sma20 > sma50:
+                direction = Direction.LONG
+            elif sma5 < sma20 < sma50:
+                direction = Direction.SHORT
+            else:
+                return None
+            confidence = min(abs(sma5 - sma20) / current * 500, 0.75)
+            model_source = ModelSource.TECHNICAL
+            rationale = f"SMA5={sma5:.5f} vs SMA20={sma20:.5f}"
+
+        if confidence < 0.3:
             return None
 
-        confidence = min(abs(sma5 - sma20) / current * 500, 0.75)
-        if confidence < 0.3:
+        if direction == Direction.LONG:
+            sl = current - atr * 1.5
+            tp = current + atr * 2.0
+        else:
+            sl = current + atr * 1.5
+            tp = current - atr * 2.0
+
+        # Guard the ForecastProposal SL/TP validators when ATR is degenerate.
+        if not (sl > 0 and tp > 0 and sl != current and tp != current):
             return None
 
         return ForecastProposal(
@@ -362,9 +393,9 @@ class BacktestEngine:
             stop_loss=round(sl, 5),
             take_profit=round(tp, 5),
             confidence=round(confidence, 4),
-            model_source=ModelSource.TECHNICAL,
+            model_source=model_source,
             horizon_minutes=horizon,
-            rationale=f"SMA5={sma5:.5f} vs SMA20={sma20:.5f}",
+            rationale=rationale,
         )
 
     def _check_close(self, trade: TradeRecord, candle: dict) -> bool:
