@@ -165,6 +165,50 @@ realistic **cost knob** (spread + commission + slippage in pips); the **CAS-SDG 
 simulator**; **CJT** operating-region tagging; **nested lacunarity** gap map; **RPM**
 routing seed.
 
+## 6A. The CAS methodology layer (what makes this more than a textbook bot)
+
+The distinctive part of this project is **not** the individual strategies (those are
+standard) — it is the **condition-analysis and strategy-selection framework** layered on
+top of them. It is proprietary (part of the owner's "CAS" framework) but maps cleanly onto
+standard quant concepts, given here so an outside reviewer can evaluate and extend it.
+Code: `cas-forex/cas_forex/regime_sim.py` (+ `cjt_*` modules); runners
+`scripts/run_strategy_simulator.py` and `scripts/run_switching_backtest.py`.
+
+- **Regime simulator (CAS-SDG):** generates many synthetic market *conditions* — trend
+  up/down, range, high-vol, low-vol, volatility-clustering, shock — and runs every strategy
+  across all of them. (Standard-quant analog: a regime-conditional performance matrix /
+  Monte-Carlo scenario stress test.)
+- **CJT operating regions:** each (strategy × condition) cell is classified into one of four
+  *behavioral* states — `cutoff` (signal barely fired), `active` (working as designed),
+  `saturation` (overtrading without converting to return), `breakdown` (deep drawdown /
+  blow-up) — with a gain (β) estimate. (Analog: behavioral regime classification + a
+  risk-adjusted gain metric, i.e. return per unit of drawdown taken.)
+- **Nested lacunarity (the gap map):** across the whole matrix, measure where we have **no
+  validated positive edge** — and nest it (gaps *within* gaps) across a second axis
+  (volatility level). A strategy may "cover" normal vol but be all-gaps at high vol. The
+  point is *honesty about coverage*: the system can refuse to trade conditions it has not
+  validated rather than over-generalizing from a thin backtest. (Analog: an out-of-sample
+  coverage / capability map; an anti-overfitting guardrail.)
+- **RPM routing (prerequisite-based switching):** each strategy has *prerequisites* — the
+  conditions under which it has edge. Detect the live condition → route to the strategy
+  whose prerequisites are met → if **none** qualifies (a lacuna), **sit out**. (Analog: a
+  regime-switching / strategy-selection meta-model with an explicit "no-trade" state.)
+
+**How they combine:** simulator measures each strategy's CJT region + return per condition →
+nested-lacunarity coverage map → RPM derives "best strategy per condition (or don't trade)"
+→ a live detector (`detect_regime`, Kaufman efficiency ratio + vol-vs-baseline + shock
+z-score + vol-of-vol) applies that routing bar-by-bar.
+
+**Honest status (important — do not oversell to candidates):** this framework is **built
+and works end-to-end**, and it correctly recovers known structure (trend/breakout win
+trending regimes; mean-reversion wins ranges; overall lacunarity 0.58 — most
+strategy×condition cells are gaps). **But on FX majors it did NOT beat the best single
+strategy** (experiments 7–9): the live detector reads daily majors as ~97% "range," and the
+trend strategies it would switch to have no edge on majors anyway. The framework's value is
+strongest where conditions genuinely vary **and** where several strategies each own a real
+regime — which is precisely the case for **stock indices vs ranging FX**, and the main
+reason indices are the top recommended test (Section 8).
+
 ## 7. The self-audit — "what went wrong?" (honest)
 
 **What is SOLID (not the problem):**

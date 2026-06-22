@@ -12,8 +12,11 @@ cost-surviving trading edge.
 - A full backtest engine + 5-stage risk/verification pipeline + evidence logging.
 - Several strategies: trend-following (moving averages), breakout, mean-reversion, and an
   ML forecaster (Amazon Chronos).
-- A market-condition simulator + a regime detector that switches strategies by market
-  condition.
+- A **proprietary condition-analysis framework** (the owner's "CAS" method): it simulates
+  many market conditions, maps which strategy works in which condition, **flags where we
+  have no validated edge** (so the system can refuse to trade conditions it hasn't proven),
+  and auto-switches strategy by detected condition. In standard terms: a regime-conditional
+  performance matrix + an out-of-sample coverage map + a regime-switching selector.
 - User-controllable risk budget (risk per trade, daily/weekly drawdown caps, position
   size) and a realistic trading-cost model (spread + commission + slippage).
 - Tested on 5 years of real daily data and 2 years of hourly data across 5 major FX pairs.
