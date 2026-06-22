@@ -465,6 +465,11 @@ class BacktestEngine:
 
     def _build_risk_assessment(self) -> Optional[RiskAssessment]:
         """Build risk assessment from current account state."""
+        # Account blown (balance gone): stop trading. You can't risk what you
+        # don't have, and the schema requires balance/equity > 0. This makes the
+        # backtest robust when an ungated arm detonates the account.
+        if self.balance <= 0:
+            return None
         margin_used = sum(
             self._usd_notional(t.proposal.symbol, t.entry_price, self.position_size) * 0.01
             for t in self.open_positions
@@ -490,7 +495,10 @@ class BacktestEngine:
             if self.open_positions
             else self.position_size * STANDARD_LOT_UNITS
         )
-        risk_per_trade = (risk_notional * 0.005) / max(self.balance, 1) * 100
+        # Cap at 100%: in deep drawdown the raw notional ratio can exceed the
+        # account; the schema bounds this field at 100 and the risk gate only
+        # cares that it is over the (much smaller) max_risk_per_trade_pct.
+        risk_per_trade = min((risk_notional * 0.005) / max(self.balance, 1) * 100, 100.0)
 
         return RiskAssessment(
             assessment_id=str(uuid.uuid4()),
