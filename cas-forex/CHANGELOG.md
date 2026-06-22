@@ -1,5 +1,42 @@
 # CAS Forex — Changelog
 
+## 2026-06-21 — Chronos-Bolt re-run confirms NO edge across TWO forecasters
+
+Wired Amazon Chronos-Bolt (`forecast/chronos_signal.py`) as a pluggable directional
+signal and re-ran the exact same real-data harness (5y daily Yahoo, 5 majors), with
+SL/TP held identical so only the forecaster changed (SMA → ML model). Evidence chain
+verified: 19,660 hash-chained packets across 5 files, all re-verified.
+
+Result (REAL): Chronos also **loses** — portfolio **-$15,574 gated / -$17,007 raw**
+on $50k, vs the SMA run's -$15,098 / -$16,296. Per pair (gated%): EUR/USD -22.0,
+GBP/USD -81.1, USD/JPY +38.6, AUD/USD -101.6 (account wiped), USD/CAD +10.2.
+Buy-and-hold beat the strategy on every pair, including the two "winners" (USD/JPY
+b&h +46.3 vs +38.6; USD/CAD b&h +14.6 vs +10.2).
+
+Decisive read: swapping a simple moving average for a real ML forecaster moved the
+needle by ~$0.5k on -$15k — i.e. **the edge problem is NOT a forecaster-quality
+problem.** Two structurally different models both lose on majors over 5 years.
+
+Consistent finding across BOTH models: the **CAS gating layer reduces loss and
+drawdown** (gated beat raw on P&L and avg max DD in both runs; suppressed 1,118
+Chronos trades) and the new blow-up guard prevented crashes when the ungated AUD/USD
+and GBP/USD arms hit ~100% loss / ~100% drawdown. Honest nuance: on the two
+profitable pairs the gates slightly REDUCED gains (USD/CAD gated +10.2 vs raw +19.5)
+— the gates cut both tails; net-positive only because losers dominate.
+
+Strategic implication: the validated, sellable asset is the safety/audit chassis, not
+a profitable bot. A trading edge remains OPEN and is the hard, unsolved part; next
+lever is a different strategy class or timeframe (per the user multi-timeframe
+requirement), NOT a bigger model. Live trading remains NOT LICENSED.
+
+Added/changed:
+- `forecast/chronos_signal.py` — cached CPU Chronos-Bolt → (Direction, confidence).
+- `backtest/engine.py` — optional `signal_fn` hook (SMA default unchanged); blow-up
+  guard (stop trading when balance <= 0; clamp risk_per_trade_pct at 100%).
+- `scripts/run_real_backtest.py` — `--model {sma,chronos}`.
+- Artifacts: `evidence_runs/real_backtest/real-chronos-20260622003352-report.json`.
+- 217 tests pass throughout.
+
 ## 2026-06-21 — First REAL-data comparative backtest: safety layer works, strategy has NO edge
 
 Ran the first backtest on REAL market data instead of synthetic candles. Pulled 5
