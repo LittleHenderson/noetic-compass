@@ -59,3 +59,18 @@ export function toneForClaim(status: string): ChipTone {
   if (s === 'SUPPRESSED' || s === 'UNAVAILABLE') return 'muted';
   return 'neutral';
 }
+
+/** Map a pipeline-stage / evidence-packet status to a tone. */
+export function toneForStage(status: string): ChipTone {
+  const s = status.toUpperCase();
+  if (s === 'LIVE_LOCKED' || s === 'WRITE_FAILED' || s === 'REJECTED' || s === 'FAIL' || s === 'CLOSED_LOSS') return 'danger';
+  if (s === 'FLAG_FOR_HUMAN_REVIEW') return 'amber';
+  if (
+    s === 'PASS' || s === 'VERIFIED' || s === 'ALLOWED' || s === 'CLEAR' ||
+    s === 'ROUTED' || s === 'EXECUTED' || s === 'ACCEPTED' || s === 'CLOSED_WIN'
+  ) {
+    return 'teal';
+  }
+  if (s === 'SUPPRESSED' || s === 'NO_ORDER' || s === 'NOT_RUN' || s === 'CANCELLED' || s === 'PROPOSED') return 'muted';
+  return 'neutral';
+}

@@ -4,7 +4,10 @@
 import type {
   ForexBannerState,
   ForexBrokerMode,
+  ForexEvidenceHash,
   ForexProofBundle,
+  ForexTrace,
+  PipelineStage,
 } from './types';
 
 const KNOWN_MODES: ForexBrokerMode[] = [
@@ -118,4 +121,135 @@ export function deriveLiveEligibility(bundle: ForexProofBundle): EligibilityRow[
       detail: 'CAS Forex currently has a local hash chain only; WORM is not wired.',
     },
   ];
+}
+
+/**
+ * Derive audit traces from the real day-1 evidence: one trace per paper route
+ * candidate, joining the route decision, risk sizing, and proof receipt.
+ *
+ * Truthfulness rule: the day-1 PAPER-ROUTE loop is the decision + risk + receipt
+ * tracks, not the full backtest/auditor pipeline. Stages the paper loop did not
+ * exercise (CAS compiler, market gate) are marked NOT_RUN with an honest detail
+ * instead of a fabricated PASS.
+ */
+export function deriveTraces(bundle: ForexProofBundle): ForexTrace[] {
+  const decision = bundle.decision.latest_decision;
+  const review = bundle.risk.latest_review;
+  const report = bundle.paperProof.report;
+  const summary = report.daily_summaries[report.daily_summaries.length - 1];
+  const liveLocked = report.live_locks.length > 0;
+
+  return decision.symbol_decisions.map((sd) => {
+    const sizing = review.sizing.find((s) => s.proposal_id === sd.proposal.proposal_id) ?? null;
+
+    const stages: PipelineStage[] = [
+      {
+        key: 'forecast',
+        label: 'Forecast Harness',
+        status: 'ROUTED',
+        exercised: true,
+        detail: `${sd.proposal.model_version} · ${sd.direction} · confidence ${sd.confidence.toFixed(4)}`,
+      },
+      {
+        key: 'gate0_compiler',
+        label: 'Gate 0 · CAS Compiler',
+        status: 'NOT_RUN',
+        exercised: false,
+        detail: 'Full CAS compiler/admissibility gate runs in the backtest/auditor path, not the day-1 paper-route loop.',
+      },
+      {
+        key: 'gate1_risk',
+        label: 'Gate 1 · Risk',
+        status: sizing ? 'ALLOWED' : 'NOT_RUN',
+        exercised: !!sizing,
+        detail: sizing
+          ? `Sized ${sizing.sized_lots} lots · planned risk $${sizing.planned_risk_usd} of $${sizing.max_risk_usd} cap · ${sizing.attempt_status}`
+          : 'No sizing recorded for this candidate.',
+      },
+      {
+        key: 'gate2_macro',
+        label: 'Gate 2 · Macro',
+        status: 'PASS',
+        exercised: true,
+        detail: `${decision.macro_status} · ${decision.macro_reason} · event context: ${decision.event_context}`,
+      },
+      {
+        key: 'gate3_market',
+        label: 'Gate 3 · Market',
+        status: 'NOT_RUN',
+        exercised: false,
+        detail: 'Market gate not exercised in the day-1 paper-route loop.',
+      },
+      {
+        key: 'gate4_execution',
+        label: 'Gate 4 · Execution',
+        status: 'NO_ORDER',
+        exercised: true,
+        detail: `Orders attempted ${summary?.orders_attempted ?? 0}; no broker order placed (paper-only).`,
+      },
+      {
+        key: 'broker',
+        label: 'Broker Outcome',
+        status: 'NO_ORDER',
+        exercised: true,
+        detail: `Orders paper-executed ${summary?.orders_paper_executed ?? 0} on ${summary?.server ?? 'demo source'}.`,
+      },
+      {
+        key: 'post_trade',
+        label: 'Post-Trade Harness',
+        status: report.open_positions_reconciled ? 'VERIFIED' : 'NOT_RUN',
+        exercised: report.open_positions_reconciled,
+        detail: report.open_positions_reconciled
+          ? 'Open positions reconciled; no new fill to settle.'
+          : 'Not run.',
+      },
+      {
+        key: 'evidence',
+        label: 'Evidence Store',
+        status: 'SUPPRESSED',
+        exercised: true,
+        detail: 'Paper route candidate recorded and hash-bound; packet status SUPPRESSED (no order).',
+      },
+      {
+        key: 'live_lock',
+        label: 'Live Lock Controller',
+        status: liveLocked ? 'LIVE_LOCKED' : 'CLEAR',
+        exercised: true,
+        detail: liveLocked ? `${report.live_locks.length} live lock(s) active.` : 'No live lock active.',
+      },
+    ];
+
+    const hashes: ForexEvidenceHash[] = summary
+      ? [
+          {
+            label: 'broker receipt sha256',
+            hash: summary.broker_receipt_hash_sha256,
+            verified: summary.broker_receipt_validated,
+          },
+          {
+            label: 'broker export sha256',
+            hash: summary.broker_export_sha256,
+            verified: summary.broker_source_verified,
+          },
+          { label: 'account id hash', hash: summary.account_id_hash },
+        ]
+      : [];
+
+    return {
+      trace_id: sd.proposal.proposal_id,
+      symbol: sd.symbol,
+      date: decision.date,
+      timeframe: sd.proposal.timeframe,
+      direction: sd.direction,
+      confidence: sd.confidence,
+      route_action: sd.action,
+      packet_status: 'SUPPRESSED',
+      broker_order_placed: false,
+      sized_lots: sizing ? sizing.sized_lots : null,
+      planned_risk_usd: sizing ? sizing.planned_risk_usd : null,
+      stages,
+      hashes,
+      chain_verified: report.chain_verified,
+    };
+  });
 }

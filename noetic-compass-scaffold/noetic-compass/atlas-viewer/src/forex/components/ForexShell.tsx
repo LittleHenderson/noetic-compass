@@ -24,7 +24,7 @@ interface NavItem {
 const NAV: NavItem[] = [
   { to: '/forex/proof', label: 'Proof', ready: true },
   { to: '/forex/dashboard', label: 'Dashboard', ready: false },
-  { to: '/forex/audit', label: 'Audit', ready: false },
+  { to: '/forex/audit', label: 'Audit', ready: true },
   { to: '/forex/trade', label: 'Paper Desk', ready: false },
   { to: '/forex/history', label: 'History', ready: false },
   { to: '/forex/settings', label: 'Settings', ready: false },

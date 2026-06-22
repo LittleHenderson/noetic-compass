@@ -227,6 +227,7 @@ export interface PaperDecisionStatus {
 
 export interface PaperRiskSizing {
   symbol: string;
+  proposal_id: string;
   action: RouteAction;
   attempt_number: number;
   attempt_status: string;
@@ -325,6 +326,65 @@ export interface ForexProofBundle {
   bundle: DailyBundleStatus;
   /** True when served from bundled fixtures rather than a live backend. */
   fromFixtures: boolean;
+}
+
+// ── Audit-console trace model (derived, see forexSelectors.ts) ───────────────
+
+export type PipelineStageStatus =
+  | 'PASS'
+  | 'ROUTED'
+  | 'ALLOWED'
+  | 'SUPPRESSED'
+  | 'NO_ORDER'
+  | 'VERIFIED'
+  | 'CLEAR'
+  | 'LIVE_LOCKED'
+  | 'NOT_RUN';
+
+export interface PipelineStage {
+  key: string;
+  label: string;
+  status: PipelineStageStatus;
+  detail: string;
+  /** False when the day-1 paper-route loop did not exercise this stage. */
+  exercised: boolean;
+}
+
+export type EvidencePacketStatus =
+  | 'PROPOSED'
+  | 'ACCEPTED'
+  | 'SUPPRESSED'
+  | 'FLAG_FOR_HUMAN_REVIEW'
+  | 'EXECUTED'
+  | 'REJECTED'
+  | 'CANCELLED'
+  | 'CLOSED_WIN'
+  | 'CLOSED_LOSS'
+  | 'LIVE_LOCKED'
+  | 'WRITE_FAILED';
+
+export interface ForexEvidenceHash {
+  label: string;
+  hash: string;
+  verified?: boolean;
+}
+
+/** One audit trace: a paper route candidate walked through the pipeline. */
+export interface ForexTrace {
+  trace_id: string;
+  symbol: string;
+  date: string;
+  timeframe: string;
+  direction: 'LONG' | 'SHORT';
+  confidence: number;
+  route_action: RouteAction;
+  packet_status: EvidencePacketStatus;
+  broker_order_placed: boolean;
+  sized_lots: number | null;
+  planned_risk_usd: number | null;
+  stages: PipelineStage[];
+  hashes: ForexEvidenceHash[];
+  chain_verified: boolean;
 }
 
 // ── Derived banner state (selector output, see forexSelectors.ts) ────────────

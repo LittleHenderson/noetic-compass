@@ -4,6 +4,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { ForexShell } from './components/ForexShell';
 import { ForexProofPage } from './pages/ForexProofPage';
+import { ForexAuditPage } from './pages/ForexAuditPage';
 
 export default function ForexApp() {
   return (
@@ -11,6 +12,7 @@ export default function ForexApp() {
       <Routes>
         <Route index element={<Navigate to="proof" replace />} />
         <Route path="proof" element={<ForexProofPage />} />
+        <Route path="audit" element={<ForexAuditPage />} />
         <Route path="*" element={<Navigate to="proof" replace />} />
       </Routes>
     </ForexShell>
