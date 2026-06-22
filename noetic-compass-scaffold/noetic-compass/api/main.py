@@ -23,14 +23,17 @@ from api.middleware.audit import AuditLogMiddleware
 from api.middleware.request_id import RequestIdMiddleware
 from api.routes import (
     assess,
+    atlas_live,
     auth,
     batch,
     benchmark,
     cohort,
     config,
     evidence,
+    explainer,
     export,
     forecast,
+    forex_proof,
     health,
     idea_atlas,
     mode7,
@@ -115,6 +118,7 @@ app.add_exception_handler(PipelineStageError, pipeline_stage_error_handler)  # t
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(assess.router)
+app.include_router(atlas_live.router)
 app.include_router(wrap.router)
 app.include_router(batch.router)
 app.include_router(benchmark.router)
@@ -129,4 +133,6 @@ app.include_router(reproducibility.router)
 app.include_router(idea_atlas.router)
 app.include_router(mode7.router)
 app.include_router(evidence.router)
+app.include_router(explainer.router)
 app.include_router(visual_grounding.router)
+app.include_router(forex_proof.router)

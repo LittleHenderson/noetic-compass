@@ -22,6 +22,13 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         if request.url.path in PUBLIC_PATHS or request.method == "OPTIONS":
             return await call_next(request)
 
+        # Read-only CAS Forex proof endpoints are public: GET-only, serving
+        # non-secret paper-proof evidence JSON (also checked into the repo) with
+        # no order/transfer/unlock surface. The proof cockpit reads them
+        # unauthenticated. Any non-GET under /forex/ still falls through to auth.
+        if request.method == "GET" and request.url.path.startswith("/forex"):
+            return await call_next(request)
+
         auth_header = request.headers.get("Authorization", "")
         if not auth_header.startswith("Bearer "):
             return JSONResponse(

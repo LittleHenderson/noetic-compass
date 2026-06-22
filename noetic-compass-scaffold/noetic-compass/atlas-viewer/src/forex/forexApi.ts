@@ -1,10 +1,12 @@
-// CAS Forex API layer — Phase 0 "fixture mode" with a backend-ready fetch path.
+// CAS Forex API layer — live read-only backend with bundled-fixture fallback.
 //
-// There is no /api/forex/* backend yet. Until one lands, FOREX_API_ENABLED is
-// false and every read resolves from bundled day-1 fixtures (truthful real
-// evidence, served statically). When the FastAPI boundary from the UI/UX plan
-// is wired, flip the flag (or set VITE_FOREX_API=1) and the same wrappers fetch
-// the live read-only status without any component change.
+// The /api/forex/* FastAPI boundary (api/routes/forex_proof.py) serves the real
+// paper-proof evidence read-only. In dev/prod these wrappers attempt that
+// backend and transparently fall back to the bundled day-1 fixtures on any
+// error, so the cockpit never blanks out — it only ever loses freshness, never
+// truthfulness. Under vitest we stay on fixtures so unit tests are deterministic
+// and never depend on a running server. Force fixtures anywhere with
+// VITE_FOREX_API=0.
 //
 // Every endpoint here is READ-ONLY. There is no order/transfer/unlock path.
 // Live trading, broker ACCEPT, and payment transfers remain NOT LICENSED.
@@ -27,10 +29,17 @@ import type {
   DailyBundleStatus,
 } from './types';
 
-/** Backend feature flag. Default OFF — no forex API exists yet. */
-export const FOREX_API_ENABLED =
-  import.meta.env?.VITE_FOREX_API === '1' ||
-  import.meta.env?.VITE_FOREX_API === 'true';
+/**
+ * Whether to attempt the live read-only backend. ON in dev/prod (with fixture
+ * fallback), OFF under vitest (MODE === 'test') for deterministic tests, and
+ * force-OFF anywhere with VITE_FOREX_API=0 / 'false'.
+ */
+const FOREX_API_DISABLED =
+  import.meta.env?.MODE === 'test' ||
+  import.meta.env?.VITE_FOREX_API === '0' ||
+  import.meta.env?.VITE_FOREX_API === 'false';
+
+export const FOREX_API_ENABLED = !FOREX_API_DISABLED;
 
 const FOREX_API_BASE = '/api/forex';
 
