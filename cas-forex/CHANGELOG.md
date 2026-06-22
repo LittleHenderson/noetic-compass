@@ -1,5 +1,42 @@
 # CAS Forex — Changelog
 
+## 2026-06-21 — First REAL-data comparative backtest: safety layer works, strategy has NO edge
+
+Ran the first backtest on REAL market data instead of synthetic candles. Pulled 5
+years of daily candles from Yahoo Finance (1,300 bars/pair, 2021-06-22 → 2026-06-22,
+no API key, no GPU) for EUR/USD, GBP/USD, USD/JPY, AUD/USD, USD/CAD and ran the full
+CAS Forex pipeline three ways: `cas_gated` (SMA proposals through the 5-gate auditor),
+`raw_model` (same proposals, gates removed), and `buy_hold` / `no_trade` baselines.
+
+Result (REAL, evidence-chain verified): the built-in SMA5/20/50 daily strategy **LOSES
+money** with or without CAS gating — portfolio P&L **-$15,097.88 gated vs -$16,296.32
+raw** on $50,000 starting capital (5 × $10k), avg max drawdown 41.5% gated / 46.0% raw.
+Buy-and-hold beat the strategy on most pairs (e.g. USD/JPY b&h +46.3% vs gated +9.3%).
+
+Honest read:
+- The **CAS safety/gating layer does its job**: it suppressed 695 trades, lost ~$1,198
+  (~7.4%) less than the ungated arm, and lowered average max drawdown (41.5% vs 46.0%).
+  It reduces damage — it cannot turn a losing strategy into a winning one.
+- The **trading edge does not exist** with the current model. `report.passed = False`
+  (no positive edge vs no-trade). This confirms live trading SHOULD remain NOT LICENSED:
+  trading this model live would lose money.
+- Evidence is real and verifiable: 13,554 hash-chained Evidence Packets across 5 files,
+  all chains independently re-verified. 217 tests still pass (additive change only).
+
+Next lever for an actual edge (in priority order): wire a real forecaster (Chronos stub
+at `forecast/models.py:112`, or a TimeGPT key), then re-run this exact harness; the
+strategy — not the safety chassis — is the bottleneck.
+
+Added:
+- `scripts/run_real_backtest.py` — real-data (Yahoo) comparative backtest:
+  cas_gated vs raw_model vs buy_hold vs no_trade, writes a real BacktestEvidenceReport
+  + verifiable hash-chain, with an explicit research-signal (not license) pass criterion.
+- Run artifact: `evidence_runs/real_backtest/real-20260621234945-report.json`.
+
+Known caveat (follow-up): the macro gate is evaluated at wall-clock now, not at the
+candle's historical timestamp, so macro blackouts are effectively inert in backtests
+(`backtest/engine.py` builds the snapshot with `timestamp=utc_now()`).
+
 ## 2026-06-19 — Closed-book KWIK hallucination probe: measured ceiling, NOT LICENSED
 
 Ran the decisive pre-answer hidden-state hallucination experiment in the one framing where
