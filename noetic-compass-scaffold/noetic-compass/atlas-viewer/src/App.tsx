@@ -5,12 +5,18 @@ import type { ReactNode } from 'react';
 import LoginPage from './pages/LoginPage';
 import LicensePage from './pages/LicensePage';
 import ModelConfigPage from './pages/ModelConfigPage';
+import LsaCalibrationPage from './pages/LsaCalibrationPage';
 import { GlassPanel } from './components/ui/GlassPanel';
+import { GuidedProductSurface } from './components/shell/GuidedProductSurface';
 import { ACCENT_BLUE, COLORS, THEME } from './lib/designTokens';
 
 // CockpitPage pulls in Three.js + framer-motion (~640 KB). Lazy-load it so the
 // initial bundle stays small for the eager Login / License / ModelConfig routes.
 const CockpitPage = lazy(() => import('./pages/CockpitPage'));
+
+// CAS Forex read-only proof cockpit. Lazy-loaded so its evidence fixtures and
+// forex module stay out of the initial bundle.
+const ForexApp = lazy(() => import('./forex/ForexApp'));
 
 function AuthGate({ children }: { children: ReactNode }) {
   return <>{children}</>;
@@ -62,6 +68,18 @@ function CockpitSuspenseFallback() {
   );
 }
 
+function GuidedCockpitRoute() {
+  return (
+    <AuthGate>
+      <GuidedProductSurface>
+        <Suspense fallback={<CockpitSuspenseFallback />}>
+          <CockpitPage />
+        </Suspense>
+      </GuidedProductSurface>
+    </AuthGate>
+  );
+}
+
 export default function App() {
   return (
     <Routes>
@@ -84,11 +102,24 @@ export default function App() {
         }
       />
       <Route
+        path="/audit-console"
+        element={<GuidedCockpitRoute />}
+      />
+      <Route
         path="/cockpit"
+        element={<GuidedCockpitRoute />}
+      />
+      <Route
+        path="/explainer"
+        element={<Navigate to="/audit-console" replace />}
+      />
+      <Route path="/lsa-calibration" element={<LsaCalibrationPage />} />
+      <Route
+        path="/forex/*"
         element={
           <AuthGate>
             <Suspense fallback={<CockpitSuspenseFallback />}>
-              <CockpitPage />
+              <ForexApp />
             </Suspense>
           </AuthGate>
         }

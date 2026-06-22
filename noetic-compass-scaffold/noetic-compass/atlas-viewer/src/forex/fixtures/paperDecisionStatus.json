@@ -1,0 +1,79 @@
+{
+  "plan_id": "index-tsmom-126-d1-paper-proof",
+  "lead_id": "index_tsmom_126_d1",
+  "strategy_setting": "tsmom_126_250_2_10",
+  "decision_count": 1,
+  "route_counts": { "ROUTE_PAPER_SIGNAL": 1 },
+  "chain_verified": true,
+  "latest_decision": {
+    "claim_boundary": "Paper route decisions are research/paper-only. They do not place trades, create broker ACCEPT, or authorize live money.",
+    "date": "2026-06-22",
+    "decision_id": "index-tsmom-126-d1-paper-proof-2026-06-22-paper-decision",
+    "event_context": "normal",
+    "lead_id": "index_tsmom_126_d1",
+    "macro_reason": "No macro blackout active.",
+    "macro_status": "PASS",
+    "notes": [
+      "At least one symbol produced a paper signal; no broker order was placed."
+    ],
+    "plan_id": "index-tsmom-126-d1-paper-proof",
+    "route_action": "ROUTE_PAPER_SIGNAL",
+    "strategy_setting": "tsmom_126_250_2_10",
+    "symbol_decisions": [
+      {
+        "action": "ROUTE_PAPER_SIGNAL",
+        "bars_used": 127,
+        "confidence": 0.4612,
+        "direction": "LONG",
+        "latest_close": 51745.87109375,
+        "proposal": {
+          "confidence": 0.4612,
+          "direction": "LONG",
+          "entry_price": 51745.87,
+          "horizon_minutes": 1440,
+          "model_source": "TECHNICAL",
+          "model_version": "paper-route:tsmom_126_250_2_10",
+          "proposal_id": "index-tsmom-126-d1-paper-proof-US30-20260622155514",
+          "rationale": "Paper-only route candidate from tsmom_126_250_2_10; no broker order placed.",
+          "stop_loss": 50485.56,
+          "symbol": "US30",
+          "take_profit": 58047.44,
+          "timeframe": "D1",
+          "timestamp": "2026-06-22T15:55:14.089762Z"
+        },
+        "reason": "Strategy signal produced a paper route candidate.",
+        "sl_mult": 2.0,
+        "symbol": "US30",
+        "tp_mult": 10.0
+      },
+      {
+        "action": "ROUTE_PAPER_SIGNAL",
+        "bars_used": 127,
+        "confidence": 0.7539,
+        "direction": "LONG",
+        "latest_close": 30241.62109375,
+        "proposal": {
+          "confidence": 0.7539,
+          "direction": "LONG",
+          "entry_price": 30241.62,
+          "horizon_minutes": 1440,
+          "model_source": "TECHNICAL",
+          "model_version": "paper-route:tsmom_126_250_2_10",
+          "proposal_id": "index-tsmom-126-d1-paper-proof-NAS100-20260622155514",
+          "rationale": "Paper-only route candidate from tsmom_126_250_2_10; no broker order placed.",
+          "stop_loss": 28971.74,
+          "symbol": "NAS100",
+          "take_profit": 36591.0,
+          "timeframe": "D1",
+          "timestamp": "2026-06-22T15:55:14.180660Z"
+        },
+        "reason": "Strategy signal produced a paper route candidate.",
+        "sl_mult": 2.0,
+        "symbol": "NAS100",
+        "tp_mult": 10.0
+      }
+    ],
+    "timeframe": "D1"
+  },
+  "claim_boundary": "Paper route decisions are research/paper-only. They do not place trades, create broker ACCEPT, or authorize live money."
+}

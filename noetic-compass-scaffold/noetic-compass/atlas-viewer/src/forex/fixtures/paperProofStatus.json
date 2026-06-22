@@ -1,0 +1,54 @@
+{
+  "claim_boundary": "Paper proof is incomplete until 30 real trading days verify. Live trading, broker ACCEPT, and payment transfers remain NOT LICENSED.",
+  "deployment_status": "NOT LICENSED",
+  "broker_accept_status": "NOT LICENSED",
+  "payment_transfer_status": "NOT LICENSED",
+  "report": {
+    "report_id": "report-index-tsmom-126-d1-paper-proof",
+    "session_id": "index-tsmom-126-d1-paper-proof",
+    "required_trading_days": 30,
+    "completed_trading_days": 1,
+    "symbols": ["US30", "NAS100"],
+    "started_at": "2026-06-22T16:13:56.533360Z",
+    "completed_at": "2026-06-22T16:13:56.533403Z",
+    "packet_count": 2,
+    "chain_verified": true,
+    "live_mode_used": false,
+    "open_positions_reconciled": true,
+    "live_locks": [],
+    "daily_summaries": [
+      {
+        "account_id_hash": "ff60999583fac674aad6a8521413c78b2982a9f93fb996c5f750d21bd6bb271f",
+        "broker_api_authenticated": true,
+        "broker_export_sha256": "113d13b413877626857614c445be2f31be3ba5b5834ba6d6975989df452b9653",
+        "broker_mode": "PAPER_MT5",
+        "broker_receipt_hash_sha256": "94d68da3b3c4d7bd13e29f69df60e1ff1d7938757e0e8e3d9aec613976704c0c",
+        "broker_receipt_validated": true,
+        "broker_source_verified": true,
+        "claim_boundary": "Paper proof is incomplete until 30 real trading days verify. Live trading, broker ACCEPT, and payment transfers remain NOT LICENSED.",
+        "date": "2026-06-22",
+        "deployment_status": "NOT LICENSED",
+        "lead_id": "index_tsmom_126_d1",
+        "live_mode": false,
+        "open_positions_reconciled": true,
+        "orders_attempted": 0,
+        "orders_paper_executed": 0,
+        "plan_id": "index-tsmom-126-d1-paper-proof",
+        "provider_receipt_id": "113d13b413877626",
+        "receipt_id": "index-tsmom-126-d1-paper-proof-2026-06-22-mt5-demo-api",
+        "receipt_validation_status": "BROKER_API_VERIFIED",
+        "server": "Hugosway-Demo",
+        "strategy_setting": "tsmom_126_250_2_10",
+        "symbols": ["US30", "NAS100"],
+        "terminal_name": "MetaTrader 5",
+        "timeframe": "D1",
+        "trading_day": 1
+      }
+    ],
+    "passed": false,
+    "failure_reasons": [
+      "paper_days 1 < required 30",
+      "broker_verified_days 1 < required 30"
+    ]
+  }
+}

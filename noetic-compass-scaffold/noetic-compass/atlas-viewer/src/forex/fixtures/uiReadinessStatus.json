@@ -1,0 +1,33 @@
+{
+  "report_id": "index-tsmom-126-d1-paper-proof-ui-readiness",
+  "plan_id": "index-tsmom-126-d1-paper-proof",
+  "lead_id": "index_tsmom_126_d1",
+  "strategy_setting": "tsmom_126_250_2_10",
+  "timeframe": "D1",
+  "readiness_status": "NOT_READY_FOR_UI_UX",
+  "min_daily_bundles_for_ui": 5,
+  "completed_trading_days": 1,
+  "broker_verified_days": 1,
+  "decision_days": 1,
+  "risk_review_days": 1,
+  "complete_bundle_days": 1,
+  "complete_bundle_dates": ["2026-06-22"],
+  "route_counts": { "ROUTE_PAPER_SIGNAL": 1 },
+  "risk_status_counts": { "PAPER_ATTEMPTS_ALLOWED": 1 },
+  "chains_verified": {
+    "paper_proof": true,
+    "paper_decision": true,
+    "paper_risk": true
+  },
+  "blockers": [
+    "complete_bundle_days 1 < required 5",
+    "broker_verified_days 1 < required 5",
+    "decision_days 1 < required 5",
+    "risk_review_days 1 < required 5"
+  ],
+  "next_ui_step": "Keep running scripts/run_daily_paper_bundle.py for each real trading day until the minimum complete daily bundle count is met.",
+  "claim_boundary": "UI readiness is proof-cockpit readiness only. It does not create broker ACCEPT, live trading permission, or payment-transfer permission.",
+  "deployment_status": "NOT LICENSED",
+  "broker_accept_status": "NOT LICENSED",
+  "payment_transfer_status": "NOT LICENSED"
+}

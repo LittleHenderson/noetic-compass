@@ -1,0 +1,37 @@
+{
+  "bundle_id": "index-tsmom-126-d1-paper-proof-2026-06-22-daily-bundle",
+  "plan_id": "index-tsmom-126-d1-paper-proof",
+  "lead_id": "index_tsmom_126_d1",
+  "strategy_setting": "tsmom_126_250_2_10",
+  "date": "2026-06-22",
+  "timeframe": "D1",
+  "steps": [
+    {
+      "name": "mt5_demo_receipt",
+      "status": "SKIPPED_EXISTING",
+      "detail": "Broker/API-verified paper receipt already exists for this date.",
+      "artifact": null,
+      "reasons": []
+    },
+    {
+      "name": "paper_route_decision",
+      "status": "SKIPPED_EXISTING",
+      "detail": "Paper route/no-trade decision already exists for this date.",
+      "artifact": null,
+      "reasons": []
+    },
+    {
+      "name": "paper_risk_review",
+      "status": "SKIPPED_EXISTING",
+      "detail": "Paper risk-budget review already exists for this date.",
+      "artifact": null,
+      "reasons": []
+    }
+  ],
+  "completed": true,
+  "ui_ux_checkpoint": "NOT_YET: wait for several daily bundles before building the proof cockpit.",
+  "claim_boundary": "Daily paper bundles are paper-proof orchestration only. They do not place trades, create broker ACCEPT, or authorize live money.",
+  "deployment_status": "NOT LICENSED",
+  "broker_accept_status": "NOT LICENSED",
+  "payment_transfer_status": "NOT LICENSED"
+}
