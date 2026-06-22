@@ -104,11 +104,14 @@ def run_variant(candles: List[dict], symbol: str, store: Optional[EvidenceStore]
                 run_id: str, gated: bool, signal_fn=None,
                 model_source: ModelSource = ModelSource.TECHNICAL,
                 initial_balance: float = 10000.0,
-                position_lots: float = 0.05) -> BacktestResult:
+                position_lots: float = 0.05,
+                spread_pips: float = 1.0,
+                extra_cost_pips: float = 0.0) -> BacktestResult:
     auditor = CASForexAuditor() if gated else PassThroughAuditor()
     engine = BacktestEngine(
         auditor=auditor, evidence_store=store, run_id=run_id,
         initial_balance=initial_balance, position_size_lots=position_lots,
+        spread_pips=spread_pips, extra_cost_pips=extra_cost_pips,
         signal_fn=signal_fn, signal_model_source=model_source,
         signal_rationale=f"{model_source.value} directional signal",
     )
@@ -146,6 +149,10 @@ def main() -> int:
     # ---- RISK BUDGET (user-controllable) ----
     parser.add_argument("--starting-balance", type=float, default=10000.0)
     parser.add_argument("--position-lots", type=float, default=0.05)
+    parser.add_argument("--spread-pips", type=float, default=1.0,
+                        help="modeled spread cost per round trip (pips)")
+    parser.add_argument("--extra-cost-pips", type=float, default=0.0,
+                        help="commission + slippage on top of spread (pips)")
     parser.add_argument("--risk-per-trade-pct", type=float, default=None,
                         help="max risk per trade as %% of balance (default: config 0.5)")
     parser.add_argument("--max-daily-dd", type=float, default=None,
@@ -233,11 +240,15 @@ def main() -> int:
         gated = run_variant(candles, symbol, gated_store, run_id, gated=True,
                             signal_fn=signal_fn, model_source=model_source,
                             initial_balance=args.starting_balance,
-                            position_lots=args.position_lots)
+                            position_lots=args.position_lots,
+                            spread_pips=args.spread_pips,
+                            extra_cost_pips=args.extra_cost_pips)
         raw = run_variant(candles, symbol, None, run_id, gated=False,
                           signal_fn=signal_fn, model_source=model_source,
                           initial_balance=args.starting_balance,
-                          position_lots=args.position_lots)
+                          position_lots=args.position_lots,
+                          spread_pips=args.spread_pips,
+                          extra_cost_pips=args.extra_cost_pips)
         bh = buy_hold_metrics(candles, symbol)
 
         chain_ok = chain_ok and gated.evidence_chain_verified

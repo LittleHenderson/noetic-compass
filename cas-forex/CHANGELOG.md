@@ -1,5 +1,35 @@
 # CAS Forex — Changelog
 
+## 2026-06-21 — Realistic-cost test: the thin edge does NOT survive normal costs
+
+Added a configurable round-trip cost knob (`extra_cost_pips` = commission + slippage
+on top of spread; `--spread-pips` / `--extra-cost-pips`) and swept the trend-filtered
+mean-reversion (the only positive strategy) across realistic cost levels.
+
+5y portfolio P&L (gated, $50k):
+- 1.0 pip total cost (very optimistic):  +$91   PASS
+- 1.5 pips (optimistic ECN+commission):  +$28   PASS
+- 2.0 pips (normal retail):              -$31   FAIL
+- 2.5 pips (standard account):           -$95   FAIL
+
+Verdict: the edge breaks even at ~1.5-2.0 pips and is negative at realistic retail
+all-in costs (majors typically 1.5-2.5 pips spread+commission+slippage). So the
+trend-filtered mean-reversion is NOT a deployable, cost-surviving strategy — it is
+positive only under optimistic cost assumptions, and even then ~$0 over 5 years on
+$50k. This is the honest make-or-break result: no deployable edge yet across 4
+strategy families tested (trend SMA, Chronos, mean-rev, mean-rev+filter).
+
+Implication for the $5-12k/month target: not reachable. Best strategy made ~$0 over
+5y on $50k; $5-12k/month on a $2-5k seed is +100-600%/month (martingale-blowup
+territory), not a real return. A realistic 2-5%/month would need a ~$100-250k account
+to clear $5k/month — and even that is exceptional and not guaranteed.
+
+Added/changed:
+- `backtest/engine.py` — `extra_cost_pips` (round-trip commission+slippage), deducted
+  with spread on close. Default 0.0 (tests unchanged).
+- `scripts/run_real_backtest.py` — `--spread-pips`, `--extra-cost-pips`.
+- 217 tests pass.
+
 ## 2026-06-21 — Strategy pivot: mean-reversion + trend filter = first POSITIVE backtest (thin)
 
 Acted on the research insight that FX majors range 70-80% of the time, so our

@@ -147,6 +147,7 @@ class BacktestEngine:
         initial_balance: float = 10000.0,
         position_size_lots: float = 0.05,
         spread_pips: float = 1.0,
+        extra_cost_pips: float = 0.0,
         evidence_store: Optional[EvidenceStore] = None,
         run_id: str = "backtest",
         signal_fn=None,
@@ -163,6 +164,9 @@ class BacktestEngine:
         self.initial_balance = initial_balance
         self.position_size = position_size_lots
         self.spread_pips = spread_pips
+        # Additional round-trip cost beyond the modeled spread: commission +
+        # slippage, expressed in pips. Real all-in majors cost ~1.5-2.5 pips.
+        self.extra_cost_pips = extra_cost_pips
         self.evidence_store = evidence_store
         self.run_id = run_id
         self.evidence_write_failed = False
@@ -438,8 +442,8 @@ class BacktestEngine:
         else:
             trade.profit_pips = (trade.entry_price - trade.exit_price) * mult
 
-        # Account for spread
-        trade.profit_pips -= self.spread_pips
+        # Account for round-trip trading cost: spread + commission + slippage
+        trade.profit_pips -= (self.spread_pips + self.extra_cost_pips)
         pip_value = self._pip_value_per_standard_lot(
             trade.proposal.symbol, trade.exit_price or trade.entry_price
         )
