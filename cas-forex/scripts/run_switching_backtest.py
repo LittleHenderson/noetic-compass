@@ -65,6 +65,13 @@ def main() -> int:
     p.add_argument("--position-lots", type=float, default=0.05)
     p.add_argument("--spread-pips", type=float, default=1.0)
     p.add_argument("--extra-cost-pips", type=float, default=0.5)
+    # detector tuning
+    p.add_argument("--detect-window", type=int, default=60)
+    p.add_argument("--er-trend", type=float, default=0.35,
+                   help="efficiency-ratio threshold for calling a trend (lower = more trends)")
+    p.add_argument("--hi-vol", type=float, default=1.5)
+    p.add_argument("--lo-vol", type=float, default=0.6)
+    p.add_argument("--shock-z", type=float, default=4.0)
     p.add_argument("--output-dir", default="evidence_runs/switching")
     args = p.parse_args()
 
@@ -73,7 +80,12 @@ def main() -> int:
         "meanrev": make_mean_reversion_signal(),
         "trend_sma": make_sma_trend_signal(),
     }
-    switch_signal = make_regime_switching_signal(sub_signals, routing=DEFAULT_ROUTING)
+    switch_signal = make_regime_switching_signal(
+        sub_signals, routing=DEFAULT_ROUTING,
+        detect_window=args.detect_window, baseline=max(args.detect_window * 3, 180),
+        er_trend=args.er_trend, hi_vol=args.hi_vol, lo_vol=args.lo_vol,
+        shock_z=args.shock_z,
+    )
 
     strategies = {
         "trend_sma": make_sma_trend_signal(),

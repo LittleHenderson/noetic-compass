@@ -1,5 +1,34 @@
 # CAS Forex — Changelog
 
+## 2026-06-21 — Detector tuning + intraday switching: cost drag is the wall, no config beats break-even
+
+Followed the switching test with (A) detector-threshold tuning on daily and (B)
+intraday H1. Added detector CLI args (`--er-trend/--detect-window/--hi-vol/--lo-vol/
+--shock-z`) to `run_switching_backtest.py`.
+
+(A) Daily er_trend sweep — MORE trend detection = WORSE switching (monotonic):
+  er 0.15 -$7,360 | 0.20 -$6,479 | 0.25 -$5,631 | 0.35 -$2,040.
+  Every "trend" call routes to breakout/trend, which lose on daily, so seeing more
+  trends destroys value. Can't tune a daily edge into existence; meanrev_tf (~+$9) wins.
+
+(B) Intraday H1 (real 2y, ~12,300 bars/pair, cost 1.5p): EVERYTHING loses —
+  trend_sma -$10,404 | breakout -$6,196 | meanrev -$4,862 | SWITCH -$4,715 |
+  meanrev_tf -$4,123 (best). SWITCH again ~= meanrev (detector still 91.6% range at H1).
+  The killer is COST DRAG: meanrev_tf made +$3.72 on daily (286 trades) but loses
+  -$4,123 on H1 (4,654 trades) — same strategy, ~16x more trades x cost. ~85% of the
+  H1 loss is trading cost.
+
+Synthesis after a thorough search (4 strategy families, 2 forecasters incl. Chronos,
+regime sim, detection, hard switching, detector tuning, daily + H1): NO configuration
+produces a cost-surviving edge. The ceiling is daily mean-rev+filter at literal
+break-even (+$3.72), which evaporates at realistic costs. The wall is cost drag eating
+thin edges, worse at higher frequency.
+
+Genuinely untested (tied to user's real 2020 success): the user's OWN discretionary
+entry rules encoded, and NAS30 / index instruments (indices trend more strongly than FX
+majors; we have only tested FX majors, which mean-revert). Live trading remains NOT
+LICENSED. 217 tests pass.
+
 ## 2026-06-21 — Regime detector + switching on REAL data: switching does NOT beat the best single strategy (on daily)
 
 Built the live regime detector + RPM switching and tested it on real 5y daily data
