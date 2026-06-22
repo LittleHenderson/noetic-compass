@@ -1,5 +1,33 @@
 # CAS Forex — Changelog
 
+## 2026-06-21 — Strategy-condition simulator (CAS-SDG for regimes): CJT + nested lacunarity + RPM routing
+
+Built the user's idea: a market-REGIME simulator that plays every strategy across
+every condition and uses the CAS machinery to map where edge lives. Working v0.
+
+- `cas_forex/regime_sim.py` — seeded synthetic OHLC generator for 7 regimes
+  (trend_up/down, range, high_vol, low_vol, vol_cluster, shock); CJT operating-region
+  classifier (cutoff/active/saturation/breakdown + gain beta); nested lacunarity
+  (gap map across strategy x regime x volatility); best-strategy-per-regime (RPM seed).
+- `scripts/run_strategy_simulator.py` — sweeps strategies x regimes x vol x seeds,
+  prints the matrix + nested lacunarity + RPM routing seed, writes a JSON report.
+
+First run (4 strategies x 7 regimes x 3 vol x 5 seeds, cost 1.5p) cleanly recovers
+known structure — which validates the simulator:
+- Trend/breakout WIN in trends (breakout +13.2%/+12.2% up/down) and LOSE in range.
+- Mean-reversion WINS in range (+0.9%) and loses in trends.
+- No single strategy wins everywhere (overall lacunarity 0.58 — 58% of cells are gaps).
+
+RPM routing seed (regime -> best validated strategy):
+  trend_up/down/high_vol -> breakout; range/shock -> meanrev; low_vol -> trend_sma;
+  vol_cluster -> NONE (honest lacuna, do not trade).
+
+Reframe (the productive insight): the edge — if any — is in REGIME DETECTION +
+SWITCHING, not one magic strategy. The honest next frontier is detecting the live
+regime reliably on REAL data and validating the routing out-of-sample (the RPM
+prerequisite question). Synthetic regimes characterize behavior, not live edge.
+Live trading remains NOT LICENSED. 217 tests pass.
+
 ## 2026-06-21 — Realistic-cost test: the thin edge does NOT survive normal costs
 
 Added a configurable round-trip cost knob (`extra_cost_pips` = commission + slippage
