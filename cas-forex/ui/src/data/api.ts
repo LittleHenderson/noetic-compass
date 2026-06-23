@@ -13,6 +13,7 @@ import type {
   AdaptiveCockpitPayload,
   OwnerControlState,
   MTHistorySummary,
+  PcbaCockpitPayload,
 } from "../types/evidence";
 
 export const API_BASE_STORAGE_KEY = "cas_forex_api_base";
@@ -105,6 +106,10 @@ export async function fetchMTHistory(): Promise<MTHistorySummary | null> {
   try { return await apiGet<MTHistorySummary>("/mt/history"); } catch { return null; }
 }
 
+export async function fetchPcbaCockpit(): Promise<PcbaCockpitPayload | null> {
+  try { return await apiGet<PcbaCockpitPayload>("/pcba/cockpit"); } catch { return null; }
+}
+
 // ── React hook with fixture fallback ──
 
 import { useState, useEffect, useCallback } from "react";
@@ -114,6 +119,30 @@ interface UseDashboardResult {
   loading: boolean;
   error: string | null;
   refetch: () => void;
+}
+
+
+function mergeDashboardState(fallback: DashboardState, live: DashboardState): DashboardState {
+  // Keep live evidence when present, but do not let a partial/stale dashboard
+  // remove optional panels such as PCBA. This makes the app operational even
+  // while the API is restarting or a cached dashboard lacks newly added keys.
+  return {
+    ...fallback,
+    ...live,
+    adaptive: live.adaptive ?? fallback.adaptive,
+    ownerControl: live.ownerControl ?? fallback.ownerControl,
+    mtHistory: live.mtHistory ?? fallback.mtHistory,
+    strategyLeads: live.strategyLeads ?? fallback.strategyLeads,
+    backsolve: live.backsolve ?? fallback.backsolve,
+    conditionTally: live.conditionTally ?? fallback.conditionTally,
+    walkForward: live.walkForward ?? fallback.walkForward,
+    mt5Receipt: live.mt5Receipt ?? fallback.mt5Receipt,
+    authorityBoundary: live.authorityBoundary ?? fallback.authorityBoundary,
+    runtimeGates: live.runtimeGates ?? fallback.runtimeGates,
+    aiModel: live.aiModel ?? fallback.aiModel,
+    brokerCandidates: live.brokerCandidates ?? fallback.brokerCandidates,
+    pcba: live.pcba ?? fallback.pcba,
+  };
 }
 
 export function useDashboard(initialState: DashboardState): UseDashboardResult {
@@ -126,7 +155,7 @@ export function useDashboard(initialState: DashboardState): UseDashboardResult {
     setError(null);
     const data = await fetchDashboard();
     if (data) {
-      setState(data);
+      setState(mergeDashboardState(initialState, data));
     } else {
       setState(initialState);
       setError("API unreachable — using fixture data");

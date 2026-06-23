@@ -14,6 +14,7 @@ import type {
   RuntimeGatesState,
   AIModelState,
   BrokerCandidate,
+  PcbaCockpitPayload,
 } from "../types/evidence";
 
 export const UI_READINESS_FIXTURE: UIReadinessReport = {
@@ -713,3 +714,72 @@ export const BROKER_CANDIDATES_FIXTURE: BrokerCandidate[] = [
   { broker_id: "xtb", display_name: "XTB", website: "https://www.xtb.com/", platform_notes: "Owner note: user-friendly platforms; verify entity, account/API availability, and leverage rules.", owner_research_leverage_note: "Owner note: up to 500:1 leverage.", configured_env_prefix: "CAS_FOREX_XTB_", verification_status: "PENDING_EXTERNAL_VERIFICATION", live_use_status: "GATED_BY_RUNTIME_GATES", notes: "" },
   { broker_id: "etoro", display_name: "eToro", website: "https://www.etoro.com/", platform_notes: "Owner note: copy trading candidate; verify Seychelles/entity path and whether automation is permitted.", owner_research_leverage_note: "Owner note: up to 400:1 leverage via Seychelles entity.", configured_env_prefix: "CAS_FOREX_ETORO_", verification_status: "PENDING_EXTERNAL_VERIFICATION", live_use_status: "GATED_BY_RUNTIME_GATES", notes: "" },
 ];
+
+export const PCBA_COCKPIT_FIXTURE: PcbaCockpitPayload = {
+  report_kind: "cas_forex_pcba_cockpit",
+  panels_active: true,
+  source: "fixture_fallback",
+  claim_boundary: "PCBA/CJT/CCB panels are active diagnostics only. They expose readiness/missing evidence/guard state but cannot create broker ACCEPT, unlock live trading, auto-deposit, move bank/card funds, or automate payouts.",
+  summary: {
+    pcba_ready_checks: 0,
+    pcba_total_checks: 9,
+    cjt_ready_checks: 0,
+    cjt_total_checks: 6,
+    ccb_designs_well_formed: true,
+    ccb_claims_licensed: false,
+    goal_complete: false,
+    current_boundary_honest: true,
+  },
+  local_evidence: {
+    pcba: {},
+    cjt: {},
+    pcba_present_count: 0,
+    pcba_total_count: 0,
+    cjt_present_count: 0,
+    cjt_total_count: 0,
+  },
+  reference_boards: [
+    { board_id: "ccb-csb", board_kind: "cognitive_safety_board", purpose: "Structural safety firewall diagnostic for outputs.", component_kinds: ["op_amp", "fuse", "mux", "regulator"], test_points: [], failure_modes: [], claim_ceiling: "FLAG_FOR_HUMAN_REVIEW", can_unlock_live_trading: false, can_create_broker_accept: false },
+    { board_id: "ccb-cob", board_kind: "cognitive_oscillator_board", purpose: "Rhythm/habit-loop diagnostic.", component_kinds: ["oscillator", "inductor", "capacitor"], test_points: [], failure_modes: [], claim_ceiling: "OPEN", can_unlock_live_trading: false, can_create_broker_accept: false },
+  ],
+  component_catalog: [
+    { kind: "resistor", role: "constraint / current limiter", claim: "diagnostic" },
+    { kind: "capacitor", role: "memory/storage sidecar", claim: "diagnostic" },
+    { kind: "fuse", role: "safety cutoff model", claim: "diagnostic" },
+  ],
+  pcba_readiness: {
+    report_id: "fixture-pcba",
+    generated_at: "fixture",
+    summary: "Fixture fallback; live API fills full PCBA readiness checks.",
+    all_ready: false,
+    any_live_authority: false,
+    any_broker_accept_authority: false,
+    checks: [{ feature: "production_pcba_component_syntax", status: "OPEN", ready: false, required_evidence: [], present_evidence: [], missing_evidence: [], rationale: "Live API fills details." }],
+  },
+  cjt_readiness: {
+    report_id: "fixture-cjt",
+    generated_at: "fixture",
+    summary: "Fixture fallback; live API fills full CJT readiness checks.",
+    all_ready: false,
+    any_live_authority: false,
+    any_broker_accept_authority: false,
+    checks: [{ feature: "production_cjt_compiler_syntax", status: "OPEN", ready: false, required_evidence: [], present_evidence: [], missing_evidence: [], rationale: "Live API fills details." }],
+  },
+  ccb_readiness: {
+    report_id: "fixture-ccb",
+    summary: "Fixture fallback; live API fills CCB CRC/readiness checks.",
+    all_designs_well_formed: true,
+    any_claim_licensed: false,
+    board_checks: [{ board_kind: "cognitive_safety_board", status: "NOT LICENSED", ready: false, required_evidence: [], present_evidence: [], missing_evidence: [], rationale: "Live API fills details." }],
+    prediction_head: { status: "OPEN", ready: false, required_evidence: [], present_evidence: [], missing_evidence: [], rationale: "No prediction head trained/evaluated." },
+  },
+  optimizer_guard: {
+    guard: "CASPCBAOptimizerGuard",
+    active: true,
+    proposal_counts: { research_queue: 0, flagged: 0, rejected: 0 },
+    claim_boundary: "Research proposal only. Live trading remains NOT LICENSED.",
+    can_create_broker_accept: false,
+    can_unlock_live_trading: false,
+  },
+  goal_status: { goal_complete: false, current_boundary_honest: true },
+};

@@ -1,86 +1,173 @@
 /* ── CAS Forex — PCBA/CJT Diagnostics ── */
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { PCBA_COCKPIT_FIXTURE } from "../data/fixtures";
+import type { DashboardState, ReadinessCheck } from "../types/evidence";
 
-const BOARDS = [
-  { id: "ccb-csb", name: "Cognitive Safety Board", purpose: "Structural safety firewall diagnostic", components: ["OP_AMP","FUSE","MUX","REGULATOR","CIRCUIT_BREAKER","SCHMITT_TRIGGER"] },
-  { id: "ccb-dab", name: "Differential Amplifier Board", purpose: "Cross-domain signal comparison & drift detection", components: ["OP_AMP","TRANSFORMER","ADC","DAC","BRIDGE_RECTIFIER","VARACTOR"] },
-  { id: "ccb-cmb", name: "Cognitive Memory Board", purpose: "Memory/storage architecture diagnostic", components: ["CAPACITOR","INDUCTOR","VARACTOR","PHOTODIODE","CRYSTAL_OSCILLATOR","RELAY"] },
-  { id: "ccb-cpmb", name: "Power Management Board", purpose: "Drive homeostasis & regulation diagnostic", components: ["REGULATOR","FUSE","CIRCUIT_BREAKER","BRIDGE_RECTIFIER","RESISTOR","DIODE"] },
-  { id: "ccb-ccb", name: "Cognitive Circuit Board", purpose: "Interconnect & routing architecture", components: ["TRACE","VIA","MUX","DEMUX","LOGIC_GATE","RELAY"] },
-];
+interface PcbaPageProps {
+  state: DashboardState;
+}
 
-const CJT = [
-  { f: "PRODUCTION_COMPILER_SYNTAX", detail: "Grammar, parser, IR roundtrip, semantics review — all pending" },
-  { f: "LIVE_TRADING_PERMISSION_PATH", detail: "12-month backtest, 30-day paper proof, legal gates — all pending" },
-  { f: "COMPILER_ENFORCED_SAFETY_CLAIM", detail: "Formal safety semantics, negative eval, red team — all pending" },
-  { f: "PROMPT_INJECTION_PREVENTION_CLAIM", detail: "Matched eval, hidden text control, false positive floor — all pending" },
-  { f: "GOVERNANCE_REGULATORY_PROOF_CLAIM", detail: "Regulatory mapping, legal review, audit retention — all pending" },
-];
+export function PcbaPage({ state }: PcbaPageProps) {
+  const pcba = state.pcba ?? PCBA_COCKPIT_FIXTURE;
 
-const COMPONENTS = [
-  ["RESISTOR","constraint / current limiter"],["CAPACITOR","memory/storage sidecar"],["INDUCTOR","momentum/habit sidecar"],
-  ["DIODE","one-way transition guard"],["TRANSFORMER","domain impedance matcher"],["OP_AMP","feedback amplifier"],
-  ["OSCILLATOR","rhythm/habit cycle"],["LOGIC_GATE","boolean prerequisite"],["MUX","routing selector"],
-  ["DEMUX","routing splitter"],["REGULATOR","homeostasis/limit"],["FUSE","safety cutoff"],
-  ["CIRCUIT_BREAKER","resettable safety cutoff"],["TRACE","transition/interconnect"],["VIA","cross-domain interconnect"],
-  ["VARACTOR","context-sensitive memory"],["RELAY","conditional enablement"],["SCHMITT_TRIGGER","hysteresis decision"],
-  ["PHOTODIODE","feedback-to-activation"],["CRYSTAL_OSCILLATOR","stable rhythm reference"],["ADC","implicit-to-explicit"],["DAC","explicit-to-action"],
-];
+  const pcbaChecks = pcba.pcba_readiness.checks;
+  const cjtChecks = pcba.cjt_readiness.checks;
+  const ccbChecks = pcba.ccb_readiness.board_checks;
+  const sourceLabel = pcba.source === "live_api" ? "LIVE API" : "FIXTURE FALLBACK";
 
-export function PcbaPage() {
   return (
     <div className="pcba-page">
-      <GlassPanel title="PCBA Reference Boards" subtitle="5 cognitive circuit board diagnostic designs">
-        <div className="pcba-boards-grid">
-          {BOARDS.map(b => (
-            <div key={b.id} className="pcba-board-card">
-              <div className="pcba-board-header"><code className="pcba-board-id">{b.id}</code><StatusChip label="DIAGNOSTIC" variant="info" size="sm" /></div>
-              <div className="pcba-board-name">{b.name}</div>
-              <div className="pcba-board-purpose">{b.purpose}</div>
-              <div className="pcba-board-components">{b.components.map(c => <span key={c} className="pcba-component-chip">{c}</span>)}</div>
-            </div>
-          ))}
-        </div>
-        <div className="pcba-claim-note">All PCBA boards are claim-bounded diagnostics. No board creates broker ACCEPT, live trading, or payment authority.</div>
-      </GlassPanel>
-
-      <GlassPanel title="CJT Production Readiness" subtitle="5 features — all NOT_READY" variant="warning">
-        <div className="cjt-features">
-          {CJT.map(f => (
-            <div key={f.f} className="cjt-feature-row">
-              <div className="cjt-feature-header"><code className="cjt-feature-name">{f.f}</code><StatusChip label="NOT_READY" variant="danger" size="sm" /><span className="cjt-checks mono">0/? checks</span></div>
-              <div className="cjt-feature-detail">{f.detail}</div>
-              <div className="cjt-progress-track"><div className="cjt-progress-fill" style={{width:"0%"}} /></div>
-            </div>
-          ))}
-        </div>
-      </GlassPanel>
-
-      <GlassPanel title="LLM Optimizer Guard" subtitle="CASPCBAOptimizerGuard — RESEARCH_QUEUE only">
+      <GlassPanel title="PCBA Active Cockpit" subtitle="Live diagnostic payload from CAS API">
         <div className="dashboard-grid-3col">
-          <div className="metric-stack"><Metric label="Guard" value="ACTIVE"/><Metric label="Prompt Injection" value="PASS"/></div>
-          <div className="metric-stack"><Metric label="Research Queue" value="0" mono/><Metric label="Flagged" value="0" mono/><Metric label="Rejected" value="0" mono/></div>
-          <div className="metric-stack"><Metric label="Can Create Broker ACCEPT" value="false" danger/><Metric label="Can Unlock Live" value="false" danger/></div>
+          <div className="metric-stack">
+            <Metric label="Panels" value={pcba.panels_active ? "ACTIVE" : "INACTIVE"} />
+            <Metric label="Source" value={sourceLabel} mono />
+          </div>
+          <div className="metric-stack">
+            <Metric label="PCBA Checks" value={`${pcba.summary.pcba_ready_checks}/${pcba.summary.pcba_total_checks}`} mono />
+            <Metric label="CJT Checks" value={`${pcba.summary.cjt_ready_checks}/${pcba.summary.cjt_total_checks}`} mono />
+          </div>
+          <div className="metric-stack">
+            <Metric label="CCB Designs" value={pcba.summary.ccb_designs_well_formed ? "CRC PASS" : "CHECK FAIL"} danger={!pcba.summary.ccb_designs_well_formed} />
+            <Metric label="Boundary Honest" value={pcba.summary.current_boundary_honest ? "YES" : "NO"} danger={!pcba.summary.current_boundary_honest} />
+          </div>
         </div>
-        <div className="optimizer-detail">No LLM optimizer proposals submitted yet. Guard evaluates prompt injection surfaces, verifies evidence refs, and enforces RESEARCH_QUEUE / FLAG_FOR_HUMAN_REVIEW / REJECT boundaries.</div>
+        <div className="optimizer-detail" style={{ marginTop: 10 }}>{pcba.claim_boundary}</div>
       </GlassPanel>
 
-      <GlassPanel title="PCBA Component Catalog" subtitle="22 cognitive circuit components">
+      <GlassPanel title="PCBA Reference Boards" subtitle={`${pcba.reference_boards.length} live board diagnostics`}>
+        <div className="pcba-boards-grid">
+          {pcba.reference_boards.map((board) => (
+            <div key={board.board_id} className="pcba-board-card">
+              <div className="pcba-board-header">
+                <code className="pcba-board-id">{board.board_id}</code>
+                <StatusChip label={board.claim_ceiling} variant={chipVariant(board.claim_ceiling)} size="sm" />
+              </div>
+              <div className="pcba-board-name">{titleize(board.board_kind)}</div>
+              <div className="pcba-board-purpose">{board.purpose}</div>
+              <div className="pcba-board-components">
+                {board.component_kinds.map((component) => <span key={component} className="pcba-component-chip">{component.toUpperCase()}</span>)}
+              </div>
+              <div className="pcba-claim-note">Unlock live: {String(board.can_unlock_live_trading)} · Broker ACCEPT: {String(board.can_create_broker_accept)}</div>
+            </div>
+          ))}
+        </div>
+      </GlassPanel>
+
+      <GlassPanel title="PCBA Production Readiness" subtitle={pcba.pcba_readiness.summary} variant="warning">
+        <ReadinessList checks={pcbaChecks} />
+      </GlassPanel>
+
+      <GlassPanel title="CJT Production Readiness" subtitle={pcba.cjt_readiness.summary} variant="warning">
+        <ReadinessList checks={cjtChecks} />
+      </GlassPanel>
+
+      <GlassPanel title="CCB Readiness" subtitle={pcba.ccb_readiness.summary}>
+        <div className="cjt-features">
+          {ccbChecks.map((check) => (
+            <div key={check.board_kind} className="cjt-feature-row">
+              <div className="cjt-feature-header">
+                <code className="cjt-feature-name">{titleize(check.board_kind ?? "unknown_board")}</code>
+                <StatusChip label={check.status} variant={chipVariant(check.status)} size="sm" />
+                <span className="cjt-checks mono">{evidenceLabel(check)}</span>
+              </div>
+              <div className="cjt-feature-detail">{check.rationale ?? "CCB diagnostic readiness."}</div>
+              <Progress check={check} />
+            </div>
+          ))}
+          <div className="cjt-feature-row">
+            <div className="cjt-feature-header">
+              <code className="cjt-feature-name">CjtPredictionHead</code>
+              <StatusChip label={pcba.ccb_readiness.prediction_head.status} variant={chipVariant(pcba.ccb_readiness.prediction_head.status)} size="sm" />
+              <span className="cjt-checks mono">{pcba.ccb_readiness.prediction_head.present_evidence.length}/{pcba.ccb_readiness.prediction_head.required_evidence.length} checks</span>
+            </div>
+            <div className="cjt-feature-detail">{pcba.ccb_readiness.prediction_head.rationale}</div>
+            <div className="cjt-progress-track"><div className="cjt-progress-fill" style={{ width: `${percent(pcba.ccb_readiness.prediction_head.present_evidence.length, pcba.ccb_readiness.prediction_head.required_evidence.length)}%` }} /></div>
+          </div>
+        </div>
+      </GlassPanel>
+
+      <GlassPanel title="LLM Optimizer Guard" subtitle={`${pcba.optimizer_guard.guard} — active under CAS/PCBA`}>
+        <div className="dashboard-grid-3col">
+          <div className="metric-stack"><Metric label="Guard" value={pcba.optimizer_guard.active ? "ACTIVE" : "INACTIVE"} /><Metric label="Boundary" value="ENFORCED" /></div>
+          <div className="metric-stack"><Metric label="Research Queue" value={`${pcba.optimizer_guard.proposal_counts.research_queue}`} mono /><Metric label="Flagged" value={`${pcba.optimizer_guard.proposal_counts.flagged}`} mono /><Metric label="Rejected" value={`${pcba.optimizer_guard.proposal_counts.rejected}`} mono /></div>
+          <div className="metric-stack"><Metric label="Can Create Broker ACCEPT" value={String(pcba.optimizer_guard.can_create_broker_accept)} danger /><Metric label="Can Unlock Live" value={String(pcba.optimizer_guard.can_unlock_live_trading)} danger /></div>
+        </div>
+        <div className="optimizer-detail">{pcba.optimizer_guard.claim_boundary}</div>
+      </GlassPanel>
+
+      <GlassPanel title="PCBA Component Catalog" subtitle={`${pcba.component_catalog.length} live cognitive circuit components`}>
         <div className="component-catalog-grid">
-          {COMPONENTS.map(([n,r]) => <div key={n} className="component-catalog-item"><code className="component-name">{n}</code><span className="component-role">{r}</span></div>)}
+          {pcba.component_catalog.map((component) => (
+            <div key={component.kind} className="component-catalog-item">
+              <code className="component-name">{component.kind.toUpperCase()}</code>
+              <span className="component-role">{component.role}</span>
+            </div>
+          ))}
         </div>
       </GlassPanel>
 
       <GlassPanel title="Production Gates" variant="danger">
         <div className="gate-grid">
-          {["PCBA Production","CJT Compiler","Safety Claims","Prompt Injection Prevention","Governance/Regulatory","LLM Optimizer"].map(l => <div key={l} className="gate-item"><div className="gate-item-header"><span className="gate-item-label">{l}</span><StatusChip label="NOT LICENSED" variant="danger" size="sm"/></div><div className="gate-item-detail">Diagnostic only — no live authority</div></div>)}
+          {pcbaChecks.concat(cjtChecks).map((check) => (
+            <div key={`${check.feature}-${check.status}`} className="gate-item">
+              <div className="gate-item-header"><span className="gate-item-label">{titleize(check.feature ?? "unknown_feature")}</span><StatusChip label={check.status} variant={chipVariant(check.status)} size="sm" /></div>
+              <div className="gate-item-detail">{check.rationale ?? "Diagnostic only — no live authority"}</div>
+            </div>
+          ))}
         </div>
       </GlassPanel>
     </div>
   );
 }
 
+function ReadinessList({ checks }: { checks: ReadinessCheck[] }) {
+  return (
+    <div className="cjt-features">
+      {checks.map((check) => (
+        <div key={check.feature} className="cjt-feature-row">
+          <div className="cjt-feature-header">
+            <code className="cjt-feature-name">{titleize(check.feature ?? "unknown_feature")}</code>
+            <StatusChip label={check.status} variant={chipVariant(check.status)} size="sm" />
+            <span className="cjt-checks mono">{evidenceLabel(check)}</span>
+          </div>
+          <div className="cjt-feature-detail">{check.rationale ?? "Readiness evidence is live from API."}</div>
+          <Progress check={check} />
+          {check.missing_evidence.length > 0 && <div className="pcba-claim-note">Missing: {check.missing_evidence.slice(0, 4).join(", ")}{check.missing_evidence.length > 4 ? ` +${check.missing_evidence.length - 4} more` : ""}</div>}
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function Progress({ check }: { check: ReadinessCheck }) {
+  return <div className="cjt-progress-track"><div className="cjt-progress-fill" style={{ width: `${percent(check.present_evidence.length, check.required_evidence.length)}%` }} /></div>;
+}
+
 function Metric({ label, value, mono, danger }: { label: string; value: string; mono?: boolean; danger?: boolean }) {
-  return <div className="dashboard-metric"><span className="field-label">{label}</span><span className={`field-value ${mono?"mono":""}`} style={{color:danger?"var(--danger)":undefined}}>{value}</span></div>;
+  return <div className="dashboard-metric"><span className="field-label">{label}</span><span className={`field-value ${mono ? "mono" : ""}`} style={{ color: danger ? "var(--danger)" : undefined }}>{value}</span></div>;
+}
+
+function evidenceLabel(check: ReadinessCheck): string {
+  return `${check.present_evidence.length}/${check.required_evidence.length} checks`;
+}
+
+function percent(present: number, total: number): number {
+  if (total <= 0) return 0;
+  return Math.round((present / total) * 100);
+}
+
+function titleize(value: string): string {
+  return value.replace(/_/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+}
+
+function chipVariant(status: string): "success" | "warning" | "danger" | "info" | "muted" | "paper" {
+  const normalized = status.toUpperCase();
+  if (normalized.includes("LICENSED") && !normalized.includes("NOT")) return "success";
+  if (normalized.includes("OPEN") || normalized.includes("ACTIVE")) return "info";
+  if (normalized.includes("PASS") || normalized.includes("READY")) return "success";
+  if (normalized.includes("FLAG") || normalized.includes("WARN")) return "warning";
+  if (normalized.includes("NOT") || normalized.includes("LOCK") || normalized.includes("FALSE")) return "danger";
+  return "muted";
 }

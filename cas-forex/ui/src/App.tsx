@@ -27,6 +27,7 @@ import {
   RUNTIME_GATES_FIXTURE,
   AI_MODEL_FIXTURE,
   BROKER_CANDIDATES_FIXTURE,
+  PCBA_COCKPIT_FIXTURE,
 } from "./data/fixtures";
 import { useDashboard } from "./data/api";
 import type { DashboardState } from "./types/evidence";
@@ -45,8 +46,24 @@ type Page =
   | "optimizer"
   | "condition-lab";
 
+const PAGE_IDS: Page[] = ["proof", "audit", "dashboard", "trade", "adaptive", "history", "settings", "pcba", "ledger", "optimizer", "condition-lab"];
+
+function initialPageFromUrl(): Page {
+  if (typeof window === "undefined") return "proof";
+  const raw = new URLSearchParams(window.location.search).get("page");
+  return PAGE_IDS.includes(raw as Page) ? (raw as Page) : "proof";
+}
+
 export function App() {
-  const [page, setPage] = useState<Page>("proof");
+  const [page, setPageState] = useState<Page>(() => initialPageFromUrl());
+  const setPage = (next: Page) => {
+    setPageState(next);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("page", next);
+      window.history.replaceState(null, "", url.toString());
+    }
+  };
 
   const fixtureState: DashboardState = useMemo(
     () => ({
@@ -73,6 +90,7 @@ export function App() {
       runtimeGates: RUNTIME_GATES_FIXTURE,
       aiModel: AI_MODEL_FIXTURE,
       brokerCandidates: BROKER_CANDIDATES_FIXTURE,
+      pcba: PCBA_COCKPIT_FIXTURE,
     }),
     [],
   );
@@ -93,7 +111,7 @@ export function App() {
       {page === "adaptive" && <AdaptivePage state={state} />}
       {page === "history" && <HistoryPage state={state} />}
       {page === "settings" && <SettingsPage state={state} />}
-      {page === "pcba" && <PcbaPage />}
+      {page === "pcba" && <PcbaPage state={state} />}
       {page === "ledger" && <LedgerPage state={state} />}
       {page === "optimizer" && <OptimizerPage state={state} />}
       {page === "condition-lab" && <ConditionLabPage state={state} />}

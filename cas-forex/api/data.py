@@ -12,6 +12,19 @@ from cas_forex.authority_boundary import build_authority_boundary_report
 from cas_forex.runtime_gates import build_runtime_gates_report
 from cas_forex.ai_model import model_status
 from cas_forex.broker_profiles import broker_candidates
+from cas_forex.ccb_readiness import build_ccb_readiness_report
+from cas_forex.cjt_readiness import (
+    build_cjt_production_readiness_report,
+    collect_local_cjt_evidence,
+)
+from cas_forex.llm_optimizer import CLAIM_BOUNDARY as LLM_OPTIMIZER_CLAIM_BOUNDARY
+from cas_forex.pcba_goal_status import build_pcba_goal_status
+from cas_forex.pcba_readiness import (
+    COMPONENT_CATALOG,
+    build_pcba_production_readiness_report,
+    collect_local_pcba_evidence,
+    reference_boards,
+)
 
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -35,6 +48,7 @@ def dashboard_state() -> Dict[str, Any]:
         "runtimeGates": runtime_gates_report(),
         "aiModel": ai_model_status(),
         "brokerCandidates": broker_candidate_profiles(),
+        "pcba": pcba_cockpit(),
     }
     adaptive = adaptive_cockpit()
     if adaptive is not None:
@@ -163,6 +177,101 @@ def ai_model_status() -> Dict[str, Any]:
 
 def broker_candidate_profiles() -> List[Dict[str, Any]]:
     return broker_candidates()
+
+
+def pcba_cockpit() -> Dict[str, Any]:
+    """Return live PCBA/CJT/CCB/optimizer cockpit data for the UI.
+
+    This activates the PCBA tab without changing authority: diagnostics and
+    readiness evidence are live, but PCBA/CJT/CCB still cannot create broker
+    ACCEPT, unlock live trading, or move money.
+    """
+
+    pcba_evidence = collect_local_pcba_evidence(REPO_ROOT)
+    cjt_evidence = collect_local_cjt_evidence(REPO_ROOT)
+    pcba_report = build_pcba_production_readiness_report(pcba_evidence)
+    cjt_report = build_cjt_production_readiness_report(cjt_evidence)
+    ccb_report = build_ccb_readiness_report(pcba_evidence | cjt_evidence)
+    goal_status = build_pcba_goal_status(
+        local_evidence=pcba_evidence,
+        receipt_paths=[],
+        artifact_root=REPO_ROOT,
+    )
+
+    pcba_checks = [check.model_dump(mode="json") for check in pcba_report.checks]
+    cjt_checks = [check.model_dump(mode="json") for check in cjt_report.checks]
+    ccb_checks = [check.model_dump(mode="json") for check in ccb_report.board_checks]
+    boards = [board.model_dump(mode="json") for board in reference_boards()]
+    components = [
+        {"kind": kind.value, "role": meta["role"], "claim": meta["claim"]}
+        for kind, meta in COMPONENT_CATALOG.items()
+    ]
+
+    return {
+        "report_kind": "cas_forex_pcba_cockpit",
+        "panels_active": True,
+        "source": "live_api",
+        "claim_boundary": (
+            "PCBA/CJT/CCB panels are active diagnostics only. They can expose live readiness, "
+            "missing evidence, CRC status, and optimizer guard state, but they cannot create "
+            "broker ACCEPT, unlock live trading, auto-deposit, move bank/card funds, or automate payouts."
+        ),
+        "summary": {
+            "pcba_ready_checks": sum(1 for check in pcba_checks if check.get("ready")),
+            "pcba_total_checks": len(pcba_checks),
+            "cjt_ready_checks": sum(1 for check in cjt_checks if check.get("ready")),
+            "cjt_total_checks": len(cjt_checks),
+            "ccb_designs_well_formed": bool(ccb_report.all_designs_well_formed),
+            "ccb_claims_licensed": bool(ccb_report.any_claim_licensed),
+            "goal_complete": bool(goal_status.get("goal_complete")),
+            "current_boundary_honest": bool(goal_status.get("current_boundary_honest")),
+        },
+        "local_evidence": {
+            "pcba": pcba_evidence,
+            "cjt": cjt_evidence,
+            "pcba_present_count": sum(1 for present in pcba_evidence.values() if present),
+            "pcba_total_count": len(pcba_evidence),
+            "cjt_present_count": sum(1 for present in cjt_evidence.values() if present),
+            "cjt_total_count": len(cjt_evidence),
+        },
+        "reference_boards": boards,
+        "component_catalog": components,
+        "pcba_readiness": {
+            "report_id": pcba_report.report_id,
+            "generated_at": pcba_report.generated_at.isoformat(),
+            "summary": pcba_report.summary,
+            "all_ready": pcba_report.all_ready,
+            "any_live_authority": pcba_report.any_live_authority,
+            "any_broker_accept_authority": pcba_report.any_broker_accept_authority,
+            "checks": pcba_checks,
+        },
+        "cjt_readiness": {
+            "report_id": cjt_report.report_id,
+            "generated_at": cjt_report.generated_at.isoformat(),
+            "summary": cjt_report.summary,
+            "all_ready": cjt_report.all_ready,
+            "any_live_authority": cjt_report.any_live_authority,
+            "any_broker_accept_authority": cjt_report.any_broker_accept_authority,
+            "checks": cjt_checks,
+        },
+        "ccb_readiness": {
+            "report_id": ccb_report.report_id,
+            "summary": ccb_report.summary,
+            "all_designs_well_formed": ccb_report.all_designs_well_formed,
+            "any_claim_licensed": ccb_report.any_claim_licensed,
+            "board_checks": ccb_checks,
+            "prediction_head": ccb_report.prediction_head.model_dump(mode="json"),
+        },
+        "optimizer_guard": {
+            "guard": "CASPCBAOptimizerGuard",
+            "active": True,
+            "proposal_counts": {"research_queue": 0, "flagged": 0, "rejected": 0},
+            "claim_boundary": LLM_OPTIMIZER_CLAIM_BOUNDARY,
+            "can_create_broker_accept": False,
+            "can_unlock_live_trading": False,
+        },
+        "goal_status": goal_status,
+    }
 
 
 def owner_control() -> Dict[str, Any]:

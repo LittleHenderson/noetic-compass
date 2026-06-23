@@ -12,6 +12,19 @@ interface ConditionLabPageProps {
 export function ConditionLabPage({ state }: ConditionLabPageProps) {
   const tally = state.conditionTally ?? [];
   const [selectedBucket, setSelectedBucket] = useState<ConditionTallyBucket | null>(null);
+  const [selectedTimeframe, setSelectedTimeframe] = useState("ALL");
+  const [selectedStrategy, setSelectedStrategy] = useState("ALL");
+  const [selectedRoute, setSelectedRoute] = useState("ALL");
+
+  const timeframes = uniqueValues(tally.map((bucket) => bucket.axes.timeframe).filter(Boolean));
+  const strategies = uniqueValues(tally.map((bucket) => bucket.axes.setting).filter(Boolean));
+  const routes = uniqueValues(tally.map((bucket) => bucket.axes.route_action).filter(Boolean));
+  const filteredTally = tally.filter((bucket) => {
+    const tfOk = selectedTimeframe === "ALL" || bucket.axes.timeframe === selectedTimeframe;
+    const strategyOk = selectedStrategy === "ALL" || bucket.axes.setting === selectedStrategy;
+    const routeOk = selectedRoute === "ALL" || bucket.axes.route_action === selectedRoute;
+    return tfOk && strategyOk && routeOk;
+  });
 
   // Gap analysis data
   const gapCells = [
@@ -37,8 +50,8 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
         <div className="control-section">
           <h4 className="control-section-title">Timeframe</h4>
           <div className="selector-chips">
-            {["ALL", "D1", "H1", "H4", "M15"].map((tf) => (
-              <button key={tf} className={`selector-chip ${tf === "D1" ? "active" : ""}`} disabled>
+            {["ALL", ...timeframes].map((tf) => (
+              <button key={tf} className={`selector-chip ${selectedTimeframe === tf ? "active" : ""}`} onClick={() => setSelectedTimeframe(tf)}>
                 {tf}
               </button>
             ))}
@@ -47,13 +60,13 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
         <div className="control-section" style={{ marginTop: 12 }}>
           <h4 className="control-section-title">Strategy Setting</h4>
           <div className="selector-chips">
-            {["ALL", "tsmom_126_250_2_10", "range_scalper_24_120"].map((s) => (
+            {["ALL", ...strategies].map((strategy) => (
               <button
-                key={s}
-                className={`selector-chip ${s === "tsmom_126_250_2_10" ? "active" : ""}`}
-                disabled
+                key={strategy}
+                className={`selector-chip ${selectedStrategy === strategy ? "active" : ""}`}
+                onClick={() => setSelectedStrategy(strategy)}
               >
-                {s.length > 20 ? s.slice(0, 20) + "\u2026" : s}
+                {strategy.length > 20 ? strategy.slice(0, 20) + "\u2026" : strategy}
               </button>
             ))}
           </div>
@@ -61,9 +74,9 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
         <div className="control-section" style={{ marginTop: 12 }}>
           <h4 className="control-section-title">Route Action</h4>
           <div className="selector-chips">
-            {["ALL", "ROUTE", "NO_TRADE"].map((r) => (
-              <button key={r} className={`selector-chip ${r === "ROUTE" ? "active" : ""}`} disabled>
-                {r}
+            {["ALL", ...routes].map((route) => (
+              <button key={route} className={`selector-chip ${selectedRoute === route ? "active" : ""}`} onClick={() => setSelectedRoute(route)}>
+                {route}
               </button>
             ))}
           </div>
@@ -73,9 +86,9 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
       {/* Section 2: Condition Buckets */}
       <GlassPanel
         title="Condition Buckets"
-        subtitle={tally.length > 0 ? `${tally.length} buckets from walk-forward evidence` : "No condition tally data"}
+        subtitle={tally.length > 0 ? `${filteredTally.length}/${tally.length} buckets from walk-forward evidence` : "No condition tally data"}
       >
-        {tally.length > 0 ? (
+        {filteredTally.length > 0 ? (
           <div className="tally-table-wrap">
             <table className="data-table">
               <thead>
@@ -92,7 +105,7 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
                 </tr>
               </thead>
               <tbody>
-                {tally.map((b) => {
+                {filteredTally.map((b) => {
                   const isSelected = selectedBucket?.key === b.key;
                   return (
                     <tr
@@ -135,7 +148,7 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
           </div>
         ) : (
           <div className="no-data-message">
-            <p>No condition tally data available.</p>
+            <p>No buckets match the selected filters.</p>
           </div>
         )}
       </GlassPanel>
@@ -296,4 +309,9 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
       </GlassPanel>
     </div>
   );
+}
+
+
+function uniqueValues(values: (string | undefined)[]): string[] {
+  return Array.from(new Set(values.filter((value): value is string => Boolean(value)))).sort();
 }

@@ -1,4 +1,4 @@
-const CACHE_NAME = "cas-forex-mobile-v1";
+const CACHE_NAME = "cas-forex-mobile-v3";
 const APP_SHELL = ["/", "/manifest.webmanifest", "/icons/cas-forex-192.png", "/icons/cas-forex-512.png"];
 
 self.addEventListener("install", (event) => {

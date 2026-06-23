@@ -357,6 +357,66 @@ export interface BrokerCandidate {
   live_use_status: string; notes: string;
 }
 
+
+export interface ReadinessCheck {
+  feature?: string;
+  board_kind?: string;
+  status: string;
+  ready?: boolean;
+  claim_ceiling?: string;
+  required_evidence: string[];
+  present_evidence: string[];
+  missing_evidence: string[];
+  can_affect_live_trading?: boolean;
+  can_create_broker_accept?: boolean;
+  rationale?: string;
+}
+
+export interface PcbaReferenceBoard {
+  board_id: string; board_kind: string; purpose: string;
+  component_kinds: string[]; test_points: string[]; failure_modes: string[];
+  claim_ceiling: string; can_unlock_live_trading: boolean; can_create_broker_accept: boolean;
+}
+
+export interface PcbaComponentCatalogEntry {
+  kind: string; role: string; claim: string;
+}
+
+export interface PcbaCockpitPayload {
+  report_kind: string; panels_active: boolean; source: string; claim_boundary: string;
+  summary: {
+    pcba_ready_checks: number; pcba_total_checks: number;
+    cjt_ready_checks: number; cjt_total_checks: number;
+    ccb_designs_well_formed: boolean; ccb_claims_licensed: boolean;
+    goal_complete: boolean; current_boundary_honest: boolean;
+  };
+  local_evidence: {
+    pcba: Record<string, boolean>; cjt: Record<string, boolean>;
+    pcba_present_count: number; pcba_total_count: number;
+    cjt_present_count: number; cjt_total_count: number;
+  };
+  reference_boards: PcbaReferenceBoard[];
+  component_catalog: PcbaComponentCatalogEntry[];
+  pcba_readiness: {
+    report_id: string; generated_at: string; summary: string; all_ready: boolean;
+    any_live_authority: boolean; any_broker_accept_authority: boolean; checks: ReadinessCheck[];
+  };
+  cjt_readiness: {
+    report_id: string; generated_at: string; summary: string; all_ready: boolean;
+    any_live_authority: boolean; any_broker_accept_authority: boolean; checks: ReadinessCheck[];
+  };
+  ccb_readiness: {
+    report_id: string; summary: string; all_designs_well_formed: boolean; any_claim_licensed: boolean;
+    board_checks: ReadinessCheck[];
+    prediction_head: { status: string; ready: boolean; required_evidence: string[]; present_evidence: string[]; missing_evidence: string[]; rationale: string; };
+  };
+  optimizer_guard: {
+    guard: string; active: boolean; proposal_counts: { research_queue: number; flagged: number; rejected: number };
+    claim_boundary: string; can_create_broker_accept: boolean; can_unlock_live_trading: boolean;
+  };
+  goal_status: Record<string, unknown>;
+}
+
 export interface DashboardState {
   uiReadiness: UIReadinessReport;
   dailySchedule: DailySchedule;
@@ -373,4 +433,5 @@ export interface DashboardState {
   runtimeGates?: RuntimeGatesState;
   aiModel?: AIModelState;
   brokerCandidates?: BrokerCandidate[];
+  pcba?: PcbaCockpitPayload;
 }
