@@ -1,0 +1,160 @@
+{
+  "schema_version": "cas-forex-strategy-leads.v1",
+  "updated_at": "2026-06-22",
+  "claim_boundary": "Research leads only. Live trading remains NOT LICENSED.",
+  "promotion_rule": "A lead can move toward deployment only after broker-grade data, walk-forward validation, risk-budget approval, and real paper-proof gates. A saved lead is not broker ACCEPT.",
+  "leads": [
+    {
+      "lead_id": "range_scalper_filtered_fx_d1",
+      "priority": 1,
+      "status": "ACTIVE_RESEARCH_LEAD",
+      "strategy_setting": "range_scalper_24_120",
+      "family": "range_scalper",
+      "mode": "swing/day range fade on D1 proxy; candidate for M15/H1 broker-data expansion",
+      "symbols_promoted_for_next_tests": ["EUR/USD", "GBP/USD"],
+      "symbols_watchlist": ["AUD/USD"],
+      "symbols_excluded_until_condition_proof": ["USD/JPY", "USD/CAD"],
+      "condition_fit": {
+        "regime": "range",
+        "volatility": "low_to_normal",
+        "preferred_timeframes": ["D1", "H1", "M15"],
+        "avoid": ["macro_blackout", "shock", "high_spread", "unvalidated_symbol"]
+      },
+      "evidence_refs": [
+        "evidence_runs/range_scalper_research/real-range_scalper-20260622043152-report.json",
+        "evidence_runs/range_scalper_research/real-range_scalper-20260622043231-report.json",
+        "evidence_runs/walk_forward_condition_lab/walk-forward-20260622044930-report.json"
+      ],
+      "headline_results": [
+        "5 FX majors, 5y D1 Yahoo proxy, cost-included: +$1,572.25; chain verified; CAS improved P&L/drawdown.",
+        "Filtered EUR/USD GBP/USD AUD/USD, 5y D1 Yahoo proxy, cost-included: +$2,686.37; avg max DD 2.38%; chain verified.",
+        "Corrected D1 walk-forward active routed windows: 3/3 positive; active routed mean return 1.2827%; routed max DD 2.298%; 32 routed trades; grade NOT_PROMOTED due sparse coverage."
+      ],
+      "open_gates": [
+        "Broker-grade bid/ask and spread/slippage by session.",
+        "M15/H1 walk-forward grid.",
+        "Macro/event-aware condition axis.",
+        "30-trading-day paper proof before live funds."
+      ],
+      "deployment_status": "NOT LICENSED"
+    },
+    {
+      "lead_id": "index_tsmom_126_d1",
+      "priority": 2,
+      "status": "ACTIVE_RESEARCH_LEAD",
+      "strategy_setting": "tsmom_126_250_2_10",
+      "family": "tsmom",
+      "mode": "D1 index trend following; strongest current index walk-forward lead",
+      "symbols_promoted_for_next_tests": ["US30", "NAS100"],
+      "symbols_watchlist": ["XAU/USD"],
+      "symbols_excluded_until_condition_proof": [],
+      "condition_fit": {
+        "regime": "trend_up_or_high_vol_trend",
+        "volatility": "normal_to_high_but_not_uncontrolled_shock",
+        "preferred_timeframes": ["D1"],
+        "avoid": ["range", "thin_liquidity", "unvalidated_event_context"]
+      },
+      "evidence_refs": [
+        "evidence_runs/index_tsmom_h1_d1_go/walk-forward-20260622054921-report.json",
+        "evidence_runs/condition_tally/condition-tally-20260622055042-report.json",
+        "evidence_runs/index_tsmom_sdg_owner_go/condition-lab-20260622055024-report.json",
+        "evidence_runs/owner_promotion_review/owner-promotion-review-20260622055433-report.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-plan.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-status.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-mt5-demo-probe-20260622153728.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-paper-decision-status.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-paper-risk-status.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-daily-bundle-status.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-ui-readiness-status.json",
+        "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-daily-schedule-status.json",
+        "docs/working/cas_forex_paper_broker_receipt_contract_20260622.md"
+      ],
+      "headline_results": [
+        "Index H1/D1 walk-forward run found D1 TSMOM route grade WALK_FORWARD_LEAD: 5 routed D1 windows, 3 positive, 60% positive rate, 1.8932% mean return, 7.0764% max drawdown, 76 trades.",
+        "Combined D1 condition tally for tsmom_126_250_2_10: mean return 1.8932%, positive rate 0.6, 76 trades.",
+        "Owner promotion review in LIMITED_PAPER mode cleared simulator and walk-forward thresholds for the D1 bucket; paper proof remains the promotion blocker.",
+        "Paper-proof ledger started on 2026-06-22 and now has 1 BROKER_API_VERIFIED MT5 demo receipt from Hugosway-Demo; chain verified; passed=false because 29 more verified days remain.",
+        "Broker/demo receipt gate supports BROKER_EXPORT_HASHED evidence and now has an MT5 demo adapter path for BROKER_API_VERIFIED paper receipts.",
+        "Daily paper route decision for 2026-06-22 returned ROUTE_PAPER_SIGNAL for both US30 and NAS100, macro PASS, with no broker order placed.",
+        "Paper risk review for 2026-06-22 allowed 2 of 2 paper attempts at 0.01 lots each; total planned paper risk $25.30 / 0.506% on $5,000 equity; evidence packet SUPPRESSED.",
+        "Daily paper bundle for 2026-06-22 completed with all three tracks present and skipped existing same-date records without duplicating proof packets.",
+        "UI/proof-cockpit correction: platform UI can start now as read-only paper/research cockpit; 1 / 5 complete daily bundles only means multi-day proof maturity is not reached yet.",
+        "Daily schedule points to next due date 2026-06-23 with broker receipt, route decision, and risk review still missing for that date."
+      ],
+      "open_gates": [
+        "29 more real verified paper-trading days on NAS100/US30 D1 after the 2026-06-22 MT5 demo-verified day.",
+        "4 more complete daily bundles before proof-cockpit UI can claim multi-day proof maturity; UI shell can start now.",
+        "Run the next due daily bundle on 2026-06-23 or the next available real trading day.",
+        "Run the daily paper bundle for each verified paper day and preserve receipt, route/no-trade, and risk-budget status.",
+        "Broker-grade index/CFD spread and slippage validation.",
+        "Event-context validation for NFP/FOMC/conflict shocks.",
+        "Owner approval for any limited paper attempts; live remains NOT LICENSED."
+      ],
+      "deployment_status": "NOT LICENSED"
+    },
+    {
+      "lead_id": "index_tsmom_252_d1",
+      "priority": 3,
+      "status": "ACTIVE_RESEARCH_LEAD",
+      "strategy_setting": "tsmom_252_500_2_8",
+      "family": "tsmom",
+      "mode": "position/swing trend following on index/gold candidates",
+      "symbols_promoted_for_next_tests": ["NAS100", "US30"],
+      "symbols_watchlist": ["XAU/USD"],
+      "symbols_excluded_until_condition_proof": [],
+      "condition_fit": {
+        "regime": "trend_up_or_trend_down",
+        "volatility": "normal_to_high_but_not_shock",
+        "preferred_timeframes": ["D1", "H4", "H1"],
+        "avoid": ["range", "shock", "unvalidated_trend_detector"]
+      },
+      "evidence_refs": [
+        "evidence_runs/strategy_edge_sprint_tsmom_252/real-tsmom-20260622041452-report.json",
+        "evidence_runs/condition_lab_focus/condition-lab-20260622042733-report.json",
+        "evidence_runs/temporal_lacunarity_focus/condition-lab-20260622044212-report.json",
+        "evidence_runs/walk_forward_condition_lab/walk-forward-20260622044930-report.json"
+      ],
+      "headline_results": [
+        "Controlled NAS100/US30 TSMOM 252 research lead: approximately +31.6% portfolio with roughly 6.8% avg DD in strategy-edge sprint.",
+        "Real-slice Condition Lab favored tsmom_252_500_2_8 and tsmom_126_250_2_10 for strongest index routes.",
+        "D1 walk-forward focus stayed NO_TRADE on NAS100/US30 because recent future windows were labeled range; this is a condition-detection blocker, not a promotion."
+      ],
+      "open_gates": [
+        "Improve index trend/range detector so NAS100/US30 trend windows are not flattened into range.",
+        "H1/H4 broker-grade walk-forward testing.",
+        "Owner 2020 NAS30/NAS100 discretionary rule encoding.",
+        "Drawdown cap and time/trailing exits."
+      ],
+      "deployment_status": "NOT LICENSED"
+    },
+    {
+      "lead_id": "meanrev_trend_filter_fx_d1",
+      "priority": 4,
+      "status": "WATCHLIST_ONLY",
+      "strategy_setting": "meanrev_20_z2_tf",
+      "family": "meanrev",
+      "mode": "D1 FX-major mean reversion with trend filter",
+      "symbols_promoted_for_next_tests": [],
+      "symbols_watchlist": ["EUR/USD", "GBP/USD", "AUD/USD"],
+      "symbols_excluded_until_condition_proof": [],
+      "condition_fit": {
+        "regime": "range",
+        "volatility": "normal",
+        "preferred_timeframes": ["D1"],
+        "avoid": ["retail_cost_above_edge", "trend_breakout_market"]
+      },
+      "evidence_refs": [
+        "evidence_runs/meanrev_tf"
+      ],
+      "headline_results": [
+        "Thin in-sample positive on FX majors, but edge was close to zero and cost-sensitive.",
+        "Keep as a baseline/watchlist strategy, not as a deployment candidate."
+      ],
+      "open_gates": [
+        "Only revive if broker-grade cost model still leaves positive walk-forward edge.",
+        "Compare against range_scalper before any promotion."
+      ],
+      "deployment_status": "NOT LICENSED"
+    }
+  ]
+}

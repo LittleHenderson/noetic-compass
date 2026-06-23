@@ -259,6 +259,19 @@ class TestCASForexAuditor:
         assert decision.overriding_gate == "risk"
         assert "LIVE_LOCKED" in decision.summary
 
+    def test_non_lock_risk_failure_suppresses(self):
+        auditor = CASForexAuditor()
+        proposal = _make_proposal()
+        snapshot = _make_snapshot()
+        risk = _make_risk(open_pos=5)
+
+        decision = auditor.evaluate(proposal, snapshot, risk)
+
+        assert decision.verdict == Verdict.SUPPRESS
+        assert decision.overriding_gate == "risk"
+        assert "Open pos" in decision.summary
+        assert "LIVE_LOCKED" not in decision.summary
+
     def test_market_closed_suppresses(self):
         auditor = CASForexAuditor()
         proposal = _make_proposal()

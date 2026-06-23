@@ -6,6 +6,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from cas_forex.instruments import broker_symbol
 from cas_forex.schemas.forecast import SUPPORTED_SYMBOLS, Direction
 from cas_forex.time_utils import utc_now
 
@@ -178,7 +179,7 @@ class BrokerOrderRequest(BaseModel):
         }.get((self.order_type, self.direction), "ORDER_TYPE_BUY")
 
         return {
-            "symbol": self.symbol.replace("/", ""),
+            "symbol": broker_symbol(self.symbol),
             "order_type": mt5_order_type,
             "volume": self.volume,
             "price": self.price if self.price > 0 else None,

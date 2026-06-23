@@ -1,0 +1,59 @@
+/* ── CAS Forex UI — Global Styles ── */
+:root {
+  --bg-deep: #0b0e14;
+  --bg-panel: #10141c;
+  --bg-card: #161b25;
+  --bg-input: #1a1f2b;
+  --border-subtle: #1e2533;
+  --border-active: #2a3345;
+  --text-primary: #e2e6ed;
+  --text-secondary: #8b93a5;
+  --text-muted: #5a6273;
+  --accent-teal: #2dd4bf;
+  --accent-teal-dim: #0f766e;
+  --accent-slate: #64748b;
+  --danger: #ef4444;
+  --danger-dim: #7f1d1d;
+  --warning: #f59e0b;
+  --warning-dim: #78350f;
+  --success: #22c55e;
+  --success-dim: #14532d;
+  --info: #3b82f6;
+  --paper: #a78bfa;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --font-mono: "Cascadia Code", "Fira Code", "JetBrains Mono", "Consolas", monospace;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}

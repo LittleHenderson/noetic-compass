@@ -34,6 +34,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from cas_forex.backtest.engine import BacktestEngine, BacktestResult
 from cas_forex.evidence_store import EvidenceStore
+from cas_forex.instruments import yahoo_ticker
 from cas_forex.schemas.decision import CASDecision, Verdict
 from cas_forex.schemas.evidence import BacktestEvidenceReport
 from cas_forex.schemas.forecast import ModelSource, pip_multiplier
@@ -66,7 +67,7 @@ def fetch_real_candles(symbol: str, period: str, interval: str) -> List[dict]:
     """Fetch real OHLCV candles from Yahoo Finance for a forex pair."""
     import yfinance as yf
 
-    ticker_str = f"{symbol.replace('/', '')}=X"
+    ticker_str = yahoo_ticker(symbol)
     ticker = yf.Ticker(ticker_str)
     df = ticker.history(period=period, interval=interval, auto_adjust=False)
     if df is None or df.empty:
@@ -132,7 +133,7 @@ def main() -> int:
     parser.add_argument("--symbols", nargs="*", default=SYMBOLS)
     parser.add_argument("--output-dir", default="evidence_runs/real_backtest")
     parser.add_argument("--model", default="sma",
-                        choices=["sma", "chronos", "meanrev", "breakout"],
+                        choices=["sma", "chronos", "meanrev", "breakout", "tsmom", "pullback", "range_scalper"],
                         help="directional signal source")
     parser.add_argument("--chronos-model", default="amazon/chronos-bolt-tiny")
     parser.add_argument("--min-move-bps", type=float, default=2.0,
@@ -146,6 +147,29 @@ def main() -> int:
                         help="mean-rev: skip fades that fight a strong trend")
     parser.add_argument("--mr-trend-lookback", type=int, default=60)
     parser.add_argument("--mr-trend-skip-bps", type=float, default=150.0)
+    # time-series momentum params
+    parser.add_argument("--ts-lookback", type=int, default=126)
+    parser.add_argument("--ts-skip-recent", type=int, default=0)
+    parser.add_argument("--ts-min-return-bps", type=float, default=250.0)
+    parser.add_argument("--ts-allow-short", action="store_true")
+    parser.add_argument("--ts-sl-mult", type=float, default=2.0)
+    parser.add_argument("--ts-tp-mult", type=float, default=6.0)
+    # trend-pullback params
+    parser.add_argument("--pb-trend-lookback", type=int, default=126)
+    parser.add_argument("--pb-pullback-lookback", type=int, default=5)
+    parser.add_argument("--pb-min-trend-bps", type=float, default=500.0)
+    parser.add_argument("--pb-pullback-bps", type=float, default=150.0)
+    parser.add_argument("--pb-allow-short", action="store_true")
+    parser.add_argument("--pb-sl-mult", type=float, default=1.5)
+    parser.add_argument("--pb-tp-mult", type=float, default=3.0)
+    # low-volatility range scalper params
+    parser.add_argument("--rs-lookback", type=int, default=24)
+    parser.add_argument("--rs-baseline", type=int, default=120)
+    parser.add_argument("--rs-z", type=float, default=1.2)
+    parser.add_argument("--rs-max-vol-ratio", type=float, default=0.75)
+    parser.add_argument("--rs-max-efficiency-ratio", type=float, default=0.35)
+    parser.add_argument("--rs-sl-mult", type=float, default=2.0)
+    parser.add_argument("--rs-tp-mult", type=float, default=0.8)
     # ---- RISK BUDGET (user-controllable) ----
     parser.add_argument("--starting-balance", type=float, default=10000.0)
     parser.add_argument("--position-lots", type=float, default=0.05)
@@ -204,6 +228,41 @@ def main() -> int:
     elif args.model == "breakout":
         from cas_forex.forecast.strategies import make_donchian_breakout_signal
         signal_fn = make_donchian_breakout_signal(lookback=args.mr_lookback)
+        model_source = ModelSource.TECHNICAL
+    elif args.model == "tsmom":
+        from cas_forex.forecast.strategies import make_time_series_momentum_signal
+        signal_fn = make_time_series_momentum_signal(
+            lookback=args.ts_lookback,
+            skip_recent=args.ts_skip_recent,
+            min_return_bps=args.ts_min_return_bps,
+            allow_short=args.ts_allow_short,
+            sl_mult=args.ts_sl_mult,
+            tp_mult=args.ts_tp_mult,
+        )
+        model_source = ModelSource.TECHNICAL
+    elif args.model == "pullback":
+        from cas_forex.forecast.strategies import make_trend_pullback_signal
+        signal_fn = make_trend_pullback_signal(
+            trend_lookback=args.pb_trend_lookback,
+            pullback_lookback=args.pb_pullback_lookback,
+            min_trend_bps=args.pb_min_trend_bps,
+            pullback_bps=args.pb_pullback_bps,
+            allow_short=args.pb_allow_short,
+            sl_mult=args.pb_sl_mult,
+            tp_mult=args.pb_tp_mult,
+        )
+        model_source = ModelSource.TECHNICAL
+    elif args.model == "range_scalper":
+        from cas_forex.forecast.strategies import make_low_vol_range_scalper_signal
+        signal_fn = make_low_vol_range_scalper_signal(
+            lookback=args.rs_lookback,
+            baseline=args.rs_baseline,
+            z_entry=args.rs_z,
+            max_vol_ratio=args.rs_max_vol_ratio,
+            max_efficiency_ratio=args.rs_max_efficiency_ratio,
+            sl_mult=args.rs_sl_mult,
+            tp_mult=args.rs_tp_mult,
+        )
         model_source = ModelSource.TECHNICAL
 
     report = BacktestEvidenceReport(

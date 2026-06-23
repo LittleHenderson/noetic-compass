@@ -5,6 +5,7 @@ from typing import List, Optional
 
 import requests  # type: ignore
 
+from cas_forex.instruments import default_mid, price_unit_size, round_price, yahoo_ticker
 from cas_forex.schemas.forecast import pip_multiplier as _pip_for
 from cas_forex.schemas.market import MarketSnapshot
 from cas_forex.config import config
@@ -38,7 +39,7 @@ class YFinanceConnector(MarketDataConnector):
     TIMEFRAME_MAP = {"M1": "1m", "M5": "5m", "M15": "15m", "H1": "1h", "D1": "1d"}
 
     def fetch_snapshot(self, symbol: str) -> MarketSnapshot:
-        ticker_str = f"{symbol.replace('/', '')}=X"
+        ticker_str = yahoo_ticker(symbol)
         try:
             import yfinance as yf  # type: ignore
             ticker = yf.Ticker(ticker_str)
@@ -58,8 +59,8 @@ class YFinanceConnector(MarketDataConnector):
             return MarketSnapshot(
                 symbol=symbol,
                 timestamp=utc_now(),
-                bid=round(bid, 5),
-                ask=round(ask, 5),
+                bid=round_price(symbol, bid),
+                ask=round_price(symbol, ask),
                 spread=round(spread, 1),
                 high=float(info.get("dayHigh", price)),
                 low=float(info.get("dayLow", price)),
@@ -74,7 +75,7 @@ class YFinanceConnector(MarketDataConnector):
     def fetch_historical(
         self, symbol: str, bars: int = 100, timeframe: str = "M5"
     ) -> List[dict]:
-        ticker_str = f"{symbol.replace('/', '')}=X"
+        ticker_str = yahoo_ticker(symbol)
         try:
             import yfinance as yf
             ticker = yf.Ticker(ticker_str)
@@ -240,13 +241,13 @@ def get_connector() -> MarketDataConnector:
 
 
 def _closed_snapshot(symbol: str) -> MarketSnapshot:
-    mid = 145.0 if symbol == "USD/JPY" else 1.0
-    pip_size = 1.0 / _pip_for(symbol)
+    mid = default_mid(symbol)
+    pip_size = price_unit_size(symbol)
     return MarketSnapshot(
         symbol=symbol,
         timestamp=utc_now(),
-        bid=round(mid - pip_size, 5),
-        ask=round(mid + pip_size, 5),
+        bid=round_price(symbol, mid - pip_size),
+        ask=round_price(symbol, mid + pip_size),
         spread=2.0,
         high=mid,
         low=mid,

@@ -6,6 +6,7 @@ from typing import Optional
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
+from cas_forex.instruments import SUPPORTED_SYMBOLS, pip_multiplier
 from cas_forex.time_utils import utc_now
 
 
@@ -19,19 +20,6 @@ class ModelSource(str, Enum):
     CHRONOS = "CHRONOS"
     TECHNICAL = "TECHNICAL"
     ENSEMBLE = "ENSEMBLE"
-
-
-SUPPORTED_SYMBOLS = frozenset(
-    {"EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "USD/CAD"}
-)
-
-
-JPY_PAIRS = frozenset({"USD/JPY"})
-
-
-def pip_multiplier(symbol: str) -> float:
-    """Return the pip multiplier: 100 for JPY pairs, 10000 for others."""
-    return 100.0 if symbol in JPY_PAIRS else 10000.0
 
 
 class ForecastProposal(BaseModel):

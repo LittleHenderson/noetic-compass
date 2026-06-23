@@ -204,8 +204,8 @@ class CASForexAuditor:
         # Gate 1: Risk (hard locks)
         risk_result = self.risk_gate.evaluate(risk)
         gate_results.append(risk_result)
-        if risk_result.status == GateStatus.FAIL and risk_result.evidence.get("locks_triggered"):
-            if self.live_lock_controller:
+        if risk_result.status == GateStatus.FAIL:
+            if risk_result.evidence.get("locks_triggered") and self.live_lock_controller:
                 reasons = []
                 if risk.daily_drawdown_breached:
                     reasons.append(LiveLockReason.DAILY_DRAWDOWN)
@@ -215,11 +215,14 @@ class CASForexAuditor:
                     reasons or [LiveLockReason.MANUAL_OPERATOR_LOCK],
                     details=risk_result.evidence,
                 )
+                summary = f"LIVE_LOCKED: {risk_result.reason}"
+            else:
+                summary = f"Risk: {risk_result.reason}"
             return CASDecision(
                 decision_id=decision_id, proposal_ref=proposal.proposal_id,
                 symbol=proposal.symbol, verdict=Verdict.SUPPRESS,
                 gate_results=gate_results, overriding_gate="risk",
-                summary=f"LIVE_LOCKED: {risk_result.reason}",
+                summary=summary,
             )
 
         # Gate 2: Macro

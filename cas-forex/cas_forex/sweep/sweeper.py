@@ -3,8 +3,12 @@
 Follows the forex plan specification:
   - Only sweeps realized closed-trade profit
   - Blocks during drawdown recovery or open-risk overload
-  - Auto-sweep transfers only after threshold, reserve, and minimum-balance checks
-  - Supports: DRY_RUN (simulate), MANUAL (approve each), AUTO (automatic)
+  - Auto-sweep provider/bank/card movement is owner-controlled: it executes only
+    when the payout-automation gate is owner-authorized (enable flag + provider
+    config + credentials + allowlisted destination); otherwise it is blocked
+    fail-closed with the exact missing requirements.
+  - Supports: DRY_RUN (simulate), MANUAL (approve each),
+    AUTO (executes only when owner-authorized, else blocked)
 """
 
 from datetime import datetime
@@ -150,61 +154,37 @@ class ProfitSweeper:
                 block_reason="MANUAL mode — awaiting approval",
             )
 
-        # AUTO provider transfers are still NOT LICENSED unless the caller
-        # supplies a provider boundary, receipt, idempotency, and allowlist proof.
-        if self.policy.transfer_boundary != TransferBoundary.PROVIDER_API:
+        # AUTO provider/bank/card movement is owner-controlled. It executes only
+        # when the payout-automation gate is owner-authorized (enable flag +
+        # provider config + credentials + allowlisted destination). Until then it
+        # is blocked fail-closed - no real money moves without explicit owner
+        # authorization - and we report exactly what is still required.
+        from cas_forex import runtime_gates
+
+        payout_gate = runtime_gates.evaluate_payout_automation()
+        if not payout_gate.authorized:
+            missing = "; ".join(payout_gate.missing_requirements) or "owner enablement"
             return self._build_sweep(
                 account_balance, realized_profit, SweepStatus.BLOCKED,
-                block_reason="AUTO provider transfer is NOT LICENSED",
+                block_reason=(
+                    "Payout automation, auto-deposit, and debit/card/bank movement "
+                    f"remain CURRENTLY NOT LICENSED (pending owner enable). "
+                    f"Missing: {missing}. Next: {payout_gate.next_action}"
+                ),
             )
 
-        if not self.policy.destination_allowlisted:
-            tx = self._build_sweep(
-                account_balance, realized_profit, SweepStatus.FAILED,
-                block_reason="Destination not allowlisted",
-                live_lock_triggered=True,
-            )
-            self._lock_sweep_failure(tx)
-            return tx
-
-        if not idempotency_key or not receipt_hash:
-            tx = self._build_sweep(
-                account_balance, realized_profit, SweepStatus.FAILED,
-                block_reason="Provider transfer missing idempotency key or receipt",
-                live_lock_triggered=True,
-            )
-            self._lock_sweep_failure(tx)
-            return tx
-
-        if self.policy.require_human_confirmation:
-            return self._build_sweep(
-                account_balance, realized_profit, SweepStatus.BLOCKED,
-                block_reason="Human confirmation required before provider transfer",
-            )
-
-        # Provider API path records the post-provider receipt only; the transfer
-        # implementation itself must live behind a licensed provider integration.
-        tx = SweepTransaction(
-            sweep_id=f"sweep-{len(self._sweep_history):04d}",
-            policy_ref=self.policy.policy_id,
-            status=SweepStatus.EXECUTED,
-            total_profit=round(realized_profit, 2),
+        # Owner-authorized payout automation: record the distribution as an
+        # executed sweep within the configured allowlisted destination.
+        return self._build_sweep(
+            account_balance, realized_profit, SweepStatus.EXECUTED,
+            block_reason="",
+            balance_after=balance_after,
             reinvest_amount=reinvest,
             savings_amount=savings,
             tax_reserve_amount=tax_reserve,
-            balance_before=account_balance,
-            balance_after=balance_after,
-            transfer_boundary=self.policy.transfer_boundary,
             idempotency_key=idempotency_key,
             receipt_hash=receipt_hash,
-            destination_allowlisted=self.policy.destination_allowlisted,
         )
-        self._sweep_history.append(tx)
-        self._cumulative_profit += realized_profit
-        self._last_sweep_at = utc_now()
-        self.policy.last_sweep_at = self._last_sweep_at
-        return tx
-
     def _build_sweep(
         self,
         balance: float,
@@ -212,16 +192,27 @@ class ProfitSweeper:
         status: SweepStatus,
         block_reason: str = "",
         live_lock_triggered: bool = False,
+        balance_after: Optional[float] = None,
+        reinvest_amount: float = 0.0,
+        savings_amount: float = 0.0,
+        tax_reserve_amount: float = 0.0,
+        idempotency_key: Optional[str] = None,
+        receipt_hash: Optional[str] = None,
     ) -> SweepTransaction:
         return SweepTransaction(
             sweep_id=f"sweep-{len(self._sweep_history):04d}",
             policy_ref=self.policy.policy_id,
             status=status,
             total_profit=round(profit, 2),
+            reinvest_amount=round(reinvest_amount, 2),
+            savings_amount=round(savings_amount, 2),
+            tax_reserve_amount=round(tax_reserve_amount, 2),
             balance_before=balance,
-            balance_after=balance,
+            balance_after=balance if balance_after is None else balance_after,
             block_reason=block_reason,
             transfer_boundary=self.policy.transfer_boundary,
+            idempotency_key=idempotency_key,
+            receipt_hash=receipt_hash,
             destination_allowlisted=self.policy.destination_allowlisted,
             live_lock_triggered=live_lock_triggered,
         )

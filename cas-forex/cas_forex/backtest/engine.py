@@ -15,6 +15,12 @@ import numpy as np
 
 from cas_forex.config import config
 from cas_forex.evidence_store import EvidenceStore
+from cas_forex.instruments import (
+    pip_value_per_lot,
+    price_unit_size,
+    round_price,
+    usd_notional,
+)
 from cas_forex.schemas.decision import CASDecision, Verdict
 from cas_forex.schemas.evidence import ForexEvidencePacket, PacketStatus
 from cas_forex.schemas.forecast import (
@@ -211,24 +217,23 @@ class BacktestEngine:
         result = BacktestResult()
         result.starting_balance = self.initial_balance
 
-        atr = self._compute_atr(candles[:warmup_bars]) if len(candles) >= warmup_bars else 0.001
-
         for i in range(warmup_bars, len(candles)):
             c = candles[i]
             timestamp = c.get("timestamp")
             dt = self._parse_time(timestamp)
+            atr = self._compute_atr(candles[: i + 1])
 
             # Update day/week tracking
             self._update_period(dt)
 
             # Build snapshot
-            pip_size = 1.0 / pip_multiplier(symbol)
+            pip_size = price_unit_size(symbol)
             half_spread = self.spread_pips * pip_size / 2.0
             snapshot = MarketSnapshot(
                 symbol=symbol,
                 timestamp=utc_now(),
-                bid=c["close"] - half_spread,
-                ask=c["close"] + half_spread,
+                bid=round_price(symbol, c["close"] - half_spread),
+                ask=round_price(symbol, c["close"] + half_spread),
                 spread=self.spread_pips,
                 high=c.get("high", c["close"]),
                 low=c.get("low", c["close"]),
@@ -244,7 +249,7 @@ class BacktestEngine:
                     self._close_trade(trade, c, lot_size_pips)
 
             # Build risk assessment
-            risk = self._build_risk_assessment()
+            risk = self._build_risk_assessment(symbol=symbol, price=c["close"])
             if risk is None:
                 continue
 
@@ -397,9 +402,9 @@ class BacktestEngine:
             proposal_id=str(uuid.uuid4()),
             symbol=symbol,
             direction=direction,
-            entry_price=round(current, 5),
-            stop_loss=round(sl, 5),
-            take_profit=round(tp, 5),
+            entry_price=round_price(symbol, current),
+            stop_loss=round_price(symbol, sl),
+            take_profit=round_price(symbol, tp),
             confidence=round(confidence, 4),
             model_source=model_source,
             horizon_minutes=horizon,
@@ -471,7 +476,9 @@ class BacktestEngine:
         self.open_positions.remove(trade)
         self.closed_trades.append(trade)
 
-    def _build_risk_assessment(self) -> Optional[RiskAssessment]:
+    def _build_risk_assessment(
+        self, symbol: Optional[str] = None, price: Optional[float] = None,
+    ) -> Optional[RiskAssessment]:
         """Build risk assessment from current account state."""
         # Account blown (balance gone): stop trading. You can't risk what you
         # don't have, and the schema requires balance/equity > 0. This makes the
@@ -501,6 +508,8 @@ class BacktestEngine:
                 for t in self.open_positions
             ])
             if self.open_positions
+            else self._usd_notional(symbol, price or 1.0, self.position_size)
+            if symbol is not None
             else self.position_size * STANDARD_LOT_UNITS
         )
         # Cap at 100%: in deep drawdown the raw notional ratio can exceed the
@@ -591,21 +600,11 @@ class BacktestEngine:
     @staticmethod
     def _pip_value_per_standard_lot(symbol: str, price: float) -> float:
         """Approximate USD value of one pip for one standard lot."""
-        pip_size = 1.0 / pip_multiplier(symbol)
-        if symbol.endswith("/USD"):
-            return STANDARD_LOT_UNITS * pip_size
-        if symbol.startswith("USD/"):
-            return (STANDARD_LOT_UNITS * pip_size) / max(price, 1e-9)
-        return STANDARD_LOT_UNITS * pip_size
+        return pip_value_per_lot(symbol, price)
 
     @staticmethod
     def _usd_notional(symbol: str, price: float, lots: float) -> float:
-        units = STANDARD_LOT_UNITS * lots
-        if symbol.startswith("USD/"):
-            return units
-        if symbol.endswith("/USD"):
-            return units * price
-        return units * price
+        return usd_notional(symbol, price, lots)
 
     def _update_period(self, dt: Optional[datetime]):
         if dt is None:

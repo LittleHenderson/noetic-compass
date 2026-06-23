@@ -8,6 +8,12 @@ from cas_forex.backtest.engine import BacktestEngine, TradeRecord
 import cas_forex.broker.mt5_bridge as mt5_module
 from cas_forex.broker.mt5_bridge import MT5Bridge
 from cas_forex.forecast.integrity import ForecastIntegrityGate
+from cas_forex.instruments import (
+    broker_symbol,
+    pip_value_per_lot,
+    usd_notional,
+    yahoo_ticker,
+)
 from cas_forex.schemas.decision import CASDecision, Verdict
 from cas_forex.schemas.forecast import Direction, ForecastProposal, ModelSource
 from cas_forex.schemas.market import MarketSnapshot
@@ -162,6 +168,11 @@ def test_get_bridge_live_mode_refuses_disconnected_mt5(monkeypatch):
     monkeypatch.setattr(mt5_module.config, "live_mode", True)
     monkeypatch.setattr(mt5_module.config, "paper_trading", False)
     monkeypatch.setattr(mt5_module.config, "mt5_login", 123)
+    monkeypatch.setattr(mt5_module.config, "mt5_password", "secret")
+    monkeypatch.setattr(mt5_module.config, "mt5_server", "Broker-Live")
+    monkeypatch.setattr(mt5_module.config, "prefer_mt5", True)
+    monkeypatch.setattr(mt5_module.config, "owner_enable_live_trading", True)
+    monkeypatch.setattr(mt5_module.config, "live_trading_licensed", True)
     monkeypatch.setattr(mt5_module.config, "personal_account_ack", True)
     monkeypatch.setattr(mt5_module.config, "no_pooled_capital_ack", True)
     monkeypatch.setattr(mt5_module.config, "account_type", "personal")
@@ -170,6 +181,36 @@ def test_get_bridge_live_mode_refuses_disconnected_mt5(monkeypatch):
     with pytest.raises(ConnectionError, match="refusing live fallback"):
         mt5_module.get_bridge()
     assert fake.connect_called is True
+
+
+def test_get_bridge_live_mode_blocked_when_not_licensed(monkeypatch):
+    """Owner-controlled gate: live trading stays unauthorized without the owner
+    enable flag, even when acks/credentials are present.
+
+    Account-type and source-of-funds acks alone must not authorize live
+    execution; the explicit owner enable flag must also be on. This proves the
+    reported status is enforced at the real broker path - and that it is a
+    fail-closed default, not a value that can be active without owner enablement.
+    """
+
+    def _boom():  # pragma: no cover - must never be constructed
+        raise AssertionError("MT5Bridge must not be built while NOT LICENSED")
+
+    monkeypatch.setattr(mt5_module.config, "live_mode", True)
+    monkeypatch.setattr(mt5_module.config, "paper_trading", False)
+    monkeypatch.setattr(mt5_module.config, "mt5_login", 123)
+    monkeypatch.setattr(mt5_module.config, "mt5_password", "secret")
+    monkeypatch.setattr(mt5_module.config, "mt5_server", "Broker-Live")
+    monkeypatch.setattr(mt5_module.config, "prefer_mt5", True)
+    monkeypatch.setattr(mt5_module.config, "owner_enable_live_trading", False)
+    monkeypatch.setattr(mt5_module.config, "live_trading_licensed", False)
+    monkeypatch.setattr(mt5_module.config, "personal_account_ack", True)
+    monkeypatch.setattr(mt5_module.config, "no_pooled_capital_ack", True)
+    monkeypatch.setattr(mt5_module.config, "account_type", "personal")
+    monkeypatch.setattr(mt5_module, "MT5Bridge", _boom)
+
+    with pytest.raises(PermissionError, match="NOT LICENSED"):
+        mt5_module.get_bridge()
 
 
 def test_backtest_books_usdjpy_profit_pips_and_account_value():
@@ -195,6 +236,87 @@ def test_backtest_books_usdjpy_profit_pips_and_account_value():
     assert trade.profit_pips == pytest.approx(19.0)
     expected_pip_value = (100000 * 0.01) / 150.20
     assert trade.profit_account == pytest.approx(19.0 * expected_pip_value * 0.05)
+
+
+def test_index_symbol_uses_point_value_not_fx_units():
+    proposal = ForecastProposal(
+        proposal_id="nas-prop",
+        symbol="NAS100",
+        direction=Direction.LONG,
+        entry_price=19000.0,
+        stop_loss=18900.0,
+        take_profit=19200.0,
+        confidence=0.8,
+        model_source=ModelSource.TECHNICAL,
+    )
+    decision = CASDecision(
+        decision_id="d-nas",
+        proposal_ref=proposal.proposal_id,
+        symbol="NAS100",
+        verdict=Verdict.ACCEPT,
+    )
+    engine = BacktestEngine(position_size_lots=0.5, spread_pips=1.0)
+    trade = TradeRecord(proposal, decision)
+    trade.entry_price = 19000.0
+    engine.open_positions.append(trade)
+
+    engine._close_trade(
+        trade,
+        {"close": 19100.0, "timestamp": "2026-06-17T00:00:00"},
+        lot_pips=0.10,
+        forced=True,
+    )
+
+    assert proposal.risk_pips == pytest.approx(100.0)
+    assert proposal.reward_pips == pytest.approx(200.0)
+    assert trade.profit_pips == pytest.approx(99.0)
+    assert trade.profit_account == pytest.approx(49.5)
+    assert pip_value_per_lot("NAS100", 19100.0) == pytest.approx(1.0)
+    assert usd_notional("NAS100", 19100.0, 0.5) == pytest.approx(9550.0)
+
+
+def test_gold_symbol_uses_contract_point_value():
+    proposal = ForecastProposal(
+        proposal_id="xau-prop",
+        symbol="XAU/USD",
+        direction=Direction.LONG,
+        entry_price=2300.0,
+        stop_loss=2290.0,
+        take_profit=2320.0,
+        confidence=0.8,
+        model_source=ModelSource.TECHNICAL,
+    )
+    decision = CASDecision(
+        decision_id="d-xau",
+        proposal_ref=proposal.proposal_id,
+        symbol="XAU/USD",
+        verdict=Verdict.ACCEPT,
+    )
+    engine = BacktestEngine(position_size_lots=0.1, spread_pips=0.5)
+    trade = TradeRecord(proposal, decision)
+    trade.entry_price = 2300.0
+    engine.open_positions.append(trade)
+
+    engine._close_trade(
+        trade,
+        {"close": 2310.0, "timestamp": "2026-06-17T00:00:00"},
+        lot_pips=0.10,
+        forced=True,
+    )
+
+    assert proposal.risk_pips == pytest.approx(10.0)
+    assert proposal.reward_pips == pytest.approx(20.0)
+    assert trade.profit_pips == pytest.approx(9.5)
+    assert trade.profit_account == pytest.approx(95.0)
+    assert pip_value_per_lot("XAU/USD", 2310.0) == pytest.approx(100.0)
+    assert usd_notional("XAU/USD", 2310.0, 0.1) == pytest.approx(23100.0)
+
+
+def test_non_fx_symbol_mappings_are_explicit():
+    assert yahoo_ticker("NAS100") == "^NDX"
+    assert yahoo_ticker("US30") == "^DJI"
+    assert yahoo_ticker("XAU/USD") == "GC=F"
+    assert broker_symbol("XAU/USD") == "XAUUSD"
 
 
 def test_integrity_uses_symbol_aware_spread_and_atr_pips():

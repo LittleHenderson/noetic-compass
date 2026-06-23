@@ -57,6 +57,7 @@ class ForexConfig:
 
     # ---- Broker ----
     broker_name: str = _env("BROKER_NAME", "HUGOSWAY")
+    selected_broker_id: str = _env("SELECTED_BROKER_ID", "hugosway")
     mt5_path: Optional[str] = _env("MT5_PATH") or None
     mt5_login: int = _env_int("MT5_LOGIN", 0)
     mt5_password: str = _env("MT5_PASSWORD", "")
@@ -75,6 +76,35 @@ class ForexConfig:
     personal_account_ack: bool = _env_bool("PERSONAL_ACCOUNT_ACK", False)
     no_pooled_capital_ack: bool = _env_bool("NO_POOLED_CAPITAL_ACK", False)
     account_type: str = _env("ACCOUNT_TYPE", "personal")
+    # Master live-trading authority switch. Live trading, broker ACCEPT,
+    # auto-deposit, debit/card/bank movement, and payout automation remain
+    # NOT LICENSED until this is explicitly turned on by the owner after the
+    # external broker/legal/paper-proof gates close. Defaults to False so the
+    # reported NOT LICENSED status is actually enforced at the execution path.
+    live_trading_licensed: bool = _env_bool("LIVE_TRADING_LICENSED", False)
+
+    # ---- Owner enable flags for real-money capabilities ----
+    # These are OFF by default (fail-closed). A capability is only ever active
+    # when (1) the matching owner enable flag below is on, (2) the required
+    # credentials are present, and (3) the broker/payment provider is
+    # configured. None of these are a "permanent lock": the owner turns them on
+    # by providing config + setting the flag. Until then the capability stays
+    # CURRENTLY NOT LICENSED / pending owner enable, and the runtime refuses to
+    # act so we never silently move real money without explicit authorization.
+    owner_enable_live_trading: bool = _env_bool("OWNER_ENABLE_LIVE_TRADING", False)
+    owner_enable_broker_accept: bool = _env_bool("OWNER_ENABLE_BROKER_ACCEPT", False)
+    owner_enable_auto_deposit: bool = _env_bool("OWNER_ENABLE_AUTO_DEPOSIT", False)
+    owner_enable_bank_card_movement: bool = _env_bool("OWNER_ENABLE_BANK_CARD_MOVEMENT", False)
+    owner_enable_payout_automation: bool = _env_bool("OWNER_ENABLE_PAYOUT_AUTOMATION", False)
+
+    # ---- Payment / transfer provider config (for deposits/payouts/movement) ----
+    # A real-money transfer capability additionally requires a configured
+    # provider and API key. Empty => provider not configured => capability stays
+    # off regardless of the enable flag.
+    payment_provider: str = _env("PAYMENT_PROVIDER", "")
+    payment_api_key: Optional[str] = _env("PAYMENT_API_KEY") or None
+    payout_destination_id: Optional[str] = _env("PAYOUT_DESTINATION_ID") or None
+    payout_destination_allowlisted: bool = _env_bool("PAYOUT_DESTINATION_ALLOWLISTED", False)
 
     # ---- Profit Sweep ----
     sweep_mode: str = _env("SWEEP_MODE", "DRY_RUN")  # DRY_RUN, MANUAL, AUTO
@@ -95,6 +125,29 @@ class ForexConfig:
     chronos_model_size: str = _env("CHRONOS_MODEL_SIZE", "tiny")  # tiny, mini, small, base, large
     forecast_horizon_minutes: int = _env_int("FORECAST_HORIZON_MINUTES", 60)
     min_forecast_confidence: float = _env_float("MIN_FORECAST_CONFIDENCE", 0.6)
+
+    # ---- Open-weight AI model (research assistant) ----
+    # Attaches a local/open-weight LLM for research analysis only. It can read
+    # evidence and produce paper/research suggestions; it has no authority to
+    # trade or move money (every such path is gated separately in
+    # runtime_gates). Defaults are off until the owner configures a backend.
+    ai_model_enabled: bool = _env_bool("AI_MODEL_ENABLED", False)
+    # Backend:
+    #   "ollama"              local open-weight server
+    #   "openai_compatible"   vLLM / LM Studio / llama.cpp / compatible endpoint
+    #   "frontier_openai"     frontier OpenAI API key
+    #   "frontier_anthropic"  frontier Anthropic API key
+    #   "frontier_google"     frontier Google/DeepMind API key
+    # or "" (disabled).
+    ai_model_backend: str = _env("AI_MODEL_BACKEND", "ollama")
+    # Default to a strong open-weight model; owner can override.
+    ai_model_name: str = _env("AI_MODEL_NAME", "llama3.1:70b-instruct")
+    ai_model_base_url: str = _env("AI_MODEL_BASE_URL", "http://127.0.0.1:11434")
+    ai_model_api_key: Optional[str] = _env("AI_MODEL_API_KEY") or None
+    ai_model_max_tokens: int = _env_int("AI_MODEL_MAX_TOKENS", 1024)
+    ai_model_temperature: float = _env_float("AI_MODEL_TEMPERATURE", 0.2)
+    ai_model_control_plane: str = _env("AI_MODEL_CONTROL_PLANE", "CAS_HARNESS_PCBA")
+    ai_model_pcba_guard_enabled: bool = _env_bool("AI_MODEL_PCBA_GUARD_ENABLED", True)
 
     # ---- MACRO Blackout ----
     macro_blackout_enabled: bool = _env_bool("MACRO_BLACKOUT_ENABLED", True)

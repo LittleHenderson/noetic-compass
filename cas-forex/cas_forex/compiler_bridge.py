@@ -17,7 +17,10 @@ For Forex:
   Consolidation   → ^0^C_{F6}|T  (Identity/Cognitive/Structure/Transcendent)
 """
 
+import importlib.util
+import os
 import sys
+from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 from cas_forex.schemas.forecast import Direction, ForecastProposal
@@ -228,19 +231,54 @@ class CASCompilerBridge:
     def __init__(self):
         self._available = False
         self._compile_fn = None
-        try:
-            # Add the noetic-compass API to path if needed
-            nc_path = (
-                r"C:\Users\wakil\OneDrive\Desktop\tksCAS"
-                r"\noetic-compass-scaffold\noetic-compass"
-            )
-            if nc_path not in sys.path:
-                sys.path.insert(0, nc_path)
-            from api.notation.compiler import compile_expression  # type: ignore
-            self._compile_fn = compile_expression
-            self._available = True
-        except ImportError:
-            self._available = False
+        self._compiler_path: Optional[Path] = None
+        self._load_compiler()
+
+    def _load_compiler(self) -> None:
+        """Load the sibling Noetic Compass CAS compiler robustly.
+
+        CAS Forex also has a top-level ``api`` package for its FastAPI app, so
+        ``from api.notation.compiler import ...`` is fragile: if the local API
+        package is already on ``sys.path`` (or cached in ``sys.modules``), the
+        import resolves to the wrong package and the compiler appears missing.
+        The bridge therefore loads the compiler by absolute file path under a
+        private module name while still adding the Noetic root to ``sys.path`` so
+        optional helpers such as ``cas_engine`` can be found.
+        """
+
+        errors: list[str] = []
+        for compiler_path in _candidate_compiler_paths():
+            try:
+                compiler_path = compiler_path.resolve()
+                noetic_root = compiler_path.parents[2]
+                noetic_root_text = str(noetic_root)
+                if noetic_root_text not in sys.path:
+                    sys.path.insert(0, noetic_root_text)
+
+                spec = importlib.util.spec_from_file_location(
+                    "_cas_forex_noetic_compiler",
+                    compiler_path,
+                )
+                if spec is None or spec.loader is None:
+                    errors.append(f"{compiler_path}: no import spec")
+                    continue
+                module = importlib.util.module_from_spec(spec)
+                sys.modules["_cas_forex_noetic_compiler"] = module
+                spec.loader.exec_module(module)
+                compile_fn = getattr(module, "compile_expression", None)
+                if compile_fn is None:
+                    errors.append(f"{compiler_path}: compile_expression missing")
+                    continue
+                self._compile_fn = compile_fn
+                self._compiler_path = compiler_path
+                self._available = True
+                return
+            except Exception as exc:  # pragma: no cover - diagnostic fallback
+                errors.append(f"{compiler_path}: {exc}")
+
+        # Keep the bridge safely disabled but expose why in compile errors.
+        self._available = False
+        self._load_error = "; ".join(errors) or "no candidate compiler.py found"
 
     @property
     def available(self) -> bool:
@@ -256,7 +294,10 @@ class CASCompilerBridge:
             return CompilerResult(
                 expression=expression,
                 valid=False,
-                error="CAS compiler not available (noetic-compass not in path)",
+                error=(
+                    "CAS compiler not available "
+                    f"({getattr(self, '_load_error', 'noetic-compass not in path')})"
+                ),
             )
 
         try:
@@ -336,3 +377,46 @@ def get_bridge() -> CASCompilerBridge:
     if _bridge is None:
         _bridge = CASCompilerBridge()
     return _bridge
+
+
+def _candidate_compiler_paths() -> list[Path]:
+    """Return plausible CAS compiler locations for Windows, WSL, and bundles."""
+
+    here = Path(__file__).resolve()
+    cas_forex_root = here.parents[1]
+    workspace_root = here.parents[2]
+    candidates: list[Path] = []
+
+    env_root = os.environ.get("CAS_COMPILER_ROOT") or os.environ.get("NOETIC_COMPASS_ROOT")
+    if env_root:
+        candidates.append(Path(env_root) / "api" / "notation" / "compiler.py")
+
+    candidates.extend(
+        [
+            workspace_root / "noetic-compass-scaffold" / "noetic-compass" / "api" / "notation" / "compiler.py",
+            workspace_root / "dist" / "cas-offline" / "api" / "notation" / "compiler.py",
+            workspace_root / "dist" / "_cas-offline-build" / "api" / "notation" / "compiler.py",
+            cas_forex_root / "api" / "notation" / "compiler.py",
+            Path.cwd() / "noetic-compass-scaffold" / "noetic-compass" / "api" / "notation" / "compiler.py",
+        ]
+    )
+
+    # Preserve the old absolute Windows intent, but make it usable from WSL by
+    # including the mounted path. These are only tried if present.
+    candidates.extend(
+        [
+            Path(r"C:\Users\wakil\OneDrive\Desktop\tksCAS\noetic-compass-scaffold\noetic-compass\api\notation\compiler.py"),
+            Path("/mnt/c/Users/wakil/OneDrive/Desktop/tksCAS/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py"),
+        ]
+    )
+
+    seen: set[str] = set()
+    existing: list[Path] = []
+    for path in candidates:
+        key = str(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        if path.exists():
+            existing.append(path)
+    return existing

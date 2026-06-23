@@ -131,3 +131,152 @@ def make_donchian_breakout_signal(
         return direction, round(confidence, 4), sl_mult, tp_mult
 
     return signal
+
+
+def make_time_series_momentum_signal(
+    lookback: int = 126,
+    skip_recent: int = 0,
+    min_return_bps: float = 250.0,
+    allow_short: bool = False,
+    sl_mult: float = 2.0,
+    tp_mult: float = 6.0,
+    max_confidence: float = 0.9,
+) -> Callable[[List[float]], SignalResult]:
+    """Time-series momentum: trade in the direction of a sustained move.
+
+    This is the daily-bar version of the evidence-backed trend-following family:
+    if the prior lookback return is strongly positive, go long; if it is strongly
+    negative and ``allow_short`` is true, go short. For equity indices the default
+    is long-or-flat because the long-term drift makes constant shorting expensive.
+    """
+
+    def signal(closes: List[float]) -> SignalResult:
+        min_len = lookback + skip_recent + 1
+        if len(closes) < min_len:
+            return None
+
+        end_idx = -1 - skip_recent if skip_recent > 0 else -1
+        recent = closes[end_idx]
+        past = closes[end_idx - lookback]
+        if past <= 0:
+            return None
+
+        ret_bps = (recent / past - 1.0) * 10_000.0
+        if ret_bps >= min_return_bps:
+            direction = Direction.LONG
+        elif allow_short and ret_bps <= -min_return_bps:
+            direction = Direction.SHORT
+        else:
+            return None
+
+        strength = max(abs(ret_bps) - min_return_bps, 0.0)
+        confidence = min(max_confidence, 0.35 + strength / 5000.0)
+        return direction, round(confidence, 4), sl_mult, tp_mult
+
+    return signal
+
+
+def make_trend_pullback_signal(
+    trend_lookback: int = 126,
+    pullback_lookback: int = 5,
+    min_trend_bps: float = 500.0,
+    pullback_bps: float = 150.0,
+    allow_short: bool = False,
+    sl_mult: float = 1.5,
+    tp_mult: float = 3.0,
+    max_confidence: float = 0.85,
+) -> Callable[[List[float]], SignalResult]:
+    """Enter on a short pullback inside a larger trend.
+
+    For NAS100/US30 this tests a practical hypothesis: the index has a persistent
+    upward regime, but buying only after a short-term dip may reduce chasing.
+    """
+
+    def signal(closes: List[float]) -> SignalResult:
+        min_len = max(trend_lookback, pullback_lookback) + 1
+        if len(closes) < min_len:
+            return None
+
+        trend_base = closes[-trend_lookback]
+        pullback_base = closes[-pullback_lookback]
+        current = closes[-1]
+        if trend_base <= 0 or pullback_base <= 0:
+            return None
+
+        trend_bps = (current / trend_base - 1.0) * 10_000.0
+        recent_bps = (current / pullback_base - 1.0) * 10_000.0
+
+        if trend_bps >= min_trend_bps and recent_bps <= -pullback_bps:
+            direction = Direction.LONG
+        elif allow_short and trend_bps <= -min_trend_bps and recent_bps >= pullback_bps:
+            direction = Direction.SHORT
+        else:
+            return None
+
+        trend_strength = max(abs(trend_bps) - min_trend_bps, 0.0)
+        pullback_strength = max(abs(recent_bps) - pullback_bps, 0.0)
+        confidence = min(max_confidence, 0.35 + (trend_strength + pullback_strength) / 7500.0)
+        return direction, round(confidence, 4), sl_mult, tp_mult
+
+    return signal
+
+
+def make_low_vol_range_scalper_signal(
+    lookback: int = 24,
+    baseline: int = 120,
+    z_entry: float = 1.2,
+    max_vol_ratio: float = 0.75,
+    max_efficiency_ratio: float = 0.35,
+    sl_mult: float = 2.0,
+    tp_mult: float = 0.8,
+    max_confidence: float = 0.8,
+) -> Callable[[List[float]], SignalResult]:
+    """Low-volatility range fade inspired by public EA/range-bot patterns.
+
+    It only trades when recent volatility is below its baseline and directional
+    efficiency is low, then fades a short-term z-score extension. This captures
+    the public Forex Fury-style idea (range/low-volatility, small targets) without
+    copying proprietary set files or assuming profitability.
+    """
+
+    def signal(closes: List[float]) -> SignalResult:
+        min_len = max(lookback + 1, baseline + 1)
+        if len(closes) < min_len:
+            return None
+
+        recent = np.asarray(closes[-lookback:], dtype=float)
+        base = np.asarray(closes[-baseline:], dtype=float)
+        if np.any(recent <= 0) or np.any(base <= 0):
+            return None
+
+        recent_rets = np.diff(np.log(recent))
+        base_rets = np.diff(np.log(base))
+        base_vol = float(base_rets.std())
+        recent_vol = float(recent_rets.std())
+        if base_vol <= 0 or recent_vol <= 0:
+            return None
+        if recent_vol / base_vol > max_vol_ratio:
+            return None
+
+        path = float(np.abs(np.diff(recent)).sum())
+        efficiency = abs(float(recent[-1] - recent[0])) / path if path > 0 else 0.0
+        if efficiency > max_efficiency_ratio:
+            return None
+
+        mean = float(recent.mean())
+        std = float(recent.std())
+        if std <= 0:
+            return None
+        z = (closes[-1] - mean) / std
+        if z >= z_entry:
+            direction = Direction.SHORT
+        elif z <= -z_entry:
+            direction = Direction.LONG
+        else:
+            return None
+
+        edge = min(abs(z) - z_entry, 3.0)
+        confidence = min(max_confidence, 0.35 + edge * 0.12)
+        return direction, round(confidence, 4), sl_mult, tp_mult
+
+    return signal

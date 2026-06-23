@@ -23,6 +23,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
+from cas_forex.instruments import default_mid, price_unit_size, round_price
 from cas_forex.schemas.cjt import CjtRegion
 from cas_forex.schemas.forecast import pip_multiplier
 
@@ -43,9 +44,14 @@ def generate_regime_candles(
     rng = np.random.default_rng(seed)
     pip = 1.0 / pip_multiplier(symbol)
     if base is None:
-        base = 150.0 if symbol == "USD/JPY" else 1.10
+        base = default_mid(symbol)
     # Base per-bar volatility in price units (~ a daily candle), scaled by vol_mult.
-    unit = (0.55 if symbol == "USD/JPY" else 0.0009) * vol_mult
+    if symbol == "USD/JPY":
+        base_unit = 0.55
+    else:
+        unit_size = price_unit_size(symbol)
+        base_unit = max(base * 0.0008, unit_size)
+    unit = base_unit * vol_mult
 
     price = float(base)
     closes = [price]
@@ -84,10 +90,10 @@ def generate_regime_candles(
         wick = abs(rng.standard_normal()) * 0.4 * unit + pip
         candles.append({
             "timestamp": f"2026-01-01T00:{i % 60:02d}:00",
-            "open": round(o, 5),
-            "high": round(max(o, c) + wick, 5),
-            "low": round(max(min(o, c) - wick, pip), 5),
-            "close": round(c, 5),
+            "open": round_price(symbol, o),
+            "high": round_price(symbol, max(o, c) + wick),
+            "low": round_price(symbol, max(min(o, c) - wick, pip)),
+            "close": round_price(symbol, c),
             "volume": 1000 + i,
         })
     return candles

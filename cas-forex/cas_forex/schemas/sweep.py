@@ -32,7 +32,7 @@ class ProfitSweepPolicy(BaseModel):
     """Configuration for automated profit sweeping.
 
     Controls when and how realized profits are transferred from the trading
-    account to savings/reinvestment.
+    account to savings/reinvestment. External payout automation remains NOT LICENSED in the current CAS Forex authority boundary.
     """
 
     policy_id: str = Field(
@@ -41,7 +41,7 @@ class ProfitSweepPolicy(BaseModel):
     )
     mode: SweepMode = Field(
         default=SweepMode.DRY_RUN,
-        description="DRY_RUN (simulate only), MANUAL (approve each), AUTO (automatic).",
+        description="DRY_RUN (simulate only), MANUAL (approve each), AUTO (blocked until payout automation is licensed).",
     )
     # Thresholds
     min_profit_threshold: float = Field(

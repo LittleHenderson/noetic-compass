@@ -342,7 +342,7 @@ def test_broker_guards_mt4_mailbox_sim_reject_and_live_legal(monkeypatch, tmp_pa
     monkeypatch.setattr(config, "paper_trading", False)
     monkeypatch.setattr(config, "personal_account_ack", False)
     monkeypatch.setattr(config, "no_pooled_capital_ack", False)
-    with pytest.raises(PermissionError, match="LIVE_LOCKED"):
+    with pytest.raises(PermissionError, match="CURRENTLY NOT LICENSED"):
         get_bridge()
 
 
@@ -411,17 +411,12 @@ def test_sweep_auto_provider_boundary_and_receipts(tmp_path):
         ),
         live_lock_controller=sweep_lock,
     )
-    failed = provider.execute_sweep(account_balance=10000.0, realized_profit=100.0)
-    assert failed.status == SweepStatus.FAILED
-    assert failed.live_lock_triggered
-    assert sweep_lock.is_locked()
-    locked = provider.execute_sweep(
-        account_balance=10000.0,
-        realized_profit=100.0,
-        idempotency_key="idem-locked",
-        receipt_hash="receipt-locked",
-    )
-    assert locked.status == SweepStatus.BLOCKED
+    blocked_provider = provider.execute_sweep(account_balance=10000.0, realized_profit=100.0)
+    assert blocked_provider.status == SweepStatus.BLOCKED
+    assert "Payout automation" in blocked_provider.block_reason
+    assert "NOT LICENSED" in blocked_provider.block_reason
+    assert blocked_provider.live_lock_triggered is False
+    assert not sweep_lock.is_locked()
 
     receipt_provider = ProfitSweeper(
         ProfitSweepPolicy(
@@ -432,12 +427,44 @@ def test_sweep_auto_provider_boundary_and_receipts(tmp_path):
             require_human_confirmation=False,
         )
     )
-    executed = receipt_provider.execute_sweep(
+    blocked_with_receipts = receipt_provider.execute_sweep(
         account_balance=10000.0,
         realized_profit=100.0,
         idempotency_key="idem-1",
         receipt_hash="receipt-1",
     )
-    assert executed.status == SweepStatus.EXECUTED
-    assert executed.transfer_boundary == TransferBoundary.PROVIDER_API
-    assert executed.receipt_hash == "receipt-1"
+    assert blocked_with_receipts.status == SweepStatus.BLOCKED
+    assert blocked_with_receipts.transfer_boundary == TransferBoundary.PROVIDER_API
+    assert blocked_with_receipts.receipt_hash is None
+    assert "debit/card/bank movement" in blocked_with_receipts.block_reason
+    assert receipt_provider.total_swept == 0.0
+
+
+def test_sweep_auto_executes_when_owner_authorized(monkeypatch):
+    from cas_forex.config import config as forex_config
+
+    monkeypatch.setattr(forex_config, "owner_enable_payout_automation", True)
+    monkeypatch.setattr(forex_config, "payment_provider", "wise")
+    monkeypatch.setattr(forex_config, "payment_api_key", "key")
+    monkeypatch.setattr(forex_config, "payout_destination_id", "dest-1")
+    monkeypatch.setattr(forex_config, "payout_destination_allowlisted", True)
+
+    sweeper = ProfitSweeper(
+        ProfitSweepPolicy(
+            mode=SweepMode.AUTO,
+            min_profit_threshold=10.0,
+            transfer_boundary=TransferBoundary.PROVIDER_API,
+            destination_allowlisted=True,
+            require_human_confirmation=False,
+        )
+    )
+    tx = sweeper.execute_sweep(
+        account_balance=10000.0,
+        realized_profit=100.0,
+        idempotency_key="idem-2",
+        receipt_hash="receipt-2",
+    )
+    assert tx.status == SweepStatus.EXECUTED
+    assert tx.savings_amount == 40.0
+    assert tx.tax_reserve_amount == 10.0
+    assert tx.receipt_hash == "receipt-2"

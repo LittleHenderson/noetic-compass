@@ -1,0 +1,13 @@
+{
+  "appId": "com.casforex.cockpit",
+  "appName": "CAS Forex",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true
+  }
+}

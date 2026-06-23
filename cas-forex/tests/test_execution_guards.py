@@ -20,7 +20,9 @@ def _risk():
         account_balance=10000,
         account_equity=10000,
         margin_free=9000,
+        margin_level_pct=500.0,
         proposed_position_size_lots=0.05,
+        risk_per_trade_pct=0.25,
         open_positions_count=0,
     )
 

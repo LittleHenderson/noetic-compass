@@ -17,6 +17,7 @@ from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 from cas_forex.config import config
+from cas_forex.instruments import broker_symbol
 from cas_forex.schemas.order import (
     BrokerLockReason,
     BrokerMode,
@@ -356,7 +357,7 @@ class MT5Bridge(BrokerBridge):
             (order.direction, order.order_type.value.upper()), mt5.ORDER_TYPE_BUY
         )
 
-        symbol = order.symbol.replace("/", "")
+        symbol = broker_symbol(order.symbol)
 
         # Get current price for market orders
         price = order.price
@@ -645,11 +646,17 @@ def get_bridge() -> BrokerBridge:
 def _enforce_live_legal_gates() -> None:
     if not config.live_mode:
         return
-    account_type = (config.account_type or "personal").lower()
-    if account_type in {"family", "friend", "client", "pooled", "fee_based", "fee-based"}:
-        raise PermissionError("LIVE_LOCKED: account boundary forbids live execution")
-    if not config.personal_account_ack or not config.no_pooled_capital_ack:
-        raise PermissionError("LIVE_LOCKED: missing personal/no-pooled-capital acknowledgments")
+    # Owner-controlled authorization (fail-closed). Live execution is only
+    # allowed when the owner has satisfied the live-trading gate: explicit
+    # enable flag(s) ON, broker credentials present, live broker configured, and
+    # account/source-of-funds acknowledgments signed. This is not a
+    # permanent lock - the gate reports exactly what is still missing and the
+    # owner authorizes it by providing those items. The check stays at the real
+    # execution path so a real-money order can never be placed without explicit
+    # owner authorization + credentials + config.
+    from cas_forex import runtime_gates
+
+    runtime_gates.require_authorized("live_trading", config)
 
 
 def _hash_payload(payload) -> str:

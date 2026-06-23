@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import hashlib
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Any, Mapping
 
 from cas_forex.pcba_authority import build_pcba_licensing_report
@@ -129,7 +129,10 @@ def build_pcba_semantics_review_bundle(
 
 
 def _artifact_entry(workspace_root: Path, ref: str) -> dict[str, Any]:
-    path = workspace_root / ref
+    # Artifact refs are persisted with Windows-style separators because the
+    # owner workspace is normally opened from Windows. Normalize them here so
+    # the same evidence bundle verifies under WSL/Linux CI as well.
+    path = workspace_root.joinpath(*PureWindowsPath(ref).parts)
     exists = path.exists()
     return {
         "ref": ref,
