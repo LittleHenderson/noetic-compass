@@ -1,6 +1,151 @@
 # CAS Forex - Changelog
 
-## 2026-06-24 - CAS Forex LLM Bot + deterministic-bot launch fixes
+## 2026-06-24 - Parallel fleet: cockpit honesty + bot dry-run + multi-timeframe runtime
+
+Three parallel agents on disjoint slices. No file collisions, no test
+regressions. Net `+18` tests (`533 → 551`).
+
+### Slice 1 — cockpit honesty (lane-aware operability counts)
+
+The operability cockpit was reporting `cas_open_position_count: 28` and
+`pending_receipt_count: 28` from stale rows in the legacy MT4 mailbox event
+journal (`evidence_runs/agent_workflow_queue/agent-events.jsonl`) while
+broker truth on the active MT5 lane is 0 open positions. The fix makes the
+reconciler and verifier lane-aware.
+
+Implemented:
+
+- `cas_forex/terminal_position_reconciliation.py` — added
+  `LANE_MT4_MAILBOX` / `LANE_MT5_DEMO` constants and `_lane_for_record()`
+  helper that classifies each record by its `broker_mode` field; CAS open
+  positions and terminal open positions now carry `lane` / `broker_mode`
+  tags; `_summary` produces a per-lane breakdown.
+- `cas_forex/terminal_operability_verifier.py` — added `ACTIVE_LANE_*`
+  constants and `_detect_active_terminal_lane()` (signal: MT5 broker-API
+  verifier status, non-blocked MT5 paper execution verifier status, or any
+  MT5 execution summary showing `execution_attempted` /
+  `order_request_built`; default `MT4_MAILBOX`); top-level
+  `cas_open_position_count` and `pending_receipt_count` now reflect the
+  active lane, with legacy totals preserved under
+  `cas_open_position_count_legacy_total` and
+  `pending_receipt_count_legacy_total`.
+
+New summary fields:
+
+- `active_terminal_lane: "MT5_DEMO" | "MT4_MAILBOX"`
+- `cas_open_position_count_by_lane: {"mt4_mailbox": N, "mt5_demo": N}`
+- `pending_receipt_count_by_lane: {"mt4_mailbox": N, "mt5_demo": N}`
+- `terminal_open_position_count_by_lane: {"mt4_mailbox": N, "mt5_demo": N}`
+- `cas_open_position_count_legacy_total: N`
+- `pending_receipt_count_legacy_total: N`
+
+Reconciliation summary additionally exposes per-lane breakdowns under
+the same key names.
+
+Tests: `tests/test_terminal_operability_lane_awareness.py` — 5 tests
+covering MT5-lane active with stale MT4 rows present (top-level count
+reflects MT5), MT4-lane active with no MT5 evidence (top-level count is
+MT4), per-lane breakdown shape, and `active_terminal_lane` detection.
+
+### Slice 2 — LLM bot `--dry-run` pipeline tracer
+
+The LLM bot is unusable without an `ANTHROPIC_API_KEY`. The dry-run mode
+lets the operator exercise the full 7-stage runtime pipeline (LLM tool
+selection through validator, manual approval, dispatch, broker, and
+explanation hand-back) without ever calling the model.
+
+Implemented:
+
+- `cas_forex/cas_forex_llm_bot.py` — added `run_dry_run_once(input, ...)`
+  (single-turn pure tracer returning a structured trace dict for tests)
+  and `run_dry_run_cli(...)` (interactive loop). Both paths use the real
+  Stage 3 validator (`validate_capability` + `fetch_runtime_gates`) and
+  the real Stage 4 dispatcher (`execute_capability`) only when
+  `actually_execute=True`. No LLM imports or calls are involved on the
+  dry-run path.
+- `scripts/run_cas_forex_llm_bot.py` — added `--dry-run` and
+  `--actually-execute` flags. `--actually-execute` errors out unless
+  paired with `--dry-run`. Default behavior unchanged.
+- `tests/test_cas_forex_llm_bot.py` — 5 new tests: validator
+  structured-message printout; REJECT short-circuits before Stage 4 and
+  Stage 5 even with `--actually-execute`; unknown-key path; correct
+  parsing of `<key> <hint>` input; full interactive CLI never touches
+  `call_gateway`.
+
+CLI:
+
+```powershell
+py -3.12 scripts/run_cas_forex_llm_bot.py --dry-run
+py -3.12 scripts/run_cas_forex_llm_bot.py --dry-run --actually-execute
+```
+
+Operator types `<key>` (e.g. `cy`, `mt`, `pp`) or `<key> <hint>` (e.g.
+`mt buy EURUSD 0.01`) at the `dry-run>` prompt; the bot prints each
+stage's output and stops at the first REJECT.
+
+### Slice 3 — Multi-timeframe runtime skeleton
+
+The runtime layer for the 2026-06-21 user request ("pick/change timeframe
+AND trade multiple timeframes at once"). Skeleton only — UI selector,
+API route, and concurrent-monitor wiring are follow-on work.
+
+Implemented:
+
+- `cas_forex/multi_timeframe_runtime.py` — pure in-memory runtime, no
+  I/O. Canonical timeframes (`M1, M5, M15, H1, H4, D1`) deliberately
+  narrower than `mtfa.TF_HIERARCHY` (W1/MN stay analytical-only).
+  Public surface:
+  - `CANONICAL_TIMEFRAMES: frozenset[str]`
+  - `TimeframeKey(str, Enum)` — string-valued enum mirror
+  - `UnknownTimeframeError(ValueError)`
+  - `TimeframeSelection(symbol, active_timeframes)` (frozen)
+  - `AggregatedRisk(symbol, sum_risk, max_risk, contributing_timeframes)`
+    (frozen)
+  - `SignalAlignment(symbol, alignment: "BUY"|"SELL"|"MIXED"|"EMPTY",
+    votes)` (frozen)
+  - `MultiTimeframeRuntime`:
+    - `activate(symbol, timeframe)` / `deactivate(symbol, timeframe)`
+      (idempotent, both validate timeframe against the canonical set)
+    - `active_timeframes_for(symbol) -> frozenset[str]`
+    - `all_active() -> Mapping[str, frozenset[str]]`
+    - `selection_for(symbol) -> TimeframeSelection`
+    - `aggregate_risk(symbol, per_timeframe_risk) -> AggregatedRisk`
+      (sums and maxes only across currently-active timeframes; inactive
+      timeframes are ignored even if present in the input mapping;
+      absent active timeframes do NOT count as zero)
+    - `signals_align(symbol, per_timeframe_direction) -> SignalAlignment`
+      (case-insensitive direction labels; unknown labels preserved in
+      votes but force `MIXED`)
+
+Tests: `tests/test_multi_timeframe_runtime.py` — 8 tests covering empty
+state, single/multi activation, deactivation (including symbol-drop when
+last TF removed), risk aggregation ignoring inactive TFs, signal
+alignment (BUY/SELL/MIXED/EMPTY, case-insensitive, unknown-direction
+forces MIXED), unknown-TF rejection at every entry point, and
+`TimeframeKey` enum parity with `CANONICAL_TIMEFRAMES`.
+
+Next wiring (NOT built in this slice):
+
+1. Per-symbol timeframe selector on Trade / Dashboard pages backed by
+   a thin API route (e.g. `GET/POST /api/forex/timeframes/{symbol}`)
+   reading `all_active()` for state.
+2. Concurrent monitor loop in the bot: for each `(symbol, tf)` pair from
+   `all_active()`, spawn / maintain a per-TF candle subscription +
+   per-TF analyzer, feed `risk_pct` / `direction` into `aggregate_risk`
+   and `signals_align`.
+3. Portfolio-risk gate at order time: order pipeline calls
+   `aggregate_risk` with current floating PnL per TF and blocks if
+   `sum_risk` exceeds the symbol's configured cap. This is the missing
+   concurrent-TF aggregation in the 2026-06-21 spec.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q
+# 551 passed (533 → 551, +18 net; no regressions)
+```
+
+
 
 ### Deterministic bot crashed on Windows launch — fixed
 

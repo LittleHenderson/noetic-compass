@@ -640,6 +640,236 @@ def _interactive_confirmation(cap: BotCapability) -> bool:
     return answer in ("y", "yes")
 
 
+# ---------------------------------------------------------------------------
+# Dry-run CLI — exercise the Stage 1→7 pipeline without an LLM call
+# ---------------------------------------------------------------------------
+
+
+DRY_RUN_HELP = (
+    "Dry-run mode. Type a capability key (e.g. `cy`, `mt`, `pp`) optionally "
+    "followed by a natural-language hint, or `menu`/`q`."
+)
+
+
+def _dry_run_render_commands(cap: BotCapability, state: BotState) -> List[str]:
+    """Return the underlying command strings `execute_capability` would shell out.
+
+    Pulled from `cap.commands` (the canonical deterministic dispatch surface)
+    so the dry-run trace matches what Stage 4 would actually run. Falls back to
+    a placeholder when the capability has no shell commands attached.
+    """
+    raw_commands = getattr(cap, "commands", None) or []
+    rendered: List[str] = []
+    for cmd in raw_commands:
+        try:
+            rendered.append(cmd.format(state=state))
+        except Exception:
+            rendered.append(str(cmd))
+    return rendered
+
+
+def run_dry_run_once(
+    raw_input_line: str,
+    state: BotState,
+    *,
+    runtime_gates: Optional[Mapping[str, Any]] = None,
+    actually_execute: bool = False,
+    confirm_callback: Optional[Any] = None,
+    out: Any = None,
+) -> Dict[str, Any]:
+    """Run one dry-run turn for the given operator input line.
+
+    Returns a dict describing every Stage trace fired so tests can assert on
+    the pipeline without scraping stdout. `out` is the stream to print to;
+    defaults to `sys.stdout` so production callers see human output.
+
+    Pipeline mirrored:
+      Stage 1 — echo input
+      Stage 2 — synthetic LLM tool-selection trace
+      Stage 3 — `validate_capability(cap, runtime_gates)` (the real validator)
+      Stage 5 — operator confirmation prompt (if `cap.requires_confirm`)
+      Stage 4 — render-or-execute underlying commands
+      Stage 7 — synthetic LLM summary trace
+    """
+    stream = out if out is not None else sys.stdout
+
+    def emit(line: str) -> None:
+        print(line, file=stream)
+
+    trace: Dict[str, Any] = {
+        "input": raw_input_line,
+        "key": None,
+        "hint": None,
+        "capability": None,
+        "validation": None,
+        "validator_rejected": False,
+        "confirmation_required": False,
+        "confirmed": None,
+        "commands": [],
+        "executed": False,
+        "execution_success": None,
+        "execution_output": None,
+        "stages_run": [],
+    }
+
+    raw = raw_input_line.strip()
+    if not raw:
+        emit("[dry-run] empty input — nothing to trace.")
+        return trace
+
+    parts = raw.split(None, 1)
+    key = parts[0]
+    hint = parts[1] if len(parts) > 1 else None
+    trace["key"] = key
+    trace["hint"] = hint
+
+    cap = find_capability(key)
+    if cap is None:
+        emit(f"[dry-run] Unknown capability key: `{key}`. Type `menu` for the list.")
+        return trace
+    trace["capability"] = cap
+
+    # Stage 1 — echo
+    trace["stages_run"].append(1)
+    emit(f"[Stage 1] operator input: {raw}")
+    if hint:
+        emit(f"          natural-language hint: {hint}")
+
+    # Stage 2 — synthetic LLM tool selection
+    trace["stages_run"].append(2)
+    tool_name = capability_tool_name(cap)
+    emit(
+        f"[Stage 2] LLM would select tool: `{tool_name}` "
+        f"(`{cap.label}`, danger=`{cap.danger_level}`)"
+    )
+
+    # Stage 3 — CAS validator
+    trace["stages_run"].append(3)
+    validation = validate_capability(cap, runtime_gates)
+    trace["validation"] = validation
+    emit("[Stage 3] CAS validator:")
+    emit(validation.structured_message)
+
+    if validation.decision == DECISION_REJECT:
+        trace["validator_rejected"] = True
+        emit(
+            "[dry-run] validator REJECTED — stopping before Stage 4. "
+            "Real bot would feed `[cas-validator:REJECTED]` back to LLM for explanation."
+        )
+        return trace
+
+    # Stage 5 — operator confirmation gate
+    if cap.requires_confirm:
+        trace["stages_run"].append(5)
+        trace["confirmation_required"] = True
+        emit(
+            f"[Stage 5] real bot would prompt operator: Approve `{cap.key}`? [y/N]"
+        )
+        if actually_execute:
+            cb = confirm_callback if confirm_callback is not None else _interactive_confirmation
+            approved = bool(cb(cap))
+            trace["confirmed"] = approved
+            if not approved:
+                emit("[dry-run] operator declined — stopping before Stage 4.")
+                return trace
+        else:
+            emit(
+                "[dry-run] confirmation gate NOT exercised (use --actually-execute to prompt for real)."
+            )
+
+    # Stage 4 — render or execute underlying commands
+    trace["stages_run"].append(4)
+    commands = _dry_run_render_commands(cap, state)
+    trace["commands"] = commands
+    emit("[Stage 4] underlying command(s) that would run:")
+    if commands:
+        for cmd in commands:
+            emit(f"           $ {cmd}")
+    else:
+        emit("           (capability has no shell commands; runs Python dispatch path)")
+
+    if actually_execute:
+        emit("[Stage 4] --actually-execute passed; dispatching via execute_capability...")
+        success, output = execute_capability(cap, state)
+        trace["executed"] = True
+        trace["execution_success"] = success
+        trace["execution_output"] = output
+        emit(f"[Stage 4] result success={success}")
+        emit(output)
+    else:
+        emit("[Stage 4] commands NOT executed (dry-run). Pass --actually-execute to run.")
+
+    # Stage 7 — synthetic LLM summary trace
+    trace["stages_run"].append(7)
+    emit("[Stage 7] real bot would feed result back to LLM for plain-English summary.")
+    return trace
+
+
+def run_dry_run_cli(
+    *,
+    api_base: str = "http://127.0.0.1:8765",
+    mt5_path: Optional[str] = None,
+    actually_execute: bool = False,
+    runtime_gates_fetcher: Optional[Any] = None,
+    input_fn: Optional[Any] = None,
+    out: Any = None,
+) -> None:
+    """Interactive dry-run that traces Stages 1→7 without ever calling the LLM.
+
+    No API key is required. The operator types `<key>` or `<key> <hint>`; the
+    bot looks up the capability, runs the real CAS validator against fetched
+    runtime gates, and prints what each stage WOULD do. With
+    `actually_execute=True`, Stage 4 dispatches deterministically and Stage 5
+    actually prompts the operator for `requires_confirm` capabilities.
+    """
+    _ensure_utf8_console()
+    stream = out if out is not None else sys.stdout
+    reader = input_fn if input_fn is not None else input
+
+    bot_state = BotState()
+    bot_state.api_base = api_base
+    if mt5_path:
+        bot_state.mt5_path = mt5_path
+
+    if runtime_gates_fetcher is None:
+        runtime_gates = fetch_runtime_gates(bot_state.api_base)
+    else:
+        runtime_gates = runtime_gates_fetcher()
+
+    print("CAS Forex LLM Bot — DRY-RUN mode (no LLM call, no API key required).", file=stream)
+    print(f"API base: {bot_state.api_base}", file=stream)
+    print(
+        f"Execution: {'LIVE (--actually-execute)' if actually_execute else 'TRACE ONLY'}",
+        file=stream,
+    )
+    print(DRY_RUN_HELP, file=stream)
+    print("", file=stream)
+
+    while True:
+        try:
+            raw = reader("dry-run> ").strip()
+        except (EOFError, KeyboardInterrupt):
+            print("\nCAS Forex LLM Bot dry-run signing off.", file=stream)
+            return
+        if not raw:
+            continue
+        if raw.lower() in ("q", "quit", "exit"):
+            print("CAS Forex LLM Bot dry-run signing off.", file=stream)
+            return
+        if raw.lower() in ("menu", "h", "help"):
+            print(render_all_commands(), file=stream)
+            continue
+
+        run_dry_run_once(
+            raw,
+            bot_state,
+            runtime_gates=runtime_gates,
+            actually_execute=actually_execute,
+            out=stream,
+        )
+        print("", file=stream)
+
+
 def run_llm_bot_cli(
     *,
     provider: Optional[str] = None,

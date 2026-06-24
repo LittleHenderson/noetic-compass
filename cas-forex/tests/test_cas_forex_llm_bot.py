@@ -534,3 +534,150 @@ def test_step_conversation_respects_round_cap(monkeypatch):
         runtime_gates_fetcher=lambda: None,
     )
     assert "tool-round cap" in final
+
+
+# ---------------------------------------------------------------------------
+# Dry-run CLI — Stage 1->7 trace without an LLM
+# ---------------------------------------------------------------------------
+
+
+import io
+
+
+def _all_gates_closed() -> Dict[str, Any]:
+    return {
+        "decisions": {
+            gate: {"capability": gate, "authorized": False, "status": "CURRENTLY NOT LICENSED"}
+            for gate in (
+                "live_trading",
+                "broker_accept",
+                "auto_deposit",
+                "bank_card_movement",
+                "payout_automation",
+            )
+        }
+    }
+
+
+def test_dry_run_once_prints_validator_message_and_skips_execution(monkeypatch):
+    """Dry-run on a safe capability must print the Stage 3 validator message and
+    must NOT call execute_capability when actually_execute=False."""
+    safe_cap = next(c for c in llm_bot.CAPABILITIES if not c.requires_confirm)
+    monkeypatch.setattr(
+        llm_bot, "execute_capability",
+        lambda cap, st: pytest.fail("execute_capability must not run when actually_execute=False"),
+    )
+    buf = io.StringIO()
+    trace = llm_bot.run_dry_run_once(
+        safe_cap.key,
+        BotState(),
+        runtime_gates=_all_gates_closed(),
+        actually_execute=False,
+        out=buf,
+    )
+    output = buf.getvalue()
+    assert trace["capability"] is safe_cap
+    assert trace["executed"] is False
+    assert trace["validation"] is not None
+    # Stage 3 verbatim structured message must appear in output.
+    assert trace["validation"].structured_message in output
+    assert "[Stage 1]" in output
+    assert "[Stage 2]" in output
+    assert "[Stage 3]" in output
+    assert "[Stage 4]" in output
+    assert "[Stage 7]" in output
+    assert 4 in trace["stages_run"]
+
+
+def test_dry_run_once_validator_reject_stops_before_stage_4(monkeypatch):
+    """When the validator REJECTs, dry-run must NOT print Stage 4 commands and
+    must print the LLM-feedback reminder."""
+    dangerous_cap = BotCapability(
+        key="ZLIVE",
+        group="mt5",
+        label="LIVE order",
+        description="real money",
+        danger_level="dangerous",
+        requires_confirm=True,
+    )
+    monkeypatch.setattr(llm_bot, "find_capability", lambda key: dangerous_cap)
+    monkeypatch.setattr(
+        llm_bot, "execute_capability",
+        lambda cap, st: pytest.fail("Stage 4 must not run after validator REJECT"),
+    )
+    buf = io.StringIO()
+    trace = llm_bot.run_dry_run_once(
+        "ZLIVE buy EURUSD",
+        BotState(),
+        runtime_gates=_all_gates_closed(),
+        actually_execute=True,  # even with execute requested, REJECT short-circuits
+        out=buf,
+    )
+    output = buf.getvalue()
+    assert trace["validator_rejected"] is True
+    assert trace["executed"] is False
+    assert 4 not in trace["stages_run"]
+    assert 5 not in trace["stages_run"]
+    assert "[cas-validator:REJECTED]" in output
+    assert "Real bot would feed" in output
+
+
+def test_dry_run_once_unknown_key_reports_error(monkeypatch):
+    """Unknown capability keys must print an error and never reach Stage 2+."""
+    monkeypatch.setattr(llm_bot, "find_capability", lambda key: None)
+    monkeypatch.setattr(
+        llm_bot, "execute_capability",
+        lambda cap, st: pytest.fail("execute_capability must not run for unknown key"),
+    )
+    buf = io.StringIO()
+    trace = llm_bot.run_dry_run_once(
+        "nonexistent-key",
+        BotState(),
+        runtime_gates=_all_gates_closed(),
+        out=buf,
+    )
+    output = buf.getvalue()
+    assert trace["capability"] is None
+    assert trace["stages_run"] == []
+    assert "Unknown capability key" in output
+
+
+def test_dry_run_once_actually_execute_dispatches(monkeypatch):
+    """With actually_execute=True on a safe capability, Stage 4 runs through
+    execute_capability and the output is recorded in the trace."""
+    safe_cap = next(c for c in llm_bot.CAPABILITIES if not c.requires_confirm)
+    monkeypatch.setattr(llm_bot, "execute_capability", lambda cap, st: (True, "real-output"))
+    buf = io.StringIO()
+    trace = llm_bot.run_dry_run_once(
+        f"{safe_cap.key} curious hint here",
+        BotState(),
+        runtime_gates=_all_gates_closed(),
+        actually_execute=True,
+        out=buf,
+    )
+    output = buf.getvalue()
+    assert trace["executed"] is True
+    assert trace["execution_success"] is True
+    assert trace["execution_output"] == "real-output"
+    assert trace["hint"] == "curious hint here"
+    assert "real-output" in output
+
+
+def test_dry_run_cli_quits_cleanly_without_llm_call(monkeypatch):
+    """The interactive dry-run CLI must read input, never touch the LLM, and
+    exit on `q` without raising."""
+    monkeypatch.setattr(
+        llm_bot, "call_gateway",
+        lambda **kwargs: pytest.fail("dry-run CLI must never call the LLM"),
+    )
+    inputs = iter(["q"])
+    buf = io.StringIO()
+    llm_bot.run_dry_run_cli(
+        api_base="http://127.0.0.1:8765",
+        actually_execute=False,
+        runtime_gates_fetcher=lambda: _all_gates_closed(),
+        input_fn=lambda prompt="": next(inputs),
+        out=buf,
+    )
+    assert "DRY-RUN mode" in buf.getvalue()
+    assert "signing off" in buf.getvalue()
