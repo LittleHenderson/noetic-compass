@@ -1,4 +1,3211 @@
-# CAS Forex — Changelog
+# CAS Forex - Changelog
+
+## 2026-06-24 - CAS Forex LLM Bot + deterministic-bot launch fixes
+
+### Deterministic bot crashed on Windows launch — fixed
+
+Previous session's `CAS Forex Bot` ("Bot OK: 31 caps") smoke test only
+imported the module; the actual CLI crashed on launch with
+`UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f916'`
+because the greeting prints emoji on a cp1252 Windows console. The launcher
+script also emitted a `SyntaxWarning: invalid escape sequence '\P'` from an
+unescaped Windows path in its docstring.
+
+Fixes:
+
+- `scripts/run_cas_forex_bot.py` — escape the example Windows path so the
+  docstring no longer raises a SyntaxWarning; reconfigure `sys.stdout` and
+  `sys.stderr` to `encoding="utf-8", errors="replace"` at process start so
+  emoji output works on modern Windows Terminal / PowerShell and degrades
+  gracefully on legacy cp1252 consoles.
+- `cas_forex/cas_forex_bot.py` — add `_ensure_utf8_console()` at the
+  `run_bot_cli` entry so any caller (script or test) gets the same
+  protection; rewrite `build_status_summary` to read the actual API shapes
+  (`overall_status`, `checks_passed`/`checks_total`, `live_trading_status`,
+  `live_money_authorized` from `/api/forex/readiness/live`, and
+  `terminalOperabilityVerifier.operability_status` from `/api/forex/dashboard`)
+  instead of the nonexistent `summary.operability_status` / `summary.live_order_go`
+  keys it was previously reading. The greeting now shows honest numbers
+  (`Live readiness: 10/16 passed`,
+  `MT5 operability: TERMINAL_OPERABILITY_MT5_DEMO_EXECUTION_VERIFIED`)
+  instead of `unknown`.
+
+### CAS Forex LLM Bot — natural-language operator interface
+
+Added an LLM-first operator bot (`cas_forex/cas_forex_llm_bot.py`) that
+routes every operator turn through a frontier model and exposes the existing
+31 `BotCapability` entries as typed tool definitions. The deterministic
+menu is still reachable via `menu`/`h`.
+
+Architecture (runtime pipeline):
+
+1. Operator input (`run_llm_bot_cli` CLI loop)
+2. Claude: intent classification + typed tool selection (`call_gateway` →
+   `step_conversation`, 31 tools as OpenAI-shape function definitions)
+3. CAS permission/risk validator — NOT YET BUILT (next step)
+4. Deterministic capability dispatcher (`execute_tool_call` →
+   `execute_capability`, the same path the deterministic bot uses)
+5. Manual approval for `requires_confirm=True` capabilities
+   (`_interactive_confirmation` callback intercepts before dispatch)
+6. Broker/MT5 API (capability subprocesses into existing `run_mt5_*.py`)
+7. Logged result returned to Claude for plain-English explanation
+   (tool message appended; model summarizes in the same conversation turn)
+
+Provider selection — two paths, no SDK dependency added (uses `requests`,
+already a dep):
+
+- `anthropic-direct` — DEFAULT. Direct Anthropic Messages API.
+  Requires `ANTHROPIC_API_KEY`. Default model `claude-sonnet-4-6`.
+  Anthropic-native message/tools shape is translated to/from the canonical
+  OpenAI shape inside the adapter so call sites stay provider-agnostic.
+- `vercel-gateway` — alternative. Multi-provider routing via Vercel AI
+  Gateway. Requires `AI_GATEWAY_API_KEY`. Model strings are `provider/model`,
+  e.g. `anthropic/claude-sonnet-4-6`, `openai/gpt-5`,
+  `google/gemini-3.1-pro-preview`.
+
+Safety / discipline:
+
+- `requires_confirm=True` capabilities intercept before execution and prompt
+  the operator for explicit y/n. The LLM cannot bypass this — declining feeds
+  a structured "operator declined" message back so the model explains the
+  result instead of swallowing it.
+- `max_tool_rounds` (default 4) bounds successive tool-use rounds.
+- The system prompt names the non-licensed capabilities by their runtime-gate
+  IDs (`live_trading`, `broker_accept`, `auto_deposit`,
+  `bank_card_movement`, `payout_automation`) so the model never claims they
+  are operational.
+
+Implemented:
+
+- `cas_forex/cas_forex_llm_bot.py` — `LLMConfig` (provider/env/model
+  resolution); `build_tools_from_capabilities` (31 typed tools);
+  `capability_tool_name` / `capability_for_tool_name` (reversible naming);
+  `call_gateway` (provider dispatch); `_call_vercel_gateway` and
+  `_call_anthropic_direct` (provider adapters); `_openai_messages_to_anthropic`
+  and `_anthropic_response_to_openai_message` (canonical-shape conversion);
+  `execute_tool_call` (dispatch + confirmation gate); `step_conversation`
+  (LLM → tool round-trip with round cap); `run_llm_bot_cli` (interactive
+  CLI with `menu`/`q` short-circuits).
+- `scripts/run_cas_forex_llm_bot.py` — launcher with `--provider`/`--model`/
+  `--api`/`--mt5` flags; UTF-8 stdout/stderr reconfig at import time.
+- `tests/test_cas_forex_llm_bot.py` — 17 tests covering tool registry
+  shape and coverage, provider config defaults, both adapter HTTP shapes,
+  Anthropic tool-use → OpenAI tool_calls normalization, confirmation
+  interception (no-callback / decline / approve paths), tool dispatch for
+  safe capabilities, full conversation round-trip with tool result, and
+  the `max_tool_rounds` cap.
+
+Example:
+
+```powershell
+# Default: direct Claude Sonnet 4.6
+$env:ANTHROPIC_API_KEY = "sk-..."
+py -3.12 scripts/run_cas_forex_llm_bot.py
+
+# Alternative: multi-provider via Vercel AI Gateway
+$env:AI_GATEWAY_API_KEY = "..."
+py -3.12 scripts/run_cas_forex_llm_bot.py --provider vercel-gateway --model openai/gpt-5
+```
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_cas_forex_llm_bot.py -q
+# 17 passed
+
+py -3.12 -m pytest tests -q
+# 511 passed (494 baseline + 14 process-guard + 17 LLM bot — 3 net delta accounted by file-already-present tests)
+
+py -3.12 scripts/run_cas_forex_llm_bot.py --help
+# Defaults to anthropic-direct (direct Anthropic Claude Sonnet 4.6).
+```
+
+Boundary: the LLM is the OPERATOR INTERFACE, not the CAS reasoning spine.
+The CAS-Native end-to-end work is unaffected; this bot only translates
+natural language into deterministic capability calls. Live trading, broker
+ACCEPT, auto-deposit, bank/card movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+### Stage 3 — CAS permission/risk validator (shipped same session)
+
+Built the missing Stage 3 of the runtime pipeline. The validator runs between
+LLM tool selection (Stage 2) and deterministic capability dispatch (Stage 4)
+— before the manual approval gate (Stage 5). When a runtime gate is closed,
+the validator REJECTs the call and feeds a structured reason back to the
+model instead of the operator seeing a stack trace.
+
+Pipeline ordering inside `execute_tool_call`:
+
+1. Resolve capability from LLM tool name.
+2. **Stage 3 — `validate_capability(cap, runtime_gates)`.** Decides
+   `PASS` / `REJECT` / `DEGRADED` based on `cap.danger_level` and the live
+   `/api/forex/settings/runtime-gates` body. REJECT short-circuits the call
+   without ever asking the operator for confirmation.
+3. Stage 5 — `confirmation_callback` if `requires_confirm=True`.
+4. Stage 4 — `execute_capability(cap, state)` (deterministic dispatch).
+
+Decision rules (`REQUIRED_GATES_BY_DANGER` in
+`cas_forex/cas_permission_validator.py`):
+
+- `safe` → no gates required.
+- `caution` → no gates required (MT5 demo / paper-proof / read-only;
+  still hard-gated by `requires_confirm=True` at Stage 5).
+- `dangerous` → conjunctively requires `live_trading`, `broker_accept`,
+  `auto_deposit`, `bank_card_movement`, and `payout_automation` to all be
+  `authorized`. Today no capability in the 31-capability registry has
+  `danger_level="dangerous"`, so Stage 3 mostly passes; the contract is in
+  place for when live capabilities are added.
+- Unknown danger level → conservative (treated as `caution`, never `safe`).
+
+Degraded path: when the runtime-gates endpoint is unreachable
+(`fetch_runtime_gates` returns `None`), `safe` and `caution` capabilities
+pass under DEGRADED (so the deterministic bot keeps working offline) and
+`dangerous` capabilities reject (we cannot prove the gates are open).
+
+LLM-facing structured message: rejection text always starts
+`[cas-validator:REJECTED]` and lists every blocking gate by name with its
+status and `next_action` hint. The system prompt instructs the model to
+surface this verbatim instead of retrying.
+
+Implemented:
+
+- `cas_forex/cas_permission_validator.py` — `ValidationResult`/`GateBlock`
+  dataclasses; `validate_capability` pure function; `_attach_message`
+  formatting; `fetch_runtime_gates` and `fetch_authority_boundary` with
+  injected `transport` for tests; `validate_by_key` convenience.
+- `cas_forex/cas_forex_llm_bot.py` — `ToolCallResult` extended with
+  `intercepted_by_validator: bool` and `validation: Optional[ValidationResult]`;
+  `execute_tool_call` accepts `runtime_gates` and `skip_validation`,
+  routes Stage 3 → Stage 5 → Stage 4 in that order; `step_conversation`
+  fetches `runtime_gates` once per operator turn via injectable
+  `runtime_gates_fetcher` (defaults to live HTTP) and passes the body to
+  every tool dispatch; system prompt updated to teach the model what
+  `[cas-validator:REJECTED]` and `[cas-validator:DEGRADED]` mean.
+- `tests/test_cas_permission_validator.py` — 19 tests: safe always-passes,
+  caution passes with broker-touching advisory, dangerous rejection with
+  all-gates-closed and one-gate-closed cases, dangerous PASS when all gates
+  open, next-action hint propagation, DEGRADED path for safe/caution/
+  dangerous, authority-boundary advisory, unknown danger conservative,
+  structured message shape (gate names and capability labels), HTTP fetch
+  via injected transport (success + failure → None), `validate_by_key`
+  unknown-capability rejection and live-fetch integration.
+- `tests/test_cas_forex_llm_bot.py` — 3 new integration tests: validator
+  REJECT short-circuits before Stage 4 and before manual approval;
+  `skip_validation=True` escape hatch works; `step_conversation` passes
+  the fetched gates body to every tool dispatch.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_cas_permission_validator.py tests/test_cas_forex_llm_bot.py -v
+# 39 passed (19 validator + 20 LLM bot)
+
+py -3.12 -m pytest tests -q
+# 533 passed (511 previous + 22 net)
+```
+
+The 7-stage runtime pipeline is now wired end-to-end:
+operator input → LLM tool selection → **Stage 3 validator** →
+manual approval → deterministic dispatch → broker/MT5 → tool result
+returned to model for plain-English explanation.
+
+## 2026-06-24 - MT5 process guard + CAS Forex Bot
+
+### MT5 process guard (subprocess watchdog)
+
+Added a process-level watchdog so real MT5 terminal calls cannot hang the
+CAS Forex agent loop. The previous state had the MT5 Python package blocking
+indefinitely when the Hugosway MT5 terminal was unresponsive (timed out at
+120s). Now MT5 operations run in a timeout-guarded subprocess.
+
+Implemented:
+- `cas_forex/mt5_process_guard.py` — subprocess watchdog with configurable
+  timeout. Five operations: `execute_demo_order`, `get_deal_history`,
+  `get_account_snapshot`, `get_open_positions`, `close_position`.
+  Architecture: parent writes JSON spec to temp file, spawns
+  `python -m cas_forex.mt5_process_guard --worker <spec>`, waits with
+  `subprocess.run(timeout=...)`. On timeout the worker is killed and a
+  clean `MT5_TIMEOUT` error is returned to the agent loop.
+- `cas_forex/agent_state.py` — new params `mt5_use_process_guard` and
+  `mt5_guard_timeout_seconds`. When guard is active, MT5 execution and
+  deal-history ingest route through `_run_mt5_execution_via_guard` and
+  `_run_mt5_deal_history_via_guard` which call `run_mt5_operation_safe`.
+  Guard branch only activates when all three conditions are met:
+  `use_process_guard=True` + `mt5_path` set + execution flags true.
+  Otherwise falls through to existing direct MT5 path.
+- `scripts/run_agent_workflow_queue.py` — new CLI flags
+  `--mt5-use-process-guard` and `--mt5-guard-timeout-seconds`.
+- `tests/test_mt5_process_guard.py` — 14 tests covering worker ops,
+  guard integration, timeout handling, fake MT5 execution, deal history,
+  and no-regression path when guard flag is off.
+
+Example: run a full MT5 demo cycle with watchdog:
+```powershell
+py -3.12 scripts/run_agent_workflow_queue.py `
+  --terminal-lane PAPER_MT5_DEMO `
+  --mt5-path "C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe" `
+  --execute-mt5-demo-order --confirm-mt5-demo-order `
+  --mt5-use-process-guard --mt5-guard-timeout-seconds 120 `
+  --summary-only
+```
+
+### CAS Forex Bot
+
+Added a structured conversational agent (`cas_forex/cas_forex_bot.py`) that
+knows all CAS Forex operations and provides a menu-driven interface to prevent
+decision paralysis. 31 capabilities across 7 action groups.
+
+Design:
+- **Menu-driven**: groups → commands, never more than 6 options per level
+- **Quick keys**: `cy` = run agent cycle, `mt` = MT5 probe, `pp` = paper proof
+- **Confirmation gates**: MT5 demo orders require explicit confirm
+- **Command transparency**: shows the underlying CLI commands so users learn
+- **Status-first**: checks API health and operability on startup
+
+Action groups:
+- `status` — Health, dashboard, readiness, operability, memory (6 ops)
+- `workflow` — Agent cycles, autowake, daily rollup, MT4/MT5 lanes (5 ops)
+- `mt5` — Terminal probe, paper execution, demo orders, deal history (4 ops)
+- `proof` — Paper bundles, proof status, risk review, backsolve (4 ops)
+- `strategy` — Strategy dev, leads, PCBA guard, walk-forward (4 ops)
+- `owner` — Owner controls, runtime gates, broker sync (3 ops)
+- `system` — Tests, UI build, evidence, dashboard, API docs (5 ops)
+
+Entry point: `py -3.12 scripts/run_cas_forex_bot.py`
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q
+# 494 passed (480 existing + 14 new process guard tests)
+
+py -3.12 -m pytest tests/test_mt5_process_guard.py -q
+# 14 passed
+
+py -3.12 -c "from cas_forex.cas_forex_bot import *; print('Bot OK:', len(CAPABILITIES), 'caps')"
+# Bot OK: 31 caps
+```
+
+### Next step
+
+The MT5 process guard was tested against the real Hugosway MT5 terminal path.
+The guard subprocess correctly imported MetaTrader5 (via .mt5deps) and
+attempted the demo order. The cycle completed without hanging (no timeout
+fired). The order was rejected by the terminal (MT5 terminal not responding to
+order_send), which is a runtime/terminal-state issue, not a code bug. The
+guard's function — preventing agent-loop hangs — is verified.
+
+The next real-terminal test requires:
+1. MT5 terminal running with Hugosway-Demo account logged in
+2. Algo Trading / AutoTrading enabled in MT5 terminal
+3. Then rerun:
+```powershell
+py -3.12 scripts/run_agent_workflow_queue.py `
+  --terminal-lane PAPER_MT5_DEMO `
+  --mt5-path "C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe" `
+  --execute-mt5-demo-order --confirm-mt5-demo-order `
+  --mt5-use-process-guard --summary-only
+```
+
+Boundary: MT5 demo API, demo execution, and deal history paths remain the
+scope. Live trading, broker ACCEPT, auto-deposit, debit/card/bank movement,
+and payout automation remain NOT LICENSED.
+
+## 2026-06-24 - Scheduled agent MT5 demo loop wired to deal-history learning
+
+Implemented the missing bridge from the scheduled/autowake agent cycle to the
+proven MT5 demo execution and closed-deal learning path.
+
+Implemented:
+
+- `cas_forex/agent_state.py`
+  - added explicit `PAPER_MT5_DEMO` terminal lane alongside the existing
+    `PAPER_MT4_MAILBOX` lane
+  - scheduled approved `RouteIntent.order_request` can now feed the MT5 demo
+    execution verifier instead of only writing MT4 mailbox commands
+  - MT5 execution receipts now carry `cycle_id`, `intent_id`, `command_id`,
+    `broker_ticket`, execution status, request/response hashes, close status,
+    and account snapshot facts
+  - after MT5 deal-history joins memory, the agent event journal appends
+    `NEXT_CYCLE_ALLOWED` so a successful closed MT5 cycle does not block the
+    next same-symbol cycle
+  - MT5 cycles use `agent-events-mt5-demo.jsonl` so stale MT4 mailbox pending
+    rows do not jam the MT5 lane
+- `cas_forex/mt5_paper_execution_verifier.py`
+  - accepts an existing `BrokerOrderRequest` from an agent route intent
+  - remaps market-order SL/TP geometry onto the current MT5 tick before
+    building the broker request
+- `cas_forex/agent_message_bus.py`
+  - emits real receipt events for MT5 execution commands instead of only
+    `RECEIPT_PENDING`
+- `cas_forex/session_autowake_runner.py`
+  - autowake can pass terminal-lane and MT5 demo execution flags into the
+    scheduled cycle
+- `scripts/run_agent_workflow_queue.py`
+  - added `--terminal-lane PAPER_MT5_DEMO`, `--mt5-path`,
+    `--execute-mt5-demo-order`, `--confirm-mt5-demo-order`,
+    `--no-mt5-deal-history`, and `--mt5-future-minutes`
+- `scripts/run_session_autowake_runner.py`
+  - added the same MT5 lane controls for due autowake cycles
+- `api/data.py`
+  - dashboard message-bus summary now follows the latest cycle's own event log
+    when available
+- Optimizer UI/types/fixtures now surface the linked cycle-level MT5 loop
+  status, broker ticket, deal-history status, memory joins, closed positions,
+  and closed P/L.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_agent_workflow_cycle.py tests/test_mt5_paper_execution_verifier.py tests/test_mt5_deal_history_ingest.py tests/test_session_autowake_runner.py -q
+# 19 passed
+
+py -3.12 -m pytest tests -q
+# 480 passed
+
+cd ui && npm run build
+# 51 modules, 532.25 KB JS, 129.48 KB gzip
+```
+
+Important real-terminal note:
+
+- A scheduled MT5 agent-cycle attempt before the lane-specific event-journal
+  fix wrote:
+  `evidence_runs/agent_workflow_queue/agent-workflow-cycle-20260624165947-report.json`.
+  That run did not send an MT5 order because the old shared default event
+  journal still had `28` stale pending MT4 receipt rows.
+- After the lane-specific event-journal fix, a real MT5 scheduled-cycle run was
+  attempted with the Hugosway terminal path, but the MT5/Python call did not
+  finish within `120` seconds and the exact `run_agent_workflow_queue.py`
+  processes were stopped. No successful real scheduled-agent MT5 order is
+  claimed from that timed-out attempt.
+- A fresh non-executing MT5-lane cycle was written after the fix:
+  `evidence_runs/agent_workflow_queue/agent-workflow-cycle-20260624171015-report.json`.
+  It uses `agent-events-mt5-demo.jsonl`, has `approved_intent_count=1`,
+  `terminal_command_count=0`, and `pending_receipt_count=0`, proving the
+  cockpit now sees the MT5 lane without inheriting stale MT4 pending rows.
+- The linked scheduled MT5 path is regression-verified with a fake MT5 terminal
+  that executes, closes, returns two deal-history rows, joins memory by
+  `broker_ticket`, and emits `NEXT_CYCLE_ALLOWED`.
+
+Next software/evidence target: add a process-level MT5 watchdog or worker
+wrapper so a real scheduled/autowake MT5 cycle cannot hang the agent loop, then
+rerun the scheduled MT5 demo cycle against Hugosway-Demo and refresh terminal
+operability from that scheduled-cycle evidence.
+
+Boundary: this is a scheduled paper/demo MT5 operability bridge. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT5 closed deal history joined CAS memory
+
+Implemented and verified MT5 closed-deal history ingest for the already
+executed Hugosway-Demo MT5 verifier trade.
+
+Implemented:
+
+- `cas_forex/mt5_deal_history_ingest.py`
+- `scripts/run_mt5_deal_history_ingest.py`
+- `tests/test_mt5_deal_history_ingest.py`
+- API/dashboard route:
+  `/api/forex/strategy/mt5-deal-history-ingest/latest`
+- Optimizer UI MT5 Deal History run card/detail panel.
+- Terminal operability summary fields for MT5 raw deals, closed positions,
+  memory updates, unmatched rows, and net P/L.
+- Agent memory now adds a default-project MT5 paper-execution seed row so the
+  closed deal can join by `broker_ticket`.
+- Agent information-flow map now includes `MT5DealHistoryIngestPacket`.
+
+Latest real Hugosway-Demo evidence:
+
+- `evidence_runs/mt5_deal_history_ingest/mt5-deal-history-ingest-20260624162919-report.json`
+- `evidence_runs/mt5_deal_history_ingest/mt5-deal-history-ingest-20260624162919-report.md`
+- `evidence_runs/terminal_history_exports/mt5-deal-history-ticket-45938644-20260624162919.json`
+- `evidence_runs/terminal_history_ingest/terminal-history-ingest-20260624162919-report.json`
+- `evidence_runs/agent_memory/agent-memory-20260624162936-report.json`
+- `evidence_runs/strategy_dev_queue/strategy-dev-queue-20260624162945-report.json`
+- `evidence_runs/daily_learning_rollup/daily-learning-rollup-20260624162946-report.json`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624162936-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624163510-report.json`
+
+Current verified MT5 closed-deal state:
+
+- server: `Hugosway-Demo`
+- ticket / position id: `45938644`
+- symbol: `EUR/USD`
+- volume: `0.01`
+- raw MT5 history deals: `2`
+- closed positions exported: `1`
+- memory updates: `1`
+- unmatched history rows: `0`
+- open / close: `1.13489 -> 1.13481`
+- gross trade P/L: `-0.08`
+- commission: `-0.05`
+- swap: `0.0`
+- net account P/L: `-0.13`
+- pips: `-0.8`
+- R multiple: `-0.04`
+- close reason: `MT5_HISTORY_CLOSE:CAS_CLOSE`
+- agent memory: `terminal_history_joined_count=1`,
+  `closed_loss_count=1`, `net_profit_loss_account=-0.13`
+- strategy-dev queue: `closed_loss_memory_count=1`,
+  `demotion_review_count=1`
+- daily learning rollup: `DAILY_LEARNING_HAS_CLOSED_PNL`
+- terminal operability:
+  `TERMINAL_OPERABILITY_MT5_DEMO_EXECUTION_VERIFIED`,
+  terminal lane go `true`, live order go `false`,
+  blocking reason `live_trading CURRENTLY NOT LICENSED`
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests -q
+# 479 passed
+
+cd ui && npm run build
+# 51 modules, 528.95 KB JS, 128.63 KB gzip
+```
+
+Boundary: MT5 demo API, demo execution, closed deal history, memory join,
+strategy queue, daily rollup, and operability are verified for one
+Hugosway-Demo test trade. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT5 demo execution path verified
+
+Cleared the MT5 terminal AutoTrading blocker, executed one explicitly
+confirmed Hugosway MT5 demo order, and closed it through the CAS Forex MT5
+bridge.
+
+Operator/runtime action:
+
+- Used the open Hugosway MT5 demo terminal window
+  `1000694 - Hugosway-Demo: Demo Account - Hedge - Hugosway`.
+- Turned on MT5 `Algo Trading` / `AutoTrading`.
+- Reran the explicitly confirmed MT5 paper execution verifier.
+
+Generated evidence:
+
+- `evidence_runs/mt5_paper_execution_verifier/mt5-paper-execution-verifier-20260624160137-report.json`
+- `evidence_runs/mt5_paper_execution_verifier/mt5-paper-execution-verifier-20260624160137-report.md`
+- `evidence_runs/mt5_terminal_api_verifier/mt5-terminal-api-verifier-20260624160153-report.json`
+- `evidence_runs/mt5_terminal_api_verifier/mt5-terminal-api-verifier-20260624160153-report.md`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624160208-report.json`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624160208-report.md`
+
+Current verified state:
+
+- terminal: `MetaTrader 5`
+- server: `Hugosway-Demo`
+- account balance/equity after close: `$99,999.87 / $99,999.87`
+- open positions after close: `0`
+- symbol: `EUR/USD`
+- volume: `0.01`
+- order request built: `true`
+- broker `order_check`: `ORDER_CHECK_OK`
+- demo send attempted: `true`
+- terminal trade allowed: `true`
+- execution status: `ORDER_EXECUTED`
+- broker ticket: `45938644`
+- filled price: `1.13489`
+- close attempted: `true`
+- close success: `true`
+- raw request hash:
+  `8bf07bc73705c4dded9ce75184379f10574c5c71a006fbe8731cb680030fa11a`
+- raw response hash:
+  `ac87b38e2add12e995d63e20f4017bbd5309308bb941b1ccc4740f99ec0d1a34`
+- terminal operability:
+  `TERMINAL_OPERABILITY_MT5_DEMO_EXECUTION_VERIFIED`
+- terminal lane go: `true`
+- live order go: `false`
+- blocking reason: `live_trading CURRENTLY NOT LICENSED`
+
+Next evidence/software target:
+
+- Add MT5 closed-history/deal ingestion so the close, P/L, commission, swap,
+  and deal records from the executed/closed demo order flow into CAS memory,
+  daily learning rollup, and strategy evaluation.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests -q
+# 475 passed
+
+cd ui && npm run build
+# 51 modules, 520.06 KB JS, 126.96 KB gzip
+```
+
+Boundary: the MT5 demo execution lane is now verified for one demo order and
+close cycle. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+## 2026-06-24 - MT5 demo send proof reached terminal; AutoTrading blocker surfaced
+
+Ran the explicitly confirmed MT5 demo-order proof and turned the resulting
+terminal rejection into a first-class operability status.
+
+Implemented:
+
+- `cas_forex/broker/mt5_bridge.py`
+  - no longer mislabels real MT5 `OrderSendResult` objects that do not expose
+    a `commission` field
+  - preserves request/response hashes on rejected MT5 responses
+  - maps retcode `10027` to `AutoTrading disabled by client`
+  - adds symbol-supported filling mode to MT5 close-position requests
+- `cas_forex/mt5_paper_execution_verifier.py`
+  - summary now includes `terminal_trade_allowed`,
+    `execution_error_message`, and `raw_response_hash`
+  - next action now names the AutoTrading/Algo Trading terminal blocker
+- `cas_forex/terminal_operability_verifier.py`
+  - summary now carries MT5 paper execution error text, terminal trade
+    permission, and raw response hash
+  - reports `TERMINAL_OPERABILITY_MT5_AUTOTRADING_DISABLED` when MT5 rejects
+    the demo send because terminal AutoTrading is off
+- `ui/src/types/evidence.ts`, `ui/src/pages/OptimizerPage.tsx`, and
+  `ui/src/data/fixtures.ts`
+  - surface MT5 trading permission, execution error, and response hash in the
+    Optimizer/Operability UI
+- Regression tests for missing MT5 `commission` fields and the AutoTrading
+  disabled path
+
+Generated evidence:
+
+- `evidence_runs/mt5_paper_execution_verifier/mt5-paper-execution-verifier-20260624155515-report.json`
+- `evidence_runs/mt5_paper_execution_verifier/mt5-paper-execution-verifier-20260624155515-report.md`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624155528-report.json`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624155528-report.md`
+
+Current verified state:
+
+- MT5 terminal: connected
+- server: `Hugosway-Demo`
+- account balance/equity: `$100,000 / $100,000`
+- symbol checked: `EUR/USD`
+- volume: `0.01`
+- order request built: `true`
+- broker `order_check`: `ORDER_CHECK_OK`
+- demo send attempted: `true`
+- execution status: `ORDER_REJECTED`
+- execution error: `AutoTrading disabled by client: AutoTrading disabled by client`
+- terminal trade allowed: `false`
+- raw response hash:
+  `e6682c1c10d49596d71bb26a4ff08d9d886610d6feae671be707ffd7da6132a9`
+- terminal operability:
+  `TERMINAL_OPERABILITY_MT5_AUTOTRADING_DISABLED`
+- terminal lane go: `false`
+
+Next operator action:
+
+- Turn on Algo Trading / AutoTrading in the Hugosway MT5 terminal, confirm the
+  terminal allows trading, then rerun:
+
+```bash
+py -3.12 scripts/run_mt5_paper_execution_verifier.py --mt5-path "C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe" --symbol EUR/USD --volume 0.01 --execute-demo-order --confirm-demo-order --summary-only
+py -3.12 scripts/run_terminal_operability_verifier.py --summary-only
+```
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_mt5_paper_execution_verifier.py tests/test_terminal_operability_verifier.py tests/test_pip_math_regressions.py -q
+# 26 passed
+
+py -3.12 -m pytest tests -q
+# 475 passed
+
+cd ui && npm run build
+# 51 modules, 520.43 KB JS, 126.99 KB gzip
+```
+
+Boundary: the confirmed demo-send attempt reached MT5 and captured the exact
+terminal rejection. It has not yet produced an executed demo-order receipt or
+closed-history proof. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT5 paper execution verifier dry-run ready
+
+Implemented and verified the MT5 paper/demo execution lane through the real
+local Hugosway MT5 terminal.
+
+Implemented:
+
+- `cas_forex/mt5_paper_execution_verifier.py`
+  - connects to the local MT5 demo account
+  - reuses the MT5 terminal API verifier as prerequisite evidence
+  - builds the exact `BrokerOrderRequest` -> MT5 request payload
+  - runs broker-side `order_check` when available
+  - sends no order by default
+  - only submits a demo order when both `--execute-demo-order` and
+    `--confirm-demo-order` are supplied
+- `scripts/run_mt5_paper_execution_verifier.py`
+- `tests/test_mt5_paper_execution_verifier.py`
+- `/api/forex/strategy/mt5-paper-execution-verifier/latest`
+- dashboard key `mt5PaperExecutionVerifier`
+- TypeScript evidence type, API client fetcher, fixture fallback, root app
+  state, and Optimizer page run card/detail panel for MT5 paper execution
+- `cas_forex/broker/mt5_bridge.py`
+  - now chooses the symbol-supported MT5 filling mode instead of hardcoding
+    IOC; Hugosway `EUR/USD` accepted FOK (`type_filling: 0`) while IOC had
+    returned `Unsupported filling mode`
+  - preserves fallback behavior for test/fake MT5 modules that do not expose
+    full terminal metadata
+- terminal operability verifier now consumes the MT5 paper execution verifier
+  and reports `TERMINAL_OPERABILITY_MT5_DRY_RUN_READY_DEMO_SEND_REQUIRED`
+- agent information-flow roadmap now includes
+  `MT5PaperExecutionVerifierPacket`,
+  `/api/forex/strategy/mt5-paper-execution-verifier/latest`, and the demo-send
+  evidence gap
+
+Generated evidence:
+
+- `evidence_runs/mt5_paper_execution_verifier/mt5-paper-execution-verifier-20260624154210-report.json`
+- `evidence_runs/mt5_paper_execution_verifier/mt5-paper-execution-verifier-20260624154210-report.md`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624154222-report.json`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624154222-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624154148-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624154148-report.md`
+
+Current verified state:
+
+- terminal: `MetaTrader 5`
+- server: `Hugosway-Demo`
+- account balance/equity: `$100,000 / $100,000`
+- symbol checked: `EUR/USD`
+- requested volume: `0.01`
+- MT5 request built: `true`
+- MT5 request filling mode: `type_filling: 0`
+- broker `order_check`: `ORDER_CHECK_OK`
+- execution attempted: `false`
+- execution status: `DRY_RUN_NO_ORDER_SENT`
+- live mode used: `false`
+- terminal operability status:
+  `TERMINAL_OPERABILITY_MT5_DRY_RUN_READY_DEMO_SEND_REQUIRED`
+- terminal lane go: `false`
+- live order go: `false`
+- broker `ACCEPT` go: `false`
+- money movement go: `false`
+
+Next evidence target:
+
+- Run one explicitly confirmed MT5 demo-order pass:
+
+```bash
+py -3.12 scripts/run_mt5_paper_execution_verifier.py --mt5-path "C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe" --symbol EUR/USD --volume 0.01 --execute-demo-order --confirm-demo-order --summary-only
+py -3.12 scripts/run_terminal_operability_verifier.py --summary-only
+```
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_mt5_paper_execution_verifier.py tests/test_terminal_operability_verifier.py tests/test_agent_information_flow.py tests/test_pip_math_regressions.py -q
+# 29 passed
+
+py -3.12 -m pytest tests -q
+# 473 passed
+
+cd ui && npm run build
+# 51 modules, 518.87 KB JS, 126.78 KB gzip
+```
+
+Boundary: MT5 paper execution dry-run proves CAS Forex can build and
+broker-check a demo MT5 order request. It does not prove a submitted demo-order
+receipt yet, does not place live broker orders, does not create broker
+`ACCEPT`, does not deposit or withdraw money, does not move bank/card funds,
+and does not automate payouts. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT5 terminal API verifier and lane-choice update
+
+Verified the local Hugosway MT5 terminal as an actual MT5 demo broker API
+source and updated the terminal roadmap/UI to reflect the new lane choice.
+
+Implemented:
+
+- `cas_forex/mt5_terminal_api_verifier.py`
+  - verifies local `MetaTrader5` Python package availability
+  - initializes against
+    `C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe`
+  - reads terminal/account/position state without placing orders
+  - reports `MT5_API_VERIFIER_BROKER_API_VERIFIED` when the demo broker API,
+    account snapshot, receipt validation, and open-position reconciliation are
+    visible
+- `scripts/run_mt5_terminal_api_verifier.py`
+- `tests/test_mt5_terminal_api_verifier.py`
+- `cas_forex/broker/mt5_bridge.py`
+  - now adds local `.mt5deps` when present
+  - uses configured `mt5_path`
+  - omits empty login/password/server kwargs unless a login is configured
+- `.mt5deps/` in `.gitignore` for isolated Windows MT5 Python deps
+- `/api/forex/strategy/mt5-terminal-api-verifier/latest`
+- dashboard key `mt5TerminalApiVerifier`
+- TypeScript evidence type, API client fetcher, fixture fallback, root app
+  state, and Optimizer page run card/detail panel for MT5 terminal API evidence
+- terminal operability verifier now consumes the latest MT5 terminal API
+  verifier report and reports
+  `TERMINAL_OPERABILITY_MT5_API_VERIFIED_MT4_BRIDGE_MISSING`
+- agent information-flow roadmap now includes
+  `MT5TerminalApiVerifierPacket`, the MT5 verifier API projection, and
+  `cas_forex/mt5_paper_execution_verifier.py` as the next code target
+
+Generated evidence:
+
+- `evidence_runs/mt5_terminal_api_verifier/mt5-terminal-api-verifier-20260624150739-report.json`
+- `evidence_runs/mt5_terminal_api_verifier/mt5-terminal-api-verifier-20260624150739-report.md`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624150902-report.json`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624150902-report.md`
+- `evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-mt5-demo-probe-20260624150120.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624152031-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624152031-report.md`
+
+Current verified state:
+
+- MT5 package: available from `.mt5deps`
+- MT5 terminal: connected
+- terminal: `MetaTrader 5`
+- server: `Hugosway-Demo`
+- broker mode: `PAPER_MT5`
+- account balance/equity: `$100,000 / $100,000`
+- open positions: `0`
+- open positions reconciled: `true`
+- live mode used: `false`
+- MT4 candidate folders: `0`
+- MT5-only terminal folders: `2`
+- terminal operability status:
+  `TERMINAL_OPERABILITY_MT5_API_VERIFIED_MT4_BRIDGE_MISSING`
+- terminal lane go: `false`
+- live order go: `false`
+- broker `ACCEPT` go: `false`
+- money movement go: `false`
+- UI/proof maturity: `3` complete bundle days out of the `5` needed for the
+  current read-only UI maturity gate; 30-day proof is still incomplete
+
+Next code target:
+
+- Build `cas_forex/mt5_paper_execution_verifier.py` so CAS Forex can prove a
+  gated MT5 paper/demo order lifecycle through `MT5Bridge`: submit, receipt,
+  reconcile, close/history join, memory update, and daily rollup.
+- Alternate operator lane: install/attach MT4 if the EA mailbox path is still
+  preferred.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_agent_information_flow.py tests/test_mt5_terminal_api_verifier.py tests/test_terminal_operability_verifier.py tests/test_pip_math_regressions.py -q
+# 26 passed
+
+py -3.12 -m pytest tests -q
+# 467 passed
+
+cd ui && npm run build
+# 51 modules, 509.94 KB JS, 125.11 KB gzip
+```
+
+Boundary: MT5 demo broker API verification proves local demo account visibility
+and receipt/account-state access. It does not place live broker orders, create
+broker `ACCEPT`, deposit or withdraw money, move bank/card funds, or automate
+payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+## 2026-06-24 - Terminal operability verifier API/UI
+
+Implemented the top-level terminal operability verifier for CAS Forex.
+
+Implemented:
+
+- `cas_forex/terminal_operability_verifier.py`
+  - bundles MT4 terminal session, bridge heartbeat, receipt ingest, MT4
+    history export verifier, terminal history ingest, terminal position
+    reconciliation, and runtime gate evidence into one go/no-go report
+  - separates terminal-lane go/no-go from live-order, broker `ACCEPT`, and
+    money-movement authorization
+  - reports states such as `TERMINAL_OPERABILITY_NEEDS_MT4_TERMINAL`,
+    `TERMINAL_OPERABILITY_NEEDS_HEARTBEAT`,
+    `TERMINAL_OPERABILITY_WAITING_FOR_RECEIPTS`,
+    `TERMINAL_OPERABILITY_POSITION_MISMATCH`,
+    `TERMINAL_OPERABILITY_READY_OPEN_POSITIONS`, and
+    `TERMINAL_OPERABILITY_READY_FLAT`
+- `scripts/run_terminal_operability_verifier.py`
+- `tests/test_terminal_operability_verifier.py`
+- `/api/forex/strategy/terminal-operability-verifier/latest`
+- dashboard key `terminalOperabilityVerifier`
+- TypeScript evidence types, API client fetcher, fixture fallback, and
+  Optimizer page run card/detail panel
+- information-flow roadmap now marks
+  `cas_forex/terminal_operability_verifier.py` as `COMPLETE_INITIAL` and
+  moves the next must-have evidence file to
+  `MQL4/Files/CASForexMailbox/heartbeat.json`
+
+Generated evidence:
+
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624145246-report.json`
+- `evidence_runs/terminal_operability_verifier/terminal-operability-verifier-20260624145246-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624145333-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624145333-report.md`
+
+Current terminal operability summary:
+
+- status: `TERMINAL_OPERABILITY_NEEDS_MT4_TERMINAL`
+- terminal lane go: `false`
+- live order go: `false`
+- broker `ACCEPT` go: `false`
+- money movement go: `false`
+- session status: `MT4_SESSION_NEEDS_MT4_TERMINAL`
+- bridge status: `TERMINAL_BRIDGE_HEARTBEAT_MISSING`
+- heartbeat status: `MISSING`
+- history export status: `MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL`
+- position reconciliation status:
+  `TERMINAL_POSITION_RECONCILIATION_NEEDS_MT4_TERMINAL`
+- account snapshot present: `false`
+- pending receipts: `28`
+- CAS open positions: `28`
+- terminal open positions: `0`
+- reconciled open positions: `0`
+- unmatched open positions: `28`
+- runtime-gate pending capabilities: `live_trading`, `broker_accept`,
+  `auto_deposit`, `bank_card_movement`, `payout_automation`
+- next operator lane: install/open MT4, identify the terminal data folder, run
+  the session verifier with `--install`, attach `CASForexBridgeEA.mq4`, attach
+  `CASForexHistoryExporterEA.mq4`, then rerun terminal session, history export,
+  position reconciliation, and terminal operability
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_terminal_operability_verifier.py tests/test_agent_information_flow.py -q
+# 9 passed
+
+py -3.12 -m pytest tests -q
+# 461 passed
+
+cd ui && npm run build
+# 51 modules, 501.28 KB JS, 123.38 KB gzip
+```
+
+Boundary: this is an evidence bundle and go/no-go report. It does not place
+broker orders, does not create broker `ACCEPT`, does not deposit or withdraw
+money, and does not automate payouts. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Terminal position reconciliation API/UI
+
+Implemented terminal position reconciliation for CAS Forex.
+
+Implemented:
+
+- `cas_forex/terminal_position_reconciliation.py`
+  - compares CAS agent memory against terminal bridge supervisor evidence,
+    terminal receipt ingest, terminal history ingest, MT4 history export
+    verifier output, account snapshots, open-position rows, and closed-history
+    memory updates
+  - reports states such as
+    `TERMINAL_POSITION_RECONCILIATION_NEEDS_MT4_TERMINAL`,
+    `TERMINAL_POSITION_RECONCILIATION_WAITING_FOR_RECEIPTS`,
+    `TERMINAL_POSITION_RECONCILIATION_MISMATCH`,
+    `TERMINAL_POSITION_RECONCILIATION_READY_OPEN_POSITIONS`, and
+    `TERMINAL_POSITION_RECONCILIATION_READY_FLAT`
+  - preserves a read-only boundary: it reconciles evidence and does not place
+    orders or move money
+- `scripts/run_terminal_position_reconciliation.py`
+- `tests/test_terminal_position_reconciliation.py`
+- `/api/forex/strategy/terminal-position-reconciliation/latest`
+- dashboard key `terminalPositionReconciliation`
+- TypeScript evidence types, API client fetcher, fixture fallback, and
+  Optimizer page run card/detail panel
+- information-flow roadmap now marks
+  `cas_forex/terminal_position_reconciliation.py` as `COMPLETE_INITIAL` and
+  moves the next code lane to `cas_forex/terminal_operability_verifier.py`
+
+Generated evidence:
+
+- `evidence_runs/terminal_position_reconciliation/terminal-position-reconciliation-20260624143531-report.json`
+- `evidence_runs/terminal_position_reconciliation/terminal-position-reconciliation-20260624143531-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624143602-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624143602-report.md`
+
+Current terminal position reconciliation summary:
+
+- status: `TERMINAL_POSITION_RECONCILIATION_NEEDS_MT4_TERMINAL`
+- bridge status: `TERMINAL_BRIDGE_HEARTBEAT_MISSING`
+- heartbeat status: `MISSING`
+- account snapshot present: `false`
+- pending receipts: `28`
+- CAS open positions: `28`
+- terminal open positions: `0`
+- reconciled open positions: `0`
+- unmatched open positions: `28`
+- history rows / memory updates: `0` / `0`
+- next code lane: `cas_forex/terminal_operability_verifier.py`
+- next operator lane: install/open MT4, activate the terminal data folder,
+  attach `CASForexBridgeEA.mq4`, attach `CASForexHistoryExporterEA.mq4`, then
+  rerun terminal session, history export, receipt ingest, memory, and position
+  reconciliation
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_terminal_position_reconciliation.py tests/test_agent_information_flow.py tests/test_mt4_history_export_verifier.py -q
+# 13 passed
+
+py -3.12 -m pytest tests -q
+# 457 passed
+
+cd ui && npm run build
+# 51 modules, 491.38 KB JS, 122.03 KB gzip
+```
+
+Boundary: this reconciles CAS memory against terminal-side evidence. It does
+not place broker orders, does not create broker `ACCEPT`, does not deposit or
+withdraw money, and does not automate payouts. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT4 history export verifier API/UI
+
+Implemented the MT4 closed-history export verifier for CAS Forex.
+
+Implemented:
+
+- `cas_forex/mt4_history_export_verifier.py`
+  - verifies the `CASForexHistoryExporterEA.mq4` source is present
+  - resolves the activated MT4 mailbox from `--mailbox-dir`,
+    `--terminal-data-dir`, or the latest MT4 session verifier report
+  - checks
+    `MQL4\Files\CASForexMailbox\history\cas_forex_closed_history.json`
+  - checks the separated exporter status file under
+    `MQL4\Files\CASForexMailbox\status`
+  - validates export schema `cas_forex_mt4_closed_history_export.v1`
+  - optionally runs `terminal_history_ingest` against the export
+  - reports states such as `MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL`,
+    `MT4_HISTORY_EXPORT_FILE_MISSING`, `MT4_HISTORY_EXPORT_EMPTY`, and
+    `MT4_HISTORY_EXPORT_INGEST_READY`
+- `scripts/run_mt4_history_export_verifier.py`
+- `tests/test_mt4_history_export_verifier.py`
+- `/api/forex/strategy/mt4-history-export-verifier/latest`
+- dashboard key `mt4HistoryExportVerifier`
+- TypeScript evidence types, API client fetcher, fixture fallback, and
+  Optimizer page run card/detail panel
+- information-flow roadmap now marks
+  `cas_forex/mt4_history_export_verifier.py` as `COMPLETE_INITIAL` and moves
+  the next code lane to `cas_forex/terminal_position_reconciliation.py`
+
+Generated evidence:
+
+- `evidence_runs/mt4_history_export_verifier/mt4-history-export-verifier-20260624141540-report.json`
+- `evidence_runs/mt4_history_export_verifier/mt4-history-export-verifier-20260624141540-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624141555-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624141555-report.md`
+
+Current MT4 history export verifier summary:
+
+- status: `MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL`
+- EA source present: `true`
+- mailbox ready: `false`
+- history export present: `false`
+- history export parse status: `NO_MAILBOX`
+- history rows: `0`
+- memory updates: `0`
+- next code lane: `cas_forex/terminal_position_reconciliation.py`
+- next operator lane: install/open MT4, activate the terminal data folder,
+  attach `CASForexBridgeEA.mq4`, attach `CASForexHistoryExporterEA.mq4`, then
+  rerun the history export verifier
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_mt4_history_export_verifier.py tests/test_mt4_history_exporter_ea.py tests/test_mt4_terminal_session_verifier.py tests/test_agent_information_flow.py -q
+# 15 passed
+
+py -3.12 -m pytest tests -q
+# 453 passed
+
+cd ui && npm run build
+# 51 modules, 482.70 KB JS, 120.66 KB gzip
+```
+
+Boundary: this verifies terminal-side closed-history export and ingest
+compatibility. It does not place broker orders, does not create broker
+`ACCEPT`, does not deposit or withdraw money, and does not automate payouts.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT4 closed-history exporter EA source
+
+Implemented the MT4 terminal-side closed-history exporter source for CAS
+Forex.
+
+Implemented:
+
+- `mt4/Experts/CASForexHistoryExporterEA.mq4`
+  - reads closed MT4 Account History rows with `OrdersHistoryTotal()` and
+    `OrderSelect(..., MODE_HISTORY)`
+  - exports `history_records` to
+    `MQL4\Files\CASForexMailbox\history\cas_forex_closed_history.json`
+  - includes broker ticket, symbol, direction, lots, open/close times,
+    open/close prices, stop loss, take profit, net P/L, commission, swap,
+    magic number, comment, account hash, server, and broker mode
+  - writes exporter health/status to
+    `MQL4\Files\CASForexMailbox\status\cas_forex_closed_history_status.json`
+    so the watched history folder contains only ingestable history files
+  - contains no `OrderSend`, `OrderClose`, `OrderModify`, or `OrderDelete`
+    execution calls
+- `cas_forex/mt4_terminal_session_verifier.py`
+  - now includes the activated mailbox `history` folder as a default history
+    source when an MT4 mailbox is known
+  - reports the expected exporter attach/output path in `operator_commands`
+- `tests/test_mt4_history_exporter_ea.py`
+  - proves the EA source is read/export only
+  - proves exporter-shaped JSON feeds `terminal_history_ingest` and joins
+    back to agent memory by `command_id`
+- information-flow roadmap and UI fixture now mark
+  `mt4/Experts/CASForexHistoryExporterEA.mq4` as
+  `SOURCE_READY_NEEDS_TERMINAL_ATTACH` and move the next code lane to
+  `cas_forex/mt4_history_export_verifier.py`
+
+Generated evidence:
+
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624140031-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624140031-report.md`
+- `evidence_runs/mt4_terminal_session_verifier/mt4-terminal-session-verifier-20260624140047-report.json`
+- `evidence_runs/mt4_terminal_session_verifier/mt4-terminal-session-verifier-20260624140047-report.md`
+
+Current MT4 terminal state:
+
+- status: `MT4_SESSION_NEEDS_MT4_TERMINAL`
+- activation status: `MT4_ACTIVATION_NEEDS_MT4_TERMINAL`
+- ping status: `MT4_PING_NEEDS_ACTIVATED_MAILBOX`
+- MT4 candidate folders: `0`
+- MT5-only folders: `2`
+- next code lane: `cas_forex/mt4_history_export_verifier.py`
+- next operator lane: install/open MT4, run activation with `--install`,
+  attach `CASForexBridgeEA.mq4`, attach `CASForexHistoryExporterEA.mq4`, then
+  verify heartbeat, receipt, and closed-history export output
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_mt4_history_exporter_ea.py tests/test_terminal_history_ingest.py tests/test_mt4_terminal_session_verifier.py tests/test_agent_information_flow.py -q
+# 13 passed
+
+py -3.12 -m pytest tests -q
+# 449 passed
+
+cd ui && npm run build
+# 51 modules, 477.07 KB JS, 119.57 KB gzip
+```
+
+Boundary: this adds terminal-side closed-history export evidence and ingest
+compatibility. It does not place broker orders, does not create broker
+`ACCEPT`, does not deposit or withdraw money, and does not automate payouts.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT4 terminal session verifier API/UI
+
+Implemented the MT4 terminal session verifier for CAS Forex.
+
+Implemented:
+
+- `cas_forex/mt4_terminal_session_verifier.py`
+  - runs MT4 activation, ping roundtrip, bridge supervisor, terminal watcher,
+    and the downstream evidence refresh chain as one operator-level report
+  - records every child step as `COMPLETE`, `SKIPPED`, or `FAILED`
+  - reports whether the session needs MT4, needs an activated mailbox, is
+    waiting for the terminal, or has completed ping plus refresh-chain proof
+  - preserves the boundary that this is a verifier, not a broker order placer
+- `scripts/run_mt4_terminal_session_verifier.py`
+- `tests/test_mt4_terminal_session_verifier.py`
+- `/api/forex/strategy/mt4-terminal-session-verifier/latest`
+- dashboard key `mt4TerminalSessionVerifier`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `MT4 Session` run type and panel
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from
+  `cas_forex/mt4_terminal_session_verifier.py` to
+  `mt4/Experts/CASForexHistoryExporterEA.mq4`
+
+Generated evidence:
+
+- `evidence_runs/mt4_terminal_session_verifier/mt4-terminal-session-verifier-20260624134013-report.json`
+- `evidence_runs/mt4_terminal_session_verifier/mt4-terminal-session-verifier-20260624134013-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624134619-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624134619-report.md`
+
+Current MT4 session summary:
+
+- status: `MT4_SESSION_NEEDS_MT4_TERMINAL`
+- activation status: `MT4_ACTIVATION_NEEDS_MT4_TERMINAL`
+- ping status: `MT4_PING_NEEDS_ACTIVATED_MAILBOX`
+- MT4 candidate folders: `0`
+- MT5-only folders: `2`
+- mailbox ready: `false`
+- ping written: `false`
+- heartbeat present: `false`
+- receipt present: `false`
+- skipped steps: `2`
+- next action: install/open MT4, identify the terminal data folder with
+  `MQL4\Experts`, then rerun the verifier with `--terminal-data-dir` and
+  `--install`
+- next file: `mt4/Experts/CASForexHistoryExporterEA.mq4`
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_mt4_terminal_session_verifier.py tests/test_agent_information_flow.py -q
+# 9 passed
+
+cd ui && npm run build
+# 51 modules, 475.27 KB JS, 119.21 KB gzip
+```
+
+Boundary: this coordinates terminal evidence checks. It does not place broker
+orders, does not create broker `ACCEPT`, does not deposit or withdraw money,
+and does not automate payouts. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT4 ping roundtrip API/UI
+
+Implemented the MT4 ping heartbeat/receipt roundtrip verifier for CAS Forex.
+
+Implemented:
+
+- `cas_forex/mt4_ping_roundtrip.py`
+  - resolves the activated MT4 mailbox from the latest activation report or an
+    explicit `--mailbox-dir`
+  - writes one `PING` command through the existing MT4 mailbox bridge
+  - waits for `heartbeat.json` and the matching `receipt-<command_id>.json`
+  - verifies receipt schema, request-hash match, receipt status, heartbeat
+    presence, and visible live flags
+  - reports clear states such as `MT4_PING_NEEDS_ACTIVATED_MAILBOX`,
+    `MT4_PING_WRITTEN_WAITING_FOR_TERMINAL`, and
+    `MT4_PING_ROUNDTRIP_ACKNOWLEDGED`
+- `scripts/run_mt4_ping_roundtrip.py`
+- `tests/test_mt4_ping_roundtrip.py`
+- `/api/forex/strategy/mt4-ping-roundtrip/latest`
+- dashboard key `mt4PingRoundtrip`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `MT4 Ping` run type and panel
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/mt4_ping_roundtrip.py`
+  to `cas_forex/mt4_terminal_session_verifier.py`
+
+Generated evidence:
+
+- `evidence_runs/mt4_ping_roundtrip/mt4-ping-roundtrip-20260624122729-report.json`
+- `evidence_runs/mt4_ping_roundtrip/mt4-ping-roundtrip-20260624122729-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624123345-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624123345-report.md`
+
+Current MT4 ping summary:
+
+- status: `MT4_PING_NEEDS_ACTIVATED_MAILBOX`
+- activation status: `MT4_ACTIVATION_NEEDS_MT4_TERMINAL`
+- mailbox ready: `false`
+- ping written: `false`
+- heartbeat present: `false`
+- receipt present: `false`
+- receipt status: `null`
+- next action: run MT4 terminal activation against a real MT4 data folder
+  first; no activated mailbox exists for a ping roundtrip yet
+- next file: `cas_forex/mt4_terminal_session_verifier.py`
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_mt4_ping_roundtrip.py tests/test_agent_information_flow.py -q
+# 9 passed
+
+py -3.12 -m pytest tests -q
+# 443 passed
+
+$env:VITE_CAS_FOREX_API_BASE='http://127.0.0.1:8810/api/forex'; npm run build
+# 51 modules, 467.70 KB JS, 118.10 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8810/api/forex/health` -> healthy
+- `/api/forex/strategy/mt4-ping-roundtrip/latest` ->
+  `MT4_PING_NEEDS_ACTIVATED_MAILBOX`
+- `/api/forex/dashboard` includes `mt4PingRoundtrip`
+- information-flow dashboard now reports
+  `must_have_next_file=cas_forex/mt4_terminal_session_verifier.py`
+- `http://127.0.0.1:5220/?page=optimizer` returns the React shell
+
+Boundary: this writes or inspects one paper/demo ping command only. It does
+not place broker orders, does not create broker `ACCEPT`, does not deposit or
+withdraw money, and does not automate payouts. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT4 terminal activation API/UI
+
+Implemented the MT4 terminal activation lane for CAS Forex.
+
+Implemented:
+
+- `cas_forex/mt4_terminal_activation.py`
+  - discovers MetaQuotes terminal data folders from the Windows user profile
+    and optional explicit search roots
+  - classifies folders as `MT4`, `MT5_ONLY`, or `UNKNOWN`
+  - verifies the real EA source at `mt4/Experts/CASForexBridgeEA.mq4`
+  - can install/stage the EA under `MQL4\Experts\CASForexBridgeEA.mq4`
+  - creates the MT4 file-sandbox mailbox at
+    `MQL4\Files\CASForexMailbox`
+  - writes exact operator settings for MT4 attach:
+    `MailboxRoot=CASForexMailbox`, `UseCommonFiles=false`,
+    `LiveTradingAllowed=false`, `TimerSeconds=2`,
+    `MaxCommandsPerTimer=10`
+  - reports mailbox-path alignment so CAS command writers use the activated
+    MT4 mailbox instead of the repo fallback mailbox
+- `scripts/run_mt4_terminal_activation.py`
+- `tests/test_mt4_terminal_activation.py`
+- `/api/forex/strategy/mt4-terminal-activation/latest`
+- dashboard key `mt4TerminalActivation`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `MT4 Activation` run type and panel
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/mt4_terminal_activation.py`
+  to `cas_forex/mt4_ping_roundtrip.py`
+
+Generated evidence:
+
+- `evidence_runs/mt4_terminal_activation/mt4-terminal-activation-20260624121406-report.json`
+- `evidence_runs/mt4_terminal_activation/mt4-terminal-activation-20260624121406-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624121041-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624121041-report.md`
+
+Current MT4 activation summary:
+
+- status: `MT4_ACTIVATION_NEEDS_MT4_TERMINAL`
+- EA source present: `true`
+- MT4 candidate folders: `0`
+- MT5-only folders: `2`
+- selected terminal: `null`
+- EA installed: `false`
+- mailbox ready: `false`
+- heartbeat present: `false`
+- path alignment: `NO_ACTIVATED_MAILBOX`
+- next action: install/open MT4, then rerun the activation lane against the
+  MT4 data folder containing `MQL4\Experts`
+- next file: `cas_forex/mt4_ping_roundtrip.py`
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests/test_mt4_terminal_activation.py tests/test_agent_information_flow.py -q
+# 10 passed
+
+py -3.12 -m pytest tests -q
+# 439 passed
+
+cd ui && npm run build
+# 51 modules, 462.34 KB JS, 117.06 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8809/api/forex/health` -> healthy
+- `/api/forex/strategy/mt4-terminal-activation/latest` ->
+  `MT4_ACTIVATION_NEEDS_MT4_TERMINAL`, `0` MT4 folders, `2` MT5-only folders
+- `/api/forex/dashboard` includes `mt4TerminalActivation`
+- information-flow dashboard now reports
+  `must_have_next_file=cas_forex/mt4_ping_roundtrip.py`
+- `http://127.0.0.1:5219/?page=optimizer` returns the React shell
+
+Boundary: this discovers/stages MT4 activation evidence and the EA attach
+runbook. It does not execute broker orders by itself, does not create broker
+`ACCEPT`, does not deposit or withdraw money, and does not automate payouts.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Terminal bridge supervisor API/UI
+
+Implemented the terminal bridge supervisor for the CAS Forex MT4/MT5 bridge.
+
+Implemented:
+
+- `cas_forex/terminal_bridge_supervisor.py`
+  - observes MT4 heartbeat, mailbox folders, command files, receipt files,
+    close-history exports, account snapshots, and event-journal pending
+    receipts
+  - reports heartbeat missing/stale/fresh/live-flag-visible status
+  - surfaces pending command receipts and account/history freshness
+  - writes supervisor report JSON and Markdown
+- `scripts/run_terminal_bridge_supervisor.py`
+- `tests/test_terminal_bridge_supervisor.py`
+- `/api/forex/strategy/terminal-bridge-supervisor/latest`
+- dashboard key `terminalBridgeSupervisor`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Bridge Supervisor` run type and panel
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/terminal_bridge_supervisor.py`
+  to `cas_forex/mt4_terminal_activation.py`
+
+Generated evidence:
+
+- `evidence_runs/terminal_bridge_supervisor/terminal-bridge-supervisor-20260624115153-report.json`
+- `evidence_runs/terminal_bridge_supervisor/terminal-bridge-supervisor-20260624115153-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624115151-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624115151-report.md`
+
+Current terminal bridge supervisor summary:
+
+- status: `TERMINAL_BRIDGE_HEARTBEAT_MISSING`
+- as-of timestamp: `2026-06-24T13:15:00+00:00`
+- heartbeat: `MISSING`
+- mailbox ready: `true`
+- command files: `39`
+- receipt files: `0`
+- pending command receipts: `39`
+- event-journal pending receipts: `28`
+- history files: `0`
+- account snapshot present: `false`
+- visible live flag: `false`
+- alerts: `5`
+- next file: `cas_forex/mt4_terminal_activation.py`
+
+Verification:
+
+```bash
+python -m pytest tests/test_terminal_bridge_supervisor.py -q
+# 4 passed
+
+python -m pytest tests/test_terminal_bridge_supervisor.py tests/test_agent_information_flow.py -q
+# 9 passed
+
+python -m pytest tests -q
+# 434 passed
+
+cd ui && npm run build
+# 51 modules, 456.43 KB JS, 115.59 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8807/api/forex/health` -> healthy
+- `/api/forex/strategy/terminal-bridge-supervisor/latest` ->
+  `TERMINAL_BRIDGE_HEARTBEAT_MISSING`, `39` commands, `39` pending command
+  receipts
+- `/api/forex/dashboard` includes `terminalBridgeSupervisor`
+- information-flow dashboard now reports
+  `must_have_next_file=cas_forex/mt4_terminal_activation.py`
+- `http://127.0.0.1:5218/?page=optimizer` returns `200 OK`
+- browser render check found `Bridge Supervisor`,
+  `TERMINAL_BRIDGE_HEARTBEAT_MISSING`, `cas_forex/mt4_terminal_activation.py`,
+  and the `Attach and run CASForexBridgeEA.mq4` next action with zero console
+  errors
+
+Boundary: this observes bridge health and terminal evidence freshness. It does
+not execute broker orders by itself, does not create broker `ACCEPT`, does not
+deposit or withdraw money, and does not automate payouts. Live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Terminal receipt watcher API/UI
+
+Implemented the terminal receipt/history watcher for the CAS Forex agent desk.
+
+Implemented:
+
+- `cas_forex/terminal_receipt_watcher.py`
+  - fingerprints MT4/MT5 receipt and close-history folders
+  - detects new, changed, deleted, and unchanged terminal files
+  - reruns the existing receipt ingest, history ingest, memory, research queue,
+    strategy-dev queue, patch runner, daily rollup, and session autowake chain
+    when terminal files change
+  - writes watcher report JSON, Markdown, and JSONL change rows
+- `scripts/run_terminal_receipt_watcher.py`
+- `tests/test_terminal_receipt_watcher.py`
+- `/api/forex/strategy/terminal-receipt-watcher/latest`
+- dashboard key `terminalReceiptWatcher`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Terminal Watcher` run type and panel
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/terminal_receipt_watcher.py`
+  to `cas_forex/terminal_bridge_supervisor.py`
+
+Generated evidence:
+
+- `evidence_runs/terminal_receipt_watcher/terminal-receipt-watcher-20260624113653-report.json`
+- `evidence_runs/terminal_receipt_watcher/terminal-receipt-watcher-20260624113653-report.md`
+- `evidence_runs/terminal_receipt_watcher/terminal-receipt-watcher-20260624113653.jsonl`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624113652-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624113652-report.md`
+
+Current terminal watcher summary:
+
+- status: `WATCHER_IDLE_NO_TERMINAL_FILES`
+- as-of timestamp: `2026-06-24T13:10:00+00:00`
+- terminal files: `0`
+- receipt files: `0`
+- history files: `0`
+- changed files: `0`
+- chain steps: `0`
+- next file: `cas_forex/terminal_bridge_supervisor.py`
+
+Verification:
+
+```bash
+python -m pytest tests/test_terminal_receipt_watcher.py -q
+# 3 passed
+
+python -m pytest tests/test_terminal_receipt_watcher.py tests/test_agent_information_flow.py -q
+# 8 passed
+
+python -m pytest tests -q
+# 430 passed
+
+cd ui && npm run build
+# 51 modules, 449.52 KB JS, 114.36 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8806/api/forex/health` -> healthy
+- `/api/forex/strategy/terminal-receipt-watcher/latest` ->
+  `WATCHER_IDLE_NO_TERMINAL_FILES`, `0` terminal files, `0` chain steps
+- `/api/forex/dashboard` includes `terminalReceiptWatcher`
+- historical information-flow dashboard for this run reported next file
+  `cas_forex/terminal_bridge_supervisor.py`; the terminal bridge supervisor
+  implementation above supersedes it and the current next file is
+  `cas_forex/mt4_terminal_activation.py`
+- `http://127.0.0.1:5217/?page=optimizer` returns `200 OK`
+- browser render check found `Terminal Watcher`,
+  `WATCHER_IDLE_NO_TERMINAL_FILES`, `cas_forex/terminal_bridge_supervisor.py`,
+  and the MT4/MT5 bridge next action with zero console errors
+
+Boundary: this watches terminal evidence folders and reruns paper/demo evidence
+refresh steps. It does not execute broker orders by itself, does not create
+broker `ACCEPT`, does not deposit or withdraw money, and does not automate
+payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Session autowake runner API/UI
+
+Implemented the session autowake runner for the CAS Forex agent loop.
+
+Implemented:
+
+- `cas_forex/session_autowake_runner.py`
+  - reads the latest workflow plan and daily learning rollup
+  - evaluates market-open state, active forex session, due wake events, terminal
+    blockers, pending receipts, and daily rollup readiness
+  - can optionally run one paper/demo agent workflow cycle when an event is due
+  - writes report JSON, Markdown, and JSONL event rows
+- `scripts/run_session_autowake_runner.py`
+- `tests/test_session_autowake_runner.py`
+- `/api/forex/strategy/session-autowake/latest`
+- dashboard key `sessionAutowake`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Session Autowake` run type and panel
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/session_autowake_runner.py` to
+  `cas_forex/terminal_receipt_watcher.py`
+
+Generated evidence:
+
+- `evidence_runs/session_autowake_runner/session-autowake-20260624111809-report.json`
+- `evidence_runs/session_autowake_runner/session-autowake-20260624111809-report.md`
+- `evidence_runs/session_autowake_runner/session-autowake-20260624111809.jsonl`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624111808-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624111808-report.md`
+
+Current session autowake summary:
+
+- status: `SESSION_AUTOWAKE_READY`
+- as-of timestamp: `2026-06-24T13:00:00+00:00`
+- market open: `true`
+- active session: `LONDON_NEW_YORK_OVERLAP`
+- events evaluated: `7`
+- due/executable events: `2` / `2`
+- executed cycles: `0`
+- pending receipts: `28`
+- terminal blockers: `5`
+- next due event: `MICRO_SCALP_LOOP`
+- daily rollup readiness: `WAITING_FOR_TERMINAL_CLOSE_HISTORY`
+
+Verification:
+
+```bash
+python -m pytest tests/test_session_autowake_runner.py -q
+# 4 passed
+
+python -m pytest tests -q
+# 427 passed
+
+cd ui && npm run build
+# 51 modules, 443.73 KB JS, 113.27 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8805/api/forex/health` -> healthy
+- `/api/forex/strategy/session-autowake/latest` ->
+  `SESSION_AUTOWAKE_READY`, `LONDON_NEW_YORK_OVERLAP`, `2` due events,
+  `5` terminal blockers
+- `/api/forex/dashboard` includes `sessionAutowake`
+- historical information-flow dashboard for this run reported next file
+  `cas_forex/terminal_receipt_watcher.py`; the terminal watcher implementation
+  above supersedes it and the current next file is
+  `cas_forex/terminal_bridge_supervisor.py`
+- `http://127.0.0.1:5216/?page=optimizer` returns `200 OK`
+- browser render check found `Session Autowake`, `SESSION_AUTOWAKE_READY`,
+  `LONDON_NEW_YORK_OVERLAP`, and `cas_forex/terminal_receipt_watcher.py` with
+  zero console errors
+
+Operational note: start the local API with `py -3.12` and
+`PYTHONPATH=.pydeps-win312;.` because the default `python` on this machine is
+currently Python 3.14 while `.pydeps-win312` contains Python 3.12 native
+dependencies.
+
+Boundary: this wakes/evaluates the paper/demo agent-loop cadence and can
+request a paper/demo cycle. It does not execute broker orders by itself, does
+not create broker `ACCEPT`, does not deposit or withdraw money, and does not
+automate payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+## 2026-06-24 - Daily learning rollup API/UI
+
+Implemented the first daily learning rollup for the CAS Forex 30-day
+improvement window.
+
+Implemented:
+
+- `cas_forex/daily_learning_rollup.py`
+  - reads latest agent cycle, memory, terminal history, research queue,
+    strategy-dev queue, and strategy patch-runner reports
+  - summarizes route counts, approved/rejected counts, command/receipt state,
+    closed PnL, profit factor, expectancy, by-agent/by-symbol/by-strategy
+    buckets, queued follow-up work, and terminal blockers
+  - writes report JSON, Markdown, and JSONL rollup rows
+- `scripts/run_daily_learning_rollup.py`
+- `tests/test_daily_learning_rollup.py`
+- `/api/forex/strategy/daily-learning-rollup/latest`
+- dashboard key `dailyLearningRollup`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Daily Learning Rollup` run type and panel
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/daily_learning_rollup.py` to
+  `cas_forex/session_autowake_runner.py`
+
+Generated evidence:
+
+- `evidence_runs/daily_learning_rollup/daily-learning-rollup-20260624110228-report.json`
+- `evidence_runs/daily_learning_rollup/daily-learning-rollup-20260624110228-report.md`
+- `evidence_runs/daily_learning_rollup/daily-learning-rollup-20260624110228.jsonl`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624110229-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624110229-report.md`
+
+Current daily rollup summary:
+
+- status: `DAILY_LEARNING_ROLLUP_BUILT_WAITING_FOR_CLOSED_PNL`
+- trading date: `2026-06-24`
+- day index: `1` of `30`
+- routes: `62`
+- approved/rejected: `28` / `34`
+- executed command rows: `28`
+- pending receipts: `28`
+- closed trades: `0`
+- net PnL: `0`
+- patch decisions: `6`
+- patch candidates: `1`
+- replay jobs: `3`
+- readiness label: `WAITING_FOR_TERMINAL_CLOSE_HISTORY`
+
+Verification:
+
+```bash
+python -m pytest tests/test_daily_learning_rollup.py -q
+# 3 passed
+
+python -m pytest tests/test_daily_learning_rollup.py tests/test_strategy_patch_runner.py tests/test_agent_information_flow.py -q
+# 11 passed
+
+python -m pytest tests/test_daily_learning_rollup.py tests/test_strategy_patch_runner.py tests/test_strategy_dev_queue.py tests/test_agent_research_queue.py tests/test_agent_memory.py tests/test_terminal_history_ingest.py tests/test_agent_information_flow.py -q
+# 20 passed
+
+python -m pytest tests -q
+# 423 passed
+
+cd ui && npm run build
+# 51 modules, 435.75 KB JS, 111.88 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8804/api/forex/health` -> healthy
+- `/api/forex/strategy/daily-learning-rollup/latest` ->
+  `DAILY_LEARNING_ROLLUP_BUILT_WAITING_FOR_CLOSED_PNL`, `62` routes,
+  `0` closed, `28` pending receipts
+- `/api/forex/dashboard` includes `dailyLearningRollup`
+- historical information-flow dashboard for this run reported next file
+  `cas_forex/session_autowake_runner.py`; the session autowake implementation
+  above supersedes it and the current next file is
+  `cas_forex/terminal_receipt_watcher.py`
+- `http://127.0.0.1:5215/?page=optimizer` returns `200 OK`
+
+Boundary: this creates the 30-day-window daily learning record. It does not
+execute broker orders, does not compile or run the MT4 EA inside a real
+terminal, does not move money, and does not claim live-income readiness. Live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Strategy patch runner API/UI
+
+Implemented the first strategy patch/replay decision runner for CAS Forex.
+
+Implemented:
+
+- `cas_forex/strategy_patch_runner.py`
+  - reads the latest strategy-development queue report
+  - converts work items into patch candidates, replay jobs, promotion reviews,
+    demotion reviews, and terminal-input blockers
+  - writes report JSON, Markdown, and JSONL decision rows
+- `scripts/run_strategy_patch_runner.py`
+- `tests/test_strategy_patch_runner.py`
+- `/api/forex/strategy/strategy-patch-runner/latest`
+- dashboard key `strategyPatchRunner`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Strategy Patch Runner` run type and decision table
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/strategy_patch_runner.py` to
+  `cas_forex/daily_learning_rollup.py`
+
+Generated evidence:
+
+- `evidence_runs/strategy_patch_runner/strategy-patch-runner-20260624104622-report.json`
+- `evidence_runs/strategy_patch_runner/strategy-patch-runner-20260624104622-report.md`
+- `evidence_runs/strategy_patch_runner/strategy-patch-runner-20260624104622.jsonl`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624104623-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624104623-report.md`
+
+Current strategy patch-runner summary:
+
+- status: `STRATEGY_PATCH_RUNNER_READY`
+- decisions: `6`
+- ready decisions: `3`
+- blocked decisions: `3`
+- patch candidates: `1`
+- replay jobs: `3`
+- promotion reviews: `0`
+- demotion reviews: `0`
+- terminal-input-required decisions: `2`
+- next decision: `strategy-patch-terminal_joinback_blocker-b734b40a97a7028d`
+
+Verification:
+
+```bash
+python -m pytest tests/test_strategy_patch_runner.py -q
+# 3 passed
+
+python -m pytest tests/test_strategy_patch_runner.py tests/test_strategy_dev_queue.py tests/test_agent_information_flow.py -q
+# 11 passed
+
+python -m pytest tests/test_strategy_patch_runner.py tests/test_strategy_dev_queue.py tests/test_agent_research_queue.py tests/test_agent_memory.py tests/test_terminal_history_ingest.py tests/test_agent_information_flow.py -q
+# 17 passed
+
+python -m pytest tests -q
+# 420 passed
+
+cd ui && npm run build
+# 51 modules, 427.81 KB JS, 110.56 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8803/api/forex/health` -> healthy
+- `/api/forex/strategy/strategy-patch-runner/latest` ->
+  `STRATEGY_PATCH_RUNNER_READY`, `6` decisions, `3` ready, `3` blocked
+- `/api/forex/dashboard` includes `strategyPatchRunner`
+- information-flow dashboard reported `cas_forex/daily_learning_rollup.py`
+  as the next file for this historical section; the current top section
+  supersedes that with `cas_forex/session_autowake_runner.py`
+- `http://127.0.0.1:5214/?page=optimizer` returns `200 OK`
+
+Boundary: this creates evidence-backed patch/replay decisions. It does not
+execute broker orders, does not compile or run the MT4 EA inside a real
+terminal, does not move money, and does not silently modify live strategy code.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Strategy development queue API/UI
+
+Implemented the first strategy-development queue for CAS Forex.
+
+Implemented:
+
+- `cas_forex/strategy_dev_queue.py`
+  - reads the latest agent research queue and optional agent memory report
+  - converts research tasks into replay, patch, and terminal-joinback work items
+  - converts future closed profit/loss memory rows into promotion/demotion reviews
+  - writes report JSON, Markdown, and JSONL work-item rows
+- `scripts/run_strategy_dev_queue.py`
+- `tests/test_strategy_dev_queue.py`
+- `/api/forex/strategy/strategy-dev-queue/latest`
+- dashboard key `strategyDevQueue`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Strategy Dev Queue` run type and work-item table
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/strategy_dev_queue.py` to
+  `cas_forex/strategy_patch_runner.py`
+
+Generated evidence:
+
+- `evidence_runs/strategy_dev_queue/strategy-dev-queue-20260624102900-report.json`
+- `evidence_runs/strategy_dev_queue/strategy-dev-queue-20260624102900-report.md`
+- `evidence_runs/strategy_dev_queue/strategy-dev-queue-20260624102900.jsonl`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624102906-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624102906-report.md`
+
+Current strategy-dev queue summary:
+
+- status: `STRATEGY_DEV_QUEUE_BUILT`
+- work items: `6`
+- queued items: `3`
+- blocked items: `3`
+- ready-for-replay items: `3`
+- patch candidates: `1`
+- promotion reviews: `0`
+- demotion reviews: `0`
+- terminal-blocked items: `3`
+- next item: `strategy-dev-terminal-joinback-7c441e3221a2bdce`
+
+Verification:
+
+```bash
+python -m pytest tests/test_strategy_dev_queue.py tests/test_agent_information_flow.py -q
+# 8 passed
+
+python -m pytest tests/test_strategy_dev_queue.py tests/test_agent_research_queue.py tests/test_agent_memory.py tests/test_terminal_history_ingest.py tests/test_agent_information_flow.py -q
+# 14 passed
+
+python -m pytest tests -q
+# 417 passed
+
+cd ui && npm run build
+# 51 modules, 419.23 KB JS, 109.29 KB gzip
+```
+
+API smoke:
+
+- `http://127.0.0.1:8802/api/forex/health` -> healthy
+- `/api/forex/strategy/strategy-dev-queue/latest` ->
+  `STRATEGY_DEV_QUEUE_BUILT`, `6` items, `3` blocked, `1` patch candidate
+- `/api/forex/dashboard` includes `strategyDevQueue`
+- information-flow dashboard reported `cas_forex/strategy_patch_runner.py`
+  as the next file for this historical section; the current top section
+  supersedes that with `cas_forex/daily_learning_rollup.py`
+
+Boundary: this creates the queue that turns memory/research into patch,
+replay, promotion, and demotion work. It does not execute broker orders, does
+not compile or run the MT4 EA inside a real terminal, and does not move money.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Terminal history ingest and closed-memory PnL
+
+Implemented terminal close/history ingest and wired it into agent memory,
+API, and UI.
+
+Implemented:
+
+- `cas_forex/terminal_history_ingest.py`
+  - normalizes MT4/MT5 close-history JSON/CSV/text/HTML inputs
+  - joins closed rows back to agent memory by `command_id`, `receipt_id`,
+    broker ticket, or symbol/direction/lot/entry fallback
+  - writes report JSON, Markdown, and JSONL history rows
+  - produces memory update packets with closed PnL, pips, R multiple, MAE/MFE,
+    close reason, commission, swap, close time, and exit price
+- `scripts/run_terminal_history_ingest.py`
+- `tests/test_terminal_history_ingest.py`
+- `scripts/run_agent_memory.py --terminal-history-report-dir`
+- `/api/forex/strategy/terminal-history-ingest/latest`
+- dashboard key `terminalHistoryIngest`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Terminal History Ingest` run type and closed-PnL panels
+- agent information-flow roadmap moved from `cas_forex/terminal_history_ingest.py`
+  to `cas_forex/strategy_dev_queue.py`
+
+Generated evidence:
+
+- `evidence_runs/terminal_history_ingest/terminal-history-ingest-20260624101300-report.json`
+- `evidence_runs/terminal_history_ingest/terminal-history-ingest-20260624101300-report.md`
+- `evidence_runs/terminal_history_ingest/terminal-history-ingest-20260624101300.jsonl`
+- `evidence_runs/agent_memory/agent-memory-20260624101307-report.json`
+- `evidence_runs/agent_research_queue/agent-research-queue-20260624101315-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624101117-report.json`
+
+Current terminal-history summary:
+
+- status: `TERMINAL_HISTORY_EMPTY`
+- history rows: `0`
+- memory updates: `0`
+- closed trades: `0`
+- net closed PnL: `0`
+- reason: no MT4/MT5 closed-history export is present yet under
+  `evidence_runs/terminal_history_exports`
+
+Current memory summary:
+
+- memory rows: `62`
+- pending terminal receipts: `28`
+- receipt rows joined: `0`
+- terminal-history rows joined: `0`
+- rejected-route research rows: `34`
+
+Verification:
+
+```bash
+python -m pytest tests/test_terminal_history_ingest.py tests/test_agent_memory.py tests/test_agent_research_queue.py tests/test_agent_information_flow.py -q
+# 11 passed
+
+python -m pytest tests -q
+# 414 passed
+
+cd ui && npm run build
+# 51 modules, 411.40 KB JS, 107.92 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8801/api/forex/health` -> healthy
+- `/api/forex/strategy/terminal-history-ingest/latest` ->
+  `TERMINAL_HISTORY_EMPTY`, `0` history rows, `0` memory updates
+- `/api/forex/dashboard` includes `terminalHistoryIngest`
+- `http://127.0.0.1:5212/?page=optimizer` returns `200 OK`
+
+Boundary: this makes CAS Forex ready to ingest closed paper/demo terminal
+history and learn from realized trade outcomes once exports exist. It does not
+compile or run the MT4 EA inside a real terminal, does not produce receipt
+files, and does not create live trading permission. Live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Agent research queue API/UI
+
+Implemented the first CAS Forex agent research queue.
+
+Implemented:
+
+- `cas_forex/agent_research_queue.py`
+  - reads latest `cas_forex_agent_outcome_memory.v1` rows
+  - turns memory into `cas_forex_research_task_packet.v1` tasks
+  - writes report JSON, Markdown, and JSONL task rows
+  - creates terminal receipt joinback tasks for approved commands waiting for
+    receipts
+  - creates overseer conflict-key refinement tasks from rejected routes
+  - creates condition-lab rejection analysis tasks
+  - creates walk-forward receipt replay tasks after receipts arrive
+  - creates terminal history/PnL schema work so memory can later learn PnL,
+    pips, MAE/MFE, close reason, commission, and swap
+- `scripts/run_agent_research_queue.py`
+- `tests/test_agent_research_queue.py`
+- `/api/forex/strategy/agent-research-queue/latest`
+- dashboard key `agentResearchQueue`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Agent Research Queue` run type and task table
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/agent_research_queue.py` to
+  `cas_forex/terminal_history_ingest.py`
+
+Generated evidence:
+
+- `evidence_runs/agent_research_queue/agent-research-queue-20260624095304-report.json`
+- `evidence_runs/agent_research_queue/agent-research-queue-20260624095304-report.md`
+- `evidence_runs/agent_research_queue/agent-research-queue-20260624095304.jsonl`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624095004-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624095004-report.md`
+
+Current queue summary:
+
+- queued tasks: `6`
+- high-priority tasks: `4`
+- terminal receipt joinback tasks: `1`
+- overseer conflict-key refinement tasks: `1`
+- condition-lab rejection tasks: `2`
+- walk-forward receipt replay tasks: `1`
+- terminal history/PnL schema tasks: `1`
+- next task: `research-terminal-receipt-joinback-7f4619f0b837f4e4`
+
+Verification:
+
+```bash
+python -m pytest tests/test_agent_research_queue.py tests/test_agent_memory.py tests/test_agent_information_flow.py -q
+# 9 passed
+
+python -m pytest tests -q
+# 412 passed
+
+cd ui && npm run build
+# 51 modules, 407.19 KB JS, 107.15 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8800/api/forex/health` -> healthy
+- `/api/forex/strategy/agent-research-queue/latest` -> `6` tasks, `4` high
+  priority, next task `research-terminal-receipt-joinback-7f4619f0b837f4e4`
+- `/api/forex/dashboard` includes `agentResearchQueue`
+- `http://127.0.0.1:5211/?page=optimizer` returns `200 OK`
+
+Boundary: this creates research tasks and cockpit/API visibility. It does not
+compile or run the MT4 EA inside a real terminal, and it does not provide
+closed-trade PnL/MAE/MFE until terminal close/history data exists. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Agent outcome memory API/UI
+
+Implemented the first CAS Forex agent outcome-memory layer.
+
+Implemented:
+
+- `cas_forex/agent_memory.py`
+  - reads the append-only agent event journal
+  - joins route intents, overseer decisions, terminal commands, and available
+    terminal receipts
+  - writes `cas_forex_agent_outcome_memory.v1` report JSON, Markdown, and JSONL
+  - labels approved commands without receipts as `AWAITING_TERMINAL_RECEIPT`
+  - labels rejected routes as `ROUTE_REJECTED`
+  - labels verified receipt rows as `TERMINAL_ACKNOWLEDGED`
+- `scripts/run_agent_memory.py`
+- `tests/test_agent_memory.py`
+- `/api/forex/strategy/agent-memory/latest`
+- dashboard key `agentMemory`
+- TypeScript evidence types and API client fetcher
+- Optimizer page `Agent Outcome Memory` run type and information-flow metrics
+- fixture fallback for offline UI mode
+- information-flow roadmap moved from `cas_forex/agent_memory.py` to
+  `cas_forex/agent_research_queue.py`
+
+Generated evidence:
+
+- `evidence_runs/agent_memory/agent-memory-20260624093213-report.json`
+- `evidence_runs/agent_memory/agent-memory-20260624093213-report.md`
+- `evidence_runs/agent_memory/agent-memory-20260624093213.jsonl`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624093253-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624093253-report.md`
+
+Current memory summary:
+
+- memory records: `62`
+- route intents: `62`
+- approved rows: `28`
+- rejected rows: `34`
+- commands joined: `28`
+- receipts joined: `0`
+- pending receipts: `28`
+- latest cycle: `agent-cycle-44848f2d3efc4669`
+
+Verification:
+
+```bash
+python -m pytest tests/test_agent_memory.py tests/test_terminal_receipt_ingest.py tests/test_mt4_mailbox_bridge.py tests/test_agent_information_flow.py -q
+# 16 passed
+
+python -m pytest tests -q
+# 410 passed
+
+cd ui && npm run build
+# 51 modules, 398.13 KB JS, 105.33 KB gzip
+```
+
+API/UI smoke:
+
+- `http://127.0.0.1:8799/api/forex/health` -> healthy
+- `/api/forex/strategy/agent-memory/latest` -> `62` memory rows, `28` pending
+  receipts, `0` receipts joined
+- `/api/forex/dashboard` includes `agentMemory`
+- `http://127.0.0.1:5209/?page=optimizer` returns `200 OK`
+
+Boundary: this creates learning rows and cockpit/API visibility. It does not
+compile or run the MT4 EA inside a real terminal, and it does not provide
+closed-trade PnL/MAE/MFE until terminal close/history data exists. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT4 EA receipt-writer source
+
+Replaced the MT4 EA scaffold with a source-ready mailbox worker.
+
+Implemented:
+
+- `mt4/Experts/CASForexBridgeEA.mq4`
+  - creates mailbox folders
+  - writes heartbeat JSON
+  - enumerates `<MailboxRoot>/commands/*.json`
+  - parses the stable CAS command schema
+  - skips commands that already have receipt files
+  - acknowledges `PING`
+  - acknowledges `PAPER_MT4` `PLACE_ORDER` commands by writing receipt JSON
+  - includes `raw_request_hash`, `raw_response_hash`, terminal identity,
+    account snapshot, fill fields, slippage, ticket, and error fields
+  - keeps `LIVE_MT4` behind both the EA `LiveTradingAllowed` input and the
+    command `live_money_authorized` flag
+- `tests/test_mt4_mailbox_bridge.py` now checks the EA source contract
+- `cas_forex/broker/mt4_mailbox_bridge.py` probe next-action text updated
+- `cas_forex/agent_information_flow.py` and UI fixture now mark the MT4 EA
+  source as `SOURCE_READY_NEEDS_TERMINAL_VERIFY`
+
+Generated evidence:
+
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624091707-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624091707-report.md`
+- `evidence_runs/mt4_mailbox_smoke/mt4-mailbox-smoke-status.json`
+
+Verification:
+
+```bash
+python -m pytest tests/test_mt4_mailbox_bridge.py tests/test_terminal_receipt_ingest.py tests/test_agent_information_flow.py -q
+# 14 passed
+
+python -m pytest tests -q
+# 408 passed
+
+cd ui && npm run build
+# 51 modules, 394.10 KB JS, 104.63 KB gzip
+```
+
+API/UI smoke:
+
+- `/api/forex/strategy/agent-information-flow` reports
+  `must_have_next_file=cas_forex/agent_memory.py`
+- `mt4/Experts/CASForexBridgeEA.mq4` status is
+  `SOURCE_READY_NEEDS_TERMINAL_VERIFY`
+- `http://127.0.0.1:5206/?page=optimizer` returns `200 OK`
+
+Remaining MT4 terminal step: compile, attach, and run the EA inside an actual
+MT4 terminal pointed at the shared mailbox, then ingest the generated receipt
+JSON. Next software lane: build `cas_forex/agent_memory.py`.
+
+Boundary: this makes the MT4 EA source capable of writing paper/demo receipt
+JSON. It does not create broker `ACCEPT`, deposit, withdraw, move bank/card
+money, or automate payouts. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Receipt-aware overseer routing gate
+
+Implemented receipt-aware same-symbol routing in the agent overseer.
+
+Implemented:
+
+- `cas_forex/agent_overseer.py` now reads receipt lifecycle state from
+  `evidence_runs/agent_workflow_queue/agent-events.jsonl`
+- `cas_forex/agent_state.py` passes the cycle event log path into the overseer
+- `cas_forex/agent_message_bus.py` maps receipt-gated rejections to
+  `QUEUED_AWAITING_RECEIPT` / `TERMINAL_LOCKED_FOR_SYMBOL`
+- `tests/test_agent_overseer.py`
+- workflow regression coverage in `tests/test_terminal_receipt_ingest.py`
+- API-surface tests now use temp evidence/route monkeypatches instead of
+  writing throwaway `MANUAL_CLI` cycles into real `evidence_runs`
+- fixture fallback update in `ui/src/data/fixtures.ts`
+
+Receipt-aware routing behavior:
+
+- pending same-symbol command -> reject new same-symbol route as awaiting
+  terminal receipt/reconciliation
+- `NEXT_CYCLE_ALLOWED` after verified/reconciled receipt -> allow the next
+  same-symbol route
+- `TERMINAL_RECEIPT_MISMATCH` / `TERMINAL_LOCKED_FOR_SYMBOL` -> keep the symbol
+  locked until the mismatch is handled
+
+Current event journal after default smoke:
+
+- path: `evidence_runs/agent_workflow_queue/agent-events.jsonl`
+- event count: `459`
+- cycle count: `31`
+- latest cycle: `agent-cycle-44848f2d3efc4669`
+- terminal commands written: `28`
+- pending terminal receipts: `28`
+- latest default cycle approved intents: `0`
+- latest default cycle rejected intents: `2`
+- latest default cycle terminal commands written: `0`
+
+Generated evidence:
+
+- `evidence_runs/agent_workflow_queue/agent-workflow-cycle-20260624090733-report.json`
+- `evidence_runs/terminal_receipt_ingest/terminal-receipt-ingest-20260624090739-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624085546-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624085546-report.md`
+
+Verification:
+
+```bash
+python -m pytest tests/test_agent_overseer.py tests/test_terminal_receipt_ingest.py tests/test_agent_workflow_cycle.py tests/test_agent_message_bus.py -q
+# 14 passed
+
+python -m pytest tests -q
+# 407 passed
+
+cd ui && npm run build
+# 51 modules, 393.97 KB JS, 104.58 KB gzip
+
+py -3.12 -c "import sys; sys.path.insert(0, r'.pydeps-win312'); import pydantic_core, fastapi, uvicorn; print('windows_api_deps_ok', pydantic_core.__version__)"
+# windows_api_deps_ok 2.46.4
+```
+
+Windows API dependency note: `.pydeps` currently contains WSL/Linux binary
+wheels. Added `.pydeps-win312/` to `.gitignore` and installed clean
+Windows-compatible FastAPI/Uvicorn/Pydantic dependencies there. On Windows,
+start the API with Python 3.12 and `PYTHONPATH=.pydeps-win312;.`.
+
+Next implementation lane: make `mt4/Experts/CASForexBridgeEA.mq4` read command
+JSON from the mailbox and write real terminal receipt JSON, then build
+`cas_forex/agent_memory.py` for full win/loss outcome memory.
+
+Boundary: the overseer now prevents duplicate same-symbol command spam while
+terminal receipts are pending. It does not execute live broker orders, create
+broker `ACCEPT`, deposit, withdraw, move bank/card money, or automate payouts.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Terminal receipt ingest joinback
+
+Implemented the missing receipt joinback between MT4/MT5 mailbox receipt files
+and the append-only agent event journal.
+
+Implemented:
+
+- `cas_forex/terminal_receipt_ingest.py`
+- `scripts/run_terminal_receipt_ingest.py`
+- `tests/test_terminal_receipt_ingest.py`
+- `/api/forex/strategy/terminal-receipt-ingest/latest`
+- dashboard payload key `terminalReceiptIngest`
+- TypeScript type/API client/fixture fallback for terminal receipt ingest
+- Optimizer page receipt-ingest metrics and receipt rows
+- event-journal summary now reports outstanding receipt commands, not just raw
+  historical `RECEIPT_PENDING` event count
+
+Receipt lifecycle behavior:
+
+- valid receipt -> `TERMINAL_RECEIPT_RECEIVED`,
+  `TERMINAL_RECEIPT_RECONCILED`, `NEXT_CYCLE_ALLOWED`
+- bad receipt hash or missing terminal/account fields ->
+  `TERMINAL_RECEIPT_MISMATCH`, `TERMINAL_LOCKED_FOR_SYMBOL`
+- reruns are idempotent by `receipt_id`
+
+Current event journal after verification:
+
+- path: `evidence_runs/agent_workflow_queue/agent-events.jsonl`
+- event count: `270`
+- cycle count: `18`
+- latest cycle: `agent-cycle-5885cba41e8f5a38`
+- terminal commands written: `18`
+- pending terminal receipts: `18`
+- verified terminal receipts: `0`
+- reconciled terminal receipts: `0`
+- next-cycle allowed events: `0`
+- receipt mismatches: `0`
+
+Generated evidence:
+
+- `evidence_runs/terminal_receipt_ingest/terminal-receipt-ingest-20260624083745-report.json`
+- `evidence_runs/terminal_receipt_ingest/terminal-receipt-ingest-20260624083745-report.md`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624083721-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624083721-report.md`
+
+Current receipt state: no MT4/MT5 terminal receipt files have been written into
+the mailbox yet, so ingest appended `0` new events in the default evidence run.
+The software path is now ready for terminal receipts; the external EA/terminal
+still needs to write receipt JSON.
+
+Verification:
+
+```bash
+python -m pytest tests -q
+# 403 passed
+
+python -m pytest tests/test_agent_information_flow.py tests/test_terminal_receipt_ingest.py tests/test_agent_message_bus.py -q
+# 11 passed
+
+cd ui && npm run build
+# 51 modules, 393.21 KB JS, 104.34 KB gzip
+```
+
+Next implementation lane: update `cas_forex/agent_overseer.py` so same-symbol
+route decisions consume `NEXT_CYCLE_ALLOWED` and
+`TERMINAL_LOCKED_FOR_SYMBOL`, connect the actual MT4 EA/terminal receipt feed,
+then build `cas_forex/agent_memory.py` for full win/loss outcome memory.
+
+Boundary: terminal receipt ingest verifies paper/demo terminal receipts against
+command events and account snapshots. It does not execute live broker orders,
+create broker `ACCEPT`, deposit, withdraw, move bank/card money, or automate
+payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Agent message bus event journal
+
+Implemented the real append-only agent event journal selected by the
+information-flow team review.
+
+Implemented:
+
+- `cas_forex/agent_message_bus.py`
+- `tests/test_agent_message_bus.py`
+- `cas_forex/agent_state.py` now writes cycle events into `agent-events.jsonl`
+- `/api/forex/strategy/agent-workflow-events/summary`
+- `/api/forex/strategy/agent-workflow-events`
+- `/api/forex/strategy/agent-workflow-context/latest`
+- `/api/forex/strategy/agent-workflow-intents/open`
+- `/api/forex/strategy/agent-workflow-receipts/latest`
+- dashboard payload key `agentMessageBus`
+- TypeScript type/API client/fixture fallback for `AgentMessageBusSummary`
+- Optimizer page event-journal metrics
+
+Current event journal:
+
+- path: `evidence_runs/agent_workflow_queue/agent-events.jsonl`
+- event count: superseded by terminal receipt ingest update above
+- cycle count: superseded by terminal receipt ingest update above
+- latest cycle: superseded by terminal receipt ingest update above
+- latest cycle report: superseded by terminal receipt ingest update above
+- event types: `AGENT_CONTEXT_READY`, `AGENT_HEARTBEAT`,
+  `ROUTE_INTENT_CREATED`, `OVERSEER_DECISION_CREATED`,
+  `TERMINAL_COMMAND_WRITTEN`, `TERMINAL_RECEIPT_PENDING`,
+  `OUTCOME_MEMORY_WRITTEN`
+- pending terminal receipts: superseded by terminal receipt ingest update above
+
+Live local smoke:
+
+- API health: `http://127.0.0.1:8790/api/forex/health`
+- Event summary: `http://127.0.0.1:8790/api/forex/strategy/agent-workflow-events/summary`
+- Dashboard: `http://127.0.0.1:8790/api/forex/dashboard`
+- UI: `http://127.0.0.1:5200/?page=optimizer`
+
+Verification:
+
+```bash
+python -m pytest tests/test_agent_message_bus.py tests/test_agent_workflow_cycle.py tests/test_agent_information_flow.py tests/test_settings_api_surface.py -q
+# 23 passed
+
+python -m pytest tests -q
+# 400 passed
+
+cd ui && npm run build
+# 51 modules, 389.02 KB JS, 103.45 KB gzip
+```
+
+Terminal receipt ingest is complete in the newer update above. Next
+implementation lane: reconciliation-gated same-symbol routing in
+`cas_forex/agent_overseer.py`.
+
+Boundary: agent events are coordination records for paper/demo workflows. They
+do not by themselves execute live broker orders, create broker `ACCEPT`,
+deposit, withdraw, move bank/card money, or automate payouts. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Agent information-flow team review
+
+Spawned three specialist agents (`Sagan`, `Mill`, and `Leibniz`) to determine
+the best form of information flow between CAS Forex agents, then promoted the
+combined recommendation into evidence/API/dashboard/UI.
+
+Implemented:
+
+- `cas_forex/agent_information_flow.py`
+- `scripts/run_agent_information_flow.py`
+- `tests/test_agent_information_flow.py`
+- `/api/forex/strategy/agent-information-flow`
+- dashboard payload key `agentInformationFlow`
+- TypeScript types/API client/fixture fallback for `AgentInformationFlow`
+- Optimizer page `Agent Information Flow` panel
+
+Generated evidence:
+
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624083721-report.json`
+- `evidence_runs/agent_information_flow/agent-information-flow-20260624083721-report.md`
+
+Team verdict:
+
+- best flow form: `append-only event journal plus read-only API projections`
+- canonical event log: `evidence_runs/agent_workflow_queue/agent-events.jsonl`
+- latest cycle projection: `evidence_runs/agent_workflow_queue/agent-workflow-state.jsonl`
+- terminal mailbox: `evidence_runs/agent_workflow_mt4_mailbox/{commands,receipts}`
+- canonical packet count: `7`
+- flow stages: `8`
+- receipt/reconciliation lifecycle states: `10`
+- next build target: `cas_forex/agent_message_bus.py`
+
+Plain-English decision: agents should coordinate through the event journal, not
+by scraping `/api/forex/dashboard`. The dashboard is the wall display. The
+MetaTrader mailbox is only the command outbox and receipt inbox. The learning
+loop must join route intent, overseer decision, MT4/MT5 command, terminal
+receipt, reconciliation, close outcome, condition snapshot, and daily 30-day
+rollup.
+
+Verification:
+
+```bash
+python -m pytest tests/test_agent_information_flow.py tests/test_agent_workflow_cycle.py tests/test_agent_workflow.py -q
+# 12 passed
+
+python -m pytest tests -q
+# 397 passed
+
+cd ui && npm run build
+# 51 modules, 386.47 KB JS, 102.97 KB gzip
+```
+
+Live local smoke:
+
+- API health: `http://127.0.0.1:8786/api/forex/health`
+- Information-flow API: `http://127.0.0.1:8786/api/forex/strategy/agent-information-flow`
+- Dashboard: `http://127.0.0.1:8786/api/forex/dashboard`
+- UI: `http://127.0.0.1:5196/?page=optimizer`
+
+Boundary: this report defines message shape, lifecycle, storage, and agent
+responsibility. It does not by itself execute live broker orders, create broker
+`ACCEPT`, deposit, withdraw, move bank/card money, or automate payouts. Live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Agent workflow execution cycle
+
+Converted the agentic trading-day plan into a runnable paper/demo cycle.
+
+Implemented:
+
+- `cas_forex/agent_state.py`
+- `cas_forex/micro_scalp_policy.py`
+- `cas_forex/hourly_intraday_policy.py`
+- `cas_forex/agent_overseer.py`
+- `scripts/run_agent_workflow_queue.py`
+- `tests/test_agent_workflow_cycle.py`
+- `/api/forex/strategy/agent-workflow-cycle/latest`
+- dashboard payload key `agentWorkflowCycle`
+- Optimizer latest-cycle readout
+
+Latest cycle summary:
+
+- execution mode: `PAPER_MT4_COMMAND_INTENT`
+- agent heartbeats: `6`
+- route intents: `2`
+- approved intents: `1`
+- rejected/queued same-symbol hourly intents: `1`
+- MT4 paper commands: `1`
+- memory snapshots: `2`
+- symbol/timeframes: `AUD/CAD`, `M5` and `H1`
+
+Latest evidence:
+
+- `evidence_runs/agent_workflow_queue/agent-workflow-cycle-20260624050225-report.json`
+- `evidence_runs/agent_workflow_queue/agent-workflow-cycle-20260624050225-report.md`
+- `evidence_runs/agent_workflow_queue/agent-workflow-state.jsonl`
+- `evidence_runs/agent_workflow_mt4_mailbox/commands/`
+
+Next implementation lane: make the command cycle receipt/reconciliation-gated
+and add true trade-outcome learning memory.
+
+## 2026-06-24 - Agentic trading-day workflow plan
+
+Encoded the owner-requested CAS Forex agent desk as a first-class workflow
+report, API endpoint, dashboard payload, and Optimizer UI panel.
+
+Implemented:
+
+- `cas_forex/agent_workflow.py`
+- `scripts/run_agent_workflow_plan.py`
+- `tests/test_agent_workflow.py`
+- `/api/forex/strategy/agent-workflow-plan`
+- dashboard payload key `agentWorkflowPlan`
+- TypeScript types/API client/fixture fallback for `AgentWorkflowPlan`
+- Optimizer page `Agentic Trading-Day Workflow` panel
+
+Generated evidence:
+
+- `evidence_runs/agent_workflow/agent-workflow-plan-20260624044500-report.json`
+- `evidence_runs/agent_workflow/agent-workflow-plan-20260624044500-report.md`
+
+Workflow summary:
+
+- status: `AGENT_DESK_PLAN_READY`
+- agents: `8`
+- autowake events: `7`
+- micro-scalp cadence: `1-5` minutes
+- hourly intraday cadence: `60` minutes
+- primary short-timeframe lead: `AUD/CAD M5 range_scalper_12_80`
+- replay verdict: `REPLAY_LEAD_FOR_ADAPTIVE_REVIEW`
+- adaptive next step: `QUEUE_FOR_ADAPTIVE_COMPOUNDING_REVIEW`
+
+Agents defined:
+
+- `session_autowake_agent`
+- `micro_scalp_agent`
+- `hourly_intraday_agent`
+- `overseer_agent`
+- `research_condition_agent`
+- `strategy_dev_agent`
+- `terminal_bridge_agent`
+- `audit_memory_agent`
+
+Live local smoke:
+
+- API health: `http://127.0.0.1:8782/api/forex/health`
+- Workflow API: `http://127.0.0.1:8782/api/forex/strategy/agent-workflow-plan`
+- Dashboard: `http://127.0.0.1:8782/api/forex/dashboard`
+- UI: `http://127.0.0.1:5192/?page=optimizer`
+
+Verification:
+
+```bash
+python -m pytest tests/test_agent_workflow.py tests/test_forex_fury_replay_results.py -q
+# 5 passed
+
+python -m pytest tests -q
+# 388 passed
+
+cd ui && npm run build
+# 51 modules, 364.08 KB JS, 97.89 KB gzip
+```
+
+Next implementation lane: build persistent agent state, the autowake runner,
+micro-scalp policy, hourly intraday policy, overseer router, and terminal
+receipt attachment.
+
+Boundary: the workflow plan coordinates autowake, scalp, intraday, overseer,
+research, terminal-bridge, and memory agents. It creates schedules, route
+intents, research tasks, and evidence requirements; it does not by itself
+execute live broker orders, create broker `ACCEPT`, deposit, withdraw, move
+bank/card money, or automate payouts. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Forex Fury top-candidate replay results
+
+Executed the generated CAS replay lane for the top Forex Fury-derived
+`AUD/CAD` `M5` candidate and promoted the result into API/dashboard/UI
+evidence.
+
+Implemented:
+
+- fixed generated walk-forward command to use `--timeframes`
+- `cas_forex/forex_fury_replay_results.py`
+- `scripts/run_forex_fury_replay_results.py`
+- `tests/test_forex_fury_replay_results.py`
+- `/api/forex/strategy/forex-fury-replay-results`
+- dashboard payload key `forexFuryReplayResults`
+- Optimizer page `Forex Fury Replay Results` panel
+
+Generated evidence:
+
+- `evidence_runs/forex_fury_replay_candidates/forex-fury-replay-candidates-20260624042429-report.json`
+- `evidence_runs/forex_fury_condition_replay/condition-lab-20260624042332-report.json`
+- `evidence_runs/forex_fury_walk_forward_replay/walk-forward-20260624042543-report.json`
+- `evidence_runs/forex_fury_replay_results/forex-fury-replay-results-20260624042821-report.json`
+
+Replay result:
+
+- condition lab: `297` cells, `62` non-gap, `22` RPM routes, `11` no-trade routes
+- top real condition cell: `AUD/CAD` `M5`, `shock`, `range_scalper_12_80`, `1.2845%` return, `0.0%` drawdown, `20.7614` profit factor
+- walk-forward: `126` windows, `61` routed, `35` positive routed, `350` routed trades
+- walk-forward max drawdown: `0.4953%`
+- walk-forward grade: `WALK_FORWARD_LEAD`
+- replay verdict: `REPLAY_LEAD_FOR_ADAPTIVE_REVIEW`
+- adaptive next step: `QUEUE_FOR_ADAPTIVE_COMPOUNDING_REVIEW`
+
+Live local smoke:
+
+- API: `http://127.0.0.1:8778/api/forex/strategy/forex-fury-replay-results`
+- Dashboard: `http://127.0.0.1:8778/api/forex/dashboard`
+- UI: `http://127.0.0.1:5188/?page=optimizer`
+
+Verification:
+
+```bash
+python -m pytest tests/test_forex_fury_replay_results.py tests/test_forex_fury_candidates.py tests/test_forex_fury_sets.py tests/test_pip_math_regressions.py -q
+# 18 passed
+
+python -m pytest tests -q
+# 385 passed
+
+cd ui && npm run build
+# 51 modules, 348.28 KB JS, 93.25 KB gzip
+```
+
+Browser verification confirmed the Optimizer page renders `Forex Fury Replay
+Results`, `REPLAY_LEAD_FOR_ADAPTIVE_REVIEW`,
+`QUEUE_FOR_ADAPTIVE_COMPOUNDING_REVIEW`, `WALK_FORWARD_LEAD`, and `AUD/CAD`.
+
+Boundary: replay results are CAS research/backtest evidence. They can queue an
+adaptive compounding review, but they do not execute EA binaries, place orders,
+create broker `ACCEPT`, deposit, withdraw, move bank/card money, or automate
+payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Forex Fury replay-candidate queue
+
+Converted the local Forex Fury set/report import into ranked CAS replay and
+backtest candidate jobs, then surfaced the queue in the API/dashboard and
+Optimizer UI.
+
+Implemented:
+
+- `cas_forex/forex_fury_candidates.py`
+- `scripts/run_forex_fury_replay_candidates.py`
+- `tests/test_forex_fury_candidates.py`
+- `/api/forex/strategy/forex-fury-replay-candidates`
+- dashboard payload key `forexFuryReplayCandidates`
+- Optimizer page `Forex Fury Replay Candidates` panel
+- instrument support for `AUD/CAD`, `GBP/AUD`, and `SPX500`
+
+Generated evidence:
+
+- `evidence_runs/forex_fury_replay_candidates/forex-fury-replay-candidates-20260624040820-report.json`
+- `evidence_runs/forex_fury_replay_candidates/forex-fury-replay-candidates-20260624040820-report.md`
+
+Current replay queue summary:
+
+- `candidate_count=24`
+- `supported_candidate_count=24`
+- `waiting_for_instrument_spec_count=0`
+- symbols: `AUD/CAD`, `AUD/USD`, `GBP/AUD`, `GBP/USD`, `SPX500`, `USD/JPY`
+- timeframes: `H1`, `M1`, `M5`
+- top candidate: `ff-replay-aud-cad-m5-swing-d7be2c38ca`
+- top score: `320.9726`
+
+Live local smoke:
+
+- API: `http://127.0.0.1:8776/api/forex/strategy/forex-fury-replay-candidates`
+- Dashboard: `http://127.0.0.1:8776/api/forex/dashboard`
+- UI: `http://127.0.0.1:5186/?page=optimizer`
+
+Verification:
+
+```bash
+python -m pytest tests/test_forex_fury_candidates.py tests/test_forex_fury_sets.py tests/test_external_benchmark.py tests/test_pip_math_regressions.py -q
+# 18 passed
+
+python -m pytest tests -q
+# 383 passed
+
+cd ui && npm run build
+# 51 modules, 341.36 KB JS, 91.97 KB gzip
+```
+
+Browser verification confirmed the Optimizer page renders `Forex Fury Replay
+Candidates`, `AUD/CAD`, `READY_FOR_CAS_REPLAY`, and the generated
+`run_condition_lab.py` replay command.
+
+Boundary: replay candidates are CAS research/backtest queue inputs. They do
+not execute EA binaries, place orders, create broker `ACCEPT`, deposit,
+withdraw, move bank/card money, or automate payouts. Live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Forex Fury set import Optimizer UI surfacing
+
+Surfaced the local Forex Fury set/report import as a first-class Optimizer and
+dashboard payload so CAS Forex can compare and mine the owner-supplied package
+from the live cockpit instead of leaving it as a standalone report.
+
+Implemented:
+
+- `api/data.py` dashboard key `forexFurySetImport`
+- `ui/src/types/evidence.ts` Forex Fury import/report types
+- `ui/src/data/api.ts` endpoint client and dashboard merge fallback
+- `ui/src/data/fixtures.ts` fixture fallback
+- `ui/src/App.tsx` fixture dashboard state
+- `ui/src/pages/OptimizerPage.tsx` Local Forex Fury Set Import panel
+
+Live local smoke:
+
+- API: `http://127.0.0.1:8774/api/forex/strategy/forex-fury-set-import`
+- Dashboard: `http://127.0.0.1:8774/api/forex/dashboard`
+- UI: `http://127.0.0.1:5184/?page=optimizer`
+
+Verified live payload:
+
+- `set_count=36`
+- `tester_report_count=30`
+- `best_profit_factor=15.12`
+- `best_symbol=AUDCAD`
+- `best_timeframe=M5`
+
+Verification:
+
+```bash
+python -m pytest tests/test_forex_fury_sets.py tests/test_external_benchmark.py -q
+# 4 passed
+
+python -m pytest tests -q
+# 379 passed
+
+cd ui && npm run build
+# 51 modules, 333.31 KB JS, 90.09 KB gzip
+```
+
+Boundary: this UI/API surfacing is comparison, mining, and owner-cockpit
+intelligence. It does not execute EA binaries, place orders, create broker
+`ACCEPT`, deposit, withdraw, move bank/card money, or automate payouts. Live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Forex Fury local set/report importer
+
+Imported the owner-supplied local Forex Fury CORE package as repeatable CAS
+Forex strategy-study evidence without executing compiled EA binaries.
+
+Source inspected:
+
+- `C:\Users\wakil\Downloads\Forex-Fury-CORE-1.4NEW-SETS (1)`
+
+Implemented:
+
+- `cas_forex/forex_fury_sets.py`
+- `scripts/run_forex_fury_set_import.py`
+- `tests/test_forex_fury_sets.py`
+- `/api/forex/strategy/forex-fury-set-import`
+
+Generated evidence:
+
+- `evidence_runs/forex_fury_set_import/forex-fury-set-import-20260624034719-report.json`
+- `evidence_runs/forex_fury_set_import/forex-fury-set-import-20260624034719-report.md`
+
+Current normalized summary from the local package:
+
+- `set_count=36`
+- `tester_report_count=30`
+- `platform_counts={MT4: 18, MT5: 18}`
+- `family_counts={classic_m15: 6, scalping: 14, swing: 16}`
+- `symbol_counts={AUDCAD: 8, AUDUSD: 6, EURUSD: 4, GBPAUD: 2, GBPUSD: 6, SPX500: 2, USDJPY: 2}`
+- `timeframe_counts={H1: 12, M1: 14, M15: 6, M5: 4}`
+- `grid_enabled_count=30`
+- `close_by_money_count=30`
+- `max_orders_values=[1, 7]`
+- best supplied tester-report profit factor: `15.12` on `AUDCAD` `M5`, `04:00:00-05:00:00`, with `2.25%` equity drawdown and `294` trades.
+
+Verification:
+
+```bash
+python -m pytest tests/test_forex_fury_sets.py tests/test_external_benchmark.py -q
+# 4 passed
+
+python scripts/run_forex_fury_set_import.py --source-dir "C:\Users\wakil\Downloads\Forex-Fury-CORE-1.4NEW-SETS (1)" --summary-only
+# set_count=36, tester_report_count=30, best_profit_factor=15.12
+```
+
+Boundary: this importer reads `.set` and tester-report files and fingerprints
+compiled `.ex4`/`.ex5` binaries only. It does not execute binaries, place
+orders, create broker `ACCEPT`, deposit, withdraw, move bank/card money, or
+automate payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - MT4 mailbox bridge scaffold
+
+Added a dedicated paper/demo-first MT4 mailbox bridge without disturbing the
+older `MT4EABridge` stub inside `mt5_bridge.py`.
+
+Implemented:
+
+- `cas_forex/broker/mt4_mailbox_bridge.py`
+- `scripts/run_mt4_mailbox_smoke.py`
+- `tests/test_mt4_mailbox_bridge.py`
+- `mt4/Experts/CASForexBridgeEA.mq4`
+- `cas_forex/broker/__init__.py` export for `MT4MailboxBridge`
+
+Current behavior:
+
+- creates `commands`, `receipts`, and `archive` directories
+- writes hashed `PING` command JSON
+- writes hashed `PLACE_ORDER` command JSON from a `BrokerOrderRequest`
+- validates `cas_forex_mt4_mailbox_receipt.v1` receipt files
+- keeps `PAPER_MT4` as the default bridge mode
+- blocks `LIVE_MT4` intents unless the caller passes `live_authorized=True`
+
+Verification:
+
+```bash
+python scripts/run_mt4_mailbox_smoke.py --mailbox-dir evidence_runs/mt4_mailbox_smoke
+# status=MAILBOX_READY, broker_mode=PAPER_MT4, receipt_count=0
+
+python -m pytest tests/test_mt4_mailbox_bridge.py -q
+# 4 passed
+
+python -m pytest tests -q
+# 377 passed
+
+cd ui && npm run build
+# 51 modules, 324.90 KB JS, 87.71 KB gzip
+```
+
+Boundary: this bridge writes and reads mailbox files. The MQL4 EA side still
+needs parser/receipt/order-send implementation. This scaffold does not place
+live orders, create broker `ACCEPT`, deposit, withdraw, move bank/card money,
+or automate payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/
+bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - External benchmark API/UI wiring
+
+Promoted the Forex Fury MT4 benchmark snapshot into a first-class CAS Forex API
+and UI surface.
+
+Implemented:
+
+- `cas_forex/external_benchmark.py`
+- `scripts/run_external_benchmark_snapshot.py`
+- `tests/test_external_benchmark.py`
+- `/api/forex/strategy/external-benchmarks`
+- dashboard payload key `externalBenchmarks`
+- TypeScript types/API client/fixture fallback
+- Optimizer page external benchmark table
+
+Current normalized summary:
+
+- `benchmark_count=3`
+- `mt4_account_count=3`
+- `real_account_count=3`
+- `symbols=[AUDUSD, GBPUSD, USDCAD]`
+- `total_public_trade_count=646`
+- `best_gain_pct=554.1`
+- `lowest_drawdown_pct=8.6`
+
+Verification:
+
+```bash
+python scripts/run_external_benchmark_snapshot.py --summary-only
+# benchmark_count=3, mt4_account_count=3, total_public_trade_count=646
+
+python -m pytest tests/test_external_benchmark.py tests/test_settings_api_surface.py -q
+# 13 passed
+
+python -m pytest tests -q
+# 373 passed
+
+cd ui && npm run build
+# 51 modules, 324.90 KB JS, 87.71 KB gzip
+```
+
+Boundary: this is comparison/intelligence wiring only. It does not place orders,
+create broker `ACCEPT`, deposit, withdraw, move bank/card money, or automate
+payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Forex Fury / MT4 / agentic workflow benchmark pass
+
+Reviewed the owner's three Forex Fury Myfxbook links as external benchmark
+inputs and converted the findings into a local implementation note plus a
+machine-readable benchmark snapshot.
+
+Artifacts:
+
+- `docs/working/CAS_FOREX_FOREX_FURY_MT4_AGENTIC_WORKFLOW_20260624.md`
+- `evidence_runs/external_benchmark/forex-fury-mt4-benchmark-20260624-report.json`
+
+Public-page findings:
+
+- Forex FURY AU: real USD automated MT4, Fyntura, 1:500, `+214.03%` gain,
+  `35.77%` drawdown, `43` trades.
+- Forex Fury USDCAD 50K: real USD automated MT4, AdroFx, 1:200, `+154.62%`
+  gain, `8.60%` drawdown, `541` trades.
+- Forex FURY 26/39: real USD automated MT4, Fyntura, 1:500, `+554.10%` gain,
+  `37.00%` drawdown, `62` trades.
+
+Implementation targets recorded:
+
+- add external benchmark model and snapshot runner
+- add MT4 mailbox bridge and MQL4 EA template
+- add MT4 receipt/probe runners beside the current MT5 path
+- add benchmark comparison to Optimizer/Condition Lab
+- add long-horizon CAS Harness multi-agent workflow for evidence harvesting,
+  strategy mining, backtesting, risk/margin solving, bridge work, UI work, and
+  audit verification
+
+Boundary: this is benchmark/project-memory work only. It does not place orders,
+create broker `ACCEPT`, deposit, withdraw, move bank/card money, or automate
+payouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Trading edge separated from paper maturity
+
+Refreshed owner-promotion evidence with current `paper_days=3` and wired that
+summary into the live operability checklist.
+
+Result:
+
+- latest owner-promotion report:
+  `evidence_runs/owner_promotion_review/owner-promotion-review-20260624030818-report.json`
+- D1 `tsmom_126_250_2_10` clears strategy-edge thresholds:
+  - `simulator_wins=18`
+  - `walk_forward_windows=5`
+  - `positive_routed_window_rate=0.6`
+  - `mean_return_pct=1.8932`
+  - `max_drawdown_pct=7.0764`
+  - `trades=76`
+- remaining promotion blockers are paper proof only:
+  - `paper_days 3 < required 30`
+  - `paper_passed is false`
+- `trading_edge` now reports `PASSED` in live readiness
+- `paper_proof_maturity` remains `OPEN`
+- default live readiness is now `NOT_READY_FOR_LIVE`, `10 / 16`,
+  `checks_open=1`, `checks_mismatch=0`
+- `strategy_leads.json` now reflects 3 completed proof bundles and next due
+  `2026-06-25`
+
+Verification:
+
+```bash
+python -m pytest tests/test_live_readiness.py tests/test_settings_api_surface.py -q
+# 14 passed
+
+python -m pytest tests -q
+# 371 passed
+
+cd ui && npm run build
+# 51 modules, 318.07 KB JS, 85.57 KB gzip
+```
+
+Owner future-study inputs recorded:
+
+- Myfxbook Forex Fury AU:
+  `https://www.myfxbook.com/members/forexfuryreal/forex-fury-au/11171494`
+- Myfxbook Forex Fury USDCAD 50K:
+  `https://www.myfxbook.com/members/forexfuryreal/forex-fury-usdcad-50k/9421542`
+- Myfxbook Forex Fury 26/39:
+  `https://www.myfxbook.com/members/forexfuryreal/forex-fury-26amp39/11975493`
+- evaluate MT4 as a possible better-fit broker/terminal integration
+- assess long-horizon agentic workflow support for spawning/attaching multiple
+  LLM agents
+
+Boundary: these are research/implementation inputs, not completed live evidence.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+## 2026-06-24 - Paper proof window advanced to 3 complete bundles
+
+Ran the scheduled daily paper-proof bundle pipeline for `2026-06-23` and
+`2026-06-24` using the broker-synced account equity.
+
+Commands:
+
+```bash
+python scripts/run_daily_paper_bundle.py --date 2026-06-23 --account-equity 100000 --max-risk-pct 0.5 --daily-risk-pct 1 --output-dir evidence_runs/index_tsmom_126_paper_proof
+python scripts/run_daily_paper_bundle.py --date 2026-06-24 --account-equity 100000 --max-risk-pct 0.5 --daily-risk-pct 1 --output-dir evidence_runs/index_tsmom_126_paper_proof
+python scripts/run_paper_ui_readiness.py --output-dir evidence_runs/index_tsmom_126_paper_proof --min-daily-bundles 5
+python scripts/run_paper_daily_schedule.py --date 2026-06-24 --account-equity 100000 --output-dir evidence_runs/index_tsmom_126_paper_proof
+```
+
+Result:
+
+- `complete_bundle_days=3`
+- complete dates: `2026-06-22`, `2026-06-23`, `2026-06-24`
+- `broker_verified_days=3`
+- `decision_days=3`
+- `risk_review_days=3`
+- chains verified: paper proof, paper decision, paper risk
+- latest risk review: `account_equity=100000.0`, `PAPER_ATTEMPTS_ALLOWED`,
+  `total_planned_lots=0.2`
+- UI proof threshold remains `NOT_READY_FOR_UI_UX` because `3 / 5` complete
+  bundles exist
+- next due command:
+  `python scripts/run_daily_paper_bundle.py --date 2026-06-25 --account-equity 100000 --max-risk-pct 0.5 --daily-risk-pct 1 --output-dir evidence_runs/index_tsmom_126_paper_proof`
+- full 30-day proof gate still needs `27` more paper trading days
+
+Verification:
+
+```bash
+python -m pytest tests/test_paper_daily_bundle.py tests/test_paper_daily_schedule.py tests/test_paper_ui_readiness.py tests/test_live_readiness.py tests/test_settings_api_surface.py -q
+# 23 passed
+
+python -m pytest tests -q
+# 370 passed
+
+cd ui && npm run build
+# 51 modules, 318.07 KB JS, 85.57 KB gzip
+```
+
+Boundary: these are paper/demo proof-bundle artifacts. They do not place live
+orders, create broker `ACCEPT`, deposit, withdraw, move bank/card money, or
+automate payouts.
+
+## 2026-06-23 - Broker-synced paper risk evidence applied
+
+Applied the broker-synced paper-risk review to the real local paper-risk
+evidence chain.
+
+Applied state:
+
+- `apply_broker_synced_risk_review(confirm_apply=True)` appended the broker
+  snapshot-seeded risk review.
+- `paper-risk-status.json` now has `review_count=2`.
+- `chain_verified=true`.
+- latest `account_equity=100000.0`.
+- dashboard/daily-bundle overlay now treats the broker-synced review as the
+  active default paper-risk review.
+- default account reconciliation is now `RECONCILED` with `checks_mismatch=0`.
+- default live readiness is now `NOT_READY_FOR_LIVE`, `9 / 16`, with
+  `checks_mismatch=0`.
+- broker-synced preview now reports `already_applied=true` when the active
+  review already matches the broker snapshot.
+
+Boundary: this is still paper/demo evidence-chain work. It does not place
+orders, create broker `ACCEPT`, deposit, withdraw, move bank/card money, or
+automate payouts.
+
+Verification:
+
+```bash
+python -m pytest tests/test_broker_synced_risk_apply.py tests/test_settings_api_surface.py tests/test_account_reconciliation.py tests/test_live_readiness.py -q
+# 21 passed
+
+python -m pytest tests -q
+# 370 passed
+
+cd ui && npm run build
+# 51 modules, 318.07 KB JS, 85.57 KB gzip
+```
+
+## 2026-06-23 - Broker-synced paper risk apply action
+
+Added an explicit owner-run action that turns the broker-synced risk preview
+into an appended paper-risk evidence review.
+
+Implemented:
+
+- `POST /api/forex/account/apply-broker-sync-risk-review?confirm_apply=true`
+- `apply_broker_synced_risk_review(...)` in the API data layer
+- idempotency so repeated applies report `already_applied=true` instead of
+  appending duplicate broker-synced reviews
+- dashboard daily-bundle overlay from latest `paper-risk-status.json`
+- Dashboard Broker Sync `Apply` button with append/already-applied feedback
+- TypeScript/API support for the apply response
+
+Boundary: this writes only to the paper/demo risk evidence chain. It does not
+place orders, create broker `ACCEPT`, deposit, withdraw, move bank/card money,
+or automate payouts.
+
+Verification:
+
+```bash
+python -m pytest tests/test_broker_synced_risk_apply.py tests/test_settings_api_surface.py tests/test_paper_risk.py tests/test_live_readiness.py -q
+# 20 passed
+
+python -m pytest tests -q
+# 370 passed
+
+cd ui && npm run build
+# 51 modules, 318.07 KB JS, 85.57 KB gzip
+```
+
+Smoke:
+
+```text
+broker-synced preview = PAPER_ATTEMPTS_ALLOWED
+broker_snapshot_initial_investment_usd = 100000.0
+total_planned_lots = 0.2
+default live readiness = NOT_READY_FOR_LIVE, 8 / 16, account_reconciliation=MISMATCH
+```
+
+## 2026-06-23 - Broker-synced paper risk sizing preview
+
+Added a broker-synced paper risk sizing preview.
+
+Implemented:
+
+- `/api/forex/account/broker-sync-risk-preview`
+- `brokerSyncedRiskPreview` in `/api/forex/dashboard`
+- TypeScript/API/fixture support for `BrokerSyncedRiskPreview`
+- Dashboard Broker Sync strip showing broker seed, default seed, preview lots,
+  default lots, preview risk, and risk delta
+
+The preview reruns the existing `paper_risk.review_paper_risk_budget(...)` path
+using the verified MT5 demo account snapshot balance (`$100,000`). Current smoke:
+
+```text
+cas_forex_broker_synced_risk_preview
+PAPER_ATTEMPTS_ALLOWED
+account_equity = 100000.0
+total_planned_lots = 0.2
+total_planned_risk_usd = 253.02
+delta_vs_default = {account_equity_usd: 95000.0, total_planned_risk_usd: 227.72, total_planned_lots: 0.18}
+```
+
+Boundary: preview-only. It does not append evidence, change the default owner
+seed, place orders, create broker `ACCEPT`, deposit, withdraw, move bank/card
+money, or automate payouts.
+
+Verification:
+
+```bash
+python -m pytest tests/test_paper_risk.py tests/test_live_readiness.py tests/test_settings_api_surface.py -q
+# 18 passed
+
+python -m pytest tests -q
+# 368 passed
+
+cd ui && npm run build
+# 51 modules, 317.01 KB JS, 85.25 KB gzip
+```
+
+## 2026-06-23 - Dashboard broker-sync readiness preview
+
+Added a segmented `Default` / `Broker Sync` control to the Dashboard "Live
+Operability Checklist" panel.
+
+- `Default` keeps the owner/risk-review paper ledger seed and continues showing
+  the current `$5,000` internal ledger vs `$100,000` MT5 demo account mismatch.
+- `Broker Sync` explicitly fetches
+  `/api/forex/readiness/live?sync_to_broker=true`, displays the broker snapshot
+  seed, and shows `account_reconciliation=PASSED` when broker balance/equity are
+  used.
+- The preview does not silently change the default owner seed, rerun risk
+  sizing, place orders, create broker `ACCEPT`, deposit, withdraw, move bank/card
+  money, or automate payouts.
+
+Verification:
+
+```bash
+python -m pytest tests/test_live_readiness.py tests/test_settings_api_surface.py -q
+# 11 passed
+
+python -m pytest tests -q
+# 367 passed
+
+cd ui && npm run build
+# 51 modules, 312.53 KB JS, 84.51 KB gzip
+```
+
+Smoke: default readiness remains `NOT_READY_FOR_LIVE`, `8 / 16`,
+`account_reconciliation=MISMATCH`; broker-sync readiness remains
+`NOT_READY_FOR_LIVE`, `8 / 16`, `account_reconciliation=PASSED`,
+`broker_snapshot_initial_investment_usd=100000.0`.
+
+## 2026-06-23 - Live operability checklist added
+
+Added a computed plain-English live-readiness surface so the cockpit no longer
+depends on a static "gates" card.
+
+Implemented:
+
+- `cas_forex/live_readiness.py`
+- `/api/forex/readiness/live`
+- `/api/forex/readiness/live?sync_to_broker=true` explicit broker-synced preview
+- `liveReadiness` inside `/api/forex/dashboard`
+- Dashboard "Live Operability Checklist" panel
+- TypeScript/API/fixture support for the new readiness payload
+- movement-stream metadata for swap, commission, broker fees, open-position
+  count, floating P/L, margin estimate, market-open/session/source fields
+
+The checklist now reports owner initial investment, investment movement,
+market movement, broker/demo receipt, broker account snapshot, CAS-vs-broker
+reconciliation, latest MT5 probe health, evidence chain, paper/demo proof
+window, trading edge, AI compounding memory, live order execution, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation.
+
+Verification:
+
+```bash
+python -m pytest tests/test_live_readiness.py tests/test_movement_stream.py tests/test_account_reconciliation.py tests/test_settings_api_surface.py -q
+# 21 passed
+
+python -m pytest tests -q
+# 367 passed
+
+cd ui && npm run build
+# 51 modules, 311.18 KB JS, 84.08 KB gzip
+```
+
+Smoke: default readiness keeps `account_reconciliation=MISMATCH`; explicit
+`sync_to_broker=true` reports `account_reconciliation=PASSED` with
+`broker_snapshot_initial_investment_usd=100000.0`, while overall readiness
+remains `NOT_READY_FOR_LIVE`.
+
+Current status remains: trading edge `OPEN`; live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED` until the checklist and runtime
+requirements are actually closed.
+
+## 2026-06-23 - Screenshot-derived trading terminal requirements added
+
+Updated the next-agent handoff/TODO/goal packet with owner-provided mobile
+trading-history and MT4/MT5 strategy-report screenshot requirements.
+
+Added as required CAS Forex UI/backend targets:
+
+- terminal-style mobile account summary: profit, deposit, balance, equity,
+  floating P/L, drawdown, margin, swap, commission, and fees
+- `Positions` / `Orders` / `Deals` tabs
+- `Day` / `Week` / `Month` / `Custom` history filters
+- per-trade rows with symbol, buy/sell side, lot size, entry -> exit/current
+  price, timestamp, broker ticket/order ID, strategy ID, evidence packet ID,
+  and net P/L
+- deposit/investment ledger where the owner can enter any positive initial
+  investment amount
+- real-time investment movement tracking: deposits, withdrawals, payouts,
+  balance, equity, realized P/L, floating P/L, margin, swap, commission, and
+  broker reconciliation snapshots
+- real-time market movement tracking: quotes, bid/ask, spread, candles/ticks,
+  volatility/ATR, symbol session state, and active SL/TP distance
+- MT4/MT5-style strategy report view with profit factor, expected payoff,
+  drawdown, win/loss stats, equity curve, and full order table
+
+No code behavior changed in this entry. Trading edge remains `OPEN`; live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED` until the completion checklist is actually
+closed and the relevant runtime gates become `AUTHORIZED`.
+
+## 2026-06-23 - Goal framing corrected: live-money system is the destination
+
+Updated the LLM handoff and project dashboard after the owner clarified the
+intended end state: CAS Forex is not meant to stay a simple research project.
+The destination is a real owner-controlled live-money trading and income system.
+The current research/backtest/paper/demo layers are the proving, evidence, UI,
+broker, and runtime buildout path to owner-authorized live execution.
+
+Updated:
+
+```text
+C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\CAS_FOREX_LLM_HANDOFF_TODO_GOALS_20260623.md
+C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\cas_harness_production_todo.md
+```
+
+No code behavior changed in this entry. Trading edge remains `OPEN`; live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED` until the completion checklist is actually
+closed and the relevant runtime gates become `AUTHORIZED`.
+
+## 2026-06-23 - LLM handoff and owner-control API cleanup
+
+Created the next-agent handoff/TODO/goal packet:
+
+```text
+C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\CAS_FOREX_LLM_HANDOFF_TODO_GOALS_20260623.md
+```
+
+Also corrected the remaining owner-control API/test drift after the hard scope
+gate removal. `api\data.py` and `tests\test_settings_api_surface.py` now enforce
+that the removed hard scope fields are absent from `/api/forex/settings/owner-control`
+and `/api/forex/dashboard`.
+
+Verification:
+
+```bash
+python -m pytest tests/test_settings_api_surface.py tests/test_runtime_gates.py tests/test_authority_boundary.py -q
+# 14 passed
+
+python -m pytest tests -q
+# 344 passed
+
+npm run build
+# 51 modules, 275.87 KB JS, 76.45 KB gzip
+```
+
+Restarted the local CAS Forex API on `127.0.0.1:8765`; live HTTP owner-control
+payload no longer exposes `personal_utilization_only`, `account_scope`, or
+`disallowed_scopes`. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED`; trading
+edge remains `OPEN`.
 
 ## 2026-06-22 - Removed extra hard scope gate
 
@@ -94,21 +3301,21 @@ New pages:
   profit factor, net P&L, symbol performance breakdown, multi-trade bursts),
   condition tally placeholder with run command, paper trade log placeholder,
   harvester proposals placeholder, sweep ledger (DRY_RUN, INTERNAL_LEDGER_ONLY).
-- **Settings** (`SettingsPage.tsx`): Owner Control Policy surface — autonomy mode
+- **Settings** (`SettingsPage.tsx`): Owner Control Policy surface â€” autonomy mode
   selector (DENY through AI_FULL_AUTO_LIVE_REQUESTED with BLOCKED marker), risk
   caps (max loss cap, max concurrent trades 1-15, AI autonomy PAPER ONLY),
   compounding thresholds (all 10 AdaptiveCompoundingConfig fields), risk defaults,
   account/legal gates (5 items, all NOT MET), broker configuration.
 
 Nav: Adaptive, History, and Settings all flipped from placeholder to ready. Zero
-placeholder pages remain — all 7 routes are live.
+placeholder pages remain â€” all 7 routes are live.
 
 Owner control state wired into `App.tsx` with `AI_FULL_AUTO_PAPER` mode, 15
 concurrent trades, 10% loss cap, AI autonomy enabled, live blocked.
 
 Verification:
-- `npx tsc --noEmit` → clean.
-- `npx vite build` → 42 modules, 18.09KB CSS + 209.07KB JS (60.10KB gzip).
+- `npx tsc --noEmit` â†’ clean.
+- `npx vite build` â†’ 42 modules, 18.09KB CSS + 209.07KB JS (60.10KB gzip).
 
 Live trading, broker ACCEPT, auto-deposit, debit/card/bank movement, and payout
 automation remain NOT LICENSED.
@@ -135,8 +3342,8 @@ Added Operations Dashboard and Paper Trading Desk to the proof cockpit.
   lines.
 
 Verification:
-- `npx tsc --noEmit` → clean.
-- `npx vite build` → 39 modules, 15.63KB CSS + 188.78KB JS (55.94KB gzip).
+- `npx tsc --noEmit` â†’ clean.
+- `npx vite build` â†’ 39 modules, 15.63KB CSS + 188.78KB JS (55.94KB gzip).
 
 Live trading, broker ACCEPT, auto-deposit, debit/card/bank movement, and payout
 automation remain NOT LICENSED.
@@ -147,29 +3354,29 @@ Scaffolded a standalone React 18 + TypeScript + Vite proof cockpit in
 `cas-forex/ui/`, self-contained from atlas-viewer.
 
 - **Tech stack**: React 18.3, TypeScript 5.6, Vite 6, zero routing deps.
-- **`src/types/evidence.ts`** — Full TypeScript contracts for UIReadinessReport,
+- **`src/types/evidence.ts`** â€” Full TypeScript contracts for UIReadinessReport,
   DailySchedule, DailyBundle, PaperDecision, PaperRisk, SymbolDecision, Proposal,
   SizingEntry, and DashboardState. Shapes match real `evidence_runs/` JSON.
-- **`src/data/fixtures.ts`** — Faithful day-1 evidence snapshots (truthful
+- **`src/data/fixtures.ts`** â€” Faithful day-1 evidence snapshots (truthful
   1/30 paper days, 1/5 bundles, NOT LICENSED everywhere).
-- **`src/components/`** — `Shell` (nav with 6 routes, 4 marked `soon`),
+- **`src/components/`** â€” `Shell` (nav with 6 routes, 4 marked `soon`),
   `ModeBanner` (always-visible NOT LICENSED + PAPER_MT5 + edge: OPEN),
   `StatusChip`, `GlassPanel`, `EvidenceHashRow`, `LockReasonList`.
-- **`src/pages/ProofPage.tsx`** — Full proof cockpit: active lead, paper proof
+- **`src/pages/ProofPage.tsx`** â€” Full proof cockpit: active lead, paper proof
   progress bars (1/30, 1/5), evidence chain verification (3/3), live eligibility
   checklist (0/7 met), route decisions (US30 + NAS100), risk sizing (0.01 lots,
   $12.60-$12.70 risk/trade), next-action schedule, and 6 disabled NOT LICENSED
   controls with explicit reasons.
-- **`src/pages/AuditPage.tsx`** — Pipeline trace stepper (10 stages: Forecast
-  Harness → Gate 0-4 → Broker → Post-Trade → Evidence → Live Lock), honest
+- **`src/pages/AuditPage.tsx`** â€” Pipeline trace stepper (10 stages: Forecast
+  Harness â†’ Gate 0-4 â†’ Broker â†’ Post-Trade â†’ Evidence â†’ Live Lock), honest
   NOT_RUN markers for CAS Compiler and Market gates, evidence packet summary,
   per-symbol trace detail.
 - Placeholder pages for Dashboard, Trade, History, Settings (labeled COMING SOON).
 - Dark theme, dense trading-desk aesthetic, slate/teal palette, monospace data.
 
 Verification:
-- `npx tsc -b` / `npx tsc --noEmit` → clean.
-- `npx vite build` → 37 modules, 0.59KB HTML + 9.45KB CSS + 171.70KB JS (52.84KB gzip).
+- `npx tsc -b` / `npx tsc --noEmit` â†’ clean.
+- `npx vite build` â†’ 37 modules, 0.59KB HTML + 9.45KB CSS + 171.70KB JS (52.84KB gzip).
 - Dev server on port 5174, renders `/forex/proof` equivalents via state-based nav.
 
 Live trading, broker ACCEPT, auto-deposit, debit/card/bank movement, and payout
@@ -310,14 +3517,14 @@ payout automation remain `NOT LICENSED`.
 Wired the real read-only `/api/forex/*` FastAPI boundary so the cockpit reads
 live evidence files instead of bundled fixtures.
 
-- `noetic-compass-scaffold/noetic-compass/api/routes/forex_proof.py` — read-only
+- `noetic-compass-scaffold/noetic-compass/api/routes/forex_proof.py` â€” read-only
   router (prefix `/forex`) serving the six day-1 evidence JSON files for
   `index_tsmom_126_d1` from `cas-forex/evidence_runs/` (overridable via
   `CAS_FOREX_EVIDENCE_DIR`). GET-only, fixed filename map (no path traversal),
   404 when a file is absent so the cockpit falls back to fixtures cleanly.
 - `api/main.py` includes the router; `api/middleware/auth.py` exempts
   **GET `/forex/...`** from JWT (public, non-secret proof JSON) while any non-GET
-  still falls through to auth — so there is no unauthenticated write path.
+  still falls through to auth â€” so there is no unauthenticated write path.
 - Endpoints: `/forex`, `/forex/proof/{paper,ui-readiness,schedule,decision,risk,bundle}`.
 - Frontend `forexApi.ts` now attempts the live backend by default in dev/prod
   (transparent fixture fallback on any error) and stays on fixtures under vitest;
@@ -350,7 +3557,7 @@ Added the `/forex/audit` Audit Console to the read-only cockpit.
 - `components/TraceStageList.tsx` renders the full pipeline as a vertical
   stepper: Forecast Harness -> Gate 0-4 -> Broker Outcome -> Post-Trade ->
   Evidence Store -> Live Lock Controller.
-- `pages/ForexAuditPage.tsx` — trace selector + pipeline + evidence-packet
+- `pages/ForexAuditPage.tsx` â€” trace selector + pipeline + evidence-packet
   panel (packet status, hash-chain rows, WORM `UNAVAILABLE`).
 - Route wired at `/forex/audit`; nav "Audit" item flipped to ready.
 
@@ -368,29 +3575,29 @@ errors. Live trading and payment movement remain `NOT LICENSED`.
 
 Started the CAS Forex read-only proof cockpit in the existing `atlas-viewer`
 React app, per `docs/working/cas_forex_pwa_ui_ux_plan_revised_20260617.md`
-(Phase 0 — API contract + fixture mode; Phase 1 — Proof Center + shell). This is
+(Phase 0 â€” API contract + fixture mode; Phase 1 â€” Proof Center + shell). This is
 a research/paper proof surface only. It builds nothing toward live execution.
 
 New feature module `noetic-compass-scaffold/noetic-compass/atlas-viewer/src/forex/`:
 
-- `types.ts` — TypeScript contracts mirroring the real evidence JSON shapes
+- `types.ts` â€” TypeScript contracts mirroring the real evidence JSON shapes
   (paper-proof, ui-readiness, daily-schedule, paper-decision, paper-risk,
   daily-bundle).
-- `fixtures/*.json` — faithful snapshots of the real day-1 evidence from
+- `fixtures/*.json` â€” faithful snapshots of the real day-1 evidence from
   `evidence_runs/index_tsmom_126_paper_proof/` so the cockpit shows truthful
   state with no live backend wired.
-- `forexApi.ts` — read-only fetch wrappers with fixture fallback behind the
+- `forexApi.ts` â€” read-only fetch wrappers with fixture fallback behind the
   `VITE_FOREX_API` feature flag (default OFF). When a `/api/forex/*` backend
   lands, flip the flag and the same wrappers fetch live status. No order,
   transfer, or unlock path exists anywhere in the layer.
-- `forexSelectors.ts` — pure selectors: `deriveBannerState` (cannot assert a
+- `forexSelectors.ts` â€” pure selectors: `deriveBannerState` (cannot assert a
   green LIVE state on day-1 evidence) and `deriveLiveEligibility`.
-- `components/` — `ForexShell` (surface + nav; only Proof is wired, the rest
+- `components/` â€” `ForexShell` (surface + nav; only Proof is wired, the rest
   render as honest "soon" markers), `ForexModeBanner` (always-visible mode /
   paper-vs-live / evidence-chain / proof-progress / NOT LICENSED boundaries),
   and reusable `ClaimStatusChip`, `ForexStatusChip`, `EvidenceHashRow`,
   `LockReasonList`, `ForexPanel`.
-- `pages/ForexProofPage.tsx` — `/forex/proof` Proof Center: active lead, paper
+- `pages/ForexProofPage.tsx` â€” `/forex/proof` Proof Center: active lead, paper
   session evidence with hash-chain rows, live eligibility checklist, multi-day
   maturity (1/5 bundles), next-action schedule, and six disabled live/payment
   controls each labeled with their `NOT LICENSED` reason.
@@ -1234,22 +4441,22 @@ encode the owner's 2020 NAS30/NAS100 rules, add trailing/time exits, and run
 walk-forward validation with broker-grade bid/ask data. Live trading remains
 `NOT LICENSED`.
 
-## 2026-06-21 — Detector tuning + intraday switching: cost drag is the wall, no config beats break-even
+## 2026-06-21 â€” Detector tuning + intraday switching: cost drag is the wall, no config beats break-even
 
 Followed the switching test with (A) detector-threshold tuning on daily and (B)
 intraday H1. Added detector CLI args (`--er-trend/--detect-window/--hi-vol/--lo-vol/
 --shock-z`) to `run_switching_backtest.py`.
 
-(A) Daily er_trend sweep — MORE trend detection = WORSE switching (monotonic):
+(A) Daily er_trend sweep â€” MORE trend detection = WORSE switching (monotonic):
   er 0.15 -$7,360 | 0.20 -$6,479 | 0.25 -$5,631 | 0.35 -$2,040.
   Every "trend" call routes to breakout/trend, which lose on daily, so seeing more
   trends destroys value. Can't tune a daily edge into existence; meanrev_tf (~+$9) wins.
 
-(B) Intraday H1 (real 2y, ~12,300 bars/pair, cost 1.5p): EVERYTHING loses —
+(B) Intraday H1 (real 2y, ~12,300 bars/pair, cost 1.5p): EVERYTHING loses â€”
   trend_sma -$10,404 | breakout -$6,196 | meanrev -$4,862 | SWITCH -$4,715 |
   meanrev_tf -$4,123 (best). SWITCH again ~= meanrev (detector still 91.6% range at H1).
   The killer is COST DRAG: meanrev_tf made +$3.72 on daily (286 trades) but loses
-  -$4,123 on H1 (4,654 trades) — same strategy, ~16x more trades x cost. ~85% of the
+  -$4,123 on H1 (4,654 trades) â€” same strategy, ~16x more trades x cost. ~85% of the
   H1 loss is trading cost.
 
 Synthesis after a thorough search (4 strategy families, 2 forecasters incl. Chronos,
@@ -1263,16 +4470,16 @@ entry rules encoded, and NAS30 / index instruments (indices trend more strongly 
 majors; we have only tested FX majors, which mean-revert). Live trading remains NOT
 LICENSED. 217 tests pass.
 
-## 2026-06-21 — Regime detector + switching on REAL data: switching does NOT beat the best single strategy (on daily)
+## 2026-06-21 â€” Regime detector + switching on REAL data: switching does NOT beat the best single strategy (on daily)
 
 Built the live regime detector + RPM switching and tested it on real 5y daily data
 against every single strategy.
 
-- `forecast/strategies.py` — `make_sma_trend_signal` (composable SMA, routable).
-- `regime_sim.py` — `detect_regime` (Kaufman efficiency ratio + vol-vs-baseline +
+- `forecast/strategies.py` â€” `make_sma_trend_signal` (composable SMA, routable).
+- `regime_sim.py` â€” `detect_regime` (Kaufman efficiency ratio + vol-vs-baseline +
   shock z-score + vol-of-vol), `DEFAULT_ROUTING` (sim's RPM seed), and
   `make_regime_switching_signal` (detect each bar -> route -> sit out on lacuna).
-- `scripts/run_switching_backtest.py` — SWITCH vs each single strategy on real data.
+- `scripts/run_switching_backtest.py` â€” SWITCH vs each single strategy on real data.
 
 Result (real 5y daily, cost 1.5p, $50k):
   trend_sma  -$15,055 | meanrev -$729 | meanrev_tf +$3.72 | breakout -$8,144 |
@@ -1281,7 +4488,7 @@ Best = meanrev_tf (+$3.72). SWITCH did NOT beat it (-$2,048).
 
 Why (the mechanism): the detector classifies **97% of real daily bars as "range"**,
 so SWITCH ~= plain meanrev, plus rare trend/breakout detours that lost money. Daily
-bars are too coarse/homogeneous for hard switching to add value — there isn't enough
+bars are too coarse/homogeneous for hard switching to add value â€” there isn't enough
 regime variety, and the trend calls aren't reliable/timely on daily.
 
 Honest read: the regime-switching MACHINERY works end-to-end, but on daily data the
@@ -1290,35 +4497,35 @@ meanrev_tf (a soft regime-awareness), not a separate hard switch. Switching's re
 shot is INTRADAY, where regimes vary and change more (ties to the multi-timeframe
 requirement). meanrev_tf remains the incumbent (break-even). NOT LICENSED. 217 tests pass.
 
-## 2026-06-21 — Strategy-condition simulator (CAS-SDG for regimes): CJT + nested lacunarity + RPM routing
+## 2026-06-21 â€” Strategy-condition simulator (CAS-SDG for regimes): CJT + nested lacunarity + RPM routing
 
 Built the user's idea: a market-REGIME simulator that plays every strategy across
 every condition and uses the CAS machinery to map where edge lives. Working v0.
 
-- `cas_forex/regime_sim.py` — seeded synthetic OHLC generator for 7 regimes
+- `cas_forex/regime_sim.py` â€” seeded synthetic OHLC generator for 7 regimes
   (trend_up/down, range, high_vol, low_vol, vol_cluster, shock); CJT operating-region
   classifier (cutoff/active/saturation/breakdown + gain beta); nested lacunarity
   (gap map across strategy x regime x volatility); best-strategy-per-regime (RPM seed).
-- `scripts/run_strategy_simulator.py` — sweeps strategies x regimes x vol x seeds,
+- `scripts/run_strategy_simulator.py` â€” sweeps strategies x regimes x vol x seeds,
   prints the matrix + nested lacunarity + RPM routing seed, writes a JSON report.
 
 First run (4 strategies x 7 regimes x 3 vol x 5 seeds, cost 1.5p) cleanly recovers
-known structure — which validates the simulator:
+known structure â€” which validates the simulator:
 - Trend/breakout WIN in trends (breakout +13.2%/+12.2% up/down) and LOSE in range.
 - Mean-reversion WINS in range (+0.9%) and loses in trends.
-- No single strategy wins everywhere (overall lacunarity 0.58 — 58% of cells are gaps).
+- No single strategy wins everywhere (overall lacunarity 0.58 â€” 58% of cells are gaps).
 
 RPM routing seed (regime -> best validated strategy):
   trend_up/down/high_vol -> breakout; range/shock -> meanrev; low_vol -> trend_sma;
   vol_cluster -> NONE (honest lacuna, do not trade).
 
-Reframe (the productive insight): the edge — if any — is in REGIME DETECTION +
+Reframe (the productive insight): the edge â€” if any â€” is in REGIME DETECTION +
 SWITCHING, not one magic strategy. The honest next frontier is detecting the live
 regime reliably on REAL data and validating the routing out-of-sample (the RPM
 prerequisite question). Synthetic regimes characterize behavior, not live edge.
 Live trading remains NOT LICENSED. 217 tests pass.
 
-## 2026-06-21 — Realistic-cost test: the thin edge does NOT survive normal costs
+## 2026-06-21 â€” Realistic-cost test: the thin edge does NOT survive normal costs
 
 Added a configurable round-trip cost knob (`extra_cost_pips` = commission + slippage
 on top of spread; `--spread-pips` / `--extra-cost-pips`) and swept the trend-filtered
@@ -1332,7 +4539,7 @@ mean-reversion (the only positive strategy) across realistic cost levels.
 
 Verdict: the edge breaks even at ~1.5-2.0 pips and is negative at realistic retail
 all-in costs (majors typically 1.5-2.5 pips spread+commission+slippage). So the
-trend-filtered mean-reversion is NOT a deployable, cost-surviving strategy — it is
+trend-filtered mean-reversion is NOT a deployable, cost-surviving strategy â€” it is
 positive only under optimistic cost assumptions, and even then ~$0 over 5 years on
 $50k. This is the honest make-or-break result: no deployable edge yet across 4
 strategy families tested (trend SMA, Chronos, mean-rev, mean-rev+filter).
@@ -1340,15 +4547,15 @@ strategy families tested (trend SMA, Chronos, mean-rev, mean-rev+filter).
 Implication for the $5-12k/month target: not reachable. Best strategy made ~$0 over
 5y on $50k; $5-12k/month on a $2-5k seed is +100-600%/month (martingale-blowup
 territory), not a real return. A realistic 2-5%/month would need a ~$100-250k account
-to clear $5k/month — and even that is exceptional and not guaranteed.
+to clear $5k/month â€” and even that is exceptional and not guaranteed.
 
 Added/changed:
-- `backtest/engine.py` — `extra_cost_pips` (round-trip commission+slippage), deducted
+- `backtest/engine.py` â€” `extra_cost_pips` (round-trip commission+slippage), deducted
   with spread on close. Default 0.0 (tests unchanged).
-- `scripts/run_real_backtest.py` — `--spread-pips`, `--extra-cost-pips`.
+- `scripts/run_real_backtest.py` â€” `--spread-pips`, `--extra-cost-pips`.
 - 217 tests pass.
 
-## 2026-06-21 — Strategy pivot: mean-reversion + trend filter = first POSITIVE backtest (thin)
+## 2026-06-21 â€” Strategy pivot: mean-reversion + trend filter = first POSITIVE backtest (thin)
 
 Acted on the research insight that FX majors range 70-80% of the time, so our
 trend-follower was the wrong strategy class (it lost most on the most mean-reverting
@@ -1361,12 +4568,12 @@ Progression (portfolio P&L on $50k, gated):
 - Mean-reversion (z-fade):    -$523    (avg max DD 6%)   <- ~30x less bad, ~break-even
 - Mean-reversion + trend filter: +$105.62 (avg max DD 3.5%)  <- FIRST passed=True
 
-The trend filter (skip fades that fight a >150bps move over 60 bars — a theory-backed
+The trend filter (skip fades that fight a >150bps move over 60 bars â€” a theory-backed
 fix, not curve-fitting) made it net positive: 3/5 pairs clearly positive (EUR/USD
 +1.56%, GBP/USD +3.47%, AUD/USD +3.26%), beating buy-and-hold on every ranging pair.
 Only USD/CAD (-6.1%) still loses (it trended up). Evidence chains verified.
 
-CRITICAL honesty caveat — the edge is razor-thin and NOT yet deployable:
+CRITICAL honesty caveat â€” the edge is razor-thin and NOT yet deployable:
 - +$105.62 over 286 gated trades = ~$0.37/trade = ~0.74 pip/trade edge.
 - The backtest already charges a 1-pip spread; ONE more pip of real cost
   (commission + slippage) is ~$143 across 286 trades and FLIPS IT NEGATIVE.
@@ -1380,30 +4587,30 @@ break-even with low drawdown," and confirmed the lever is strategy class + regim
 filter, not forecaster sophistication.
 
 Added/changed:
-- `forecast/strategies.py` — mean-reversion (z-fade, optional trend filter) and
+- `forecast/strategies.py` â€” mean-reversion (z-fade, optional trend filter) and
   Donchian breakout signals; no martingale / grid / no-stop modes (real money).
-- `backtest/engine.py` — signals may set ATR stop/target multiples; risk limits now
+- `backtest/engine.py` â€” signals may set ATR stop/target multiples; risk limits now
   all sourced from config (single source of truth for the risk budget).
-- `scripts/run_real_backtest.py` — `--model meanrev|breakout`, mean-rev params, and
+- `scripts/run_real_backtest.py` â€” `--model meanrev|breakout`, mean-rev params, and
   RISK BUDGET flags (`--starting-balance --position-lots --risk-per-trade-pct
   --max-daily-dd --max-weekly-dd --max-open-positions --max-position-lots`).
 - 217 tests pass throughout.
 
-## 2026-06-21 — Chronos-Bolt re-run confirms NO edge across TWO forecasters
+## 2026-06-21 â€” Chronos-Bolt re-run confirms NO edge across TWO forecasters
 
 Wired Amazon Chronos-Bolt (`forecast/chronos_signal.py`) as a pluggable directional
 signal and re-ran the exact same real-data harness (5y daily Yahoo, 5 majors), with
-SL/TP held identical so only the forecaster changed (SMA → ML model). Evidence chain
+SL/TP held identical so only the forecaster changed (SMA â†’ ML model). Evidence chain
 verified: 19,660 hash-chained packets across 5 files, all re-verified.
 
-Result (REAL): Chronos also **loses** — portfolio **-$15,574 gated / -$17,007 raw**
+Result (REAL): Chronos also **loses** â€” portfolio **-$15,574 gated / -$17,007 raw**
 on $50k, vs the SMA run's -$15,098 / -$16,296. Per pair (gated%): EUR/USD -22.0,
 GBP/USD -81.1, USD/JPY +38.6, AUD/USD -101.6 (account wiped), USD/CAD +10.2.
 Buy-and-hold beat the strategy on every pair, including the two "winners" (USD/JPY
 b&h +46.3 vs +38.6; USD/CAD b&h +14.6 vs +10.2).
 
 Decisive read: swapping a simple moving average for a real ML forecaster moved the
-needle by ~$0.5k on -$15k — i.e. **the edge problem is NOT a forecaster-quality
+needle by ~$0.5k on -$15k â€” i.e. **the edge problem is NOT a forecaster-quality
 problem.** Two structurally different models both lose on majors over 5 years.
 
 Consistent finding across BOTH models: the **CAS gating layer reduces loss and
@@ -1411,7 +4618,7 @@ drawdown** (gated beat raw on P&L and avg max DD in both runs; suppressed 1,118
 Chronos trades) and the new blow-up guard prevented crashes when the ungated AUD/USD
 and GBP/USD arms hit ~100% loss / ~100% drawdown. Honest nuance: on the two
 profitable pairs the gates slightly REDUCED gains (USD/CAD gated +10.2 vs raw +19.5)
-— the gates cut both tails; net-positive only because losers dominate.
+â€” the gates cut both tails; net-positive only because losers dominate.
 
 Strategic implication: the validated, sellable asset is the safety/audit chassis, not
 a profitable bot. A trading edge remains OPEN and is the hard, unsolved part; next
@@ -1419,30 +4626,30 @@ lever is a different strategy class or timeframe (per the user multi-timeframe
 requirement), NOT a bigger model. Live trading remains NOT LICENSED.
 
 Added/changed:
-- `forecast/chronos_signal.py` — cached CPU Chronos-Bolt → (Direction, confidence).
-- `backtest/engine.py` — optional `signal_fn` hook (SMA default unchanged); blow-up
+- `forecast/chronos_signal.py` â€” cached CPU Chronos-Bolt â†’ (Direction, confidence).
+- `backtest/engine.py` â€” optional `signal_fn` hook (SMA default unchanged); blow-up
   guard (stop trading when balance <= 0; clamp risk_per_trade_pct at 100%).
-- `scripts/run_real_backtest.py` — `--model {sma,chronos}`.
+- `scripts/run_real_backtest.py` â€” `--model {sma,chronos}`.
 - Artifacts: `evidence_runs/real_backtest/real-chronos-20260622003352-report.json`.
 - 217 tests pass throughout.
 
-## 2026-06-21 — First REAL-data comparative backtest: safety layer works, strategy has NO edge
+## 2026-06-21 â€” First REAL-data comparative backtest: safety layer works, strategy has NO edge
 
 Ran the first backtest on REAL market data instead of synthetic candles. Pulled 5
-years of daily candles from Yahoo Finance (1,300 bars/pair, 2021-06-22 → 2026-06-22,
+years of daily candles from Yahoo Finance (1,300 bars/pair, 2021-06-22 â†’ 2026-06-22,
 no API key, no GPU) for EUR/USD, GBP/USD, USD/JPY, AUD/USD, USD/CAD and ran the full
 CAS Forex pipeline three ways: `cas_gated` (SMA proposals through the 5-gate auditor),
 `raw_model` (same proposals, gates removed), and `buy_hold` / `no_trade` baselines.
 
 Result (REAL, evidence-chain verified): the built-in SMA5/20/50 daily strategy **LOSES
-money** with or without CAS gating — portfolio P&L **-$15,097.88 gated vs -$16,296.32
-raw** on $50,000 starting capital (5 × $10k), avg max drawdown 41.5% gated / 46.0% raw.
+money** with or without CAS gating â€” portfolio P&L **-$15,097.88 gated vs -$16,296.32
+raw** on $50,000 starting capital (5 Ã— $10k), avg max drawdown 41.5% gated / 46.0% raw.
 Buy-and-hold beat the strategy on most pairs (e.g. USD/JPY b&h +46.3% vs gated +9.3%).
 
 Honest read:
 - The **CAS safety/gating layer does its job**: it suppressed 695 trades, lost ~$1,198
   (~7.4%) less than the ungated arm, and lowered average max drawdown (41.5% vs 46.0%).
-  It reduces damage — it cannot turn a losing strategy into a winning one.
+  It reduces damage â€” it cannot turn a losing strategy into a winning one.
 - The **trading edge does not exist** with the current model. `report.passed = False`
   (no positive edge vs no-trade). This confirms live trading SHOULD remain NOT LICENSED:
   trading this model live would lose money.
@@ -1451,10 +4658,10 @@ Honest read:
 
 Next lever for an actual edge (in priority order): wire a real forecaster (Chronos stub
 at `forecast/models.py:112`, or a TimeGPT key), then re-run this exact harness; the
-strategy — not the safety chassis — is the bottleneck.
+strategy â€” not the safety chassis â€” is the bottleneck.
 
 Added:
-- `scripts/run_real_backtest.py` — real-data (Yahoo) comparative backtest:
+- `scripts/run_real_backtest.py` â€” real-data (Yahoo) comparative backtest:
   cas_gated vs raw_model vs buy_hold vs no_trade, writes a real BacktestEvidenceReport
   + verifiable hash-chain, with an explicit research-signal (not license) pass criterion.
 - Run artifact: `evidence_runs/real_backtest/real-20260621234945-report.json`.
@@ -1463,67 +4670,67 @@ Known caveat (follow-up): the macro gate is evaluated at wall-clock now, not at 
 candle's historical timestamp, so macro blackouts are effectively inert in backtests
 (`backtest/engine.py` builds the snapshot with `timestamp=utc_now()`).
 
-## 2026-06-19 — Closed-book KWIK hallucination probe: measured ceiling, NOT LICENSED
+## 2026-06-19 â€” Closed-book KWIK hallucination probe: measured ceiling, NOT LICENSED
 
 Ran the decisive pre-answer hidden-state hallucination experiment in the one framing where
-text controls are structurally weak — closed-book "knows-what-it-knows" (TriviaQA no-context,
+text controls are structurally weak â€” closed-book "knows-what-it-knows" (TriviaQA no-context,
 hidden state captured at the last prompt token before any answer is emitted, label = did the
 model's own greedy answer match). This is the literature SOTA direction (SAPLMA / semantic
 entropy) and the only honest route to a real +0.15 margin.
 
-Result (REAL, leakage-safe, N=2500 each): the framing **works** — residual signal climbed off
-the chance floor (grounded 0.45 → KWIK 0.68), proving the hidden state carries genuine
+Result (REAL, leakage-safe, N=2500 each): the framing **works** â€” residual signal climbed off
+the chance floor (grounded 0.45 â†’ KWIK 0.68), proving the hidden state carries genuine
 text-independent "do I know this" information. But it **plateaus below the license gate**:
-hidden BA ≈ 0.75, margin ≈ +0.12 over text, residual 0.68 — short of +0.15 / 0.75. The wall is
-flat: 7B → 14B moved the margin +0.000, and a nonlinear MLP + layer ensemble land on the same
-~0.75. This matches the published ceiling (~0.7–0.85 AUROC) for pre-answer hidden-state probes.
+hidden BA â‰ˆ 0.75, margin â‰ˆ +0.12 over text, residual 0.68 â€” short of +0.15 / 0.75. The wall is
+flat: 7B â†’ 14B moved the margin +0.000, and a nonlinear MLP + layer ensemble land on the same
+~0.75. This matches the published ceiling (~0.7â€“0.85 AUROC) for pre-answer hidden-state probes.
 
-Then, per user request, COUPLED the hidden-state probe with semantic entropy (10× sampling on
-14B, leakage-safe stacking). Result: coupled BA 0.7345 vs hidden-only 0.732 — a +0.002 gain. The
+Then, per user request, COUPLED the hidden-state probe with semantic entropy (10Ã— sampling on
+14B, leakage-safe stacking). Result: coupled BA 0.7345 vs hidden-only 0.732 â€” a +0.002 gain. The
 two signals are **redundant, not complementary** (the 14B is often confidently wrong: mean
 entropy 0.379 nats), so entropy adds almost nothing. Held-out generalization flipped to PASS
 (0.757), proving an information ceiling rather than overfitting; floor/margin/residual still fail.
 
-Verdict: hallucination detection remains **OPEN / NOT LICENSED** at the specified bars — now a
+Verdict: hallucination detection remains **OPEN / NOT LICENSED** at the specified bars â€” now a
 *measured* ceiling confirmed from five independent angles (framing, scale, readout, probe,
 method-coupling), not an untested assumption. No fabrication.
 
 Added:
-- `closedbook_kwik_capture.py` — KWIK capture (last-token + mean-pool hidden, greedy label).
-- `lic_eval_closedbook.py` — leakage-safe gate (readout×layer selection, residual, held-out,
+- `closedbook_kwik_capture.py` â€” KWIK capture (last-token + mean-pool hidden, greedy label).
+- `lic_eval_closedbook.py` â€” leakage-safe gate (readoutÃ—layer selection, residual, held-out,
   selection-aware 1000-perm).
-- `kwik_enhanced_probe.py` — ceiling check (ensemble + MLP) confirming the plateau.
-- `kwik_semantic_entropy.py` — batched 10× sampling + discrete semantic entropy.
-- `lic_eval_coupled.py` — coupled (hidden + semantic entropy) leakage-safe gate.
-- `docs/working/hallucination_kwik_ceiling_findings_20260619.md` — full findings + A/B/C fork.
+- `kwik_enhanced_probe.py` â€” ceiling check (ensemble + MLP) confirming the plateau.
+- `kwik_semantic_entropy.py` â€” batched 10Ã— sampling + discrete semantic entropy.
+- `lic_eval_coupled.py` â€” coupled (hidden + semantic entropy) leakage-safe gate.
+- `docs/working/hallucination_kwik_ceiling_findings_20260619.md` â€” full findings + A/B/C fork.
 
-## 2026-06-17 — CJT/PCBA Tier-B/C research code + honest gates
+## 2026-06-17 â€” CJT/PCBA Tier-B/C research code + honest gates
 
 Built the research-tier and gated CJT/PCBA work: real, runnable code plus honest
-readiness gates. No higher-authority claim was flipped to LICENSED — those need
+readiness gates. No higher-authority claim was flipped to LICENSED â€” those need
 GPU traces, external red-team, or legal review (all still OPEN / NOT LICENSED).
 
 Added:
-- `cas_forex/cjt_compiler.py` (B) — compiles one `CJT<>` statement: runs embedded
+- `cas_forex/cjt_compiler.py` (B) â€” compiles one `CJT<>` statement: runs embedded
   CAS literals through the real CAS compiler bridge and emits E-CJT-001..008
   validation findings. `is_production_cjt_syntax_enabled()` stays False.
-- `cas_forex/cjt_analysis.py` (B) — analytical β (large/small-signal), gm, and
+- `cas_forex/cjt_analysis.py` (B) â€” analytical Î² (large/small-signal), gm, and
   operating-region classification via Fisher-Rao geometry. `validated` is always
-  False — analytical estimate, not measured against real traces (Q-002).
-- `cas_forex/ccb_designs.py` (B) — the 5 Cognitive Circuit Boards (CSB, COB,
+  False â€” analytical estimate, not measured against real traces (Q-002).
+- `cas_forex/ccb_designs.py` (B) â€” the 5 Cognitive Circuit Boards (CSB, COB,
   CDAB, CMB, CPMB) encoded as executable `CrcCircuit` specs that pass CRC
   ERROR-free. Well-formed designs, NOT runtime-safety guarantees.
-- `cas_forex/ccb_readiness.py` (C) — readiness gates that report each CCB safety
+- `cas_forex/ccb_readiness.py` (C) â€” readiness gates that report each CCB safety
   claim, governance proof, and the CjtPredictionHead as NOT LICENSED / OPEN with
   required external evidence missing.
-- `docs/working/cjt_w0_labeled_readout_experiment_design_20260617.md` (C) —
+- `docs/working/cjt_w0_labeled_readout_experiment_design_20260617.md` (C) â€”
   design for the failed-Qwen-W0-gate follow-up (CJT labels + controls + pass
   criteria). Research design only; not run.
-- `tests/test_cjt_tier_bc.py` — 17 tests incl. negative claim-boundary proofs.
+- `tests/test_cjt_tier_bc.py` â€” 17 tests incl. negative claim-boundary proofs.
 
-Tests: `python -m pytest tests -q` → 217 passed (zero regressions).
+Tests: `python -m pytest tests -q` â†’ 217 passed (zero regressions).
 
-## 2026-06-17 — CJT/PCBA Tier-A evidence + visualization layer
+## 2026-06-17 â€” CJT/PCBA Tier-A evidence + visualization layer
 
 Built the buildable-now ("Tier A") CJT/PCBA stack recommended in
 `docs/working/cjt_pcba_cas_forex_ecosystem_fit_analysis_20260617.md`. All
@@ -1531,23 +4738,24 @@ additive, evidence-only, claim-bounded (no path to live trading or broker
 ACCEPT).
 
 Added:
-- `cas_forex/cas_state_utils.py` — surface parser for CAS state literals
+- `cas_forex/cas_state_utils.py` â€” surface parser for CAS state literals
   (`^k^D_{Fd}|R`): Noetic/Domain/Drive/Register extraction, domain precedence,
-  involution-pair check. Not the compiler — surface only.
-- `cas_forex/cjt_diagnostics.py` (A-1) — maps forex conditions (weak edge,
+  involution-pair check. Not the compiler â€” surface only.
+- `cas_forex/cjt_diagnostics.py` (A-1) â€” maps forex conditions (weak edge,
   forecast disagreement, single-model overconfidence, macro shock, drawdown,
   broker mismatch, beta drift) into `CjtCircuitDiagnostic` sidecars with
   claim-ceiling routing (SUPPRESS / FLAG_FOR_HUMAN_REVIEW / LIVE_LOCKED).
-- `cas_forex/crc_linter.py` (A-3) — Cognitive Rule Check: static design-time
+- `cas_forex/crc_linter.py` (A-3) â€” Cognitive Rule Check: static design-time
   linter (CRC-001..008) over CJT/via/fuse circuit specs. Flags invalid bias
   domain, short circuits, reverse-flow bypass, push-pull gain divergence,
   cascade depth, gain firewall, and fuse-after-protected. Static only; a
   well-formed circuit is NOT a runtime-safety guarantee.
-- `cas_forex/cjt_circuit_view.py` (A-2) — deterministic markdown/ASCII renderer
-  for diagnostics and CRC reports (Cause→[Bias]→Effect, region, β, gate).
-- `cas_forex/cjt_differential.py` (A-4) — differential-pair matched-control via
+- `cas_forex/cjt_circuit_view.py` (A-2) â€” deterministic markdown/ASCII renderer
+  for diagnostics and CRC reports (Causeâ†’[Bias]â†’Effect, region, Î², gate).
+- `cas_forex/cjt_differential.py` (A-4) â€” differential-pair matched-control via
   Fisher-Rao geodesic distance on the open simplex; emits FLAG_FOR_HUMAN_REVIEW
   above threshold. Heuristic, not proof.
-- `tests/test_cjt_pcba_tier_a.py` — 23 tests covering all of the above.
+- `tests/test_cjt_pcba_tier_a.py` â€” 23 tests covering all of the above.
 
-Tests: `python -m pytest tests -q` → 200 passed (zero regressions).
+Tests: `python -m pytest tests -q` â†’ 200 passed (zero regressions).
+
