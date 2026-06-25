@@ -1,5 +1,58 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - Bot role corrected: understanding window, NOT trade advisor
+
+Followup correction to the MTF monitor entry below, which framed
+`find_tradeable_symbols` as "the operator's 'what should I act on now'
+answer." That framing is wrong: surfacing trade picks to the operator
+through the LLM bot reintroduces the exact emotional / anxiety-driven
+decision loop the agent autonomy exists to eliminate.
+
+CAS Forex has two interaction surfaces and they serve different roles:
+
+1. **The agent cycle** trades autonomously on the operator's account.
+   Its explicit purpose is to REMOVE detrimental trading psychology —
+   anxiety-driven, emotional, in-the-moment decisions — from the
+   operator's loop. The agent picks what to trade. The operator does not.
+2. **The LLM bot** is an EDUCATOR + WINDOW into the system's reasoning.
+   It helps the operator UNDERSTAND what the system is doing and why.
+   It is NOT a trade advisor, NOT a trade picker, NOT an oracle to query
+   for trade decisions.
+
+Fixed:
+
+- `cas_forex/cas_forex_llm_bot.py` — `SYSTEM_PROMPT` rewritten. The bot
+  is now framed as "an educator and a window into the system's
+  reasoning." Good question categories listed explicitly: "Why did the
+  agent trade X?" / "How does Strategy Y work?" / "What's a runtime
+  gate?" / "What's the system doing right now?" / "How does the agent
+  decide what to trade?". The bot MUST redirect "what should I trade?"
+  / "is this a good entry?" / "what's hot right now?" — those are the
+  exact emotional prompts the agent autonomy exists to defuse.
+
+Internal primitives like `find_tradeable_symbols` in
+`cas_forex/mtf_monitor.py` are AGENT-CYCLE primitives, not user-facing
+tools. They power the agent's autonomous selection logic. They will
+NOT be wired as `BotCapability` entries for the LLM bot to call —
+contrary to the "Not built in this slice" note in the MTF monitor
+entry below.
+
+Runtime safety surface unchanged: `requires_confirm=True`, Stage 3
+validator, runtime gates. Only the LLM bot's CONVERSATIONAL role is
+constrained to understanding. The agent cycle, MT5 execution path,
+broker bridge, and strategy dev queue still trade autonomously on the
+operator's behalf — that's the whole point.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests -q
+# 573 passed (no regressions; system-prompt-only change).
+```
+
+Saved as a durable feedback memory so this constraint survives future
+sessions.
+
 ## 2026-06-24 - MTF monitor — "what should I trade right now"
 
 Built the next slice on the multi-timeframe stack: a pure-function monitor
