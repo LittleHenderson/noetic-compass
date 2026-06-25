@@ -1,5 +1,70 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - MTF monitor — "what should I trade right now"
+
+Built the next slice on the multi-timeframe stack: a pure-function monitor
+that composes a per-symbol snapshot across every symbol with at least one
+active timeframe in the runtime, and identifies which symbols are
+currently tradeable.
+
+The monitor's job is composition, not feed integration. Upstream code
+(MTFA, candle subscriptions, broker bridge) is responsible for producing
+per-(symbol, tf) direction and risk numbers. The monitor takes those as
+inputs, orchestrates the runtime's `aggregate_risk` and `signals_align`
+across every active symbol, and returns a single composed snapshot the
+bot, the LLM, and the UI can render.
+
+Implemented:
+
+- `cas_forex/mtf_monitor.py`:
+  - `SymbolMonitorSnapshot(symbol, active_timeframes, aggregated_risk,
+    signal_alignment)` — frozen per-symbol record.
+  - `MonitorSnapshot(symbols)` — frozen snapshot across every active
+    symbol, sorted by symbol for stable rendering;
+    `for_symbol(symbol)` accessor.
+  - `TradeableSymbol(symbol, direction, aggregated_risk,
+    active_timeframes)` — symbol the operator should consider acting on
+    right now.
+  - `compose_monitor_snapshot(runtime, *, risk_by_symbol,
+    direction_by_symbol)` — pure composition. Missing inputs treated as
+    "no signal" / "no risk" (consistent with runtime semantics: an
+    active TF that supplies no number does not count as zero, it does
+    not contribute). Inactive TFs in the input are ignored even if
+    present.
+  - `find_tradeable_symbols(snapshot, *, max_risk_per_symbol)` —
+    filters to symbols where (a) every voting active TF agrees on
+    direction (alignment ∈ {BUY, SELL}) AND (b) aggregated sum-risk
+    ≤ cap. Sorted order preserved from the snapshot.
+- `tests/test_mtf_monitor.py` — 12 tests: empty runtime, sorted output,
+  per-symbol active-TF carriage, risk aggregation ignoring inactive TFs,
+  all-BUY / MIXED / EMPTY alignment cases, missing-input resilience,
+  tradeable filter skipping MIXED/EMPTY, tradeable filter respecting
+  risk cap, tradeable filter returning all aligned within budget,
+  sorted ordering preserved through filter.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests -q
+# 573 passed (561 → 573, +12 net; no regressions).
+```
+
+What this unlocks: the LLM bot's open-ended "what should I trade right
+now?" path now has a concrete primitive to call. Wiring the monitor into
+a capability that pulls live per-TF direction/risk from MTFA + current
+floating PnL is the next step. The pure-function design means upstream
+feed implementations can evolve independently of monitor / runtime / UI.
+
+Not built in this slice:
+
+1. Live feed integration — concrete upstream for `risk_by_symbol` /
+   `direction_by_symbol`. MTFA's `analyze(symbol, candles)` returns
+   direction; the broker bridge knows floating PnL.
+2. New `BotCapability` exposing `find_tradeable_symbols` as a tool the
+   LLM bot can call.
+3. UI panel rendering the monitor snapshot on the Trade or Dashboard
+   page.
+
 ## 2026-06-24 - Bot voice: instrument-panel framing, no defeatist language
 
 CAS Forex is the operator's personal trading system on their own account.
