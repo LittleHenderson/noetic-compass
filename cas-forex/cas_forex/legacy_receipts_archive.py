@@ -56,12 +56,13 @@ class LegacyReceiptArchiveResult:
 
 
 def _extract_kind(event: Mapping[str, Any]) -> str | None:
-    kind = event.get("kind")
-    if isinstance(kind, str):
-        return kind
-    event_kind = event.get("event_kind")
-    if isinstance(event_kind, str):
-        return event_kind
+    # The journal historically used `kind` / `event_kind`; the live agent
+    # cycle writes `event_type`. Check all three so the identifier matches
+    # the actual on-disk shape regardless of producer vintage.
+    for field in ("kind", "event_kind", "event_type"):
+        value = event.get(field)
+        if isinstance(value, str):
+            return value
     return None
 
 
@@ -119,10 +120,22 @@ def identify_stale_pending_receipts(
         if not isinstance(event, Mapping):
             continue
         kind = _extract_kind(event)
-        if kind != "RECEIPT_PENDING":
-            continue
-        broker_mode = _extract_broker_mode(event)
-        if broker_mode is None or "MT4" not in broker_mode.upper():
+        if kind == "RECEIPT_PENDING":
+            # Legacy strict path: bare RECEIPT_PENDING events MUST carry an
+            # MT4 broker_mode marker. Conservative — anything ambiguous is
+            # left alone.
+            broker_mode = _extract_broker_mode(event)
+            if broker_mode is None or "MT4" not in broker_mode.upper():
+                continue
+        elif kind == "TERMINAL_RECEIPT_PENDING":
+            # The live agent cycle writes TERMINAL_RECEIPT_PENDING with no
+            # top-level broker_mode; the lane is implicit in the
+            # consumer_agent_ids ("mt4_or_mt5_terminal"). These rows are
+            # only archived via the age threshold below — a stale terminal
+            # receipt is one that's been waiting >24h with no successor
+            # event ever ack'ing it, regardless of which lane was intended.
+            pass
+        else:
             continue
         timestamp = _extract_timestamp(event)
         if timestamp is None:

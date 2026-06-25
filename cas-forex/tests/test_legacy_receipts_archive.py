@@ -117,6 +117,31 @@ def test_identify_row_without_broker_mode_is_not_stale() -> None:
     assert identify_stale_pending_receipts(events, now=NOW) == ()
 
 
+def test_identify_terminal_receipt_pending_via_event_type_no_broker_mode() -> None:
+    """Live agent cycle writes `event_type: TERMINAL_RECEIPT_PENDING` with no
+    top-level broker_mode. These rows ARE stale-archivable when old enough
+    because the lane is implicit in consumer_agent_ids and there's no other
+    way to age them out."""
+    events = [
+        # Fresh — should NOT be archived
+        {
+            "event_type": "TERMINAL_RECEIPT_PENDING",
+            "created_at": _iso(NOW, 1.0),
+        },
+        # Old — should be archived
+        {
+            "event_type": "TERMINAL_RECEIPT_PENDING",
+            "created_at": _iso(NOW, 48.0),
+        },
+        # Old but wrong type — should NOT be archived
+        {
+            "event_type": "AGENT_HEARTBEAT",
+            "created_at": _iso(NOW, 48.0),
+        },
+    ]
+    assert identify_stale_pending_receipts(events, now=NOW) == (1,)
+
+
 # ---------------------------------------------------------------------------
 # I/O tests
 # ---------------------------------------------------------------------------
