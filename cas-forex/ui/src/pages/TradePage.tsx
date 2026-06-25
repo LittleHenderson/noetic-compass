@@ -5,6 +5,7 @@ import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { CandlestickChart } from "../components/charts/CandlestickChart";
 import { MultiTimeframeSelector } from "../components/MultiTimeframeSelector";
+import { LiveTradesTelemetry } from "../components/LiveTradesTelemetry";
 import type { DashboardState, SymbolDecision, SizingEntry } from "../types/evidence";
 
 interface TradePageProps {
@@ -84,6 +85,9 @@ export function TradePage({ state }: TradePageProps) {
 
       {/* ── Multi-timeframe runtime selector (MTF runtime / risk aggregation) ── */}
       <MultiTimeframeSelector symbol={normalizeSymbolForRuntime(symbol)} />
+
+      {/* ── Live Trades Telemetry (observational, polled every 2s) ── */}
+      <LiveTradesTelemetry />
 
       {/* ── Proposal Preview + Risk Sizing ── */}
       <div className="trade-grid-2col">

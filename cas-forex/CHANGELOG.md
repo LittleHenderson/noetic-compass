@@ -1,5 +1,191 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - Parallel fleet: decision explainer + loop health + autowake supervisor + live telemetry
+
+Four parallel agents on disjoint slices, all serving the autonomous-loop
++ understanding-window architecture. No file collisions, no test
+regressions. Net `+34` tests (`573 → 607`).
+
+### Slice A — Agent decision explainer
+
+`cas_forex/agent_decision_explainer.py` — pure function
+`explain_latest_agent_decision(...)` that walks the agent's reasoning
+chain in order: strategy lead → walk-forward evidence → PCBA gate
+verdict → cycle decision → execution outcome. Returns an
+`AgentDecisionExplanation(cycle_id, overall_status, plain_english_summary,
+chain, next_action_hint)` with `chain: tuple[DecisionChainStep, ...]`.
+
+`overall_status ∈ {"executed", "approved_not_executed", "blocked",
+"no_recent_decision"}`. Per-step `status ∈ {"found", "missing",
+"blocked"}` — when a step's input is absent, the step explains what
+input would unlock it. The function NEVER fabricates and NEVER advises
+a future trade — every plain-English summary is strictly past-tense
+explanation. Tests assert forbidden substrings ("buy now", "should you
+trade", "good entry", "place a trade") never appear in any scenario.
+
+Tests (`tests/test_agent_decision_explainer.py`): 8 tests including
+no-input → "no_recent_decision", full-executed chain, approved-but-
+not-executed, PCBA-blocked, missing walk-forward, and the "never
+advises future trades" invariant.
+
+This is the primitive the LLM bot will use when the operator asks "why
+did the agent trade X?" or "explain the most recent agent decision."
+
+### Slice B — Autonomous loop health summary
+
+`cas_forex/autonomous_loop_health.py` — pure function
+`summarize_autonomous_loop_health(...)` answering "is the autonomous
+loop alive and producing decisions?" in one structured snapshot.
+
+`AutonomousLoopHealth(overall_status, last_cycle_at_iso,
+seconds_since_last_cycle, cycles_today, decisions_today,
+executions_today, blocked_today, autowake_present,
+autowake_next_due_iso, plain_english_summary, diagnostic_hints)`.
+
+Status classification:
+- `"unknown"` — every input is None / empty. The function refuses to fabricate.
+- `"never_started"` — at least one input provided, but no parseable cycle timestamp anywhere.
+- `"running"` — cycle within the last `running_threshold_minutes` (default 60), OR `autowake_next_due_iso` parses to a future UTC instant (loop is paced between fires).
+- `"stalled"` — cycle exists, older than threshold, AND no future autowake fire is scheduled.
+
+`diagnostic_hints` is `()` when `"running"`; otherwise actionable strings
+(autowake missing, MT5 cycle present but executions 0, validator
+rejection rate high, autowake past due). `plain_english_summary` is
+verified across all scenarios to never contain trade-advisory
+substrings.
+
+Companion `load_loop_health_inputs(repo_root)` does the disk I/O
+separately so the summarizer stays pure for tests.
+
+Tests (`tests/test_autonomous_loop_health.py`): 11 tests across
+all status branches + the no-trade-advisory invariant.
+
+### Slice C — Autowake supervisor
+
+`cas_forex/autowake_supervisor.py` — the missing long-running
+supervisor that wraps the existing `session_autowake_runner` as a
+restart-on-crash loop with capped exponential backoff, max-tick /
+max-duration / consecutive-failure caps, and SIGINT/SIGTERM-safe
+graceful shutdown.
+
+`AutowakeSupervisor` constructor takes:
+- `tick: Callable[[], Mapping[str, Any]]` — the autowake one-shot.
+- `tick_interval_seconds: float` — base cadence.
+- `max_ticks: int | None` — optional cap.
+- `max_consecutive_failures: int = 5` — circuit breaker.
+- `max_total_duration_seconds: float | None` — optional cap.
+- `clock: Callable[[], float] = time.monotonic` — INJECTED so tests
+  advance virtual time without sleeping.
+- `sleeper: Callable[[float], None] = time.sleep` — INJECTED.
+- `on_tick: Callable[[SupervisorTickResult], None] | None` — per-tick
+  observer.
+- `shutdown_event: threading.Event | None` — signal-handler hook.
+
+`run()` returns `SupervisorRunSummary(total_ticks, successful_ticks,
+failed_ticks, consecutive_failures_at_stop, stopped_reason,
+last_tick_result)` where `stopped_reason ∈ {"max_ticks",
+"shutdown_signal", "max_consecutive_failures", "duration_cap"}`.
+Backoff between failed ticks: `tick_interval * min(2^consec_failures,
+30)`.
+
+`scripts/run_autowake_supervisor.py` — production launcher with
+SIGINT/SIGTERM → `threading.Event` plumbing and CLI flags
+`--tick-interval-seconds`, `--max-ticks`, `--max-total-duration-seconds`,
+`--max-consecutive-failures`, `--execute-cycle`, `--summary-only`.
+
+Example invocation:
+
+```powershell
+py -3.12 scripts/run_autowake_supervisor.py `
+  --tick-interval-seconds 300 `
+  --max-ticks 288 `
+  --max-total-duration-seconds 86400 `
+  --execute-cycle --summary-only
+```
+
+That schedules a tick every 5 minutes for up to 24 hours (288 ticks),
+each calling the autowake runner with `--execute-cycle`. SIGINT/SIGTERM
+flip the shutdown event so the loop exits cleanly between ticks.
+
+Tests (`tests/test_autowake_supervisor.py`): 8 tests using fake
+`clock` + `sleeper`. Cover the four stop reasons, success-resets-
+consecutive-counter, backoff multiplier, and the `on_tick` callback.
+
+### Slice D — Live trades telemetry (backend + UI panel)
+
+Backend — `api/routes/live_telemetry.py`:
+
+`GET /api/forex/live-telemetry` returns:
+
+```jsonc
+{
+  "as_of_iso": "...",
+  "open_positions": [
+    {
+      "symbol": "EURUSD",
+      "direction": "BUY"|"SELL",
+      "lots": 0.01,
+      "entry_price": 1.0850,
+      "current_price": 1.0855,
+      "floating_pnl": 0.5,
+      "opened_at_iso": "..." | null,
+      "broker_ticket": "..." | null
+    }
+  ],
+  "totals": { "open_position_count": int, "total_floating_pnl": float },
+  "data_freshness": {
+    "source": "mt5_terminal_api_verifier"|"movement_stream"|"none",
+    "stale": bool,
+    "last_update_iso": "..." | null
+  }
+}
+```
+
+Source selection: MT5 terminal verifier first (broker truth);
+movement_stream fallback (paper/demo ledger-derived); otherwise
+`source: "none", open_positions: []`. NEVER fabricates prices or P&L.
+Staleness window: 5 minutes against UTC now.
+
+`api/server.py` — wired the router under `/api/forex/live-telemetry`.
+
+UI — `ui/src/components/LiveTradesTelemetry.tsx`:
+
+Polls every 2 seconds via `setInterval` in `useEffect`. Renders:
+- Header: open position count, total floating P&L, "as of HH:MM:SS",
+  staleness chip when `data_freshness.stale`.
+- Table: Symbol, Direction, Lots, Entry, Current, Floating P&L,
+  Time open. P&L color: positive teal, negative red, zero neutral.
+- Empty state: "No active positions" — not an error, not "you
+  should trade." Observational only.
+
+Wired into `ui/src/pages/TradePage.tsx` above the proposal preview.
+`ui/src/data/api.ts` gains `LiveTelemetryPosition` /
+`LiveTelemetryResponse` types and `fetchLiveTelemetry()`.
+
+Tests (`tests/test_live_telemetry_api.py`): 7 tests via the FastAPI
+ASGI helper — route registered, schema shape, no-data → `source:"none"`,
+mocked-data echoes correctly, totals math, direction normalization.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q     # 607 passed (573 → 607, +34 net)
+cd ui && npm run build           # 53 modules, 3.26s
+```
+
+### Boundary
+
+Operator-side actions (not in scope this iteration):
+1. Start MT5 terminal with Hugosway-Demo and enable AutoTrading.
+2. Restart uvicorn so the new `/api/forex/live-telemetry` route
+   registers in the running process.
+3. Launch the supervisor: `py -3.12 scripts/run_autowake_supervisor.py
+   --tick-interval-seconds 300 --execute-cycle --summary-only`.
+
+Runtime safety unchanged: `requires_confirm=True` capabilities still
+prompt; Stage 3 validator still REJECTs closed gates; the LLM bot
+remains an understanding window, not a trade advisor.
+
 ## 2026-06-24 - Bot role corrected: understanding window, NOT trade advisor
 
 Followup correction to the MTF monitor entry below, which framed

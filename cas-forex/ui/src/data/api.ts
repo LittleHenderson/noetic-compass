@@ -149,6 +149,41 @@ export async function deactivateTimeframe(symbol: string, timeframe: string): Pr
   }
 }
 
+// ── Live trade telemetry ──
+
+export interface LiveTelemetryPosition {
+  symbol: string;
+  direction: "BUY" | "SELL";
+  lots: number;
+  entry_price: number;
+  current_price: number;
+  floating_pnl: number;
+  opened_at_iso: string | null;
+  broker_ticket: string | null;
+}
+
+export interface LiveTelemetryResponse {
+  as_of_iso: string;
+  open_positions: LiveTelemetryPosition[];
+  totals: {
+    open_position_count: number;
+    total_floating_pnl: number;
+  };
+  data_freshness: {
+    source: "mt5_terminal_api_verifier" | "movement_stream" | "none";
+    stale: boolean;
+    last_update_iso: string | null;
+  };
+}
+
+export async function fetchLiveTelemetry(): Promise<LiveTelemetryResponse | null> {
+  try {
+    return await apiGet<LiveTelemetryResponse>("/live-telemetry");
+  } catch {
+    return null;
+  }
+}
+
 // ── Aggregate dashboard ──
 
 export async function fetchDashboard(): Promise<DashboardState | null> {

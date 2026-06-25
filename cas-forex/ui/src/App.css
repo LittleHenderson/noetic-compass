@@ -1868,3 +1868,46 @@
     width: 100%;
   }
 }
+
+/* ── Live Trades Telemetry ── */
+.live-telemetry-header {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.live-telemetry-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.live-telemetry-table-wrap {
+  overflow-x: auto;
+}
+.live-telemetry-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.78rem;
+}
+.live-telemetry-table th,
+.live-telemetry-table td {
+  text-align: left;
+  padding: 5px 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.live-telemetry-table th.num,
+.live-telemetry-table td.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.live-telemetry-empty {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 8px 0 2px 0;
+}
+.live-telemetry-error {
+  margin-top: 8px;
+  font-size: 0.72rem;
+  color: var(--warning);
+}
