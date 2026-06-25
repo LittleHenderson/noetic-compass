@@ -1,5 +1,81 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - Mobile build: PWA installable on any phone + Capacitor Android APK path
+
+The PWA manifest and Capacitor scaffolding were partially in place (manifest,
+icons, capacitor.config.json, `mobile:*` npm scripts) but no service worker
+was generated and Capacitor was never installed. This slice completes both
+paths.
+
+### PWA — installable on any modern phone, no app store
+
+- `ui/vite.config.ts` — registers `vite-plugin-pwa`. The existing manifest at
+  `ui/public/manifest.webmanifest` is used verbatim (no synthesized manifest).
+  `strategies: "generateSW"` produces a Workbox service worker.
+- Workbox config:
+  - 9 entries precached at build time (575 KiB).
+  - `navigateFallbackDenylist: [/^\/api\//]` — API responses are NEVER
+    cached. CAS Forex telemetry must stay live; stale data is worse than
+    no data.
+  - Runtime caching `StaleWhileRevalidate` for static assets only
+    (style/script/worker/image/font) with a 30-day window.
+- `ui/package.json` — adds `vite-plugin-pwa` and `workbox-window` as
+  `devDependencies`.
+
+After `npm run build`, the operator opens
+`http://<host>:5174/` (or a deployed URL) on their phone's browser and
+taps "Add to Home Screen." The app installs as a standalone PWA with the
+manifest's icon, theme colour, and shortcuts — no APK, no store, no Java
+toolchain required.
+
+### Capacitor — Android APK path
+
+- `ui/package.json` — adds `@capacitor/core`, `@capacitor/cli`, and
+  `@capacitor/android` as `devDependencies`.
+- `npx cap add android` was run; `ui/android/` is now scaffolded with the
+  full Gradle project. `.gitignore` already excludes `ui/android/` — the
+  native project is regenerated per machine.
+- Existing `mobile:apk:debug` script works as-is:
+  ```bash
+  cd ui
+  npm run mobile:apk:debug
+  ```
+  This runs `tsc -b && vite build && npx cap sync android && cd android &&
+  ./gradlew assembleDebug` and produces an APK at
+  `ui/android/app/build/outputs/apk/debug/app-debug.apk`.
+
+Operator-side requirements for the APK build (not in scope this iteration):
+
+- **Java JDK 17+** on the build machine (`java -version` to verify).
+- **Android SDK** with API level 33+ (Android Studio is the easiest install;
+  the SDK manager handles platform/build-tools downloads).
+- Set `ANDROID_HOME` environment variable to the SDK location.
+
+The first time on a fresh machine, also run `npx cap add android` once
+(already done on this machine; `.gitignore` keeps the result local).
+
+### Verification
+
+```bash
+cd ui && npm run build
+# vite v6 build OK, 538 KiB JS / 26 KiB CSS gzipped to 130/4.6 KiB.
+# PWA v1.3.0 generateSW; 9 entries precached at 575 KiB.
+# dist/sw.js and dist/workbox-*.js generated.
+npx cap add android
+# √ Adding native android project — gradle project at ui/android/.
+py -3.12 -m pytest tests -q
+# 615 passed (no Python changes; UI-only slice).
+```
+
+### Boundary
+
+Neither path changes the bot framing or runtime safety. The PWA loads the
+same React app, hits the same API, and shows the same instrument-panel
+view (live telemetry, MTF selector, autonomous-loop status). The APK is
+just a WebView shell around the same bundle. The agent cycle still trades
+autonomously on the operator's behalf; the LLM bot remains an
+understanding window.
+
 ## 2026-06-24 - Wire explainer + loop health into API routes and bot capabilities
 
 The `agent_decision_explainer` and `autonomous_loop_health` primitives
