@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .data import dashboard_state
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -28,6 +28,11 @@ app.include_router(adaptive.router, prefix="/api/forex/adaptive", tags=["adaptiv
 app.include_router(settings.router, prefix="/api/forex/settings", tags=["settings"])
 app.include_router(pcba.router, prefix="/api/forex/pcba", tags=["pcba"])
 app.include_router(mt.router, prefix="/api/forex/mt", tags=["mt"])
+app.include_router(account.router, prefix="/api/forex/account", tags=["account"])
+app.include_router(movement.router, prefix="/api/forex/movement", tags=["movement"])
+app.include_router(reconciliation.router, prefix="/api/forex/reconciliation", tags=["reconciliation"])
+app.include_router(readiness.router, prefix="/api/forex/readiness", tags=["readiness"])
+app.include_router(timeframes.router, prefix="/api/forex/timeframes", tags=["timeframes"])
 
 
 @app.get("/api/forex/dashboard")

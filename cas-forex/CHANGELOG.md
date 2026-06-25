@@ -1,5 +1,59 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - Multi-timeframe runtime API route
+
+Wired the multi-timeframe runtime skeleton (shipped earlier this session)
+into a thin FastAPI route so the UI selector and a future concurrent
+monitor loop have a single source of truth for "which timeframes are
+active for which symbol."
+
+Implemented:
+
+- `api/routes/timeframes.py` — process-singleton `MultiTimeframeRuntime`
+  (`get_runtime()` accessor; `set_runtime_for_testing()` swap helper) +
+  five endpoints under `/api/forex/timeframes`:
+  - `GET /canonical` — list the canonical timeframe vocabulary
+    (`M1/M5/M15/H1/H4/D1`) so the UI selector stays in sync with the
+    runtime's accepted set.
+  - `GET ` / `GET /` — snapshot of every symbol with at least one
+    active timeframe, sorted by symbol for stable UI rendering.
+  - `GET /{symbol}` — selection for one symbol. Unknown symbols return
+    an empty selection (not 404) — the symbol is just not yet active.
+  - `POST /{symbol}/{timeframe}` — activate. Idempotent. Returns the
+    updated selection. 400 on unknown timeframe with the canonical
+    vocabulary in the error detail.
+  - `DELETE /{symbol}/{timeframe}` — deactivate. Idempotent. Same
+    error shape on unknown timeframe.
+- `api/server.py` — `from .routes import ... timeframes` and
+  `app.include_router(timeframes.router, prefix="/api/forex/timeframes",
+  tags=["timeframes"])`.
+- `tests/test_timeframes_api.py` — 10 tests driving the FastAPI ASGI app
+  directly: canonical endpoint shape, empty-state listing, missing-symbol
+  returns empty selection (not 404), activate→query roundtrip and
+  multi-TF aggregation, unknown-timeframe 400 with canonical list, POST
+  idempotency, deactivate removes only the target, deactivate-last
+  drops the symbol from the listing, DELETE error shape, sorted-symbols
+  listing for stable UI.
+
+Deployment note: a running uvicorn process must be reloaded (or
+`--reload` enabled) to pick up the new route. The ASGI-driven tests
+prove the route registration; the running dev server returns 404 until
+restarted.
+
+Tests: 551 → 561 (+10 net, no regressions).
+
+Next wiring (NOT built):
+
+1. UI selector on Trade / Dashboard pages calling these endpoints.
+2. Concurrent monitor loop in the bot: for each `(symbol, tf)` pair from
+   `GET /api/forex/timeframes`, maintain a per-TF candle subscription
+   and per-TF analyzer.
+3. Portfolio-risk gate at order time: order pipeline calls
+   `aggregate_risk` with current floating PnL per TF and blocks if
+   `sum_risk` exceeds the symbol's configured cap.
+4. State persistence (file-backed or Redis) if/when the server moves
+   to multi-worker — today the runtime is pure in-memory.
+
 ## 2026-06-24 - Parallel fleet: cockpit honesty + bot dry-run + multi-timeframe runtime
 
 Three parallel agents on disjoint slices. No file collisions, no test
