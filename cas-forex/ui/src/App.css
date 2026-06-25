@@ -888,6 +888,123 @@
   color: var(--text-muted);
 }
 
+.gate-item-next {
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.66rem;
+  line-height: 1.35;
+  color: var(--warning);
+}
+
+.readiness-mode-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.readiness-mode-switch {
+  display: inline-grid;
+  grid-template-columns: repeat(2, minmax(92px, 1fr));
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.readiness-mode-button {
+  min-height: 30px;
+  padding: 5px 10px;
+  border: 0;
+  border-right: 1px solid var(--border-subtle);
+  background: transparent;
+  color: var(--text-muted);
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.readiness-mode-button:last-child {
+  border-right: 0;
+}
+
+.readiness-mode-button.active {
+  background: var(--accent-teal-dim);
+  color: var(--accent-teal);
+}
+
+.readiness-mode-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.broker-risk-preview {
+  margin-bottom: 12px;
+  padding: 10px 0 12px;
+  border-top: 1px solid var(--border-subtle);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.broker-risk-preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+}
+
+.broker-risk-preview-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.broker-risk-apply-button {
+  min-height: 28px;
+  padding: 5px 10px;
+  border: 1px solid var(--accent-teal);
+  border-radius: var(--radius-sm);
+  background: var(--accent-teal-dim);
+  color: var(--accent-teal);
+  font: inherit;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  cursor: pointer;
+}
+
+.broker-risk-apply-button:disabled {
+  border-color: var(--border-subtle);
+  background: var(--bg-card);
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.broker-risk-preview-note {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 0.66rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+}
+
+.broker-risk-apply-result {
+  margin-top: 8px;
+  font-size: 0.68rem;
+  color: var(--accent-teal);
+}
+
 /* ── Trade Desk ── */
 
 .trade-selectors {
@@ -937,6 +1054,43 @@
   border-color: var(--accent-teal);
   color: var(--accent-teal);
   font-weight: 700;
+}
+
+.selector-chip:disabled {
+  opacity: 0.5;
+  cursor: progress;
+}
+
+/* ── Multi-timeframe selector ── */
+
+.mtf-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mtf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.mtf-loading {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+}
+
+.mtf-error {
+  font-size: 0.72rem;
+  color: var(--danger, #f87171);
+  font-family: var(--font-mono);
+}
+
+.mtf-summary {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
 }
 
 /* ── Proposal Preview ── */

@@ -4,6 +4,7 @@ import { useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { CandlestickChart } from "../components/charts/CandlestickChart";
+import { MultiTimeframeSelector } from "../components/MultiTimeframeSelector";
 import type { DashboardState, SymbolDecision, SizingEntry } from "../types/evidence";
 
 interface TradePageProps {
@@ -18,8 +19,16 @@ type Symbol = (typeof SYMBOLS)[number];
 type Timeframe = (typeof TIMEFRAMES)[number];
 type Style = (typeof STYLES)[number];
 
+// FastAPI path parameters don't accept encoded slashes (%2F) reliably; the
+// MTF runtime stores symbols as plain strings, so normalize "EUR/USD" -> "EURUSD"
+// for the runtime. Display symbols stay slash-formatted.
+function normalizeSymbolForRuntime(displaySymbol: string): string {
+  return displaySymbol.replace(/\//g, "");
+}
+
 export function TradePage({ state }: TradePageProps) {
   const { dailyBundle: b } = state;
+  const movement = state.movementStream;
   const decision = b.latest_decision.latest_decision;
 
   const [symbol, setSymbol] = useState<Symbol>("NAS100");
@@ -31,6 +40,8 @@ export function TradePage({ state }: TradePageProps) {
 
   const activeSizing: SizingEntry | undefined =
     b.latest_risk.latest_review.sizing.find((s) => s.symbol === symbol);
+  const activeQuote = movement?.quotes.find((q) => q.symbol === symbol);
+  const activePosition = movement?.positions.find((p) => p.symbol === symbol);
   const candlePreview = activeDecision
     ? buildProposalCandles(
         activeDecision.proposal.entry_price,
@@ -70,6 +81,9 @@ export function TradePage({ state }: TradePageProps) {
           </div>
         </div>
       </GlassPanel>
+
+      {/* ── Multi-timeframe runtime selector (MTF runtime / risk aggregation) ── */}
+      <MultiTimeframeSelector symbol={normalizeSymbolForRuntime(symbol)} />
 
       {/* ── Proposal Preview + Risk Sizing ── */}
       <div className="trade-grid-2col">
@@ -147,6 +161,34 @@ export function TradePage({ state }: TradePageProps) {
       {/* ── Forecast Harness ── */}
       <GlassPanel title="Proposal Price Scale" subtitle={activeDecision ? `${symbol} entry / stop / target context` : "No active paper signal"}>
         <CandlestickChart candles={candlePreview} symbol={symbol} height={180} />
+      </GlassPanel>
+
+
+      <GlassPanel title="Active Market Movement" subtitle={activeQuote ? `${symbol} paper/demo quote, SL/TP distance, floating P/L` : "Select a currently routed paper symbol to view movement"}>
+        {activeQuote && activePosition ? (
+          <div className="dashboard-grid-3col">
+            <div className="metric-stack" style={{ padding: 0 }}>
+              <MetaRow label="Bid / Ask" value={`${activeQuote.bid.toFixed(2)} / ${activeQuote.ask.toFixed(2)}`} mono />
+              <MetaRow label="Spread" value={`${activeQuote.spread_units.toFixed(1)} ${activeQuote.price_unit_name}`} mono />
+              <MetaRow label="Source" value={activeQuote.source} mono />
+            </div>
+            <div className="metric-stack" style={{ padding: 0 }}>
+              <MetaRow label="Current" value={activePosition.current_price.toFixed(2)} mono />
+              <MetaRow label="Floating P/L" value={`$${activePosition.floating_pnl_usd.toFixed(2)} (${activePosition.floating_pnl_units.toFixed(2)} ${activeQuote.price_unit_name}s)`} mono />
+              <MetaRow label="Margin Est." value={`$${activePosition.margin_estimate_usd.toFixed(2)}`} mono />
+            </div>
+            <div className="metric-stack" style={{ padding: 0 }}>
+              <MetaRow label="To SL" value={activePosition.distance_to_sl_units == null ? "—" : `${activePosition.distance_to_sl_units.toFixed(2)} ${activeQuote.price_unit_name}s`} mono />
+              <MetaRow label="To TP" value={activePosition.distance_to_tp_units == null ? "—" : `${activePosition.distance_to_tp_units.toFixed(2)} ${activeQuote.price_unit_name}s`} mono />
+              <MetaRow label="Mode" value={movement?.mode ?? "PAPER_DEMO_REALTIME_SCAFFOLD"} mono />
+            </div>
+          </div>
+        ) : (
+          <NoSignal symbol={symbol} timeframe={timeframe} />
+        )}
+        <div style={{ marginTop: 8, fontSize: "0.7rem", color: "var(--warning)" }}>
+          {movement?.claim_boundary ?? "Paper/demo movement only. Live trading and payment movement remain NOT LICENSED."}
+        </div>
       </GlassPanel>
 
       <GlassPanel title="Forecast Harness" subtitle="Strategy model status for current session">

@@ -1,5 +1,74 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - Multi-timeframe selector UI (Trade page)
+
+Wired the operator-facing selector for the MTF runtime API into the React
+Trade page. The operator can now visually toggle which timeframes are
+concurrently active for a symbol; each toggle round-trips through
+`/api/forex/timeframes` so the bot, monitor loop, and risk gates all
+see the same state.
+
+Implemented:
+
+- `ui/src/data/api.ts` — added `apiDelete<T>` helper (sibling of
+  `apiGet`/`apiPost`) and five timeframes endpoints:
+  `fetchCanonicalTimeframes`, `fetchAllActiveTimeframes`,
+  `fetchSymbolTimeframes`, `activateTimeframe`, `deactivateTimeframe`.
+  All return `null` on error so the UI can degrade gracefully if the
+  API is down. Types: `SymbolTimeframeSelection`, `CanonicalTimeframes`,
+  `ActiveTimeframesSnapshot`.
+- `ui/src/components/MultiTimeframeSelector.tsx` — controlled component
+  taking a `symbol` prop. Loads the canonical vocabulary once,
+  re-syncs the active set whenever the symbol changes, and uses
+  optimistic UI for toggle interactions (local state flips immediately,
+  reverts if the API returns null). Per-chip `pending` state disables
+  the button while its POST/DELETE is in flight so double-clicks can't
+  race.
+- `ui/src/pages/TradePage.tsx` — added a new `MultiTimeframeSelector`
+  panel below the existing single-TF picker (additive — the existing
+  Symbol/Timeframe/Style chips are unchanged). New helper
+  `normalizeSymbolForRuntime("EUR/USD") -> "EURUSD"` strips the slash
+  so FastAPI path parameters don't have to deal with `%2F` encoding.
+- `ui/src/App.css` — minimal new styles for `.mtf-selector`,
+  `.mtf-chips`, `.mtf-loading`, `.mtf-error`, `.mtf-summary`, plus a
+  generic `.selector-chip:disabled` rule. The chip buttons reuse the
+  existing `.selector-chip` / `.selector-chip.active` styling so the
+  visual language matches the rest of the page.
+
+Verification:
+
+```bash
+cd ui && npm run build
+# vite v6.4.3 building for production... 52 modules transformed
+# (was 51 modules; +1 for MultiTimeframeSelector). built in 2.99s.
+
+py -3.12 -m pytest tests -q
+# 561 passed (no regressions; UI-only change does not affect Python tests).
+```
+
+Deployment notes:
+
+- The running dev server must be reloaded to pick up the new route
+  (committed in the prior CHANGELOG entry). Hit `Ctrl-C` on the uvicorn
+  process and rerun, or use `--reload`.
+- The UI build (`npm run build`) produces a fresh bundle in `ui/dist/`.
+  Vite dev server (`npm run dev`) HMR will pick up the changes
+  automatically.
+
+Next wiring (NOT built in this slice):
+
+1. Concurrent monitor loop in the bot reading `GET /api/forex/timeframes`
+   on tick and maintaining per-`(symbol, tf)` candle subscriptions +
+   analyzers.
+2. Portfolio-risk gate at order time calling `aggregate_risk` with
+   live floating PnL per TF and blocking if `sum_risk` exceeds the
+   symbol's configured cap.
+3. State persistence (file-backed or Redis) if/when the API server
+   moves to multi-worker uvicorn — today the runtime is pure in-memory
+   and resets on server restart.
+4. Selector parity on Dashboard and Optimizer pages (currently only
+   on Trade page).
+
 ## 2026-06-24 - Multi-timeframe runtime API route
 
 Wired the multi-timeframe runtime skeleton (shipped earlier this session)
