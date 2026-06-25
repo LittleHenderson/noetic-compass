@@ -1,5 +1,144 @@
 # CAS Forex - Changelog
 
+## 2026-06-25 - Army fleet round 2: Fury set application + notification triggers + UI pages + risk monitoring
+
+Four parallel agents on disjoint scopes. No collisions. 726 → 799 (+73 net).
+
+### Slice 1 — Forex Fury set application primitive
+
+`cas_forex/forex_fury_set_application.py` — pure module:
+- `parse_set_text(text) -> (parameters, errors)` parses MT4/MT5 `.set` files
+  with optimization tuples (value, min, step, max, optimize_flag).
+- `SetParameter`, `SetPayload`, `EnrichedOrderRequest` frozen dataclasses.
+- `apply_set_to_order_request(...)` enriches a base broker order request
+  with `.set` parameters via `DEFAULT_SET_KEY_TO_REQUEST_KEY` mapping
+  (`Lot_Size→lots`, `Stop_Loss→stop_loss_pips`, `Take_Profit→take_profit_pips`,
+  `InpUseGrid→uses_grid`, plus 13 more). Base never mutated; returns new dict.
+- `materialize_set_payload(...)` disk loader with sha256 verification;
+  returns `(SetPayload|None, error_message|None)`, never raises.
+
+Out of scope: integration into `cas_forex/broker/mt5_bridge.py`. This slice
+ships the primitive; the broker bridge integration is a follow-on with
+larger blast radius.
+
++14 tests.
+
+### Slice 2 — Notification trigger observers
+
+`cas_forex/notification_triggers.py` — pure detectors that fire
+`NotificationEvent`s when meaningful state changes:
+
+| event_kind | severity |
+|---|---|
+| `TRADE_EXECUTED` | info |
+| `TRADE_BLOCKED` | warning |
+| `LOOP_STALLED` | alert |
+| `LOOP_RESUMED` | info |
+| `MT5_DISCONNECTED` | alert |
+| `READINESS_GATE_FLIPPED` | info |
+
+Each detector takes parsed state dicts + the previous observation
+(`previous_status` / `previous_authorized_set` / `previous_cycle_report`)
+and returns 0 or 1 events. `detect_all(...)` runs all detectors and
+returns a deterministic tuple. `event_id = sha256(kind|key_fields)[:16]`
+for dedupe.
+
+`title` + `body` are OBSERVATIONAL ("Cycle abc executed BUY EURUSD
+0.01 lots; broker ticket 12345"). Tests parametrize 14 forbidden
+advisory phrases across all 6 detectors × multiple sample inputs — no
+trade-pick language anywhere.
+
+Wiring into the live agent cycle (calling `dispatch_test_push` when
+events fire) is a follow-on slice; this one ships the primitives.
+
++30 tests.
+
+### Slice 3 — UI integrator: Operator Briefing card + Fury page + Strategy Dev page
+
+Consumes the three backend capabilities shipped in the last fleet.
+
+`ui/src/components/OperatorBriefingCard.tsx` — polls
+`/api/forex/operator-briefing` every 60s. `StatusChip` for loop status,
+stats line, `plain_english_briefing` verbatim, diagnostic-hint bullets.
+Mounted on `DashboardPage.tsx` above the existing 3-col grid.
+
+`ui/src/pages/ForexFuryPage.tsx` — new "Fury" page. Lists replay
+candidates with rank, ID, symbol, TF, family, PF, DD%, score,
+readiness. Each row has a "Promote to paper lane" button that calls
+`POST /api/forex/forex-fury-promote/promote`. Success shows `lead_id`
+inline; 400 shows integrity error. Summary stats (total candidates,
+top symbol, top family).
+
+`ui/src/pages/StrategyDevPage.tsx` — new "Strategy" page. Lists queue
+items with stage filter dropdown (default show all). Per-item:
+5 action buttons (Promote / Demote / Reject / Archive / Review) +
+optional inline note. Each button posts to
+`/api/forex/strategy-dev-actions/{action}`. Success / 400 surfaced
+inline with `current_stage` + `message`.
+
+`ui/src/data/api.ts` — additive: `apiPostJson` helper,
+`OperatorBriefingResponse`, `ForexFuryPromoteResponse`,
+`ForexFuryPromotionStatusResponse`, `StrategyActionResponse`,
+`StrategyDevAction`, `ApiPostError`. Fetchers + action wrappers.
+
+`ui/src/App.tsx`, `ui/src/components/Shell.tsx` — additive: `Page`
+union extended with `"forex-fury"` and `"strategy-dev"`; nav entries
+labeled "Fury" and "Strategy" appended after "Decisions".
+
+`ui/src/App.css` — additive styles for `.operator-briefing-card`,
+`.fury-candidates-table`, `.fury-candidate-row`, `.fury-row-action`,
+`.strategy-dev-list`, `.strategy-dev-row`, `.strategy-action-button`,
+`.action-result-toast` (`.action-result-ok` / `.action-result-err`),
+filter row, note input.
+
+UI build: 60 modules, 2.87s, PWA SW regenerated. Zero TS errors.
+
+### Slice 4 — Portfolio risk monitoring
+
+`cas_forex/risk_monitoring.py` — pure aggregator:
+- `compose_portfolio_risk_snapshot(*, live_telemetry, account_snapshot,
+  now)` → `PortfolioRiskSnapshot` with per-symbol exposure aggregation
+  (`MIXED` direction when both BUY+SELL on same symbol), concentration %,
+  margin utilization %, largest gain/loss positions, sorted `by_symbol`
+  list, plain-English summary, observational diagnostic hints
+  ("Concentration above 60% in EURUSD", "Margin utilization above 50%").
+- `snapshot_to_payload(...)` JSON-serializer.
+- `SymbolRiskExposure`, `PortfolioRiskSnapshot` frozen dataclasses.
+
+Tests parametrize 9 forbidden advisory phrases ("you should close",
+"consider closing", "scale back", "exit position", "take profit now",
+"cut your losses", "reduce exposure", "buy more", "add to position")
+across 3 risk shapes; all observational. 27 parametrized assertions.
+
+`api/routes/risk_monitoring.py` — `GET /api/forex/risk-monitoring/portfolio`.
+Default loader chains `api.routes.live_telemetry.collect_live_telemetry()`
+(reuses MT5 → movement_stream → empty cascade) and
+`api.data.mt5_terminal_api_verifier_latest()` for the account snapshot.
+Loader-injection hooks.
+
++29 tests (16 unit + 5 route + 8 forbidden-phrase parametrized).
+
+### Parent integration
+
+`api/server.py` — additive: import extended with `risk_monitoring`;
+one new `include_router` line under `/api/forex/risk-monitoring`.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q   # 799 passed (726 → 799, +73 net)
+cd ui && npm run build         # 60 modules, 2.87s, PWA SW regenerated
+```
+
+### Boundary unchanged
+
+Risk monitoring is OBSERVATIONAL. Notification trigger bodies are
+OBSERVATIONAL. The Fury promote button posts `PROMOTED_PAPER_LANE`
+only; live-money path remains license-gated. Strategy Dev actions move
+queue stages without enabling live execution. The LLM bot is still an
+understanding window. The agent cycle still trades autonomously on
+the operator's behalf to remove emotional decisions from the loop.
+
 ## 2026-06-25 - Army fleet: push + Fury promote + strategy actions + history UI + operator briefing
 
 Five parallel agents on disjoint files. No collisions. 631 → 726 (+95 net tests).

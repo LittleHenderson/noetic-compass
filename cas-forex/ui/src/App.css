@@ -2203,3 +2203,171 @@
   border-radius: var(--radius-sm);
 }
 
+/* ── Operator Briefing Card ── */
+
+.operator-briefing-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* ── Forex Fury Candidates Table ── */
+
+.fury-candidates-table {
+  margin-top: 4px;
+}
+
+.fury-candidate-row td {
+  vertical-align: top;
+}
+
+.fury-row-action {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+}
+
+/* ── Strategy Dev List ── */
+
+.strategy-dev-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.strategy-dev-filter-select {
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 0.78rem;
+  font-family: inherit;
+}
+
+.strategy-dev-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.strategy-dev-row {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+  background: var(--bg-panel);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.strategy-dev-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.strategy-dev-row-id {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+}
+
+.strategy-dev-row-meta {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.strategy-dev-row-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.78rem;
+}
+
+.strategy-dev-row-desc {
+  color: var(--text-primary);
+}
+
+.strategy-dev-row-sub {
+  color: var(--text-muted);
+  font-size: 0.72rem;
+}
+
+.strategy-dev-row-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.strategy-dev-note-input {
+  flex: 1 1 220px;
+  min-width: 180px;
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 0.76rem;
+  font-family: inherit;
+}
+
+.strategy-dev-action-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.strategy-action-button {
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.strategy-action-button:hover:not(:disabled) {
+  border-color: var(--accent-teal-dim);
+  color: var(--accent-teal);
+}
+
+.strategy-action-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+/* ── Action result toast (inline) ── */
+
+.action-result-toast {
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+.action-result-ok {
+  background: var(--success-dim);
+  color: var(--success);
+  border: 1px solid var(--success-dim);
+}
+
+.action-result-err {
+  background: var(--danger-dim);
+  color: var(--danger);
+  border: 1px solid var(--danger-dim);
+}
+

@@ -92,6 +92,32 @@ async function apiPost<T>(path: string): Promise<T> {
   return res.json();
 }
 
+async function apiPostJson<TResp, TBody>(path: string, body: TBody): Promise<TResp> {
+  const res = await fetch(`${getApiBase()}${path}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+    signal: AbortSignal.timeout(10_000),
+  });
+  const text = await res.text();
+  let parsed: unknown;
+  try {
+    parsed = text ? JSON.parse(text) : null;
+  } catch {
+    parsed = text;
+  }
+  if (!res.ok) {
+    const err = new Error(`API ${res.status}: ${res.statusText}`) as Error & {
+      status?: number;
+      payload?: unknown;
+    };
+    err.status = res.status;
+    err.payload = parsed;
+    throw err;
+  }
+  return parsed as TResp;
+}
+
 async function apiDelete<T>(path: string): Promise<T> {
   const res = await fetch(`${getApiBase()}${path}`, {
     method: "DELETE",
@@ -532,4 +558,119 @@ export function useDashboard(initialState: DashboardState): UseDashboardResult {
   useEffect(() => { load(); }, [load]);
 
   return { state, loading, error, refetch: load };
+}
+
+// ── Operator briefing (one-call snapshot) ──
+
+export interface OperatorBriefingResponse {
+  loop_health_status: string;
+  cycles_today: number;
+  decisions_today: number;
+  executions_today: number;
+  blocked_today: number;
+  last_cycle_at_iso: string | null;
+  seconds_since_last_cycle: number | null;
+  plain_english_briefing: string;
+  diagnostic_hints: string[];
+  next_action_hint: string | null;
+  generated_at_iso?: string | null;
+  [key: string]: unknown;
+}
+
+export async function fetchOperatorBriefing(): Promise<OperatorBriefingResponse | null> {
+  try {
+    return await apiGet<OperatorBriefingResponse>("/operator-briefing");
+  } catch {
+    return null;
+  }
+}
+
+// ── Forex Fury promote ──
+
+export interface ForexFuryPromoteResponse {
+  status: string;
+  lead_id?: string;
+  candidate_id: string;
+  message?: string;
+  [key: string]: unknown;
+}
+
+export interface ForexFuryPromotionStatusResponse {
+  candidate_id: string;
+  promoted: boolean;
+  lead_id?: string | null;
+  message?: string;
+  [key: string]: unknown;
+}
+
+export interface ApiPostError {
+  status: number;
+  message: string;
+  payload: unknown;
+}
+
+function toPostError(err: unknown): ApiPostError {
+  const anyErr = err as { status?: number; message?: string; payload?: unknown };
+  return {
+    status: anyErr?.status ?? 0,
+    message: anyErr?.message ?? "Request failed",
+    payload: anyErr?.payload ?? null,
+  };
+}
+
+export async function promoteForexFuryCandidate(
+  candidateId: string,
+): Promise<{ ok: true; data: ForexFuryPromoteResponse } | { ok: false; error: ApiPostError }> {
+  try {
+    const data = await apiPostJson<ForexFuryPromoteResponse, { candidate_id: string }>(
+      "/forex-fury-promote/promote",
+      { candidate_id: candidateId },
+    );
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
+}
+
+export async function getForexFuryPromotionStatus(
+  candidateId: string,
+): Promise<ForexFuryPromotionStatusResponse | null> {
+  try {
+    return await apiGet<ForexFuryPromotionStatusResponse>(
+      `/forex-fury-promote/promotion-status?candidate_id=${encodeURIComponent(candidateId)}`,
+    );
+  } catch {
+    return null;
+  }
+}
+
+// ── Strategy Dev actions ──
+
+export type StrategyDevAction = "promote" | "demote" | "reject" | "archive" | "review";
+
+export interface StrategyActionResponse {
+  status: string;
+  strategy_id: string;
+  action: StrategyDevAction;
+  current_stage?: string;
+  message?: string;
+  [key: string]: unknown;
+}
+
+export async function applyStrategyDevAction(
+  strategyId: string,
+  action: StrategyDevAction,
+  note?: string,
+): Promise<{ ok: true; data: StrategyActionResponse } | { ok: false; error: ApiPostError }> {
+  try {
+    const body: { strategy_id: string; note?: string } = { strategy_id: strategyId };
+    if (note && note.trim().length > 0) body.note = note.trim();
+    const data = await apiPostJson<StrategyActionResponse, typeof body>(
+      `/strategy-dev-actions/${action}`,
+      body,
+    );
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
 }
