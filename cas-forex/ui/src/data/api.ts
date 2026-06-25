@@ -424,6 +424,21 @@ export async function fetchAgentDecisionLatest(): Promise<AgentDecisionResponse 
   try { return await apiGet<AgentDecisionResponse>("/agent-decision/latest"); } catch { return null; }
 }
 
+export interface AgentDecisionHistoryItem extends AgentDecisionResponse {
+  cycle_report_path: string;
+  actioned_at?: string | null;
+}
+
+export interface AgentDecisionHistoryResponse {
+  count: number;
+  limit: number;
+  decisions: AgentDecisionHistoryItem[];
+}
+
+export async function fetchAgentDecisionHistory(limit: number = 25): Promise<AgentDecisionHistoryResponse | null> {
+  try { return await apiGet<AgentDecisionHistoryResponse>(`/agent-decision/history?limit=${limit}`); } catch { return null; }
+}
+
 export async function fetchAutonomousLoopHealth(): Promise<AutonomousLoopHealthResponse | null> {
   try { return await apiGet<AutonomousLoopHealthResponse>("/autonomous-loop/health"); } catch { return null; }
 }

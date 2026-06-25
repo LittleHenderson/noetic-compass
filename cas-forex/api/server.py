@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .data import dashboard_state
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -37,6 +37,10 @@ app.include_router(live_telemetry.router, prefix="/api/forex/live-telemetry", ta
 app.include_router(agent_decision.router, prefix="/api/forex/agent-decision", tags=["agent-decision"])
 app.include_router(agent_decision_history.router, prefix="/api/forex/agent-decision", tags=["agent-decision"])
 app.include_router(autonomous_loop.router, prefix="/api/forex/autonomous-loop", tags=["autonomous-loop"])
+app.include_router(notifications.router, prefix="/api/forex/notifications", tags=["notifications"])
+app.include_router(forex_fury_promote.router, prefix="/api/forex/forex-fury-promote", tags=["forex-fury-promote"])
+app.include_router(strategy_dev_actions.router, prefix="/api/forex/strategy-dev-actions", tags=["strategy-dev-actions"])
+app.include_router(operator_briefing.router, prefix="/api/forex/operator-briefing", tags=["operator-briefing"])
 
 
 @app.get("/api/forex/dashboard")

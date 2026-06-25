@@ -1,5 +1,142 @@
 # CAS Forex - Changelog
 
+## 2026-06-25 - Army fleet: push + Fury promote + strategy actions + history UI + operator briefing
+
+Five parallel agents on disjoint files. No collisions. 631 → 726 (+95 net tests).
+Parent integrates 4 new routes into `api/server.py`.
+
+### Slice 1 — Web push notifications (skeleton)
+
+`cas_forex/push_notifications.py`: `PushSubscription` + `PushSubscriptionStore`
+(file-backed JSONL at `evidence_runs/push_subscriptions/subscriptions.jsonl`,
+atomic temp+rename writes); `PushDispatchResult`; `dispatch_test_push`. An
+observational-payload guard raises on advisory phrases — notifications are
+report-only, never trade-advisory.
+
+`api/routes/notifications.py`: `POST /subscribe`, `POST /unsubscribe` (204,
+idempotent), `GET /subscriptions`, `POST /test-push`. Module-level singleton
+store + `set_store_for_testing` / `set_transport_for_testing` hooks.
+
+`dispatch_test_push` returns `success=False,
+error_message="dispatch backend not installed (pywebpush)"` when no transport
+injected. `pip install pywebpush` + a tiny VAPID transport unlocks real
+push later — no dep added today.
+
+Tests: 11 unit + 8 route = 19. Operator hits `POST /test-push` to validate
+their subscription roundtrip without a real push delivery.
+
+### Slice 2 — Forex Fury promote + sha256 verification
+
+`cas_forex/forex_fury_promote.py`: `verify_set_integrity(...)` pure sha256
+check; `promote_candidate(...)` looks up a replay candidate, verifies the
+`.set` on disk matches the manifest, atomically appends a strategy lead.
+Lead `status` is hard-coded `PROMOTED_PAPER_LANE` — never `PROMOTED_LIVE`
+(license-flip stays operator-driven).
+
+`api/routes/forex_fury_promote.py`: `POST /promote` (200 success, 400 on
+integrity fail with structured detail), `GET /promotion-status?candidate_id=X`.
+Loader-injection hooks for tests.
+
+Promoted twice → appends both with distinct deterministic `lead_id`s
+(audit-trail semantics; callers dedupe via `GET /promotion-status`).
+
+Tests: 10 unit + 5 route = 15. Confirms PROMOTED_PAPER_LANE is the only
+status emitted by this module.
+
+### Slice 3 — Strategy Dev Queue promote/demote/reject/archive/review
+
+`cas_forex/strategy_dev_actions.py`: `PROMOTABLE_STAGES = ("RESEARCH",
+"REPLAY", "PAPER", "REVIEW")`, `STAGE_ORDER` map, pure predicates
+`can_promote`/`can_demote`/`next_stage_for_promotion`/
+`previous_stage_for_demotion`, and `apply_action(...)` that atomically
+rewrites the queue JSON with `history` appended (never replaced) per action.
+PROMOTED/REJECTED/ARCHIVED are terminal. REVIEW tags `last_reviewed_at_iso`
+without changing stage. `PROMOTED` here is the queue-stage label only;
+nothing in this slice enables live execution.
+
+`api/routes/strategy_dev_actions.py`: `POST /promote`, `/demote`, `/reject`,
+`/archive`, `/review`. 400 on illegal transition or missing strategy_id
+with `{error, message, current_stage}` detail. Loader-injection.
+
+Route gracefully accepts both `items`/`strategy_id` (spec) and the real
+queue report's `work_items`/`item_id` shape so the existing dashboard
+data flows through unchanged.
+
+Tests: 13 unit + 9 route = 22.
+
+### Slice 4 — Decision History UI page
+
+`ui/src/pages/DecisionHistoryPage.tsx` — limit selector (10/25/50,
+default 25), 60s polling, status breakdown stats
+(`executed: N · blocked: N · approved_not_executed: N · no_recent_decision: N`),
+empty/error/loading states.
+
+`ui/src/components/DecisionHistoryRow.tsx` — truncated mono `cycle_id`,
+`StatusChip` for `overall_status`, clamped summary with show-more toggle,
+collapsible decision chain, muted `next_action_hint`. Plain text only — no
+markdown / emojis / advisory text.
+
+`ui/src/data/api.ts` — additive types `AgentDecisionHistoryItem`,
+`AgentDecisionHistoryResponse`; fetcher `fetchAgentDecisionHistory(limit)`.
+
+`ui/src/App.tsx` and `ui/src/components/Shell.tsx` — additive: `Page`
+union extended with `"decision-history"`, route entry after Cond. Lab,
+nav entry labeled "Decisions".
+
+`ui/src/App.css` — additive styles for `.decision-history-*` classes.
+
+UI build: 57 modules transformed in 3.22s, PWA precache 9 entries / 589 KiB.
+
+### Slice 5 — Operator Briefing capability
+
+`cas_forex/operator_briefing.py`: `OperatorBriefing` frozen dataclass
+aggregating loop health, latest decision, live telemetry, MT5 probe, and
+readiness state into one structured snapshot. Pure
+`compose_operator_briefing(...)` takes parsed inputs; companion
+`load_operator_briefing_inputs(repo_root)` does the disk I/O.
+
+`plain_english_briefing` is a 3-5 sentence template the LLM bot surfaces
+verbatim. Tests verify it NEVER contains "buy now" / "should you trade" /
+"good entry" / "place a trade" / "what should i do" / "you should sell" /
+"now is the time" (case-insensitive substring assertion).
+
+`api/routes/operator_briefing.py`: `GET /api/forex/operator-briefing`
+(loader-injection). Returns 200 even when all inputs are None — graceful
+"unknown" briefing.
+
+`cas_forex/cas_forex_bot.py`: new `BotCapability(key="bf", group="status",
+label="Operator Briefing", api_endpoint="/api/forex/operator-briefing")`
+added after `ah`. Capability count: 33 → 34.
+
+Tests: 9 unit + 4 route = 13.
+
+The LLM bot can now answer "what's going on?" with a single `bf` tool
+call instead of chaining 4-5 capability calls.
+
+### Parent integration
+
+`api/server.py` — additive: imports extended with `notifications`,
+`forex_fury_promote`, `strategy_dev_actions`, `operator_briefing`;
+4 new `include_router` lines under prefixes
+`/api/forex/notifications`, `/api/forex/forex-fury-promote`,
+`/api/forex/strategy-dev-actions`, `/api/forex/operator-briefing`.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q  # 726 passed (631 → 726, +95 net)
+cd ui && npm run build       # 57 modules, 3.22s, PWA SW regenerated
+```
+
+### Boundary unchanged
+
+LLM bot remains an understanding window. `requires_confirm` gates, Stage 3
+validator, and runtime-gate licensure all unchanged. Push notifications
+are observational. Strategy Dev `PROMOTED` is a queue-stage label only.
+Forex Fury promotion writes `PROMOTED_PAPER_LANE` only. The agent cycle
+still trades autonomously on the operator's behalf to remove emotional
+decision-making from the loop — that's the whole point.
+
 ## 2026-06-25 - Parallel fleet: trade-page cards + decision history + receipt archive + Fury audit
 
 Four parallel agents on disjoint slices. No collisions. 615 → 631 (+16 net).

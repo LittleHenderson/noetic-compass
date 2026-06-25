@@ -91,6 +91,11 @@ CAPABILITIES: List[BotCapability] = [
         description="Is the autonomous loop alive? Last cycle time, cycles today, decisions/executions/blocked counts, diagnostic hints",
         api_endpoint="/api/forex/autonomous-loop/health",
     ),
+    BotCapability(
+        key="bf", group="status", label="Operator Briefing",
+        description="Single-call snapshot: loop health + latest decision + open positions + MT5 status + readiness gates",
+        api_endpoint="/api/forex/operator-briefing",
+    ),
 
     # ---- AGENT WORKFLOW ----
     BotCapability(

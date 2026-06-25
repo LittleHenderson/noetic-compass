@@ -15,7 +15,8 @@ type Page =
   | "pcba"
   | "ledger"
   | "optimizer"
-  | "condition-lab";
+  | "condition-lab"
+  | "decision-history";
 
 interface ShellProps {
   readiness: UIReadinessReport;
@@ -36,6 +37,7 @@ const NAV_ITEMS: { id: Page; label: string; ready: boolean }[] = [
   { id: "ledger", label: "Ledger", ready: true },
   { id: "optimizer", label: "Optimizer", ready: true },
   { id: "condition-lab", label: "Cond. Lab", ready: true },
+  { id: "decision-history", label: "Decisions", ready: true },
 ];
 
 export function Shell({
