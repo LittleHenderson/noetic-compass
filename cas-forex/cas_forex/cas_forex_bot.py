@@ -81,6 +81,16 @@ CAPABILITIES: List[BotCapability] = [
         description="Last agent cycle events, receipts, pending items",
         api_endpoint="/api/forex/strategy/agent-events/latest",
     ),
+    BotCapability(
+        key="ax", group="status", label="Explain Latest Agent Decision",
+        description="Walk the agent's reasoning chain for the most recent cycle: strategy lead, walk-forward, PCBA gate, cycle intent, execution outcome",
+        api_endpoint="/api/forex/agent-decision/latest",
+    ),
+    BotCapability(
+        key="ah", group="status", label="Autonomous Loop Health",
+        description="Is the autonomous loop alive? Last cycle time, cycles today, decisions/executions/blocked counts, diagnostic hints",
+        api_endpoint="/api/forex/autonomous-loop/health",
+    ),
 
     # ---- AGENT WORKFLOW ----
     BotCapability(
@@ -379,6 +389,20 @@ def build_status_summary(state: BotState) -> str:
             )
             op_status = str(operability.get("operability_status") or "unknown")
             lines.append(_status_line("MT5 operability", op_status, "VERIFIED" in op_status))
+    except Exception:
+        pass
+
+    try:
+        loop_url = f"{state.api_base}/api/forex/autonomous-loop/health"
+        req = urllib.request.Request(loop_url)
+        with urllib.request.urlopen(req, timeout=5) as resp:
+            loop = json.loads(resp.read().decode())
+            loop_status = str(loop.get("overall_status") or "unknown")
+            cycles = loop.get("cycles_today")
+            label = f"{loop_status}"
+            if cycles is not None:
+                label = f"{loop_status} ({cycles} cycles today)"
+            lines.append(_status_line("Autonomous loop", label, loop_status == "running"))
     except Exception:
         pass
 

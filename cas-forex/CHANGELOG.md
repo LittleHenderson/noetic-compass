@@ -1,5 +1,68 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - Wire explainer + loop health into API routes and bot capabilities
+
+The `agent_decision_explainer` and `autonomous_loop_health` primitives
+shipped earlier but were not callable from the bot. This slice exposes
+both as API routes, adds them as `BotCapability` entries so the LLM
+bot can call them as tools, and surfaces loop health in the deterministic
+bot's startup status banner.
+
+Implemented:
+
+- `api/routes/agent_decision.py` — `GET /api/forex/agent-decision/latest`
+  loads cycle / memory / strategy-dev / strategy-leads / walk-forward /
+  PCBA evidence from `evidence_runs/*` via `_safe_load_latest`, runs the
+  pure explainer, returns the structured `AgentDecisionExplanation`
+  payload. Missing artifacts → explainer's `status="missing"` chain
+  steps; the route never fabricates. `set_loader_for_testing` /
+  `reset_loader_for_testing` for injection.
+- `api/routes/autonomous_loop.py` — `GET /api/forex/autonomous-loop/health`
+  uses the module's own `load_loop_health_inputs(repo_root)` helper,
+  runs the pure summariser, returns the `AutonomousLoopHealth` payload.
+  Same loader-injection pattern.
+- `api/server.py` — `include_router` for both under
+  `/api/forex/agent-decision` and `/api/forex/autonomous-loop`.
+- `cas_forex/cas_forex_bot.py`:
+  - Two new `BotCapability` entries (capability count: 31 → 33):
+    - `ax` — Explain Latest Agent Decision (`/api/forex/agent-decision/latest`)
+    - `ah` — Autonomous Loop Health (`/api/forex/autonomous-loop/health`)
+  - `build_status_summary` now also queries
+    `/api/forex/autonomous-loop/health` and reports the loop status
+    in the deterministic bot's startup banner: e.g.
+    `Autonomous loop: running (3 cycles today)`. If the endpoint
+    isn't reachable (e.g. uvicorn predates the route), the line is
+    silently skipped — the bot doesn't lecture about it.
+
+The LLM bot's tool-registry size test was rewritten to follow
+`len(CAPABILITIES)` instead of a hardcoded 31, so future capability
+additions don't break it.
+
+Tests:
+
+- `tests/test_agent_decision_route.py` — 4 tests via the FastAPI ASGI
+  helper: 200 + correct empty payload when no evidence, full schema
+  shape matching the dataclass, no-trade-advisory invariant on
+  `plain_english_summary` at the route boundary, default loader is
+  the disk-backed helper after reset.
+- `tests/test_autonomous_loop_route.py` — 4 tests: 200 + "unknown"
+  status when no evidence, full required-fields schema, no-trade-
+  advisory invariant, default loader resolution.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests -q
+# 615 passed (607 → 615, +8 net; no regressions).
+```
+
+Bot capabilities: 31 → 33. The LLM bot's "why did the agent trade X?"
+and "is the loop alive?" paths are now single tool calls instead of
+multi-step JSON assembly.
+
+Deployment note: restart uvicorn so both new routes register and the
+deterministic bot's `Autonomous loop` status line shows up.
+
 ## 2026-06-24 - Parallel fleet: decision explainer + loop health + autowake supervisor + live telemetry
 
 Four parallel agents on disjoint slices, all serving the autonomous-loop

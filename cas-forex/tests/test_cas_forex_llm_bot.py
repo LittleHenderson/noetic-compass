@@ -60,8 +60,11 @@ class FakeTransport:
 
 
 def test_tools_cover_every_capability():
+    from cas_forex.cas_forex_bot import CAPABILITIES
     tools = build_tools_from_capabilities()
-    assert len(tools) == 31, f"expected 31 tools, got {len(tools)}"
+    assert len(tools) == len(CAPABILITIES), (
+        f"tool count {len(tools)} must match capability count {len(CAPABILITIES)}"
+    )
     for tool in tools:
         assert tool["type"] == "function"
         fn = tool["function"]
