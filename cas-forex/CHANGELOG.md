@@ -1,5 +1,118 @@
 # CAS Forex - Changelog
 
+## 2026-06-25 - Army fleet round 4: stack-check + strategy ranking/diff + daily report + UI pages
+
+Four parallel agents on disjoint scopes. No collisions. 879 → 979 (+100 net).
+
+### Slice 1 — Stack health check
+
+`cas_forex/stack_health_check.py` — composes 6 checks (`uvicorn-api`,
+`autowake-supervisor`, `mt5-terminal`, `autonomous-loop`,
+`readiness-gates`, `live-telemetry`) into a single
+`StackHealthReport(overall_status, checks, plain_english_summary,
+next_actions)`. Overall precedence: MISSING > DEGRADED > UNKNOWN > OK.
+
+`scripts/run_cas_forex_stack_check.py` — CLI: `--api-base`, `--json`,
+`--summary-only`, `--exit-code-on-degraded`, `--repo-root`.
+
+`api/routes/stack_health.py` — `GET /api/forex/stack-health/check`
+(thin wrapper; parent added this so the UI page has a backend).
+
+Tests: 16, parametrized 9 forbidden phrases across 4 sample reports.
+
+### Slice 2 — Strategy comparison / ranking
+
+`cas_forex/strategy_comparison.py` — pure:
+- `normalize_records(...)` unifies Forex Fury candidates + strategy leads +
+  strategy-dev-queue items into a single shape.
+- `rank_strategies(...)` computes per-metric ranks + composite score (0–100).
+  Default weights: PF 0.35, DD-inverse 0.30, walk-forward grade 0.20,
+  recency 0.10, total-trades-log 0.05. Normalizers: PF clamped at PF/5,
+  DD-inv = 1 - min(dd/50, 1), WF grade {LEAD:1.0, WATCH:0.5,
+  REJECT:0.0}, trades = log1p(n)/log1p(1000). Recency: linear over
+  30 days clamped 0..1.
+- `diff_strategies(a, b)` field-level diff with observational
+  `plain_english_diff`.
+
+`api/routes/strategy_comparison.py` — `GET /ranked?limit=N` (default
+25, max 50, 400 on out-of-range) and `GET /diff?strategy_id_a=X&strategy_id_b=Y`
+(400 on unknown id).
+
+Tests: 22 unit + 22 route fixtures (44 total). 10 forbidden phrases
+parametrized across ranked summary, diagnostic hints, and diff text.
+Wording emphasizes "the operator owns interpretation; this is
+observational evidence only."
+
+### Slice 3 — Daily report generator
+
+`cas_forex/daily_report_generator.py` — pure composer with 7 sections:
+1. `cycles` — total + by-outcome counts; flags ≥5 consecutive blocked.
+2. `decisions` — total + by_status + top blocking reason.
+3. `executions` — total + net P&L + top winning/losing strategies.
+4. `strategies` — promotions/demotions + walk-forward verdict counts.
+5. `risk` — peak concentration + peak margin utilization + floating P&L range.
+6. `system` — uvicorn / autowake uptime % + MT5 disconnect events.
+7. `incidents` — loop stalls, REJECTs, dispatch failures, MT5 incidents.
+
+`overall_headline` template: "YYYY-MM-DD: N cycles, N executions,
+N blocked, net $X — system healthy throughout." (or "...N incident(s)
+recorded.")
+
+`api/routes/daily_report.py` — `GET /today` and `GET /{report_date}`.
+
+Tests: 35 generator + 5 route (40 total). 10 forbidden phrases
+parametrized across multiple report fixtures.
+
+### Slice 4 — UI: Stack Status + Strategy Comparison + Daily Report pages
+
+`ui/src/pages/StackStatusPage.tsx` — 30s polling. Overall status chip,
+plain summary, 6-check table, remediation steps as numbered list (the
+"factual commands" returned by the backend, not advice).
+
+`ui/src/pages/StrategyComparisonPage.tsx` — Ranked/Diff mode toggle:
+- Ranked: limit selector (10/25/50), 10-col table (rank, ID, source
+  chip, symbol, TF, family, PF, DD%, WF grade, composite). Row-click
+  enters diff mode with that row as A and auto-picks a non-equal B.
+- Diff: two dropdowns, side-by-side field table, `plain_english_diff`
+  verbatim.
+
+`ui/src/pages/DailyReportPage.tsx` — date picker (`max=today UTC`,
+default today), overall headline, plain summary, collapsible section
+cards (defaults to expanded), diagnostic hints bullet list.
+
+`ui/src/data/api.ts` — additive types `StackHealthCheckResult`,
+`StackHealthReport`, `StrategyComparisonRecord`, `StrategyRankingReport`,
+`StrategyDiff`, `DailySection`, `DailyReport`; fetchers
+`fetchStackHealth`, `fetchRankedStrategies`, `fetchStrategyDiff`,
+`fetchDailyReport`.
+
+`ui/src/App.tsx`, `ui/src/components/Shell.tsx` — additive: `Page`
+union extended with `"stack-status"` / `"strategy-comparison"` /
+`"daily-report"`; nav entries Stack / Compare / Daily.
+
+UI build: 66 modules, 2.95s, PWA SW regenerated, zero TS errors.
+
+### Parent integration
+
+`api/server.py` — additive: extended imports with `strategy_comparison`,
+`daily_report`, `stack_health`; three new `include_router` lines under
+their own prefixes.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q   # 979 passed (879 → 979, +100 net)
+cd ui && npm run build         # 66 modules, 2.95s, PWA SW regenerated
+```
+
+### Boundary unchanged
+
+Stack-check next_actions are factual commands ("Launch autowake
+supervisor: ..."). Strategy comparison output is observational
+evidence. Daily report describes what happened. None of these
+artifacts produces trade advice. All forbidden-phrase guards verified
+in tests.
+
 ## 2026-06-25 - Army fleet round 3: dispatcher loop + risk gate + webhook fallback + UI panels + system health
 
 Five parallel agents on disjoint scopes. No collisions. 799 → 879 (+80 net).

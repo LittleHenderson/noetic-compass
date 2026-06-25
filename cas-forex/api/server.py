@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .data import dashboard_state
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -44,6 +44,9 @@ app.include_router(operator_briefing.router, prefix="/api/forex/operator-briefin
 app.include_router(risk_monitoring.router, prefix="/api/forex/risk-monitoring", tags=["risk-monitoring"])
 app.include_router(webhook_notifications.router, prefix="/api/forex/webhook-notifications", tags=["webhook-notifications"])
 app.include_router(system_health.router, prefix="/api/forex/system-health", tags=["system-health"])
+app.include_router(strategy_comparison.router, prefix="/api/forex/strategy-comparison", tags=["strategy-comparison"])
+app.include_router(daily_report.router, prefix="/api/forex/daily-report", tags=["daily-report"])
+app.include_router(stack_health.router, prefix="/api/forex/stack-health", tags=["stack-health"])
 
 
 @app.get("/api/forex/dashboard")

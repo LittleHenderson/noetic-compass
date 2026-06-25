@@ -16,6 +16,9 @@ import { ConditionLabPage } from "./pages/ConditionLabPage";
 import { DecisionHistoryPage } from "./pages/DecisionHistoryPage";
 import { ForexFuryPage } from "./pages/ForexFuryPage";
 import { StrategyDevPage } from "./pages/StrategyDevPage";
+import { StackStatusPage } from "./pages/StackStatusPage";
+import { StrategyComparisonPage } from "./pages/StrategyComparisonPage";
+import { DailyReportPage } from "./pages/DailyReportPage";
 import {
   UI_READINESS_FIXTURE,
   DAILY_SCHEDULE_FIXTURE,
@@ -83,9 +86,12 @@ type Page =
   | "condition-lab"
   | "decision-history"
   | "forex-fury"
-  | "strategy-dev";
+  | "strategy-dev"
+  | "stack-status"
+  | "strategy-comparison"
+  | "daily-report";
 
-const PAGE_IDS: Page[] = ["proof", "audit", "dashboard", "trade", "adaptive", "history", "settings", "pcba", "ledger", "optimizer", "condition-lab", "decision-history", "forex-fury", "strategy-dev"];
+const PAGE_IDS: Page[] = ["proof", "audit", "dashboard", "trade", "adaptive", "history", "settings", "pcba", "ledger", "optimizer", "condition-lab", "decision-history", "forex-fury", "strategy-dev", "stack-status", "strategy-comparison", "daily-report"];
 
 function initialPageFromUrl(): Page {
   if (typeof window === "undefined") return "proof";
@@ -190,6 +196,9 @@ export function App() {
       {page === "decision-history" && <DecisionHistoryPage />}
       {page === "forex-fury" && <ForexFuryPage state={state} />}
       {page === "strategy-dev" && <StrategyDevPage state={state} />}
+      {page === "stack-status" && <StackStatusPage />}
+      {page === "strategy-comparison" && <StrategyComparisonPage />}
+      {page === "daily-report" && <DailyReportPage />}
     </Shell>
   );
 }

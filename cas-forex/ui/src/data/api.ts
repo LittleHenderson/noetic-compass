@@ -585,6 +585,133 @@ export async function fetchOperatorBriefing(): Promise<OperatorBriefingResponse 
   }
 }
 
+// ── Stack health ──
+
+export interface StackHealthCheckResult {
+  name: string;
+  status: string;
+  headline: string;
+  detail: string;
+  [key: string]: unknown;
+}
+
+export interface StackHealthReport {
+  overall_status: string;
+  plain_english_summary: string;
+  checks: StackHealthCheckResult[];
+  next_actions: string[];
+  generated_at_iso?: string | null;
+  [key: string]: unknown;
+}
+
+export async function fetchStackHealth(): Promise<StackHealthReport | null> {
+  try {
+    return await apiGet<StackHealthReport>("/stack-health/check");
+  } catch {
+    return null;
+  }
+}
+
+// ── Strategy comparison ──
+
+export interface StrategyComparisonRecord {
+  rank: number;
+  strategy_id: string;
+  source: string;
+  symbol: string | null;
+  timeframe: string | null;
+  family: string | null;
+  profit_factor: number | null;
+  max_drawdown_pct: number | null;
+  walk_forward_grade: string | null;
+  composite_score: number | null;
+  [key: string]: unknown;
+}
+
+export interface StrategyRankingReport {
+  records: StrategyComparisonRecord[];
+  limit: number;
+  total_available: number;
+  plain_english_summary?: string;
+  generated_at_iso?: string | null;
+  [key: string]: unknown;
+}
+
+export interface StrategyDiffField {
+  field: string;
+  value_a: unknown;
+  value_b: unknown;
+}
+
+export interface StrategyDiff {
+  strategy_a_id: string;
+  strategy_b_id: string;
+  fields: StrategyDiffField[];
+  plain_english_diff: string;
+  generated_at_iso?: string | null;
+  [key: string]: unknown;
+}
+
+export async function fetchRankedStrategies(
+  limit: number,
+): Promise<StrategyRankingReport | null> {
+  try {
+    return await apiGet<StrategyRankingReport>(
+      `/strategy-comparison/ranked?limit=${encodeURIComponent(limit)}`,
+    );
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchStrategyDiff(
+  idA: string,
+  idB: string,
+): Promise<StrategyDiff | null> {
+  try {
+    return await apiGet<StrategyDiff>(
+      `/strategy-comparison/diff?a=${encodeURIComponent(idA)}&b=${encodeURIComponent(idB)}`,
+    );
+  } catch {
+    return null;
+  }
+}
+
+// ── Daily report ──
+
+export interface DailySection {
+  name: string;
+  headline: string;
+  detail: string;
+  metrics?: Record<string, unknown>;
+  notable_events?: string[];
+  [key: string]: unknown;
+}
+
+export interface DailyReport {
+  report_date: string;
+  overall_headline: string;
+  plain_english_summary: string;
+  sections: DailySection[];
+  diagnostic_hints: string[];
+  generated_at_iso?: string | null;
+  [key: string]: unknown;
+}
+
+export async function fetchDailyReport(
+  date: string,
+): Promise<DailyReport | null> {
+  const path =
+    date === "today"
+      ? "/daily-report/today"
+      : `/daily-report/${encodeURIComponent(date)}`;
+  try {
+    return await apiGet<DailyReport>(path);
+  } catch {
+    return null;
+  }
+}
+
 // ── Forex Fury promote ──
 
 export interface ForexFuryPromoteResponse {
