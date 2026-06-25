@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { NotificationSubscriptionPanel } from "../components/NotificationSubscriptionPanel";
+import { WebhookSubscriptionPanel } from "../components/WebhookSubscriptionPanel";
 import { getApiBase, resetApiBase, setApiBase } from "../data/api";
 import type { DashboardState } from "../types/evidence";
 
@@ -29,6 +31,12 @@ export function SettingsPage({ state }: SettingsPageProps) {
   return (
     <div className="settings-page">
       <MobileApiPanel />
+
+      {/* ── Notification Subscriptions (Web Push) ── */}
+      <NotificationSubscriptionPanel />
+
+      {/* ── Webhook Subscriptions ── */}
+      <WebhookSubscriptionPanel />
 
       {/* ── Owner Control Surface ── */}
       <GlassPanel title="Owner Control Policy" subtitle="Risk caps, AI autonomy, concurrent trades">

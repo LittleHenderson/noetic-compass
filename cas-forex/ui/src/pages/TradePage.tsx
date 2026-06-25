@@ -6,6 +6,7 @@ import { StatusChip } from "../components/StatusChip";
 import { CandlestickChart } from "../components/charts/CandlestickChart";
 import { MultiTimeframeSelector } from "../components/MultiTimeframeSelector";
 import { LiveTradesTelemetry } from "../components/LiveTradesTelemetry";
+import { PortfolioRiskCard } from "../components/PortfolioRiskCard";
 import { AgentDecisionCard } from "../components/AgentDecisionCard";
 import { AutonomousLoopCard } from "../components/AutonomousLoopCard";
 import type { DashboardState, SymbolDecision, SizingEntry } from "../types/evidence";
@@ -93,6 +94,9 @@ export function TradePage({ state }: TradePageProps) {
         <AgentDecisionCard />
         <AutonomousLoopCard />
       </div>
+
+      {/* ── Portfolio Risk (observational shape, polled every 30s) ── */}
+      <PortfolioRiskCard />
 
       {/* ── Live Trades Telemetry (observational, polled every 2s) ── */}
       <LiveTradesTelemetry />

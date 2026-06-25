@@ -674,3 +674,214 @@ export async function applyStrategyDevAction(
     return { ok: false, error: toPostError(err) };
   }
 }
+
+// ── Portfolio Risk Monitoring ──
+
+export interface SymbolRiskExposureItem {
+  symbol: string;
+  direction: string;
+  open_position_count: number;
+  total_lots: number;
+  total_floating_pnl: number;
+  largest_position_lots: number;
+}
+
+export interface PortfolioRiskResponse {
+  snapshot_at_iso: string;
+  open_position_count: number;
+  total_floating_pnl: number;
+  total_exposure_lots: number;
+  largest_symbol_exposure: SymbolRiskExposureItem | null;
+  largest_floating_pnl_loss: number;
+  largest_floating_pnl_gain: number;
+  by_symbol: SymbolRiskExposureItem[];
+  concentration_pct: number;
+  account_balance: number | null;
+  account_equity: number | null;
+  account_margin: number | null;
+  account_free_margin: number | null;
+  margin_utilization_pct: number | null;
+  plain_english_summary: string;
+  diagnostic_hints: string[];
+}
+
+export async function fetchPortfolioRisk(): Promise<PortfolioRiskResponse | null> {
+  try {
+    return await apiGet<PortfolioRiskResponse>("/risk-monitoring/portfolio");
+  } catch {
+    return null;
+  }
+}
+
+// ── Web Push Notification Subscriptions ──
+
+export interface PushSubscriptionItem {
+  endpoint: string;
+  keys: { p256dh: string | null; auth: string | null };
+  label: string;
+  created_at_iso: string;
+}
+
+export interface PushSubscriptionsResponse {
+  subscriptions: PushSubscriptionItem[];
+  total_subscriptions: number;
+}
+
+export interface PushTestResult {
+  endpoint: string;
+  success: boolean;
+  status_code: number | null;
+  error_message: string | null;
+}
+
+export interface PushTestResponse {
+  results: PushTestResult[];
+}
+
+export async function fetchPushSubscriptions(): Promise<PushSubscriptionsResponse | null> {
+  try {
+    return await apiGet<PushSubscriptionsResponse>("/notifications/subscriptions");
+  } catch {
+    return null;
+  }
+}
+
+export interface WebPushSubscribeBody {
+  endpoint: string;
+  keys: { p256dh: string; auth: string };
+  label?: string;
+}
+
+export async function subscribeWebPush(
+  body: WebPushSubscribeBody,
+): Promise<
+  | { ok: true; data: { subscription: PushSubscriptionItem; total_subscriptions: number } }
+  | { ok: false; error: ApiPostError }
+> {
+  try {
+    const data = await apiPostJson<
+      { subscription: PushSubscriptionItem; total_subscriptions: number },
+      WebPushSubscribeBody
+    >("/notifications/subscribe", body);
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
+}
+
+export async function unsubscribeWebPush(
+  endpoint: string,
+): Promise<{ ok: true } | { ok: false; error: ApiPostError }> {
+  try {
+    await apiPostJson<unknown, { endpoint: string }>("/notifications/unsubscribe", { endpoint });
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
+}
+
+export async function testPushAll(
+  label?: string,
+): Promise<{ ok: true; data: PushTestResponse } | { ok: false; error: ApiPostError }> {
+  try {
+    const body: { label?: string } = {};
+    if (label && label.trim().length > 0) body.label = label.trim();
+    const data = await apiPostJson<PushTestResponse, typeof body>(
+      "/notifications/test-push",
+      body,
+    );
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
+}
+
+// ── Webhook Notification Subscriptions ──
+
+export interface WebhookSubscriptionItem {
+  webhook_url: string;
+  label: string;
+  created_at_iso: string;
+  last_used_at_iso: string | null;
+}
+
+export interface WebhookSubscriptionsResponse {
+  subscriptions: WebhookSubscriptionItem[];
+  total_subscriptions: number;
+}
+
+export interface WebhookTestResult {
+  webhook_url: string;
+  success: boolean;
+  status_code: number | null;
+  error_message: string | null;
+}
+
+export interface WebhookTestResponse {
+  results: WebhookTestResult[];
+}
+
+export async function fetchWebhookSubscriptions(): Promise<WebhookSubscriptionsResponse | null> {
+  try {
+    return await apiGet<WebhookSubscriptionsResponse>("/webhook-notifications/subscriptions");
+  } catch {
+    return null;
+  }
+}
+
+export async function subscribeWebhook(
+  webhookUrl: string,
+  label: string,
+): Promise<
+  | { ok: true; data: { subscription: WebhookSubscriptionItem; total_subscriptions: number } }
+  | { ok: false; error: ApiPostError }
+> {
+  try {
+    const body = { webhook_url: webhookUrl, label };
+    const data = await apiPostJson<
+      { subscription: WebhookSubscriptionItem; total_subscriptions: number },
+      typeof body
+    >("/webhook-notifications/subscribe", body);
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
+}
+
+export async function unsubscribeWebhook(
+  webhookUrl: string,
+): Promise<{ ok: true } | { ok: false; error: ApiPostError }> {
+  try {
+    await apiPostJson<unknown, { webhook_url: string }>(
+      "/webhook-notifications/unsubscribe",
+      { webhook_url: webhookUrl },
+    );
+    return { ok: true };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
+}
+
+export async function testWebhookAll(
+  label?: string,
+  title?: string,
+  body?: string,
+): Promise<{ ok: true; data: WebhookTestResponse } | { ok: false; error: ApiPostError }> {
+  try {
+    const requestBody: { label?: string; payload?: Record<string, unknown> } = {};
+    if (label && label.trim().length > 0) requestBody.label = label.trim();
+    if (title || body) {
+      requestBody.payload = {
+        title: title || "CAS Forex",
+        body: body || "Test webhook from the cockpit (observational).",
+      };
+    }
+    const data = await apiPostJson<WebhookTestResponse, typeof requestBody>(
+      "/webhook-notifications/test",
+      requestBody,
+    );
+    return { ok: true, data };
+  } catch (err) {
+    return { ok: false, error: toPostError(err) };
+  }
+}

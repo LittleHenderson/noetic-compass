@@ -1,5 +1,169 @@
 # CAS Forex - Changelog
 
+## 2026-06-25 - Army fleet round 3: dispatcher loop + risk gate + webhook fallback + UI panels + system health
+
+Five parallel agents on disjoint scopes. No collisions. 799 → 879 (+80 net).
+
+### Slice 1 — Notification dispatcher loop
+
+`cas_forex/notification_dispatcher_loop.py` — `NotificationDispatcherLoop`
+class mirrors `AutowakeSupervisor`: injected clock/sleeper, shutdown event,
+max_ticks/duration/consecutive-failure caps, backoff
+`tick_interval * min(2^consec, 16)`.
+
+Per tick: load current state snapshot → load previous from JSON file →
+`notification_triggers.detect_all(current, previous)` → dispatch each event
+to each subscription → persist current → previous atomically. Dispatch
+failures swallowed (tick continues). Loader failures count toward
+consecutive-failure budget.
+
+`scripts/run_notification_dispatcher.py` — launcher; SIGINT/SIGTERM →
+shutdown event; default 60s ticks. Real loader chains
+`load_operator_briefing_inputs` + `load_loop_health_inputs`. Real
+dispatch is the stubbed `dispatch_test_push(transport=None)` until
+`pip install pywebpush` lands.
+
++9 tests.
+
+### Slice 2 — Pre-execution risk gate
+
+`cas_forex/pre_execution_risk_gate.py` — pure
+`evaluate_proposed_intent(...)` that checks a proposed RouteIntent
+against the current `PortfolioRiskSnapshot` and `RiskCapConfig`.
+
+Cap dimensions (7):
+- `max_total_exposure_lots`
+- `max_concentration_pct`
+- `max_margin_utilization_pct`
+- `max_positions_per_symbol`
+- `max_open_position_count`
+- `max_drawdown_pct_from_equity_peak`
+- `max_floating_loss_usd`
+
+`DEFAULT_CAPS`: 10 lots / 70% / 70% / 5 pos / 20 open / 15% dd / no
+floating cap. `None` on any cap means "no cap" for that dimension.
+
+`RiskGateDecision.plain_english_reason` is parametrized against 10
+forbidden phrases (`"you should sell"`, `"consider closing"`, `"scale
+back"`, `"exit position"`, `"take profit"`, `"cut your losses"`,
+`"buy more"`, `"add to position"`, `"is a good entry"`, `"we
+recommend"`) across PASS and REJECT branches — observational only.
+
+Concentration computes the max would-be symbol concentration after
+adding (covers the case where adding to a small symbol still leaves an
+existing dominant symbol breaching). Exposure aggregates as `|lots|`.
+
+Integration into the agent cycle is OOS (follow-on slice).
+
++28 tests.
+
+### Slice 3 — Webhook fallback notifications
+
+`cas_forex/webhook_notifications.py` — `WebhookSubscriptionStore`
+(JSONL-backed, atomic temp+rename) + `dispatch_webhook(...)`.
+
+Pre-dispatch validation: `OBSERVATIONAL_GUARD_PHRASES` (11 phrases:
+`"you should buy"`, `"you should sell"`, `"good entry"`, `"good exit"`,
+`"recommended trade"`, `"we recommend"`, `"buy now"`, `"sell now"`,
+`"take profit now"`, `"best trade"`, `"hot tip"`) checked
+case-insensitively against payload's `title`+`body`. Match → short-circuit
+to `success=False, error_message="advisory phrase in payload: '<phrase>'"`
+before any HTTP call. Tests confirm transport NEVER invoked for any of
+the 11 phrases.
+
+`api/routes/webhook_notifications.py` — `POST /subscribe` (400 on
+missing url), `POST /unsubscribe` (204 idempotent), `GET /subscriptions`,
+`POST /test`. Module-level singleton store + `set_store_for_testing` /
+`set_transport_for_testing` injection.
+
+Works with Slack, Discord, Microsoft Teams, custom servers — anywhere
+the operator pastes the webhook URL.
+
++23 tests (15 unit + 8 route).
+
+### Slice 4 — UI: portfolio risk + push subscriptions + webhook subscriptions
+
+`ui/src/components/PortfolioRiskCard.tsx` — polls
+`/api/forex/risk-monitoring/portfolio` every 30s. Open-position count,
+total exposure, floating P/L (color-coded), concentration meter +
+margin utilization meter (teal under 50%, warning yellow 50-70%, danger
+red >70%), top-5 by_symbol table, diagnostic-hint bullets. Mounted on
+TradePage above LiveTradesTelemetry.
+
+`ui/src/components/NotificationSubscriptionPanel.tsx` — uses the
+browser Push API: `Notification.permission` check,
+`navigator.serviceWorker.ready` + `pushManager.subscribe`. Buttons:
+Enable / Disable / Send test push. Persistent inline note: "Backend
+dispatch backend (pywebpush) not yet installed — subscriptions
+register but pushes will fail until installed." VAPID public key from
+`VITE_CAS_FOREX_VAPID_PUBLIC_KEY` env. Mounted on SettingsPage under
+MobileApiPanel.
+
+`ui/src/components/WebhookSubscriptionPanel.tsx` — list existing,
+add form (webhook_url + label), per-row remove button, "Send test
+webhook" with inline result. Mounted on SettingsPage.
+
+`ui/src/data/api.ts` — additive: 6 new types, 8 fetchers/actions
+(`fetchPortfolioRisk`, `fetchPushSubscriptions`, `subscribeWebPush`,
+`unsubscribeWebPush`, `testPushAll`, `fetchWebhookSubscriptions`,
+`subscribeWebhook`, `unsubscribeWebhook`, `testWebhookAll`).
+
+`ui/src/App.css` — additive: `.portfolio-risk-*`, `.risk-meter-*`,
+`.notification-subscription-*`, `.webhook-*` styles.
+
+UI build: 63 modules transformed, 2.88s, PWA SW regenerated.
+
+### Slice 5 — System health monitor
+
+`cas_forex/system_health_monitor.py` — pure `compose_system_health(...)`
+returns `SystemHealthSnapshot` with:
+- `processes`: per-process `ProcessHealth(name, expected, last_signal_at_iso,
+  seconds_since_signal, likely_alive, status_label)` where
+  `status_label ∈ {alive, stale, missing, expected_off}`.
+- `evidence_freshness`: per-artifact freshness with per-artifact threshold
+  override.
+- `disk_space`: `shutil.disk_usage` + recursive walk of evidence_runs/.
+- `overall_status ∈ {healthy, degraded, stale, unknown}` with precedence.
+- `plain_english_summary`, `diagnostic_hints`.
+
+5 forbidden imperative phrases (`"you should restart"`, `"consider
+restarting"`, `"kill the"`, `"should be killed"`, `"force restart"`)
+parametrized across all 5 status branches — health monitor describes
+state, never commands.
+
+`load_system_health_inputs(repo_root)` separate disk loader. Default
+expected processes: `("uvicorn-api", "autowake-supervisor",
+"mt5-terminal")`. `notification-dispatcher` reports `expected_off` when
+absent (does NOT degrade overall).
+
+`api/routes/system_health.py` — `GET /api/forex/system-health/snapshot`
+with loader-injection.
+
++20 tests (16 composer + 4 route).
+
+### Parent integration
+
+`api/server.py` — additive: imports extended with `webhook_notifications`,
+`system_health`; two new `include_router` lines under prefixes
+`/api/forex/webhook-notifications` and `/api/forex/system-health`.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q   # 879 passed (799 → 879, +80 net)
+cd ui && npm run build         # 63 modules, 2.88s, PWA SW regenerated
+```
+
+### Boundary unchanged
+
+Webhook payloads observational (11 forbidden phrases enforced
+pre-dispatch). Risk gate decisions observational (10 forbidden phrases
+across PASS+REJECT). System health observational (5 forbidden
+imperative phrases across all status branches). Notification dispatcher
+uses the same stubbed dispatcher until `pywebpush` is installed. The
+LLM bot is still an understanding window. License gates remain
+unchanged.
+
 ## 2026-06-25 - Army fleet round 2: Fury set application + notification triggers + UI pages + risk monitoring
 
 Four parallel agents on disjoint scopes. No collisions. 726 → 799 (+73 net).
