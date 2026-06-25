@@ -19,6 +19,7 @@ import { StrategyDevPage } from "./pages/StrategyDevPage";
 import { StackStatusPage } from "./pages/StackStatusPage";
 import { StrategyComparisonPage } from "./pages/StrategyComparisonPage";
 import { DailyReportPage } from "./pages/DailyReportPage";
+import { QuickStartPage } from "./pages/QuickStartPage";
 import {
   UI_READINESS_FIXTURE,
   DAILY_SCHEDULE_FIXTURE,
@@ -73,6 +74,7 @@ import type { DashboardState } from "./types/evidence";
 import "./App.css";
 
 type Page =
+  | "quick-start"
   | "proof"
   | "audit"
   | "dashboard"
@@ -91,7 +93,7 @@ type Page =
   | "strategy-comparison"
   | "daily-report";
 
-const PAGE_IDS: Page[] = ["proof", "audit", "dashboard", "trade", "adaptive", "history", "settings", "pcba", "ledger", "optimizer", "condition-lab", "decision-history", "forex-fury", "strategy-dev", "stack-status", "strategy-comparison", "daily-report"];
+const PAGE_IDS: Page[] = ["quick-start", "proof", "audit", "dashboard", "trade", "adaptive", "history", "settings", "pcba", "ledger", "optimizer", "condition-lab", "decision-history", "forex-fury", "strategy-dev", "stack-status", "strategy-comparison", "daily-report"];
 
 function initialPageFromUrl(): Page {
   if (typeof window === "undefined") return "proof";
@@ -182,6 +184,7 @@ export function App() {
           {loading ? "Loading live evidence API..." : error}
         </div>
       )}
+      {page === "quick-start" && <QuickStartPage />}
       {page === "proof" && <ProofPage state={state} />}
       {page === "audit" && <AuditPage state={state} />}
       {page === "dashboard" && <DashboardPage state={state} />}

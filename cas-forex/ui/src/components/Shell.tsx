@@ -5,6 +5,7 @@ import { ModeBanner } from "./ModeBanner";
 import type { UIReadinessReport } from "../types/evidence";
 
 type Page =
+  | "quick-start"
   | "proof"
   | "audit"
   | "dashboard"
@@ -31,6 +32,7 @@ interface ShellProps {
 }
 
 const NAV_ITEMS: { id: Page; label: string; ready: boolean }[] = [
+  { id: "quick-start", label: "Quick Start", ready: true },
   { id: "proof", label: "Proof", ready: true },
   { id: "audit", label: "Audit", ready: true },
   { id: "dashboard", label: "Dashboard", ready: true },

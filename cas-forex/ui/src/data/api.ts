@@ -585,6 +585,21 @@ export async function fetchOperatorBriefing(): Promise<OperatorBriefingResponse 
   }
 }
 
+// ── API server health (root /health) ──
+
+export interface ApiHealthResponse {
+  status: string;
+  [key: string]: unknown;
+}
+
+export async function fetchHealth(): Promise<ApiHealthResponse | null> {
+  try {
+    return await apiGet<ApiHealthResponse>("/health");
+  } catch {
+    return null;
+  }
+}
+
 // ── Stack health ──
 
 export interface StackHealthCheckResult {

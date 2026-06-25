@@ -1,5 +1,139 @@
 # CAS Forex - Changelog
 
+## 2026-06-25 - Army fleet round 5: operator audit + backup/restore + e2e smoke + quick-start
+
+Four parallel agents on disjoint files. No collisions. 979 → 1032 (+53 net).
+
+### Slice 1 — Operator audit log
+
+`cas_forex/operator_audit.py` — append-only JSONL at
+`evidence_runs/operator_audit/operator-audit.jsonl` with append + flush +
+fsync per entry. `OperatorAuditEntry` carries `action_kind` (13 kinds:
+STRATEGY_PROMOTED/DEMOTED/REJECTED/ARCHIVED/REVIEWED,
+FOREX_FURY_PROMOTED, RUNTIME_GATE_FLIP, NOTIFICATION_SUBSCRIBED/UNSUBSCRIBED,
+WEBHOOK_SUBSCRIBED/UNSUBSCRIBED, LEGACY_RECEIPTS_ARCHIVED, OTHER), actor,
+target id/label, summary, payload, recorded_at_iso, reversible flag +
+reversal_hint.
+
+Append validates summary against `OBSERVATIONAL_GUARD_PHRASES`
+(case-insensitive) and raises ValueError on match — no advisory text
+gets persisted.
+
+`api/routes/operator_audit.py` — `GET /entries?limit=...&since_iso=...
+&action_kind=...&action_kind=...` (multi-filter), `GET /stats`, `POST
+/record` (400 on guard phrase). Tests: 15 unit + 8 route.
+
+Wiring into the existing strategy_dev_actions / forex_fury_promote /
+runtime-gate endpoints is a follow-on slice; this round ships the
+primitive + standalone API.
+
+### Slice 2 — Backup / restore primitive
+
+`cas_forex/backup_restore.py`:
+- `create_backup(...)` produces a ZIP at `snapshot_dir/cas-forex-backup-<ts>.zip`
+  with an internal `manifest.json`. Glob patterns default to
+  `strategy_leads.json`, `evidence_runs/agent_memory/*-report.json`
+  (latest-only by mtime), agent-events.jsonl, agent-events-mt5-demo.jsonl,
+  push/webhook subscriptions, operator-audit.jsonl. Never raises (empty
+  manifest on failure).
+- `list_backups(...)` returns sorted-DESC by created_at.
+- `evaluate_restore(...)` classifies each file: WOULD_OVERWRITE /
+  WOULD_RESTORE_NEW / SKIPPED_UNCHANGED / MISSING_IN_BACKUP /
+  SKIPPED_OUT_OF_ROOT. Read-only.
+- `execute_restore(...)` writes via tempfile + os.replace per file.
+  Out-of-root paths refused. Unchanged files skipped (idempotent).
+  Simulated I/O error → live file untouched.
+
+`scripts/run_backup.py` — always creates a backup.
+`scripts/run_restore.py` — `--snapshot-path` required; `--execute`
+required for real restore (default dry-run). `--only-files` for scoped
+restore.
+
+14 tests, all `tmp_path`-based (never touches operator's real
+evidence_runs/).
+
+### Slice 3 — End-to-end smoke orchestrator
+
+`cas_forex/e2e_smoke.py` — `run_endpoint_smoke(...)` hits every API
+endpoint in `BUILT_IN_ENDPOINTS` (17 entries across health, dashboard,
+readiness, observability, agent-decision, telemetry, configuration,
+risk, strategy, reporting, subscriptions), validates required schema
+keys at the top level, classifies pass/fail/skip per endpoint, returns
+`E2ESmokeReport(passed, failed, skipped, elapsed_ms, failures, results,
+plain_english_summary)`.
+
+`skip_post=True` by default (POST endpoints can mutate); GET-only smoke.
+Schema-check leniency: missing required key → success=False,
+schema_check=`MISSING_KEY:<name>`. Connection error → status_code=None,
+error_message documents.
+
+`scripts/run_e2e_smoke.py` — `--api-base`, `--timeout-seconds`,
+`--json`, `--summary-only`, `--exit-code-on-failure`. Human view shows
+per-category OK/FAIL tally + failures list.
+
+16 tests (5-phrase forbidden-substring parametrized across all-OK,
+all-500, empty-catalog branches; belt-and-suspenders redactor in the
+report builder).
+
+### Slice 4 — Quick-Start onboarding page (UI)
+
+`ui/src/pages/QuickStartPage.tsx` — 7-milestone checklist with
+auto-refresh every 30s + "Run all checks now" button:
+1. API server reachable (checks `/health`)
+2. MT5 terminal connected (via stack-health)
+3. Autowake supervisor running (via stack-health)
+4. Autonomous loop firing (via autonomous-loop/health)
+5. PWA installed on phone (operator self-marks; persisted in
+   localStorage `cas_forex_quick_start_pwa_installed`)
+6. Notification subscription registered (push OR webhook)
+7. Operator briefing returns plain English
+
+Completion banner ("Stack ready. Loop firing. Phone connected.
+You're set.") shown only when all 7 are done.
+
+`ui/src/components/QuickStartItem.tsx` — collapsible card with status
+chip + "how to complete" detail body.
+
+Nav placement: "Quick Start" is now the FIRST tab in the top nav.
+Default route preserved (still `proof` when no `?page=`).
+
+UI build: 68 modules, 2.76s, PWA SW regenerated, zero TS errors.
+
+### Parent integration
+
+`api/server.py` — additive: import + include_router for
+`operator_audit` under `/api/forex/operator-audit`.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q   # 1032 passed (979 → 1032, +53 net)
+cd ui && npm run build         # 68 modules, 2.76s, PWA SW regenerated
+```
+
+### Honest assessment after 5 rounds
+
+The operational chassis is now comprehensive. Across 5 rounds:
+- Tests: 631 → 1032 (+401 net)
+- Backend modules: 20+ new (most pure / observational)
+- API routes: 13 new (including stack-health, system-health, daily-report,
+  strategy-comparison, operator-briefing, risk-monitoring, audit log,
+  push/webhook subscriptions, agent-decision history)
+- UI surfaces: 14 new pages/components (Quick Start, Stack Status, Compare,
+  Daily Report, Forex Fury, Strategy Dev, Decision History, Portfolio Risk,
+  Operator Briefing, Multi-Timeframe Selector, Live Telemetry, Notification
+  Subscription, Webhook Subscription, AgentDecisionCard, AutonomousLoopCard)
+- Forbidden-phrase guards: enforced across every operator-facing
+  observational primitive
+
+What more chassis will NOT do: change the revenue picture. The
+remaining levers are:
+1. Strategy edge research (multi-iteration, can't fleet).
+2. Wiring chassis primitives into the live agent cycle (high blast
+   radius — better as targeted slices with explicit operator review).
+3. Operator-side actions (MT5 AutoTrading, runtime gate flips, license
+   work).
+
 ## 2026-06-25 - Army fleet round 4: stack-check + strategy ranking/diff + daily report + UI pages
 
 Four parallel agents on disjoint scopes. No collisions. 879 → 979 (+100 net).
