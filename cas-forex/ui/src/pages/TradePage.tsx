@@ -6,6 +6,8 @@ import { StatusChip } from "../components/StatusChip";
 import { CandlestickChart } from "../components/charts/CandlestickChart";
 import { MultiTimeframeSelector } from "../components/MultiTimeframeSelector";
 import { LiveTradesTelemetry } from "../components/LiveTradesTelemetry";
+import { AgentDecisionCard } from "../components/AgentDecisionCard";
+import { AutonomousLoopCard } from "../components/AutonomousLoopCard";
 import type { DashboardState, SymbolDecision, SizingEntry } from "../types/evidence";
 
 interface TradePageProps {
@@ -85,6 +87,12 @@ export function TradePage({ state }: TradePageProps) {
 
       {/* ── Multi-timeframe runtime selector (MTF runtime / risk aggregation) ── */}
       <MultiTimeframeSelector symbol={normalizeSymbolForRuntime(symbol)} />
+
+      {/* ── Agent decision + autonomous-loop pulse (observational) ── */}
+      <div className="trade-grid-2col">
+        <AgentDecisionCard />
+        <AutonomousLoopCard />
+      </div>
 
       {/* ── Live Trades Telemetry (observational, polled every 2s) ── */}
       <LiveTradesTelemetry />

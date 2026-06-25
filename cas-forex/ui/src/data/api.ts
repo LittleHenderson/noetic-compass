@@ -388,6 +388,46 @@ export async function fetchLiveReadiness(syncToBroker = false): Promise<LiveRead
   try { return await apiGet<LiveReadinessReport>(`/readiness/live${suffix}`); } catch { return null; }
 }
 
+// ── Agent decision explainer + autonomous loop health ──
+
+export interface DecisionChainStep {
+  name: string;
+  headline: string;
+  detail: string;
+  evidence: string[];
+  status: string;
+}
+
+export interface AgentDecisionResponse {
+  cycle_id: string | null;
+  overall_status: string;
+  plain_english_summary: string;
+  chain: DecisionChainStep[];
+  next_action_hint: string | null;
+}
+
+export interface AutonomousLoopHealthResponse {
+  overall_status: string;
+  last_cycle_at_iso: string | null;
+  seconds_since_last_cycle: number | null;
+  cycles_today: number;
+  decisions_today: number;
+  executions_today: number;
+  blocked_today: number;
+  autowake_present: boolean;
+  autowake_next_due_iso: string | null;
+  plain_english_summary: string;
+  diagnostic_hints: string[];
+}
+
+export async function fetchAgentDecisionLatest(): Promise<AgentDecisionResponse | null> {
+  try { return await apiGet<AgentDecisionResponse>("/agent-decision/latest"); } catch { return null; }
+}
+
+export async function fetchAutonomousLoopHealth(): Promise<AutonomousLoopHealthResponse | null> {
+  try { return await apiGet<AutonomousLoopHealthResponse>("/autonomous-loop/health"); } catch { return null; }
+}
+
 // ── React hook with fixture fallback ──
 
 import { useState, useEffect, useCallback } from "react";

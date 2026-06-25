@@ -1,5 +1,171 @@
 # CAS Forex - Changelog
 
+## 2026-06-25 - Parallel fleet: trade-page cards + decision history + receipt archive + Fury audit
+
+Four parallel agents on disjoint slices. No collisions. 615 → 631 (+16 net).
+
+### Slice 1 — Trade page: Agent Decision card + Autonomous Loop card
+
+Surfaces the explainer (`ax`) and loop-health (`ah`) primitives as live
+UI panels on the Trade page so the operator SEES them without typing.
+
+- `ui/src/components/AgentDecisionCard.tsx` — polls `/api/forex/agent-decision/latest`
+  every 30s. Header: truncated mono `cycle_id` + `overall_status` chip
+  (executed→info, approved_not_executed→paper, blocked→warning,
+  no_recent_decision→muted). `plain_english_summary` below. Collapsible
+  "Decision chain" lists each step with a status chip (found→info,
+  missing→muted, blocked→warning). `next_action_hint` in muted text at
+  bottom.
+- `ui/src/components/AutonomousLoopCard.tsx` — polls
+  `/api/forex/autonomous-loop/health` every 30s. Header: `overall_status`
+  chip (running→info, stalled→warning, others→muted). Stats line:
+  `cycles today: N · decisions: N · executions: N · blocked: N`. Plain
+  summary, "Last cycle: Xm Ys ago" (with local-time ISO), "Next due:
+  HH:MM" when present, and a "What's blocking it" bullet list when
+  `diagnostic_hints` non-empty.
+- `ui/src/pages/TradePage.tsx` — additive: both cards in a 2-col grid
+  directly above `<LiveTradesTelemetry />`, below `<MultiTimeframeSelector />`.
+- `ui/src/data/api.ts` — additive: `DecisionChainStep`,
+  `AgentDecisionResponse`, `AutonomousLoopHealthResponse` types;
+  `fetchAgentDecisionLatest()`, `fetchAutonomousLoopHealth()`.
+- `ui/src/App.css` — additive: `.agent-decision-card`,
+  `.autonomous-loop-card`, `.decision-chain-list`, `.loop-diagnostic-list`,
+  `.decision-status-row` (~150 lines, all using existing CSS vars).
+
+Build: 55 modules transformed, 2.85s; PWA precache 9 entries / 582 KiB.
+
+### Slice 2 — `GET /api/forex/agent-decision/history?limit=N`
+
+- `api/routes/agent_decision_history.py` — globs recent cycle reports
+  (newest-first by mtime), runs the pure explainer against each
+  with shared context (memory / strategy / walk-forward / PCBA),
+  returns the list. Default `limit=10`, range `[1, 50]`,
+  out-of-range → HTTP 400 `{"error": "invalid_limit", ...}`. Same
+  loader-injection pattern as the latest route.
+- `api/server.py` — additive two lines (import + `include_router`
+  under same prefix as the latest route so the tag groups together).
+- `tests/test_agent_decision_history_route.py` — 6 tests: empty cycle
+  set → empty list (NOT 404); 3 reports → 3 decisions newest-first;
+  `limit=2` with 5 reports returns 2; `limit=0` and `limit=51` → 400;
+  no `plain_english_summary` contains trade-advisory substrings.
+
+### Slice 3 — Legacy MT4 receipt archive tool
+
+The supervisor's `pending_receipt_count: 28` and the cockpit's
+`legacy_total: 28` come from stale MT4-mailbox `RECEIPT_PENDING` rows
+that never reconciled (no MT4 terminal active). This slice gives the
+operator a safe way to archive them to a snapshot and reset the
+baseline.
+
+- `cas_forex/legacy_receipts_archive.py`:
+  - `identify_stale_pending_receipts(events, *, age_threshold_hours,
+    now)` — pure. Conservative: row qualifies only when
+    `kind`/`event_kind` is `RECEIPT_PENDING` AND broker_mode contains
+    "MT4" (case-insensitive, top-level / nested `command` / nested
+    `intent`) AND timestamp is older than threshold. Missing fields
+    or unparseable timestamps → row NOT archived.
+  - `archive_stale_receipts(*, journal_path, snapshot_dir, dry_run=True,
+    age_threshold_hours=24.0, now=None)` → `LegacyReceiptArchiveResult`.
+    Default `dry_run=True`. Snapshot-first ordering (write+fsync the
+    archive snapshot BEFORE rewriting the journal). Journal rewrite is
+    atomic via temp file + `os.replace`. Idempotent: zero stale → no
+    snapshot created. Any I/O error populates `error_message`;
+    public API never raises.
+- `scripts/run_legacy_receipts_archive.py` — CLI flags:
+  `--journal-path` (default `evidence_runs/agent_workflow_queue/agent-events.jsonl`),
+  `--snapshot-dir` (default `evidence_runs/legacy_receipts_archive/`),
+  `--age-hours` (default 24), `--execute` (REQUIRED to actually
+  archive), `--summary-only`. Default behavior is dry-run preview.
+- `tests/test_legacy_receipts_archive.py` — 10 tests. All I/O via
+  `tmp_path`; the real `evidence_runs/` is never read or written.
+
+**Operator usage:**
+
+```powershell
+# Preview what would archive (safe):
+py -3.12 scripts/run_legacy_receipts_archive.py
+
+# Actually archive (writes snapshot + rewrites journal):
+py -3.12 scripts/run_legacy_receipts_archive.py --execute
+```
+
+### Slice 4 — Forex Fury sets audit (investigation only, no code change)
+
+The operator asked where their Forex Fury sets landed. Findings:
+
+**Status: PARTIAL** — the 36 sets are fully ingested, ranked, replayed,
+summarized, and the paper agent cycle IS consuming them today. They are
+NOT yet driving live-money orders (license-gated by design).
+
+**Location:**
+- Ingest: `cas_forex/forex_fury_sets.py` parses `.set` files +
+  ReportTester.html, fingerprints `.ex4`/`.ex5` binaries (does NOT execute).
+- Candidates: `cas_forex/forex_fury_candidates.py` builds ranked replay
+  candidates from the import report.
+- Verdict: `cas_forex/forex_fury_replay_results.py` rolls condition-lab
+  + walk-forward into `REPLAY_LEAD_FOR_ADAPTIVE_REVIEW`.
+- Cycle consumption: `cas_forex/agent_state.py:155-162` calls
+  `load_latest_forex_fury_*` + `build_micro_scalp_intents(...)` +
+  `build_hourly_intraday_intents(...)` → `RouteIntent` with
+  `strategy_setting="forex_fury_<family>_<symbol>_<tf>"`.
+- API: `/strategy/forex-fury-set-import`,
+  `/strategy/forex-fury-replay-candidates`,
+  `/strategy/forex-fury-replay-results` already serve the imports.
+- UI: rendered on `ui/src/pages/OptimizerPage.tsx`.
+
+**Headline numbers from the import report:**
+
+- 36 `.set` files imported (MT4=18, MT5=18).
+- Families: scalping=14, swing=16, classic_m15=6.
+- Symbols: AUDCAD=8, AUDUSD=6, EURUSD=4, GBPAUD=2, GBPUSD=6, SPX500=2,
+  USDJPY=2.
+- 24 ranked replay candidates produced.
+- **Top profile:** AUDCAD M5 swing 04:00-05:00 — PF 15.12, DD 2.25%,
+  total trades 294, history quality 98%.
+- Walk-forward grade: `WALK_FORWARD_LEAD` (61/126 windows routed,
+  35 positive).
+- Condition-lab gap: 0.7912 across 297 cells.
+
+**Caveat:** PF / DD numbers are vendor-supplied EA tester reports, NOT
+CAS-validated OOS edge. The walk-forward replay over the CAS condition
+lab is the more honest indicator and grades `WALK_FORWARD_LEAD`. The
+agent cycle is acting on the verdict — not on the raw tester reports.
+
+**Path from PARTIAL → LIVE** (not built in this slice, ~5-file change):
+
+1. `cas_forex/broker/mt5_bridge.py` — add `apply_set_file(profile_id,
+   set_path)` so the chosen candidate's source `.set` is applied to the
+   live MT5 EA at runtime (today the `.set` parameters are only
+   summarized into `BrokerOrderRequest` SL/TP/lot, not re-applied to the
+   EA).
+2. `cas_forex/agent_state.py:155-170` — propagate
+   `relative_source_path` + `source_sha256` into
+   `RouteIntent.order_request` so the executor can verify integrity
+   before sending.
+3. `cas_forex/agent_workflow.py:77-90` — wire an owner-authorized
+   license check into `run_agent_workflow_cycle` to gate the
+   `MT5_DEMO → MT5_LIVE` lane switch.
+4. `api/routes/strategy.py` — `POST /strategy/forex-fury-promote`
+   takes a `candidate_id` and writes a `strategy_leads.json` entry
+   binding the `.set` to the live lane.
+5. `tests/test_forex_fury_candidates.py` — assert the top candidate's
+   `source_sha256` matches the bytes on disk before any promotion.
+
+### Verification
+
+```bash
+py -3.12 -m pytest tests -q     # 631 passed (615 → 631, +16 net)
+cd ui && npm run build          # 55 modules, 2.85s, PWA SW regenerated
+```
+
+### Boundary unchanged
+
+The understanding-window bot framing, `requires_confirm` gates, Stage 3
+validator, and runtime-gate licensure all unchanged. The cards expose
+existing primitives; the history route wraps the existing pure
+explainer; the receipt archive is dry-run by default; Slice 4 was
+investigation only.
+
 ## 2026-06-24 - Mobile build: PWA installable on any phone + Capacitor Android APK path
 
 The PWA manifest and Capacitor scaffolding were partially in place (manifest,
