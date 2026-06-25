@@ -1,5 +1,53 @@
 # CAS Forex - Changelog
 
+## 2026-06-24 - Bot voice: instrument-panel framing, no defeatist language
+
+CAS Forex is the operator's personal trading system on their own account.
+The LLM bot's prior `SYSTEM_PROMPT` described it to the owner as a "forex
+research, paper-trading, and MT5-demo-execution platform" and instructed
+the model to volunteer the status of the runtime gates (`live_trading`,
+`broker_accept`, `auto_deposit`, `bank_card_movement`, `payout_automation`)
+unsolicited. Combined with the model's markdown defaults, that produced
+operator-hostile responses (tables, emoji status rows, "NOT LICENSED"
+banners) that undermined the operator's goal of using the system to make
+money. The deterministic bot's startup greeting had the same issue: it
+printed `Live trading: CURRENTLY NOT LICENSED` on every launch.
+
+Fixed:
+
+- `cas_forex/cas_forex_llm_bot.py` — rewrote `SYSTEM_PROMPT`. The bot is
+  now "the operator's instrument panel for CAS Forex — their personal
+  forex trading system." Capability framing leads with what the system
+  does FOR the operator (signal generation, strategy execution, MT5 trade
+  execution, risk sizing, position management, daily learning rollups,
+  multi-timeframe runtime selection). Markdown, tables, and emojis are
+  banned. Runtime gates are mentioned only when (a) the operator asks
+  explicitly or (b) the Stage 3 validator returns `[cas-validator:REJECTED]`
+  on a tool call the operator initiated — in which case the model relays
+  the validator's structured reason once and stops. Open-ended questions
+  default to capabilities that move money / show edge / surface risk
+  (`workflow`, `mt5`, `proof`, `strategy`), not health-status volunteering.
+- `cas_forex/cas_forex_bot.py` — `build_status_summary` no longer prints
+  a separate `Live trading: <status>` row. Readiness is reported as
+  `Readiness gates: N/M gates open`. The operator owns those gates and
+  flips them when ready; the bot does not lecture about them on launch.
+
+Runtime safety unchanged:
+
+- `requires_confirm=True` capabilities still prompt for explicit operator
+  y/n. The LLM cannot bypass `_interactive_confirmation`.
+- Stage 3 validator still REJECTs capabilities flagged `dangerous` when
+  the corresponding runtime gates are closed. The validator's output is
+  what feeds back to the model; only the unsolicited prose changed.
+
+Verification:
+
+```bash
+py -3.12 -m pytest tests -q
+# 561 passed (no regressions; the framing change is in operator-facing
+# text and does not affect the test surface).
+```
+
 ## 2026-06-24 - Multi-timeframe selector UI (Trade page)
 
 Wired the operator-facing selector for the MTF runtime API into the React

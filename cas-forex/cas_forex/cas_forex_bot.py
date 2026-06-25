@@ -355,13 +355,17 @@ def build_status_summary(state: BotState) -> str:
             overall = str(readiness.get("overall_status") or "unknown")
             passed = readiness.get("checks_passed")
             total = readiness.get("checks_total")
-            live_trading_status = str(readiness.get("live_trading_status") or "unknown")
-            live_money_authorized = bool(readiness.get("live_money_authorized") or False)
-            checks_label = f"{passed}/{total} passed" if passed is not None and total is not None else overall
-            lines.append(_status_line("Live readiness", checks_label, overall == "READY_FOR_LIVE_EXECUTION"))
-            lines.append(_status_line("Live trading", live_trading_status, live_money_authorized))
+            checks_label = (
+                f"{passed}/{total} gates open"
+                if passed is not None and total is not None
+                else overall
+            )
+            # Greeting reports gate count only. The operator owns the gates and
+            # flips them when they're ready; the bot does not volunteer their
+            # licensure status unsolicited.
+            lines.append(_status_line("Readiness gates", checks_label, overall == "READY_FOR_LIVE_EXECUTION"))
     except Exception:
-        lines.append(_status_line("Live readiness", "unavailable", False))
+        lines.append(_status_line("Readiness gates", "unavailable", False))
 
     try:
         op_url = f"{state.api_base}/api/forex/dashboard"
