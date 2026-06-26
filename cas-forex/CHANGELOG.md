@@ -1,5 +1,59 @@
 # CAS Forex - Changelog
 
+## 2026-06-26 - The two missing engines: order dispatch loop + money-movement engine
+
+The gates were open-able but guarded nothing — no loop ever walked a signal
+through them into a broker, and no transfer code sat behind the money gates.
+This round builds both engines, paper-first and fully tested.
+
+### Engine 1 — Order dispatch loop (`cas_forex/order_dispatch.py`)
+
+The walk that was missing: `TradeIntent → BrokerOrderRequest (schema/geometry
+validation) → execution_guard.guarded_place_order (live-trading gate if live,
+then pre-execution risk gate) → bridge.execute_order → AccountLedgerEvent`.
+
+- `TradeIntent` (normalized, broker-agnostic signal; SL/TP required so every
+  dispatched order is risk-bounded by construction).
+- `dispatch_intent` / `dispatch_intents` — non-raising per-intent loop; each
+  yields a `DispatchResult` with explicit status (`REJECTED_PRECHECK`,
+  `BLOCKED_LIVE_GATE`, `BLOCKED_RISK`, or `BROKER_<status>`), the gate decision,
+  the broker outcome, and a balance-neutral dispatch ledger event.
+- Paper-first: `bridge=None` uses `broker.get_bridge()` (SimulatedBrokerBridge
+  unless live trading is owner-authorized). Going live is a config/flag swap on
+  a loop already proven against the paper broker; the same gate chain runs in
+  paper mode.
+
+### Engine 2 — Money-movement engine (`cas_forex/money_movement.py`)
+
+The transfer code behind the money gates. `PaymentProvider` abstraction +
+`SimulatedPaymentProvider` (moves no real money, `is_real=False`).
+
+- `MovementEngine.deposit / withdraw / payout / reinvest_split`. Each is
+  fail-closed: the matching capability gate (`auto_deposit` /
+  `bank_card_movement` / `payout_automation`) is evaluated first and the
+  provider is only touched if authorized; a block returns the exact missing
+  requirements and never calls the provider.
+- `reinvest_split` retains the reinvest leg in-account (no gate) and routes the
+  savings + tax-reserve legs through the payout gate.
+- Simulated-provider events keep `external_money_movement=False`, so the paper
+  account ledger accepts them; a real provider sets it True (real-money ledger,
+  out of scope).
+
+### Fix
+
+- `execution_guard.guarded_place_order` now calls the real `bridge.execute_order`
+  (falling back to `place_order` for test fakes). It previously called
+  `place_order`, which only exists on test fakes — so the one sanctioned
+  dispatch chokepoint would have failed against every real bridge.
+
+### Other
+
+- `scripts/run_paper_dispatch.py` — runnable end-to-end paper demo (dispatch →
+  ledger → reinvest split), no credentials needed.
+- Tests: `tests/test_order_dispatch.py` (5) + `tests/test_money_movement.py`
+  (11). Full suite: 1056 passed (1 pre-existing stale-date failure in
+  test_daily_report_generator, unrelated).
+
 ## 2026-06-25 - Army fleet round 5: operator audit + backup/restore + e2e smoke + quick-start
 
 Four parallel agents on disjoint files. No collisions. 979 → 1032 (+53 net).
