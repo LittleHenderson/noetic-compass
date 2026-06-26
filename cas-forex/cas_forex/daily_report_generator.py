@@ -106,7 +106,7 @@ def compose_daily_report(
 
     now_utc = _coerce_now(now)
     generated_at_iso = now_utc.isoformat()
-    safe_date = _safe_date_string(report_date)
+    safe_date = _safe_date_string(report_date, now=now_utc)
 
     cycles = _normalize_seq(cycle_reports)
     events = _normalize_seq(event_journal)
@@ -864,12 +864,14 @@ def _coerce_now(now: Optional[datetime]) -> datetime:
     return now.astimezone(timezone.utc)
 
 
-def _safe_date_string(value: Any) -> str:
+def _safe_date_string(value: Any, now: Optional[datetime] = None) -> str:
     if isinstance(value, str) and value:
         return value
     if isinstance(value, date):
         return value.isoformat()
-    return datetime.now(timezone.utc).strftime("%Y-%m-%d")
+    # Fall back to the injected reference time (not real wall-clock today), so
+    # the report date is deterministic for a given ``now``.
+    return _coerce_now(now).strftime("%Y-%m-%d")
 
 
 def _safe_int(value: Any, default: int = 0) -> int:

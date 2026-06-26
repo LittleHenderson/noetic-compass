@@ -330,9 +330,12 @@ def test_dataclass_is_json_serializable():
     assert isinstance(text, str) and len(text) > 0
 
 
-def test_invalid_date_falls_back_to_today_string():
-    report = compose_daily_report(report_date="", now=_fixed_now())
-    assert report.report_date == "2026-06-25"
+def test_invalid_date_falls_back_to_injected_now_string():
+    # The fallback date must be derived from the injected ``now`` (deterministic),
+    # not from real wall-clock today.
+    now = _fixed_now()
+    report = compose_daily_report(report_date="", now=now)
+    assert report.report_date == now.strftime("%Y-%m-%d")
 
 
 # ---------------------------------------------------------------------------
