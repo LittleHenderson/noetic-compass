@@ -119,6 +119,30 @@ def test_non_positive_amount_rejected():
     assert result.provider_receipt is None
 
 
+def test_payout_to_non_allowlisted_destination_is_rejected():
+    # The gate confirms AN allowlisted destination is configured; the engine must
+    # additionally confirm THIS payout targets it. A mismatched destination is
+    # rejected fail-closed and the provider is never called.
+    class _ExplodingProvider(SimulatedPaymentProvider):
+        def withdraw(self, amount_usd, *, destination_id, kind):  # noqa: ANN001
+            raise AssertionError("provider must not be called for a bad destination")
+
+    engine = MovementEngine(provider=_ExplodingProvider(), config=_authorized_cfg())
+    result = engine.payout(200.0, destination_id="some-other-account")
+    assert result.status == STATUS_REJECTED
+    assert result.provider_receipt is None
+    assert "allowlisted" in result.reason
+
+
+def test_payout_defaults_to_allowlisted_destination():
+    # With no destination given, the payout binds to the owner's allowlisted
+    # config destination (config.payout_destination_id == "dest-1") and settles.
+    engine = MovementEngine(config=_authorized_cfg())
+    result = engine.payout(150.0)
+    assert result.status == STATUS_SETTLED
+    assert result.ledger_event.event_type == "payout"
+
+
 # -- reinvest split -----------------------------------------------------------
 
 def test_reinvest_split_math_and_gating_when_authorized():

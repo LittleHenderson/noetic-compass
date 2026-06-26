@@ -118,6 +118,57 @@ def main() -> None:
     for leg in split.legs:
         print(f"  - {leg.kind:10s} {leg.status:10s} :: {leg.reason}")
 
+    # Agent-signal dispatch: a REAL RouteIntent (the shape the micro-scalp agent
+    # emits) flows through the overseer into the same gated paper dispatch.
+    from cas_forex.agent_dispatch import run_agent_dispatch_cycle
+    from cas_forex.agent_state import RouteIntent
+    from cas_forex.schemas.forecast import Direction
+    from cas_forex.schemas.order import BrokerOrderRequest, OrderType
+
+    demo_order = BrokerOrderRequest(
+        order_id="agent-EURUSD-demo",
+        decision_ref="micro_scalp_agent:demo",
+        symbol="EUR/USD",
+        order_type=OrderType.MARKET,
+        direction=Direction.LONG,
+        volume=0.1,
+        price=0.0,
+        stop_loss=1.0900,
+        take_profit=1.1100,
+        comment="CAS_MICRO_SCALP",
+    )
+    route_intent = RouteIntent(
+        intent_id="intent-micro-eurusd-m5",
+        agent_id="micro_scalp_agent",
+        action="OPEN_MICRO_SCALP",
+        symbol="EUR/USD",
+        timeframe="M5",
+        strategy_setting="range_scalper_12_80",
+        direction=Direction.LONG.value,
+        confidence=0.7,
+        evidence_score=2.0,
+        lot_size=0.1,
+        entry_price=1.10,
+        stop_loss=1.0900,
+        take_profit=1.1100,
+        reason="demo replay lead",
+        evidence_refs=["demo-evidence-ref"],
+        order_request=demo_order.model_dump(mode="json"),
+    )
+    agent_cycle = run_agent_dispatch_cycle(
+        intents=[route_intent],
+        bridge=SimulatedBrokerBridge(),
+        config=config,
+        enforce_receipt_gates=False,
+    )
+    print("\n=== AGENT-SIGNAL DISPATCH (real RouteIntent -> overseer -> gate) ===")
+    print(
+        f"route_intents={len(agent_cycle.route_intents)} approved={agent_cycle.approved_count} "
+        f"executed={agent_cycle.dispatch_report.executed_count}"
+    )
+    for r in agent_cycle.dispatch_report.results:
+        print(f"  - {r.order_id:20s} {r.status:18s} :: {r.reason}")
+
     print("\n(JSON dispatch report below)")
     print(json.dumps(report.to_dict(), indent=2)[:1200] + " ...")
 

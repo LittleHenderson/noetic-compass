@@ -57,6 +57,8 @@ CLAIM_BOUNDARY = (
 STATUS_REJECTED_PRECHECK = "REJECTED_PRECHECK"  # order failed schema/geometry validation
 STATUS_BLOCKED_LIVE_GATE = "BLOCKED_LIVE_GATE"  # live-trading gate not authorized
 STATUS_BLOCKED_RISK = "BLOCKED_RISK"  # pre-execution risk cap breach
+STATUS_OVERSEER_REJECTED = "OVERSEER_REJECTED"  # agent overseer rejected before dispatch
+STATUS_DISPATCH_ERROR = "DISPATCH_ERROR"  # bridge raised / unusable; never reached a fill
 
 
 @dataclass(frozen=True)
@@ -168,6 +170,7 @@ class DispatchReport:
     executed_count: int
     blocked_count: int
     rejected_count: int
+    pending_count: int
     live_execution_runtime_locked: bool
     claim_boundary: str = CLAIM_BOUNDARY
     notes: tuple[str, ...] = field(default_factory=tuple)
@@ -182,6 +185,7 @@ class DispatchReport:
             "executed_count": self.executed_count,
             "blocked_count": self.blocked_count,
             "rejected_count": self.rejected_count,
+            "pending_count": self.pending_count,
             "live_execution_runtime_locked": self.live_execution_runtime_locked,
             "claim_boundary": self.claim_boundary,
             "notes": list(self.notes),
@@ -196,8 +200,12 @@ def _resolve_config(config: Any = None) -> Any:
     return default_config
 
 
-def _ledger_event_for_outcome(
-    intent: TradeIntent, outcome: OrderOutcome
+def _ledger_event_from_order(
+    order: BrokerOrderRequest,
+    outcome: OrderOutcome,
+    *,
+    strategy_id: Optional[str] = None,
+    ai_action: str = "DISPATCH",
 ) -> AccountLedgerEvent:
     """A balance-neutral dispatch record for the account ledger.
 
@@ -208,28 +216,115 @@ def _ledger_event_for_outcome(
     """
     return AccountLedgerEvent(
         ledger_id=stable_ledger_id(
-            "dispatch", intent.decision_ref, intent.order_id, intent.symbol, intent.direction
+            "dispatch", order.decision_ref, order.order_id, order.symbol, order.direction.value
         ),
         event_type="paper_order_intent",
         timestamp=utc_now().isoformat(),
         amount_usd=0.0,
         balance_delta_usd=0.0,
         equity_delta_usd=0.0,
-        symbol=intent.symbol,
-        side=intent.resolved_direction().value,
-        lot_size=float(intent.volume),
-        price=outcome.filled_price if outcome.filled_price is not None else (intent.price or None),
-        sl=float(intent.stop_loss),
-        tp=float(intent.take_profit),
+        symbol=order.symbol,
+        side=order.direction.value,
+        lot_size=float(order.volume),
+        price=outcome.filled_price if outcome.filled_price is not None else (order.price or None),
+        sl=float(order.stop_loss),
+        tp=float(order.take_profit),
         broker_ticket=str(outcome.broker_ticket) if outcome.broker_ticket is not None else None,
-        strategy_id=intent.strategy_id,
-        ai_action=intent.ai_action,
-        evidence_packet_id=intent.decision_ref,
+        strategy_id=strategy_id,
+        ai_action=ai_action,
+        evidence_packet_id=order.decision_ref,
         note=(
             f"Order dispatched to broker bridge; outcome={outcome.status.value} "
             f"mode={outcome.broker_mode.value} real_broker={outcome.is_real_broker}."
         ),
         external_money_movement=False,
+    )
+
+
+def dispatch_order(
+    order: BrokerOrderRequest,
+    bridge: Any,
+    *,
+    proposed_intent: Optional[Mapping[str, Any]] = None,
+    strategy_id: Optional[str] = None,
+    ai_action: str = "DISPATCH",
+    config: Any = None,
+    live_telemetry: Optional[Mapping[str, Any]] = None,
+    account_snapshot: Optional[Mapping[str, Any]] = None,
+    equity_peak: Optional[float] = None,
+) -> DispatchResult:
+    """Dispatch a pre-built broker order through the full gate chain. Never raises.
+
+    This is the lower-level entry point. It takes an already-validated
+    ``BrokerOrderRequest`` (e.g. one rebuilt from an agent RouteIntent's
+    ``order_request``) and runs the live-trading gate (live mode only), then the
+    pre-execution risk gate, and only then touches the bridge. ``proposed_intent``
+    overrides the symbol/direction/lots inferred from ``order`` for the risk gate.
+    """
+    # Local import keeps the (heavy) broker module off the import path for
+    # callers that only need the data types.
+    from cas_forex.execution_guard import guarded_place_order
+
+    direction = order.direction.value
+    intent_summary = f"{direction} {order.symbol} {float(order.volume):.2f} lots"
+    intent_dict = dict(proposed_intent) if proposed_intent else {
+        "symbol": order.symbol,
+        "direction": direction,
+        "lots": float(order.volume),
+    }
+
+    def _blocked(status: str, reason: str, *, caps: tuple[str, ...] = ()) -> DispatchResult:
+        return DispatchResult(
+            order_id=order.order_id,
+            decision_ref=order.decision_ref,
+            symbol=order.symbol,
+            direction=direction,
+            volume=float(order.volume),
+            status=status,
+            reason=reason,
+            intent_summary=intent_summary,
+            dispatched_to_bridge=False,
+            risk_blocking_caps=caps,
+        )
+
+    try:
+        outcome: OrderOutcome = guarded_place_order(
+            bridge,
+            order,
+            proposed_intent=intent_dict,
+            config=config,
+            live_telemetry=live_telemetry,
+            account_snapshot=account_snapshot,
+            equity_peak=equity_peak,
+        )
+    except PermissionError as exc:
+        return _blocked(STATUS_BLOCKED_LIVE_GATE, str(exc))
+    except ExecutionBlocked as exc:
+        return _blocked(
+            STATUS_BLOCKED_RISK,
+            exc.decision.plain_english_reason,
+            caps=tuple(exc.decision.blocking_caps),
+        )
+    except Exception as exc:  # bridge unusable / execute_order raised
+        # Preserve the "never raises" contract so one bad bridge call cannot
+        # abort the whole batch; surface it as an explicit per-intent error.
+        return _blocked(STATUS_DISPATCH_ERROR, f"Dispatch error: {exc}")
+
+    ledger_event = _ledger_event_from_order(
+        order, outcome, strategy_id=strategy_id, ai_action=ai_action
+    )
+    return DispatchResult(
+        order_id=order.order_id,
+        decision_ref=order.decision_ref,
+        symbol=order.symbol,
+        direction=direction,
+        volume=float(order.volume),
+        status=f"BROKER_{outcome.status.value}",
+        reason=outcome.error_message or f"Broker outcome: {outcome.status.value}",
+        intent_summary=intent_summary,
+        dispatched_to_bridge=True,
+        outcome=outcome,
+        ledger_event=ledger_event,
     )
 
 
@@ -242,11 +337,7 @@ def dispatch_intent(
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
 ) -> DispatchResult:
-    """Dispatch one intent through the full gate chain. Never raises."""
-    # Local import keeps the (heavy) broker module out of import-time for callers
-    # that only need the data types.
-    from cas_forex.execution_guard import guarded_place_order
-
+    """Dispatch one normalized TradeIntent through the full gate chain. Never raises."""
     intent_summary = f"{str(intent.direction).upper()} {intent.symbol} {float(intent.volume):.2f} lots"
 
     # 1. Build + validate the broker order (schema + SL/TP geometry).
@@ -265,107 +356,44 @@ def dispatch_intent(
             dispatched_to_bridge=False,
         )
 
-    # 2. Gate chain + dispatch. guarded_place_order enforces the live-trading
-    #    gate (live mode only) then the pre-execution risk gate, and only then
-    #    touches the bridge.
-    try:
-        outcome: OrderOutcome = guarded_place_order(
-            bridge,
-            order,
-            proposed_intent=intent.proposed_intent(),
-            config=config,
-            live_telemetry=live_telemetry,
-            account_snapshot=account_snapshot,
-            equity_peak=equity_peak,
-        )
-    except PermissionError as exc:
-        return DispatchResult(
-            order_id=intent.order_id,
-            decision_ref=intent.decision_ref,
-            symbol=intent.symbol,
-            direction=str(intent.direction).upper(),
-            volume=float(intent.volume),
-            status=STATUS_BLOCKED_LIVE_GATE,
-            reason=str(exc),
-            intent_summary=intent_summary,
-            dispatched_to_bridge=False,
-        )
-    except ExecutionBlocked as exc:
-        return DispatchResult(
-            order_id=intent.order_id,
-            decision_ref=intent.decision_ref,
-            symbol=intent.symbol,
-            direction=str(intent.direction).upper(),
-            volume=float(intent.volume),
-            status=STATUS_BLOCKED_RISK,
-            reason=exc.decision.plain_english_reason,
-            intent_summary=intent_summary,
-            dispatched_to_bridge=False,
-            risk_blocking_caps=tuple(exc.decision.blocking_caps),
-        )
-
-    # 3. The order reached the bridge. Record the outcome + ledger event.
-    ledger_event = _ledger_event_for_outcome(intent, outcome)
-    return DispatchResult(
-        order_id=intent.order_id,
-        decision_ref=intent.decision_ref,
-        symbol=intent.symbol,
-        direction=str(intent.direction).upper(),
-        volume=float(intent.volume),
-        status=f"BROKER_{outcome.status.value}",
-        reason=outcome.error_message or f"Broker outcome: {outcome.status.value}",
-        intent_summary=intent_summary,
-        dispatched_to_bridge=True,
-        outcome=outcome,
-        ledger_event=ledger_event,
+    # 2-3. Gate chain + dispatch + ledger event (shared with the agent path).
+    return dispatch_order(
+        order,
+        bridge,
+        proposed_intent=intent.proposed_intent(),
+        strategy_id=intent.strategy_id,
+        ai_action=intent.ai_action,
+        config=config,
+        live_telemetry=live_telemetry,
+        account_snapshot=account_snapshot,
+        equity_peak=equity_peak,
     )
 
 
-def dispatch_intents(
-    intents: Iterable[TradeIntent],
-    *,
-    bridge: Any = None,
-    config: Any = None,
-    live_telemetry: Optional[Mapping[str, Any]] = None,
-    account_snapshot: Optional[Mapping[str, Any]] = None,
-    equity_peak: Optional[float] = None,
+def build_dispatch_report(
+    results: Sequence[DispatchResult], *, config: Any = None
 ) -> DispatchReport:
-    """Dispatch a batch of intents through the gate chain into the broker bridge.
+    """Assemble a DispatchReport from per-intent results, with summary counts.
 
-    With ``bridge=None`` the configured bridge (``broker.get_bridge()``) is used,
-    which is the paper broker unless the owner has authorized live trading.
+    Shared by ``dispatch_intents`` and the agent dispatch path so both produce an
+    identically-shaped, fully-traceable report.
     """
     config = _resolve_config(config)
-    if bridge is None:
-        from cas_forex.broker.mt5_bridge import get_bridge
-
-        bridge = get_bridge()
-
-    results: list[DispatchResult] = []
-    for intent in intents:
-        results.append(
-            dispatch_intent(
-                intent,
-                bridge,
-                config=config,
-                live_telemetry=live_telemetry,
-                account_snapshot=account_snapshot,
-                equity_peak=equity_peak,
-            )
-        )
-
     live_mode = bool(getattr(config, "live_mode", False))
     executed = sum(1 for r in results if r.executed)
     blocked = sum(
-        1
-        for r in results
-        if r.status in {STATUS_BLOCKED_LIVE_GATE, STATUS_BLOCKED_RISK}
+        1 for r in results if r.status in {STATUS_BLOCKED_LIVE_GATE, STATUS_BLOCKED_RISK}
     )
     rejected = sum(
         1
         for r in results
-        if r.status == STATUS_REJECTED_PRECHECK
+        if r.status in {STATUS_REJECTED_PRECHECK, STATUS_OVERSEER_REJECTED, STATUS_DISPATCH_ERROR}
         or (r.outcome is not None and r.outcome.status.value in {"REJECTED", "CANCELLED"})
+    )
+    # A queued-but-not-yet-filled order (e.g. MT4 mailbox lane returns PENDING)
+    # is its own bucket so executed + blocked + rejected + pending == intent_count.
+    pending = sum(
+        1 for r in results if r.outcome is not None and r.outcome.status.value == "PENDING"
     )
 
     try:
@@ -384,6 +412,7 @@ def dispatch_intents(
         executed_count=executed,
         blocked_count=blocked,
         rejected_count=rejected,
+        pending_count=pending,
         live_execution_runtime_locked=live_locked,
         notes=(
             "Each result carries its gate decision and broker outcome; the path "
@@ -392,6 +421,40 @@ def dispatch_intents(
             "realized P/L is recorded when positions close, not at entry.",
         ),
     )
+
+
+def dispatch_intents(
+    intents: Iterable[TradeIntent],
+    *,
+    bridge: Any = None,
+    config: Any = None,
+    live_telemetry: Optional[Mapping[str, Any]] = None,
+    account_snapshot: Optional[Mapping[str, Any]] = None,
+    equity_peak: Optional[float] = None,
+) -> DispatchReport:
+    """Dispatch a batch of normalized intents through the gate chain into the broker.
+
+    With ``bridge=None`` the configured bridge (``broker.get_bridge()``) is used,
+    which is the paper broker unless the owner has authorized live trading.
+    """
+    config = _resolve_config(config)
+    if bridge is None:
+        from cas_forex.broker.mt5_bridge import get_bridge
+
+        bridge = get_bridge()
+
+    results = [
+        dispatch_intent(
+            intent,
+            bridge,
+            config=config,
+            live_telemetry=live_telemetry,
+            account_snapshot=account_snapshot,
+            equity_peak=equity_peak,
+        )
+        for intent in intents
+    ]
+    return build_dispatch_report(results, config=config)
 
 
 def dispatched_ledger_events(report: DispatchReport) -> tuple[AccountLedgerEvent, ...]:

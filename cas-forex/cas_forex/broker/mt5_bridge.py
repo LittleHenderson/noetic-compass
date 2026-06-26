@@ -14,6 +14,7 @@ import hashlib
 import json
 from datetime import datetime
 from pathlib import Path
+import sys
 from typing import Dict, Optional, Tuple
 
 from cas_forex.config import config
@@ -27,6 +28,19 @@ from cas_forex.schemas.order import (
 )
 from cas_forex.schemas.forecast import Direction, pip_multiplier
 from cas_forex.time_utils import utc_now
+
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
+LOCAL_MT5_DEPS = REPO_ROOT / ".mt5deps"
+
+
+def _add_local_mt5_deps() -> None:
+    """Prefer the project-local MT5 wheel when it exists."""
+
+    if LOCAL_MT5_DEPS.exists():
+        path = str(LOCAL_MT5_DEPS)
+        if path not in sys.path:
+            sys.path.insert(0, path)
 
 
 class BrokerBridge(ABC):
@@ -57,6 +71,17 @@ class BrokerBridge(ABC):
         """List all currently open positions."""
         ...
 
+    def will_execute_real_order(self) -> bool:
+        """Whether dispatching an order through this bridge would reach a real
+        broker terminal (not a pure paper simulator / mailbox).
+
+        Defaults to False; real bridges override. The execution guard consults
+        this so the owner live-trading authorization is required for ANY real
+        dispatch — independent of the ``config.live_mode`` flag, which a real,
+        connected account does not depend on to fill orders.
+        """
+        return False
+
 
 class MT5Bridge(BrokerBridge):
     """Real MetaTrader 5 connection via the MetaTrader5 Python package.
@@ -82,16 +107,20 @@ class MT5Bridge(BrokerBridge):
         """Attempt to initialize MT5 connection."""
         self._connected = False
         try:
+            _add_local_mt5_deps()
             import MetaTrader5 as mt5
             self._mt5 = mt5
 
             # MT5 may hang if terminal isn't running — catch everything
             try:
-                result = mt5.initialize(
-                    login=self.login,
-                    password=self.password,
-                    server=self.server,
-                )
+                kwargs = {}
+                if config.mt5_path:
+                    kwargs["path"] = config.mt5_path
+                if self.login and self.login > 0:
+                    kwargs["login"] = self.login
+                    kwargs["password"] = self.password
+                    kwargs["server"] = self.server
+                result = mt5.initialize(**kwargs)
             except Exception:
                 return
 
@@ -116,6 +145,13 @@ class MT5Bridge(BrokerBridge):
             return info is not None and info.connected
         except Exception:
             return False
+
+    def will_execute_real_order(self) -> bool:
+        """A connected MT5 terminal places a real order via ``order_send`` (live
+        or demo account). Fail-closed: require owner live-trading authorization
+        for any connected-terminal dispatch, regardless of ``config.live_mode``.
+        When not connected, dispatch falls back to simulation (paper)."""
+        return self.is_connected()
 
     def get_account_info(self) -> Dict[str, float]:
         """Get current account state from MT5."""
@@ -172,8 +208,11 @@ class MT5Bridge(BrokerBridge):
                     raw_request_hash=_hash_payload(request),
                 )
 
-            retcode = result.retcode
-            ticket = result.order if result.order > 0 else None
+            retcode = getattr(result, "retcode", None)
+            order_ticket = getattr(result, "order", 0) or 0
+            deal_ticket = getattr(result, "deal", 0) or 0
+            ticket = order_ticket if order_ticket > 0 else (deal_ticket if deal_ticket > 0 else None)
+            comment = getattr(result, "comment", "")
 
             # MT5 return codes
             if retcode == self._mt5.TRADE_RETCODE_DONE:
@@ -181,25 +220,30 @@ class MT5Bridge(BrokerBridge):
                 error = None
             elif retcode == self._mt5.TRADE_RETCODE_DONE_PARTIAL:
                 status = OrderStatus.PARTIAL
-                error = f"Partial fill: {result.comment}"
+                error = f"Partial fill: {comment}"
             elif retcode == self._mt5.TRADE_RETCODE_REJECT:
                 status = OrderStatus.REJECTED
-                error = f"Rejected: {result.comment}"
+                error = f"Rejected: {comment}"
             elif retcode == self._mt5.TRADE_RETCODE_CANCEL:
                 status = OrderStatus.CANCELLED
-                error = f"Cancelled: {result.comment}"
+                error = f"Cancelled: {comment}"
+            elif retcode == getattr(self._mt5, "TRADE_RETCODE_CLIENT_DISABLES_AT", 10027):
+                status = OrderStatus.REJECTED
+                error = f"AutoTrading disabled by client: {comment}"
             else:
                 status = OrderStatus.REJECTED
-                error = f"Unknown retcode {retcode}: {result.comment}"
+                error = f"Unknown retcode {retcode}: {comment}"
             lock_reason = None
             if status == OrderStatus.REJECTED and "margin" in str(error or "").lower():
                 lock_reason = BrokerLockReason.MARGIN_REJECT
 
-            fill_price = float(result.price) if result.price > 0 else None
+            result_price = getattr(result, "price", None)
+            fill_price = float(result_price) if result_price and result_price > 0 else None
             expected_price = order.price if order.price > 0 else fill_price
             slippage_pips = None
             if fill_price and expected_price:
                 slippage_pips = abs(fill_price - expected_price) * pip_multiplier(order.symbol)
+            commission = getattr(result, "commission", None)
 
             return OrderOutcome(
                 order_ref=order.order_id,
@@ -207,7 +251,7 @@ class MT5Bridge(BrokerBridge):
                 status=status,
                 filled_price=fill_price,
                 slippage_pips=round(slippage_pips, 2) if slippage_pips else None,
-                commission=float(result.commission) if result.commission else None,
+                commission=float(commission) if commission is not None else None,
                 timestamp=utc_now(),
                 error_message=error,
                 is_duplicate=False,
@@ -273,6 +317,8 @@ class MT5Bridge(BrokerBridge):
                 "deviation": 30,
                 "magic": 20260601,
                 "comment": "CAS_CLOSE",
+                "type_time": getattr(self._mt5, "ORDER_TIME_GTC", 0),
+                "type_filling": self._symbol_filling_mode(symbol),
             }
 
             result = self._mt5.order_send(request)
@@ -378,8 +424,38 @@ class MT5Bridge(BrokerBridge):
             "magic": order.magic_number,
             "comment": order.comment[:27],
             "type_time": mt5.ORDER_TIME_GTC,
-            "type_filling": mt5.ORDER_FILLING_IOC,
+            "type_filling": self._symbol_filling_mode(symbol),
         }
+
+    def _symbol_filling_mode(self, symbol: str) -> int:
+        """Return the MT5 order filling constant supported by this symbol."""
+
+        mt5 = self._mt5
+        fallback = getattr(mt5, "ORDER_FILLING_IOC", 1)
+        try:
+            info = mt5.symbol_info(symbol)
+        except Exception:
+            info = None
+        raw = getattr(info, "filling_mode", None) if info is not None else None
+        flag_to_order = {
+            1: getattr(mt5, "ORDER_FILLING_FOK", fallback),
+            2: getattr(mt5, "ORDER_FILLING_IOC", fallback),
+            4: getattr(mt5, "ORDER_FILLING_RETURN", fallback),
+        }
+        if raw in flag_to_order:
+            return flag_to_order[raw]
+        constants = [
+            value
+            for value in (
+                getattr(mt5, "ORDER_FILLING_FOK", None),
+                getattr(mt5, "ORDER_FILLING_IOC", None),
+                getattr(mt5, "ORDER_FILLING_RETURN", None),
+            )
+            if value is not None
+        ]
+        if raw is not None and raw in constants:
+            return int(raw)
+        return fallback
 
     def _simulate_execution(self, order: BrokerOrderRequest) -> OrderOutcome:
         """Simulate order execution for paper trading."""

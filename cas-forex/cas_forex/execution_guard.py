@@ -150,6 +150,24 @@ def _is_live_execution(config: Any = None) -> bool:
     return bool(getattr(_resolve_config(config), "live_mode", False))
 
 
+def _bridge_executes_real(bridge: Any) -> bool:
+    """Whether the bridge itself would place a real order on this dispatch.
+
+    ``config.live_mode`` is NOT sufficient: a connected real MT5 terminal fills
+    orders based on connection state, not the live_mode flag, so an operator who
+    left LIVE_MODE off but pointed the bridge at a connected live account would
+    otherwise bypass the owner gate. We ask the bridge directly via
+    ``will_execute_real_order``. If the probe raises, fail closed (assume real).
+    """
+    probe = getattr(bridge, "will_execute_real_order", None)
+    if not callable(probe):
+        return False
+    try:
+        return bool(probe())
+    except Exception:  # pragma: no cover - defensive; fail closed
+        return True
+
+
 def _intent_from_order(order: Any) -> dict[str, Any]:
     """Best-effort extraction of symbol/direction/lots from a bridge order
     object (e.g. an MT5 order model). ``direction`` may be an enum with a
@@ -180,21 +198,26 @@ def guarded_place_order(
 
     Order of checks (fail-closed -- the bridge is only touched if all pass):
 
-      1. If this is a live-mode (real-money) dispatch, re-assert the owner
-         live-trading gate via ``runtime_gates.require_authorized`` -- raises
-         ``PermissionError`` listing what is still missing.
+      1. If this dispatch would touch a real broker -- either the app is in live
+         mode OR the bridge reports it will place a real order
+         (``will_execute_real_order``) -- re-assert the owner live-trading gate
+         via ``runtime_gates.require_authorized`` -- raises ``PermissionError``
+         listing what is still missing.
       2. Run the pre-execution risk gate over the proposed intent -- raises
          ``ExecutionBlocked`` on any cap breach.
-      3. Only then call ``bridge.place_order(order)`` and return its result.
+      3. Only then call ``bridge.execute_order(order)`` (real bridges) -- falling
+         back to ``bridge.place_order`` for test fakes -- and return its result.
 
     ``proposed_intent`` overrides the symbol/direction/lots inferred from
     ``order`` if supplied.
     """
     intent = dict(proposed_intent) if proposed_intent else _intent_from_order(order)
 
-    if _is_live_execution(config):
+    if _is_live_execution(config) or _bridge_executes_real(bridge):
         # Defense-in-depth: enforce the live-trading authorization at the
-        # dispatch chokepoint, not only at bridge construction.
+        # dispatch chokepoint, not only at bridge construction. This fires when
+        # the app is in live mode OR when the bridge itself would place a real
+        # order (e.g. a connected MT5 terminal) even with live_mode off.
         from cas_forex import runtime_gates
 
         runtime_gates.require_authorized("live_trading", config)
@@ -209,5 +232,10 @@ def guarded_place_order(
     # The real broker bridges (MT5Bridge / SimulatedBrokerBridge / MT4EABridge)
     # expose ``execute_order``; only test fakes define ``place_order``. Prefer
     # the real method and fall back so both work through this one chokepoint.
-    dispatch = getattr(bridge, "execute_order", None) or getattr(bridge, "place_order")
+    dispatch = getattr(bridge, "execute_order", None) or getattr(bridge, "place_order", None)
+    if not callable(dispatch):
+        raise TypeError(
+            "broker bridge exposes neither execute_order nor place_order; "
+            "cannot dispatch order"
+        )
     return dispatch(order)

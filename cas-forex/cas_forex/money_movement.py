@@ -237,6 +237,19 @@ class MovementEngine:
         self.provider = provider or SimulatedPaymentProvider()
         self.config = config
 
+    @classmethod
+    def from_config(cls, config: Any = None) -> "MovementEngine":
+        """Build an engine whose provider is selected from config.
+
+        Uses the config-selected provider (e.g. Stripe when configured),
+        falling back to the simulated provider. Selecting a real provider does
+        not bypass any gate — every movement is still gate-checked first.
+        """
+        # Lazy import: payment_providers imports from this module.
+        from cas_forex.payment_providers import build_payment_provider
+
+        return cls(provider=build_payment_provider(config), config=config)
+
     # -- external movements ------------------------------------------------
 
     def deposit(
@@ -371,6 +384,13 @@ class MovementEngine:
 
     # -- internals ---------------------------------------------------------
 
+    def _cfg(self) -> Any:
+        if self.config is not None:
+            return self.config
+        from cas_forex.config import config as default_config
+
+        return default_config
+
     def _zero_leg(self, kind: MovementKind) -> MovementResult:
         return MovementResult(
             kind=kind.value,
@@ -418,6 +438,26 @@ class MovementEngine:
                 ),
                 missing_requirements=tuple(gate.missing_requirements),
             )
+
+        # 1b. Payout destination must match the owner's allowlisted destination.
+        # The gate only confirms that AN allowlisted destination is configured,
+        # not that THIS payout targets it — bind/validate here, fail-closed, so
+        # an authorized payout can never be redirected to an arbitrary account.
+        if kind == MovementKind.PAYOUT:
+            allowed = getattr(self._cfg(), "payout_destination_id", None)
+            destination_id = destination_id if destination_id is not None else allowed
+            if allowed is not None and destination_id != allowed:
+                return MovementResult(
+                    kind=kind.value,
+                    status=STATUS_REJECTED,
+                    requested_amount_usd=money(amount),
+                    capability=capability,
+                    authorized=True,
+                    reason=(
+                        "requested payout destination does not match the "
+                        "owner-allowlisted payout destination"
+                    ),
+                )
 
         # 2. Authorized — run the provider.
         if kind == MovementKind.DEPOSIT:

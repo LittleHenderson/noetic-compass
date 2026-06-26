@@ -12,12 +12,14 @@ from cas_forex.broker.mt5_bridge import SimulatedBrokerBridge
 from cas_forex.order_dispatch import (
     STATUS_BLOCKED_LIVE_GATE,
     STATUS_BLOCKED_RISK,
+    STATUS_DISPATCH_ERROR,
     STATUS_REJECTED_PRECHECK,
     TradeIntent,
     dispatch_intent,
     dispatch_intents,
     dispatched_ledger_events,
 )
+from cas_forex.schemas.order import BrokerMode, OrderOutcome, OrderStatus
 
 
 def _cfg(*, live_mode: bool = False) -> SimpleNamespace:
@@ -26,6 +28,53 @@ def _cfg(*, live_mode: bool = False) -> SimpleNamespace:
         max_open_positions=5,
         max_weekly_drawdown_pct=5.0,
         live_mode=live_mode,
+    )
+
+
+def _authorized_live_cfg() -> SimpleNamespace:
+    # Everything evaluate_live_trading requires, fully owner-authorized.
+    return SimpleNamespace(
+        max_total_exposure_lots=0.5,
+        max_open_positions=5,
+        max_weekly_drawdown_pct=5.0,
+        live_mode=True,
+        owner_enable_live_trading=True,
+        live_trading_licensed=True,
+        mt5_login=12345,
+        mt5_password="pw",
+        mt5_server="HugosWay-Live",
+        prefer_mt5=True,
+        mt5_path=None,
+        personal_account_ack=True,
+        no_pooled_capital_ack=True,
+        account_type="personal",
+        selected_broker_id="hugosway",
+    )
+
+
+class _FakeRealBridge:
+    """A bridge that reports it would place a REAL order (like a connected MT5)."""
+
+    def __init__(self, outcome: OrderOutcome) -> None:
+        self.outcome = outcome
+        self.calls: list = []
+
+    def will_execute_real_order(self) -> bool:
+        return True
+
+    def execute_order(self, order):
+        self.calls.append(order)
+        return self.outcome
+
+
+def _executed_outcome(order_id: str) -> OrderOutcome:
+    return OrderOutcome(
+        order_ref=order_id,
+        broker_ticket=999001,
+        status=OrderStatus.EXECUTED,
+        filled_price=1.1000,
+        broker_mode=BrokerMode.LIVE_MT5,
+        is_real_broker=True,
     )
 
 
@@ -100,6 +149,81 @@ def test_invalid_geometry_rejected_in_precheck():
     assert result.status == STATUS_REJECTED_PRECHECK
     assert result.dispatched_to_bridge is False
     assert result.outcome is None
+
+
+def test_real_bridge_requires_live_gate_even_when_live_mode_off():
+    # GB-1 regression: a bridge that would place a real order must require the
+    # owner live-trading gate even with live_mode off (gate is NOT keyed only on
+    # config.live_mode). No enable flags -> blocked at the dispatch chokepoint.
+    bridge = _FakeRealBridge(_executed_outcome("ord-1"))
+    result = dispatch_intent(_intent(), bridge, config=_cfg(live_mode=False))
+
+    assert result.status == STATUS_BLOCKED_LIVE_GATE
+    assert result.dispatched_to_bridge is False
+    assert bridge.calls == []  # the real bridge was never touched
+
+
+def test_authorized_live_dispatch_reaches_real_bridge():
+    # GAP 3: with live trading fully owner-authorized, an approved order actually
+    # reaches the (fake) real bridge and the ledger note records real_broker=True.
+    bridge = _FakeRealBridge(_executed_outcome("ord-1"))
+    result = dispatch_intent(_intent(), bridge, config=_authorized_live_cfg())
+
+    assert result.status == "BROKER_EXECUTED"
+    assert result.dispatched_to_bridge is True
+    assert len(bridge.calls) == 1
+    assert result.ledger_event is not None
+    assert "real_broker=True" in result.ledger_event.note
+
+
+def test_pending_outcome_counted_in_pending_bucket():
+    # OD-1: a queued (PENDING) outcome belongs to its own bucket so the counts
+    # reconcile: executed + blocked + rejected + pending == intent_count.
+    pending = OrderOutcome(
+        order_ref="ord-1",
+        broker_ticket=None,
+        status=OrderStatus.PENDING,
+        broker_mode=BrokerMode.PAPER_MT4,
+        is_real_broker=False,
+    )
+
+    class _PendingBridge:
+        def execute_order(self, order):
+            return pending
+
+    report = dispatch_intents([_intent()], bridge=_PendingBridge(), config=_cfg())
+    assert report.pending_count == 1
+    assert report.executed_count == 0
+    total = (
+        report.executed_count
+        + report.blocked_count
+        + report.rejected_count
+        + report.pending_count
+    )
+    assert total == report.intent_count
+
+
+def test_dispatch_error_does_not_raise_and_is_recorded():
+    # OD-2: a bridge exposing neither execute_order nor place_order must not
+    # break the "never raises" contract — it becomes a per-intent DISPATCH_ERROR.
+    class _BrokenBridge:
+        pass
+
+    report = dispatch_intents([_intent()], bridge=_BrokenBridge(), config=_cfg())
+    assert report.intent_count == 1
+    assert report.results[0].status == STATUS_DISPATCH_ERROR
+    assert report.results[0].dispatched_to_bridge is False
+    assert report.rejected_count == 1
+
+
+def test_bridge_exception_becomes_dispatch_error():
+    class _ThrowingBridge:
+        def execute_order(self, order):
+            raise RuntimeError("broker socket closed")
+
+    result = dispatch_intent(_intent(), _ThrowingBridge(), config=_cfg())
+    assert result.status == STATUS_DISPATCH_ERROR
+    assert "broker socket closed" in result.reason
 
 
 def test_batch_report_counts_and_mode():

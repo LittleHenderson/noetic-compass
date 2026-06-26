@@ -1,5 +1,58 @@
 # CAS Forex - Changelog
 
+## 2026-06-26 - Agent-signal dispatch + Stripe provider + adversarial-review fixes
+
+Wired the agent cycle's real signals into the gated dispatch loop, added a live
+Stripe payment-provider skeleton, then ran a 5-lens adversarial review (with
+per-finding refutation + a completeness critic) and fixed every confirmed
+finding. Full suite: 1084 passed.
+
+### Engine A — agent-signal dispatch (`cas_forex/agent_dispatch.py`)
+
+Reuses the SAME signal builders (`build_micro_scalp_intents` /
+`build_hourly_intraday_intents`) and the SAME overseer (`review_route_intents`)
+as the existing cycle, then routes overseer-approved intents through
+`order_dispatch.dispatch_order` (live + risk gate → bridge → ledger). Every
+intent is represented in the report (approved→dispatched, rejected→
+`OVERSEER_REJECTED`). `order_dispatch` refactored to share a `dispatch_order` +
+`build_dispatch_report` core (no duplication).
+
+- `scripts/run_agent_dispatch_cycle.py` — production runner (real replay evidence
+  → overseer → gated paper dispatch → JSON artifact). Verified end-to-end against
+  real Forex Fury replay leads.
+
+### Engine B — Stripe provider (`cas_forex/payment_providers.py`)
+
+`StripePaymentProvider` (lazy/injectable SDK, `is_real=True`) + `build_payment_provider`
+factory + `MovementEngine.from_config`. A real provider is unreachable until the
+capability gate authorizes it, and its events are real-money (refused by the
+paper ledger).
+
+### Adversarial-review fixes
+
+- **GB-1 (blocker):** the live-trading gate keyed only on `config.live_mode`, but
+  a *connected* `MT5Bridge` fills real orders regardless — so LIVE_MODE off + a
+  connected real account = real order with no owner gate. Added
+  `BrokerBridge.will_execute_real_order()` (MT5Bridge → True when connected); the
+  execution guard now requires the live-trading gate whenever the bridge would
+  execute real, not just when `live_mode` is set.
+- **payout-allowlist (med):** an authorized payout could target any caller
+  `destination_id`. The engine now binds the destination to / validates it
+  against `config.payout_destination_id`, fail-closed.
+- **SM-1 (med):** Stripe `requires_capture` (authorized, not captured — funds not
+  moved) no longer maps to SETTLED.
+- **OD-1 (low):** `PENDING` broker outcomes now have a `pending_count` bucket so
+  executed+blocked+rejected+pending == intent_count.
+- **OD-2 (low):** dispatch never-raises contract hardened — bridge with no
+  usable method / a throwing `execute_order` becomes a per-intent
+  `DISPATCH_ERROR`, not an aborted batch.
+- **SF-1 (nit):** `dispatch_route_intents` pairs intents↔decisions positionally
+  (matching the canonical cycle); no intent dropped under duplicate `intent_id`.
+
+Tests: +13 (order dispatch real-bridge gate / pending / dispatch-error,
+payout allowlist, Stripe deposit + `requires_capture`, real reinvest legs,
+duplicate-id, report writer).
+
 ## 2026-06-26 - The two missing engines: order dispatch loop + money-movement engine
 
 The gates were open-able but guarded nothing — no loop ever walked a signal
