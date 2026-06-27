@@ -147,8 +147,14 @@ def promote_candidate(
     repo_root: Path,
     leads_path: Path,
     now: Optional[datetime] = None,
+    allow_unverified: bool = False,
 ) -> ForexFuryPromotionResult:
     """Promote a candidate into strategy_leads.json under the paper research lane.
+
+    ``allow_unverified`` is the owner override: when True, a candidate whose
+    underlying .set file is missing (or whose sha256 does not match) is still
+    promoted, but the lead is flagged ``integrity_verified: false`` with a note,
+    so the audit trail stays honest. Default False keeps the verified-only gate.
 
     Choice on idempotency: APPEND. Promoting the same candidate twice produces
     two distinct lead entries (distinct ``lead_id`` derived from
@@ -183,7 +189,7 @@ def promote_candidate(
         expected_sha256=expected_sha,
         repo_root=repo_root,
     )
-    if not integrity.verified:
+    if not integrity.verified and not allow_unverified:
         if integrity.error_message and "missing" in integrity.error_message:
             reason = "set file missing"
         else:
@@ -217,8 +223,14 @@ def promote_candidate(
         },
         "promoted_at_iso": promoted_at_iso,
         "status": PAPER_LANE_STATUS,
+        "integrity_verified": integrity.verified,
         "claim_boundary": CLAIM_BOUNDARY,
     }
+    if not integrity.verified:
+        # Owner-overridden promotion of an unverified candidate — record why, so
+        # this lead is never mistaken for one backed by a verified .set file.
+        lead_entry["integrity_override"] = True
+        lead_entry["integrity_note"] = integrity.error_message
 
     _append_lead_atomic(leads_path, lead_entry)
 

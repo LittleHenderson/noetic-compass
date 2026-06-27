@@ -93,6 +93,8 @@ def reset_loader_for_testing() -> None:
 
 class PromoteRequest(BaseModel):
     candidate_id: str
+    # Owner override: promote even if the .set file is missing / unverified.
+    allow_unverified: bool = False
 
 
 # ---------------------------------------------------------------------------
@@ -120,6 +122,7 @@ async def promote(request: PromoteRequest) -> dict[str, Any]:
         replay_candidates=candidates_payload,
         repo_root=_REPO_ROOT,
         leads_path=_LEADS_PATH,
+        allow_unverified=request.allow_unverified,
     )
     if not result.accepted:
         raise HTTPException(

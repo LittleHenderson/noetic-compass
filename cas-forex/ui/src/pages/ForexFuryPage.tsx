@@ -88,10 +88,13 @@ export function ForexFuryPage({ state }: ForexFuryPageProps) {
     };
   }, []);
 
-  async function handlePromote(candidate: ForexFuryReplayCandidate) {
+  async function handlePromote(
+    candidate: ForexFuryReplayCandidate,
+    allowUnverified = false,
+  ) {
     const id = candidate.candidate_id;
     setPending((prev) => ({ ...prev, [id]: true }));
-    const result = await promoteForexFuryCandidate(id);
+    const result = await promoteForexFuryCandidate(id, allowUnverified);
     setPending((prev) => ({ ...prev, [id]: false }));
     if (result.ok) {
       setResults((prev) => ({ ...prev, [id]: { kind: "ok", ok: result.data } }));
@@ -206,6 +209,16 @@ export function ForexFuryPage({ state }: ForexFuryPageProps) {
                           {result?.kind === "err" && (
                             <div className="action-result-toast action-result-err">
                               {extractErrorMessage(result.err)}
+                              <button
+                                type="button"
+                                className="strategy-action-button"
+                                style={{ marginTop: 6 }}
+                                disabled={isPending}
+                                onClick={() => handlePromote(c, true)}
+                                title="Promote without the verified .set file. The lead is flagged integrity_verified: false."
+                              >
+                                {isPending ? "Promoting..." : "Promote anyway (unverified)"}
+                              </button>
                             </div>
                           )}
                         </div>

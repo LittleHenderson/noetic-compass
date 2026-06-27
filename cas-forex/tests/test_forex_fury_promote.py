@@ -138,6 +138,28 @@ def test_promote_integrity_failure_does_not_write_leads(tmp_path: Path) -> None:
     assert not leads_path.exists()
 
 
+def test_promote_allow_unverified_writes_flagged_lead(tmp_path: Path) -> None:
+    leads_path = tmp_path / "strategy_leads.json"
+    # No .set file on disk => integrity fails, but the owner override promotes
+    # anyway, and the lead is flagged so it can never be mistaken for verified.
+    cand = _candidate()
+    result = promote_candidate(
+        candidate_id=cand["candidate_id"],
+        replay_candidates={"candidates": [cand]},
+        repo_root=tmp_path,
+        leads_path=leads_path,
+        allow_unverified=True,
+    )
+    assert result.accepted is True
+    assert result.lead_id is not None
+    assert result.integrity is not None and result.integrity.verified is False
+
+    entry = json.loads(leads_path.read_text(encoding="utf-8"))["leads"][0]
+    assert entry["integrity_verified"] is False
+    assert entry["integrity_override"] is True
+    assert entry["status"] == "PROMOTED_PAPER_LANE"
+
+
 def test_promote_success_writes_lead_entry(tmp_path: Path) -> None:
     _write_set_file(tmp_path, "sets/demo.set")
     cand = _candidate(relative_set="sets/demo.set")

@@ -823,12 +823,16 @@ function toPostError(err: unknown): ApiPostError {
 
 export async function promoteForexFuryCandidate(
   candidateId: string,
+  allowUnverified = false,
 ): Promise<{ ok: true; data: ForexFuryPromoteResponse } | { ok: false; error: ApiPostError }> {
   try {
-    const data = await apiPostJson<ForexFuryPromoteResponse, { candidate_id: string }>(
-      "/forex-fury-promote/promote",
-      { candidate_id: candidateId },
-    );
+    const data = await apiPostJson<
+      ForexFuryPromoteResponse,
+      { candidate_id: string; allow_unverified: boolean }
+    >("/forex-fury-promote/promote", {
+      candidate_id: candidateId,
+      allow_unverified: allowUnverified,
+    });
     return { ok: true, data };
   } catch (err) {
     return { ok: false, error: toPostError(err) };
