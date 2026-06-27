@@ -189,6 +189,63 @@ export async function resetRiskControl(): Promise<RiskControlState> {
   return apiPost<RiskControlState>("/risk-control/reset");
 }
 
+// ── Owner live-enable control (turn the live-trading gate flags ON in-app) ──
+
+export type LiveEnableKey =
+  | "personal_account_ack"
+  | "no_pooled_capital_ack"
+  | "live_mode"
+  | "prefer_mt5"
+  | "owner_enable_live_trading"
+  | "live_trading_licensed";
+
+export interface LiveEnableFlag {
+  key: LiveEnableKey;
+  label: string;
+  consequence: string;
+  enabled: boolean;
+  overridden: boolean;
+}
+
+export interface RuntimeGateDecision {
+  capability: string;
+  authorized: boolean;
+  status: string;
+  missing_requirements: string[];
+  satisfied_requirements: string[];
+  next_action: string;
+}
+
+export interface LiveEnableState {
+  report_kind?: string;
+  flags: LiveEnableFlag[];
+  resolved: Record<LiveEnableKey, boolean>;
+  runtime_gates: {
+    report_kind?: string;
+    decisions: Record<string, RuntimeGateDecision>;
+    all_real_money_authorized: boolean;
+    summary: string;
+  };
+  live_trading: RuntimeGateDecision;
+  live_authorized: boolean;
+  still_missing: string[];
+  caveats: string[];
+}
+
+export async function fetchLiveEnable(): Promise<LiveEnableState | null> {
+  try { return await apiGet<LiveEnableState>("/live-enable/state"); } catch { return null; }
+}
+
+export async function updateLiveEnable(
+  patch: Partial<Record<LiveEnableKey, boolean>>,
+): Promise<LiveEnableState> {
+  return apiPostJson<LiveEnableState, typeof patch>("/live-enable/update", patch);
+}
+
+export async function resetLiveEnable(): Promise<LiveEnableState> {
+  return apiPost<LiveEnableState>("/live-enable/reset");
+}
+
 // ── Multi-timeframe runtime selector ──
 
 export interface SymbolTimeframeSelection {

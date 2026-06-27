@@ -27,7 +27,10 @@ Use `preview_eval`/`preview_inspect`/`preview_resize` on the **UI** serverId. GO
 
 ## 1. THE TWO NEXT TASKS (priority order from the owner)
 
-### TASK A (TOP PRIORITY) — In-app toggle buttons to ENABLE LIVE TRADING
+### TASK A — DONE (2026-06-27, next session). "Go Live — Owner Switches" panel shipped.
+Built per the spec below: `cas_forex/live_enable_control.py` (override module) + `api/routes/live_enable.py` + Settings "Go Live — Owner Switches" panel (6 toggles in 3 groups + live runtime-gate readout + honest caveat). `runtime_gates._resolve_config` now consults `apply_live_enable_overrides` (no-op when unset, fail-closed). Verified end-to-end in the UI (all-on → gate AUTHORIZED, Reset reverts). Tests: `tests/test_live_enable_control.py`. **Original spec kept below for reference.**
+
+### TASK A (TOP PRIORITY — COMPLETE) — In-app toggle buttons to ENABLE LIVE TRADING
 The owner is furious that going live requires editing `.env`. He wants **toggle switches in the app** for everything `runtime_gates.evaluate_live_trading` checks that is currently env-only:
 
 1. **Account / source-of-funds acknowledgments** → config flags `personal_account_ack`, `no_pooled_capital_ack` (config.py). Currently env `CAS_FOREX_PERSONAL_ACCOUNT_ACK`, `CAS_FOREX_NO_POOLED_CAPITAL_ACK`. → in-app **signed-acknowledgment toggles** (with the consequence text shown).

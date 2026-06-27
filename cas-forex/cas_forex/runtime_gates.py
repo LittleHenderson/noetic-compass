@@ -67,11 +67,23 @@ def _check(label: str, ok: bool, satisfied: List[str], missing: List[str]) -> No
 
 
 def _resolve_config(config: Any = None) -> Any:
-    if config is not None:
-        return config
-    from cas_forex.config import config as default_config
+    if config is None:
+        from cas_forex.config import config as default_config
 
-    return default_config
+        config = default_config
+    # Honour the owner's in-app live-enable toggles. With no overrides set this
+    # returns the config unchanged (true no-op), so default/test behaviour is
+    # preserved; with toggles set, the live-enable flags read their override
+    # values. This is the single point where the toggles reach the real-money
+    # authorization path, and it stays fail-closed (overrides only ever set the
+    # six named boolean flags; every other requirement is still checked).
+    try:
+        from cas_forex.live_enable_control import apply_live_enable_overrides
+
+        config = apply_live_enable_overrides(config)
+    except Exception:  # pragma: no cover - defensive: never break the gate
+        pass
+    return config
 
 
 def evaluate_live_trading(config: Any = None) -> GateDecision:

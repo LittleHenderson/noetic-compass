@@ -13,6 +13,11 @@ import {
   updateRiskControl,
   resetRiskControl,
   type RiskControlState,
+  fetchLiveEnable,
+  updateLiveEnable,
+  resetLiveEnable,
+  type LiveEnableState,
+  type LiveEnableKey,
 } from "../data/api";
 import type { DashboardState } from "../types/evidence";
 
@@ -39,6 +44,9 @@ export function SettingsPage({ state }: SettingsPageProps) {
   return (
     <div className="settings-page">
       <MobileApiPanel />
+
+      {/* ── Go Live — owner switches (turn the live-trading gate flags ON) ── */}
+      <GoLivePanel />
 
       {/* ── Owner risk control — set any cap, or remove it ── */}
       <RiskControlPanel />
@@ -266,6 +274,189 @@ function MobileApiPanel() {
         For a phone, use your computer's LAN/VPN/tunnel address, e.g. <code>http://192.168.x.x:8765/api/forex</code>.
         <strong> Do not use 127.0.0.1 on the phone</strong> unless the API is running on the phone itself.
         {saved && <span style={{ color: "var(--success)", marginLeft: 8 }}>Saved. Refresh or reopen the app to reload live evidence.</span>}
+      </div>
+    </GlassPanel>
+  );
+}
+
+// Grouped layout for the live-enable toggles. Keys map to the backend flags.
+const GO_LIVE_GROUPS: { title: string; keys: LiveEnableKey[] }[] = [
+  { title: "Account acknowledgments", keys: ["personal_account_ack", "no_pooled_capital_ack"] },
+  { title: "Live broker mode", keys: ["live_mode", "prefer_mt5"] },
+  { title: "Owner enable", keys: ["owner_enable_live_trading", "live_trading_licensed"] },
+];
+
+function ToggleSwitch({
+  on,
+  busy,
+  onClick,
+  label,
+}: {
+  on: boolean;
+  busy: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      className="go-live-switch"
+      data-on={on}
+      disabled={busy}
+      aria-pressed={on}
+      aria-label={`${label} — ${on ? "on" : "off"}`}
+      onClick={onClick}
+    >
+      <span className="knob" />
+    </button>
+  );
+}
+
+function GoLivePanel() {
+  const [le, setLe] = useState<LiveEnableState | null>(null);
+  const [busyKey, setBusyKey] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+
+  useEffect(() => {
+    void fetchLiveEnable().then((s) => { if (s) setLe(s); });
+  }, []);
+
+  async function toggle(key: LiveEnableKey, next: boolean) {
+    setBusyKey(key);
+    setStatus("");
+    try {
+      setLe(await updateLiveEnable({ [key]: next }));
+    } catch {
+      setStatus("Couldn't save — is the API reachable? Check the address above.");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  async function reset() {
+    setBusyKey("__reset__");
+    setStatus("");
+    try {
+      setLe(await resetLiveEnable());
+      setStatus("Reset to config / env defaults.");
+    } catch {
+      setStatus("Couldn't reset.");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  const flagFor = (key: LiveEnableKey) => le?.flags.find((f) => f.key === key);
+  const authorized = le?.live_authorized ?? false;
+  const missing = le?.still_missing ?? [];
+
+  return (
+    <GlassPanel
+      title="Go Live — Owner Switches"
+      subtitle="Turn the live-trading gate flags ON from here — no .env edits"
+      variant={authorized ? "default" : "danger"}
+    >
+      {/* Live readout: AUTHORIZED vs exactly what is still missing */}
+      <div
+        style={{
+          marginBottom: 14,
+          padding: "10px 12px",
+          borderRadius: "var(--radius-sm)",
+          background: authorized ? "rgba(34,197,94,0.12)" : "var(--danger-dim)",
+          border: `1px solid ${authorized ? "rgba(34,197,94,0.4)" : "var(--danger-dim)"}`,
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <StatusChip
+            label={authorized ? "LIVE-TRADING GATE: AUTHORIZED" : "LIVE-TRADING GATE: NOT YET"}
+            variant={authorized ? "success" : "danger"}
+            size="sm"
+          />
+        </div>
+        {le && !authorized && missing.length > 0 && (
+          <div style={{ marginTop: 8 }}>
+            <div className="control-field-desc" style={{ color: "var(--danger)", fontWeight: 600 }}>
+              Still missing before the gate authorizes:
+            </div>
+            <ul style={{ margin: "4px 0 0", paddingLeft: 18 }}>
+              {missing.map((m) => (
+                <li key={m} className="control-field-desc" style={{ color: "var(--danger)" }}>{m}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {le == null && (
+          <div className="control-field-desc" style={{ marginTop: 6 }}>Loading live-enable state…</div>
+        )}
+      </div>
+
+      {/* The toggles, grouped */}
+      <div style={{ display: "grid", gap: 4 }}>
+        {GO_LIVE_GROUPS.map((group) => (
+          <div key={group.title}>
+            <div className="go-live-group-title">{group.title}</div>
+            {group.keys.map((key) => {
+              const f = flagFor(key);
+              const on = f?.enabled ?? false;
+              return (
+                <div key={key} className="go-live-row">
+                  <ToggleSwitch
+                    on={on}
+                    busy={busyKey === key}
+                    label={f?.label ?? key}
+                    onClick={() => void toggle(key, !on)}
+                  />
+                  <div className="go-live-row-body">
+                    <div className="go-live-row-label">
+                      {f?.label ?? key}
+                      {f?.overridden && (
+                        <span style={{ marginLeft: 6, fontSize: "0.62rem", color: "var(--text-secondary)" }}>
+                          (set in-app)
+                        </span>
+                      )}
+                    </div>
+                    <div className="go-live-row-consequence">{f?.consequence ?? ""}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      <div className="mobile-api-row" style={{ marginTop: 14 }}>
+        <button
+          className="mobile-api-button ghost"
+          type="button"
+          disabled={busyKey === "__reset__"}
+          onClick={() => void reset()}
+        >
+          Reset to defaults
+        </button>
+      </div>
+      {status && (
+        <div className="control-field-desc" style={{ color: status.startsWith("Couldn't") ? "var(--danger)" : "var(--success)" }}>
+          {status}
+        </div>
+      )}
+
+      {/* Honest caveat — visible always, never one accidental tap from real money */}
+      <div
+        style={{
+          marginTop: 14,
+          padding: "8px 12px",
+          background: "var(--panel-dim)",
+          borderRadius: "var(--radius-sm)",
+          fontSize: "0.72rem",
+          color: "var(--text-secondary)",
+        }}
+      >
+        <strong>What these switches do:</strong> they satisfy the live-trading gate — they do
+        <strong> not</strong> place any order by themselves. A real order also needs a
+        <strong> connected broker feed</strong> and a <strong>running dispatch loop</strong> (neither
+        runs automatically yet), and the broker bridge re-checks authorization at order time
+        (fail-closed). So flipping every switch here turns the gate green, but it is never one
+        accidental tap from real money.
       </div>
     </GlassPanel>
   );

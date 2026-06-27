@@ -1,6 +1,44 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Two pending owner tasks: (A) in-app toggle switches to enable live trading [acks + live_mode + owner_enable_live_trading + live_trading_licensed] — owner is NOT a dev, no env vars; (B) the "Trading Windows" live-chart cockpit (connector already fixed). Plus launch the comprehensive UI audit (Daily Report `by_status` shows `[object Object]`).
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Task A (in-app live-enable toggles) is now DONE (see entry below). Remaining: (B) the "Trading Windows" live-chart cockpit (connector already fixed); plus launch the comprehensive UI audit (Daily Report `by_status` shows `[object Object]`).
+
+## 2026-06-27 - "Go Live — Owner Switches" panel (Task A: enable live trading from the app, no .env)
+
+The owner is not a developer; going live used to require editing `.env`. This adds
+in-app toggle switches for everything `runtime_gates.evaluate_live_trading` checked
+that was env-only, following the exact `risk_control` override pattern.
+
+### Runtime override (`cas_forex/live_enable_control.py`)
+Module-level `_OVERRIDES` + `set_live_enable_overrides()` / `resolve_live_enable()` /
+`clear_live_enable_overrides()`, plus `apply_live_enable_overrides(config)` that
+returns a `_ResolvedConfig` view whose six live-enable flags read their override
+values. The flags: `personal_account_ack`, `no_pooled_capital_ack`, `live_mode`,
+`prefer_mt5`, `owner_enable_live_trading`, `live_trading_licensed`.
+
+### Gate wiring (`cas_forex/runtime_gates.py`)
+`_resolve_config` now consults `apply_live_enable_overrides` — the single point where
+the toggles reach the real-money authorization path. **No-op when no overrides are
+set** (existing behaviour/tests unchanged); fail-closed (overrides only ever set the
+six named booleans — every other gate requirement is still checked at the bridge).
+
+### API (`api/routes/live_enable.py`, registered in `api/server.py`)
+`GET /api/forex/live-enable/state`, `POST /update`, `POST /reset`. Every response
+re-evaluates `runtime_gates` and returns the live-trading decision so the UI shows
+exactly what is still missing.
+
+### UI ("Go Live — Owner Switches" panel on Settings, `SettingsPage.tsx` + `App.css`)
+6 real toggle switches in 3 groups (Acknowledgments / Live broker mode / Owner enable),
+each labelled with its real consequence; a live readout chip (AUTHORIZED vs NOT YET)
+with the exact still-missing list; an always-visible honest caveat: the toggles satisfy
+the gate but a connected broker feed + a running dispatch loop are still required, and
+the bridge re-checks at order time — never one accidental tap from real money.
+
+**Verified end-to-end:** API returns correct state; flipping all 6 toggles in the UI
+flips the gate to AUTHORIZED with an empty missing-list; Reset reverts to config
+defaults; mobile layout correct; no console errors. New tests
+`tests/test_live_enable_control.py` (7) + `tests/test_runtime_gates.py` (7) all pass;
+full suite 1135 passing (6 pre-existing unrelated failures from the working-tree
+`strategy_leads.json` `PROMOTED_PAPER_LANE` WIP — not touched here).
 
 ## 2026-06-27 - Floating AI assistant + owner risk control (you drive, no ceilings)
 
