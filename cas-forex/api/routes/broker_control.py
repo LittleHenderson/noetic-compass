@@ -25,6 +25,7 @@ router = APIRouter()
 
 class BrokerControlUpdate(BaseModel):
     platform: Optional[str] = Field(default=None, description="auto | mt5 | mt4 | simulated")
+    strictness: Optional[str] = Field(default=None, description="loose | normal | strict (loosen or harden both MT5 & MT4)")
     max_spread_pips: Optional[float] = Field(default=None, ge=0)
     max_slippage_pips: Optional[float] = Field(default=None, ge=0)
     min_lot: Optional[float] = Field(default=None, ge=0)

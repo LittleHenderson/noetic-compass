@@ -64,6 +64,40 @@ def test_invalid_platform_rejected():
         set_broker_control_overrides(platform="bogus")
 
 
+def test_strictness_loose_loosens_both_directions():
+    ctrl = set_broker_control_overrides(strictness="loose")
+    assert ctrl.strictness == "loose"
+    assert ctrl.loosened is True
+    assert ctrl.hardened is False
+    assert ctrl.min_stop_distance_pips == 0.0
+    assert ctrl.max_lot == 100.0
+
+
+def test_strictness_strict_hardens():
+    ctrl = set_broker_control_overrides(strictness="strict")
+    assert ctrl.strictness == "strict"
+    assert ctrl.hardened is True
+    assert ctrl.loosened is False
+    assert ctrl.min_stop_distance_pips == 10.0
+    assert ctrl.max_lot == 0.5
+
+
+def test_strictness_from_config():
+    assert resolve_broker_control(_cfg(broker_strictness="strict")).strictness == "strict"
+    assert resolve_broker_control(_cfg(broker_strictness="loose")).strictness == "loose"
+
+
+def test_explicit_field_overrides_preset():
+    ctrl = set_broker_control_overrides(strictness="loose", max_spread_pips=3.0)
+    assert ctrl.max_spread_pips == 3.0  # explicit field wins over the preset
+    assert ctrl.min_stop_distance_pips == 0.0  # rest of the loose preset stays
+
+
+def test_invalid_strictness_rejected():
+    with pytest.raises(ValueError):
+        set_broker_control_overrides(strictness="bogus")
+
+
 def test_select_bridge_simulated_applies_loosened_tolerances():
     set_broker_control_overrides(platform="simulated", max_spread_pips=99.0, max_lot=500.0)
     bridge = select_bridge(_cfg())

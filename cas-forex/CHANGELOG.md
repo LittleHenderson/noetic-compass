@@ -1,5 +1,17 @@
 # CAS Forex - Changelog
 
+## 2026-06-27 - Broker strictness: loosen OR harden (both MT5 & MT4), one knob
+
+Made the broker control symmetric. `broker_strictness` ∈ `loose | normal | strict`
+is the single loosen-or-harden knob for both MT5 and MT4 (and the simulator):
+`loose` relaxes the execution tolerances (accept more orders), `strict` tightens
+them (reject more), `normal` = defaults. Env (`BROKER_STRICTNESS`) or runtime
+(`POST /api/forex/broker-control/update {"strictness": "..."}`). Per-field
+tolerance overrides still win over the preset; the report now carries
+`strictness`, `loosened`, and `hardened`. Verified: a 4-pip-stop order is
+rejected at normal, executes when loosened, rejected when hardened. +8 tests,
+full suite 1121.
+
 ## 2026-06-27 - Broker control (choose MT4/MT5 + loosen) + adversarial-review fixes
 
 Owner gets two broker abilities — pick the platform and loosen the paper limits —

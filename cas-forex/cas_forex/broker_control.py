@@ -28,7 +28,7 @@ from typing import Any, Optional
 
 PLATFORMS = ("auto", "mt5", "mt4", "simulated")
 
-# Strict simulator defaults (mirror SimulatedBrokerBridge constructor defaults).
+# Strict-NORMAL simulator defaults (mirror SimulatedBrokerBridge constructor).
 _STRICT = {
     "max_spread_pips": 5.0,
     "max_slippage_pips": 3.0,
@@ -39,6 +39,37 @@ _STRICT = {
 
 # Tolerances safe to flip at runtime via the API (paper-only).
 _TOLERANCE_KEYS = tuple(_STRICT.keys())
+
+# Map each tolerance to its config attribute.
+_FIELD_CFG = {
+    "max_spread_pips": "broker_max_spread_pips",
+    "max_slippage_pips": "broker_max_slippage_pips",
+    "min_lot": "broker_min_lot",
+    "max_lot": "broker_max_lot",
+    "min_stop_distance_pips": "broker_min_stop_distance_pips",
+}
+
+# Strictness presets — the symmetric loosen/harden control for both platforms.
+STRICTNESS_LEVELS = ("loose", "normal", "strict")
+_PRESETS = {
+    "normal": dict(_STRICT),
+    # LOOSEN: accept far more orders (wide spread/slippage, no min-stop, big lots).
+    "loose": {
+        "max_spread_pips": 50.0,
+        "max_slippage_pips": 30.0,
+        "min_lot": 0.001,
+        "max_lot": 100.0,
+        "min_stop_distance_pips": 0.0,
+    },
+    # HARDEN: tighter than default (narrow spread/slippage, larger min-stop, smaller max lot).
+    "strict": {
+        "max_spread_pips": 2.0,
+        "max_slippage_pips": 1.0,
+        "min_lot": 0.01,
+        "max_lot": 0.5,
+        "min_stop_distance_pips": 10.0,
+    },
+}
 
 # Process-global runtime overrides (single-owner cockpit). Reset on restart.
 _OVERRIDES: dict[str, Any] = {}
@@ -65,17 +96,31 @@ class BrokerControl:
             or self.min_stop_distance_pips < _STRICT["min_stop_distance_pips"]
         )
 
+    @property
+    def hardened(self) -> bool:
+        return (
+            self.max_spread_pips < _STRICT["max_spread_pips"]
+            or self.max_slippage_pips < _STRICT["max_slippage_pips"]
+            or self.max_lot < _STRICT["max_lot"]
+            or self.min_stop_distance_pips > _STRICT["min_stop_distance_pips"]
+        )
+
+    @property
+    def strictness(self) -> str:
+        """Label the current tolerances against the presets (else 'custom')."""
+        current = {k: getattr(self, k) for k in _TOLERANCE_KEYS}
+        for level, preset in _PRESETS.items():
+            if all(abs(current[k] - preset[k]) < 1e-9 for k in _TOLERANCE_KEYS):
+                return level
+        return "custom"
+
     def to_dict(self) -> dict[str, Any]:
         return {
             "platform": self.platform,
-            "tolerances": {
-                "max_spread_pips": self.max_spread_pips,
-                "max_slippage_pips": self.max_slippage_pips,
-                "min_lot": self.min_lot,
-                "max_lot": self.max_lot,
-                "min_stop_distance_pips": self.min_stop_distance_pips,
-            },
+            "strictness": self.strictness,
+            "tolerances": {k: getattr(self, k) for k in _TOLERANCE_KEYS},
             "loosened": self.loosened,
+            "hardened": self.hardened,
             "treat_mt5_account_as_demo": self.treat_mt5_account_as_demo,
             "movement_max_usd": self.movement_max_usd,
         }
@@ -90,13 +135,30 @@ def _resolve_config(config: Any = None) -> Any:
 
 
 def resolve_broker_control(config: Any = None) -> BrokerControl:
-    """Resolve the effective broker control: runtime overrides over config."""
+    """Resolve the effective broker control.
+
+    Precedence (lowest → highest): strictness preset → per-field config value
+    (only when explicitly changed from the normal default) → runtime override.
+    Strictness comes from a runtime override or ``config.broker_strictness``.
+    """
     config = _resolve_config(config)
 
-    def pick(key: str, cfg_attr: str) -> float:
+    strictness = str(_OVERRIDES.get("strictness", getattr(config, "broker_strictness", "normal"))).lower()
+    if strictness not in STRICTNESS_LEVELS:
+        strictness = "normal"
+    tol = dict(_PRESETS[strictness])
+
+    # Per-field config override only when the owner explicitly changed it from
+    # the normal default (so a preset is not silently reset to normal).
+    for key, cfg_attr in _FIELD_CFG.items():
+        cfg_val = float(getattr(config, cfg_attr, _STRICT[key]))
+        if abs(cfg_val - _STRICT[key]) > 1e-9:
+            tol[key] = cfg_val
+
+    # Runtime overrides always win.
+    for key in _TOLERANCE_KEYS:
         if key in _OVERRIDES:
-            return float(_OVERRIDES[key])
-        return float(getattr(config, cfg_attr, _STRICT[key]))
+            tol[key] = float(_OVERRIDES[key])
 
     platform = str(_OVERRIDES.get("platform", getattr(config, "broker_platform", "auto"))).lower()
     if platform not in PLATFORMS:
@@ -104,36 +166,44 @@ def resolve_broker_control(config: Any = None) -> BrokerControl:
 
     return BrokerControl(
         platform=platform,
-        max_spread_pips=pick("max_spread_pips", "broker_max_spread_pips"),
-        max_slippage_pips=pick("max_slippage_pips", "broker_max_slippage_pips"),
-        min_lot=pick("min_lot", "broker_min_lot"),
-        max_lot=pick("max_lot", "broker_max_lot"),
-        min_stop_distance_pips=pick("min_stop_distance_pips", "broker_min_stop_distance_pips"),
         treat_mt5_account_as_demo=bool(getattr(config, "mt5_treat_account_as_demo", False)),
         movement_max_usd=getattr(config, "movement_max_usd", None),
+        **tol,
     )
 
 
 def set_broker_control_overrides(
     *,
     platform: Optional[str] = None,
+    strictness: Optional[str] = None,
     max_spread_pips: Optional[float] = None,
     max_slippage_pips: Optional[float] = None,
     min_lot: Optional[float] = None,
     max_lot: Optional[float] = None,
     min_stop_distance_pips: Optional[float] = None,
 ) -> BrokerControl:
-    """Set runtime overrides for platform + paper tolerances (the SAFE controls).
+    """Set runtime overrides for platform + strictness/tolerances (SAFE controls).
 
-    The real-money loosen (treat_mt5_account_as_demo) and the movement cap are
-    intentionally NOT settable here — they stay env-only so a casual API call
-    can never relax the real-money boundary.
+    ``strictness`` (loose/normal/strict) is the one-knob loosen-or-harden for
+    both MT5 and MT4; explicit per-field tolerances set in the same call win
+    over the preset. The real-money loosen (treat_mt5_account_as_demo) and the
+    movement cap are intentionally NOT settable here — they stay env-only so a
+    casual API call can never relax the real-money boundary.
     """
     if platform is not None:
         p = str(platform).lower()
         if p not in PLATFORMS:
             raise ValueError(f"platform must be one of {PLATFORMS}")
         _OVERRIDES["platform"] = p
+    if strictness is not None:
+        s = str(strictness).lower()
+        if s not in STRICTNESS_LEVELS:
+            raise ValueError(f"strictness must be one of {STRICTNESS_LEVELS}")
+        _OVERRIDES["strictness"] = s
+        # Applying a preset replaces any prior per-field tolerance overrides so
+        # the preset is coherent; explicit fields below re-apply on top.
+        for key in _TOLERANCE_KEYS:
+            _OVERRIDES.pop(key, None)
     for key, value in (
         ("max_spread_pips", max_spread_pips),
         ("max_slippage_pips", max_slippage_pips),
@@ -215,8 +285,10 @@ def build_broker_control_report(config: Any = None) -> dict[str, Any]:
     data = ctrl.to_dict()
     data["report_kind"] = "cas_forex_broker_control"
     data["platform_options"] = list(PLATFORMS)
+    data["strictness_levels"] = list(STRICTNESS_LEVELS)
     data["env_vars"] = {
         "platform": "BROKER_PLATFORM",
+        "strictness": "BROKER_STRICTNESS",
         "max_spread_pips": "BROKER_MAX_SPREAD_PIPS",
         "max_slippage_pips": "BROKER_MAX_SLIPPAGE_PIPS",
         "min_lot": "BROKER_MIN_LOT",
@@ -226,8 +298,9 @@ def build_broker_control_report(config: Any = None) -> dict[str, Any]:
         "movement_max_usd": "MOVEMENT_MAX_USD",
     }
     data["notes"] = [
-        "platform + paper tolerances are runtime-overridable via POST; they affect paper/simulated execution and which bridge the dispatch loop uses.",
+        "strictness (loose/normal/strict) is the one-knob loosen-or-harden for both MT5 and MT4; platform + per-field tolerances are also runtime-overridable via POST.",
+        "These affect paper/simulated execution and which bridge the dispatch loop uses; a real broker enforces its own limits, so strictness shapes which orders CAS dispatches.",
         "treat_mt5_account_as_demo and movement_max_usd are env-only (real-money boundary), not settable via the runtime API.",
-        "Loosening paper tolerances does not authorize live trading; a connected live MT5 account still requires the owner live-trading gate.",
+        "Loosening/hardening tolerances does not authorize live trading; a connected live MT5 account still requires the owner live-trading gate.",
     ]
     return data

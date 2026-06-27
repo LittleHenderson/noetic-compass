@@ -164,10 +164,16 @@ class ForexConfig:
     #   "auto" (pick MT4 mailbox / MT5 / simulator by config), "mt5", "mt4",
     #   or "simulated". The owner chooses the platform here.
     broker_platform: str = _env("BROKER_PLATFORM", "auto")
-    # Paper/simulator execution tolerances. These are the "loosen" knobs: raise
-    # the spread/slippage/lot ceilings or lower the min-stop to make the paper
-    # broker accept more orders. They default to the strict simulator defaults
-    # and affect paper/simulated execution only.
+    # broker_strictness: one knob to LOOSEN or HARDEN execution for both MT5 and
+    # MT4 (and the simulator). "loose" relaxes the tolerances (accept more
+    # orders), "strict" tightens them (reject more), "normal" = defaults. Applies
+    # to paper/simulated execution; for a real broker the broker enforces its own
+    # limits, so strictness shapes which orders CAS dispatches to it.
+    broker_strictness: str = _env("BROKER_STRICTNESS", "normal")
+    # Paper/simulator execution tolerances. These are the fine-grained knobs
+    # behind strictness: raise the spread/slippage/lot ceilings or lower the
+    # min-stop to loosen; do the reverse to harden. They default to the strict
+    # simulator defaults and affect paper/simulated execution only.
     broker_max_spread_pips: float = _env_float("BROKER_MAX_SPREAD_PIPS", 5.0)
     broker_max_slippage_pips: float = _env_float("BROKER_MAX_SLIPPAGE_PIPS", 3.0)
     broker_min_lot: float = _env_float("BROKER_MIN_LOT", 0.01)

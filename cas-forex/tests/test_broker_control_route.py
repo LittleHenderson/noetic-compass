@@ -48,6 +48,21 @@ def test_update_invalid_platform_returns_422():
     assert resp.status_code == 422
 
 
+def test_update_strictness_loose_then_strict():
+    client = _client()
+    loose = client.post("/api/forex/broker-control/update", json={"strictness": "loose"}).json()
+    assert loose["strictness"] == "loose"
+    assert loose["loosened"] is True
+    strict = client.post("/api/forex/broker-control/update", json={"strictness": "strict"}).json()
+    assert strict["strictness"] == "strict"
+    assert strict["hardened"] is True
+
+
+def test_update_invalid_strictness_returns_422():
+    resp = _client().post("/api/forex/broker-control/update", json={"strictness": "bogus"})
+    assert resp.status_code == 422
+
+
 def test_reset_reverts_to_config_default():
     client = _client()
     client.post("/api/forex/broker-control/update", json={"platform": "mt4"})
