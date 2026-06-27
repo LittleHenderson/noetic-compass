@@ -130,6 +130,49 @@
   letter-spacing: 0.04em;
 }
 
+/* Hamburger toggle — desktop hides it; the inline nav shows. */
+.shell-nav-toggle {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+.shell-nav-toggle-icon { font-size: 1.05rem; line-height: 1; }
+.shell-nav-toggle-label { font-weight: 600; }
+
+/* On narrow screens (phones/tablets) the 18-item nav can't fit in one row, so
+   collapse it behind the hamburger and reveal it as a full-width wrapping
+   drawer. Every page — including Settings — is reachable. */
+@media (max-width: 860px) {
+  .shell-nav {
+    flex-wrap: wrap;
+    height: auto;
+    min-height: 48px;
+    padding: 8px 12px;
+    gap: 8px;
+  }
+  .shell-nav-toggle { display: inline-flex; }
+  .shell-nav-links {
+    display: none;
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+  }
+  .shell-nav-links.open { display: flex; }
+  .shell-nav-link {
+    font-size: 0.9rem;
+    padding: 9px 13px;
+  }
+}
+
 /* ── Main ── */
 
 .shell-main {

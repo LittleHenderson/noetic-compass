@@ -1,6 +1,6 @@
 /* ── CAS Forex — App Shell ── */
 
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { ModeBanner } from "./ModeBanner";
 import type { UIReadinessReport } from "../types/evidence";
 
@@ -58,6 +58,9 @@ export function Shell({
   onNavigate,
   children,
 }: ShellProps) {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const activeLabel = NAV_ITEMS.find((i) => i.id === activePage)?.label ?? "Menu";
+
   return (
     <div className="app-shell">
       <ModeBanner readiness={readiness} />
@@ -67,14 +70,29 @@ export function Shell({
           <span className="shell-nav-title">CAS Forex</span>
           <span className="shell-nav-sub">Proof Cockpit</span>
         </div>
-        <div className="shell-nav-links">
+        {/* Hamburger — only shown on narrow screens (CSS). Lets every page,
+            including Settings, be reached on a phone. */}
+        <button
+          className="shell-nav-toggle"
+          aria-label="Toggle navigation menu"
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          <span className="shell-nav-toggle-icon">{menuOpen ? "✕" : "☰"}</span>
+          <span className="shell-nav-toggle-label">{activeLabel}</span>
+        </button>
+        <div className={`shell-nav-links ${menuOpen ? "open" : ""}`}>
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
               className={`shell-nav-link ${
                 activePage === item.id ? "active" : ""
               } ${!item.ready ? "disabled" : ""}`}
-              onClick={() => item.ready && onNavigate(item.id)}
+              onClick={() => {
+                if (!item.ready) return;
+                onNavigate(item.id);
+                setMenuOpen(false);
+              }}
               disabled={!item.ready}
               title={!item.ready ? "Coming soon" : undefined}
             >
