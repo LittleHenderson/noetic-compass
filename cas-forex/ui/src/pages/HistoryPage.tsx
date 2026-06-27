@@ -10,6 +10,7 @@ interface HistoryPageProps {
 
 export function HistoryPage({ state }: HistoryPageProps) {
   const mt = state.mtHistory;
+  const account = state.accountLedger;
 
   return (
     <div className="history-page">
@@ -67,6 +68,64 @@ export function HistoryPage({ state }: HistoryPageProps) {
         )}
       </GlassPanel>
 
+
+      <GlassPanel title="Terminal History" subtitle="Positions / Orders / Deals · Day / Week / Month / Custom filters">
+        <div className="dashboard-grid-3col" style={{ marginBottom: 12 }}>
+          <div className="metric-stack" style={{ padding: 0 }}>
+            <Metric label="Deposit" value={`$${(account?.summary.deposit_usd ?? 0).toFixed(2)}`} mono />
+            <Metric label="Profit" value={`$${(account?.summary.realized_pnl_usd ?? 0).toFixed(2)}`} mono danger={(account?.summary.realized_pnl_usd ?? 0) < 0} />
+            <Metric label="Balance" value={`$${(account?.summary.balance_usd ?? 0).toFixed(2)}`} mono />
+          </div>
+          <div className="metric-stack" style={{ padding: 0 }}>
+            <Metric label="Equity" value={`$${(account?.summary.equity_usd ?? 0).toFixed(2)}`} mono />
+            <Metric label="Swap" value={`$${(account?.summary.swap_usd ?? 0).toFixed(2)}`} mono />
+            <Metric label="Commission" value={`$${(account?.summary.commission_usd ?? 0).toFixed(2)}`} mono />
+          </div>
+          <div className="metric-stack" style={{ padding: 0 }}>
+            <Metric label="Positions" value={`${account?.summary.open_position_count ?? 0}`} mono />
+            <Metric label="Orders" value={`${account?.summary.order_count ?? 0}`} mono />
+            <Metric label="Deals" value={`${account?.summary.deal_count ?? 0}`} mono />
+          </div>
+        </div>
+        <div className="sweep-status" style={{ marginBottom: 8 }}>
+          {(account?.supported_history_tabs ?? ["Positions", "Orders", "Deals"]).map((tab) => (
+            <StatusChip key={tab} label={tab} variant={tab === "Positions" ? "info" : "muted"} size="sm" />
+          ))}
+          <span style={{ color: "var(--text-muted)", fontSize: "0.72rem", marginLeft: 8 }}>
+            Filters: {(account?.supported_time_filters ?? ["Seconds", "Minutes", "Hour", "Day", "Week", "Month", "Custom"]).join(" / ")}
+          </span>
+        </div>
+        {account && account.positions.length > 0 ? (
+          <div className="tally-table-wrap">
+            <table className="data-table">
+              <thead>
+                <tr><th>Symbol</th><th>Side</th><th>Lot</th><th>Open → Current</th><th>SL</th><th>TP</th><th>Ticket</th><th>AI / Evidence</th><th>Net P/L</th></tr>
+              </thead>
+              <tbody>
+                {account.positions.map((row) => (
+                  <tr key={row.row_id}>
+                    <td className="mono cell-symbol">{row.symbol}</td>
+                    <td><StatusChip label={row.side} variant={row.side === "LONG" ? "info" : "danger"} size="sm" /></td>
+                    <td className="mono">{row.lot_size.toFixed(2)}</td>
+                    <td className="mono">{row.open_price.toFixed(2)} → {(row.close_or_current_price ?? row.open_price).toFixed(2)}</td>
+                    <td className="mono" style={{ color: "var(--danger)" }}>{row.stop_loss?.toFixed(2) ?? "—"}</td>
+                    <td className="mono" style={{ color: "var(--success)" }}>{row.take_profit?.toFixed(2) ?? "—"}</td>
+                    <td className="mono" style={{ fontSize: "0.66rem" }}>{row.broker_ticket ?? row.simulator_ticket}</td>
+                    <td className="mono" style={{ fontSize: "0.66rem" }}>{row.ai_action} / {row.evidence_packet_id}</td>
+                    <td className="mono" style={{ color: row.net_pnl_usd > 0 ? "var(--success)" : row.net_pnl_usd < 0 ? "var(--danger)" : "var(--text-muted)" }}>${row.net_pnl_usd.toFixed(2)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <div className="no-data-message"><p>No paper/demo terminal rows are available yet.</p></div>
+        )}
+        <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.7rem" }}>
+          {account?.claim_boundary ?? "Paper/demo history only. Live trading and payment movement remain NOT LICENSED."}
+        </div>
+      </GlassPanel>
+
       {/* ── Condition Tally ── */}
       <GlassPanel title="Condition Tally" subtitle={state.conditionTally && state.conditionTally.length > 0 ? `${state.conditionTally.length} buckets from walk-forward evidence` : "Evidence score breakdown across condition axes"}>
         {state.conditionTally && state.conditionTally.length > 0 ? (
@@ -90,7 +149,7 @@ export function HistoryPage({ state }: HistoryPageProps) {
               </tbody>
             </table>
             <div style={{ marginTop: 8, color: "var(--text-muted)", fontSize: "0.68rem" }}>
-              Source: condition-tally-20260622055042-report.json — 46 total windows across 5 condition buckets
+              Source: latest walk-forward condition-tally evidence — {state.conditionTally.length} condition buckets
             </div>
           </div>
         ) : (

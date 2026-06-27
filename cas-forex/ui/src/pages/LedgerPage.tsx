@@ -1,5 +1,6 @@
 /* ── CAS Forex — Paper Proof Ledger ── */
 
+import { useMemo, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { EquityCurve } from "../components/charts/EquityCurve";
@@ -17,7 +18,10 @@ export function LedgerPage({ state }: LedgerPageProps) {
   const bundlesDone = sched.complete_bundle_days;
   const bundlesTarget = sched.ui_min_daily_bundles;
   const equity = state.dailyBundle.latest_risk.latest_review.account_equity;
-  const plannedRisk = state.dailyBundle.latest_risk.latest_review.sizing.reduce(
+  const account = state.accountLedger;
+  const [ownerSeedInput, setOwnerSeedInput] = useState(() => `${account?.summary.owner_selected_initial_investment_usd ?? equity}`);
+  const ownerSeed = Number(ownerSeedInput);
+  const plannedRisk = (state.dailyBundle.latest_risk.latest_review.sizing ?? []).reduce(
     (sum, row) => sum + row.planned_risk_usd,
     0,
   );
@@ -26,6 +30,15 @@ export function LedgerPage({ state }: LedgerPageProps) {
     { date: "planned-risk-floor", equity: equity - plannedRisk },
     { date: sched.next_due_date, equity },
   ];
+  const accountPreview = useMemo(() => {
+    const seed = Number.isFinite(ownerSeed) && ownerSeed > 0 ? ownerSeed : account?.summary.initial_investment_usd ?? equity;
+    const realized = account?.summary.realized_pnl_usd ?? 0;
+    const floating = account?.summary.floating_pnl_usd ?? 0;
+    const margin = account?.summary.margin_used_usd ?? 0;
+    const balance = seed + realized - (account?.summary.withdrawals_usd ?? 0) - (account?.summary.payouts_usd ?? 0) - (account?.summary.commission_usd ?? 0) - (account?.summary.broker_fees_usd ?? 0) + (account?.summary.swap_usd ?? 0);
+    const previewEquity = balance + floating;
+    return { seed, balance, equity: previewEquity, freeMargin: Math.max(0, previewEquity - margin), riskPct: seed > 0 ? (plannedRisk / seed) * 100 : 0 };
+  }, [account, equity, ownerSeed, plannedRisk]);
 
   // Generate 30-day skeleton (skip weekends)
   const dayRows: { day: number; date: string; status: string; route: string; risk: string; broker: string; hash: string }[] = [];
@@ -81,6 +94,43 @@ export function LedgerPage({ state }: LedgerPageProps) {
 
       <GlassPanel title="Paper Equity Reference" subtitle="paper risk budget reference, not live P&L">
         <EquityCurve points={equityReference} initialEquity={equity} height={160} />
+      </GlassPanel>
+
+
+      <GlassPanel title="Owner Investment Ledger" subtitle="owner-selectable paper/demo seed now; live deposits remain gated">
+        <div className="dashboard-grid-3col">
+          <div className="metric-stack" style={{ padding: 0 }}>
+            <label className="field-label" htmlFor="owner-seed-input">Paper initial investment</label>
+            <input
+              id="owner-seed-input"
+              type="number"
+              min="0.01"
+              step="0.01"
+              value={ownerSeedInput}
+              onChange={(event) => setOwnerSeedInput(event.target.value)}
+              style={{ width: "100%", padding: "8px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--panel)", color: "var(--text)", marginTop: 6 }}
+            />
+            <div style={{ marginTop: 8 }}>
+              <StatusChip label="PAPER/DEMO LEDGER" variant="paper" size="sm" />
+            </div>
+          </div>
+          <div className="metric-stack" style={{ padding: 0 }}>
+            <Metric label="Deposit" value={`$${accountPreview.seed.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} mono />
+            <Metric label="Balance" value={`$${accountPreview.balance.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} mono />
+            <Metric label="Equity" value={`$${accountPreview.equity.toLocaleString(undefined, { maximumFractionDigits: 2 })}`} mono />
+          </div>
+          <div className="metric-stack" style={{ padding: 0 }}>
+            <Metric label="Planned Risk" value={`$${plannedRisk.toFixed(2)} / ${accountPreview.riskPct.toFixed(3)}%`} mono />
+            <Metric label="Margin / Free" value={`$${(account?.summary.margin_used_usd ?? 0).toFixed(2)} / $${accountPreview.freeMargin.toFixed(2)}`} mono />
+            <Metric label="Risk Review Equity" value={`$${(account?.summary.risk_review_account_equity_usd ?? equity).toLocaleString()}`} mono />
+          </div>
+        </div>
+        <div style={{ marginTop: 10, color: "var(--text-muted)", fontSize: "0.72rem" }}>
+          Changing this field previews the owner-selected paper/demo account seed. It does not deposit funds or move bank/card money.
+          {accountPreview.seed !== (account?.summary.risk_review_account_equity_usd ?? equity) && (
+            <span style={{ color: "var(--warning)", marginLeft: 6 }}>Rerun paper risk sizing for this amount before relying on lot/risk percentages.</span>
+          )}
+        </div>
       </GlassPanel>
 
       {/* Section 2: Daily Bundle Ledger */}
