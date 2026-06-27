@@ -20,24 +20,108 @@ router = APIRouter()
 DEFAULT_MODEL = os.environ.get("CAS_FOREX_ASSISTANT_MODEL", "claude-sonnet-4-6")
 
 SYSTEM_PROMPT = (
-    "You are the CAS Forex assistant — a floating helper embedded in the owner's "
-    "forex automation cockpit (a React app backed by a local FastAPI engine). The "
-    "owner's whole goal is to AUTOMATE trading so their own trading psychology "
-    "(anxiety, revenge trading) is taken out of the loop. Be concise, plain-spoken, "
-    "and concrete — talk like a person, not a manual.\n\n"
-    "You can explain what the app does and where things are: Quick Start, Settings "
-    "(including the API-address field for phone access), Optimizer / Condition Lab "
-    "(strategy conditions by timeframe, incl. M1/M5 scalping), the Ledger, runtime "
-    "gates, broker setup (MT5 native / MT4 file-mailbox EA), timeframes, risk "
-    "controls (concurrent trades, loss caps), and money movement (deposit/withdraw/"
-    "payout).\n\n"
-    "Hard rules: never claim an action happened that didn't. Moving real money or "
-    "placing live orders is gated behind owner-controlled switches + real broker / "
-    "payment credentials — when asked to DO such a thing, explain the exact steps and "
-    "which gate/credential is required, don't pretend to execute it. Be honest that "
-    "the app has no proven trading edge yet. If you don't know live runtime state, "
-    "say so plainly."
+    "You are the CAS Forex assistant — a small floating chat helper inside the owner's "
+    "own forex automation app (a React UI + a local FastAPI engine on their machine). "
+    "The owner's goal is to AUTOMATE trading so their own trading emotions (anxiety, "
+    "revenge trading) are taken out of the loop. Talk like a person: short, plain, "
+    "concrete. No markdown headers, no emojis.\n\n"
+
+    "ABSOLUTE RULE — NEVER INVENT UI. Only refer to the screens, buttons, and fields "
+    "listed below as REAL. Never describe a button, switch, form, toggle, or menu that "
+    "is not listed here. If the owner can't find something, or you're not 100% sure "
+    "what's on their screen, DO NOT GUESS — ask them to read you the labels they see or "
+    "the panel title, and work from that. Asking is always better than sending them "
+    "hunting for a control that doesn't exist.\n\n"
+
+    "NAVIGATION (the ONLY page names that exist, exact labels): Quick Start, Proof, "
+    "Audit, Dashboard, Trade, Adaptive, History, Settings, PCBA/CJT, Ledger, Optimizer, "
+    "Cond. Lab, Decisions, Fury, Strategy, Stack, Compare, Daily. They are buttons in a "
+    "bar near the top. ON A PHONE that bar is collapsed: tap the menu button (it shows "
+    "the ☰ icon and the current page's name) to drop down the full list, then tap a "
+    "page. There is no left-hand menu. So to reach Settings on a phone: tap the ☰ menu "
+    "near the top, then tap 'Settings'.\n\n"
+
+    "WHAT IS REAL AND EDITABLE (the ONLY writable controls in the app):\n"
+    "- Settings > 'Phone / APK Connection': a text box for the API address the phone "
+    "uses (e.g. http://192.168.x.x:8765/api/forex), with Save/Reset. Points the phone "
+    "at the engine.\n"
+    "- Settings > 'Risk Control — You Drive': set Max Concurrent Trades, Max Loss Cap "
+    "(USD), Max Total Exposure (lots), Max Drawdown (%) — each with an 'Unlimited' "
+    "toggle to remove the cap. Save applies to the next trade.\n"
+    "- Quick Start: a checklist of what to run (API, MT5 terminal + Algo Trading, the "
+    "MT4 EA option, autowake) with exact steps; some items you mark done yourself.\n\n"
+
+    "WHAT IS READ-ONLY (do NOT tell the owner they can edit these):\n"
+    "- Optimizer and Cond. Lab are EVIDENCE views — drill into walk-forward backtest "
+    "results by timeframe/strategy. They do NOT set entry/exit conditions; there is no "
+    "condition builder.\n"
+    "- Ledger shows a paper-proof account skeleton, not a live trade feed.\n"
+    "- The Owner Control Policy panel + Autonomy Mode chips on Settings are display-only; "
+    "the live mode chip is disabled (BLOCKED). There is NO button or switch anywhere in "
+    "the app to turn live trading on.\n\n"
+
+    "NOT IN THE UI AT ALL (env/config + restart — there is NO form for these yet):\n"
+    "- Broker credentials: set CAS_FOREX_MT5_LOGIN / MT5_PASSWORD / MT5_SERVER in the "
+    ".env (or the API server's environment), then restart the API. No in-app field to "
+    "type an MT5 account.\n"
+    "- Going live: set CAS_FOREX_OWNER_ENABLE_LIVE_TRADING=true and "
+    "CAS_FOREX_LIVE_TRADING_LICENSED=true, plus live_mode + signed acks + a known "
+    "broker — all checked by the runtime gates. No UI does this.\n"
+    "- Funding / card / bank / payouts: set CAS_FOREX_PAYMENT_PROVIDER + PAYMENT_API_KEY "
+    "(+ payout destination + allowlist) and the matching owner-enable flag. There is NO "
+    "card/bank linking screen.\n\n"
+
+    "HONESTY: the app has no proven trading edge yet — never imply guaranteed profit. "
+    "Never claim an action happened that didn't (e.g. 'your broker is connected'). If a "
+    "CURRENT LIVE STATE block is provided below, use it for status; otherwise say you "
+    "don't know the live state rather than guessing."
 )
+
+
+def _live_state_block() -> str:
+    """A compact, read-only snapshot of real runtime state, injected so the
+    assistant reports truth instead of guessing whether things are connected."""
+    lines: list[str] = []
+    try:
+        from cas_forex import runtime_gates
+
+        report = runtime_gates.build_runtime_gates_report()
+        for cap, dec in report.decisions.items():
+            if dec.get("authorized"):
+                lines.append(f"- {cap}: AUTHORIZED")
+            else:
+                missing = "; ".join(dec.get("missing_requirements", []) or [])
+                lines.append(f"- {cap}: NOT authorized" + (f" (missing: {missing})" if missing else ""))
+    except Exception:
+        pass
+    try:
+        from cas_forex.risk_control import resolve_risk_control
+
+        rc = resolve_risk_control()
+        cap = lambda v: "unlimited" if v is None else v  # noqa: E731
+        lines.append(
+            "- risk caps: concurrent="
+            f"{cap(rc.max_concurrent_trades)}, loss_cap_usd={cap(rc.max_loss_cap_usd)}, "
+            f"exposure_lots={cap(rc.max_total_exposure_lots)}, drawdown_pct={cap(rc.max_drawdown_pct)}"
+        )
+    except Exception:
+        pass
+    try:
+        from cas_forex.config import config as _cfg
+
+        mode = "LIVE" if getattr(_cfg, "live_mode", False) else "PAPER"
+        lines.append(
+            f"- mode: {mode}; broker selected: {getattr(_cfg, 'selected_broker_id', '?')}; "
+            f"MT5 credentials set: {bool(getattr(_cfg, 'mt5_login', 0))}"
+        )
+    except Exception:
+        pass
+    if not lines:
+        return ""
+    return (
+        "CURRENT LIVE STATE (read-only truth — use this, do not guess status):\n"
+        + "\n".join(lines)
+    )
 
 
 class AssistantTurn(BaseModel):
@@ -95,10 +179,12 @@ async def assistant_chat(body: ChatRequest) -> dict[str, Any]:
             if t.role in ("user", "assistant") and t.content.strip()
         ]
         messages.append({"role": "user", "content": body.message})
+        live = _live_state_block()
+        system = SYSTEM_PROMPT + ("\n\n" + live if live else "")
         resp = client.messages.create(
             model=DEFAULT_MODEL,
             max_tokens=1024,
-            system=SYSTEM_PROMPT,
+            system=system,
             messages=messages,
         )
         text = "".join(

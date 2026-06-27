@@ -1866,29 +1866,16 @@
     padding: calc(5px + env(safe-area-inset-top, 0px)) 10px 5px;
   }
 
+  /* Position below the (taller) mobile mode banner. The hamburger drawer in the
+     @media (max-width: 860px) block above governs .shell-nav-links /
+     .shell-nav-link — do NOT re-add overflow-x / min-width here (that was the old
+     horizontal-scroll nav and it hid Settings off-screen). */
   .shell-nav {
     top: 42px;
-    height: auto;
-    min-height: 48px;
-    padding: 6px 10px;
-    align-items: stretch;
-    gap: 8px;
   }
 
   .shell-nav-brand {
     min-width: max-content;
-  }
-
-  .shell-nav-links {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding-bottom: 2px;
-  }
-
-  .shell-nav-link {
-    min-width: max-content;
-    padding: 7px 10px;
-    font-size: 0.74rem;
   }
 
   .shell-main {
