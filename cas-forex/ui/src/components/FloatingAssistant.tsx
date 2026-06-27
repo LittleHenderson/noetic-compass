@@ -21,6 +21,24 @@ const GREETING: Msg = {
     "caps, or what any screen does.",
 };
 
+// Keyframes for the "thinking" cues (injected once; inline styles can't do @keyframes).
+const KEYFRAMES = `
+@keyframes casTyping { 0%,80%,100% { opacity:.25; transform:translateY(0) } 40% { opacity:1; transform:translateY(-3px) } }
+@keyframes casPulse { 0%,100% { box-shadow:0 0 0 0 rgba(34,197,94,.55) } 70% { box-shadow:0 0 0 6px rgba(34,197,94,0) } }
+.cas-typing-dot { width:6px; height:6px; border-radius:3px; background:#9aa4b2; display:inline-block; animation:casTyping 1s infinite }
+.cas-pulse { animation:casPulse 1.2s infinite }
+`;
+
+function TypingDots() {
+  return (
+    <span style={{ display: "inline-flex", gap: 4, alignItems: "center", padding: "3px 0" }} aria-label="Assistant is thinking">
+      <span className="cas-typing-dot" style={{ animationDelay: "0s" }} />
+      <span className="cas-typing-dot" style={{ animationDelay: "0.15s" }} />
+      <span className="cas-typing-dot" style={{ animationDelay: "0.3s" }} />
+    </span>
+  );
+}
+
 export function FloatingAssistant() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -79,14 +97,17 @@ export function FloatingAssistant() {
 
   return (
     <>
-      {/* Floating button — always visible, bottom-right, above everything. */}
+      <style>{KEYFRAMES}</style>
+      {/* Floating button — always visible, bottom-right, above everything.
+          Pulses while a reply is in flight even if collapsed. */}
       {!open && (
         <button
           aria-label="Open assistant"
           onClick={() => setOpen(true)}
           style={S.fab}
+          className={busy ? "cas-pulse" : undefined}
         >
-          <span style={S.fabIcon}>💬</span>
+          <span style={S.fabIcon}>{busy ? "…" : "💬"}</span>
         </button>
       )}
 
@@ -94,7 +115,8 @@ export function FloatingAssistant() {
         <div style={S.panel} role="dialog" aria-label="CAS Forex assistant">
           <div style={S.header}>
             <span style={S.headerTitle}>
-              <span style={S.dot} /> CAS Forex Assistant
+              <span style={S.dot} className={busy ? "cas-pulse" : undefined} />{" "}
+              {busy ? "Thinking…" : "CAS Forex Assistant"}
             </span>
             <button aria-label="Close assistant" onClick={() => setOpen(false)} style={S.iconBtn}>
               ✕
@@ -104,8 +126,8 @@ export function FloatingAssistant() {
           <div ref={scrollRef} style={S.scroll}>
             {msgs.map((m, i) => (
               <div key={i} style={{ ...S.row, justifyContent: m.role === "user" ? "flex-end" : "flex-start" }}>
-                <div style={{ ...S.bubble, ...(m.role === "user" ? S.bubbleUser : S.bubbleAi), ...(m.pending ? S.pending : {}) }}>
-                  {m.content}
+                <div style={{ ...S.bubble, ...(m.role === "user" ? S.bubbleUser : S.bubbleAi) }}>
+                  {m.pending ? <TypingDots /> : m.content}
                 </div>
               </div>
             ))}
