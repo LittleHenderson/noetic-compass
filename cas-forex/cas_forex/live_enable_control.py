@@ -36,7 +36,7 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-# The flags this surface can override. All are booleans on ``ForexConfig``.
+# The live-trading flags this surface can override. All booleans on ``ForexConfig``.
 LIVE_ENABLE_KEYS = (
     "personal_account_ack",
     "no_pooled_capital_ack",
@@ -46,8 +46,32 @@ LIVE_ENABLE_KEYS = (
     "live_trading_licensed",
 )
 
-# key present => owner explicitly set it (value True/False wins over config).
-_OVERRIDES: dict[str, bool] = {}
+# The downstream capability owner-enable flags (broker ACCEPT + money movement).
+# These authorize the capabilities the owner reached via the "Path to Authorize"
+# panel — same owner-controlled-gate design as live trading.
+CAPABILITY_ENABLE_KEYS = (
+    "owner_enable_broker_accept",
+    "owner_enable_auto_deposit",
+    "owner_enable_bank_card_movement",
+    "owner_enable_payout_automation",
+)
+
+# Provider config the money-movement gates additionally require. payment_api_key
+# is a SECRET — it is stored if the owner sets it, but NEVER returned in any
+# report (only whether it is set). The others are non-secret identifiers.
+PROVIDER_STR_KEYS = ("payment_provider", "payment_api_key", "payout_destination_id")
+PROVIDER_BOOL_KEYS = ("payout_destination_allowlisted",)
+
+# Secret keys are masked in every owner-facing report.
+SECRET_KEYS = frozenset({"payment_api_key"})
+
+# Every overridable key, and which ones are booleans vs free-text strings.
+_BOOL_KEYS = frozenset(LIVE_ENABLE_KEYS + CAPABILITY_ENABLE_KEYS + PROVIDER_BOOL_KEYS)
+_STR_KEYS = frozenset(PROVIDER_STR_KEYS)
+ALL_OVERRIDE_KEYS = tuple(LIVE_ENABLE_KEYS + CAPABILITY_ENABLE_KEYS + PROVIDER_BOOL_KEYS + PROVIDER_STR_KEYS)
+
+# key present => owner explicitly set it. Value type matches the key (bool or str).
+_OVERRIDES: dict[str, Any] = {}
 
 
 def _resolve_config(config: Any = None) -> Any:
@@ -106,18 +130,24 @@ def resolve_live_enable(config: Any = None) -> dict[str, bool]:
     return resolved
 
 
-def set_live_enable_overrides(**flags: Optional[bool]) -> dict[str, bool]:
-    """Set owner live-enable toggles. Only flags actually passed are changed.
+def set_live_enable_overrides(**flags: Any) -> dict[str, bool]:
+    """Set owner authorization overrides. Only flags actually passed are changed.
 
-    Pass ``True``/``False`` to set a flag; omit one (or pass ``None``) to leave it
-    as-is. Unknown keys are rejected so a typo can't silently no-op.
+    Boolean flags take ``True``/``False``; string config keys (payment_provider,
+    payment_api_key, payout_destination_id) take text. Omit a key (or pass
+    ``None``) to leave it as-is. Unknown keys are rejected so a typo can't
+    silently no-op. Booleans are coerced with ``bool()``; strings are stored
+    trimmed.
     """
     for key, value in flags.items():
         if value is None:
             continue
-        if key not in LIVE_ENABLE_KEYS:
-            raise ValueError(f"Unknown live-enable flag: {key}")
-        _OVERRIDES[key] = bool(value)
+        if key not in ALL_OVERRIDE_KEYS:
+            raise ValueError(f"Unknown authorization flag: {key}")
+        if key in _STR_KEYS:
+            _OVERRIDES[key] = str(value).strip()
+        else:
+            _OVERRIDES[key] = bool(value)
     return resolve_live_enable()
 
 
@@ -153,7 +183,120 @@ _FLAG_META = {
         "label": "Live trading licensed",
         "consequence": "Owner attests live trading is licensed/authorized to proceed.",
     },
+    "owner_enable_broker_accept": {
+        "label": "Owner-enable broker ACCEPT",
+        "consequence": "Owner authorizes creating a broker ACCEPT (needs live trading authorized first).",
+    },
+    "owner_enable_auto_deposit": {
+        "label": "Owner-enable auto-deposit",
+        "consequence": "Owner authorizes automatic deposits (needs a payment provider configured).",
+    },
+    "owner_enable_bank_card_movement": {
+        "label": "Owner-enable bank/card movement",
+        "consequence": "Owner authorizes bank/card money movement (needs a payment provider).",
+    },
+    "owner_enable_payout_automation": {
+        "label": "Owner-enable payout automation (sweep ledger)",
+        "consequence": "Owner authorizes automatic payouts/sweeps (needs provider + allowlisted destination).",
+    },
+    "payout_destination_allowlisted": {
+        "label": "Payout destination allowlisted",
+        "consequence": "Owner confirms the payout destination is allowlisted/approved.",
+    },
 }
+
+# The 5 owner-controlled capabilities, in display order, with the owner-enable
+# toggle(s) that authorize each. Provider credentials are shared and shown in a
+# separate section.
+_CAPABILITY_UI = (
+    {"capability": "live_trading", "title": "Live Trading",
+     "toggles": ("owner_enable_live_trading", "live_trading_licensed"),
+     "note": "Account acknowledgments + live mode are in the 'Go Live — Owner Switches' panel above."},
+    {"capability": "broker_accept", "title": "Broker ACCEPT",
+     "toggles": ("owner_enable_broker_accept",),
+     "note": "Also requires live trading to be authorized first."},
+    {"capability": "auto_deposit", "title": "Auto-Deposit",
+     "toggles": ("owner_enable_auto_deposit",),
+     "note": "Also requires the payment provider below."},
+    {"capability": "bank_card_movement", "title": "Bank / Card Movement",
+     "toggles": ("owner_enable_bank_card_movement",),
+     "note": "Also requires the payment provider below."},
+    {"capability": "payout_automation", "title": "Payout Automation (Sweep Ledger)",
+     "toggles": ("owner_enable_payout_automation",),
+     "note": "Also requires the payment provider + an allowlisted payout destination below."},
+)
+
+
+def _resolve_value(config: Any, key: str) -> Any:
+    """The effective value of any overridable key (override over config)."""
+    if key in _OVERRIDES:
+        return _OVERRIDES[key]
+    default: Any = False if key in _BOOL_KEYS else ""
+    return getattr(config, key, default)
+
+
+def build_authorization_report(config: Any = None) -> dict[str, Any]:
+    """Unified owner-facing report powering the 'Path to Authorize' toggles.
+
+    Returns every capability with its live ``runtime_gates`` decision (authorized
+    + exactly what is still missing) and the owner-enable toggle(s) that authorize
+    it, plus a shared payment-provider section. The secret ``payment_api_key`` is
+    NEVER returned — only whether it is set.
+    """
+    config = _resolve_config(config)
+
+    from cas_forex import runtime_gates
+
+    gates_report = runtime_gates.build_runtime_gates_report(config)
+    decisions = gates_report.decisions
+
+    capabilities = []
+    for cap in _CAPABILITY_UI:
+        dec = decisions.get(cap["capability"], {})
+        toggles = [
+            {
+                "key": key,
+                "label": _FLAG_META[key]["label"],
+                "consequence": _FLAG_META[key]["consequence"],
+                "enabled": bool(_resolve_value(config, key)),
+                "overridden": key in _OVERRIDES,
+            }
+            for key in cap["toggles"]
+        ]
+        capabilities.append(
+            {
+                "capability": cap["capability"],
+                "title": cap["title"],
+                "authorized": bool(dec.get("authorized", False)),
+                "status": dec.get("status", ""),
+                "missing_requirements": list(dec.get("missing_requirements", [])),
+                "satisfied_requirements": list(dec.get("satisfied_requirements", [])),
+                "toggles": toggles,
+                "note": cap.get("note", ""),
+            }
+        )
+
+    provider = {
+        "payment_provider": str(_resolve_value(config, "payment_provider") or ""),
+        # Never expose the key itself — only whether one is set.
+        "payment_api_key_set": bool(str(_resolve_value(config, "payment_api_key") or "")),
+        "payout_destination_id": str(_resolve_value(config, "payout_destination_id") or ""),
+        "payout_destination_allowlisted": bool(_resolve_value(config, "payout_destination_allowlisted")),
+        "allowlist_label": _FLAG_META["payout_destination_allowlisted"]["label"],
+    }
+
+    return {
+        "report_kind": "cas_forex_authorization",
+        "capabilities": capabilities,
+        "provider": provider,
+        "all_real_money_authorized": bool(gates_report.all_real_money_authorized),
+        "summary": gates_report.summary,
+        "caveats": [
+            "These toggles satisfy the owner-authorization gate — they do NOT move money or place orders by themselves.",
+            "Money movement also needs a configured payment provider + API key (set below) and a running process; the bridge/provider re-checks at action time.",
+            "The payment API key is stored in the running app only and is never shown back here.",
+        ],
+    }
 
 
 def build_live_enable_report(config: Any = None) -> dict[str, Any]:

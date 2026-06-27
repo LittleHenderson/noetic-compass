@@ -96,3 +96,45 @@ def test_report_shape_has_flags_and_caveats():
     assert keys == set(live_enable_control.LIVE_ENABLE_KEYS)
     assert report["caveats"]
     assert report["report_kind"] == "cas_forex_live_enable"
+
+
+def test_authorization_report_covers_all_five_capabilities():
+    report = live_enable_control.build_authorization_report(FakeConfig())
+    caps = [c["capability"] for c in report["capabilities"]]
+    assert caps == [
+        "live_trading",
+        "broker_accept",
+        "auto_deposit",
+        "bank_card_movement",
+        "payout_automation",
+    ]
+    # Every capability carries its own toggles + gate readout.
+    for c in report["capabilities"]:
+        assert c["toggles"]
+        assert "authorized" in c and "missing_requirements" in c
+
+
+def test_payout_automation_authorizes_via_toggles_and_provider():
+    cfg = FakeConfig()
+    assert runtime_gates.is_authorized("payout_automation", cfg) is False
+    live_enable_control.set_live_enable_overrides(
+        owner_enable_payout_automation=True,
+        payment_provider="wise",
+        payment_api_key="secret-xyz",
+        payout_destination_id="dest-1",
+        payout_destination_allowlisted=True,
+    )
+    assert runtime_gates.is_authorized("payout_automation", cfg) is True
+
+
+def test_payment_api_key_is_never_returned_in_report():
+    live_enable_control.set_live_enable_overrides(payment_api_key="super-secret-123")
+    report = live_enable_control.build_authorization_report(FakeConfig())
+    assert "super-secret-123" not in str(report)
+    assert report["provider"]["payment_api_key_set"] is True
+
+
+def test_string_provider_keys_not_coerced_to_bool():
+    live_enable_control.set_live_enable_overrides(payment_provider="stripe")
+    cfg = live_enable_control.apply_live_enable_overrides(FakeConfig())
+    assert cfg.payment_provider == "stripe"

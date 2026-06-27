@@ -246,6 +246,65 @@ export async function resetLiveEnable(): Promise<LiveEnableState> {
   return apiPost<LiveEnableState>("/live-enable/reset");
 }
 
+// ── Unified capability authorization (Path to Authorize — all 5 capabilities) ──
+
+export interface AuthorizationToggle {
+  key: string;
+  label: string;
+  consequence: string;
+  enabled: boolean;
+  overridden: boolean;
+}
+
+export interface AuthorizationCapability {
+  capability: string;
+  title: string;
+  authorized: boolean;
+  status: string;
+  missing_requirements: string[];
+  satisfied_requirements: string[];
+  toggles: AuthorizationToggle[];
+  note: string;
+}
+
+export interface AuthorizationProvider {
+  payment_provider: string;
+  payment_api_key_set: boolean;
+  payout_destination_id: string;
+  payout_destination_allowlisted: boolean;
+  allowlist_label: string;
+}
+
+export interface AuthorizationState {
+  report_kind?: string;
+  capabilities: AuthorizationCapability[];
+  provider: AuthorizationProvider;
+  all_real_money_authorized: boolean;
+  summary: string;
+  caveats: string[];
+}
+
+export type AuthorizationPatch = Partial<{
+  owner_enable_live_trading: boolean;
+  live_trading_licensed: boolean;
+  owner_enable_broker_accept: boolean;
+  owner_enable_auto_deposit: boolean;
+  owner_enable_bank_card_movement: boolean;
+  owner_enable_payout_automation: boolean;
+  payout_destination_allowlisted: boolean;
+  payment_provider: string;
+  payment_api_key: string;
+  payout_destination_id: string;
+}>;
+
+export async function fetchAuthorization(): Promise<AuthorizationState | null> {
+  try { return await apiGet<AuthorizationState>("/live-enable/authorization"); } catch { return null; }
+}
+
+export async function updateAuthorization(patch: AuthorizationPatch): Promise<AuthorizationState> {
+  return apiPostJson<AuthorizationState, AuthorizationPatch>("/live-enable/authorization/update", patch);
+}
+
 // ── Trading Windows cockpit (live-ish candles + quote per symbol) ──
 
 export interface ChartCandle {

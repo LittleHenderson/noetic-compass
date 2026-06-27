@@ -18,6 +18,10 @@ import {
   resetLiveEnable,
   type LiveEnableState,
   type LiveEnableKey,
+  fetchAuthorization,
+  updateAuthorization,
+  type AuthorizationState,
+  type AuthorizationPatch,
 } from "../data/api";
 import type { DashboardState } from "../types/evidence";
 
@@ -121,23 +125,8 @@ export function SettingsPage({ state }: SettingsPageProps) {
         </div>
       </GlassPanel>
 
-      {/* ── Runtime Gates ── */}
-      <GlassPanel title="Path to Authorize Everything" subtitle="Every live-money feature lists missing owner/config requirements">
-        <div style={{ marginBottom: 10, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
-          {gates?.summary ?? "Owner-controlled runtime gates are loading."}
-        </div>
-        <div className="control-grid">
-          {Object.values(gates?.decisions ?? {}).map((g) => (
-            <ControlField
-              key={g.capability}
-              label={g.capability.replace(/_/g, " ")}
-              value={g.authorized ? "AUTHORIZED" : g.status}
-              danger={!g.authorized}
-              description={g.authorized ? "Owner enable + credentials + provider config satisfied." : g.next_action}
-            />
-          ))}
-        </div>
-      </GlassPanel>
+      {/* ── Path to Authorize Everything — functional owner toggles ── */}
+      <AuthorizePanel />
 
       {/* ── AI Model Control ── */}
       <GlassPanel title="AI Model Control" subtitle="Open-weight/frontier LLMs under CAS Harness + PCBA">
@@ -457,6 +446,163 @@ function GoLivePanel() {
         runs automatically yet), and the broker bridge re-checks authorization at order time
         (fail-closed). So flipping every switch here turns the gate green, but it is never one
         accidental tap from real money.
+      </div>
+    </GlassPanel>
+  );
+}
+
+function AuthorizePanel() {
+  const [auth, setAuth] = useState<AuthorizationState | null>(null);
+  const [busyKey, setBusyKey] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
+  const [provider, setProvider] = useState("");
+  const [apiKey, setApiKey] = useState("");
+  const [destId, setDestId] = useState("");
+
+  function loadProviderDraft(s: AuthorizationState) {
+    setProvider(s.provider.payment_provider ?? "");
+    setDestId(s.provider.payout_destination_id ?? "");
+    // api key is never returned — keep the field blank (it stays set on the server).
+  }
+
+  useEffect(() => {
+    void fetchAuthorization().then((s) => { if (s) { setAuth(s); loadProviderDraft(s); } });
+  }, []);
+
+  async function apply(patch: AuthorizationPatch, key: string) {
+    setBusyKey(key);
+    setStatus("");
+    try {
+      const s = await updateAuthorization(patch);
+      setAuth(s);
+      loadProviderDraft(s);
+      setStatus("Saved.");
+    } catch {
+      setStatus("Couldn't save — is the API reachable? Check the address above.");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  async function reset() {
+    setBusyKey("__reset__");
+    setStatus("");
+    try {
+      await resetLiveEnable();
+      const s = await fetchAuthorization();
+      if (s) { setAuth(s); loadProviderDraft(s); setApiKey(""); }
+      setStatus("Reset to config / env defaults.");
+    } catch {
+      setStatus("Couldn't reset.");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  const allGreen = auth?.all_real_money_authorized ?? false;
+
+  return (
+    <GlassPanel
+      title="Path to Authorize Everything — Owner Switches"
+      subtitle="Flip every live-money capability ON from here — no .env, no restart"
+      variant={allGreen ? "default" : "danger"}
+    >
+      <div style={{ marginBottom: 12, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
+        {auth?.summary ?? "Loading owner-controlled capabilities…"}
+      </div>
+
+      <div style={{ display: "grid", gap: 4 }}>
+        {(auth?.capabilities ?? []).map((cap) => (
+          <div key={cap.capability} style={{ padding: "10px 0", borderBottom: "1px solid var(--border-subtle)" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              <span style={{ fontWeight: 700, fontSize: "0.84rem" }}>{cap.title}</span>
+              <StatusChip
+                label={cap.authorized ? "AUTHORIZED" : "NOT YET"}
+                variant={cap.authorized ? "success" : "danger"}
+                size="sm"
+              />
+            </div>
+            <div style={{ display: "grid", gap: 4, marginTop: 8 }}>
+              {cap.toggles.map((t) => (
+                <div key={t.key} className="go-live-row" style={{ borderBottom: "none", padding: "4px 0" }}>
+                  <ToggleSwitch
+                    on={t.enabled}
+                    busy={busyKey === t.key}
+                    label={t.label}
+                    onClick={() => void apply({ [t.key]: !t.enabled } as AuthorizationPatch, t.key)}
+                  />
+                  <div className="go-live-row-body">
+                    <div className="go-live-row-label">{t.label}{t.overridden && <span style={{ marginLeft: 6, fontSize: "0.62rem", color: "var(--text-secondary)" }}>(set in-app)</span>}</div>
+                    <div className="go-live-row-consequence">{t.consequence}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {!cap.authorized && cap.missing_requirements.length > 0 && (
+              <div className="control-field-desc" style={{ color: "var(--danger)", marginTop: 4 }}>
+                Still missing: {cap.missing_requirements.join("; ")}
+              </div>
+            )}
+            {cap.note && <div className="control-field-desc" style={{ marginTop: 2 }}>{cap.note}</div>}
+          </div>
+        ))}
+      </div>
+
+      {/* Shared payment provider (for deposits / movement / payouts / sweep ledger) */}
+      <div className="go-live-group-title" style={{ marginTop: 14 }}>Payment provider (deposits · movement · payout / sweep ledger)</div>
+      <div style={{ display: "grid", gap: 10, marginTop: 6 }}>
+        <div className="control-field">
+          <span className="field-label">Provider name</span>
+          <input className="mobile-api-input" value={provider} placeholder="e.g. wise, stripe"
+            onChange={(e) => { setProvider(e.target.value); setStatus(""); }} />
+        </div>
+        <div className="control-field">
+          <span className="field-label">Provider API key{auth?.provider.payment_api_key_set ? " — set ✓" : ""}</span>
+          <input className="mobile-api-input" type="password" value={apiKey}
+            placeholder={auth?.provider.payment_api_key_set ? "•••••• (leave blank to keep)" : "your provider API key"}
+            autoComplete="off"
+            onChange={(e) => { setApiKey(e.target.value); setStatus(""); }} />
+          <div className="control-field-desc">Stored only in the running app; never shown back here.</div>
+        </div>
+        <div className="control-field">
+          <span className="field-label">Payout destination id</span>
+          <input className="mobile-api-input" value={destId} placeholder="allowlisted destination id"
+            onChange={(e) => { setDestId(e.target.value); setStatus(""); }} />
+        </div>
+        <div className="go-live-row" style={{ borderBottom: "none" }}>
+          <ToggleSwitch
+            on={auth?.provider.payout_destination_allowlisted ?? false}
+            busy={busyKey === "payout_destination_allowlisted"}
+            label={auth?.provider.allowlist_label ?? "Payout destination allowlisted"}
+            onClick={() => void apply({ payout_destination_allowlisted: !(auth?.provider.payout_destination_allowlisted ?? false) }, "payout_destination_allowlisted")}
+          />
+          <div className="go-live-row-body">
+            <div className="go-live-row-label">{auth?.provider.allowlist_label ?? "Payout destination allowlisted"}</div>
+            <div className="go-live-row-consequence">Owner confirms the payout destination is approved.</div>
+          </div>
+        </div>
+        <div className="mobile-api-row">
+          <button className="mobile-api-button" type="button" disabled={busyKey === "__provider__"}
+            onClick={() => {
+              const patch: AuthorizationPatch = { payment_provider: provider, payout_destination_id: destId };
+              if (apiKey.trim()) patch.payment_api_key = apiKey.trim();
+              void apply(patch, "__provider__").then(() => setApiKey(""));
+            }}>
+            Save provider
+          </button>
+          <button className="mobile-api-button ghost" type="button" disabled={busyKey === "__reset__"} onClick={() => void reset()}>
+            Reset all to defaults
+          </button>
+        </div>
+      </div>
+
+      {status && <div className="control-field-desc" style={{ color: status.startsWith("Couldn't") ? "var(--danger)" : "var(--success)" }}>{status}</div>}
+
+      <div style={{ marginTop: 14, padding: "8px 12px", background: "var(--panel-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--text-secondary)" }}>
+        <strong>What these switches do:</strong> they satisfy the owner-authorization gate for each capability — they do
+        <strong> not</strong> move money or place orders by themselves. Money movement also needs the payment provider + API
+        key above and a running process; the provider/bridge re-checks at action time. Flipping every switch turns the gate
+        green, but it is never one accidental tap from real money.
       </div>
     </GlassPanel>
   );
