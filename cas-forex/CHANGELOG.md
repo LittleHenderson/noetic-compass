@@ -1,5 +1,7 @@
 # CAS Forex - Changelog
 
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Two pending owner tasks: (A) in-app toggle switches to enable live trading [acks + live_mode + owner_enable_live_trading + live_trading_licensed] — owner is NOT a dev, no env vars; (B) the "Trading Windows" live-chart cockpit (connector already fixed). Plus launch the comprehensive UI audit (Daily Report `by_status` shows `[object Object]`).
+
 ## 2026-06-27 - Floating AI assistant + owner risk control (you drive, no ceilings)
 
 Two owner-facing features, plus phone access over WiFi.
