@@ -3186,3 +3186,46 @@
 .tw-pause.active { background: var(--warning-dim); color: var(--warning); }
 .tw-order-msg { font-size: 0.72rem; color: var(--text-secondary); padding-top: 2px; }
 
+/* Account header bar (the terminal's account line) */
+.tw-account-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+}
+.tw-account-stat { display: flex; flex-direction: column; gap: 1px; }
+.tw-account-stat-label { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+.tw-account-stat-value { font-size: 0.9rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Per-pane open positions table */
+.tw-positions { min-height: 22px; }
+.tw-positions-table { width: 100%; border-collapse: collapse; font-size: 0.7rem; }
+.tw-positions-table th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  padding: 2px 6px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.tw-positions-table td { padding: 3px 6px; border-bottom: 1px solid var(--border-subtle); }
+.tw-positions-table tr:last-child td { border-bottom: none; }
+.tw-long { color: var(--success); font-weight: 700; }
+.tw-short { color: var(--danger); font-weight: 700; }
+
+/* All-open-positions table (MT4 Terminal-style trade list) */
+.tw-all-positions { margin-top: 12px; }
+.tw-all-positions-title {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+.tw-all-positions .tw-positions-table { font-size: 0.72rem; }
+.tw-all-positions .tw-positions-table td, .tw-all-positions .tw-positions-table th { white-space: nowrap; }
+

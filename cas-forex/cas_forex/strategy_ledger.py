@@ -12,7 +12,16 @@ from typing import Any, Dict, List
 
 
 LEDGER_PATH = Path(__file__).resolve().parents[1] / "strategy_leads.json"
-REQUIRED_STATUSES = {"ACTIVE_RESEARCH_LEAD", "WATCHLIST_ONLY", "RETIRED"}
+# Allowed lead statuses. PROMOTED_PAPER_LANE is written by the Forex Fury
+# "Promote to paper lane" feature (cas_forex/forex_fury_promote.py) and is a
+# valid research-lead state — it is paper-lane promotion, NOT live deployment
+# (deployment_status stays NOT LICENSED regardless).
+REQUIRED_STATUSES = {
+    "ACTIVE_RESEARCH_LEAD",
+    "WATCHLIST_ONLY",
+    "RETIRED",
+    "PROMOTED_PAPER_LANE",
+}
 
 
 def load_strategy_lead_ledger(path: Path = LEDGER_PATH) -> Dict[str, Any]:
@@ -34,8 +43,17 @@ def validate_strategy_lead_ledger(data: Dict[str, Any]) -> None:
         if not lead_id or lead_id in lead_ids:
             raise ValueError(f"Invalid or duplicate lead_id: {lead_id!r}")
         lead_ids.add(lead_id)
-        if lead.get("status") not in REQUIRED_STATUSES:
-            raise ValueError(f"{lead_id} has invalid status {lead.get('status')!r}")
+        status = lead.get("status")
+        if status not in REQUIRED_STATUSES:
+            raise ValueError(f"{lead_id} has invalid status {status!r}")
+        if status == "PROMOTED_PAPER_LANE":
+            # Forex Fury paper-lane promotions are a separate, lighter record type
+            # (paper promotion only — never live). They carry integrity provenance
+            # instead of the research-lead deployment/evidence/gates fields, so they
+            # are validated on that provenance and skip the research-lead checks.
+            if not lead.get("source_sha256"):
+                raise ValueError(f"{lead_id} paper-lane promotion must keep its source_sha256 provenance")
+            continue
         if lead.get("deployment_status") != "NOT LICENSED":
             raise ValueError(f"{lead_id} must remain NOT LICENSED until live gates close")
         if not lead.get("evidence_refs"):

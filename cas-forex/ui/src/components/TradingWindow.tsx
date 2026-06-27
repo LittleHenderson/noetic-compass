@@ -9,6 +9,7 @@ import {
   type ChartWindow,
   type ManualOrderResult,
 } from "../data/api";
+import type { PositionMovement } from "../types/evidence";
 
 export type WindowRole = "Live" | "Demo" | "Strategy A" | "Strategy B";
 
@@ -20,6 +21,10 @@ interface TradingWindowProps {
   /** "Live" needs a connected broker feed (none running) — say so honestly. */
   brokerFeedConnected?: boolean;
   pollMs?: number;
+  /** All open positions (any symbol) from the movement feed; filtered per pane. */
+  positions?: PositionMovement[];
+  /** Where the open-position feed came from (e.g. "paper/demo simulator"). */
+  positionsSource?: string;
 }
 
 export function TradingWindow({
@@ -29,6 +34,8 @@ export function TradingWindow({
   timeframes,
   brokerFeedConnected = false,
   pollMs = 12_000,
+  positions = [],
+  positionsSource,
 }: TradingWindowProps) {
   const [symbol, setSymbol] = useState(defaultSymbol);
   const [timeframe, setTimeframe] = useState("M5");
@@ -127,10 +134,41 @@ export function TradingWindow({
         )}
       </div>
 
+      {/* Open positions for this symbol (MT4-style), from the movement feed */}
+      <div className="tw-positions">
+        {(() => {
+          const mine = positions.filter((p) => p.symbol === symbol);
+          if (mine.length === 0) {
+            return <div className="tw-muted" style={{ fontSize: "0.7rem" }}>No open position in {symbol}.</div>;
+          }
+          return (
+            <table className="tw-positions-table">
+              <thead>
+                <tr><th>Side</th><th>Lots</th><th>Entry</th><th>Now</th><th>P&amp;L</th></tr>
+              </thead>
+              <tbody>
+                {mine.map((p) => (
+                  <tr key={p.row_id}>
+                    <td className={p.side === "LONG" ? "tw-long" : "tw-short"}>{p.side}</td>
+                    <td className="mono">{p.lot_size}</td>
+                    <td className="mono">{p.open_price}</td>
+                    <td className="mono">{p.current_price}</td>
+                    <td className="mono" style={{ color: p.floating_pnl_usd > 0 ? "var(--success)" : p.floating_pnl_usd < 0 ? "var(--danger)" : "var(--text-secondary)" }}>
+                      {p.floating_pnl_usd >= 0 ? "+" : ""}{p.floating_pnl_usd.toFixed(2)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          );
+        })()}
+      </div>
+
       <div className="trading-window-footer">
         <div className="tw-feed-label">
           {data?.source ? `${data.source} · ${data.feed_label}` : "—"}
           {data?.cached ? " · cached" : ""}
+          {positionsSource ? ` · positions: ${positionsSource}` : ""}
         </div>
         <div className="trading-window-controls">
           <button className="tw-btn tw-buy" disabled={placing} onClick={() => void placeOrder("BUY")}>Buy</button>
