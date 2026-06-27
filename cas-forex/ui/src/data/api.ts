@@ -246,6 +246,90 @@ export async function resetLiveEnable(): Promise<LiveEnableState> {
   return apiPost<LiveEnableState>("/live-enable/reset");
 }
 
+// ── Trading Windows cockpit (live-ish candles + quote per symbol) ──
+
+export interface ChartCandle {
+  time: string;
+  open: number;
+  high: number;
+  low: number;
+  close: number;
+}
+
+export interface ChartQuote {
+  bid: number;
+  ask: number;
+  mid: number;
+  spread: number;
+  is_market_open: boolean;
+  session: string;
+  timestamp: string;
+}
+
+export interface ChartWindow {
+  report_kind?: string;
+  symbol: string;
+  timeframe: string;
+  bars: number;
+  candles: ChartCandle[];
+  quote: ChartQuote | null;
+  source: string;
+  live_feed: boolean;
+  feed_label: string;
+  cached?: boolean;
+  error?: string;
+}
+
+export interface ChartSymbols {
+  symbols: string[];
+  timeframes: string[];
+}
+
+export async function fetchChartSymbols(): Promise<ChartSymbols | null> {
+  try { return await apiGet<ChartSymbols>("/chart/symbols"); } catch { return null; }
+}
+
+export async function fetchChartWindow(
+  symbol: string,
+  timeframe: string,
+  bars = 60,
+): Promise<ChartWindow | null> {
+  const q = `symbol=${encodeURIComponent(symbol)}&timeframe=${encodeURIComponent(timeframe)}&bars=${bars}`;
+  try { return await apiGet<ChartWindow>(`/chart/window?${q}`); } catch { return null; }
+}
+
+export interface ManualOrderResult {
+  report_kind?: string;
+  status?: string;
+  detail?: string;
+  mode?: string;
+  intent_count?: number;
+  executed_count?: number;
+  blocked_count?: number;
+  rejected_count?: number;
+  live_execution_runtime_locked?: boolean;
+  results?: { status: string; reason: string }[];
+  manual_order?: {
+    symbol: string;
+    direction: string;
+    lots: number;
+    stop_loss: number;
+    take_profit: number;
+    auto_sl: boolean;
+    auto_tp: boolean;
+  };
+}
+
+export async function postManualOrder(body: {
+  symbol: string;
+  direction: "BUY" | "SELL";
+  lots: number;
+  sl?: number | null;
+  tp?: number | null;
+}): Promise<ManualOrderResult> {
+  return apiPostJson<ManualOrderResult, typeof body>("/order-dispatch/manual", body);
+}
+
 // ── Multi-timeframe runtime selector ──
 
 export interface SymbolTimeframeSelection {

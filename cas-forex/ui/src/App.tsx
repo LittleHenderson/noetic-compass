@@ -22,6 +22,7 @@ import { StackStatusPage } from "./pages/StackStatusPage";
 import { StrategyComparisonPage } from "./pages/StrategyComparisonPage";
 import { DailyReportPage } from "./pages/DailyReportPage";
 import { QuickStartPage } from "./pages/QuickStartPage";
+import { WindowsPage } from "./pages/WindowsPage";
 import {
   UI_READINESS_FIXTURE,
   DAILY_SCHEDULE_FIXTURE,
@@ -93,9 +94,10 @@ type Page =
   | "strategy-dev"
   | "stack-status"
   | "strategy-comparison"
-  | "daily-report";
+  | "daily-report"
+  | "windows";
 
-const PAGE_IDS: Page[] = ["quick-start", "proof", "audit", "dashboard", "trade", "adaptive", "history", "settings", "pcba", "ledger", "optimizer", "condition-lab", "decision-history", "forex-fury", "strategy-dev", "stack-status", "strategy-comparison", "daily-report"];
+const PAGE_IDS: Page[] = ["quick-start", "proof", "audit", "dashboard", "trade", "adaptive", "history", "settings", "pcba", "ledger", "optimizer", "condition-lab", "decision-history", "forex-fury", "strategy-dev", "stack-status", "strategy-comparison", "daily-report", "windows"];
 
 function initialPageFromUrl(): Page {
   if (typeof window === "undefined") return "proof";
@@ -205,6 +207,7 @@ export function App() {
       {page === "stack-status" && <StackStatusPage />}
       {page === "strategy-comparison" && <StrategyComparisonPage />}
       {page === "daily-report" && <DailyReportPage />}
+      {page === "windows" && <WindowsPage state={state} />}
     </Shell>
     <FloatingAssistant />
     </>

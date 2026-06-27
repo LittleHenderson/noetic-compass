@@ -49,7 +49,10 @@ The owner is furious that going live requires editing `.env`. He wants **toggle 
 
 **SAFETY / HONESTY (state once in the UI, don't moralize):** flipping these toggles is the owner satisfying the gate — consistent with `runtime_gates`' design ("the owner turns a capability on by satisfying its requirements"). BUT: (1) toggles alone still place NO orders — there is no order-dispatch *loop* wired to a scheduler yet (the engines exist: `order_dispatch.py`/`agent_dispatch.py`, but nothing runs them on a timer in production); (2) the bridge-level gate (`MT5Bridge.execute_order` + `_live_gate_block`, fail-closed `is_demo_account`) still enforces authorization at order time; (3) label each toggle with its real consequence. Do NOT silently make real-money trading one tap away without the readout showing exactly what each switch does.
 
-### TASK B (was in progress) — Live "Trading Windows" cockpit
+### TASK B — DONE (2026-06-27, next session). "Trading Windows" cockpit shipped.
+Built per the spec below: `api/routes/chart.py` (`GET /chart/window` TTL-cached + `GET /chart/symbols`) + `POST /order-dispatch/manual` (gated paper dispatch) + `ui/src/components/TradingWindow.tsx` + `ui/src/pages/WindowsPage.tsx` (2×2 grid) + nav "Live Charts" (`?page=windows`). Verified end-to-end (4 panes real candles+quotes, selectors reload, Buy=paper fill, Pause works, honest Live label, mobile single-column). Tests: `tests/test_chart_route.py`. **Original spec kept below for reference.**
+
+### TASK B (COMPLETE) — Live "Trading Windows" cockpit
 Owner wants a page like MT4 / TradingView: **4 live chart windows** = **Live**, **Demo**, **Strategy A**, **Strategy B** — real-time price movement of what the CAS agents are watching/testing, primarily to **watch/analyze**, with **optional controls** (manual buy/sell, pause) for live OR agent-initiated executions.
 
 **Done so far:** fixed `YFinanceConnector.fetch_historical` (commit `c4be2e49`) — it was passing an invalid Yahoo `period` and returning 0 bars; now returns real OHLC (verified EUR/USD M5 → 40 bars, XAU/USD H1 → 40 bars). So **real candle data is now available.**

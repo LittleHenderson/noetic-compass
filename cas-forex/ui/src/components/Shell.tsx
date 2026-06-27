@@ -22,7 +22,8 @@ type Page =
   | "strategy-dev"
   | "stack-status"
   | "strategy-comparison"
-  | "daily-report";
+  | "daily-report"
+  | "windows";
 
 interface ShellProps {
   readiness: UIReadinessReport;
@@ -37,6 +38,7 @@ const NAV_ITEMS: { id: Page; label: string; ready: boolean }[] = [
   { id: "audit", label: "Audit", ready: true },
   { id: "dashboard", label: "Dashboard", ready: true },
   { id: "trade", label: "Trade", ready: true },
+  { id: "windows", label: "Live Charts", ready: true },
   { id: "adaptive", label: "Adaptive", ready: true },
   { id: "history", label: "History", ready: true },
   { id: "settings", label: "Settings", ready: true },

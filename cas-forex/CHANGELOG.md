@@ -1,6 +1,45 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Task A (in-app live-enable toggles) is now DONE (see entry below). Remaining: (B) the "Trading Windows" live-chart cockpit (connector already fixed); plus launch the comprehensive UI audit (Daily Report `by_status` shows `[object Object]`).
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Tasks A (in-app live-enable toggles) and B (Trading Windows cockpit) are now DONE (see entries below). Remaining: launch the comprehensive UI audit (Daily Report `by_status` shows `[object Object]`).
+
+## 2026-06-27 - "Trading Windows" live-chart cockpit (Task B)
+
+A 4-pane (2×2) live-ish chart cockpit, like MT4/TradingView: Live / Demo /
+Strategy A / Strategy B, each watching what the CAS agents track, with optional
+manual controls.
+
+### Backend (`api/routes/chart.py`, registered in `api/server.py`)
+`GET /api/forex/chart/window?symbol=&timeframe=&bars=` → `{candles:[{time,o,h,l,c}],
+quote:{bid,ask,mid,spread,is_market_open,session}, source, live_feed, feed_label}`
+via `market_data.connector.get_connector()` (OANDA when configured, else yfinance).
+Small in-process **TTL cache (~20s)** keyed by (symbol,timeframe,bars) so multiple
+panes can poll every ~12s without hammering the slow/rate-limited upstream on a
+single-worker uvicorn. `GET /chart/symbols` lists tradeable symbols + timeframes.
+HONEST: `live_feed:false` + `feed_label:"near-real-time market data (delayed)"` —
+no connected broker tick feed; yfinance/OANDA is delayed retail data.
+
+### Manual orders (`POST /api/forex/order-dispatch/manual`)
+`{symbol,direction,lots,sl?,tp?}` → routes one `TradeIntent` through the SAME gated
+`dispatch_intents` (paper-safe by default; SL/TP auto-derived from the live quote
+when omitted so the order is always risk-bounded). `?confirm=true` required only
+when live trading is owner-authorized. Verified: paper BUY EUR/USD → BROKER_EXECUTED,
+`live_execution_runtime_locked` stays true.
+
+### UI (`TradingWindow.tsx`, `WindowsPage.tsx`, nav in `App.tsx`/`Shell.tsx`, CSS)
+Each window: role label + status chip + symbol/timeframe selectors + live bid/ask/
+spread/session → `CandlestickChart` (pure SVG) → footer with source/feed label +
+Buy/Sell (0.01-lot gated paper orders) + Pause (UI-local poll toggle). Polls every
+12s; the TTL cache covers it. Strategy panes default from the top strategy leads /
+Fury replay candidates. "Live" honestly shows "No broker feed — market data".
+New nav item **"Live Charts"** (`?page=windows`).
+
+**Verified end-to-end:** all 4 panes render real candles (60 each) + real quotes
+(incl. gold @ ~4086); symbol/timeframe selectors reload the chart; Buy → "PAPER:
+BUY EUR/USD 0.01 lots filled"; Pause toggles; mobile stacks single-column; no
+console errors. `tests/test_chart_route.py` (5) pass; full suite 1140 passing
+(same 6 pre-existing `strategy_leads.json` `PROMOTED_PAPER_LANE` failures, untouched).
+
+## 2026-06-27 - "Go Live — Owner Switches" panel (Task A: enable live trading from the app, no .env)
 
 ## 2026-06-27 - "Go Live — Owner Switches" panel (Task A: enable live trading from the app, no .env)
 

@@ -3088,3 +3088,78 @@
 }
 .go-live-group-title:first-of-type { margin-top: 0; }
 
+/* ── Trading Windows cockpit ── */
+.windows-intro { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; }
+.windows-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+@media (max-width: 860px) {
+  .windows-grid { grid-template-columns: 1fr; }
+}
+.trading-window {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md, 10px);
+  background: var(--bg-card);
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.trading-window-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.trading-window-role { display: flex; align-items: center; gap: 8px; }
+.trading-window-role-label { font-weight: 700; font-size: 0.86rem; }
+.trading-window-selectors { display: flex; gap: 6px; }
+.tw-select {
+  background: var(--bg-input, var(--bg-card));
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 3px 6px;
+  font-size: 0.74rem;
+}
+.trading-window-quote {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+.trading-window-quote strong { color: var(--text-primary); }
+.tw-session { margin-left: auto; color: var(--accent-teal, var(--text-muted)); font-weight: 600; }
+.tw-muted { color: var(--text-muted); font-size: 0.78rem; }
+.trading-window-chart { min-height: 180px; }
+.trading-window-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.tw-feed-label { font-size: 0.68rem; color: var(--text-muted); }
+.trading-window-controls { display: flex; gap: 6px; }
+.tw-btn {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--bg-card);
+  color: var(--text-primary);
+}
+.tw-btn:disabled { opacity: 0.5; cursor: progress; }
+.tw-buy { border-color: var(--success); color: var(--success); }
+.tw-sell { border-color: var(--danger); color: var(--danger); }
+.tw-pause.active { background: var(--warning-dim); color: var(--warning); }
+.tw-order-msg { font-size: 0.72rem; color: var(--text-secondary); padding-top: 2px; }
+
