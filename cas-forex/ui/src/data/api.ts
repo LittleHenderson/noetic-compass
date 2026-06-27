@@ -856,14 +856,17 @@ export interface StrategyRankingReport {
 
 export interface StrategyDiffField {
   field: string;
-  value_a: unknown;
-  value_b: unknown;
+  a_value: unknown;
+  b_value: unknown;
 }
 
 export interface StrategyDiff {
-  strategy_a_id: string;
-  strategy_b_id: string;
-  fields: StrategyDiffField[];
+  strategy_id_a: string;
+  strategy_id_b: string;
+  symbol_match?: boolean;
+  timeframe_match?: boolean;
+  family_match?: boolean;
+  field_diffs: StrategyDiffField[];
   plain_english_diff: string;
   generated_at_iso?: string | null;
   [key: string]: unknown;
@@ -887,7 +890,7 @@ export async function fetchStrategyDiff(
 ): Promise<StrategyDiff | null> {
   try {
     return await apiGet<StrategyDiff>(
-      `/strategy-comparison/diff?a=${encodeURIComponent(idA)}&b=${encodeURIComponent(idB)}`,
+      `/strategy-comparison/diff?strategy_id_a=${encodeURIComponent(idA)}&strategy_id_b=${encodeURIComponent(idB)}`,
     );
   } catch {
     return null;
@@ -897,7 +900,7 @@ export async function fetchStrategyDiff(
 // ── Daily report ──
 
 export interface DailySection {
-  name: string;
+  section_name: string;
   headline: string;
   detail: string;
   metrics?: Record<string, unknown>;
@@ -1000,6 +1003,10 @@ export interface StrategyActionResponse {
   status: string;
   strategy_id: string;
   action: StrategyDevAction;
+  // Success payload is asdict(StrategyActionResult): previous_stage/next_stage.
+  next_stage?: string;
+  previous_stage?: string;
+  // Present on the rejection (400) error detail, not the success payload.
   current_stage?: string;
   message?: string;
   [key: string]: unknown;

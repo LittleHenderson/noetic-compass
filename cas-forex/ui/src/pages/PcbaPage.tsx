@@ -49,7 +49,7 @@ export function PcbaPage({ state }: PcbaPageProps) {
               <div className="pcba-board-components">
                 {board.component_kinds.map((component) => <span key={component} className="pcba-component-chip">{component.toUpperCase()}</span>)}
               </div>
-              <div className="pcba-claim-note">Unlock live: {String(board.can_unlock_live_trading)} · Broker ACCEPT: {String(board.can_create_broker_accept)}</div>
+              <div className="pcba-claim-note">Unlock live: {board.can_unlock_live_trading ? "YES" : "NO"} · Broker ACCEPT: {board.can_create_broker_accept ? "YES" : "NO"}</div>
             </div>
           ))}
         </div>
@@ -92,7 +92,7 @@ export function PcbaPage({ state }: PcbaPageProps) {
         <div className="dashboard-grid-3col">
           <div className="metric-stack"><Metric label="Guard" value={pcba.optimizer_guard.active ? "ACTIVE" : "INACTIVE"} /><Metric label="Boundary" value="ENFORCED" /></div>
           <div className="metric-stack"><Metric label="Research Queue" value={`${pcba.optimizer_guard.proposal_counts.research_queue}`} mono /><Metric label="Flagged" value={`${pcba.optimizer_guard.proposal_counts.flagged}`} mono /><Metric label="Rejected" value={`${pcba.optimizer_guard.proposal_counts.rejected}`} mono /></div>
-          <div className="metric-stack"><Metric label="Can Create Broker ACCEPT" value={String(pcba.optimizer_guard.can_create_broker_accept)} danger /><Metric label="Can Unlock Live" value={String(pcba.optimizer_guard.can_unlock_live_trading)} danger /></div>
+          <div className="metric-stack"><Metric label="Can Create Broker ACCEPT" value={pcba.optimizer_guard.can_create_broker_accept ? "YES" : "NO"} danger={pcba.optimizer_guard.can_create_broker_accept} /><Metric label="Can Unlock Live" value={pcba.optimizer_guard.can_unlock_live_trading ? "YES" : "NO"} danger={pcba.optimizer_guard.can_unlock_live_trading} /></div>
         </div>
         <div className="optimizer-detail">{pcba.optimizer_guard.claim_boundary}</div>
       </GlassPanel>
@@ -110,8 +110,8 @@ export function PcbaPage({ state }: PcbaPageProps) {
 
       <GlassPanel title="Production Gates" variant="danger">
         <div className="gate-grid">
-          {pcbaChecks.concat(cjtChecks).map((check) => (
-            <div key={`${check.feature}-${check.status}`} className="gate-item">
+          {pcbaChecks.concat(cjtChecks).map((check, idx) => (
+            <div key={`${check.feature}-${check.status}-${idx}`} className="gate-item">
               <div className="gate-item-header"><span className="gate-item-label">{titleize(check.feature ?? "unknown_feature")}</span><StatusChip label={check.status} variant={chipVariant(check.status)} size="sm" /></div>
               <div className="gate-item-detail">{check.rationale ?? "Diagnostic only — no live authority"}</div>
             </div>

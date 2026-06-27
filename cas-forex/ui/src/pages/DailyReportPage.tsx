@@ -38,7 +38,7 @@ function SectionCard({ section }: SectionCardProps) {
         onClick={() => setOpen((v) => !v)}
         type="button"
       >
-        <span className="daily-section-title">{section.name}</span>
+        <span className="daily-section-title">{section.section_name}</span>
         <span className="daily-section-headline">{section.headline}</span>
         <span className="daily-section-caret">{open ? "▾" : "▸"}</span>
       </button>
@@ -129,7 +129,7 @@ export function DailyReportPage() {
       </GlassPanel>
 
       {sections.map((s) => (
-        <SectionCard key={s.name} section={s} />
+        <SectionCard key={s.section_name} section={s} />
       ))}
 
       {report?.diagnostic_hints && report.diagnostic_hints.length > 0 && (

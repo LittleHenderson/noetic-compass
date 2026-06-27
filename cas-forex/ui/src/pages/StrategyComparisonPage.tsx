@@ -67,16 +67,16 @@ function DiffPanel({ diff, loading, error }: DiffPanelProps) {
         <thead>
           <tr>
             <th>Field</th>
-            <th>A — {truncate(diff.strategy_a_id, 18)}</th>
-            <th>B — {truncate(diff.strategy_b_id, 18)}</th>
+            <th>A — {truncate(diff.strategy_id_a, 18)}</th>
+            <th>B — {truncate(diff.strategy_id_b, 18)}</th>
           </tr>
         </thead>
         <tbody>
-          {diff.fields.map((f) => (
+          {diff.field_diffs.map((f) => (
             <tr key={f.field}>
               <td className="mono">{f.field}</td>
-              <td>{String(f.value_a ?? "—")}</td>
-              <td>{String(f.value_b ?? "—")}</td>
+              <td>{String(f.a_value ?? "—")}</td>
+              <td>{String(f.b_value ?? "—")}</td>
             </tr>
           ))}
         </tbody>

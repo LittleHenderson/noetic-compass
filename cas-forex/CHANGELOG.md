@@ -1,6 +1,41 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Tasks A (in-app live-enable toggles) and B (Trading Windows cockpit) are now DONE (see entries below). Remaining: launch the comprehensive UI audit (Daily Report `by_status` shows `[object Object]`).
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Tasks A (live-enable toggles), B (Trading Windows cockpit), and the comprehensive UI audit are all DONE (see entries below). The audit fanned 19 agents across every page + adversarial verification; 13 confirmed issues fixed (7 high incl. broken Strategy-diff contract, blank Daily-Report section titles, a Ledger crash-guard), plus 2 runtime React key bugs the static audit missed.
+
+## 2026-06-27 - Comprehensive UI audit + 15 fixes
+
+Ran a 36-agent workflow (one auditor per page → adversarial verifier per finding)
+across all 19 pages. 13 confirmed issues (7 high, 5 medium, 1 low); 11 pages clean.
+Fixed every confirmed issue, plus 2 duplicate/missing React-key bugs a live console
+sweep caught that the static audit could not. All verified in-browser on a fresh
+server (section titles render, diff works, no console errors); `tsc` clean.
+
+Contract mismatches (frontend was reading the wrong field/param names — verified
+against live backend before fixing):
+- **Daily Report**: section titles were blank — backend sends `section_name`, UI read
+  `name` (also fixed the undefined React key). `ui/src/data/api.ts` + `DailyReportPage.tsx`.
+- **Strategy Compare diff**: was fully broken — UI sent `a`/`b` (backend wants
+  `strategy_id_a`/`strategy_id_b` → 422) and read `fields`/`value_a`/`value_b`/`strategy_a_id`
+  (backend sends `field_diffs`/`a_value`/`b_value`/`strategy_id_a` → `.map` crash). Aligned
+  the api.ts types, the fetch params, and `StrategyComparisonPage.tsx`.
+- **Strategy Dev**: success toast showed no stage — read `current_stage`; success payload
+  has `next_stage` (error payload legitimately has `current_stage`, left as-is). `StrategyDevPage.tsx`.
+
+Crash guards / render bugs:
+- **Ledger**: `sizing.reduce(...)` had no guard; backend can omit `latest_risk` → crash.
+  Now `(sizing ?? []).reduce(...)`. `LedgerPage.tsx`.
+- **Optimizer**: 4 mojibake em-dashes (`â€"` from a double-UTF-8 encoding) → proper `—`.
+- **PCBA**: two `String(boolean)` renders showed raw `true`/`false` → `YES`/`NO`; the danger
+  styling now follows the value. Also a duplicate React key (`feature-status` collided across
+  pcba+cjt checks) → index-suffixed.
+- **Condition Lab**: bucket-detail axes rendered without the `?? "—"` guard the table uses → added.
+- **History**: hardcoded/stale condition-tally source line (`...20260622...json — 46 windows`) →
+  dynamic bucket count, no fabricated numbers.
+
+11 pages came back clean: Quick Start, Proof, Audit, Dashboard, Trade, Live Charts,
+Adaptive, Settings, Decisions, Fury, Stack.
+
+## 2026-06-27 - "Trading Windows" live-chart cockpit (Task B)
 
 ## 2026-06-27 - "Trading Windows" live-chart cockpit (Task B)
 

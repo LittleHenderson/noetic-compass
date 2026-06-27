@@ -168,15 +168,15 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
             </div>
             <div className="sizing-row">
               <span className="field-label">Timeframe</span>
-              <span className="field-value mono">{selectedBucket.axes.timeframe}</span>
+              <span className="field-value mono">{selectedBucket.axes.timeframe ?? "—"}</span>
             </div>
             <div className="sizing-row">
               <span className="field-label">Strategy Setting</span>
-              <span className="field-value mono">{selectedBucket.axes.setting}</span>
+              <span className="field-value mono">{selectedBucket.axes.setting ?? "—"}</span>
             </div>
             <div className="sizing-row">
               <span className="field-label">Route Action</span>
-              <span className="field-value mono">{selectedBucket.axes.route_action}</span>
+              <span className="field-value mono">{selectedBucket.axes.route_action ?? "—"}</span>
             </div>
             <div className="sizing-row">
               <span className="field-label">Total Windows</span>

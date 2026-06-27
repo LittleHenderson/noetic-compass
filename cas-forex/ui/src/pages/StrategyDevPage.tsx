@@ -203,7 +203,7 @@ export function StrategyDevPage({ state }: StrategyDevPageProps) {
                   {result?.kind === "ok" && (
                     <div className="action-result-toast action-result-ok">
                       {result.ok?.action ?? "action"} applied
-                      {result.ok?.current_stage ? ` · stage: ${result.ok.current_stage}` : ""}
+                      {result.ok?.next_stage ? ` · stage: ${result.ok.next_stage}` : ""}
                       {result.ok?.message ? ` · ${result.ok.message}` : ""}
                     </div>
                   )}
