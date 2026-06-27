@@ -16,6 +16,7 @@ import {
 type MilestoneKey =
   | "api"
   | "mt5"
+  | "mt4"
   | "autowake"
   | "loop"
   | "pwa"
@@ -61,6 +62,7 @@ export function QuickStartPage() {
   const [expanded, setExpanded] = useState<Record<MilestoneKey, boolean>>({
     api: false,
     mt5: false,
+    mt4: false,
     autowake: false,
     loop: false,
     pwa: false,
@@ -142,10 +144,17 @@ export function QuickStartPage() {
       },
       {
         key: "mt5",
-        title: "MT5 terminal connected",
+        title: "MT5 terminal connected + Algo Trading ON",
         status: mt5Ok ? "done" : "pending",
         detail:
-          "Start MT5 with Hugosway-Demo logged in. Enable Algo Trading / AutoTrading.",
+          "Start MT5 logged into your broker (demo first). Then ENABLE ALGO TRADING — this is a MetaTrader button that only YOU can click; no app is allowed to flip it (MetaTrader requires your consent before a robot can trade). Click the 'Algo Trading' button in the MT5 top toolbar until it turns green. Belt-and-suspenders: Tools → Options → Expert Advisors → tick 'Allow Algorithmic Trading' → OK.",
+      },
+      {
+        key: "mt4",
+        title: "MT4 (optional — file-mailbox EA path)",
+        status: "pending",
+        detail:
+          "MT4 has no Python API (MetaQuotes only built one for MT5), so there is no MT5-style 'connect' for MT4 — it works via a file-mailbox Expert Advisor, paper/demo only. To use MT4: set MT4_ENABLED=true and MT4_MAILBOX_DIR=<shared folder>, attach the CAS Forex EA (.mq4) to a chart in MT4, and in MT4 turn on AutoTrading + allow the EA to read/write files. Leave this off if you're on MT5.",
       },
       {
         key: "autowake",
@@ -281,7 +290,13 @@ function initialMilestones(): Milestone[] {
     },
     {
       key: "mt5",
-      title: "MT5 terminal connected",
+      title: "MT5 terminal connected + Algo Trading ON",
+      status: "pending",
+      detail: "",
+    },
+    {
+      key: "mt4",
+      title: "MT4 (optional — file-mailbox EA path)",
       status: "pending",
       detail: "",
     },
