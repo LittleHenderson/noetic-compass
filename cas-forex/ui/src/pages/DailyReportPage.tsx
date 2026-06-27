@@ -13,6 +13,21 @@ interface SectionCardProps {
   section: DailySection;
 }
 
+/** Render a metric value readably — nested objects (e.g. by_status: {ACCEPTED: 3})
+ * would otherwise stringify to "[object Object]". */
+function formatMetricValue(v: unknown): string {
+  if (v == null) return "—";
+  if (Array.isArray(v)) {
+    return v.length ? v.map((x) => formatMetricValue(x)).join(", ") : "—";
+  }
+  if (typeof v === "object") {
+    const entries = Object.entries(v as Record<string, unknown>);
+    if (entries.length === 0) return "—";
+    return entries.map(([k, val]) => `${k}: ${formatMetricValue(val)}`).join(", ");
+  }
+  return String(v);
+}
+
 function SectionCard({ section }: SectionCardProps) {
   const [open, setOpen] = useState(true);
 
@@ -36,7 +51,7 @@ function SectionCard({ section }: SectionCardProps) {
                 {Object.entries(section.metrics).map(([k, v]) => (
                   <tr key={k}>
                     <td className="mono">{k}</td>
-                    <td className="mono">{String(v ?? "—")}</td>
+                    <td className="mono">{formatMetricValue(v)}</td>
                   </tr>
                 ))}
               </tbody>
