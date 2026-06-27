@@ -4,6 +4,7 @@
 import { useState, useMemo } from "react";
 import { Shell } from "./components/Shell";
 import { FloatingAssistant } from "./components/FloatingAssistant";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import { ProofPage } from "./pages/ProofPage";
 import { AuditPage } from "./pages/AuditPage";
 import { DashboardPage } from "./pages/DashboardPage";
@@ -189,6 +190,7 @@ export function App() {
           {loading ? "Loading live evidence API..." : error}
         </div>
       )}
+      <ErrorBoundary resetKey={page} label={page}>
       {page === "quick-start" && <QuickStartPage />}
       {page === "proof" && <ProofPage state={state} />}
       {page === "audit" && <AuditPage state={state} />}
@@ -208,6 +210,7 @@ export function App() {
       {page === "strategy-comparison" && <StrategyComparisonPage />}
       {page === "daily-report" && <DailyReportPage />}
       {page === "windows" && <WindowsPage state={state} />}
+      </ErrorBoundary>
     </Shell>
     <FloatingAssistant />
     </>

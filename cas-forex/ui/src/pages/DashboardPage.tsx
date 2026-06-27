@@ -225,9 +225,9 @@ export function DashboardPage({ state }: DashboardPageProps) {
                   <td className={`mono ${lead.priority === 2 ? "cell-active" : ""}`}>{lead.lead_id}</td>
                   <td><StatusChip label={lead.status === "ACTIVE_RESEARCH_LEAD" ? "ACTIVE" : lead.status} variant={lead.status === "WATCHLIST_ONLY" ? "muted" : lead.priority <= 2 ? "info" : "paper"} size="sm" /></td>
                   <td className="mono">{lead.family}</td>
-                  <td className="mono" style={{ fontSize: "0.68rem" }}>{lead.symbols_promoted_for_next_tests.join(", ")}</td>
-                  <td style={{ color: "var(--text-muted)", fontSize: "0.68rem", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lead.headline_results[0]}</td>
-                  <td className="mono" style={{ fontSize: "0.66rem", color: "var(--warning)" }}>{lead.open_gates.length} gates</td>
+                  <td className="mono" style={{ fontSize: "0.68rem" }}>{(lead.symbols_promoted_for_next_tests ?? []).join(", ") || "—"}</td>
+                  <td style={{ color: "var(--text-muted)", fontSize: "0.68rem", maxWidth: 240, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{lead.headline_results?.[0] ?? "—"}</td>
+                  <td className="mono" style={{ fontSize: "0.66rem", color: "var(--warning)" }}>{(lead.open_gates ?? []).length} gates</td>
                 </tr>
               )) ?? (
                 <tr><td colSpan={7} className="text-muted">Loading strategy leads from strategy_leads.json...</td></tr>
