@@ -115,7 +115,7 @@ export function DashboardPage({ state }: DashboardPageProps) {
         <div className="dashboard-grid-3col">
           <div className="metric-stack" style={{ padding: 0 }}>
             <Metric label="Stream Mode" value={movement?.mode ?? "PAPER_DEMO_REALTIME_SCAFFOLD"} mono />
-            <Metric label="Symbols" value={movement?.symbols.join(", ") ?? "—"} mono />
+            <Metric label="Symbols" value={movement?.symbols?.join(", ") ?? "—"} mono />
             <Metric label="Updated" value={movement?.timestamp ?? "—"} mono />
           </div>
           <div className="metric-stack" style={{ padding: 0 }}>
