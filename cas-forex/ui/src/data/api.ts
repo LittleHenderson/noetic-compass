@@ -158,6 +158,37 @@ export async function postAssistantChat(
   return (await res.json()) as AssistantReply;
 }
 
+// ── Owner risk control (any concurrent count / loss cap, or none) ──
+
+export interface RiskControlState {
+  max_concurrent_trades: number | null;
+  max_total_exposure_lots: number | null;
+  max_loss_cap_usd: number | null;
+  max_drawdown_pct: number | null;
+  unlimited: {
+    concurrent_trades: boolean;
+    total_exposure_lots: boolean;
+    loss_cap_usd: boolean;
+    drawdown_pct: boolean;
+  };
+  report_kind?: string;
+  notes?: string[];
+}
+
+export async function fetchRiskControl(): Promise<RiskControlState | null> {
+  try { return await apiGet<RiskControlState>("/risk-control/state"); } catch { return null; }
+}
+
+export async function updateRiskControl(
+  patch: Partial<Record<"max_concurrent_trades" | "max_total_exposure_lots" | "max_loss_cap_usd" | "max_drawdown_pct", number | null>>,
+): Promise<RiskControlState> {
+  return apiPostJson<RiskControlState, typeof patch>("/risk-control/update", patch);
+}
+
+export async function resetRiskControl(): Promise<RiskControlState> {
+  return apiPost<RiskControlState>("/risk-control/reset");
+}
+
 // ── Multi-timeframe runtime selector ──
 
 export interface SymbolTimeframeSelection {

@@ -54,43 +54,32 @@ def _resolve_config(config: Any = None) -> Any:
 
 
 def caps_from_config(config: Any = None) -> RiskCapConfig:
-    """Map the app ForexConfig onto the gate's ``RiskCapConfig``.
+    """Map the effective owner risk control onto the gate's ``RiskCapConfig``.
 
-    Only the dimensions the app config actually defines are capped; everything
-    else stays ``None`` (no cap) rather than inventing limits the operator
-    never set. Mapping:
+    The effective caps come from ``risk_control.resolve_risk_control`` — owner
+    runtime overrides on top of static config. Any dimension the owner set to
+    ``None`` (unlimited) becomes ``None`` here (no cap), so the owner can raise,
+    lower, or REMOVE any cap at runtime. With no overrides this reproduces the
+    prior config-only mapping exactly.
 
-      - max_total_exposure_lots          <- config.max_total_exposure_lots
-      - max_open_position_count          <- config.max_open_positions
-      - max_positions_per_symbol         <- config.max_open_positions
-        (a single symbol can never need more than the whole-book position cap)
-      - max_drawdown_pct_from_equity_peak <- config.max_weekly_drawdown_pct
+      - max_total_exposure_lots          <- risk_control.max_total_exposure_lots
+      - max_open_position_count          <- risk_control.max_concurrent_trades
+      - max_positions_per_symbol         <- risk_control.max_concurrent_trades
+      - max_drawdown_pct_from_equity_peak <- risk_control.max_drawdown_pct
+      - max_floating_loss_usd            <- risk_control.max_loss_cap_usd
     """
     config = _resolve_config(config)
+    from cas_forex.risk_control import resolve_risk_control
 
-    def _f(attr: str) -> Optional[float]:
-        value = getattr(config, attr, None)
-        try:
-            return None if value is None else float(value)
-        except (TypeError, ValueError):
-            return None
-
-    def _i(attr: str) -> Optional[int]:
-        value = getattr(config, attr, None)
-        try:
-            return None if value is None else int(value)
-        except (TypeError, ValueError):
-            return None
-
-    open_cap = _i("max_open_positions")
+    rc = resolve_risk_control(config)
     return RiskCapConfig(
-        max_total_exposure_lots=_f("max_total_exposure_lots"),
+        max_total_exposure_lots=rc.max_total_exposure_lots,
         max_concentration_pct=None,
         max_margin_utilization_pct=None,
-        max_positions_per_symbol=open_cap,
-        max_open_position_count=open_cap,
-        max_drawdown_pct_from_equity_peak=_f("max_weekly_drawdown_pct"),
-        max_floating_loss_usd=None,
+        max_positions_per_symbol=rc.max_concurrent_trades,
+        max_open_position_count=rc.max_concurrent_trades,
+        max_drawdown_pct_from_equity_peak=rc.max_drawdown_pct,
+        max_floating_loss_usd=rc.max_loss_cap_usd,
     )
 
 

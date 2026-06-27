@@ -1,5 +1,38 @@
 # CAS Forex - Changelog
 
+## 2026-06-27 - Floating AI assistant + owner risk control (you drive, no ceilings)
+
+Two owner-facing features, plus phone access over WiFi.
+
+### Floating AI assistant (`ui/src/components/FloatingAssistant.tsx`)
+
+A persistent 💬 chat bubble mounted at the app root, so it follows the owner on
+every page. Opens a chat panel wired to `POST /api/forex/assistant/chat`
+(`api/routes/assistant.py`) — a cockpit-aware Claude reply via the anthropic SDK
+(`ANTHROPIC_API_KEY` from env, model `claude-sonnet-4-6`). Never 500s: returns a
+clear "set ANTHROPIC_API_KEY" message when unconfigured, a graceful error string
+on provider failure; `GET /assistant/status` reports configured + model. Verified
+live (real reply, source=ai).
+
+### Owner risk control (`cas_forex/risk_control.py`)
+
+Set ANY concurrent-trade count and ANY loss cap at runtime — or remove the cap
+entirely (null = unlimited). Mirrors the broker_control override pattern; the
+effective caps feed `execution_guard.caps_from_config`, so they apply to the
+pre-execution risk gate on the next dispatch with no restart. With no overrides
+the prior config-only caps are reproduced exactly. `GET/POST /api/forex/risk-control`
++ a "Risk Control — You Drive" panel on the Settings page (4 caps, each with an
+Unlimited toggle). Verified: an oversized order the default 0.5-lot cap blocks
+passes once the owner removes the exposure cap.
+
+### Phone access
+
+Backend + UI dev server now bind to the LAN (`--host 0.0.0.0`); phone reaches the
+cockpit at `http://<PC-LAN-IP>:5174` and points at the API via the in-app
+Settings → API address field. Local/home-WiFi only until hosting + auth land.
+
++12 risk-control tests. Full suite: 1133 passed.
+
 ## 2026-06-27 - Broker strictness: loosen OR harden (both MT5 & MT4), one knob
 
 Made the broker control symmetric. `broker_strictness` ∈ `loose | normal | strict`

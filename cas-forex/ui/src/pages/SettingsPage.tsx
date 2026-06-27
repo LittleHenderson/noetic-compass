@@ -1,11 +1,19 @@
 /* ── CAS Forex — Settings & Owner Control ── */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { NotificationSubscriptionPanel } from "../components/NotificationSubscriptionPanel";
 import { WebhookSubscriptionPanel } from "../components/WebhookSubscriptionPanel";
-import { getApiBase, resetApiBase, setApiBase } from "../data/api";
+import {
+  getApiBase,
+  resetApiBase,
+  setApiBase,
+  fetchRiskControl,
+  updateRiskControl,
+  resetRiskControl,
+  type RiskControlState,
+} from "../data/api";
 import type { DashboardState } from "../types/evidence";
 
 interface SettingsPageProps {
@@ -31,6 +39,9 @@ export function SettingsPage({ state }: SettingsPageProps) {
   return (
     <div className="settings-page">
       <MobileApiPanel />
+
+      {/* ── Owner risk control — set any cap, or remove it ── */}
+      <RiskControlPanel />
 
       {/* ── Notification Subscriptions (Web Push) ── */}
       <NotificationSubscriptionPanel />
@@ -255,6 +266,108 @@ function MobileApiPanel() {
         For a phone, use your computer's LAN/VPN/tunnel address, e.g. <code>http://192.168.x.x:8765/api/forex</code>.
         <strong> Do not use 127.0.0.1 on the phone</strong> unless the API is running on the phone itself.
         {saved && <span style={{ color: "var(--success)", marginLeft: 8 }}>Saved. Refresh or reopen the app to reload live evidence.</span>}
+      </div>
+    </GlassPanel>
+  );
+}
+
+const RISK_FIELDS = [
+  { key: "max_concurrent_trades", label: "Max Concurrent Trades", hint: "How many trades can be open at once. Toggle Unlimited to remove the cap." },
+  { key: "max_loss_cap_usd", label: "Max Loss Cap (USD)", hint: "Floating loss that blocks new trades. Unlimited = no cap." },
+  { key: "max_total_exposure_lots", label: "Max Total Exposure (lots)", hint: "Total open lots across the whole book." },
+  { key: "max_drawdown_pct", label: "Max Drawdown (%)", hint: "Drawdown from the equity peak that blocks new trades." },
+] as const;
+
+type RiskKey = (typeof RISK_FIELDS)[number]["key"];
+
+function RiskControlPanel() {
+  const [rc, setRc] = useState<RiskControlState | null>(null);
+  const [draft, setDraft] = useState<Record<string, { value: string; unlimited: boolean }>>({});
+  const [status, setStatus] = useState<string>("");
+
+  function load(s: RiskControlState) {
+    setRc(s);
+    const d: Record<string, { value: string; unlimited: boolean }> = {};
+    for (const f of RISK_FIELDS) {
+      const v = s[f.key];
+      d[f.key] = { value: v == null ? "" : String(v), unlimited: v == null };
+    }
+    setDraft(d);
+  }
+
+  useEffect(() => {
+    void fetchRiskControl().then((s) => { if (s) load(s); });
+  }, []);
+
+  async function save() {
+    const patch: Partial<Record<RiskKey, number | null>> = {};
+    for (const f of RISK_FIELDS) {
+      const cell = draft[f.key] ?? { value: "", unlimited: false };
+      patch[f.key] = cell.unlimited || cell.value.trim() === "" ? null : Number(cell.value);
+    }
+    try {
+      load(await updateRiskControl(patch));
+      setStatus("Saved — applies to the next trade immediately.");
+    } catch {
+      setStatus("Couldn't save — is the API reachable? Check the address above.");
+    }
+  }
+
+  async function reset() {
+    try {
+      load(await resetRiskControl());
+      setStatus("Reset to defaults.");
+    } catch {
+      setStatus("Couldn't reset.");
+    }
+  }
+
+  const fmt = (v: number | null) => (v == null ? "∞" : String(v));
+
+  return (
+    <GlassPanel title="Risk Control — You Drive" subtitle="Set any concurrent-trade count and any loss cap, or remove the cap entirely">
+      <div style={{ display: "grid", gap: 12 }}>
+        {RISK_FIELDS.map((f) => {
+          const cell = draft[f.key] ?? { value: "", unlimited: false };
+          return (
+            <div key={f.key} className="control-field">
+              <div className="control-field-header">
+                <span className="field-label">{f.label}</span>
+                <label style={{ display: "flex", alignItems: "center", gap: 6, fontSize: "0.72rem" }}>
+                  <input
+                    type="checkbox"
+                    checked={cell.unlimited}
+                    onChange={(e) => { setDraft({ ...draft, [f.key]: { ...cell, unlimited: e.target.checked } }); setStatus(""); }}
+                  />
+                  Unlimited
+                </label>
+              </div>
+              <input
+                className="mobile-api-input"
+                type="number"
+                min={0}
+                disabled={cell.unlimited}
+                value={cell.unlimited ? "" : cell.value}
+                placeholder={cell.unlimited ? "Unlimited (no cap)" : "0"}
+                onChange={(e) => { setDraft({ ...draft, [f.key]: { ...cell, value: e.target.value } }); setStatus(""); }}
+              />
+              <div className="control-field-desc">{f.hint}</div>
+            </div>
+          );
+        })}
+        <div className="mobile-api-row">
+          <button className="mobile-api-button" type="button" onClick={() => void save()}>Save risk caps</button>
+          <button className="mobile-api-button ghost" type="button" onClick={() => void reset()}>Reset to defaults</button>
+        </div>
+        {status && <div className="control-field-desc" style={{ color: "var(--success)" }}>{status}</div>}
+        {rc && (
+          <div className="control-field-desc">
+            Effective now — concurrent: <strong>{fmt(rc.max_concurrent_trades)}</strong>, loss cap:{" "}
+            <strong>{rc.max_loss_cap_usd == null ? "∞" : `$${rc.max_loss_cap_usd}`}</strong>, exposure:{" "}
+            <strong>{fmt(rc.max_total_exposure_lots)}</strong> lots, drawdown:{" "}
+            <strong>{rc.max_drawdown_pct == null ? "∞" : `${rc.max_drawdown_pct}%`}</strong>.
+          </div>
+        )}
       </div>
     </GlassPanel>
   );
