@@ -1,5 +1,32 @@
 # CAS Forex - Changelog
 
+## 2026-06-27 — Owner-reported fixes: crash, missing assistant, real authorization toggles
+
+A batch of owner-reported breakage + control gaps, all fixed and verified live.
+
+- **Dashboard blank-out + missing floating assistant (same root cause).** The
+  Dashboard threw on render (unguarded `.join` on heterogeneous strategy leads —
+  8 of 12 `ff-lead-*` entries lack `symbols_promoted_for_next_tests`) and, with no
+  error boundary, the uncaught throw unmounted the WHOLE app — which is why the
+  floating assistant vanished too. Guarded the lead reads + added a real
+  `ErrorBoundary` so one page can never blank the app/assistant again. (62c4c1e7)
+- **Authority Boundary / Path to Authorize were non-functional** (read-only). The
+  "Path to Authorize Everything" panel is now real in-app TOGGLES for all 5
+  owner-controlled capabilities (live trading, broker ACCEPT, auto-deposit,
+  bank/card movement, payout automation = the sweep ledger) + a shared payment
+  provider section (provider, API key as a password stored-but-never-returned,
+  payout destination, allowlist). The sweep ledger can be licensed entirely in-app.
+  `live_enable_control` extended; `runtime_gates` consults the overrides. (c2b81ed4)
+- **Assistant stopped lying about `.env`.** Its system prompt was stale (still said
+  "no button to go live", listed `CAS_FOREX_*` env vars). Rewrote it to point at
+  the Go Live + Path to Authorize toggle panels and to never instruct a `.env` edit
+  or restart — while keeping the honest caveat that toggles satisfy the gate but a
+  broker feed + running process are still needed. (c2b81ed4)
+- **Condition Lab now always shows M1 + M5** (and M15/H1/D1) in the Timeframe
+  filter, not just the timeframes present in data — selecting one with no evidence
+  shows the honest empty state.
+
+
 > **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-27.md` first.** Tasks A (live-enable toggles), B (Trading Windows cockpit), and the comprehensive UI audit are all DONE (see entries below). The audit fanned 19 agents across every page + adversarial verification; 13 confirmed issues fixed (7 high incl. broken Strategy-diff contract, blank Daily-Report section titles, a Ledger crash-guard), plus 2 runtime React key bugs the static audit missed.
 
 ## 2026-06-27 - Comprehensive UI audit + 15 fixes

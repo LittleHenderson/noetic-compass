@@ -16,7 +16,15 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
   const [selectedStrategy, setSelectedStrategy] = useState("ALL");
   const [selectedRoute, setSelectedRoute] = useState("ALL");
 
-  const timeframes = uniqueValues(tally.map((bucket) => bucket.axes.timeframe).filter(Boolean));
+  // Always show the standard tradeable timeframes (incl. M1 + M5 for scalping),
+  // even when no walk-forward bucket has them yet — selecting one with no evidence
+  // just shows the empty "no buckets match" state. Extra timeframes seen in the
+  // data are appended after the canonical set.
+  const dataTimeframes = uniqueValues(tally.map((bucket) => bucket.axes.timeframe).filter(Boolean));
+  const timeframes = [
+    ...CANONICAL_TIMEFRAMES,
+    ...dataTimeframes.filter((tf) => !CANONICAL_TIMEFRAMES.includes(tf)),
+  ];
   const strategies = uniqueValues(tally.map((bucket) => bucket.axes.setting).filter(Boolean));
   const routes = uniqueValues(tally.map((bucket) => bucket.axes.route_action).filter(Boolean));
   const filteredTally = tally.filter((bucket) => {
@@ -311,6 +319,11 @@ export function ConditionLabPage({ state }: ConditionLabPageProps) {
   );
 }
 
+
+// The standard tradeable timeframes always offered in the Condition Lab filter,
+// in scalping-to-swing order. M1 + M5 are the scalping timeframes the owner wants
+// always available. Matches the market-data connector's supported timeframes.
+const CANONICAL_TIMEFRAMES = ["M1", "M5", "M15", "H1", "D1"];
 
 function uniqueValues(values: (string | undefined)[]): string[] {
   return Array.from(new Set(values.filter((value): value is string => Boolean(value)))).sort();
