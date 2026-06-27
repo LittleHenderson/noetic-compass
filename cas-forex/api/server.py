@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .data import dashboard_state
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -51,6 +51,7 @@ app.include_router(operator_audit.router, prefix="/api/forex/operator-audit", ta
 app.include_router(order_dispatch.router, prefix="/api/forex/order-dispatch", tags=["order-dispatch"])
 app.include_router(money_movement.router, prefix="/api/forex/money-movement", tags=["money-movement"])
 app.include_router(broker_control.router, prefix="/api/forex/broker-control", tags=["broker-control"])
+app.include_router(assistant.router, prefix="/api/forex/assistant", tags=["assistant"])
 
 
 @app.get("/api/forex/dashboard")

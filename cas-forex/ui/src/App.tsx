@@ -1,7 +1,9 @@
 /* ── CAS Forex — Root App ── */
+/* Floating AI assistant mounted at root so it follows the user on every page. */
 
 import { useState, useMemo } from "react";
 import { Shell } from "./components/Shell";
+import { FloatingAssistant } from "./components/FloatingAssistant";
 import { ProofPage } from "./pages/ProofPage";
 import { AuditPage } from "./pages/AuditPage";
 import { DashboardPage } from "./pages/DashboardPage";
@@ -178,6 +180,7 @@ export function App() {
   const state = apiState ?? fixtureState;
 
   return (
+    <>
     <Shell readiness={state.uiReadiness} activePage={page} onNavigate={setPage}>
       {(loading || error) && (
         <div className="api-status-strip">
@@ -203,5 +206,7 @@ export function App() {
       {page === "strategy-comparison" && <StrategyComparisonPage />}
       {page === "daily-report" && <DailyReportPage />}
     </Shell>
+    <FloatingAssistant />
+    </>
   );
 }
