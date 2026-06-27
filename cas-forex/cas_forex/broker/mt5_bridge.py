@@ -147,11 +147,65 @@ class MT5Bridge(BrokerBridge):
             return False
 
     def will_execute_real_order(self) -> bool:
-        """A connected MT5 terminal places a real order via ``order_send`` (live
-        or demo account). Fail-closed: require owner live-trading authorization
-        for any connected-terminal dispatch, regardless of ``config.live_mode``.
-        When not connected, dispatch falls back to simulation (paper)."""
-        return self.is_connected()
+        """A connected LIVE (non-demo) MT5 terminal places real-money orders via
+        ``order_send``. The execution guard requires owner live-trading
+        authorization for these, regardless of ``config.live_mode``. A connected
+        DEMO account is paper; a disconnected bridge falls back to simulation."""
+        return self.is_connected() and not self.is_demo_account()
+
+    def is_demo_account(self) -> bool:
+        """Best-effort: is the connected MT5 account a DEMO (paper) account?
+
+        Fail-closed in the LIVE direction: ONLY a positive MT5 trade_mode ==
+        ACCOUNT_TRADE_MODE_DEMO match confirms demo. A live/contest/unknown
+        trade_mode, an unavailable constant, or missing account info is treated
+        as LIVE (return False) so the live-trading gate is required before any
+        real ``order_send``. We deliberately do NOT infer demo from the broker's
+        server/company name — those strings are broker/operator-controlled, so a
+        live account whose server label merely contains "demo" must not be
+        downgraded to paper and skip the gate.
+
+        The owner can explicitly declare the account paper via the
+        ``mt5_treat_account_as_demo`` config override (a deliberate, env-set
+        loosening), in which case it is treated as demo.
+        """
+        if bool(getattr(config, "mt5_treat_account_as_demo", False)):
+            return True
+        if not self.is_connected():
+            return False
+        try:
+            info = self._mt5.account_info()
+        except Exception:
+            return False
+        if info is None:
+            return False
+        trade_mode = getattr(info, "trade_mode", None)
+        demo_const = getattr(self._mt5, "ACCOUNT_TRADE_MODE_DEMO", None)
+        return demo_const is not None and trade_mode == demo_const
+
+    def _live_gate_block(self, order_ref: str = "live-gate") -> Optional[OrderOutcome]:
+        """Return a REJECTED outcome if a connected LIVE account is not
+        owner-authorized for live trading, else None. Shared by every real
+        ``order_send`` path (execute_order, close_position) so the live-trading
+        gate is enforced uniformly — never just on one method."""
+        if self.is_demo_account():
+            return None
+        from cas_forex import runtime_gates
+
+        try:
+            runtime_gates.require_authorized("live_trading", config)
+        except PermissionError as exc:
+            return OrderOutcome(
+                order_ref=order_ref,
+                status=OrderStatus.REJECTED,
+                error_message=f"Live-trading gate not authorized: {exc}",
+                timestamp=utc_now(),
+                broker_mode=self._broker_mode(),
+                is_real_broker=False,
+                server=self.server,
+                account_id_hash=self._account_id_hash(),
+            )
+        return None
 
     def get_account_info(self) -> Dict[str, float]:
         """Get current account state from MT5."""
@@ -190,6 +244,15 @@ class MT5Bridge(BrokerBridge):
                 )
             # Paper trading: simulate execution
             return self._simulate_execution(order)
+
+        # Real-money guard AT THE BRIDGE: a connected LIVE (non-demo) account
+        # fills real-money orders via order_send. Require the owner live-trading
+        # gate here so a direct caller (one not routed through the execution
+        # guard) still cannot place a real order without authorization. Demo
+        # accounts are paper and pass through.
+        gate_block = self._live_gate_block(order.order_id)
+        if gate_block is not None:
+            return gate_block
 
         try:
             request = self._build_mt5_request(order)
@@ -286,8 +349,15 @@ class MT5Bridge(BrokerBridge):
             )
 
     def close_position(self, ticket: int, volume: Optional[float] = None) -> bool:
-        """Close a position by ticket number."""
+        """Close a position by ticket number.
+
+        A close is a real ``order_send``, so it is gated the same way as
+        ``execute_order``: on a connected LIVE (non-demo) account the owner
+        live-trading gate must be authorized, else the close is refused.
+        """
         if not self.is_connected():
+            return False
+        if self._live_gate_block() is not None:
             return False
         try:
             # Get position to determine close direction

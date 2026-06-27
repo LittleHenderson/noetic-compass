@@ -226,6 +226,29 @@ def test_bridge_exception_becomes_dispatch_error():
     assert "broker socket closed" in result.reason
 
 
+def test_dispatch_works_through_mt4_mailbox_bridge(monkeypatch, tmp_path):
+    # The gated dispatch loop is broker-agnostic: it drives the MT4 EA mailbox
+    # bridge too. MT4 is paper/demo-only here, so the order is written as a paper
+    # command intent (PAPER_MT4) and returns PENDING (its own report bucket).
+    from cas_forex.broker.mt5_bridge import MT4EABridge
+    from cas_forex.config import config as global_config
+
+    mailbox = str(tmp_path / "mt4")
+    monkeypatch.setattr(global_config, "mt4_enabled", True)
+    monkeypatch.setattr(global_config, "paper_trading", True)
+    monkeypatch.setattr(global_config, "live_mode", False)
+    monkeypatch.setattr(global_config, "mt4_mailbox_dir", mailbox)
+
+    bridge = MT4EABridge(mailbox_dir=mailbox)
+    result = dispatch_intent(_intent(), bridge, config=_cfg())
+
+    assert result.dispatched_to_bridge is True
+    assert result.status == "BROKER_PENDING"
+    assert result.outcome.broker_mode.value == "PAPER_MT4"
+    # MT4 mailbox is paper -> the live gate is not required to dispatch.
+    assert bridge.will_execute_real_order() is False
+
+
 def test_batch_report_counts_and_mode():
     bridge = SimulatedBrokerBridge()
     intents = [

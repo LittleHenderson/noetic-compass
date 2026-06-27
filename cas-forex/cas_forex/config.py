@@ -159,6 +159,32 @@ class ForexConfig:
     mt4_enabled: bool = _env_bool("MT4_ENABLED", False)
     mt4_mailbox_dir: Optional[str] = _env("MT4_MAILBOX_DIR") or None
 
+    # ---- Broker platform selection + loosen controls (owner-tunable) ----
+    # broker_platform: which bridge the dispatch loop uses.
+    #   "auto" (pick MT4 mailbox / MT5 / simulator by config), "mt5", "mt4",
+    #   or "simulated". The owner chooses the platform here.
+    broker_platform: str = _env("BROKER_PLATFORM", "auto")
+    # Paper/simulator execution tolerances. These are the "loosen" knobs: raise
+    # the spread/slippage/lot ceilings or lower the min-stop to make the paper
+    # broker accept more orders. They default to the strict simulator defaults
+    # and affect paper/simulated execution only.
+    broker_max_spread_pips: float = _env_float("BROKER_MAX_SPREAD_PIPS", 5.0)
+    broker_max_slippage_pips: float = _env_float("BROKER_MAX_SLIPPAGE_PIPS", 3.0)
+    broker_min_lot: float = _env_float("BROKER_MIN_LOT", 0.01)
+    broker_max_lot: float = _env_float("BROKER_MAX_LOT", 1.0)
+    broker_min_stop_distance_pips: float = _env_float("BROKER_MIN_STOP_DISTANCE_PIPS", 5.0)
+    # Owner override: explicitly declare the connected MT5 account is paper/demo.
+    # This LOOSENS the live-trading bridge gate (a connected account is then
+    # treated as paper, so order_send is allowed without owner live-trading
+    # authorization). Env-only and OFF by default: set it only if you have
+    # deliberately pointed the terminal at a demo/paper account.
+    mt5_treat_account_as_demo: bool = _env_bool("MT5_TREAT_ACCOUNT_AS_DEMO", False)
+    # Optional hard ceiling on a single deposit/withdraw/payout (USD). None = no
+    # cap. Enforced before any payment provider is called.
+    movement_max_usd: Optional[float] = (
+        float(_env("MOVEMENT_MAX_USD")) if _env("MOVEMENT_MAX_USD") else None
+    )
+
     # ---- Symbols ----
     trading_symbols: list = field(default_factory=lambda: [
         "EUR/USD", "GBP/USD", "USD/JPY", "AUD/USD", "USD/CAD"

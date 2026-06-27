@@ -16,6 +16,7 @@ from cas_forex.account_ledger import (
 )
 from cas_forex.money_movement import (
     STATUS_BLOCKED,
+    STATUS_FAILED,
     STATUS_REJECTED,
     STATUS_RETAINED,
     STATUS_SETTLED,
@@ -141,6 +142,43 @@ def test_payout_defaults_to_allowlisted_destination():
     result = engine.payout(150.0)
     assert result.status == STATUS_SETTLED
     assert result.ledger_event.event_type == "payout"
+
+
+def test_withdraw_to_non_allowlisted_destination_is_rejected():
+    # MM-1 regression: WITHDRAWAL is an outflow, so it binds to the owner's
+    # allowlisted destination too — not just PAYOUT.
+    class _ExplodingProvider(SimulatedPaymentProvider):
+        def withdraw(self, amount_usd, *, destination_id, kind):  # noqa: ANN001
+            raise AssertionError("provider must not be called for a bad destination")
+
+    engine = MovementEngine(provider=_ExplodingProvider(), config=_authorized_cfg())
+    result = engine.withdraw(200.0, destination_id="some-other-account")
+    assert result.status == STATUS_REJECTED
+    assert "allowlisted" in result.reason
+    assert result.provider_receipt is None
+
+
+def test_amount_cap_rejects_over_limit_transfer():
+    cfg = _authorized_cfg()
+    cfg.movement_max_usd = 100.0
+    engine = MovementEngine(config=cfg)
+    result = engine.deposit(500.0, source_id="prefunded")
+    assert result.status == STATUS_REJECTED
+    assert "cap" in result.reason
+    assert result.provider_receipt is None
+
+
+def test_provider_error_becomes_failed_not_exception():
+    # MM-2 regression: a provider that raises (e.g. SDK missing) yields a clean
+    # FAILED result, never an exception out of the engine.
+    class _BrokenProvider(SimulatedPaymentProvider):
+        def deposit(self, amount_usd, *, source_id):  # noqa: ANN001
+            raise RuntimeError("stripe SDK not installed")
+
+    engine = MovementEngine(provider=_BrokenProvider(), config=_authorized_cfg())
+    result = engine.deposit(100.0)
+    assert result.status == STATUS_FAILED
+    assert "provider error" in result.reason
 
 
 # -- reinvest split -----------------------------------------------------------

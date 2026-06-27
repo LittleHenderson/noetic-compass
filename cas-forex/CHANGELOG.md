@@ -1,5 +1,96 @@
 # CAS Forex - Changelog
 
+## 2026-06-27 - Broker control (choose MT4/MT5 + loosen) + adversarial-review fixes
+
+Owner gets two broker abilities — pick the platform and loosen the paper limits —
+and the security review of the prior round's hardening/API caught a real
+fail-open I introduced, now fixed. Full suite: 1114 passed.
+
+### Owner broker control (`cas_forex/broker_control.py`)
+
+- CHOOSE the platform the gated dispatch loop trades through:
+  `broker_platform` ∈ `auto | mt5 | mt4 | simulated`. `select_bridge()` honors
+  it; the dispatch loop now uses it instead of the auto-only `get_bridge()`.
+- LOOSEN the paper/simulator execution tolerances (`max_spread_pips`,
+  `max_slippage_pips`, `min_lot`, `max_lot`, `min_stop_distance_pips`) so the
+  paper broker accepts more orders. Verified: a tight-stop order rejected by the
+  strict sim executes once loosened.
+- Runtime-overridable via `POST /api/forex/broker-control/update` (+ `GET
+  /state`, `POST /reset`); persistent via env. The real-money loosen
+  (`mt5_treat_account_as_demo`) and the per-transfer cap (`movement_max_usd`)
+  are env-only — deliberately NOT settable from the runtime API.
+
+### Adversarial-review fixes (5 confirmed findings)
+
+- **is_demo_account fail-open (high):** the demo-detection substring fallback
+  (`"demo" in server/company`) could flip a genuine LIVE account to demo and
+  skip the live gate — broker/operator-controlled strings, not safety inputs.
+  Now ONLY a positive `trade_mode == ACCOUNT_TRADE_MODE_DEMO` match confirms
+  demo (fail-closed to live); the substring path is gone. The owner can still
+  explicitly declare paper via `mt5_treat_account_as_demo`.
+- **close_position ungated (low):** a position close is a real `order_send`;
+  it now goes through the same live-trading gate as `execute_order` (shared
+  `_live_gate_block`).
+- **MM-1 withdraw exposure (high):** WITHDRAWAL is an outflow, so it now binds
+  to the owner-allowlisted destination (like PAYOUT); added an optional
+  per-transfer USD cap (`movement_max_usd`); money POSTs now require an explicit
+  `?confirm=true` when the capability is owner-authorized (second layer beyond
+  the gate).
+- **MM-2 provider error (low):** a misconfigured/unavailable payment provider
+  becomes a clean `FAILED` result instead of a 500.
+
+### MT4
+
+The dispatch loop already drives MT4 (verified last round). `broker_platform=mt4`
+now selects the MT4 mailbox bridge explicitly; MT4 stays paper/demo-only.
+
+Tests: +21 (broker-control unit + route, demo-substring regression, owner
+loosen override, close-position gate, withdraw allowlist + cap + provider-error,
+authorized payout confirm flow).
+
+## 2026-06-26 - API surface + MT5 bridge live-gate hardening (+ MT4 verified)
+
+Exposed both engines over the FastAPI gateway, hardened the MT5 bridge so a
+connected live account can't fill orders without owner authorization, and
+confirmed the gated dispatch loop works on the MT4 front. Full suite: 1092 passed.
+
+### MT5 bridge hardening (root-cause fix for GB-1)
+
+The earlier fix patched the dispatch-loop chokepoint; this closes the root in
+shared broker infra so DIRECT callers (e.g. the MT5 demo verifier lane) are also
+fail-closed.
+
+- `MT5Bridge.is_demo_account()` — best-effort demo detection (trade_mode /
+  server / company), fail-closed (unconfirmable → treated as live).
+- `MT5Bridge.execute_order` now requires `runtime_gates.require_authorized
+  ("live_trading")` before `order_send` whenever the connected account is NOT a
+  confirmed demo account — so a connected LIVE account returns REJECTED without
+  ever sending, regardless of `config.live_mode`. A connected DEMO account stays
+  paper (no gate).
+- `will_execute_real_order()` = `is_connected() and not is_demo_account()`, so
+  the execution guard and the bridge agree on what counts as real.
+
+### API surface
+
+- `api/routes/order_dispatch.py` (`/api/forex/order-dispatch`): `GET /latest`
+  (most recent gated dispatch cycle, read-only), `POST /run` (run one now —
+  real signals → overseer → gate → configured bridge; paper-first).
+- `api/routes/money_movement.py` (`/api/forex/money-movement`): `GET /gates`
+  (deposit / bank-card / payout gate status + what's missing), `POST /deposit
+  /withdraw /payout /reinvest-split` via `MovementEngine.from_config`. Each runs
+  the capability gate first; default config → every POST returns BLOCKED with
+  the missing requirements and moves no money.
+
+### MT4
+
+Confirmed the gated dispatch loop is broker-agnostic and drives the MT4 EA
+mailbox bridge (`MT4EABridge`): a dispatched order is written as a `PAPER_MT4`
+command intent and returns `PENDING`. MT4 is paper/demo-only by construction
+(the EA bridge refuses live mode).
+
+Tests: +11 (bridge live-gate regression, MT4 mailbox dispatch, 2 order-dispatch
+route, 5 money-movement route).
+
 ## 2026-06-26 - Agent-signal dispatch + Stripe provider + adversarial-review fixes
 
 Wired the agent cycle's real signals into the gated dispatch loop, added a live

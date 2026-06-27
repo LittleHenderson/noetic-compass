@@ -439,11 +439,13 @@ class MovementEngine:
                 missing_requirements=tuple(gate.missing_requirements),
             )
 
-        # 1b. Payout destination must match the owner's allowlisted destination.
-        # The gate only confirms that AN allowlisted destination is configured,
-        # not that THIS payout targets it — bind/validate here, fail-closed, so
-        # an authorized payout can never be redirected to an arbitrary account.
-        if kind == MovementKind.PAYOUT:
+        # 1b. Outflow destination must match the owner's allowlisted destination.
+        # Both PAYOUT and WITHDRAWAL move money OUT of the account, so both bind
+        # to the owner-allowlisted destination (payout_destination_id) when one
+        # is configured. The gate only confirms an allowlisted destination
+        # exists for payout; this confirms THIS transfer targets it — so an
+        # authorized outflow can never be redirected to an arbitrary account.
+        if kind in {MovementKind.PAYOUT, MovementKind.WITHDRAWAL}:
             allowed = getattr(self._cfg(), "payout_destination_id", None)
             destination_id = destination_id if destination_id is not None else allowed
             if allowed is not None and destination_id != allowed:
@@ -454,17 +456,42 @@ class MovementEngine:
                     capability=capability,
                     authorized=True,
                     reason=(
-                        "requested payout destination does not match the "
-                        "owner-allowlisted payout destination"
+                        f"requested {kind.value} destination does not match the "
+                        "owner-allowlisted destination"
                     ),
                 )
 
-        # 2. Authorized — run the provider.
-        if kind == MovementKind.DEPOSIT:
-            receipt = self.provider.deposit(amount, source_id=source_id)
-        else:
-            receipt = self.provider.withdraw(
-                amount, destination_id=destination_id, kind=kind
+        # 1c. Hard per-transfer amount ceiling (owner-set; None = no cap),
+        # enforced before any provider is touched.
+        cap = getattr(self._cfg(), "movement_max_usd", None)
+        if cap is not None and amount > float(cap):
+            return MovementResult(
+                kind=kind.value,
+                status=STATUS_REJECTED,
+                requested_amount_usd=money(amount),
+                capability=capability,
+                authorized=True,
+                reason=f"amount {money(amount)} exceeds the per-transfer cap of {money(float(cap))}",
+            )
+
+        # 2. Authorized — run the provider. A provider that is misconfigured or
+        # unavailable (e.g. a real provider whose SDK is missing) becomes a clean
+        # FAILED result rather than an exception escaping the engine.
+        try:
+            if kind == MovementKind.DEPOSIT:
+                receipt = self.provider.deposit(amount, source_id=source_id)
+            else:
+                receipt = self.provider.withdraw(
+                    amount, destination_id=destination_id, kind=kind
+                )
+        except Exception as exc:  # provider unavailable / network / SDK error
+            return MovementResult(
+                kind=kind.value,
+                status=STATUS_FAILED,
+                requested_amount_usd=money(amount),
+                capability=capability,
+                authorized=True,
+                reason=f"payment provider error: {exc}",
             )
 
         if receipt.status != STATUS_SETTLED:

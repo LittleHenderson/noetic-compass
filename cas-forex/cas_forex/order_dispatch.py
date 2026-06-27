@@ -439,9 +439,10 @@ def dispatch_intents(
     """
     config = _resolve_config(config)
     if bridge is None:
-        from cas_forex.broker.mt5_bridge import get_bridge
+        # Honor the owner's platform choice + loosen settings.
+        from cas_forex.broker_control import select_bridge
 
-        bridge = get_bridge()
+        bridge = select_bridge(config)
 
     results = [
         dispatch_intent(

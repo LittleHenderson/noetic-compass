@@ -156,9 +156,10 @@ def dispatch_route_intents(
     so every intent is represented in the report.
     """
     if bridge is None:
-        from cas_forex.broker.mt5_bridge import get_bridge
+        # Honor the owner's platform choice + loosen settings.
+        from cas_forex.broker_control import select_bridge
 
-        bridge = get_bridge()
+        bridge = select_bridge(config)
 
     # Pair intents with decisions POSITIONALLY (1:1, in order) — the same way the
     # canonical run_agent_workflow_cycle does (agent_state.py) and the order in
