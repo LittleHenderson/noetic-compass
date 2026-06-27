@@ -33,6 +33,22 @@ class MarketDataConnector(ABC):
         ...
 
 
+def _yf_period_for_interval(yf_interval: str) -> str:
+    """A valid Yahoo `period` that covers a useful window for each interval.
+
+    Yahoo only accepts named periods (1d/5d/1mo/3mo/...) and caps intraday
+    history: 1m up to 7d, other intraday up to 60d, hourly up to ~730d.
+    """
+    return {
+        "1m": "5d",
+        "5m": "1mo",
+        "15m": "1mo",
+        "30m": "1mo",
+        "1h": "3mo",
+        "1d": "2y",
+    }.get(yf_interval, "1mo")
+
+
 class YFinanceConnector(MarketDataConnector):
     """Free market data via Yahoo Finance. No API key required."""
 
@@ -80,7 +96,10 @@ class YFinanceConnector(MarketDataConnector):
             import yfinance as yf
             ticker = yf.Ticker(ticker_str)
             yf_tf = self.TIMEFRAME_MAP.get(timeframe, "5m")
-            df = ticker.history(period=f"{bars * 5}m", interval=yf_tf)
+            # Yahoo requires a named period (1d/5d/1mo/...), NOT "<minutes>m", and
+            # caps intraday history (1m<=7d, intraday<=60d). Pick a valid window
+            # that comfortably covers `bars`, then take the last `bars` rows.
+            df = ticker.history(period=_yf_period_for_interval(yf_tf), interval=yf_tf)
             if df is None or df.empty:
                 return []
             candles = []
