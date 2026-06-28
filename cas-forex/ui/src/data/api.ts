@@ -189,6 +189,104 @@ export async function resetRiskControl(): Promise<RiskControlState> {
   return apiPost<RiskControlState>("/risk-control/reset");
 }
 
+// ── Owner proof control (advance the proof in-app + profitability thresholds) ──
+
+export interface ProofControlState {
+  report_kind?: string;
+  proof: {
+    required_trading_days: number;
+    completed_trading_days: number;
+    broker_verified_days: number;
+    net_pnl_usd: number;
+    max_drawdown_pct: number;
+    days_with_trades: number;
+    min_trade_days_required: number;
+    profit_passed: boolean;
+    passed: boolean;
+    failure_reasons: string[];
+  };
+  thresholds: {
+    require_net_positive: boolean;
+    min_net_pnl_usd: number;
+    max_drawdown_pct: number;
+    min_trade_days_fraction: number;
+    seed_capital_usd: number;
+    overridden_fields?: string[];
+    note?: string;
+  };
+  auto_runner: {
+    running: boolean;
+    check_interval_seconds: number;
+    last_check_iso: string | null;
+    last_run_iso: string | null;
+    last_recorded_date: string | null;
+    last_status: string | null;
+    last_detail: string | null;
+    last_error: string | null;
+    days_recorded_this_session: number;
+    note?: string;
+  };
+  run_result?: {
+    status: string;
+    date?: string;
+    detail?: string;
+    reasons?: string[];
+  };
+  error?: string;
+  claim_boundary?: string;
+}
+
+export type ProofThresholdPatch = Partial<{
+  require_net_positive: boolean;
+  min_net_pnl_usd: number;
+  max_drawdown_pct: number;
+  min_trade_days_fraction: number;
+  seed_capital_usd: number;
+}>;
+
+export async function fetchProofControl(): Promise<ProofControlState | null> {
+  try {
+    return await apiGet<ProofControlState>("/proof-control/state");
+  } catch {
+    return null;
+  }
+}
+
+// Recording a proof day reads the demo broker terminal, which can be slow; give
+// it a generous timeout rather than the shared 8s POST helper.
+export async function runProofDayNow(): Promise<ProofControlState> {
+  const res = await fetch(`${getApiBase()}/proof-control/run-now`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    signal: AbortSignal.timeout(90_000),
+  });
+  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
+  return (await res.json()) as ProofControlState;
+}
+
+export async function startProofAutoRunner(
+  checkIntervalSeconds = 1800,
+): Promise<ProofControlState> {
+  return apiPostJson<ProofControlState, { check_interval_seconds: number }>(
+    "/proof-control/auto/start",
+    { check_interval_seconds: checkIntervalSeconds },
+  );
+}
+
+export async function stopProofAutoRunner(): Promise<ProofControlState> {
+  return apiPost<ProofControlState>("/proof-control/auto/stop");
+}
+
+export async function updateProofThresholds(
+  patch: ProofThresholdPatch,
+): Promise<ProofControlState> {
+  return apiPostJson<ProofControlState, ProofThresholdPatch>("/proof-control/thresholds", patch);
+}
+
+export async function resetProofThresholds(): Promise<ProofControlState> {
+  return apiPost<ProofControlState>("/proof-control/thresholds/reset");
+}
+
 // ── Owner live-enable control (turn the live-trading gate flags ON in-app) ──
 
 export type LiveEnableKey =
