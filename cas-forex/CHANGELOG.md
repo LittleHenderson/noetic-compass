@@ -1,6 +1,35 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28.md` first.** It has full session context: what shipped (in-app authorization toggles, Trading Windows terminal, paper Auto-Trade Loop, MT5 live-account read), the MT5-IPC instability conclusion (don't re-chase it), pending tasks (start the paper loop, gate-status accuracy = task #10, MT4 EA mailbox route), and working-tree landmines.
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART2.md` first** (then Part 1 for background). The "live & profitable" finish line shipped: the 30-day proof now MEASURES PROFIT (net-positive + drawdown ≤ 8% + real trades), advances in-app (Record-today button + daily auto-runner, no CLI), routes real orders through the stable MT4 EA mailbox (round-trip fixed), and every live/authority status reads honest owner-flag sources. Honest caveats: index-TSMOM-126 has no proven edge yet, and 27 real trading days still have to elapse — code can't shortcut that.
+
+## 2026-06-28 — "Live & profitable" finish line (profit-measured proof, in-app advance, MT4 route, honest status)
+
+- **The 30-day proof now measures profit** (`3167fb60`). `summarize_paper_proof.passed`
+  also requires net-positive realized P&L + max drawdown ≤ limit (default 8%, the
+  plan's gate) + real trades on most days — before, a proof of 30 zero-trade or
+  losing days would have PASSED. MT5 demo receipt sums realized P&L
+  (profit+commission+swap+fee) into `realized_pnl`, carried through the receipt →
+  daily summary. New `cas_forex/proof_control.py` = owner-adjustable thresholds.
+  Anti-gaming: only broker-verified days count; a plan-only ledger can never pass.
+- **The proof advances from inside the app** (`eed98c9e`, `900b5da0`, `a61ff4cc`).
+  `cas_forex/proof_runner.py` = owner-controlled daily auto-runner + `run_proof_day_now()`
+  manual path (paper-only, idempotent, retries if the demo terminal is down).
+  `POST /api/forex/proof-control/{run-now,auto/start,auto/stop,thresholds}`. Proof page
+  gains a **Proof Control** panel: profit metrics, the honest "what's left", a
+  **Record today's proof day** button, the **daily auto-runner** toggle, and tunable
+  thresholds. Removed the CLI instruction from the owner's next-action.
+- **MT4 EA mailbox as the stable in-app real-order route** (`78319cea`). New
+  `cas_forex/mt4_control.py` (enable + mailbox folder + EA heartbeat). **Fixed the
+  round-trip**: `MT4EABridge.execute_order` now writes the EA-readable
+  `commands/<id>.json` (the EA never saw dispatched orders before). Settings "MT4
+  Bridge — Stable File Route" panel: on/off, mailbox folder, EA link
+  (LIVE/STALE/NO_HEARTBEAT), one-tap "Use MT4 for dispatch".
+- **Honest live/authority status** (`f84cad78`). ModeBanner (every page) + Settings
+  Owner-Control / Broker-Config / Legal-Gates now read live owner-flag sources
+  (authorityBoundary, live-enable, broker-control, proof readiness, MT4 link) instead
+  of hardcoded "PAPER_MT5 / live_mode=false / Broker Health: DISCONNECTED / 1/30".
+  A connected DEMO never licenses live (status is owner-flag driven, not the MT5 IPC).
+- Suite green: **1177 passed**; UI tsc clean.
 
 
 ## 2026-06-27 — Auto-Trade Loop: owner-set interval + symbol/session targeting; market status
