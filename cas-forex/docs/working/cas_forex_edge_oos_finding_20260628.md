@@ -3,23 +3,28 @@
 ## Verdict: NO EDGE
 
 A leak-free, out-of-sample test of regime-switching on 5 years of real daily data
-(US30, NAS100, EUR/USD, GBP/USD, USD/JPY, AUD/USD, USD/CAD) shows **no demonstrable
-edge** from detecting the market regime and switching strategies.
+(US30, NAS100, EUR/USD, GBP/USD, USD/JPY, AUD/USD, USD/CAD; 40 OOS windows, ~736
+trades) shows **no demonstrable edge** from detecting the market regime and
+switching strategies. Verdict: **NO_EDGE at every cost (1.0 / 2.0 / 3.0 points).**
 
-| metric (40 OOS windows, 736 trades, 2.0pt all-in cost) | value |
-|---|---|
-| SWITCH total OOS return | **+40.2%** |
-| best single strategy (chosen on train) | +20.5% |
-| **random-routing null** (shuffle regime→strategy) | **+42.3%** |
-| SWITCH beats the random null, per window | **2%** |
-| SWITCH positive-window rate | 55% |
-| SWITCH max drawdown | 16.7% |
+| metric (cost sweep, 40 OOS windows) | 1.0p | 2.0p | 3.0p |
+|---|---|---|---|
+| SWITCH total OOS return | −2.7% | −2.7% | −2.7% |
+| best single (chosen on train) | −6.1% | −6.2% | −6.2% |
+| **random-routing null** | **−1.2%** | **−1.2%** | **−1.2%** |
+| SWITCH beats the null, per window | **0%** | **0%** | **0%** |
+| SWITCH positive-window rate | 20% | 20% | 20% |
 
-The headline `+40%` is **beta, not alpha**: a *random* assignment of strategies to
-regimes does just as well (+42%) and beats the "smart" switch in 98% of windows.
-The regime detector and its routing add no value over chance. The positive number
-is simply from being long-biased instruments during a 2021–2026 up-period, not from
-the switching logic.
+**The core finding (robust): SWITCH never beats a random assignment of strategies
+to regimes** — 0% of windows across all costs. The regime detector and its routing
+add no value over chance.
+
+A second, separate run on a *refetched* copy of the same "5y daily" data printed
+SWITCH **+40%** (vs null +42%, still beaten in 98% of windows). The total return
+flipping sign just from re-fetching the data is itself a no-edge signal — a real
+edge is stable to a few bars of noise; this number is pure beta/path-noise. The
+SWITCH-vs-null skill comparison, by contrast, is null-or-worse in every run. (For
+a publishable claim the data must be frozen once; the verdict does not change.)
 
 ## Why this is the right answer, not a failure
 
