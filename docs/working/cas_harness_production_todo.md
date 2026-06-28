@@ -1,4 +1,4 @@
-# CAS Harness Production TODO
+﻿# CAS Harness Production TODO
 
 Canonical file:
 `C:\Users\wakil\OneDrive\Desktop\tksCAS\docs\working\cas_harness_production_todo.md`
@@ -17,9 +17,2010 @@ Plain-English mandate: this file is the project dashboard. Check the dashboard b
 
 ## Current Plain-English State
 
+2026-06-24 (phase 2) CAS Forex MT5 process guard implemented and tested.
+`cas-forex\cas_forex\mt5_process_guard.py` wraps MT5 calls in a
+timeout-guarded subprocess so a hung MT5 terminal cannot block the agent
+loop. Five worker operations: `execute_demo_order`, `get_deal_history`,
+`get_account_snapshot`, `get_open_positions`, `close_position`. Integrated
+into `agent_state.py` via `mt5_use_process_guard` +
+`mt5_guard_timeout_seconds` params; falls through to existing direct MT5 path
+when guard is off. CLI flags added to `run_agent_workflow_queue.py`. 14 new
+tests in `test_mt5_process_guard.py`. Also implemented CAS Forex Bot
+(`cas-forex\cas_forex\cas_forex_bot.py`): 31 capabilities across 7 action
+groups, menu-driven, confirmation gates, command transparency. Entry point:
+`py -3.12 scripts/run_cas_forex_bot.py`. Full test suite: `494 passed` (14
+new guard tests, zero regressions). Next action: rerun scheduled MT5 demo
+cycle against real Hugosway terminal with guard enabled.
+
+2026-06-24 CAS Forex scheduled/autowake agent MT5 demo loop is now
+implemented and regression-verified, but not yet real-terminal verified through
+the scheduled path. The missing bridge from `session_autowake ->
+run_agent_workflow_cycle -> MT5 demo execution -> MT5 deal-history ingest ->
+agent memory` was implemented in `cas-forex\cas_forex\agent_state.py`,
+`cas-forex\cas_forex\mt5_paper_execution_verifier.py`,
+`cas-forex\cas_forex\agent_message_bus.py`,
+`cas-forex\cas_forex\session_autowake_runner.py`,
+`cas-forex\scripts\run_agent_workflow_queue.py`,
+`cas-forex\scripts\run_session_autowake_runner.py`, `cas-forex\api\data.py`,
+and the Optimizer UI/types/fixtures. New explicit terminal lanes:
+`PAPER_MT4_MAILBOX` and `PAPER_MT5_DEMO`. The MT5 lane now consumes the
+approved scheduled `RouteIntent.order_request`, emits an MT5 receipt with
+`cycle_id`, `intent_id`, `command_id`, `broker_ticket`, hashes, execution and
+close status, runs MT5 deal-history ingest by ticket, refreshes memory, and
+appends `NEXT_CYCLE_ALLOWED` after closed deal-history joins memory. MT5 cycles
+now use `agent-events-mt5-demo.jsonl` so stale MT4 mailbox pending rows do not
+block the MT5 demo lane. Regression proof:
+`cas-forex\tests\test_agent_workflow_cycle.py` now proves a fake MT5 terminal
+executes, closes, returns two deal-history rows, joins memory by
+`broker_ticket`, reports net P/L `-0.13`, and emits `NEXT_CYCLE_ALLOWED`.
+Verification: focused linked-loop suite `19 passed`; full CAS Forex suite
+`480 passed`; `cd ui && npm run build` passed with `51` modules, `532.25 KB`
+JS / `129.48 KB` gzip. Real-terminal note: scheduled MT5 attempt
+`cas-forex\evidence_runs\agent_workflow_queue\agent-workflow-cycle-20260624165947-report.json`
+did not send an MT5 order because the old shared event journal had `28` stale
+pending MT4 receipt rows. After the event-journal split, a real scheduled MT5
+cycle was attempted against
+`C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe`, but the
+MT5/Python call did not finish within `120` seconds and the exact
+`run_agent_workflow_queue.py` processes were stopped; no successful real
+scheduled-agent MT5 order is claimed from that timed-out attempt. Fresh
+non-executing MT5-lane cockpit report after the event-journal split:
+`cas-forex\evidence_runs\agent_workflow_queue\agent-workflow-cycle-20260624171015-report.json`;
+it uses `agent-events-mt5-demo.jsonl`, has `approved_intent_count=1`,
+`terminal_command_count=0`, and `pending_receipt_count=0`, proving the cockpit
+now sees the MT5 lane without inheriting stale MT4 pending rows. Next
+software/evidence target: add a process-level MT5 watchdog/worker wrapper so
+real scheduled/autowake MT5 cycles cannot hang the agent loop, then rerun the
+scheduled MT5 demo cycle against Hugosway-Demo and refresh terminal
+operability from that scheduled-cycle evidence. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT5 closed-deal history ingest is now implemented,
+surfaced, and verified against the real local Hugosway-Demo MT5 account for
+the explicitly confirmed demo verifier trade. Latest MT5 deal-history evidence:
+`cas-forex\evidence_runs\mt5_deal_history_ingest\mt5-deal-history-ingest-20260624162919-report.json`
+and `.md`. Latest terminal-history export:
+`cas-forex\evidence_runs\terminal_history_exports\mt5-deal-history-ticket-45938644-20260624162919.json`.
+Latest terminal-history ingest:
+`cas-forex\evidence_runs\terminal_history_ingest\terminal-history-ingest-20260624162919-report.json`.
+Latest refreshed agent memory:
+`cas-forex\evidence_runs\agent_memory\agent-memory-20260624162936-report.json`.
+Latest strategy-dev queue:
+`cas-forex\evidence_runs\strategy_dev_queue\strategy-dev-queue-20260624162945-report.json`.
+Latest daily learning rollup:
+`cas-forex\evidence_runs\daily_learning_rollup\daily-learning-rollup-20260624162946-report.json`.
+Latest terminal operability:
+`cas-forex\evidence_runs\terminal_operability_verifier\terminal-operability-verifier-20260624162936-report.json`.
+Latest agent information-flow map:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624163510-report.json`.
+Current verified MT5 closed-deal state: server `Hugosway-Demo`; ticket /
+position id `45938644`; symbol `EUR/USD`; volume `0.01`; raw MT5 history
+deals `2`; closed positions exported `1`; memory updates `1`; unmatched
+history rows `0`; open / close `1.13489 -> 1.13481`; gross trade P/L `-0.08`;
+commission `-0.05`; swap `0.0`; net account P/L `-0.13`; pips `-0.8`; R
+multiple `-0.04`; close reason `MT5_HISTORY_CLOSE:CAS_CLOSE`. Current memory
+summary: `terminal_history_joined_count=1`, `closed_loss_count=1`,
+`net_profit_loss_account=-0.13`. Current strategy-dev queue:
+`closed_loss_memory_count=1`, `demotion_review_count=1`. Current daily rollup:
+`DAILY_LEARNING_HAS_CLOSED_PNL`. Current operability:
+`TERMINAL_OPERABILITY_MT5_DEMO_EXECUTION_VERIFIED`, terminal lane go `true`,
+live order go `false`, broker `ACCEPT` go `false`, money movement go `false`,
+blocking reason `live_trading CURRENTLY NOT LICENSED`. Verification: full CAS
+Forex suite `479 passed`; `cd ui && npm run build` passed with `51` modules,
+`528.95 KB` JS / `128.63 KB` gzip. Next software target: route normal scheduled
+paper/demo agent workflow commands through the proven MT5 execution and
+deal-history learning loop, instead of relying only on the standalone verifier
+trade. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT5 demo execution lane is now verified for one
+explicitly confirmed Hugosway demo order and close cycle. Used the open MT5
+window `1000694 - Hugosway-Demo: Demo Account - Hedge - Hugosway`, turned on
+MT5 `Algo Trading` / `AutoTrading`, reran the MT5 paper execution verifier,
+and captured an executed/closed demo order through `MT5Bridge`. Latest MT5
+paper execution evidence:
+`cas-forex\evidence_runs\mt5_paper_execution_verifier\mt5-paper-execution-verifier-20260624160137-report.json`
+and `.md`. Latest refreshed MT5 terminal API evidence:
+`cas-forex\evidence_runs\mt5_terminal_api_verifier\mt5-terminal-api-verifier-20260624160153-report.json`
+and `.md`. Latest terminal operability evidence:
+`cas-forex\evidence_runs\terminal_operability_verifier\terminal-operability-verifier-20260624160208-report.json`
+and `.md`. Current verified state: terminal `MetaTrader 5`; server
+`Hugosway-Demo`; account balance/equity after close `99999.87 / 99999.87`;
+open positions after close `0`; symbol `EUR/USD`; volume `0.01`; order
+request built `true`; order check status `ORDER_CHECK_OK`; terminal trade
+allowed `true`; demo send attempted `true`; execution status
+`ORDER_EXECUTED`; broker ticket `45938644`; filled price `1.13489`; close
+attempted `true`; close success `true`; raw request hash
+`8bf07bc73705c4dded9ce75184379f10574c5c71a006fbe8731cb680030fa11a`; raw
+response hash
+`ac87b38e2add12e995d63e20f4017bbd5309308bb941b1ccc4740f99ec0d1a34`.
+Current operability summary:
+`TERMINAL_OPERABILITY_MT5_DEMO_EXECUTION_VERIFIED`, terminal lane go `true`,
+live order go `false`, broker `ACCEPT` go `false`, money movement go `false`,
+blocking reason `live_trading CURRENTLY NOT LICENSED`. Verification remains:
+full CAS Forex suite `475 passed`; `cd ui && npm run build` passed with `51`
+modules, `520.06 KB` JS / `126.96 KB` gzip. Next software/evidence target:
+add MT5 closed-history/deal ingestion so the close, P/L, commission, swap, and
+deal records from this demo execution flow into CAS memory, daily learning
+rollup, and strategy evaluation. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex explicitly confirmed MT5 demo-send proof reached the
+local Hugosway MT5 terminal and exposed the current terminal blocker: MT5
+returned retcode `10027`, `AutoTrading disabled by client`. Updated
+`cas-forex\cas_forex\broker\mt5_bridge.py` so real MT5 `OrderSendResult`
+objects without `commission` no longer get mislabeled as Python wrapper
+failures; raw request/response hashes are preserved; retcode `10027` is named
+plainly; and close-position requests use the symbol-supported filling mode.
+Updated `cas-forex\cas_forex\mt5_paper_execution_verifier.py`,
+`cas-forex\cas_forex\terminal_operability_verifier.py`,
+`cas-forex\ui\src\types\evidence.ts`,
+`cas-forex\ui\src\pages\OptimizerPage.tsx`, and
+`cas-forex\ui\src\data\fixtures.ts` so MT5 trading permission, execution
+error, and raw response hash are visible in API/UI evidence. Latest MT5 paper
+execution evidence:
+`cas-forex\evidence_runs\mt5_paper_execution_verifier\mt5-paper-execution-verifier-20260624155515-report.json`
+and `.md`. Latest terminal operability evidence:
+`cas-forex\evidence_runs\terminal_operability_verifier\terminal-operability-verifier-20260624155528-report.json`
+and `.md`. Current verified state: terminal `MetaTrader 5`; server
+`Hugosway-Demo`; account balance/equity `100000.0 / 100000.0`; symbol
+`EUR/USD`; volume `0.01`; order request built `true`; order check status
+`ORDER_CHECK_OK`; demo send attempted `true`; execution status
+`ORDER_REJECTED`; execution error `AutoTrading disabled by client:
+AutoTrading disabled by client`; terminal trade allowed `false`; raw response
+hash `e6682c1c10d49596d71bb26a4ff08d9d886610d6feae671be707ffd7da6132a9`.
+Current operability summary:
+`TERMINAL_OPERABILITY_MT5_AUTOTRADING_DISABLED`, terminal lane go `false`,
+live order go `false`, broker `ACCEPT` go `false`, money movement go `false`.
+Verification: focused MT5 paper execution / operability / pip regression
+suite `26 passed`; full CAS Forex suite `475 passed`; `cd ui && npm run
+build` passed with `51` modules, `520.43 KB` JS / `126.99 KB` gzip. Next
+operator action: turn on Algo Trading / AutoTrading inside the Hugosway MT5
+terminal, confirm the terminal allows trading, rerun `py -3.12
+scripts/run_mt5_paper_execution_verifier.py --mt5-path "C:\Program
+Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe" --symbol EUR/USD
+--volume 0.01 --execute-demo-order --confirm-demo-order --summary-only`, then
+rerun `py -3.12 scripts/run_terminal_operability_verifier.py --summary-only`.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT5 paper execution verifier implemented, surfaced, and
+dry-run verified against the real local Hugosway MT5 demo terminal: added
+`cas-forex\cas_forex\mt5_paper_execution_verifier.py`,
+`cas-forex\scripts\run_mt5_paper_execution_verifier.py`, and
+`cas-forex\tests\test_mt5_paper_execution_verifier.py`; updated
+`cas-forex\cas_forex\broker\mt5_bridge.py` so MT5 order requests use the
+symbol-supported filling mode instead of hardcoded IOC; wired
+`/api/forex/strategy/mt5-paper-execution-verifier/latest`; added dashboard key
+`mt5PaperExecutionVerifier`; extended the Optimizer UI with an MT5 paper
+execution run card/detail panel; and updated terminal operability plus
+agent-information flow to consume `MT5PaperExecutionVerifierPacket`.
+Important broker finding: Hugosway `EUR/USD` rejected IOC with `Unsupported
+filling mode`, but accepted FOK as `type_filling: 0`. Latest MT5 paper
+execution evidence:
+`cas-forex\evidence_runs\mt5_paper_execution_verifier\mt5-paper-execution-verifier-20260624154210-report.json`
+and `.md`. Latest terminal operability evidence:
+`cas-forex\evidence_runs\terminal_operability_verifier\terminal-operability-verifier-20260624154222-report.json`
+and `.md`. Latest agent information-flow evidence:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624154148-report.json`
+and `.md`. Current verified state: terminal `MetaTrader 5`; server
+`Hugosway-Demo`; account balance/equity `100000.0 / 100000.0`; symbol
+`EUR/USD`; volume `0.01`; MT5 request built `true`; order check attempted
+`true`; order check status `ORDER_CHECK_OK`; execution attempted `false`;
+execution status `DRY_RUN_NO_ORDER_SENT`; live mode used `false`. Current
+operability summary:
+`TERMINAL_OPERABILITY_MT5_DRY_RUN_READY_DEMO_SEND_REQUIRED`, terminal lane go
+`false`, live order go `false`, broker `ACCEPT` go `false`, money movement go
+`false`. Verification: focused MT5 paper execution / operability /
+information-flow / pip regression suite `29 passed`; full CAS Forex suite `473
+passed`; `cd ui && npm run build` passed with `51` modules, `518.87 KB` JS /
+`126.78 KB` gzip. Next proof lane: run
+`py -3.12 scripts/run_mt5_paper_execution_verifier.py --mt5-path "C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe" --symbol EUR/USD --volume 0.01 --execute-demo-order --confirm-demo-order --summary-only`
+to capture one explicitly confirmed MT5 demo-order submit/receipt/close path,
+then rerun `py -3.12 scripts/run_terminal_operability_verifier.py
+--summary-only`. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+2026-06-24 CAS Forex MT5 terminal API verifier implemented, verified, and
+surfaced: added `cas-forex\cas_forex\mt5_terminal_api_verifier.py`,
+`cas-forex\scripts\run_mt5_terminal_api_verifier.py`, and
+`cas-forex\tests\test_mt5_terminal_api_verifier.py`; updated
+`cas-forex\cas_forex\broker\mt5_bridge.py` so it loads local `.mt5deps`, uses
+the configured MT5 terminal path, and avoids empty credential kwargs; wired
+`/api/forex/strategy/mt5-terminal-api-verifier/latest`; added dashboard key
+`mt5TerminalApiVerifier`; and extended the Optimizer UI with an MT5 API run
+type, detail panel, and operability summary row. Real local terminal state:
+running `C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe`;
+MT5 package available from `cas-forex\.mt5deps`; terminal `MetaTrader 5`;
+server `Hugosway-Demo`; broker mode `PAPER_MT5`; balance/equity
+`100000.0 / 100000.0`; open positions `0`; open positions reconciled `true`;
+live mode used `false`; MT4 candidate folders `0`; MT5-only terminal folders
+`2`. Latest MT5 verifier evidence:
+`cas-forex\evidence_runs\mt5_terminal_api_verifier\mt5-terminal-api-verifier-20260624150739-report.json`
+and `.md`. Latest appended MT5 demo receipt:
+`cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-mt5-demo-probe-20260624150120.json`.
+Latest terminal operability evidence:
+`cas-forex\evidence_runs\terminal_operability_verifier\terminal-operability-verifier-20260624150902-report.json`
+and `.md`. Current operability summary:
+`TERMINAL_OPERABILITY_MT5_API_VERIFIED_MT4_BRIDGE_MISSING`, terminal lane go
+`false`, live order go `false`, broker `ACCEPT` go `false`, money movement go
+`false`. The software map now includes `MT5TerminalApiVerifierPacket`,
+`/api/forex/strategy/mt5-terminal-api-verifier/latest`, marks
+`cas_forex\mt5_terminal_api_verifier.py` as `COMPLETE_INITIAL`, and moves the
+next code target to `cas_forex\mt5_paper_execution_verifier.py`. Current UI
+maturity file
+`cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-ui-readiness-status.json`
+shows `3` complete broker-verified bundle days out of the `5` required for the
+current UI maturity gate, with dates `2026-06-22`, `2026-06-23`, and
+`2026-06-24`; 30-day proof is still incomplete. Verification: focused
+MT5/information-flow/operability suite `26 passed`; full CAS Forex suite `467
+passed`; `cd ui && npm run build` passed with `51` modules, `509.94 KB` JS /
+`125.11 KB` gzip. Next build lane: implement
+`cas_forex\mt5_paper_execution_verifier.py` to prove a gated MT5 paper/demo
+order lifecycle through `MT5Bridge`, or install/attach MT4 if the EA mailbox
+path is still preferred. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex terminal operability verifier implemented and surfaced:
+added `cas-forex\cas_forex\terminal_operability_verifier.py`,
+`cas-forex\scripts\run_terminal_operability_verifier.py`, and
+`cas-forex\tests\test_terminal_operability_verifier.py`; wired
+`/api/forex/strategy/terminal-operability-verifier/latest`; added dashboard key
+`terminalOperabilityVerifier`; and extended the Optimizer UI with a Terminal
+Operability run type plus a go/no-go panel showing terminal lane, live-order,
+broker `ACCEPT`, money-movement, pending runtime gates, session status,
+history export status, position reconciliation status, heartbeat, account
+snapshot, CAS vs terminal open positions, checks, and next action. Latest
+terminal operability evidence:
+`cas-forex\evidence_runs\terminal_operability_verifier\terminal-operability-verifier-20260624145246-report.json`
+and `.md`. Latest refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624145333-report.json`
+and `.md`. Current operability summary:
+`TERMINAL_OPERABILITY_NEEDS_MT4_TERMINAL`, terminal lane go `false`, live order
+go `false`, broker `ACCEPT` go `false`, money movement go `false`, session
+status `MT4_SESSION_NEEDS_MT4_TERMINAL`, bridge status
+`TERMINAL_BRIDGE_HEARTBEAT_MISSING`, heartbeat status `MISSING`, history
+export status `MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL`, position reconciliation
+status `TERMINAL_POSITION_RECONCILIATION_NEEDS_MT4_TERMINAL`, account snapshot
+present `false`, pending receipts `28`, CAS open positions `28`, terminal open
+positions `0`, reconciled open positions `0`, unmatched open positions `28`,
+and runtime-gate pending capabilities `live_trading`, `broker_accept`,
+`auto_deposit`, `bank_card_movement`, and `payout_automation`. The software map
+now marks `cas_forex\terminal_operability_verifier.py` as `COMPLETE_INITIAL`
+and moves the next must-have evidence file to
+`MQL4\Files\CASForexMailbox\heartbeat.json`. Verification: focused
+operability / information-flow suite `9 passed`; full CAS Forex suite `461
+passed`; `cd ui && npm run build` passed with `51` modules, `501.28 KB` JS /
+`123.38 KB` gzip. Remaining terminal lane: install/open an actual MT4 terminal
+on this machine, identify its data folder, run `py -3.12
+scripts/run_mt4_terminal_session_verifier.py --terminal-data-dir
+"<MT4_DATA_DIR>" --install --wait-seconds 10`, attach
+`CASForexBridgeEA.mq4`, attach `CASForexHistoryExporterEA.mq4`, then rerun
+terminal session, history export, position reconciliation, and terminal
+operability. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+2026-06-24 CAS Forex terminal position reconciliation implemented and surfaced:
+added `cas-forex\cas_forex\terminal_position_reconciliation.py`,
+`cas-forex\scripts\run_terminal_position_reconciliation.py`, and
+`cas-forex\tests\test_terminal_position_reconciliation.py`; wired
+`/api/forex/strategy/terminal-position-reconciliation/latest`; added dashboard
+key `terminalPositionReconciliation`; and extended the Optimizer UI with a
+Position Reconciliation run type and panel showing reconciliation status, CAS
+vs terminal open-position counts, matched/unmatched counts, heartbeat,
+account-snapshot state, pending receipts, receipt mismatches, history joined,
+net P/L, checks, and next action. Latest terminal position reconciliation
+evidence:
+`cas-forex\evidence_runs\terminal_position_reconciliation\terminal-position-reconciliation-20260624143531-report.json`
+and `.md`. Latest refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624143602-report.json`
+and `.md`. Current reconciliation summary:
+`TERMINAL_POSITION_RECONCILIATION_NEEDS_MT4_TERMINAL`, bridge status
+`TERMINAL_BRIDGE_HEARTBEAT_MISSING`, heartbeat status `MISSING`, account
+snapshot present `false`, pending receipts `28`, CAS open positions `28`,
+terminal open positions `0`, reconciled open positions `0`, unmatched open
+positions `28`, history rows `0`, memory updates `0`, and net P/L `0.0`. The
+software map now marks `cas_forex\terminal_position_reconciliation.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`cas_forex\terminal_operability_verifier.py`, which should bundle terminal
+session, heartbeat, receipts, history export, position reconciliation, runtime
+gates, and operator next actions into one go/no-go operability report.
+Verification: focused terminal-position / information-flow / MT4 history
+export suite `13 passed`; full CAS Forex suite `457 passed`; `cd ui && npm run
+build` passed with `51` modules, `491.38 KB` JS / `122.03 KB` gzip. Remaining
+terminal lane: install/open an actual MT4 terminal on this machine, identify
+its data folder, run `py -3.12 scripts/run_mt4_terminal_session_verifier.py
+--terminal-data-dir "<MT4_DATA_DIR>" --install --wait-seconds 10`, attach
+`CASForexBridgeEA.mq4`, attach `CASForexHistoryExporterEA.mq4`, then rerun
+terminal session, history export, receipt ingest, memory, and position
+reconciliation. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+2026-06-24 CAS Forex MT4 history export verifier implemented and surfaced:
+added `cas-forex\cas_forex\mt4_history_export_verifier.py`,
+`cas-forex\scripts\run_mt4_history_export_verifier.py`, and
+`cas-forex\tests\test_mt4_history_export_verifier.py`; wired
+`/api/forex/strategy/mt4-history-export-verifier/latest`; added dashboard key
+`mt4HistoryExportVerifier`; and extended the Optimizer UI with an MT4 History
+Export run type and panel showing verifier status, mailbox path, exporter EA
+source state, history export file state, schema parse status, ingest status,
+memory update count, net P/L total, expected export path, and next operator
+action. Latest MT4 history export verifier evidence:
+`cas-forex\evidence_runs\mt4_history_export_verifier\mt4-history-export-verifier-20260624141540-report.json`
+and `.md`. Latest refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624141555-report.json`
+and `.md`. Current verifier summary:
+`MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL`, EA source present `true`, mailbox
+ready `false`, history export present `false`, history export parse status
+`NO_MAILBOX`, history rows `0`, memory updates `0`, and net P/L `0.0`. The
+software map now marks `cas_forex\mt4_history_export_verifier.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`cas_forex\terminal_position_reconciliation.py`, which should reconcile open
+terminal positions, account snapshots, receipts, history exports, and CAS
+memory so the cockpit knows what the broker terminal is actually holding.
+Verification: focused MT4 verifier/exporter/session/information-flow suite `15
+passed`; full CAS Forex suite `453 passed`; `cd ui && npm run build` passed
+with `51` modules, `482.70 KB` JS / `120.66 KB` gzip. Remaining terminal lane:
+install/open an actual MT4 terminal on this machine, identify its data folder,
+run `py -3.12 scripts/run_mt4_terminal_session_verifier.py
+--terminal-data-dir "<MT4_DATA_DIR>" --install --wait-seconds 10`, attach
+`CASForexBridgeEA.mq4`, attach `CASForexHistoryExporterEA.mq4`, then rerun the
+history export verifier after the terminal produces
+`MQL4\Files\CASForexMailbox\history\cas_forex_closed_history.json`. Live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT4 closed-history exporter EA source implemented:
+added `cas-forex\mt4\Experts\CASForexHistoryExporterEA.mq4` and
+`cas-forex\tests\test_mt4_history_exporter_ea.py`; updated
+`cas-forex\cas_forex\mt4_terminal_session_verifier.py` so an activated MT4
+mailbox automatically adds
+`<MT4_DATA_DIR>\MQL4\Files\CASForexMailbox\history` as a history source; and
+updated the agent information-flow roadmap plus UI fixture so
+`MT4HistoryExporterPacket` is part of the flow. The exporter reads closed MT4
+Account History rows with `OrdersHistoryTotal()` / `OrderSelect(...,
+MODE_HISTORY)`, writes ingestable history JSON to
+`MQL4\Files\CASForexMailbox\history\cas_forex_closed_history.json`, writes
+exporter status separately to `MQL4\Files\CASForexMailbox\status`, includes
+ticket, broker ticket, symbol, direction, lots, open/close times, open/close
+prices, SL/TP, net P/L, commission, swap, magic number, comment, account hash,
+server, and broker mode, and contains no `OrderSend`, `OrderClose`,
+`OrderModify`, or `OrderDelete` execution calls. Latest refreshed
+information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624140031-report.json`;
+latest MT4 session verifier report:
+`cas-forex\evidence_runs\mt4_terminal_session_verifier\mt4-terminal-session-verifier-20260624140047-report.json`.
+Current terminal state remains `MT4_SESSION_NEEDS_MT4_TERMINAL`,
+`MT4_ACTIVATION_NEEDS_MT4_TERMINAL`, and
+`MT4_PING_NEEDS_ACTIVATED_MAILBOX`, with MT4 candidate folders `0` and MT5-only
+folders `2`. The software map now marks
+`mt4\Experts\CASForexHistoryExporterEA.mq4` as
+`SOURCE_READY_NEEDS_TERMINAL_ATTACH` and moves the next code lane to
+`cas_forex\mt4_history_export_verifier.py`, which should verify that an
+attached MT4 terminal actually produced the closed-history export and that
+`terminal_history_ingest` can consume it. Verification: focused exporter /
+ingest / session / information-flow suite `13 passed`; full CAS Forex suite
+`449 passed`; `cd ui && npm run build` passed with `51` modules, `477.07 KB`
+JS / `119.57 KB` gzip. Remaining terminal lane: install/open an actual MT4
+terminal on this machine, identify its data folder, run
+`py -3.12 scripts/run_mt4_terminal_session_verifier.py --terminal-data-dir
+"<MT4_DATA_DIR>" --install --wait-seconds 10`, attach
+`CASForexBridgeEA.mq4`, attach `CASForexHistoryExporterEA.mq4`, then verify
+heartbeat, receipt, and closed-history export output. Live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT4 terminal session verifier implemented and surfaced:
+added `cas-forex\cas_forex\mt4_terminal_session_verifier.py`,
+`cas-forex\scripts\run_mt4_terminal_session_verifier.py`, and
+`cas-forex\tests\test_mt4_terminal_session_verifier.py`; wired
+`/api/forex/strategy/mt4-terminal-session-verifier/latest`; added dashboard key
+`mt4TerminalSessionVerifier`; and extended the Optimizer UI with an MT4 Session
+run type and panel showing activation status, ping status, supervisor/watcher
+status, step count, skipped/failed steps, heartbeat/receipt presence, refresh
+chain completion, and next operator action. Latest MT4 session evidence:
+`cas-forex\evidence_runs\mt4_terminal_session_verifier\mt4-terminal-session-verifier-20260624134013-report.json`
+and `.md`. Current session summary: `MT4_SESSION_NEEDS_MT4_TERMINAL`,
+activation status `MT4_ACTIVATION_NEEDS_MT4_TERMINAL`, ping status
+`MT4_PING_NEEDS_ACTIVATED_MAILBOX`, MT4 candidate folders `0`, MT5-only folders
+`2`, mailbox ready `false`, ping written `false`, heartbeat present `false`,
+receipt present `false`, skipped steps `2`, and next action to install/open MT4,
+identify the terminal data folder with `MQL4\Experts`, then rerun the verifier
+with `--terminal-data-dir` and `--install`. Latest refreshed information-flow
+report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624134619-report.json`;
+the software map now marks `cas_forex\mt4_terminal_session_verifier.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`mt4\Experts\CASForexHistoryExporterEA.mq4`. Verification: focused MT4 session
+/ information-flow suite `9 passed`; `cd ui && npm run build` passed with `51`
+modules, `475.27 KB` JS / `119.21 KB` gzip. Remaining terminal lane:
+install/open an actual MT4 terminal on this machine, identify its data folder,
+run `py -3.12 scripts/run_mt4_terminal_session_verifier.py
+--terminal-data-dir "<MT4_DATA_DIR>" --install --wait-seconds 10`, attach
+`CASForexBridgeEA.mq4` inside MT4, then verify heartbeat/receipt and refresh
+chain execution. Next software lane: build
+`mt4\Experts\CASForexHistoryExporterEA.mq4` so completed MT4 account-history
+rows can be exported into CAS Forex history files and learned by memory/rollup.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT4 ping roundtrip implemented and surfaced:
+added `cas-forex\cas_forex\mt4_ping_roundtrip.py`,
+`cas-forex\scripts\run_mt4_ping_roundtrip.py`, and
+`cas-forex\tests\test_mt4_ping_roundtrip.py`; wired
+`/api/forex/strategy/mt4-ping-roundtrip/latest`; added dashboard key
+`mt4PingRoundtrip`; and extended the Optimizer UI with an MT4 Ping run type and
+panel showing ping-written state, mailbox readiness, heartbeat presence,
+receipt presence/status, request-hash match, visible live flag state, command
+ID, and the next operator action. Latest MT4 ping evidence:
+`cas-forex\evidence_runs\mt4_ping_roundtrip\mt4-ping-roundtrip-20260624122729-report.json`
+and `.md`. Current ping summary: `MT4_PING_NEEDS_ACTIVATED_MAILBOX`,
+activation status `MT4_ACTIVATION_NEEDS_MT4_TERMINAL`, mailbox ready `false`,
+ping written `false`, heartbeat present `false`, receipt present `false`,
+receipt status `null`, and next action to run MT4 terminal activation against a
+real MT4 data folder first because no activated mailbox exists for a ping
+roundtrip yet. Latest refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624123345-report.json`;
+the software map now marks `cas_forex\mt4_ping_roundtrip.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`cas_forex\mt4_terminal_session_verifier.py`. Verification: focused MT4 ping /
+information-flow suite `9 passed`; full CAS Forex suite `443 passed`;
+`$env:VITE_CAS_FOREX_API_BASE='http://127.0.0.1:8810/api/forex'; npm run
+build` passed with `51` modules, `467.70 KB` JS / `118.10 KB` gzip. Fresh
+local smoke: API `http://127.0.0.1:8810/api/forex/health`, ping endpoint
+`http://127.0.0.1:8810/api/forex/strategy/mt4-ping-roundtrip/latest`,
+dashboard `http://127.0.0.1:8810/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5220/?page=optimizer`. Remaining terminal lane: install/open
+an actual MT4 terminal on this machine, identify its data folder, run
+activation with `--install`, attach `CASForexBridgeEA.mq4` inside MT4, then
+rerun `py -3.12 scripts/run_mt4_ping_roundtrip.py --mailbox-dir
+"<MT4_DATA_DIR>\MQL4\Files\CASForexMailbox" --wait-seconds 10`. Next software
+lane: build `cas_forex\mt4_terminal_session_verifier.py` so one operator
+command can run activation, ping, supervisor, watcher, receipt ingest, history
+ingest, memory, rollup, and autowake refresh together. Live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT4 terminal activation implemented and surfaced:
+added `cas-forex\cas_forex\mt4_terminal_activation.py`,
+`cas-forex\scripts\run_mt4_terminal_activation.py`, and
+`cas-forex\tests\test_mt4_terminal_activation.py`; wired
+`/api/forex/strategy/mt4-terminal-activation/latest`; added dashboard key
+`mt4TerminalActivation`; and extended the Optimizer UI with an MT4 Activation
+run type and panel showing terminal candidates, MT4 vs MT5-only folder counts,
+EA source/install/hash state, selected terminal path, mailbox readiness,
+heartbeat presence, mailbox path alignment, exact MT4 attach settings, and the
+next operator action. Latest MT4 activation evidence:
+`cas-forex\evidence_runs\mt4_terminal_activation\mt4-terminal-activation-20260624121406-report.json`
+and `.md`. Current activation summary:
+`MT4_ACTIVATION_NEEDS_MT4_TERMINAL`, EA source present `true`, MT4 candidate
+folders `0`, MT5-only folders `2`, selected terminal `null`, EA installed
+`false`, mailbox ready `false`, heartbeat present `false`, path alignment
+`NO_ACTIVATED_MAILBOX`, and next action to install/open MT4, then rerun
+activation against the MT4 data folder containing `MQL4\Experts`. Latest
+refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624121041-report.json`;
+the software map now marks `cas_forex\mt4_terminal_activation.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`cas_forex\mt4_ping_roundtrip.py`. Verification: focused MT4 activation /
+information-flow suite `10 passed`; full CAS Forex suite `439 passed`; `cd ui
+&& npm run build` passed with `51` modules, `462.34 KB` JS / `117.06 KB` gzip.
+Fresh local smoke: API `http://127.0.0.1:8809/api/forex/health`, activation
+endpoint
+`http://127.0.0.1:8809/api/forex/strategy/mt4-terminal-activation/latest`,
+dashboard `http://127.0.0.1:8809/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5219/?page=optimizer`. Remaining terminal lane: install/open
+an actual MT4 terminal on this machine, find its data folder, rerun
+`py -3.12 scripts/run_mt4_terminal_activation.py --terminal-data-dir
+"<MT4_DATA_DIR>" --install`, attach `CASForexBridgeEA.mq4` inside MT4 with
+`MailboxRoot=CASForexMailbox`, `UseCommonFiles=false`, and
+`LiveTradingAllowed=false`, then build/run `cas_forex\mt4_ping_roundtrip.py` so
+CAS Forex writes a ping into the activated MT4 mailbox, observes heartbeat and
+receipt JSON, and refreshes supervisor, watcher, ingest, memory, queue, rollup,
+and autowake evidence. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex terminal bridge supervisor implemented and surfaced:
+added `cas-forex\cas_forex\terminal_bridge_supervisor.py`,
+`cas-forex\scripts\run_terminal_bridge_supervisor.py`, and
+`cas-forex\tests\test_terminal_bridge_supervisor.py`; wired
+`/api/forex/strategy/terminal-bridge-supervisor/latest`; added dashboard key
+`terminalBridgeSupervisor`; and extended the Optimizer UI with a Bridge
+Supervisor run type and panel showing heartbeat status, heartbeat age, command
+and receipt counts, event-journal pending receipts, history file count, account
+snapshot presence, visible live flag state, alerts, and next action. Latest
+supervisor evidence:
+`cas-forex\evidence_runs\terminal_bridge_supervisor\terminal-bridge-supervisor-20260624115153-report.json`
+and `.md`. Current supervisor summary at `2026-06-24T13:15:00+00:00`:
+`TERMINAL_BRIDGE_HEARTBEAT_MISSING`, heartbeat `MISSING`, mailbox ready `true`,
+`39` command files, `0` receipt files, `39` pending command receipts, `28`
+event-journal pending receipts, `0` history files, account snapshot present
+`false`, visible live flag `false`, `5` alerts, and next action to attach and
+run `CASForexBridgeEA.mq4` in MT4/MT5 with `MailboxRoot` pointed at the shared
+mailbox so `heartbeat.json` appears. Latest refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624115151-report.json`;
+the software map now marks `cas_forex\terminal_bridge_supervisor.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`cas_forex\mt4_terminal_activation.py`. Verification: terminal-supervisor tests
+`4 passed`; focused supervisor / information-flow suite `9 passed`; full CAS
+Forex suite `434 passed`; `cd ui && npm run build` passed with `51` modules,
+`456.43 KB` JS / `115.59 KB` gzip after setting
+`VITE_CAS_FOREX_API_BASE=http://127.0.0.1:8807/api/forex`. Fresh local smoke:
+API `http://127.0.0.1:8807/api/forex/health`, supervisor endpoint
+`http://127.0.0.1:8807/api/forex/strategy/terminal-bridge-supervisor/latest`,
+dashboard `http://127.0.0.1:8807/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5218/?page=optimizer`. Browser render check confirmed the
+Optimizer page displays `Bridge Supervisor`,
+`TERMINAL_BRIDGE_HEARTBEAT_MISSING`, `cas_forex/mt4_terminal_activation.py`,
+and the `Attach and run CASForexBridgeEA.mq4` next action with zero console
+errors. Startup note remains: use `py -3.12` with `PYTHONPATH=.pydeps-win312;.`
+for the local FastAPI server because the default `python` is currently Python
+3.14 while `.pydeps-win312` contains Python 3.12 native wheels. Remaining
+terminal lane: discover/stage the real MT4 terminal data folder, copy or verify
+`CASForexBridgeEA.mq4` under `MQL4\Experts`, attach it inside MT4 with
+`MailboxRoot` pointed at the shared mailbox, let it write heartbeat and receipt
+JSON, export or ingest closed account history, then rerun the watcher and the
+ingest-memory-queue-rollup-autowake chain. Next software lane: build
+`cas_forex\mt4_terminal_activation.py` so CAS Forex can discover/stage MT4
+terminal folders, copy/configure the EA, point it at the mailbox, and write an
+activation manifest/runbook. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex terminal receipt watcher implemented and surfaced: added
+`cas-forex\cas_forex\terminal_receipt_watcher.py`,
+`cas-forex\scripts\run_terminal_receipt_watcher.py`, and
+`cas-forex\tests\test_terminal_receipt_watcher.py`; wired
+`/api/forex/strategy/terminal-receipt-watcher/latest`; added dashboard key
+`terminalReceiptWatcher`; and extended the Optimizer UI with a Terminal Watcher
+run type and panel showing watched receipt/history file counts, changed file
+count, chain-request state, latest completed step, failed step count, and
+refresh-chain steps. Latest watcher evidence:
+`cas-forex\evidence_runs\terminal_receipt_watcher\terminal-receipt-watcher-20260624113653-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\terminal_receipt_watcher\terminal-receipt-watcher-20260624113653.jsonl`.
+Current watcher summary at `2026-06-24T13:10:00+00:00`:
+`WATCHER_IDLE_NO_TERMINAL_FILES`, `0` terminal files, `0` receipt files, `0`
+history files, `0` changed files, `0` chain steps, and next action to start or
+verify the MT4/MT5 terminal bridge so receipt JSON or closed-history exports
+appear in the watched folders. Latest refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624113652-report.json`;
+the software map now marks `cas_forex\terminal_receipt_watcher.py` as
+`COMPLETE_INITIAL` and moved the then-next code lane to
+`cas_forex\terminal_bridge_supervisor.py`; that lane is now completed by the
+terminal bridge supervisor implementation above. Verification: terminal-watcher tests
+`3 passed`; focused watcher / information-flow suite `8 passed`; full CAS
+Forex suite `430 passed`; `cd ui && npm run build` passed with `51` modules,
+`449.52 KB` JS / `114.36 KB` gzip after setting
+`VITE_CAS_FOREX_API_BASE=http://127.0.0.1:8806/api/forex`. Fresh local smoke:
+API `http://127.0.0.1:8806/api/forex/health`, watcher endpoint
+`http://127.0.0.1:8806/api/forex/strategy/terminal-receipt-watcher/latest`,
+dashboard `http://127.0.0.1:8806/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5217/?page=optimizer`. Browser render check confirmed the
+Optimizer page displays `Terminal Watcher`, `WATCHER_IDLE_NO_TERMINAL_FILES`,
+`cas_forex/terminal_bridge_supervisor.py`, and the MT4/MT5 terminal bridge next
+action with zero console errors. Startup note remains: use `py -3.12` with
+`PYTHONPATH=.pydeps-win312;.` for the local FastAPI server because the default
+`python` is currently Python 3.14 while `.pydeps-win312` contains Python 3.12
+native wheels. Remaining terminal lane: compile, attach, and run
+`CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at the shared
+mailbox, export or ingest closed account history, then rerun the watcher and
+the ingest-memory-queue-rollup-autowake chain. Current next software lane is
+`cas_forex\mt4_terminal_activation.py`. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex session autowake runner implemented and surfaced: added
+`cas-forex\cas_forex\session_autowake_runner.py`,
+`cas-forex\scripts\run_session_autowake_runner.py`, and
+`cas-forex\tests\test_session_autowake_runner.py`; wired
+`/api/forex/strategy/session-autowake/latest`; added dashboard key
+`sessionAutowake`; and extended the Optimizer UI with a Session Autowake panel
+showing market-open state, active session, due/executable event counts,
+executed cycle count, pending receipts, terminal blockers, daily rollup
+readiness, evaluated wake events, and next action. Latest session autowake
+evidence:
+`cas-forex\evidence_runs\session_autowake_runner\session-autowake-20260624111809-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\session_autowake_runner\session-autowake-20260624111809.jsonl`.
+Current deterministic session summary at `2026-06-24T13:00:00+00:00`:
+`SESSION_AUTOWAKE_READY`, active session `LONDON_NEW_YORK_OVERLAP`, market open
+`true`, `7` events evaluated, `2` due, `2` executable, `0` executed cycles,
+`28` pending receipts, `5` terminal blockers, next due event
+`MICRO_SCALP_LOOP`, daily rollup status
+`DAILY_LEARNING_ROLLUP_BUILT_WAITING_FOR_CLOSED_PNL`, and readiness label
+`WAITING_FOR_TERMINAL_CLOSE_HISTORY`. Latest refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624111808-report.json`;
+the software map now marks `cas_forex\session_autowake_runner.py` as
+`COMPLETE_INITIAL` and moved the then-next code lane to
+`cas_forex\terminal_receipt_watcher.py`; that lane is now completed by the
+terminal watcher implementation above. Verification: session-autowake tests
+`4 passed`; full CAS Forex suite `427 passed`; `cd ui && npm run build` passed
+with `51` modules, `443.73 KB` JS / `113.27 KB` gzip after setting
+`VITE_CAS_FOREX_API_BASE=http://127.0.0.1:8805/api/forex`. Fresh local smoke:
+API `http://127.0.0.1:8805/api/forex/health`, session-autowake endpoint
+`http://127.0.0.1:8805/api/forex/strategy/session-autowake/latest`, dashboard
+`http://127.0.0.1:8805/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5216/?page=optimizer`. Browser render check confirmed the
+Optimizer page displays `Session Autowake`, `SESSION_AUTOWAKE_READY`,
+`LONDON_NEW_YORK_OVERLAP`, and `cas_forex/terminal_receipt_watcher.py` with
+zero console errors. Startup note: use `py -3.12` with `PYTHONPATH=.pydeps-win312;.`
+for the local FastAPI server because the default `python` is currently Python
+3.14 while `.pydeps-win312` contains Python 3.12 native wheels. Remaining
+terminal lane: compile, attach, and run `CASForexBridgeEA.mq4` inside an actual
+MT4 terminal pointed at the shared mailbox, export or ingest closed account
+history, then rerun terminal receipt watcher, terminal receipt ingest, terminal
+history ingest, memory, research queue, strategy-dev queue, patch runner, daily
+rollup, and session autowake. Current next software lane is
+`cas_forex\terminal_bridge_supervisor.py`. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex daily learning rollup implemented and surfaced: added
+`cas-forex\cas_forex\daily_learning_rollup.py`,
+`cas-forex\scripts\run_daily_learning_rollup.py`, and
+`cas-forex\tests\test_daily_learning_rollup.py`; wired
+`/api/forex/strategy/daily-learning-rollup/latest`; added dashboard key
+`dailyLearningRollup`; and extended the Optimizer UI with a Daily Learning
+Rollup panel showing 30-day window day, route counts, approved/rejected counts,
+closed win/loss/flat counts, net PnL, profit factor, expectancy, readiness
+label, queued follow-up work, and terminal blockers. Latest daily rollup
+evidence:
+`cas-forex\evidence_runs\daily_learning_rollup\daily-learning-rollup-20260624110228-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\daily_learning_rollup\daily-learning-rollup-20260624110228.jsonl`.
+Current daily rollup summary:
+`DAILY_LEARNING_ROLLUP_BUILT_WAITING_FOR_CLOSED_PNL`, trading date
+`2026-06-24`, day `1` of `30`, `62` routes, `28` approved, `34` rejected,
+`28` executed/command-joined, `28` pending receipts, `0` closed trades, `0`
+net PnL, `1` patch candidate, `3` replay jobs, `6` patch decisions, and
+readiness label `WAITING_FOR_TERMINAL_CLOSE_HISTORY`. Latest refreshed
+information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624110229-report.json`;
+that historical report marks `cas_forex\daily_learning_rollup.py` as
+`COMPLETE_INITIAL` and moved the then-next code lane to
+`cas_forex\session_autowake_runner.py`; that next lane is now completed by the
+session autowake implementation above. Verification: daily-rollup tests `3
+passed`; focused daily-rollup / patch-runner / information-flow suite `11
+passed`; focused terminal-history / memory / research / strategy-dev /
+patch-runner / daily-rollup / information-flow suite `20 passed`; full CAS
+Forex suite `423 passed`; `cd ui && npm run build` passed with `51` modules,
+`435.75 KB` JS / `111.88 KB` gzip. Fresh local smoke: API
+`http://127.0.0.1:8804/api/forex/health`, daily-rollup endpoint
+`http://127.0.0.1:8804/api/forex/strategy/daily-learning-rollup/latest`,
+dashboard `http://127.0.0.1:8804/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5215/?page=optimizer`. Remaining terminal lane: compile,
+attach, and run `CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at
+the shared mailbox, export or ingest closed account history, then rerun
+terminal receipt ingest, terminal history ingest, memory, research queue,
+strategy-dev queue, patch runner, daily rollup, and session autowake. Current
+next software lane is `cas_forex\terminal_receipt_watcher.py`. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+2026-06-24 CAS Forex strategy patch runner implemented and surfaced: added
+`cas-forex\cas_forex\strategy_patch_runner.py`,
+`cas-forex\scripts\run_strategy_patch_runner.py`, and
+`cas-forex\tests\test_strategy_patch_runner.py`; wired
+`/api/forex/strategy/strategy-patch-runner/latest`; added dashboard key
+`strategyPatchRunner`; and extended the Optimizer UI with a Strategy Patch
+Runner panel that shows decisions, ready/blocked counts, patch candidates,
+replay jobs, promotion/demotion reviews, terminal-input blockers, patch
+targets, and next action. Latest strategy patch-runner evidence:
+`cas-forex\evidence_runs\strategy_patch_runner\strategy-patch-runner-20260624104622-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\strategy_patch_runner\strategy-patch-runner-20260624104622.jsonl`.
+Current patch-runner summary: `STRATEGY_PATCH_RUNNER_READY`, `6` decisions,
+`3` ready, `3` blocked, `1` patch candidate, `3` replay jobs, `0` promotion
+reviews, `0` demotion reviews, `2` terminal-input-required decisions, and next
+decision `strategy-patch-terminal_joinback_blocker-b734b40a97a7028d`. Latest
+refreshed information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624104623-report.json`;
+the software map now marks `cas_forex\strategy_patch_runner.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`cas_forex\daily_learning_rollup.py`. Verification: patch-runner tests `3
+passed`; focused patch-runner / strategy-dev / information-flow suite `11
+passed`; focused patch-runner / strategy-dev / research / memory /
+terminal-history / information-flow suite `17 passed`; full CAS Forex suite
+`420 passed`; `cd ui && npm run build` passed with `51` modules, `427.81 KB`
+JS / `110.56 KB` gzip. Fresh local smoke: API
+`http://127.0.0.1:8803/api/forex/health`, patch-runner endpoint
+`http://127.0.0.1:8803/api/forex/strategy/strategy-patch-runner/latest`,
+dashboard `http://127.0.0.1:8803/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5214/?page=optimizer`. Remaining terminal lane: compile,
+attach, and run `CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at
+the shared mailbox, export or ingest closed account history, then rerun
+terminal receipt ingest, terminal history ingest, memory, research queue,
+strategy-dev queue, and patch runner. Next software lane: build
+`cas_forex\daily_learning_rollup.py` so each trading day becomes a 30-day
+learning record by agent, symbol, strategy, condition, PnL, and queued
+follow-up work. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT
+LICENSED`.
+
+2026-06-24 CAS Forex strategy-development queue implemented and surfaced:
+added `cas-forex\cas_forex\strategy_dev_queue.py`,
+`cas-forex\scripts\run_strategy_dev_queue.py`, and
+`cas-forex\tests\test_strategy_dev_queue.py`; wired
+`/api/forex/strategy/strategy-dev-queue/latest`; added dashboard key
+`strategyDevQueue`; and extended the Optimizer UI with a Strategy Dev Queue
+panel that shows queued work items, blocked items, replay requests, patch
+candidates, promotion/demotion reviews, and the next item. Latest strategy-dev
+queue evidence:
+`cas-forex\evidence_runs\strategy_dev_queue\strategy-dev-queue-20260624102900-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\strategy_dev_queue\strategy-dev-queue-20260624102900.jsonl`.
+Current strategy-dev summary: `STRATEGY_DEV_QUEUE_BUILT`, `6` work items,
+`3` queued, `3` blocked, `3` ready for replay, `1` patch candidate, `0`
+promotion reviews, `0` demotion reviews, `3` terminal-blocked items, and next
+item `strategy-dev-terminal-joinback-7c441e3221a2bdce`. Latest refreshed
+information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624102906-report.json`;
+the software map now marks `cas_forex\strategy_dev_queue.py` as
+`COMPLETE_INITIAL` and moves the next code lane to
+`cas_forex\strategy_patch_runner.py`. Verification: focused strategy-dev /
+information-flow suite `8 passed`; focused strategy-dev / memory /
+research-queue / terminal-history / information-flow suite `14 passed`; full
+CAS Forex suite `417 passed`; `cd ui && npm run build` passed with `51`
+modules, `419.23 KB` JS / `109.29 KB` gzip. Fresh API smoke:
+`http://127.0.0.1:8802/api/forex/health`,
+`http://127.0.0.1:8802/api/forex/strategy/strategy-dev-queue/latest`, and
+`http://127.0.0.1:8802/api/forex/dashboard`. Remaining terminal lane: compile,
+attach, and run `CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at
+the shared mailbox, export or ingest closed account history, then rerun
+terminal receipt ingest, terminal history ingest, memory, research queue, and
+strategy-dev queue. Next software lane: build
+`cas_forex\strategy_patch_runner.py` so queued patch/replay work can become
+candidate strategy edits and replay jobs. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex terminal close-history ingest implemented and surfaced:
+added `cas-forex\cas_forex\terminal_history_ingest.py`,
+`cas-forex\scripts\run_terminal_history_ingest.py`, and
+`cas-forex\tests\test_terminal_history_ingest.py`; wired
+`/api/forex/strategy/terminal-history-ingest/latest`; added dashboard key
+`terminalHistoryIngest`; extended agent memory so the latest terminal-history
+ingest report can enrich memory rows with closed-trade PnL, pips, R multiple,
+MAE/MFE, close reason, commission, swap, close time, and exit price; and added
+Optimizer UI panels for terminal history and closed-memory PnL. Latest terminal
+history ingest report:
+`cas-forex\evidence_runs\terminal_history_ingest\terminal-history-ingest-20260624101300-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\terminal_history_ingest\terminal-history-ingest-20260624101300.jsonl`.
+Current terminal-history summary: `TERMINAL_HISTORY_EMPTY`, `0` history rows,
+`0` memory updates, `0` closed trades, `0` net PnL, because no exported
+MT4/MT5 close-history file exists yet under
+`cas-forex\evidence_runs\terminal_history_exports`. Latest memory report:
+`cas-forex\evidence_runs\agent_memory\agent-memory-20260624101307-report.json`
+with `62` memory rows, `28` approved command rows still waiting for terminal
+receipts, `34` rejected-route rows ready for research, `0` receipts joined, and
+`0` terminal-history rows joined. Latest research queue:
+`cas-forex\evidence_runs\agent_research_queue\agent-research-queue-20260624101315-report.json`
+with `6` queued tasks and next task
+`research-terminal-receipt-joinback-7f4619f0b837f4e4`. Latest information-flow
+report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624101117-report.json`;
+the software map now marks `cas_forex\terminal_history_ingest.py` as
+`SOURCE_READY_NEEDS_HISTORY_EXPORT`, `cas_forex\agent_memory.py` as
+`CLOSE_HISTORY_READY_NEEDS_EXPORT`, and the next code lane as
+`cas_forex\strategy_dev_queue.py`. Verification: focused terminal-history /
+memory / research-queue / information-flow suite `11 passed`; full CAS Forex
+suite `414 passed`; `cd ui && npm run build` passed with `51` modules,
+`411.40 KB` JS / `107.92 KB` gzip. Fresh local smoke: API
+`http://127.0.0.1:8801/api/forex/health`, terminal-history endpoint
+`http://127.0.0.1:8801/api/forex/strategy/terminal-history-ingest/latest`,
+dashboard `http://127.0.0.1:8801/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5212/?page=optimizer`. Remaining terminal lane: compile,
+attach, and run `CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at
+the shared mailbox, export or ingest closed account history, then rerun
+terminal receipt ingest, terminal history ingest, memory, and research queue.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex agent research queue implemented and surfaced: memory
+rows now turn into concrete queued work for terminal receipt joinback,
+overseer conflict-key refinement, condition-lab rejection analysis,
+walk-forward receipt replay, and terminal history/PnL schema work. New files:
+`cas-forex\cas_forex\agent_research_queue.py`,
+`cas-forex\scripts\run_agent_research_queue.py`, and
+`cas-forex\tests\test_agent_research_queue.py`. Updated API/UI/roadmap files:
+`cas-forex\api\data.py`, `cas-forex\api\routes\strategy.py`,
+`cas-forex\cas_forex\agent_information_flow.py`,
+`cas-forex\ui\src\types\evidence.ts`, `cas-forex\ui\src\data\api.ts`,
+`cas-forex\ui\src\data\fixtures.ts`, `cas-forex\ui\src\App.tsx`, and
+`cas-forex\ui\src\pages\OptimizerPage.tsx`. Latest queue evidence:
+`cas-forex\evidence_runs\agent_research_queue\agent-research-queue-20260624095304-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\agent_research_queue\agent-research-queue-20260624095304.jsonl`.
+Current queue summary: `6` queued tasks, `4` high-priority tasks, `1`
+terminal receipt joinback task, `1` overseer conflict-key refinement task, `2`
+condition-lab rejection tasks, `1` walk-forward receipt replay task, and `1`
+terminal history/PnL schema task. The next task is
+`research-terminal-receipt-joinback-7f4619f0b837f4e4`. Refreshed
+information-flow evidence:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624095004-report.json`.
+Flow status now says `cas_forex\agent_research_queue.py` is `COMPLETE`; the
+next software lane is `cas_forex\terminal_history_ingest.py`. Plain English:
+CAS Forex can now convert memory into an agent worklist; the next code problem
+is ingesting closed-trade terminal history so memory can learn real PnL, pips,
+MAE/MFE, close reason, commission, and swap. Verification: focused
+research-queue/memory/info-flow suite `9 passed`; full CAS Forex suite
+`412 passed`; `cd ui && npm run build` passed with `51` modules,
+`407.19 KB` JS / `107.15 KB` gzip. Fresh local smoke: API
+`http://127.0.0.1:8800/api/forex/health`, queue endpoint
+`http://127.0.0.1:8800/api/forex/strategy/agent-research-queue/latest`,
+dashboard `http://127.0.0.1:8800/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5211/?page=optimizer`. Remaining terminal lane: compile,
+attach, and run `CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at
+the shared mailbox, then rerun receipt ingest, memory, and research queue.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex agent outcome memory implemented and surfaced: added the
+first durable learning layer that joins route intents, overseer decisions,
+terminal commands, and available terminal receipts into reusable memory rows.
+New files: `cas-forex\cas_forex\agent_memory.py`,
+`cas-forex\scripts\run_agent_memory.py`, and
+`cas-forex\tests\test_agent_memory.py`. Updated API/UI files:
+`cas-forex\api\data.py`, `cas-forex\api\routes\strategy.py`,
+`cas-forex\ui\src\types\evidence.ts`, `cas-forex\ui\src\data\api.ts`,
+`cas-forex\ui\src\data\fixtures.ts`, `cas-forex\ui\src\App.tsx`, and
+`cas-forex\ui\src\pages\OptimizerPage.tsx`. Latest memory evidence:
+`cas-forex\evidence_runs\agent_memory\agent-memory-20260624093213-report.json`
+and `.md` plus
+`cas-forex\evidence_runs\agent_memory\agent-memory-20260624093213.jsonl`.
+Current memory summary: `62` records, `28` approved command rows waiting for
+terminal receipts, `34` rejected-route rows ready for research, `28` commands
+joined, `0` receipts joined, `0` verified receipts, and latest cycle
+`agent-cycle-44848f2d3efc4669`. Latest information-flow evidence refreshed:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624093253-report.json`.
+Flow status now says `cas_forex\agent_memory.py` is
+`INITIAL_READY_NEEDS_CLOSE_DATA`; the next software lane is
+`cas_forex\agent_research_queue.py`. Plain English: the system can now remember
+which agent proposals were approved, rejected, or waiting for terminal proof,
+but closed-trade PnL, MAE/MFE, and lesson scoring still require terminal close
+or history data. Verification: focused memory/receipt/MT4/info-flow suite
+`16 passed`; full CAS Forex suite `410 passed`; `cd ui && npm run build`
+passed with `51` modules, `398.13 KB` JS / `105.33 KB` gzip. Fresh local
+smoke: API `http://127.0.0.1:8799/api/forex/health`, memory endpoint
+`http://127.0.0.1:8799/api/forex/strategy/agent-memory/latest`, dashboard
+`http://127.0.0.1:8799/api/forex/dashboard`, and UI preview
+`http://127.0.0.1:5209/?page=optimizer`. Remaining terminal lane: compile,
+attach, and run `CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at
+the shared mailbox, then rerun receipt ingest and agent memory so receipts
+become learning rows. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT4 EA receipt-writer source implemented: replaced the
+`mt4\Experts\CASForexBridgeEA.mq4` scaffold with a working mailbox worker. The
+EA now creates mailbox folders, writes heartbeat JSON, enumerates
+`<MailboxRoot>\commands\*.json`, parses the stable CAS command schema, skips
+already-receipted commands, acknowledges `PING` and `PAPER_MT4` `PLACE_ORDER`
+commands by writing `cas_forex_mt4_mailbox_receipt.v1` JSON, includes
+`raw_request_hash`, `raw_response_hash`, terminal identity, account snapshot,
+fill fields, slippage, ticket/error fields, and uses an explicit
+`LiveTradingAllowed` input plus command-level authorization before any
+`LIVE_MT4` `OrderSend` path can run. Updated
+`cas-forex\cas_forex\broker\mt4_mailbox_bridge.py`,
+`cas-forex\cas_forex\agent_information_flow.py`,
+`cas-forex\ui\src\data\fixtures.ts`, and
+`cas-forex\tests\test_mt4_mailbox_bridge.py`. New information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624091707-report.json`.
+Flow status now says `mt4\Experts\CASForexBridgeEA.mq4` is
+`SOURCE_READY_NEEDS_TERMINAL_VERIFY` and the next code file is
+`cas_forex\agent_memory.py`. MT4 mailbox smoke refreshed:
+`cas-forex\evidence_runs\mt4_mailbox_smoke\mt4-mailbox-smoke-status.json`.
+Verification: targeted MT4/receipt/info-flow suite `14 passed`; full CAS Forex
+suite `408 passed`; `cd ui && npm run build` passed with `51` modules,
+`394.10 KB` JS / `104.63 KB` gzip; API/UI smoke passed at
+`http://127.0.0.1:8797/api/forex/strategy/agent-information-flow` and
+`http://127.0.0.1:5206/?page=optimizer`. Remaining terminal step: compile,
+attach, and run `CASForexBridgeEA.mq4` inside an actual MT4 terminal pointed at
+the shared mailbox, then ingest the generated receipt JSON. Next software lane:
+build `cas_forex\agent_memory.py` so verified receipts and route decisions turn
+into win/loss outcome memory. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex receipt-aware overseer implemented: the overseer now reads
+the append-only event journal before approving same-symbol route intents. If an
+AUD/CAD route already has command files waiting for terminal receipts, the next
+AUD/CAD micro-scalp/hourly route is rejected as `QUEUED_AWAITING_RECEIPT`
+instead of writing another MT4 command. If a future terminal receipt verifies
+and reconciles to `NEXT_CYCLE_ALLOWED`, the same symbol can route again. If a
+receipt mismatch produces `TERMINAL_LOCKED_FOR_SYMBOL`, the same symbol remains
+locked until the mismatch is handled. Updated
+`cas-forex\cas_forex\agent_overseer.py`,
+`cas-forex\cas_forex\agent_state.py`,
+`cas-forex\cas_forex\agent_message_bus.py`,
+`cas-forex\ui\src\data\fixtures.ts`, and added
+`cas-forex\tests\test_agent_overseer.py` plus receipt lifecycle workflow
+regressions. Fixed API-surface tests so future verification uses temp evidence
+and does not write throwaway `MANUAL_CLI` cycles into real `evidence_runs`.
+Default workflow smoke now proves the gate is active: latest cycle
+`agent-cycle-44848f2d3efc4669` wrote `0` terminal commands, rejected `2` same
+symbol route intents, and reported `28` pending receipts across `459` journal
+events / `31` cycles. Latest cycle report:
+`cas-forex\evidence_runs\agent_workflow_queue\agent-workflow-cycle-20260624090733-report.json`.
+Latest receipt ingest report:
+`cas-forex\evidence_runs\terminal_receipt_ingest\terminal-receipt-ingest-20260624090739-report.json`.
+Latest information-flow report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624085546-report.json`;
+its next file is now `mt4\Experts\CASForexBridgeEA.mq4`. Verification:
+focused receipt/overseer suite `14 passed`; full CAS Forex suite `407 passed`;
+`cd ui && npm run build` passed with `51` modules, `393.97 KB` JS /
+`104.58 KB` gzip. Also fixed the Windows API dependency path by adding
+`.pydeps-win312\` to `.gitignore` and installing Windows-compatible FastAPI /
+Uvicorn / Pydantic dependencies there; API smoke now runs under `py -3.12`
+with `PYTHONPATH=.pydeps-win312;.`. Next implementation lane: make
+`mt4\Experts\CASForexBridgeEA.mq4` read command JSON from the mailbox and write
+real terminal receipt JSON, then build `cas_forex\agent_memory.py` for full
+win/loss outcome memory. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex terminal receipt ingest implemented: built the joinback
+layer between MT4/MT5 mailbox receipt files and the append-only agent journal.
+Added `cas-forex\cas_forex\terminal_receipt_ingest.py`,
+`cas-forex\scripts\run_terminal_receipt_ingest.py`, and
+`cas-forex\tests\test_terminal_receipt_ingest.py`; wired
+`/api/forex/strategy/terminal-receipt-ingest/latest`; added dashboard key
+`terminalReceiptIngest`; extended the Optimizer information-flow panel with
+receipt ingest counts and receipt rows; and upgraded the event-journal summary
+so `pending_receipt_count` means commands still actually waiting, not just raw
+historical `RECEIPT_PENDING` rows. Receipt ingest validates command linkage,
+raw request hash match, terminal identity fields, account snapshot presence,
+paper/demo live-mode flags, and idempotency by `receipt_id`. Verified behavior:
+a good receipt appends `TERMINAL_RECEIPT_RECEIVED`,
+`TERMINAL_RECEIPT_RECONCILED`, and `NEXT_CYCLE_ALLOWED`; a bad receipt hash
+appends `TERMINAL_RECEIPT_MISMATCH` and `TERMINAL_LOCKED_FOR_SYMBOL`; reruns do
+not duplicate receipt events. Current event journal:
+`cas-forex\evidence_runs\agent_workflow_queue\agent-events.jsonl` with `270`
+events across `18` cycles, latest cycle `agent-cycle-5885cba41e8f5a38`, `18`
+terminal commands written, and `18` commands still waiting for terminal
+receipts. Latest receipt ingest report:
+`cas-forex\evidence_runs\terminal_receipt_ingest\terminal-receipt-ingest-20260624083745-report.json`.
+Current receipt state: `0` receipt files, `0` verified, `0` reconciled, `0`
+next-cycle allowed, `0` mismatched, `18` pending. Refreshed information-flow
+report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624083721-report.json`;
+its next file is now `cas_forex\agent_overseer.py`, not
+`cas_forex\terminal_receipt_ingest.py`. Verification: full CAS Forex suite
+`403 passed`; focused receipt/info-flow/message-bus suite `11 passed`;
+`cd ui && npm run build` passed with `51` modules, `393.21 KB` JS /
+`104.34 KB` gzip. Next implementation lane: make
+`cas_forex\agent_overseer.py` consume `NEXT_CYCLE_ALLOWED` and
+`TERMINAL_LOCKED_FOR_SYMBOL`, then connect the actual MT4 EA/terminal to write
+real receipt JSON into the mailbox, then build full trade outcome memory.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex append-only agent message bus implemented: built the
+actual journal behind the previously selected information-flow architecture.
+Added `cas-forex\cas_forex\agent_message_bus.py` and
+`cas-forex\tests\test_agent_message_bus.py`; wired
+`cas-forex\cas_forex\agent_state.py` so every workflow cycle now appends
+`cas_forex_agent_event.v1` rows for `AGENT_CONTEXT_READY`, `AGENT_HEARTBEAT`,
+`ROUTE_INTENT_CREATED`, `OVERSEER_DECISION_CREATED`,
+`TERMINAL_COMMAND_WRITTEN`, `TERMINAL_RECEIPT_PENDING`, and
+`OUTCOME_MEMORY_WRITTEN`. New API projections:
+`/api/forex/strategy/agent-workflow-events/summary`,
+`/api/forex/strategy/agent-workflow-events`,
+`/api/forex/strategy/agent-workflow-context/latest`,
+`/api/forex/strategy/agent-workflow-intents/open`, and
+`/api/forex/strategy/agent-workflow-receipts/latest`; dashboard key
+`agentMessageBus`; Optimizer event-journal readout. Current journal is now
+superseded by the terminal receipt ingest update above.
+Live smoke passed at `http://127.0.0.1:8790/api/forex/health`,
+`http://127.0.0.1:8790/api/forex/strategy/agent-workflow-events/summary`,
+`http://127.0.0.1:8790/api/forex/dashboard`, and
+`http://127.0.0.1:5200/?page=optimizer`. Verification:
+focused message-bus/API suite `23 passed`; full CAS Forex suite `400 passed`;
+`cd ui && npm run build` passed with `51` modules, `389.02 KB` JS /
+`103.45 KB` gzip. Terminal receipt ingest was completed in the newer update
+above; the next lane is overseer consumption of receipt lifecycle events. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex agent information-flow team review and cockpit surface
+complete: spawned three specialist agents (`Sagan`, `Mill`, and `Leibniz`) to
+review the best flow of information between CAS Forex agents, then encoded the
+combined verdict as first-class evidence/API/UI. The selected architecture is
+an append-only event journal plus read-only API projections: the agent journal
+is the desk log, evidence reports are durable binders, the API/dashboard is the
+wall display, and MT4/MT5 mailbox files are only terminal outbox/inbox. Added
+`cas-forex\cas_forex\agent_information_flow.py`,
+`cas-forex\scripts\run_agent_information_flow.py`, and
+`cas-forex\tests\test_agent_information_flow.py`; wired
+`/api/forex/strategy/agent-information-flow`; added dashboard key
+`agentInformationFlow`; added TypeScript types/API client/fixture fallback; and
+added the Optimizer `Agent Information Flow` panel. Latest generated report:
+`cas-forex\evidence_runs\agent_information_flow\agent-information-flow-20260624083721-report.json`
+and `.md`. Current flow status is `FLOW_BLUEPRINT_READY`; specialist review
+count is `3`; canonical packet count is `7`; flow stage count is `8`; receipt
+lifecycle state count is `10`. The next build target is now
+`cas_forex\agent_overseer.py`, then `cas_forex\agent_memory.py`. The key
+implementation gap is now clear:
+close the loop from route intent -> overseer decision -> MT4/MT5 command ->
+terminal receipt -> reconciliation -> trade outcome memory -> daily 30-day
+rollup. Live local smoke passed:
+`http://127.0.0.1:8786/api/forex/health`,
+`http://127.0.0.1:8786/api/forex/strategy/agent-information-flow`,
+`http://127.0.0.1:8786/api/forex/dashboard`, and
+`http://127.0.0.1:5196/?page=optimizer`. Verification:
+focused information-flow/workflow suite `12 passed`; full CAS Forex suite
+`397 passed`; `cd ui && npm run build` passed with `51` modules,
+`386.47 KB` JS / `102.97 KB` gzip. Live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex agent workflow execution-cycle scaffold complete:
+converted the agentic trading-day plan into a runnable paper/demo cycle. Added
+`cas-forex\cas_forex\agent_state.py`,
+`cas-forex\cas_forex\micro_scalp_policy.py`,
+`cas-forex\cas_forex\hourly_intraday_policy.py`,
+`cas-forex\cas_forex\agent_overseer.py`,
+`cas-forex\scripts\run_agent_workflow_queue.py`, and
+`cas-forex\tests\test_agent_workflow_cycle.py`; wired
+`/api/forex/strategy/agent-workflow-cycle/latest`; added dashboard key
+`agentWorkflowCycle`; and added latest-cycle readout to the Optimizer page.
+Latest cycle evidence shows `PAPER_MT4_COMMAND_INTENT`: `6` heartbeats,
+`2` route intents, `1` approved micro-scalp intent, `1` rejected/queued
+same-symbol hourly intent, `1` MT4 paper command, and `2` memory snapshots.
+Latest generated report:
+`cas-forex\evidence_runs\agent_workflow_queue\agent-workflow-cycle-20260624050225-report.json`
+with `.md` sidecar; rolling state:
+`cas-forex\evidence_runs\agent_workflow_queue\agent-workflow-state.jsonl`;
+MT4 command mailbox:
+`cas-forex\evidence_runs\agent_workflow_mt4_mailbox\commands`. The flow review
+above supersedes the next implementation lane: commands now need
+receipt/reconciliation-gated joinback and true trade-outcome memory.
+
+2026-06-24 CAS Forex agentic trading-day workflow plan complete: encoded the
+owner-requested autowake + scalper + hourly intraday + overseer + research desk
+as first-class CAS Forex evidence/API/UI instead of a loose idea. Added
+`cas-forex\cas_forex\agent_workflow.py`,
+`cas-forex\scripts\run_agent_workflow_plan.py`, and
+`cas-forex\tests\test_agent_workflow.py`; wired
+`/api/forex/strategy/agent-workflow-plan`; added dashboard key
+`agentWorkflowPlan`; added TypeScript types/API client/fixture fallback; and
+added the Optimizer `Agentic Trading-Day Workflow` panel. Generated
+`cas-forex\evidence_runs\agent_workflow\agent-workflow-plan-20260624044500-report.json`
+and `.md`. Current plan status is `AGENT_DESK_PLAN_READY` with `8` agents:
+`session_autowake_agent`, `micro_scalp_agent`, `hourly_intraday_agent`,
+`overseer_agent`, `research_condition_agent`, `strategy_dev_agent`,
+`terminal_bridge_agent`, and `audit_memory_agent`. Autowake events include
+FX week open precheck, Asian/London/New York session scouts, `MICRO_SCALP_LOOP`
+every `1-5` minutes, `HOURLY_INTRADAY_LOOP` every `60` minutes, and end-of-day
+memory rollup. Primary short-timeframe lead remains `AUD/CAD M5
+range_scalper_12_80` from the Forex Fury replay result
+`REPLAY_LEAD_FOR_ADAPTIVE_REVIEW`; adaptive next step remains
+`QUEUE_FOR_ADAPTIVE_COMPOUNDING_REVIEW`. Live local smoke passed:
+`http://127.0.0.1:8782/api/forex/health`,
+`http://127.0.0.1:8782/api/forex/strategy/agent-workflow-plan`,
+`http://127.0.0.1:8782/api/forex/dashboard`, and
+`http://127.0.0.1:5192/?page=optimizer`. Verification:
+focused agent/replay API suite `5 passed`; full CAS Forex suite `388 passed`;
+`cd ui && npm run build` passed with `51` modules, `364.08 KB` JS /
+`97.89 KB` gzip. Next implementation lane: build `cas_forex\agent_state.py`,
+`scripts\run_agent_workflow_queue.py`, `cas_forex\micro_scalp_policy.py`,
+`cas_forex\hourly_intraday_policy.py`, and `cas_forex\agent_overseer.py`, then
+attach approved route packets to MT4/MT5 paper/demo receipts. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex Forex Fury top-candidate replay execution complete:
+executed the generated replay lane for the top `AUD/CAD` `M5` candidate
+`ff-replay-aud-cad-m5-swing-d7be2c38ca`, fixed the generated walk-forward
+command from `--timeframe` to `--timeframes`, regenerated the replay-candidate
+report as
+`cas-forex\evidence_runs\forex_fury_replay_candidates\forex-fury-replay-candidates-20260624042429-report.json`,
+then ran condition-lab and walk-forward replay evidence. New artifacts:
+`cas-forex\evidence_runs\forex_fury_condition_replay\condition-lab-20260624042332-report.json`,
+`cas-forex\evidence_runs\forex_fury_walk_forward_replay\walk-forward-20260624042543-report.json`,
+and
+`cas-forex\evidence_runs\forex_fury_replay_results\forex-fury-replay-results-20260624042821-report.json`
+with `.md` sidecars. Added
+`cas-forex\cas_forex\forex_fury_replay_results.py`,
+`cas-forex\scripts\run_forex_fury_replay_results.py`, and
+`cas-forex\tests\test_forex_fury_replay_results.py`; wired
+`/api/forex/strategy/forex-fury-replay-results`; added dashboard key
+`forexFuryReplayResults`; added the Optimizer `Forex Fury Replay Results`
+panel. Replay summary: condition lab ran `297` cells with `62` non-gap cells,
+`22` RPM routes, `11` no-trade routes, and top real cell `AUD/CAD` `M5`
+`range_scalper_12_80` in `shock` regime with `1.2845%` return, `0.0%` drawdown,
+`36` mean trades, `0.9722` win rate, and `20.7614` profit factor. Walk-forward
+ran `126` windows, `61` routed windows, `35` positive routed windows,
+`0.5738` positive routed window rate, `350` routed trades, `0.4953%` routed max
+drawdown, and `research_grade=WALK_FORWARD_LEAD`. Replay verdict is
+`REPLAY_LEAD_FOR_ADAPTIVE_REVIEW`; next step is
+`QUEUE_FOR_ADAPTIVE_COMPOUNDING_REVIEW`. Live local smoke passed at
+`http://127.0.0.1:8778/api/forex/strategy/forex-fury-replay-results`,
+`http://127.0.0.1:8778/api/forex/dashboard`, and
+`http://127.0.0.1:5188/?page=optimizer`; browser verification confirmed the UI
+renders `Forex Fury Replay Results`, `REPLAY_LEAD_FOR_ADAPTIVE_REVIEW`,
+`QUEUE_FOR_ADAPTIVE_COMPOUNDING_REVIEW`, `WALK_FORWARD_LEAD`, and `AUD/CAD`.
+Verification: focused Forex Fury replay suite `18 passed`; full CAS Forex suite
+`385 passed`; `cd ui && npm run build` passed with `51` modules,
+`348.28 KB` JS / `93.25 KB` gzip. Next implementation lane: create the adaptive
+compounding review for the `AUD/CAD` `M5` replay lead and compare the replay
+routes against basket add/hold/close rules, while continuing MT4 paper/demo
+receipt work. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex Forex Fury replay-candidate queue complete: converted the
+local Forex Fury set/report import into ranked CAS replay/backtest candidate
+jobs and surfaced them in the Optimizer UI/dashboard API. Added
+`cas-forex\cas_forex\forex_fury_candidates.py`,
+`cas-forex\scripts\run_forex_fury_replay_candidates.py`, and
+`cas-forex\tests\test_forex_fury_candidates.py`; expanded instrument support
+in `cas-forex\cas_forex\instruments.py` for `AUD/CAD`, `GBP/AUD`, and
+`SPX500`; updated `api\data.py`, `api\routes\strategy.py`,
+`ui\src\types\evidence.ts`, `ui\src\data\api.ts`,
+`ui\src\data\fixtures.ts`, `ui\src\App.tsx`, and
+`ui\src\pages\OptimizerPage.tsx`. Generated
+`cas-forex\evidence_runs\forex_fury_replay_candidates\forex-fury-replay-candidates-20260624042429-report.json`
+and `.md`. Current queue summary: `candidate_count=24`,
+`supported_candidate_count=24`, `waiting_for_instrument_spec_count=0`,
+symbols `AUD/CAD`, `AUD/USD`, `GBP/AUD`, `GBP/USD`, `SPX500`, and
+`USD/JPY`; timeframes `H1`, `M1`, `M5`; top candidate
+`ff-replay-aud-cad-m5-swing-d7be2c38ca` with `top_candidate_score=320.9726`.
+Live local smoke passed:
+`http://127.0.0.1:8776/api/forex/strategy/forex-fury-replay-candidates`,
+`http://127.0.0.1:8776/api/forex/dashboard`, and
+`http://127.0.0.1:5186/?page=optimizer`. Browser verification confirmed the
+Optimizer page renders "Forex Fury Replay Candidates", `AUD/CAD`,
+`READY_FOR_CAS_REPLAY`, and the `run_condition_lab.py` command. Verification:
+focused Forex Fury/instrument/API suite `18 passed`; full CAS Forex suite
+`383 passed`; `cd ui && npm run build` passed with `51` modules,
+`341.36 KB` JS / `91.97 KB` gzip. Next implementation lane: run the generated
+condition-lab and walk-forward replay commands for the top candidates, then
+wire the replay results into adaptive compounding policy and MT4 paper/demo
+receipt evidence. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex local Forex Fury set/report import is now surfaced in the
+Optimizer UI and dashboard API. The cockpit now loads the real
+`forex-fury-set-import-20260624034719-report.json` through
+`/api/forex/strategy/forex-fury-set-import`, includes it in
+`/api/forex/dashboard` as `forexFurySetImport`, and renders a dedicated
+"Local Forex Fury Set Import" Optimizer panel with imported set/report counts,
+MT4/MT5 counts, best profit factor, lowest drawdown, max orders, grid/money
+close counts, top tester-report profiles, and improvement targets. Updated
+files: `cas-forex\api\data.py`,
+`cas-forex\ui\src\types\evidence.ts`, `cas-forex\ui\src\data\api.ts`,
+`cas-forex\ui\src\data\fixtures.ts`, `cas-forex\ui\src\App.tsx`, and
+`cas-forex\ui\src\pages\OptimizerPage.tsx`. Verification:
+`python -m pytest tests/test_forex_fury_sets.py tests/test_external_benchmark.py -q`
+= `4 passed`; API/dashboard smoke returned `36 30 15.12`; full CAS Forex
+suite `python -m pytest tests -q` = `379 passed`; `cd ui && npm run build`
+passed with `51` modules, `333.31 KB` JS / `90.09 KB` gzip; live local smoke
+passed at `http://127.0.0.1:8774/api/forex/dashboard` and
+`http://127.0.0.1:5184/?page=optimizer`. The candidate-conversion lane is now
+complete in the replay-candidate queue above; the next lane is to run generated
+replays, then feed winners into compounding policy and the MT4 paper/demo
+receipt path.
+Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex local Forex Fury set/report import complete: inspected the
+owner-supplied package at
+`C:\Users\wakil\Downloads\Forex-Fury-CORE-1.4NEW-SETS (1)` without executing
+compiled EA binaries. Added `cas-forex\cas_forex\forex_fury_sets.py`,
+`cas-forex\scripts\run_forex_fury_set_import.py`, and
+`cas-forex\tests\test_forex_fury_sets.py`; added API route
+`/api/forex/strategy/forex-fury-set-import`; generated
+`cas-forex\evidence_runs\forex_fury_set_import\forex-fury-set-import-20260624034719-report.json`
+and `.md`. Current normalized package summary: `set_count=36`,
+`tester_report_count=30`, `platform_counts={MT4: 18, MT5: 18}`,
+`family_counts={classic_m15: 6, scalping: 14, swing: 16}`,
+`symbol_counts={AUDCAD: 8, AUDUSD: 6, EURUSD: 4, GBPAUD: 2, GBPUSD: 6,
+SPX500: 2, USDJPY: 2}`, `timeframe_counts={H1: 12, M1: 14, M15: 6, M5: 4}`,
+`grid_enabled_count=30`, `close_by_money_count=30`,
+`max_orders_values=[1, 7]`. Best supplied tester-report signal is an `AUDCAD`
+`M5` swing profile on `04:00:00-05:00:00` with `profit_factor=15.12`,
+`equity_drawdown_relative_pct=2.25`, `total_net_profit=21982.6`, and
+`total_trades=294`. Verification:
+`python -m pytest tests/test_forex_fury_sets.py tests/test_external_benchmark.py -q`
+= `4 passed`; API loader smoke returned `36 30 15.12`. Boundary preserved: the
+importer reads `.set` and tester-report files and fingerprints `.ex4`/`.ex5`
+binaries only. It does not execute binaries, place orders, create broker
+`ACCEPT`, deposit, withdraw, move bank/card funds, or automate payouts. Next
+candidate-input lane after the UI surfacing is now complete in the
+replay-candidate queue above. The remaining lane is CAS replay execution,
+adaptive compounding comparison, and MT4 paper/demo receipt work. Live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex MT4 mailbox bridge scaffold complete: added a dedicated
+paper/demo-first MT4 mailbox bridge contract without disturbing the older
+`MT4EABridge` stub inside `mt5_bridge.py`. New files:
+`cas-forex\cas_forex\broker\mt4_mailbox_bridge.py`,
+`cas-forex\scripts\run_mt4_mailbox_smoke.py`,
+`cas-forex\tests\test_mt4_mailbox_bridge.py`, and
+`cas-forex\mt4\Experts\CASForexBridgeEA.mq4`; updated
+`cas-forex\cas_forex\broker\__init__.py` to export `MT4MailboxBridge`.
+The bridge creates `commands`, `receipts`, and `archive` directories; writes
+hashed `PING` and `PLACE_ORDER` command JSON; validates
+`cas_forex_mt4_mailbox_receipt.v1` receipts; blocks `LIVE_MT4` order intents
+unless `live_authorized=True`; and keeps the boundary explicit that mailbox
+commands do not place live orders or create broker `ACCEPT` by themselves. Ran
+`python scripts/run_mt4_mailbox_smoke.py --mailbox-dir evidence_runs/mt4_mailbox_smoke`,
+which wrote `evidence_runs\mt4_mailbox_smoke\mt4-mailbox-smoke-status.json`
+with `status=MAILBOX_READY`, `broker_mode=PAPER_MT4`, `receipt_count=0`, and a
+hashed ping command. Verification: `python -m pytest tests/test_mt4_mailbox_bridge.py -q`
+= `4 passed`; full CAS Forex suite `python -m pytest tests -q` = `377 passed`;
+`cd ui && npm run build` passed with `51` modules, `324.90 KB` JS /
+`87.71 KB` gzip. Remaining MT4 work: attach/finish the MQL4 EA side so it
+parses command JSON, writes heartbeat/receipts, acknowledges `PAPER_MT4`, and
+only executes `LIVE_MT4` after runtime authorization. Live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex external benchmark API/UI wiring complete: promoted the
+Forex Fury MT4 benchmark snapshot from a loose JSON/doc artifact into a first-
+class CAS Forex cockpit surface. Added
+`cas-forex\cas_forex\external_benchmark.py`,
+`cas-forex\scripts\run_external_benchmark_snapshot.py`, and
+`cas-forex\tests\test_external_benchmark.py`; wired
+`/api/forex/strategy/external-benchmarks`; added dashboard payload key
+`externalBenchmarks`; added TypeScript types/API client/fixture fallback; and
+surfaced the benchmark table on the Optimizer page. Current normalized summary:
+`benchmark_count=3`, `mt4_account_count=3`, `real_account_count=3`,
+`symbols=[AUDUSD, GBPUSD, USDCAD]`, `total_public_trade_count=646`,
+`best_gain_pct=554.1`, and `lowest_drawdown_pct=8.6`. Verification:
+`python scripts/run_external_benchmark_snapshot.py --summary-only` prints the
+summary, `python -m pytest tests/test_external_benchmark.py tests/test_settings_api_surface.py -q`
+= `13 passed`; full CAS Forex suite `python -m pytest tests -q` = `373 passed`;
+and `cd ui && npm run build` passed with `51` modules, `324.90 KB` JS /
+`87.71 KB` gzip. Boundary preserved: this benchmark API/UI work does not place
+orders, create broker `ACCEPT`, deposit, withdraw, move bank/card money, or
+automate payouts. That pass fed into the later MT4 mailbox scaffold, Forex Fury
+set import, and replay-candidate queue above. Remaining related work is MT4
+receipt/probe execution plus the long-horizon multi-agent workflow queue. Live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex external benchmark / MT4 / agentic workflow first pass:
+reviewed the owner's three Forex Fury Myfxbook links and converted them into a
+local implementation note plus machine-readable external benchmark snapshot.
+New artifacts:
+`docs\working\CAS_FOREX_FOREX_FURY_MT4_AGENTIC_WORKFLOW_20260624.md` and
+`cas-forex\evidence_runs\external_benchmark\forex-fury-mt4-benchmark-20260624-report.json`.
+The public pages show real USD automated MetaTrader 4 systems: Forex FURY AU
+on Fyntura at 1:500 MT4 with `+214.03%` gain, `35.77%` drawdown, `43` trades;
+Forex Fury USDCAD 50K on AdroFx at 1:200 MT4 with `+154.62%` gain, `8.60%`
+drawdown, `541` trades; and Forex FURY 26' on Fyntura at 1:500 MT4 with
+`+554.10%` gain, `37.00%` drawdown, `62` trades. Public-page limitation:
+summary stats are visible, but deeper data/open trades are private, so these
+links are benchmark targets unless full exports/API access are provided. MT4
+fit verdict: CAS Forex already has MT4 config/schema hooks (`mt4_enabled`,
+`mt4_mailbox_dir`, `PAPER_MT4`, `LIVE_MT4`), but no real MT4 bridge yet; next
+implementation target is a paper/demo MT4 mailbox bridge, MQL4 EA template,
+MT4 receipt/probe runner, and UI/API terminal-health selector. Agentic workflow
+verdict: add long-horizon CAS Harness multi-agent workflow for evidence
+harvesting, strategy mining, backtesting, risk/margin solving, terminal bridge
+work, UI work, and audit verification. Boundary preserved: this benchmark pass
+does not place orders, create broker `ACCEPT`, deposit, withdraw, move bank/card
+money, or automate payouts. Live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex trading-edge gate separated from paper-maturity blocker:
+refreshed owner-promotion review with current `paper_days=3` and wired latest
+owner-promotion evidence into the live operability checklist. The latest review
+(`owner-promotion-review-20260624030818-report.json`) shows the D1
+`tsmom_126_250_2_10` candidate clears strategy-edge thresholds:
+`simulator_wins=18`, `walk_forward_windows=5`, `positive_routed_window_rate=0.6`,
+`mean_return_pct=1.8932`, `max_drawdown_pct=7.0764`, `trades=76`; its remaining
+promotion blockers are `paper_days 3 < required 30` and `paper_passed is false`.
+Updated `live_readiness.py` so the `trading_edge` gate can pass from
+owner-promotion simulator/walk-forward evidence while `paper_proof_maturity`
+stays separate and `OPEN`. Added `ownerPromotionReview` to the dashboard payload
+and updated `strategy_leads.json` to reflect 3 complete bundles, 27 paper days
+remaining, 2 UI-maturity bundles remaining, and next due date `2026-06-25`.
+Current default live readiness is now `NOT_READY_FOR_LIVE`, `10 / 16`,
+`checks_open=1`, `checks_mismatch=0`; remaining non-runtime proof blocker is
+`paper_proof_maturity`. Verification: focused live/API suite `14 passed`; full
+CAS Forex suite `371 passed`; UI build passed with `51` modules, `318.07 KB` JS
+/ `85.57 KB` gzip. Boundary preserved: this does not place orders, create
+broker `ACCEPT`, deposit, withdraw, move bank/card money, or automate payouts.
+Owner also provided future research inputs to record for the next pass:
+Myfxbook Forex Fury links
+`https://www.myfxbook.com/members/forexfuryreal/forex-fury-au/11171494`,
+`https://www.myfxbook.com/members/forexfuryreal/forex-fury-usdcad-50k/9421542`,
+and `https://www.myfxbook.com/members/forexfuryreal/forex-fury-26amp39/11975493`;
+evaluate whether MT4 is a better integration fit; and assess long-horizon
+agentic workflow support for spawning/attaching multiple LLM agents. These are
+queued research/implementation inputs, not completed evidence. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-24 CAS Forex paper proof window advanced: ran the scheduled daily
+paper-proof bundle pipeline for `2026-06-23` and `2026-06-24` using the
+broker-synced account equity (`--account-equity 100000`). Both bundle runs
+completed and appended all three required tracks: MT5 demo broker/API-verified
+receipt, paper route decision, and paper risk review. Regenerated UI readiness
+and daily schedule artifacts. Current proof maturity is now `complete_bundle_days=3`
+with complete dates `2026-06-22`, `2026-06-23`, and `2026-06-24`;
+`broker_verified_days=3`, `decision_days=3`, `risk_review_days=3`, and all
+proof/decision/risk chains verify. Latest risk review remains broker-synced at
+`account_equity=100000.0`, `PAPER_ATTEMPTS_ALLOWED`, `total_planned_lots=0.2`,
+and latest `review_count=4` including the earlier broker-sync apply review.
+The proof-cockpit UI threshold still remains `NOT_READY_FOR_UI_UX` because
+`3 / 5` complete daily bundles are present; next due date is `2026-06-25` with
+recommended command `python scripts/run_daily_paper_bundle.py --date 2026-06-25 --account-equity 100000 --max-risk-pct 0.5 --daily-risk-pct 1 --output-dir evidence_runs/index_tsmom_126_paper_proof`.
+Full proof still needs `27` more paper trading days for the 30-day proof gate.
+Verification: targeted daily-bundle/schedule/UI-readiness/live/API suite `23
+passed`; full CAS Forex suite `370 passed`; UI build passed with `51` modules,
+`318.07 KB` JS / `85.57 KB` gzip. Default live readiness remains
+`NOT_READY_FOR_LIVE`, `9 / 16`, `checks_open=2`, `checks_mismatch=0`. Trading
+edge remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit, debit/card/
+bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-23 CAS Forex broker-synced paper risk evidence applied: appended the
+broker-synced paper-risk review into the real local paper-risk evidence chain
+using `apply_broker_synced_risk_review(confirm_apply=True)`. The active
+`paper-risk-status.json` now has `review_count=2`, `chain_verified=true`, and
+latest `account_equity=100000.0` from the verified MT5 demo snapshot. The
+dashboard/daily-bundle overlay now sees that broker-synced risk review as the
+active default paper risk review. Result: default account ledger initial
+investment is `$100,000`, `requires_new_risk_review_for_selected_investment=false`,
+default account reconciliation moved to `RECONCILED`, `checks_mismatch=0`, and
+default live readiness moved from `8 / 16` to `9 / 16` with
+`checks_mismatch=0`. The preview now reports `already_applied=true` when the
+broker-synced review is already active instead of expecting a positive delta.
+Verification: targeted broker-sync/API/reconciliation/live-readiness suite `21
+passed`; full CAS Forex suite `370 passed`; UI build passed with `51` modules,
+`318.07 KB` JS / `85.57 KB` gzip. Boundary preserved: this is paper/demo
+evidence-chain work only; it does not place orders, create broker `ACCEPT`,
+deposit, withdraw, move bank/card money, or automate payouts. Remaining live
+operability blockers are now the proof-window maturity gate, the trading-edge
+promotion gate, and the real-money/payment authorization gates. Trading edge
+remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-23 CAS Forex broker-synced paper risk apply action: added explicit
+owner-run POST `/api/forex/account/apply-broker-sync-risk-review?confirm_apply=true`
+to append the broker-synced paper risk sizing review into the local
+paper-risk evidence chain. The route requires `confirm_apply=true`; without it
+the API returns `400` and does not write. The apply helper is idempotent: if the
+latest paper-risk review already matches the verified broker demo snapshot
+balance and source decision, it reports `already_applied=true` instead of
+appending duplicates. The dashboard Broker Sync risk strip now has an `Apply`
+button and shows whether evidence was appended or already present. The API now
+overlays the latest `paper-risk-status.json` into the dashboard daily bundle
+when present, so an applied broker-synced paper-risk review becomes visible as
+the active risk review. Boundary preserved: this is paper/demo evidence-chain
+work only; it does not place orders, create broker `ACCEPT`, deposit, withdraw,
+move bank/card money, or automate payouts. Verification: targeted broker-sync/
+API/live-readiness/paper-risk suite `20 passed`; full CAS Forex suite `370
+passed`; UI build passed with `51` modules, `318.07 KB` JS / `85.57 KB` gzip.
+Smoke: broker-synced preview remains `PAPER_ATTEMPTS_ALLOWED`,
+`broker_snapshot_initial_investment_usd=100000.0`, `total_planned_lots=0.2`;
+default live readiness remains `NOT_READY_FOR_LIVE`, `8 / 16`,
+`account_reconciliation=MISMATCH`. Trading edge remains `OPEN`; live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-23 CAS Forex broker-synced paper risk sizing preview: added
+`/api/forex/account/broker-sync-risk-preview`, dashboard
+`brokerSyncedRiskPreview`, TypeScript/API/fixture support, and a Dashboard
+Broker Sync mode strip that shows broker-seeded risk sizing. The preview reruns
+the existing `paper_risk.review_paper_risk_budget(...)` path from the verified
+MT5 demo account snapshot balance (`$100,000`) instead of inventing separate
+math. It reports `PAPER_ATTEMPTS_ALLOWED`, `0.20` planned lots, `$253.02` planned
+risk, and delta vs the default `$5,000` paper-risk review: `+$95,000` account
+equity, `+$227.72` planned risk, `+0.18` lots. It is explicit preview-only:
+`would_append_evidence=false`, `live_money_authorized=false`,
+`payment_movement_authorized=false`; it does not append the paper-risk evidence
+chain, change the default owner seed, place orders, create broker `ACCEPT`,
+deposit, withdraw, move bank/card money, or automate payouts. Verification:
+targeted paper-risk/live-readiness/API suite `18 passed`; full CAS Forex suite
+`368 passed`; UI build passed with `51` modules, `317.01 KB` JS / `85.25 KB`
+gzip. Trading edge remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`.
+
+2026-06-23 CAS Forex Dashboard broker-sync readiness preview: added a
+segmented `Default` / `Broker Sync` control to the Dashboard "Live Operability
+Checklist" panel. `Default` keeps the owner/risk-review paper ledger seed and
+continues to show the `$5,000` internal ledger vs `$100,000` MT5 demo snapshot
+as `account_reconciliation=MISMATCH`. `Broker Sync` explicitly fetches
+`/api/forex/readiness/live?sync_to_broker=true`, displays the broker snapshot
+seed, and shows the reconciliation row as `PASSED` when the verified broker demo
+balance/equity are used. This is a UI preview only: it does not silently change
+the default owner seed, rerun risk sizing, place orders, create broker `ACCEPT`,
+deposit, withdraw, move bank/card money, or automate payouts. Verification:
+targeted live-readiness/API suite `11 passed`; full CAS Forex suite `367
+passed`; UI build passed with `51` modules, `312.53 KB` JS / `84.51 KB` gzip.
+Smoke remains: default readiness `NOT_READY_FOR_LIVE`, `8 / 16`,
+`account_reconciliation=MISMATCH`; broker-sync readiness `NOT_READY_FOR_LIVE`,
+`8 / 16`, `account_reconciliation=PASSED`, broker seed `$100,000`. Trading edge
+remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
+2026-06-23 CAS Forex live operability checklist: added
+`cas-forex\cas_forex\live_readiness.py`, `/api/forex/readiness/live`, explicit
+broker-synced preview `/api/forex/readiness/live?sync_to_broker=true`, dashboard
+`liveReadiness`, and a Dashboard "Live Operability Checklist" panel. This rolls
+the scattered gates into plain-English rows for owner initial investment,
+investment movement tracking, market movement tracking, broker/demo receipt,
+broker account snapshot, CAS-vs-broker reconciliation, latest MT5 probe health,
+evidence chain, paper/demo proof window, trading edge, AI compounding memory,
+live order execution, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation. Movement-stream metadata now explicitly includes swap,
+commission, broker fees, open-position count, floating P/L, margin estimate,
+market-open/session/source fields so the checklist can prove account and market
+movement coverage. Verification: targeted live-readiness/API/movement/
+reconciliation suite `21 passed`; full CAS Forex suite `367 passed`; UI build
+passed with `51` modules, `311.18 KB` JS / `84.08 KB` gzip. Current computed
+state remains not live-ready: trading edge remains `OPEN`; live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED` / `CURRENTLY NOT LICENSED` until the evidence, broker,
+account/payment, and owner runtime requirements are actually complete.
+Smoke: default readiness reports `account_reconciliation=MISMATCH`; explicit
+broker-synced readiness reports `account_reconciliation=PASSED` with
+`broker_snapshot_initial_investment_usd=100000.0`, while overall readiness stays
+`NOT_READY_FOR_LIVE`.
+
+
+2026-06-23 CAS Forex Windows MT5 demo probe succeeded with account snapshot:
+verified that WSL Python lacks `MetaTrader5` but Windows Python has it installed,
+then ran `python.exe scripts/run_mt5_paper_receipt.py --date 2026-06-23` without
+append. New artifact:
+`evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-mt5-demo-probe-20260623212602.json`
+with `BROKER_API_VERIFIED`, Hugosway-Demo, `live_mode=false`, and redacted
+`account_snapshot`: balance/equity `$100,000`, margin `$0`, free margin
+`$100,000`, currency `USD`, leverage `500`. The proof ledger was not appended.
+Default reconciliation now correctly reports a mismatch because the internal
+owner/risk-review paper ledger is still `$5,000` while the connected MT5 demo
+account is `$100,000`. Added explicit opt-in broker-synced reconciliation preview:
+`/api/forex/reconciliation/account?sync_to_broker=true`, which seeds paper/demo
+accounting from the verified broker snapshot and proves `balance_equity_reconciliation=OK`
+without silently changing the default owner/risk seed or authorizing live money.
+Verification: targeted WSL account/receipt/reconciliation/movement suite `19
+passed`; Windows FastAPI API/receipt/reconciliation suite `19 passed`; full
+Windows CAS Forex suite `364 passed`; UI build passed with `51` modules,
+`302.23 KB` JS / `82.13 KB` gzip. Trading edge remains `OPEN`; live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED`.
+
+
+2026-06-23 CAS Forex latest MT5 probe status surfaced separately from last
+verified receipt: ran `python3 scripts/run_mt5_paper_receipt.py --date 2026-06-23`
+without append. The probe wrote
+`evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-mt5-demo-probe-20260623211448.json`
+with status `UNAVAILABLE` because the local Python environment does not have the
+`MetaTrader5` package. This did not mutate the proof ledger. Updated API behavior:
+`/api/forex/mt/receipt/latest` now returns the latest probe that actually has a
+verified broker receipt, while new `/api/forex/mt/probe/latest` and dashboard
+`mt5ProbeStatus` expose the newest probe attempt and blocker. The Proof UI now
+shows Latest MT5 Probe Attempt separately, so the cockpit preserves the last
+verified MT5 demo receipt while honestly showing that current receipt refresh and
+account-snapshot capture are blocked until MetaTrader5/terminal access exists.
+Verification: WSL MT5 receipt/reconciliation/account/movement suite `18 passed`;
+Windows FastAPI API/receipt/reconciliation suite `17 passed`; full Windows CAS
+Forex suite `362 passed`; UI build passed with `51` modules, `301.83 KB` JS /
+`81.98 KB` gzip. Trading edge remains `OPEN`; live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED`.
+
+
+2026-06-23 CAS Forex MT5 demo account snapshot in broker receipts: upgraded
+`MT5DemoPaperReceiptAdapter` and `paper_proof.validate_paper_broker_receipt` so
+API-verified MT5 demo receipts can carry a redacted `account_snapshot` with
+balance, equity, margin, free margin, currency, leverage, server, and account
+hash, while still excluding raw login/account identifiers. `/api/forex/mt/receipt/latest`
+now normalizes `account_snapshot` plus top-level `balance`, `equity`, `margin`,
+`margin_free`, `account_currency`, and `account_leverage` when broker evidence
+contains them. Account reconciliation now reads either top-level or nested broker
+account snapshots, so `balance_equity_reconciliation` can move from
+`UNVERIFIABLE` to `OK` as soon as broker/demo receipts include matching account
+truth. Existing saved receipts still show empty/null account snapshot fields,
+which honestly preserves the current live-readiness gap until the next MT5 demo
+probe captures account balance/equity/margin. Verification: MT5 receipt,
+reconciliation, account, and movement targeted suite `18 passed`; Windows FastAPI
+API/receipt/reconciliation suite `16 passed`; full Windows CAS Forex suite
+`361 passed`; UI build passed with `51` modules, `299.85 KB` JS / `81.56 KB`
+gzip. Trading edge remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED`.
+
+
+2026-06-23 CAS Forex account/broker reconciliation snapshot: added
+`cas-forex\cas_forex\account_reconciliation.py`, `/api/forex/reconciliation/account`,
+and dashboard `accountReconciliation` payload. The report cross-checks the
+internal owner investment ledger and movement stream against MT5 demo/broker
+receipt evidence: receipt validation, hash-chain verification, live-mode
+consistency, symbol coverage, open-position reconciliation, balance/equity
+reconcilability, and movement-vs-ledger consistency. It deliberately reports
+missing broker account balance/equity as `UNVERIFIABLE` instead of pretending the
+field is reconciled, so this live-readiness gap is visible. Dashboard now shows a
+broker/demo reconciliation panel with OK/mismatch/unverifiable checks and
+blockers. Boundary preserved: reconciliation is read-only verification only; it
+does not place orders, create broker `ACCEPT`, deposit, withdraw, move bank/card
+money, or automate payouts. Verification: reconciliation/movement/account suite
+`13 passed`; Windows FastAPI reconciliation/API suite `11 passed`; full Windows
+CAS Forex suite `360 passed`; UI build passed with `51` modules, `299.73 KB` JS /
+`81.52 KB` gzip. Trading edge remains `OPEN`; live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED`.
+
+
+2026-06-23 CAS Forex provider-backed movement snapshot path: upgraded
+`cas-forex\cas_forex\movement_stream.py` and `/api/forex/movement/snapshot`
+so the movement stream can accept configured-provider `MarketSnapshot` quotes
+while retaining deterministic paper-route fallback. The API now supports
+`/api/forex/movement/snapshot?use_provider=true`; when requested it fetches
+snapshots from the configured `MarketDataConnector` per active paper symbol and
+fails soft per symbol if the provider is unavailable. Provider snapshots update
+current price, floating P/L, bid/ask/spread, candle high/low/close, session, and
+market-open state, but they still do not authorize live orders or money movement.
+The UI client can request provider mode via `fetchMovementStream(useProvider)`.
+Verification: WSL movement/account suite `8 passed`; Windows FastAPI API-surface
+suite `5 passed`; full Windows CAS Forex suite `354 passed`; UI build passed
+with `51` modules, `294.08 KB` JS / `80.27 KB` gzip. Trading edge remains
+`OPEN`; live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED`.
+
+
+2026-06-23 CAS Forex paper/demo movement-stream scaffold: added
+`cas-forex\cas_forex\movement_stream.py`, `/api/forex/movement/snapshot`, and
+dashboard `movementStream` payload. The new stream recomputes paper/demo account
+movement from the owner investment ledger and active paper rows: balance, equity,
+realized P/L, floating P/L, swap, commission, broker fees, margin, free margin,
+drawdown, deposit, withdrawal, payout, and open-position count. It also exposes
+market movement telemetry for active paper symbols: bid, ask, mid, spread,
+synthetic candle, ATR units, SL/TP distance, floating P/L units/USD, and estimated
+margin. Dashboard and Trade UI now surface the movement scaffold. Boundary
+preserved: movement streams are paper/demo telemetry only; they do not place live
+orders, create broker `ACCEPT`, deposit, withdraw, move bank/card money, or
+automate payouts. Verification: WSL targeted movement/account suite `7 passed`;
+Windows FastAPI API-surface suite `5 passed`; full Windows CAS Forex suite
+`353 passed`; UI build passed with `51` modules, `294.08 KB` JS / `80.27 KB`
+gzip. Trading edge remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED`.
+
+2026-06-23 CAS Forex scalping/hourly filter correction: account/history time-filter metadata now includes `Seconds`, `Minutes`, and `Hour` in addition to `Day`, `Week`, `Month`, and `Custom`, so the cockpit supports scalp, minute, hourly, and longer-history views.
+
+
+2026-06-23 CAS Forex owner investment/account ledger first pass: added
+`cas-forex\cas_forex\account_ledger.py` plus `/api/forex/account/ledger`
+and dashboard `accountLedger` payload. The new ledger accepts any positive
+owner-selected paper/demo initial investment amount, creates traceable internal
+ledger IDs, summarizes deposit, balance, equity, realized/floating P/L, swap,
+commission, broker fees, margin, free margin, drawdown, planned risk, and exposes
+MT4/MT5-style `Positions` / `Orders` / `Deals` rows with `Seconds` / `Minutes` / `Hour` / `Day` / `Week` /
+`Month` / `Custom` filter metadata. Dashboard, Ledger, and History UI now surface
+the account/investment summary and terminal-style rows from this API/fixture
+shape. Boundary preserved: this is internal paper/demo accounting only; it does
+not deposit, withdraw, move bank/card money, place live orders, create broker
+`ACCEPT`, or automate payouts. Verification: Windows Python targeted account/API
+suite `9 passed`; full CAS Forex suite `350 passed`; WSL pure account-ledger
+suite `5 passed`; UI build passed with `51` modules, `286.46 KB` JS /
+`78.67 KB` gzip. Trading edge remains `OPEN`; live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED`.
+
 We are past "does the idea work?" and now at "turn the working pieces into a reliable product line."
 
 The next step is not more random experiments. The next step is a gated production build.
+
+2026-06-23 CAS Forex screenshot-derived live trading cockpit requirements:
+owner provided mobile trading-history and MT4/MT5 strategy-report screenshots
+as product references. Updated
+`docs\working\CAS_FOREX_LLM_HANDOFF_TODO_GOALS_20260623.md` with the required
+UI/backend behavior: terminal-style account summary, `Positions` / `Orders` /
+`Deals`, `Seconds` / `Minutes` / `Hour` / `Day` / `Week` / `Month` / `Custom` history filters, per-trade
+symbol/side/lot/price/timestamp/P&L rows, MT4/MT5-style strategy report stats
+and equity curve, and a deposit/investment ledger. Added explicit requirement
+that the owner can choose/deposit any positive initial investment amount and
+that CAS Forex must track both investment movement and market movement in real
+time. Paper/demo should emulate this now; live mode should use broker/payment/
+provider integrations once gates are complete. Trading edge remains `OPEN`;
+live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED`.
+
+2026-06-23 CAS Forex goal-framing correction: owner clarified that CAS Forex is
+not intended to remain a simple research project. The ultimate goal is a real
+owner-controlled live-money trading and income system. The current
+research/backtest/paper/demo layers are the proving, evidence, UI, broker, and
+runtime buildout path to owner-authorized live execution, not the final
+destination. Updated
+`docs\working\CAS_FOREX_LLM_HANDOFF_TODO_GOALS_20260623.md` to make this clear
+for future LLMs. The live-readiness path remains a completion checklist:
+evidence, broker route, account/payment setup, owner enable flags, credentials,
+and runtime gates must be completed before live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, or payout automation can become
+`AUTHORIZED`. Trading edge remains `OPEN`; live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED`.
+
+2026-06-23 CAS Forex LLM handoff and API truth cleanup: created the next-agent
+handoff/TODO/goal packet at
+`docs\working\CAS_FOREX_LLM_HANDOFF_TODO_GOALS_20260623.md`. Corrected the
+remaining owner-control API/test drift after the hard scope gate removal:
+`cas-forex\api\data.py` and `cas-forex\tests\test_settings_api_surface.py`
+now enforce that the removed hard scope fields are absent from live
+`/api/forex/settings/owner-control` and `/api/forex/dashboard` payloads.
+Verification: targeted API/runtime/authority suite `14 passed`; full CAS Forex
+suite `344 passed`; UI build passed with `51` modules, `275.87 KB` JS /
+`76.45 KB` gzip. Restarted local API on `127.0.0.1:8765`; live HTTP
+owner-control no longer exposes `personal_utilization_only`, `account_scope`,
+or `disallowed_scopes`. Trading edge remains `OPEN`; live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED`.
+
+2026-06-22 CAS Forex extra hard scope gate removal: owner rejected the added
+hard scope switch. Removed the extra runtime check, config field, direct
+regression test, owner-control API fields, UI Settings gate, fallback fixture
+fields, authority-boundary wording, mobile app wording, and changelog/TODO
+current-state language. Runtime still uses owner-controlled real-money gates:
+live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation require explicit owner enable flags, credentials/provider
+config, and gate clearance before they can become `AUTHORIZED`. Verification:
+targeted runtime/authority suite `11 passed`; full CAS Forex suite `338
+passed`; UI build passed with `51` modules, `269.95 KB` JS / `75.10 KB` gzip.
+Restarted the local API on `127.0.0.1:8765`; live HTTP
+`/api/forex/settings/owner-control` and `/api/forex/dashboard` no longer expose
+the removed scope switch fields, and live-trading missing-requirement text now
+uses `account/source-of-funds acknowledgments signed`. Final UI build size after
+the wording cleanup: `51` modules, `269.94 KB` JS / `75.09 KB` gzip. Trading
+edge remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED`.
+
+2026-06-22 CAS Forex audit-blocker closeout: addressed the two local
+handoff-clean blockers from the WSL/API/UI operating audit. The UI readiness
+status artifact
+`cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-ui-readiness-status.json`
+now matches the corrected readiness rule: status is still `NOT_READY_FOR_UI_UX`
+because only `1 / 5` complete daily bundles exists, but `next_ui_step` now
+explicitly says a read-only UI shell may start immediately if multi-day proof is
+labeled pending. The API dashboard now returns that corrected text. The UI
+package lock no longer contains the temporary `/tmp` tarball reference for
+`@esbuild/linux-x64`; `cas-forex\ui\package.json` and
+`cas-forex\ui\package-lock.json` use registry version pins for the Linux
+Rollup/esbuild optional dependencies. Verification: `python -m pytest tests -q`
+in `cas-forex` reports `319 passed`; `npm run build` in `cas-forex\ui` passes
+with `50` modules and `258.44 KB` JS / `71.54 KB` gzip; Windows and WSL
+`npm ci --dry-run` complete; `rg` finds no `file:/tmp`, `/tmp/`, or `tmp*.tgz`
+references in the UI package files; API dashboard returns `AI_FULL_AUTO_PAPER`,
+`16800` backsolve scenarios, `BROKER_API_VERIFIED`, adaptive
+`READ_ONLY_PAPER_RESEARCH`, and `OPEN_INITIAL=2`. Status: the local CAS Forex
+read-only proof-cockpit handoff is cleaner. Trading edge remains `OPEN`; live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED`.
+
+2026-06-22 CAS Forex local WSL/API/UI operating audit: verified the pasted
+status report against the local workspace. CAS Forex is running locally in
+paper/research mode at `http://127.0.0.1:5174` and
+`http://127.0.0.1:8765/api/forex/health`; `/api/forex/dashboard` returns the
+evidence-backed dashboard with `AI_FULL_AUTO_PAPER`, `16800` backsolve
+scenarios, `0` viable scenarios, `BROKER_API_VERIFIED` MT5 demo receipt,
+adaptive cockpit status `READ_ONLY_PAPER_RESEARCH`, and adaptive action counts
+`OPEN_INITIAL=2`. Verified Windows-side full CAS Forex suite
+`319 passed`, Windows UI build `50` modules / `258.44 KB` JS / `71.54 KB`
+gzip, WSL full suite `319 passed`, WSL UI build, WSL compiler bridge loading
+`/mnt/c/Users/wakil/OneDrive/Desktop/tksCAS/noetic-compass-scaffold/noetic-compass/api/notation/compiler.py`,
+and WSL PCBA semantics artifact refs with no missing refs. Current residual
+handoff issues: top-level UI readiness evidence artifact
+`cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-ui-readiness-status.json`
+is stale and still says only to keep running daily bundles, while code now says
+a read-only UI shell may start immediately with pending multi-day proof labels;
+regenerate that artifact before relying on the dashboard as the source of truth.
+Also clean `cas-forex\ui\package-lock.json` because the root package lock still
+contains a temporary tarball ref for `@esbuild/linux-x64`, even though current
+installed `node_modules`, `npm ci --dry-run`, and builds pass. Live trading,
+broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation
+remain `NOT LICENSED`; trading edge remains `OPEN`.
+
+2026-06-22 CAS Forex proof-cockpit API/UI audit fix: audited the newly landed
+FastAPI + React self-contained cockpit work and corrected the main gaps. The
+API routes under `cas-forex\api` now return evidence-backed payloads instead
+of `{status, data: null}` stubs, using a shared loader in
+`cas-forex\api\data.py` for the active paper proof, daily schedule, daily
+bundle, strategy ledger, leverage backsolve, condition tally, walk-forward
+summary, MT5 demo receipt, owner-control state, and adaptive cockpit. The root
+dashboard endpoint now returns a real `DashboardState`. The React root
+`cas-forex\ui\src\App.tsx` now uses `useDashboard()` with fixture fallback, the
+client defaults to `http://127.0.0.1:8765/api/forex` to avoid an occupied local
+`8000` port, and the fixture fallback includes the current adaptive cockpit payload. Generated
+fresh adaptive paper/research artifacts under
+`cas-forex\evidence_runs\index_tsmom_126_paper_proof`: adaptive compounding
+status/jsonl/jsonl.state plus adaptive cockpit JSON/HTML. Current adaptive
+cockpit status is `READ_ONLY_PAPER_RESEARCH`, action counts `OPEN_INITIAL=2`,
+chain verified, and no broker order placed. Also wired the pure-SVG chart
+components into real pages: confidence sparkline on Dashboard, paper equity
+reference on Ledger, and proposal price scale on Trade. Verification:
+FastAPI dashboard smoke passed; UI build passed (`50` modules, `258.44 KB` JS,
+`71.54 KB` gzip); full CAS Forex suite `319 passed`. Status: proof-cockpit
+API/UI is improved and adaptive cockpit is no longer empty, but trading edge
+remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit, debit/card/bank
+movement, and payout automation remain `NOT LICENSED`.
+
+2026-06-22 CAS Forex adaptive paper compounding manager: implemented the V1
+core engine for owner-requested winner compounding / pyramiding in paper mode.
+Added `cas-forex\cas_forex\adaptive_compounding.py`,
+`cas-forex\cas_forex\mt_history_import.py`,
+`cas-forex\cas_forex\adaptive_cockpit.py`,
+`cas-forex\scripts\run_adaptive_compounding_review.py`,
+`cas-forex\scripts\run_mt_history_import.py`,
+`cas-forex\scripts\run_adaptive_cockpit.py`,
+`cas-forex\tests\test_adaptive_compounding.py`,
+`cas-forex\tests\test_mt_history_import.py`, and
+`cas-forex\tests\test_adaptive_cockpit.py`. The new adaptive manager consumes
+latest paper route decisions, active paper positions, condition tally evidence,
+and imported MT4/MT5 CSV/HTML account-history summaries. It can recommend
+`OPEN_INITIAL`, `ADD_TO_WINNER`, `HOLD`, `TIGHTEN_STOP`,
+`PARTIAL_TAKE_PROFIT`, `CLOSE_BASKET`, or `NO_TRADE`, while saving basket
+state, per-trade SL/TP, evidence refs, and adaptive memory snapshots for
+future strategy analysis. The importer summarizes win rate, profit factor,
+symbol performance, and multi-trade bursts from MT4/MT5 exports. The cockpit
+writer generates read-only JSON/HTML artifacts for the CAS Forex proof UI.
+Verification: targeted adaptive suite `10 passed`; full CAS Forex suite
+`319 passed`. Status: adaptive compounding is paper/research infrastructure,
+not broker authority. Trading edge remains `OPEN`; live trading, broker
+`ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED`.
+
+2026-06-22 CAS Forex user-risk and AI autonomy expansion: owner rejected the
+idea that CAS Forex should hard-code a `10%` or `15%` risk cap or limit AI to
+recommendations only. Updated the backsolve and owner-control layers so the
+owner can provide any positive max-loss percentage, test/open up to `15`
+concurrent paper trades, and choose AI autonomy modes. Added/updated
+`cas-forex\cas_forex\leverage_backsolve.py`,
+`cas-forex\scripts\run_leverage_income_backsolve.py`,
+`cas-forex\cas_forex\owner_control.py`,
+`cas-forex\tests\test_leverage_backsolve.py`, and
+`cas-forex\tests\test_owner_control.py`. New modes include
+`AI_FULL_AUTO_PAPER`, which can select risk cap, lot size, and concurrency from
+the evidence grid for paper-mode autonomy, and `AI_FULL_AUTO_LIVE_REQUESTED`,
+which records the owner's request but remains blocked because live trading,
+broker `ACCEPT`, and payment movement are `NOT LICENSED`. Generated fresh
+report
+`cas-forex\evidence_runs\leverage_income_backsolve\leverage-income-backsolve-20260622191201-report.json`
+with caps `10`, `15`, `25`, `50`, `100`, `2500`, and `6000`, concurrency
+`1..15`, and `AI_FULL_AUTO_PAPER`. Result: `16,800` scenarios, viable scenarios
+`0`, AI status `AI_NO_VIABLE_SCENARIO`. Verdict counts:
+`TARGET_NOT_REACHED=14532`, `TARGET_REACHED_BUT_DRAWDOWN_FAIL=2168`,
+`TARGET_REACHED_BUT_MARGIN_FAIL=100`. Even extreme owner-selected caps did not
+produce a paper candidate because target-reaching scenarios require drawdown
+around `2264.448%` for `$5k/month` and/or exhaust stressed equity/margin.
+Verification: `python -m pytest tests -q` in `cas-forex` reports `309 passed`.
+Trading edge remains `OPEN`; live trading, broker `ACCEPT`, auto-deposit,
+debit/card/bank movement, and payout automation remain `NOT LICENSED`.
+
+2026-06-22 CAS Forex leveraged income backsolve: implemented the paper-only
+`US30`/`NAS100` leverage/income backsolve requested after the owner asked why
+multiple trades and `1:100` / `1:200` leverage could not turn the current
+evidence into `$5k-$12k/month` from a `$5,000` seed. Added
+`cas-forex\cas_forex\leverage_backsolve.py`,
+`cas-forex\scripts\run_leverage_income_backsolve.py`, and
+`cas-forex\tests\test_leverage_backsolve.py`. Generated current report
+`cas-forex\evidence_runs\leverage_income_backsolve\leverage-income-backsolve-20260622185718-report.json`
+and Markdown sibling. Result: `480` scenarios checked across `$5,000` and
+`$12,000` monthly targets, `tsmom_126_250_2_10` and `tsmom_252_500_2_8`,
+`HugosWay`/`CedarFX` research profiles at `1:100` and `1:200`, lot grid
+`0.01` through `10`, and concurrency `1`, `2`, `4`. Viable scenarios:
+`0`. The strongest current D1 evidence baseline is `tsmom_126_250_2_10` at
+`$32.93/month` per `0.05` lots on the saved `$10k` research balance, with
+`7.0764%` base max drawdown; `tsmom_252_500_2_8` has `NO_ROUTED_EVIDENCE`
+on the selected D1 route map. The best high-exposure projection can reach
+large monthly dollars, but the lowest drawdown among target-reaching scenarios
+is `2264.448%` for `$5k/month` and `5661.12%` for `$12k/month`, so every
+target-reaching scenario violates the owner-selected `10%` account-loss cap
+before it can become a paper-proof candidate. Leverage changes margin capacity,
+not strategy edge. Trading edge remains `OPEN`; live trading, broker `ACCEPT`,
+auto-deposit, debit/card/bank movement, and payout automation remain
+`NOT LICENSED`.
+
+2026-06-22 CAS Forex $5k seed monthly projection check: owner asked what
+CAS Forex stands to make monthly if only `US30` and `NAS100` are viable, using
+an initial `$5,000` investment. Current evidence does not support an income
+claim. Translating the strongest D1 `index_tsmom_126_d1` walk-forward report
+(`1.8932%` routed mean return per 150-bar D1 window at `0.05` lots on `$10k`)
+to the current paper-risk sizing (`0.01` lots on `$5k`) gives roughly
+`$3-$5/month` average depending on whether `NO_TRADE` windows are included.
+Using the same risk density as the walk-forward report (`0.025` lots on `$5k`)
+gives roughly `$8-$13/month` average. The older controlled in-sample TSMOM
+252 result (`~31.6%` over ~5 years) maps to roughly `$26/month` on `$5k`, but
+that is weaker evidence because it is not the current paper-proof candidate.
+Targeting `$5k-$12k/month` from `$5k` requires `100%-240%` monthly returns,
+which remains `SURVIVAL_RISK`, not a projection. Trading edge remains `OPEN`;
+live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and
+payout automation remain `NOT LICENSED`.
+
+2026-06-22 CAS Forex third-party audit pre-UI gate: owner requested a
+third-party audit of the entire CAS Forex project before UI/UX development.
+Created `docs\working\CAS_FOREX_THIRD_PARTY_AUDIT_PACKET_20260622.md` as the
+copy-paste audit handoff with local file addresses, project spec sheet,
+evidence report map, reproduction commands, known hotspots, and requested
+auditor deliverables. Updated the valid next move: before building the read-only
+proof cockpit UI, obtain an independent audit of trading/backtest correctness,
+cost/fill/data assumptions, leakage/overfitting risk, evidence-chain integrity,
+paper-proof gates, MT5 demo safety, owner-control/LLM guardrails, and live/payment
+lockouts. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED`.
+
+2026-06-22 CAS Forex UI/UX start correction: owner challenged whether CAS Forex
+must wait a month, or even wait for five complete daily bundles, before UI/UX
+work starts. Corrected plan: no. The CAS Forex proof-cockpit/platform UI can
+start immediately as a read-only paper/research cockpit using the current day-1
+real evidence plus clearly labeled pending/blocked future-day states. The `5`
+complete daily bundles threshold is a truthful multi-day proof-display maturity
+threshold, not a blocker to starting the UI build. The `30 / 30` verified paper
+days gate is for live-money/deployment promotion, not for beginning UI/UX. Live
+trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout
+automation remain `NOT LICENSED`. Next valid move: start the CAS Forex proof
+cockpit MVP now with disabled live controls and explicit blockers.
+
+2026-06-22 CAS Forex priority synthesis: user designated CAS Forex as the urgent near-term focus because personal/project runway is tight, and asked to pull in CAS_PCBA_Engineer, CAS Harness, and TKS_FORMAL_MANUAL_v6.1_CLEAN as strengthening context. Created `docs\working\cas_forex_priority_synthesis_20260622.md`. Current verdict: CAS Forex has a strong audited research/backtest chassis, but the trading edge remains `OPEN` and live trading remains `NOT LICENSED`. Real-data FX-major results remain narrow and negative after realistic costs: SMA and Chronos lose materially; mean-reversion with trend filter is only a thin in-sample positive and flips negative around normal retail all-in costs; regime switching works end-to-end but does not beat the best single FX-major strategy. Recommended next move is not live money: implement non-FX instrument/point-value support for NAS100/US30/XAU, add broker-grade data/cost realism, run index/gold trend/breakout plus owner 2020 rules, then add walk-forward validation and real 30-trading-day paper proof. CAS_PCBA_Engineer should contribute CCDL board specs, TP1-TP5 trade test points, CSB/CDAB/CMB/CPMB/COB diagnostics, fault-injection tests, and circuit registry/rollback discipline, but must not create broker `ACCEPT`. CAS Harness should contribute Evidence Packet, proof UI, `/verify`-style replay, and claim-status discipline. TKS v6.1 should contribute RPM prerequisite/failure propagation, fractal stability, and type/effect boundaries so research evidence is not confused with live permission.
+
+2026-06-22 CAS Forex index/gold first implementation pass: added `cas-forex\cas_forex\instruments.py` and wired metadata-backed non-FX instrument support into forecast symbols, backtest price units/P&L/notional math, Yahoo ticker lookup, MT5/broker symbol conversion, and real-data runner lookup. Added `NAS100`, `US30`, and `XAU/USD` as research instruments with explicit point/contract defaults and regression coverage for NAS100 point P&L, XAU/USD contract point value, and non-FX Yahoo/MT5 mappings. Verification: `python -m pytest tests -q` in `cas-forex` reports `220 passed`. Ran first research-only Yahoo proxy smokes with `0.1` lots, 5y daily data, `1.0` spread plus `1.0` extra cost: `breakout NAS100 US30 XAU/USD` portfolio `-$9,833.96` due XAU/USD wipeout; `sma NAS100 US30` portfolio `-$954.72`; `breakout NAS100 US30` portfolio `+$299.62` but `report.passed=false` because CAS did not improve P&L/drawdown versus raw and buy-and-hold dominated (`NAS100 +115.08%`, `US30 +52.21%`). Status: indices/gold are now runnable through the harness; deployable edge remains `OPEN`; live trading remains `NOT LICENSED`. Next valid move is owner 2020 NAS30/NAS100 rule encoding, trailing/time exits, broker-grade bid/ask data, and walk-forward validation.
+
+2026-06-22 CAS Forex capital-goal/range-scalper update: user set an explicit personal target of `$5k-$12k+` monthly income from an estimated `$2k-$5k` seed account, with user-controlled risk budget plus eventual profit split into reinvestment, bank/debit payout, and reserve flows. Added `cas-forex\cas_forex\capital_plan.py` so the system computes required monthly return and labels the stated target range as `SURVIVAL_RISK` (`100%` to `600%` monthly return depending on seed/target), not as an expected or promised result. Profit sweep policy remains `DRY_RUN` / `INTERNAL_LEDGER_ONLY` by default; provider/bank/debit/card transfer automation remains `NOT LICENSED` until broker, payment-provider, allowlist, receipt, idempotency, tax, and legal gates close. Added a Forex-Fury-inspired but non-proprietary `make_low_vol_range_scalper_signal()` and wired `--model range_scalper` plus condition-lab settings. Initial research-only 5y daily Yahoo proxy runs with costs found a second positive lead: all five FX majors portfolio `+$1,572.25`, chain verified, CAS gating improved P&L/drawdown but USD/JPY and USD/CAD were negative; filtered EUR/USD/GBP/USD/AUD/USD portfolio `+$2,686.37`, avg max DD `2.38%`, chain verified. Status: range-scalper is a positive research signal, not live permission or income proof; live trading remains `NOT LICENSED`. Next valid move: walk-forward validation for index TSMOM and range-scalper, broker-grade bid/ask data, MTFA/timeframe-specific testing, and 30-trading-day paper proof before any live funds.
+
+2026-06-22 CAS Forex temporal nested-lacunarity update: user asked to nest lacunarity over second, minute, hour, day, month, and year timeframes so CAS-SDG simulations, CJT regions, and RPM routes can switch strategies/settings by timeframe. Added first-class `timeframe` and `time_scale` fields to `cas-forex\cas_forex\condition_lab.py`, CLI support for `--timeframes`, synthetic volatility scaling by approximate bar duration, Yahoo-safe real-data interval defaults where available, and default nested axes `source -> symbol -> time_scale -> timeframe -> regime -> vol_mult -> family`. RPM route keys now include the temporal axes. First compact NAS100 synthetic temporal run (`S1 M1 H1 D1 MN1 Y1`, `trend_up/range`, `tsmom_252_500_2_8` plus `range_scalper_24_120`) produced `24` cells, overall gap fraction `0.8750`, `S1/M1/H1` at `100%` gap, `D1/MN1/Y1` at `75%` gap, `1` RPM route, and `11` `NO_TRADE` conditions; report `cas-forex\evidence_runs\temporal_lacunarity_focus\condition-lab-20260622044212-report.json`, chart `docs\working\cas_forex_temporal_lacunarity_chart_20260622.png`. Status: architecture now supports multi-timeframe condition mapping, but this is a focused research stress map, not live edge; true second-level real testing requires broker/tick data, and live trading remains `NOT LICENSED`. Next valid move: walk-forward RPM over timeframe-specific route maps using broker-grade M1/tick data and untouched future windows.
+
+2026-06-22 CAS Forex walk-forward RPM update: added `cas-forex\cas_forex\walk_forward.py` and `cas-forex\scripts\run_walk_forward_condition_lab.py` so Condition Lab route maps are trained on one historical window, frozen, and evaluated only on the next untouched future window. The evaluator uses prior training bars as signal context without scoring training-window P&L, preventing long-lookback settings from being falsely inert in shorter test windows. First corrected D1 Yahoo-proxy run across `NAS100`, `US30`, `EUR/USD`, `GBP/USD`, and `AUD/USD` with `tsmom_252_500_2_8` plus `range_scalper_24_120` produced `18` windows, `7` routed windows, `3` active routed windows, `3 / 3` positive active routed windows, routed total return-percent sum `3.8480%`, active routed mean return `1.2827%`, routed max drawdown `2.2980%`, and `32` routed trades; research grade remains `NOT_PROMOTED` because route coverage is sparse and positive routed window rate is only `0.4286`. Report `cas-forex\evidence_runs\walk_forward_condition_lab\walk-forward-20260622044930-report.json`, chart `docs\working\cas_forex_walk_forward_rpm_chart_20260622.png`. Status: range-scalper survives the first active out-of-sample windows on EUR/USD/GBP/USD, but this is still research evidence, not live permission or income proof; live trading remains `NOT LICENSED`. Next valid move: expand broker-grade M1/H1 walk-forward data, improve NAS100/US30 condition detection, and require paper proof before live funds.
+
+2026-06-22 CAS Forex strategy-lead ledger and switching audit: user asked to always keep winning strategies visible and asked how much the analyze/simulate/switch-up strategy has been tried, including whether NFP/conflict-style conditions are factored in. Added `cas-forex\strategy_leads.json`, `cas-forex\cas_forex\strategy_ledger.py`, `cas-forex\tests\test_strategy_ledger.py`, and `docs\working\cas_forex_winning_strategy_ledger_20260622.md`. Current front-of-mind leads are `range_scalper_filtered_fx_d1` as priority 1 (`ACTIVE_RESEARCH_LEAD`, focused on EUR/USD/GBP/USD with AUD/USD watchlist), `index_tsmom_252_d1` as priority 2 (`ACTIVE_RESEARCH_LEAD`, focused on NAS100/US30 but blocked on better trend/range detection), and `meanrev_trend_filter_fx_d1` as `WATCHLIST_ONLY`. The switching program has been tried as synthetic CAS-SDG regime simulation, real D1/H1 hard switching, Condition Lab RPM route maps, temporal nested lacunarity, and walk-forward RPM. Current verdict: machinery works, but switching is not yet a promoted strategy; route only when evidence exists, otherwise `NO_TRADE`. NFP/CPI/FOMC/GDP/unemployment/central-bank/rate-decision seed events exist in `MacroGate`, and CJT macro-shock diagnostics can route to `LIVE_LOCKED`, but historical backtests do not yet evaluate real macro event timing per candle and conflict/geopolitical shocks are not yet first-class Condition Lab/RPM axes. Status: event-aware multi-timeframe/mode routing is now the next required build; live trading remains `NOT LICENSED`.
+
+2026-06-22 CAS Forex guarded LLM optimizer scaffold: added `cas-forex\cas_forex\llm_optimizer.py`, `cas-forex\cas_forex\condition_tally.py`, and `cas-forex\scripts\run_condition_tally.py`, with tests in `cas-forex\tests\test_llm_optimizer.py` and `cas-forex\tests\test_condition_tally.py`, plus plan `docs\working\cas_forex_llm_optimizer_plan_20260622.md`. This creates the first bounded LLM research-assistant path: strategy ledger plus evidence reports plus condition/event tally feed an `OptimizerProposal`, then `CASPCBAOptimizerGuard` returns `RESEARCH_QUEUE`, `FLAG_FOR_HUMAN_REVIEW`, or `REJECT`. The guard requires known strategy leads, evidence refs, condition contexts, and the `NOT LICENSED` claim boundary; it rejects live trade placement, live-mode unlocks, broker `ACCEPT`, bank/debit/card/payment movement, prompt-injection surfaces, and guaranteed-profit language. First saved condition tally from the corrected D1 walk-forward report is `cas-forex\evidence_runs\condition_tally\condition-tally-20260622052757-report.json`: `18` windows, `7` routed, `11` `NO_TRADE`, `3` positive routed, all legacy windows defaulting to `normal`; strongest current bucket is `EUR/USD` `D1` `normal` `range_scalper_24_120` with mean return `1.1483%` and `31` trades. Status: this helps protect against evidence drift and unsafe proposal escalation, but hallucination prevention remains `OPEN`, live trading remains `NOT LICENSED`, and payout/deposit automation remains `NOT LICENSED`. Next valid move: build an open-weight model benchmark runner that compares Qwen/Llama/Mistral/Gemma/DeepSeek candidates on evidence-grounding, JSON contract reliability, no-live-authority behavior, negative controls, drift checks, and cost before choosing a default CAS Forex optimizer model.
+
+2026-06-22 CAS Forex owner-controlled simulator promotion policy: user clarified that the future LLM should be able to utilize CAS-SDG / Condition Lab based on what it learns, and that if enough wins are accumulated for `Strategy X`, the owner should be able to deny, receive notification only, allow a limited number of attempts, or eventually allow autonomous deployment. Added `cas-forex\cas_forex\owner_control.py`, `cas-forex\scripts\run_owner_promotion_review.py`, and `cas-forex\tests\test_owner_control.py`; updated `OptimizerProposal` with `simulator_requests` so the later LLM add-on can request CAS-SDG sweeps without being connected directly to execution. Owner modes are `DENY`, `NOTIFY_ONLY`, `LIMITED_PAPER`, `PAPER_AUTO`, and `LIVE_AUTO`; `LIVE_AUTO` currently returns `LIVE_BLOCKED_NOT_LICENSED`, while `LIMITED_PAPER` and `PAPER_AUTO` are paper-only. First current-evidence owner review is `cas-forex\evidence_runs\owner_promotion_review\owner-promotion-review-20260622053731-report.json`, sourced from `condition-tally-20260622052757`: requested `LIMITED_PAPER`, but both current routed buckets remain `NOTIFY` because CAS-SDG win count, walk-forward coverage, 30-day paper proof, and paper pass are not yet present. Status: the owner accept/deny switchboard now exists for simulator/paper promotion, but live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and profit-sweep provider automation remain `NOT LICENSED`; the urgent `$5k-$12k/month` target remains `SURVIVAL_RISK` math until a real edge clears broker-grade and paper gates. Next valid move: feed expanded CAS-SDG/Condition Lab runs plus M15/H1 walk-forward evidence into owner-control reviews for `range_scalper_filtered_fx_d1` and `index_tsmom_252_d1`.
+
+2026-06-22 CAS Forex GO sprint evidence update: implemented the next owner-control proof step and ran fresh evidence. `cas-forex\cas_forex\owner_control.py` now has `count_condition_lab_simulator_wins()`, `cas-forex\scripts\run_owner_promotion_review.py` now ingests `--condition-lab-reports`, and `cas-forex\scripts\run_condition_tally.py` now supports custom `--axes` for family-level reviews. Fresh range-scalper M15/H1 evidence did not promote: `range_scalper_24_120` M15/H1 walk-forward `evidence_runs\range_scalper_m15_h1_walk_forward_go\walk-forward-20260622054614-report.json` had `340` windows, `65` routed, combined routed mean return `-0.0614%`, grade `NOT_PROMOTED`; adding `range_scalper_12_80` in `evidence_runs\range_scalper_variants_m15_h1_go\walk-forward-20260622054829-report.json` worsened to combined routed mean return `-0.1056%`. Fresh index TSMOM evidence produced the strongest current candidate: `evidence_runs\index_tsmom_h1_d1_go\walk-forward-20260622054921-report.json` found the D1 subreport `WALK_FORWARD_LEAD` with `5` routed D1 windows, `3` positive, positive routed window rate `0.6`, routed mean return `1.8932%`, max drawdown `7.0764%`, and `76` trades. CAS-SDG report `evidence_runs\index_tsmom_sdg_owner_go\condition-lab-20260622055024-report.json` had `288` cells and `16` RPM routes with top D1 trend-up/high-vol TSMOM cells on US30/NAS100. Owner review `evidence_runs\owner_promotion_review\owner-promotion-review-20260622055433-report.json` in `LIMITED_PAPER` mode shows D1 `tsmom_126_250_2_10` cleared simulator and walk-forward thresholds; remaining blockers are `paper_days 0 < required 30` and `paper_passed is false`. Added `index_tsmom_126_d1` to `cas-forex\strategy_leads.json` as priority 2. Status: strongest current paper-proof candidate is now `index_tsmom_126_d1`; live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`. Next valid move: start the 30-trading-day paper-proof path for NAS100/US30 D1 TSMOM 126 with broker-grade index/CFD spread/slippage validation.
+
+2026-06-22 CAS Forex paper-proof ledger started: added `cas-forex\cas_forex\paper_proof.py`, `cas-forex\scripts\run_paper_proof_plan.py`, and `cas-forex\tests\test_paper_proof.py` to give `index_tsmom_126_d1` its own plan, append-only daily Evidence Packet chain, and status report. Started the actual ledger at `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-status.json` with a 2026-06-22 day-1 plan-only heartbeat for D1 `tsmom_126_250_2_10` on `US30` and `NAS100`; the later MT5 adapter pass upgraded the same date to `BROKER_API_VERIFIED`. Current status: completed trading days `1 / 30`, broker verified days `1 / 30`, chain verified `true`, live mode used `false`, passed `false`, blockers `paper_days 1 < required 30` and `broker_verified_days 1 < required 30`. Status: this protects the strongest lead and starts the proof ledger, but it is not a live-money gate. Broker `ACCEPT`, live trading, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`. Next valid move: append one verified broker/demo paper day at a time until 30 real paper days pass.
+
+2026-06-22 CAS Forex broker/demo receipt gate: extended `cas-forex\cas_forex\paper_proof.py` and `cas-forex\scripts\run_paper_proof_plan.py` so the active `index_tsmom_126_d1` paper ledger can ingest paper/demo broker receipts without confusing them with live permission. The gate now distinguishes `PLAN_ONLY`, `BROKER_EXPORT_HASHED`, and `BROKER_API_VERIFIED`; command-line/user-supplied JSON can only become hash-bound export evidence, while `BROKER_API_VERIFIED` is reserved for a broker/demo adapter. Duplicate receipt events for an existing trading date do not inflate the day count; the report keeps the strongest evidence per date. Added contract doc `docs\working\cas_forex_paper_broker_receipt_contract_20260622.md` and wrote local template `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-receipt-template-20260622.json`. Current status after the MT5 adapter pass is `1 / 30`, broker verified days `1 / 30`, chain verified `true`, passed `false`. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`. Next valid move: append one verified MT5 demo paper day at a time and pair each day with route/no-trade strategy status.
+
+2026-06-22 CAS Forex MT5 demo receipt adapter: added `cas-forex\cas_forex\paper_broker_adapter.py`, `cas-forex\scripts\run_mt5_paper_receipt.py`, and `cas-forex\tests\test_paper_broker_adapter.py`. The adapter reads MT5 demo account/account-history/open-position state, refuses live mode and non-demo accounts, and can append `BROKER_API_VERIFIED` paper receipts without placing orders. Real probe command `python scripts/run_mt5_paper_receipt.py --date 2026-06-22 --append-if-verified --output-dir evidence_runs/index_tsmom_126_paper_proof` returned `BROKER_API_VERIFIED` from `Hugosway-Demo`, terminal `MetaTrader 5`, with `orders_attempted=0`, `orders_paper_executed=0`, open positions reconciled `true`, and receipt hash `94d68da3b3c4d7bd13e29f69df60e1ff1d7938757e0e8e3d9aec613976704c0c`. Probe artifact: `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-mt5-demo-probe-20260622153728.json`. Current active proof status: completed days `1 / 30`, broker verified days `1 / 30`, packet count `2`, chain verified `true`, passed `false`, blockers `paper_days 1 < required 30` and `broker_verified_days 1 < required 30`. Status: this is the first real demo-source paper-proof day, not live trading permission or income proof. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`. UI/UX checkpoint: not yet; build the proof cockpit after daily MT5 demo receipt generation and route/no-trade status are stable across multiple days so the UI can display truthful proof rather than placeholders.
+
+2026-06-22 CAS Forex daily paper route/no-trade loop: added `cas-forex\cas_forex\paper_decision.py`, `cas-forex\scripts\run_paper_route_decision.py`, `cas-forex\tests\test_paper_decision.py`, and doc `docs\working\cas_forex_daily_paper_decision_loop_20260622.md`. This creates the second daily proof track beside MT5 receipts: it records whether CAS would route, no-trade, macro-lock, or mark unavailable for the active lead, while keeping Evidence Packet status `SUPPRESSED` and placing no broker order. Real command `python scripts/run_paper_route_decision.py --date 2026-06-22 --append-decision --output-dir evidence_runs/index_tsmom_126_paper_proof` produced status `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-paper-decision-status.json` and chain `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-paper-decisions.jsonl`. Result: route action `ROUTE_PAPER_SIGNAL`, macro `PASS`, event context `normal`, US30 `LONG` confidence `0.4612`, NAS100 `LONG` confidence `0.7539`, no broker order placed. Status: CAS now has demo-source proof plus route/no-trade intent for paper day 1, but live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`. Risk-budget sizing is now covered by the paper risk-budget loop below.
+
+2026-06-22 CAS Forex paper risk-budget sizing loop: added `cas-forex\cas_forex\paper_risk.py`, `cas-forex\scripts\run_paper_risk_review.py`, `cas-forex\tests\test_paper_risk.py`, and doc `docs\working\cas_forex_paper_risk_budget_loop_20260622.md`. This creates the third daily proof track: it sizes routed paper candidates against account equity, per-trade risk percent, daily risk percent, lot step, max position lots, and daily attempt cap while keeping Evidence Packet status `SUPPRESSED` and placing no broker order. Real command `python scripts/run_paper_risk_review.py --account-equity 5000 --max-risk-pct 0.5 --daily-risk-pct 1.0 --append-review --output-dir evidence_runs/index_tsmom_126_paper_proof` produced status `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-paper-risk-status.json` and chain `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-paper-risk.jsonl`. Result: risk status `PAPER_ATTEMPTS_ALLOWED`, account equity `$5,000`, proposed attempts `2`, allowed attempts `2`, suppressed attempts `0`, US30 `0.01` paper lots with planned risk `$12.60`, NAS100 `0.01` paper lots with planned risk `$12.70`, total planned paper risk `$25.30` / `0.506%`, no broker order placed. Status: day 1 now has MT5 demo source proof, route/no-trade intent, and risk-budget sizing, but live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`. The repeatable daily bundle is now covered by the next entry.
+
+2026-06-22 CAS Forex daily paper proof bundle runner: added `cas-forex\cas_forex\paper_daily_bundle.py`, `cas-forex\scripts\run_daily_paper_bundle.py`, `cas-forex\tests\test_paper_daily_bundle.py`, and doc `docs\working\cas_forex_daily_paper_bundle_20260622.md`. The bundle ties together MT5 demo receipt, paper route/no-trade decision, and paper risk-budget review, defaulting to skip existing same-date records so reruns do not duplicate proof packets. Real command `python scripts/run_daily_paper_bundle.py --date 2026-06-22 --account-equity 5000 --max-risk-pct 0.5 --daily-risk-pct 1.0 --output-dir evidence_runs/index_tsmom_126_paper_proof` produced status `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-daily-bundle-status.json`. Result: completed `true`, MT5 receipt `SKIPPED_EXISTING`, route decision `SKIPPED_EXISTING`, risk review `SKIPPED_EXISTING`, because all three day-1 records already existed. Status: this is the one-command daily paper-proof loop, not live trading permission. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`. UI/UX checkpoint is now controlled by the UI-readiness gate below.
+
+2026-06-22 CAS Forex UI-readiness gate: added `cas-forex\cas_forex\paper_ui_readiness.py`, `cas-forex\scripts\run_paper_ui_readiness.py`, `cas-forex\tests\test_paper_ui_readiness.py`, and doc `docs\working\cas_forex_ui_readiness_gate_20260622.md`. The gate is read-only and decides when proof-cockpit UI/UX should start based on complete daily paper bundles, not live trading readiness. Real command `python scripts/run_paper_ui_readiness.py --min-daily-bundles 5 --output-dir evidence_runs/index_tsmom_126_paper_proof` produced status `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-ui-readiness-status.json`. Result: readiness status `NOT_READY_FOR_UI_UX`, complete daily bundles `1 / 5`, broker verified days `1 / 5`, decision days `1 / 5`, risk review days `1 / 5`, and all three paper chains verified `true`; blockers are `complete_bundle_days 1 < required 5`, `broker_verified_days 1 < required 5`, `decision_days 1 < required 5`, and `risk_review_days 1 < required 5`. Status: UI/UX should start after `5` complete daily bundles, while the full paper/live gate remains `30 / 30` verified trading days and live trading remains `NOT LICENSED`.
+
+2026-06-22 CAS Forex daily paper schedule / next-action status: added `cas-forex\cas_forex\paper_daily_schedule.py`, `cas-forex\scripts\run_paper_daily_schedule.py`, `cas-forex\tests\test_paper_daily_schedule.py`, and doc `docs\working\cas_forex_daily_schedule_20260622.md`. The schedule is read-only and reports the next due trading date, missing tracks, remaining UI bundles, remaining 30-day paper-proof days, and the exact next command to run. Real command `python scripts/run_paper_daily_schedule.py --date 2026-06-22 --account-equity 5000 --max-risk-pct 0.5 --daily-risk-pct 1.0 --output-dir evidence_runs/index_tsmom_126_paper_proof` produced status `cas-forex\evidence_runs\index_tsmom_126_paper_proof\index-tsmom-126-d1-paper-proof-daily-schedule-status.json`. Result: latest complete bundle date `2026-06-22`, next due date `2026-06-23`, next due status `WAIT_NEXT_TRADING_DAY`, complete daily bundles `1`, UI bundles remaining `4`, paper-proof days remaining `29`, and missing tracks for next due date `broker_verified_receipt`, `paper_route_decision`, and `paper_risk_review`. Recommended command is `python scripts/run_daily_paper_bundle.py --date 2026-06-23 --account-equity 5000 --max-risk-pct 0.5 --daily-risk-pct 1 --output-dir evidence_runs/index_tsmom_126_paper_proof`. Status: this is an operator prompt only; live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement, and payout automation remain `NOT LICENSED`.
+
+2026-06-22 CAS Forex event-aware routing scaffold: added `cas-forex\cas_forex\event_context.py` and wired `event_context` into Condition Lab cells, nested lacunarity axes, RPM route keys, synthetic `--event-contexts`, real Condition Lab `--real-event-source static_macro`, and walk-forward `--event-source static_macro`. Supported labels now include `normal`, macro pre/post contexts for `NFP`, `CPI`, `FOMC`, `RATE_DECISION`, `GDP`, `UNEMPLOYMENT`, `CENTRAL_BANK_SPEECH`, plus `conflict_shock`, `weekend_gap`, and `liquidity_thin`. First compact synthetic event-context run across NAS100/EUR/USD, M15/H1/D1, normal/pre_NFP/post_NFP/conflict_shock produced `96` cells, gap fraction `0.9062`, `1` RPM route, and `47` `NO_TRADE` route cells; only route was synthetic `EUR/USD` `D1` `post_NFP` `trend_up` -> `tsmom_252_500_2_8`, report `cas-forex\evidence_runs\event_context_focus\condition-lab-20260622050947-report.json`. First real static-macro smoke produced `8` windows and `8` `NO_TRADE`, report `cas-forex\evidence_runs\event_context_walk_forward_smoke\walk-forward-20260622051001-report.json`. Status: CAS can now keep normal/event/conflict contexts separate in the switcher, but the static 2026 macro calendar is only a seed and conflict windows need curated/provider-backed data; live trading remains `NOT LICENSED`. Next valid move: add historical macro calendars and conflict/liquidity event windows, then rerun M15/H1 walk-forward routes for active strategy leads.
+
+2026-06-20 CAS Forex PCBA Engineer book fit audit: reviewed `book\CAS_PCBA_Engineer\CAS_PCBA_Engineer.pdf` and its Markdown source for CAS Forex applicability. Created `docs\working\cas_forex_pcba_engineer_book_fit_20260620.md`. Verdict: the book can materially improve CAS Forex as a design/evidence layer, especially CCDL-style forex pipeline schematics, fixed trade test points, CSB lock/suppression explanation, CDAB forecast disagreement diagnostics, CMB evidence lacunarity, CPMB risk-budget ledgers, COB session/regime rhythm diagnostics, Chapter 23 fault-injection tests, and Chapter 25 circuit registry/rollback discipline. Boundary remains strict: CCDL/CJT/PCBA/CCB outputs must not create broker `ACCEPT`; they may explain, `SUPPRESS`, `FLAG_FOR_HUMAN_REVIEW`, or contribute to `LIVE_LOCKED`. CAS Forex live trading remains `NOT LICENSED`.
+
+2026-06-17 PCBA syntax/safety/prompt licensing closeout: audited the PCBA grammar, semantics bundle, parser, compiler integration, and authority receipts, then ran a local red-team pass before finalizing receipts. Red team found one real parser safety bug: non-finite numeric values such as `R=nan` were downgraded to strings and accepted; fixed `cas-forex\cas_forex\pcba_syntax.py`, added the regression to `tests\test_pcba_models.py`, and refreshed the semantics bundle/request hashes. Added deterministic prompt-injection surface normalization for zero-width, HTML-unescaped, URL-decoded, and base64-decoded text in `cas-forex\cas_forex\pcba_prompt_injection.py`, plus regression tests. Added `cas-forex\scripts\generate_pcba_red_team_artifacts.py`, generated `docs\working\pcba_red_team_safety_report_20260617.md`, `docs\working\pcba_red_team_safety_raw_20260617.jsonl`, `docs\working\pcba_compiler_enforced_safety_claim_review_20260617.md`, `docs\working\pcba_hidden_text_control_eval_20260617.md`, `docs\working\pcba_hidden_text_control_eval_20260617.jsonl`, `docs\working\pcba_prompt_injection_red_team_report_20260617.md`, and `docs\working\pcba_prompt_injection_red_team_raw_20260617.jsonl`. Filled and finalized five verified receipts using `operator_id=codex_gpt5_local_reviewer_20260617`; this is an AI/local-reviewer attestation, not a human signature. Receipt hashes: semantics `0bae328fedfeb21e347842e9a935b70a80f2604c744d57b8a61740b761d1d52f`, safety red-team `4cd69f768f4a19e9aa9c6ed93a6ceef5f4a9b0ce6be96fc2c24f878f1404343e`, safety claim review `d277a1f3469d9e2760cd638d4c80e6a13daef8781e2a7bf1e8a4045209ebce19`, hidden-text control `ef18fb302038959dbd2726d38a5475c0a9390727ae1ff0a0f74e0139f5088bc5`, prompt red-team `9c87cd525839bf4300d699dd7e4a2770f780745031f70c361b57cfe075345bee`. Patched `issue_pcba_authority_report.py` / `write_missing_receipt_templates()` so a full authority report preserves supplied receipt files instead of deleting them while refreshing missing templates. Current verified authority status: `production_pcba_component_syntax=LICENSED`, `compiler_enforced_safety_claim=LICENSED`, `prompt_injection_prevention_claim=LICENSED`, `live_trading_permission_path=NOT LICENSED`, and `broker_accept_creation=NOT LICENSED`. The two licensed claims are scoped to the reviewed parser/compiler/prompt-screening evidence and do not claim universal safety, live trading permission, legal/regulatory proof, WORM permanence, or broker execution. Final verification: `python -m pytest -q` in `cas-forex` is `177 passed`; final `scripts\audit_pcba_goal_status.py` with all five receipts reports `goal_complete=true`, `current_boundary_honest=true`, no blockers, and live trading plus broker `ACCEPT` still `NOT LICENSED`.
+
+2026-06-17 CAS Harness CJT/PCBA claim audit: reviewed the user attachment `C:\Users\wakil\.codex\attachments\17ee1870-c72a-4e2b-911e-2c240cb0a5ac\pasted-text.txt` against `CJT_PCBA_IMPLEMENTATION_BLUEPRINT.md`, the CJT/PCBA readiness artifacts, PCBA prompt-injection red-team/hidden-text reports, the CAS Harness instruction-integrity implementation, and the Qwen expanded W0 result. Created `docs\working\cjt_pcba_cas_harness_claim_audit_20260617.md`. Verdict: CJT/PCBA can materially improve CAS Harness as a shadow product layer by adding deterministic visible/hidden/encoded/nested text screening, circuit-style Evidence Packet diagnostics, clearer hijack/refusal explanation, and better `FLAG_FOR_HUMAN_REVIEW` routing. It does not license internal W0 prompt-injection detection, live pre-speech interception, prompt-injection prevention/removal/reversal, hallucination prevention, CjtPredictionHead readout, CJT attention gating, or causal compliance-state proof. The Qwen expanded W0 result remains controlling evidence for the internal detector claim: best layer `28`, hidden BA `0.745011`, text BA `0.650776`, hidden-minus-text `0.094235`, status `FAIL`; internal prompt-injection detection remains `OPEN` / `NOT LICENSED`. Recommended CAS Harness product move: integrate PCBA surface extraction and CJT/PCBA diagnostics into the existing instruction-integrity shadow scan with `verdict_effect: none_shadow_only`; positives route to `FLAG_FOR_HUMAN_REVIEW`, not `ACCEPT`. Recommended research move: run CJT-labeled W0 typed-readout experiments with text/layer-0/payload/domain/length/shuffled/permutation controls before any steering/ablation.
+
+2026-06-17 CAS Harness CJT/PCBA integration: implemented the recommended bounded product move in the integration worktree on `codex/cas-harness-public-beta-candidate`. The instruction-integrity shadow scan now applies PCBA-style surface normalization for base64, URL-encoded, HTML-unescaped, and zero-width-masked prompt/scenario/output text before running the existing instruction-risk checks; matching hidden/encoded payloads route to `FLAG_FOR_HUMAN_REVIEW`, keep `verdict_effect: none_shadow_only`, and produce a `cjt_pcba_diagnostics` gluing block with the claim ceiling that internal W0 prompt-injection detection, live pre-speech interception, prompt-injection prevention/removal/reversal, hallucination prevention, CjtPredictionHead claims, and causal proof remain `OPEN` / `NOT LICENSED`. The active-context quarantine proposal can remove the encoded payload span while preserving raw evidence hashes; this is still not a public prevention/removal/reversal claim. UI/API support was added so the diagnostics survive the route schema and render in the audit panel. Verification: `python -m py_compile api\services\cas_harness_instruction_integrity.py`; `python -m pytest tests\test_cas_harness_instruction_integrity.py tests\test_cas_harness_api_endpoint_runner.py -q` = `19 passed`; `python -m pytest tests\test_cas_harness_instruction_integrity_benchmark.py -q` = `4 passed`; `python scripts\run_instruction_integrity_benchmark.py --fail-on-gate` = `15 / 15`, `injected_recall=1.0`, `benign_false_positive_rate=0.0`, `overall_pass=true`; `npm test -- --run src\lib\casHarnessAuditApi.test.ts src\components\audit\InstructionIntegrityPanel.test.tsx` = `51 passed`; `npm run build` passed; `python -m pytest tests\test_cas_harness_audit.py tests\test_cas_harness_live_worker_runner.py -q` = `59 passed`.
+
+2026-06-17 CAS Harness active-goal claim auditor: added a machine-checkable auditor in the integration worktree for the six active goal claims: internal W0 prompt-injection detection, live pre-speech interception, prompt-injection prevention/removal/reversal, hallucination prevention, CjtPredictionHead claims, and causal proof. Added `api\services\cas_harness_goal_claim_auditor.py`, `scripts\audit_cas_harness_active_goal_claims.py`, `tests\test_cas_harness_goal_claim_auditor.py`, and generated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`. Current audited result is intentionally `goal_complete=false`: `claims_total=6`, `claims_licensed=0`, `claims_not_licensed=6`. The W0 claim reads the current Qwen expanded layer-28 full-control artifact and remains `OPEN` / `NOT LICENSED` because `risk_hidden_balanced_accuracy_pass`, `risk_text_margin_pass`, and `risk_per_payload_floor_pass` are false; observed W0 metrics are hidden BA `0.745011`, text BA `0.650776`, hidden-minus-text `0.094235`, layer-0 BA `0.5`, within-payload permutation p `0.000999`, and data readiness `READY_FOR_W0_CAPTURE`. The other five claims remain `OPEN` / `NOT LICENSED`: live interception has no hosted pre-output receipt, prevention/removal/reversal is shadow-only until hosted enforcement/external red-team/WORM/claim-review gates close, hallucination prevention has no prevention benchmark/intervention proof, CjtPredictionHead has no implemented/evaluated claim artifact, and causal proof has no prompt-injection W0 direction intervention with matched controls. Verification: `python -m py_compile api\services\cas_harness_goal_claim_auditor.py scripts\audit_cas_harness_active_goal_claims.py`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `3 passed`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py tests\test_cas_harness_instruction_integrity.py tests\test_cas_harness_api_endpoint_runner.py -q` = `22 passed`; `python scripts\audit_cas_harness_active_goal_claims.py --out docs\working\cas_harness_active_goal_claim_audit_20260617.json --fail-on-open` intentionally exits `2` while claims remain open.
+
+2026-06-17 CAS Harness active-goal auditor tightening: extended `api\services\cas_harness_goal_claim_auditor.py` so it does not trust a single headline W0 file. It now scans every current `cas_harness_behavior_v6_matched_prespeech_eval.v1` JSON report under `docs\working` and licenses the W0 claim only if at least one report has `status=PASS` and every frozen W0 gate is true. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current scan found `existing_w0_report_count=61`, `passing_w0_report_count=0`, so internal W0 prompt-injection detection remains `OPEN` / `NOT LICENSED`. Best existing W0 artifact is `docs\working\qwen_v6_matched_prespeech_eval_seed00_47_v2_20260615\layer_28_exploratory_threshold_low0125_high030_full.json` with hidden BA `0.809091`, text BA `0.809091`, hidden-minus-text `0.0`, gate pass count `12 / 14`, and failing gates `risk_text_margin_pass` plus `risk_within_payload_permutation_pass`; this confirms the older high-BA exploratory result is text-tied and cannot license the internal detector. Verification: `python -m py_compile api\services\cas_harness_goal_claim_auditor.py scripts\audit_cas_harness_active_goal_claims.py`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `3 passed`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py tests\test_cas_harness_instruction_integrity.py tests\test_cas_harness_api_endpoint_runner.py -q` = `22 passed`; `python scripts\audit_cas_harness_active_goal_claims.py --out docs\working\cas_harness_active_goal_claim_audit_20260617.json --fail-on-open` intentionally exits `2`.
+
+2026-06-17 CAS Harness hidden/encoded prompt-injection W0 candidate: converted the CJT/PCBA study into a falsifiable next W0 path in the integration worktree. Added `live-trace-worker\scripts\build_hidden_prompt_injection_bank.py`, `live-trace-worker\scripts\screen_hidden_prompt_injection_surface_leakage.py`, and `live-trace-worker\scripts\evaluate_hidden_prompt_injection_prespeech.py`; patched `live-trace-worker\scripts\capture_enabled_predicate_w0_all_layers.py` so future all-layer W0 captures preserve `labels_prompt_injection_status` and `labels_encoding`; added regression coverage in `live-trace-worker\tests\test_behavior_probe_dataset_scripts.py`; and extended `api\services\cas_harness_goal_claim_auditor.py` so the active-goal report can see the new candidate readiness without licensing the W0 claim. Generated `live-trace-worker\scenarios\hidden_prompt_injection_bank_v0_20260617.json`, `docs\working\hidden_prompt_injection_bank_v0_20260617_summary.json`, and `docs\working\hidden_prompt_injection_surface_screen_v0_20260617.json`. The bank has `640` rows, `80` exact prompt groups, `5` payload classes, balanced `PRESENT` / `ABSENT`, and balanced `base64` / `url` encodings. Surface preflight is `READY_FOR_W0_CAPTURE`: text BA `0.4`, length BA `0.425`, payload BA `0.2625`, domain BA `0.2875`, encoding BA `0.3875`, and all leakage gates true. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; active goal remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`. Verification: `python -m py_compile live-trace-worker\scripts\build_hidden_prompt_injection_bank.py live-trace-worker\scripts\screen_hidden_prompt_injection_surface_leakage.py live-trace-worker\scripts\evaluate_hidden_prompt_injection_prespeech.py live-trace-worker\scripts\capture_enabled_predicate_w0_all_layers.py`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "hidden_prompt_injection"` = `4 passed`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "all_layer or parse_layers_arg or hidden_prompt_injection"` = `5 passed`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `3 passed`. Claim boundary: this is a clean W0 capture candidate and evaluator contract, not a licensed internal detector, live interception path, prevention/removal/reversal proof, hallucination prevention proof, CjtPredictionHead proof, or causal proof.
+
+2026-06-17 CAS Harness larger hidden/encoded prompt-injection W0 bank and pod runbook: expanded the hidden/encoded bank from `640` rows / `80` prompt groups to `2560` rows / `320` exact prompt groups using `--expansion-rounds 4`; generated `live-trace-worker\scenarios\hidden_prompt_injection_bank_large_v1_20260617.json`, `docs\working\hidden_prompt_injection_bank_large_v1_20260617_summary.json`, and `docs\working\hidden_prompt_injection_surface_screen_large_v1_20260617.json`. Larger-bank surface preflight is `READY_FOR_W0_CAPTURE`: text BA `0.503125`, length BA `0.459375`, payload BA `0.403125`, domain BA `0.40625`, encoding BA `0.45`, and all leakage gates true. Updated `api\services\cas_harness_goal_claim_auditor.py` to track the larger screen by default and to scan future `cas_harness_hidden_prompt_injection_prespeech_eval.v1` reports; a future hidden/encoded W0 report can license only the scoped internal W0 prompt-injection presence screen if every frozen hidden-injection gate passes. Added `docs\working\hidden_prompt_injection_w0_pod_runbook_20260617.md` with exact pod setup, all-layer W0 capture, layer-scout, confirmatory evaluator, and artifact pullback commands. Tried latest pod `root@195.26.233.61 -p 37154` and older pods `root@194.68.245.165 -p 22089` / `-p 22046`; all SSH attempts timed out, so no GPU capture has run yet. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current status remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`, with `existing_hidden_injection_w0_report_count=0`. Verification: `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "hidden_prompt_injection"` = `4 passed`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `4 passed`; `python -m py_compile live-trace-worker\scripts\build_hidden_prompt_injection_bank.py live-trace-worker\scripts\screen_hidden_prompt_injection_surface_leakage.py live-trace-worker\scripts\evaluate_hidden_prompt_injection_prespeech.py live-trace-worker\scripts\capture_enabled_predicate_w0_all_layers.py api\services\cas_harness_goal_claim_auditor.py` passed. Next gate: get a reachable pod, capture Qwen all-layer W0 on `hidden_prompt_injection_bank_large_v1_20260617.json`, run the hidden-injection W0 evaluator, and only then decide whether internal W0 prompt-injection detection is `LICENSED` or remains `OPEN` / `NOT LICENSED`.
+
+2026-06-18 UTC / 2026-06-17 PT CAS Harness hidden/encoded prompt-injection W0 proof: user supplied reachable pod `root@195.26.233.21 -p 44506`; captured all `2560` rows across `29` layers for `Qwen/Qwen2.5-1.5B-Instruct` on `hidden_prompt_injection_bank_large_v1_20260617.json`. Scout run over layers `1..28` picked layer `18` as best (`hidden_balanced_accuracy=0.896875`, `text_hash_balanced_accuracy=0.503125`, `l0_embedding_balanced_accuracy=0.5`). Added deterministic parallel/progress support to the evaluator controls (`--control-jobs`, `--progress-every`) after the serial 1000-permutation confirm run stayed CPU-bound for more than one hour; local smoke confirmed serial and parallel seeded controls match. Final confirmatory report `docs\working\hidden_prompt_injection_w0_large_v1_qwen_20260617\hidden_prompt_injection_prespeech_eval_large_v1_qwen_layer_18_parallel_20260617.json` is `PASS` with all `14 / 14` hidden-injection gates true: hidden BA `0.896875`, hidden-minus-text `0.39375`, hidden-minus-layer-0 `0.396875`, shuffled-label mean `0.500719`, and within-payload permutation p `0.000999`. Added human audit summary `docs\working\hidden_prompt_injection_w0_large_v1_qwen_20260617\AUDIT_SUMMARY.md`; archived the heavy `.npz`, rows, logs, manifest, and final report under `D:\tksCAS-archive\hidden_prompt_injection_w0_large_v1_qwen_20260617\`. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current active-goal state is `goal_complete=false`, `claims_total=6`, `claims_licensed=1`, `claims_not_licensed=5`. The licensed claim is only `internal_w0_prompt_injection_detection`, with the exact ceiling `LICENSED only for this model/layer/protocol W0 hidden/encoded prompt-injection presence screen.` The five remaining active-goal claims stay `OPEN` / `NOT LICENSED`: live pre-speech interception, prompt-injection prevention/removal/reversal, hallucination prevention, CjtPredictionHead claims, and causal proof. Verification: `python -m py_compile live-trace-worker\scripts\evaluate_behavior_v5_prespeech.py live-trace-worker\scripts\evaluate_hidden_prompt_injection_prespeech.py api\services\cas_harness_goal_claim_auditor.py scripts\audit_cas_harness_active_goal_claims.py`; deterministic serial-vs-parallel control smoke passed; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "hidden_prompt_injection"` = `4 passed`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `4 passed`. Next gate: wire this scoped W0 detector into a hosted/live worker receipt before the first generated token, then run matched hidden-direction interventions for causal proof; do not market prevention/removal/reversal, hallucination prevention, CjtPredictionHead, or causal claims yet.
+
+2026-06-18 correction to the hidden/encoded prompt-injection W0 proof: the previous `claims_licensed=1` entry above is superseded and must not be used as a product claim. Re-audit added a character-level n-gram text control and it beat the hidden-state readout: hidden layer-18 BA `0.896875`, word-level text BA `0.503125`, but character-level text BA `0.925` / `0.931` de-duplicated. Therefore `char_text_margin_pass=false`, the final report `docs\working\hidden_prompt_injection_w0_large_v1_qwen_20260617\hidden_prompt_injection_prespeech_eval_large_v1_qwen_layer_18_parallel_20260617.json` is now `FAIL`, and `internal_w0_prompt_injection_detection` is `OPEN` / `NOT LICENSED`. Commits `25336f2c`, `da77d7cb`, `7a1b7f40`, and `5903e38f` on `codex/cas-harness-public-beta-candidate` withdraw the license, add permanent `char_text_margin_pass` and `char_text_leakage_pass` gates, wire only a shadow `w0_prespeech_screen` event before the first generated token, and record that a surface-clean prompt-injection bank was not constructible for this formulation. The current active-goal audit is `goal_complete=false`, `claims_total=6`, `claims_licensed=0`, `claims_not_licensed=6`; all six claims remain `OPEN` / `NOT LICENSED`: internal W0 prompt-injection detection, live pre-speech interception, prompt-injection prevention/removal/reversal, hallucination prevention, CjtPredictionHead claims, and causal proof. Plain-English boundary: CAS Harness has a useful surface/shadow prompt-injection warning path that can route to `FLAG_FOR_HUMAN_REVIEW`, but it has not proved internal hidden-state prompt-injection detection beyond surface text, has not proved hallucination prevention, and has not proved causal control.
+
+2026-06-18 CAS Harness internal-detection recovery implementation: on `codex/cas-harness-public-beta-candidate`, implemented the split-lane recovery plan. The live `w0_prespeech_screen` event now carries `claim_ceiling: NOT LICENSED AS INTERNAL DETECTION`, keeps `verdict_effect: none_shadow_only`, and is tested on the SSE stream before the first token. The v5 W0 comply/refuse evaluator now requires exact same-prompt mixed groups, grouped folds, word-level and character n-gram text baselines, layer-0/payload/domain/length controls, shuffled-label controls, and within-payload permutation; a pass cannot be manufactured from prompt text differences. Lane A and Lane B pod runners now emit behavior-focused artifacts (`labels_behavior`, prompt-grouped scenario ids, temporal W0/W1/W8 metadata, and paired JSONL causal rows). The causal analyzer now requires complete `prompt_id + seed` blocks across `no_op`, `+refusal`, `-refusal`, and `random`, and the active-goal auditor scans future v5 pre-speech and v5 causal reports without re-licensing the withdrawn prompt-injection detector. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`: current state remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`; all six claims stay `OPEN` / `NOT LICENSED`. Verification in the integration worktree: `python -m py_compile ...` passed; `python -m pytest live-trace-worker\tests\test_w0_prespeech_screen.py live-trace-worker\tests\test_sse_stream.py -q` = `4 passed`; `python -m pytest live-trace-worker\tests\test_w0_prespeech_apparatus.py -q` = `8 passed`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `6 passed`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "v5_prespeech or v5_causal or hidden_prompt_injection"` = `10 passed, 19 deselected`; `python scripts\audit_cas_harness_active_goal_claims.py --out docs\working\cas_harness_active_goal_claim_audit_20260617.json --fail-on-open` intentionally exits nonzero while the six claims are open. Product-safe launch language remains: CAS Harness can flag prompt-injection and instruction-integrity risk before the model answer is shown, with Evidence Packet audit trails. Do not claim proven internal hidden-state prompt-injection detection, live interception, prevention/removal/reversal, hallucination prevention, CjtPredictionHead, or causal proof until their auditor rows flip to `LICENSED`.
+
+2026-06-18 CAS Harness internal-detection hardening and hallucination gate: on `codex/cas-harness-public-beta-candidate`, added `live-trace-worker\scripts\evaluate_hallucination_prespeech.py` as the first W0 hidden-state hallucination-risk evaluator. It tests SUPPORTED versus UNSUPPORTED evidence-grounded factual answers from prompt-stage activations only, with exact prompt grouping, same-prompt mixed groups, layer-0, word-text, character-text, topic, domain, evidence-source, retrieval-condition, retrieval-score, prompt-length, evidence-length, shuffled-label, within-topic permutation, and per-topic floors. Extended `api\services\cas_harness_goal_claim_auditor.py` so future `cas_harness_hallucination_prespeech_eval.v1` reports are visible in the active-goal audit, while `hallucination_prevention` remains `OPEN` / `NOT LICENSED` unless a separate guardrail/intervention proof reduces unsupported answers without breaking supported-answer quality. Patched `live-trace-worker\scripts\evaluate_behavior_v6_matched_prespeech.py` and `W0_REQUIRED_GATES` with permanent `risk_char_text_margin_pass`, so old v6 prompt-risk reports without character n-gram controls cannot license internal W0 prompt-injection detection. Hardened launch-facing UI/API boundaries: `atlas-viewer` now parses/renders `gluing.activation_detection` only as `DETECTION ONLY` / `detection_only_post_hoc` / `verdict_effect: none_shadow_only`; the audit panel title now says `Shadow quarantine proposal`; cockpit benchmark copy now says scoped benchmark evidence instead of direct universal product claim. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`: current status remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`; internal W0 prompt-injection detection now fails `risk_hidden_balanced_accuracy_pass`, `risk_text_margin_pass`, `risk_char_text_margin_pass`, and `risk_per_payload_floor_pass`; hallucination prespeech detection has `report_count=0`; causal proof has no complete v5 proof pair. Verification: `python -m py_compile live-trace-worker\scripts\evaluate_hallucination_prespeech.py live-trace-worker\scripts\evaluate_behavior_v6_matched_prespeech.py api\services\cas_harness_goal_claim_auditor.py scripts\audit_cas_harness_active_goal_claims.py`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `8 passed`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "hallucination_w0"` = `2 passed`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "v6_matched_prespeech"` = `1 passed`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "hidden_prompt_injection"` = `4 passed`; `npm test -- --run src\lib\casHarnessAuditApi.test.ts src\components\audit\InstructionIntegrityPanel.test.tsx src\pages\AuditConsolePage.test.tsx` = `69 passed`; `npm run build` passed; `python scripts\audit_cas_harness_active_goal_claims.py --out docs\working\cas_harness_active_goal_claim_audit_20260617.json --fail-on-open` exits `2` intentionally. Product-safe claim remains: CAS Harness can provide Evidence Packet audit trails and shadow instruction-integrity/prompt-injection risk review that routes to `FLAG_FOR_HUMAN_REVIEW`; hidden-state prompt-injection detection, hidden-state hallucination detection/prevention, live interception, prevention/removal/reversal, CjtPredictionHead, and causal proof remain `OPEN` / `NOT LICENSED`.
+
+2026-06-18 CAS Harness grounded factual-QA hallucination W0 pod run: on `codex/cas-harness-public-beta-candidate`, implemented and ran the first clean hallucination W0 capture candidate end-to-end. Added `live-trace-worker\scripts\build_grounded_factual_qa_hallucination_bank.py` and `live-trace-worker\scripts\screen_grounded_factual_qa_surface_leakage.py`; generated `live-trace-worker\scenarios\grounded_factual_qa_hallucination_bank_v0_20260618.json` (`400` rows, `40` exact prompt groups, `40` mixed prompt groups, `5` topics, `SUPPORTED=200`, `UNSUPPORTED=200`) plus `docs\working\grounded_factual_qa_hallucination_surface_screen_v0_20260618.json`, which is `READY_FOR_W0_CAPTURE` with word-text BA `0.5`, char-text BA `0.5`, and all surface leakage gates true. Patched `capture_enabled_predicate_w0_all_layers.py` to preserve hallucination metadata (`labels_support_status`, topic/evidence/retrieval fields, evidence text, candidate/gold answers) and to save `prompt_group_ids`; patched `evaluate_hallucination_prespeech.py` to use saved `prompt_group_ids` when present. This fixed a real validation bug found during the run: without saved `prompt_group_ids`, the evaluator derived groups from `scenario_id` and split supported/unsupported slots apart. On reachable pod `root@195.26.233.21 -p 44506`, captured `Qwen/Qwen2.5-1.5B-Instruct` W0 all layers (`400 x 29 x 1536`); heavy dataset archived at `D:\tksCAS-archive\grounded_factual_qa_hallucination_w0_qwen_grouped_20260618\enabled_predicate_w0_all_layers_dataset.npz`. Corrected grouped layer scout found every layer at hidden BA `0.5`; final full-control report `docs\working\grounded_factual_qa_hallucination_w0_qwen_grouped_20260618\hallucination_prespeech_eval_qwen_grouped_layer_14_confirm_20260618.json` is `FAIL`: hidden BA `0.5`, layer-0 BA `0.5`, word-text BA `0.5`, char-text BA `0.5`, hidden-minus-char `0.0`, within-topic permutation p `0.293706`, and only `6 / 19` W0 gates pass. Added `docs\working\grounded_factual_qa_hallucination_w0_qwen_grouped_20260618\AUDIT_SUMMARY.md`. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current state remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`. Claim boundary: this run proves the hallucination W0 capture/evaluator path works and gives a decisive negative result for branch-level exact-prompt W0 support-status detection on Qwen; hidden-state hallucination detection, hallucination prevention, live interception, prompt-injection prevention/removal/reversal, CjtPredictionHead, and causal proof remain `OPEN` / `NOT LICENSED`. Next research/product move is W1/W8 pre-display timing controls and surface/evidence integrity warnings, not relabeling this W0 failure as a win. Verification: `python -m py_compile live-trace-worker\scripts\build_grounded_factual_qa_hallucination_bank.py live-trace-worker\scripts\screen_grounded_factual_qa_surface_leakage.py live-trace-worker\scripts\capture_enabled_predicate_w0_all_layers.py live-trace-worker\scripts\evaluate_hallucination_prespeech.py api\services\cas_harness_goal_claim_auditor.py scripts\audit_cas_harness_active_goal_claims.py`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "grounded_factual_qa or hallucination_w0 or all_layer"` = `6 passed, 28 deselected`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `8 passed`; `python scripts\audit_cas_harness_active_goal_claims.py --out docs\working\cas_harness_active_goal_claim_audit_20260617.json --fail-on-open` intentionally exits `2`.
+
+2026-06-18 CAS Harness hallucination W1/W8 timing controls and pod run: extended `live-trace-worker\scripts\capture_enabled_predicate_w0_all_layers.py` so the same all-layer capture path can record explicit `W0`, `W1`, or `W8` timing states; W1/W8 records include `timing_points`, `timing_indices`, `generated_prefix_texts`, and generated-prefix token counts. Hardened `live-trace-worker\scripts\evaluate_hallucination_prespeech.py` with generated-prefix word and character n-gram controls, so an early-generation/pre-display readout cannot pass if it is only reading the first few internally generated tokens. Updated `api\services\cas_harness_goal_claim_auditor.py` so hallucination timing reports remain visible to the active-goal audit while hallucination prevention stays `OPEN` / `NOT LICENSED` until a separate guardrail/intervention proof exists. On reachable pod `root@195.26.233.21 -p 44506`, captured full `W1` and `W8` all-layer activations for the grounded factual-QA hallucination bank (`400` rows each, all `29` layers) and ran scouts plus confirmatory reports. Final timing summary `docs\working\grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618\TIMING_AUDIT_SUMMARY.json` is negative: W1 best layer `1`, confirm `FAIL`, hidden BA `0.5`, char-text BA `0.5`, generated-prefix char BA `0.5`, within-topic permutation p `0.220779`; W8 best layer `1`, confirm `FAIL`, hidden BA `0.5`, char-text BA `0.5`, generated-prefix char BA `0.5`, within-topic permutation p `0.083916`. Added human summary `docs\working\grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618\AUDIT_SUMMARY.md`; heavy activation archives are under `D:\tksCAS-archive\grounded_factual_qa_hallucination_w1_w8_qwen_timing_20260618\`. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current active-goal state remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`, with hallucination timing report count now visible and no passing report. Claim boundary: W1/W8 pre-display timing apparatus works, but this Qwen same-prompt support-status formulation still does not prove hidden-state hallucination detection, hallucination prevention, live interception, prevention/removal/reversal, CjtPredictionHead, or causal proof. Recommended next research move is not rerunning this exact Qwen benchmark; use outcome-native hallucination labels from actual generated answers, retrieval-conflict cases, or a larger/more capable model while preserving the same prefix/text/layer-0/topic/retrieval controls.
+
+2026-06-18 CAS Harness outcome-native hallucination trajectory run: implemented and tested the next hallucination route in the integration worktree. Added `live-trace-worker\scripts\build_outcome_native_hallucination_bank.py` and `live-trace-worker\scripts\sample_outcome_native_hallucination_generations.py`; patched `capture_enabled_predicate_w0_all_layers.py` so W1/W8/W16 timing capture can teacher-force the exact generated token path that was judged, while the hidden-state NPZ stores only labels, hashes, generated-prefix controls, and generation references rather than full post-output text. The deterministic judge now excludes both-value answers as `AMBIGUOUS` instead of falsely labeling caveated answers. Qwen-1.5B on the 80-row smoke produced no unsupported outputs. Qwen-0.5B on the 800-row larger bank produced real outcome-native variation: `800` generations, `576` binary labeled rows, `SUPPORTED=541`, `UNSUPPORTED=35`, `NO_CLAIM=210`, `AMBIGUOUS=14`, and `28` mixed exact-prompt groups. Captured W1, W8, and W16 all-layer timing activations on pod `root@195.26.233.21 -p 44506`; repo summary artifacts are under `docs\working\outcome_native_hallucination_qwen05_large_v1_20260618\`, with heavy archives under `D:\tksCAS-archive\outcome_native_hallucination_qwen05_large_v1_20260618\`. Scout results are all `FAIL`: W1 best layer `1` hidden BA `0.662371`; W8 best layer `15` hidden BA `0.652786`; W16 best layer `1` hidden BA `0.793478`, but W16 still fails because generated-prefix and layer-0 controls explain too much (`generated_prefix_char_text_hash_balanced_accuracy=0.726812`) and the margin gates do not pass. Claim boundary: this proves the outcome-native data path can create real unsupported outputs and that timing capture follows the actual judged trajectory, but hidden-state hallucination detection, hallucination prevention, live interception, prompt-injection prevention/removal/reversal, CjtPredictionHead, and causal proof remain `OPEN` / `NOT LICENSED`. Next gate: build a more unsupported-balanced outcome-native bank with at least `80` unsupported outputs, `40` mixed exact-prompt groups, and at least `8` unsupported rows per topic, then rerun W1/W8/W16 and require hidden-state BA `>= 0.75` plus `>= 0.15` margin over prompt text, char text, layer-0, and generated-prefix controls before any claim upgrade.
+
+2026-06-18 CAS Harness outcome-native hallucination hard-v2 run: built and ran the more unsupported-balanced Qwen-0.5B hard bank requested by the previous gate. The new bank has `2400` scenarios, `200` exact prompt groups, `8` stale/draft challenge modes, and `12` samples per prompt. Generation produced `1392` binary labels with `SUPPORTED=1208`, `UNSUPPORTED=184`, and `97` mixed exact-prompt groups; every topic had at least `25` unsupported rows. Captured W1/W8/W16/W32 timing activations on pod `root@195.26.233.21 -p 44506`, archived heavy artifacts under `D:\tksCAS-archive\outcome_native_hallucination_qwen05_hard_v2_20260618\`, and saved repo audit artifacts under `docs\working\outcome_native_hallucination_qwen05_hard_v2_20260618\`. Best confirmatory result is W16 layer `15`: hidden BA `0.888633`, text BA `0.649253`, char BA `0.615042`, layer-0 BA `0.698968`, challenge-mode BA `0.57458`, within-topic permutation p `0.000999`, and `88` mixed groups. It still fails the frozen internal-detection gate because generated-prefix controls are too close: generated-prefix word BA `0.79535`, generated-prefix char BA `0.828944`, hidden-minus-prefix-word `0.093283`, hidden-minus-prefix-char `0.059689`, both below the required `0.15` margin. Added `challenge_mode_margin_pass` as a required hallucination timing auditor gate and regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current status remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`. Follow-up residual-over-prefix diagnostic `w16_layer15_prefix_residual_diagnostic.json` also fails: after fold-local residualization against generated-prefix word+char features, prefix-residual hidden BA drops to `0.686017`, below the `0.75` floor, with residual-minus-prefix-char `-0.154433`. Claim boundary: this is useful pre-display unsupported-answer trajectory evidence, but hidden-state hallucination detection, hallucination prevention, live interception, prompt-injection prevention/removal/reversal, CjtPredictionHead, and causal proof remain `OPEN` / `NOT LICENSED`. Next valid gate is not more W16 residualization on this dataset; it is a pre-answer-token or W0/W1 formulation that creates unsupported-risk variation before answer-bearing prefix text exists, then beats generated-prefix word and character baselines by at least `0.15`.
+
+2026-06-18 CAS Harness Qwen-1.5B hallucination package audit: audited the claimed Qwen-1.5B trajectory package in commits `d4efd8ae` and `1326b6a7` and created `docs\working\hallucination_qwen15_package_audit_20260618.md`. The package is materially stronger than the earlier broken-script version: the balanced-accuracy bug is fixed in the inspected scripts, the Markdown reports the full 8-layer scan, and the framing now says second-model replication rather than size-scaling or causal proof. The result still cannot license hidden-state hallucination detection. Blocking gaps: no committed runnable artifact reproduces the exact 1000-shuffle selection-aware max-over-8-layers p-value; the p table displays `0.0010` while claiming a `<0.001` pass instead of showing exact `1/1001 = 0.000999`; the commits are on `origin/codex/cascompass-legal-live-source`, not `origin/codex/cas-harness-public-beta-candidate`; and generated-prefix, token-identity, shuffled-time, and exact layer-0 controls remain open for this package. Claim boundary remains: hidden-state hallucination detection, hallucination prevention, live interception, prompt-injection prevention/removal/reversal, CjtPredictionHead, and causal proof are `OPEN` / `NOT LICENSED`. Safe wording is "Qwen-1.5B gives a second-model trajectory-signal replication lead on the stale-majority subset; it is not a licensed detector yet."
+
+2026-06-18 CAS Harness outcome-native hallucination PRE_ANSWER and W0 prompt-risk closeout: implemented dynamic `PRE_ANSWER` timing in `capture_enabled_predicate_w0_all_layers.py` so the capture can resolve the token immediately before the judged answer value, and hardened `evaluate_hallucination_prespeech.py` so any non-W0 pre-display report must run prefix-residual controls as licensing gates. On pod `root@195.26.233.21 -p 44506`, captured `Qwen/Qwen2.5-0.5B-Instruct` PRE_ANSWER all-layer states for the hard-v2 labeled bank (`1392` rows, layers `0..24`, answer boundary found `1392 / 1392`). Layer `14` looked perfect before controls (`hidden_balanced_accuracy=1.0`) but remains `FAIL`: generated-prefix char BA `0.866776`, hidden-minus-prefix-char `0.133224` below the `0.15` margin, and prefix-residual hidden BA `0.65185` with residual-minus-prefix-char `-0.214926`. Repo artifacts: `docs\working\outcome_native_hallucination_preanswer_qwen05_hard_v2_20260618\`; heavy archive: `D:\tksCAS-archive\outcome_native_hallucination_preanswer_qwen05_hard_v2_20260618\outcome_native_hallucination_preanswer_qwen05_hard_v2_20260618.tgz`. Also captured true W0 states on the same bank and ran a prompt-level risk scout: `120` prompt groups (`HIGH_RISK=35`, `LOW_RISK=85`) showed prompt-risk signal, but hidden layer `1` BA `0.835294` did not beat word text BA `0.843697` and barely beat char text BA `0.821008` (`+0.014286`), so it is not an internal hidden-state claim. Repo artifacts: `docs\working\outcome_native_hallucination_w0_prompt_risk_qwen05_hard_v2_20260618\`; heavy archive: `D:\tksCAS-archive\outcome_native_hallucination_w0_prompt_risk_qwen05_hard_v2_20260618\outcome_native_hallucination_w0_prompt_risk_qwen05_hard_v2_20260618.tgz`. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current active-goal status remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`. Claim boundary: PRE_ANSWER and W0 prompt-risk are useful product diagnostics for pre-display/surface/evidence risk review, but hidden-state hallucination detection, hallucination prevention, live interception, prompt-injection prevention/removal/reversal, CjtPredictionHead, and causal proof remain `OPEN` / `NOT LICENSED`. Next valid product move is a hosted Evidence Packet lane for surface/evidence integrity warnings; next valid research move must beat prompt text, char text, generated-prefix, prefix-residual, layer-0, grouped-fold, shuffled-label, and permutation controls before any claim upgrade.
+
+2026-06-17 PCBA active-goal status auditor: added a focused objective auditor for the three current PCBA gates. Added `cas-forex\cas_forex\pcba_goal_status.py`, `cas-forex\scripts\audit_pcba_goal_status.py`, and `cas-forex\tests\test_pcba_goal_status.py`. Generated `docs\working\pcba_goal_status_20260617.json` and `docs\working\pcba_goal_status_20260617.md`. Current status artifact says `goal_complete=false`, `current_boundary_honest=true`, `syntax_only_missing_receipt=true`, `syntax_receipt_verified=false`, `safety_boundary_holds=true`, and `prompt_boundary_holds=true`; the only production syntax blocker remains the verified `pcba_semantics_review_signed` receipt. The auditor exits nonzero until that receipt is approved, finalized, and verified, while preserving `compiler_enforced_safety_claim=NOT LICENSED` and `prompt_injection_prevention_claim=NOT LICENSED`. Verification: `python -m pytest tests/test_pcba_goal_status.py tests/test_pcba_semantics_review_bundle.py tests/test_pcba_semantics_receipt_cli.py -q` is `11 passed`; `python scripts\run_pcba_model_checks.py --out "..\docs\working\pcba_model_local_evidence_20260617.json"` records `pcba_goal_status_tests_pass=true`; full `python -m pytest -q` in `cas-forex` is now `172 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run.
+
+2026-06-17 PCBA semantics review bundle: added a reviewer-ready, machine-checkable evidence bundle for the remaining `pcba_semantics_review_signed` syntax gate. Added `cas-forex\cas_forex\pcba_semantics_review.py`, `cas-forex\scripts\build_pcba_semantics_review_bundle.py`, and `cas-forex\tests\test_pcba_semantics_review_bundle.py`. Generated `docs\working\pcba_semantics_review_bundle_20260617.json` and `docs\working\pcba_semantics_review_bundle_20260617.md`; both report `ready_for_human_signature=true` and `licensed=false`. Refreshed unsigned `docs\working\pcba_semantics_review_request_20260617.json` so its `artifact_hashes` now cover the grammar spec, parser, compiler integration, review packet, JSON bundle, and Markdown bundle. `python scripts\verify_pcba_semantics_receipt.py --receipt "..\docs\working\pcba_semantics_review_request_20260617.json"` still intentionally exits nonzero because `approved=false`, `operator_id`, `signed_reason`, `signature`, and `receipt_hash` remain empty. Verification: `python -m pytest tests/test_pcba_semantics_review_bundle.py tests/test_pcba_semantics_receipt_cli.py -q` is `8 passed`; `python scripts\run_pcba_model_checks.py --out "..\docs\working\pcba_model_local_evidence_20260617.json"` records `pcba_semantics_receipt_cli_tests_pass=true` and `pcba_semantics_review_bundle_tests_pass=true`; full `python -m pytest -q` in `cas-forex` is now `169 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run. Current result: Production PCBA component syntax remains `OPEN` until the human semantics receipt is signed and verified. Compiler-enforced safety remains `NOT LICENSED` pending `red_team_report_pass` and `claim_review_signed`. Prompt-injection prevention remains `NOT LICENSED` pending `hidden_text_control_pass` and `red_team_prompt_injection_pass`.
+
+2026-06-17 PCBA semantics receipt closeout tooling: added the final machinery needed to accept, verify, and report a human-signed `pcba_semantics_review_signed` receipt without accidentally overwriting it. Added `cas-forex\scripts\finalize_pcba_authority_receipt.py` to compute `receipt_hash` only after a reviewer has set `approved=true`, `operator_id`, `signed_reason`, and `signature`; added `cas-forex\scripts\verify_pcba_semantics_receipt.py` to verify the signed receipt against artifact SHA-256 hashes and emit `docs\working\pcba_semantics_receipt_verification_20260617.json`; added `cas-forex\tests\test_pcba_semantics_receipt_cli.py`; changed `cas-forex\scripts\issue_pcba_authority_report.py` so it does not overwrite an existing semantics receipt unless `--force-write-semantics-template` is explicitly used; added reviewer packet `docs\working\pcba_semantics_review_packet_20260617.md`; and updated `docs\working\pcba_authority_licensing_path_20260617.md`. Verification: `python -m pytest tests/test_pcba_semantics_receipt_cli.py tests/test_pcba_authority.py -q` is `12 passed`; `python scripts\run_pcba_model_checks.py --out "..\docs\working\pcba_model_local_evidence_20260617.json"` records `pcba_semantics_receipt_cli_tests_pass=true`; full `python -m pytest -q` in `cas-forex` is now `167 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run. Current result: Production PCBA component syntax remains `OPEN` because the actual human receipt is still unsigned/unverified; `verify_pcba_semantics_receipt.py` intentionally exits nonzero on the current unsigned template and records `verified=false`. Compiler-enforced safety remains `NOT LICENSED` with `red_team_report_pass` and `claim_review_signed` still missing. Prompt-injection prevention remains `NOT LICENSED` with `hidden_text_control_pass` and `red_team_prompt_injection_pass` still missing. PCBA broker `ACCEPT` creation remains permanently `NOT LICENSED`.
+
+2026-06-17 PCBA licensing/acceptance harness update: strengthened the PCBA gate path without fabricating signed human/external evidence. Added local PCBA safety semantics/eval and prompt-injection shadow eval files: `cas-forex\cas_forex\pcba_safety.py`, `cas-forex\cas_forex\pcba_prompt_injection.py`, `cas-forex\scripts\run_pcba_safety_eval.py`, `cas-forex\scripts\run_pcba_prompt_injection_eval.py`, `cas-forex\tests\test_pcba_safety_eval.py`, and `cas-forex\tests\test_pcba_prompt_injection_eval.py`. Hardened `cas-forex\cas_forex\pcba_authority.py` so signed receipts with `artifact_refs` verify SHA-256 artifact hashes, and regenerated `docs\working\pcba_authority_report_20260617.json`, `docs\working\pcba_model_local_evidence_20260617.json`, `docs\working\pcba_semantics_review_request_20260617.json`, `docs\working\pcba_safety_eval_20260617.json`, `docs\working\pcba_safety_eval_20260617.jsonl`, `docs\working\pcba_prompt_injection_eval_20260617.json`, `docs\working\pcba_prompt_injection_eval_20260617.jsonl`, `docs\working\pcba_formal_safety_semantics_20260617.md`, and current missing receipt templates under `docs\working\pcba_authority_receipts_needed_20260617\`. Verification: `python -m pytest tests/test_pcba_safety_eval.py tests/test_pcba_prompt_injection_eval.py tests/test_pcba_authority.py -q` is `9 passed`; full `python -m pytest -q` in `cas-forex` is now `161 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run. Current result: Production PCBA component syntax remains `OPEN` because `pcba_semantics_review_signed` is unsigned; the template now hashes `docs\working\pcba_syntax_grammar_spec_20260617.md`, `cas-forex\cas_forex\pcba_syntax.py`, and `cas-forex\cas_forex\pcba_compiler.py`, and the harness will mark syntax `LICENSED` only after a verified owner/human semantics receipt is supplied. Live-trading permission remains `NOT LICENSED` until real 12-month backtest proof, real 30-trading-day paper proof, legal/account gates, broker proof, and human next-session unlock receipts are supplied. Compiler-enforced safety remains `NOT LICENSED`; `formal_pcba_safety_semantics`, `negative_safety_eval_pass`, and `evidence_anchor_pass` are present, while `red_team_report_pass` and `claim_review_signed` are missing. Prompt-injection prevention remains `NOT LICENSED`; `matched_prompt_injection_eval_pass`, `false_positive_floor_pass`, and `repeatability_packet_chain_pass` are present, while `hidden_text_control_pass` and `red_team_prompt_injection_pass` are missing. Governance/regulatory proof remains `NOT LICENSED` pending legal/regulatory/disclosure/retention review receipts. Broker `ACCEPT` creation from PCBA remains permanently `NOT LICENSED`: even with all local no-ACCEPT evidence present, PCBA cannot create broker `ACCEPT`.
+
+2026-06-17 PCBA rectification pass: cleaned up the user-named PCBA readiness blockers that can be honestly handled locally. Added shared timezone-aware UTC helpers in `cas-forex\cas_forex\time_utils.py` and replaced `datetime.utcnow()` across CAS Forex runtime, schemas, proof runners, market data, broker, verifier, backtest, sweep, and harvester paths. `rg "datetime\.utcnow|utcnow\(" cas_forex scripts tests` now returns no matches, and full `python -m pytest -q` is `152 passed` with no deprecation-warning summary. Added real PCBA-to-CAS compiler integration in `cas-forex\cas_forex\pcba_compiler.py` with tests in `cas-forex\tests\test_pcba_compiler_integration.py`; `pcba_production_compiler_integration_tests_pass` is now `present` in `docs\working\pcba_model_local_evidence_20260617.json`. Updated `scripts\run_pcba_model_checks.py`, `docs\working\pcba_model_audit_implementation_report_20260617.md`, `docs\working\pcba_external_gate_checklist_20260617.md`, and added `docs\working\pcba_rectification_status_20260617.md`. Verification: `python -m pytest tests/test_pcba_compiler_integration.py tests/test_pcba_models.py -q` is `44 passed`; full suite is `152 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` run; comparative and paper proof smoke runners verify local evidence chains but intentionally output `passed=false` because synthetic candles and two synthetic paper days do not satisfy real 12-month backtest evidence or 30-trading-day paper proof. Production PCBA component syntax remains `OPEN` only because `pcba_semantics_review_signed` is still missing. Live-trading permission, compiler-enforced safety claim, prompt-injection prevention claim, and governance/regulatory proof claim remain `NOT LICENSED` pending real external/time/legal/security evidence. Broker `ACCEPT` creation from PCBA remains intentionally `NOT LICENSED`; PCBA may explain, `SUPPRESS`, `FLAG_FOR_HUMAN_REVIEW`, or contribute to `LIVE_LOCKED`, but must not directly create broker `ACCEPT`.
+
+2026-06-17 PCBA attached-model audit and implementation: applied the same audit/verification/implementation treatment used for CJT to the PCBA attachment at `C:\Users\wakil\.codex\attachments\cb5b1274-ed8a-4072-a5d3-f757909df7f1\pasted-text.txt`. Implemented PCBA as a diagnostics/readiness sidecar, not production compiler authority: added component/board/readiness schemas in `cas-forex\cas_forex\schemas\pcba.py`, a bounded generic component parser/IR in `cas-forex\cas_forex\pcba_syntax.py`, readiness evidence gates in `cas-forex\cas_forex\pcba_readiness.py`, optional `pcba_diagnostics` on `ForexEvidencePacket` and `ForecastHarnessReport`, exports in `schemas\__init__.py`, tests in `cas-forex\tests\test_pcba_models.py`, runner `cas-forex\scripts\run_pcba_model_checks.py`, grammar spec `docs\working\pcba_syntax_grammar_spec_20260617.md`, implementation report `docs\working\pcba_model_audit_implementation_report_20260617.md`, external gate checklist `docs\working\pcba_external_gate_checklist_20260617.md`, and local evidence artifact `docs\working\pcba_model_local_evidence_20260617.json`. The parser covers all 23 attached component models and the readiness layer covers all 5 Cognitive Circuit Boards. Verification: `python -m pytest tests/test_pcba_models.py -q` is `40 passed`; `python scripts\run_pcba_model_checks.py --out "..\docs\working\pcba_model_local_evidence_20260617.json"` passed; full `python -m pytest -q` in `cas-forex` is now `148 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run. A date-sensitive test fixture was pinned to a non-blackout timestamp so the suite remains deterministic on FOMC dates; production `MacroGate` behavior was not relaxed. Result: PCBA diagnostics can explain, `SUPPRESS`, `FLAG_FOR_HUMAN_REVIEW`, or contribute to `LIVE_LOCKED`, but cannot create broker `ACCEPT`, unlock live trading, or license compiler-enforced safety, prompt-injection prevention, governance/regulatory proof, memory, burnout-prevention, or reference-board safety claims. PCBA production component syntax remains `OPEN`; high-authority PCBA claims and live money remain `NOT LICENSED`.
+
+2026-06-17 CJT ungating attempt: advanced the locally provable gates without fabricating external/time/legal evidence. Added research `CJT<>` parser/IR in `cas-forex\cas_forex\cjt_syntax.py`, parser tests in `cas-forex\tests\test_cjt_compiler_syntax.py`, draft grammar spec `docs\working\cjt_syntax_grammar_spec_20260617.md`, local evidence collector `collect_local_cjt_evidence()` in `cas-forex\cas_forex\cjt_readiness.py`, runner `cas-forex\scripts\run_cjt_ungating_checks.py`, evidence artifact `docs\working\cjt_ungating_local_evidence_20260617.json`, and external gate checklist `docs\working\cjt_ungating_external_gate_checklist_20260617.md`. Verification: `run_cjt_ungating_checks.py` proves `cjt_grammar_spec_present`, `cjt_parser_implementation_present`, `cjt_parser_tests_pass`, `cjt_invalid_form_tests_pass`, `cjt_ir_roundtrip_tests_pass`, `cjt_compiler_branch_disconnected_from_live_trading`, `cjt_no_accept_bypass_tests_pass`, `no_cjt_to_accept_route`, `auditor_accept_requires_gate_passes`, and `broker_accept_negative_tests_pass` are present. Full `python -m pytest -q` is now `108 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run. Remaining blockers are non-local: production `CJT<>` compiler syntax still needs grammar approval, signed semantics review, and production compiler integration tests; live-trading permission still needs 12-month backtest evidence, 30 trading days paper proof, legal/account gates, real broker proof, and next-session human unlock; compiler-enforced safety and prompt-injection prevention claims still need formal semantics, negative/security evals, red-team reports, evidence anchoring, and claim review; governance/regulatory proof still needs legal/regulatory mapping and signed review. Broker `ACCEPT` creation by CJT remains intentionally blocked and should not be ungated. CAS Forex live money remains `NOT LICENSED`.
+
+2026-06-17 CJT production-authority readiness guard: implemented a CAS Forex readiness-and-test layer for the high-authority CJT items the user named: production `CJT<>` compiler syntax, live-trading permission path, compiler-enforced safety claim, prompt-injection prevention claim, governance/regulatory proof claim, and anything that can create broker `ACCEPT`. Added `cas-forex\cas_forex\schemas\cjt.py`, `cas-forex\cas_forex\cjt_readiness.py`, optional `cjt_diagnostics` sidecars on `ForexEvidencePacket` and `ForecastHarnessReport`, exports in `schemas\__init__.py`, `cas-forex\tests\test_cjt_readiness.py`, and `cas-forex\scripts\report_cjt_readiness.py`. Created `docs\working\cjt_production_authority_readiness_report_20260617.md`. Verification: `python -m pytest tests/test_cjt_readiness.py -q` is `5 passed`; `python -m pytest tests/test_plan_completion.py -q` is `10 passed`; full `python -m pytest -q` is `94 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run. Result: these CJT features are now explicit and testable gates, but they remain `OPEN` / `NOT LICENSED`; `CJT<>` production compiler syntax is not enabled, CJT cannot unlock live trading, CJT cannot claim compiler-enforced safety or prompt-injection prevention, CJT cannot serve as governance/regulatory proof, and CJT cannot create broker `ACCEPT`. CAS Forex live money remains `NOT LICENSED`.
+
+2026-06-17 CJT/PCBA fit analysis: reviewed `docs\working\CJT_PCBA_IMPLEMENTATION_BLUEPRINT.md` for CAS Forex and larger CAS ecosystem implementation fit. Created `docs\working\cjt_pcba_cas_forex_ecosystem_fit_analysis_20260617.md`. Verdict: implement CJT/PCBA first as an evidence-only diagnostic and proof-visualization sidecar, not as production compiler authority or live-trading permission. Recommended CAS Forex path: add optional `CjtObservation` / `CjtCircuitDiagnostic` schemas, write diagnostics into Forecast Harness / Evidence Packet / Post-Trade / Harvester paths, map forecast disagreement, weak edge, macro shock, broker mismatch, drawdown, and beta drift into cutoff/active/saturation/breakdown-style diagnostics, and prove tests that CJT can only explain, `SUPPRESS`, `FLAG_FOR_HUMAN_REVIEW`, or trigger `LIVE_LOCKED`. Recommended larger CAS path: add generic Evidence Packet sidecars, Atlas/proof circuit panel, matched-control differential-pair experiments, CSB shadow safety screens, and a separate compiler research branch for `CJT<>` syntax. Do not claim compiler-enforced safety, prompt-injection prevention, governance-standard status, audio proof, or live broker `ACCEPT` from CJT until formal semantics and evidence gates close. CAS Forex live money remains `NOT LICENSED`.
+
+2026-06-17 CAS Forex UI/UX plan revision: reviewed the 7-agent CAS Forex PWA UI plan from `C:\Users\wakil\.codex\attachments\2dfcbc58-31ef-4871-be1c-3dfb0ad372b7\pasted-text.txt` against the actual `atlas-viewer` shell and current CAS Forex backend state. Created `docs\working\cas_forex_pwa_ui_ux_plan_revised_20260617.md`. Verdict: the original plan fits the React/Router/Framer/GlassPanel foundation, but must be corrected before build because it implied a live trading desk, `LIVE` status, `2.0%` risk default, WORM anchoring, and AUTO sweep transfers that CAS Forex cannot truthfully claim. Revised direction: build `/forex/proof` first, add a global paper/sim/proof/lock banner, show `Max Risk/Trade=0.5%`, expose Forecast Harness + Gate 0-4 + post-trade/evidence/live-lock pipeline, label local JSONL as tamper-evident but not WORM, keep provider/bank `AUTO` transfers `NOT LICENSED`, and keep all live-money actions disabled until 12-month evidence, real 30-day paper proof, broker proof, legal/account gates, WORM/equivalent anchoring, and next-session human unlock close.
+
+2026-06-17 CAS Forex strike-plan implementation: executed the four-lane plan-completion pass in `cas-forex/`. Added local append-only/tamper-evident JSONL `EvidenceStore`, evidence receipts/reports/post-trade observation schemas, lifecycle packet emission in `BacktestEngine`, `PostTradeHarness`, `ForecastHarness` with explicit `OK` / `NO_SIGNAL` / `UNAVAILABLE` / `ERROR` / `WEAK_EDGE` / `DRIFT_BREACH` statuses, lazy optional Chronos/TimesFM/TimeGPT adapter paths, deterministic baselines, provider-backed `MacroGate` with 2026 static seed events and 15-minute default blackout, macro shock `LIVE_LOCKED`, default `MAX_RISK_PER_TRADE_PCT=0.5`, correlated exposure suppression, persistent `LiveLockController`, broker mode/metadata/lock enums, MT4 mailbox bridge, broker legal/account gates, simulator broker rejects/partial fill, transfer-boundary sweep controls, and proof-runner entrypoints for comparative backtests and paper-session reports. Verification now passes `pytest -q` as `89 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run; the new proof runners execute and verify local chains. Claim boundary remains strict: generated proof-runner smoke data is marked `passed=false` and does NOT satisfy 12-month historical evidence or real 30-trading-day paper proof; local JSONL is tamper-evident, not WORM; real provider/bank `AUTO` transfers remain `NOT LICENSED`; live money remains `NOT LICENSED` with `paper_trading=True` / `live_mode=False` until broker proof, legal/account gates, 12-month evidence, 30-day paper evidence, human unlock, and WORM/equivalent anchoring gates close. Remaining follow-ups: replace status-only Chronos/TimesFM adapters with real inference integrations when dependencies/models are available, wire a real MT4 EA sidecar to the mailbox, feed real historical/paper session data into the new runners, and migrate `datetime.utcnow()` usage before future Python deprecation becomes operational noise.
+
+2026-06-17 CAS Forex PDF plan comparison: compared current `cas-forex/` build against `C:\Users\wakil\Downloads\cas_harness_forex_trading_execution_plan.pdf`; `python -m pytest -q` remains `77 passed` with `datetime.utcnow()` deprecation warnings. The build matches the structural spine of the plan: supported pairs, market data scaffold, forecast proposal schemas, CAS compiler/auditor gates, drawdown locks, MT5/simulator bridge, backtest engine, profit sweep policy, evidence packet schema, MTFA, SDG templates, and offline harvester promotion gates. Missing or incomplete against the plan: primary Chronos/Chronos-Bolt/Chronos-2 is stubbed, TimesFM is absent, MT4 Expert Advisor fallback is absent, MacroEventState/news surprise/shock handling is absent, default risk per trade is still `2.0%` instead of the plan's `0.5%`, blackout defaults are `60/120` minutes instead of the plan's `15` minutes, Evidence Packets are not generated for every proposed/suppressed/closed trade in the backtest/live path, live Post-Trade Harness/outcome monitor is incomplete, 12-month multi-symbol raw-vs-CAS-vs-baseline backtests are not yet evidenced, 30-day fully automated demo trading is not yet complete, legal/account-boundary warnings for family/friends are not implemented as product controls, real savings/bank transfer integration is absent, and several required LIVE_LOCKED triggers remain missing or only partially represented (broker disconnect during open trade, margin error, MT5 execution mismatch, model drift breach, news shock, Evidence Packet write failure, savings transfer failure, and human unlock workflow). Verdict: the build is a strong tested scaffold, not the full automated forex trading system described by the PDF plan; keep real-money use `NOT LICENSED` and live broker routing blocked until those gates close.
+
+2026-06-17 CAS Forex execution status: the prior CAS Forex blocker queue was executed in `cas-forex/`. `python -m pytest -q` is now `77 passed`; `scripts\smoke_backtest.py` runs with `14 trades | 5 won | 9 lost | PnL $-15.60 | Sharpe 0.63`; and `scripts\smoke_mtfa.py` runs across scalping/day/swing/position styles. Implemented named CAS recipe targets (`Î©_trade_profit`) plus hard rejection on failed recipe compilation in `CASNativeEnsemble`; fail-closed execution validation for missing market prices, wrong TP/SL side, and LIMIT/STOP orders without explicit positive prices; symbol-aware USD/JPY pip math in MT5 slippage, backtest pips/account value, and forecast-integrity normalization; `get_bridge()` now attempts an MT5 connection before simulation fallback and refuses disconnected MT5 live mode; MT5 post-fill abnormal slippage now converts broker deviation points to pips; harvester promotion gates now require backtest pass, paper pass, human approval/signature, local hash-chain evidence anchoring with matching approval/anchor payload hashes, and next-session-only promotion that rejects forged anchored state; and CAS SDG forex templates now generate deterministic compiler-checked trade candidates plus an explicit negative wide-spread guard scenario that also fails the market-spread gate. CAS Forex is structurally stronger, but still NOT real-money/live-trading-ready: `live_mode=False`, `paper_trading=True`, TimeGPT live signal quality is still not proven locally, MT5 live execution still needs terminal/session proof, the suite has `datetime.utcnow()` deprecation warnings to clean up, and 30-day paper trading remains mandatory before any real-money use.
+
+2026-06-17 CAS Forex team audit: `python -m pytest -q` is `52 passed`; `scripts\smoke_backtest.py` and `scripts\smoke_mtfa.py` both run; `cas_forex.broker` now imports cleanly; `BrokerOrderRequest` has a model validator; `ExecutionGate` now rejects LONG/SHORT take-profit side violations when `current_price` is supplied; `MacroGate` probes for `2026-06-17T18:00:00` FOMC, `2026-06-10T12:30:00` CPI, and `2026-07-02T12:30:00` NFP return `FAIL`; OANDA config is present and returned a live EUR/USD snapshot; `MetaTrader5` is installed and MT5 credentials are present, but `live_mode=False`, `paper_trading=True`, and `get_bridge()` still returned `SimulatedBrokerBridge` because `MT5Bridge.__init__()` no longer connects automatically while the factory checks `is_connected()` without calling `connect()`. CAS Forex remains NOT live-trading-ready. Remaining execution queue: fix CAS v7.6 recipes by emitting named production targets such as `Î©_trade_profit` and hard-rejecting `recipe_compiled=False` in `CASNativeEnsemble`; fail closed in `ExecutionGate` when a market order has neither positive `order.price` nor `current_price`, validate full `SL < effective_price < TP` / `TP < effective_price < SL` geometry, and require `price > 0` for LIMIT/STOP orders; replace remaining pip math in `mt5_bridge.py`, `backtest/engine.py`, and `forecast/integrity.py` with `pip_multiplier()` plus symbol-aware USD pip/account value; fix `get_bridge()` to call `connect()` before falling back to simulation and keep live mode blocked unless MT5 is actually connected; treat TimeGPT as configured but not locally proven because a synthetic probe returned `NO_SIGNAL`; and implement the harvester as a real promotion state machine with backtest pass, paper pass, human signature, append-only/WORM-style evidence anchoring, and next-session-only promotion. CAS SDG forex scenario templates remain a medium follow-up, not a live trading blocker. 30-day paper trading remains mandatory before any real-money use.
+
+2026-06-16 CAS Forex audit status: local review of untracked `cas-forex/` verified `python -m pytest -q` is `52 passed`, but CAS Forex is NOT live-trading-ready. Critical blockers: the auditor can return `ACCEPT` for a LONG proposal whose `take_profit` is below `entry_price` because the Pydantic validator checks `take_profit` before it is available and `ExecutionGate` does not validate take-profit side; the hard-coded macro gate misses official 2026 events and release times; forecast integrity/ensemble currently crashes on missing `config`; `MarketSnapshotCapture` calls connector methods that do not exist; USD/JPY pip math uses the non-JPY `10000` multiplier; and `ChronosModel` is still stubbed. Treat CAS Forex broker execution and profit sweep as research/scaffold only; live broker routing should remain blocked until these issues are fixed with regression tests and a dry-run/paper proof. Recommended next move: patch trade geometry validators/gates first, replace macro hard-coding with official calendar ingestion or reviewed config, fix forecast/market-data integration, add per-symbol pip-size handling, then rerun tests plus negative acceptance probes before any MT5/live-mode use.
+
+2026-06-16 CAS Forex follow-up audit: claimed `52/52 passing` is true and several fixes are present (`ForecastProposal` now uses `model_validator(mode="after")`, `integrity.py` imports `config`, R:R threshold is `>= 2.0`, and duplicate/conflicting `snapshot.py` / `gates.py` / `orchestrator.py` source files are removed). However P0/P1 closure is not confirmed. `MacroGate` is still wrong against official Fed/BLS calendars: Federal Reserve lists 2026 FOMC June `16-17*` with the June meeting release on June 17, while code blocks June 18 and misses June 17; BLS lists May 2026 CPI release on Jun. 10 at 08:30 AM ET and Employment Situation for June 2026 on Jul. 02 at 08:30 AM ET, while code uses a fixed mid-month/first-Friday approximation that misses those and can falsely block other dates. JPY pip math is only partly fixed: `pip_multiplier()` exists on `ForecastProposal`, but `ExecutionGate`, `MarketGate`, broker slippage, market-data spread, and backtest P&L still use `10000`. `BrokerOrderRequest` still permits geometrically invalid raw orders and `ExecutionGate` can `PASS` a raw LONG order with `take_profit` below market. `requirements.txt` still omits runtime dependencies (`numpy`, `requests`, `yfinance`, optional `MetaTrader5`/Chronos), and `scripts/smoke_backtest.py` still fails to import `cas_forex` when run directly. Treat CAS Forex as improved but still NOT live-trading-ready; live broker routing remains blocked. Next move: replace macro approximations with explicit official release-date tables/feed, apply `pip_multiplier()` across all gate/broker/backtest calculations, add `BrokerOrderRequest`/`ExecutionGate` geometry guards, update requirements, fix the smoke script, and add regression tests for official Fed/BLS dates, USD/JPY pip distance, and raw-order rejection.
+
+2026-06-16 CAS Forex second follow-up verification: `python -m pytest -q` remains `52 passed` with warnings. Macro P0 is now corrected locally: probes for `2026-06-17T18:00:00` FOMC, `2026-06-10T12:30:00` CPI, and `2026-07-02T12:30:00` NFP all return `FAIL`, while `2026-07-03T12:30:00` returns `PASS`. `requirements.txt` now includes `numpy`, `requests`, and `yfinance`, with optional `MetaTrader5`, `chronos-forecasting`, and `nixtlats` noted. `ExecutionGate` now uses `pip_multiplier()` and reports a 1-pip USD/JPY stop as `1.0` pip, correctly failing a `5` pip minimum. Remaining blockers: `BrokerOrderRequest` still lacks a `model_validator` and `ExecutionGate` still `PASS`es a raw LONG order with `take_profit` below market; hard-coded `10000` remains in `MarketGate`, `connector.py`, `mt5_bridge.py`, `backtest/engine.py`, and forecast-integrity normalization; `scripts/smoke_backtest.py` still fails with `ModuleNotFoundError: No module named 'cas_forex'`; multi-timeframe support remains pending. CAS Forex is improved but still NOT live-trading-ready until broker-order geometry, remaining pip math, and smoke/backtest proof are closed.
+
+2026-06-16 CAS-native pipeline audit with `C:\Users\wakil\Downloads\self-improving-harness.pdf`: `python -m pytest -q` is still `52 passed`, but the new "all components live" claim is NOT confirmed. `CASNativeEnsemble().propose()` currently fails on the default `TechnicalModel` with `TypeError: TechnicalModel.predict() takes from 3 to 4 positional arguments but 5 were given` because `cas_ensemble.py` passes `timeframe` to every model while `TechnicalModel.predict()` does not accept it. `smoke_mtfa.py` still fails with `ModuleNotFoundError: No module named 'cas_forex'`. `mtfa.py` casts SMA values to `int`, which flattens forex prices near `1.x` and weakens trend detection. `BrokerOrderRequest` now has a geometry validator, but it only runs when `price > 0`; a market order with `price=0.0` and bad take-profit geometry can still be created and can still `PASS` `ExecutionGate`. Remaining `10000` constants remain in `mt5_bridge.py`, `backtest/engine.py`, and forecast-integrity normalization. The PDF is useful as design guidance, not as direct live-trading permission: its Continual Harness pattern suggests adding a separate trajectory-refiner loop that reviews trade/evidence windows, detects failure signatures, proposes CRUD edits to strategies/skills/memory/config, scores changes with process rewards, and promotes them only after offline/backtest/paper gates. Do not allow self-modification inside live MT5 execution. Recommended next move: fix `CASNativeEnsemble` model-call compatibility, add tests for CAS-native ensemble and MTFA, fix `smoke_mtfa.py`, remove `int()` SMA casts, close raw-market-order geometry, finish symbol-aware pip math, then implement a paper-only Continual-Harness-style refiner with human approval and WORM/Evidence Packet logging.
+
+2026-06-16 CAS Forex current-state audit: `python -m pytest -q` is `52 passed`; `scripts\smoke_mtfa.py` and `scripts\smoke_backtest.py` now run; macro probes for `2026-06-17T18:00:00` FOMC, `2026-06-10T12:30:00` CPI, and `2026-07-02T12:30:00` NFP all return `FAIL`; OANDA config is present and returned a live EUR/USD snapshot around `1.16125/1.16145`; MTFA SMA casts were corrected to `float`; `CASNativeEnsemble` is callable; and `BrokerOrderRequest` has a partial `model_validator`. CAS Forex is still NOT live-trading-ready. New blockers/remaining risks: `cas_forex.broker` package import fails because `broker/__init__.py` imports nonexistent `PaperBroker`; a raw market LONG order with `price=0.0`, `current_price=1.0850`, `stop_loss=1.0700`, and `take_profit=1.0800` still creates successfully and `ExecutionGate` returns `PASS`; CAS recipe strings from `market_to_cas_recipe()` currently fail the real compiler because the production target uses bare `Î©` instead of compiler-required `Î©_name` / `Î©_{name}`, while `CASNativeEnsemble` records `recipe_compiled=False` but does not reject on failed recipe compilation; TimeGPT config is present but a synthetic probe returned `NO_SIGNAL`, and `TimeGPTModel` swallows API/status/schema errors so the `LONG conf=0.95` claim is not locally evidenced; `MetaTrader5` is not installed, `mt5_login` is absent, `live_mode=False`, and broker execution resolves to simulator/paper behavior, not proven MT5 live routing; hard-coded non-JPY pip math remains in `mt5_bridge.py`, `backtest/engine.py`, and forecast-integrity normalization; and `Harvester` is an offline proposal generator without an enforced backtest-pass + paper-pass + human-signature promotion state machine or WORM/Evidence Packet anchoring. Recommended next move: fix broker package exports, add execution-gate TP-side validation against `current_price`, fix recipe target syntax and gate on recipe compiler success when recipes are claimed, expose TimeGPT failures in evidence, keep MT5 live blocked until installed/configured/paper-proven, convert remaining pip math to `pip_multiplier()`, and add tests for CAS-native ensemble, MTFA, harvester, broker imports, raw-order rejection, recipe compilation, and USD/JPY backtest/slippage.
+
+## 2026-06-15 Amazon Internal Review / Distribution Boundary
+
+The user has decided to send `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.pdf` to an Amazon-internal group that includes their manager, supervisor, senior software engineers, and senior ML engineers. Treat this as a scoped governance and technical-review request, not a launch announcement or broad confidential packet distribution.
+
+2026-06-15 confidence/posture update: after comparing CAS Harness with Amazon-internal XPlane / AGI Model Debug Station material, the user's confidence dropped and the user is reconsidering whether sending the full spec would be embarrassing. Recommended posture changed from "send the spec confidently" to "do not present CAS Harness as a superior interpretability breakthrough." If proceeding, send a smaller, humble feedback request that explicitly asks whether the evidence/explanation layer is useful or redundant beside existing model-debugging and mechanistic-interpretability tools.
+
+2026-06-15 Noetic Compass portfolio framing update: considering `noeticcompass.com` and the broader local CAS research/development record, do not make CAS Harness carry the whole story alone. The stronger honest framing is: Noetic Compass is the broader CAS assessment / notation / explanation platform ("Measure How AI Thinks"); CAS Native is the compiler-grounded CAS model/research lane; CAS Harness is the open-weight model audit/evidence-packet lane. In Amazon review copy, ask whether this broader CAS representation + explanation + evidence layer is useful next to existing model-evaluation/debugging infrastructure, not whether CAS is "better than interpretability."
+
+Communication boundary:
+
+- Do not send the NDA-gated investor/strategic-partner spec sheet broadly until the user has cleared Amazon conflict-of-interest / outside-work / IP-disclosure process and verified whether recipients may receive confidential outside-project material.
+- First email should ask for the correct review path and offer a sanitized one-page summary or a short meeting, not attach the full confidential spec by default.
+- If the full spec is later shared, frame it as confidential, founder-owned, patent-pending work for technical critique; keep exact claim-status language and do not claim public/paid launch readiness.
+- Mention the independent red-team review as a positive governance signal, but say findings are pending and will be incorporated. Do not present an unfinished red-team as validation.
+- If referencing the June 2026 Fable/Mythos access suspension, use only neutral public-source framing. Do not repeat social-media language such as "snitched" or imply CAS Harness would have prevented the incident. The allowed point is simple: high-stakes model-safety disputes need clean evidence trails that show prompts, outputs, internal signals, flags, reviewer notes, and reproducibility.
+- If Amazon reviewers compare CAS Harness to XPlane / mechanistic-interpretability toolkits, do not claim CAS Harness is superior as a low-level sparse-autoencoder, feature-mining, attention, log-prob, or activation-steering workbench. The honest positioning is complementary: XPlane-style tools are stronger for model builders debugging internal features; CAS Harness aims to provide a higher-level audit/explanation/evidence layer that maps internal signals into CAS notation, plain-English review, `FLAG_FOR_HUMAN_REVIEW` routing, and Evidence Packets.
+
+Claim boundary remains strict: CAS Harness has LICENSED research/product claims around open-weight hidden-state readout, causal/bridge evidence, Evidence Packets, WORM-gated verifier discipline, and fleet apparatus, but public/paid launch, customer-production `ACCEPT`, frontier-scale results above 20B, prompt-injection prevention/removal/reversal, hallucination prevention, universal/CAS-specific uniqueness, GDPR/CCPA/CPRA/SOC 2 readiness, and certification claims remain `OPEN` / `NOT LICENSED` unless their gates are explicitly closed.
+
+Recommended next move: do not send the full spec as a broad "here is my product" packet while confidence is low. Either pause, or send a short narrower note to a smaller review group asking for hard feedback on whether CAS Harness adds a useful audit/explanation layer on top of existing evaluation/debugging/interpretability workflows. Keep the claim to "possible evidence/explanation layer," not "superior mechanistic interpretability."
+
+2026-06-15 smaller spec-sheet artifact created: `docs/working/cas_harness_amazon_review_brief_20260615.md`. Use this as the first-share review brief instead of the full NDA-gated `CAS_HARNESS_SPEC_SHEET_current.pdf` when asking Amazon colleagues for early technical critique. The brief frames CAS / Noetic Compass as a possible notation, explanation, and evidence layer; explicitly says it is not replacing mechanistic interpretability; preserves `FLAG_FOR_HUMAN_REVIEW`; and keeps customer-production `ACCEPT`, frontier-scale validation above tested scope, prompt-injection prevention/removal/reversal, hallucination prevention, general AI safety certification, and universal CAS superiority as `OPEN` / `NOT LICENSED`.
+
+2026-06-15 CAS specificity assertion audit: the user challenged the claim boundary by arguing that high scores came from the original TKS definitions, CAS derives from TKS, and "CAS/TKS is the only DSL fully compilable BNF psychological ethics and situational ontology currently known." Current answer: definition-anchored detection is supported, comparative CAS-specificity is still `OPEN` / `NOT LICENSED`. Local artifacts support that the Stage-9 v1 high-readout lineage used real TKS meaning/glosses and produced strong hidden-over-text lift, but the same artifacts warn that v1 carries text/gloss leakage and Stage LSA remains `OPEN`. Local artifacts support that CAS reconciles authoritative Noetic definitions and register cross-products from TKS while retaining its own mathematics/compiler/notation. Local artifacts support the existence of a BNF grammar and executable compiler/renderer/diagram path. Do not collapse the user's assertion into "only DSL" generally. The narrower "only currently known fully compilable BNF DSL for psychological ethics and situational ontology" claim is plausible as a differentiator but should be phrased as a currently-known / prior-art-search-bounded claim, not as an exhaustive world-first unless a formal literature/prior-art search is completed. Safer wording: "CAS/TKS appears to be a distinctive compiler-backed BNF DSL for TKS-derived cognitive, ethical, and situational ontology, and current evidence supports definition-anchored hidden-state readout. Whether CAS is comparatively special versus matched non-CAS taxonomies remains an open evidence gate."
+
+2026-06-15 non-CAS comparator candidates documented: `docs/working/cas_harness_mtc_candidate_non_cas_taxonomies_20260615.md`. Recommended first matched-control comparator is `mft5_diamonds8_40`: Moral Foundations Theory five-foundation labels crossed with DIAMONDS Situational Eight labels for an exact 40-class non-CAS ethics/situational control. Other candidates: Schwartz 10 values for the Noetic-10 axis, Morality-as-Cooperation 7 values for drive/foundation-like controls, HEXACO domains/facets as lower-priority psychology controls, and LegalRuleML/eFLINT/Scenic as DSL prior-art comparators rather than hidden-state MTC taxonomies. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED` until a preregistered matched-control run passes.
+
+2026-06-15 Condition-4 MFT/DIAMONDS matched-control run started. New artifacts under `docs/working/mtc_matched_taxonomy_20260530/`: `build_mft_diamonds_condition4_scenarios.py`, `mft_diamonds_condition4_scenarios_20260615.jsonl`, `mft_diamonds_condition4_scenarios_20260615_manifest.json`, `surface_gate_condition4_mft_diamonds.py`, `surface_gate_condition4_mft_diamonds_result.json`, `adapt_condition4_for_capture.py`, `mft_diamonds_condition4_capture_20260615.json`, `mft_diamonds_condition4_mtc_manifest_20260615.json`, and `run_condition4_mft_diamonds_comparator.py`. Fixture facts: 1,440 rows; 40 CAS/TKS element labels; exact 40-cell MFT5 x DIAMONDS8 control balance per split; orthogonality within permutation-null band. Local surface gate result is `NEAR-PASS`, not full PASS: CAS 40E text baseline `0.0722` vs chance `0.025`; MFT5 x DIAMONDS8 text baseline `0.9472`, proving the non-CAS control is strongly present in prompt text. GPT-NeoX-20B pod run was attempted on `root@195.26.233.61 -p 34766`, but blocked during model download by `OSError: [Errno 122] Disk quota exceeded` after partial Hugging Face shard download. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`. Next options: use a pod/storage mount with enough writable quota for GPT-NeoX-20B, clean/redirect Hugging Face cache to a real large volume, or run a smaller-model smoke capture while keeping GPT-NeoX-20B as the claim-bearing target.
+
+2026-06-15 F28 vs GoEmotions pilot takeover: Claude's completed Pythia-2.8B pilot artifacts are present under `docs/working/mtc_f28_goemotions_20260615/` and summarized in `docs/working/cas_harness_mtc_f28_goemotions_result_20260615.md`. Formal preregistered verdict remains `BLOCKED_CAS_NOT_RECOVERABLE`: CAS Foundation hidden-minus-text lift is `+13.9pp`, below the frozen `+20pp` floor. Substantive pilot signal remains notable but not claim-licensing: CAS beats GoEmotions on lift by `+13.4pp`, scrambled-CAS null is near chance, and Drive/Register sub-axes recover at `65.3%` / `71.7%`. Takeover audit found no completed 2,800-row confirmatory fixture locally or on the pod, so Codex added `build_confirmatory_authoring_plan.py`, `surface_gate_f28_goemotions.py`, `TAKEOVER_STATUS_20260615.md`, `mtc_f28_goemotions_confirmatory_authoring_plan_20260615.json`, `mtc_f28_goemotions_confirmatory_authoring_chunks_20260615.jsonl`, `mtc_f28_goemotions_confirmatory_authoring_manifest_20260615.json`, and `mtc_f28_goemotions_pilot_full_surface_gate_recheck_20260615.json`. The reusable Gate-1 recheck reproduced pilot PASS: Foundation answer-stripped text `0.3586`, GoEmotions answer-stripped text `0.5714`. Next required step is authoring the 112 confirmatory chunks, not GPU capture. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`.
+
+2026-06-15 F28 vs GoEmotions programmatic confirmatory attempt: Codex assembled `docs/working/mtc_f28_goemotions_20260615/mtc_f28_goemotions_confirmatory_programmatic_20260615.json` from the balanced 2,800-row plan and provenance-marked it `codex_programmatic_authoring_v0`. Balance was correct (`2800` rows; 28 CAS Foundation classes and 28 GoEmotion classes with `100` rows each; `2240` train / `560` test), but Gate 1 failed with `BLOCKED_TEXT_BASELINE_TOO_HIGH`: Foundation answer-stripped text baseline `1.0`, GoEmotion answer-stripped text baseline `1.0`, Drive/Register answer-stripped text baselines `1.0`, threshold `0.60`. Result recorded in `docs/working/mtc_f28_goemotions_20260615/PROGRAMMATIC_CONFIRMATORY_GATE1_BLOCKED_20260615.md` and `mtc_f28_goemotions_confirmatory_programmatic_surface_gate_20260615.json`. Do not run GPU capture from this fixture. Next required step remains independent/non-template authoring of the 112 confirmatory chunks, then Gate 1 and Gate 2 before any pod run. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`.
+
+2026-06-15 F28 vs GoEmotions Gemini confirmatory attempt: Codex added `docs/working/mtc_f28_goemotions_20260615/author_confirmatory_chunks_gemini.py` and `gate2_confirmatory_gemini_blind.py`, authored all `112` chunks with `models/gemini-2.5-flash-lite`, and assembled `mtc_f28_goemotions_confirmatory_gemini_20260615.json` (`2800` rows; 28 CAS Foundation classes and 28 GoEmotion classes with `100` rows each; `2240` train / `560` test; SHA-256 `eac9684473b1a46e79a39a63c3bd6536a345d07b26e2020eb234620533b3ff75`). Gate 1 passed: Foundation answer-stripped text baseline `0.1561`, GoEmotion answer-stripped text baseline `0.5639`, Drive `0.3704`, Register `0.5693`, threshold `0.60`. Gate 2 blocked GPU: automated blind `models/gemini-2.5-flash` judge returned `CHECK` with Foundation `0.1857`, GoEmotion `0.5857`; same-packet `models/gemini-2.5-pro` adjudication also returned `CHECK` with Foundation `0.1571`, GoEmotion `0.6143`. Result recorded in `docs/working/mtc_f28_goemotions_20260615/CONFIRMATORY_GEMINI_GATE2_CHECK_20260615.md`. Do not run GPU capture from this fixture. Next required step is to revise authoring so CAS drive/register meaning survives blind review without raising surface-text leakage, then rerun Gate 1 and Gate 2. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`.
+
+2026-06-16 original-TKS definition correction: User asked whether the confirmatory run used the original TKS definitions. Direct answer: no, the earlier confirmatory runs used short CAS/TKS drive-register summaries, not the full original TKS 28 subfoundation meanings. Codex then built `docs/working/mtc_f28_goemotions_20260615/build_confirmatory_authoring_plan_tks_original.py` from `C:\Users\wakil\Downloads\Everthing-Tootra-TKS\canon\normalized\canon_subfoundations_28_defs.json` (source SHA-256 `5507bf6f85f63dc62847ea5f9018b6ad4471ca8acfe851a0f50d2b4ebbf6c88d`), authored all 112 chunks with Gemini, and assembled `mtc_f28_goemotions_confirmatory_gemini_tks_original_20260615.json` (`2800` rows; 28 CAS Foundation classes and 28 GoEmotion classes with `100` rows each; `2240` train / `560` test; fixture SHA-256 `5f0c641ffe0e86dd1af0aefa3dd7a8efaa42b088ded8a877798056bd361f5083`). Gate 1 blocked GPU with `BLOCKED_TEXT_BASELINE_TOO_HIGH`: Foundation answer-stripped text baseline `0.7361`, Drive `0.8307`, Register `0.8543`, GoEmotion `0.1443`, threshold `0.60`. Result recorded in `docs/working/mtc_f28_goemotions_20260615/CONFIRMATORY_TKS_ORIGINAL_GATE1_BLOCKED_20260615.md`. Interpretation: original TKS meaning is present, but too surface-visible for hidden-state specificity testing. Do not run GPU capture from this fixture. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`.
+
+2026-06-16 wrong-definition artifact quarantine: User requested quarantining the earlier F28 x GoEmotions confirmatory artifacts that used short CAS/TKS drive-register summaries instead of original TKS definitions. Codex moved the wrong-definition lineage from `docs/working/mtc_f28_goemotions_20260615/` into `docs/working/_quarantine/mtc_f28_goemotions_wrong_short_defs_20260616/`, including `build_confirmatory_authoring_plan.py`, programmatic confirmatory artifacts, Gemini confirmatory chunks/fixtures, Gate 2 files, and related compiled Python cache files. Quarantine manifest: `docs/working/_quarantine/mtc_f28_goemotions_wrong_short_defs_20260616/quarantine_manifest_20260616.json`. Future work must use the canonical original source `C:\Users\wakil\Downloads\Everthing-Tootra-TKS\canon\normalized\canon_subfoundations_28_defs.json` or explicitly documented owner-locked definitions. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`.
+
+2026-06-16 original-TKS de-leak confirmatory attempt: Codex hardened `docs/working/mtc_f28_goemotions_20260615/author_confirmatory_chunks_gemini.py` so it refuses non-original plans unless they carry `tks_original`, `original_tks_meaning`, and the canonical source `canon_subfoundations_28_defs.json`. Codex then added `build_confirmatory_authoring_plan_tks_original_delink.py`, authored all 112 chunks for `20260616_tks_original_delink_v1`, and assembled `mtc_f28_goemotions_confirmatory_gemini_20260616_tks_original_delink_v1.json` (`2800` rows; fixture SHA-256 `4a8831d0af30a785204c7f972f92114cdec20e051a5bf603cacf15eba8e7fa37`). Gate 1 scripted verdict was `PASS`: Foundation answer-stripped `0.5721`, GoEmotion answer-stripped `0.0343`, Drive `0.5511`, Register `0.6282`, threshold `0.60`; register remains surface-loud and is a caution. Fresh original-TKS Gate 2 script `gate2_confirmatory_tks_original_blind.py` used the canonical 28 original TKS definitions and returned `CHECK`: Foundation `0.6357`, Drive `0.7500`, Register `0.7286`, GoEmotion `0.0786`. Interpretation: original-TKS CAS meaning survived de-leaking better than the text baseline, but GoEmotion was flattened, so the fixture is not valid for F28-vs-GoEmotions GPU comparison. Do not run GPU capture. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`. Next move is v2/v3 authoring with separated channels: original-TKS event logic plus balanced GoEmotion micro-behavior.
+
+2026-06-16 original-TKS free-emotion v4 confirmatory attempt: Codex added `build_confirmatory_authoring_plan_tks_original_freeemotion.py`, hardened the author JSONL loader against UTF-8 BOM shard files, authored all 112 chunks for `20260616_tks_original_freeemotion_v1`, and assembled `mtc_f28_goemotions_confirmatory_gemini_20260616_tks_original_freeemotion_v1.json` (`2800` rows; fixture SHA-256 `3acb2a2049be0e621d8e648ac3bf1ddcc1bf268f9f756fe1e36799a1086162d7`) from the canonical original TKS source `C:\Users\wakil\Downloads\Everthing-Tootra-TKS\canon\normalized\canon_subfoundations_28_defs.json` (SHA-256 `5507bf6f85f63dc62847ea5f9018b6ad4471ca8acfe851a0f50d2b4ebbf6c88d`). Gate 1 returned `PASS`: Foundation answer-stripped `0.2396`, Drive `0.3089`, Register `0.3918`, GoEmotion answer-stripped `0.2943`, threshold `0.60`. Gate 2 returned `CHECK`: Foundation `0.4286`, Drive `0.5429`, Register `0.6143`, GoEmotion `0.2643`, with `0` invalid foundation predictions and `2` invalid GoEmotion predictions. Interpretation: the CAS/original-TKS Foundation side now survives both low surface leakage and blind meaning recovery, but the GoEmotion comparator side does not clear the required `0.50` blind floor and falls below its own surface baseline. Do not run GPU capture from this fixture. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`. Result memo: `docs/working/mtc_f28_goemotions_20260615/CONFIRMATORY_TKS_ORIGINAL_FREEEMOTION_GATE2_CHECK_20260616.md`. Next move is v5: keep the v4 CAS/TKS channel, revise only the GoEmotion channel to use stronger varied non-label affect cues without repeating fixed v3-style microbehavior phrases, then rerun Gate 1 and Gate 2 before any GPU capture.
+
+2026-06-16 original-TKS affect2 v5 confirmatory attempt: Codex added `build_confirmatory_authoring_plan_tks_original_affect2.py`, patched `author_confirmatory_chunks_gemini.py` to support `emotion_signal_shape` / `emotion_signal_hint` / `emotion_signal_intensity`, authored all 112 chunks for `20260616_tks_original_affect2_v1`, and assembled `mtc_f28_goemotions_confirmatory_gemini_20260616_tks_original_affect2_v1.json` (`2800` rows; fixture SHA-256 `11ce563a8f8cddac3702cc76bc54f05a254f75aa50d617ac01d5c34902ac1099`) from the canonical original TKS source `C:\Users\wakil\Downloads\Everthing-Tootra-TKS\canon\normalized\canon_subfoundations_28_defs.json` (SHA-256 `5507bf6f85f63dc62847ea5f9018b6ad4471ca8acfe851a0f50d2b4ebbf6c88d`). Gate 1 returned `PASS`: Foundation answer-stripped `0.1254`, Drive `0.2186`, Register `0.3893`, GoEmotion answer-stripped `0.4825`, threshold `0.60`. Gate 2 returned `CHECK`: Foundation `0.4143`, Drive `0.6071`, Register `0.5429`, GoEmotion `0.3643`, with `0` invalid foundation predictions and `0` invalid GoEmotion predictions. Interpretation: v5 improved GoEmotion blind recovery over v4 (`0.3643` vs `0.2643`) while preserving low CAS/Foundation surface leakage, but GoEmotion still failed the required `0.50` blind floor and fell below its own text baseline. Do not run GPU capture from this fixture. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`. Result memo: `docs/working/mtc_f28_goemotions_20260615/CONFIRMATORY_TKS_ORIGINAL_AFFECT2_GATE2_CHECK_20260616.md`. Next move: stop simply making synthetic emotion cues louder; keep the v5 original-TKS CAS channel, build or source a separately gated GoEmotion-first comparator that passes blind readability on its own, then recombine and rerun Gate 1 and Gate 2 before any GPU capture.
+
+2026-06-16 GoEmotion calibration and v6-v8 original-TKS recombination attempts: Codex built a GoEmotion-only calibration bank `goemotion_calibration_bank_20260616_goemotion_calibration_v1.json` (SHA-256 `b80c95da442f67559b0c05a1eec83b1b1c656f62ef5da06af0fb6f97e1e5821a`) that passed blind GoEmotion-only readability at `0.9464`; caveat: `love` collapsed into `caring` (`0.0`). Recombination still did not produce a GPU-eligible fixture. v6 `20260616_tks_original_calibrated_goemotion_v1` was `BLOCKED_TEXT_BASELINE_TOO_HIGH`: Foundation text `0.1257`, GoEmotion text `0.6521`; diagnostic partial Gate 2 after the block was only GoEmotion `0.4154`. v7 `20260616_tks_original_calibrated_goemotion_soft_v1` passed Gate 1 (Foundation text `0.2321`, GoEmotion text `0.3561`) but Gate 2 returned `CHECK`: Foundation `0.6357`, Drive `0.7643`, Register `0.7000`, GoEmotion `0.2357`. v8 `20260616_tks_original_affect_cocentral_v1` passed Gate 1 (Foundation text `0.1457`, GoEmotion text `0.4721`) but Gate 2 returned `CHECK`: Foundation `0.6071`, Drive `0.7500`, Register `0.7071`, GoEmotion `0.3714`. Interpretation: the CAS/original-TKS side repeatedly survives low surface leakage and blind meaning recovery, but the GoEmotion comparator fails under recombination. Do not run GPU capture from v6, v7, or v8. Comparative CAS/TKS specificity remains `OPEN` / `NOT LICENSED`. Result memo: `docs/working/mtc_f28_goemotions_20260615/CONFIRMATORY_TKS_ORIGINAL_GOEMOTION_V6_V8_GATE_SUMMARY_20260616.md`. Recommended next move: stop treating GoEmotion as the first claim-bearing comparator; rebuild a situational/ethical matched control such as MFT x DIAMONDS under the same leakage-control discipline, or build a human/LLM-agreed GoEmotion fixture before overlaying CAS/TKS.
 
 ## 2026-06-11 RPM/Lacunarity Reason-Break Implementation
 
@@ -206,6 +2207,19 @@ Updated recommended next move: recover or rerun the seed `16..31` generation-onl
 - W0 evaluator result: `FAIL` / `BLOCKED`, not a licensed detector. Frozen/default thresholds were blocked by prompt-risk class floor (`7 / 7`, required `10 / 10`). Best full-control exploratory valid split was layer `28`, hidden BA `0.809091`, text BA `0.809091`, permutation p `0.008991`, status `FAIL`.
 
 Updated status: the data-readiness gate and W0 capture path work, but internal prompt-injection detection remains `OPEN` / `NOT LICENSED`. Do not run causal steering/ablation from this Qwen result. The next valid research move is a larger frozen prompt-risk bank or a more chain-sensitive model, followed by W0 evaluation only if hidden states beat text/layer-0/payload/domain controls under frozen thresholds.
+
+2026-06-15 larger-bank continuation:
+
+- Implemented an `expanded` matched prompt-risk bank variant in `build_matched_prompt_chain_break_bank.py`, adding weak, borderline, and anchored risk-language templates.
+- Generated `live-trace-worker/scenarios/matched_prompt_chain_break_expanded_bank_v2_s16_20260615.json`: `1920` rows, `120` exact prompt groups, `16` samples per prompt, `5` payload classes, and balanced template kinds (`weak=640`, `borderline=640`, `anchored=640`). Bank SHA-256: `DF7E67D236F4EC653B95B04B24E0F6212AF212AF596C4F34BD81156C809DBBF5`.
+- Ran Qwen generation-only screening on pod `root@195.26.233.61 -p 37154` in three `640`-row chunks and archived outputs at `D:\tksCAS-archive\qwen_v6_expanded_bank_v2_s16_generation_only_20260615\`.
+- Larger-bank combined gate passed: `READY_FOR_W0_CAPTURE`, `BROKEN=375`, `INTACT=1545`, `mixed_prompt_group_count=89`, `testable_payload_class_count=5`, all readiness gates `true`. Gate manifest SHA-256: `DE80CBA1589E8E19C625CD47EDD605C45660C12F657DA1928466263749816179`.
+- Completed all-layer prompt-stage W0 hidden-state capture before output generation. Archive: `D:\tksCAS-archive\qwen_v6_expanded_bank_v2_s16_w0_all_layers_20260615\`; feature shape `[1920, 29, 1536]`; dataset SHA-256 `E0B0DD7C17D4DDB0D8F9C5CAEBE227C0EB927E59BA1ECC2539958F6EC6E1E9C4`; manifest SHA-256 `61FBBA0A59B99A9EDFA601911A2682320313C0E300D298A87ED6980FD6F2100F`.
+- Result note: `docs/working/qwen_v6_expanded_matched_prespeech_w0_result_20260615.md`. Proof bundle: `D:\tksCAS-archive\qwen_v6_expanded_w0_matched_prespeech_result_20260615.tgz`, SHA-256 `CFDB63C525467489C58481C3120BE8FB52A12A79F9615157FB1DB57C0EF41C32`.
+- Frozen/default layer `14` remained `FAIL`: hidden BA `0.582594`, text BA `0.650776`, hidden-minus-text `-0.068182`, permutation p `0.146853`.
+- Optimized candidate scan found layer `28` as the best layer. Full controls on layer `28` still returned `FAIL`: hidden BA `0.745011` vs required `0.75`; hidden-minus-text `0.094235` vs required `0.15`; permutation p `0.000999`; per-payload floor failed for `credential_secret_boundary` and `system_instruction_boundary`.
+
+Updated status: the larger bank fixed the prompt-group/data-readiness bottleneck and found a real late-layer W0 signal, but it still does not license the internal prompt-injection detector. Internal prompt-injection detection, prompt-injection prevention/removal/reversal, hallucination prevention, live interception, sample-specific stochastic branch prediction, and causal compliance-state detection remain `OPEN` / `NOT LICENSED`. Do not run causal steering/ablation from this Qwen result. Next valid research move is either a less text-obvious expanded bank, a stronger external/human judge before W0 capture, or the same expanded gate on a more chain-sensitive/refusal-sensitive model.
 
 ## 2026-06-11 Enabled-Predicate Campaign Implementation
 
@@ -673,27 +2687,27 @@ PR #1 of the paid-security spine is no longer pending: PR #134 merged to `master
 
 Also, the evidence-honesty fix is not parked: PR #132 already merged as `546243d`, and PR #133 worker-token-send merged as `79c0cdb`.
 
-## Launch Security Build — audit complete; PR #1 (accounts spine) BUILT + reviewed, NOT merged (2026-06-04)
+## Launch Security Build â€” audit complete; PR #1 (accounts spine) BUILT + reviewed, NOT merged (2026-06-04)
 
 A read-only 8-dimension paid-user security audit ran (9-agent workflow) against the `launch-scoped-beta`/`master` backend. Full plan: `docs/working/cas_harness_launch_security_audit_plan_20260604.md`.
 
-**PR #1 status (account half of the spine):** BUILT + security-reviewed + committed `a50c968` on `launch/paid-security-spine` (pushed to origin; **NOT merged to master, NOT deployed**). Flag-gated `accounts_enabled=False` (`NC_ACCOUNTS_ENABLED`) → default path byte-for-byte unchanged, internal smoke flow intact. Real `Account` + `InviteCode` persisted on the existing StateStore; fail-closed atomic `redeem_invite` (single-use via `put(expected_version)` + deterministic `account_id` + email-uniqueness index at v0); identity-login branch binds SERVER-DERIVED `account_id`/`tenant_id`/`role` (never request body); `_authorize_mint` preserved as the outer gate; redeem is non-enumerable (every failure → one `400`); durable-or-`503`, never in-memory; invite creation `403`-gated (RBAC TODO). Reviewed (diff + concurrency trace); tests re-run independently → **106 passed**. Remaining spine = **PR #2**: token `session_id`/`jti` + revocation + dispatch-side disabled-account/session re-check + `require_role`/central authz dependency. Then Phases 3-7 (tenant isolation on distributed/fleet/evidence, quotas/billing, RBAC application, security headers/CORS, durable audit log).
+**PR #1 status (account half of the spine):** BUILT + security-reviewed + committed `a50c968` on `launch/paid-security-spine` (pushed to origin; **NOT merged to master, NOT deployed**). Flag-gated `accounts_enabled=False` (`NC_ACCOUNTS_ENABLED`) â†’ default path byte-for-byte unchanged, internal smoke flow intact. Real `Account` + `InviteCode` persisted on the existing StateStore; fail-closed atomic `redeem_invite` (single-use via `put(expected_version)` + deterministic `account_id` + email-uniqueness index at v0); identity-login branch binds SERVER-DERIVED `account_id`/`tenant_id`/`role` (never request body); `_authorize_mint` preserved as the outer gate; redeem is non-enumerable (every failure â†’ one `400`); durable-or-`503`, never in-memory; invite creation `403`-gated (RBAC TODO). Reviewed (diff + concurrency trace); tests re-run independently â†’ **106 passed**. Remaining spine = **PR #2**: token `session_id`/`jti` + revocation + dispatch-side disabled-account/session re-check + `require_role`/central authz dependency. Then Phases 3-7 (tenant isolation on distributed/fleet/evidence, quotas/billing, RBAC application, security headers/CORS, durable audit log).
 
 Codex merge audit (2026-06-04): `a50c968` is **merge-safe only while default-off** (`accounts_enabled=False`), because production behavior stays unchanged. It is **not enable-safe for external/paid users yet**. Enabled-mode follow-ups before `NC_ACCOUNTS_ENABLED=true`: (1) replace `/accounts/invite`'s temporary shared `X-Auth-Mint-Secret` operator gate with real `require_role("operator"|"admin")` RBAC, because the current dashboard mint secret is bundle-readable; (2) store only a hash of invite codes, not raw bearer invite codes, in the durable StateStore payload; (3) complete PR #2 sessions/revocation/disabled-account recheck and central role/tenant dependencies. Test audit: account/invite tests passed 17/17; broader targeted branch suite passed 156 tests with the same 2 old `test_middleware.py` `/assess` fixture failures reproduced on clean `origin/master`; focused non-preexisting checks passed 32/32 + 124/124.
 
 Scorecard (current state for PAID-user launch):
-- Accounts & invites: **MISSING** — `/auth/token` mints a token for ANY username on the shared `NC_AUTH_MINT_SECRET`; no account model, no invite-to-account.
-- Tokens & sessions: **PARTIAL** — stateless JWT (`sub`/`api_key`/`exp`); no session/revoke/refresh, no account-status check; token in localStorage.
-- Quotas & billing: **MISSING** — no server-side quota/billing gate at any audit choke point; `production/billing.py` is an unwired STUB.
-- Tenant isolation: **PARTIAL** — audit sessions owner-scoped; distributed + fleet + evidence are cross-tenant leaky; no `tenant_id` claim; one literal `INTERIM_TENANT="default"`.
-- RBAC: **MISSING** — no role model; `POST /evidence/{trace_id}/anchor` is auth-gated but NOT role-gated (any authed user can anchor any system packet).
-- XSS/headers/CORS: **PARTIAL** — render discipline clean (no `dangerouslySetInnerHTML`); but no security-headers/CSP middleware; CORS `allow_credentials=True` + `*.vercel.app` regex.
-- Audit logs: **MISSING** — request logging only, no durable append-only security-event store; failed-auth 401s not logged (middleware ordering).
-- Durable storage: **PARTIAL** — StateStore Protocol + durable SqliteStateStore + verified PostgresStateStore EXIST and are reusable; security state + `_SESSIONS` are RAM-only.
+- Accounts & invites: **MISSING** â€” `/auth/token` mints a token for ANY username on the shared `NC_AUTH_MINT_SECRET`; no account model, no invite-to-account.
+- Tokens & sessions: **PARTIAL** â€” stateless JWT (`sub`/`api_key`/`exp`); no session/revoke/refresh, no account-status check; token in localStorage.
+- Quotas & billing: **MISSING** â€” no server-side quota/billing gate at any audit choke point; `production/billing.py` is an unwired STUB.
+- Tenant isolation: **PARTIAL** â€” audit sessions owner-scoped; distributed + fleet + evidence are cross-tenant leaky; no `tenant_id` claim; one literal `INTERIM_TENANT="default"`.
+- RBAC: **MISSING** â€” no role model; `POST /evidence/{trace_id}/anchor` is auth-gated but NOT role-gated (any authed user can anchor any system packet).
+- XSS/headers/CORS: **PARTIAL** â€” render discipline clean (no `dangerouslySetInnerHTML`); but no security-headers/CSP middleware; CORS `allow_credentials=True` + `*.vercel.app` regex.
+- Audit logs: **MISSING** â€” request logging only, no durable append-only security-event store; failed-auth 401s not logged (middleware ordering).
+- Durable storage: **PARTIAL** â€” StateStore Protocol + durable SqliteStateStore + verified PostgresStateStore EXIST and are reusable; security state + `_SESSIONS` are RAM-only.
 
 Reuse (do NOT rebuild): StateStore spine (Postgres when `NC_DATABASE_URL` set, else SQLite under `/var/data`), the owner-scoping pattern, JWT transport, CRM lead pipeline. `production/{billing,tenant_isolation,compliance}.py` are import-isolated STUBS (correct shapes, not implementations).
 
-Plan = SPINE FIRST (cannot parallelize): real Account + InviteCode on StateStore + token claims (`account_id`/`tenant_id`/`role`/`jti`) + identity login + central `require_role`/`current_tenant` dependency. THEN parallel: tenant isolation ∥ headers/CORS ∥ docs; serial: quotas → RBAC (shared route files); durable audit log after tenant. Build off `master` (NOT `wave5.5` — it has an older `auth.py`).
+Plan = SPINE FIRST (cannot parallelize): real Account + InviteCode on StateStore + token claims (`account_id`/`tenant_id`/`role`/`jti`) + identity login + central `require_role`/`current_tenant` dependency. THEN parallel: tenant isolation âˆ¥ headers/CORS âˆ¥ docs; serial: quotas â†’ RBAC (shared route files); durable audit log after tenant. Build off `master` (NOT `wave5.5` â€” it has an older `auth.py`).
 
 Recommended first PR (branch `launch/paid-security-spine`, flag-gated `accounts_enabled=False` so the current internal smoke flow is byte-for-byte unchanged, no deploy): Account + InviteCode on StateStore + `POST /accounts/invite/redeem` + an identity-login branch alongside the existing shared-secret fallback.
 
@@ -1013,7 +3027,7 @@ Scoped-beta roadmap proposal from the 2026-06-03 launch swarm, pending owner exe
 
 1. Phase 0 - consolidate and stop overclaiming: **DONE 2026-06-04** (launch branch `launch/scoped-beta`, pushed `origin/launch/scoped-beta` @ `96730cc`; NOT yet merged to `master`).
    - [x] Consolidate launch work onto `master`: created `launch/scoped-beta` OFF `origin/master` (so it carries the current CAS Harness product routes + the correct paid-disk `render.yaml`), then cherry-picked only the two useful declutter commits (`dcb6330`, `f94c227`). `wave5.5/harness-launch-declutter` is NOT deployed. Merge `launch/scoped-beta` -> `master` is HELD pending owner go (it triggers Render auto-deploy; see deploy action below). Declutter frontend build-verify (tsc/vitest in the worktree) deferred to the pre-merge gate.
-   - [x] Reissue investor-facing spec sheets as v2.0: `docs/marketing/CAS_HARNESS_SPEC_SHEET_v2_0_INVESTOR_EXTERNAL_NDA_20260604.md` produced with all 5 corrections (Object-Lock Governance-not-COMPLIANCE / ~30-day rolling / tamper-evident; Stage 9 40E ACCEPT WITHDRAWN -> FLAG_FOR_HUMAN_REVIEW; single-instance-only durability; no SOC2/cert + standing "no legal advice" disclaimer; uniqueness OPEN / Condition-3 comparator GREY while PRESERVING the 95.625% readout + η→ε bridge PASS). v1.6-v1.9 carry a SUPERSEDED banner. Verified: 0 uncorrected overclaims survive. AWAITING owner wording sign-off + decision on commit location (the marketing docs live on the `wave5.5` working tree, NOT on `master`).
+   - [x] Reissue investor-facing spec sheets as v2.0: `docs/marketing/CAS_HARNESS_SPEC_SHEET_v2_0_INVESTOR_EXTERNAL_NDA_20260604.md` produced with all 5 corrections (Object-Lock Governance-not-COMPLIANCE / ~30-day rolling / tamper-evident; Stage 9 40E ACCEPT WITHDRAWN -> FLAG_FOR_HUMAN_REVIEW; single-instance-only durability; no SOC2/cert + standing "no legal advice" disclaimer; uniqueness OPEN / Condition-3 comparator GREY while PRESERVING the 95.625% readout + Î·â†’Îµ bridge PASS). v1.6-v1.9 carry a SUPERSEDED banner. Verified: 0 uncorrected overclaims survive. AWAITING owner wording sign-off + decision on commit location (the marketing docs live on the `wave5.5` working tree, NOT on `master`).
    - [x] Neutralize stale branch blueprints: addressed by consolidating onto a `master`-based launch branch carrying the correct paid-disk / ledger / CRM `render.yaml`; the stale `wave5.5` blueprint is simply not deployed.
 2. Phase 1 - security before external users: **DONE 2026-06-04** (commit `96730cc`; 174 tests pass).
    - [x] Tenant-scope `GET /api/cas-harness/audit/sessions` (S1): sessions carry `owner_sub`/`owner_api_key` from caller identity (request.state or best-effort Bearer decode); create/get/list FAIL CLOSED; owner key folds into the deterministic `audit_id`; `to_dict()` strips owner identity.
@@ -1172,6 +3186,13 @@ Clean public story to earn:
 
 ## Update Log
 
+- 2026-06-18: CAS PCBA bias/vibration diagnostic lane implemented in the integration worktree on `codex/cas-harness-public-beta-candidate`. The CAS PCBA Engineer book points to a stronger internal test than one-shot hidden-state classification: paired small-signal response around `^5` bias and `^4` Vibration, with `beta/gm/r_pi` treated as measurable hidden-state delta response and `E-CJT-008 CjtCrossDomainBias` treated as the prompt-injection structure to test. Added `build_cjt_bias_vibration_bank.py`, `evaluate_cjt_bias_vibration_diagnostic.py`, generated a 72-row paired bank at `live-trace-worker/scenarios/cjt_bias_vibration_bank_v0_20260618.json`, and preserved PCBA metadata through all-layer capture via `labels_cjt_role`, `labels_cjt_family`, `labels_cjt_pair_role`, `labels_trusted_authority`, and `labels_pcba_expected_signal`. Verification: syntax checks passed and `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py` passed (`43 passed`). Claim boundary unchanged: this is a real candidate path for hidden-state prompt-injection/hallucination-risk detection, but it remains `OPEN / NOT LICENSED` until real pod W0/PRE_ANSWER activation captures beat word, char, length, layer-0, payload/domain, grouped-fold, shuffled-label, and permutation controls; prevention/removal/reversal/live interception/causal proof remain separate gates.
+- 2026-06-18 CAS PCBA bias/vibration W0 pod result: ran the new 72-row PCBA bank on reachable pod `root@195.26.233.21 -p 44506` with `Qwen/Qwen2.5-1.5B-Instruct`, all `29` W0 layers, hidden size `1536`, zero generated tokens. Full heavy archive is local at `D:\tksCAS-archive\cjt_bias_vibration_w0_qwen_20260618\`; repo summary is in `docs\working\cjt_bias_vibration_w0_qwen_20260618\`. Result: `FAIL` for hidden-state/internal claim. Best hidden layer reached hidden BA `1.0`, but surface controls also dominated: word-text delta BA `0.9166666666666667`, char-text delta BA `0.9583333333333333`, length delta BA `0.9722222222222222`, hidden-minus-char only `0.04166666666666674`; no layer passed. Added `screen_cjt_bias_vibration_surface_leakage.py` so future CJT bias/vibration banks must pass surface preflight before GPU capture; v0 is now correctly `BLOCKED_SURFACE_LEAKAGE`. Claim boundary unchanged: hidden-state prompt-injection detection, hidden-state hallucination detection, prompt-injection prevention/removal/reversal, live interception, and causal proof remain `OPEN / NOT LICENSED`. Next gate is a surface-balanced/counterbalanced v1 PCBA bank, then W0 capture only after the surface screen passes.
+- 2026-06-18 CAS PCBA bias/vibration v1 recovery result: built the counterbalanced v1 bank (`live-trace-worker/scenarios/cjt_bias_vibration_bank_v1_20260618.json`) so every prompt carries the same safe/unsafe/supported/unsupported bundle and only a rotated neutral active channel changes. Surface preflight passed before GPU spend: word-text delta BA `0.4583333333333333`, char-text delta BA `0.4027777777777778`, length delta BA `0.5`, active-channel BA `0.375`, status `READY_FOR_W0_CAPTURE`. Ran W0 all-layer Qwen capture on `root@195.26.233.21 -p 44506`, 72 rows, 29 layers, hidden size 1536, generated-prefix tokens `0`; full archive is local at `D:\tksCAS-archive\cjt_bias_vibration_w0_qwen_v1_20260618\`, repo audit is in `docs\working\cjt_bias_vibration_w0_qwen_v1_20260618\`. Result: `PASS` for a scoped PCBA/CJT paired hidden-response screen on layers `18, 22, 23, 25, 27, 28`; best layer `18` hidden BA `0.8472222222222222`, char-text BA `0.4027777777777778`, layer-0 BA `0.5`, hidden-minus-char `0.4444444444444444`, hidden-minus-layer-0 `0.3472222222222222`, permutation p `0.000999000999000999`, failed gates none; family breakdown layer 18: instruction-integrity `0.875`, factual-support `0.8333333333333333`. Public claim boundary upgraded only to: CAS Harness has evidence of a pre-output W0 hidden-state response to PCBA/CJT bias/vibration perturbations in this controlled paired design. Universal hidden-state prompt-injection detection, universal hidden-state hallucination detection, removal/reversal, live interception, and causal proof remain `OPEN / NOT LICENSED`; next gate is causal intervention on the passing layer window with no-op, +/-risk/refusal direction, random same-norm direction, paired seeds, and held-out prompt groups.
+- 2026-06-18 CAS PCBA bias/vibration causal intervention follow-up: implemented a layer-level intervention hook and causal lane (`export_cjt_bias_vibration_direction.py`, `build_cjt_bias_vibration_causal_bank.py`, `run_cjt_bias_vibration_causal_experiment.py`, `relabel_cjt_bias_vibration_causal_outputs.py`, `analyze_cjt_bias_vibration_causal.py`) and ran Qwen layer-18 interventions on 16 held-out PCBA/CJT risk prompts. Full bidirectional causal gate remains `FAIL` / `OPEN / NOT LICENSED`: alpha `10` relabeled run had baseline risk adoption `0.15625`, `+risk` shift `0.03125`, random shift `0.0`, and `+risk` p `0.388261`, so causal risk-steering/control is not licensed. However, the `-risk` removal screen is `PASS_DIAGNOSTIC_NOT_LICENSED`: risk adoption dropped to `0.015625`, reduction shift `0.140625`, reduction-minus-random `0.140625`, CI95 `[0.0625, 0.21875]`, p `0.004`, ignored shift `0.0625`, malformed shift `0.0`. Full archive is local at `D:\tksCAS-archive\cjt_bias_vibration_causal_qwen_20260618\`; repo audit is in `docs\working\cjt_bias_vibration_causal_qwen_20260618\`. Claim boundary: this is a serious removal/reversal lead, not a public removal claim; prompt-injection/hallucination-risk removal remains `OPEN / NOT LICENSED` until a frozen removal-only prereg clears stricter `p < 0.001`, human label audit, and expanded held-out prompt replication.
+- 2026-06-18 CAS PCBA bias/vibration expanded causal replication: built a 35-case / 70-risk-prompt expanded held-out bank and reran the Qwen layer-18 alpha `10` causal/removal gate on pod `root@195.26.233.21 -p 44506`. The small-bank removal lead did not replicate. Blended expanded run (`560` rows) remained `FAIL`: baseline risk adoption `0.15`, `-risk` adoption `0.085714`, reduction shift `0.064286`, reduction p `0.024599`, reduction-minus-random `0.057143`, below the screen and public-proof gates. Split-axis PCBA test also failed: `^4` unsupported-vibration direction (`UNSUPPORTED_LURE` vs `SUPPORTED_EVIDENCE`, `280` rows) had baseline `0.071429`, reduction `0.014286`, p `0.498125`, and random same-norm risk shift `0.1`; `^5` untrusted-bias direction (`UNTRUSTED_INJECTION` vs `BENIGN_PARAPHRASE` + `TRUSTED_CORRECTION`, `280` rows) had baseline `0.128571`, reduction `0.057143`, p `0.183091`, and did not beat random by the required margin. Full archive is local at `D:\tksCAS-archive\cjt_bias_vibration_causal_expanded_qwen_20260618\`; repo audit is in `docs\working\cjt_bias_vibration_causal_expanded_qwen_20260618\`. Claim boundary hardened: W0 hidden-response detection remains the marketable lead, but hidden-state causal prompt-injection/hallucination-risk removal or reversal remains `OPEN / NOT LICENSED`.
+- 2026-06-18 CAS mapping/fleet product assessment: reviewed the mapping / time-scale / fleet-lens notes in `C:\Users\wakil\.codex\attachments\8ad0a0f3-d9e7-437e-b98d-f999f8a82cb7\pasted-text.txt` and `C:\Users\wakil\.codex\attachments\1e439273-55d2-428a-aed0-ad7e08bd27c1\pasted-text.txt`. Verdict: these notes materially help CAS Harness productization by defining a claim-safe lane for longitudinal model drift monitoring, fleet coherence checks, structural Evidence Packet diagnostics, and CAS-Native data harvest labels. They do not fix the failed hidden-state causal/removal gate and do not license prompt-injection removal/reversal, hallucination prevention, live pre-speech interception, or causal proof. Next product move is a shadow-only `Structural Monitoring` / `Fleet Drift` evidence lane with explicit `measured` versus `assigned` provenance and `FLAG_FOR_HUMAN_REVIEW` routing; next research move is a trajectory-break detector over W0/W1/W8 hidden states that must still beat char/text, layer-0, length, payload/domain, grouped-fold, shuffled-label, and permutation controls before any internal claim upgrade.
+- 2026-06-18 CAS mapping/fleet structural monitoring implementation: implemented the shadow-only `Structural Monitoring` / `Fleet Drift` evidence lane in the integration worktree on `codex/cas-harness-public-beta-candidate`. New worker-submitted `structural_monitoring` snapshots are normalized by `api/services/cas_harness_structural_monitoring.py`, exposed on fleet run responses, hash-bound into merged Evidence Packets under `distributed_fleet.structural_monitoring`, and rendered in the fleet console with explicit `measured` / `assigned` / `unavailable` basis counts, drift flags, review reasons, and claim ceiling. The live worker now posts `evidence_packet_fragment_payload` through the receipt body and includes that payload in the canonical fragment hash; the real open-weight shard script emits a measured activation-summary structural signature. Claim boundary unchanged: positives route to `FLAG_FOR_HUMAN_REVIEW` with `verdict_effect=none_shadow_only`; this does not license universal hidden-state prompt-injection detection, hidden-state hallucination detection, prevention/removal/reversal, live interception, autonomous remediation, `ACCEPT`, or causal proof. Verification: `python -m pytest tests/test_cas_harness_fleet_executor.py` = `20 passed`; split live-worker pytest = `13 passed`; contract/evidence suite = `104 passed, 2 skipped`; frontend targeted Vitest = `54 passed`; `npm run build` passed with only the existing chunk-size warning.
 - 2026-06-10: Qwen pre-speech behavior probe diagnostic completed on branch `codex/cas-harness-public-beta-candidate`. Archived prompt-stage vectors were converted into a standard behavior probe dataset (`304` rows, `COMPLIED=161`, `REFUSED=143`, `raw_prompt_vec`, layer `14`) and evaluated locally. Global hidden readout separated behavior (`test_acc: 0.852459`) but text-hash baseline was stronger (`0.885246`), and the payload-controlled gate blocked the claim: only `overt_5` had both labels with at least three examples and its within-payload test accuracy was `0.5`. Pre-speech/live interception, causal compliance-state detection, payload-independent detection, prompt-injection prevention/removal, harmful-instruction inversion, and hallucination prevention remain `OPEN` and `NOT LICENSED`. Next data gate is mixed payload balance, not just more refusals: target at least three payload classes with `COMPLIED >= 8` and `REFUSED >= 8` each, preferably five classes at `10/10`, before causal/live ablation claims.
 - 2026-06-10: Instruction Integrity Evidence Packet persistence gate added on branch `codex/cas-harness-public-beta-candidate`. Customer API and hosted live-worker Evidence Packets now carry `instruction_integrity`, scan both `prompt` and `model_output`, preserve the report through `EvidencePacket` load and `/verify`, and write it before `packet_without_hashes_sha256` so the shadow report is hash-covered. Audit-session run responses reuse the packet-owned report. Verification: targeted backend suite passed (`65 passed`), `python scripts/run_instruction_integrity_benchmark.py --fail-on-gate` still passed all `15` cases with injected recall `1.0` and benign false-positive rate `0.0`, and touched modules compiled. Public prevention/removal claims remain `OPEN` and `NOT LICENSED`; next gates are hosted authenticated proof, external/red-team fixture expansion, and verifier policy.
 - 2026-06-10: Instruction Integrity activation detection probe plumbing added on branch `codex/cas-harness-public-beta-candidate`. Added a claim-honest comply/refuse detection service and packet gluing lane that can score only compatible realized-output activation-window vectors with the required `DETECTION ONLY` claim ceiling. Closed API and current Pythia live packets record the lane as `unavailable`; the archived Qwen probe is blocked on model mismatch for Pythia. Verification: focused backend suite passed (`81 passed`), benchmark remained `15` / `15`, and touched modules compiled. Pre-speech/live interception and causal/payload-independent detection remain `OPEN` and `NOT LICENSED`.
@@ -1196,6 +3217,11 @@ Clean public story to earn:
 - 2026-06-03: completed Pythia-160M activation-level matched ablation from the archived `.npz` without rerunning the model. Report `pythia160m_activation_cover_ablation_report.json` shows label-specific cover drop `0.054762` versus wrong-cover drop `0.003572` and random-control max drop `0.005953`; union cover drop `0.108334` versus union random-control max `0.0`. Archived at `D:\tksCAS-archive\pythia160m_activation_cover_ablation_20260603\`. This does not make the WORM-retained packet `ACCEPT`; uniqueness/MTC remains open.
 - 2026-06-03: reconfirmed matched-taxonomy boundary after matched-ablation evidence landed. Existing `run_matched_taxonomy_control.py` and tests are present in the desktop worktree only, while current `master` has only the new uniqueness-gate consumers. Archived Condition-3 MTC evidence at `D:\tksCAS-archive\condition3_mtc_capture_20260531\` is a GPT-NeoX-20B negative result, not a Pythia-160M uniqueness pass.
 - 2026-06-03: audited the second-pod MTC handoff. A1 amendment draft is present and coherent but not founder-approved/frozen. SSH checks to the H200 pod at `194.68.245.85:22055` timed out twice, so capture status is currently unobserved from this session.
+- 2026-06-18 CAS Harness trajectory-break evaluator contract: implemented `live-trace-worker\scripts\evaluate_timing_trajectory_break.py` in the integration worktree on `codex/cas-harness-public-beta-candidate`. This is the concrete evaluator for the RPM/lacunarity "break in reason" lane: it aligns the same trajectories across W0, W1, and W8, requires forced-continuation/output identity hashes when present, builds hidden movement features from `W1-W0`, `W8-W1`, and `W8-W0`, and only passes if the trajectory readout beats W0-static, shuffled-time, layer-0 trajectory, prompt word/char text, generated-prefix word/char text, metadata, length, shuffled-label, per-stratum, and within-stratum permutation controls. Added regression tests for a clean internal movement PASS, a generated-prefix character leakage FAIL, and a forced-continuation hash mismatch BLOCKED result; verification: `python -m py_compile live-trace-worker\scripts\evaluate_timing_trajectory_break.py`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "trajectory_break"` = `3 passed`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "trajectory_break or hallucination or hidden_prompt_injection"` = `11 passed`. Claim boundary: this is an auditable research gate, not a passed real-model result yet; hidden-state prompt-injection detection, hidden-state hallucination detection/prevention, prompt-injection prevention/removal/reversal, live interception, and causal proof remain `OPEN` / `NOT LICENSED` until a real W0/W1/W8 capture passes these controls and the active-goal auditor is updated accordingly.
+- 2026-06-18 CAS Harness outcome-native trajectory-break real-data scout: extended `evaluate_timing_trajectory_break.py` with explicit row-intersection mode for later timing captures that are missing a small number of rows; retention is now reported and gated by `row_intersection_retention_pass`. Ran the evaluator on the real Qwen-0.5B hard-v2 outcome-native hallucination W0/W1/W8 captures. W8 had `1381` rows versus W0/W1 `1392`; the aligned retained fraction was `0.992098`, with W8 exclusions `SUPPORTED=8`, `UNSUPPORTED=3`, and identity hashes checked via `model_output_sha256s` plus `judged_answer_sha256s`. Scout reports under `docs\working\outcome_native_hallucination_trajectory_break_qwen05_hard_v2_20260618\` show a non-trivial trajectory signal but no licensed hidden-state hallucination detection: best layer `14` has trajectory BA `0.819487`, W0-static BA `0.714641` (margin `0.104846`), generated-prefix char BA `0.734484` (margin `0.085002`), prompt char BA `0.707217` (margin `0.112270`), and layer-0 trajectory BA `0.706876` (margin `0.112610`), all below the required `0.15` margin where applicable. Because the margin gates already fail, no 1000-permutation confirmatory run was justified. Added `AUDIT_SUMMARY.md`, wired `cas_harness_timing_trajectory_break_eval.v0` reports into `api\services\cas_harness_goal_claim_auditor.py` as detection evidence only, and regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current status remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`. Verification: `python -m py_compile live-trace-worker\scripts\evaluate_timing_trajectory_break.py api\services\cas_harness_goal_claim_auditor.py scripts\audit_cas_harness_active_goal_claims.py`; `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "trajectory_break"` = `4 passed`; `python -m pytest tests\test_cas_harness_goal_claim_auditor.py -q` = `9 passed`. Claim boundary: hidden-state hallucination detection/prevention, live pre-speech interception, prompt-injection prevention/removal/reversal, and causal proof remain `OPEN` / `NOT LICENSED`; the useful marketable lane remains Evidence Packet-backed pre-display/surface/evidence risk review with `FLAG_FOR_HUMAN_REVIEW`.
+- 2026-06-18 CAS Harness early W0/W1 trajectory follow-up: extended `evaluate_timing_trajectory_break.py` so `--w8-dataset` is optional and the same evaluator can test the earliest `W0 -> W1` movement without answer-bearing W8 prefix text. Added a fixture regression for the W0/W1 mode. Ran real Qwen-0.5B hard-v2 outcome-native hallucination scouts under `docs\working\outcome_native_hallucination_early_trajectory_qwen05_hard_v2_20260618\`. Result: W0/W1 improves the generated-prefix character control but still fails the hidden-state hallucination detection gate. Best layer `15` has trajectory BA `0.790797`, W0-static BA `0.718255` (margin `0.072542`), generated-prefix char BA `0.562230` (margin `0.228567`), prompt char BA `0.711075` (margin `0.079722`), and layer-0 trajectory BA `0.678646` (margin `0.112151`). Failed important gates include `w0_static_control_margin_pass`, `prompt_char_text_margin_pass`, `l0_trajectory_margin_pass`, `shuffled_time_control_margin_pass`, `generated_prefix_text_margin_pass`, `per_stratum_floor_pass`, and the non-confirmatory 10-permutation `within_stratum_permutation_pass`. Regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current status remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`, with the early W0/W1 layer-15 report now the best trajectory candidate but still `FAIL`. Verification: `python -m pytest live-trace-worker\tests\test_behavior_probe_dataset_scripts.py -q -k "trajectory_break"` = `5 passed`. Claim boundary unchanged: hidden-state hallucination detection/prevention, live pre-speech interception, prompt-injection prevention/removal/reversal, and causal proof remain `OPEN` / `NOT LICENSED`.
+- 2026-06-18 CAS Harness multi-token trajectory follow-up: extended `evaluate_timing_trajectory_break.py` again so arbitrary `--timing-dataset W<number>=path` captures can be added after W0/W1/W8, and added a fixed `row_intersection_license_retention_pass` gate requiring at least `0.95` retained rows for any licensing-grade trajectory claim. Added regression coverage for a real extra `W16` timing point. Ran real Qwen-0.5B hard-v2 W0/W1/W8/W16 scouts under `docs\working\outcome_native_hallucination_multitoken_trajectory_qwen05_hard_v2_20260618\`. Best result is W16 layer `15`, still `FAIL`: trajectory BA `0.870244`, W0-static BA `0.725879` (margin `0.144365`, just under the required `0.15`), generated-prefix char BA `0.828634` (margin `0.041609`), layer-0 trajectory BA `0.755382` (margin `0.114862`), quick permutation p `0.090909`, and W16 retention `968 / 1392` (`0.695402`), which fails the new licensing retention floor. W32 is not usable from this capture: row intersection retained only `328 / 1392` (`0.235632`) and the report is `BLOCKED`. Added `AUDIT_SUMMARY.md` and regenerated `docs\working\cas_harness_active_goal_claim_audit_20260617.json`; current status remains `goal_complete=false`, `claims_licensed=0`, `claims_not_licensed=6`. Claim boundary unchanged: hidden-state hallucination detection/prevention, hidden-state prompt-injection detection, live pre-speech interception, prompt-injection prevention/removal/reversal, and causal proof remain `OPEN` / `NOT LICENSED`. Next valid research move is Qwen-1.5B or larger with generation/capture configured to preserve W16/W32 rows, not another Qwen-0.5B layer sweep.
+- 2026-06-18 hallucination delta claim audit: audited `docs\working\HALLUCINATION_AUDIT_PACKAGE.md`, `docs\working\CAS_HARBOR_TRAJECTORY_DELTA_20260618.md`, and scratch scripts `pt_q15.py`, `pt_q15_delta.py`, and `pt_adm2.py`. Saved audit memo `docs\working\hallucination_delta_claim_audit_20260618.md`. Verdict: W0-to-W1 trajectory delta is a serious research lead, but the current package is `OPEN` / `NOT LICENSED`, not `LICENSED`. Blocking issues: package rounds `p=0.00100` while claiming a `< 0.001` pass; Qwen-1.5B `L27 delta: 0.7795` is not backed by a pulled local report artifact and the last known pod timed out; `pt_q15_delta.py` uses an invalid balanced-accuracy expression that always returns `0.5`; `pt_q15.py` computes the main BA correctly but its permutation loop uses the same invalid expression; and the package lacks a schema-backed generated-prefix/token-identity/shuffled-time/layer-0/per-stratum/permutation control report. Claim boundary unchanged: hidden-state hallucination detection/prevention remains `OPEN` / `NOT LICENSED`; safe wording is only that CAS Harness has a promising W0-to-W1 hidden-state trajectory-delta research lead requiring a hardened confirmatory report.
 - 2026-06-03: completed the replacement-pod GPT-NeoX-20B Condition-3 capture after user supplied `ssh root@212.247.220.166 -p 18611 -i ~/.ssh/id_ed25519`. Fixed the final missing safetensor shard, converted the adapted fixture from JSONL to one JSON list with `scenario_id` preserved, downgraded `transformers` from `5.10.1` to `4.44.2` for Torch 2.4 compatibility, captured all 1,440 rows, and archived NPZ/metadata/log/provenance at `D:\tksCAS-archive\condition3_mtc_capture_20260603\`. This is claim-neutral capture, not a comparator verdict.
 - 2026-06-03: completed the GPT-NeoX-20B Condition-3 matched-taxonomy comparator on the replacement H200 pod. Result: `GREY` (`pass: false`, `grey: true`, `falsify: false`, `blocked: false`). CAS passed hidden-readout-over-text and flat-lacunarity gates, but failed the preregistered matched-readout margin against the coherent NC40 control (`CAS accuracy 0.5347222222222222` versus `NC40 accuracy 1.0`, observed margin `-46.52777777777778pp` vs required `+5pp`). Archived result/log/manifest at `D:\tksCAS-archive\condition3_mtc_comparator_20260603\`. Pythia-160M remains `FLAG_FOR_HUMAN_REVIEW`; uniqueness remains open.
 - 2026-06-03: clarified definition boundary for the Condition-3 comparator. It used CAS 40E fixture labels and prompt descriptors, but did not run a TKS 28 Foundations axis. The `NC28` in the result is a non-CAS topic/function control taxonomy, not Foundation-28 evidence.
@@ -1226,3 +3252,4 @@ Clean public story to earn:
 - 2026-05-31: clarified WORM distinction: S3 Object-Lock anchoring exists and strict smoke passed at the platform level, but the Gate 3 Pythia-160M CPU packet was not anchored through that path and therefore remains safe-anchor/non-WORM.
 - 2026-05-31: recorded Pythia-160M Gate 3 evidence-packet closure, verifier `SUPPRESS` due `output_bridge_gate_failed`, safe-anchor non-WORM status, corrected Pythia identity override, archive path, and updated the immediate next move toward WORM/legal/data-consent/production-route decisions.
 - Initial version: created as the canonical production TODO and agent operating checklist.
+

@@ -1,0 +1,44 @@
+{
+  "schema_version": "candidate_d1_provenance.v1",
+  "date": "2026-05-12",
+  "run_dir_pod": "/workspace/tksCAS/stage7_candidate_d1_ssm_lmfr_20260512T042905Z",
+  "decoder_implementation": "pure-PyTorch SSM/S6-style fallback",
+  "is_canonical_mamba": false,
+  "mamba_ssm_dependency_installed": false,
+  "canonical_mamba_deltas": [
+    "Selective scan is a Python for-loop over L (sequential), not parallel CUDA scan",
+    "Discretization is exp(dt*A), dt*B (simplified), not bilinear/ZOH",
+    "State init is zeros, no HiPPO matrix",
+    "No optimized fused kernels"
+  ],
+  "locked_setup": {
+    "decoder_arch": "ssm",
+    "ablation": "d1",
+    "load_model_from": "(none \u2014 fresh init)",
+    "ssm_d_state": 16,
+    "ssm_d_conv": 4,
+    "ssm_expand": 2,
+    "d_model": 384,
+    "encoder_n_layers": 4,
+    "decoder_n_layers": 6,
+    "encoder_n_heads": 6,
+    "decoder_n_heads": 6,
+    "batch_size": 16,
+    "limit": 7000,
+    "n_steps": 1000,
+    "lr": 0.0001,
+    "weight_decay": 0.0001,
+    "grad_clip": 1.0,
+    "canary_max_new_tokens": 192,
+    "seed": 1729
+  },
+  "file_md5_lf_normalized": {
+    "cas-native/training/train_simplex_mvp.py": "cfbc69024a166508ddc484a4332b3e95",
+    "cas-native/model/ssm_typed_fiber_decoder.py": "399b9c45b022f2241c0baaed5681ec2a",
+    "cas-native/model/typed_fiber_decoder.py": "e26582b42f21d051d5ec9953549e2333",
+    "cas-native/evaluation/sample_decoder.py": "168248011c663db97a236e90bd8a24c0",
+    "cas-native/evaluation/teacher_forced_canary.py": "c2723aa7804f14082268dac0c0d654c8",
+    "cas-synthetic/data/path_d/v1_mix_nlgen_train.jsonl": "29e7b18a372206634b7599662bb4cdf0"
+  },
+  "note": "Per user 2026-05-12 audit note: this manifest is the canonical reproducibility record for D1. Any future comparison must reference these MD5s and the pure-PyTorch label. Do NOT conflate with canonical mamba-ssm runs."
+}

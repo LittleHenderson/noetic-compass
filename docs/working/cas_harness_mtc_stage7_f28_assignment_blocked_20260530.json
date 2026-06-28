@@ -1,0 +1,372 @@
+{
+  "assignment_algorithm_version": "materialize_matched_taxonomy_assignments.py:v1",
+  "axis": "f28",
+  "blocked": true,
+  "blocking_reasons": [
+    {
+      "blocked_status": "blocked_insufficient_nc28_candidate_cover",
+      "control_id": "NC28_TOPIC_FUNCTION_NESTED_V1",
+      "details": {
+        "assigned_counts": {
+          "NC28_human_services_choose_action": 0,
+          "NC28_human_services_describe_state": 0,
+          "NC28_human_services_evaluate_risk": 0,
+          "NC28_human_services_explain_cause": 0,
+          "NC28_law_policy_choose_action": 0,
+          "NC28_law_policy_describe_state": 0,
+          "NC28_law_policy_evaluate_risk": 0,
+          "NC28_law_policy_explain_cause": 0,
+          "NC28_learning_assessment_choose_action": 0,
+          "NC28_learning_assessment_describe_state": 0,
+          "NC28_learning_assessment_evaluate_risk": 0,
+          "NC28_learning_assessment_explain_cause": 0,
+          "NC28_market_transaction_choose_action": 0,
+          "NC28_market_transaction_describe_state": 0,
+          "NC28_market_transaction_evaluate_risk": 0,
+          "NC28_market_transaction_explain_cause": 0,
+          "NC28_medical_care_choose_action": 0,
+          "NC28_medical_care_describe_state": 48,
+          "NC28_medical_care_evaluate_risk": 0,
+          "NC28_medical_care_explain_cause": 0,
+          "NC28_operations_planning_choose_action": 0,
+          "NC28_operations_planning_describe_state": 0,
+          "NC28_operations_planning_evaluate_risk": 0,
+          "NC28_operations_planning_explain_cause": 0,
+          "NC28_technical_system_choose_action": 0,
+          "NC28_technical_system_describe_state": 6,
+          "NC28_technical_system_evaluate_risk": 0,
+          "NC28_technical_system_explain_cause": 0
+        },
+        "assigned_rows": 54,
+        "candidate_coverage": {
+          "NC28_human_services_choose_action": 0,
+          "NC28_human_services_describe_state": 0,
+          "NC28_human_services_evaluate_risk": 0,
+          "NC28_human_services_explain_cause": 0,
+          "NC28_law_policy_choose_action": 0,
+          "NC28_law_policy_describe_state": 0,
+          "NC28_law_policy_evaluate_risk": 0,
+          "NC28_law_policy_explain_cause": 0,
+          "NC28_learning_assessment_choose_action": 0,
+          "NC28_learning_assessment_describe_state": 0,
+          "NC28_learning_assessment_evaluate_risk": 0,
+          "NC28_learning_assessment_explain_cause": 0,
+          "NC28_market_transaction_choose_action": 0,
+          "NC28_market_transaction_describe_state": 0,
+          "NC28_market_transaction_evaluate_risk": 0,
+          "NC28_market_transaction_explain_cause": 0,
+          "NC28_medical_care_choose_action": 0,
+          "NC28_medical_care_describe_state": 80,
+          "NC28_medical_care_evaluate_risk": 0,
+          "NC28_medical_care_explain_cause": 0,
+          "NC28_operations_planning_choose_action": 0,
+          "NC28_operations_planning_describe_state": 0,
+          "NC28_operations_planning_evaluate_risk": 0,
+          "NC28_operations_planning_explain_cause": 0,
+          "NC28_technical_system_choose_action": 0,
+          "NC28_technical_system_describe_state": 6,
+          "NC28_technical_system_evaluate_risk": 0,
+          "NC28_technical_system_explain_cause": 0
+        },
+        "requested_rows": 1344,
+        "target_counts": {
+          "NC28_human_services_choose_action": 48,
+          "NC28_human_services_describe_state": 48,
+          "NC28_human_services_evaluate_risk": 48,
+          "NC28_human_services_explain_cause": 48,
+          "NC28_law_policy_choose_action": 48,
+          "NC28_law_policy_describe_state": 48,
+          "NC28_law_policy_evaluate_risk": 48,
+          "NC28_law_policy_explain_cause": 48,
+          "NC28_learning_assessment_choose_action": 48,
+          "NC28_learning_assessment_describe_state": 48,
+          "NC28_learning_assessment_evaluate_risk": 48,
+          "NC28_learning_assessment_explain_cause": 48,
+          "NC28_market_transaction_choose_action": 48,
+          "NC28_market_transaction_describe_state": 48,
+          "NC28_market_transaction_evaluate_risk": 48,
+          "NC28_market_transaction_explain_cause": 48,
+          "NC28_medical_care_choose_action": 48,
+          "NC28_medical_care_describe_state": 48,
+          "NC28_medical_care_evaluate_risk": 48,
+          "NC28_medical_care_explain_cause": 48,
+          "NC28_operations_planning_choose_action": 48,
+          "NC28_operations_planning_describe_state": 48,
+          "NC28_operations_planning_evaluate_risk": 48,
+          "NC28_operations_planning_explain_cause": 48,
+          "NC28_technical_system_choose_action": 48,
+          "NC28_technical_system_describe_state": 48,
+          "NC28_technical_system_evaluate_risk": 48,
+          "NC28_technical_system_explain_cause": 48
+        },
+        "unsatisfied_target_counts": {
+          "NC28_human_services_choose_action": 48,
+          "NC28_human_services_describe_state": 48,
+          "NC28_human_services_evaluate_risk": 48,
+          "NC28_human_services_explain_cause": 48,
+          "NC28_law_policy_choose_action": 48,
+          "NC28_law_policy_describe_state": 48,
+          "NC28_law_policy_evaluate_risk": 48,
+          "NC28_law_policy_explain_cause": 48,
+          "NC28_learning_assessment_choose_action": 48,
+          "NC28_learning_assessment_describe_state": 48,
+          "NC28_learning_assessment_evaluate_risk": 48,
+          "NC28_learning_assessment_explain_cause": 48,
+          "NC28_market_transaction_choose_action": 48,
+          "NC28_market_transaction_describe_state": 48,
+          "NC28_market_transaction_evaluate_risk": 48,
+          "NC28_market_transaction_explain_cause": 48,
+          "NC28_medical_care_choose_action": 48,
+          "NC28_medical_care_evaluate_risk": 48,
+          "NC28_medical_care_explain_cause": 48,
+          "NC28_operations_planning_choose_action": 48,
+          "NC28_operations_planning_describe_state": 48,
+          "NC28_operations_planning_evaluate_risk": 48,
+          "NC28_operations_planning_explain_cause": 48,
+          "NC28_technical_system_choose_action": 48,
+          "NC28_technical_system_describe_state": 42,
+          "NC28_technical_system_evaluate_risk": 48,
+          "NC28_technical_system_explain_cause": 48
+        },
+        "unsupported_rows": [
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 0,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1T",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 1,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1A",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_role_inverse_minimal_F1A",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 2,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1T",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1T",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 3,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1A",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_no_alias_plain_F1A",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 4,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_concrete_human_F1T",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_concrete_human_F1T",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 5,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_concrete_human_F1A",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_concrete_human_F1A",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 6,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_system_process_F1T",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_system_process_F1T",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 7,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_system_process_F1A",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F1T_F1A_system_process_F1A",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 8,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1f",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1f",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 9,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1E",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_role_inverse_minimal_F1E",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 10,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1f",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1f",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 11,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1E",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_no_alias_plain_F1E",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 12,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_concrete_human_F1f",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_concrete_human_F1f",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 13,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_concrete_human_F1E",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_concrete_human_F1E",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 14,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_system_process_F1f",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_system_process_F1f",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 15,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_system_process_F1E",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_f_E_F1f_F1E_system_process_F1E",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 16,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2T",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2T",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 17,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2A",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_role_inverse_minimal_F2A",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 18,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2T",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2T",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 19,
+            "row_key": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2A",
+            "sample_id": "stage7_pilot_bundle001_expense_audit_same_drive_register_T_A_F2T_F2A_no_alias_plain_F2A",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          }
+        ]
+      },
+      "reason": "balanced assignment cannot satisfy quotas from supported non-CAS candidates"
+    }
+  ],
+  "controls_requested": [
+    "all_coherent_non_cas"
+  ],
+  "label_assignment_sha256": "96a9ba970a8394eafe0d75278d1832bf9b7d578d88293eef09497c657cb05d15",
+  "label_mode": "sample_id_map",
+  "manifest": "live-trace-worker\\scenarios\\matched_taxonomy_control_manifest_20260530.json",
+  "manifest_sha256": "16a9087e85aa2d31e1c7fc648eb094d33a8bcde1e9a354d018f585c09a30276f",
+  "schema_version": "cas_harness_matched_taxonomy_assignments.v1",
+  "source_dataset_sha256": null,
+  "source_scenario": "C:\\tmp\\gpt_neox_20b_foundation28_and_40element_20260526\\stage7_foundation_rolebound_pilot_20260526.json",
+  "source_scenario_sha256": "5b8aad738ca22afec11c60186981193ed3b951a4e13da3fd7bfd5f7acb54d46d",
+  "split_manifest": {},
+  "split_manifest_sha256": null,
+  "status": "blocked",
+  "taxonomies": []
+}

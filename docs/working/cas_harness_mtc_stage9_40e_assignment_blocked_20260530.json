@@ -1,0 +1,419 @@
+{
+  "assignment_algorithm_version": "materialize_matched_taxonomy_assignments.py:v1",
+  "axis": "40e",
+  "blocked": true,
+  "blocking_reasons": [
+    {
+      "blocked_status": "blocked_insufficient_nc40_candidate_cover",
+      "control_id": "NC40_TOPIC_FRAME_V1",
+      "details": {
+        "assigned_counts": {
+          "NC40_commerce_finance_causal_explanation": 0,
+          "NC40_commerce_finance_classification": 0,
+          "NC40_commerce_finance_procedure": 14,
+          "NC40_commerce_finance_risk_mitigation": 0,
+          "NC40_commerce_finance_tradeoff_decision": 0,
+          "NC40_customer_support_causal_explanation": 0,
+          "NC40_customer_support_classification": 0,
+          "NC40_customer_support_procedure": 64,
+          "NC40_customer_support_risk_mitigation": 0,
+          "NC40_customer_support_tradeoff_decision": 0,
+          "NC40_education_causal_explanation": 0,
+          "NC40_education_classification": 0,
+          "NC40_education_procedure": 0,
+          "NC40_education_risk_mitigation": 0,
+          "NC40_education_tradeoff_decision": 0,
+          "NC40_healthcare_causal_explanation": 0,
+          "NC40_healthcare_classification": 0,
+          "NC40_healthcare_procedure": 0,
+          "NC40_healthcare_risk_mitigation": 0,
+          "NC40_healthcare_tradeoff_decision": 0,
+          "NC40_law_governance_causal_explanation": 0,
+          "NC40_law_governance_classification": 0,
+          "NC40_law_governance_procedure": 0,
+          "NC40_law_governance_risk_mitigation": 0,
+          "NC40_law_governance_tradeoff_decision": 0,
+          "NC40_logistics_operations_causal_explanation": 0,
+          "NC40_logistics_operations_classification": 0,
+          "NC40_logistics_operations_procedure": 64,
+          "NC40_logistics_operations_risk_mitigation": 0,
+          "NC40_logistics_operations_tradeoff_decision": 0,
+          "NC40_public_safety_causal_explanation": 0,
+          "NC40_public_safety_classification": 0,
+          "NC40_public_safety_procedure": 0,
+          "NC40_public_safety_risk_mitigation": 0,
+          "NC40_public_safety_tradeoff_decision": 0,
+          "NC40_software_data_causal_explanation": 0,
+          "NC40_software_data_classification": 0,
+          "NC40_software_data_procedure": 0,
+          "NC40_software_data_risk_mitigation": 0,
+          "NC40_software_data_tradeoff_decision": 0
+        },
+        "assigned_rows": 142,
+        "candidate_coverage": {
+          "NC40_commerce_finance_causal_explanation": 0,
+          "NC40_commerce_finance_classification": 0,
+          "NC40_commerce_finance_procedure": 14,
+          "NC40_commerce_finance_risk_mitigation": 0,
+          "NC40_commerce_finance_tradeoff_decision": 0,
+          "NC40_customer_support_causal_explanation": 0,
+          "NC40_customer_support_classification": 0,
+          "NC40_customer_support_procedure": 160,
+          "NC40_customer_support_risk_mitigation": 0,
+          "NC40_customer_support_tradeoff_decision": 0,
+          "NC40_education_causal_explanation": 0,
+          "NC40_education_classification": 0,
+          "NC40_education_procedure": 0,
+          "NC40_education_risk_mitigation": 0,
+          "NC40_education_tradeoff_decision": 0,
+          "NC40_healthcare_causal_explanation": 0,
+          "NC40_healthcare_classification": 0,
+          "NC40_healthcare_procedure": 0,
+          "NC40_healthcare_risk_mitigation": 0,
+          "NC40_healthcare_tradeoff_decision": 0,
+          "NC40_law_governance_causal_explanation": 0,
+          "NC40_law_governance_classification": 0,
+          "NC40_law_governance_procedure": 0,
+          "NC40_law_governance_risk_mitigation": 0,
+          "NC40_law_governance_tradeoff_decision": 0,
+          "NC40_logistics_operations_causal_explanation": 0,
+          "NC40_logistics_operations_classification": 0,
+          "NC40_logistics_operations_procedure": 174,
+          "NC40_logistics_operations_risk_mitigation": 0,
+          "NC40_logistics_operations_tradeoff_decision": 0,
+          "NC40_public_safety_causal_explanation": 0,
+          "NC40_public_safety_classification": 0,
+          "NC40_public_safety_procedure": 0,
+          "NC40_public_safety_risk_mitigation": 0,
+          "NC40_public_safety_tradeoff_decision": 0,
+          "NC40_software_data_causal_explanation": 0,
+          "NC40_software_data_classification": 0,
+          "NC40_software_data_procedure": 0,
+          "NC40_software_data_risk_mitigation": 0,
+          "NC40_software_data_tradeoff_decision": 0
+        },
+        "requested_rows": 2560,
+        "target_counts": {
+          "NC40_commerce_finance_causal_explanation": 64,
+          "NC40_commerce_finance_classification": 64,
+          "NC40_commerce_finance_procedure": 64,
+          "NC40_commerce_finance_risk_mitigation": 64,
+          "NC40_commerce_finance_tradeoff_decision": 64,
+          "NC40_customer_support_causal_explanation": 64,
+          "NC40_customer_support_classification": 64,
+          "NC40_customer_support_procedure": 64,
+          "NC40_customer_support_risk_mitigation": 64,
+          "NC40_customer_support_tradeoff_decision": 64,
+          "NC40_education_causal_explanation": 64,
+          "NC40_education_classification": 64,
+          "NC40_education_procedure": 64,
+          "NC40_education_risk_mitigation": 64,
+          "NC40_education_tradeoff_decision": 64,
+          "NC40_healthcare_causal_explanation": 64,
+          "NC40_healthcare_classification": 64,
+          "NC40_healthcare_procedure": 64,
+          "NC40_healthcare_risk_mitigation": 64,
+          "NC40_healthcare_tradeoff_decision": 64,
+          "NC40_law_governance_causal_explanation": 64,
+          "NC40_law_governance_classification": 64,
+          "NC40_law_governance_procedure": 64,
+          "NC40_law_governance_risk_mitigation": 64,
+          "NC40_law_governance_tradeoff_decision": 64,
+          "NC40_logistics_operations_causal_explanation": 64,
+          "NC40_logistics_operations_classification": 64,
+          "NC40_logistics_operations_procedure": 64,
+          "NC40_logistics_operations_risk_mitigation": 64,
+          "NC40_logistics_operations_tradeoff_decision": 64,
+          "NC40_public_safety_causal_explanation": 64,
+          "NC40_public_safety_classification": 64,
+          "NC40_public_safety_procedure": 64,
+          "NC40_public_safety_risk_mitigation": 64,
+          "NC40_public_safety_tradeoff_decision": 64,
+          "NC40_software_data_causal_explanation": 64,
+          "NC40_software_data_classification": 64,
+          "NC40_software_data_procedure": 64,
+          "NC40_software_data_risk_mitigation": 64,
+          "NC40_software_data_tradeoff_decision": 64
+        },
+        "unsatisfied_target_counts": {
+          "NC40_commerce_finance_causal_explanation": 64,
+          "NC40_commerce_finance_classification": 64,
+          "NC40_commerce_finance_procedure": 50,
+          "NC40_commerce_finance_risk_mitigation": 64,
+          "NC40_commerce_finance_tradeoff_decision": 64,
+          "NC40_customer_support_causal_explanation": 64,
+          "NC40_customer_support_classification": 64,
+          "NC40_customer_support_risk_mitigation": 64,
+          "NC40_customer_support_tradeoff_decision": 64,
+          "NC40_education_causal_explanation": 64,
+          "NC40_education_classification": 64,
+          "NC40_education_procedure": 64,
+          "NC40_education_risk_mitigation": 64,
+          "NC40_education_tradeoff_decision": 64,
+          "NC40_healthcare_causal_explanation": 64,
+          "NC40_healthcare_classification": 64,
+          "NC40_healthcare_procedure": 64,
+          "NC40_healthcare_risk_mitigation": 64,
+          "NC40_healthcare_tradeoff_decision": 64,
+          "NC40_law_governance_causal_explanation": 64,
+          "NC40_law_governance_classification": 64,
+          "NC40_law_governance_procedure": 64,
+          "NC40_law_governance_risk_mitigation": 64,
+          "NC40_law_governance_tradeoff_decision": 64,
+          "NC40_logistics_operations_causal_explanation": 64,
+          "NC40_logistics_operations_classification": 64,
+          "NC40_logistics_operations_risk_mitigation": 64,
+          "NC40_logistics_operations_tradeoff_decision": 64,
+          "NC40_public_safety_causal_explanation": 64,
+          "NC40_public_safety_classification": 64,
+          "NC40_public_safety_procedure": 64,
+          "NC40_public_safety_risk_mitigation": 64,
+          "NC40_public_safety_tradeoff_decision": 64,
+          "NC40_software_data_causal_explanation": 64,
+          "NC40_software_data_classification": 64,
+          "NC40_software_data_procedure": 64,
+          "NC40_software_data_risk_mitigation": 64,
+          "NC40_software_data_tradeoff_decision": 64
+        },
+        "unsupported_rows": [
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 0,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_definition_compact_A1",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_definition_compact_A1",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 1,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_definition_compact_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_definition_compact_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 2,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_applied_human_A1",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_applied_human_A1",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 3,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_applied_human_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_applied_human_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 4,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_system_process_A1",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_system_process_A1",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 5,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_system_process_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_system_process_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 6,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_role_inverse_plain_A1",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_role_inverse_plain_A1",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 7,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_role_inverse_plain_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A1_A2_role_inverse_plain_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 8,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_definition_compact_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_definition_compact_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 9,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_definition_compact_A3",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_definition_compact_A3",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 10,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_applied_human_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_applied_human_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 11,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_applied_human_A3",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_applied_human_A3",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 12,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_system_process_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_system_process_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 13,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_system_process_A3",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_system_process_A3",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 14,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_role_inverse_plain_A2",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_role_inverse_plain_A2",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 15,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_role_inverse_plain_A3",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A2_A3_role_inverse_plain_A3",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 16,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_definition_compact_A3",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_definition_compact_A3",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 17,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_definition_compact_A4",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_definition_compact_A4",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 18,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_applied_human_A3",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_applied_human_A3",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          },
+          {
+            "assignment_source": "keyword_manifest",
+            "candidate_notes": [],
+            "row_index": 19,
+            "row_key": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_applied_human_A4",
+            "sample_id": "s9_pilot_bundle001_expense_audit_same_domain_noetic_cycle_A_A3_A4_applied_human_A4",
+            "source_text_fields_used": [
+              "metadata.paraphrase_family",
+              "prompt"
+            ]
+          }
+        ]
+      },
+      "reason": "balanced assignment cannot satisfy quotas from supported non-CAS candidates"
+    }
+  ],
+  "controls_requested": [
+    "all_coherent_non_cas"
+  ],
+  "label_assignment_sha256": "5674b403a86c083c775acad8ce14bbc11f72ca777fb7d1e4a9e3f0e40a81a930",
+  "label_mode": "sample_id_map",
+  "manifest": "live-trace-worker\\scenarios\\matched_taxonomy_control_manifest_20260530.json",
+  "manifest_sha256": "16a9087e85aa2d31e1c7fc648eb094d33a8bcde1e9a354d018f585c09a30276f",
+  "schema_version": "cas_harness_matched_taxonomy_assignments.v1",
+  "source_dataset_sha256": "5f9a14714dcad87991a04a8317119b4eeb8097af7377446e59efb1c65f428610",
+  "source_scenario": "D:\\tksCAS-archive\\gpt_neox_20b_stage9_original_40e_closure_20260527\\stage9_original_40e_scenarios_20260527.json",
+  "source_scenario_sha256": "b2ad0481daaa1e5597a445a7ad8a9f2a4d108ead213818edd2ffb665af55b537",
+  "split_manifest": {},
+  "split_manifest_sha256": null,
+  "status": "blocked",
+  "taxonomies": []
+}

@@ -76,6 +76,48 @@ first-token text leak. Under leakage-safe grouped CV with hard controls the sign
 collapses to ~0.63 and **loses to text**. `docs/working/HALLUCINATION_AUDIT_PACKAGE_QWEN1.5B.md`
 is corrected/superseded accordingly.
 
+## GATE CONTRADICTION — the current gate is unsatisfiable as written (proof)
+
+Three required gates cannot hold simultaneously:
+
+1. **Mixed exact-prompt groups** — one exact prompt `P` carries *both* labels.
+2. **Pre-answer timing (W0/W1/PRE_ANSWER) + grouped validation** — `P`'s group held together.
+3. **Margin over text ≥ 0.15.**
+
+**Proof.** For `P` to carry both labels, decoding must be non-deterministic (sampling);
+identical prompt + greedy decode = exactly one label. Under sampling, the forward pass
+up to the pre-answer window is *identical* for the supported and unsupported instances
+of `P` — the divergence is the downstream sampled token. **Measured: W0 within-group
+max deviation = 0.000** (the hidden states are byte-identical within a mixed group).
+Therefore, under grouped validation, any classifier on the **W0** hidden state scores
+**exactly 0.5** balanced accuracy within mixed groups (identical inputs, two labels).
+The margin gate then demands `text_BA ≤ hidden_BA − 0.15 ≤ 0.5 − 0.15 = 0.35` — the text
+baseline must perform *below chance*, which is impossible. At **W1** the only
+within-group difference is the single emitted token, whose information is fully
+available to the `token_identity` / `genprefix` text controls, so the margin is ≤ 0
+there as well (measured −0.025 to −0.077). Hence the conjunction
+{mixed-group, pre-answer, grouped, margin ≥ 0.15} is **unsatisfiable**. ∎
+
+**Consequence:** the gate can never be flipped to `LICENSED` by any honest experiment
+*as written*. This is a defect in the gate specification, not a missing result.
+
+## Corrected, satisfiable gate (the real fix)
+
+Replace gate requirement **"mixed exact-prompt groups"** with:
+
+> **Per-input deterministic labels, grouped by prompt.** Decode greedily so each unique
+> prompt has ONE outcome; label that prompt SUPPORTED/UNSUPPORTED; group CV by prompt
+> (each prompt in exactly one fold). The pre-answer (W0) hidden state now legitimately
+> *differs across prompts* and can carry signal, while grouped CV still prevents leakage.
+
+This is the standard "does-the-model-know-what-it-knows" framing (closed-book greedy +
+parametric-knowledge label). It is satisfiable in principle. **But on the current bank
+it still fails** — the reframe below shows prompt text predicts the per-input label at
+0.947 (margin +0.011). So a full license needs BOTH (a) this gate correction AND (b) a
+new bank where surface text does not already predict difficulty (same-form questions
+over entities the model knows vs does not, balanced). Both are required; neither can be
+fabricated.
+
 ## Why this framing cannot license a pre-answer detector (structural, not just empirical)
 
 The generator (`/root/scripts/sample_outcome_native_hallucination_generations.py`)

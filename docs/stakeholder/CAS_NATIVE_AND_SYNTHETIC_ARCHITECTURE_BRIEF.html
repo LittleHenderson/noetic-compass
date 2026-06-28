@@ -1,0 +1,2127 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Noetic Compass" />
+  <meta name="dcterms.date" content="2026-04-29" />
+  <title>CAS-Native AI and CAS Synthetic Data Generator</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+    /* CSS for syntax highlighting */
+    html { -webkit-text-size-adjust: 100%; }
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { color: #008000; } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { color: #008000; font-weight: bold; } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="cas_stakeholder_pdf.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CAS-Native AI and CAS Synthetic Data Generator</h1>
+<p class="subtitle">Stakeholder Architecture Brief</p>
+<p class="author">Noetic Compass</p>
+<p class="date">2026-04-29</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cas-native-ai-and-cas-synthetic-data-generator"
+id="toc-cas-native-ai-and-cas-synthetic-data-generator">CAS-Native AI
+and CAS Synthetic Data Generator</a>
+<ul>
+<li><a href="#stakeholder-architecture-brief"
+id="toc-stakeholder-architecture-brief">Stakeholder Architecture
+Brief</a></li>
+</ul></li>
+<li><a href="#executive-summary" id="toc-executive-summary">Executive
+Summary</a></li>
+<li><a href="#the-one-minute-explanation"
+id="toc-the-one-minute-explanation">The One-Minute Explanation</a></li>
+<li><a href="#system-map" id="toc-system-map">System Map</a></li>
+<li><a href="#part-i-cas-synthetic-data-generator"
+id="toc-part-i-cas-synthetic-data-generator">Part I: CAS Synthetic Data
+Generator</a>
+<ul>
+<li><a href="#what-it-is" id="toc-what-it-is">What It Is</a></li>
+<li><a href="#simple-analogy" id="toc-simple-analogy">Simple
+Analogy</a></li>
+<li><a href="#what-it-produces" id="toc-what-it-produces">What It
+Produces</a></li>
+<li><a href="#current-generator-buckets"
+id="toc-current-generator-buckets">Current Generator Buckets</a></li>
+<li><a href="#what-version-buckets-mean"
+id="toc-what-version-buckets-mean">What “Version Buckets” Mean</a></li>
+<li><a href="#generator-structure"
+id="toc-generator-structure">Generator Structure</a></li>
+<li><a href="#component-by-component-mapping"
+id="toc-component-by-component-mapping">Component-by-Component
+Mapping</a></li>
+<li><a href="#why-synthetic-data-is-needed"
+id="toc-why-synthetic-data-is-needed">Why Synthetic Data Is
+Needed</a></li>
+<li><a href="#why-validation-is-load-bearing"
+id="toc-why-validation-is-load-bearing">Why Validation Is
+Load-Bearing</a></li>
+<li><a href="#level-3-conversational-recoverable-data"
+id="toc-level-3-conversational-recoverable-data">Level 3 Conversational
+/ Recoverable Data</a></li>
+</ul></li>
+<li><a href="#part-ii-cas-native-ai" id="toc-part-ii-cas-native-ai">Part
+II: CAS-Native AI</a>
+<ul>
+<li><a href="#what-it-is-1" id="toc-what-it-is-1">What It Is</a></li>
+<li><a href="#simple-analogy-1" id="toc-simple-analogy-1">Simple
+Analogy</a></li>
+<li><a href="#main-cas-native-components"
+id="toc-main-cas-native-components">Main CAS-Native Components</a></li>
+<li><a href="#cas-native-model-layers"
+id="toc-cas-native-model-layers">CAS-Native Model Layers</a></li>
+<li><a href="#what-the-v2-architecture-adds"
+id="toc-what-the-v2-architecture-adds">What the v2 Architecture
+Adds</a></li>
+<li><a href="#training-inputs" id="toc-training-inputs">Training
+Inputs</a></li>
+<li><a href="#training-losses-in-plain-english"
+id="toc-training-losses-in-plain-english">Training Losses in Plain
+English</a></li>
+<li><a href="#inference-modes" id="toc-inference-modes">Inference
+Modes</a></li>
+<li><a href="#why-free-sampling-was-not-enough"
+id="toc-why-free-sampling-was-not-enough">Why Free Sampling Was Not
+Enough</a></li>
+</ul></li>
+<li><a href="#part-iii-how-cas-synthetic-and-cas-native-work-together"
+id="toc-part-iii-how-cas-synthetic-and-cas-native-work-together">Part
+III: How CAS Synthetic and CAS-Native Work Together</a>
+<ul>
+<li><a href="#the-joint-pipeline" id="toc-the-joint-pipeline">The Joint
+Pipeline</a></li>
+<li><a href="#relationship-in-one-sentence"
+id="toc-relationship-in-one-sentence">Relationship in One
+Sentence</a></li>
+<li><a href="#why-this-is-better-than-just-fine-tune-a-chatbot"
+id="toc-why-this-is-better-than-just-fine-tune-a-chatbot">Why This Is
+Better Than “Just Fine-Tune a Chatbot”</a></li>
+</ul></li>
+<li><a href="#part-iv-concrete-examples"
+id="toc-part-iv-concrete-examples">Part IV: Concrete Examples</a>
+<ul>
+<li><a href="#example-1-basic-state"
+id="toc-example-1-basic-state">Example 1: Basic State</a></li>
+<li><a href="#example-2-register-aware-state"
+id="toc-example-2-register-aware-state">Example 2: Register-Aware
+State</a></li>
+<li><a href="#example-3-register-co-presence"
+id="toc-example-3-register-co-presence">Example 3: Register
+Co-Presence</a></li>
+<li><a href="#example-4-cross-register-integration"
+id="toc-example-4-cross-register-integration">Example 4: Cross-Register
+Integration</a></li>
+<li><a href="#example-5-production-recipe"
+id="toc-example-5-production-recipe">Example 5: Production
+Recipe</a></li>
+<li><a href="#example-6-typed-set-cluster"
+id="toc-example-6-typed-set-cluster">Example 6: Typed Set /
+Cluster</a></li>
+<li><a href="#example-7-product-coordinate-space"
+id="toc-example-7-product-coordinate-space">Example 7: Product /
+Coordinate Space</a></li>
+</ul></li>
+<li><a href="#part-v-current-maturity-and-evidence"
+id="toc-part-v-current-maturity-and-evidence">Part V: Current Maturity
+and Evidence</a>
+<ul>
+<li><a href="#what-is-solid-now" id="toc-what-is-solid-now">What Is
+Solid Now</a></li>
+<li><a href="#what-is-still-research-build-out"
+id="toc-what-is-still-research-build-out">What Is Still Research /
+Build-Out</a></li>
+<li><a href="#stakeholder-ready-claim"
+id="toc-stakeholder-ready-claim">Stakeholder-Ready Claim</a></li>
+</ul></li>
+<li><a href="#part-vi-why-the-compiler-matters"
+id="toc-part-vi-why-the-compiler-matters">Part VI: Why the Compiler
+Matters</a></li>
+<li><a href="#part-vii-architecture-strengths"
+id="toc-part-vii-architecture-strengths">Part VII: Architecture
+Strengths</a>
+<ul>
+<li><a href="#separation-of-concerns" id="toc-separation-of-concerns">1.
+Separation of Concerns</a></li>
+<li><a href="#curriculum-instead-of-chaos"
+id="toc-curriculum-instead-of-chaos">2. Curriculum Instead of
+Chaos</a></li>
+<li><a href="#recoverability-discipline"
+id="toc-recoverability-discipline">3. Recoverability Discipline</a></li>
+<li><a href="#honest-failure-loop" id="toc-honest-failure-loop">4.
+Honest Failure Loop</a></li>
+</ul></li>
+<li><a href="#part-viii-business-stakeholder-value"
+id="toc-part-viii-business-stakeholder-value">Part VIII: Business /
+Stakeholder Value</a>
+<ul>
+<li><a href="#product-value" id="toc-product-value">Product
+Value</a></li>
+<li><a href="#research-value" id="toc-research-value">Research
+Value</a></li>
+<li><a href="#engineering-value" id="toc-engineering-value">Engineering
+Value</a></li>
+</ul></li>
+<li><a href="#part-ix-roadmap" id="toc-part-ix-roadmap">Part IX:
+Roadmap</a>
+<ul>
+<li><a href="#near-term-next-steps"
+id="toc-near-term-next-steps">Near-Term Next Steps</a></li>
+<li><a href="#medium-term-next-steps"
+id="toc-medium-term-next-steps">Medium-Term Next Steps</a></li>
+<li><a href="#long-term-direction"
+id="toc-long-term-direction">Long-Term Direction</a></li>
+</ul></li>
+<li><a href="#appendix-a-glossary" id="toc-appendix-a-glossary">Appendix
+A: Glossary</a></li>
+<li><a href="#appendix-b-file-map" id="toc-appendix-b-file-map">Appendix
+B: File Map</a>
+<ul>
+<li><a href="#cas-synthetic" id="toc-cas-synthetic">CAS
+Synthetic</a></li>
+<li><a href="#cas-native" id="toc-cas-native">CAS-Native</a></li>
+<li><a href="#architecture-docs" id="toc-architecture-docs">Architecture
+Docs</a></li>
+</ul></li>
+<li><a href="#appendix-c-reproduction-commands"
+id="toc-appendix-c-reproduction-commands">Appendix C: Reproduction
+Commands</a></li>
+<li><a href="#appendix-d-stakeholder-demo-script"
+id="toc-appendix-d-stakeholder-demo-script">Appendix D: Stakeholder Demo
+Script</a></li>
+<li><a href="#appendix-e-what-to-say-if-asked-hard-questions"
+id="toc-appendix-e-what-to-say-if-asked-hard-questions">Appendix E: What
+To Say If Asked Hard Questions</a>
+<ul>
+<li><a href="#is-this-just-prompt-engineering"
+id="toc-is-this-just-prompt-engineering">Is this just prompt
+engineering?</a></li>
+<li><a href="#why-not-use-a-general-llm"
+id="toc-why-not-use-a-general-llm">Why not use a general LLM?</a></li>
+<li><a href="#is-the-model-already-intelligent-in-cas"
+id="toc-is-the-model-already-intelligent-in-cas">Is the model already
+intelligent in CAS?</a></li>
+<li><a href="#what-is-the-biggest-technical-risk"
+id="toc-what-is-the-biggest-technical-risk">What is the biggest
+technical risk?</a></li>
+<li><a href="#how-do-you-handle-ambiguity"
+id="toc-how-do-you-handle-ambiguity">How do you handle
+ambiguity?</a></li>
+<li><a href="#why-synthetic-data" id="toc-why-synthetic-data">Why
+synthetic data?</a></li>
+<li><a href="#what-makes-the-architecture-defensible"
+id="toc-what-makes-the-architecture-defensible">What makes the
+architecture defensible?</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="cas-native-ai-and-cas-synthetic-data-generator">CAS-Native AI
+and CAS Synthetic Data Generator</h1>
+<h2 id="stakeholder-architecture-brief">Stakeholder Architecture
+Brief</h2>
+<p><strong>Purpose.</strong> This brief explains what CAS-Native AI and
+the CAS Synthetic Data Generator are, how each system works
+independently, and how they work together as one learning pipeline.</p>
+<p><strong>Audience.</strong> This is written for mixed stakeholders:
+product, research, engineering, AI/ML reviewers, and non-technical
+decision makers.</p>
+<p><strong>Core promise.</strong> CAS-Native AI is not just a chatbot
+wrapped around a notation system. It is an attempt to train AI around a
+structured cognitive language, with deterministic compiler validation
+used as a guardrail.</p>
+<p><strong>Important boundary.</strong> CAS is an architecture and
+representation framework. Nothing in this brief should be read as a
+clinical, medical, diagnostic, or behavioral-certainty claim. The
+current system can represent, validate, generate, train on, and recover
+CAS structures. Predictive or intervention claims require separate
+empirical validation.</p>
+<h1 id="executive-summary">Executive Summary</h1>
+<p>CAS has three major layers:</p>
+<ol type="1">
+<li><strong>The CAS compiler</strong> is the referee. It decides whether
+a CAS expression is structurally valid.</li>
+<li><strong>CAS Synthetic Data Generator</strong> is the curriculum
+factory. It creates large numbers of validated examples that teach the
+model how CAS expressions work.</li>
+<li><strong>CAS-Native AI</strong> is the learner and interpreter. It
+uses the synthetic curriculum to learn mappings between natural language
+and formal CAS structures.</li>
+</ol>
+<p>The short version:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Plain-language analogy</th>
+<th>Technical object</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Rulebook</td>
+<td>CAS compiler</td>
+<td>Defines valid grammar, typed constructs, Rule 4 admissibility, and
+diagram metadata</td>
+</tr>
+<tr>
+<td>Curriculum factory</td>
+<td>CAS Synthetic Data Generator</td>
+<td>Produces controlled JSONL training examples across CAS versions and
+construct families</td>
+</tr>
+<tr>
+<td>Student/interpreter</td>
+<td>CAS-Native AI</td>
+<td>Learns to map prompts to CAS structures and later explain or
+converse about them</td>
+</tr>
+<tr>
+<td>Exam grader</td>
+<td>Compiler validation and evaluation scripts</td>
+<td>Checks whether output expressions compile and match intended
+slots</td>
+</tr>
+<tr>
+<td>Tutor feedback loop</td>
+<td>Reranker and candidate filtering</td>
+<td>Shows the model legal answers first, then learns which legal answer
+best matches the prompt</td>
+</tr>
+</tbody>
+</table>
+<p>The strongest current evidence is not from unconstrained free-form
+generation. The strongest evidence is from the <strong>recoverable Level
+3 prompt-to-CAS pipeline</strong>, where prompts explicitly verbalize
+the slots needed for exact CAS recovery without copying the target
+expression. In the latest patched reranker validation:</p>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th style="text-align: right;">Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Recoverable Level 3 records</td>
+<td style="text-align: right;">19,454</td>
+</tr>
+<tr>
+<td>Compiler-valid records</td>
+<td style="text-align: right;">19,454 / 19,454</td>
+</tr>
+<tr>
+<td>Semantic reranker exact top-1</td>
+<td style="text-align: right;">21 / 30</td>
+</tr>
+<tr>
+<td>Ground-truth in top-5</td>
+<td style="text-align: right;">26 / 30</td>
+</tr>
+<tr>
+<td>Mean ground-truth rank</td>
+<td style="text-align: right;">2.89</td>
+</tr>
+<tr>
+<td>Compiler-valid outputs</td>
+<td style="text-align: right;">30 / 30</td>
+</tr>
+<tr>
+<td>Ground-truth scoreable</td>
+<td style="text-align: right;">27 / 30</td>
+</tr>
+<tr>
+<td>Slot-match after patched prompt-slot filtering</td>
+<td style="text-align: right;">28 / 30</td>
+</tr>
+</tbody>
+</table>
+<p>The prior recoverable reranker baseline was 12 / 30 exact top-1, 24 /
+30 top-5, and 5.11 mean rank. The patched run improved exact top-1 by
+75%, improved top-5 to 26 / 30, and reduced mean rank by roughly
+43%.</p>
+<p>This matters because it shows the system can learn exact CAS recovery
+when the prompt contains enough recoverable evidence. It also shows the
+engineering discipline: when earlier free-sampling failed, the finding
+was not hidden. The pipeline was changed from “make the model invent
+valid notation” to “give the model a compiler-valid candidate bank and
+train it to select the right expression.”</p>
+<h1 id="the-one-minute-explanation">The One-Minute Explanation</h1>
+<p>CAS is a formal language for describing cognitive structure.</p>
+<p>The Synthetic Data Generator writes practice problems in that
+language.</p>
+<p>CAS-Native AI studies those practice problems.</p>
+<p>The compiler checks every answer.</p>
+<p>The reranker improves the model by asking: “Among all legal CAS
+expressions, which one best matches this prompt?”</p>
+<p>That combination is the main architectural difference from a normal
+chatbot. A normal chatbot tries to write plausible text. CAS-Native is
+being built to route language through a formal grammar and typed
+cognitive representation.</p>
+<h1 id="system-map">System Map</h1>
+<pre class="text"><code>                         CAS framework rules
+                                |
+                                v
+                         CAS compiler/parser
+                  grammar, types, Rule 4, diagrams
+                                |
+                                v
+        +---------------- CAS Synthetic Data Generator ----------------+
+        | templates, mix ratios, randomization, validation, Level 3 NL |
+        +--------------------------------------------------------------+
+                                |
+                         JSONL training data
+                                |
+                                v
+        +--------------------- CAS-Native AI --------------------------+
+        | tokenizer, transformer, v2 heads, trainer, reranker, decoder |
+        +--------------------------------------------------------------+
+                                |
+                  candidate scoring / constrained generation
+                                |
+                                v
+                         compiler validation
+                                |
+                                v
+                   metrics, failure analysis, new data</code></pre>
+<p>The loop is deliberate:</p>
+<ol type="1">
+<li><strong>Rules define what is legal.</strong></li>
+<li><strong>Synthetic data creates examples of legal and intentionally
+illegal patterns.</strong></li>
+<li><strong>CAS-Native trains on the examples.</strong></li>
+<li><strong>Inference proposes or ranks expressions.</strong></li>
+<li><strong>The compiler verifies the output.</strong></li>
+<li><strong>Failures become the next generator or model
+improvement.</strong></li>
+</ol>
+<h1 id="part-i-cas-synthetic-data-generator">Part I: CAS Synthetic Data
+Generator</h1>
+<h2 id="what-it-is">What It Is</h2>
+<p>CAS Synthetic Data Generator is the training-data factory for
+CAS-Native AI.</p>
+<p>It creates examples that teach the model the CAS language in a
+controlled way. It does not depend on random internet text. It uses
+formal templates, typed randomization, mix ratios, compiler validation,
+and optional paraphrasing layers.</p>
+<h2 id="simple-analogy">Simple Analogy</h2>
+<p>Think of CAS Synthetic as a flight simulator for a pilot.</p>
+<p>A pilot should not learn only by flying random planes in random
+weather. A simulator creates controlled situations: takeoff, landing,
+turbulence, engine failure, night flight, instrument-only flight.</p>
+<p>CAS Synthetic does the same for CAS:</p>
+<table>
+<thead>
+<tr>
+<th>Simulator concept</th>
+<th>CAS Synthetic equivalent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Takeoff lesson</td>
+<td>Basic CAS state expression</td>
+</tr>
+<tr>
+<td>Weather lesson</td>
+<td>Register, drive, and domain variation</td>
+</tr>
+<tr>
+<td>Emergency drill</td>
+<td>Deliberate Rule 4 violation</td>
+</tr>
+<tr>
+<td>Navigation exercise</td>
+<td>Production recipe or pathway expression</td>
+</tr>
+<tr>
+<td>Flight exam</td>
+<td>Compiler-validated prompt-to-expression pair</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-it-produces">What It Produces</h2>
+<p>The generator produces JSONL records. Each record is a small training
+example.</p>
+<p>A simplified example:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;prompt&quot;</span><span class="fu">:</span> <span class="st">&quot;I am learning CAS. The target structure is a state expression; Noetic ^2; domain O; drive F3; register |T. What is the precise notation?&quot;</span><span class="fu">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;response&quot;</span><span class="fu">:</span> <span class="st">&quot;^2^O_{F3}|T&quot;</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cas_expression&quot;</span><span class="fu">:</span> <span class="st">&quot;^2^O_{F3}|T&quot;</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;bucket&quot;</span><span class="fu">:</span> <span class="st">&quot;v75_register&quot;</span><span class="fu">,</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;register_labels&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">&quot;position&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span> <span class="dt">&quot;register&quot;</span><span class="fu">:</span> <span class="st">&quot;T&quot;</span><span class="fu">}</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;construct_metadata&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;expression_kind&quot;</span><span class="fu">:</span> <span class="st">&quot;register_state&quot;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Plain-English reading:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Field</th>
+<th>Analogy</th>
+<th>Technical meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prompt</code></td>
+<td>The question on the worksheet</td>
+<td>Natural-language input</td>
+</tr>
+<tr>
+<td><code>response</code></td>
+<td>The answer the student should give</td>
+<td>Target output text</td>
+</tr>
+<tr>
+<td><code>cas_expression</code></td>
+<td>The formal answer key</td>
+<td>Compiler-checked CAS notation</td>
+</tr>
+<tr>
+<td><code>bucket</code></td>
+<td>Lesson category</td>
+<td>Which CAS feature family this example teaches</td>
+</tr>
+<tr>
+<td><code>register_labels</code></td>
+<td>Highlighted answer part</td>
+<td>Supervision for the register axis</td>
+</tr>
+<tr>
+<td><code>construct_metadata</code></td>
+<td>Teacher’s annotation</td>
+<td>Structural classification of the construct</td>
+</tr>
+</tbody>
+</table>
+<h2 id="current-generator-buckets">Current Generator Buckets</h2>
+<p>The Level 2 scaffold currently uses six major curriculum buckets:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 30%" />
+<col style="width: 23%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr>
+<th>Bucket</th>
+<th style="text-align: right;">Share in 10K dataset</th>
+<th>What it teaches</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>v74_baseline</code></td>
+<td style="text-align: right;">20%</td>
+<td>Basic CAS states, RPM, fractals, pathways</td>
+<td><code>^2^O_{F3}</code></td>
+</tr>
+<tr>
+<td><code>v75_register</code></td>
+<td style="text-align: right;">25%</td>
+<td>Register annotations T/A/f/E</td>
+<td><code>^2^O_{F3}|T</code></td>
+</tr>
+<tr>
+<td><code>v77_rule_four</code></td>
+<td style="text-align: right;">15%</td>
+<td>Operator discipline and deliberate invalid examples</td>
+<td><code>^3^P_{F2}|A + ^3^P_{F2}|f</code></td>
+</tr>
+<tr>
+<td><code>v77_omega</code></td>
+<td style="text-align: right;">20%</td>
+<td>Named emergent register outcomes</td>
+<td><code>(^3^P_{F2}|A × ^3^P_{F2}|f) = ^3^P|Ω_refusal</code></td>
+</tr>
+<tr>
+<td><code>v76_production</code></td>
+<td style="text-align: right;">10%</td>
+<td>Production recipes and yield-style semantics</td>
+<td><code>Θ(Ω_safe_judgment) = 0.4*^3^P_{F2}|A + 0.6*^2^C_{F2}|f → Ω_safe_judgment</code></td>
+</tr>
+<tr>
+<td><code>meta_logic</code></td>
+<td style="text-align: right;">10%</td>
+<td>Typed sets, clusters, membership, subset, products, covers</td>
+<td><code>NoeticCluster{^2, ^7} ⊆ Noetics</code></td>
+</tr>
+</tbody>
+</table>
+<p>The mix ratio is a curriculum choice. It prevents the model from
+seeing only simple notation while also preventing advanced notation from
+drowning out the basics.</p>
+<h2 id="what-version-buckets-mean">What “Version Buckets” Mean</h2>
+<p>The bucket labels correspond to admitted CAS framework layers:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>CAS layer</th>
+<th>Plain meaning</th>
+<th>Technical meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>v7.4</td>
+<td>Basic coordinate language</td>
+<td>Noetic, Domain, Drive, state bank, RPM, fractal expressions</td>
+</tr>
+<tr>
+<td>v7.5</td>
+<td>Register layer</td>
+<td>Phenomenological register axis: <code>|T</code>, <code>|A</code>,
+<code>|f</code>, <code>|E</code></td>
+</tr>
+<tr>
+<td>v7.6</td>
+<td>Production layer</td>
+<td>Recipe/yield semantics using <code>Θ</code>, <code>Ω</code>,
+coefficients, leakage/yield fields</td>
+</tr>
+<tr>
+<td>v7.7</td>
+<td>Operator discipline</td>
+<td>Register-set, co-presence, integration, named emergent outcomes</td>
+</tr>
+<tr>
+<td>Meta-logic</td>
+<td>Framework reasoning layer</td>
+<td>Typed finite sets, clusters, membership, subset, product, cover,
+partition</td>
+</tr>
+</tbody>
+</table>
+<h2 id="generator-structure">Generator Structure</h2>
+<p>The repo-level structure is:</p>
+<pre class="text"><code>cas-synthetic/
+  generator/       deterministic generators by bucket
+  templates/       YAML templates and construct families
+  llm_interface/   optional paraphrase providers
+  validation/      schema, compiler, Rust/composite validators
+  mix_controller/  ratio control across buckets
+  scripts/         generate, validate, inspect commands
+  tests/           regression and coverage tests
+  data/            generated JSONL and metrics artifacts</code></pre>
+<h2 id="component-by-component-mapping">Component-by-Component
+Mapping</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Technical term</th>
+<th>Simple analogy</th>
+<th>Practical function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generator module</td>
+<td>Lesson writer</td>
+<td>Emits candidate examples for one CAS bucket</td>
+</tr>
+<tr>
+<td>Template YAML</td>
+<td>Lesson plan</td>
+<td>Defines expression shapes and natural-language wrappers</td>
+</tr>
+<tr>
+<td>Mix controller</td>
+<td>Curriculum scheduler</td>
+<td>Keeps data proportions stable across buckets</td>
+</tr>
+<tr>
+<td>Random seed</td>
+<td>Recipe number</td>
+<td>Makes a dataset reproducible</td>
+</tr>
+<tr>
+<td>JSONL</td>
+<td>Stack of flashcards</td>
+<td>One training record per line</td>
+</tr>
+<tr>
+<td>Schema validator</td>
+<td>Form checker</td>
+<td>Ensures required fields exist and have valid types</td>
+</tr>
+<tr>
+<td>Compiler validator</td>
+<td>Referee</td>
+<td>Ensures CAS expressions are accepted by the compiler</td>
+</tr>
+<tr>
+<td>Composite validator</td>
+<td>Inspection station</td>
+<td>Combines schema, compiler, and semantic checks</td>
+</tr>
+<tr>
+<td>Deliberate invalid examples</td>
+<td>Trick questions</td>
+<td>Teaches the model to detect or avoid illegal forms</td>
+</tr>
+<tr>
+<td>Level 3 recoverable prompts</td>
+<td>Worked translation exercises</td>
+<td>Natural-language prompts that expose enough slots for exact
+recovery</td>
+</tr>
+</tbody>
+</table>
+<h2 id="why-synthetic-data-is-needed">Why Synthetic Data Is Needed</h2>
+<p>There is no large public internet corpus of CAS expressions. The
+framework is new and highly structured. A general model will not
+naturally know that:</p>
+<pre class="text"><code>^2^O_{F3}|T</code></pre>
+<p>means a specific Noetic, Domain, Drive, and Register combination.</p>
+<p>Synthetic data solves this by creating millions of controlled “CAS
+language lessons” before real-world data exists.</p>
+<h2 id="why-validation-is-load-bearing">Why Validation Is
+Load-Bearing</h2>
+<p>Without validation, synthetic data can silently poison the model.</p>
+<p>Example:</p>
+<pre class="text"><code>^2^O|T_{F3}</code></pre>
+<p>This looks close to the correct expression, but the canonical order
+is:</p>
+<pre class="text"><code>^2^O_{F3}|T</code></pre>
+<p>The generator previously exposed this kind of mismatch in older
+buckets. The validation gate caught it before scaling. That is the point
+of the gate: bad curriculum creates bad model behavior.</p>
+<h2 id="level-3-conversational-recoverable-data">Level 3 Conversational
+/ Recoverable Data</h2>
+<p>Level 2 data teaches the compiler surface. Level 3 data teaches
+natural-language recovery.</p>
+<p>The key lesson from recent testing:</p>
+<p><strong>Underdetermined prompts do not support exact CAS
+recovery.</strong></p>
+<p>Bad exact-recovery prompt:</p>
+<pre class="text"><code>A doctor facing an unfamiliar diagnosis is asked to give their perspective.</code></pre>
+<p>There are many valid CAS expressions that could fit. The model cannot
+be expected to recover one exact hidden target.</p>
+<p>Recoverable prompt:</p>
+<pre class="text"><code>I am learning CAS. The target structure is families: state expression;
+states: Noetic ^2; domain O; drive F3; register |T. What is the precise notation?</code></pre>
+<p>Target:</p>
+<pre class="text"><code>^2^O_{F3}|T</code></pre>
+<p>This is learnable because the prompt provides the recoverable slots
+without copying the whole expression.</p>
+<h1 id="part-ii-cas-native-ai">Part II: CAS-Native AI</h1>
+<h2 id="what-it-is-1">What It Is</h2>
+<p>CAS-Native AI is the model stack that learns from CAS data.</p>
+<p>It is designed to do more than produce generic text. It is being
+trained to understand and work with CAS as a structured cognitive
+notation.</p>
+<h2 id="simple-analogy-1">Simple Analogy</h2>
+<p>Think of CAS-Native as a student learning both a language and a
+rule-governed technical discipline.</p>
+<p>It is not enough for the student to say words that sound right. The
+student must:</p>
+<ol type="1">
+<li>Understand the vocabulary.</li>
+<li>Follow the grammar.</li>
+<li>Choose the right construct for the situation.</li>
+<li>Produce an answer the compiler accepts.</li>
+<li>Explain the answer in human language.</li>
+</ol>
+<h2 id="main-cas-native-components">Main CAS-Native Components</h2>
+<pre class="text"><code>cas-native/
+  model/       transformer and CAS-specific heads
+  training/    tokenizer, data pipeline, trainer, losses, configs
+  inference/   sampling, constrained candidates, semantic reranker
+  validation/  bridge to compiler/Rust validation and structural hashes
+  tests/       component and integration tests</code></pre>
+<h2 id="cas-native-model-layers">CAS-Native Model Layers</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Technical component</th>
+<th>Simple analogy</th>
+<th>What it does</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tokenizer</td>
+<td>Alphabet and spelling system</td>
+<td>Converts text/CAS notation into model tokens</td>
+</tr>
+<tr>
+<td>Transformer backbone</td>
+<td>Student’s working memory</td>
+<td>Learns patterns across prompts and expressions</td>
+</tr>
+<tr>
+<td>LM head</td>
+<td>Sentence writer</td>
+<td>Predicts next tokens</td>
+</tr>
+<tr>
+<td>Cognitive state embedding</td>
+<td>CAS coordinate board</td>
+<td>Represents the 40-state bank</td>
+</tr>
+<tr>
+<td>Register FiLM</td>
+<td>Colored lens</td>
+<td>Modulates representation by <code>|T</code>, <code>|A</code>,
+<code>|f</code>, <code>|E</code></td>
+</tr>
+<tr>
+<td>Shared Register Latent</td>
+<td>Single source of register meaning</td>
+<td>Keeps register behavior consistent across two FiLM surfaces</td>
+</tr>
+<tr>
+<td>Emergent Register Pipeline</td>
+<td>Pattern binder</td>
+<td>Learns when cross-register integration should map to
+<code>Ω_*</code></td>
+</tr>
+<tr>
+<td>Production Semantics Head</td>
+<td>Recipe calculator</td>
+<td>Learns recipe/yield-style structure</td>
+</tr>
+<tr>
+<td>Expression Proposer Head</td>
+<td>Drafting assistant</td>
+<td>Proposes CAS expression structure from hidden states</td>
+</tr>
+<tr>
+<td>Topos reasoner</td>
+<td>Logic head</td>
+<td>Represents three-valued intuitionistic truth outputs</td>
+</tr>
+<tr>
+<td>Lacunarity gate/head</td>
+<td>Pattern-gap monitor</td>
+<td>Measures and reports concentration/gap structure</td>
+</tr>
+<tr>
+<td>Semantic reranker</td>
+<td>Multiple-choice scorer</td>
+<td>Scores legal CAS candidates against a prompt</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-the-v2-architecture-adds">What the v2 Architecture
+Adds</h2>
+<p>The v2 design is governed by architecture decision records:</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>ADR</th>
+<th>Decision</th>
+<th>Stakeholder translation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ADR-01</td>
+<td>Register FiLM modulation</td>
+<td>Add register-aware lenses without rewriting the whole model</td>
+</tr>
+<tr>
+<td>ADR-02</td>
+<td>Metric-learning binding for <code>Ω_*</code></td>
+<td>Learn emergent register outcomes by similarity/binding, not fixed
+output classes only</td>
+</tr>
+<tr>
+<td>ADR-03</td>
+<td><code>Ω_*</code> output design</td>
+<td>Keep named emergents extensible through a registry</td>
+</tr>
+<tr>
+<td>ADR-04</td>
+<td>Hybrid production semantics</td>
+<td>Use differentiable training but preserve symbolic inference
+discipline</td>
+</tr>
+<tr>
+<td>ADR-05</td>
+<td>Clean redesign</td>
+<td>Preserve the 40-state structure instead of carrying old technical
+debt</td>
+</tr>
+<tr>
+<td>ADR-06</td>
+<td>Rust engine alignment</td>
+<td>Keep compiler/Rust validation authoritative for rule checks</td>
+</tr>
+<tr>
+<td>ADR-07</td>
+<td>Learned expression proposer</td>
+<td>Add gradient-bearing structure learning for Rule 4 patterns</td>
+</tr>
+<tr>
+<td>ADR-08</td>
+<td>Shared Register Latent</td>
+<td>Prevent register meaning from drifting between FiLM surfaces</td>
+</tr>
+<tr>
+<td>ADR-09</td>
+<td>Memory substrate future architecture</td>
+<td>Future graph/vector memory layer for CAS-indexed cognition</td>
+</tr>
+</tbody>
+</table>
+<p>The core design philosophy is:</p>
+<p><strong>The neural model learns; the compiler judges; the framework
+vocabulary remains controlled.</strong></p>
+<h2 id="training-inputs">Training Inputs</h2>
+<p>CAS-Native consumes records shaped like:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;prompt&quot;</span><span class="fu">:</span> <span class="st">&quot;I am learning CAS...&quot;</span><span class="fu">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;response&quot;</span><span class="fu">:</span> <span class="st">&quot;^2^O_{F3}|T&quot;</span><span class="fu">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;cas_expression&quot;</span><span class="fu">:</span> <span class="st">&quot;^2^O_{F3}|T&quot;</span><span class="fu">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;register_labels&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="fu">{</span><span class="dt">&quot;position&quot;</span><span class="fu">:</span> <span class="dv">0</span><span class="fu">,</span> <span class="dt">&quot;register&quot;</span><span class="fu">:</span> <span class="st">&quot;T&quot;</span><span class="fu">}</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;omega_labels&quot;</span><span class="fu">:</span> <span class="ot">[]</span><span class="fu">,</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;production_target&quot;</span><span class="fu">:</span> <span class="kw">null</span><span class="fu">,</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;construct_metadata&quot;</span><span class="fu">:</span> <span class="fu">{</span><span class="dt">&quot;expression_kind&quot;</span><span class="fu">:</span> <span class="st">&quot;register_state&quot;</span><span class="fu">}</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>The trainer uses optional labels only when present.</p>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Label field</th>
+<th>Teaches</th>
+<th>If absent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>register_labels</code></td>
+<td>Register prediction and register-aware modulation</td>
+<td>Register losses are skipped</td>
+</tr>
+<tr>
+<td><code>omega_labels</code></td>
+<td>Named emergent <code>Ω_*</code> binding</td>
+<td>Emergent binding loss is skipped</td>
+</tr>
+<tr>
+<td><code>production_target</code></td>
+<td>Production/yield head</td>
+<td>Production loss is skipped</td>
+</tr>
+<tr>
+<td><code>construct_metadata</code></td>
+<td>Construct family / meta-logic coverage</td>
+<td>Used for representation/evaluation, not always weighted
+training</td>
+</tr>
+<tr>
+<td><code>cas_expression</code></td>
+<td>Formal target</td>
+<td>Used by validation and candidate construction</td>
+</tr>
+</tbody>
+</table>
+<p>This masking behavior matters because one dataset can contain mixed
+lesson types without forcing every example to teach every head.</p>
+<h2 id="training-losses-in-plain-english">Training Losses in Plain
+English</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Loss or metric</th>
+<th>Simple analogy</th>
+<th>What it pushes the model to learn</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Language-model loss</td>
+<td>Spelling and phrasing grade</td>
+<td>Predict the target text tokens</td>
+</tr>
+<tr>
+<td>Register loss / FiLM losses</td>
+<td>Use the right colored lens</td>
+<td>Represent <code>|T</code>, <code>|A</code>, <code>|f</code>,
+<code>|E</code> correctly</td>
+</tr>
+<tr>
+<td>Involution losses</td>
+<td>Preserve opposition symmetry</td>
+<td>Keep paired register transformations coherent</td>
+</tr>
+<tr>
+<td>Emergent binding loss</td>
+<td>Recognize the right named outcome</td>
+<td>Bind multi-register patterns to <code>Ω_*</code></td>
+</tr>
+<tr>
+<td>Production loss</td>
+<td>Solve the recipe</td>
+<td>Estimate recipe/yield structure</td>
+</tr>
+<tr>
+<td>Rule 4 loss</td>
+<td>Avoid illegal operator use</td>
+<td>Penalize invalid cross-register/operator patterns</td>
+</tr>
+<tr>
+<td>Proposer Rule 4 loss</td>
+<td>Draft structurally valid expressions</td>
+<td>Make the expression proposer learn valid CAS structure</td>
+</tr>
+<tr>
+<td>Null-space regularization</td>
+<td>Keep unused labels quiet</td>
+<td>Prevent unused <code>Ω_*</code> slots from drifting into false
+matches</td>
+</tr>
+</tbody>
+</table>
+<h2 id="inference-modes">Inference Modes</h2>
+<p>CAS-Native has multiple ways to produce or select CAS outputs.</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Analogy</th>
+<th>Strength</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free sampling</td>
+<td>Student writes from memory</td>
+<td>Shows what the model has internalized</td>
+<td>Can produce invalid or partial CAS</td>
+</tr>
+<tr>
+<td>Primed sampling</td>
+<td>Give the first few symbols</td>
+<td>Tests continuation ability</td>
+<td>Still lacks grammar unless constrained</td>
+</tr>
+<tr>
+<td>Grammar-constrained candidates</td>
+<td>Multiple-choice exam with only legal answers</td>
+<td>Guarantees compiler-valid candidates</td>
+<td>Needs a good candidate bank</td>
+</tr>
+<tr>
+<td>Semantic reranking</td>
+<td>Choose best legal answer</td>
+<td>Strong current path for exact recovery</td>
+<td>Depends on prompt recoverability and candidate coverage</td>
+</tr>
+</tbody>
+</table>
+<p>The recent evidence favors constrained candidate selection plus
+reranking over unconstrained free generation.</p>
+<h2 id="why-free-sampling-was-not-enough">Why Free Sampling Was Not
+Enough</h2>
+<p>Earlier qualitative generation showed that the model had learned
+parts of the vocabulary but not enough grammar. It could emit CAS-like
+fragments, but not consistently structured expressions.</p>
+<p>The engineering conclusion was:</p>
+<p><strong>Do not keep spending GPU time hoping grammar emerges by
+accident. Put the compiler grammar into the decoding path.</strong></p>
+<p>That led to candidate banks, prompt-slot filters, and semantic
+reranking.</p>
+<h1 id="part-iii-how-cas-synthetic-and-cas-native-work-together">Part
+III: How CAS Synthetic and CAS-Native Work Together</h1>
+<h2 id="the-joint-pipeline">The Joint Pipeline</h2>
+<pre class="text"><code>1. Framework authors define valid CAS constructs.
+2. Compiler implements those constructs.
+3. CAS Synthetic emits examples across construct families.
+4. Validators reject malformed examples.
+5. CAS-Native trains on validated JSONL.
+6. Inference builds compiler-valid candidate sets.
+7. Semantic reranker scores candidates against prompts.
+8. Compiler validates selected output.
+9. Metrics identify failures.
+10. Generator or model is patched.</code></pre>
+<h2 id="relationship-in-one-sentence">Relationship in One Sentence</h2>
+<p>CAS Synthetic teaches the model what the world of valid CAS
+expressions looks like; CAS-Native learns to navigate that world; the
+compiler prevents both from leaving the map.</p>
+<h2 id="why-this-is-better-than-just-fine-tune-a-chatbot">Why This Is
+Better Than “Just Fine-Tune a Chatbot”</h2>
+<p>A normal fine-tune might learn to imitate examples. It may produce
+convincing but invalid notation.</p>
+<p>The CAS pipeline adds three controls:</p>
+<ol type="1">
+<li><strong>Controlled data generation.</strong> The examples cover
+specific framework features by design.</li>
+<li><strong>Compiler validation.</strong> Invalid expressions are caught
+before and after training.</li>
+<li><strong>Constrained inference.</strong> The model can be asked to
+choose among legal expressions instead of inventing arbitrary
+strings.</li>
+</ol>
+<p>That gives stakeholders a clearer quality story:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Risk in generic AI</th>
+<th>CAS control</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hallucinated syntax</td>
+<td>Compiler validation</td>
+</tr>
+<tr>
+<td>Underrepresented advanced notation</td>
+<td>Synthetic mix ratios</td>
+</tr>
+<tr>
+<td>Hidden invalid examples</td>
+<td>Dataset validation</td>
+</tr>
+<tr>
+<td>Good-looking but wrong output</td>
+<td>Exact-match, top-k, slot-match metrics</td>
+</tr>
+<tr>
+<td>Unclear failure cause</td>
+<td>Per-bucket reports and candidate diagnostics</td>
+</tr>
+</tbody>
+</table>
+<h1 id="part-iv-concrete-examples">Part IV: Concrete Examples</h1>
+<h2 id="example-1-basic-state">Example 1: Basic State</h2>
+<p>Natural-language prompt:</p>
+<pre class="text"><code>Noetic ^2, Operational domain, Drive F3.</code></pre>
+<p>CAS expression:</p>
+<pre class="text"><code>^2^O_{F3}</code></pre>
+<p>1:1 mapping:</p>
+<table>
+<thead>
+<tr>
+<th>Expression part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^2</code></td>
+<td>Noetic index 2</td>
+</tr>
+<tr>
+<td><code>^O</code></td>
+<td>Operational domain</td>
+</tr>
+<tr>
+<td><code>_{F3}</code></td>
+<td>Drive/Foundation slot F3</td>
+</tr>
+<tr>
+<td>Whole expression</td>
+<td>One typed cognitive state</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy: a coordinate on a map. <code>^2</code> is the city,
+<code>O</code> is the district, <code>F3</code> is the street.</p>
+<h2 id="example-2-register-aware-state">Example 2: Register-Aware
+State</h2>
+<p>Natural-language prompt:</p>
+<pre class="text"><code>The same state, but viewed through the meaning-level Transcendent register.</code></pre>
+<p>CAS expression:</p>
+<pre class="text"><code>^2^O_{F3}|T</code></pre>
+<p>1:1 mapping:</p>
+<table>
+<thead>
+<tr>
+<th>Expression part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>^2^O_{F3}</code></td>
+<td>Base cognitive state</td>
+</tr>
+<tr>
+<td><code>|T</code></td>
+<td>Transcendent register</td>
+</tr>
+<tr>
+<td>Whole expression</td>
+<td>State plus phenomenological register</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy: the same map coordinate viewed through a specific lens.</p>
+<h2 id="example-3-register-co-presence">Example 3: Register
+Co-Presence</h2>
+<p>Natural-language prompt:</p>
+<pre class="text"><code>Noetic ^3 in Principled domain and Drive F2 is present in both Analytical and Affective registers.</code></pre>
+<p>CAS expression:</p>
+<pre class="text"><code>^3^P_{F2}|A + ^3^P_{F2}|f</code></pre>
+<p>1:1 mapping:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Expression part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>Co-presence</td>
+</tr>
+<tr>
+<td><code>|A</code></td>
+<td>Analytical register</td>
+</tr>
+<tr>
+<td><code>|f</code></td>
+<td>Affective register</td>
+</tr>
+<tr>
+<td>Whole expression</td>
+<td>Two register aspects present together, not yet integrated</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy: two instruments playing at the same time, but not yet
+blended into a chord.</p>
+<h2 id="example-4-cross-register-integration">Example 4: Cross-Register
+Integration</h2>
+<p>Natural-language prompt:</p>
+<pre class="text"><code>Analytical, Affective, and Transcendent registers integrate into a named emergent refusal pattern.</code></pre>
+<p>CAS expression:</p>
+<pre class="text"><code>(^3^P_{F2}|A × ^3^P_{F2}|f × ^3^P_{F2}|T) = ^3^P|Ω_refusal</code></pre>
+<p>1:1 mapping:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Expression part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>×</code></td>
+<td>Cross-register integration</td>
+</tr>
+<tr>
+<td>Same <code>^3^P</code> across operands</td>
+<td>Required same-Noetic/same-Domain structure</td>
+</tr>
+<tr>
+<td><code>Ω_refusal</code></td>
+<td>Named emergent register outcome</td>
+</tr>
+<tr>
+<td>Whole expression</td>
+<td>Integration produces a named emergent state</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy: individual ingredients combine into a new dish, not just a
+pile of ingredients.</p>
+<h2 id="example-5-production-recipe">Example 5: Production Recipe</h2>
+<p>Natural-language prompt:</p>
+<pre class="text"><code>Safe judgment is produced from weighted prerequisite states.</code></pre>
+<p>CAS expression:</p>
+<pre class="text"><code>Θ(Ω_safe_judgment) = 0.40*^3^P_{F2}|A + 0.25*^2^C_{F2}|f + 0.20*^7^O_{F4}|E + 0.15*^6^P_{F1}|T → Ω_safe_judgment</code></pre>
+<p>1:1 mapping:</p>
+<table>
+<thead>
+<tr>
+<th>Expression part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Θ(...)</code></td>
+<td>Production recipe</td>
+</tr>
+<tr>
+<td><code>Ω_safe_judgment</code></td>
+<td>Target named outcome</td>
+</tr>
+<tr>
+<td>Coefficients</td>
+<td>Contribution weights</td>
+</tr>
+<tr>
+<td><code>+</code></td>
+<td>Recipe ingredients combined</td>
+</tr>
+<tr>
+<td><code>→</code></td>
+<td>Production arrow</td>
+</tr>
+<tr>
+<td>Whole expression</td>
+<td>A structured recipe for producing an outcome</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy: a recipe card. Ingredients have quantities and point toward
+a finished dish.</p>
+<h2 id="example-6-typed-set-cluster">Example 6: Typed Set / Cluster</h2>
+<p>Natural-language prompt:</p>
+<pre class="text"><code>The Noetic cluster containing ^2 and ^7 is a subset of all Noetics.</code></pre>
+<p>CAS expression:</p>
+<pre class="text"><code>NoeticCluster{^2, ^7} ⊆ Noetics</code></pre>
+<p>1:1 mapping:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Expression part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NoeticCluster{...}</code></td>
+<td>Typed finite cluster of Noetics</td>
+</tr>
+<tr>
+<td><code>^2, ^7</code></td>
+<td>Members of the cluster</td>
+</tr>
+<tr>
+<td><code>⊆</code></td>
+<td>Subset or equal</td>
+</tr>
+<tr>
+<td><code>Noetics</code></td>
+<td>Carrier set of all Noetics</td>
+</tr>
+<tr>
+<td>Whole expression</td>
+<td>A typed set-theory claim inside the CAS meta-logic layer</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy: a labeled folder containing two cards, placed inside the
+larger cabinet labeled “Noetics.”</p>
+<h2 id="example-7-product-coordinate-space">Example 7: Product /
+Coordinate Space</h2>
+<p>Natural-language prompt:</p>
+<pre class="text"><code>Represent the space of all Noetic-by-Domain combinations.</code></pre>
+<p>CAS expression:</p>
+<pre class="text"><code>Product(Noetics, Domains)</code></pre>
+<p>1:1 mapping:</p>
+<table>
+<thead>
+<tr>
+<th>Expression part</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Product(...)</code></td>
+<td>Cartesian-style product construct</td>
+</tr>
+<tr>
+<td><code>Noetics</code></td>
+<td>First carrier</td>
+</tr>
+<tr>
+<td><code>Domains</code></td>
+<td>Second carrier</td>
+</tr>
+<tr>
+<td>Whole expression</td>
+<td>All possible Noetic-Domain pairings</td>
+</tr>
+</tbody>
+</table>
+<p>Analogy: a spreadsheet where rows are Noetics and columns are
+Domains.</p>
+<h1 id="part-v-current-maturity-and-evidence">Part V: Current Maturity
+and Evidence</h1>
+<h2 id="what-is-solid-now">What Is Solid Now</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Area</th>
+<th>Current state</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compiler grammar</td>
+<td>Broad CAS notation accepted, including typed meta-logic and diagram
+payloads</td>
+</tr>
+<tr>
+<td>Synthetic generator</td>
+<td>Level 2 scaffold with v7.4-v7.7 plus meta-logic buckets</td>
+</tr>
+<tr>
+<td>Dataset validation</td>
+<td>Compiler validation and metrics for generated corpora</td>
+</tr>
+<tr>
+<td>Level 3 recoverable prompts</td>
+<td>19,454 validated prompt-to-CAS examples</td>
+</tr>
+<tr>
+<td>Semantic reranker</td>
+<td>Patched recoverable run reached 21 / 30 exact top-1, 26 / 30 top-5,
+2.89 mean rank, and 30 / 30 compiler-valid outputs</td>
+</tr>
+<tr>
+<td>Training infrastructure</td>
+<td>Trainer supports JSONL, v2 component flags, eval step, production
+warmup, device alignment</td>
+</tr>
+<tr>
+<td>Evidence discipline</td>
+<td>Failed hypotheses documented rather than buried</td>
+</tr>
+</tbody>
+</table>
+<h2 id="what-is-still-research-build-out">What Is Still Research /
+Build-Out</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Area</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fully conversational CAS-Native</td>
+<td>Not complete; requires Level 3 dialogue data and response
+policy</td>
+</tr>
+<tr>
+<td>Free-form exact CAS generation</td>
+<td>Not reliable enough alone; constrained decoding is preferred</td>
+</tr>
+<tr>
+<td>Full-scale CAS-Native training</td>
+<td>Progressing, but not yet product-grade</td>
+</tr>
+<tr>
+<td>Empirical behavioral prediction</td>
+<td>Not established; needs separate validation design</td>
+</tr>
+<tr>
+<td>Medical/clinical interpretation</td>
+<td>Out of scope unless separately validated and reviewed</td>
+</tr>
+<tr>
+<td>Large public deployment of CAS-Native model</td>
+<td>Future milestone, not current claim</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stakeholder-ready-claim">Stakeholder-Ready Claim</h2>
+<p>Defensible claim:</p>
+<blockquote>
+<p>CAS now has a validated synthetic-data pipeline and an early
+CAS-Native inference path that can recover formal CAS expressions from
+recoverable prompts using compiler-valid candidates and semantic
+reranking. The latest patched reranker run reached 70% exact top-1 on
+the current 30-item evaluation slice while keeping 100% compiler-valid
+outputs.</p>
+</blockquote>
+<p>Not defensible yet:</p>
+<blockquote>
+<p>CAS-Native is a finished conversational AI that fully understands
+cognition or predicts behavior.</p>
+</blockquote>
+<p>This distinction protects credibility.</p>
+<h1 id="part-vi-why-the-compiler-matters">Part VI: Why the Compiler
+Matters</h1>
+<p>The compiler is the difference between a symbolic AI project and a
+model merely imitating symbols.</p>
+<p>For example, a generic model might output:</p>
+<pre class="text"><code>^2^O|T_{F3}</code></pre>
+<p>This looks plausible, but the compiler enforces:</p>
+<pre class="text"><code>^2^O_{F3}|T</code></pre>
+<p>The compiler can also reject type errors:</p>
+<pre class="text"><code>^2 ⊂ ^7</code></pre>
+<p>Why invalid? Because subset requires sets or clusters, not individual
+Noetics.</p>
+<p>Correct form:</p>
+<pre class="text"><code>NoeticCluster{^2} ⊂ NoeticCluster{^2, ^7}</code></pre>
+<p>Plain-English analogy:</p>
+<p>You cannot say “one playing card is a subfolder of another playing
+card.” You need folders or sets before subset language applies.</p>
+<h1 id="part-vii-architecture-strengths">Part VII: Architecture
+Strengths</h1>
+<h2 id="separation-of-concerns">1. Separation of Concerns</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Owns</th>
+<th>Does not own</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compiler</td>
+<td>Validity, typing, parsing, diagram payloads</td>
+<td>Learning semantic intent</td>
+</tr>
+<tr>
+<td>Generator</td>
+<td>Curriculum and examples</td>
+<td>Final inference judgment</td>
+</tr>
+<tr>
+<td>CAS-Native model</td>
+<td>Learned mapping and ranking</td>
+<td>Authority over grammar validity</td>
+</tr>
+<tr>
+<td>Evaluator</td>
+<td>Metrics and failure reports</td>
+<td>Framework definitions</td>
+</tr>
+</tbody>
+</table>
+<p>This separation keeps the system more maintainable.</p>
+<h2 id="curriculum-instead-of-chaos">2. Curriculum Instead of Chaos</h2>
+<p>The generator decides how much of each construct the model sees.</p>
+<p>That avoids a common AI failure: the model learns frequent easy
+patterns and ignores rare but important advanced structures.</p>
+<h2 id="recoverability-discipline">3. Recoverability Discipline</h2>
+<p>The current results showed that exact recovery requires enough
+evidence in the prompt.</p>
+<p>That is not a weakness. It is a useful product insight:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Product mode</th>
+<th>Prompt requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Teaching mode</td>
+<td>Prompt can expose slots explicitly</td>
+</tr>
+<tr>
+<td>Compiler assistant</td>
+<td>Prompt should be recoverable and guided</td>
+</tr>
+<tr>
+<td>Open-ended reflection</td>
+<td>CAS output should be treated as interpretation, not exact hidden
+answer</td>
+</tr>
+<tr>
+<td>Research/evaluation</td>
+<td>Ground-truth recoverability must be controlled</td>
+</tr>
+</tbody>
+</table>
+<h2 id="honest-failure-loop">4. Honest Failure Loop</h2>
+<p>Recent failures directly improved the architecture:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Finding</th>
+<th>System response</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Free sampling produced fragments</td>
+<td>Move toward grammar-constrained decoding</td>
+</tr>
+<tr>
+<td>Level 2 prompts were underdetermined</td>
+<td>Build Level 3 recoverable prompts</td>
+</tr>
+<tr>
+<td>Candidate filters had phantom slots</td>
+<td>Patch slot inference and add regressions</td>
+</tr>
+<tr>
+<td>Some generator buckets emitted invalid notation</td>
+<td>Add validation gates and fix generator drift</td>
+</tr>
+</tbody>
+</table>
+<h1 id="part-viii-business-stakeholder-value">Part VIII: Business /
+Stakeholder Value</h1>
+<h2 id="product-value">Product Value</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>User-facing capability</th>
+<th>Underlying CAS system</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compiler explains why notation is valid or invalid</td>
+<td>Parser, typechecker, Rule 4 validator</td>
+</tr>
+<tr>
+<td>Diagrams render structure visually</td>
+<td>Compiler diagram payloads</td>
+</tr>
+<tr>
+<td>Natural-language examples teach notation</td>
+<td>Level 3 prompt/explanation data</td>
+</tr>
+<tr>
+<td>Idea Atlas maps thoughts structurally</td>
+<td>CAS expression extraction and graph views</td>
+</tr>
+<tr>
+<td>Future conversational tutor</td>
+<td>CAS-Native trained on recoverable dialogue</td>
+</tr>
+<tr>
+<td>Future assessment/reporting</td>
+<td>CAS compiler + model + validated rubrics</td>
+</tr>
+</tbody>
+</table>
+<h2 id="research-value">Research Value</h2>
+<table>
+<thead>
+<tr>
+<th>Research need</th>
+<th>CAS answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Formal notation</td>
+<td>CAS grammar and typed constructs</td>
+</tr>
+<tr>
+<td>Reproducible experiments</td>
+<td>Seeded synthetic data generation</td>
+</tr>
+<tr>
+<td>Controlled ablations</td>
+<td>Bucket-level curriculum and component flags</td>
+</tr>
+<tr>
+<td>Error analysis</td>
+<td>Per-bucket exact/top-k/slot metrics</td>
+</tr>
+<tr>
+<td>AI alignment to framework</td>
+<td>Compiler-validated candidate selection</td>
+</tr>
+</tbody>
+</table>
+<h2 id="engineering-value">Engineering Value</h2>
+<table>
+<thead>
+<tr>
+<th>Engineering need</th>
+<th>CAS answer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Avoid silent data corruption</td>
+<td>Compiler validation gates</td>
+</tr>
+<tr>
+<td>Keep training reproducible</td>
+<td>Seeded generation and reports</td>
+</tr>
+<tr>
+<td>Support gradual rollout</td>
+<td>Component flags in <code>training_v2.yaml</code></td>
+</tr>
+<tr>
+<td>Debug model behavior</td>
+<td>Bucket-specific metrics</td>
+</tr>
+<tr>
+<td>Keep syntax authoritative</td>
+<td>Compiler/Rust validation layer</td>
+</tr>
+</tbody>
+</table>
+<h1 id="part-ix-roadmap">Part IX: Roadmap</h1>
+<h2 id="near-term-next-steps">Near-Term Next Steps</h2>
+<ol type="1">
+<li><p><strong>Scale the patched recoverable reranker
+evaluation.</strong> The patched 30-item run cleared all four gates:
+exact top-1 21/30, top-5 26/30, mean rank 2.89, and ground-truth
+scoreable 27/30. The next credibility step is a larger held-out
+evaluation so the claim is not over-dependent on a 30-example
+slice.</p></li>
+<li><p><strong>Build mixed CAS-Native curriculum training.</strong>
+Combine symbolic Level 2, recoverable Level 3, and later conversational
+examples without overloading one dataset with every objective.</p></li>
+<li><p><strong>Add conversational wrappers as a separate layer.</strong>
+Do not pollute the symbolic compiler corpus. Build prompt/answer pairs
+that explain CAS expressions naturally.</p></li>
+<li><p><strong>Keep compiler-valid candidate decoding as the primary
+inference path.</strong> Free sampling remains useful as a diagnostic,
+but not as the primary product path.</p></li>
+<li><p><strong>Add stakeholder demos.</strong> Demonstrate one prompt
+moving through: natural language → candidate bank → reranker → CAS
+expression → compiler validation → diagram → natural-language
+explanation.</p></li>
+</ol>
+<h2 id="medium-term-next-steps">Medium-Term Next Steps</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Milestone</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Larger reranker evaluation set</td>
+<td>30 examples is useful but too small for stakeholder-grade
+claims</td>
+</tr>
+<tr>
+<td>Full conversational Level 3 dataset</td>
+<td>Required for CAS-Native to become a tutor/explainer</td>
+</tr>
+<tr>
+<td>Product-grade explanation generator</td>
+<td>Users need natural-language mirrors of CAS expressions</td>
+</tr>
+<tr>
+<td>Integrated online/offline compiler parity</td>
+<td>Same behavior across PWA and CLI package</td>
+</tr>
+<tr>
+<td>Evaluation dashboard</td>
+<td>Stakeholders need visible progress metrics</td>
+</tr>
+</tbody>
+</table>
+<h2 id="long-term-direction">Long-Term Direction</h2>
+<p>The long-term architecture is a CAS-native cognitive assistant:</p>
+<ol type="1">
+<li>It listens to natural language.</li>
+<li>It maps language into CAS structures.</li>
+<li>It validates those structures.</li>
+<li>It explains them back to the user.</li>
+<li>It tracks structure over time.</li>
+<li>It supports diagrams, recipes, clusters, and future memory substrate
+integration.</li>
+</ol>
+<h1 id="appendix-a-glossary">Appendix A: Glossary</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Term</th>
+<th>Plain definition</th>
+<th>Technical definition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAS</td>
+<td>Cognitive coordinate language</td>
+<td>Cognitive Architecture System notation and compiler framework</td>
+</tr>
+<tr>
+<td>Noetic</td>
+<td>Basic cognitive operator/index</td>
+<td>One of the finite Noetic indices <code>^0</code> through
+<code>^9</code></td>
+</tr>
+<tr>
+<td>Domain</td>
+<td>Processing domain</td>
+<td>One of <code>P</code>, <code>C</code>, <code>E</code>,
+<code>O</code></td>
+</tr>
+<tr>
+<td>Drive/Foundation slot</td>
+<td>Motivating/structuring axis</td>
+<td><code>F1</code> through <code>F7</code> subscript</td>
+</tr>
+<tr>
+<td>Register</td>
+<td>Phenomenological mode</td>
+<td><code>|T</code>, <code>|A</code>, <code>|f</code>,
+<code>|E</code></td>
+</tr>
+<tr>
+<td><code>Ω_*</code></td>
+<td>Named emergent outcome</td>
+<td>Registered named emergent from valid integration</td>
+</tr>
+<tr>
+<td><code>Θ(...)</code></td>
+<td>Recipe marker</td>
+<td>Production semantics target recipe</td>
+</tr>
+<tr>
+<td>Rule 4</td>
+<td>Operator discipline</td>
+<td>Validity rule governing cross-register integration</td>
+</tr>
+<tr>
+<td>Compiler</td>
+<td>Referee</td>
+<td>Parser/typechecker/validator for CAS expressions</td>
+</tr>
+<tr>
+<td>Synthetic data</td>
+<td>Controlled examples</td>
+<td>Generated JSONL examples for training/evaluation</td>
+</tr>
+<tr>
+<td>Bucket</td>
+<td>Lesson family</td>
+<td>Dataset partition for a CAS feature class</td>
+</tr>
+<tr>
+<td>Tokenizer</td>
+<td>Text-to-ID converter</td>
+<td>Converts prompts and CAS expressions into model tokens</td>
+</tr>
+<tr>
+<td>Reranker</td>
+<td>Candidate chooser</td>
+<td>Scores compiler-valid candidates against prompt semantics</td>
+</tr>
+<tr>
+<td>Slot</td>
+<td>Recoverable value</td>
+<td>Noetic/domain/drive/register/carrier value extracted from prompt or
+expression</td>
+</tr>
+<tr>
+<td>Candidate bank</td>
+<td>Legal answer list</td>
+<td>Compiler-valid expressions available to constrained inference</td>
+</tr>
+<tr>
+<td>Exact match</td>
+<td>Perfect answer</td>
+<td>Selected expression equals ground truth</td>
+</tr>
+<tr>
+<td>Top-5</td>
+<td>Near-recovery metric</td>
+<td>Ground truth appears in first five ranked candidates</td>
+</tr>
+<tr>
+<td>Slot match</td>
+<td>Structural match</td>
+<td>Output contains requested recoverable slots even if exact string
+differs</td>
+</tr>
+</tbody>
+</table>
+<h1 id="appendix-b-file-map">Appendix B: File Map</h1>
+<h2 id="cas-synthetic">CAS Synthetic</h2>
+<pre class="text"><code>cas-synthetic/README.md
+cas-synthetic/generator/
+cas-synthetic/templates/
+cas-synthetic/validation/
+cas-synthetic/mix_controller/
+cas-synthetic/scripts/generate_level2.py
+cas-synthetic/scripts/validate_level2_dataset.py
+cas-synthetic/scripts/generate_level3_conversations.py
+cas-synthetic/scripts/validate_level3_conversations.py
+cas-synthetic/data/level2_scaffold/LEVEL3_RECOVERABLE_FULL_REPORT.md</code></pre>
+<h2 id="cas-native">CAS-Native</h2>
+<pre class="text"><code>noetic-compass-scaffold/noetic-compass/cas-native/model/cas_native_model.py
+noetic-compass-scaffold/noetic-compass/cas-native/model/production_semantics.py
+noetic-compass-scaffold/noetic-compass/cas-native/model/type_constraints.py
+noetic-compass-scaffold/noetic-compass/cas-native/training/data_format.md
+noetic-compass-scaffold/noetic-compass/cas-native/training/trainer.py
+noetic-compass-scaffold/noetic-compass/cas-native/training/tokenizer.py
+noetic-compass-scaffold/noetic-compass/cas-native/config/training_v2.yaml
+noetic-compass-scaffold/noetic-compass/cas-native/inference/constrained_sampling.py
+noetic-compass-scaffold/noetic-compass/cas-native/inference/semantic_reranker.py
+noetic-compass-scaffold/noetic-compass/cas-native/inference/train_semantic_reranker.py
+noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/semantic-reranker-recoverable-20260429/</code></pre>
+<h2 id="architecture-docs">Architecture Docs</h2>
+<pre class="text"><code>docs/architecture/cas_native_v2_adrs.md
+docs/CAS_NATIVE_AI_CLAUDE_PLAYBOOK.md
+docs/CAS_FOUNDATIONAL_CLARIFICATIONS.md</code></pre>
+<h1 id="appendix-c-reproduction-commands">Appendix C: Reproduction
+Commands</h1>
+<p>Generate Level 3 recoverable data:</p>
+<div class="sourceCode" id="cb34"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>python cas-synthetic\scripts\generate_level3_conversations<span class="op">.</span><span class="fu">py</span> `</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>input cas-synthetic\<span class="kw">data</span>\level2_scaffold\level2_full_10k<span class="op">.</span><span class="fu">jsonl</span> `</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>output cas-synthetic\<span class="kw">data</span>\level2_scaffold\level3_recoverable_full<span class="op">.</span><span class="fu">jsonl</span> `</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>variants-per-source <span class="dv">2</span> `</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>style-id recoverable_translation `</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">--</span>progress-every <span class="dv">5000</span></span></code></pre></div>
+<p>Validate:</p>
+<div class="sourceCode" id="cb35"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>python cas-synthetic\scripts\validate_level3_conversations<span class="op">.</span><span class="fu">py</span> `</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  cas-synthetic\<span class="kw">data</span>\level2_scaffold\level3_recoverable_full<span class="op">.</span><span class="fu">jsonl</span></span></code></pre></div>
+<p>Expected validation:</p>
+<pre class="text"><code>Total records:      19454
+Valid records:      19454
+Invalid records:    0
+Compiler checked:   19454
+Compiler skipped:   0</code></pre>
+<p>Run focused tests:</p>
+<div class="sourceCode" id="cb37"><pre
+class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>pytest cas-synthetic\tests\test_level3_conversational<span class="op">.</span><span class="fu">py</span> <span class="op">-</span>q</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>pytest noetic-compass-scaffold\noetic-compass\cas-native\tests\test_constrained_sampling<span class="op">.</span><span class="fu">py</span> <span class="op">-</span>q</span></code></pre></div>
+<p>Expected:</p>
+<pre class="text"><code>13 passed
+18 passed</code></pre>
+<h1 id="appendix-d-stakeholder-demo-script">Appendix D: Stakeholder Demo
+Script</h1>
+<p>Use this flow when explaining the system live:</p>
+<ol type="1">
+<li><p><strong>Start with a plain sentence.</strong> “I want the system
+to represent Noetic ^2, Operational domain, Drive F3, in the
+Transcendent register.”</p></li>
+<li><p><strong>Show the CAS expression.</strong>
+<code>^2^O_{F3}|T</code></p></li>
+<li><p><strong>Map each part.</strong> <code>^2</code> = Noetic,
+<code>O</code> = Domain, <code>F3</code> = Drive, <code>|T</code> =
+Register.</p></li>
+<li><p><strong>Explain the compiler.</strong> “The compiler checks
+whether this is legal, the way a programming language compiler checks
+source code.”</p></li>
+<li><p><strong>Explain the generator.</strong> “The generator creates
+thousands of examples like this so the model has a curriculum.”</p></li>
+<li><p><strong>Explain CAS-Native.</strong> “CAS-Native learns the
+mapping between the plain sentence and the formal expression.”</p></li>
+<li><p><strong>Explain the reranker.</strong> “Instead of trusting the
+model to invent syntax, we give it legal candidates and train it to pick
+the right one.”</p></li>
+<li><p><strong>Show the current evidence.</strong> “On recoverable
+prompts, the latest reranker put the ground truth in the top five 24 out
+of 30 times and all outputs were compiler-valid.”</p></li>
+<li><p><strong>State the honest boundary.</strong> “This is not yet a
+finished conversational CAS expert. It is a validated architecture path
+toward one.”</p></li>
+</ol>
+<h1 id="appendix-e-what-to-say-if-asked-hard-questions">Appendix E: What
+To Say If Asked Hard Questions</h1>
+<h2 id="is-this-just-prompt-engineering">Is this just prompt
+engineering?</h2>
+<p>No. Prompting is only one interface layer. The system includes a
+compiler, typed notation, synthetic data generation, model training,
+constrained candidate decoding, and evaluation metrics.</p>
+<h2 id="why-not-use-a-general-llm">Why not use a general LLM?</h2>
+<p>A general LLM can imitate notation but has no built-in obligation to
+follow CAS grammar. CAS-Native uses compiler validation and controlled
+training data to make structure first-class.</p>
+<h2 id="is-the-model-already-intelligent-in-cas">Is the model already
+intelligent in CAS?</h2>
+<p>Early evidence says it can learn recoverable prompt-to-CAS ranking.
+It is not yet a finished general CAS conversational agent.</p>
+<h2 id="what-is-the-biggest-technical-risk">What is the biggest
+technical risk?</h2>
+<p>The largest current risk is not syntax validity; constrained
+candidates help with that. The larger risk is semantic intent: whether a
+user’s natural language contains enough recoverable evidence to justify
+one exact CAS expression.</p>
+<h2 id="how-do-you-handle-ambiguity">How do you handle ambiguity?</h2>
+<p>Ambiguity should produce either multiple candidate interpretations or
+a clarifying question, not a false claim of exact certainty.</p>
+<h2 id="why-synthetic-data">Why synthetic data?</h2>
+<p>Because no public CAS corpus exists. Synthetic generation is the only
+practical way to train coverage across the full formal surface while
+keeping examples compiler-valid.</p>
+<h2 id="what-makes-the-architecture-defensible">What makes the
+architecture defensible?</h2>
+<p>It separates authority: the model learns, the compiler validates, the
+generator controls curriculum, and evaluation reports failures by
+bucket.</p>
+</body>
+</html>

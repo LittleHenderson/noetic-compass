@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Noetic Compass" />
+  <meta name="dcterms.date" content="2026-04-29" />
+  <title>CAS-Native AI Global Public Launch Timeline</title>
+  <style>
+    /* Default styles provided by pandoc.
+    ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+    */
+    span.smallcaps{font-variant: small-caps;}
+    div.columns{display: flex; gap: min(4vw, 1.5em);}
+    div.column{flex: auto; overflow-x: auto;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    /* The extra [class] is a hack that increases specificity enough to
+       override a similar rule in reveal.js */
+    ul.task-list[class]{list-style: none;}
+    ul.task-list li input[type="checkbox"] {
+      font-size: inherit;
+      width: 0.8em;
+      margin: 0 0.8em 0.2em -1.6em;
+      vertical-align: middle;
+    }
+    .display.math{display: block; text-align: center; margin: 0.5rem auto;}
+  </style>
+  <link rel="stylesheet" href="cas_stakeholder_pdf.css" />
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">CAS-Native AI Global Public Launch Timeline</h1>
+<p class="subtitle">Gated Roadmap From Research Prototype to Public
+LLM-Style Usage</p>
+<p class="author">Noetic Compass</p>
+<p class="date">2026-04-29</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#cas-native-ai-global-public-launch-timeline"
+id="toc-cas-native-ai-global-public-launch-timeline">CAS-Native AI
+Global Public Launch Timeline</a>
+<ul>
+<li><a
+href="#gated-roadmap-from-research-prototype-to-public-llm-style-usage"
+id="toc-gated-roadmap-from-research-prototype-to-public-llm-style-usage">Gated
+Roadmap From Research Prototype to Public LLM-Style Usage</a></li>
+</ul></li>
+<li><a href="#executive-timeline" id="toc-executive-timeline">Executive
+Timeline</a></li>
+<li><a href="#what-global-public-usage-means"
+id="toc-what-global-public-usage-means">What “Global Public Usage”
+Means</a></li>
+<li><a href="#phase-0-current-state"
+id="toc-phase-0-current-state">Phase 0: Current State</a>
+<ul>
+<li><a href="#where-cas-native-is-today"
+id="toc-where-cas-native-is-today">Where CAS-Native Is Today</a></li>
+<li><a href="#main-lesson-from-current-work"
+id="toc-main-lesson-from-current-work">Main Lesson From Current
+Work</a></li>
+</ul></li>
+<li><a href="#phase-1-evaluation-hardening"
+id="toc-phase-1-evaluation-hardening">Phase 1: Evaluation Hardening</a>
+<ul>
+<li><a href="#build-items" id="toc-build-items">Build Items</a></li>
+<li><a href="#gates-to-clear" id="toc-gates-to-clear">Gates to
+Clear</a></li>
+<li><a href="#deliverable" id="toc-deliverable">Deliverable</a></li>
+</ul></li>
+<li><a href="#phase-2-closed-alpha-cas-native-assistant"
+id="toc-phase-2-closed-alpha-cas-native-assistant">Phase 2: Closed Alpha
+CAS-Native Assistant</a>
+<ul>
+<li><a href="#core-product-capabilities"
+id="toc-core-product-capabilities">Core Product Capabilities</a></li>
+<li><a href="#alpha-restrictions" id="toc-alpha-restrictions">Alpha
+Restrictions</a></li>
+<li><a href="#gates-to-clear-1" id="toc-gates-to-clear-1">Gates to
+Clear</a></li>
+</ul></li>
+<li><a href="#phase-3-private-beta-with-product-workflows"
+id="toc-phase-3-private-beta-with-product-workflows">Phase 3: Private
+Beta With Product Workflows</a>
+<ul>
+<li><a href="#product-workflows" id="toc-product-workflows">Product
+Workflows</a></li>
+<li><a href="#infrastructure-work"
+id="toc-infrastructure-work">Infrastructure Work</a></li>
+<li><a href="#gates-to-clear-2" id="toc-gates-to-clear-2">Gates to
+Clear</a></li>
+</ul></li>
+<li><a href="#phase-4-public-research-preview"
+id="toc-phase-4-public-research-preview">Phase 4: Public Research
+Preview</a>
+<ul>
+<li><a href="#what-ships" id="toc-what-ships">What Ships</a></li>
+<li><a href="#what-does-not-ship-yet"
+id="toc-what-does-not-ship-yet">What Does Not Ship Yet</a></li>
+<li><a href="#gates-to-clear-3" id="toc-gates-to-clear-3">Gates to
+Clear</a></li>
+</ul></li>
+<li><a href="#phase-5-public-beta-api-and-app"
+id="toc-phase-5-public-beta-api-and-app">Phase 5: Public Beta API and
+App</a>
+<ul>
+<li><a href="#api-surface" id="toc-api-surface">API Surface</a></li>
+<li><a href="#production-infrastructure"
+id="toc-production-infrastructure">Production Infrastructure</a></li>
+<li><a href="#gates-to-clear-4" id="toc-gates-to-clear-4">Gates to
+Clear</a></li>
+</ul></li>
+<li><a href="#phase-6-global-public-launch-candidate"
+id="toc-phase-6-global-public-launch-candidate">Phase 6: Global Public
+Launch Candidate</a>
+<ul>
+<li><a href="#launch-candidate-capabilities"
+id="toc-launch-candidate-capabilities">Launch Candidate
+Capabilities</a></li>
+<li><a href="#global-launch-gates" id="toc-global-launch-gates">Global
+Launch Gates</a></li>
+</ul></li>
+<li><a href="#phase-7-mature-multimodal-cas-native-platform"
+id="toc-phase-7-mature-multimodal-cas-native-platform">Phase 7: Mature
+Multimodal CAS-Native Platform</a>
+<ul>
+<li><a href="#what-all-modalities-operating-in-all-modalities-means"
+id="toc-what-all-modalities-operating-in-all-modalities-means">What “All
+Modalities Operating in All Modalities” Means</a></li>
+<li><a href="#mature-capability-targets"
+id="toc-mature-capability-targets">Mature Capability Targets</a></li>
+</ul></li>
+<li><a href="#risk-register" id="toc-risk-register">Risk
+Register</a></li>
+<li><a href="#decision-points" id="toc-decision-points">Decision
+Points</a>
+<ul>
+<li><a href="#decision-point-1-after-phase-1"
+id="toc-decision-point-1-after-phase-1">Decision Point 1: After Phase
+1</a></li>
+<li><a href="#decision-point-2-after-phase-2"
+id="toc-decision-point-2-after-phase-2">Decision Point 2: After Phase
+2</a></li>
+<li><a href="#decision-point-3-after-phase-3"
+id="toc-decision-point-3-after-phase-3">Decision Point 3: After Phase
+3</a></li>
+<li><a href="#decision-point-4-before-phase-6"
+id="toc-decision-point-4-before-phase-6">Decision Point 4: Before Phase
+6</a></li>
+</ul></li>
+<li><a href="#recommended-stakeholder-framing"
+id="toc-recommended-stakeholder-framing">Recommended Stakeholder
+Framing</a></li>
+<li><a href="#practical-next-step"
+id="toc-practical-next-step">Practical Next Step</a></li>
+</ul>
+</nav>
+<h1 id="cas-native-ai-global-public-launch-timeline">CAS-Native AI
+Global Public Launch Timeline</h1>
+<h2
+id="gated-roadmap-from-research-prototype-to-public-llm-style-usage">Gated
+Roadmap From Research Prototype to Public LLM-Style Usage</h2>
+<p><strong>Starting point.</strong> April 29, 2026.</p>
+<p><strong>Purpose.</strong> This document gives stakeholders a
+practical launch roadmap for CAS-Native AI as a public LLM-style system.
+It explains the major intervals, what must be built, what must be
+proven, and what should not be claimed too early.</p>
+<p><strong>Important framing.</strong> This is a gated roadmap, not a
+guaranteed calendar promise. CAS-Native should move to wider release
+only when its validation, safety, infrastructure, and product-readiness
+gates clear.</p>
+<p><strong>Current status summary.</strong> CAS has a working compiler,
+a CAS Synthetic Data Generator, recoverable Level 3 prompt data, and an
+early CAS-Native reranker path. The strongest latest result is the
+patched recoverable reranker run: 21 / 30 exact top-1, 26 / 30 top-5,
+2.89 mean rank, 28 / 30 slot-match, and 30 / 30 compiler-valid outputs
+on the current 30-item evaluation slice.</p>
+<h1 id="executive-timeline">Executive Timeline</h1>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 25%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr>
+<th>Phase</th>
+<th style="text-align: right;">Approximate interval from Apr 29,
+2026</th>
+<th>Calendar window</th>
+<th>Primary goal</th>
+<th>Release posture</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase 0</td>
+<td style="text-align: right;">Current state</td>
+<td>Apr 2026</td>
+<td>Research prototype and evidence base</td>
+<td>Internal only</td>
+</tr>
+<tr>
+<td>Phase 1</td>
+<td style="text-align: right;">0-30 days</td>
+<td>May 2026</td>
+<td>Evaluation hardening and meta_logic diagnosis</td>
+<td>Internal / technical demos</td>
+</tr>
+<tr>
+<td>Phase 2</td>
+<td style="text-align: right;">1-3 months</td>
+<td>Jun-Jul 2026</td>
+<td>Closed alpha CAS-Native assistant</td>
+<td>Invite-only research alpha</td>
+</tr>
+<tr>
+<td>Phase 3</td>
+<td style="text-align: right;">3-6 months</td>
+<td>Aug-Oct 2026</td>
+<td>Private beta with product workflows</td>
+<td>Limited trusted users</td>
+</tr>
+<tr>
+<td>Phase 4</td>
+<td style="text-align: right;">6-9 months</td>
+<td>Nov 2026-Jan 2027</td>
+<td>Public research preview</td>
+<td>Public but constrained</td>
+</tr>
+<tr>
+<td>Phase 5</td>
+<td style="text-align: right;">9-12 months</td>
+<td>Feb-Apr 2027</td>
+<td>Public beta API and app</td>
+<td>Broader public usage</td>
+</tr>
+<tr>
+<td>Phase 6</td>
+<td style="text-align: right;">12-18 months</td>
+<td>May-Oct 2027</td>
+<td>Global public launch candidate</td>
+<td>Production-scale public LLM-style usage</td>
+</tr>
+<tr>
+<td>Phase 7</td>
+<td style="text-align: right;">18-36 months</td>
+<td>Nov 2027-Apr 2029</td>
+<td>Multimodal CAS-native platform</td>
+<td>Mature ecosystem</td>
+</tr>
+</tbody>
+</table>
+<p>The aggressive path reaches a constrained public research preview in
+6-9 months and a public beta in 9-12 months. A credible global public
+LLM-style launch should be treated as a 12-18 month target unless the
+validation program outperforms expectations.</p>
+<h1 id="what-global-public-usage-means">What “Global Public Usage”
+Means</h1>
+<p>For stakeholders, “global public usage” should not mean merely
+putting a chatbot online.</p>
+<p>It should mean:</p>
+<ol type="1">
+<li><strong>Reliable access.</strong> Users can access CAS-Native
+through a web app and/or API with stable uptime.</li>
+<li><strong>Compiler-grounded output.</strong> CAS expressions are
+validated before being presented as formal outputs.</li>
+<li><strong>Transparent uncertainty.</strong> The system distinguishes
+exact recovery, likely interpretation, and ambiguous cases.</li>
+<li><strong>Safe claims.</strong> It does not present CAS
+interpretations as diagnosis, therapy, or behavioral certainty.</li>
+<li><strong>Multimodal pathway.</strong> Text, CAS notation, diagrams,
+voice, and visual artifacts can begin routing through a shared CAS
+representation layer.</li>
+<li><strong>Auditability.</strong> Outputs can be inspected, reproduced,
+scored, and traced to model, compiler, and candidate-selection
+behavior.</li>
+</ol>
+<h1 id="phase-0-current-state">Phase 0: Current State</h1>
+<h2 id="where-cas-native-is-today">Where CAS-Native Is Today</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Area</th>
+<th>Current status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CAS compiler</td>
+<td>Broad grammar, typed meta-logic, clusters, set operations, diagrams,
+Rule 4 validation</td>
+</tr>
+<tr>
+<td>CAS Synthetic Data Generator</td>
+<td>Level 2 generator plus Level 3 recoverable prompt pipeline</td>
+</tr>
+<tr>
+<td>Recoverable dataset</td>
+<td>19,454 compiler-valid Level 3 prompt-to-CAS examples</td>
+</tr>
+<tr>
+<td>Semantic reranker</td>
+<td>Patched run reached 21 / 30 exact top-1 and 26 / 30 top-5</td>
+</tr>
+<tr>
+<td>Constrained inference</td>
+<td>Candidate-bank and prompt-slot filtering path exists</td>
+</tr>
+<tr>
+<td>Free-form CAS generation</td>
+<td>Not product-ready; model can learn tokens but not reliably assemble
+grammar alone</td>
+</tr>
+<tr>
+<td>Public CAS-Native LLM</td>
+<td>Not launched yet</td>
+</tr>
+</tbody>
+</table>
+<h2 id="main-lesson-from-current-work">Main Lesson From Current
+Work</h2>
+<p>The right near-term path is not unconstrained generation.</p>
+<p>The right path is:</p>
+<pre class="text"><code>natural-language prompt
+  -&gt; recoverable slot extraction
+  -&gt; compiler-valid candidate bank
+  -&gt; semantic reranker
+  -&gt; compiler validation
+  -&gt; CAS expression + explanation + diagram</code></pre>
+<p>This is closer to a structured reasoning engine than a standard
+chatbot.</p>
+<h1 id="phase-1-evaluation-hardening">Phase 1: Evaluation Hardening</h1>
+<p><strong>Interval.</strong> 0-30 days from April 29, 2026. Target
+window: May 2026.</p>
+<p><strong>Goal.</strong> Turn the promising 30-item result into a
+defensible evaluation program.</p>
+<h2 id="build-items">Build Items</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Workstream</th>
+<th>What needs to happen</th>
+<th>Why it matters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>meta_logic diagnosis</td>
+<td>Find why meta_logic lags at 2 / 5 exact and mean rank 15.67</td>
+<td>It is the only major structural laggard</td>
+</tr>
+<tr>
+<td>Larger held-out eval</td>
+<td>Expand from 30 examples to 300-600 examples</td>
+<td>30 examples is too small for serious claims</td>
+</tr>
+<tr>
+<td>Paraphrase holdout</td>
+<td>Test prompts in styles not seen during training</td>
+<td>Detects shallow prompt-format overfitting</td>
+</tr>
+<tr>
+<td>Candidate-bank audit</td>
+<td>Measure target scoreability and filter attrition by bucket</td>
+<td>Ensures correct answer is available to reranker</td>
+</tr>
+<tr>
+<td>Error taxonomy</td>
+<td>Label failures by candidate missing, filter error, semantic
+confusion, type ambiguity</td>
+<td>Makes fixes targeted instead of speculative</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gates-to-clear">Gates to Clear</h2>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th style="text-align: right;">Minimum target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compiler-valid outputs</td>
+<td style="text-align: right;">100% on constrained path</td>
+</tr>
+<tr>
+<td>Exact top-1 on 300+ heldout examples</td>
+<td style="text-align: right;">&gt;= 60%</td>
+</tr>
+<tr>
+<td>Ground-truth top-5 on 300+ heldout examples</td>
+<td style="text-align: right;">&gt;= 85%</td>
+</tr>
+<tr>
+<td>Bucket with worst top-5</td>
+<td style="text-align: right;">&gt;= 70%</td>
+</tr>
+<tr>
+<td>meta_logic target scoreability</td>
+<td style="text-align: right;">&gt;= 95%</td>
+</tr>
+<tr>
+<td>Paraphrase holdout degradation</td>
+<td style="text-align: right;">Less than 15 percentage points</td>
+</tr>
+</tbody>
+</table>
+<h2 id="deliverable">Deliverable</h2>
+<p>A stakeholder-grade validation report:</p>
+<pre class="text"><code>CAS-Native Recoverable Prompt Evaluation v1
+sample size: 300-600
+by-bucket metrics
+failure taxonomy
+overfit checks
+recommended release posture</code></pre>
+<h1 id="phase-2-closed-alpha-cas-native-assistant">Phase 2: Closed Alpha
+CAS-Native Assistant</h1>
+<p><strong>Interval.</strong> 1-3 months from April 29, 2026. Target
+window: June-July 2026.</p>
+<p><strong>Goal.</strong> Build a closed alpha assistant that can
+translate, explain, and teach CAS under controlled conditions.</p>
+<h2 id="core-product-capabilities">Core Product Capabilities</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Capability</th>
+<th>User-facing behavior</th>
+<th>Technical basis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Natural language to CAS</td>
+<td>User describes a structure; assistant returns CAS notation</td>
+<td>Recoverable prompt pipeline + reranker</td>
+</tr>
+<tr>
+<td>CAS to natural language</td>
+<td>User enters expression; assistant explains it</td>
+<td>Compiler AST + natural-language mirror templates</td>
+</tr>
+<tr>
+<td>CAS diagrams</td>
+<td>User gets visual structure diagrams</td>
+<td>Compiler diagram payload + renderer</td>
+</tr>
+<tr>
+<td>Invalid expression help</td>
+<td>User sees why expression failed and how to fix it</td>
+<td>Parser/typechecker error explanations</td>
+</tr>
+<tr>
+<td>Tutorial mode</td>
+<td>Guided learning path from basic states to meta-logic</td>
+<td>Level 3 examples + glossary/dictionary</td>
+</tr>
+</tbody>
+</table>
+<h2 id="alpha-restrictions">Alpha Restrictions</h2>
+<p>The alpha should not claim:</p>
+<ol type="1">
+<li>Clinical diagnosis.</li>
+<li>Behavior prediction.</li>
+<li>Autonomous therapy.</li>
+<li>General human mind-reading.</li>
+<li>Full frontier-model equivalence.</li>
+</ol>
+<p>It should claim:</p>
+<ol type="1">
+<li>Formal CAS translation assistance.</li>
+<li>Compiler-grounded notation validation.</li>
+<li>Structured cognitive representation.</li>
+<li>Early CAS-native learning and explanation.</li>
+</ol>
+<h2 id="gates-to-clear-1">Gates to Clear</h2>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Gate</th>
+<th style="text-align: right;">Minimum target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Alpha user tasks completed without crash</td>
+<td style="text-align: right;">&gt;= 95%</td>
+</tr>
+<tr>
+<td>CAS compiler validation for formal outputs</td>
+<td style="text-align: right;">100% where formal output is claimed</td>
+</tr>
+<tr>
+<td>User-rated explanation clarity</td>
+<td style="text-align: right;">&gt;= 4 / 5 in guided alpha</td>
+</tr>
+<tr>
+<td>Ambiguous prompt handling</td>
+<td style="text-align: right;">Clarifying question or multiple
+candidates, not false certainty</td>
+</tr>
+<tr>
+<td>P0 safety issues</td>
+<td style="text-align: right;">0 open</td>
+</tr>
+</tbody>
+</table>
+<h1 id="phase-3-private-beta-with-product-workflows">Phase 3: Private
+Beta With Product Workflows</h1>
+<p><strong>Interval.</strong> 3-6 months from April 29, 2026. Target
+window: August-October 2026.</p>
+<p><strong>Goal.</strong> Move from a technical assistant to repeatable
+workflows for real users.</p>
+<h2 id="product-workflows">Product Workflows</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Workflow</th>
+<th>What the user does</th>
+<th>CAS-Native output</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Learn CAS</td>
+<td>Works through guided examples</td>
+<td>Explanations, diagrams, correction feedback</td>
+</tr>
+<tr>
+<td>Analyze an idea</td>
+<td>Enters a thought or project note</td>
+<td>CAS interpretation + graph placement</td>
+</tr>
+<tr>
+<td>Compare interpretations</td>
+<td>Asks why one CAS expression differs from another</td>
+<td>Side-by-side structural explanation</td>
+</tr>
+<tr>
+<td>Build recipes</td>
+<td>Describes outcome ingredients</td>
+<td>Production expression + yield-style explanation</td>
+</tr>
+<tr>
+<td>Explore clusters</td>
+<td>Groups Noetics/states</td>
+<td>Typed set/cluster diagrams</td>
+</tr>
+</tbody>
+</table>
+<h2 id="infrastructure-work">Infrastructure Work</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Infrastructure area</th>
+<th>Required work</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Authentication</td>
+<td>User accounts and access control</td>
+</tr>
+<tr>
+<td>Logging</td>
+<td>Privacy-aware output/error telemetry</td>
+</tr>
+<tr>
+<td>Model routing</td>
+<td>Separate compiler, reranker, and language explanation paths</td>
+</tr>
+<tr>
+<td>Caching</td>
+<td>Candidate-bank and compiler-result caching</td>
+</tr>
+<tr>
+<td>Observability</td>
+<td>Per-bucket accuracy and failure dashboards</td>
+</tr>
+<tr>
+<td>Abuse controls</td>
+<td>Rate limits and safety filters</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gates-to-clear-2">Gates to Clear</h2>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Gate</th>
+<th style="text-align: right;">Minimum target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Private beta users</td>
+<td style="text-align: right;">50-200 trusted users</td>
+</tr>
+<tr>
+<td>Formal output compiler-validity</td>
+<td style="text-align: right;">100% on compiler-routed formal
+claims</td>
+</tr>
+<tr>
+<td>Task success rate</td>
+<td style="text-align: right;">&gt;= 80%</td>
+</tr>
+<tr>
+<td>Average latency for compiler/reranker path</td>
+<td style="text-align: right;">&lt; 5 seconds for common queries</td>
+</tr>
+<tr>
+<td>Ambiguous prompt false-certainty incidents</td>
+<td style="text-align: right;">&lt; 2%</td>
+</tr>
+</tbody>
+</table>
+<h1 id="phase-4-public-research-preview">Phase 4: Public Research
+Preview</h1>
+<p><strong>Interval.</strong> 6-9 months from April 29, 2026. Target
+window: November 2026-January 2027.</p>
+<p><strong>Goal.</strong> Public access with explicit research-preview
+limits.</p>
+<h2 id="what-ships">What Ships</h2>
+<ol type="1">
+<li>Public CAS compiler.</li>
+<li>Natural-language-to-CAS assistant in constrained mode.</li>
+<li>CAS-to-natural-language mirror explanations.</li>
+<li>Diagram rendering.</li>
+<li>Basic Idea Atlas integration.</li>
+<li>Documentation, tutorials, glossary, and examples.</li>
+<li>Public safety and limitations page.</li>
+</ol>
+<h2 id="what-does-not-ship-yet">What Does Not Ship Yet</h2>
+<ol type="1">
+<li>Open-ended behavioral prediction.</li>
+<li>Clinical/mental-health interpretation.</li>
+<li>Unreviewed autonomous advice.</li>
+<li>Unlimited API usage.</li>
+<li>Claims of human-level psychological understanding.</li>
+</ol>
+<h2 id="gates-to-clear-3">Gates to Clear</h2>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Gate</th>
+<th style="text-align: right;">Minimum target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public uptime</td>
+<td style="text-align: right;">&gt;= 99% for preview window</td>
+</tr>
+<tr>
+<td>Formal CAS outputs compiler-valid</td>
+<td style="text-align: right;">100% where formal output is claimed</td>
+</tr>
+<tr>
+<td>Heldout exact top-1</td>
+<td style="text-align: right;">&gt;= 70% on recoverable prompts</td>
+</tr>
+<tr>
+<td>Heldout top-5</td>
+<td style="text-align: right;">&gt;= 90% on recoverable prompts</td>
+</tr>
+<tr>
+<td>Human explanation quality</td>
+<td style="text-align: right;">&gt;= 4 / 5 average</td>
+</tr>
+<tr>
+<td>Published limitation policy</td>
+<td style="text-align: right;">Complete</td>
+</tr>
+</tbody>
+</table>
+<h1 id="phase-5-public-beta-api-and-app">Phase 5: Public Beta API and
+App</h1>
+<p><strong>Interval.</strong> 9-12 months from April 29, 2026. Target
+window: February-April 2027.</p>
+<p><strong>Goal.</strong> Broader public usage with developer/API access
+and scaled infrastructure.</p>
+<h2 id="api-surface">API Surface</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Endpoint class</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Compile</td>
+<td>Validate CAS expression, return AST, type, bytecode, diagram
+payload</td>
+</tr>
+<tr>
+<td>Translate</td>
+<td>Natural language to CAS candidates</td>
+</tr>
+<tr>
+<td>Explain</td>
+<td>CAS expression to natural-language explanation</td>
+</tr>
+<tr>
+<td>Diagram</td>
+<td>CAS expression to visual graph/containment/radial layout</td>
+</tr>
+<tr>
+<td>Rerank</td>
+<td>Rank compiler-valid candidates against a prompt</td>
+</tr>
+<tr>
+<td>Tutorial</td>
+<td>Return guided examples and feedback</td>
+</tr>
+<tr>
+<td>Idea Atlas</td>
+<td>Capture and map ideas</td>
+</tr>
+</tbody>
+</table>
+<h2 id="production-infrastructure">Production Infrastructure</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Need</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Model serving</td>
+<td>GPU or optimized CPU service for reranker/LLM paths</td>
+</tr>
+<tr>
+<td>Compiler service</td>
+<td>Low-latency deterministic parser/typechecker</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>User histories, idea graphs, audit logs</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>Clear data retention and deletion policy</td>
+</tr>
+<tr>
+<td>Versioning</td>
+<td>CAS grammar version and model version attached to outputs</td>
+</tr>
+<tr>
+<td>Monitoring</td>
+<td>Accuracy drift, latency, error rates, safety events</td>
+</tr>
+</tbody>
+</table>
+<h2 id="gates-to-clear-4">Gates to Clear</h2>
+<table>
+<thead>
+<tr>
+<th>Gate</th>
+<th style="text-align: right;">Minimum target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API availability</td>
+<td style="text-align: right;">&gt;= 99.5%</td>
+</tr>
+<tr>
+<td>Formal output validation</td>
+<td style="text-align: right;">100% compiler-valid formal outputs</td>
+</tr>
+<tr>
+<td>Public beta satisfaction</td>
+<td style="text-align: right;">&gt;= 4 / 5 from target users</td>
+</tr>
+<tr>
+<td>Security review</td>
+<td style="text-align: right;">Complete</td>
+</tr>
+<tr>
+<td>Privacy review</td>
+<td style="text-align: right;">Complete</td>
+</tr>
+<tr>
+<td>Cost per query</td>
+<td style="text-align: right;">Sustainable under pricing model</td>
+</tr>
+</tbody>
+</table>
+<h1 id="phase-6-global-public-launch-candidate">Phase 6: Global Public
+Launch Candidate</h1>
+<p><strong>Interval.</strong> 12-18 months from April 29, 2026. Target
+window: May-October 2027.</p>
+<p><strong>Goal.</strong> Public LLM-style CAS-Native usage at
+meaningful scale.</p>
+<h2 id="launch-candidate-capabilities">Launch Candidate
+Capabilities</h2>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Expected launch-candidate behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Conversational CAS tutoring</td>
+<td>Explains notation, corrects mistakes, teaches progressively</td>
+</tr>
+<tr>
+<td>Natural-language CAS translation</td>
+<td>Converts recoverable prompts into validated CAS expressions</td>
+</tr>
+<tr>
+<td>CAS-native explanation</td>
+<td>Maps every expression part to plain-language meaning</td>
+</tr>
+<tr>
+<td>Diagram-native output</td>
+<td>Shows graph, containment, radial, recipe, and dependency
+diagrams</td>
+</tr>
+<tr>
+<td>Voice input</td>
+<td>Speech-to-text routed into CAS interpretation</td>
+</tr>
+<tr>
+<td>Voice output</td>
+<td>Natural-language explanations read aloud</td>
+</tr>
+<tr>
+<td>Vision input, limited</td>
+<td>Images or diagrams can be described and mapped into CAS-relevant
+structures where appropriate</td>
+</tr>
+<tr>
+<td>Multimodal output</td>
+<td>Text, CAS notation, diagrams, and possibly sonification from shared
+CAS representation</td>
+</tr>
+<tr>
+<td>API integration</td>
+<td>Developers can build CAS-aware tools</td>
+</tr>
+<tr>
+<td>Audit trail</td>
+<td>Outputs include model/compiler/version metadata</td>
+</tr>
+</tbody>
+</table>
+<h2 id="global-launch-gates">Global Launch Gates</h2>
+<table>
+<colgroup>
+<col style="width: 42%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr>
+<th>Gate</th>
+<th style="text-align: right;">Minimum target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Formal output compiler-validity</td>
+<td style="text-align: right;">100% for formal CAS claims</td>
+</tr>
+<tr>
+<td>Recoverable prompt exact top-1</td>
+<td style="text-align: right;">&gt;= 80% on large heldout</td>
+</tr>
+<tr>
+<td>Recoverable prompt top-5</td>
+<td style="text-align: right;">&gt;= 95% on large heldout</td>
+</tr>
+<tr>
+<td>Worst-bucket top-5</td>
+<td style="text-align: right;">&gt;= 85%</td>
+</tr>
+<tr>
+<td>Ambiguity handling</td>
+<td style="text-align: right;">Clarifies or offers alternatives in &gt;=
+95% of ambiguous test cases</td>
+</tr>
+<tr>
+<td>Production uptime</td>
+<td style="text-align: right;">&gt;= 99.9%</td>
+</tr>
+<tr>
+<td>Security/privacy review</td>
+<td style="text-align: right;">Passed</td>
+</tr>
+<tr>
+<td>Public documentation</td>
+<td style="text-align: right;">Complete</td>
+</tr>
+<tr>
+<td>Support and incident process</td>
+<td style="text-align: right;">Operational</td>
+</tr>
+</tbody>
+</table>
+<h1 id="phase-7-mature-multimodal-cas-native-platform">Phase 7: Mature
+Multimodal CAS-Native Platform</h1>
+<p><strong>Interval.</strong> 18-36 months from April 29, 2026. Target
+window: November 2027-April 2029.</p>
+<p><strong>Goal.</strong> CAS-Native becomes a platform where all
+modalities can route through shared CAS structure.</p>
+<h2 id="what-all-modalities-operating-in-all-modalities-means">What “All
+Modalities Operating in All Modalities” Means</h2>
+<p>The long-term architecture should not treat text, image, voice,
+diagram, and audio as separate products.</p>
+<p>It should treat CAS as the shared intermediate representation:</p>
+<pre class="text"><code>speech -&gt; text -&gt; CAS -&gt; explanation
+text -&gt; CAS -&gt; diagram
+CAS -&gt; natural language -&gt; voice
+image -&gt; scene/diagram features -&gt; CAS hypothesis
+CAS -&gt; radial diagram -&gt; sonification
+conversation history -&gt; CAS memory graph -&gt; future retrieval</code></pre>
+<h2 id="mature-capability-targets">Mature Capability Targets</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr>
+<th>Modality</th>
+<th>Input</th>
+<th>Output</th>
+<th>CAS role</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Text</td>
+<td>Prompts, notes, dialogue</td>
+<td>Explanations, summaries, CAS translations</td>
+<td>Main interaction channel</td>
+</tr>
+<tr>
+<td>Symbolic notation</td>
+<td>CAS expressions</td>
+<td>AST, validation, diagrams, explanations</td>
+<td>Formal language channel</td>
+</tr>
+<tr>
+<td>Diagram</td>
+<td>User views or edits structure</td>
+<td>Graph/containment/radial/recipe views</td>
+<td>Visual reasoning channel</td>
+</tr>
+<tr>
+<td>Voice</td>
+<td>Spoken thoughts/questions</td>
+<td>Spoken explanations</td>
+<td>Accessibility and mobile capture</td>
+</tr>
+<tr>
+<td>Image</td>
+<td>Diagrams, sketches, screenshots, visual artifacts</td>
+<td>CAS hypotheses and structured descriptions</td>
+<td>Vision-to-structure bridge</td>
+</tr>
+<tr>
+<td>Audio/sonification</td>
+<td>Temporal Cognitive Score</td>
+<td>Auditory representation</td>
+<td>Pattern perception channel</td>
+</tr>
+<tr>
+<td>Memory graph</td>
+<td>Prior user ideas and CAS states</td>
+<td>Retrieval, comparison, longitudinal maps</td>
+<td>Continuity channel</td>
+</tr>
+</tbody>
+</table>
+<h1 id="risk-register">Risk Register</h1>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Why it matters</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Overfitting to recoverable prompt style</td>
+<td>Model may perform well only on one template style</td>
+<td>Paraphrase holdouts and external eval prompts</td>
+</tr>
+<tr>
+<td>Candidate-bank gaps</td>
+<td>Reranker cannot select missing ground truth</td>
+<td>Scoreability audits and bank expansion</td>
+</tr>
+<tr>
+<td>meta_logic lag</td>
+<td>Advanced constructs may remain weak</td>
+<td>Local diagnosis before more GPU training</td>
+</tr>
+<tr>
+<td>Overclaiming</td>
+<td>Stakeholder trust can be damaged</td>
+<td>Use precise current/expected/hoped language</td>
+</tr>
+<tr>
+<td>Latency</td>
+<td>Public users will not tolerate slow responses</td>
+<td>Cache compiler/candidates and optimize reranker service</td>
+</tr>
+<tr>
+<td>Privacy</td>
+<td>Idea Atlas and cognitive notes are sensitive</td>
+<td>Data minimization, deletion, consent, encryption</td>
+</tr>
+<tr>
+<td>Safety misuse</td>
+<td>Users may treat CAS as diagnosis</td>
+<td>Clear disclaimers and safety policy</td>
+</tr>
+<tr>
+<td>Cost scaling</td>
+<td>Public LLM usage can become expensive</td>
+<td>Tiered model routing and compiler-first paths</td>
+</tr>
+</tbody>
+</table>
+<h1 id="decision-points">Decision Points</h1>
+<h2 id="decision-point-1-after-phase-1">Decision Point 1: After Phase
+1</h2>
+<p>Question: Did the larger heldout evaluation confirm the patched
+reranker result?</p>
+<p>If yes, proceed to closed alpha.</p>
+<p>If no, do not launch. Diagnose data/candidate/filter failure.</p>
+<h2 id="decision-point-2-after-phase-2">Decision Point 2: After Phase
+2</h2>
+<p>Question: Can real users complete guided CAS tasks without expert
+handholding?</p>
+<p>If yes, proceed to private beta.</p>
+<p>If no, improve tutorial, explanations, and error recovery.</p>
+<h2 id="decision-point-3-after-phase-3">Decision Point 3: After Phase
+3</h2>
+<p>Question: Are workflows valuable outside the development team?</p>
+<p>If yes, proceed to public research preview.</p>
+<p>If no, narrow the product wedge.</p>
+<h2 id="decision-point-4-before-phase-6">Decision Point 4: Before Phase
+6</h2>
+<p>Question: Is the system safe, useful, stable, and honest enough for
+global public usage?</p>
+<p>If yes, launch candidate.</p>
+<p>If no, keep it in public beta.</p>
+<h1 id="recommended-stakeholder-framing">Recommended Stakeholder
+Framing</h1>
+<p>Use this short framing:</p>
+<blockquote>
+<p>CAS-Native AI is being built as a compiler-grounded cognitive
+language model. The launch plan is intentionally gated: first prove
+formal recovery and explanation, then closed alpha, then private beta,
+then public research preview, then global launch. The goal is not to
+release another generic chatbot. The goal is to release an AI system
+that can translate, validate, explain, diagram, and eventually reason
+across CAS structures in text, symbols, voice, vision, diagrams, and
+memory.</p>
+</blockquote>
+<h1 id="practical-next-step">Practical Next Step</h1>
+<p>The immediate next step is not more public marketing.</p>
+<p>The immediate next step is:</p>
+<ol type="1">
+<li>Terminate any idle GPU pod.</li>
+<li>Diagnose the meta_logic bucket locally.</li>
+<li>Patch candidate coverage or filtering if needed.</li>
+<li>Run a larger heldout recoverable evaluation.</li>
+<li>Only then move toward closed alpha.</li>
+</ol>
+</body>
+</html>
