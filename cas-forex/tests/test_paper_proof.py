@@ -17,6 +17,16 @@ from cas_forex.paper_proof import (
 )
 
 
+@pytest.fixture(autouse=True)
+def _reset_profit_overrides():
+    """Owner profit-threshold overrides are process-global; isolate each test."""
+    from cas_forex.proof_control import clear_profit_threshold_overrides
+
+    clear_profit_threshold_overrides()
+    yield
+    clear_profit_threshold_overrides()
+
+
 def _paper_mode(monkeypatch):
     monkeypatch.setattr(config, "live_mode", False)
     monkeypatch.setattr(config, "paper_trading", True)
@@ -153,13 +163,16 @@ def test_api_verified_receipt_can_satisfy_short_test_plan(monkeypatch, tmp_path)
         plan,
         tmp_path,
         trading_date=date(2026, 6, 22),
-        broker_receipt=_receipt(plan, source_attestation="BROKER_API_VERIFIED"),
+        broker_receipt=_receipt(plan, source_attestation="BROKER_API_VERIFIED", realized_pnl=15.0),
         allow_api_verified_receipt=True,
     )
     report = summarize_paper_proof(plan, tmp_path)
 
     assert report.completed_trading_days == 1
     assert report.chain_verified is True
+    assert report.broker_verified_days == 1
+    assert report.net_pnl_usd == 15.0
+    assert report.profit_passed is True
     assert report.passed is True
     assert report.failure_reasons == []
 
@@ -175,3 +188,87 @@ def test_live_broker_receipt_is_rejected(monkeypatch, tmp_path):
             trading_date=date(2026, 6, 22),
             broker_receipt=_receipt(plan, live_mode=True),
         )
+
+
+def _append_verified(plan, tmp_path, day, **overrides):
+    overrides.setdefault("source_attestation", "BROKER_API_VERIFIED")
+    overrides["trading_date"] = day.isoformat()
+    overrides["receipt_id"] = f"receipt-{day.isoformat()}"
+    append_paper_proof_day(
+        plan,
+        tmp_path,
+        trading_date=day,
+        broker_receipt=_receipt(plan, **overrides),
+        allow_api_verified_receipt=True,
+    )
+
+
+def test_profit_gate_blocks_when_proof_is_not_net_positive(monkeypatch, tmp_path):
+    _paper_mode(monkeypatch)
+    plan = replace(build_index_tsmom_126_paper_proof_plan(), required_trading_days=1)
+
+    _append_verified(plan, tmp_path, date(2026, 6, 22), realized_pnl=-5.0)
+    report = summarize_paper_proof(plan, tmp_path)
+
+    assert report.broker_verified_days == 1
+    assert report.net_pnl_usd == -5.0
+    assert report.profit_passed is False
+    assert report.passed is False
+    assert any("net P&L" in reason for reason in report.failure_reasons)
+
+
+def test_profit_gate_blocks_when_drawdown_exceeds_limit(monkeypatch, tmp_path):
+    _paper_mode(monkeypatch)
+    plan = replace(build_index_tsmom_126_paper_proof_plan(), required_trading_days=2)
+
+    # Net positive (+200) but a 12% peak-to-trough drawdown on the 2000 seed.
+    _append_verified(plan, tmp_path, date(2026, 6, 22), realized_pnl=500.0)
+    _append_verified(plan, tmp_path, date(2026, 6, 23), realized_pnl=-300.0)
+    report = summarize_paper_proof(plan, tmp_path)
+
+    assert report.net_pnl_usd == 200.0
+    assert report.max_drawdown_pct >= 8.0
+    assert report.profit_passed is False
+    assert report.passed is False
+    assert any("drawdown" in reason for reason in report.failure_reasons)
+
+
+def test_plan_only_days_can_never_pass_even_when_count_met(monkeypatch, tmp_path):
+    """Anti-gaming: a ledger of plan-only heartbeats is never a passed proof."""
+    _paper_mode(monkeypatch)
+    plan = replace(build_index_tsmom_126_paper_proof_plan(), required_trading_days=1)
+
+    append_paper_proof_day(
+        plan,
+        tmp_path,
+        trading_date=date(2026, 6, 22),
+        orders_attempted=0,
+        orders_paper_executed=0,
+    )
+    report = summarize_paper_proof(plan, tmp_path)
+
+    assert report.completed_trading_days == 1
+    assert report.broker_verified_days == 0
+    assert report.profit_passed is False
+    assert report.passed is False
+    assert any("broker_verified_days 0 < required 1" in reason for reason in report.failure_reasons)
+
+
+def test_profit_thresholds_are_owner_adjustable(monkeypatch, tmp_path):
+    from cas_forex.proof_control import (
+        clear_profit_threshold_overrides,
+        set_profit_threshold_overrides,
+    )
+
+    _paper_mode(monkeypatch)
+    plan = replace(build_index_tsmom_126_paper_proof_plan(), required_trading_days=1)
+    _append_verified(plan, tmp_path, date(2026, 6, 22), realized_pnl=15.0)
+
+    assert summarize_paper_proof(plan, tmp_path).passed is True
+
+    # Raise the bar above the achieved P&L: the same ledger no longer passes.
+    set_profit_threshold_overrides(min_net_pnl_usd=50.0)
+    assert summarize_paper_proof(plan, tmp_path).passed is False
+
+    clear_profit_threshold_overrides()
+    assert summarize_paper_proof(plan, tmp_path).passed is True

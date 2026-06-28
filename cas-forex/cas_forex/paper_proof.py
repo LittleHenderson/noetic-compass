@@ -184,6 +184,8 @@ def append_paper_proof_day(
         "account_id_hash": receipt_summary.get("account_id_hash"),
         "server": receipt_summary.get("server"),
         "broker_export_sha256": receipt_summary.get("broker_export_sha256"),
+        "account_snapshot": receipt_summary.get("account_snapshot"),
+        "realized_pnl": _coerce_pnl(receipt_summary.get("realized_pnl")),
         "open_positions_reconciled": bool(open_positions_reconciled),
         "live_mode": False,
         "deployment_status": "NOT LICENSED",
@@ -238,6 +240,7 @@ def paper_broker_receipt_template(
         "timeframe": plan.timeframe,
         "orders_attempted": 0,
         "orders_paper_executed": 0,
+        "realized_pnl": 0.0,
         "open_positions_reconciled": True,
         "live_mode": False,
         "broker_export_sha256": "replace_with_sha256_of_broker_export_file",
@@ -327,6 +330,7 @@ def validate_paper_broker_receipt(
 
     broker_api_authenticated = attestation == BROKER_API_VERIFIED and allow_api_verified
     validation_status = BROKER_API_VERIFIED if broker_api_authenticated else BROKER_EXPORT_HASHED
+    account_snapshot = _normalize_account_snapshot(receipt.get("account_snapshot") or {})
     normalized = {
         "receipt_id": str(receipt["receipt_id"]),
         "receipt_validation_status": validation_status,
@@ -349,10 +353,38 @@ def validate_paper_broker_receipt(
         "order_ids": list(receipt.get("order_ids", [])),
         "broker_api_authenticated": broker_api_authenticated,
         "broker_source_verified": broker_api_authenticated,
+        "account_snapshot": account_snapshot,
+        "realized_pnl": _coerce_pnl(receipt.get("realized_pnl")),
     }
     normalized["receipt_hash_sha256"] = _sha256_json(normalized)
     return normalized
 
+
+
+def _normalize_account_snapshot(value: Mapping[str, Any]) -> Dict[str, Any]:
+    if not isinstance(value, Mapping):
+        return {}
+
+    def number(key: str) -> float | None:
+        raw = value.get(key)
+        if raw is None:
+            return None
+        try:
+            return round(float(raw), 2)
+        except (TypeError, ValueError):
+            return None
+
+    snapshot = {
+        "balance": number("balance"),
+        "equity": number("equity"),
+        "margin": number("margin"),
+        "margin_free": number("margin_free"),
+        "currency": value.get("currency"),
+        "leverage": value.get("leverage"),
+        "server": value.get("server"),
+        "account_id_hash": value.get("account_id_hash"),
+    }
+    return {k: v for k, v in snapshot.items() if v is not None}
 
 def summarize_paper_proof(
     plan: PaperProofPlan,
@@ -370,6 +402,7 @@ def summarize_paper_proof(
     broker_verified_days = sum(
         1 for summary in summaries if bool(summary.get("broker_source_verified"))
     )
+    profit = _profit_metrics(plan, summaries)
 
     report = PaperTradingSessionReport(
         report_id=f"report-{plan.plan_id}",
@@ -382,6 +415,13 @@ def summarize_paper_proof(
         live_mode_used=live_mode_used,
         open_positions_reconciled=open_positions_reconciled,
         daily_summaries=summaries,
+        broker_verified_days=broker_verified_days,
+        net_pnl_usd=round(profit["net_pnl_usd"], 2),
+        max_drawdown_pct=round(profit["max_drawdown_pct"], 2),
+        days_with_trades=profit["days_with_trades"],
+        min_trade_days_required=profit["min_trade_days"],
+        profit_passed=profit["profit_passed"],
+        profit_thresholds=profit["thresholds"],
     )
 
     if len(summaries) < plan.required_trading_days:
@@ -398,6 +438,21 @@ def summarize_paper_proof(
         report.failure_reasons.append("Live mode was used during a paper-proof session.")
     if not open_positions_reconciled:
         report.failure_reasons.append("Open positions were not reconciled for every day.")
+    if not profit["net_ok"]:
+        report.failure_reasons.append(
+            f"net P&L {report.net_pnl_usd:.2f} is not above the required "
+            f"{profit['thresholds']['min_net_pnl_usd']:.2f} (proof must be net-positive)"
+        )
+    if not profit["dd_ok"]:
+        report.failure_reasons.append(
+            f"max drawdown {report.max_drawdown_pct:.2f}% exceeds the "
+            f"{profit['thresholds']['max_drawdown_pct']:.2f}% limit"
+        )
+    if not profit["trades_ok"]:
+        report.failure_reasons.append(
+            f"days with real trades {report.days_with_trades} < required "
+            f"{report.min_trade_days_required}"
+        )
 
     report.completed_at = utc_now()
     report.passed = (
@@ -406,10 +461,75 @@ def summarize_paper_proof(
         and chain_verified
         and not live_mode_used
         and open_positions_reconciled
+        and profit["profit_passed"]
     )
     if not report.passed and not report.failure_reasons:
         report.failure_reasons.append(PAPER_PROOF_CLAIM_BOUNDARY)
     return report
+
+
+def _coerce_pnl(value: Any) -> float:
+    try:
+        return round(float(value), 2)
+    except (TypeError, ValueError):
+        return 0.0
+
+
+def _profit_metrics(plan: PaperProofPlan, summaries: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Realized P&L, drawdown, and activity across broker-verified proof days.
+
+    Only broker-verified days carry weight - a plan-only heartbeat never counts
+    as profit. Drawdown is measured on a realized-equity curve seeded from the
+    plan's conservative seed capital. Thresholds are owner-adjustable in-app.
+    """
+
+    from cas_forex.proof_control import resolve_profit_thresholds
+
+    thresholds = resolve_profit_thresholds(plan)
+    verified = sorted(
+        (s for s in summaries if bool(s.get("broker_source_verified"))),
+        key=lambda s: str(s.get("date", "")),
+    )
+
+    net_pnl = 0.0
+    equity = float(thresholds.seed_capital_usd)
+    peak = equity
+    max_dd_pct = 0.0
+    days_with_trades = 0
+    for summary in verified:
+        pnl = _coerce_pnl(summary.get("realized_pnl"))
+        net_pnl += pnl
+        equity += pnl
+        if equity > peak:
+            peak = equity
+        if peak > 0:
+            drawdown = (peak - equity) / peak * 100.0
+            if drawdown > max_dd_pct:
+                max_dd_pct = drawdown
+        if int(summary.get("orders_paper_executed") or 0) > 0:
+            days_with_trades += 1
+
+    min_trade_days = thresholds.min_trade_days(plan.required_trading_days)
+    net_ok = (not thresholds.require_net_positive) or (net_pnl > thresholds.min_net_pnl_usd)
+    dd_ok = max_dd_pct <= thresholds.max_drawdown_pct
+    trades_ok = days_with_trades >= min_trade_days
+    return {
+        "net_pnl_usd": net_pnl,
+        "max_drawdown_pct": max_dd_pct,
+        "days_with_trades": days_with_trades,
+        "min_trade_days": min_trade_days,
+        "net_ok": net_ok,
+        "dd_ok": dd_ok,
+        "trades_ok": trades_ok,
+        "profit_passed": net_ok and dd_ok and trades_ok,
+        "thresholds": {
+            "require_net_positive": thresholds.require_net_positive,
+            "min_net_pnl_usd": thresholds.min_net_pnl_usd,
+            "max_drawdown_pct": thresholds.max_drawdown_pct,
+            "min_trade_days_fraction": thresholds.min_trade_days_fraction,
+            "seed_capital_usd": thresholds.seed_capital_usd,
+        },
+    }
 
 
 def write_paper_proof_status(

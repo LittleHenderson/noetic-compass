@@ -99,6 +99,7 @@ class MT5DemoPaperReceiptAdapter:
         }
         broker_export_sha256 = _sha256_json(snapshot)
         orders_attempted = max(len(filtered_orders), len(filtered_deals))
+        realized_pnl = self._sum_realized_pnl(filtered_deals)
         receipt = {
             "receipt_id": f"{plan.plan_id}-{trading_date.isoformat()}-mt5-demo-api",
             "source_attestation": BROKER_API_VERIFIED,
@@ -110,10 +111,12 @@ class MT5DemoPaperReceiptAdapter:
             "timeframe": plan.timeframe,
             "orders_attempted": orders_attempted,
             "orders_paper_executed": len(filtered_deals),
+            "realized_pnl": realized_pnl,
             "open_positions_reconciled": open_positions_reconciled,
             "live_mode": False,
             "broker_export_sha256": broker_export_sha256,
             "account_id_hash": self._account_hash(account),
+            "account_snapshot": self._redacted_account_snapshot(account),
             "server": str(account.get("server") or config.mt5_server or "MT5_DEMO"),
             "terminal_name": str(terminal.get("name") or "MetaTrader5"),
             "provider_receipt_id": broker_export_sha256[:16],
@@ -236,6 +239,25 @@ class MT5DemoPaperReceiptAdapter:
             return []
         return [self._object_to_dict(position) for position in positions or []]
 
+    def _sum_realized_pnl(self, deals: Sequence[Mapping[str, Any]]) -> float:
+        """Net realized P&L for the day: gross profit plus commission, swap, fee.
+
+        MT5 deal records carry these as separate signed fields; summing them is
+        the broker's own realized result for the trading date, after costs.
+        """
+
+        total = 0.0
+        for deal in deals:
+            for key in ("profit", "commission", "swap", "fee"):
+                value = deal.get(key)
+                if value is None:
+                    continue
+                try:
+                    total += float(value)
+                except (TypeError, ValueError):
+                    continue
+        return round(total, 2)
+
     def _redacted_account(self, account: Mapping[str, Any]) -> Dict[str, Any]:
         return {
             "login_hash": self._account_hash(account),
@@ -244,6 +266,34 @@ class MT5DemoPaperReceiptAdapter:
             "trade_mode": account.get("trade_mode"),
             "currency": account.get("currency"),
             "leverage": account.get("leverage"),
+        }
+
+    def _redacted_account_snapshot(self, account: Mapping[str, Any]) -> Dict[str, Any]:
+        """Return non-secret account truth needed for reconciliation.
+
+        This intentionally excludes raw login/name fields while preserving the
+        broker/demo balance/equity/margin values required to reconcile the
+        cockpit's internal ledger against broker account truth.
+        """
+
+        def number(key: str) -> float | None:
+            value = account.get(key)
+            if value is None:
+                return None
+            try:
+                return round(float(value), 2)
+            except (TypeError, ValueError):
+                return None
+
+        return {
+            "balance": number("balance"),
+            "equity": number("equity"),
+            "margin": number("margin"),
+            "margin_free": number("margin_free"),
+            "currency": account.get("currency"),
+            "leverage": account.get("leverage"),
+            "server": account.get("server"),
+            "account_id_hash": self._account_hash(account),
         }
 
     def _account_hash(self, account: Mapping[str, Any]) -> str:

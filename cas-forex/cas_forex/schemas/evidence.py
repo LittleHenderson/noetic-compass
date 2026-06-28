@@ -213,5 +213,12 @@ class PaperTradingSessionReport(BaseModel):
     open_positions_reconciled: bool = False
     live_locks: List[str] = Field(default_factory=list)
     daily_summaries: List[Dict[str, Any]] = Field(default_factory=list)
+    broker_verified_days: int = 0
+    net_pnl_usd: float = 0.0
+    max_drawdown_pct: float = 0.0
+    days_with_trades: int = 0
+    min_trade_days_required: int = 0
+    profit_passed: bool = False
+    profit_thresholds: Dict[str, Any] = Field(default_factory=dict)
     passed: bool = False
     failure_reasons: List[str] = Field(default_factory=list)
