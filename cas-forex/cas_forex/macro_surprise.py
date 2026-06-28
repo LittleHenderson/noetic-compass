@@ -176,6 +176,33 @@ def evaluate_macro_surprise(
         cost_ret = (cost_pips * pip) / entry if entry > 0 else 0.0
         usable.append({"surprise": float(sz), "ret": float(ret), "cost_ret": float(cost_ret)})
 
+    return evaluate_surprise_return_pairs(
+        usable, symbol=symbol, horizon_bars=horizon_bars, cost_pips=cost_pips,
+        train_frac=train_frac, n_null=n_null, min_test_events=min_test_events,
+        min_history=min_history, seed=seed,
+    )
+
+
+def evaluate_surprise_return_pairs(
+    usable: Sequence[Dict[str, float]],
+    *,
+    symbol: str,
+    horizon_bars: int = 1,
+    cost_pips: float = 1.0,
+    train_frac: float = 0.6,
+    n_null: int = 200,
+    min_test_events: int = 8,
+    min_history: int = 6,
+    seed: int = 11,
+) -> MacroSurpriseReport:
+    """OOS + null core, on precomputed [{surprise, ret, cost_ret}] pairs (time-ordered).
+
+    Shared by the intraday path and any event-study runner (e.g. a daily
+    release-day study). ``usable`` MUST already be sorted by event time, with each
+    pair's ``surprise`` causally standardized (no future) and ``ret`` measured only
+    from price at/after the release.
+    """
+    rng = np.random.default_rng(seed)
     n = len(usable)
     if n < (min_test_events * 2):
         return MacroSurpriseReport(symbol=symbol, horizon_bars=horizon_bars, cost_pips=cost_pips, summary={
