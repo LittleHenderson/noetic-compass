@@ -55,7 +55,9 @@ This session **took over both dev servers** (the prior session's were orphaned/s
 
 ## 4. WORKING-TREE LANDMINES (don't regress)
 
-- **Stale pre-existing WIP** (06-23/24, NOT this session's): big uncommitted reconciliation/probe work in `api/data.py` (+883), `api/routes/strategy.py`, `cas_forex/instruments.py`, `cas_forex/broker/__init__.py`, `tests/test_settings_api_surface.py`, `tests/test_paper_broker_adapter.py`, plus `strategy_leads.json` (data). I committed only the small reconciliation deltas that rode along inside files I edited (`paper_proof.py`, `paper_broker_adapter.py`, and the `evidence.ts`/`fixtures.ts`/`ProofPage.tsx` set in `a61ff4cc`). The rest is still uncommitted — leave it for the owner unless asked; don't `git add -A`.
+- **Repo cleanup done (`8747a4f5`)**: the cas-forex working tree is now FULLY COMMITTED and clean. ~104 previously-untracked but tested modules/tests/scripts + the `mt4/` EAs + the reconciliation/instruments WIP + `strategy_leads.json` + requirements/gitignore/launch.json were committed in one coherence commit (the committed history was latently broken — `api/server.py` imported untracked routers; the MT4 bridge imported untracked `mt4_mailbox_bridge`). App imports clean (144 routes); suite green (1177).
+- **The rest of the monorepo is intentionally untouched**: the parent `tksCAS` repo still has 600+ uncommitted/deleted files in OTHER projects (`cas-synthetic/`, `noetic-compass-scaffold/`, `.claude/worktrees/`). That is out of CAS-Forex scope — do NOT `git add -A` from the repo root.
+- Ignored + intentionally uncommitted: `.env` (secrets), `evidence_runs/` (proof ledgers), `.claude/settings.local.json` (local permission state), `__pycache__`.
 - Real-money gate is fail-closed at the bridge (`mt5_bridge._live_gate_block`, strict `is_demo_account`). Profit thresholds and the auto-runner never touch the live gate. Don't regress.
 - Co-author trailer: `Co-Authored-By: Claude Opus 4.8 <noreply@anthropic.com>`. Commit + push after each unit.
 - Do NOT re-chase the MT5 Python IPC (Part-1 §2): unfixable-from-here env instability. The MT4 file mailbox is the stable route.
