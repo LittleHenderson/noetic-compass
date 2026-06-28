@@ -9,7 +9,9 @@ import {
   fetchDispatchLoopStatus,
   startDispatchLoop,
   stopDispatchLoop,
+  fetchMt5Account,
   type DispatchLoopState,
+  type Mt5LiveState,
 } from "../data/api";
 import type { DashboardState, MovementStreamState } from "../types/evidence";
 
@@ -128,6 +130,8 @@ export function WindowsPage({ state }: WindowsPageProps) {
         </div>
       </GlassPanel>
 
+      <Mt5LiveAccountPanel />
+
       <AutoTradeLoopBar symbols={symbols} />
 
       <div className="windows-grid">
@@ -232,6 +236,94 @@ function MarketStatusStrip() {
         <span className="tw-market-reopen">active session: <strong>{st.session}</strong></span>
       )}
     </div>
+  );
+}
+
+function Mt5LiveAccountPanel() {
+  const [mt5, setMt5] = useState<Mt5LiveState | null>(null);
+  const poll = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const load = () => { void fetchMt5Account().then((s) => { if (s) setMt5(s); }); };
+    load();
+    poll.current = setInterval(load, 6000);
+    return () => { if (poll.current) clearInterval(poll.current); };
+  }, []);
+
+  const connected = mt5?.connected ?? false;
+  const acc = mt5?.account;
+  const positions = mt5?.positions ?? [];
+  const usd = (v: number | undefined) => `$${(v ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
+
+  return (
+    <GlassPanel
+      title="MetaTrader 5 — Connected Account"
+      subtitle="Live, read-only, straight from your MT5 terminal"
+      variant={connected ? "info" : "default"}
+    >
+      {connected && acc ? (
+        <>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10, flexWrap: "wrap" }}>
+            <StatusDot on={true} />
+            <span style={{ fontWeight: 700, fontSize: "0.84rem" }}>#{acc.login}</span>
+            <span className="tw-loop-mode">{acc.server}</span>
+            <StatusChip label={mt5?.is_demo ? "DEMO — paper-safe" : "LIVE ACCOUNT"} variant={mt5?.is_demo ? "success" : "danger"} size="sm" />
+            {mt5?.algo_allowed && <StatusChip label="Algo on" variant="muted" size="sm" />}
+          </div>
+          <div className="tw-account-bar" style={{ marginBottom: 10 }}>
+            <AcctStat label="Balance" value={usd(acc.balance_usd)} />
+            <AcctStat label="Equity" value={usd(acc.equity_usd)} />
+            <AcctStat
+              label="Floating P&L"
+              value={`${acc.floating_pnl_usd >= 0 ? "+" : ""}${usd(acc.floating_pnl_usd)}`}
+              tone={acc.floating_pnl_usd > 0 ? "up" : acc.floating_pnl_usd < 0 ? "down" : undefined}
+            />
+            <AcctStat label="Margin / Free" value={`${usd(acc.margin_used_usd)} / ${usd(acc.free_margin_usd)}`} />
+            <AcctStat label="Open positions" value={`${mt5?.open_position_count ?? positions.length}`} />
+            <AcctStat label="Leverage" value={`1:${acc.leverage}`} />
+          </div>
+          <div className="tw-all-positions">
+            <div className="tw-all-positions-title">MT5 Open Positions ({positions.length})</div>
+            {positions.length > 0 ? (
+              <table className="tw-positions-table">
+                <thead>
+                  <tr><th>Symbol</th><th>Side</th><th>Lots</th><th>Open</th><th>Now</th><th>SL</th><th>TP</th><th>Floating P&amp;L</th></tr>
+                </thead>
+                <tbody>
+                  {positions.map((p) => (
+                    <tr key={p.ticket ?? `${p.symbol}-${p.open_price}`}>
+                      <td className="mono" style={{ fontWeight: 700 }}>{p.symbol}</td>
+                      <td className={p.side === "LONG" ? "tw-long" : "tw-short"}>{p.side}</td>
+                      <td className="mono">{p.lots}</td>
+                      <td className="mono">{p.open_price}</td>
+                      <td className="mono">{p.current_price}</td>
+                      <td className="mono" style={{ color: "var(--danger)" }}>{p.stop_loss ?? "—"}</td>
+                      <td className="mono" style={{ color: "var(--success)" }}>{p.take_profit ?? "—"}</td>
+                      <td className="mono" style={{ color: p.floating_pnl_usd > 0 ? "var(--success)" : p.floating_pnl_usd < 0 ? "var(--danger)" : "var(--text-secondary)" }}>
+                        {p.floating_pnl_usd >= 0 ? "+" : ""}{p.floating_pnl_usd.toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="tw-muted" style={{ fontSize: "0.72rem" }}>No open positions in MT5 right now.</div>
+            )}
+          </div>
+          {mt5?.note && <div className="control-field-desc" style={{ marginTop: 8 }}>{mt5.note}</div>}
+        </>
+      ) : (
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+            <StatusDot on={false} />
+            <span style={{ fontWeight: 700, fontSize: "0.82rem" }}>Not connected</span>
+          </div>
+          <div className="control-field-desc">
+            {mt5?.detail ?? mt5?.error ?? "Open your MetaTrader 5 terminal, log into your account, and make sure it shows a live connection (ticking prices). This panel will pick it up automatically."}
+          </div>
+        </div>
+      )}
+    </GlassPanel>
   );
 }
 

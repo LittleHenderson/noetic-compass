@@ -429,6 +429,52 @@ export async function stopDispatchLoop(): Promise<DispatchLoopState> {
   return apiPost<DispatchLoopState>("/dispatch-loop/stop");
 }
 
+// ── Live MetaTrader 5 account (read-only, from the connected terminal) ──
+
+export interface Mt5Position {
+  ticket: number | null;
+  symbol: string;
+  side: string;
+  lots: number;
+  open_price: number;
+  current_price: number;
+  stop_loss: number | null;
+  take_profit: number | null;
+  floating_pnl_usd: number;
+  swap_usd: number;
+}
+
+export interface Mt5Account {
+  login: number;
+  server: string;
+  name: string;
+  currency: string;
+  leverage: number;
+  balance_usd: number;
+  equity_usd: number;
+  margin_used_usd: number;
+  free_margin_usd: number;
+  floating_pnl_usd: number;
+}
+
+export interface Mt5LiveState {
+  report_kind?: string;
+  connected: boolean;
+  is_demo?: boolean;
+  account?: Mt5Account;
+  positions?: Mt5Position[];
+  open_position_count?: number;
+  algo_allowed?: boolean;
+  note?: string;
+  detail?: string;
+  error?: string;
+  cached?: boolean;
+}
+
+export async function fetchMt5Account(): Promise<Mt5LiveState | null> {
+  try { return await apiGet<Mt5LiveState>("/mt5/account"); } catch { return null; }
+}
+
 // ── Multi-timeframe runtime selector ──
 
 export interface SymbolTimeframeSelection {
