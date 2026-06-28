@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "cas-forex-api",
+      "runtimeExecutable": "C:\\Python314\\python.exe",
+      "runtimeArgs": ["-m", "uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", "8765"],
+      "port": 8765
+    },
+    {
+      "name": "cas-forex-ui",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "ui", "run", "dev", "--", "--host", "0.0.0.0"],
+      "port": 5174
+    }
+  ]
+}

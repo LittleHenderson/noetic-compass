@@ -1,59 +1,71 @@
 {
-  "schema_version": "cas-forex-strategy-leads.v1",
-  "updated_at": "2026-06-22",
   "claim_boundary": "Research leads only. Live trading remains NOT LICENSED.",
-  "promotion_rule": "A lead can move toward deployment only after broker-grade data, walk-forward validation, risk-budget approval, and real paper-proof gates. A saved lead is not broker ACCEPT.",
   "leads": [
     {
-      "lead_id": "range_scalper_filtered_fx_d1",
-      "priority": 1,
-      "status": "ACTIVE_RESEARCH_LEAD",
-      "strategy_setting": "range_scalper_24_120",
-      "family": "range_scalper",
-      "mode": "swing/day range fade on D1 proxy; candidate for M15/H1 broker-data expansion",
-      "symbols_promoted_for_next_tests": ["EUR/USD", "GBP/USD"],
-      "symbols_watchlist": ["AUD/USD"],
-      "symbols_excluded_until_condition_proof": ["USD/JPY", "USD/CAD"],
       "condition_fit": {
+        "avoid": [
+          "macro_blackout",
+          "shock",
+          "high_spread",
+          "unvalidated_symbol"
+        ],
+        "preferred_timeframes": [
+          "D1",
+          "H1",
+          "M15"
+        ],
         "regime": "range",
-        "volatility": "low_to_normal",
-        "preferred_timeframes": ["D1", "H1", "M15"],
-        "avoid": ["macro_blackout", "shock", "high_spread", "unvalidated_symbol"]
+        "volatility": "low_to_normal"
       },
+      "deployment_status": "NOT LICENSED",
       "evidence_refs": [
         "evidence_runs/range_scalper_research/real-range_scalper-20260622043152-report.json",
         "evidence_runs/range_scalper_research/real-range_scalper-20260622043231-report.json",
         "evidence_runs/walk_forward_condition_lab/walk-forward-20260622044930-report.json"
       ],
+      "family": "range_scalper",
       "headline_results": [
         "5 FX majors, 5y D1 Yahoo proxy, cost-included: +$1,572.25; chain verified; CAS improved P&L/drawdown.",
         "Filtered EUR/USD GBP/USD AUD/USD, 5y D1 Yahoo proxy, cost-included: +$2,686.37; avg max DD 2.38%; chain verified.",
         "Corrected D1 walk-forward active routed windows: 3/3 positive; active routed mean return 1.2827%; routed max DD 2.298%; 32 routed trades; grade NOT_PROMOTED due sparse coverage."
       ],
+      "lead_id": "range_scalper_filtered_fx_d1",
+      "mode": "swing/day range fade on D1 proxy; candidate for M15/H1 broker-data expansion",
       "open_gates": [
         "Broker-grade bid/ask and spread/slippage by session.",
         "M15/H1 walk-forward grid.",
         "Macro/event-aware condition axis.",
         "30-trading-day paper proof before live funds."
       ],
-      "deployment_status": "NOT LICENSED"
+      "priority": 1,
+      "status": "ACTIVE_RESEARCH_LEAD",
+      "strategy_setting": "range_scalper_24_120",
+      "symbols_excluded_until_condition_proof": [
+        "USD/JPY",
+        "USD/CAD"
+      ],
+      "symbols_promoted_for_next_tests": [
+        "EUR/USD",
+        "GBP/USD"
+      ],
+      "symbols_watchlist": [
+        "AUD/USD"
+      ]
     },
     {
-      "lead_id": "index_tsmom_126_d1",
-      "priority": 2,
-      "status": "ACTIVE_RESEARCH_LEAD",
-      "strategy_setting": "tsmom_126_250_2_10",
-      "family": "tsmom",
-      "mode": "D1 index trend following; strongest current index walk-forward lead",
-      "symbols_promoted_for_next_tests": ["US30", "NAS100"],
-      "symbols_watchlist": ["XAU/USD"],
-      "symbols_excluded_until_condition_proof": [],
       "condition_fit": {
+        "avoid": [
+          "range",
+          "thin_liquidity",
+          "unvalidated_event_context"
+        ],
+        "preferred_timeframes": [
+          "D1"
+        ],
         "regime": "trend_up_or_high_vol_trend",
-        "volatility": "normal_to_high_but_not_uncontrolled_shock",
-        "preferred_timeframes": ["D1"],
-        "avoid": ["range", "thin_liquidity", "unvalidated_event_context"]
+        "volatility": "normal_to_high_but_not_uncontrolled_shock"
       },
+      "deployment_status": "NOT LICENSED",
       "evidence_refs": [
         "evidence_runs/index_tsmom_h1_d1_go/walk-forward-20260622054921-report.json",
         "evidence_runs/condition_tally/condition-tally-20260622055042-report.json",
@@ -69,92 +81,307 @@
         "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-daily-schedule-status.json",
         "docs/working/cas_forex_paper_broker_receipt_contract_20260622.md"
       ],
+      "family": "tsmom",
       "headline_results": [
         "Index H1/D1 walk-forward run found D1 TSMOM route grade WALK_FORWARD_LEAD: 5 routed D1 windows, 3 positive, 60% positive rate, 1.8932% mean return, 7.0764% max drawdown, 76 trades.",
         "Combined D1 condition tally for tsmom_126_250_2_10: mean return 1.8932%, positive rate 0.6, 76 trades.",
         "Owner promotion review in LIMITED_PAPER mode cleared simulator and walk-forward thresholds for the D1 bucket; paper proof remains the promotion blocker.",
-        "Paper-proof ledger started on 2026-06-22 and now has 1 BROKER_API_VERIFIED MT5 demo receipt from Hugosway-Demo; chain verified; passed=false because 29 more verified days remain.",
+        "Paper-proof ledger started on 2026-06-22 and now has 3 complete daily bundles with BROKER_API_VERIFIED MT5 demo receipts from Hugosway-Demo; chain verified; passed=false because 27 more verified days remain.",
         "Broker/demo receipt gate supports BROKER_EXPORT_HASHED evidence and now has an MT5 demo adapter path for BROKER_API_VERIFIED paper receipts.",
         "Daily paper route decision for 2026-06-22 returned ROUTE_PAPER_SIGNAL for both US30 and NAS100, macro PASS, with no broker order placed.",
-        "Paper risk review for 2026-06-22 allowed 2 of 2 paper attempts at 0.01 lots each; total planned paper risk $25.30 / 0.506% on $5,000 equity; evidence packet SUPPRESSED.",
-        "Daily paper bundle for 2026-06-22 completed with all three tracks present and skipped existing same-date records without duplicating proof packets.",
-        "UI/proof-cockpit correction: platform UI can start now as read-only paper/research cockpit; 1 / 5 complete daily bundles only means multi-day proof maturity is not reached yet.",
-        "Daily schedule points to next due date 2026-06-23 with broker receipt, route decision, and risk review still missing for that date."
+        "Broker-synced paper risk review is active at $100,000 account equity; latest 2026-06-24 paper risk review allowed 2 of 2 paper attempts at 0.20 total lots and $260.75 planned risk.",
+        "Daily paper bundles for 2026-06-22, 2026-06-23, and 2026-06-24 completed with all three tracks present.",
+        "UI/proof-cockpit correction: platform UI can start now as read-only paper/research cockpit; 3 / 5 complete daily bundles means multi-day proof maturity is not reached yet.",
+        "Latest owner-promotion review separates edge from paper maturity: D1 tsmom_126_250_2_10 clears simulator/walk-forward trading-edge thresholds; remaining promotion blockers are paper_days 3 < 30 and paper_passed=false.",
+        "Daily schedule points to next due date 2026-06-25 with broker receipt, route decision, and risk review still missing for that date."
       ],
+      "lead_id": "index_tsmom_126_d1",
+      "mode": "D1 index trend following; strongest current index walk-forward lead",
       "open_gates": [
-        "29 more real verified paper-trading days on NAS100/US30 D1 after the 2026-06-22 MT5 demo-verified day.",
-        "4 more complete daily bundles before proof-cockpit UI can claim multi-day proof maturity; UI shell can start now.",
-        "Run the next due daily bundle on 2026-06-23 or the next available real trading day.",
+        "27 more real verified paper-trading days on NAS100/US30 D1 after the 2026-06-24 MT5 demo-verified day.",
+        "2 more complete daily bundles before proof-cockpit UI can claim multi-day proof maturity; UI shell can start now.",
+        "Run the next due daily bundle on 2026-06-25 or the next available real trading day.",
         "Run the daily paper bundle for each verified paper day and preserve receipt, route/no-trade, and risk-budget status.",
         "Broker-grade index/CFD spread and slippage validation.",
         "Event-context validation for NFP/FOMC/conflict shocks.",
         "Owner approval for any limited paper attempts; live remains NOT LICENSED."
       ],
-      "deployment_status": "NOT LICENSED"
+      "priority": 2,
+      "status": "ACTIVE_RESEARCH_LEAD",
+      "strategy_setting": "tsmom_126_250_2_10",
+      "symbols_excluded_until_condition_proof": [],
+      "symbols_promoted_for_next_tests": [
+        "US30",
+        "NAS100"
+      ],
+      "symbols_watchlist": [
+        "XAU/USD"
+      ]
     },
     {
-      "lead_id": "index_tsmom_252_d1",
-      "priority": 3,
-      "status": "ACTIVE_RESEARCH_LEAD",
-      "strategy_setting": "tsmom_252_500_2_8",
-      "family": "tsmom",
-      "mode": "position/swing trend following on index/gold candidates",
-      "symbols_promoted_for_next_tests": ["NAS100", "US30"],
-      "symbols_watchlist": ["XAU/USD"],
-      "symbols_excluded_until_condition_proof": [],
       "condition_fit": {
+        "avoid": [
+          "range",
+          "shock",
+          "unvalidated_trend_detector"
+        ],
+        "preferred_timeframes": [
+          "D1",
+          "H4",
+          "H1"
+        ],
         "regime": "trend_up_or_trend_down",
-        "volatility": "normal_to_high_but_not_shock",
-        "preferred_timeframes": ["D1", "H4", "H1"],
-        "avoid": ["range", "shock", "unvalidated_trend_detector"]
+        "volatility": "normal_to_high_but_not_shock"
       },
+      "deployment_status": "NOT LICENSED",
       "evidence_refs": [
         "evidence_runs/strategy_edge_sprint_tsmom_252/real-tsmom-20260622041452-report.json",
         "evidence_runs/condition_lab_focus/condition-lab-20260622042733-report.json",
         "evidence_runs/temporal_lacunarity_focus/condition-lab-20260622044212-report.json",
         "evidence_runs/walk_forward_condition_lab/walk-forward-20260622044930-report.json"
       ],
+      "family": "tsmom",
       "headline_results": [
         "Controlled NAS100/US30 TSMOM 252 research lead: approximately +31.6% portfolio with roughly 6.8% avg DD in strategy-edge sprint.",
         "Real-slice Condition Lab favored tsmom_252_500_2_8 and tsmom_126_250_2_10 for strongest index routes.",
         "D1 walk-forward focus stayed NO_TRADE on NAS100/US30 because recent future windows were labeled range; this is a condition-detection blocker, not a promotion."
       ],
+      "lead_id": "index_tsmom_252_d1",
+      "mode": "position/swing trend following on index/gold candidates",
       "open_gates": [
         "Improve index trend/range detector so NAS100/US30 trend windows are not flattened into range.",
         "H1/H4 broker-grade walk-forward testing.",
         "Owner 2020 NAS30/NAS100 discretionary rule encoding.",
         "Drawdown cap and time/trailing exits."
       ],
-      "deployment_status": "NOT LICENSED"
+      "priority": 3,
+      "status": "ACTIVE_RESEARCH_LEAD",
+      "strategy_setting": "tsmom_252_500_2_8",
+      "symbols_excluded_until_condition_proof": [],
+      "symbols_promoted_for_next_tests": [
+        "NAS100",
+        "US30"
+      ],
+      "symbols_watchlist": [
+        "XAU/USD"
+      ]
     },
     {
-      "lead_id": "meanrev_trend_filter_fx_d1",
-      "priority": 4,
-      "status": "WATCHLIST_ONLY",
-      "strategy_setting": "meanrev_20_z2_tf",
-      "family": "meanrev",
-      "mode": "D1 FX-major mean reversion with trend filter",
-      "symbols_promoted_for_next_tests": [],
-      "symbols_watchlist": ["EUR/USD", "GBP/USD", "AUD/USD"],
-      "symbols_excluded_until_condition_proof": [],
       "condition_fit": {
+        "avoid": [
+          "retail_cost_above_edge",
+          "trend_breakout_market"
+        ],
+        "preferred_timeframes": [
+          "D1"
+        ],
         "regime": "range",
-        "volatility": "normal",
-        "preferred_timeframes": ["D1"],
-        "avoid": ["retail_cost_above_edge", "trend_breakout_market"]
+        "volatility": "normal"
       },
+      "deployment_status": "NOT LICENSED",
       "evidence_refs": [
         "evidence_runs/meanrev_tf"
       ],
+      "family": "meanrev",
       "headline_results": [
         "Thin in-sample positive on FX majors, but edge was close to zero and cost-sensitive.",
         "Keep as a baseline/watchlist strategy, not as a deployment candidate."
       ],
+      "lead_id": "meanrev_trend_filter_fx_d1",
+      "mode": "D1 FX-major mean reversion with trend filter",
       "open_gates": [
         "Only revive if broker-grade cost model still leaves positive walk-forward edge.",
         "Compare against range_scalper before any promotion."
       ],
-      "deployment_status": "NOT LICENSED"
+      "priority": 4,
+      "status": "WATCHLIST_ONLY",
+      "strategy_setting": "meanrev_20_z2_tf",
+      "symbols_excluded_until_condition_proof": [],
+      "symbols_promoted_for_next_tests": [],
+      "symbols_watchlist": [
+        "EUR/USD",
+        "GBP/USD",
+        "AUD/USD"
+      ]
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-m5-swing-d7be2c38ca",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 2.25,
+        "profit_factor": 15.12,
+        "total_trades": 294,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-461fdcd87e32",
+      "promoted_at_iso": "2026-06-27T17:12:39+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt4-2-sw-1b02c5b997",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "source_sha256": "f4adb891fa499d07be9f8bbc861cb7298705de191783caee8f11eef77f42189a",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "M5"
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-m5-swing-d7be2c38ca",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 2.25,
+        "profit_factor": 15.12,
+        "total_trades": 294,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-3dfb36997a1e",
+      "promoted_at_iso": "2026-06-27T17:22:32+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt4-2-sw-1b02c5b997",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "source_sha256": "f4adb891fa499d07be9f8bbc861cb7298705de191783caee8f11eef77f42189a",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "M5"
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-m5-swing-233f4199ab",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 2.25,
+        "profit_factor": 15.12,
+        "total_trades": 294,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT5\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-88a7e2844264",
+      "promoted_at_iso": "2026-06-27T17:22:38+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt5-2-sw-db6978a0ea",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT5\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "source_sha256": "f1e1190f0e7d77a29554358c385d7dceef0079d955fb5a62a38fa64b38c4f390",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "M5"
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-m5-swing-233f4199ab",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 2.25,
+        "profit_factor": 15.12,
+        "total_trades": 294,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT5\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-c89ca2a13550",
+      "promoted_at_iso": "2026-06-27T22:07:54+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt5-2-sw-db6978a0ea",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT5\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "source_sha256": "f1e1190f0e7d77a29554358c385d7dceef0079d955fb5a62a38fa64b38c4f390",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "M5"
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-m5-swing-d7be2c38ca",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 2.25,
+        "profit_factor": 15.12,
+        "total_trades": 294,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-a9cd2136e010",
+      "promoted_at_iso": "2026-06-27T22:07:58+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt4-2-sw-1b02c5b997",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (2)\\AUDCAD M5 UTC-0.set",
+      "source_sha256": "f4adb891fa499d07be9f8bbc861cb7298705de191783caee8f11eef77f42189a",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "M5"
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-h1-swing-54cccb9ab5",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 7.02,
+        "profit_factor": 6.72,
+        "total_trades": 1221,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (4)\\AUDCAD H1 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-50e6d512d95d",
+      "promoted_at_iso": "2026-06-27T22:08:01+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt4-2-sw-a99eb78ac3",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (4)\\AUDCAD H1 UTC-0.set",
+      "source_sha256": "51359971e32343143dd7fa5919f8a5c77cc13bee4aeea24dcdcc4395f7740a22",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "H1"
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-h1-swing-6d47394d7b",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 7.02,
+        "profit_factor": 6.72,
+        "total_trades": 1221,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT5\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (4)\\AUDCAD H1 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-cba6c2823789",
+      "promoted_at_iso": "2026-06-27T22:08:02+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt5-2-sw-acb9bd4eed",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT5\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (4)\\AUDCAD H1 UTC-0.set",
+      "source_sha256": "27af96c31b62249303b962ac90d0297891b26ced99880e0ea92269c65c9e5420",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "H1"
+    },
+    {
+      "candidate_id": "ff-replay-aud-cad-h1-swing-f074ad528b",
+      "claim_boundary": "Forex Fury promotions land in the paper research lane only. This module never writes PROMOTED_LIVE; live-money execution remains operator-driven and gated by the broker-license flip.",
+      "evidence_ref": {
+        "equity_drawdown_relative_pct": 7.03,
+        "profit_factor": 4.18,
+        "total_trades": 1028,
+        "walk_forward_grade": null
+      },
+      "family": "swing",
+      "integrity_note": "set file missing at Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (1)\\AUDCAD H1 UTC-0.set",
+      "integrity_override": true,
+      "integrity_verified": false,
+      "lead_id": "ff-lead-c684ad10fe76",
+      "promoted_at_iso": "2026-06-27T22:08:04+00:00",
+      "source_profile_id": "ff-forex-fury-core-1-4-new-sets-forex-fury-core-1-3-fury-core-26-mt4-2-sw-e765130bd6",
+      "source_set_path": "Forex-Fury-CORE-1.4(NEW SETS)\\Forex Fury CORE [1.3]\\FURY CORE 26\\MT4\\SET FILES\\2 SWING TRADING SETS [NEW 2026]\\AUDCAD\\AUDCAD (1)\\AUDCAD H1 UTC-0.set",
+      "source_sha256": "35d579d5bcf0b3dbdb7ac6852bb0a85f45f886dd7ac794a5f5cd1d19e3d2df4a",
+      "status": "PROMOTED_PAPER_LANE",
+      "symbol": "AUD/CAD",
+      "timeframe": "H1"
     }
-  ]
+  ],
+  "promotion_rule": "A lead can move toward deployment only after broker-grade data, walk-forward validation, risk-budget approval, and real paper-proof gates. A saved lead is not broker ACCEPT.",
+  "schema_version": "cas-forex-strategy-leads.v1",
+  "updated_at": "2026-06-27T22:08:04+00:00"
 }

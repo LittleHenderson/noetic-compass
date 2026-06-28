@@ -29,6 +29,10 @@ class FakeDemoMT5:
             company="Fake Demo Broker",
             currency="USD",
             leverage=100,
+            balance=5000.0,
+            equity=5012.5,
+            margin=12.3,
+            margin_free=5000.2,
         )
 
     def history_orders_get(self, start, end):
@@ -74,6 +78,10 @@ class FakeRealMT5(FakeDemoMT5):
             company="Real Broker",
             currency="USD",
             leverage=100,
+            balance=5000.0,
+            equity=5012.5,
+            margin=12.3,
+            margin_free=5000.2,
         )
 
 
@@ -90,6 +98,12 @@ def test_mt5_demo_adapter_collects_api_verified_receipt(monkeypatch):
     assert receipt["orders_attempted"] == 1
     assert receipt["orders_paper_executed"] == 1
     assert receipt["broker_mode"] == "PAPER_MT5"
+    assert receipt["account_snapshot"]["balance"] == 5000.0
+    assert receipt["account_snapshot"]["equity"] == 5012.5
+    assert receipt["account_snapshot"]["margin"] == 12.3
+    assert receipt["account_snapshot"]["margin_free"] == 5000.2
+    assert receipt["account_snapshot"]["account_id_hash"] == receipt["account_id_hash"]
+    assert "login" not in receipt["account_snapshot"]
     assert len(receipt["receipt_hash_sha256"]) == 64
 
 

@@ -50,6 +50,8 @@ INSTRUMENT_SPECS = {
     "USD/JPY": _fx("USD/JPY", 145.0, price_unit=0.01),
     "AUD/USD": _fx("AUD/USD", 0.66),
     "USD/CAD": _fx("USD/CAD", 1.36),
+    "AUD/CAD": _fx("AUD/CAD", 0.90),
+    "GBP/AUD": _fx("GBP/AUD", 1.92),
     # Broker-specific CFD economics vary. These defaults are research-grade
     # placeholders: one lot = 1 currency unit per index point.
     "NAS100": InstrumentSpec(
@@ -74,6 +76,18 @@ INSTRUMENT_SPECS = {
         price_precision=2,
         yahoo_ticker="^DJI",
         mt5_symbol="US30",
+        point_value_per_lot=1.0,
+    ),
+    "SPX500": InstrumentSpec(
+        symbol="SPX500",
+        asset_class="INDEX_CFD",
+        unit_name="point",
+        price_unit=1.0,
+        contract_size=1.0,
+        default_mid=5_500.0,
+        price_precision=2,
+        yahoo_ticker="^GSPC",
+        mt5_symbol="SPX500",
         point_value_per_lot=1.0,
     ),
     # One standard XAU/USD lot is commonly 100 troy ounces; this uses $1 price
