@@ -2,30 +2,35 @@
 
 import type {
   UIReadinessReport,
+  AuthorityBoundaryState,
 } from "../types/evidence";
 import { StatusChip } from "./StatusChip";
 
 interface ModeBannerProps {
   readiness: UIReadinessReport;
+  authority?: AuthorityBoundaryState;
 }
 
-export function ModeBanner({ readiness }: ModeBannerProps) {
+export function ModeBanner({ readiness, authority }: ModeBannerProps) {
   const isReady =
     readiness.readiness_status === "READY_FOR_PROOF_COCKPIT_UI_UX";
+
+  // Live status comes from the owner-flag-driven authority gate (NOT the flaky
+  // MT5 connection), so a connected DEMO account never reads as licensed.
+  const liveAuthorized = authority?.live_trading_status === "AUTHORIZED";
+  const edge = authority?.trading_edge_status ?? "OPEN";
 
   return (
     <div className="mode-banner">
       <div className="mode-banner-left">
         <StatusChip
-          label="NOT LICENSED"
-          variant="danger"
+          label={liveAuthorized ? "LIVE AUTHORIZED" : "NOT LICENSED"}
+          variant={liveAuthorized ? "success" : "danger"}
           size="sm"
         />
-        <span className="mode-banner-label">PAPER_MT5</span>
+        <span className="mode-banner-label">{liveAuthorized ? "LIVE" : "PAPER"}</span>
         <span className="mode-banner-sep">|</span>
-        <span className="mode-banner-label">live_mode=false</span>
-        <span className="mode-banner-sep">|</span>
-        <span className="mode-banner-label">edge: OPEN</span>
+        <span className="mode-banner-label">edge: {edge}</span>
         <span className="mode-banner-sep">|</span>
         <span className="mode-banner-label">
           {readiness.completed_trading_days} / 30 days

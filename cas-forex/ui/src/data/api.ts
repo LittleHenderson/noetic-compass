@@ -336,6 +336,20 @@ export async function setDispatchPlatform(
   });
 }
 
+export interface BrokerControlState {
+  report_kind?: string;
+  platform?: string;
+  strictness?: string;
+}
+
+export async function fetchBrokerControl(): Promise<BrokerControlState | null> {
+  try {
+    return await apiGet<BrokerControlState>("/broker-control/state");
+  } catch {
+    return null;
+  }
+}
+
 // ── Owner live-enable control (turn the live-trading gate flags ON in-app) ──
 
 export type LiveEnableKey =

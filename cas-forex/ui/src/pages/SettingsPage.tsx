@@ -23,6 +23,10 @@ import {
   updateAuthorization,
   type AuthorizationState,
   type AuthorizationPatch,
+  fetchBrokerControl,
+  type BrokerControlState,
+  fetchMt4Control,
+  type MT4ControlState,
 } from "../data/api";
 import type { DashboardState } from "../types/evidence";
 
@@ -45,6 +49,23 @@ export function SettingsPage({ state }: SettingsPageProps) {
   const gates = state.runtimeGates;
   const ai = state.aiModel;
   const brokers = state.brokerCandidates ?? [];
+
+  // Live, stable sources for the status fields below (NOT the flaky MT5 IPC):
+  // owner-flag acks + live_mode from live-enable, platform from broker-control,
+  // and the EA file-link from the MT4 bridge. The authoritative live status
+  // stays ab.live_trading_status (owner-flag driven; a demo never licenses live).
+  const [le, setLe] = useState<LiveEnableState | null>(null);
+  const [bc, setBc] = useState<BrokerControlState | null>(null);
+  const [mt4, setMt4] = useState<MT4ControlState | null>(null);
+  useEffect(() => {
+    void fetchLiveEnable().then((s) => { if (s) setLe(s); });
+    void fetchBrokerControl().then((s) => { if (s) setBc(s); });
+    void fetchMt4Control().then((s) => { if (s) setMt4(s); });
+  }, []);
+
+  const liveAuthorized = ab?.live_trading_status === "AUTHORIZED";
+  const liveBrokerValue = liveAuthorized ? "AUTHORIZED" : "NOT LICENSED";
+  const proofDays = state.uiReadiness?.completed_trading_days ?? 0;
 
   return (
     <div className="settings-page">
@@ -104,7 +125,7 @@ export function SettingsPage({ state }: SettingsPageProps) {
               <ControlField label="Max Concurrent Trades" value={`${oc?.max_concurrent_trades ?? 3}`} description="Maximum simultaneous paper trades. Owner can set 1-15." mono />
               <ControlField label="AI Autonomy" value={oc?.ai_autonomy_enabled ? "ENABLED (PAPER ONLY)" : "DISABLED"} description="When enabled, AI can select risk cap, lot size, and concurrency from surviving scenarios." />
               <ControlField label="Owner Control" value="OWNER-CONTROLLED" description="Research/paper automation can run now; live-money capabilities require explicit owner enable flags, credentials, and provider config." />
-              <ControlField label="Live Trading" value="NOT LICENSED" danger description="Live trading, broker ACCEPT, and payment movement remain locked regardless of autonomy mode." />
+              <ControlField label="Live Trading" value={liveBrokerValue} danger={!liveAuthorized} description="Live trading, broker ACCEPT, and payment movement remain locked regardless of autonomy mode until the owner authorizes them." />
             </div>
           </div>
         </div>
@@ -195,10 +216,10 @@ export function SettingsPage({ state }: SettingsPageProps) {
       {/* ── Account & Legal Gates ── */}
       <GlassPanel title="Account & Legal Gates" variant="danger">
         <div className="legal-gates">
-          <LegalGate label="CAS_FOREX_ACCOUNT_AUTH_ACK" met={false} detail="Account authorization acknowledgment required" />
-          <LegalGate label="CAS_FOREX_SOURCE_OF_FUNDS_ACK" met={false} detail="Source-of-funds acknowledgment required" />
+          <LegalGate label="CAS_FOREX_ACCOUNT_AUTH_ACK" met={!!le?.resolved.personal_account_ack} detail={le?.resolved.personal_account_ack ? "Account authorization acknowledged (Go Live panel)" : "Account authorization acknowledgment required — set it in Go Live"} />
+          <LegalGate label="CAS_FOREX_SOURCE_OF_FUNDS_ACK" met={!!le?.resolved.no_pooled_capital_ack} detail={le?.resolved.no_pooled_capital_ack ? "Source-of-funds / no-pooled-capital acknowledged (Go Live panel)" : "Source-of-funds acknowledgment required — set it in Go Live"} />
           <LegalGate label="Account Type" met={false} detail="Not verified — required before live eligibility" />
-          <LegalGate label="Broker Terminal Proof" met={false} detail="30-day paper proof required (1/30)" />
+          <LegalGate label="Broker Terminal Proof" met={proofDays >= 30} detail={`30-day paper proof (${proofDays}/30 days)`} />
           <LegalGate label="WORM Evidence Anchoring" met={false} detail="UNAVAILABLE — local hash chain only" />
         </div>
         <div style={{ marginTop: 12, padding: "8px 12px", background: "var(--danger-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--danger)" }}>
@@ -209,11 +230,11 @@ export function SettingsPage({ state }: SettingsPageProps) {
       {/* ── Broker Settings ── */}
       <GlassPanel title="Broker Configuration">
         <div className="control-grid">
-          <ControlField label="Broker Mode" value="PAPER_MT5" mono />
-          <ControlField label="MT5 Terminal" value="Demo Only" />
-          <ControlField label="MT4 Mailbox" value="Not configured" />
-          <ControlField label="Broker Health" value="DISCONNECTED" danger />
-          <ControlField label="Live Broker" value="NOT LICENSED" danger />
+          <ControlField label="Dispatch Platform" value={(bc?.platform ?? "auto").toUpperCase()} mono description="Which broker route the dispatch loop uses (Broker Control / MT4 panel)." />
+          <ControlField label="MT5 Terminal" value={le?.resolved.live_mode ? "Live" : "Demo"} description="Reflects the live_mode owner flag, not the terminal connection." />
+          <ControlField label="MT4 Mailbox" value={mt4 ? (mt4.enabled ? `ON · ${mt4.mailbox_dir}` : "OFF") : "—"} mono />
+          <ControlField label="MT4 EA Link" value={mt4 ? (mt4.enabled ? mt4.link_status : "ROUTE OFF") : "—"} danger={!!(mt4?.enabled && mt4.link_status !== "LIVE")} description="Stable file-based EA heartbeat (not the flaky MT5 IPC)." />
+          <ControlField label="Live Broker" value={liveBrokerValue} danger={!liveAuthorized} description="Owner-flag gate; a connected demo never licenses live." />
         </div>
       </GlassPanel>
     </div>

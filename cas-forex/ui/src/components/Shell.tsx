@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { ModeBanner } from "./ModeBanner";
-import type { UIReadinessReport } from "../types/evidence";
+import type { UIReadinessReport, AuthorityBoundaryState } from "../types/evidence";
 
 type Page =
   | "quick-start"
@@ -27,6 +27,7 @@ type Page =
 
 interface ShellProps {
   readiness: UIReadinessReport;
+  authority?: AuthorityBoundaryState;
   activePage: Page;
   onNavigate: (page: Page) => void;
   children: ReactNode;
@@ -56,6 +57,7 @@ const NAV_ITEMS: { id: Page; label: string; ready: boolean }[] = [
 
 export function Shell({
   readiness,
+  authority,
   activePage,
   onNavigate,
   children,
@@ -65,7 +67,7 @@ export function Shell({
 
   return (
     <div className="app-shell">
-      <ModeBanner readiness={readiness} />
+      <ModeBanner readiness={readiness} authority={authority} />
       <nav className="shell-nav">
         <div className="shell-nav-brand">
           <span className="shell-nav-logo">◈</span>

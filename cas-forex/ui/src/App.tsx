@@ -184,7 +184,7 @@ export function App() {
 
   return (
     <>
-    <Shell readiness={state.uiReadiness} activePage={page} onNavigate={setPage}>
+    <Shell readiness={state.uiReadiness} authority={state.authorityBoundary} activePage={page} onNavigate={setPage}>
       {(loading || error) && (
         <div className="api-status-strip">
           {loading ? "Loading live evidence API..." : error}
