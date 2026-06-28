@@ -1,0 +1,108 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_tier3_dialogue_v1",
+  "trace_id": "b9d8ef6a-d4ef-4254-973e-c6c5b2514d08",
+  "seed": 20260506,
+  "target_records": 500,
+  "total_records": 363,
+  "tier3_records": 363,
+  "total_conversations": 70,
+  "resumed_records": 0,
+  "validator_pass_count": 363,
+  "validator_pass_rate": 1.0,
+  "provider": "gemini",
+  "primary_model": "gemini-3.1-pro-preview",
+  "fallback_model": "gemini-2.5-pro",
+  "final_model": "gemini-3.1-pro-preview",
+  "price_per_m_input_usd": 2.0,
+  "price_per_m_output_usd": 12.0,
+  "api_key_status": "present",
+  "dry_run": false,
+  "distributions": {
+    "tier": {
+      "tier3": 363
+    },
+    "noetic": {
+      "^4": 41,
+      "^3": 37,
+      "^5": 34,
+      "^9": 37,
+      "^6": 39,
+      "^2": 28,
+      "^1": 43,
+      "^7": 39,
+      "^0": 33,
+      "^8": 32
+    },
+    "domain": {
+      "P": 94,
+      "C": 92,
+      "O": 91,
+      "E": 86
+    },
+    "drive": {
+      "F7": 44,
+      "F4": 53,
+      "F3": 51,
+      "F6": 52,
+      "F2": 48,
+      "F5": 62,
+      "F1": 53
+    },
+    "register": {
+      "f": 95,
+      "T": 90,
+      "A": 88,
+      "E": 90
+    },
+    "expression_family": {
+      "base": 282,
+      "copresence": 21,
+      "register_set": 31,
+      "recipe": 14,
+      "omega_emergent": 15
+    },
+    "demographic_profile": {
+      "skeptical_analyst": 51,
+      "young_professional_technical": 49,
+      "lay_casual": 49,
+      "senior_academic_humanities": 50,
+      "confident_veteran": 46,
+      "mid_career_clinician_direct": 29,
+      "anxious_first_timer": 45,
+      "global_english_indirect": 44
+    },
+    "tone": {
+      "frustrated": 79,
+      "reflective": 72,
+      "neutral": 82,
+      "anxious": 65,
+      "excited": 65
+    },
+    "generator_model": {
+      "gemini-3.1-pro-preview": 363
+    }
+  },
+  "total_cost_usd": 3.1483,
+  "input_tokens": 84752,
+  "output_tokens": 248237,
+  "api_calls": 86,
+  "hard_cost_cap_usd": 3.0,
+  "cost_aborted": true,
+  "failure_counts": {
+    "json_parse:JSONDecodeError": 8,
+    "cost_cap_exceeded": 5
+  },
+  "generation_started": "2026-05-06T19:25:47.222275+00:00",
+  "generation_completed": "2026-05-06T19:33:25.227702+00:00",
+  "out_prefix": "cas-synthetic\\data\\native_nl\\v1_dialogue_500_gemini_pro_bakeoff_v3_20260506",
+  "records_per_shard": 500,
+  "shard_paths": [
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_500_gemini_pro_bakeoff_v3_20260506_0000.jsonl"
+  ],
+  "round_trip_validator": "deferred",
+  "notes": [
+    "Cost tracker aborted before target was filled.",
+    "Accepted records ended below target after top-up rounds; inspect failure_counts before scaling."
+  ]
+}

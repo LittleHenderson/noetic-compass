@@ -1,0 +1,79 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_lever3_reformat_v1",
+  "trace_id": "c38b3820-4547-446b-ba87-3b6228b23f40",
+  "input_paths": [
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\level2_scaffold\\lever3_paired_dt_K4.jsonl",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\level2_scaffold\\lever3_paired_freeform_5k_2026_05_04.jsonl"
+  ],
+  "out_path": "cas-synthetic\\data\\native_nl\\v1_dialogue_lever3_strict_audit_20260506.jsonl",
+  "include_explanatory": false,
+  "limit": null,
+  "total_records": 160,
+  "conversational_lm_records": 160,
+  "cas_explanation_auxiliary_records": 0,
+  "validator_pass_count": 160,
+  "failure_counts": {
+    "strict_reject:jargon:\\bnoetic[s]?\\b": 10360,
+    "strict_reject:too_long": 1820,
+    "strict_reject:jargon:\\bregister[s]?\\b": 8355,
+    "strict_reject:jargon:\\bcas\\b": 2045,
+    "strict_reject:jargon:\\^[0-9]": 1140,
+    "strict_reject:template_opener": 135,
+    "strict_reject:jargon:\\bF[1-7]\\b": 425,
+    "strict_reject:jargon:\\bdrive[s]?\\b": 55,
+    "strict_reject:jargon:\\bdomain[s]?\\b": 70
+  },
+  "distributions": {
+    "tier": {
+      "tier3_reformatted": 160
+    },
+    "training_lane": {
+      "conversational_lm": 160
+    },
+    "use_for_conversational_lm": {
+      "True": 160
+    },
+    "source_bucket": {
+      "meta_logic": 160
+    },
+    "noetic": {
+      "?": 160
+    },
+    "domain": {
+      "?": 160
+    },
+    "drive": {
+      "?": 160
+    },
+    "register": {
+      "?": 160
+    },
+    "axis_parse_quality": {
+      "missing": 160
+    },
+    "demographic_profile": {
+      "global_english_indirect": 20,
+      "confident_veteran": 16,
+      "senior_academic_humanities": 14,
+      "mid_career_clinician_direct": 14,
+      "skeptical_analyst": 15,
+      "lay_casual": 17,
+      "young_professional_technical": 15,
+      "anxious_first_timer": 17,
+      "unknown": 32
+    },
+    "tone": {
+      "excited": 22,
+      "anxious": 23,
+      "neutral": 26,
+      "reflective": 25,
+      "frustrated": 32,
+      "unknown": 32
+    }
+  },
+  "notes": [
+    "Lever3 assistant_response often explains CAS notation directly.",
+    "Rows with use_for_conversational_lm=false must not be mixed into the fluent dialogue LM loss."
+  ]
+}

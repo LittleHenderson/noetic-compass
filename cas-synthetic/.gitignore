@@ -17,14 +17,13 @@ __pycache__/
 # --- bulk generated Path-D regeneration output (archive, don't commit) ---
 # NOTE: do NOT ignore data/path_d/v1_eval_pack_* — those are the committed
 # reproducibility eval packs and must stay tracked.
-data/path_d/wave3_step2_5_english_descriptions_*.jsonl
-data/path_d/wave3_step2_5_ledger_*.jsonl
-data/path_d/wave3_step2_5_rejected_*.jsonl
-data/path_d/wave3_step2_5_manifest_*.json
-data/path_d/wave3_full/
+data/path_d/wave3_*
 data/path_d/*_dryrun.jsonl
 data/path_d/*_dryrun.json
 data/*_tmp.jsonl
+# Large built corpora (keep on disk; not committed to git)
+data/level3_pilot_full.jsonl
+v1_mix_nlgen_train.jsonl
 tests/_tmp_*/
 .pytest-tmp-level3/
 test-tmp-level3/

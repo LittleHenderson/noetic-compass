@@ -1,0 +1,39 @@
+{
+  "dataset": "level3_recoverable_eval_1000",
+  "style_id": "recoverable_translation",
+  "seed": 20260429,
+  "source": "cas-synthetic/data/level2_scaffold/level2_full_10k.jsonl",
+  "output": "cas-synthetic/data/level2_scaffold/level3_recoverable_eval_1000.jsonl",
+  "heldout_policy": "disjoint source-index range from the training prefix; source records start at zero-based index 8000",
+  "source_range": {
+    "start_source_record": 8000,
+    "selected_source_records": 1034,
+    "min_written_source_index": 8000,
+    "max_written_source_index": 9033,
+    "source_records_used": 1000,
+    "source_records_skipped": 34
+  },
+  "generation": {
+    "variants_per_source": 1,
+    "max_source_records": 2000,
+    "max_output_records": 1000,
+    "written": 1000
+  },
+  "validation": {
+    "total_records": 1000,
+    "valid_records": 1000,
+    "invalid_records": 0,
+    "compiler_checked": 1000,
+    "compiler_skipped": 0
+  },
+  "bucket_counts": {
+    "v74_baseline": 200,
+    "v75_register": 264,
+    "v77_rule_four": 123,
+    "v77_omega": 203,
+    "meta_logic": 102,
+    "v76_production": 108
+  },
+  "source_level2_ids_unique": 1000,
+  "step7_status": "unblocked after this eval set is committed or otherwise preserved outside the ignored data directory"
+}

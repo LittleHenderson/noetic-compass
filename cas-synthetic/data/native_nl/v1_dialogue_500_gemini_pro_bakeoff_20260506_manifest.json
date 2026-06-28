@@ -1,0 +1,51 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_tier3_dialogue_v1",
+  "trace_id": "1a7d7963-5221-41ff-891a-262dcba6a0c3",
+  "seed": 20260506,
+  "target_records": 500,
+  "total_records": 0,
+  "tier3_records": 0,
+  "total_conversations": 0,
+  "resumed_records": 0,
+  "validator_pass_count": 0,
+  "validator_pass_rate": 0.0,
+  "provider": "gemini",
+  "primary_model": "gemini-3.1-pro-preview",
+  "fallback_model": "gemini-2.5-pro",
+  "final_model": "gemini-3.1-pro-preview",
+  "price_per_m_input_usd": 2.0,
+  "price_per_m_output_usd": 12.0,
+  "api_key_status": "present",
+  "dry_run": false,
+  "distributions": {
+    "tier": {},
+    "noetic": {},
+    "domain": {},
+    "drive": {},
+    "register": {},
+    "expression_family": {},
+    "demographic_profile": {},
+    "tone": {},
+    "generator_model": {}
+  },
+  "total_cost_usd": 0.2545,
+  "input_tokens": 94815,
+  "output_tokens": 5402,
+  "api_calls": 96,
+  "hard_cost_cap_usd": 3.0,
+  "cost_aborted": false,
+  "failure_counts": {
+    "json_parse:JSONDecodeError": 95
+  },
+  "generation_started": "2026-05-06T19:15:25.701897+00:00",
+  "generation_completed": "2026-05-06T19:20:33.276223+00:00",
+  "out_prefix": "cas-synthetic\\data\\native_nl\\v1_dialogue_500_gemini_pro_bakeoff_20260506",
+  "records_per_shard": 500,
+  "shard_paths": [],
+  "round_trip_validator": "deferred",
+  "notes": [
+    "No new accepted records in top-up round; stopped.",
+    "Accepted records ended below target after top-up rounds; inspect failure_counts before scaling."
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "acceptance_rate": 0.7,
+  "accepted_file": "cas-synthetic\\data\\stage4b\\stage4b_pilot_20260514T174756Z_accepted.jsonl",
+  "budget_cap_usd": 5.0,
+  "category_spread": {
+    "binary_composition": 5,
+    "let_binding": 1,
+    "recipe": 14,
+    "state_literal": 15
+  },
+  "created_at": "2026-05-14T17:49:45Z",
+  "elapsed_seconds": 108.66096925735474,
+  "input_file": "cas-synthetic\\data\\stage4b\\oasst2_questions_pilot.jsonl",
+  "input_sha256": "60336c4fe640b31f943b6e6b2dea502349ddce9dc8c9b6583dd7b863a32b6e8f",
+  "judge_floor": 3,
+  "kill_switch_usd": 4.5,
+  "model_used": "claude-haiku-4-5-20251001",
+  "n_accepted": 35,
+  "n_attempted": 50,
+  "n_copyright_flagged": 3,
+  "n_haiku_judge_calls": 47,
+  "n_haiku_propose_calls": 58,
+  "n_records_with_repair_attempts": 6,
+  "n_rejected": 15,
+  "pilot_id": "stage4b_pilot_20260514T174756Z",
+  "reject_reasons": {
+    "cas_compile": 3,
+    "haiku_judge": 12
+  },
+  "rejected_file": "cas-synthetic\\data\\stage4b\\stage4b_pilot_20260514T174756Z_rejected.jsonl",
+  "rule": "external questions only; foreign answer text NEVER stored; CAS supervision is Haiku-proposed and compiler-validated only",
+  "schema_version": "stage4b_pilot.v1",
+  "total_cost_usd": 0.145584
+}

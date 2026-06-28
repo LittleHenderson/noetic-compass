@@ -1,0 +1,45 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_lever3_reformat_v1",
+  "trace_id": "2d9b1e2e-e9d7-4636-924b-161d997007f5",
+  "input_paths": [
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\level2_scaffold\\lever3_paired_dt_K4.jsonl",
+    "C:\\Users\\wakil\\OneDrive\\Desktop\\tksCAS\\cas-synthetic\\data\\level2_scaffold\\lever3_paired_freeform_5k_2026_05_04.jsonl"
+  ],
+  "out_path": "cas-synthetic\\data\\native_nl\\v1_dialogue_lever3_strict_audit_v2_20260506.jsonl",
+  "include_explanatory": false,
+  "limit": null,
+  "total_records": 0,
+  "conversational_lm_records": 0,
+  "cas_explanation_auxiliary_records": 0,
+  "validator_pass_count": 0,
+  "failure_counts": {
+    "strict_reject:jargon:\\bnoetic[s]?\\b": 10360,
+    "strict_reject:too_long": 1820,
+    "strict_reject:jargon:\\bregister[s]?\\b": 8355,
+    "strict_reject:jargon:\\bcas\\b": 2045,
+    "strict_reject:jargon:\\^[0-9]": 1140,
+    "strict_reject:template_opener": 135,
+    "strict_reject:jargon:\\bF[1-7]\\b": 425,
+    "strict_reject:explanatory_reply:\\bnotation\\b": 160,
+    "strict_reject:jargon:\\bdrive[s]?\\b": 55,
+    "strict_reject:jargon:\\bdomain[s]?\\b": 70
+  },
+  "distributions": {
+    "tier": {},
+    "training_lane": {},
+    "use_for_conversational_lm": {},
+    "source_bucket": {},
+    "noetic": {},
+    "domain": {},
+    "drive": {},
+    "register": {},
+    "axis_parse_quality": {},
+    "demographic_profile": {},
+    "tone": {}
+  },
+  "notes": [
+    "Lever3 assistant_response often explains CAS notation directly.",
+    "Rows with use_for_conversational_lm=false must not be mixed into the fluent dialogue LM loss."
+  ]
+}

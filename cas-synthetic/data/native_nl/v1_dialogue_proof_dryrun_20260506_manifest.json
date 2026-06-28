@@ -1,0 +1,98 @@
+{
+  "schema_version": "native_nl.v1",
+  "generation_version": "native_nl_tier3_dialogue_v1",
+  "trace_id": "e4dd4121-8244-43fa-8946-6f397f7c1d7a",
+  "seed": 20260506,
+  "target_records": 500,
+  "total_records": 500,
+  "tier3_records": 500,
+  "total_conversations": 95,
+  "resumed_records": 0,
+  "validator_pass_count": 500,
+  "validator_pass_rate": 1.0,
+  "primary_model": "claude-sonnet-4-6",
+  "final_model": "claude-sonnet-4-6",
+  "api_key_status": "dry-run",
+  "dry_run": true,
+  "distributions": {
+    "tier": {
+      "tier3": 500
+    },
+    "noetic": {
+      "^2": 42,
+      "^7": 48,
+      "^0": 50,
+      "^5": 49,
+      "^9": 48,
+      "^3": 50,
+      "^1": 62,
+      "^4": 52,
+      "^8": 46,
+      "^6": 53
+    },
+    "domain": {
+      "E": 131,
+      "P": 127,
+      "O": 130,
+      "C": 112
+    },
+    "drive": {
+      "F6": 70,
+      "F7": 73,
+      "F4": 69,
+      "F3": 65,
+      "F2": 71,
+      "F5": 81,
+      "F1": 71
+    },
+    "register": {
+      "f": 131,
+      "A": 120,
+      "T": 120,
+      "E": 129
+    },
+    "expression_family": {
+      "base": 390,
+      "register_set": 45,
+      "copresence": 27,
+      "omega_emergent": 21,
+      "recipe": 17
+    },
+    "demographic_profile": {
+      "lay_casual": 63,
+      "skeptical_analyst": 67,
+      "young_professional_technical": 65,
+      "global_english_indirect": 63,
+      "confident_veteran": 61,
+      "anxious_first_timer": 69,
+      "senior_academic_humanities": 58,
+      "mid_career_clinician_direct": 54
+    },
+    "tone": {
+      "neutral": 102,
+      "anxious": 102,
+      "frustrated": 100,
+      "reflective": 96,
+      "excited": 100
+    },
+    "generator_model": {
+      "dry-run": 500
+    }
+  },
+  "total_cost_usd": 0.0,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "api_calls": 0,
+  "hard_cost_cap_usd": 500.0,
+  "cost_aborted": false,
+  "failure_counts": {},
+  "generation_started": "2026-05-06T09:15:25.188599+00:00",
+  "generation_completed": "2026-05-06T09:15:25.672284+00:00",
+  "out_prefix": "cas-synthetic\\data\\native_nl\\v1_dialogue_proof_dryrun_20260506",
+  "records_per_shard": 5000,
+  "shard_paths": [
+    "cas-synthetic\\data\\native_nl\\v1_dialogue_proof_dryrun_20260506_0000.jsonl"
+  ],
+  "round_trip_validator": "deferred",
+  "notes": []
+}

@@ -1,0 +1,29 @@
+{
+  "acceptance_rate": 0.0,
+  "accepted_file": "cas-synthetic\\data\\stage4b\\stage4b_pilot_20260514T174421Z_accepted.jsonl",
+  "budget_cap_usd": 5.0,
+  "category_spread": {},
+  "created_at": "2026-05-14T17:46:00Z",
+  "elapsed_seconds": 99.84360885620117,
+  "input_file": "cas-synthetic\\data\\stage4b\\oasst2_questions_pilot.jsonl",
+  "input_sha256": "60336c4fe640b31f943b6e6b2dea502349ddce9dc8c9b6583dd7b863a32b6e8f",
+  "judge_floor": 3,
+  "kill_switch_usd": 4.5,
+  "model_used": "claude-haiku-4-5-20251001",
+  "n_accepted": 0,
+  "n_attempted": 50,
+  "n_copyright_flagged": 3,
+  "n_haiku_judge_calls": 45,
+  "n_haiku_propose_calls": 60,
+  "n_records_with_repair_attempts": 7,
+  "n_rejected": 50,
+  "pilot_id": "stage4b_pilot_20260514T174421Z",
+  "reject_reasons": {
+    "cas_compile": 5,
+    "haiku_judge": 45
+  },
+  "rejected_file": "cas-synthetic\\data\\stage4b\\stage4b_pilot_20260514T174421Z_rejected.jsonl",
+  "rule": "external questions only; foreign answer text NEVER stored; CAS supervision is Haiku-proposed and compiler-validated only",
+  "schema_version": "stage4b_pilot.v1",
+  "total_cost_usd": 0.11167
+}
