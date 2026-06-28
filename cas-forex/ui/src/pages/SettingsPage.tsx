@@ -5,6 +5,7 @@ import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { NotificationSubscriptionPanel } from "../components/NotificationSubscriptionPanel";
 import { WebhookSubscriptionPanel } from "../components/WebhookSubscriptionPanel";
+import { Mt4BridgePanel } from "../components/Mt4BridgePanel";
 import {
   getApiBase,
   resetApiBase,
@@ -54,6 +55,9 @@ export function SettingsPage({ state }: SettingsPageProps) {
 
       {/* ── Owner risk control — set any cap, or remove it ── */}
       <RiskControlPanel />
+
+      {/* ── MT4 EA mailbox — the stable real-order route ── */}
+      <Mt4BridgePanel />
 
       {/* ── Notification Subscriptions (Web Push) ── */}
       <NotificationSubscriptionPanel />

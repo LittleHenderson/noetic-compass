@@ -588,20 +588,30 @@ class MT4EABridge(BrokerBridge):
     """Mailbox-based MT4 Expert Advisor bridge for paper proof only."""
 
     def __init__(self, mailbox_dir: Optional[str] = None):
-        self.mailbox_dir = Path(mailbox_dir or config.mt4_mailbox_dir or "mt4_mailbox")
+        from cas_forex.mt4_control import resolve_mt4_control
+
+        resolved_dir = mailbox_dir or resolve_mt4_control().mailbox_dir
+        self.mailbox_dir = Path(resolved_dir)
         self.orders_path = self.mailbox_dir / "orders.jsonl"
         self.acks_path = self.mailbox_dir / "acks.jsonl"
         self.heartbeat_path = self.mailbox_dir / "heartbeat.json"
         self.positions_path = self.mailbox_dir / "positions.jsonl"
 
     def connect(self) -> bool:
-        if not config.mt4_enabled or config.live_mode or not config.paper_trading:
+        from cas_forex.mt4_control import resolve_mt4_control
+
+        if not resolve_mt4_control().enabled or config.live_mode or not config.paper_trading:
             return False
         self.mailbox_dir.mkdir(parents=True, exist_ok=True)
         return True
 
     def is_connected(self) -> bool:
-        return self.heartbeat_path.exists()
+        # Connected only when the EA heartbeat is present AND fresh — a stale
+        # heartbeat from a dead EA must not read as connected.
+        from cas_forex.mt4_control import read_ea_heartbeat
+
+        heartbeat = read_ea_heartbeat(self.mailbox_dir)
+        return bool(heartbeat["present"] and heartbeat["fresh"])
 
     def execute_order(self, order: BrokerOrderRequest) -> OrderOutcome:
         if not self.connect():
@@ -619,6 +629,17 @@ class MT4EABridge(BrokerBridge):
         }
         with self.orders_path.open("a", encoding="utf-8") as f:
             f.write(json.dumps(payload, sort_keys=True) + "\n")
+        # Also write the EA-readable command file the running EA actually polls
+        # (commands/<id>.json). orders.jsonl above stays as a local audit log.
+        # Best-effort: a mailbox-write hiccup must not fail the dispatch.
+        try:
+            from cas_forex.broker.mt4_mailbox_bridge import MT4MailboxBridge
+
+            MT4MailboxBridge(self.mailbox_dir).write_order_intent(
+                order, broker_mode=BrokerMode.PAPER_MT4, live_authorized=False
+            )
+        except Exception:
+            pass
         return OrderOutcome(
             order_ref=order.order_id,
             status=OrderStatus.PENDING,

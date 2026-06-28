@@ -287,6 +287,55 @@ export async function resetProofThresholds(): Promise<ProofControlState> {
   return apiPost<ProofControlState>("/proof-control/thresholds/reset");
 }
 
+// ── Owner MT4 mailbox route (stable file-based real-order path) ──
+
+export interface MT4ControlState {
+  report_kind?: string;
+  enabled: boolean;
+  mailbox_dir: string;
+  link_status: "LIVE" | "STALE" | "NO_HEARTBEAT";
+  heartbeat: {
+    present: boolean;
+    fresh: boolean;
+    state: string | null;
+    account_id_hash: string | null;
+    server: string | null;
+    live_trading_allowed: boolean | null;
+    time: string | null;
+    age_seconds: number | null;
+  };
+  note?: string;
+  claim_boundary?: string;
+  error?: string;
+}
+
+export async function fetchMt4Control(): Promise<MT4ControlState | null> {
+  try {
+    return await apiGet<MT4ControlState>("/mt4-bridge/state");
+  } catch {
+    return null;
+  }
+}
+
+export async function updateMt4Control(
+  patch: Partial<{ enabled: boolean; mailbox_dir: string }>,
+): Promise<MT4ControlState> {
+  return apiPostJson<MT4ControlState, typeof patch>("/mt4-bridge/update", patch);
+}
+
+export async function resetMt4Control(): Promise<MT4ControlState> {
+  return apiPost<MT4ControlState>("/mt4-bridge/reset");
+}
+
+// One-tap: route the dispatch loop through the chosen broker platform.
+export async function setDispatchPlatform(
+  platform: "auto" | "mt5" | "mt4" | "simulated",
+): Promise<{ platform?: string }> {
+  return apiPostJson<{ platform?: string }, { platform: string }>("/broker-control/update", {
+    platform,
+  });
+}
+
 // ── Owner live-enable control (turn the live-trading gate flags ON in-app) ──
 
 export type LiveEnableKey =
