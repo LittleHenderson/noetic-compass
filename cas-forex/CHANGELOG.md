@@ -1,5 +1,19 @@
 # CAS Forex - Changelog
 
+## 2026-06-27 — Auto-Trade Loop: owner-set interval + symbol/session targeting; market status
+
+- **Market OPEN/CLOSED + session strip** on Trading Windows: live badge, Asian/
+  London/New York with the active one lit, and a "reopens in … (Sun 22:00 UTC)"
+  countdown — so frozen weekend charts read as "market closed", not a bug. (8c73e480)
+- **Strategy panes show open positions**: Strategy A → US30, Strategy B → NAS100,
+  each with its LONG position under the chart. (8c73e480)
+- **Loop interval is fully owner-set** — 1 second to 24 hours (old 10s/60s floor
+  gone), changeable live while running via "Apply". (1a252b0d)
+- **Loop targeting**: aim the paper loop at chosen symbols ("Trade only" chips) and
+  sessions ("During sessions" chips) so it stacks proof on the setups you care
+  about; idles off-session; updates live. (6760b67b)
+- Full suite green: 1159 passed.
+
 ## 2026-06-27 — Trading terminal + auto-trade loop + green test suite
 
 - **Trading Windows is now a real terminal** (was bare charts). Account header bar
