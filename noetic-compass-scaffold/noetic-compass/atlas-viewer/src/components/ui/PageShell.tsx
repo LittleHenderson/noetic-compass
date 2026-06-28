@@ -7,13 +7,16 @@ export interface PageShellProps {
   children: ReactNode;
   showNav?: boolean;
   cardMaxWidth?: number;
+  contentAlign?: 'center' | 'start';
 }
 
 const STEPS: Array<{ to: string; label: string }> = [
   { to: '/login', label: 'Sign in' },
   { to: '/license', label: 'License' },
   { to: '/model-config', label: 'Model' },
+  { to: '/explainer', label: 'Guide' },
   { to: '/cockpit', label: 'Cockpit' },
+  { to: '/lsa-calibration', label: 'LSA' },
 ];
 
 // Wave 5.2: dropped the big purple/blue ambient blobs. Replaced with a tight
@@ -24,7 +27,8 @@ const backdropStyle: CSSProperties = {
   inset: 0,
   background:
     'radial-gradient(ellipse at 50% 110%, rgba(15, 23, 42, 0.9) 0%, #020617 60%, #000000 100%)',
-  overflow: 'hidden',
+  overflowX: 'hidden',
+  overflowY: 'auto',
 };
 
 // A faint grid graticule behind everything — gives the page a HUD-like
@@ -52,6 +56,8 @@ const navWrapperStyle: CSSProperties = {
 const navInnerStyle: CSSProperties = {
   display: 'flex',
   alignItems: 'center',
+  justifyContent: 'center',
+  flexWrap: 'wrap',
   gap: 2,
   padding: 4,
   fontSize: 12,
@@ -109,12 +115,19 @@ export function PageShell({
   children,
   showNav = true,
   cardMaxWidth = 460,
+  contentAlign = 'center',
 }: PageShellProps) {
   const location = useLocation();
 
   const cardStyle: CSSProperties = {
     width: '100%',
     maxWidth: cardMaxWidth,
+  };
+
+  const resolvedMainStyle: CSSProperties = {
+    ...mainStyle,
+    justifyContent: contentAlign === 'start' ? 'flex-start' : 'center',
+    ...(contentAlign === 'start' ? { paddingTop: 28 } : {}),
   };
 
   return (
@@ -167,7 +180,7 @@ export function PageShell({
         </nav>
       ) : null}
 
-      <main style={mainStyle}>
+      <main style={resolvedMainStyle}>
         <div style={wordmarkStyle}>
           <span style={wordmarkAccentStyle}>Atlas Viewer</span>
           <span>·</span>

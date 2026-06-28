@@ -11,6 +11,7 @@ import dailyScheduleRaw from './dailyScheduleStatus.json';
 import paperDecisionRaw from './paperDecisionStatus.json';
 import paperRiskRaw from './paperRiskStatus.json';
 import dailyBundleRaw from './dailyBundleStatus.json';
+import adaptiveCockpitRaw from './adaptiveCockpit.json';
 
 import type {
   PaperProofStatus,
@@ -19,6 +20,7 @@ import type {
   PaperDecisionStatus,
   PaperRiskStatus,
   DailyBundleStatus,
+  AdaptiveCockpitPayload,
 } from '../types';
 
 export const paperProofFixture = paperProofRaw as unknown as PaperProofStatus;
@@ -27,3 +29,4 @@ export const dailyScheduleFixture = dailyScheduleRaw as unknown as DailySchedule
 export const paperDecisionFixture = paperDecisionRaw as unknown as PaperDecisionStatus;
 export const paperRiskFixture = paperRiskRaw as unknown as PaperRiskStatus;
 export const dailyBundleFixture = dailyBundleRaw as unknown as DailyBundleStatus;
+export const adaptiveCockpitFixture = adaptiveCockpitRaw as unknown as AdaptiveCockpitPayload;

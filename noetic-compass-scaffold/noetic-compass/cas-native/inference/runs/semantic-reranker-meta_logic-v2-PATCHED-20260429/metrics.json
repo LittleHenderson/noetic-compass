@@ -1,0 +1,104 @@
+{
+  "dataset": "/root/workspace/cas-synthetic/data/level2_scaffold/level3_recoverable_full.jsonl",
+  "tokenizer": "/root/workspace/noetic-compass-scaffold/noetic-compass/cas-native/inference/runs/semantic-reranker-meta_logic-v2-PATCHED-20260429/tokenizer.json",
+  "train_record_limit": 19000,
+  "train_pair_count": 47192,
+  "eval_record_count": 30,
+  "candidate_bank_sizes": {
+    "v74_baseline": 1852,
+    "v75_register": 3964,
+    "v77_rule_four": 1673,
+    "v77_omega": 1798,
+    "v76_production": 1005,
+    "meta_logic": 940
+  },
+  "pair_build": {
+    "eligible_records": 11798,
+    "skipped_eval_records": 30,
+    "skipped_no_prompt_or_target": 0,
+    "skipped_bucket": 0,
+    "skipped_target_not_scoreable": 7626,
+    "per_bucket_pairs": {
+      "v75_register": 9048,
+      "v77_rule_four": 5448,
+      "v77_omega": 12952,
+      "v74_baseline": 5688,
+      "v76_production": 7980,
+      "meta_logic": 6076
+    }
+  },
+  "epochs": 10,
+  "batch_size": 512,
+  "learning_rate": 0.001,
+  "seed": 42,
+  "device": "cuda",
+  "epoch_metrics": [
+    {
+      "loss": 0.38250766966932565,
+      "pairwise_accuracy": 0.775035511421901,
+      "batches": 93.0,
+      "epoch": 1
+    },
+    {
+      "loss": 0.2780278863445405,
+      "pairwise_accuracy": 0.823537161273341,
+      "batches": 93.0,
+      "epoch": 2
+    },
+    {
+      "loss": 0.2596377262505152,
+      "pairwise_accuracy": 0.8364968998457796,
+      "batches": 93.0,
+      "epoch": 3
+    },
+    {
+      "loss": 0.249199973479394,
+      "pairwise_accuracy": 0.846869654552911,
+      "batches": 93.0,
+      "epoch": 4
+    },
+    {
+      "loss": 0.23293699388222028,
+      "pairwise_accuracy": 0.8600680443548387,
+      "batches": 93.0,
+      "epoch": 5
+    },
+    {
+      "loss": 0.20623324474980753,
+      "pairwise_accuracy": 0.8784938602037328,
+      "batches": 93.0,
+      "epoch": 6
+    },
+    {
+      "loss": 0.18940374062907311,
+      "pairwise_accuracy": 0.8888494321095046,
+      "batches": 93.0,
+      "epoch": 7
+    },
+    {
+      "loss": 0.17546493007290748,
+      "pairwise_accuracy": 0.8950276458135216,
+      "batches": 93.0,
+      "epoch": 8
+    },
+    {
+      "loss": 0.1675169631358116,
+      "pairwise_accuracy": 0.9018320812973925,
+      "batches": 93.0,
+      "epoch": 9
+    },
+    {
+      "loss": 0.1639708464825025,
+      "pairwise_accuracy": 0.9009080221576076,
+      "batches": 93.0,
+      "epoch": 10
+    }
+  ],
+  "wall_clock_seconds": 1152.0535655021667,
+  "model_config": {
+    "vocab_size": 665,
+    "d_model": 192,
+    "hidden_dim": 384,
+    "dropout": 0.1
+  }
+}

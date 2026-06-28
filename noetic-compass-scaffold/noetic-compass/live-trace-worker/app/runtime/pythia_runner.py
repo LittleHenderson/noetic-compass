@@ -13,6 +13,18 @@ from __future__ import annotations
 from typing import AsyncIterator
 
 from ..schemas.requests import CreateSessionRequest
+from .model_loader import get_manifest
+from .probe_runner import RuntimeProbeConfig, resolve_runtime_config
+
+
+def build_pythia_runtime_plan(req: CreateSessionRequest) -> RuntimeProbeConfig:
+    """Resolve request knobs exactly as the real Pythia runner will consume them."""
+
+    manifest = get_manifest(req.model_id)
+    return resolve_runtime_config(
+        req.method_configs,
+        n_layers=manifest.model_arch.n_layers,
+    )
 
 
 async def run_pythia(req: CreateSessionRequest) -> AsyncIterator[dict]:
@@ -26,6 +38,7 @@ async def run_pythia(req: CreateSessionRequest) -> AsyncIterator[dict]:
       - mode7_attribution
       - confidence (softmax margin, normalised)
     """
+    _ = build_pythia_runtime_plan(req)
     raise NotImplementedError(
         "Real Pythia runner lands in milestone 2 — use the fake event_stream "
         "for now (set LIVE_TRACE_USE_FAKE=1 or rely on the milestone-1 default)."

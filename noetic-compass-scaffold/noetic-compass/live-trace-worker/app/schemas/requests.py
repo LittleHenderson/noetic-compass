@@ -4,7 +4,9 @@ from __future__ import annotations
 
 from typing import Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, model_validator
+
+from .methods import LiveMethodConfig, validate_live_method_configs
 
 
 class CreateSessionRequest(BaseModel):
@@ -31,6 +33,14 @@ class CreateSessionRequest(BaseModel):
         "mode7_attribution",
         "confidence_margin",
     ]] = Field(default_factory=list)
+    # Atlas method-panel runtime configuration. Empty means the milestone-1
+    # default LIVE pipeline: all worker-wired methods with default knobs.
+    method_configs: dict[str, LiveMethodConfig] = Field(default_factory=dict)
+
+    @model_validator(mode="after")
+    def _validate_method_configs(self) -> "CreateSessionRequest":
+        validate_live_method_configs(self.method_configs)
+        return self
 
 
 class CreateSessionResponse(BaseModel):

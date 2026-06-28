@@ -1,0 +1,47 @@
+{
+  "name": "CAS Harness",
+  "short_name": "CAS Harness",
+  "description": "CAS Harness audit console and LSA calibration tools.",
+  "start_url": "/lsa-calibration",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#020617",
+  "theme_color": "#0f766e",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icons/cas-harness-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "LSA Calibration",
+      "short_name": "LSA",
+      "description": "Open the 20-item human calibration packet.",
+      "url": "/lsa-calibration",
+      "icons": [
+        {
+          "src": "/icons/cas-harness-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Cockpit",
+      "short_name": "Cockpit",
+      "description": "Open the CAS Harness cockpit.",
+      "url": "/cockpit",
+      "icons": [
+        {
+          "src": "/icons/cas-harness-icon.svg",
+          "sizes": "any",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

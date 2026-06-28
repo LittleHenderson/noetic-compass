@@ -419,4 +419,10 @@ export const SPATIAL_EVIDENCE_MODULE: TestingMethod = {
   prerequisites: ['image artifact + primitive annotations OR model-emitted coordinates'],
   validatedArchs: ['pythia'],
   orderIndex: 9,
+  liveRuntime: {
+    status: 'payload_only',
+    supportedKnobs: ['source_filter', 'kind_filter', 'show_confidence'],
+    effect:
+      'Visual artifact filtering only; it does not alter live worker runtime',
+  },
 };

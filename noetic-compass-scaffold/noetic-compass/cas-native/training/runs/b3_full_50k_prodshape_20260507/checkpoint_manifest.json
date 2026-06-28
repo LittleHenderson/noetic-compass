@@ -1,0 +1,77 @@
+{
+  "checkpoint_id": "7ae0a6ab-cac1-4ac7-96d8-605448c282e4",
+  "code_version": "v0.1.0",
+  "extra": {
+    "checkpoint_path": "/workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/b3_full_50k_prodshape_20260507/model_final.pt",
+    "curriculum": {
+      "beta_end": 1.0,
+      "beta_start": 0.1,
+      "curriculum_steps": 10000,
+      "schedule": "linear_ramp_clipped"
+    },
+    "global_step": 14845,
+    "n_val_records": 2500,
+    "sample_reply": {
+      "sample_every_steps": 500,
+      "sample_max_new_tokens": 100,
+      "sample_record_index": 0,
+      "sample_return_trace": false,
+      "sample_sampling": "temperature",
+      "sample_temperature": 0.8,
+      "sample_top_p": 0.9
+    },
+    "tokenizer": {
+      "english_bpe_hash": "ac4d12a6d26cc1194ea31fee8cdc07d52a0a759964810956b13cafea08a06889",
+      "english_bpe_path": "/workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/b3_full_50k_prodshape_20260507/english_bpe.json",
+      "english_bpe_source_path": "/workspace/tksCAS/cas-synthetic/data/native_nl/english_bpe_50k_claude_20260507.json",
+      "tokenizer_hash": "39d834ae37955ec97ccbea8cf3610ff1da99a43dbae85fa7107ec888f2513e58",
+      "tokenizer_kind": "ExtendedHybridCASTokenizer",
+      "tokenizer_metadata": {
+        "bpe_merge_count": 23740,
+        "cas_reserved_token_count": 14683,
+        "english_vocab_size": 24000,
+        "extended_vocab_size": 38683,
+        "extension_type": "english_bpe",
+        "frozen": true,
+        "hash": "0de7f222b07f9742",
+        "reserved_token_count": 198,
+        "special_tokens": [
+          "[PAD]",
+          "[UNK]",
+          "[BOS]",
+          "[EOS]",
+          "[SEP]",
+          "[CAS]",
+          "[/CAS]",
+          "[TASK_EXPR]",
+          "[TASK_EXPLAIN]",
+          "[TASK_CHAT]",
+          "[PROMPT]",
+          "[RESPONSE]",
+          "[SP]",
+          "[NL]",
+          "[TAB]"
+        ],
+        "trained_at_timestamp": "2026-05-07T02:41:53+00:00",
+        "trained_from_corpus_hash": "3ad2596d71945b8c371d0cc38835e09d853be73ae86c9bd84783e70939050af4",
+        "type": "HybridCASTokenizer",
+        "version": "hybrid-cas-v1",
+        "vocab_size": 14683,
+        "vocab_version": "english-bpe-tier3-50k-claude-20260507"
+      },
+      "tokenizer_path": "/workspace/tksCAS/noetic-compass-scaffold/noetic-compass/cas-native/training/runs/b3_full_50k_prodshape_20260507/tokenizer.json",
+      "use_cas_prefix": false,
+      "vocab_size": 38683
+    },
+    "use_cas_prefix": false,
+    "use_fallback_head": false
+  },
+  "final_loss_total": 1.4416730403900146,
+  "git_commit_sha": "788148bd907c3f6aad79c64418490c815c67aea3",
+  "n_epochs_completed": 5,
+  "n_train_records": 47500,
+  "schema_version": "checkpoint.v1",
+  "trained_at_timestamp": "2026-05-07T05:19:54Z",
+  "trained_from_corpus_hash": "3ad2596d71945b8c371d0cc38835e09d853be73ae86c9bd84783e70939050af4",
+  "weights_sha": "8235bd998092a689e16319fd867eed8c2255492cbba0c44a169fd4a036ea21a3"
+}

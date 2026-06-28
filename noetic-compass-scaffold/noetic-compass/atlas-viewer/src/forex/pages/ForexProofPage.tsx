@@ -8,15 +8,16 @@
 import { useEffect, useState, type CSSProperties, type ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { COLORS, ACCENT_TEAL, FONT_MONO, SPRING_GENTLE } from '../../lib/designTokens';
-import { fetchForexProofBundle } from '../forexApi';
+import { fetchForexProofBundle, fetchAdaptiveCockpit } from '../forexApi';
 import { deriveLiveEligibility, type EligibilityRow } from '../forexSelectors';
-import type { ForexProofBundle } from '../types';
+import type { ForexProofBundle, AdaptiveCockpitPayload } from '../types';
 import { ForexModeBanner } from '../components/ForexModeBanner';
 import { ForexPanel } from '../components/ForexPanel';
 import { ForexStatusChip } from '../components/ForexStatusChip';
 import { ClaimStatusChip } from '../components/ClaimStatusChip';
 import { EvidenceHashRow } from '../components/EvidenceHashRow';
 import { LockReasonList } from '../components/LockReasonList';
+import AdaptiveCompoundingPanel from '../components/AdaptiveCompoundingPanel';
 
 // ── small layout helpers ─────────────────────────────────────────────────────
 
@@ -141,13 +142,20 @@ const centerStyle: CSSProperties = {
 
 export function ForexProofPage() {
   const [bundle, setBundle] = useState<ForexProofBundle | null>(null);
+  const [adaptive, setAdaptive] = useState<AdaptiveCockpitPayload | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    fetchForexProofBundle()
-      .then((b) => {
-        if (!cancelled) setBundle(b);
+    Promise.all([
+      fetchForexProofBundle(),
+      fetchAdaptiveCockpit(),
+    ])
+      .then(([b, a]) => {
+        if (!cancelled) {
+          setBundle(b);
+          setAdaptive(a);
+        }
       })
       .catch((e: unknown) => {
         if (!cancelled) setError(e instanceof Error ? e.message : 'Failed to load CAS Forex evidence.');
@@ -308,6 +316,10 @@ export function ForexProofPage() {
           </code>
         </div>
       </ForexPanel>
+
+      {adaptive && (
+        <AdaptiveCompoundingPanel cockpit={adaptive} />
+      )}
 
       <ForexPanel
         title="Live & Payment Controls"

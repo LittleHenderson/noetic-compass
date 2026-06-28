@@ -1,0 +1,716 @@
+{
+  "schema_version": "cas_harness_matched_taxonomy_control_manifest.v1",
+  "manifest_id": "matched_taxonomy_control_manifest_20260530",
+  "created_date": "2026-05-30",
+  "status": "label_manifest_ready",
+  "lane": "control_taxonomy_label_manifest_only",
+  "execution_ready": true,
+  "execution_ready_scope": "Ready for a runner that consumes this schema to materialize deterministic control labels from the frozen Stage 9 40E and Stage 7 F28 scenario artifacts. This file is not a row-level assignment artifact and does not execute probes.",
+  "source_documents": [
+    "docs/working/cas_harness_matched_taxonomy_control_prereg_20260530.md",
+    "docs/working/cas_harness_original_closure_methodology_20260526.md",
+    "docs/working/cas_harness_ai2_one_pager_20260526.md",
+    "docs/working/gpt_neox_20b_stage9_original_40e_bridge_proof_REPRODUCIBILITY_NOTES_20260528.md",
+    "noetic-compass-scaffold/noetic-compass/docs/working/tks28_foundations_specificity_layer_2026_05_09.md",
+    "noetic-compass-scaffold/noetic-compass/research/cas_probe/stage7_foundation_pilot_smoke_activations_manifest_20260517.json"
+  ],
+  "global_rules": {
+    "split_policy": "reuse_frozen_source_split_or_block",
+    "row_count_policy": "use_same_rows_as_source_activation_artifact",
+    "row_key_priority": [
+      "scenario.id",
+      "scenario.sample_id",
+      "metadata.sample_ids",
+      "sha256(dataset_artifact_sha256 + ':' + row_index)"
+    ],
+    "base_prompt_group_key": "prompt_after_stripping_leading_bracket_framing_tags",
+    "non_cas_assignment_prohibited_fields": [
+      "labels_operator",
+      "labels_domain",
+      "foundation",
+      "drive",
+      "register",
+      "cas_expression",
+      "cas_label",
+      "forty_element_label",
+      "f28_label"
+    ],
+    "block_if_split_missing": true,
+    "block_if_non_cas_quota_unsatisfied": true,
+    "emit_assignment_hash": true
+  },
+  "seeds": {
+    "manifest_seed": 20260530,
+    "stage9_existing_readout_seed": 20260527,
+    "stage9_existing_bridge_selection_seed": 20260528,
+    "nc40_assignment_seed": 2026053040,
+    "nc28_assignment_seed": 2026053028,
+    "scrambled_40e_primary_seed": 2026053140,
+    "scrambled_f28_primary_seed": 2026053128,
+    "scrambled_40e_null_sweep_seeds": [
+      2026053401,
+      2026053402,
+      2026053403,
+      2026053404,
+      2026053405,
+      2026053406,
+      2026053407,
+      2026053408,
+      2026053409,
+      2026053410
+    ],
+    "scrambled_f28_null_sweep_seeds": [
+      2026052801,
+      2026052802,
+      2026052803,
+      2026052804,
+      2026052805,
+      2026052806,
+      2026052807,
+      2026052808,
+      2026052809,
+      2026052810
+    ],
+    "text_baseline_seed": 2026053050,
+    "lacunarity_seed": 2026053060
+  },
+  "source_targets": {
+    "stage9_40e": {
+      "method_label": "S9-40E-ORIGINAL-BASELINE-READOUT",
+      "axis": "40_element_operator_x_domain",
+      "canonical_remote_scenarios": "/workspace/cas-harness-large-eval/data/stage9_original_40e_scenarios_20260527.json",
+      "canonical_remote_dataset": "/workspace/cas-harness-large-eval/data/gpt_neox_20b_stage9_original_40e_layers_0_43.npz",
+      "canonical_remote_readout_report": "/workspace/cas-harness-large-eval/results/gpt_neox_20b_stage9_original_40e_probe_eval_report.json",
+      "known_counts": {
+        "rows": 8320,
+        "classes": 40,
+        "rows_per_class": 208,
+        "train_rows": 3840,
+        "test_rows": 4480
+      },
+      "known_metrics": {
+        "hidden_readout_accuracy": 0.95625,
+        "count_vectorizer_text_accuracy": 0.49241071,
+        "text_hash_accuracy": 0.5,
+        "majority_accuracy": 0.025,
+        "shuffled_label_mean_accuracy": 0.02619
+      }
+    },
+    "stage7_f28": {
+      "method_label": "S7-F28-BALANCED-BRIDGE",
+      "axis": "foundation_28_drive_x_register",
+      "known_counts": {
+        "rows": 4368,
+        "classes": 28,
+        "rows_per_class": 156
+      },
+      "known_metrics": {
+        "gpt_neox_20b_foundation_accuracy": 0.868622,
+        "gpt_neox_20b_bridge_layer": 40,
+        "foundation_lacunarity": 0.006715,
+        "drive_lacunarity": 0.002752,
+        "register_lacunarity": 0.001283,
+        "text_baseline_accuracy": 0.4228,
+        "chance_accuracy": 0.03571428571428571,
+        "shuffled_label_accuracy": 0.034
+      }
+    }
+  },
+  "cas_reference_label_spaces": {
+    "stage9_40e": {
+      "construction": "operator|domain",
+      "operators": [
+        "^0",
+        "^1",
+        "^2",
+        "^3",
+        "^4",
+        "^5",
+        "^6",
+        "^7",
+        "^8",
+        "^9"
+      ],
+      "domains": [
+        "P",
+        "C",
+        "E",
+        "O"
+      ],
+      "labels": [
+        "^0|P",
+        "^0|C",
+        "^0|E",
+        "^0|O",
+        "^1|P",
+        "^1|C",
+        "^1|E",
+        "^1|O",
+        "^2|P",
+        "^2|C",
+        "^2|E",
+        "^2|O",
+        "^3|P",
+        "^3|C",
+        "^3|E",
+        "^3|O",
+        "^4|P",
+        "^4|C",
+        "^4|E",
+        "^4|O",
+        "^5|P",
+        "^5|C",
+        "^5|E",
+        "^5|O",
+        "^6|P",
+        "^6|C",
+        "^6|E",
+        "^6|O",
+        "^7|P",
+        "^7|C",
+        "^7|E",
+        "^7|O",
+        "^8|P",
+        "^8|C",
+        "^8|E",
+        "^8|O",
+        "^9|P",
+        "^9|C",
+        "^9|E",
+        "^9|O"
+      ]
+    },
+    "stage7_f28": {
+      "construction": "F{drive}{register}",
+      "drives": [
+        "F1",
+        "F2",
+        "F3",
+        "F4",
+        "F5",
+        "F6",
+        "F7"
+      ],
+      "registers": [
+        "T",
+        "A",
+        "f",
+        "E"
+      ],
+      "labels": [
+        "F1T",
+        "F1A",
+        "F1f",
+        "F1E",
+        "F2T",
+        "F2A",
+        "F2f",
+        "F2E",
+        "F3T",
+        "F3A",
+        "F3f",
+        "F3E",
+        "F4T",
+        "F4A",
+        "F4f",
+        "F4E",
+        "F5T",
+        "F5A",
+        "F5f",
+        "F5E",
+        "F6T",
+        "F6A",
+        "F6f",
+        "F6E",
+        "F7T",
+        "F7A",
+        "F7f",
+        "F7E"
+      ]
+    }
+  },
+  "controls": {
+    "scrambled_cas": {
+      "stage9_40e": {
+        "control_id": "SCR40E_BALANCED_SPLIT_SHUFFLE_V1",
+        "source_axis": "stage9_40e",
+        "class_count": 40,
+        "primary_seed": 2026053140,
+        "null_sweep_seeds_ref": "seeds.scrambled_40e_null_sweep_seeds"
+      },
+      "stage7_f28": {
+        "control_id": "SCRF28_BALANCED_SPLIT_SHUFFLE_V1",
+        "source_axis": "stage7_f28",
+        "class_count": 28,
+        "primary_seed": 2026053128,
+        "null_sweep_seeds_ref": "seeds.scrambled_f28_null_sweep_seeds"
+      },
+      "algorithm": {
+        "name": "balanced_splitwise_label_shuffle_with_identity_repair",
+        "version": "v1",
+        "steps": [
+          "For each frozen split separately, collect the canonical source labels as a multiset.",
+          "Sort rows by stable row key.",
+          "Shuffle the label multiset with numpy.random.default_rng(seed).permutation.",
+          "Repair accidental identity assignments by cyclically swapping assigned labels among identity rows.",
+          "If full identity repair is impossible, residual unchanged labels must be below 1 percent in that split.",
+          "Emit one row-level assignment artifact per seed."
+        ],
+        "preserve_per_split_class_counts": true,
+        "expected_result": "near_chance_hidden_readout_and_dirty_lacunarity"
+      }
+    },
+    "nc40_topic_frame": {
+      "control_id": "NC40_TOPIC_FRAME_V1",
+      "source_axis": "stage9_40e",
+      "class_count": 40,
+      "assignment_seed": 2026053040,
+      "is_nested_metric_target": false,
+      "topic_axis": [
+        "healthcare",
+        "education",
+        "commerce_finance",
+        "law_governance",
+        "software_data",
+        "logistics_operations",
+        "customer_support",
+        "public_safety"
+      ],
+      "frame_axis": [
+        "classification",
+        "causal_explanation",
+        "procedure",
+        "tradeoff_decision",
+        "risk_mitigation"
+      ],
+      "labels": [
+        "NC40_healthcare_classification",
+        "NC40_healthcare_causal_explanation",
+        "NC40_healthcare_procedure",
+        "NC40_healthcare_tradeoff_decision",
+        "NC40_healthcare_risk_mitigation",
+        "NC40_education_classification",
+        "NC40_education_causal_explanation",
+        "NC40_education_procedure",
+        "NC40_education_tradeoff_decision",
+        "NC40_education_risk_mitigation",
+        "NC40_commerce_finance_classification",
+        "NC40_commerce_finance_causal_explanation",
+        "NC40_commerce_finance_procedure",
+        "NC40_commerce_finance_tradeoff_decision",
+        "NC40_commerce_finance_risk_mitigation",
+        "NC40_law_governance_classification",
+        "NC40_law_governance_causal_explanation",
+        "NC40_law_governance_procedure",
+        "NC40_law_governance_tradeoff_decision",
+        "NC40_law_governance_risk_mitigation",
+        "NC40_software_data_classification",
+        "NC40_software_data_causal_explanation",
+        "NC40_software_data_procedure",
+        "NC40_software_data_tradeoff_decision",
+        "NC40_software_data_risk_mitigation",
+        "NC40_logistics_operations_classification",
+        "NC40_logistics_operations_causal_explanation",
+        "NC40_logistics_operations_procedure",
+        "NC40_logistics_operations_tradeoff_decision",
+        "NC40_logistics_operations_risk_mitigation",
+        "NC40_customer_support_classification",
+        "NC40_customer_support_causal_explanation",
+        "NC40_customer_support_procedure",
+        "NC40_customer_support_tradeoff_decision",
+        "NC40_customer_support_risk_mitigation",
+        "NC40_public_safety_classification",
+        "NC40_public_safety_causal_explanation",
+        "NC40_public_safety_procedure",
+        "NC40_public_safety_tradeoff_decision",
+        "NC40_public_safety_risk_mitigation"
+      ],
+      "mapping_rule": {
+        "assignment_algorithm": "deterministic_min_cost_balanced_assignment",
+        "assignment_scope": "train_and_test_splits_solved_separately",
+        "target_counts": "match_source_stage9_40e_per_split_class_counts",
+        "explicit_field_priority": [
+          "control_semantic.topic_40",
+          "control_semantic.frame_40"
+        ],
+        "candidate_text_fields": [
+          "lexical_pack_id",
+          "domain_slug",
+          "task_slug",
+          "prompt",
+          "reply",
+          "paraphrase_family",
+          "surface_style",
+          "question_type"
+        ],
+        "prohibited_input_fields_ref": "global_rules.non_cas_assignment_prohibited_fields",
+        "block_status": "blocked_insufficient_nc40_candidate_cover"
+      },
+      "keyword_rules": {
+        "topics": {
+          "healthcare": [
+            "patient",
+            "clinic",
+            "triage",
+            "diagnosis",
+            "treatment",
+            "medication",
+            "hospital",
+            "care plan"
+          ],
+          "education": [
+            "student",
+            "lesson",
+            "teacher",
+            "course",
+            "assessment",
+            "classroom",
+            "curriculum",
+            "grading"
+          ],
+          "commerce_finance": [
+            "invoice",
+            "payment",
+            "budget",
+            "loan",
+            "portfolio",
+            "market",
+            "vendor",
+            "revenue"
+          ],
+          "law_governance": [
+            "policy",
+            "statute",
+            "court",
+            "regulation",
+            "compliance",
+            "permit",
+            "contract",
+            "agency"
+          ],
+          "software_data": [
+            "code",
+            "api",
+            "database",
+            "model",
+            "dataset",
+            "server",
+            "bug",
+            "pipeline"
+          ],
+          "logistics_operations": [
+            "warehouse",
+            "shipment",
+            "inventory",
+            "routing",
+            "factory",
+            "schedule",
+            "dispatch",
+            "packing"
+          ],
+          "customer_support": [
+            "customer",
+            "client",
+            "ticket",
+            "service",
+            "complaint",
+            "account",
+            "refund",
+            "support"
+          ],
+          "public_safety": [
+            "incident",
+            "safety",
+            "emergency",
+            "hazard",
+            "inspection",
+            "risk",
+            "response",
+            "security"
+          ]
+        },
+        "frames": {
+          "classification": [
+            "classify",
+            "identify",
+            "label",
+            "which category",
+            "what type",
+            "recognize",
+            "sort"
+          ],
+          "causal_explanation": [
+            "because",
+            "cause",
+            "why",
+            "explains",
+            "leads to",
+            "depends on",
+            "trigger"
+          ],
+          "procedure": [
+            "step",
+            "procedure",
+            "how to",
+            "workflow",
+            "sequence",
+            "process",
+            "execute"
+          ],
+          "tradeoff_decision": [
+            "choose",
+            "decide",
+            "tradeoff",
+            "option",
+            "prioritize",
+            "compare",
+            "recommend"
+          ],
+          "risk_mitigation": [
+            "risk",
+            "mitigate",
+            "prevent",
+            "failure",
+            "harm",
+            "unsafe",
+            "guardrail"
+          ]
+        }
+      }
+    },
+    "nc28_topic_function_nested": {
+      "control_id": "NC28_TOPIC_FUNCTION_NESTED_V1",
+      "source_axis": "stage7_f28",
+      "class_count": 28,
+      "assignment_seed": 2026053028,
+      "is_nested_metric_target": true,
+      "parent_axis_name": "topic_family",
+      "child_axis_name": "discourse_function",
+      "topic_axis": [
+        "medical_care",
+        "learning_assessment",
+        "market_transaction",
+        "law_policy",
+        "technical_system",
+        "operations_planning",
+        "human_services"
+      ],
+      "function_axis": [
+        "describe_state",
+        "explain_cause",
+        "choose_action",
+        "evaluate_risk"
+      ],
+      "labels": [
+        "NC28_medical_care_describe_state",
+        "NC28_medical_care_explain_cause",
+        "NC28_medical_care_choose_action",
+        "NC28_medical_care_evaluate_risk",
+        "NC28_learning_assessment_describe_state",
+        "NC28_learning_assessment_explain_cause",
+        "NC28_learning_assessment_choose_action",
+        "NC28_learning_assessment_evaluate_risk",
+        "NC28_market_transaction_describe_state",
+        "NC28_market_transaction_explain_cause",
+        "NC28_market_transaction_choose_action",
+        "NC28_market_transaction_evaluate_risk",
+        "NC28_law_policy_describe_state",
+        "NC28_law_policy_explain_cause",
+        "NC28_law_policy_choose_action",
+        "NC28_law_policy_evaluate_risk",
+        "NC28_technical_system_describe_state",
+        "NC28_technical_system_explain_cause",
+        "NC28_technical_system_choose_action",
+        "NC28_technical_system_evaluate_risk",
+        "NC28_operations_planning_describe_state",
+        "NC28_operations_planning_explain_cause",
+        "NC28_operations_planning_choose_action",
+        "NC28_operations_planning_evaluate_risk",
+        "NC28_human_services_describe_state",
+        "NC28_human_services_explain_cause",
+        "NC28_human_services_choose_action",
+        "NC28_human_services_evaluate_risk"
+      ],
+      "mapping_rule": {
+        "assignment_algorithm": "deterministic_min_cost_balanced_assignment",
+        "assignment_scope": "train_and_test_splits_solved_separately",
+        "target_counts": "match_source_stage7_f28_per_split_class_counts",
+        "explicit_field_priority": [
+          "control_semantic.topic_7",
+          "control_semantic.function_4"
+        ],
+        "candidate_text_fields": [
+          "lexical_pack_id",
+          "domain_slug",
+          "task_slug",
+          "prompt",
+          "reply",
+          "paraphrase_family",
+          "surface_style",
+          "question_type"
+        ],
+        "prohibited_input_fields_ref": "global_rules.non_cas_assignment_prohibited_fields",
+        "block_status": "blocked_insufficient_nc28_candidate_cover"
+      },
+      "keyword_rules": {
+        "topics": {
+          "medical_care": [
+            "patient",
+            "clinic",
+            "triage",
+            "diagnosis",
+            "treatment",
+            "hospital",
+            "care"
+          ],
+          "learning_assessment": [
+            "student",
+            "lesson",
+            "teacher",
+            "assessment",
+            "course",
+            "classroom",
+            "grading"
+          ],
+          "market_transaction": [
+            "invoice",
+            "payment",
+            "purchase",
+            "vendor",
+            "budget",
+            "market",
+            "contract"
+          ],
+          "law_policy": [
+            "policy",
+            "law",
+            "court",
+            "regulation",
+            "compliance",
+            "permit",
+            "agency"
+          ],
+          "technical_system": [
+            "code",
+            "api",
+            "database",
+            "model",
+            "server",
+            "bug",
+            "pipeline"
+          ],
+          "operations_planning": [
+            "warehouse",
+            "shipment",
+            "inventory",
+            "routing",
+            "factory",
+            "schedule",
+            "dispatch"
+          ],
+          "human_services": [
+            "customer",
+            "client",
+            "support",
+            "case worker",
+            "service",
+            "complaint",
+            "account"
+          ]
+        },
+        "functions": {
+          "describe_state": [
+            "describe",
+            "status",
+            "current",
+            "profile",
+            "records",
+            "observes",
+            "what is"
+          ],
+          "explain_cause": [
+            "because",
+            "cause",
+            "why",
+            "explains",
+            "leads to",
+            "depends on",
+            "trigger"
+          ],
+          "choose_action": [
+            "choose",
+            "decide",
+            "next step",
+            "action",
+            "recommend",
+            "select",
+            "execute"
+          ],
+          "evaluate_risk": [
+            "risk",
+            "harm",
+            "unsafe",
+            "failure",
+            "mitigate",
+            "prevent",
+            "concern"
+          ]
+        }
+      },
+      "nested_lacunarity_metrics": [
+        "parent_topic_family_lacunarity",
+        "child_discourse_function_lacunarity",
+        "joint_topic_function_lacunarity"
+      ]
+    }
+  },
+  "assignment_artifact_contract": {
+    "required_fields": [
+      "schema_version",
+      "source_axis",
+      "control_id",
+      "manifest_sha256",
+      "source_scenario_sha256",
+      "source_dataset_sha256",
+      "split_manifest_sha256",
+      "seed",
+      "row_assignments",
+      "class_counts_by_split",
+      "blocked_status"
+    ],
+    "row_assignment_fields": [
+      "row_key",
+      "row_index",
+      "split",
+      "assigned_control_label",
+      "candidate_labels",
+      "assignment_source",
+      "source_text_fields_used"
+    ]
+  },
+  "readout_contract": {
+    "hidden_readout": "StandardScaler + LogisticRegression(class_weight='balanced', solver='lbfgs')",
+    "text_baseline": "CountVectorizer or documented text-only classifier on same frozen split",
+    "metrics": [
+      "accuracy",
+      "macro_f1",
+      "hidden_minus_text_accuracy",
+      "hidden_minus_text_macro_f1",
+      "flat_lacunarity",
+      "best_layer",
+      "neighbor_layer_stability"
+    ],
+    "additional_nested_metrics_for_f28_and_nc28": [
+      "parent_factor_lacunarity",
+      "child_factor_lacunarity",
+      "joint_class_lacunarity"
+    ]
+  },
+  "block_statuses": {
+    "missing_split": "blocked_missing_frozen_split_manifest",
+    "missing_source_artifact": "blocked_missing_source_scenario_or_activation_artifact",
+    "nc40_quota": "blocked_insufficient_nc40_candidate_cover",
+    "nc28_quota": "blocked_insufficient_nc28_candidate_cover",
+    "cas_field_leakage": "blocked_non_cas_assignment_used_cas_field"
+  }
+}

@@ -24,6 +24,7 @@ import { useReplayController } from '../../hooks/useReplayController';
 import type { ReplayTrace } from '../../lib/replayController';
 import type { ModelArchitecture } from '../../lib/modelArchitecture';
 import {
+  isLiveRunnableMethod,
   TESTING_METHODS,
   type TestingMethod,
 } from '../../lib/testingMethods';
@@ -34,12 +35,20 @@ import {
   type VisualPrimitive,
 } from '../../lib/visualPrimitives';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
-import { parseCoord } from '../../lib/neuronCover';
+import {
+  coverEvidenceByClass,
+  formatCoverConfidence,
+  loadStage27FSnapshot,
+  parseCoord,
+  type CoverEvidence,
+} from '../../lib/neuronCover';
 import { GlassPanel } from '../ui/GlassPanel';
 import { ACCENT_TEAL, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
 
 interface TraceNeuronCovers {
   per_class_neuron_covers?: Record<string, string[]>;
+  cover_evidence?: Record<string, CoverEvidence>;
+  row_reports?: unknown[];
 }
 interface TraceWithCovers {
   neuron_covers?: TraceNeuronCovers;
@@ -285,6 +294,23 @@ function frameAtIndex(frames: unknown[], index: number): PerTokenFrame | undefin
   return candidate as PerTokenFrame;
 }
 
+interface BlindspotEvidenceMatch {
+  classKey: string;
+  evidence: CoverEvidence;
+}
+
+function coverEvidenceFromTraceCovers(
+  covers: TraceNeuronCovers | undefined,
+): Record<string, CoverEvidence> {
+  if (!covers) return {};
+  if (covers.cover_evidence) return covers.cover_evidence;
+  try {
+    return coverEvidenceByClass(loadStage27FSnapshot(covers)) as Record<string, CoverEvidence>;
+  } catch {
+    return {};
+  }
+}
+
 export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const {
     trace,
@@ -309,7 +335,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
     undefined,
   );
   const [enabledMethodIds, setEnabledMethodIds] = useState<Set<string>>(
-    () => new Set(methods.map((m) => m.id)),
+    () => new Set(methods.filter(isLiveRunnableMethod).map((m) => m.id)),
   );
   const [knobValues, setKnobValues] = useState<
     Record<string, Record<string, KnobValue>>
@@ -375,9 +401,24 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       }));
   }, [showActiveTrace, currentFrame]);
 
+  const traceNeuronCovers = (trace as unknown as TraceWithCovers).neuron_covers;
+
+  const blindspotEvidenceByCoord = useMemo<Map<string, BlindspotEvidenceMatch[]>>(() => {
+    const evidenceByClass = coverEvidenceFromTraceCovers(traceNeuronCovers);
+    const out = new Map<string, BlindspotEvidenceMatch[]>();
+    for (const [classKey, evidence] of Object.entries(evidenceByClass)) {
+      for (const label of evidence.neuron_cover) {
+        const next = out.get(label) ?? [];
+        next.push({ classKey, evidence });
+        out.set(label, next);
+      }
+    }
+    return out;
+  }, [traceNeuronCovers]);
+
   const blindspotCoords = useMemo<NeuronCoord[] | undefined>(() => {
     if (!showBlindspots) return undefined;
-    const covers = (trace as unknown as TraceWithCovers).neuron_covers?.per_class_neuron_covers;
+    const covers = traceNeuronCovers?.per_class_neuron_covers;
     if (!covers) return undefined;
     const seen = new Set<string>();
     const out: NeuronCoord[] = [];
@@ -395,7 +436,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
       }
     }
     return out;
-  }, [showBlindspots, trace]);
+  }, [showBlindspots, traceNeuronCovers]);
 
   useEffect(() => {
     setActivePrimitiveId(undefined);
@@ -452,6 +493,8 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
 
   const handleToggleMethod = useCallback(
     (methodId: string, enabled: boolean) => {
+      const method = methods.find((m) => m.id === methodId);
+      if (!method || !isLiveRunnableMethod(method)) return;
       setEnabledMethodIds((prev) => {
         const next = new Set(prev);
         if (enabled) next.add(methodId);
@@ -487,6 +530,7 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
   const handleNeuronClick = useCallback(
     (coord: NeuronCoord) => {
       setSelectedNeuron(coord);
+      const coverMatches = blindspotEvidenceByCoord.get(coord.label) ?? [];
       openDrawer({
         source: 'neuron',
         title: coord.label,
@@ -499,10 +543,17 @@ export function AtlasViewerShell(props: AtlasViewerShellProps): JSX.Element {
         detail: {
           token: tokens[currentTokenIndex]?.token,
           architecture: architecture.family,
+          cover_level_confidence: coverMatches.map(({ classKey, evidence }) => ({
+            class_key: classKey,
+            statement: formatCoverConfidence(evidence.confidence),
+            confidence: evidence.confidence,
+            clean_margin: evidence.clean_margin,
+            targeted_drop: evidence.targeted_drop,
+          })),
         },
       });
     },
-    [openDrawer, currentTokenIndex, tokens, architecture.family],
+    [openDrawer, currentTokenIndex, tokens, architecture.family, blindspotEvidenceByCoord],
   );
 
   const handlePrimitiveSelect = useCallback((p: VisualPrimitive) => {

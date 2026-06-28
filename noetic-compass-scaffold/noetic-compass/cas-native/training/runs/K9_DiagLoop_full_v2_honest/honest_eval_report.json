@@ -1,0 +1,100 @@
+{
+  "by_bucket_canonical": {
+    "meta_logic": {
+      "all_heads_exact": 48,
+      "all_heads_exact_rate": 0.47058823529411764,
+      "n": 102
+    },
+    "v74_baseline": {
+      "all_heads_exact": 180,
+      "all_heads_exact_rate": 0.9,
+      "n": 200
+    },
+    "v75_register": {
+      "all_heads_exact": 126,
+      "all_heads_exact_rate": 0.4772727272727273,
+      "n": 264
+    },
+    "v76_production": {
+      "all_heads_exact": 33,
+      "all_heads_exact_rate": 0.3055555555555556,
+      "n": 108
+    },
+    "v77_omega": {
+      "all_heads_exact": 216,
+      "all_heads_exact_rate": 0.8089887640449438,
+      "n": 267
+    },
+    "v77_rule_four": {
+      "all_heads_exact": 27,
+      "all_heads_exact_rate": 0.4576271186440678,
+      "n": 59
+    }
+  },
+  "by_bucket_paraphrase_with_self_prior": {
+    "meta_logic": {
+      "all_heads_exact": 60,
+      "all_heads_exact_rate": 0.19607843137254902,
+      "n": 306
+    },
+    "v74_baseline": {
+      "all_heads_exact": 425,
+      "all_heads_exact_rate": 0.7083333333333334,
+      "n": 600
+    },
+    "v75_register": {
+      "all_heads_exact": 88,
+      "all_heads_exact_rate": 0.1111111111111111,
+      "n": 792
+    },
+    "v76_production": {
+      "all_heads_exact": 105,
+      "all_heads_exact_rate": 0.32407407407407407,
+      "n": 324
+    },
+    "v77_omega": {
+      "all_heads_exact": 637,
+      "all_heads_exact_rate": 0.7952559300873908,
+      "n": 801
+    },
+    "v77_rule_four": {
+      "all_heads_exact": 76,
+      "all_heads_exact_rate": 0.4293785310734463,
+      "n": 177
+    }
+  },
+  "canonical_text_only": 0.63,
+  "n_canonical": 1000,
+  "n_paraphrase": 3000,
+  "paraphrase_lift_pp": 17.633333333333333,
+  "paraphrase_text_only": 0.28733333333333333,
+  "paraphrase_with_self_prior": 0.46366666666666667,
+  "per_head_canonical_text_only": {
+    "authority": 1.0,
+    "domain": 0.952,
+    "drive": 0.863,
+    "expression_family": 0.968,
+    "has_meta_logic": 0.999,
+    "has_omega": 1.0,
+    "meta_relations": 0.979,
+    "noetic": 0.881,
+    "register_mode": 0.948,
+    "registers": 0.935,
+    "transition_kind": 0.976,
+    "turn_type": 1.0
+  },
+  "per_head_paraphrase_with_self_prior": {
+    "authority": 1.0,
+    "domain": 0.899,
+    "drive": 0.754,
+    "expression_family": 0.9693333333333334,
+    "has_meta_logic": 0.9913333333333333,
+    "has_omega": 1.0,
+    "meta_relations": 0.9453333333333334,
+    "noetic": 0.7633333333333333,
+    "register_mode": 0.8946666666666667,
+    "registers": 0.9183333333333333,
+    "transition_kind": 0.9566666666666667,
+    "turn_type": 1.0
+  }
+}

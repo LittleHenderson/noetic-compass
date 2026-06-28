@@ -1,0 +1,16 @@
+{
+  "checkpoint_id": "a4339684-01a0-462f-b9ad-5c7a43dbefde",
+  "code_version": "v0.1.0",
+  "extra": {
+    "first_event_id": "733be848-78a9-44c8-bfbc-4edca6d21e30",
+    "smoke_test": true
+  },
+  "final_loss_total": 4.177526950836182,
+  "git_commit_sha": "ba6fc6647c2324fbe7958417fb022eded874e453",
+  "n_epochs_completed": 0,
+  "n_train_records": 2,
+  "schema_version": "checkpoint.v1",
+  "trained_at_timestamp": "2026-05-09T01:09:11Z",
+  "trained_from_corpus_hash": "smoke_synthetic",
+  "weights_sha": "de88917a1bec23b2b41be4fd35e1be7c1ea4d7cd17e1bcf4dac79ad75ddee197"
+}

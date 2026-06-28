@@ -1,0 +1,26 @@
+atlas v0: TS trace schema + TraceLoader — Agent B
+
+Adds the TypeScript port of the traceability_v0 JSON schema and a
+TraceLoader React component the Idea Atlas page can mount to bring a
+trace in from disk, drag-drop, URL ?trace= param, or the bundled demo.
+
+- dashboard/src/lib/trace.ts: full type tree (AtlasTrace + sub-shapes
+  including the discriminated cas_expression/nl_bridge input union)
+  plus isAtlasTrace type guard and validateAtlasTrace returning a
+  precise error string for the first malformed top-level key. Mirrors
+  field-for-field the schema emitted by cas-native/inference/
+  traceability_v0.py + thought_tree.py.
+
+- dashboard/src/components/idea-atlas/TraceLoader.tsx: card with demo
+  button + file picker + drag-drop zone + URL ?trace= auto-load on
+  mount. Validates every blob through validateAtlasTrace before firing
+  onTraceLoaded; surfaces parse / schema errors via onError. Bundled
+  DEMO_TRACE matches the canonical "explain a thought becoming action"
+  -> ^9^O sample (nl_bridge input shape).
+
+- Tests: 19 passing — 11 cover validator round-trip + per-required-key
+  rejection + bad schema_version + nl_bridge variant; 8 cover demo
+  button, file picker (valid / invalid JSON / missing key / wrong
+  version), and URL param paths.
+
+Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>

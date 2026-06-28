@@ -16,6 +16,12 @@ cas-native/data/test_batch_*.jsonl
 
 cas-native/training/runs/**/*.pt
 
+# --- scratch run outputs (model checkpoints, dev-server logs, deploy checks) ---
+.tmp/
+*.log
+*.out
+*.err
+
 # --- large research/probe ML artifacts (archive to D:\tksCAS-archive\, never commit) ---
 research/**/*.npz
 research/**/*.pt

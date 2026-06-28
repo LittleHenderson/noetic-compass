@@ -4,6 +4,7 @@ import {
   KNOB_TYPE_VALUES,
   TESTING_METHODS,
   getMethod,
+  isLiveRunnableMethod,
   listMethods,
 } from './testingMethods';
 
@@ -92,7 +93,9 @@ describe('testingMethods registry', () => {
   it('Module 1 axis enum covers all 4 CAS axes', () => {
     const m = getMethod('foundation_probe');
     const axis = m?.knobs.find((k) => k.id === 'axis');
+    const topK = m?.knobs.find((k) => k.id === 'top_k');
     expect(axis?.options).toEqual(['Noetic', 'Domain', 'Drive', 'Register']);
+    expect(topK?.default).toBe(8);
   });
 
   it('Module 5 drive enum covers F1..F7', () => {
@@ -117,6 +120,27 @@ describe('testingMethods registry', () => {
     expect(fmt?.options).toEqual(['JSON', 'markdown']);
   });
 
+  it('classifies LIVE runtime support for every method', () => {
+    const statuses = Object.fromEntries(
+      TESTING_METHODS.map((m) => [m.id, m.liveRuntime.status]),
+    );
+    expect(statuses.foundation_probe).toBe('wired_runtime_effect');
+    expect(statuses.rpm_gate_check).toBe('wired_runtime_effect');
+    expect(statuses.blindspot_detection).toBe('wired_runtime_effect');
+    expect(statuses.verification_stack).toBe('wired_runtime_effect');
+    expect(statuses.evidence_packet).toBe('payload_only');
+    expect(statuses.spatial_evidence_layer).toBe('payload_only');
+    expect(statuses.inversion_scan).toBe('unsupported');
+    expect(statuses.sparse_neuron_cover).toBe('unsupported');
+    expect(statuses.drive_local_eraser).toBe('unsupported');
+    expect(TESTING_METHODS.filter(isLiveRunnableMethod).map((m) => m.id)).toEqual([
+      'foundation_probe',
+      'rpm_gate_check',
+      'blindspot_detection',
+      'verification_stack',
+    ]);
+  });
+
   it('verbatim text from doc §5 is preserved', () => {
     expect(getMethod('foundation_probe')?.description).toBe(
       'Reads the 7-drive Foundation signal from model hidden states using linear probes',
@@ -128,10 +152,13 @@ describe('testingMethods registry', () => {
       'Scans for structural drift across 7 inversion axes (N / W / F / E / S / A / P)',
     );
     expect(getMethod('sparse_neuron_cover')?.outputShape).toBe(
-      '`neuron_cover` list with `clean_margin` + `targeted_drop` scores',
+      '`neuron_cover` list with `clean_margin`, `targeted_drop`, and cover-level confidence',
     );
     expect(getMethod('drive_local_eraser')?.outputShape).toBe(
       'Pre/post output-distribution shift + matched-control p-value',
+    );
+    expect(getMethod('blindspot_detection')?.outputShape).toBe(
+      'Per-drive blindspot overlay on NeuralNetScene + cover-level confidence table',
     );
     expect(getMethod('verification_stack')?.outputShape).toBe(
       'Per-token ACCEPT / SUPPRESS / FLAG table',

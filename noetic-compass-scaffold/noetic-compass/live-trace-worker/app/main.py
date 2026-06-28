@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from fastapi import FastAPI
 
+from .auth import WorkerTokenMiddleware
 from .routes import health, live_trace
 
 
@@ -23,6 +24,7 @@ def create_app() -> FastAPI:
             "directly."
         ),
     )
+    app.add_middleware(WorkerTokenMiddleware)
     app.include_router(health.router, tags=["health"])
     app.include_router(live_trace.router, tags=["live-trace"])
     return app

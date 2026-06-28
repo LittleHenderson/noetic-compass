@@ -53,7 +53,16 @@ def test_dump_session_emits_full_event_sequence(client):
     # Manifest first, complete last, neuron_covers right after manifest.
     assert events[0]["type"] == "manifest"
     assert events[1]["type"] == "neuron_covers"
+    assert events[2]["type"] == "method_runtime_status"
     assert events[-1]["type"] == "complete"
+
+    method_statuses = {
+        item["method_id"]: item for item in events[2]["methods"]
+    }
+    assert method_statuses["evidence_packet"]["enabled"] is False
+    assert method_statuses["evidence_packet"]["status"] == "payload_only"
+    assert method_statuses["drive_local_eraser"]["enabled"] is False
+    assert method_statuses["drive_local_eraser"]["status"] == "unsupported"
 
     # Token events in between, exact count == max_new_tokens.
     token_events = [e for e in events if e["type"] == "token"]
@@ -78,6 +87,12 @@ def test_dump_session_emits_full_event_sequence(client):
     for cls in ("F1A", "F1T", "F1f", "F1E"):
         assert cls in covers
         assert all(label.startswith("L") and "N" in label for label in covers[cls])
+
+    cover_evidence = events[1]["cover_evidence"]
+    assert cover_evidence["F1A"]["confidence"]["status"] in {"real", "unavailable"}
+    assert cover_evidence["F1A"]["confidence"]["provenance"]["confidence_scope"] == (
+        "cover-level"
+    )
 
 
 def test_dump_session_is_deterministic_under_seed(client):

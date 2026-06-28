@@ -50,6 +50,7 @@ _FILES: dict[str, str] = {
     "decision": f"{_LEAD_PREFIX}-paper-decision-status.json",
     "risk": f"{_LEAD_PREFIX}-paper-risk-status.json",
     "bundle": f"{_LEAD_PREFIX}-daily-bundle-status.json",
+    "adaptive-cockpit": f"{_LEAD_PREFIX}-adaptive-cockpit.json",
 }
 
 
@@ -113,3 +114,8 @@ def get_paper_risk() -> JSONResponse:
 @router.get("/proof/bundle")
 def get_daily_bundle() -> JSONResponse:
     return JSONResponse(_read_evidence("bundle"))
+
+
+@router.get("/proof/adaptive-cockpit")
+def get_adaptive_cockpit() -> JSONResponse:
+    return JSONResponse(_read_evidence("adaptive-cockpit"))

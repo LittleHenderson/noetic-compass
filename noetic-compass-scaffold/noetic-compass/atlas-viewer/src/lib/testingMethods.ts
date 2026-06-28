@@ -23,7 +23,34 @@ export interface TestingMethod {
   prerequisites: readonly string[];
   validatedArchs: readonly string[];
   orderIndex: number;
+  liveRuntime: LiveRuntimeSupport;
 }
+
+export type LiveRuntimeStatus =
+  | 'wired_runtime_effect'
+  | 'payload_only'
+  | 'unsupported';
+
+export interface LiveRuntimeSupport {
+  status: LiveRuntimeStatus;
+  supportedKnobs: readonly string[];
+  effect: string;
+}
+
+const LAYER_OPTIONS = [
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+] as const;
 
 const FOUNDATION_PROBE: TestingMethod = {
   id: 'foundation_probe',
@@ -45,7 +72,15 @@ const FOUNDATION_PROBE: TestingMethod = {
       label: 'Layer range',
       type: 'multiselect',
       default: [],
+      options: LAYER_OPTIONS,
       description: 'Inclusive layer indices to sweep',
+    },
+    {
+      id: 'top_k',
+      label: 'Top K neurons',
+      type: 'number',
+      default: 8,
+      description: 'Number of top activations emitted per token',
     },
   ],
   outputShape: 'Per-layer accuracy table + heatmap visualization',
@@ -53,6 +88,12 @@ const FOUNDATION_PROBE: TestingMethod = {
   prerequisites: ['Forward-pass hidden state capture'],
   validatedArchs: ['Pythia-160M', 'OLMo-1B', 'Qwen2.5-1.5B'],
   orderIndex: 1,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['axis', 'layer_range', 'top_k'],
+    effect:
+      'layer_range restricts emitted activation layers; top_k changes top_activated_neurons length',
+  },
 };
 
 const RPM_GATE_CHECK: TestingMethod = {
@@ -100,12 +141,25 @@ const RPM_GATE_CHECK: TestingMethod = {
       type: 'number',
       default: 0.75,
     },
+    {
+      id: 'emit_attention',
+      label: 'Emit attention summary',
+      type: 'boolean',
+      default: false,
+      description: 'Include attention head summaries used by the RPM check',
+    },
   ],
   outputShape: 'Pathway diagram with gate verdicts',
   costEstimateGpuMinutes: 2,
   prerequisites: ['Trace artifact with token-position alignment'],
   validatedArchs: ['Pythia-160M'],
   orderIndex: 2,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['pathway_nodes', 'strictness_threshold', 'emit_attention'],
+    effect:
+      'strictness_threshold changes RPM pass/fail; emit_attention includes attention_summary in token events',
+  },
 };
 
 const INVERSION_SCAN: TestingMethod = {
@@ -135,6 +189,11 @@ const INVERSION_SCAN: TestingMethod = {
   prerequisites: ['Forward-pass hidden states + RPM trace'],
   validatedArchs: ['Pythia-160M'],
   orderIndex: 3,
+  liveRuntime: {
+    status: 'unsupported',
+    supportedKnobs: [],
+    effect: 'No live worker inversion scanner is wired yet',
+  },
 };
 
 const SPARSE_NEURON_COVER: TestingMethod = {
@@ -160,11 +219,17 @@ const SPARSE_NEURON_COVER: TestingMethod = {
       description: 'Greedy until `clean_margin < threshold` when 0',
     },
   ],
-  outputShape: '`neuron_cover` list with `clean_margin` + `targeted_drop` scores',
+  outputShape:
+    '`neuron_cover` list with `clean_margin`, `targeted_drop`, and cover-level confidence',
   costEstimateGpuMinutes: 15,
   prerequisites: ['Stage 26-style probe + ablation harness'],
   validatedArchs: ['Pythia-160M', 'Qwen2.5-1.5B'],
   orderIndex: 4,
+  liveRuntime: {
+    status: 'unsupported',
+    supportedKnobs: [],
+    effect: 'No live worker causal cover discovery is wired yet',
+  },
 };
 
 const DRIVE_LOCAL_ERASER: TestingMethod = {
@@ -196,6 +261,11 @@ const DRIVE_LOCAL_ERASER: TestingMethod = {
   prerequisites: ['Module 4 output (neuron cover) for the target drive'],
   validatedArchs: ['Pythia-160M', 'Qwen2.5-1.5B'],
   orderIndex: 5,
+  liveRuntime: {
+    status: 'unsupported',
+    supportedKnobs: [],
+    effect: 'Live steering is disabled until a safe runtime implementation exists',
+  },
 };
 
 const BLINDSPOT_DETECTION: TestingMethod = {
@@ -215,18 +285,34 @@ const BLINDSPOT_DETECTION: TestingMethod = {
       options: ['one_drive', 'all_7'] as const,
     },
     {
+      id: 'drive',
+      label: 'Drive',
+      type: 'enum',
+      default: 'F1',
+      options: ['F1', 'F2', 'F3', 'F4', 'F5', 'F6', 'F7'] as const,
+      description: 'Used when scope is one_drive',
+    },
+    {
       id: 'layer_range',
       label: 'Layer range',
       type: 'multiselect',
       default: [],
+      options: LAYER_OPTIONS,
       description: 'Inclusive layer indices to overlay',
     },
   ],
-  outputShape: 'Per-drive blindspot overlay on NeuralNetScene + cover position table',
+  outputShape:
+    'Per-drive blindspot overlay on NeuralNetScene + cover-level confidence table',
   costEstimateGpuMinutes: 0,
   prerequisites: ['Modules 4 + 5'],
   validatedArchs: ['Pythia-160M', 'Qwen2.5-1.5B'],
   orderIndex: 6,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['scope', 'drive', 'layer_range'],
+    effect:
+      'scope/drive/layer_range change emitted neuron_covers classes and coordinates',
+  },
 };
 
 const VERIFICATION_STACK: TestingMethod = {
@@ -250,6 +336,11 @@ const VERIFICATION_STACK: TestingMethod = {
   prerequisites: ['Modules 1, 3, 6 outputs'],
   validatedArchs: ['Pythia-160M'],
   orderIndex: 7,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['mode'],
+    effect: 'mode changes token verdict thresholds in verification_stack events',
+  },
 };
 
 const EVIDENCE_PACKET: TestingMethod = {
@@ -280,6 +371,11 @@ const EVIDENCE_PACKET: TestingMethod = {
   prerequisites: ['Any module output'],
   validatedArchs: ['Pythia-160M', 'OLMo-1B', 'Qwen2.5-1.5B'],
   orderIndex: 8,
+  liveRuntime: {
+    status: 'payload_only',
+    supportedKnobs: ['include_per_token_detail', 'export_format'],
+    effect: 'Artifact/export preference only; it does not alter live worker runtime',
+  },
 };
 
 import { SPATIAL_EVIDENCE_MODULE } from './visualPrimitives';
@@ -306,4 +402,14 @@ export function getMethod(id: string): TestingMethod | undefined {
 
 export function listMethods(): readonly TestingMethod[] {
   return [...TESTING_METHODS].sort((a, b) => a.orderIndex - b.orderIndex);
+}
+
+export function isLiveRunnableMethod(method: TestingMethod): boolean {
+  return method.liveRuntime.status === 'wired_runtime_effect';
+}
+
+export function liveRuntimeLabel(status: LiveRuntimeStatus): string {
+  if (status === 'wired_runtime_effect') return 'live wired';
+  if (status === 'payload_only') return 'payload-only';
+  return 'unsupported';
 }

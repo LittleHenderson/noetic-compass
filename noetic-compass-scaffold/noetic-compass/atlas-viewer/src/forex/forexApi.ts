@@ -18,6 +18,7 @@ import {
   paperDecisionFixture,
   paperRiskFixture,
   dailyBundleFixture,
+  adaptiveCockpitFixture,
 } from './fixtures';
 import type {
   ForexProofBundle,
@@ -27,6 +28,7 @@ import type {
   PaperDecisionStatus,
   PaperRiskStatus,
   DailyBundleStatus,
+  AdaptiveCockpitPayload,
 } from './types';
 
 /**
@@ -92,6 +94,10 @@ export async function fetchPaperRiskStatus(): Promise<PaperRiskStatus> {
 
 export async function fetchDailyBundleStatus(): Promise<DailyBundleStatus> {
   return (await resolve('/proof/bundle', dailyBundleFixture)).value;
+}
+
+export async function fetchAdaptiveCockpit(): Promise<AdaptiveCockpitPayload> {
+  return (await resolve('/proof/adaptive-cockpit', adaptiveCockpitFixture)).value;
 }
 
 /** One read for the whole proof cockpit. */

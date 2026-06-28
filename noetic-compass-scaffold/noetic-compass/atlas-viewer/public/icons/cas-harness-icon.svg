@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="CAS Harness">
+  <rect width="512" height="512" rx="96" fill="#020617"/>
+  <path d="M108 256c0-82 66-148 148-148s148 66 148 148-66 148-148 148-148-66-148-148Z" fill="none" stroke="#2dd4bf" stroke-width="32"/>
+  <path d="M168 256c0-49 39-88 88-88s88 39 88 88-39 88-88 88-88-39-88-88Z" fill="none" stroke="#e2e8f0" stroke-width="22"/>
+  <path d="M256 82v82M256 348v82M82 256h82M348 256h82" stroke="#22d3ee" stroke-width="22" stroke-linecap="round"/>
+  <circle cx="256" cy="256" r="28" fill="#ccfbf1"/>
+</svg>

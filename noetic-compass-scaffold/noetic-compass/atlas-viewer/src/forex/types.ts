@@ -387,6 +387,86 @@ export interface ForexTrace {
   chain_verified: boolean;
 }
 
+// ── Adaptive cockpit payload (…-adaptive-cockpit.json) ───────────────────────
+
+export interface AdaptiveActionCounts {
+  OPEN_INITIAL?: number;
+  ADD_TO_WINNER?: number;
+  HOLD?: number;
+  TIGHTEN_STOP?: number;
+  PARTIAL_TAKE_PROFIT?: number;
+  CLOSE_BASKET?: number;
+  NO_TRADE?: number;
+}
+
+export interface AdaptiveDecision {
+  symbol: string;
+  action: string;
+  direction: string;
+  lot_size: number;
+  stop_loss: number | null;
+  take_profit: number | null;
+  evidence_score: number;
+  reason: string;
+}
+
+export interface AdaptiveCompoundingSummary {
+  plan_id: string;
+  lead_id: string;
+  strategy_setting: string;
+  review_count: number;
+  action_counts: AdaptiveActionCounts;
+  chain_verified: boolean;
+  latest_review: {
+    review_id: string;
+    date: string;
+    decisions: AdaptiveDecision[];
+    action_counts: AdaptiveActionCounts;
+  } | null;
+  claim_boundary: string;
+  deployment_status: string;
+  broker_accept_status: string;
+  payment_transfer_status: string;
+}
+
+export interface ImportedHistorySymbol {
+  trades: number;
+  wins: number;
+  losses: number;
+  win_rate: number;
+  net_profit: number;
+}
+
+export interface ImportedHistory {
+  source_file: string;
+  total_trades: number;
+  winning_trades: number;
+  losing_trades: number;
+  win_rate: number;
+  profit_factor: number;
+  total_profit: number;
+  total_loss: number;
+  net_profit: number;
+  symbol_performance: Record<string, ImportedHistorySymbol>;
+  multi_trade_bursts: number;
+}
+
+export interface AdaptiveCockpitPayload {
+  plan_id: string;
+  lead_id: string;
+  strategy_setting: string;
+  timeframe: string;
+  cockpit_status: string;
+  adaptive_action_counts: AdaptiveActionCounts;
+  latest_adaptive_decisions: AdaptiveDecision[];
+  adaptive_compounding: AdaptiveCompoundingSummary;
+  imported_history: ImportedHistory | null;
+  claim_boundary: string;
+  deployment_status: string;
+  broker_accept_status: string;
+  payment_transfer_status: string;
+}
+
 // ── Derived banner state (selector output, see forexSelectors.ts) ────────────
 
 export interface ForexBannerState {

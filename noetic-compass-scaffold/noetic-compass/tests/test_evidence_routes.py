@@ -168,6 +168,97 @@ def test_evidence_get_dev_fixture_caveats_flag_dev_mode(client, auth_headers):
     assert any("dev fixture" in c.lower() for c in body["caveats"])
 
 
+def test_evidence_get_preserves_s7_f28_20b_packet_claims(
+    client, auth_headers, monkeypatch
+):
+    """A real trace packet can carry the GPT-NeoX-20B S7-F28 bridge rows
+    without the packet builder rewriting them into a completed verifier claim.
+    """
+    from api.routes import evidence as evidence_route
+
+    trace_id = "gpt-neox-20b-s7-f28-balanced-logistic"
+    trace = {
+        "input": {
+            "text": "Stage 7 Foundation-28 eta-to-epsilon bridge batch",
+            "model_id": "EleutherAI/gpt-neox-20b",
+        },
+        "cas_expression": {
+            "text": "Foundation-28 / Drive x Register",
+            "compiler_valid": True,
+            "grammar_category": "taxonomy_reference",
+        },
+        "output": {
+            "text": "Probe-readable epsilon loop passed under balanced logistic readout.",
+            "n_tokens": 14,
+        },
+        "copy_slot_trace": [
+            {
+                "role": "drive",
+                "name": "F3",
+                "copied": True,
+                "source_token_index": 0,
+                "target_token_index": 0,
+                "claim_level": "derived_trace",
+            },
+            {
+                "role": "register",
+                "name": "E",
+                "copied": True,
+                "source_token_index": 1,
+                "target_token_index": 1,
+                "claim_level": "derived_trace",
+            },
+        ],
+        "model_checkpoint_id": "EleutherAI/gpt-neox-20b",
+        "code_commit_sha": "stage7-f28-local-artifact",
+        "claim_levels": [
+            {
+                "claim": (
+                    "S7-F28 balanced-logistic readout passed the "
+                    "eta-to-epsilon likelihood bridge."
+                ),
+                "level": "derived_trace",
+                "support_status": "supported",
+                "support_rationale": (
+                    "Trace rows report +0.596413 mean likelihood-margin delta, "
+                    "90/112 positive rows, and sign-test p=3e-11."
+                ),
+            },
+            {
+                "claim": (
+                    "This packet is not a full CAS Harness ACCEPT until the "
+                    "Evidence Packet verifier merge completes."
+                ),
+                "level": "derived_trace",
+                "support_status": "partially_supported",
+                "support_rationale": (
+                    "The trace covers the S7-F28 likelihood-bridge tier but "
+                    "does not include the final verifier decision layer."
+                ),
+            },
+        ],
+        "caveats": [
+            "20B S7-F28 bridge packet: verifier merge is still pending.",
+        ],
+    }
+
+    monkeypatch.setattr(
+        evidence_route,
+        "_load_trace_artifact",
+        lambda requested_trace_id: trace if requested_trace_id == trace_id else None,
+    )
+
+    resp = client.get(f"/evidence/{trace_id}", headers=auth_headers)
+    assert resp.status_code == 200, resp.text
+    body = resp.json()
+
+    assert body["trace_id"] == trace_id
+    assert body["input"]["model_id"] == "EleutherAI/gpt-neox-20b"
+    assert body["provenance"]["model_checkpoint_id"] == "EleutherAI/gpt-neox-20b"
+    assert body["claim_levels"] == trace["claim_levels"]
+    assert any("verifier merge is still pending" in c for c in body["caveats"])
+
+
 # ---------------------------------------------------------------------------
 # GET 404.
 # ---------------------------------------------------------------------------

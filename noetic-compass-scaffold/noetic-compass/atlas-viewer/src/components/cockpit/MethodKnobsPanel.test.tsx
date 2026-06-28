@@ -24,6 +24,11 @@ const enumMethod: TestingMethod = {
   prerequisites: ['pre1'],
   validatedArchs: ['Pythia-160M'],
   orderIndex: 1,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['axis'],
+    effect: 'test runtime effect',
+  },
 };
 
 const numberMethod: TestingMethod = {
@@ -45,6 +50,11 @@ const numberMethod: TestingMethod = {
   prerequisites: [],
   validatedArchs: [],
   orderIndex: 2,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['gain'],
+    effect: 'test runtime effect',
+  },
 };
 
 const boolMethod: TestingMethod = {
@@ -66,6 +76,11 @@ const boolMethod: TestingMethod = {
   prerequisites: ['any'],
   validatedArchs: [],
   orderIndex: 3,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['include_detail'],
+    effect: 'test runtime effect',
+  },
 };
 
 const multiMethod: TestingMethod = {
@@ -88,6 +103,11 @@ const multiMethod: TestingMethod = {
   prerequisites: [],
   validatedArchs: [],
   orderIndex: 4,
+  liveRuntime: {
+    status: 'wired_runtime_effect',
+    supportedKnobs: ['axes'],
+    effect: 'test runtime effect',
+  },
 };
 
 const allMethods: TestingMethod[] = [enumMethod, numberMethod, boolMethod, multiMethod];
@@ -231,6 +251,32 @@ describe('MethodKnobsPanel', () => {
     expect(screen.getByTestId('method-status-m_enum')).toHaveTextContent(
       'enabled',
     );
+  });
+
+  it('marks unsupported LIVE methods unavailable and disables their toggle', () => {
+    const unsupported: TestingMethod = {
+      ...enumMethod,
+      id: 'm_unsupported',
+      name: 'Unsupported Method',
+      liveRuntime: {
+        status: 'unsupported',
+        supportedKnobs: [],
+        effect: 'not wired',
+      },
+    };
+    renderPanel({
+      methods: [unsupported],
+      enabled: new Set(['m_unsupported']),
+    });
+    const toggle = screen.getByTestId(
+      'method-toggle-m_unsupported',
+    ) as HTMLInputElement;
+    expect(toggle.disabled).toBe(true);
+    expect(toggle.checked).toBe(false);
+    expect(screen.getByTestId('method-live-status-m_unsupported')).toHaveTextContent(
+      'unsupported',
+    );
+    expect(screen.getByTestId('knob-m_unsupported-axis')).toBeDisabled();
   });
 
   it('collapse chevron hides body knobs section', () => {

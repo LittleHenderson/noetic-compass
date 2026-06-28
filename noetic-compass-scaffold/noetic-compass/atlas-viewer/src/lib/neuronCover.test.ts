@@ -4,6 +4,10 @@ import {
   formatCoord,
   loadStage27FSnapshot,
   coordsForClass,
+  coverEvidenceByClass,
+  deriveCoverConfidence,
+  formatCoverConfidence,
+  unsupportedCoverConfidence,
   type Stage27FData,
 } from "./neuronCover";
 
@@ -118,6 +122,10 @@ describe("loadStage27FSnapshot", () => {
     expect(snap.row_reports).toHaveLength(2);
     expect(snap.row_reports[0].target).toBe("F1T");
     expect(snap.candidate_layers_per_class.F1f).toEqual([5]);
+    expect(snap.row_reports[0].confidence.status).toBe("real");
+    expect(snap.row_reports[0].confidence.provenance.formula).toBe(
+      "targeted_drop / clean_margin",
+    );
   });
 
   it("accepts row_reports nested under evaluation", () => {
@@ -169,10 +177,76 @@ describe("loadStage27FSnapshot", () => {
     expect(() => loadStage27FSnapshot(raw)).toThrow(/target invalid/);
   });
 
-  it("throws on row with non-numeric clean_margin", () => {
+  it("marks row confidence unavailable on invalid clean_margin", () => {
     const raw = makeValidSnapshot();
     (raw.row_reports as Array<Record<string, unknown>>)[0].clean_margin = "high";
-    expect(() => loadStage27FSnapshot(raw)).toThrow(/clean_margin/);
+    const snap = loadStage27FSnapshot(raw);
+    expect(snap.row_reports[0].confidence.status).toBe("unavailable");
+    expect(snap.row_reports[0].confidence.reason).toMatch(/clean_margin/);
+  });
+});
+
+describe("cover-level confidence mapping", () => {
+  it("computes a valid medium score from targeted_drop / clean_margin", () => {
+    const confidence = deriveCoverConfidence(
+      { targeted_drop: 7.2, clean_margin: 10 },
+      { source: "unit-test" },
+    );
+    expect(confidence.status).toBe("real");
+    expect(confidence.score).toBeCloseTo(0.72);
+    expect(confidence.label).toBe("medium");
+    expect(formatCoverConfidence(confidence)).toBe("Confidence: 72% medium");
+    expect(confidence.provenance.source).toBe("unit-test");
+  });
+
+  it("does not emit a score when clean_margin is zero", () => {
+    const confidence = deriveCoverConfidence({ targeted_drop: 1, clean_margin: 0 });
+    expect(confidence.status).toBe("unavailable");
+    expect(confidence.score).toBeNull();
+    expect(confidence.reason).toMatch(/clean_margin/);
+  });
+
+  it("does not emit a score when targeted_drop is missing", () => {
+    const confidence = deriveCoverConfidence({ clean_margin: 10 });
+    expect(confidence.status).toBe("unavailable");
+    expect(confidence.score).toBeNull();
+    expect(confidence.reason).toMatch(/targeted_drop missing/);
+  });
+
+  it("does not report scores above the calibrated 0.95 range", () => {
+    const confidence = deriveCoverConfidence({ targeted_drop: 9.6, clean_margin: 10 });
+    expect(confidence.status).toBe("unavailable");
+    expect(confidence.score).toBeNull();
+    expect(confidence.reason).toMatch(/0\.95/);
+    expect(confidence.provenance.raw_score).toBeCloseTo(0.96);
+  });
+
+  it("separates unsupported drive state from unavailable evidence", () => {
+    const confidence = unsupportedCoverConfidence("F8A");
+    expect(confidence.status).toBe("unsupported");
+    expect(confidence.reason).toMatch(/unsupported/);
+    expect(confidence.score).toBeNull();
+  });
+
+  it("propagates row evidence provenance into the cover evidence map", () => {
+    const raw = makeValidSnapshot();
+    raw.schema_version = "stage27f_targeted_mlp_neuron_covers.v1";
+    raw.status = "STAGE27F_TARGETED_MLP_NEURON_COVERS_DIAGNOSTIC_ONLY_CONTRACT_MISMATCH";
+    raw.artifact_contract = {
+      status: "LOCAL_RECAPTURE_HASH_MISMATCH",
+      formal_gate_valid: false,
+    };
+    (raw.row_reports as Array<Record<string, unknown>>)[0].sample_id = "sample-1";
+    const snap = loadStage27FSnapshot(raw);
+    const evidence = coverEvidenceByClass(snap).F1T;
+    expect(evidence?.confidence.status).toBe("real");
+    expect(evidence?.confidence.provenance.source_schema_version).toBe(
+      "stage27f_targeted_mlp_neuron_covers.v1",
+    );
+    expect(evidence?.confidence.provenance.artifact_status).toBe(
+      "LOCAL_RECAPTURE_HASH_MISMATCH",
+    );
+    expect(evidence?.confidence.provenance.sample_id).toBe("sample-1");
   });
 });
 

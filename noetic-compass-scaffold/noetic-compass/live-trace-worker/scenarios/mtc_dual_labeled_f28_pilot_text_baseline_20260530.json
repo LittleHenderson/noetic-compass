@@ -1,0 +1,35 @@
+{
+  "assignments": "live-trace-worker\\scenarios\\mtc_dual_labeled_f28_pilot_assignments_20260530.json",
+  "assignments_sha256": "6d23dbdb33524cc2d183bdd7f7ef9e2258619af4f3efd86ca0c30aa253494ed7",
+  "axis": "f28",
+  "created_at": "2026-05-30T08:25:30.240470+00:00",
+  "fixture": "live-trace-worker\\scenarios\\mtc_dual_labeled_f28_pilot_20260530.json",
+  "fixture_sha256": "5dc7718af9e347de2ab97435404b64f6dd96bac3d089c164007f44b2861ce748",
+  "label_set_reports": {
+    "NC28_TOPIC_FUNCTION_NESTED_V1": {
+      "chance_accuracy": 0.03571428571428571,
+      "class_count": 28,
+      "max_features": 16384,
+      "test_accuracy": 0.0,
+      "test_macro_f1": 0.0,
+      "test_rows": 140,
+      "train_rows": 560,
+      "vectorizer": "CountVectorizer(1-2 grams)"
+    },
+    "cas_f28": {
+      "chance_accuracy": 0.03571428571428571,
+      "class_count": 28,
+      "max_features": 16384,
+      "test_accuracy": 0.1,
+      "test_macro_f1": 0.10000000000000002,
+      "test_rows": 140,
+      "train_rows": 560,
+      "vectorizer": "CountVectorizer(1-2 grams)"
+    }
+  },
+  "max_text_baseline_accuracy": 0.1,
+  "row_count": 700,
+  "schema_version": "cas_harness_mtc_fixture_text_baseline.v1",
+  "status": "completed",
+  "warning": "High text baseline means the prompt surface can predict at least one label set; rewrite before claim-bearing activation capture if this exceeds the preregistered ceiling."
+}

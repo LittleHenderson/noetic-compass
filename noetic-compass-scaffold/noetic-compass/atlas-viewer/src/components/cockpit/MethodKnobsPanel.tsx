@@ -8,7 +8,12 @@ import {
   SPRING_GENTLE,
   GLASS_PANEL_FILL,
 } from '../../lib/designTokens';
-import type { TestingMethod, KnobDef } from '../../lib/testingMethods';
+import {
+  isLiveRunnableMethod,
+  liveRuntimeLabel,
+  type TestingMethod,
+  type KnobDef,
+} from '../../lib/testingMethods';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 
 export type KnobValue = string | number | boolean | string[];
@@ -357,6 +362,7 @@ export default function MethodKnobsPanel({
       <div data-testid="method-knobs-panel" style={{ display: 'contents' }}>
         {ordered.map((method) => {
           const enabled = enabledMethodIds.has(method.id);
+          const liveRunnable = isLiveRunnableMethod(method);
           const isOpen = expanded.has(method.id);
           const nameId = `method-${method.id}-name`;
           const isFree = method.costEstimateGpuMinutes === 0;
@@ -370,6 +376,7 @@ export default function MethodKnobsPanel({
           const statusColor = enabled
             ? ATLAS_STATUS_COLORS.accepted
             : ATLAS_STATUS_COLORS.unavailable;
+          const liveStatus = liveRuntimeLabel(method.liveRuntime.status);
 
           return (
             <motion.section
@@ -408,6 +415,18 @@ export default function MethodKnobsPanel({
                 >
                   {enabled ? 'enabled' : 'disabled'}
                 </span>
+                <span
+                  data-testid={`method-live-status-${method.id}`}
+                  title={method.liveRuntime.effect}
+                  style={pillStyle(
+                    liveRunnable
+                      ? 'rgba(45, 212, 191, 0.22)'
+                      : 'rgba(148, 163, 184, 0.16)',
+                    liveRunnable ? '#ccfbf1' : '#cbd5e1',
+                  )}
+                >
+                  {liveStatus}
+                </span>
                 <label
                   style={{
                     display: 'inline-flex',
@@ -419,7 +438,8 @@ export default function MethodKnobsPanel({
                   <input
                     data-testid={`method-toggle-${method.id}`}
                     type="checkbox"
-                    checked={enabled}
+                    checked={enabled && liveRunnable}
+                    disabled={!liveRunnable}
                     aria-label={`Enable ${method.name}`}
                     onChange={(e: ChangeEvent<HTMLInputElement>) =>
                       onToggleMethod(method.id, e.target.checked)
@@ -439,7 +459,7 @@ export default function MethodKnobsPanel({
                       layoutId={`switch-thumb-${method.id}`}
                       style={{
                         ...switchThumbStyle,
-                        left: enabled ? 16 : 2,
+                        left: enabled && liveRunnable ? 16 : 2,
                       }}
                       transition={SPRING_SNAPPY}
                     />
@@ -492,7 +512,7 @@ export default function MethodKnobsPanel({
                           method.id,
                           knob,
                           valueFor(knobValues, method.id, knob),
-                          !enabled,
+                          !enabled || !liveRunnable,
                           onKnobChange,
                         ),
                       )}

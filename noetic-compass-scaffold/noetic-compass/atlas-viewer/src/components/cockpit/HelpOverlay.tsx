@@ -155,7 +155,7 @@ const COMPONENTS: Array<{ name: string; what: string }> = [
   {
     name: 'Blindspots overlay (B)',
     what:
-      'Every cognitive operation in CAS lives in one of four registers — Analytical, Transcendent, affective, Embodied. The F1 drive (Unity) has a known set of neurons that cover each of those registers. The Blindspot overlay paints those four cover sets together. What it tells you: which parts of the network the F1 drive would have to fire to handle a Unity-related thought, and therefore — when Unity-related content shows up in the input but those neurons are quiet — what the model could be missing right now.',
+      'Every cognitive operation in CAS lives in one of four registers — Analytical, Transcendent, affective, Embodied. The F1 drive (Unity) has a Stage 27F cover for each register. The Blindspot overlay paints those cover sets together, and any confidence shown for them is cover-level confidence from targeted_drop / clean_margin, not single-neuron certainty.',
   },
   {
     name: 'Confidence badges',
