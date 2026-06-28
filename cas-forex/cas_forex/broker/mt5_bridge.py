@@ -35,7 +35,20 @@ LOCAL_MT5_DEPS = REPO_ROOT / ".mt5deps"
 
 
 def _add_local_mt5_deps() -> None:
-    """Prefer the project-local MT5 wheel when it exists."""
+    """Make MetaTrader5 importable, preferring a working environment install.
+
+    A properly pip-installed ``MetaTrader5`` (with its compiled ``_core``) always
+    wins — if it imports, we touch nothing. The project-local ``.mt5deps`` wheel
+    is only a FALLBACK for machines without a system install; we never let it
+    shadow a working install (the vendored copy can be built for a different
+    Python ABI and then fail with ``No module named 'MetaTrader5._core'``).
+    """
+
+    try:
+        import MetaTrader5  # noqa: F401 - a working install is preferred, untouched
+        return
+    except Exception:
+        pass
 
     if LOCAL_MT5_DEPS.exists():
         path = str(LOCAL_MT5_DEPS)
