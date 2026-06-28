@@ -3229,6 +3229,44 @@
 .tw-all-positions .tw-positions-table { font-size: 0.72rem; }
 .tw-all-positions .tw-positions-table td, .tw-all-positions .tw-positions-table th { white-space: nowrap; }
 
+/* Market status + session strip */
+.tw-market-strip {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+}
+.tw-market-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 3px 10px;
+  border-radius: 999px;
+}
+.tw-market-badge.open { background: var(--success-dim); color: var(--success); }
+.tw-market-badge.closed { background: var(--danger-dim); color: var(--danger); }
+.tw-session-chips { display: flex; gap: 6px; }
+.tw-session-chip {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+}
+.tw-session-chip.active {
+  border-color: var(--accent-teal, var(--success));
+  color: var(--accent-teal, var(--success));
+  background: var(--success-dim);
+}
+.tw-market-reopen { font-size: 0.72rem; color: var(--text-secondary); }
+.tw-market-reopen strong { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
 /* Auto-trade loop control bar */
 .tw-loop-bar { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
 .tw-loop-status { display: flex; align-items: center; gap: 8px; }

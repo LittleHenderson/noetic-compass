@@ -41,8 +41,13 @@ export function WindowsPage({ state }: WindowsPageProps) {
     return () => { if (timer.current) clearInterval(timer.current); };
   }, []);
 
-  // Strategy windows default to the top strategy leads / Fury replay candidates,
-  // falling back to sensible majors when those aren't available.
+  const acct = movement?.account;
+  const positions = movement?.positions ?? [];
+
+  // Strategy panes prefer symbols that currently have an OPEN POSITION (so the
+  // owner sees a live position sitting on a chart), then top strategy leads /
+  // Fury candidates, then sensible index defaults.
+  const positionSymbols = positions.map((p) => p.symbol).filter((s) => symbols.includes(s));
   const leadSymbols = (state.strategyLeads ?? [])
     .flatMap((l) => l.symbols_promoted_for_next_tests ?? [])
     .filter((s) => symbols.includes(s));
@@ -50,8 +55,8 @@ export function WindowsPage({ state }: WindowsPageProps) {
     .filter((c) => c.symbol_supported)
     .map((c) => c.cas_symbol)
     .filter((s) => symbols.includes(s));
-  const stratA = leadSymbols[0] ?? furySymbols[0] ?? "GBP/USD";
-  const stratB = leadSymbols[1] ?? furySymbols[1] ?? "USD/JPY";
+  const stratA = positionSymbols[0] ?? leadSymbols[0] ?? furySymbols[0] ?? "US30";
+  const stratB = positionSymbols[1] ?? leadSymbols[1] ?? furySymbols[1] ?? "NAS100";
 
   const panes: { role: WindowRole; symbol: string; brokerFeedConnected: boolean }[] = [
     { role: "Live", symbol: "EUR/USD", brokerFeedConnected: false },
@@ -60,8 +65,6 @@ export function WindowsPage({ state }: WindowsPageProps) {
     { role: "Strategy B", symbol: stratB, brokerFeedConnected: false },
   ];
 
-  const acct = movement?.account;
-  const positions = movement?.positions ?? [];
   const positionsSource = acct?.source === "mt5_live" ? "live broker" : "paper/demo simulator";
   const usd = (v: number | undefined) => `$${(v ?? 0).toLocaleString(undefined, { maximumFractionDigits: 2 })}`;
 
@@ -84,6 +87,8 @@ export function WindowsPage({ state }: WindowsPageProps) {
           <AcctStat label="Margin / Free" value={`${usd(acct?.margin_used_usd)} / ${usd(acct?.free_margin_usd)}`} />
           <AcctStat label="Mode" value={movement?.mode === "LIVE" ? "LIVE" : "PAPER / DEMO"} />
         </div>
+
+        <MarketStatusStrip />
         <div className="windows-intro">
           Near-real-time market data (delayed retail feed, not a pro tick stream). “Live”
           needs a connected broker feed — none is running yet, so it shows market data + the
@@ -128,7 +133,7 @@ export function WindowsPage({ state }: WindowsPageProps) {
       <div className="windows-grid">
         {panes.map((p) => (
           <TradingWindow
-            key={p.role}
+            key={`${p.role}-${p.symbol}`}
             role={p.role}
             defaultSymbol={p.symbol}
             symbols={symbols}
@@ -139,6 +144,93 @@ export function WindowsPage({ state }: WindowsPageProps) {
           />
         ))}
       </div>
+    </div>
+  );
+}
+
+interface MarketStatus {
+  open: boolean;
+  session: "Asian" | "London" | "New York" | "Overlap";
+  londonActive: boolean;
+  newYorkActive: boolean;
+  asianActive: boolean;
+  nextOpen: Date | null;
+}
+
+// Forex week: opens Sunday ~22:00 UTC, closes Friday ~22:00 UTC. Sessions by UTC hour.
+function computeMarketStatus(now: Date): MarketStatus {
+  const day = now.getUTCDay(); // 0=Sun .. 6=Sat
+  const h = now.getUTCHours();
+  let open: boolean;
+  if (day === 6) open = false;            // Saturday — closed
+  else if (day === 0) open = h >= 22;     // Sunday — opens 22:00 UTC
+  else if (day === 5) open = h < 22;      // Friday — closes 22:00 UTC
+  else open = true;                        // Mon–Thu — open
+
+  const asianActive = h < 8 || h >= 21;
+  const londonActive = h >= 8 && h < 16;          // includes the overlap
+  const newYorkActive = h >= 12 && h < 21;        // includes the overlap
+  let session: MarketStatus["session"] = "Asian";
+  if (h >= 12 && h < 16) session = "Overlap";
+  else if (h >= 8 && h < 12) session = "London";
+  else if (h >= 16 && h < 21) session = "New York";
+
+  let nextOpen: Date | null = null;
+  if (!open) {
+    let cand = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 22, 0, 0));
+    // First Sunday-22:00-UTC strictly after now.
+    for (let i = 0; i < 8 && !(cand.getUTCDay() === 0 && cand > now); i++) {
+      cand = new Date(cand.getTime() + 86_400_000);
+    }
+    nextOpen = cand;
+  }
+  return { open, session, asianActive, londonActive, newYorkActive, nextOpen };
+}
+
+function formatCountdown(ms: number): string {
+  if (ms <= 0) return "now";
+  const s = Math.floor(ms / 1000);
+  const d = Math.floor(s / 86400);
+  const h = Math.floor((s % 86400) / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  const sec = s % 60;
+  if (d > 0) return `${d}d ${h}h ${m}m`;
+  if (h > 0) return `${h}h ${m}m ${sec}s`;
+  return `${m}m ${sec}s`;
+}
+
+function MarketStatusStrip() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const t = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(t);
+  }, []);
+  const st = computeMarketStatus(now);
+  const sessions: { name: string; active: boolean; hours: string }[] = [
+    { name: "Asian", active: st.asianActive, hours: "00–08 UTC" },
+    { name: "London", active: st.londonActive, hours: "08–16 UTC" },
+    { name: "New York", active: st.newYorkActive, hours: "12–21 UTC" },
+  ];
+  const countdown = st.nextOpen ? formatCountdown(st.nextOpen.getTime() - now.getTime()) : "";
+
+  return (
+    <div className="tw-market-strip">
+      <span className={`tw-market-badge ${st.open ? "open" : "closed"}`}>
+        {st.open ? "MARKET OPEN" : "MARKET CLOSED"}
+      </span>
+      <div className="tw-session-chips">
+        {sessions.map((s) => (
+          <span key={s.name} className={`tw-session-chip ${s.active ? "active" : ""}`} title={s.hours}>
+            {s.name}
+          </span>
+        ))}
+      </div>
+      {!st.open && st.nextOpen && (
+        <span className="tw-market-reopen">reopens in <strong>{countdown}</strong> (Sun 22:00 UTC)</span>
+      )}
+      {st.open && (
+        <span className="tw-market-reopen">active session: <strong>{st.session}</strong></span>
+      )}
     </div>
   );
 }
