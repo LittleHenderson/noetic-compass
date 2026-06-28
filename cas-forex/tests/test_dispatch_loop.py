@@ -29,10 +29,14 @@ class _FakeCycle:
 def _clean_loop(monkeypatch):
     import cas_forex.agent_dispatch as ad
 
+    monkeypatch.setattr(ad, "collect_route_intents", lambda *a, **k: [])
     monkeypatch.setattr(ad, "run_agent_dispatch_cycle", lambda **kw: _FakeCycle())
     monkeypatch.setattr(ad, "write_agent_dispatch_cycle_report", lambda cycle: {})
     dispatch_loop.stop_loop()
     dispatch_loop._state.cycles_run = 0
+    dispatch_loop._state.cycles_idle = 0
+    dispatch_loop._state.symbols = []
+    dispatch_loop._state.sessions = []
     dispatch_loop._state.last_summary = ""
     dispatch_loop._state.last_error = ""
     yield
@@ -94,6 +98,62 @@ def test_interval_change_while_running_is_applied_live():
     again = dispatch_loop.start_loop(3)
     assert again["running"] is True
     assert again["interval_seconds"] == 3
+    dispatch_loop.stop_loop()
+
+
+def test_active_sessions_by_hour():
+    import datetime as _dt
+
+    def at(h):
+        return _dt.datetime(2026, 6, 24, h, 0, tzinfo=_dt.timezone.utc)
+
+    assert dispatch_loop.active_sessions(at(3)) == {"Asian"}
+    assert dispatch_loop.active_sessions(at(9)) == {"London"}
+    assert dispatch_loop.active_sessions(at(14)) == {"London", "New York"}  # overlap
+    assert dispatch_loop.active_sessions(at(18)) == {"New York"}
+    assert dispatch_loop.active_sessions(at(23)) == {"Asian"}
+
+
+def test_symbol_targeting_filters_dispatched_intents(monkeypatch):
+    import cas_forex.agent_dispatch as ad
+
+    class _I:
+        def __init__(self, symbol):
+            self.symbol = symbol
+
+    captured = {}
+
+    def _capture_cycle(**kw):
+        captured["intents"] = list(kw.get("intents") or [])
+        return _FakeCycle()
+
+    monkeypatch.setattr(ad, "collect_route_intents", lambda *a, **k: [_I("EUR/USD"), _I("US30"), _I("NAS100")])
+    monkeypatch.setattr(ad, "run_agent_dispatch_cycle", _capture_cycle)
+
+    dispatch_loop.start_loop(10, symbols=["US30"])
+    assert _wait_for(lambda: "intents" in captured)
+    assert [i.symbol for i in captured["intents"]] == ["US30"]
+    dispatch_loop.stop_loop()
+
+
+def test_session_targeting_idles_outside_target_sessions(monkeypatch):
+    import cas_forex.agent_dispatch as ad
+
+    called = {"dispatch": 0}
+
+    def _count(**kw):
+        called["dispatch"] += 1
+        return _FakeCycle()
+
+    monkeypatch.setattr(ad, "collect_route_intents", lambda *a, **k: [])
+    monkeypatch.setattr(ad, "run_agent_dispatch_cycle", _count)
+    # Pretend it's the Asian session, but the owner targets London only.
+    monkeypatch.setattr(dispatch_loop, "active_sessions", lambda now=None: {"Asian"})
+
+    dispatch_loop.start_loop(10, sessions=["London"])
+    assert _wait_for(lambda: dispatch_loop.loop_status()["cycles_idle"] >= 1)
+    assert called["dispatch"] == 0  # never dispatched off-session
+    assert "idle — outside target sessions" in (dispatch_loop.loop_status()["last_summary"] or "")
     dispatch_loop.stop_loop()
 
 

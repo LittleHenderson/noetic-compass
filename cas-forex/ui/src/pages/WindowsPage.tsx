@@ -128,7 +128,7 @@ export function WindowsPage({ state }: WindowsPageProps) {
         </div>
       </GlassPanel>
 
-      <AutoTradeLoopBar />
+      <AutoTradeLoopBar symbols={symbols} />
 
       <div className="windows-grid">
         {panes.map((p) => (
@@ -235,24 +235,44 @@ function MarketStatusStrip() {
   );
 }
 
-function AutoTradeLoopBar() {
+const LOOP_SESSIONS = ["Asian", "London", "New York"];
+
+function AutoTradeLoopBar({ symbols }: { symbols: string[] }) {
   const [loop, setLoop] = useState<DispatchLoopState | null>(null);
   const [interval, setIntervalSec] = useState(60);
+  const [targetSymbols, setTargetSymbols] = useState<string[]>([]);
+  const [targetSessions, setTargetSessions] = useState<string[]>([]);
+  const [synced, setSynced] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const poll = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
-    const load = () => { void fetchDispatchLoopStatus().then((s) => { if (s) setLoop(s); }); };
+    const load = () => {
+      void fetchDispatchLoopStatus().then((s) => {
+        if (!s) return;
+        setLoop(s);
+        // Reflect the running loop's targeting once, so the UI matches the server.
+        setSynced((was) => {
+          if (!was) {
+            setTargetSymbols(s.symbols ?? []);
+            setTargetSessions(s.sessions ?? []);
+          }
+          return true;
+        });
+      });
+    };
     load();
     poll.current = setInterval(load, 5000);
     return () => { if (poll.current) clearInterval(poll.current); };
   }, []);
 
+  const body = () => ({ interval_seconds: interval, symbols: targetSymbols, sessions: targetSessions });
+
   async function start() {
     setBusy(true); setMsg("");
     try {
-      const s = await startDispatchLoop(interval);
+      const s = await startDispatchLoop(body());
       if (s.status === "CONFIRM_REQUIRED") {
         setMsg("Live trading is authorized — starting the loop could place REAL orders. Tap “Start LIVE loop” to confirm.");
       }
@@ -262,7 +282,7 @@ function AutoTradeLoopBar() {
   }
   async function startLiveConfirmed() {
     setBusy(true); setMsg("");
-    try { setLoop(await startDispatchLoop(interval, true)); }
+    try { setLoop(await startDispatchLoop(body(), true)); }
     catch { setMsg("Couldn't start the loop."); }
     finally { setBusy(false); }
   }
@@ -272,11 +292,18 @@ function AutoTradeLoopBar() {
     catch { setMsg("Couldn't stop the loop."); }
     finally { setBusy(false); }
   }
-  async function applyInterval() {
+  async function applySettings() {
     setBusy(true); setMsg("");
-    try { setLoop(await startDispatchLoop(interval, true)); setMsg(`Interval set to ${interval}s — applies on the next cycle.`); }
-    catch { setMsg("Couldn't update the interval."); }
+    try { setLoop(await startDispatchLoop(body(), true)); setMsg("Applied — takes effect on the next cycle."); }
+    catch { setMsg("Couldn't update the loop."); }
     finally { setBusy(false); }
+  }
+
+  function toggleSymbol(s: string) {
+    setTargetSymbols((cur) => cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]);
+  }
+  function toggleSession(s: string) {
+    setTargetSessions((cur) => cur.includes(s) ? cur.filter((x) => x !== s) : [...cur, s]);
   }
 
   const running = loop?.running ?? false;
@@ -308,9 +335,38 @@ function AutoTradeLoopBar() {
         )}
         {running && (
           <>
-            <button className="tw-btn tw-pause" disabled={busy || interval === loop?.interval_seconds} onClick={() => void applyInterval()}>Apply interval</button>
+            <button className="tw-btn tw-pause" disabled={busy} onClick={() => void applySettings()}>Apply</button>
             <button className="tw-btn tw-sell" disabled={busy} onClick={() => void stop()}>Stop loop</button>
           </>
+        )}
+      </div>
+
+      {/* Targeting: which symbols + which sessions the loop trades */}
+      <div className="tw-loop-target">
+        <div className="tw-loop-target-row">
+          <span className="tw-loop-target-label">Trade only</span>
+          <div className="tw-loop-chips">
+            {symbols.map((s) => (
+              <button key={s} type="button"
+                className={`tw-loop-chip ${targetSymbols.includes(s) ? "on" : ""}`}
+                onClick={() => toggleSymbol(s)}>{s}</button>
+            ))}
+          </div>
+          <span className="tw-loop-target-hint">{targetSymbols.length === 0 ? "(all symbols)" : `${targetSymbols.length} selected`}</span>
+        </div>
+        <div className="tw-loop-target-row">
+          <span className="tw-loop-target-label">During sessions</span>
+          <div className="tw-loop-chips">
+            {LOOP_SESSIONS.map((s) => (
+              <button key={s} type="button"
+                className={`tw-loop-chip ${targetSessions.includes(s) ? "on" : ""} ${(loop?.active_sessions ?? []).includes(s) ? "live" : ""}`}
+                onClick={() => toggleSession(s)}>{s}</button>
+            ))}
+          </div>
+          <span className="tw-loop-target-hint">{targetSessions.length === 0 ? "(any session)" : `active now: ${(loop?.active_sessions ?? []).join(", ") || "none"}`}</span>
+        </div>
+        {running && (targetSymbols.length > 0 || targetSessions.length > 0) && (
+          <div className="control-field-desc">Changed targeting? Tap <strong>Apply</strong> to push it to the running loop.</div>
         )}
       </div>
       <div className="tw-loop-detail">

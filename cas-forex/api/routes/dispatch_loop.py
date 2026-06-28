@@ -9,7 +9,7 @@ explicit ``?confirm=true``.
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Query
 from pydantic import BaseModel, Field
@@ -33,6 +33,11 @@ class StartLoop(BaseModel):
         ge=MIN_INTERVAL_SECONDS,
         le=MAX_INTERVAL_SECONDS,
     )
+    # Targeting. Omit (null) = leave unchanged; [] = clear the restriction
+    # (trade everything / any session). Symbols restrict which pairs the loop
+    # dispatches; sessions restrict which trading sessions it runs in.
+    symbols: Optional[List[str]] = None
+    sessions: Optional[List[str]] = None
 
 
 @router.get("/status")
@@ -55,7 +60,7 @@ async def post_start(body: StartLoop, confirm: bool = Query(default=False)) -> d
                 "on a timer. Re-POST with ?confirm=true to start it."
             ),
         }
-    return start_loop(body.interval_seconds)
+    return start_loop(body.interval_seconds, symbols=body.symbols, sessions=body.sessions)
 
 
 @router.post("/stop")

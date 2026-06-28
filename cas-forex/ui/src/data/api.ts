@@ -395,7 +395,11 @@ export interface DispatchLoopState {
   report_kind?: string;
   running: boolean;
   interval_seconds?: number;
+  symbols?: string[];
+  sessions?: string[];
+  active_sessions?: string[];
   cycles_run?: number;
+  cycles_idle?: number;
   last_run_iso?: string | null;
   last_summary?: string | null;
   last_error?: string | null;
@@ -406,13 +410,19 @@ export interface DispatchLoopState {
   detail?: string;
 }
 
+export interface DispatchLoopStart {
+  interval_seconds: number;
+  symbols?: string[];
+  sessions?: string[];
+}
+
 export async function fetchDispatchLoopStatus(): Promise<DispatchLoopState | null> {
   try { return await apiGet<DispatchLoopState>("/dispatch-loop/status"); } catch { return null; }
 }
 
-export async function startDispatchLoop(intervalSeconds: number, confirm = false): Promise<DispatchLoopState> {
+export async function startDispatchLoop(body: DispatchLoopStart, confirm = false): Promise<DispatchLoopState> {
   const q = confirm ? "?confirm=true" : "";
-  return apiPostJson<DispatchLoopState, { interval_seconds: number }>(`/dispatch-loop/start${q}`, { interval_seconds: intervalSeconds });
+  return apiPostJson<DispatchLoopState, DispatchLoopStart>(`/dispatch-loop/start${q}`, body);
 }
 
 export async function stopDispatchLoop(): Promise<DispatchLoopState> {
