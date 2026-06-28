@@ -47,6 +47,7 @@ export interface DailySchedule {
   missing_tracks_for_next_due: string[];
   complete_bundle_dates: string[];
   recommended_command: string;
+  recommended_action?: string;
   notes: string[];
   claim_boundary: string;
   deployment_status: "NOT LICENSED" | "LICENSED";
@@ -276,6 +277,138 @@ export interface MTHistorySummary {
   multi_trade_bursts: number; import_date: string;
 }
 
+
+export interface AccountLedgerEvent {
+  ledger_id: string; event_type: string; timestamp: string; amount_usd: number;
+  balance_delta_usd: number; equity_delta_usd: number; margin_delta_usd: number;
+  symbol: string | null; side: string | null; lot_size: number | null; price: number | null;
+  sl: number | null; tp: number | null; broker_ticket: string | null; simulator_ticket: string | null;
+  strategy_id: string | null; ai_action: string | null; evidence_packet_id: string | null;
+  evidence_refs: string[]; note: string; external_money_movement: boolean;
+}
+
+export interface AccountTerminalTradeRow {
+  row_id: string; tab: string; symbol: string; side: string; lot_size: number;
+  open_price: number; close_or_current_price: number | null; stop_loss: number | null; take_profit: number | null;
+  timestamp: string; broker_ticket: string | null; simulator_ticket: string; strategy_id: string;
+  ai_action: string; evidence_packet_id: string; net_pnl_usd: number; swap_usd: number;
+  commission_usd: number; fees_usd: number; status: string;
+}
+
+export interface AccountLedgerSummary {
+  mode: string; initial_investment_usd: number; owner_selected_initial_investment_usd: number;
+  risk_review_account_equity_usd: number; requires_new_risk_review_for_selected_investment: boolean;
+  deposit_usd: number; withdrawals_usd: number; payouts_usd: number; realized_pnl_usd: number;
+  floating_pnl_usd: number; swap_usd: number; commission_usd: number; broker_fees_usd: number;
+  balance_usd: number; equity_usd: number; margin_used_usd: number; free_margin_usd: number;
+  planned_risk_usd: number; planned_risk_pct_of_selected_equity: number; drawdown_usd: number;
+  drawdown_pct: number; event_count: number; open_position_count: number; order_count: number; deal_count: number;
+  currency: string;
+}
+
+export interface AccountLedgerState {
+  report_kind: string; plan_id: string; lead_id: string; strategy_setting: string; as_of_date: string; mode: string;
+  summary: AccountLedgerSummary; cashflow_events: AccountLedgerEvent[];
+  positions: AccountTerminalTradeRow[]; orders: AccountTerminalTradeRow[]; deals: AccountTerminalTradeRow[];
+  supported_history_tabs: string[]; supported_time_filters: string[]; evidence_refs: string[];
+  claim_boundary: string; trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
+  auto_deposit_status: string; debit_card_bank_movement_status: string; payout_automation_status: string;
+  deployment_status: string; live_money_authorized: boolean; payment_movement_authorized: boolean;
+  sync_to_broker_snapshot?: boolean; broker_snapshot_initial_investment_usd?: number | null;
+  notes: string[];
+}
+
+
+export interface MarketMovementQuote {
+  symbol: string; timestamp: string; bid: number; ask: number; mid: number;
+  spread_units: number; price_unit_name: string; price_unit_size: number;
+  session: string; is_market_open: boolean; source: string; stale: boolean;
+  synthetic_candle: { time: string; open: number; high: number; low: number; close: number };
+  atr_units: number;
+}
+
+export interface PositionMovement {
+  row_id: string; symbol: string; side: string; lot_size: number;
+  open_price: number; current_price: number; stop_loss: number | null; take_profit: number | null;
+  floating_pnl_usd: number; floating_pnl_units: number;
+  distance_to_sl_units: number | null; distance_to_tp_units: number | null;
+  distance_to_sl_pct: number | null; distance_to_tp_pct: number | null;
+  margin_estimate_usd: number; broker_ticket: string | null; simulator_ticket: string;
+  evidence_packet_id: string; ai_action: string; status: string;
+}
+
+export interface AccountMovementSnapshot {
+  timestamp: string; balance_usd: number; equity_usd: number; realized_pnl_usd: number;
+  floating_pnl_usd: number; swap_usd: number; commission_usd: number; broker_fees_usd: number;
+  margin_used_usd: number; free_margin_usd: number; drawdown_usd: number; drawdown_pct: number;
+  deposit_usd: number; withdrawals_usd: number; payouts_usd: number; open_position_count: number; source: string;
+}
+
+export interface MovementStreamState {
+  report_kind: string; stream_id: string; mode: string; timestamp: string; symbols: string[];
+  account: AccountMovementSnapshot; quotes: MarketMovementQuote[]; positions: PositionMovement[];
+  account_streams: string[]; market_streams: string[]; evidence_refs: string[]; claim_boundary: string;
+  trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
+  auto_deposit_status: string; debit_card_bank_movement_status: string; payout_automation_status: string;
+  live_money_authorized: boolean; payment_movement_authorized: boolean; notes: string[];
+}
+
+
+export interface ReconciliationCheck {
+  check_id: string; description: string; status: string;
+  internal_value: unknown; broker_value: unknown; detail: string;
+}
+
+export interface AccountReconciliationReport {
+  report_kind: string; mode: string; as_of_date: string; plan_id: string; lead_id: string;
+  overall_status: string; checks_total: number; checks_ok: number; checks_mismatch: number; checks_unverifiable: number;
+  broker_mode: string; broker_receipt_id: string | null; broker_receipt_validation_status: string | null;
+  broker_chain_verified: boolean; internal_symbols: string[]; broker_symbols: string[];
+  checks: ReconciliationCheck[]; blockers: string[]; claim_boundary: string;
+  trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
+  deployment_status: string; live_money_authorized: boolean; payment_movement_authorized: boolean;
+  sync_to_broker_snapshot?: boolean; broker_snapshot_initial_investment_usd?: number | null;
+  notes: string[];
+}
+
+export interface BrokerSyncedRiskPreview {
+  report_kind: string; mode: string; review_id: string; plan_id: string; lead_id: string;
+  strategy_setting: string; date: string; timeframe: string; source_decision_id: string | null;
+  route_action: string; account_equity: number; max_risk_per_trade_pct: number;
+  daily_risk_budget_pct: number; daily_risk_budget_usd: number; max_position_lots: number;
+  max_paper_attempts: number; existing_attempts: number; attempts_remaining_before_review: number;
+  proposed_attempts: number; allowed_attempts: number; suppressed_attempts: number;
+  total_planned_lots: number; total_planned_risk_usd: number; total_planned_risk_pct: number;
+  risk_status: string; sizing: SizingEntry[]; blockers: string[]; notes: string[];
+  claim_boundary: string; deployment_status: string; broker_accept_status: string;
+  payment_transfer_status: string; sync_to_broker_snapshot: boolean;
+  broker_snapshot_initial_investment_usd: number; default_risk_review_account_equity_usd: number;
+  default_total_planned_risk_usd: number; default_total_planned_lots: number;
+  delta_vs_default: { account_equity_usd: number; total_planned_risk_usd: number; total_planned_lots: number };
+  would_append_evidence: boolean; live_money_authorized: boolean; payment_movement_authorized: boolean;
+  evidence_appended?: boolean; already_applied?: boolean; append_receipt?: unknown | null;
+  paper_risk_status_path?: string; paper_risk_summary?: PaperRisk;
+  next_action: string;
+}
+
+export interface LiveReadinessCheck {
+  gate_id: string; label: string; status: string; plain_english: string;
+  evidence: string[]; next_action: string; blocks_live: boolean;
+  owner_action_required: boolean; capability: string | null;
+}
+
+export interface LiveReadinessReport {
+  report_kind: string; mode: string; overall_status: string; plain_english_summary: string;
+  checks_total: number; checks_passed: number; checks_open: number; checks_mismatch: number;
+  checks_unverifiable: number; checks_currently_not_licensed: number;
+  live_money_authorized: boolean; payment_movement_authorized: boolean;
+  next_actions: string[]; checks: LiveReadinessCheck[]; claim_boundary: string;
+  trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
+  auto_deposit_status: string; debit_card_bank_movement_status: string;
+  payout_automation_status: string; notes: string[];
+  sync_to_broker_snapshot?: boolean; broker_snapshot_initial_investment_usd?: number | null;
+}
+
 export interface BacksolveSummary {
   run_id: string; total_scenarios: number; viable_scenarios: number;
   ai_autonomy_mode: string; ai_selection: string | null;
@@ -300,6 +433,1933 @@ export interface WalkForwardSummary {
   research_grade: string; symbols: string[]; claim_boundary: string;
 }
 
+export interface ExternalBenchmark {
+  benchmark_id: string;
+  name: string;
+  url: string;
+  public_account_descriptor: string;
+  visible_symbol_focus: string;
+  gain_pct: number;
+  abs_gain_pct?: number;
+  daily_pct?: number;
+  monthly_pct?: number;
+  drawdown_pct: number;
+  balance_usd?: number;
+  equity_usd?: number;
+  deposits_usd?: number;
+  withdrawals_usd?: number;
+  profit_usd?: number;
+  trades: number;
+  pips?: number;
+  average_win_pips?: number;
+  average_win_usd?: number;
+  average_loss_pips?: number;
+  average_loss_pips_displayed?: number;
+  average_loss_usd?: number;
+  lots?: number | null;
+  commissions_usd?: number;
+  longs_won?: string;
+  shorts_won?: string;
+  average_trade_length?: string;
+  profit_factor?: number;
+  expectancy?: string;
+}
+
+export interface ExternalBenchmarkReport {
+  report_kind: string;
+  created_at: string;
+  source_family: string;
+  claim_boundary: string;
+  source_limitations: string[];
+  official_myfxbook_api_notes?: {
+    url: string;
+    access_scope: string;
+    useful_methods: string[];
+    history_limit_note: string;
+  };
+  benchmarks: ExternalBenchmark[];
+  implementation_targets: string[];
+  recommended_next_files: string[];
+  report_path?: string;
+  summary: {
+    benchmark_count: number;
+    real_account_count: number;
+    mt4_account_count: number;
+    symbols: string[];
+    total_public_trade_count: number;
+    best_gain_benchmark_id: string;
+    best_gain_pct: number;
+    lowest_drawdown_benchmark_id: string;
+    lowest_drawdown_pct: number;
+    next_build_target: string;
+  };
+}
+
+export interface ForexFuryMetricSnapshot {
+  profile_id: string;
+  platform: string;
+  family: string;
+  variant: string;
+  symbol: string;
+  timeframe: string;
+  trade_window: string | null;
+  profit_factor: number | null;
+  total_net_profit: number | null;
+  equity_drawdown_relative_pct: number | null;
+  total_trades: number | null;
+  history_quality: string | null;
+  metric?: string;
+  value?: number;
+}
+
+export interface ForexFuryTesterReport {
+  report_path: string;
+  relative_report_path: string;
+  report_sha256: string;
+  expert: string | null;
+  symbol: string | null;
+  period: string | null;
+  company: string | null;
+  currency: string | null;
+  leverage: string | null;
+  history_quality: string | null;
+  metrics: {
+    total_net_profit: number | null;
+    gross_profit: number | null;
+    gross_loss: number | null;
+    profit_factor: number | null;
+    expected_payoff: number | null;
+    recovery_factor: number | null;
+    sharpe_ratio: number | null;
+    total_trades: number | null;
+    total_deals: number | null;
+    profit_trades_pct: number | null;
+    loss_trades_pct: number | null;
+    balance_drawdown_relative_pct: number | null;
+    equity_drawdown_relative_pct: number | null;
+    initial_deposit: number | null;
+    bars: number | null;
+    ticks: number | null;
+  };
+}
+
+export interface ForexFurySetRecord {
+  profile_id: string;
+  source_path: string;
+  relative_source_path: string;
+  source_sha256: string;
+  platform: "MT4" | "MT5" | "UNKNOWN";
+  family: string;
+  variant: string;
+  symbol: string | null;
+  timeframe: string | null;
+  trade_window: string | null;
+  trade_window_hours: number | null;
+  active_days: string[];
+  core_parameters: Record<string, unknown>;
+  derived: {
+    lot_size: number | null;
+    stop_loss: number | null;
+    take_profit: number | null;
+    tp_sl_ratio: number | null;
+    max_orders: number | null;
+    max_trades_per_day: number | null;
+    max_spread: number | null;
+    uses_grid: boolean;
+    grid_level_distance_min: number | null;
+    grid_level_distance_max: number | null;
+    grid_volume_multiplier_max: number | null;
+    uses_close_by_money: boolean;
+    close_money_trigger: number | null;
+    uses_hidden_sltp: boolean;
+    uses_dynamic_retrace: boolean;
+    uses_cost_averaging: boolean;
+    uses_trailing_stop: boolean;
+    uses_stochastic_filter: boolean;
+    uses_heiken_ashi_filter: boolean;
+    one_set_trade_per_day: boolean;
+    only_range_trading: boolean;
+  };
+  optimization: { ranges: Record<string, Record<string, unknown>>; optimized_fields: string[] };
+  tester_report: ForexFuryTesterReport | null;
+}
+
+export interface ForexFurySetImportReport {
+  report_kind: string;
+  created_at: string;
+  source_family: string;
+  source_dir: string;
+  claim_boundary: string;
+  source_limitations: string[];
+  file_counts: Record<string, number>;
+  compiled_binaries: Array<{
+    path: string;
+    relative_path: string;
+    extension: string;
+    size_bytes: number;
+    sha256: string;
+    handling: string;
+  }>;
+  set_records: ForexFurySetRecord[];
+  summary: {
+    set_count: number;
+    html_report_file_count: number;
+    tester_report_count: number;
+    compiled_binary_count: number;
+    platform_counts: Record<string, number>;
+    family_counts: Record<string, number>;
+    symbol_counts: Record<string, number>;
+    timeframe_counts: Record<string, number>;
+    trade_windows: string[];
+    max_orders_values: number[];
+    grid_enabled_count: number;
+    close_by_money_count: number;
+    hidden_sltp_count: number;
+    trailing_stop_count: number;
+    dynamic_retrace_count: number;
+    cost_averaging_count: number;
+    stochastic_filter_count: number;
+    one_set_trade_per_day_count: number;
+    best_profit_factor: ForexFuryMetricSnapshot | null;
+    lowest_equity_drawdown_pct: ForexFuryMetricSnapshot | null;
+    highest_net_profit: ForexFuryMetricSnapshot | null;
+    top_report_profiles: ForexFuryMetricSnapshot[];
+  };
+  cas_improvement_targets: string[];
+  report_path?: string;
+}
+
+export interface ForexFuryReplayCandidate {
+  rank: number;
+  candidate_id: string;
+  source_profile_id: string;
+  source_set_path: string;
+  source_set_sha256: string;
+  source_report_path: string | null;
+  platform: string;
+  family: string;
+  variant: string;
+  raw_symbol: string | null;
+  cas_symbol: string;
+  symbol_supported: boolean;
+  symbol_status: string;
+  timeframe: string;
+  trade_window: string | null;
+  trade_window_hours: number | null;
+  active_days: string[];
+  execution_profile: {
+    max_orders: number | null;
+    max_trades_per_day: number | null;
+    uses_grid: boolean;
+    uses_close_by_money: boolean;
+    close_money_trigger: number | null;
+    uses_trailing_stop: boolean;
+    uses_hidden_sltp: boolean;
+    uses_dynamic_retrace: boolean;
+    uses_cost_averaging: boolean;
+    one_set_trade_per_day: boolean;
+    only_range_trading: boolean;
+  };
+  risk_shape: {
+    lot_size: number | null;
+    stop_loss: number | null;
+    take_profit: number | null;
+    tp_sl_ratio: number | null;
+    grid_level_distance_min: number | null;
+    grid_level_distance_max: number | null;
+    grid_volume_multiplier_max: number | null;
+  };
+  evidence: {
+    profit_factor: number | null;
+    equity_drawdown_relative_pct: number | null;
+    total_net_profit: number | null;
+    total_trades: number | null;
+    history_quality: string | null;
+  };
+  score: number;
+  readiness: string;
+  replay_job: {
+    job_id: string;
+    job_kind: string;
+    source: string;
+    status: string;
+    symbols: string[];
+    timeframes: string[];
+    families_to_compare: string[];
+    owner_control_inputs: {
+      max_open_positions: number | null;
+      trade_window: string | null;
+      allow_grid_policy_test: boolean;
+      allow_money_close_policy_test: boolean;
+    };
+  };
+  recommended_commands: string[];
+  notes: string[];
+}
+
+export interface ForexFuryReplayCandidateReport {
+  report_kind: string;
+  created_at: string;
+  source_report_path: string | null;
+  source_report_sha256: string | null;
+  source_set_count: number;
+  claim_boundary: string;
+  selection_thresholds: {
+    min_profit_factor: number;
+    max_equity_drawdown_pct: number;
+    max_candidates: number;
+  };
+  candidate_count: number;
+  candidates: ForexFuryReplayCandidate[];
+  summary: {
+    source_set_count: number;
+    candidate_count: number;
+    supported_candidate_count: number;
+    waiting_for_instrument_spec_count: number;
+    symbols: string[];
+    timeframes: string[];
+    families: Record<string, number>;
+    platforms: Record<string, number>;
+    ready_for_replay_ids: string[];
+    top_candidate_id: string | null;
+    top_candidate_score: number | null;
+  };
+  next_actions: string[];
+  report_path?: string;
+}
+
+export interface ForexFuryReplayResultsReport {
+  report_kind: string;
+  created_at: string;
+  claim_boundary: string;
+  source_reports: Record<string, {
+    run_id: string | null;
+    report_kind: string | null;
+    path: string | null;
+    sha256: string | null;
+  }>;
+  candidate_summary: ForexFuryReplayCandidateReport["summary"];
+  condition_summary: {
+    run_id: string;
+    source: string;
+    symbols: string[];
+    timeframes: string[];
+    cell_count: number;
+    non_gap_cell_count: number;
+    route_count: number;
+    no_trade_route_count: number;
+    overall_gap_fraction: number;
+    top_condition_cells: Array<{
+      source: string;
+      symbol: string;
+      timeframe: string;
+      event_context: string;
+      regime: string;
+      vol_mult: number;
+      setting: string;
+      family: string;
+      mean_return_pct: number;
+      mean_max_dd_pct: number;
+      mean_trades: number;
+      win_rate: number;
+      profit_factor: number;
+      region: string;
+      beta: number;
+      score: number;
+    }>;
+  };
+  walk_forward_summary: {
+    run_id: string;
+    windows: number;
+    routed_windows: number;
+    no_trade_windows: number;
+    active_routed_windows: number;
+    positive_routed_windows: number;
+    positive_routed_window_rate: number;
+    positive_active_routed_windows: number;
+    positive_active_routed_window_rate: number;
+    routed_total_return_pct_sum: number;
+    routed_mean_return_pct: number;
+    active_routed_mean_return_pct: number;
+    routed_max_drawdown_pct: number;
+    routed_total_trades: number;
+    research_grade: string;
+    claim_boundary: string;
+  };
+  replay_verdict: string;
+  adaptive_compounding_next_step: string;
+  next_actions: string[];
+  report_path?: string;
+}
+
+export interface AgentWorkflowAutowakeEvent {
+  event_id: string;
+  trigger: string;
+  action: string;
+  purpose: string;
+}
+
+export interface AgentWorkflowAgent {
+  agent_id: string;
+  role: string;
+  cadence: string;
+  timeframes: string[];
+  primary_inputs: string[];
+  decision_outputs: string[];
+  memory_writes: string[];
+  must_reject_conditions?: string[];
+  plain_english: string;
+}
+
+export interface AgentWorkflowPlan {
+  report_kind: string;
+  created_at: string;
+  workflow_status: string;
+  current_execution_mode: string;
+  target_execution_mode: string;
+  claim_boundary: string;
+  summary: {
+    agent_count: number;
+    autowake_event_count: number;
+    micro_scalp_cadence_minutes: string;
+    hourly_intraday_cadence_minutes: number;
+    thirty_day_window_days: number;
+    primary_replay_lead: string | null;
+    primary_replay_verdict: string | null;
+    adaptive_next_step: string | null;
+  };
+  autowake_schedule: {
+    market_week: string;
+    timezone_policy: string;
+    events: AgentWorkflowAutowakeEvent[];
+  };
+  agent_roster: AgentWorkflowAgent[];
+  coordination_model: {
+    proposal_flow: string[];
+    conflict_rules: string[];
+    llm_context_bootstrap: string[];
+  };
+  knowledge_pack: Array<{
+    path: string;
+    purpose: string;
+    required_by: string[];
+  }>;
+  thirty_day_window: {
+    objective: string;
+    primary_short_timeframe_lead: string | null;
+    daily_outputs: string[];
+    promotion_criteria: string[];
+  };
+  implementation_queue: Array<{
+    priority: number;
+    item_id: string;
+    plain_english: string;
+    target_file: string;
+  }>;
+  source_reports: Record<string, {
+    report_kind: string | null;
+    path: string | null;
+    sha256: string | null;
+    status: string;
+  }>;
+  live_execution_boundary: {
+    live_trading_status: string;
+    broker_accept_status: string;
+    auto_deposit_status: string;
+    debit_card_bank_movement_status: string;
+    payout_automation_status: string;
+    owner_runtime_authorization_required: boolean;
+    plain_english: string;
+  };
+  report_path?: string;
+}
+
+export interface AgentWorkflowCycle {
+  report_kind: string;
+  cycle_id: string;
+  created_at: string;
+  trigger_source: string;
+  execution_mode: string;
+  summary: {
+    agent_heartbeat_count: number;
+    route_intent_count: number;
+    approved_intent_count: number;
+    rejected_intent_count: number;
+    terminal_command_count: number;
+    memory_snapshot_count: number;
+    symbols: string[];
+    timeframes: string[];
+    terminal_lane?: string;
+    mt5_loop_status?: string | null;
+    mt5_execution_report_count?: number;
+    mt5_executed_order_count?: number;
+    mt5_broker_tickets?: Array<string | number>;
+    mt5_deal_history_status?: string | null;
+    mt5_deal_history_memory_update_count?: number;
+    mt5_closed_position_count?: number;
+    mt5_net_profit_loss_account?: number;
+    mt5_post_memory_terminal_history_joined_count?: number;
+    mt5_post_memory_pnl_ready_count?: number;
+  };
+  agent_heartbeats: Array<{
+    agent_id: string;
+    status: string;
+    timestamp: string;
+    cadence: string;
+    detail: string;
+  }>;
+  route_intents: Array<{
+    intent_id: string;
+    agent_id: string;
+    action: string;
+    symbol: string;
+    timeframe: string;
+    strategy_setting: string;
+    direction: string | null;
+    confidence: number;
+    evidence_score: number;
+    lot_size: number;
+    entry_price: number | null;
+    stop_loss: number | null;
+    take_profit: number | null;
+    reason: string;
+    evidence_refs: string[];
+    order_request: Record<string, unknown> | null;
+    status: string;
+  }>;
+  overseer_decisions: Array<{
+    decision_id: string;
+    intent_id: string;
+    agent_id: string;
+    decision: string;
+    approved: boolean;
+    reasons: string[];
+    command_ready: boolean;
+    timestamp: string;
+  }>;
+  terminal_commands: Array<Record<string, unknown>>;
+  mt5_execution_loop?: {
+    lane: string;
+    loop_status: string;
+    execution_reports: Array<Record<string, unknown>>;
+    deal_history_ingest: Record<string, unknown> | null;
+    pre_deal_memory: Record<string, unknown> | null;
+    post_deal_memory: Record<string, unknown> | null;
+    summary: Record<string, unknown>;
+  } | null;
+  memory_snapshots: Array<Record<string, unknown>>;
+  live_execution_boundary: {
+    live_trading_status: string;
+    broker_accept_status: string;
+    auto_deposit_status: string;
+    debit_card_bank_movement_status: string;
+    payout_automation_status: string;
+  };
+  claim_boundary: string;
+  output_dir: string;
+  report_path?: string;
+}
+
+export interface AgentInformationFlow {
+  report_kind: string;
+  created_at: string;
+  flow_status: string;
+  claim_boundary: string;
+  design_principle: string;
+  specialist_agent_reviews: Array<{
+    agent: string;
+    focus: string;
+    verdict: string;
+    plain_english: string;
+  }>;
+  agent_roles: Array<{
+    agent_id: string;
+    consumes: string[];
+    produces: string[];
+    cannot_produce: string[];
+  }>;
+  information_planes: Array<{
+    plane: string;
+    purpose: string;
+    primary_packet: string;
+    path: string;
+  }>;
+  event_envelope: {
+    schema: string;
+    path: string;
+    required_fields: string[];
+    example_event_types: string[];
+    idempotency_rule: string;
+    plain_english: string;
+  };
+  canonical_packets: Array<{
+    packet_name: string;
+    purpose: string;
+    required_fields: string[];
+    storage_target: string;
+  }>;
+  flow_stages: Array<{
+    stage: number;
+    name: string;
+    producer: string;
+    consumer: string;
+    packet: string;
+  }>;
+  state_machine: Array<{ from: string; to: string; by: string }>;
+  receipt_and_reconciliation_lifecycle: Array<{ state: string; plain_english: string }>;
+  learning_memory_contracts: Array<{
+    schema: string;
+    purpose: string;
+    required_fields: string[];
+  }>;
+  main_bottlenecks: Array<{
+    bottleneck_id: string;
+    plain_english: string;
+    fix_target: string;
+  }>;
+  storage_and_api_targets: {
+    append_only_event_log: string;
+    latest_cycle_projection: string;
+    cycle_reports: string;
+    mt4_mailbox: string;
+    latest_api: string;
+    flow_api: string;
+    next_api_projections: string[];
+    dashboard_key: string;
+    ui_panel: string;
+  };
+  implementation_queue: Array<{
+    priority: number;
+    target_file: string;
+    plain_english: string;
+  }>;
+  summary: {
+    agent_count: number;
+    information_plane_count: number;
+    specialist_agent_count: number;
+    canonical_packet_count: number;
+    flow_stage_count: number;
+    lifecycle_state_count: number;
+    must_have_next_file: string;
+    best_flow_form: string;
+  };
+  report_path?: string;
+}
+
+export interface AgentMessageBusSummary {
+  event_log_path: string;
+  event_count: number;
+  event_type_counts: Record<string, number>;
+  status_counts: Record<string, number>;
+  cycle_count: number;
+  latest_event_id: string | null;
+  latest_cycle_id: string | null;
+  pending_receipt_count: number;
+  raw_receipt_pending_event_count?: number;
+  verified_receipt_count?: number;
+  reconciled_receipt_count?: number;
+  next_cycle_allowed_count?: number;
+  receipt_mismatch_count?: number;
+  open_receipt_command_ids?: string[];
+  claim_boundary: string;
+}
+
+export interface AgentMemoryRecord {
+  schema: string;
+  memory_id: string;
+  cycle_id: string;
+  intent_id: string;
+  decision_id?: string | null;
+  command_id?: string | null;
+  receipt_id?: string | null;
+  agent_id: string;
+  symbol: string;
+  timeframe: string;
+  strategy_setting?: string | null;
+  action: string;
+  decision: string;
+  decision_status: string;
+  outcome_label: string;
+  learning_status: string;
+  terminal_history_id?: string | null;
+  terminal_history_status?: string | null;
+  broker_ticket?: string | number | null;
+  profit_loss_account?: number | null;
+  profit_loss_pips?: number | null;
+  profit_loss_r?: number | null;
+  mae?: number | null;
+  mfe?: number | null;
+  close_reason?: string | null;
+  closed_at?: string | null;
+  exit_price?: number | null;
+  condition_snapshot_open: Record<string, unknown>;
+  condition_snapshot_close: Record<string, unknown>;
+  source_event_ids: string[];
+  claim_boundary: string;
+}
+
+export interface AgentMemoryReport {
+  report_kind: string;
+  created_at: string;
+  memory_status: string;
+  schema: string;
+  event_log_path: string;
+  output_dir: string;
+  summary: {
+    memory_record_count: number;
+    route_intent_count: number;
+    approved_count: number;
+    rejected_count: number;
+    command_joined_count: number;
+    receipt_joined_count: number;
+    verified_receipt_count: number;
+    receipt_mismatch_count: number;
+    pending_receipt_count: number;
+    terminal_history_joined_count?: number;
+    closed_trade_count?: number;
+    closed_profit_count?: number;
+    closed_loss_count?: number;
+    closed_flat_count?: number;
+    net_profit_loss_account?: number;
+    pnl_ready_memory_count?: number;
+    mae_ready_count?: number;
+    mfe_ready_count?: number;
+    outcome_label_counts: Record<string, number>;
+    learning_status_counts: Record<string, number>;
+    source_event_count: number;
+    source_cycle_count: number;
+    latest_cycle_id: string | null;
+    event_log_pending_receipt_count: number;
+  };
+  memory_records: AgentMemoryRecord[];
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface TerminalHistoryRecord {
+  schema: string;
+  history_id: string;
+  source_path: string;
+  source_sha256?: string | null;
+  ticket?: string | null;
+  broker_ticket?: string | null;
+  command_id?: string | null;
+  receipt_id?: string | null;
+  symbol: string;
+  direction: string;
+  lots: number;
+  opened_at?: string | null;
+  closed_at?: string | null;
+  open_price?: number | null;
+  close_price?: number | null;
+  stop_loss?: number | null;
+  take_profit?: number | null;
+  profit_loss_account: number;
+  profit_loss_pips?: number | null;
+  profit_loss_r?: number | null;
+  mae?: number | null;
+  mfe?: number | null;
+  close_reason?: string | null;
+  commission: number;
+  swap: number;
+  account_currency?: string | null;
+  broker_mode?: string | null;
+  claim_boundary: string;
+}
+
+export interface TerminalHistoryMemoryUpdate {
+  memory_id: string;
+  history_id: string;
+  command_id?: string | null;
+  receipt_id?: string | null;
+  broker_ticket?: string | number | null;
+  symbol: string;
+  timeframe?: string | null;
+  match_method?: string | null;
+  terminal_history_status: string;
+  profit_loss_account: number;
+  profit_loss_pips?: number | null;
+  profit_loss_r?: number | null;
+  mae?: number | null;
+  mfe?: number | null;
+  close_reason?: string | null;
+  commission?: number | null;
+  swap?: number | null;
+  closed_at?: string | null;
+  exit_price?: number | null;
+  outcome_label: string;
+  promotion_signal: string;
+  demotion_flags: string[];
+  source_path?: string | null;
+  source_sha256?: string | null;
+}
+
+export interface TerminalHistoryIngestReport {
+  report_kind: string;
+  created_at: string;
+  ingest_status: string;
+  schema: string;
+  source_paths: string[];
+  memory_report_path?: string | null;
+  output_dir: string;
+  summary: {
+    history_record_count: number;
+    memory_update_count: number;
+    unmatched_history_count: number;
+    closed_trade_count: number;
+    closed_profit_count: number;
+    closed_loss_count: number;
+    closed_flat_count: number;
+    net_profit_loss_account: number;
+    total_commission: number;
+    total_swap: number;
+    pnl_ready_memory_count: number;
+    mae_ready_count: number;
+    mfe_ready_count: number;
+    source_memory_count: number;
+    source_pending_receipt_count: number;
+  };
+  history_records: TerminalHistoryRecord[];
+  memory_updates: TerminalHistoryMemoryUpdate[];
+  unmatched_history_records: TerminalHistoryRecord[];
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT5DealHistoryIngestReport {
+  report_kind: string;
+  created_at: string;
+  ingest_status: string;
+  schema: string;
+  query: {
+    start: string;
+    end: string;
+    days_back: number;
+    future_minutes?: number;
+    symbol?: string | null;
+    ticket?: string | null;
+  };
+  mt5_path?: string | null;
+  terminal_snapshot: Record<string, unknown>;
+  history_export_path?: string | null;
+  raw_deal_count: number;
+  raw_deals_sha256: string;
+  raw_deals?: Array<Record<string, unknown>>;
+  history_records: Array<Record<string, unknown>>;
+  terminal_history_ingest: Partial<TerminalHistoryIngestReport> | Record<string, unknown>;
+  summary: {
+    mt5_package_available: boolean;
+    initialize_ok: boolean;
+    terminal_connected: boolean;
+    terminal_name?: string | null;
+    terminal_trade_allowed?: boolean | null;
+    server?: string | null;
+    demo_account_confirmed: boolean;
+    account_snapshot_present: boolean;
+    account_balance?: number | null;
+    account_equity?: number | null;
+    account_currency?: string | null;
+    ticket_filter?: string | null;
+    raw_deal_count: number;
+    closed_position_count: number;
+    history_record_count: number;
+    memory_update_count: number;
+    unmatched_history_count: number;
+    closed_trade_count: number;
+    closed_profit_count: number;
+    closed_loss_count: number;
+    closed_flat_count: number;
+    net_profit_loss_account: number;
+    total_commission: number;
+    total_swap: number;
+    history_export_path?: string | null;
+    terminal_history_ingest_status?: string | null;
+    terminal_history_report_path?: string | null;
+  };
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface AgentResearchTask {
+  schema: string;
+  task_id: string;
+  task_type: string;
+  priority: number;
+  status: string;
+  source_memory_ids: string[];
+  source_outcome_labels: string[];
+  research_question: string;
+  plain_english_goal: string;
+  symbols: string[];
+  timeframes: string[];
+  families: string[];
+  agents: string[];
+  actions: string[];
+  success_metric: string;
+  required_inputs: string[];
+  produces: string[];
+  blocked_by: string[];
+  source_counts: Record<string, number>;
+  created_at: string;
+  claim_boundary: string;
+}
+
+export interface AgentResearchQueueReport {
+  report_kind: string;
+  created_at: string;
+  queue_status: string;
+  schema: string;
+  memory_report_path?: string | null;
+  output_dir: string;
+  summary: {
+    task_count: number;
+    queued_task_count: number;
+    high_priority_task_count: number;
+    task_type_counts: Record<string, number>;
+    priority_counts: Record<string, number>;
+    status_counts: Record<string, number>;
+    source_memory_count: number;
+    source_pending_receipt_count: number;
+    source_ready_for_research_count: number;
+    source_receipt_joined_count: number;
+    source_latest_cycle_id: string | null;
+    terminal_receipt_task_count: number;
+    condition_lab_task_count: number;
+    walk_forward_task_count: number;
+    strategy_dev_task_count: number;
+    next_task_id: string | null;
+  };
+  research_tasks: AgentResearchTask[];
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface StrategyDevWorkItem {
+  schema: string;
+  item_id: string;
+  item_type: string;
+  priority: number;
+  status: string;
+  source_task_ids: string[];
+  source_memory_ids: string[];
+  source_outcome_labels: string[];
+  symbols: string[];
+  timeframes: string[];
+  families: string[];
+  agents: string[];
+  actions: string[];
+  hypothesis: string;
+  plain_english_goal: string;
+  proposed_change: string;
+  replay_request: Record<string, unknown>;
+  promotion_review: Record<string, unknown>;
+  required_inputs: string[];
+  blocked_by: string[];
+  produces: string[];
+  acceptance_checks: string[];
+  source_counts: Record<string, number>;
+  created_at: string;
+  claim_boundary: string;
+}
+
+export interface StrategyDevQueueReport {
+  report_kind: string;
+  created_at: string;
+  queue_status: string;
+  schema: string;
+  research_queue_report_path?: string | null;
+  memory_report_path?: string | null;
+  output_dir: string;
+  summary: {
+    item_count: number;
+    queued_item_count: number;
+    blocked_item_count: number;
+    ready_for_replay_count: number;
+    patch_candidate_count: number;
+    promotion_review_count: number;
+    demotion_review_count: number;
+    terminal_blocked_count: number;
+    item_type_counts: Record<string, number>;
+    status_counts: Record<string, number>;
+    priority_counts: Record<string, number>;
+    source_task_count: number;
+    source_memory_count: number;
+    source_pending_receipt_count: number;
+    source_terminal_history_joined_count: number;
+    closed_profit_memory_count: number;
+    closed_loss_memory_count: number;
+    next_item_id: string | null;
+  };
+  work_items: StrategyDevWorkItem[];
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface StrategyPatchDecision {
+  schema: string;
+  decision_id: string;
+  decision_type: string;
+  priority: number;
+  status: string;
+  source_item_id: string;
+  source_item_type: string;
+  source_task_ids: string[];
+  source_memory_ids: string[];
+  symbols: string[];
+  timeframes: string[];
+  plain_english_decision: string;
+  proposed_action: string;
+  patch_target: string;
+  replay_job: Record<string, unknown>;
+  promotion_review: Record<string, unknown>;
+  required_inputs: string[];
+  blocked_by: string[];
+  evidence_refs: Record<string, unknown>;
+  generated_artifacts: string[];
+  acceptance_checks: string[];
+  owner_review_required: boolean;
+  created_at: string;
+  claim_boundary: string;
+}
+
+export interface StrategyPatchRunnerReport {
+  report_kind: string;
+  created_at: string;
+  runner_status: string;
+  schema: string;
+  strategy_dev_queue_report_path?: string | null;
+  output_dir: string;
+  summary: {
+    decision_count: number;
+    ready_decision_count: number;
+    blocked_decision_count: number;
+    patch_candidate_count: number;
+    replay_job_count: number;
+    promotion_review_count: number;
+    demotion_review_count: number;
+    terminal_input_required_count: number;
+    owner_review_required_count: number;
+    decision_type_counts: Record<string, number>;
+    status_counts: Record<string, number>;
+    priority_counts: Record<string, number>;
+    patch_target_counts: Record<string, number>;
+    source_item_count: number;
+    source_blocked_item_count: number;
+    source_patch_candidate_count: number;
+    next_decision_id: string | null;
+  };
+  decisions: StrategyPatchDecision[];
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface DailyLearningRollupReport {
+  report_kind: string;
+  created_at: string;
+  rollup_status: string;
+  schema: string;
+  trading_date: string;
+  day_index: number;
+  window_days: number;
+  source_reports: Record<string, unknown>;
+  output_dir: string;
+  summary: {
+    route_count: number;
+    approved_count: number;
+    rejected_count: number;
+    executed_count: number;
+    receipt_joined_count: number;
+    pending_receipt_count: number;
+    terminal_history_joined_count: number;
+    terminal_history_update_count: number;
+    closed_count: number;
+    win_count: number;
+    loss_count: number;
+    flat_count: number;
+    gross_profit_account: number;
+    gross_loss_account: number;
+    net_profit_loss_account: number;
+    profit_factor: number | null;
+    expectancy_account: number | null;
+    max_drawdown_pct: number | null;
+    research_task_count: number;
+    strategy_item_count: number;
+    patch_decision_count: number;
+    patch_candidate_count: number;
+    replay_job_count: number;
+    promotion_candidate_count: number;
+    demotion_flag_count: number;
+    terminal_input_required_count: number;
+    source_report_count: number;
+    chain_verified: boolean;
+    readiness_label: string;
+  };
+  by_agent: Array<Record<string, unknown>>;
+  by_symbol: Array<Record<string, unknown>>;
+  by_strategy: Array<Record<string, unknown>>;
+  by_condition_cell: Array<Record<string, unknown>>;
+  promotion_candidates: Array<Record<string, unknown>>;
+  demotion_flags: Array<Record<string, unknown>>;
+  queued_follow_up_work: Array<{
+    work_type: string;
+    source_id: string | null;
+    status: string | null;
+    priority: number | null;
+    plain_english: string | null;
+  }>;
+  terminal_blockers: Array<{
+    blocker_id: string;
+    count: number;
+    plain_english: string;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface SessionAutowakeEvent {
+  schema: string;
+  event_id: string;
+  action: string;
+  trigger: string;
+  purpose: string;
+  due: boolean;
+  status: string;
+  decision: string;
+  requested_agent_cycle: boolean;
+  terminal_blocked: boolean;
+  active_session: string;
+  as_of: string;
+  daily_rollup_status?: string | null;
+  reasons: string[];
+  claim_boundary: string;
+}
+
+export interface SessionAutowakeReport {
+  report_kind: string;
+  created_at: string;
+  autowake_status: string;
+  schema: string;
+  as_of: string;
+  execution_mode: string;
+  workflow_plan_path?: string | null;
+  daily_rollup_path?: string | null;
+  output_dir: string;
+  session_state: {
+    market_open: boolean;
+    active_session: string;
+    weekday: string;
+    utc_hour: number;
+    utc_minute: number;
+    timezone: string;
+    market_week_reference: string;
+  };
+  summary: {
+    event_count: number;
+    due_event_count: number;
+    executable_event_count: number;
+    executed_cycle_count: number;
+    market_open: boolean;
+    active_session: string;
+    terminal_blocker_count: number;
+    pending_receipt_count: number;
+    closed_count: number;
+    daily_rollup_status?: string | null;
+    daily_rollup_readiness_label?: string | null;
+    next_due_event_id?: string | null;
+    executed_cycle_id?: string | null;
+  };
+  event_evaluations: SessionAutowakeEvent[];
+  terminal_blockers: Array<{
+    blocker_id: string;
+    count: number;
+    plain_english: string;
+  }>;
+  executed_cycle?: Record<string, unknown> | null;
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface TerminalReceiptWatcherFileChange {
+  schema: string;
+  change_status: string;
+  file_role: string | null;
+  path: string | null;
+  name?: string | null;
+  sha256?: string | null;
+  previous_sha256?: string | null;
+  size_bytes?: number | null;
+  previous_size_bytes?: number | null;
+  modified_at?: string | null;
+  previous_modified_at?: string | null;
+}
+
+export interface TerminalReceiptWatcherReport {
+  report_kind: string;
+  created_at: string;
+  watch_status: string;
+  schema: string;
+  as_of: string;
+  mailbox_dir: string;
+  receipt_dir: string;
+  history_source_paths: string[];
+  event_log_path: string;
+  output_dir: string;
+  chain_output_root?: string | null;
+  summary: {
+    terminal_file_count: number;
+    receipt_file_count: number;
+    history_file_count: number;
+    changed_file_count: number;
+    chain_requested: boolean;
+    chain_step_count: number;
+    chain_step_complete_count: number;
+    chain_step_failed_count: number;
+    latest_completed_step?: string | null;
+    first_failed_step?: string | null;
+  };
+  file_fingerprints: Array<Record<string, unknown>>;
+  file_changes: {
+    change_counts: Record<string, number>;
+    changed_files: TerminalReceiptWatcherFileChange[];
+  };
+  chain_steps: Array<{
+    step: string;
+    status: string;
+    status_label: string;
+    started_at?: string;
+    finished_at?: string;
+    artifact_paths?: Record<string, string>;
+    summary?: Record<string, unknown>;
+    message?: string;
+  }>;
+  chain_reports: Record<string, {
+    report_kind?: string;
+    status?: string;
+    report_path?: string | null;
+    summary?: Record<string, unknown>;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface TerminalBridgeSupervisorReport {
+  report_kind: string;
+  created_at: string;
+  supervisor_status: string;
+  schema: string;
+  as_of: string;
+  mailbox_dir: string;
+  command_dir: string;
+  receipt_dir: string;
+  heartbeat_path: string;
+  history_source_paths: string[];
+  event_log_path: string;
+  output_dir: string;
+  thresholds: Record<string, number>;
+  summary: {
+    heartbeat_status?: string | null;
+    heartbeat_present: boolean;
+    heartbeat_age_seconds?: number | null;
+    mailbox_ready: boolean;
+    command_file_count: number;
+    receipt_file_count: number;
+    pending_command_receipt_count: number;
+    event_journal_pending_receipt_count: number;
+    history_file_count: number;
+    account_snapshot_present: boolean;
+    live_trading_flag_visible: boolean;
+    alert_count: number;
+    high_alert_count: number;
+    medium_alert_count: number;
+    terminal_bridge_ready: boolean;
+  };
+  heartbeat: Record<string, unknown>;
+  mailbox: Record<string, unknown>;
+  commands: Record<string, unknown>;
+  receipts: Record<string, unknown>;
+  history: Record<string, unknown>;
+  event_journal: Record<string, unknown>;
+  account_snapshot: Record<string, unknown>;
+  alerts: Array<{
+    alert_id: string;
+    severity: string;
+    plain_english: string;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT4TerminalActivationReport {
+  report_kind: string;
+  created_at: string;
+  activation_status: string;
+  schema: string;
+  ea_source: {
+    path: string;
+    exists: boolean;
+    sha256?: string | null;
+    size_bytes?: number | null;
+  };
+  candidate_terminals: Array<Record<string, unknown>>;
+  selected_terminal: {
+    terminal_data_dir: string;
+    platform: string;
+    mql4_dir: string;
+    mql4_dir_exists: boolean;
+    experts_dir: string;
+    experts_dir_exists: boolean;
+    files_dir: string;
+    files_dir_exists: boolean;
+    ea: {
+      target_path: string;
+      target_exists: boolean;
+      target_sha256?: string | null;
+      source_sha256?: string | null;
+      hash_matches: boolean;
+    };
+    mailbox: {
+      mailbox_dir: string;
+      command_dir: string;
+      receipt_dir: string;
+      archive_dir: string;
+      heartbeat_path: string;
+      mailbox_exists: boolean;
+      command_dir_exists: boolean;
+      receipt_dir_exists: boolean;
+      archive_dir_exists: boolean;
+      mailbox_ready: boolean;
+      heartbeat_present: boolean;
+      command_file_count: number;
+      receipt_file_count: number;
+    };
+  } | null;
+  install_requested: boolean;
+  create_mailbox_requested: boolean;
+  actions: Array<Record<string, unknown>>;
+  settings: {
+    MailboxRoot: string;
+    UseCommonFiles: boolean;
+    LiveTradingAllowed: boolean;
+    SymbolSuffix: string;
+    TimerSeconds: number;
+    MaxCommandsPerTimer: number;
+  };
+  path_alignment: {
+    cas_default_mailbox_dir: string;
+    recommended_cas_mailbox_dir?: string | null;
+    alignment_status: string;
+    recommended_env: Record<string, string | null>;
+    plain_english: string;
+  };
+  operator_commands: Record<string, string>;
+  activation_steps: Array<{
+    step: number;
+    plain_english: string;
+  }>;
+  summary: {
+    candidate_count: number;
+    mt4_candidate_count: number;
+    mt5_only_candidate_count: number;
+    selected_terminal_present: boolean;
+    selected_platform?: string | null;
+    ea_source_present: boolean;
+    ea_installed: boolean;
+    ea_hash_matches: boolean;
+    mailbox_ready: boolean;
+    heartbeat_present: boolean;
+    command_file_count: number;
+    receipt_file_count: number;
+    install_requested: boolean;
+    create_mailbox_requested: boolean;
+  };
+  claim_boundary: string;
+  next_action: string;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT4PingRoundtripReport {
+  report_kind: string;
+  created_at: string;
+  roundtrip_status: string;
+  schema: string;
+  mailbox_dir: string | null;
+  activation_status?: string | null;
+  activation_report_path?: string | null;
+  wait_seconds: number;
+  poll_interval_seconds: number;
+  write_ping_requested: boolean;
+  existing_command_id?: string | null;
+  command: {
+    command_id?: string | null;
+    command_type?: string | null;
+    command_path?: string | null;
+    raw_request_hash?: string | null;
+    broker_mode?: string | null;
+    live_money_authorized?: boolean;
+  } | null;
+  expected_receipt_id?: string | null;
+  mailbox: {
+    mailbox_dir: string | null;
+    mailbox_exists: boolean;
+    command_dir_exists: boolean;
+    receipt_dir_exists: boolean;
+    archive_dir_exists: boolean;
+    command_file_count: number;
+    receipt_file_count: number;
+  };
+  heartbeat: Record<string, unknown>;
+  receipt: Record<string, unknown>;
+  summary: {
+    activation_status?: string | null;
+    mailbox_ready: boolean;
+    command_id?: string | null;
+    command_path?: string | null;
+    ping_written: boolean;
+    command_schema_valid: boolean;
+    command_type?: string | null;
+    heartbeat_present: boolean;
+    heartbeat_valid: boolean;
+    receipt_present: boolean;
+    receipt_valid: boolean;
+    receipt_status?: string | null;
+    raw_request_hash_match: boolean;
+    live_flag_visible: boolean;
+    command_file_count: number;
+    receipt_file_count: number;
+  };
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT4TerminalSessionVerifierReport {
+  report_kind: string;
+  created_at: string;
+  session_status: string;
+  schema: string;
+  terminal_data_dir?: string | null;
+  mailbox_dir?: string | null;
+  search_roots: string[];
+  event_log_path: string;
+  history_source_paths: string[];
+  output_dir: string;
+  child_output_root: string;
+  settings: {
+    install_ea: boolean;
+    create_mailbox: boolean;
+    wait_seconds: number;
+    poll_interval_seconds: number;
+    write_ping: boolean;
+    run_refresh_chain: boolean;
+    force_refresh_chain: boolean;
+  };
+  step_results: Array<{
+    step: string;
+    status: string;
+    status_label: string | null;
+    message?: string;
+    started_at?: string;
+    finished_at?: string;
+    artifact_paths?: Record<string, string>;
+    summary?: Record<string, unknown>;
+  }>;
+  child_reports: Record<string, {
+    report_kind?: string;
+    status?: string | null;
+    report_path?: string | null;
+    summary?: Record<string, unknown>;
+  }>;
+  summary: {
+    activation_status?: string | null;
+    roundtrip_status?: string | null;
+    supervisor_status?: string | null;
+    watch_status?: string | null;
+    mailbox_dir?: string | null;
+    mt4_candidate_count: number;
+    mt5_only_candidate_count: number;
+    selected_terminal_present: boolean;
+    mailbox_ready: boolean;
+    ping_written: boolean;
+    heartbeat_present: boolean;
+    receipt_present: boolean;
+    receipt_status?: string | null;
+    live_flag_visible: boolean;
+    command_file_count: number;
+    receipt_file_count: number;
+    chain_requested: boolean;
+    chain_step_count: number;
+    chain_step_complete_count: number;
+    chain_step_failed_count: number;
+    refresh_chain_complete: boolean;
+    step_count: number;
+    failed_step_count: number;
+    skipped_step_count: number;
+    watcher_terminal_file_count: number;
+    watcher_changed_file_count: number;
+  };
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT4HistoryExportVerifierReport {
+  report_kind: string;
+  created_at: string;
+  verifier_status: string;
+  schema: string;
+  ea_source: {
+    path: string;
+    present: boolean;
+    sha256?: string | null;
+    size_bytes: number;
+  };
+  session_report: {
+    present: boolean;
+    session_status?: string | null;
+    mailbox_dir?: string | null;
+    report_path?: string | null;
+    summary?: Record<string, unknown>;
+  };
+  mailbox_dir?: string | null;
+  history_export_path?: string | null;
+  status_path?: string | null;
+  history_export: {
+    present: boolean;
+    path?: string | null;
+    sha256?: string | null;
+    size_bytes?: number;
+    schema?: string | null;
+    schema_valid?: boolean;
+    parse_status: string;
+    parse_error?: string;
+    history_record_count?: number;
+    history_records?: Array<Record<string, unknown>>;
+    summary?: Record<string, unknown>;
+  };
+  exporter_status: {
+    present: boolean;
+    path?: string | null;
+    sha256?: string | null;
+    schema?: string | null;
+    export_status?: string | null;
+    exported_order_count?: number | null;
+    parse_status: string;
+    parse_error?: string;
+    payload?: Record<string, unknown>;
+  };
+  ingest_report?: {
+    report_kind?: string;
+    ingest_status?: string;
+    artifact_paths?: Record<string, string>;
+    summary?: Record<string, unknown>;
+  } | null;
+  ingest_error?: { error_type: string; message: string } | null;
+  summary: {
+    ea_source_present: boolean;
+    mailbox_ready: boolean;
+    mailbox_dir?: string | null;
+    history_export_present: boolean;
+    history_export_parse_status?: string | null;
+    history_export_schema_valid: boolean;
+    history_record_count: number;
+    exporter_status_present: boolean;
+    exporter_status?: string | null;
+    ingest_status?: string | null;
+    ingest_error_type?: string | null;
+    memory_update_count: number;
+    unmatched_history_count: number;
+    closed_profit_count: number;
+    closed_loss_count: number;
+    net_profit_loss_account: number;
+  };
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface TerminalPositionReconciliationReport {
+  report_kind: string;
+  created_at: string;
+  reconciliation_status: string;
+  schema: string;
+  source_reports: Record<string, {
+    present: boolean;
+    report_kind?: string | null;
+    status?: string | null;
+    report_path?: string | null;
+    created_at?: string | null;
+    summary?: Record<string, unknown>;
+    error_type?: string;
+    message?: string;
+  }>;
+  summary: {
+    bridge_report_present: boolean;
+    receipt_ingest_report_present: boolean;
+    history_ingest_report_present: boolean;
+    memory_report_present: boolean;
+    mt4_history_export_verifier_present: boolean;
+    bridge_status?: string | null;
+    mt4_history_export_verifier_status?: string | null;
+    heartbeat_status?: string | null;
+    heartbeat_present: boolean;
+    account_snapshot_present: boolean;
+    account_snapshot_source?: string | null;
+    live_trading_flag_visible: boolean;
+    pending_receipt_count: number;
+    receipt_mismatch_count: number;
+    cas_open_position_count: number;
+    cas_receipt_pending_open_count: number;
+    cas_receipt_ack_open_count: number;
+    terminal_open_position_count: number;
+    reconciled_open_position_count: number;
+    unmatched_open_position_count: number;
+    history_record_count: number;
+    memory_update_count: number;
+    unmatched_history_count: number;
+    terminal_history_joined_count: number;
+    closed_profit_count: number;
+    closed_loss_count: number;
+    net_profit_loss_account: number;
+  };
+  account_snapshot: { present: boolean; source?: string | null; snapshot: Record<string, unknown> };
+  terminal_open_positions: Array<Record<string, unknown>>;
+  cas_open_positions: Array<Record<string, unknown>>;
+  reconciled_open_positions: Array<Record<string, unknown>>;
+  unmatched_open_positions: Array<Record<string, unknown>>;
+  closed_history: {
+    history_record_count: number;
+    memory_update_count: number;
+    history_records: Array<Record<string, unknown>>;
+    memory_updates: Array<Record<string, unknown>>;
+  };
+  checks: Array<{
+    check_id: string;
+    description: string;
+    status: string;
+    value: unknown;
+    detail: string;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface TerminalOperabilityVerifierReport {
+  report_kind: string;
+  created_at: string;
+  operability_status: string;
+  schema: string;
+  source_reports: Record<string, {
+    present: boolean;
+    report_kind?: string | null;
+    status?: string | null;
+    report_path?: string | null;
+    created_at?: string | null;
+    summary?: Record<string, unknown>;
+    error_type?: string;
+    message?: string;
+  }>;
+  summary: {
+    session_report_present: boolean;
+    bridge_report_present: boolean;
+    receipt_ingest_report_present: boolean;
+    history_export_verifier_present: boolean;
+    history_ingest_report_present: boolean;
+    position_reconciliation_report_present: boolean;
+    mt5_terminal_api_verifier_present?: boolean;
+    mt5_paper_execution_verifier_present?: boolean;
+    mt5_deal_history_ingest_present?: boolean;
+    runtime_gates_present: boolean;
+    session_status?: string | null;
+    activation_status?: string | null;
+    roundtrip_status?: string | null;
+    bridge_status?: string | null;
+    heartbeat_status?: string | null;
+    heartbeat_present: boolean;
+    mailbox_ready: boolean;
+    receipt_present: boolean;
+    pending_receipt_count: number;
+    receipt_mismatch_count: number;
+    history_export_verifier_status?: string | null;
+    history_export_present: boolean;
+    history_export_parse_status?: string | null;
+    history_record_count: number;
+    memory_update_count: number;
+    unmatched_history_count: number;
+    position_reconciliation_status?: string | null;
+    account_snapshot_present: boolean;
+    mt5_terminal_api_verifier_status?: string | null;
+    mt5_terminal_connected?: boolean;
+    mt5_broker_api_verified?: boolean;
+    mt5_account_snapshot_present?: boolean;
+    mt5_open_position_count?: number;
+    mt5_open_positions_reconciled?: boolean;
+    mt5_server?: string | null;
+    mt5_account_balance?: number | null;
+    mt5_account_equity?: number | null;
+    mt5_paper_execution_verifier_status?: string | null;
+    mt5_paper_order_request_built?: boolean;
+    mt5_paper_order_check_status?: string | null;
+    mt5_paper_execution_attempted?: boolean;
+    mt5_paper_execution_status?: string | null;
+    mt5_paper_execution_error_message?: string | null;
+    mt5_paper_terminal_trade_allowed?: boolean | null;
+    mt5_paper_raw_response_hash?: string | null;
+    mt5_paper_close_attempted?: boolean;
+    mt5_paper_close_success?: boolean;
+    mt5_deal_history_ingest_status?: string | null;
+    mt5_deal_history_raw_deal_count?: number;
+    mt5_deal_history_closed_position_count?: number;
+    mt5_deal_history_memory_update_count?: number;
+    mt5_deal_history_unmatched_count?: number;
+    mt5_deal_history_net_profit_loss_account?: number;
+    cas_open_position_count: number;
+    terminal_open_position_count: number;
+    reconciled_open_position_count: number;
+    unmatched_open_position_count: number;
+    live_flag_visible: boolean;
+    live_trading_authorized: boolean;
+    broker_accept_authorized: boolean;
+    money_movement_authorized: boolean;
+    all_real_money_authorized: boolean;
+    runtime_gate_pending_capabilities: string[];
+    net_profit_loss_account: number;
+  };
+  checks: Array<{
+    check_id: string;
+    description: string;
+    status: string;
+    value: unknown;
+    detail: string;
+  }>;
+  go_no_go: {
+    terminal_lane_go: boolean;
+    live_order_go: boolean;
+    broker_accept_go: boolean;
+    money_movement_go: boolean;
+    blocking_reasons: string[];
+  };
+  runtime_gate_decisions: Record<string, unknown>;
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT5TerminalApiVerifierReport {
+  report_kind: string;
+  created_at: string;
+  verifier_status: string;
+  schema: string;
+  trading_date: string;
+  mt5_path?: string | null;
+  probe: Record<string, unknown>;
+  terminal_snapshot: Record<string, unknown>;
+  summary: {
+    mt5_package_available: boolean;
+    initialize_ok: boolean;
+    terminal_connected: boolean;
+    probe_status?: string | null;
+    broker?: string | null;
+    broker_mode?: string | null;
+    receipt_validation_status?: string | null;
+    broker_api_authenticated: boolean;
+    broker_source_verified: boolean;
+    server?: string | null;
+    terminal_name?: string | null;
+    account_snapshot_present: boolean;
+    account_currency?: string | null;
+    account_balance?: number | null;
+    account_equity?: number | null;
+    open_position_count: number;
+    open_positions_reconciled: boolean;
+    orders_attempted: number;
+    orders_paper_executed: number;
+    live_mode_used: boolean;
+    reasons: string[];
+  };
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT5PaperExecutionVerifierReport {
+  report_kind: string;
+  created_at: string;
+  verifier_status: string;
+  schema: string;
+  trading_date: string;
+  mt5_path?: string | null;
+  execution_controls: {
+    execute_demo_order: boolean;
+    confirm_demo_order: boolean;
+    close_after_send: boolean;
+    live_mode_forced_off: boolean;
+    paper_trading_forced_on: boolean;
+  };
+  api_verifier: Record<string, unknown>;
+  terminal_snapshot: Record<string, unknown>;
+  order: Record<string, unknown>;
+  mt5_request: Record<string, unknown>;
+  order_check: Record<string, unknown>;
+  execution_result: Record<string, unknown>;
+  summary: {
+    mt5_api_verified: boolean;
+    api_verifier_status?: string | null;
+    terminal_connected: boolean;
+    terminal_name?: string | null;
+    terminal_trade_allowed?: boolean;
+    server?: string | null;
+    demo_account_confirmed: boolean;
+    account_snapshot_present: boolean;
+    account_balance?: number | null;
+    account_equity?: number | null;
+    open_position_count_before: number;
+    order_request_built: boolean;
+    order_error?: string | null;
+    symbol?: string | null;
+    direction?: string | null;
+    volume?: number | null;
+    raw_request_hash?: string | null;
+    order_check_attempted: boolean;
+    order_check_status?: string | null;
+    execution_attempted: boolean;
+    execution_status?: string | null;
+    execution_error_message?: string | null;
+    broker_ticket?: string | number | null;
+    filled_price?: number | null;
+    close_attempted: boolean;
+    close_success: boolean;
+    raw_response_hash?: string | null;
+    live_mode_used: boolean;
+  };
+  claim_boundary: string;
+  next_action: string;
+  operator_commands: Record<string, string>;
+  output_dir: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface TerminalReceiptIngestRecord {
+  receipt_id: string;
+  command_id: string;
+  cycle_id: string | null;
+  intent_id: string | null;
+  decision_id: string | null;
+  agent_id: string | null;
+  symbol: string | null;
+  timeframe: string | null;
+  command_path: string | null;
+  receipt_path: string | null;
+  status: string | null;
+  receipt_validation_status: string;
+  lifecycle_status: string;
+  reconcile_status: string;
+  next_cycle_status: string;
+  raw_request_hash: string | null;
+  expected_raw_request_hash: string | null;
+  raw_request_hash_match: boolean;
+  raw_response_hash: string | null;
+  terminal_name: string | null;
+  terminal_build: string | number | null;
+  account_id_hash: string | null;
+  server: string | null;
+  broker_mode: string | null;
+  live_mode: boolean;
+  live_trading_allowed: boolean;
+  broker_ticket: string | number | null;
+  filled_price: number | null;
+  filled_volume: number | null;
+  slippage_pips: number | null;
+  commission: number | null;
+  swap: number | null;
+  error_code: string | number | null;
+  account_snapshot_present: boolean;
+  terminal_identity_present: boolean;
+  reasons: string[];
+  receipt_sha256: string | null;
+  ingest_action: string;
+  event_ids: string[];
+}
+
+export interface TerminalReceiptIngestReport {
+  report_kind: string;
+  created_at: string;
+  ingest_status: string;
+  mailbox_dir: string;
+  event_log_path: string;
+  summary: {
+    receipt_count: number;
+    new_receipt_count: number;
+    skipped_already_ingested_count: number;
+    verified_receipt_count: number;
+    reconciled_receipt_count: number;
+    next_cycle_allowed_count: number;
+    receipt_mismatch_count: number;
+    terminal_locked_count: number;
+    appended_event_count: number;
+    appended_event_ids: string[];
+    pending_receipt_count: number;
+    event_count: number;
+    latest_event_id: string | null;
+    latest_cycle_id: string | null;
+    event_type_counts: Record<string, number>;
+    status_counts: Record<string, number>;
+  };
+  receipt_records: TerminalReceiptIngestRecord[];
+  claim_boundary: string;
+  next_action: string;
+  artifact_paths?: Record<string, string>;
+  report_path?: string;
+}
+
+export interface MT5ProbeStatus {
+  probe_path: string; status: string; broker: string | null; trading_date: string | null;
+  has_receipt: boolean; receipt_validation_status: string | null; account_snapshot_present: boolean;
+  reasons: string[]; claim_boundary: string;
+}
+
 export interface MT5Receipt {
   receipt_id: string; receipt_validation_status: string; broker_mode: string;
   trading_date: string; symbols: string[]; orders_attempted: number;
@@ -307,6 +2367,9 @@ export interface MT5Receipt {
   broker_api_authenticated: boolean; broker_source_verified: boolean;
   server: string; terminal_name: string;
   receipt_hash_sha256: string; broker_export_sha256: string;
+  account_snapshot?: { balance?: number; equity?: number; margin?: number; margin_free?: number; currency?: string; leverage?: number; account_id_hash?: string; server?: string };
+  balance?: number | null; equity?: number | null; margin?: number | null; margin_free?: number | null;
+  account_currency?: string | null; account_leverage?: number | null;
   packet_hash: string; record_hash: string;
   chain_verified: boolean; worm_retained: boolean;
 }
@@ -423,12 +2486,45 @@ export interface DashboardState {
   dailyBundle: DailyBundle;
   adaptive?: AdaptiveCockpitPayload;
   ownerControl?: OwnerControlState;
+  accountLedger?: AccountLedgerState;
+  movementStream?: MovementStreamState;
+  accountReconciliation?: AccountReconciliationReport;
+  liveReadiness?: LiveReadinessReport;
+  brokerSyncedRiskPreview?: BrokerSyncedRiskPreview;
   mtHistory?: MTHistorySummary;
   strategyLeads?: StrategyLead[];
   backsolve?: BacksolveSummary;
   conditionTally?: ConditionTallyBucket[];
   walkForward?: WalkForwardSummary;
+  externalBenchmarks?: ExternalBenchmarkReport;
+  forexFurySetImport?: ForexFurySetImportReport | null;
+  forexFuryReplayCandidates?: ForexFuryReplayCandidateReport | null;
+  forexFuryReplayResults?: ForexFuryReplayResultsReport | null;
+  agentWorkflowPlan?: AgentWorkflowPlan | null;
+  agentWorkflowCycle?: AgentWorkflowCycle | null;
+  agentInformationFlow?: AgentInformationFlow | null;
+  agentMessageBus?: AgentMessageBusSummary | null;
+  agentMemory?: AgentMemoryReport | null;
+  agentResearchQueue?: AgentResearchQueueReport | null;
+  strategyDevQueue?: StrategyDevQueueReport | null;
+  strategyPatchRunner?: StrategyPatchRunnerReport | null;
+  dailyLearningRollup?: DailyLearningRollupReport | null;
+  sessionAutowake?: SessionAutowakeReport | null;
+  terminalReceiptWatcher?: TerminalReceiptWatcherReport | null;
+  terminalBridgeSupervisor?: TerminalBridgeSupervisorReport | null;
+  mt4TerminalActivation?: MT4TerminalActivationReport | null;
+  mt4PingRoundtrip?: MT4PingRoundtripReport | null;
+  mt4TerminalSessionVerifier?: MT4TerminalSessionVerifierReport | null;
+  mt4HistoryExportVerifier?: MT4HistoryExportVerifierReport | null;
+  mt5TerminalApiVerifier?: MT5TerminalApiVerifierReport | null;
+  mt5PaperExecutionVerifier?: MT5PaperExecutionVerifierReport | null;
+  mt5DealHistoryIngest?: MT5DealHistoryIngestReport | null;
+  terminalPositionReconciliation?: TerminalPositionReconciliationReport | null;
+  terminalOperabilityVerifier?: TerminalOperabilityVerifierReport | null;
+  terminalReceiptIngest?: TerminalReceiptIngestReport | null;
+  terminalHistoryIngest?: TerminalHistoryIngestReport | null;
   mt5Receipt?: MT5Receipt;
+  mt5ProbeStatus?: MT5ProbeStatus;
   authorityBoundary?: AuthorityBoundaryState;
   runtimeGates?: RuntimeGatesState;
   aiModel?: AIModelState;

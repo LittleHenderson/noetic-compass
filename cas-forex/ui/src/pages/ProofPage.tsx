@@ -4,6 +4,7 @@ import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { LockReasonList } from "../components/LockReasonList";
 import { EvidenceHashRow } from "../components/EvidenceHashRow";
+import { ProofControlPanel } from "../components/ProofControlPanel";
 import type { DashboardState } from "../types/evidence";
 
 interface ProofPageProps {
@@ -40,6 +41,9 @@ export function ProofPage({ state }: ProofPageProps) {
           </div>
         </div>
       </GlassPanel>
+
+      {/* ── Proof Control (advance + profit thresholds) ── */}
+      <ProofControlPanel />
 
       {/* ── Paper Proof Progress ── */}
       <div className="proof-grid-2col">
@@ -249,8 +253,8 @@ export function ProofPage({ state }: ProofPageProps) {
               size="sm"
             />
           </div>
-          <div className="next-action-command mono">
-            {s.recommended_command}
+          <div className="next-action-command">
+            {s.recommended_action || s.recommended_command}
           </div>
           <LockReasonList
             title="Missing Tracks for Next Due Date"
@@ -324,6 +328,35 @@ export function ProofPage({ state }: ProofPageProps) {
               <div className="hash-row"><span className="field-label">Packet Hash</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{state.mt5Receipt.packet_hash.slice(0, 24)}...</code></div>
             </div>
           </div>
+        </GlassPanel>
+      )}
+
+
+
+      {state.mt5ProbeStatus && (
+        <GlassPanel title="Latest MT5 Probe Attempt" subtitle={state.mt5ProbeStatus.probe_path} variant={state.mt5ProbeStatus.status === "BROKER_API_VERIFIED" ? "info" : "danger"}>
+          <div className="dashboard-grid-3col">
+            <div className="metric-stack">
+              <Metric label="Probe Status" value={state.mt5ProbeStatus.status} mono danger={state.mt5ProbeStatus.status !== "BROKER_API_VERIFIED"} />
+              <Metric label="Broker" value={state.mt5ProbeStatus.broker ?? "—"} mono />
+              <Metric label="Trading Date" value={state.mt5ProbeStatus.trading_date ?? "—"} mono />
+            </div>
+            <div className="metric-stack">
+              <Metric label="Has Receipt" value={String(state.mt5ProbeStatus.has_receipt)} mono />
+              <Metric label="Account Snapshot" value={state.mt5ProbeStatus.account_snapshot_present ? "PRESENT" : "MISSING"} mono danger={!state.mt5ProbeStatus.account_snapshot_present} />
+              <Metric label="Latest Verified Receipt" value={state.mt5Receipt?.receipt_validation_status ?? "—"} mono />
+            </div>
+            <div className="metric-stack">
+              <Metric label="Live Trading" value="NOT LICENSED" mono danger />
+              <Metric label="Broker ACCEPT" value="NOT LICENSED" mono danger />
+              <Metric label="Payment Movement" value="NOT LICENSED" mono danger />
+            </div>
+          </div>
+          {state.mt5ProbeStatus.reasons.length > 0 && (
+            <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.72rem" }}>
+              Latest probe blocker: {state.mt5ProbeStatus.reasons.join("; ")}
+            </div>
+          )}
         </GlassPanel>
       )}
 
