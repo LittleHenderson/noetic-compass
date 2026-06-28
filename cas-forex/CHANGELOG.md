@@ -1,6 +1,22 @@
 # CAS Forex - Changelog
 
-## 2026-06-27 — Owner-reported fixes: crash, missing assistant, real authorization toggles
+## 2026-06-27 — Trading terminal + auto-trade loop + green test suite
+
+- **Trading Windows is now a real terminal** (was bare charts). Account header bar
+  (Balance / Equity / Floating P&L / Open positions / Margin / Mode) + an MT4-style
+  "Open Positions" table listing every open position (symbol, side, lots, entry, now,
+  SL, TP, floating P&L), plus per-pane positions for each chart's symbol — all from
+  /movement/snapshot. (0bc3553b)
+- **Paper dispatch loop on a timer** — the #1 functional gap. `cas_forex/dispatch_loop.py`
+  + an "Auto-Trade Loop" control on the Trading Windows page run the gated dispatch
+  cycle every N seconds, so the bot trades on its own (paper-safe; live needs explicit
+  authorize + a ?confirm=true start). This builds the paper-proof track record
+  automatically. (62f2109a)
+- **Test suite fully green (1154 passed, 0 failed).** Fixed the 6 long-standing
+  strategy_ledger/llm_optimizer failures by teaching the validator that Forex-Fury
+  PROMOTED_PAPER_LANE records are a separate, provenance-checked record type. (0bc3553b)
+
+
 
 A batch of owner-reported breakage + control gaps, all fixed and verified live.
 
