@@ -62,6 +62,28 @@ real edge is:
 Until a component clears step 1 on broker-grade data, there is no edge to deploy,
 and the NOT LICENSED / paper-only boundaries stay.
 
+## Nested-lacunarity bias-state map (multi-timeframe, 2026-06-28)
+
+The bias-state slider ("how well you know the 28 cells"), **measured** instead of
+guessed, via `cas_forex/nested_lacunarity.py` on real data (US30 + EUR/USD, **H1
+and D1**, all regimes), each cell decided by the unchanged leak-free OOS null:
+
+> **BIAS-STATE: ALL_GAPS — 28 cells, 28 gaps, 0 non-gaps. Gap fraction 1.0000 at
+> both H1 and D1. Fractal-coherent cells: 0.**
+
+H1 was untested territory (finer bars, ~3.5k–12k of them, many more regime
+transitions). It made no difference: no cell at any timeframe, symbol, or regime
+clears the null. Multi-timeframe did not surface hidden edge — it confirmed the
+no-edge result more robustly, across scales. The measured bias-state for price-only
+signals is **≈ 0 everywhere**. In recipe terms: `Θ(Ω_profit) = a·price +
+b·NEW_INFORMATION → profit` has its limiting reagent (NEW_INFORMATION) at ~0, so
+theoretical yield is ~0 across all 28 cells — exactly what the map shows.
+
+The discipline frame is built and verified (`cas_forex/cascade_forecast.py` +
+`nested_lacunarity.py`, suite green 1212): it will trust, size, and route a *real*
+signal honestly — but it confirms there is no price-only signal to route. The only
+path to a non-zero bias-state is new information.
+
 ## Reproduce
 
 `python scripts/run_edge_oos.py` (writes `evidence_runs/edge_oos/*-report.json`).
