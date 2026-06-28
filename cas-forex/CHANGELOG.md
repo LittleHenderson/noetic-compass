@@ -1,5 +1,8 @@
 # CAS Forex - Changelog
 
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28.md` first.** It has full session context: what shipped (in-app authorization toggles, Trading Windows terminal, paper Auto-Trade Loop, MT5 live-account read), the MT5-IPC instability conclusion (don't re-chase it), pending tasks (start the paper loop, gate-status accuracy = task #10, MT4 EA mailbox route), and working-tree landmines.
+
+
 ## 2026-06-27 — Auto-Trade Loop: owner-set interval + symbol/session targeting; market status
 
 - **Market OPEN/CLOSED + session strip** on Trading Windows: live badge, Asian/
