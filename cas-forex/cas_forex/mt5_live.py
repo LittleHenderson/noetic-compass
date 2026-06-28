@@ -21,6 +21,9 @@ _bridge: Any = None
 _cache: Optional[dict[str, Any]] = None
 _cache_expiry = 0.0
 _TTL_SECONDS = 4.0
+# When a read fails (MT5's IPC is flaky/unreachable), cache the failure longer so
+# the UI poller can't hammer it with back-to-back slow connects.
+_FAIL_TTL_SECONDS = 20.0
 
 
 def _get_bridge() -> Any:
@@ -56,6 +59,20 @@ def _read_snapshot() -> dict[str, Any]:
         if not bridge.is_connected():
             bridge.connect()
         if not bridge.is_connected():
+            mt5 = getattr(bridge, "_mt5", None)
+            if mt5 is None:
+                # The package never imported in THIS process.
+                return {
+                    **base,
+                    "connected": False,
+                    "detail": "The MetaTrader5 Python package isn't importable in the API process.",
+                    "diagnostic": "import_failed",
+                }
+            last_error = None
+            try:
+                last_error = mt5.last_error()
+            except Exception:
+                pass
             return {
                 **base,
                 "connected": False,
@@ -63,6 +80,8 @@ def _read_snapshot() -> dict[str, Any]:
                     "MetaTrader 5 isn't reachable. Open the MT5 terminal, log into your "
                     "account, and make sure it shows a live connection (ticking prices)."
                 ),
+                "diagnostic": "ipc",
+                "last_error": list(last_error) if isinstance(last_error, tuple) else last_error,
             }
         mt5 = bridge._mt5
         acc = mt5.account_info()
@@ -110,7 +129,8 @@ def get_mt5_account_snapshot(force: bool = False) -> dict[str, Any]:
             return out
         snap = _read_snapshot()
         _cache = snap
-        _cache_expiry = now + _TTL_SECONDS
+        # Back off longer when down, so a flaky terminal can't freeze the poller.
+        _cache_expiry = now + (_TTL_SECONDS if snap.get("connected") else _FAIL_TTL_SECONDS)
         out = dict(snap)
         out["cached"] = False
         return out

@@ -33,6 +33,10 @@ from cas_forex.time_utils import utc_now
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LOCAL_MT5_DEPS = REPO_ROOT / ".mt5deps"
 
+# Bound the MT5 connect handshake (ms). MetaTrader's Python IPC can be flaky and
+# its default initialize timeout is 60s — far too long for a poller. Fail fast.
+MT5_INIT_TIMEOUT_MS = 8000
+
 
 def _add_local_mt5_deps() -> None:
     """Make MetaTrader5 importable, preferring a working environment install.
@@ -126,7 +130,11 @@ class MT5Bridge(BrokerBridge):
 
             # MT5 may hang if terminal isn't running — catch everything
             try:
-                path_kw = {"path": config.mt5_path} if config.mt5_path else {}
+                # Bound the connect so a flaky/unreachable terminal fails fast
+                # (default MT5 timeout is 60s, which would freeze callers).
+                path_kw = {"timeout": MT5_INIT_TIMEOUT_MS}
+                if config.mt5_path:
+                    path_kw["path"] = config.mt5_path
                 # Prefer ATTACHING to the already-running, already-logged-in
                 # terminal (a bare initialize). Forcing a re-login with
                 # login/password/server into a terminal that's already logged in

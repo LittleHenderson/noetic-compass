@@ -346,7 +346,9 @@ def test_mt5_bridge_initialize_uses_configured_terminal_path_without_empty_crede
     bridge = MT5Bridge()
 
     assert bridge.connect() is True
-    assert fake.initialize_calls == [{"path": r"C:\Program Files\Broker\terminal64.exe"}]
+    assert fake.initialize_calls == [
+        {"timeout": mt5_module.MT5_INIT_TIMEOUT_MS, "path": r"C:\Program Files\Broker\terminal64.exe"}
+    ]
 
 
 class _FakeMT5Attach:
@@ -387,8 +389,9 @@ def test_mt5_bridge_attaches_without_relogin_when_account_matches(monkeypatch):
     _set_mt5_config(monkeypatch)
 
     bridge = MT5Bridge()
+    t = mt5_module.MT5_INIT_TIMEOUT_MS
     assert bridge.connect() is True
-    assert fake.initialize_calls == [{"path": r"C:\Program Files\Broker\terminal64.exe"}]
+    assert fake.initialize_calls == [{"timeout": t, "path": r"C:\Program Files\Broker\terminal64.exe"}]
     assert fake.shutdown_calls == 0
 
 
@@ -399,10 +402,12 @@ def test_mt5_bridge_relogins_with_credentials_on_account_mismatch(monkeypatch):
     _set_mt5_config(monkeypatch)
 
     bridge = MT5Bridge()
+    t = mt5_module.MT5_INIT_TIMEOUT_MS
     assert bridge.connect() is True
     assert fake.initialize_calls == [
-        {"path": r"C:\Program Files\Broker\terminal64.exe"},
+        {"timeout": t, "path": r"C:\Program Files\Broker\terminal64.exe"},
         {
+            "timeout": t,
             "path": r"C:\Program Files\Broker\terminal64.exe",
             "login": 123456,
             "password": "secret",
