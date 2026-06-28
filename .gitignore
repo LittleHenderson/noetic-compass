@@ -51,6 +51,7 @@ __pycache__/
 /v1_smoke_*
 
 # --- agent / tooling working dirs ---
+/.claude/worktrees/
 /.cleanup/
 /.codex-remote-attachments/
 /.codex_runpod_patch/
@@ -70,6 +71,16 @@ __pycache__/
 # --- docs/ working-note scratch (keep the .md/.json source) ---
 docs/working/**/*.log
 docs/working/**/*.pid
+
+# --- oversized data dirs / binaries (keep on disk; archive to D: if wanted) ---
+docs/working/mtc_f28_goemotions_20260615/
+docs/working/lsa_artifacts_20260530/
+docs/working/mtc_matched_taxonomy_20260530/
+docs/working/_quarantine/
+docs/working/candidate_e/
+docs/self_improving_harness.pdf
+/_tmp_*.pdf
+/book-formatting/
 
 # --- dist/ is PARTIALLY tracked: dist/cas-offline.zip + dist/cas-offline/* are
 #     real committed source. Ignore only the build/test noise inside it. ---
