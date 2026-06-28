@@ -272,6 +272,12 @@ function AutoTradeLoopBar() {
     catch { setMsg("Couldn't stop the loop."); }
     finally { setBusy(false); }
   }
+  async function applyInterval() {
+    setBusy(true); setMsg("");
+    try { setLoop(await startDispatchLoop(interval, true)); setMsg(`Interval set to ${interval}s — applies on the next cycle.`); }
+    catch { setMsg("Couldn't update the interval."); }
+    finally { setBusy(false); }
+  }
 
   const running = loop?.running ?? false;
   const needsLiveConfirm = loop?.status === "CONFIRM_REQUIRED";
@@ -290,9 +296,8 @@ function AutoTradeLoopBar() {
         </div>
         <label className="tw-loop-interval">
           every
-          <input type="number" min={10} max={3600} value={interval}
-            disabled={running}
-            onChange={(e) => setIntervalSec(Math.max(10, Math.min(3600, Number(e.target.value) || 60)))} />
+          <input type="number" min={1} max={86400} step={1} value={interval}
+            onChange={(e) => setIntervalSec(Math.max(1, Math.min(86400, Math.round(Number(e.target.value)) || 1)))} />
           sec
         </label>
         {!running && !needsLiveConfirm && (
@@ -302,7 +307,10 @@ function AutoTradeLoopBar() {
           <button className="tw-btn tw-sell" disabled={busy} onClick={() => void startLiveConfirmed()}>Start LIVE loop</button>
         )}
         {running && (
-          <button className="tw-btn tw-sell" disabled={busy} onClick={() => void stop()}>Stop loop</button>
+          <>
+            <button className="tw-btn tw-pause" disabled={busy || interval === loop?.interval_seconds} onClick={() => void applyInterval()}>Apply interval</button>
+            <button className="tw-btn tw-sell" disabled={busy} onClick={() => void stop()}>Stop loop</button>
+          </>
         )}
       </div>
       <div className="tw-loop-detail">
@@ -315,6 +323,9 @@ function AutoTradeLoopBar() {
         Runs the same gated dispatch cycle as the manual Buy/Sell, on a timer. Paper-safe by default —
         it can only reach a live broker once you authorize live trading on Settings, and the broker
         re-checks at order time. This is what builds your paper-proof track record automatically.
+        Interval is fully yours — anything from 1 second to 24 hours; while it's running, change the
+        number and tap “Apply interval.” Very low intervals (a few seconds) hit the market-data feed
+        and CPU harder — that's your call, not a cap.
       </div>
     </GlassPanel>
   );

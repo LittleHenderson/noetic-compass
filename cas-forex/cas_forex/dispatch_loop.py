@@ -21,9 +21,12 @@ from __future__ import annotations
 import threading
 from typing import Any, Optional
 
-MIN_INTERVAL_SECONDS = 10
+# The owner drives — the interval can be anything from 1 second up to a day.
+# (Very low intervals hammer the market-data feed + CPU; that's the owner's call,
+# surfaced as an honest note in the UI, not blocked.)
+MIN_INTERVAL_SECONDS = 1
 DEFAULT_INTERVAL_SECONDS = 60
-MAX_INTERVAL_SECONDS = 3600
+MAX_INTERVAL_SECONDS = 86_400
 
 
 class _LoopState:
@@ -66,8 +69,9 @@ def _run(interval: int) -> None:
             _state.last_error = ""
         except Exception as exc:  # one bad cycle must never kill the loop thread
             _state.last_error = f"{type(exc).__name__}: {exc}"
-        # Sleep the interval, but wake immediately if stop was requested.
-        _state.stop_event.wait(interval)
+        # Sleep the CURRENT interval (re-read each cycle so the owner can change it
+        # live without restarting), but wake immediately if stop was requested.
+        _state.stop_event.wait(max(MIN_INTERVAL_SECONDS, _state.interval))
 
 
 def start_loop(interval_seconds: int = DEFAULT_INTERVAL_SECONDS) -> dict[str, Any]:

@@ -71,11 +71,29 @@ def test_start_is_idempotent():
 
 
 def test_interval_is_clamped():
-    s = dispatch_loop.start_loop(1)  # below MIN
+    s = dispatch_loop.start_loop(0)  # below MIN -> clamped up to MIN (1)
     assert s["interval_seconds"] == dispatch_loop.MIN_INTERVAL_SECONDS
     dispatch_loop.stop_loop()
-    s2 = dispatch_loop.start_loop(99999)  # above MAX
+    s2 = dispatch_loop.start_loop(9_999_999)  # above MAX -> clamped down to MAX
     assert s2["interval_seconds"] == dispatch_loop.MAX_INTERVAL_SECONDS
+    dispatch_loop.stop_loop()
+
+
+def test_owner_can_set_sub_60s_interval():
+    # The owner drives: anything from 1s up is honored, including below the old 60s/10s floors.
+    for want in (1, 3, 5, 30):
+        s = dispatch_loop.start_loop(want)
+        assert s["interval_seconds"] == want
+        dispatch_loop.stop_loop()
+
+
+def test_interval_change_while_running_is_applied_live():
+    dispatch_loop.start_loop(45)
+    assert dispatch_loop.loop_status()["interval_seconds"] == 45
+    # Re-calling start while running updates the interval without spawning a 2nd loop.
+    again = dispatch_loop.start_loop(3)
+    assert again["running"] is True
+    assert again["interval_seconds"] == 3
     dispatch_loop.stop_loop()
 
 
