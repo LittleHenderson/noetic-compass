@@ -49,6 +49,7 @@ class PaperDailySchedule:
     missing_tracks_for_next_due: List[str]
     complete_bundle_dates: List[str]
     recommended_command: str
+    recommended_action: str = ""
     notes: List[str] = field(default_factory=list)
     claim_boundary: str = PAPER_DAILY_SCHEDULE_CLAIM_BOUNDARY
     deployment_status: str = "NOT LICENSED"
@@ -125,6 +126,11 @@ def evaluate_daily_paper_schedule(
         f"--daily-risk-pct {daily_risk_pct:g} "
         "--output-dir evidence_runs/index_tsmom_126_paper_proof"
     )
+    action = (
+        "On the next trading day, open the Proof page and press "
+        "\"Record today's proof day\" — or turn on the daily auto-runner so it "
+        "records each broker-verified day for you. No command line needed."
+    )
     return PaperDailySchedule(
         schedule_id=f"{plan.plan_id}-{day.isoformat()}-daily-schedule",
         plan_id=plan.plan_id,
@@ -147,6 +153,7 @@ def evaluate_daily_paper_schedule(
         missing_tracks_for_next_due=missing,
         complete_bundle_dates=complete_dates,
         recommended_command=command,
+        recommended_action=action,
         notes=notes,
     )
 

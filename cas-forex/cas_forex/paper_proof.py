@@ -86,6 +86,19 @@ def build_index_tsmom_126_paper_proof_plan() -> PaperProofPlan:
     )
 
 
+PROOF_EVIDENCE_SUBDIR = "index_tsmom_126_paper_proof"
+
+
+def index_tsmom_126_proof_dir() -> Path:
+    """Canonical on-disk evidence dir for the index-TSMOM-126 proof ledger.
+
+    Single source of truth so the API reader, the daily-runner, and CLIs all
+    point at the same ``evidence_runs/index_tsmom_126_paper_proof`` directory.
+    """
+
+    return Path(__file__).resolve().parents[1] / "evidence_runs" / PROOF_EVIDENCE_SUBDIR
+
+
 def write_paper_proof_plan(plan: PaperProofPlan, output_dir: str | Path) -> Path:
     """Persist a paper-proof plan next to its daily evidence chain."""
 
