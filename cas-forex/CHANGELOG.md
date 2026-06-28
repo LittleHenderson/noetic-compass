@@ -1,6 +1,29 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART2.md` first** (then Part 1 for background). The "live & profitable" finish line shipped: the 30-day proof now MEASURES PROFIT (net-positive + drawdown ≤ 8% + real trades), advances in-app (Record-today button + daily auto-runner, no CLI), routes real orders through the stable MT4 EA mailbox (round-trip fixed), and every live/authority status reads honest owner-flag sources. Honest caveats: index-TSMOM-126 has no proven edge yet, and 27 real trading days still have to elapse — code can't shortcut that.
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door: an intraday/tick post-release macro test (free data, untested). Don't claim/build a fake edge; the null discipline is sacred.
+
+## 2026-06-28 — The EDGE investigation: leak-free OOS, bias-state map, macro-surprise (verdict: no edge yet)
+
+- **Leak-free OOS regime-switching test** (`d7ba0062`, `e2fa510b`): `cas_forex/edge_oos.py`
+  — routing learned on train, per-bar causal switcher, realistic cost, measured vs a
+  RANDOM-ROUTING null. Verdict NO_EDGE: switching never beats the null (0% of windows),
+  any cost. The +40%/−2.7% swing on a data refetch is pure beta/noise.
+- **All assembly tools are dead ends** (PCBA/CJT/CCB = governance; Fury = vendor `.set`
+  import; condition_lab = re-parameterized price rules; optimizer = no model). 13-setting
+  grid through edge_oos: 4 positive standalone (beta), selection forward → NO_EDGE (`2366d812`).
+- **Discipline frame** (`c759c5a2`): `cas_forex/cascade_forecast.py` (confidence decay +
+  breakdown/open-cause flags) + `cas_forex/nested_lacunarity.py` (bias-state map; structural
+  no-lookahead TF guard). Measured D1+H1: ALL_GAPS 28/28 (`7399b735`).
+- **Macro-surprise new-information cell** (`b7d6e9f5`, `a4c94585`): `cas_forex/macro_surprise.py`
+  — surprise→move OOS vs a shuffled-surprise null; instrument validated (detects planted
+  signal, rejects noise). Real Forex Factory data (HF `Ehsanrs2/Forex_Factory_Calendar`):
+  811 US surprises 2021-2026 vs EUR/USD daily → NO_SKILL (learned correct sign −1, 56.3%
+  hit, +7.45%, but null p95 +9.52%; faint tilt, not significant at daily resolution).
+- **Repo made whole + monorepo cleaned** earlier this session (`8747a4f5`..`01d3c15c`):
+  committed ~104 untracked-but-tested files, restored 28 deleted eval packs, landed real
+  gitignores (big data stays on disk). Archived `evidence_runs/` to D:. Suite green: 1217.
+- **Known issue:** the intraday M1/M5/M15 bias-state map crashed on zero-distance ATR
+  stops at fine scale (`engine._generate_proposal` tp==entry) — inconclusive, fix pending.
 
 ## 2026-06-28 — "Live & profitable" finish line (profit-measured proof, in-app advance, MT4 route, honest status)
 
