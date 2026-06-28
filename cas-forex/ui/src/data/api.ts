@@ -389,6 +389,36 @@ export async function postManualOrder(body: {
   return apiPostJson<ManualOrderResult, typeof body>("/order-dispatch/manual", body);
 }
 
+// ── Auto-trade dispatch loop (runs the gated cycle on a timer; paper by default) ──
+
+export interface DispatchLoopState {
+  report_kind?: string;
+  running: boolean;
+  interval_seconds?: number;
+  cycles_run?: number;
+  last_run_iso?: string | null;
+  last_summary?: string | null;
+  last_error?: string | null;
+  started_at_iso?: string | null;
+  mode?: string;
+  note?: string;
+  status?: string; // "CONFIRM_REQUIRED" when live is authorized
+  detail?: string;
+}
+
+export async function fetchDispatchLoopStatus(): Promise<DispatchLoopState | null> {
+  try { return await apiGet<DispatchLoopState>("/dispatch-loop/status"); } catch { return null; }
+}
+
+export async function startDispatchLoop(intervalSeconds: number, confirm = false): Promise<DispatchLoopState> {
+  const q = confirm ? "?confirm=true" : "";
+  return apiPostJson<DispatchLoopState, { interval_seconds: number }>(`/dispatch-loop/start${q}`, { interval_seconds: intervalSeconds });
+}
+
+export async function stopDispatchLoop(): Promise<DispatchLoopState> {
+  return apiPost<DispatchLoopState>("/dispatch-loop/stop");
+}
+
 // ── Multi-timeframe runtime selector ──
 
 export interface SymbolTimeframeSelection {

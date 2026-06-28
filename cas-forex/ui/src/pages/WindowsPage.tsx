@@ -3,7 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { TradingWindow, type WindowRole } from "../components/TradingWindow";
-import { fetchChartSymbols, fetchMovementStream } from "../data/api";
+import {
+  fetchChartSymbols,
+  fetchMovementStream,
+  fetchDispatchLoopStatus,
+  startDispatchLoop,
+  stopDispatchLoop,
+  type DispatchLoopState,
+} from "../data/api";
 import type { DashboardState, MovementStreamState } from "../types/evidence";
 
 interface WindowsPageProps {
@@ -116,6 +123,8 @@ export function WindowsPage({ state }: WindowsPageProps) {
         </div>
       </GlassPanel>
 
+      <AutoTradeLoopBar />
+
       <div className="windows-grid">
         {panes.map((p) => (
           <TradingWindow
@@ -132,6 +141,95 @@ export function WindowsPage({ state }: WindowsPageProps) {
       </div>
     </div>
   );
+}
+
+function AutoTradeLoopBar() {
+  const [loop, setLoop] = useState<DispatchLoopState | null>(null);
+  const [interval, setIntervalSec] = useState(60);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState("");
+  const poll = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    const load = () => { void fetchDispatchLoopStatus().then((s) => { if (s) setLoop(s); }); };
+    load();
+    poll.current = setInterval(load, 5000);
+    return () => { if (poll.current) clearInterval(poll.current); };
+  }, []);
+
+  async function start() {
+    setBusy(true); setMsg("");
+    try {
+      const s = await startDispatchLoop(interval);
+      if (s.status === "CONFIRM_REQUIRED") {
+        setMsg("Live trading is authorized — starting the loop could place REAL orders. Tap “Start LIVE loop” to confirm.");
+      }
+      setLoop(s);
+    } catch { setMsg("Couldn't start the loop — is the API reachable?"); }
+    finally { setBusy(false); }
+  }
+  async function startLiveConfirmed() {
+    setBusy(true); setMsg("");
+    try { setLoop(await startDispatchLoop(interval, true)); }
+    catch { setMsg("Couldn't start the loop."); }
+    finally { setBusy(false); }
+  }
+  async function stop() {
+    setBusy(true); setMsg("");
+    try { setLoop(await stopDispatchLoop()); }
+    catch { setMsg("Couldn't stop the loop."); }
+    finally { setBusy(false); }
+  }
+
+  const running = loop?.running ?? false;
+  const needsLiveConfirm = loop?.status === "CONFIRM_REQUIRED";
+
+  return (
+    <GlassPanel
+      title="Auto-Trade Loop"
+      subtitle="Run the strategy on a timer — the bot trades on its own (paper-safe by default)"
+      variant={running ? "info" : "default"}
+    >
+      <div className="tw-loop-bar">
+        <div className="tw-loop-status">
+          <StatusDot on={running} />
+          <span className="tw-loop-state">{running ? "RUNNING" : "STOPPED"}</span>
+          <span className="tw-loop-mode">{loop?.mode === "LIVE" ? "LIVE" : "PAPER / DEMO"}</span>
+        </div>
+        <label className="tw-loop-interval">
+          every
+          <input type="number" min={10} max={3600} value={interval}
+            disabled={running}
+            onChange={(e) => setIntervalSec(Math.max(10, Math.min(3600, Number(e.target.value) || 60)))} />
+          sec
+        </label>
+        {!running && !needsLiveConfirm && (
+          <button className="tw-btn tw-buy" disabled={busy} onClick={() => void start()}>Start loop</button>
+        )}
+        {!running && needsLiveConfirm && (
+          <button className="tw-btn tw-sell" disabled={busy} onClick={() => void startLiveConfirmed()}>Start LIVE loop</button>
+        )}
+        {running && (
+          <button className="tw-btn tw-sell" disabled={busy} onClick={() => void stop()}>Stop loop</button>
+        )}
+      </div>
+      <div className="tw-loop-detail">
+        {loop?.cycles_run != null && <span>cycles run: <strong>{loop.cycles_run}</strong></span>}
+        {loop?.last_summary && <span>last: <strong>{loop.last_summary}</strong></span>}
+        {loop?.last_error && <span style={{ color: "var(--danger)" }}>error: {loop.last_error}</span>}
+      </div>
+      {msg && <div className="control-field-desc" style={{ color: needsLiveConfirm ? "var(--danger)" : "var(--text-secondary)" }}>{msg}</div>}
+      <div className="control-field-desc">
+        Runs the same gated dispatch cycle as the manual Buy/Sell, on a timer. Paper-safe by default —
+        it can only reach a live broker once you authorize live trading on Settings, and the broker
+        re-checks at order time. This is what builds your paper-proof track record automatically.
+      </div>
+    </GlassPanel>
+  );
+}
+
+function StatusDot({ on }: { on: boolean }) {
+  return <span style={{ width: 9, height: 9, borderRadius: 5, background: on ? "var(--success)" : "var(--text-muted)", display: "inline-block" }} className={on ? "cas-pulse" : undefined} />;
 }
 
 function AcctStat({ label, value, tone }: { label: string; value: string; tone?: "up" | "down" }) {
