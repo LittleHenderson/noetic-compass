@@ -349,36 +349,67 @@ def test_mt5_bridge_initialize_uses_configured_terminal_path_without_empty_crede
     assert fake.initialize_calls == [{"path": r"C:\Program Files\Broker\terminal64.exe"}]
 
 
-def test_mt5_bridge_initialize_includes_credentials_only_when_login_present(monkeypatch):
-    class FakeMT5:
-        def __init__(self):
-            self.initialize_calls = []
+class _FakeMT5Attach:
+    """Records initialize() calls; reports a configurable attached account."""
 
-        def initialize(self, **kwargs):
-            self.initialize_calls.append(kwargs)
-            return True
+    def __init__(self, attached_login):
+        self.initialize_calls = []
+        self.shutdown_calls = 0
+        self._attached_login = attached_login
 
-        def terminal_info(self):
-            return SimpleNamespace(connected=True)
+    def initialize(self, **kwargs):
+        self.initialize_calls.append(kwargs)
+        return True
 
-    fake = FakeMT5()
-    monkeypatch.setitem(sys.modules, "MetaTrader5", fake)
+    def account_info(self):
+        return SimpleNamespace(login=self._attached_login)
+
+    def terminal_info(self):
+        return SimpleNamespace(connected=True)
+
+    def shutdown(self):
+        self.shutdown_calls += 1
+
+
+def _set_mt5_config(monkeypatch):
     monkeypatch.setattr(mt5_module.config, "mt5_path", r"C:\Program Files\Broker\terminal64.exe")
     monkeypatch.setattr(mt5_module.config, "mt5_login", 123456)
     monkeypatch.setattr(mt5_module.config, "mt5_password", "secret")
     monkeypatch.setattr(mt5_module.config, "mt5_server", "Broker-Demo")
 
-    bridge = MT5Bridge()
 
+def test_mt5_bridge_attaches_without_relogin_when_account_matches(monkeypatch):
+    # Terminal already logged into the configured account -> attach only (a bare
+    # initialize with path), never re-login with credentials (a re-login into an
+    # already-logged-in terminal fails with "IPC send failed").
+    fake = _FakeMT5Attach(attached_login=123456)
+    monkeypatch.setitem(sys.modules, "MetaTrader5", fake)
+    _set_mt5_config(monkeypatch)
+
+    bridge = MT5Bridge()
+    assert bridge.connect() is True
+    assert fake.initialize_calls == [{"path": r"C:\Program Files\Broker\terminal64.exe"}]
+    assert fake.shutdown_calls == 0
+
+
+def test_mt5_bridge_relogins_with_credentials_on_account_mismatch(monkeypatch):
+    # Terminal logged into a DIFFERENT account -> attach, then re-login with creds.
+    fake = _FakeMT5Attach(attached_login=999999)
+    monkeypatch.setitem(sys.modules, "MetaTrader5", fake)
+    _set_mt5_config(monkeypatch)
+
+    bridge = MT5Bridge()
     assert bridge.connect() is True
     assert fake.initialize_calls == [
+        {"path": r"C:\Program Files\Broker\terminal64.exe"},
         {
             "path": r"C:\Program Files\Broker\terminal64.exe",
             "login": 123456,
             "password": "secret",
             "server": "Broker-Demo",
-        }
+        },
     ]
+    assert fake.shutdown_calls == 1
 
 
 def test_get_bridge_live_mode_refuses_disconnected_mt5(monkeypatch):

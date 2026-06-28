@@ -126,14 +126,29 @@ class MT5Bridge(BrokerBridge):
 
             # MT5 may hang if terminal isn't running — catch everything
             try:
-                kwargs = {}
-                if config.mt5_path:
-                    kwargs["path"] = config.mt5_path
+                path_kw = {"path": config.mt5_path} if config.mt5_path else {}
+                # Prefer ATTACHING to the already-running, already-logged-in
+                # terminal (a bare initialize). Forcing a re-login with
+                # login/password/server into a terminal that's already logged in
+                # fails with "IPC send failed" (-10001); attaching succeeds.
+                result = mt5.initialize(**path_kw)
                 if self.login and self.login > 0:
-                    kwargs["login"] = self.login
-                    kwargs["password"] = self.password
-                    kwargs["server"] = self.server
-                result = mt5.initialize(**kwargs)
+                    if result:
+                        acc = mt5.account_info()
+                        # Only re-login if the terminal is on a DIFFERENT account
+                        # than the one configured.
+                        if acc is None or getattr(acc, "login", None) != self.login:
+                            mt5.shutdown()
+                            result = mt5.initialize(
+                                login=self.login, password=self.password,
+                                server=self.server, **path_kw,
+                            )
+                    else:
+                        # Couldn't attach — fall back to a full credentialed login.
+                        result = mt5.initialize(
+                            login=self.login, password=self.password,
+                            server=self.server, **path_kw,
+                        )
             except Exception:
                 return
 
