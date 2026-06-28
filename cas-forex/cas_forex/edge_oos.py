@@ -188,9 +188,15 @@ def evaluate_oos(
     detect_window: int = DEFAULT_DETECT_WINDOW,
     n_null: int = 20,
     seed: int = 7,
+    sub_signals: Optional[Dict[str, Callable]] = None,
 ) -> EdgeOOSReport:
-    """Walk-forward, leak-free OOS test of regime-switching vs baselines."""
-    sub_signals = build_sub_signals()
+    """Walk-forward, leak-free OOS test of regime-switching vs baselines.
+
+    ``sub_signals`` overrides the strategy menu the switch selects among (default:
+    the 7 primitives). Pass the full condition_lab setting grid to test whether
+    any tuned/assembled variant has OOS edge.
+    """
+    sub_signals = sub_signals or build_sub_signals()
     rng = np.random.default_rng(seed)
     ctx_bars = max(detect_window * 3, 180)
     windows: List[Dict[str, Any]] = []
