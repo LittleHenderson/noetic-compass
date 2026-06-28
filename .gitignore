@@ -1,1 +1,81 @@
 .vercel
+
+# ---------------------------------------------------------------------------
+# tksCAS monorepo root ignores. Scoped to repo-root scratch + universal noise.
+# Subprojects (cas-forex/, cas-synthetic/, noetic-compass-scaffold/) keep their
+# own .gitignore for project-specific rules. Adding a pattern here never
+# untracks an already-committed file (e.g. the v1_eval_pack_* reproducibility
+# packs and dist/cas-offline* stay tracked).
+# ---------------------------------------------------------------------------
+
+# --- universal build/test noise (any depth) ---
+__pycache__/
+*.pyc
+.pytest_cache/
+*.out.log
+*.err.log
+*.pid
+
+# --- Word / Office lock + temp files ---
+~$*
+*.docx.tmp
+
+# --- root-level scratch dirs (training/run/dev scratch) ---
+/tmp/
+/.tmp/
+/tmp_*
+/manual_tmp_test/
+/codex_*_pytest_tmp*/
+/.pytest-tmp/
+/stage6_v6_artifacts/
+/graphify-out/
+
+# --- root-level probe / capture scratch scripts ---
+/pt.py
+/pt_*.py
+/bg.sh
+/headers.txt
+/expr_run.out
+/tokenizer_run.out
+/launch_stopped_*.log
+
+# --- product-render scratch ---
+/oneshot_product.*
+/repl_product*.*
+/quoted_product.svg
+/previous_product.svg
+/cas_diagram.html
+/cas_diagram.svg
+
+# --- smoke-run manifests/samples ---
+/v1_smoke_*
+
+# --- agent / tooling working dirs ---
+/.cleanup/
+/.codex-remote-attachments/
+/.codex_runpod_patch/
+/.v1c_eval_pull/
+/.deepseek/
+/.grok/
+/.vs/
+
+# --- backup tarballs (archive to D:\tksCAS-archive\ instead of committing) ---
+/*.tar
+/*.tar.gz
+
+# --- docx recovery outputs (regenerable; source script may be committed) ---
+/*.docx.bak
+/extracted_*/
+
+# --- docs/ working-note scratch (keep the .md/.json source) ---
+docs/working/**/*.log
+docs/working/**/*.pid
+
+# --- dist/ is PARTIALLY tracked: dist/cas-offline.zip + dist/cas-offline/* are
+#     real committed source. Ignore only the build/test noise inside it. ---
+/dist/_cas-offline-build/
+/dist/**/__pycache__/
+/dist/cas-offline/PATH
+/dist/*-test.html
+/dist/offline-demo-smoke/
+/dist/offline-recipe-pwa.*

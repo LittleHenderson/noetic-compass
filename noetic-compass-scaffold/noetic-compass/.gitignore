@@ -15,3 +15,13 @@ cas-native/data/test_batch_*.jsonl
 .env*.local
 
 cas-native/training/runs/**/*.pt
+
+# --- large research/probe ML artifacts (archive to D:\tksCAS-archive\, never commit) ---
+research/**/*.npz
+research/**/*.pt
+research/**/*.tgz
+research/**/.tmp/
+research/**/graphify-out/
+cas-native/inference/runs/**/*.pt
+cas-native/training/runs/**/*.tgz
+cas-native/tests/_tmp_runtime/
