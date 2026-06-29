@@ -2,6 +2,29 @@
 
 > **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
 
+## 2026-06-29 — WASTE engine: fleet-built core of the adaptive AI loop (7 modules, 107 tests green)
+
+A fleet of 7 agents built the **W·A·S·T·E** (Watch·Analyze·Strategize·Test·Execute) loop's modules
+with zero collisions (disjoint new files), all green. The engine name **WASTE** is kept by owner
+decision (prima-materia / transmutation omen). Modules:
+- `cas_forex/edge_gate.py` — the fail-closed null TEST gate (the integrity core): CandidateSetup →
+  EdgeTestDecision; PASS only when measured win-prob ≥ threshold AND it beats the shuffle null;
+  mints an HMAC `edge_token` bound to the order; `verify_token` rejects tampered/stale tokens.
+- `cas_forex/waste_loop.py` — the WASTE controller (dependency-injected, fail-closed: no PASS token
+  ⇒ no execute; emits the AiStage trace that drives the heartbeat).
+- `cas_forex/compounding_governor.py` — lacunarity/RPM/CJT/cascade add·hold·cut; every ADD requires a
+  FRESH edge-gate PASS (never inherits the parent's token).
+- `cas_forex/ai_control_surface.py` — the AI's typed dials over every lever (edge_threshold default
+  0.65, risk, symbols, sessions, compound units) with owner-set bounds.
+- `cas_forex/trade_management.py` — position sizing + breakeven principal-lock (SL→entry at +1R).
+- `cas_forex/ai_objective.py` + `ai_incentive.py` — pace board (**$250/day floor … $3,500/day CAP =
+  stop-for-the-day**, owner sliders) + 2.5%/$5k **verified-profit** fee ledger. Pace is a scoreboard,
+  never a trade-forcer; nothing lowers the edge bar (honesty-guard test enforces it).
+- UI: `EdgeThresholdControl` (65% slider), `ObjectivePaceCard`, `IncentiveLedgerCard`, `useAiStage`.
+All import-clean + contracts align; UI tsc clean; **107 module tests green**. NEXT (main-agent
+integration into shared files): edge-token into the dispatch chokepoint (fail-closed), broker
+`modify_position` for breakeven-lock, mount UI + wire heartbeat to the real stage, start the loop.
+
 ## 2026-06-28 — Intelligent-execution loop: architecture blueprint + live AI activity indicator
 
 The owner's pivot (correct, and matches the evidence): no static formula beats forex; only an
