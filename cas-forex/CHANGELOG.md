@@ -2,6 +2,22 @@
 
 > **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
 
+## 2026-06-28 — Index TSMOM = no alpha; Chronos forecaster = no skill (every public-signal lever closed)
+
+- **Index TSMOM** (the active proof lead `tsmom_126_250_2_10`) tested vs buy-hold + a
+  beta-controlled random-timing null on 30+yr index D1 (`scripts/run_index_tsmom_test.py`):
+  beats_null=NO in every era (full/2000+/2010+/2016+). It cuts drawdown vs buy-hold —
+  real risk management — but generates NO alpha. Not an edge.
+- **Chronos-Bolt forecaster skill-gate** — filled the empty `chronos_signal` slot
+  (`scripts/run_forecaster_skill_gate.py`, GPU). Next-bar direction on EUR/USD H1/D1 +
+  US30/NAS100/SPX D1: hit **0.49–0.51**, below the shuffled-label null p95, Brier worse
+  than base-rate → **NO next-bar skill**. The last untested signal class, closed.
+- Bottom line: every testable public-data signal class (price rules all TFs, regime
+  switching, macro daily+intraday, weekend-gap, turn-of-month, index TSMOM, cross-asset,
+  a real pretrained forecaster) is now measured NO-EDGE against the null. The remaining
+  untested edge source is the **owner's own discretionary method** (the unencoded "2020
+  NAS30/NAS100 rule") — encode + null-test that next.
+
 ## 2026-06-28 — Edge-research team (48 agents) + 2 top survivors tested: weekend-gap NO_SKILL, turn-of-month DECAYED
 
 Ran a 48-agent research workflow over the full codebase + CAS v7.4/Noetic docs + index
