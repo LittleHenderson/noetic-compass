@@ -88,6 +88,46 @@ class MT4MailboxBridge:
         }
         return self._write_command(payload)
 
+    def write_modify_intent(
+        self,
+        ticket: int,
+        *,
+        stop_loss: float,
+        take_profit: Optional[float] = None,
+        broker_mode: BrokerMode = BrokerMode.PAPER_MT4,
+        live_authorized: bool = False,
+    ) -> Dict[str, Any]:
+        """Write a MODIFY_SL command — move an OPEN position's SL/TP.
+
+        This is the mailbox half of the breakeven principal-lock. It is
+        RISK-REDUCING (it amends the protective stop on a position the EA already
+        opened); it never opens new exposure and never creates broker ACCEPT by
+        itself. The EA-side handler that reads this command and calls
+        ``OrderModify`` is OUT OF SCOPE here (note: the running CASForexBridgeEA
+        must learn the MODIFY_SL command_type). ``take_profit=None`` instructs
+        the EA to leave the existing TP untouched.
+        """
+        if broker_mode not in {BrokerMode.PAPER_MT4, BrokerMode.LIVE_MT4}:
+            raise ValueError("MT4 mailbox bridge only accepts PAPER_MT4 or LIVE_MT4 broker modes")
+        if broker_mode == BrokerMode.LIVE_MT4 and not live_authorized:
+            raise ValueError("LIVE_MT4 mailbox intent requires explicit live_authorized=True")
+
+        self.ensure_mailbox()
+        command_id = f"modify-{int(ticket)}-{_timestamp_id()}"
+        payload = {
+            "schema": COMMAND_SCHEMA,
+            "command_id": command_id,
+            "command_type": "MODIFY_SL",
+            "created_at": utc_now().isoformat(),
+            "broker_mode": broker_mode.value,
+            "live_money_authorized": bool(live_authorized),
+            "ticket": int(ticket),
+            "stop_loss": float(stop_loss),
+            "take_profit": (None if take_profit is None else float(take_profit)),
+            "claim_boundary": CLAIM_BOUNDARY,
+        }
+        return self._write_command(payload)
+
     def read_receipts(self, command_id: Optional[str] = None) -> List[Dict[str, Any]]:
         self.ensure_mailbox()
         receipts: List[Dict[str, Any]] = []

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { EdgeThresholdControl } from "../components/EdgeThresholdControl";
 import { NotificationSubscriptionPanel } from "../components/NotificationSubscriptionPanel";
 import { WebhookSubscriptionPanel } from "../components/WebhookSubscriptionPanel";
 import { Mt4BridgePanel } from "../components/Mt4BridgePanel";
@@ -70,6 +71,9 @@ export function SettingsPage({ state }: SettingsPageProps) {
   return (
     <div className="settings-page">
       <MobileApiPanel />
+
+      {/* ── Min edge to trade — owner integrity dial (local only) ── */}
+      <EdgeThresholdPanel />
 
       {/* ── Go Live — owner switches (turn the live-trading gate flags ON) ── */}
       <GoLivePanel />
@@ -250,6 +254,55 @@ function ControlField({ label, value, mono, danger, description }: { label: stri
       </div>
       {description && <div className="control-field-desc">{description}</div>}
     </div>
+  );
+}
+
+// Owner's "min edge to trade" dial. Persisted locally only (key
+// 'cas_forex_edge_threshold', a 0..1 fraction, default 0.65). No backend call:
+// this records the owner's intended bar in-app. The live dispatch chokepoint is
+// fail-closed regardless — a setup with no measured-and-null-beating edge never
+// trades, so this slider can only RAISE the bar, never manufacture a trade.
+const EDGE_THRESHOLD_KEY = "cas_forex_edge_threshold";
+const EDGE_THRESHOLD_DEFAULT = 0.65;
+
+function readStoredEdgeThreshold(): number {
+  try {
+    const raw = window.localStorage.getItem(EDGE_THRESHOLD_KEY);
+    if (raw == null) return EDGE_THRESHOLD_DEFAULT;
+    const v = Number(raw);
+    if (!Number.isFinite(v)) return EDGE_THRESHOLD_DEFAULT;
+    // Stored as a 0..1 fraction; keep it inside the legal 0.50..0.95 band.
+    return Math.min(0.95, Math.max(0.5, v));
+  } catch {
+    return EDGE_THRESHOLD_DEFAULT;
+  }
+}
+
+function EdgeThresholdPanel() {
+  const [fraction, setFraction] = useState<number>(() => readStoredEdgeThreshold());
+
+  // EdgeThresholdControl works in whole-percent (50..95); store the 0..1 fraction.
+  const percent = Math.round(fraction * 100);
+
+  function onChangePercent(p: number) {
+    const next = Math.min(0.95, Math.max(0.5, p / 100));
+    setFraction(next);
+    try {
+      window.localStorage.setItem(EDGE_THRESHOLD_KEY, String(next));
+    } catch {
+      /* localStorage unavailable (private mode) — keep the in-memory value */
+    }
+  }
+
+  return (
+    <>
+      <EdgeThresholdControl value={percent} onChange={onChangePercent} />
+      <div className="control-field-desc" style={{ margin: "-6px 4px 14px" }}>
+        The AI only trades setups it measures above this AND that beat the null.
+        Saved on this device only (default {Math.round(EDGE_THRESHOLD_DEFAULT * 100)}%); it can
+        only raise the bar — below it, the dispatch chokepoint stands down (no trade, capital safe).
+      </div>
+    </>
   );
 }
 

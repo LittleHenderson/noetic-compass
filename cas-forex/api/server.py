@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from .data import dashboard_state
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage, waste_loop_control
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -60,6 +60,7 @@ app.include_router(dispatch_loop.router, prefix="/api/forex/dispatch-loop", tags
 app.include_router(mt5_live.router, prefix="/api/forex/mt5", tags=["mt5-live"])
 app.include_router(proof_control.router, prefix="/api/forex/proof-control", tags=["proof-control"])
 app.include_router(mt4_control.router, prefix="/api/forex/mt4-bridge", tags=["mt4-bridge"])
+app.include_router(waste_loop_control.router, prefix="/api/forex/waste-loop-control", tags=["waste-loop-control"])
 
 
 @app.get("/api/forex/dashboard")

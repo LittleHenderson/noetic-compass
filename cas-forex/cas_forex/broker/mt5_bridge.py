@@ -84,6 +84,35 @@ class BrokerBridge(ABC):
         ...
 
     @abstractmethod
+    def modify_position(
+        self,
+        ticket: int,
+        *,
+        stop_loss: float,
+        take_profit: Optional[float] = None,
+    ) -> OrderOutcome:
+        """Move an OPEN position's stop-loss (and optionally take-profit).
+
+        This is the broker primitive behind the breakeven principal-lock: it
+        amends the protective stop on an EXISTING, already-authorized position
+        (typically moving the SL toward the entry price once the trade is in
+        profit). ``take_profit=None`` leaves the existing TP untouched.
+
+        HONESTY / risk posture: modifying the stop of an open position is
+        RISK-REDUCING — it can only tighten downside on a position the edge gate
+        already authorized to open. It therefore does NOT require an edge PASS
+        token (no new market exposure is created). It can never manufacture an
+        edge or open a position; the most it does is protect principal already
+        committed. A LIVE modify still passes the owner live-trading
+        authorization, exactly like ``execute_order`` / ``close_position`` — see
+        each bridge's implementation.
+
+        Returns an :class:`OrderOutcome` (``EXECUTED`` on success, ``REJECTED``
+        for an unknown ticket, a broker error, or an unauthorized live modify).
+        """
+        ...
+
+    @abstractmethod
     def get_open_positions(self) -> list:
         """List all currently open positions."""
         ...
@@ -433,6 +462,113 @@ class MT5Bridge(BrokerBridge):
         except Exception:
             return False
 
+    def modify_position(
+        self,
+        ticket: int,
+        *,
+        stop_loss: float,
+        take_profit: Optional[float] = None,
+    ) -> OrderOutcome:
+        """Amend an open MT5 position's SL/TP via ``TRADE_ACTION_SLTP``.
+
+        Risk-reducing breakeven-lock primitive (see the ABC docstring). A modify
+        on a connected LIVE (non-demo) account touches a real position, so it is
+        gated EXACTLY like ``execute_order`` / ``close_position``: the owner
+        live-trading gate must be authorized, else the modify is REJECTED. Demo
+        accounts are paper and pass through. ``take_profit=None`` preserves the
+        position's existing TP.
+        """
+        order_ref = f"modify-{ticket}"
+        if not self.is_connected():
+            return OrderOutcome(
+                order_ref=order_ref,
+                status=OrderStatus.REJECTED,
+                error_message="MT5 not connected",
+                timestamp=utc_now(),
+                broker_mode=self._broker_mode(),
+                is_real_broker=False,
+                server=self.server,
+                account_id_hash=self._account_id_hash(),
+            )
+        gate_block = self._live_gate_block(order_ref)
+        if gate_block is not None:
+            return gate_block
+        try:
+            positions = self._mt5.positions_get(ticket=ticket)
+            if not positions:
+                return OrderOutcome(
+                    order_ref=order_ref,
+                    status=OrderStatus.REJECTED,
+                    error_message=f"No open position for ticket {ticket}",
+                    timestamp=utc_now(),
+                    broker_mode=self._broker_mode(),
+                    is_real_broker=True,
+                    terminal_name="MetaTrader5",
+                    account_id_hash=self._account_id_hash(),
+                    server=self.server,
+                )
+            pos = positions[0]
+            # take_profit=None means "leave TP as-is": carry the position's
+            # current TP into the request so the modify only moves the stop.
+            tp_value = float(take_profit) if take_profit is not None else float(
+                getattr(pos, "tp", 0.0) or 0.0
+            )
+            request = {
+                "action": self._mt5.TRADE_ACTION_SLTP,
+                "symbol": pos.symbol,
+                "position": ticket,
+                "sl": float(stop_loss),
+                "tp": tp_value,
+                "magic": getattr(pos, "magic", 20260601),
+                "comment": "CAS_BREAKEVEN",
+            }
+            result = self._mt5.order_send(request)
+            if result is None:
+                return OrderOutcome(
+                    order_ref=order_ref,
+                    status=OrderStatus.REJECTED,
+                    error_message="MT5 order_send returned None",
+                    timestamp=utc_now(),
+                    broker_mode=self._broker_mode(),
+                    is_real_broker=True,
+                    terminal_name="MetaTrader5",
+                    account_id_hash=self._account_id_hash(),
+                    server=self.server,
+                    raw_request_hash=_hash_payload(request),
+                )
+            retcode = getattr(result, "retcode", None)
+            comment = getattr(result, "comment", "")
+            done = (
+                retcode == self._mt5.TRADE_RETCODE_DONE
+                or retcode == getattr(self._mt5, "TRADE_RETCODE_DONE_PARTIAL", None)
+            )
+            return OrderOutcome(
+                order_ref=order_ref,
+                broker_ticket=ticket,
+                status=OrderStatus.EXECUTED if done else OrderStatus.REJECTED,
+                error_message=None if done else f"Modify failed (retcode {retcode}): {comment}",
+                timestamp=utc_now(),
+                broker_mode=self._broker_mode(),
+                is_real_broker=True,
+                terminal_name="MetaTrader5",
+                account_id_hash=self._account_id_hash(),
+                server=self.server,
+                raw_request_hash=_hash_payload(request),
+                raw_response_hash=_hash_payload(_result_payload(result)),
+            )
+        except Exception as e:
+            return OrderOutcome(
+                order_ref=order_ref,
+                status=OrderStatus.REJECTED,
+                error_message=str(e),
+                timestamp=utc_now(),
+                broker_mode=self._broker_mode(),
+                is_real_broker=True,
+                terminal_name="MetaTrader5",
+                account_id_hash=self._account_id_hash(),
+                server=self.server,
+            )
+
     def _slippage_points_to_pips(self, symbol: str, points: int) -> float:
         """Convert MT5 deviation points to forex pips for evidence checks."""
         point_size = None
@@ -655,6 +791,53 @@ class MT4EABridge(BrokerBridge):
     def close_position(self, ticket: int, volume: Optional[float] = None) -> bool:
         return False
 
+    def modify_position(
+        self,
+        ticket: int,
+        *,
+        stop_loss: float,
+        take_profit: Optional[float] = None,
+    ) -> OrderOutcome:
+        """Write a MODIFY_SL mailbox command to move an open position's SL/TP.
+
+        Mirrors ``execute_order``'s mailbox-command pattern (a new MODIFY_SL
+        command file the running EA polls). This is the breakeven principal-lock
+        primitive: risk-reducing, so it does NOT require an edge token. The
+        EA-side handler that reads MODIFY_SL and calls ``OrderModify`` is OUT OF
+        SCOPE (the running CASForexBridgeEA must add a MODIFY_SL branch).
+
+        The mailbox itself is paper/demo-only (``connect`` refuses when
+        ``config.live_mode``), so this path can never move real money; it returns
+        PENDING because the EA fills asynchronously, exactly like
+        ``execute_order``.
+        """
+        if not self.connect():
+            return OrderOutcome(
+                order_ref=f"modify-{ticket}",
+                status=OrderStatus.REJECTED,
+                error_message="MT4 bridge requires enabled paper mailbox mode",
+                broker_mode=BrokerMode.PAPER_MT4,
+                is_real_broker=False,
+            )
+        from cas_forex.broker.mt4_mailbox_bridge import MT4MailboxBridge
+
+        command = MT4MailboxBridge(self.mailbox_dir).write_modify_intent(
+            ticket,
+            stop_loss=stop_loss,
+            take_profit=take_profit,
+            broker_mode=BrokerMode.PAPER_MT4,
+            live_authorized=False,
+        )
+        return OrderOutcome(
+            order_ref=command["command_id"],
+            broker_ticket=ticket,
+            status=OrderStatus.PENDING,
+            broker_mode=BrokerMode.PAPER_MT4,
+            is_real_broker=True,
+            terminal_name="MetaTrader4-EA",
+            raw_request_hash=command["raw_request_hash"],
+        )
+
     def get_open_positions(self) -> list:
         if not self.positions_path.exists():
             return []
@@ -799,6 +982,51 @@ class SimulatedBrokerBridge(BrokerBridge):
             is_real_broker=False,
             raw_request_hash=_hash_payload(order.model_dump(mode="json")),
             lock_reason=lock_reason,
+        )
+
+    def modify_position(
+        self,
+        ticket: int,
+        *,
+        stop_loss: float,
+        take_profit: Optional[float] = None,
+    ) -> OrderOutcome:
+        """Move the in-memory open position's SL (and optionally TP).
+
+        Pure-paper breakeven-lock primitive: it amends the protective stop on a
+        position THIS simulator already opened. No edge token is required (it is
+        risk-reducing and opens no new exposure), and there is no real money to
+        move. An unknown ticket is REJECTED. The new SL/TP are recorded on the
+        stored position as overrides so subsequent ``get_open_positions`` reflect
+        the locked stop.
+        """
+        order_ref = f"modify-{ticket}"
+        pos = self._positions.get(ticket)
+        if pos is None:
+            return OrderOutcome(
+                order_ref=order_ref,
+                status=OrderStatus.REJECTED,
+                error_message=f"No open position for ticket {ticket}",
+                broker_mode=BrokerMode.SIMULATED,
+                is_real_broker=False,
+            )
+        pos["stop_loss"] = float(stop_loss)
+        if take_profit is not None:
+            pos["take_profit"] = float(take_profit)
+        return OrderOutcome(
+            order_ref=order_ref,
+            broker_ticket=ticket,
+            status=OrderStatus.EXECUTED,
+            timestamp=utc_now(),
+            broker_mode=BrokerMode.SIMULATED,
+            is_real_broker=False,
+            raw_request_hash=_hash_payload(
+                {
+                    "ticket": ticket,
+                    "stop_loss": float(stop_loss),
+                    "take_profit": (None if take_profit is None else float(take_profit)),
+                }
+            ),
         )
 
     def close_position(self, ticket: int, volume: Optional[float] = None) -> bool:

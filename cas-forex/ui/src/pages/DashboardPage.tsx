@@ -5,6 +5,8 @@ import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { SparkChart } from "../components/charts/SparkChart";
 import { OperatorBriefingCard } from "../components/OperatorBriefingCard";
+import { ObjectivePaceCard } from "../components/ObjectivePaceCard";
+import { IncentiveLedgerCard } from "../components/IncentiveLedgerCard";
 import { applyBrokerSyncedRiskReview, fetchBrokerSyncedRiskPreview, fetchLiveReadiness } from "../data/api";
 import type { BrokerSyncedRiskPreview, DashboardState, LiveReadinessCheck, LiveReadinessReport } from "../types/evidence";
 
@@ -17,6 +19,13 @@ export function DashboardPage({ state }: DashboardPageProps) {
   const risk = b.latest_risk.latest_review;
   const decision = b.latest_decision.latest_decision;
   const account = state.accountLedger?.summary;
+  // Realized P&L already in state (broker/demo account ledger). Honest empty
+  // state is 0 — the pace/incentive cards never frame $0 as failure, and the
+  // fee accrues only on this realized figure, never floating/paper P&L.
+  const realizedPnl = account?.realized_pnl_usd ?? 0;
+  // Position within the 20-trading-day month for the linear pace expectation
+  // (0 = not started). Derived from completed paper days, capped at 20.
+  const tradingDayIndex = Math.min(20, Math.max(0, r.completed_trading_days));
   const movement = state.movementStream;
   const recon = state.accountReconciliation;
   const liveReadiness = state.liveReadiness;
@@ -107,6 +116,30 @@ export function DashboardPage({ state }: DashboardPageProps) {
             <Metric label="Edge" value="OPEN" warning />
           </div>
         </GlassPanel>
+      </div>
+
+      {/* ── Objective pace + AI performance-fee ledger ──
+       *
+       * Both read realized P&L already in dashboard state (account ledger).
+       * There is no today/month split in the payload, so we feed the single
+       * realized figure (honest empty-state 0 when absent — the cards never
+       * frame $0 as failure). The incentive fee accrues only on this
+       * broker/demo-VERIFIED realized number, never floating/paper P&L. The
+       * $250/day objective and $3,500 daily cap are surfaced as sliders the
+       * loop reads; they never lower the trade bar. */}
+      <div className="dashboard-grid-2col">
+        <ObjectivePaceCard
+          dailyTarget={250}
+          monthlyTarget={5000}
+          realizedToday={realizedPnl}
+          realizedMonth={realizedPnl}
+          tradingDayIndex={tradingDayIndex}
+        />
+        <IncentiveLedgerCard verifiedProfit={realizedPnl} rate={0.025} per={5000} />
+      </div>
+      <div className="control-field-desc" style={{ margin: "-2px 4px 4px" }}>
+        Objective is $250/day toward $5,000/month, with a $3,500 daily cap; the AI earns it only
+        by pressing real, tested edges. A no-edge day stays at $0 with capital intact, never a miss.
       </div>
 
 
