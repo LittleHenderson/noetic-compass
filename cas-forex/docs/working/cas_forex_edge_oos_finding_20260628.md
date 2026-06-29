@@ -84,6 +84,34 @@ The discipline frame is built and verified (`cas_forex/cascade_forecast.py` +
 signal honestly — but it confirms there is no price-only signal to route. The only
 path to a non-zero bias-state is new information.
 
+## Intraday macro-surprise — the last open door, now CLOSED (2026-06-28)
+
+The daily macro test left one door: the real reaction happens in minutes, not days.
+Tested it properly via `cas_forex/macro_intraday.py` + `scripts/run_macro_intraday_real.py`
+on **real HistData M1 EUR/USD (5 years, 1.8M bars, 2020–2024)** + the Forex Factory
+calendar, measuring the move **0–30 min after each release** at a news-realistic 2-pip
+cost, through the same shuffled-surprise null.
+
+> **PRIMARY (pre-registered) verdict: NO_SKILL.** 535 usable surprises, 214 test
+> events, hit rate **0.509** (coin flip), net **−3.74%** (negative after cost), and
+> the real signal is *worse* than the shuffled null's p95 (−1.31%). All four secondary
+> windows (0–30/1pip, 0–30/3pip, 0–15/2pip, 5–30/2pip) agree: NO_SKILL. No single
+> indicator rescues it (per-indicator raw hits cluster at ~0.50, mixed-sign means).
+
+The faint *daily* tilt did **not** survive at the resolution where macro moves happen —
+it went negative. And the test was generous (HistData M1 is interbank-ish, *tighter*
+than retail; real news spreads blow out far wider, so a retail result would be worse).
+Conclusion: **the macro-surprise → EUR/USD reaction has no tradeable edge for a retail
+participant** — the consensus is priced in seconds, gone before a retail fill, and cost
+eats the rest. The new-information channel (the one lever that could create edge) is,
+for what's testable here, closed.
+
+**Every lever is now tested and the answer is consistent: no demonstrated tradeable
+edge.** Price-only (all scales) = all-gaps; assembly tools (PCBA/CJT/Fury/optimizer/
+condition_lab) = no edge; CAS Harness = wrong domain; recipes/Foundations = organize-
+not-predict; macro surprise daily = faint-but-not-significant; macro surprise intraday
+= NO_SKILL. The null control caught every apparent edge along the way.
+
 ## Reproduce
 
 `python scripts/run_edge_oos.py` (writes `evidence_runs/edge_oos/*-report.json`).
