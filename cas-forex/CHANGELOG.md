@@ -2,6 +2,27 @@
 
 > **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
 
+## 2026-06-28 — Intelligent-execution loop: architecture blueprint + live AI activity indicator
+
+The owner's pivot (correct, and matches the evidence): no static formula beats forex; only an
+adaptive AI **Watch→Analyze→Strategize→Test→Execute** loop can. Architecture workflow
+`wf_9c26a366-034` mapped the codebase + produced a buildable spec. The honesty auditor caught
+that the null TEST gate was BYPASSABLE (opt-in kwarg, every existing caller skipped it) and
+specified the fail-closed fix (unconditional edge-token check inside `guarded_place_order`),
+plus 8 fixes: token carrier on TradeIntent/BrokerOrderRequest; correct null hypothesis (feed
+entry SIGNAL-STRENGTH as `surprise`, not the fixed direction); UNDERPOWERED≠NO_TRADE reason
+taxonomy; bar-based (not wall-clock) verdict staleness; multiple-testing correction under
+candidate fan-out; per-add compounding re-test enforcement; missing `modify_position` broker
+primitive for breakeven-lock; missing risk→lots position sizing. Build follows.
+- **`ui/src/components/AiActivityIndicator`** — a live animated heartbeat in the app header:
+  a distinct figure + colour per loop stage (radar sweep=watch, orbiting dots=analyze, thinking
+  dots=strategize, flipping coin=test, burst=execute, rising bars=compound, gold shield=principal
+  locked, dim dash=no-trade, red X=blocked, breathing core=idle). Self-cycles now; drives off the
+  real loop stage once wired. tsc clean, no console errors.
+- Owner requirements locked for the loop build: user-controlled **edge-threshold slider (default
+  65%)** gating execution on measured-OOS win-prob that beats the null, and full **long/short**
+  (both directions evaluated each cycle).
+
 ## 2026-06-28 — Index TSMOM = no alpha; Chronos forecaster = no skill (every public-signal lever closed)
 
 - **Index TSMOM** (the active proof lead `tsmom_126_250_2_10`) tested vs buy-hold + a

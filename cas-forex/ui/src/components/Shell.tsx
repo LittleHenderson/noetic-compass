@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { ModeBanner } from "./ModeBanner";
+import { AiActivityIndicator } from "./AiActivityIndicator";
 import type { UIReadinessReport, AuthorityBoundaryState } from "../types/evidence";
 
 type Page =
@@ -74,6 +75,7 @@ export function Shell({
           <span className="shell-nav-title">CAS Forex</span>
           <span className="shell-nav-sub">Proof Cockpit</span>
         </div>
+        <AiActivityIndicator />
         {/* Hamburger — only shown on narrow screens (CSS). Lets every page,
             including Settings, be reached on a phone. */}
         <button
