@@ -1,6 +1,43 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door: an intraday/tick post-release macro test (free data, untested). Don't claim/build a fake edge; the null discipline is sacred.
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday/tick post-release macro test — is now BUILT and adversarially reviewed (`cas_forex/macro_intraday.py`, `scripts/run_macro_intraday_real.py`); it renders a verdict the instant the operator drops HistData ASCII M1 EUR/USD CSVs into `data/external/`. Don't claim/build a fake edge; the null discipline is sacred.
+
+## 2026-06-28 — Intraday macro-surprise test: the open door, BUILT + adversarially reviewed (awaits M1 data)
+
+The higher-resolution rerun of the daily macro test (which was NO_SKILL with a faint
+tilt): the EUR/USD move in the 5–30 min AFTER each US release, on 1-minute bars, through
+the same leak-free shuffled-surprise null core.
+
+- **`cas_forex/macro_intraday.py`** — DST-correct release schedule (self-contained
+  US-Eastern rule proven == IANA tz database across 5,219 weekdays 2007–2026, 0
+  mismatches; NFP/CPI/PPI/Retail 8:30, ISM 10:00, FOMC 14:00, ADP 8:15 → true UTC).
+  HistData ASCII M1 loader that defeats the timezone trap STRUCTURALLY: bars are
+  EST-no-DST (+5h fixed), releases are ET-with-DST (+4/+5h), BOTH forced to true UTC
+  before alignment. Per-indicator causal z-score → `evaluate_surprise_return_pairs`.
+  Pre-registered PRIMARY window is the verdict (0→30 min, news-realistic 2-pip cost);
+  4 exploratory secondaries never become the headline (no tuning-to-pass).
+- **`scripts/run_macro_intraday_real.py`** — real runner; verdict the instant HistData
+  M1 EUR/USD CSVs land in `data/external/` (git-ignored). `--self-test` proves the
+  machinery now (synthetic signal→CANDIDATE_EDGE, noise→NO_SKILL). FF calendar yields
+  34 known-time US indicators / 3,668 candidate releases (2007–2025).
+- **Adversarial review** (5-lens workflow, every finding independently verified):
+  1 CRITICAL finding REJECTED on ground truth — the calendar's `[:10]` date slice matches
+  published NFP release dates 24/24, so the proposed timezone-conversion "fix" would have
+  shifted ~half the sample back a day (the `00:00` stamps are placeholders; the date is
+  the true US release date). 5 real findings FIXED: (a) **co-released indicators**
+  (NFP+Avg Hourly Earnings, CPI+Core CPI at one instant) now **collapse to one window**
+  with averaged surprise — they were double-counting identical returns and breaking the
+  null's exchangeability toward a false edge; (b) PRIMARY cost → **news-realistic 2 pips**
+  + documented that the permutation null is gross-directional (cost held fixed) and
+  `net>0` is the cost gate; (c) **per-indicator decomposition** in the report (is a
+  verdict broad or NFP/CPI-driven?); (d) non-finite calendar cells dropped + counted,
+  never coerced (also fixes a one-bad-cell-zeroes-successors bug); (e) UNDERPOWERED print
+  surfaces its reason.
+- Suite green: **1235 passed**. External data (FF calendar + HistData M1) stays on disk,
+  git-ignored — never committed.
+- **Still needs:** the operator's HistData ASCII M1 EUR/USD CSVs in `data/external/`,
+  then run the script. Likely still NO_SKILL (markets price consensus in seconds; retail
+  can't capture the first-second move) — report it straight either way.
 
 ## 2026-06-28 — The EDGE investigation: leak-free OOS, bias-state map, macro-surprise (verdict: no edge yet)
 

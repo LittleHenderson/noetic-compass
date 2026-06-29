@@ -248,6 +248,13 @@ def evaluate_surprise_return_pairs(
     null_p95 = float(np.percentile(null_returns, 95)) if null_returns else 0.0
     null_mean = float(np.mean(null_returns)) if null_returns else 0.0
 
+    # Conjunctive gate. Note the two cost roles: the per-event cost is direction-
+    # independent and identical for the real test and EVERY shuffled permutation, so it
+    # cancels in `net_return > null_p95` — that gate therefore isolates DIRECTIONAL skill
+    # (does surprise sign predict move sign better than random labels), with trading
+    # frequency/cost held fixed. Profitability-after-cost is enforced SEPARATELY by
+    # `net_return > 0`, which is the only gate the (caller-chosen, ideally realistic) cost
+    # actually moves. Both must hold for CANDIDATE_EDGE.
     edge = (
         len(test) >= min_test_events
         and net_return > 0

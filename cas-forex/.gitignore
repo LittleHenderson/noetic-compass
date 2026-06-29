@@ -14,6 +14,10 @@ __pycache__/
 tmppcba-pytest/
 tmp_output.txt
 evidence_runs/
+
+# External market/calendar data (downloaded or user-supplied; NEVER committed —
+# big, and not ours to redistribute). Forex Factory calendar + HistData M1 CSVs.
+data/external/
 ui/node_modules/
 ui/dist/
 *.tsbuildinfo
