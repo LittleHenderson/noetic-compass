@@ -1,8 +1,8 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday/tick post-release macro test — is now BUILT and adversarially reviewed (`cas_forex/macro_intraday.py`, `scripts/run_macro_intraday_real.py`); it renders a verdict the instant the operator drops HistData ASCII M1 EUR/USD CSVs into `data/external/`. Don't claim/build a fake edge; the null discipline is sacred.
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
 
-## 2026-06-28 — Intraday macro-surprise test: the open door, BUILT + adversarially reviewed (awaits M1 data)
+## 2026-06-28 — Intraday macro-surprise test: BUILT, reviewed, RUN — verdict NO_SKILL (last open door closed)
 
 The higher-resolution rerun of the daily macro test (which was NO_SKILL with a faint
 tilt): the EUR/USD move in the 5–30 min AFTER each US release, on 1-minute bars, through
@@ -35,9 +35,15 @@ the same leak-free shuffled-surprise null core.
   surfaces its reason.
 - Suite green: **1235 passed**. External data (FF calendar + HistData M1) stays on disk,
   git-ignored — never committed.
-- **Still needs:** the operator's HistData ASCII M1 EUR/USD CSVs in `data/external/`,
-  then run the script. Likely still NO_SKILL (markets price consensus in seconds; retail
-  can't capture the first-second move) — report it straight either way.
+- **RAN on real data — verdict NO_SKILL (conclusive):** real HistData ASCII M1 EUR/USD
+  2020–2024 (5 files, ~1.8M bars, in `data/external/`, git-ignored). PRIMARY (0→30 min,
+  2-pip): 535 usable events / 214 OOS, hit **0.509** (coin flip), net **−3.74%**, WORSE
+  than the shuffled-null p95 (−1.31%) → **NO_SKILL**. All 4 secondary windows agree (each
+  net-negative); per-indicator raw hits cluster at ~0.50 (NFP 0.518, CPI y/y 0.357 — the
+  move after the print is essentially random). The faint *positive* daily tilt goes
+  *negative* at intraday resolution. Generous case (HistData M1 is interbank-tighter than
+  retail; real news spreads blow out → retail worse). **The new-information macro channel
+  is closed for retail.** Report: `evidence_runs/macro_intraday/` (git-ignored).
 
 ## 2026-06-28 — The EDGE investigation: leak-free OOS, bias-state map, macro-surprise (verdict: no edge yet)
 
