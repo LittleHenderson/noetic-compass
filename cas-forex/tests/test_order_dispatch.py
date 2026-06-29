@@ -21,6 +21,37 @@ from cas_forex.order_dispatch import (
 )
 from cas_forex.schemas.order import BrokerMode, OrderOutcome, OrderStatus
 
+import pytest
+
+from cas_forex import edge_authorization as _EA
+from cas_forex.edge_gate import CandidateSetup, EdgeTestDecision, _now_iso, mint_token
+
+
+@pytest.fixture(autouse=True)
+def _reset_edge_registry():
+    # The fail-closed edge gate (edge_authorization) is process-global; isolate it
+    # per test so a live-dispatch registration never leaks into the paper-path tests.
+    _EA.reset()
+    yield
+    _EA.reset()
+
+
+def _authorize_intent(intent) -> None:
+    """Register a fresh edge PASS for an intent so it can clear the chokepoint's
+    fail-closed edge gate (real-money / loop orders require a tested edge)."""
+    evat = _now_iso()
+    setup = CandidateSetup(
+        symbol=intent.symbol, timeframe="H1", direction=intent.direction,
+        entry=float(getattr(intent, "price", 0.0)) or 1.10,
+        stop_loss=intent.stop_loss, take_profit=intent.take_profit,
+        signal_strength=1.0, regime="trend", decision_ref=intent.decision_ref,
+    )
+    dec = EdgeTestDecision(
+        status="PASS", measured_win_prob=0.70, null_p95=0.10, threshold=0.65,
+        edge_token=mint_token(setup, evat), evaluated_at=evat, reason="authorized for test",
+    )
+    _EA.authorize(intent.decision_ref, dec, setup)
+
 
 def _cfg(*, live_mode: bool = False) -> SimpleNamespace:
     return SimpleNamespace(
@@ -167,7 +198,9 @@ def test_authorized_live_dispatch_reaches_real_bridge():
     # GAP 3: with live trading fully owner-authorized, an approved order actually
     # reaches the (fake) real bridge and the ledger note records real_broker=True.
     bridge = _FakeRealBridge(_executed_outcome("ord-1"))
-    result = dispatch_intent(_intent(), bridge, config=_authorized_live_cfg())
+    intent = _intent()
+    _authorize_intent(intent)  # live dispatch now also requires a tested edge PASS
+    result = dispatch_intent(intent, bridge, config=_authorized_live_cfg())
 
     assert result.status == "BROKER_EXECUTED"
     assert result.dispatched_to_bridge is True

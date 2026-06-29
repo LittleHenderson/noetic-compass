@@ -202,7 +202,8 @@ def guarded_place_order(
     """
     intent = dict(proposed_intent) if proposed_intent else _intent_from_order(order)
 
-    if _is_live_execution(config) or _bridge_executes_real(bridge):
+    is_real = _is_live_execution(config) or _bridge_executes_real(bridge)
+    if is_real:
         # Defense-in-depth: enforce the live-trading authorization at the
         # dispatch chokepoint, not only at bridge construction. This fires when
         # the app is in live mode OR when the bridge itself would place a real
@@ -210,6 +211,18 @@ def guarded_place_order(
         from cas_forex import runtime_gates
 
         runtime_gates.require_authorized("live_trading", config)
+
+    # Fail-closed EDGE gate -- the WASTE loop's TEST step, enforced at the dispatch
+    # chokepoint so it can never be skipped. A real-money dispatch, and any order
+    # the loop registered for its decision_ref, MUST carry a fresh, matching PASS
+    # from ``edge_gate`` (a measured win-prob >= the owner threshold that beat the
+    # null). No PASS => ``EdgeNotAuthorized`` and the bridge is never touched.
+    # Legacy paper dispatch (no registration, not live) is unaffected.
+    from cas_forex import edge_authorization
+
+    decision_ref = getattr(order, "decision_ref", None)
+    if is_real or edge_authorization.is_required(decision_ref):
+        edge_authorization.require(order, is_real=is_real)
 
     guard(
         intent,
