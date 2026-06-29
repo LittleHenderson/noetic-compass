@@ -118,3 +118,50 @@ export function useAiStage(options: UseAiStageOptions = {}): AiStage {
 
   return stage;
 }
+
+/** The loop heartbeat: the current stage AND whether the loop is actually running.
+ * ``live`` is true only when the backend reports a fresh, running loop — so the
+ * indicator can honestly show OFFLINE vs LIVE instead of guessing. */
+export interface LoopHeartbeat {
+  stage: AiStage;
+  live: boolean;
+}
+
+/** Poll the WASTE-loop stage endpoint ({ stage, running }). Falls back to
+ * { idle, live:false } on any error / stale / unreachable — never fakes activity. */
+export function useLoopHeartbeat(url: string, intervalMs = 2000): LoopHeartbeat {
+  const [hb, setHb] = useState<LoopHeartbeat>({ stage: "idle", live: false });
+  const cancelled = useRef(false);
+
+  useEffect(() => {
+    cancelled.current = false;
+
+    const tick = async () => {
+      try {
+        const res = await fetch(url, {
+          headers: { "Content-Type": "application/json" },
+          signal: AbortSignal.timeout(6000),
+        });
+        if (!res.ok) {
+          if (!cancelled.current) setHb({ stage: "idle", live: false });
+          return;
+        }
+        const data: unknown = await res.json();
+        const running = !!(data && typeof data === "object" && (data as { running?: unknown }).running);
+        const stage = coerceAiStage(data) ?? "idle";
+        if (!cancelled.current) setHb({ stage: running ? stage : "idle", live: running });
+      } catch {
+        if (!cancelled.current) setHb({ stage: "idle", live: false });
+      }
+    };
+
+    void tick();
+    const handle = window.setInterval(() => void tick(), intervalMs);
+    return () => {
+      cancelled.current = true;
+      window.clearInterval(handle);
+    };
+  }, [url, intervalMs]);
+
+  return hb;
+}

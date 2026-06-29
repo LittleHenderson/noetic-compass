@@ -4,7 +4,9 @@
    real `stage` once the W→A→S→T→E loop is wired; until then it self-cycles so
    every figure is visible. */
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { getApiBase } from "../data/api";
+import { useLoopHeartbeat } from "./useAiStage";
 import "./AiActivityIndicator.css";
 
 export type AiStage =
@@ -81,40 +83,58 @@ function Figure({ stage }: { stage: AiStage }) {
 }
 
 interface Props {
-  /** Drive the indicator from real loop state. If omitted, it self-cycles (demo). */
+  /** Force a stage (controlled). Omit to read the real loop heartbeat. */
   stage?: AiStage;
-  /** Demo cycle interval (ms) when no stage is supplied. */
+  /** Opt-in self-cycle showcase (off by default — the real indicator is NOT a demo). */
+  demo?: boolean;
+  /** Demo cycle interval (ms). */
   intervalMs?: number;
 }
 
-export function AiActivityIndicator({ stage, intervalMs = 2200 }: Props) {
-  const [demoStage, setDemoStage] = useState<AiStage>("watch");
+export function AiActivityIndicator({ stage, demo = false, intervalMs = 2200 }: Props) {
+  // DEFAULT: read the actual WASTE-loop stage from the backend. It shows OFFLINE/idle
+  // until the loop is running, then pulses with what the AI is really doing — no faking.
+  const heartbeatUrl = useMemo(() => `${getApiBase()}/waste-loop/stage`, []);
+  const hb = useLoopHeartbeat(heartbeatUrl, 2000);
 
+  const [demoStage, setDemoStage] = useState<AiStage>("watch");
   useEffect(() => {
-    if (stage) return; // real stage supplied — no demo cycle
+    if (!demo) return;
     let i = 0;
     const id = setInterval(() => {
       i = (i + 1) % DEMO_ORDER.length;
       setDemoStage(DEMO_ORDER[i]);
     }, intervalMs);
     return () => clearInterval(id);
-  }, [stage, intervalMs]);
+  }, [demo, intervalMs]);
 
-  const active = stage ?? demoStage;
+  const controlled = stage !== undefined;
+  const active: AiStage = controlled ? stage : demo ? demoStage : (hb.stage as AiStage);
+  const conn: "live" | "demo" | "offline" =
+    controlled ? "live" : demo ? "demo" : hb.live ? "live" : "offline";
   const meta = STAGE_META[active];
+  const connLabel = conn === "live" ? "LIVE" : conn === "demo" ? "DEMO" : "OFFLINE";
+  const connTitle =
+    conn === "live" ? "Loop connected — live stage" :
+    conn === "demo" ? "Demo preview — not connected to the loop" :
+    "Loop not running — engine offline";
 
   return (
     <div
-      className={`ai-activity ai-stage-${active}`}
-      title={`AI: ${meta.label} — ${meta.sub}`}
+      className={`ai-activity ai-stage-${active} ai-conn-${conn}`}
+      title={`AI: ${meta.label} — ${meta.sub} (${connLabel})`}
       aria-live="polite"
-      aria-label={`AI ${meta.label}: ${meta.sub}`}
+      aria-label={`AI ${meta.label}: ${meta.sub}. ${connTitle}`}
     >
       <Figure stage={active} />
       <div className="ai-activity-text">
         <span className="ai-activity-label">{meta.label}</span>
         <span className="ai-activity-sub">{meta.sub}</span>
       </div>
+      <span className={`ai-conn-badge ai-conn-badge-${conn}`} title={connTitle}>
+        <span className="ai-conn-dot" />
+        {connLabel}
+      </span>
     </div>
   );
 }

@@ -2,6 +2,17 @@
 
 > **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
 
+## 2026-06-29 — AI activity indicator: hard-wired to the real loop (honest LIVE/OFFLINE), not a demo
+
+The header heartbeat now reflects what the loop is ACTUALLY doing instead of cycling on a timer
+(owner caught it: "constantly changing, no indication it's connected"). New `cas_forex/loop_heartbeat.py`
+(in-memory stage mirror; `running` only on a fresh tick) + route `GET /api/forex/waste-loop/stage`.
+UI: `useLoopHeartbeat` polls it; `AiActivityIndicator` defaults to the real stage and shows an explicit
+**LIVE / OFFLINE / DEMO** badge (demo is now opt-in via prop). Verified live: with the loop not running
+the indicator reads `idle` + `OFFLINE` from the endpoint (`running:false`) — no faked activity. Once the
+WASTE loop ticks (calls `loop_heartbeat.record(stage)` from the runner), it goes LIVE with the real stage.
+Heartbeat tests green; UI tsc clean.
+
 ## 2026-06-29 — WASTE engine: fleet-built core of the adaptive AI loop (7 modules, 107 tests green)
 
 A fleet of 7 agents built the **W·A·S·T·E** (Watch·Analyze·Strategize·Test·Execute) loop's modules
