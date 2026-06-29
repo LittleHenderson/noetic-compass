@@ -2,6 +2,32 @@
 
 > **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
 
+## 2026-06-28 — Edge-research team (48 agents) + 2 top survivors tested: weekend-gap NO_SKILL, turn-of-month DECAYED
+
+Ran a 48-agent research workflow over the full codebase + CAS v7.4/Noetic docs + index
+microstructure + cross-asset + seasonality + money-management to generate and adversarially
+screen genuinely-novel TESTABLE edge hypotheses (41 gathered, 30 survived, team-lead ranked).
+Several index ideas were computed DEAD by the screeners themselves: the overnight-drift
+premise is FALSE on 2020-25 (NASDAQ intraday wins; after CFD financing it's beta);
+cross-asset and index<->index lead-lag are NO_SKILL after cost; macro-on-index inherits the
+FX-macro failure. Then ran the top-2 testable-now survivors through the sacred null myself:
+
+- **Weekend-gap fade** (`scripts/run_weekend_gap_test.py`): EUR/USD Sunday-open gap, HistData
+  M1 2020-2024, 261 weekends. Real GROSS reversion at 1h (61.7% fade-aligned, beats the null
+  gross) — but it dies to cost: net-NEGATIVE at >= 2-pip weekend spread (real weekend spreads
+  are 3-8 pips), and 4h/6h decay to a coin flip. **NO_SKILL** (a real micro-tendency, not a
+  tradeable edge). Settles a screener disagreement in favor of the null.
+- **Turn-of-month (-1,+3)** on US30/NAS100/SPX (`scripts/run_turn_of_month_test.py`): yfinance
+  D1 to 1992/1985/1927, beta-controlled within-month relocation null. REAL + strong over FULL
+  history (NAS100 98.8th pct, SPX 100th) — the apparatus correctly detected the famous
+  Lakonishok-Smidt / McConnell-Xu anomaly — but **DECAYED**: by 2000+/2010+/2016+ it no longer
+  beats the timing null (55-70th pct). Modern positive return is beta, not timing skill.
+  **No tradeable edge today.** (Fixed a cost bug: proportional bps spread, not absolute index
+  points across a 1927 S&P of ~17.)
+- Honest state: both top survivors resolved to no tradeable edge; the machine works (found a
+  real anomaly AND its death). Remaining lever: the real-forecaster skill-gate (Chronos/TimesFM),
+  team prior ~10-15%. yfinance index D1 frozen to `data/external/` (git-ignored); scripts committed.
+
 ## 2026-06-28 — Intraday macro-surprise test: BUILT, reviewed, RUN — verdict NO_SKILL (last open door closed)
 
 The higher-resolution rerun of the daily macro test (which was NO_SKILL with a faint
