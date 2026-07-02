@@ -3,12 +3,50 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import HTTPException
 
-from cas_forex.account_ledger import build_account_ledger_from_paper_review
+from cas_forex.account_ledger import (
+    build_account_ledger_from_paper_review,
+    build_live_account_ledger_from_terminal_history,
+)
+from cas_forex.auto_halt import build_auto_halt_report
+from cas_forex.broker_truth_monitor import (
+    latest_reconciliation_report as latest_broker_truth_reconciliation_report,
+    monitor_status as broker_truth_monitor_status,
+)
+from cas_forex.broker_truth_recovery_packet import build_broker_truth_recovery_packet
+from cas_forex.broker_reality import build_broker_reality_review
+from cas_forex.compound_add_order_dry_run_review import build_compound_add_order_dry_run_review
+from cas_forex.live_pilot import build_live_pilot_policy
+from cas_forex.live_order_dry_run import DEFAULT_AUDIT_PATH as LIVE_ORDER_DRY_RUN_AUDIT_PATH
+from cas_forex.live_order_dry_run import DEFAULT_COMPOUND_ADD_AUDIT_PATH as COMPOUND_ADD_DRY_RUN_AUDIT_PATH
+from cas_forex.live_order_dry_run import LiveOrderDryRunAuditLog
+from cas_forex.live_order_dry_run_review import build_live_order_dry_run_review
+from cas_forex.live_recovery import build_live_recovery_report
+from cas_forex.live_money_progression_packet import build_live_money_progression_packet
+from cas_forex.order_attempt_audit import build_order_attempt_audit_status
+from cas_forex.order_attempt_recovery_packet import build_order_attempt_recovery_packet
+from cas_forex.payout_recovery import build_payout_recovery_status
+from cas_forex.mt5_market_data_diagnostic import latest_mt5_market_data_diagnostic
+from cas_forex.waste_real_candle_probe import latest_waste_real_candle_probe
+from cas_forex.waste_direction_review_packet import build_waste_direction_review_packet
+from cas_forex.waste_direction_learning_ledger import build_waste_direction_learning_ledger
+from cas_forex.waste_direction_outcome_binding import build_waste_direction_outcome_binding
+from cas_forex.waste_paper_sample_collector import (
+    build_waste_paper_sample_collector,
+    waste_paper_sample_collector_scheduler_status as build_waste_paper_sample_collector_scheduler_status,
+)
+from cas_forex.waste_adaptation_promotion_rule import build_waste_adaptation_promotion_rule
+from cas_forex.waste_adaptation_plan import build_waste_adaptation_plan
+from cas_forex.waste_adaptation_apply_preview import build_waste_adaptation_apply_preview
+from cas_forex.waste_adaptation_owner_review import build_waste_adaptation_owner_review
+from cas_forex.waste_adaptation_paper_apply import build_waste_adaptation_paper_apply_status
+from cas_forex.waste_runner import build_compound_add_dispatch_handoff_status
+from cas_forex.waste_pilot_promotion import build_waste_pilot_promotion_status
 from cas_forex.movement_stream import build_movement_stream_state
 from cas_forex.account_reconciliation import build_account_reconciliation_report
 from cas_forex.live_readiness import build_live_readiness_report
@@ -20,9 +58,10 @@ from cas_forex.paper_risk import (
     summarize_paper_risk_reviews,
     write_paper_risk_status,
 )
+from cas_forex.owner_control import build_owner_control_report
 from cas_forex.market_data.connector import get_connector
 from cas_forex.authority_boundary import build_authority_boundary_report
-from cas_forex.runtime_gates import build_runtime_gates_report
+from cas_forex.runtime_gates import PENDING_OWNER_ENABLE, build_runtime_gates_report
 from cas_forex.ai_model import model_status
 from cas_forex.broker_profiles import broker_candidates
 from cas_forex.ccb_readiness import build_ccb_readiness_report
@@ -116,6 +155,11 @@ from cas_forex.terminal_position_reconciliation import (
     TerminalPositionReconciliationError,
     load_latest_terminal_position_reconciliation_report,
 )
+from cas_forex.terminal_receipt_recovery_packet import (
+    build_terminal_receipt_recovery_packet,
+    run_terminal_receipt_archive_action,
+)
+from cas_forex.terminal_receipt_recovery_sequence import run_terminal_receipt_recovery_refresh
 from cas_forex.terminal_operability_verifier import (
     TerminalOperabilityVerifierError,
     load_latest_terminal_operability_verifier_report,
@@ -143,6 +187,519 @@ PROOF_DIR = EVIDENCE_ROOT / "index_tsmom_126_paper_proof"
 PLAN_ID = "index-tsmom-126-d1-paper-proof"
 
 
+def _optional_dashboard_value(loader):
+    try:
+        return loader()
+    except HTTPException:
+        return None
+
+
+def _waste_scheduler_fast_status() -> Dict[str, Any]:
+    try:
+        from cas_forex.waste_background_worker import COLLECTOR_KIND, worker_status
+
+        worker = worker_status(COLLECTOR_KIND)
+    except Exception:
+        worker = {"running": False}
+    config = worker.get("config") if isinstance(worker.get("config"), dict) else {}
+    claim_boundary = (
+        "Fast dashboard scheduler status is intentionally lightweight. Use "
+        "/api/forex/waste-loop-control/paper-sample-collector/scheduler for "
+        "the owner-toggle status and explicit probe actions for heavy evidence."
+    )
+    next_action = (
+        "Paper sample collector worker is running."
+        if worker.get("running")
+        else "Start the paper sample collector from the Trade page when ready."
+    )
+    return {
+        "report_kind": "cas_forex_waste_paper_sample_collector_scheduler",
+        "generated_at": worker.get("checked_at"),
+        "running": bool(worker.get("running", False)),
+        "status": "WASTE_PAPER_SAMPLE_COLLECTOR_RUNNING" if worker.get("running") else "WASTE_PAPER_SAMPLE_COLLECTOR_STOPPED",
+        "interval_seconds": config.get("interval_seconds", 300),
+        "cycles_run": None,
+        "started_at_iso": worker.get("started_at"),
+        "last_run_iso": None,
+        "last_error": None,
+        "latest_collector_status": None,
+        "config": {},
+        "config_present": bool(config),
+        "external_worker_present": bool(worker),
+        "paper_only": True,
+        "read_only_market_actions_only": True,
+        "runtime_changed": False,
+        "broker_execution_touched": False,
+        "live_order_attempted": False,
+        "money_moved": False,
+        "claim_boundary": "",
+        "claim_boundary_present": bool(claim_boundary),
+        "next_action": "",
+        "next_action_present": bool(next_action),
+        "full_status_route": "/api/forex/waste-loop-control/paper-sample-collector/scheduler",
+        "summary_only": True,
+    }
+
+
+def _waste_runner_fast_status() -> Dict[str, Any]:
+    from api.routes.waste_loop_control import build_fast_waste_runner_status
+
+    return build_fast_waste_runner_status()
+
+
+def _waste_runner_shell_status() -> Dict[str, Any]:
+    # Use the durable runner/supervisor view, then project only shell fields.
+    # The local API process can be different from the process that owns the
+    # timed WASTE lease, so local worker state alone can falsely read offline.
+    status = _waste_runner_fast_status()
+    return {
+        "report_kind": "cas_forex_waste_runner_shell",
+        "running": bool(status.get("running")),
+        "status": status.get("status"),
+        "current_stage": status.get("current_stage") or status.get("stage"),
+        "cycles_run": status.get("cycles_run"),
+        "mode": status.get("mode"),
+        "last_reason": status.get("last_reason"),
+        "last_run_iso": status.get("last_run_iso"),
+        "worker_isolated": bool(status.get("worker_isolated")),
+        "claim_boundary": (
+            "Shell WASTE status is observational only. It does not authorize "
+            "live trading, broker ACCEPT, LICENSED status, deposits, withdrawals, "
+            "bank/card movement, payouts, or order execution."
+        ),
+    }
+
+
+def dashboard_shell_state() -> Dict[str, Any]:
+    """Ultra-small first-paint packet for the always-visible app shell."""
+    return {
+        "uiReadiness": _dashboard_ui_readiness_summary(ui_readiness()),
+        "authorityBoundary": _optional_dashboard_value(_dashboard_authority_boundary_first_paint),
+        "wasteLoop": _optional_dashboard_value(_waste_runner_shell_status),
+    }
+
+
+def dashboard_fast_state() -> Dict[str, Any]:
+    """Small live dashboard packet for the app shell and operational pages."""
+    readiness = ui_readiness()
+    return {
+        "proofProgress": _dashboard_proof_progress_summary(readiness),
+        "riskBudget": _dashboard_risk_budget_summary_from_latest_risk(),
+        "ownerControl": _optional_dashboard_value(_dashboard_owner_control_summary_from_full),
+        # Authority, WASTE, and broker-detail packets are already handled by the
+        # shell route, instant stage probe, and deferred full fetches. Keep the
+        # fast lane focused on first-paint Dashboard cards.
+    }
+
+
+def _numeric(value: Any) -> float:
+    return value if isinstance(value, (int, float)) else 0.0
+
+
+def _dashboard_risk_budget_summary_from_latest_risk() -> Dict[str, Any]:
+    latest_risk_path = PROOF_DIR / f"{PLAN_ID}-paper-risk-status.json"
+    risk = _read_json(latest_risk_path) if latest_risk_path.exists() else latest_risk()
+    return _dashboard_risk_budget_summary(risk)
+
+
+def _dashboard_risk_budget_summary(risk: Dict[str, Any]) -> Dict[str, Any]:
+    """Tiny first-paint account/risk numbers; full sizing stays in dailyBundle."""
+    latest_review = risk.get("latest_review") if isinstance(risk.get("latest_review"), dict) else {}
+    sizing = latest_review.get("sizing")
+    sizing_rows = sizing if isinstance(sizing, list) else []
+    planned_risk_total_usd = (
+        sum(_numeric(row.get("planned_risk_usd")) for row in sizing_rows if isinstance(row, dict))
+        if sizing_rows
+        else _numeric(
+            latest_review.get("planned_risk_total_usd")
+            or latest_review.get("total_planned_risk_usd")
+            or risk.get("planned_risk_total_usd")
+        )
+    )
+    planned_lots_total = (
+        sum(_numeric(row.get("sized_lots")) for row in sizing_rows if isinstance(row, dict))
+        if sizing_rows
+        else _numeric(
+            latest_review.get("planned_lots_total")
+            or latest_review.get("total_planned_lots")
+            or risk.get("planned_lots_total")
+        )
+    )
+    claim_boundary = risk.get("claim_boundary") or latest_review.get("claim_boundary") or ""
+    return {
+        "report_kind": "cas_forex_dashboard_risk_budget_summary",
+        "date": latest_review.get("date", ""),
+        "review_count": risk.get("review_count", 0),
+        "risk_status": latest_review.get("risk_status", ""),
+        "risk_status_counts": risk.get("risk_status_counts") if isinstance(risk.get("risk_status_counts"), dict) else {},
+        "chain_verified": bool(risk.get("chain_verified")),
+        "account_equity": _numeric(latest_review.get("account_equity")),
+        "max_risk_per_trade_pct": _numeric(latest_review.get("max_risk_per_trade_pct")),
+        "daily_risk_budget_pct": _numeric(latest_review.get("daily_risk_budget_pct")),
+        "daily_risk_budget_usd": _numeric(latest_review.get("daily_risk_budget_usd")),
+        "max_position_lots": _numeric(latest_review.get("max_position_lots")),
+        "planned_risk_total_usd": planned_risk_total_usd,
+        "planned_lots_total": planned_lots_total,
+        "sizing_count": len(sizing_rows),
+        "summary_only": True,
+        "claim_boundary": "",
+        "claim_boundary_present": bool(claim_boundary),
+    }
+
+
+def _dashboard_owner_control_summary_from_full() -> Dict[str, Any]:
+    return _dashboard_owner_control_summary(owner_control())
+
+
+def _dashboard_owner_control_summary(control: Dict[str, Any]) -> Dict[str, Any]:
+    """Compact owner-control knobs; full policy prose stays on /settings/owner-control."""
+    allowed_modes = control.get("allowed_modes") if isinstance(control.get("allowed_modes"), list) else []
+    claim_boundary = control.get("claim_boundary") if isinstance(control.get("claim_boundary"), str) else ""
+    override_state_path = (
+        control.get("override_state_path")
+        if isinstance(control.get("override_state_path"), str)
+        else ""
+    )
+    return {
+        "mode": control.get("mode", "AI_FULL_AUTO_PAPER"),
+        "max_concurrent_trades": control.get("max_concurrent_trades", 3),
+        "max_loss_cap_pct": control.get("max_loss_cap_pct", 10),
+        "ai_autonomy_enabled": bool(control.get("ai_autonomy_enabled")),
+        "live_requested": bool(control.get("live_requested")),
+        "live_blocked": bool(control.get("live_blocked")),
+        "claim_boundary": "",
+        "claim_boundary_present": bool(claim_boundary),
+        "override_count": control.get("override_count", 0),
+        "persisted": bool(control.get("persisted")),
+        "override_state_path": "",
+        "override_state_path_present": bool(override_state_path),
+        "allowed_modes": [],
+        "allowed_mode_count": len(allowed_modes),
+        "summary_only": True,
+    }
+
+
+def _dashboard_authority_boundary_first_paint() -> Dict[str, Any]:
+    return _dashboard_authority_boundary_summary(authority_boundary_fast())
+
+
+def _dashboard_authority_boundary_summary(boundary: Dict[str, Any]) -> Dict[str, Any]:
+    """Compact owner-authority status; full prose stays on /settings/authority-boundary."""
+    allowed_scopes = boundary.get("allowed_scopes") if isinstance(boundary.get("allowed_scopes"), list) else []
+    blockers = boundary.get("blockers") if isinstance(boundary.get("blockers"), list) else []
+    claim_boundary = boundary.get("claim_boundary") if isinstance(boundary.get("claim_boundary"), str) else ""
+
+    return {
+        "report_kind": boundary.get("report_kind", "cas_forex_authority_boundary"),
+        "operating_mode": boundary.get("operating_mode", "READ_ONLY_PAPER_RESEARCH"),
+        "live_trading_status": boundary.get("live_trading_status", PENDING_OWNER_ENABLE),
+        "broker_accept_status": boundary.get("broker_accept_status", PENDING_OWNER_ENABLE),
+        "auto_deposit_status": boundary.get("auto_deposit_status", PENDING_OWNER_ENABLE),
+        "debit_card_bank_movement_status": boundary.get(
+            "debit_card_bank_movement_status",
+            PENDING_OWNER_ENABLE,
+        ),
+        "payout_automation_status": boundary.get("payout_automation_status", PENDING_OWNER_ENABLE),
+        "trading_edge_status": boundary.get("trading_edge_status", "OPEN"),
+        "can_place_live_orders": bool(boundary.get("can_place_live_orders")),
+        "can_create_broker_accept": bool(boundary.get("can_create_broker_accept")),
+        "can_auto_deposit": bool(boundary.get("can_auto_deposit")),
+        "can_move_money": bool(boundary.get("can_move_money")),
+        "can_automate_payouts": bool(boundary.get("can_automate_payouts")),
+        "allowed_scopes": [],
+        "allowed_scope_count": len(allowed_scopes),
+        "blockers": [],
+        "blocker_count": len(blockers),
+        "claim_boundary": "",
+        "claim_boundary_present": bool(claim_boundary),
+        "ledger_deployment_status_counts": (
+            boundary.get("ledger_deployment_status_counts")
+            if isinstance(boundary.get("ledger_deployment_status_counts"), dict)
+            else {}
+        ),
+        "live_execution_runtime_locked": bool(boundary.get("live_execution_runtime_locked", True)),
+        "summary_only": True,
+    }
+
+
+def _dashboard_ui_readiness_summary(readiness: Dict[str, Any]) -> Dict[str, Any]:
+    """Compact proof maturity status; full blocker prose stays on /proof/readiness."""
+    complete_dates = (
+        readiness.get("complete_bundle_dates")
+        if isinstance(readiness.get("complete_bundle_dates"), list)
+        else []
+    )
+    blockers = readiness.get("blockers") if isinstance(readiness.get("blockers"), list) else []
+    next_ui_step = readiness.get("next_ui_step") if isinstance(readiness.get("next_ui_step"), str) else ""
+    claim_boundary = readiness.get("claim_boundary") if isinstance(readiness.get("claim_boundary"), str) else ""
+
+    return {
+        "report_id": readiness.get("report_id", ""),
+        "plan_id": readiness.get("plan_id", ""),
+        "lead_id": readiness.get("lead_id", ""),
+        "strategy_setting": readiness.get("strategy_setting", ""),
+        "timeframe": readiness.get("timeframe", ""),
+        "readiness_status": readiness.get("readiness_status", "NOT_READY_FOR_UI_UX"),
+        "min_daily_bundles_for_ui": readiness.get("min_daily_bundles_for_ui", 0),
+        "completed_trading_days": readiness.get("completed_trading_days", 0),
+        "broker_verified_days": readiness.get("broker_verified_days", 0),
+        "decision_days": readiness.get("decision_days", 0),
+        "risk_review_days": readiness.get("risk_review_days", 0),
+        "complete_bundle_days": readiness.get("complete_bundle_days", 0),
+        "complete_bundle_dates": [],
+        "complete_bundle_date_count": len(complete_dates),
+        "route_counts": readiness.get("route_counts") if isinstance(readiness.get("route_counts"), dict) else {},
+        "risk_status_counts": readiness.get("risk_status_counts") if isinstance(readiness.get("risk_status_counts"), dict) else {},
+        "chains_verified": readiness.get("chains_verified") if isinstance(readiness.get("chains_verified"), dict) else {},
+        "blockers": [],
+        "blocker_count": len(blockers),
+        "next_ui_step": "",
+        "next_ui_step_present": bool(next_ui_step),
+        "claim_boundary": "",
+        "claim_boundary_present": bool(claim_boundary),
+        "deployment_status": readiness.get("deployment_status", "NOT LICENSED"),
+        "broker_accept_status": readiness.get("broker_accept_status", "NOT LICENSED"),
+        "payment_transfer_status": readiness.get("payment_transfer_status", "NOT LICENSED"),
+        "summary_only": True,
+    }
+
+
+def _dashboard_proof_progress_summary(readiness: Dict[str, Any]) -> Dict[str, Any]:
+    """Tiny first-paint proof counters; full readiness stays on /proof/readiness."""
+    chains_verified = (
+        readiness.get("chains_verified")
+        if isinstance(readiness.get("chains_verified"), dict)
+        else {}
+    )
+    verified_count = sum(
+        1 for key in ("paper_proof", "paper_decision", "paper_risk")
+        if bool(chains_verified.get(key))
+    )
+    return {
+        "report_kind": "cas_forex_dashboard_proof_progress_summary",
+        "readiness_status": readiness.get("readiness_status", "NOT_READY_FOR_UI_UX"),
+        "min_daily_bundles_for_ui": readiness.get("min_daily_bundles_for_ui", 0),
+        "completed_trading_days": readiness.get("completed_trading_days", 0),
+        "complete_bundle_days": readiness.get("complete_bundle_days", 0),
+        "complete_bundle_date_count": len(
+            readiness.get("complete_bundle_dates")
+            if isinstance(readiness.get("complete_bundle_dates"), list)
+            else []
+        ),
+        "chains_verified_count": verified_count,
+        "chains_expected_count": 3,
+        "paper_proof_chain_verified": bool(chains_verified.get("paper_proof")),
+        "blocker_count": len(
+            readiness.get("blockers")
+            if isinstance(readiness.get("blockers"), list)
+            else []
+        ),
+        "summary_only": True,
+    }
+
+
+def _dashboard_daily_schedule_summary(schedule: Dict[str, Any]) -> Dict[str, Any]:
+    """Compact next-action schedule; full operator prompt stays on /proof/schedule."""
+    missing_tracks = (
+        schedule.get("missing_tracks_for_next_due")
+        if isinstance(schedule.get("missing_tracks_for_next_due"), list)
+        else []
+    )
+    complete_dates = (
+        schedule.get("complete_bundle_dates")
+        if isinstance(schedule.get("complete_bundle_dates"), list)
+        else []
+    )
+    notes = schedule.get("notes") if isinstance(schedule.get("notes"), list) else []
+    claim_boundary = schedule.get("claim_boundary") if isinstance(schedule.get("claim_boundary"), str) else ""
+
+    return {
+        "schedule_id": schedule.get("schedule_id", ""),
+        "plan_id": schedule.get("plan_id", ""),
+        "lead_id": schedule.get("lead_id", ""),
+        "strategy_setting": schedule.get("strategy_setting", ""),
+        "timeframe": schedule.get("timeframe", ""),
+        "as_of_date": schedule.get("as_of_date", ""),
+        "next_due_date": schedule.get("next_due_date", ""),
+        "next_due_status": schedule.get("next_due_status", ""),
+        "latest_complete_bundle_date": schedule.get("latest_complete_bundle_date", ""),
+        "complete_bundle_days": schedule.get("complete_bundle_days", 0),
+        "completed_trading_days": schedule.get("completed_trading_days", 0),
+        "broker_verified_days": schedule.get("broker_verified_days", 0),
+        "decision_days": schedule.get("decision_days", 0),
+        "risk_review_days": schedule.get("risk_review_days", 0),
+        "ui_min_daily_bundles": schedule.get("ui_min_daily_bundles", 0),
+        "ui_bundles_remaining": schedule.get("ui_bundles_remaining", 0),
+        "required_paper_days": schedule.get("required_paper_days", 0),
+        "paper_days_remaining": schedule.get("paper_days_remaining", 0),
+        "missing_tracks_for_next_due": [],
+        "missing_track_count": len(missing_tracks),
+        "complete_bundle_dates": [],
+        "complete_bundle_date_count": len(complete_dates),
+        "recommended_command": schedule.get("recommended_command", ""),
+        "recommended_action": schedule.get("recommended_action", ""),
+        "notes": [],
+        "note_count": len(notes),
+        "claim_boundary": "",
+        "claim_boundary_present": bool(claim_boundary),
+        "deployment_status": schedule.get("deployment_status", "NOT LICENSED"),
+        "broker_accept_status": schedule.get("broker_accept_status", "NOT LICENSED"),
+        "payment_transfer_status": schedule.get("payment_transfer_status", "NOT LICENSED"),
+        "summary_only": True,
+    }
+
+
+def _dashboard_daily_bundle_summary(bundle: Dict[str, Any]) -> Dict[str, Any]:
+    """Compact first-paint proof context; full evidence stays on /bundle/daily."""
+    steps = bundle.get("steps") if isinstance(bundle.get("steps"), list) else []
+    latest_proof = bundle.get("latest_proof") if isinstance(bundle.get("latest_proof"), dict) else {}
+    proof_failures = latest_proof.get("failure_reasons") if isinstance(latest_proof.get("failure_reasons"), list) else []
+
+    decision = bundle.get("latest_decision") if isinstance(bundle.get("latest_decision"), dict) else {}
+    latest_decision = (
+        decision.get("latest_decision")
+        if isinstance(decision.get("latest_decision"), dict)
+        else {}
+    )
+    symbol_decisions = latest_decision.get("symbol_decisions")
+    symbol_decision_rows = symbol_decisions if isinstance(symbol_decisions, list) else []
+    symbol_decision_count = len(symbol_decision_rows)
+
+    risk = bundle.get("latest_risk") if isinstance(bundle.get("latest_risk"), dict) else {}
+    latest_review = risk.get("latest_review") if isinstance(risk.get("latest_review"), dict) else {}
+    sizing = latest_review.get("sizing")
+    sizing_rows = sizing if isinstance(sizing, list) else []
+    planned_risk_total_usd = (
+        sum(_numeric(row.get("planned_risk_usd")) for row in sizing_rows if isinstance(row, dict))
+        if sizing_rows
+        else _numeric(
+            latest_review.get("planned_risk_total_usd")
+            or latest_review.get("total_planned_risk_usd")
+            or risk.get("planned_risk_total_usd")
+        )
+    )
+    planned_lots_total = (
+        sum(_numeric(row.get("sized_lots")) for row in sizing_rows if isinstance(row, dict))
+        if sizing_rows
+        else _numeric(
+            latest_review.get("planned_lots_total")
+            or latest_review.get("total_planned_lots")
+            or risk.get("planned_lots_total")
+        )
+    )
+
+    decision_boundary = decision.get("claim_boundary") or latest_decision.get("claim_boundary") or ""
+    risk_boundary = risk.get("claim_boundary") or latest_review.get("claim_boundary") or ""
+
+    return {
+        "bundle_id": bundle.get("bundle_id", ""),
+        "plan_id": bundle.get("plan_id", ""),
+        "lead_id": bundle.get("lead_id", ""),
+        "strategy_setting": bundle.get("strategy_setting", ""),
+        "date": bundle.get("date", ""),
+        "timeframe": bundle.get("timeframe", ""),
+        "steps": [],
+        "step_count": len(steps),
+        "completed": bool(bundle.get("completed")),
+        "latest_proof": {
+            "status_path": "",
+            "status_path_present": bool(latest_proof.get("status_path")),
+            "completed_trading_days": latest_proof.get("completed_trading_days", 0),
+            "required_trading_days": latest_proof.get("required_trading_days", 0),
+            "chain_verified": bool(latest_proof.get("chain_verified")),
+            "passed": bool(latest_proof.get("passed")),
+            "failure_reasons": [],
+            "failure_reason_count": len(proof_failures),
+        },
+        "latest_decision": {
+            "plan_id": "",
+            "lead_id": "",
+            "strategy_setting": "",
+            "decision_count": decision.get("decision_count", 0),
+            "route_counts": decision.get("route_counts") if isinstance(decision.get("route_counts"), dict) else {},
+            "chain_verified": bool(decision.get("chain_verified")),
+            "claim_boundary": "",
+            "claim_boundary_present": bool(decision_boundary),
+            "summary_only": True,
+            "symbol_decision_count": symbol_decision_count,
+            "latest_decision": {
+                "date": latest_decision.get("date", bundle.get("date", "")),
+                "decision_id": "",
+                "plan_id": "",
+                "lead_id": "",
+                "strategy_setting": "",
+                "route_action": latest_decision.get("route_action", ""),
+                "timeframe": latest_decision.get("timeframe", bundle.get("timeframe", "")),
+                "macro_status": latest_decision.get("macro_status", ""),
+                "macro_reason": "",
+                "event_context": latest_decision.get("event_context", ""),
+                "claim_boundary": "",
+                "claim_boundary_present": bool(latest_decision.get("claim_boundary", decision_boundary)),
+                "notes": [],
+                "note_count": len(latest_decision.get("notes") if isinstance(latest_decision.get("notes"), list) else []),
+                "summary_only": True,
+                "symbol_decision_count": symbol_decision_count,
+                "symbol_decisions": [],
+            },
+        },
+        "latest_risk": {
+            "plan_id": "",
+            "lead_id": "",
+            "strategy_setting": "",
+            "review_count": risk.get("review_count", 0),
+            "risk_status_counts": risk.get("risk_status_counts") if isinstance(risk.get("risk_status_counts"), dict) else {},
+            "chain_verified": bool(risk.get("chain_verified")),
+            "summary_only": True,
+            "sizing_count": len(sizing_rows),
+            "planned_risk_total_usd": planned_risk_total_usd,
+            "planned_lots_total": planned_lots_total,
+            "claim_boundary": "",
+            "claim_boundary_present": bool(risk_boundary),
+            "latest_review": {
+                "date": latest_review.get("date", bundle.get("date", "")),
+                "review_id": "",
+                "risk_status": latest_review.get("risk_status", ""),
+                "route_action": "",
+                "account_equity": _numeric(latest_review.get("account_equity")),
+                "max_risk_per_trade_pct": _numeric(latest_review.get("max_risk_per_trade_pct")),
+                "daily_risk_budget_pct": _numeric(latest_review.get("daily_risk_budget_pct")),
+                "daily_risk_budget_usd": _numeric(latest_review.get("daily_risk_budget_usd")),
+                "max_position_lots": _numeric(latest_review.get("max_position_lots")),
+                "max_paper_attempts": latest_review.get("max_paper_attempts", 0),
+                "allowed_attempts": latest_review.get("allowed_attempts", 0),
+                "proposed_attempts": latest_review.get("proposed_attempts", 0),
+                "existing_attempts": latest_review.get("existing_attempts", 0),
+                "attempts_remaining_before_review": latest_review.get("attempts_remaining_before_review", 0),
+                "claim_boundary": "",
+                "claim_boundary_present": bool(latest_review.get("claim_boundary", risk_boundary)),
+                "deployment_status": latest_review.get("deployment_status", bundle.get("deployment_status", "NOT LICENSED")),
+                "broker_accept_status": latest_review.get("broker_accept_status", bundle.get("broker_accept_status", "NOT LICENSED")),
+                "payment_transfer_status": latest_review.get("payment_transfer_status", bundle.get("payment_transfer_status", "NOT LICENSED")),
+                "plan_id": "",
+                "lead_id": "",
+                "blockers": [],
+                "blocker_count": len(latest_review.get("blockers") if isinstance(latest_review.get("blockers"), list) else []),
+                "notes": [],
+                "note_count": len(latest_review.get("notes") if isinstance(latest_review.get("notes"), list) else []),
+                "summary_only": True,
+                "sizing_count": len(sizing_rows),
+                "planned_risk_total_usd": planned_risk_total_usd,
+                "planned_lots_total": planned_lots_total,
+                "sizing": [],
+            },
+        },
+        "claim_boundary": "",
+        "claim_boundary_present": bool(bundle.get("claim_boundary", "")),
+        "deployment_status": bundle.get("deployment_status", "NOT LICENSED"),
+        "broker_accept_status": bundle.get("broker_accept_status", "NOT LICENSED"),
+        "payment_transfer_status": bundle.get("payment_transfer_status", "NOT LICENSED"),
+        "completed_steps": bundle.get("completed_steps", 0),
+        "total_steps": bundle.get("total_steps", len(steps)),
+        "overall_status": bundle.get("overall_status", ""),
+        "summary_only": True,
+    }
+
+
 def dashboard_state() -> Dict[str, Any]:
     state: Dict[str, Any] = {
         "uiReadiness": ui_readiness(),
@@ -159,144 +716,68 @@ def dashboard_state() -> Dict[str, Any]:
         "conditionTally": condition_tally(),
         "walkForward": walk_forward_summary(),
         "externalBenchmarks": external_benchmarks(),
-        "forexFurySetImport": None,
-        "forexFuryReplayCandidates": None,
-        "forexFuryReplayResults": None,
-        "agentWorkflowPlan": None,
-        "agentWorkflowCycle": None,
-        "agentInformationFlow": None,
-        "agentMessageBus": None,
-        "agentMemory": None,
-        "agentResearchQueue": None,
-        "strategyDevQueue": None,
-        "strategyPatchRunner": None,
-        "dailyLearningRollup": None,
-        "sessionAutowake": None,
-        "terminalReceiptWatcher": None,
-        "terminalBridgeSupervisor": None,
-        "mt4TerminalActivation": None,
-        "mt4PingRoundtrip": None,
-        "mt4TerminalSessionVerifier": None,
-        "mt4HistoryExportVerifier": None,
-        "mt5TerminalApiVerifier": None,
-        "mt5PaperExecutionVerifier": None,
-        "mt5DealHistoryIngest": None,
-        "terminalPositionReconciliation": None,
-        "terminalOperabilityVerifier": None,
-        "terminalReceiptIngest": None,
-        "terminalHistoryIngest": None,
+        "forexFurySetImport": _optional_dashboard_value(forex_fury_set_import),
+        "forexFuryReplayCandidates": _optional_dashboard_value(forex_fury_replay_candidates),
+        "forexFuryReplayResults": _optional_dashboard_value(forex_fury_replay_results),
+        "agentWorkflowPlan": _optional_dashboard_value(agent_workflow_plan),
+        "agentWorkflowCycle": _optional_dashboard_value(agent_workflow_cycle),
+        "agentInformationFlow": _optional_dashboard_value(agent_information_flow),
+        "agentMessageBus": _optional_dashboard_value(agent_message_bus_summary),
+        "agentMemory": _optional_dashboard_value(agent_memory_latest),
+        "agentResearchQueue": _optional_dashboard_value(agent_research_queue_latest),
+        "strategyDevQueue": _optional_dashboard_value(strategy_dev_queue_latest),
+        "strategyPatchRunner": _optional_dashboard_value(strategy_patch_runner_latest),
+        "dailyLearningRollup": _optional_dashboard_value(daily_learning_rollup_latest),
+        "sessionAutowake": _optional_dashboard_value(session_autowake_latest),
+        "terminalReceiptWatcher": _optional_dashboard_value(terminal_receipt_watcher_latest),
+        "terminalBridgeSupervisor": _optional_dashboard_value(terminal_bridge_supervisor_latest),
+        "mt4TerminalActivation": _optional_dashboard_value(mt4_terminal_activation_latest),
+        "mt4PingRoundtrip": _optional_dashboard_value(mt4_ping_roundtrip_latest),
+        "mt4TerminalSessionVerifier": _optional_dashboard_value(mt4_terminal_session_verifier_latest),
+        "mt4HistoryExportVerifier": _optional_dashboard_value(mt4_history_export_verifier_latest),
+        "mt5TerminalApiVerifier": _optional_dashboard_value(mt5_terminal_api_verifier_latest),
+        "mt5PaperExecutionVerifier": _optional_dashboard_value(mt5_paper_execution_verifier_latest),
+        "mt5DealHistoryIngest": _optional_dashboard_value(mt5_deal_history_ingest_latest),
+        "terminalPositionReconciliation": _optional_dashboard_value(terminal_position_reconciliation_latest),
+        "terminalOperabilityVerifier": _optional_dashboard_value(terminal_operability_verifier_latest),
+        "terminalReceiptRecoveryPacket": _optional_dashboard_value(terminal_receipt_recovery_packet_latest),
+        "terminalReceiptIngest": _optional_dashboard_value(terminal_receipt_ingest_latest),
+        "terminalHistoryIngest": _optional_dashboard_value(terminal_history_ingest_latest),
         "mt5Receipt": mt5_receipt(),
         "mt5ProbeStatus": mt5_probe_status(),
         "authorityBoundary": authority_boundary(),
         "runtimeGates": runtime_gates_report(),
+        "autoHalt": auto_halt_status(),
+        "brokerTruthMonitor": broker_truth_monitor_status(),
+        "orderAttemptAudit": build_order_attempt_audit_status(),
+        "orderAttemptRecoveryPacket": order_attempt_recovery_packet(),
+        "payoutRecovery": build_payout_recovery_status(),
+        "brokerReality": broker_reality_review(),
+        "livePilot": live_pilot_policy(),
+        "liveOrderDryRun": live_order_dry_run_latest(),
+        "compoundAddOrderDryRun": compound_add_order_dry_run_latest(),
+        "compoundAddOrderDryRunReview": compound_add_order_dry_run_review_status(),
+        "compoundAddDispatchHandoff": compound_add_dispatch_handoff_status(),
+        "liveOrderDryRunReview": live_order_dry_run_review_status(),
+        "wasteEntryPilotPromotion": waste_entry_pilot_promotion_status(),
+        "wasteDirectionReview": waste_direction_review_packet(),
+        "wasteDirectionLearning": _optional_dashboard_value(waste_direction_learning_ledger),
+        "wasteDirectionOutcomeBinding": _optional_dashboard_value(waste_direction_outcome_binding),
+        "wastePaperSampleCollector": _optional_dashboard_value(waste_paper_sample_collector),
+        "wastePaperSampleCollectorScheduler": waste_paper_sample_collector_scheduler_status(),
+        "wasteAdaptationPromotionRule": _optional_dashboard_value(waste_adaptation_promotion_rule),
+        "wasteAdaptationPlan": _optional_dashboard_value(waste_adaptation_plan),
+        "wasteAdaptationApplyPreview": _optional_dashboard_value(waste_adaptation_apply_preview),
+        "wasteAdaptationOwnerReview": _optional_dashboard_value(waste_adaptation_owner_review),
+        "wasteAdaptationPaperApply": _optional_dashboard_value(waste_adaptation_paper_apply_status),
+        "liveRecovery": live_recovery_status(),
+        "liveMoneyProgression": _optional_dashboard_value(live_money_progression_packet),
+        "mt5MarketDataDiagnostic": mt5_market_data_diagnostic_status(),
+        "wasteRealCandleProbe": waste_real_candle_probe_status(),
         "aiModel": ai_model_status(),
         "brokerCandidates": broker_candidate_profiles(),
-        "pcba": pcba_cockpit(),
+        "pcba": _optional_dashboard_value(pcba_cockpit),
     }
-    try:
-        state["forexFurySetImport"] = forex_fury_set_import()
-    except HTTPException:
-        state["forexFurySetImport"] = None
-    try:
-        state["forexFuryReplayCandidates"] = forex_fury_replay_candidates()
-    except HTTPException:
-        state["forexFuryReplayCandidates"] = None
-    try:
-        state["forexFuryReplayResults"] = forex_fury_replay_results()
-    except HTTPException:
-        state["forexFuryReplayResults"] = None
-    try:
-        state["agentWorkflowPlan"] = agent_workflow_plan()
-    except HTTPException:
-        state["agentWorkflowPlan"] = None
-    try:
-        state["agentWorkflowCycle"] = agent_workflow_cycle()
-    except HTTPException:
-        state["agentWorkflowCycle"] = None
-    try:
-        state["agentInformationFlow"] = agent_information_flow()
-    except HTTPException:
-        state["agentInformationFlow"] = None
-    try:
-        state["agentMessageBus"] = agent_message_bus_summary()
-    except HTTPException:
-        state["agentMessageBus"] = None
-    try:
-        state["agentMemory"] = agent_memory_latest()
-    except HTTPException:
-        state["agentMemory"] = None
-    try:
-        state["agentResearchQueue"] = agent_research_queue_latest()
-    except HTTPException:
-        state["agentResearchQueue"] = None
-    try:
-        state["strategyDevQueue"] = strategy_dev_queue_latest()
-    except HTTPException:
-        state["strategyDevQueue"] = None
-    try:
-        state["strategyPatchRunner"] = strategy_patch_runner_latest()
-    except HTTPException:
-        state["strategyPatchRunner"] = None
-    try:
-        state["dailyLearningRollup"] = daily_learning_rollup_latest()
-    except HTTPException:
-        state["dailyLearningRollup"] = None
-    try:
-        state["sessionAutowake"] = session_autowake_latest()
-    except HTTPException:
-        state["sessionAutowake"] = None
-    try:
-        state["terminalReceiptWatcher"] = terminal_receipt_watcher_latest()
-    except HTTPException:
-        state["terminalReceiptWatcher"] = None
-    try:
-        state["terminalBridgeSupervisor"] = terminal_bridge_supervisor_latest()
-    except HTTPException:
-        state["terminalBridgeSupervisor"] = None
-    try:
-        state["mt4TerminalActivation"] = mt4_terminal_activation_latest()
-    except HTTPException:
-        state["mt4TerminalActivation"] = None
-    try:
-        state["mt4PingRoundtrip"] = mt4_ping_roundtrip_latest()
-    except HTTPException:
-        state["mt4PingRoundtrip"] = None
-    try:
-        state["mt4TerminalSessionVerifier"] = mt4_terminal_session_verifier_latest()
-    except HTTPException:
-        state["mt4TerminalSessionVerifier"] = None
-    try:
-        state["mt4HistoryExportVerifier"] = mt4_history_export_verifier_latest()
-    except HTTPException:
-        state["mt4HistoryExportVerifier"] = None
-    try:
-        state["mt5TerminalApiVerifier"] = mt5_terminal_api_verifier_latest()
-    except HTTPException:
-        state["mt5TerminalApiVerifier"] = None
-    try:
-        state["mt5PaperExecutionVerifier"] = mt5_paper_execution_verifier_latest()
-    except HTTPException:
-        state["mt5PaperExecutionVerifier"] = None
-    try:
-        state["mt5DealHistoryIngest"] = mt5_deal_history_ingest_latest()
-    except HTTPException:
-        state["mt5DealHistoryIngest"] = None
-    try:
-        state["terminalPositionReconciliation"] = terminal_position_reconciliation_latest()
-    except HTTPException:
-        state["terminalPositionReconciliation"] = None
-    try:
-        state["terminalOperabilityVerifier"] = terminal_operability_verifier_latest()
-    except HTTPException:
-        state["terminalOperabilityVerifier"] = None
-    try:
-        state["terminalReceiptIngest"] = terminal_receipt_ingest_latest()
-    except HTTPException:
-        state["terminalReceiptIngest"] = None
-    try:
-        state["terminalHistoryIngest"] = terminal_history_ingest_latest()
-    except HTTPException:
-        state["terminalHistoryIngest"] = None
     adaptive = adaptive_cockpit()
     if adaptive is not None:
         state["adaptive"] = adaptive
@@ -342,6 +823,41 @@ def strategy_leads() -> List[Dict[str, Any]]:
     if not isinstance(leads, list):
         raise HTTPException(status_code=500, detail="strategy_leads.json has invalid leads shape")
     return leads
+
+
+def strategy_lead_summaries(limit: int = 12) -> List[Dict[str, Any]]:
+    """Compact dashboard shape for the strategy-leads table.
+
+    The full strategy ledger can carry long evidence refs, notes, and research
+    commentary. The Dashboard only renders a short watchlist row, so this keeps
+    the below-fold automatic fetch lean while preserving `/strategy/leads` for
+    the full Strategy page.
+    """
+
+    summaries: List[Dict[str, Any]] = []
+    for lead in strategy_leads():
+        if not isinstance(lead, dict):
+            continue
+        headline_results = lead.get("headline_results")
+        open_gates = lead.get("open_gates")
+        summaries.append(
+            {
+                "lead_id": lead.get("lead_id"),
+                "priority": lead.get("priority", 999),
+                "status": lead.get("status"),
+                "strategy_setting": lead.get("strategy_setting", ""),
+                "family": lead.get("family"),
+                "mode": lead.get("mode", ""),
+                "symbols_promoted_for_next_tests": lead.get("symbols_promoted_for_next_tests") or [],
+                "symbols_watchlist": [],
+                "headline_results": [headline_results[0]] if isinstance(headline_results, list) and headline_results else [],
+                "open_gates": [""] * len(open_gates) if isinstance(open_gates, list) else [],
+                "evidence_refs": [],
+                "deployment_status": lead.get("deployment_status", "NOT LICENSED"),
+                "summary_only": True,
+            }
+        )
+    return sorted(summaries, key=lambda row: int(row.get("priority") or 999))[: max(1, min(int(limit), 50))]
 
 
 def backsolve_summary() -> Dict[str, Any]:
@@ -608,6 +1124,43 @@ def terminal_position_reconciliation_latest() -> Dict[str, Any]:
         raise HTTPException(status_code=404, detail=str(exc)) from exc
 
 
+def terminal_receipt_recovery_packet_latest() -> Dict[str, Any]:
+    try:
+        return build_terminal_receipt_recovery_packet(
+            reconciliation_report=load_latest_terminal_position_reconciliation_report()
+        )
+    except TerminalPositionReconciliationError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+
+
+def terminal_receipt_archive_action(
+    *,
+    execute: bool = False,
+    confirm_owner_archive: bool = False,
+    age_threshold_hours: float = 24.0,
+    notes: str = "",
+) -> Dict[str, Any]:
+    return run_terminal_receipt_archive_action(
+        execute=execute,
+        confirm_owner_archive=confirm_owner_archive,
+        age_threshold_hours=age_threshold_hours,
+        notes=notes,
+    )
+
+
+def terminal_receipt_recovery_refresh_action(
+    *,
+    execute: bool = False,
+    confirm_owner_refresh: bool = False,
+    notes: str = "",
+) -> Dict[str, Any]:
+    return run_terminal_receipt_recovery_refresh(
+        execute=execute,
+        confirm_owner_refresh=confirm_owner_refresh,
+        notes=notes,
+    )
+
+
 def terminal_operability_verifier_latest() -> Dict[str, Any]:
     try:
         return load_latest_terminal_operability_verifier_report()
@@ -693,6 +1246,53 @@ def latest_adaptive_compounding() -> Optional[Dict[str, Any]]:
 
 def authority_boundary() -> Dict[str, Any]:
     return build_authority_boundary_report(strategy_leads()).to_dict()
+
+
+def authority_boundary_fast() -> Dict[str, Any]:
+    """Fail-closed authority summary for the first-paint dashboard packet.
+
+    The full boundary calls ``runtime_gates.evaluate_all()``, which performs
+    broker-truth, live-pilot, recovery, and dry-run review checks. That belongs
+    in the detailed dashboard, not the shell heartbeat. This fast packet is
+    deliberately conservative: it never advertises live-money capability as
+    active and lets the full dashboard/individual settings pages provide the
+    expensive exact gate reasons moments later.
+    """
+
+    return {
+        "report_kind": "cas_forex_authority_boundary",
+        "operating_mode": "READ_ONLY_PAPER_RESEARCH",
+        "live_trading_status": PENDING_OWNER_ENABLE,
+        "broker_accept_status": PENDING_OWNER_ENABLE,
+        "auto_deposit_status": PENDING_OWNER_ENABLE,
+        "debit_card_bank_movement_status": PENDING_OWNER_ENABLE,
+        "payout_automation_status": PENDING_OWNER_ENABLE,
+        "trading_edge_status": "OPEN",
+        "can_place_live_orders": False,
+        "can_create_broker_accept": False,
+        "can_auto_deposit": False,
+        "can_move_money": False,
+        "can_automate_payouts": False,
+        "allowed_scopes": [
+            "research",
+            "backtest",
+            "paper_trade_decision",
+            "demo_broker_receipt",
+            "read_only_ui",
+            "internal_ledger_dry_run",
+        ],
+        "blockers": [
+            "Fast shell packet defers detailed runtime-gate audit to /api/forex/dashboard and dedicated settings endpoints."
+        ],
+        "claim_boundary": (
+            "Fast shell boundary is fail-closed for first paint. Research/paper cockpit runs now; "
+            "live trading, broker ACCEPT, auto-deposit, debit/card/bank movement, and payout "
+            "automation remain pending owner enable until owner switches/reviews, credentials/provider "
+            "config, and action-time checks authorize them."
+        ),
+        "ledger_deployment_status_counts": {},
+        "live_execution_runtime_locked": True,
+    }
 
 
 def runtime_gates_report() -> Dict[str, Any]:
@@ -818,6 +1418,71 @@ def account_ledger(initial_investment_usd: Optional[float] = None) -> Dict[str, 
         ),
     )
     return state.to_dict()
+
+
+def live_broker_account_ledger() -> Optional[Dict[str, Any]]:
+    """Return a live broker closed-history ledger when verified live rows exist.
+
+    Demo/paper terminal history intentionally returns ``None``. Callers that
+    need a ledger should fall back to ``account_ledger()`` so demo profit never
+    becomes sweepable real money.
+    """
+
+    gates = runtime_gates_report().get("decisions", {})
+    live_status = ((gates.get("live_trading") or {}).get("status")) or "CURRENTLY NOT LICENSED"
+    broker_status = ((gates.get("broker_accept") or {}).get("status")) or "CURRENTLY NOT LICENSED"
+    payout = gates.get("payout_automation") or {}
+    payout_status = payout.get("status") or "CURRENTLY NOT LICENSED"
+    payment_authorized = bool(payout.get("authorized", False))
+
+    for loader in (terminal_history_ingest_latest, mt5_deal_history_ingest_latest):
+        try:
+            report = loader()
+        except HTTPException:
+            continue
+        try:
+            return build_live_account_ledger_from_terminal_history(
+                report,
+                live_trading_status=str(live_status),
+                broker_accept_status=str(broker_status),
+                payout_automation_status=str(payout_status),
+                payment_movement_authorized=payment_authorized,
+            ).to_dict()
+        except ValueError:
+            continue
+    return None
+
+
+def verified_profit_account_ledger() -> Dict[str, Any]:
+    """Ledger used by verified-profit sweep calculations.
+
+    Prefer live broker-confirmed closed history when it exists; otherwise return
+    the normal paper/demo account ledger, which the sweep layer reports as
+    ``DEMO_NOT_SWEEPABLE``.
+    """
+
+    return live_broker_account_ledger() or account_ledger()
+
+
+def verified_profit_sweep_preview_status() -> Dict[str, Any]:
+    from cas_forex.verified_profit_sweep import ProfitSweepPolicyStore, build_sweep_preview
+
+    return build_sweep_preview(
+        verified_profit_account_ledger(),
+        ProfitSweepPolicyStore().load(),
+    ).to_dict()
+
+
+def auto_halt_status(*, persist: bool = True) -> Dict[str, Any]:
+    live_ledger = live_broker_account_ledger()
+    paper_ledger = account_ledger()
+    reconciliation = latest_broker_truth_reconciliation_report()
+    return build_auto_halt_report(
+        live_account_ledger=live_ledger,
+        paper_account_ledger=paper_ledger,
+        reconciliation_report=reconciliation,
+        persist=persist,
+    )
 
 
 def broker_synced_risk_preview() -> Dict[str, Any]:
@@ -1070,12 +1735,197 @@ def live_readiness(sync_to_broker: bool = False) -> Dict[str, Any]:
         mt5_probe_status=mt5_probe_status(),
         runtime_gates=runtime_gates_report(),
         authority_boundary=authority_boundary(),
+        broker_reality_review=broker_reality_review(),
+        live_pilot_policy=live_pilot_policy(),
+        live_recovery_report=live_recovery_status(),
         adaptive=adaptive,
         owner_promotion=owner_promotion_review_summary(),
     ).to_dict()
     report["sync_to_broker_snapshot"] = bool(sync_to_broker and initial)
     report["broker_snapshot_initial_investment_usd"] = float(initial) if initial else None
     return report
+
+
+def broker_reality_review(broker_id: str | None = None) -> Dict[str, Any]:
+    return build_broker_reality_review(broker_id)
+
+
+def live_pilot_policy() -> Dict[str, Any]:
+    return build_live_pilot_policy()
+
+
+def live_order_dry_run_latest() -> Dict[str, Any]:
+    latest = LiveOrderDryRunAuditLog(LIVE_ORDER_DRY_RUN_AUDIT_PATH).latest()
+    if latest is None:
+        return {
+            "report_kind": "cas_forex_live_order_dry_run_latest",
+            "status": "NO_DRY_RUN_AUDIT_YET",
+            "broker_touched": False,
+            "detail": "No live-order dry-run audit has been recorded yet.",
+        }
+    return {
+        "report_kind": "cas_forex_live_order_dry_run_latest",
+        "status": latest.get("status"),
+        "broker_touched": False,
+        "latest_audit": latest,
+    }
+
+
+def compound_add_order_dry_run_latest() -> Dict[str, Any]:
+    latest = LiveOrderDryRunAuditLog(COMPOUND_ADD_DRY_RUN_AUDIT_PATH).latest()
+    if latest is None:
+        return {
+            "report_kind": "cas_forex_compound_add_order_dry_run_latest",
+            "status": "NO_COMPOUND_ADD_DRY_RUN_AUDIT_YET",
+            "broker_touched": False,
+            "detail": "No compound-add dry-run audit has been recorded yet.",
+        }
+    return {
+        "report_kind": "cas_forex_compound_add_order_dry_run_latest",
+        "status": latest.get("status"),
+        "broker_touched": False,
+        "latest_audit": latest,
+    }
+
+
+def compound_add_order_dry_run_review_status() -> Dict[str, Any]:
+    return build_compound_add_order_dry_run_review()
+
+
+def compound_add_dispatch_handoff_status() -> Dict[str, Any]:
+    latest = LiveOrderDryRunAuditLog(COMPOUND_ADD_DRY_RUN_AUDIT_PATH).latest()
+    payload = latest.get("payload") if isinstance(latest, dict) else {}
+    review = build_compound_add_order_dry_run_review(dry_run_audit=latest or {})
+    return build_compound_add_dispatch_handoff_status(
+        payload if isinstance(payload, dict) else {},
+        review=review,
+    )
+
+
+def live_order_dry_run_review_status() -> Dict[str, Any]:
+    return build_live_order_dry_run_review()
+
+
+def waste_entry_pilot_promotion_status() -> Dict[str, Any]:
+    latest = LiveOrderDryRunAuditLog(LIVE_ORDER_DRY_RUN_AUDIT_PATH).latest()
+    return build_waste_pilot_promotion_status(dry_run_audit=latest or {})
+
+
+def waste_direction_review_packet() -> Dict[str, Any]:
+    return build_waste_direction_review_packet()
+
+
+def waste_direction_learning_ledger() -> Dict[str, Any]:
+    return build_waste_direction_learning_ledger()
+
+
+def waste_direction_outcome_binding() -> Dict[str, Any]:
+    return build_waste_direction_outcome_binding()
+
+
+def waste_paper_sample_collector() -> Dict[str, Any]:
+    return build_waste_paper_sample_collector(
+        mt5_market_data_diagnostic=mt5_market_data_diagnostic_status(),
+        real_candle_probe=waste_real_candle_probe_status(),
+        direction_learning=waste_direction_learning_ledger(),
+        direction_outcome_binding=waste_direction_outcome_binding(),
+        mt5_deal_history_ingest=_optional_mt5_deal_history_ingest(),
+    )
+
+
+def waste_paper_sample_collector_scheduler_status() -> Dict[str, Any]:
+    return build_waste_paper_sample_collector_scheduler_status()
+
+
+def waste_adaptation_promotion_rule() -> Dict[str, Any]:
+    return build_waste_adaptation_promotion_rule(
+        direction_learning=waste_direction_learning_ledger(),
+        direction_outcome_binding=waste_direction_outcome_binding(),
+    )
+
+
+def waste_adaptation_plan() -> Dict[str, Any]:
+    return build_waste_adaptation_plan(
+        direction_learning=waste_direction_learning_ledger(),
+        direction_review=waste_direction_review_packet(),
+        adaptation_promotion_rule=waste_adaptation_promotion_rule(),
+    )
+
+
+def waste_adaptation_apply_preview() -> Dict[str, Any]:
+    return build_waste_adaptation_apply_preview(
+        adaptation_plan=waste_adaptation_plan(),
+        runtime_gates=runtime_gates_report(),
+    )
+
+
+def waste_adaptation_owner_review() -> Dict[str, Any]:
+    return build_waste_adaptation_owner_review(
+        adaptation_apply_preview=waste_adaptation_apply_preview(),
+    )
+
+
+def waste_adaptation_paper_apply_status() -> Dict[str, Any]:
+    return build_waste_adaptation_paper_apply_status(
+        owner_review=waste_adaptation_owner_review(),
+    )
+
+
+def order_attempt_recovery_packet() -> Dict[str, Any]:
+    return build_order_attempt_recovery_packet(
+        order_attempt_status=build_order_attempt_audit_status(),
+    )
+
+
+def live_recovery_status() -> Dict[str, Any]:
+    return build_live_recovery_report()
+
+
+def live_money_progression_packet() -> Dict[str, Any]:
+    return build_live_money_progression_packet(
+        runtime_gates=runtime_gates_report(),
+        broker_truth_packet=build_broker_truth_recovery_packet(
+            monitor_state=broker_truth_monitor_status(),
+        ),
+        live_recovery_report=live_recovery_status(),
+        waste_pilot_promotion=waste_entry_pilot_promotion_status(),
+        waste_direction_review=waste_direction_review_packet(),
+        waste_direction_learning=waste_direction_learning_ledger(),
+        waste_direction_outcome_binding=waste_direction_outcome_binding(),
+        waste_adaptation_promotion_rule=waste_adaptation_promotion_rule(),
+        waste_adaptation_plan=waste_adaptation_plan(),
+        waste_adaptation_apply_preview=waste_adaptation_apply_preview(),
+        waste_adaptation_owner_review=waste_adaptation_owner_review(),
+        waste_adaptation_paper_apply=waste_adaptation_paper_apply_status(),
+        sweep_preview=verified_profit_sweep_preview_status(),
+        payout_recovery_status=build_payout_recovery_status(),
+        live_readiness_report=live_readiness(),
+    )
+
+
+def mt5_market_data_diagnostic_status() -> Dict[str, Any]:
+    return latest_mt5_market_data_diagnostic()
+
+
+def waste_real_candle_probe_status() -> Dict[str, Any]:
+    return latest_waste_real_candle_probe()
+
+
+def _optional_mt5_deal_history_ingest() -> Dict[str, Any]:
+    try:
+        return mt5_deal_history_ingest_latest()
+    except HTTPException as exc:
+        return {
+            "report_kind": "cas_forex_mt5_deal_history_ingest_report",
+            "ingest_status": "UNAVAILABLE",
+            "error": str(exc.detail),
+            "history_records": [],
+            "summary": {
+                "closed_position_count": 0,
+                "history_record_count": 0,
+                "net_profit_loss_account": 0.0,
+            },
+        }
 
 
 def _broker_snapshot_initial_investment(receipt: Dict[str, Any]) -> float | None:
@@ -1087,19 +1937,7 @@ def _broker_snapshot_initial_investment(receipt: Dict[str, Any]) -> float | None
 
 
 def owner_control() -> Dict[str, Any]:
-    return {
-        "mode": "AI_FULL_AUTO_PAPER",
-        "max_concurrent_trades": 15,
-        "max_loss_cap_pct": 10,
-        "ai_autonomy_enabled": True,
-        "live_requested": False,
-        "live_blocked": True,
-        "claim_boundary": (
-            "Owner control policy is owner-controlled: CAS Forex can run research/paper automation now. "
-            "Live trading, broker ACCEPT, and payment movement require explicit owner enable flags, "
-            "credentials/provider config, and gate clearance."
-        ),
-    }
+    return build_owner_control_report(live_authorized=False)
 
 
 def mt_history() -> Optional[Dict[str, Any]]:

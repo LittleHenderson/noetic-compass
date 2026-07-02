@@ -35,7 +35,7 @@ limits protect demo dispatch too.
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from typing import Any, Iterable, Mapping, Optional, Sequence
 
 from cas_forex.account_ledger import AccountLedgerEvent, stable_ledger_id
@@ -49,16 +49,32 @@ CLAIM_BOUNDARY = (
     "the pre-execution risk gate, then into the configured broker bridge. By "
     "default it dispatches to the paper broker (SimulatedBrokerBridge); it can "
     "only reach a live broker after the owner-controlled live-trading gate is "
-    "authorized (enable flag + credentials + broker config). It never sizes or "
-    "picks trades on its own and enables no real-money capability by itself."
+    "authorized (enable flag + credentials + broker config). Explicit compound/"
+    "pyramid add intents also require a current owner ACCEPT for the exact "
+    "compound-add dry-run fingerprint before any broker bridge is touched. It "
+    "never sizes or picks trades on its own and enables no real-money capability "
+    "by itself."
 )
 
 # Per-intent dispatch statuses.
 STATUS_REJECTED_PRECHECK = "REJECTED_PRECHECK"  # order failed schema/geometry validation
 STATUS_BLOCKED_LIVE_GATE = "BLOCKED_LIVE_GATE"  # live-trading gate not authorized
+STATUS_BLOCKED_COMPOUND_ADD_REVIEW = "BLOCKED_COMPOUND_ADD_REVIEW"  # pyramid add owner review missing/mismatched
 STATUS_BLOCKED_RISK = "BLOCKED_RISK"  # pre-execution risk cap breach
 STATUS_OVERSEER_REJECTED = "OVERSEER_REJECTED"  # agent overseer rejected before dispatch
 STATUS_DISPATCH_ERROR = "DISPATCH_ERROR"  # bridge raised / unusable; never reached a fill
+
+COMPOUND_ADD_ACTIONS = frozenset(
+    {
+        "COMPOUND_ADD",
+        "PYRAMID_ADD",
+        "WASTE_COMPOUND_ADD",
+        "WASTE_PYRAMID_ADD",
+        "ADD_TO_WINNER",
+        "CAS_FOREX_ADD",
+        "CAS_FOREX_ADD_DRY_RUN",
+    }
+)
 
 
 @dataclass(frozen=True)
@@ -135,6 +151,9 @@ class DispatchResult:
     outcome: Optional[OrderOutcome] = None
     ledger_event: Optional[AccountLedgerEvent] = None
     risk_blocking_caps: tuple[str, ...] = ()
+    audit_attempt_id: Optional[str] = None
+    audit_status: Optional[str] = None
+    audit_error: Optional[str] = None
 
     @property
     def executed(self) -> bool:
@@ -155,6 +174,9 @@ class DispatchResult:
             "outcome": self.outcome.model_dump(mode="json") if self.outcome is not None else None,
             "ledger_event": self.ledger_event.to_dict() if self.ledger_event is not None else None,
             "risk_blocking_caps": list(self.risk_blocking_caps),
+            "audit_attempt_id": self.audit_attempt_id,
+            "audit_status": self.audit_status,
+            "audit_error": self.audit_error,
         }
 
 
@@ -194,10 +216,108 @@ class DispatchReport:
 
 def _resolve_config(config: Any = None) -> Any:
     if config is not None:
-        return config
-    from cas_forex.config import config as default_config
+        base = config
+    else:
+        from cas_forex.config import config as default_config
 
-    return default_config
+        base = default_config
+
+    try:
+        from cas_forex.live_enable_control import apply_live_enable_overrides
+
+        return apply_live_enable_overrides(base)
+    except Exception:  # pragma: no cover - dispatch stays fail-closed downstream
+        return base
+
+
+def _mode_from_config(config: Any = None) -> str:
+    return "LIVE" if bool(getattr(_resolve_config(config), "live_mode", False)) else "PAPER"
+
+
+def _bridge_reports_real_execution(bridge: Any) -> bool:
+    probe = getattr(bridge, "will_execute_real_order", None)
+    if not callable(probe):
+        return False
+    try:
+        return bool(probe())
+    except Exception:
+        return True
+
+
+def _is_compound_add_dispatch(
+    *,
+    order: Any,
+    ai_action: str,
+    proposed_intent: Optional[Mapping[str, Any]],
+) -> bool:
+    intent = dict(proposed_intent or {})
+    if bool(intent.get("is_compound_add") or intent.get("compound_add")):
+        return True
+    values = [
+        ai_action,
+        getattr(order, "comment", ""),
+        intent.get("ai_action"),
+        intent.get("action"),
+        intent.get("route_action"),
+        intent.get("order_role"),
+        intent.get("intent_role"),
+    ]
+    for value in values:
+        token = str(value or "").strip().upper().replace("-", "_").replace(" ", "_")
+        if token in COMPOUND_ADD_ACTIONS:
+            return True
+        if "ADD" in token and ("COMPOUND" in token or "PYRAMID" in token):
+            return True
+    return False
+
+
+def _resolve_audit_store(audit_store: Any = None) -> Any:
+    if audit_store is not None:
+        return audit_store
+    from cas_forex.order_attempt_audit import default_order_attempt_audit_store
+
+    return default_order_attempt_audit_store()
+
+
+def record_dispatch_result_to_audit(
+    result: DispatchResult,
+    *,
+    audit_store: Any = None,
+    started_attempt: Optional[Mapping[str, Any]] = None,
+    order: Any = None,
+    proposed_intent: Optional[Mapping[str, Any]] = None,
+    config: Any = None,
+    bridge: Any = None,
+    is_real_attempt: Optional[bool] = None,
+    source: str = "order_dispatch",
+) -> DispatchResult:
+    """Persist a dispatch result and attach audit metadata without raising."""
+    try:
+        store = _resolve_audit_store(audit_store)
+        mode = _mode_from_config(config)
+        real_attempt = (
+            bool(is_real_attempt)
+            if is_real_attempt is not None
+            else mode == "LIVE" or bool(getattr(result.outcome, "is_real_broker", False))
+        )
+        record = store.record_result(
+            result,
+            started_attempt=started_attempt,
+            order=order,
+            proposed_intent=proposed_intent,
+            mode=mode,
+            is_real_attempt=real_attempt,
+            bridge_name=bridge.__class__.__name__ if bridge is not None else "",
+            source=source,
+        )
+        return replace(
+            result,
+            audit_attempt_id=str(record.get("attempt_id") or ""),
+            audit_status=str(record.get("status") or ""),
+            audit_error=None,
+        )
+    except Exception as exc:
+        return replace(result, audit_error=str(exc))
 
 
 def _ledger_event_from_order(
@@ -252,6 +372,8 @@ def dispatch_order(
     live_telemetry: Optional[Mapping[str, Any]] = None,
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
+    audit_store: Any = None,
+    audit_source: str = "order_dispatch",
 ) -> DispatchResult:
     """Dispatch a pre-built broker order through the full gate chain. Never raises.
 
@@ -272,9 +394,37 @@ def dispatch_order(
         "direction": direction,
         "lots": float(order.volume),
     }
+    mode = _mode_from_config(config)
+    is_real_attempt = mode == "LIVE" or _bridge_reports_real_execution(bridge)
+    resolved_audit_store = _resolve_audit_store(audit_store)
+    audit_attempt: Optional[Mapping[str, Any]] = None
+    try:
+        audit_attempt = resolved_audit_store.record_started(
+            order,
+            proposed_intent=intent_dict,
+            mode=mode,
+            is_real_attempt=is_real_attempt,
+            bridge_name=bridge.__class__.__name__,
+            source=audit_source,
+        )
+    except Exception as exc:
+        if is_real_attempt:
+            return DispatchResult(
+                order_id=order.order_id,
+                decision_ref=order.decision_ref,
+                symbol=order.symbol,
+                direction=direction,
+                volume=float(order.volume),
+                status=STATUS_DISPATCH_ERROR,
+                reason=f"Order audit unavailable before real dispatch: {exc}",
+                intent_summary=intent_summary,
+                dispatched_to_bridge=False,
+                audit_status="AUDIT_UNAVAILABLE",
+                audit_error=str(exc),
+            )
 
     def _blocked(status: str, reason: str, *, caps: tuple[str, ...] = ()) -> DispatchResult:
-        return DispatchResult(
+        result = DispatchResult(
             order_id=order.order_id,
             decision_ref=order.decision_ref,
             symbol=order.symbol,
@@ -286,6 +436,27 @@ def dispatch_order(
             dispatched_to_bridge=False,
             risk_blocking_caps=caps,
         )
+        return record_dispatch_result_to_audit(
+            result,
+            audit_store=resolved_audit_store,
+            started_attempt=audit_attempt,
+            order=order,
+            proposed_intent=intent_dict,
+            config=config,
+            bridge=bridge,
+            is_real_attempt=is_real_attempt,
+            source=audit_source,
+        )
+
+    if _is_compound_add_dispatch(order=order, ai_action=ai_action, proposed_intent=intent_dict):
+        try:
+            from cas_forex.compound_add_order_dry_run_review import (
+                require_current_compound_add_order_dry_run_review,
+            )
+
+            require_current_compound_add_order_dry_run_review(order)
+        except Exception as exc:
+            return _blocked(STATUS_BLOCKED_COMPOUND_ADD_REVIEW, str(exc))
 
     try:
         outcome: OrderOutcome = guarded_place_order(
@@ -313,7 +484,22 @@ def dispatch_order(
     ledger_event = _ledger_event_from_order(
         order, outcome, strategy_id=strategy_id, ai_action=ai_action
     )
-    return DispatchResult(
+    if bool(getattr(outcome, "is_real_broker", False)) and outcome.status.value in {"EXECUTED", "PARTIAL"}:
+        try:
+            from cas_forex.live_pilot import record_live_pilot_dispatch
+
+            record_live_pilot_dispatch(
+                order_id=order.order_id,
+                symbol=order.symbol,
+                lots=float(order.volume),
+                outcome_status=outcome.status.value,
+            )
+        except Exception:
+            # The order already reached the broker; never mask the broker result.
+            # The broker-truth monitor and ledger reconciliation will still catch
+            # the real position even if the pilot audit write failed.
+            pass
+    result = DispatchResult(
         order_id=order.order_id,
         decision_ref=order.decision_ref,
         symbol=order.symbol,
@@ -326,6 +512,17 @@ def dispatch_order(
         outcome=outcome,
         ledger_event=ledger_event,
     )
+    return record_dispatch_result_to_audit(
+        result,
+        audit_store=resolved_audit_store,
+        started_attempt=audit_attempt,
+        order=order,
+        proposed_intent=intent_dict,
+        config=config,
+        bridge=bridge,
+        is_real_attempt=is_real_attempt,
+        source=audit_source,
+    )
 
 
 def dispatch_intent(
@@ -336,6 +533,8 @@ def dispatch_intent(
     live_telemetry: Optional[Mapping[str, Any]] = None,
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
+    audit_store: Any = None,
+    audit_source: str = "order_dispatch",
 ) -> DispatchResult:
     """Dispatch one normalized TradeIntent through the full gate chain. Never raises."""
     intent_summary = f"{str(intent.direction).upper()} {intent.symbol} {float(intent.volume):.2f} lots"
@@ -344,7 +543,7 @@ def dispatch_intent(
     try:
         order = intent.to_order()
     except Exception as exc:  # pydantic ValidationError or bad direction
-        return DispatchResult(
+        result = DispatchResult(
             order_id=intent.order_id,
             decision_ref=intent.decision_ref,
             symbol=intent.symbol,
@@ -354,6 +553,18 @@ def dispatch_intent(
             reason=f"Order rejected before dispatch: {exc}",
             intent_summary=intent_summary,
             dispatched_to_bridge=False,
+        )
+        return record_dispatch_result_to_audit(
+            result,
+            audit_store=audit_store,
+            proposed_intent={
+                "symbol": intent.symbol,
+                "direction": str(intent.direction).upper(),
+                "lots": float(intent.volume),
+            },
+            config=config,
+            bridge=bridge,
+            source=f"{audit_source}_precheck",
         )
 
     # 2-3. Gate chain + dispatch + ledger event (shared with the agent path).
@@ -367,6 +578,8 @@ def dispatch_intent(
         live_telemetry=live_telemetry,
         account_snapshot=account_snapshot,
         equity_peak=equity_peak,
+        audit_store=audit_store,
+        audit_source=audit_source,
     )
 
 
@@ -382,7 +595,10 @@ def build_dispatch_report(
     live_mode = bool(getattr(config, "live_mode", False))
     executed = sum(1 for r in results if r.executed)
     blocked = sum(
-        1 for r in results if r.status in {STATUS_BLOCKED_LIVE_GATE, STATUS_BLOCKED_RISK}
+        1
+        for r in results
+        if r.status
+        in {STATUS_BLOCKED_LIVE_GATE, STATUS_BLOCKED_COMPOUND_ADD_REVIEW, STATUS_BLOCKED_RISK}
     )
     rejected = sum(
         1
@@ -431,6 +647,7 @@ def dispatch_intents(
     live_telemetry: Optional[Mapping[str, Any]] = None,
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
+    audit_store: Any = None,
 ) -> DispatchReport:
     """Dispatch a batch of normalized intents through the gate chain into the broker.
 
@@ -452,6 +669,7 @@ def dispatch_intents(
             live_telemetry=live_telemetry,
             account_snapshot=account_snapshot,
             equity_peak=equity_peak,
+            audit_store=audit_store,
         )
         for intent in intents
     ]

@@ -239,6 +239,21 @@ def test_mt5_terminal_only_is_degraded() -> None:
     assert report.overall_status == "DEGRADED"
 
 
+def test_mt5_probe_status_broker_api_verified_is_ok() -> None:
+    report = compose_stack_health_report(
+        system_health=_healthy_system_health(),
+        operator_briefing=_healthy_operator_briefing(),
+        loop_health=_healthy_loop_health(),
+        mt5_probe={"status": "BROKER_API_VERIFIED", "broker": "MT5"},
+        readiness=_healthy_readiness(),
+        live_telemetry=_healthy_live_telemetry(),
+        now=_now(),
+    )
+    mt5_check = next(c for c in report.checks if c.name == "mt5-terminal")
+    assert mt5_check.status == "OK"
+    assert report.overall_status == "OK"
+
+
 # ---------------------------------------------------------------------------
 # 5. Autonomous loop "stalled" -> DEGRADED
 # ---------------------------------------------------------------------------

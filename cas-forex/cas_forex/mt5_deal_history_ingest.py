@@ -1,8 +1,11 @@
 """MT5 closed-deal history ingest for CAS Forex.
 
-This reads closed demo/paper trade deals from the local MetaTrader5 Python API,
-exports them in the existing terminal-history shape, and optionally runs the
-generic terminal_history_ingest joiner so deal P/L can flow into CAS memory.
+This reads closed demo/paper trade deals from the local MetaTrader5 Python API
+by default, exports them in the existing terminal-history shape, and optionally
+runs the generic terminal_history_ingest joiner so deal P/L can flow into CAS
+memory. Live account history can be read only through the explicit
+``account_mode="live"`` + ``confirm_live_history=True`` path; that path is still
+read-only evidence and never places orders or moves money.
 """
 
 from __future__ import annotations
@@ -31,11 +34,12 @@ REPORT_KIND = "cas_forex_mt5_deal_history_ingest_report"
 INGEST_SCHEMA = "cas_forex_mt5_deal_history_ingest.v1"
 EXPORT_SCHEMA = "cas_forex_mt5_deal_history_export.v1"
 CLAIM_BOUNDARY = (
-    "MT5 deal history ingest reads closed demo/paper deal history through the "
-    "MetaTrader5 Python API and exports it for CAS Forex memory review. It "
-    "does not place live broker orders, create broker ACCEPT, deposit, "
-    "withdraw, move bank/card funds, automate payouts, or override runtime "
-    "gates."
+    "MT5 deal history ingest reads closed deal history through the MetaTrader5 "
+    "Python API and exports it for CAS Forex memory and profit-accounting "
+    "review. Demo/paper is the default lane; live account history requires an "
+    "explicit live-history confirmation. It does not place live broker orders, "
+    "create broker ACCEPT, deposit, withdraw, move bank/card funds, automate "
+    "payouts, or override runtime gates."
 )
 
 
@@ -60,9 +64,12 @@ def build_mt5_deal_history_ingest_report(
     mt5_module: Any | None = None,
     run_terminal_history_ingest: bool = True,
     write_report: bool = True,
+    account_mode: str = "demo",
+    confirm_live_history: bool = False,
 ) -> Dict[str, Any]:
     """Read MT5 deal history, export normalized rows, and write evidence."""
 
+    mode = _normalize_account_mode(account_mode)
     _add_local_mt5_deps()
     mt5 = mt5_module or _import_mt5()
     old_mt5_path = config.mt5_path
@@ -70,16 +77,17 @@ def build_mt5_deal_history_ingest_report(
     old_paper_trading = config.paper_trading
     if mt5_path is not None:
         config.mt5_path = str(mt5_path)
-    config.live_mode = False
-    config.paper_trading = True
+    config.live_mode = mode == "live"
+    config.paper_trading = mode != "live"
     try:
         query_start, query_end = _query_window(start=start, end=end, days_back=days_back, future_minutes=future_minutes)
         terminal_snapshot = _terminal_snapshot(mt5=mt5, mt5_path=mt5_path)
-        raw_deals = (
-            _fetch_deals(mt5=mt5, start=query_start, end=query_end, ticket=ticket, symbol=symbol)
-            if terminal_snapshot.get("demo_account_confirmed")
-            else []
+        should_fetch = _should_fetch_deals(
+            terminal_snapshot,
+            account_mode=mode,
+            confirm_live_history=confirm_live_history,
         )
+        raw_deals = _fetch_deals(mt5=mt5, start=query_start, end=query_end, ticket=ticket, symbol=symbol) if should_fetch else []
     finally:
         config.mt5_path = old_mt5_path
         config.live_mode = old_live_mode
@@ -89,6 +97,7 @@ def build_mt5_deal_history_ingest_report(
         raw_deals,
         account=terminal_snapshot.get("account") if isinstance(terminal_snapshot.get("account"), Mapping) else {},
         ticket=ticket,
+        broker_mode="LIVE_MT5" if mode == "live" else "PAPER_MT5",
     )
     export_path: Optional[Path] = None
     if write_report:
@@ -98,6 +107,7 @@ def build_mt5_deal_history_ingest_report(
             query_start=query_start,
             query_end=query_end,
             ticket=ticket,
+            account_mode=mode,
         )
 
     terminal_history_report: Dict[str, Any] = {}
@@ -116,6 +126,8 @@ def build_mt5_deal_history_ingest_report(
         terminal_history_report=terminal_history_report,
         export_path=export_path,
         ticket=ticket,
+        account_mode=mode,
+        confirm_live_history=confirm_live_history,
     )
     ingest_status = _ingest_status(summary)
     report = {
@@ -130,7 +142,11 @@ def build_mt5_deal_history_ingest_report(
             "future_minutes": int(future_minutes),
             "symbol": symbol,
             "ticket": str(ticket) if ticket is not None else None,
+            "account_mode": mode,
+            "confirm_live_history": bool(confirm_live_history),
         },
+        "account_mode": mode,
+        "confirm_live_history": bool(confirm_live_history),
         "mt5_path": str(mt5_path) if mt5_path is not None else config.mt5_path,
         "terminal_snapshot": terminal_snapshot,
         "history_export_path": str(export_path) if export_path is not None else None,
@@ -175,6 +191,7 @@ def write_mt5_deal_history_export(
     query_start: datetime,
     query_end: datetime,
     ticket: Optional[str | int] = None,
+    account_mode: str = "demo",
 ) -> Path:
     target_dir = Path(export_dir).expanduser().resolve()
     target_dir.mkdir(parents=True, exist_ok=True)
@@ -189,6 +206,7 @@ def write_mt5_deal_history_export(
             "start": query_start.isoformat(),
             "end": query_end.isoformat(),
             "ticket": str(ticket) if ticket is not None else None,
+            "account_mode": _normalize_account_mode(account_mode),
         },
         "history_records": list(history_rows),
         "claim_boundary": CLAIM_BOUNDARY,
@@ -250,8 +268,11 @@ def render_mt5_deal_history_ingest_markdown(report: Mapping[str, Any]) -> str:
         "",
         "## Summary",
         "",
+        f"- Account mode: `{summary.get('account_mode')}`",
+        f"- Live history confirmed: `{summary.get('confirm_live_history')}`",
         f"- Terminal connected: `{summary.get('terminal_connected')}`",
         f"- Demo account confirmed: `{summary.get('demo_account_confirmed')}`",
+        f"- Live account confirmed: `{summary.get('live_account_confirmed')}`",
         f"- Raw MT5 deals: `{summary.get('raw_deal_count')}`",
         f"- Closed positions: `{summary.get('closed_position_count')}`",
         f"- History rows: `{summary.get('history_record_count')}`",
@@ -300,6 +321,26 @@ def _query_window(
     return query_start, query_end
 
 
+def _normalize_account_mode(value: str) -> str:
+    mode = str(value or "demo").strip().lower()
+    if mode in {"demo", "paper", "paper_demo"}:
+        return "demo"
+    if mode == "live":
+        return "live"
+    raise MT5DealHistoryIngestError("account_mode must be 'demo' or 'live'")
+
+
+def _should_fetch_deals(
+    terminal_snapshot: Mapping[str, Any],
+    *,
+    account_mode: str,
+    confirm_live_history: bool,
+) -> bool:
+    if account_mode == "live":
+        return bool(confirm_live_history) and bool(terminal_snapshot.get("live_account_confirmed"))
+    return bool(terminal_snapshot.get("demo_account_confirmed"))
+
+
 def _parse_datetime(value: datetime | str) -> datetime:
     if isinstance(value, datetime):
         return value if value.tzinfo is not None else value.replace(tzinfo=timezone.utc)
@@ -312,7 +353,14 @@ def _parse_datetime(value: datetime | str) -> datetime:
 
 def _terminal_snapshot(*, mt5: Any | None, mt5_path: Optional[Path | str]) -> Dict[str, Any]:
     if mt5 is None:
-        return {"mt5_package_available": False, "initialize_ok": False, "terminal": {}, "account": {}, "demo_account_confirmed": False}
+        return {
+            "mt5_package_available": False,
+            "initialize_ok": False,
+            "terminal": {},
+            "account": {},
+            "demo_account_confirmed": False,
+            "live_account_confirmed": False,
+        }
     kwargs: Dict[str, Any] = {}
     path = str(mt5_path or config.mt5_path or "")
     if path:
@@ -323,12 +371,14 @@ def _terminal_snapshot(*, mt5: Any | None, mt5_path: Optional[Path | str]) -> Di
             mt5.initialize(**kwargs)
             terminal = _object_to_dict(mt5.terminal_info())
         account = _object_to_dict(mt5.account_info())
+        demo_confirmed = _is_demo_account(mt5, account)
         return {
             "mt5_package_available": True,
             "initialize_ok": bool(terminal),
             "terminal": _terminal_info_snapshot(terminal),
             "account": _redacted_account_snapshot(account),
-            "demo_account_confirmed": _is_demo_account(mt5, account),
+            "demo_account_confirmed": demo_confirmed,
+            "live_account_confirmed": bool(account) and not demo_confirmed,
         }
     except Exception as exc:
         return {
@@ -339,6 +389,7 @@ def _terminal_snapshot(*, mt5: Any | None, mt5_path: Optional[Path | str]) -> Di
             "terminal": {},
             "account": {},
             "demo_account_confirmed": False,
+            "live_account_confirmed": False,
         }
 
 
@@ -390,6 +441,7 @@ def _closed_history_rows(
     *,
     account: Mapping[str, Any],
     ticket: Optional[str | int],
+    broker_mode: str = "PAPER_MT5",
 ) -> List[Dict[str, Any]]:
     trade_deals = [
         dict(deal)
@@ -439,7 +491,7 @@ def _closed_history_rows(
                 "comment": close_deal.get("comment") or open_deal.get("comment"),
                 "magic": close_deal.get("magic") or open_deal.get("magic"),
                 "account_currency": account.get("currency") or "USD",
-                "broker_mode": "PAPER_MT5",
+                "broker_mode": broker_mode,
                 "source_row": {
                     "group_key": group_key,
                     "deal_tickets": [deal.get("ticket") for deal in deals],
@@ -461,6 +513,8 @@ def _summary(
     terminal_history_report: Mapping[str, Any],
     export_path: Optional[Path],
     ticket: Optional[str | int],
+    account_mode: str,
+    confirm_live_history: bool,
 ) -> Dict[str, Any]:
     terminal = terminal_snapshot.get("terminal") if isinstance(terminal_snapshot.get("terminal"), Mapping) else {}
     account = terminal_snapshot.get("account") if isinstance(terminal_snapshot.get("account"), Mapping) else {}
@@ -473,7 +527,10 @@ def _summary(
         "terminal_name": terminal.get("name"),
         "terminal_trade_allowed": terminal.get("trade_allowed"),
         "server": account.get("server"),
+        "account_mode": account_mode,
+        "confirm_live_history": bool(confirm_live_history),
         "demo_account_confirmed": bool(terminal_snapshot.get("demo_account_confirmed")),
+        "live_account_confirmed": bool(terminal_snapshot.get("live_account_confirmed")),
         "account_snapshot_present": bool(account),
         "account_balance": account.get("balance"),
         "account_equity": account.get("equity"),
@@ -502,6 +559,20 @@ def _ingest_status(summary: Mapping[str, Any]) -> str:
         return "MT5_DEAL_HISTORY_PACKAGE_MISSING"
     if not summary.get("terminal_connected"):
         return "MT5_DEAL_HISTORY_TERMINAL_DISCONNECTED"
+    if summary.get("account_mode") == "live":
+        if not summary.get("confirm_live_history"):
+            return "MT5_DEAL_HISTORY_LIVE_CONFIRM_REQUIRED"
+        if summary.get("demo_account_confirmed"):
+            return "MT5_DEAL_HISTORY_BLOCKED_DEMO_ACCOUNT_FOR_LIVE"
+        if not summary.get("live_account_confirmed"):
+            return "MT5_DEAL_HISTORY_BLOCKED_LIVE_ACCOUNT_UNCONFIRMED"
+        if int(summary.get("raw_deal_count") or 0) == 0:
+            return "MT5_LIVE_DEAL_HISTORY_EMPTY"
+        if int(summary.get("history_record_count") or 0) == 0:
+            return "MT5_LIVE_DEAL_HISTORY_NO_CLOSED_POSITIONS"
+        if int(summary.get("memory_update_count") or 0) > 0:
+            return "MT5_LIVE_DEAL_HISTORY_JOINED_TO_MEMORY"
+        return "MT5_LIVE_DEAL_HISTORY_EXPORTED_UNMATCHED"
     if not summary.get("demo_account_confirmed"):
         return "MT5_DEAL_HISTORY_BLOCKED_NON_DEMO_ACCOUNT"
     if int(summary.get("raw_deal_count") or 0) == 0:
@@ -530,6 +601,20 @@ def _next_action(status: str, summary: Mapping[str, Any]) -> str:
         return "Open/log into MetaTrader 5, set CAS_FOREX_MT5_PATH if needed, then rerun MT5 deal history ingest."
     if status == "MT5_DEAL_HISTORY_BLOCKED_NON_DEMO_ACCOUNT":
         return "Log into an MT5 demo account before reading this paper/demo deal-history lane."
+    if status == "MT5_DEAL_HISTORY_LIVE_CONFIRM_REQUIRED":
+        return "Live account history is read-only evidence, but it still requires explicit --live-history --confirm-live-history before CAS reads live closed deals."
+    if status == "MT5_DEAL_HISTORY_BLOCKED_DEMO_ACCOUNT_FOR_LIVE":
+        return "The terminal is on a demo account; use the default demo history lane or log into the owner-approved live account before live-history ingest."
+    if status == "MT5_DEAL_HISTORY_BLOCKED_LIVE_ACCOUNT_UNCONFIRMED":
+        return "CAS could not confirm a live account snapshot. Check the terminal account/server before live-history ingest."
+    if status == "MT5_LIVE_DEAL_HISTORY_EMPTY":
+        return "No live MT5 deals were returned for the query window. Broaden --days-back or rerun after a live trade closes."
+    if status == "MT5_LIVE_DEAL_HISTORY_NO_CLOSED_POSITIONS":
+        return "Live MT5 deals were present, but no closed position groups were found. Check the query window or ticket filter."
+    if status == "MT5_LIVE_DEAL_HISTORY_JOINED_TO_MEMORY":
+        return "Live closed-deal history joined CAS memory. Review the verified-profit sweep cockpit before any owner-confirmed payout action."
+    if status == "MT5_LIVE_DEAL_HISTORY_EXPORTED_UNMATCHED":
+        return "Live closed-deal history was exported. Add/retain broker_ticket, command_id, receipt_id, or a verifier memory row so it can join strategy memory."
     if status == "MT5_DEAL_HISTORY_EMPTY":
         return "No MT5 deals were returned for the query window. Broaden --days-back or run after a demo order closes."
     if status == "MT5_DEAL_HISTORY_NO_CLOSED_POSITIONS":
@@ -545,6 +630,7 @@ def _operator_commands(mt5_path: Optional[Path | str]) -> Dict[str, str]:
     path = str(mt5_path or config.mt5_path or "<MT5_TERMINAL64_EXE>")
     return {
         "mt5_deal_history_ingest": f'py -3.12 scripts/run_mt5_deal_history_ingest.py --mt5-path "{path}" --days-back 7 --summary-only',
+        "mt5_live_deal_history_ingest": f'py -3.12 scripts/run_mt5_deal_history_ingest.py --mt5-path "{path}" --live-history --confirm-live-history --days-back 7 --summary-only',
         "terminal_history_ingest": "py -3.12 scripts/run_terminal_history_ingest.py --summary-only",
         "agent_memory": "py -3.12 scripts/run_agent_memory.py",
         "daily_learning_rollup": "py -3.12 scripts/run_daily_learning_rollup.py --summary-only",

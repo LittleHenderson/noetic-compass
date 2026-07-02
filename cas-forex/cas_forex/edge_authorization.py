@@ -28,7 +28,7 @@ from typing import Any, Dict, Optional
 from cas_forex.edge_gate import CandidateSetup, EdgeTestDecision, _now_iso, verify_token
 
 
-class EdgeNotAuthorized(Exception):
+class EdgeNotAuthorized(PermissionError):
     """Raised at the dispatch chokepoint when an order lacks a fresh, matching edge PASS."""
 
 

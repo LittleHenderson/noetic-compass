@@ -10,26 +10,26 @@ def _proposal(**overrides):
     data = {
         "proposal_id": "opt-001",
         "model_id": "qwen3-research-candidate",
-        "lead_id": "range_scalper_filtered_fx_d1",
-        "objective": "Test M15/H1 range scalper variants under normal and post_NFP conditions.",
+        "lead_id": "index_tsmom_126_d1",
+        "objective": "Test D1 TSMOM variants under normal and post_NFP conditions.",
         "proposed_changes": {
-            "timeframes": ["M15", "H1"],
-            "symbols": ["EUR/USD", "GBP/USD"],
+            "timeframes": ["D1"],
+            "symbols": ["US30", "NAS100"],
             "risk_budget_effect": "research-only dry run",
         },
         "simulator_requests": [
             {
                 "source": "cas-sdg",
-                "symbols": ["EUR/USD", "GBP/USD"],
-                "settings": ["range_scalper_24_120"],
-                "timeframes": ["M15", "H1"],
+                "symbols": ["US30", "NAS100"],
+                "settings": ["tsmom_126_250_2_10"],
+                "timeframes": ["D1"],
                 "event_contexts": ["normal", "post_NFP"],
             }
         ],
         "evidence_refs": [
-            "evidence_runs/range_scalper_research/real-range_scalper-20260622043231-report.json"
+            "evidence_runs/index_tsmom_126_paper_proof/index-tsmom-126-d1-paper-proof-status.json"
         ],
-        "condition_contexts": ["normal", "post_NFP", "range", "low_to_normal_vol"],
+        "condition_contexts": ["normal", "post_NFP", "trend", "normal_to_high_vol"],
         "risk_notes": ["Research proposal only; paper/backtest validation required."],
         "claim_boundary": CLAIM_BOUNDARY,
     }

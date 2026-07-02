@@ -88,6 +88,15 @@ def test_execute_order_writes_ea_readable_command(monkeypatch, tmp_path):
     set_mt4_control_overrides(enabled=True, mailbox_dir=str(mailbox))
 
     bridge = MT4EABridge()
+    blocked = bridge.execute_order(_order())
+    assert blocked.status.value == "REJECTED"
+    assert "fresh EA heartbeat" in (blocked.error_message or "")
+
+    mailbox.mkdir(parents=True, exist_ok=True)
+    (mailbox / "heartbeat.json").write_text(
+        json.dumps({"schema": "cas_forex_mt4_heartbeat.v1", "state": "TIMER", "server": "Demo"}),
+        encoding="utf-8",
+    )
     outcome = bridge.execute_order(_order())
 
     assert outcome.broker_mode.value == "PAPER_MT4"

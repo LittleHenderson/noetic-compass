@@ -31,11 +31,21 @@ from cas_forex.proof_runner import (
     DEFAULT_CHECK_INTERVAL_SECONDS,
     MAX_CHECK_INTERVAL_SECONDS,
     MIN_CHECK_INTERVAL_SECONDS,
+    control_state,
+    restore_desired_runner,
     run_proof_day_now,
     runner_status,
+    set_desired_runner_state,
     start_runner,
     stop_runner,
 )
+from cas_forex.waste_background_worker import (
+    proof_auto_runner_worker_status,
+    start_proof_auto_runner_worker,
+    stop_proof_auto_runner_worker,
+    use_in_process_workers_for_tests,
+)
+from api.route_cache import cache_first_payload
 
 router = APIRouter()
 
@@ -80,7 +90,7 @@ def _state_payload() -> dict[str, Any]:
         "report_kind": "cas_forex_proof_control",
         "proof": _proof_summary(),
         "thresholds": build_profit_thresholds_report(plan),
-        "auto_runner": runner_status(),
+        "auto_runner": _auto_runner_status(),
         "claim_boundary": (
             "Paper proof advancement and thresholds only. Recording proof days "
             "does not place live orders, create broker ACCEPT, or move money."
@@ -88,10 +98,79 @@ def _state_payload() -> dict[str, Any]:
     }
 
 
+def _auto_runner_status() -> dict[str, Any]:
+    if use_in_process_workers_for_tests():
+        return runner_status()
+    return proof_auto_runner_worker_status()
+
+
+def restore_desired_auto_runner() -> dict[str, Any]:
+    """Re-arm owner-desired PAPER proof scheduling without blocking the API."""
+
+    if use_in_process_workers_for_tests():
+        return restore_desired_runner()
+    desired = control_state()
+    if not desired.get("desired_running"):
+        status = proof_auto_runner_worker_status()
+        status["restore_status"] = "NO_RESTORE_DESIRED"
+        return status
+    try:
+        from cas_forex.config import config
+
+        paper_safe = bool(config.paper_trading and not config.live_mode)
+    except Exception:
+        paper_safe = False
+    if not paper_safe:
+        status = proof_auto_runner_worker_status()
+        status["restore_status"] = "RESTORE_BLOCKED_NOT_PAPER_MODE"
+        status["restore_detail"] = (
+            "Proof auto-runner desired state exists, but the app is not in "
+            "paper mode. Owner must restore proof collection explicitly."
+        )
+        return status
+    status = start_proof_auto_runner_worker(
+        check_interval_seconds=int(
+            desired.get("check_interval_seconds") or DEFAULT_CHECK_INTERVAL_SECONDS
+        )
+    )
+    status["restore_status"] = "RESTORED_DESIRED_PAPER_PROOF_RUNNER"
+    return status
+
+
 @router.get("/state")
 async def get_state() -> dict[str, Any]:
     """Live proof summary + profitability thresholds + auto-runner status."""
-    return _state_payload()
+    return cache_first_payload(
+        "proof_control_state",
+        builder=_state_payload,
+        fallback=_proof_state_warming,
+        ttl_seconds=30.0,
+    )
+
+
+def _proof_state_warming() -> dict[str, Any]:
+    return {
+        "report_kind": "cas_forex_proof_control",
+        "status": "WARMING",
+        "proof": {
+            "required_trading_days": 30,
+            "completed_trading_days": 0,
+            "broker_verified_days": 0,
+            "net_pnl_usd": 0,
+            "max_drawdown_pct": 0,
+            "days_with_trades": 0,
+            "min_trade_days_required": 0,
+            "profit_passed": False,
+            "passed": False,
+            "failure_reasons": ["Proof control state cache is warming."],
+        },
+        "thresholds": {},
+        "auto_runner": {"running": False, "status": "WARMING"},
+        "claim_boundary": (
+            "Paper proof advancement and thresholds only. Recording proof days "
+            "does not place live orders, create broker ACCEPT, or move money."
+        ),
+    }
 
 
 @router.post("/thresholds")
@@ -125,12 +204,24 @@ def post_run_now() -> dict[str, Any]:
 @router.post("/auto/start")
 async def post_auto_start(body: AutoRunnerStart) -> dict[str, Any]:
     """Start the daily proof auto-runner."""
-    start_runner(body.check_interval_seconds)
+    if use_in_process_workers_for_tests():
+        start_runner(body.check_interval_seconds)
+    else:
+        set_desired_runner_state(body.check_interval_seconds, desired_running=True)
+        start_proof_auto_runner_worker(check_interval_seconds=body.check_interval_seconds)
     return _state_payload()
 
 
 @router.post("/auto/stop")
 async def post_auto_stop() -> dict[str, Any]:
     """Stop the daily proof auto-runner."""
-    stop_runner()
+    if use_in_process_workers_for_tests():
+        stop_runner()
+    else:
+        status = _auto_runner_status()
+        set_desired_runner_state(
+            int(status.get("check_interval_seconds") or DEFAULT_CHECK_INTERVAL_SECONDS),
+            desired_running=False,
+        )
+        stop_proof_auto_runner_worker()
     return _state_payload()

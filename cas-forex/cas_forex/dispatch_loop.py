@@ -11,14 +11,18 @@ it can only ever reach a live broker when the owner has authorized live trading
 (and the broker bridge re-checks at order time, fail-closed). By default that
 means paper/demo dispatch — the loop running does not move the live gate.
 
-Owner-controlled: nothing starts this automatically. The owner starts/stops it and
-sets the interval from the app. A single global loop (single-owner cockpit);
-state resets on restart.
+Owner-controlled: the owner starts/stops it and sets the interval from the app.
+That desired switch is persisted, so a restarted API can re-arm the PAPER loop
+without making the owner run a command. A single global loop (single-owner
+cockpit); session counters reset on restart.
 """
 
 from __future__ import annotations
 
+import json
+import os
 import threading
+from pathlib import Path
 from typing import Any, Optional
 
 # The owner drives — the interval can be anything from 1 second up to a day.
@@ -27,6 +31,9 @@ from typing import Any, Optional
 MIN_INTERVAL_SECONDS = 1
 DEFAULT_INTERVAL_SECONDS = 60
 MAX_INTERVAL_SECONDS = 86_400
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CONTROL_STATE_PATH = REPO_ROOT / "runtime" / "dispatch-loop-control.json"
+_CONTROL_STATE_PATH = DEFAULT_CONTROL_STATE_PATH
 
 
 # Session names the owner can target. Overlap-inclusive (a cycle during the
@@ -69,6 +76,58 @@ class _LoopState:
 
 _state = _LoopState()
 _lock = threading.Lock()
+
+
+def set_control_state_path_for_testing(path: str | Path) -> None:
+    """Redirect durable desired-state writes in tests."""
+    global _CONTROL_STATE_PATH
+    _CONTROL_STATE_PATH = Path(path)
+
+
+def reset_control_state_path_for_testing() -> None:
+    """Restore the default desired-state path. Tests only."""
+    global _CONTROL_STATE_PATH
+    _CONTROL_STATE_PATH = DEFAULT_CONTROL_STATE_PATH
+
+
+def _persist_enabled() -> bool:
+    return "PYTEST_CURRENT_TEST" not in os.environ or _CONTROL_STATE_PATH != DEFAULT_CONTROL_STATE_PATH
+
+
+def _load_control_state() -> dict[str, Any]:
+    if not _CONTROL_STATE_PATH.exists():
+        return {}
+    try:
+        payload = json.loads(_CONTROL_STATE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _save_control_state(*, desired_running: bool) -> None:
+    if not _persist_enabled():
+        return
+    payload = {
+        "report_kind": "cas_forex_dispatch_loop_control",
+        "desired_running": bool(desired_running),
+        "interval_seconds": int(_state.interval),
+        "symbols": list(_state.symbols),
+        "sessions": list(_state.sessions),
+        "mode": _effective_mode(),
+        "paper_safe_restore_only": True,
+        "claim_boundary": (
+            "Dispatch loop control records the owner-desired PAPER scheduler "
+            "state for API restart recovery. It does not authorize live trading, "
+            "broker ACCEPT, edge tokens, deposits, withdrawals, bank/card "
+            "movement, payouts, or LICENSED status."
+        ),
+    }
+    _CONTROL_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    tmp = _CONTROL_STATE_PATH.with_suffix(
+        f"{_CONTROL_STATE_PATH.suffix}.{os.getpid()}.{threading.get_ident()}.tmp"
+    )
+    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    tmp.replace(_CONTROL_STATE_PATH)
 
 
 def _run(interval: int) -> None:
@@ -123,6 +182,8 @@ def start_loop(
     interval_seconds: int = DEFAULT_INTERVAL_SECONDS,
     symbols: Optional[list[str]] = None,
     sessions: Optional[list[str]] = None,
+    *,
+    persist_desired: bool = True,
 ) -> dict[str, Any]:
     """Start the paper dispatch loop if not already running. Idempotent.
 
@@ -140,6 +201,8 @@ def start_loop(
             _state.symbols = [str(s) for s in symbols]
         if sessions is not None:
             _state.sessions = [s for s in (str(x) for x in sessions) if s in SESSION_NAMES]
+        if persist_desired:
+            _save_control_state(desired_running=True)
         if _state.thread and _state.thread.is_alive():
             return _status_locked()
         _state.stop_event.clear()
@@ -151,7 +214,7 @@ def start_loop(
         return _status_locked()
 
 
-def stop_loop() -> dict[str, Any]:
+def stop_loop(*, persist_desired: bool = True) -> dict[str, Any]:
     """Stop the loop and wait briefly for the current cycle to wind down."""
     with _lock:
         _state.stop_event.set()
@@ -160,6 +223,8 @@ def stop_loop() -> dict[str, Any]:
         thread.join(timeout=3.0)
     with _lock:
         _state.thread = None
+        if persist_desired:
+            _save_control_state(desired_running=False)
         return _status_locked()
 
 
@@ -177,9 +242,12 @@ def _effective_mode() -> str:
 
 def _status_locked() -> dict[str, Any]:
     running = bool(_state.thread and _state.thread.is_alive())
+    control = _load_control_state()
     return {
         "report_kind": "cas_forex_dispatch_loop",
         "running": running,
+        "desired_running": bool(control.get("desired_running", running)),
+        "durable_control_state_path": str(_CONTROL_STATE_PATH),
         "interval_seconds": _state.interval,
         "symbols": list(_state.symbols),
         "sessions": list(_state.sessions),
@@ -204,3 +272,28 @@ def loop_status() -> dict[str, Any]:
     """Current loop status (running, interval, cycles run, last result, mode)."""
     with _lock:
         return _status_locked()
+
+
+def restore_desired_loop() -> dict[str, Any]:
+    """Re-arm the owner-desired PAPER dispatch loop after an API restart."""
+    desired = _load_control_state()
+    if not desired.get("desired_running"):
+        status = loop_status()
+        status["restore_status"] = "NO_RESTORE_DESIRED"
+        return status
+    if _effective_mode() != "PAPER":
+        status = loop_status()
+        status["restore_status"] = "RESTORE_BLOCKED_LIVE_CONFIRM_REQUIRED"
+        status["restore_detail"] = (
+            "Dispatch loop desired state exists, but the effective mode is not "
+            "PAPER. Owner must start it explicitly in live-authorized mode."
+        )
+        return status
+    status = start_loop(
+        int(desired.get("interval_seconds") or DEFAULT_INTERVAL_SECONDS),
+        symbols=list(desired.get("symbols") or []),
+        sessions=list(desired.get("sessions") or []),
+        persist_desired=False,
+    )
+    status["restore_status"] = "RESTORED_DESIRED_PAPER_LOOP"
+    return status

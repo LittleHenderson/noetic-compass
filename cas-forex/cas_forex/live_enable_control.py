@@ -10,7 +10,9 @@ checks, mirroring ``broker_control`` and ``risk_control``:
   - ``live_mode`` — live broker mode ON.
   - ``prefer_mt5`` — prefer the MT5 bridge (one half of "live broker configured").
   - ``owner_enable_live_trading`` / ``live_trading_licensed`` — the master
-    owner-enable pair.
+    owner-enable / owner-ACCEPT authority pair. The second key keeps its legacy
+    storage name for compatibility, but the UI presents it as owner authority,
+    not an agent-issued license.
 
 Each flag is a simple ON/OFF toggle. A key present in ``_OVERRIDES`` means the
 owner has explicitly set it from the app; its value (True/False) wins over the
@@ -18,23 +20,31 @@ static config / env value. Absent => fall back to config. ``runtime_gates``
 consults the resolved values (see ``apply_live_enable_overrides``), so flipping a
 toggle takes effect on the next gate evaluation with no restart and no env edit.
 
-IMPORTANT (honesty, fail-closed): satisfying these flags only makes the
-``runtime_gates`` decision report AUTHORIZED — it is the owner turning the
-capability on by meeting its requirements. It does NOT by itself place any
-order. Two further things still gate a real order: (1) there is no production
-dispatch *loop* on a timer (the engines in ``order_dispatch``/``agent_dispatch``
-must actually be run), and (2) the broker bridge re-checks authorization at order
-time (``MT5Bridge.execute_order`` + fail-closed ``is_demo_account``). The flags
-are necessary, not sufficient. The Settings readout states exactly what is still
-missing.
+IMPORTANT (honesty, fail-closed): satisfying these flags makes the
+``runtime_gates`` decision report AUTHORIZED because the owner has turned the
+capability on. It does NOT by itself place any order. A real order still needs a
+running dispatch path, a fresh edge authorization where required, and the broker
+bridge re-checks owner authorization at order time (``MT5Bridge.execute_order``
++ fail-closed ``is_demo_account``). The Settings readout states exactly what is
+still missing.
 
-Overrides are process-global (single-owner cockpit) and reset on restart; the
-static config / env values remain the persistent defaults.
+Overrides are local runtime state for the single-owner cockpit. They persist in
+``runtime/live-enable-overrides.json`` so the owner does not lose provider or
+authorization setup on an API restart. Static config / env values remain the
+fallback defaults, and ``reset`` clears the local runtime override file.
 """
 
 from __future__ import annotations
 
+import json
+import os
+from pathlib import Path
+import threading
+import time
 from typing import Any, Optional
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_OVERRIDE_PATH = REPO_ROOT / "runtime" / "live-enable-overrides.json"
 
 # The live-trading flags this surface can override. All booleans on ``ForexConfig``.
 LIVE_ENABLE_KEYS = (
@@ -72,6 +82,127 @@ ALL_OVERRIDE_KEYS = tuple(LIVE_ENABLE_KEYS + CAPABILITY_ENABLE_KEYS + PROVIDER_B
 
 # key present => owner explicitly set it. Value type matches the key (bool or str).
 _OVERRIDES: dict[str, Any] = {}
+_OVERRIDES_LOADED = False
+_OVERRIDE_PATH: Path | None = DEFAULT_OVERRIDE_PATH
+_REPORT_CACHE_LOCK = threading.RLock()
+_REPORT_CACHE: dict[str, tuple[float, dict[str, Any]]] = {}
+_REPORT_CACHE_TTL_SECONDS = 30.0
+
+
+def _report_cache_enabled(config: Any = None) -> bool:
+    return config is None and not os.environ.get("PYTEST_CURRENT_TEST")
+
+
+def _report_cache_ttl_seconds() -> float:
+    try:
+        return max(0.0, float(os.environ.get("CAS_FOREX_LIVE_ENABLE_REPORT_CACHE_TTL_SECONDS", "")))
+    except ValueError:
+        return _REPORT_CACHE_TTL_SECONDS
+
+
+def _invalidate_report_cache() -> None:
+    with _REPORT_CACHE_LOCK:
+        _REPORT_CACHE.clear()
+
+
+def invalidate_live_enable_report_cache() -> None:
+    """Clear cached owner authorization reports after other live gates change."""
+
+    _invalidate_report_cache()
+
+
+def _cached_default_report(cache_key: str, builder) -> dict[str, Any]:
+    ttl_seconds = _report_cache_ttl_seconds()
+    if ttl_seconds <= 0:
+        return builder()
+    now = time.monotonic()
+    with _REPORT_CACHE_LOCK:
+        cached = _REPORT_CACHE.get(cache_key)
+        if cached is not None:
+            built_at, payload = cached
+            if (now - built_at) <= ttl_seconds:
+                out = dict(payload)
+                out["cache_status"] = "fresh"
+                out["cache_age_seconds"] = now - built_at
+                out["cache_ttl_seconds"] = ttl_seconds
+                return out
+    payload = builder()
+    with _REPORT_CACHE_LOCK:
+        _REPORT_CACHE[cache_key] = (time.monotonic(), dict(payload))
+    out = dict(payload)
+    out["cache_status"] = "rebuilt"
+    out["cache_age_seconds"] = 0.0
+    out["cache_ttl_seconds"] = ttl_seconds
+    return out
+
+
+def _load_overrides() -> None:
+    """Load persisted owner overrides once per process.
+
+    Unknown keys are ignored so older/newer runtime files fail closed instead of
+    poisoning the config view.
+    """
+
+    global _OVERRIDES_LOADED
+    if _OVERRIDES_LOADED:
+        return
+    _OVERRIDES_LOADED = True
+    if os.environ.get("PYTEST_CURRENT_TEST") and _OVERRIDE_PATH == DEFAULT_OVERRIDE_PATH:
+        return
+    if _OVERRIDE_PATH is None or not _OVERRIDE_PATH.exists():
+        return
+    try:
+        payload = json.loads(_OVERRIDE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+    raw = payload.get("overrides") if isinstance(payload, dict) else None
+    if not isinstance(raw, dict):
+        return
+    for key, value in raw.items():
+        if key not in ALL_OVERRIDE_KEYS or value is None:
+            continue
+        if key in _STR_KEYS:
+            _OVERRIDES[key] = str(value).strip()
+        else:
+            _OVERRIDES[key] = bool(value)
+
+
+def _save_overrides() -> None:
+    if _OVERRIDE_PATH is None:
+        return
+    if not _OVERRIDES:
+        try:
+            _OVERRIDE_PATH.unlink()
+        except FileNotFoundError:
+            pass
+        return
+    payload = {
+        "report_kind": "cas_forex_live_enable_overrides",
+        "overrides": dict(_OVERRIDES),
+        "secret_keys": sorted(SECRET_KEYS),
+        "claim_boundary": (
+            "Local owner authorization and payment-provider setup for the "
+            "single-owner CAS Forex cockpit. The payment API key may be stored "
+            "here, but owner-facing reports only expose payment_api_key_set. "
+            "These settings do not place orders or move money by themselves; "
+            "runtime gates, broker gates, provider gates, edge gates, and "
+            "explicit action confirmation still re-check before any side effect."
+        ),
+    }
+    _OVERRIDE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    tmp = _OVERRIDE_PATH.with_suffix(_OVERRIDE_PATH.suffix + ".tmp")
+    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    tmp.replace(_OVERRIDE_PATH)
+
+
+def set_live_enable_override_store_for_tests(path: Path | str | None) -> None:
+    """Point persistence at a test file, or disable it with ``None``."""
+
+    global _OVERRIDE_PATH, _OVERRIDES_LOADED
+    _OVERRIDE_PATH = Path(path) if path is not None else None
+    _OVERRIDES.clear()
+    _OVERRIDES_LOADED = False
+    _invalidate_report_cache()
 
 
 def _resolve_config(config: Any = None) -> Any:
@@ -110,6 +241,7 @@ def apply_live_enable_overrides(config: Any = None) -> Any:
     so existing behaviour and tests are unaffected). Idempotent: wrapping an
     already-wrapped config returns it as-is.
     """
+    _load_overrides()
     config = _resolve_config(config)
     if not _OVERRIDES:
         return config
@@ -120,6 +252,7 @@ def apply_live_enable_overrides(config: Any = None) -> Any:
 
 def resolve_live_enable(config: Any = None) -> dict[str, bool]:
     """The effective (resolved) value of each live-enable flag."""
+    _load_overrides()
     config = _resolve_config(config)
     resolved: dict[str, bool] = {}
     for key in LIVE_ENABLE_KEYS:
@@ -139,6 +272,8 @@ def set_live_enable_overrides(**flags: Any) -> dict[str, bool]:
     silently no-op. Booleans are coerced with ``bool()``; strings are stored
     trimmed.
     """
+    _load_overrides()
+    changed = False
     for key, value in flags.items():
         if value is None:
             continue
@@ -148,12 +283,20 @@ def set_live_enable_overrides(**flags: Any) -> dict[str, bool]:
             _OVERRIDES[key] = str(value).strip()
         else:
             _OVERRIDES[key] = bool(value)
+        changed = True
+    if changed:
+        _save_overrides()
+        _invalidate_report_cache()
     return resolve_live_enable()
 
 
 def clear_live_enable_overrides() -> None:
     """Drop all live-enable overrides (revert to static config / env defaults)."""
+    global _OVERRIDES_LOADED
     _OVERRIDES.clear()
+    _OVERRIDES_LOADED = True
+    _save_overrides()
+    _invalidate_report_cache()
 
 
 # Owner-facing labels + the real consequence of each toggle (shown in the UI so
@@ -180,8 +323,8 @@ _FLAG_META = {
         "consequence": "Master switch: owner authorizes live order placement.",
     },
     "live_trading_licensed": {
-        "label": "Live trading licensed",
-        "consequence": "Owner attests live trading is licensed/authorized to proceed.",
+        "label": "Owner ACCEPT live authority",
+        "consequence": "Owner authorizes live trading to proceed from this cockpit.",
     },
     "owner_enable_broker_accept": {
         "label": "Owner-enable broker ACCEPT",
@@ -227,8 +370,51 @@ _CAPABILITY_UI = (
 )
 
 
+def _owner_authority_model(gates_report: Any) -> dict[str, Any]:
+    """Structured owner-authority contract shared by live-control reports."""
+
+    report_dict = gates_report.to_dict() if hasattr(gates_report, "to_dict") else {}
+    return {
+        "authority": "OWNER",
+        "authority_controls": ["owner switches", "Owner ACCEPT buttons"],
+        "owner_controls_are_final_authority": bool(
+            getattr(
+                gates_report,
+                "owner_controls_are_final_authority",
+                report_dict.get("owner_controls_are_final_authority", True),
+            )
+        ),
+        "metrics_and_ai_are_advisory_only": True,
+        "metrics_and_ai_can_veto_owner_authority": bool(
+            getattr(
+                gates_report,
+                "metrics_and_ai_can_veto_owner_authority",
+                report_dict.get("metrics_and_ai_can_veto_owner_authority", False),
+            )
+        ),
+        "technical_action_time_checks_still_required": True,
+        "advisory_inputs": list(
+            getattr(gates_report, "advisory_only_inputs", report_dict.get("advisory_only_inputs", []))
+        ),
+        "action_time_requirements": list(
+            getattr(gates_report, "action_time_requirements", report_dict.get("action_time_requirements", []))
+        ),
+        "statement": str(
+            getattr(
+                gates_report,
+                "owner_authority_boundary",
+                report_dict.get(
+                    "owner_authority_boundary",
+                    "Owner switches and Owner ACCEPT buttons are the live-money authority path.",
+                ),
+            )
+        ),
+    }
+
+
 def _resolve_value(config: Any, key: str) -> Any:
     """The effective value of any overridable key (override over config)."""
+    _load_overrides()
     if key in _OVERRIDES:
         return _OVERRIDES[key]
     default: Any = False if key in _BOOL_KEYS else ""
@@ -236,6 +422,12 @@ def _resolve_value(config: Any, key: str) -> Any:
 
 
 def build_authorization_report(config: Any = None) -> dict[str, Any]:
+    if _report_cache_enabled(config):
+        return _cached_default_report("authorization", lambda: _build_authorization_report_uncached(None))
+    return _build_authorization_report_uncached(config)
+
+
+def _build_authorization_report_uncached(config: Any = None) -> dict[str, Any]:
     """Unified owner-facing report powering the 'Path to Authorize' toggles.
 
     Returns every capability with its live ``runtime_gates`` decision (authorized
@@ -243,6 +435,7 @@ def build_authorization_report(config: Any = None) -> dict[str, Any]:
     it, plus a shared payment-provider section. The secret ``payment_api_key`` is
     NEVER returned — only whether it is set.
     """
+    _load_overrides()
     config = _resolve_config(config)
 
     from cas_forex import runtime_gates
@@ -291,15 +484,26 @@ def build_authorization_report(config: Any = None) -> dict[str, Any]:
         "provider": provider,
         "all_real_money_authorized": bool(gates_report.all_real_money_authorized),
         "summary": gates_report.summary,
+        "owner_authority_model": _owner_authority_model(gates_report),
+        "override_state_path": str(_OVERRIDE_PATH) if _OVERRIDE_PATH is not None else None,
+        "override_count": len(_OVERRIDES),
+        "persisted": _OVERRIDE_PATH is not None,
         "caveats": [
             "These toggles satisfy the owner-authorization gate — they do NOT move money or place orders by themselves.",
+            "Performance/readiness metrics and AI recommendations are advisory only; they cannot authorize or veto an owner-controlled live capability.",
             "Money movement also needs a configured payment provider + API key (set below) and a running process; the bridge/provider re-checks at action time.",
-            "The payment API key is stored in the running app only and is never shown back here.",
+            "The payment API key is stored in the local runtime override file when provided and is never shown back here.",
         ],
     }
 
 
 def build_live_enable_report(config: Any = None) -> dict[str, Any]:
+    if _report_cache_enabled(config):
+        return _cached_default_report("live_enable", lambda: _build_live_enable_report_uncached(None))
+    return _build_live_enable_report_uncached(config)
+
+
+def _build_live_enable_report_uncached(config: Any = None) -> dict[str, Any]:
     """Owner-facing report: resolved flags + the live-trading gate readout.
 
     ``runtime_gates`` is the single source of truth for what is still missing, so
@@ -307,6 +511,7 @@ def build_live_enable_report(config: Any = None) -> dict[str, Any]:
     full report. The UI uses ``decisions.live_trading`` to show AUTHORIZED vs the
     exact list of what is still required.
     """
+    _load_overrides()
     resolved = resolve_live_enable(config)
 
     flags = []
@@ -331,13 +536,18 @@ def build_live_enable_report(config: Any = None) -> dict[str, Any]:
         "report_kind": "cas_forex_live_enable",
         "flags": flags,
         "resolved": resolved,
+        "override_state_path": str(_OVERRIDE_PATH) if _OVERRIDE_PATH is not None else None,
+        "override_count": len(_OVERRIDES),
+        "persisted": _OVERRIDE_PATH is not None,
         "runtime_gates": gates_report.to_dict(),
+        "owner_authority_model": _owner_authority_model(gates_report),
         "live_trading": live,
         "live_authorized": bool(live.get("authorized", False)),
         "still_missing": list(live.get("missing_requirements", [])),
         "caveats": [
-            "These toggles satisfy the runtime gate — they do NOT place any order by themselves.",
-            "A connected broker feed and a running dispatch loop are still required before a real order fires.",
-            "The broker bridge re-checks authorization at order time (fail-closed is_demo_account).",
+            "These toggles satisfy the owner live-trading authority gate - they do NOT place any order by themselves.",
+            "Paper days, 12-month evidence, AI confidence, win-rate estimates, and profit pace are advisory only; owner switches/ACCEPT buttons control live authority.",
+            "A real order also needs a connected broker/feed path, fresh edge authorization when required, and order-time risk checks.",
+            "The broker bridge re-checks owner authorization at order time.",
         ],
     }

@@ -89,6 +89,9 @@ def build_live_readiness_report(
     mt5_probe_status: Mapping[str, Any],
     runtime_gates: Mapping[str, Any],
     authority_boundary: Mapping[str, Any],
+    broker_reality_review: Mapping[str, Any] | None = None,
+    live_pilot_policy: Mapping[str, Any] | None = None,
+    live_recovery_report: Mapping[str, Any] | None = None,
     adaptive: Mapping[str, Any] | None = None,
     owner_promotion: Mapping[str, Any] | None = None,
 ) -> LiveReadinessReport:
@@ -96,6 +99,9 @@ def build_live_readiness_report(
         _owner_initial_investment(account_ledger)
         + _movement_checks(movement_stream)
         + _broker_checks(mt5_receipt, mt5_probe_status, account_reconciliation)
+        + _broker_reality_checks(broker_reality_review or {})
+        + _live_pilot_checks(live_pilot_policy or {})
+        + _live_recovery_checks(live_recovery_report or {})
         + _evidence_and_edge_checks(ui_readiness, daily_bundle, backsolve, walk_forward, adaptive, owner_promotion)
         + _runtime_capability_checks(runtime_gates)
     )
@@ -316,6 +322,100 @@ def _broker_checks(
             next_action="" if mt5_probe_status.get("status") == "BROKER_API_VERIFIED" else "Run the MT5 probe from Windows Python/terminal where MetaTrader5 is installed and logged in.",
             blocks_live=mt5_probe_status.get("status") != "BROKER_API_VERIFIED",
         ),
+    ]
+
+
+def _broker_reality_checks(review: Mapping[str, Any]) -> list[LiveReadinessCheck]:
+    accepted = bool(review.get("accepted_for_live_and_payout", False))
+    status = PASSED if accepted else OPEN_STATUS
+    missing = tuple(str(item) for item in (review.get("missing_requirements") or ()))
+    broker = str(review.get("broker_display_name") or review.get("broker_id") or "selected broker")
+    return [
+        LiveReadinessCheck(
+            gate_id="broker_reality_review",
+            label="Broker reality review",
+            status=status,
+            plain_english=(
+                f"Owner has recorded ACCEPT for {broker} withdrawal, KYC, fee, currency, entity, and automation-term reality."
+                if accepted
+                else f"Owner has not yet recorded ACCEPT for {broker} withdrawal, KYC, fee, currency, entity, and automation-term reality."
+            ),
+            evidence=(
+                f"owner_review_status={review.get('owner_review_status', 'OPEN')}",
+                f"source_count={len(review.get('source_urls') or [])}",
+                f"missing={'; '.join(missing) if missing else 'none'}",
+            ),
+            next_action="" if accepted else "Complete Settings -> Broker Reality Review, add source links/notes, and owner-confirm ACCEPT.",
+            blocks_live=not accepted,
+            owner_action_required=not accepted,
+        )
+    ]
+
+
+def _live_pilot_checks(policy: Mapping[str, Any]) -> list[LiveReadinessCheck]:
+    ready = bool(policy.get("ready_for_next_live_order", False))
+    accepted = bool(policy.get("accepted_for_live_start", False))
+    status = PASSED if ready else OPEN_STATUS
+    missing = tuple(str(item) for item in (policy.get("missing_requirements") or ()))
+    return [
+        LiveReadinessCheck(
+            gate_id="small_controlled_live_pilot",
+            label="Small controlled live pilot",
+            status=status,
+            plain_english=(
+                "Owner has ACCEPTED the small live pilot and there is capacity for the next capped live order."
+                if ready
+                else (
+                    "Owner ACCEPT exists, but pilot capacity is exhausted and must be reviewed before more live orders."
+                    if accepted
+                    else "Owner has not yet ACCEPTED the small live pilot limits for first real-money testing."
+                )
+            ),
+            evidence=(
+                f"owner_pilot_status={policy.get('owner_pilot_status', 'OPEN')}",
+                f"allowed_symbols={','.join(policy.get('allowed_symbols') or [])}",
+                f"max_trade_lots={policy.get('max_trade_lots')}",
+                f"max_open_live_lots={policy.get('max_open_live_lots')}",
+                f"live_trade_count={policy.get('live_trade_count')}",
+                f"pilot_capacity_remaining={policy.get('pilot_capacity_remaining')}",
+                f"missing={'; '.join(missing) if missing else 'none'}",
+            ),
+            next_action="" if ready else "Complete Settings -> Live Pilot, set small limits/symbols, and owner-confirm ACCEPT before first live-money testing.",
+            blocks_live=not ready,
+            owner_action_required=not ready,
+        )
+    ]
+
+
+def _live_recovery_checks(report: Mapping[str, Any]) -> list[LiveReadinessCheck]:
+    clear = bool(report.get("recovery_clear_for_live", False))
+    requires = bool(report.get("requires_recovery_review", False))
+    missing = tuple(str(item) for item in (report.get("missing_requirements") or ()))
+    return [
+        LiveReadinessCheck(
+            gate_id="live_crash_disconnect_recovery",
+            label="Crash/disconnect recovery",
+            status=PASSED if clear else OPEN_STATUS,
+            plain_english=(
+                "Recovery review is clear for the current broker-truth and live-pilot evidence."
+                if clear
+                else (
+                    "Prior live activity or open-position evidence needs owner recovery review before more live orders."
+                    if requires
+                    else "Recovery evidence is not clear yet."
+                )
+            ),
+            evidence=(
+                f"recovery_status={report.get('recovery_status', 'OPEN')}",
+                f"requires_recovery_review={requires}",
+                f"evidence_ready_for_owner_accept={report.get('evidence_ready_for_owner_accept')}",
+                f"current_fingerprint={report.get('current_fingerprint')}",
+                f"missing={'; '.join(missing) if missing else 'none'}",
+            ),
+            next_action="" if clear else "Refresh broker-truth monitoring, inspect open-position reconciliation, then owner-ACCEPT live recovery before more live orders.",
+            blocks_live=not clear,
+            owner_action_required=not clear and requires,
+        )
     ]
 
 

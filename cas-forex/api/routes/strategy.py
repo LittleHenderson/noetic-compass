@@ -1,6 +1,8 @@
 from typing import Optional
 
 from fastapi import APIRouter, Query
+from pydantic import BaseModel, Field
+from ..route_cache import cache_first_payload
 from ..data import (
     agent_information_flow,
     agent_memory_latest,
@@ -20,6 +22,7 @@ from ..data import (
     forex_fury_replay_results,
     forex_fury_set_import,
     session_autowake_latest,
+    strategy_lead_summaries,
     strategy_dev_queue_latest,
     strategy_patch_runner_latest,
     strategy_leads,
@@ -33,6 +36,9 @@ from ..data import (
     mt5_paper_execution_verifier_latest,
     mt5_deal_history_ingest_latest,
     terminal_position_reconciliation_latest,
+    terminal_receipt_archive_action,
+    terminal_receipt_recovery_refresh_action,
+    terminal_receipt_recovery_packet_latest,
     terminal_operability_verifier_latest,
     terminal_receipt_watcher_latest,
     terminal_receipt_ingest_latest,
@@ -42,10 +48,29 @@ from ..data import (
 router = APIRouter()
 
 
+class TerminalReceiptArchiveActionBody(BaseModel):
+    execute: bool = False
+    confirm_owner_archive: bool = False
+    age_threshold_hours: float = Field(default=24.0, gt=0, le=8760)
+    notes: Optional[str] = None
+
+
+class TerminalReceiptRecoveryRefreshBody(BaseModel):
+    execute: bool = False
+    confirm_owner_refresh: bool = False
+    notes: Optional[str] = None
+
+
 @router.get("/leads")
 async def get_leads():
     """Returns all strategy leads."""
     return strategy_leads()
+
+
+@router.get("/leads/summary")
+async def get_lead_summaries(limit: int = Query(default=12, ge=1, le=50)):
+    """Returns compact strategy-lead rows for dashboard first/idle hydration."""
+    return strategy_lead_summaries(limit=limit)
 
 
 @router.get("/backsolve")
@@ -239,6 +264,50 @@ async def get_mt5_deal_history_ingest_latest():
 async def get_terminal_position_reconciliation_latest():
     """Returns latest CAS Forex terminal position reconciliation report."""
     return terminal_position_reconciliation_latest()
+
+
+@router.get("/terminal-receipt-recovery-packet/latest")
+async def get_terminal_receipt_recovery_packet_latest():
+    """Returns read-only terminal receipt recovery packet."""
+    return cache_first_payload(
+        "terminal_receipt_recovery_packet_latest",
+        builder=terminal_receipt_recovery_packet_latest,
+        fallback=_terminal_receipt_recovery_warming,
+        ttl_seconds=60.0,
+    )
+
+
+def _terminal_receipt_recovery_warming():
+    return {
+        "report_kind": "cas_forex_terminal_receipt_recovery_packet",
+        "status": "WARMING",
+        "terminal_reconciliation_clean_for_live": False,
+        "pending_receipt_count": 0,
+        "can_archive_stale_pending_receipts": False,
+        "legacy_archive_preview": {"pending_receipt_rows_archived": 0},
+        "next_action": "Terminal receipt recovery cache is warming.",
+    }
+
+
+@router.post("/terminal-receipt-recovery-packet/archive-stale")
+async def post_terminal_receipt_archive_action(body: TerminalReceiptArchiveActionBody):
+    """Owner-controlled archive action for stale pending terminal receipt rows."""
+    return terminal_receipt_archive_action(
+        execute=body.execute,
+        confirm_owner_archive=body.confirm_owner_archive,
+        age_threshold_hours=body.age_threshold_hours,
+        notes=body.notes or "",
+    )
+
+
+@router.post("/terminal-receipt-recovery-packet/refresh-chain")
+async def post_terminal_receipt_recovery_refresh_action(body: TerminalReceiptRecoveryRefreshBody):
+    """Owner-controlled local evidence refresh chain for receipt recovery."""
+    return terminal_receipt_recovery_refresh_action(
+        execute=body.execute,
+        confirm_owner_refresh=body.confirm_owner_refresh,
+        notes=body.notes or "",
+    )
 
 
 @router.get("/terminal-operability-verifier/latest")

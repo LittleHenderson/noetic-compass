@@ -51,9 +51,10 @@ from __future__ import annotations
 import hashlib
 import hmac
 import os
+import random
 from dataclasses import dataclass
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence
 
 from cas_forex.macro_surprise import evaluate_surprise_return_pairs
 
@@ -178,7 +179,7 @@ def verify_token(
 
 def evaluate_candidate(
     setup: CandidateSetup,
-    entry_pairs: Sequence[Dict[str, float]],
+    entry_pairs: Sequence[Dict[str, Any]],
     *,
     threshold: float = 0.65,
     n_null: int = 500,
@@ -206,7 +207,7 @@ def evaluate_candidate(
     Only a PASS carries an ``edge_token``.
     """
     evaluated_at = _now_iso()
-    pairs = list(entry_pairs)
+    pairs = _same_direction_pairs(setup, entry_pairs)
 
     # Couldn't-test gate #1: not enough outcomes to even attempt a credible test.
     if len(pairs) < min_events:
@@ -233,6 +234,19 @@ def evaluate_candidate(
                 "cost_ret": float(p.get("cost_ret", 0.0)),
             }
         )
+
+    if _has_direction_tags(entry_pairs):
+        direction_decision = _evaluate_direction_tagged_pairs(
+            setup,
+            pairs,
+            threshold=threshold,
+            n_null=n_null,
+            min_events=min_events,
+            seed=seed,
+            evaluated_at=evaluated_at,
+        )
+        if direction_decision is not None:
+            return direction_decision
 
     report = evaluate_surprise_return_pairs(
         usable,
@@ -310,3 +324,154 @@ def evaluate_candidate(
         evaluated_at=evaluated_at,
         reason="; ".join(fail_reasons),
     )
+
+
+def _same_direction_pairs(
+    setup: CandidateSetup,
+    entry_pairs: Sequence[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Return only OOS outcomes for the setup's direction when direction tags exist.
+
+    Older callers passed untagged rows and remain valid. New WASTE market-data
+    rows carry ``direction`` so LONG and SHORT hypotheses are tested against their
+    own historical decisions instead of borrowing the opposite side's outcomes.
+    """
+
+    raw = list(entry_pairs)
+    if not any("direction" in pair for pair in raw):
+        return raw
+    direction = str(setup.direction).upper()
+    return [
+        pair
+        for pair in raw
+        if str(pair.get("direction", "")).upper() == direction
+    ]
+
+
+def _has_direction_tags(entry_pairs: Sequence[Dict[str, Any]]) -> bool:
+    return any("direction" in pair for pair in entry_pairs)
+
+
+def _evaluate_direction_tagged_pairs(
+    setup: CandidateSetup,
+    pairs: Sequence[Dict[str, Any]],
+    *,
+    threshold: float,
+    n_null: int,
+    min_events: int,
+    seed: int,
+    evaluated_at: str,
+) -> Optional[EdgeTestDecision]:
+    """Evaluate WASTE direction-tagged rows against a random-direction null.
+
+    WASTE rows already contain the historical direction chosen by STRATEGIZE.
+    After filtering to the candidate direction, their signal sign is naturally
+    constant (all LONG rows are positive, all SHORT rows negative), so the
+    macro-surprise shuffled-label null cannot distinguish the real sequence
+    from its permutations. Here the null asks the relevant directional question:
+    did the chosen side beat random LONG/SHORT choices on the same closed
+    historical windows, net of cost?
+    """
+
+    direction = str(setup.direction).upper()
+    if direction not in _VALID_DIRECTIONS:
+        return None
+
+    if len(pairs) < (min_events * 2):
+        return EdgeTestDecision(
+            status="NO_TRADE_UNDERPOWERED",
+            measured_win_prob=0.0,
+            null_p95=0.0,
+            threshold=threshold,
+            edge_token=None,
+            evaluated_at=evaluated_at,
+            reason=(
+                f"only {len(pairs)} direction-tagged OOS outcomes "
+                f"(need >= {min_events * 2} for a train/test split)"
+            ),
+        )
+
+    cut = max(6, int(len(pairs) * 0.6))
+    test = list(pairs[cut:])
+    if len(test) < min_events:
+        return EdgeTestDecision(
+            status="NO_TRADE_UNDERPOWERED",
+            measured_win_prob=0.0,
+            null_p95=0.0,
+            threshold=threshold,
+            edge_token=None,
+            evaluated_at=evaluated_at,
+            reason=f"only {len(test)} test events (need >= {min_events})",
+        )
+
+    direction_multiplier = 1.0 if direction == "LONG" else -1.0
+    signed_returns = [
+        direction_multiplier * float(p.get("ret", 0.0)) - float(p.get("cost_ret", 0.0))
+        for p in test
+    ]
+    net_return = float(sum(signed_returns))
+    measured_win_prob = sum(1 for item in signed_returns if item > 0.0) / len(signed_returns)
+
+    rng = random.Random(seed)
+    null_returns: List[float] = []
+    for _ in range(max(0, int(n_null))):
+        pnl = 0.0
+        for p in test:
+            random_direction = 1.0 if rng.random() >= 0.5 else -1.0
+            pnl += random_direction * float(p.get("ret", 0.0)) - float(p.get("cost_ret", 0.0))
+        null_returns.append(pnl)
+    null_p95 = _percentile(null_returns, 95.0) if null_returns else 0.0
+    beats_null = net_return > null_p95
+
+    passes = beats_null and net_return > 0.0 and measured_win_prob >= threshold
+    if passes:
+        token = mint_token(setup, evaluated_at)
+        return EdgeTestDecision(
+            status="PASS",
+            measured_win_prob=measured_win_prob,
+            null_p95=null_p95,
+            threshold=threshold,
+            edge_token=token,
+            evaluated_at=evaluated_at,
+            reason=(
+                f"direction edge confirmed: win_prob {measured_win_prob:.3f} >= threshold "
+                f"{threshold:.3f}, net {net_return:.5f} > 0, beats random-direction null"
+            ),
+        )
+
+    fail_reasons: List[str] = []
+    if not beats_null:
+        fail_reasons.append(
+            f"net return {net_return:.5f} does not beat random-direction null p95 {null_p95:.5f}"
+        )
+    if net_return <= 0.0:
+        fail_reasons.append(f"net return {net_return:.5f} not positive after cost")
+    if measured_win_prob < threshold:
+        fail_reasons.append(
+            f"win_prob {measured_win_prob:.3f} below threshold {threshold:.3f}"
+        )
+    if not fail_reasons:
+        fail_reasons.append("did not satisfy all direction edge conditions")
+
+    return EdgeTestDecision(
+        status="NO_TRADE_NULL_FAILED",
+        measured_win_prob=measured_win_prob,
+        null_p95=null_p95,
+        threshold=threshold,
+        edge_token=None,
+        evaluated_at=evaluated_at,
+        reason="; ".join(fail_reasons),
+    )
+
+
+def _percentile(values: Sequence[float], q: float) -> float:
+    if not values:
+        return 0.0
+    ordered = sorted(float(value) for value in values)
+    if len(ordered) == 1:
+        return ordered[0]
+    rank = (len(ordered) - 1) * max(0.0, min(100.0, float(q))) / 100.0
+    lower = int(rank)
+    upper = min(lower + 1, len(ordered) - 1)
+    weight = rank - lower
+    return ordered[lower] * (1.0 - weight) + ordered[upper] * weight

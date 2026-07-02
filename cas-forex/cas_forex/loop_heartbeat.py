@@ -10,7 +10,7 @@ mirror, not a source of truth; it places no trade and gates nothing.
 
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, Optional
 
@@ -27,6 +27,7 @@ class _Beat:
     detail: Optional[str] = None
     symbol: Optional[str] = None
     updated_at: Optional[str] = None  # ISO-8601 UTC
+    stage_trace: list[str] = field(default_factory=list)
 
 
 _BEAT = _Beat()
@@ -37,6 +38,11 @@ def record(stage: str, *, detail: Optional[str] = None, symbol: Optional[str] = 
     s = str(stage).strip().lower()
     if s not in VALID_STAGES:
         s = "idle"
+    if s == "watch" or not _BEAT.stage_trace:
+        _BEAT.stage_trace = [s]
+    elif _BEAT.stage_trace[-1] != s:
+        _BEAT.stage_trace.append(s)
+        _BEAT.stage_trace = _BEAT.stage_trace[-12:]
     _BEAT.stage = s
     _BEAT.detail = detail
     _BEAT.symbol = symbol
@@ -70,4 +76,5 @@ def snapshot(*, stale_after_s: float = _STALE_AFTER_S) -> Dict[str, Any]:
         "symbol": _BEAT.symbol if running else None,
         "updated_at": _BEAT.updated_at,
         "age_seconds": round(age, 2) if age is not None else None,
+        "stage_trace": list(_BEAT.stage_trace) if running else [],
     }

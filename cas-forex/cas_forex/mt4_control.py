@@ -154,11 +154,12 @@ def build_mt4_control_report(config: Any = None) -> Dict[str, Any]:
         "heartbeat": heartbeat,
         "link_status": link,
         "note": (
-            "Enabling writes PAPER_MT4 command intents the EA acknowledges via the "
-            "shared mailbox folder. Point the mailbox dir at the MT4 terminal's "
-            "MQL4\\Files\\CASForexMailbox folder and attach CASForexBridgeEA. Then "
-            "select platform 'mt4' in Broker Control so dispatch routes through it. "
-            "This is the stable, file-based real-order route (not the flaky MT5 IPC)."
+            "Route ON selects the MT4 mailbox path, but MT4 demo trading is not "
+            "active until CASForexBridgeEA writes a fresh heartbeat.json and receipt "
+            "files in the shared mailbox folder. Point the mailbox dir at the MT4 "
+            "terminal's MQL4\\Files\\CASForexMailbox folder and attach "
+            "CASForexBridgeEA. Then select platform 'mt4' in Broker Control so "
+            "dispatch can use the live EA link when it is fresh."
         ),
         "claim_boundary": (
             "Enabling the MT4 route does not authorize live money. Live MT4 also "

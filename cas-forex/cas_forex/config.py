@@ -76,21 +76,19 @@ class ForexConfig:
     personal_account_ack: bool = _env_bool("PERSONAL_ACCOUNT_ACK", False)
     no_pooled_capital_ack: bool = _env_bool("NO_POOLED_CAPITAL_ACK", False)
     account_type: str = _env("ACCOUNT_TYPE", "personal")
-    # Master live-trading authority switch. Live trading, broker ACCEPT,
-    # auto-deposit, debit/card/bank movement, and payout automation remain
-    # NOT LICENSED until this is explicitly turned on by the owner after the
-    # external broker/legal/paper-proof gates close. Defaults to False so the
-    # reported NOT LICENSED status is actually enforced at the execution path.
+    # Legacy env/storage name for the owner's live-trading ACCEPT switch. The
+    # UI presents this as owner authority, not an agent-issued license. Defaults
+    # to False so the live execution path stays owner-off until explicitly set.
     live_trading_licensed: bool = _env_bool("LIVE_TRADING_LICENSED", False)
 
     # ---- Owner enable flags for real-money capabilities ----
     # These are OFF by default (fail-closed). A capability is only ever active
     # when (1) the matching owner enable flag below is on, (2) the required
     # credentials are present, and (3) the broker/payment provider is
-    # configured. None of these are a "permanent lock": the owner turns them on
-    # by providing config + setting the flag. Until then the capability stays
-    # CURRENTLY NOT LICENSED / pending owner enable, and the runtime refuses to
-    # act so we never silently move real money without explicit authorization.
+    # configured. None of these are a permanent lock: the owner turns them on by
+    # providing config + setting the flag. Until then the capability stays
+    # pending owner enable, and the runtime refuses to act so we never silently
+    # move real money without explicit authorization.
     owner_enable_live_trading: bool = _env_bool("OWNER_ENABLE_LIVE_TRADING", False)
     owner_enable_broker_accept: bool = _env_bool("OWNER_ENABLE_BROKER_ACCEPT", False)
     owner_enable_auto_deposit: bool = _env_bool("OWNER_ENABLE_AUTO_DEPOSIT", False)
@@ -115,7 +113,11 @@ class ForexConfig:
     sweep_tax_reserve_pct: float = _env_float("SWEEP_TAX_RESERVE_PCT", 10.0)
 
     # ---- Market Data ----
-    market_data_provider: str = _env("MARKET_DATA_PROVIDER", "YAHOO")  # OANDA or YAHOO
+    market_data_provider: str = _env("MARKET_DATA_PROVIDER", "YAHOO")  # MT5, OANDA, or YAHOO
+    # Optional owner override for broker-specific MT5 symbol names, for example:
+    # {"NAS100":["NAS100.cash","USTEC"],"US30":"US30.cash"} or
+    # NAS100=NAS100.cash|USTEC;US30=US30.cash
+    mt5_symbol_overrides: str = _env("MT5_SYMBOL_OVERRIDES", "")
     oanda_api_key: Optional[str] = _env("OANDA_API_KEY") or None
     oanda_account_id: Optional[str] = _env("OANDA_ACCOUNT_ID") or None
     oanda_environment: str = _env("OANDA_ENVIRONMENT", "practice")  # practice or live

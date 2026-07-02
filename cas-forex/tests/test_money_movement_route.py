@@ -6,10 +6,13 @@ BLOCKED result surfacing the missing requirements and never moves money.
 
 from __future__ import annotations
 
+import asyncio
+
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from api.routes import money_movement as route_module
+from api.routes.money_movement import VerifiedSweepPolicyUpdate
 
 
 def _client() -> TestClient:
@@ -67,8 +70,11 @@ def test_deposit_rejects_non_positive_amount():
 
 def test_authorized_payout_requires_confirm_then_settles(monkeypatch):
     # Authorize payout on the GLOBAL config (simulated provider -> no real money).
+    from cas_forex import broker_reality, live_enable_control
     from cas_forex.config import config as gc
 
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
+    monkeypatch.setattr(live_enable_control, "apply_live_enable_overrides", lambda cfg: cfg)
     monkeypatch.setattr(gc, "owner_enable_payout_automation", True)
     monkeypatch.setattr(gc, "payment_provider", "simulated")
     monkeypatch.setattr(gc, "payment_api_key", "k")
@@ -88,3 +94,44 @@ def test_authorized_payout_requires_confirm_then_settles(monkeypatch):
         json={"amount_usd": 100, "destination_id": "dest-1"},
     )
     assert settled.json()["status"] == "SETTLED"
+
+
+def test_verified_profit_sweep_policy_update_invalidates_dependent_caches(monkeypatch):
+    captured: dict[str, object] = {}
+
+    class FakeSettings:
+        def __init__(self):
+            self.sweep_pct = 40.0
+            self.tax_reserve_pct = 20.0
+            self.min_sweep_usd = 25.0
+            self.destination_id = "dest-1"
+            self.allow_principal_sweep = False
+            self.policy_id = "unit"
+
+    class FakePolicyStore:
+        def update(self, **changes):
+            captured["changes"] = changes
+            return FakeSettings()
+
+        def load(self):
+            return FakeSettings()
+
+    class FakeAuditLog:
+        def append(self, action, payload):
+            captured["audit_action"] = action
+            captured["audit_payload"] = payload
+            return {"audit_id": "unit-audit"}
+
+    def fake_invalidate_live_money_gate_caches(*keys: str):
+        captured["invalidated"] = keys
+
+    monkeypatch.setattr(route_module, "_policy_store", lambda: FakePolicyStore())
+    monkeypatch.setattr(route_module, "_audit_log", lambda: FakeAuditLog())
+    monkeypatch.setattr(route_module, "invalidate_live_money_gate_caches", fake_invalidate_live_money_gate_caches)
+
+    body = VerifiedSweepPolicyUpdate(sweep_pct=40.0, destination_id="dest-1")
+    packet = asyncio.run(route_module.post_verified_profit_sweep_policy(body))
+
+    assert packet["report_kind"] == "cas_forex_verified_profit_sweep_policy"
+    assert captured["changes"] == {"sweep_pct": 40.0, "destination_id": "dest-1"}
+    assert captured["invalidated"] == ()

@@ -50,6 +50,25 @@ def test_multiple_timeframes_active_per_symbol() -> None:
     }
 
 
+def test_state_path_persists_active_timeframes_across_runtime_restart(tmp_path) -> None:
+    state_path = tmp_path / "multi-timeframe-runtime.json"
+    rt = MultiTimeframeRuntime(state_path)
+    rt.activate("NAS100", "D1")
+    rt.activate("NAS100", "H1")
+    rt.activate("US30", "M15")
+
+    reloaded = MultiTimeframeRuntime(state_path)
+
+    assert reloaded.active_timeframes_for("NAS100") == frozenset({"D1", "H1"})
+    assert reloaded.active_timeframes_for("US30") == frozenset({"M15"})
+
+    reloaded.deactivate("NAS100", "H1")
+    reloaded_again = MultiTimeframeRuntime(state_path)
+
+    assert reloaded_again.active_timeframes_for("NAS100") == frozenset({"D1"})
+    assert reloaded_again.active_timeframes_for("US30") == frozenset({"M15"})
+
+
 def test_deactivate_removes_only_target_timeframe() -> None:
     rt = MultiTimeframeRuntime()
     rt.activate("EURUSD", "M5")

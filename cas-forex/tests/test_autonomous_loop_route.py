@@ -47,8 +47,10 @@ async def _asgi_get(path: str) -> tuple[int, Any]:
 @pytest.fixture(autouse=True)
 def _reset_loader_between_tests():
     route_module.reset_loader_for_testing()
+    route_module.set_runtime_status_loader_for_testing(lambda: None)
     yield
     route_module.reset_loader_for_testing()
+    route_module.reset_runtime_status_loader_for_testing()
 
 
 def test_route_returns_200_when_no_evidence():
@@ -104,3 +106,110 @@ def test_plain_english_summary_never_advises_future_trade():
 def test_default_loader_uses_loop_health_inputs():
     route_module.reset_loader_for_testing()
     assert route_module._LOADER is route_module._default_loader
+
+
+def test_runtime_waste_loop_overrides_stale_archive_health():
+    route_module.set_loader_for_testing(lambda: {
+        "autowake_report": {"summary": {"next_due_at": "2026-01-01T00:00:00+00:00"}},
+        "latest_cycle_report": {
+            "report_kind": "cas_forex_agent_workflow_cycle",
+            "cycle_id": "old-cycle",
+            "created_at": "2026-01-01T00:00:00+00:00",
+            "summary": {},
+        },
+        "recent_event_journal": [],
+        "daily_rollup": None,
+    })
+    route_module.set_runtime_status_loader_for_testing(lambda: {
+        "source": "waste_runner",
+        "running": True,
+        "mode": "PAPER",
+        "stage": "no_trade",
+        "cycles_run": 12,
+        "last_run_iso": "2026-07-01T01:00:00+00:00",
+        "status": "RUNNING",
+    })
+
+    status, body = asyncio.run(_asgi_get("/api/forex/autonomous-loop/health"))
+
+    assert status == 200
+    assert body["overall_status"] == "running"
+    assert body["diagnostic_hints"] == []
+    assert body["last_cycle_at_iso"] == "2026-07-01T01:00:00+00:00"
+    assert body["runtime_loop"]["source"] == "waste_runner"
+    assert body["runtime_loop"]["stage"] == "no_trade"
+    assert "does not authorize live trading" in body["runtime_loop"]["claim_boundary"]
+
+
+def test_runtime_overlay_absent_preserves_unknown_health():
+    route_module.set_loader_for_testing(lambda: {
+        "autowake_report": None,
+        "latest_cycle_report": None,
+        "recent_event_journal": [],
+        "daily_rollup": None,
+    })
+    route_module.set_runtime_status_loader_for_testing(lambda: None)
+
+    status, body = asyncio.run(_asgi_get("/api/forex/autonomous-loop/health"))
+
+    assert status == 200
+    assert body["overall_status"] == "unknown"
+    assert "runtime_loop" not in body
+
+
+def test_runtime_status_prefers_cached_waste_runner_snapshot(monkeypatch):
+    route_module.reset_runtime_status_loader_for_testing()
+    started: list[str] = []
+    monkeypatch.setattr(
+        route_module,
+        "cached_payload_snapshot",
+        lambda key, *, ttl_seconds: {
+            "running": True,
+            "mode": "PAPER",
+            "cycles_run": 21,
+            "last_run_iso": "2026-07-01T02:00:00+00:00",
+            "last_reason": "no edge",
+            "status": "RUNNING",
+            "current_stage": "no_trade",
+        } if key == "waste_runner_status_fast" and ttl_seconds == 5.0 else None,
+    )
+    monkeypatch.setattr(
+        route_module,
+        "start_cache_refresh",
+        lambda key, builder: started.append(key) or True,
+    )
+
+    runtime = route_module._runtime_loop_status()
+
+    assert runtime == {
+        "source": "waste_runner",
+        "running": True,
+        "mode": "PAPER",
+        "cycles_run": 21,
+        "last_run_iso": "2026-07-01T02:00:00+00:00",
+        "summary": "no edge",
+        "status": "RUNNING",
+        "stage": "no_trade",
+    }
+    assert started == []
+
+
+def test_runtime_status_cache_miss_starts_refresh_without_inline_waste_build(monkeypatch):
+    route_module.reset_runtime_status_loader_for_testing()
+    started: list[str] = []
+    monkeypatch.setattr(route_module, "cached_payload_snapshot", lambda key, *, ttl_seconds: None)
+    monkeypatch.setattr(
+        route_module,
+        "start_cache_refresh",
+        lambda key, builder: started.append(key) or True,
+    )
+    monkeypatch.setattr(route_module, "build_fast_waste_runner_status", None, raising=False)
+    monkeypatch.setattr(
+        "cas_forex.dispatch_loop.loop_status",
+        lambda: {"running": False, "status": "STOPPED"},
+    )
+
+    runtime = route_module._runtime_loop_status()
+
+    assert runtime is None
+    assert started == ["waste_runner_status_fast"]

@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from cas_forex import broker_reality
 from cas_forex.account_ledger import (
     CREDIT_EVENT_TYPES,
     DEBIT_EVENT_TYPES,
@@ -102,7 +103,8 @@ def test_deposit_settles_and_emits_credit_event():
     assert "deposit" in CREDIT_EVENT_TYPES
 
 
-def test_payout_settles_and_emits_debit_event():
+def test_payout_settles_and_emits_debit_event(monkeypatch):
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
     engine = MovementEngine(config=_authorized_cfg())
     result = engine.payout(300.0, destination_id="dest-1")
 
@@ -120,10 +122,12 @@ def test_non_positive_amount_rejected():
     assert result.provider_receipt is None
 
 
-def test_payout_to_non_allowlisted_destination_is_rejected():
+def test_payout_to_non_allowlisted_destination_is_rejected(monkeypatch):
     # The gate confirms AN allowlisted destination is configured; the engine must
     # additionally confirm THIS payout targets it. A mismatched destination is
     # rejected fail-closed and the provider is never called.
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
+
     class _ExplodingProvider(SimulatedPaymentProvider):
         def withdraw(self, amount_usd, *, destination_id, kind):  # noqa: ANN001
             raise AssertionError("provider must not be called for a bad destination")
@@ -135,9 +139,10 @@ def test_payout_to_non_allowlisted_destination_is_rejected():
     assert "allowlisted" in result.reason
 
 
-def test_payout_defaults_to_allowlisted_destination():
+def test_payout_defaults_to_allowlisted_destination(monkeypatch):
     # With no destination given, the payout binds to the owner's allowlisted
     # config destination (config.payout_destination_id == "dest-1") and settles.
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
     engine = MovementEngine(config=_authorized_cfg())
     result = engine.payout(150.0)
     assert result.status == STATUS_SETTLED
@@ -183,7 +188,8 @@ def test_provider_error_becomes_failed_not_exception():
 
 # -- reinvest split -----------------------------------------------------------
 
-def test_reinvest_split_math_and_gating_when_authorized():
+def test_reinvest_split_math_and_gating_when_authorized(monkeypatch):
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
     engine = MovementEngine(config=_authorized_cfg())
     split = engine.reinvest_split(
         1000.0, reinvest_pct=50.0, savings_pct=40.0, tax_reserve_pct=10.0,

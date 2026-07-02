@@ -19,6 +19,10 @@ from cas_forex.terminal_position_reconciliation import (
     build_terminal_position_reconciliation_report,
     load_latest_terminal_position_reconciliation_report,
 )
+from cas_forex.terminal_receipt_recovery_packet import (
+    build_terminal_receipt_recovery_packet,
+    run_terminal_receipt_archive_action,
+)
 from cas_forex.terminal_receipt_ingest import ingest_terminal_receipts
 
 
@@ -50,6 +54,37 @@ async def _asgi_get(path: str) -> tuple[int, dict[str, Any]]:
     status = next(m["status"] for m in sent if m["type"] == "http.response.start")
     body = b"".join(m.get("body", b"") for m in sent if m["type"] == "http.response.body")
     return int(status), json.loads(body.decode("utf-8"))
+
+
+async def _asgi_post(path: str, body: dict[str, Any]) -> tuple[int, dict[str, Any]]:
+    payload = json.dumps(body).encode("utf-8")
+    sent: list[dict[str, Any]] = []
+
+    async def receive() -> dict[str, Any]:
+        return {"type": "http.request", "body": payload, "more_body": False}
+
+    async def send(message: dict[str, Any]) -> None:
+        sent.append(message)
+
+    parsed = urlsplit(path)
+    scope = {
+        "type": "http",
+        "asgi": {"version": "3.0"},
+        "http_version": "1.1",
+        "method": "POST",
+        "scheme": "http",
+        "path": parsed.path,
+        "raw_path": parsed.path.encode("utf-8"),
+        "query_string": parsed.query.encode("utf-8"),
+        "headers": [(b"host", b"testserver"), (b"content-type", b"application/json")],
+        "client": ("127.0.0.1", 12345),
+        "server": ("testserver", 80),
+        "root_path": "",
+    }
+    await app(scope, receive, send)
+    status = next(m["status"] for m in sent if m["type"] == "http.response.start")
+    response_body = b"".join(m.get("body", b"") for m in sent if m["type"] == "http.response.body")
+    return int(status), json.loads(response_body.decode("utf-8"))
 
 
 def _write_heartbeat(mailbox_dir: Path) -> None:
@@ -239,6 +274,170 @@ def test_terminal_position_reconciliation_flags_unmatched_open_memory(tmp_path):
     assert report["checks"][4]["status"] == "MISMATCH"
 
 
+def test_terminal_receipt_recovery_packet_previews_pending_receipt_blocker(tmp_path):
+    report = build_terminal_position_reconciliation_report(
+        terminal_bridge_report={
+            "report_kind": "cas_forex_terminal_bridge_supervisor_report",
+            "supervisor_status": "TERMINAL_BRIDGE_HEARTBEAT_MISSING",
+            "summary": {"heartbeat_status": "MISSING", "heartbeat_present": False, "live_trading_flag_visible": False},
+            "account_snapshot": {"account_snapshot_present": False, "latest_account_snapshot": None},
+        },
+        receipt_ingest_report={"report_kind": "cas_forex_terminal_receipt_ingest", "summary": {"pending_receipt_count": 1, "receipt_mismatch_count": 0}, "receipt_records": []},
+        history_ingest_report={"report_kind": "cas_forex_terminal_history_ingest", "summary": {}, "history_records": [], "memory_updates": []},
+        memory_report={
+            "report_kind": "cas_forex_agent_memory_report",
+            "summary": {"pending_receipt_count": 1, "receipt_mismatch_count": 0},
+            "memory_records": [
+                {
+                    "memory_id": "memory-pending-1",
+                    "decision_approved": True,
+                    "command_id": "agent-micro-AUDCAD-20260624053115-20260624053115627453",
+                    "broker_mode": "PAPER_MT4",
+                    "symbol": "AUD/CAD",
+                    "direction": "LONG",
+                    "outcome_label": "AWAITING_TERMINAL_RECEIPT",
+                    "learning_status": "WAITING_FOR_TERMINAL",
+                    "condition_snapshot_open": {"symbol": "AUD/CAD", "direction": "LONG", "lot_size": 0.1, "entry_price": 0.9},
+                }
+            ],
+        },
+        mt4_history_export_verifier_report={"report_kind": "cas_forex_mt4_history_export_verifier_report", "verifier_status": "MT4_HISTORY_EXPORT_NEEDS_MT4_TERMINAL", "summary": {}},
+        output_dir=tmp_path / "reconciliation",
+        write_report=False,
+    )
+    event_log = tmp_path / "agent-events.jsonl"
+    event_log.write_text(
+        json.dumps(
+            {
+                "event_type": "TERMINAL_RECEIPT_PENDING",
+                "created_at": "2026-06-24T05:31:15+00:00",
+                "subject": "old pending receipt",
+            },
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    packet = build_terminal_receipt_recovery_packet(
+        reconciliation_report=report,
+        event_log_path=event_log,
+        legacy_snapshot_dir=tmp_path / "legacy-archive",
+    )
+
+    assert packet["report_kind"] == "cas_forex_terminal_receipt_recovery_packet"
+    assert packet["status"] == "TERMINAL_RECEIPT_RECOVERY_ARCHIVE_PREVIEW_READY"
+    assert packet["terminal_reconciliation_clean_for_live"] is False
+    assert packet["broker_touched"] is False
+    assert packet["journal_rewritten"] is False
+    assert packet["pending_receipt_count"] == 1
+    assert packet["pending_positions"][0]["classification_status"] == "LEGACY_MT4_MAILBOX_PENDING"
+    assert packet["legacy_archive_preview"]["dry_run"] is True
+    assert packet["legacy_archive_preview"]["pending_receipt_rows_archived"] == 1
+    assert event_log.exists()
+
+
+def test_terminal_receipt_archive_action_requires_owner_confirmation(tmp_path):
+    event_log = tmp_path / "agent-events.jsonl"
+    event_log.write_text(
+        json.dumps(
+            {
+                "event_type": "TERMINAL_RECEIPT_PENDING",
+                "created_at": "2000-01-01T00:00:00+00:00",
+                "subject": "old pending receipt",
+            },
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+
+    action = run_terminal_receipt_archive_action(
+        execute=True,
+        confirm_owner_archive=False,
+        event_log_path=event_log,
+        legacy_snapshot_dir=tmp_path / "legacy-archive",
+    )
+
+    assert action["report_kind"] == "cas_forex_terminal_receipt_archive_action"
+    assert action["status"] == "TERMINAL_RECEIPT_ARCHIVE_CONFIRM_REQUIRED"
+    assert action["dry_run"] is True
+    assert action["broker_touched"] is False
+    assert action["journal_rewritten"] is False
+    assert action["money_moved"] is False
+    assert action["archive_result"]["pending_receipt_rows_archived"] == 1
+    assert "TERMINAL_RECEIPT_PENDING" in event_log.read_text(encoding="utf-8")
+    assert not any((tmp_path / "legacy-archive").glob("*.jsonl"))
+
+
+def test_terminal_receipt_archive_action_route_previews_and_executes(monkeypatch, tmp_path):
+    event_log = tmp_path / "agent-events.jsonl"
+    event_log.write_text(
+        "\n".join(
+            [
+                json.dumps(
+                    {
+                        "event_type": "TERMINAL_RECEIPT_PENDING",
+                        "created_at": "2000-01-01T00:00:00+00:00",
+                        "subject": "old pending receipt",
+                    },
+                    sort_keys=True,
+                ),
+                json.dumps(
+                    {
+                        "event_type": "KEEP_ME",
+                        "created_at": "2000-01-01T00:00:00+00:00",
+                        "subject": "ordinary row",
+                    },
+                    sort_keys=True,
+                ),
+            ]
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    archive_dir = tmp_path / "legacy-archive"
+
+    def archive_action(**kwargs: Any) -> dict[str, Any]:
+        return run_terminal_receipt_archive_action(
+            event_log_path=event_log,
+            legacy_snapshot_dir=archive_dir,
+            **kwargs,
+        )
+
+    monkeypatch.setattr(strategy_routes, "terminal_receipt_archive_action", archive_action)
+
+    status, preview = asyncio.run(
+        _asgi_post(
+            "/api/forex/strategy/terminal-receipt-recovery-packet/archive-stale",
+            {"execute": False, "confirm_owner_archive": False, "notes": "preview"},
+        )
+    )
+    assert status == 200
+    assert preview["status"] == "TERMINAL_RECEIPT_ARCHIVE_DRY_RUN"
+    assert preview["dry_run"] is True
+    assert preview["journal_rewritten"] is False
+    assert preview["archive_result"]["pending_receipt_rows_archived"] == 1
+    assert "TERMINAL_RECEIPT_PENDING" in event_log.read_text(encoding="utf-8")
+
+    status, executed = asyncio.run(
+        _asgi_post(
+            "/api/forex/strategy/terminal-receipt-recovery-packet/archive-stale",
+            {"execute": True, "confirm_owner_archive": True, "notes": "owner execute"},
+        )
+    )
+    assert status == 200
+    assert executed["status"] == "TERMINAL_RECEIPT_ARCHIVE_EXECUTED"
+    assert executed["dry_run"] is False
+    assert executed["broker_touched"] is False
+    assert executed["journal_rewritten"] is True
+    assert executed["money_moved"] is False
+    rewritten = event_log.read_text(encoding="utf-8")
+    assert "TERMINAL_RECEIPT_PENDING" not in rewritten
+    assert "KEEP_ME" in rewritten
+    assert len(list(archive_dir.glob("*.jsonl"))) == 1
+
+
 def test_terminal_position_reconciliation_api_and_dashboard_surface(monkeypatch, tmp_path):
     report = build_terminal_position_reconciliation_report(
         terminal_bridge_report={
@@ -266,3 +465,42 @@ def test_terminal_position_reconciliation_api_and_dashboard_surface(monkeypatch,
     status, dashboard = asyncio.run(_asgi_get("/api/forex/dashboard"))
     assert status == 200
     assert dashboard["terminalPositionReconciliation"]["summary"]["account_snapshot_present"] is False
+
+
+def test_terminal_receipt_recovery_packet_api_and_dashboard_surface(monkeypatch, tmp_path):
+    packet = {
+        "report_kind": "cas_forex_terminal_receipt_recovery_packet",
+        "generated_at": "2026-06-30T00:00:00+00:00",
+        "status": "TERMINAL_RECEIPT_RECOVERY_WAITING_FOR_TERMINAL",
+        "terminal_reconciliation_clean_for_live": False,
+        "broker_touched": False,
+        "journal_rewritten": False,
+        "receipt_ingest_attempted": False,
+        "attempt_finalized": False,
+        "pending_receipt_count": 28,
+        "pending_receipt_count_by_lane": {"mt4_mailbox": 28},
+        "cas_receipt_pending_open_count": 28,
+        "unmatched_open_position_count": 28,
+        "terminal_open_position_count": 0,
+        "heartbeat_status": "MISSING",
+        "account_snapshot_present": False,
+        "pending_positions": [],
+        "legacy_archive_preview": {"dry_run": True, "pending_receipt_rows_archived": 0},
+        "missing_requirements": ["terminal_heartbeat_fresh", "terminal_receipts_clear"],
+        "source_reconciliation": {},
+        "operator_commands": {},
+        "claim_boundary": "read-only packet",
+        "next_action": "Open the terminal bridge.",
+    }
+
+    monkeypatch.setattr(strategy_routes, "terminal_receipt_recovery_packet_latest", lambda: packet)
+    monkeypatch.setattr(api_server, "dashboard_state", lambda: {"terminalReceiptRecoveryPacket": packet})
+
+    status, body = asyncio.run(_asgi_get("/api/forex/strategy/terminal-receipt-recovery-packet/latest"))
+    assert status == 200
+    assert body["report_kind"] == "cas_forex_terminal_receipt_recovery_packet"
+    assert body["journal_rewritten"] is False
+
+    status, dashboard = asyncio.run(_asgi_get("/api/forex/dashboard"))
+    assert status == 200
+    assert dashboard["terminalReceiptRecoveryPacket"]["pending_receipt_count"] == 28

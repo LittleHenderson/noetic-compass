@@ -37,6 +37,7 @@ from cas_forex.order_dispatch import (
     DispatchResult,
     build_dispatch_report,
     dispatch_order,
+    record_dispatch_result_to_audit,
 )
 from cas_forex.schemas.order import BrokerOrderRequest
 from cas_forex.time_utils import utc_now
@@ -147,6 +148,7 @@ def dispatch_route_intents(
     live_telemetry: Optional[Mapping[str, Any]] = None,
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
+    audit_store: Any = None,
 ) -> DispatchReport:
     """Dispatch the overseer-approved route intents through the gated loop.
 
@@ -171,37 +173,59 @@ def dispatch_route_intents(
         decision = decisions[idx] if idx < len(decisions) else None
         if decision is None:
             # Fewer decisions than intents — never drop the intent silently.
+            result = DispatchResult(
+                order_id=str((intent.order_request or {}).get("order_id") or intent.intent_id),
+                decision_ref=intent.agent_id,
+                symbol=intent.symbol,
+                direction=str(intent.direction or "").upper(),
+                volume=float(intent.lot_size or 0.0),
+                status=STATUS_OVERSEER_REJECTED,
+                reason="no overseer decision aligned to this intent",
+                intent_summary=f"{str(intent.direction or '').upper()} {intent.symbol}",
+                dispatched_to_bridge=False,
+            )
             results.append(
-                DispatchResult(
-                    order_id=str((intent.order_request or {}).get("order_id") or intent.intent_id),
-                    decision_ref=intent.agent_id,
-                    symbol=intent.symbol,
-                    direction=str(intent.direction or "").upper(),
-                    volume=float(intent.lot_size or 0.0),
-                    status=STATUS_OVERSEER_REJECTED,
-                    reason="no overseer decision aligned to this intent",
-                    intent_summary=f"{str(intent.direction or '').upper()} {intent.symbol}",
-                    dispatched_to_bridge=False,
+                record_dispatch_result_to_audit(
+                    result,
+                    audit_store=audit_store,
+                    config=config,
+                    bridge=bridge,
+                    source="agent_dispatch_missing_overseer_decision",
                 )
             )
             continue
         if not decision.approved:
-            results.append(_overseer_rejected_result(intent, decision))
+            results.append(
+                record_dispatch_result_to_audit(
+                    _overseer_rejected_result(intent, decision),
+                    audit_store=audit_store,
+                    config=config,
+                    bridge=bridge,
+                    source="agent_dispatch_overseer_rejected",
+                )
+            )
             continue
         if not intent.order_request:
             # Approved but no order payload: nothing to dispatch. Record as a
             # pre-check rejection so it is not silently dropped.
+            result = DispatchResult(
+                order_id=intent.intent_id,
+                decision_ref=intent.agent_id,
+                symbol=intent.symbol,
+                direction=str(intent.direction or "").upper(),
+                volume=float(intent.lot_size or 0.0),
+                status="REJECTED_PRECHECK",
+                reason="approved intent carries no BrokerOrderRequest payload",
+                intent_summary=f"{str(intent.direction or '').upper()} {intent.symbol}",
+                dispatched_to_bridge=False,
+            )
             results.append(
-                DispatchResult(
-                    order_id=intent.intent_id,
-                    decision_ref=intent.agent_id,
-                    symbol=intent.symbol,
-                    direction=str(intent.direction or "").upper(),
-                    volume=float(intent.lot_size or 0.0),
-                    status="REJECTED_PRECHECK",
-                    reason="approved intent carries no BrokerOrderRequest payload",
-                    intent_summary=f"{str(intent.direction or '').upper()} {intent.symbol}",
-                    dispatched_to_bridge=False,
+                record_dispatch_result_to_audit(
+                    result,
+                    audit_store=audit_store,
+                    config=config,
+                    bridge=bridge,
+                    source="agent_dispatch_missing_order_payload",
                 )
             )
             continue
@@ -209,17 +233,24 @@ def dispatch_route_intents(
         try:
             order = BrokerOrderRequest(**dict(intent.order_request))
         except Exception as exc:
+            result = DispatchResult(
+                order_id=str((intent.order_request or {}).get("order_id") or intent.intent_id),
+                decision_ref=str((intent.order_request or {}).get("decision_ref") or intent.agent_id),
+                symbol=intent.symbol,
+                direction=str(intent.direction or "").upper(),
+                volume=float(intent.lot_size or 0.0),
+                status="REJECTED_PRECHECK",
+                reason=f"order payload failed validation: {exc}",
+                intent_summary=f"{str(intent.direction or '').upper()} {intent.symbol}",
+                dispatched_to_bridge=False,
+            )
             results.append(
-                DispatchResult(
-                    order_id=str((intent.order_request or {}).get("order_id") or intent.intent_id),
-                    decision_ref=str((intent.order_request or {}).get("decision_ref") or intent.agent_id),
-                    symbol=intent.symbol,
-                    direction=str(intent.direction or "").upper(),
-                    volume=float(intent.lot_size or 0.0),
-                    status="REJECTED_PRECHECK",
-                    reason=f"order payload failed validation: {exc}",
-                    intent_summary=f"{str(intent.direction or '').upper()} {intent.symbol}",
-                    dispatched_to_bridge=False,
+                record_dispatch_result_to_audit(
+                    result,
+                    audit_store=audit_store,
+                    config=config,
+                    bridge=bridge,
+                    source="agent_dispatch_order_precheck",
                 )
             )
             continue
@@ -234,6 +265,8 @@ def dispatch_route_intents(
                 live_telemetry=live_telemetry,
                 account_snapshot=account_snapshot,
                 equity_peak=equity_peak,
+                audit_store=audit_store,
+                audit_source="agent_dispatch_order",
             )
         )
 
@@ -252,6 +285,7 @@ def run_agent_dispatch_cycle(
     live_telemetry: Optional[Mapping[str, Any]] = None,
     account_snapshot: Optional[Mapping[str, Any]] = None,
     equity_peak: Optional[float] = None,
+    audit_store: Any = None,
 ) -> AgentDispatchCycle:
     """Run one agent dispatch cycle: real signals -> overseer -> gated dispatch.
 
@@ -280,6 +314,7 @@ def run_agent_dispatch_cycle(
         live_telemetry=live_telemetry,
         account_snapshot=account_snapshot,
         equity_peak=equity_peak,
+        audit_store=audit_store,
     )
 
     return AgentDispatchCycle(

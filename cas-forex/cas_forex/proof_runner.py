@@ -11,13 +11,18 @@ is idempotent (``skip_existing``) so a day already broker-verified is never
 re-appended. If the demo terminal is down when a day is due, the runner records
 the miss and retries on the next check rather than burning the day.
 
-A single global runner (single-owner cockpit). State resets on restart.
+A single global runner (single-owner cockpit). The owner-desired on/off switch
+is persisted so API startup can re-arm the PAPER proof auto-runner; session
+counters reset on restart.
 """
 
 from __future__ import annotations
 
+import json
+import os
 import threading
 from datetime import date
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 # How often the runner wakes to check whether today's proof day still needs
@@ -26,6 +31,10 @@ from typing import Any, Dict, Optional
 MIN_CHECK_INTERVAL_SECONDS = 60
 DEFAULT_CHECK_INTERVAL_SECONDS = 1800  # 30 minutes
 MAX_CHECK_INTERVAL_SECONDS = 86_400
+INITIAL_CHECK_DELAY_SECONDS = 60
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CONTROL_STATE_PATH = REPO_ROOT / "runtime" / "proof-auto-runner-control.json"
+_CONTROL_STATE_PATH = DEFAULT_CONTROL_STATE_PATH
 
 
 class _RunnerState:
@@ -45,6 +54,55 @@ class _RunnerState:
 
 _state = _RunnerState()
 _lock = threading.Lock()
+
+
+def set_control_state_path_for_testing(path: str | Path) -> None:
+    """Redirect durable desired-state writes in tests."""
+    global _CONTROL_STATE_PATH
+    _CONTROL_STATE_PATH = Path(path)
+
+
+def reset_control_state_path_for_testing() -> None:
+    """Restore the default desired-state path. Tests only."""
+    global _CONTROL_STATE_PATH
+    _CONTROL_STATE_PATH = DEFAULT_CONTROL_STATE_PATH
+
+
+def _persist_enabled() -> bool:
+    return "PYTEST_CURRENT_TEST" not in os.environ or _CONTROL_STATE_PATH != DEFAULT_CONTROL_STATE_PATH
+
+
+def _load_control_state() -> Dict[str, Any]:
+    if not _CONTROL_STATE_PATH.exists():
+        return {}
+    try:
+        payload = json.loads(_CONTROL_STATE_PATH.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def _save_control_state(*, desired_running: bool) -> None:
+    if not _persist_enabled():
+        return
+    payload = {
+        "report_kind": "cas_forex_proof_auto_runner_control",
+        "desired_running": bool(desired_running),
+        "check_interval_seconds": int(_state.check_interval),
+        "paper_safe_restore_only": True,
+        "claim_boundary": (
+            "Proof auto-runner control records the owner-desired PAPER proof "
+            "scheduler state for API restart recovery. It does not authorize "
+            "live trading, broker ACCEPT, orders, deposits, withdrawals, "
+            "bank/card movement, payouts, or LICENSED status."
+        ),
+    }
+    _CONTROL_STATE_PATH.parent.mkdir(parents=True, exist_ok=True)
+    tmp = _CONTROL_STATE_PATH.with_suffix(
+        f"{_CONTROL_STATE_PATH.suffix}.{os.getpid()}.{threading.get_ident()}.tmp"
+    )
+    tmp.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    tmp.replace(_CONTROL_STATE_PATH)
 
 
 def _plan_and_dir():
@@ -114,6 +172,15 @@ def run_proof_day_now(trading_date: Optional[date] = None) -> Dict[str, Any]:
 def _run() -> None:
     from cas_forex.time_utils import utc_now
 
+    # On API startup, restore the switch immediately but let the dashboard and
+    # health routes breathe before the heavier proof bundle check runs.
+    initial_delay = min(
+        INITIAL_CHECK_DELAY_SECONDS,
+        max(MIN_CHECK_INTERVAL_SECONDS, int(_state.check_interval)),
+    )
+    if _state.stop_event.wait(initial_delay):
+        return
+
     while not _state.stop_event.is_set():
         try:
             now = utc_now()
@@ -137,7 +204,11 @@ def _run() -> None:
         _state.stop_event.wait(max(MIN_CHECK_INTERVAL_SECONDS, _state.check_interval))
 
 
-def start_runner(check_interval_seconds: int = DEFAULT_CHECK_INTERVAL_SECONDS) -> Dict[str, Any]:
+def start_runner(
+    check_interval_seconds: int = DEFAULT_CHECK_INTERVAL_SECONDS,
+    *,
+    persist_desired: bool = True,
+) -> Dict[str, Any]:
     """Start the daily proof auto-runner if not already running. Idempotent."""
 
     from cas_forex.time_utils import utc_now
@@ -148,6 +219,8 @@ def start_runner(check_interval_seconds: int = DEFAULT_CHECK_INTERVAL_SECONDS) -
             min(MAX_CHECK_INTERVAL_SECONDS, int(check_interval_seconds)),
         )
         _state.check_interval = interval
+        if persist_desired:
+            _save_control_state(desired_running=True)
         if _state.thread and _state.thread.is_alive():
             return _status_locked()
         _state.stop_event.clear()
@@ -157,7 +230,7 @@ def start_runner(check_interval_seconds: int = DEFAULT_CHECK_INTERVAL_SECONDS) -
         return _status_locked()
 
 
-def stop_runner() -> Dict[str, Any]:
+def stop_runner(*, persist_desired: bool = True) -> Dict[str, Any]:
     """Stop the auto-runner; the current check winds down on its own."""
 
     with _lock:
@@ -167,14 +240,55 @@ def stop_runner() -> Dict[str, Any]:
         thread.join(timeout=3.0)
     with _lock:
         _state.thread = None
+        if persist_desired:
+            _save_control_state(desired_running=False)
         return _status_locked()
+
+
+def set_desired_runner_state(
+    check_interval_seconds: int = DEFAULT_CHECK_INTERVAL_SECONDS,
+    *,
+    desired_running: bool,
+) -> Dict[str, Any]:
+    """Persist the owner-desired auto-runner state without starting a thread."""
+
+    with _lock:
+        interval = max(
+            MIN_CHECK_INTERVAL_SECONDS,
+            min(MAX_CHECK_INTERVAL_SECONDS, int(check_interval_seconds)),
+        )
+        _state.check_interval = interval
+        _save_control_state(desired_running=desired_running)
+        return _status_locked()
+
+
+def control_state() -> Dict[str, Any]:
+    """Return the durable owner desired-state file without changing runtime."""
+
+    control = _load_control_state()
+    return {
+        "report_kind": "cas_forex_proof_auto_runner_control",
+        "desired_running": bool(control.get("desired_running", False)),
+        "check_interval_seconds": int(
+            control.get("check_interval_seconds") or DEFAULT_CHECK_INTERVAL_SECONDS
+        ),
+        "durable_control_state_path": str(_CONTROL_STATE_PATH),
+        "paper_safe_restore_only": bool(control.get("paper_safe_restore_only", True)),
+        "claim_boundary": control.get(
+            "claim_boundary",
+            "Proof auto-runner control records owner-desired PAPER proof scheduling only.",
+        ),
+    }
 
 
 def _status_locked() -> Dict[str, Any]:
     running = bool(_state.thread and _state.thread.is_alive())
+    control = _load_control_state()
     return {
         "report_kind": "cas_forex_proof_runner",
         "running": running,
+        "desired_running": bool(control.get("desired_running", running)),
+        "durable_control_state_path": str(_CONTROL_STATE_PATH),
         "check_interval_seconds": _state.check_interval,
         "last_check_iso": _state.last_check_iso or None,
         "last_run_iso": _state.last_run_iso or None,
@@ -196,3 +310,32 @@ def runner_status() -> Dict[str, Any]:
     """Current auto-runner status."""
     with _lock:
         return _status_locked()
+
+
+def restore_desired_runner() -> Dict[str, Any]:
+    """Re-arm the owner-desired PAPER proof auto-runner after an API restart."""
+    desired = _load_control_state()
+    if not desired.get("desired_running"):
+        status = runner_status()
+        status["restore_status"] = "NO_RESTORE_DESIRED"
+        return status
+    try:
+        from cas_forex.config import config
+
+        paper_safe = bool(config.paper_trading and not config.live_mode)
+    except Exception:
+        paper_safe = False
+    if not paper_safe:
+        status = runner_status()
+        status["restore_status"] = "RESTORE_BLOCKED_NOT_PAPER_MODE"
+        status["restore_detail"] = (
+            "Proof auto-runner desired state exists, but the app is not in "
+            "paper mode. Owner must restore proof collection explicitly."
+        )
+        return status
+    status = start_runner(
+        int(desired.get("check_interval_seconds") or DEFAULT_CHECK_INTERVAL_SECONDS),
+        persist_desired=False,
+    )
+    status["restore_status"] = "RESTORED_DESIRED_PAPER_PROOF_RUNNER"
+    return status

@@ -351,6 +351,42 @@ def test_mt5_bridge_initialize_uses_configured_terminal_path_without_empty_crede
     ]
 
 
+def test_mt5_bridge_initialize_auto_uses_known_terminal_path(tmp_path, monkeypatch):
+    class FakeMT5:
+        def __init__(self):
+            self.initialize_calls = []
+            self._account = SimpleNamespace(login=123456)
+
+        def initialize(self, **kwargs):
+            self.initialize_calls.append(kwargs)
+            return True
+
+        def account_info(self):
+            return self._account
+
+        def terminal_info(self):
+            return SimpleNamespace(connected=True)
+
+    terminal = tmp_path / "Hugosway PRO5 Terminal" / "terminal64.exe"
+    terminal.parent.mkdir()
+    terminal.write_text("fake terminal", encoding="utf-8")
+    fake = FakeMT5()
+    monkeypatch.setitem(sys.modules, "MetaTrader5", fake)
+    monkeypatch.setattr(mt5_module.config, "mt5_path", None)
+    monkeypatch.setattr(mt5_module.config, "mt5_login", 123456)
+    monkeypatch.setattr(mt5_module.config, "mt5_password", "secret")
+    monkeypatch.setattr(mt5_module.config, "mt5_server", "Broker-Demo")
+    monkeypatch.setattr(mt5_module, "COMMON_MT5_TERMINAL_PATHS", (str(terminal),))
+
+    bridge = MT5Bridge()
+
+    assert bridge.mt5_path == str(terminal)
+    assert bridge.connect() is True
+    assert fake.initialize_calls == [
+        {"timeout": mt5_module.MT5_INIT_TIMEOUT_MS, "path": str(terminal)}
+    ]
+
+
 class _FakeMT5Attach:
     """Records initialize() calls; reports a configurable attached account."""
 
@@ -418,6 +454,8 @@ def test_mt5_bridge_relogins_with_credentials_on_account_mismatch(monkeypatch):
 
 
 def test_get_bridge_live_mode_refuses_disconnected_mt5(monkeypatch):
+    from cas_forex import runtime_gates
+
     class FakeBridge:
         def __init__(self):
             self.connect_called = False
@@ -439,6 +477,7 @@ def test_get_bridge_live_mode_refuses_disconnected_mt5(monkeypatch):
     monkeypatch.setattr(mt5_module.config, "no_pooled_capital_ack", True)
     monkeypatch.setattr(mt5_module.config, "account_type", "personal")
     monkeypatch.setattr(mt5_module, "MT5Bridge", lambda: fake)
+    monkeypatch.setattr(runtime_gates, "require_authorized", lambda *args, **kwargs: None)
 
     with pytest.raises(ConnectionError, match="refusing live fallback"):
         mt5_module.get_bridge()

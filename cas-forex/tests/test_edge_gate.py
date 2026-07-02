@@ -75,6 +75,62 @@ def test_planted_edge_passes_with_token_and_winprob():
     )
 
 
+def test_direction_tagged_pairs_must_match_candidate_direction():
+    setup = _setup()
+    setup.direction = "SHORT"
+    long_only_pairs = [
+        {**pair, "direction": "LONG"}
+        for pair in _planted_pairs(n=80, seed=6)
+    ]
+
+    dec = evaluate_candidate(setup, long_only_pairs, threshold=0.65, seed=5)
+
+    assert dec.status == "NO_TRADE_INSUFFICIENT_BARS"
+    assert dec.edge_token is None
+    assert "only 0 OOS outcomes" in dec.reason
+
+
+def test_direction_tagged_short_edge_beats_random_direction_null():
+    setup = _setup()
+    setup.direction = "SHORT"
+    pairs = [
+        {
+            "signal_strength": -0.20 - (idx * 0.001),
+            "direction": "SHORT",
+            "ret": -0.004,
+            "cost_ret": 0.00005,
+        }
+        for idx in range(80)
+    ]
+
+    dec = evaluate_candidate(setup, pairs, threshold=0.65, seed=7)
+
+    assert dec.status == "PASS"
+    assert dec.edge_token is not None
+    assert dec.measured_win_prob >= dec.threshold
+    assert "random-direction null" in dec.reason
+
+
+def test_direction_tagged_same_side_noise_still_blocks():
+    setup = _setup()
+    setup.direction = "SHORT"
+    pairs = [
+        {
+            "signal_strength": -0.30,
+            "direction": "SHORT",
+            "ret": -0.003 if idx % 2 == 0 else 0.003,
+            "cost_ret": 0.00005,
+        }
+        for idx in range(80)
+    ]
+
+    dec = evaluate_candidate(setup, pairs, threshold=0.65, seed=7)
+
+    assert dec.status == "NO_TRADE_NULL_FAILED"
+    assert dec.edge_token is None
+    assert dec.measured_win_prob < dec.threshold
+
+
 # --------------------------------------------------------------------------- #
 # DISCIPLINE: the gate CANNOT emit a token on noise.
 # --------------------------------------------------------------------------- #

@@ -200,6 +200,56 @@ def test_mt5_deal_history_ingest_blocks_non_demo_account(tmp_path):
     assert report["summary"]["demo_account_confirmed"] is False
 
 
+def test_mt5_live_deal_history_requires_explicit_confirmation(tmp_path):
+    report = build_mt5_deal_history_ingest_report(
+        mt5_module=FakeMT5DealHistory(demo=False),
+        account_mode="live",
+        confirm_live_history=False,
+        output_dir=tmp_path / "mt5-deal-history",
+        export_dir=tmp_path / "terminal-history-exports",
+        terminal_history_output_dir=tmp_path / "terminal-history-ingest",
+    )
+
+    assert report["ingest_status"] == "MT5_DEAL_HISTORY_LIVE_CONFIRM_REQUIRED"
+    assert report["account_mode"] == "live"
+    assert report["summary"]["live_account_confirmed"] is True
+    assert report["summary"]["raw_deal_count"] == 0
+
+
+def test_mt5_live_deal_history_blocks_demo_account(tmp_path):
+    report = build_mt5_deal_history_ingest_report(
+        mt5_module=FakeMT5DealHistory(demo=True),
+        account_mode="live",
+        confirm_live_history=True,
+        output_dir=tmp_path / "mt5-deal-history",
+        export_dir=tmp_path / "terminal-history-exports",
+        terminal_history_output_dir=tmp_path / "terminal-history-ingest",
+    )
+
+    assert report["ingest_status"] == "MT5_DEAL_HISTORY_BLOCKED_DEMO_ACCOUNT_FOR_LIVE"
+    assert report["summary"]["demo_account_confirmed"] is True
+    assert report["summary"]["raw_deal_count"] == 0
+
+
+def test_mt5_live_deal_history_exports_live_rows_when_confirmed(tmp_path):
+    report = build_mt5_deal_history_ingest_report(
+        mt5_module=FakeMT5DealHistory(demo=False),
+        account_mode="live",
+        confirm_live_history=True,
+        memory_report={"summary": {"memory_record_count": 0, "pending_receipt_count": 0}, "memory_records": []},
+        output_dir=tmp_path / "mt5-deal-history",
+        export_dir=tmp_path / "terminal-history-exports",
+        terminal_history_output_dir=tmp_path / "terminal-history-ingest",
+    )
+
+    assert report["ingest_status"] == "MT5_LIVE_DEAL_HISTORY_EXPORTED_UNMATCHED"
+    assert report["summary"]["live_account_confirmed"] is True
+    assert report["summary"]["raw_deal_count"] == 2
+    assert report["summary"]["net_profit_loss_account"] == pytest.approx(-0.13)
+    assert report["history_records"][0]["broker_mode"] == "LIVE_MT5"
+    assert report["terminal_history_ingest"]["summary"]["history_record_count"] == 1
+
+
 def test_mt5_deal_history_ingest_api_and_dashboard_surface(monkeypatch, tmp_path):
     report = build_mt5_deal_history_ingest_report(
         mt5_module=FakeMT5DealHistory(empty=True),

@@ -220,6 +220,15 @@ def _extract_mt5_flags(
             mt5_probe.get("broker_api_verified")
             or mt5_probe.get("broker_source_verified")
         )
+    probe_status = str(
+        mt5_probe.get("status")
+        or mt5_probe.get("probe_status")
+        or mt5_probe.get("receipt_validation_status")
+        or ""
+    ).upper()
+    if probe_status == "BROKER_API_VERIFIED":
+        terminal_connected = True
+        broker_api_verified = True
     return True, terminal_connected, broker_api_verified
 
 
@@ -395,7 +404,7 @@ def _check_readiness_gates(
             "passing." + caveat
         ),
         remediation=(
-            f"Inspect failing readiness gates: GET /api/forex/live/readiness "
+            f"Inspect failing readiness gates: GET /api/forex/readiness/live "
             f"({passed}/{total} passing)"
         ),
     )
@@ -620,9 +629,9 @@ def load_stack_health_inputs(
         falls back to :func:`load_operator_briefing_inputs` composed locally.
       * ``system_health`` — :func:`load_system_health_inputs` + composer.
       * ``loop_health`` — :func:`load_loop_health_inputs` + summariser.
-      * ``mt5_probe`` — HTTP GET ``{api_base}/api/forex/mt5/probe``.
-      * ``readiness`` — HTTP GET ``{api_base}/api/forex/live/readiness``.
-      * ``live_telemetry`` — HTTP GET ``{api_base}/api/forex/live/telemetry``.
+      * ``mt5_probe`` — HTTP GET ``{api_base}/api/forex/mt/probe/latest``.
+      * ``readiness`` — HTTP GET ``{api_base}/api/forex/readiness/live``.
+      * ``live_telemetry`` — HTTP GET ``{api_base}/api/forex/live-telemetry``.
     """
     root = Path(repo_root)
     api_base = api_base.rstrip("/")
@@ -671,9 +680,9 @@ def load_stack_health_inputs(
     except Exception:
         loop_health = None
 
-    mt5_probe = _http_get_json(f"{api_base}/api/forex/mt5/probe")
-    readiness = _http_get_json(f"{api_base}/api/forex/live/readiness")
-    live_telemetry = _http_get_json(f"{api_base}/api/forex/live/telemetry")
+    mt5_probe = _http_get_json(f"{api_base}/api/forex/mt/probe/latest")
+    readiness = _http_get_json(f"{api_base}/api/forex/readiness/live")
+    live_telemetry = _http_get_json(f"{api_base}/api/forex/live-telemetry")
 
     return {
         "system_health": system_health,

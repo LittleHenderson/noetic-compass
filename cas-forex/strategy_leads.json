@@ -21,34 +21,34 @@
       "evidence_refs": [
         "evidence_runs/range_scalper_research/real-range_scalper-20260622043152-report.json",
         "evidence_runs/range_scalper_research/real-range_scalper-20260622043231-report.json",
-        "evidence_runs/walk_forward_condition_lab/walk-forward-20260622044930-report.json"
+        "evidence_runs/walk_forward_condition_lab/walk-forward-20260622044930-report.json",
+        "evidence_runs/range_scalper_realtest/range-scalper-realtest-report.json"
       ],
       "family": "range_scalper",
       "headline_results": [
-        "5 FX majors, 5y D1 Yahoo proxy, cost-included: +$1,572.25; chain verified; CAS improved P&L/drawdown.",
-        "Filtered EUR/USD GBP/USD AUD/USD, 5y D1 Yahoo proxy, cost-included: +$2,686.37; avg max DD 2.38%; chain verified.",
-        "Corrected D1 walk-forward active routed windows: 3/3 positive; active routed mean return 1.2827%; routed max DD 2.298%; 32 routed trades; grade NOT_PROMOTED due sparse coverage."
+        "Early filtered EUR/USD GBP/USD AUD/USD D1 Yahoo proxy run was positive, but later broker-cost/null testing did not hold broadly.",
+        "Focused realtest bright spot: GBPUSD_D1 had 18 trades, 94.44% win rate, +1273.3 pips at 2.0 pip spread, and beat the random-entry null.",
+        "Superseding stress transcript reports longer GBP/USD history around breakeven, not beating null, fragile to dropping top winners, unstable by split, and sensitive to parameter nudges."
       ],
       "lead_id": "range_scalper_filtered_fx_d1",
-      "mode": "swing/day range fade on D1 proxy; candidate for M15/H1 broker-data expansion",
+      "mode": "fragile range-fade watch pattern only; template for WASTE fragility checks, not a promotion candidate",
       "open_gates": [
-        "Broker-grade bid/ask and spread/slippage by session.",
-        "M15/H1 walk-forward grid.",
-        "Macro/event-aware condition axis.",
-        "30-trading-day paper proof before live funds."
+        "Do not revive the 94% headline without the superseding stress-test warning.",
+        "Broker-grade bid/ask and spread/slippage by session would need to beat null again.",
+        "Require sample-size, leave-best-trades-out, split-stability, parameter-jitter, and cross-symbol robustness checks.",
+        "Only reconsider if fresh owner-approved research produces new no-lookahead evidence."
       ],
-      "priority": 1,
-      "status": "ACTIVE_RESEARCH_LEAD",
+      "priority": 4,
+      "status": "WATCHLIST_ONLY",
       "strategy_setting": "range_scalper_24_120",
       "symbols_excluded_until_condition_proof": [
         "USD/JPY",
         "USD/CAD"
       ],
-      "symbols_promoted_for_next_tests": [
-        "EUR/USD",
-        "GBP/USD"
-      ],
+      "symbols_promoted_for_next_tests": [],
       "symbols_watchlist": [
+        "EUR/USD",
+        "GBP/USD",
         "AUD/USD"
       ]
     },
@@ -106,7 +106,7 @@
         "Event-context validation for NFP/FOMC/conflict shocks.",
         "Owner approval for any limited paper attempts; live remains NOT LICENSED."
       ],
-      "priority": 2,
+      "priority": 1,
       "status": "ACTIVE_RESEARCH_LEAD",
       "strategy_setting": "tsmom_126_250_2_10",
       "symbols_excluded_until_condition_proof": [],
@@ -154,7 +154,7 @@
         "Owner 2020 NAS30/NAS100 discretionary rule encoding.",
         "Drawdown cap and time/trailing exits."
       ],
-      "priority": 3,
+      "priority": 2,
       "status": "ACTIVE_RESEARCH_LEAD",
       "strategy_setting": "tsmom_252_500_2_8",
       "symbols_excluded_until_condition_proof": [],
@@ -193,7 +193,7 @@
         "Only revive if broker-grade cost model still leaves positive walk-forward edge.",
         "Compare against range_scalper before any promotion."
       ],
-      "priority": 4,
+      "priority": 5,
       "status": "WATCHLIST_ONLY",
       "strategy_setting": "meanrev_20_z2_tf",
       "symbols_excluded_until_condition_proof": [],

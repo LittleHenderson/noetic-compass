@@ -24,8 +24,12 @@ Public surface:
 
 from __future__ import annotations
 
+import json
+import os
+import threading
 from dataclasses import dataclass, field
 from enum import Enum
+from pathlib import Path
 from typing import Dict, Literal, Mapping, MutableMapping
 
 # Canonical timeframe vocabulary for the runtime. Kept as a tuple so the
@@ -139,9 +143,11 @@ class MultiTimeframeRuntime:
     (the expected case) is fine.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, state_path: str | Path | None = None) -> None:
         # symbol -> mutable set of active timeframe strings
         self._state: MutableMapping[str, set[str]] = {}
+        self._state_path = Path(state_path) if state_path is not None else None
+        self._load_state()
 
     # ---- mutation -------------------------------------------------------
 
@@ -153,6 +159,7 @@ class MultiTimeframeRuntime:
         """
         tf = _validate_timeframe(timeframe)
         self._state.setdefault(symbol, set()).add(tf)
+        self._persist_state()
 
     def deactivate(self, symbol: str, timeframe: str) -> None:
         """Mark ``timeframe`` inactive for ``symbol``.
@@ -169,6 +176,7 @@ class MultiTimeframeRuntime:
         bucket.discard(tf)
         if not bucket:
             self._state.pop(symbol, None)
+        self._persist_state()
 
     # ---- queries --------------------------------------------------------
 
@@ -269,6 +277,44 @@ class MultiTimeframeRuntime:
             alignment=alignment,
             votes=votes,
         )
+
+    # ---- durability -----------------------------------------------------
+
+    def _load_state(self) -> None:
+        if self._state_path is None or not self._state_path.exists():
+            return
+        try:
+            payload = json.loads(self._state_path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return
+        symbols = payload.get("symbols") if isinstance(payload, Mapping) else None
+        if not isinstance(symbols, Mapping):
+            return
+        loaded: MutableMapping[str, set[str]] = {}
+        for symbol, timeframes in symbols.items():
+            if not isinstance(symbol, str) or not isinstance(timeframes, list):
+                continue
+            valid = {tf for tf in timeframes if isinstance(tf, str) and tf in CANONICAL_TIMEFRAMES}
+            if valid:
+                loaded[symbol] = valid
+        self._state = loaded
+
+    def _persist_state(self) -> None:
+        if self._state_path is None:
+            return
+        payload = {
+            "report_kind": "cas_forex_multi_timeframe_runtime",
+            "symbols": {
+                symbol: sorted(timeframes)
+                for symbol, timeframes in sorted(self._state.items())
+                if timeframes
+            },
+        }
+        self._state_path.parent.mkdir(parents=True, exist_ok=True)
+        suffix = f"{self._state_path.suffix}.{os.getpid()}.{threading.get_ident()}.tmp"
+        tmp = self._state_path.with_suffix(suffix)
+        tmp.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+        tmp.replace(self._state_path)
 
 
 __all__ = [

@@ -14,6 +14,7 @@ pure in-memory.
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Dict, List
 
 from fastapi import APIRouter, HTTPException
@@ -27,7 +28,10 @@ from cas_forex.multi_timeframe_runtime import (
 router = APIRouter()
 
 
-_RUNTIME = MultiTimeframeRuntime()
+REPO_ROOT = Path(__file__).resolve().parents[2]
+DEFAULT_STATE_PATH = REPO_ROOT / "runtime" / "multi-timeframe-runtime.json"
+
+_RUNTIME = MultiTimeframeRuntime(DEFAULT_STATE_PATH)
 
 
 def get_runtime() -> MultiTimeframeRuntime:

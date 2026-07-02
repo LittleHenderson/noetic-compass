@@ -32,7 +32,7 @@ def test_authority_boundary_defaults_pending_owner_enable():
     # The boundary must list concrete, owner-actionable missing requirements -
     # proving this is a path to authorize, not a permanent ban.
     assert report.blockers
-    assert any("owner_enable_live_trading" in b for b in report.blockers)
+    assert any("owner live-trading switches are ON" in b for b in report.blockers)
 
     assert_authority_boundary(report)
 
@@ -44,6 +44,7 @@ def test_not_licensed_is_current_status_not_permanent():
 
 
 def test_authority_boundary_runtime_lock_reflects_live_gate(monkeypatch):
+    from cas_forex import auto_halt, broker_reality, broker_truth_monitor, live_order_dry_run_review, live_pilot, live_recovery
     from cas_forex.config import config
 
     # Default: live trading not authorized -> runtime lock holds.
@@ -64,6 +65,12 @@ def test_authority_boundary_runtime_lock_reflects_live_gate(monkeypatch):
     monkeypatch.setattr(config, "personal_account_ack", True)
     monkeypatch.setattr(config, "no_pooled_capital_ack", True)
     monkeypatch.setattr(config, "account_type", "personal")
+    monkeypatch.setattr(auto_halt, "is_auto_halt_active", lambda: False)
+    monkeypatch.setattr(broker_truth_monitor, "broker_truth_monitor_ready_for_live", lambda: True)
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
+    monkeypatch.setattr(live_pilot, "is_live_pilot_available_for_live", lambda: True)
+    monkeypatch.setattr(live_recovery, "is_live_recovery_clear_for_live", lambda: True)
+    monkeypatch.setattr(live_order_dry_run_review, "is_live_order_dry_run_review_clear_for_live", lambda: True)
 
     unlocked = build_authority_boundary_report()
     assert unlocked.live_execution_runtime_locked is False

@@ -23,6 +23,7 @@ from cas_forex.dispatch_loop import (
     start_loop,
     stop_loop,
 )
+from api.route_cache import cache_first_payload
 
 router = APIRouter()
 
@@ -43,7 +44,37 @@ class StartLoop(BaseModel):
 @router.get("/status")
 async def get_status() -> dict[str, Any]:
     """Current loop status."""
-    return loop_status()
+    return cache_first_payload(
+        "dispatch_loop_status",
+        builder=loop_status,
+        fallback=_dispatch_status_warming,
+        ttl_seconds=5.0,
+    )
+
+
+def _dispatch_status_warming() -> dict[str, Any]:
+    return {
+        "report_kind": "cas_forex_dispatch_loop",
+        "running": False,
+        "desired_running": False,
+        "status": "WARMING",
+        "interval_seconds": None,
+        "symbols": [],
+        "sessions": [],
+        "active_sessions": [],
+        "cycles_run": None,
+        "cycles_idle": None,
+        "last_run_iso": None,
+        "last_summary": "Dispatch loop status cache is warming.",
+        "last_error": None,
+        "started_at_iso": None,
+        "mode": "PAPER",
+        "note": (
+            "Dispatch loop status is observational. It does not authorize live "
+            "trading, broker ACCEPT, edge tokens, deposits, withdrawals, "
+            "bank/card movement, payouts, or LICENSED status."
+        ),
+    }
 
 
 @router.post("/start")

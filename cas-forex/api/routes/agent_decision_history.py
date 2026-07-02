@@ -65,7 +65,7 @@ def _safe_load_path(path: Path) -> Optional[dict[str, Any]]:
         return None
 
 
-def _list_cycle_reports() -> list[Tuple[str, dict[str, Any]]]:
+def _list_cycle_reports(limit: int | None = None) -> list[Tuple[str, dict[str, Any]]]:
     """List (relative_path, parsed_json) for all cycle reports, NEWEST FIRST.
 
     Primary set is the agent_workflow_queue glob. If empty, fall back to
@@ -83,6 +83,8 @@ def _list_cycle_reports() -> list[Tuple[str, dict[str, Any]]]:
         return []
     # Sort by mtime DESCENDING (newest first).
     paths.sort(key=lambda p: p.stat().st_mtime, reverse=True)
+    if limit is not None:
+        paths = paths[: max(0, limit)]
     out: list[Tuple[str, dict[str, Any]]] = []
     for p in paths:
         data = _safe_load_path(p)
@@ -96,27 +98,31 @@ def _list_cycle_reports() -> list[Tuple[str, dict[str, Any]]]:
     return out
 
 
-def _default_loader() -> dict[str, Any]:
+def _default_loader(limit: int | None = None) -> dict[str, Any]:
     """Load all cycle reports and the shared context. Tests can replace.
 
     Returns ``{"cycle_reports": [(path_str, dict), ...], "context": {...}}``.
     The context dict's keys match the explainer's context kwargs (i.e.
     everything except ``agent_cycle_report``).
     """
-    cycle_reports = _list_cycle_reports()
+    cycle_reports = _list_cycle_reports(limit=limit)
     context = {
         key: _safe_load_latest(pattern) for key, pattern in _CONTEXT_PATTERNS.items()
     }
     return {"cycle_reports": cycle_reports, "context": context}
 
 
-_LOADER: Callable[[], dict[str, Any]] = _default_loader
+_LOADER: Callable[[int | None], dict[str, Any]] = _default_loader
 
 
 def set_loader_for_testing(loader: Callable[[], dict[str, Any]]) -> None:
     """Replace the disk-backed loader. Tests only."""
     global _LOADER
-    _LOADER = loader
+
+    def _wrapped_loader(limit: int | None = None) -> dict[str, Any]:
+        return loader()
+
+    _LOADER = _wrapped_loader
 
 
 def reset_loader_for_testing() -> None:
@@ -154,7 +160,7 @@ async def get_agent_decision_history(limit: int = 10) -> Any:
             },
         )
 
-    loaded = _LOADER()
+    loaded = _LOADER(limit)
     cycle_reports: list[Tuple[str, dict[str, Any]]] = loaded.get(
         "cycle_reports", []
     ) or []

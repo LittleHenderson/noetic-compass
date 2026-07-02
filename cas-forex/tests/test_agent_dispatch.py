@@ -19,6 +19,7 @@ from cas_forex.agent_dispatch import (
 )
 from cas_forex.agent_state import RouteIntent
 from cas_forex.broker.mt5_bridge import SimulatedBrokerBridge
+from cas_forex.order_attempt_audit import OrderAttemptAuditStore
 from cas_forex.order_dispatch import STATUS_BLOCKED_LIVE_GATE, STATUS_OVERSEER_REJECTED
 from cas_forex.schemas.forecast import Direction
 from cas_forex.schemas.order import BrokerOrderRequest, OrderType
@@ -116,13 +117,18 @@ def test_overseer_rejected_intent_is_recorded_not_dispatched():
     assert bridge.get_open_positions() == []
 
 
-def test_live_mode_blocks_approved_intent_at_gate():
+def test_live_mode_blocks_approved_intent_at_gate(tmp_path):
+    store = OrderAttemptAuditStore(
+        tmp_path / "agent-live-gate-order-attempts.json",
+        tmp_path / "agent-live-gate-order-attempts-audit.jsonl",
+    )
     bridge = SimulatedBrokerBridge()
     cycle = run_agent_dispatch_cycle(
         intents=[_route_intent()],
         bridge=bridge,
         config=_cfg(live_mode=True),
         enforce_receipt_gates=False,
+        audit_store=store,
     )
     assert cycle.approved_count == 1  # overseer approves
     result = cycle.dispatch_report.results[0]

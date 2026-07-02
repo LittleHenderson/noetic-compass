@@ -128,10 +128,17 @@ class BrokerControl:
 
 def _resolve_config(config: Any = None) -> Any:
     if config is not None:
-        return config
-    from cas_forex.config import config as default_config
+        base = config
+    else:
+        from cas_forex.config import config as default_config
 
-    return default_config
+        base = default_config
+    try:
+        from cas_forex.live_enable_control import apply_live_enable_overrides
+
+        return apply_live_enable_overrides(base)
+    except Exception:  # pragma: no cover - broker control falls back to base config
+        return base
 
 
 def resolve_broker_control(config: Any = None) -> BrokerControl:
@@ -249,34 +256,62 @@ def select_bridge(config: Any = None):
         MT4EABridge,
         MT5Bridge,
         SimulatedBrokerBridge,
-        _enforce_live_legal_gates,
-        get_bridge,
     )
 
     if ctrl.platform == "simulated":
         return _simulated_bridge(ctrl)
 
     if ctrl.platform == "mt4":
-        mt4 = MT4EABridge()
+        mt4 = MT4EABridge(
+            mailbox_dir=getattr(config, "mt4_mailbox_dir", None),
+            enabled=getattr(config, "mt4_enabled", None),
+            runtime_config=config,
+        )
         if mt4.connect():
             return mt4
         return _simulated_bridge(ctrl)
 
     if ctrl.platform == "mt5":
-        # Same live legal gate get_bridge enforces (no-op unless live_mode).
-        _enforce_live_legal_gates()
+        # Same live legal gate get_bridge enforces, against the owner-resolved config.
+        if getattr(config, "live_mode", False):
+            from cas_forex import runtime_gates
+
+            runtime_gates.require_authorized("live_trading", config)
         if getattr(config, "mt5_login", 0) and config.mt5_login > 0:
-            bridge = MT5Bridge()
+            bridge = MT5Bridge(
+                login=config.mt5_login,
+                password=getattr(config, "mt5_password", ""),
+                server=getattr(config, "mt5_server", ""),
+                prefer_mt5=bool(getattr(config, "prefer_mt5", True)),
+            )
             if bridge.connect():
                 return bridge
         return _simulated_bridge(ctrl)
 
-    # "auto": keep get_bridge's selection, but apply loosen tolerances when it
-    # resolves to the simulator.
-    bridge = get_bridge()
-    if isinstance(bridge, SimulatedBrokerBridge):
-        return _simulated_bridge(ctrl)
-    return bridge
+    # "auto": choose from the resolved config instead of the raw process-global
+    # config, so in-app owner toggles and explicit test configs are authoritative.
+    if getattr(config, "live_mode", False):
+        from cas_forex import runtime_gates
+
+        runtime_gates.require_authorized("live_trading", config)
+    if getattr(config, "mt4_enabled", False) and getattr(config, "mt4_mailbox_dir", None):
+        mt4 = MT4EABridge(
+            mailbox_dir=getattr(config, "mt4_mailbox_dir", None),
+            enabled=getattr(config, "mt4_enabled", None),
+            runtime_config=config,
+        )
+        if mt4.connect():
+            return mt4
+    if getattr(config, "mt5_login", 0) and config.mt5_login > 0:
+        bridge = MT5Bridge(
+            login=config.mt5_login,
+            password=getattr(config, "mt5_password", ""),
+            server=getattr(config, "mt5_server", ""),
+            prefer_mt5=bool(getattr(config, "prefer_mt5", True)),
+        )
+        if bridge.connect():
+            return bridge
+    return _simulated_bridge(ctrl)
 
 
 def build_broker_control_report(config: Any = None) -> dict[str, Any]:

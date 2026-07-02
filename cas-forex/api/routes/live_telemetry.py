@@ -28,6 +28,7 @@ from typing import Any, Dict, List, Mapping, Optional, Tuple
 from fastapi import APIRouter, HTTPException
 
 from api import data as data_module
+from api.route_cache import cache_first_payload
 from cas_forex.time_utils import utc_now
 
 router = APIRouter()
@@ -253,4 +254,9 @@ def collect_live_telemetry() -> Dict[str, Any]:
 async def get_live_telemetry() -> Dict[str, Any]:
     """Return a snapshot of currently open positions plus per-symbol
     floating P&L. Read-only telemetry; never proposes trades."""
-    return collect_live_telemetry()
+    return cache_first_payload(
+        "live_telemetry",
+        builder=collect_live_telemetry,
+        fallback=_empty_payload,
+        ttl_seconds=60.0,
+    )

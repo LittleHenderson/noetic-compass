@@ -73,6 +73,21 @@ def _order(volume=0.05):
     )
 
 
+def _write_mt4_heartbeat(mailbox_dir):
+    mailbox_dir.mkdir(parents=True, exist_ok=True)
+    (mailbox_dir / "heartbeat.json").write_text(
+        json.dumps(
+            {
+                "schema": "cas_forex_mt4_mailbox_heartbeat.v1",
+                "state": "RUNNING",
+                "server": "DemoServer",
+                "live_trading_allowed": False,
+            }
+        ),
+        encoding="utf-8",
+    )
+
+
 def _risk(**overrides):
     data = {
         "assessment_id": "risk-001",
@@ -304,6 +319,10 @@ def test_broker_guards_mt4_mailbox_sim_reject_and_live_legal(monkeypatch, tmp_pa
     monkeypatch.setattr(config, "paper_trading", True)
     monkeypatch.setattr(config, "live_mode", False)
     mt4 = MT4EABridge()
+    no_heartbeat = mt4.execute_order(_order())
+    assert no_heartbeat.status == OrderStatus.REJECTED
+    assert "fresh EA heartbeat" in no_heartbeat.error_message
+    _write_mt4_heartbeat(tmp_path / "mt4")
     outcome = mt4.execute_order(_order())
     assert outcome.status == OrderStatus.PENDING
     assert outcome.broker_mode == BrokerMode.PAPER_MT4
@@ -441,8 +460,10 @@ def test_sweep_auto_provider_boundary_and_receipts(tmp_path):
 
 
 def test_sweep_auto_executes_when_owner_authorized(monkeypatch):
+    from cas_forex import broker_reality
     from cas_forex.config import config as forex_config
 
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
     monkeypatch.setattr(forex_config, "owner_enable_payout_automation", True)
     monkeypatch.setattr(forex_config, "payment_provider", "wise")
     monkeypatch.setattr(forex_config, "payment_api_key", "key")

@@ -15,7 +15,7 @@ import json
 from datetime import datetime
 from pathlib import Path
 import sys
-from typing import Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple
 
 from cas_forex.config import config
 from cas_forex.instruments import broker_symbol
@@ -32,6 +32,31 @@ from cas_forex.time_utils import utc_now
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 LOCAL_MT5_DEPS = REPO_ROOT / ".mt5deps"
+COMMON_MT5_TERMINAL_PATHS = (
+    r"C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
+    r"C:\Program Files (x86)\Hugosway\Hugosway PRO5 Terminal\terminal64.exe",
+    r"C:\Program Files\MetaTrader 5\terminal64.exe",
+    r"C:\Program Files (x86)\MetaTrader 5\terminal64.exe",
+)
+
+
+def _effective_config():
+    try:
+        from cas_forex.live_enable_control import apply_live_enable_overrides
+
+        return apply_live_enable_overrides(config)
+    except Exception:  # pragma: no cover - fall back to static config
+        return config
+
+
+def _resolve_mt5_terminal_path(cfg: object) -> str | None:
+    configured = str(getattr(cfg, "mt5_path", "") or "").strip()
+    if configured:
+        return configured
+    for candidate in COMMON_MT5_TERMINAL_PATHS:
+        if Path(candidate).exists():
+            return candidate
+    return None
 
 # Bound the MT5 connect handshake (ms). MetaTrader's Python IPC can be flaky and
 # its default initialize timeout is 60s — far too long for a poller. Fail fast.
@@ -142,10 +167,12 @@ class MT5Bridge(BrokerBridge):
         server: Optional[str] = None,
         prefer_mt5: bool = True,
     ):
-        self.login = login or config.mt5_login
-        self.password = password or config.mt5_password
-        self.server = server or config.mt5_server
-        self.prefer_mt5 = prefer_mt5
+        cfg = _effective_config()
+        self.login = login or cfg.mt5_login
+        self.password = password or cfg.mt5_password
+        self.server = server or cfg.mt5_server
+        self.prefer_mt5 = prefer_mt5 if prefer_mt5 is not None else bool(getattr(cfg, "prefer_mt5", True))
+        self.mt5_path = _resolve_mt5_terminal_path(cfg)
         self._mt5 = None
         self._connected = False
 
@@ -162,8 +189,8 @@ class MT5Bridge(BrokerBridge):
                 # Bound the connect so a flaky/unreachable terminal fails fast
                 # (default MT5 timeout is 60s, which would freeze callers).
                 path_kw = {"timeout": MT5_INIT_TIMEOUT_MS}
-                if config.mt5_path:
-                    path_kw["path"] = config.mt5_path
+                if self.mt5_path:
+                    path_kw["path"] = self.mt5_path
                 # Prefer ATTACHING to the already-running, already-logged-in
                 # terminal (a bare initialize). Forcing a re-login with
                 # login/password/server into a terminal that's already logged in
@@ -298,7 +325,7 @@ class MT5Bridge(BrokerBridge):
         when MT5 is not connected (returns REJECTED or simulates).
         """
         if not self.is_connected():
-            if config.live_mode:
+            if _effective_config().live_mode:
                 return OrderOutcome(
                     order_ref=order.order_id,
                     status=OrderStatus.REJECTED,
@@ -587,7 +614,7 @@ class MT5Bridge(BrokerBridge):
         return float(points) / 10.0
 
     def _broker_mode(self) -> BrokerMode:
-        return BrokerMode.LIVE_MT5 if config.live_mode else BrokerMode.PAPER_MT5
+        return BrokerMode.LIVE_MT5 if _effective_config().live_mode else BrokerMode.PAPER_MT5
 
     def _account_id_hash(self) -> Optional[str]:
         if not self.login:
@@ -723,11 +750,20 @@ class MT5Bridge(BrokerBridge):
 class MT4EABridge(BrokerBridge):
     """Mailbox-based MT4 Expert Advisor bridge for paper proof only."""
 
-    def __init__(self, mailbox_dir: Optional[str] = None):
+    def __init__(
+        self,
+        mailbox_dir: Optional[str] = None,
+        *,
+        enabled: Optional[bool] = None,
+        runtime_config: Any = None,
+    ):
         from cas_forex.mt4_control import resolve_mt4_control
 
-        resolved_dir = mailbox_dir or resolve_mt4_control().mailbox_dir
+        ctrl = resolve_mt4_control(runtime_config)
+        resolved_dir = mailbox_dir or ctrl.mailbox_dir
         self.mailbox_dir = Path(resolved_dir)
+        self._enabled_override = enabled
+        self._runtime_config = runtime_config
         self.orders_path = self.mailbox_dir / "orders.jsonl"
         self.acks_path = self.mailbox_dir / "acks.jsonl"
         self.heartbeat_path = self.mailbox_dir / "heartbeat.json"
@@ -736,7 +772,15 @@ class MT4EABridge(BrokerBridge):
     def connect(self) -> bool:
         from cas_forex.mt4_control import resolve_mt4_control
 
-        if not resolve_mt4_control().enabled or config.live_mode or not config.paper_trading:
+        cfg = self._runtime_config or _effective_config()
+        route_enabled = (
+            bool(self._enabled_override)
+            if self._enabled_override is not None
+            else resolve_mt4_control(cfg).enabled
+        )
+        if not route_enabled or cfg.live_mode or not cfg.paper_trading:
+            return False
+        if not self.is_connected():
             return False
         self.mailbox_dir.mkdir(parents=True, exist_ok=True)
         return True
@@ -754,7 +798,10 @@ class MT4EABridge(BrokerBridge):
             return OrderOutcome(
                 order_ref=order.order_id,
                 status=OrderStatus.REJECTED,
-                error_message="MT4 bridge requires enabled paper mailbox mode",
+                error_message=(
+                    "MT4 bridge requires enabled paper mailbox mode and a fresh "
+                    "EA heartbeat before demo/paper commands can be dispatched"
+                ),
                 broker_mode=BrokerMode.PAPER_MT4,
                 is_real_broker=False,
             )
@@ -815,7 +862,10 @@ class MT4EABridge(BrokerBridge):
             return OrderOutcome(
                 order_ref=f"modify-{ticket}",
                 status=OrderStatus.REJECTED,
-                error_message="MT4 bridge requires enabled paper mailbox mode",
+                error_message=(
+                    "MT4 bridge requires enabled paper mailbox mode and a fresh "
+                    "EA heartbeat before demo/paper commands can be dispatched"
+                ),
                 broker_mode=BrokerMode.PAPER_MT4,
                 is_real_broker=False,
             )
@@ -1055,18 +1105,23 @@ class SimulatedBrokerBridge(BrokerBridge):
 def get_bridge() -> BrokerBridge:
     """Factory: return the configured broker bridge."""
     _enforce_live_legal_gates()
-    if config.live_mode and config.mt5_login > 0:
+    cfg = _effective_config()
+    if cfg.live_mode and cfg.mt5_login > 0:
         bridge = MT5Bridge()
         if not bridge.connect():
             raise ConnectionError("MT5 live bridge connection failed; refusing live fallback")
         return bridge
-    if config.paper_trading:
-        if config.mt4_enabled and config.mt4_mailbox_dir:
-            mt4 = MT4EABridge()
+    if cfg.paper_trading:
+        if cfg.mt4_enabled and cfg.mt4_mailbox_dir:
+            mt4 = MT4EABridge(
+                mailbox_dir=getattr(cfg, "mt4_mailbox_dir", None),
+                enabled=getattr(cfg, "mt4_enabled", None),
+                runtime_config=cfg,
+            )
             if mt4.connect():
                 return mt4
         # Prefer real MT5 for paper if available
-        if config.mt5_login > 0:
+        if cfg.mt5_login > 0:
             bridge = MT5Bridge()
             if bridge.connect():
                 return bridge
@@ -1075,7 +1130,8 @@ def get_bridge() -> BrokerBridge:
 
 
 def _enforce_live_legal_gates() -> None:
-    if not config.live_mode:
+    cfg = _effective_config()
+    if not cfg.live_mode:
         return
     # Owner-controlled authorization (fail-closed). Live execution is only
     # allowed when the owner has satisfied the live-trading gate: explicit
@@ -1087,7 +1143,7 @@ def _enforce_live_legal_gates() -> None:
     # owner authorization + credentials + config.
     from cas_forex import runtime_gates
 
-    runtime_gates.require_authorized("live_trading", config)
+    runtime_gates.require_authorized("live_trading", cfg)
 
 
 def _hash_payload(payload) -> str:

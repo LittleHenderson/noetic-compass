@@ -4,6 +4,7 @@ from cas_forex.account_ledger import (
     AccountLedgerEvent,
     assert_account_ledger_boundary,
     build_account_ledger_from_paper_review,
+    build_live_account_ledger_from_terminal_history,
     build_paper_account_ledger,
 )
 
@@ -124,3 +125,75 @@ def test_build_account_ledger_from_risk_review_populates_terminal_rows_and_recal
     assert row.evidence_packet_id == "review-1"
     assert any(event.event_type == "paper_order_intent" for event in ledger.cashflow_events)
     assert_account_ledger_boundary(ledger)
+
+
+def test_live_broker_account_ledger_uses_only_verified_live_closed_history():
+    report = {
+        "report_kind": "cas_forex_terminal_history_ingest",
+        "created_at": "2026-06-30T12:00:00Z",
+        "report_path": "evidence_runs/terminal_history_ingest/live-report.json",
+        "summary": {"account_balance": 5400.0, "account_equity": 5400.0, "account_currency": "USD"},
+        "history_records": [
+            {
+                "history_id": "hist-live-profit",
+                "source_path": "broker/live-history.json",
+                "source_sha256": "abc123",
+                "broker_mode": "LIVE_MT5",
+                "broker_ticket": "live-ticket-1",
+                "symbol": "NAS100",
+                "direction": "LONG",
+                "lots": 0.02,
+                "open_price": 20000.0,
+                "close_price": 20100.0,
+                "closed_at": "2026-06-30T10:00:00Z",
+                "profit_loss_account": 500.0,
+                "commission": -20.0,
+                "swap": 0.0,
+                "account_currency": "USD",
+            },
+            {
+                "history_id": "hist-demo-profit",
+                "source_path": "broker/demo-history.json",
+                "source_sha256": "def456",
+                "broker_mode": "PAPER_MT5",
+                "broker_ticket": "demo-ticket-1",
+                "symbol": "NAS100",
+                "direction": "LONG",
+                "profit_loss_account": 9999.0,
+            },
+        ],
+    }
+
+    ledger = build_live_account_ledger_from_terminal_history(report)
+
+    assert ledger.mode == "LIVE_ACCOUNT_LEDGER"
+    assert ledger.live_money_authorized is True
+    assert ledger.payment_movement_authorized is False
+    assert ledger.summary.realized_pnl_usd == 480.0
+    assert ledger.summary.balance_usd == 5400.0
+    assert ledger.summary.deal_count == 1
+    assert ledger.deals[0].broker_ticket == "live-ticket-1"
+    assert ledger.cashflow_events[0].event_type == "realized_profit"
+    assert ledger.cashflow_events[0].evidence_packet_id == "hist-live-profit"
+
+
+def test_live_broker_account_ledger_rejects_demo_history_even_with_ticket():
+    report = {
+        "report_kind": "cas_forex_terminal_history_ingest",
+        "created_at": "2026-06-30T12:00:00Z",
+        "history_records": [
+            {
+                "history_id": "hist-demo",
+                "source_path": "broker/demo-history.json",
+                "source_sha256": "abc123",
+                "broker_mode": "PAPER_MT5",
+                "broker_ticket": "demo-ticket",
+                "symbol": "NAS100",
+                "direction": "LONG",
+                "profit_loss_account": 1000.0,
+            }
+        ],
+    }
+
+    with pytest.raises(ValueError, match="no live broker-confirmed"):
+        build_live_account_ledger_from_terminal_history(report)

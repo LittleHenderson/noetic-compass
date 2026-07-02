@@ -21,6 +21,7 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
+from ..route_cache import cache_first_payload
 from cas_forex.push_notifications import (
     PushDispatchResult,
     PushSubscription,
@@ -106,6 +107,22 @@ def _serialize_dispatch(result: PushDispatchResult) -> Dict[str, Any]:
     }
 
 
+def _subscriptions_payload() -> Dict[str, Any]:
+    subs = get_store().list_all()
+    return {
+        "subscriptions": [_serialize_subscription(s) for s in subs],
+        "total_subscriptions": len(subs),
+    }
+
+
+def _subscriptions_warming() -> Dict[str, Any]:
+    return {
+        "subscriptions": [],
+        "total_subscriptions": 0,
+        "detail": "Push subscription cache is warming.",
+    }
+
+
 # Transport hook for tests: when set, dispatch_test_push will use it.
 _TEST_TRANSPORT: Optional[PushTransport] = None
 
@@ -166,11 +183,12 @@ async def unsubscribe(body: UnsubscribeRequest) -> Response:
 async def list_subscriptions() -> Dict[str, Any]:
     # TODO: operator-only — gate this behind the same auth as the cockpit
     # once the auth layer lands. Today there is no auth on /api/forex/*.
-    subs = get_store().list_all()
-    return {
-        "subscriptions": [_serialize_subscription(s) for s in subs],
-        "total_subscriptions": len(subs),
-    }
+    return cache_first_payload(
+        "push_notification_subscriptions",
+        builder=_subscriptions_payload,
+        fallback=_subscriptions_warming,
+        ttl_seconds=10.0,
+    )
 
 
 @router.post("/test-push")

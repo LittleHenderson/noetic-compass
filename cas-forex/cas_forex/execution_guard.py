@@ -47,10 +47,17 @@ class ExecutionBlocked(Exception):
 
 def _resolve_config(config: Any = None) -> Any:
     if config is not None:
-        return config
-    from cas_forex.config import config as default_config
+        base = config
+    else:
+        from cas_forex.config import config as default_config
 
-    return default_config
+        base = default_config
+    try:
+        from cas_forex.live_enable_control import apply_live_enable_overrides
+
+        return apply_live_enable_overrides(base)
+    except Exception:  # pragma: no cover - guard remains conservative below
+        return base
 
 
 def caps_from_config(config: Any = None) -> RiskCapConfig:
@@ -192,9 +199,12 @@ def guarded_place_order(
          (``will_execute_real_order``) -- re-assert the owner live-trading gate
          via ``runtime_gates.require_authorized`` -- raises ``PermissionError``
          listing what is still missing.
-      2. Run the pre-execution risk gate over the proposed intent -- raises
+      2. Require a fresh matching EDGE PASS token for every real-money dispatch
+         and every loop-registered decision_ref.
+      3. Enforce the owner-accepted small-live-pilot envelope.
+      4. Run the pre-execution risk gate over the proposed intent -- raises
          ``ExecutionBlocked`` on any cap breach.
-      3. Only then call ``bridge.execute_order(order)`` (real bridges) -- falling
+      5. Only then call ``bridge.execute_order(order)`` (real bridges) -- falling
          back to ``bridge.place_order`` for test fakes -- and return its result.
 
     ``proposed_intent`` overrides the symbol/direction/lots inferred from
@@ -223,6 +233,14 @@ def guarded_place_order(
     decision_ref = getattr(order, "decision_ref", None)
     if is_real or edge_authorization.is_required(decision_ref):
         edge_authorization.require(order, is_real=is_real)
+
+    if is_real:
+        from cas_forex import live_pilot
+
+        live_pilot.require_live_pilot_intent(
+            intent,
+            live_telemetry=live_telemetry,
+        )
 
     guard(
         intent,

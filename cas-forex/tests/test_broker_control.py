@@ -6,7 +6,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from cas_forex.broker.mt5_bridge import SimulatedBrokerBridge
+from cas_forex.broker.mt5_bridge import MT4EABridge, SimulatedBrokerBridge
 from cas_forex.broker_control import (
     PLATFORMS,
     build_broker_control_report,
@@ -116,6 +116,22 @@ def test_select_bridge_mt4_falls_back_to_sim_when_mt4_disabled():
     bridge = select_bridge(_cfg())
     # MT4 not enabled in config -> mailbox connect fails -> simulator fallback.
     assert isinstance(bridge, SimulatedBrokerBridge)
+
+
+def test_select_bridge_mt4_requires_fresh_ea_heartbeat(tmp_path):
+    set_broker_control_overrides(platform="mt4")
+    mailbox = tmp_path / "mt4"
+    bridge = select_bridge(_cfg(mt4_enabled=True, mt4_mailbox_dir=str(mailbox)))
+    assert isinstance(bridge, SimulatedBrokerBridge)
+
+    mailbox.mkdir(parents=True)
+    (mailbox / "heartbeat.json").write_text(
+        '{"state":"RUNNING","server":"DemoServer","live_trading_allowed":false}',
+        encoding="utf-8",
+    )
+
+    bridge = select_bridge(_cfg(mt4_enabled=True, mt4_mailbox_dir=str(mailbox)))
+    assert isinstance(bridge, MT4EABridge)
 
 
 def test_treat_account_as_demo_reads_from_config():

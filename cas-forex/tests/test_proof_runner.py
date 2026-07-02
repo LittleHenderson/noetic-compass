@@ -51,3 +51,55 @@ def test_runner_status_shape():
     assert status["report_kind"] == "cas_forex_proof_runner"
     assert status["running"] is False
     assert "check_interval_seconds" in status
+
+
+def test_desired_proof_runner_restores_after_process_restart(monkeypatch, tmp_path):
+    _paper_mode(monkeypatch)
+    proof_runner.set_control_state_path_for_testing(tmp_path / "proof-auto-runner-control.json")
+    monkeypatch.setattr(
+        proof_runner,
+        "run_proof_day_now",
+        lambda *a, **k: {
+            "report_kind": "cas_forex_proof_run",
+            "status": "SKIPPED_EXISTING",
+            "detail": "test proof already recorded",
+        },
+    )
+    try:
+        proof_runner.start_runner(120)
+        # Simulate process teardown: stop the in-memory thread but keep owner desired state.
+        proof_runner.stop_runner(persist_desired=False)
+
+        restored = proof_runner.restore_desired_runner()
+
+        assert restored["restore_status"] == "RESTORED_DESIRED_PAPER_PROOF_RUNNER"
+        assert restored["running"] is True
+        assert restored["check_interval_seconds"] == 120
+    finally:
+        proof_runner.stop_runner()
+        proof_runner.reset_control_state_path_for_testing()
+
+
+def test_owner_stop_persists_proof_runner_off(monkeypatch, tmp_path):
+    _paper_mode(monkeypatch)
+    proof_runner.set_control_state_path_for_testing(tmp_path / "proof-auto-runner-control.json")
+    monkeypatch.setattr(
+        proof_runner,
+        "run_proof_day_now",
+        lambda *a, **k: {
+            "report_kind": "cas_forex_proof_run",
+            "status": "SKIPPED_EXISTING",
+            "detail": "test proof already recorded",
+        },
+    )
+    try:
+        proof_runner.start_runner(120)
+        proof_runner.stop_runner()
+
+        restored = proof_runner.restore_desired_runner()
+
+        assert restored["restore_status"] == "NO_RESTORE_DESIRED"
+        assert restored["running"] is False
+    finally:
+        proof_runner.stop_runner()
+        proof_runner.reset_control_state_path_for_testing()

@@ -16,15 +16,23 @@ import json
 from pathlib import Path
 from typing import Any, Optional
 
-from fastapi import APIRouter, Query
+from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, Field
 
+from ..route_cache import cache_first_payload
 from cas_forex import runtime_gates
 from cas_forex.agent_dispatch import (
     DEFAULT_OUTPUT_DIR,
     run_agent_dispatch_cycle,
     write_agent_dispatch_cycle_report,
 )
+from cas_forex.broker_truth_monitor import load_latest_broker_truth_monitor_report
+from cas_forex.order_attempt_audit import (
+    OrderAttemptAuditError,
+    build_order_attempt_audit_status,
+    default_order_attempt_audit_store,
+)
+from cas_forex.order_attempt_recovery_packet import build_order_attempt_recovery_packet
 
 router = APIRouter()
 
@@ -47,6 +55,64 @@ async def get_latest_dispatch_cycle() -> dict[str, Any]:
             "status": "unreadable",
             "detail": str(exc),
         }
+
+
+@router.get("/audit")
+async def get_order_attempt_audit() -> dict[str, Any]:
+    """Return durable order-attempt audit status (read-only)."""
+    return cache_first_payload(
+        "order_attempt_audit",
+        builder=build_order_attempt_audit_status,
+        fallback=_order_attempt_audit_warming,
+        ttl_seconds=30.0,
+    )
+
+
+@router.get("/audit/recovery-packet")
+async def get_order_attempt_recovery_packet() -> dict[str, Any]:
+    """Return owner-action packet for unresolved real order attempts."""
+    return cache_first_payload(
+        "order_attempt_recovery_packet",
+        builder=_build_order_attempt_recovery_packet_payload,
+        fallback=_order_attempt_recovery_warming,
+        ttl_seconds=30.0,
+    )
+
+
+def _build_order_attempt_recovery_packet_payload() -> dict[str, Any]:
+    try:
+        broker_truth = load_latest_broker_truth_monitor_report()
+    except Exception:
+        broker_truth = {}
+    return build_order_attempt_recovery_packet(
+        order_attempt_status=build_order_attempt_audit_status(),
+        broker_truth_report=broker_truth,
+    )
+
+
+def _order_attempt_audit_warming() -> dict[str, Any]:
+    return {
+        "report_kind": "cas_forex_order_attempt_audit",
+        "status": "WARMING",
+        "attempt_count": 0,
+        "unresolved_real_attempt_count": 0,
+        "synthetic_test_like_count": 0,
+        "broker_review_required_count": 0,
+        "next_action": "Order-attempt audit cache is warming.",
+    }
+
+
+def _order_attempt_recovery_warming() -> dict[str, Any]:
+    return {
+        "report_kind": "cas_forex_order_attempt_recovery_packet",
+        "status": "WARMING",
+        "recovery_clear_for_live": False,
+        "can_reconcile_unresolved_attempts": False,
+        "unresolved_real_attempt_count": 0,
+        "synthetic_test_like_count": 0,
+        "broker_review_required_count": 0,
+        "next_action": "Order-attempt recovery cache is warming.",
+    }
 
 
 @router.post("/run")
@@ -93,6 +159,40 @@ class ManualOrder(BaseModel):
     lots: float = Field(gt=0)
     sl: Optional[float] = Field(default=None, gt=0)
     tp: Optional[float] = Field(default=None, gt=0)
+
+
+class ReconcileUnresolvedAttempt(BaseModel):
+    attempt_id: str = Field(..., min_length=1)
+    notes: Optional[str] = None
+    broker_truth_report: Optional[dict[str, Any]] = None
+
+
+@router.post("/audit/reconcile-unresolved")
+async def post_reconcile_unresolved_attempt(
+    body: ReconcileUnresolvedAttempt,
+    confirm_owner_reconcile: bool = Query(default=False),
+) -> dict[str, Any]:
+    """Owner-reconcile one unresolved real order attempt against clean broker truth.
+
+    This finalizes the audit record so recovery no longer treats it as an open
+    crash-window attempt. It does not create a broker outcome, retry the order,
+    place/close anything, or move money.
+    """
+    try:
+        broker_truth = body.broker_truth_report or load_latest_broker_truth_monitor_report()
+        return default_order_attempt_audit_store().reconcile_unresolved_real_attempt(
+            body.attempt_id,
+            broker_truth_report=broker_truth,
+            notes=body.notes or "",
+            confirm_owner_reconcile=confirm_owner_reconcile,
+        )
+    except Exception as exc:
+        if isinstance(exc, OrderAttemptAuditError):
+            raise HTTPException(status_code=400, detail=str(exc)) from exc
+        raise HTTPException(
+            status_code=400,
+            detail=f"Cannot reconcile unresolved real order attempt: {type(exc).__name__}: {exc}",
+        ) from exc
 
 
 @router.post("/manual")

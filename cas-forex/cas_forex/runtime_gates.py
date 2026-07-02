@@ -10,13 +10,20 @@ firewall" framing with an owner-controlled gate:
       3. the broker / payment provider for it is configured
          (plus allowlist / legal acknowledgments where the capability needs them).
 
-If any requirement is missing the capability stays *pending owner enable*
-(status ``CURRENTLY NOT LICENSED``) and the runtime refuses to act. This is not
-a permanent refusal - it is a safety default. The owner turns a capability on by
-satisfying its requirements, and the gate reports exactly what is still missing.
+If any owner command / credential / broker requirement is missing the capability
+stays *pending owner enable* (status ``CURRENTLY NOT LICENSED``) and the runtime
+refuses to act. This is not a permanent refusal - it is a safety default. The
+owner turns a capability on by satisfying its owner-controlled requirements, and
+the gate reports exactly what is still missing.
 
 Nothing here ever flips a capability on by itself. The owner does that through
 config / environment, and only then does the gate report ``AUTHORIZED``.
+
+Performance/readiness metrics are not authority. Paper-day counts, 12-month
+research evidence, AI confidence, proof maturity, and profit pace may warn or
+inform the owner, but they do not authorize or veto live trading. The owner's
+switches/ACCEPT buttons plus action-time technical prerequisites are the live
+authority path.
 """
 
 from __future__ import annotations
@@ -39,6 +46,31 @@ CAPABILITIES = (
     "payout_automation",
 )
 
+OWNER_AUTHORITY_BOUNDARY = (
+    "The owner is the live-trading authority. CAS Forex metrics, AI agents, "
+    "paper-proof maturity, 12-month evidence, win-rate estimates, and profit "
+    "pace are advisory only and cannot authorize or veto live trading. Runtime "
+    "authorization is controlled by owner switches/ACCEPT buttons plus technical "
+    "requirements that must exist at action time, such as broker credentials, "
+    "provider config, edge authorization, and bridge/risk checks."
+)
+
+ADVISORY_ONLY_INPUTS = (
+    "paper-proof day count",
+    "12-month / multi-symbol evidence",
+    "strategy win-rate / profit metrics",
+    "AI confidence or agent recommendation",
+    "daily/monthly profit pace",
+)
+
+ACTION_TIME_REQUIREMENTS = (
+    "owner switches / Owner ACCEPT are ON for the capability",
+    "broker or payment-provider credentials are configured",
+    "broker/feed/provider bridge is reachable for the requested action",
+    "fresh edge authorization exists when the dispatch path requires it",
+    "risk checks, emergency-stop checks, and explicit action confirmation pass",
+)
+
 
 @dataclass(frozen=True)
 class GateDecision:
@@ -49,6 +81,7 @@ class GateDecision:
     status: str
     missing_requirements: tuple[str, ...] = ()
     satisfied_requirements: tuple[str, ...] = ()
+    advisory_requirements: tuple[str, ...] = ()
     next_action: str = ""
 
     def to_dict(self) -> dict[str, Any]:
@@ -58,12 +91,17 @@ class GateDecision:
             "status": self.status,
             "missing_requirements": list(self.missing_requirements),
             "satisfied_requirements": list(self.satisfied_requirements),
+            "advisory_requirements": list(self.advisory_requirements),
             "next_action": self.next_action,
         }
 
 
 def _check(label: str, ok: bool, satisfied: List[str], missing: List[str]) -> None:
     (satisfied if ok else missing).append(label)
+
+
+def _advise(label: str, ok: bool, satisfied: List[str], advisory: List[str]) -> None:
+    (satisfied if ok else advisory).append(label)
 
 
 def _resolve_config(config: Any = None) -> Any:
@@ -86,15 +124,61 @@ def _resolve_config(config: Any = None) -> Any:
     return config
 
 
-def evaluate_live_trading(config: Any = None) -> GateDecision:
+def evaluate_live_trading(config: Any = None, *, require_dry_run_review: bool = True) -> GateDecision:
     """Authorize live order placement only with owner flag + creds + broker."""
 
     config = _resolve_config(config)
     satisfied: List[str] = []
     missing: List[str] = []
+    advisory: List[str] = []
+    try:
+        from cas_forex.auto_halt import is_auto_halt_active
+
+        auto_halt_clear = not is_auto_halt_active()
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable halt state
+        auto_halt_clear = False
+    try:
+        from cas_forex.broker_truth_monitor import broker_truth_monitor_ready_for_live
+
+        broker_truth_fresh = broker_truth_monitor_ready_for_live()
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable monitor state
+        broker_truth_fresh = False
+    selected_broker = str(
+        getattr(config, "selected_broker_id", None)
+        or getattr(config, "broker_name", "")
+        or ""
+    ).lower()
+    try:
+        from cas_forex.broker_reality import is_broker_reality_accepted
+
+        broker_reality_accept = is_broker_reality_accepted(selected_broker)
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable review state
+        broker_reality_accept = False
+    try:
+        from cas_forex.live_pilot import is_live_pilot_available_for_live
+
+        live_pilot_ready = is_live_pilot_available_for_live()
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable pilot state
+        live_pilot_ready = False
+    try:
+        from cas_forex.live_recovery import is_live_recovery_clear_for_live
+
+        live_recovery_clear = is_live_recovery_clear_for_live()
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable recovery state
+        live_recovery_clear = False
+    try:
+        from cas_forex.live_order_dry_run_review import is_live_order_dry_run_review_clear_for_live
+
+        dry_run_review_clear = (
+            is_live_order_dry_run_review_clear_for_live()
+            if require_dry_run_review
+            else True
+        )
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable review state
+        dry_run_review_clear = False if require_dry_run_review else True
 
     _check(
-        "owner_enable_live_trading flag is ON",
+        "owner live-trading switches are ON",
         bool(getattr(config, "owner_enable_live_trading", False))
         and bool(getattr(config, "live_trading_licensed", False)),
         satisfied,
@@ -132,11 +216,6 @@ def evaluate_live_trading(config: Any = None) -> GateDecision:
     try:
         from cas_forex.broker_profiles import BROKER_BY_ID
 
-        selected_broker = str(
-            getattr(config, "selected_broker_id", None)
-            or getattr(config, "broker_name", "")
-            or ""
-        ).lower()
         broker_known = selected_broker in BROKER_BY_ID
     except Exception:  # pragma: no cover - defensive fallback
         broker_known = bool(getattr(config, "broker_name", ""))
@@ -146,15 +225,58 @@ def evaluate_live_trading(config: Any = None) -> GateDecision:
         satisfied,
         missing,
     )
+    _check(
+        "auto-halt circuit breaker is CLEAR",
+        auto_halt_clear,
+        satisfied,
+        missing,
+    )
+    _advise(
+        "continuous broker-truth monitor is fresh and live-connected",
+        broker_truth_fresh,
+        satisfied,
+        advisory,
+    )
+    _check(
+        "owner broker-reality review is ACCEPT for selected broker",
+        broker_reality_accept,
+        satisfied,
+        missing,
+    )
+    _check(
+        "small-controlled live pilot is ACCEPT and has remaining capacity",
+        live_pilot_ready,
+        satisfied,
+        missing,
+    )
+    _check(
+        "live crash/disconnect recovery review is CLEAR",
+        live_recovery_clear,
+        satisfied,
+        missing,
+    )
+    _check(
+        "owner ACCEPTED latest passing live-order dry run against fresh broker truth",
+        dry_run_review_clear,
+        satisfied,
+        missing,
+    )
 
     return _decision(
         "live_trading",
         satisfied,
         missing,
+        advisory=advisory,
         next_action=(
-            "Select a broker candidate, set OWNER_ENABLE_LIVE_TRADING + "
-            "LIVE_TRADING_LICENSED, configure live broker credentials, and sign "
-            "the account acknowledgments."
+            "Review/clear any active auto-halt, start broker-truth monitoring "
+            "until a fresh live MT5 snapshot is visible, select a broker "
+            "candidate, record owner ACCEPT for broker withdrawal/KYC/fees/"
+            "currency/automation terms, owner-ACCEPT the small-controlled live "
+            "pilot, clear any crash/disconnect recovery review after fresh "
+            "broker-truth reconciliation, run and owner-ACCEPT a passing "
+            "live-order dry run against fresh broker truth, turn on the "
+            "Owner-enable live trading + Owner ACCEPT live authority switches, configure live "
+            "broker credentials, and sign the account acknowledgments."
         ),
     )
 
@@ -222,6 +344,17 @@ def evaluate_payout_automation(config: Any = None) -> GateDecision:
     config = _resolve_config(config)
     satisfied: List[str] = []
     missing: List[str] = []
+    selected_broker = str(
+        getattr(config, "selected_broker_id", None)
+        or getattr(config, "broker_name", "")
+        or ""
+    ).lower()
+    try:
+        from cas_forex.broker_reality import is_broker_reality_accepted
+
+        broker_reality_accept = is_broker_reality_accepted(selected_broker)
+    except Exception:  # pragma: no cover - defensive: fail closed on unreadable review state
+        broker_reality_accept = False
 
     _check(
         "owner_enable_payout_automation flag is ON",
@@ -253,6 +386,12 @@ def evaluate_payout_automation(config: Any = None) -> GateDecision:
         satisfied,
         missing,
     )
+    _check(
+        "owner broker-reality review is ACCEPT for withdrawal/payout terms",
+        broker_reality_accept,
+        satisfied,
+        missing,
+    )
 
     return _decision(
         "payout_automation",
@@ -260,12 +399,19 @@ def evaluate_payout_automation(config: Any = None) -> GateDecision:
         missing,
         next_action=(
             "Configure PAYMENT_PROVIDER + PAYMENT_API_KEY + PAYOUT_DESTINATION_ID, "
-            "allowlist the destination, then set OWNER_ENABLE_PAYOUT_AUTOMATION."
+            "allowlist the destination, record owner ACCEPT for broker withdrawal/KYC/fee/currency terms, "
+            "then set OWNER_ENABLE_PAYOUT_AUTOMATION."
         ),
     )
 
 
-def _decision(capability: str, satisfied: List[str], missing: List[str], next_action: str) -> GateDecision:
+def _decision(
+    capability: str,
+    satisfied: List[str],
+    missing: List[str],
+    next_action: str,
+    advisory: List[str] | None = None,
+) -> GateDecision:
     authorized = not missing
     return GateDecision(
         capability=capability,
@@ -273,6 +419,7 @@ def _decision(capability: str, satisfied: List[str], missing: List[str], next_ac
         status=AUTHORIZED if authorized else PENDING_OWNER_ENABLE,
         missing_requirements=tuple(missing),
         satisfied_requirements=tuple(satisfied),
+        advisory_requirements=tuple(advisory or ()),
         next_action="" if authorized else next_action,
     )
 
@@ -324,6 +471,11 @@ class RuntimeGatesReport:
     decisions: dict[str, dict[str, Any]] = field(default_factory=dict)
     all_real_money_authorized: bool = False
     summary: str = ""
+    owner_authority_boundary: str = OWNER_AUTHORITY_BOUNDARY
+    advisory_only_inputs: tuple[str, ...] = ADVISORY_ONLY_INPUTS
+    action_time_requirements: tuple[str, ...] = ACTION_TIME_REQUIREMENTS
+    owner_controls_are_final_authority: bool = True
+    metrics_and_ai_can_veto_owner_authority: bool = False
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -331,6 +483,11 @@ class RuntimeGatesReport:
             "decisions": self.decisions,
             "all_real_money_authorized": self.all_real_money_authorized,
             "summary": self.summary,
+            "owner_authority_boundary": self.owner_authority_boundary,
+            "advisory_only_inputs": list(self.advisory_only_inputs),
+            "action_time_requirements": list(self.action_time_requirements),
+            "owner_controls_are_final_authority": self.owner_controls_are_final_authority,
+            "metrics_and_ai_can_veto_owner_authority": self.metrics_and_ai_can_veto_owner_authority,
         }
 
 

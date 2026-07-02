@@ -26,9 +26,9 @@ OPEN = "OPEN"
 AUTHORITY_BOUNDARY_CLAIM = (
     "Research/paper cockpit runs now. Live trading, broker ACCEPT, auto-deposit, "
     "debit/card/bank movement, and payout automation are owner-controlled "
-    "capabilities: each is CURRENTLY NOT LICENSED until the owner provides "
-    "credentials/provider config and sets its enable flag, then it becomes "
-    "AUTHORIZED. Trading edge remains OPEN."
+    "capabilities: each stays pending owner enable until the owner provides "
+    "credentials/provider config, turns on its enable flag, and the action-time "
+    "broker/provider checks pass. Trading edge remains OPEN."
 )
 
 

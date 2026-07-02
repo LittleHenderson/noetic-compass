@@ -9,6 +9,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
+from cas_forex import broker_reality
 from cas_forex.account_ledger import _validate_events
 from cas_forex.money_movement import (
     STATUS_BLOCKED,
@@ -141,7 +142,8 @@ def test_gate_blocks_before_real_provider_is_called():
     assert fake.payout_calls == []
 
 
-def test_authorized_real_payout_produces_real_money_ledger_event():
+def test_authorized_real_payout_produces_real_money_ledger_event(monkeypatch):
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
     fake = _FakeStripe(payout_status="paid")
     provider = StripePaymentProvider("sk_test_123", stripe_module=fake)
     engine = MovementEngine(provider=provider, config=_authorized_payout_cfg())
@@ -207,7 +209,8 @@ def test_authorized_real_deposit_produces_external_ledger_event():
 
 # -- reinvest split with a real provider (GAP 5) ------------------------------
 
-def test_reinvest_split_real_provider_legs_are_external():
+def test_reinvest_split_real_provider_legs_are_external(monkeypatch):
+    monkeypatch.setattr(broker_reality, "is_broker_reality_accepted", lambda broker_id=None: True)
     fake = _FakeStripe(payout_status="paid")
     provider = StripePaymentProvider("sk_test_123", stripe_module=fake)
     engine = MovementEngine(provider=provider, config=_authorized_payout_cfg())

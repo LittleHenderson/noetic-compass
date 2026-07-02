@@ -98,6 +98,23 @@ def _full_inputs() -> dict[str, Any]:
     }
 
 
+def _stalled_inputs() -> dict[str, Any]:
+    data = _full_inputs()
+    data["loop_health"] = {
+        "overall_status": "stalled",
+        "cycles_today": 0,
+        "decisions_today": 0,
+        "executions_today": 0,
+        "blocked_today": 0,
+        "autowake_present": False,
+        "autowake_next_due_iso": None,
+        "diagnostic_hints": [
+            "Most recent cycle is older than the running threshold and no future autowake fire is scheduled."
+        ],
+    }
+    return data
+
+
 def test_empty_inputs_returns_200_with_unknown_briefing():
     route_module.set_loader_for_testing(_empty_inputs)
     app = _make_app()
@@ -121,6 +138,36 @@ def test_full_inputs_returns_200_with_populated_briefing():
     assert body["mt5_terminal_connected"] is True
     assert body["readiness_gates_open"] == 8
     assert body["readiness_gates_total"] == 10
+
+
+def test_runtime_overlay_replaces_stalled_archive_briefing(monkeypatch):
+    route_module.set_loader_for_testing(_stalled_inputs)
+    monkeypatch.setattr(
+        route_module,
+        "_runtime_loop_status",
+        lambda: {
+            "source": "waste_runner",
+            "running": True,
+            "mode": "PAPER",
+            "stage": "no_trade",
+            "cycles_run": 9,
+            "last_run_iso": "2026-07-01T02:35:20+00:00",
+            "status": "RUNNING",
+        },
+    )
+    app = _make_app()
+
+    status, body = asyncio.run(_asgi_get(app, "/api/forex/operator-briefing"))
+
+    assert status == 200
+    assert body["loop_health_status"] == "running"
+    assert body["cycles_today"] == 9
+    assert body["runtime_loop"]["source"] == "waste_runner"
+    assert body["runtime_loop"]["stage"] == "no_trade"
+    assert "Autonomous loop runtime is running" in body["plain_english_briefing"]
+    assert "Autonomous loop is stalled" not in body["plain_english_briefing"]
+    assert "Most recent cycle" not in body["plain_english_briefing"]
+    assert "Most recent cycle" not in " ".join(body["diagnostic_hints"])
 
 
 def test_payload_carries_all_required_keys():

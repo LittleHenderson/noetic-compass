@@ -35,6 +35,8 @@ def main() -> int:
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--skip-terminal-history-ingest", action="store_true")
     parser.add_argument("--summary-only", action="store_true")
+    parser.add_argument("--live-history", action="store_true", help="Read live account closed history instead of the default demo/paper lane.")
+    parser.add_argument("--confirm-live-history", action="store_true", help="Required with --live-history before CAS reads live account history.")
     args = parser.parse_args()
 
     report = build_mt5_deal_history_ingest_report(
@@ -50,6 +52,8 @@ def main() -> int:
         export_dir=args.export_dir,
         output_dir=args.output_dir,
         run_terminal_history_ingest=not args.skip_terminal_history_ingest,
+        account_mode="live" if args.live_history else "demo",
+        confirm_live_history=args.confirm_live_history,
     )
     if args.summary_only:
         payload = {

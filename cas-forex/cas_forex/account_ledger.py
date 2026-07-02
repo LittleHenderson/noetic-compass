@@ -26,7 +26,15 @@ CLAIM_BOUNDARY = (
 )
 
 MODE = "PAPER_DEMO_ACCOUNT_LEDGER"
+LIVE_MODE = "LIVE_ACCOUNT_LEDGER"
 DEPLOYMENT_STATUS = "NOT LICENSED"
+LIVE_CLAIM_BOUNDARY = (
+    "Live broker account ledger is read-only accounting from broker-confirmed "
+    "closed trade history. It can calculate verified net closed-trade winnings "
+    "for owner review and sweep preview, but it does not place live orders, "
+    "create broker ACCEPT, deposit funds, withdraw funds, move bank/card money, "
+    "or automate payouts."
+)
 
 CREDIT_EVENT_TYPES = {"initial_investment", "deposit", "realized_profit", "positive_swap", "balance_adjustment_credit"}
 DEBIT_EVENT_TYPES = {"withdrawal", "payout", "realized_loss", "commission", "broker_fee", "negative_swap", "balance_adjustment_debit"}
@@ -367,6 +375,175 @@ def build_account_ledger_from_paper_review(
     )
 
 
+def build_live_account_ledger_from_terminal_history(
+    history_report: Mapping[str, Any],
+    *,
+    initial_investment_usd: float | None = None,
+    plan_id: str = "live-broker-closed-history",
+    lead_id: str = "broker-confirmed-closed-trades",
+    strategy_setting: str = "broker-history",
+    live_trading_status: str = NOT_LICENSED,
+    broker_accept_status: str = NOT_LICENSED,
+    payout_automation_status: str = NOT_LICENSED,
+    payment_movement_authorized: bool = False,
+) -> AccountLedgerState:
+    """Build a read-only live ledger from broker-confirmed closed history.
+
+    Unlike the paper builder, this accepts only rows that prove all three:
+    broker mode is live, a broker ticket exists, and source evidence is present.
+    If those conditions are absent the function raises, so demo exports never
+    become sweepable real winnings by accident.
+    """
+
+    records = [
+        record
+        for record in history_report.get("history_records") or []
+        if _is_verified_live_history_record(record, history_report)
+    ]
+    if not records:
+        raise ValueError("no live broker-confirmed closed trade rows with evidence")
+
+    report_evidence_refs = _history_report_evidence_refs(history_report)
+    as_of_date = _history_as_of_date(history_report, records)
+    summary_payload = history_report.get("summary") if isinstance(history_report.get("summary"), Mapping) else {}
+    currency = _first_record_text(records, "account_currency") or str(summary_payload.get("account_currency") or "USD")
+
+    events: list[AccountLedgerEvent] = []
+    deals: list[TerminalTradeRow] = []
+    for idx, record in enumerate(records, start=1):
+        ticket = str(record.get("broker_ticket") or record.get("ticket") or "").strip()
+        evidence_refs = tuple(dict.fromkeys((*report_evidence_refs, *_record_evidence_refs(record))))
+        evidence_packet_id = str(record.get("history_id") or stable_ledger_id("live-history", ticket, idx))
+        net_pnl = money(_net_closed_trade_pnl(record))
+        event_type = "realized_profit" if net_pnl >= 0 else "realized_loss"
+        timestamp = str(record.get("closed_at") or record.get("close_time") or history_report.get("created_at") or f"{as_of_date}T00:00:00Z")
+        symbol = str(record.get("symbol") or "UNKNOWN")
+        side = str(record.get("direction") or record.get("side") or "UNKNOWN")
+        lots = _optional_live_float(record.get("lots") or record.get("lot_size")) or 0.0
+        open_price = _optional_live_float(record.get("open_price"))
+        close_price = _optional_live_float(record.get("close_price"))
+        stop_loss = _optional_live_float(record.get("stop_loss"))
+        take_profit = _optional_live_float(record.get("take_profit"))
+        sim_ticket = stable_ledger_id("live-row", ticket, evidence_packet_id)
+
+        events.append(
+            AccountLedgerEvent(
+                ledger_id=stable_ledger_id("ledger", LIVE_MODE, ticket, timestamp, net_pnl),
+                event_type=event_type,
+                timestamp=timestamp,
+                amount_usd=money(abs(net_pnl)),
+                balance_delta_usd=net_pnl,
+                equity_delta_usd=net_pnl,
+                symbol=symbol,
+                side=side,
+                lot_size=lots,
+                price=close_price if close_price is not None else open_price,
+                sl=stop_loss,
+                tp=take_profit,
+                broker_ticket=ticket,
+                simulator_ticket=None,
+                strategy_id=str(record.get("strategy_id") or strategy_setting),
+                ai_action=str(record.get("ai_action") or record.get("close_reason") or "BROKER_CLOSED_HISTORY"),
+                evidence_packet_id=evidence_packet_id,
+                evidence_refs=evidence_refs,
+                note="Live broker-confirmed closed-trade net P/L; read-only accounting event.",
+                external_money_movement=False,
+            )
+        )
+        deals.append(
+            TerminalTradeRow(
+                row_id=stable_ledger_id("row", LIVE_MODE, ticket, timestamp, net_pnl),
+                tab="Deals",
+                symbol=symbol,
+                side=side,
+                lot_size=lots,
+                open_price=float(open_price or 0.0),
+                close_or_current_price=close_price,
+                stop_loss=stop_loss,
+                take_profit=take_profit,
+                timestamp=timestamp,
+                broker_ticket=ticket,
+                simulator_ticket=sim_ticket,
+                strategy_id=str(record.get("strategy_id") or strategy_setting),
+                ai_action=str(record.get("ai_action") or record.get("close_reason") or "BROKER_CLOSED_HISTORY"),
+                evidence_packet_id=evidence_packet_id,
+                net_pnl_usd=net_pnl,
+                swap_usd=money(_optional_live_float(record.get("swap")) or 0.0),
+                commission_usd=money(abs(_optional_live_float(record.get("commission")) or 0.0)),
+                fees_usd=money(abs(_optional_live_float(record.get("fees")) or 0.0)),
+                status="BROKER_CLOSED_VERIFIED",
+            )
+        )
+
+    realized_pnl = money(sum(event.balance_delta_usd for event in events))
+    initial = money(float(initial_investment_usd or 0.0))
+    account_balance = _optional_live_float(summary_payload.get("account_balance"))
+    account_equity = _optional_live_float(summary_payload.get("account_equity"))
+    balance = money(account_balance if account_balance is not None else initial + realized_pnl)
+    equity = money(account_equity if account_equity is not None else balance)
+    drawdown = money(max(0.0, initial - equity)) if initial > 0 else 0.0
+
+    summary = AccountLedgerSummary(
+        mode=LIVE_MODE,
+        initial_investment_usd=initial,
+        owner_selected_initial_investment_usd=initial,
+        risk_review_account_equity_usd=initial,
+        requires_new_risk_review_for_selected_investment=False,
+        deposit_usd=initial,
+        withdrawals_usd=0.0,
+        payouts_usd=0.0,
+        realized_pnl_usd=realized_pnl,
+        floating_pnl_usd=0.0,
+        swap_usd=money(sum(row.swap_usd for row in deals)),
+        commission_usd=money(sum(row.commission_usd for row in deals)),
+        broker_fees_usd=money(sum(row.fees_usd for row in deals)),
+        balance_usd=balance,
+        equity_usd=equity,
+        margin_used_usd=0.0,
+        free_margin_usd=max(0.0, equity),
+        planned_risk_usd=0.0,
+        planned_risk_pct_of_selected_equity=0.0,
+        drawdown_usd=drawdown,
+        drawdown_pct=pct(drawdown / initial * 100.0) if initial > 0 else 0.0,
+        event_count=len(events),
+        open_position_count=0,
+        order_count=0,
+        deal_count=len(deals),
+        currency=currency,
+    )
+    notes = (
+        "Live broker closed-history rows are read-only and can feed verified net winnings; they do not authorize trading or payout movement.",
+        "Principal sweep remains zero; only broker-ticketed closed-trade net winnings are available to the sweep preview.",
+    )
+    return AccountLedgerState(
+        report_kind="cas_forex_account_ledger",
+        plan_id=plan_id,
+        lead_id=lead_id,
+        strategy_setting=strategy_setting,
+        as_of_date=as_of_date,
+        mode=LIVE_MODE,
+        summary=summary,
+        cashflow_events=tuple(events),
+        positions=(),
+        orders=(),
+        deals=tuple(deals),
+        supported_history_tabs=("Positions", "Orders", "Deals"),
+        supported_time_filters=("Seconds", "Minutes", "Hour", "Day", "Week", "Month", "Custom"),
+        evidence_refs=tuple(dict.fromkeys((*report_evidence_refs, *[ref for event in events for ref in event.evidence_refs]))),
+        claim_boundary=LIVE_CLAIM_BOUNDARY,
+        trading_edge_status=OPEN,
+        live_trading_status=live_trading_status,
+        broker_accept_status=broker_accept_status,
+        auto_deposit_status=NOT_LICENSED,
+        debit_card_bank_movement_status=NOT_LICENSED,
+        payout_automation_status=payout_automation_status,
+        deployment_status=OPEN,
+        live_money_authorized=True,
+        payment_movement_authorized=bool(payment_movement_authorized),
+        notes=notes,
+    )
+
+
 def _rows_from_risk_sizing(
     risk_review: Mapping[str, Any],
     *,
@@ -435,6 +612,87 @@ def _events_from_terminal_rows(rows: Sequence[TerminalTradeRow] | tuple[Terminal
             note="Paper order intent only; no broker order was placed.",
             external_money_movement=False,
         )
+
+
+def _is_verified_live_history_record(record: Mapping[str, Any], history_report: Mapping[str, Any]) -> bool:
+    ticket = str(record.get("broker_ticket") or record.get("ticket") or "").strip()
+    broker_mode = str(record.get("broker_mode") or "").upper()
+    live_mode = "LIVE" in broker_mode and "PAPER" not in broker_mode and "DEMO" not in broker_mode
+    return bool(ticket) and live_mode and bool(_record_evidence_refs(record) or _history_report_evidence_refs(history_report))
+
+
+def _record_evidence_refs(record: Mapping[str, Any]) -> tuple[str, ...]:
+    refs: list[str] = []
+    for key in ("source_path", "source_sha256", "history_id", "receipt_id", "command_id"):
+        value = record.get(key)
+        if value:
+            refs.append(f"{key}:{value}")
+    raw_row = record.get("raw_row")
+    if isinstance(raw_row, Mapping):
+        for key in ("source_path", "source_sha256"):
+            value = raw_row.get(key)
+            if value:
+                refs.append(f"raw_{key}:{value}")
+    return tuple(dict.fromkeys(refs))
+
+
+def _history_report_evidence_refs(history_report: Mapping[str, Any]) -> tuple[str, ...]:
+    refs: list[str] = []
+    for key in ("report_path", "history_export_path"):
+        value = history_report.get(key)
+        if value:
+            refs.append(f"{key}:{value}")
+    artifacts = history_report.get("artifact_paths")
+    if isinstance(artifacts, Mapping):
+        for key, value in sorted(artifacts.items()):
+            if value:
+                refs.append(f"artifact_{key}:{value}")
+    for path in history_report.get("source_paths") or ():
+        if path:
+            refs.append(f"source_path:{path}")
+    return tuple(dict.fromkeys(refs))
+
+
+def _history_as_of_date(history_report: Mapping[str, Any], records: Sequence[Mapping[str, Any]]) -> str:
+    for value in (
+        history_report.get("created_at"),
+        *(record.get("closed_at") or record.get("close_time") for record in records),
+        *(record.get("opened_at") or record.get("open_time") for record in records),
+    ):
+        if not value:
+            continue
+        raw = str(value)
+        if len(raw) >= 10:
+            return raw[:10]
+    return "unknown-date"
+
+
+def _first_record_text(records: Sequence[Mapping[str, Any]], key: str) -> str | None:
+    for record in records:
+        value = record.get(key)
+        if value:
+            return str(value)
+    return None
+
+
+def _net_closed_trade_pnl(record: Mapping[str, Any]) -> float:
+    raw_row = record.get("raw_row")
+    source_row = raw_row.get("source_row") if isinstance(raw_row, Mapping) and isinstance(raw_row.get("source_row"), Mapping) else None
+    if isinstance(source_row, Mapping):
+        net_profit = _optional_live_float(source_row.get("net_profit"))
+        if net_profit is not None:
+            return net_profit
+    pnl = _optional_live_float(record.get("profit_loss_account") or record.get("net_pnl_usd") or record.get("profit")) or 0.0
+    commission = _optional_live_float(record.get("commission")) or 0.0
+    swap = _optional_live_float(record.get("swap")) or 0.0
+    fees = _optional_live_float(record.get("fees")) or 0.0
+    return pnl + commission + swap - abs(fees)
+
+
+def _optional_live_float(value: Any) -> float | None:
+    if value is None or value == "":
+        return None
+    return float(value)
 
 
 def _optional_float(value: Any) -> float | None:

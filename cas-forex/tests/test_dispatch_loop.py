@@ -41,6 +41,7 @@ def _clean_loop(monkeypatch):
     dispatch_loop._state.last_error = ""
     yield
     dispatch_loop.stop_loop()
+    dispatch_loop.reset_control_state_path_for_testing()
 
 
 def _wait_for(predicate, timeout=3.0):
@@ -170,3 +171,29 @@ def test_one_bad_cycle_does_not_kill_the_loop(monkeypatch):
     assert dispatch_loop.loop_status()["running"] is True
     assert "simulated cycle failure" in dispatch_loop.loop_status()["last_error"]
     dispatch_loop.stop_loop()
+
+
+def test_desired_dispatch_loop_restores_after_process_restart(tmp_path):
+    dispatch_loop.set_control_state_path_for_testing(tmp_path / "dispatch-loop-control.json")
+    dispatch_loop.start_loop(30, symbols=["NAS100", "US30"], sessions=["Asian"])
+    # Simulate process teardown: stop the in-memory thread but keep owner desired state.
+    dispatch_loop.stop_loop(persist_desired=False)
+
+    restored = dispatch_loop.restore_desired_loop()
+
+    assert restored["restore_status"] == "RESTORED_DESIRED_PAPER_LOOP"
+    assert restored["running"] is True
+    assert restored["interval_seconds"] == 30
+    assert restored["symbols"] == ["NAS100", "US30"]
+    assert restored["sessions"] == ["Asian"]
+
+
+def test_owner_stop_persists_dispatch_loop_off(tmp_path):
+    dispatch_loop.set_control_state_path_for_testing(tmp_path / "dispatch-loop-control.json")
+    dispatch_loop.start_loop(30, symbols=["NAS100"])
+    dispatch_loop.stop_loop()
+
+    restored = dispatch_loop.restore_desired_loop()
+
+    assert restored["restore_status"] == "NO_RESTORE_DESIRED"
+    assert restored["running"] is False

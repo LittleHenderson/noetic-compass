@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from typing import Any
 from urllib.parse import urlsplit
 
@@ -166,3 +167,32 @@ def test_history_summaries_never_advise_future_trade():
             assert phrase not in summary, (
                 f"forbidden trade-advisory phrase {phrase!r} in cycle {decision['cycle_id']}"
             )
+
+
+def test_default_loader_limits_disk_reads_to_requested_newest_reports(tmp_path, monkeypatch):
+    queue_dir = tmp_path / "evidence_runs" / "agent_workflow_queue"
+    queue_dir.mkdir(parents=True)
+    for idx in range(5):
+        path = queue_dir / f"agent-workflow-cycle-c{idx}-report.json"
+        path.write_text(json.dumps(_make_cycle_report(f"c{idx}")), encoding="utf-8")
+        os.utime(path, (100 + idx, 100 + idx))
+
+    loaded_names: list[str] = []
+    original_safe_load_path = route_module._safe_load_path
+
+    def spy_safe_load_path(path):
+        loaded_names.append(path.name)
+        return original_safe_load_path(path)
+
+    monkeypatch.setattr(route_module, "REPO_ROOT", tmp_path)
+    monkeypatch.setattr(route_module, "_safe_load_path", spy_safe_load_path)
+
+    loaded = route_module._default_loader(limit=2)
+    reports = loaded["cycle_reports"]
+
+    assert len(reports) == 2
+    assert [report["cycle_id"] for _, report in reports] == ["c4", "c3"]
+    assert loaded_names == [
+        "agent-workflow-cycle-c4-report.json",
+        "agent-workflow-cycle-c3-report.json",
+    ]

@@ -101,6 +101,9 @@ class CompoundDecision:
     action: str  # 'ADD' | 'HOLD' | 'CUT'
     add_units: int
     reason: str
+    add_dry_run: Optional[dict[str, Any]] = None
+    add_dispatch_intent: Optional[dict[str, Any]] = None
+    add_dispatch_result: Optional[dict[str, Any]] = None
 
 
 # The single status string that licenses a call to execute_fn.
