@@ -788,6 +788,24 @@ def _run_runner(args: argparse.Namespace) -> int:
             "config": {"interval_seconds": args.interval_seconds, "confirm": bool(args.confirm)},
         },
     )
+    if not status.get("running"):
+        # start_runner refused (e.g. CONFIRM_REQUIRED while the owner's live
+        # switches are ON and confirm was not passed). Exiting silently here
+        # looked exactly like a crash — empty log, route claiming RUNNING for
+        # a worker that was already gone. Say why, record the refusal, and
+        # exit with a distinct code instead.
+        detail = status.get("detail") or status.get("last_error") or ""
+        print(
+            f"WASTE runner worker did not start: {status.get('status')} — {detail}",
+            flush=True,
+        )
+        record = worker_status(RUNNER_KIND)
+        record["status"] = status.get("status") or "NOT_STARTED"
+        record["running"] = False
+        record["detail"] = detail
+        record["stopped_at"] = utc_now().isoformat()
+        _save_record(RUNNER_KIND, record)
+        return 3
     try:
         while True:
             time.sleep(1.0)
