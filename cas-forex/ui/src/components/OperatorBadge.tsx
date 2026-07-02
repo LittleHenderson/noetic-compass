@@ -12,6 +12,11 @@ import {
   runOperatorNow,
   addOperatorTokens,
   setOperatorKey,
+  chatWithOperator,
+  fetchGuidance,
+  addGuidance,
+  removeGuidance,
+  type GuidanceNote,
   type OperatorState,
 } from "../data/operatorApi";
 import "./OperatorBadge.css";
@@ -49,6 +54,10 @@ export function OperatorBadge() {
   const [topUp, setTopUp] = useState("500000");
   const [keyInput, setKeyInput] = useState("");
   const [keyMsg, setKeyMsg] = useState("");
+  const [chatInput, setChatInput] = useState("");
+  const [chatReply, setChatReply] = useState("");
+  const [chatBusy, setChatBusy] = useState(false);
+  const [guidance, setGuidance] = useState<GuidanceNote[]>([]);
   const timer = useRef<number | null>(null);
 
   const refresh = useCallback(async () => {
@@ -63,6 +72,40 @@ export function OperatorBadge() {
       if (timer.current) window.clearInterval(timer.current);
     };
   }, [refresh]);
+
+  useEffect(() => {
+    if (open) fetchGuidance().then(setGuidance);
+  }, [open]);
+
+  const ask = useCallback(async () => {
+    const q = chatInput.trim();
+    if (!q) return;
+    setChatBusy(true);
+    setChatReply("…thinking…");
+    try {
+      const res = await chatWithOperator(q);
+      setChatReply(res.ok ? res.reply || "(no reply)" : `Unavailable: ${res.error ?? "no model reachable"}`);
+    } catch {
+      setChatReply("Unavailable: request failed.");
+    } finally {
+      setChatBusy(false);
+    }
+  }, [chatInput]);
+
+  const saveGuidance = useCallback(async () => {
+    const q = chatInput.trim();
+    if (!q) return;
+    setChatBusy(true);
+    try {
+      setGuidance(await addGuidance(q));
+      setChatInput("");
+      setChatReply("Saved as standing guidance — the operator weighs it on every check from now on.");
+    } catch {
+      setChatReply("Could not save guidance.");
+    } finally {
+      setChatBusy(false);
+    }
+  }, [chatInput]);
 
   const { driver, label, note } = classifyDriver(state);
   const mp = state?.model_provider;
@@ -200,6 +243,43 @@ export function OperatorBadge() {
             >
               Add Claude tokens
             </button>
+          </div>
+
+          <div className="operator-badge-chat">
+            <div className="operator-badge-actions-title">Talk to the operator</div>
+            <textarea
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              placeholder="Ask a question, or write a consideration (e.g. bank big winners early, then restart the cycle)…"
+              rows={2}
+              aria-label="Message to the AI operator"
+            />
+            <div className="operator-badge-chat-buttons">
+              <button disabled={chatBusy || !chatInput.trim()} onClick={ask}>
+                Ask
+              </button>
+              <button disabled={chatBusy || !chatInput.trim()} onClick={saveGuidance}>
+                Save as standing guidance
+              </button>
+            </div>
+            {chatReply ? <div className="operator-badge-chat-reply">{chatReply}</div> : null}
+            {guidance.length > 0 ? (
+              <div className="operator-badge-guidance">
+                <div className="operator-badge-actions-title">Standing guidance (weighed every check)</div>
+                {guidance.slice(0, 6).map((note) => (
+                  <div className="operator-badge-guidance-note" key={note.note_id}>
+                    <span>{note.text.length > 90 ? note.text.slice(0, 90) + "…" : note.text}</span>
+                    <button
+                      aria-label="Remove guidance"
+                      title="Remove"
+                      onClick={() => removeGuidance(note.note_id).then(setGuidance)}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : null}
           </div>
 
           {state?.recent_actions && state.recent_actions.length > 0 ? (

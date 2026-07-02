@@ -430,6 +430,36 @@ def _learning_agg(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
     }
 
 
+def _merged_learning_history(history_report_dir: Path | str) -> dict[str, Any]:
+    """Broker-verified MT5 history + simulated paper outcomes, merged by ticket
+    with the REAL record winning. Learning-only: the promotion-grade binding
+    never reads the simulated ledger."""
+    real = _latest_history(history_report_dir)
+    real_rows = real.get("history_records") if isinstance(real.get("history_records"), list) else []
+    merged: dict[str, dict[str, Any]] = {}
+    try:
+        from cas_forex.paper_outcome_sim import load_paper_outcome_history
+
+        sim = load_paper_outcome_history()
+        for row in sim.get("history_records", []) or []:
+            if isinstance(row, Mapping):
+                ticket = str(row.get("broker_ticket") or "")
+                if ticket:
+                    merged[ticket] = dict(row)
+        sim_status = sim.get("ingest_status")
+    except Exception:
+        sim_status = "UNAVAILABLE"
+    for row in real_rows:
+        if isinstance(row, Mapping):
+            ticket = str(row.get("broker_ticket") or row.get("ticket") or "")
+            if ticket:
+                merged[ticket] = dict(row)  # broker-verified wins over simulated
+    return {
+        "ingest_status": f"{real.get('ingest_status')}+{sim_status}",
+        "history_records": list(merged.values()),
+    }
+
+
 def build_waste_learning_outcomes(
     *,
     cycles: Iterable[Mapping[str, Any]] | None = None,
@@ -454,7 +484,11 @@ def build_waste_learning_outcomes(
     attempt_rows = _attempt_rows(
         attempts if attempts is not None else _load_attempts(order_attempt_state_path)
     )
-    history = dict(history_report) if history_report is not None else _latest_history(history_report_dir)
+    history = (
+        dict(history_report)
+        if history_report is not None
+        else _merged_learning_history(history_report_dir)
+    )
     history_rows = _history_rows(history)
 
     attempts_by_decision = _index_by(attempt_rows, "decision_ref")

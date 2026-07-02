@@ -194,6 +194,67 @@
 }
 .operator-badge-action { margin: 0.18rem 0; }
 
+.operator-badge-chat {
+  margin-top: 0.6rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 0.5rem;
+}
+.operator-badge-chat textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.35rem 0.45rem;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(0, 0, 0, 0.25);
+  color: #eaf4ff;
+  font-size: 0.7rem;
+  resize: vertical;
+}
+.operator-badge-chat-buttons {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+}
+.operator-badge-chat-buttons button {
+  flex: 1;
+  padding: 0.32rem 0.4rem;
+  border-radius: 0.4rem;
+  border: 1px solid rgba(96, 165, 250, 0.4);
+  background: rgba(96, 165, 250, 0.12);
+  color: #dbeafe;
+  font-size: 0.66rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.operator-badge-chat-buttons button:disabled { opacity: 0.5; cursor: default; }
+.operator-badge-chat-reply {
+  margin-top: 0.45rem;
+  padding: 0.45rem 0.5rem;
+  border-radius: 0.4rem;
+  background: rgba(96, 165, 250, 0.08);
+  border: 1px solid rgba(96, 165, 250, 0.2);
+  white-space: pre-wrap;
+  max-height: 14rem;
+  overflow-y: auto;
+}
+.operator-badge-guidance { margin-top: 0.5rem; }
+.operator-badge-guidance-note {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin: 0.22rem 0;
+  color: #cfe8ff;
+}
+.operator-badge-guidance-note button {
+  border: none;
+  background: transparent;
+  color: #f87171;
+  cursor: pointer;
+  font-size: 0.7rem;
+  line-height: 1;
+}
+
 .operator-badge-boundary {
   margin-top: 0.6rem;
   font-size: 0.62rem;

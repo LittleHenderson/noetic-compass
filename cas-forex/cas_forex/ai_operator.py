@@ -78,7 +78,10 @@ _OPERATOR_SYSTEM_PROMPT = (
     "trading loop's learning evidence and tune ONLY the owner-fenced AI dials to "
     "improve paper learning and (eventually) real edge. You never trade, move "
     "money, or authorize anything — you only propose dial values, which are "
-    "clamped to the owner's bounds before taking effect. Respond with a single "
+    "clamped to the owner's bounds before taking effect. The context may include "
+    "owner_guidance: standing considerations from the owner — weigh them "
+    "seriously in your reasoning and say so when they shape a decision, but they "
+    "never override the fences or the evidence. Respond with a single "
     "JSON object and nothing else, matching exactly:\n"
     '{"observations": "<what the evidence shows>", '
     '"actions": [{"type": "adjust_dial", "lever": "<one of the dials>", '
@@ -157,6 +160,12 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         lambda: __import__("cas_forex.waste_adaptation_plan", fromlist=["build_waste_adaptation_plan"]).build_waste_adaptation_plan(),
         {"status": "UNAVAILABLE"},
     )
+    # Refresh realized paper outcomes first (guarded: at most once per 10 min),
+    # so the operator reasons over fresh wins/losses. Best-effort by design.
+    _safe(
+        lambda: __import__("cas_forex.paper_outcome_sim", fromlist=["maybe_refresh_paper_outcomes"]).maybe_refresh_paper_outcomes(),
+        None,
+    )
     # The learn-from-mistakes ledger: realized paper win/loss per symbol x
     # direction x profile, including non-edge learning trades. This is what lets
     # the operator say "SHORT NAS100 keeps losing — raise its confidence bar".
@@ -164,9 +173,17 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         lambda: __import__("cas_forex.waste_direction_outcome_binding", fromlist=["build_waste_learning_outcomes"]).build_waste_learning_outcomes(),
         {"status": "UNAVAILABLE"},
     )
+    # Standing owner guidance — the owner's plain-language considerations,
+    # weighed on every tick. Judgment-shaping only; every action stays clamped
+    # to the owner fences regardless of what a note asks for.
+    owner_guidance = _safe(
+        lambda: __import__("cas_forex.operator_guidance", fromlist=["guidance_for_prompt"]).guidance_for_prompt(),
+        [],
+    )
     return {
         "dials": (snapshot.get("control_surface") or {}).get("values") if isinstance(snapshot, dict) else None,
         "dial_bounds": (snapshot.get("control_surface") or {}).get("bounds") if isinstance(snapshot, dict) else None,
+        "owner_guidance": owner_guidance,
         "learning": _compact(learning),
         "outcome_binding": _compact(outcome),
         "learning_outcomes": _compact_learning_outcomes(learning_outcomes),
@@ -372,6 +389,60 @@ class AIOperator:
         )
         self._record(tick)
         return tick
+
+    def chat(self, message: str) -> dict[str, Any]:
+        """Talk to the strategy desk: answer the owner's question with the FULL
+        operator context (learning ledger, dials, recent actions, standing
+        guidance). Conversational only — chat NEVER moves a dial; if the owner
+        wants something considered going forward, it is saved as standing
+        guidance via the guidance store, and the next tick acts on it."""
+        from cas_forex.model_provider import get_model_provider
+
+        question = str(message or "").strip()
+        if not question:
+            return {"ok": False, "error": "empty message"}
+        context = gather_context(self.config)
+        context["recent_operator_actions"] = [
+            {k: a.get(k) for k in ("at", "provider", "summary", "actions_applied") if k in a}
+            for a in self.recent_actions(limit=5)
+        ]
+        system = (
+            "You are the CAS Forex AI operator — the always-on strategy desk that "
+            "tunes the owner-fenced dials of a paper-trading learning loop. The "
+            "owner is talking to you directly. Answer in plain language, honestly "
+            "and concretely, using the provided context (realized paper outcomes, "
+            "dials, learning state, your own recent actions, standing owner "
+            "guidance). Be direct about trade-offs and about what you can and "
+            "cannot do: you tune dials within owner fences; you never place "
+            "orders, move money, or authorize live trading. This chat does not "
+            "change any dial — changes happen on your scheduled ticks. Keep the "
+            "answer under 250 words."
+        )
+        prompt = (
+            "CONTEXT:\n"
+            + json.dumps(context, indent=1, default=str)[:9000]
+            + "\n\nOWNER'S MESSAGE:\n"
+            + question[:2000]
+        )
+        gen = get_model_provider(self.config).generate(prompt, system)
+        reply = {
+            "ok": bool(gen.get("ok")),
+            "reply": (gen.get("text") or "").strip(),
+            "provider": gen.get("provider"),
+            "provider_label": gen.get("provider_label"),
+            "paid": bool(gen.get("paid")),
+            "error": gen.get("error"),
+            "at": utc_now().isoformat(),
+            "dials_changed": False,
+            "claim_boundary": "Chat is conversational only; dials change only on scheduled operator ticks, always clamped to owner fences.",
+        }
+        try:
+            chat_log = self.actions_path.parent / "ai-operator-chat.jsonl"
+            with chat_log.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps({"question": question, **reply}, default=str) + "\n")
+        except OSError:
+            pass
+        return reply
 
     def recent_actions(self, limit: int = 20) -> list[dict[str, Any]]:
         if not self.actions_path.exists():

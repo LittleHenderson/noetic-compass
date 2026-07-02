@@ -487,6 +487,31 @@ async def get_learning_outcomes() -> dict[str, Any]:
     )
 
 
+@router.get("/paper-outcomes/latest")
+async def get_paper_outcomes_latest() -> dict[str, Any]:
+    """The simulated paper-outcome ledger (realized P&L from real candles)."""
+    from cas_forex.paper_outcome_sim import load_paper_outcome_history
+
+    ledger = load_paper_outcome_history()
+    records = ledger.get("history_records", [])
+    return {
+        "report_kind": ledger.get("report_kind"),
+        "ingest_status": ledger.get("ingest_status"),
+        "resolved_count": len(records),
+        "unresolvable_count": len(ledger.get("unresolvable") or {}),
+        "updated_at": ledger.get("updated_at"),
+        "recent_records": records[-10:],
+    }
+
+
+@router.post("/paper-outcomes/run")
+async def post_paper_outcomes_run() -> dict[str, Any]:
+    """Resolve unresolved paper attempts against real candles now (idempotent)."""
+    from cas_forex.paper_outcome_sim import resolve_paper_outcomes
+
+    return resolve_paper_outcomes()
+
+
 @router.get("/paper-sample-collector")
 async def get_paper_sample_collector() -> dict[str, Any]:
     """Paper-only coordinator for broker-grade WASTE sample collection."""

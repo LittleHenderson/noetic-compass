@@ -11,6 +11,7 @@ state.
 from __future__ import annotations
 
 import json
+import os
 import threading
 from dataclasses import asdict, dataclass, field, replace
 from datetime import datetime, timezone
@@ -283,7 +284,16 @@ def get_authority(state_path: Path | str = DEFAULT_STATE_PATH) -> AiControlAutho
     global _AUTHORITY
     with _AUTHORITY_LOCK:
         if _AUTHORITY is None or Path(state_path) != _AUTHORITY.state_path:
-            _AUTHORITY = AiControlAuthority(state_path)
+            resolved = Path(state_path)
+            # Test isolation: a pytest run must NEVER touch (or persist to) the
+            # owner's live authority store — full-suite runs were scrambling the
+            # live dials (edge threshold, learning mode) mid-trading. Tests that
+            # need a specific store still use set_authority_for_tests(...).
+            if resolved == DEFAULT_STATE_PATH and os.environ.get("PYTEST_CURRENT_TEST"):
+                import tempfile
+
+                resolved = Path(tempfile.gettempdir()) / f"cas-forex-test-authority-{os.getpid()}.json"
+            _AUTHORITY = AiControlAuthority(resolved)
         return _AUTHORITY
 
 

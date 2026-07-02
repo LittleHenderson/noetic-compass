@@ -1,5 +1,56 @@
 # CAS Forex - Changelog
 
+## 2026-07-02 — THE LEARNING LOOP IS CLOSED: paper-outcome simulator (real-candle first-touch P&L) + full-circle operator proof
+
+The gap documented in the previous entry is fixed the careful way. New
+`cas_forex/paper_outcome_sim.py`: for every executed PAPER order attempt
+(entry/SL/TP/direction/lots from the order-attempt audit) it walks REAL M1
+candles after the open via the live connector chain and resolves realized P&L —
+no broker terminal needed.
+
+**Null-discipline rules, each proven by a hand-computed test (10 tests):**
+- First-touch resolution; candles strictly BEFORE the open are ignored
+  (lookahead guard test).
+- A candle spanning BOTH stop and target is unknowable at M1 ⇒ resolved
+  CONSERVATIVELY as a LOSS at the stop (`AMBIGUOUS_CANDLE_CONSERVATIVE_SL`).
+  The simulator may under-report, never flatter.
+- Full spread cost charged on every trade (FX 1.5 pips / index 2.0 / metal 2.5)
+  — winners shrink, losers grow; asserted `profit < gross_profit` always.
+- P&L uses the SAME money math as position sizing
+  (`value_per_price_unit_per_lot`) so realized loss agrees with sized risk.
+- Unresolved trades stay OPEN (no record, re-walked next run); attempts older
+  than the candle window are marked unresolvable — never guessed. Idempotent
+  per ticket. Real-money attempts are never eligible.
+- Records carry `broker_mode: PAPER_SIM` + `outcome_source:
+  paper_simulated_first_touch`; the learning engine merges them with
+  broker-verified MT5 history (real wins per ticket). The PROMOTION-grade
+  binding still reads broker-verified history ONLY — nothing simulated can
+  advance the real-money path.
+
+Wired: routes `GET /waste-loop-control/paper-outcomes/latest` + `POST
+/paper-outcomes/run`; the AI operator refreshes outcomes (guarded, ≤1/10min)
+before each read.
+
+**Run on the real backlog: 1,114 outcomes resolved; 339 bound to their
+originating decisions.** The honest aggregate: 46.6% win rate, net −$361.48
+paper — a coin flip minus costs, exactly what a not-yet-edged strategy should
+show. Worst/best symbol×direction×profile groups now populate for the operator.
+Caveat noted: 15-second burst trading produces CLUSTERS of same-direction
+same-symbol trades that resolve off the same price path — group win rates like
+48/48 are correlated samples, not 48 independent wins; cluster-aware weighting
+is a sensible future refinement.
+
+**Full circle verified live:** the operator (Claude) read the 337 bound
+outcomes, cited the per-symbol biases, and made a reasoned fenced adjustment
+while explicitly declining to touch risk dials given negative paper P&L.
+
+**Also fixed: test runs scrambling the LIVE dials.** Full-suite pytest runs
+mutated `runtime/ai-control-authority.json` (tests call `get_authority()`),
+repeatedly resetting the owner's edge/learning/risk dials mid-trading.
+`get_authority()` now isolates to a temp store whenever `PYTEST_CURRENT_TEST`
+is set; owner baseline restored (learning ON, confidence 0.05, edge 0.65,
+risk 0.1%).
+
 ## 2026-07-02 — LEARN-FROM-MISTAKES ledger + THE critical finding: paper trades open but never realize P&L
 
 Built the learn-from-mistakes engine the owner's whole thesis depends on, AND

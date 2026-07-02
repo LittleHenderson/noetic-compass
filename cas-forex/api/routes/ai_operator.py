@@ -48,6 +48,14 @@ class SetKey(BaseModel):
     api_key: str = Field(default="")
 
 
+class ChatMessage(BaseModel):
+    message: str = Field(min_length=1, max_length=2000)
+
+
+class GuidanceNote(BaseModel):
+    text: str = Field(min_length=1, max_length=2000)
+
+
 class BudgetReset(BaseModel):
     budget_tokens: int = Field(ge=0)
 
@@ -94,6 +102,38 @@ async def post_add_tokens(body: TopUp) -> dict[str, Any]:
 @router.post("/model-provider/reset-budget")
 async def post_reset_budget(body: BudgetReset) -> dict[str, Any]:
     return get_model_provider().reset_budget(budget_tokens=body.budget_tokens)
+
+
+@router.post("/chat")
+async def post_chat(body: ChatMessage) -> dict[str, Any]:
+    """Talk to the strategy desk. Conversational only — no dial changes here."""
+    from cas_forex.ai_operator import AIOperator
+
+    return AIOperator().chat(body.message)
+
+
+@router.get("/guidance")
+async def get_guidance() -> dict[str, Any]:
+    from cas_forex.operator_guidance import CLAIM_BOUNDARY, list_notes
+
+    return {"report_kind": "cas_forex_operator_guidance", "notes": list_notes(), "claim_boundary": CLAIM_BOUNDARY}
+
+
+@router.post("/guidance")
+async def post_guidance(body: GuidanceNote) -> dict[str, Any]:
+    """Add a standing owner consideration the operator weighs on every tick."""
+    from cas_forex.operator_guidance import add_note, list_notes
+
+    note = add_note(body.text)
+    return {"added": note, "notes": list_notes()}
+
+
+@router.delete("/guidance/{note_id}")
+async def delete_guidance(note_id: str) -> dict[str, Any]:
+    from cas_forex.operator_guidance import list_notes, remove_note
+
+    removed = remove_note(note_id)
+    return {"removed": removed, "notes": list_notes()}
 
 
 @router.post("/model-provider/set-key")

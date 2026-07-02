@@ -1,4 +1,4 @@
-import { apiGet, apiPostJson } from "./apiCore";
+import { apiDelete, apiGet, apiPostJson } from "./apiCore";
 
 export interface OperatorState {
   report_kind?: string;
@@ -65,4 +65,44 @@ export async function setOperatorKey(apiKey: string): Promise<OperatorState["mod
     "/ai-operator/model-provider/set-key",
     { api_key: apiKey },
   );
+}
+
+export interface OperatorChatReply {
+  ok: boolean;
+  reply?: string;
+  provider?: string | null;
+  paid?: boolean;
+  error?: string | null;
+}
+
+export interface GuidanceNote {
+  note_id: string;
+  text: string;
+  created_at: string;
+}
+
+export async function chatWithOperator(message: string): Promise<OperatorChatReply> {
+  return apiPostJson<OperatorChatReply, { message: string }>("/ai-operator/chat", { message });
+}
+
+export async function fetchGuidance(): Promise<GuidanceNote[]> {
+  try {
+    const body = await apiGet<{ notes: GuidanceNote[] }>("/ai-operator/guidance", 6000);
+    return body.notes ?? [];
+  } catch {
+    return [];
+  }
+}
+
+export async function addGuidance(text: string): Promise<GuidanceNote[]> {
+  const body = await apiPostJson<{ notes: GuidanceNote[] }, { text: string }>(
+    "/ai-operator/guidance",
+    { text },
+  );
+  return body.notes ?? [];
+}
+
+export async function removeGuidance(noteId: string): Promise<GuidanceNote[]> {
+  const body = await apiDelete<{ notes: GuidanceNote[] }>(`/ai-operator/guidance/${noteId}`);
+  return body.notes ?? [];
 }
