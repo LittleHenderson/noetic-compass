@@ -47,7 +47,12 @@ def test_runner_default_directional_path_forms_candidate_but_gate_stops_without_
 
 
 def test_runner_default_directional_path_respects_cas_rpm_no_trade(tmp_path):
-    set_authority_for_tests(AiControlAuthority(tmp_path / "authority.json"))
+    # This test verifies the FAIL-CLOSED CAS-RPM path, so the owner's paper-
+    # learning override (default ON, which intentionally LEARNS from an RPM
+    # NO_TRADE lacuna instead of blocking) is explicitly OFF here.
+    _auth = AiControlAuthority(tmp_path / "authority.json")
+    _auth.control.adjust("paper_learning_trades", 0)
+    set_authority_for_tests(_auth)
     try:
         runner = WasteRunner(
             watch_fn=lambda: {
