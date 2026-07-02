@@ -17,6 +17,30 @@ Plain-English mandate: this file is the project dashboard. Check the dashboard b
 
 ## Current Plain-English State
 
+2026-07-02 CAS Forex AI OPERATOR shipped — always-on strategy desk with Claude->free-local failover and an
+in-app key field. Pushed `63b4bb0a` (backend) + `b1cbd9d9` (UI); full suite `1735 passed, 0 failed`; UI
+tsc + build clean. `cas_forex/model_provider.py` is an ordered failover ladder: PAID Claude primary -> FREE
+local fallback (Ollama), durable token budget, fails over on credit/rate/budget error with a 900s cooldown,
+`top_up()` flips back. `cas_forex/ai_operator.py` reads the learning ledgers + a tool manifest, asks the ACTIVE
+model for a structured decision, and applies it ONLY through `ai_control_authority.ai_adjust` (owner-clamped) —
+tests prove it can move only the 9 owner-fenced dials and that `live_mode`/`owner_enable_live_trading`/
+`wire_money`/non-dial actions are rejected, unparseable replies make no change, and the live-money gate is
+unreachable. `cas_forex/ai_operator_runner.py` is the always-on scheduler (owner on/off, durable, restart-
+surviving, 30-min default). `cas_forex/operator_secrets.py` stores a pasted Claude key locally under the
+git-ignored `runtime/` (never logged/echoed; masked hint only) and takes precedence over config/env so an in-
+app key needs no restart. Routes under `/api/forex/ai-operator/*`. UI: `OperatorBadge` header indicator on
+every page + phone shows the ACTUAL driver (CLAUDE green / LOCAL amber / warming blue / NO MODEL red / OFF
+grey) with token budget, last switch, recent actions, and controls incl. a password key field + Add-tokens.
+Verified live: with no valid Anthropic billing key and no local Ollama in this environment, a tick failed and
+the badge correctly read NO MODEL while the trading loop kept running — the failover degraded safely. To make
+a model actually answer: paste a real `sk-ant-api03-…` key in the badge (or set `AI_OPERATOR_PRIMARY_API_KEY`/
+`ANTHROPIC_API_KEY`), OR install Ollama + pull a model (fully free). Owner boundary unchanged: the operator
+only tunes owner-fenced dials; it never trades, moves money, or authorizes live. NOTE: running the full pytest
+suite against the live runtime dir mutates `runtime/ai-control-authority.json` (tests call get_authority());
+after a full-suite run, re-set owner dials (paper_learning_trades=1, min_directional_confidence=0.05,
+edge_threshold=0.65, max_risk_pct_per_trade=0.1) and restart the waste runner. Current live dials are restored;
+waste runner + collector + operator loop all RUNNING.
+
 2026-07-01 CAS Forex W.A.S.T.E gate PROVEN capable end-to-end on real data; collector deepened to real
 verdicts. Diagnosed why every cycle said `NO_TRADE`: the timed 60s runner (scheduled-snapshot lane) mirrors
 the latest real-candle probe, and the collector's default `bars: 180` was too shallow — every probe verdict
