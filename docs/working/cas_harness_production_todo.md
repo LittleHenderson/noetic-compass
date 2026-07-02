@@ -17,6 +17,23 @@ Plain-English mandate: this file is the project dashboard. Check the dashboard b
 
 ## Current Plain-English State
 
+2026-07-01 CAS Forex W.A.S.T.E gate PROVEN capable end-to-end on real data; collector deepened to real
+verdicts. Diagnosed why every cycle said `NO_TRADE`: the timed 60s runner (scheduled-snapshot lane) mirrors
+the latest real-candle probe, and the collector's default `bars: 180` was too shallow — every probe verdict
+was `NO_TRADE_UNDERPOWERED` (insufficient samples), never a real measurement. A one-off deep probe
+(`POST /waste-loop-control/real-candle-probe/run`, `bars: 900`, `max_pairs: 400`, broker-grade NAS100 H1)
+produced the first REAL measured verdict: `183` entry-pair samples from `200` evaluated windows, candidate
+`LONG NAS100 H1`, measured win-prob `0.486` vs threshold `0.650`, net return `0.02502` did not beat the
+random-direction null p95 `0.05268` → `NO_TRADE_NULL_FAILED`. That is the machine working exactly as
+designed: it can form candidates, measure them, and honestly refuse edgeless ones. The paper-sample
+collector scheduler was restarted with `bars: 900, max_pairs: 400, interval_seconds: 300` so every 5-minute
+sweep now yields measured verdicts instead of underpowered ones. Both directions are scored every evaluation
+(long_score vs short_score), all three sessions (Asian/London/NewYork) and all supported symbols are enabled
+by default via the AI control dials. Also shipped: `START_CAS_FOREX.bat` (repo root + owner's Desktop) —
+one-click backend + installable app, no CLI. Owner authority boundary unchanged: probes/collector are
+read-only market actions; no live orders, deposits, withdrawals, payouts, broker `ACCEPT`, or `LICENSED`
+claims are created by any of this.
+
 2026-07-01 CAS Forex W.A.S.T.E runner is LIVE and its two silent-death causes are fixed. The runner had been
 found dead repeatedly; both causes are now diagnosed, fixed, tested, and pushed (`5a3a0f91`, `448ed8ff`).
 Cause 1: the supervisor lease renewal's atomic file replace raised `PermissionError` (WinError 5) under
