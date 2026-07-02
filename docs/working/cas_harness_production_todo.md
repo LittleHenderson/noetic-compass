@@ -17,6 +17,6802 @@ Plain-English mandate: this file is the project dashboard. Check the dashboard b
 
 ## Current Plain-English State
 
+2026-07-01 CAS Forex three-day in-flight body VERIFIED GREEN and COMMITTED+PUSHED. The 2026-06-29→07-01 work
+(127 modified files + ~130 new modules/tests: live-money spine, runtime-gate owner-authority redesign, WASTE
+adaptation loop, broker funding handoff, dashboard first-paint overhaul) was inventoried, verified, and landed
+on `codex/cascompass-legal-live-source`. Verification: full pytest suite `1707 passed, 0 failed` (~15.5 min),
+UI `npx tsc --noEmit` clean, `npm run build` clean with PWA precache at `8` shell entries (~`182.10 KiB`).
+Four stale tests were updated to the newest ratified contracts with NO app-code changes: two
+`tests/test_broker_truth_monitor.py` gate tests now assert broker-truth freshness in `advisory_requirements`
+(matching `test_broker_truth_freshness_is_advisory_not_owner_veto`; a DEMO snapshot still never reads as
+satisfied), `tests/test_order_dispatch.py::test_dispatch_works_through_mt4_mailbox_bridge` now covers both the
+dead-mailbox `BROKER_REJECTED` fail-loud path and the fresh-heartbeat `BROKER_PENDING` path, and
+`tests/test_settings_api_surface.py::test_dashboard_fast_*` derives proof-day counts and
+`planned_risk_total_usd` from the same live evidence file the endpoint reads (the frozen `28.48` broke at
+`28.76` and day counts advance with the auto-runner). Funding loop verified live in the running app: Settings
+`BROKER FUNDING HANDOFF` panel present with `NO RAW BANK/CARD STORAGE` and `Sync Broker Snapshot`;
+`/api/forex/reconciliation/account?sync_to_broker=true` returned `7/7` checks OK with
+`BROKER_API_VERIFIED` and `broker_chain_verified: true` (mode `PAPER_DEMO_ACCOUNT_RECONCILIATION` — demo
+terminal, honestly labeled). Proof ledger stands at `5/30` broker-verified days, `0` trades, net `$0` —
+proof `NOT PASSED`; edge remains unproven per the PART3-EDGE handoff. Session handoff:
+`cas-forex/docs/working/SESSION_HANDOFF_2026-07-01.md`; changelog head updated. Owner authority boundary
+unchanged: nothing here authorizes live orders, deposits, withdrawals, payout automation, broker `ACCEPT`, or
+any `LICENSED` claim; live trading and all money movement remain `CURRENTLY NOT LICENSED` pending owner
+switches + funded real broker + provider config.
+
+2026-07-01 CAS Forex dashboard/live API routing now cools down recently failed API bases so one dead local route does
+not slow every dashboard read during startup. `ui/src/data/apiCore.ts` adds `FAILED_API_BASE_COOLDOWN_MS = 15_000`,
+tracks `failedApiBaseUntil`, filters cooled-down bases through `availableApiBases(...)`, clears the cooldown on success,
+and clears the remembered last-good base when the owner changes or resets the configured API base. The shared client
+only cools down transport/timeout failures and `API 404` route-miss responses; normal application errors do not
+demote the base. `ui/src/data/wasteStageProbe.ts` applies the same `15_000 ms` cooldown to the lightweight W.A.S.T.E
+header heartbeat probe. Regression coverage in `tests/test_settings_api_surface.py` now proves both last-good-base
+routing and failed-base cooldown behavior are present. Verification: focused dashboard API routing tests passed
+(`2 passed`), focused settings/dashboard API surface tests passed (`69 passed`, with the existing FastAPI `on_event`
+deprecation warnings), and UI `npm run build` passed. Build inspection showed Vite transformed `122` modules, root JS
+about `20.99 KB` (`7.47 KB` gzip), first CSS about `20.16 KB`, `apiCore-*.js` about `3.21 KB`,
+`wasteStageProbe-*.js` about `2.22 KB`, `dashboardApi-*.js` about `7.62 KB`, and service-worker precache remains
+`8` shell entries at about `182.10 KiB`. Owner authority boundary unchanged: this is client-side live API
+route-selection and read-side startup resilience only; it does not execute live orders, create owner `ACCEPT`, touch
+broker execution bridges, deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex dashboard/live API reads now remember the last API base that actually answered before retrying
+the default local base again. `ui/src/data/apiCore.ts` persists
+`cas_forex_last_successful_api_base`, uses it first for local read routing, and also records successful
+POST/JSON/DELETE routes so later dashboard reads do not repeatedly burn time on a dead/stale base before reaching the
+working dev-server proxy or owner-configured API base. `ui/src/data/wasteStageProbe.ts` uses the same sticky base for
+the lightweight W.A.S.T.E heartbeat probe that feeds the header. Regression coverage in
+`tests/test_settings_api_surface.py` now proves both clients read/persist the last successful base and place it ahead
+of the default retry path. Verification: focused sticky API-base test passed (`1 passed`), focused
+settings/dashboard API surface tests passed (`68 passed`, with the existing FastAPI `on_event` deprecation warnings),
+and UI `npm run build` passed. Build inspection showed Vite transformed `122` modules, root JS about `20.99 KB`
+(`7.46 KB` gzip), first CSS about `20.16 KB`, `apiCore-*.js` about `2.67 KB`, `wasteStageProbe-*.js` about
+`1.73 KB`, `dashboardApi-*.js` about `7.62 KB`, and service-worker precache remains `8` shell entries at about
+`182.10 KiB`. Owner authority boundary unchanged: this is live API route-selection and read-side startup resilience
+only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store
+raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex now gives the dashboard shell cache first claim on backend startup before the fast dashboard cache
+warmer. `api/server.py` replaced the tied `0.2 s` shell/fast timers with named delays:
+`_DASHBOARD_SHELL_CACHE_REFRESH_DELAY_SECONDS = 0.05`, `_DASHBOARD_FAST_CACHE_REFRESH_DELAY_SECONDS = 0.25`, and
+`_DASHBOARD_FULL_CACHE_REFRESH_DELAY_SECONDS = 0.2`. The full aggregate background refresh keeps its original timing,
+but shell and fast no longer wake together and compete during the first dashboard paint. Regression coverage in
+`tests/test_settings_api_surface.py` now captures the Timer delay arguments and proves the shell refresh delay is lower
+than the fast refresh delay. Verification: focused shell/fast cache timing tests passed (`2 passed`), focused
+settings/dashboard API surface tests passed (`67 passed`, with the existing FastAPI `on_event` deprecation warnings),
+and `python -m py_compile api\server.py` passed. UI build was not rerun because this slice changed backend startup
+scheduling and backend tests only. Owner authority boundary unchanged: this is read-side startup cache scheduling only;
+it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw
+bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex now staggers backend startup route-cache warmers instead of waking every deep read-only packet at
+the same instant. `api/server.py` keeps shell and fast dashboard cache refreshes first, then uses
+`_STARTUP_ROUTE_CACHE_DELAY_SECONDS = 1.0` plus `_STARTUP_ROUTE_CACHE_STAGGER_SECONDS = 0.1` when starting the deeper
+startup route-cache refreshes. The builders still run through the shared serial refresh guard, but their timer wakeups
+no longer all contend for that guard at exactly the same moment. Regression coverage in `tests/test_settings_api_surface.py`
+now proves shell/fast prewarm ordering is unchanged, route-cache warmers use monotonically increasing delays, and the
+first deep warmer still starts at the original `1.0 s` delay. Verification: focused startup route-cache tests passed
+(`2 passed`), focused settings/dashboard API surface tests passed (`66 passed`, with the existing FastAPI `on_event`
+deprecation warnings), and `python -m py_compile api\server.py` passed. UI build was not rerun because this slice
+changed backend startup scheduling and source tests only. Owner authority boundary unchanged: this is read-side
+startup cache scheduling only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges,
+deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex now waits for browser idle before loading the stale dashboard-cache chunk. The previous slice moved
+`ui/src/data/dashboardStartupCache.ts` out of the root bundle; this follow-up changes `ui/src/App.tsx` so the dynamic
+`import("./data/dashboardStartupCache")` is scheduled through `scheduleAppIdleWork(...)` with
+`DASHBOARD_STALE_CACHE_IDLE_TIMEOUT_MS = 650`, and the cleanup cancels that idle callback/timer on unmount. The stale
+cache still only applies while current state is exactly the startup object, so live shell/fast packets keep priority if
+they arrive first. Regression coverage in `tests/test_settings_api_surface.py` now proves the stale-cache chunk is not
+statically imported, is dynamically imported through the idle scheduler, is cancelable, and still preserves the
+startup-object guard. Verification: focused stale-cache hydrator test passed (`1 passed`), focused
+settings/dashboard API surface tests passed (`66 passed`, with the existing FastAPI `on_event` deprecation warnings),
+and UI `npm run build` passed. Build inspection showed Vite transformed `122` modules, root JS about `20.99 KB`
+(`7.46 KB` gzip), first CSS about `20.16 KB`, `dashboardStartupCache-*.js` remains a separate lazy chunk about
+`2.04 KB`, `DashboardPage-*.js` about `7.13 KB`, `DashboardOperationsWorkbench-*.js` about `28.91 KB`,
+`dashboardApi-*.js` about `7.62 KB`, and service-worker precache remains `8` shell entries at about `182.10 KiB`.
+Owner authority boundary unchanged: this is local read-side dashboard startup-cache scheduling only; it does not
+execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card
+data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex moved stale dashboard-cache reading out of the root first-paint bundle and tightened stale packet
+sanitization. `ui/src/App.tsx` no longer statically imports `ui/src/data/dashboardStartupCache.ts`; it now paints from
+the minimal `startupDashboardState()` first, then dynamically imports the stale-cache reader after mount and applies it
+only if live shell/fast state has not already replaced the startup object. `ui/src/data/dashboardStartupCache.ts` now
+enforces the same first-paint field allowlist on reads that the writer already enforced on writes, trims old cached
+daily-bundle arrays (`steps`, proof failures, decision notes/symbol rows, risk blockers/notes/sizing), keeps computed
+risk totals, and drops deep operational fields before root state sees them. Static root-only W.A.S.T.E cache/probe
+claim strings were shortened while preserving the same authority boundary: observational only, no trading, broker,
+payment, payout, or order authority. Regression coverage in `tests/test_settings_api_surface.py` now proves stale-cache
+read is dynamically imported, stale packets apply only while current state is still the startup object, the reader
+trims first-paint data, and deep fields stay out of both reader and writer. Verification: focused stale-cache tests
+passed (`2 passed`), focused settings/dashboard API surface tests passed (`66 passed`, with the existing FastAPI
+`on_event` deprecation warnings), and UI `npm run build` passed. Build inspection showed Vite transformed `122`
+modules, root JS dropped to about `20.95 KB` (`7.43 KB` gzip), first CSS about `20.16 KB`,
+`dashboardStartupCache-*.js` is now a separate lazy chunk about `2.04 KB`, `DashboardPage-*.js` about `7.13 KB`,
+`DashboardOperationsWorkbench-*.js` about `28.91 KB`, `dashboardApi-*.js` about `7.62 KB`, and service-worker precache
+fell to about `182.07 KiB` across the same `8` shell entries. Owner authority boundary unchanged: this is local
+read-side dashboard startup-cache scheduling and trimming only; it does not execute live orders, create owner `ACCEPT`,
+touch broker execution bridges, deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex DashboardSweepOpsPanel now idle-gates the nested broker-truth/W.A.S.T.E operations chunk. The
+sweep card itself remains lazy behind `DashboardOperationsWorkbench`, but `ui/src/components/DashboardSweepOpsPanel.tsx`
+now adds `DASHBOARD_BROKER_TRUTH_PANEL_IDLE_TIMEOUT_MS = 1_200`, a local `scheduleSweepIdleWork(...)` helper, and
+`brokerTruthPanelReady` state before rendering the lazy `DashboardBrokerTruthOpsPanel`. This lets the verified-profit
+sweep summary paint first while the heavier `DashboardBrokerTruthOpsPanel-*.js` chunk waits for a browser idle slot or
+the timeout cap. Regression coverage in `tests/test_settings_api_surface.py` now proves the nested broker-truth panel
+is still lazy, guarded by idle scheduling, and keeps the fallback visible until ready. Verification: focused dashboard
+sweep/deep lazy tests passed (`3 passed`), focused settings/dashboard API surface tests passed (`66 passed`, with the
+existing FastAPI `on_event` deprecation warnings), and UI `npm run build` passed. Build inspection showed Vite
+transformed `122` modules, root JS stayed about `21.84 KB`, first CSS about `20.16 KB`, `DashboardPage-*.js` about
+`7.13 KB`, `DashboardOperationsWorkbench-*.js` about `28.91 KB`, `DashboardSweepOpsPanel-*.js` about `12.05 KB`,
+`DashboardBrokerTruthOpsPanel-*.js` remains a separate delayed chunk about `19.35 KB`, `dashboardApi-*.js` about
+`7.67 KB`, and service-worker precache remains `8` shell entries. Owner authority boundary unchanged: this is read-side
+dashboard nested chunk scheduling only; it does not execute live orders, create owner `ACCEPT`, touch broker execution
+bridges, deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex DashboardOperationsWorkbench recurring dashboard reads now start through browser-idle scheduling
+instead of raw first-load timers. `ui/src/components/DashboardOperationsWorkbench.tsx` added
+`DASHBOARD_LOOP_CORE_POLL_MS = 15_000` and a shared `scheduleDashboardRecurringWork(...)` helper, then routed strategy
+lead refresh, account/movement/reconciliation/readiness core refresh, verified-profit sweep refresh, auto-halt refresh,
+W.A.S.T.E/broker-truth loop refresh, market-evidence refresh, dry-run evidence refresh, and handoff evidence refresh
+through that helper. User-triggered broker-sync retry timers remain direct retries because those only run after the
+owner opens that broker-sync path. Regression coverage in `tests/test_settings_api_surface.py` now proves the recurring
+idle helper exists, the startup poll groups use it, and the old raw first-load timer strings are absent. Verification:
+targeted dashboard lazy tests passed (`2 passed`), focused settings/dashboard API surface tests passed (`66 passed`,
+with the existing FastAPI `on_event` deprecation warnings), and UI `npm run build` passed. Build inspection showed Vite
+transformed `122` modules, root JS stayed about `21.84 KB`, first CSS about `20.16 KB`, `DashboardPage-*.js` about
+`7.13 KB`, `DashboardOperationsWorkbench-*.js` dropped to about `28.91 KB`, `dashboardApi-*.js` about `7.67 KB`, and
+service-worker precache remains `8` shell entries. Owner authority boundary unchanged: this is read-side dashboard
+poll scheduling only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit,
+withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex DashboardOperationsWorkbench now waits for browser idle before pulling the deep dashboard cache
+snapshot. `ui/src/components/DashboardOperationsWorkbench.tsx` added
+`DASHBOARD_DEEP_CACHE_SNAPSHOT_IDLE_TIMEOUT_MS = 700` and routes `fetchDashboardDeepCacheSnapshot()` through the
+existing `scheduleDashboardIdleWork(...)` helper, with cleanup that both marks the fetch result cancelled and cancels
+the idle callback/timer when the component unmounts. This keeps the lazy workbench from immediately starting another
+heavy read burst the moment it appears, while preserving the same cached packets once the browser has a lane open.
+Regression coverage in `tests/test_settings_api_surface.py` now proves the deep-cache snapshot is idle scheduled,
+cancellable, and still remains before the staggered core panel polling path. Verification: targeted dashboard lazy
+tests passed (`2 passed`), focused settings/dashboard API surface tests passed (`66 passed`, with the existing FastAPI
+`on_event` deprecation warnings), and UI `npm run build` passed. Build inspection showed Vite transformed `122`
+modules, root JS stayed about `21.84 KB`, first CSS about `20.16 KB`, `DashboardPage-*.js` about `7.13 KB`,
+`DashboardOperationsWorkbench-*.js` about `29.71 KB`, `dashboardApi-*.js` about `7.67 KB`, and service-worker precache
+remains `8` shell entries. Owner authority boundary unchanged: this is read-side dashboard timing only; it does not
+execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card
+data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex collapsed the Dashboard deep-operations lazy waterfall into one idle-gated load. `ui/src/pages/DashboardPage.tsx`
+now lazy-loads `DashboardOperationsWorkbench` directly after the existing `DASHBOARD_DEEP_OPERATIONS_IDLE_TIMEOUT_MS = 1_600`
+idle gate instead of first loading `DashboardDeepOperations` and then waiting through that component's separate
+`1,800 ms` idle gate before the real workbench could mount. The now-dead
+`ui/src/components/DashboardDeepOperations.tsx` intermediate shell was removed, and
+`ui/src/components/DashboardOperationsWorkbench.tsx` was cleaned up to use `DashboardOperationsWorkbenchProps` instead
+of the stale `DashboardDeepOperationsProps` name. Regression coverage in `tests/test_settings_api_surface.py` now
+proves the intermediate file is absent, `DashboardPage` imports `DashboardOperationsWorkbench` directly, the deep API
+client remains lazy inside the workbench, and core/deep panel polling is still staggered. Verification: targeted
+dashboard lazy-boundary tests passed (`2 passed`), focused settings/dashboard API surface tests passed (`66 passed`,
+with the existing FastAPI `on_event` deprecation warnings), and UI `npm run build` passed. Build inspection showed
+Vite transformed `122` modules instead of `123`, no `DashboardDeepOperations-*.js` chunk was emitted, root JS stayed
+about `21.84 KB`, first CSS about `20.16 KB`, `DashboardPage-*.js` about `7.13 KB`, `DashboardOperationsWorkbench-*.js`
+remains a lazy chunk about `29.68 KB`, `dashboardApi-*.js` about `7.67 KB`, and service-worker precache remains `8`
+shell entries. Owner authority boundary unchanged: this is UI lazy-boundary cleanup only; it does not execute live
+orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card data, automate
+payouts, or alter funding custody.
+
+2026-07-01 CAS Forex removed the duplicate dashboard-hydrator W.A.S.T.E stage probe from first dashboard startup.
+`ui/src/App.tsx` still owns the instant post-mount `fetchInstantWasteStage()` path that feeds the header activity badge,
+but `ui/src/data/dashboardApi.ts` no longer imports, dynamically imports, or calls `wasteStageProbe` and no longer issues
+its own `fetchWasteLoopStagePacket()` before shell/fast packets. That means Dashboard hydration now starts with
+`/dashboard/shell` and the fast packet timer instead of also competing for `/waste-loop/stage`. Regression coverage in
+`tests/test_settings_api_surface.py` now proves the hydrator skips `fetchWasteLoopStagePacket`,
+`fetchAndApplyWasteLoopStage`, `waste_stage_probe`, and the old dashboard-specific "Fast WASTE stage probe" path while
+the root instant W.A.S.T.E probe remains active. Verification: targeted regression passed (`1 passed`), focused
+settings/dashboard API surface tests passed (`66 passed`, with the existing FastAPI `on_event` deprecation warnings),
+source checks confirmed the removed symbols only remain as negative test assertions and not in `dashboardApi.ts`, and UI
+`npm run build` passed. Build inspection showed `dashboardApi-*.js` dropped to about `7.67 KB` (`2.55 KB` gzip) from the
+previous about `8.48 KB`, `DashboardStateHydrator-*.js` stayed about `0.91 KB`, root JS stayed about `21.84 KB`, first
+CSS about `20.16 KB`, `wasteStageProbe-*.js` remains a separate lazy chunk about `1.42 KB`, and service-worker precache
+remains `8` shell entries. Owner authority boundary unchanged: this is read-side request/module slimming only; it does
+not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card
+data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex dashboard startup path now has two more first-paint guards. `ui/src/data/dashboardApi.ts` and
+`ui/src/data/api.ts` no longer statically import `./wasteStageProbe`; both modules now use a cached dynamic
+`loadWasteStageProbe()` call so the W.A.S.T.E stage helper stays on its lazy chunk boundary until a stage probe is
+actually requested. `ui/src/data/dashboardStartupCache.ts` added `DASHBOARD_STALE_CACHE_MAX_BYTES = 80_000` and checks
+the raw localStorage string size before `JSON.parse`, while `ui/src/data/dashboardStartupCacheWriter.ts` applies the
+same cap before merging an existing stale packet. This prevents an old oversized dashboard cache from blocking the
+root app before first paint. Regression coverage in `tests/test_settings_api_surface.py` now proves the lazy probe
+boundary and stale-cache byte cap. Verification: targeted dashboard startup tests passed (`2 passed`), focused
+settings/dashboard API surface tests passed (`66 passed`, with the existing FastAPI `on_event` deprecation warnings),
+source checks found no static `./wasteStageProbe` import in `ui/src/data`, and UI `npm run build` passed. Build
+inspection showed `DashboardStateHydrator-*.js` about `0.91 KB`, `dashboardApi-*.js` about `8.48 KB`, root JS about
+`21.84 KB`, first CSS about `20.16 KB`, `wasteStageProbe-*.js` still a separate lazy chunk about `1.42 KB`, and the
+service-worker precache remains `8` shell entries. Owner authority boundary unchanged: this is read-side dashboard
+startup and cache parsing only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges,
+deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex Auto-Trade Loop now sanitizes raw live-gate dispatch exceptions before they reach the operator
+card. `ui/src/pages/WindowsPage.tsx` added `formatDispatchLoopLastError(...)`, so a backend
+`PermissionError: live_trading is CURRENTLY NOT LICENSED (pending owner enable)` no longer renders as a long red
+exception dump on the Live Charts / Auto-Trade Loop surface. The card now shows an owner-readable warning that
+paper/demo can keep running and that no live broker order was sent; other permission blocks are also shown as gate
+blocks instead of raw exception text. `ui/src/pages/WindowsPage.css` added the warning tone, and
+`tests/test_settings_api_surface.py` now proves the card uses the formatter and does not render `error:
+{loop.last_error}` directly. Verification: targeted regression passed (`1 passed`), focused settings/dashboard API
+surface tests passed (`65 passed`, with the existing FastAPI `on_event` deprecation warnings), and UI
+`npm run build` passed. Browser check on `page=windows` found the Auto-Trade Loop card present and no raw
+`PermissionError: live_trading is CURRENTLY NOT LICENSED` text visible. Owner authority boundary unchanged: this is
+display-only error handling; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges,
+deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex stale dashboard startup cache now merges shell and fast packets instead of letting the last
+writer replace the previous first-paint snapshot. `ui/src/data/dashboardStartupCacheWriter.ts` now reads the existing
+fresh-enough local cache, sanitizes it through the same first-paint filter, merges the next sanitized shell/fast packet
+into it, and keeps the richer `dashboardMeta.kind` when a tiny shell packet lands after a fast packet. This preserves
+both shell fields such as the stale-safe W.A.S.T.E/header state and fast fields such as `proofProgress`/`riskBudget`
+for the next app launch, regardless of network response order. Verification: targeted cache-writer tests passed
+(`2 passed`), focused settings/dashboard API surface tests passed (`64 passed`, with the existing FastAPI `on_event`
+deprecation warnings), and UI `npm run build` passed. Build inspection showed root JS about `21.82 KB` (`7.76 KB`
+gzip), first CSS about `20.16 KB`, `DashboardStateHydrator-*.js` about `0.95 KB`, `dashboardApi-*.js` about `8.45 KB`,
+`dashboardStartupCacheWriter-*.js` about `3.76 KB` (`1.37 KB` gzip), and service-worker precache remains `8` shell
+entries. Owner authority boundary unchanged: this is local read-side UI cache persistence only; it does not execute
+live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card data,
+automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex startup cache warming now gives the Dashboard shell/fast packets first claim on the shared
+read-refresh lane before deeper evidence packets begin warming. `api/route_cache.py` added an optional
+`delay_seconds` argument to `start_cache_refresh(...)`, preserving the existing `0.2 s` default for normal cache
+refreshes. `api/server.py` now starts the hot deep route-cache prewarm batch with
+`_STARTUP_ROUTE_CACHE_DELAY_SECONDS = 1.0`, while `warm_dashboard_fast_cache()` still starts owner switch restore,
+Dashboard shell cache, and Dashboard fast cache first. This reduces the chance that a deep evidence warmer grabs the
+single serial refresh semaphore ahead of the packets that make the cockpit feel alive on first load. Verification:
+focused route-cache/startup dashboard tests passed (`12 passed`), focused settings/dashboard API surface tests passed
+(`64 passed`, with the existing FastAPI `on_event` deprecation warnings), `python -m py_compile api\route_cache.py
+api\server.py` passed, and UI `npm run build` passed. Build inspection still shows root JS about `21.81 KB`, first CSS
+about `20.16 KB`, `DashboardStateHydrator-*.js` about `0.95 KB`, `dashboardApi-*.js` about `8.45 KB`, and
+service-worker precache remains `8` shell entries. Owner authority boundary unchanged: this is read-side startup cache
+scheduling only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit,
+withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex `DashboardStateHydrator` is now a tiny post-paint loader shell instead of carrying the full
+dashboard hydration API orchestration in its own first dashboard chunk. `ui/src/components/DashboardStateHydrator.tsx`
+now imports `../data/dashboardApi` dynamically inside its effect, preserves the existing cancellation/error fallback,
+and still calls `loadDashboardState(...)` with the same `fastFetchDeferMs` path once the module arrives. Verification:
+targeted dashboard hydrator/source tests passed (`4 passed`), focused settings/dashboard API surface tests passed
+(`64 passed`, with the existing FastAPI `on_event` deprecation warnings), and UI `npm run build` passed. Build
+inspection showed `DashboardStateHydrator-*.js` split down to about `0.95 KB` (`0.55 KB` gzip), with
+`dashboardApi-*.js` emitted separately at about `8.45 KB` (`2.92 KB` gzip); root JS stayed about `21.81 KB`, first CSS
+about `20.16 KB`, and service-worker precache remains `8` shell entries. Owner authority boundary unchanged: this is
+read-side UI chunk splitting only; it does not execute live orders, create owner `ACCEPT`, touch broker execution
+bridges, deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex root W.A.S.T.E instant stage probing is now split out of the first app parse path. `ui/src/App.tsx`
+keeps the same post-mount `fetchInstantWasteStage()` behavior, but it dynamically imports `ui/src/data/wasteStageProbe.ts`
+inside that function instead of statically pulling the probe helper into the root shell. The Dashboard can still show the
+early W.A.S.T.E live/no-trade state, while Vite now emits `wasteStageProbe-*.js` as a separate lazy chunk instead of
+bundling that helper into `index-*.js`. Verification: targeted App/dashboard source tests passed (`3 passed`), focused
+settings/dashboard API surface tests passed (`64 passed`, with the existing FastAPI `on_event` deprecation warnings),
+and UI `npm run build` passed. Build inspection showed root JS about `21.81 KB` (`7.75 KB` gzip), first CSS about
+`20.16 KB`, `wasteStageProbe-*.js` about `1.42 KB` (`0.82 KB` gzip), `DashboardStateHydrator-*.js` about `8.56 KB`
+(`2.97 KB` gzip), `DashboardPage-*.js` about `7.11 KB` (`2.30 KB` gzip), and service-worker precache remains `8`
+shell entries. Owner authority boundary unchanged: this is read-side UI chunk splitting only; it does not execute live
+orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card data, automate
+payouts, or alter funding custody.
+
+2026-07-01 CAS Forex fast-dashboard warming retries now preserve their backoff but wait for browser idle before
+refetching. `ui/src/data/dashboardApi.ts` added `DASHBOARD_FAST_RETRY_BASE_DELAY_MS` and
+`scheduleDashboardRetryWork(...)`; when `/api/forex/dashboard/fast` reports `warming` or `refreshing`, the retry still
+waits `1,500 ms * attempt`, then enters the existing idle-first hydrator scheduler before touching the network again.
+The initial `50 ms` dashboard fast-lane fetch is unchanged, so the first live packet still gets priority; only
+background retry pressure moves out of the browser's busy first-paint path. Verification: targeted dashboard hydrator
+tests passed, focused settings/dashboard API surface tests passed (`63 passed`, with the existing FastAPI `on_event`
+deprecation warnings), and UI `npm run build` passed. Build inspection showed root JS about `22.88 KB` (`8.22 KB`
+gzip), first CSS about `20.16 KB`, `DashboardStateHydrator-*.js` about `8.47 KB` (`2.94 KB` gzip),
+`DashboardPage-*.js` about `7.11 KB` (`2.30 KB` gzip), and service-worker precache remains `8` shell entries. Owner
+authority boundary unchanged: this is read-side dashboard retry scheduling only; it does not execute live orders,
+create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card data, automate payouts,
+or alter funding custody.
+
+2026-07-01 CAS Forex fixed-timer dashboard support imports now wait for browser idle. `ui/src/pages/DashboardPage.tsx`
+now routes the operator briefing card, objective/incentive support cards, and deep operations shell through
+`scheduleDashboardIdleWork(...)` with the existing timeout caps, so those lazy imports no longer fire on plain timers
+while the dashboard is still settling. `ui/src/App.tsx` also moves the `FloatingAssistant` lazy import behind
+`scheduleAppIdleWork(...)` with the existing `1,200 ms` timeout cap, keeping the assistant available without competing
+with first dashboard hydration when the browser is busy. Verification: targeted dashboard idle-source tests passed,
+focused settings/dashboard API surface tests passed (`63 passed`, with the existing FastAPI `on_event` deprecation
+warnings), and UI `npm run build` passed. Build inspection showed root JS about `22.88 KB` (`8.22 KB` gzip), first CSS
+about `20.16 KB`, `DashboardPage-*.js` about `7.11 KB` (`2.30 KB` gzip), `DashboardStateHydrator-*.js` about
+`8.43 KB` (`2.93 KB` gzip), `FloatingAssistant-*.js` remains a lazy `5.50 KB` (`2.35 KB` gzip) chunk, and
+service-worker precache remains `8` shell entries. Owner authority boundary unchanged: this is UI import scheduling
+only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store
+raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex stack-health now prewarms during API startup instead of waiting for the first Stack Status page
+visit to kick off the heavier diagnostic compose. `api/routes/stack_health.py` exposes
+`start_stack_health_cache_refresh()`, keeps the report on its existing background cache lane, and refuses duplicate
+warmers while one is already building. `api/server.py` now includes `stack_health_check` in the startup read-only
+warmup pass beside the dashboard shell/fast/deep evidence packets. Verification: targeted startup prewarm tests passed,
+the stack-health composer suite passed (`17 passed`), focused settings/dashboard API surface tests passed (`63 passed`,
+with the existing FastAPI `on_event` deprecation warnings), and UI `npm run build` passed. Build inspection showed root
+JS remains about `22.69 KB`, first CSS about `20.16 KB`, `StackStatusPage-*.js` about `2.88 KB` (`1.19 KB` gzip),
+`DashboardStateHydrator-*.js` about `8.43 KB` (`2.93 KB` gzip), and service-worker precache remains `8` shell entries.
+Owner authority boundary unchanged: this is read-only operational status cache warming only; it does not execute live
+orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card data, automate
+payouts, or alter funding custody.
+
+2026-07-01 CAS Forex stale dashboard-cache writes now wait for browser idle instead of importing the writer chunk
+immediately after shell/fast packets apply. `ui/src/data/dashboardApi.ts` now schedules `writeStaleDashboardPacketLater`
+through the same idle-first hydrator helper with a `4,000 ms` timeout cap, so visible dashboard state updates first and
+the local stale-cache persistence chunk runs only when the browser has idle time or the fallback timeout expires.
+Verification: targeted dashboard hydrator/cache-writer tests passed, focused settings/dashboard API surface tests passed
+(`62 passed`, with the existing FastAPI `on_event` deprecation warnings), and UI `npm run build` passed. Build
+inspection showed root JS remains about `22.69 KB`, first CSS about `20.16 KB`, `DashboardStateHydrator-*.js` is about
+`8.43 KB` (`2.93 KB` gzip), `dashboardStartupCacheWriter-*.js` remains a lazy `3.27 KB` chunk, and service-worker
+precache remains `8` shell entries. Owner authority boundary unchanged: this is local UI cache persistence scheduling
+only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store
+raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex dashboard full-detail hydration now uses browser idle slots instead of plain timers after
+the fast packet lands. `ui/src/data/dashboardApi.ts` added `scheduleDashboardHydrationWork`, which uses
+`requestIdleCallback` when available and preserves the existing timeout caps for authority-boundary, UI-readiness,
+daily-schedule, daily-bundle, and paper-sample scheduler detail reads. The fast packet timer remains independent, so
+the shell/fast dashboard path still paints quickly; only the noncritical post-fast detail reads now wait for idle or
+their existing fallback timeout. Verification: targeted dashboard hydrator tests passed, focused settings/dashboard
+API surface tests passed (`62 passed`, with the existing FastAPI `on_event` deprecation warnings), and UI
+`npm run build` passed. Build inspection showed root JS remains about `22.69 KB`, first CSS about `20.16 KB`,
+`DashboardStateHydrator-*.js` is about `8.41 KB` (`2.92 KB` gzip), `DashboardDeepOperations-*.js` about `2.12 KB`,
+and service-worker precache remains `8` shell entries. Owner authority boundary unchanged: this is read-side dashboard
+hydration scheduling only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges,
+deposit, withdraw, store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex below-fold dashboard panels now wait for browser idle before loading their real chunks.
+`ui/src/components/DashboardOperationsWorkbench.tsx` keeps the existing lightweight fallbacks visible for the
+Evidence + Route Panels and Live Operability Checklist, then mounts `DashboardEvidencePanels` after an idle-gated
+`2,400 ms` timeout cap and `LiveOperabilityPanel` after an idle-gated `3,600 ms` timeout cap. The data pollers still
+run on their existing schedules, but these below-fold render chunks no longer join the first workbench import burst.
+Verification: targeted dashboard-deep source tests passed, focused settings/dashboard API surface tests passed
+(`62 passed`, with the existing FastAPI `on_event` deprecation warnings), and UI `npm run build` passed. Build
+inspection showed root JS remains about `22.69 KB`, first CSS about `20.16 KB`, `DashboardDeepOperations-*.js` about
+`2.12 KB`, `DashboardEvidencePanels-*.js` about `11.69 KB`, `LiveOperabilityPanel-*.js` about `6.11 KB`, and the
+workbench chunk is about `29.68 KB` (`8.80 KB` gzip) after carrying the idle flags; service-worker precache remains
+`8` shell entries. Owner authority boundary unchanged: this is UI scheduling only; it does not execute live orders,
+create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card data, automate payouts,
+or alter funding custody.
+
+2026-07-01 CAS Forex dashboard deep-cache hydration now suppresses duplicate first staggered reads when the
+snapshot already delivered warm packets. `ui/src/components/DashboardOperationsWorkbench.tsx` records which
+`/api/forex/dashboard/deep-cache` packets were usable, consumes those markers once in the delayed panel loaders,
+and then leaves the existing polling/refresh/action paths intact. This means the deep dashboard can paint from the
+single snapshot and avoid immediately re-requesting account reconciliation, live readiness, auto-halt, broker truth,
+W.A.S.T.E runner, verified-profit sweep, payout recovery, live recovery, market diagnostic, real-candle probe,
+live-order dry-run, dry-run review, WASTE handoff, and WASTE pilot promotion on the first scheduled pass when those
+packets are already warm. Verification: targeted dashboard-deep source/cache tests passed, focused
+settings/dashboard API surface tests passed (`62 passed`, with the existing FastAPI `on_event` deprecation warnings),
+and UI `npm run build` passed. Build inspection showed the root shell remains about `22.69 KB`, first CSS about
+`20.16 KB`, `DashboardDeepOperations-*.js` about `2.12 KB`, `dashboardDeepApi-*.js` about `4.79 KB`, and the
+workbench chunk is about `29.51 KB` (`8.77 KB` gzip) after carrying the one-time warm-packet bookkeeping; service
+worker precache remains `8` shell entries. Owner authority boundary unchanged: this is read-side dashboard hydration
+only; it does not execute live orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw,
+store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex dashboard deep panels now hydrate from one read-only cache snapshot before their staggered polls.
+`/api/forex/dashboard/deep-cache` returns cached snapshots for the idle-loaded dashboard packets only; it does not call
+packet builders inline and returns per-packet `WARMING` placeholders when startup prewarm has not populated a cache yet.
+`ui/src/data/dashboardDeepApi.ts` exposes `fetchDashboardDeepCacheSnapshot`, and
+`ui/src/components/DashboardOperationsWorkbench.tsx` consumes it once on mount to seed account reconciliation,
+live-readiness, auto-halt, broker truth, W.A.S.T.E runner, verified-profit sweep, payout recovery, live recovery,
+market diagnostic, real-candle probe, dry-run review, and WASTE handoff state before the existing staggered per-panel
+pollers begin. Verification: targeted deep-cache/server/source tests passed, startup prewarm regression passed, focused
+settings/dashboard API surface tests passed (`62 passed`, with the existing FastAPI `on_event` deprecation warnings),
+and UI `npm run build` passed. Build inspection showed the first-paint shell remains unchanged in spirit: root JS about
+`22.69 KB`, first CSS about `20.16 KB`, `DashboardDeepOperations-*.js` about `2.12 KB`, `dashboardDeepApi-*.js` about
+`4.79 KB`, `DashboardOperationsWorkbench-*.js` about `28.54 KB`, and the service-worker precache remains only `8`
+shell entries. Owner authority boundary unchanged: this is read-side cache hydration only; it does not execute live
+orders, create owner `ACCEPT`, touch broker execution bridges, deposit, withdraw, store raw bank/card data, automate
+payouts, or alter funding custody.
+
+2026-07-01 CAS Forex dashboard route-cache prewarm now covers the idle-loaded deep operations packets. API startup
+already warmed the shell/fast dashboard cards; it now also starts cache refreshes for account reconciliation, verified
+profit sweep policy/state, payout recovery, live recovery, live-order dry-run latest/review, WASTE entry handoff,
+WASTE pilot promotion, compound-add latest/review/handoff, MT5 market-data diagnostic latest, and WASTE real-candle
+probe latest. The saved market-diagnostic and real-candle-probe `latest` routes now use the same fail-soft
+`cache_first_payload` path as other read-only dashboard evidence, so idle-hydrated panels can land on warm packets
+instead of each route doing its own cold read. Verification: the startup route-cache regression passed, MT5/probe route
+smoke tests passed, focused settings/dashboard API surface tests passed (`61 passed`, with the existing FastAPI
+`on_event` deprecation warnings), related money-movement/live-recovery/live-order-dry-run tests passed (`32 passed`),
+and UI `npm run build` passed. Owner authority boundary unchanged: this cache/prewarm work does not execute live
+orders, does not create owner `ACCEPT`, does not touch broker execution bridges, and does not deposit, withdraw,
+store raw bank/card data, automate payouts, or alter funding custody.
+
+2026-07-01 CAS Forex funding custody boundary clarified for live-readiness work. The app already has a broker-funding
+handoff on Settings (`Broker Funding Handoff`) and Proof (`Live & Payment Controls` -> `Broker Funding Route`): funding
+is done in the broker client portal, then CAS uses `Sync Broker Snapshot` / account reconciliation to verify the
+broker/terminal balance and equity before risk sizing or live-readiness decisions rely on it. Next product emphasis is
+to make that handoff unmistakable and keep the post-funding receipt/account-snapshot chain smooth. Owner authority
+boundary unchanged: this does not add raw bank/card storage to CAS, does not itself deposit or withdraw funds, and does
+not alter owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch, live trading, payout
+automation, or funding custody.
+
+2026-07-01 CAS Forex deferred dashboard operations now load on browser idle instead of fixed timers.
+The already-split Dashboard deep shell and operations workbench were still using plain `setTimeout` gates for the
+workbench, sweep controls, and compound-add review controls. `ui/src/components/DashboardDeepOperations.tsx` now
+schedules the workbench with `requestIdleCallback` and an `1,800 ms` timeout fallback, while
+`ui/src/components/DashboardOperationsWorkbench.tsx` schedules the sweep workbench and compound-add control readiness
+through the same idle-first pattern with `3,200 ms` and `4,000 ms` timeout caps. Regression coverage now proves the
+Dashboard shell keeps `dashboardDeepApiPromise` out of first load, uses the idle scheduler, and keeps the staged core
+polling/sweep boundary in the workbench. Verification: the two targeted dashboard idle/deep tests passed; focused
+settings/dashboard API surface tests passed (`61 passed`, with the existing FastAPI `on_event` deprecation warnings);
+UI `npm run build` passed; direct asset inspection confirmed `DashboardDeepOperations-*.js` is about `2.12 KB`,
+`DashboardOperationsWorkbench-*.js` is about `27.36 KB`, `DashboardSweepOpsPanel-*.js` is about `11.72 KB`,
+`DashboardBrokerTruthOpsPanel-*.js` is about `19.35 KB`, none of those deferred dashboard chunks are precached, root JS
+remains about `22.69 KB`, first CSS remains about `20.16 KB`, and the service-worker precache remains `8` shell
+entries totaling about `210.36 KB` on disk. Runtime browser smoke on the Dashboard confirmed the Account/Risk/Proof
+shell appears immediately and the deeper sweep, broker-truth, movement, and live-operability panels appear after the
+idle-gated load. Owner authority boundary unchanged: this scheduling change does not alter owner `ACCEPT`, broker
+credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling,
+payout automation, or funding custody.
+
+2026-07-01 CAS Forex Dashboard deep operations are now split into a tiny deferred shell plus a later workbench chunk.
+`ui/src/components/DashboardDeepOperations.tsx` no longer carries the broker-truth, sweep, W.A.S.T.E dry-run, auto-halt,
+live-readiness, and deep API client wiring. It is now a small idle-gated shell that keeps the immediate "Deep Operations"
+placeholder visible after first Dashboard paint and lazy-loads the preserved controller in the new
+`ui/src/components/DashboardOperationsWorkbench.tsx` on browser idle with an `1,800 ms` timeout cap. The workbench renders immediately once its
+chunk arrives, so the old operations delay is not applied twice; deeper subpanels still keep their existing staged
+timers. Regression coverage now proves the shell lazy-loads the workbench, keeps `dashboardDeepApiPromise` out of the
+shell, keeps core polling/sweep staging in the workbench, and prevents the removed `operationsPanelReady` double-delay
+from returning. Verification: the two targeted dashboard-deep tests passed; focused settings/dashboard API surface
+tests passed (`61 passed`, with the existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed;
+direct asset inspection confirmed `DashboardDeepOperations-*.js` is about `1.95 KB` (gzip about `0.88 KB`) and
+`DashboardOperationsWorkbench-*.js` is about `27.24 KB` (gzip about `8.12 KB`), neither is precached, root JS remains
+about `22.69 KB`, first CSS remains about `20.16 KB`, and the service-worker precache remains `8` shell entries
+totaling about `210.36 KB` on disk. Runtime browser smoke on the Dashboard confirmed the lightweight Deep Operations
+placeholder appears first, then the real movement, live-operability, and verified-profit sweep panels appear after the
+workbench delay. Owner authority boundary unchanged: this chunk split does not alter owner `ACCEPT`, broker
+credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling,
+payout automation, or funding custody.
+
+2026-07-01 CAS Forex Dashboard instant fallback no longer carries one-off fallback CSS in the root shell.
+`DashboardInstantShell.tsx` remains statically available so the Dashboard does not flash blank while lazy dashboard
+chunks hydrate, but it now renders through existing shared `glass-panel`, `dashboard-grid-3col`, and
+`dashboard-metric` primitives instead of custom `.dashboard-instant-*` selectors. Root `ui/src/App.css` no longer
+owns any `.dashboard-instant-*` rules, and regression coverage in `tests/test_settings_api_surface.py` now proves the
+instant fallback stays static while those fallback-only selectors stay out of source and root CSS. Verification:
+focused settings/dashboard API surface tests passed (`61 passed`, with the existing FastAPI `on_event` deprecation
+warnings); UI `npm run build` passed; direct source/build inspection confirmed `dashboard-instant` is absent from
+`DashboardInstantShell.tsx`, `App.css`, and the built `index-*.css`; built first CSS is now about `20.16 KB` (gzip
+about `4.39 KB`), down from about `21.79 KB`; the shell JS is about `22.69 KB`; and the service-worker precache
+remains `8` shell entries totaling about `210.36 KB` on disk. Owner authority boundary unchanged: this UI
+first-paint cleanup does not alter owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch,
+live trading, deposits, withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex background dashboard hydration no longer competes with non-dashboard first paint.
+`App.tsx` previously mounted the lazy `DashboardStateHydrator` after `160 ms` even when the user was on Proof,
+Trade, Settings, or another non-dashboard route. Dashboard users still get immediate hydration and the
+`50 ms` fast-lane fetch, but non-dashboard routes now schedule the hydrator with `requestIdleCallback` and a
+`2,200 ms` timeout fallback. Regression coverage in `tests/test_settings_api_surface.py` now proves the
+Dashboard route still mounts the hydrator before the idle/background branch while off-dashboard hydration waits
+behind the idle scheduler. Verification: the targeted dashboard-hydrator test passed; focused settings/dashboard
+API surface tests passed (`61 passed`, with the existing FastAPI `on_event` deprecation warnings); UI
+`npm run build` passed; direct `dist/sw.js` inspection confirmed `DashboardStateHydrator-*.js` (`8.37 KB`,
+gzip about `2.87 KB`) and `DashboardPage-*.js` (`7.22 KB`, gzip about `2.30 KB`) remain lazy and are not
+precached. The shell JS increased slightly from about `22.48 KB` to about `22.65 KB` to carry the idle
+scheduler, and the precache remains `8` shell entries totaling about `211.96 KB` on disk. Owner authority
+boundary unchanged: this scheduling split does not alter owner `ACCEPT`, broker credentials/config, edge
+authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout automation,
+or funding custody.
+
+2026-07-01 CAS Forex header activity indicator now defers its full animated chunk until after first shell paint.
+The app shell already had an instant W.A.S.T.E badge for live/no-trade status, but rendering the lazy
+`AiActivityIndicator` immediately still kicked off the full animated indicator chunk during first paint. `Shell`
+now keeps `AiActivityInstantBadge` mounted first and schedules the full `AiActivityIndicator` through
+`requestIdleCallback` with a `1,400 ms` timeout fallback. Regression coverage in `tests/test_settings_api_surface.py`
+now proves the shell uses the instant badge first and mounts the full indicator only behind the idle/timeout gate.
+Verification: focused settings/dashboard API surface tests passed (`61 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; direct `dist/sw.js` inspection confirmed
+`AiActivityIndicator-*.js` (`6.74 KB`, gzip about `2.48 KB`) and `AiActivityIndicator-*.css` (`7.15 KB`,
+gzip about `1.94 KB`) remain lazy and are not precached. The shell JS increased slightly from about `22.16 KB`
+to about `22.48 KB` to carry the idle gate, and the precache remains `8` shell entries totaling about
+`211.79 KB` on disk. Owner authority boundary unchanged: this scheduling split does not alter owner `ACCEPT`,
+broker credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals,
+bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex live telemetry, decision-card, portfolio-risk, and subscription panel CSS now stay out of
+root first-paint CSS. Root `ui/src/App.css` still carried component-owned styles for live telemetry tables,
+agent/autonomous-loop/decision-chain cards, the operator briefing card, portfolio risk meters/tables, and
+notification/webhook subscription panels. Those styles now live with their owning components in
+`ui/src/components/LiveTelemetryTable.css`, `ui/src/components/DecisionCardPrimitives.css`,
+`ui/src/components/PortfolioRiskCard.css`, and `ui/src/components/SubscriptionPanels.css`, and each consuming
+component imports the needed CSS directly. Regression coverage in `tests/test_settings_api_surface.py` now
+proves those selectors stay out of root first-paint CSS while remaining present in the component CSS files.
+Verification: focused settings/dashboard API surface tests passed (`60 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; built first CSS dropped from about `26.90 KB` to
+about `21.79 KB` (gzip about `4.61 KB`); Vite emitted `LiveTelemetryTable-*.css` at about `0.67 KB` (gzip
+about `0.32 KB`) and `DecisionCardPrimitives-*.css` at about `2.20 KB` (gzip about `0.64 KB`), while the
+portfolio-risk styles were folded into the lazy Trade CSS chunk and subscription-panel styles into the lazy
+Settings CSS chunk. Direct `dist/sw.js` inspection confirmed those lazy CSS assets are not precached; the
+precache remains `8` shell entries totaling about `211.47 KB` on disk. Owner authority boundary unchanged:
+this CSS split does not alter owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch,
+live trading, deposits, withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex live-account funding boundary clarified. The app should not pretend that its paper/demo
+initial-investment controls load real money into a brokerage account. Broker funding belongs in the broker client
+portal or broker-enabled MT5 payment flow, with KYC/source-of-funds handled by the broker/provider; CAS Forex should
+provide a clear "Broker Funding Handoff" surface, then verify the funded account through broker/terminal account
+snapshots, receipts, and reconciliation before live risk sizing or W.A.S.T.E dispatch trusts the balance. Current
+app surfaces already point to Settings and Proof for broker funding handoff and payment-provider/payout destination
+setup; the production priority is to make that separation unmistakable in the UI: "fund at broker, CAS verifies and
+trades/records after sync." Owner authority boundary unchanged: this clarification does not itself authorize live
+orders, deposits, withdrawals, bank/card movement, payout automation, broker ACCEPT, or any LICENSED claim.
+
+2026-07-01 CAS Forex Adaptive route CSS now lazy-loads, and shared route primitives have a real owner.
+Root `ui/src/App.css` still carried Adaptive Cockpit route-only styles for adaptive action chips, basket cards,
+the adaptive decisions table wrapper, and memory snapshot cards. Those selectors now live in the new
+`ui/src/pages/AdaptivePage.css`, imported only by `AdaptivePage`. During the split, inspection also found a
+styling ownership bug: `.route-symbol` and `.sizing-row` had been left in lazy `ProofPage.css` even though
+Adaptive, Condition Lab, History, Ledger, Proof, and Trade all use those classes. They now live in the new
+shared lazy `ui/src/components/RoutePrimitives.css`, and each consuming route imports that file directly.
+Regression coverage in `tests/test_settings_api_surface.py` now proves the Adaptive selectors and shared
+route primitives stay out of root first-paint CSS, verifies `ProofPage.css` no longer owns those shared
+primitives, and verifies all consuming routes import `RoutePrimitives.css`. Verification: focused
+settings/dashboard API surface tests passed (`59 passed`, with the existing FastAPI `on_event` deprecation
+warnings); UI `npm run build` passed; first CSS dropped from about `27.89 KB` to about `26.90 KB` (gzip about
+`5.37 KB`); Vite emitted `AdaptivePage-*.css` at about `0.99 KB` (gzip about `0.40 KB`) and
+`RoutePrimitives-*.css` at about `0.18 KB` (gzip about `0.15 KB`); direct `dist/sw.js` inspection confirmed
+Adaptive and RoutePrimitives CSS are not precached and the precache remains `8` shell entries totaling about
+`216.44 KB` on disk. Owner authority boundary unchanged: this CSS split does not alter owner `ACCEPT`, broker
+credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card
+handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Trade page and selector CSS now lazy-loads instead of riding the Dashboard shell.
+Root `ui/src/App.css` still carried Trade Desk route-only styles (`.trade-selectors`, proposal/sizing/forecast
+preview selectors, CAS-expression rows, order action buttons, and `.no-signal`) plus shared selector-chip and
+multi-timeframe selector styles used by Trade, Condition Lab, Settings, and `MultiTimeframeSelector`. The
+Trade-only styles now live in `ui/src/pages/TradePage.css`; shared chip primitives now live in
+`ui/src/components/SelectorChips.css`; and multi-timeframe selector styles now live in
+`ui/src/components/MultiTimeframeSelector.css`. `TradePage`, `ConditionLabPage`, `SettingsPage`, and
+`MultiTimeframeSelector` import the needed CSS directly, while root `App.css` keeps unrelated shared
+`.placeholder-badge` styling. Regression coverage in `tests/test_settings_api_surface.py` now proves those
+selectors stay out of root first-paint CSS while remaining present in the route/shared CSS files. Verification:
+focused settings/dashboard API surface tests passed (`58 passed`, with the existing FastAPI `on_event`
+deprecation warnings); the new CSS-boundary test also passed by itself after the final cleanup (`1 passed`,
+same warnings); UI `npm run build` passed; first CSS dropped from about `32.13 KB` to about `27.89 KB` (gzip
+about `5.48 KB`); Vite emitted `TradePage-*.css` at about `3.29 KB` (gzip about `0.94 KB`) and
+`SelectorChips-*.css` at about `0.53 KB` (gzip about `0.28 KB`), with the multi-timeframe styles bundled into
+the lazy Trade CSS asset; direct `dist/sw.js` inspection confirmed Trade/selector/multi-timeframe CSS is not
+precached and the precache remains `8` shell entries totaling about `217.34 KB` on disk. Owner authority
+boundary unchanged: this CSS split does not alter owner `ACCEPT`, broker credentials/config, edge
+authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout automation,
+or funding custody.
+
+2026-07-01 CAS Forex Strategy Dev and Forex Fury review CSS now lazy-loads with those routes.
+Root `ui/src/App.css` still carried strategy-review styles for lazy pages: `.strategy-dev-*` list controls,
+`.fury-*` replay candidate rows, and the shared `.strategy-action-button` / `.action-result-*` controls used
+by both Strategy Dev and Forex Fury. `ui/src/pages/StrategyDevPage.tsx` now imports the new
+`ui/src/pages/StrategyDevPage.css`, `ui/src/pages/ForexFuryPage.tsx` now imports the new
+`ui/src/pages/ForexFuryPage.css`, and both lazy routes import the new shared
+`ui/src/components/StrategyActionControls.css`. Regression coverage in `tests/test_settings_api_surface.py`
+now proves those selectors stay out of root first-paint CSS while remaining present in the lazy route/shared
+CSS. Verification: focused settings/dashboard API surface tests passed (`57 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; first CSS dropped from about `34.41 KB`
+to about `32.13 KB` (gzip about `6.07 KB`); Vite emitted `StrategyDevPage-*.css` at about `1.39 KB`,
+`ForexFuryPage-*.css` at about `0.16 KB`, and `StrategyActionControls-*.css` at about `0.74 KB`; direct
+`dist/sw.js` inspection confirmed none of those CSS assets are precached and the precache remains `8` shell
+entries totaling about `221.50 KB` on disk. Owner authority boundary unchanged: this CSS split does not alter
+owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits,
+withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex PCBA/CJT route CSS now lazy-loads with the PCBA page.
+Root `ui/src/App.css` still carried PCBA diagnostics styles even though `PcbaPage` is a lazy route. The moved
+selectors include `.pcba-boards-grid`, `.pcba-board-card`, `.pcba-component-chip`, `.pcba-claim-note`,
+`.cjt-features`, `.cjt-feature-row`, `.component-catalog-grid`, `.event-context-grid`, `.temporal-grid`,
+`.temporal-cell`, and `.optimizer-detail`. `ui/src/pages/PcbaPage.tsx` now imports the new
+`ui/src/pages/PcbaPage.css`, and regression coverage in `tests/test_settings_api_surface.py` proves those
+selectors stay out of root first-paint CSS. Verification: focused settings/dashboard API surface tests passed
+(`56 passed`, with the existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed; first CSS
+dropped from about `37.86 KB` to about `34.41 KB` (gzip about `6.35 KB`); Vite emitted `PcbaPage-*.css` as a
+separate lazy CSS asset of about `3.45 KB` (gzip about `0.84 KB`); direct `dist/sw.js` inspection confirmed
+PCBA CSS is not precached and the precache remains `8` shell entries totaling about `223.64 KB` on disk.
+Owner authority boundary unchanged: this CSS split does not alter owner `ACCEPT`, broker credentials/config,
+edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout
+automation, or funding custody.
+
+2026-07-01 CAS Forex Proof and Audit route CSS now lazy-load instead of riding the Dashboard shell.
+Root `ui/src/App.css` still carried Proof cockpit styles (`.lead-grid`, `.proof-grid-2col`,
+`.progress-stack`, `.hash-row`, `.checklist-grid`, `.route-card`, `.sizing-grid`, `.next-action`,
+`.not-licensed-grid`, and `.lock-reason-list`) plus Audit console styles (`.pipeline`,
+`.evidence-summary`, and `.trace-detail`) even though both pages are lazy routes. `ui/src/pages/ProofPage.tsx`
+now imports the new `ui/src/pages/ProofPage.css`, and `ui/src/pages/AuditPage.tsx` now imports the new
+`ui/src/pages/AuditPage.css`. Shared primitives such as `.lead-field`, `.field-label`, `.field-value`,
+`.disabled-control`, and `.go-live-switch` intentionally remain in root CSS because other lazy pages and
+shared components still use them. Regression coverage in `tests/test_settings_api_surface.py` now proves both
+lazy CSS boundaries. Verification: focused settings/dashboard API surface tests passed (`55 passed`, with the
+existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed; first CSS dropped from about
+`42.94 KB` to about `37.86 KB` (gzip about `6.82 KB`); Vite emitted `ProofPage-*.css` as a separate lazy CSS
+asset of about `3.53 KB` (gzip about `0.91 KB`) and `AuditPage-*.css` as a separate lazy CSS asset of about
+`1.56 KB` (gzip about `0.53 KB`); direct `dist/sw.js` inspection confirmed Proof/Audit CSS is not precached
+and the precache remains `8` shell entries totaling about `227.06 KB` on disk. Owner authority boundary
+unchanged: this CSS split does not alter owner `ACCEPT`, broker credentials/config, edge authorization,
+MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout automation, or funding
+custody.
+
+2026-07-01 CAS Forex Stack Status route CSS now lazy-loads with the Stack Status page.
+Root `ui/src/App.css` still carried Stack Status table/remediation styles even though `StackStatusPage` is a
+lazy route. `ui/src/pages/StackStatusPage.tsx` now imports the new `ui/src/pages/StackStatusPage.css`, and
+route-only selectors such as `.stack-status-page`, `.stack-status-table`, and `.stack-remediation-list` have
+been removed from root `App.css`. Shared primitives `.stack-status-row` and `.plain-english-block`
+intentionally remain in root CSS because Daily Report and Strategy Comparison still share them. Regression
+coverage in `tests/test_settings_api_surface.py` now proves that boundary. Verification: focused
+settings/dashboard API surface tests passed (`53 passed`, with the existing FastAPI `on_event` deprecation
+warnings); UI `npm run build` passed; first CSS dropped from about `43.58 KB` to about `42.94 KB` (gzip about
+`7.45 KB`); Vite emitted `StackStatusPage-*.css` as a separate lazy CSS asset of about `0.64 KB` (gzip about
+`0.32 KB`); direct `dist/sw.js` inspection confirmed Stack Status CSS is not precached and the precache remains
+`8` shell entries totaling about `232.07 KB` on disk. Owner authority boundary unchanged: this CSS split does
+not alter owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch, live trading,
+deposits, withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Daily Report route CSS now lazy-loads with the Daily Report page.
+Root `ui/src/App.css` still carried Daily Report section/card styles even though `DailyReportPage` is a lazy
+route. `ui/src/pages/DailyReportPage.tsx` now imports the new `ui/src/pages/DailyReportPage.css`, and
+route-only selectors such as `.daily-report-page`, `.report-overall-headline`, `.daily-section`,
+`.daily-section-header`, `.daily-section-metrics`, `.daily-section-events`, and `.report-diagnostic-hints`
+have been removed from root `App.css`. Shared primitives `.stack-status-row`, `.plain-english-block`, and
+`.limit-selector` intentionally remain in root CSS because Daily Report, Stack Status, and Strategy Comparison
+still share them. Regression coverage in `tests/test_settings_api_surface.py` now proves that boundary.
+Verification: focused settings/dashboard API surface tests passed after correcting a test selector assertion
+(`52 passed`, with the existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed; first CSS
+dropped from about `44.96 KB` to about `43.58 KB` (gzip about `7.53 KB`); Vite emitted
+`DailyReportPage-*.css` as a separate lazy CSS asset of about `1.38 KB` (gzip about `0.54 KB`); direct
+`dist/sw.js` inspection confirmed Daily Report CSS is not precached and the precache remains `8` shell entries
+totaling about `232.67 KB` on disk. Owner authority boundary unchanged: this CSS split does not alter owner
+`ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits,
+withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Strategy Comparison route CSS now lazy-loads with the Strategy Comparison page.
+Root `ui/src/App.css` still carried Strategy Comparison ranking/diff table styles even though
+`StrategyComparisonPage` is a lazy route. `ui/src/pages/StrategyComparisonPage.tsx` now imports the new
+`ui/src/pages/StrategyComparisonPage.css`, and route-only selectors such as `.strategy-comparison-page`,
+`.comparison-mode-toggle`, `.comparison-table`, `.comparison-row`, `.score-teal`, `.score-yellow`,
+`.score-muted`, `.diff-panel`, and `.diff-controls` have been removed from root `App.css`. The shared
+`.limit-selector` primitive intentionally remains in root CSS because Daily Report still uses it. Regression
+coverage in `tests/test_settings_api_surface.py` now proves that boundary. Verification: focused
+settings/dashboard API surface tests passed after correcting a test selector assertion (`51 passed`, with the
+existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed; first CSS dropped from about
+`46.14 KB` to about `44.96 KB` (gzip about `7.74 KB`); Vite emitted `StrategyComparisonPage-*.css` as a
+separate lazy CSS asset of about `1.19 KB` (gzip about `0.48 KB`); direct `dist/sw.js` inspection confirmed
+Strategy Comparison CSS is not precached and the precache remains `8` shell entries totaling about
+`234.01 KB` on disk. Owner authority boundary unchanged: this CSS split does not alter owner `ACCEPT`, broker
+credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card
+handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Decision History route CSS now lazy-loads with the Decision History page.
+After the Windows cockpit split, root `ui/src/App.css` still carried Decision History page and row styles even
+though `DecisionHistoryPage` is a lazy route and `DecisionHistoryRow` is only imported by that page.
+`ui/src/pages/DecisionHistoryPage.tsx` now imports the new `ui/src/pages/DecisionHistoryPage.css`, and the
+`.decision-history-*`, `.decision-summary-clamped`, and `.decision-chain-detail` styles have been removed from
+root `App.css`. Regression coverage in `tests/test_settings_api_surface.py` now proves the page imports its
+own CSS and that route-only selectors such as `.decision-history-page`, `.decision-history-row`,
+`.decision-summary-clamped`, and `.decision-chain-detail` stay out of first-paint root CSS. Verification:
+focused settings/dashboard API surface tests passed (`50 passed`, with the existing FastAPI `on_event`
+deprecation warnings); UI `npm run build` passed; first CSS dropped from about `48.03 KB` to about `46.14 KB`
+(gzip about `7.88 KB`); Vite emitted `DecisionHistoryPage-*.css` as a separate lazy CSS asset of about
+`1.89 KB` (gzip about `0.61 KB`); direct `dist/sw.js` inspection confirmed Decision History CSS is not
+precached and the precache remains `8` shell entries totaling about `235.15 KB` on disk. Owner authority
+boundary unchanged: this CSS split does not alter owner `ACCEPT`, broker credentials/config, edge
+authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout automation,
+or funding custody.
+
+2026-07-01 CAS Forex Trading Windows route CSS now lazy-loads with the Windows cockpit.
+After the Quick Start CSS split, root `ui/src/App.css` still carried the terminal-style Trading Windows cockpit
+selectors (`.windows-*`, `.trading-window-*`, and `.tw-*`) even though those panes only render on the lazy
+Windows page. `ui/src/pages/WindowsPage.tsx` now imports the new `ui/src/pages/WindowsPage.css`, and the
+Trading Windows cockpit block has been removed from root `App.css`. Regression coverage in
+`tests/test_settings_api_surface.py` now proves the Windows page imports its own CSS and that route-only
+selectors such as `.windows-grid`, `.trading-window`, `.tw-account-bar`, `.tw-market-strip`, and `.tw-loop-bar`
+stay out of first-paint root CSS. Verification: focused settings/dashboard API surface tests passed
+(`49 passed`, with the existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed; first CSS
+dropped from about `53.71 KB` to about `48.03 KB` (gzip about `8.16 KB`); Vite emitted `WindowsPage-*.css` as
+a separate lazy CSS asset of about `5.68 KB` (gzip about `1.28 KB`); direct `dist/sw.js` inspection confirmed
+Windows CSS is not precached and the precache remains `8` shell entries totaling about `236.99 KB` on disk.
+Owner authority boundary unchanged: this CSS split does not alter owner `ACCEPT`, broker credentials/config,
+edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout
+automation, or funding custody.
+
+2026-07-01 CAS Forex Quick Start route CSS now lazy-loads with the Quick Start page.
+The dashboard first-paint CSS still carried Quick Start page-only selectors, so the Dashboard was paying for a
+route the owner had not opened. `ui/src/pages/QuickStartPage.tsx` now imports the new
+`ui/src/pages/QuickStartPage.css`, and the `.quick-start-*` selector block has been removed from root
+`ui/src/App.css`. Regression coverage in `tests/test_settings_api_surface.py` now proves Quick Start imports
+its own CSS and that route-only selectors such as `.quick-start-page`, `.quick-start-list`,
+`.quick-start-pwa-self-mark`, and `.quick-start-completion-banner` stay out of the first-paint root CSS.
+Verification: focused settings/dashboard API surface tests passed (`48 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; first CSS dropped from about `56.79 KB` to about
+`53.71 KB` (gzip about `8.89 KB`); Vite emitted `QuickStartPage-*.css` as a separate lazy CSS asset of about
+`3.09 KB` (gzip about `0.97 KB`); direct `dist/sw.js` inspection confirmed Quick Start CSS is not precached and
+the precache remains `8` shell entries totaling about `242.63 KB` on disk. Owner authority boundary unchanged:
+this CSS split does not alter owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch,
+live trading, deposits, withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex funding model clarified for live-account readiness.
+The owner asked where live trading capital is loaded and whether funding belongs in CAS Forex, the broker
+website, or MT4/MT5. The product boundary remains: funding the live trading account is handled through the
+selected broker's client portal/account area, while CAS Forex provides the broker portal handoff and then syncs
+the broker account snapshot after funding so balance, equity, margin, and account ownership can drive risk
+sizing, readiness checks, and AI trade control. MT4/MT5 is the trade terminal/bridge, not the primary place to
+enter raw bank/card funding details. CAS Forex should continue to avoid raw bank/card storage and direct custody
+while making the funding route, post-funding sync, and owner authority obvious in Proof and Settings. This does
+not alter owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5 dispatch, live trading,
+deposits, withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Dashboard delayed sweep/auto-halt CSS is now lazy-loaded with its panel.
+After splitting the full AI indicator CSS, `App.css` still carried Dashboard deep-operation styles for the
+verified-profit sweep cockpit, auto-halt panel, and broker-truth monitor even though those controls do not
+render until delayed Dashboard deep operations mount. `ui/src/App.css` now keeps only the shared sweep row and
+button primitives that Settings/Trade also reuse. The delayed panel-only styles moved to the new
+`ui/src/components/DashboardSweepOpsPanel.css`, imported by the lazy `DashboardSweepOpsPanel`. Regression
+coverage in `tests/test_settings_api_surface.py` now proves the panel CSS contains `.sweep-cockpit`,
+`.sweep-control-grid`, `.auto-halt-strip`, `.auto-halt-check-grid`, and `.broker-truth-monitor-strip`, while
+root `App.css` no longer carries them and still retains shared `.sweep-action-button`,
+`.sweep-confirm-check`, and `.sweep-status-row` styles. Verification: focused settings/dashboard API surface
+tests passed (`47 passed`, with the existing FastAPI `on_event` deprecation warnings); UI `npm run build`
+passed; first CSS dropped from about `60.16 KB` to about `56.79 KB` (gzip about `9.44 KB`); Vite emitted
+`DashboardSweepOpsPanel-*.css` as a separate lazy CSS asset of about `3.37 KB`; direct `dist/sw.js` inspection
+confirmed that delayed CSS is not precached and the precache remains `8` shell entries totaling about
+`218.25 KiB`. Owner authority boundary unchanged: this CSS split does not alter owner `ACCEPT`, broker
+credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card
+handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex first CSS payload no longer carries the full animated AI indicator.
+The root shell uses `AiActivityInstantBadge` as the immediate header fallback while the full
+`AiActivityIndicator` lazy-loads. Inspection showed the instant badge was importing
+`AiActivityIndicator.css`, which meant every animated W.A.S.T.E stage figure was included in the first CSS
+payload even before the lazy full indicator mounted. `ui/src/components/AiActivityInstantBadge.tsx` now imports
+the new minimal `ui/src/components/AiActivityInstantBadge.css`; the full `AiActivityIndicator.css` remains on
+the lazy full indicator. Regression coverage in `tests/test_settings_api_surface.py` now proves the instant
+badge does not import the full CSS, retains trace/stage styling, and does not include full-stage animation
+rules such as `aifig-watch` or `ai-flip`. Verification: focused settings/dashboard API surface tests passed
+(`46 passed`, with the existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed; the first
+CSS asset dropped from about `64.45 KB` to about `60.16 KB` (gzip from about `10.79 KB` to about `9.89 KB`);
+Vite emitted `AiActivityIndicator-*.css` as a separate lazy CSS asset of about `7.15 KB`; direct `dist/sw.js`
+inspection confirmed the full AI indicator CSS is not precached and the precache remains at `8` shell entries
+totaling about `221.54 KiB`. Owner authority boundary unchanged: this CSS split does not alter owner `ACCEPT`,
+broker credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals,
+bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Dashboard hydrator now lazy-loads the stale-cache writer after live state is applied.
+The active Dashboard startup path still had one noncritical side effect in the hydrator chunk: writing a stale
+packet to `localStorage` for the next launch. That cache write is useful, but it is not required before the
+owner sees the live Dashboard state. `ui/src/data/dashboardApi.ts` now removes the static
+`dashboardStartupCacheWriter` import and uses `writeStaleDashboardPacketLater`, which dynamically imports
+`ui/src/data/dashboardStartupCacheWriter.ts` only after a shell/fast packet has already been applied to React
+state. Regression coverage in `tests/test_settings_api_surface.py` now proves the hydrator has no static cache
+writer import, keeps the dynamic import, and applies state before scheduling cache writes. Verification:
+focused settings/dashboard API surface tests passed (`46 passed`, with the existing FastAPI `on_event`
+deprecation warnings); UI `npm run build` passed; `DashboardStateHydrator` dropped from about `11.05 KB` to
+about `8.37 KB` (gzip about `2.87 KB`), while the cache writer became its own lazy
+`dashboardStartupCacheWriter` chunk of about `3.27 KB`; PWA precache stayed at `8` shell entries. Owner
+authority boundary unchanged: this chunk split does not alter owner `ACCEPT`, broker credentials/config, edge
+authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout automation,
+or funding custody.
+
+2026-07-01 CAS Forex stale dashboard startup cache now stores first-paint fields only.
+After the shared API cleanup, source-map inspection showed the Dashboard hydrator chunk still bundled
+`dashboardStartupCacheWriter.ts`, and the stale cache writer was preserving deep-operation fields
+(`runtimeGates`, `autoHalt`, `brokerTruthMonitor`, and `wasteRealCandleProbe`). Those fields belong to delayed
+Dashboard operations panels, not the instant first-paint shell. `ui/src/data/dashboardStartupCacheWriter.ts`
+now caches only the fast first-paint state needed by the Dashboard shell: `proofProgress`, `riskBudget`,
+summarized `dailySchedule`, summarized `dailyBundle`, stale-marked `wasteLoop`, and `dashboardMeta`.
+Regression coverage in `tests/test_settings_api_surface.py` now proves the writer keeps first-paint fields and
+does not cache the deep-operation fields or generic `copyDashboardCacheField` helper. Verification: focused
+settings/dashboard API surface tests passed (`45 passed`, with the existing FastAPI `on_event` deprecation
+warnings); UI `npm run build` passed; the DashboardStateHydrator chunk dropped from about `11.22 KB` to about
+`11.05 KB` (source map from about `38.37 KB` to about `37.53 KB`); PWA precache stayed at `8` shell entries.
+Owner authority boundary unchanged: this cache trim does not alter owner `ACCEPT`, broker credentials/config,
+edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout
+automation, or funding custody.
+
+2026-07-01 CAS Forex shared API module no longer exposes the stale full-dashboard client path.
+Current inspection showed the active Dashboard hydrator already uses the split `dashboardApi.ts` flow
+(`stage` probe, `/dashboard/shell`, `/dashboard/fast`, and delayed card hydration), but the broad shared
+`ui/src/data/api.ts` module still carried the old `DashboardPacket`, `fetchDashboardShell`,
+`fetchDashboardFast`, full `fetchDashboard("/dashboard")`, and `useDashboard` hook. Because many lazy pages
+import the shared API module, that stale code kept an accidental route back to the old aggregate and bloated
+the shared API source map. `ui/src/data/api.ts` now removes the legacy dashboard exports/hook; the split
+Dashboard loader remains isolated in `ui/src/data/dashboardApi.ts`. Regression coverage in
+`tests/test_settings_api_surface.py` now proves the shared API module has no `"/dashboard"` aggregate helper,
+no `useDashboard`, and no shell/fast dashboard exports, while the dedicated hydrator keeps the split shell/fast
+calls. Verification: `npm run build` passed; the generated shared API chunk remained about `15.35 KB` while
+its source map dropped from about `105 KB` to about `95 KB`; focused settings/dashboard API surface tests
+passed (`44 passed`, with the existing FastAPI `on_event` deprecation warnings). Owner authority boundary
+unchanged: this is a frontend client cleanup only and does not alter owner `ACCEPT`, broker credentials/config,
+edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, payout
+automation, or funding custody.
+
+2026-07-01 CAS Forex Proof page now exposes the broker funding route where the owner is already looking.
+The owner asked where money is loaded to fund a live trading account while viewing the Proof/go-live page. The
+real funding route was already present on Settings as `Broker Funding Handoff`, but Proof only showed provider
+and payout controls, which made the broker-funding workflow too easy to miss. `ui/src/pages/ProofPage.tsx` now
+adds a `Broker Funding Route` block inside `Live & Payment Controls` with `OPEN BROKER PORTAL`, `SYNC BROKER
+SNAPSHOT`, `BROKER PORTAL`, and `NO RAW BANK/CARD STORAGE` language. It uses the existing Hugo'sWay client
+portal handoff and the existing `fetchAccountReconciliation(true)` sync so CAS can verify broker balance/equity
+after funding. Verification: focused settings/proof API surface tests passed (`44 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; PWA precache remained limited to `8`
+shell entries. Owner authority boundary unchanged: this is a visibility/handoff improvement only; it does not
+store raw bank/card numbers, move money by itself, bypass broker KYC/funding, authorize live orders, mark a
+broker `ACCEPT`, or claim `LICENSED` status.
+
+2026-07-01 CAS Forex instant WASTE header fallback now renders the real stage trace when already available.
+The app shell already lazy-loads the full animated `AiActivityIndicator`, with
+`AiActivityInstantBadge` as the immediate fallback. That fallback previously
+showed `LIVE` / `No Trade` but did not render `stage_trace`, so the owner could
+briefly lose the proof that WASTE had moved through `Watch > Analyze >
+Strategize > Test > Execute > No Trade` while the full indicator chunk loaded.
+`ui/src/components/AiActivityInstantBadge.tsx` now reads `stage_trace` (or
+`durable_cycle.stage_trace`) from the already-present WASTE packet, completes a
+no-trade trace with `Test` and `Execute` when needed, and renders the same compact
+trace line without adding any network fetches. Verification: focused
+dashboard/settings surface tests passed (`43 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; the generated CAS app
+shell remains small at about `21.3 KB` (`index-OYKPMIgW.js`, gzip about `7.62
+KB`); and direct `dist/sw.js` parsing still confirmed only `8` shell precache URLs
+totaling about `253 KB` on disk. Owner authority boundary unchanged: this
+first-paint display fallback does not alter owner `ACCEPT`, broker
+credentials/config, edge authorization, MT4/MT5 dispatch, live trading, deposits,
+withdrawals, bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex PWA precache now keeps only the first-paint app shell.
+Production `sw.js` inspection after the React vendor split showed the service
+worker was still precaching every lazy route chunk, including Settings,
+Optimizer, Trade, Proof, and deep Dashboard operation chunks. That meant the
+install/update cache path still pulled about `775 KB` across `48` entries even
+though Dashboard first paint no longer needs those screens. `ui/vite.config.ts`
+now limits Workbox `globPatterns` to the app shell only: `index.html`,
+`registerSW.js`, `manifest.webmanifest`, `assets/index-*.css`,
+`assets/index-*.js`, and `assets/react-vendor-*.js`; the existing runtime
+`StaleWhileRevalidate` cache still caches lazy route chunks when the owner
+actually opens those pages. Verification: focused dashboard/settings surface
+tests passed (`43 passed`, with the existing FastAPI `on_event` deprecation
+warnings); UI `npm run build` passed and reported `precache 8 entries (224.79
+KiB)`; direct `dist/sw.js` parsing confirmed `8` precache URLs totaling about
+`252 KB` on disk: `react-vendor`, `index` CSS, `index` JS, icons, `index.html`,
+`manifest.webmanifest`, and `registerSW.js`. Owner authority boundary unchanged:
+this PWA cache trim does not alter owner `ACCEPT`, broker credentials/config,
+edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals,
+bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex frontend app shell now splits React into a stable vendor chunk.
+After the Dashboard API packets were slimmed, production build inspection showed
+the first JavaScript app shell was still about `163 KB` because React, ReactDOM,
+and scheduler were bundled with CAS app code. `ui/vite.config.ts` now uses a
+Rollup `manualChunks` rule that emits React/ReactDOM/scheduler into a separate
+`react-vendor` chunk. The production build now emits the CAS app shell as about
+`20.4 KB` (`index-CyYHs02Z.js`, gzip about `7.33 KB`) and the reusable
+`react-vendor-CfDz6BDZ.js` chunk as about `143 KB` (gzip about `45.83 KB`).
+This lets future CAS cockpit changes reuse the cached React vendor chunk instead
+of invalidating the whole app shell. Verification: focused dashboard/settings
+surface tests passed (`42 passed`, with the existing FastAPI `on_event`
+deprecation warnings); UI `npm run build` passed and showed the split chunks;
+browser smoke on Dashboard showed `LIVE`, `No Trade`, `Watch > Analyze >
+Strategize > Test > Execute > No Trade`, Operator Briefing `RUNNING`, zero
+disabled buttons, no `API unreachable`, no fixture text, no visible `skipped`,
+and no console warnings/errors. Owner authority boundary unchanged: this frontend
+cache split does not alter owner `ACCEPT`, broker credentials/config, edge
+authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card
+handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Dashboard/Operator runtime overlay now reuses the hot WASTE runner cache.
+Live profiling after the Dashboard fast-packet split showed `/api/forex/dashboard/fast`
+and `/api/forex/waste-loop/stage` were already small and fast, but the Operator
+Briefing and autonomous-loop health overlays still had a path that could rebuild
+WASTE runner status directly while rendering the Dashboard. `api/routes/autonomous_loop.py`
+now reads the prewarmed `waste_runner_status_fast` route-cache snapshot first and
+starts a background refresh on cache miss instead of doing an inline WASTE status
+build for every overlay. This lets Operator Briefing and autonomous-loop health
+share the same hot WASTE evidence already used by `/api/forex/waste-loop-control/status/fast`.
+Verification: focused autonomous-loop/operator/dashboard/heartbeat tests passed
+(`64 passed`, with the existing FastAPI `on_event` deprecation warnings);
+`api/routes/autonomous_loop.py`, `api/routes/operator_briefing.py`,
+`api/routes/loop_stage.py`, `api/data.py`, and `api/server.py` compiled; API was
+restarted on port `8765` as process `47516`; live `/api/forex/dashboard/fast`
+measured about `1.4 KB` (`1414` bytes); live `/api/forex/waste-loop/stage`
+returned `watch > analyze > strategize > test > execute > no_trade`; and browser
+smoke on Dashboard showed `LIVE`, `No Trade`, `Watch > Analyze > Strategize >
+Test > Execute > No Trade`, Operator Briefing `RUNNING`, zero disabled buttons,
+no `API unreachable`, no fixture text, no visible `skipped`, and no console
+warnings/errors. Owner authority boundary unchanged: this cache reuse is
+observational only and does not alter owner `ACCEPT`, broker credentials/config,
+edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals,
+bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Dashboard fast packet now defers WASTE and authority detail out of the fast lane.
+Live profiling after the proof-progress/risk-budget splits showed the Dashboard
+was still duplicating WASTE and authority data in `/api/forex/dashboard/fast`
+even though the first-paint shell and live stage endpoint already own that
+state. `api/data.py` now keeps the fast packet focused on first-paint cards
+only: `proofProgress`, `riskBudget`, `ownerControl`, and `dashboardMeta`. It no
+longer includes `wasteLoop`, `authorityBoundary`, `movementStream`, `mt5Receipt`,
+or `mt5ProbeStatus`. `api/server.py` now uses a card-only warming packet for cold
+fast-cache starts. Verification: focused dashboard/settings/heartbeat tests
+passed (`50 passed`, with the existing FastAPI `on_event` deprecation warnings);
+`api/routes/loop_stage.py`, `api/data.py`, and `api/server.py` compiled; UI
+`npm run build` passed; API was restarted on port `8765` as process `51380`; live
+`/api/forex/dashboard/fast` measured about `1.4 KB` (`1408` bytes) with keys
+`proofProgress`, `riskBudget`, `ownerControl`, and `dashboardMeta`; live
+`/api/forex/dashboard/shell` still includes `uiReadiness`, `authorityBoundary`,
+and the WASTE shell; and live `/api/forex/waste-loop/stage` returns `LIVE` /
+`no_trade` with the full W.A.S.T.E indicator trace
+`watch > analyze > strategize > test > execute > no_trade`. Owner authority
+boundary unchanged: this packet slimming and heartbeat display work does not
+alter owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5
+dispatch, live trading, deposits, withdrawals, bank/card handling, payout
+automation, or funding custody.
+
+2026-07-01 CAS Forex Settings now exposes the broker funding handoff instead of implying CAS stores payment details.
+The owner asked where live-trading funds are loaded. The correct product
+boundary is now visible in the app: `SettingsPage.tsx` includes a `Broker
+Funding Handoff` panel after the MT4 bridge panel. It links to the broker
+client portal (`https://app.hugosway.com`), labels custody as `NO RAW
+BANK/CARD STORAGE`, and provides a `Sync Broker Snapshot` action that calls the
+existing read-only broker-sync reconciliation path
+`/api/forex/reconciliation/account?sync_to_broker=true` through
+`fetchAccountReconciliation(true)`. This makes the real flow explicit: fund
+through the broker/provider, then let CAS verify broker/terminal evidence for
+account reconciliation, risk sizing, and readiness. Verification: focused
+dashboard/settings surface tests passed (`41 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; browser
+smoke on Settings showed `BROKER FUNDING HANDOFF`, `Open Broker Portal`, `NO
+RAW BANK/CARD STORAGE`, and an enabled `Sync Broker Snapshot` button, with no
+`API unreachable` message. Owner authority boundary unchanged: this adds a
+funding handoff and broker snapshot sync control only; it does not store raw
+bank/card details, deposit funds, withdraw funds, automate payouts, create
+broker `ACCEPT`, or authorize live orders by itself.
+
+2026-07-01 CAS Forex Dashboard fast packet now uses a tiny proof-progress summary instead of the full UI readiness summary.
+Live profiling after the risk-budget split showed `uiReadiness` had become the
+largest remaining `/api/forex/dashboard/fast` field at about `865` bytes, while
+the first Dashboard cards only needed proof-day, bundle, and chain counts.
+`api/data.py` now emits `proofProgress` from the current proof-readiness report
+and no longer includes `uiReadiness` in the fast packet. `DashboardPage` and
+`DashboardInstantShell` read `proofProgress` for first-paint Proof Progress
+cards, with `uiReadiness` retained as the fallback/full detail source. The
+stale startup cache now preserves `proofProgress` too, and the existing
+frontend hydrator still fetches the full readiness report later through
+`/api/forex/proof/readiness` at `DASHBOARD_FULL_UI_READINESS_DEFER_MS = 1_500`.
+Verification: focused dashboard/settings surface tests passed (`40 passed`,
+with the existing FastAPI `on_event` deprecation warnings); UI `npm run build`
+passed; API was restarted on port `8765` as process `43912`; live
+`/api/forex/dashboard/fast` measured about `2.7 KB` (`2710` bytes), includes
+`proofProgress`, and no longer includes `uiReadiness`, `dailyBundle`, or
+`wastePaperSampleCollectorScheduler`. Owner authority boundary unchanged: this
+first-paint split does not alter owner `ACCEPT`, broker credentials/config,
+edge authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals,
+bank/card handling, payout automation, or funding custody.
+
+2026-07-01 CAS Forex Dashboard fast packet now uses a tiny risk-budget summary instead of the full daily bundle.
+Live profiling after the scheduler removal showed `dailyBundle` had become the
+largest remaining `/api/forex/dashboard/fast` field at about `2.3 KB`, while
+the first Dashboard cards only needed account equity and planned-risk totals.
+`api/data.py` now emits `riskBudget` from the latest paper-risk status and no
+longer includes `dailyBundle` in the fast packet. `DashboardPage` and
+`DashboardInstantShell` read `riskBudget` for first-paint Account/Risk cards,
+while the existing frontend hydrator still fetches the full daily bundle later
+through `/api/forex/bundle/daily` at
+`DASHBOARD_FULL_DAILY_BUNDLE_DEFER_MS = 2_800` for the Evidence, Trade, and
+Proof detail surfaces. The stale startup cache now preserves `riskBudget` too.
+Verification: focused dashboard/settings surface tests passed (`40 passed`,
+with the existing FastAPI `on_event` deprecation warnings); UI `npm run build`
+passed; API was restarted on port `8765`; live
+`/api/forex/dashboard/fast` measured about `3.2 KB` (`3231` bytes), includes
+`riskBudget`, and no longer includes `dailyBundle` or
+`wastePaperSampleCollectorScheduler`; browser smoke showed Dashboard `LIVE`,
+`No Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`,
+Account/Risk Budget/Proof Progress present, zero disabled buttons, no
+`API unreachable`, no fixture text, no visible `skipped`, and no console
+warnings/errors. Owner authority boundary unchanged: this first-paint split
+does not alter owner `ACCEPT`, broker credentials/config, edge authorization,
+MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, or
+payout automation.
+
+2026-07-01 CAS Forex Dashboard fast packet no longer carries the paper-sample scheduler summary.
+Live profiling showed `/api/forex/dashboard/fast` was still carrying
+`wastePaperSampleCollectorScheduler`, even though the Dashboard already fetches
+the full paper-sample scheduler later from
+`/api/forex/waste-loop-control/paper-sample-collector/scheduler`. `api/data.py`
+now omits that scheduler summary from `dashboard_fast_state()`, keeping the
+first live Dashboard packet focused on `uiReadiness`, `dailyBundle`,
+`ownerControl`, `authorityBoundary`, and the WASTE shell status. The full
+scheduler endpoint remains available and paper-only, and the frontend deferred
+hydrator still has the explicit scheduler fetch path. Verification: focused
+dashboard/settings surface tests passed (`40 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; API was restarted
+on port `8765`; live `/api/forex/dashboard/fast` measured about `5.1 KB`
+(`5098` bytes) and no longer includes `wastePaperSampleCollectorScheduler`;
+the full scheduler endpoint still returns
+`cas_forex_waste_paper_sample_collector_scheduler` with `paper_only: true`;
+browser smoke showed Dashboard `LIVE`, `No Trade`, `Watch > Analyze >
+Strategize > Test > Execute > No Trade`, Account/Risk Budget/Proof Progress
+present, zero disabled buttons, no `API unreachable`, no fixture text, no
+visible `skipped`, and no console warnings/errors. Owner authority boundary
+unchanged: this packet slimming does not alter owner `ACCEPT`, broker
+credentials/config, edge authorization, MT4/MT5 dispatch, live trading,
+deposits, withdrawals, bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard hydrator now starts on first render for direct Dashboard loads.
+`ui/src/App.tsx` no longer initializes `dashboardHydratorMounted` to `false`
+for every route. When the owner opens `?page=dashboard` directly, the hydrator
+is mounted from the first React render instead of waiting for the first
+`useEffect` cycle to flip the flag. The existing effect still handles later
+navigation to Dashboard, and non-Dashboard initial routes still avoid eager
+hydration. This removes one more frontend tick before the lazy
+`DashboardStateHydrator` chunk starts loading and before the `50ms`
+Dashboard-fast `/api/forex/dashboard/fast` path can begin. Added static
+regression coverage so a direct Dashboard load cannot silently return to
+starting with the hydrator disabled. Verification: focused dashboard/settings
+surface tests passed (`40 passed`, with the existing FastAPI `on_event`
+deprecation warnings); UI `npm run build` passed; browser smoke showed
+Dashboard `LIVE`, `No Trade`, `Watch > Analyze > Strategize > Test > Execute >
+No Trade`, Account/Risk Budget/Proof Progress present, zero disabled buttons,
+no `API unreachable`, no fixture text, and no console warnings/errors. Owner
+authority boundary unchanged: this first-render hydration change does not alter
+owner `ACCEPT`, broker credentials/config, edge authorization, MT4/MT5
+dispatch, live trading, deposits, withdrawals, bank/card handling, or payout
+automation.
+
+2026-07-01 CAS Forex Dashboard fast-packet delay override completed.
+`DashboardStateHydrator` now accepts a `fastFetchDeferMs` override and passes it
+through to `loadDashboardState()`, while `dashboardApi.ts` keeps the existing
+`350ms` default for non-Dashboard hydration. `ui/src/App.tsx` now gives the
+Dashboard route a `50ms` fast lane, so after `?page=dashboard` mounts the
+hydrator immediately, the `/api/forex/dashboard/fast` timer starts almost
+right away instead of waiting the old default. Non-Dashboard routes still use
+the calmer default delay. Added regression coverage for the configurable fast
+delay, the Dashboard route override, and the preserved default. Verification:
+focused dashboard/settings surface tests passed (`40 passed`, with the
+existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed;
+browser smoke showed Dashboard `LIVE`, `No Trade`, `Watch > Analyze >
+Strategize > Test > Execute > No Trade`, Account/Risk Budget/Proof Progress
+present, zero disabled buttons, no `API unreachable`, no fixture text, and no
+console warnings/errors. Owner authority boundary unchanged: this timing change
+does not alter owner `ACCEPT`, broker credentials/config, edge authorization,
+MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, or
+payout automation.
+
+2026-07-01 CAS Forex Dashboard route now mounts the hydrator immediately.
+The app previously waited `160ms` before mounting `DashboardStateHydrator`,
+even when the owner was already opening `?page=dashboard`; that meant the
+`/api/forex/dashboard/fast` timer started after an avoidable extra delay.
+`ui/src/App.tsx` now takes a Dashboard-only fast lane: when `page ===
+"dashboard"`, it mounts the hydrator immediately, while non-Dashboard pages
+still keep the small `160ms` delay to avoid unnecessary API noise during normal
+navigation. Added a static regression test so the Dashboard route cannot
+accidentally reintroduce that startup delay before the hydrator begins. This
+moves the first live Account/Risk Budget/Proof packet earlier without changing
+broker dispatch, owner controls, live trading, money movement, or payout
+behavior. Verification: focused dashboard/settings surface tests passed (`40
+passed`, with the existing FastAPI `on_event` deprecation warnings); UI `npm
+run build` passed; browser smoke showed Dashboard `LIVE`, `No Trade`, `Watch >
+Analyze > Strategize > Test > Execute > No Trade`, Account/Risk Budget/Proof
+Progress present, zero disabled buttons, no `API unreachable`, no fixture text,
+and no console warnings/errors. Owner authority boundary unchanged: this timing
+change does not alter owner `ACCEPT`, broker credentials/config, edge
+authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card
+handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard route fallback now uses the instant cockpit shell.
+The Dashboard suspense fallback no longer paints only a thin WASTE header while
+the real Dashboard page chunk loads. `ui/src/App.tsx` now uses
+`DashboardInstantShell` for the Dashboard route fallback, and
+`ui/src/components/DashboardInstantShell.tsx` now shows the first-paint cockpit
+facts the owner cares about: WASTE loop stage, proof-days progress, account
+balance/equity, and risk budget/free-margin. This makes the page feel live
+earlier even if the fuller dashboard chunk, support cards, and deep operations
+are still loading behind it. Added a static regression test proving the
+Dashboard route fallback stays wired to the instant cockpit shell and that the
+shell contains `Account`, `Risk Budget`, and `Proof`. Verification: focused
+dashboard/settings surface tests passed (`39 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; browser
+smoke showed Dashboard `LIVE`, `No Trade`, `Watch > Analyze > Strategize >
+Test > Execute > No Trade`, Account/Risk Budget/Proof Progress present, zero
+disabled buttons, no `API unreachable`, no fixture text, and no console
+warnings/errors. Owner authority boundary unchanged: this first-paint UI change
+does not alter owner `ACCEPT`, broker credentials/config, edge authorization,
+MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card handling, or
+payout automation.
+
+2026-07-01 CAS Forex Dashboard shell fetch no longer blocks the fast packet timer.
+Live profiling showed the tiny `/api/forex/dashboard/shell` route can still
+occasionally take hundreds of milliseconds when the API is busy, even though
+the route is cache-first. `ui/src/data/dashboardApi.ts` now treats the shell
+fetch like the WASTE stage probe in the browser path: it starts
+`fetchAndApplyDashboardShell()` without awaiting it, then schedules the
+`/api/forex/dashboard/fast` timer immediately. Server-side/non-browser
+hydration still awaits shell in order. This removes shell latency from the
+first-paint critical path while preserving stale-cache startup, shell writes to
+the browser cache, the fast packet, and the deferred full detail hydration.
+Added a static regression test so the browser startup branch cannot reintroduce
+an awaited shell fetch before the fast timer. Verification: focused
+dashboard/settings surface tests passed (`38 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; browser
+smoke showed Dashboard `LIVE`, `No Trade`, `Watch > Analyze > Strategize >
+Test > Execute > No Trade`, Account/Risk Budget/Proof Progress present, zero
+disabled buttons, no `API unreachable`, no fixture text, and no console
+warnings/errors. Owner authority boundary unchanged: this frontend scheduling
+change does not alter owner `ACCEPT`, broker credentials/config, edge
+authorization, MT4/MT5 dispatch, live trading, deposits, withdrawals, bank/card
+handling, or payout automation.
+
+2026-07-01 CAS Forex MT4 heartbeat boundary and Dashboard fast-packet slim completed.
+The MT4 mailbox route now distinguishes path selection from actual EA
+connectivity. `MT4EABridge` no longer accepts MT4 paper/demo dispatch unless
+the route is enabled, the app is in paper mode, and `heartbeat.json` is present
+and fresh in the configured mailbox. Broker-control selection now passes the
+resolved MT4 config into the bridge instead of falling back to process-global
+MT4 settings, so tests and runtime use the same mailbox/heartbeat rule.
+Settings now tells the owner plainly that `ROUTE ON` only selects the path and
+is not an active MT4 demo fill by itself. Live API verification after restart:
+MT4 route enabled, broker platform `mt4`, mailbox `mt4_mailbox`, link
+`NO_HEARTBEAT`, heartbeat absent, mailbox absent; dispatch loop running in
+PAPER with `0` route intents, `0` approved, `0` executed, and `0` pending.
+Dashboard `/api/forex/dashboard/fast` is live at about `5.8 KB` and no longer
+carries `dailySchedule`; full schedule hydration remains on
+`/api/forex/proof/schedule`. Browser smoke showed Settings `ROUTE ON` + `NO EA
+HEARTBEAT` with the corrected MT4 wording, and Dashboard showed `LIVE`,
+`No Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`, zero
+disabled buttons, no `API unreachable`, no fixture text, and no console
+warnings/errors. Owner authority boundary unchanged: this does not create bank
+card handling, deposits, withdrawals, payout automation, broker ACCEPT, or
+real-money order authority.
+
+2026-07-01 CAS Forex Dashboard support-card defer completed.
+The Dashboard now lets the header plus Account/Risk Budget/Proof Progress paint
+before loading the noncritical top support cards. `DashboardPage.tsx` gates the
+Operator Briefing card behind a `900ms` defer and the Objective/AI Performance
+Fee support-card pair behind a `1.1s` defer, while keeping their existing
+fallback panels visible during that short delay. This prevents the
+OperatorBriefingCard import and its `/operator-briefing` poll, plus the
+ObjectivePaceCard/IncentiveLedgerCard imports, from competing with the first
+live cockpit paint. Added a focused static regression test to keep those
+support cards behind the first-paint defers. Verification: focused
+dashboard/settings surface tests passed (`36 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; the
+emitted support-card chunks remain separate (`OperatorBriefingCard` about
+`2.01 KB`, `ObjectivePaceCard` about `2.31 KB`, and `IncentiveLedgerCard` about
+`1.66 KB`), while `DashboardPage` remains small at about `6.79 KB`. Browser
+smoke showed Dashboard present (`ACCOUNT`, `RISK BUDGET`, `PROOF PROGRESS`),
+Operator Briefing mounted, Objective and AI Performance Fee mounted, `LIVE`,
+`No Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`, zero
+disabled controls, no visible `NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, no `API unreachable`, no visible
+`skipped`, no fixture text, and no console warnings/errors. Owner authority
+boundary unchanged: this is frontend first-paint scheduling only and does not
+change owner `ACCEPT`, owner toggles, broker credentials/config, edge
+authorization, order execution, deposits, withdrawals, raw bank/card handling,
+or payout automation.
+
+2026-07-01 CAS Forex Dashboard deep API client split completed.
+`DashboardDeepOperations.tsx` no longer statically imports the deep dashboard
+API helper module on first load of the delayed operations component. The
+component now keeps a cached dynamic loader for `../data/dashboardDeepApi`, and
+the polling/action wrappers pull that helper chunk only when the delayed
+operations reads or owner-triggered actions actually need it. This keeps the
+first deep-operations render lighter while preserving the same WASTE,
+broker-truth, sweep, auto-halt, and owner `ACCEPT` behavior. Added a focused
+static regression test to prevent the static deep API import from returning.
+Verification: focused dashboard/settings surface tests passed (`35 passed`,
+with the existing FastAPI `on_event` deprecation warnings); UI `npm run build`
+passed; the emitted `DashboardDeepOperations` chunk moved from about
+`29.60 KB` to about `28.02 KB`, and Vite emitted a separate
+`dashboardDeepApi` chunk at about `4.67 KB`; source-map inspection confirmed
+`dashboardDeepApi.ts` now lives in that separate chunk. Browser smoke showed
+Dashboard present (`ACCOUNT`, `RISK BUDGET`, `PROOF PROGRESS`), `LIVE`, `No
+Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`, zero
+disabled controls, the deep operations surface visible (`VERIFIED PROFIT
+SWEEP`), no visible `NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no `PAYMENT
+MOVEMENT CURRENTLY NOT LICENSED`, no `API unreachable`, no visible `skipped`,
+no fixture text, and no console warnings/errors. Owner authority boundary
+unchanged: this is frontend chunk-splitting work only and does not change owner
+`ACCEPT`, owner toggles, broker credentials/config, edge authorization, order
+execution, deposits, withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard hydrator legacy path removed.
+The staged Dashboard hydrator API no longer carries the old React hook surface
+or full aggregate `/dashboard` fetch path. `ui/src/data/dashboardApi.ts` now
+omits the unused React import, `UseDashboardResult`, `useDashboard`, and
+`fetchDashboard`, leaving the staged `loadDashboardState`/fast-plus-deferred
+hydration path as the active dashboard startup API. A focused static regression
+test now guards that the staged hydrator API stays free of the legacy hook and
+full aggregate fetch. Verification: focused dashboard/settings surface tests
+passed (`34 passed`, with the existing FastAPI `on_event` deprecation
+warnings); UI `npm run build` passed; source-map inspection showed the
+`dashboardApi.ts` source contribution inside the `DashboardStateHydrator` map
+falling from about `18.06 KB` to about `16.96 KB`; the emitted hydrator chunk
+remained `10,891` bytes because the removed code was already tree-shaken from
+runtime output. Browser smoke showed Dashboard present (`ACCOUNT`, `RISK
+BUDGET`, `PROOF PROGRESS`), `LIVE`, `No Trade`, `Watch > Analyze > Strategize
+> Test > Execute > No Trade`, zero disabled controls, no visible `NOT
+LICENSED`, no `CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT
+LICENSED`, no `API unreachable`, no visible `skipped`, no fixture text, and no
+console warnings/errors. Owner authority boundary unchanged: this cleanup does
+not change owner `ACCEPT`, owner toggles, broker credentials/config, edge
+authorization, order execution, deposits, withdrawals, raw bank/card handling,
+or payout automation.
+
+2026-07-01 CAS Forex Dashboard full-detail hydration stagger widened.
+The staged Dashboard hydrator no longer schedules all post-fast full-detail
+reads inside the same early one-second burst. Live measurement before the
+change showed the paper-sample collector scheduler route was small but slow
+(`/api/forex/waste-loop-control/paper-sample-collector/scheduler`, about
+`2.4 KB` but roughly `1.16s` on this run), while that full scheduler hydration
+was queued at `1.05s` after the fast packet. `ui/src/data/dashboardApi.ts` now
+keeps the fast packet at `350ms`, spreads full authority/readiness/schedule/
+daily-bundle hydration to `0.9s`, `1.5s`, `2.1s`, and `2.8s`, and moves the
+slow full paper-sample scheduler read to `6.5s`. The Dashboard still receives
+the compact fast summary early; Settings and Trade can still fetch or mutate
+the scheduler through their own controls. Verification: focused
+dashboard/settings surface tests passed (`33 passed`, with the existing
+FastAPI `on_event` deprecation warnings), including a static regression check
+for the widened timers; UI `npm run build` passed; browser smoke showed
+Dashboard present, `LIVE`, `No Trade`, `Watch > Analyze > Strategize > Test >
+Execute > No Trade`, zero disabled controls, no visible `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, no
+`API unreachable`, no visible `skipped`, no fixture text, and no console
+warnings/errors. Owner authority boundary unchanged: this is frontend
+hydration timing work only and does not change owner `ACCEPT`, owner toggles,
+broker credentials/config, edge authorization, order execution, deposits,
+withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex app-shell page registry slimming completed.
+The Dashboard startup path no longer carries duplicated page/nav declarations in
+both `App.tsx` and `Shell.tsx`, and `App.tsx` no longer renders pages through a
+long conditional branch. Added shared `ui/src/pageConfig.ts` for the canonical
+page IDs/nav labels, updated `Shell.tsx` to consume that single config, and
+updated `App.tsx` to use a compact lazy `PAGE_COMPONENTS` registry plus one
+`<ActivePage state={state} />` render. All pages remain lazy-loaded; this is
+boot-code slimming, not a behavior or trading-path change. Source-map
+inspection after build shows `App.tsx` source contribution down from about
+`11.98 KB` to about `10.05 KB`, `Shell.tsx` down from about `4.25 KB` to about
+`2.87 KB`, and the new shared `pageConfig.ts` at about `1.25 KB`. The built
+main JS chunk moved from about `162.91 KB` after the prior instant-badge pass
+to about `161.81 KB`. Verification: UI `npm run build` passed; focused
+dashboard/settings surface tests passed (`32 passed`, with the existing FastAPI
+`on_event` deprecation warnings); browser navigation smoke clicked Settings and
+back to Dashboard successfully, then showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, Dashboard panels
+present, zero disabled controls, no visible `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, no
+`API unreachable`, no visible `skipped`, no fixture text, and no console
+warnings/errors. Owner authority boundary unchanged: this is frontend app-shell
+startup work only and does not change owner `ACCEPT`, owner toggles, broker
+credentials/config, edge authorization, order execution, deposits, withdrawals,
+raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard instant activity fallback slimmed.
+The first-load WASTE header fallback no longer carries its own durable
+`stage_trace` parsing and expansion logic. `AiActivityInstantBadge.tsx` now
+shows only the direct current stage plus LIVE/SYNC while the real
+`AiActivityIndicator.tsx` chunk loads; the full indicator remains responsible
+for the honest WASTE trace, including `Watch > Analyze > Strategize > Test >
+Execute > No Trade`. This keeps `Test` and `Execute` wired in the real
+indicator without making the temporary fallback duplicate that work. Source-map
+inspection showed the instant badge source contribution falling from about
+`5.2 KB` to about `2.5 KB`, and the built main JS chunk moving from about
+`164.15 KB` before this pass to about `162.91 KB` after it. Verification: UI
+`npm run build` passed; focused dashboard/settings surface tests passed (`31
+passed`, with the existing FastAPI `on_event` deprecation warnings); browser
+smoke showed `LIVE`, `No Trade`, `Watch > Analyze > Strategize > Test >
+Execute > No Trade` after the first heartbeat poll, no disabled controls, no
+visible `NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, no `API unreachable`, no visible
+`skipped`, no fixture text, and no console warnings/errors. Owner authority
+boundary unchanged: this is frontend boot-weight/display work only and does not
+change owner `ACCEPT`, owner toggles, broker credentials/config, edge
+authorization, order execution, deposits, withdrawals, raw bank/card handling,
+or payout automation.
+
+2026-07-01 CAS Forex Dashboard sweep/broker-truth chunk delay completed.
+The Dashboard deep-operations render wave now lets evidence tables and
+live-operability hydrate first, while the sweep/broker-truth control surface is
+queued slightly later. `DashboardDeepOperations.tsx` keeps the existing
+deep-operations fallback until `1.8s`, then renders the evidence/live
+operability chunks, and holds `DashboardSweepOpsPanel` behind a separate
+`3.2s` `sweepOpsPanelReady` gate. This avoids importing the sweep panel
+(`~11.7 KB`) and its nested broker-truth controls (`~19.3 KB`) in the same
+first deep-render wave as the evidence panel (`~11.7 KB`) and live-operability
+panel (`~6.1 KB`). The visible sweep fallback stays in place while queued, so
+the controls read as syncing rather than missing. Verification: UI
+`npm run build` passed; focused dashboard tests passed (`6 passed`, with the
+existing FastAPI `on_event` deprecation warnings); browser midpoint smoke showed
+`LIVE` and `No Trade` with the sweep fallback still present and full
+sweep/broker-truth controls not yet loaded; final browser smoke showed `LIVE`,
+`No Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`, WASTE
+loop live with no offline mismatch, Account/Risk/Proof cards present,
+Real-Time Movement Scaffold present, Paper Route Candidates rows present, Next
+Action and Strategy Leads present, Live Operability Checklist present,
+broker-truth controls present, sweep controls present (`Save Split`,
+`Check Sweep`, `Confirm Payout`), zero disabled buttons, no visible `skipped`,
+no `API unreachable`, no fixture text, no visible `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no
+console warnings/errors. Owner authority boundary unchanged: this is dashboard
+chunk timing work only and does not change owner `ACCEPT`, live-trading
+switches, broker credentials/config, edge authorization, order execution,
+deposits, withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard deep core-panel hydration stagger completed.
+The Dashboard deep-operations layer no longer fires the account ledger,
+movement snapshot, account reconciliation, and live-readiness requests as one
+post-paint burst. Before this slice, live profiling showed those four endpoints
+as a roughly `29 KB` combined core-panel read (`/account/ledger` about `7.9 KB`,
+`/movement/snapshot` about `4.6 KB`, `/reconciliation/account` about `3.9 KB`,
+and `/readiness/live` about `13.3 KB`) scheduled together after deep operations
+mounted. `DashboardDeepOperations.tsx` now staggers those reads: account at
+`1.6s`, movement at `2.1s`, reconciliation at `2.6s`, and live readiness at
+`3.1s`, with separate `30s` poll offsets instead of one synchronized recurring
+burst. Verification: UI `npm run build` passed; focused dashboard tests passed
+(`6 passed`, with the existing FastAPI `on_event` deprecation warnings);
+browser smoke on Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, WASTE loop live
+with no offline mismatch, Account/Risk/Proof cards present, Real-Time Movement
+Scaffold present, Paper Route Candidates rows present, Next Action and Strategy
+Leads present, Live Operability Checklist present, zero disabled buttons, no
+visible `skipped`, no `API unreachable`, no fixture text, no visible
+`NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary unchanged: this is dashboard polling/staging work only
+and does not change owner `ACCEPT`, live-trading switches, broker
+credentials/config, edge authorization, order execution, deposits, withdrawals,
+raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard duplicate daily-bundle hydration removed.
+The Dashboard evidence panels no longer perform their own `fetchDailyBundle`
+request when the first-paint `dailyBundle` is summary-only. Full daily-bundle
+hydration is now owned by the central staged dashboard hydrator in
+`ui/src/data/dashboardApi.ts`, which keeps the page responsive while avoiding a
+second `/api/forex/bundle/daily` request from the evidence panel. Live endpoint
+profile before this slice showed `/dashboard/shell` at about `2.3 KB` and
+around `0.012s`, `/dashboard/fast` at about `7.0 KB` and around `0.013-0.019s`,
+and `/bundle/daily` at about `7.1 KB`; removing the duplicate saves one
+full-bundle hydration request during Dashboard startup without changing any
+backend trading authority, broker, order, payment, or payout path. Verification:
+UI `npm run build` passed; focused dashboard tests passed (`5 passed`, with the
+existing FastAPI `on_event` deprecation warnings); source check shows
+`fetchDailyBundle` now appears only in the central dashboard hydrator, not
+`DashboardEvidencePanels.tsx`; browser smoke on Dashboard showed `LIVE`,
+`No Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`, WASTE
+loop live with no offline mismatch, Account/Risk/Proof cards present, Paper
+Route Candidates rows present, Next Action and Strategy Leads present, zero
+disabled buttons, no visible `skipped`, no `API unreachable`, no fixture text,
+no visible `NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary unchanged: this is dashboard hydration deduplication
+only and does not change owner `ACCEPT`, live-trading switches, broker
+credentials/config, edge authorization, order execution, deposits, withdrawals,
+raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard daily-bundle first-paint slim and WASTE shell truth fix completed.
+The `/api/forex/dashboard/fast` first-paint packet now trims repeated
+`dailyBundle` proof identifiers and hidden noncritical strings from the
+summary-only `latest_decision` and `latest_risk` subshapes while preserving the
+full evidence on `/api/forex/bundle/daily`. The startup stale-cache writer now
+uses the same compact shape so cached first paint does not re-expand the daily
+bundle. During browser smoke a deeper dashboard panel exposed a mixed signal:
+the header could show the WASTE stage as live while the first-paint shell
+summary could still read the local API process as offline. The shell summary now
+derives running/stage truth from the same durable WASTE runner/supervisor status
+used by `/api/forex/waste-loop-control/status/fast`, then projects only compact
+shell fields. After API restart on port `8765`, live warmed measurement showed
+`/dashboard/shell` at about `2.3 KB` with `running: true`, stage `no_trade`, and
+`611` cycles; `/dashboard/fast` at about `7.0 KB` versus the prior about
+`7.3 KB`; first-paint `dailyBundle` at about `2.4 KB`; compact
+`latest_decision` at about `595` bytes and `latest_risk` at about `1.0 KB`; and
+full `/bundle/daily` remained about `7.1 KB` with the real decision id, review
+id, and macro reason still present. Verification: backend compile passed for
+`api\data.py`; focused dashboard shell/fast tests passed (`4 passed`, with the
+existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed;
+browser smoke on Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, `WASTE LOOP LIVE:
+NO TRADE`, Account/Risk/Proof cards present, Next Action and Strategy Leads
+present, zero disabled buttons, no visible `skipped`, no `API unreachable`, no
+fixture text, no visible `NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary unchanged: this is dashboard payload slimming and
+truthful WASTE status reporting only; it does not change owner `ACCEPT`,
+live-trading switches, broker credentials/config, edge authorization, order
+execution, deposits, withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard owner-control summary slim completed.
+The `/api/forex/dashboard/fast` first-paint packet now carries a compact
+`ownerControl` summary instead of the full owner-control policy report. First
+paint keeps the current owner mode, risk cap, concurrent-trade cap, AI autonomy
+flag, live-request/live-blocked booleans, override count, and persistence flag,
+but blanks duplicated claim-boundary prose, the local override path, and the
+allowed-mode list, replacing them with `claim_boundary_present`,
+`override_state_path_present`, and `allowed_mode_count`. The full
+`/api/forex/settings/owner-control` route remains intact with full
+claim-boundary text, all `7` allowed modes, and the override path. After API
+restart on port `8765`, live warmed measurement showed `/dashboard/shell` at
+about `2.2 KB`, `/dashboard/fast` at about `7.3 KB` versus the prior about
+`7.7 KB`, and first-paint `ownerControl` at about `357` bytes versus the prior
+about `776` bytes; `/settings/owner-control` remained about `771` bytes with
+full policy detail. Verification: backend compile passed for `api\data.py`;
+focused dashboard/owner-control tests passed (`6 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; browser
+smoke on Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, mode-banner
+paper/demo and edge status present, Account/Risk/Proof cards present, Next
+Action and its command present, Strategy Leads rows present, route rows present
+after hydration, zero disabled buttons, no visible `skipped`, no
+`API unreachable`, no fixture text, no `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no
+console warnings/errors. Owner authority boundary unchanged: this is read-only
+dashboard payload splitting/cache slimming only and does not change owner
+`ACCEPT`, live-trading switches, broker credentials/config, edge
+authorization, order execution, deposits, withdrawals, raw bank/card handling,
+or payout automation.
+
+2026-07-01 CAS Forex Dashboard readiness/schedule claim-boundary slim completed.
+The `/api/forex/dashboard/fast` first-paint packet now blanks duplicated
+`uiReadiness.claim_boundary` and `dailySchedule.claim_boundary`, replacing them
+with `claim_boundary_present` flags while preserving the full claim-boundary
+prose on `/api/forex/proof/readiness` and `/api/forex/proof/schedule`. The
+startup stale-cache writer now applies the same compact readiness/schedule
+shape so cached first paint does not reintroduce the longer proof/schedule
+prose. After API restart on port `8765`, live measurement showed warmed
+`/dashboard/shell` at about `2.2 KB`, `/dashboard/fast` at about `7.7 KB`
+versus the prior about `7.9 KB`, `uiReadiness` at about `865` bytes versus the
+prior about `979` bytes, and `dailySchedule` at about `1.1 KB` versus the prior
+about `1.2 KB`. Full `/proof/readiness` remained about `1.3 KB` with a
+non-empty claim boundary, and full `/proof/schedule` remained about `1.6 KB`
+with a non-empty claim boundary. Verification: backend compile passed for
+`api\data.py`; focused dashboard shell/fast tests passed (`4 passed`, with the
+existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed;
+browser smoke on Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, mode-banner
+paper/demo and edge status present, Account/Risk/Proof cards present, Next
+Action and its command present, Strategy Leads rows present, route rows present
+after hydration, zero disabled buttons, no visible `skipped`, no
+`API unreachable`, no fixture text, no `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no
+console warnings/errors. Owner authority boundary unchanged: this is read-only
+dashboard payload splitting/cache slimming only and does not change owner
+`ACCEPT`, live-trading switches, broker credentials/config, edge
+authorization, order execution, deposits, withdrawals, raw bank/card handling,
+or payout automation.
+
+2026-07-01 CAS Forex owner-authority model UI/API contract completed.
+The live-control reports now carry a structured `owner_authority_model` that
+states the owner is the authority, owner switches / `Owner ACCEPT` buttons are
+the capability authority path, metrics and AI are advisory only, metrics/AI
+cannot veto owner authority, and technical action-time checks still run before
+side effects. `runtime_gates` now exposes the same explicit booleans plus the
+action-time requirement list, and the live-enable warming/fallback packets carry
+the same model so the UI does not drift while route-cache audits are warming.
+Settings now renders a compact owner-authority strip in both Go Live and Path to
+Authorize Everything: Authority = OWNER, Metrics / AI = ADVISORY, Action-Time
+Checks = REQUIRED. Verification: backend compile passed for `runtime_gates.py`,
+`live_enable_control.py`, and `api\routes\live_enable.py`; focused
+`test_runtime_gates.py` + `test_live_enable_control.py` passed (`30 passed`);
+UI `npm run build` passed; API restarted on port `8765`; live
+`/live-enable/authorization` returned authority `OWNER`, metrics veto `false`,
+and `5` action-time requirements; browser smoke on Settings showed the owner
+authority strip, `Owner ACCEPT`, zero disabled buttons, no visible
+`NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner boundary reaffirmed: owner controls can authorize capabilities from the
+app, while broker/provider/edge/risk/confirmation checks still report or block
+actual order or money side effects at action time instead of pretending they
+worked.
+
+2026-07-01 CAS Forex Dashboard daily-bundle prose/path slim completed.
+The `/api/forex/dashboard/fast` daily-bundle summary is slimmer again. First
+paint now keeps the dashboard-critical account/risk/proof/route counts and
+numbers, but blanks duplicated long claim-boundary prose and the local
+paper-proof `status_path`, replacing them with presence flags:
+`claim_boundary_present`, nested claim-boundary presence flags, and
+`status_path_present`. The full evidence path, claim-boundary text, route rows,
+symbol decisions, and risk sizing remain available on `/api/forex/bundle/daily`;
+the startup stale-cache writer now applies the same compact shape so cached
+first paint does not reintroduce the longer daily-bundle prose. After API
+restart on port `8765`, live measurement showed `/dashboard/shell` at about
+`2.3 KB`, `/dashboard/fast` at about `7.9 KB` versus the prior about `8.5 KB`,
+and first-paint `dailyBundle` at about `2.8 KB` versus the prior about
+`3.3 KB`; `/bundle/daily` remained about `7.1 KB` with full status path,
+claim-boundary prose, `2` symbol-decision rows, and `2` sizing rows intact.
+Verification: backend compile passed for `api\data.py`; focused
+dashboard/daily-bundle tests passed (`4 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; browser smoke on
+Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, mode-banner proof
+days and edge status present, Account/Risk/Proof cards present, Next Action and
+its command present, Strategy Leads rows present, route rows present after
+hydration, zero disabled buttons, no visible `skipped`, no `API unreachable`,
+no fixture text, no `NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary unchanged: this is read-only dashboard payload
+splitting/cache slimming only and does not change owner `ACCEPT`, live-trading
+switches, broker credentials/config, edge authorization, order execution,
+deposits, withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard paper-sample scheduler split completed.
+The `/api/forex/dashboard/fast` packet now carries a compact
+`wastePaperSampleCollectorScheduler` summary instead of embedding scheduler
+config, worker internals, full safety checklist fields, filesystem paths, long
+claim-boundary prose, and next-action prose during first Dashboard hydration.
+First paint keeps the visible scheduler status, running flag, interval, cycle
+count, last-error/last-run fields, and the core paper/read-only safety facts:
+`paper_only`, `read_only_market_actions_only`, `runtime_changed`,
+`broker_execution_touched`, `live_order_attempted`, and `money_moved`. The full
+scheduler report still loads from
+`/api/forex/waste-loop-control/paper-sample-collector/scheduler`, and the
+frontend Dashboard hydrator now fetches that full report shortly after the fast
+packet. After API restart on port `8765`, live measurement showed
+`/dashboard/shell` at about `2.3 KB`, `/dashboard/fast` at about `8.5 KB`
+versus the prior about `8.9 KB`, and first-paint
+`wastePaperSampleCollectorScheduler` at about `708` bytes versus the prior
+about `1.1 KB`; the full scheduler route remained about `2.4 KB` with all `9`
+config keys, external worker detail, full claim-boundary prose, and full
+next-action prose. Verification: backend compile passed for `api\data.py`;
+focused dashboard/scheduler tests passed (`5 passed`, with the existing
+FastAPI `on_event` deprecation warnings); UI `npm run build` passed; browser
+smoke on Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, mode-banner proof
+days and edge status present, Account/Risk/Proof cards present, Next Action and
+its command present, Strategy Leads rows present, zero disabled buttons, no
+visible `skipped`, no `API unreachable`, no fixture text, no `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no
+console warnings/errors. Owner authority boundary unchanged: this is read-only
+dashboard payload splitting only and does not change owner `ACCEPT`,
+live-trading switches, broker credentials/config, edge authorization, order
+execution, deposits, withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard authority-boundary split completed.
+The `/api/forex/dashboard/shell` and `/api/forex/dashboard/fast` packets now
+carry a compact `authorityBoundary` summary for first paint. The fast packet
+keeps the owner-control statuses, all `can_*` booleans, trading edge status,
+and live-runtime lock, but replaces allowed-scope arrays, blocker prose, and
+long claim-boundary text with counts/presence flags. The full owner-authority
+report still loads from `/api/forex/settings/authority-boundary`, and the
+frontend Dashboard hydrator now fetches that full report shortly after the fast
+packet, before proof readiness, schedule, and daily-bundle hydration. After API
+restart on port `8765`, live measurement showed `/dashboard/shell` at about
+`2.3 KB`, `/dashboard/fast` at about `8.9 KB` versus the prior about `9.3 KB`,
+and first-paint `authorityBoundary` at about `732` bytes; the full authority
+route remained about `1.9 KB` with all `6` allowed scopes, `10` blockers, and
+full claim-boundary prose. Verification: backend compile passed for
+`api\data.py`; focused dashboard/settings tests passed (`8 passed`, with the
+existing FastAPI `on_event` deprecation warnings); UI `npm run build` passed;
+browser smoke on Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, mode-banner proof
+days and `3/3` chain status present, Account/Risk/Proof cards present, Next
+Action and its command present, Strategy Leads rows present, zero disabled
+buttons, no visible `skipped`, no `API unreachable`, no fixture text, no
+`NOT LICENSED`, no `CURRENTLY NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary reaffirmed: owner switches / owner `ACCEPT` remain the
+software authority path for live trading controls, while metrics, AI agents,
+paper-proof counts, dashboards, and profit pace remain advisory only; broker
+credentials/config, edge authorization, bridge checks, and risk checks remain
+technical action-time requirements. This slice is read-only dashboard payload
+splitting and does not place orders, deposit, withdraw, store raw bank/card
+data, automate payouts, or create broker approval by itself.
+
+2026-07-01 CAS Forex Dashboard UI-readiness split completed.
+The `/api/forex/dashboard/shell` and `/api/forex/dashboard/fast` packets now
+carry a compact `uiReadiness` summary instead of the full proof-readiness
+report. First paint keeps proof counts, chain booleans, readiness status, and
+lead/strategy labels, while full blocker text, complete-bundle date arrays, and
+the long next-step prose are represented as counts/presence flags and still
+served in full from `/api/forex/proof/readiness`. The frontend Dashboard
+hydrator now performs a delayed full readiness fetch shortly after the fast
+packet, before the delayed full schedule and daily-bundle fetches. After API
+restart on port `8765`, live measurement showed `/dashboard/shell` at about
+`2.8 KB`, `/dashboard/fast` at about `9.3 KB` versus the prior about `9.6 KB`,
+and fast `uiReadiness` at about `979` bytes versus the prior about `1.3 KB`;
+`/proof/readiness` remained about `1.3 KB` and still contained all `4`
+blockers, all `3` complete bundle dates, and the full next-step prose.
+Verification: backend compile passed for `api\data.py`; focused dashboard
+shell/fast API tests passed (`4 passed`, with the existing FastAPI `on_event`
+deprecation warnings); UI `npm run build` passed; browser smoke on Dashboard
+showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, mode-banner proof
+days and `3/3` chain status present, Account/Risk/Proof cards present, Next
+Action and its command present, route rows present, Strategy Leads rows present,
+zero disabled buttons, no visible `skipped`, no `API unreachable`, no fixture
+text, no `NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no
+console warnings/errors. Owner authority boundary unchanged: this is read-only
+dashboard payload splitting only and does not change owner `ACCEPT`,
+live-trading switches, broker credentials/config, edge authorization, order
+execution, deposits, withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard daily-schedule split completed.
+The `/api/forex/dashboard/fast` packet now carries a compact
+`dailySchedule` summary instead of the full operator schedule prompt. First
+paint keeps the next due date/status, remaining proof counts, and recommended
+command, while long notes, missing-track arrays, and complete-bundle date
+arrays are represented as counts in the fast packet and still served in full
+from `/api/forex/proof/schedule`. The frontend Dashboard hydrator now performs
+a delayed full schedule fetch shortly after the fast packet, alongside the
+existing delayed full daily-bundle fetch, so Dashboard/Proof-style views regain
+the full schedule details after first paint. After API restart on port `8765`,
+live measurement showed `/dashboard/fast` at about `9.6 KB` versus the prior
+about `10.0 KB`, and the fast `dailySchedule` field at about `1.2 KB` versus
+the prior about `1.6 KB`; `/proof/schedule` remained about `1.6 KB` and still
+contained all `3` missing tracks, all `3` complete bundle dates, and all `5`
+notes. Verification: backend compile passed for `api\data.py`; focused
+dashboard shell/fast API tests passed (`4 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; browser smoke on
+Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, Account/Risk/Proof
+cards present, Next Action and its command present, route rows present, Strategy
+Leads rows present, zero disabled buttons, no visible `skipped`, no
+`API unreachable`, no fixture text, no `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary unchanged: this is read-only dashboard payload
+splitting only and does not change owner `ACCEPT`, live-trading switches,
+broker credentials/config, edge authorization, order execution, deposits,
+withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard daily-bundle compact summary completed.
+The `/api/forex/dashboard/fast` packet now carries a true compact
+`dailyBundle` summary instead of copying the full daily proof bundle and then
+blanking only the route/sizing arrays. First paint keeps the fields the
+Dashboard needs: account equity, planned risk total, route action, macro/event
+headline fields, paper/risk counts, step counts, and proof failure counts.
+Heavy proof details, artifact paths, route rows, sizing rows, notes, and full
+failure-reason text remain available on `/api/forex/bundle/daily` and still
+hydrate the detailed Dashboard evidence panels after mount. After API restart
+on port `8765`, live measurement showed `/dashboard/fast` at about `10.0 KB`
+versus the prior about `11.6 KB`, and the fast `dailyBundle` field at about
+`3.3 KB` versus the prior about `4.9 KB`; the full bundle route remained about
+`7.1 KB` and still contained all `3` proof steps and all `4` proof failure
+reasons. Verification: backend compile passed for `api\data.py`; focused
+dashboard shell/fast API tests passed (`4 passed`, with the existing FastAPI
+`on_event` deprecation warnings); UI `npm run build` passed; browser smoke on
+Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, Account/Risk/Proof
+cards present, route rows present after full bundle hydration, Strategy Leads
+rows present, zero disabled buttons, no visible `skipped`, no `API unreachable`,
+no fixture text, no `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary unchanged: this is read-only dashboard payload
+slimming only and does not change owner `ACCEPT`, live-trading switches, broker
+credentials/config, edge authorization, order execution, deposits, withdrawals,
+raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex Dashboard fast W.A.S.T.E packet slim completed.
+The `/api/forex/dashboard/fast` packet now carries the compact
+`cas_forex_waste_runner_shell` W.A.S.T.E status instead of embedding the full
+runner/control report during first Dashboard hydration. The full runner report
+still loads after mount through `/api/forex/waste-loop-control/status/fast`,
+so below-fold controls and supervisor detail remain available without making
+the first fast aggregate duplicate that heavier payload. After API restart on
+port `8765`, live measurement showed `/dashboard/fast` at about `11.6 KB`, the
+fast `wasteLoop` field at `399` bytes, and the full W.A.S.T.E control route at
+about `3.6 KB` with status `RUNNING` and supervisor data present. Verification:
+backend compile passed for `api\data.py`; focused dashboard shell/fast API
+tests passed (`4 passed`, with the existing FastAPI `on_event` deprecation
+warnings); UI `npm run build` passed; browser smoke on Dashboard showed
+`LIVE`, `No Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`,
+Strategy Leads rows present, zero disabled buttons, no visible `skipped`, no
+`API unreachable`, no fixture text, no `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Owner authority boundary unchanged and reaffirmed: owner switches / owner
+`ACCEPT` remain the software authority path for live trading controls, while
+metrics, AI agents, paper-proof counts, and dashboards remain advisory; broker
+credentials/config, edge authorization, bridge checks, and risk checks are
+still technical action-time requirements. This slice is read-only dashboard
+payload slimming and does not place orders, deposit, withdraw, store raw
+bank/card data, automate payouts, or create broker approval by itself.
+
+2026-07-01 CAS Forex Dashboard strategy-leads summary split completed.
+The Dashboard no longer auto-fetches the full `strategy_leads.json` ledger for
+the below-fold Strategy Leads table. Added `/api/forex/strategy/leads/summary`,
+which returns only the dashboard row fields: priority, lead id, status, family,
+promoted symbols, first headline result, open-gate count shape, deployment
+status, and `summary_only: true`. The full `/api/forex/strategy/leads` endpoint
+remains unchanged for pages that need the complete research ledger, evidence
+refs, and long notes. The Dashboard deep API now calls the summary route.
+Verification: backend compile passed for `api\data.py` and
+`api\routes\strategy.py`; `tests\test_strategy_ledger.py` passed (`3 passed`);
+UI `npm run build` passed. After API restart on port `8765`, live timing showed
+`/strategy/leads/summary` at about `4.6 KB` versus full `/strategy/leads` at
+about `17.7 KB`; warm summary read was about `86.6ms`. Browser smoke on
+Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, Strategy Leads
+rows present, zero disabled buttons, no visible `skipped`, no `API unreachable`,
+no fixture text, no `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Safety boundary unchanged: this is read-only dashboard payload slimming and does
+not change strategy authority, order execution, owner `ACCEPT`, broker state,
+deposits, withdrawals, raw bank/card handling, or payout automation.
+
+2026-07-01 CAS Forex owner live-authority boundary reinforced.
+The runtime live gate now states the owner-control hierarchy directly:
+CAS Forex metrics, AI agents, paper-proof day counts, 12-month / multi-symbol
+evidence, win-rate estimates, and profit pace are advisory only and cannot
+authorize or veto live trading. Runtime authorization is controlled by the
+owner's switches / `ACCEPT` buttons plus technical requirements that must exist
+at action time, such as broker credentials, provider config, edge
+authorization, bridge checks, and risk checks. `runtime_gates` now returns this
+`owner_authority_boundary` and an `advisory_only_inputs` list in its report, and
+`live_enable_control` now surfaces the same caveat in owner-facing live-control
+reports. Added a regression proving bad paper-proof / AI / win-rate / profit
+metrics do not veto an otherwise owner-authorized live-trading gate. Verification:
+backend compile passed for `runtime_gates.py` and `live_enable_control.py`;
+`tests\test_runtime_gates.py` + `tests\test_live_enable_control.py` passed
+(`30 passed`); UI `npm run build` passed. Browser smoke on Dashboard showed
+`LIVE`, `No Trade`, `Watch > Analyze > Strategize > Test > Execute > No Trade`,
+zero disabled buttons, no visible `skipped`, no `API unreachable`, no fixture
+text, no `NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no
+console warnings/errors. Boundary unchanged: this update does not place orders,
+deposit, withdraw, move bank/card funds, automate payouts, or create external
+broker approval by itself.
+
+2026-07-01 CAS Forex Dashboard deep-operations idle staging completed.
+The Dashboard no longer mounts the heavy `DashboardDeepOperations` chunk on a
+fixed 700ms timer. It now schedules the deep operations mount with the browser
+idle callback when available, with a 1.6-second timeout fallback, so first-paint
+W.A.S.T.E / shell work gets priority while still guaranteeing the owner controls
+load shortly after the first dashboard paint. Verification: UI `npm run build`
+passed; the root chunk remained about `164.19 kB` / `53.51 kB gzip`,
+`DashboardPage` is about `6.52 kB` / `2.10 kB gzip`, and
+`DashboardDeepOperations` remains split at about `29.41 kB` / `8.33 kB gzip`.
+Browser smoke confirmed the current Vite-served `DashboardPage` source is live,
+the below-fold deep operations content is present in the DOM after idle mount,
+and the visible header stayed `LIVE` / `No Trade` with the full W.A.S.T.E trace.
+Safety boundary unchanged: this is frontend scheduling only and does not change
+order execution, deposits, withdrawals, raw bank/card handling, payout
+automation, owner `ACCEPT`, or broker state by itself.
+
+2026-07-01 CAS Forex Dashboard hydrator post-paint staging completed.
+The root app now waits `160ms` before mounting the lazy
+`DashboardStateHydrator`, so the Shell, first-paint W.A.S.T.E badge, and root
+stage probe can paint before the delayed Dashboard API hydrator chunk and
+dashboard client begin competing for parse/fetch time. The immediate W.A.S.T.E
+stage probe remains unchanged, so the header can still become `LIVE` quickly;
+the normal shell/fast/full Dashboard hydration still runs after the short
+post-paint delay. Verification: UI `npm run build` passed; the root chunk is
+about `164.19 kB` / `53.50 kB gzip` after adding the tiny timer/state gate
+(slightly above the prior `164.05 kB`, so this is a sequencing improvement
+rather than a bundle-size reduction). Browser smoke on Dashboard showed
+Dashboard content present, `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, no visible
+`skipped`, zero disabled buttons, no `API unreachable`, no fixture text, no
+`NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console
+warnings/errors. Safety boundary unchanged: this is frontend hydration staging
+only and does not create owner `ACCEPT`, broker `ACCEPT`, deposits,
+withdrawals, raw bank/card movement, payout automation, live orders, or
+`LICENSED` status by itself.
+
+2026-07-01 CAS Forex startup cache reader slim completed.
+The first-paint Dashboard startup cache path has been split again so the root
+`App.tsx` bundle imports only the stale-cache read/merge path. The heavier
+daily-bundle summary sanitizer and cache-write sanitizer now live in the
+delayed `dashboardStartupCacheWriter.ts` path that loads with the Dashboard
+hydrator, not the initial app startup. The stale read still forces any cached
+W.A.S.T.E status to `running: false` / `syncing`, so a cached packet cannot
+claim the loop is live before the fresh heartbeat probe reports. Verification:
+UI `npm run build` passed; root startup chunk moved from about `165.06 kB` /
+`53.79 kB gzip` to about `164.05 kB` / `53.48 kB gzip`; source-map review
+showed `dashboardStartupCache.ts` in the startup bundle move from about
+`4,750` source chars to about `2,444`; the delayed `dashboardApi` chunk now
+owns the about `3,960` source-char writer/sanitizer. Endpoint timings remained
+healthy: `/waste-loop/stage` about `576ms` first observed hit and about
+`80-85ms` warm, `/dashboard/shell` about `58-76ms`, `/dashboard/fast` about
+`95-143ms`, and `/dashboard` about `95-100ms`. Browser smoke on Dashboard
+still showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, no visible
+`skipped`, zero disabled buttons, no `API unreachable`, no fixture text, no
+`NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console
+warnings/errors. Safety boundary unchanged: this is startup-cache and bundle
+slimming work only and does not create owner `ACCEPT`, broker `ACCEPT`,
+deposits, withdrawals, raw bank/card movement, payout automation, live orders,
+or `LICENSED` status by itself.
+
+2026-07-01 CAS Forex shared W.A.S.T.E stage probe client completed.
+The frontend no longer has separate root-app, Dashboard hydrator, legacy API
+barrel, and activity-indicator callers each owning their own direct
+`/api/forex/waste-loop/stage` fetch. A new shared
+`ui/src/data/wasteStageProbe.ts` client owns the tiny W.A.S.T.E stage probe,
+with in-flight request reuse and a short 1-second cache, and all four frontend
+paths now call `fetchWasteStageProbe()`. The root app still gets an early
+read-only heartbeat for first paint; the delayed Dashboard hydrator and the
+2-second activity poll can reuse that result instead of stampeding the stage
+endpoint. Source verification shows the literal `/waste-loop/stage` URL now
+appears only inside `wasteStageProbe.ts`. UI build passed; `dashboardApi`
+chunk moved from about `6.56 kB` to about `6.32 kB`, while the root chunk
+increased from about `164.25 kB` to about `165.06 kB` (`53.79 kB gzip`) because
+the shared stage helper now loads at startup. API timing after the prior stage
+cache fix remained healthy: `/waste-loop/stage` about `545ms` first observed
+hit and about `73ms` warm, `/dashboard/shell` about `67-81ms`,
+`/dashboard/fast` about `102-132ms`, and `/dashboard` about `87-113ms`.
+Browser smoke on Dashboard still showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, no visible
+`skipped`, zero disabled buttons, no `API unreachable`, no fixture text, no
+`NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console
+warnings/errors. Safety boundary unchanged: this is read-only heartbeat
+plumbing and does not create owner `ACCEPT`, broker `ACCEPT`, deposits,
+withdrawals, raw bank/card movement, payout automation, live orders, or
+`LICENSED` status by itself.
+
+2026-07-01 CAS Forex W.A.S.T.E stage cold-start nonblocking completed.
+The `/api/forex/waste-loop/stage` route no longer blocks first paint while a
+cold API process inspects the isolated W.A.S.T.E runner. The route now returns
+the local heartbeat/warming packet immediately on a cold cache miss and starts
+the isolated-runner refresh in the background; fresh or stale cached worker
+packets are still reused for the visible `LIVE` / `No Trade` state. After API
+restart, repeated local timing measured `/waste-loop/stage` at about `482ms`
+for the first observed hit and about `67-78ms` for warm hits, with
+`/dashboard/shell` about `68-82ms`, `/dashboard/fast` about `102-142ms`, and
+`/dashboard` about `104-115ms`. Browser smoke on the open Dashboard showed
+`LIVE`, `No Trade`, the full trace
+`Watch > Analyze > Strategize > Test > Execute > No Trade`, no visible
+`skipped`, zero disabled buttons, no `API unreachable`, no fixture text, no
+`NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console
+warnings/errors. Verification: backend compile passed; `tests\test_loop_heartbeat.py`
+passed (`8 passed`); `tests\test_route_cache.py` passed (`7 passed`); UI
+`npm run build` passed. Safety boundary unchanged: this is heartbeat/cache/UI
+responsiveness work only and does not create owner `ACCEPT`, broker `ACCEPT`,
+deposits, withdrawals, raw bank/card movement, payout automation, live orders,
+or `LICENSED` status by itself.
+
+2026-07-01 CAS Forex owner live-authority wording and gate alignment completed.
+The live-enable surface now treats the owner as the software authority for live
+trading controls. The legacy stored key `live_trading_licensed` remains for
+compatibility, but owner-facing API/UI labels now read `Owner ACCEPT live
+authority` instead of `Live trading licensed`. Settings and Trade/Proof shortcut
+copy now say owner switches/ACCEPT buttons control live authority, while broker
+credentials, edge authorization, provider setup, and risk checks re-check at
+action time. `runtime_gates.evaluate_live_trading()` now reports broker-truth
+freshness as an advisory requirement rather than an owner-vetoing hard blocker;
+owner-command, broker credential/config, account acknowledgment, auto-halt,
+owner broker-reality ACCEPT, live-pilot ACCEPT, recovery CLEAR, and owner
+dry-run ACCEPT remain the hard live-authority path. Browser smoke on Settings
+showed `Owner ACCEPT live authority`, no visible `NOT LICENSED` /
+`CURRENTLY NOT LICENSED`, no disabled buttons, and no console warnings/errors.
+Verification: backend compile passed; focused runtime/live-enable,
+execution/dispatch, authority/settings, readiness/progression tests passed;
+UI `npm run build` passed. Safety boundary unchanged: no live order, deposit,
+withdrawal, payout, raw bank/card movement, or broker ACCEPT is performed by
+this wording/gate-alignment change by itself.
+
+2026-07-01 CAS Forex instant badge fallback slim completed.
+The first-paint `AiActivityInstantBadge` now matches the full W.A.S.T.E
+indicator contract: it renders `Watch > Analyze > Strategize > Test > Execute >
+No Trade` without visible `skipped` text, and keeps the armed-but-not-reached
+explanation in the hover detail. This closes the startup flash gap where the
+lazy fallback could briefly show the old skipped wording before
+`AiActivityIndicator` finished loading. The fallback was also simplified to one
+small pulse figure and compact label maps instead of duplicating more of the
+full animated indicator. UI build output showed the root `index-*.js` chunk
+move from about `164.72 kB` / `53.62 kB gzip` to about `164.25 kB` /
+`53.46 kB gzip`; the source map shows `AiActivityInstantBadge.tsx` moved from
+about `5,798` source chars to about `5,220`. Verification: no remaining
+visible skipped tokens in the shell/indicator source path; UI `npm run build`
+passed; `tests\test_loop_heartbeat.py` passed (`7 passed`); browser smoke on
+the open Dashboard showed `LIVE`, `No Trade`, the full trace with `Test` and
+`Execute`, no visible `skipped`, zero disabled controls, no `API unreachable`,
+no fixture text, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console
+warnings/errors. Safety boundary unchanged: this is first-paint display/bundle
+work only and does not create owner `ACCEPT`, broker `ACCEPT`, deposits,
+withdrawals, raw bank/card movement, payout automation, or `LICENSED` status by
+itself.
+
+2026-07-01 CAS Forex W.A.S.T.E trace wording and stage-cache follow-up completed.
+The Dashboard W.A.S.T.E indicator now preserves the full visible acronym during
+ordinary no-candidate / no-edge cycles without showing the word `skipped`:
+`Watch > Analyze > Strategize > Test > Execute > No Trade`. The hover detail
+states that Test and Execute are armed, but the cycle ended before a candidate
+reached the edge gate. Real backend semantics remain unchanged: `test` is only
+actually reached when Strategize forms a candidate, and `execute` is only
+actually reached after a fresh `PASS` token. The `/api/forex/waste-loop/stage`
+isolated-worker fallback now uses a 1.5-second cache-first packet and is
+prewarmed on API startup under `waste_loop_stage_runner`, so duplicate root
+probe / indicator polls can reuse the last proven stage instead of repeatedly
+reading durable worker status. After API restart, repeated stage polls measured
+about `7-11ms` while the packet was fresh, compared with the previous observed
+about `1.2s` outlier; a stale refresh hit can still take longer, so this is
+progress toward instant-live rather than a claim that every path is finished.
+Verification: `python -m py_compile api\routes\loop_stage.py api\server.py`
+passed; `tests\test_loop_heartbeat.py` passed (`7 passed`); UI
+`npm run build` passed; browser smoke on the open Dashboard showed `LIVE`,
+`No Trade`, the full trace with `Test` and `Execute`, no visible `skipped`,
+zero disabled controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Safety boundary unchanged: this is heartbeat/display/cache work only and does
+not create owner `ACCEPT`, broker `ACCEPT`, deposits, withdrawals, raw
+bank/card movement, payout automation, or `LICENSED` status by itself.
+
+2026-07-01 CAS Forex W.A.S.T.E skipped-label cleanup completed.
+The Dashboard W.A.S.T.E indicator no longer auto-inserts visible
+`Test (skipped)` and `Execute (skipped)` labels into ordinary no-candidate /
+no-edge cycles. The main trace now renders the actual stage path, for example
+`Watch > Analyze > Strategize > No Trade`, with no visible `skipped` text. A
+hover/accessibility detail still explains that Test and Execute are armed but
+were not reached when Strategize produced no candidate, or that Execute is
+armed but did not run when a fresh `PASS` token was not present. Real `test`
+and `execute` stages still appear in the trace when the backend actually
+reaches them. Verification: UI `npm run build` passed; W.A.S.T.E loop/runner
+tests passed (`39 passed`, with two existing FastAPI deprecation warnings);
+browser smoke on the open Dashboard showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, no visible `skipped` text, zero
+disabled controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Safety boundary unchanged: this is indicator wording only and does not create
+owner `ACCEPT`, broker `ACCEPT`, deposits, withdrawals, raw bank/card movement,
+payout automation, or `LICENSED` status by itself.
+
+2026-07-01 CAS Forex W.A.S.T.E Test/Execute live-path verification refreshed.
+The open Dashboard tab was reloaded after the API restart and the visible
+W.A.S.T.E indicator now shows `LIVE` / `No Trade` with the full no-edge trace:
+`Watch > Analyze > Strategize > Test (skipped) > Execute (skipped) > No Trade`.
+The skipped labels are only display labels for cycles where Strategize produces
+no candidate; they are not fake order stages. The backend loop still reaches
+real `test` only when there is a candidate setup, and reaches real `execute`
+only when the edge gate returns `PASS` with a non-empty token. Verification was
+rerun: `python -m py_compile` passed for W.A.S.T.E/live-enable/dispatch/MT5
+modules; `tests\test_waste_loop.py` + `tests\test_waste_runner.py` passed
+(`39 passed`, with two existing FastAPI deprecation warnings); dispatch,
+runtime-gate, live-enable, broker-control, MT5 diagnostic, and pip-regression
+tests passed (`84 passed`); and UI `npm run build` passed. Browser smoke showed
+zero disabled controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+MT5 diagnostic status remains `MT5_MARKET_DATA_READY`; the operator message now
+says CAS Forex can auto-use the discovered Hugosway terminal path for
+broker-grade market data and the gated bridge path, without telling the owner
+to restart the API just to use that detected path. Safety boundary unchanged:
+this does not create owner `ACCEPT`, broker `ACCEPT`, deposits, withdrawals,
+raw bank/card movement, payout automation, or `LICENSED` status by itself.
+
+2026-07-01 CAS Forex W.A.S.T.E Test/Execute execution semantics verified.
+The W.A.S.T.E indicator's `Test (skipped)` and `Execute (skipped)` labels are
+display-only only for no-candidate/no-edge cycles; the backend stages are not
+for show. `WasteLoop.tick()` still enters `test` only after Strategize forms a
+candidate, and enters `execute` only after the edge gate returns `PASS` with a
+non-empty token. The runner then registers that token with
+`edge_authorization` and sends the order through the normal `order_dispatch`
+chokepoint. The execution stack now resolves the same owner live-enable
+overrides in broker selection, dispatch mode, execution guard, and MT5 bridge
+mode handling, so paper/demo remains the default, while an owner-enabled live
+configuration can reach a real-capable bridge only after live-trading runtime
+gate, edge authorization, live-pilot, risk, and audit gates pass. Added a
+W.A.S.T.E runner test that starts with static live flags OFF, turns them ON via
+the in-app `live_enable_control` override path, receives a fresh edge `PASS`,
+then proves `Execute` reaches a fake real bridge and records the order attempt
+as `mode: LIVE` / `is_real_attempt: true`. Test isolation was tightened so
+pytest does not read the user's persisted cockpit override file unless a test
+explicitly points at a test override file. Verification: `python -m py_compile`
+passed for the changed backend modules; `tests\test_waste_loop.py` +
+`tests\test_waste_runner.py` passed (`39 passed`, with two existing FastAPI
+deprecation warnings); and `tests\test_order_dispatch.py`,
+`tests\test_runtime_gates.py`, `tests\test_live_enable_control.py`, and
+`tests\test_broker_control.py` passed (`58 passed`). Safety boundary unchanged:
+this does not create owner `ACCEPT`, broker `ACCEPT`, deposits, withdrawals,
+raw bank/card movement, payout automation, or `LICENSED` status by itself.
+
+2026-07-01 CAS Forex instant W.A.S.T.E stage probe completed.
+The dashboard hydrator now starts a tiny `/api/forex/waste-loop/stage` probe
+in parallel with the normal `/dashboard/shell` load, so the header can become
+honestly live from the current W.A.S.T.E stage packet before the larger shell
+and fast dashboard packets finish. The probe is read-only and observational:
+it updates `wasteLoop` with running/stage/mode/trace only, and its claim
+boundary states it does not authorize live trading, broker `ACCEPT`,
+`LICENSED` status, deposits, withdrawals, bank/card movement, payouts, or
+order execution. The W.A.S.T.E indicator now explicitly includes the full
+acronym during no-edge cycles as
+`Watch > Analyze > Strategize > Test (skipped) > Execute (skipped) > No Trade`.
+That keeps Test and Execute visible without pretending the null gate or order
+dispatch actually ran when Strategize produced no tradable candidate. Browser
+smoke on `/?page=dashboard` showed the header at `LIVE`/`No Trade` after the
+early stage probe, the trace containing both `Test (skipped)` and
+`Execute (skipped)`, and after hydration the paper route table still showed
+`US30` and `NAS100` rows. The same smoke showed zero disabled controls, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Verification: UI `npm run build` passed; focused dashboard API tests remained
+green (`10 passed, 18 deselected`). Safety boundary unchanged: this is
+dashboard liveness/display work only, not live orders, deposits, withdrawals,
+raw bank/card storage, broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex fast daily-bundle split and full W.A.S.T.E trace completed.
+`/api/forex/dashboard/fast` no longer inlines the full daily proof route/sizing
+tables. The backend now returns a `dailyBundle.summary_only` packet for first
+paint: proof status, dates, counts, account/risk headline values, and preserved
+row counts remain available, while `symbol_decisions` and `sizing` are empty
+in the fast packet. The full evidence remains available through
+`/api/forex/bundle/daily`; `dashboardApi.ts` hydrates that full bundle after
+the shell/fast load, and `DashboardEvidencePanels` also hydrates the full
+bundle directly when it sees a summary-only packet. Startup cache writes are
+also summary-only so cached proof rows cannot re-bloat first paint. Live API
+measurement after restart showed `/dashboard/shell` about `3.0 KB`,
+`/dashboard/fast` about `14.5 KB`, `/bundle/daily` about `7.1 KB`, and
+`/dashboard` about `14.5 KB`; the fast daily bundle now reports
+`summary_only: true`, `0` inline symbol rows, `2` symbol row count, `0` inline
+sizing rows, and `2` sizing row count, while `/bundle/daily` still returns the
+full two symbol rows and two sizing rows. The W.A.S.T.E header trace now shows
+the complete acronym honestly: when the cycle stops before a candidate reaches
+the null gate, the indicator renders
+`Watch > Analyze > Strategize > Test (skipped) > Execute (skipped) > No Trade`
+instead of pretending Test or Execute ran. Verification: focused dashboard API
+tests passed (`10 passed, 18 deselected`), UI `npm run build` passed, and
+browser smoke on `/?page=dashboard` showed `LIVE`, `No Trade`, the full skipped
+W.A.S.T.E trace, hydrated paper route rows for `US30` and `NAS100`, zero
+disabled controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console warnings/errors.
+Safety boundary unchanged: this is dashboard payload/display work only; it does
+not authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex staged fast-dashboard fetch completed.
+The browser-side dashboard hydrator no longer starts `/dashboard/shell` and
+`/dashboard/fast` at the same instant. `dashboardApi.ts` now applies the stale
+startup cache if present, fetches the tiny shell packet first for the live
+header, then waits `350ms` before starting the larger fast packet. Non-browser
+execution still awaits shell/fast deterministically for tests and server-side
+callers. This reduces startup contention without changing any trading,
+payment, broker, or owner-authority behavior. Verification: UI `npm run build`
+passed; startup `index-*.js` stayed about `162.44 kB`; the delayed
+`DashboardStateHydrator-*.js` chunk moved from about `5.63 kB` to about
+`5.70 kB`; `DashboardPage-*.js` stayed about `6.32 kB`; and
+`DashboardDeepOperations-*.js` stayed about `29.34 kB`. Endpoint timing check
+showed `/dashboard/shell` about `3.0 KB`, `/dashboard/fast` about `16.7 KB`,
+and `/dashboard` currently serving the fast-sized packet rather than a giant
+full aggregate. Browser smoke on `/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, account context, objective context,
+and the deep placeholder at load; after the staged/delayed mounts it showed
+verified-profit sweep, movement, paper route candidates, W.A.S.T.E controls,
+and owner-gated dry-run controls. The same smoke showed zero disabled controls,
+no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this frontend data-fetch staging work does not authorize
+live orders, deposits, withdrawals, raw bank/card storage, broker `ACCEPT`,
+payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex staged deep-dashboard mount completed.
+`DashboardPage.tsx` now waits `700ms` after the first Dashboard mount before
+starting the lazy `DashboardDeepOperations` controller chunk. This means the
+first Dashboard paint shows the live W.A.S.T.E header, account/risk/proof
+cards, objective cards, and lightweight sync/owner-gated messaging without
+immediately competing with the 29.34 kB deep operations controller parse. The
+deep controls still hydrate shortly after first paint; this is a performance
+staging change, not an authority rewrite. Verification: UI `npm run build`
+passed; `DashboardPage-*.js` is about `6.32 kB`, `DashboardDeepOperations-*.js`
+remains about `29.34 kB`, and startup `index-*.js` remains about `162.44 kB`.
+Browser timing smoke on `/?page=dashboard` showed, before the delayed mount,
+`LIVE`, `No Trade`, `Watch > Analyze > Strategize > No Trade`, account
+context, objective context, and no verified-profit sweep / broker-truth deep
+controls; after the delayed mount it showed the sweep, broker-truth,
+auto-halt, MT5, W.A.S.T.E dry-run, route, movement, and live-operability
+controls. The same smoke showed zero disabled controls, no `API unreachable`,
+no fixture text, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console
+errors. Safety boundary unchanged: this frontend staging work does not
+authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex startup cache reader/writer split completed.
+The synchronous Dashboard startup cache path has been trimmed so the root app
+only imports the safe read/merge/sanitize path. A new delayed
+`dashboardStartupCacheWriter.ts` module owns writing fresh shell/fast packets
+after the `DashboardStateHydrator` chunk loads, while
+`dashboardStartupCache.ts` remains the startup reader and sanitizer. This keeps
+the immediate app path focused on safe reuse of the last known context and
+pushes cache-write code back behind the delayed API hydrator. Verification:
+UI `npm run build` passed; startup `index-*.js` moved from about `162.59 kB`
+to about `162.44 kB`; `dashboardStartupCache.ts` source in the startup map
+moved from about `3,778` source bytes to about `3,279`; the delayed
+`DashboardStateHydrator-*.js` chunk is about `5.63 kB` and now includes the
+about `604` source-byte writer module. Browser smoke on `/?page=dashboard`
+showed `LIVE`, `No Trade`, and `Watch > Analyze > Strategize > No Trade`;
+account context was present early; after hydration it showed
+`Operator Briefing`, `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `PAYMENT SETUP PENDING`, `Check Sweep`,
+`Confirm Payout`, auto-halt controls, `Check MT5 Data`,
+`Run Real Candle Probe`, `Run WASTE Dry Run`, `Accept Dry Run`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: cached W.A.S.T.E remains sanitized to stale/syncing and
+this split does not authorize live orders, deposits, withdrawals, raw
+bank/card storage, broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex startup dashboard cache seed completed.
+The root app can now seed its first Dashboard/Shell state from the same
+short-lived sanitized dashboard packet cache that the delayed hydrator uses.
+A new `dashboardStartupCache.ts` module owns the cache key, TTL, read path,
+write path, and startup merge helper. `App.tsx` reads that packet
+synchronously during startup, so the first render can reuse the last safe
+readiness/daily-bundle/context packet while the live shell/fast API refresh
+loads. `dashboardApi.ts` now shares the same sanitized reader/writer instead
+of keeping cache logic private inside the delayed hydrator. Safety detail:
+cached W.A.S.T.E state is sanitized on both read and write to `running: false`,
+`status: STALE`, and `stage/current_stage: syncing`, with an explicit claim
+boundary saying the cache does not assert the loop is live and does not
+authorize live trading, broker `ACCEPT`, `LICENSED` status, deposits,
+withdrawals, bank/card movement, payouts, or order execution. Verification:
+UI `npm run build` passed; startup `index-*.js` moved from about `161.08 kB`
+to about `162.59 kB` because it now carries the small synchronous cache reader;
+the delayed `DashboardStateHydrator-*.js` chunk moved from about `6.83 kB` to
+about `5.47 kB`; `dashboardStartupCache.ts` is about `3,778` source bytes in
+the startup map; `DashboardPage-*.js` stayed about `6.19 kB`. Browser smoke on
+`/?page=dashboard` showed `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade`; account context was present early;
+after hydration it showed `Operator Briefing`, `Objective`,
+`AI Performance Fee`, `Verified Profit Sweep`, `PAYMENT SETUP PENDING`,
+`Check Sweep`, `Confirm Payout`, auto-halt controls, `Check MT5 Data`,
+`Run Real Candle Probe`, `Run WASTE Dry Run`, `Accept Dry Run`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Note:
+browser automation did not expose direct `localStorage` reads in its read-only
+evaluation scope, so cache contents were verified by source/build behavior and
+runtime hydration, not by reading the storage key from the page. Safety
+boundary unchanged: this startup cache work does not authorize live orders,
+deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or
+`LICENSED` status.
+
+2026-07-01 CAS Forex deep dashboard controller split completed.
+The Dashboard first-screen page no longer carries the deep operations
+controller, deep API imports, polling timers, owner-confirm state, and
+below-fold action handlers in `DashboardPage.tsx`. A new lazy
+`DashboardDeepOperations` component now owns the verified-profit sweep,
+payment setup, auto-halt, broker-truth/W.A.S.T.E, evidence panels, live
+operability, broker-sync readiness, dry-run review, W.A.S.T.E handoff, and
+compound-add controller state. `DashboardPage.tsx` keeps only the immediate
+operator surface: briefing fallback, account/risk/proof cards, objective pace,
+AI performance-fee card, and a read-only deep-operations placeholder. This is
+a loading/controller split, not an authority rewrite. Verification: UI
+`npm run build` passed; the Dashboard page chunk moved from about `32.60 kB`
+after the sweep panel split to about `6.19 kB`; the delayed
+`DashboardDeepOperations-*.js` controller chunk is about `29.34 kB`; source map
+inspection shows `DashboardPage.tsx` source in its page chunk moved from about
+`71,064` source bytes to about `7,009`, with the extracted controller isolated
+at about `58,665` source bytes plus `dashboardDeepApi.ts` at about `10,347`
+source bytes in the delayed chunk. Browser smoke on `/?page=dashboard` showed
+`LIVE`, `No Trade`, and `Watch > Analyze > Strategize > No Trade`; confirmed
+the account/risk/proof cards were present; after hydration it showed
+`Operator Briefing`, `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `PAYMENT SETUP PENDING`, `Check Sweep`,
+`Confirm Payout`, auto-halt controls, `Check MT5 Data`,
+`Run Real Candle Probe`, `Run WASTE Dry Run`, `Accept Dry Run`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this frontend loading/controller split does not authorize
+live orders, deposits, withdrawals, raw bank/card storage, broker `ACCEPT`,
+payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex verified-profit sweep panel split completed.
+The Dashboard page no longer statically renders the verified-profit sweep,
+payment setup, live-recovery, and auto-halt operations stack inside
+`DashboardPage.tsx`. A new lazy `DashboardSweepOpsPanel` component now owns
+that render/formatting surface and lazy-loads the existing
+`DashboardBrokerTruthOpsPanel` underneath it for MT5, W.A.S.T.E, broker-truth,
+live-order dry-run, and compound-add controls. The parent Dashboard still owns
+the state, polling, owner-confirm flags, and action handlers, so this is a
+loading/render split rather than a behavior or authority rewrite. Verification:
+UI `npm run build` passed; the Dashboard page chunk moved from about
+`40.35 kB` after the broker-truth/W.A.S.T.E split to about `32.60 kB`; the new
+`DashboardSweepOpsPanel-*.js` delayed chunk is about `11.65 kB`; source map
+inspection shows `DashboardPage.tsx` source in its chunk moved from about
+`84,647` source bytes to about `71,016`, with the extracted sweep panel
+isolated at about `17,582` source bytes. Browser smoke on
+`/?page=dashboard` showed the early header reading `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade`; after hydration it showed
+`Operator Briefing`, `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `PAYMENT SETUP PENDING`, `Check Sweep`,
+`Confirm Payout`, auto-halt controls, `Check MT5 Data`,
+`Run Real Candle Probe`, `Run WASTE Dry Run`, `Accept Dry Run`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this frontend loading/render split does not authorize live
+orders, deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts,
+or `LICENSED` status.
+
+2026-07-01 CAS Forex broker-truth/W.A.S.T.E operations split completed.
+The largest remaining below-fold Dashboard render stack has been moved out of
+`DashboardPage.tsx`. A new lazy `DashboardBrokerTruthOpsPanel` component now
+owns the render/formatting surface for MT5 data health, W.A.S.T.E loop health,
+real-candle probe, broker-truth monitor, live-order dry-run review, and
+compound-add review. The parent Dashboard still owns the existing state,
+polling, owner-confirm flags, and action handlers, so this is a render/loading
+split rather than a behavior rewrite. Verification: UI `npm run build` passed;
+production output now emits `DashboardBrokerTruthOpsPanel-*.js` as its own
+about `19.27 kB` delayed chunk; the Dashboard page chunk moved from about
+`53.14 kB` after the lazy operator briefing split to about `40.35 kB`; source
+map inspection shows `DashboardPage.tsx` source in its chunk moved from about
+`107,740` source bytes to about `84,647`, with the extracted panel isolated at
+about `29,434` source bytes. Browser smoke on `/?page=dashboard` showed the
+early header still reading `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade`; after hydration it showed
+`Operator Briefing`, `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `Check MT5 Data`, `Run Real Candle Probe`, broker
+truth monitor controls, `Run WASTE Dry Run`, `Accept Dry Run`, compound-add,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this frontend loading/render split does not authorize live
+orders, deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts,
+or `LICENSED` status.
+
+2026-07-01 CAS Forex lazy operator briefing split completed.
+The Dashboard page no longer statically carries `OperatorBriefingCard` and its
+one-call polling UI inside the main Dashboard chunk. `DashboardPage.tsx` now
+lazy-loads the operator briefing behind a small read-only fallback that says
+the cockpit snapshot is syncing, while preserving owner-gated wording for
+orders and payment setup. Verification: UI `npm run build` passed; production
+output now emits `OperatorBriefingCard-*.js` as its own about `2.01 kB` chunk;
+the Dashboard page chunk moved from about `53.92 kB` after the previous split
+work to about `53.14 kB`; source-map inspection confirms
+`OperatorBriefingCard.tsx` is no longer inside the Dashboard page map. Browser
+smoke on `/?page=dashboard` showed the hydrated dashboard still reading
+`LIVE`, `No Trade`, and `Watch > Analyze > Strategize > No Trade`, with
+`Operator Briefing`, `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `Real-Time Movement Scaffold`,
+`Paper Route Candidates`, and `Live Operability Checklist` present, zero
+disabled controls, no operator-briefing unavailable state, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this is frontend loading/display work only; it does not
+authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status. Next biggest dashboard performance
+target remains extracting the deep operations/sweep/auto-halt/W.A.S.T.E
+controls block out of `DashboardPage.tsx` into a delayed component.
+
+2026-07-01 CAS Forex instant W.A.S.T.E badge slimming completed.
+The startup W.A.S.T.E fallback badge no longer carries duplicated stage maps
+and stage validation tables in the first app bundle. `AiActivityInstantBadge`
+now uses one compact `STAGE_TEXT` table plus the existing trace helpers, so the
+first paint still shows the honest loop state while the full polling
+`AiActivityIndicator` hydrates separately. Verification: UI `npm run build`
+passed; the production startup `index-*.js` moved from about `161.54 kB` after
+the stale W.A.S.T.E cache honesty fix to about `161.08 kB`, and the source-map
+entry for `AiActivityInstantBadge.tsx` moved from `5,266` source bytes to
+`4,493`. Browser smoke on `/?page=dashboard` showed the hydrated dashboard
+still reading `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade`, with `Objective`,
+`AI Performance Fee`, `Verified Profit Sweep`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist` present, zero disabled controls, no
+`API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this is frontend loading/display work only; it does not
+authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex stale W.A.S.T.E cache honesty fix completed.
+The frontend stale dashboard packet cache no longer replays an old W.A.S.T.E
+heartbeat as `LIVE`. `dashboardApi.ts` now sanitizes cached `wasteLoop` through
+`staleWasteLoopForCache()`, preserving observational context while forcing
+`running: false`, `status: STALE`, and `current_stage: syncing` until the fresh
+shell/fast API heartbeat confirms the real loop state. The cached W.A.S.T.E
+packet also carries a claim boundary saying the stale cache does not assert the
+loop is live and does not authorize live trading, broker `ACCEPT`, `LICENSED`
+status, deposits, withdrawals, bank/card movement, payouts, or order execution.
+Verification: UI `npm run build` passed; production `index-*.js` stayed about
+`161.54 kB` because this logic lives in the delayed
+`DashboardStateHydrator-*.js` chunk, now about `6.83 kB`; source inspection
+confirmed cached W.A.S.T.E is rewritten to stale/syncing and no longer copied
+raw; `git diff --check` for `dashboardApi.ts` passed. Browser smoke on
+`/?page=dashboard` showed fresh data still taking over correctly with `LIVE`,
+`No Trade`, and `Watch > Analyze > Strategize > No Trade`; after hydration it
+still showed `Objective`, `AI Performance Fee`, `Verified Profit Sweep`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no `API unreachable`,
+no local startup fallback strip, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged and tightened: this is frontend read-path cache honesty work
+only; it does not authorize live orders, deposits, withdrawals, raw bank/card
+storage, broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex stale dashboard packet cache completed.
+The delayed dashboard data loader now keeps a short-lived local stale packet so
+the cockpit can reuse the last good shell/fast dashboard surface while fresh
+API packets are fetched. `dashboardApi.ts` stores only a sanitized allowlist:
+`uiReadiness`, `dailySchedule`, `dailyBundle`, `wasteLoop`, `runtimeGates`,
+`autoHalt`, `brokerTruthMonitor`, `wasteRealCandleProbe`, and
+`dashboardMeta`. It deliberately does not cache account ledger, movement
+stream, live-money progression, payout recovery, owner-control review packets,
+or raw bank/card/payment fields. The cache has a 5-minute TTL and is wrapped in
+storage try/catch so private-mode or unavailable browser storage falls back to
+normal live fetch. Verification: UI `npm run build` passed; production
+`index-*.js` stayed about `161.54 kB` because the cache lives in the delayed
+`DashboardStateHydrator-*.js` chunk, now about `6.34 kB`; source inspection
+confirmed the cache allowlist and excluded sensitive/money-movement surfaces;
+`git diff --check` for `dashboardApi.ts` passed. Browser smoke on
+`/?page=dashboard` showed the early header reading `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade`; after hydration it still showed
+`Objective`, `AI Performance Fee`, `Verified Profit Sweep`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no `API unreachable`,
+no local startup fallback strip, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Note:
+the browser automation sandbox does not expose direct storage inspection, so
+storage contents were verified by source allowlist/build/runtime behavior
+rather than reading the browser storage key directly. Safety boundary unchanged:
+this is frontend read-path cache work only; it does not authorize live orders,
+deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or
+`LICENSED` status.
+
+2026-07-01 CAS Forex lazy dashboard-state hydrator completed.
+The root app no longer carries the dashboard hydration effect and loader logic
+inside `App.tsx`. A new no-UI `DashboardStateHydrator` component lazy-loads
+after the lightweight shell renders, owns the shell/fast dashboard state
+refresh effect, and calls the existing `loadDashboardState()` packet loader.
+This keeps the first paint focused on the W.A.S.T.E header and startup shell
+while the dashboard data machinery lives in its own delayed chunk. Verification:
+UI `npm run build` passed; production output now emits
+`DashboardStateHydrator-*.js` as its own about `5.42 kB` chunk; startup
+`index-*.js` moved from about `161.84 kB` after the boot-fallback slimming
+pass to about `161.54 kB`. Source-map inspection confirms neither
+`DashboardStateHydrator.tsx` nor `dashboardApi.ts` is present in the first
+`index-*.js` map. `git diff --check` for `App.tsx` and
+`DashboardStateHydrator.tsx` passed with the normal Windows CRLF warning only.
+Browser smoke on `/?page=dashboard` showed the early header already reading
+`LIVE`, `No Trade`, and `Watch > Analyze > Strategize > No Trade`; after
+hydration it still showed `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `Real-Time Movement Scaffold`,
+`Paper Route Candidates`, and `Live Operability Checklist`, with zero disabled
+controls, no `API unreachable`, no local startup fallback strip, no fixture
+text, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors.
+Safety boundary unchanged: this is frontend loading/read-path work only; it
+does not authorize live orders, deposits, withdrawals, raw bank/card storage,
+broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex dashboard boot-fallback slimming completed.
+The root app no longer statically imports the larger `DashboardInstantShell`
+component just to serve as the Dashboard Suspense fallback. `App.tsx` now uses
+a tiny inline `DashboardBootFallback` that keeps the same operator-facing
+meaning during the brief Dashboard chunk load: Dashboard is syncing or the
+W.A.S.T.E loop is live with the current stage. This removes a dashboard-only
+fallback module from the first app parse while preserving the fast live header.
+Verification: UI `npm run build` passed; production `index-*.js` moved from
+about `163.04 kB` after the deferred dashboard API-loader pass to about
+`161.84 kB`; source-map inspection confirms `DashboardInstantShell.tsx` is no
+longer present in the first `index-*.js` map. `git diff --check` for
+`App.tsx` passed with the normal Windows CRLF warning only. Browser smoke on
+`/?page=dashboard` showed the live header still reading `LIVE`, `No Trade`,
+and `Watch > Analyze > Strategize > No Trade`; after hydration it still showed
+`Objective`, `AI Performance Fee`, `Verified Profit Sweep`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no `API unreachable`,
+no local startup fallback strip, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this is frontend fallback/loading work only; it does not
+authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex deferred dashboard API loader completed.
+The root app no longer statically imports the dashboard shell/fast API hook on
+the first app parse. `App.tsx` now renders from the lightweight startup shell,
+then dynamically imports `dashboardApi.ts` after first paint; `dashboardApi.ts`
+now exposes a reusable `loadDashboardState()` packet loader so the existing
+hook behavior is preserved for any later callers. This moves the dashboard
+fetch/merge client and the shared `apiCore` fetch helper out of the startup
+bundle while keeping the same shell/fast hydration sequence. Verification: UI
+`npm run build` passed and production output now emits `dashboardApi-*.js`
+as its own about `5.60 kB` chunk plus `apiCore-*.js` as its own about
+`2.37 kB` chunk; startup `index-*.js` moved from about `169.70 kB` after the
+W.A.S.T.E indicator split to about `163.04 kB`. Source-map inspection confirms
+`dashboardApi.ts` and `apiCore.ts` are no longer present in the first
+`index-*.js` map. `git diff --check` for the touched app/API-loader files
+passed with the normal Windows CRLF warning only. Browser smoke on
+`/?page=dashboard` showed the early shell already reading `LIVE`, `No Trade`,
+and `Watch > Analyze > Strategize > No Trade`; after hydration it still showed
+`Objective`, `AI Performance Fee`, `Verified Profit Sweep`,
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, and
+`Live Operability Checklist`, with zero disabled controls, no `API unreachable`,
+no local startup fallback strip, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this is frontend loading/read-path work only; it does not
+authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex WASTE activity-indicator hydration split completed.
+The Shell no longer statically imports the full W.A.S.T.E activity indicator
+polling stack on first app parse. `Shell.tsx` now renders a tiny
+`AiActivityInstantBadge` fallback from the first-paint WASTE packet and
+lazy-loads the full `AiActivityIndicator` polling component behind it. The
+operator still sees the honest `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade` trace immediately, while the heavier
+heartbeat polling code hydrates as its own chunk. Verification: UI
+`npm run build` passed and production output now emits
+`AiActivityIndicator-*.js` as its own about `6.15 kB` chunk; the startup
+`index-*.js` moved from about `172.66 kB` after the prior startup fallback
+slimming pass to about `169.70 kB`; the Dashboard page stayed about
+`53.86 kB`. `git diff --check` for the touched indicator/shell files passed
+with the normal Windows CRLF warning only. Browser smoke on `/?page=dashboard`
+showed the header indicator as `No Trade`, `LIVE`, and
+`Watch > Analyze > Strategize > No Trade`; after hydration it still showed
+zero disabled controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, no console errors, and the
+Dashboard support panels (`Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `Real-Time Movement Scaffold`,
+`Paper Route Candidates`, and `Live Operability Checklist`) present. Safety
+boundary unchanged: this is frontend hydration/display work only; it does not
+authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex startup fallback slimming completed.
+The first app bundle no longer carries the full owner-control/authority
+startup fallback object before the API shell responds. `App.tsx` now keeps the
+startup `DashboardState` skeletal: only the nested readiness, schedule,
+decision, and risk fields that first-paint Dashboard/Proof/Trade surfaces can
+touch are present, while live authority and owner-control details arrive from
+the real shell/fast dashboard API packets. Verification: UI `npm run build`
+passed; production `index-*.js` moved from about `175.58 kB` before the recent
+startup/dashboard slimming passes to about `172.66 kB`, while the already-split
+Dashboard page stayed about `53.86 kB`; `git diff --check` for `App.tsx`
+passed with the normal Windows CRLF warning only. Browser smoke on
+`/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, paper/demo mode visible,
+proof-pending/ready status visible, then `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, `Real-Time Movement Scaffold`,
+`Paper Route Candidates`, and `Live Operability Checklist` present after
+hydration. The same smoke showed zero disabled controls, no `API unreachable`,
+no fixture text, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console
+errors. Safety boundary unchanged: this is frontend startup-state slimming
+only; it does not authorize live orders, deposits, withdrawals, raw bank/card
+storage, broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex dashboard evidence/route lazy chunk completed.
+The below-fold dashboard evidence block has been extracted from
+`DashboardPage.tsx` into `DashboardEvidencePanels.tsx` and is now lazy-loaded
+behind a compact `Evidence + Route Panels` fallback. The moved block includes
+the real-time movement scaffold, paper route candidates, daily summary, next
+action, strategy leads, broker/demo reconciliation, and evidence-chain health.
+Those tables still hydrate after the live cockpit is visible, but they no
+longer ride the first Dashboard page parse. Verification: UI `npm run build`
+passed; production output now emits `DashboardEvidencePanels-*.js` as its own
+about `11.67 kB` chunk; the Dashboard page chunk moved from about `63.70 kB`
+to about `53.86 kB`; `git diff --check` for the touched dashboard files
+passed with the normal Windows CRLF warning only. Browser smoke on
+`/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, the operator briefing populated,
+the evidence/route fallback or hydrated panel present early, then
+`Real-Time Movement Scaffold`, `Paper Route Candidates`, `Strategy Leads`,
+`Broker/Demo Account Reconciliation`, and `Evidence Chain Health` present
+after hydration, plus `Objective`, `AI Performance Fee`,
+`Verified Profit Sweep`, and `Live Operability Checklist` still present. The
+same smoke showed zero disabled controls, no `API unreachable`, no fixture
+text, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors.
+Safety boundary unchanged: this is frontend module-loading/display work only;
+it does not authorize live orders, deposits, withdrawals, raw bank/card
+storage, broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex dashboard live-operability lazy chunk completed.
+The below-fold `Live Operability Checklist` has been extracted from
+`DashboardPage.tsx` into `LiveOperabilityPanel.tsx` and is now lazy-loaded
+behind a compact owner-gated fallback. The checklist behavior stays the same:
+Default/Broker Sync mode switching, broker-synced paper risk preview, gate
+chips, and owner-facing next actions remain intact, but that review surface no
+longer rides the first Dashboard page parse. Verification: UI `npm run build`
+passed; production output now emits `LiveOperabilityPanel-*.js` as its own
+about `6.07 kB` chunk; the Dashboard page chunk moved from about `67.56 kB`
+to about `63.70 kB`; `git diff --check` for the touched dashboard files
+passed with the normal Windows CRLF warning only. Browser smoke on
+`/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, the operator briefing populated,
+`Live Operability Checklist` hydrated later with `Broker Sync`,
+`PAYMENT SETUP PENDING`, and owner-gated language visible, zero disabled
+controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Delayed
+smoke still showed `Objective`, `AI Performance Fee`, `Verified Profit Sweep`,
+and `Paper Route Candidates`. Safety boundary unchanged: this is frontend
+module-loading/display work only; it does not authorize live orders, deposits,
+withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or `LICENSED`
+status.
+
+2026-07-01 CAS Forex dashboard objective/support-card lazy chunks completed.
+The Dashboard no longer statically imports `ObjectivePaceCard` or
+`IncentiveLedgerCard` on the first page module. `DashboardPage.tsx` now
+lazy-loads those support cards behind a compact objective/fee fallback, keeping
+the first Dashboard parse focused on the live WASTE header, top cockpit, and
+operator briefing before below-fold supporting cards hydrate. Verification: UI
+`npm run build` passed; production output now emits `ObjectivePaceCard-*.js`
+as its own about `2.31 kB` chunk and `IncentiveLedgerCard-*.js` as its own
+about `1.66 kB` chunk; the Dashboard page chunk moved from about `70.21 kB`
+to about `67.56 kB`; `git diff --check` for `DashboardPage.tsx` passed with
+the normal Windows CRLF warning only. Browser smoke on `/?page=dashboard`
+showed `LIVE`, `No Trade`, `Watch > Analyze > Strategize > No Trade`, the
+operator briefing populated, objective/fee support present early and fully
+hydrated later, zero disabled controls, no `API unreachable`, no fixture text,
+no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Delayed
+smoke still showed `Verified Profit Sweep`, `Paper Route Candidates`, and
+`Live Operability`. Safety boundary unchanged: this is frontend
+module-loading/display work only; it does not authorize live orders, deposits,
+withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or `LICENSED`
+status.
+
+2026-07-01 CAS Forex dashboard below-fold spark-chart lazy chunk completed.
+The Dashboard no longer statically imports the small `SparkChart` component used
+only inside the delayed `Paper Route Candidates` table. `DashboardPage.tsx` now
+lazy-loads that chart inside the already staged below-fold render path, keeping
+the first Dashboard page module focused on the live header/top cockpit. This is
+a small split, but it continues the same rule: below-fold visuals should not
+ride the first live Dashboard parse. Verification: UI `npm run build` passed;
+production output now emits `SparkChart-*.js` as its own about `0.70 kB` chunk;
+the Dashboard page chunk moved from about `70.58 kB` to about `70.21 kB`;
+`git diff --check` for `DashboardPage.tsx` passed with the normal Windows CRLF
+warning only. Browser smoke on `/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, the operator briefing populated,
+zero disabled controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Delayed smoke
+showed `Paper Route Candidates`, `Verified Profit Sweep`, `Live Operability`,
+and compound-add content still present, with two rendered spark SVG polylines in
+the route-candidate table. Safety boundary unchanged: this is frontend
+module-loading/display work only; it does not authorize live orders, deposits,
+withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or `LICENSED`
+status.
+
+2026-07-01 CAS Forex dashboard deep-API lazy chunk completed.
+`DashboardPage.tsx` no longer statically imports the deep dashboard operations
+API client. The page now uses a cached dynamic import for `dashboardDeepApi.ts`,
+so first Dashboard parse/render can happen before the API client for delayed
+below-fold controls is fetched and evaluated. The existing staged calls and
+owner-gated buttons keep the same behavior; only the module-loading path
+changed. Verification: UI `npm run build` passed; production output now emits
+`dashboardDeepApi-*.js` as its own about `4.66 kB` chunk; the Dashboard page
+chunk moved from about `72.15 kB` to about `70.58 kB`; `git diff --check` for
+`DashboardPage.tsx` passed with the normal Windows CRLF warning only. Browser
+smoke on `/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, the operator briefing populated,
+zero disabled controls, no `API unreachable`, no fixture text, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Follow-up
+smoke after the staged render showed `Verified Profit Sweep`, `Live Operability`,
+and compound-add content present. Safety boundary unchanged: this is frontend
+module-loading/read-path work only; it does not authorize live orders, deposits,
+withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or `LICENSED`
+status.
+
+2026-07-01 CAS Forex operator-briefing startup prewarm completed.
+The API startup path now warms the operator-briefing cache alongside the other
+hot read-only cockpit packets. `operator_briefing.py` exposes a
+`start_operator_briefing_cache_refresh()` hook that starts its local stale-first
+cache worker, and `api/server.py` calls it from `_start_startup_route_cache_refreshes()`
+with its own result key. This means the Dashboard's top briefing card can read a
+fresh cached briefing immediately after backend startup instead of making the
+first screen pay for the heavier evidence read. Verification: `python -m
+py_compile api\routes\operator_briefing.py api\server.py
+tests\test_settings_api_surface.py tests\test_operator_briefing_route.py`
+passed; `python -m pytest tests\test_settings_api_surface.py
+tests\test_operator_briefing_route.py -q` passed (`33 passed`, two FastAPI
+startup deprecation warnings); UI `npm run build` passed; the API was restarted
+on `127.0.0.1:8765`; direct `/api/forex/operator-briefing` returned
+`cache_status: fresh`, `loop_health_status: running`, and `cycles_today: 266`;
+browser smoke on `/?page=dashboard` showed the operator briefing populated as
+`RUNNING`, `LIVE`, `No Trade`, `Watch > Analyze > Strategize > No Trade`, zero
+disabled controls, no `API unreachable`, no fixture text, no visible
+`NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, no loaded broad
+`/assets/api-*.js` chunk on the Dashboard smoke path, and no console errors.
+Safety boundary unchanged: this is read-only startup/cache work only; it does
+not authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex operator-briefing narrow client split completed.
+The top Dashboard `OperatorBriefingCard` no longer imports the broad
+`data/api.ts` client just to call `/api/forex/operator-briefing`. A new narrow
+`operatorBriefingApi.ts` carries only the operator-briefing response type and
+fetcher, and both `OperatorBriefingCard.tsx` and `QuickStartPage.tsx` now use
+that narrow module. The backend operator-briefing route already has a
+stale-first cache/warming path, so this pass finishes the matching frontend
+split for the immediate top-card path. Verification: UI `npm run build` passed
+and emitted a tiny `operatorBriefingApi` chunk of about `0.19 kB`; the shared
+`api-*.js` chunk moved from about `15.30 kB` to about `15.22 kB`; Dashboard
+remained about `72.15 kB`; `python -m py_compile
+api\routes\operator_briefing.py tests\test_operator_briefing_route.py` passed;
+`python -m pytest tests\test_operator_briefing_route.py -q` passed
+(`6 passed`); browser smoke on `/?page=dashboard` showed the operator briefing
+card populated as `RUNNING`, the early `Deep Operations` placeholder, then the
+restored `VERIFIED PROFIT SWEEP`, with no loaded `/assets/api-*.js` resource
+on the Dashboard smoke path. The same smoke showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, zero disabled buttons, no
+`API unreachable`, no fixture text, no visible `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this is frontend client-splitting/read-path work only; it
+does not authorize live orders, deposits, withdrawals, raw bank/card storage,
+broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex dashboard staged-render deferral completed.
+The Dashboard now keeps the top live cockpit immediate and defers the large
+below-fold operational block until after first paint. `DashboardPage.tsx` waits
+`1.8 s` before rendering the heavy Verified Profit Sweep, movement scaffold,
+route candidates, strategy leads, reconciliation, evidence health, and live
+operability panels. During that short window it shows a compact `Deep
+Operations` placeholder with `LIVE HEADER ACTIVE`, `PAYMENT SETUP PENDING`,
+`OWNER GATED`, and `READ ONLY` status, so the user sees that the app is alive
+without forcing all deep tables/buttons to render in the same first pass. The
+compound-add review split from the prior pass remains lazy and independently
+delayed. Verification: UI `npm run build` passed; `git diff --check` passed
+for the touched frontend files with normal CRLF warnings only. Production build
+sizes after the staged-render patch: startup `index` about `175.54 kB`,
+Dashboard about `72.14 kB`, shared `api-*.js` about `15.30 kB`, and
+`CompoundAddReviewPanel` about `9.79 kB`. Browser smoke on `/?page=dashboard`
+showed the immediate Dashboard body containing the `Deep Operations` placeholder
+while still showing the header `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade`; later probes showed
+`VERIFIED PROFIT SWEEP`, `LIVE OPERABILITY CHECKLIST`, and the `COMPOUND ADD`
+panel restored. The same smoke showed zero disabled buttons, no
+`API unreachable`, no fixture text, no visible `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Safety
+boundary unchanged: this is frontend render scheduling/read-path work only; it
+does not authorize live orders, deposits, withdrawals, raw bank/card storage,
+broker `ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex dashboard deep API split / compound-add deferral completed.
+`DashboardPage.tsx` no longer imports the broad `data/api.ts` runtime surface
+for its deep dashboard controls. A new narrow `dashboardDeepApi.ts` carries only
+the runtime calls used by the Dashboard page, while the existing all-purpose
+API client remains available to the other pages. The below-fold
+`CompoundAddReviewPanel` is now a lazy chunk and is not rendered until a
+`4 s` delay; its own API hydration remains delayed to `15 s`, so compound-add
+review code and requests no longer compete with the first live dashboard paint.
+Verification: UI `npm run build` passed; the Dashboard page chunk moved from
+about `77.03 kB` before this split to about `71.19 kB`; the compound-add panel
+is emitted as its own `9.79 kB` chunk; the shared `api-*.js` chunk dropped from
+about `18.04 kB` to about `15.30 kB`; `git diff --check` passed for the
+touched frontend files with normal CRLF warnings only. Browser smoke on
+`/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, zero disabled buttons, no
+`API unreachable`, no fixture text, no visible `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. The early
+browser probes showed `Compound-add review queued...`, and a later probe showed
+the real `COMPOUND ADD` panel after the delay. Safety boundary unchanged: this
+is frontend startup/read-path work only; it does not authorize live orders,
+deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or
+`LICENSED` status.
+
+2026-07-01 CAS Forex dashboard instant shell / assistant deferral completed.
+The dashboard route now has a real Suspense fallback instead of a generic
+blank loading block. `DashboardInstantShell.tsx` renders a compact live shell
+from the already-loaded dashboard state while the heavier Dashboard page chunk
+finishes loading, so slow module loads can still show WASTE state, proof-day
+progress, account P/L, and `PAYMENT SETUP PENDING` immediately. The floating
+assistant is now lazy-loaded and mounted after a `1.2 s` delay, which keeps its
+chat code out of the startup path and leaves first paint to the WASTE/dashboard
+shell. Verification: UI `npm run build` passed; the production startup
+`index` chunk is now about `175.5 kB`, with `FloatingAssistant` emitted as its
+own `5.46 kB` chunk and the heavier API client still separated at about
+`18.0 kB`; `git diff --check` passed for the touched frontend files with
+normal CRLF warnings only; browser smoke on `/?page=dashboard` showed `LIVE`,
+`No Trade`, `Watch > Analyze > Strategize > No Trade`, zero disabled buttons,
+no `API unreachable`, no fixture text, no visible `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. The first
+browser probe saw the assistant absent, and the follow-up probe after the delay
+saw the assistant button present, confirming the deferral works. Safety
+boundary unchanged: this is frontend startup/display work only; it does not
+authorize live orders, deposits, withdrawals, raw bank/card storage, broker
+`ACCEPT`, payouts, or `LICENSED` status.
+
+2026-07-01 CAS Forex first-paint API split / GET preflight cleanup completed.
+The dashboard startup path is slimmer again. The shared API transport was split
+into `apiCore.ts`, and first-paint callers now use narrow modules:
+`dashboardApi.ts` for shell/fast dashboard hydration, `loopStatusApi.ts` for
+the WASTE activity indicator, and `assistantApi.ts` for the floating assistant.
+`App.tsx`, `AiActivityIndicator.tsx`, and `FloatingAssistant.tsx` no longer
+import the large `data/api.ts` surface just to render the shell. Routine GET
+requests also no longer send a JSON `Content-Type` header, so cross-origin
+reads do not trigger avoidable browser preflight handshakes; POST/DELETE JSON
+mutations still keep their JSON content header. Verification: UI
+`npm run build` passed; the production startup `index` chunk dropped from about
+`196.4 kB` to `178.5 kB`, and the heavy API client moved into a separate
+`api-*.js` chunk of about `18.0 kB`; `git diff --check` passed for the touched
+frontend files with normal CRLF warnings only; browser smoke on
+`/?page=dashboard` showed `LIVE`, `No Trade`,
+`Watch > Analyze > Strategize > No Trade`, zero disabled buttons, no
+`API unreachable`, no fixture text, no visible `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors. Same-browser
+dashboard first-ready timing improved from roughly `2.59 s` before the split to
+roughly `2.29 s` after it; the remaining delay appears dominated by dev-server
+page/module loading rather than the old giant dashboard aggregate. API trace
+after the GET cleanup showed normal `GET /api/forex/strategy/leads` entries
+without new `OPTIONS` preflight entries. Safety boundary unchanged: this is
+frontend startup/read-path work only; it does not authorize live orders,
+deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or
+`LICENSED` status.
+
+2026-07-01 CAS Forex PCBA warming-retry / red-label cleanup completed.
+The PCBA page no longer imports or renders a local fixture fallback while the
+live API is warming. It now starts from the shell PCBA packet only if the packet
+is the real `cas_forex_pcba_cockpit` kind, fetches
+`/api/forex/pcba/cockpit` directly, retries warming packets with a short
+backoff (`750 ms`, `1.5 s`, `3 s`, `5 s`, `8 s`), and shows `CONNECTING`,
+`API WARMING`, `API UNAVAILABLE`, or `LIVE API` instead of freezing on a
+placeholder. Empty loading/unavailable packets remain fail-closed and explicitly
+say they do not create broker `ACCEPT`, unlock live trading, move money, or
+mark anything `LICENSED`; visible PCBA `NOT LICENSED` production-claim chips
+continue to render as owner-facing `CLAIM PENDING`. Verification: UI
+`npm run build` passed; `git diff --check` passed for `PcbaPage.tsx` and this
+TODO with normal CRLF warnings only; browser smoke on `/?page=pcba` showed
+`LIVE API`, zero disabled buttons, no `API unreachable`, no fixture text, no
+visible `NOT LICENSED`, no
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, and no console errors; browser smoke
+on `/?page=dashboard` showed `LIVE`, `No Trade`, and
+`Watch > Analyze > Strategize > No Trade` in the WASTE indicator, with no
+fixture text or payment-not-licensed wording. Safety boundary unchanged: this
+is presentation/read-path reliability work only; it does not authorize live
+orders, deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts,
+or `LICENSED` status.
+
+2026-07-01 CAS Forex Decision History cold-read slimming completed.
+The Decision History page was the slowest route in the full-app smoke
+(`decision-history` took about `7.8 s` in the broad browser pass). Root cause:
+`/api/forex/agent-decision/history` sorted cycle-report paths but then parsed
+every saved cycle report before slicing to the requested limit. The route now
+passes `limit` into the disk loader, and the default loader slices newest
+paths before JSON parsing, so `limit=10` reads only the newest 10 cycle
+reports rather than all 55 currently on disk. Regression coverage now proves
+the default loader reads only the requested newest files. Verification:
+`python -m py_compile api\routes\agent_decision_history.py
+tests\test_agent_decision_history_route.py` passed; `python -m pytest
+tests\test_agent_decision_history_route.py -q` passed (`7 passed`, two FastAPI
+deprecation warnings); the API was restarted on `127.0.0.1:8765` with
+`C:\Python314\python.exe -m uvicorn api.server:app --host 0.0.0.0 --port
+8765`; `/api/forex/health` returned 200; warm direct timings after restart
+were roughly `80-221 ms` for `limit=10`, `105-123 ms` for `limit=25`, and
+`130-219 ms` for `limit=50`; browser smoke on
+`/?page=decision-history` reached content-ready state in `289 ms` after
+DOMContentLoaded, total navigation `1762 ms`, with no disabled buttons, no
+`API unreachable`, no fixture fallback, no visible `NOT LICENSED`, visible
+WASTE live state, and no console errors. Safety boundary unchanged: read-only
+history/explanation work only; no live orders, deposits, withdrawals, raw
+bank/card storage, broker `ACCEPT`, payouts, or `LICENSED` status were
+authorized.
+
+2026-07-01 CAS Forex dead-control explainer sweep completed.
+The remaining disabled controls found in live browser smoke were not
+Owner ACCEPT / Confirm buttons; they were two Dashboard `Recover Lease`
+buttons and two Settings notification test buttons. Those controls no longer
+sit gray/dead when no action is required. Dashboard recovery buttons stay
+clickable unless a recovery is already busy; when the WASTE or broker-truth
+supervisor lease is healthy, clicking them records an explicit
+`WASTE_LEASE_HEALTHY_NO_RECOVERY_NEEDED` or
+`BROKER_TRUTH_LEASE_HEALTHY_NO_RECOVERY_NEEDED` message instead of silently
+doing nothing. Settings `Send test push` and `Send test webhook` stay clickable
+with zero subscriptions and now explain that a push subscription or webhook URL
+must be added first. Verification: UI `npm run build` passed; `git diff
+--check` passed for `DashboardPage.tsx`,
+`NotificationSubscriptionPanel.tsx`, and `WebhookSubscriptionPanel.tsx` with
+normal CRLF warnings only; browser smoke on Dashboard, Settings, Trade, Proof,
+and PCBA showed `disabledCount: 0`, no `API unreachable`, no fixture fallback,
+no visible `NOT LICENSED`, no visible
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, visible WASTE live/no-trade state,
+and no console errors. Browser click checks confirmed `Send test push`
+produces the no-subscriptions setup message and Dashboard `Recover Lease`
+produces the healthy-lease message. Safety boundary unchanged: no live orders,
+deposits, withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or
+`LICENSED` status were authorized.
+
+2026-07-01 CAS Forex WASTE indicator cycle-trace completed.
+The always-visible WASTE activity indicator now keeps the main state honest
+(`LIVE` plus the current terminal stage such as `No Trade`) while also showing a
+compact latest-cycle trace when the backend exposes one, for example
+`Watch > Analyze > Strategize > No Trade`. The backend
+`/api/forex/waste-loop/stage` payload now carries `stage_trace` from both the
+process-local heartbeat and the isolated WASTE worker's compact durable cycle,
+so the UI does not fake a demo animation just to prove the runner is moving.
+Verification: `python -m py_compile api\routes\loop_stage.py
+cas_forex\loop_heartbeat.py tests\test_loop_heartbeat.py` passed;
+`python -m pytest tests\test_loop_heartbeat.py -q` passed (`7 passed`); and UI
+`npm run build` passed. Safety boundary unchanged: this is observational
+heartbeat/readout work only; it does not authorize live orders, deposits,
+withdrawals, bank/card movement, payouts, broker `ACCEPT`, or `LICENSED` status.
+
+2026-07-01 CAS Forex owner-pending presentation sweep completed.
+The UI no longer renders paper/demo live-money and PCBA/CJT pending states as
+visible `NOT LICENSED`, `CURRENTLY NOT LICENSED`, or
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED` phrases on the checked cockpit pages.
+Updated startup/fallback copy and stale static panels in App startup state,
+Proof, Adaptive, History, Ledger, Settings, Trade, Dashboard comments, and
+PCBA so owner/provider-gated capabilities display as `OWNER PENDING`,
+`PAYMENT SETUP PENDING`, `CLAIM PENDING`, or paper/demo standby language.
+Raw backend claim-status guards and mapper logic still preserve conservative
+claim statuses; this is a presentation/readability repair only. Verification:
+UI `npm run build` passed; `git diff --check` passed for the touched UI files
+with normal CRLF warnings only; browser smoke on Dashboard, Proof, Trade,
+Settings, History, Ledger, Adaptive, and PCBA showed no `API unreachable`, no
+fixture fallback, visible `PAPER / DEMO ACTIVE`, visible WASTE live/no-trade
+state, no console errors, and no visible `CURRENTLY NOT LICENSED` or
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`. Focused follow-up smoke on
+Dashboard, Settings, and PCBA showed no visible `NOT LICENSED` lines. Safety
+boundary unchanged: this does not authorize live orders, deposits,
+withdrawals, raw bank/card storage, broker `ACCEPT`, payouts, or `LICENSED`
+status.
+
+2026-07-01 CAS Forex dashboard deep-hydration stagger completed.
+The Dashboard no longer fires the full WASTE/live-order deep-evidence bundle in
+one parallel wave after first paint. The always-visible WASTE/broker-truth core
+status still hydrates early at `900 ms`, but the below-fold deep evidence now
+hydrates in separate lanes: MT5 market-data + real-candle probe at `6 s`,
+live-order dry-run + dry-run review at `9 s`, dispatch handoff + pilot
+promotion at `12 s`, and subsequent deep-evidence polling every `45 s` instead
+of every `30 s`. The Compound Add panel also moved its automatic three-endpoint
+hydration out of the same early wave; Dashboard now passes
+`autoHydrateDelayMs={15000}` while manual Refresh/Accept/Dispatch actions
+remain immediate. Verification: UI `npm run build` passed; `git diff --check`
+passed for `DashboardPage.tsx` and `CompoundAddReviewPanel.tsx` with only
+normal CRLF warnings; browser smoke at `3.5 s` on
+`http://127.0.0.1:5173/?page=dashboard` still showed `No Trade` / `LIVE`,
+visible `WASTE LOOP LIVE: NO TRADE`, visible `PAYMENT SETUP PENDING`, and no
+visible `NOT LICENSED`, `CURRENTLY NOT LICENSED`, or
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`. Live timing samples on API PID
+`60448`: `/api/forex/dashboard/shell`
+`140.5, 22.8, 7.7, 13.1, 12.6, 7.8` ms; `/api/forex/dashboard/fast`
+`17.2, 11.1, 12.4, 15.4, 11.5, 13.6` ms;
+`/api/forex/waste-loop-control/status/fast`
+`11.1, 11.7, 30.5, 7.7, 8.3, 11.6` ms;
+`/api/forex/broker-truth-monitor/status/fast`
+`38.6, 15.3, 30.5, 19.1, 15.5, 10.1` ms; and
+`/api/forex/waste-loop/stage` `22.1, 11.4, 18.0, 11.1, 23.0, 10.8` ms. Safety
+boundary unchanged: this is UI scheduling/read-path work only; it does not
+authorize live orders, deposits, withdrawals, bank/card movement, payouts,
+broker `ACCEPT`, or `LICENSED` status.
+
+2026-07-01 CAS Forex broker-truth fast-lane cache split completed.
+The dashboard's broker-truth monitor card no longer has to read even the tiny
+external-worker status directly on every hot poll. The
+`/api/forex/broker-truth-monitor/status/fast` route now uses the shared
+cache-first wrapper with a fail-closed
+warming packet on cold cache, a 10-second TTL, and background refresh. API
+startup also prewarms `broker_truth_monitor_fast_status` along with the shell,
+fast dashboard, WASTE, live-enable, PCBA, settings, live-money, readiness, and
+auto-halt hot cards. Live smoke after API restart on PID `60448` showed
+broker-truth fast returning `cache_status: fresh`,
+`BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, dashboard fast returning `fresh`, and
+WASTE `running: true`, `stage: no_trade`, `mode: PAPER`. Warm Python timing
+samples after the first cached read: broker-truth fast
+`14.3, 6.8, 8.7, 13.1, 6.4, 6.9, 8.4` ms; dashboard fast
+`12.9, 16.2, 10.4, 18.4, 11.5, 14.2, 12.9, 26.6` ms; WASTE stage mostly
+low-double-digit milliseconds. Browser smoke on
+`http://127.0.0.1:5173/?page=dashboard` still showed `No Trade` / `LIVE`,
+visible `WASTE LOOP LIVE: NO TRADE`, visible `PAYMENT SETUP PENDING`, and no
+visible `NOT LICENSED`, `CURRENTLY NOT LICENSED`, or
+`PAYMENT MOVEMENT CURRENTLY NOT LICENSED`. Regression checks:
+`python -m py_compile api\routes\broker_truth_monitor.py api\server.py
+tests\test_broker_truth_monitor.py tests\test_settings_api_surface.py` passed;
+`python -m pytest tests\test_broker_truth_monitor.py
+tests\test_settings_api_surface.py tests\test_live_enable_control.py -q`
+passed (`68 passed`, two FastAPI deprecation warnings); `git diff --check`
+passed for the touched files with normal CRLF warnings only. Safety boundary
+unchanged: this is read-path/cache work only; it does not authorize live
+orders, deposits, withdrawals, bank/card movement, payouts, broker `ACCEPT`, or
+`LICENSED` status.
+
+2026-07-01 CAS Forex broker-sync dashboard cold-read repair completed.
+The explicit broker-sync endpoints now block on a cold cache long enough to
+return a real broker-synced preview instead of letting the UI persist a
+`WARMING` / `0/0` packet. `/api/forex/readiness/live?sync_to_broker=true`
+and `/api/forex/reconciliation/account?sync_to_broker=true` keep the normal
+non-sync dashboard reads fast, but explicit Broker Sync reads now return the
+real preview on first use. The Dashboard also now fetches the broker-synced
+reconciliation packet when the `Broker Sync` tab is selected, so the
+Broker/Demo Account Reconciliation panel switches from the default paper
+`6/7` mismatch view to the broker-synced `RECONCILED` / `7/7` preview in that
+mode. The UI retries warming broker-sync readiness/reconciliation packets
+instead of treating them as final. Verification: live endpoint smoke on API
+PID `63172` showed reconciliation `RECONCILED`, `7/7`, `0` mismatches,
+`sync_to_broker_snapshot: true`; readiness `NOT_READY_FOR_LIVE`, `9/19`,
+`0` mismatches, `sync_to_broker_snapshot: true`; and WASTE `running: true`,
+`stage: no_trade`, `mode: PAPER`. Browser smoke on
+`http://127.0.0.1:5173/?page=dashboard` showed no visible `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`,
+visible `PAYMENT SETUP PENDING`, visible `WASTE LOOP LIVE: NO TRADE`, and the
+active Broker Sync tab showing `RECONCILED -- 7/7 OK`, `0 mismatch`,
+`BROKER SYNC PREVIEW`, broker seed `$100,000`, and
+`CAS vs broker account match PASSED`. Regression/build checks: `python -m pytest
+tests\test_live_enable_control.py tests\test_settings_api_surface.py -q`
+passed (`45 passed`, two FastAPI deprecation warnings); UI `npm run build`
+passed; `git diff --check` passed for the touched files with only normal CRLF
+warnings. Safety boundary unchanged: this is read-path, cache, and presentation
+work only; it does not authorize live orders, deposits, withdrawals, bank/card
+movement, payouts, broker `ACCEPT`, or `LICENSED` status.
+
+2026-07-01 CAS Forex dashboard owner-pending/WASTE status repair completed.
+The Dashboard no longer presents paper/demo live-money setup as a red
+`CURRENTLY NOT LICENSED` failure. Visible dashboard capability labels now map
+closed live-money gates to owner-pending/standby language: `TRADING OWNER
+PENDING`, `PAYOUT OWNER PENDING`, `PAYMENT SETUP PENDING`, live-operability
+gate cards as `OWNER PENDING`, and the movement scaffold boundary as
+`PAPER / DEMO`. The WASTE runtime strip now says `WASTE LOOP LIVE: NO TRADE`
+when the real WASTE runner is alive and its current stage is `no_trade`, while
+the live-order dry-run/pilot blockers remain separate warning blockers instead
+of implying the WASTE engine itself is down. The PCBA page no longer renders
+local fixture evidence while waiting for the API; it uses an empty fail-closed
+loading/unavailable packet instead. Live-enable GET routes now use the
+cache-first route lane (`live_enable_state_report` and
+`live_enable_authorization_report`) so Trade/Settings owner-switch reads no
+longer have to synchronously rebuild runtime-gate evidence on first paint; owner
+writes still return the real rebuilt report and invalidate those cache keys.
+Verification: `python -m py_compile api\routes\live_enable.py
+api\live_money_cache.py tests\test_live_enable_control.py` passed;
+`python -m pytest tests\test_live_enable_control.py
+tests\test_settings_api_surface.py -q` passed (`43 passed`, two FastAPI
+deprecation warnings); UI `npm run build` passed; `git diff --check` passed for
+the touched files; API was restarted on PID `54464`; warm endpoint samples
+showed `/api/forex/live-enable/state`, `/api/forex/live-enable/authorization`,
+`/api/forex/dashboard/fast`, and `/api/forex/waste-loop/stage` returning in
+single-digit to low double-digit milliseconds after startup; browser smoke on
+`http://127.0.0.1:5173/?page=dashboard` showed no visible `NOT LICENSED`, no
+`CURRENTLY NOT LICENSED`, no `PAYMENT MOVEMENT CURRENTLY NOT LICENSED`, no
+`PAYOUT NOT AUTHORIZED`, visible `PAYMENT SETUP PENDING`, visible
+`WASTE LOOP LIVE: NO TRADE`, and the activity indicator reading `No Trade` /
+`LIVE`. Safety boundary unchanged: this is presentation and cache/read-path
+work only; it does not authorize live orders, deposits, withdrawals, bank/card
+movement, payouts, broker `ACCEPT`, or `LICENSED` status.
+
+2026-07-01 CAS Forex root health alias repair completed. The local API already
+served `/api/forex/health`, which the React client reaches through its
+`/api/forex` base URL, but the bare supervisor-style `/health` route returned
+404. `api.server.health()` is now registered on both `/health` and
+`/api/forex/health`, and `/health` is excluded from synchronous request tracing
+like the other hot liveness routes. Regression coverage now asserts both health
+paths return `status: healthy`, `version: 0.1.0`, and the hot-poll trace skip
+set includes `/health`. Verification: `python -m py_compile api\server.py
+tests\test_settings_api_surface.py` passed; `python -m pytest
+tests\test_settings_api_surface.py -q` passed (`25 passed`, two FastAPI
+deprecation warnings); `git diff --check` passed for the touched API/test files;
+API was restarted on PID `51600`; live smoke showed `/health` and
+`/api/forex/health` returning 200, dashboard shell/fast returning 200, and
+`/api/forex/waste-loop/stage` still returning `running: true`,
+`stage: no_trade`, `mode: PAPER`. Safety boundary unchanged: health/liveness only, no
+live orders, deposits, withdrawals, bank/card movement, payouts, broker
+`ACCEPT`, or `LICENSED` status.
+
+2026-07-01 CAS Forex WASTE heartbeat split-brain repair completed. Live smoke
+found the WASTE runner fast route truthfully reporting `running: true`,
+`current_stage: no_trade`, and `mode: PAPER`, while the activity indicator's
+`/api/forex/waste-loop/stage` route could still return `running: false`,
+`stage: idle` after an API restart. Root cause: the stage route accepted the
+fresh durable supervisor lease, then incorrectly vetoed it when the optional
+worker registry row was unconfigured (`configured: false`, `running: false`).
+`api.routes.loop_stage._runner_is_live(...)` now only lets an external-worker
+row veto the heartbeat when that row is explicitly configured and reports not
+running. The frontend indicator also falls back from `/waste-loop/stage` to the
+fast WASTE status route before checking dispatch-loop status, so the header
+stays connected to the durable runner even during API memory resets. Verification:
+`python -m py_compile api\routes\loop_stage.py tests\test_loop_heartbeat.py`
+passed; `python -m pytest tests\test_loop_heartbeat.py -q` passed (`6 passed`);
+`python -m pytest tests\test_loop_heartbeat.py tests\test_settings_api_surface.py
+-q` passed (`30 passed`); UI `npm run build` passed; API was restarted on PID
+`66612`; live smoke showed `/api/forex/waste-loop/stage` returning
+`running: true`, `stage: no_trade`, `source: waste_runner_status`; browser smoke
+on `/?page=proof`, `/?page=pcba`, `/?page=trade`, and `/?page=dashboard` showed
+the activity indicator as `LIVE`, `No Trade`, no `API unreachable`, no fixture
+fallback, and no console errors. Safety boundary unchanged: observational
+heartbeat only, no live orders, deposits, withdrawals, bank/card movement,
+payouts, broker `ACCEPT`, or `LICENSED` status.
+
+2026-07-01 CAS Forex paper/demo status-language repair completed. The
+always-visible mode banner no longer presents the active paper/demo lane as a
+bright red `NOT LICENSED` failure; it now shows `PAPER / DEMO ACTIVE` while
+leaving live authorization as a separate gate. Settings now presents the
+live-trading owner switch panel as `LIVE-TRADING GATE: STANDBY` instead of a
+red failure state, maps live-money gate values to owner-pending display text
+while preserving the raw backend status in descriptions, and defaults the PCBA
+guard display to enabled unless the API explicitly reports it off. Trade and
+Proof live/payment controls now use warning/standby styling for owner-pending
+setup instead of danger styling, and the PCBA page maps backend `NOT LICENSED`
+production-claim chips to visible `CLAIM PENDING` warning chips so PCBA pending
+claims do not look like paper/demo execution is broken. Verification: UI
+`npm run build` passed; `git diff --check` passed on the touched UI files; browser
+smoke on `/?page=pcba`, `/?page=settings`, `/?page=trade`, and `/?page=proof`
+showed no `API unreachable`, no fixture fallback, no console errors, top banner
+`PAPER / DEMO ACTIVE`, no top-banner `NOT LICENSED`, no `PCBA Guard DISABLED`,
+zero red `NOT LICENSED` chips in the inspected pages, and zero disabled buttons
+on PCBA/Trade/Proof. Raw live-money and production claim states remain enforced
+in the backend; this is a presentation repair, not a live-order or money-movement
+authorization.
+
+2026-07-01 CAS Forex Dashboard browser-hydration split completed. The
+frontend `useDashboard` hook now starts `/api/forex/dashboard/shell` and
+`/api/forex/dashboard/fast` at the same time instead of waiting for shell
+before asking for fast; a late shell packet is prevented from overwriting a
+newer fast packet. Dashboard secondary hydration also no longer groups the core
+account/movement/reconciliation/readiness reads or the sweep/payout/recovery
+reads behind `Promise.all`; each panel updates as soon as its own endpoint
+returns, so one delayed evidence packet cannot hold back the rest of the page.
+Verification: UI `npm run build` passed; browser smoke on
+`http://127.0.0.1:5173/?page=dashboard` showed no `API unreachable`, no fixture
+text, no visible `DISABLED`, no console errors, live `PAPER` / `LIVE` state,
+and `49` buttons; browser smoke on `/?page=trade` showed no `API unreachable`,
+no fixture text, no visible `DISABLED`, no console errors, and `49` enabled
+buttons. Live endpoint smoke after Dashboard load showed dashboard shell/fast,
+ledger, movement, reconciliation, readiness, verified-profit sweep,
+payout-recovery, live-recovery, WASTE fast, and broker-truth fast reachable
+without slow trace entries. Safety boundary unchanged: this does not place live
+orders, deposit, withdraw, store raw bank/card numbers, automate payouts,
+create broker `ACCEPT`, or mark anything `LICENSED`.
+
+2026-07-01 CAS Forex live-enable hot-poll prewarm repair completed. The owner
+authorization routes used by Trade and Settings now join the API startup
+prewarm lane: `live_enable_authorization_report` warms
+`/api/forex/live-enable/authorization`, and `live_enable_state_report` warms
+`/api/forex/live-enable/state`. Both hot GET paths are also excluded from the
+synchronous JSONL request trace, matching the other cockpit polling routes.
+Verification: `python -m py_compile api\server.py
+tests\test_settings_api_surface.py` passed; `python -m pytest
+tests\test_settings_api_surface.py tests\test_live_enable_control.py -q`
+passed (`38 passed`); UI `npm run build` passed; API was reloaded on PID
+`23100`; `curl` warm samples for `/live-enable/authorization` and
+`/live-enable/state` returned mostly around `8-16ms` with no API unreachable
+state; browser smoke showed Trade with no `API unreachable`, no fixture text,
+`49` buttons, `0` disabled buttons, and enabled payment-provider/API-key/payout
+destination inputs, and Settings with no `API unreachable`, no fixture text,
+enabled Owner ACCEPT / owner controls, and only unrelated notification test
+buttons disabled. Safety boundary unchanged: this does not place live orders,
+deposit, withdraw, store raw bank/card numbers, automate payouts, create broker
+`ACCEPT`, or mark anything `LICENSED`.
+
+2026-07-01 CAS Forex live-money fast-lane split completed. The Trade and
+Settings cockpit no longer have to poll the heavy full
+`/api/forex/live-money/progression-packet` for ordinary status refreshes. The
+backend now exposes `/api/forex/live-money/progression-packet/fast`, using a
+cached full packet when present and otherwise a fail-closed lightweight summary
+from cheap/cached sources: runtime gates, broker-truth recovery, live recovery,
+WASTE direction review, WASTE pilot, verified-profit sweep, payout recovery,
+and cached live readiness. Deep WASTE adaptation/learning/outcome evidence
+remains in the full packet instead of being rebuilt on every cockpit poll.
+`api.route_cache.cached_payload_snapshot(...)` now reads cached packets without
+starting work. Normal frontend polling now uses the fast route; explicit
+post-write refreshes still call the full route with `refresh=true`. The fast
+route is also excluded from synchronous request tracing. Verification:
+`python -m py_compile api\route_cache.py api\server.py api\routes\live_money.py
+tests\test_route_cache.py tests\test_live_money_progression_packet.py
+tests\test_settings_api_surface.py` passed; `python -m pytest
+tests\test_route_cache.py tests\test_live_money_progression_packet.py
+tests\test_settings_api_surface.py -q` passed (`35 passed`); UI `npm run build`
+passed; API was reloaded on PID `61664`; live smoke showed the fast route
+settling from startup `WARMING` to a real `LIVE_MONEY_PROGRESS_BLOCKED` summary
+with `9` blockers and then returning around `14ms`, while `/dashboard/fast` and
+WASTE fast stayed reachable and WASTE reported `RUNNING`. Browser smoke on
+`/?page=trade` showed no `API unreachable`, no fixture fallback, `49` buttons,
+`0` disabled buttons, WASTE `LIVE` / `Watching`, and the live-money lane showing
+the real blocked state instead of waiting on the heavy full packet. Safety
+boundary unchanged: this does not place live orders, deposit, withdraw, store
+raw bank/card numbers, automate payouts, create broker `ACCEPT`, or mark
+anything `LICENSED`.
+
+2026-07-01 CAS Forex hot-route startup prewarm and WASTE supervisor-status
+repair completed. After the dashboard shell/fast prewarm repair, live smoke
+found `/api/forex/proof-control/state` still returning a cold `WARMING` packet
+and WASTE `/status/fast` / `/status` could report `STOPPED` after an API
+restart when the isolated WASTE worker was still alive and renewing a fresh
+desired-running supervisor lease. `api.route_cache` now exposes
+`start_cache_refresh(...)` so API startup can warm genuinely fast read-only
+cockpit packets before the browser asks for them. API startup now prewarms
+proof control, WASTE fast status, dispatch-loop status, live telemetry,
+readiness, and auto-halt. The heavier live-money progression packet was
+measured directly at about `36.3s` cold and intentionally left out of the
+startup hot lane so it cannot block the shared fast-card refresh queue; it
+remains cache-first/on-demand with UI retry. WASTE fast status and the full
+WASTE status overlay now treat a fresh desired-running supervisor lease as
+running evidence even if `runtime\waste-background-workers.json` lost the
+`waste_runner` record. Verification: `python -m py_compile api\route_cache.py
+api\server.py api\routes\waste_loop_control.py cas_forex\waste_background_worker.py
+tests\test_route_cache.py tests\test_settings_api_surface.py
+tests\test_supervisor_recovery_routes.py tests\test_waste_background_worker.py`
+passed; `python -m pytest tests\test_route_cache.py
+tests\test_settings_api_surface.py tests\test_supervisor_recovery_routes.py
+tests\test_waste_background_worker.py -q` passed (`39 passed`); API was
+reloaded on PID `60088`; settled live smoke showed `/dashboard/shell`,
+`/dashboard/fast`, proof control, WASTE fast, dispatch status, live telemetry,
+readiness, and auto-halt returning fast cached/refreshing packets, while both
+WASTE `/status/fast` and `/status` reported `RUNNING`. Browser smoke on
+`/?page=trade` showed no `API unreachable`, no fixture fallback, `49` buttons,
+`0` disabled buttons, WASTE `LIVE` / `Watching`, and enabled provider/token/
+payout-destination inputs. Browser smoke on `/?page=settings` showed no `API
+unreachable`, no fixture fallback, enabled owner switches and Owner ACCEPT
+buttons, with only unrelated notification test buttons disabled. Safety
+boundary unchanged: this does not place live orders, deposit, withdraw, store
+raw bank/card numbers, automate payouts, create broker `ACCEPT`, or mark
+anything `LICENSED`.
+
+2026-07-01 CAS Forex dashboard startup prewarm repair completed. The API
+startup hook now prewarms both `/api/forex/dashboard/shell` and
+`/api/forex/dashboard/fast` after restoring owner-desired paper workers, instead
+of warming only the fast packet and leaving the first browser shell request to
+discover a cold cache. A regression test now proves startup restores owner
+runtime switches, starts shell prewarm, then starts fast prewarm. Verification:
+`python -m py_compile api\server.py tests\test_settings_api_surface.py` passed;
+`python -m pytest tests\test_settings_api_surface.py tests\test_route_cache.py
+-q` passed (`25 passed`); API was reloaded on PID `63996`; live smoke after
+restart showed `/dashboard/shell` fresh in 26.8ms and `/dashboard/fast` fresh in
+83.9ms, later settled to sub-30ms reads, with `/waste-loop-control/status/fast`
+reporting `RUNNING` and `/live-money/progression-packet` reachable as
+`LIVE_MONEY_PROGRESS_BLOCKED`. Browser smoke on `/?page=trade` showed no `API
+unreachable`, no fixture fallback, 49 buttons, 0 disabled buttons, and enabled
+provider/token/payout-destination inputs. Browser smoke on `/?page=settings`
+showed no `API unreachable`, no fixture fallback, enabled Owner ACCEPT / owner
+switch controls, and only unrelated notification test buttons disabled. Safety
+boundary unchanged: this does not place live orders, deposit, withdraw, store
+raw bank/card numbers, automate payouts, create broker `ACCEPT`, or mark
+anything `LICENSED`.
+
+2026-07-01 CAS Forex WASTE paper-runner false blocker repair completed. Live
+smoke showed the isolated WASTE runner was genuinely running in `PAPER`, while
+the paper sample collector's latest evidence packet could still mark
+`paper_runner_running` false because the collector runs in its own background
+worker and `cas_forex.waste_runner.runner_status()` intentionally skips
+external-worker overlay inside background workers. `cas_forex.waste_paper_sample_collector`
+now overlays the durable isolated WASTE runner worker status when the local
+in-process runner status says stopped, so paper evidence recognizes the real
+owner-started WASTE runner instead of blocking on a process-local false
+negative. A regression test now proves a stopped local runner plus a running
+isolated worker produces `paper_runner_running: true` and a `PASS` check.
+Verification: `python -m py_compile cas_forex\waste_paper_sample_collector.py
+tests\test_waste_paper_sample_collector.py` passed; `python -m pytest
+tests\test_waste_paper_sample_collector.py -q` passed (`11 passed`); API was
+reloaded on PID `63544`; the paper sample collector worker was restarted and a
+fresh read-only collection pass returned `paper_runner_running: true`,
+`paper_runner_check: PASS`, and `WASTE_PAPER_SAMPLE_AWAITING_PAPER_EXECUTION`.
+The isolated WASTE runner remains running in `PAPER` with PID `20560`, and the
+new paper sample collector worker is running with PID `62940`. Safety boundary
+unchanged: this does not place live orders, deposit, withdraw, store raw
+bank/card numbers, automate payouts, create broker `ACCEPT`, create owner
+`ACCEPT`, or mark anything `LICENSED`.
+
+2026-07-01 CAS Forex live-control UI refresh/retry repair completed. The user
+reported the Trade/Settings app showing `API unreachable`, fixture data, and
+grayed/inert ACCEPT/Confirm controls. Verification found the configured API is
+`http://127.0.0.1:8765/api/forex` and the API was healthy there; the earlier
+`8000` smoke target was wrong. `cas-forex/ui/src/pages/TradePage.tsx` now fixes
+the stale `liveProgression` closure in the WARMING retry loop and runs an
+immediate `refresh=true` progression read plus short retry sequence after owner
+provider/destination and owner-switch writes. `cas-forex/ui/src/pages/SettingsPage.tsx`
+now emits a live-money progression refresh event after authorization,
+broker-reality, and small-live-pilot writes/resets, and the Live Recovery /
+Live-Money Completion panel listens for that event, refreshes with
+`refresh=true`, and retries while the progression packet is warming. Verification:
+UI `npm run build` passed; focused backend route/cache tests passed (`34
+passed`); browser smoke on `http://127.0.0.1:5173/?page=trade` after reload
+showed no `API unreachable`, no fixture fallback, 49 buttons, 0 disabled
+buttons, and visible/enabled provider-token/payout-destination fields; browser
+smoke on `/?page=settings` after hydration showed no `API unreachable`, no
+fixture fallback, 79 buttons, Owner ACCEPT/Owner Confirm controls enabled, and
+only unrelated push/webhook test buttons disabled. Live API smoke showed WASTE
+runner, dispatch loop, and paper sample collector running in `PAPER`, with a
+fresh live-money progression packet. Current real-money blockers are now real
+gate/evidence blockers rather than inert UI: payment provider/API key/payout
+destination are empty, broker reality review is `OPEN`, small live pilot is
+`OPEN`, broker truth is demo/warning, WASTE direction is not currently
+edge-confirmed, and verified-profit sweep remains demo/non-sweepable. Safety
+boundary unchanged: this does not place live orders, deposit, withdraw, store
+raw bank/card numbers, automate payouts, create broker `ACCEPT`, or mark
+anything `LICENSED`.
+
+2026-07-01 CAS Forex owner-review gate invalidation repair completed. After
+the owner-write/progression-cache repair, the remaining live-money gates still
+had a stale-read gap: owner ACCEPT/reset actions for broker reality, small live
+pilot, and live-order dry-run review could update their own evidence file while
+the owner-facing authorization/progression/readiness packets kept stale cache
+data until TTL expiry. A shared `api.live_money_cache.invalidate_live_money_gate_caches`
+helper now invalidates the live-money progression packet, verified-profit
+sweep packets, live-readiness, live-recovery, live-order dry-run review,
+handoff/pilot-promotion, ledger, movement, and reconciliation route caches and
+also clears the cached owner authorization report in
+`cas_forex.live_enable_control`. The following write routes now call that
+shared invalidator after successful owner writes: live-enable authorization
+update/reset, broker-reality review save/reset, small live-pilot policy
+save/reset, live-order dry-run review accept/reset, compound-add dry-run review
+accept/reset, verified-profit sweep policy update, and payout-recovery resolve.
+API was reloaded on PID `33820`. Verification: `python -m py_compile
+api/live_money_cache.py api/route_cache.py api/routes/live_enable.py
+api/routes/broker_reality.py api/routes/live_pilot.py
+api/routes/live_order_dry_run.py api/routes/money_movement.py
+cas_forex/live_enable_control.py tests/test_route_cache.py
+tests/test_live_enable_control.py tests/test_money_movement_route.py
+tests/test_broker_reality.py tests/test_live_pilot.py
+tests/test_live_order_dry_run.py tests/test_live_money_progression_packet.py`
+passed; focused tests passed (`42 passed`); live smoke after reload showed
+`/broker-reality/review` 37.3ms and OPEN, `/live-pilot/policy` 24.7ms and
+OPEN, `/live-order-dry-run/review` 29.6ms and OPEN/warming,
+`/live-enable/authorization` rebuilt successfully, and
+`/live-money/progression-packet?refresh=true` returned a cache-first warming
+packet in 49.8ms. Safety boundary unchanged: this does not place live orders,
+deposit, withdraw, store raw bank/card numbers, automate payouts, create broker
+`ACCEPT`, or mark anything `LICENSED`.
+
+2026-07-01 CAS Forex owner-write/progression-cache repair completed. The
+Trade page could save provider/destination or owner-switch changes and then
+immediately re-read a stale cached live-money progression packet, making the
+app look as if the save did not matter until the cache TTL expired. `api.route_cache`
+now exposes targeted `invalidate_cache(...)`. Owner authorization updates and
+resets invalidate the dependent live-money, verified-profit sweep,
+live-readiness, ledger, movement, and reconciliation packets; verified-profit
+sweep policy updates and payout-recovery resolutions invalidate the sweep and
+live-money progression packets. `GET /api/forex/live-money/progression-packet`
+now accepts `refresh=true`, which invalidates the progression packet and starts
+the cache-first refresh without blocking the UI on heavy evidence collection.
+The Trade page now uses `fetchLiveMoneyProgressionPacket(true)` immediately
+after `SAVE PROVIDER / DESTINATION` and `TURN OWNER SWITCHES ON`; normal polling
+stays cache-first. API was reloaded on PID `66536`. Verification: `python -m
+py_compile api/route_cache.py api/routes/live_enable.py api/routes/live_money.py
+api/routes/money_movement.py tests/test_route_cache.py
+tests/test_live_enable_control.py tests/test_live_money_progression_packet.py
+tests/test_money_movement_route.py` passed; `python -m pytest
+tests/test_route_cache.py tests/test_live_enable_control.py
+tests/test_live_money_progression_packet.py tests/test_money_movement_route.py
+-q` passed (`30 passed`); UI `npm run build` passed; live smoke after reload
+showed `/health` 154.6ms, normal `/live-money/progression-packet` 31.6ms
+returning warming/cache-first, `/live-money/progression-packet?refresh=true`
+18.0ms returning warming/cache-first rather than timing out, authorization
+260.5ms, and verified-profit sweep state 223.0ms. Safety boundary unchanged:
+this does not place live orders, deposit, withdraw, store raw bank/card
+numbers, automate payouts, create broker `ACCEPT`, or mark anything
+`LICENSED`.
+
+2026-07-01 CAS Forex dashboard aggregate/cache contention repair completed.
+After the first-paint dashboard fix, direct API sampling showed the UI path was
+off the giant aggregate but the API could still hitch during cache warmup.
+`api.server` now routes dashboard shell, fast, and full cache builders through
+the shared `api.route_cache.run_serial_refresh` guard, so dashboard evidence
+refreshes do not overlap with other expensive read-only route refreshes inside
+the API process. The legacy read-only `/api/forex/dashboard` GET is also on the
+synchronous JSONL trace-skip list, and focused tests now prove that
+`/api/forex/dashboard?refresh=true` returns a cached fast packet instead of
+calling the full aggregate inline, that all dashboard refresh builders share
+the serialized refresh guard, and that live overlays use cached fast state
+without calling the fast builder inline. API was reloaded on PID `65300`.
+Verification: `python -m py_compile api/server.py api/route_cache.py
+tests/test_settings_api_surface.py` passed; `python -m pytest
+tests/test_settings_api_surface.py tests/test_route_cache.py -q` passed (`21
+passed`); UI `npm run build` passed; live Python timing sample after reload
+showed `/dashboard/shell` mostly 9-57ms after first warm sample,
+`/dashboard/fast` 12-19ms, `/dashboard` 10-18ms returning `cold_fast_cache`,
+`/dashboard?refresh=true` 9-28ms returning `full_refresh_disabled`,
+`/live-telemetry` 7-13ms, and `/health` 7-15ms. Safety boundary unchanged:
+this does not place live orders, deposit, withdraw, store raw bank/card
+numbers, automate payouts, create broker `ACCEPT`, or mark anything
+`LICENSED`.
+
+2026-07-01 CAS Forex dashboard first-paint hydration repair completed. The
+frontend boot path was confirmed to use `/api/forex/dashboard/shell` and
+`/api/forex/dashboard/fast` instead of the legacy full dashboard aggregate.
+`cas-forex/ui/src/pages/DashboardPage.tsx` now staggers dashboard-only
+secondary panel hydration so the page can paint from the shell/fast packet
+before strategy leads, account/reconciliation/readiness panels, WASTE status,
+sweep controls, auto-halt state, and deep evidence calls compete with the
+first render. Verification: UI `npm run build` passed; focused API/cache tests
+passed (`4 passed`); browser smoke on `/?page=dashboard` showed the page
+painted within the first second with LIVE runtime text and no `API
+unreachable`, no fixture fallback, and no visible `DISABLED`; browser smoke on
+`/?page=trade` showed no `API unreachable`, no fixture fallback, no visible
+`DISABLED`, 49 cockpit buttons, and 0 disabled buttons. Direct API samples
+confirmed shell/fast/full/health routes are reachable, but also showed the
+legacy full dashboard aggregate and occasional shell/fast samples can still
+hitch while the API process is busy. Current priority remains keeping
+first-paint UI off the legacy aggregate path and continuing to move expensive
+evidence refreshes behind cache-first, non-blocking surfaces. Safety boundary
+unchanged: this does not place live orders, deposit, withdraw, store raw
+bank/card numbers, automate payouts, create broker `ACCEPT`, or mark anything
+`LICENSED`.
+
+2026-07-01 CAS Forex hot-polling/API responsiveness repair completed. After
+the first Trade-page repair, repeated runtime samples showed the API still
+hitched under the live Trade page because high-frequency polling endpoints were
+rebuilding evidence and/or writing the synchronous JSONL request trace. The
+following read-only GET surfaces were moved to cache-first or hot trace-skip
+paths: live telemetry (`/api/forex/live-telemetry`, 60s observational cache),
+proof control state (`/api/forex/proof-control/state`, 30s cache), dispatch
+loop status (`/api/forex/dispatch-loop/status`, 5s cache), WASTE fast status
+(`/api/forex/waste-loop-control/status/fast`, 5s cache), owner authorization
+reports (`cas_forex.live_enable_control`, 30s cache with immediate invalidation
+on owner/provider changes), plus trace skipping for `agent-decision/latest`,
+`mt/probe/latest`, `risk-monitoring/portfolio`,
+`waste-loop-control/paper-sample-collector/scheduler`, and
+`/api/forex/timeframes/*`. API was reloaded on PID `64220`. WASTE is running in
+isolated PAPER mode on PID `20560` at 60s; dispatch loop is running in PAPER at
+60s with `NAS100` / `US30`; proof auto-runner, broker-truth monitor, and paper
+sample collector remain running externally. Direct hot-poll sample after warmup
+showed `timeframes/NAS100` avg ~0.032s, `agent-decision/latest` avg ~0.039s,
+`risk-monitoring/portfolio` avg ~0.028s,
+`paper-sample-collector/scheduler` avg ~0.039s, `live-telemetry` avg ~0.010s,
+and `/api/forex/health` avg ~0.010s. Browser check on Trade showed
+`Live-Money Completion Lane` present, no `API unreachable`, no fixture text, no
+visible `DISABLED`, enabled `SAVE PROVIDER / DESTINATION`, enabled `TURN OWNER
+SWITCHES ON`, enabled `RUN WASTE PROBE`, enabled `START PAPER LOOP`, owner-save
+status visible, and paper-loop status visible. Verification: focused API tests
+passed (`41 passed`), broader hot route slice passed earlier (`52 passed`),
+WASTE/broker route tests passed (`28 passed`), UI build passed, and
+`git diff --check` passed for touched files. Safety boundary unchanged: these
+are paper/owner-control/read-only responsiveness changes and do not place live
+orders, deposit, withdraw, store raw bank/card numbers, automate payouts, create
+broker `ACCEPT`, or mark anything `LICENSED`.
+
+2026-07-01 CAS Forex Trade cockpit actionability/latency repair completed.
+After the Trade-page completion lane landed, runtime sampling exposed a startup
+latency spike where even `/api/forex/health` could sit behind expensive gate
+report rebuilding during cache warmup. `cas_forex.live_enable_control` now
+caches default owner authorization/live-enable reports for a short runtime TTL
+and invalidates that cache immediately whenever the owner saves switches,
+provider settings, clears overrides, or changes the override store. This keeps
+the cockpit responsive during normal polling while preserving immediate owner
+button feedback after `SAVE PROVIDER / DESTINATION` or `TURN OWNER SWITCHES ON`.
+Regression coverage was added in `tests/test_live_enable_control.py` to prove a
+default authorization report is reused and then invalidated by an owner update.
+Runtime was reloaded on API PID `43908`; owner switch overrides are still ON in
+`cas-forex/runtime/live-enable-overrides.json`, while payment provider,
+provider API key, and payout destination remain empty because the owner still
+has to supply provider-token/destination data. Focused verification:
+`python -m py_compile cas-forex/cas_forex/live_enable_control.py
+cas-forex/api/routes/live_enable.py` passed; `python -m pytest
+tests/test_live_enable_control.py tests/test_live_money_progression_packet.py
+tests/test_route_cache.py -q` passed (`19 passed`); UI `npm run build` passed;
+`git diff --check` passed for touched files. Settled runtime sample after cache
+warmup: `/api/forex/health` average ~0.086s with no timeouts,
+`/api/forex/live-enable/authorization` average ~0.038s with cache `fresh`, and
+`/api/forex/live-money/progression-packet` average ~0.023s with cache `fresh`.
+Browser verification on `http://127.0.0.1:5173/?page=trade` showed
+`Live-Money Completion Lane` present, no `API unreachable`, no fixture text, no
+visible `DISABLED`, and enabled `SAVE PROVIDER / DESTINATION`, `TURN OWNER
+SWITCHES ON`, `RUN WASTE PROBE`, and `START PAPER LOOP`. The owner-switch
+button was exercised and reported `Owner switches saved`; the safe paper-loop
+button was exercised and reported the `PAPER loop` / sample scheduler status.
+Safety boundary remains unchanged: no live order, bank/card movement, deposit,
+withdrawal, payout, broker `ACCEPT`, or raw bank/card storage occurs from these
+status and owner-switch actions.
+
+2026-07-01 CAS Forex Trade-page guided completion lane completed. The existing
+read-only `cas_forex_live_money_progression_packet` is now surfaced directly on
+`?page=trade` as `Live-Money Completion Lane`, so the owner no longer has to
+leave the Trade cockpit to see why live dispatch, WASTE pilot progression, or
+verified payout remains blocked. `TradePage.tsx` now fetches
+`/api/forex/live-money/progression-packet`, retries quickly while authorization
+or progression data is missing/warming, refreshes normally after hydration, and
+refreshes the progression packet immediately after `SAVE PROVIDER / DESTINATION`
+or `TURN OWNER SWITCHES ON`. The panel shows Live Dispatch / WASTE Pilot /
+Verified Payout chips, blocker count, active WASTE intent, current packet
+status, the first six blockers with `plane`, `detail`, and `next_action`, plus
+links to `OPEN SETTINGS GATES` and `OPEN PROOF / PAYMENT`. Runtime smoke:
+`/api/forex/live-money/progression-packet` returned
+`LIVE_MONEY_PROGRESS_BLOCKED`, `blocker_count=9`,
+`full_progression_clear=false`, in ~0.192s; `/api/forex/live-enable/
+authorization` returned `all_real_money_authorized=false`; `/api/forex/health`
+returned healthy in ~0.009s. Browser smoke on
+`http://127.0.0.1:5173/?page=trade` showed no `API unreachable`, no fixture
+text, no visible `DISABLED`, enabled `SAVE PROVIDER / DESTINATION`, enabled
+`TURN OWNER SWITCHES ON`, enabled `RUN WASTE PROBE`, enabled
+`START PAPER LOOP`, and the new lane showing `Blockers 9`, active intent
+`NAS100 LONG`, `LIVE_MONEY_PROGRESS_BLOCKED`, and Settings/Proof links.
+Verification: UI `npm run build` passed; focused live-money progression tests
+passed (`3 passed`); `git diff --check` passed for the touched UI files. Safety
+boundary unchanged: this is a read-only owner guidance lane. It does not place
+live orders, create broker `ACCEPT`, deposit, withdraw, store raw bank/card
+numbers, automate payouts, move money, guarantee profit, or mark payment
+movement `LICENSED`. Remaining live-money gates are now visible in Trade rather
+than hidden: live broker proof/recovery, broker-reality `ACCEPT`, small live
+pilot `ACCEPT`, latest live dry-run `ACCEPT`, provider token/destination, and
+verified broker-confirmed winnings for payout.
+
+2026-07-01 CAS Forex owner-control/proof-worker repair completed after the
+owner reported `API unreachable`, fixture fallback, missing bank/card setup,
+and grayed-out accept/confirm behavior on the Trade page. The proof auto-runner
+was moved out of the API process into the existing isolated worker supervisor:
+`cas_forex.waste_background_worker` now supports `proof_auto_runner` /
+`proof-auto-runner`, starts it at below-normal priority, records its state in
+`cas-forex/runtime/waste-background-workers.json`, and `/api/forex/proof-control`
+now starts/stops/restores that external worker while tests retain the in-process
+path. `cas_forex.proof_runner` now has a durable desired-state helper so the API
+can persist the owner switch without starting a local proof thread. Runtime
+after restart: API PID `64924` on `127.0.0.1:8765`; WASTE worker PID `7328`
+running in `PAPER`; broker-truth worker PID `37596` read-only; paper sample
+collector PID `45568`; proof auto-runner PID `46592` running externally at
+`check_interval_seconds=3600`; dispatch loop `running=true` and
+`desired_running=true`. Owner toggle repair: `/api/forex/live-enable/
+authorization/update` now accepts the core live-owner flags
+`personal_account_ack`, `no_pooled_capital_ack`, `live_mode`, and `prefer_mt5`
+as part of the unified authorization payload, and the Trade/Proof "TURN OWNER
+SWITCHES ON" buttons now submit the full owner switch set instead of only the
+downstream broker/payment flags. The owner-requested switches were saved to
+`cas-forex/runtime/live-enable-overrides.json` with the owner flags ON; provider
+fields remain empty because CAS Forex cannot invent or store raw bank/card
+numbers. Trade page UI now exposes the provider-token path directly:
+`Payment provider`, `Provider API key/token`, and `Payout destination token`;
+visible capability cards show owner-pending gate status instead of hard
+`DISABLED` language; browser smoke on `http://127.0.0.1:5173/?page=trade`
+showed no `API unreachable`, no fixture text, no visible `DISABLED` card
+language, `OWNER PENDING` cards after auth hydration, enabled
+`SAVE PROVIDER / DESTINATION`, enabled `TURN OWNER SWITCHES ON`, enabled
+`RUN WASTE PROBE`, and enabled `START PAPER LOOP`. Verification:
+`python -m py_compile` passed for the changed backend modules; focused pytest
+passed for proof worker/proof runner/live-enable (`23 passed`) and API surface
+hot routes (`2 passed`); UI `npm run build` passed; `git diff --check` passed
+for the touched files. Safety boundary unchanged: owner switches are ON, but
+real-money authorization remains fail-closed because the live broker proof,
+broker-reality ACCEPT, pilot ACCEPT, recovery CLEAR, live dry-run ACCEPT, and
+provider token/destination evidence are still not complete. This repair does
+not place live orders, create broker `ACCEPT`, deposit, withdraw, store raw
+bank/card numbers, automate payouts, move money, guarantee profit, or mark
+payment movement `LICENSED`. Next production fix: add an owner-facing guided
+completion lane that walks through provider token setup, broker-reality ACCEPT,
+small live-pilot ACCEPT, live-recovery clear, and dry-run ACCEPT without hiding
+the missing requirements behind disabled-looking cards.
+
+2026-07-01 CAS Forex durable owner-switch restore completed. The owner-started
+PAPER dispatch loop and proof auto-runner no longer depend only on in-memory
+threads. `cas_forex.dispatch_loop` now persists the owner-desired dispatch
+state to `cas-forex/runtime/dispatch-loop-control.json` with
+`desired_running=true`, `interval_seconds=15`, `symbols=["NAS100", "US30"]`,
+empty sessions, and `paper_safe_restore_only=true`; owner Stop writes
+`desired_running=false`. `cas_forex.proof_runner` now persists the owner-desired
+proof auto-runner state to
+`cas-forex/runtime/proof-auto-runner-control.json` with
+`desired_running=true`, `check_interval_seconds=3600`, and
+`paper_safe_restore_only=true`; owner Stop writes `desired_running=false`.
+`api.server` startup now restores those owner-desired PAPER schedulers before
+warming the dashboard cache, while both restore paths fail closed outside PAPER
+mode. A cold-start stall was found when the proof auto-runner restored and
+immediately ran a heavy proof bundle check; fixed by delaying the first
+automatic proof check for up to `60` seconds after startup, while the switch
+still shows running immediately and the manual `run-now` path remains available.
+Runtime proof after a second API restart with no manual start calls:
+`/api/forex/dispatch-loop/status` returned `running=true`,
+`desired_running=true`, `interval_seconds=15`, `symbols=["NAS100","US30"]`,
+`mode=PAPER`; `/api/forex/proof-control/state` returned
+`auto_runner.running=true`, `desired_running=true`, `check_interval_seconds=3600`,
+with no immediate heavy proof check yet; `/api/forex/autonomous-loop/health`
+remained `running`; `/api/forex/timeframes` still showed `NAS100` and `US30`
+active on `D1`, `H1`, `H4`, `M15`, and `M5`. Immediate post-restart endpoint
+sample after the proof-delay fix: `/health` ~0.235s, `/dashboard/shell`
+~0.086s, `/dashboard/fast` ~0.150s, `/dashboard` ~0.098s,
+`/dispatch-loop/status` ~0.021s, `/proof-control/state` ~0.036s,
+`/autonomous-loop/health` ~0.008s, `/waste-loop-control/status/fast` ~0.019s,
+and `/timeframes` ~0.024s. Verification: `python -m py_compile` passed for
+the changed modules/tests; focused pytest passed for dispatch/proof/
+autonomous-loop/heartbeat (`28 passed`), then dispatch/proof after the proof
+delay (`17 passed`); `git diff --check` passed for the touched files. Safety
+boundary unchanged: this restores PAPER/read-only owner switches only. It does
+not place live orders, create broker `ACCEPT`, deposit, withdraw, store raw bank
+or card numbers, automate payouts, move money, guarantee profit, mark payment
+movement `LICENSED`, or mark live trading `LICENSED`. Remaining production
+fix: move any remaining heavy proof/broker/probe/report builders that can run in
+the API process into isolated workers or queued last-known-good snapshots.
+
+2026-07-01 CAS Forex scheduled-runner/UI truth follow-up completed. A stale
+normal-priority paper-sample-collector process was found, stopped, and relaunched
+through the in-app scheduler at below-normal priority; `waste_background_worker`
+now records worker `priority_class` and replaces a still-running worker when its
+Windows priority no longer matches the expected class. The isolated timed WASTE
+runner now starts with `CAS_FOREX_WASTE_SCHEDULED_SNAPSHOT_WATCH=1`, so scheduled
+beats read the latest persisted real-candle probe snapshot instead of doing a
+fresh terminal/candle market scan in the timer process. The durable WASTE cycle
+audit now shows `report_kind=cas_forex_waste_scheduled_snapshot_watch`,
+`cached_snapshot_only=true`, `status=WASTE_SCHEDULED_SNAPSHOT_READY`, latest
+directional hypothesis `LONG` on `NAS100 D1`, `stage_trace=watch/analyze/
+strategize/no_trade`, and no broker execution, edge authorization registration,
+deposit, withdrawal, bank/card movement, or payout. Manual probes still perform
+the real candle scan when the owner presses the probe controls. The active
+timeframe selector now persists to
+`cas-forex/runtime/multi-timeframe-runtime.json`; after API restart/re-arm,
+`NAS100` and `US30` both have `D1`, `H1`, `H4`, `M15`, and `M5` active. The
+Trade page Agent Decision and Autonomous Loop cards now retry every `5` seconds
+while empty and display warming/retry language instead of the stale "restart
+uvicorn" error. Runtime after restart/re-arm: API is healthy on
+`127.0.0.1:8765`; WASTE external worker PID `7328` is running in `PAPER` at
+below-normal priority with a `60` second cadence; broker-truth worker PID
+`37596` is running read-only at idle priority with `ready_for_live=false`;
+paper-sample collector PID `45568` is running below-normal at `300` seconds;
+dispatch loop is running in `PAPER` at `15` seconds for `NAS100`/`US30`; proof
+auto-runner is running. Verification: `python -m py_compile` passed for the
+changed backend modules/tests; focused pytest passed for timeframe runtime/API
+(`19 passed`) and new WASTE snapshot/worker-env checks (`4 passed`); UI
+`npm run build` passed; Python HTTP smoke showed `/health`, `/timeframes`,
+`/autonomous-loop/health`, `/agent-decision/latest`,
+`/waste-loop-control/status/fast`, `/dispatch-loop/status`, and
+`/proof-control/state` reachable; browser smoke on `?page=trade` showed no
+`API unreachable`, no fixture text, enabled `SAVE PROVIDER / DESTINATION`,
+enabled `TURN OWNER SWITCHES ON`, enabled `RUN WASTE PROBE`, enabled
+`START PAPER LOOP`, `5 active: D1, H1, H4, M15, M5`, loaded agent decision,
+and autonomous loop running from WASTE in `PAPER`. Safety boundary unchanged:
+this turns on paper/read-only runtime and fixes stale UI/runtime truth. It does
+not place live orders, create broker `ACCEPT`, deposit, withdraw, store raw bank
+or card numbers, automate payouts, move money, guarantee profit, mark payment
+movement `LICENSED`, or mark live trading `LICENSED`. Payment setup in the app
+is provider/token/destination setup only; actual bank/card data belongs with the
+chosen payment/broker provider after owner approval. Remaining production fix:
+move the remaining heavy broker-truth/probe/report refreshes to fully queued
+last-known-good snapshots so even cold Windows/OneDrive contention cannot cause
+a temporary stall.
+
+2026-07-01 CAS Forex worker-isolation/responsiveness pass completed. The
+broker-truth monitor now launches as an isolated `waste_background_worker`
+subcommand (`broker-truth-monitor`) outside the uvicorn/API process for normal
+runtime, while pytest keeps the in-process monitor path. The hot
+`/api/forex/broker-truth-monitor/status/fast` route no longer reads the full
+broker-truth report; it reads only the tiny worker record and stays fail-closed
+(`ready_for_live=false`) until full evidence is available elsewhere. WASTE
+stage/status hot routes were moved off the event loop and now use compact
+runner state. The default `/api/forex/dashboard` route no longer cold-builds
+the full dashboard in the request path; it serves cached fast/warming data and
+refreshes separately. Dashboard shell/fast refreshes are timer-delayed so first
+paint can return before background cache work starts. Shared worker-state writes
+now use unique temp files with retries, fixing the Windows/OneDrive
+`PermissionError [WinError 5]` crash that killed broker-truth workers. Runtime
+priority is now explicit: WASTE worker launches below-normal priority, paper
+collector below-normal, and broker-truth/MT5 probe at idle priority. Runtime
+after restart/re-arm: API running on `127.0.0.1:8765`; WASTE paper worker
+running at a calmer `30` second cadence, dispatch loop running in `PAPER` at
+`15` seconds, proof auto-runner running, broker-truth worker running read-only
+at `300` seconds, broker-truth status
+`BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, and `ready_for_live=false`. Settled
+verification after warm-up: `/api/forex/health` completed `12/12` with max
+~0.320s and avg ~0.034s; `/api/forex/dashboard` ~0.353s;
+`/dashboard/shell` ~0.012s; `/dashboard/fast` ~0.073s;
+`/broker-truth-monitor/status/fast` ~0.017s; `/autonomous-loop/health`
+~0.006s; `/waste-loop/stage` ~0.016s; `/waste-loop-control/status/fast`
+~0.011s. Focused tests passed: broker-truth monitor, supervisor recovery,
+WASTE supervisor, loop heartbeat, route cache, operator briefing, hot trace
+skip, and WASTE runner suites (`70 passed` in the broad focused run, then
+`38 passed` and `37 passed` for the later worker-priority patches). Safety
+boundary unchanged: this turns on paper/read-only runtime loops and fixes UI/API
+responsiveness; it does not place live orders, create broker `ACCEPT`, deposit,
+withdraw, store raw bank/card numbers, automate payouts, move money, guarantee
+profit, mark payment movement `LICENSED`, or mark live trading `LICENSED`.
+Known residual risk: first cold startup or a simultaneous heavy WASTE/broker
+truth tick can still produce a short multi-second stall on this Windows/OneDrive
+machine, but warmed hot polling is now responsive. Next production fix: make
+the heavyweight WASTE candle probe and broker-truth report generation fully
+queue-based with last-known-good snapshots so even first-pass terminal/market
+reads cannot block API health.
+
+2026-07-01 CAS Forex dashboard/app-wide cache pass completed after the
+hot-path split exposed another source of slowness: secondary dashboard and
+app-wide read-only panels were still doing raw disk/ledger/recovery work and
+writing synchronous trace rows. The following read-only GET routes now use
+cache-first or staged behavior with fail-closed warming packets:
+`/api/forex/account/ledger`, `/api/forex/movement/snapshot`,
+`/api/forex/reconciliation/account`,
+`/api/forex/money-movement/verified-profit-sweep/policy`,
+`/api/forex/money-movement/verified-profit-sweep/state`,
+`/api/forex/money-movement/verified-profit-sweep/payout-recovery`,
+`/api/forex/live-recovery/status`, `/api/forex/auto-halt/status`,
+`/api/forex/live-order-dry-run/latest`,
+`/api/forex/live-order-dry-run/review`,
+`/api/forex/live-order-dry-run/waste-entry-order/dispatch-handoff`,
+`/api/forex/live-order-dry-run/waste-entry-order/pilot-promotion`,
+`/api/forex/live-order-dry-run/compound-add-order/latest`,
+`/api/forex/live-order-dry-run/compound-add-order/review`,
+`/api/forex/live-order-dry-run/compound-add-order/dispatch-handoff`,
+`/api/forex/autonomous-loop/health`,
+`/api/forex/notifications/subscriptions`, and
+`/api/forex/webhook-notifications/subscriptions`. Hot polling trace skip now
+covers both `GET` and CORS `OPTIONS` for dashboard/core/app-wide polling
+routes, including stack health, autonomous-loop health, account/movement/
+reconciliation, WASTE deep-evidence reads, notification subscription lists,
+proof state, and live-order dry-run panels. UI follow-up: the compound-add
+review panel delays its own evidence fan-out until after first paint, and the
+auto-halt card now renders `AUTO-HALT WARMING` instead of looking clear while a
+cold cache is still warming. Broker-truth monitor default/start fallback was
+slowed from `30` seconds to `120` seconds because its read-only reconciliation
+cycle can still briefly occupy the API process; this keeps the monitor running
+while reducing dashboard contention until a separate broker-truth worker is
+built. Runtime after restart/re-arm: WASTE paper worker is running at
+`stage=no_trade` with cycles increasing; dispatch loop is running in `PAPER`;
+proof auto-runner is running; broker-truth monitor is running read-only at
+`120` seconds, has completed a cycle, reports
+`BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, and `ready_for_live=false`. Final
+settled timing sample: `/dashboard/shell` max ~0.029s, `/dashboard/fast` max
+~0.071s, `/autonomous-loop/health` max ~0.024s, `/account/ledger` max ~0.011s,
+`/movement/snapshot` max ~0.011s, `/reconciliation/account` max ~0.015s,
+`/operator-briefing` max ~0.039s, `/waste-loop/stage` max ~0.053s, and
+`/broker-truth-monitor/status/fast` max ~0.009s; hot poll trace check added
+`0` bytes. Verification: `python -m py_compile` passed for the changed API
+modules; focused pytest passed for settings trace skip, account ledger, money
+movement, auto-halt, live recovery, live-order dry-run, broker-truth monitor,
+autonomous-loop route, notifications route, and webhook route; UI
+`npm run build` passed. Safety boundary unchanged: this turns on paper/
+read-only runtime and makes the dashboard/app-wide pollers faster. It does not
+place live orders, create broker `ACCEPT`, deposit, withdraw, store raw bank or
+card numbers, automate payouts, move money, guarantee profit, mark payment
+movement `LICENSED`, or mark live trading `LICENSED`. Remaining performance
+blocker: the first broker-truth reconciliation pass can still create a
+multi-second `/health` spike while it runs inside the API process. The next
+real fix is to move broker-truth reconciliation into an isolated worker the
+same way WASTE uses an external paper worker.
+
+2026-07-01 CAS Forex dashboard hot-path and staged-polling follow-up
+completed after the owner reported the app still felt blocked by
+`API unreachable`, fixture data, and disabled-looking live/payment controls.
+The API request-trace middleware now skips synchronous JSONL trace writes for
+hot GET polling routes: `/api/forex/health`, `/api/forex/dashboard/shell`,
+`/api/forex/dashboard/fast`, `/api/forex/readiness/live`,
+`/api/forex/waste-loop/stage`, `/api/forex/dispatch-loop/status`,
+`/api/forex/waste-loop-control/status/fast`,
+`/api/forex/broker-truth-monitor/status/fast`, and
+`/api/forex/operator-briefing`. The dashboard now stages secondary polling:
+core WASTE/broker runtime checks load first, while sweep, auto-halt, MT5
+diagnostic, real-candle probe, live-order dry-run, review, dispatch-handoff,
+and pilot-promotion evidence load after the first paint instead of all firing
+against the API at once. Verification: UI `npm run build` passed;
+`python -m py_compile api\server.py` passed;
+`python -m pytest tests\test_settings_api_surface.py::test_hot_polling_get_routes_skip_synchronous_request_trace -q`
+passed; and browser smoke on `?page=dashboard` showed no `API unreachable`,
+no fixture text, badge `LIVE`, `WASTE LOCAL RUNNING`, live readiness
+`NOT_READY_FOR_LIVE`, operator runtime running, and Strategy Leads present.
+Runtime state after this follow-up: WASTE is running in `PAPER` mode at
+`stage=no_trade` with cycles increasing; dispatch is running in `PAPER`; the
+proof auto-runner is running; and the broker-truth monitor is running read-only
+with `BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, `ready_for_live=false` because
+the connected MT5 evidence is still demo/paper. Safety boundary unchanged:
+this turns on paper/read-only runtime and removes stale UI blocking behavior.
+It does not place live orders, create broker `ACCEPT`, deposit, withdraw, store
+raw bank/card numbers, automate payouts, move money, guarantee profit, mark
+payment movement `LICENSED`, or mark live trading `LICENSED`. Remaining
+performance follow-up: occasional `/health` spikes can still occur during API
+contention, so the next engineering target is to move or cache any remaining
+expensive dashboard panel builders that can still occupy the event loop.
+
+2026-07-01 CAS Forex dashboard/runtime truth and cold-cache follow-up
+completed after the owner reported fixture/unreachable text, disabled-looking
+controls, and stale runtime claims. Dashboard boot is now split away from the
+legacy full aggregate: `/api/forex/dashboard/shell` and
+`/api/forex/dashboard/fast` return fail-closed warming packets immediately on
+cold cache and refresh in the background; the React dashboard hook no longer
+falls through to the monolithic `/dashboard` aggregate after the fast packet;
+and Strategy Leads hydrate from `/api/forex/strategy/leads`. Live-readiness
+now uses the same cache-first non-blocking behavior, so `/api/forex/readiness/live`
+returns a safe `WARMING`/`NOT_READY_FOR_LIVE` packet instead of blocking the
+screen. The operator briefing now overlays live WASTE/dispatch runtime evidence
+over stale archived autonomous-loop evidence, so a running WASTE loop is shown
+as `running` instead of `stalled`. Runtime state after repair: API is healthy
+on port `8765`; WASTE external worker PID `63868` is running in `PAPER` mode
+at `stage=no_trade` with cycles increasing; dispatch is running in `PAPER`
+mode over `NAS100` and `US30`; proof auto-runner is enabled; broker-truth
+monitor is running read-only and reports `BROKER_TRUTH_RECONCILED_WITH_WARNINGS`
+because the connected MT5 evidence is demo/paper, not a live account. Endpoint
+timings after warm restart were fast: `/health` ~0.019s, `/dashboard/shell`
+~0.020s, `/dashboard/fast` ~0.024s, `/readiness/live` ~0.015s,
+`/strategy/leads` ~0.021s, and `/operator-briefing` ~0.032s. Browser smoke on
+`?page=trade` and `?page=dashboard` showed no `API unreachable`, no fixture
+text, badge `LIVE`, enabled `SAVE PROVIDER / DESTINATION`, enabled
+`TURN OWNER SWITCHES ON`, enabled `RUN WASTE PROBE`, enabled
+`START PAPER LOOP`, Dashboard `WASTE LOCAL RUNNING`, live readiness
+`NOT_READY_FOR_LIVE`, Strategy Leads present, and operator briefing text
+`Autonomous loop runtime is running from waste runner in PAPER mode`. Verification:
+UI `npm run build` passed; `python -m py_compile` passed for the changed API
+routes; focused pytest passed (`49 passed`, plus the earlier dashboard/settings
+route pass). Safety boundary unchanged: this turns on paper/read-only runtime
+and truthful UI controls only. It does not place live orders, create broker
+`ACCEPT`, deposit, withdraw, store raw bank/card numbers, automate payouts,
+move money, guarantee profit, mark payment movement `LICENSED`, or mark live
+trading `LICENSED`.
+
+2026-07-01 CAS Forex Trade page runtime-health follow-up completed. The
+`/api/forex/autonomous-loop/health` route now overlays live WASTE/dispatch
+runtime evidence on top of archived autonomous-loop evidence, so the UI no
+longer reports `stalled` when the paper timers are actually running. The route
+adds a `runtime_loop` claim boundary and reports `overall_status=running` from
+the live WASTE runner first, or from the dispatch loop when WASTE is between
+workers. UI follow-up: `AiActivityIndicator` now reads WASTE first and falls
+back to the dispatch PAPER loop before showing `OFFLINE`; `MultiTimeframeSelector`
+now retries after temporary API misses and lightly refreshes every `15` seconds
+so owner/agent runtime changes show without a page reload. Runtime state after
+repair: WASTE worker PID `63632` is running in `PAPER` mode with
+`/waste-loop/stage` showing `running=true`, `stage=no_trade`, `cycles_run=35+`;
+the dispatch loop is running in `PAPER` mode over `NAS100` and `US30`; and
+`NAS100` plus `US30` have `D1`, `H1`, `H4`, `M15`, and `M5` active. Browser
+smoke on `?page=trade` showed badge `LIVE`, class
+`ai-stage-no_trade ai-conn-live`, no `API unreachable`, no fixture/fallback
+text, no timeframe-load error, `5 active: D1, H1, H4, M15, M5`, and enabled
+`SAVE PROVIDER / DESTINATION`, `TURN OWNER SWITCHES ON`, `RUN WASTE PROBE`,
+and `START PAPER LOOP` buttons. Verification: UI `npm run build` passed; the
+focused timeframes/autonomous-loop pytest suite passed (`27 passed`). Safety
+boundary unchanged: this turns on paper/read-only runtime and UI controls only.
+It does not place live orders, create broker `ACCEPT`, deposit, withdraw, store
+raw bank/card numbers, automate payouts, move money, guarantee profit, or mark
+live trading/payment movement `LICENSED`.
+
+2026-07-01 CAS Forex Trade-page recovery and safe-worker restart completed
+after the owner reported API-unreachable/fixture text, inactive-looking
+ACCEPT/CONFIRM controls, and no obvious bank/card/payout setup path. Runtime
+repair: the API is reachable at `http://127.0.0.1:8765/api/forex`; the WASTE
+PAPER worker was restarted through `/api/forex/waste-loop-control/start` and
+now reports `/api/forex/waste-loop/stage` as `running=true`, `stage=no_trade`,
+`mode=PAPER`, with cycles increasing. The paper sample collector scheduler and
+read-only broker-truth monitor were already running; the daily paper-proof
+auto-runner was started through `/proof-control/auto/start`, and the PAPER
+dispatch loop was started through `/dispatch-loop/start` with `NAS100`/`US30`
+scope. UI repair: `AiActivityIndicator` now reads WASTE heartbeat through the
+same resilient API-base fallback path used by the rest of the app, so a stale
+saved API base no longer makes the global badge falsely look offline when the
+local API is reachable. `TradePage` now directly hydrates
+`/live-enable/authorization` and exposes an enabled `Owner Authorization &
+Payout Setup` panel with provider/token and payout-destination-token inputs,
+enabled `SAVE PROVIDER / DESTINATION`, enabled `TURN OWNER SWITCHES ON`, and a
+`FULL PROOF CONTROLS` shortcut. Browser smoke on `?page=trade` showed badge
+`LIVE`, class `ai-stage-no_trade ai-conn-live`, no `API unreachable`, no
+fixture/fallback text, and enabled `RUN WASTE PROBE`, `START PAPER LOOP`,
+provider/destination, and owner-switch buttons. Verification: UI `npm run build`
+passed; `python -m pytest tests\test_settings_api_surface.py -q` passed
+(`13 passed`). Safety boundary unchanged: this turns on paper/read-only loops
+and makes owner setup controls usable. It does not place live orders, create
+broker `ACCEPT`, deposit, withdraw, store raw bank/card numbers, automate
+payouts, move money, or mark live trading/payment movement `LICENSED`.
+
+2026-07-01 CAS Forex Live Charts / Windows strategy-symbol hydration step
+completed. `WindowsPage` already polled `/api/forex/movement/snapshot` for
+account/open-position telemetry, but Strategy A/B pane symbol selection still
+depended on full-dashboard `strategyLeads` and
+`forexFuryReplayCandidates`. It now initializes from any dashboard evidence
+that is present, then polls `/api/forex/strategy/leads` and
+`/api/forex/strategy/forex-fury-replay-candidates` every `30` seconds. Slim
+dashboard packets that omit these strategy fields do not clear already-hydrated
+Live Charts strategy-symbol evidence. Runtime measurement:
+`/strategy/leads` returned about `17.7 KB` in `186 ms` with `12` leads;
+`/strategy/forex-fury-replay-candidates` returned about `71.2 KB` in `62 ms`
+with `24` candidates; and `/movement/snapshot` returned about `4.3 KB` in
+`26 ms` with `mode=PAPER_DEMO_REALTIME_SCAFFOLD`,
+`live_trading_status=CURRENTLY NOT LICENSED`, and `2` positions. Browser smoke
+showed `Trading Windows`, `Strategy A`, `Strategy B`, `US30`, `NAS100`,
+`Open Positions`, `PAPER / DEMO`, no `API unreachable`, and no fixture/fallback
+warning. Separate operational note from the same smoke: the global AI activity
+badge showed `OFFLINE`; the exact heartbeat endpoint
+`/api/forex/waste-loop/stage` returned `running=false`, `stage=idle`. Next
+functional action for the full-app goal is to repair/restart the WASTE
+worker/control path so the heartbeat is honestly `LIVE` again when the paper
+loop is running. Verification: UI `npm run build` passed; `python -m pytest
+tests\test_settings_api_surface.py -q` passed (`13 passed`). Safety boundary
+unchanged: this is read-only chart/strategy-symbol hydration. It does not place
+live orders, create broker `ACCEPT`, deposit, withdraw, store raw bank/card
+numbers, automate payouts, or mark live trading/payment movement `LICENSED`.
+
+2026-07-01 CAS Forex History and Condition Lab hydration step completed.
+`HistoryPage` no longer depends on the full-dashboard aggregate for MT
+history, account ledger, or condition tally. It initializes from any dashboard
+evidence that is present, then polls `/api/forex/mt/history`,
+`/api/forex/account/ledger`, and `/api/forex/strategy/condition-tally` every
+`30` seconds. `ConditionLabPage` now also polls
+`/api/forex/strategy/condition-tally` every `30` seconds instead of relying on
+`state.conditionTally` from the old aggregate. Slim dashboard packets that omit
+these fields do not clear already-hydrated History or Condition Lab evidence.
+Runtime measurement: `/mt/history` currently returned `null` (`4 B`) in about
+`173 ms`, so History correctly keeps the no-import message for MT4/MT5 account
+history; `/account/ledger` returned about `7.6 KB` in `30 ms` with
+`deployment_status=NOT LICENSED`, `live_trading_status=CURRENTLY NOT LICENSED`,
+`balance_usd=5000.0`, and `open_position_count=2`; and
+`/strategy/condition-tally` returned about `2.3 KB` in `27 ms` with `5`
+condition buckets. Browser smoke showed History rendering `Terminal History`,
+`$5000.00`, `Condition Tally`, `5 buckets`, `NOT LICENSED`, no
+`API unreachable`, and no fixture/fallback warning. Condition Lab smoke showed
+`Condition Lab`, `Condition Buckets`, `5/5 buckets`, `M1`, `M5`, no
+`API unreachable`, and no fixture/fallback warning. Verification: UI
+`npm run build` passed; `python -m pytest tests\test_settings_api_surface.py
+-q` passed (`13 passed`). Safety boundary unchanged: this is read-only
+history/account/condition evidence hydration. It does not place live orders,
+create broker `ACCEPT`, deposit, withdraw, store raw bank/card numbers,
+automate payouts, or mark live trading/payment movement `LICENSED`.
+
+2026-07-01 CAS Forex Optimizer page strategy-evidence hydration step
+completed. The Optimizer page no longer depends on the full-dashboard aggregate
+for the core strategy evidence quartet: capital backsolve, condition tally,
+walk-forward evidence, and external benchmark snapshot. `OptimizerPage` now
+initializes from any dashboard evidence that is present, then polls
+`/api/forex/strategy/backsolve`, `/api/forex/strategy/condition-tally`,
+`/api/forex/strategy/walk-forward`, and
+`/api/forex/strategy/external-benchmarks` every `30` seconds. Slim dashboard
+packets that omit these heavier strategy fields do not clear already-hydrated
+Optimizer evidence. Runtime measurement: `/strategy/backsolve` returned about
+`618 B` in `1.3 s` cold with `deployment_status=NOT LICENSED`;
+`/strategy/condition-tally` returned about `2.3 KB` in `39 ms` with `5`
+condition buckets; `/strategy/walk-forward` returned about `445 B` in `18 ms`
+with `research_grade=NOT_PROMOTED`; and `/strategy/external-benchmarks`
+returned about `4.8 KB` in `24 ms` with
+`report_kind=cas_forex_external_benchmark_snapshot`. Browser Optimizer smoke
+showed `LLM Optimizer Queue`, `Condition Tally`, `Leverage Backsolve`,
+`Walk-Forward Grid`, external benchmark content, run id `20260622191201`,
+`NOT_PROMOTED`, no `API unreachable`, and no fixture/fallback warning.
+Verification: UI `npm run build` passed; `python -m pytest
+tests\test_settings_api_surface.py -q` passed (`13 passed`). Safety boundary
+unchanged: this is read-only strategy evidence hydration. It does not place
+live orders, create broker `ACCEPT`, deposit, withdraw, store raw bank/card
+numbers, automate payouts, or mark live trading/payment movement `LICENSED`.
+
+2026-07-01 CAS Forex Proof page evidence hydration step completed. The Proof
+page no longer depends on the full-dashboard aggregate for capital backsolve,
+walk-forward evidence, MT5 receipt proof, or latest MT5 probe status.
+`ProofPage` now initializes from any dashboard evidence that is present, then
+polls `/api/forex/strategy/backsolve`, `/api/forex/strategy/walk-forward`,
+`/api/forex/mt/receipt/latest`, and `/api/forex/mt/probe/latest` every `30`
+seconds. A timing bug found in browser smoke was fixed: slim dashboard packets
+that omit these proof-heavy fields no longer clear already-hydrated Proof
+evidence. Runtime measurement: `/strategy/backsolve` returned about `618 B`
+in `1.3 s` cold with `deployment_status=NOT LICENSED`;
+`/strategy/walk-forward` returned about `445 B` in `41 ms` with
+`research_grade=NOT_PROMOTED`; `/mt/receipt/latest` returned about `1.1 KB`
+in `24 ms` with `BROKER_API_VERIFIED`, `live_mode=false`,
+`broker_api_authenticated=true`, and `chain_verified=true`; `/mt/probe/latest`
+returned about `457 B` in `25 ms` with `BROKER_API_VERIFIED`. Browser Proof
+smoke showed `Capital & Backsolve`, `MT5 Demo Receipt`,
+`Latest MT5 Probe Attempt`, and `Walk-Forward Evidence`, no `API unreachable`,
+no fixture/fallback warning, and enabled `SAVE PROVIDER / DESTINATION`,
+`TURN OWNER SWITCHES ON`, and `SAVE SWEEP POLICY` buttons. Verification:
+UI `npm run build` passed after the final timing fix; `python -m pytest
+tests\test_settings_api_surface.py -q` passed earlier in the same slice
+(`13 passed`). Safety boundary unchanged: this is read-only proof/control
+hydration. It does not place live orders, create broker `ACCEPT`, deposit,
+withdraw, store raw bank/card numbers, automate payouts, or mark live trading
+or payment movement `LICENSED`.
+
+2026-07-01 CAS Forex Ledger page account/receipt hydration step completed.
+`LedgerPage` no longer depends on the full-dashboard aggregate for owner
+investment ledger or MT5 receipt evidence. It initializes from any dashboard
+state that is present, then polls `/api/forex/account/ledger` and
+`/api/forex/mt/receipt/latest` every `30` seconds. This keeps the 30-day paper
+proof ledger, owner seed preview, account balance/equity/margin, evidence hash
+chain, and deployment-gate receipt checks live even though `/dashboard/fast`
+does not carry the full `accountLedger` payload and only carries a slim/null
+MT5 receipt placeholder. Runtime measurement: `/account/ledger` returned about
+`7.6 KB` in `251 ms` with `deployment_status=NOT LICENSED` and
+`live_trading_status=CURRENTLY NOT LICENSED`; `/mt/receipt/latest` returned
+about `1.1 KB` in `21 ms` with `BROKER_API_VERIFIED`,
+`broker_api_authenticated=true`, and `chain_verified=true`. Browser Ledger
+smoke showed the expected `30-Day Paper Proof Ledger`, `Owner Investment
+Ledger`, `Evidence Hash Chain`, and `Deployment Gate` headings, no
+`API unreachable`, no fixture/fallback warning, and paper seed value `5000`.
+Verification: UI `npm run build` passed; `python -m pytest
+tests\test_settings_api_surface.py -q` passed (`13 passed`). Safety boundary
+unchanged: this is read-only paper/demo ledger and receipt hydration; it does
+not deposit funds, withdraw funds, store raw bank/card numbers, place live
+orders, create broker `ACCEPT`, or mark live trading/payment movement
+`LICENSED`.
+
+2026-07-01 CAS Forex Trade page movement hydration step completed. The Trade
+page no longer depends on full-dashboard aggregate state for active market
+movement. `TradePage` now initializes from any `state.movementStream` evidence
+but immediately polls `/api/forex/movement/snapshot` every `5` seconds, so the
+paper trading desk can show bid/ask, spread, source, current price, floating
+P/L, margin estimate, SL/TP distance, and paper/demo mode even when
+`/dashboard/fast` intentionally keeps `movementStream` slim/null. Runtime
+measurement: `/movement/snapshot` returned about `4.3 KB` in `220 ms` in the
+sampled run, with `mode=PAPER_DEMO_REALTIME_SCAFFOLD`, `2` quotes, `2`
+positions, and `live_trading_status=CURRENTLY NOT LICENSED`. Browser Trade DOM
+smoke showed `Active Market Movement` rendering NAS100 paper/demo quote and
+position telemetry, `PAPER_DEMO_REALTIME_SCAFFOLD`, `LIVE` badge, WASTE
+`No Trade`, no `API unreachable`, no fixture/fallback warning, and enabled
+`RUN WASTE PROBE` / `START PAPER LOOP` controls. Verification: UI
+`npm run build` passed; `python -m pytest tests\test_settings_api_surface.py -q`
+passed (`13 passed`). Safety boundary unchanged: this is paper/demo telemetry
+hydration only; it does not place live orders, create broker `ACCEPT`, deposit,
+withdraw, store raw bank/card numbers, automate payouts, or mark anything
+`LICENSED`.
+
+2026-07-01 CAS Forex dashboard page-level hydration step completed. After the
+shell split, Dashboard no longer has to wait for the giant full aggregate to
+make core operational panels truthful. `DashboardPage` now hydrates account
+ledger, movement snapshot, account reconciliation, and live readiness from their
+own small endpoints (`/account/ledger`, `/movement/snapshot`,
+`/reconciliation/account`, `/readiness/live`) and refreshes them every `30`
+seconds while keeping `/dashboard/shell` and `/dashboard/fast` as first-paint /
+summary packets. This preserves the split/cache/slim architecture and reduces
+the chance that account, balance, sweep, movement, or readiness panels silently
+show stale startup state.
+
+Runtime measurement after the change: `/account/ledger` about `7.6 KB` / `139
+ms`; `/movement/snapshot` about `4.3 KB` / `23 ms`;
+`/reconciliation/account` about `3.7 KB` / `48 ms`; `/readiness/live` about
+`13.4 KB` / `22 ms`; `/dashboard/shell` about `3.1 KB` / `23 ms`; and
+`/dashboard/fast` about `19.1 KB` / `21 ms` in the sampled run. Browser
+Dashboard smoke after reload showed badge `LIVE`, WASTE `No Trade`, Dashboard
+`WASTE LOCAL RUNNING`, no `API unreachable`, no fixture/fallback warning, and
+the Account plus Verified Profit Sweep panels present. Verification: UI
+`npm run build` passed; `python -m pytest tests\test_settings_api_surface.py -q`
+passed (`13 passed`). Safety boundary unchanged: this is live panel hydration
+and dashboard performance work only; live trading, broker `ACCEPT`, deposits,
+withdrawals, raw bank/card storage, payout automation, and `LICENSED` status
+remain owner-gated and not complete.
+
+2026-07-01 CAS Forex dashboard shell split/cache/slim step completed. Added
+`/api/forex/dashboard/shell` as an ultra-small first-paint packet with only
+`uiReadiness`, `authorityBoundary`, and shell-grade `wasteLoop`; it explicitly
+omits `dailyBundle`, `dailySchedule`, and
+`wastePaperSampleCollectorScheduler`. The shell route uses its own independent
+2-second cache so it is not blocked behind heavier route-cache work. The React
+dashboard loader now requests `/dashboard/shell` first, paints the always-visible
+app shell from that evidence, then hydrates `/dashboard/fast` and full
+dashboard evidence afterward. New regression coverage verifies that the shell
+route stays tiny and keeps the claim boundary that shell WASTE status does not
+authorize live trading, broker `ACCEPT`, `LICENSED` status, deposits,
+withdrawals, bank/card movement, payouts, or order execution.
+
+Runtime after final reload: API healthy on `127.0.0.1:8765`; WASTE PAPER worker
+running with `current_stage=no_trade`, `mode=PAPER`, and cycles increasing;
+broker truth monitor running read-only with
+`BROKER_TRUTH_RECONCILED_WITH_WARNINGS`; MT5 evidence remains demo/warnings, not
+live-ready. Measurement after the independent shell cache: `/dashboard/shell`
+was about `3.1 KB` (`cold` about `199 ms`, `fresh` about `42 ms`,
+stale-return/refresh path about `17 ms` then `fresh` about `15 ms`) and excluded
+the page-heavy dashboard keys; `/dashboard/fast` stayed about `19.1 KB`.
+Browser smoke on Trade and Dashboard showed no `API unreachable`, no fixture
+fallback, badge `LIVE`, `PAPER` visible, `No Trade`, Dashboard
+`WASTE LOCAL RUNNING`, and owner-action buttons enabled with explicit
+confirmation titles such as `OWNER_DISPATCH_CONFIRM_REQUIRED`,
+`OWNER_ACCEPT_CONFIRM_REQUIRED`, and `OWNER_PAYOUT_CONFIRM_REQUIRED`.
+Verification: `python -m py_compile api\data.py api\server.py
+api\routes\waste_loop_control.py` passed; `python -m pytest
+tests\test_settings_api_surface.py -q` passed (`13 passed`); UI `npm run build`
+passed. This resolves the first-paint/fixture-feel blocker but does not mark the
+full CAS Forex app complete: live trading and money movement remain owner-gated
+and not `LICENSED`, and raw bank/card number storage remains out of scope for
+the app. Next product action is to keep slimming/caching the remaining slow
+panels and connect only provider-token/payout-destination setup flows, never raw
+card or bank-number storage.
+
+2026-07-01 CAS Forex dashboard fast WASTE heartbeat follow-up completed as the
+next split/cache/slim step. `/api/forex/dashboard/fast` now includes compact
+`wasteLoop` state from the same slim WASTE runner builder used by
+`/api/forex/waste-loop-control/status/fast`, and cached full-dashboard payloads
+overlay that fresh WASTE state so the Dashboard strip does not wait for
+page-level polling before showing `WASTE LOCAL RUNNING`. The React app now
+preserves `wasteLoop` in dashboard merges, passes it through the shell, and
+seeds the AI activity indicator from the fast packet while the real
+`/api/forex/waste-loop/stage` heartbeat poll continues to take over. The
+indicator also starts in `SYNC` while checking heartbeat evidence instead of
+showing a false `OFFLINE` state before the first poll returns.
+
+Runtime after reload: API listener PID `36148`; `/dashboard/fast` contains
+`wasteLoop`, `wasteLoop.running=true`, `current_stage=no_trade`, and fresh
+dashboard metadata; warm route samples were generally about `108-158 ms` after
+one cold/stale-refresh sample, while `/waste-loop-control/status/fast` stayed
+about `68-126 ms` and `/waste-loop/stage` about `90 ms`. Browser Dashboard smoke
+showed no `API unreachable`, no fixture fallback, shell indicator
+`ai-stage-no_trade ai-conn-live` with badge `LIVE`, and Dashboard
+`WASTE LOCAL RUNNING`; WASTE remains PAPER and fail-closed with no live-money
+authorization. Broker truth remains `BROKER_TRUTH_RECONCILED_WITH_WARNINGS`,
+MT5 connected to demo, `28` unmatched / pending terminal receipt rows, and live
+recovery still missing only `live_account_visible` and
+`position_reconciliation_clean`. Verification: `python -m py_compile
+api\data.py api\server.py api\routes\waste_loop_control.py` passed;
+`python -m pytest tests\test_settings_api_surface.py -q` passed (`12 passed`);
+focused supervisor/heartbeat tests passed earlier in this slice (`27 passed`);
+UI `npm run build` passed. Safety boundary unchanged: this makes the dashboard
+feel more live and truthful; it does not create broker `ACCEPT`, mark live
+trading `LICENSED`, place live trades, deposit, withdraw, store raw bank/card
+numbers, automate payouts, move money, or guarantee profit.
+
+2026-07-01 CAS Forex live-recovery blocker classification repair completed
+after the owner reported that the app still looked blocked/inert and asked why
+the goal was being treated as reached. Live recovery now classifies the 5 stale
+unresolved `_FakeRealBridge` / compound-add / WASTE handoff rows as
+`SYNTHETIC_TEST_LIKE` so they remain visible for owner audit but no longer count
+as broker-review-required live blockers. A backend count bug was fixed so an
+unknown unresolved real attempt counts as exactly one broker-review blocker, not
+two. Settings Live Recovery now separates `Unresolved Attempt Rows`,
+`Test-like Attempts`, `Broker Review Attempts`, and `Unknown Attempt Rows`; the
+current browser UI shows `Unresolved Attempt Rows 5`, `Test-like Attempts 5`,
+`Broker Review Attempts 0`, and `Unknown Attempt Rows 0`, with the explicit
+message that the synthetic/test-like rows do not block live recovery by
+themselves.
+
+Runtime after reload: API listener PID `50516`; WASTE PAPER remains
+`running=true`, cycles increasing (`1072` during final verification), and the
+edge gate is correctly refusing execution with `NO_TRADE_NULL_FAILED`; broker
+truth monitor is `running=true`, `BROKER_TRUTH_RECONCILED_WITH_WARNINGS`,
+`mt5_connected=true`, `mt5_is_demo=true`, `terminal_unmatched_open_position_count=28`,
+and `terminal_pending_receipt_count=28`; live recovery remains `OPEN` with only
+`live_account_visible` and `position_reconciliation_clean` missing. Browser
+smoke on Trade, Dashboard, Proof, and Settings showed no `API unreachable`, no
+fixture fallback, `LIVE` and `PAPER` visible, Dashboard payment setup surfaced,
+Proof provider/destination controls visible, and target `ACCEPT` / `CONFIRM` /
+WASTE / payout buttons enabled with explicit blocker titles or messages instead
+of silently gray. Verification: `python -m py_compile cas_forex\live_recovery.py`
+passed; `python -m pytest tests\test_live_recovery.py tests\test_live_money_progression_packet.py -q`
+passed (`9 passed`); UI `npm run build` passed. Safety boundary unchanged: this
+does not create broker `ACCEPT`, mark live trading `LICENSED`, store raw
+bank/card numbers, deposit, withdraw, move funds, automate payouts, place live
+trades, or guarantee profit. Remaining real blockers are a connected
+owner-approved live account and clean terminal/open-position receipt
+reconciliation, plus the broader live-money gates already listed in the app.
+
+2026-06-30 CAS Forex live-money freshness/payment-setup UX repair completed
+after the Dashboard became operational but still left the owner asking where
+bank/card/payment setup lives and whether the live-money packet was fresh.
+Shared read-only route cache packets now expose `cache_generated_at_iso`,
+`cache_age_seconds`, `cache_stale`, and `cache_refreshing` so stale cached
+packets are visible instead of merely saying `refreshing`. The Dashboard
+Verified Profit Sweep card now shows a `PAYMENT SETUP NEEDED` strip when payout
+automation is not authorized, with direct `Open Settings` and `Open Proof`
+actions to the provider/API-key/payout-destination-token controls. The copy is
+explicit that CAS Forex stores provider credentials/tokens, not raw bank or
+card numbers. Settings live-recovery now displays `Packet Cache` beside the
+live-money progression packet; the frontend dashboard merge now preserves
+`liveMoneyProgression` and `orderAttemptRecoveryPacket`, and the individual
+live-money packet fetch now has a longer timeout so a first warming read does
+not strand the panel on `unavailable`.
+
+Verification after API reload: focused backend tests
+`tests/test_route_cache.py tests/test_live_money_progression_packet.py -q`
+passed (`4 passed`); UI `npm run build` passed; browser Dashboard smoke showed
+no `API unreachable`, no fixture text, `LIVE` and `PAPER` visible,
+`PAYMENT SETUP NEEDED` visible, provider-token copy visible, and `Open
+Settings` / `Open Proof` links present. Browser Settings smoke showed
+`Live Money Packet LIVE_MONEY_PROGRESS_BLOCKED` and `Packet Cache fresh 38s
+old`, with no `API unreachable` and no fixture text. Runtime after reload:
+API listener PID `64192`; WASTE PAPER `running=true`, cycles increasing
+(`890` during final verification), stage `no_trade`, `NO_TRADE_NULL_FAILED`;
+broker-truth monitor restarted and reports `running=true`,
+`BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, `cache_status=fresh`, no last error,
+`ready_for_live=false`; live-money packet `LIVE_MONEY_PROGRESS_BLOCKED`,
+`blocker_count=9`, `cache_status=fresh`, `cache_stale=false`; Stack Health
+`DEGRADED` with `5/6` OK, `1` degraded, `0` missing, `0` unknown because
+readiness gates remain `9/19`. Fast route timing in the same runtime:
+`/dashboard/fast` about `119 ms`, `/live-money/progression-packet` about
+`125 ms`, `/waste-loop-control/status/fast` about `135 ms`,
+`/broker-truth-monitor/status/fast` about `80 ms`, and `/stack-health/check`
+about `64 ms`. Safety boundary unchanged: this repairs freshness visibility
+and setup navigation; it does not create broker `ACCEPT`, mark live trading
+`LICENSED`, place live trades, deposit, withdraw, store raw bank/card numbers,
+automate payouts, move money, or guarantee profit.
+
+2026-06-30 CAS Forex compound-add blocked-action UX repair completed after the
+owner reported that additional `ACCEPT` / handoff controls still appeared
+grayed out or inert. The Dashboard `Accept Add` and `Dispatch Handoff` controls
+in `cas-forex/ui/src/components/CompoundAddReviewPanel.tsx` now stay safely
+clickable whenever the blocker is local and known, and they surface
+`OWNER_ACCEPT_CONFIRM_REQUIRED` / `OWNER_DISPATCH_CONFIRM_REQUIRED` as visible
+owner-facing blockers and button tooltips instead of silently doing nothing.
+The accept blocker also falls back to an explicit
+`COMPOUND_ADD_EVIDENCE_NOT_READY` message when review evidence is not ready.
+Verification: UI `npm run build` passed after the final edit; browser Dashboard
+smoke showed no `API unreachable`, no fixture text, `LIVE` and `PAPER` visible,
+one enabled `Accept Add` button with title `OWNER_ACCEPT_CONFIRM_REQUIRED`, and
+one enabled `Dispatch Handoff` button with title
+`OWNER_DISPATCH_CONFIRM_REQUIRED`. Runtime remained honest and fail-closed:
+WASTE PAPER `running=true`, cycles increasing (`732` during verification),
+MT5TerminalMarketDataConnector active for US30 D1 with `fallback_used=false`,
+current candidate LONG, and edge gate refusing execution with
+`NO_TRADE_NULL_FAILED`; broker-truth monitor `running=true` with MT5 connected
+in demo mode, `BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, zero MT5 open positions,
+28 unmatched terminal open positions, and 28 pending receipts; Stack Health
+`DEGRADED` at `5/6` OK because readiness gates remain `9/19`. Current
+compound-add review remains `OPEN` and not ready for owner `ACCEPT`: no
+compound-add dry-run audit is present, no live account is visible, no live open
+parent position is visible, and open-position/pending-receipt blockers remain.
+Safety boundary unchanged: this repair does not create broker `ACCEPT`, mark
+live trading `LICENSED`, place live trades, deposit, withdraw, store raw
+bank/card details, automate payouts, move money, or guarantee profit.
+
+2026-06-30 CAS Forex Dashboard blocked-action UX repair completed after the
+owner reported gray `ACCEPT` / `CONFIRM` controls that appeared to do nothing.
+Dashboard live-adjacent controls now remain safely clickable when their blocker
+is local and known: `Run WASTE Dry Run`, `Dispatch WASTE`, `Accept Dry Run`,
+`Clear Auto-Halt`, and `Confirm Payout` show the exact blocker in the adjacent
+status line and expose the same blocker as a tooltip instead of silently doing
+nothing behind a disabled button. The blockers currently surfaced include
+`OWNER_DISPATCH_CONFIRM_REQUIRED`, `OWNER_ACCEPT_CONFIRM_REQUIRED`,
+`OWNER_CLEAR_CONFIRM_REQUIRED`, and `OWNER_PAYOUT_CONFIRM_REQUIRED`; no broker
+dispatch, live trade, payout, deposit, withdrawal, bank/card movement, broker
+`ACCEPT`, or `LICENSED` status is created when those blockers are present.
+Verification: UI `npm run build` passed; browser Dashboard smoke showed no
+`API unreachable`, no fixture text, `LIVE` and `PAPER` visible, all five target
+buttons enabled, and click-through blocker messages present for owner dispatch,
+owner dry-run accept, auto-halt clear, and payout confirm. Runtime after the
+change remained healthy: API listener PID `24800`, WASTE PAPER `running=true`
+with cycles increasing (`660` during verification), broker-truth monitor
+`running=true` with MT5 connected in Hugosway demo mode, and Stack Health
+`DEGRADED` at `5/6` OK, `1` degraded, `0` missing, `0` unknown because live
+readiness gates are still open. Safety boundary unchanged: this is a UI
+truthfulness/ergonomics repair for blocked owner actions, not live-money
+authorization or a profit guarantee.
+
+2026-06-30 CAS Forex readiness cold-start and supervisor stale-PID repair
+completed after the owner asked why controls still looked unavailable after the
+API/dashboard fixes. `/api/forex/readiness/live?sync_to_broker=true` now uses a
+cold-blocking cache mode so the first Broker Sync click returns a real
+`LIVE_OPERABILITY_CHECKLIST` packet instead of an empty `WARMING` shell. The
+warming fallback was also made schema-complete and explicitly non-authorizing.
+Broker-truth and WASTE supervisor leases now treat a fresh timestamp with a
+dead owner PID as stale, so an API restart cannot strand the read-only
+broker-truth monitor behind a phantom owner. Runtime after reload: API healthy
+on `127.0.0.1:8765` under listener PID `24800`; WASTE PAPER worker PID `22104`
+is `running=true`, `mode=PAPER`, cycles increasing (`576` during verification),
+current stage `no_trade`; broker-truth monitor restarted under PID `24800` with
+`running=true`, `BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, MT5 connected,
+Hugosway demo mode, and no last error; paper sample collector remains running.
+Default readiness remains honest at `9/19` with one mismatch because the owner
+paper model is `$5,000` while the Hugosway-Demo broker snapshot is `$100,000`.
+Broker-sync readiness now returns immediately as `9/19`, `0` mismatches,
+`5` open gates, `5` `CURRENTLY NOT LICENSED` gates, and broker seed
+`100000.0`; this is a paper/demo accounting preview only. Stack Health is
+`DEGRADED` with `5/6` checks OK, `1` degraded, `0` missing, `0` unknown; the
+only degraded item is live-readiness gates. Browser smoke on Dashboard, Trade,
+Settings, Proof, and Stack showed no `API unreachable`, no fixture text,
+`LIVE` and `PAPER` visible, Trade `RUN WASTE PROBE` / `START PAPER LOOP`
+enabled, Settings `Owner ACCEPT` / `Save provider` / sample controls enabled,
+and Proof/Stack `SAVE PROVIDER / DESTINATION` enabled. Dashboard live dispatch,
+dry-run accept, add accept, handoff, auto-halt clear, and payout confirm remain
+disabled because the required evidence/owner/live-money gates are not clear, not
+because the controls are broken. Verification: `python -m py_compile` passed
+for route-cache/readiness/supervisor files; focused tests passed with
+`28 passed`. Safety boundary unchanged: this repairs first-click readiness and
+post-restart monitor ownership; it does not create broker `ACCEPT`, mark live
+trading `LICENSED`, store raw bank/card numbers, deposit, withdraw, move funds,
+automate payouts, place live trades, or guarantee profit.
+
+2026-06-30 CAS Forex broker-truth/MT5/Stack activation repair completed after
+the owner asked why the app still showed unreachable/fixture data and disabled
+accept/confirm controls. Added a compact
+`/api/forex/broker-truth-monitor/status/fast` dashboard endpoint, changed the
+UI to poll that compact endpoint, and wrapped it in cache-first behavior so the
+Dashboard card does not wait on a full MT5-backed evidence packet. Fixed
+broker-truth supervisor hygiene so fresh acquire/renew clears stale
+`stop_requested_at` / `stop_requested_by`, and fixed broker-truth state writes
+on Windows/OneDrive by using unique temp files plus retry on transient
+`PermissionError`. Fixed the MT5 truth read path so the Python 3.14 API can
+launch the MT5 snapshot subprocess through Python 3.12 when the local
+`MetaTrader5` wheel is a `cp312` build; broker-truth now auto-selects the
+discovered Hugosway terminal path for read-only snapshot attachment and avoids
+forcing a credentialed relogin for truth reads. Fixed Stack Health so the
+existing `/api/forex/mt/probe/latest` shape with `status=BROKER_API_VERIFIED`
+counts as an OK MT5 broker-API proof instead of incorrectly reporting MT5 as
+missing.
+
+Runtime after final reload: API PID `64404`, Vite UI PID `7188` under wrapper
+PID `42688`, WASTE runner worker PID `22104`, paper sample collector PID
+`54648`, and safe report-only autowake supervisor PID `47960`. WASTE is
+`running=true`, `mode=PAPER`, cycles increasing (`426+` during final checks),
+and stage `no_trade`. Broker-truth monitor is `running=true`, has ticked, and
+its latest compact packet reports `mt5_connected=true`, `mt5_is_demo=true`,
+`mt5_open_position_count=0`, `last_error=null`,
+`BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, and `ready_for_live=false` because the
+terminal reconciliation/live-money gates are still not fully clear. Stack
+Health improved to `DEGRADED` with `5/6 checks OK, 1 DEGRADED, 0 MISSING,
+0 UNKNOWN`; the only Stack degradation is readiness gates `9/19` passing.
+Read-only MT5 terminal verifier passed under Python 3.12 against
+Hugosway-Demo with account snapshot present, broker API authenticated, demo
+mode, and zero open positions. Ran one safe session autowake cycle with
+`--no-terminal-commands`; it refreshed the stale autonomous-loop signal without
+writing terminal order commands. Browser smoke on Dashboard, Trade, Settings,
+Proof, and Stack showed no `API unreachable`, no fixture text, `LIVE` and
+`PAPER` visible, enabled `RUN WASTE PROBE` / `START PAPER LOOP`, enabled
+Settings `Owner ACCEPT` buttons, and enabled `SAVE PROVIDER / DESTINATION`.
+Verification: `python -m py_compile` passed for touched broker-truth and
+stack-health files; focused tests passed with `41 passed`; UI `npm run build`
+passed earlier in this repair lane. Safety boundary unchanged: this turns on
+safe PAPER/read-only/reporting lanes and fixes the app's live state plumbing;
+it does not create broker `ACCEPT`, mark live trading `LICENSED`, store raw
+bank/card numbers, deposit, withdraw, move funds, automate payouts, place live
+trades, or guarantee profit. Provider/destination setup exists in Settings and
+Proof; raw bank/card-number capture remains intentionally absent.
+
+2026-06-30 CAS Forex dashboard split/cache/slim follow-up completed. Added
+`/api/forex/waste-loop-control/status/fast`, a compact WASTE runner status
+endpoint for dashboard polling; the full `/status` evidence packet remains
+available for deep inspection. Dashboard now polls the compact route and splits
+its eight-endpoint supervisor refresh so WASTE/MT5 cards update independently
+instead of waiting behind slower broker-truth/live-dry-run evidence calls. Fixed
+WASTE supervisor state hygiene so fresh acquire/renew clears stale
+`stop_requested_at` / `stop_requested_by`; Dashboard now shows `REMOTE OWNER`
+for the isolated PAPER worker instead of stale `STOP REQUESTED`. Added a short
+`5s` cache plus API startup prewarm for `/api/forex/dashboard/fast` so the fast
+shell does not repeatedly cold-read OneDrive proof files.
+
+Runtime after final reload: API PID `39800`, WASTE runner worker PID `22104`,
+WASTE `running=true`, `mode=PAPER`, stage `no_trade`, heartbeat live,
+stop-request flag clear. Final timing after prewarm:
+`/api/forex/dashboard/fast` returned `cache=fresh` in about `117-144 ms`;
+`/api/forex/waste-loop-control/status/fast` returned about `4.6 KB` in about
+`94 ms`; `/api/forex/waste-loop/stage` returned about `0.2 KB` in about `93 ms`.
+Earlier comparison in the same runtime lane showed full WASTE status around
+`40 KB` and roughly `324 ms` average, while compact status was around `4.6 KB`
+and roughly `92 ms`. Browser Dashboard smoke showed no `API unreachable`, no
+fixture text, LIVE badge present, and the WASTE strip rendered
+`WASTE LOCAL RUNNING REMOTE OWNER PAPER RUNNER BROKER TRUTH`, cycles increasing,
+source `MT5TerminalMarketDataConnector`, candles `180`, pairs `38`, profile
+`blend`, hypothesis `LONG`. Disabled Dashboard buttons are live/dispatch/payout
+gates (`Dispatch WASTE`, `Accept Dry Run`, `Accept Add`, `Dispatch Handoff`,
+`Clear Auto-Halt`, `Confirm Payout`) and remain intentionally gated, not broken
+controls. Verification: `python -m py_compile` passed for `api\server.py`,
+`api\routes\waste_loop_control.py`, and `cas_forex\waste_runner_supervisor.py`;
+focused backend tests passed with `27 passed` for settings/supervisor surfaces
+and `20 passed` for supervisor/heartbeat after cleanup; UI `npm run build`
+passed. Safety boundary unchanged: this improves live-feeling PAPER automation
+and dashboard polling; it does not create broker `ACCEPT`, mark anything
+`LICENSED`, store raw bank/card numbers, deposit, withdraw, move funds,
+automate payouts, place live trades, or guarantee profit. Remaining real blocker
+for full live operation: MT5 terminal/broker proof and live/payment gates are
+still not fully passing; Stack previously showed readiness `DEGRADED` at `9/19`
+passing and true `MISSING` MT5 terminal connectivity.
+
+2026-06-30 CAS Forex Stack/heartbeat/browser verification repair completed
+after the owner reported `API reads unreachable using fixture data`, grayed
+accept/confirm controls, and uncertainty about whether the goal was actually
+reached. Fixed Stack Health's stale internal route probes from old paths
+(`/api/forex/mt5/probe`, `/api/forex/live/readiness`,
+`/api/forex/live/telemetry`) to the mounted routes
+`/api/forex/mt/probe/latest`, `/api/forex/readiness/live`, and
+`/api/forex/live-telemetry`; recent trace verification showed `0` old-path hits
+and live new-path hits. Live-readiness is now cache-first so Settings/Stack do
+not hang while the heavier gate report warms, and Stack Health cache TTL is now
+short enough to avoid holding an early dependency-warming `UNKNOWN` snapshot.
+Fixed `/api/forex/waste-loop/stage` so an API restart no longer makes the UI
+say `OFFLINE` while the isolated WASTE worker is running; the route now falls
+back to durable WASTE runner/supervisor state and reports
+`source=waste_runner_status` when the worker owns the loop. Runtime after final
+reload and safe paper-loop button exercise: API PID `25072`, Vite UI PID
+`7188`, WASTE runner worker PID `49944` running `mode=PAPER` at 5-second ticks,
+cycles increasing (`6` on final tick check), current stage `no_trade`, heartbeat
+`running=true`, heartbeat stage `no_trade`, source `waste_runner_status`; paper
+sample collector worker PID `54648` is still running. Stack Health now reports
+`MISSING` overall because real prerequisites are missing, not because the API is
+broken: `Stack: 2/6 checks OK, 3 DEGRADED, 1 MISSING, 0 UNKNOWN`;
+`readiness-gates` is `DEGRADED` with `Readiness gates 9/19 passing`; the true
+`MISSING` item is MT5 terminal connectivity. Browser smoke on Trade, Settings,
+Proof, and Stack Status showed no `API unreachable`, no fixture text, LIVE badge
+present, Trade buttons `RUN WASTE PROBE` and `START PAPER LOOP` enabled, Proof
+`SAVE PROVIDER / DESTINATION` enabled, Settings `Owner ACCEPT`, `Save provider`,
+`Run Sample Collector`, and `Stop Sample Scheduler` enabled; only nonconfigured
+notification test buttons and one helper field were disabled. Provider/payout
+setup exists as payment-provider/API-key/allowlisted-destination fields on
+Settings and Proof; raw bank/card-number storage is not implemented and should
+not be faked. Verification: `python -m py_compile` passed for
+`api\routes\loop_stage.py`, `api\routes\stack_health.py`,
+`api\routes\readiness.py`, and `cas_forex\stack_health_check.py`; focused
+backend tests passed with `22 passed`; UI `npm run build` passed. Safety
+boundary unchanged: this turns on and verifies the PAPER automation surface and
+real worker heartbeat; it does not create broker `ACCEPT`, mark anything
+`LICENSED`, store raw bank/card numbers, deposit, withdraw, move funds, automate
+payouts, place live trades, or guarantee profit.
+
+2026-06-30 CAS Forex cache-first runtime responsiveness follow-up completed
+after browser smoke exposed remaining Settings-side route stalls. The React
+dashboard hook now treats `/api/forex/dashboard/fast` as the live first-paint
+state and no longer blocks controls by awaiting the full aggregate after a
+successful fast packet. Added `api\route_cache.py` and applied cache-first,
+delayed, serialized refresh behavior to slow read-only diagnostics:
+`/api/forex/stack-health/check`, `/api/forex/operator-briefing`,
+`/api/forex/order-dispatch/audit`,
+`/api/forex/order-dispatch/audit/recovery-packet`,
+`/api/forex/strategy/terminal-receipt-recovery-packet/latest`,
+`/api/forex/live-money/progression-packet`, and WASTE read-only evidence
+reports for direction review/learning/outcome binding, paper sample collector,
+adaptation promotion, adaptation plan, adaptation preview, adaptation owner
+review, and adaptation paper apply. `waste_background_worker.py` now overlays
+durable isolated-worker evidence into top-level status fields so the UI shows
+real WASTE cycles/stage instead of a restarted API process's empty in-memory
+counter. Runtime after reload: API healthy on `127.0.0.1:8765` under uvicorn
+PID `64000`; WASTE runner worker PID `62548` is `running=true`, `mode=PAPER`,
+`cycles_run=328`, `stage=no_trade`; paper sample collector worker PID `54648`
+is `running=true`, `cycles_run=6`, latest
+`WASTE_PAPER_SAMPLE_AWAITING_PAPER_EXECUTION`. Cold timing after final reload:
+`/health` about `0.021s`, `/dashboard/fast` about `0.042s`,
+`/stack-health/check` about `0.016s`, `/operator-briefing` about `0.016s`;
+warm timing about `0.017s`, `0.028s`, `0.019s`, and `0.018s`. Browser smoke:
+Trade has no `API unreachable`, no fixture text, zero disabled controls, and
+enabled `RUN WASTE PROBE` / `START PAPER LOOP`; Proof has no `API unreachable`,
+no fixture text, zero disabled controls, and enabled
+`SAVE PROVIDER / DESTINATION`; Settings has no `API unreachable`, no fixture
+text, enabled `Owner ACCEPT`, `Save provider`, `Run Sample Collector`, and
+`Stop Sample Scheduler`, with only nonconfigured notification/unlimited helper
+controls disabled. Verification: `python -m py_compile` passed for the touched
+route/cache/worker files; focused route, WASTE, stack/operator, owner/settings,
+and live-money/order-dispatch tests passed in the rerun sets; UI
+`npm run build` passed. Safety boundary unchanged: this makes the app controls
+and PAPER evidence loops responsive; it does not create broker `ACCEPT`, move
+bank/card funds, automate deposits or payouts, mark anything `LICENSED`, place
+live trades, or guarantee profit.
+
+2026-06-30 CAS Forex owner-control/button/runtime responsiveness repair
+completed for the owner-reported "buttons grayed out / confirm does nothing /
+turn everything on" failure mode. The Settings autonomy-mode chips are no longer
+dead controls: they now persist owner-selected mode through
+`POST /api/forex/settings/owner-control/update` into
+`cas-forex\runtime\owner-control-overrides.json`, with the current restored
+mode `AI_FULL_AUTO_PAPER` and `live_requested=false`. The owner-control endpoint
+was kept fast by removing a heavy full live-gate evaluation from the quick
+readout; detailed live authority remains on runtime-gate/authority endpoints
+and at action-time checks. The frontend API client now uses the same live-base
+fallback for POST/DELETE as GET and prioritizes the local API on localhost, so
+the app can no longer show live data from one base while `Owner ACCEPT`,
+confirm, save, or start buttons silently post to a stale stored base. WASTE
+runner start was also repaired: `start_runner` no longer calls the full
+broker/live-money gate before starting PAPER, which had wedged the API; it uses
+a fast owner/live-flag confirmation guard and still leaves real broker/live
+authorization to dispatch-time gates. Runtime after reload: API healthy on
+`127.0.0.1:8765`, UI healthy on `127.0.0.1:5173`, WASTE runner `running=true`,
+`mode=PAPER`, cycles increasing, and paper sample collector scheduler
+`WASTE_PAPER_SAMPLE_COLLECTOR_RUNNING`. Browser smoke: Trade has no
+`API unreachable`, no `fixture`, shows `LIVE` and `PAPER`, `RUN WASTE PROBE` and
+`START PAPER LOOP` enabled, and scheduler text `RUNNING`; Settings has no
+`API unreachable`, no `fixture`, all autonomy mode chips enabled, no
+live-requested notice, and all visible `Owner ACCEPT` buttons enabled.
+Verification: `python -m py_compile cas_forex\owner_control.py
+api\data.py api\routes\settings.py cas_forex\waste_runner.py
+api\routes\waste_loop_control.py` passed; focused WASTE runner/supervisor
+tests passed with `31 passed`; focused owner/settings tests passed with
+`21 passed`; UI `npm run build` passed. Safety boundary unchanged: this turns
+on PAPER automation and owner controls; it does not deposit, withdraw, move
+bank/card money, create broker `ACCEPT`, place live orders, mark anything
+`LICENSED`, or guarantee profit.
+
+2026-06-30 CAS Forex paper/live-control UX and WASTE edge-gate repair completed
+for the owner-reported "API unreachable / fixture data / grayed accept buttons"
+failure mode. The WASTE TEST gate now has a direction-tagged path for WASTE
+LONG/SHORT evidence: after filtering historical rows to the candidate side it
+compares the chosen side's cost-adjusted return against a random-direction null,
+instead of shuffling same-sign labels that made constant-side evidence tie the
+null forever. This preserves fail-closed behavior while allowing real "knows
+when to go long/short" evidence to PASS only when it beats a null, is
+net-positive, and clears the owner edge threshold. Settings owner/action
+buttons (`Owner ACCEPT`, adaptation review/apply, archive, refresh, reconcile)
+now remain clickable and report the exact "Cannot ..." blocker when a required
+owner checkbox or evidence condition is missing, instead of appearing dead. Trade
+now polls the live paper-sample scheduler endpoint directly and both Trade and
+Settings pass `scan_candidates=true`, `max_scan_candidates=8`, and
+`run_deal_history_ingest=true` when starting/running paper sample collection.
+Verification: `tests\test_edge_gate.py` passed with `16 passed`; focused
+WASTE runner/market tests passed with `35 passed`; focused edge/default tests
+passed with `18 passed`; focused edge/collector tests passed with `26 passed`;
+`python -m py_compile cas_forex\edge_gate.py` passed; UI `npm run build`
+passed after both Settings and Trade changes. Runtime was reloaded under API PID
+`35188`; WASTE PAPER is running at 5-second ticks with `runner_cycles=63`,
+current stage `no_trade`, and the latest refusal is honest
+`NO_TRADE_NULL_FAILED` because the tested US30 D1 long return is negative after
+cost and does not beat the random-direction null. Paper sample collector
+scheduler is running with `scheduler_cycles=2`,
+`latest_collector_status=WASTE_PAPER_SAMPLE_AWAITING_PAPER_EXECUTION`,
+`market_data_ready=true`, `confirmed_direction_count=2`, bound outcomes `0/5`,
+and `money_moved=false`. Browser Trade smoke now shows no `API unreachable`, no
+`fixture data`, LIVE badge present, `RUN WASTE PROBE` and `START PAPER LOOP`
+enabled, and `Sample scheduler: RUNNING; latest
+WASTE_PAPER_SAMPLE_AWAITING_PAPER_EXECUTION.` Live trading, broker `ACCEPT`,
+bank/card/deposit/payout movement, and any `LICENSED` claim remain owner-gated
+and not created by this work.
+
+2026-06-30 CAS Forex dashboard aggregate/cache repair completed after the
+full-suite dashboard surface check exposed stale or `None` embedded sections.
+`api\data.py` now restores the full `/api/forex/dashboard` aggregate for the
+legacy/full evidence packets (`agent*`, Forex Fury, MT4/MT5 verifier/history,
+terminal recovery/operability, WASTE learning/outcome/sample/adaptation,
+live-money progression, and PCBA) while `/dashboard/fast` remains the slim
+shell packet. `api\server.py` now bypasses the full-dashboard cache under
+pytest so monkeypatched ASGI tests do not see stale state, and cached production
+dashboard responses now overlay live operational fields from
+`dashboard_fast_state()` so controls such as the paper sample scheduler do not
+appear `STOPPED` after they have been started. `pytest.ini` ignores the local
+unreadable `tmppcba-pytest` scratch directory, and root `.gitignore` now covers
+`codex_pytest_tmp*` scratch directories without deleting them. Verification:
+the previous 24 dashboard-surface failures now pass explicitly with
+`24 passed`; `tests\test_settings_api_surface.py` passed with `12 passed`;
+collector/outcome tests passed with `15 passed`; `python -m py_compile
+api\data.py api\server.py cas_forex\waste_paper_sample_collector.py` passed;
+`from api.server import app` imports with `224` routes. Runtime was reloaded
+under API PID `36340`; stale runner lease was cleared via stop/recover; WASTE
+PAPER restarted at 5 seconds; paper sample collector restarted at 300 seconds
+with `run_deal_history_ingest=true`. Final runtime smoke showed
+`runner_running=true`, `runner_cycles=4`, `runner_stage=no_trade`,
+`scheduler_running=true`, `scheduler_cycles=1`, scheduler actions
+`mt5_market_data_diagnostic,waste_real_candle_probe_scan,mt5_demo_deal_history_ingest,waste_direction_outcome_binding`,
+and `/dashboard` now reports `wastePaperSampleCollectorScheduler.running=true`.
+Final browser Trade smoke showed no `API unreachable`, no `fixture` text, both
+`RUN WASTE PROBE` and `START PAPER LOOP` enabled, and visible text
+`Sample scheduler: RUNNING; latest WASTE_PAPER_SAMPLE_NEEDS_PASS_TOKEN.` A full
+all-tests run was attempted after the dashboard fix but outlived the tool
+timeout; targeted reruns of the discovered failure set are green.
+
+2026-06-30 CAS Forex paper proof loop is now fuller end-to-end after the
+owner-reported Trade-page button failure. The WASTE paper sample collector no
+longer defaults to scan-only: `run_waste_paper_sample_collection_once`,
+`WastePaperSampleCollectorScheduler`, the API request model, Settings controls,
+and Trade page paper-loop controls now default `run_deal_history_ingest=true`.
+Each collector pass now also immediately rebuilds read-only WASTE direction
+outcome binding from the freshly ingested MT5 demo/paper history, so closed demo
+history can flow into bound paper-outcome evidence without a hidden manual
+kick. Safety boundary unchanged: this reads broker-grade candles and
+paper/demo deal history only; it does not place orders, close positions, create
+broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, mint edge
+tokens, deposit, withdraw, move bank/card money, automate payouts, or mark
+anything `LICENSED`. Verification: focused collector/outcome tests passed with
+`15 passed`; focused WASTE market/runner/collector/outcome tests passed with
+`48 passed`; MT5 deal-history/collector/outcome tests passed with `22 passed`;
+UI `npm run build` passed. Runtime was reloaded under API PID `61748`; stale
+old-runner supervisor lease from PID `35284` was cleared through the designed
+stop/recover route, WASTE PAPER restarted at 5 seconds, and the read-only paper
+sample collector scheduler restarted at 300 seconds. Runtime smoke showed
+`runner_running=true`, `runner_cycles=4`, current stage `no_trade`, supervisor
+owned by this process, `scheduler_running=true`, `scheduler_cycles=1`, and
+scheduler actions
+`mt5_market_data_diagnostic,waste_real_candle_probe_scan,mt5_demo_deal_history_ingest,waste_direction_outcome_binding`
+with `scheduler_money_moved=false` and
+`scheduler_broker_execution_touched=false`. Browser Trade smoke showed no
+`API unreachable`, no `fixture` text, both `RUN WASTE PROBE` and
+`START PAPER LOOP` enabled, and clicking `RUN WASTE PROBE` updated the page to
+`Probe scheduler running: WASTE_PAPER_SAMPLE_AWAITING_PAPER_EXECUTION.
+confirmed=2, bound=0/5.` Remaining gap: WASTE has confirmed PASS-direction
+samples and demo history can be ingested, but no bound executed paper/demo
+outcome is complete yet because matching finalized paper/demo execution
+attempts are still missing; live money/payout movement remains unavailable
+until real verified winnings and owner-approved provider gates exist.
+
+2026-06-30 CAS Forex owner authorization/payment setup durability fixed. The
+Proof page's `SAVE PROVIDER / DESTINATION` and owner authorization controls are
+no longer process-memory only: `live_enable_control.py` now persists local owner
+authorization and payment-provider override state to
+`cas-forex\runtime\live-enable-overrides.json`, reloads it through the same
+runtime-gate path after an API restart, and still never returns
+`payment_api_key` in owner-facing reports. `POST /api/forex/live-enable/reset`
+continues to clear the local runtime override file. The authorization report now
+exposes `override_state_path`, `override_count`, and `persisted` so the app can
+prove whether the setup is backed by local runtime state. Safety boundary
+unchanged: these saved owner settings do not place orders, deposit, withdraw,
+move bank/card money, create broker `ACCEPT`, or mark anything `LICENSED`; every
+money/trade action still re-checks runtime gates, broker/provider gates, edge
+gates, live recovery, and explicit confirm requirements at action time. A payout
+math UI mismatch was also fixed: Proof page verified-profit sweep inputs now use
+backend units (`0..100` percent, defaults `30` sweep / `20` tax reserve / `$25`
+minimum) instead of fractional `0..1` defaults that could silently save `0.5%`
+where the owner meant a percentage. Verification: `python -m py_compile
+cas-forex\cas_forex\live_enable_control.py cas-forex\api\routes\live_enable.py`
+passed; focused live-enable/runtime/money tests passed with `57 passed`, then
+focused live-enable/runtime/route/sweep tests passed with `41 passed`; UI
+`npm run build` passed with the root chunk still `191.92 KB` and Proof chunk
+`30.61 KB`. Runtime was reloaded under API PID `35284`; WASTE is running in
+`PAPER`, the read-only paper sample collector scheduler is running, fast
+dashboard returned HTTP 200 at about `22.6 KB` in about `0.32s`, and browser
+Proof smoke showed no `API unreachable`, no `fixture data`, zero disabled
+buttons/inputs, sweep input `min=0 max=100 step=1 value=30`, tax input
+`min=0 max=100 step=1 value=20`, and minimum sweep value `25`. Remaining gap:
+payment/provider setup is now restart-safe, but there are still no verified live
+net winnings to sweep and no live money movement should occur until the owner
+sets real provider/destination data and the live gates legitimately authorize.
+
+2026-06-30 CAS Forex timed WASTE runner now uses the same bounded market-lane
+scanner as the paper evidence collector. `waste_market_data.py` adds
+`build_waste_market_state_scan(...)`, which scans strategy-ledger
+`ACTIVE_RESEARCH_LEAD` symbol/timeframe lanes, previews edge status only to pick
+the strongest WATCH lane, and attaches a compact `waste_market_scan` packet to
+the selected market state. `waste_runner._default_watch()` now calls that scan
+builder instead of the old single-lane builder, and the durable WASTE cycle audit
+now records scan status, selected symbol/timeframe, attempt count, selected edge
+status, and the safety flags. The scan does not register edge authorization,
+dispatch orders, touch broker execution, create broker `ACCEPT`, create owner
+`ACCEPT`, authorize live trading, deposit, withdraw, move bank/card money,
+automate payouts, or mark anything `LICENSED`; the runner still re-runs TEST and
+requires a fresh PASS before execution. Verification:
+`python -m py_compile cas-forex\cas_forex\waste_market_data.py
+cas-forex\cas_forex\waste_runner.py` passed; focused tests passed with
+`34 passed` across `test_waste_market_data.py`, `test_waste_runner.py`, and
+`test_waste_runner_directional_defaults.py`. Runtime was reloaded under API PID
+`61656`; WASTE is running in `PAPER`, and a fresh post-reload durable cycle
+scanned 6 eligible lanes, selected `US30 H1`, ended `NO_TRADE` because the edge
+gate returned `NO_TRADE_NULL_FAILED`, had `edge_has_token=false`,
+`execute_result=null`, `edge_authorization_registered=false`,
+`broker_execution_touched=false`, and `money_moved=false`. The read-only paper
+sample collector scheduler is also running. `/api/forex/dashboard/fast` returned
+HTTP 200 in about 0.27 seconds at about 22 KB with no `API unreachable` or
+fixture markers. Browser smoke checks showed the Trade page has `LIVE`/`PAPER`,
+no API-unreachable strip, no fixture text, and zero disabled buttons; the Proof
+page shows the live eligibility/payment sections, no fixture text, no
+API-unreachable strip, enabled provider/destination/sweep inputs, and zero
+disabled buttons. Remaining gap: this makes WASTE genuinely scan eligible
+paper-market lanes on the timed loop, but it still has no confirmed PASS-token
+paper direction sample and no bound closed MT5 paper outcome.
+
+2026-06-30 CAS Forex WASTE paper probe scanner implemented. The paper-only
+sample collector no longer has to sit on one configured probe lane while waiting
+for a PASS-token sample. `waste_paper_sample_collector.py` now supports a
+bounded read-only WASTE real-candle scan over strategy-ledger-eligible
+`ACTIVE_RESEARCH_LEAD` symbols/timeframes. The scanner is exposed through
+`scan_candidates` and `max_scan_candidates` on the paper sample collector
+run-once and scheduler routes, and the scheduler now persists those settings in
+its owner-visible config. If no explicit timeframe is supplied, the scanner uses
+each active lead's preferred timeframes; if a PASS appears, it stops on that
+probe, otherwise it selects the strongest blocked probe for status visibility.
+The scanner does not register edge authorization, dispatch orders, touch broker
+execution, create broker `ACCEPT`, create owner `ACCEPT`, authorize live trading,
+deposit, withdraw, move bank/card money, automate payouts, or mark anything
+`LICENSED`. A fast-dashboard regression from the richer scan evidence was also
+fixed: `/api/forex/dashboard/fast` now carries a compact scheduler/scan summary
+instead of the full selected probe packet, while the full scheduler endpoint
+keeps the full evidence. Verification: `python -m py_compile
+cas-forex\api\data.py cas-forex\cas_forex\waste_paper_sample_collector.py
+cas-forex\api\routes\waste_loop_control.py` passed; focused probe/collector
+tests passed with `14 passed`; UI `npm run build` still passed with the root
+chunk at 191.92 KB and no large-chunk warning; browser Trade smoke showed no
+API strip, no `API unreachable`, no `fixture data`, heartbeat `LIVE`, and
+enabled `RUN WASTE PROBE` / `START PAPER LOOP`. Live API was reloaded as PID
+`61836`; WASTE is running in `PAPER` with cycles increasing and stage
+`no_trade`; the paper sample collector scheduler is running with
+`scan_candidates=true`, `max_scan_candidates=4`, and no forced timeframe. A
+forced live scan checked broker-grade candles for `US30 D1`, `NAS100 D1`,
+`NAS100 H4`, and `NAS100 H1`; it selected `NAS100 H1` as the strongest blocked
+probe but returned `WASTE_PROBE_SCAN_NO_PASS`, latest collector status
+`WASTE_PAPER_SAMPLE_NEEDS_PASS_TOKEN`, `money_moved=false`,
+`live_order_attempted=false`, and `broker_execution_touched=false`.
+`/api/forex/dashboard/fast` returned HTTP 200 in about 0.30 seconds at about
+22 KB after trimming the scan payload. Remaining product gap: WASTE is now
+searching more intelligently in PAPER, but it still has zero confirmed PASS-token
+direction samples and zero bound closed outcomes. The next aligned work is to
+let the scanner keep running, improve eligible research lanes only with
+no-lookahead broker-grade evidence, and bind any future PASS paper/demo
+execution to MT5 closed-history before any owner review of promotion.
+
+2026-06-30 CAS Forex second dashboard slim/lazy-load pass completed. The
+`/api/forex/dashboard/fast` packet now carries only first-paint operational
+state: readiness, schedule, daily bundle, owner control, movement stream, MT5
+receipt/probe, authority boundary, and the WASTE paper sample scheduler. It no
+longer carries broker truth, order audits, live recovery, WASTE probe detail, or
+other Settings/Dashboard-only diagnostics. The full dashboard no longer builds
+the live-money progression packet, WASTE adaptation stack, WASTE direction
+learning/outcome binding, WASTE paper sample collector, PCBA/CJT cockpit, Forex
+Fury reports, agent memory, strategy-dev queue, patch runner, daily rollup,
+session autowake, or terminal/MT4/MT5 verifier bundles; those remain available
+through their existing page-specific endpoints. The React dashboard merge now
+preserves an explicit backend `null` for lazy fields instead of silently
+refilling them from local fixtures. `PcbaPage` now lazy-loads
+`/api/forex/pcba/cockpit` and shows `LIVE API` once the live packet lands.
+`OptimizerPage` now lazy-loads Forex Fury, agent workflow/memory/research,
+strategy-dev/patch-runner, daily learning, autowake, terminal, MT4, and MT5
+reports from their existing endpoints. Verification after API reload: fresh
+`/dashboard/fast` returned HTTP 200 in about 0.22 seconds at about 35 KB; cold
+full `/dashboard` returned HTTP 200 in about 3.36 seconds at about 255 KB; cached
+full `/dashboard` returned HTTP 200 in about 0.045 seconds. This replaces the
+prior ~1.1-1.4 second fast packet, ~38 second cold full packet, and ~1.18 MB full
+payload. Follow-up root UI code-splitting is now complete: `App.tsx` no longer
+imports `./data/fixtures` or statically imports page modules at startup, uses
+React `lazy`/`Suspense`, and boots from a compact startup state while the fast
+dashboard packet lands. Source check returned `fixture_imports=0`,
+`static_page_imports=0`, and `lazy_calls=19`. UI `npm run build` passed with no
+large-chunk warning; the root JS chunk dropped from about 767 KB to 191.92 KB
+(59.49 KB gzip), with page chunks split out separately: Settings 85.40 KB,
+Optimizer 79.02 KB, Dashboard 71.05 KB, Proof 30.61 KB, Trade 26.13 KB, and
+PCBA 10.41 KB. `python -m py_compile cas-forex\api\data.py
+cas-forex\api\server.py` passed, and `git diff --check` reported only existing
+LF-to-CRLF warnings. Final endpoint check returned fresh
+`/dashboard/fast` HTTP 200 in about 0.38 seconds at about 35 KB and cached full
+`/dashboard` HTTP 200 in about 0.15 seconds at about 255 KB. Browser
+verification showed Trade has no API strip, no `API unreachable`, no
+`fixture data`, WASTE heartbeat `LIVE`, and enabled `RUN WASTE PROBE` /
+`START PAPER LOOP`; PCBA/CJT shows `LIVE API` with no fixture fallback; Optimizer
+loads memory, strategy, Forex Fury, agent workflow, terminal, and MT5 report
+signals with no fixture banner. Runtime after verification: API PID `57076`,
+WASTE `running=true`, `mode=PAPER`, stage `no_trade`, cycles `124`, edge
+threshold `0.65`, daily cap `$3,500`, paper execution sink configured, paper
+sample scheduler `WASTE_PAPER_SAMPLE_COLLECTOR_RUNNING`, scheduler cycles `3`,
+market data ready, `confirmed_direction_count=0`, `bound_outcome_count=0`,
+`money_moved=false`, and `live_order_attempted=false`. Remaining product gap:
+the responsiveness problem is materially fixed, but CAS Forex is still
+`NOT LICENSED` for live trading or money movement. The next product work is to
+keep collecting broker-grade PAPER WASTE probes until a real PASS-token sample
+appears, bind future paper/demo executions to MT5 closed outcomes, and then
+promote only owner-reviewed evidence; optional frontend polish is further
+splitting shared API/types/CSS if initial parse time still feels heavy on the
+target machine.
+
+2026-06-30 CAS Forex dashboard split/cache pass completed. The app no longer
+has to wait on the giant `/api/forex/dashboard` aggregate before Trade/Proof can
+feel live. FastAPI now exposes `GET /api/forex/dashboard/fast` for a slim live
+operational packet and keeps the full dashboard behind an in-process cache with
+a 300-second TTL. `GET /api/forex/dashboard` builds the full evidence bundle on
+first cold request, then serves cached full packets quickly; stale cached
+packets are served without kicking off surprise background rebuilds unless
+`?refresh=true` is explicitly supplied. The React dashboard hook now loads fast
+state first, clears startup without claiming fixture fallback, and refreshes the
+full evidence bundle in the background. The root app no longer shows the normal
+startup `Loading live evidence API...` strip; it only shows the strip for an
+actual API error. Verification after reload: `/dashboard/fast` returned HTTP
+200 in about 1.1-1.4 seconds at about 124-139 KB, cold full dashboard returned
+HTTP 200 in about 38 seconds at about 1.18 MB, and cached full dashboard
+returned HTTP 200 in about 0.25 seconds. Browser verification on Trade showed
+no API strip, no `API unreachable`, no `fixture data`, WASTE heartbeat
+`LIVE`, and enabled `RUN WASTE PROBE` / `START PAPER LOOP` buttons. Clicking
+`RUN WASTE PROBE` returned `Probe scheduler running:
+WASTE_PAPER_SAMPLE_NEEDS_PASS_TOKEN`; clicking `START PAPER LOOP` returned
+`PAPER loop running at 5s; sample scheduler running with 1 cycle(s).` Browser
+verification on Proof showed `LIVE & PAYMENT CONTROLS`, provider and
+bank/card-destination-token inputs, enabled Save Provider / Turn Owner Switches
+On / Save Sweep Policy buttons, and zero static `DISABLED` cards. Runtime after
+recovering an orphaned pre-restart WASTE supervisor lease: API PID `46640`,
+WASTE `running=true`, `mode=PAPER`, stage `no_trade`, scheduler
+`WASTE_PAPER_SAMPLE_COLLECTOR_RUNNING`, latest collector status
+`WASTE_PAPER_SAMPLE_NEEDS_PASS_TOKEN`, `money_moved=false`, and
+`live_order_attempted=false`. Verification: `python -m py_compile
+cas-forex\api\server.py cas-forex\api\data.py` passed; `npm run build` passed
+with the existing large-chunk warning; `git diff --check` reported only the
+repo's existing LF-to-CRLF warnings. Remaining product gap: deeper pages still
+consume the 1.18 MB full dashboard shape once loaded; the next performance pass
+should move page-specific heavy panels such as PCBA/CJT, live-money progression,
+WASTE adaptation, and research history to their own lazy endpoints/components.
+
+2026-06-30 CAS Forex live-control repair pass completed after the Proof/Trade UI
+showed false fixture/unreachable and static disabled controls. The UI API client
+now retries safe GET reads across the saved/default/same-origin API bases and
+gives the heavy dashboard aggregate a 180-second timeout instead of falsely
+falling back after 8 seconds. Vite now proxies `/api/forex` to the local FastAPI
+server, and FastAPI explicitly allows local dev ports 5173 and 5174. The
+dashboard route now runs its synchronous aggregate builder through FastAPI's
+threadpool so the lightweight stage/health/status routes can still answer while
+the dashboard is building. Trade no longer hard-codes dead buttons: `RUN WASTE
+PROBE` now starts/ensures the paper sample collector scheduler, and `START PAPER
+LOOP` starts the PAPER WASTE loop plus the scheduler through existing backend
+gates. Proof no longer renders static `DISABLED` cards for Live & Payment
+Controls; it now shows live owner authorization switches, provider/API-key
+storage, bank/card payout destination token input, destination allowlist toggle,
+and verified-profit sweep policy inputs. The app still does not collect raw
+bank/card numbers and does not create deposits, withdrawals, bank/card movement,
+broker `ACCEPT`, owner `ACCEPT`, or live-money authority by itself. The local API
+was restarted as PID `33804`, Vite is serving `127.0.0.1:5173`, WASTE PAPER was
+restarted at a 5-second interval, the paper sample collector scheduler was
+restarted at a 300-second interval, and live smoke returned
+`stage=no_trade`, `running=true`, `mode=PAPER`, `cycles_run=66`, scheduler
+`WASTE_PAPER_SAMPLE_COLLECTOR_RUNNING`, latest collector status
+`WASTE_PAPER_SAMPLE_NEEDS_PASS_TOKEN`, `money_moved=false`, and
+`live_order_attempted=false`. Browser verification showed the Trade page has no
+`API unreachable` or fixture banner, the top heartbeat shows `LIVE`, and both
+Trade buttons are enabled; Proof shows `LIVE & PAYMENT CONTROLS`, working Save
+Provider / Turn Owner Switches On / Save Sweep Policy buttons, provider and
+destination-token inputs, and zero static `DISABLED` cards. Verification:
+`python -m py_compile cas-forex\api\server.py` passed; `npm run build` passed
+with only the existing large-chunk warning. Remaining blocker: the full
+`/api/forex/dashboard` aggregate still takes about 105 seconds and returns about
+1.18 MB locally, so the next product fix is to split/cache/slim the dashboard
+payload and let page-specific panels load their own lightweight endpoints rather
+than making every page wait on the full evidence bundle.
+
+2026-06-30 CAS Forex WASTE future PASS-token paper execution sink implemented.
+`waste_runner.py` now gives the timed WASTE runner a default PASS-only paper/demo
+dispatch sink. When WASTE reaches EXECUTE from a fresh edge-gate PASS, it selects
+the owner-configured bridge through `broker_control.select_bridge`, builds the
+exact `waste-{decision_ref}` order, sends it through the normal
+`order_dispatch.dispatch_intent` chokepoint, and records the result in
+`cas-forex/runtime/order-attempts.json` with source `waste_runner`. This does not
+create owner `ACCEPT`, broker `ACCEPT`, live authority, deposits, withdrawals,
+bank/card movement, or payout actions. The dispatch still re-checks the edge
+authorization and risk/live gates before any bridge can be touched. The runner
+status now exposes `paper_execution_sink` so the owner can see that the sink is
+configured and where its authority boundary is. A PASS-token timestamp bug was
+also fixed: the runner now preserves the edge gate's original `evaluated_at` when
+registering the PASS, so HMAC verification at the dispatch chokepoint can
+actually validate the token. `waste_cycle_audit.py` now serializes dispatch
+results as structured JSON so future executed PASS cycles can show broker ticket
+and audit status in the durable WASTE cycle record. Focused tests prove a future
+PASS reaches the default paper sink, writes a finalized non-real order attempt,
+and remains fail-closed without PASS. Existing fake-real bridge tests were moved
+to temporary order-attempt audit stores so future test runs stop polluting live
+runtime evidence. Verification: `py_compile` passed for the touched runner,
+cycle-audit, and test files; `test_waste_runner.py` plus `test_order_dispatch.py`
+passed with `35 passed`; the wider WASTE safety slice passed with `82 passed`;
+UI `npm run build` passed with the existing Vite chunk-size warning; `git diff
+--check` reported only existing LF-to-CRLF warnings. The local API was reloaded
+on `127.0.0.1:8765` as PID `50404`; WASTE was restarted in PAPER at a 5-second
+interval and reported `running=true`, `mode=PAPER`, `cycles_run=7`,
+`last_decision=NO_TRADE`, with `paper_execution_sink.configured=true` and source
+`broker_control.select_bridge`. The paper sample collector scheduler was
+restarted and reported `WASTE_PAPER_SAMPLE_COLLECTOR_RUNNING`, `cycles_run=1`,
+`latest_collector_status=WASTE_PAPER_SAMPLE_AWAITING_PAPER_EXECUTION`,
+`confirmed_direction_count=2`, `bound_outcome_count=0`,
+`broker_execution_touched=false`, `live_order_attempted=false`, and
+`money_moved=false`. Current blocker before live-readiness: the existing runtime
+`order-attempts.json` still contains older fake/test real-attempt records
+including unresolved real attempts. Those must be owner-reviewed and either
+reconciled through the explicit recovery path or the runtime evidence store must
+be deliberately reset as test-polluted before any live-money readiness claim.
+Current next product gap: let the patched WASTE runner collect future PASS-token
+paper/demo executions, then bind those executions to MT5 demo closed-history by
+broker ticket. The prior range-scalper research is useful as negative evidence
+only: its first 18-trade GBP/USD result looked strong, but the longer stress
+test did not beat the null robustly, so it should not be promoted as a tradable
+edge without new broker-grade PASS/outcome evidence.
+
+2026-06-30 CAS Forex WASTE paper sample collector scheduler implemented.
+`waste_paper_sample_collector.py` now includes an owner-toggleable, paper-only
+background scheduler for the paper sample collection lane. The scheduler writes
+durable state to `cas-forex/runtime/waste-paper-sample-collector-scheduler.json`
+and durable audit rows to
+`cas-forex/runtime/waste-paper-sample-collector-scheduler-audit.jsonl`. It is
+exposed through
+`GET /api/forex/waste-loop-control/paper-sample-collector/scheduler`,
+`POST /api/forex/waste-loop-control/paper-sample-collector/scheduler/run-once`,
+`POST /api/forex/waste-loop-control/paper-sample-collector/scheduler/start`,
+and `POST /api/forex/waste-loop-control/paper-sample-collector/scheduler/stop`;
+included in the dashboard payload as `wastePaperSampleCollectorScheduler`; and
+displayed in Settings Live Recovery with Run Sample Collector and Start/Stop
+Sample Scheduler controls. The scheduler only repeats read-only paper/demo
+evidence collection steps: MT5 broker-grade market-data diagnostic, WASTE
+real-candle probe, and optional MT5 demo deal-history ingest. It does not start
+live trading, dispatch paper/live orders, close positions, create broker
+`ACCEPT`, create owner `ACCEPT`, authorize live trading, mint edge tokens, lower
+thresholds, raise risk, deposit, withdraw, move bank/card money, automate
+payouts, mark evidence `LICENSED`, or mutate runtime controls. Verification:
+`py_compile` passed for the scheduler module, route/data wiring, and touched
+tests; focused collector/scheduler + dashboard API tests passed with `18
+passed`; the wider WASTE safety slice passed with `63 passed`; UI `npm run
+build` passed with the existing Vite chunk-size warning; `git diff --check`
+reported only existing line-ending warnings on touched tracked files. The local
+API was reloaded on `127.0.0.1:8765` as PID `43456`. The old PAPER WASTE runner
+was stopped through the normal route before reload, releasing its supervisor
+lease. After reload, WASTE was restarted paper-safe and reported `running=true`,
+`mode=PAPER`, `cycles_run=8`, stage `no_trade`, with the edge gate rejecting
+the current NAS100 setup on null/cost/win-probability failure. The paper sample
+collector scheduler was started at a 300-second interval with
+`run_market_diagnostic=true`, `run_real_candle_probe=true`, and
+`run_deal_history_ingest=false`; live smoke returned
+`WASTE_PAPER_SAMPLE_COLLECTOR_RUNNING`, `cycles_run=1`,
+`latest_collector_status=WASTE_PAPER_SAMPLE_NEEDS_PASS_TOKEN`,
+`sample_collection_complete=false`, `market_data_ready=true`,
+`confirmed_direction_count=0`, `bound_outcome_count=0`,
+`bound_outcomes_needed=5`, `broker_execution_touched=false`, and
+`money_moved=false`. Current next product gap: the paper sample lane can now
+run continuously, but the edge gate still has not produced a PASS-token sample.
+The next aligned build is the paper execution sink for future PASS-token WASTE
+entries: when a real PASS occurs, the exact `decision_ref` / `order_id` must be
+paper/demo dispatched, recorded in `order-attempts.json`, and later bound to MT5
+demo closed-history by broker ticket without live authority or money movement.
+
+2026-06-30 CAS Forex WASTE paper sample collector implemented.
+`waste_paper_sample_collector.py` now gives CAS Forex an owner-visible,
+paper-only evidence coordinator for the next proof gap: collecting broker-grade
+WASTE LONG/SHORT samples and binding them to closed MT5 paper/demo outcomes. It
+synthesizes the WASTE runner status, MT5 market-data diagnostic, latest WASTE
+real-candle probe, direction-learning ledger, direction outcome-binding report,
+and latest MT5 deal-history ingest into one status packet with required next
+actions. It is exposed at
+`GET /api/forex/waste-loop-control/paper-sample-collector`, has an explicit
+read-only collection endpoint at
+`POST /api/forex/waste-loop-control/paper-sample-collector/run-once`, is included
+in the dashboard payload as `wastePaperSampleCollector`, and is displayed in
+Settings Live Recovery next to direction learning, outcome binding, and
+adaptation promotion. The packet is read-only and paper-only: it does not place
+orders, close positions, create broker `ACCEPT`, create owner `ACCEPT`,
+authorize live trading, mint edge tokens, lower thresholds, raise risk, deposit,
+withdraw, move bank/card money, automate payouts, mark evidence `LICENSED`, or
+mutate runtime controls. Verification: `py_compile` passed for the new collector,
+route/data wiring, and touched tests; focused collector + dashboard API tests
+passed with `16 passed`; the wider WASTE safety slice passed with `61 passed`;
+UI `npm run build` passed with the existing Vite chunk-size warning; `git diff
+--check` reported only existing line-ending warnings on touched tracked files.
+The local API was reloaded on `127.0.0.1:8765`; after the stale pre-reload WASTE
+supervisor lease expired naturally, WASTE was restarted paper-safe and reported
+`running=true`, `mode=PAPER`, `cycles_run=5`, stage `no_trade`, with the edge
+gate rejecting the current NAS100 setup on null/cost/win-probability failure.
+Live smoke for the collector returned `WASTE_PAPER_SAMPLE_NEEDS_PASS_TOKEN`,
+`sample_collection_complete=false`, `market_data_ready=true`,
+`paper_runner_running=true`, `real_candle_probe_status=EDGE_BLOCKED`,
+`probe_edge_status=NO_TRADE_NULL_FAILED`, `confirmed_direction_count=0`,
+`executed_confirmed_count=0`, `bound_outcome_count=0`,
+`bound_outcomes_needed=5`, required action `keep_probing_for_pass_token`,
+`broker_execution_touched=false`, and `money_moved=false`. Current next product
+gap: CAS can now see the paper sample collection lane, but it still has zero
+PASS-token samples and zero bound closed outcomes. The next aligned build is to
+make the collector schedulable/owner-toggleable and, once a real edge PASS
+appears, ensure the paper execution sink and MT5 demo deal-history ingest bind
+that exact `decision_ref` / `order_id` / broker ticket without live authority or
+money movement.
+
+2026-06-30 CAS Forex WASTE direction outcome-binding ledger implemented.
+`waste_direction_outcome_binding.py` now joins confirmed WASTE PASS-token
+LONG/SHORT direction cycles to paper/demo order attempts and closed MT5
+paper/demo history rows by `decision_ref`, `order_id`, and `broker_ticket`. It
+reports whether realized paper/demo outcomes are bound before adaptation
+promotion can rely on direction learning. It is exposed at
+`GET /api/forex/waste-loop-control/direction-outcome-binding`, included in the
+dashboard payload as `wasteDirectionOutcomeBinding`, displayed in Settings Live
+Recovery, included in `liveMoneyProgression.source_summaries` as
+`waste_direction_outcome_binding`, and folded into
+`waste_adaptation_promotion_rule.py` so
+`WASTE_ADAPTATION_PROMOTION_READY_FOR_OWNER_REVIEW` now requires both
+direction-learning readiness and `outcome_ready_for_promotion=true`. This report
+is read-only and paper-only: it does not place orders, close positions, create
+broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, reconcile
+unresolved attempts, mint edge tokens, lower thresholds, enable live trading,
+raise risk, deposit, withdraw, move bank/card money, automate payouts, mark
+evidence `LICENSED`, or mutate runtime controls. Verification: `py_compile`
+passed; focused outcome/promotion/adaptation/progression/Settings tests passed
+with `29 passed`; the wider WASTE safety slice passed with `56 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning; `git diff
+--check` reported only existing line-ending warnings on touched tracked files.
+The local API was reloaded on `127.0.0.1:8765`; live smoke returned
+`WASTE_DIRECTION_OUTCOME_NO_CONFIRMED_EDGE`, `confirmed_direction_count=0`,
+`executed_confirmed_count=0`, `bound_outcome_count=0`,
+`bound_outcomes_needed=5`, `net_paper_pnl=0`, `paper_only=true`,
+`dry_run=true`, `runtime_changed=false`, `would_enable_live_trading=false`,
+`broker_touched=false`, and `money_moved=false`. Promotion remained
+`WASTE_ADAPTATION_PROMOTION_COLLECTING` with
+`outcome_ready_for_promotion=false`; live-money progression remained
+`LIVE_MONEY_PROGRESS_BLOCKED` with no broker or money side effects. WASTE was
+restarted paper-safe after the stale supervisor lease expired naturally and
+reported `running=true`, `mode=PAPER`, `cycles_run=2`, stage `no_trade`, with
+the edge gate rejecting the current NAS100 setup on null/cost/win-probability
+failure. Current next product gap: WASTE still has zero confirmed PASS-token
+samples and zero bound closed paper/demo outcomes. The next aligned build is a
+scheduled, owner-visible paper sample collection loop that runs broker-grade
+real-candle probes and MT5 paper/demo deal-history ingest until PASS-token
+direction samples can close and bind to outcomes without live authority or
+money movement.
+
+2026-06-30 CAS Forex WASTE adaptation promotion rule implemented.
+`waste_adaptation_promotion_rule.py` now makes the WASTE direction-learning
+promotion threshold explicit and read-only. It counts confirmed PASS-token
+LONG/SHORT direction samples, reports `min_confirmed_for_adaptation`,
+`confirmed_direction_count`, `confirmed_samples_needed`, blocked samples,
+dominant/recommended symbol/timeframe/profile/direction, and whether promotion is
+ready for owner review. It is exposed at
+`GET /api/forex/waste-loop-control/adaptation-promotion-rule`, included in the
+dashboard payload as `wasteAdaptationPromotionRule`, displayed in Settings Live
+Recovery, included in `liveMoneyProgression.source_summaries` as
+`waste_adaptation_promotion_rule`, and folded into
+`waste_adaptation_plan.py` as `promotion_rule_summary` so
+`WASTE_ADAPTATION_PLAN_READY_FOR_OWNER_REVIEW` depends on the explicit promotion
+report. This promotion rule is read-only and dry-run: it does not place orders,
+close positions, create broker `ACCEPT`, create owner `ACCEPT`, authorize live
+trading, reconcile unresolved attempts, mint edge tokens, lower the edge
+threshold, enable live trading, raise risk, deposit, withdraw, move bank/card
+money, automate payouts, mark evidence `LICENSED`, or mutate live/runtime
+controls. Verification: `py_compile` passed for the new promotion-rule,
+adaptation-plan, live-money progression, API route, API data, and touched test
+files; focused promotion/adaptation/progression/Settings API tests passed with
+`22 passed`; the combined promotion, paper apply, owner review, apply preview,
+adaptation plan, direction learning, direction review, live-money progression,
+broker-truth, and Settings API surface slice passed with `49 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only; `git diff
+--check` reported only existing line-ending warnings on touched tracked files.
+An attempted broader `python -m pytest cas-forex\tests -q` run timed out after
+5 minutes before returning a full-suite verdict, and no stray pytest worker
+remained afterward.
+The local API was reloaded on `127.0.0.1:8765`; live smoke returned
+`WASTE_ADAPTATION_PROMOTION_COLLECTING`, `direction_rows=250`,
+`confirmed_direction_count=0`, `min_confirmed_for_adaptation=5`,
+`confirmed_samples_needed=5`, `promotion_ready_for_owner_review=false`,
+`dry_run=true`, `read_only=true`, `runtime_changed=false`,
+`would_enable_live_trading=false`, `broker_touched=false`, and
+`money_moved=false`. The live-money progression packet remained
+`LIVE_MONEY_PROGRESS_BLOCKED` with `blocker_count=9`,
+`waste_adaptation_promotion_rule.confirmed_samples_needed=5`, and no broker or
+money side effects. After the API reload, the previous WASTE supervisor lease was
+allowed to expire naturally rather than using a fake owner-confirmed recovery;
+WASTE then restarted paper-safe and reported `running=true`, `mode=PAPER`,
+`cycles_run=2`, stage `no_trade`, with the edge gate rejecting the current NAS100
+setup on null/cost/win-probability failure. Current next product gap: the
+promotion threshold is now visible and enforced, but WASTE still has zero
+confirmed PASS-token direction samples. The next aligned build is to collect and
+retain broker-grade PASS-token paper direction samples, then bind any promoted
+LONG/SHORT learning to realized paper outcomes before compounding or live owner
+review can rely on it.
+
+2026-06-30 CAS Forex WASTE adaptation PAPER-only apply audit implemented.
+`waste_adaptation_paper_apply.py` now records an owner-accepted WASTE
+adaptation preview to a paper-only apply audit trail. It requires current owner
+`ACCEPT` on the adaptation owner review, a ready dry-run apply preview, matching
+accepted/current fingerprints, and no runtime/live/broker/money side-effect
+flags before it can record. It is exposed at
+`GET /api/forex/waste-loop-control/adaptation-paper-apply`,
+`POST /api/forex/waste-loop-control/adaptation-paper-apply/record`, and
+`POST /api/forex/waste-loop-control/adaptation-paper-apply/reset`; included in
+the dashboard payload as `wasteAdaptationPaperApply`; displayed in Settings
+Live Recovery with Owner Paper Apply / Record Paper Apply / Reset Paper Apply
+controls; and included in `liveMoneyProgression.source_summaries` as
+`waste_adaptation_paper_apply`. This apply audit is paper-only: it does not
+place orders, close positions, create broker `ACCEPT`, create live-trading owner
+`ACCEPT`, authorize live trading, reconcile unresolved attempts, mint edge
+tokens, lower the edge threshold, enable live trading, raise risk, deposit,
+withdraw, move bank/card money, automate payouts, mark evidence `LICENSED`, or
+mutate live/runtime controls. Verification: `py_compile` passed for the new
+paper-apply/owner-review/preview/progression/API route files; focused WASTE
+adaptation paper apply, owner review, apply preview, adaptation plan, and
+live-money progression tests passed with `23 passed`; the combined paper apply,
+owner review, apply preview, adaptation plan, direction learning, direction
+review, live-money progression, broker-truth, and Settings API surface slice
+passed with `45 passed`; UI `npm run build` passed with the existing Vite
+chunk-size warning only; `git diff --check` reported only existing line-ending
+warnings on touched tracked files. The local API was reloaded on
+`127.0.0.1:8765`; live route smoke returned
+`WASTE_ADAPTATION_PAPER_APPLY_BLOCKED`, `paper_apply_ready=false`,
+`paper_apply_current=false`, `paper_apply_recorded=false`, `paper_only=true`,
+`dry_run=true`, `runtime_changed=false`, `would_apply_runtime_change=false`,
+`would_enable_live_trading=false`, `broker_touched=false`,
+`owner_accept_created=false`, and `money_moved=false`. The live record route
+refused a paper-apply request without `confirm_owner_apply=true` with HTTP
+`400`, so no fake paper-apply decision was recorded. WASTE was restarted
+paper-safe and reported `running=true`, `mode=PAPER`, `cycles_run=2`, stage
+`no_trade`, with the edge gate rejecting the current NAS100 setup on
+null/cost/win-probability failure. The live-money progression packet remained
+`LIVE_MONEY_PROGRESS_BLOCKED` with `blocker_count=9`,
+`waste_adaptation_paper_apply.paper_only=true`, `paper_apply_ready=false`,
+`paper_apply_current=false`, `would_apply_runtime_change=false`,
+`would_enable_live_trading=false`, and no broker or money side effects. Current
+next product gap: the adaptation safety chain can now preview, owner-review, and
+paper-apply audit a future adaptation, but it still cannot produce a ready apply
+because there are zero confirmed PASS-token direction samples. The next aligned
+build is to add a confirmed-edge sample accumulator/promotion rule that records
+how many PASS-token WASTE direction samples are needed before the adaptation
+plan can become `WASTE_ADAPTATION_PLAN_READY_FOR_OWNER_REVIEW`, still without
+live authority or money movement.
+
+2026-06-30 CAS Forex WASTE adaptation owner-review audit trail implemented.
+`waste_adaptation_owner_review.py` now records an owner paper-only review
+decision for the current WASTE adaptation apply preview. It supports
+`HOLD_PAPER_ONLY`, `REQUEST_MORE_EVIDENCE`, and `ACCEPT_PAPER_ONLY`, with
+`ACCEPT` requiring both `confirm_owner_review=true` and
+`confirm_owner_accept=true` plus a ready dry-run preview. It is exposed at
+`GET /api/forex/waste-loop-control/adaptation-owner-review`,
+`POST /api/forex/waste-loop-control/adaptation-owner-review/record`, and
+`POST /api/forex/waste-loop-control/adaptation-owner-review/reset`; included in
+the dashboard payload as `wasteAdaptationOwnerReview`; displayed in Settings
+Live Recovery with owner HOLD / More Evidence / Accept Paper Adapt / Reset Adapt
+Review controls; and included in `liveMoneyProgression.source_summaries` as
+`waste_adaptation_owner_review`. This owner review is paper-only: it does not
+place orders, close positions, create broker `ACCEPT`, create live-trading owner
+`ACCEPT`, authorize live trading, reconcile unresolved attempts, mint edge
+tokens, lower the edge threshold, enable live trading, raise risk, deposit,
+withdraw, move bank/card money, automate payouts, mark evidence `LICENSED`, or
+apply a profile/risk/no-trade change. Verification: `py_compile` passed for the
+new owner-review/preview/progression/API route files; focused WASTE adaptation
+owner review, apply preview, adaptation plan, and live-money progression tests
+passed with `17 passed`; the combined owner review, apply preview, adaptation
+plan, direction learning, direction review, live-money progression,
+broker-truth, and Settings API surface slice passed with `39 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only;
+`git diff --check` reported only existing line-ending warnings on touched
+tracked files. The local API was reloaded on `127.0.0.1:8765`; live route smoke
+returned owner review `OPEN`, `paper_only=true`, `paper_only_review_current=false`,
+`paper_only_accept_current=false`, `evidence_ready_for_owner_accept=false`,
+`apply_allowed_now=false`, `runtime_changed=false`,
+`would_apply_runtime_change=false`, `would_enable_live_trading=false`,
+`broker_touched=false`, `owner_accept_created=false`, and `money_moved=false`.
+The live record route refused a HOLD request without `confirm_owner_review=true`
+with HTTP `400`, so no fake owner decision was recorded. WASTE was restarted
+paper-safe and reported `running=true`, `mode=PAPER`, `cycles_run=2`, stage
+`no_trade`, with the edge gate rejecting the current NAS100 setup on
+null/cost/win-probability failure. The live-money progression packet remained
+`LIVE_MONEY_PROGRESS_BLOCKED` with `blocker_count=9`,
+`waste_adaptation_owner_review.paper_only=true`, `apply_allowed_now=false`,
+`would_apply_runtime_change=false`, `would_enable_live_trading=false`, and no
+broker or money side effects. Current next product gap: owner review can now be
+recorded, but adaptation still cannot apply because there are zero confirmed
+PASS-token direction samples and there is no owner-confirmed PAPER-only apply
+executor. The next aligned build is a PAPER-only adaptation apply executor that
+requires current owner `ACCEPT`, a ready preview, and all dry-run safety flags,
+then writes a runtime-audit proposal/apply record without touching live trading,
+broker bridges, edge tokens, or money.
+
+2026-06-30 CAS Forex WASTE adaptation apply-preview simulator implemented.
+`waste_adaptation_apply_preview.py` now turns the dry-run WASTE adaptation plan
+and current AI control authority into an owner-readable apply preview showing
+current controls, owner envelope, simulated paper-only changes, blockers, and
+side-effect flags. It is exposed at
+`GET /api/forex/waste-loop-control/adaptation-apply-preview`, included in the
+dashboard payload as `wasteAdaptationApplyPreview`, displayed in Settings Live
+Recovery, and included in `liveMoneyProgression.source_summaries` as
+`waste_adaptation_apply_preview`. The preview can show proposed
+`PAPER_PROFILE_PRIORITY_HINT`, `HOLD_NO_TRADE_DISCIPLINE`,
+`PAPER_DIAGNOSTIC_ONLY`, `KEEP_GATE_AUTHORITY`, or
+`COLLECT_MORE_EVIDENCE` simulated changes, but every change is dry-run and
+marked `would_apply_runtime_change=false`. This preview is read-only: it does
+not place orders, close positions, create broker `ACCEPT`, create owner
+`ACCEPT`, authorize live trading, reconcile unresolved attempts, mint edge
+tokens, lower the edge threshold, enable live trading, raise risk, deposit,
+withdraw, move bank/card money, automate payouts, mark evidence `LICENSED`, or
+apply a profile/risk/no-trade change. Verification: `py_compile` passed for the
+new preview/progression/API route files; focused WASTE adaptation preview,
+adaptation plan, and live-money progression tests passed with `11 passed`; the
+combined adaptation preview, adaptation plan, direction learning, direction
+review, live-money progression, broker-truth, and Settings API surface slice
+passed with `33 passed`; UI `npm run build` passed with the existing Vite
+chunk-size warning only; `git diff --check` reported only existing line-ending
+warnings on touched tracked files. The local API was reloaded on
+`127.0.0.1:8765`; the stale stopped-process WASTE supervisor lease was cleared
+through the built-in recovery path after `/stop`, with no live authorization or
+money side effects; WASTE was restarted paper-safe and reported
+`running=true`, `mode=PAPER`, `cycles_run=2`, stage `no_trade`, with the edge
+gate rejecting the current NAS100 setup on null/cost/win-probability failure.
+Live route smoke returned `WASTE_ADAPTATION_APPLY_PREVIEW_BLOCKED`,
+`dry_run=true`, `preview_ready_for_owner_review=false`,
+`apply_allowed_now=false`, `apply_endpoint_available=false`,
+`runtime_changed=false`, `runtime_change_attempted=false`,
+`would_apply_runtime_change=false`, `would_lower_edge_threshold=false`,
+`would_enable_live_trading=false`, `simulated_change_count=2`,
+`blocker_count=1`, `broker_touched=false`, `live_order_attempted=false`,
+`owner_accept_created=false`, and `money_moved=false`. The live-money
+progression packet remained `LIVE_MONEY_PROGRESS_BLOCKED` with
+`blocker_count=9`, `waste_adaptation_apply_preview.dry_run=true`,
+`apply_allowed_now=false`, `would_apply_runtime_change=false`,
+`would_enable_live_trading=false`, and no broker or money side effects. Current
+next product gap: WASTE can now show what adaptation would change, but it still
+cannot apply anything because there are zero confirmed PASS-token direction
+samples and no owner-reviewed apply endpoint. The next aligned build is an
+owner-confirmed PAPER-only adaptation audit trail that can record an owner
+review decision without creating live authority, broker `ACCEPT`, edge tokens,
+or money movement.
+
+2026-06-30 CAS Forex WASTE adaptation dry-run plan implemented.
+`waste_adaptation_plan.py` now turns the WASTE direction-learning ledger and
+latest direction review into owner-visible adaptation proposals without applying
+them. It is exposed at
+`GET /api/forex/waste-loop-control/adaptation-plan`, included in the dashboard
+payload as `wasteAdaptationPlan`, displayed in Settings Live Recovery, and
+included in `liveMoneyProgression.source_summaries` as `waste_adaptation_plan`.
+The plan can propose dry-run no-trade discipline, profile diagnostic, profile
+priority review, and gate-discipline actions from LONG/SHORT evidence. It
+reports `WASTE_ADAPTATION_PLAN_READY_FOR_OWNER_REVIEW` only when enough
+confirmed PASS-token direction evidence exists; otherwise it remains
+`WASTE_ADAPTATION_PLAN_NO_EVIDENCE` or `WASTE_ADAPTATION_PLAN_COLLECTING`.
+This plan is read-only and dry-run: it does not place orders, close positions,
+create broker `ACCEPT`, create owner `ACCEPT`, authorize live trading,
+reconcile unresolved attempts, mint edge tokens, lower the edge threshold,
+enable live trading, deposit, withdraw, move bank/card money, automate payouts,
+mark evidence `LICENSED`, or convert directional learning into a runtime trade
+change. Verification: `py_compile` passed for the new adaptation/progression/
+API/test files; focused WASTE adaptation, direction learning, direction review,
+and live-money progression tests passed with `15 passed`; the combined
+adaptation, direction, live-money progression, broker-truth, and Settings API
+surface slice passed with `29 passed`; UI `npm run build` passed with the
+existing Vite chunk-size warning only; `git diff --check` reported only existing
+line-ending warnings on touched tracked files. The local API on
+`127.0.0.1:8765` returned `WASTE_ADAPTATION_PLAN_COLLECTING`, `dry_run=true`,
+`adaptation_ready_for_owner_review=false`, `runtime_changed=false`,
+`runtime_change_attempted=false`, `would_lower_edge_threshold=false`,
+`would_enable_live_trading=false`, `proposal_count=2`, `broker_touched=false`,
+`live_order_attempted=false`, `attempt_finalized=false`,
+`edge_token_minted=false`, `owner_accept_created=false`, and
+`money_moved=false`. The live-money progression packet remained
+`LIVE_MONEY_PROGRESS_BLOCKED` with `blocker_count=9` and no broker or money
+side effects. WASTE was restarted paper-safe and reported `running=true`,
+`mode=PAPER`, `cycles_run=13`, stage `no_trade`, with the edge gate rejecting
+the current NAS100 setup on null/cost/win-probability failure. Current next
+product gap: the AI can now propose how it would adapt from LONG/SHORT evidence,
+but adaptation remains inactive because there are zero confirmed PASS-token
+direction samples. The next aligned build is an owner-reviewed apply-preview
+simulator that shows exactly what a proposed profile/risk/no-trade discipline
+change would alter, while still requiring edge, broker, risk, recovery, and
+owner gates before any real dispatch.
+
+2026-06-30 CAS Forex WASTE direction-learning ledger implemented.
+`waste_direction_learning_ledger.py` now reads the durable WASTE cycle audit log
+and summarizes recent LONG/SHORT outcomes over time by symbol, timeframe,
+profile, and direction. It reports direction rows, confirmed PASS-token counts,
+blocked counts, direction/edge-status counts, average chosen/opposite scores,
+average score margin, average win probability, average reward-R, broker-grade
+count, holdout count, and a profile-direction recommendation status. It is
+exposed at `GET /api/forex/waste-loop-control/direction-learning`, included in
+the dashboard payload as `wasteDirectionLearning`, displayed in Settings Live
+Recovery, and included in `liveMoneyProgression.source_summaries` as
+`waste_direction_learning`. The ledger reports
+`PROFILE_DIRECTION_REVIEW_READY` only after enough confirmed PASS-token direction
+samples exist; otherwise it stays `INSUFFICIENT_CONFIRMED_EDGE` /
+`learning_ready_for_adaptation=false`. This ledger is read-only: it does not
+place orders, close positions, create broker `ACCEPT`, create owner `ACCEPT`,
+authorize live trading, reconcile unresolved attempts, mint edge tokens,
+deposit, withdraw, move bank/card money, automate payouts, mark evidence
+`LICENSED`, or convert directional learning into a live trade. Verification:
+`py_compile` passed for the new ledger/API/test files; focused direction
+learning/review/progression tests passed with `11 passed`; the combined
+learning, review, live-money progression, broker-truth, and Settings API surface
+slice passed with `25 passed`; UI `npm run build` passed with the existing Vite
+chunk-size warning only. The local API was reloaded on `127.0.0.1:8765`; live
+read-only route smoke returned `WASTE_DIRECTION_LEARNING_ACTIVE`,
+`cycles_loaded=250`, `direction_rows=250`, `confirmed_direction_count=0`,
+`blocked_direction_count=250`, `learning_ready_for_adaptation=false`,
+`broker_touched=false`, `live_order_attempted=false`, `attempt_finalized=false`,
+`edge_token_minted=false`, and `money_moved=false`. The updated live-money
+progression smoke remained `LIVE_MONEY_PROGRESS_BLOCKED` with `blocker_count=9`
+and no broker or money side effects. WASTE was restarted paper-safe and reported
+`running=true`, `mode=PAPER`, `cycles_run=4`, stage `no_trade`, with the edge
+gate rejecting the current NAS100 setup on null/cost/win-probability failure.
+Current next product gap: the AI now has a memory of repeated LONG/SHORT edge
+failures, but adaptation is intentionally not active because there are zero
+confirmed PASS-token direction samples. The next aligned build is an
+owner-visible WASTE adaptation plan that uses this ledger to propose profile,
+threshold, or no-trade discipline changes in dry-run only, while keeping actual
+execution behind edge, broker, risk, recovery, and owner gates.
+
+2026-06-30 CAS Forex WASTE direction review packet implemented.
+`waste_direction_review_packet.py` now turns the latest durable WASTE cycle into
+an owner-readable read-only direction review: chosen LONG/SHORT side, opposite
+side, long/short scores, score margin, selected profile/regime, out-of-sample
+entry-pair count, edge-gate status/token presence, and the direction-aware
+stop-loss/take-profit reward box. It is exposed at
+`GET /api/forex/waste-loop-control/direction-review`, included in the dashboard
+payload as `wasteDirectionReview`, displayed in Settings Live Recovery, and
+fed into `live_money_progression_packet.py` as the
+`waste_direction_edge_confirmed` blocker/source. The packet reports
+`WASTE_DIRECTION_EDGE_CONFIRMED` only when the latest WASTE direction has a
+candidate, broker-grade read-only candles, validation pairs, a valid directional
+profit box, and a PASS edge token; otherwise it stays blocked/no-candidate. This
+packet is read-only: it does not place orders, close positions, create broker
+`ACCEPT`, create owner `ACCEPT`, authorize live trading, reconcile unresolved
+attempts, mint edge tokens, deposit, withdraw, move bank/card money, automate
+payouts, mark evidence `LICENSED`, or convert a directional preference into a
+live trade. Verification: `py_compile` passed for the new packet/API/test files;
+focused direction/progression tests passed with `7 passed`; the combined WASTE
+direction, live-money progression, broker-truth, and Settings API surface slice
+passed with `21 passed`; UI `npm run build` passed with the existing Vite
+chunk-size warning only. The local API was reloaded on `127.0.0.1:8765`; live
+read-only route smoke returned `WASTE_DIRECTION_EDGE_BLOCKED`,
+`direction_edge_confirmed=false`, `blocker_count=1`, `broker_touched=false`,
+`live_order_attempted=false`, `attempt_finalized=false`, `edge_token_minted=false`,
+and `money_moved=false`. The updated live-money progression smoke returned
+`LIVE_MONEY_PROGRESS_BLOCKED`, `blocker_count=9`, `broker_touched=false`,
+`live_order_attempted=false`, `attempt_finalized=false`, and `money_moved=false`.
+WASTE was restarted paper-safe and reported `running=true`, `mode=PAPER`,
+`cycles_run=3`, stage `no_trade`; the fresh direction review showed NAS100 D1
+`LONG`, opposite `SHORT`, long score `0.55`, short score `0.1037`, score margin
+`0.4463`, and 40 entry pairs, but remained blocked because the edge gate failed
+null/cost/win-probability requirements. Current next product gap: the AI can now
+show why it prefers LONG or SHORT and why that preference still cannot execute;
+the next aligned build is to add a direction-learning ledger that records these
+blocked/confirmed LONG-vs-SHORT outcomes over time so WASTE can adapt profile
+selection and profit/compound decisions from verified evidence instead of one
+cycle at a time.
+
+2026-06-30 CAS Forex live-money progression packet implemented.
+`live_money_progression_packet.py` now builds a single read-only fail-closed
+packet for the final path from PAPER proof toward real-money live dispatch,
+WASTE pilot progression, and verified-profit payout. The packet synthesizes
+runtime gates, compact broker-truth recovery, live recovery, WASTE pilot
+promotion, verified-profit sweep preview, payout recovery, and the plain-English
+live-readiness checklist into `cas_forex_live_money_progression_packet`. It is
+exposed at `GET /api/forex/live-money/progression-packet`, included in the
+dashboard payload as `liveMoneyProgression`, and displayed in Settings Live
+Recovery with live dispatch, WASTE pilot, verified payout, blocker count, and
+active WASTE LONG/SHORT intent fields. This packet is read-only: it does not
+place orders, close positions, create broker `ACCEPT`, create owner `ACCEPT`,
+authorize live trading, reconcile unresolved attempts, mint edge tokens,
+deposit, withdraw, move bank/card money, automate payouts, mark evidence
+`LICENSED`, or convert demo/paper results into real profit. Verification:
+`py_compile` passed for the new packet/route/API/test files; focused progression
+and broker-truth packet tests passed with `6 passed`; the combined progression,
+broker-truth, and Settings API surface slice passed with `17 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only. The local
+API was reloaded on `127.0.0.1:8765`; live read-only route smoke returned
+`LIVE_MONEY_PROGRESS_BLOCKED`, `live_dispatch_clear=false`,
+`waste_pilot_clear=false`, `verified_payout_clear=false`,
+`full_progression_clear=false`, `blocker_count=8`, `broker_touched=false`,
+`live_order_attempted=false`, `attempt_finalized=false`, and
+`money_moved=false`. WASTE was restarted paper-safe and reported `running=true`,
+`mode=PAPER`, `cycles_run=6`, stage `no_trade`, with the edge gate rejecting
+the current NAS100 setup on null/cost/win-probability failure. Current next
+product gap: the owner now has one compact progression packet, but live-money
+progression remains blocked until live MT5 broker truth is visible and clean,
+runtime live/payout gates are owner-authorized, WASTE pilot policy/dry-run
+review clears, verified live broker-confirmed winnings exist, and payout
+recovery has no pending attempts.
+
+2026-06-30 CAS Forex compact broker-truth recovery packet implemented.
+`broker_truth_recovery_packet.py` now turns the large broker-truth monitor
+status into an owner-readable fail-closed packet:
+`cas_forex_broker_truth_recovery_packet`. It classifies whether broker truth is
+clear for the live-recovery layer and lists exact blockers such as
+`mt5_live_account_visible`, `terminal_account_snapshot_present`,
+`terminal_pending_receipts_clear`, and `terminal_open_positions_match`. It is
+exposed at `GET /api/forex/broker-truth-monitor/recovery-packet`, and Settings
+Live Recovery now fetches and displays the packet, blocker count, and next
+action beside the existing broker-truth controls. This packet is read-only: it
+does not read/write broker orders itself, place orders, close positions, create
+broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, reconcile
+unresolved attempts, mint edge tokens, deposit, withdraw, move bank/card money,
+automate payouts, or mark evidence `LICENSED`. Verification: `py_compile`
+passed for the packet/route/test files; broker-truth recovery packet,
+broker-truth monitor, and Settings API tests passed with `27 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only. The
+local API was reloaded on `127.0.0.1:8765`; live route smoke returned
+`BROKER_TRUTH_RECOVERY_BLOCKED`, `broker_truth_clear_for_live_recovery=false`,
+`blocker_count=6`, `broker_touched=false`, `live_order_attempted=false`,
+`attempt_finalized=false`, and `money_moved=false`, with next action to connect
+the owner-approved live MT5 account and rerun Broker Truth because demo truth
+cannot unlock live-money gates. WASTE was restarted paper-safe and reported
+`running=true`, `mode=PAPER`, `cycles_run=4`, stage `no_trade`, and an edge
+gate rejection reason based on null/cost/win-probability failure. Current next
+product gap: the blockers are now compact and owner-visible, but live-money
+progression remains blocked until live MT5 truth is visible, terminal snapshot
+and receipts are clean, open-position reconciliation matches, and unresolved
+real attempts are reconciled against that truth.
+
+2026-06-30 CAS Forex broker-truth controls added to Settings Live Recovery.
+The broker-truth monitor already had read-only `/status`, `/run-once`,
+`/start`, `/stop`, and supervisor recovery routes; this pass made the recovery
+workflow more usable by surfacing broker truth directly inside the Settings
+Live Recovery panel. The panel now receives `brokerTruthMonitor` from dashboard
+state, refreshes broker truth status with the other recovery packets, shows
+truth monitor status/running/live-ready fields, and adds `Run Broker Truth`
+plus `Start Truth Monitor` / `Stop Truth Monitor` controls. These controls use
+the existing read-only broker-truth monitor API and do not place orders, close
+positions, create broker `ACCEPT`, create owner `ACCEPT`, authorize live
+trading, reconcile unresolved attempts, mint edge tokens, deposit, withdraw,
+move bank/card money, automate payouts, or mark evidence `LICENSED`.
+Verification: broker-truth monitor plus Settings API surface tests passed with
+`24 passed`; the combined broker-truth/recovery-refresh/settings slice passed
+with `27 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only. Runtime read-only smoke on `127.0.0.1:8765` ran
+`POST /api/forex/broker-truth-monitor/run-once` and returned
+`BROKER_TRUTH_RECONCILED_WITH_WARNINGS`, `ready_for_live=false`,
+`mt5_connected=true`, `mt5_is_demo=true`, `terminal_pending=28`, and
+`terminal_unmatched=28`. WASTE remained paper-safe and live after the check:
+`running=true`, symbol `NAS100`, stage `no_trade`. Current next product gap:
+broker truth is now easier for the owner to run from recovery, but live-money
+progression still remains blocked until broker truth is fresh for a live
+account, terminal receipt/position reconciliation is clean, and unresolved real
+order attempts are reconciled against that broker truth.
+
+2026-06-30 CAS Forex owner-controlled terminal receipt recovery refresh chain
+implemented. `terminal_receipt_recovery_sequence.py` now provides
+`run_terminal_receipt_recovery_refresh()` as a plan-first owner action for the
+post-archive/post-terminal-receipt evidence rebuild. The action returns
+`cas_forex_terminal_receipt_recovery_refresh`, defaults to dry-run, requires
+`confirm_owner_refresh=true` before running, and, when owner-confirmed, forces
+the existing terminal receipt watcher refresh chain, rebuilds terminal position
+reconciliation, rebuilds the terminal receipt recovery packet, and rebuilds
+live recovery status. It reports `broker_touched=false`,
+`live_order_attempted=false`, `attempt_finalized=false`, and
+`money_moved=false`; it does not place orders, close positions, create broker
+`ACCEPT`, create owner `ACCEPT`, authorize live trading, reconcile unresolved
+order attempts, mint edge tokens, deposit, withdraw, move bank/card money,
+automate payouts, or mark evidence `LICENSED`. It is exposed at
+`POST /api/forex/strategy/terminal-receipt-recovery-packet/refresh-chain`; the
+Settings Live Recovery panel now has `Plan Refresh`, `Owner Refresh`, and
+`Run Refresh Chain` controls. Verification: `py_compile` passed for the new
+sequence/API/route/test files; focused recovery sequence plus terminal
+position/receipt tests passed with `11 passed`; dashboard API surface passed
+with `11 passed`; the combined recovery/terminal/settings slice passed with
+`22 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only; `from api.server import app` reported `203` routes and the
+refresh-chain route registered; the local API was reloaded on
+`127.0.0.1:8765`, the live refresh-chain route plan returned
+`TERMINAL_RECEIPT_RECOVERY_REFRESH_DRY_RUN` with `broker_touched=false`,
+`live_order_attempted=false`, `attempt_finalized=false`, and
+`money_moved=false`; WASTE was restarted paper-safe and reported
+`running=true`, `mode=PAPER`, `cycles_run=4`, stage `no_trade`, and an edge
+gate rejection reason based on null/cost/win-probability failure. Current next
+product gap: after the owner uses archive/refresh only when appropriate, live
+recovery still must show fresh broker truth, clean terminal reconciliation, and
+no unresolved real order attempts before any WASTE pilot, live dispatch, or
+verified-profit payout progression can clear.
+
+2026-06-30 CAS Forex owner-controlled terminal receipt archive action
+implemented. `terminal_receipt_recovery_packet.py` now exposes
+`run_terminal_receipt_archive_action()` as a dry-run-first owner action for
+stale pending terminal receipt rows. The action returns
+`cas_forex_terminal_receipt_archive_action`, defaults to dry-run, requires
+`confirm_owner_archive=true` before execution, writes a snapshot before any
+local event-journal rewrite, and reports `broker_touched=false`,
+`receipt_ingest_attempted=false`, `attempt_finalized=false`, and
+`money_moved=false`. It is exposed at
+`POST /api/forex/strategy/terminal-receipt-recovery-packet/archive-stale`;
+the Settings Live Recovery panel now has `Preview Archive`, `Owner Archive`,
+and `Archive Stale Rows` controls plus archive-action status feedback. This
+does not ingest receipts, reconcile attempts, place orders, close positions,
+create broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, mint
+edge tokens, deposit, withdraw, move bank/card money, automate payouts, or
+mark evidence `LICENSED`. Verification: `py_compile` passed for the touched
+terminal receipt recovery/API/route/test files; focused terminal position and
+receipt recovery tests passed with `8 passed`; dashboard API surface passed
+with `11 passed`; the archive/recovery/settings focused slice passed with
+`30 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only; `from api.server import app` reported the archive route
+registered; the local API was reloaded on `127.0.0.1:8765`, the live archive
+route preview returned `TERMINAL_RECEIPT_ARCHIVE_DRY_RUN` with
+`journal_rewritten=false`, `broker_touched=false`, and `money_moved=false`;
+WASTE was restarted paper-safe and reported `running=true`, `mode=PAPER`,
+`cycles_run=3`, stage `no_trade`, and an edge-gate rejection reason based on
+null/cost failure. Current next product gap: owner may preview/execute stale
+local receipt-row archive when appropriate, then the system must rebuild agent
+memory, rerun terminal receipt ingest if new receipts exist, rerun terminal
+position reconciliation, and rerun live recovery before unresolved real order
+attempts or any live-money progression can clear.
+
+2026-06-30 CAS Forex terminal receipt recovery packet implemented.
+`terminal_receipt_recovery_packet.py` now builds a read-only owner review
+packet for the terminal receipt/position-reconciliation blocker that currently
+keeps live recovery fail-closed. The packet reads the latest terminal position
+reconciliation report, lists pending receipt-backed CAS positions, classifies
+legacy `PAPER_MT4` mailbox rows as `LEGACY_MT4_MAILBOX_PENDING`, and runs the
+existing legacy receipt archive in dry-run mode only so the owner can see
+archive eligibility without rewriting the event journal. It is exposed at
+`/api/forex/strategy/terminal-receipt-recovery-packet/latest`, included in the
+dashboard payload as `terminalReceiptRecoveryPacket`, merged through the UI
+dashboard state, and shown in Settings Live Recovery as a `RECEIPTS CLEAN` /
+`RECEIPTS BLOCKED` chip with pending receipt and archive-preview counts.
+Runtime sanity on the local API reported
+`TERMINAL_RECEIPT_RECOVERY_WAITING_FOR_TERMINAL`, `pending_receipt_count=28`,
+`unmatched_open_position_count=28`, `heartbeat_status=MISSING`,
+`account_snapshot_present=false`, `journal_rewritten=false`, and
+`receipt_ingest_attempted=false`. WASTE was restarted paper-safe after the API
+reload and reported `running=true`, `interval_seconds=5`, `cycles_run=2`,
+stage `no_trade`, and `last_reason="strategize produced no candidate setup"`.
+This does not archive rows, rewrite journals, ingest receipts, reconcile
+attempts, place orders, close positions, create broker `ACCEPT`, create owner
+`ACCEPT`, authorize live trading, mint edge tokens, deposit, withdraw, move
+bank/card money, automate payouts, or mark evidence `LICENSED`. Verification:
+`py_compile` passed for the touched terminal receipt recovery/API/route/test
+files; terminal position reconciliation tests passed with `6 passed`; dashboard
+API surface passed with `11 passed`; UI `npm run build` passed with the
+existing Vite chunk-size warning only; the combined terminal
+reconciliation/live-recovery/dashboard slice passed with `22 passed`. Current
+next product gap: get a fresh terminal heartbeat/account snapshot and either
+let the terminal produce receipts or owner-review/execute the legacy archive
+for stale paper MT4 rows, then rebuild memory/reconciliation before unresolved
+order attempts can be owner-reconciled.
+
+2026-06-30 CAS Forex order-attempt recovery packet implemented.
+`order_attempt_recovery_packet.py` now builds a read-only owner review packet
+for unresolved real order-attempt audit rows. The packet packages the exact
+unresolved attempts, latest broker-truth freshness/live-account/reconciliation
+checks, whether owner reconciliation is currently safe to attempt, and a
+classification that flags rows such as `_FakeRealBridge` as
+`SYNTHETIC_TEST_LIKE` for review without clearing or downgrading them. It is
+exposed at `/api/forex/order-dispatch/audit/recovery-packet`, included in the
+dashboard payload as `orderAttemptRecoveryPacket`, and shown in the Settings
+Live Recovery panel as `RECONCILE READY` / `RECONCILE BLOCKED` with counts for
+test-like and broker-review-required attempts. Runtime sanity on the local API
+showed the current packet is `RECOVERY_PACKET_BLOCKED`:
+`unresolved_real_attempt_count=5`, `synthetic_test_like_count=5`,
+`broker_review_required_count=0`, and
+`can_reconcile_unresolved_attempts=false` because broker truth is stale, no live
+MT5 account is visible, and terminal position/receipt reconciliation is still
+dirty. WASTE was restarted paper-safe after the API reload and reported
+`running=true`, `interval_seconds=5`, `cycles_run=2`, stage `no_trade`, and
+`last_reason="strategize produced no candidate setup"`. This does not
+reconcile or finalize attempts, place orders, close positions, create broker
+`ACCEPT`, create owner `ACCEPT`, authorize live trading, mint edge tokens,
+deposit, withdraw, move bank/card money, automate payouts, or mark evidence
+`LICENSED`. Verification: `py_compile` passed for the touched recovery
+packet/order-dispatch/API/test files; `test_order_dispatch_route.py` passed
+with `5 passed`; dashboard API surface passed with `11 passed`; live
+recovery plus order-dispatch route tests passed with `10 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only. Current
+next product gap: refresh broker truth from a connected live terminal and clean
+the pending terminal position/receipt reconciliation before the owner can
+reconcile each exact unresolved attempt.
+
+2026-06-30 CAS Forex WASTE pilot promotion readiness gate implemented.
+`waste_pilot_promotion.py` now provides a read-only owner-visible gate between
+WASTE real-candle dry-run/review evidence and any small controlled pilot
+sequence. The gate requires a WASTE entry handoff-ready dry-run, current owner
+`ACCEPT` for the exact dry-run fingerprint, an explicit LONG/SHORT hypothesis,
+owner-accepted pilot policy with remaining capacity, the intent inside the
+pilot symbol/lot/risk envelope, live recovery `CLEAR`, and no unresolved real
+order-attempt audit rows. It reports `WASTE_PILOT_READY` only when all checks
+are `OK`; otherwise it reports `WASTE_PILOT_BLOCKED` with exact blockers. It is
+exposed at
+`/api/forex/live-order-dry-run/waste-entry-order/pilot-promotion`, included in
+the dashboard payload as `wasteEntryPilotPromotion`, and shown in the WASTE
+dry-run cockpit with a `Check Pilot` action. Runtime sanity after restarting
+the local API showed the current NAS100 WASTE evidence has a real broker-grade
+LONG hypothesis with `entry_pair_count=40`, but the promotion gate correctly
+remains `WASTE_PILOT_BLOCKED` because the WASTE dry-run has not passed, owner
+dry-run `ACCEPT` is not current, the pilot policy is still `OPEN`, live
+recovery is not `CLEAR`, and unresolved real-attempt audit rows remain open.
+WASTE was restarted paper-safe at a 5-second interval under the new API and
+reported `running=true`, `cycles_run=2`, stage `no_trade`, and edge
+`NO_TRADE_NULL_FAILED`. This does not place orders, close positions, create
+broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, mint edge
+tokens, deposit, withdraw, move bank/card money, automate payouts, or mark
+evidence `LICENSED`. Verification: `py_compile` passed for the touched
+promotion/route/API/test files; focused WASTE entry live-order tests passed
+with `3 passed`; full `test_live_order_dry_run.py` passed with `18 passed`;
+dashboard API surface tests passed with `11 passed`; live pilot/recovery/order
+dispatch passed with `26 passed`; WASTE runner/probe/market-data passed with
+`37 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only. Current next product gap: owner-review/reconcile the unresolved
+real-attempt audit rows against broker truth and then decide the exact tiny
+paper/live pilot sequence rules for a future `WASTE_PILOT_READY` candidate.
+
+2026-06-30 CAS Forex timed WASTE runner real-candle source evidence
+implemented and runtime-verified. The default timed `WasteRunner` already uses
+`build_waste_market_state()` plus directional analyze/strategize when no custom
+stage callables are injected; this pass made that fact durable and
+owner-visible. Each WASTE cycle result now carries compact `watch_state` and
+`analysis` summaries instead of only candidate/edge output: source connector,
+symbol/timeframe, read-only broker-grade flag, fallback flag, candle count,
+holdout `entry_pair_count`, selected directional profile, strategy-firewall
+state, CAS lacunarity/RPM/CJT summary, execution costs, and LONG/SHORT
+hypothesis. `waste_cycle_audit.py` persists those fields in
+`runtime/waste-runner-state.json` and the append-only WASTE runner audit, and
+the dashboard WASTE local runner strip now shows timed-runner source, candles,
+pairs, profile, and hypothesis separately from the manual real-candle probe.
+Runtime sanity on the local API restarted WASTE paper-safe at a 5-second
+interval and verified the timed loop is actually running from broker-grade
+market data: `running=true`, `mode=PAPER`, `cycles_run=4`, NAS100 D1,
+`source=MT5TerminalMarketDataConnector`, `broker_grade_market_truth=true`,
+`read_only_market_data=true`, `fallback_used=false`, `candles_count=180`,
+`entry_pair_count=40`, `hypothesis_direction=LONG`,
+`edge_status=NO_TRADE_NULL_FAILED`, `edge_has_token=false`,
+`execute_result=null`, and stage trace
+`watch>analyze>strategize>test>no_trade`. This means the timed runner now has
+real market eyes and still refused the trade when the edge gate failed. This
+does not place orders, close positions, create broker `ACCEPT`, create owner
+`ACCEPT`, authorize live trading, mint edge tokens, deposit, withdraw, move
+bank/card money, automate payouts, or mark evidence `LICENSED`. Verification:
+`py_compile` passed for the touched WASTE runner/cycle-audit/test files;
+focused WASTE runner tests passed with `18 passed`; the wider
+WASTE/market-data/probe/live-order slice passed with `54 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only. Current
+next product gap: decide how owner-reviewed passing WASTE dry-run evidence
+should be promoted into a small controlled paper/live pilot sequence with broker
+receipts, while keeping edge PASS, owner `ACCEPT`, recovery, broker truth, and
+payout gates fail-closed.
+
+2026-06-30 CAS Forex WASTE entry dispatch handoff cockpit implemented.
+The latest WASTE real-candle live-order dry-run can now be reviewed as an
+owner-visible dispatch handoff without creating a parallel trade path.
+`waste_runner.py` now rebuilds a `WASTE_ENTRY` `TradeIntent` only from a
+passing `cas_forex_live_order_dry_run` that carries
+`waste_real_candle_source` with `WASTE_PROBE_DRY_RUN_HANDOFF_READY`,
+broker-grade market truth, and positive holdout `entry_pair_count`.
+`/api/forex/live-order-dry-run/waste-entry-order/dispatch-handoff` reports
+whether the exact WASTE entry dry-run is owner-review-current, and
+`/dispatch` requires `confirm_owner_dispatch=true`, returns
+`CONFIRM_REQUIRED` when live trading is authorized without `?confirm=true`, and
+otherwise sends the exact dry-run order into the normal `order_dispatch`
+chokepoint. The dashboard now shows a WASTE entry handoff chip, `Check Handoff`
+button, owner dispatch checkbox, note field, and disabled-until-ready
+`Dispatch WASTE` action. Runtime sanity on the local API showed the current
+NAS100 WASTE dry-run remains blocked because it did not pass the live-order
+dry-run gate: `status=BLOCKED_WASTE_ENTRY_DISPATCH_HANDOFF`,
+`broker_touched=false`, `dispatched_to_bridge=false`, and
+`dispatch_attempted=false` even when `confirm_owner_dispatch=true` was supplied.
+This does not place orders, close positions, create broker `ACCEPT`, create
+owner `ACCEPT`, authorize live trading, mint edge tokens, deposit, withdraw,
+move bank/card money, automate payouts, or mark evidence `LICENSED`.
+Verification: `py_compile` passed for the touched WASTE runner/live dry-run
+route/test files; focused live dry-run tests passed with `17 passed`; the wider
+live-order/order-dispatch/WASTE slice passed with `56 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only. Current
+next product gap: make the timed WASTE runner itself use the broker-grade
+real-candle watch/analyze/strategize source path continuously instead of relying
+on manual probes, while preserving the PASS-only edge authorization and owner
+dispatch/review gates.
+
+2026-06-30 CAS Forex WASTE real-candle probe backend dry-run handoff
+implemented. `waste_real_candle_probe.py` now exposes a guarded backend
+handoff that loads the latest persisted WASTE real-candle probe, requires
+broker-grade read-only market truth, a LONG/SHORT candidate, numeric entry/SL/TP
+geometry, positive no-lookahead holdout `entry_pairs`, directional-hypothesis
+metadata, strategy-firewall allowance, no broker touch, and no registered or
+persisted edge token before it can create a live-order dry-run audit packet.
+`/api/forex/waste-loop-control/real-candle-probe/dry-run` is now the cockpit
+handoff route, and the dashboard button calls that route instead of assembling
+the order request in the browser. The dashboard preview also refuses to light
+the WASTE dry-run action unless the latest real-candle probe candidate carries
+explicit broker-grade market truth. Runtime sanity on the local API refreshed a
+NAS100 D1 probe from `MT5TerminalMarketDataConnector`: it produced a read-only
+broker-grade LONG candidate with `entry_pair_count=40`, then the edge gate
+returned `NO_TRADE_NULL_FAILED` with no edge token. The new dry-run handoff
+recorded a `cas_forex_live_order_dry_run` audit from that source, but remained
+`DRY_RUN_BLOCKED`, `broker_touched=false`,
+`would_reach_broker_if_executed=false`, `source_status=WASTE_PROBE_DRY_RUN_HANDOFF_READY`,
+and `source_edge_has_token=false`. This does not place orders, close positions,
+create broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, deposit,
+withdraw, move bank/card money, automate payouts, or mark evidence `LICENSED`.
+Verification: `py_compile` passed for the touched WASTE probe/route/test files;
+`test_waste_real_candle_probe.py` passed with `6 passed`; the focused WASTE
+market-data/live-order dry-run slice passed with `34 passed`; UI `npm run build`
+passed with the existing Vite chunk-size warning only. Current next product gap:
+advance the real Strategize -> data path from safe proof packets into owner
+review of edge-`PASS`, risk-clear, broker-truth-current candidates, then wire
+only owner-approved dry-run evidence through the normal dispatch chokepoint.
+
+2026-06-30 CAS Forex WASTE market-backed dry-run source guard implemented.
+The WASTE runner/data path already has read-only market eyes:
+`waste_market_data.py` can prefer broker-grade MT5 terminal candles, build
+no-lookahead holdout `entry_pairs`, select a directional profile with CAS
+lacunarity/RPM/CJT context, and pass LONG/SHORT candidates into the edge gate;
+`waste_real_candle_probe.py` persists a safe WATCH -> ANALYZE -> STRATEGIZE ->
+TEST rehearsal without registering an edge token or touching a broker bridge.
+The new cockpit guard in `DashboardPage.tsx` now refuses to use a durable WASTE
+cycle candidate for `Run WASTE Dry Run` unless it is market-backed: symbol,
+direction, decision ref, numeric entry/SL/TP, positive `entry_pair_count`, a
+`directional_hypothesis`, and `market_state_meta` are all required. If the
+durable runner cycle is stale or synthetic, the cockpit can still use the latest
+real-candle probe candidate when that candidate carries the same market-backed
+evidence. This prevents old test-like durable cycles such as `dref-test-1` from
+feeding owner dry-run controls while preserving the real candle long/short path.
+Runtime sanity on the local API refreshed a NAS100 D1 real-candle probe from
+`MT5TerminalMarketDataConnector`: it produced a broker-grade read-only LONG
+candidate with `entry_pair_count=20`, then the edge gate returned
+`NO_TRADE_UNDERPOWERED`; `broker_touched=false`,
+`edge_authorization_registered=false`, and `edge_token_persisted=false`. This
+does not place orders, close positions, create broker `ACCEPT`, create owner
+`ACCEPT`, authorize live trading, deposit, withdraw, move bank/card money,
+automate payouts, or mark evidence `LICENSED`. Verification:
+`test_waste_market_data.py`, `test_waste_real_candle_probe.py`, and
+`test_waste_runner.py` passed with `32 passed`; UI `npm run build` passed with
+the existing Vite chunk-size warning only. Current next product gap: continue
+from safe real-candle probes into an owner-reviewed WASTE dry-run/review flow
+only when the candidate is market-backed and the normal edge/risk/recovery
+gates remain clear.
+
+2026-06-30 CAS Forex verified-profit sweep live-recovery blocker implemented.
+The verified winnings sweep path now refuses a payout request when the live
+recovery gate is not `CLEAR`. `request_verified_profit_sweep()` accepts a live
+recovery report and returns `LIVE_RECOVERY_BLOCKED` before confirmation,
+payout-attempt reservation, movement-engine payout, or provider contact when
+`recovery_clear_for_live=false`. The FastAPI money-movement routes now pass the
+current `build_live_recovery_report()` into both supplied-ledger and
+current-ledger sweep requests, so dashboard/API sweep requests are backend
+fail-closed while broker truth, open-position reconciliation, unresolved real
+order attempts, or payout recovery remain dirty. The Operations Dashboard
+Verified Profit Sweep cockpit now fetches live recovery status, shows a
+`RECOVERY <status>` chip, displays a `RECOVERY BLOCKS PAYOUT` row when dirty,
+and disables `Confirm Payout` unless the sweep preview is `READY` and live
+recovery is clear. Runtime sanity on the local API showed current
+`recovery_status=OPEN`, `recovery_clear_for_live=false`, and a synthetic
+broker-confirmed live-profit sweep request returned `LIVE_RECOVERY_BLOCKED`
+with no `movement` result and payout recovery still `pending_count=0`. This
+does not place trades, close positions, create broker `ACCEPT`, mint edge
+tokens, deposit, withdraw, move bank/card money, automate payouts, or mark
+evidence `LICENSED`; it is a payout safety gate. Verification:
+`py_compile` passed for the sweep/route/test files; focused sweep and
+money-movement tests passed with `33 passed`; the wider
+verified-sweep/order-dispatch/live-recovery/runtime-gates/broker-truth/settings
+slice passed with `71 passed`; UI `npm run build` passed with the existing Vite
+chunk-size warning only. Current next product gap: owner-review and resolve the
+local unresolved real order-attempt audit rows against broker truth, then
+continue the real Strategize -> data path so WASTE can form real long/short
+candidates from live candles before any edge token or live order can exist.
+
+2026-06-30 CAS Forex owner cockpit unresolved-attempt recovery workflow
+implemented. The Settings Live Recovery panel now fetches
+`/api/forex/order-dispatch/audit`, lists compact
+`unresolved_real_attempts`, auto-selects a pending attempt ID, shows the
+selected attempt, and exposes an `Owner Reconcile` checkbox plus `Reconcile
+Attempt` action. The UI calls
+`POST /api/forex/order-dispatch/audit/reconcile-unresolved` with the selected
+`attempt_id` only after owner confirmation, then refreshes both order-attempt
+audit and live-recovery status. This makes the prior backend recovery finalize
+path usable from the owner cockpit while preserving the boundary: it does not
+retry orders, place orders, close positions, create broker `ACCEPT`, mint edge
+tokens, deposit, withdraw, move bank/card money, automate payouts, or mark
+evidence `LICENSED`. Reconciliation still requires the backend's clean fresh
+broker-truth checks before any unresolved real attempt can be finalized as
+`RECOVERY_RECONCILED`. Verification: UI `npm run build` passed with the
+existing Vite chunk-size warning only; focused order-dispatch route plus
+live-recovery tests passed with `9 passed`; py_compile passed for the recovery
+route/audit modules. Current next product gap: after the local unresolved test
+attempts are owner-reviewed against broker truth, continue into verified
+closed-trade winnings, tax reserve, and owner-configured profit sweep controls.
+
+2026-06-30 CAS Forex unresolved real order-attempt recovery finalize path
+implemented. `order_attempt_audit.py` now exposes
+`reconcile_unresolved_real_attempt()`, which requires
+`confirm_owner_reconcile=true`, requires fresh clean broker-truth evidence
+(`broker_truth_present`, `broker_truth_fresh`, `live_account_visible`, and
+`broker_truth_reconciled`), refuses already-finalized/non-real attempts, and
+records an unresolved crash-window real attempt as
+`ATTEMPT_RECOVERY_RECONCILED` / `RECOVERY_RECONCILED` without inventing a
+broker fill, failure, ledger event, or retry. It preserves
+`bridge_touch_unknown=true` and `requires_owner_review_before_retry=true` so
+the audit does not falsely claim what happened during the crash window. Added
+`POST /api/forex/order-dispatch/audit/reconcile-unresolved`; the order-attempt
+audit status now exposes compact `unresolved_real_attempts` summaries, and live
+recovery passes those summaries through `order_attempt_summary`. This gives the
+owner/operator the attempt IDs needed to clear the recovery blocker only after
+broker truth is clean. This does not place orders, close positions, create
+broker `ACCEPT`, mint edge tokens, deposit, withdraw, move bank/card money,
+automate payouts, or mark evidence `LICENSED`. Runtime note: after the new
+gate loaded locally, `/api/forex/live-recovery/status` correctly reported
+`recovery_status=OPEN`, `recovery_clear_for_live=false`, and
+`unresolved_real_attempt_count=4` from the current local audit state, so CAS
+Forex is fail-closed until those attempts are reconciled or otherwise resolved.
+Verification: order-dispatch route plus live-recovery tests passed with `9
+passed`; py_compile passed for `order_attempt_audit.py`, `live_recovery.py`,
+`api/routes/order_dispatch.py`, and the related tests; the wider
+order-dispatch/live-recovery/runtime-gates/broker-truth/settings slice passed
+with `59 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only. Current next product gap: add an owner cockpit workflow to select
+and reconcile unresolved real attempts from the visible audit list, then
+continue into verified closed-trade winnings, tax reserve, and owner-configured
+profit sweep controls.
+
+2026-06-30 CAS Forex live recovery now blocks unresolved real order attempts.
+`live_recovery.py` now consumes durable `order_attempt_audit` status as live
+recovery evidence. If a real broker order attempt was recorded as started but
+never finalized, recovery becomes `OPEN`, `recovery_clear_for_live=false`, and
+`missing_requirements` includes `unresolved_real_order_attempts_clear`; owner
+`ACCEPT` cannot clear recovery until that unresolved real attempt is reconciled
+or finalized in the order-attempt audit. The recovery fingerprint now includes
+order-attempt counts and latest-attempt metadata, so a prior owner recovery
+`ACCEPT` does not silently remain current after the broker-attempt state
+changes. The Settings Live Recovery panel now shows `Unresolved Real Attempts`
+as an owner-visible danger field. This is reliability/safety gating only: it
+does not place orders, close positions, create broker `ACCEPT`, mint edge
+tokens, deposit, withdraw, move bank/card money, automate payouts, or mark
+evidence `LICENSED`. Verification: live recovery tests passed with `5 passed`;
+py_compile passed for `live_recovery.py` and `test_live_recovery.py`; the wider
+live-recovery/runtime-gates/broker-truth/settings/order-dispatch slice passed
+with `55 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only. Current next product gap: add the explicit reconciliation/finalize
+workflow for unresolved real order attempts after a crash/disconnect, then
+continue into verified closed-trade winnings, tax reserve, and owner-configured
+profit sweep controls.
+
+2026-06-30 CAS Forex owner-confirmed compound-add dispatch handoff action
+implemented. Added
+`POST /api/forex/live-order-dry-run/compound-add-order/dispatch-handoff/dispatch`,
+which requires `confirm_owner_dispatch=true`, refuses stale or missing owner
+`ACCEPT` for the exact compound-add fingerprint, returns `CONFIRM_REQUIRED`
+instead of dispatching when live trading is owner-authorized but `?confirm=true`
+is absent, and otherwise hands the exact dry-run `COMPOUND_ADD` intent to the
+normal `order_dispatch` chokepoint. That chokepoint still rechecks compound-add
+owner `ACCEPT`, live-trading authority, edge authorization, live-pilot gates,
+risk caps, emergency-stop/auto-halt gates, bridge selection, and durable
+order-attempt audit before any bridge can be touched. The Operations Dashboard
+compound-add panel now exposes an explicit `Owner dispatch` checkbox, optional
+`Live confirm` checkbox, `Dispatch Handoff` button, and handoff bridge-touched
+status chip. This is not automatic trading and not owner `ACCEPT` creation: the
+button does nothing unless the owner takes the dispatch action, and the endpoint
+does not create broker `ACCEPT`, mint edge tokens, deposit, withdraw, move
+bank/card money, automate payouts, or mark any evidence `LICENSED`. Verification:
+focused handoff API regressions passed with `2 passed`; py_compile passed for
+the route and tests; the wider live-order/settings/WASTE/order-dispatch slice
+passed with `59 passed`; UI `npm run build` passed with the existing Vite
+chunk-size warning only. Current next product gap: continue hardening the
+real-money reliability layer around live open-position recovery and continuous
+broker-truth reconciliation, then connect verified closed-trade winnings to
+tax-reserved, owner-configurable profit sweep controls.
+
+2026-06-30 CAS Forex compound-add dispatch handoff cockpit status
+implemented. Added a read-only owner-visible handoff status layer for WASTE
+compound adds: `waste_runner.py` now exposes
+`build_compound_add_dispatch_handoff_status()`, the API exposes
+`GET /api/forex/live-order-dry-run/compound-add-order/dispatch-handoff`,
+dashboard data now includes `compoundAddDispatchHandoff`, and the Operations
+Dashboard compound-add panel shows a `HANDOFF READY` / `HANDOFF BLOCKED` chip
+plus a `Check Handoff` refresh action. This status rebuilds the exact
+`COMPOUND_ADD` dispatch intent only from a passing compound-add dry-run and
+shows whether the current owner `ACCEPT` fingerprint would let an attempted
+handoff reach the normal order-dispatch chokepoint. It remains status-only:
+`broker_touched=false`, `dispatched_to_bridge=false`, no live trade is placed,
+no broker `ACCEPT` is created, no edge token is minted, no deposit/withdrawal
+or bank/card movement occurs, and no payout automation is authorized. The live
+local API is currently responding fail-closed for the handoff route when there
+is no current compound-add dry-run evidence. Verification: focused backend
+route/dashboard tests passed with `2 passed`; the wider live-order/settings/
+WASTE/order-dispatch slice passed with `58 passed`; py_compile passed for
+`api/data.py`, `api/routes/live_order_dry_run.py`, `waste_runner.py`, and the
+new test file; UI `npm run build` passed with the existing Vite chunk-size
+warning only. The attached prior-agent range-scalper research remains useful as
+negative guardrail evidence: its short-sample win rate did not survive
+full-history, cost-adjusted, null-tested stress testing, so it should inform
+what WASTE rejects rather than be treated as a production edge. Current next
+product gap: add the explicit owner-confirmed
+dispatch action endpoint for an already accepted handoff, still flowing through
+normal dispatch/risk/emergency/live gates and still audited, then continue the
+real-money path with continuous broker-truth recovery and verified-profit sweep
+hardening.
+
+2026-06-30 CAS Forex WASTE compound-add dispatch-intent handoff implemented.
+`waste_loop.CompoundDecision` now carries optional `add_dispatch_intent` and
+`add_dispatch_result` evidence. `waste_runner.py` now exposes
+`build_compound_add_dispatch_intent_from_dry_run()` and
+`dispatch_compound_add_from_dry_run()`: the first rebuilds the exact
+`COMPOUND_ADD` `TradeIntent` only from a passing compound-add dry-run
+`order_request`, and the second hands that exact intent to normal
+`order_dispatch.dispatch_intent()` with audit source
+`waste_compound_add_handoff`. The handoff does not mint edge tokens, invent
+owner approval, or bypass dispatch. If owner `ACCEPT` for the current exact
+compound-add fingerprint is missing or stale, order dispatch returns
+`BLOCKED_COMPOUND_ADD_REVIEW` and the bridge is not touched. If the owner
+`ACCEPT` is current and the normal live/risk/edge/pilot gates are satisfied,
+the same handoff can reach a fake live bridge through the existing dispatch
+chain. This is still not `LICENSED` evidence, not a broker `ACCEPT`, and not
+bank/card movement: it does not deposit, withdraw, move money, automate
+payouts, or authorize live trading by itself. Verification: the two new WASTE
+handoff regressions passed with `2 passed`; py_compile passed for
+`waste_loop.py`, `waste_runner.py`, and `test_waste_runner.py`; focused WASTE/
+live-order/order-dispatch/dashboard backend slice passed with `57 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only. Current
+next product gap: expose the compound-add dispatch handoff as an owner-visible
+cockpit action/status so the owner can see whether an accepted add is merely
+reviewable, dispatch-blocked, or actually handed to the broker under live gates,
+then continue the broader real-money path with continuous broker-truth recovery
+and verified-profit sweep hardening.
+
+2026-06-30 CAS Forex WASTE compound-add cockpit/API smoke implemented and
+verified. Added a focused regression that builds a real WASTE manage-stage
+`ADD` decision from reconciled parent-position evidence, writes the generated
+compound-add dry-run to a temp append-only audit, reads `/api/forex/dashboard`,
+and proves the cockpit data surface now receives that exact WASTE-generated add
+evidence as `compoundAddOrderDryRun`. The same smoke patches fresh live broker-
+truth evidence and proves `compoundAddOrderDryRunReview` becomes
+owner-reviewable (`evidence_ready_for_owner_accept=true`) while
+`compound_add_dry_run_review_clear_for_dispatch=false` remains false until the
+owner explicitly records `ACCEPT`. The browser check also loaded the running
+local dashboard at `http://127.0.0.1:5173/?page=dashboard` and confirmed the
+visible cockpit has `COMPOUND ADD`, `BROKER NOT TOUCHED`, `Owner ACCEPT`, and
+`Accept Add` controls with zero console errors. This is an evidence/control
+smoke only: it does not place add orders, close positions, create broker
+`ACCEPT`, authorize live trading, deposit, withdraw, move bank/card money,
+automate payouts, mint edge tokens, or turn owner-reviewable evidence into
+`LICENSED` evidence. Verification: the exact new smoke passed with `1 passed`;
+the focused WASTE/live-order/dashboard backend slice passed with `39 passed`;
+UI `npm run build` passed with the existing Vite chunk-size warning only; the
+running browser dashboard showed the compound-add cockpit controls and no
+console errors. Current next product gap: build the explicit WASTE compound-add
+dispatch-intent handoff that can only use the exact owner-`ACCEPT` current
+compound-add dry-run fingerprint and must still flow through the normal dispatch
+chokepoint, risk gates, emergency stop, and owner live controls.
+
+2026-06-30 CAS Forex compound-add owner cockpit surface implemented. The UI now
+has a dedicated compound-add review panel mounted on the Operations Dashboard,
+separate from the normal live-order dry-run card. It fetches the latest
+compound-add dry-run audit and current owner review, shows whether the add
+fingerprint is owner `ACCEPT` current, shows blocker/missing-requirement
+counts, exposes the exact order/parent/side/symbol/decision metadata, and gives
+the owner explicit Refresh, Reset, note, checkbox, and Accept Add controls
+against the backend
+`/api/forex/live-order-dry-run/compound-add-order/...` review endpoints. The
+dashboard merge state and TypeScript evidence contracts now include
+`compoundAddOrderDryRun` and `compoundAddOrderDryRunReview`, so a generated
+WASTE manage-stage add rehearsal can be surfaced in the cockpit instead of
+being hidden in append-only audit logs. This UI control does not place add
+orders, close positions, create broker `ACCEPT`, authorize live trading,
+deposit, withdraw, move bank/card money, automate payouts, mint edge tokens, or
+turn any dry-run/review artifact into `LICENSED` evidence. The prior-agent
+range-scalper research remains useful as negative guardrail evidence only: its
+tempting short-sample win rate did not survive full-history, cost-adjusted,
+null-tested stress testing, so it should not be treated as a production edge.
+Verification: UI `npm run build` passed with the existing Vite chunk-size
+warning only; focused live dry-run/dashboard API tests passed with `24 passed`.
+Current next product gap: connect the owner cockpit panel to the live WASTE
+manage-stage flow in an end-to-end browser/API smoke, then continue the
+real-money path by feeding only broker-truth, edge-`PASS`, risk-gated,
+owner-controlled long/short/add/hold/cut decisions toward dispatch.
+
+2026-06-30 CAS Forex WASTE manage-stage compound-add dry-run evidence wire
+implemented. `waste_loop.CompoundDecision` can now carry optional
+`add_dry_run` evidence, and `waste_runner.py` now builds a compound-add dry-run
+report when the strict CAS-backed manage-stage governor returns `ADD`. The
+builder prefers `terminal_position_reconciliation.reconciled_open_positions`
+with status `TERMINAL_POSITION_RECONCILIATION_READY_OPEN_POSITIONS`, zero
+unmatched positions, zero pending receipts, and zero receipt mismatches; it
+falls back to execution-result evidence as non-broker-grade truth when no clean
+reconciled position exists. The dry run uses the existing
+`build_compound_add_order_dry_run()` path and can append to the compound-add
+dry-run audit, so WASTE/AI manage-stage evidence can now flow into the
+owner-visible add rehearsal/review path. It still does not place add orders,
+call a broker bridge, create broker `ACCEPT`, create owner `ACCEPT`, authorize
+live trading, deposit, withdraw, move bank/card money, automate payouts, mint
+edge tokens, or turn a compound add into `LICENSED` evidence. Also corrected
+WASTE current-price extraction so current broker/market price is preferred over
+entry/fill price for compounding decisions when both are present. Verification:
+py_compile passed for `waste_loop.py`, `waste_runner.py`, and
+`test_waste_runner.py`; focused WASTE/live/order tests passed with `60 passed`;
+live/WASTE/order/runtime/settings slice passed with `81 passed`; full CAS Forex
+backend suite passed with `1497 passed`; UI `npm run build` passed with the
+existing Vite chunk-size warning only. Current next product gap: add the
+owner-visible cockpit controls for viewing the generated compound-add dry-run,
+resetting/accepting the exact add fingerprint, and clearly showing why an add
+is blocked or owner-reviewable.
+
+2026-06-30 CAS Forex compound-add dispatch chokepoint gate implemented.
+`compound_add_order_dry_run_review.py` now exposes
+`require_current_compound_add_order_dry_run_review(order)`, which refuses
+dispatch unless the latest compound-add review is owner `ACCEPT`, current for
+the latest passing dry-run plus fresh broker-position evidence, and the broker
+order about to be sent matches the accepted dry-run `order_request` exactly
+across `order_id`, `decision_ref`, symbol, direction, volume, price, stop loss,
+take profit, and comment. `order_dispatch.py` now recognizes explicit compound/
+pyramid add intents (`COMPOUND_ADD`, `PYRAMID_ADD`, WASTE compound variants,
+`is_compound_add`, etc.) and returns `BLOCKED_COMPOUND_ADD_REVIEW` before
+`guarded_place_order()` if the exact owner-accepted fingerprint is absent or
+mismatched. That means a marked pyramid add can be audited as attempted but the
+broker bridge is not touched unless the exact accepted add evidence is still
+current. This does not place add orders, close positions, create broker
+`ACCEPT`, create owner `ACCEPT`, authorize live trading, deposit, withdraw, move
+bank/card money, automate payouts, mint edge tokens, or turn a compound add into
+`LICENSED` evidence. Verification: py_compile passed for
+`compound_add_order_dry_run_review.py`, `order_dispatch.py`, and
+`test_order_dispatch.py`; focused order/live dry-run tests passed with `29
+passed`; live/order/runtime/settings slice passed with `63 passed`; full CAS
+Forex backend suite passed with `1496 passed`; UI `npm run build` passed with
+the existing Vite chunk-size warning only. Current next product gap: feed real
+WASTE/AI manage-stage broker-position reconciliation evidence into the
+compound-add dry-run/review flow automatically, then build the owner-visible UI
+control to review/reset/ACCEPT the exact add fingerprint from the cockpit.
+
+2026-06-30 CAS Forex compound-add owner review/`ACCEPT` gate implemented.
+Added `compound_add_order_dry_run_review.py`, which records owner `ACCEPT` for
+the exact latest passing compound-add dry-run fingerprint only when the
+compound-add dry run is fresh, `DRY_RUN_PASS`, broker-untouched, all add/base
+checks passed, the compound governor selected `ADD`, the parent position
+reference is present, the fresh add-edge `PASS` and broker-truth parent checks
+passed, and fresh live broker-truth evidence shows a connected non-demo MT5
+account with at least one open position and no open-position/receipt mismatch or
+pending receipt. Added
+`GET /api/forex/live-order-dry-run/compound-add-order/review`,
+`POST /api/forex/live-order-dry-run/compound-add-order/review/accept`, and
+`POST /api/forex/live-order-dry-run/compound-add-order/review/reset`; dashboard
+state now exposes `compoundAddOrderDryRunReview`. The accepted fingerprint is
+invalidated if the add order, parent context, compound context, check statuses,
+or broker-position evidence changes. This creates owner review evidence only:
+it does not place add orders, close positions, create broker `ACCEPT`, authorize
+live trading, deposit, withdraw, move bank/card money, automate payouts, mint
+edge tokens, or turn any add into `LICENSED` evidence. Verification:
+py_compile passed for `compound_add_order_dry_run_review.py`,
+`api/routes/live_order_dry_run.py`, and `api/data.py`; focused live-order/
+compound-add review tests passed with `13 passed`; live/order/runtime/settings
+slice passed with `61 passed`; full CAS Forex backend suite passed with `1494
+passed`; UI `npm run build` passed with the existing Vite chunk-size warning
+only. Current next product gap: wire the actual future pyramid/add dispatch
+chokepoint so it refuses broker execution unless this exact
+compound-add-owner-review fingerprint is current, then feed the review from
+real WASTE/AI manage-stage broker-position reconciliation evidence.
+
+2026-06-30 CAS Forex controlled compound-add order dry-run path implemented.
+`live_order_dry_run.py` now has a `CompoundAddDryRunRequest` and
+`build_compound_add_order_dry_run()` report path for rehearsing an exact pyramid
+add order against the normal live-order dry-run gates plus compound-specific
+requirements: parent position reference, broker-grade parent/market truth,
+positive floating R, CAS lacunarity/RPM/CJT feature map, RPM `ROUTE`, non-lacuna
+selected cell, active CJT region, compound unit headroom, and a fresh matching
+add-edge `PASS`. The report uses its own
+`cas_forex_compound_add_order_dry_run` kind and append-only
+`compound-add-order-dry-run-audit.jsonl` audit path. Added
+`POST /api/forex/live-order-dry-run/compound-add-order` and
+`GET /api/forex/live-order-dry-run/compound-add-order/latest`, and dashboard
+state now exposes `compoundAddOrderDryRun` so the owner cockpit can surface the
+latest compound-add rehearsal evidence. This is still a rehearsal/evidence path:
+it does not place add orders, close positions, create broker `ACCEPT`, create
+owner `ACCEPT`, authorize live trading, deposit, withdraw, move bank/card money,
+automate payouts, register edge tokens, or turn CAS/RPM/CJT context into
+`LICENSED` evidence. Verification: py_compile passed for
+`live_order_dry_run.py`, `api/routes/live_order_dry_run.py`, and `api/data.py`;
+focused live-order dry-run tests passed with `10 passed`; live/order/runtime/
+settings slice passed with `58 passed`; full CAS Forex backend suite passed with
+`1491 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only. Current next product gap: wire WASTE/AI manage-stage evidence to
+populate this compound-add dry-run from actual broker-position reconciliation
+and then add an explicit owner review/`ACCEPT` surface for the exact passing add
+fingerprint before any real pyramid dispatch can be unlocked.
+
+2026-06-30 CAS Forex WASTE compounding decision gate wired to CAS feature map.
+`directional_intelligence.py` now carries `broker_grade_market_truth` inside
+candidate `market_state_meta`, and `waste_runner.py` now evaluates the WASTE
+post-execution manage stage through a strict CAS-backed compound review. The
+review reads the candidate's `cas_feature_map`, broker-grade market truth flag,
+current position-profit R context, current/max compound units, an explicit
+fresh compound edge `PASS`, and an explicit exact-add risk-gate result before
+it can return `ADD`. In the normal timed runner path, those exact add gates are
+not yet present, so the review returns `HOLD` with the blocker reason instead
+of adding a pyramid unit. This is a decision/audit surface only: it does not
+place add orders, close positions, create broker `ACCEPT`, create owner
+`ACCEPT`, authorize live trading, deposit, withdraw, transfer funds, automate
+payouts, register edge tokens, or turn CAS/CJT/RPM context into `LICENSED`
+evidence. `ADD` remains impossible unless broker truth, CAS RPM/CJT non-lacuna
+context, positive R, add-risk pass, and fresh compound edge `PASS` are all
+present for the exact add decision; any actual add order would still have to go
+through the normal gated order dispatch path. Also hardened the fallback market
+data test so it explicitly disables the MT5 lane when testing fallback behavior
+on this now-MT5-ready machine. Verification: py_compile passed for
+`directional_intelligence.py`, `waste_runner.py`, `waste_market_data.py`, and
+`waste_real_candle_probe.py`; focused WASTE runner/loop/compounding/market-data
+tests passed with `65 passed`; neighboring MT5/WASTE/live/order/runtime/settings
+suite passed with `118 passed`; UI `npm run build` passed with the existing
+Vite chunk-size warning only; full CAS Forex backend suite passed with `1488
+passed`. Current next product gap: create the controlled add-order dry-run path
+that builds an exact add intent from a profitable broker-truth position, runs
+edge PASS plus add-risk gates, and records owner-visible evidence before any
+real pyramid dispatch can be owner-approved.
+
+2026-06-30 CAS Forex CAS lacunarity/RPM/CJT feature map added to WASTE
+directional tuning. `waste_market_data.py` now evaluates each directional
+profile's older-window evidence as a CAS cell: cost-adjusted return, maximum
+drawdown, CJT operating region via `classify_region`, lacuna/non-lacuna via
+`cell_is_gap`, RPM `ROUTE` / `NO_TRADE`, RPM score, and a lacunarity rollup
+across profiles. Profile selection now requires RPM/CJT/non-lacuna eligibility;
+later holdout validation `entry_pairs` still go to the edge gate unchanged.
+`directional_intelligence.py` carries `cas_feature_map` through analysis and
+candidate `market_state_meta`, and `waste_real_candle_probe.py` exposes the CAS
+feature map in owner-visible probe evidence. This is evidence-only routing
+context for mutable intelligence and future compounding; it does not place
+orders, close positions, create broker `ACCEPT`, create owner `ACCEPT`,
+authorize live trading, deposit, withdraw, transfer funds, automate payouts,
+register edge tokens, or turn any CAS/CJT/RPM profile into `LICENSED` evidence.
+Current machine WASTE real-candle probe result: `NAS100` `D1` from
+`MT5TerminalMarketDataConnector`, `fallback_used=false`,
+`broker_grade_market_truth=true`, `180` candles, selected profile `blend`,
+CAS current regime `range`, lacunarity gap fraction `0.25`, cell reliability
+`0.75`, RPM route count `3`, selected RPM action `ROUTE`, selected CJT region
+`active`, selected lacuna status `false`, `40` holdout validation entry pairs,
+`LONG` candidate `waste-dir-4f89c091f73a84a3`, edge gate
+`NO_TRADE_NULL_FAILED`, measured win probability `0.3571` below owner threshold
+`0.65`, net return negative after cost, `broker_touched=false`,
+`edge_authorization_registered=false`, and `edge_token_persisted=false`.
+Verification: py_compile passed for `directional_intelligence.py`,
+`waste_market_data.py`, and `waste_real_candle_probe.py`; focused
+directional/WASTE/probe/runner tests passed with `33 passed`; neighboring
+MT5/WASTE/live/order/runtime/settings/condition/compounding suite passed with
+`115 passed`; UI `npm run build` passed with the existing Vite chunk-size
+warning only; full CAS Forex backend suite passed with `1485 passed`. Current
+next product gap: use this CAS feature map in the compounding add/hold/cut path
+only after a fresh edge `PASS`, broker-truth evidence, owner risk gates, and
+position-profit context exist for the exact add decision.
+
+2026-06-30 CAS Forex mutable long/short directional hypothesis tuning
+implemented. WASTE no longer relies on a single blended directional scorer
+only: `directional_intelligence.py` now supports explicit causal profiles
+(`blend`, `trend_follow`, `range_fade`, and `breakout_continuation`) and carries
+the selected profile in the candidate fingerprint and audit metadata.
+`waste_market_data.py` now tunes those profiles on older closed candles, then
+passes only later holdout validation `entry_pairs` to the edge gate, with
+`no_lookahead=true` and `validation_pairs_holdout=true` recorded in
+`directional_hypothesis_tuning`. `waste_real_candle_probe.py` now exposes the
+selected profile and tuning summary in owner-visible probe evidence. This is
+candidate formation only: it does not place orders, close positions, create
+broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, deposit,
+withdraw, transfer funds, automate payouts, register edge tokens, or turn any
+profile into `LICENSED` evidence. Current machine WASTE real-candle probe
+result: `NAS100` `D1` from `MT5TerminalMarketDataConnector`,
+`fallback_used=false`, `broker_grade_market_truth=true`, `180` candles,
+selected profile `blend`, tuning status `SELECTED_CAUSAL_PROFILE`, `40`
+holdout validation entry pairs, `LONG` candidate
+`waste-dir-9c18a7759b0692cc`, edge gate `NO_TRADE_NULL_FAILED`, measured win
+probability `0.3571` below owner threshold `0.65`, net return negative after
+cost, `broker_touched=false`, `edge_authorization_registered=false`, and
+`edge_token_persisted=false`. Verification: py_compile passed for
+`directional_intelligence.py`, `waste_market_data.py`, and
+`waste_real_candle_probe.py`; focused directional/WASTE/probe/runner tests
+passed with `33 passed`; neighboring MT5/WASTE/live/order/runtime/settings
+suite passed with `86 passed`; UI `npm run build` passed with the existing Vite
+chunk-size warning only; full CAS Forex backend suite passed with `1485
+passed`. Current next product gap: enrich the mutable profile workbench with
+owner-approved CAS lacunarity/RPM/CJT features, then let compounding decisions
+consume only broker-truth, edge-PASS, risk-gated, owner-controlled execution
+evidence.
+
+2026-06-30 CAS Forex MT5 terminal locator and broker-truth WASTE probe path
+implemented. The read-only `mt5_market_data_diagnostic` now includes an
+`mt5_terminal_locator` payload that inspects the configured
+`CAS_FOREX_MT5_PATH`, common Hugosway/MetaTrader install locations, and visible
+Windows `terminal64.exe` / `terminal.exe` processes. It remains strictly
+read-only: it does not launch MetaTrader, log into an account, place orders,
+close positions, create broker `ACCEPT`, create owner `ACCEPT`, authorize live
+trading, deposit, withdraw, transfer funds, automate payouts, register edge
+tokens, or turn fallback data into `LICENSED` evidence. When no explicit
+`CAS_FOREX_MT5_PATH` is configured, the diagnostic and WASTE market-data path
+now auto-try the discovered Hugosway terminal executable for read-only candles.
+Current machine diagnostic result: `MT5_MARKET_DATA_READY`, `2 / 2` symbols
+ready, auto-selected path
+`C:\Program Files\Hugosway\Hugosway PRO5 Terminal\terminal64.exe`, visible
+terminal process count `1`, `NAS100` and `US30` both
+`BROKER_TRUTH_READY` with `180` broker candles. Current machine WASTE
+real-candle probe result: source `MT5TerminalMarketDataConnector`,
+`fallback_used=false`, `broker_grade_market_truth=true`, `180` candles,
+`79` entry pairs, `LONG` candidate `waste-dir-39161d61e5a509dc`, edge gate
+`NO_TRADE_NULL_FAILED`, measured win probability `0.5909` below the owner
+threshold `0.65`, `broker_touched=false`, `edge_authorization_registered=false`,
+and `edge_token_persisted=false`. Verification: py_compile passed for
+`waste_market_data.py` and `mt5_market_data_diagnostic.py`; focused
+MT5/WASTE/probe tests passed with `20 passed`; neighboring
+MT5/WASTE/live/order/runtime/settings suite passed with `79 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only; full
+CAS Forex backend suite passed with `1483 passed`. Current next product gap:
+keep reading broker-grade MT5 candles, improve/expand the mutable long/short
+candidate intelligence, and only promote a fingerprint to dry-run/owner
+`ACCEPT` after a broker-truth candidate clears the null and threshold gates.
+
+2026-06-30 CAS Forex owner-visible MT5 market-data diagnostic implemented.
+Added `cas-forex\cas_forex\mt5_market_data_diagnostic.py`, durable latest state
+at `runtime\mt5-market-data-diagnostic.json`, and append-only audit rows at
+`runtime\mt5-market-data-diagnostic-audit.jsonl`. Added
+`GET /api/forex/waste-loop-control/mt5-market-data-diagnostic/latest` and
+`POST /api/forex/waste-loop-control/mt5-market-data-diagnostic/run`; dashboard
+state now exposes `mt5MarketDataDiagnostic`, and the owner cockpit has a
+read-only **Check MT5 Data** strip beside the WASTE real-candle probe. The
+diagnostic checks whether the local MT5 terminal can return broker-grade
+`NAS100`/`US30` candles and tick spread for the active D1 lane before WASTE
+tries to use broker truth. It does not place orders, close positions, call a
+broker execution bridge, create broker `ACCEPT`, create owner `ACCEPT`,
+authorize live trading, deposit, withdraw, transfer funds, automate payouts,
+register edge tokens, or turn fallback data into `LICENSED` evidence. Current
+machine diagnostic result: `MT5_MARKET_DATA_NOT_READY`, `0 / 2` symbols ready;
+`NAS100` and `US30` both returned `NO_BROKER_GRADE_CANDLES` because MT5
+initialize reported `(-10004, 'No IPC connection')`; `broker_touched=false` and
+`edge_token_persisted=false`. Also corrected `EdgeNotAuthorized` to inherit
+`PermissionError`, so missing/stale edge PASS failures are surfaced as
+authorization denials rather than generic dispatch errors. Verification:
+diagnostic/api/data py_compile passed; new diagnostic tests passed with
+`3 passed`; neighboring MT5/WASTE/live/order/runtime/settings suite passed with
+`76 passed`; edge/order slice passed with `23 passed`; UI `npm run build`
+passed with the existing Vite chunk-size warning only; full CAS Forex backend
+suite passed with `1480 passed`. Current next product gap: open/log into the
+local MT5/Hugo's Way terminal or set the correct `CAS_FOREX_MT5_PATH`, rerun
+**Check MT5 Data** until at least one active index symbol is
+`BROKER_TRUTH_READY`, then rerun WASTE real-candle probe/dry-run before any
+owner ACCEPT of a live-pilot fingerprint.
+
+2026-06-30 CAS Forex MT5 broker-symbol discovery and diagnostics implemented.
+The read-only MT5 market-data connector now supports owner-configured broker
+symbol overrides through `CAS_FOREX_MT5_SYMBOL_OVERRIDES`, accepting either JSON
+such as `{"NAS100":["NAS100.cash","USTEC"],"US30":"US30.cash"}` or compact
+syntax such as `NAS100=NAS100.cash|USTEC;US30=US30.cash`. It also tries built-in
+index/metal aliases and scans MT5 `symbols_get` results before declaring a
+canonical symbol unresolved. WASTE connector attempts now record `detail` plus
+`symbol_resolution` diagnostics, including configured candidates, tried
+candidates, discovered candidates, selected broker symbol, and resolution
+source. This is still read-only market evidence: it does not place orders, close
+positions, create broker `ACCEPT`, create owner `ACCEPT`, authorize live
+trading, deposit, withdraw, transfer funds, automate payouts, or turn fallback
+data into `LICENSED` evidence. Current machine probe result for `NAS100` `D1`:
+`MT5TerminalMarketDataConnector` returned `NO_CANDLES` because MT5 initialize
+reported `(-10004, 'No IPC connection')`; `OANDARestConnector` also returned
+`NO_CANDLES`; `YFinanceConnector` fallback returned `180` candles and `79`
+pairs; the edge gate remained `NO_TRADE_NULL_FAILED`, with
+`broker_grade_market_truth=false`, `fallback_used=true`, `broker_touched=false`,
+`edge_authorization_registered=false`, and `edge_token_persisted=false`.
+Verification: connector/waste py_compile passed; focused WASTE/data/probe/
+directional suite passed with `35 passed`; neighboring WASTE/live/order/runtime/
+settings/pip suite passed with `98 passed`; full CAS Forex suite passed with
+`1477 passed`. Current next product gap: open/log into the local MT5/Hugo's Way
+terminal or set the correct `CAS_FOREX_MT5_PATH`, then rerun the WASTE real-
+candle probe; if the broker uses nonstandard names, set
+`CAS_FOREX_MT5_SYMBOL_OVERRIDES` so the cockpit reaches **BROKER TRUTH** for
+`NAS100`/`US30` before any owner ACCEPT of a live-pilot fingerprint.
+
+2026-06-30 CAS Forex read-only MT5 broker-market-truth adapter implemented.
+Added `MT5TerminalMarketDataConnector` in
+`cas-forex\cas_forex\market_data\connector.py`, a read-only MetaTrader 5
+terminal market-data connector that fetches broker-terminal candles through
+`copy_rates_from_pos` and tick bid/ask spread through `symbol_info_tick`.
+`CAS_FOREX_MARKET_DATA_PROVIDER=MT5` is now an explicit market-data provider
+option. The connector is marked `broker_grade_market_truth=true` and
+`read_only_market_data=true`, and its claim boundary states that it does not
+place orders, close positions, create broker `ACCEPT`, create owner `ACCEPT`,
+authorize live trading, deposit, withdraw, transfer funds, or automate payouts.
+WASTE market state now prefers MT5 broker-terminal market truth when MT5 market
+truth is configured, then configured provider candles, then `YFinanceConnector`
+fallback. WASTE durable probe reports now carry `broker_grade_market_truth`,
+`read_only_market_data`, `market_data_claim_boundary`, and `execution_costs`.
+For broker-grade MT5 candles, edge-test costs include live tick spread plus the
+owner-configured `broker_max_slippage_pips` buffer; actual realized slippage
+remains a broker-receipt/dry-run/live-order evidence requirement and is not
+pretended from candles. The cockpit now shows **BROKER TRUTH**, **FALLBACK
+DATA**, or **CONNECTOR DATA**, plus the edge cost used by the latest
+real-candle probe. Current machine result: an owner-observed probe tried
+`MT5TerminalMarketDataConnector` first for `NAS100` `D1` but got `NO_CANDLES`,
+then tried `OANDARestConnector` and got `NO_CANDLES`, then used
+`YFinanceConnector` fallback with `180` candles and `79` pairs. The candidate
+remained `EDGE_BLOCKED` with edge gate `NO_TRADE_NULL_FAILED`,
+`broker_grade_market_truth=false`, `fallback_used=true`, `broker_touched=false`,
+`edge_authorization_registered=false`, and `edge_token_persisted=false`.
+Verification: connector/import py_compile passed; focused WASTE/data/probe/
+directional suite passed with `31 passed`; API import reports `185` routes and
+dashboard latest probe exposes source/fallback/broker-grade/cost fields;
+neighboring WASTE/live/order/runtime/settings/pip suite passed with
+`94 passed`; UI `npm run build` passed with the existing Vite chunk-size warning
+only; full CAS Forex suite passed with `1473 passed`. Current next product gap:
+make the local MT5/Hugo's Way terminal return broker-grade `NAS100`/`US30`
+rates and tick spread for the active D1 lane, then rerun the WASTE probe/dry-run
+until the cockpit says **BROKER TRUTH** before any owner ACCEPT of a live-pilot
+fingerprint.
+
+2026-06-30 CAS Forex WASTE real-candle probe implemented and verified. The
+configured OANDA lane did not return usable active-index candles for the current
+NAS100/US30 D1 evidence lane, so `cas-forex\cas_forex\waste_market_data.py`
+now records connector attempts and, when no explicit connector is injected,
+falls back from the configured connector to `YFinanceConnector` for market-data
+watch/analyze/probe evidence. Added
+`cas-forex\cas_forex\waste_real_candle_probe.py`, with latest state at
+`runtime\waste-real-candle-probe.json` and append-only audit rows at
+`runtime\waste-real-candle-probe-audit.jsonl`. Added
+`GET /api/forex/waste-loop-control/real-candle-probe/latest` and
+`POST /api/forex/waste-loop-control/real-candle-probe/run`, surfaced
+`wasteRealCandleProbe` in dashboard state, and added a cockpit **Run Real
+Candle Probe** action. The probe runs WATCH/ANALYZE/STRATEGIZE/TEST on real
+connector candles, but it does not start the timed runner, register edge
+authorization, place orders, close positions, call a broker bridge, create
+broker `ACCEPT`, create owner `ACCEPT`, authorize live trading, deposit,
+withdraw, transfer funds, automate payouts, or persist any edge token. Actual
+probe result: `NAS100` `D1` via `YFinanceConnector` fallback, `180` candles,
+`79` same-direction entry pairs, `SHORT` candidate
+`waste-dir-ae3b07aa9136a2f9`, edge gate `NO_TRADE_NULL_FAILED`, measured win
+probability `0.0833` below threshold `0.65`, with `broker_touched=false`,
+`edge_authorization_registered=false`, and `edge_token_persisted=false`.
+Verification: focused WASTE/data/probe/directional suite passed with
+`29 passed`; API import reports `185` routes and both real-candle probe routes
+plus dashboard field are present; neighboring live/order/runtime/settings suite
+passed with `66 passed`; full CAS Forex suite passed with `1471 passed`; UI
+`npm run build` passed with the existing Vite chunk-size warning only. Current
+next product gap: broker-grade CFD candle/spread/slippage truth for NAS100/US30,
+then an owner-observed WASTE dry run using fresh broker truth and owner ACCEPT
+of the exact passing fingerprint before any tiny live pilot dispatch.
+
+2026-06-30 CAS Forex WASTE strategy-ledger evidence firewall implemented.
+Added `cas-forex\cas_forex\waste_strategy_firewall.py`, which turns
+`strategy_leads.json` into a fail-closed memory guard for WASTE candidate
+formation. The prior range-scalper research is useful as a suppression signal:
+`range_scalper_filtered_fx_d1` remains `WATCHLIST_ONLY` and `NOT LICENSED`, so
+it cannot form a WASTE candidate even if an old transcript mentions a 94% win
+rate. WASTE may form a research candidate only when the symbol/timeframe is tied
+to an `ACTIVE_RESEARCH_LEAD`, is in `symbols_promoted_for_next_tests`, and the
+timeframe is in that lead's `preferred_timeframes`. Passing this firewall only
+means "eligible for edge-gate testing"; it does not create broker `ACCEPT`,
+owner `ACCEPT`, edge tokens, orders, live trading authorization, deposits,
+withdrawals, transfers, payout automation, or any `LICENSED` claim. The default
+WASTE watcher now follows the active D1 index evidence lane instead of the old
+M15 default; faster intraday lanes remain suppressed until fresh no-lookahead
+evidence is added to the owner-visible ledger. WASTE market state, directional
+analysis, candidates, and durable cycle audit rows now carry
+`strategy_firewall` metadata so the cockpit/audit can explain why a symbol was
+eligible or suppressed. Verification: focused WASTE strategy/data/runner suite
+passed with `26 passed`; neighboring strategy-ledger/WASTE/runtime/order/dry-run
+suite passed with `58 passed`; UI `npm run build` passed; full CAS Forex suite
+passed with `1468 passed`. Current next product gap: run the WASTE watcher
+against real connector candles in the active D1 index lane, then run the
+broker-connected dry run against fresh live broker truth and owner-ACCEPT the
+exact passing fingerprint before any tiny live pilot order.
+
+2026-06-30 CAS Forex owner-accepted live-order dry-run review gate
+implemented. Added `cas-forex\cas_forex\live_order_dry_run_review.py`, a
+durable owner ACCEPT gate at `runtime\live-order-dry-run-review.json` with
+append-only audit rows at `runtime\live-order-dry-run-review-audit.jsonl`.
+The gate ties owner acceptance to the exact latest passing live-order dry-run
+audit fingerprint plus fresh live broker-truth evidence. Added
+`GET /api/forex/live-order-dry-run/review`,
+`POST /api/forex/live-order-dry-run/review/accept?confirm_owner_accept=true`,
+and `/review/reset`. `runtime_gates.evaluate_live_trading()` now requires
+"owner ACCEPTED latest passing live-order dry run against fresh broker truth"
+for real live authorization; `live_order_dry_run.py` deliberately evaluates the
+base live gate without this review requirement so the owner can generate the
+dry-run evidence first, ACCEPT it second, and only then approach real dispatch.
+The dashboard now carries `liveOrderDryRunReview` and the Verified Profit Sweep
+safety cockpit shows review status, evidence readiness, missing requirements,
+notes, Owner ACCEPT checkbox, and **Accept Dry Run** action. This review does
+not call a broker bridge, place orders, close positions, create broker `ACCEPT`,
+mint edge tokens, deposit, withdraw, transfer funds, automate payouts, or
+authorize live trading by itself. Verification: focused review/runtime/
+dashboard API suite passed with `70 passed`; UI `npm run build` passed; API
+import reports `183` routes and the review routes plus dashboard field are
+present; neighboring live/order suite passed with `91 passed`; neighboring
+money/auto-halt suite passed with `38 passed`; full CAS Forex suite passed with
+`1462 passed`. Current next product gap: run an actual owner-observed
+broker-connected WASTE dry-run against fresh live broker truth, owner-ACCEPT
+that specific fingerprint, then proceed only to the already capped tiny live
+pilot dispatch path.
+
+2026-06-30 CAS Forex live-order dry-run cockpit visibility implemented. The
+dashboard payload now includes `liveOrderDryRun` from the append-only
+`runtime\live-order-dry-run-audit.jsonl` ledger, and the Verified Profit Sweep
+safety cockpit now shows latest dry-run status, broker-touch boundary,
+candidate availability, blocker count, order/symbol/side, last audit time, and
+per-gate dry-run checks. Added owner controls to refresh the latest dry-run
+audit and to run a **WASTE candidate dry run** from the latest durable WASTE
+cycle candidate using the accepted live-pilot max lot size. This button
+rehearses broker-order schema, owner live-trading gate, edge `PASS`, live pilot,
+and pre-execution risk gate through
+`POST /api/forex/live-order-dry-run/order`; it does not call a broker bridge,
+place orders, close positions, create broker `ACCEPT`, mint edge tokens,
+deposit, withdraw, transfer funds, automate payouts, or authorize live trading.
+Verification: focused dry-run/dashboard API suite passed with `15 passed`; UI
+`npm run build` passed; neighboring runtime/execution/order/live-pilot/
+live-recovery/broker-truth/dry-run suite passed with `58 passed`; API import
+reports `180` routes and dashboard `liveOrderDryRun` is present; full CAS Forex
+suite passed with `1458 passed`. Current next product gap: run a
+broker-connected dry-run against fresh live broker truth and then add explicit
+owner review/acceptance of that dry-run evidence before any tiny live pilot
+order is dispatched.
+
+2026-06-30 CAS Forex live-order dry-run audit implemented. Added
+`cas-forex\cas_forex\live_order_dry_run.py`, which rehearses a proposed live
+order against the same live-money blockers used at dispatch: broker-order
+schema/geometry, owner live-trading gate, fresh matching edge `PASS` token,
+small-controlled live pilot envelope, and pre-execution risk gate. Added
+`POST /api/forex/live-order-dry-run/order` plus
+`GET /api/forex/live-order-dry-run/latest`, with append-only audit rows at
+`runtime\live-order-dry-run-audit.jsonl`. A passing dry run reports
+`DRY_RUN_PASS` and `would_reach_broker_if_executed=true`; a blocked dry run
+lists every blocker. In all cases `broker_touched=false`: the dry-run path does
+not construct or call a broker bridge, place orders, close positions, create
+broker `ACCEPT`, mint edge tokens, deposit, withdraw, transfer funds, automate
+payouts, or authorize live trading. Verification: focused live-order dry-run
+suite passed with `4 passed`; neighboring runtime/execution/order/live-pilot/
+live-recovery/broker-truth/settings suite passed with `65 passed`; API import
+reports `180` routes and both live-order dry-run routes are present; full CAS
+Forex suite passed with `1458 passed`. Current next product gap: surface the
+dry-run report in the owner cockpit and then run a broker-connected dry-run
+against fresh live broker truth before any owner-confirmed tiny live pilot order.
+
+2026-06-30 CAS Forex supervisor lease recovery actions implemented. Added
+owner-confirmed recovery for stale or stop-requested WASTE and broker-truth
+supervisor leases. `cas-forex\cas_forex\waste_runner_supervisor.py` and
+`cas-forex\cas_forex\broker_truth_monitor_supervisor.py` now expose
+`recover_stale_or_requested(confirm=True)`, which clears only stale leases or
+leases that already have durable stop intent; it refuses a fresh active
+desired-running remote owner and returns `RECOVERY_REFUSED`. Added
+`POST /api/forex/waste-loop-control/supervisor/recover?confirm=true` and
+`POST /api/forex/broker-truth-monitor/supervisor/recover?confirm=true`. The
+Dashboard safety cockpit now enables **Recover Lease** only for `STALE LEASE`
+or `STOP REQUESTED`, then refreshes the relevant status after recovery. Recovery
+actions do not start loops, authorize live trading, mint edge tokens, place
+orders, close positions, read MT5, deposit, withdraw, transfer funds, or
+override owner gates; they only clear durable supervisor state that is already
+stale or explicitly stop-requested. Verification: focused supervisor/route
+suite passed with `25 passed`; UI `npm run build` passed; neighboring
+runtime/live-recovery/WASTE/order/guard suite passed with `46 passed`; API
+import reports `178` routes and both recovery routes are present; full CAS
+Forex suite passed with `1454 passed`. Current next product gap: proceed from
+operator loop ownership/recovery toward small controlled live-trading dry-run
+evidence with connected live broker truth, while keeping live execution
+fail-closed until owner broker reality, live pilot, live recovery, broker truth,
+edge PASS, and risk gates are all satisfied.
+
+2026-06-30 CAS Forex supervisor ownership cockpit visibility implemented. The
+Dashboard verified-profit safety cockpit now polls both
+`/api/forex/waste-loop-control/status` and
+`/api/forex/broker-truth-monitor/status` every `30` seconds and surfaces
+durable supervisor ownership for both live-critical loops. The WASTE row shows
+local running/stopped state, supervisor ownership (`LOCAL OWNER`, `REMOTE OWNER`,
+`STALE LEASE`, `STOP REQUESTED`, `NO OWNER`, or `OWNERSHIP UNKNOWN`), mode,
+cycles, stage, active owner, last heartbeat, and supervisor next action. The
+broker-truth monitor row keeps its existing running/readiness/reconciliation
+chips and now also shows supervisor ownership, active owner, and last heartbeat.
+Emergency stop now updates the local WASTE status from the stop response so the
+cockpit reflects durable stop intent faster. Added typed WASTE supervisor
+payload support in `cas-forex\ui\src\data\api.ts` and broker-truth supervisor
+payload support in `cas-forex\ui\src\types\evidence.ts`. This UI work does not
+authorize live trading, place orders, close positions, mint edge tokens,
+deposit, withdraw, transfer funds, or override owner gates; it makes loop
+ownership and stop intent visible before live scaling. Verification: UI
+`npm run build` passed; focused broker-truth/WASTE supervisor tests passed with
+`15 passed`; neighboring runtime/live-recovery/WASTE tests passed with
+`23 passed`; API import reports `176` routes and both supervisor-backed status
+routes are present. Current next product gap: real operator runtime should add
+an owner-facing recovery action for stale/remote leases and then continue toward
+small controlled live-trading dry-run evidence with connected live broker truth.
+
+2026-06-30 CAS Forex broker-truth monitor supervisor lease implemented. Added
+`cas-forex\cas_forex\broker_truth_monitor_supervisor.py`, a durable
+process-ownership lease at `runtime\broker-truth-monitor-supervisor.json` with
+append-only audit rows at
+`runtime\broker-truth-monitor-supervisor-audit.jsonl`. The read-only
+broker-truth monitor now acquires this lease before starting, renews it while
+polling, refuses to start a duplicate monitor loop when another fresh owner
+holds the lease, allows stale lease takeover, records durable stop requests,
+and releases the lease on clean shutdown. `cas-forex\cas_forex\broker_truth_monitor.py`
+now exposes `supervisor` in monitor status so the API/UI can distinguish local
+thread state from durable desired-running ownership. Added tests for duplicate
+fresh-owner blocking, stale takeover, durable stop requests, route/status shape,
+and supervisor status visibility. The supervisor does not read MT5 itself,
+place orders, close positions, authorize live trading, deposit, withdraw,
+transfer funds, or override owner gates; it only governs which process may own
+the continuous read-only broker-truth monitor. Verification: focused
+broker-truth suite passed with `10 passed`; surrounding runtime/live/auto-halt/
+order/WASTE suites passed with `67 passed`; API import reports `176` routes and
+the broker-truth monitor status route is present; full CAS Forex suite passed
+with `1444 passed`; UI `npm run build` passed. Current next reliability/UI gap:
+surface WASTE and broker-truth supervisor ownership in the cockpit so the owner
+can see whether a loop is locally running, remotely owned, stale, or stop-
+requested before any owner-approved live scaling.
+
+2026-06-30 CAS Forex WASTE runner supervisor lease implemented. Added
+`cas-forex\cas_forex\waste_runner_supervisor.py`, a durable process-ownership
+lease at `runtime\waste-runner-supervisor.json` with append-only audit rows at
+`runtime\waste-runner-supervisor-audit.jsonl`. The timed WASTE runner now
+acquires this lease before starting, renews it while ticking, refuses to start
+a duplicate loop when another fresh owner holds the lease, allows stale lease
+takeover, and records durable stop requests so a stop call that lands on a
+different API worker can still be observed by the owning runner. Runner status
+now surfaces `supervisor` evidence showing desired-running state, active lease,
+freshness, local owner id, whether the lease belongs to this process, and the
+next action. This closes the live-money reliability gap where a multi-worker
+API could have ambiguous process-local WASTE loop ownership. The supervisor
+does not authorize live trading, mint edge tokens, place orders, deposit,
+withdraw, transfer funds, or override owner gates; it only governs which
+process may own the timed loop. Verification: focused WASTE supervisor/runner
+suite passed with `16 passed`; surrounding broker-truth/runtime/live/order/
+money suites passed with `80 passed`; API import reports `176` routes and the
+WASTE control status route is present; full CAS Forex suite passed with
+`1439 passed`. Current next reliability gap: broker-truth monitor process
+ownership should get the same durable supervisor treatment, and the WASTE
+status/UI should distinguish local thread state from remotely owned
+desired-running state before owner-approved live scaling.
+
+2026-06-30 CAS Forex durable order-attempt audit implemented. Added
+`cas-forex\cas_forex\order_attempt_audit.py`, with latest structured state at
+`runtime\order-attempts.json` and append-only audit rows at
+`runtime\order-attempts-audit.jsonl`. `cas-forex\cas_forex\order_dispatch.py`
+now writes an `ATTEMPT_STARTED` audit row before a dispatch reaches the broker
+guard/bridge, then records the final blocked/rejected/pending/executed result
+after the gate/bridge outcome. If a bridge reports it could place a real order
+and the pre-bridge audit cannot be written, dispatch now fails closed before
+touching the bridge so CAS Forex does not place an unlogged live-capable order.
+Agent dispatch overseer rejections and malformed route payloads are recorded
+through the same audit rail. Added read-only
+`/api/forex/order-dispatch/audit`, surfaced `orderAttemptAudit` in dashboard
+state, and typed the UI payload. This audit store does not authorize live
+trading, mint edge tokens, place orders, deposit, withdraw, transfer funds, or
+override owner gates. Verification: focused order-dispatch route suite passed
+with `17 passed`; neighboring agent/guard/WASTE/live/money suites passed with
+`74 passed`; UI `npm run build` passed; full CAS Forex suite passed with
+`1434 passed`; API import reports `176` routes and the order-dispatch audit
+route is present. Current next reliability gap: live runner/process ownership
+and broker-truth reconciliation should be made supervisor-safe before any
+owner-approved live scaling, so a multi-worker API restart cannot create
+ambiguous loop ownership.
+
+2026-06-30 CAS Forex durable WASTE cycle audit implemented. Added
+`cas-forex\cas_forex\waste_cycle_audit.py`, with latest-cycle state at
+`runtime\waste-runner-state.json` and append-only audit rows at
+`runtime\waste-runner-audit.jsonl`. `cas-forex\cas_forex\waste_runner.py` now
+records every manual/background WASTE tick to that durable store, including
+decision, reason, stage trace, candidate symbol/timeframe/direction/risk box,
+entry-pair count, directional hypothesis/market metadata, edge status, edge
+reason, whether an edge token existed, execution result, compound result, mode,
+interval, and errors. `/api/forex/waste-loop-control/status` now also surfaces
+the durable latest cycle through `durable_cycle` and `durable_cycle_status`.
+This closes a live-money reliability gap where the heartbeat was process-local
+and runner memory reset on restart; the live badge can still be process-local,
+but the last WASTE decision trail now survives restarts for audit/recovery. The
+audit store does not authorize live trading, mint edge tokens, place orders,
+deposit, withdraw, transfer funds, or override owner gates. Verification:
+focused WASTE runner/edge/market-data suite passed with `29 passed`; API import
+reports `175` routes; one-shot runner check persisted `NO_TRADE`, candidate
+direction `SHORT`, and edge status `NO_TRADE_NULL_FAILED`; full CAS Forex suite
+passed with `1430 passed`.
+
+2026-06-30 CAS Forex WASTE strategize/data path tightened for direction-aware
+market hypotheses. The existing WASTE default path now fetches real connector
+candles through `cas-forex\cas_forex\waste_market_data.py`, scores
+LONG/SHORT/NO_TRADE through `cas-forex\cas_forex\directional_intelligence.py`,
+forms a `CandidateSetup` only when the owner-enabled direction has enough
+confidence, and attaches `market_state_meta` plus recent historical OOS
+`entry_pairs` to the candidate. Each OOS pair now carries its own `direction`
+tag, and `cas-forex\cas_forex\edge_gate.py` filters tagged rows to the
+candidate's own direction before running the null test. That means a SHORT
+candidate cannot borrow unrelated LONG history, and a LONG candidate cannot
+borrow unrelated SHORT history. Older untagged test callers remain supported.
+This still does not authorize a trade: the edge gate must pass the
+same-direction null test, mint a fresh token, and dispatch must re-verify the
+token at the broker chokepoint. One-shot runtime check against the configured
+OANDA connector fetched `AUD/CAD` candles, formed a real `SHORT` candidate with
+market metadata and OOS rows, then correctly returned `NO_TRADE` because the
+edge gate reported `NO_TRADE_NULL_FAILED` after costs and threshold checks.
+Verification: focused WASTE/edge/directional suite passed with `32 passed`;
+full CAS Forex suite passed with `1428 passed`. Current status: WASTE can now
+watch/analyze/strategize/test real candle-backed long/short hypotheses, but live
+trading remains fail-closed until owner live gates, broker truth, broker
+reality, live pilot, live recovery, risk gates, and a fresh same-direction edge
+`PASS` are all present.
+
+2026-06-30 CAS Forex verified-profit payout recovery implemented. Added
+`cas-forex\cas_forex\payout_recovery.py`, a durable idempotency/recovery ledger
+at `runtime\payout-attempts.json` with audit rows at
+`runtime\payout-attempts-audit.jsonl`. Verified-profit sweep now reserves a
+stable transfer key before provider contact, records the provider/movement
+result, returns `PAYOUT_ALREADY_RECORDED` for an already-settled retry, and
+returns `PAYOUT_RECOVERY_REQUIRED` when a prior reserved attempt must be
+resolved against provider/bank evidence before retry. Added
+`/api/forex/money-movement/verified-profit-sweep/payout-recovery` and
+`/resolve`, surfaced `payoutRecovery` in dashboard state, and added Dashboard
+visibility for last payout attempt, pending recovery count, idempotency key, and
+next action. The recovery ledger does not move money, create receipts, authorize
+payout automation, deposit, withdraw, or transfer funds by itself. It only
+prevents duplicate sweep payouts after retry/crash/network interruption and
+forces owner/provider evidence review for stuck attempts. Also tightened
+`execution_guard.guarded_place_order()` so, after the live legal gate, the
+fresh matching EDGE `PASS` token is checked before the live-pilot envelope and
+risk gate. Verification: focused payout/money/runtime suite passed with
+`40 passed`; full CAS Forex suite passed with `1426 passed`; UI `npm run build`
+passed; API import reports `175` routes; the running API returns
+`cas_forex_payout_recovery` with `pending_count=0` and
+`has_pending_recovery=false`. Live trading and payout automation remain
+fail-closed until the owner completes broker reality, broker truth, live pilot,
+live recovery, edge/risk, and explicit payout confirmations.
+
+2026-06-30 CAS Forex live crash/disconnect recovery gate implemented. Added
+`cas-forex\cas_forex\live_recovery.py`, durable owner recovery state at
+`runtime\live-recovery-state.json`, and audit rows at
+`runtime\live-recovery-audit.jsonl`. Added
+`/api/forex/live-recovery/status`, `/accept`, and `/reset`, surfaced
+`liveRecovery` in dashboard state, and added a Settings **Live Recovery** panel
+where the owner can inspect broker-truth freshness, live account visibility,
+open/unmatched/pending position reconciliation, live-pilot trade count,
+current evidence fingerprint, owner notes, and confirmable Owner `ACCEPT`.
+Runtime live trading now also requires "live crash/disconnect recovery review
+is CLEAR". The recovery report ties owner acceptance to the current broker
+truth + live-pilot fingerprint, so new stale/unmatched broker evidence or
+new live-pilot activity reopens the recovery requirement. Recovery `ACCEPT`
+is rejected unless broker truth is fresh, a live MT5 account is visible, and
+open-position reconciliation is clean. This gate does not place or close
+orders, deposit, withdraw, move bank/card funds, automate payouts, create
+broker `ACCEPT`, or authorize live trading by itself. Verification:
+`tests/test_live_recovery.py`, `tests/test_runtime_gates.py`,
+`tests/test_live_enable_control.py`, `tests/test_order_dispatch.py`,
+`tests/test_execution_guard.py`, and `tests/test_live_readiness.py` passed
+with `47 passed`; UI `npm run build` passed; API import reports `173` routes;
+the running `/api/forex/live-recovery/status` returns `OPEN`,
+`recovery_clear_for_live=false`; dashboard live gate lists
+"live crash/disconnect recovery review is CLEAR" as missing, and the Settings
+page responds. Current recovery blockers are stale broker truth, no visible
+live MT5 account, and unresolved unmatched/pending terminal reconciliation
+evidence, so live trading remains fail-closed.
+
+2026-06-30 CAS Forex small-controlled live pilot gate implemented. Added
+`cas-forex\cas_forex\live_pilot.py`, durable pilot policy state at
+`runtime\live-pilot-policy.json`, and audit rows at
+`runtime\live-pilot-audit.jsonl`. Added `/api/forex/live-pilot/policy` plus
+`/reset`, surfaced `livePilot` in dashboard state, and added a Settings
+**Small Live Pilot** panel where the owner can set allowed symbols,
+`max_trade_lots`, `max_open_live_lots`, `max_live_trade_count`,
+`max_daily_loss_usd`, `max_total_loss_usd`, `max_pilot_days`, notes, and the
+required owner confirmations. Saving without confirmation keeps the policy
+`OPEN`; only explicit Owner Confirm + `Owner ACCEPT` can mark it `ACCEPT`, and
+incomplete policies are rejected. Runtime live trading now requires
+"small-controlled live pilot is ACCEPT and has remaining capacity" in addition
+to owner flags, live broker config, broker truth, broker reality, account
+acks, and auto-halt clear state. `execution_guard.guarded_place_order()` now
+re-checks the live pilot envelope for real-broker orders, blocking symbols
+outside the pilot, lots above the pilot cap, open lots above the pilot cap, or
+exhausted pilot capacity before a bridge is touched. Real-broker executed or
+partial dispatches record against pilot capacity through
+`order_dispatch.dispatch_order()`. Live readiness now includes a
+`small_controlled_live_pilot` check. Verification: focused live-pilot/runtime/
+live-enable/order-dispatch/execution-guard/live-readiness suite passed with
+`47 passed`; UI `npm run build` passed; API import reports `170` routes and
+the running API returns livePilot `OPEN`, `ready_for_next_live_order=false`;
+dashboard live gate lists the small-controlled pilot requirement as missing,
+and the Settings page responds on the dev server. Current status remains
+fail-closed: no live trading is authorized until the owner completes broker
+reality, broker truth, and live pilot `ACCEPT`, plus the existing live/risk
+requirements.
+
+2026-06-30 CAS Forex strategy-ledger correction. The prior-agent
+range-scalper research was useful, but as fragility evidence rather than a live
+edge. Updated `cas-forex\strategy_leads.json` so
+`range_scalper_filtered_fx_d1` is no longer an `ACTIVE_RESEARCH_LEAD`; it is now
+`WATCHLIST_ONLY` at priority `4`, with the
+`evidence_runs\range_scalper_realtest\range-scalper-realtest-report.json`
+stress evidence attached and headline text stating the GBP/USD D1 `18`-trade
+bright spot did not survive broader robustness concerns. `index_tsmom_126_d1`
+is now priority `1`, and `index_tsmom_252_d1` is priority `2`. This prevents
+future agents from reviving the `94%` range-scalper headline as trade
+authorization while preserving it as a WASTE fragility-check template. Verified
+`strategy_leads.json` parses and focused strategy-ledger/comparison tests passed
+with `40 passed`. Live trading remains fail-closed and not authorized by this
+research correction.
+
+2026-06-30 CAS Forex broker-reality review gate implemented. Added
+`cas-forex\cas_forex\broker_reality.py`, durable owner-reviewed broker evidence
+at `runtime\broker-reality-review.json`, and audit rows at
+`runtime\broker-reality-audit.jsonl`. Added
+`/api/forex/broker-reality/review` plus `/reset`, and surfaced the review in
+dashboard state as `brokerReality`. Settings now has a **Broker Reality Review**
+panel where the owner can record broker entity/jurisdiction, withdrawal
+minimums, withdrawal timing, KYC requirements, withdrawal fees, currency
+conversion, automation terms, source URLs, owner notes, review validity, and
+the required checkboxes. Saving without confirmation keeps the review `OPEN`;
+only explicit Owner Confirm + `Owner ACCEPT` can mark it `ACCEPT`, and
+incomplete reviews are rejected. Runtime live-trading gates now require
+"owner broker-reality review is ACCEPT for selected broker"; payout automation
+now requires "owner broker-reality review is ACCEPT for withdrawal/payout
+terms". Live readiness now includes a plain-English broker reality check. This
+does not claim Hugo'sWay or any broker is approved, does not provide legal
+advice, and does not place orders or move money; it records the owner's review
+evidence and keeps live/payout gates fail-closed until accepted. Verification:
+`tests/test_broker_reality.py`, `tests/test_runtime_gates.py`,
+`tests/test_live_enable_control.py`, `tests/test_order_dispatch.py`, and
+`tests/test_live_readiness.py` passed with `37 passed`; `npm run build` in
+`cas-forex\ui` passed; API import reports `167` routes; browser Settings page
+renders the broker reality fields/checks; runtime dashboard shows broker
+reality `OPEN` and live/payout gates list broker-reality ACCEPT as missing.
+Remaining product gaps: owner must complete current broker research from broker
+terms/source documents, connect/verify a live MT5/terminal session with fresh
+broker truth, and then run the small-controlled live-money path before scaling.
+
+2026-06-30 CAS Forex continuous broker-truth monitor implemented. Added
+`cas-forex\cas_forex\broker_truth_monitor.py`, a read-only background monitor
+that repeatedly reconciles MT5/account visibility and terminal position
+reconciliation evidence, persists the latest state to
+`runtime\broker-truth-monitor-state.json`, and writes timestamped evidence
+reports under `evidence_runs\broker_truth_monitor`. Added
+`/api/forex/broker-truth-monitor/status`, `/start`, `/stop`, and `/run-once`.
+`api.data.dashboard_state()` now includes `brokerTruthMonitor`; the Dashboard
+auto-halt cockpit now shows monitor running/stopped, live-truth freshness,
+latest reconciliation status, cycles, MT5 mode, unmatched terminal positions,
+and read-only controls to refresh, run one check, start, or stop the monitor.
+`api.data.auto_halt_status()` now feeds the latest broker-truth reconciliation
+report into auto-halt instead of passing `None`, so a live-ledger
+`RECONCILIATION_FAILED` can trip the broker-truth breaker. Runtime live-trading
+gates now require "continuous broker-truth monitor is fresh and live-connected"
+in addition to owner flags, credentials, broker config, acknowledgments, and a
+clear auto-halt latch. MT5 reads run in an isolated Python subprocess with a
+timeout, so a stuck terminal IPC call does not freeze the API cockpit; verified
+`/start` returned in `20 ms` and early `/status` returned in `831 ms` while the
+first check was still warming. Verification: focused backend safety suite
+passed with `41 passed`; focused monitor/runtime subset passed with `12 passed`;
+`npm run build` in `cas-forex\ui` passed; API import reports `164` routes; the
+browser dashboard shows `MONITOR RUNNING`, `LIVE TRUTH NOT READY`, and
+`RECONCILED WITH WARNINGS`. Current live status is intentionally not ready:
+local MT5 is unreachable and terminal reconciliation still needs terminal/MT4
+evidence, so live trading remains fail-closed. Remaining product gaps: connect
+and verify a live MT5/terminal session that produces fresh live broker truth,
+then test the small-controlled live path; broker withdrawal/KYC/fee/currency
+conversion/ToS review remains OPEN before real-money scaling.
+
+2026-06-30 CAS Forex auto-halt circuit breakers implemented. Added
+`cas-forex\cas_forex\auto_halt.py`, a durable live-money safety latch stored in
+`runtime\auto-halt-state.json`. The evaluator checks live account drawdown,
+consecutive closed-trade losses, live-vs-paper realized-P/L divergence, and
+broker-truth reconciliation failure. When a hard breaker trips, it persists
+`AUTO_HALT_ACTIVE` with `force_paper_mode=true`; `runtime_gates.evaluate_live_trading`
+now requires "auto-halt circuit breaker is CLEAR", so live trading becomes
+`CURRENTLY NOT LICENSED` while the halt latch is active even if owner live flags
+and broker credentials are otherwise present. Added `/api/forex/auto-halt/status`
+to evaluate/report the breaker and `/api/forex/auto-halt/clear?confirm_clear=true`
+to clear it only after explicit owner confirmation. Dashboard payload now
+includes `autoHalt` from `api.data.auto_halt_status()`. Verification:
+`tests/test_auto_halt.py`, `tests/test_auto_halt_route.py`,
+`tests/test_runtime_gates.py`, `tests/test_order_dispatch.py`,
+`tests/test_execution_guard.py`, `tests/test_verified_profit_sweep.py`,
+`tests/test_money_movement_route.py`, and `tests/test_money_movement.py` passed
+with `62 passed`; API import succeeded with `160` routes. UI cockpit gap is now
+closed by the next entry. Remaining gap: continuous broker-truth reconciliation
+still needs a live polling/worker path.
+
+2026-06-30 CAS Forex auto-halt UI cockpit implemented. The Dashboard verified
+profit sweep panel now polls `/api/forex/auto-halt/status`, renders the
+live-money circuit breaker beside Emergency Stop, shows whether the latch is
+`AUTO_HALT_ACTIVE` or clear, displays `PAPER FORCED` when live authority is
+disabled, breaks out the four hard checks (drawdown, consecutive losses,
+live-vs-paper divergence, broker-truth reconciliation), and provides a manual
+refresh plus an owner-confirmed `Clear Auto-Halt` control that calls
+`/api/forex/auto-halt/clear?confirm_clear=true`. This UI does not authorize
+live trading, place orders, move money, or override the owner-governed runtime
+gates; it only exposes and clears the existing safety latch after explicit
+owner confirmation. Verification: `npm run build` in `cas-forex\ui` passed, and
+focused backend safety checks passed with `13 passed` for
+`tests/test_auto_halt.py`, `tests/test_auto_halt_route.py`, and
+`tests/test_runtime_gates.py`. Remaining product gap: continuous broker-truth
+reconciliation still needs a live polling/worker path so the auto-halt evidence
+is refreshed continuously from broker reality rather than only on dashboard/API
+evaluation.
+
+2026-06-30 CAS Forex MT5 live closed-history ingest path implemented. The
+existing MT5 deal-history ingest remains demo/paper by default, but now supports
+an explicit read-only live history lane through `account_mode="live"` or CLI
+`--live-history --confirm-live-history`. Without confirmation it returns
+`MT5_DEAL_HISTORY_LIVE_CONFIRM_REQUIRED` and fetches zero deals. With
+confirmation it still blocks if the terminal is on a demo account; only a
+confirmed non-demo account can export rows labeled `LIVE_MT5`. The exported
+history still goes through terminal-history ingest and does not place orders,
+create broker `ACCEPT`, deposit, withdraw, move bank/card funds, automate
+payouts, or override runtime gates. This closes the software gap between the
+new `LIVE_ACCOUNT_LEDGER` adapter and an MT5 source capable of producing
+`LIVE_*` closed-history rows. Verification:
+`tests/test_mt5_deal_history_ingest.py`, `tests/test_account_ledger.py`,
+`tests/test_verified_profit_sweep.py`, `tests/test_money_movement_route.py`,
+and `tests/test_money_movement.py` passed with `43 passed`; API import
+succeeded with `158` routes; CLI help exposes `--live-history` and
+`--confirm-live-history`. Current local evidence remains demo/paper, so real
+sweepable profit remains zero until the owner-approved live terminal path is
+run against actual closed live broker deals. Next product action: add
+continuous broker-truth reconciliation plus auto-halt circuit breakers for max
+drawdown, consecutive losses, and live-vs-paper divergence before any
+real-money scaling.
+
+2026-06-30 CAS Forex live broker closed-history ledger adapter implemented.
+Added a separate read-only `LIVE_ACCOUNT_LEDGER` path in
+`cas-forex\cas_forex\account_ledger.py` that accepts only terminal-history rows
+with all three proofs present: broker mode is live (not paper/demo), a broker
+ticket exists, and source evidence exists (`source_path`/`source_sha256` or
+equivalent report artifacts). Paper/demo history, even with a broker ticket, is
+rejected for live sweep accounting. `api.data` now exposes
+`live_broker_account_ledger()` and `verified_profit_account_ledger()`;
+verified-profit sweep state/request-current uses that verified ledger first and
+falls back to the paper/demo ledger when no live evidence exists. Current local
+evidence is still `PAPER_MT5`, so real sweepable profit remains zero until a
+future live broker closed-history report exists. Verification:
+`tests/test_account_ledger.py`, `tests/test_verified_profit_sweep.py`,
+`tests/test_money_movement_route.py`, `tests/test_money_movement.py`,
+`tests/test_account_reconciliation.py`, and `tests/test_live_readiness.py`
+passed with `46 passed`; API import succeeded with `158` routes. Next product
+action: build/verify the live terminal closed-history exporter/ingest path for
+actual broker `LIVE_*` rows, then add continuous broker-truth reconciliation and
+auto-halt circuit breakers before any real-money scaling.
+
+2026-06-30 CAS Forex verified-profit sweep UI/control cockpit implemented.
+Dashboard now surfaces demo/live ledger status, live-readiness status, live
+trading authorization, payout gate status, broker-confirmed profit available for
+sweep, verified net winnings, tax reserve, owner sweep amount, keep-in-broker
+amount, principal sweep (`0.0`), last sweep/withdrawal audit row, owner-editable
+sweep percentage, owner-editable tax reserve percentage, minimum sweep amount,
+confirm-gated payout request, and an emergency stop button that sends stop calls
+to both WASTE and the dispatch loop. Added typed UI API helpers for
+`/api/forex/money-movement/verified-profit-sweep/*`, plus backend
+`/request-current` so the dashboard requests a sweep from the server's current
+ledger instead of inventing or re-sending stale money data. A payout request is
+still broker-verified-winnings-only, still requires explicit owner confirm, and
+still re-checks payout/provider gates before any provider can be touched.
+Verification: focused money-movement/profit-sweep tests passed with
+`28 passed`; API import succeeded with `158` routes; `npm run build` for the UI
+passed. Build also required small existing UI type hygiene fixes in
+`ObjectivePaceCard`, `SettingsPage`, and `WindowsPage`. Next product action:
+connect live broker closed-trade ingest into the live account ledger and expose
+WASTE data/strategy status beside the sweep cockpit.
+
+2026-06-30 CAS Forex runtime responsiveness and owner-control repair. Fixed the
+local failure shown by the owner where the UI said `API unreachable - using
+local startup state`, WASTE/owner ACCEPT controls appeared inert, and payment
+destination controls were unclear. Backend changes: owner-control mode
+overrides now persist locally through `/api/forex/settings/owner-control/*`;
+mutation API fallback now uses the last successful API base so POST buttons no
+longer silently target a stale stored URL; `/api/forex/dashboard` no longer
+starts the heavy full-dashboard warmer by default; `/api/forex/dashboard/fast`
+was slimmed to cheap first-paint state; WASTE runner and paper sample collector
+timers now start as isolated background worker processes instead of heavy
+threads inside uvicorn; scheduler status no longer reloads the giant last-run
+packet on every poll; and stack-health/operator-briefing route composition now
+runs off the event loop. Runtime verification after reload: API healthy on
+`127.0.0.1:8765`, UI healthy on `127.0.0.1:5173`, Trade page shows no
+API-unreachable/fixture text, `RUN WASTE PROBE` and `START PAPER LOOP` are
+enabled, Settings Owner ACCEPT/Save/Reset/Paper buttons are enabled, and Proof
+page exposes enabled provider/token/payout-destination inputs plus
+`SAVE PROVIDER / DESTINATION`. Paper-safe WASTE worker PID `62548` and paper
+sample collector worker PID `54648` were running after the first delayed
+collector window, while `/health`, `/dashboard/fast`, and scheduler status still
+responded. Remaining follow-up: stack-health remains a slow observational route
+(around 7-8s) and should get a cached/fast summary; live trading and money
+movement remain owner-gated and receipt/gate dependent, with no raw bank/card
+number storage and no live money movement performed by this repair.
+
+2026-06-29 CAS Forex verified-profit sweep accounting slice implemented. Added
+`cas-forex\cas_forex\verified_profit_sweep.py` and extended
+`cas-forex\api\routes\money_movement.py` with
+`/api/forex/money-movement/verified-profit-sweep/policy`,
+`/state`, `/preview`, and `/request`. This closes the first backend version of
+the profit-sweep requirement without moving money by default: sweepable winnings
+are derived from broker-confirmed closed trade ledger rows/events only
+(`broker_ticket` plus evidence), unverified rows are ignored, paper/demo profit
+is explicitly reported as `DEMO_NOT_SWEEPABLE`, verified losses/commissions/fees
+are netted out, tax reserve is withheld before the owner sweep percentage is
+applied, and principal sweep remains `0.0` unless a future owner-explicit
+principal mode is built. `/request` requires `confirm=true` before any payout is
+attempted; even after confirmation the existing `MovementEngine` re-checks
+`payout_automation` and provider gates, so default config returns `BLOCKED` with
+no provider receipt and no money movement. Audit rows append to
+`runtime\profit-sweep-audit.jsonl`, and policy persists to
+`runtime\profit-sweep-policy.json` (ignored local runtime state). Verification:
+combined focused WASTE/control/edge/dispatch plus money-movement/profit-sweep
+suite passed with `177 passed`; `from api.server import app` succeeded with
+`157` routes.
+Next product action: surface profit available for sweep, sweep percentage, tax
+reserve, last payout attempt, bank/payout gate status, and emergency stop in the
+UI; then connect live broker closed-trade ingest into a live account ledger.
+
+2026-06-29 CAS Forex WASTE strategize-to-data wire implemented. Added
+`cas-forex\cas_forex\waste_market_data.py`, which fetches candles through the
+existing market-data connector, selects an owner-allowed symbol/timeframe,
+builds a WASTE market state, and attaches recent causal OOS `entry_pairs` for
+the same directional pattern. Each historical pair scores LONG/SHORT/NO_TRADE
+using only candles available at that past decision point, stores signed
+`signal_strength` (LONG positive, SHORT negative), then measures raw future
+return and cost for that past window. The current candle is excluded from its
+own proof. `waste_runner._default_watch` now tries this data-backed watcher and
+falls back to an empty no-trade state if no feed is reachable; `_default_analyze`
+and `_default_strategize` can now form a directional candidate when candles are
+present. Directional candidates still do not authorize execution: without enough
+or good enough OOS `entry_pairs`, the edge gate returns `NO_TRADE_*`; only a
+fresh `PASS` token can reach dispatch. Verification: focused
+authority/directional/data/WASTE/edge/dispatch safety suite `136 passed`; `from
+api.server import app` succeeded with `152` routes. Next product action: connect
+UI controls to `/api/forex/ai-control-authority`, expose WASTE data status in
+the cockpit, and then build verified-profit accounting/profit-sweep controls
+from broker-confirmed closed trades.
+
+2026-06-29 CAS Forex final objective clarification. The product goal is real
+money capable CAS Forex, not paper/demo as an end state. Paper/demo remains the
+proof stage before live money is owner-unlocked. Final system must support live
+broker trading after readiness gates pass, owner risk/daily-loss/daily-profit
+cap/emergency-stop controls, broker-confirmed closed-trade net-winnings
+accounting, user-set sweep percentage, tax-reserve percentage withheld before
+sweep, explicit bank/payout setup and confirmation, payout audit logs, and
+small-controlled-amount testing before scaling. Hard rules: never fake profit
+numbers, never call demo profit real profit, never move money without explicit
+user setup and confirmation, never withdraw principal by accident unless the
+owner explicitly chooses that, keep emergency stop available, and log every live
+trade/profit calculation/payout action. Reliability gaps to close before real
+money scale: disconnect/crash recovery, continuous broker-truth reconciliation
+for partial fills/requotes/stop-outs/orphaned positions, auto-halt circuit
+breakers for max account drawdown/consecutive losses, live-vs-paper divergence
+monitor that reverts to paper when live behavior diverges from validated
+expectation, and broker withdrawal/KYC/fee/currency-conversion/ToS checks.
+
+2026-06-29 CAS Forex AI Control Authority slice started. Implemented durable
+backend control authority in `cas-forex\cas_forex\ai_control_authority.py`,
+directional long/short/no-trade hypothesis scoring in
+`cas-forex\cas_forex\directional_intelligence.py`, API route
+`cas-forex\api\routes\ai_control_authority.py`, server registration at
+`/api/forex/ai-control-authority`, WASTE runner wiring to read the durable
+authority by default, and `runtime/` ignore entry for local mutable authority
+state. Owner envelope now records the `$5,000` monthly target, `$250` daily
+floor, `$3,500` daily cap, `2.5%` incentive rate, allowed symbols/sessions,
+LONG/SHORT permissions, edge-threshold bounds, risk ceiling, concurrent-trade
+ceiling, compound-unit ceiling, and fresh-PASS requirements. The AI can adjust
+runtime levers only inside that owner envelope; this route does not enable live
+trading or money movement. Directional intelligence can now form a LONG or
+SHORT WASTE `CandidateSetup` from injected candles, but without `entry_pairs`
+the edge gate still stops at `NO_TRADE_INSUFFICIENT_BARS`. This is the intended
+first step: mutable intelligence can propose direction, while execution remains
+PASS-gated. Verification: focused authority/directional plus existing
+AI/WASTE/edge/dispatch safety suite `133 passed`; `from api.server import app`
+succeeded with `152` routes. Next product action: wire a real
+watcher/data source to feed candles plus recent OOS `entry_pairs` into WASTE,
+then connect the UI sliders/buttons to `/api/forex/ai-control-authority`.
+
+2026-06-29 CAS Forex prior range-scalper research assessment. The attached
+prior-agent transcript was checked against the repo and is real: commit
+`c2fd41f2` added `scripts\run_range_scalper_test.py`, and commit `4c7f0bc7`
+added `scripts\run_gbp_scalper_validate.py`. The benefit is research/control
+value, not a deployable edge. The early saved JSON at
+`cas-forex\evidence_runs\range_scalper_realtest\range-scalper-realtest-report.json`
+shows the bright spot: `GBPUSD_D1`, `18` trades, `94.44%` win rate,
+`+1273.3` pips at `2.0` pip spread, beating the random-entry null. The later
+stress-test script exists because that sample was too thin; the pasted
+transcript records the longer-history result as not robust: `89` trades,
+roughly breakeven, not beating null, sensitive to dropping top winners,
+unstable by half-split, and fragile under parameter nudges. Product action:
+do not let future agents revive the `94%` headline as a trade authorization.
+Use range-scalper only as a weak WASTE watch-pattern and as a template for the
+AI Control Authority's fragility checks: sample size, null outperformance,
+walk-forward stability, leave-best-trades-out, parameter jitter, spread/cost
+sensitivity, and cross-symbol robustness. `strategy_leads.json` still contains
+older active-research language for `range_scalper_filtered_fx_d1`; this was
+corrected on 2026-06-30 by adding the superseding stress-test evidence and
+demoting the lead to watch-only/fragile so UI and agents do not overweight it.
+
+2026-06-29 CAS Forex owner-governance clarification. The owner/user is the
+only authority who can approve Hugosway use, real-money trading, broker
+`ACCEPT`, money movement, and whether a capability is `LICENSED`. Agents must
+not present their own caution as the owner's licensing decision. When an agent
+reports `NOT LICENSED` / `CURRENTLY NOT LICENSED`, it means the current
+recorded software gate/status is not enabled or not evidenced yet; it does not
+mean the agent has authority over the owner's final decision. Product design
+target: AI autonomy inside an owner-authorized envelope. CAS Harness / CAS
+PCBA should grant, limit, and audit tool permissions; WASTE should use mutable
+intelligence to Watch, Analyze, Strategize, Test, then Execute; the AI should
+be date-aware, objective-aware, and able to adjust allowed levers such as edge
+thresholds, position sizing, profit-taking, principal-lock/breakeven behavior,
+and lacunarity/RPM/CJT compounding within owner-set limits. Owner objective:
+target at least `$5,000` monthly profit, modeled as `$250` per trading day
+across `20` forex trading days, with the incentive ledger tracking the stated
+`2.5%` AI incentive on verified profit. Separate owner authorization from
+evidence: owner approval can allow a lane to run, but profitability still must
+be measured by receipts, costs, drawdown, null controls, and account evidence.
+Next product focus: build the AI Control Authority layer that turns these
+owner permissions and objectives into durable backend controls, not just UI
+local state.
+
+2026-06-29 CAS Forex WASTE/edge audit update. Commit `dd9b1daf`
+(`feat(forex): WASTE engine integration wires #2/#3b/#4`) is present in
+`cas-forex` and the safety-critical WASTE surface is stronger than the older
+2026-06-25 audit state: `execution_guard.py` is now the dispatch chokepoint,
+real/live dispatch requires edge authorization, `waste_loop.py` is fail-closed
+on missing/non-`PASS` tokens, and MT5 `modify_position` uses `TRADE_ACTION_SLTP`
+behind the live owner gate. Verification run on 2026-06-29: UI `npx tsc
+--noEmit` passed; focused safety suite passed `117 passed`; focused edge
+research suite passed `36 passed`. Full-suite verification is not cleanly
+closed in this audit: one full pytest run timed out, and collection observed
+`1370` tests before a `PermissionError` on the local directory
+`cas-forex\tmppcba-pytest`; root repo status also warns on
+`codex_pytest_tmp_level3`. Next testing action: fix/ignore those temp
+directories without deleting user data, then rerun the full CAS Forex suite.
+
+Important product-readiness distinction: the WASTE heartbeat can be `LIVE`,
+but the default global runner still does not yet evaluate live broker candles
+or propose real setups. `_default_watch` returns an unknown regime,
+`_default_analyze` returns zero confidence, `_default_strategize` returns
+`None`, and `_entry_pairs_for` defaults to no OOS pairs; therefore the current
+default loop is loop-health telemetry, not a demonstrated profitable market
+strategy. The default paper dispatch also returns `NO_BRIDGE` unless a
+`bridge_factory` is injected. The Settings UI edge slider currently persists
+to browser `localStorage` only and is not wired to backend runtime
+`AiControlSurface` state. MT4 Python-side `MODIFY_SL` command writing exists,
+but `mt4\Experts\CASForexBridgeEA.mq4` does not yet implement a `MODIFY_SL` /
+`OrderModify` handler, so MT4 breakeven-lock is not operational end-to-end.
+
+Current edge evidence remains: no public-data lever tested so far has shown a
+tradeable, cost-adjusted edge that beats null controls, including the
+intraday macro test. The most money-directed next research action is to encode
+the user's untested discretionary NAS30/NAS100 rule as a formal, no-lookahead,
+cost-adjusted, null-guarded OOS hypothesis, then paper/demo only if it beats
+null. Live trading, broker `ACCEPT`, auto-deposit, debit/card/bank movement,
+and payout automation remain `NOT LICENSED` / `CURRENTLY NOT LICENSED`.
+
 2026-06-24 (phase 2) CAS Forex MT5 process guard implemented and tested.
 `cas-forex\cas_forex\mt5_process_guard.py` wraps MT5 calls in a
 timeout-guarded subprocess so a hung MT5 terminal cannot block the agent
@@ -1875,7 +8671,7 @@ cockpit MVP now with disabled live controls and explicit blockers.
 
 2026-06-22 CAS Forex walk-forward RPM update: added `cas-forex\cas_forex\walk_forward.py` and `cas-forex\scripts\run_walk_forward_condition_lab.py` so Condition Lab route maps are trained on one historical window, frozen, and evaluated only on the next untouched future window. The evaluator uses prior training bars as signal context without scoring training-window P&L, preventing long-lookback settings from being falsely inert in shorter test windows. First corrected D1 Yahoo-proxy run across `NAS100`, `US30`, `EUR/USD`, `GBP/USD`, and `AUD/USD` with `tsmom_252_500_2_8` plus `range_scalper_24_120` produced `18` windows, `7` routed windows, `3` active routed windows, `3 / 3` positive active routed windows, routed total return-percent sum `3.8480%`, active routed mean return `1.2827%`, routed max drawdown `2.2980%`, and `32` routed trades; research grade remains `NOT_PROMOTED` because route coverage is sparse and positive routed window rate is only `0.4286`. Report `cas-forex\evidence_runs\walk_forward_condition_lab\walk-forward-20260622044930-report.json`, chart `docs\working\cas_forex_walk_forward_rpm_chart_20260622.png`. Status: range-scalper survives the first active out-of-sample windows on EUR/USD/GBP/USD, but this is still research evidence, not live permission or income proof; live trading remains `NOT LICENSED`. Next valid move: expand broker-grade M1/H1 walk-forward data, improve NAS100/US30 condition detection, and require paper proof before live funds.
 
-2026-06-22 CAS Forex strategy-lead ledger and switching audit: user asked to always keep winning strategies visible and asked how much the analyze/simulate/switch-up strategy has been tried, including whether NFP/conflict-style conditions are factored in. Added `cas-forex\strategy_leads.json`, `cas-forex\cas_forex\strategy_ledger.py`, `cas-forex\tests\test_strategy_ledger.py`, and `docs\working\cas_forex_winning_strategy_ledger_20260622.md`. Current front-of-mind leads are `range_scalper_filtered_fx_d1` as priority 1 (`ACTIVE_RESEARCH_LEAD`, focused on EUR/USD/GBP/USD with AUD/USD watchlist), `index_tsmom_252_d1` as priority 2 (`ACTIVE_RESEARCH_LEAD`, focused on NAS100/US30 but blocked on better trend/range detection), and `meanrev_trend_filter_fx_d1` as `WATCHLIST_ONLY`. The switching program has been tried as synthetic CAS-SDG regime simulation, real D1/H1 hard switching, Condition Lab RPM route maps, temporal nested lacunarity, and walk-forward RPM. Current verdict: machinery works, but switching is not yet a promoted strategy; route only when evidence exists, otherwise `NO_TRADE`. NFP/CPI/FOMC/GDP/unemployment/central-bank/rate-decision seed events exist in `MacroGate`, and CJT macro-shock diagnostics can route to `LIVE_LOCKED`, but historical backtests do not yet evaluate real macro event timing per candle and conflict/geopolitical shocks are not yet first-class Condition Lab/RPM axes. Status: event-aware multi-timeframe/mode routing is now the next required build; live trading remains `NOT LICENSED`.
+2026-06-22 CAS Forex strategy-lead ledger and switching audit: user asked to always keep winning strategies visible and asked how much the analyze/simulate/switch-up strategy has been tried, including whether NFP/conflict-style conditions are factored in. Added `cas-forex\strategy_leads.json`, `cas-forex\cas_forex\strategy_ledger.py`, `cas-forex\tests\test_strategy_ledger.py`, and `docs\working\cas_forex_winning_strategy_ledger_20260622.md`. At that time the front-of-mind leads were `range_scalper_filtered_fx_d1` as priority 1 (`ACTIVE_RESEARCH_LEAD`, focused on EUR/USD/GBP/USD with AUD/USD watchlist), `index_tsmom_252_d1` as priority 2 (`ACTIVE_RESEARCH_LEAD`, focused on NAS100/US30 but blocked on better trend/range detection), and `meanrev_trend_filter_fx_d1` as `WATCHLIST_ONLY`; superseded 2026-06-30 by demoting range-scalper to `WATCHLIST_ONLY` and moving `index_tsmom_126_d1` to priority 1. The switching program has been tried as synthetic CAS-SDG regime simulation, real D1/H1 hard switching, Condition Lab RPM route maps, temporal nested lacunarity, and walk-forward RPM. Current verdict: machinery works, but switching is not yet a promoted strategy; route only when evidence exists, otherwise `NO_TRADE`. NFP/CPI/FOMC/GDP/unemployment/central-bank/rate-decision seed events exist in `MacroGate`, and CJT macro-shock diagnostics can route to `LIVE_LOCKED`, but historical backtests do not yet evaluate real macro event timing per candle and conflict/geopolitical shocks are not yet first-class Condition Lab/RPM axes. Status: event-aware multi-timeframe/mode routing is now the next required build; live trading remains `NOT LICENSED`.
 
 2026-06-22 CAS Forex guarded LLM optimizer scaffold: added `cas-forex\cas_forex\llm_optimizer.py`, `cas-forex\cas_forex\condition_tally.py`, and `cas-forex\scripts\run_condition_tally.py`, with tests in `cas-forex\tests\test_llm_optimizer.py` and `cas-forex\tests\test_condition_tally.py`, plus plan `docs\working\cas_forex_llm_optimizer_plan_20260622.md`. This creates the first bounded LLM research-assistant path: strategy ledger plus evidence reports plus condition/event tally feed an `OptimizerProposal`, then `CASPCBAOptimizerGuard` returns `RESEARCH_QUEUE`, `FLAG_FOR_HUMAN_REVIEW`, or `REJECT`. The guard requires known strategy leads, evidence refs, condition contexts, and the `NOT LICENSED` claim boundary; it rejects live trade placement, live-mode unlocks, broker `ACCEPT`, bank/debit/card/payment movement, prompt-injection surfaces, and guaranteed-profit language. First saved condition tally from the corrected D1 walk-forward report is `cas-forex\evidence_runs\condition_tally\condition-tally-20260622052757-report.json`: `18` windows, `7` routed, `11` `NO_TRADE`, `3` positive routed, all legacy windows defaulting to `normal`; strongest current bucket is `EUR/USD` `D1` `normal` `range_scalper_24_120` with mean return `1.1483%` and `31` trades. Status: this helps protect against evidence drift and unsafe proposal escalation, but hallucination prevention remains `OPEN`, live trading remains `NOT LICENSED`, and payout/deposit automation remains `NOT LICENSED`. Next valid move: build an open-weight model benchmark runner that compares Qwen/Llama/Mistral/Gemma/DeepSeek candidates on evidence-grounding, JSON contract reliability, no-live-authority behavior, negative controls, drift checks, and cost before choosing a default CAS Forex optimizer model.
 
@@ -3252,4 +10048,3 @@ Clean public story to earn:
 - 2026-05-31: clarified WORM distinction: S3 Object-Lock anchoring exists and strict smoke passed at the platform level, but the Gate 3 Pythia-160M CPU packet was not anchored through that path and therefore remains safe-anchor/non-WORM.
 - 2026-05-31: recorded Pythia-160M Gate 3 evidence-packet closure, verifier `SUPPRESS` due `output_bridge_gate_failed`, safe-anchor non-WORM status, corrected Pythia identity override, archive path, and updated the immediate next move toward WORM/legal/data-consent/production-route decisions.
 - Initial version: created as the canonical production TODO and agent operating checklist.
-

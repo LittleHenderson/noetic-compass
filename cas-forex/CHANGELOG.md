@@ -1,6 +1,78 @@
 # CAS Forex - Changelog
 
-> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md` first.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
+> **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-07-01.md` first** (then the PART3-EDGE handoff below for the edge verdict). The per-unit build log for 2026-06-29→07-01 lives in the parent repo's `docs/working/cas_harness_production_todo.md` (266 dated entries) — read its head before changing dashboard/live-money/WASTE code.
+
+## 2026-07-01 — Three days of in-flight work landed: live-money spine, WASTE adaptation, funding handoff, dashboard overhaul (suite 1707 green)
+
+This session inventoried and landed the large uncommitted body of work built across
+2026-06-29→07-01 (127 modified files + ~130 new modules/tests, logged entry-by-entry in
+`../docs/working/cas_harness_production_todo.md`). Verified green before commit: **pytest
+1707 passed / 0 failed** (suite grew from 1217), UI `tsc --noEmit` clean, `npm run build`
+clean (PWA precache = 8 shell entries, ~182 KiB). Four stale tests were updated to the
+newest ratified contracts (below) — no app code was changed to make the suite pass.
+
+**1. Live-money go-live spine (all fail-closed, owner-driven).** New modules + routes:
+`auto_halt` (circuit breaker), `broker_reality` (owner ACCEPT of the real broker's
+withdrawal/KYC/fees/currency terms), `broker_truth_monitor` (+ supervisor + recovery
+packets; continuous MT5-snapshot vs terminal reconciliation), `live_pilot`
+(small-controlled live pilot envelope with remaining-capacity tracking), `live_recovery`
+(crash/disconnect recovery review), `live_order_dry_run` (+ owner review bound to fresh
+broker truth), `order_attempt_audit` (every dispatch attempt recorded before the bridge is
+touched), `terminal_receipt_recovery_*`, `payout_recovery`, `live_money_progression_packet`
+(routes `/api/forex/live-money/progression-packet{,/fast}`), `ai_control_authority`.
+
+**2. Runtime-gate redesign — owner authority boundary.** `runtime_gates.py` now states it
+in code: performance/readiness METRICS (paper-day counts, evidence, AI confidence, profit
+pace) are advisory only — they never authorize or veto live trading. The live gate gained a
+new advisory tier (broker-truth monitor freshness is an ADVISORY, surfaced but never an
+owner veto) and five new HARD requirements: auto-halt clear, owner broker-reality ACCEPT,
+live-pilot ACCEPT with capacity, recovery review clear, owner-ACCEPTED passing live-order
+dry run against fresh broker truth. The payout gate now also requires broker-reality ACCEPT
+for withdrawal terms. Bridge-level `is_demo_account` strict gate unchanged (a connected
+demo still never licenses live).
+
+**3. Funding custody boundary (owner requirement made product truth).** Funding is a
+**broker handoff + CAS verification loop**, never card entry into CAS: Settings gained a
+`Broker Funding Handoff` panel (broker portal link, `NO RAW BANK/CARD STORAGE`, `Sync
+Broker Snapshot` → `/api/forex/reconciliation/account?sync_to_broker=true`), and Proof
+gained the same `Broker Funding Route` block inside Live & Payment Controls. Winnings flow
+out via the new **verified-profit sweep** (`verified_profit_sweep.py` + 8 routes under
+`/api/forex/money-movement/verified-profit-sweep/*`): sweepable money is computed ONLY from
+broker-confirmed closed trades (demo/paper profit reports `DEMO_NOT_SWEEPABLE`), with owner
+sweep %, tax-reserve %, minimum, allowlisted destination, and payout-recovery handling.
+Verified live this session: reconciliation sync returns 7/7 checks OK
+(`BROKER_API_VERIFIED`, chain verified) against the demo terminal.
+
+**4. WASTE adaptation loop (learning half of the engine).** `waste_adaptation_plan` →
+`apply_preview` → `owner_review` → `paper_apply` → `promotion_rule` (adaptations are
+planned, previewed, owner-reviewed, applied to PAPER first, and only promoted by rule),
+plus `waste_background_worker`, `waste_cycle_audit`, direction-learning ledger +
+outcome-binding + review packet, paper sample collector, real-candle probe, runner
+supervisor, and `waste_strategy_firewall`. MT4 mailbox dispatch now requires a FRESH EA
+heartbeat (fail-loud `BROKER_REJECTED` instead of silently queueing commands no EA reads).
+
+**5. Dashboard/first-paint overhaul.** Instant shell + startup caches
+(`DashboardInstantShell`, `DashboardStateHydrator`, shell/fast cache prewarm with
+first-claim ordering), idle-gated deep panels (`DashboardOperationsWorkbench`, sweep/broker
+-truth ops panels), per-route lazy CSS (every page), React vendor chunk, API-base
+last-good routing + 15s failed-base cooldown (`apiCore.ts`), W.A.S.T.E header stage probe.
+PWA precache trimmed to the 8-entry first-paint shell.
+
+**6. This session's fixes (stale tests → ratified contracts).**
+`test_broker_truth_monitor` ×2 updated to the advisory-tier gate contract (freshness is
+advisory, never a veto; a DEMO snapshot still never reads as live truth);
+`test_dispatch_works_through_mt4_mailbox_bridge` updated to the heartbeat contract (dead
+mailbox → `BROKER_REJECTED`, fresh heartbeat → `BROKER_PENDING`);
+`test_dashboard_fast_*` now derives proof-day/risk expectations from the same live evidence
+files the endpoint reads (they legitimately advance as the auto-runner records days) instead
+of freezing `3 days` / `$28.48`. Also: `.gitignore` now excludes `uvicorn-*.log`.
+
+Honest status separation (unchanged by all of the above): the 30-day profit proof is at
+**5/30 broker-verified days, 0 trades, net $0** — `NOT PASSED`; the edge remains
+**unproven** (see PART3-EDGE handoff); live trading, deposits, payouts all remain
+`CURRENTLY NOT LICENSED` pending owner switches + funded real broker + provider config.
+
+> **PRIOR HEAD NOTE (still true): read `docs/working/SESSION_HANDOFF_2026-06-28-PART3-EDGE.md`.** This session honestly answered "does CAS Forex have an edge?" — and built the apparatus to prove one. Bottom line: NO edge found. Price-only signals are all-gaps at every timeframe; every assembly tool (PCBA/CJT/Fury/optimizer/condition_lab) organizes the same edgeless price rules; the CAS Harness is the wrong domain; CAS recipes/28-Foundations organize but don't predict; and the first REAL new-information test (macro surprise, 811 events) is NO_SKILL at daily resolution (a faint sub-significance tilt). A null control caught 3 apparent edges. The one open door — an intraday post-release macro test — was BUILT, adversarially reviewed, and RUN on real HistData M1 EUR/USD (2020–2024, ~1.8M bars): verdict **NO_SKILL** (hit 0.51, net negative, worse than the shuffled null). The new-information macro channel is closed for retail. Every lever is now tested; no edge anywhere. Don't claim/build a fake edge; the null discipline is sacred.
 
 ## 2026-06-29 — AI activity indicator: hard-wired to the real loop (honest LIVE/OFFLINE), not a demo
 
