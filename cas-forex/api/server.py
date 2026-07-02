@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.concurrency import run_in_threadpool
 from .data import dashboard_fast_state, dashboard_shell_state, dashboard_state
 from .route_cache import cached_payload_snapshot, run_serial_refresh, start_cache_refresh
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage, waste_loop_control, ai_control_authority, auto_halt, broker_truth_monitor, broker_reality, live_pilot, live_recovery, live_money, live_order_dry_run
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage, waste_loop_control, ai_control_authority, auto_halt, broker_truth_monitor, broker_reality, live_pilot, live_recovery, live_money, live_order_dry_run, ai_operator
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -488,6 +488,12 @@ def _restore_owner_runtime_switches() -> None:
         restore_desired_auto_runner()
     except Exception:
         pass
+    try:
+        from cas_forex.ai_operator_runner import restore_desired_state_on_startup
+
+        restore_desired_state_on_startup()
+    except Exception:
+        pass
 
 
 _REQUEST_TRACE_PATH = os.path.join(
@@ -646,6 +652,7 @@ app.include_router(live_pilot.router, prefix="/api/forex/live-pilot", tags=["liv
 app.include_router(live_recovery.router, prefix="/api/forex/live-recovery", tags=["live-recovery"])
 app.include_router(live_money.router, prefix="/api/forex/live-money", tags=["live-money"])
 app.include_router(live_order_dry_run.router, prefix="/api/forex/live-order-dry-run", tags=["live-order-dry-run"])
+app.include_router(ai_operator.router, prefix="/api/forex/ai-operator", tags=["ai-operator"])
 
 
 @app.get("/api/forex/dashboard/shell")

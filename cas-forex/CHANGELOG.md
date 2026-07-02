@@ -1,5 +1,61 @@
 # CAS Forex - Changelog
 
+## 2026-07-02 — AI OPERATOR: always-on strategy desk + Claude→free-local failover + live model indicator
+
+The original vision, built: an owner-controlled AI operator that runs alongside
+the app, reads the learning ledgers, and tunes the AI dials WITHIN the owner
+fences — with automatic failover to a free local model when Claude tokens run
+out, and an always-visible indicator so the owner sees every switch. Suite green
+including 19 new tests; UI tsc + build clean.
+
+**`cas_forex/model_provider.py` — failover ladder (the cost-control heart).**
+Ordered chain: PAID primary (Claude via Anthropic API) → FREE local fallback
+(Ollama by default, fully free). Durable token budget (`runtime/model-provider-
+state.json`); when the owner's budget is spent OR the primary returns a credit/
+rate/auth error, the chain fails over to free and records the switch; a cooldown
+(900s) stops it from hammering a token-less primary; `top_up(tokens)` flips it
+back to Claude on the next call. Built on the existing `ai_model.py` backends.
+7 tests cover: chain order, no-key→free, credit-error failover + cooldown,
+budget-exhaustion skip, top-up flip-back, all-fail safe degrade.
+
+**`cas_forex/ai_operator.py` — the strategy-desk brain.** Each tick: gathers
+context (direction-learning ledger, outcome binding, adaptation plan, recent
+cycles, dials) + a TOOL MANIFEST so the model is always aware of what exists
+(dials it can set, evidence it can read, PCBA/CondLab/Optimizer/adaptation, and
+an explicit "you cannot" list); asks the ACTIVE model for a structured decision;
+applies it ONLY through `ai_control_authority.ai_adjust`, which clamps every
+value to owner bounds. Hard boundary proven by tests: it can move only the 9
+owner-fenced dials; `live_mode`, `owner_enable_live_trading`, "wire_money", and
+any non-dial action are rejected; unparseable/absent model replies make NO
+change; the live-money gate is unreachable by construction.
+
+**`cas_forex/ai_operator_runner.py` + `api/routes/ai_operator.py`.** Always-on
+scheduler mirroring the proof-runner (owner on/off, durable desired-state,
+survives API restarts, default 30-min interval for cost). Routes:
+`/api/forex/ai-operator/{state,start,stop,run-now,config}` and
+`/ai-operator/model-provider/{state,add-tokens,reset-budget}`. Startup restore
+re-arms the loop if the owner had it on. New config: `ai_operator_enabled`,
+`ai_operator_interval_seconds`, `ai_operator_primary_{backend,model,base_url,
+api_key}` (key from `AI_OPERATOR_PRIMARY_API_KEY` or `ANTHROPIC_API_KEY`),
+`ai_operator_token_budget`.
+
+**UI — `OperatorBadge` in the header (every page + phone).** Live indicator that
+polls `/ai-operator/state` every 10s and shows the ACTUAL driver, not just what
+is configured: CLAUDE (green) / LOCAL free (amber) / OPERATOR ON warming (blue) /
+NO MODEL (red) / OFF (grey). Click to expand: running state, active model + token
+budget, the last model switch, the operator's last summary, controls
+(pause/start, run once, **Add Claude tokens**), recent operator actions, and the
+boundary line. Honesty fix baked in: a configured-but-failing Claude reads
+"NO MODEL", never a healthy green.
+
+**Verified live:** badge renders and correctly showed "NO MODEL" when a tick
+failed (this environment has no valid Anthropic billing key and no local Ollama),
+proving the failover degraded safely with the trading loop untouched. To make a
+model actually answer: set a real Anthropic API key (`sk-ant-api03-…`) OR install
+Ollama + pull a model (fully free) — the badge flips to green/amber the moment
+either works. The operator only ever moves owner-fenced dials; it cannot trade,
+move money, or authorize live.
+
 ## 2026-07-01 (late) — GLOVES-OFF PAPER LEARNING: the edge bar becomes a label on paper; M1 scalp loop live; FIRST LEARNING TRADE FILLED
 
 Owner directive (verbatim intent): the 65% edge bar is for REAL money; on paper/demo the AI

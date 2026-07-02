@@ -151,6 +151,27 @@ class ForexConfig:
     ai_model_control_plane: str = _env("AI_MODEL_CONTROL_PLANE", "CAS_HARNESS_PCBA")
     ai_model_pcba_guard_enabled: bool = _env_bool("AI_MODEL_PCBA_GUARD_ENABLED", True)
 
+    # ---- AI operator (always-on strategy desk) ----
+    # An owner-controlled loop that reads the learning ledgers and adjusts the
+    # AI dials WITHIN the owner fences (never the live-money gate). It runs on a
+    # paid PRIMARY model (Claude) and fails over to the FREE local fallback
+    # (ai_model_* above, Ollama by default) when the token budget runs out or
+    # the primary reports a credit/rate error. See cas_forex/model_provider.py
+    # and cas_forex/ai_operator.py. Off until the owner turns it on in-app.
+    ai_operator_enabled: bool = _env_bool("AI_OPERATOR_ENABLED", False)
+    ai_operator_interval_seconds: int = _env_int("AI_OPERATOR_INTERVAL_SECONDS", 1800)
+    ai_operator_primary_backend: str = _env("AI_OPERATOR_PRIMARY_BACKEND", "frontier_anthropic")
+    ai_operator_primary_model: str = _env("AI_OPERATOR_PRIMARY_MODEL", "claude-sonnet-5")
+    ai_operator_primary_base_url: str = _env("AI_OPERATOR_PRIMARY_BASE_URL", "https://api.anthropic.com")
+    # Paid-primary key: prefer an operator-specific key, else the standard
+    # ANTHROPIC_API_KEY. Absent => the free local fallback is the active provider.
+    ai_operator_primary_api_key: Optional[str] = (
+        _env("AI_OPERATOR_PRIMARY_API_KEY") or _env("ANTHROPIC_API_KEY") or None
+    )
+    # Owner token budget for the paid primary. 0 = no cap (use until a credit
+    # error); >0 = fail over to free once spent reaches it. Owner tops up in-app.
+    ai_operator_token_budget: int = _env_int("AI_OPERATOR_TOKEN_BUDGET", 0)
+
     # ---- MACRO Blackout ----
     macro_blackout_enabled: bool = _env_bool("MACRO_BLACKOUT_ENABLED", True)
     blackout_before_nfp_minutes: int = _env_int("BLACKOUT_BEFORE_NFP_MINUTES", 15)
