@@ -1,5 +1,34 @@
 # CAS Forex Mobile App / APK Deployment
 
+## Fastest path — install on your phone right now (verified 2026-07-01)
+
+With the two servers running on the PC (`cas-forex-api` on 8765 and
+`cas-forex-mobile` on 4173 — both defined in `.claude/launch.json`), on a phone
+connected to the **same Wi-Fi**:
+
+1. Open **`http://10.0.0.6:4173`** in the phone browser
+   (10.0.0.6 is this PC's Wi-Fi address; if it ever changes, run `ipconfig`
+   and use the new "Wireless LAN adapter Wi-Fi" IPv4 address).
+2. Install it:
+   - **Android (Chrome/Edge)**: menu (⋮) → **Add to Home screen** / **Install app**.
+   - **iPhone (Safari)**: Share → **Add to Home Screen**.
+3. Done. The icon opens CAS Forex full-screen like a native app.
+
+No API URL setup is needed on this path: port 4173 serves the built app AND
+proxies `/api/forex/*` to the backend on the same origin (verified: manifest,
+service worker controlling the page, API healthy through the proxy, zero
+horizontal overflow at 375px phone width). The phone must be able to reach the
+PC (same Wi-Fi / VPN), and the PC firewall must allow inbound TCP 4173/8765 on
+the private network.
+
+Port 4173 is the **installable production build** (fast first paint, offline
+app shell). Port 5174 is the developer server (live reload) — usable from the
+phone too, but it does not register the service worker, so installs from 5174
+are plain bookmarks. Rebuild the production app after UI changes with
+`cd ui && npm run build`, then restart `cas-forex-mobile`.
+
+---
+
 CAS Forex can run on a phone in two layers. The phone app exposes the owner-controlled cockpit; it does not bypass the backend runtime gates:
 
 1. **Installable web app (PWA) — ready now.**

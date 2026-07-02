@@ -12,6 +12,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "ui", "run", "dev", "--", "--host", "0.0.0.0"],
       "port": 5174
+    },
+    {
+      "name": "cas-forex-mobile",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "ui", "run", "preview", "--", "--host", "0.0.0.0", "--port", "4173"],
+      "port": 4173
     }
   ]
 }
