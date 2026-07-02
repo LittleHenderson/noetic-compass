@@ -92,6 +92,11 @@ class _ProviderConfigView:
             "ai_model_name": spec.model_name,
             "ai_model_base_url": spec.base_url,
             "ai_model_api_key": spec.api_key,
+            # Operator calls need room for extended-thinking models: the JSON
+            # answer follows the thinking budget, so use the operator ceiling.
+            "ai_model_max_tokens": int(
+                getattr(base_config, "ai_operator_max_tokens", 4000) or 4000
+            ),
         }
 
     def __getattr__(self, item: str) -> Any:

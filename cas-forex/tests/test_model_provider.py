@@ -9,9 +9,20 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from cas_forex import model_provider
+import pytest
+
+from cas_forex import model_provider, operator_secrets
 from cas_forex.ai_model import AIModelResult
 from cas_forex.model_provider import ModelProvider, build_provider_chain
+
+
+@pytest.fixture(autouse=True)
+def _isolate_operator_secret_store(tmp_path):
+    # build_provider_chain consults the durable secret store for a pasted key;
+    # point it at an empty temp file so tests never read the owner's real key.
+    operator_secrets.set_secrets_path_for_tests(tmp_path / "operator-secrets.json")
+    yield
+    operator_secrets.set_secrets_path_for_tests(None)
 
 
 def _config(**over):

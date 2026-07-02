@@ -225,11 +225,13 @@ class AIModelClient:
 
     def _generate_anthropic(self, prompt: str, system: str) -> str:
         url = f"{self.config.ai_model_base_url.rstrip('/')}/v1/messages"
+        # ``temperature`` is deprecated on the Claude 5 model family and returns
+        # a 400 if sent, so it is omitted for the Anthropic backend. Structured/
+        # reliable output comes from the system prompt, not the sampling temp.
         payload = {
             "model": self.config.ai_model_name,
             "system": system,
             "messages": [{"role": "user", "content": prompt}],
-            "temperature": float(getattr(self.config, "ai_model_temperature", 0.2)),
             "max_tokens": int(getattr(self.config, "ai_model_max_tokens", 1024)),
         }
         body = self._post_json(

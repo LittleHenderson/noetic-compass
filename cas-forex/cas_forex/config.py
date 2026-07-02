@@ -171,6 +171,10 @@ class ForexConfig:
     # Owner token budget for the paid primary. 0 = no cap (use until a credit
     # error); >0 = fail over to free once spent reaches it. Owner tops up in-app.
     ai_operator_token_budget: int = _env_int("AI_OPERATOR_TOKEN_BUDGET", 0)
+    # Output-token ceiling per operator call. Claude 5 models use extended
+    # thinking that consumes output tokens BEFORE the JSON answer, so this must
+    # be generous or the JSON gets truncated (thinking ~1-1.5k + answer ~0.5k).
+    ai_operator_max_tokens: int = _env_int("AI_OPERATOR_MAX_TOKENS", 4000)
 
     # ---- MACRO Blackout ----
     macro_blackout_enabled: bool = _env_bool("MACRO_BLACKOUT_ENABLED", True)
