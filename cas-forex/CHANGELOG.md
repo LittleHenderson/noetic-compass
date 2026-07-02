@@ -1,5 +1,46 @@
 # CAS Forex - Changelog
 
+## 2026-07-02 — LEARN-FROM-MISTAKES ledger + THE critical finding: paper trades open but never realize P&L
+
+Built the learn-from-mistakes engine the owner's whole thesis depends on, AND
+diagnosed why learning can't yet complete. Suite green (5 new tests); operator +
+route wired.
+
+**`build_waste_learning_outcomes` (in waste_direction_outcome_binding.py).** The
+existing outcome-binding only counts PASS-token edges (of which there is ~1 in
+250 cycles), so the gloves-off learning trades never fed adaptation. The new
+engine binds EVERY closed paper trade — learning trades included — to its
+originating direction and aggregates realized win-rate + net P&L per
+symbol × direction × profile, surfacing worst/best groups. This is what lets the
+AI operator say "SHORT NAS100 M1 loses 70% over 25 trades — raise its confidence
+bar." Wired into the operator's context (`_compact_learning_outcomes`) + route
+`GET /api/forex/waste-loop-control/learning-outcomes`. 5 tests prove it binds
+non-edge trades, ranks the losing group, ignores unclosed trades, and never
+touches money/live. Read-only PAPER/DEMO; realized paper stats NEVER auto-promote
+to real money (that still needs a PASS token + owner live gates).
+
+**THE CRITICAL FINDING (documented, not yet fixed — next build).** Tracing why
+`bound_outcome_count` is 0 despite 300+ dispatched trades: the paper trades OPEN
+(the sim/paper bridge assigns tickets) but their realized P&L is NEVER captured,
+because (a) no MT5 terminal is connected — `mt5_deal_history_ingest` reports
+`mt5_package_available: false, initialize_ok: false`, so closed-deal P&L can't be
+ingested; and (b) `SimulatedBrokerBridge` holds positions in-memory and has no
+close-with-P&L step. So the learning loop makes predictions and dispatches
+orders, but no outcome ever comes back — it can generate but not yet LEARN.
+
+The missing piece is a **paper-outcome simulator**: for each dispatched paper
+order (entry/SL/TP/direction), walk subsequent REAL candles, resolve first-touch
+of SL vs TP (with real spread/cost), compute realized P&L, and write a durable
+closed-outcome ledger the learning engine reads — no broker terminal required.
+Deliberately NOT rushed here: a subtly-wrong P&L simulator would fabricate fake
+edges, which violates the codebase's sacred null-discipline. It must use real
+candles + correct pip math + honest first-touch/spread, and be validated before
+its outputs feed the operator. Specified as the next build in the handoff.
+
+Net: the consumer (learning-outcomes engine + operator wiring) is shipped and
+tested; the producer (paper-outcome P&L) is the next careful, null-safe build.
+Until then the operator correctly sees 0 bound outcomes and HOLDS — honest.
+
 ## 2026-07-02 — AI OPERATOR: always-on strategy desk + Claude→free-local failover + live model indicator
 
 The original vision, built: an owner-controlled AI operator that runs alongside

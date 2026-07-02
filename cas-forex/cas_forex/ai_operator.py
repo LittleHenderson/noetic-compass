@@ -157,15 +157,45 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         lambda: __import__("cas_forex.waste_adaptation_plan", fromlist=["build_waste_adaptation_plan"]).build_waste_adaptation_plan(),
         {"status": "UNAVAILABLE"},
     )
+    # The learn-from-mistakes ledger: realized paper win/loss per symbol x
+    # direction x profile, including non-edge learning trades. This is what lets
+    # the operator say "SHORT NAS100 keeps losing — raise its confidence bar".
+    learning_outcomes = _safe(
+        lambda: __import__("cas_forex.waste_direction_outcome_binding", fromlist=["build_waste_learning_outcomes"]).build_waste_learning_outcomes(),
+        {"status": "UNAVAILABLE"},
+    )
     return {
         "dials": (snapshot.get("control_surface") or {}).get("values") if isinstance(snapshot, dict) else None,
         "dial_bounds": (snapshot.get("control_surface") or {}).get("bounds") if isinstance(snapshot, dict) else None,
         "learning": _compact(learning),
         "outcome_binding": _compact(outcome),
+        "learning_outcomes": _compact_learning_outcomes(learning_outcomes),
         "adaptation": _compact(adaptation),
         "recent_cycles": _recent_cycles(),
         "tool_manifest": TOOL_MANIFEST,
     }
+
+
+def _compact_learning_outcomes(obj: Any) -> Any:
+    """Keep the operator-useful learning fields incl. the worst/best groups
+    (small lists the model should reason over), dropping bulk sample rows."""
+    if not isinstance(obj, dict):
+        return obj
+    keep = {
+        k: obj.get(k)
+        for k in (
+            "bound_trade_count",
+            "learning_ready",
+            "overall",
+            "direction_counts",
+            "symbol_counts",
+            "worst_groups",
+            "best_groups",
+            "next_action",
+        )
+        if k in obj
+    }
+    return keep or {"status": obj.get("status", "UNAVAILABLE")}
 
 
 def _compact(obj: Any) -> Any:

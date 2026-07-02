@@ -31,7 +31,10 @@ from cas_forex.waste_runner import (
 from cas_forex.waste_cycle_audit import default_waste_cycle_audit_store
 from cas_forex.waste_direction_review_packet import build_waste_direction_review_packet
 from cas_forex.waste_direction_learning_ledger import build_waste_direction_learning_ledger
-from cas_forex.waste_direction_outcome_binding import build_waste_direction_outcome_binding
+from cas_forex.waste_direction_outcome_binding import (
+    build_waste_direction_outcome_binding,
+    build_waste_learning_outcomes,
+)
 from cas_forex.waste_paper_sample_collector import (
     DEFAULT_SCHEDULER_INTERVAL_SECONDS,
     DEFAULT_SCAN_CANDIDATE_LIMIT,
@@ -469,6 +472,18 @@ async def get_direction_outcome_binding() -> dict[str, Any]:
         "waste_direction_outcome_binding",
         builder=build_waste_direction_outcome_binding,
         report_kind="cas_forex_waste_direction_outcome_binding",
+    )
+
+
+@router.get("/learning-outcomes")
+async def get_learning_outcomes() -> dict[str, Any]:
+    """Learn-from-mistakes ledger: realized paper win/loss per symbol x direction
+    x profile across EVERY closed paper trade (learning trades included, not just
+    PASS-token edges). Read-only PAPER/DEMO; never promotes to real money."""
+    return _cached_waste_report(
+        "waste_learning_outcomes",
+        builder=build_waste_learning_outcomes,
+        report_kind="cas_forex_waste_learning_outcomes",
     )
 
 

@@ -401,8 +401,127 @@ def _float(value: Any, default: float = 0.0) -> float:
         return round(float(default), 6)
 
 
+LEARNING_REPORT_KIND = "cas_forex_waste_learning_outcomes"
+
+LEARNING_CLAIM_BOUNDARY = (
+    "WASTE learning outcomes is read-only PAPER/DEMO analysis binding EVERY "
+    "closed paper trade (edge-passing or not) to its originating direction so the "
+    "AI can learn from realized wins and losses. It does not place orders, close "
+    "positions, create owner/broker ACCEPT, authorize live trading, mint edge "
+    "tokens, or move money. Realized paper stats never auto-promote to real money "
+    "— that path still requires a PASS edge token and the owner's live gates."
+)
+
+
+def _learning_agg(rows: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    n = len(rows)
+    wins = sum(1 for r in rows if _float(r.get("net_pnl"), 0.0) > 0.0)
+    losses = sum(1 for r in rows if _float(r.get("net_pnl"), 0.0) < 0.0)
+    flat = n - wins - losses
+    net = round(sum(_float(r.get("net_pnl"), 0.0) for r in rows), 4)
+    return {
+        "trades": n,
+        "wins": wins,
+        "losses": losses,
+        "flat": flat,
+        "win_rate": round(wins / n, 3) if n else 0.0,
+        "net_pnl": net,
+        "avg_pnl": round(net / n, 4) if n else 0.0,
+    }
+
+
+def build_waste_learning_outcomes(
+    *,
+    cycles: Iterable[Mapping[str, Any]] | None = None,
+    attempts: Iterable[Mapping[str, Any]] | Mapping[str, Mapping[str, Any]] | None = None,
+    history_report: Mapping[str, Any] | None = None,
+    audit_path: Path | str = DEFAULT_WASTE_AUDIT_PATH,
+    order_attempt_state_path: Path | str = DEFAULT_ORDER_ATTEMPT_STATE_PATH,
+    history_report_dir: Path | str = DEFAULT_MT5_DEAL_HISTORY_DIR,
+    max_cycles: int = 500,
+    min_samples_per_group: int = 4,
+) -> dict[str, Any]:
+    """Bind EVERY closed paper/demo trade (learning trades included, not just
+    PASS-token edges) to its originating direction and aggregate realized wins/
+    losses per symbol x direction x profile — the owner's "learn from mistakes"
+    ledger. This is what the AI operator reads to see what is actually working
+    on paper vs what keeps losing, so it can tune the fenced dials accordingly.
+    Read-only PAPER/DEMO; never promotes to real money on its own."""
+
+    cycle_rows = _cycle_rows(
+        list(cycles) if cycles is not None else _load_cycles(audit_path, max_cycles=max_cycles)
+    )
+    attempt_rows = _attempt_rows(
+        attempts if attempts is not None else _load_attempts(order_attempt_state_path)
+    )
+    history = dict(history_report) if history_report is not None else _latest_history(history_report_dir)
+    history_rows = _history_rows(history)
+
+    attempts_by_decision = _index_by(attempt_rows, "decision_ref")
+    attempts_by_order = _index_by(attempt_rows, "order_id")
+    history_by_ticket = _index_by(history_rows, "broker_ticket")
+
+    bound: list[dict[str, Any]] = []
+    for row in cycle_rows:  # ALL LONG/SHORT cycles, edge-passing or not
+        attempt = _matching_attempt(row, attempts_by_decision, attempts_by_order)
+        ticket = _broker_ticket(row, attempt)
+        history_row = history_by_ticket.get(ticket) if ticket else None
+        if attempt and history_row and _paper_demo_history(history_row):
+            bound.append(_bound_row(row, attempt, history_row))
+
+    overall = _learning_agg(bound)
+
+    groups: dict[tuple[Any, Any, Any], list[dict[str, Any]]] = {}
+    for r in bound:
+        key = (r.get("symbol"), r.get("direction"), r.get("profile"))
+        groups.setdefault(key, []).append(r)
+    group_stats = [
+        {"symbol": k[0], "direction": k[1], "profile": k[2], **_learning_agg(v)}
+        for k, v in groups.items()
+    ]
+    sized = [g for g in group_stats if g["trades"] >= max(1, int(min_samples_per_group))]
+    # Worst = lowest win-rate then most-negative net; best = the inverse.
+    worst = sorted(sized, key=lambda g: (g["win_rate"], g["net_pnl"]))[:5]
+    best = sorted(sized, key=lambda g: (-g["win_rate"], -g["net_pnl"]))[:5]
+
+    learning_ready = overall["trades"] >= max(1, int(min_samples_per_group))
+    return {
+        "report_kind": LEARNING_REPORT_KIND,
+        "generated_at": utc_now().isoformat(),
+        "read_only": True,
+        "paper_only": True,
+        "learning_ready": learning_ready,
+        "min_samples_per_group": max(1, int(min_samples_per_group)),
+        "bound_trade_count": overall["trades"],
+        "closed_history_count": len(history_rows),
+        "overall": overall,
+        "direction_counts": dict(Counter(str(r.get("direction") or "UNKNOWN") for r in bound)),
+        "symbol_counts": dict(Counter(str(r.get("symbol") or "UNKNOWN") for r in bound)),
+        "worst_groups": worst,
+        "best_groups": best,
+        "group_count": len(group_stats),
+        "paper_demo_history_status": history.get("ingest_status"),
+        "runtime_changed": False,
+        "broker_touched": False,
+        "money_moved": False,
+        "edge_token_minted": False,
+        "owner_accept_created": False,
+        "sample_bound_rows": bound[-8:],
+        "claim_boundary": LEARNING_CLAIM_BOUNDARY,
+        "next_action": (
+            f"{overall['trades']} paper outcomes bound "
+            f"({overall['wins']}W/{overall['losses']}L, net {overall['net_pnl']}). "
+            "The AI operator reads this to tune the fenced dials; real-money "
+            "promotion still requires a PASS edge token + owner live gates."
+            if learning_ready
+            else "Not enough closed paper trades bound yet to learn per-group patterns."
+        ),
+    }
+
+
 __all__ = [
     "DEFAULT_MIN_BOUND_OUTCOMES_FOR_PROMOTION",
+    "LEARNING_REPORT_KIND",
     "REPORT_KIND",
     "STATUS_AWAITING_CLOSED_HISTORY",
     "STATUS_AWAITING_EXECUTION",
@@ -410,4 +529,5 @@ __all__ = [
     "STATUS_NO_CONFIRMED_EDGE",
     "STATUS_READY",
     "build_waste_direction_outcome_binding",
+    "build_waste_learning_outcomes",
 ]
