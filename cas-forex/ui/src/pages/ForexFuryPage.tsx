@@ -19,6 +19,8 @@ import type {
   ForexFuryReplayCandidate,
   ForexFuryReplayCandidateReport,
 } from "../types/evidence";
+import "../components/StrategyActionControls.css";
+import "./ForexFuryPage.css";
 
 interface ForexFuryPageProps {
   state: DashboardState;

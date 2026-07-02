@@ -1,7 +1,6 @@
 /* ── CAS Forex — API Client ── */
 
 import type {
-  DashboardState,
   UIReadinessReport,
   DailySchedule,
   DailyBundle,
@@ -33,6 +32,9 @@ import type {
   MT5PaperExecutionVerifierReport,
   MT5DealHistoryIngestReport,
   TerminalPositionReconciliationReport,
+  TerminalReceiptArchiveAction,
+  TerminalReceiptRecoveryRefreshAction,
+  TerminalReceiptRecoveryPacket,
   TerminalOperabilityVerifierReport,
   TerminalReceiptIngestReport,
   TerminalHistoryIngestReport,
@@ -47,85 +49,51 @@ import type {
   AccountReconciliationReport,
   LiveReadinessReport,
   BrokerSyncedRiskPreview,
+  AutoHaltReport,
+  BrokerTruthMonitorStatus,
+  BrokerTruthMonitorSupervisorStatus,
+  BrokerTruthRecoveryPacket,
+  LiveMoneyProgressionPacket,
+  OrderAttemptAuditAttempt,
+  OrderAttemptAuditStatus,
+  OrderAttemptRecoveryPacket,
+  PayoutRecoveryAttempt,
+  PayoutRecoveryStatus,
+  BrokerRealityReview,
+  LivePilotPolicy,
+  LiveOrderDryRunLatest,
+  LiveOrderDryRunReport,
+  LiveOrderDryRunReview,
+  CompoundAddOrderDryRunLatest,
+  CompoundAddOrderDryRunReview,
+  CompoundAddDispatchHandoffStatus,
+  WasteEntryDispatchHandoffStatus,
+  WasteEntryPilotPromotionStatus,
+  WasteDirectionReviewPacket,
+  WasteDirectionLearningLedger,
+  WasteDirectionOutcomeBinding,
+  WastePaperSampleCollector,
+  WastePaperSampleCollectorScheduler,
+  WasteAdaptationPromotionRule,
+  WasteAdaptationPlan,
+  WasteAdaptationApplyPreview,
+  WasteAdaptationOwnerReview,
+  WasteAdaptationPaperApply,
+  LiveRecoveryReport,
+  MT5MarketDataDiagnostic,
+  WasteRealCandleProbe,
 } from "../types/evidence";
+import { apiDelete, apiGet, apiPost, apiPostJson, getApiBase } from "./apiCore";
 
-export const API_BASE_STORAGE_KEY = "cas_forex_api_base";
-const DEFAULT_API_BASE =
-  import.meta.env.VITE_CAS_FOREX_API_BASE ?? "http://127.0.0.1:8765/api/forex";
+export { API_BASE_STORAGE_KEY, getApiBase, resetApiBase, setApiBase } from "./apiCore";
 
-export function getApiBase(): string {
-  if (typeof window === "undefined") return DEFAULT_API_BASE;
-  return window.localStorage.getItem(API_BASE_STORAGE_KEY) || DEFAULT_API_BASE;
-}
+type WasteStageProbeModule = typeof import("./wasteStageProbe");
 
-export function setApiBase(value: string): void {
-  if (typeof window === "undefined") return;
-  const cleaned = value.trim().replace(/\/+$/, "");
-  if (!cleaned) {
-    window.localStorage.removeItem(API_BASE_STORAGE_KEY);
-    return;
-  }
-  window.localStorage.setItem(API_BASE_STORAGE_KEY, cleaned);
-}
+let wasteStageProbePromise: Promise<WasteStageProbeModule> | null = null;
 
-export function resetApiBase(): void {
-  if (typeof window === "undefined") return;
-  window.localStorage.removeItem(API_BASE_STORAGE_KEY);
-}
-
-async function apiGet<T>(path: string): Promise<T> {
-  const res = await fetch(`${getApiBase()}${path}`, {
-    headers: { "Content-Type": "application/json" },
-    signal: AbortSignal.timeout(8000),
-  });
-  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
-  return res.json();
-}
-
-async function apiPost<T>(path: string): Promise<T> {
-  const res = await fetch(`${getApiBase()}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    signal: AbortSignal.timeout(8000),
-  });
-  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
-  return res.json();
-}
-
-async function apiPostJson<TResp, TBody>(path: string, body: TBody): Promise<TResp> {
-  const res = await fetch(`${getApiBase()}${path}`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-    signal: AbortSignal.timeout(10_000),
-  });
-  const text = await res.text();
-  let parsed: unknown;
-  try {
-    parsed = text ? JSON.parse(text) : null;
-  } catch {
-    parsed = text;
-  }
-  if (!res.ok) {
-    const err = new Error(`API ${res.status}: ${res.statusText}`) as Error & {
-      status?: number;
-      payload?: unknown;
-    };
-    err.status = res.status;
-    err.payload = parsed;
-    throw err;
-  }
-  return parsed as TResp;
-}
-
-async function apiDelete<T>(path: string): Promise<T> {
-  const res = await fetch(`${getApiBase()}${path}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" },
-    signal: AbortSignal.timeout(8000),
-  });
-  if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
-  return res.json();
+function loadWasteStageProbe(): Promise<WasteStageProbeModule> {
+  wasteStageProbePromise ??= import("./wasteStageProbe");
+  return wasteStageProbePromise;
 }
 
 // ── Floating AI assistant ──
@@ -374,7 +342,20 @@ export interface RuntimeGateDecision {
   status: string;
   missing_requirements: string[];
   satisfied_requirements: string[];
+  advisory_requirements?: string[];
   next_action: string;
+}
+
+export interface OwnerAuthorityModel {
+  authority: string;
+  authority_controls: string[];
+  owner_controls_are_final_authority: boolean;
+  metrics_and_ai_are_advisory_only: boolean;
+  metrics_and_ai_can_veto_owner_authority: boolean;
+  technical_action_time_checks_still_required: boolean;
+  advisory_inputs: string[];
+  action_time_requirements: string[];
+  statement: string;
 }
 
 export interface LiveEnableState {
@@ -386,7 +367,13 @@ export interface LiveEnableState {
     decisions: Record<string, RuntimeGateDecision>;
     all_real_money_authorized: boolean;
     summary: string;
+    owner_authority_boundary?: string;
+    advisory_only_inputs?: string[];
+    action_time_requirements?: string[];
+    owner_controls_are_final_authority?: boolean;
+    metrics_and_ai_can_veto_owner_authority?: boolean;
   };
+  owner_authority_model?: OwnerAuthorityModel;
   live_trading: RuntimeGateDecision;
   live_authorized: boolean;
   still_missing: string[];
@@ -424,6 +411,7 @@ export interface AuthorizationCapability {
   status: string;
   missing_requirements: string[];
   satisfied_requirements: string[];
+  advisory_requirements?: string[];
   toggles: AuthorizationToggle[];
   note: string;
 }
@@ -442,10 +430,18 @@ export interface AuthorizationState {
   provider: AuthorizationProvider;
   all_real_money_authorized: boolean;
   summary: string;
+  owner_authority_model?: OwnerAuthorityModel;
   caveats: string[];
+  override_state_path?: string | null;
+  override_count?: number;
+  persisted?: boolean;
 }
 
 export type AuthorizationPatch = Partial<{
+  personal_account_ack: boolean;
+  no_pooled_capital_ack: boolean;
+  live_mode: boolean;
+  prefer_mt5: boolean;
   owner_enable_live_trading: boolean;
   live_trading_licensed: boolean;
   owner_enable_broker_accept: boolean;
@@ -466,7 +462,652 @@ export async function updateAuthorization(patch: AuthorizationPatch): Promise<Au
   return apiPostJson<AuthorizationState, AuthorizationPatch>("/live-enable/authorization/update", patch);
 }
 
+// ── Verified profit sweep (broker-confirmed net winnings only) ──
+
+export interface VerifiedProfitSweepSettings {
+  sweep_pct: number;
+  tax_reserve_pct: number;
+  min_sweep_usd: number;
+  destination_id?: string | null;
+  allow_principal_sweep: boolean;
+  policy_id: string;
+}
+
+export interface VerifiedProfitSweepWinnings {
+  ledger_mode: string;
+  live_money_authorized: boolean;
+  verified_closed_trade_count: number;
+  verified_profit_usd: number;
+  verified_loss_usd: number;
+  verified_costs_usd: number;
+  net_verified_winnings_usd: number;
+  sweepable_winnings_usd: number;
+  ignored_unverified_rows: number;
+  claim_status: string;
+  reason: string;
+}
+
+export interface VerifiedProfitSweepPreview {
+  report_kind?: string;
+  settings: VerifiedProfitSweepSettings;
+  winnings: VerifiedProfitSweepWinnings;
+  tax_reserve_usd: number;
+  post_tax_winnings_usd: number;
+  sweep_amount_usd: number;
+  keep_in_broker_usd: number;
+  principal_sweep_usd: number;
+  status: string;
+  reason: string;
+  payout_gate: RuntimeGateDecision;
+  hard_rule?: string;
+}
+
+export interface VerifiedProfitSweepAuditRecord {
+  audit_id?: string;
+  action: string;
+  timestamp: string;
+  payload?: unknown;
+}
+
+export interface VerifiedProfitSweepLiveRecoveryGate {
+  report_kind?: string | null;
+  recovery_status?: string | null;
+  recovery_clear_for_live: boolean;
+  requires_recovery_review?: boolean;
+  evidence_ready_for_owner_accept?: boolean;
+  missing_requirements?: string[];
+  current_fingerprint?: string | null;
+  order_attempt_summary?: {
+    unresolved_real_attempt_count?: number;
+    has_unresolved_real_attempt?: boolean;
+  };
+  next_action?: string | null;
+}
+
+export interface VerifiedProfitSweepPolicy {
+  report_kind?: string;
+  settings: VerifiedProfitSweepSettings;
+  latest_audit?: VerifiedProfitSweepAuditRecord | null;
+  audit?: VerifiedProfitSweepAuditRecord | null;
+  note?: string;
+}
+
+export type VerifiedProfitSweepPolicyUpdate = Partial<
+  Pick<
+    VerifiedProfitSweepSettings,
+    "sweep_pct" | "tax_reserve_pct" | "min_sweep_usd" | "destination_id" | "allow_principal_sweep"
+  >
+>;
+
+export interface VerifiedProfitSweepRequestResult {
+  status: string;
+  detail?: string;
+  preview: VerifiedProfitSweepPreview;
+  movement?: { status: string; provider_receipt?: unknown | null; [key: string]: unknown };
+  payout_attempt?: PayoutRecoveryAttempt | null;
+  live_recovery?: VerifiedProfitSweepLiveRecoveryGate | null;
+  audit?: VerifiedProfitSweepAuditRecord;
+}
+
+export async function fetchVerifiedProfitSweepPolicy(): Promise<VerifiedProfitSweepPolicy | null> {
+  try { return await apiGet<VerifiedProfitSweepPolicy>("/money-movement/verified-profit-sweep/policy"); } catch { return null; }
+}
+
+export async function updateVerifiedProfitSweepPolicy(
+  patch: VerifiedProfitSweepPolicyUpdate,
+): Promise<VerifiedProfitSweepPolicy> {
+  return apiPostJson<VerifiedProfitSweepPolicy, VerifiedProfitSweepPolicyUpdate>(
+    "/money-movement/verified-profit-sweep/policy",
+    patch,
+  );
+}
+
+export async function fetchVerifiedProfitSweepState(): Promise<VerifiedProfitSweepPreview | null> {
+  try { return await apiGet<VerifiedProfitSweepPreview>("/money-movement/verified-profit-sweep/state"); } catch { return null; }
+}
+
+export async function previewVerifiedProfitSweep(
+  accountLedger: AccountLedgerState,
+  settings?: VerifiedProfitSweepPolicyUpdate,
+): Promise<VerifiedProfitSweepPreview> {
+  return apiPostJson<VerifiedProfitSweepPreview, { account_ledger: AccountLedgerState; settings?: VerifiedProfitSweepPolicyUpdate }>(
+    "/money-movement/verified-profit-sweep/preview",
+    { account_ledger: accountLedger, settings },
+  );
+}
+
+export async function requestVerifiedProfitSweepCurrent(
+  settings?: VerifiedProfitSweepPolicyUpdate,
+  confirm = false,
+): Promise<VerifiedProfitSweepRequestResult> {
+  const q = confirm ? "?confirm=true" : "";
+  return apiPostJson<VerifiedProfitSweepRequestResult, VerifiedProfitSweepPolicyUpdate>(
+    `/money-movement/verified-profit-sweep/request-current${q}`,
+    settings ?? {},
+  );
+}
+
+export async function fetchPayoutRecoveryStatus(): Promise<PayoutRecoveryStatus | null> {
+  try { return await apiGet<PayoutRecoveryStatus>("/money-movement/verified-profit-sweep/payout-recovery"); } catch { return null; }
+}
+
+export async function resolvePayoutAttempt(
+  idempotency_key: string,
+  owner_status: "SETTLED" | "FAILED" | "BLOCKED",
+  provider_reference = "",
+  notes = "",
+): Promise<{ report_kind: string; attempt: PayoutRecoveryAttempt; status: string }> {
+  return apiPostJson<
+    { report_kind: string; attempt: PayoutRecoveryAttempt; status: string },
+    { idempotency_key: string; owner_status: string; provider_reference: string; notes: string }
+  >(
+    "/money-movement/verified-profit-sweep/payout-recovery/resolve",
+    { idempotency_key, owner_status, provider_reference, notes },
+  );
+}
+
 // ── Trading Windows cockpit (live-ish candles + quote per symbol) ──
+
+export type { AutoHaltReport };
+export type { BrokerTruthMonitorStatus };
+export type { BrokerTruthMonitorSupervisorStatus };
+export type { BrokerTruthRecoveryPacket };
+export type { LiveMoneyProgressionPacket };
+export type { OrderAttemptAuditAttempt };
+export type { OrderAttemptAuditStatus };
+export type { OrderAttemptRecoveryPacket };
+export type { TerminalReceiptArchiveAction };
+export type { TerminalReceiptRecoveryRefreshAction };
+export type { TerminalReceiptRecoveryPacket };
+export type { PayoutRecoveryStatus };
+export type { BrokerRealityReview };
+export type { LivePilotPolicy };
+export type { LiveOrderDryRunLatest };
+export type { LiveOrderDryRunReport };
+export type { LiveOrderDryRunReview };
+export type { CompoundAddOrderDryRunLatest };
+export type { CompoundAddOrderDryRunReview };
+export type { CompoundAddDispatchHandoffStatus };
+export type { WasteEntryDispatchHandoffStatus };
+export type { WasteEntryPilotPromotionStatus };
+export type { WasteDirectionReviewPacket };
+export type { WasteDirectionLearningLedger };
+export type { WasteDirectionOutcomeBinding };
+export type { WastePaperSampleCollector };
+export type { WastePaperSampleCollectorScheduler };
+export type { WasteAdaptationPromotionRule };
+export type { WasteAdaptationPlan };
+export type { WasteAdaptationApplyPreview };
+export type { WasteAdaptationOwnerReview };
+export type { WasteAdaptationPaperApply };
+export type { LiveRecoveryReport };
+export type { MT5MarketDataDiagnostic };
+export type { WasteRealCandleProbe };
+
+export interface LiveOrderDryRunRequest {
+  order_id: string;
+  decision_ref?: string | null;
+  symbol: string;
+  direction: string;
+  volume: number;
+  price?: number;
+  stop_loss: number;
+  take_profit: number;
+  expected_loss_usd?: number | null;
+  comment?: string;
+  live_telemetry?: Record<string, unknown> | null;
+  account_snapshot?: Record<string, unknown> | null;
+  equity_peak?: number | null;
+}
+
+export interface WasteRealCandleProbeDryRunRequest {
+  volume: number;
+  order_id?: string | null;
+  expected_loss_usd?: number | null;
+  live_telemetry?: Record<string, unknown> | null;
+  account_snapshot?: Record<string, unknown> | null;
+  equity_peak?: number | null;
+}
+
+export interface WasteAdaptationOwnerReviewRequest {
+  decision: string;
+  notes?: string | null;
+}
+
+export interface WasteAdaptationPaperApplyRequest {
+  notes?: string | null;
+}
+
+export async function fetchLatestLiveOrderDryRun(): Promise<LiveOrderDryRunLatest | null> {
+  try { return await apiGet<LiveOrderDryRunLatest>("/live-order-dry-run/latest"); } catch { return null; }
+}
+
+export async function runLiveOrderDryRun(body: LiveOrderDryRunRequest): Promise<LiveOrderDryRunReport> {
+  return apiPostJson<LiveOrderDryRunReport, LiveOrderDryRunRequest>("/live-order-dry-run/order", body);
+}
+
+export async function fetchWasteEntryDispatchHandoffStatus(): Promise<WasteEntryDispatchHandoffStatus | null> {
+  try {
+    return await apiGet<WasteEntryDispatchHandoffStatus>("/live-order-dry-run/waste-entry-order/dispatch-handoff");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWasteEntryPilotPromotionStatus(): Promise<WasteEntryPilotPromotionStatus | null> {
+  try {
+    return await apiGet<WasteEntryPilotPromotionStatus>("/live-order-dry-run/waste-entry-order/pilot-promotion");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWasteDirectionReviewPacket(): Promise<WasteDirectionReviewPacket | null> {
+  try {
+    return await apiGet<WasteDirectionReviewPacket>("/waste-loop-control/direction-review");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWasteDirectionLearningLedger(): Promise<WasteDirectionLearningLedger | null> {
+  try {
+    return await apiGet<WasteDirectionLearningLedger>("/waste-loop-control/direction-learning");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWasteDirectionOutcomeBinding(): Promise<WasteDirectionOutcomeBinding | null> {
+  try {
+    return await apiGet<WasteDirectionOutcomeBinding>("/waste-loop-control/direction-outcome-binding");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWastePaperSampleCollector(): Promise<WastePaperSampleCollector | null> {
+  try {
+    return await apiGet<WastePaperSampleCollector>("/waste-loop-control/paper-sample-collector");
+  } catch {
+    return null;
+  }
+}
+
+export interface WastePaperSampleCollectorSchedulerRequest {
+  interval_seconds?: number;
+  run_market_diagnostic?: boolean;
+  run_real_candle_probe?: boolean;
+  run_deal_history_ingest?: boolean;
+  symbol?: string | null;
+  timeframe?: string;
+  bars?: number;
+  max_pairs?: number;
+  scan_candidates?: boolean;
+  max_scan_candidates?: number;
+}
+
+export async function fetchWastePaperSampleCollectorScheduler(): Promise<WastePaperSampleCollectorScheduler | null> {
+  try {
+    return await apiGet<WastePaperSampleCollectorScheduler>("/waste-loop-control/paper-sample-collector/scheduler");
+  } catch {
+    return null;
+  }
+}
+
+export async function runWastePaperSampleCollectorSchedulerOnce(
+  body: WastePaperSampleCollectorSchedulerRequest = {},
+): Promise<WastePaperSampleCollectorScheduler> {
+  return apiPostJson<WastePaperSampleCollectorScheduler, WastePaperSampleCollectorSchedulerRequest>(
+    "/waste-loop-control/paper-sample-collector/scheduler/run-once",
+    body,
+    75_000,
+  );
+}
+
+export async function startWastePaperSampleCollectorScheduler(
+  body: WastePaperSampleCollectorSchedulerRequest = {},
+): Promise<WastePaperSampleCollectorScheduler> {
+  return apiPostJson<WastePaperSampleCollectorScheduler, WastePaperSampleCollectorSchedulerRequest>(
+    "/waste-loop-control/paper-sample-collector/scheduler/start",
+    body,
+    30_000,
+  );
+}
+
+export async function stopWastePaperSampleCollectorScheduler(): Promise<WastePaperSampleCollectorScheduler> {
+  return apiPostJson<WastePaperSampleCollectorScheduler, Record<string, never>>(
+    "/waste-loop-control/paper-sample-collector/scheduler/stop",
+    {},
+  );
+}
+
+export async function fetchWasteAdaptationPromotionRule(): Promise<WasteAdaptationPromotionRule | null> {
+  try {
+    return await apiGet<WasteAdaptationPromotionRule>("/waste-loop-control/adaptation-promotion-rule");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWasteAdaptationPlan(): Promise<WasteAdaptationPlan | null> {
+  try {
+    return await apiGet<WasteAdaptationPlan>("/waste-loop-control/adaptation-plan");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWasteAdaptationApplyPreview(): Promise<WasteAdaptationApplyPreview | null> {
+  try {
+    return await apiGet<WasteAdaptationApplyPreview>("/waste-loop-control/adaptation-apply-preview");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchWasteAdaptationOwnerReview(): Promise<WasteAdaptationOwnerReview | null> {
+  try {
+    return await apiGet<WasteAdaptationOwnerReview>("/waste-loop-control/adaptation-owner-review");
+  } catch {
+    return null;
+  }
+}
+
+export async function recordWasteAdaptationOwnerReview(
+  body: WasteAdaptationOwnerReviewRequest,
+  confirmOwnerReview = false,
+  confirmOwnerAccept = false,
+): Promise<WasteAdaptationOwnerReview> {
+  const params = new URLSearchParams();
+  if (confirmOwnerReview) params.set("confirm_owner_review", "true");
+  if (confirmOwnerAccept) params.set("confirm_owner_accept", "true");
+  const query = params.toString();
+  return apiPostJson<WasteAdaptationOwnerReview, WasteAdaptationOwnerReviewRequest>(
+    `/waste-loop-control/adaptation-owner-review/record${query ? `?${query}` : ""}`,
+    body,
+  );
+}
+
+export async function resetWasteAdaptationOwnerReview(reason = "OWNER_RESET"): Promise<WasteAdaptationOwnerReview> {
+  return apiPostJson<WasteAdaptationOwnerReview, Record<string, never>>(
+    `/waste-loop-control/adaptation-owner-review/reset?reason=${encodeURIComponent(reason)}`,
+    {},
+  );
+}
+
+export async function fetchWasteAdaptationPaperApply(): Promise<WasteAdaptationPaperApply | null> {
+  try {
+    return await apiGet<WasteAdaptationPaperApply>("/waste-loop-control/adaptation-paper-apply");
+  } catch {
+    return null;
+  }
+}
+
+export async function recordWasteAdaptationPaperApply(
+  body: WasteAdaptationPaperApplyRequest,
+  confirmOwnerApply = false,
+): Promise<WasteAdaptationPaperApply> {
+  const query = confirmOwnerApply ? "?confirm_owner_apply=true" : "";
+  return apiPostJson<WasteAdaptationPaperApply, WasteAdaptationPaperApplyRequest>(
+    `/waste-loop-control/adaptation-paper-apply/record${query}`,
+    body,
+  );
+}
+
+export async function resetWasteAdaptationPaperApply(reason = "OWNER_RESET"): Promise<WasteAdaptationPaperApply> {
+  return apiPostJson<WasteAdaptationPaperApply, Record<string, never>>(
+    `/waste-loop-control/adaptation-paper-apply/reset?reason=${encodeURIComponent(reason)}`,
+    {},
+  );
+}
+
+export async function dispatchWasteEntryDispatchHandoff(
+  notes = "",
+  confirmOwnerDispatch = false,
+  confirmLiveDispatch = false,
+): Promise<WasteEntryDispatchHandoffStatus> {
+  const q = confirmLiveDispatch ? "?confirm=true" : "";
+  return apiPostJson<WasteEntryDispatchHandoffStatus, { confirm_owner_dispatch: boolean; notes: string }>(
+    `/live-order-dry-run/waste-entry-order/dispatch-handoff/dispatch${q}`,
+    { confirm_owner_dispatch: confirmOwnerDispatch, notes },
+  );
+}
+
+export async function fetchLiveOrderDryRunReview(): Promise<LiveOrderDryRunReview | null> {
+  try { return await apiGet<LiveOrderDryRunReview>("/live-order-dry-run/review"); } catch { return null; }
+}
+
+export async function acceptLiveOrderDryRunReview(
+  notes = "",
+  confirmOwnerAccept = false,
+): Promise<LiveOrderDryRunReview> {
+  const q = confirmOwnerAccept ? "?confirm_owner_accept=true" : "";
+  return apiPostJson<LiveOrderDryRunReview, { notes: string }>(
+    `/live-order-dry-run/review/accept${q}`,
+    { notes },
+  );
+}
+
+export async function resetLiveOrderDryRunReview(reason = "OWNER_RESET"): Promise<LiveOrderDryRunReview> {
+  return apiPost<LiveOrderDryRunReview>(`/live-order-dry-run/review/reset?reason=${encodeURIComponent(reason)}`);
+}
+
+export async function fetchCompoundAddOrderDryRunLatest(): Promise<CompoundAddOrderDryRunLatest | null> {
+  try {
+    return await apiGet<CompoundAddOrderDryRunLatest>("/live-order-dry-run/compound-add-order/latest");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchCompoundAddOrderDryRunReview(): Promise<CompoundAddOrderDryRunReview | null> {
+  try {
+    return await apiGet<CompoundAddOrderDryRunReview>("/live-order-dry-run/compound-add-order/review");
+  } catch {
+    return null;
+  }
+}
+
+export async function fetchCompoundAddDispatchHandoffStatus(): Promise<CompoundAddDispatchHandoffStatus | null> {
+  try {
+    return await apiGet<CompoundAddDispatchHandoffStatus>("/live-order-dry-run/compound-add-order/dispatch-handoff");
+  } catch {
+    return null;
+  }
+}
+
+export async function dispatchCompoundAddDispatchHandoff(
+  notes = "",
+  confirmOwnerDispatch = false,
+  confirmLiveDispatch = false,
+): Promise<CompoundAddDispatchHandoffStatus> {
+  const q = confirmLiveDispatch ? "?confirm=true" : "";
+  return apiPostJson<CompoundAddDispatchHandoffStatus, { confirm_owner_dispatch: boolean; notes: string }>(
+    `/live-order-dry-run/compound-add-order/dispatch-handoff/dispatch${q}`,
+    { confirm_owner_dispatch: confirmOwnerDispatch, notes },
+  );
+}
+
+export async function acceptCompoundAddOrderDryRunReview(
+  notes = "",
+  confirmOwnerAccept = false,
+): Promise<CompoundAddOrderDryRunReview> {
+  const q = confirmOwnerAccept ? "?confirm_owner_accept=true" : "";
+  return apiPostJson<CompoundAddOrderDryRunReview, { notes: string }>(
+    `/live-order-dry-run/compound-add-order/review/accept${q}`,
+    { notes },
+  );
+}
+
+export async function resetCompoundAddOrderDryRunReview(reason = "OWNER_RESET"): Promise<CompoundAddOrderDryRunReview> {
+  return apiPost<CompoundAddOrderDryRunReview>(
+    `/live-order-dry-run/compound-add-order/review/reset?reason=${encodeURIComponent(reason)}`,
+  );
+}
+
+export async function fetchAutoHaltStatus(): Promise<AutoHaltReport | null> {
+  try { return await apiGet<AutoHaltReport>("/auto-halt/status"); } catch { return null; }
+}
+
+export async function clearAutoHalt(reason: string, confirmClear = false): Promise<AutoHaltReport> {
+  const q = confirmClear ? "?confirm_clear=true" : "";
+  return apiPostJson<AutoHaltReport, { reason: string }>(
+    `/auto-halt/clear${q}`,
+    { reason: reason.trim() || "OWNER_CLEAR" },
+  );
+}
+
+export async function fetchBrokerTruthMonitorStatus(): Promise<BrokerTruthMonitorStatus | null> {
+  try { return await apiGet<BrokerTruthMonitorStatus>("/broker-truth-monitor/status/fast"); } catch { return null; }
+}
+
+export async function fetchBrokerTruthRecoveryPacket(): Promise<BrokerTruthRecoveryPacket | null> {
+  try { return await apiGet<BrokerTruthRecoveryPacket>("/broker-truth-monitor/recovery-packet"); } catch { return null; }
+}
+
+export async function fetchLiveMoneyProgressionPacket(refresh = false): Promise<LiveMoneyProgressionPacket | null> {
+  const path = refresh ? "/live-money/progression-packet?refresh=true" : "/live-money/progression-packet/fast";
+  try { return await apiGet<LiveMoneyProgressionPacket>(path, refresh ? 20_000 : 8_000); } catch { return null; }
+}
+
+export async function startBrokerTruthMonitor(intervalSeconds = 30): Promise<BrokerTruthMonitorStatus> {
+  return apiPostJson<BrokerTruthMonitorStatus, { interval_seconds: number }>(
+    "/broker-truth-monitor/start",
+    { interval_seconds: intervalSeconds },
+  );
+}
+
+export async function stopBrokerTruthMonitor(): Promise<BrokerTruthMonitorStatus> {
+  return apiPost<BrokerTruthMonitorStatus>("/broker-truth-monitor/stop");
+}
+
+export async function runBrokerTruthMonitorOnce(): Promise<BrokerTruthMonitorStatus> {
+  return apiPost<BrokerTruthMonitorStatus>("/broker-truth-monitor/run-once");
+}
+
+export async function recoverBrokerTruthMonitorSupervisor(confirm = true): Promise<BrokerTruthMonitorSupervisorStatus> {
+  const q = confirm ? "?confirm=true" : "";
+  return apiPost<BrokerTruthMonitorSupervisorStatus>(`/broker-truth-monitor/supervisor/recover${q}`);
+}
+
+export type BrokerRealityUpdate = Partial<
+  Pick<
+    BrokerRealityReview,
+    | "broker_id"
+    | "broker_entity"
+    | "withdrawal_minimum"
+    | "withdrawal_timing"
+    | "kyc_requirements"
+    | "withdrawal_fees"
+    | "currency_conversion"
+    | "automation_tos"
+    | "automation_allowed_by_owner_review"
+    | "source_urls"
+    | "notes"
+    | "review_valid_days"
+  >
+> & Partial<Record<
+  | "withdrawal_minimum_reviewed"
+  | "withdrawal_timing_reviewed"
+  | "kyc_requirements_reviewed"
+  | "withdrawal_fees_reviewed"
+  | "currency_conversion_reviewed"
+  | "automation_tos_reviewed"
+  | "broker_entity_reviewed"
+  | "owner_accepts_broker_terms",
+  boolean
+>>;
+
+export async function fetchBrokerRealityReview(brokerId?: string): Promise<BrokerRealityReview | null> {
+  const q = brokerId ? `?broker_id=${encodeURIComponent(brokerId)}` : "";
+  try { return await apiGet<BrokerRealityReview>(`/broker-reality/review${q}`); } catch { return null; }
+}
+
+export async function updateBrokerRealityReview(
+  patch: BrokerRealityUpdate,
+  confirmOwnerAccept = false,
+): Promise<BrokerRealityReview> {
+  const q = confirmOwnerAccept ? "?confirm_owner_accept=true" : "";
+  return apiPostJson<BrokerRealityReview, BrokerRealityUpdate>(`/broker-reality/review${q}`, patch);
+}
+
+export async function resetBrokerRealityReview(brokerId?: string): Promise<BrokerRealityReview> {
+  const q = brokerId ? `?broker_id=${encodeURIComponent(brokerId)}` : "";
+  return apiPost<BrokerRealityReview>(`/broker-reality/reset${q}`);
+}
+
+export type LivePilotUpdate = Partial<
+  Pick<
+    LivePilotPolicy,
+    | "allowed_symbols"
+    | "max_trade_lots"
+    | "max_open_live_lots"
+    | "max_live_trade_count"
+    | "max_daily_loss_usd"
+    | "max_total_loss_usd"
+    | "max_pilot_days"
+    | "notes"
+  >
+> & Partial<Record<
+  | "owner_understands_real_money_risk"
+  | "owner_confirms_small_amounts_only"
+  | "owner_confirms_no_scaling_without_review"
+  | "owner_confirms_emergency_stop_ready",
+  boolean
+>>;
+
+export async function fetchLivePilotPolicy(): Promise<LivePilotPolicy | null> {
+  try { return await apiGet<LivePilotPolicy>("/live-pilot/policy"); } catch { return null; }
+}
+
+export async function updateLivePilotPolicy(
+  patch: LivePilotUpdate,
+  confirmOwnerAccept = false,
+): Promise<LivePilotPolicy> {
+  const q = confirmOwnerAccept ? "?confirm_owner_accept=true" : "";
+  return apiPostJson<LivePilotPolicy, LivePilotUpdate>(`/live-pilot/policy${q}`, patch);
+}
+
+export async function resetLivePilotPolicy(): Promise<LivePilotPolicy> {
+  return apiPost<LivePilotPolicy>("/live-pilot/reset");
+}
+
+export async function fetchLiveRecoveryStatus(): Promise<LiveRecoveryReport | null> {
+  try { return await apiGet<LiveRecoveryReport>("/live-recovery/status"); } catch { return null; }
+}
+
+export async function fetchOrderAttemptAudit(): Promise<OrderAttemptAuditStatus | null> {
+  try { return await apiGet<OrderAttemptAuditStatus>("/order-dispatch/audit"); } catch { return null; }
+}
+
+export async function fetchOrderAttemptRecoveryPacket(): Promise<OrderAttemptRecoveryPacket | null> {
+  try { return await apiGet<OrderAttemptRecoveryPacket>("/order-dispatch/audit/recovery-packet"); } catch { return null; }
+}
+
+export async function reconcileUnresolvedOrderAttempt(
+  attemptId: string,
+  notes = "",
+  confirmOwnerReconcile = false,
+): Promise<OrderAttemptAuditStatus> {
+  const q = confirmOwnerReconcile ? "?confirm_owner_reconcile=true" : "";
+  return apiPostJson<OrderAttemptAuditStatus, { attempt_id: string; notes: string }>(
+    `/order-dispatch/audit/reconcile-unresolved${q}`,
+    { attempt_id: attemptId, notes },
+  );
+}
+
+export async function acceptLiveRecovery(notes: string, confirmOwnerAccept = false): Promise<LiveRecoveryReport> {
+  const q = confirmOwnerAccept ? "?confirm_owner_accept=true" : "";
+  return apiPostJson<LiveRecoveryReport, { notes: string }>(
+    `/live-recovery/accept${q}`,
+    { notes },
+  );
+}
+
+export async function resetLiveRecovery(reason = "OWNER_RESET"): Promise<LiveRecoveryReport> {
+  return apiPost<LiveRecoveryReport>(`/live-recovery/reset?reason=${encodeURIComponent(reason)}`);
+}
 
 export interface ChartCandle {
   time: string;
@@ -588,6 +1229,178 @@ export async function startDispatchLoop(body: DispatchLoopStart, confirm = false
 
 export async function stopDispatchLoop(): Promise<DispatchLoopState> {
   return apiPost<DispatchLoopState>("/dispatch-loop/stop");
+}
+
+export interface WasteLoopCandidate {
+  symbol?: string | null;
+  timeframe?: string | null;
+  direction?: string | null;
+  entry?: number | null;
+  stop_loss?: number | null;
+  take_profit?: number | null;
+  signal_strength?: number | null;
+  regime?: string | null;
+  decision_ref?: string | null;
+  entry_pair_count?: number;
+  directional_hypothesis?: Record<string, unknown> | null;
+  market_state_meta?: Record<string, unknown> | null;
+}
+
+export interface WasteLoopDurableCycle {
+  report_kind?: string;
+  decision?: string;
+  reason?: string;
+  stage?: string;
+  mode?: string;
+  running?: boolean;
+  watch_state?: Record<string, unknown> | null;
+  analysis?: Record<string, unknown> | null;
+  candidate?: WasteLoopCandidate | null;
+  edge?: Record<string, unknown> | null;
+  [key: string]: unknown;
+}
+
+export interface WasteLoopState {
+  report_kind?: string;
+  running: boolean;
+  interval_seconds?: number;
+  cycles_run?: number;
+  cycles_idle?: number;
+  stage?: string;
+  current_stage?: string;
+  mode?: string;
+  status?: string;
+  last_run_iso?: string | null;
+  last_reason?: string | null;
+  last_decision?: unknown;
+  detail?: string;
+  note?: string;
+  durable_cycle?: WasteLoopDurableCycle | null;
+  durable_cycle_status?: Record<string, unknown> | null;
+  supervisor?: LoopSupervisorStatus;
+}
+
+export interface WasteLoopStageState {
+  report_kind?: string;
+  running?: boolean;
+  stage?: string;
+  current_stage?: string;
+  mode?: string;
+  cycles_run?: number;
+  last_reason?: string | null;
+  last_run_iso?: string | null;
+}
+
+export interface WasteRealCandleProbeRequest {
+  symbol?: string | null;
+  timeframe?: string;
+  bars?: number;
+  max_pairs?: number;
+}
+
+export interface MT5MarketDataDiagnosticRequest {
+  symbols?: string[] | null;
+  timeframe?: string;
+  bars?: number;
+}
+
+export interface WasteLoopStartRequest {
+  interval_seconds: number;
+}
+
+export interface LoopSupervisorLease {
+  owner_id?: string;
+  status?: string;
+  mode?: string;
+  interval_seconds?: number;
+  acquired_at?: string;
+  last_heartbeat_at?: string;
+  expires_at?: string;
+  [key: string]: unknown;
+}
+
+export interface LoopSupervisorStatus {
+  report_kind: string;
+  status?: string;
+  generated_at?: string;
+  desired_running: boolean;
+  active_lease?: LoopSupervisorLease | null;
+  active_lease_is_fresh: boolean;
+  owned_by_this_process: boolean;
+  local_owner_id: string;
+  local_running: boolean;
+  stop_requested_at?: string | null;
+  stop_requested_by?: string | null;
+  state_path?: string;
+  audit_path?: string;
+  claim_boundary?: string;
+  next_action: string;
+  recovery?: Record<string, unknown>;
+}
+
+export async function fetchWasteLoopStatus(): Promise<WasteLoopState | null> {
+  try { return await apiGet<WasteLoopState>("/waste-loop-control/status/fast"); } catch { return null; }
+}
+
+export async function fetchWasteLoopStage(): Promise<WasteLoopStageState | null> {
+  const { fetchWasteStageProbe } = await loadWasteStageProbe();
+  return await fetchWasteStageProbe({ timeoutMs: 6_000, maxAgeMs: 1_000 }) as WasteLoopStageState | null;
+}
+
+export async function fetchWasteRealCandleProbe(): Promise<WasteRealCandleProbe | null> {
+  try { return await apiGet<WasteRealCandleProbe>("/waste-loop-control/real-candle-probe/latest"); } catch { return null; }
+}
+
+export async function runWasteRealCandleProbe(
+  body: WasteRealCandleProbeRequest = {},
+): Promise<WasteRealCandleProbe> {
+  return apiPostJson<WasteRealCandleProbe, WasteRealCandleProbeRequest>(
+    "/waste-loop-control/real-candle-probe/run",
+    body,
+  );
+}
+
+export async function runWasteRealCandleProbeDryRun(
+  body: WasteRealCandleProbeDryRunRequest,
+): Promise<LiveOrderDryRunReport> {
+  return apiPostJson<LiveOrderDryRunReport, WasteRealCandleProbeDryRunRequest>(
+    "/waste-loop-control/real-candle-probe/dry-run",
+    body,
+  );
+}
+
+export async function fetchMT5MarketDataDiagnostic(): Promise<MT5MarketDataDiagnostic | null> {
+  try {
+    return await apiGet<MT5MarketDataDiagnostic>("/waste-loop-control/mt5-market-data-diagnostic/latest");
+  } catch {
+    return null;
+  }
+}
+
+export async function runMT5MarketDataDiagnostic(
+  body: MT5MarketDataDiagnosticRequest = {},
+): Promise<MT5MarketDataDiagnostic> {
+  return apiPostJson<MT5MarketDataDiagnostic, MT5MarketDataDiagnosticRequest>(
+    "/waste-loop-control/mt5-market-data-diagnostic/run",
+    body,
+  );
+}
+
+export async function startWasteLoop(intervalSeconds = 5): Promise<WasteLoopState> {
+  return apiPostJson<WasteLoopState, WasteLoopStartRequest>(
+    "/waste-loop-control/start?confirm=true",
+    { interval_seconds: intervalSeconds },
+    30_000,
+  );
+}
+
+export async function stopWasteLoop(): Promise<WasteLoopState> {
+  return apiPost<WasteLoopState>("/waste-loop-control/stop");
+}
+
+export async function recoverWasteLoopSupervisor(confirm = true): Promise<LoopSupervisorStatus> {
+  const q = confirm ? "?confirm=true" : "";
+  return apiPost<LoopSupervisorStatus>(`/waste-loop-control/supervisor/recover${q}`);
 }
 
 // ── Live MetaTrader 5 account (read-only, from the connected terminal) ──
@@ -713,16 +1526,6 @@ export interface LiveTelemetryResponse {
 export async function fetchLiveTelemetry(): Promise<LiveTelemetryResponse | null> {
   try {
     return await apiGet<LiveTelemetryResponse>("/live-telemetry");
-  } catch {
-    return null;
-  }
-}
-
-// ── Aggregate dashboard ──
-
-export async function fetchDashboard(): Promise<DashboardState | null> {
-  try {
-    return await apiGet<DashboardState>("/dashboard");
   } catch {
     return null;
   }
@@ -855,6 +1658,48 @@ export async function fetchTerminalPositionReconciliation(): Promise<TerminalPos
   try { return await apiGet<TerminalPositionReconciliationReport>("/strategy/terminal-position-reconciliation/latest"); } catch { return null; }
 }
 
+export async function fetchTerminalReceiptRecoveryPacket(): Promise<TerminalReceiptRecoveryPacket | null> {
+  try { return await apiGet<TerminalReceiptRecoveryPacket>("/strategy/terminal-receipt-recovery-packet/latest"); } catch { return null; }
+}
+
+export async function runTerminalReceiptArchiveAction({
+  execute = false,
+  confirm_owner_archive = false,
+  age_threshold_hours = 24,
+  notes = "",
+}: {
+  execute?: boolean;
+  confirm_owner_archive?: boolean;
+  age_threshold_hours?: number;
+  notes?: string;
+}): Promise<TerminalReceiptArchiveAction> {
+  return apiPostJson<
+    TerminalReceiptArchiveAction,
+    { execute: boolean; confirm_owner_archive: boolean; age_threshold_hours: number; notes: string }
+  >(
+    "/strategy/terminal-receipt-recovery-packet/archive-stale",
+    { execute, confirm_owner_archive, age_threshold_hours, notes },
+  );
+}
+
+export async function runTerminalReceiptRecoveryRefreshAction({
+  execute = false,
+  confirm_owner_refresh = false,
+  notes = "",
+}: {
+  execute?: boolean;
+  confirm_owner_refresh?: boolean;
+  notes?: string;
+}): Promise<TerminalReceiptRecoveryRefreshAction> {
+  return apiPostJson<
+    TerminalReceiptRecoveryRefreshAction,
+    { execute: boolean; confirm_owner_refresh: boolean; notes: string }
+  >(
+    "/strategy/terminal-receipt-recovery-packet/refresh-chain",
+    { execute, confirm_owner_refresh, notes },
+  );
+}
+
 export async function fetchTerminalOperabilityVerifier(): Promise<TerminalOperabilityVerifierReport | null> {
   try { return await apiGet<TerminalOperabilityVerifierReport>("/strategy/terminal-operability-verifier/latest"); } catch { return null; }
 }
@@ -881,6 +1726,19 @@ export async function fetchAdaptiveCockpit(): Promise<AdaptiveCockpitPayload | n
 
 export async function fetchOwnerControl(): Promise<OwnerControlState | null> {
   try { return await apiGet<OwnerControlState>("/settings/owner-control"); } catch { return null; }
+}
+
+export type OwnerControlUpdate = Partial<Pick<
+  OwnerControlState,
+  "mode" | "max_concurrent_trades" | "max_loss_cap_pct" | "ai_autonomy_enabled"
+>>;
+
+export async function updateOwnerControl(patch: OwnerControlUpdate): Promise<OwnerControlState> {
+  return apiPostJson<OwnerControlState, OwnerControlUpdate>("/settings/owner-control/update", patch);
+}
+
+export async function resetOwnerControl(): Promise<OwnerControlState> {
+  return apiPost<OwnerControlState>("/settings/owner-control/reset");
 }
 
 export async function fetchMTHistory(): Promise<MTHistorySummary | null> {
@@ -913,8 +1771,9 @@ export async function fetchMovementStream(useProvider = false): Promise<Movement
   try { return await apiGet<MovementStreamState>(`/movement/snapshot${suffix}`); } catch { return null; }
 }
 
-export async function fetchAccountReconciliation(): Promise<AccountReconciliationReport | null> {
-  try { return await apiGet<AccountReconciliationReport>("/reconciliation/account"); } catch { return null; }
+export async function fetchAccountReconciliation(syncToBroker = false): Promise<AccountReconciliationReport | null> {
+  const suffix = syncToBroker ? "?sync_to_broker=true" : "";
+  try { return await apiGet<AccountReconciliationReport>(`/reconciliation/account${suffix}`); } catch { return null; }
 }
 
 export async function fetchLiveReadiness(syncToBroker = false): Promise<LiveReadinessReport | null> {
@@ -975,97 +1834,6 @@ export async function fetchAgentDecisionHistory(limit: number = 25): Promise<Age
 
 export async function fetchAutonomousLoopHealth(): Promise<AutonomousLoopHealthResponse | null> {
   try { return await apiGet<AutonomousLoopHealthResponse>("/autonomous-loop/health"); } catch { return null; }
-}
-
-// ── React hook with fixture fallback ──
-
-import { useState, useEffect, useCallback } from "react";
-
-interface UseDashboardResult {
-  state: DashboardState | null;
-  loading: boolean;
-  error: string | null;
-  refetch: () => void;
-}
-
-
-function mergeDashboardState(fallback: DashboardState, live: DashboardState): DashboardState {
-  // Keep live evidence when present, but do not let a partial/stale dashboard
-  // remove optional panels such as PCBA. This makes the app operational even
-  // while the API is restarting or a cached dashboard lacks newly added keys.
-  return {
-    ...fallback,
-    ...live,
-    adaptive: live.adaptive ?? fallback.adaptive,
-    ownerControl: live.ownerControl ?? fallback.ownerControl,
-    accountLedger: live.accountLedger ?? fallback.accountLedger,
-    movementStream: live.movementStream ?? fallback.movementStream,
-    accountReconciliation: live.accountReconciliation ?? fallback.accountReconciliation,
-    liveReadiness: live.liveReadiness ?? fallback.liveReadiness,
-    brokerSyncedRiskPreview: live.brokerSyncedRiskPreview ?? fallback.brokerSyncedRiskPreview,
-    mtHistory: live.mtHistory ?? fallback.mtHistory,
-    strategyLeads: live.strategyLeads ?? fallback.strategyLeads,
-    backsolve: live.backsolve ?? fallback.backsolve,
-    conditionTally: live.conditionTally ?? fallback.conditionTally,
-    walkForward: live.walkForward ?? fallback.walkForward,
-    externalBenchmarks: live.externalBenchmarks ?? fallback.externalBenchmarks,
-    forexFurySetImport: live.forexFurySetImport ?? fallback.forexFurySetImport,
-    forexFuryReplayCandidates: live.forexFuryReplayCandidates ?? fallback.forexFuryReplayCandidates,
-    forexFuryReplayResults: live.forexFuryReplayResults ?? fallback.forexFuryReplayResults,
-    agentWorkflowPlan: live.agentWorkflowPlan ?? fallback.agentWorkflowPlan,
-    agentWorkflowCycle: live.agentWorkflowCycle ?? fallback.agentWorkflowCycle,
-    agentInformationFlow: live.agentInformationFlow ?? fallback.agentInformationFlow,
-    agentMessageBus: live.agentMessageBus ?? fallback.agentMessageBus,
-    agentMemory: live.agentMemory ?? fallback.agentMemory,
-    agentResearchQueue: live.agentResearchQueue ?? fallback.agentResearchQueue,
-    strategyDevQueue: live.strategyDevQueue ?? fallback.strategyDevQueue,
-    strategyPatchRunner: live.strategyPatchRunner ?? fallback.strategyPatchRunner,
-    dailyLearningRollup: live.dailyLearningRollup ?? fallback.dailyLearningRollup,
-    sessionAutowake: live.sessionAutowake ?? fallback.sessionAutowake,
-    terminalReceiptWatcher: live.terminalReceiptWatcher ?? fallback.terminalReceiptWatcher,
-    terminalBridgeSupervisor: live.terminalBridgeSupervisor ?? fallback.terminalBridgeSupervisor,
-    mt4TerminalActivation: live.mt4TerminalActivation ?? fallback.mt4TerminalActivation,
-    mt4PingRoundtrip: live.mt4PingRoundtrip ?? fallback.mt4PingRoundtrip,
-    mt4TerminalSessionVerifier: live.mt4TerminalSessionVerifier ?? fallback.mt4TerminalSessionVerifier,
-    mt4HistoryExportVerifier: live.mt4HistoryExportVerifier ?? fallback.mt4HistoryExportVerifier,
-    mt5TerminalApiVerifier: live.mt5TerminalApiVerifier ?? fallback.mt5TerminalApiVerifier,
-    mt5PaperExecutionVerifier: live.mt5PaperExecutionVerifier ?? fallback.mt5PaperExecutionVerifier,
-    mt5DealHistoryIngest: live.mt5DealHistoryIngest ?? fallback.mt5DealHistoryIngest,
-    terminalPositionReconciliation: live.terminalPositionReconciliation ?? fallback.terminalPositionReconciliation,
-    terminalOperabilityVerifier: live.terminalOperabilityVerifier ?? fallback.terminalOperabilityVerifier,
-    terminalReceiptIngest: live.terminalReceiptIngest ?? fallback.terminalReceiptIngest,
-    terminalHistoryIngest: live.terminalHistoryIngest ?? fallback.terminalHistoryIngest,
-    mt5Receipt: live.mt5Receipt ?? fallback.mt5Receipt,
-    mt5ProbeStatus: live.mt5ProbeStatus ?? fallback.mt5ProbeStatus,
-    authorityBoundary: live.authorityBoundary ?? fallback.authorityBoundary,
-    runtimeGates: live.runtimeGates ?? fallback.runtimeGates,
-    aiModel: live.aiModel ?? fallback.aiModel,
-    brokerCandidates: live.brokerCandidates ?? fallback.brokerCandidates,
-    pcba: live.pcba ?? fallback.pcba,
-  };
-}
-
-export function useDashboard(initialState: DashboardState): UseDashboardResult {
-  const [state, setState] = useState<DashboardState | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-    const data = await fetchDashboard();
-    if (data) {
-      setState(mergeDashboardState(initialState, data));
-    } else {
-      setState(initialState);
-      setError("API unreachable — using fixture data");
-    }
-    setLoading(false);
-  }, [initialState]);
-
-  useEffect(() => { load(); }, [load]);
-
-  return { state, loading, error, refetch: load };
 }
 
 // ── Operator briefing (one-call snapshot) ──

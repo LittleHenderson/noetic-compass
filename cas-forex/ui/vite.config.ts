@@ -16,7 +16,16 @@ export default defineConfig({
       manifestFilename: "manifest.webmanifest",
       manifest: false, // use the existing public/manifest.webmanifest verbatim
       workbox: {
-        globPatterns: ["**/*.{js,css,html,svg,png,ico,webmanifest,json}"],
+        // Precache only the first-paint app shell. Lazy route chunks are still
+        // runtime-cached below when the owner actually opens those pages.
+        globPatterns: [
+          "index.html",
+          "registerSW.js",
+          "manifest.webmanifest",
+          "assets/index-*.css",
+          "assets/index-*.js",
+          "assets/react-vendor-*.js",
+        ],
         // CAS Forex API responses are always live — never cache them in the SW.
         navigateFallbackDenylist: [/^\/api\//],
         runtimeCaching: [
@@ -44,9 +53,28 @@ export default defineConfig({
   server: {
     port: 5174,
     open: true,
+    proxy: {
+      "/api/forex": {
+        target: "http://127.0.0.1:8765",
+        changeOrigin: true,
+      },
+    },
   },
   build: {
     outDir: "dist",
     sourcemap: true,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (
+            id.includes("node_modules/react/")
+            || id.includes("node_modules/react-dom/")
+            || id.includes("node_modules/scheduler/")
+          ) {
+            return "react-vendor";
+          }
+        },
+      },
+    },
   },
 });

@@ -2,14 +2,18 @@
 
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
+import { StatusChip } from "../components/StatusChip";
 import { TradingWindow, type WindowRole } from "../components/TradingWindow";
+import "./WindowsPage.css";
 import {
   fetchChartSymbols,
+  fetchForexFuryReplayCandidates,
   fetchMovementStream,
   fetchDispatchLoopStatus,
   startDispatchLoop,
   stopDispatchLoop,
   fetchMt5Account,
+  fetchStrategyLeads,
   type DispatchLoopState,
   type Mt5LiveState,
 } from "../data/api";
@@ -26,6 +30,10 @@ export function WindowsPage({ state }: WindowsPageProps) {
   const [symbols, setSymbols] = useState<string[]>(FALLBACK_SYMBOLS);
   const [timeframes, setTimeframes] = useState<string[]>(FALLBACK_TIMEFRAMES);
   const [movement, setMovement] = useState<MovementStreamState | null>(state.movementStream ?? null);
+  const [strategyLeads, setStrategyLeads] = useState<DashboardState["strategyLeads"] | null>(state.strategyLeads ?? null);
+  const [furyReplayCandidates, setFuryReplayCandidates] = useState<DashboardState["forexFuryReplayCandidates"] | null>(
+    state.forexFuryReplayCandidates ?? null,
+  );
   const timer = useRef<ReturnType<typeof setInterval> | null>(null);
 
   useEffect(() => {
@@ -43,6 +51,30 @@ export function WindowsPage({ state }: WindowsPageProps) {
     return () => { if (timer.current) clearInterval(timer.current); };
   }, []);
 
+  useEffect(() => { if (state.strategyLeads) setStrategyLeads(state.strategyLeads); }, [state.strategyLeads]);
+  useEffect(() => {
+    if (state.forexFuryReplayCandidates) setFuryReplayCandidates(state.forexFuryReplayCandidates);
+  }, [state.forexFuryReplayCandidates]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function refreshStrategySymbols() {
+      const [nextLeads, nextFuryCandidates] = await Promise.all([
+        fetchStrategyLeads(),
+        fetchForexFuryReplayCandidates(),
+      ]);
+      if (cancelled) return;
+      if (nextLeads) setStrategyLeads(nextLeads);
+      if (nextFuryCandidates) setFuryReplayCandidates(nextFuryCandidates);
+    }
+    void refreshStrategySymbols();
+    const interval = window.setInterval(() => { void refreshStrategySymbols(); }, 30_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
   const acct = movement?.account;
   const positions = movement?.positions ?? [];
 
@@ -50,10 +82,10 @@ export function WindowsPage({ state }: WindowsPageProps) {
   // owner sees a live position sitting on a chart), then top strategy leads /
   // Fury candidates, then sensible index defaults.
   const positionSymbols = positions.map((p) => p.symbol).filter((s) => symbols.includes(s));
-  const leadSymbols = (state.strategyLeads ?? [])
+  const leadSymbols = (strategyLeads ?? [])
     .flatMap((l) => l.symbols_promoted_for_next_tests ?? [])
     .filter((s) => symbols.includes(s));
-  const furySymbols = (state.forexFuryReplayCandidates?.candidates ?? [])
+  const furySymbols = (furyReplayCandidates?.candidates ?? [])
     .filter((c) => c.symbol_supported)
     .map((c) => c.cas_symbol)
     .filter((s) => symbols.includes(s));
@@ -329,12 +361,28 @@ function Mt5LiveAccountPanel() {
 
 const LOOP_SESSIONS = ["Asian", "London", "New York"];
 
+function formatDispatchLoopLastError(lastError?: string | null): string | null {
+  const raw = String(lastError ?? "").trim();
+  if (!raw) return null;
+  const rawLower = raw.toLowerCase();
+  if (
+    rawLower.includes("live_trading is currently not licensed")
+    || rawLower.includes("pending owner enable")
+  ) {
+    return "Live dispatch blocked: paper/demo loop can keep running; no live broker order was sent. Clear the owner live-trading checks when you want live dispatch enabled.";
+  }
+  if (rawLower.includes("permissionerror")) {
+    return "Dispatch blocked by an owner or broker gate. No broker order was sent; review the gate panel before enabling live dispatch.";
+  }
+  return `Loop cycle warning: ${raw}`;
+}
+
 function AutoTradeLoopBar({ symbols }: { symbols: string[] }) {
   const [loop, setLoop] = useState<DispatchLoopState | null>(null);
   const [interval, setIntervalSec] = useState(60);
   const [targetSymbols, setTargetSymbols] = useState<string[]>([]);
   const [targetSessions, setTargetSessions] = useState<string[]>([]);
-  const [synced, setSynced] = useState(false);
+  const [, setSynced] = useState(false);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState("");
   const poll = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -400,6 +448,7 @@ function AutoTradeLoopBar({ symbols }: { symbols: string[] }) {
 
   const running = loop?.running ?? false;
   const needsLiveConfirm = loop?.status === "CONFIRM_REQUIRED";
+  const loopLastError = formatDispatchLoopLastError(loop?.last_error);
 
   return (
     <GlassPanel
@@ -464,7 +513,7 @@ function AutoTradeLoopBar({ symbols }: { symbols: string[] }) {
       <div className="tw-loop-detail">
         {loop?.cycles_run != null && <span>cycles run: <strong>{loop.cycles_run}</strong></span>}
         {loop?.last_summary && <span>last: <strong>{loop.last_summary}</strong></span>}
-        {loop?.last_error && <span style={{ color: "var(--danger)" }}>error: {loop.last_error}</span>}
+        {loopLastError && <span className="tw-loop-warning">{loopLastError}</span>}
       </div>
       {msg && <div className="control-field-desc" style={{ color: needsLiveConfirm ? "var(--danger)" : "var(--text-secondary)" }}>{msg}</div>}
       <div className="control-field-desc">

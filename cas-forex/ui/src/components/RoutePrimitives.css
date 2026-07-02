@@ -1,0 +1,12 @@
+.route-symbol {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent-teal);
+  font-family: var(--font-mono);
+}
+
+.sizing-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

@@ -1,0 +1,29 @@
+/* CAS Forex - Multi-timeframe selector */
+
+.mtf-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mtf-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.mtf-loading {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.mtf-error {
+  font-size: 0.72rem;
+  color: var(--danger);
+}
+
+.mtf-summary {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}

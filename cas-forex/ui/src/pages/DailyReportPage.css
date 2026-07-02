@@ -1,0 +1,99 @@
+/* Daily Report Page */
+
+.daily-report-page {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+
+.report-overall-headline {
+  font-size: 1.3rem;
+  color: var(--text-primary);
+  margin: 12px 0 4px;
+  letter-spacing: 0.01em;
+}
+
+.daily-section {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.daily-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 14px;
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 10px 14px;
+  cursor: pointer;
+  text-align: left;
+}
+
+.daily-section-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  min-width: 140px;
+}
+
+.daily-section-headline {
+  color: var(--text-secondary);
+  flex: 1;
+  font-size: 0.8rem;
+}
+
+.daily-section-caret {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.daily-section-body {
+  padding: 0 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+  line-height: 1.45;
+}
+
+.daily-section-metrics {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.76rem;
+}
+
+.daily-section-metrics td {
+  padding: 3px 8px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.daily-section-metrics td:first-child {
+  color: var(--text-muted);
+  width: 40%;
+}
+
+.daily-section-events {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.report-diagnostic-hints {
+  margin: 0;
+  padding-left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}

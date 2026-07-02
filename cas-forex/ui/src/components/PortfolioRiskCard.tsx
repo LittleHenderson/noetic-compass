@@ -12,6 +12,8 @@
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "./GlassPanel";
 import { fetchPortfolioRisk, type PortfolioRiskResponse } from "../data/api";
+import "./LiveTelemetryTable.css";
+import "./PortfolioRiskCard.css";
 
 const POLL_INTERVAL_MS = 30_000;
 

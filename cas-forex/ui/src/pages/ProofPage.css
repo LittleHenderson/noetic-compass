@@ -1,0 +1,269 @@
+/* CAS Forex - Proof cockpit route styles */
+
+.lead-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.proof-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 640px) {
+  .proof-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.progress-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.progress-label {
+  min-width: 120px;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.progress-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--border-subtle);
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.progress-bar-fill.warning {
+  background: var(--warning);
+}
+
+.progress-bar-fill.success {
+  background: var(--success);
+}
+
+.progress-bar-fill.danger {
+  background: var(--danger);
+}
+
+.progress-value {
+  min-width: 44px;
+  text-align: right;
+  font-size: 0.78rem;
+  color: var(--text-primary);
+}
+
+.progress-detail {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.hash-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hash-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.hash-row-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.hash-row-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.hash-row-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.hash-row-value {
+  font-size: 0.72rem;
+  color: var(--accent-teal);
+}
+
+.checklist-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 6px;
+}
+
+.check-item {
+  display: flex;
+  gap: 8px;
+  padding: 6px 0;
+}
+
+.check-icon {
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin-top: 1px;
+  flex-shrink: 0;
+}
+
+.check-label {
+  font-size: 0.78rem;
+  color: var(--text-primary);
+}
+
+.check-detail {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+.route-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.route-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.route-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
+}
+
+.route-confidence {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.route-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.route-price-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.route-rationale {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.sizing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.sizing-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+
+.sizing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.sizing-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.risk-summary {
+  display: flex;
+  gap: 16px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.next-action {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.next-action-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.next-action-command {
+  font-size: 0.72rem;
+  color: var(--accent-teal);
+  background: var(--bg-card);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  word-break: break-all;
+  border: 1px solid var(--border-subtle);
+}
+
+.not-licensed-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.lock-reason-list {
+  margin-bottom: 4px;
+}
+
+.lock-reason-items {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lock-reason-item {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  background: var(--bg-card);
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  font-family: var(--font-mono);
+}

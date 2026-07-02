@@ -11,7 +11,8 @@ import { StatusChip } from "./StatusChip";
 import {
   fetchOperatorBriefing,
   type OperatorBriefingResponse,
-} from "../data/api";
+} from "../data/operatorBriefingApi";
+import "./DecisionCardPrimitives.css";
 
 const POLL_INTERVAL_MS = 60_000;
 

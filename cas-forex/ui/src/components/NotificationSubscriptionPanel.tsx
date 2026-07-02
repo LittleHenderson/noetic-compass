@@ -21,6 +21,8 @@ import {
   type PushSubscriptionItem,
   type PushTestResult,
 } from "../data/api";
+import "./LiveTelemetryTable.css";
+import "./SubscriptionPanels.css";
 
 type PermissionState = "default" | "granted" | "denied" | "unknown";
 
@@ -178,6 +180,12 @@ export function NotificationSubscriptionPanel() {
   }, [apiAvailable, currentEndpoint, refreshServer]);
 
   const handleTest = useCallback(async () => {
+    if (serverSubscriptions.length === 0) {
+      setError(null);
+      setTestResults([]);
+      setMessage("No push subscriptions on server yet. Enable/register push notifications first, then send a test.");
+      return;
+    }
     setBusy(true);
     setError(null);
     setMessage(null);
@@ -197,7 +205,7 @@ export function NotificationSubscriptionPanel() {
     } finally {
       setBusy(false);
     }
-  }, []);
+  }, [serverSubscriptions.length]);
 
   const permissionVariant: "success" | "warning" | "danger" | "muted" =
     permission === "granted"
@@ -275,8 +283,9 @@ export function NotificationSubscriptionPanel() {
               <button
                 type="button"
                 className="notification-button"
-                disabled={busy || serverSubscriptions.length === 0}
+                disabled={busy}
                 onClick={() => void handleTest()}
+                title={serverSubscriptions.length === 0 ? "No push subscriptions on server yet." : undefined}
               >
                 Send test push
               </button>

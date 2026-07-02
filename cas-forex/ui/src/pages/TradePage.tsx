@@ -1,6 +1,6 @@
 /* ── CAS Forex — Paper Trading Desk ── */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { CandlestickChart } from "../components/charts/CandlestickChart";
@@ -9,7 +9,22 @@ import { LiveTradesTelemetry } from "../components/LiveTradesTelemetry";
 import { PortfolioRiskCard } from "../components/PortfolioRiskCard";
 import { AgentDecisionCard } from "../components/AgentDecisionCard";
 import { AutonomousLoopCard } from "../components/AutonomousLoopCard";
-import type { DashboardState, SymbolDecision, SizingEntry } from "../types/evidence";
+import {
+  fetchAuthorization,
+  fetchLiveMoneyProgressionPacket,
+  fetchMovementStream,
+  fetchWastePaperSampleCollectorScheduler,
+  startWasteLoop,
+  startWastePaperSampleCollectorScheduler,
+  updateAuthorization,
+  type AuthorizationPatch,
+  type AuthorizationState,
+  type LiveMoneyProgressionPacket,
+} from "../data/api";
+import type { DashboardState, MovementStreamState, SymbolDecision, SizingEntry } from "../types/evidence";
+import "../components/RoutePrimitives.css";
+import "../components/SelectorChips.css";
+import "./TradePage.css";
 
 interface TradePageProps {
   state: DashboardState;
@@ -30,14 +45,140 @@ function normalizeSymbolForRuntime(displaySymbol: string): string {
   return displaySymbol.replace(/\//g, "");
 }
 
+const LIVE_MONEY_POST_WRITE_RETRY_DELAYS_MS = [1_500, 4_000, 8_000] as const;
+
+function isLiveMoneyProgressionWarming(packet: LiveMoneyProgressionPacket | null | undefined): boolean {
+  return packet?.status === "WARMING" || packet?.cache_status === "warming" || packet?.cache_refreshing === true;
+}
+
 export function TradePage({ state }: TradePageProps) {
   const { dailyBundle: b } = state;
-  const movement = state.movementStream;
   const decision = b.latest_decision.latest_decision;
 
   const [symbol, setSymbol] = useState<Symbol>("NAS100");
   const [timeframe, setTimeframe] = useState<Timeframe>("D1");
   const [style, setStyle] = useState<Style>("swing");
+  const [actionBusy, setActionBusy] = useState<"proposal" | "paper-loop" | "">("");
+  const [actionStatus, setActionStatus] = useState("");
+  const [liveMovement, setLiveMovement] = useState<MovementStreamState | null>(state.movementStream ?? null);
+  const [liveSampleScheduler, setLiveSampleScheduler] = useState(state.wastePaperSampleCollectorScheduler ?? null);
+  const [tradeAuth, setTradeAuth] = useState<AuthorizationState | null>(null);
+  const [liveProgression, setLiveProgression] = useState<LiveMoneyProgressionPacket | null>(state.liveMoneyProgression ?? null);
+  const [authBusy, setAuthBusy] = useState("");
+  const [authStatus, setAuthStatus] = useState("");
+  const [paymentProvider, setPaymentProvider] = useState("");
+  const [paymentApiKey, setPaymentApiKey] = useState("");
+  const [payoutDestination, setPayoutDestination] = useState("");
+  const movement = liveMovement ?? state.movementStream ?? null;
+
+  async function refreshLiveMoneyProgression(refresh = false): Promise<LiveMoneyProgressionPacket | null> {
+    const next = await fetchLiveMoneyProgressionPacket(refresh);
+    if (next) setLiveProgression(next);
+    return next;
+  }
+
+  function scheduleLiveMoneyProgressionRetries() {
+    LIVE_MONEY_POST_WRITE_RETRY_DELAYS_MS.forEach((delayMs) => {
+      window.setTimeout(() => {
+        void refreshLiveMoneyProgression(false);
+      }, delayMs);
+    });
+  }
+
+  async function refreshLiveMoneyProgressionAfterWrite() {
+    const next = await refreshLiveMoneyProgression(true);
+    if (isLiveMoneyProgressionWarming(next)) scheduleLiveMoneyProgressionRetries();
+  }
+
+  useEffect(() => {
+    if (state.movementStream) setLiveMovement(state.movementStream);
+  }, [state.movementStream]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadMovement() {
+      const next = await fetchMovementStream();
+      if (!cancelled && next) setLiveMovement(next);
+    }
+    void loadMovement();
+    const intervalId = window.setInterval(() => void loadMovement(), 5_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    setLiveSampleScheduler(state.wastePaperSampleCollectorScheduler ?? null);
+  }, [state.wastePaperSampleCollectorScheduler]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function loadScheduler() {
+      const next = await fetchWastePaperSampleCollectorScheduler();
+      if (!cancelled && next) setLiveSampleScheduler(next);
+    }
+    void loadScheduler();
+    const intervalId = window.setInterval(() => void loadScheduler(), 10_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    let hydrated = Boolean(tradeAuth);
+    let quickRetryId: number | undefined;
+    async function loadAuth(initial = false) {
+      const next = await fetchAuthorization();
+      if (cancelled || !next) return;
+      hydrated = true;
+      setTradeAuth(next);
+      if (initial) {
+        setPaymentProvider(next.provider.payment_provider ?? "");
+        setPayoutDestination(next.provider.payout_destination_id ?? "");
+      }
+    }
+    void loadAuth(true);
+    quickRetryId = window.setInterval(() => {
+      if (!hydrated) void loadAuth(false);
+    }, 5_000);
+    const intervalId = window.setInterval(() => void loadAuth(false), 30_000);
+    return () => {
+      cancelled = true;
+      if (quickRetryId !== undefined) window.clearInterval(quickRetryId);
+      window.clearInterval(intervalId);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (state.liveMoneyProgression) setLiveProgression(state.liveMoneyProgression);
+  }, [state.liveMoneyProgression]);
+
+  useEffect(() => {
+    let cancelled = false;
+    let hydrated = Boolean(liveProgression);
+    let latestStatus = liveProgression?.status ?? "";
+    let quickRetryId: number | undefined;
+    async function loadProgression() {
+      const next = await fetchLiveMoneyProgressionPacket();
+      if (cancelled || !next) return;
+      hydrated = true;
+      latestStatus = next.status ?? "";
+      setLiveProgression(next);
+    }
+    void loadProgression();
+    quickRetryId = window.setInterval(() => {
+      if (!hydrated || latestStatus === "WARMING") void loadProgression();
+    }, 5_000);
+    const intervalId = window.setInterval(() => void loadProgression(), 30_000);
+    return () => {
+      cancelled = true;
+      if (quickRetryId !== undefined) window.clearInterval(quickRetryId);
+      window.clearInterval(intervalId);
+    };
+  }, []);
 
   const activeDecision: SymbolDecision | undefined =
     decision.symbol_decisions.find((d) => d.symbol === symbol);
@@ -53,11 +194,126 @@ export function TradePage({ state }: TradePageProps) {
         activeDecision.proposal.take_profit,
       )
     : [];
+  const sampleScheduler = liveSampleScheduler ?? state.wastePaperSampleCollectorScheduler;
+  const sampleRequest = {
+    interval_seconds: 300,
+    run_market_diagnostic: true,
+    run_real_candle_probe: true,
+    run_deal_history_ingest: true,
+    symbol: normalizeSymbolForRuntime(symbol),
+    timeframe,
+    bars: 180,
+    max_pairs: 80,
+    scan_candidates: true,
+    max_scan_candidates: 8,
+  };
+
+  async function runPaperProposal() {
+    setActionBusy("proposal");
+    setActionStatus("");
+    try {
+      const packet = await startWastePaperSampleCollectorScheduler(sampleRequest);
+      setLiveSampleScheduler(packet);
+      setActionStatus(
+        `Probe scheduler running: ${packet.latest_collector_status ?? packet.status}. ` +
+          `confirmed=${packet.confirmed_direction_count}, bound=${packet.bound_outcome_count}/${packet.bound_outcomes_needed}.`,
+      );
+    } catch {
+      setActionStatus("Probe scheduler could not start. Check that the API and MT5 connector are reachable.");
+    } finally {
+      setActionBusy("");
+    }
+  }
+
+  async function startPaperLoop() {
+    setActionBusy("paper-loop");
+    setActionStatus("");
+    try {
+      const [loop, scheduler] = await Promise.all([
+        startWasteLoop(5),
+        startWastePaperSampleCollectorScheduler(sampleRequest),
+      ]);
+      setLiveSampleScheduler(scheduler);
+      setActionStatus(
+        `PAPER loop ${loop.running ? "running" : "reported"} at ${loop.interval_seconds ?? 5}s; ` +
+          `sample scheduler ${scheduler.running ? "running" : "reported"} with ${scheduler.cycles_run} cycle(s).`,
+      );
+    } catch {
+      setActionStatus("Paper loop could not start. If a stale supervisor lease exists, use Dashboard recovery, then retry.");
+    } finally {
+      setActionBusy("");
+    }
+  }
+
+  async function saveTradeProvider() {
+    setAuthBusy("provider");
+    setAuthStatus("");
+    try {
+      const patch: AuthorizationPatch = {
+        payment_provider: paymentProvider.trim(),
+        payout_destination_id: payoutDestination.trim(),
+      };
+      if (paymentApiKey.trim()) patch.payment_api_key = paymentApiKey.trim();
+      const next = await updateAuthorization(patch);
+      setTradeAuth(next);
+      await refreshLiveMoneyProgressionAfterWrite();
+      setPaymentProvider(next.provider.payment_provider ?? "");
+      setPayoutDestination(next.provider.payout_destination_id ?? "");
+      setPaymentApiKey("");
+      setAuthStatus("Provider and payout destination saved.");
+    } catch {
+      setAuthStatus("Could not save provider or destination. Check the API connection.");
+    } finally {
+      setAuthBusy("");
+    }
+  }
+
+  async function turnTradeOwnerSwitchesOn() {
+    setAuthBusy("all");
+    setAuthStatus("");
+    try {
+      const patch: AuthorizationPatch = {
+        personal_account_ack: true,
+        no_pooled_capital_ack: true,
+        live_mode: true,
+        prefer_mt5: true,
+        owner_enable_live_trading: true,
+        live_trading_licensed: true,
+        owner_enable_broker_accept: true,
+        owner_enable_auto_deposit: true,
+        owner_enable_bank_card_movement: true,
+        owner_enable_payout_automation: true,
+        payment_provider: paymentProvider.trim(),
+        payout_destination_id: payoutDestination.trim(),
+      };
+      if (payoutDestination.trim()) patch.payout_destination_allowlisted = true;
+      if (paymentApiKey.trim()) patch.payment_api_key = paymentApiKey.trim();
+      const next = await updateAuthorization(patch);
+      setTradeAuth(next);
+      await refreshLiveMoneyProgressionAfterWrite();
+      setPaymentProvider(next.provider.payment_provider ?? "");
+      setPayoutDestination(next.provider.payout_destination_id ?? "");
+      setPaymentApiKey("");
+      setAuthStatus("Owner authority switches saved. Broker credentials, edge authorization, provider setup, and risk still re-check at action time.");
+    } catch {
+      setAuthStatus("Could not save owner switches. Check the API connection.");
+    } finally {
+      setAuthBusy("");
+    }
+  }
+
+  const liveCap = findCapability(tradeAuth, "live_trading");
+  const brokerCap = findCapability(tradeAuth, "broker_accept");
+  const payoutCap = findCapability(tradeAuth, "payout_automation");
+  const progressionBlockers = liveProgression?.blockers ?? [];
+  const firstBlockers = progressionBlockers.slice(0, 6);
+  const liveIntent = liveProgression?.active_waste_intent;
+  const liveIntentLabel = [liveIntent?.symbol, liveIntent?.direction].filter(Boolean).join(" ") || "none";
 
   return (
     <div className="trade-page">
       {/* ── Selectors ── */}
-      <GlassPanel title="Paper Trading Desk" subtitle="Research / paper-only — no broker orders placed">
+      <GlassPanel title="Paper Trading Desk" subtitle="WASTE paper/demo proof desk - PASS-gated backend execution">
         <div className="trade-selectors">
           <div className="selector-group">
             <span className="selector-label">Symbol</span>
@@ -101,7 +357,109 @@ export function TradePage({ state }: TradePageProps) {
       {/* ── Live Trades Telemetry (observational, polled every 2s) ── */}
       <LiveTradesTelemetry />
 
+      <GlassPanel
+        title="Owner Authorization & Payout Setup"
+        subtitle={tradeAuth?.summary ?? "Owner-controlled live/payment gates"}
+        variant={tradeAuth?.all_real_money_authorized ? "default" : "warning"}
+      >
+        <div className="dashboard-grid-3col">
+          <AuthStatusCard title="Live Trading" capability={liveCap} />
+          <AuthStatusCard title="Broker ACCEPT" capability={brokerCap} />
+          <AuthStatusCard title="Payout Automation" capability={payoutCap} />
+        </div>
+        <div className="dashboard-grid-3col" style={{ marginTop: 10 }}>
+          <div className="control-field">
+            <span className="field-label">Payment provider</span>
+            <input
+              className="mobile-api-input"
+              value={paymentProvider}
+              placeholder="wise, stripe, broker payout provider"
+              onChange={(event) => { setPaymentProvider(event.target.value); setAuthStatus(""); }}
+            />
+          </div>
+          <div className="control-field">
+            <span className="field-label">Provider API key/token{tradeAuth?.provider.payment_api_key_set ? " - set" : ""}</span>
+            <input
+              className="mobile-api-input"
+              type="password"
+              value={paymentApiKey}
+              placeholder={tradeAuth?.provider.payment_api_key_set ? "leave blank to keep current key" : "provider API key/token"}
+              autoComplete="off"
+              onChange={(event) => { setPaymentApiKey(event.target.value); setAuthStatus(""); }}
+            />
+            <div className="control-field-desc">Provider tokens only; no raw bank or card numbers are stored here.</div>
+          </div>
+          <div className="control-field">
+            <span className="field-label">Payout destination token</span>
+            <input
+              className="mobile-api-input"
+              value={payoutDestination}
+              placeholder="allowlisted payout destination id"
+              onChange={(event) => { setPayoutDestination(event.target.value); setAuthStatus(""); }}
+            />
+          </div>
+        </div>
+        <div className="mobile-api-row" style={{ marginTop: 10 }}>
+          <button className="mobile-api-button" type="button" disabled={authBusy === "provider"} onClick={() => void saveTradeProvider()}>
+            {authBusy === "provider" ? "SAVING..." : "SAVE PROVIDER / DESTINATION"}
+          </button>
+          <button className="mobile-api-button" type="button" disabled={authBusy === "all"} onClick={() => void turnTradeOwnerSwitchesOn()}>
+            {authBusy === "all" ? "SAVING..." : "TURN OWNER SWITCHES ON"}
+          </button>
+          <a className="sweep-action-button setup-link" href="?page=proof">FULL PROOF CONTROLS</a>
+        </div>
+        {authStatus && (
+          <div className="control-field-desc" style={{ color: authStatus.startsWith("Could not") ? "var(--danger)" : "var(--success)", marginTop: 8 }}>
+            {authStatus}
+          </div>
+        )}
+      </GlassPanel>
+
       {/* ── Proposal Preview + Risk Sizing ── */}
+      <GlassPanel
+        title="Live-Money Completion Lane"
+        subtitle={liveProgression?.next_action ?? "Loading live-money progression gates"}
+        variant={liveProgression?.full_progression_clear ? "default" : "warning"}
+      >
+        <div className="dashboard-grid-3col">
+          <CompletionMetric label="Live Dispatch" clear={liveProgression?.live_dispatch_clear} />
+          <CompletionMetric label="WASTE Pilot" clear={liveProgression?.waste_pilot_clear} />
+          <CompletionMetric label="Verified Payout" clear={liveProgression?.verified_payout_clear} />
+        </div>
+        <div className="dashboard-grid-3col" style={{ marginTop: 10 }}>
+          <MetaRow label="Blockers" value={String(liveProgression?.blocker_count ?? progressionBlockers.length)} mono />
+          <MetaRow label="Active Intent" value={liveIntentLabel} mono />
+          <MetaRow label="Status" value={liveProgression?.status ?? "SYNCING"} mono />
+        </div>
+        <div style={{ display: "grid", gap: 8, marginTop: 12 }}>
+          {firstBlockers.length > 0 ? firstBlockers.map((blocker) => (
+            <div key={`${blocker.plane}-${blocker.blocker_id}`} className="lock-line" style={{ alignItems: "flex-start" }}>
+              <span style={{ color: "var(--danger)", marginRight: 6 }}>x</span>
+              <span>
+                <span className="mono">{blocker.plane}</span>: {blocker.detail}
+                {blocker.next_action && <span style={{ color: "var(--text-secondary)" }}> {blocker.next_action}</span>}
+              </span>
+            </div>
+          )) : (
+            <div className="control-field-desc" style={{ color: liveProgression?.full_progression_clear ? "var(--success)" : "var(--text-secondary)" }}>
+              {liveProgression?.full_progression_clear ? "All live-money progression checks are clear for owner review." : "Progression packet is syncing."}
+            </div>
+          )}
+        </div>
+        {progressionBlockers.length > firstBlockers.length && (
+          <div className="control-field-desc" style={{ marginTop: 8 }}>
+            Showing {firstBlockers.length} of {progressionBlockers.length} blockers. Open Settings for the full audit lane.
+          </div>
+        )}
+        <div className="mobile-api-row" style={{ marginTop: 10 }}>
+          <a className="sweep-action-button setup-link" href="?page=settings">OPEN SETTINGS GATES</a>
+          <a className="sweep-action-button setup-link" href="?page=proof">OPEN PROOF / PAYMENT</a>
+        </div>
+        <div className="control-field-desc" style={{ marginTop: 8, color: "var(--text-secondary)" }}>
+          {liveProgression?.claim_boundary ?? "Read-only progress lane. No orders, deposits, withdrawals, or payouts are executed from this panel."}
+        </div>
+      </GlassPanel>
+
       <div className="trade-grid-2col">
         <GlassPanel title="Proposal Preview" subtitle={activeDecision ? activeDecision.proposal.proposal_id : "No active signal for this symbol/timeframe"}>
           {activeDecision ? (
@@ -203,7 +561,7 @@ export function TradePage({ state }: TradePageProps) {
           <NoSignal symbol={symbol} timeframe={timeframe} />
         )}
         <div style={{ marginTop: 8, fontSize: "0.7rem", color: "var(--warning)" }}>
-          {movement?.claim_boundary ?? "Paper/demo movement only. Live trading and payment movement remain NOT LICENSED."}
+          {movement?.claim_boundary ?? "Paper/demo movement only. Live trading and payment movement wait for owner authority switches and provider setup."}
         </div>
       </GlassPanel>
 
@@ -241,18 +599,23 @@ export function TradePage({ state }: TradePageProps) {
         </div>
       </GlassPanel>
 
-      {/* ── Primary Actions (Disabled) ── */}
+      {/* ── Primary Actions ── */}
       <GlassPanel title="Order" variant="danger">
         <div className="trade-action">
           <div className="trade-action-buttons">
-            <button className="btn-paper" disabled>Run Paper Proposal</button>
-            <button className="btn-send" disabled>Send Paper Order</button>
+            <button className="btn-paper" disabled={actionBusy !== ""} onClick={() => void runPaperProposal()}>
+              {actionBusy === "proposal" ? "RUNNING..." : "RUN WASTE PROBE"}
+            </button>
+            <button className="btn-send" disabled={actionBusy !== ""} onClick={() => void startPaperLoop()}>
+              {actionBusy === "paper-loop" ? "STARTING..." : "START PAPER LOOP"}
+            </button>
           </div>
           <div className="trade-action-reasons">
-            <LockLine reason="Paper order execution not wired to broker adapter" />
-            <LockLine reason="Live execution: NOT LICENSED — 1/30 paper days, edge OPEN" />
-            <LockLine reason="Broker ACCEPT: NOT LICENSED" />
+            <LockLine reason="PASS-gated paper/demo execution sink is wired; dispatch still requires a fresh edge PASS token." />
+            <LockLine reason={`Sample scheduler: ${sampleScheduler?.running ? "RUNNING" : "STOPPED"}; latest ${sampleScheduler?.latest_collector_status ?? "not reported"}.`} />
+            <LockLine reason="Live execution and money movement still require owner authorization, broker/provider setup, and action-time checks." />
           </div>
+          {actionStatus && <div className="trade-action-status">{actionStatus}</div>}
         </div>
       </GlassPanel>
     </div>
@@ -285,6 +648,45 @@ function MetaRow({ label, value, mono }: { label: string; value: string; mono?: 
     <div className="meta-row">
       <span className="field-label">{label}</span>
       <span className={`field-value ${mono ? "mono" : ""}`}>{value}</span>
+    </div>
+  );
+}
+
+function findCapability(auth: AuthorizationState | null, capability: string): AuthorizationState["capabilities"][number] | undefined {
+  return auth?.capabilities.find((cap) => cap.capability === capability);
+}
+
+function AuthStatusCard({
+  title,
+  capability,
+}: {
+  title: string;
+  capability?: AuthorizationState["capabilities"][number];
+}) {
+  const authorized = Boolean(capability?.authorized);
+  const rawStatus = capability?.status ?? "NOT READY";
+  const label = authorized ? "AUTHORIZED" : rawStatus.includes("NOT LICENSED") ? "OWNER PENDING" : rawStatus;
+  const reason = authorized
+    ? "Owner gate authorized."
+    : capability?.missing_requirements.slice(0, 2).join("; ") || "Waiting for owner/provider setup.";
+  return (
+    <div className="disabled-control" style={{ borderColor: authorized ? "var(--success)" : "var(--warning-dim)" }}>
+      <div className="disabled-control-header">
+        <span className="disabled-control-label">{title}</span>
+        <StatusChip label={label} variant={authorized ? "success" : "warning"} size="sm" />
+      </div>
+      <div className="disabled-control-reason" style={{ color: authorized ? "var(--success)" : "var(--text-secondary)" }}>
+        {reason}
+      </div>
+    </div>
+  );
+}
+
+function CompletionMetric({ label, clear }: { label: string; clear?: boolean }) {
+  return (
+    <div className="metric-stack" style={{ padding: 0 }}>
+      <span className="field-label">{label}</span>
+      <StatusChip label={clear ? "CLEAR" : "STANDBY"} variant={clear ? "success" : "warning"} size="sm" />
     </div>
   );
 }

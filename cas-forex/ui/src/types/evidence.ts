@@ -14,15 +14,20 @@ export interface UIReadinessReport {
   risk_review_days: number;
   complete_bundle_days: number;
   complete_bundle_dates: string[];
+  complete_bundle_date_count?: number;
   route_counts: Record<string, number>;
   risk_status_counts: Record<string, number>;
   chains_verified: Record<string, boolean>;
   blockers: string[];
+  blocker_count?: number;
   next_ui_step: string;
+  next_ui_step_present?: boolean;
   claim_boundary: string;
+  claim_boundary_present?: boolean;
   deployment_status: "NOT LICENSED" | "LICENSED";
   broker_accept_status: "NOT LICENSED" | "LICENSED";
   payment_transfer_status: "NOT LICENSED" | "LICENSED";
+  summary_only?: boolean;
 }
 
 export interface DailySchedule {
@@ -45,14 +50,19 @@ export interface DailySchedule {
   required_paper_days: number;
   paper_days_remaining: number;
   missing_tracks_for_next_due: string[];
+  missing_track_count?: number;
   complete_bundle_dates: string[];
+  complete_bundle_date_count?: number;
   recommended_command: string;
   recommended_action?: string;
   notes: string[];
+  note_count?: number;
   claim_boundary: string;
+  claim_boundary_present?: boolean;
   deployment_status: "NOT LICENSED" | "LICENSED";
   broker_accept_status: "NOT LICENSED" | "LICENSED";
   payment_transfer_status: "NOT LICENSED" | "LICENSED";
+  summary_only?: boolean;
 }
 
 export interface Proposal {
@@ -92,6 +102,9 @@ export interface PaperDecision {
   route_counts: Record<string, number>;
   chain_verified: boolean;
   claim_boundary: string;
+  claim_boundary_present?: boolean;
+  summary_only?: boolean;
+  symbol_decision_count?: number;
   latest_decision: {
     date: string;
     decision_id: string;
@@ -104,7 +117,11 @@ export interface PaperDecision {
     macro_reason: string;
     event_context: string;
     claim_boundary: string;
+    claim_boundary_present?: boolean;
     notes: string[];
+    note_count?: number;
+    summary_only?: boolean;
+    symbol_decision_count?: number;
     symbol_decisions: SymbolDecision[];
   };
 }
@@ -139,6 +156,12 @@ export interface PaperRisk {
   review_count: number;
   risk_status_counts: Record<string, number>;
   chain_verified: boolean;
+  claim_boundary?: string;
+  claim_boundary_present?: boolean;
+  summary_only?: boolean;
+  sizing_count?: number;
+  planned_risk_total_usd?: number;
+  planned_lots_total?: number;
   latest_review: {
     date: string;
     review_id: string;
@@ -155,15 +178,56 @@ export interface PaperRisk {
     existing_attempts: number;
     attempts_remaining_before_review: number;
     claim_boundary: string;
+    claim_boundary_present?: boolean;
     deployment_status: string;
     broker_accept_status: string;
     payment_transfer_status: string;
     plan_id: string;
     lead_id: string;
     blockers: string[];
+    blocker_count?: number;
     notes: string[];
+    note_count?: number;
+    summary_only?: boolean;
+    sizing_count?: number;
+    planned_risk_total_usd?: number;
+    planned_lots_total?: number;
     sizing: SizingEntry[];
   };
+}
+
+export interface DashboardRiskBudgetSummary {
+  report_kind: string;
+  date: string;
+  review_count: number;
+  risk_status: string;
+  risk_status_counts: Record<string, number>;
+  chain_verified: boolean;
+  account_equity: number;
+  max_risk_per_trade_pct: number;
+  daily_risk_budget_pct: number;
+  daily_risk_budget_usd: number;
+  max_position_lots: number;
+  planned_risk_total_usd: number;
+  planned_lots_total: number;
+  sizing_count: number;
+  summary_only?: boolean;
+  claim_boundary?: string;
+  claim_boundary_present?: boolean;
+}
+
+export interface DashboardProofProgressSummary {
+  report_kind: string;
+  readiness_status: string;
+  min_daily_bundles_for_ui: number;
+  completed_trading_days: number;
+  complete_bundle_days: number;
+  complete_bundle_date_count: number;
+  chains_verified_count: number;
+  chains_expected_count: number;
+  paper_proof_chain_verified: boolean;
+  blocker_count: number;
+  summary_only?: boolean;
 }
 
 export interface DailyBundleStep {
@@ -185,21 +249,25 @@ export interface DailyBundle {
   completed: boolean;
   latest_proof: {
     status_path: string;
+    status_path_present?: boolean;
     completed_trading_days: number;
     required_trading_days: number;
     chain_verified: boolean;
     passed: boolean;
     failure_reasons: string[];
+    failure_reason_count?: number;
   };
   latest_decision: PaperDecision;
   latest_risk: PaperRisk;
   claim_boundary: string;
+  claim_boundary_present?: boolean;
   deployment_status: "NOT LICENSED" | "LICENSED";
   broker_accept_status: "NOT LICENSED" | "LICENSED";
   payment_transfer_status: "NOT LICENSED" | "LICENSED";
   completed_steps: number;
   total_steps: number;
   overall_status: string;
+  summary_only?: boolean;
 }
 
 export type AdaptiveAction =
@@ -268,6 +336,12 @@ export interface OwnerControlState {
   mode: OwnerControlMode; max_concurrent_trades: number;
   max_loss_cap_pct: number; ai_autonomy_enabled: boolean;
   live_requested: boolean; live_blocked: boolean; claim_boundary: string;
+  claim_boundary_present?: boolean;
+  override_count?: number; persisted?: boolean; override_state_path?: string | null;
+  override_state_path_present?: boolean;
+  allowed_modes?: OwnerControlMode[];
+  allowed_mode_count?: number;
+  summary_only?: boolean;
 }
 
 export interface MTHistorySummary {
@@ -315,6 +389,7 @@ export interface AccountLedgerState {
   auto_deposit_status: string; debit_card_bank_movement_status: string; payout_automation_status: string;
   deployment_status: string; live_money_authorized: boolean; payment_movement_authorized: boolean;
   sync_to_broker_snapshot?: boolean; broker_snapshot_initial_investment_usd?: number | null;
+  cache_status?: string;
   notes: string[];
 }
 
@@ -368,6 +443,7 @@ export interface AccountReconciliationReport {
   trading_edge_status: string; live_trading_status: string; broker_accept_status: string;
   deployment_status: string; live_money_authorized: boolean; payment_movement_authorized: boolean;
   sync_to_broker_snapshot?: boolean; broker_snapshot_initial_investment_usd?: number | null;
+  cache_status?: string;
   notes: string[];
 }
 
@@ -407,6 +483,7 @@ export interface LiveReadinessReport {
   auto_deposit_status: string; debit_card_bank_movement_status: string;
   payout_automation_status: string; notes: string[];
   sync_to_broker_snapshot?: boolean; broker_snapshot_initial_investment_usd?: number | null;
+  cache_status?: string; readiness_status?: string;
 }
 
 export interface BacksolveSummary {
@@ -2079,6 +2156,100 @@ export interface TerminalPositionReconciliationReport {
   report_path?: string;
 }
 
+export interface TerminalReceiptRecoveryPacket {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  terminal_reconciliation_clean_for_live: boolean;
+  broker_touched: boolean;
+  journal_rewritten: boolean;
+  receipt_ingest_attempted: boolean;
+  attempt_finalized: boolean;
+  pending_receipt_count: number;
+  pending_receipt_count_by_lane: Record<string, number>;
+  cas_receipt_pending_open_count: number;
+  unmatched_open_position_count: number;
+  terminal_open_position_count: number;
+  heartbeat_status: string;
+  account_snapshot_present: boolean;
+  mt4_history_export_verifier_status?: string | null;
+  pending_positions: Array<Record<string, unknown>>;
+  legacy_archive_preview: {
+    journal_path: string;
+    snapshot_path?: string | null;
+    total_rows_before: number;
+    pending_receipt_rows_archived: number;
+    rows_remaining: number;
+    archived_at_iso: string;
+    dry_run: boolean;
+    error_message?: string | null;
+    execute_required_for_archive?: boolean;
+    claim_boundary?: string;
+  };
+  missing_requirements: string[];
+  source_reconciliation: Record<string, unknown>;
+  operator_commands: Record<string, string>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface TerminalReceiptArchiveAction {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  requested_execute: boolean;
+  confirm_owner_archive: boolean;
+  dry_run: boolean;
+  broker_touched: boolean;
+  journal_rewritten: boolean;
+  receipt_ingest_attempted: boolean;
+  attempt_finalized: boolean;
+  money_moved: boolean;
+  age_threshold_hours: number;
+  notes_recorded: string;
+  archive_result: {
+    journal_path: string;
+    snapshot_path?: string | null;
+    total_rows_before: number;
+    pending_receipt_rows_archived: number;
+    rows_remaining: number;
+    archived_at_iso: string;
+    dry_run: boolean;
+    error_message?: string | null;
+  };
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface TerminalReceiptRecoveryRefreshAction {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  requested_execute: boolean;
+  confirm_owner_refresh: boolean;
+  dry_run: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  money_moved: boolean;
+  notes_recorded: string;
+  steps: Array<{
+    step: string;
+    status: string;
+    status_label?: string | null;
+    detail: string;
+  }>;
+  reports: Record<string, {
+    report_kind?: string | null;
+    status?: string | null;
+    report_path?: string | null;
+    summary?: Record<string, unknown>;
+    next_action?: string | null;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+}
+
 export interface TerminalOperabilityVerifierReport {
   report_kind: string;
   created_at: string;
@@ -2390,14 +2561,30 @@ export interface AuthorityBoundaryState {
   payout_automation_status: string; trading_edge_status: string;
   can_place_live_orders: boolean; can_create_broker_accept: boolean;
   can_auto_deposit: boolean; can_move_money: boolean; can_automate_payouts: boolean;
-  allowed_scopes: string[]; blockers: string[]; claim_boundary: string;
+  allowed_scopes: string[]; allowed_scope_count?: number;
+  blockers: string[]; blocker_count?: number;
+  claim_boundary: string; claim_boundary_present?: boolean;
   ledger_deployment_status_counts: Record<string, number>;
   live_execution_runtime_locked: boolean;
+  summary_only?: boolean;
 }
 
 export interface RuntimeGateDecision {
   capability: string; authorized: boolean; status: string;
-  missing_requirements: string[]; satisfied_requirements: string[]; next_action: string;
+  missing_requirements: string[]; satisfied_requirements: string[];
+  advisory_requirements?: string[]; next_action: string;
+}
+
+export interface OwnerAuthorityModel {
+  authority: string;
+  authority_controls: string[];
+  owner_controls_are_final_authority: boolean;
+  metrics_and_ai_are_advisory_only: boolean;
+  metrics_and_ai_can_veto_owner_authority: boolean;
+  technical_action_time_checks_still_required: boolean;
+  advisory_inputs: string[];
+  action_time_requirements: string[];
+  statement: string;
 }
 
 export interface RuntimeGatesState {
@@ -2405,6 +2592,176 @@ export interface RuntimeGatesState {
   decisions: Record<string, RuntimeGateDecision>;
   all_real_money_authorized: boolean;
   summary: string;
+  owner_authority_boundary?: string;
+  advisory_only_inputs?: string[];
+  action_time_requirements?: string[];
+  owner_controls_are_final_authority?: boolean;
+  metrics_and_ai_can_veto_owner_authority?: boolean;
+}
+
+export interface AutoHaltCheck {
+  check_id: string;
+  status: string;
+  metric: unknown;
+  threshold: unknown;
+  detail: string;
+  trips_halt: boolean;
+}
+
+export interface AutoHaltReport {
+  report_kind: string;
+  generated_at?: string;
+  status: string;
+  halt_active: boolean;
+  force_paper_mode: boolean;
+  settings: {
+    max_account_drawdown_pct: number;
+    max_consecutive_losses: number;
+    max_live_paper_divergence_pct: number;
+  };
+  checks: AutoHaltCheck[];
+  triggered_checks: string[];
+  active_state?: Record<string, unknown>;
+  claim_boundary?: string;
+  next_action: string;
+  clear_state?: Record<string, unknown>;
+}
+
+export interface BrokerTruthMonitorCheck {
+  check_id: string;
+  status: string;
+  value: unknown;
+  description: string;
+  detail: string;
+  trips_auto_halt?: boolean;
+}
+
+export interface BrokerTruthMonitorReport {
+  report_kind: string;
+  generated_at: string;
+  monitor_status: string;
+  overall_status: string;
+  checks_total: number;
+  checks_ok: number;
+  checks_mismatch: number;
+  checks_unverifiable: number;
+  running_status?: string;
+  interval_seconds?: number;
+  fresh_for_live_seconds?: number;
+  mt5_connected: boolean;
+  mt5_is_demo?: boolean | null;
+  mt5_open_position_count?: number;
+  terminal_reconciliation_status?: string | null;
+  terminal_unmatched_open_position_count?: number;
+  terminal_pending_receipt_count?: number;
+  terminal_receipt_mismatch_count?: number;
+  terminal_account_snapshot_present?: boolean;
+  checks: BrokerTruthMonitorCheck[];
+  latest_terminal_reconciliation?: Record<string, unknown> | null;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface BrokerTruthMonitorSupervisorStatus {
+  report_kind: string;
+  status?: string;
+  generated_at?: string;
+  desired_running: boolean;
+  active_lease?: Record<string, unknown> | null;
+  active_lease_is_fresh: boolean;
+  owned_by_this_process: boolean;
+  local_owner_id: string;
+  local_running: boolean;
+  stop_requested_at?: string | null;
+  stop_requested_by?: string | null;
+  state_path?: string;
+  audit_path?: string;
+  claim_boundary: string;
+  next_action: string;
+  recovery?: Record<string, unknown>;
+}
+
+export interface BrokerTruthMonitorStatus {
+  report_kind: string;
+  running: boolean;
+  status?: string;
+  interval_seconds: number;
+  cycles_run: number;
+  last_error?: string | null;
+  started_at_iso?: string | null;
+  monitor_status: string;
+  ready_for_live: boolean;
+  latest_report?: BrokerTruthMonitorReport | null;
+  supervisor?: BrokerTruthMonitorSupervisorStatus;
+  claim_boundary: string;
+}
+
+export interface BrokerTruthRecoveryPacket {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  broker_truth_clear_for_live_recovery: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  money_moved: boolean;
+  monitor_summary: Record<string, unknown>;
+  blockers: Array<{
+    blocker_id: string;
+    clear: boolean;
+    value: unknown;
+    detail: string;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface LiveMoneyProgressionBlocker {
+  blocker_id: string;
+  plane: string;
+  clear: boolean;
+  value: unknown;
+  detail: string;
+  next_action?: string;
+}
+
+export interface LiveMoneyProgressionPacket {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  live_dispatch_clear: boolean;
+  waste_pilot_clear: boolean;
+  verified_payout_clear: boolean;
+  full_progression_clear: boolean;
+  broker_truth_clear: boolean;
+  live_recovery_clear: boolean;
+  live_readiness_clear: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  active_waste_intent: {
+    symbol?: string | null;
+    direction?: string | null;
+    lots?: number | null;
+    entry_pair_count?: number | null;
+    status?: string | null;
+  };
+  source_summaries: Record<string, unknown>;
+  blocker_count: number;
+  blockers: LiveMoneyProgressionBlocker[];
+  claim_boundary: string;
+  next_action: string;
+  cache_status?: string;
+  cache_built_at_epoch?: number | null;
+  cache_generated_at_iso?: string | null;
+  cache_age_seconds?: number | null;
+  cache_ttl_seconds?: number;
+  cache_stale?: boolean;
+  cache_refreshing?: boolean;
+  cache_error?: string;
 }
 
 export interface AIModelState {
@@ -2418,6 +2775,849 @@ export interface BrokerCandidate {
   platform_notes: string; owner_research_leverage_note: string;
   configured_env_prefix: string; verification_status: string;
   live_use_status: string; notes: string;
+}
+
+export interface BrokerRealityReview {
+  report_kind: string;
+  broker_id: string;
+  broker_display_name: string;
+  broker_website: string;
+  owner_review_status: string;
+  accepted_for_live_and_payout: boolean;
+  owner_accepted_at?: string | null;
+  updated_at?: string | null;
+  review_valid_days: number;
+  broker_entity: string;
+  withdrawal_minimum: string;
+  withdrawal_timing: string;
+  kyc_requirements: string;
+  withdrawal_fees: string;
+  currency_conversion: string;
+  automation_tos: string;
+  automation_allowed_by_owner_review: boolean;
+  source_urls: string[];
+  notes: string;
+  checks: Record<string, boolean>;
+  missing_requirements: string[];
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface LivePilotPolicy {
+  report_kind: string;
+  owner_pilot_status: string;
+  accepted_for_live_start: boolean;
+  ready_for_next_live_order: boolean;
+  owner_accepted_at?: string | null;
+  updated_at?: string | null;
+  allowed_symbols: string[];
+  max_trade_lots: number;
+  max_open_live_lots: number;
+  max_live_trade_count: number;
+  max_daily_loss_usd: number;
+  max_total_loss_usd: number;
+  max_pilot_days: number;
+  live_trade_count: number;
+  pilot_capacity_remaining: number;
+  last_live_order_at?: string | null;
+  last_live_order?: Record<string, unknown> | null;
+  notes: string;
+  checks: Record<string, boolean>;
+  missing_requirements: string[];
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface LiveOrderDryRunCheck {
+  check_id: string;
+  passed: boolean;
+  status: string;
+  detail: string;
+  evidence?: unknown;
+}
+
+export interface LiveOrderDryRunAuditRecord {
+  audit_id?: string;
+  action?: string;
+  timestamp?: string;
+  status?: string;
+  order_id?: string;
+  decision_ref?: string;
+  payload?: LiveOrderDryRunReport | Record<string, unknown>;
+}
+
+export interface LiveOrderDryRunReport {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  would_reach_broker_if_executed: boolean;
+  broker_touched: boolean;
+  order_id: string;
+  decision_ref: string;
+  proposed_intent: Record<string, unknown>;
+  order_request?: Record<string, unknown> | null;
+  checks: LiveOrderDryRunCheck[];
+  blocking_reasons: string[];
+  next_action: string;
+  claim_boundary: string;
+  audit?: LiveOrderDryRunAuditRecord;
+  waste_real_candle_source?: Record<string, unknown>;
+}
+
+export interface LiveOrderDryRunLatest {
+  report_kind: string;
+  status: string;
+  broker_touched: boolean;
+  detail?: string;
+  latest_audit?: LiveOrderDryRunAuditRecord | null;
+}
+
+export interface LiveOrderDryRunReview {
+  report_kind: string;
+  generated_at: string;
+  review_status: string;
+  owner_review_status: string;
+  owner_accepted_at?: string | null;
+  accepted_fingerprint?: string | null;
+  current_fingerprint: string;
+  dry_run_review_clear_for_live: boolean;
+  evidence_ready_for_owner_accept: boolean;
+  missing_requirements: string[];
+  checks: Array<{
+    check_id: string;
+    status: string;
+    evidence: Record<string, unknown>;
+    detail: string;
+  }>;
+  latest_dry_run_summary: Record<string, unknown>;
+  broker_truth_summary: Record<string, unknown>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface CompoundAddOrderDryRunAuditRecord {
+  report_kind?: string;
+  timestamp?: string;
+  action?: string;
+  status?: string;
+  order_id?: string;
+  decision_ref?: string;
+  payload?: CompoundAddOrderDryRunReport | Record<string, unknown>;
+}
+
+export interface CompoundAddOrderDryRunReport {
+  report_kind: string;
+  generated_at?: string;
+  status: string;
+  broker_touched: boolean;
+  order_id?: string;
+  decision_ref?: string;
+  proposed_intent?: Record<string, unknown>;
+  order_request?: Record<string, unknown> | null;
+  checks?: LiveOrderDryRunCheck[];
+  blocking_reasons?: string[];
+  parent_position_reference?: string | null;
+  compound_context?: Record<string, unknown>;
+  next_action?: string;
+  claim_boundary?: string;
+  audit?: CompoundAddOrderDryRunAuditRecord;
+}
+
+export interface CompoundAddOrderDryRunLatest {
+  report_kind: string;
+  status: string;
+  broker_touched: boolean;
+  detail?: string;
+  latest_audit?: CompoundAddOrderDryRunAuditRecord | null;
+}
+
+export interface CompoundAddOrderDryRunReview {
+  report_kind: string;
+  generated_at: string;
+  review_status: string;
+  owner_review_status: string;
+  owner_accepted_at?: string | null;
+  accepted_fingerprint?: string | null;
+  current_fingerprint?: string | null;
+  compound_add_dry_run_review_clear_for_dispatch: boolean;
+  evidence_ready_for_owner_accept: boolean;
+  missing_requirements: string[];
+  checks: Array<{
+    check_id: string;
+    status: string;
+    evidence: Record<string, unknown>;
+    detail: string;
+  }>;
+  latest_compound_add_summary: Record<string, unknown>;
+  broker_truth_summary: Record<string, unknown>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface CompoundAddDispatchHandoffStatus {
+  report_kind: string;
+  status: string;
+  order_id?: string | null;
+  decision_ref?: string | null;
+  broker_touched: boolean;
+  dispatched_to_bridge: boolean;
+  dispatch_attempted?: boolean;
+  owner_dispatch_confirmed?: boolean;
+  live_trading_authorized?: boolean;
+  dispatch_preview_only?: boolean;
+  would_call_dispatch_if_owner_attempted?: boolean;
+  intent?: Record<string, unknown>;
+  dispatch_result?: Record<string, unknown>;
+  handoff_status?: CompoundAddDispatchHandoffStatus;
+  owner_review_status?: string;
+  compound_add_dry_run_review_clear_for_dispatch?: boolean;
+  missing_requirements?: string[];
+  reason?: string;
+  detail?: string;
+  notes?: string;
+  claim_boundary?: string;
+  next_action?: string;
+}
+
+export interface WasteEntryDispatchHandoffStatus {
+  report_kind: string;
+  status: string;
+  order_id?: string | null;
+  decision_ref?: string | null;
+  broker_touched: boolean;
+  dispatched_to_bridge: boolean;
+  dispatch_attempted?: boolean;
+  owner_dispatch_confirmed?: boolean;
+  live_trading_authorized?: boolean;
+  dispatch_preview_only?: boolean;
+  would_call_dispatch_if_owner_attempted?: boolean;
+  intent?: Record<string, unknown>;
+  dispatch_result?: Record<string, unknown>;
+  handoff_status?: WasteEntryDispatchHandoffStatus;
+  owner_review_status?: string;
+  dry_run_review_clear_for_live?: boolean;
+  waste_real_candle_source?: Record<string, unknown>;
+  missing_requirements?: string[];
+  reason?: string;
+  detail?: string;
+  notes?: string;
+  claim_boundary?: string;
+  next_action?: string;
+}
+
+export interface WasteEntryPilotPromotionStatus {
+  report_kind: string;
+  generated_at?: string;
+  status: string;
+  ready_for_pilot_sequence: boolean;
+  broker_touched: boolean;
+  dispatched_to_bridge: boolean;
+  dispatch_attempted: boolean;
+  order_id?: string | null;
+  decision_ref?: string | null;
+  symbol?: string | null;
+  direction?: string | null;
+  lots?: number | null;
+  entry_pair_count?: number | null;
+  missing_requirements: string[];
+  checks: Array<{
+    check_id: string;
+    status: string;
+    evidence: Record<string, unknown>;
+    detail: string;
+  }>;
+  handoff_status?: WasteEntryDispatchHandoffStatus;
+  dry_run_review_summary?: Record<string, unknown>;
+  pilot_policy_summary?: Record<string, unknown>;
+  live_recovery_summary?: Record<string, unknown>;
+  order_attempt_summary?: Record<string, unknown>;
+  waste_real_candle_source?: Record<string, unknown>;
+  claim_boundary?: string;
+  next_action?: string;
+}
+
+export interface WasteDirectionReviewPacket {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  direction_edge_confirmed: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  money_moved: boolean;
+  direction_summary: {
+    symbol?: string | null;
+    timeframe?: string | null;
+    direction?: string | null;
+    opposite_direction?: string | null;
+    long_score?: number | null;
+    short_score?: number | null;
+    chosen_score?: number | null;
+    opposite_score?: number | null;
+    score_margin?: number | null;
+    confidence?: number | null;
+    regime?: string | null;
+    profile?: string | null;
+    decision_ref?: string | null;
+    entry_pair_count?: number | null;
+  };
+  profit_box: {
+    valid?: boolean;
+    entry?: number | null;
+    stop_loss?: number | null;
+    take_profit?: number | null;
+    risk_units?: number | null;
+    reward_units?: number | null;
+    reward_r?: number | null;
+    direction?: string | null;
+  };
+  edge_gate_summary: {
+    status?: string | null;
+    measured_win_prob?: number | null;
+    threshold?: number | null;
+    null_p95?: number | null;
+    has_edge_token?: boolean;
+    reason?: string | null;
+  };
+  cas_context: Record<string, unknown>;
+  blocker_count: number;
+  blockers: Array<{
+    blocker_id: string;
+    plane: string;
+    clear: boolean;
+    value: unknown;
+    detail: string;
+    next_action?: string;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WasteDirectionLearningLedger {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  cycles_loaded: number;
+  direction_rows: number;
+  confirmed_direction_count: number;
+  blocked_direction_count: number;
+  direction_counts: Record<string, number>;
+  edge_status_counts: Record<string, number>;
+  groups: Array<Record<string, unknown>>;
+  profile_recommendation: Record<string, unknown>;
+  learning_ready_for_adaptation: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  money_moved: boolean;
+  sample_rows: Array<Record<string, unknown>>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WasteDirectionOutcomeBinding {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  read_only: boolean;
+  dry_run: boolean;
+  paper_only: boolean;
+  outcome_ready_for_promotion: boolean;
+  min_bound_outcomes_for_promotion: number;
+  direction_rows: number;
+  confirmed_direction_count: number;
+  executed_confirmed_count: number;
+  closed_history_count: number;
+  bound_outcome_count: number;
+  unbound_confirmed_count: number;
+  bound_outcomes_needed: number;
+  profitable_bound_count: number;
+  losing_bound_count: number;
+  flat_bound_count: number;
+  net_paper_pnl: number;
+  avg_bound_pnl: number;
+  direction_counts: Record<string, number>;
+  profile_counts: Record<string, number>;
+  paper_demo_history_status?: string | null;
+  history_account_mode?: string | null;
+  history_report_path?: string | null;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_apply_runtime_change: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  would_raise_risk: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  bound_rows: Array<Record<string, unknown>>;
+  unbound_confirmed_rows: Array<Record<string, unknown>>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WastePaperSampleCollector {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  read_only: boolean;
+  dry_run: boolean;
+  paper_only: boolean;
+  sample_collection_complete: boolean;
+  paper_runner_running: boolean;
+  paper_runner_mode: string;
+  market_data_ready: boolean;
+  mt5_market_data_status?: string | null;
+  mt5_ready_symbol_count: number;
+  real_candle_probe_status?: string | null;
+  real_candle_probe_broker_grade: boolean;
+  real_candle_probe_fallback_used: boolean;
+  probe_symbol?: string | null;
+  probe_timeframe?: string | null;
+  probe_direction?: string | null;
+  probe_edge_status?: string | null;
+  probe_edge_pass_unregistered: boolean;
+  direction_rows: number;
+  confirmed_direction_count: number;
+  confirmed_samples_needed: number;
+  executed_confirmed_count: number;
+  closed_history_count: number;
+  bound_outcome_count: number;
+  bound_outcomes_needed: number;
+  net_paper_pnl: number;
+  mt5_deal_history_status?: string | null;
+  mt5_deal_history_account_mode?: string | null;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_apply_runtime_change: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  would_raise_risk: boolean;
+  broker_touched: boolean;
+  broker_execution_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  checks: Array<{
+    check_id: string;
+    status: string;
+    passed: boolean;
+    detail: string;
+    evidence: Record<string, unknown>;
+  }>;
+  required_actions: Array<{
+    action_id: string;
+    detail: string;
+    route: string;
+    command?: string | null;
+    requires_owner_review: boolean;
+    can_touch_broker_execution: boolean;
+    can_authorize_live_trading: boolean;
+    can_create_owner_accept: boolean;
+    can_create_broker_accept: boolean;
+    can_move_money: boolean;
+  }>;
+  source_summaries: Record<string, unknown>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WastePaperSampleCollectorScheduler {
+  report_kind: string;
+  generated_at: string;
+  running: boolean;
+  status: string;
+  interval_seconds: number;
+  cycles_run: number;
+  started_at_iso?: string | null;
+  last_run_iso?: string | null;
+  last_error?: string | null;
+  latest_run?: Record<string, unknown> | null;
+  latest_collector_status?: string | null;
+  sample_collection_complete: boolean;
+  market_data_ready: boolean;
+  confirmed_direction_count: number;
+  bound_outcome_count: number;
+  bound_outcomes_needed: number;
+  config: {
+    run_market_diagnostic: boolean;
+    run_real_candle_probe: boolean;
+    run_deal_history_ingest: boolean;
+    symbol?: string | null;
+    timeframe?: string | null;
+    bars?: number | null;
+    max_pairs?: number | null;
+  };
+  config_present?: boolean;
+  paper_only: boolean;
+  read_only_market_actions_only: boolean;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_apply_runtime_change: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  would_raise_risk: boolean;
+  broker_touched: boolean;
+  broker_execution_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  external_worker_present?: boolean;
+  state_path?: string | null;
+  audit_path?: string | null;
+  claim_boundary: string;
+  claim_boundary_present?: boolean;
+  next_action: string;
+  next_action_present?: boolean;
+  full_status_route?: string;
+  summary_only?: boolean;
+}
+
+export interface WasteAdaptationPromotionRule {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  read_only: boolean;
+  dry_run: boolean;
+  promotion_ready_for_owner_review: boolean;
+  learning_ready_for_adaptation: boolean;
+  outcome_ready_for_promotion: boolean;
+  min_confirmed_for_adaptation: number;
+  confirmed_direction_count: number;
+  confirmed_samples_needed: number;
+  bound_outcome_count?: number | null;
+  bound_outcomes_needed?: number | null;
+  net_paper_pnl?: number | null;
+  blocked_direction_count: number;
+  direction_rows: number;
+  direction_counts: Record<string, number>;
+  edge_status_counts: Record<string, number>;
+  profile_recommendation_status?: string | null;
+  outcome_binding_summary?: Record<string, unknown>;
+  dominant_group: Record<string, unknown>;
+  recommended_group: Record<string, unknown>;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_apply_runtime_change: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  would_raise_risk: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WasteAdaptationPlan {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  dry_run: boolean;
+  adaptation_ready_for_owner_review: boolean;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  learning_summary: Record<string, unknown>;
+  promotion_rule_summary: Record<string, unknown>;
+  latest_direction_summary: Record<string, unknown>;
+  proposal_count: number;
+  proposals: Array<{
+    proposal_id: string;
+    proposal_type: string;
+    detail: string;
+    dry_run: boolean;
+    would_apply_runtime_change: boolean;
+    would_lower_edge_threshold: boolean;
+    would_enable_live_trading: boolean;
+    requires_owner_review: boolean;
+    evidence: Record<string, unknown>;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WasteAdaptationApplyPreview {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  dry_run: boolean;
+  owner_review_required: boolean;
+  preview_ready_for_owner_review: boolean;
+  apply_allowed_now: boolean;
+  apply_endpoint_available: boolean;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_apply_runtime_change: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  would_raise_risk: boolean;
+  would_create_owner_accept: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  adaptation_plan_summary: Record<string, unknown>;
+  runtime_gate_summary: Record<string, unknown>;
+  current_controls: Record<string, unknown>;
+  owner_envelope_summary: Record<string, unknown>;
+  simulated_change_count: number;
+  simulated_changes: Array<{
+    proposal_id?: string | null;
+    proposal_type?: string | null;
+    change_type: string;
+    field: string;
+    current_value: unknown;
+    preview_value: unknown;
+    dry_run: boolean;
+    would_apply_runtime_change: boolean;
+    would_lower_edge_threshold: boolean;
+    would_enable_live_trading: boolean;
+    would_raise_risk: boolean;
+    requires_owner_review: boolean;
+    rationale: string;
+  }>;
+  blocker_count: number;
+  blockers: Array<{
+    blocker_id: string;
+    clear: boolean;
+    detail: string;
+    evidence: Record<string, unknown>;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WasteAdaptationOwnerReview {
+  report_kind: string;
+  generated_at: string;
+  owner_review_status: string;
+  owner_review_decision: string;
+  owner_reviewed_at?: string | null;
+  owner_review_notes?: string | null;
+  accepted_fingerprint?: string | null;
+  current_fingerprint: string;
+  reviewed_fingerprint?: string | null;
+  paper_only_review_current: boolean;
+  paper_only_accept_current: boolean;
+  evidence_ready_for_owner_accept: boolean;
+  missing_requirements: string[];
+  checks: Array<{
+    check_id: string;
+    status: string;
+    evidence: Record<string, unknown>;
+    detail: string;
+  }>;
+  preview_summary: Record<string, unknown>;
+  dry_run: boolean;
+  paper_only: boolean;
+  apply_allowed_now: boolean;
+  apply_endpoint_available: boolean;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_apply_runtime_change: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  would_raise_risk: boolean;
+  would_create_live_authority: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface WasteAdaptationPaperApply {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  paper_apply_ready: boolean;
+  paper_apply_current: boolean;
+  paper_apply_recorded: boolean;
+  paper_apply_recorded_at?: string | null;
+  applied_fingerprint?: string | null;
+  current_fingerprint: string;
+  accepted_fingerprint?: string | null;
+  paper_only: boolean;
+  dry_run: boolean;
+  apply_requires_owner_confirm: boolean;
+  runtime_changed: boolean;
+  runtime_change_attempted: boolean;
+  would_apply_runtime_change: boolean;
+  would_lower_edge_threshold: boolean;
+  would_enable_live_trading: boolean;
+  would_raise_risk: boolean;
+  broker_touched: boolean;
+  live_order_attempted: boolean;
+  attempt_finalized: boolean;
+  edge_token_minted: boolean;
+  owner_accept_created: boolean;
+  money_moved: boolean;
+  owner_review_summary: Record<string, unknown>;
+  simulated_change_count: number;
+  paper_apply_effect: Record<string, unknown>;
+  missing_requirements: string[];
+  checks: Array<{
+    check_id: string;
+    status: string;
+    evidence: Record<string, unknown>;
+    detail: string;
+  }>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface LiveRecoveryReport {
+  report_kind: string;
+  generated_at: string;
+  recovery_status: string;
+  owner_recovery_status: string;
+  owner_accepted_at?: string | null;
+  accepted_fingerprint?: string | null;
+  current_fingerprint: string;
+  recovery_clear_for_live: boolean;
+  requires_recovery_review: boolean;
+  evidence_ready_for_owner_accept: boolean;
+  missing_requirements: string[];
+  checks: Array<{
+    check_id: string;
+    status: string;
+    evidence: Record<string, unknown>;
+    detail: string;
+  }>;
+  broker_truth_summary: Record<string, unknown>;
+  live_pilot_summary: Record<string, unknown>;
+  order_attempt_summary?: Record<string, unknown>;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface PayoutRecoveryAttempt {
+  attempt_id?: string;
+  idempotency_key: string;
+  status: string;
+  created_at?: string;
+  updated_at?: string;
+  amount_usd?: number;
+  destination_id?: string | null;
+  preview_status?: string | null;
+  preview_reason?: string | null;
+  provider_reference?: string | null;
+  provider_status?: string | null;
+  provider_is_real?: boolean | null;
+  movement_status?: string | null;
+  movement_reason?: string | null;
+  recovery_reason?: string;
+  owner_resolved_at?: string;
+  owner_resolution_notes?: string;
+  claim_boundary?: string;
+  movement?: Record<string, unknown>;
+}
+
+export interface PayoutRecoveryStatus {
+  report_kind: string;
+  generated_at: string;
+  attempt_count: number;
+  pending_count: number;
+  has_pending_recovery: boolean;
+  latest_attempt?: PayoutRecoveryAttempt | null;
+  pending_attempts: PayoutRecoveryAttempt[];
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface OrderAttemptAuditAttempt {
+  attempt_id?: string;
+  attempt_key?: string;
+  status?: string;
+  created_at?: string;
+  updated_at?: string;
+  source?: string;
+  mode?: string;
+  is_real_attempt?: boolean;
+  bridge_name?: string;
+  order_id?: string;
+  decision_ref?: string;
+  symbol?: string;
+  direction?: string;
+  volume?: number | null;
+  result_finalized?: boolean;
+  dispatched_to_bridge?: boolean;
+  executed?: boolean;
+  result_status?: string | null;
+  result_reason?: string | null;
+  outcome?: Record<string, unknown> | null;
+  claim_boundary?: string;
+}
+
+export interface OrderAttemptAuditStatus {
+  report_kind: string;
+  generated_at: string;
+  attempt_count: number;
+  real_attempt_count: number;
+  unresolved_attempt_count: number;
+  unresolved_real_attempt_count: number;
+  unresolved_real_attempts?: OrderAttemptAuditAttempt[];
+  executed_count: number;
+  latest_attempt?: OrderAttemptAuditAttempt | null;
+  has_unresolved_real_attempt: boolean;
+  state_path?: string;
+  audit_path?: string;
+  claim_boundary: string;
+  next_action: string;
+}
+
+export interface OrderAttemptRecoveryPacket {
+  report_kind: string;
+  generated_at: string;
+  status: string;
+  can_reconcile_unresolved_attempts: boolean;
+  broker_touched: boolean;
+  dispatched_to_bridge: boolean;
+  attempt_finalized: boolean;
+  unresolved_real_attempt_count: number;
+  synthetic_test_like_count: number;
+  broker_review_required_count: number;
+  missing_requirements: string[];
+  broker_truth_checks: Array<{
+    check_id: string;
+    status: string;
+    evidence: Record<string, unknown>;
+    detail: string;
+  }>;
+  broker_truth_summary: Record<string, unknown>;
+  unresolved_real_attempts: Array<OrderAttemptAuditAttempt & {
+    classification_status?: string;
+    classification_reasons?: string[];
+    requires_owner_terminal_review?: boolean;
+    owner_reconcile_route?: string;
+  }>;
+  claim_boundary: string;
+  next_action: string;
 }
 
 
@@ -2480,10 +3680,77 @@ export interface PcbaCockpitPayload {
   goal_status: Record<string, unknown>;
 }
 
+export interface WasteRealCandleProbe {
+  report_kind: string;
+  status: string;
+  generated_at?: string;
+  symbol?: string | null;
+  timeframe?: string | null;
+  source?: string | null;
+  fallback_used?: boolean;
+  broker_grade_market_truth?: boolean;
+  broker_touched?: boolean;
+  edge_authorization_registered?: boolean;
+  edge_token_persisted?: boolean;
+  candles_count?: number;
+  entry_pair_count?: number;
+  market_state?: Record<string, unknown> | null;
+  analysis?: Record<string, unknown> | null;
+  candidate?: Record<string, unknown> | null;
+  edge?: Record<string, unknown> | null;
+  claim_boundary?: string;
+  next_action?: string;
+  detail?: string;
+  error?: string;
+  audit?: Record<string, unknown>;
+}
+
+export interface MT5MarketDataDiagnosticSymbol {
+  symbol: string;
+  timeframe: string;
+  status: string;
+  candle_count: number;
+  has_quote: boolean;
+  quote?: Record<string, unknown> | null;
+  spread_pips?: number | null;
+  broker_grade_market_truth: boolean;
+  read_only_market_data: boolean;
+  selected_broker_symbol?: string | null;
+  symbol_resolution?: Record<string, unknown> | null;
+  detail?: string | null;
+  first_candle_time?: string | null;
+  last_candle_time?: string | null;
+}
+
+export interface MT5MarketDataDiagnostic {
+  report_kind: string;
+  status: string;
+  generated_at?: string;
+  ready_symbol_count?: number;
+  checked_symbol_count?: number;
+  symbols: MT5MarketDataDiagnosticSymbol[];
+  timeframe?: string;
+  bars_requested?: number;
+  broker_touched: boolean;
+  edge_authorization_registered?: boolean;
+  edge_token_persisted?: boolean;
+  live_trading_authorized?: boolean;
+  configured?: Record<string, unknown>;
+  terminal_locator?: Record<string, unknown>;
+  operator_commands?: Record<string, string>;
+  claim_boundary?: string;
+  next_action?: string;
+  detail?: string;
+  error?: string;
+  audit?: Record<string, unknown>;
+}
+
 export interface DashboardState {
   uiReadiness: UIReadinessReport;
   dailySchedule: DailySchedule;
   dailyBundle: DailyBundle;
+  riskBudget?: DashboardRiskBudgetSummary;
+  proofProgress?: DashboardProofProgressSummary;
   adaptive?: AdaptiveCockpitPayload;
   ownerControl?: OwnerControlState;
   accountLedger?: AccountLedgerState;
@@ -2520,6 +3787,7 @@ export interface DashboardState {
   mt5PaperExecutionVerifier?: MT5PaperExecutionVerifierReport | null;
   mt5DealHistoryIngest?: MT5DealHistoryIngestReport | null;
   terminalPositionReconciliation?: TerminalPositionReconciliationReport | null;
+  terminalReceiptRecoveryPacket?: TerminalReceiptRecoveryPacket | null;
   terminalOperabilityVerifier?: TerminalOperabilityVerifierReport | null;
   terminalReceiptIngest?: TerminalReceiptIngestReport | null;
   terminalHistoryIngest?: TerminalHistoryIngestReport | null;
@@ -2527,7 +3795,35 @@ export interface DashboardState {
   mt5ProbeStatus?: MT5ProbeStatus;
   authorityBoundary?: AuthorityBoundaryState;
   runtimeGates?: RuntimeGatesState;
+  autoHalt?: AutoHaltReport;
+  brokerTruthMonitor?: BrokerTruthMonitorStatus;
+  wasteLoop?: Record<string, unknown> | null;
+  orderAttemptAudit?: OrderAttemptAuditStatus;
+  orderAttemptRecoveryPacket?: OrderAttemptRecoveryPacket;
+  payoutRecovery?: PayoutRecoveryStatus;
   aiModel?: AIModelState;
   brokerCandidates?: BrokerCandidate[];
+  brokerReality?: BrokerRealityReview;
+  livePilot?: LivePilotPolicy;
+  liveOrderDryRun?: LiveOrderDryRunLatest | null;
+  liveOrderDryRunReview?: LiveOrderDryRunReview | null;
+  wasteEntryPilotPromotion?: WasteEntryPilotPromotionStatus | null;
+  wasteDirectionReview?: WasteDirectionReviewPacket | null;
+  wasteDirectionLearning?: WasteDirectionLearningLedger | null;
+  wasteDirectionOutcomeBinding?: WasteDirectionOutcomeBinding | null;
+  wastePaperSampleCollector?: WastePaperSampleCollector | null;
+  wastePaperSampleCollectorScheduler?: WastePaperSampleCollectorScheduler | null;
+  wasteAdaptationPromotionRule?: WasteAdaptationPromotionRule | null;
+  wasteAdaptationPlan?: WasteAdaptationPlan | null;
+  wasteAdaptationApplyPreview?: WasteAdaptationApplyPreview | null;
+  wasteAdaptationOwnerReview?: WasteAdaptationOwnerReview | null;
+  wasteAdaptationPaperApply?: WasteAdaptationPaperApply | null;
+  compoundAddOrderDryRun?: CompoundAddOrderDryRunLatest | null;
+  compoundAddOrderDryRunReview?: CompoundAddOrderDryRunReview | null;
+  compoundAddDispatchHandoff?: CompoundAddDispatchHandoffStatus | null;
+  liveRecovery?: LiveRecoveryReport;
+  liveMoneyProgression?: LiveMoneyProgressionPacket;
+  mt5MarketDataDiagnostic?: MT5MarketDataDiagnostic | null;
+  wasteRealCandleProbe?: WasteRealCandleProbe | null;
   pcba?: PcbaCockpitPayload;
 }

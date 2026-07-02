@@ -4,14 +4,15 @@ import { useCallback, useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { QuickStartItem } from "../components/QuickStartItem";
 import type { QuickStartStatus } from "../components/QuickStartItem";
+import "./QuickStartPage.css";
 import {
   fetchHealth,
   fetchStackHealth,
   fetchAutonomousLoopHealth,
-  fetchOperatorBriefing,
   fetchPushSubscriptions,
   fetchWebhookSubscriptions,
 } from "../data/api";
+import { fetchOperatorBriefing } from "../data/operatorBriefingApi";
 
 type MilestoneKey =
   | "api"

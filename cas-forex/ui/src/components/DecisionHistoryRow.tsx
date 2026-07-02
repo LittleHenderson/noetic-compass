@@ -11,6 +11,7 @@ import type {
   AgentDecisionHistoryItem,
   DecisionChainStep,
 } from "../data/api";
+import "./DecisionCardPrimitives.css";
 
 type ChipVariant = "success" | "warning" | "danger" | "info" | "muted" | "paper";
 

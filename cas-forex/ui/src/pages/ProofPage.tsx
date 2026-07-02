@@ -1,18 +1,82 @@
 /* ── CAS Forex — Proof Cockpit Page ── */
 
+import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { LockReasonList } from "../components/LockReasonList";
 import { EvidenceHashRow } from "../components/EvidenceHashRow";
 import { ProofControlPanel } from "../components/ProofControlPanel";
-import type { DashboardState } from "../types/evidence";
+import {
+  fetchBacksolve,
+  fetchAuthorization,
+  fetchAccountReconciliation,
+  fetchMT5ProbeStatus,
+  fetchMT5Receipt,
+  fetchVerifiedProfitSweepPolicy,
+  fetchWalkForward,
+  updateAuthorization,
+  updateVerifiedProfitSweepPolicy,
+  type AuthorizationPatch,
+  type AuthorizationState,
+  type VerifiedProfitSweepPolicy,
+  type VerifiedProfitSweepPolicyUpdate,
+} from "../data/api";
+import type {
+  AccountReconciliationReport,
+  BacksolveSummary,
+  DashboardState,
+  MT5ProbeStatus,
+  MT5Receipt,
+  WalkForwardSummary,
+} from "../types/evidence";
+import "../components/RoutePrimitives.css";
+import "./ProofPage.css";
 
 interface ProofPageProps {
   state: DashboardState;
 }
 
+const HUGOSWAY_CLIENT_PORTAL_URL = "https://app.hugosway.com";
+
 export function ProofPage({ state }: ProofPageProps) {
   const { uiReadiness: r, dailySchedule: s, dailyBundle: b } = state;
+  const [backsolveEvidence, setBacksolveEvidence] = useState<BacksolveSummary | null>(state.backsolve ?? null);
+  const [walkForwardEvidence, setWalkForwardEvidence] = useState<WalkForwardSummary | null>(state.walkForward ?? null);
+  const [mt5ReceiptEvidence, setMt5ReceiptEvidence] = useState<MT5Receipt | null>(state.mt5Receipt ?? null);
+  const [mt5ProbeEvidence, setMt5ProbeEvidence] = useState<MT5ProbeStatus | null>(state.mt5ProbeStatus ?? null);
+
+  useEffect(() => { if (state.backsolve) setBacksolveEvidence(state.backsolve); }, [state.backsolve]);
+  useEffect(() => { if (state.walkForward) setWalkForwardEvidence(state.walkForward); }, [state.walkForward]);
+  useEffect(() => { if (state.mt5Receipt) setMt5ReceiptEvidence(state.mt5Receipt); }, [state.mt5Receipt]);
+  useEffect(() => { if (state.mt5ProbeStatus) setMt5ProbeEvidence(state.mt5ProbeStatus); }, [state.mt5ProbeStatus]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function refreshProofEvidence() {
+      const [nextBacksolve, nextWalkForward, nextMt5Receipt, nextMt5Probe] = await Promise.all([
+        fetchBacksolve(),
+        fetchWalkForward(),
+        fetchMT5Receipt(),
+        fetchMT5ProbeStatus(),
+      ]);
+      if (cancelled) return;
+      if (nextBacksolve) setBacksolveEvidence(nextBacksolve);
+      if (nextWalkForward) setWalkForwardEvidence(nextWalkForward);
+      if (nextMt5Receipt) setMt5ReceiptEvidence(nextMt5Receipt);
+      if (nextMt5Probe) setMt5ProbeEvidence(nextMt5Probe);
+    }
+    void refreshProofEvidence();
+    const interval = window.setInterval(() => { void refreshProofEvidence(); }, 30_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const backsolve = backsolveEvidence ?? state.backsolve ?? null;
+  const walkForward = walkForwardEvidence ?? state.walkForward ?? null;
+  const mt5Receipt = mt5ReceiptEvidence ?? state.mt5Receipt ?? null;
+  const mt5ProbeStatus = mt5ProbeEvidence ?? state.mt5ProbeStatus ?? null;
 
   return (
     <div className="proof-page">
@@ -142,7 +206,7 @@ export function ProofPage({ state }: ProofPageProps) {
           <CheckItem
             label="Legal / account acknowledgments"
             met={false}
-            detail="NOT LICENSED"
+            detail="Owner acknowledgments pending"
           />
           <CheckItem
             label="No pooled / managed account"
@@ -265,67 +329,67 @@ export function ProofPage({ state }: ProofPageProps) {
       </GlassPanel>
 
       {/* ── Capital / Backsolve Summary ── */}
-      {state.backsolve && (
-        <GlassPanel title="Capital & Backsolve" subtitle={`${state.backsolve.total_scenarios.toLocaleString()} scenarios — ${state.backsolve.ai_autonomy_mode}`} variant="warning">
+      {backsolve && (
+        <GlassPanel title="Capital & Backsolve" subtitle={`${backsolve.total_scenarios.toLocaleString()} scenarios — ${backsolve.ai_autonomy_mode}`} variant="warning">
           <div className="backsolve-summary">
             <div className="dashboard-grid-3col">
               <div className="metric-stack">
                 <Metric label="Seed Capital" value="$5,000" mono />
                 <Metric label="Target Income" value="$5K-$12K/month" />
-                <Metric label="Required Return" value={`${state.backsolve.required_return_math.target_5k_on_5k_pct}%-${state.backsolve.required_return_math.target_12k_on_5k_pct}%`} mono />
+                <Metric label="Required Return" value={`${backsolve.required_return_math.target_5k_on_5k_pct}%-${backsolve.required_return_math.target_12k_on_5k_pct}%`} mono />
               </div>
               <div className="metric-stack">
-                <Metric label="Total Scenarios" value={state.backsolve.total_scenarios.toLocaleString()} mono />
-                <Metric label="Viable" value={`${state.backsolve.viable_scenarios}`} mono danger={state.backsolve.viable_scenarios === 0} />
-                <Metric label="AI Selection" value={state.backsolve.ai_selection ?? "NONE"} mono />
+                <Metric label="Total Scenarios" value={backsolve.total_scenarios.toLocaleString()} mono />
+                <Metric label="Viable" value={`${backsolve.viable_scenarios}`} mono danger={backsolve.viable_scenarios === 0} />
+                <Metric label="AI Selection" value={backsolve.ai_selection ?? "NONE"} mono />
               </div>
               <div className="metric-stack">
-                <Metric label="Target Not Reached" value={state.backsolve.verdict_counts.TARGET_NOT_REACHED?.toLocaleString() ?? "—"} mono />
-                <Metric label="Drawdown Fail" value={state.backsolve.verdict_counts.TARGET_REACHED_BUT_DRAWDOWN_FAIL?.toLocaleString() ?? "—"} mono />
-                <Metric label="Margin Fail" value={state.backsolve.verdict_counts.TARGET_REACHED_BUT_MARGIN_FAIL?.toLocaleString() ?? "—"} mono />
+                <Metric label="Target Not Reached" value={backsolve.verdict_counts.TARGET_NOT_REACHED?.toLocaleString() ?? "—"} mono />
+                <Metric label="Drawdown Fail" value={backsolve.verdict_counts.TARGET_REACHED_BUT_DRAWDOWN_FAIL?.toLocaleString() ?? "—"} mono />
+                <Metric label="Margin Fail" value={backsolve.verdict_counts.TARGET_REACHED_BUT_MARGIN_FAIL?.toLocaleString() ?? "—"} mono />
               </div>
             </div>
             <div style={{ marginTop: 8, padding: "6px 10px", background: "var(--danger-dim)", borderRadius: "var(--radius-sm)", fontSize: "0.72rem", color: "var(--danger)" }}>
-              {state.backsolve.capital_label}: $5K-$12K/month from $5K seed requires 100%-240% monthly return. Current D1 evidence baseline is $32.93/month. Leverage changes margin; it does not create edge.
+              {backsolve.capital_label}: $5K-$12K/month from $5K seed requires 100%-240% monthly return. Current D1 evidence baseline is $32.93/month. Leverage changes margin; it does not create edge.
             </div>
           </div>
         </GlassPanel>
       )}
 
       {/* ── MT5 Demo Receipt ── */}
-      {state.mt5Receipt && (
-        <GlassPanel title="MT5 Demo Receipt" subtitle={`${state.mt5Receipt.server} — ${state.mt5Receipt.trading_date}`} variant="info">
+      {mt5Receipt && (
+        <GlassPanel title="MT5 Demo Receipt" subtitle={`${mt5Receipt.server} — ${mt5Receipt.trading_date}`} variant="info">
           <div className="receipt-detail">
             <div className="receipt-grid">
               <div className="receipt-field">
                 <span className="field-label">Status</span>
-                <StatusChip label={state.mt5Receipt.receipt_validation_status} variant="success" size="sm" />
+                <StatusChip label={mt5Receipt.receipt_validation_status} variant="success" size="sm" />
               </div>
               <div className="receipt-field">
                 <span className="field-label">Broker API</span>
-                <StatusChip label={state.mt5Receipt.broker_api_authenticated ? "AUTHENTICATED" : "NOT AUTH"} variant={state.mt5Receipt.broker_api_authenticated ? "success" : "danger"} size="sm" />
+                <StatusChip label={mt5Receipt.broker_api_authenticated ? "AUTHENTICATED" : "NOT AUTH"} variant={mt5Receipt.broker_api_authenticated ? "success" : "danger"} size="sm" />
               </div>
               <div className="receipt-field">
                 <span className="field-label">Chain</span>
-                <StatusChip label={state.mt5Receipt.chain_verified ? "VERIFIED" : "FAILED"} variant={state.mt5Receipt.chain_verified ? "success" : "danger"} size="sm" />
+                <StatusChip label={mt5Receipt.chain_verified ? "VERIFIED" : "FAILED"} variant={mt5Receipt.chain_verified ? "success" : "danger"} size="sm" />
               </div>
               <div className="receipt-field">
                 <span className="field-label">WORM</span>
-                <span style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>{state.mt5Receipt.worm_retained ? "RETAINED" : "UNAVAILABLE"}</span>
+                <span style={{ color: "var(--text-muted)", fontSize: "0.72rem" }}>{mt5Receipt.worm_retained ? "RETAINED" : "UNAVAILABLE"}</span>
               </div>
               <div className="receipt-field">
                 <span className="field-label">Live Mode</span>
-                <span className="field-value mono" style={{ color: "var(--danger)" }}>{String(state.mt5Receipt.live_mode)}</span>
+                <span className="field-value mono" style={{ color: "var(--danger)" }}>{String(mt5Receipt.live_mode)}</span>
               </div>
               <div className="receipt-field">
                 <span className="field-label">Positions Reconciled</span>
-                <span className="field-value mono">{String(state.mt5Receipt.open_positions_reconciled)}</span>
+                <span className="field-value mono">{String(mt5Receipt.open_positions_reconciled)}</span>
               </div>
             </div>
             <div className="receipt-hashes">
-              <div className="hash-row"><span className="field-label">Receipt Hash</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{state.mt5Receipt.receipt_hash_sha256.slice(0, 24)}...</code></div>
-              <div className="hash-row"><span className="field-label">Broker Export</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{state.mt5Receipt.broker_export_sha256.slice(0, 24)}...</code></div>
-              <div className="hash-row"><span className="field-label">Packet Hash</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{state.mt5Receipt.packet_hash.slice(0, 24)}...</code></div>
+              <div className="hash-row"><span className="field-label">Receipt Hash</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{mt5Receipt.receipt_hash_sha256.slice(0, 24)}...</code></div>
+              <div className="hash-row"><span className="field-label">Broker Export</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{mt5Receipt.broker_export_sha256.slice(0, 24)}...</code></div>
+              <div className="hash-row"><span className="field-label">Packet Hash</span><code className="hash-row-value" style={{ fontSize: "0.62rem" }}>{mt5Receipt.packet_hash.slice(0, 24)}...</code></div>
             </div>
           </div>
         </GlassPanel>
@@ -333,102 +397,416 @@ export function ProofPage({ state }: ProofPageProps) {
 
 
 
-      {state.mt5ProbeStatus && (
-        <GlassPanel title="Latest MT5 Probe Attempt" subtitle={state.mt5ProbeStatus.probe_path} variant={state.mt5ProbeStatus.status === "BROKER_API_VERIFIED" ? "info" : "danger"}>
+      {mt5ProbeStatus && (
+        <GlassPanel title="Latest MT5 Probe Attempt" subtitle={mt5ProbeStatus.probe_path} variant={mt5ProbeStatus.status === "BROKER_API_VERIFIED" ? "info" : "danger"}>
           <div className="dashboard-grid-3col">
             <div className="metric-stack">
-              <Metric label="Probe Status" value={state.mt5ProbeStatus.status} mono danger={state.mt5ProbeStatus.status !== "BROKER_API_VERIFIED"} />
-              <Metric label="Broker" value={state.mt5ProbeStatus.broker ?? "—"} mono />
-              <Metric label="Trading Date" value={state.mt5ProbeStatus.trading_date ?? "—"} mono />
+              <Metric label="Probe Status" value={mt5ProbeStatus.status} mono danger={mt5ProbeStatus.status !== "BROKER_API_VERIFIED"} />
+              <Metric label="Broker" value={mt5ProbeStatus.broker ?? "—"} mono />
+              <Metric label="Trading Date" value={mt5ProbeStatus.trading_date ?? "—"} mono />
             </div>
             <div className="metric-stack">
-              <Metric label="Has Receipt" value={String(state.mt5ProbeStatus.has_receipt)} mono />
-              <Metric label="Account Snapshot" value={state.mt5ProbeStatus.account_snapshot_present ? "PRESENT" : "MISSING"} mono danger={!state.mt5ProbeStatus.account_snapshot_present} />
-              <Metric label="Latest Verified Receipt" value={state.mt5Receipt?.receipt_validation_status ?? "—"} mono />
+              <Metric label="Has Receipt" value={String(mt5ProbeStatus.has_receipt)} mono />
+              <Metric label="Account Snapshot" value={mt5ProbeStatus.account_snapshot_present ? "PRESENT" : "MISSING"} mono danger={!mt5ProbeStatus.account_snapshot_present} />
+              <Metric label="Latest Verified Receipt" value={mt5Receipt?.receipt_validation_status ?? "—"} mono />
             </div>
             <div className="metric-stack">
-              <Metric label="Live Trading" value="NOT LICENSED" mono danger />
-              <Metric label="Broker ACCEPT" value="NOT LICENSED" mono danger />
-              <Metric label="Payment Movement" value="NOT LICENSED" mono danger />
+              <Metric label="Live Trading" value="OWNER PENDING" mono warning />
+              <Metric label="Broker ACCEPT" value="OWNER PENDING" mono warning />
+              <Metric label="Payment Movement" value="PAYMENT SETUP PENDING" mono warning />
             </div>
           </div>
-          {state.mt5ProbeStatus.reasons.length > 0 && (
+          {mt5ProbeStatus.reasons.length > 0 && (
             <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.72rem" }}>
-              Latest probe blocker: {state.mt5ProbeStatus.reasons.join("; ")}
+              Latest probe blocker: {mt5ProbeStatus.reasons.join("; ")}
             </div>
           )}
         </GlassPanel>
       )}
 
       {/* ── Walk-Forward Summary ── */}
-      {state.walkForward && (
-        <GlassPanel title="Walk-Forward Evidence" subtitle={`${state.walkForward.run_id} — ${state.walkForward.research_grade}`} variant="info">
+      {walkForward && (
+        <GlassPanel title="Walk-Forward Evidence" subtitle={`${walkForward.run_id} — ${walkForward.research_grade}`} variant="info">
           <div className="wf-summary">
             <div className="dashboard-grid-3col">
               <div className="metric-stack">
-                <Metric label="Total Windows" value={`${state.walkForward.total_windows}`} mono />
-                <Metric label="Routed" value={`${state.walkForward.routed_windows}`} mono />
-                <Metric label="Active Routed" value={`${state.walkForward.active_routed_windows}`} mono />
+                <Metric label="Total Windows" value={`${walkForward.total_windows}`} mono />
+                <Metric label="Routed" value={`${walkForward.routed_windows}`} mono />
+                <Metric label="Active Routed" value={`${walkForward.active_routed_windows}`} mono />
               </div>
               <div className="metric-stack">
-                <Metric label="Positive Active" value={`${state.walkForward.positive_active_routed_windows} / ${state.walkForward.active_routed_windows}`} mono />
-                <Metric label="Mean Return" value={`${state.walkForward.active_routed_mean_return_pct.toFixed(2)}%`} mono />
-                <Metric label="Max DD" value={`${state.walkForward.routed_max_drawdown_pct.toFixed(2)}%`} mono />
+                <Metric label="Positive Active" value={`${walkForward.positive_active_routed_windows} / ${walkForward.active_routed_windows}`} mono />
+                <Metric label="Mean Return" value={`${walkForward.active_routed_mean_return_pct.toFixed(2)}%`} mono />
+                <Metric label="Max DD" value={`${walkForward.routed_max_drawdown_pct.toFixed(2)}%`} mono />
               </div>
               <div className="metric-stack">
-                <Metric label="Routed Return" value={`${state.walkForward.routed_total_return_pct.toFixed(2)}%`} mono />
-                <Metric label="Total Trades" value={`${state.walkForward.total_routed_trades}`} mono />
-                <Metric label="Symbols" value={state.walkForward.symbols.join(", ")} />
+                <Metric label="Routed Return" value={`${walkForward.routed_total_return_pct.toFixed(2)}%`} mono />
+                <Metric label="Total Trades" value={`${walkForward.total_routed_trades}`} mono />
+                <Metric label="Symbols" value={walkForward.symbols.join(", ")} />
               </div>
             </div>
             <div className="wf-grade">
-              <StatusChip label={`Grade: ${state.walkForward.research_grade}`} variant="warning" size="sm" />
-              <span className="text-muted-italic" style={{ marginLeft: 8 }}>{state.walkForward.claim_boundary}</span>
+              <StatusChip label={`Grade: ${walkForward.research_grade}`} variant="warning" size="sm" />
+              <span className="text-muted-italic" style={{ marginLeft: 8 }}>{walkForward.claim_boundary}</span>
             </div>
           </div>
         </GlassPanel>
       )}
 
-      {/* ── NOT LICENSED Controls ── */}
-      <GlassPanel title="Live & Payment Controls" variant="danger">
-        <div className="not-licensed-grid">
-          <DisabledControl
-            label="Deployment"
-            reason="NOT LICENSED — paper proof incomplete"
-          />
-          <DisabledControl
-            label="Broker ACCEPT"
-            reason="NOT LICENSED — no live broker connection authorized"
-          />
-          <DisabledControl
-            label="Auto-Deposit"
-            reason="NOT LICENSED — payment movement not authorized"
-          />
-          <DisabledControl
-            label="Debit / Card / Bank"
-            reason="NOT LICENSED — transfer not authorized"
-          />
-          <DisabledControl
-            label="Payout Automation"
-            reason="NOT LICENSED — sweep/payout not authorized"
-          />
-          <DisabledControl
-            label="Live Trading"
-            reason="NOT LICENSED — 1/30 paper days, edge OPEN"
-          />
-        </div>
-      </GlassPanel>
+      <ProofLivePaymentControls />
     </div>
   );
 }
 
 /* ── Helpers ── */
 
-function Metric({ label, value, mono, danger }: { label: string; value: string; mono?: boolean; danger?: boolean }) {
+function ProofLivePaymentControls() {
+  const [auth, setAuth] = useState<AuthorizationState | null>(null);
+  const [policy, setPolicy] = useState<VerifiedProfitSweepPolicy | null>(null);
+  const [reconciliation, setReconciliation] = useState<AccountReconciliationReport | null>(null);
+  const [busyKey, setBusyKey] = useState("");
+  const [status, setStatus] = useState("");
+  const [fundingStatus, setFundingStatus] = useState("");
+  const [provider, setProvider] = useState("");
+  const [apiKey, setApiKey] = useState("");
+  const [destId, setDestId] = useState("");
+  const [sweepPct, setSweepPct] = useState("30");
+  const [taxReservePct, setTaxReservePct] = useState("20");
+  const [minSweepUsd, setMinSweepUsd] = useState("25");
+
+  function loadAuthDraft(nextAuth: AuthorizationState) {
+    setProvider(nextAuth.provider.payment_provider ?? "");
+    setDestId(nextAuth.provider.payout_destination_id ?? "");
+  }
+
+  function loadPolicyDraft(nextPolicy: VerifiedProfitSweepPolicy) {
+    setSweepPct(String(nextPolicy.settings.sweep_pct));
+    setTaxReservePct(String(nextPolicy.settings.tax_reserve_pct));
+    setMinSweepUsd(String(nextPolicy.settings.min_sweep_usd));
+  }
+
+  async function refresh() {
+    const [nextAuth, nextPolicy, nextReconciliation] = await Promise.all([
+      fetchAuthorization(),
+      fetchVerifiedProfitSweepPolicy(),
+      fetchAccountReconciliation(),
+    ]);
+    if (nextAuth) {
+      setAuth(nextAuth);
+      loadAuthDraft(nextAuth);
+    }
+    if (nextPolicy) {
+      setPolicy(nextPolicy);
+      loadPolicyDraft(nextPolicy);
+    }
+    if (nextReconciliation) setReconciliation(nextReconciliation);
+  }
+
+  useEffect(() => {
+    void refresh();
+  }, []);
+
+  async function applyAuth(patch: AuthorizationPatch, key: string, okMessage = "Saved.") {
+    setBusyKey(key);
+    setStatus("");
+    try {
+      const nextAuth = await updateAuthorization(patch);
+      setAuth(nextAuth);
+      loadAuthDraft(nextAuth);
+      setStatus(okMessage);
+    } catch {
+      setStatus("Could not save owner authorization. Check the API connection.");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  async function saveProvider() {
+    const patch: AuthorizationPatch = {
+      payment_provider: provider.trim(),
+      payout_destination_id: destId.trim(),
+    };
+    if (apiKey.trim()) patch.payment_api_key = apiKey.trim();
+    await applyAuth(patch, "__provider__", "Provider and destination saved.");
+    setApiKey("");
+  }
+
+  async function syncBrokerSnapshot() {
+    setBusyKey("__broker_snapshot__");
+    setFundingStatus("");
+    try {
+      const report = await fetchAccountReconciliation(true);
+      setReconciliation(report);
+      setFundingStatus(
+        report
+          ? "Broker snapshot synced. CAS can compare broker balance/equity against the owner ledger."
+          : "Broker snapshot sync returned no report.",
+      );
+    } catch {
+      setFundingStatus("Could not sync broker snapshot. Confirm the API and terminal/broker receipt path are reachable.");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  async function turnOwnerSwitchesOn() {
+    const patch: AuthorizationPatch = {
+      personal_account_ack: true,
+      no_pooled_capital_ack: true,
+      live_mode: true,
+      prefer_mt5: true,
+      owner_enable_live_trading: true,
+      live_trading_licensed: true,
+      owner_enable_broker_accept: true,
+      owner_enable_auto_deposit: true,
+      owner_enable_bank_card_movement: true,
+      owner_enable_payout_automation: true,
+      payment_provider: provider.trim(),
+      payout_destination_id: destId.trim(),
+    };
+    if (destId.trim()) patch.payout_destination_allowlisted = true;
+    if (apiKey.trim()) patch.payment_api_key = apiKey.trim();
+    await applyAuth(
+      patch,
+      "__all__",
+      "Owner authority switches saved. Broker credentials, edge authorization, provider setup, and risk still re-check at action time.",
+    );
+    setApiKey("");
+  }
+
+  async function saveSweepPolicy() {
+    setBusyKey("__sweep__");
+    setStatus("");
+    try {
+      const patch: VerifiedProfitSweepPolicyUpdate = {
+        sweep_pct: cleanNumber(sweepPct, policy?.settings.sweep_pct ?? 30),
+        tax_reserve_pct: cleanNumber(taxReservePct, policy?.settings.tax_reserve_pct ?? 20),
+        min_sweep_usd: cleanNumber(minSweepUsd, policy?.settings.min_sweep_usd ?? 25),
+        destination_id: destId.trim() || null,
+      };
+      const nextPolicy = await updateVerifiedProfitSweepPolicy(patch);
+      setPolicy(nextPolicy);
+      loadPolicyDraft(nextPolicy);
+      setStatus("Verified-profit sweep policy saved.");
+    } catch {
+      setStatus("Could not save sweep policy. Check the API connection.");
+    } finally {
+      setBusyKey("");
+    }
+  }
+
+  const allAuthorized = auth?.all_real_money_authorized ?? false;
+  const snapshot = reconciliation?.broker_snapshot_initial_investment_usd;
+  const blockerCount = reconciliation?.blockers?.length ?? 0;
+  const syncStatus = reconciliation?.overall_status ?? "READY";
+  const statusVariant = syncStatus.includes("MISMATCH") ? "warning" : "info";
+
+  return (
+    <GlassPanel
+      title="Live & Payment Controls"
+      subtitle="Owner authorization, broker/payment gates, and verified-profit payout destination"
+      variant={allAuthorized ? "default" : "warning"}
+    >
+      <div style={{ marginBottom: 12, fontSize: "0.78rem", color: "var(--text-secondary)" }}>
+        {auth?.summary ?? "Loading owner-controlled capability state..."}
+      </div>
+
+      <div className="go-live-group-title">Broker Funding Route</div>
+      <div className="dashboard-grid-3col">
+        <div className="control-field">
+          <div className="control-field-header">
+            <span className="field-label">Where to fund</span>
+            <StatusChip label="BROKER PORTAL" variant="info" size="sm" />
+          </div>
+          <div className="control-field-desc">Use the broker client portal for KYC, deposits, withdrawals, and account funding.</div>
+        </div>
+        <div className="control-field">
+          <div className="control-field-header">
+            <span className="field-label">CAS custody</span>
+            <StatusChip label="NO RAW BANK/CARD STORAGE" variant="success" size="sm" />
+          </div>
+          <div className="control-field-desc">CAS reads broker/terminal evidence after funding; payment details stay with the broker/provider.</div>
+        </div>
+        <div className="control-field">
+          <div className="control-field-header">
+            <span className="field-label">Broker snapshot</span>
+            <StatusChip label={syncStatus} variant={statusVariant} size="sm" />
+          </div>
+          <div className="control-field-desc">
+            {snapshot != null
+              ? `Broker snapshot balance/equity seed: $${snapshot.toFixed(2)}.`
+              : `No broker-funded snapshot loaded yet${blockerCount ? `; ${blockerCount} blocker(s) reported.` : "."}`}
+          </div>
+        </div>
+      </div>
+      <div className="mobile-api-row">
+        <a className="mobile-api-button" href={HUGOSWAY_CLIENT_PORTAL_URL} target="_blank" rel="noreferrer">
+          OPEN BROKER PORTAL
+        </a>
+        <button
+          className="mobile-api-button ghost"
+          type="button"
+          disabled={busyKey === "__broker_snapshot__"}
+          onClick={() => void syncBrokerSnapshot()}
+        >
+          {busyKey === "__broker_snapshot__" ? "SYNCING..." : "SYNC BROKER SNAPSHOT"}
+        </button>
+      </div>
+      {fundingStatus && (
+        <div
+          className="control-field-desc"
+          style={{ color: fundingStatus.startsWith("Could not") ? "var(--danger)" : "var(--success)" }}
+        >
+          {fundingStatus}
+        </div>
+      )}
+
+      <div className="not-licensed-grid" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
+        {(auth?.capabilities ?? []).map((cap) => (
+          <div
+            key={cap.capability}
+            className="disabled-control"
+            style={{ borderColor: cap.authorized ? "var(--success)" : "var(--warning-dim)" }}
+          >
+            <div className="disabled-control-header">
+              <span className="disabled-control-label">{cap.title}</span>
+              <StatusChip
+                label={cap.authorized ? "AUTHORIZED" : cap.status.includes("NOT LICENSED") ? "OWNER PENDING" : cap.status}
+                variant={cap.authorized ? "success" : "warning"}
+                size="sm"
+              />
+            </div>
+            <div className="disabled-control-reason" style={{ color: cap.authorized ? "var(--success)" : "var(--text-secondary)" }}>
+              {cap.authorized ? "Authorized by owner controls." : cap.missing_requirements.join("; ") || "Waiting for owner/provider setup."}
+            </div>
+            <div style={{ display: "grid", gap: 4, marginTop: 8 }}>
+              {cap.toggles.map((toggle) => (
+                <div key={toggle.key} className="go-live-row" style={{ borderBottom: "none", padding: "4px 0" }}>
+                  <ToggleSwitch
+                    on={toggle.enabled}
+                    busy={busyKey === toggle.key}
+                    label={toggle.label}
+                    onClick={() => void applyAuth({ [toggle.key]: !toggle.enabled } as AuthorizationPatch, toggle.key)}
+                  />
+                  <div className="go-live-row-body">
+                    <div className="go-live-row-label">{toggle.label}</div>
+                    <div className="go-live-row-consequence">{toggle.consequence}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            {cap.note && <div className="control-field-desc">{cap.note}</div>}
+          </div>
+        ))}
+      </div>
+
+      <div className="go-live-group-title">Bank / Card / Payout Destination</div>
+      <div className="dashboard-grid-3col">
+        <div className="control-field">
+          <span className="field-label">Payment provider</span>
+          <input
+            className="mobile-api-input"
+            value={provider}
+            placeholder="wise, stripe, broker payout provider"
+            onChange={(event) => { setProvider(event.target.value); setStatus(""); }}
+          />
+        </div>
+        <div className="control-field">
+          <span className="field-label">Provider API key{auth?.provider.payment_api_key_set ? " - set" : ""}</span>
+          <input
+            className="mobile-api-input"
+            type="password"
+            value={apiKey}
+            placeholder={auth?.provider.payment_api_key_set ? "leave blank to keep current key" : "provider API key"}
+            autoComplete="off"
+            onChange={(event) => { setApiKey(event.target.value); setStatus(""); }}
+          />
+          <div className="control-field-desc">The app stores a provider key/token, not raw bank or card numbers.</div>
+        </div>
+        <div className="control-field">
+          <span className="field-label">Bank/card destination token</span>
+          <input
+            className="mobile-api-input"
+            value={destId}
+            placeholder="allowlisted payout destination id"
+            onChange={(event) => { setDestId(event.target.value); setStatus(""); }}
+          />
+        </div>
+      </div>
+
+      <div className="go-live-row" style={{ borderBottom: "none" }}>
+        <ToggleSwitch
+          on={auth?.provider.payout_destination_allowlisted ?? false}
+          busy={busyKey === "payout_destination_allowlisted"}
+          label={auth?.provider.allowlist_label ?? "Payout destination allowlisted"}
+          onClick={() => void applyAuth(
+            { payout_destination_allowlisted: !(auth?.provider.payout_destination_allowlisted ?? false) },
+            "payout_destination_allowlisted",
+          )}
+        />
+        <div className="go-live-row-body">
+          <div className="go-live-row-label">{auth?.provider.allowlist_label ?? "Payout destination allowlisted"}</div>
+          <div className="go-live-row-consequence">Owner confirms the payout destination token is approved for deposits/sweeps.</div>
+        </div>
+      </div>
+
+      <div className="mobile-api-row">
+        <button className="mobile-api-button" type="button" disabled={busyKey === "__provider__"} onClick={() => void saveProvider()}>
+          SAVE PROVIDER / DESTINATION
+        </button>
+        <button className="mobile-api-button" type="button" disabled={busyKey === "__all__"} onClick={() => void turnOwnerSwitchesOn()}>
+          TURN OWNER SWITCHES ON
+        </button>
+      </div>
+
+      <div className="go-live-group-title">Verified-Profit Sweep Policy</div>
+      <div className="dashboard-grid-3col">
+        <div className="control-field">
+          <span className="field-label">Sweep pct</span>
+          <input className="mobile-api-input" type="number" min={0} max={100} step="1" value={sweepPct} onChange={(event) => setSweepPct(event.target.value)} />
+        </div>
+        <div className="control-field">
+          <span className="field-label">Tax reserve pct</span>
+          <input className="mobile-api-input" type="number" min={0} max={100} step="1" value={taxReservePct} onChange={(event) => setTaxReservePct(event.target.value)} />
+        </div>
+        <div className="control-field">
+          <span className="field-label">Minimum sweep USD</span>
+          <input className="mobile-api-input" type="number" min={0} step="1" value={minSweepUsd} onChange={(event) => setMinSweepUsd(event.target.value)} />
+        </div>
+      </div>
+      <div className="mobile-api-row">
+        <button className="mobile-api-button ghost" type="button" disabled={busyKey === "__sweep__"} onClick={() => void saveSweepPolicy()}>
+          SAVE SWEEP POLICY
+        </button>
+      </div>
+
+      {status && (
+        <div className="control-field-desc" style={{ color: status.startsWith("Could not") ? "var(--danger)" : "var(--success)" }}>
+          {status}
+        </div>
+      )}
+    </GlassPanel>
+  );
+}
+
+function Metric({
+  label,
+  value,
+  mono,
+  danger,
+  warning,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  danger?: boolean;
+  warning?: boolean;
+}) {
+  const color = danger ? "var(--danger)" : warning ? "var(--warning)" : undefined;
   return (
     <div className="dashboard-metric">
       <span className="field-label">{label}</span>
-      <span className={`field-value ${mono ? "mono" : ""}`} style={{ color: danger ? "var(--danger)" : undefined }}>{value}</span>
+      <span className={`field-value ${mono ? "mono" : ""}`} style={{ color }}>{value}</span>
     </div>
   );
 }
@@ -458,20 +836,33 @@ function CheckItem({
   );
 }
 
-function DisabledControl({
+function ToggleSwitch({
+  on,
+  busy,
+  onClick,
   label,
-  reason,
 }: {
+  on: boolean;
+  busy: boolean;
+  onClick: () => void;
   label: string;
-  reason: string;
 }) {
   return (
-    <div className="disabled-control">
-      <div className="disabled-control-header">
-        <span className="disabled-control-label">{label}</span>
-        <StatusChip label="DISABLED" variant="danger" size="sm" />
-      </div>
-      <div className="disabled-control-reason">{reason}</div>
-    </div>
+    <button
+      type="button"
+      className="go-live-switch"
+      data-on={on}
+      disabled={busy}
+      aria-pressed={on}
+      aria-label={`${label} - ${on ? "on" : "off"}`}
+      onClick={onClick}
+    >
+      <span className="knob" />
+    </button>
   );
+}
+
+function cleanNumber(value: string, fallback: number): number {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : fallback;
 }

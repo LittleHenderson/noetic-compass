@@ -15,8 +15,10 @@ import {
   fetchAutonomousLoopHealth,
   type AutonomousLoopHealthResponse,
 } from "../data/api";
+import "./DecisionCardPrimitives.css";
 
 const POLL_INTERVAL_MS = 30_000;
+const RETRY_INTERVAL_MS = 5_000;
 
 type ChipVariant = "success" | "warning" | "danger" | "info" | "muted" | "paper";
 
@@ -67,15 +69,17 @@ export function AutonomousLoopCard() {
 
   useEffect(() => {
     let cancelled = false;
+    let retryId: number | undefined;
     const load = async () => {
       const result = await fetchAutonomousLoopHealth();
-      if (!cancelled) setData(result);
+      if (cancelled) return;
+      if (result) setData(result);
+      retryId = window.setTimeout(load, result ? POLL_INTERVAL_MS : RETRY_INTERVAL_MS);
     };
-    load();
-    const handle = setInterval(load, POLL_INTERVAL_MS);
+    void load();
     return () => {
       cancelled = true;
-      clearInterval(handle);
+      if (retryId !== undefined) window.clearTimeout(retryId);
     };
   }, []);
 
@@ -84,7 +88,7 @@ export function AutonomousLoopCard() {
       <GlassPanel title="Autonomous Loop">
         <div className="autonomous-loop-card">
           <div className="decision-empty">
-            Autonomous loop health unavailable — restart uvicorn so /api/forex/autonomous-loop is registered.
+            Autonomous loop status is warming. The app is retrying the live loop route.
           </div>
         </div>
       </GlassPanel>

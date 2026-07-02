@@ -1,20 +1,46 @@
 /* ── CAS Forex — Condition Lab ── */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { fetchConditionTally } from "../data/api";
 import type { DashboardState, ConditionTallyBucket } from "../types/evidence";
+import "../components/RoutePrimitives.css";
+import "../components/SelectorChips.css";
 
 interface ConditionLabPageProps {
   state: DashboardState;
 }
 
 export function ConditionLabPage({ state }: ConditionLabPageProps) {
-  const tally = state.conditionTally ?? [];
+  const [liveTally, setLiveTally] = useState<ConditionTallyBucket[] | null>(state.conditionTally ?? null);
   const [selectedBucket, setSelectedBucket] = useState<ConditionTallyBucket | null>(null);
   const [selectedTimeframe, setSelectedTimeframe] = useState("ALL");
   const [selectedStrategy, setSelectedStrategy] = useState("ALL");
   const [selectedRoute, setSelectedRoute] = useState("ALL");
+  const tally = liveTally ?? state.conditionTally ?? [];
+
+  useEffect(() => { if (state.conditionTally) setLiveTally(state.conditionTally); }, [state.conditionTally]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function refreshConditionTally() {
+      const nextTally = await fetchConditionTally();
+      if (!cancelled && nextTally) setLiveTally(nextTally);
+    }
+    void refreshConditionTally();
+    const interval = window.setInterval(() => { void refreshConditionTally(); }, 30_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (selectedBucket && !tally.some((bucket) => bucket.key === selectedBucket.key)) {
+      setSelectedBucket(null);
+    }
+  }, [selectedBucket, tally]);
 
   // Always show the standard tradeable timeframes (incl. M1 + M5 for scalping),
   // even when no walk-forward bucket has them yet — selecting one with no evidence

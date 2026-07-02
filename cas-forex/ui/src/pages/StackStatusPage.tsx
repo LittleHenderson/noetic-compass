@@ -5,6 +5,7 @@ import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { fetchStackHealth } from "../data/api";
 import type { StackHealthCheckResult, StackHealthReport } from "../data/api";
+import "./StackStatusPage.css";
 
 type ChipVariant = "success" | "warning" | "danger" | "muted" | "info";
 

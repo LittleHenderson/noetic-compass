@@ -1,0 +1,251 @@
+/* CAS Forex - PCBA/CJT diagnostics route styles */
+
+.pcba-boards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.pcba-board-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.pcba-board-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.pcba-board-id {
+  font-size: 0.72rem;
+  color: var(--accent-teal);
+  font-weight: 700;
+}
+
+.pcba-board-name {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.pcba-board-purpose {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.pcba-board-components {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.pcba-component-chip {
+  font-size: 0.6rem;
+  font-family: var(--font-mono);
+  padding: 1px 6px;
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+}
+
+.pcba-claim-note {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.cjt-features {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.cjt-feature-row {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cjt-feature-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.cjt-feature-name {
+  font-size: 0.68rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.cjt-checks {
+  font-size: 0.65rem;
+  color: var(--text-muted);
+}
+
+.cjt-feature-detail {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.cjt-progress-track {
+  height: 3px;
+  background: var(--border-subtle);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.cjt-progress-fill {
+  height: 100%;
+  background: var(--danger);
+  border-radius: 2px;
+}
+
+.component-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 4px;
+}
+
+.component-catalog-item {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  padding: 3px 6px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+}
+
+.component-name {
+  font-size: 0.62rem;
+  color: var(--accent-teal);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.component-role {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.event-context-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.event-context-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  background: var(--bg-card);
+  border: 1px solid;
+  border-radius: var(--radius-sm);
+}
+
+.event-label {
+  font-size: 0.66rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.event-vol {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.event-priority {
+  font-size: 0.6rem;
+  color: var(--accent-teal);
+  font-family: var(--font-mono);
+}
+
+.event-context-note {
+  margin-top: 10px;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.temporal-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 8px;
+}
+
+.temporal-cell {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+
+.temporal-cell.has-route {
+  border-color: var(--paper);
+}
+
+.temporal-cell-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.temporal-scale {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+}
+
+.temporal-gap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+}
+
+.temporal-route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.temporal-route-setting {
+  font-size: 0.6rem;
+  color: var(--paper);
+  word-break: break-all;
+}
+
+.temporal-no-route {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.temporal-note {
+  margin-top: 10px;
+  font-size: 0.65rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.optimizer-detail {
+  margin-top: 10px;
+  padding: 8px 10px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}

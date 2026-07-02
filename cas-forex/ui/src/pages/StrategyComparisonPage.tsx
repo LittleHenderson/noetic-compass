@@ -12,6 +12,7 @@ import type {
   StrategyDiff,
   StrategyRankingReport,
 } from "../data/api";
+import "./StrategyComparisonPage.css";
 
 type Mode = "ranked" | "diff";
 

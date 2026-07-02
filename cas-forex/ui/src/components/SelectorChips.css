@@ -1,0 +1,35 @@
+/* Shared lazy selector chip controls */
+
+.selector-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.selector-chip {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-mono);
+}
+
+.selector-chip:hover {
+  border-color: var(--accent-teal-dim);
+  color: var(--text-primary);
+}
+
+.selector-chip.active {
+  background: var(--accent-teal-dim);
+  border-color: var(--accent-teal);
+  color: var(--accent-teal);
+}
+
+.selector-chip:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}

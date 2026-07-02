@@ -1,7 +1,40 @@
 /* ── CAS Forex — LLM Optimizer Queue ── */
 
+import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import {
+  fetchAgentInformationFlow,
+  fetchAgentMemory,
+  fetchAgentMessageBusSummary,
+  fetchAgentResearchQueue,
+  fetchAgentWorkflowCycle,
+  fetchAgentWorkflowPlan,
+  fetchBacksolve,
+  fetchConditionTally,
+  fetchDailyLearningRollup,
+  fetchExternalBenchmarks,
+  fetchForexFuryReplayCandidates,
+  fetchForexFuryReplayResults,
+  fetchForexFurySetImport,
+  fetchMT4HistoryExportVerifier,
+  fetchMT4PingRoundtrip,
+  fetchMT4TerminalActivation,
+  fetchMT4TerminalSessionVerifier,
+  fetchMT5DealHistoryIngest,
+  fetchMT5PaperExecutionVerifier,
+  fetchMT5TerminalApiVerifier,
+  fetchSessionAutowake,
+  fetchStrategyDevQueue,
+  fetchStrategyPatchRunner,
+  fetchTerminalBridgeSupervisor,
+  fetchTerminalHistoryIngest,
+  fetchTerminalOperabilityVerifier,
+  fetchTerminalPositionReconciliation,
+  fetchTerminalReceiptIngest,
+  fetchTerminalReceiptWatcher,
+  fetchWalkForward,
+} from "../data/api";
 import type { DashboardState } from "../types/evidence";
 
 interface OptimizerPageProps {
@@ -9,43 +42,166 @@ interface OptimizerPageProps {
 }
 
 export function OptimizerPage({ state }: OptimizerPageProps) {
-  const backsolve = state.backsolve;
-  const tally = state.conditionTally;
-  const wf = state.walkForward;
-  const externalBenchmarks = state.externalBenchmarks;
+  const [liveBacksolve, setLiveBacksolve] = useState<DashboardState["backsolve"]>(state.backsolve);
+  const [liveConditionTally, setLiveConditionTally] = useState<DashboardState["conditionTally"]>(state.conditionTally);
+  const [liveWalkForward, setLiveWalkForward] = useState<DashboardState["walkForward"]>(state.walkForward);
+  const [liveExternalBenchmarks, setLiveExternalBenchmarks] = useState<DashboardState["externalBenchmarks"]>(state.externalBenchmarks);
+  const [forexFuryImport, setForexFuryImport] = useState<DashboardState["forexFurySetImport"]>(null);
+  const [furyReplay, setFuryReplay] = useState<DashboardState["forexFuryReplayCandidates"]>(null);
+  const [furyReplayResults, setFuryReplayResults] = useState<DashboardState["forexFuryReplayResults"]>(null);
+  const [agentWorkflow, setAgentWorkflow] = useState<DashboardState["agentWorkflowPlan"]>(null);
+  const [agentCycle, setAgentCycle] = useState<DashboardState["agentWorkflowCycle"]>(null);
+  const [agentFlow, setAgentFlow] = useState<DashboardState["agentInformationFlow"]>(null);
+  const [agentBus, setAgentBus] = useState<DashboardState["agentMessageBus"]>(null);
+  const [agentMemory, setAgentMemory] = useState<DashboardState["agentMemory"]>(null);
+  const [agentResearchQueue, setAgentResearchQueue] = useState<DashboardState["agentResearchQueue"]>(null);
+  const [strategyDevQueue, setStrategyDevQueue] = useState<DashboardState["strategyDevQueue"]>(null);
+  const [strategyPatchRunner, setStrategyPatchRunner] = useState<DashboardState["strategyPatchRunner"]>(null);
+  const [dailyLearningRollup, setDailyLearningRollup] = useState<DashboardState["dailyLearningRollup"]>(null);
+  const [sessionAutowake, setSessionAutowake] = useState<DashboardState["sessionAutowake"]>(null);
+  const [terminalReceiptWatcher, setTerminalReceiptWatcher] = useState<DashboardState["terminalReceiptWatcher"]>(null);
+  const [terminalBridgeSupervisor, setTerminalBridgeSupervisor] = useState<DashboardState["terminalBridgeSupervisor"]>(null);
+  const [mt4TerminalActivation, setMt4TerminalActivation] = useState<DashboardState["mt4TerminalActivation"]>(null);
+  const [mt4PingRoundtrip, setMt4PingRoundtrip] = useState<DashboardState["mt4PingRoundtrip"]>(null);
+  const [mt4TerminalSessionVerifier, setMt4TerminalSessionVerifier] = useState<DashboardState["mt4TerminalSessionVerifier"]>(null);
+  const [mt4HistoryExportVerifier, setMt4HistoryExportVerifier] = useState<DashboardState["mt4HistoryExportVerifier"]>(null);
+  const [mt5TerminalApiVerifier, setMt5TerminalApiVerifier] = useState<DashboardState["mt5TerminalApiVerifier"]>(null);
+  const [mt5PaperExecutionVerifier, setMt5PaperExecutionVerifier] = useState<DashboardState["mt5PaperExecutionVerifier"]>(null);
+  const [mt5DealHistoryIngest, setMt5DealHistoryIngest] = useState<DashboardState["mt5DealHistoryIngest"]>(null);
+  const [terminalPositionReconciliation, setTerminalPositionReconciliation] = useState<DashboardState["terminalPositionReconciliation"]>(null);
+  const [terminalOperabilityVerifier, setTerminalOperabilityVerifier] = useState<DashboardState["terminalOperabilityVerifier"]>(null);
+  const [terminalReceiptIngest, setTerminalReceiptIngest] = useState<DashboardState["terminalReceiptIngest"]>(null);
+  const [terminalHistoryIngest, setTerminalHistoryIngest] = useState<DashboardState["terminalHistoryIngest"]>(null);
+
+  useEffect(() => { if (state.backsolve) setLiveBacksolve(state.backsolve); }, [state.backsolve]);
+  useEffect(() => { if (state.conditionTally) setLiveConditionTally(state.conditionTally); }, [state.conditionTally]);
+  useEffect(() => { if (state.walkForward) setLiveWalkForward(state.walkForward); }, [state.walkForward]);
+  useEffect(() => { if (state.externalBenchmarks) setLiveExternalBenchmarks(state.externalBenchmarks); }, [state.externalBenchmarks]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function refreshOptimizerEvidence() {
+      const [nextBacksolve, nextTally, nextWalkForward, nextExternalBenchmarks] = await Promise.all([
+        fetchBacksolve(),
+        fetchConditionTally(),
+        fetchWalkForward(),
+        fetchExternalBenchmarks(),
+      ]);
+      if (cancelled) return;
+      if (nextBacksolve) setLiveBacksolve(nextBacksolve);
+      if (nextTally) setLiveConditionTally(nextTally);
+      if (nextWalkForward) setLiveWalkForward(nextWalkForward);
+      if (nextExternalBenchmarks) setLiveExternalBenchmarks(nextExternalBenchmarks);
+    }
+    void refreshOptimizerEvidence();
+    const interval = window.setInterval(() => { void refreshOptimizerEvidence(); }, 30_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([
+      fetchForexFurySetImport(),
+      fetchForexFuryReplayCandidates(),
+      fetchForexFuryReplayResults(),
+      fetchAgentWorkflowPlan(),
+      fetchAgentWorkflowCycle(),
+      fetchAgentInformationFlow(),
+      fetchAgentMessageBusSummary(),
+      fetchAgentMemory(),
+      fetchAgentResearchQueue(),
+      fetchStrategyDevQueue(),
+      fetchStrategyPatchRunner(),
+      fetchDailyLearningRollup(),
+      fetchSessionAutowake(),
+      fetchTerminalReceiptWatcher(),
+      fetchTerminalBridgeSupervisor(),
+      fetchMT4TerminalActivation(),
+      fetchMT4PingRoundtrip(),
+      fetchMT4TerminalSessionVerifier(),
+      fetchMT4HistoryExportVerifier(),
+      fetchMT5TerminalApiVerifier(),
+      fetchMT5PaperExecutionVerifier(),
+      fetchMT5DealHistoryIngest(),
+      fetchTerminalPositionReconciliation(),
+      fetchTerminalOperabilityVerifier(),
+      fetchTerminalReceiptIngest(),
+      fetchTerminalHistoryIngest(),
+    ]).then(([
+      setImport,
+      replayCandidates,
+      replayResults,
+      workflowPlan,
+      workflowCycle,
+      informationFlow,
+      messageBus,
+      memory,
+      researchQueue,
+      devQueue,
+      patchRunner,
+      learningRollup,
+      autowake,
+      receiptWatcher,
+      bridgeSupervisor,
+      mt4Activation,
+      mt4Ping,
+      mt4Session,
+      mt4HistoryExport,
+      mt5Api,
+      mt5PaperExecution,
+      mt5DealHistory,
+      positionReconciliation,
+      operability,
+      receiptIngest,
+      historyIngest,
+    ]) => {
+      if (cancelled) return;
+      if (setImport) setForexFuryImport(setImport);
+      if (replayCandidates) setFuryReplay(replayCandidates);
+      if (replayResults) setFuryReplayResults(replayResults);
+      if (workflowPlan) setAgentWorkflow(workflowPlan);
+      if (workflowCycle) setAgentCycle(workflowCycle);
+      if (informationFlow) setAgentFlow(informationFlow);
+      if (messageBus) setAgentBus(messageBus);
+      if (memory) setAgentMemory(memory);
+      if (researchQueue) setAgentResearchQueue(researchQueue);
+      if (devQueue) setStrategyDevQueue(devQueue);
+      if (patchRunner) setStrategyPatchRunner(patchRunner);
+      if (learningRollup) setDailyLearningRollup(learningRollup);
+      if (autowake) setSessionAutowake(autowake);
+      if (receiptWatcher) setTerminalReceiptWatcher(receiptWatcher);
+      if (bridgeSupervisor) setTerminalBridgeSupervisor(bridgeSupervisor);
+      if (mt4Activation) setMt4TerminalActivation(mt4Activation);
+      if (mt4Ping) setMt4PingRoundtrip(mt4Ping);
+      if (mt4Session) setMt4TerminalSessionVerifier(mt4Session);
+      if (mt4HistoryExport) setMt4HistoryExportVerifier(mt4HistoryExport);
+      if (mt5Api) setMt5TerminalApiVerifier(mt5Api);
+      if (mt5PaperExecution) setMt5PaperExecutionVerifier(mt5PaperExecution);
+      if (mt5DealHistory) setMt5DealHistoryIngest(mt5DealHistory);
+      if (positionReconciliation) setTerminalPositionReconciliation(positionReconciliation);
+      if (operability) setTerminalOperabilityVerifier(operability);
+      if (receiptIngest) setTerminalReceiptIngest(receiptIngest);
+      if (historyIngest) setTerminalHistoryIngest(historyIngest);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const backsolve = liveBacksolve ?? state.backsolve;
+  const tally = liveConditionTally ?? state.conditionTally;
+  const wf = liveWalkForward ?? state.walkForward;
+  const externalBenchmarks = liveExternalBenchmarks ?? state.externalBenchmarks;
   const benchmarks = externalBenchmarks?.benchmarks ?? [];
-  const forexFuryImport = state.forexFurySetImport;
   const furySummary = forexFuryImport?.summary;
   const furyProfiles = furySummary?.top_report_profiles ?? [];
-  const furyReplay = state.forexFuryReplayCandidates;
   const furyReplaySummary = furyReplay?.summary;
   const furyReplayCandidates = furyReplay?.candidates ?? [];
-  const furyReplayResults = state.forexFuryReplayResults;
   const furyCondition = furyReplayResults?.condition_summary;
   const furyWalkForward = furyReplayResults?.walk_forward_summary;
-  const agentWorkflow = state.agentWorkflowPlan;
-  const agentCycle = state.agentWorkflowCycle;
-  const agentFlow = state.agentInformationFlow;
-  const agentBus = state.agentMessageBus;
-  const agentMemory = state.agentMemory;
-  const agentResearchQueue = state.agentResearchQueue;
-  const strategyDevQueue = state.strategyDevQueue;
-  const strategyPatchRunner = state.strategyPatchRunner;
-  const dailyLearningRollup = state.dailyLearningRollup;
-  const sessionAutowake = state.sessionAutowake;
-  const terminalReceiptWatcher = state.terminalReceiptWatcher;
-  const terminalBridgeSupervisor = state.terminalBridgeSupervisor;
-  const mt4TerminalActivation = state.mt4TerminalActivation;
-  const mt4PingRoundtrip = state.mt4PingRoundtrip;
-  const mt4TerminalSessionVerifier = state.mt4TerminalSessionVerifier;
-  const mt4HistoryExportVerifier = state.mt4HistoryExportVerifier;
-  const mt5TerminalApiVerifier = state.mt5TerminalApiVerifier;
-  const mt5PaperExecutionVerifier = state.mt5PaperExecutionVerifier;
-  const mt5DealHistoryIngest = state.mt5DealHistoryIngest;
-  const terminalPositionReconciliation = state.terminalPositionReconciliation;
-  const terminalOperabilityVerifier = state.terminalOperabilityVerifier;
-  const terminalReceiptIngest = state.terminalReceiptIngest;
-  const terminalHistoryIngest = state.terminalHistoryIngest;
   const agentRoster = agentWorkflow?.agent_roster ?? [];
   const autowakeEvents = agentWorkflow?.autowake_schedule.events ?? [];
   const implementationQueue = agentWorkflow?.implementation_queue ?? [];

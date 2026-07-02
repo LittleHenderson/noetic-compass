@@ -1,70 +1,60 @@
 /* ── CAS Forex — App Shell ── */
 
-import { useState, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ModeBanner } from "./ModeBanner";
-import { AiActivityIndicator } from "./AiActivityIndicator";
+import { AiActivityInstantBadge } from "./AiActivityInstantBadge";
+import { NAV_ITEMS, type Page } from "../pageConfig";
 import type { UIReadinessReport, AuthorityBoundaryState } from "../types/evidence";
-
-type Page =
-  | "quick-start"
-  | "proof"
-  | "audit"
-  | "dashboard"
-  | "trade"
-  | "adaptive"
-  | "history"
-  | "settings"
-  | "pcba"
-  | "ledger"
-  | "optimizer"
-  | "condition-lab"
-  | "decision-history"
-  | "forex-fury"
-  | "strategy-dev"
-  | "stack-status"
-  | "strategy-comparison"
-  | "daily-report"
-  | "windows";
 
 interface ShellProps {
   readiness: UIReadinessReport;
   authority?: AuthorityBoundaryState;
+  wasteLoop?: Record<string, unknown> | null;
   activePage: Page;
   onNavigate: (page: Page) => void;
   children: ReactNode;
 }
 
-const NAV_ITEMS: { id: Page; label: string; ready: boolean }[] = [
-  { id: "quick-start", label: "Quick Start", ready: true },
-  { id: "proof", label: "Proof", ready: true },
-  { id: "audit", label: "Audit", ready: true },
-  { id: "dashboard", label: "Dashboard", ready: true },
-  { id: "trade", label: "Trade", ready: true },
-  { id: "windows", label: "Live Charts", ready: true },
-  { id: "adaptive", label: "Adaptive", ready: true },
-  { id: "history", label: "History", ready: true },
-  { id: "settings", label: "Settings", ready: true },
-  { id: "pcba", label: "PCBA/CJT", ready: true },
-  { id: "ledger", label: "Ledger", ready: true },
-  { id: "optimizer", label: "Optimizer", ready: true },
-  { id: "condition-lab", label: "Cond. Lab", ready: true },
-  { id: "decision-history", label: "Decisions", ready: true },
-  { id: "forex-fury", label: "Fury", ready: true },
-  { id: "strategy-dev", label: "Strategy", ready: true },
-  { id: "stack-status", label: "Stack", ready: true },
-  { id: "strategy-comparison", label: "Compare", ready: true },
-  { id: "daily-report", label: "Daily", ready: true },
-];
+const AiActivityIndicator = lazy(() =>
+  import("./AiActivityIndicator").then((module) => ({ default: module.AiActivityIndicator })),
+);
+
+const AI_ACTIVITY_FULL_INDICATOR_IDLE_TIMEOUT_MS = 1_400;
+
+type IdleCallbackHandle = number;
+type IdleSchedulerWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout?: number }) => IdleCallbackHandle;
+  cancelIdleCallback?: (handle: IdleCallbackHandle) => void;
+};
 
 export function Shell({
   readiness,
   authority,
+  wasteLoop,
   activePage,
   onNavigate,
   children,
 }: ShellProps) {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [fullActivityIndicatorMounted, setFullActivityIndicatorMounted] = useState(false);
   const activeLabel = NAV_ITEMS.find((i) => i.id === activePage)?.label ?? "Menu";
+
+  useEffect(() => {
+    const idleWindow = window as IdleSchedulerWindow;
+    if (idleWindow.requestIdleCallback) {
+      const id = idleWindow.requestIdleCallback(
+        () => setFullActivityIndicatorMounted(true),
+        { timeout: AI_ACTIVITY_FULL_INDICATOR_IDLE_TIMEOUT_MS },
+      );
+      return () => idleWindow.cancelIdleCallback?.(id);
+    }
+
+    const id = window.setTimeout(
+      () => setFullActivityIndicatorMounted(true),
+      AI_ACTIVITY_FULL_INDICATOR_IDLE_TIMEOUT_MS,
+    );
+    return () => window.clearTimeout(id);
+  }, []);
 
   return (
     <div className="app-shell">
@@ -75,7 +65,13 @@ export function Shell({
           <span className="shell-nav-title">CAS Forex</span>
           <span className="shell-nav-sub">Proof Cockpit</span>
         </div>
-        <AiActivityIndicator />
+        {fullActivityIndicatorMounted ? (
+          <Suspense fallback={<AiActivityInstantBadge wasteLoop={wasteLoop} />}>
+            <AiActivityIndicator wasteLoop={wasteLoop} />
+          </Suspense>
+        ) : (
+          <AiActivityInstantBadge wasteLoop={wasteLoop} />
+        )}
         {/* Hamburger — only shown on narrow screens (CSS). Lets every page,
             including Settings, be reached on a phone. */}
         <button

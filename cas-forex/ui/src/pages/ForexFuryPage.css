@@ -1,0 +1,16 @@
+/* CAS Forex - Forex Fury candidates route styles */
+
+.fury-candidates-table {
+  margin-top: 4px;
+}
+
+.fury-candidate-row td {
+  vertical-align: top;
+}
+
+.fury-row-action {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+}

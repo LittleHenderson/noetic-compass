@@ -11,12 +11,28 @@
   box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 22%, transparent);
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
 }
-.ai-activity-text { display: flex; flex-direction: column; line-height: 1.08; }
+.ai-activity-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.08;
+}
 .ai-activity-label {
   font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
   color: var(--accent, #7fd8ff);
 }
 .ai-activity-sub { font-size: 10px; color: rgba(255, 255, 255, 0.5); white-space: nowrap; }
+.ai-activity-trace {
+  max-width: min(56vw, 520px);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: color-mix(in srgb, var(--accent) 72%, rgba(255, 255, 255, 0.45));
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-top: 2px;
+}
 
 /* per-stage accent colour */
 .ai-stage-idle       { --accent: #6aa0b5; }
@@ -131,6 +147,8 @@
 .ai-conn-badge-live   .ai-conn-dot { background: #36e6a0; box-shadow: 0 0 6px #36e6a0; animation: ai-conn-blink 1.1s ease-in-out infinite; }
 .ai-conn-badge-offline{ color: #8a93a3; background: rgba(138, 147, 163, 0.08); border-color: rgba(138, 147, 163, 0.25); }
 .ai-conn-badge-offline .ai-conn-dot { background: #8a93a3; }
+.ai-conn-badge-syncing{ color: #39d0ff; background: rgba(57, 208, 255, 0.10); border-color: rgba(57, 208, 255, 0.28); }
+.ai-conn-badge-syncing .ai-conn-dot { background: #39d0ff; box-shadow: 0 0 5px #39d0ff; animation: ai-conn-blink 1.2s ease-in-out infinite; }
 .ai-conn-badge-demo   { color: #ffc24b; background: rgba(255, 194, 75, 0.10); border-color: rgba(255, 194, 75, 0.30); }
 .ai-conn-badge-demo   .ai-conn-dot { background: #ffc24b; box-shadow: 0 0 5px #ffc24b; }
 

@@ -5,7 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from "react";
-import { postAssistantChat, type AssistantTurn } from "../data/api";
+import { postAssistantChat, type AssistantTurn } from "../data/assistantApi";
 
 interface Msg {
   role: "user" | "assistant";

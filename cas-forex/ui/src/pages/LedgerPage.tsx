@@ -1,10 +1,12 @@
 /* ── CAS Forex — Paper Proof Ledger ── */
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import { EquityCurve } from "../components/charts/EquityCurve";
-import type { DashboardState } from "../types/evidence";
+import { fetchAccountLedger, fetchMT5Receipt } from "../data/api";
+import type { AccountLedgerState, DashboardState, MT5Receipt } from "../types/evidence";
+import "../components/RoutePrimitives.css";
 
 interface LedgerPageProps {
   state: DashboardState;
@@ -12,14 +14,47 @@ interface LedgerPageProps {
 
 export function LedgerPage({ state }: LedgerPageProps) {
   const sched = state.dailySchedule;
-  const mt = state.mt5Receipt;
+  const [liveAccount, setLiveAccount] = useState<AccountLedgerState | null>(state.accountLedger ?? null);
+  const [liveMtReceipt, setLiveMtReceipt] = useState<MT5Receipt | null>(state.mt5Receipt ?? null);
+  const mt = liveMtReceipt ?? state.mt5Receipt ?? null;
   const completed = sched.completed_trading_days;
   const remaining = sched.required_paper_days - completed;
   const bundlesDone = sched.complete_bundle_days;
   const bundlesTarget = sched.ui_min_daily_bundles;
   const equity = state.dailyBundle.latest_risk.latest_review.account_equity;
-  const account = state.accountLedger;
+  const account = liveAccount ?? state.accountLedger ?? null;
   const [ownerSeedInput, setOwnerSeedInput] = useState(() => `${account?.summary.owner_selected_initial_investment_usd ?? equity}`);
+
+  useEffect(() => {
+    if (state.accountLedger) setLiveAccount(state.accountLedger);
+  }, [state.accountLedger]);
+
+  useEffect(() => {
+    if (state.mt5Receipt) setLiveMtReceipt(state.mt5Receipt);
+  }, [state.mt5Receipt]);
+
+  useEffect(() => {
+    let cancelled = false;
+    let interval: number | undefined;
+
+    async function loadLedgerEvidence() {
+      const [ledger, receipt] = await Promise.all([
+        fetchAccountLedger(),
+        fetchMT5Receipt(),
+      ]);
+      if (cancelled) return;
+      if (ledger) setLiveAccount(ledger);
+      if (receipt) setLiveMtReceipt(receipt);
+    }
+
+    void loadLedgerEvidence();
+    interval = window.setInterval(() => void loadLedgerEvidence(), 30_000);
+    return () => {
+      cancelled = true;
+      if (interval !== undefined) window.clearInterval(interval);
+    };
+  }, []);
+
   const ownerSeed = Number(ownerSeedInput);
   const plannedRisk = (state.dailyBundle.latest_risk.latest_review.sizing ?? []).reduce(
     (sum, row) => sum + row.planned_risk_usd,
@@ -219,7 +254,7 @@ export function LedgerPage({ state }: LedgerPageProps) {
       </GlassPanel>
 
       {/* Section 4: Deployment Gate */}
-      <GlassPanel title="Deployment Gate" variant="danger">
+      <GlassPanel title="Deployment Gate" variant="warning">
         <div className="legal-gates">
           <GateRow label="30 paper days completed" met={completed >= 30} detail={`${completed}/30`} />
           <GateRow label="5 multi-day bundles" met={bundlesDone >= bundlesTarget} detail={`${bundlesDone}/${bundlesTarget}`} />
@@ -232,14 +267,14 @@ export function LedgerPage({ state }: LedgerPageProps) {
           style={{
             marginTop: 12,
             padding: "8px 12px",
-            background: "var(--danger-dim)",
+            background: "var(--warning-dim)",
             borderRadius: "var(--radius-sm)",
             fontSize: "0.72rem",
-            color: "var(--danger)",
+            color: "var(--warning)",
           }}
         >
           DEPLOYMENT GATE: NOT MET — {completed}/30 paper days, {bundlesDone}/{bundlesTarget} bundles. Live trading, broker
-          ACCEPT, and payment movement remain NOT LICENSED.
+          ACCEPT, and payment movement wait for owner/provider gates.
         </div>
       </GlassPanel>
     </div>

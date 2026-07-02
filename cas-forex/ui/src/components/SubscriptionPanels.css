@@ -1,0 +1,83 @@
+.notification-subscription-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.notification-status-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.notification-button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.notification-button {
+  padding: 7px 12px;
+  font-size: 0.74rem;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-teal-dim);
+  background: var(--accent-teal-dim);
+  color: var(--accent-teal);
+  cursor: pointer;
+  transition: background 120ms ease-in-out, opacity 120ms ease-in-out;
+}
+
+.notification-button:hover:not(:disabled) {
+  background: var(--accent-teal);
+  color: var(--text-primary);
+}
+
+.notification-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.notification-button.ghost {
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.notification-button.ghost:hover:not(:disabled) {
+  background: var(--border-subtle);
+  color: var(--text-primary);
+}
+
+.notification-status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  font-size: 0.7rem;
+  border-radius: var(--radius-sm);
+  background: var(--border-subtle);
+  color: var(--text-secondary);
+}
+
+.webhook-subscription-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.webhook-add-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.webhook-add-form .mobile-api-input {
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+.webhook-row td {
+  font-size: 0.74rem;
+}

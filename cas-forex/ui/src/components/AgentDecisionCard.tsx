@@ -15,8 +15,10 @@ import {
   type AgentDecisionResponse,
   type DecisionChainStep,
 } from "../data/api";
+import "./DecisionCardPrimitives.css";
 
 const POLL_INTERVAL_MS = 30_000;
+const RETRY_INTERVAL_MS = 5_000;
 
 type ChipVariant = "success" | "warning" | "danger" | "info" | "muted" | "paper";
 
@@ -59,15 +61,17 @@ export function AgentDecisionCard() {
 
   useEffect(() => {
     let cancelled = false;
+    let retryId: number | undefined;
     const load = async () => {
       const result = await fetchAgentDecisionLatest();
-      if (!cancelled) setData(result);
+      if (cancelled) return;
+      if (result) setData(result);
+      retryId = window.setTimeout(load, result ? POLL_INTERVAL_MS : RETRY_INTERVAL_MS);
     };
-    load();
-    const handle = setInterval(load, POLL_INTERVAL_MS);
+    void load();
     return () => {
       cancelled = true;
-      clearInterval(handle);
+      if (retryId !== undefined) window.clearTimeout(retryId);
     };
   }, []);
 
@@ -76,7 +80,7 @@ export function AgentDecisionCard() {
       <GlassPanel title="Latest Agent Decision">
         <div className="agent-decision-card">
           <div className="decision-empty">
-            Agent decision unavailable — restart uvicorn so /api/forex/agent-decision is registered.
+            Agent decision is warming. The app is retrying the live decision route.
           </div>
         </div>
       </GlassPanel>

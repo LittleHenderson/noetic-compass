@@ -16,16 +16,19 @@ export function ModeBanner({ readiness, authority }: ModeBannerProps) {
     readiness.readiness_status === "READY_FOR_PROOF_COCKPIT_UI_UX";
 
   // Live status comes from the owner-flag-driven authority gate (NOT the flaky
-  // MT5 connection), so a connected DEMO account never reads as licensed.
+  // MT5 connection). In non-live mode, show the active paper/demo lane instead
+  // of presenting paper-safe operation as a red live-license failure.
   const liveAuthorized = authority?.live_trading_status === "AUTHORIZED";
   const edge = authority?.trading_edge_status ?? "OPEN";
+  const modeChipLabel = liveAuthorized ? "LIVE AUTHORIZED" : "PAPER / DEMO ACTIVE";
+  const modeChipVariant = liveAuthorized ? "success" : "paper";
 
   return (
     <div className="mode-banner">
       <div className="mode-banner-left">
         <StatusChip
-          label={liveAuthorized ? "LIVE AUTHORIZED" : "NOT LICENSED"}
-          variant={liveAuthorized ? "success" : "danger"}
+          label={modeChipLabel}
+          variant={modeChipVariant}
           size="sm"
         />
         <span className="mode-banner-label">{liveAuthorized ? "LIVE" : "PAPER"}</span>

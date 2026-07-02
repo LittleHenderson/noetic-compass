@@ -3,6 +3,8 @@
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import type { DashboardState, BasketState, AdaptiveTradeDecision, AdaptiveMemorySnapshot } from "../types/evidence";
+import "../components/RoutePrimitives.css";
+import "./AdaptivePage.css";
 
 interface AdaptivePageProps {
   state: DashboardState;
@@ -112,15 +114,15 @@ export function AdaptivePage({ state }: AdaptivePageProps) {
         </GlassPanel>
       )}
 
-      {/* ── NOT LICENSED ── */}
-      <GlassPanel title="Live & Payment Gates" variant="danger">
+      {/* ── Owner-gated live/payment boundary ── */}
+      <GlassPanel title="Live & Payment Gates" variant="warning">
         <div className="gate-grid">
-          <GateItem label="Deployment" detail="NOT LICENSED — adaptive compounding is paper/research only" />
-          <GateItem label="Broker ACCEPT" detail="NOT LICENSED — no broker orders from adaptive engine" />
-          <GateItem label="Auto-Deposit" detail="NOT LICENSED" />
-          <GateItem label="Debit / Card / Bank" detail="NOT LICENSED" />
-          <GateItem label="Payout Automation" detail="NOT LICENSED" />
-          <GateItem label="Live Trading" detail="NOT LICENSED" />
+          <GateItem label="Deployment" detail="Paper/demo adaptive compounding only until owner gates are complete." />
+          <GateItem label="Broker ACCEPT" detail="Owner review required before broker-order authority." />
+          <GateItem label="Auto-Deposit" detail="Owner/provider setup pending." />
+          <GateItem label="Debit / Card / Bank" detail="Provider destination token required; raw bank/card storage stays out of scope." />
+          <GateItem label="Payout Automation" detail="Owner-approved verified-profit sweep setup pending." />
+          <GateItem label="Live Trading" detail="Owner-controlled live pilot setup pending." />
         </div>
       </GlassPanel>
     </div>
@@ -216,7 +218,7 @@ function GateItem({ label, detail }: { label: string; detail: string }) {
     <div className="gate-item">
       <div className="gate-item-header">
         <span className="gate-item-label">{label}</span>
-        <StatusChip label="NOT LICENSED" variant="danger" size="sm" />
+        <StatusChip label="OWNER PENDING" variant="warning" size="sm" />
       </div>
       <div className="gate-item-detail">{detail}</div>
     </div>

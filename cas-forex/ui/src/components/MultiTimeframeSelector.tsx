@@ -19,6 +19,8 @@ import {
   fetchCanonicalTimeframes,
   fetchSymbolTimeframes,
 } from "../data/api";
+import "./SelectorChips.css";
+import "./MultiTimeframeSelector.css";
 
 interface MultiTimeframeSelectorProps {
   symbol: string;
@@ -33,32 +35,54 @@ export function MultiTimeframeSelector({ symbol }: MultiTimeframeSelectorProps) 
   // Load the canonical vocabulary once.
   useEffect(() => {
     let cancelled = false;
-    fetchCanonicalTimeframes().then((result) => {
+    let retryId: number | undefined;
+
+    async function loadCanonical() {
+      const result = await fetchCanonicalTimeframes();
       if (cancelled) return;
       if (result) {
         setCanonical(result.canonical_timeframes);
       } else {
         setError("Could not load canonical timeframe vocabulary");
+        retryId = window.setTimeout(() => void loadCanonical(), 5_000);
       }
-    });
+    }
+
+    void loadCanonical();
     return () => {
       cancelled = true;
+      if (retryId !== undefined) window.clearTimeout(retryId);
     };
   }, []);
 
   // Re-sync active set whenever the symbol changes.
-  const reloadActive = useCallback(async () => {
+  const reloadActive = useCallback(async (): Promise<boolean> => {
     const result = await fetchSymbolTimeframes(symbol);
     if (result) {
       setActive(new Set(result.active_timeframes));
       setError(null);
-    } else {
-      setError(`Could not load active timeframes for ${symbol}`);
+      return true;
     }
+    setError(`Could not load active timeframes for ${symbol}`);
+    return false;
   }, [symbol]);
 
   useEffect(() => {
-    void reloadActive();
+    let cancelled = false;
+    let retryId: number | undefined;
+
+    async function loadActive() {
+      const ok = await reloadActive();
+      if (!cancelled) {
+        retryId = window.setTimeout(() => void loadActive(), ok ? 15_000 : 5_000);
+      }
+    }
+
+    void loadActive();
+    return () => {
+      cancelled = true;
+      if (retryId !== undefined) window.clearTimeout(retryId);
+    };
   }, [reloadActive]);
 
   const toggle = useCallback(

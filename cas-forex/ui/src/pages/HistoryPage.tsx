@@ -1,16 +1,49 @@
 /* ── CAS Forex — History & MT Import ── */
 
+import { useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { fetchAccountLedger, fetchConditionTally, fetchMTHistory } from "../data/api";
 import type { DashboardState } from "../types/evidence";
+import "../components/RoutePrimitives.css";
 
 interface HistoryPageProps {
   state: DashboardState;
 }
 
 export function HistoryPage({ state }: HistoryPageProps) {
-  const mt = state.mtHistory;
-  const account = state.accountLedger;
+  const [liveMtHistory, setLiveMtHistory] = useState<DashboardState["mtHistory"] | null>(state.mtHistory ?? null);
+  const [liveAccountLedger, setLiveAccountLedger] = useState<DashboardState["accountLedger"] | null>(state.accountLedger ?? null);
+  const [liveConditionTally, setLiveConditionTally] = useState<DashboardState["conditionTally"] | null>(state.conditionTally ?? null);
+
+  useEffect(() => { if (state.mtHistory) setLiveMtHistory(state.mtHistory); }, [state.mtHistory]);
+  useEffect(() => { if (state.accountLedger) setLiveAccountLedger(state.accountLedger); }, [state.accountLedger]);
+  useEffect(() => { if (state.conditionTally) setLiveConditionTally(state.conditionTally); }, [state.conditionTally]);
+
+  useEffect(() => {
+    let cancelled = false;
+    async function refreshHistoryEvidence() {
+      const [nextMtHistory, nextAccountLedger, nextConditionTally] = await Promise.all([
+        fetchMTHistory(),
+        fetchAccountLedger(),
+        fetchConditionTally(),
+      ]);
+      if (cancelled) return;
+      if (nextMtHistory) setLiveMtHistory(nextMtHistory);
+      if (nextAccountLedger) setLiveAccountLedger(nextAccountLedger);
+      if (nextConditionTally) setLiveConditionTally(nextConditionTally);
+    }
+    void refreshHistoryEvidence();
+    const interval = window.setInterval(() => { void refreshHistoryEvidence(); }, 30_000);
+    return () => {
+      cancelled = true;
+      window.clearInterval(interval);
+    };
+  }, []);
+
+  const mt = liveMtHistory ?? state.mtHistory ?? null;
+  const account = liveAccountLedger ?? state.accountLedger ?? null;
+  const conditionTally = liveConditionTally ?? state.conditionTally ?? [];
 
   return (
     <div className="history-page">
@@ -122,20 +155,20 @@ export function HistoryPage({ state }: HistoryPageProps) {
           <div className="no-data-message"><p>No paper/demo terminal rows are available yet.</p></div>
         )}
         <div style={{ marginTop: 8, color: "var(--warning)", fontSize: "0.7rem" }}>
-          {account?.claim_boundary ?? "Paper/demo history only. Live trading and payment movement remain NOT LICENSED."}
+          {account?.claim_boundary ?? "Paper/demo history only. Live trading and payment movement wait for owner/provider gates."}
         </div>
       </GlassPanel>
 
       {/* ── Condition Tally ── */}
-      <GlassPanel title="Condition Tally" subtitle={state.conditionTally && state.conditionTally.length > 0 ? `${state.conditionTally.length} buckets from walk-forward evidence` : "Evidence score breakdown across condition axes"}>
-        {state.conditionTally && state.conditionTally.length > 0 ? (
+      <GlassPanel title="Condition Tally" subtitle={conditionTally.length > 0 ? `${conditionTally.length} buckets from walk-forward evidence` : "Evidence score breakdown across condition axes"}>
+        {conditionTally.length > 0 ? (
           <div className="tally-table-wrap">
             <table className="data-table">
               <thead>
                 <tr><th>Bucket</th><th>Windows</th><th>Active</th><th>+Rate</th><th>Mean Return</th><th>Max DD</th><th>Trades</th></tr>
               </thead>
               <tbody>
-                {state.conditionTally.map((b) => (
+                {conditionTally.map((b) => (
                   <tr key={b.key}>
                     <td className="mono" style={{ fontSize: "0.68rem" }}>{b.key}</td>
                     <td className="mono">{b.windows}</td>
@@ -149,7 +182,7 @@ export function HistoryPage({ state }: HistoryPageProps) {
               </tbody>
             </table>
             <div style={{ marginTop: 8, color: "var(--text-muted)", fontSize: "0.68rem" }}>
-              Source: latest walk-forward condition-tally evidence — {state.conditionTally.length} condition buckets
+              Source: latest walk-forward condition-tally evidence — {conditionTally.length} condition buckets
             </div>
           </div>
         ) : (
@@ -177,17 +210,17 @@ export function HistoryPage({ state }: HistoryPageProps) {
       </GlassPanel>
 
       {/* ── Sweep Ledger ── */}
-      <GlassPanel title="Sweep Ledger" variant="danger">
+      <GlassPanel title="Sweep Ledger" variant="warning">
         <div className="sweep-ledger">
           <div className="sweep-status">
             <StatusChip label="DRY_RUN" variant="warning" size="sm" />
-            <span style={{ color: "var(--text-muted)", fontSize: "0.75rem", marginLeft: 8 }}>Sweep/payout automation is NOT LICENSED</span>
+            <span style={{ color: "var(--text-muted)", fontSize: "0.75rem", marginLeft: 8 }}>Sweep/payout automation is in owner setup</span>
           </div>
           <div style={{ marginTop: 8 }}>
             <div className="sizing-row"><span className="field-label">Mode</span><span className="field-value">DRY_RUN</span></div>
             <div className="sizing-row"><span className="field-label">Transfer Boundary</span><span className="field-value">INTERNAL_LEDGER_ONLY</span></div>
-            <div className="sizing-row"><span className="field-label">Provider Transfer</span><span className="field-value mono" style={{ color: "var(--danger)" }}>NOT LICENSED</span></div>
-            <div className="sizing-row"><span className="field-label">Bank / Debit / Card</span><span className="field-value mono" style={{ color: "var(--danger)" }}>NOT LICENSED</span></div>
+            <div className="sizing-row"><span className="field-label">Provider Transfer</span><span className="field-value mono" style={{ color: "var(--warning)" }}>OWNER PENDING</span></div>
+            <div className="sizing-row"><span className="field-label">Bank / Debit / Card</span><span className="field-value mono" style={{ color: "var(--warning)" }}>DESTINATION TOKEN PENDING</span></div>
           </div>
         </div>
       </GlassPanel>

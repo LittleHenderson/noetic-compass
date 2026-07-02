@@ -1,0 +1,166 @@
+.agent-decision-card,
+.autonomous-loop-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: var(--text-primary);
+}
+
+.decision-status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.decision-cycle-id {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.decision-summary {
+  font-size: 0.78rem;
+  color: var(--text-primary);
+  line-height: 1.4;
+}
+
+.decision-empty {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.decision-next-action {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.decision-chain {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.decision-chain-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 0.74rem;
+  color: var(--accent-teal);
+  text-align: left;
+}
+
+.decision-chain-toggle:hover {
+  color: var(--text-primary);
+}
+
+.decision-chain-caret {
+  font-family: var(--font-mono);
+  width: 0.8em;
+  display: inline-block;
+}
+
+.decision-chain-list {
+  list-style: none;
+  margin: 0;
+  padding: 6px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.decision-chain-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 4px 0;
+}
+
+.decision-chain-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.decision-chain-name {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+}
+
+.decision-chain-headline {
+  font-size: 0.74rem;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.loop-stats {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+}
+
+.loop-last-cycle {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.loop-last-cycle-iso {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.loop-next-due {
+  font-size: 0.74rem;
+  color: var(--text-secondary);
+}
+
+.loop-diagnostic {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 4px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.loop-diagnostic-header {
+  font-size: 0.72rem;
+  color: var(--warning);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.loop-diagnostic-list {
+  list-style: disc;
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.loop-diagnostic-item {
+  font-size: 0.74rem;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.operator-briefing-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

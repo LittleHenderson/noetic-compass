@@ -38,7 +38,7 @@ function paceFor(realized: number, expected: number): Pace {
   return { label: "On pace", tone: "neutral" };
 }
 
-function toneColor(tone: Pace["tone"]): string | undefined {
+function toneColor(tone?: Pace["tone"]): string | undefined {
   if (tone === "good") return "var(--success)";
   if (tone === "bad") return "var(--warning)";
   return undefined;

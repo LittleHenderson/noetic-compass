@@ -1,0 +1,241 @@
+/* CAS Forex - Trading desk route styles */
+
+.trade-selectors {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.selector-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.selector-label {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.trade-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 960px) {
+  .trade-grid-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.proposal-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.proposal-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.proposal-prices {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.price-block {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.price-value {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.proposal-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.meta-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 0.76rem;
+}
+
+.proposal-rationale,
+.sizing-rationale {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-style: italic;
+  padding: 6px 8px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+}
+
+.sizing-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sizing-preview-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sizing-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.size-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.risk-budget-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.budget-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.forecast-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 8px;
+}
+
+.forecast-model {
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 8px 10px;
+}
+
+.forecast-model-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.forecast-model-name {
+  color: var(--accent-teal);
+  font-size: 0.72rem;
+}
+
+.forecast-model-detail {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+}
+
+.cas-expression {
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+  padding: 10px 12px;
+}
+
+.cas-expr-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cas-expr-code {
+  color: var(--paper);
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.trade-action {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.trade-action-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-paper,
+.btn-send {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.btn-paper:disabled,
+.btn-send:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn-paper:not(:disabled):hover,
+.btn-send:not(:disabled):hover {
+  filter: brightness(1.1);
+}
+
+.btn-paper {
+  background: var(--paper);
+  color: var(--bg-root);
+}
+
+.btn-send {
+  background: var(--success);
+  color: var(--bg-root);
+}
+
+.trade-action-reasons {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.trade-action-status {
+  font-size: 0.76rem;
+  color: var(--accent-teal);
+  padding: 6px 8px;
+  background: var(--bg-card);
+  border-radius: var(--radius-sm);
+}
+
+.lock-line {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.no-signal {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}

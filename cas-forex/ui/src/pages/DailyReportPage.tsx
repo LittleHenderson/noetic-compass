@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { fetchDailyReport } from "../data/api";
 import type { DailyReport, DailySection } from "../data/api";
+import "./DailyReportPage.css";
 
 function todayUtcIso(): string {
   return new Date().toISOString().slice(0, 10);

@@ -19,6 +19,7 @@ import {
   type LiveTelemetryResponse,
   type LiveTelemetryPosition,
 } from "../data/api";
+import "./LiveTelemetryTable.css";
 
 const POLL_INTERVAL_MS = 2000;
 

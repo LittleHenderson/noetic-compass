@@ -3,6 +3,7 @@
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
 import type { DashboardState } from "../types/evidence";
+import "./AuditPage.css";
 
 interface AuditPageProps {
   state: DashboardState;

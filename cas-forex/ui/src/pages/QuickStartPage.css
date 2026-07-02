@@ -1,0 +1,202 @@
+/* Quick Start Page */
+
+.quick-start-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.quick-start-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.quick-start-refresh-button {
+  padding: 8px 16px;
+  background: var(--accent-teal-dim, rgba(56, 189, 248, 0.18));
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.14));
+  border-radius: 6px;
+  color: var(--text-primary, #f1f5f9);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.quick-start-refresh-button:hover:not(:disabled) {
+  background: rgba(56, 189, 248, 0.28);
+}
+
+.quick-start-refresh-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.quick-start-progress {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+  font-weight: 600;
+}
+
+.quick-start-refreshed-at {
+  font-size: 0.78rem;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.quick-start-intro {
+  margin: 0 0 14px 0;
+  font-size: 0.86rem;
+  line-height: 1.5;
+  color: var(--text-secondary, #94a3b8);
+}
+
+.quick-start-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.quick-start-item {
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.12));
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.02);
+  overflow: hidden;
+  transition: border-color 0.15s ease;
+}
+
+.quick-start-item-done {
+  border-color: rgba(34, 197, 94, 0.45);
+}
+
+.quick-start-item-error {
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
+.quick-start-item-running {
+  border-color: rgba(56, 189, 248, 0.4);
+}
+
+.quick-start-item-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-primary, #f1f5f9);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+}
+
+.quick-start-item-header:hover {
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.quick-start-item-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 0.78rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.quick-start-item-title {
+  flex: 1;
+  font-size: 0.92rem;
+  font-weight: 500;
+}
+
+.quick-start-status-chip {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.quick-start-status-done {
+  background: rgba(34, 197, 94, 0.18);
+  color: #4ade80;
+}
+
+.quick-start-status-pending {
+  background: rgba(148, 163, 184, 0.16);
+  color: #cbd5e1;
+}
+
+.quick-start-status-running {
+  background: rgba(56, 189, 248, 0.18);
+  color: #7dd3fc;
+}
+
+.quick-start-status-error {
+  background: rgba(248, 113, 113, 0.18);
+  color: #fca5a5;
+}
+
+.quick-start-item-caret {
+  font-size: 0.85rem;
+  color: var(--text-secondary, #94a3b8);
+  flex-shrink: 0;
+}
+
+.quick-start-detail {
+  padding: 0 14px 14px 50px;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  color: var(--text-secondary, #94a3b8);
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 12px;
+  margin-top: -1px;
+}
+
+.quick-start-detail p {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.quick-start-pwa-self-mark {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 14px 0 14px;
+}
+
+.quick-start-pwa-button {
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.14));
+  border-radius: 6px;
+  color: var(--text-primary, #f1f5f9);
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-family: inherit;
+}
+
+.quick-start-pwa-button:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.quick-start-completion-banner {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.4);
+  border-radius: 8px;
+  color: #86efac;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-align: center;
+}

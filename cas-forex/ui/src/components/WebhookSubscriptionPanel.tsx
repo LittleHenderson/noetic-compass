@@ -18,6 +18,8 @@ import {
   type WebhookSubscriptionItem,
   type WebhookTestResult,
 } from "../data/api";
+import "./LiveTelemetryTable.css";
+import "./SubscriptionPanels.css";
 
 function truncateUrl(url: string, max = 56): string {
   if (url.length <= max) return url;
@@ -89,6 +91,12 @@ export function WebhookSubscriptionPanel() {
   );
 
   const handleTest = useCallback(async () => {
+    if (subscriptions.length === 0) {
+      setError(null);
+      setTestResults([]);
+      setMessage("No webhook subscriptions on server yet. Add a webhook URL first, then send a test.");
+      return;
+    }
     setBusy(true);
     setError(null);
     setMessage(null);
@@ -110,7 +118,7 @@ export function WebhookSubscriptionPanel() {
     } finally {
       setBusy(false);
     }
-  }, []);
+  }, [subscriptions.length]);
 
   return (
     <GlassPanel
@@ -127,8 +135,9 @@ export function WebhookSubscriptionPanel() {
           <button
             type="button"
             className="notification-button"
-            disabled={busy || subscriptions.length === 0}
+            disabled={busy}
             onClick={() => void handleTest()}
+            title={subscriptions.length === 0 ? "No webhook subscriptions on server yet." : undefined}
           >
             Send test webhook
           </button>

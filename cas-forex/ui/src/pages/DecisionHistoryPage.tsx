@@ -12,6 +12,7 @@ import {
   type AgentDecisionHistoryItem,
   type AgentDecisionHistoryResponse,
 } from "../data/api";
+import "./DecisionHistoryPage.css";
 
 const POLL_INTERVAL_MS = 60_000;
 const LIMIT_OPTIONS = [10, 25, 50] as const;

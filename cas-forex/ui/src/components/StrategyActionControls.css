@@ -1,0 +1,43 @@
+/* Shared lazy action controls for strategy review routes */
+
+.strategy-action-button {
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 0.74rem;
+  font-family: inherit;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.strategy-action-button:hover:not(:disabled) {
+  border-color: var(--accent-teal-dim);
+  color: var(--accent-teal);
+}
+
+.strategy-action-button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.action-result-toast {
+  border-radius: var(--radius-sm);
+  padding: 4px 8px;
+  font-size: 0.72rem;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+.action-result-ok {
+  background: var(--success-dim);
+  color: var(--success);
+  border: 1px solid var(--success-dim);
+}
+
+.action-result-err {
+  background: var(--danger-dim);
+  color: var(--danger);
+  border: 1px solid var(--danger-dim);
+}

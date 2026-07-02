@@ -67,7 +67,13 @@ export function Mt4BridgePanel() {
     try {
       const s = await updateMt4Control({ enabled: !mc.enabled, mailbox_dir: dir.trim() || undefined });
       apply(s);
-      setStatus(s.enabled ? "MT4 route ON." : "MT4 route OFF.");
+      setStatus(
+        s.enabled
+          ? s.link_status === "LIVE"
+            ? "MT4 route ON and EA heartbeat live."
+            : "MT4 route ON, waiting for the EA heartbeat before demo fills can run."
+          : "MT4 route OFF."
+      );
     } catch {
       setStatus("Couldn't change the MT4 route.");
     } finally {
@@ -91,7 +97,11 @@ export function Mt4BridgePanel() {
     setBusy("platform");
     try {
       await setDispatchPlatform("mt4");
-      setStatus("Dispatch now routes through MT4. (Turn the route ON and attach the EA to actually fill.)");
+      setStatus(
+        mc?.link_status === "LIVE"
+          ? "MT4 is selected for dispatch and the EA heartbeat is live."
+          : "MT4 is selected for dispatch, but no demo fills can run until the EA heartbeat is live."
+      );
     } catch {
       setStatus("Couldn't switch the dispatch platform.");
     } finally {
@@ -168,10 +178,17 @@ export function Mt4BridgePanel() {
           </button>
         </div>
 
-        {status && <div className="control-field-desc" style={{ color: "var(--success)" }}>{status}</div>}
+        {status && (
+          <div
+            className="control-field-desc"
+            style={{ color: status.toLowerCase().includes("heartbeat") && mc.link_status !== "LIVE" ? "var(--warning)" : "var(--success)" }}
+          >
+            {status}
+          </div>
+        )}
         <div className="control-field-desc">
-          Enabling writes paper (PAPER_MT4) command files the EA acknowledges — it does not authorize live money. Live MT4
-          additionally needs the EA's own LiveTradingAllowed input.
+          MT4 demo trading needs a fresh EA heartbeat plus receipts from this mailbox. Route ON only selects the path; it
+          is not an active MT4 demo fill by itself. Live MT4 additionally needs the EA's own LiveTradingAllowed input.
         </div>
       </div>
     </GlassPanel>

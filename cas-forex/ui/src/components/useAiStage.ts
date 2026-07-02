@@ -71,7 +71,6 @@ async function readSource(source: AiStageSource): Promise<AiStage | null> {
   }
   try {
     const res = await fetch(source, {
-      headers: { "Content-Type": "application/json" },
       signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) return null;
@@ -124,32 +123,42 @@ export function useAiStage(options: UseAiStageOptions = {}): AiStage {
  * indicator can honestly show OFFLINE vs LIVE instead of guessing. */
 export interface LoopHeartbeat {
   stage: AiStage;
-  live: boolean;
+  live: boolean | null;
+  trace?: AiStage[];
 }
 
 /** Poll the WASTE-loop stage endpoint ({ stage, running }). Falls back to
  * { idle, live:false } on any error / stale / unreachable — never fakes activity. */
-export function useLoopHeartbeat(url: string, intervalMs = 2000): LoopHeartbeat {
-  const [hb, setHb] = useState<LoopHeartbeat>({ stage: "idle", live: false });
+export function useLoopHeartbeat(
+  source: string | (() => Promise<unknown>),
+  intervalMs = 2000,
+  initial?: LoopHeartbeat | null,
+): LoopHeartbeat {
+  const [hb, setHb] = useState<LoopHeartbeat>(initial ?? { stage: "idle", live: null });
   const cancelled = useRef(false);
+
+  useEffect(() => {
+    if (initial) setHb(initial);
+  }, [initial]);
 
   useEffect(() => {
     cancelled.current = false;
 
     const tick = async () => {
       try {
-        const res = await fetch(url, {
-          headers: { "Content-Type": "application/json" },
-          signal: AbortSignal.timeout(6000),
-        });
-        if (!res.ok) {
+        const data: unknown = typeof source === "function"
+          ? await source()
+          : await fetch(source, {
+              signal: AbortSignal.timeout(6000),
+            }).then((res) => (res.ok ? res.json() : null));
+        if (!data) {
           if (!cancelled.current) setHb({ stage: "idle", live: false });
           return;
         }
-        const data: unknown = await res.json();
         const running = !!(data && typeof data === "object" && (data as { running?: unknown }).running);
         const stage = coerceAiStage(data) ?? "idle";
-        if (!cancelled.current) setHb({ stage: running ? stage : "idle", live: running });
+        const trace = running ? coerceStageTrace(data) : [];
+        if (!cancelled.current) setHb({ stage: running ? stage : "idle", live: running, trace });
       } catch {
         if (!cancelled.current) setHb({ stage: "idle", live: false });
       }
@@ -161,7 +170,29 @@ export function useLoopHeartbeat(url: string, intervalMs = 2000): LoopHeartbeat 
       cancelled.current = true;
       window.clearInterval(handle);
     };
-  }, [url, intervalMs]);
+  }, [source, intervalMs]);
 
   return hb;
+}
+
+function coerceStageTrace(data: unknown): AiStage[] {
+  const record = asRecord(data);
+  const durable = asRecord(record.durable_cycle);
+  const rawTrace = Array.isArray(record.stage_trace)
+    ? record.stage_trace
+    : Array.isArray(durable.stage_trace)
+      ? durable.stage_trace
+      : [];
+  const trace: AiStage[] = [];
+  for (const item of rawTrace) {
+    const stage = coerceAiStage(item);
+    if (!stage || stage === "idle") continue;
+    if (trace[trace.length - 1] === stage) continue;
+    trace.push(stage);
+  }
+  return trace.slice(-8);
+}
+
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" ? value as Record<string, unknown> : {};
 }

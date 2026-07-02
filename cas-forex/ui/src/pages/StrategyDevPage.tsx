@@ -20,6 +20,8 @@ import type {
   StrategyDevQueueReport,
   StrategyDevWorkItem,
 } from "../types/evidence";
+import "../components/StrategyActionControls.css";
+import "./StrategyDevPage.css";
 
 interface StrategyDevPageProps {
   state: DashboardState;
