@@ -188,6 +188,10 @@ class ModelProvider:
         self.state_path = Path(state_path)
         self.events_path = Path(events_path)
         self.cooldown_seconds = int(cooldown_seconds)
+        # Generous per-call timeout: extended-thinking models on the full
+        # operator context run well past the 60s default; a too-short timeout
+        # causes spurious failovers that read as "NO MODEL".
+        self.request_timeout = float(getattr(self.config, "ai_operator_request_timeout", 150) or 150)
         self._lock = threading.RLock()
         self._state = self._load()
 
@@ -332,7 +336,7 @@ class ModelProvider:
 
             for spec in ordered:
                 view = _ProviderConfigView(self.config, spec)
-                result: AIModelResult = AIModelClient(view).generate(prompt, system)
+                result: AIModelResult = AIModelClient(view, timeout=self.request_timeout).generate(prompt, system)
                 if result.ok:
                     if spec.paid:
                         est = (len(prompt) + len(system or "") + len(result.text or "")) // _CHARS_PER_TOKEN

@@ -172,9 +172,15 @@ class ForexConfig:
     # error); >0 = fail over to free once spent reaches it. Owner tops up in-app.
     ai_operator_token_budget: int = _env_int("AI_OPERATOR_TOKEN_BUDGET", 0)
     # Output-token ceiling per operator call. Claude 5 models use extended
-    # thinking that consumes output tokens BEFORE the JSON answer, so this must
-    # be generous or the JSON gets truncated (thinking ~1-1.5k + answer ~0.5k).
-    ai_operator_max_tokens: int = _env_int("AI_OPERATOR_MAX_TOKENS", 4000)
+    # thinking that consumes output tokens BEFORE the JSON answer, and thinking
+    # scales with how much evidence the operator is weighing — measured ~3.5-4.5k
+    # thinking tokens on the full learning context, so this must be generous or
+    # the JSON gets truncated (stop_reason=max_tokens) and reads as unparseable.
+    ai_operator_max_tokens: int = _env_int("AI_OPERATOR_MAX_TOKENS", 10000)
+    # HTTP read timeout per operator model call. Claude 5 extended thinking on
+    # the full learning context runs ~40-90s, past the 60s default — so operator
+    # calls get their own generous timeout to avoid spurious failovers.
+    ai_operator_request_timeout: int = _env_int("AI_OPERATOR_REQUEST_TIMEOUT", 150)
 
     # ---- MACRO Blackout ----
     macro_blackout_enabled: bool = _env_bool("MACRO_BLACKOUT_ENABLED", True)

@@ -364,6 +364,22 @@ class AIOperator:
             return tick
         decision = _extract_json(gen.get("text") or "")
         if decision is None:
+            # Extended-thinking models occasionally spend the whole token budget
+            # reasoning and truncate the JSON. Retry ONCE, terse: JSON only, one
+            # sentence of observations, no long deliberation.
+            terse_system = (
+                _OPERATOR_SYSTEM_PROMPT
+                + "\n\nIMPORTANT: Reply with ONLY the JSON object and nothing "
+                "else. Keep 'observations' to a single sentence. Do not "
+                "deliberate at length — decide quickly."
+            )
+            gen_retry = get_model_provider(self.config).generate(
+                prompt + "\n\nRespond with ONLY the JSON object now.", terse_system
+            )
+            if gen_retry.get("ok"):
+                gen = gen_retry
+                decision = _extract_json(gen_retry.get("text") or "")
+        if decision is None:
             tick = OperatorTick(
                 ok=False,
                 provider=gen.get("provider"),

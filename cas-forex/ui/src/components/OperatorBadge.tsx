@@ -30,18 +30,27 @@ function classifyDriver(state: OperatorState | null): { driver: Driver; label: s
   if (!state) return { driver: "unknown", label: "OPERATOR ?", note: "API unreachable" };
   if (!state.running) return { driver: "off", label: "OPERATOR OFF", note: "strategy desk paused" };
 
-  // Prefer the ACTUAL last-tick outcome over "which provider would be tried" —
-  // a configured Claude that fails every call must NOT read as a healthy CLAUDE.
+  // Prefer the ACTUAL last-tick outcome over "which provider would be tried".
+  // A provider name on the last tick means the model DID answer — even if the
+  // tick couldn't use that answer (e.g. an over-long reply). That is a model
+  // that is UP, not "NO MODEL". Only a tick with NO provider is truly no-model.
   const lastOk = state.last_ok;
   const lastProvider = state.last_provider ?? null;
+  const err = state.last_error ?? "";
+  const parseHiccup = lastOk === false && !!lastProvider && !/reachable|unavailable|no model|connect|credit|api key/i.test(err);
+  if (lastProvider) {
+    const paid = lastProvider === "claude";
+    const note = parseHiccup
+      ? "answering, but the last reply was too long to use — recovering next check"
+      : paid
+        ? "paid primary is answering"
+        : "free fallback is answering";
+    return paid
+      ? { driver: "claude", label: "CLAUDE", note }
+      : { driver: "local", label: "LOCAL (free)", note };
+  }
   if (lastOk === false) {
     return { driver: "stalled", label: "NO MODEL", note: "no AI model reachable — set a Claude key or install the local model" };
-  }
-  if (lastOk === true && lastProvider) {
-    const paid = lastProvider === "claude";
-    return paid
-      ? { driver: "claude", label: "CLAUDE", note: "paid primary is answering" }
-      : { driver: "local", label: "LOCAL (free)", note: "free fallback is answering" };
   }
   // Running but no tick has completed yet.
   return { driver: "warming", label: "OPERATOR ON", note: "starting — first check pending" };
