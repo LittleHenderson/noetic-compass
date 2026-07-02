@@ -17,6 +17,26 @@ Plain-English mandate: this file is the project dashboard. Check the dashboard b
 
 ## Current Plain-English State
 
+2026-07-01 CAS Forex W.A.S.T.E runner is LIVE and its two silent-death causes are fixed. The runner had been
+found dead repeatedly; both causes are now diagnosed, fixed, tested, and pushed (`5a3a0f91`, `448ed8ff`).
+Cause 1: the supervisor lease renewal's atomic file replace raised `PermissionError` (WinError 5) under
+transient OneDrive/antivirus file locks and the exception escaped outside the tick guard, killing the runner
+thread (captured in `runtime/worker-logs/waste_runner-20260701-053510.log`). Fix: `_save_payload` retries
+transient `OSError` (5 attempts, backoff) with a regression test, and `waste_runner._run` treats supervisor
+I/O errors as skip-renewal-and-retry (lease TTL `180s` covers a missed `60s` renewal) instead of thread death.
+Cause 2: with the owner's durable live-authority switches ON, `start_runner` correctly returns
+`CONFIRM_REQUIRED` unless `confirm=true` — but the background worker exited SILENTLY on that refusal (empty
+log) while the start route reported `RUNNING`; fix: the worker now logs the refusal, records it in the durable
+worker record, and exits with a distinct code. The runner was then started via
+`POST /api/forex/waste-loop-control/start?confirm=true` and verified LIVE: heartbeat `running: true`, full
+stage trace `watch→analyze→strategize→test→execute→no_trade`, mode `PAPER`, honest `NO_TRADE` while no
+candidate beats the edge gate. Real-order dispatch remains fail-closed regardless (live gate missing
+broker-reality ACCEPT / pilot / dry-run review; connected account is demo). Full sweep verified: proof
+auto-runner `RUNNING` (recorded `2026-07-02`, now `6/30` broker-verified days), paper-sample collector
+running, dev UI `5174` + installable mobile build `4173` reachable on the LAN, API healthy. Worker tests
+`4 passed`, runner+supervisor tests `33 passed`. Owner authority boundary unchanged: starting the PAPER
+runner authorizes no live orders, deposits, withdrawals, payouts, broker `ACCEPT`, or `LICENSED` claims.
+
 2026-07-01 CAS Forex three-day in-flight body VERIFIED GREEN and COMMITTED+PUSHED. The 2026-06-29→07-01 work
 (127 modified files + ~130 new modules/tests: live-money spine, runtime-gate owner-authority redesign, WASTE
 adaptation loop, broker funding handoff, dashboard first-paint overhaul) was inventoried, verified, and landed
