@@ -1,5 +1,33 @@
 # CAS Forex - Changelog
 
+## 2026-07-02 — Early-banking test of the owner's idea (MFE tracking) + operator-guidance context + isolation fix
+
+Built the exact instrument the operator itself said it needed (and the owner
+asked for): a way to test "bank big winners early, then restart WASTE."
+
+- **MFE (max favorable excursion)** now recorded on every simulated paper close
+  (`paper_outcome_sim._closed`): `mfe_price`, `mfe_pnl`, `captured_fraction_of_peak`,
+  `bars_to_peak`, `bars_held` — how far a trade ran into profit before it closed.
+- **`build_early_banking_analysis`**: for a range of "bank at f × peak" policies,
+  models paper net vs holding to SL/TP. Conservative + honest: a losing trade is
+  never rescued by early banking (only winners change); caveats surfaced (assumes
+  the fractional level was reachable; ignores capital-efficiency upside; paper-
+  only, no real-money-edge claim). Route `GET /waste-loop-control/early-banking-
+  analysis`; wired into the operator context so it (and the owner via chat) can
+  reason over it. 3 hand-computed tests (MFE recorded; banking beats hold on big
+  give-back; never rescues a loser).
+- **Early live signal (directional, 11 MFE trades so far):** trades capture only
+  ~0.40 of their peak (big give-back); modeled banking at 0.8×peak improves paper
+  net by ~+\$41 vs hold. Verdict honestly "not enough data yet" (needs 20) —
+  accumulates as trading continues. Note: MFE is captured on NEW resolutions
+  only; the pre-existing resolved backlog has none.
+- **Test-isolation fix (real bug):** `get_authority()` with a bare call now
+  returns the current process authority instead of rebuilding — the previous
+  version leaked a shared per-process temp store between tests (chat test saw a
+  0.95 edge_threshold left by another test). A bare call respects
+  `set_authority_for_tests`; explicit paths still rebind. Also: the operator's
+  live paper-outcome refresh is skipped under pytest (it did live candle fetches).
+
 ## 2026-07-02 — THE LEARNING LOOP IS CLOSED: paper-outcome simulator (real-candle first-touch P&L) + full-circle operator proof
 
 The gap documented in the previous entry is fixed the careful way. New

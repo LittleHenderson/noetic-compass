@@ -260,21 +260,35 @@ def resolve_first_touch(
     Conservative: a candle spanning BOTH levels resolves as a LOSS at the stop
     (``close_reason: AMBIGUOUS_CANDLE_CONSERVATIVE_SL``)."""
     direction = attempt["direction"]
+    entry = float(attempt["entry"])
     stop = float(attempt["stop_loss"])
     target = float(attempt["take_profit"])
     open_time: datetime = attempt["open_time"]
 
+    # Max Favorable Excursion: the best price the trade reached in its favour
+    # BEFORE it closed, and how many bars it took to get there. This is what
+    # lets us test "bank big winners early" (owner idea) — did trades run far
+    # into profit before reversing, or close near their peak already?
+    best_price = entry
+    best_bars = 0
+    bars = 0
+
     for candle in candles:
         if candle["ts"] < open_time:
             continue
+        bars += 1
+        favorable = candle["high"] if direction == "LONG" else candle["low"]
+        if (direction == "LONG" and favorable > best_price) or (direction == "SHORT" and favorable < best_price):
+            best_price = favorable
+            best_bars = bars
         hit_stop = candle["low"] <= stop if direction == "LONG" else candle["high"] >= stop
         hit_target = candle["high"] >= target if direction == "LONG" else candle["low"] <= target
         if hit_stop and hit_target:
-            return _closed(attempt, exit_price=stop, close_reason="AMBIGUOUS_CANDLE_CONSERVATIVE_SL", close_time=candle["ts"])
+            return _closed(attempt, exit_price=stop, close_reason="AMBIGUOUS_CANDLE_CONSERVATIVE_SL", close_time=candle["ts"], mfe_price=best_price, bars_to_peak=best_bars, bars_held=bars)
         if hit_stop:
-            return _closed(attempt, exit_price=stop, close_reason="STOP_LOSS", close_time=candle["ts"])
+            return _closed(attempt, exit_price=stop, close_reason="STOP_LOSS", close_time=candle["ts"], mfe_price=best_price, bars_to_peak=best_bars, bars_held=bars)
         if hit_target:
-            return _closed(attempt, exit_price=target, close_reason="TAKE_PROFIT", close_time=candle["ts"])
+            return _closed(attempt, exit_price=target, close_reason="TAKE_PROFIT", close_time=candle["ts"], mfe_price=best_price, bars_to_peak=best_bars, bars_held=bars)
     return None  # still open at this resolution — re-walk next run
 
 
@@ -284,6 +298,9 @@ def _closed(
     exit_price: float,
     close_reason: str,
     close_time: datetime,
+    mfe_price: float | None = None,
+    bars_to_peak: int = 0,
+    bars_held: int = 0,
 ) -> dict[str, Any]:
     symbol = attempt["symbol"]
     lots = float(attempt["lots"])
@@ -293,6 +310,14 @@ def _closed(
     gross = (exit_price - entry) * sign * value_per_unit * lots
     cost = _spread_price(symbol) * value_per_unit * lots  # full spread, always charged
     net = round(gross - cost, 6)
+    # MFE in P&L terms: what the trade was worth at its best point (gross of the
+    # single exit-spread cost, which would apply to an early bank too).
+    mfe = float(mfe_price) if mfe_price is not None else entry
+    mfe_gross = (mfe - entry) * sign * value_per_unit * lots
+    mfe_pnl = round(mfe_gross - cost, 6)
+    # How much of the peak the actual close captured (1.0 = closed at peak;
+    # low = gave back a big winner). Undefined when the peak never went positive.
+    captured = round(net / mfe_pnl, 4) if mfe_pnl > 0 else None
     return {
         "broker_ticket": str(attempt["broker_ticket"]),
         "symbol": symbol,
@@ -308,6 +333,11 @@ def _closed(
         "entry": entry,
         "exit": float(exit_price),
         "lots": lots,
+        "mfe_price": round(mfe, 8),
+        "mfe_pnl": mfe_pnl,
+        "captured_fraction_of_peak": captured,
+        "bars_to_peak": int(bars_to_peak),
+        "bars_held": int(bars_held),
         "decision_ref": attempt.get("decision_ref"),
         "order_id": attempt.get("order_id"),
         "outcome_source": OUTCOME_SOURCE,
@@ -417,11 +447,106 @@ def maybe_refresh_paper_outcomes(
         return None  # best-effort: a failed refresh must never break the caller
 
 
+EARLY_BANK_REPORT_KIND = "cas_forex_early_banking_analysis"
+DEFAULT_BANK_FRACTIONS = (0.4, 0.5, 0.6, 0.7, 0.8)
+
+
+def build_early_banking_analysis(
+    *,
+    ledger_path: Path | str = DEFAULT_LEDGER_PATH,
+    bank_fractions: tuple[float, ...] = DEFAULT_BANK_FRACTIONS,
+    min_trades: int = 20,
+) -> dict[str, Any]:
+    """Test the owner's "bank big winners early" idea on realized paper trades.
+
+    For each resolved trade we know its actual net AND its max-favorable-excursion
+    P&L (the best it was ever worth). A "bank at fraction f" policy is modeled
+    conservatively: if the trade's peak was profitable, assume we could have
+    exited at ``f * mfe_pnl`` (a trade that reached its peak passed through every
+    lower level first); otherwise the trade keeps its actual (losing) outcome —
+    early banking never rescues a loser. This compares total net under each
+    banking policy against holding to the real SL/TP.
+
+    Honest caveats surfaced in the result: this assumes the fractional level was
+    reachable (true for a monotone run to the peak, optimistic for a jagged one),
+    ignores that banking early frees capital sooner (a plus it does NOT credit),
+    and says nothing about real-money edge. Directional signal for the operator
+    and owner, not a promise."""
+    ledger = load_paper_outcome_history(ledger_path)
+    rows = [r for r in ledger.get("history_records", []) if isinstance(r, Mapping) and r.get("mfe_pnl") is not None]
+    actual_net = round(sum(_num(r.get("profit")) for r in rows), 4)
+    winners = [r for r in rows if _num(r.get("mfe_pnl")) > 0]
+    # How much of the peak winners actually kept (low => big give-back => early
+    # banking likely helps; high => trades already close near their peak).
+    captured = [_num(r.get("captured_fraction_of_peak")) for r in winners if r.get("captured_fraction_of_peak") is not None]
+    avg_captured = round(sum(captured) / len(captured), 4) if captured else None
+
+    policies = []
+    for f in bank_fractions:
+        total = 0.0
+        banked = 0
+        for r in rows:
+            mfe_pnl = _num(r.get("mfe_pnl"))
+            actual = _num(r.get("profit"))
+            if mfe_pnl > 0:
+                total += f * mfe_pnl  # banked at fraction of peak
+                banked += 1
+            else:
+                total += actual  # loser keeps its real outcome
+        policies.append(
+            {
+                "bank_fraction_of_peak": f,
+                "modeled_net_pnl": round(total, 4),
+                "delta_vs_hold": round(total - actual_net, 4),
+                "trades_banked_early": banked,
+            }
+        )
+    best = max(policies, key=lambda p: p["modeled_net_pnl"]) if policies else None
+    return {
+        "report_kind": EARLY_BANK_REPORT_KIND,
+        "generated_at": utc_now().isoformat(),
+        "resolved_trades_with_mfe": len(rows),
+        "enough_data": len(rows) >= max(1, int(min_trades)),
+        "min_trades": max(1, int(min_trades)),
+        "actual_net_pnl_hold_to_sl_tp": actual_net,
+        "winner_count": len(winners),
+        "avg_captured_fraction_of_peak": avg_captured,
+        "policies": policies,
+        "best_policy": best,
+        "verdict": (
+            "not enough resolved trades with MFE yet — keep trading and re-check"
+            if len(rows) < max(1, int(min_trades))
+            else (
+                f"modeled early-banking at {best['bank_fraction_of_peak']} of peak would change paper net by "
+                f"{best['delta_vs_hold']} vs holding to SL/TP (directional, see caveats)"
+                if best
+                else "no policy computed"
+            )
+        ),
+        "caveats": [
+            "assumes the fractional profit level was reachable (optimistic on jagged runs)",
+            "does not credit the capital-efficiency benefit of banking sooner",
+            "paper-only; says nothing about real-money edge",
+        ],
+        "read_only": True,
+        "money_moved": False,
+    }
+
+
+def _num(value: Any) -> float:
+    try:
+        return float(value)
+    except (TypeError, ValueError):
+        return 0.0
+
+
 __all__ = [
     "DEFAULT_LEDGER_PATH",
+    "EARLY_BANK_REPORT_KIND",
     "LEDGER_REPORT_KIND",
     "OUTCOME_SOURCE",
     "REPORT_KIND",
+    "build_early_banking_analysis",
     "load_paper_outcome_history",
     "maybe_refresh_paper_outcomes",
     "resolve_first_touch",

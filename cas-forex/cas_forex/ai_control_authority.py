@@ -280,20 +280,31 @@ _AUTHORITY: Optional[AiControlAuthority] = None
 _AUTHORITY_LOCK = threading.Lock()
 
 
-def get_authority(state_path: Path | str = DEFAULT_STATE_PATH) -> AiControlAuthority:
+def get_authority(state_path: Path | str | None = None) -> AiControlAuthority:
+    """Return the process-global control authority.
+
+    A bare call (``state_path is None``) means "give me the current process
+    authority" — it returns whatever is set (including a test-injected one via
+    ``set_authority_for_tests``) and only constructs a default if none exists.
+    Passing an explicit path (re)binds to that store.
+    """
     global _AUTHORITY
     with _AUTHORITY_LOCK:
-        if _AUTHORITY is None or Path(state_path) != _AUTHORITY.state_path:
-            resolved = Path(state_path)
-            # Test isolation: a pytest run must NEVER touch (or persist to) the
-            # owner's live authority store — full-suite runs were scrambling the
-            # live dials (edge threshold, learning mode) mid-trading. Tests that
-            # need a specific store still use set_authority_for_tests(...).
-            if resolved == DEFAULT_STATE_PATH and os.environ.get("PYTEST_CURRENT_TEST"):
-                import tempfile
+        if state_path is None:
+            if _AUTHORITY is None:
+                resolved = DEFAULT_STATE_PATH
+                # Test isolation: a pytest run must NEVER touch (or persist to)
+                # the owner's live authority store — full-suite runs were
+                # scrambling the live dials (edge threshold, learning mode)
+                # mid-trading.
+                if os.environ.get("PYTEST_CURRENT_TEST"):
+                    import tempfile
 
-                resolved = Path(tempfile.gettempdir()) / f"cas-forex-test-authority-{os.getpid()}.json"
-            _AUTHORITY = AiControlAuthority(resolved)
+                    resolved = Path(tempfile.gettempdir()) / f"cas-forex-test-authority-{os.getpid()}.json"
+                _AUTHORITY = AiControlAuthority(resolved)
+            return _AUTHORITY
+        if _AUTHORITY is None or Path(state_path) != _AUTHORITY.state_path:
+            _AUTHORITY = AiControlAuthority(Path(state_path))
         return _AUTHORITY
 
 

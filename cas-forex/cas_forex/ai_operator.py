@@ -18,6 +18,7 @@ engine keeps running on local math regardless of what the operator decides.
 from __future__ import annotations
 
 import json
+import os
 import re
 from dataclasses import dataclass, field
 from pathlib import Path
@@ -162,15 +163,24 @@ def gather_context(config: Any = None) -> dict[str, Any]:
     )
     # Refresh realized paper outcomes first (guarded: at most once per 10 min),
     # so the operator reasons over fresh wins/losses. Best-effort by design.
-    _safe(
-        lambda: __import__("cas_forex.paper_outcome_sim", fromlist=["maybe_refresh_paper_outcomes"]).maybe_refresh_paper_outcomes(),
-        None,
-    )
+    # Skipped under pytest — it does live candle fetches + ledger writes that
+    # must not leak between tests.
+    if not os.environ.get("PYTEST_CURRENT_TEST"):
+        _safe(
+            lambda: __import__("cas_forex.paper_outcome_sim", fromlist=["maybe_refresh_paper_outcomes"]).maybe_refresh_paper_outcomes(),
+            None,
+        )
     # The learn-from-mistakes ledger: realized paper win/loss per symbol x
     # direction x profile, including non-edge learning trades. This is what lets
     # the operator say "SHORT NAS100 keeps losing — raise its confidence bar".
     learning_outcomes = _safe(
         lambda: __import__("cas_forex.waste_direction_outcome_binding", fromlist=["build_waste_learning_outcomes"]).build_waste_learning_outcomes(),
+        {"status": "UNAVAILABLE"},
+    )
+    # Early-banking analysis: directly tests the owner's "bank big winners early,
+    # then restart WASTE" idea against realized max-favorable-excursion data.
+    early_banking = _safe(
+        lambda: __import__("cas_forex.paper_outcome_sim", fromlist=["build_early_banking_analysis"]).build_early_banking_analysis(),
         {"status": "UNAVAILABLE"},
     )
     # Standing owner guidance — the owner's plain-language considerations,
@@ -187,6 +197,7 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         "learning": _compact(learning),
         "outcome_binding": _compact(outcome),
         "learning_outcomes": _compact_learning_outcomes(learning_outcomes),
+        "early_banking_analysis": early_banking,
         "adaptation": _compact(adaptation),
         "recent_cycles": _recent_cycles(),
         "tool_manifest": TOOL_MANIFEST,

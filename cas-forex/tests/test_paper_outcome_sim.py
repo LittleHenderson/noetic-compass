@@ -218,3 +218,50 @@ def test_learning_engine_consumes_simulated_ledger(tmp_path):
     )
     assert r["bound_trade_count"] == 1
     assert r["overall"]["wins"] == 1
+
+
+# ---------------------------------------------------------------------------
+# Max Favorable Excursion + early-banking analysis (owner "bank big winners")
+# ---------------------------------------------------------------------------
+def test_mfe_recorded_on_a_winner(tmp_path):
+    # LONG runs to 1.1030 (peak) then closes at TP 1.1020 — MFE must exceed exit.
+    candles = [
+        _candle(1, high=1.1030, low=1.1002),   # peak 1.1030
+        _candle(2, high=1.1021, low=1.1002),   # touches TP 1.1020
+    ]
+    _run(tmp_path, [_attempt(201, tp=1.1020)], candles)
+    rec = load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"][0]
+    assert rec["mfe_price"] == 1.1030
+    assert rec["mfe_pnl"] > rec["profit"]  # it was worth more at the peak than at close
+    assert 0.0 < rec["captured_fraction_of_peak"] < 1.0  # gave some back
+    assert rec["bars_to_peak"] == 1
+
+
+def test_early_banking_analysis_prefers_banking_when_giveback_is_large(tmp_path):
+    from cas_forex.paper_outcome_sim import build_early_banking_analysis
+
+    # Build a set of winners that each ran far past their TP before closing at TP
+    # (big give-back): peak ~1.1050, TP 1.1010. Early banking near the peak should
+    # model a higher net than holding to TP.
+    attempts = [_attempt(300 + i, tp=1.1010) for i in range(25)]
+    candles = [_candle(1, high=1.1050, low=1.1002), _candle(2, high=1.1011, low=1.1002)]
+    _run(tmp_path, attempts, candles)
+    analysis = build_early_banking_analysis(ledger_path=tmp_path / "paper-outcomes.json", min_trades=10)
+    assert analysis["enough_data"] is True
+    assert analysis["resolved_trades_with_mfe"] == 25
+    # Peak was worth far more than the TP close, so the best banking policy beats hold.
+    assert analysis["best_policy"]["modeled_net_pnl"] > analysis["actual_net_pnl_hold_to_sl_tp"]
+    assert analysis["avg_captured_fraction_of_peak"] < 0.6  # big give-back
+
+
+def test_early_banking_never_rescues_a_loser(tmp_path):
+    from cas_forex.paper_outcome_sim import build_early_banking_analysis
+
+    # A pure loser (hits SL, never went favorable) must keep its loss under every
+    # banking policy — early banking only ever changes WINNERS.
+    candles = [_candle(1, high=1.1001, low=1.0989)]  # straight to SL, no favorable move
+    _run(tmp_path, [_attempt(400, sl=1.0990)], candles)
+    analysis = build_early_banking_analysis(ledger_path=tmp_path / "paper-outcomes.json", min_trades=1)
+    for policy in analysis["policies"]:
+        assert policy["modeled_net_pnl"] == analysis["actual_net_pnl_hold_to_sl_tp"]
+        assert policy["trades_banked_early"] == 0

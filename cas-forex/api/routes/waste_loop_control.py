@@ -512,6 +512,15 @@ async def post_paper_outcomes_run() -> dict[str, Any]:
     return resolve_paper_outcomes()
 
 
+@router.get("/early-banking-analysis")
+async def get_early_banking_analysis() -> dict[str, Any]:
+    """Test the owner's 'bank big winners early, then restart WASTE' idea against
+    realized max-favorable-excursion data. Read-only paper analysis."""
+    from cas_forex.paper_outcome_sim import build_early_banking_analysis
+
+    return build_early_banking_analysis()
+
+
 @router.get("/paper-sample-collector")
 async def get_paper_sample_collector() -> dict[str, Any]:
     """Paper-only coordinator for broker-grade WASTE sample collection."""
