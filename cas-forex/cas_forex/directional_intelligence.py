@@ -282,7 +282,17 @@ def analyze_market_state(state: Mapping[str, Any]) -> dict[str, Any]:
             "hypothesis_tuning": state.get("directional_hypothesis_tuning"),
             "cas_feature_map": state.get("cas_feature_map"),
         }
-    hypothesis = score_direction(candles, symbol=symbol, timeframe=timeframe, profile=profile)
+    try:
+        min_confidence = float(get_authority().control.get("min_directional_confidence"))
+    except Exception:
+        min_confidence = 0.18
+    hypothesis = score_direction(
+        candles,
+        symbol=symbol,
+        timeframe=timeframe,
+        profile=profile,
+        min_confidence=min_confidence,
+    )
     return {
         "confidence": hypothesis.confidence,
         "hypothesis": hypothesis.to_dict(),
@@ -344,16 +354,42 @@ def strategize_market_state(
     return setup
 
 
+def _paper_learning_active() -> bool:
+    """Owner paper-learning mode (2026-07-01): True only when the owner dial is
+    ON and live trading is NOT actually authorized. Errors read False."""
+    try:
+        authority = get_authority()
+        if not bool(authority.control.get("paper_learning_trades")):
+            return False
+        from cas_forex import runtime_gates
+        from cas_forex.config import config
+
+        if getattr(config, "live_mode", False) and runtime_gates.is_authorized("live_trading"):
+            return False
+        return True
+    except Exception:
+        return False
+
+
 def _cas_route_block_reason(state: Mapping[str, Any]) -> str | None:
     cas_map = state.get("cas_feature_map")
     if not isinstance(cas_map, Mapping):
         return None
     rpm_action = str(cas_map.get("selected_rpm_action") or "").upper()
+    block: str | None = None
     if rpm_action and rpm_action != "ROUTE":
-        return "CAS lacunarity/RPM/CJT selected NO_TRADE for this profile"
-    if _bool_value(cas_map.get("selected_is_lacuna"), default=False):
-        return "CAS lacunarity/RPM/CJT selected cell is a lacuna"
-    return None
+        block = "CAS lacunarity/RPM/CJT selected NO_TRADE for this profile"
+    elif _bool_value(cas_map.get("selected_is_lacuna"), default=False):
+        block = "CAS lacunarity/RPM/CJT selected cell is a lacuna"
+    if block is None:
+        return None
+    # Owner paper-learning mode: a lacuna (unmeasured cell) is exactly where the
+    # loop must gather outcomes — the CAS map rides along as a feature/label but
+    # does not veto paper LEARNING candidates. Real-money authorization is
+    # unaffected (the mode reads False whenever live trading is authorized).
+    if _paper_learning_active():
+        return None
+    return block
 
 
 def _no_trade(

@@ -35,7 +35,13 @@ def use_in_process_workers_for_tests() -> bool:
     return bool(os.environ.get("PYTEST_CURRENT_TEST"))
 
 
-def start_waste_runner_worker(*, interval_seconds: int, confirm: bool = False) -> dict[str, Any]:
+def start_waste_runner_worker(
+    *,
+    interval_seconds: int,
+    confirm: bool = False,
+    deep_watch: bool = False,
+    watch_timeframe: str | None = None,
+) -> dict[str, Any]:
     if use_in_process_workers_for_tests():
         from cas_forex.waste_runner import start_runner
 
@@ -48,7 +54,12 @@ def start_waste_runner_worker(*, interval_seconds: int, confirm: bool = False) -
             str(int(interval_seconds)),
             *(["--confirm"] if confirm else []),
         ],
-        config={"interval_seconds": int(interval_seconds), "confirm": bool(confirm)},
+        config={
+            "interval_seconds": int(interval_seconds),
+            "confirm": bool(confirm),
+            "deep_watch": bool(deep_watch),
+            "watch_timeframe": str(watch_timeframe) if watch_timeframe else None,
+        },
     )
     return _runner_route_status(worker)
 
@@ -416,7 +427,18 @@ def _start_worker(kind: str, worker_args: list[str], *, config: Mapping[str, Any
     env = os.environ.copy()
     env["CAS_FOREX_BACKGROUND_WORKER"] = kind
     if kind == RUNNER_KIND:
-        env["CAS_FOREX_WASTE_SCHEDULED_SNAPSHOT_WATCH"] = "1"
+        # Snapshot-only watch is the cheap default. ``deep_watch`` (owner scalp
+        # mode) makes every tick run the real candle scan so the loop can form
+        # candidates itself instead of mirroring the 5-minute probe. Pop both
+        # vars first — the API process may itself carry them (inherited env),
+        # and a stale inherited value must never override the requested config.
+        env.pop("CAS_FOREX_WASTE_SCHEDULED_SNAPSHOT_WATCH", None)
+        env.pop("CAS_FOREX_WASTE_WATCH_TIMEFRAME", None)
+        if not config.get("deep_watch"):
+            env["CAS_FOREX_WASTE_SCHEDULED_SNAPSHOT_WATCH"] = "1"
+        watch_timeframe = config.get("watch_timeframe")
+        if watch_timeframe:
+            env["CAS_FOREX_WASTE_WATCH_TIMEFRAME"] = str(watch_timeframe)
     creationflags = _worker_creationflags(kind)
     with log_path.open("ab") as log:
         process = subprocess.Popen(

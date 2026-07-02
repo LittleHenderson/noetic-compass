@@ -189,6 +189,7 @@ class WasteLoop:
         manage_fn: Optional[_ManageFn] = None,
         objective: Any = None,
         control: Any = None,
+        paper_learning_fn: Optional[Callable[[], bool]] = None,
     ) -> None:
         self.watch_fn = watch_fn
         self.analyze_fn = analyze_fn
@@ -197,6 +198,14 @@ class WasteLoop:
         self.size_fn = size_fn
         self.execute_fn = execute_fn
         self.manage_fn = manage_fn
+        # Owner decision (2026-07-01): on PAPER/DEMO the edge verdict is a LABEL
+        # the system learns from, not an execution blocker — paper trades are the
+        # learning corpus. When this callable returns True, a non-PASS candidate
+        # still executes as a paper LEARNING trade carrying NO edge token, which
+        # makes a real-money fill structurally impossible (the dispatch chokepoint
+        # requires a fresh PASS token for every real dispatch and raises without
+        # one). The injector (runner) must return False outside PAPER mode.
+        self.paper_learning_fn = paper_learning_fn
         # ``objective`` carries the pace target ($250/day); ``control`` is the owner
         # surface (e.g. is the loop allowed to run, threshold overrides). They are
         # opaque to the loop — read by the injected stages, not by the controller.
@@ -221,6 +230,61 @@ class WasteLoop:
             stage = "blocked"
         self._stage = stage
         trace.append(stage)
+
+    def _paper_learning_enabled(self) -> bool:
+        """True only when the injected owner control says paper learning trades
+        are on. Any error reads as False — the loop falls back to fail-closed
+        NO_TRADE, never to an accidental execution."""
+        if self.paper_learning_fn is None:
+            return False
+        try:
+            return bool(self.paper_learning_fn())
+        except Exception:
+            return False
+
+    def _learning_execute(
+        self,
+        trace: List[str],
+        setup: CandidateSetup,
+        edge: Optional[EdgeTestDecision],
+        label_status: str,
+        label_reason: str,
+    ) -> dict[str, Any]:
+        """Execute a paper LEARNING trade for a non-PASS candidate.
+
+        The trade carries NO edge token (empty string), so the dispatch chokepoint
+        refuses it for any real-money path by construction. The edge verdict is
+        preserved on the result as the learning label. Compounding is skipped —
+        adds always require a fresh PASS; learning trades never amplify."""
+        try:
+            lots = self.size_fn(setup)
+        except Exception as exc:
+            self._set_stage("blocked", trace)
+            return self._result(
+                trace, "BLOCKED", f"size_fn failed: {type(exc).__name__}: {exc}", setup=setup, edge=edge
+            )
+        self._set_stage("execute", trace)
+        try:
+            execute_result = self.execute_fn(setup, lots, "")
+        except Exception as exc:
+            self._set_stage("blocked", trace)
+            return self._result(
+                trace,
+                "BLOCKED",
+                f"learning execute_fn failed: {type(exc).__name__}: {exc}",
+                setup=setup,
+                edge=edge,
+            )
+        out = self._result(
+            trace,
+            "EXECUTE",
+            f"paper LEARNING trade (edge label {label_status}: {label_reason})".strip(),
+            setup=setup,
+            edge=edge,
+            execute_result=execute_result,
+        )
+        out["learning_trade"] = True
+        return out
 
     def _result(
         self,
@@ -294,10 +358,17 @@ class WasteLoop:
                 trace, "BLOCKED", f"test_fn failed: {type(exc).__name__}: {exc}", setup=setup
             )
 
-        # FAIL-CLOSED CHOKEPOINT: the one and only gate to execution.
+        # FAIL-CLOSED CHOKEPOINT: the one and only gate to execution with a token.
         if not _is_pass(edge):
             status = getattr(edge, "status", "MISSING") if edge is not None else "MISSING"
             reason = getattr(edge, "reason", "") if edge is not None else "test_fn returned no decision"
+            if self._paper_learning_enabled():
+                # PAPER LEARNING TRADE (owner decision 2026-07-01): execute the
+                # candidate on paper WITHOUT an edge token so the loop can learn
+                # from real recorded outcomes. The edge verdict rides along as
+                # the training label. No token ⇒ any real-money path refuses at
+                # the dispatch chokepoint; risk + live gates still run in full.
+                return self._learning_execute(trace, setup, edge, status, reason)
             self._set_stage("no_trade", trace)
             return self._result(
                 trace,

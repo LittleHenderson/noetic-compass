@@ -487,6 +487,28 @@ def _empty_hypothesis_tuning(*, status: str, reason: str, horizon: int) -> dict[
     }
 
 
+def _paper_learning_firewall_override(authority: AiControlAuthority, symbol: str) -> bool:
+    """Owner paper-learning mode (2026-07-01): a symbol the owner enabled on the
+    AI dial may form LEARNING candidates on paper even without a promoted
+    research lead / matching lead timeframe. The override NEVER applies when
+    live trading is actually authorized (config.live_mode + full live gate),
+    and any error reads False — fail-closed back to the firewall verdict."""
+    try:
+        if not bool(authority.control.get("paper_learning_trades")):
+            return False
+        enabled = {str(s) for s in (authority.control.get("symbols") or [])}
+        if str(symbol) not in enabled:
+            return False
+        from cas_forex import runtime_gates
+        from cas_forex.config import config
+
+        if getattr(config, "live_mode", False) and runtime_gates.is_authorized("live_trading"):
+            return False
+        return True
+    except Exception:
+        return False
+
+
 def build_waste_market_state(
     *,
     connector: Optional[MarketDataConnector] = None,
@@ -519,7 +541,20 @@ def build_waste_market_state(
                 ledger_path=strategy_leads_path,
             )
             firewall_payload = firewall.to_dict()
-            if not firewall.candidate_allowed:
+            firewall_allowed = firewall.candidate_allowed
+            if not firewall_allowed and _paper_learning_firewall_override(authority, sym):
+                firewall_allowed = True
+                firewall_payload = {
+                    **firewall_payload,
+                    "candidate_allowed": True,
+                    "firewall_status": "ALLOW_PAPER_LEARNING",
+                    "reason": (
+                        "owner paper-learning mode: symbol is enabled on the owner "
+                        "dial, so paper LEARNING candidates may form; the original "
+                        f"firewall verdict was: {firewall_payload.get('reason') or firewall.firewall_status}"
+                    ),
+                }
+            if not firewall_allowed:
                 skipped_firewalls.append(firewall_payload)
                 last_error = firewall_payload.get("reason") or firewall.firewall_status
                 connector_attempts.append(
@@ -787,18 +822,22 @@ def _waste_market_scan_candidates(
     except Exception:
         candidates = []
 
-    if not candidates:
-        for sym in authority.control.get("symbols") or []:
-            if sym:
-                candidates.append(
-                    {
-                        "symbol": str(sym),
-                        "timeframe": _norm_tf(requested_tf or DEFAULT_WASTE_TIMEFRAME),
-                        "lead_id": None,
-                        "priority": 999,
-                        "source": "ai_control_symbols",
-                    }
-                )
+    # Owner scalp/learning breadth (2026-07-01): the AI's own symbol dial ALWAYS
+    # contributes scan lanes after the research leads (dedup + limit applied
+    # below) — the scan must not tunnel-vision on index leads while the owner
+    # has FX pairs enabled. Previously these lanes were used only when no lead
+    # produced a candidate at all.
+    for sym in authority.control.get("symbols") or []:
+        if sym:
+            candidates.append(
+                {
+                    "symbol": str(sym),
+                    "timeframe": _norm_tf(requested_tf or DEFAULT_WASTE_TIMEFRAME),
+                    "lead_id": None,
+                    "priority": 999,
+                    "source": "ai_control_symbols",
+                }
+            )
 
     deduped: list[dict[str, Any]] = []
     seen: set[tuple[str, str]] = set()

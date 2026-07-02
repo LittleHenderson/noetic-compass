@@ -95,6 +95,10 @@ class StartRunner(BaseModel):
         ge=MIN_INTERVAL_SECONDS,
         le=MAX_INTERVAL_SECONDS,
     )
+    # Owner scalp mode: run the full candle scan every tick (instead of the cheap
+    # 5-minute-probe mirror) and optionally pin the watch timeframe (e.g. "M1").
+    deep_watch: bool = False
+    watch_timeframe: str | None = None
 
 
 class RealCandleProbeRequest(BaseModel):
@@ -663,6 +667,8 @@ async def post_start(body: StartRunner, confirm: bool = Query(default=False)) ->
         return start_waste_runner_worker(
             interval_seconds=body.interval_seconds,
             confirm=confirm,
+            deep_watch=body.deep_watch,
+            watch_timeframe=body.watch_timeframe,
         )
     return start_runner(body.interval_seconds, confirm=confirm)
 

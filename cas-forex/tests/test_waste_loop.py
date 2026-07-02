@@ -81,6 +81,7 @@ def _build(
     recorder: _Recorder,
     test_raises: bool = False,
     manage_fn: Any = None,
+    paper_learning_fn: Any = None,
 ) -> WasteLoop:
     def watch_fn() -> dict[str, Any]:
         return {"bid": 1.10, "ask": 1.1001}
@@ -107,6 +108,7 @@ def _build(
         size_fn=size_fn,
         execute_fn=recorder.execute,
         manage_fn=manage_fn,
+        paper_learning_fn=paper_learning_fn,
     )
 
 
@@ -371,3 +373,100 @@ def test_initial_stage_is_idle():
     rec = _Recorder()
     loop = _build(strategize_returns=_setup(), test_returns=_pass_edge(), recorder=rec)
     assert loop.current_stage() == "idle"
+
+
+# ---------------------------------------------------------------------------
+# Paper LEARNING mode (owner decision 2026-07-01): on paper, the edge verdict is
+# a label, not a blocker. Learning trades carry NO token — real money remains
+# structurally impossible for them at the dispatch chokepoint.
+# ---------------------------------------------------------------------------
+def test_learning_mode_executes_non_pass_candidate_with_empty_token():
+    rec = _Recorder()
+    loop = _build(
+        strategize_returns=_setup(),
+        test_returns=_fail_edge(),
+        recorder=rec,
+        paper_learning_fn=lambda: True,
+    )
+
+    result = loop.tick()
+
+    assert result["decision"] == "EXECUTE"
+    assert result.get("learning_trade") is True
+    # The edge verdict rides along as the training label.
+    assert result["edge"].status == "NO_TRADE_NULL_FAILED"
+    assert "LEARNING" in result["reason"]
+    # Executed exactly once with an EMPTY token — never a fabricated PASS token.
+    assert len(rec.execute_calls) == 1
+    _, lots, token = rec.execute_calls[0]
+    assert token == ""
+    assert lots == 0.10
+    assert result["stage_trace"][-1] == "execute"
+
+
+def test_learning_mode_off_keeps_fail_closed_no_trade():
+    rec = _Recorder()
+    loop = _build(
+        strategize_returns=_setup(),
+        test_returns=_fail_edge(),
+        recorder=rec,
+        paper_learning_fn=lambda: False,
+    )
+
+    result = loop.tick()
+
+    assert result["decision"] == "NO_TRADE"
+    assert rec.execute_calls == []
+
+
+def test_learning_mode_error_reads_as_off_fail_closed():
+    rec = _Recorder()
+
+    def broken_gate() -> bool:
+        raise RuntimeError("owner control unreadable")
+
+    loop = _build(
+        strategize_returns=_setup(),
+        test_returns=_fail_edge(),
+        recorder=rec,
+        paper_learning_fn=broken_gate,
+    )
+
+    result = loop.tick()
+
+    assert result["decision"] == "NO_TRADE"
+    assert rec.execute_calls == []
+
+
+def test_learning_mode_does_not_touch_pass_path_token():
+    rec = _Recorder()
+    loop = _build(
+        strategize_returns=_setup(),
+        test_returns=_pass_edge("tok-REAL"),
+        recorder=rec,
+        paper_learning_fn=lambda: True,
+    )
+
+    result = loop.tick()
+
+    # A genuine PASS still executes through the token path, not the learning path.
+    assert result["decision"] == "EXECUTE"
+    assert result.get("learning_trade") is None
+    assert rec.execute_calls[0][2] == "tok-REAL"
+
+
+def test_learning_mode_never_invents_a_candidate():
+    rec = _Recorder()
+    loop = _build(
+        strategize_returns=None,
+        test_returns=_fail_edge(),
+        recorder=rec,
+        paper_learning_fn=lambda: True,
+    )
+
+    result = loop.tick()
+
+    # No candidate => still NO_TRADE. Learning mode only unblocks execution of a
+    # REAL candidate; it never fabricates one.
+    assert result["decision"] == "NO_TRADE"
+    assert rec.execute_calls == []

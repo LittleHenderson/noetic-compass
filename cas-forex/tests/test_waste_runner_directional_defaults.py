@@ -30,6 +30,8 @@ def test_runner_default_directional_path_forms_candidate_but_gate_stops_without_
                 "candles": _candles(19_000.0, 45.0),
             }
         )
+        # Fail-closed contract under test: learning dial explicitly OFF.
+        runner.control.adjust("paper_learning_trades", 0)
         result = runner.tick_once()
     finally:
         set_authority_for_tests(None)

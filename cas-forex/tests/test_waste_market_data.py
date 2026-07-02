@@ -376,6 +376,9 @@ def test_build_waste_market_state_fetches_candles_and_entry_pairs(tmp_path):
 def test_build_waste_market_state_blocks_watchlist_only_symbol(tmp_path):
     auth = AiControlAuthority(tmp_path / "authority.json")
     auth.owner_update(allowed_symbols=["GBP/USD"])
+    # Fail-closed firewall contract under test: the owner paper-learning
+    # override (default ON since 2026-07-01) is explicitly OFF here.
+    auth.control.adjust("paper_learning_trades", 0)
     connector = FakeConnector(_candles())
     ledger = tmp_path / "strategy_leads.json"
     ledger.write_text(
@@ -663,6 +666,8 @@ def test_runner_data_backed_watch_passes_entry_pairs_to_edge_gate(tmp_path, monk
                 strategy_leads_path=ledger,
             )
         )
+        # Fail-closed contract under test: learning dial explicitly OFF.
+        runner.control.adjust("paper_learning_trades", 0)
         result = runner.tick_once()
     finally:
         set_authority_for_tests(None)

@@ -1,5 +1,54 @@
 # CAS Forex - Changelog
 
+## 2026-07-01 (late) — GLOVES-OFF PAPER LEARNING: the edge bar becomes a label on paper; M1 scalp loop live; FIRST LEARNING TRADE FILLED
+
+Owner directive (verbatim intent): the 65% edge bar is for REAL money; on paper/demo the AI
+must TRADE to build learning material — "the edge is developed from learning from mistakes,
+not before." Also: scalp on M1 or faster, both directions, all sessions. Implemented, tested
+(suite **1716 passed / 0 failed**), and verified live tonight with a FILLED demo trade:
+`LONG NAS100 0.47 lots, broker ticket 45940508, BROKER_EXECUTED (PAPER_MT5)` carrying its
+edge verdict as the learning label.
+
+**The learning-mode architecture (paper-only by construction):**
+- `waste_loop.py`: non-PASS candidates now execute as **paper LEARNING trades** when the
+  owner's `paper_learning_trades` dial is ON — the edge verdict rides along as the training
+  label (`learning_trade: true` on the cycle). Learning trades carry an **EMPTY edge token**,
+  so any real-money path refuses them at the dispatch chokepoint (fail-closed physics, not
+  policy). Learning never invents candidates (strategize None ⇒ still NO_TRADE) and never
+  compounds (adds always require a fresh PASS).
+- `waste_runner.py`: empty-token execute skips edge-authorization registration (never
+  fabricates a PASS) and dispatches through the legacy paper path; `_paper_learning_allowed`
+  = dial ON + effective mode PAPER. Production runners now share the DURABLE owner-fenced
+  authority dial surface (`get_runner()` wires `get_authority().control`) — owner/AI dial
+  changes (edge threshold, risk %, learning, confidence) finally reach the running loop.
+- Three learning-hostile vetoes made learning-aware (all real-money behavior unchanged):
+  the strategy-lead firewall (owner-dial symbols allowed as `ALLOW_PAPER_LEARNING`), the
+  CAS lacuna/RPM cell veto (a lacuna is where learning DATA is needed), and the directional
+  confidence bar (now owner lever `min_directional_confidence`, default 0.18, scalp 0.05).
+- Scan breadth: the WASTE market scan now ALWAYS includes the owner's symbol dial after
+  research leads (was: leads-only unless empty) — 8 lanes scanned per cycle incl. FX pairs.
+- Scalp mode: `POST /waste-loop-control/start?confirm=true` accepts `deep_watch` (full
+  candle scan per tick instead of the 5-min-probe mirror) + `watch_timeframe` (e.g. "M1");
+  `_start_worker` pops inherited env so stale snapshot-mode vars can't override the request.
+- New levers: `paper_learning_trades` (1/0, default 1), `min_directional_confidence`
+  (0.0–0.90, default 0.18). Set live: learning ON, confidence 0.05, risk/trade 0.1%.
+
+**Current runtime**: runner LIVE at 15s cycles, deep-watch M1, 8 lanes, long+short scored
+every cycle; collector 900-bar sweeps every 5 min; proof auto-runner recording days.
+Owner switch note: **live_mode override flipped OFF** (it was ON without a live account,
+which made the chokepoint treat paper learning trades as real attempts and block them —
+flip it back in-app when actually going live). Mixed-version processes were found
+overwriting each other's authority lever registry — resolved by restarting everything on
+final code; the env-pop + shared-authority changes prevent recurrence.
+
+**Also this session**: `START_CAS_FOREX.bat` (repo + Desktop) one-click starter; stale
+AUD/CAD same-symbol block diagnosed (28 June-24 mailbox phantoms need one MT4-terminal
+session to verify-flat then archive via `terminal-receipt-recovery-packet/archive-stale`).
+
+Honest boundary, stated once: learning trades measure and label — they are NOT edge claims.
+The 30-day proof still requires net-positive P&L at the owner bar; nothing here touches the
+real-money gate chain (owner switches + broker-reality ACCEPT + dry-run ACCEPT + pilot).
+
 > **NEXT AGENT: read `docs/working/SESSION_HANDOFF_2026-07-01.md` first** (then the PART3-EDGE handoff below for the edge verdict). The per-unit build log for 2026-06-29→07-01 lives in the parent repo's `docs/working/cas_harness_production_todo.md` (266 dated entries) — read its head before changing dashboard/live-money/WASTE code.
 
 ## 2026-07-01 — Three days of in-flight work landed: live-money spine, WASTE adaptation, funding handoff, dashboard overhaul (suite 1707 green)

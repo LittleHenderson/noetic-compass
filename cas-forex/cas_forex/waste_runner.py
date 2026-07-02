@@ -171,6 +171,11 @@ def _default_watch() -> dict[str, Any]:
     try:
         from cas_forex.waste_market_data import build_waste_market_state_scan
 
+        # Owner scalp mode may pin the watch timeframe (e.g. M1); the default
+        # zero-arg call is preserved exactly when the env override is absent.
+        watch_timeframe = os.environ.get("CAS_FOREX_WASTE_WATCH_TIMEFRAME") or None
+        if watch_timeframe:
+            return build_waste_market_state_scan(timeframe=watch_timeframe)
         return build_waste_market_state_scan()
     except Exception as exc:
         return {
@@ -453,7 +458,22 @@ class WasteRunner:
             manage_fn=self._manage_stage,
             objective=self.objective,
             control=self.control,
+            paper_learning_fn=self._paper_learning_allowed,
         )
+
+    def _paper_learning_allowed(self) -> bool:
+        """Owner gate for token-less paper LEARNING trades.
+
+        True only when the effective runtime mode is PAPER and the owner's
+        ``paper_learning_trades`` dial is ON. Any error reads False (fail-closed
+        back to NO_TRADE). Live/real mode NEVER learns with money: the dispatch
+        chokepoint independently refuses token-less real dispatches."""
+        try:
+            if _effective_mode() != "PAPER":
+                return False
+            return bool(self.control.get("paper_learning_trades"))
+        except Exception:
+            return False
 
     # -- stage wrappers: each stamps the live heartbeat -------------------
     # The heartbeat pulses with the REAL stage the loop is in. WasteLoop also sets
@@ -517,14 +537,26 @@ class WasteRunner:
         )
 
     def _execute_stage(self, setup: CandidateSetup, lots: float, token: str) -> Any:
-        """EXECUTE — reached ONLY on a fresh PASS carrying a non-empty token.
+        """EXECUTE — a fresh PASS token, or a token-less paper LEARNING trade.
 
         Fail-closed twice: register the authorization for this setup's
         ``decision_ref`` (so the dispatch chokepoint will verify it), THEN dispatch
         through the gated broker path. The dispatch path re-checks the registration
         and refuses without a fresh, matching PASS. The selected bridge may be
         paper/demo by default or real only when the owner live gate is authorized.
+
+        LEARNING branch (owner decision 2026-07-01): when the loop authorizes a
+        paper learning trade the token is EMPTY — we deliberately skip the
+        edge-authorization registration so the order goes through the legacy
+        paper dispatch path. A real-money dispatch without a fresh PASS token is
+        refused at the chokepoint, so this branch can only ever fill on
+        paper/demo. Risk gate and live gate still run in full.
         """
+        if not token:
+            loop_heartbeat.record(
+                "execute", detail="dispatching paper LEARNING order", symbol=setup.symbol
+            )
+            return self._dispatch(setup, lots, "")
         loop_heartbeat.record("execute", detail="dispatching gated order", symbol=setup.symbol)
         gate_setup = _to_gate_setup(setup)
         source_decision = self._latest_edge_decision
@@ -723,14 +755,25 @@ class WasteRunner:
             loop_heartbeat.record("idle", detail="runner stopped")
             return
         while not self._stop_event.is_set():
-            if self._supervisor_store.should_stop(owner_id=self._supervisor_owner_id):
-                self.last_error = "Supervisor requested WASTE runner stop."
-                break
-            renewed, _ = self._supervisor_store.renew(
-                owner_id=self._supervisor_owner_id,
-                interval_seconds=self.interval,
-                mode=_effective_mode(),
-            )
+            try:
+                if self._supervisor_store.should_stop(owner_id=self._supervisor_owner_id):
+                    self.last_error = "Supervisor requested WASTE runner stop."
+                    break
+                renewed, _ = self._supervisor_store.renew(
+                    owner_id=self._supervisor_owner_id,
+                    interval_seconds=self.interval,
+                    mode=_effective_mode(),
+                )
+            except OSError as exc:
+                # A transient supervisor-state I/O failure (OneDrive/antivirus
+                # file lock — the exact failure that once killed this thread)
+                # must not stop the loop. The lease TTL (180s) comfortably
+                # covers a missed renewal at the 60s cycle; record and retry
+                # on the next cycle.
+                self.last_error = f"Supervisor state I/O error (will retry): {exc}"
+                self._record_error(self.last_error, running=True)
+                self._stop_event.wait(max(MIN_INTERVAL_SECONDS, self.interval))
+                continue
             if not renewed:
                 self.last_error = "Supervisor lease conflict; stopping this local WASTE runner."
                 self._record_error(self.last_error, running=True)
@@ -1925,12 +1968,29 @@ _runner: Optional[WasteRunner] = None
 _runner_lock = threading.Lock()
 
 
+def _production_control() -> Optional[AiControlSurface]:
+    """The durable, owner-fenced dial surface for PRODUCTION runners.
+
+    Production loops must share the persisted AI-control authority so owner/AI
+    dial changes (edge threshold, risk %, learning mode, confidence bar) reach
+    the running loop. Tests keep an isolated in-memory surface (returning None
+    lets WasteRunner construct its own default)."""
+    try:
+        if os.environ.get("PYTEST_CURRENT_TEST"):
+            return None
+        from cas_forex.ai_control_authority import get_authority
+
+        return get_authority().control
+    except Exception:
+        return None
+
+
 def get_runner() -> WasteRunner:
     """The process-global runner (lazily constructed). Single-owner cockpit."""
     global _runner
     with _runner_lock:
         if _runner is None:
-            _runner = WasteRunner()
+            _runner = WasteRunner(control=_production_control())
         return _runner
 
 

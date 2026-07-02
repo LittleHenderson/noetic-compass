@@ -99,6 +99,21 @@ _SCALAR_LEVERS: Dict[str, ScalarLever] = {
     "max_compound_units": ScalarLever(
         "max_compound_units", 4, 0, 8, is_int=True
     ),
+    # Owner decision (2026-07-01): 1 = on PAPER/DEMO a non-PASS candidate still
+    # executes as a token-less paper LEARNING trade (the edge verdict becomes the
+    # training label); 0 = the edge gate blocks paper execution too (the pre-
+    # 2026-07-01 behaviour). Real money is untouched by this dial: a token-less
+    # dispatch is refused at the chokepoint whenever the path is real.
+    "paper_learning_trades": ScalarLever(
+        "paper_learning_trades", 1, 0, 1, is_int=True
+    ),
+    # Minimum directional-hypothesis confidence before a candidate may form.
+    # 0.18 is the historic hardcoded default; scalp/learning mode may lower it
+    # (more candidates, weaker directional basis). This shapes HYPOTHESIS
+    # formation only — the edge gate / learning-label semantics are unchanged.
+    "min_directional_confidence": ScalarLever(
+        "min_directional_confidence", 0.18, 0.0, 0.90
+    ),
 }
 
 _SET_LEVERS: Dict[str, SetLever] = {

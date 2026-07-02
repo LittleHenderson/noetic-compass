@@ -291,6 +291,9 @@ def test_non_pass_test_means_no_execution(monkeypatch):
         strategize_fn=lambda s, a: _setup(),
         dispatch_fn=fake_dispatch,
     )
+    # This test proves the FAIL-CLOSED path, so the owner's paper-learning dial
+    # (default ON since 2026-07-01) is explicitly OFF here.
+    runner.control.adjust("paper_learning_trades", 0)
     # Force the gate to a non-PASS verdict.
     monkeypatch.setattr(
         waste_runner, "evaluate_candidate", lambda *a, **k: _no_trade_decision()
@@ -482,6 +485,8 @@ def test_cannot_execute_without_pass(monkeypatch, status):
         strategize_fn=lambda s, a: setup,
         dispatch_fn=lambda **k: dispatched.append(k),
     )
+    # Fail-closed contract under test: learning dial explicitly OFF.
+    runner.control.adjust("paper_learning_trades", 0)
     refused = EdgeTestDecision(
         status=status,
         measured_win_prob=0.0,
@@ -510,6 +515,8 @@ def test_pass_with_empty_token_does_not_execute(monkeypatch):
         strategize_fn=lambda s, a: setup,
         dispatch_fn=lambda **k: dispatched.append(k),
     )
+    # Fail-closed contract under test: learning dial explicitly OFF.
+    runner.control.adjust("paper_learning_trades", 0)
     bad_pass = EdgeTestDecision(
         status="PASS",
         measured_win_prob=0.9,
@@ -537,6 +544,8 @@ def test_tick_persists_durable_cycle_audit(tmp_path, monkeypatch):
         strategize_fn=lambda s, a: setup,
         audit_store=store,
     )
+    # Fail-closed contract under test: learning dial explicitly OFF.
+    runner.control.adjust("paper_learning_trades", 0)
     monkeypatch.setattr(
         waste_runner, "evaluate_candidate", lambda *a, **k: _no_trade_decision()
     )
@@ -566,6 +575,8 @@ def test_runner_status_surfaces_durable_latest_cycle(tmp_path, monkeypatch):
         strategize_fn=lambda s, a: setup,
         audit_store=store,
     )
+    # Fail-closed contract under test: learning dial explicitly OFF.
+    runner.control.adjust("paper_learning_trades", 0)
     monkeypatch.setattr(
         waste_runner, "evaluate_candidate", lambda *a, **k: _no_trade_decision()
     )
@@ -711,6 +722,8 @@ def test_default_runner_persists_real_candle_watch_source_evidence(tmp_path, mon
         tmp_path / "waste-runner-audit.jsonl",
     )
     runner = waste_runner.WasteRunner(audit_store=store)
+    # Fail-closed contract under test: learning dial explicitly OFF.
+    runner.control.adjust("paper_learning_trades", 0)
 
     result = runner.tick_once()
     latest = store.build_status()["latest_cycle"]
@@ -1121,3 +1134,51 @@ def test_compound_holds_without_broker_grade_market_truth():
 
     assert decision.action == "HOLD"
     assert "broker-grade market truth is required" in decision.reason
+
+
+# ---------------------------------------------------------------------------
+# Paper LEARNING trades (owner decision 2026-07-01)
+# ---------------------------------------------------------------------------
+def test_learning_execute_with_empty_token_skips_edge_registration(monkeypatch):
+    """A token-less learning dispatch must NEVER register an edge authorization
+    (that would fabricate a PASS). It dispatches through the legacy paper path."""
+    dispatched = {}
+
+    def fake_dispatch(*, setup, lots, token):
+        dispatched["setup"] = setup
+        dispatched["lots"] = lots
+        dispatched["token"] = token
+        return {"status": "BROKER_CONFIRMED"}
+
+    def exploding_authorize(*args, **kwargs):
+        raise AssertionError("edge_authorization.authorize must not run for learning trades")
+
+    monkeypatch.setattr(edge_authorization, "authorize", exploding_authorize)
+    runner = _runner(dispatch_fn=fake_dispatch)
+
+    setup = _setup()
+    result = runner._execute_stage(setup, 0.05, "")
+
+    assert result == {"status": "BROKER_CONFIRMED"}
+    assert dispatched["token"] == ""
+    assert dispatched["lots"] == 0.05
+
+
+def test_paper_learning_allowed_only_in_paper_mode(monkeypatch):
+    runner = _runner()
+    runner.control.adjust("paper_learning_trades", 1)
+
+    monkeypatch.setattr(waste_runner, "_effective_mode", lambda: "PAPER")
+    assert runner._paper_learning_allowed() is True
+
+    monkeypatch.setattr(waste_runner, "_effective_mode", lambda: "LIVE")
+    assert runner._paper_learning_allowed() is False
+
+
+def test_paper_learning_dial_off_disables_learning_trades(monkeypatch):
+    runner = _runner()
+    monkeypatch.setattr(waste_runner, "_effective_mode", lambda: "PAPER")
+    runner.control.adjust("paper_learning_trades", 0)
+    assert runner._paper_learning_allowed() is False
+    runner.control.adjust("paper_learning_trades", 1)
+    assert runner._paper_learning_allowed() is True
