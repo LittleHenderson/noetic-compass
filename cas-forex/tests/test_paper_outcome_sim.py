@@ -265,3 +265,83 @@ def test_early_banking_never_rescues_a_loser(tmp_path):
     for policy in analysis["policies"]:
         assert policy["modeled_net_pnl"] == analysis["actual_net_pnl_hold_to_sl_tp"]
         assert policy["trades_banked_early"] == 0
+
+
+# ---------------------------------------------------------------------------
+# Trailing-stop simulation (the implementable "bank winners early")
+# ---------------------------------------------------------------------------
+from cas_forex.paper_outcome_sim import simulate_trailing_stop, _candle_rows
+
+
+def _attempt_obj(direction="LONG", entry=1.1000, sl=1.0990, tp=1.1100, lots=0.10, symbol="EUR/USD"):
+    # A resolvable attempt as the simulator's internal dict (post-_eligible).
+    return {
+        "broker_ticket": "T", "symbol": symbol, "direction": direction,
+        "entry": entry, "stop_loss": sl, "take_profit": tp, "lots": lots,
+        "open_time": T0, "decision_ref": "d", "order_id": "o",
+    }
+
+
+def test_trailing_stop_locks_in_profit_on_pullback(tmp_path):
+    # LONG runs up to 1.1050 (peak) then pulls back. A 0.5 trail locks in at
+    # entry + 0.5*(peak-entry). With peak 1.1050, lock ≈ 1.1025. TP is 1.1100
+    # (never hit). Trade should exit near the trailing level, in PROFIT — far
+    # better than round-tripping back to the original SL.
+    att = _attempt_obj(tp=1.1100)
+    candles = _candle_rows([
+        _candle(1, high=1.1030, low=1.1005),   # peak 1.1030 set (for next bar)
+        _candle(2, high=1.1050, low=1.1028),   # peak 1.1050 (trail from prev peak 1.1030 => lock 1.1015, low 1.1028 doesn't hit)
+        _candle(3, high=1.1040, low=1.1010),   # trail now from peak 1.1050 => lock 1.1025; low 1.1010 <= 1.1025 => exit
+    ])
+    pnl = simulate_trailing_stop(att, candles, trail_fraction=0.5)
+    assert pnl is not None and pnl > 0  # banked a profit, not a round-trip loss
+
+
+def test_trailing_stop_never_below_original_stop(tmp_path):
+    # A trade that goes straight to the original SL exits there (trail can't be
+    # worse than the original stop) — a loser stays a loser.
+    att = _attempt_obj(sl=1.0990)
+    candles = _candle_rows([_candle(1, high=1.1002, low=1.0989)])  # straight to SL
+    pnl = simulate_trailing_stop(att, candles, trail_fraction=0.5)
+    assert pnl is not None and pnl < 0
+
+
+def test_trailing_stop_no_intrabar_lookahead(tmp_path):
+    # In the SAME bar the price both sets a new high AND dips: the trailing level
+    # must be based on the PRIOR bar's peak, so a first favorable bar cannot lock
+    # in a level it only reached mid-bar. Here bar 1 is the first favorable move
+    # (peak starts at entry), so its low cannot trigger a profit-locking trail.
+    att = _attempt_obj(entry=1.1000, sl=1.0990, tp=1.1100)
+    candles = _candle_rows([_candle(1, high=1.1050, low=1.0995)])  # big range, first bar
+    pnl = simulate_trailing_stop(att, candles, trail_fraction=0.5)
+    # Trail for bar 1 is based on peak=entry => lock=entry+0.5*0=entry, clamped to
+    # orig SL 1.0990; low 1.0995 does not hit 1.0990 => not resolved this bar.
+    assert pnl is None
+
+
+def test_trailing_stop_analysis_aggregates_stored_values(tmp_path):
+    from cas_forex.paper_outcome_sim import build_trailing_stop_analysis
+
+    # Resolve real records (which now store trailing_pnl_by_fraction), then the
+    # analysis must aggregate them and compare against actual hold-to-SL/TP net.
+    attempts = [_attempt(500 + i, sl=1.0990, tp=1.1100) for i in range(22)]
+    # The classic give-back: each trade runs to 1.1060, then round-trips all the
+    # way back to the original SL (a LOSS if held). A trailing stop would have
+    # banked profit near the peak instead — the whole point.
+    candles = [
+        _candle(1, high=1.1030, low=1.1005),
+        _candle(2, high=1.1060, low=1.1028),
+        _candle(3, high=1.1010, low=1.0985),  # pulls back through the trail AND the SL
+    ]
+    resolve_paper_outcomes(
+        attempts=attempts, candles_by_symbol={"EUR/USD": candles},
+        ledger_path=tmp_path / "paper-outcomes.json",
+    )
+    analysis = build_trailing_stop_analysis(ledger_path=tmp_path / "paper-outcomes.json", min_trades=10)
+    assert analysis["enough_data"] is True
+    assert analysis["resolved_trades_with_trailing"] == 22
+    assert analysis["best_policy"] is not None
+    # Held to SL/TP these are losers; a trailing stop banks the run — so the best
+    # trailing policy must beat holding.
+    assert analysis["best_policy"]["delta_vs_hold"] > 0
+    assert "IMPLEMENTABLE" in analysis["note"]

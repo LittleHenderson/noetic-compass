@@ -515,10 +515,20 @@ async def post_paper_outcomes_run() -> dict[str, Any]:
 @router.get("/early-banking-analysis")
 async def get_early_banking_analysis() -> dict[str, Any]:
     """Test the owner's 'bank big winners early, then restart WASTE' idea against
-    realized max-favorable-excursion data. Read-only paper analysis."""
+    realized max-favorable-excursion data. Read-only paper analysis (idealized
+    upper bound; see trailing-stop-analysis for the implementable version)."""
     from cas_forex.paper_outcome_sim import build_early_banking_analysis
 
     return build_early_banking_analysis()
+
+
+@router.get("/trailing-stop-analysis")
+async def get_trailing_stop_analysis() -> dict[str, Any]:
+    """The IMPLEMENTABLE version of banking winners early: realized paper net
+    under a trailing stop vs holding to SL/TP. Read-only paper analysis."""
+    from cas_forex.paper_outcome_sim import build_trailing_stop_analysis
+
+    return build_trailing_stop_analysis()
 
 
 @router.get("/paper-sample-collector")

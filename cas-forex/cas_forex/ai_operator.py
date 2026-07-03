@@ -183,6 +183,11 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         lambda: __import__("cas_forex.paper_outcome_sim", fromlist=["build_early_banking_analysis"]).build_early_banking_analysis(),
         {"status": "UNAVAILABLE"},
     )
+    # The IMPLEMENTABLE version: realized paper net under a trailing stop.
+    trailing_stop = _safe(
+        lambda: __import__("cas_forex.paper_outcome_sim", fromlist=["build_trailing_stop_analysis"]).build_trailing_stop_analysis(),
+        {"status": "UNAVAILABLE"},
+    )
     # Standing owner guidance — the owner's plain-language considerations,
     # weighed on every tick. Judgment-shaping only; every action stays clamped
     # to the owner fences regardless of what a note asks for.
@@ -198,6 +203,7 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         "outcome_binding": _compact(outcome),
         "learning_outcomes": _compact_learning_outcomes(learning_outcomes),
         "early_banking_analysis": early_banking,
+        "trailing_stop_analysis": trailing_stop,
         "adaptation": _compact(adaptation),
         "recent_cycles": _recent_cycles(),
         "tool_manifest": TOOL_MANIFEST,

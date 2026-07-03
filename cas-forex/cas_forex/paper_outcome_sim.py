@@ -56,6 +56,10 @@ FALLBACK_SPREAD_UNITS = 2.0
 DEFAULT_MAX_CANDLES = 1500  # M1 ⇒ ~25 hours of walk window per run
 MAX_ATTEMPT_AGE_DAYS = 5  # older unresolved attempts are marked unresolvable
 
+# Trailing-stop lock-in fractions tested per resolved trade (the implementable
+# "bank winners early" policies: lock in this share of the best run so far).
+TRAIL_FRACTIONS = (0.3, 0.5, 0.7)
+
 CLAIM_BOUNDARY = (
     "Paper outcome simulation resolves PAPER order attempts against real candles "
     "to produce realized paper P&L for the LEARNING ledger only. It is "
@@ -292,6 +296,70 @@ def resolve_first_touch(
     return None  # still open at this resolution — re-walk next run
 
 
+def simulate_trailing_stop(
+    attempt: Mapping[str, Any],
+    candles: list[dict[str, Any]],
+    *,
+    trail_fraction: float,
+) -> Optional[float]:
+    """Realistic, IMPLEMENTABLE version of "bank winners early": a trailing stop
+    that locks in ``trail_fraction`` of the best run so far.
+
+    As price moves favourably the stop ratchets to
+    ``entry + trail_fraction * (best_favorable - entry)`` (mirrored for SHORT),
+    never worse than the original stop. The trade exits at the trailing stop on a
+    pullback, or at the original take-profit, or the original stop.
+
+    NO intra-bar lookahead: the trailing level for a bar is computed from the peak
+    as of the PREVIOUS bar (you cannot lock in a level the price only reached
+    later in the same bar). Ambiguous within-bar ordering resolves against the
+    trade (stop before target). Returns realized net P&L, or None if unresolved.
+    """
+    direction = attempt["direction"]
+    entry = float(attempt["entry"])
+    orig_stop = float(attempt["stop_loss"])
+    target = float(attempt["take_profit"])
+    open_time: datetime = attempt["open_time"]
+    frac = max(0.0, min(1.0, float(trail_fraction)))
+
+    best = entry
+    for candle in candles:
+        if candle["ts"] < open_time:
+            continue
+        # Trailing level from the peak BEFORE this bar (no intra-bar lookahead).
+        # Until a confirmed favourable move (best beyond entry), the stop stays
+        # at the ORIGINAL stop — a trailing stop must not sit at breakeven and
+        # get knocked out by ordinary noise before the trade ever runs.
+        if direction == "LONG":
+            trail = orig_stop if best <= entry else max(orig_stop, entry + frac * (best - entry))
+            hit_trail = candle["low"] <= trail
+            hit_target = candle["high"] >= target
+        else:
+            trail = orig_stop if best >= entry else min(orig_stop, entry - frac * (entry - best))
+            hit_trail = candle["high"] >= trail
+            hit_target = candle["low"] <= target
+        if hit_trail:
+            return _net_pnl(attempt, exit_price=trail)  # conservative: pullback first
+        if hit_target:
+            return _net_pnl(attempt, exit_price=target)
+        # Update the peak with THIS bar's favourable extreme for the next bar.
+        favorable = candle["high"] if direction == "LONG" else candle["low"]
+        if (direction == "LONG" and favorable > best) or (direction == "SHORT" and favorable < best):
+            best = favorable
+    return None
+
+
+def _net_pnl(attempt: Mapping[str, Any], *, exit_price: float) -> float:
+    symbol = attempt["symbol"]
+    lots = float(attempt["lots"])
+    entry = float(attempt["entry"])
+    sign = 1.0 if attempt["direction"] == "LONG" else -1.0
+    value_per_unit = value_per_price_unit_per_lot(symbol, entry)
+    gross = (float(exit_price) - entry) * sign * value_per_unit * lots
+    cost = _spread_price(symbol) * value_per_unit * lots
+    return round(gross - cost, 6)
+
+
 def _closed(
     attempt: Mapping[str, Any],
     *,
@@ -391,6 +459,12 @@ def resolve_paper_outcomes(
                 continue
             record = resolve_first_touch(attempt, candles)
             if record is not None:
+                # Also record the realized P&L under trailing-stop exits, from
+                # the SAME candles — the implementable "bank winners early" idea.
+                record["trailing_pnl_by_fraction"] = {
+                    f"{frac}": simulate_trailing_stop(attempt, candles, trail_fraction=frac)
+                    for frac in TRAIL_FRACTIONS
+                }
                 resolved.append(record)
             elif now - attempt["open_time"] > timedelta(days=MAX_ATTEMPT_AGE_DAYS):
                 unresolvable[attempt["broker_ticket"]] = "unresolved_after_max_age"
@@ -533,6 +607,68 @@ def build_early_banking_analysis(
     }
 
 
+TRAILING_REPORT_KIND = "cas_forex_trailing_stop_analysis"
+
+
+def build_trailing_stop_analysis(
+    *,
+    ledger_path: Path | str = DEFAULT_LEDGER_PATH,
+    min_trades: int = 20,
+) -> dict[str, Any]:
+    """The IMPLEMENTABLE test of "bank winners early": realized paper net if each
+    trade had used a trailing stop (lock in f of the best run) vs holding to the
+    original SL/TP. Unlike the idealized 'bank at f×peak' ceiling, a trailing
+    stop is a real order you can place, so these numbers are achievable — modulo
+    the usual paper caveats (M1 resolution, real spread charged, no real-money
+    edge claim)."""
+    ledger = load_paper_outcome_history(ledger_path)
+    rows = [
+        r for r in ledger.get("history_records", [])
+        if isinstance(r, Mapping) and isinstance(r.get("trailing_pnl_by_fraction"), Mapping)
+    ]
+    actual_net = round(sum(_num(r.get("profit")) for r in rows), 4)
+    fractions = sorted({k for r in rows for k in (r.get("trailing_pnl_by_fraction") or {}).keys()})
+    policies = []
+    for key in fractions:
+        vals = [r["trailing_pnl_by_fraction"].get(key) for r in rows]
+        vals = [_num(v) for v in vals if v is not None]
+        if not vals:
+            continue
+        total = round(sum(vals), 4)
+        policies.append(
+            {
+                "trail_lock_fraction": float(key),
+                "modeled_net_pnl": total,
+                "delta_vs_hold": round(total - actual_net, 4),
+                "trades": len(vals),
+            }
+        )
+    best = max(policies, key=lambda p: p["modeled_net_pnl"]) if policies else None
+    return {
+        "report_kind": TRAILING_REPORT_KIND,
+        "generated_at": utc_now().isoformat(),
+        "resolved_trades_with_trailing": len(rows),
+        "enough_data": len(rows) >= max(1, int(min_trades)),
+        "min_trades": max(1, int(min_trades)),
+        "actual_net_pnl_hold_to_sl_tp": actual_net,
+        "policies": policies,
+        "best_policy": best,
+        "verdict": (
+            "not enough trades with trailing data yet — accumulates as new trades close"
+            if len(rows) < max(1, int(min_trades))
+            else (
+                f"an achievable trailing stop locking {best['trail_lock_fraction']:.0%} of the run would change "
+                f"paper net by {best['delta_vs_hold']:+.2f} vs holding to SL/TP"
+                if best
+                else "no policy computed"
+            )
+        ),
+        "note": "trailing stop is an IMPLEMENTABLE order (unlike the idealized bank-at-peak ceiling); real spread charged; paper-only.",
+        "read_only": True,
+        "money_moved": False,
+    }
+
+
 def _num(value: Any) -> float:
     try:
         return float(value)
@@ -546,9 +682,13 @@ __all__ = [
     "LEDGER_REPORT_KIND",
     "OUTCOME_SOURCE",
     "REPORT_KIND",
+    "TRAILING_REPORT_KIND",
+    "TRAIL_FRACTIONS",
     "build_early_banking_analysis",
+    "build_trailing_stop_analysis",
     "load_paper_outcome_history",
     "maybe_refresh_paper_outcomes",
     "resolve_first_touch",
     "resolve_paper_outcomes",
+    "simulate_trailing_stop",
 ]
