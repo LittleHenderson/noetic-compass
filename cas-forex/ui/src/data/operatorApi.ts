@@ -29,6 +29,20 @@ export interface OperatorState {
     chain?: Array<{ name: string; label: string; paid: boolean; note: string }>;
   };
   recent_actions?: Array<Record<string, unknown>>;
+  objective?: string;
+  profit_and_balance?: {
+    seed_capital_usd?: number;
+    honest_unique_signal_net_pnl_usd?: number;
+    honest_paper_balance_usd?: number;
+    unique_signals?: number;
+    unique_win_rate?: number;
+    unique_profit_factor?: number | null;
+    raw_net_pnl_usd?: number;
+    raw_trades?: number;
+    cluster_inflation_x?: number;
+    biggest_cluster_size?: number;
+    caveats?: string[];
+  };
   claim_boundary?: string;
 }
 

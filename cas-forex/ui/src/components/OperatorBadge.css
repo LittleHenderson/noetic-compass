@@ -105,6 +105,34 @@
 .operator-badge-state--on { background: rgba(52, 211, 153, 0.2); color: #6ee7b7; }
 .operator-badge-state--off { background: rgba(107, 119, 133, 0.25); color: #9fb0c0; }
 
+.operator-badge-profit {
+  margin: 0.5rem 0;
+  padding: 0.45rem 0.55rem;
+  border-radius: 0.5rem;
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.22);
+}
+.operator-badge-profit-goal {
+  font-weight: 700;
+  font-size: 0.68rem;
+  margin-bottom: 0.3rem;
+  color: #a7f3d0;
+}
+.operator-badge-profit-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  margin: 0.12rem 0;
+}
+.operator-badge-pos { color: #6ee7b7; font-weight: 600; }
+.operator-badge-neg { color: #fca5a5; font-weight: 600; }
+.operator-badge-profit-caveat {
+  margin-top: 0.35rem;
+  font-size: 0.6rem;
+  color: #d6b36b;
+  line-height: 1.3;
+}
+
 .operator-badge-line { margin: 0.25rem 0; }
 .operator-badge-muted { color: #8ba0b3; }
 .operator-badge-switch { color: #fbbf24; }

@@ -14,6 +14,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "./GlassPanel";
 import { StatusChip } from "./StatusChip";
+import { SymbolTag } from "./SymbolTag";
 import {
   fetchLiveTelemetry,
   type LiveTelemetryResponse,
@@ -155,7 +156,7 @@ export function LiveTradesTelemetry() {
             <tbody>
               {positions.map((row, i) => (
                 <tr key={`${row.symbol}-${row.broker_ticket ?? i}`}>
-                  <td>{row.symbol}</td>
+                  <td><SymbolTag symbol={row.symbol} size="sm" /></td>
                   <td>
                     <StatusChip
                       label={row.direction}

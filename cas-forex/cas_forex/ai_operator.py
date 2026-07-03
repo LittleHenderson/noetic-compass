@@ -77,15 +77,23 @@ TOOL_MANIFEST = {
 }
 
 _OPERATOR_SYSTEM_PROMPT = (
-    "You are the CAS Forex AI operator: an always-on strategy desk. You read the "
-    "trading loop's learning evidence and tune ONLY the owner-fenced AI dials to "
-    "improve paper learning and (eventually) real edge. You never trade, move "
-    "money, or authorize anything — you only propose dial values, which are "
-    "clamped to the owner's bounds before taking effect. The context may include "
-    "owner_guidance: standing considerations from the owner — weigh them "
-    "seriously in your reasoning and say so when they shape a decision, but they "
-    "never override the fences or the evidence. Respond with a single "
-    "JSON object and nothing else, matching exactly:\n"
+    "You are the CAS Forex AI operator: an always-on strategy desk. Your PRIMARY "
+    "OBJECTIVE is to GROW THE ACCOUNT — increase realized net profit and the "
+    "balance/principal. Everything you do serves that goal: keep what wins, cut "
+    "what loses, protect gains. You do NOT place trades yourself — the trading "
+    "engine does that; you steer it by tuning the owner-fenced dials (edge "
+    "threshold, risk %, symbols, sessions, confidence, learning mode, "
+    "compounding, and the trailing stop). Use profit_and_balance and "
+    "learning_outcomes to decide: drop symbol/direction groups that keep losing, "
+    "favour ones that profit, enable/tune the trailing stop when it banks more "
+    "than it costs, size to grow the balance without breaching risk caps. Be "
+    "honest: durable profit needs a real edge (still unproven) and REAL money "
+    "needs the owner's go-live switches — you operate on PAPER and never move "
+    "money or authorize live. You only propose dial values, clamped to the "
+    "owner's bounds. The context may include owner_guidance: standing "
+    "considerations from the owner — weigh them seriously and say so when they "
+    "shape a decision, but they never override the fences or the evidence. "
+    "Respond with a single JSON object and nothing else, matching exactly:\n"
     '{"observations": "<what the evidence shows>", '
     '"actions": [{"type": "adjust_dial", "lever": "<one of the dials>", '
     '"value": <number or list>, "reason": "<why>"}], '
@@ -108,6 +116,68 @@ def _safe(fn, default):
         return fn()
     except Exception:
         return default
+
+
+def _profit_and_balance() -> dict[str, Any]:
+    """The operator's north-star scoreboard — kept HONEST.
+
+    The 15-second burst loop opens many near-identical trades on the same price
+    move, so the RAW paper P&L is inflated by correlated clusters (the classic
+    mirage this codebase's null discipline guards against). We therefore report a
+    DE-DUPLICATED unique-signal net as the primary number, and flag the raw one.
+    Even the deduped number is likely optimistic (resolution survivorship: fast
+    winners hit target and count, slow losers drift and stay unresolved), so the
+    honest stance stays: NO PROVEN EDGE — grow the balance by cutting losers and
+    protecting gains, not by trusting the paper total."""
+    seed = 2000.0
+    try:
+        thresholds = __import__("cas_forex.proof_control", fromlist=["build_profit_thresholds_report"]).build_profit_thresholds_report()
+        seed = float(thresholds.get("seed_capital_usd") or 2000.0)
+    except Exception:
+        pass
+    ledger = _safe(
+        lambda: __import__("cas_forex.paper_outcome_sim", fromlist=["load_paper_outcome_history"]).load_paper_outcome_history(),
+        {"history_records": []},
+    )
+    rows = [r for r in (ledger.get("history_records") or []) if isinstance(r, dict)]
+    raw_net = round(sum(float(r.get("profit") or 0.0) for r in rows), 2)
+
+    # Collapse correlated clusters: same (symbol, direction, entry, exit, reason)
+    # is ONE unique signal, represented by its average P&L.
+    clusters: dict[tuple, list[float]] = {}
+    for r in rows:
+        key = (
+            r.get("symbol"), r.get("direction"),
+            round(float(r.get("entry") or 0.0), 5),
+            round(float(r.get("exit") or 0.0), 5),
+            r.get("close_reason"),
+        )
+        clusters.setdefault(key, []).append(float(r.get("profit") or 0.0))
+    unique = [sum(v) / len(v) for v in clusters.values()]
+    unique_net = round(sum(unique), 2)
+    uwins = len([x for x in unique if x > 0])
+    ulosses = len([x for x in unique if x < 0])
+    ugw = round(sum(x for x in unique if x > 0), 2)
+    ugl = round(sum(x for x in unique if x < 0), 2)
+    biggest_cluster = max((len(v) for v in clusters.values()), default=0)
+    return {
+        "objective": "grow the account balance by cutting losers and protecting gains (paper now; real needs owner go-live)",
+        "seed_capital_usd": seed,
+        "honest_unique_signal_net_pnl_usd": unique_net,
+        "honest_paper_balance_usd": round(seed + unique_net, 2),
+        "unique_signals": len(unique),
+        "unique_win_rate": round(uwins / len(unique), 3) if unique else 0.0,
+        "unique_profit_factor": round(ugw / abs(ugl), 3) if ugl else None,
+        "raw_net_pnl_usd": raw_net,
+        "raw_trades": len(rows),
+        "cluster_inflation_x": round(len(rows) / len(unique), 2) if unique else 1.0,
+        "biggest_cluster_size": biggest_cluster,
+        "caveats": [
+            "RAW paper P&L is inflated by correlated 15s-burst clusters — use the unique-signal net.",
+            "Even the unique net is likely optimistic (resolution survivorship: fast winners resolve, slow losers stay open).",
+            "No proven edge; the paper total is not reliable profit evidence. Real money needs owner go-live.",
+        ],
+    }
 
 
 def _recent_cycles(limit: int = 40) -> dict[str, Any]:
@@ -198,6 +268,7 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         [],
     )
     return {
+        "profit_and_balance": _profit_and_balance(),
         "dials": (snapshot.get("control_surface") or {}).get("values") if isinstance(snapshot, dict) else None,
         "dial_bounds": (snapshot.get("control_surface") or {}).get("bounds") if isinstance(snapshot, dict) else None,
         "owner_guidance": owner_guidance,

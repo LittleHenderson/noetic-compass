@@ -189,6 +189,13 @@ def _status_locked() -> Dict[str, Any]:
         operator_recent = AIOperator().recent_actions(limit=10)
     except Exception:
         operator_recent = []
+    profit_and_balance: Dict[str, Any] = {}
+    try:
+        from cas_forex.ai_operator import _profit_and_balance
+
+        profit_and_balance = _profit_and_balance()
+    except Exception:
+        profit_and_balance = {}
     return {
         "report_kind": REPORT_KIND,
         "running": running,
@@ -204,9 +211,12 @@ def _status_locked() -> Dict[str, Any]:
         "last_error": _state.last_error or None,
         "model_provider": provider_status,
         "recent_actions": operator_recent,
+        "profit_and_balance": profit_and_balance,
+        "objective": "Grow realized net profit and the account balance (paper now; real needs owner go-live).",
         "claim_boundary": (
-            "The AI operator adjusts only owner-fenced AI dials; it never trades, "
-            "moves money, or authorizes live trading."
+            "The AI operator steers the trading engine by tuning owner-fenced "
+            "dials toward profit; it never places trades, moves money, or "
+            "authorizes live trading itself."
         ),
     }
 

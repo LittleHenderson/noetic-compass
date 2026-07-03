@@ -163,6 +163,30 @@ export function OperatorBadge() {
             Driving now: <strong>{label}</strong> <span className="operator-badge-muted">— {note}</span>
           </div>
 
+          {state?.profit_and_balance ? (
+            <div className="operator-badge-profit">
+              <div className="operator-badge-profit-goal">🎯 Objective: grow the balance</div>
+              <div className="operator-badge-profit-row">
+                <span>Paper balance (honest)</span>
+                <strong>${(state.profit_and_balance.honest_paper_balance_usd ?? 0).toLocaleString()}</strong>
+              </div>
+              <div className="operator-badge-profit-row operator-badge-muted">
+                <span>Net, de-clustered</span>
+                <span className={(state.profit_and_balance.honest_unique_signal_net_pnl_usd ?? 0) >= 0 ? "operator-badge-pos" : "operator-badge-neg"}>
+                  {(state.profit_and_balance.honest_unique_signal_net_pnl_usd ?? 0) >= 0 ? "+" : ""}
+                  ${(state.profit_and_balance.honest_unique_signal_net_pnl_usd ?? 0).toLocaleString()}
+                </span>
+              </div>
+              <div className="operator-badge-profit-row operator-badge-muted">
+                <span>{state.profit_and_balance.unique_signals ?? 0} signals · win {Math.round((state.profit_and_balance.unique_win_rate ?? 0) * 100)}%</span>
+                <span>PF {state.profit_and_balance.unique_profit_factor ?? "—"}</span>
+              </div>
+              <div className="operator-badge-profit-caveat">
+                Paper only, no proven edge yet. Raw total ${(state.profit_and_balance.raw_net_pnl_usd ?? 0).toLocaleString()} is inflated by burst-trade clusters — not real profit.
+              </div>
+            </div>
+          ) : null}
+
           {mp?.primary_configured ? (
             <div className="operator-badge-line operator-badge-muted">
               Claude budget: {formatTokens(mp?.spent_tokens ?? 0)} used
