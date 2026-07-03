@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { GlassPanel } from "../components/GlassPanel";
 import { StatusChip } from "../components/StatusChip";
+import { SymbolTag } from "../components/SymbolTag";
 import { TradingWindow, type WindowRole } from "../components/TradingWindow";
 import "./WindowsPage.css";
 import {
@@ -142,7 +143,7 @@ export function WindowsPage({ state }: WindowsPageProps) {
               <tbody>
                 {positions.map((p) => (
                   <tr key={p.row_id}>
-                    <td className="mono" style={{ fontWeight: 700 }}>{p.symbol}</td>
+                    <td><SymbolTag symbol={p.symbol} size="sm" /></td>
                     <td className={p.side === "LONG" ? "tw-long" : "tw-short"}>{p.side}</td>
                     <td className="mono">{p.lot_size}</td>
                     <td className="mono">{p.open_price}</td>
@@ -324,7 +325,7 @@ function Mt5LiveAccountPanel() {
                 <tbody>
                   {positions.map((p) => (
                     <tr key={p.ticket ?? `${p.symbol}-${p.open_price}`}>
-                      <td className="mono" style={{ fontWeight: 700 }}>{p.symbol}</td>
+                      <td><SymbolTag symbol={p.symbol} size="sm" /></td>
                       <td className={p.side === "LONG" ? "tw-long" : "tw-short"}>{p.side}</td>
                       <td className="mono">{p.lots}</td>
                       <td className="mono">{p.open_price}</td>

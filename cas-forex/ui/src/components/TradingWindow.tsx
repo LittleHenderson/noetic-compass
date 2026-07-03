@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CandlestickChart } from "./charts/CandlestickChart";
 import { StatusChip } from "./StatusChip";
+import { SymbolTag } from "./SymbolTag";
 import {
   fetchChartWindow,
   postManualOrder,
@@ -102,6 +103,7 @@ export function TradingWindow({
           )}
         </div>
         <div className="trading-window-selectors">
+          <SymbolTag symbol={symbol} size="sm" />
           <select className="tw-select" value={symbol} onChange={(e) => setSymbol(e.target.value)}>
             {symbols.map((s) => <option key={s} value={s}>{s}</option>)}
           </select>

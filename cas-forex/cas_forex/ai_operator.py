@@ -52,7 +52,7 @@ TOOL_MANIFEST = {
         "paper_learning_trades": "1 = trade on paper to learn even without an edge; 0 = block",
         "trailing_stop_enabled": "1 = trades exit via a TRAILING STOP that banks a share of the run on a pullback, instead of only holding to fixed SL/TP — the implementable 'bank winners early'. Turn ON when trailing_stop_analysis shows it beats holding.",
         "trailing_lock_fraction": "how much of the best run the trailing stop locks in (0.5 = half; higher = tighter/closer to the peak)",
-        "symbols": "which markets to scan (subset of owner-allowed)",
+        "symbols": "which markets to scan/trade (subset of owner-allowed — the universe is wide: majors, crosses, JPY pairs, metals, indices). SCOUT broadly: add markets to watch, then keep the ones that PROFIT in learning_outcomes and drop chronic losers.",
         "sessions": "which sessions to trade (Asian/London/NewYork)",
     },
     "evidence_you_can_read": [

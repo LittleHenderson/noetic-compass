@@ -38,7 +38,7 @@ def _fx(symbol: str, default_mid: float, price_unit: float = 0.0001) -> Instrume
         price_unit=price_unit,
         contract_size=100_000.0,
         default_mid=default_mid,
-        price_precision=3 if symbol == "USD/JPY" else 5,
+        price_precision=3 if symbol.endswith("/JPY") else 5,
         yahoo_ticker=f"{symbol.replace('/', '')}=X",
         mt5_symbol=symbol.replace("/", ""),
     )
@@ -52,6 +52,18 @@ INSTRUMENT_SPECS = {
     "USD/CAD": _fx("USD/CAD", 1.36),
     "AUD/CAD": _fx("AUD/CAD", 0.90),
     "GBP/AUD": _fx("GBP/AUD", 1.92),
+    # --- Scout universe: more majors + crosses for the operator to watch and
+    # promote/demote by realized profit. price_unit + pip math come from _fx;
+    # JPY crosses use the 0.01 pip. A symbol the broker/feed doesn't serve simply
+    # returns no candles and is skipped — safe to include broadly. ---
+    "EUR/GBP": _fx("EUR/GBP", 0.85),
+    "EUR/JPY": _fx("EUR/JPY", 160.0, price_unit=0.01),
+    "GBP/JPY": _fx("GBP/JPY", 185.0, price_unit=0.01),
+    "AUD/JPY": _fx("AUD/JPY", 96.0, price_unit=0.01),
+    "NZD/USD": _fx("NZD/USD", 0.60),
+    "USD/CHF": _fx("USD/CHF", 0.88),
+    "EUR/AUD": _fx("EUR/AUD", 1.62),
+    "EUR/CAD": _fx("EUR/CAD", 1.48),
     # Broker-specific CFD economics vary. These defaults are research-grade
     # placeholders: one lot = 1 currency unit per index point.
     "NAS100": InstrumentSpec(
