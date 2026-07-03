@@ -46,7 +46,9 @@ TOOL_MANIFEST = {
         "edge_threshold": "min measured win-prob to authorize a REAL trade (paper learning ignores it)",
         "min_directional_confidence": "min hypothesis confidence before a candidate forms (lower = more trades)",
         "max_risk_pct_per_trade": "risk budget per trade, sizes the lots",
-        "max_concurrent_trades": "how many positions may be open at once",
+        "max_concurrent_trades": "how many positions may be open at once — ENFORCED at the dispatch chokepoint (what you set here is what the risk gate blocks on; an explicit owner override wins)",
+        "max_positions_per_symbol": "how many positions ONE symbol may stack — ENFORCED at the chokepoint. This is your anti-blind-stacking lever: raise it only when you deliberately want to concentrate on a signal",
+        "max_total_exposure_lots": "total lots across all open positions — ENFORCED at the chokepoint",
         "max_compound_units": "how many times a winner may be added to",
         "daily_loss_cap_usd": "stop trading for the day after this loss",
         "paper_learning_trades": "1 = trade on paper to learn even without an edge; 0 = block",
@@ -93,11 +95,43 @@ _OPERATOR_SYSTEM_PROMPT = (
     "owner's bounds. The context may include owner_guidance: standing "
     "considerations from the owner — weigh them seriously and say so when they "
     "shape a decision, but they never override the fences or the evidence. "
+    "EPISTEMIC STANCE (important): nothing here is random — every price move has "
+    "a cause. When many near-identical clustered trades all win, that is ONE "
+    "independent observation copied many times, NOT many wins — it overcounts "
+    "evidence, it does not make the signal fake. Never dismiss a profitable "
+    "pattern as 'luck'. Treat it as an UNCONFIRMED, promising lead: keep it in "
+    "the watch and gather INDEPENDENT out-of-sample setups to test whether its "
+    "cause repeats (real edge) or was specific to one moment. Cut a market for "
+    "sustained INDEPENDENT losses, not because a winner came in a cluster. "
+    "RISK CAPS ARE IN YOUR HANDS (owner directive 2026-07-03): "
+    "max_concurrent_trades, max_positions_per_symbol and max_total_exposure_lots "
+    "are enforced at the dispatch chokepoint — the gate blocks on whatever you "
+    "set (an explicit owner override wins). Your capital is finite: many thin "
+    "open positions dilute it and grow nothing. Measured on 1,434 resolved "
+    "paper trades (2026-07-03): the burst loop stacked copies onto LOSERS as "
+    "hard as winners (avg 1.21 vs 1.22 copies) and genuine stacking netted "
+    "-$317, while nearly all real profit came from SINGLE deliberate trades. So "
+    "run FEWER, DELIBERATE positions sized to matter; allow a symbol to stack "
+    "only when you consciously choose to concentrate on a signal with "
+    "independent supporting evidence, and watch the win/loss stack symmetry — "
+    "if losers stack as deep as winners, the loop is stacking blindly and you "
+    "should tighten max_positions_per_symbol. "
+    "IMPORTANT — you are one of many operators over time. The context includes "
+    "inherited_lessons: durable conclusions PRIOR operators learned from the "
+    "trades so far. Read them FIRST; do not re-try what they found does not work. "
+    "When THIS tick's evidence teaches something durable that future operators "
+    "should inherit (a market's behaviour, an exit policy result, a data-quality "
+    "trap, what is/isn't a real edge), record it in the 'lessons' field so the "
+    "system's knowledge compounds. "
     "Respond with a single JSON object and nothing else, matching exactly:\n"
     '{"observations": "<what the evidence shows>", '
     '"actions": [{"type": "adjust_dial", "lever": "<one of the dials>", '
     '"value": <number or list>, "reason": "<why>"}], '
+    '"lessons": [{"text": "<durable takeaway for future operators>", '
+    '"category": "market|exit_policy|sizing_risk|data_quality|edge|general", '
+    '"evidence": "<the numbers that support it>"}], '
     '"summary": "<one line>"}\n'
+    "Use an empty lessons list if nothing durable was learned this tick.\n"
     "Use an empty actions list if no change is warranted. Only use lever names "
     "from the provided dial list. Be conservative: small, justified changes."
 )
@@ -119,16 +153,21 @@ def _safe(fn, default):
 
 
 def _profit_and_balance() -> dict[str, Any]:
-    """The operator's north-star scoreboard — kept HONEST.
+    """The operator's north-star scoreboard — TWO honest numbers, side by side.
 
-    The 15-second burst loop opens many near-identical trades on the same price
-    move, so the RAW paper P&L is inflated by correlated clusters (the classic
-    mirage this codebase's null discipline guards against). We therefore report a
-    DE-DUPLICATED unique-signal net as the primary number, and flag the raw one.
-    Even the deduped number is likely optimistic (resolution survivorship: fast
-    winners hit target and count, slow losers drift and stay unresolved), so the
-    honest stance stays: NO PROVEN EDGE — grow the balance by cutting losers and
-    protecting gains, not by trusting the paper total."""
+    Two different questions get two different numbers (owner correction
+    2026-07-03 — neither is a 'mirage'):
+
+      * BALANCE GROWTH — how much did the paper balance actually move? Every
+        filled lot counts: 49 stacked copies of a winner really do move the
+        balance 49 times. This is the #1-goal number.
+      * INDEPENDENT EVIDENCE — how sure are we the signals repeat? N correlated
+        copies of one signal are ~ONE independent observation, so clusters are
+        collapsed to their average. This is the edge-confidence number.
+
+    Injected test/replay rows are quarantined out of the ledger entirely (a
+    single 49-copy ':test' cluster was inflating the old headline by +$9,458 =
+    90.4%); the quarantine badge below keeps that correction auditable."""
     seed = 2000.0
     try:
         thresholds = __import__("cas_forex.proof_control", fromlist=["build_profit_thresholds_report"]).build_profit_thresholds_report()
@@ -140,6 +179,7 @@ def _profit_and_balance() -> dict[str, Any]:
         {"history_records": []},
     )
     rows = [r for r in (ledger.get("history_records") or []) if isinstance(r, dict)]
+    quarantined = [r for r in (ledger.get("quarantined_test_artifacts") or []) if isinstance(r, dict)]
     raw_net = round(sum(float(r.get("profit") or 0.0) for r in rows), 2)
 
     # Collapse correlated clusters: same (symbol, direction, entry, exit, reason)
@@ -160,22 +200,47 @@ def _profit_and_balance() -> dict[str, Any]:
     ugw = round(sum(x for x in unique if x > 0), 2)
     ugl = round(sum(x for x in unique if x < 0), 2)
     biggest_cluster = max((len(v) for v in clusters.values()), default=0)
+    # Stack-symmetry monitor: are winners stacked deeper than losers? If losers
+    # stack as deep (as measured 2026-07-03: 1.21 vs 1.22), the burst loop is
+    # stacking blindly — concentration is variance, not conviction.
+    win_sizes = [len(v) for v in clusters.values() if sum(v) > 0]
+    loss_sizes = [len(v) for v in clusters.values() if sum(v) < 0]
+    avg_win_stack = round(sum(win_sizes) / len(win_sizes), 3) if win_sizes else None
+    avg_loss_stack = round(sum(loss_sizes) / len(loss_sizes), 3) if loss_sizes else None
     return {
-        "objective": "grow the account balance by cutting losers and protecting gains (paper now; real needs owner go-live)",
+        "objective": "GROW THE BALANCE — the #1 goal. Fewer, deliberate, well-sized positions; concentrate only on signals with independent supporting evidence (paper now; real needs owner go-live).",
         "seed_capital_usd": seed,
+        # --- Question 1: how much did the balance actually move? -------------
+        "balance_growth_net_pnl_usd": raw_net,
+        "honest_paper_balance_usd": round(seed + raw_net, 2),
+        "balance_question": "How much did the paper balance actually move? Every filled lot counts (stacked copies included).",
+        # --- Question 2: how sure are we the signals repeat? ------------------
         "honest_unique_signal_net_pnl_usd": unique_net,
-        "honest_paper_balance_usd": round(seed + unique_net, 2),
+        "evidence_question": "One vote per independent signal (clusters collapsed): how sure are we the edge repeats?",
         "unique_signals": len(unique),
         "unique_win_rate": round(uwins / len(unique), 3) if unique else 0.0,
         "unique_profit_factor": round(ugw / abs(ugl), 3) if ugl else None,
+        # --- Provenance + concentration telemetry ----------------------------
         "raw_net_pnl_usd": raw_net,
         "raw_trades": len(rows),
         "cluster_inflation_x": round(len(rows) / len(unique), 2) if unique else 1.0,
         "biggest_cluster_size": biggest_cluster,
+        "avg_winning_stack_depth": avg_win_stack,
+        "avg_losing_stack_depth": avg_loss_stack,
+        "stacking_is_blind": (
+            None
+            if avg_win_stack is None or avg_loss_stack is None
+            else bool(avg_loss_stack >= avg_win_stack)
+        ),
+        "test_artifacts_quarantined": len(quarantined),
+        "test_artifacts_net_pnl_usd": round(sum(float(r.get("profit") or 0.0) for r in quarantined), 2),
+        "data_class": "PAPER_SIM / paper_simulated_first_touch — simulated first-touch fills on real candles, not live broker money.",
         "caveats": [
-            "RAW paper P&L is inflated by correlated 15s-burst clusters — use the unique-signal net.",
-            "Even the unique net is likely optimistic (resolution survivorship: fast winners resolve, slow losers stay open).",
-            "No proven edge; the paper total is not reliable profit evidence. Real money needs owner go-live.",
+            "TWO questions, TWO numbers: balance growth counts every filled lot (stacking a winner really grows the balance); independent evidence collapses correlated copies (49 copies = ~1 observation of whether the signal repeats). Neither number is a mirage — they answer different questions.",
+            "A profitable clustered signal is NOT 'luck' — it happened for a reason. It is an UNCONFIRMED lead: investigate it with independent out-of-sample setups; do not dismiss it, and do not bet the principal on it before it confirms.",
+            "Stacking multiplies wins AND losses by the same factor. Concentrate deliberately (your risk-cap dials are enforced at the chokepoint), never as a side effect of burst timing.",
+            "Injected test/replay rows are quarantined out of both numbers (see test_artifacts_quarantined).",
+            "Real money needs owner go-live regardless.",
         ],
     }
 
@@ -267,8 +332,15 @@ def gather_context(config: Any = None) -> dict[str, Any]:
         lambda: __import__("cas_forex.operator_guidance", fromlist=["guidance_for_prompt"]).guidance_for_prompt(),
         [],
     )
+    # Inherited knowledge: durable lessons prior operators learned from the
+    # trades so far — read first so this operator builds on them, not from scratch.
+    inherited_lessons = _safe(
+        lambda: __import__("cas_forex.operator_lessons", fromlist=["lessons_for_prompt"]).lessons_for_prompt(),
+        [],
+    )
     return {
         "profit_and_balance": _profit_and_balance(),
+        "inherited_lessons": inherited_lessons,
         "dials": (snapshot.get("control_surface") or {}).get("values") if isinstance(snapshot, dict) else None,
         "dial_bounds": (snapshot.get("control_surface") or {}).get("bounds") if isinstance(snapshot, dict) else None,
         "owner_guidance": owner_guidance,
@@ -428,11 +500,14 @@ class AIOperator:
                 skipped.append({"action": action, "why": f"{type(exc).__name__}: {exc}"})
         return applied, skipped
 
-    def _record(self, tick: OperatorTick) -> None:
+    def _record(self, tick: OperatorTick, *, extra: Optional[dict[str, Any]] = None) -> None:
         self.actions_path.parent.mkdir(parents=True, exist_ok=True)
+        payload = tick.to_dict()
+        if extra:
+            payload.update(extra)
         try:
             with self.actions_path.open("a", encoding="utf-8") as handle:
-                handle.write(json.dumps(tick.to_dict(), default=str) + "\n")
+                handle.write(json.dumps(payload, default=str) + "\n")
         except OSError:
             pass
 
@@ -482,6 +557,7 @@ class AIOperator:
             self._record(tick)
             return tick
         applied, skipped = self._apply(decision)
+        lessons_recorded = self._record_lessons(decision)
         tick = OperatorTick(
             ok=True,
             provider=gen.get("provider"),
@@ -493,8 +569,35 @@ class AIOperator:
             actions_applied=applied,
             actions_skipped=skipped,
         )
-        self._record(tick)
+        tick_dict = tick.to_dict()
+        tick_dict["lessons_recorded"] = lessons_recorded
+        self._record(tick, extra={"lessons_recorded": lessons_recorded})
         return tick
+
+    def _record_lessons(self, decision: dict[str, Any]) -> list[dict[str, Any]]:
+        """Persist any durable lessons the operator learned this tick so future
+        operators inherit them. Never raises."""
+        out: list[dict[str, Any]] = []
+        try:
+            from cas_forex.operator_lessons import record_lesson
+
+            for item in (decision.get("lessons") or [])[:5]:
+                if not isinstance(item, dict):
+                    continue
+                text = str(item.get("text") or "").strip()
+                if not text:
+                    continue
+                stored = record_lesson(
+                    text,
+                    category=str(item.get("category") or "general"),
+                    evidence=str(item.get("evidence") or ""),
+                    source="operator",
+                )
+                if stored:
+                    out.append({"text": stored["text"], "category": stored["category"]})
+        except Exception:
+            pass
+        return out
 
     def chat(self, message: str) -> dict[str, Any]:
         """Talk to the strategy desk: answer the owner's question with the FULL

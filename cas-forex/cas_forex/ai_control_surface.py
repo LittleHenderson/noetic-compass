@@ -10,8 +10,9 @@ fence.
 What is and is NOT a lever here:
 
   - IS a lever: edge_threshold, max_risk_pct_per_trade, max_concurrent_trades,
-    daily_loss_cap_usd, symbols, sessions, max_compound_units. These shape HOW
-    HARD the AI pursues the target, never WHETHER an edge exists.
+    max_positions_per_symbol, max_total_exposure_lots, daily_loss_cap_usd,
+    symbols, sessions, max_compound_units. These shape HOW HARD the AI pursues
+    the target, never WHETHER an edge exists.
   - NOT a lever: real-money / go-live. Flipping demo -> live money stays an
     explicit owner gate elsewhere in the stack (BRIDGE-level ``is_demo_account``
     check). It is deliberately absent from this surface. The AI cannot enable
@@ -126,6 +127,19 @@ _SCALAR_LEVERS: Dict[str, ScalarLever] = {
     # half of the peak profit; higher = tighter/closer to the peak).
     "trailing_lock_fraction": ScalarLever(
         "trailing_lock_fraction", 0.5, 0.1, 0.9
+    ),
+    # RISK CAPS IN THE AI'S HANDS (owner directive 2026-07-03): these two flow
+    # into the pre-execution risk gate via ``execution_guard.caps_from_config``,
+    # so what the operator sets here is what the dispatch chokepoint ENFORCES
+    # (an explicit owner runtime override in ``risk_control`` still wins).
+    # Measured context: the burst loop stacked copies onto losers exactly as
+    # hard as winners (avg 1.21 vs 1.22 copies) — per-symbol concentration is a
+    # deliberate decision now, not a side effect of burst timing.
+    "max_positions_per_symbol": ScalarLever(
+        "max_positions_per_symbol", 3, 1, 50, is_int=True
+    ),
+    "max_total_exposure_lots": ScalarLever(
+        "max_total_exposure_lots", 2.0, 0.01, 100.0
     ),
 }
 

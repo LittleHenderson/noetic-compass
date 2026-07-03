@@ -165,13 +165,20 @@ export function OperatorBadge() {
 
           {state?.profit_and_balance ? (
             <div className="operator-badge-profit">
-              <div className="operator-badge-profit-goal">🎯 Objective: grow the balance</div>
+              <div className="operator-badge-profit-goal">🎯 #1 goal: grow the balance</div>
               <div className="operator-badge-profit-row">
-                <span>Paper balance (honest)</span>
+                <span>Paper balance</span>
                 <strong>${(state.profit_and_balance.honest_paper_balance_usd ?? 0).toLocaleString()}</strong>
               </div>
+              <div className="operator-badge-profit-row">
+                <span>Balance growth (every lot counts)</span>
+                <span className={(state.profit_and_balance.balance_growth_net_pnl_usd ?? state.profit_and_balance.raw_net_pnl_usd ?? 0) >= 0 ? "operator-badge-pos" : "operator-badge-neg"}>
+                  {(state.profit_and_balance.balance_growth_net_pnl_usd ?? state.profit_and_balance.raw_net_pnl_usd ?? 0) >= 0 ? "+" : ""}
+                  ${(state.profit_and_balance.balance_growth_net_pnl_usd ?? state.profit_and_balance.raw_net_pnl_usd ?? 0).toLocaleString()}
+                </span>
+              </div>
               <div className="operator-badge-profit-row operator-badge-muted">
-                <span>Net, de-clustered</span>
+                <span>Evidence it repeats (1 vote/signal)</span>
                 <span className={(state.profit_and_balance.honest_unique_signal_net_pnl_usd ?? 0) >= 0 ? "operator-badge-pos" : "operator-badge-neg"}>
                   {(state.profit_and_balance.honest_unique_signal_net_pnl_usd ?? 0) >= 0 ? "+" : ""}
                   ${(state.profit_and_balance.honest_unique_signal_net_pnl_usd ?? 0).toLocaleString()}
@@ -181,8 +188,17 @@ export function OperatorBadge() {
                 <span>{state.profit_and_balance.unique_signals ?? 0} signals · win {Math.round((state.profit_and_balance.unique_win_rate ?? 0) * 100)}%</span>
                 <span>PF {state.profit_and_balance.unique_profit_factor ?? "—"}</span>
               </div>
+              {(state.profit_and_balance.test_artifacts_quarantined ?? 0) > 0 ? (
+                <div className="operator-badge-profit-row operator-badge-muted">
+                  <span>Test rows quarantined</span>
+                  <span>
+                    {state.profit_and_balance.test_artifacts_quarantined} (${(state.profit_and_balance.test_artifacts_net_pnl_usd ?? 0).toLocaleString()} excluded)
+                  </span>
+                </div>
+              ) : null}
               <div className="operator-badge-profit-caveat">
-                Paper only, no proven edge yet. Raw total ${(state.profit_and_balance.raw_net_pnl_usd ?? 0).toLocaleString()} is inflated by burst-trade clusters — not real profit.
+                Two questions, two numbers: balance growth counts every filled lot; evidence counts each signal once (49 stacked copies = 1 observation).
+                Paper trading — real money needs your go-live.
               </div>
             </div>
           ) : null}

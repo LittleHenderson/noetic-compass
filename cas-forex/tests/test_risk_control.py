@@ -55,21 +55,27 @@ def test_caps_from_config_reflects_overrides():
     set_risk_control_overrides(max_concurrent_trades=42, max_total_exposure_lots=None)
     caps = caps_from_config(_cfg())
     assert caps.max_open_position_count == 42
-    assert caps.max_positions_per_symbol == 42
+    # Per-symbol stacking stays the AI operator's dial (default 3), held under
+    # the owner's open-count cap — the owner override widens the total, not
+    # blind per-symbol stacking (2026-07-03).
+    assert caps.max_positions_per_symbol == 3
     assert caps.max_total_exposure_lots is None  # unlimited
 
 
-def test_no_overrides_preserves_prior_behavior():
-    # With nothing set, caps mirror the old config-only mapping exactly.
+def test_no_overrides_hands_the_caps_to_the_ai_dials():
+    # Owner directive 2026-07-03: with no explicit owner override, the AI
+    # operator's dials ARE the enforced caps (defaults 2.0 lots / 15 open /
+    # 3 per symbol) — static config is only the last fallback.
     caps = caps_from_config(_cfg())
-    assert caps.max_total_exposure_lots == 0.5
-    assert caps.max_open_position_count == 5
+    assert caps.max_total_exposure_lots == 2.0
+    assert caps.max_open_position_count == 15
+    assert caps.max_positions_per_symbol == 3
     assert caps.max_drawdown_pct_from_equity_peak == 5.0
     assert caps.max_floating_loss_usd is None
 
 
 def test_unlimited_lets_oversized_order_pass_the_gate():
-    # 5 lots on an empty book breaches the default 0.5-lot cap...
+    # 5 lots on an empty book breaches the AI dial's default 2.0-lot cap...
     blocked = evaluate({"symbol": "EUR/USD", "direction": "BUY", "lots": 5.0}, config=_cfg())
     assert not blocked.accepted
     assert "max_total_exposure_lots" in blocked.blocking_caps

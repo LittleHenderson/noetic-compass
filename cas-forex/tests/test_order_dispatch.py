@@ -253,8 +253,8 @@ def test_dispatch_writes_durable_order_attempt_audit(tmp_path):
 
 def test_risk_cap_breach_blocks_before_bridge():
     bridge = SimulatedBrokerBridge()
-    # 1.0 lot on an empty book exceeds the 0.5-lot total-exposure cap.
-    result = dispatch_intent(_intent(volume=1.0), bridge, config=_cfg())
+    # 2.5 lots on an empty book exceeds the AI dial's 2.0-lot total-exposure cap.
+    result = dispatch_intent(_intent(volume=2.5), bridge, config=_cfg())
 
     assert result.status == STATUS_BLOCKED_RISK
     assert result.dispatched_to_bridge is False
@@ -270,7 +270,7 @@ def test_risk_blocked_dispatch_is_still_audited(tmp_path):
         tmp_path / "order-attempts-audit.jsonl",
     )
     bridge = SimulatedBrokerBridge()
-    result = dispatch_intent(_intent(order_id="audit-risk", volume=1.0), bridge, config=_cfg(), audit_store=store)
+    result = dispatch_intent(_intent(order_id="audit-risk", volume=2.5), bridge, config=_cfg(), audit_store=store)
 
     assert result.status == STATUS_BLOCKED_RISK
     assert result.audit_status == "ATTEMPT_RECORDED"
@@ -558,7 +558,7 @@ def test_batch_report_counts_and_mode():
     bridge = SimulatedBrokerBridge()
     intents = [
         _intent(order_id="ok-1", volume=0.1),
-        _intent(order_id="too-big", volume=1.0),  # risk-blocked
+        _intent(order_id="too-big", volume=2.5),  # risk-blocked (over the 2.0-lot dial)
     ]
     report = dispatch_intents(intents, bridge=bridge, config=_cfg())
 

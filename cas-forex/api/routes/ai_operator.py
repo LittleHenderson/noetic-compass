@@ -119,6 +119,15 @@ async def get_guidance() -> dict[str, Any]:
     return {"report_kind": "cas_forex_operator_guidance", "notes": list_notes(), "claim_boundary": CLAIM_BOUNDARY}
 
 
+@router.get("/lessons")
+async def get_lessons() -> dict[str, Any]:
+    """The durable cross-operator lessons journal — what prior operators learned
+    from the trades so future operators inherit it."""
+    from cas_forex.operator_lessons import CLAIM_BOUNDARY, list_lessons
+
+    return {"report_kind": "cas_forex_operator_lessons", "lessons": list_lessons(), "claim_boundary": CLAIM_BOUNDARY}
+
+
 @router.post("/guidance")
 async def post_guidance(body: GuidanceNote) -> dict[str, Any]:
     """Add a standing owner consideration the operator weighs on every tick."""

@@ -23,6 +23,7 @@ demo dispatch.
 
 from __future__ import annotations
 
+import os
 from typing import Any, Mapping, Optional
 
 from cas_forex import risk_monitoring
@@ -60,31 +61,69 @@ def _resolve_config(config: Any = None) -> Any:
         return base
 
 
+def _ai_dial(name: str) -> Optional[float]:
+    """Read one AI-operator risk dial from the control authority. Best-effort:
+    any failure (no authority, unknown lever) returns None so callers fall back
+    to the owner/static value."""
+    try:
+        from cas_forex.ai_control_authority import get_authority
+
+        value = get_authority().control.get(name)
+        return None if value is None else float(value)
+    except Exception:
+        return None
+
+
 def caps_from_config(config: Any = None) -> RiskCapConfig:
-    """Map the effective owner risk control onto the gate's ``RiskCapConfig``.
+    """Map the effective risk caps onto the gate's ``RiskCapConfig``.
 
-    The effective caps come from ``risk_control.resolve_risk_control`` — owner
-    runtime overrides on top of static config. Any dimension the owner set to
-    ``None`` (unlimited) becomes ``None`` here (no cap), so the owner can raise,
-    lower, or REMOVE any cap at runtime. With no overrides this reproduces the
-    prior config-only mapping exactly.
+    Precedence per dimension (owner directive 2026-07-03 — the risk cap is in
+    the AI's hands, the owner keeps the override):
 
-      - max_total_exposure_lots          <- risk_control.max_total_exposure_lots
-      - max_open_position_count          <- risk_control.max_concurrent_trades
-      - max_positions_per_symbol         <- risk_control.max_concurrent_trades
+      1. EXPLICIT owner runtime override (``risk_control``, may be None =
+         unlimited) — the owner drives; always wins when set.
+      2. The AI operator's dial (``max_concurrent_trades``,
+         ``max_positions_per_symbol``, ``max_total_exposure_lots`` on the
+         owner-fenced control surface) — so what the operator sets is what the
+         chokepoint ENFORCES.
+      3. Static config — the pre-dial fallback.
+
+      - max_total_exposure_lots          <- override | AI dial | config
+      - max_open_position_count          <- override | AI dial | config
+      - max_positions_per_symbol         <- AI dial (capped by open-count cap),
+                                            else the open-count cap
       - max_drawdown_pct_from_equity_peak <- risk_control.max_drawdown_pct
       - max_floating_loss_usd            <- risk_control.max_loss_cap_usd
     """
     config = _resolve_config(config)
-    from cas_forex.risk_control import resolve_risk_control
+    from cas_forex.risk_control import explicit_override_keys, resolve_risk_control
 
     rc = resolve_risk_control(config)
+    owner_set = explicit_override_keys()
+
+    max_open = rc.max_concurrent_trades
+    if "max_concurrent_trades" not in owner_set:
+        dial = _ai_dial("max_concurrent_trades")
+        if dial is not None:
+            max_open = int(dial)
+
+    per_symbol: Optional[int] = max_open
+    dial = _ai_dial("max_positions_per_symbol")
+    if dial is not None:
+        per_symbol = int(dial) if max_open is None else min(int(dial), int(max_open))
+
+    total_lots = rc.max_total_exposure_lots
+    if "max_total_exposure_lots" not in owner_set:
+        dial = _ai_dial("max_total_exposure_lots")
+        if dial is not None:
+            total_lots = float(dial)
+
     return RiskCapConfig(
-        max_total_exposure_lots=rc.max_total_exposure_lots,
+        max_total_exposure_lots=total_lots,
         max_concentration_pct=None,
         max_margin_utilization_pct=None,
-        max_positions_per_symbol=rc.max_concurrent_trades,
-        max_open_position_count=rc.max_concurrent_trades,
+        max_positions_per_symbol=per_symbol,
+        max_open_position_count=max_open,
         max_drawdown_pct_from_equity_peak=rc.max_drawdown_pct,
         max_floating_loss_usd=rc.max_loss_cap_usd,
     )
@@ -96,7 +135,23 @@ def build_snapshot_payload(
     account_snapshot: Optional[Mapping[str, Any]] = None,
 ) -> dict[str, Any]:
     """Compose the portfolio snapshot payload the gate consumes. Safe with
-    all-``None`` inputs (collapses to an empty, zero-exposure portfolio)."""
+    all-``None`` inputs (collapses to an empty, zero-exposure portfolio).
+
+    Self-hydration (2026-07-03): when the caller supplies NO telemetry, count
+    the simulator's still-open PAPER attempts as the portfolio. Without this,
+    the open-position caps compared every dispatch against an EMPTY portfolio
+    and never fired — which is how 150+ paper positions piled up unchecked.
+    Skipped under pytest (tests inject their own telemetry) and best-effort in
+    production: any failure falls back to the empty portfolio as before."""
+    if live_telemetry is None and not os.environ.get("PYTEST_CURRENT_TEST"):
+        try:
+            from cas_forex.paper_outcome_sim import open_paper_positions
+
+            rows = open_paper_positions()
+            if rows:
+                live_telemetry = {"open_positions": rows}
+        except Exception:
+            pass
     snapshot = risk_monitoring.compose_portfolio_risk_snapshot(
         live_telemetry=live_telemetry,
         account_snapshot=account_snapshot,

@@ -54,17 +54,58 @@ class _Order:
 # caps_from_config
 # ---------------------------------------------------------------------------
 
-def test_caps_from_config_maps_defined_dimensions_only():
+def test_caps_from_config_ai_dials_drive_when_owner_has_not_overridden():
+    # Owner directive 2026-07-03: with no explicit owner runtime override, the
+    # AI operator's dials ARE the enforced caps (dial defaults: 15 open, 3 per
+    # symbol, 2.0 total lots) — static config is only the last fallback.
     caps = caps_from_config(_cfg())
-    assert caps.max_total_exposure_lots == 0.5
-    assert caps.max_open_position_count == 5
-    assert caps.max_positions_per_symbol == 5
+    assert caps.max_total_exposure_lots == 2.0
+    assert caps.max_open_position_count == 15
+    assert caps.max_positions_per_symbol == 3
     assert caps.max_drawdown_pct_from_equity_peak == 5.0
-    # Dimensions the app config does not define stay uncapped (None), rather
-    # than inventing limits the operator never set.
+    # Dimensions nothing defines stay uncapped (None), rather than inventing
+    # limits the operator never set.
     assert caps.max_concentration_pct is None
     assert caps.max_margin_utilization_pct is None
     assert caps.max_floating_loss_usd is None
+
+
+def test_caps_from_config_owner_override_beats_ai_dial():
+    from cas_forex.risk_control import (
+        clear_risk_control_overrides,
+        set_risk_control_overrides,
+    )
+
+    try:
+        set_risk_control_overrides(max_concurrent_trades=7, max_total_exposure_lots=9.0)
+        caps = caps_from_config(_cfg())
+        assert caps.max_open_position_count == 7
+        assert caps.max_total_exposure_lots == 9.0
+        # The per-symbol dial still applies, held under the owner's open cap.
+        assert caps.max_positions_per_symbol == 3
+    finally:
+        clear_risk_control_overrides()
+
+
+def test_caps_from_config_follows_the_ai_dial(tmp_path):
+    from cas_forex.ai_control_authority import (
+        AiControlAuthority,
+        get_authority,
+        set_authority_for_tests,
+    )
+
+    try:
+        set_authority_for_tests(AiControlAuthority(tmp_path / "authority.json"))
+        control = get_authority().control
+        control.adjust("max_concurrent_trades", 4)
+        control.adjust("max_positions_per_symbol", 2)
+        control.adjust("max_total_exposure_lots", 0.8)
+        caps = caps_from_config(_cfg())
+        assert caps.max_open_position_count == 4
+        assert caps.max_positions_per_symbol == 2
+        assert caps.max_total_exposure_lots == 0.8
+    finally:
+        set_authority_for_tests(None)
 
 
 # ---------------------------------------------------------------------------
@@ -80,9 +121,9 @@ def test_evaluate_passes_within_caps():
 
 
 def test_evaluate_rejects_total_exposure_breach():
-    # 1.0 lot on an empty book exceeds the 0.5-lot total-exposure cap.
+    # 2.5 lots on an empty book exceeds the 2.0-lot total-exposure dial.
     decision = evaluate(
-        {"symbol": "EURUSD", "direction": "BUY", "lots": 1.0}, config=_cfg()
+        {"symbol": "EURUSD", "direction": "BUY", "lots": 2.5}, config=_cfg()
     )
     assert not decision.accepted
     assert "max_total_exposure_lots" in decision.blocking_caps
@@ -100,7 +141,7 @@ def test_evaluate_rejects_missing_fields():
 
 def test_guard_raises_on_breach():
     with pytest.raises(ExecutionBlocked) as exc:
-        guard({"symbol": "EURUSD", "direction": "BUY", "lots": 1.0}, config=_cfg())
+        guard({"symbol": "EURUSD", "direction": "BUY", "lots": 2.5}, config=_cfg())
     assert "max_total_exposure_lots" in exc.value.decision.blocking_caps
 
 
@@ -125,7 +166,7 @@ def test_guarded_place_order_dispatches_on_pass():
 
 def test_guarded_place_order_blocks_and_does_not_touch_bridge():
     bridge = _FakeBridge()
-    order = _Order("EURUSD", "BUY", 1.0)  # breaches total-exposure cap
+    order = _Order("EURUSD", "BUY", 2.5)  # breaches the total-exposure dial
     with pytest.raises(ExecutionBlocked):
         guarded_place_order(bridge, order, config=_cfg())
     assert bridge.calls == []  # the bridge must never be reached on a block

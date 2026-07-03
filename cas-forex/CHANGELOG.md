@@ -1,5 +1,54 @@
 # CAS Forex - Changelog
 
+## 2026-07-03 — Risk caps in the AI's hands + test-artifact quarantine + two-question scoreboard + lessons journal
+
+Owner directives this session: (1) "the risk cap must be placed in the hands of
+the AI to control as he sees fit... increasing the balance must be the number 1
+goal"; (2) never dismiss a profitable pattern as "luck" — investigate it; (3)
+current trades are a learning curve that must teach FUTURE operators.
+
+**The measurement that drove it (6-agent audit of the 1,434-trade paper ledger,
+adversarially verified, high confidence):**
+- 90.4% of the paper "profit" (+\$9,458.47 of +\$10,461.21) was ONE injected
+  test order — a 49-copy EUR/USD LONG cluster, single broker ticket, identical
+  \$193.03 per copy, decision_refs `micro_scalp_agent:test`/`dec-1`. Not trading.
+- The burst loop stacks BLINDLY: winners avg 1.21 copies vs losers 1.22 —
+  genuine multi-copy stacking netted −\$317; single deliberate trades produced
+  nearly all real profit (+\$964 of the de-artifacted +\$1,003).
+- No hidden open-loser survivorship in this ledger (12 unresolvable rows are
+  missed-opens with no P&L; worst-case swing ~\$180).
+
+**Shipped:**
+- **Test-artifact quarantine** (`paper_outcome_sim`): `is_test_artifact` +
+  `purge_test_artifacts` (rows moved to a `quarantined_test_artifacts` bucket,
+  never destroyed) + ingest guard so test-tagged rows can never re-enter.
+  Ran on the real ledger: 49 rows / +\$9,458.47 quarantined, 1,385 real remain.
+- **Risk caps enforced from the AI's dials** (`execution_guard.caps_from_config`):
+  precedence = explicit owner runtime override > AI dial > static config. New
+  dials `max_positions_per_symbol` (default 3 — the anti-blind-stacking lever)
+  and `max_total_exposure_lots` (default 2.0); `max_concurrent_trades` dial
+  (default 15) now actually reaches the gate.
+- **Self-hydrating portfolio snapshot** (`build_snapshot_payload`): with no
+  broker telemetry the gate now counts the simulator's still-open paper
+  attempts (`open_paper_positions`, TTL-cached, path-keyed) instead of
+  comparing against an EMPTY portfolio — the bug that let 150+ positions pile
+  up unchecked. Skipped under pytest.
+- **Two-question scoreboard** (`_profit_and_balance` + OperatorBadge): BALANCE
+  GROWTH (every filled lot counts — the #1-goal number) and INDEPENDENT
+  EVIDENCE (1 vote per signal — the edge-confidence number) side by side, each
+  labeled with its question; neither called a "mirage". Plus stack-symmetry
+  monitor (`stacking_is_blind`), quarantine badge, data-class badge.
+- **Operator brain**: system prompt carries the owner's risk-cap handoff, the
+  measured stacking facts, and the epistemic stance (clustered wins = ONE
+  observation = unconfirmed lead to investigate, never "luck").
+- **Cross-operator lessons journal** (`operator_lessons`, from earlier this
+  session): founding principles auto-seeded; 3 measured lessons recorded
+  (blind stacking, provenance-before-trust, two-questions-two-numbers);
+  `GET /ai-operator/lessons`; lessons inherited into every operator context.
+- Tests updated to the new layered-caps semantics + new coverage (artifact
+  flagging/purge/ingest-guard, open-position counting, dial→gate flow,
+  owner-override precedence).
+
 ## 2026-07-02 — Early-banking test of the owner's idea (MFE tracking) + operator-guidance context + isolation fix
 
 Built the exact instrument the operator itself said it needed (and the owner

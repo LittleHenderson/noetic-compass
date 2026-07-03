@@ -196,6 +196,15 @@ def _status_locked() -> Dict[str, Any]:
         profit_and_balance = _profit_and_balance()
     except Exception:
         profit_and_balance = {}
+    lessons: list = []
+    lessons_total = 0
+    try:
+        from cas_forex.operator_lessons import lessons_count, list_lessons
+
+        lessons = list_lessons(limit=8)
+        lessons_total = lessons_count()
+    except Exception:
+        lessons, lessons_total = [], 0
     return {
         "report_kind": REPORT_KIND,
         "running": running,
@@ -212,6 +221,8 @@ def _status_locked() -> Dict[str, Any]:
         "model_provider": provider_status,
         "recent_actions": operator_recent,
         "profit_and_balance": profit_and_balance,
+        "recent_lessons": lessons,
+        "lessons_total": lessons_total,
         "objective": "Grow realized net profit and the account balance (paper now; real needs owner go-live).",
         "claim_boundary": (
             "The AI operator steers the trading engine by tuning owner-fenced "

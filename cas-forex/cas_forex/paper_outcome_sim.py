@@ -86,6 +86,112 @@ CLAIM_BOUNDARY = (
 
 _LOCK = threading.RLock()
 
+# Test/replay provenance markers. Rows whose decision_ref carries one of these
+# are INJECTED test signals, not trades the loop earned. Discovered 2026-07-03:
+# one 49-copy EUR/USD cluster (decision_refs 'micro_scalp_agent:test'/'dec-1',
+# ONE broker ticket, identical $193.03 per copy) was +$9,458 = 90.4% of the
+# entire paper net — it was flattering the scoreboard AND the learning ledger.
+# Such rows are refused at ingest and can be quarantined out of an existing
+# ledger (moved to a 'quarantined_test_artifacts' bucket, never destroyed).
+_TEST_REF_EXACT = frozenset({"dec-1", "dec-2", "dec-3"})
+
+
+def is_test_artifact(record: Mapping[str, Any]) -> bool:
+    """True when a record/attempt's provenance marks it as an injected test
+    signal rather than a trade the loop earned (see _TEST_REF_EXACT note)."""
+    for key in ("decision_ref", "order_id"):
+        ref = str(record.get(key) or "").lower()
+        if ref in _TEST_REF_EXACT or ":test" in ref or ref.startswith("test-") or ref.endswith("_test"):
+            return True
+    return False
+
+
+def purge_test_artifacts(ledger_path: Path | str = DEFAULT_LEDGER_PATH) -> dict[str, Any]:
+    """Move injected test/replay rows out of ``history_records`` into a
+    ``quarantined_test_artifacts`` bucket in the same ledger file (preserved,
+    not destroyed — reversible by hand). Idempotent. Returns counts + the
+    quarantined net P&L so the scoreboard correction is auditable."""
+    with _LOCK:
+        path = Path(ledger_path)
+        ledger = _load_ledger(path)
+        rows = [r for r in ledger.get("history_records", []) if isinstance(r, dict)]
+        keep = [r for r in rows if not is_test_artifact(r)]
+        quarantined = [r for r in rows if is_test_artifact(r)]
+        if quarantined:
+            ledger["history_records"] = keep
+            ledger["quarantined_test_artifacts"] = list(
+                ledger.get("quarantined_test_artifacts") or []
+            ) + quarantined
+            _save_ledger(path, ledger)
+        return {
+            "report_kind": "cas_forex_paper_ledger_test_artifact_purge",
+            "quarantined_now": len(quarantined),
+            "quarantined_total": len(ledger.get("quarantined_test_artifacts") or []),
+            "remaining_records": len(keep) if quarantined else len(rows),
+            "quarantined_net_pnl_usd": round(
+                sum(float(r.get("profit") or 0.0) for r in (ledger.get("quarantined_test_artifacts") or [])), 2
+            ),
+            "ledger_path": str(path),
+        }
+
+
+# Open-paper-position snapshot cache (the risk gate reads this on every
+# dispatch; a short TTL keeps it out of the 15s burst loop's hot path).
+# Keyed by the (ledger, attempts) paths so callers with different stores
+# never see each other's snapshot.
+_OPEN_POS_CACHE: dict[str, Any] = {"at": 0.0, "positions": None, "key": None}
+_OPEN_POS_TTL_SECONDS = 20.0
+
+
+def open_paper_positions(
+    *,
+    ledger_path: Path | str = DEFAULT_LEDGER_PATH,
+    order_attempt_state_path: Path | str = DEFAULT_ORDER_ATTEMPT_STATE_PATH,
+    max_age_seconds: float = _OPEN_POS_TTL_SECONDS,
+) -> list[dict[str, Any]]:
+    """Currently-OPEN paper positions: executed paper attempts the simulator has
+    not yet resolved (or written off). This is the portfolio the pre-execution
+    risk gate counts when the caller supplies no broker telemetry — it makes the
+    open-position caps REAL for the paper loop instead of letting them compare
+    against an empty portfolio (how 150+ positions piled up unchecked).
+    Best-effort: any failure returns []."""
+    now = time.monotonic()
+    cache_key = (str(ledger_path), str(order_attempt_state_path))
+    with _LOCK:
+        cached = _OPEN_POS_CACHE["positions"]
+        if (
+            cached is not None
+            and _OPEN_POS_CACHE["key"] == cache_key
+            and max_age_seconds > 0
+            and now - _OPEN_POS_CACHE["at"] <= max_age_seconds
+        ):
+            return [dict(p) for p in cached]
+        try:
+            ledger = _load_ledger(Path(ledger_path))
+            known = {str(r.get("broker_ticket")) for r in ledger.get("history_records", [])}
+            unresolvable = {str(k) for k in (ledger.get("unresolvable") or {})}
+            eligible = [
+                a for a in (_eligible_attempt(r) for r in _load_attempts(order_attempt_state_path)) if a
+            ]
+            open_rows = [
+                {
+                    "symbol": a["symbol"],
+                    "direction": a["direction"],
+                    "lots": float(a["lots"]),
+                    "floating_pnl": 0.0,  # unknown without live quotes; count/lots caps still bite
+                }
+                for a in eligible
+                if a["broker_ticket"] not in known
+                and a["broker_ticket"] not in unresolvable
+                and not is_test_artifact(a)
+            ]
+        except Exception:
+            open_rows = []
+        _OPEN_POS_CACHE["at"] = now
+        _OPEN_POS_CACHE["positions"] = open_rows
+        _OPEN_POS_CACHE["key"] = cache_key
+        return [dict(p) for p in open_rows]
+
 
 # ---------------------------------------------------------------------------
 # Ledger I/O
@@ -449,7 +555,17 @@ def resolve_paper_outcomes(
 
         raw_attempts = list(attempts) if attempts is not None else _load_attempts(order_attempt_state_path)
         eligible = [a for a in (_eligible_attempt(r) for r in raw_attempts) if a]
-        pending = [a for a in eligible if a["broker_ticket"] not in known and a["broker_ticket"] not in unresolvable]
+        # Ingest guard: injected test/replay signals never enter the ledger —
+        # they flatter the scoreboard and poison the learning loop (see
+        # _TEST_REF_EXACT note; 2026-07-03 audit).
+        test_artifacts_skipped = sum(1 for a in eligible if is_test_artifact(a))
+        pending = [
+            a
+            for a in eligible
+            if a["broker_ticket"] not in known
+            and a["broker_ticket"] not in unresolvable
+            and not is_test_artifact(a)
+        ]
 
         now = utc_now()
         resolved: list[dict[str, Any]] = []
@@ -519,6 +635,7 @@ def resolve_paper_outcomes(
             "newly_resolved_losses": losses,
             "newly_resolved_net_pnl": round(sum(r["profit"] for r in resolved), 4),
             "still_open": still_open,
+            "test_artifacts_skipped": test_artifacts_skipped,
             "newly_unresolvable": newly_unresolvable,
             "total_resolved": len(known) + len(resolved),
             "ledger_path": str(path),

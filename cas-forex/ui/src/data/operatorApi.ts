@@ -32,8 +32,13 @@ export interface OperatorState {
   objective?: string;
   profit_and_balance?: {
     seed_capital_usd?: number;
-    honest_unique_signal_net_pnl_usd?: number;
+    // Question 1 — how much did the paper balance actually move (every lot counts)?
+    balance_growth_net_pnl_usd?: number;
     honest_paper_balance_usd?: number;
+    balance_question?: string;
+    // Question 2 — one vote per independent signal: how sure are we it repeats?
+    honest_unique_signal_net_pnl_usd?: number;
+    evidence_question?: string;
     unique_signals?: number;
     unique_win_rate?: number;
     unique_profit_factor?: number | null;
@@ -41,6 +46,12 @@ export interface OperatorState {
     raw_trades?: number;
     cluster_inflation_x?: number;
     biggest_cluster_size?: number;
+    avg_winning_stack_depth?: number | null;
+    avg_losing_stack_depth?: number | null;
+    stacking_is_blind?: boolean | null;
+    test_artifacts_quarantined?: number;
+    test_artifacts_net_pnl_usd?: number;
+    data_class?: string;
     caveats?: string[];
   };
   claim_boundary?: string;

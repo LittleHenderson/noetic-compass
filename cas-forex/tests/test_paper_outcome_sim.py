@@ -396,3 +396,97 @@ def test_trailing_disabled_holds_to_sl_tp(tmp_path):
         assert rec["profit"] == rec["hold_profit"] < 0  # held the loss
     finally:
         set_authority_for_tests(None)
+
+
+# ---------------------------------------------------------------------------
+# Test-artifact provenance: injected test signals never pollute the ledger
+# (2026-07-03 audit: one 49-copy ':test' cluster was +$9,458 = 90.4% of the
+# whole paper net and was flattering both the scoreboard and the learning loop)
+# ---------------------------------------------------------------------------
+def test_is_test_artifact_flags_injected_refs():
+    from cas_forex.paper_outcome_sim import is_test_artifact
+
+    assert is_test_artifact({"decision_ref": "micro_scalp_agent:test"})
+    assert is_test_artifact({"decision_ref": "dec-1"})
+    assert is_test_artifact({"order_id": "waste-micro_scalp_agent:test"})
+    assert not is_test_artifact({"decision_ref": "waste-dir-b73b9111201ad23d"})
+    assert not is_test_artifact({"decision_ref": "d-101", "order_id": "waste-d-101"})
+    assert not is_test_artifact({})
+
+
+def test_ingest_guard_refuses_test_artifacts(tmp_path):
+    candles = [_candle(1, high=1.1021, low=1.1002)]  # would resolve as TP win
+    att = _attempt(801)
+    att["decision_ref"] = "micro_scalp_agent:test"
+    report = _run(tmp_path, [att], candles)
+    assert report["test_artifacts_skipped"] == 1
+    assert report["newly_resolved"] == 0
+    assert load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"] == []
+
+
+def test_purge_test_artifacts_quarantines_and_is_idempotent(tmp_path):
+    import json as _json
+
+    from cas_forex.paper_outcome_sim import purge_test_artifacts
+
+    ledger_path = tmp_path / "paper-outcomes.json"
+    ledger_path.write_text(
+        _json.dumps(
+            {
+                "history_records": [
+                    {"broker_ticket": "1", "profit": 193.03, "decision_ref": "micro_scalp_agent:test"},
+                    {"broker_ticket": "2", "profit": 5.0, "decision_ref": "waste-dir-abc"},
+                    {"broker_ticket": "3", "profit": 50.0, "decision_ref": "dec-1"},
+                ],
+                "unresolvable": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    report = purge_test_artifacts(ledger_path)
+    assert report["quarantined_now"] == 2
+    assert report["remaining_records"] == 1
+    assert report["quarantined_net_pnl_usd"] == 243.03
+    data = _json.loads(ledger_path.read_text(encoding="utf-8"))
+    assert [r["broker_ticket"] for r in data["history_records"]] == ["2"]
+    assert len(data["quarantined_test_artifacts"]) == 2
+    # Idempotent: a second purge quarantines nothing new and loses nothing.
+    report2 = purge_test_artifacts(ledger_path)
+    assert report2["quarantined_now"] == 0
+    assert report2["quarantined_total"] == 2
+    assert report2["remaining_records"] == 1
+
+
+# ---------------------------------------------------------------------------
+# Open paper positions: the portfolio the risk gate counts when no broker
+# telemetry is supplied (makes the open-position caps REAL for the paper loop)
+# ---------------------------------------------------------------------------
+def test_open_paper_positions_counts_unresolved_only(tmp_path):
+    import json as _json
+
+    from cas_forex.paper_outcome_sim import open_paper_positions
+
+    attempts = {
+        "attempts": {
+            "a": _attempt(901),                      # open (not resolved)
+            "b": _attempt(902, direction="SHORT", entry=1.1000, sl=1.1010, tp=1.0980),  # resolved below
+            "c": _attempt(903),                      # test artifact — excluded
+        }
+    }
+    attempts["attempts"]["c"]["decision_ref"] = "dec-1"
+    attempts_path = tmp_path / "order-attempts.json"
+    attempts_path.write_text(_json.dumps(attempts), encoding="utf-8")
+    ledger_path = tmp_path / "paper-outcomes.json"
+    ledger_path.write_text(
+        _json.dumps({"history_records": [{"broker_ticket": "902", "profit": 1.0}], "unresolvable": {}}),
+        encoding="utf-8",
+    )
+    rows = open_paper_positions(
+        ledger_path=ledger_path,
+        order_attempt_state_path=attempts_path,
+        max_age_seconds=0,
+    )
+    assert len(rows) == 1
+    assert rows[0]["symbol"] == "EUR/USD"
+    assert rows[0]["direction"] == "LONG"
+    assert rows[0]["lots"] == 0.10

@@ -137,6 +137,13 @@ def clear_risk_control_overrides() -> None:
     _OVERRIDES.clear()
 
 
+def explicit_override_keys() -> frozenset[str]:
+    """Cap keys the owner has EXPLICITLY set at runtime (value may be None =
+    unlimited). ``execution_guard`` uses this for precedence: an explicit owner
+    override beats the AI operator's dial; an unset key lets the dial drive."""
+    return frozenset(_OVERRIDES)
+
+
 def build_risk_control_report(config: Any = None) -> dict[str, Any]:
     """Owner-facing report: effective caps + how to change them."""
     rc = resolve_risk_control(config)
