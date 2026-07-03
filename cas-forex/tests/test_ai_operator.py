@@ -158,3 +158,45 @@ def test_tool_manifest_lists_what_it_cannot_do(tmp_path):
     assert "move money" in forbidden
     assert "live trading" in forbidden
     assert "edge token" in forbidden
+
+
+class _CapturingProvider(_StubProvider):
+    """Stub that also records every prompt it was asked to answer."""
+
+    def __init__(self, text, **kw):
+        super().__init__(text, **kw)
+        self.prompts = []
+
+    def generate(self, prompt, system=None):
+        self.prompts.append(prompt)
+        return super().generate(prompt, system)
+
+
+def test_next_tick_sees_its_own_prior_dial_changes(tmp_path, monkeypatch):
+    """Self-continuity (2026-07-03): a tick re-added a market the prior tick
+    had just cut, calling it 'previously unused'. The next tick's prompt must
+    carry the operator's own recent applied changes, placed at the HEAD of the
+    context so prompt truncation can never drop them."""
+    decision = {
+        "observations": "cut the chronic loser",
+        "actions": [{"type": "adjust_dial", "lever": "max_positions_per_symbol", "value": 2, "reason": "stop blind stacking"}],
+        "summary": "tightened per-symbol stacking",
+    }
+    provider = _CapturingProvider(json.dumps(decision))
+    op = _operator(tmp_path, monkeypatch, provider)
+    try:
+        first = op.tick()
+        assert first.ok is True
+        # First tick: no prior applied actions -> no self-history block.
+        assert "your_recent_dial_changes" not in provider.prompts[0]
+
+        second = op.tick()
+        assert second.ok is True
+        follow_up = provider.prompts[1]
+        assert "your_recent_dial_changes" in follow_up
+        assert "max_positions_per_symbol" in follow_up.split("inherited_lessons")[0]
+        # Head placement: the self-history must appear before the (truncatable)
+        # tail of the context dump.
+        assert follow_up.index("your_recent_dial_changes") < len(follow_up) // 2
+    finally:
+        _teardown()

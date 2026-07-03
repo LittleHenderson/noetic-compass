@@ -116,6 +116,11 @@ _OPERATOR_SYSTEM_PROMPT = (
     "independent supporting evidence, and watch the win/loss stack symmetry — "
     "if losers stack as deep as winners, the loop is stacking blindly and you "
     "should tighten max_positions_per_symbol. "
+    "CONTINUITY: the context may include your_recent_dial_changes — YOUR OWN "
+    "latest decisions with their reasons, newest first. Respect them: do not "
+    "undo or contradict a recent change unless NEW evidence arrived since it "
+    "was made (and if you do, say which evidence). Never describe a market or "
+    "setting as unused/untried when your recent changes touched it. "
     "IMPORTANT — you are one of many operators over time. The context includes "
     "inherited_lessons: durable conclusions PRIOR operators learned from the "
     "trades so far. Read them FIRST; do not re-try what they found does not work. "
@@ -511,10 +516,46 @@ class AIOperator:
         except OSError:
             pass
 
+    def _recent_dial_changes(self, limit: int = 6) -> list[dict[str, Any]]:
+        """The operator's OWN latest decisions, fed back into its next tick so
+        it doesn't blindly undo what it just did (observed 2026-07-03: a tick
+        re-added AUD/CAD 13 minutes after the prior tick cut it for 0/14
+        losses, calling the market 'previously unused'). Compact on purpose:
+        summaries + applied dial changes only, newest first."""
+        out: list[dict[str, Any]] = []
+        for row in self.recent_actions(limit=40):
+            applied = row.get("actions_applied") or []
+            if not applied:
+                continue
+            out.append(
+                {
+                    "at": row.get("at"),
+                    "summary": str(row.get("summary") or "")[:220],
+                    "dials_changed": [
+                        {
+                            "lever": a.get("lever"),
+                            "new_value": a.get("new_value"),
+                            "reason": str(a.get("reason") or "")[:180],
+                        }
+                        for a in applied
+                        if isinstance(a, dict)
+                    ],
+                }
+            )
+            if len(out) >= limit:
+                break
+        return out
+
     def tick(self) -> OperatorTick:
         from cas_forex.model_provider import get_model_provider
 
         context = gather_context(self.config)
+        # Self-continuity: put YOUR OWN recent dial changes FIRST in the
+        # context (the prompt truncates the tail, never the head) so a new
+        # tick always knows what the previous ticks just decided and why.
+        recent_changes = self._recent_dial_changes()
+        if recent_changes:
+            context = {"your_recent_dial_changes": recent_changes, **context}
         prompt = build_prompt(context)
         gen = get_model_provider(self.config).generate(prompt, _OPERATOR_SYSTEM_PROMPT)
         if not gen.get("ok"):
