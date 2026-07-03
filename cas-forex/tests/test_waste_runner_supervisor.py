@@ -145,3 +145,37 @@ def test_recover_fresh_desired_waste_lease_refuses(tmp_path):
     assert status["status"] == STATUS_RECOVERY_REFUSED
     assert status["active_lease"]["owner_id"] == "worker-a"
     assert status["recovery"]["can_clear"] is False
+
+
+def test_save_payload_retries_transient_windows_file_lock(tmp_path, monkeypatch):
+    # OneDrive/antivirus briefly locks runtime state files on Windows; the
+    # atomic replace then raises PermissionError (WinError 5). This killed the
+    # runner thread once (renew -> _save_payload -> PermissionError). The store
+    # must retry the transient lock instead of surfacing it immediately.
+    import pathlib
+
+    from cas_forex import waste_runner_supervisor as sup
+
+    monkeypatch.setattr(sup, "_SAVE_RETRY_DELAY_SECONDS", 0.0)
+    store = _store(tmp_path)
+
+    real_replace = pathlib.Path.replace
+    failures = {"left": 3}
+
+    def flaky_replace(self, target):
+        if failures["left"] > 0:
+            failures["left"] -= 1
+            raise PermissionError(5, "Access is denied (simulated OneDrive lock)")
+        return real_replace(self, target)
+
+    monkeypatch.setattr(pathlib.Path, "replace", flaky_replace)
+
+    # Succeeds despite three consecutive locked replaces.
+    lease = store.acquire(owner_id="worker-a", interval_seconds=5, mode="PAPER")
+    assert lease["owner_id"] == "worker-a"
+    assert failures["left"] == 0
+
+    # A lock that never clears still surfaces after the retry budget.
+    failures["left"] = 10_000
+    with pytest.raises(PermissionError):
+        store.request_stop(requested_by="worker-b")

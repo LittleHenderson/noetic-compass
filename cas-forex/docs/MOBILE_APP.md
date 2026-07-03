@@ -34,7 +34,8 @@ CAS Forex can run on a phone in two layers. The phone app exposes the owner-cont
 1. **Installable web app (PWA) — ready now.**
    - Android Chrome / Edge: open the cockpit URL, then **Add to Home screen** / **Install app**.
    - iPhone Safari: open the cockpit URL, then **Share → Add to Home Screen**.
-   - This uses `ui/public/manifest.webmanifest`, generated app icons, and `ui/public/sw.js`.
+   - This uses `ui/public/manifest.webmanifest`, generated app icons, and the
+     service worker generated at build time by `vite-plugin-pwa` (`dist/sw.js`).
 
 2. **Android APK wrapper — scaffolded with Capacitor.**
    - Uses the same React cockpit and bundles `ui/dist` into an Android WebView.

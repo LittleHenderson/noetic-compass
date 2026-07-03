@@ -16,6 +16,7 @@ import contextlib
 import json
 import os
 import socket
+import time
 import uuid
 from pathlib import Path
 from typing import Any, Iterator, Mapping
@@ -27,6 +28,12 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_STATE_PATH = REPO_ROOT / "runtime" / "waste-runner-supervisor.json"
 DEFAULT_AUDIT_PATH = REPO_ROOT / "runtime" / "waste-runner-supervisor-audit.jsonl"
 DEFAULT_LEASE_SECONDS = 180
+
+# OneDrive / antivirus on Windows briefly lock files mid-sync, making the
+# atomic replace in ``_save_payload`` raise WinError 5. The lock clears in
+# well under a second; retry before surfacing the error.
+_SAVE_ATTEMPTS = 5
+_SAVE_RETRY_DELAY_SECONDS = 0.2
 
 REPORT_KIND = "cas_forex_waste_runner_supervisor"
 STATUS_LEASE_ACQUIRED = "LEASE_ACQUIRED"
@@ -366,8 +373,21 @@ class WasteRunnerSupervisorStore:
     def _save_payload(self, payload: Mapping[str, Any]) -> None:
         self.state_path.parent.mkdir(parents=True, exist_ok=True)
         tmp = self.state_path.with_suffix(self.state_path.suffix + ".tmp")
-        tmp.write_text(json.dumps(dict(payload), indent=2, sort_keys=True, default=str), encoding="utf-8")
-        tmp.replace(self.state_path)
+        serialized = json.dumps(dict(payload), indent=2, sort_keys=True, default=str)
+        last_error: OSError | None = None
+        for attempt in range(_SAVE_ATTEMPTS):
+            try:
+                tmp.write_text(serialized, encoding="utf-8")
+                tmp.replace(self.state_path)
+                return
+            except OSError as exc:
+                # Transient Windows file lock (OneDrive sync / antivirus scan).
+                # This killed the runner thread once (renew -> PermissionError
+                # WinError 5); back off briefly and try again.
+                last_error = exc
+                time.sleep(_SAVE_RETRY_DELAY_SECONDS * (attempt + 1))
+        assert last_error is not None
+        raise last_error
 
     def _audit_locked(self, action: str, payload: Mapping[str, Any]) -> None:
         self.audit_path.parent.mkdir(parents=True, exist_ok=True)
