@@ -60,6 +60,21 @@ MAX_ATTEMPT_AGE_DAYS = 5  # older unresolved attempts are marked unresolvable
 # "bank winners early" policies: lock in this share of the best run so far).
 TRAIL_FRACTIONS = (0.3, 0.5, 0.7)
 
+
+def _trailing_dials() -> tuple[bool, float]:
+    """Owner/operator trailing-stop dials: (enabled, lock_fraction). Off on any
+    error. When enabled, resolved trades exit via the trailing stop — so the
+    realized outcomes the learning loop sees reflect the exit policy in force."""
+    try:
+        from cas_forex.ai_control_authority import get_authority
+
+        control = get_authority().control
+        enabled = bool(int(control.get("trailing_stop_enabled")))
+        frac = float(control.get("trailing_lock_fraction"))
+        return enabled, frac
+    except Exception:
+        return False, 0.5
+
 CLAIM_BOUNDARY = (
     "Paper outcome simulation resolves PAPER order attempts against real candles "
     "to produce realized paper P&L for the LEARNING ledger only. It is "
@@ -425,6 +440,7 @@ def resolve_paper_outcomes(
     max_candles: int = DEFAULT_MAX_CANDLES,
 ) -> dict[str, Any]:
     """Resolve every eligible unresolved paper attempt. Idempotent per ticket."""
+    trailing_enabled, trail_fraction = _trailing_dials()
     with _LOCK:
         path = Path(ledger_path)
         ledger = _load_ledger(path)
@@ -459,12 +475,26 @@ def resolve_paper_outcomes(
                 continue
             record = resolve_first_touch(attempt, candles)
             if record is not None:
-                # Also record the realized P&L under trailing-stop exits, from
-                # the SAME candles — the implementable "bank winners early" idea.
+                # Always record the counterfactual trailing outcomes for the
+                # analysis. If the owner/operator has trailing ENABLED, the
+                # trade's ACTUAL realized exit IS the trailing stop — so the
+                # ledger (and everything downstream) reflects the live policy.
                 record["trailing_pnl_by_fraction"] = {
                     f"{frac}": simulate_trailing_stop(attempt, candles, trail_fraction=frac)
                     for frac in TRAIL_FRACTIONS
                 }
+                record["hold_profit"] = record["profit"]  # keep the hold-to-SL/TP value
+                if trailing_enabled:
+                    trail_pnl = simulate_trailing_stop(attempt, candles, trail_fraction=trail_fraction)
+                    if trail_pnl is not None:
+                        record["profit"] = trail_pnl
+                        record["exit_policy"] = "TRAILING_STOP"
+                        record["trailing_lock_fraction"] = trail_fraction
+                        record["close_reason"] = "TRAILING_STOP"
+                    else:
+                        record["exit_policy"] = "HOLD_TO_SL_TP"
+                else:
+                    record["exit_policy"] = "HOLD_TO_SL_TP"
                 resolved.append(record)
             elif now - attempt["open_time"] > timedelta(days=MAX_ATTEMPT_AGE_DAYS):
                 unresolvable[attempt["broker_ticket"]] = "unresolved_after_max_age"

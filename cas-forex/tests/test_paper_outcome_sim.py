@@ -345,3 +345,54 @@ def test_trailing_stop_analysis_aggregates_stored_values(tmp_path):
     # trailing policy must beat holding.
     assert analysis["best_policy"]["delta_vs_hold"] > 0
     assert "IMPLEMENTABLE" in analysis["note"]
+
+
+# ---------------------------------------------------------------------------
+# Trailing stop ACTUALLY IN FORCE when the owner/operator dial is on
+# ---------------------------------------------------------------------------
+def test_trailing_enabled_changes_realized_outcome(tmp_path):
+    from cas_forex.ai_control_authority import AiControlAuthority, set_authority_for_tests
+
+    auth = AiControlAuthority(tmp_path / "authority.json")
+    auth.control.adjust("trailing_stop_enabled", 1)
+    auth.control.adjust("trailing_lock_fraction", 0.5)
+    set_authority_for_tests(auth)
+    try:
+        # Give-back trade: runs to 1.1060, round-trips back through SL 1.0990.
+        # HELD it's a loss; with trailing ON it banks profit near the peak.
+        att = _attempt(700, sl=1.0990, tp=1.1100)
+        candles = [
+            _candle(1, high=1.1030, low=1.1005),
+            _candle(2, high=1.1060, low=1.1028),
+            _candle(3, high=1.1010, low=1.0985),  # round-trip through trail + SL
+        ]
+        _run(tmp_path, [att], candles)
+        rec = load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"][0]
+        assert rec["exit_policy"] == "TRAILING_STOP"
+        assert rec["close_reason"] == "TRAILING_STOP"
+        assert rec["hold_profit"] < 0          # holding would have lost
+        assert rec["profit"] > 0               # trailing banked a profit
+        assert rec["trailing_lock_fraction"] == 0.5
+    finally:
+        set_authority_for_tests(None)
+
+
+def test_trailing_disabled_holds_to_sl_tp(tmp_path):
+    from cas_forex.ai_control_authority import AiControlAuthority, set_authority_for_tests
+
+    auth = AiControlAuthority(tmp_path / "authority.json")
+    auth.control.adjust("trailing_stop_enabled", 0)
+    set_authority_for_tests(auth)
+    try:
+        att = _attempt(701, sl=1.0990, tp=1.1100)
+        candles = [
+            _candle(1, high=1.1060, low=1.1005),
+            _candle(2, high=1.1010, low=1.0985),  # round-trip to SL
+        ]
+        _run(tmp_path, [att], candles)
+        rec = load_paper_outcome_history(tmp_path / "paper-outcomes.json")["history_records"][0]
+        assert rec["exit_policy"] == "HOLD_TO_SL_TP"
+        assert rec["close_reason"] == "STOP_LOSS"
+        assert rec["profit"] == rec["hold_profit"] < 0  # held the loss
+    finally:
+        set_authority_for_tests(None)

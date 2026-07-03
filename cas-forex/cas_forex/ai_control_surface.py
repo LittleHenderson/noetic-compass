@@ -114,6 +114,19 @@ _SCALAR_LEVERS: Dict[str, ScalarLever] = {
     "min_directional_confidence": ScalarLever(
         "min_directional_confidence", 0.18, 0.0, 0.90
     ),
+    # Trailing stop (the implementable "bank winners early", 2026-07-03): 1 =
+    # trades exit via a trailing stop that locks in a share of the best run and
+    # closes on a pullback, instead of only holding to the fixed SL/TP. This is
+    # the owner's take-profit idea made operational; the operator turns it on
+    # when the trailing-stop analysis supports it.
+    "trailing_stop_enabled": ScalarLever(
+        "trailing_stop_enabled", 0, 0, 1, is_int=True
+    ),
+    # Fraction of the best favourable run the trailing stop locks in (0.5 = lock
+    # half of the peak profit; higher = tighter/closer to the peak).
+    "trailing_lock_fraction": ScalarLever(
+        "trailing_lock_fraction", 0.5, 0.1, 0.9
+    ),
 }
 
 _SET_LEVERS: Dict[str, SetLever] = {

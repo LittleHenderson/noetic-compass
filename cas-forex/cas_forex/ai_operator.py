@@ -50,6 +50,8 @@ TOOL_MANIFEST = {
         "max_compound_units": "how many times a winner may be added to",
         "daily_loss_cap_usd": "stop trading for the day after this loss",
         "paper_learning_trades": "1 = trade on paper to learn even without an edge; 0 = block",
+        "trailing_stop_enabled": "1 = trades exit via a TRAILING STOP that banks a share of the run on a pullback, instead of only holding to fixed SL/TP — the implementable 'bank winners early'. Turn ON when trailing_stop_analysis shows it beats holding.",
+        "trailing_lock_fraction": "how much of the best run the trailing stop locks in (0.5 = half; higher = tighter/closer to the peak)",
         "symbols": "which markets to scan (subset of owner-allowed)",
         "sessions": "which sessions to trade (Asian/London/NewYork)",
     },
