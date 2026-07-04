@@ -110,8 +110,14 @@ def _dial_value(lever: str) -> Any:
     return values.get(lever)
 
 
+def _norm_confirm(text: Any) -> str:
+    # Upper-case, trim, and collapse internal whitespace so "send  $500  withdraw"
+    # matches "SEND $500 WITHDRAW".
+    return " ".join(str(text or "").strip().upper().split())
+
+
 def _confirmation_matches(required: str, provided: Any) -> bool:
-    return str(provided or "").strip().upper() == str(required or "").strip().upper()
+    return _norm_confirm(provided) == _norm_confirm(required)
 
 
 # ---------------------------------------------------------------------------
@@ -250,6 +256,164 @@ def _apply_set_lan_mode(params: dict[str, Any]) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Command: arm_live_switch  ->  live_enable_control.set_live_enable_overrides
+# Arms/disarms an owner authorization switch. This authorizes a CAPABILITY; it
+# does not itself place a trade or move money — the dispatch/movement chokepoints
+# still require this plus their own gates (edge PASS, ?confirm, provider config).
+# ---------------------------------------------------------------------------
+_LIVE_SWITCHES = (
+    "personal_account_ack",
+    "no_pooled_capital_ack",
+    "live_mode",
+    "prefer_mt5",
+    "owner_enable_live_trading",
+    "live_trading_licensed",
+    "owner_enable_broker_accept",
+    "owner_enable_auto_deposit",
+    "owner_enable_bank_card_movement",
+    "owner_enable_payout_automation",
+)
+
+
+def _live_switch_current(switch: str) -> Any:
+    try:
+        from cas_forex.live_enable_control import apply_live_enable_overrides
+
+        return bool(getattr(apply_live_enable_overrides(None), switch, False))
+    except Exception:
+        return None
+
+
+def _preview_arm_live_switch(params: dict[str, Any]) -> Preview:
+    switch = str(params.get("switch") or "")
+    enabled = bool(params.get("enabled"))
+    blockers: list[str] = []
+    if switch not in _LIVE_SWITCHES:
+        blockers.append(f"Unknown live switch '{switch}'. Known: {list(_LIVE_SWITCHES)}")
+    current = _live_switch_current(switch) if not blockers else None
+    consequence = ""
+    try:
+        from cas_forex.live_enable_control import _FLAG_META  # noqa: SLF001 (same-package read)
+
+        consequence = str((_FLAG_META.get(switch) or {}).get("consequence") or "")
+    except Exception:
+        pass
+    verb = "ARM" if enabled else "DISARM"
+    effects = []
+    if not blockers:
+        effects.append(
+            f"{verb}s owner switch '{switch}'."
+            + (f" {consequence}" if consequence else "")
+            + " This AUTHORIZES the capability; the trade/money chokepoints still "
+            "enforce their own gates (edge PASS, ?confirm, provider config)."
+        )
+    return Preview(
+        command="arm_live_switch",
+        params={"switch": switch, "enabled": enabled},
+        title=f"{verb} live switch '{switch}'",
+        current=current,
+        proposed=enabled,
+        effects=effects,
+        blockers=blockers,
+        # Deliberate, switch-specific confirmation for a higher-stakes action.
+        confirm_phrase=f"{verb} {switch}",
+    )
+
+
+def _apply_arm_live_switch(params: dict[str, Any]) -> dict[str, Any]:
+    from cas_forex.live_enable_control import set_live_enable_overrides
+
+    switch = str(params.get("switch") or "")
+    enabled = bool(params.get("enabled"))
+    before = _live_switch_current(switch)
+    set_live_enable_overrides(**{switch: enabled})
+    return {"switch": switch, "before": before, "after": _live_switch_current(switch)}
+
+
+# ---------------------------------------------------------------------------
+# Command: move_money  ->  MovementEngine (deposit / withdraw / payout)
+# The engine gate-checks fail-closed: the payment provider is only touched if the
+# matching owner capability gate authorizes it, and the default provider is the
+# SIMULATED one unless the owner configured a real provider. This command's
+# strong typed confirmation is the broker's equivalent of the route's ?confirm.
+# ---------------------------------------------------------------------------
+_MONEY_ACTIONS = {
+    "deposit": "auto_deposit",
+    "withdraw": "bank_card_movement",
+    "payout": "payout_automation",
+}
+
+
+def _preview_move_money(params: dict[str, Any]) -> Preview:
+    action = str(params.get("action") or "").lower()
+    raw_amount = params.get("amount_usd")
+    blockers: list[str] = []
+    if action not in _MONEY_ACTIONS:
+        blockers.append(f"Unknown action '{action}'. Known: {sorted(_MONEY_ACTIONS)}")
+    amount = 0.0
+    try:
+        amount = float(raw_amount)
+        if amount <= 0:
+            blockers.append("amount_usd must be > 0")
+    except (TypeError, ValueError):
+        blockers.append(f"amount_usd must be a number, got {raw_amount!r}")
+
+    gate_status: Any = None
+    if action in _MONEY_ACTIONS:
+        try:
+            from cas_forex import runtime_gates
+
+            decision = runtime_gates.evaluate_capability(_MONEY_ACTIONS[action]).to_dict()
+            gate_status = {
+                "capability": _MONEY_ACTIONS[action],
+                "authorized": bool(decision.get("authorized")),
+                "missing": decision.get("missing_requirements") or decision.get("missing") or [],
+            }
+            if not gate_status["authorized"]:
+                miss = gate_status["missing"]
+                blockers.append(
+                    f"'{_MONEY_ACTIONS[action]}' is not authorized yet — arm it first "
+                    f"(arm_live_switch). Missing: {miss or 'owner enablement'}."
+                )
+        except Exception as exc:
+            blockers.append(f"could not read money gate: {exc}")
+
+    effects = []
+    if not blockers:
+        effects.append(
+            f"Moves ${amount:g} ({action}). Uses the configured payment provider — "
+            "SIMULATED unless you've set a real provider. Fail-closed: the engine "
+            "re-checks the gate before touching any provider."
+        )
+    return Preview(
+        command="move_money",
+        params={"action": action, "amount_usd": amount, "destination_id": params.get("destination_id"), "source_id": params.get("source_id")},
+        title=f"{action.title()} ${amount:g}",
+        current=gate_status,
+        proposed=f"${amount:g} {action}",
+        effects=effects,
+        blockers=blockers,
+        # Strong, amount-and-action-specific confirmation for moving money.
+        confirm_phrase=f"SEND ${amount:g} {action.upper()}",
+    )
+
+
+def _apply_move_money(params: dict[str, Any]) -> dict[str, Any]:
+    from cas_forex.money_movement import MovementEngine
+
+    action = str(params.get("action") or "").lower()
+    amount = float(params.get("amount_usd") or 0.0)
+    engine = MovementEngine.from_config()
+    if action == "deposit":
+        result = engine.deposit(amount, source_id=params.get("source_id"))
+    elif action == "withdraw":
+        result = engine.withdraw(amount, destination_id=params.get("destination_id"))
+    else:  # payout
+        result = engine.payout(amount, destination_id=params.get("destination_id"))
+    return result.to_dict()
+
+
+# ---------------------------------------------------------------------------
 # Registry
 # ---------------------------------------------------------------------------
 COMMANDS: dict[str, Command] = {
@@ -279,6 +443,28 @@ COMMANDS: dict[str, Command] = {
         params=[{"name": "enabled", "type": "boolean", "help": "true = allow paired devices"}],
         build_preview=_preview_set_lan_mode,
         apply=_apply_set_lan_mode,
+    ),
+    "arm_live_switch": Command(
+        name="arm_live_switch",
+        summary="Arm/disarm an owner authorization switch (live trading, broker accept, deposit/withdraw/payout enablement). Authorizes a capability; the chokepoints still enforce their own gates.",
+        params=[
+            {"name": "switch", "type": "string", "help": "one of: " + ", ".join(_LIVE_SWITCHES)},
+            {"name": "enabled", "type": "boolean", "help": "true = arm, false = disarm"},
+        ],
+        build_preview=_preview_arm_live_switch,
+        apply=_apply_arm_live_switch,
+    ),
+    "move_money": Command(
+        name="move_money",
+        summary="Deposit, withdraw, or pay out funds. Fail-closed: only moves if the matching owner capability is armed; provider is SIMULATED unless a real one is configured.",
+        params=[
+            {"name": "action", "type": "string", "help": "deposit | withdraw | payout"},
+            {"name": "amount_usd", "type": "number", "help": "amount in USD (> 0)"},
+            {"name": "destination_id", "type": "string?", "help": "for withdraw/payout"},
+            {"name": "source_id", "type": "string?", "help": "for deposit"},
+        ],
+        build_preview=_preview_move_money,
+        apply=_apply_move_money,
     ),
 }
 

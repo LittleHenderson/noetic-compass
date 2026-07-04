@@ -10,7 +10,7 @@ from __future__ import annotations
 
 import pytest
 
-from cas_forex import owner_auth, owner_command_broker, risk_control
+from cas_forex import live_enable_control, owner_auth, owner_command_broker, risk_control
 from cas_forex.ai_control_authority import AiControlAuthority, set_authority_for_tests
 
 
@@ -19,12 +19,16 @@ def _isolated(tmp_path):
     set_authority_for_tests(AiControlAuthority(tmp_path / "authority.json"))
     owner_auth.set_auth_path_for_tests(tmp_path / "owner-auth.json")
     owner_command_broker.set_receipts_path_for_tests(tmp_path / "receipts.jsonl")
+    live_enable_control.set_live_enable_override_store_for_tests(tmp_path / "live-enable.json")
     risk_control.clear_risk_control_overrides()
+    live_enable_control.clear_live_enable_overrides()
     yield
     set_authority_for_tests(None)
     owner_auth.set_auth_path_for_tests(None)
     owner_command_broker.set_receipts_path_for_tests(None)
     risk_control.clear_risk_control_overrides()
+    live_enable_control.clear_live_enable_overrides()
+    live_enable_control.set_live_enable_override_store_for_tests(None)
 
 
 def test_catalog_lists_the_settings_commands():
@@ -109,3 +113,51 @@ def test_unknown_command_is_refused():
     assert owner_command_broker.preview("nope", {})["ready"] is False
     res = owner_command_broker.execute("nope", {}, confirmation="CONFIRM")
     assert res["ok"] is False and res["applied"] is False
+
+
+# --- arm_live_switch ---------------------------------------------------------
+
+def test_arm_live_switch_needs_switch_specific_confirmation():
+    prev = owner_command_broker.preview("arm_live_switch", {"switch": "owner_enable_live_trading", "enabled": True})
+    assert prev["ready"] is True
+    assert prev["confirm_phrase"] == "ARM owner_enable_live_trading"
+    # A plain "CONFIRM" is NOT enough for a live switch.
+    res = owner_command_broker.execute("arm_live_switch", {"switch": "owner_enable_live_trading", "enabled": True}, confirmation="CONFIRM")
+    assert res["ok"] is False and res["applied"] is False
+    assert res["need_confirmation"] == "ARM owner_enable_live_trading"
+
+
+def test_arm_live_switch_applies_with_exact_phrase():
+    res = owner_command_broker.execute(
+        "arm_live_switch",
+        {"switch": "personal_account_ack", "enabled": True},
+        confirmation="ARM personal_account_ack",
+    )
+    assert res["ok"] is True and res["applied"] is True
+    assert res["result"]["after"] is True
+    assert live_enable_control.resolve_live_enable()["personal_account_ack"] is True
+
+
+def test_arm_live_switch_unknown_switch_blocks():
+    prev = owner_command_broker.preview("arm_live_switch", {"switch": "nope", "enabled": True})
+    assert prev["ready"] is False
+
+
+# --- move_money (fail-closed when the capability isn't armed) -----------------
+
+def test_move_money_blocks_when_capability_not_armed():
+    prev = owner_command_broker.preview("move_money", {"action": "withdraw", "amount_usd": 500})
+    # Default: the money capability is not authorized, so this is not ready.
+    assert prev["ready"] is False
+    assert prev["confirm_phrase"] == "SEND $500 WITHDRAW"
+    # Even with the strong phrase, an unarmed capability does not move money.
+    res = owner_command_broker.execute(
+        "move_money", {"action": "withdraw", "amount_usd": 500}, confirmation="SEND $500 WITHDRAW"
+    )
+    assert res["ok"] is False and res["applied"] is False
+    assert res["reason"] == "blocked"
+
+
+def test_move_money_rejects_bad_amount_and_action():
+    assert owner_command_broker.preview("move_money", {"action": "withdraw", "amount_usd": 0})["ready"] is False
+    assert owner_command_broker.preview("move_money", {"action": "teleport", "amount_usd": 5})["ready"] is False

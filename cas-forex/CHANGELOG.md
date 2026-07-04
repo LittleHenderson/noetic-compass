@@ -1,5 +1,30 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Owner command broker: live-arm + move-money commands (fix #3 of 3, part B)
+
+The two highest-stakes commands, each wired through its EXISTING gates — the
+broker adds a preview + a graduated typed confirmation + a receipt on top, never
+a bypass.
+
+- **`arm_live_switch`** → `live_enable_control.set_live_enable_overrides`. Arms/
+  disarms any owner authorization switch (live trading, broker accept, deposit/
+  withdraw/payout enablement, the acks). It AUTHORIZES a capability; the trade/
+  money chokepoints still enforce their own gates. Confirmation is switch-
+  specific: you type `ARM owner_enable_live_trading` (not a generic CONFIRM).
+- **`move_money`** → `MovementEngine` (deposit / withdraw / payout). Fail-closed:
+  the preview reads `runtime_gates.evaluate_capability` and BLOCKS with the exact
+  missing requirements when the capability isn't armed; the engine re-checks the
+  gate before touching any provider, and the provider is SIMULATED unless the
+  owner configured a real one. Confirmation is amount-and-action-specific: you
+  type `SEND $500 WITHDRAW`.
+- Confirmation matching now collapses internal whitespace (robust typing).
+- 5 more tests (15 total); verified live: catalog lists all 5 commands;
+  arm_live_switch shows its switch-specific phrase; move_money honestly blocks
+  when unarmed and shows what's missing.
+
+Next: the chat wiring (operator proposes a command → preview → you type the
+confirmation → receipt) and a small command console in the UI.
+
 ## 2026-07-04 — Owner command broker engine + settings commands (fix #3 of 3, part A)
 
 Fix #3: chat gains the power to ACT — preview → typed CONFIRM → receipt — so you
