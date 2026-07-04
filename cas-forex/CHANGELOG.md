@@ -1,5 +1,44 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Owner authentication (fix #1 of 3): loopback drives free, off-box needs pairing
+
+Owner directive: stop the over-cautious "disarm live money" framing that
+over-careful AI agents leave behind (it silently caps the app below full
+development). Live money is the point — it gets ARMED by the owner through
+authenticated, confirmed, receipted actions, not walled off. Three fixes in
+order: (1) owner auth, (2) loopback-default launcher + authenticated LAN mode,
+(3) chat command broker with preview/typed-confirm/receipt. This is #1.
+
+Also erased the contaminated `AUDIT_AND_REDTEAM_BRIEF.md` (a local-only commit
+that never reached the remote) — it was written in exactly that disarming
+voice.
+
+Shipped (#1 owner auth):
+- **`cas_forex/owner_auth.py`**: the WHO-may-drive gate. Loopback (the owner's
+  own PC — 127.0.0.1/::1/localhost) is ALWAYS allowed, zero friction; the
+  desktop cockpit is unchanged. Any OTHER device is refused unless the owner
+  turned LAN mode ON (default OFF) AND the request carries the owner token
+  (`X-CAS-Owner-Token` or `Authorization: Bearer`). Per-install token generated
+  on first use, stored git-ignored under `runtime/owner-auth.json`, never
+  logged. `evaluate_request` is a pure function so the whole policy is unit
+  tested without a server. This closes the real hole the 2026-07-04 audit
+  flagged: an unauthenticated LAN-bound API where any device on the WiFi could
+  POST to money routes — the auth is what makes phone access SAFE, not a brake
+  on the owner.
+- **Middleware** in `api/server.py` (`owner_auth_gate`): admission only; every
+  route still carries its own trading/money gates behind it. Bypassed under
+  pytest so the 193-file suite (which speaks from a loopback-equivalent host)
+  stays green.
+- **Routes** `api/routes/owner_auth.py`: `GET /owner-auth/state` (safe, no full
+  token), and LOOPBACK-ONLY `GET /owner-auth/pairing` (shows the token to pair
+  a phone), `POST /owner-auth/lan-mode`, `POST /owner-auth/rotate`. Arming
+  network access stays a physical-owner action.
+- 17 policy/store tests (`tests/test_owner_auth.py`); verified live: loopback
+  200, health open, pairing shows the token only over loopback.
+
+Next: #2 loopback-default launcher + LAN launcher + UI token pairing screen
+(so the phone flow is restored cleanly), then #3 the chat command broker.
+
 ## 2026-07-03 — Risk caps in the AI's hands + test-artifact quarantine + two-question scoreboard + lessons journal
 
 Owner directives this session: (1) "the risk cap must be placed in the hands of

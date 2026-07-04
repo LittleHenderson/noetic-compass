@@ -13,7 +13,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.concurrency import run_in_threadpool
 from .data import dashboard_fast_state, dashboard_shell_state, dashboard_state
 from .route_cache import cached_payload_snapshot, run_serial_refresh, start_cache_refresh
-from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage, waste_loop_control, ai_control_authority, auto_halt, broker_truth_monitor, broker_reality, live_pilot, live_recovery, live_money, live_order_dry_run, ai_operator
+from .routes import proof, bundle, strategy, adaptive, settings, mt, pcba, account, movement, reconciliation, readiness, timeframes, live_telemetry, agent_decision, agent_decision_history, autonomous_loop, notifications, forex_fury_promote, strategy_dev_actions, operator_briefing, risk_monitoring, webhook_notifications, system_health, strategy_comparison, daily_report, stack_health, operator_audit, order_dispatch, money_movement, broker_control, assistant, risk_control, live_enable, chart, dispatch_loop, mt5_live, proof_control, mt4_control, loop_stage, waste_loop_control, ai_control_authority, auto_halt, broker_truth_monitor, broker_reality, live_pilot, live_recovery, live_money, live_order_dry_run, ai_operator, owner_auth
 
 app = FastAPI(title="CAS Forex API", version="0.1.0")
 
@@ -581,6 +581,41 @@ def _trace_request_event(event: str, request: Request, extra: dict[str, Any] | N
         pass
 
 
+def _owner_auth_enforced() -> bool:
+    """Owner-auth is enforced in normal operation, and bypassed under pytest so
+    the route test-suite (which speaks from a loopback-equivalent host anyway)
+    stays green. Mirrors ``_dashboard_cache_disabled_for_tests``."""
+    return not os.environ.get("PYTEST_CURRENT_TEST")
+
+
+@app.middleware("http")
+async def owner_auth_gate(request: Request, call_next):
+    """WHO-may-drive gate: loopback (the owner's own PC) is always allowed;
+    off-box requests need LAN mode ON + a valid owner token. See
+    ``cas_forex.owner_auth``. This only decides admission — every route still
+    carries its own trading/money gates behind it."""
+    if _owner_auth_enforced():
+        from cas_forex import owner_auth
+        from fastapi.responses import JSONResponse
+
+        decision = owner_auth.evaluate_request(
+            method=request.method,
+            client_host=request.client.host if request.client else None,
+            path=request.url.path,
+            headers=request.headers,
+        )
+        if not decision.allow:
+            return JSONResponse(
+                status_code=decision.status,
+                content={
+                    "error": "owner_auth_required",
+                    "detail": decision.reason,
+                    "report_kind": "cas_forex_owner_auth_denied",
+                },
+            )
+    return await call_next(request)
+
+
 @app.middleware("http")
 async def trace_requests(request: Request, call_next):
     if not _should_trace_request(request.method, request.url.path):
@@ -653,6 +688,7 @@ app.include_router(live_recovery.router, prefix="/api/forex/live-recovery", tags
 app.include_router(live_money.router, prefix="/api/forex/live-money", tags=["live-money"])
 app.include_router(live_order_dry_run.router, prefix="/api/forex/live-order-dry-run", tags=["live-order-dry-run"])
 app.include_router(ai_operator.router, prefix="/api/forex/ai-operator", tags=["ai-operator"])
+app.include_router(owner_auth.router, prefix="/api/forex/owner-auth", tags=["owner-auth"])
 
 
 @app.get("/api/forex/dashboard/shell")
