@@ -1,0 +1,22 @@
+# Keep the image small + never bake in local state or secrets.
+runtime/
+**/__pycache__/
+*.pyc
+.git/
+.gitignore
+tests/
+docs/
+scenarios/
+data/
+ui/node_modules/
+ui/src/
+node_modules/
+*.log
+tmp_*
+tmppcba-pytest/
+.pytest-tmp/
+# Everything under ui EXCEPT the built bundle (copied explicitly in the Dockerfile).
+ui/public/
+ui/*.ts
+ui/*.json
+ui/*.html

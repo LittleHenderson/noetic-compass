@@ -29,6 +29,7 @@ from __future__ import annotations
 
 import hmac
 import json
+import os
 import secrets
 import threading
 import time
@@ -96,8 +97,21 @@ def _save(data: dict) -> None:
         raise last_error
 
 
+def cloud_mode() -> bool:
+    """True when the engine is hosted on the internet (a cloud server). A deploy
+    sets ``CAS_FOREX_CLOUD_MODE=1``. In cloud mode loopback is NOT trusted — a
+    reverse proxy in front of the app makes every request appear to come from
+    127.0.0.1, so the owner token is required on everything."""
+    return str(os.environ.get("CAS_FOREX_CLOUD_MODE", "")).strip().lower() in {"1", "true", "yes", "on"}
+
+
 def current_token() -> Optional[str]:
-    """The stored owner token, or None if one has never been generated."""
+    """The owner token. A deploy-time env override (``CAS_FOREX_OWNER_TOKEN``)
+    wins — that's how a cloud host injects the owner's chosen token — otherwise
+    the value stored in the git-ignored auth file."""
+    env = os.environ.get("CAS_FOREX_OWNER_TOKEN")
+    if env and env.strip():
+        return env.strip()
     with _LOCK:
         value = _load().get("owner_token")
         return str(value) if value else None
@@ -216,6 +230,18 @@ def evaluate_request(
         return _ALLOW
     if any(str(path).startswith(p) for p in EXEMPT_PREFIXES):
         return _ALLOW
+    # CLOUD MODE: on the internet (usually behind a reverse proxy that makes
+    # every request look like loopback), NEVER trust loopback — require a valid
+    # owner token on everything. HTTPS is assumed at the proxy (see DEPLOY.md).
+    if cloud_mode():
+        if verify_token(extract_token(headers)):
+            return _ALLOW
+        return AuthDecision(
+            False,
+            401,
+            "Owner token required. Send Authorization: Bearer <token> or "
+            "X-CAS-Owner-Token (set at deploy via CAS_FOREX_OWNER_TOKEN).",
+        )
     if request_is_loopback(client_host):
         return _ALLOW
     if not lan_mode_enabled():

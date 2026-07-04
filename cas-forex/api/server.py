@@ -867,3 +867,25 @@ async def get_dashboard(refresh: bool = False):
 @app.get("/api/forex/health")
 async def health():
     return {"status": "healthy", "version": "0.1.0"}
+
+
+# ---------------------------------------------------------------------------
+# Optional single-container UI serving (cloud deploy). When CAS_FOREX_SERVE_UI=1
+# and the built UI exists, mount it at "/" so ONE container serves both the API
+# (/api/forex/*) and the cockpit — the phone/desktop hit one URL. Off by default
+# so local dev (UI on its own dev server) is unchanged. Mounted LAST so every
+# API route and @app.get above take precedence; html=True gives SPA fallback.
+# ---------------------------------------------------------------------------
+def _mount_ui_if_enabled() -> None:
+    if os.environ.get("CAS_FOREX_SERVE_UI") != "1":
+        return
+    from pathlib import Path as _Path
+
+    from fastapi.staticfiles import StaticFiles
+
+    dist = _Path(os.environ.get("CAS_FOREX_UI_DIST") or (_Path(__file__).resolve().parents[1] / "ui" / "dist"))
+    if dist.is_dir() and (dist / "index.html").exists():
+        app.mount("/", StaticFiles(directory=str(dist), html=True), name="ui")
+
+
+_mount_ui_if_enabled()

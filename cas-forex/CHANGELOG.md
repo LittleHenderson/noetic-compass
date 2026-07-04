@@ -1,5 +1,33 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Cloud deploy scaffold (phone runs independently of the desktop)
+
+Owner chose cloud hosting so the engine runs 24/7 and the phone works even when
+the laptop is off. This lays the safe foundation (no deploy, no account, no
+money — just the artifacts + the security model). The image build itself is
+unverified locally (no Docker on the build box); app code + auth + UI serving
+are tested.
+
+- **Cloud-mode auth** (`owner_auth`): `CAS_FOREX_CLOUD_MODE=1` makes the app
+  trust NO request without a valid owner token — loopback is NOT trusted,
+  because a reverse proxy in front makes every request look local (the classic
+  cloud hole). `CAS_FOREX_OWNER_TOKEN` env injects the owner's token at deploy.
+  4 new tests (21 total).
+- **Single-container UI serving** (`api/server.py`): `CAS_FOREX_SERVE_UI=1`
+  mounts the built cockpit at `/` so ONE container serves API + UI on one port
+  — phone/desktop are thin clients of the same instance. Off by default (local
+  dev unchanged), mounted last so all API routes take precedence.
+- **`Dockerfile` / `docker-compose.yml` / `.dockerignore`**: the engine as an
+  always-on service with a persistent `/app/runtime` volume ("same instance,
+  continued exactly"). MetaTrader5 stays out (Linux-cloud-safe; paper/operator
+  brain uses yfinance/OANDA data). `--proxy-headers` for TLS-terminating proxies.
+- **`docs/DEPLOY.md`**: step-by-step for a VPS+Caddy (auto-HTTPS) or Fly.io,
+  the HTTPS/owner-token security rules, and the live-MT5 caveat (Windows host or
+  PC-side relay when going live — not needed for paper/demo now).
+
+The owner provisions the host + pays + runs the deploy (an AI can't create
+accounts or enter payment); everything else is copy-paste.
+
 ## 2026-07-04 — Use the connected HugosWay DEMO terminal for real fills (not the sim)
 
 Owner: "why is HugosWay demo not being used?" — because `select_bridge()` only

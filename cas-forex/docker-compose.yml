@@ -1,0 +1,32 @@
+# CAS Forex — run the engine as an always-on service (VPS / any Docker host).
+# The phone and desktop connect to it as clients; state lives in a named volume
+# so it survives restarts ("same instance, continued exactly").
+#
+#   1) Build the UI:   (cd ui && npm ci && npm run build)
+#   2) Pick a token:   export CAS_FOREX_OWNER_TOKEN="$(python -c 'import secrets;print(secrets.token_urlsafe(32))')"
+#   3) Up:             docker compose up -d --build
+#
+# HTTPS: do NOT expose port 8765 to the internet in cleartext — the owner token
+# would travel unencrypted. Put a TLS reverse proxy (Caddy/Traefik/Cloudflare
+# Tunnel) in front, or use a host that terminates HTTPS for you (see docs/DEPLOY.md).
+services:
+  cas-forex:
+    build: .
+    image: cas-forex:latest
+    environment:
+      CAS_FOREX_CLOUD_MODE: "1"
+      CAS_FOREX_SERVE_UI: "1"
+      # REQUIRED: the owner token every device must send. Compose fails if unset.
+      CAS_FOREX_OWNER_TOKEN: "${CAS_FOREX_OWNER_TOKEN:?set a strong CAS_FOREX_OWNER_TOKEN}"
+      # Optional model provider key (else the free local fallback / paper only).
+      ANTHROPIC_API_KEY: "${ANTHROPIC_API_KEY:-}"
+    volumes:
+      - cas-forex-runtime:/app/runtime
+    # Bind to localhost only; let the TLS reverse proxy reach it. Change to
+    # "8765:8765" ONLY if a proxy/tunnel terminates HTTPS in front of it.
+    ports:
+      - "127.0.0.1:8765:8765"
+    restart: unless-stopped
+
+volumes:
+  cas-forex-runtime:

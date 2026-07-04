@@ -120,3 +120,33 @@ def test_mask_never_reveals_full_token():
     masked = owner_auth.mask_token(token)
     assert masked.endswith(token[-4:])
     assert token not in masked
+
+
+# --- cloud mode: on the internet, never trust loopback ------------------------
+
+def test_cloud_mode_loopback_without_token_is_refused(monkeypatch):
+    monkeypatch.setenv("CAS_FOREX_CLOUD_MODE", "1")
+    owner_auth.get_or_create_token()
+    # Even from 127.0.0.1 (a reverse proxy in front of the app), no token = 401.
+    d = _eval("127.0.0.1", headers={})
+    assert d.allow is False
+    assert d.status == 401
+
+
+def test_cloud_mode_valid_token_from_anywhere_allows(monkeypatch):
+    monkeypatch.setenv("CAS_FOREX_CLOUD_MODE", "1")
+    token = owner_auth.get_or_create_token()
+    assert _eval("203.0.113.7", headers={"X-CAS-Owner-Token": token}).allow is True
+    assert _eval("127.0.0.1", headers={"Authorization": f"Bearer {token}"}).allow is True
+
+
+def test_cloud_mode_health_still_exempt(monkeypatch):
+    monkeypatch.setenv("CAS_FOREX_CLOUD_MODE", "1")
+    assert _eval("203.0.113.7", path="/api/forex/health", method="GET").allow is True
+
+
+def test_env_token_overrides_stored_token(monkeypatch):
+    owner_auth.get_or_create_token()  # a stored token exists
+    monkeypatch.setenv("CAS_FOREX_OWNER_TOKEN", "deploy-injected-token")
+    assert owner_auth.current_token() == "deploy-injected-token"
+    assert owner_auth.verify_token("deploy-injected-token") is True
