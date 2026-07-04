@@ -16,6 +16,13 @@ export default defineConfig({
       manifestFilename: "manifest.webmanifest",
       manifest: false, // use the existing public/manifest.webmanifest verbatim
       workbox: {
+        // A new build must TAKE OVER immediately — the owner should never be
+        // stuck on a stale cached shell after an update (2026-07-04). skipWaiting
+        // activates the new service worker at once; clientsClaim makes it control
+        // already-open tabs; cleanupOutdatedCaches drops the old precache.
+        skipWaiting: true,
+        clientsClaim: true,
+        cleanupOutdatedCaches: true,
         // Precache only the first-paint app shell. Lazy route chunks are still
         // runtime-cached below when the owner actually opens those pages.
         globPatterns: [
