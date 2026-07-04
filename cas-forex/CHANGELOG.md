@@ -1,5 +1,33 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Chat can ACT: propose → preview → typed CONFIRM → receipt (fix #3 of 3, COMPLETE)
+
+The final piece — chat gains the power to *do* things, closing all three of the
+owner's fixes.
+
+- **Operator chat proposes commands** (`ai_operator.chat`): the operator now
+  gets the command catalog and, when the owner clearly asks it to DO something,
+  emits a `` ```command `` block; the reply carries the proposed command AND its
+  broker preview (current → proposed, effects, blockers, the exact phrase to
+  type). It never executes — proposing shows the preview; the change happens
+  only when the owner confirms. `_extract_proposed_command` parses + strips the
+  block so the chat bubble stays clean. 2 new tests.
+- **UI command console** (`OperatorBadge` + `ownerCommandApi.ts`): a chat
+  proposal renders inline as a preview card with the effects, any blockers, and
+  a confirm box pre-filled with the exact phrase — "Confirm & run" executes
+  through the broker and shows the receipt; a blocked preview shows why and
+  offers no run. `apiCore` already carries the owner token, so this works from a
+  paired phone too.
+- Verified live from the browser: full preview → execute(CONFIRM) → receipt
+  round-trip works; execute without the phrase is refused; the operator panel
+  and chat render with no console errors. UI typecheck + build green.
+
+**Fix #3 complete.** All three owner fixes shipped: (1) owner auth, (2)
+loopback-default launcher + authenticated LAN + phone pairing, (3) the chat
+command broker (5 commands: set_ai_dial, set_risk_cap, set_lan_mode,
+arm_live_switch, move_money) with preview → typed CONFIRM → receipt, every
+command running the same gated function the buttons use — never a bypass.
+
 ## 2026-07-04 — Owner command broker: live-arm + move-money commands (fix #3 of 3, part B)
 
 The two highest-stakes commands, each wired through its EXISTING gates — the

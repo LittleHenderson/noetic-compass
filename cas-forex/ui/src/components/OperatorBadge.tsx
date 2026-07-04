@@ -19,6 +19,7 @@ import {
   type GuidanceNote,
   type OperatorState,
 } from "../data/operatorApi";
+import { executeCommand, type CommandPreview } from "../data/ownerCommandApi";
 import "./OperatorBadge.css";
 
 const POLL_MS = 10_000;
@@ -67,6 +68,10 @@ export function OperatorBadge() {
   const [chatReply, setChatReply] = useState("");
   const [chatBusy, setChatBusy] = useState(false);
   const [guidance, setGuidance] = useState<GuidanceNote[]>([]);
+  const [proposed, setProposed] = useState<{ command: string; params: Record<string, unknown> } | null>(null);
+  const [preview, setPreview] = useState<CommandPreview | null>(null);
+  const [confirmInput, setConfirmInput] = useState("");
+  const [receiptMsg, setReceiptMsg] = useState("");
   const timer = useRef<number | null>(null);
 
   const refresh = useCallback(async () => {
@@ -91,15 +96,50 @@ export function OperatorBadge() {
     if (!q) return;
     setChatBusy(true);
     setChatReply("…thinking…");
+    setProposed(null);
+    setPreview(null);
+    setConfirmInput("");
+    setReceiptMsg("");
     try {
       const res = await chatWithOperator(q);
       setChatReply(res.ok ? res.reply || "(no reply)" : `Unavailable: ${res.error ?? "no model reachable"}`);
+      if (res.ok && res.proposed_command && res.command_preview) {
+        setProposed(res.proposed_command);
+        setPreview(res.command_preview);
+        // Pre-fill the confirm box with the exact phrase so it's one tap to run.
+        setConfirmInput(res.command_preview.confirm_phrase || "CONFIRM");
+      }
     } catch {
       setChatReply("Unavailable: request failed.");
     } finally {
       setChatBusy(false);
     }
   }, [chatInput]);
+
+  const runProposed = useCallback(async () => {
+    if (!proposed) return;
+    setChatBusy(true);
+    setReceiptMsg("");
+    try {
+      const res = await executeCommand(proposed.command, proposed.params, confirmInput.trim());
+      if (res.ok && res.applied) {
+        const r = (res.result || {}) as Record<string, unknown>;
+        setReceiptMsg(`Done ✓ ${JSON.stringify(r)}`);
+        setProposed(null);
+        setPreview(null);
+        setConfirmInput("");
+        refresh();
+      } else if (res.need_confirmation) {
+        setReceiptMsg(`Type exactly: "${res.need_confirmation}" to run this.`);
+      } else {
+        setReceiptMsg(`Not applied: ${res.reason ?? "blocked"}${res.preview?.blockers?.length ? " — " + res.preview.blockers.join("; ") : ""}`);
+      }
+    } catch {
+      setReceiptMsg("Command failed to run.");
+    } finally {
+      setChatBusy(false);
+    }
+  }, [proposed, confirmInput, refresh]);
 
   const saveGuidance = useCallback(async () => {
     const q = chatInput.trim();
@@ -312,6 +352,63 @@ export function OperatorBadge() {
               </button>
             </div>
             {chatReply ? <div className="operator-badge-chat-reply">{chatReply}</div> : null}
+
+            {preview ? (
+              <div
+                style={{
+                  marginTop: 8,
+                  border: "1px solid #2a2f3a",
+                  borderRadius: 8,
+                  padding: 10,
+                  background: "#0f1218",
+                }}
+              >
+                <div style={{ fontWeight: 600, marginBottom: 4 }}>Proposed: {preview.title}</div>
+                <div style={{ fontSize: 12, opacity: 0.85 }}>
+                  {String(JSON.stringify(preview.current))} → <strong>{String(JSON.stringify(preview.proposed))}</strong>
+                </div>
+                {(preview.effects || []).map((e, i) => (
+                  <div key={i} style={{ fontSize: 12, opacity: 0.8, marginTop: 4 }}>{e}</div>
+                ))}
+                {preview.blockers && preview.blockers.length > 0 ? (
+                  <div style={{ fontSize: 12, color: "#e0574a", marginTop: 6 }}>
+                    Can't run yet: {preview.blockers.join("; ")}
+                  </div>
+                ) : (
+                  <div style={{ marginTop: 8 }}>
+                    <div style={{ fontSize: 12, opacity: 0.8, marginBottom: 4 }}>
+                      To run, this must say exactly: <code>{preview.confirm_phrase}</code>
+                    </div>
+                    <input
+                      value={confirmInput}
+                      onChange={(e) => setConfirmInput(e.target.value)}
+                      style={{
+                        width: "100%",
+                        boxSizing: "border-box",
+                        background: "#0b0d12",
+                        border: "1px solid #2a2f3a",
+                        borderRadius: 6,
+                        padding: 8,
+                        color: "inherit",
+                        marginBottom: 6,
+                      }}
+                      aria-label="Type the confirmation phrase to run the command"
+                    />
+                    <div style={{ display: "flex", gap: 8 }}>
+                      <button disabled={chatBusy} onClick={runProposed}>Confirm &amp; run</button>
+                      <button
+                        disabled={chatBusy}
+                        onClick={() => { setProposed(null); setPreview(null); setConfirmInput(""); }}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            ) : null}
+            {receiptMsg ? <div className="operator-badge-chat-reply" style={{ marginTop: 6 }}>{receiptMsg}</div> : null}
+
             {guidance.length > 0 ? (
               <div className="operator-badge-guidance">
                 <div className="operator-badge-actions-title">Standing guidance (weighed every check)</div>

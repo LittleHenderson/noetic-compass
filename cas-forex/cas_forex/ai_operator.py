@@ -423,6 +423,29 @@ def _extract_json(text: str) -> Optional[dict[str, Any]]:
         return None
 
 
+def _extract_proposed_command(text: str) -> tuple[Optional[dict[str, Any]], str]:
+    """Pull a proposed owner command out of a chat reply.
+
+    The operator emits ```command {"command": "...", "params": {...}} ``` when it
+    wants to ACT. Returns ``(proposed_or_None, display_text_without_the_block)``.
+    The block is stripped from the display text so the chat bubble stays clean;
+    the structured command is handed to the broker for a preview."""
+    if not text:
+        return None, text
+    match = re.search(r"```(?:command|json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+    if not match:
+        return None, text
+    try:
+        obj = json.loads(match.group(1))
+    except json.JSONDecodeError:
+        return None, text
+    if not isinstance(obj, dict) or not obj.get("command"):
+        return None, text
+    display = (text[: match.start()] + text[match.end():]).strip()
+    proposed = {"command": str(obj.get("command")), "params": obj.get("params") or {}}
+    return proposed, display
+
+
 @dataclass
 class OperatorTick:
     ok: bool
@@ -641,11 +664,15 @@ class AIOperator:
         return out
 
     def chat(self, message: str) -> dict[str, Any]:
-        """Talk to the strategy desk: answer the owner's question with the FULL
-        operator context (learning ledger, dials, recent actions, standing
-        guidance). Conversational only — chat NEVER moves a dial; if the owner
-        wants something considered going forward, it is saved as standing
-        guidance via the guidance store, and the next tick acts on it."""
+        """Talk to the strategy desk, and let it PROPOSE an action.
+
+        The operator answers with the full context. When the owner asks it to DO
+        something that maps to an owner command (set a dial/risk cap, LAN mode,
+        arm a live switch, move money), it proposes that command — and the reply
+        carries the command's PREVIEW (current state, exact change, effects,
+        blockers, the phrase to type). Nothing changes here: execution is a
+        SEPARATE step through the command broker with the typed confirmation, so
+        the owner always sees and confirms the exact change first."""
         from cas_forex.model_provider import get_model_provider
 
         question = str(message or "").strip()
@@ -656,18 +683,27 @@ class AIOperator:
             {k: a.get(k) for k in ("at", "provider", "summary", "actions_applied") if k in a}
             for a in self.recent_actions(limit=5)
         ]
-        system = (
-            "You are the CAS Forex AI operator — the always-on strategy desk that "
-            "tunes the owner-fenced dials of a paper-trading learning loop. The "
-            "owner is talking to you directly. Answer in plain language, honestly "
-            "and concretely, using the provided context (realized paper outcomes, "
-            "dials, learning state, your own recent actions, standing owner "
-            "guidance). Be direct about trade-offs and about what you can and "
-            "cannot do: you tune dials within owner fences; you never place "
-            "orders, move money, or authorize live trading. This chat does not "
-            "change any dial — changes happen on your scheduled ticks. Keep the "
-            "answer under 250 words."
+        catalog = _safe(
+            lambda: __import__("cas_forex.owner_command_broker", fromlist=["catalog"]).catalog(),
+            [],
         )
+        system = (
+            "You are the CAS Forex AI operator — the always-on strategy desk. The "
+            "owner is talking to you directly. Answer in plain language, honestly "
+            "and concretely, using the provided context. Be direct about "
+            "trade-offs. Keep the answer under 250 words.\n"
+            "You can ACT on the owner's behalf by PROPOSING an owner command. When "
+            "the owner clearly asks you to DO something that matches one of the "
+            "available commands (see COMMAND_CATALOG in context), append EXACTLY "
+            "ONE fenced block on its own line:\n"
+            "```command\n{\"command\": \"<name>\", \"params\": { ... }}\n```\n"
+            "Only propose a command you are confident maps to the request; put "
+            "real values in params. If the message is just a question, do NOT "
+            "propose a command. You never execute — proposing shows the owner a "
+            "preview and the exact confirmation phrase they must type; the change "
+            "only happens when they confirm."
+        )
+        context["COMMAND_CATALOG"] = catalog
         prompt = (
             "CONTEXT:\n"
             + json.dumps(context, indent=1, default=str)[:9000]
@@ -675,16 +711,32 @@ class AIOperator:
             + question[:2000]
         )
         gen = get_model_provider(self.config).generate(prompt, system)
+        text = (gen.get("text") or "").strip()
+        proposed, display = _extract_proposed_command(text)
+        preview = None
+        if proposed is not None:
+            preview = _safe(
+                lambda: __import__("cas_forex.owner_command_broker", fromlist=["preview"]).preview(
+                    proposed["command"], proposed.get("params") or {}
+                ),
+                None,
+            )
         reply = {
             "ok": bool(gen.get("ok")),
-            "reply": (gen.get("text") or "").strip(),
+            "reply": display,
             "provider": gen.get("provider"),
             "provider_label": gen.get("provider_label"),
             "paid": bool(gen.get("paid")),
             "error": gen.get("error"),
             "at": utc_now().isoformat(),
             "dials_changed": False,
-            "claim_boundary": "Chat is conversational only; dials change only on scheduled operator ticks, always clamped to owner fences.",
+            "proposed_command": proposed,
+            "command_preview": preview,
+            "claim_boundary": (
+                "Chat can PROPOSE an action and show its preview; nothing changes "
+                "until you confirm the exact typed phrase. Execution runs the same "
+                "gated function the buttons use and writes a receipt."
+            ),
         }
         try:
             chat_log = self.actions_path.parent / "ai-operator-chat.jsonl"

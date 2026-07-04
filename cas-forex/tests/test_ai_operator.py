@@ -200,3 +200,41 @@ def test_next_tick_sees_its_own_prior_dial_changes(tmp_path, monkeypatch):
         assert follow_up.index("your_recent_dial_changes") < len(follow_up) // 2
     finally:
         _teardown()
+
+
+def test_chat_proposes_a_command_with_preview(tmp_path, monkeypatch):
+    """The operator can PROPOSE an owner command in chat; the reply carries the
+    broker preview and strips the raw command block from the display text.
+    Nothing is executed (proposing != executing)."""
+    reply_text = (
+        "Sure — I'll raise the edge threshold to 0.7 so we only take stronger setups.\n"
+        "```command\n{\"command\": \"set_ai_dial\", \"params\": {\"lever\": \"edge_threshold\", \"value\": 0.7}}\n```"
+    )
+    op = _operator(tmp_path, monkeypatch, _StubProvider(reply_text))
+    try:
+        res = op.chat("raise the edge threshold to 0.7")
+        assert res["ok"] is True
+        assert res["proposed_command"]["command"] == "set_ai_dial"
+        assert res["proposed_command"]["params"]["lever"] == "edge_threshold"
+        # The preview is attached and ready, with the confirm phrase.
+        assert res["command_preview"]["ready"] is True
+        assert res["command_preview"]["confirm_phrase"] == "CONFIRM"
+        # The raw ```command block is stripped from the shown reply.
+        assert "```" not in res["reply"]
+        assert "edge threshold" in res["reply"].lower()
+        # Chat did NOT change the dial (proposing != executing).
+        from cas_forex.ai_control_authority import get_authority
+        assert float(get_authority().control.get("edge_threshold")) != 0.7
+    finally:
+        _teardown()
+
+
+def test_chat_plain_question_proposes_no_command(tmp_path, monkeypatch):
+    op = _operator(tmp_path, monkeypatch, _StubProvider("The balance grew on paper but there's no proven edge yet."))
+    try:
+        res = op.chat("how are we doing?")
+        assert res["ok"] is True
+        assert res["proposed_command"] is None
+        assert res["command_preview"] is None
+    finally:
+        _teardown()

@@ -98,6 +98,10 @@ export interface OperatorChatReply {
   provider?: string | null;
   paid?: boolean;
   error?: string | null;
+  // When the operator proposes an owner action, the reply carries the proposed
+  // command and its broker preview. Execution stays a separate confirmed step.
+  proposed_command?: { command: string; params: Record<string, unknown> } | null;
+  command_preview?: import("./ownerCommandApi").CommandPreview | null;
 }
 
 export interface GuidanceNote {
