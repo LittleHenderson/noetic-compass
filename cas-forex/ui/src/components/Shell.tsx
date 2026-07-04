@@ -4,6 +4,7 @@ import { lazy, Suspense, useEffect, useState, type ReactNode } from "react";
 import { ModeBanner } from "./ModeBanner";
 import { AiActivityInstantBadge } from "./AiActivityInstantBadge";
 import { OperatorBadge } from "./OperatorBadge";
+import { OwnerAccessBadge } from "./OwnerAccessBadge";
 import { NAV_ITEMS, type Page } from "../pageConfig";
 import type { UIReadinessReport, AuthorityBoundaryState } from "../types/evidence";
 
@@ -74,6 +75,7 @@ export function Shell({
           <AiActivityInstantBadge wasteLoop={wasteLoop} />
         )}
         <OperatorBadge />
+        <OwnerAccessBadge />
         {/* Hamburger — only shown on narrow screens (CSS). Lets every page,
             including Settings, be reached on a phone. */}
         <button

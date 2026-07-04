@@ -1,5 +1,30 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Loopback-default launcher + authenticated LAN + phone pairing (fix #2 of 3)
+
+Fix #2 of the owner's three: make phone access SAFE without disabling anything.
+
+- **Launchers split.** `START_CAS_FOREX.bat` now binds `127.0.0.1` (this PC
+  only) — the safe default; nothing on the network can reach it. New
+  `START_CAS_FOREX_LAN.bat` binds `0.0.0.0` for phone access, and other devices
+  are still refused until the owner turns LAN mode ON and pairs. Loopback always
+  works with no token.
+- **UI carries the owner token.** `ui/src/data/apiCore.ts` gains
+  `getOwnerToken`/`setOwnerToken` and attaches `X-CAS-Owner-Token` on every
+  request when a token is set — so a paired phone works whether it hits the API
+  directly or through the app-server origin. The owner's own PC (loopback) needs
+  no token, unchanged.
+- **Owner Access panel** (`OwnerAccessBadge` in the shell nav, `ownerAuthApi.ts`):
+  on the PC it shows the pairing token (loopback-only), a LAN-mode ON/OFF toggle,
+  and rotate (unpairs all devices); on a phone it takes the pasted token and
+  saves it locally. Green/red dot shows paired state at a glance.
+- Verified live: panel renders on the PC ("always allowed, no token needed"),
+  `/owner-auth/pairing` returns the full 43-char token over loopback only,
+  LAN mode reads/writes. UI typecheck + build green.
+
+Next: #3 the chat command broker (preview → typed CONFIRM → receipt) so chat can
+ACT, not just talk.
+
 ## 2026-07-04 — Owner authentication (fix #1 of 3): loopback drives free, off-box needs pairing
 
 Owner directive: stop the over-cautious "disarm live money" framing that

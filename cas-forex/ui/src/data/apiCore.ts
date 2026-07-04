@@ -1,6 +1,37 @@
 export const API_BASE_STORAGE_KEY = "cas_forex_api_base";
+export const OWNER_TOKEN_STORAGE_KEY = "cas_forex_owner_token";
 const LAST_SUCCESSFUL_API_BASE_STORAGE_KEY = "cas_forex_last_successful_api_base";
 const FAILED_API_BASE_COOLDOWN_MS = 15_000;
+
+// Owner pairing token. On the owner's own PC (loopback) the API needs no token;
+// this is for reaching the cockpit from ANOTHER device (phone) once LAN mode is
+// on. When set, it rides every request as X-CAS-Owner-Token. Stored locally.
+export function getOwnerToken(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(OWNER_TOKEN_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function setOwnerToken(token: string | null): void {
+  if (typeof window === "undefined") return;
+  try {
+    const cleaned = (token || "").trim();
+    if (cleaned) window.localStorage.setItem(OWNER_TOKEN_STORAGE_KEY, cleaned);
+    else window.localStorage.removeItem(OWNER_TOKEN_STORAGE_KEY);
+  } catch {
+    // Private mode / storage disabled — nothing to persist.
+  }
+}
+
+function authHeaders(extra?: Record<string, string>): Record<string, string> {
+  const headers: Record<string, string> = { ...(extra || {}) };
+  const token = getOwnerToken();
+  if (token) headers["X-CAS-Owner-Token"] = token;
+  return headers;
+}
 const DEFAULT_API_BASE =
   import.meta.env.VITE_CAS_FOREX_API_BASE ?? "http://127.0.0.1:8765/api/forex";
 let lastSuccessfulApiBase: string | null = null;
@@ -118,6 +149,7 @@ export async function apiGet<T>(path: string, timeoutMs = 8000): Promise<T> {
   for (const base of apiGetBases()) {
     try {
       const res = await fetch(`${base}${path}`, {
+        headers: authHeaders(),
         signal: AbortSignal.timeout(timeoutMs),
       });
       if (!res.ok) throw new Error(`API ${res.status}: ${res.statusText}`);
@@ -137,7 +169,7 @@ export async function apiPost<T>(path: string): Promise<T> {
     try {
       const res = await fetch(`${base}${path}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         signal: AbortSignal.timeout(8000),
       });
       if (!res.ok) {
@@ -167,7 +199,7 @@ export async function apiPostJson<TResp, TBody>(
     try {
       const res = await fetch(`${base}${path}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         body: JSON.stringify(body),
         signal: AbortSignal.timeout(timeoutMs),
       });
@@ -206,7 +238,7 @@ export async function apiDelete<T>(path: string): Promise<T> {
     try {
       const res = await fetch(`${base}${path}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: authHeaders({ "Content-Type": "application/json" }),
         signal: AbortSignal.timeout(8000),
       });
       if (!res.ok) {
