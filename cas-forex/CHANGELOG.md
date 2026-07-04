@@ -1,5 +1,34 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Owner command broker engine + settings commands (fix #3 of 3, part A)
+
+Fix #3: chat gains the power to ACT — preview → typed CONFIRM → receipt — so you
+can tell it to do something and it does it, legibly and auditably, through the
+SAME gated functions the buttons use (never a bypass). Part A ships the engine
+and the settings commands; part B adds live-arm + move-money commands and the
+chat/UI wiring.
+
+- **`cas_forex/owner_command_broker.py`**: a command registry where each command
+  has a `build_preview` (current state, exact change, effects, blockers, the
+  phrase to type) and an `apply` (calls the same owner-facing service function
+  the UI uses). `preview(command, params)` shows what will happen;
+  `execute(command, params, confirm)` re-checks blockers, verifies the typed
+  confirmation, applies, and writes a durable receipt to
+  `runtime/owner-command-receipts.jsonl`. A blocked preview NEVER applies; no
+  confirmation → no change.
+- Commands: `set_ai_dial` (→ `ai_control_authority.ai_adjust`, owner-fenced),
+  `set_risk_cap` (→ `risk_control.set_risk_control_overrides`, number or null=
+  unlimited), `set_lan_mode` (→ `owner_auth.set_lan_mode`).
+- **Routes** `api/routes/owner-command/*`: `/catalog`, `/preview`, `/execute`,
+  `/receipts`.
+- 10 tests; verified live over loopback (catalog + preview show current→proposed;
+  execute without CONFIRM does not apply).
+
+Next (part B): `arm_live_switch` + `move_money` commands (through their existing
+owner-authorization / confirm / edge gates — the typed CONFIRM is an EXTRA step,
+not a replacement), then the chat integration (operator proposes a command →
+preview → you type CONFIRM → receipt) and a small command console in the UI.
+
 ## 2026-07-04 — Loopback-default launcher + authenticated LAN + phone pairing (fix #2 of 3)
 
 Fix #2 of the owner's three: make phone access SAFE without disabling anything.
