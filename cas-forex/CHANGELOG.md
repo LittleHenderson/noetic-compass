@@ -1,5 +1,31 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Use the connected HugosWay DEMO terminal for real fills (not the sim)
+
+Owner: "why is HugosWay demo not being used?" — because `select_bridge()` only
+routed to MT5 when `mt5_login > 0`, and it's 0. The app READ the terminal (for
+the account display) but ROUTED trades to the internal simulator. Fixed.
+
+- **`broker_control.select_bridge` now uses a connected DEMO terminal.** New
+  `_try_mt5_bridge` constructs an MT5Bridge with NO login required — the bridge
+  attaches to the already-running, already-logged-in terminal (a bare
+  `mt5.initialize()`). In `auto` mode a connected DEMO terminal is used for
+  dispatch (real demo fills, real spreads/slippage); a connected LIVE terminal
+  is NOT auto-routed (that stays an explicit `platform="mt5"` choice, and even
+  then the live-trading gate blocks any real `order_send` until authorized).
+- Safety unchanged: `is_demo_account()` is fail-closed toward LIVE, so only a
+  true demo trades freely; `will_execute_real_order()` stays False for demo, so
+  the execution guard never triggers the live gate for demo dispatch.
+- Verified live on the owner's box: `select_bridge()` → `MT5Bridge`,
+  `connected: True`, `is_demo: True`, `will_execute_real_order: False`.
+- pytest guard: the real terminal is never attached during tests (the dev box
+  has a live demo terminal up); tests exercise the path via a monkeypatched
+  fake. 5 broker tests updated/added; suite green.
+
+Net: the operator now trades your HugosWay demo (#1000694) — a real broker,
+demo money — instead of the internal candle simulator. Risk caps
+(max_concurrent_trades / per-symbol / total lots) apply to this dispatch too.
+
 ## 2026-07-04 — Daily winnings target: a real, findable control
 
 Owner: "where can I control the increase in daily winnings?" — the assistant

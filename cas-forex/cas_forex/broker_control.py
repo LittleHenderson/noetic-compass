@@ -23,6 +23,7 @@ runtime-override API.
 
 from __future__ import annotations
 
+import os
 from dataclasses import dataclass
 from typing import Any, Optional
 
@@ -243,18 +244,57 @@ def _simulated_bridge(ctrl: BrokerControl):
     )
 
 
+def _try_mt5_bridge(config: Any, *, require_demo: bool):
+    """Construct an ``MT5Bridge`` and connect it to the running terminal.
+
+    KEY: no ``mt5_login`` is required — the bridge ATTACHES to the already-running,
+    already-logged-in terminal (a bare ``mt5.initialize()``). So a connected demo
+    terminal is usable even when ``MT5_LOGIN`` was never set (the old guard wrongly
+    ignored it, falling back to the simulator — 2026-07-04).
+
+    Returns the connected bridge, or ``None`` if it can't connect. When
+    ``require_demo`` is True (``auto`` mode) it also returns ``None`` for a
+    connected LIVE account, so ``auto`` never silently routes to a real-money
+    terminal — that stays an explicit ``platform="mt5"`` choice, and even then the
+    live-trading gate blocks any real ``order_send`` until the owner authorizes it.
+    """
+    from cas_forex.broker.mt5_bridge import MT5Bridge
+
+    # Never attach to a REAL running terminal during pytest (the dev/test machine
+    # may have a live demo terminal up). Tests that exercise this path monkeypatch
+    # MT5Bridge with a fake, whose __module__ is the test module, not this one.
+    if os.environ.get("PYTEST_CURRENT_TEST") and getattr(MT5Bridge, "__module__", "") == "cas_forex.broker.mt5_bridge":
+        return None
+
+    bridge = MT5Bridge(
+        login=int(getattr(config, "mt5_login", 0) or 0),
+        password=getattr(config, "mt5_password", ""),
+        server=getattr(config, "mt5_server", ""),
+        prefer_mt5=bool(getattr(config, "prefer_mt5", True)),
+    )
+    try:
+        if not bridge.connect():
+            return None
+        if require_demo and not bridge.is_demo_account():
+            return None
+        return bridge
+    except Exception:
+        return None
+
+
 def select_bridge(config: Any = None):
     """Return the broker bridge per the owner's platform choice + loosen settings.
 
     The gated dispatch loop calls this so "choose MT4 vs MT5" and "loosen the
     paper limits" take effect. Live execution stays gated inside the bridges:
-    selecting MT5 does not authorize live trading.
+    selecting MT5 does not authorize live trading. When a demo MT5 terminal is
+    connected, ``auto`` mode routes dispatch to THAT terminal (real demo fills),
+    not the internal simulator.
     """
     config = _resolve_config(config)
     ctrl = resolve_broker_control(config)
     from cas_forex.broker.mt5_bridge import (
         MT4EABridge,
-        MT5Bridge,
         SimulatedBrokerBridge,
     )
 
@@ -277,16 +317,10 @@ def select_bridge(config: Any = None):
             from cas_forex import runtime_gates
 
             runtime_gates.require_authorized("live_trading", config)
-        if getattr(config, "mt5_login", 0) and config.mt5_login > 0:
-            bridge = MT5Bridge(
-                login=config.mt5_login,
-                password=getattr(config, "mt5_password", ""),
-                server=getattr(config, "mt5_server", ""),
-                prefer_mt5=bool(getattr(config, "prefer_mt5", True)),
-            )
-            if bridge.connect():
-                return bridge
-        return _simulated_bridge(ctrl)
+        # Explicit mt5: use the connected terminal (demo or live). A live account
+        # still can't place a real order until the dispatch-time live gate passes.
+        bridge = _try_mt5_bridge(config, require_demo=False)
+        return bridge if bridge is not None else _simulated_bridge(ctrl)
 
     # "auto": choose from the resolved config instead of the raw process-global
     # config, so in-app owner toggles and explicit test configs are authoritative.
@@ -302,15 +336,11 @@ def select_bridge(config: Any = None):
         )
         if mt4.connect():
             return mt4
-    if getattr(config, "mt5_login", 0) and config.mt5_login > 0:
-        bridge = MT5Bridge(
-            login=config.mt5_login,
-            password=getattr(config, "mt5_password", ""),
-            server=getattr(config, "mt5_server", ""),
-            prefer_mt5=bool(getattr(config, "prefer_mt5", True)),
-        )
-        if bridge.connect():
-            return bridge
+    # Use a connected DEMO terminal automatically (what the owner expects when
+    # their demo terminal is up); a connected LIVE terminal is NOT auto-routed.
+    bridge = _try_mt5_bridge(config, require_demo=True)
+    if bridge is not None:
+        return bridge
     return _simulated_bridge(ctrl)
 
 

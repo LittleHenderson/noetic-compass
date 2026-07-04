@@ -106,7 +106,11 @@ def test_select_bridge_simulated_applies_loosened_tolerances():
     assert bridge.max_lot == 500.0
 
 
-def test_select_bridge_auto_defaults_to_simulator():
+def test_select_bridge_auto_defaults_to_simulator(monkeypatch):
+    # With NO reachable MT5 terminal, auto falls back to the simulator. (Made
+    # deterministic: the dev machine may have a live demo terminal, which auto
+    # would correctly use instead — see test_auto_routes_to_connected_demo_terminal.)
+    monkeypatch.setattr("cas_forex.broker.mt5_bridge.MT5Bridge", _fake_mt5_class(demo=True, connects=False))
     bridge = select_bridge(_cfg())
     assert isinstance(bridge, SimulatedBrokerBridge)
 
@@ -151,3 +155,51 @@ def test_report_lists_platforms_and_env_vars():
     assert set(report["platform_options"]) == set(PLATFORMS)
     assert report["env_vars"]["platform"] == "BROKER_PLATFORM"
     assert report["report_kind"] == "cas_forex_broker_control"
+
+
+# ---------------------------------------------------------------------------
+# 2026-07-04: a connected DEMO terminal must be USED for dispatch (auto mode),
+# even with mt5_login=0 (the bridge attaches to the running terminal). A
+# connected LIVE terminal is NOT auto-routed.
+# ---------------------------------------------------------------------------
+def _fake_mt5_class(*, demo: bool, connects: bool = True):
+    class _Fake:
+        def __init__(self, **kwargs):
+            pass
+
+        def connect(self):
+            return connects
+
+        def is_demo_account(self):
+            return demo
+
+    return _Fake
+
+
+def test_auto_routes_to_connected_demo_terminal(monkeypatch):
+    monkeypatch.setattr("cas_forex.broker.mt5_bridge.MT5Bridge", _fake_mt5_class(demo=True))
+    bridge = select_bridge(_cfg(mt5_login=0))  # login not set — must still use the terminal
+    assert bridge.is_demo_account() is True
+    assert not isinstance(bridge, SimulatedBrokerBridge)
+
+
+def test_auto_does_not_route_to_connected_live_terminal(monkeypatch):
+    monkeypatch.setattr("cas_forex.broker.mt5_bridge.MT5Bridge", _fake_mt5_class(demo=False))
+    bridge = select_bridge(_cfg(mt5_login=0))
+    # A live terminal in auto mode is NOT used — falls back to the simulator.
+    assert isinstance(bridge, SimulatedBrokerBridge)
+
+
+def test_explicit_mt5_uses_connected_terminal_even_live(monkeypatch):
+    monkeypatch.setattr("cas_forex.broker.mt5_bridge.MT5Bridge", _fake_mt5_class(demo=False))
+    set_broker_control_overrides(platform="mt5")
+    bridge = select_bridge(_cfg(mt5_login=0, live_mode=False))
+    # Explicit mt5 uses the terminal; a real order is still blocked at the
+    # dispatch-time live gate (not exercised here).
+    assert not isinstance(bridge, SimulatedBrokerBridge)
+
+
+def test_auto_falls_back_to_sim_when_terminal_unreachable(monkeypatch):
+    monkeypatch.setattr("cas_forex.broker.mt5_bridge.MT5Bridge", _fake_mt5_class(demo=True, connects=False))
+    bridge = select_bridge(_cfg(mt5_login=0))
+    assert isinstance(bridge, SimulatedBrokerBridge)
