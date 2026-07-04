@@ -32,6 +32,10 @@ export interface OperatorState {
   objective?: string;
   profit_and_balance?: {
     seed_capital_usd?: number;
+    // Owner-set daily winnings target (and cap + monthly) — the operator pushes toward it.
+    daily_winnings_target_usd?: number | null;
+    daily_cap_usd?: number | null;
+    monthly_target_usd?: number | null;
     // Question 1 — how much did the paper balance actually move (every lot counts)?
     balance_growth_net_pnl_usd?: number;
     honest_paper_balance_usd?: number;

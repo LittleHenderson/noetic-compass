@@ -1,5 +1,28 @@
 # CAS Forex - Changelog
 
+## 2026-07-04 — Daily winnings target: a real, findable control
+
+Owner: "where can I control the increase in daily winnings?" — the assistant
+correctly said it didn't exist as a control. Now it does.
+
+- **`set_profit_target` command** (owner command broker → `ai_control_authority.owner_update`):
+  set the daily winnings TARGET, the daily CAP, and the monthly target. Preview
+  shows current → proposed, blocks a target above the cap, and applies with a
+  receipt. Settable three ways: the operator chat ("set my daily target to $500"
+  → preview → CONFIRM), the operator panel's new target field, or the console.
+- **The operator now USES it**: `profit_and_balance` carries
+  `daily_winnings_target_usd` / `daily_cap_usd` / `monthly_target_usd`, and the
+  operator prompt tells it to push toward the daily target (size up when behind,
+  with evidence, within risk caps) and ease off once the daily cap is hit.
+- **UI**: a "🎯 Daily winnings target" row + inline setter in the AI Operator
+  panel (top bar) showing the current target/cap.
+- **Assistant awareness**: the floating assistant's control map now lists the
+  Daily Winnings Target so it points the owner there instead of saying "I don't
+  see it."
+- 4 new tests (19 broker total); verified live (catalog has the command; operator
+  state shows the target; preview current→proposed works). UI typecheck + build
+  green.
+
 ## 2026-07-04 — Chat can ACT: propose → preview → typed CONFIRM → receipt (fix #3 of 3, COMPLETE)
 
 The final piece — chat gains the power to *do* things, closing all three of the

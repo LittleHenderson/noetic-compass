@@ -161,3 +161,43 @@ def test_move_money_blocks_when_capability_not_armed():
 def test_move_money_rejects_bad_amount_and_action():
     assert owner_command_broker.preview("move_money", {"action": "withdraw", "amount_usd": 0})["ready"] is False
     assert owner_command_broker.preview("move_money", {"action": "teleport", "amount_usd": 5})["ready"] is False
+
+
+# --- set_profit_target (the daily-winnings control) --------------------------
+
+def test_set_profit_target_applies_daily_target():
+    from cas_forex.ai_control_authority import get_authority
+
+    prev = owner_command_broker.preview("set_profit_target", {"daily_target": 500})
+    assert prev["ready"] is True
+    assert any("Daily winnings target" in e for e in prev["effects"])
+    res = owner_command_broker.execute("set_profit_target", {"daily_target": 500}, confirmation="CONFIRM")
+    assert res["ok"] is True and res["applied"] is True
+    env = get_authority().snapshot()["owner_envelope"]
+    assert float(env["daily_profit_floor_usd"]) == 500.0
+
+
+def test_set_profit_target_rejects_target_above_cap():
+    # Default daily cap is 3500; a 5000 target exceeds it.
+    prev = owner_command_broker.preview("set_profit_target", {"daily_target": 5000})
+    assert prev["ready"] is False
+    assert any("cap" in b.lower() for b in prev["blockers"])
+
+
+def test_set_profit_target_sets_cap_and_monthly_together():
+    from cas_forex.ai_control_authority import get_authority
+
+    res = owner_command_broker.execute(
+        "set_profit_target",
+        {"daily_target": 300, "daily_cap": 1500, "monthly_target": 6000},
+        confirmation="CONFIRM",
+    )
+    assert res["ok"] is True
+    env = get_authority().snapshot()["owner_envelope"]
+    assert float(env["daily_profit_floor_usd"]) == 300.0
+    assert float(env["daily_profit_cap_usd"]) == 1500.0
+    assert float(env["monthly_profit_target_usd"]) == 6000.0
+
+
+def test_set_profit_target_needs_at_least_one_field():
+    assert owner_command_broker.preview("set_profit_target", {})["ready"] is False

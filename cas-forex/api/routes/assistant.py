@@ -62,6 +62,12 @@ SYSTEM_PROMPT = (
     "- 'Risk Control — You Drive': set Max Concurrent Trades, Max Loss Cap (USD), Max "
     "Total Exposure (lots), Max Drawdown (%) — each with an 'Unlimited' toggle to remove "
     "the cap. Save applies to the next trade.\n"
+    "- 'Daily Winnings Target' (in the AI Operator panel — click the operator badge in the "
+    "top bar, in the profit section): set the daily winnings TARGET, the daily CAP, and the "
+    "monthly target. The operator pushes toward the daily target each day and eases off once "
+    "the cap is hit. The owner can also just tell the operator in its chat 'set my daily "
+    "target to $500' and confirm — it previews the change, the owner types CONFIRM, and it "
+    "applies with a receipt. THIS is where the owner controls the increase in daily winnings.\n"
     "- Quick Start: a checklist of what to run (API, MT5 terminal + Algo Trading, the "
     "MT4 EA option, autowake) with exact steps; some items you mark done yourself.\n\n"
 

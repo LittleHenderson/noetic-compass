@@ -72,6 +72,8 @@ export function OperatorBadge() {
   const [preview, setPreview] = useState<CommandPreview | null>(null);
   const [confirmInput, setConfirmInput] = useState("");
   const [receiptMsg, setReceiptMsg] = useState("");
+  const [targetInput, setTargetInput] = useState("");
+  const [targetMsg, setTargetMsg] = useState("");
   const timer = useRef<number | null>(null);
 
   const refresh = useCallback(async () => {
@@ -115,6 +117,24 @@ export function OperatorBadge() {
       setChatBusy(false);
     }
   }, [chatInput]);
+
+  const setDailyTarget = useCallback(async () => {
+    const v = Number(targetInput);
+    if (!Number.isFinite(v) || v <= 0) { setTargetMsg("Enter a dollar amount."); return; }
+    setTargetMsg("Setting…");
+    try {
+      const res = await executeCommand("set_profit_target", { daily_target: v }, "CONFIRM");
+      if (res.ok && res.applied) {
+        setTargetMsg(`Daily target set to $${v.toLocaleString()} ✓`);
+        setTargetInput("");
+        refresh();
+      } else {
+        setTargetMsg(`Not set: ${res.reason ?? "blocked"}${res.preview?.blockers?.length ? " — " + res.preview.blockers.join("; ") : ""}`);
+      }
+    } catch {
+      setTargetMsg("Could not set the target.");
+    }
+  }, [targetInput, refresh]);
 
   const runProposed = useCallback(async () => {
     if (!proposed) return;
@@ -236,6 +256,46 @@ export function OperatorBadge() {
                   </span>
                 </div>
               ) : null}
+              <div
+                style={{
+                  marginTop: 8,
+                  paddingTop: 8,
+                  borderTop: "1px solid #2a2f3a",
+                }}
+              >
+                <div className="operator-badge-profit-row">
+                  <span>🎯 Daily winnings target</span>
+                  <strong>
+                    {state.profit_and_balance.daily_winnings_target_usd != null
+                      ? `$${Number(state.profit_and_balance.daily_winnings_target_usd).toLocaleString()}/day`
+                      : "not set"}
+                    {state.profit_and_balance.daily_cap_usd != null
+                      ? ` · cap $${Number(state.profit_and_balance.daily_cap_usd).toLocaleString()}`
+                      : ""}
+                  </strong>
+                </div>
+                <div style={{ display: "flex", gap: 6, marginTop: 6 }}>
+                  <input
+                    type="number"
+                    value={targetInput}
+                    onChange={(e) => setTargetInput(e.target.value)}
+                    placeholder="new daily target $"
+                    aria-label="New daily winnings target in dollars"
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      background: "#0b0d12",
+                      border: "1px solid #2a2f3a",
+                      borderRadius: 6,
+                      padding: "6px 8px",
+                      color: "inherit",
+                    }}
+                  />
+                  <button disabled={!targetInput.trim()} onClick={setDailyTarget}>Set</button>
+                </div>
+                {targetMsg ? <div className="operator-badge-muted" style={{ marginTop: 4, fontSize: 12 }}>{targetMsg}</div> : null}
+              </div>
+
               <div className="operator-badge-profit-caveat">
                 Two questions, two numbers: balance growth counts every filled lot; evidence counts each signal once (49 stacked copies = 1 observation).
                 Paper trading — real money needs your go-live.

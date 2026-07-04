@@ -103,6 +103,12 @@ _OPERATOR_SYSTEM_PROMPT = (
     "the watch and gather INDEPENDENT out-of-sample setups to test whether its "
     "cause repeats (real edge) or was specific to one moment. Cut a market for "
     "sustained INDEPENDENT losses, not because a winner came in a cluster. "
+    "DAILY WINNINGS TARGET: the owner sets a daily target (and cap + monthly) — "
+    "see profit_and_balance.daily_winnings_target_usd / daily_cap_usd. PUSH to "
+    "reach the daily target: when the day is behind target and there is genuine "
+    "supporting evidence, size up toward it (within the risk caps); once the "
+    "daily cap is hit, ease off and stop opening new trades that day. The owner "
+    "changes it via the set_profit_target command. "
     "RISK CAPS ARE IN YOUR HANDS (owner directive 2026-07-03): "
     "max_concurrent_trades, max_positions_per_symbol and max_total_exposure_lots "
     "are enforced at the dispatch chokepoint — the gate blocks on whatever you "
@@ -212,8 +218,18 @@ def _profit_and_balance() -> dict[str, Any]:
     loss_sizes = [len(v) for v in clusters.values() if sum(v) < 0]
     avg_win_stack = round(sum(win_sizes) / len(win_sizes), 3) if win_sizes else None
     avg_loss_stack = round(sum(loss_sizes) / len(loss_sizes), 3) if loss_sizes else None
+    # Owner-set daily WINNINGS target (and cap + monthly). The operator pushes
+    # toward the daily target and eases off once the cap is hit. Set via the
+    # set_profit_target command.
+    env = _safe(
+        lambda: (__import__("cas_forex.ai_control_authority", fromlist=["get_authority"]).get_authority().snapshot().get("owner_envelope") or {}),
+        {},
+    )
     return {
         "objective": "GROW THE BALANCE — the #1 goal. Fewer, deliberate, well-sized positions; concentrate only on signals with independent supporting evidence (paper now; real needs owner go-live).",
+        "daily_winnings_target_usd": env.get("daily_profit_floor_usd"),
+        "daily_cap_usd": env.get("daily_profit_cap_usd"),
+        "monthly_target_usd": env.get("monthly_profit_target_usd"),
         "seed_capital_usd": seed,
         # --- Question 1: how much did the balance actually move? -------------
         "balance_growth_net_pnl_usd": raw_net,

@@ -256,6 +256,86 @@ def _apply_set_lan_mode(params: dict[str, Any]) -> dict[str, Any]:
 
 
 # ---------------------------------------------------------------------------
+# Command: set_profit_target  ->  ai_control_authority.owner_update
+# The owner's daily WINNINGS target (and cap + monthly target). The operator
+# reads these and pushes toward the daily target, easing off once the daily cap
+# is hit. This is the "control the increase in daily winnings" lever.
+# ---------------------------------------------------------------------------
+def _owner_envelope() -> dict[str, Any]:
+    return dict(_authority().snapshot().get("owner_envelope") or {})
+
+
+def _preview_set_profit_target(params: dict[str, Any]) -> Preview:
+    env = _owner_envelope()
+    field_map = {
+        "daily_target": "daily_profit_floor_usd",
+        "daily_cap": "daily_profit_cap_usd",
+        "monthly_target": "monthly_profit_target_usd",
+    }
+    changes: dict[str, float] = {}
+    blockers: list[str] = []
+    for key, envelope_key in field_map.items():
+        if params.get(key) is None:
+            continue
+        try:
+            val = float(params[key])
+        except (TypeError, ValueError):
+            blockers.append(f"{key} must be a number, got {params[key]!r}")
+            continue
+        if val < 0:
+            blockers.append(f"{key} must be >= 0")
+            continue
+        changes[envelope_key] = val
+    if not changes and not blockers:
+        blockers.append("Nothing to set — provide daily_target, daily_cap, and/or monthly_target.")
+    # Effective daily floor/cap after the change: floor must not exceed cap.
+    eff_floor = changes.get("daily_profit_floor_usd", float(env.get("daily_profit_floor_usd") or 0.0))
+    eff_cap = changes.get("daily_profit_cap_usd", float(env.get("daily_profit_cap_usd") or 0.0))
+    if eff_cap and eff_floor > eff_cap:
+        blockers.append(f"daily target ${eff_floor:g} can't exceed the daily cap ${eff_cap:g}.")
+    current = {
+        "daily_target_usd": env.get("daily_profit_floor_usd"),
+        "daily_cap_usd": env.get("daily_profit_cap_usd"),
+        "monthly_target_usd": env.get("monthly_profit_target_usd"),
+    }
+    effects = []
+    if not blockers:
+        if "daily_profit_floor_usd" in changes:
+            effects.append(f"Daily winnings target → ${changes['daily_profit_floor_usd']:g} (the operator pushes to reach it each day).")
+        if "daily_profit_cap_usd" in changes:
+            effects.append(f"Daily cap → ${changes['daily_profit_cap_usd']:g} (once hit, it stops opening new trades that day).")
+        if "monthly_profit_target_usd" in changes:
+            effects.append(f"Monthly target → ${changes['monthly_profit_target_usd']:g} (sets the daily pace).")
+    return Preview(
+        command="set_profit_target",
+        params={k: v for k, v in {"daily_target": params.get("daily_target"), "daily_cap": params.get("daily_cap"), "monthly_target": params.get("monthly_target")}.items() if v is not None},
+        title="Set daily winnings target",
+        current=current,
+        proposed={k.replace("_usd", ""): v for k, v in changes.items()},
+        effects=effects,
+        blockers=blockers,
+        confirm_phrase="CONFIRM",
+    )
+
+
+def _apply_set_profit_target(params: dict[str, Any]) -> dict[str, Any]:
+    field_map = {
+        "daily_target": "daily_profit_floor_usd",
+        "daily_cap": "daily_profit_cap_usd",
+        "monthly_target": "monthly_profit_target_usd",
+    }
+    changes = {field_map[k]: float(params[k]) for k in field_map if params.get(k) is not None}
+    before = _owner_envelope()
+    _authority().owner_update(**changes)
+    after = _owner_envelope()
+    return {
+        "changed": list(changes),
+        "before": {k: before.get(k) for k in changes},
+        "after": {k: after.get(k) for k in changes},
+    }
+
+
+# ---------------------------------------------------------------------------
 # Command: arm_live_switch  ->  live_enable_control.set_live_enable_overrides
 # Arms/disarms an owner authorization switch. This authorizes a CAPABILITY; it
 # does not itself place a trade or move money — the dispatch/movement chokepoints
@@ -443,6 +523,17 @@ COMMANDS: dict[str, Command] = {
         params=[{"name": "enabled", "type": "boolean", "help": "true = allow paired devices"}],
         build_preview=_preview_set_lan_mode,
         apply=_apply_set_lan_mode,
+    ),
+    "set_profit_target": Command(
+        name="set_profit_target",
+        summary="Set your DAILY WINNINGS TARGET (and daily cap + monthly target). The operator pushes toward the daily target and eases off once the cap is hit.",
+        params=[
+            {"name": "daily_target", "type": "number?", "help": "daily winnings goal in USD"},
+            {"name": "daily_cap", "type": "number?", "help": "stop opening new trades once the day hits this USD"},
+            {"name": "monthly_target", "type": "number?", "help": "monthly target in USD (sets the pace)"},
+        ],
+        build_preview=_preview_set_profit_target,
+        apply=_apply_set_profit_target,
     ),
     "arm_live_switch": Command(
         name="arm_live_switch",
