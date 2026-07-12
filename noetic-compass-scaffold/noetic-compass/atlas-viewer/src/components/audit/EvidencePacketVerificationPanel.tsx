@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import {
   verifyEvidencePacket,
   type EvidenceVerifyCheck,
@@ -14,6 +14,7 @@ import {
 
 export interface EvidencePacketVerificationPanelProps {
   traceId: string | null | undefined;
+  authToken?: string | null;
   fetchImpl?: typeof fetch;
 }
 
@@ -187,16 +188,23 @@ function summaryText(state: VerifyState): string {
 
 export function EvidencePacketVerificationPanel({
   traceId,
+  authToken,
   fetchImpl,
 }: EvidencePacketVerificationPanelProps): JSX.Element | null {
   const [state, setState] = useState<VerifyState>({ status: 'idle' });
   const cleanedTraceId = traceId?.trim() ?? '';
-  const canVerify = cleanedTraceId.length > 0 && state.status !== 'loading';
+  const cleanedAuthToken = authToken?.trim() ?? '';
+  const canVerify =
+    cleanedTraceId.length > 0 && cleanedAuthToken.length > 0 && state.status !== 'loading';
   const status = statusLabel(state);
   const visibleChecks = useMemo(
     () => (state.status === 'loaded' ? state.response.checks.slice(0, 4) : []),
     [state],
   );
+
+  useEffect(() => {
+    setState({ status: 'idle' });
+  }, [cleanedTraceId]);
 
   if (!cleanedTraceId) return null;
 
@@ -204,7 +212,10 @@ export function EvidencePacketVerificationPanel({
     if (!canVerify) return;
     setState({ status: 'loading' });
     try {
-      const response = await verifyEvidencePacket(cleanedTraceId, { fetchImpl });
+      const response = await verifyEvidencePacket(cleanedTraceId, {
+        authToken: cleanedAuthToken,
+        fetchImpl,
+      });
       setState({ status: 'loaded', response });
     } catch (error) {
       setState({
@@ -215,7 +226,11 @@ export function EvidencePacketVerificationPanel({
   };
 
   return (
-    <section style={panelStyle} aria-label="Evidence Packet verification">
+    <section
+      id="evidence-packet-verification"
+      style={panelStyle}
+      aria-label="Evidence Packet verification"
+    >
       <div style={headerStyle}>
         <div>
           <p style={eyebrowStyle}>Evidence Packet verification</p>
@@ -242,6 +257,11 @@ export function EvidencePacketVerificationPanel({
       <span style={statusPillStyle(status.tone)}>{status.label}</span>
       <p style={textStyle}>{summaryText(state)}</p>
       <p style={{ ...textStyle, ...monoStyle }}>trace_id: {cleanedTraceId}</p>
+      {!cleanedAuthToken ? (
+        <p role="note" style={textStyle}>
+          Enter the protected API token to run the authenticated POST verification.
+        </p>
+      ) : null}
 
       {visibleChecks.length > 0 ? (
         <div style={checkGridStyle} aria-label="Evidence Packet verify checks">

@@ -21,6 +21,7 @@ export interface ModelConnectionCardProps {
   endpointLabel?: string;
   statusDetail?: string;
   lastChecked?: string;
+  showSelectionDetails?: boolean;
   isAuditRunning?: boolean;
   canRunAudit?: boolean;
   onConnect?: () => void;
@@ -205,6 +206,7 @@ export function ModelConnectionCard({
   endpointLabel = 'Endpoint not set',
   statusDetail,
   lastChecked,
+  showSelectionDetails = false,
   isAuditRunning = false,
   canRunAudit = true,
   onConnect,
@@ -214,7 +216,8 @@ export function ModelConnectionCard({
 }: ModelConnectionCardProps): JSX.Element {
   const runDisabled = status !== 'connected' || isAuditRunning || !canRunAudit;
   const connectDisabled = status === 'connecting';
-  const showDetails = status !== 'disconnected' || Boolean(lastChecked);
+  const showDetails =
+    status !== 'disconnected' || Boolean(lastChecked) || showSelectionDetails;
 
   return (
     <GlassPanel
@@ -290,7 +293,7 @@ export function ModelConnectionCard({
               onClick={onConnect}
               disabled={connectDisabled}
             >
-              {status === 'connecting' ? 'Connecting...' : 'Connect model'}
+              {status === 'connecting' ? 'Connecting selected model...' : 'Connect selected model'}
             </button>
           )}
           <button
@@ -299,7 +302,7 @@ export function ModelConnectionCard({
             onClick={onRunAudit}
             disabled={runDisabled}
           >
-            {isAuditRunning ? 'Running audit...' : 'Run audit'}
+            {isAuditRunning ? 'Running CAS audit...' : 'Run CAS audit'}
           </button>
         </div>
       </div>

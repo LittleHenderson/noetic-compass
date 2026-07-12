@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
@@ -9,6 +9,7 @@ import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer
 import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
 import EvidencePacketVerificationPanel from '../components/audit/EvidencePacketVerificationPanel';
 import EvidencePacketFlightRecorderFaq from '../components/audit/EvidencePacketFlightRecorderFaq';
+import EvidencePacketActions from '../components/audit/EvidencePacketActions';
 import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
 import FleetExecutorPanel from '../components/audit/FleetExecutorPanel';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
@@ -164,8 +165,13 @@ const STAGE9_40E_PACKET_TARGET: AuditTargetConfig = {
 
 const AUDIT_STEPS: AuditStep[] = [
   {
-    label: 'Connect model',
-    detail: 'Verify the model target, API route, and license gate.',
+    label: 'Choose model',
+    detail: 'Choose the supported model target that this audit will evaluate.',
+    command: 'CHOOSE',
+  },
+  {
+    label: 'Connect key or worker',
+    detail: 'Verify the selected target and show the live-worker connection truth.',
     command: 'CONNECT',
   },
   {
@@ -174,9 +180,14 @@ const AUDIT_STEPS: AuditStep[] = [
     command: 'RUN',
   },
   {
-    label: 'Return verdict + evidence',
-    detail: 'Return ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips.',
-    command: 'VERDICT',
+    label: 'Track progress',
+    detail: 'Follow the backend lifecycle while evidence is validated and packaged.',
+    command: 'PROGRESS',
+  },
+  {
+    label: 'Result + evidence',
+    detail: 'Review the evidence-gated verdict, proof chips, and Evidence Packet actions.',
+    command: 'RESULT',
   },
 ];
 
@@ -302,21 +313,35 @@ function verdictSummaryFor(session: CasHarnessAuditSession | null): string {
 
 function commandStateFor(
   index: number,
+  hasModelChoice: boolean,
   hasTarget: boolean,
   session: CasHarnessAuditSession | null,
   isAuditRunning: boolean,
+  isTargetConnecting: boolean,
   error: string | null,
 ): CommandState {
-  if (error) return index < 2 ? 'done' : 'blocked';
-  if (index === 0) return hasTarget ? 'done' : 'active';
+  if (index === 0) return hasModelChoice ? 'done' : 'active';
   if (index === 1) {
-    if (!hasTarget) return 'waiting';
-    if (isAuditRunning) return 'active';
-    return session ? 'done' : 'ready';
+    if (!hasModelChoice) return 'waiting';
+    if (error && !hasTarget) return 'blocked';
+    if (isTargetConnecting) return 'active';
+    return hasTarget ? 'done' : 'ready';
   }
-  if (!session) return hasTarget ? 'waiting' : 'waiting';
-  if (session.verdict) return 'done';
-  return 'blocked';
+  if (index === 2) {
+    if (!hasTarget) return 'waiting';
+    if (error) return 'blocked';
+    if (!session) return isAuditRunning ? 'active' : 'ready';
+    return 'done';
+  }
+  if (index === 3) {
+    if (error) return 'blocked';
+    if (!session) return 'waiting';
+    if (session.verdict || session.status === 'COMPLETE') return 'done';
+    return 'active';
+  }
+  if (!session) return 'waiting';
+  if (error) return 'blocked';
+  return session.verdict || session.status === 'COMPLETE' ? 'done' : 'waiting';
 }
 
 function commandStatusLabel(state: CommandState): string {
@@ -726,6 +751,34 @@ const fleetNoticeStyle: CSSProperties = {
   lineHeight: 1.45,
 };
 
+const advancedDetailsStyle: CSSProperties = {
+  marginTop: 20,
+  border: `1px solid ${COLORS.borderSubtle}`,
+  borderRadius: 8,
+  background: 'rgba(2, 6, 23, 0.34)',
+};
+
+const advancedSummaryStyle: CSSProperties = {
+  padding: '13px 16px',
+  color: COLORS.textSecondary,
+  cursor: 'pointer',
+  fontFamily: FONT_FAMILY,
+  fontSize: 13,
+  fontWeight: 800,
+};
+
+const advancedStackStyle: CSSProperties = {
+  display: 'grid',
+  gap: 18,
+  padding: '2px 16px 16px',
+};
+
+const savedPacketActionsStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 8,
+};
+
 const verdictStackStyle: CSSProperties = {
   display: 'grid',
   gap: 16,
@@ -784,6 +837,10 @@ function AuditScopeBanner({ scope }: { scope: CasHarnessAuditScope }) {
 
 export default function AuditConsolePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const requestedModel = searchParams.get('model');
+  const requestedTraceId = searchParams.get('trace')?.trim() ?? '';
+  const queryTarget = requestedModel === 'pythia-160m' ? M1_REFERENCE_TARGET : null;
   const [target, setTarget] = useState<AuditTargetConfig | null>(null);
   const [session, setSession] = useState<CasHarnessAuditSession | null>(null);
   const [sessionError, setSessionError] = useState<string | null>(null);
@@ -833,21 +890,25 @@ export default function AuditConsolePage() {
   }, []);
 
   const isConfigured = target !== null;
+  const hasModelChoice = Boolean(target ?? queryTarget);
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
   const activeError = targetError ?? sessionError;
   const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning || isTargetConnecting, activeError);
   const commandButtonEnabled =
     !isAuditRunning && !isTargetConnecting && (!isConfigured || !session?.verdict);
-  const commandButtonLabel = !isConfigured
+  const commandButtonLabel = !hasModelChoice
+    ? 'Choose a model'
+    : !isConfigured
     ? isTargetConnecting
-      ? 'Connecting target'
-      : 'Prepare target'
+      ? 'Connecting selected model...'
+      : 'Connect selected model'
     : isAuditRunning
-      ? 'Running audit'
+      ? 'Running CAS audit...'
       : session?.verdict
         ? 'Verdict ready'
         : 'Run CAS audit';
   const showVerdictExplainer = Boolean(session?.verdict || session?.verifier_decision);
+  const visibleEvidenceTraceId = session?.evidence_packet_trace_id ?? requestedTraceId;
   const liveWorkerChip = useMemo(
     () => liveWorkerChipView(liveWorkerHealth),
     [liveWorkerHealth],
@@ -980,6 +1041,10 @@ export default function AuditConsolePage() {
   };
 
   const runPrimaryCommand = () => {
+    if (!hasModelChoice) {
+      navigate('/model-config');
+      return;
+    }
     if (!isConfigured) {
       void connectReferenceTarget();
       return;
@@ -1283,15 +1348,18 @@ export default function AuditConsolePage() {
                     ? 'connected'
                     : 'disconnected'
             }
-            modelName={target?.modelId ?? 'No model connected'}
-            provider={target?.provider ?? 'License/API connector pending'}
-            endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
+            modelName={target?.modelId ?? queryTarget?.modelId ?? 'No model selected'}
+            provider={target?.provider ?? queryTarget?.provider ?? 'Choose a supported model first'}
+            endpointLabel={target?.endpointLabel ?? queryTarget?.endpointLabel ?? 'Configure in Model'}
+            showSelectionDetails={Boolean(target ?? queryTarget)}
             statusDetail={
               targetError
                 ? targetError
                 : isConfigured
                   ? target.statusDetail
-                  : 'Connect a supported target before running a CAS Harness audit.'
+                  : queryTarget
+                    ? 'Pythia-160M selected. Connect it before running a CAS Harness audit.'
+                    : 'Choose a supported target before connecting or running an audit.'
             }
             lastChecked={
               session
@@ -1302,7 +1370,7 @@ export default function AuditConsolePage() {
             }
             isAuditRunning={isAuditRunning}
             canRunAudit={Boolean(target?.canRunAudit)}
-            onConnect={connectReferenceTarget}
+            onConnect={hasModelChoice ? connectReferenceTarget : () => navigate('/model-config')}
             onDisconnect={disconnectTarget}
             onRunAudit={runAudit}
           />
@@ -1313,11 +1381,11 @@ export default function AuditConsolePage() {
             <div>
               <h2 style={commandTitleStyle}>Audit command center</h2>
               <AuditPopover
-                briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
+                briefing="The launch path stays linear: choose a model, connect the target, run CAS, track progress, then review the evidence-gated result."
                 placement="bottom"
                 width={340}
             >
-              <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
+              <p style={commandSubtitleStyle}>Choose. Connect. Run. Track. Review.</p>
             </AuditPopover>
           </div>
           <div style={commandActionsStyle}>
@@ -1335,22 +1403,6 @@ export default function AuditConsolePage() {
               <span style={liveWorkerDotStyle(liveWorkerChip.accent)} aria-hidden="true" />
               {liveWorkerChip.label}
             </span>
-            <button
-              type="button"
-              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-              onClick={loadStage940EPacketTarget}
-              disabled={isAuditRunning || isTargetConnecting}
-            >
-              Load 20B validation packet
-            </button>
-            <button
-              type="button"
-              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-              onClick={loadS7F28PacketTarget}
-              disabled={isAuditRunning || isTargetConnecting}
-            >
-              Load 20B review packet
-            </button>
             <input
               type="password"
               aria-label="Bring your own provider API key (optional)"
@@ -1386,13 +1438,20 @@ export default function AuditConsolePage() {
             {AUDIT_STEPS.map((step, index) => {
               const state = commandStateFor(
                 index,
+                hasModelChoice,
                 isConfigured,
                 session,
                 isAuditRunning,
-                sessionError,
+                isTargetConnecting,
+                activeError,
               );
               return (
-                <article key={step.label} style={stepStyle(state)}>
+                <article
+                  key={step.label}
+                  style={stepStyle(state)}
+                  data-launch-step={step.command.toLowerCase()}
+                  data-state={state}
+                >
                   <AuditPopover briefing={step.detail} block placement="bottom">
                     <span style={stepNumberStyle}>{index + 1}</span>
                     <h2 style={stepLabelStyle}>{step.command}</h2>
@@ -1407,8 +1466,30 @@ export default function AuditConsolePage() {
           </section>
         </section>
 
-        <div style={singleColumnStyle}>
-          <EnterpriseScalePlanCard
+        <details style={advancedDetailsStyle} data-testid="advanced-scale-fleet-tools">
+          <summary style={advancedSummaryStyle}>Advanced scale &amp; fleet tools</summary>
+          <div style={advancedStackStyle}>
+            <section aria-label="Saved packet tools" style={savedPacketActionsStyle}>
+              <button
+                type="button"
+                style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+                onClick={loadStage940EPacketTarget}
+                disabled={isAuditRunning || isTargetConnecting}
+              >
+                Load 20B validation packet
+              </button>
+              <button
+                type="button"
+                style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+                onClick={loadS7F28PacketTarget}
+                disabled={isAuditRunning || isTargetConnecting}
+              >
+                Load 20B review packet
+              </button>
+            </section>
+
+            <div style={singleColumnStyle}>
+              <EnterpriseScalePlanCard
             plan={enterprisePlan}
             selectedSize={enterprisePlanSize}
             isLoading={isEnterprisePlanLoading}
@@ -1416,11 +1497,11 @@ export default function AuditConsolePage() {
             onSelectSize={(size) => {
               void loadEnterprisePlan(size);
             }}
-          />
-        </div>
+              />
+            </div>
 
-        <div style={singleColumnStyle}>
-          <DistributedAuditRunPanel
+            <div style={singleColumnStyle}>
+              <DistributedAuditRunPanel
             audit={distributedAudit}
             isLoading={isDistributedAuditLoading}
             error={distributedAuditError}
@@ -1433,11 +1514,11 @@ export default function AuditConsolePage() {
             onMergeRun={() => {
               void mergeDistributedRun();
             }}
-          />
-        </div>
+              />
+            </div>
 
-        <div style={singleColumnStyle}>
-          <FleetExecutorPanel
+            <div style={singleColumnStyle}>
+              <FleetExecutorPanel
             registeredWorkers={fleetRegisteredWorkers}
             leasedJobs={fleetRun?.leased_jobs ?? 0}
             staleWorkers={fleetRun?.stale_workers.length ?? 0}
@@ -1584,8 +1665,10 @@ export default function AuditConsolePage() {
                 Fleet merge reason: {fleetRun.merge_reason}
               </p>
             ) : null}
-          </section>
-        </div>
+              </section>
+            </div>
+          </div>
+        </details>
 
         <div style={session ? lowerGridStyle : singleColumnStyle}>
           <AuditSessionProgress
@@ -1624,6 +1707,11 @@ export default function AuditConsolePage() {
               }
               onInspectInAtlas={session ? () => navigate('/cockpit') : undefined}
             />
+            <EvidencePacketActions
+              key={visibleEvidenceTraceId || 'no-evidence-packet'}
+              traceId={visibleEvidenceTraceId}
+              authToken={fleetAuthToken}
+            />
             {showVerdictExplainer ? (
               <AuditVerdictExplainer
                 verdict={session?.verdict ?? null}
@@ -1633,9 +1721,13 @@ export default function AuditConsolePage() {
                 lifecycleMessage={latestLifecycleMessage(session)}
               />
             ) : null}
-            {session?.evidence_packet_trace_id ? (
+            {visibleEvidenceTraceId ? (
               <>
-                <EvidencePacketVerificationPanel traceId={session.evidence_packet_trace_id} />
+                <EvidencePacketVerificationPanel
+                  key={visibleEvidenceTraceId}
+                  traceId={visibleEvidenceTraceId}
+                  authToken={fleetAuthToken}
+                />
                 <EvidencePacketFlightRecorderFaq />
               </>
             ) : null}

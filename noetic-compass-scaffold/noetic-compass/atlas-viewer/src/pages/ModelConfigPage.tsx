@@ -213,10 +213,10 @@ export default function ModelConfigPage() {
           }}
           whileTap={{ scale: 0.99 }}
           transition={SPRING_SNAPPY}
-          onClick={() => navigate('/cockpit')}
-          data-testid="enter-cockpit"
+          onClick={() => navigate(`/audit-console?model=${encodeURIComponent(selected)}`)}
+          data-testid="continue-to-audit"
         >
-          Enter cockpit
+          Choose model for CAS audit
         </motion.button>
 
         <p style={footnoteStyle}>
