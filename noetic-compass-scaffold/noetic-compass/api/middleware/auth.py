@@ -26,6 +26,8 @@ PUBLIC_PATHS = {
     # any invalid/used/expired code), and creates only a single account. Invite CREATION
     # (/accounts/invite) is deliberately NOT public — it stays behind the JWT + operator gate.
     "/accounts/invite/redeem",
+    "/accounts/bootstrap",
+    "/platform/tenants",
     "/docs",
     "/openapi.json",
     "/redoc",
@@ -66,6 +68,22 @@ def is_public_path(path: str) -> bool:
     if not settings.accounts_enabled:
         return any(path.startswith(p) for p in ACCOUNT_GATED_PUBLIC_PREFIXES)
     return False
+ACCOUNT_MODE_ALLOWED_PREFIXES = (
+    "/auth/",
+    "/accounts/",
+    "/api/cas-harness/audit/session",
+    "/api/cas-harness/audit/sessions",
+    "/evidence",
+    "/health",
+    "/notation",
+)
+
+
+def is_account_mode_allowed_path(path: str) -> bool:
+    """Customer tokens may reach only routes with an explicit tenant/account boundary."""
+    return any(path.startswith(prefix) for prefix in ACCOUNT_MODE_ALLOWED_PREFIXES)
+
+
 
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
@@ -154,6 +172,13 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
                     status_code=401,
                     content={"detail": "Account is disabled"},
                 )
+            if (
+                session.auth_epoch != account.auth_epoch
+                or session.tenant_id != account.tenant_id
+            ):
+                return JSONResponse(
+                    status_code=401, content={"detail": "Session credential is stale"}
+                )
             # Attach SERVER-DERIVED identity for the central authz dependency. Sourced from the
             # session/account records, never from the request body -- ``require_role`` reads exactly
             # these. Role comes from the live account record (authoritative now), tenant from the
@@ -164,6 +189,14 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
             request.state.session_id = session.session_id
             # Best-effort last-seen; never blocks or fails the request.
             session_store.touch_session(session.session_id)
+
+        if settings.accounts_enabled and not is_account_mode_allowed_path(
+            request.url.path
+        ):
+            return JSONResponse(
+                status_code=403,
+                content={"detail": "Route is unavailable to customer account credentials."},
+            )
 
         return await call_next(request)
 

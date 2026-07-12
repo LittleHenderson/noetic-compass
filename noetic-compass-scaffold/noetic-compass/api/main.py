@@ -39,6 +39,7 @@ from api.routes import (
     idea_atlas,
     mode7,
     notation,
+    platform_accounts,
     reproducibility,
     scenarios,
     state_ledger_status,
@@ -71,117 +72,111 @@ def _browser_managed_cors_credentials_allowed(
 
 
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    """Own one durable backend and share it across every account-mode service."""
     import logging
 
-    logger = logging.getLogger("noetic.startup")
-
-    # Fail loud in production on the default JWT secret. With debug=False a real deployment
-    # MUST set NC_JWT_SECRET; otherwise every issued token is signed with a public, known
-    # secret and is trivially forgeable. Refuse to start rather than serve a forgeable auth.
-    # (CAS Harness scoped-beta Phase 1 — see api/routes/auth.py and api/config.py.)
-    if not settings.debug and settings.jwt_secret == "change-me-in-production":
-        raise RuntimeError(
-            "Refusing to start: NC_JWT_SECRET is still the default 'change-me-in-production' "
-            "with debug=False. Set a real secret (NC_JWT_SECRET) before running in production."
-        )
-
-    # Startup: verify cas_engine is importable (non-fatal if missing)
-    try:
-        import cas_engine  # noqa: F401
-
-        logger.info("cas_engine loaded successfully")
-    except ImportError:
-        logger.warning("cas_engine not available — running without Rust scoring engine")
-
-    # Initialise database (no-op when DATABASE_URL is unset)
-    from api.db import init_db, close_db
-
-    await init_db()
-
-    # Durable state ledger: dark by default (no mirror installed) unless an operator sets
-    # NC_STATE_LEDGER_ENABLED. All logic lives in the bootstrap module; the lifespan only
-    # installs, stashes the handle for shutdown, and logs the honest serving posture.
-    from api.state_ledger_bootstrap import install_state_ledger, teardown_state_ledger
-
-    handle = install_state_ledger(settings)
-    app.state.state_ledger = handle
-    if handle is None:
-        logger.info("state ledger: dark (dict-authoritative)")
-    elif handle.read_authority:
-        logger.info("state ledger: ENABLED, LEDGER READ-AUTHORITATIVE")
-    else:
-        logger.info("state ledger: ENABLED, dual-write+shadow, dict-authoritative")
-
-    # Durable account/invite store (PAID-user security spine — account half). Dark by default
-    # (accounts_enabled off => None => /accounts/* return 503, /auth/token keeps the shared-secret
-    # mint). When enabled, build_account_store selects the SAME durable backend as the state ledger
-    # (Postgres when NC_DATABASE_URL set, else SQLite) and FAILS LOUD if no durable backend can be
-    # built — account state is durable or absent, never silently in-memory.
+    from api.db import close_db, init_db
     from api.services.accounts import build_account_store
-
-    app.state.account_store = build_account_store(settings)
-    if app.state.account_store is None:
-        logger.info("accounts: dark (shared-secret mint only)")
-    else:
-        logger.info("accounts: ENABLED, durable account store installed")
-
-    # Per-tenant usage quotas (PAID-user metering spine). Dark by default — the quota engine
-    # (api/services/quotas.py) is INERT unless NC_QUOTAS_ENABLED is set, and even when set this PR
-    # only ARMS the engine (route wiring is a separate change). Quotas are PER-ACCOUNT, so enabling
-    # them without identity is a config error: there is no tenant to meter without accounts. Fail
-    # loud rather than silently meter nothing. (Mirrors the accounts-half posture above; the engine
-    # itself imports nothing from FastAPI and is exercised only by tests/test_quotas.py here.)
-    if settings.quotas_enabled and not settings.accounts_enabled:
-        raise RuntimeError(
-            "Refusing to start: NC_QUOTAS_ENABLED=true requires NC_ACCOUNTS_ENABLED=true "
-            "(quotas are per-account)."
-        )
-    if settings.quotas_enabled:
-        logger.info("quotas: ENABLED, per-tenant monthly audit quota armed (route wiring pending)")
-    else:
-        logger.info("quotas: dark (engine inert, no metering)")
-
-    # Durable session store (PAID-user security spine — session half). Shares the accounts_enabled
-    # flag: a session is only meaningful once identity login is on. Dark by default
-    # (accounts_enabled off => None => no jti is embedded and the dispatch middleware does no session
-    # lookup, so legacy no-jti tokens flow byte-for-byte as today). When enabled, build_session_store
-    # selects the SAME durable backend as the state ledger and FAILS LOUD if no durable backend can
-    # be built — session state is durable or absent (a forgetful session store would silently log
-    # every user out on redeploy AND make a revoked session forgettable).
     from api.services.sessions import build_session_store
-
-    app.state.session_store = build_session_store(settings)
-    if app.state.session_store is None:
-        logger.info("sessions: dark (no session enforcement)")
-    else:
-        logger.info("sessions: ENABLED, durable session store installed")
-
-    # CRM lead capture: build the service from settings and stash it for the routes. Dark by
-    # default (in-memory store + null provider) unless NC_CRM_LEAD_STORE_PATH / NC_CRM_PROVIDER are
-    # set. build_crm_service fails loud for a provider we have not implemented, so a misconfigured
-    # CRM surfaces at startup rather than silently syncing nothing.
-    from api.services.crm import build_crm_service, build_public_lead_abuse_guard
-
-    app.state.crm = build_crm_service(settings)
-    app.state.crm_public_abuse_guard = build_public_lead_abuse_guard(settings)
-    _crm_store = type(app.state.crm.store).__name__
-    _crm_provider = getattr(app.state.crm.provider, "provider_name", "unknown")
-    _crm_abuse = app.state.crm_public_abuse_guard
-    logger.info(
-        "crm lead capture: store=%s provider=%s public_limit=%s/%ss",
-        _crm_store,
-        _crm_provider,
-        _crm_abuse.max_submissions,
-        _crm_abuse.window_seconds,
+    from api.services.cas_harness_audit_sessions import configure_audit_session_store
+    from api.state_ledger_bootstrap import (
+        _build_state_store,
+        install_state_ledger,
+        teardown_state_ledger,
     )
 
-    yield
+    logger = logging.getLogger("noetic.startup")
+    app.state.state_ledger = None
+    app.state.shared_state_store = None
+    app.state.account_store = None
+    app.state.session_store = None
 
-    # Shutdown: uninstall the ledger mirror (returns to dark) and close the database pool.
-    teardown_state_ledger(handle)
-    await close_db()
+    if (not settings.debug or settings.accounts_enabled) and (
+        settings.jwt_secret == "change-me-in-production"
+    ):
+        raise RuntimeError(
+            "Refusing to start: NC_JWT_SECRET is still change-me-in-production."
+        )
+    settings.validate_account_storage()
+    if settings.quotas_enabled and not settings.accounts_enabled:
+        raise RuntimeError(
+            "NC_QUOTAS_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."
+        )
+
+    handle = None
+    owned_state_store = None
+    database_started = False
+    try:
+        try:
+            import cas_engine  # noqa: F401
+
+            logger.info("cas_engine loaded successfully")
+        except ImportError:
+            logger.warning("cas_engine not available - running without Rust scoring engine")
+
+        database_started = True
+        await init_db()
+        handle = install_state_ledger(settings)
+        app.state.state_ledger = handle
+        shared_store = handle.store if handle is not None else None
+        if settings.accounts_enabled and shared_store is None:
+            owned_state_store = _build_state_store(settings)
+            shared_store = owned_state_store
+        app.state.shared_state_store = shared_store
+
+        configure_audit_session_store(
+            shared_store if settings.accounts_enabled else None
+        )
+        app.state.account_store = build_account_store(settings, store=shared_store)
+        app.state.session_store = build_session_store(settings, store=shared_store)
+        if (
+            app.state.account_store is not None
+            and not app.state.account_store.has_active_owner()
+            and not settings.account_bootstrap_secret
+        ):
+            raise RuntimeError(
+                "Account mode has no owner; set NC_ACCOUNT_BOOTSTRAP_SECRET for first startup."
+            )
+
+
+        if handle is None:
+            logger.info("state ledger: dark (dict-authoritative)")
+        elif handle.read_authority:
+            logger.info("state ledger: ENABLED, LEDGER READ-AUTHORITATIVE")
+        else:
+            logger.info("state ledger: ENABLED, dual-write shadow")
+        logger.info(
+            "accounts: %s",
+            "ENABLED" if app.state.account_store is not None else "dark",
+        )
+        logger.info(
+            "quotas: %s", "ENABLED" if settings.quotas_enabled else "dark"
+        )
+
+        from api.services.crm import build_crm_service, build_public_lead_abuse_guard
+
+        app.state.crm = build_crm_service(settings)
+        app.state.crm_public_abuse_guard = build_public_lead_abuse_guard(settings)
+        yield
+    finally:
+        # Clear wrappers before closing their shared backend so a repeated lifespan cannot reuse
+        configure_audit_session_store(None)
+        # a stale closed store after either normal shutdown or partial startup failure.
+        app.state.account_store = None
+        app.state.session_store = None
+        app.state.shared_state_store = None
+        try:
+            if handle is not None:
+                teardown_state_ledger(handle)
+            elif owned_state_store is not None:
+                owned_state_store.close()
+        finally:
+            app.state.state_ledger = None
+            if database_started:
+                await close_db()
 
 
 app = FastAPI(
@@ -193,6 +188,12 @@ app = FastAPI(
 # CORS — configured via NC_CORS_ORIGINS env var (default "*")
 # Regex matches every Vercel deployment alias (preview, team-scoped, canonical)
 # so stakeholder demos never hit "Failed to fetch" when Vercel rotates the URL.
+# Starlette wraps later additions around earlier ones. CORS is added last so direct middleware
+# 401/403/429 responses still carry browser-readable CORS headers.
+app.add_middleware(AuditLogMiddleware)
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(JWTAuthMiddleware)
+app.add_middleware(RequestIdMiddleware)
 cors_origins = _parse_cors_origins(settings.cors_origins)
 # Browser-managed credentials stay disabled for every origin. Authentication
 # uses explicit Bearer headers rather than cookies, and allow_headers below
@@ -233,6 +234,7 @@ app.add_exception_handler(PipelineStageError, pipeline_stage_error_handler)  # t
 app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(accounts.router)
+app.include_router(platform_accounts.router)
 app.include_router(assess.router)
 app.include_router(wrap.router)
 app.include_router(batch.router)

@@ -7,12 +7,11 @@ pure functions over a :class:`StateStore`, with no FastAPI/route/settings import
 :class:`QuotaExceeded` into an HTTP 429; this module only provides the read, the increment, and the
 single guarded ``consume_quota`` entry point a route will call.
 
-INERT BY DEFAULT. Nothing here runs unless ``settings.quotas_enabled`` is on (default off), and even
-then route wiring is follow-on work. With the flag off, no code path reaches these functions, no
-usage counter is ever written or read, and app behaviour is byte-for-byte unchanged. The flag and
-its startup guard ("quotas require accounts") live in ``api/config.py`` / ``api/main.py``; this
-module makes no policy decision about whether quotas are active -- it just does the arithmetic when
-asked.
+INERT BY DEFAULT. Nothing here runs unless ``settings.quotas_enabled`` is on (default off). The
+account-scoped audit run route consumes one unit per durable audit id before external execution;
+with the flag off, no counter is read or written. The flag and its startup guard ("quotas require
+accounts") live in ``api/config.py`` / ``api/main.py``; this module only performs the versioned,
+tenant-scoped arithmetic when asked.
 
 Isolation. A usage counter is a tenant-scoped :class:`LedgerRecord` exactly like an evidence
 ownership row (see ``api/services/evidence_ownership.py``). Isolation is NOT a hand-rolled tenant
@@ -275,6 +274,55 @@ def consume_quota(
     raise last_conflict
 
 
+def consume_audit_quota(
+    store: StateStore,
+    *,
+    tenant_id: str,
+    period_key: str,
+    audit_id: str,
+    limit: int,
+    source: str = _DEFAULT_SOURCE,
+) -> int:
+    """Consume once per audit id; retries and concurrent duplicate runs are idempotent."""
+    last_conflict: Optional[VersionConflict] = None
+    for _ in range(_MAX_RETRIES):
+        existing = store.get(tenant_id, USAGE_COUNTER_KIND, period_key)
+        current = 0 if existing is None else int(existing.payload.get("count", 0))
+        raw_ids = () if existing is None else existing.payload.get("audit_ids", ())
+        audit_ids = [str(value) for value in raw_ids] if isinstance(raw_ids, (list, tuple)) else []
+        if audit_id in audit_ids:
+            return current
+        if current >= limit:
+            raise QuotaExceeded(tenant_id=tenant_id, limit=limit, count=current)
+        next_ids = [*audit_ids, audit_id]
+        payload = {
+            "count": current + 1,
+            "limit": limit,
+            "period": period_key,
+            "audit_ids": next_ids,
+        }
+        if existing is None:
+            candidate = LedgerRecord.new(
+                tenant_id=tenant_id,
+                kind=USAGE_COUNTER_KIND,
+                record_id=period_key,
+                payload=payload,
+                source=source,
+            )
+            expected_version = 0
+        else:
+            candidate = existing.with_payload(payload)
+            expected_version = existing.version
+        try:
+            store.put(candidate, expected_version=expected_version)
+            return current + 1
+        except VersionConflict as conflict:
+            last_conflict = conflict
+            continue
+    assert last_conflict is not None
+    raise last_conflict
+
+
 __all__ = [
     "USAGE_COUNTER_KIND",
     "DEFAULT_AUDITS_PER_MONTH",
@@ -285,4 +333,5 @@ __all__ = [
     "get_usage",
     "increment_usage",
     "consume_quota",
+    "consume_audit_quota",
 ]

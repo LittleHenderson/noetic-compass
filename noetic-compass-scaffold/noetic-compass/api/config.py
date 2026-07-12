@@ -1,5 +1,7 @@
 """Application configuration via environment variables."""
 
+from pathlib import Path
+
 from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings
 
@@ -99,8 +101,8 @@ class Settings(BaseSettings):
         default=False,
         validation_alias=AliasChoices("NC_ACCOUNTS_ENABLED", "ACCOUNTS_ENABLED"),
     )
-    # Server-only pepper used to derive recoverable high-entropy account API credentials.
-    # Account records persist only a one-way credential hash; this value must remain stable.
+    # Server-only key for one-way HMAC hashes of client-held account API credentials.
+    # Account records never persist the bearer value; this key must remain stable across replicas.
     account_credential_pepper: str = Field(
         default="",
         validation_alias=AliasChoices(
@@ -111,6 +113,15 @@ class Settings(BaseSettings):
     account_bootstrap_secret: str = Field(
         default="",
         validation_alias=AliasChoices("NC_ACCOUNT_BOOTSTRAP_SECRET", "ACCOUNT_BOOTSTRAP_SECRET"),
+    )
+    # Separate platform authority for provisioning later customer tenants. Customer account roles
+    # never inherit this authority, and the value is accepted only in a server-side request header.
+    platform_tenant_provisioning_secret: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_PLATFORM_TENANT_PROVISIONING_SECRET",
+            "PLATFORM_TENANT_PROVISIONING_SECRET",
+        ),
     )
     accounts_bootstrap_tenant_id: str = Field(
         default="primary",
@@ -131,8 +142,8 @@ class Settings(BaseSettings):
     #   NC_QUOTAS_ENABLED=false (default) -> NO metering. The quota engine
     #     (api/services/quotas.py) is never consulted, no usage counter is ever written or read,
     #     and app behaviour is byte-for-byte the current behaviour. Engine inert.
-    #   NC_QUOTAS_ENABLED=true -> a per-tenant monthly audit quota is enforced (route wiring lands
-    #     in a SEPARATE PR; this flag only arms the engine). Quotas are PER-ACCOUNT, so this REQUIRES
+    #   NC_QUOTAS_ENABLED=true -> the audit run route enforces a per-tenant monthly quota,
+    #     idempotently keyed by audit id. Quotas are PER-ACCOUNT, so this REQUIRES
     #     accounts_enabled: enabling quotas without accounts is a config error and FAILS LOUD at
     #     startup (see api/main.py lifespan) — there is no tenant to meter without identity.
     quotas_enabled: bool = Field(
@@ -235,6 +246,60 @@ class Settings(BaseSettings):
     # Docker Compose DB credentials (used only by docker-compose.yml)
     db_user: str = "noetic"
     db_password: str = "noetic_dev"
+
+    def validate_account_storage(self) -> None:
+        """Fail loud unless account mode has an explicitly persistent shared backend."""
+        if not self.accounts_enabled:
+            return
+
+        from api.services.accounts.credentials import validate_credential_pepper
+
+        validate_credential_pepper(self.account_credential_pepper)
+        if self.jwt_algorithm != "HS256":
+            raise RuntimeError("Account mode pins NC_JWT_ALGORITHM=HS256.")
+        if len(self.jwt_secret.encode("utf-8")) < 32:
+            raise RuntimeError("Account mode requires NC_JWT_SECRET with at least 32 bytes.")
+        if self.account_bootstrap_secret and len(
+            self.account_bootstrap_secret.encode("utf-8")
+        ) < 32:
+            raise RuntimeError(
+                "NC_ACCOUNT_BOOTSTRAP_SECRET must contain at least 32 bytes when set."
+            )
+        if self.platform_tenant_provisioning_secret and len(
+            self.platform_tenant_provisioning_secret.encode("utf-8")
+        ) < 32:
+            raise RuntimeError(
+                "NC_PLATFORM_TENANT_PROVISIONING_SECRET must contain at least "
+                "32 bytes when set."
+            )
+        database_url = (self.database_url or "").strip()
+        if database_url:
+            scheme = database_url.split(":", 1)[0].lower()
+            if scheme not in {"postgres", "postgresql", "postgresql+asyncpg"}:
+                raise RuntimeError(
+                    "Account mode requires PostgreSQL or acknowledged single-host SQLite."
+                )
+            return
+
+        if not self.debug:
+            raise RuntimeError(
+                "Hosted account mode requires NC_DATABASE_URL backed by PostgreSQL."
+            )
+
+        if not self.accounts_allow_single_host_sqlite:
+            raise RuntimeError(
+                "Account mode on SQLite requires "
+                "NC_ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE=true."
+            )
+        raw_path = self.state_ledger_path.strip()
+        lowered = raw_path.lower()
+        if not raw_path or lowered == ":memory:" or "mode=memory" in lowered:
+            raise RuntimeError("Account mode refuses an in-memory SQLite ledger.")
+        if not Path(raw_path).expanduser().is_absolute():
+            raise RuntimeError(
+                "Account mode requires an absolute NC_STATE_LEDGER_PATH."
+            )
+
 
     model_config = {"env_prefix": "NC_", "env_file": ".env", "extra": "ignore"}
 

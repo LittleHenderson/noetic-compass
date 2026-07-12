@@ -36,6 +36,7 @@ from api.services.quotas import (
     DEFAULT_AUDITS_PER_MONTH,
     USAGE_COUNTER_KIND,
     QuotaExceeded,
+    consume_audit_quota,
     consume_quota,
     get_quota_limit,
     get_usage,
@@ -186,6 +187,55 @@ def test_get_quota_limit_returns_default():
     assert get_quota_limit() == DEFAULT_AUDITS_PER_MONTH
     # plan_id is accepted but ignored for now (single-allowance data model).
     assert get_quota_limit("any-plan") == DEFAULT_AUDITS_PER_MONTH
+
+
+def test_audit_quota_is_idempotent_by_audit_id(backend):
+    assert consume_audit_quota(
+        backend,
+        tenant_id="tenant-A",
+        period_key=_PERIOD,
+        audit_id="audit-1",
+        limit=2,
+    ) == 1
+    assert consume_audit_quota(
+        backend,
+        tenant_id="tenant-A",
+        period_key=_PERIOD,
+        audit_id="audit-1",
+        limit=2,
+    ) == 1
+    assert get_usage(backend, tenant_id="tenant-A", period_key=_PERIOD) == 1
+
+
+def test_audit_quota_is_tenant_isolated_and_caps_distinct_audits(backend):
+    for tenant in ("tenant-A", "tenant-B"):
+        assert consume_audit_quota(
+            backend,
+            tenant_id=tenant,
+            period_key=_PERIOD,
+            audit_id="audit-1",
+            limit=1,
+        ) == 1
+    with pytest.raises(QuotaExceeded):
+        consume_audit_quota(
+            backend,
+            tenant_id="tenant-A",
+            period_key=_PERIOD,
+            audit_id="audit-2",
+            limit=1,
+        )
+    assert get_usage(backend, tenant_id="tenant-B", period_key=_PERIOD) == 1
+
+
+def test_audit_quota_uses_independent_month_buckets(backend):
+    for period in ("audits:2026-06", "audits:2026-07"):
+        assert consume_audit_quota(
+            backend,
+            tenant_id="tenant-A",
+            period_key=period,
+            audit_id="audit-1",
+            limit=1,
+        ) == 1
 
 
 # --- VersionConflict path --------------------------------------------------

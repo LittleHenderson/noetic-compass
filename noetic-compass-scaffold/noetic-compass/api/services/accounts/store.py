@@ -13,6 +13,8 @@ persist credential hashes only; raw account credentials exist solely in the rede
 from __future__ import annotations
 
 import hashlib
+from dataclasses import replace
+from datetime import UTC, datetime
 from typing import Callable, Optional
 
 from api.services.crm.models import normalize_email
@@ -23,7 +25,15 @@ from api.services.production.state_substrate import (
 )
 
 from .invites import generate_invite_code, is_redeemable
-from .credentials import credential_matches, validate_credential_pepper
+from .credentials import (
+    CREDENTIAL_VERSION,
+    LEGACY_CREDENTIAL_VERSION,
+    SUPPORTED_CREDENTIAL_VERSIONS,
+    credential_matches,
+    hash_account_credential,
+    validate_account_credential,
+    validate_credential_pepper,
+)
 from .models import (
     ACCOUNT_EMAIL_INDEX_KIND,
     ACCOUNT_KIND,
@@ -154,12 +164,15 @@ class AccountStore:
         if not normalized:
             return None
         index = self._store.get(self._tenant, ACCOUNT_EMAIL_INDEX_KIND, _email_index_id(normalized))
-        if index is None:
+        account_id = str(index.payload.get("account_id") or "") if index is not None else ""
+        # Always perform the second keyed read. Unknown and known identities therefore have the
+        # same storage-call shape before the constant-time credential digest comparison.
+        record = self._store.get(
+            self._tenant, ACCOUNT_KIND, account_id or "acct-auth-dummy"
+        )
+        if not account_id or record is None:
             return None
-        account_id = str(index.payload.get("account_id") or "")
-        if not account_id:
-            return None
-        return self.get_account_by_id(account_id)
+        return Account.from_payload(record.payload)
 
     def authenticate_account(
         self, email_or_username: str, api_credential: str | None
@@ -170,11 +183,136 @@ class AccountStore:
         unknown or the stored record predates per-account credentials.
         """
         account = self.get_account_by_email(email_or_username)
-        if not credential_matches(account, api_credential):
+        if not credential_matches(
+            account, api_credential, pepper=self._credential_pepper
+        ):
             return None
         if account is None or not account.is_active:
             return None
+        if account.credential_version == LEGACY_CREDENTIAL_VERSION:
+            account = self._upgrade_legacy_credential(account, api_credential or "")
         return account
+
+    def _upgrade_legacy_credential(
+        self, account: Account, presented: str
+    ) -> Account:
+        """CAS-upgrade a verified v1 digest to the pepper-keyed v2 format."""
+        for _ in range(12):
+            record = self._store.get(self._tenant, ACCOUNT_KIND, account.account_id)
+            if record is None:
+                raise RuntimeError("legacy credential account disappeared during upgrade")
+            current = Account.from_payload(record.payload)
+            if current.credential_version == CREDENTIAL_VERSION:
+                if not credential_matches(
+                    current, presented, pepper=self._credential_pepper
+                ):
+                    raise RuntimeError("credential changed during legacy upgrade")
+                return current
+            if (
+                current.credential_version != LEGACY_CREDENTIAL_VERSION
+                or not credential_matches(
+                    current, presented, pepper=self._credential_pepper
+                )
+            ):
+                raise RuntimeError("legacy credential changed during upgrade")
+            now = datetime.now(UTC).isoformat()
+            upgraded = replace(
+                current,
+                credential_hash=hash_account_credential(
+                    presented, pepper=self._credential_pepper
+                ),
+                credential_version=CREDENTIAL_VERSION,
+                credential_issued_at=now,
+                auth_epoch=current.auth_epoch + 1,
+                updated_at=now,
+            )
+            try:
+                self._store.put(
+                    record.with_payload(upgraded.to_payload()),
+                    expected_version=record.version,
+                )
+                return upgraded
+            except VersionConflict:
+                continue
+        raise RuntimeError("legacy credential upgrade contention did not converge")
+
+    def has_accounts(self) -> bool:
+        return bool(self._store.list(self._tenant, ACCOUNT_KIND))
+
+    def has_active_owner(self) -> bool:
+        """Return whether account mode has an active administrative owner."""
+        return any(
+            (account := Account.from_payload(record.payload)).role == "owner"
+            and account.is_active
+            and bool(account.credential_hash)
+            and account.credential_version in SUPPORTED_CREDENTIAL_VERSIONS
+            for record in self._store.list(self._tenant, ACCOUNT_KIND)
+        )
+
+    def bootstrap_owner(
+        self,
+        *,
+        email_or_username: str,
+        tenant_id: str,
+        api_credential: str,
+        display_name: Optional[str] = None,
+    ) -> Account:
+        from .bootstrap import bootstrap_first_owner
+
+        return bootstrap_first_owner(
+            self,
+            email_or_username=email_or_username,
+            tenant_id=tenant_id,
+            api_credential=api_credential,
+            display_name=display_name,
+        )
+
+    def recover_bootstrap_owner(
+        self,
+        *,
+        email_or_username: str,
+        tenant_id: str,
+        new_credential: str,
+    ) -> Account:
+        from .bootstrap import recover_bootstrap_owner
+
+        return recover_bootstrap_owner(
+            self,
+            email_or_username=email_or_username,
+            tenant_id=tenant_id,
+            new_credential=new_credential,
+        )
+
+    def rotate_account_credential(
+        self, account_id: str, *, new_credential: str
+    ) -> Optional[Account]:
+        """Atomically hash a client-held retry-safe replacement credential."""
+        validate_account_credential(new_credential)
+        for _ in range(12):
+            record = self._store.get(self._tenant, ACCOUNT_KIND, account_id)
+            if record is None:
+                return None
+            account = Account.from_payload(record.payload)
+            now = datetime.now(UTC).isoformat()
+            updated = replace(
+                account,
+                credential_hash=hash_account_credential(
+                    new_credential, pepper=self._credential_pepper
+                ),
+                credential_version=CREDENTIAL_VERSION,
+                credential_issued_at=now,
+                auth_epoch=account.auth_epoch + 1,
+                updated_at=now,
+            )
+            try:
+                self._store.put(
+                    record.with_payload(updated.to_payload()),
+                    expected_version=record.version,
+                )
+            except VersionConflict:
+                continue
+            return updated
+        raise RuntimeError("credential rotation contention did not converge")
 
     # --- the security-critical redeem -------------------------------------
 
@@ -183,6 +321,7 @@ class AccountStore:
         *,
         code: str,
         email_or_username: str,
+        api_credential: str,
         display_name: Optional[str] = None,
     ) -> Account:
         """Crash-safe redemption: reserve the use before making an account visible."""
@@ -192,6 +331,7 @@ class AccountStore:
             self,
             code=code,
             email_or_username=email_or_username,
+            api_credential=api_credential,
             display_name=display_name,
         )
 

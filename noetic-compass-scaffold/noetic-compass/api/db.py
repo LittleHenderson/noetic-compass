@@ -33,6 +33,17 @@ engine: AsyncEngine | None = None
 async_session_factory: async_sessionmaker[AsyncSession] | None = None  # type: ignore[assignment]
 
 
+
+def _async_database_url(raw: str) -> str:
+    """Return an asyncpg SQLAlchemy URL for either common hosted Postgres form."""
+    if raw.startswith("postgresql+asyncpg://"):
+        return raw
+    if raw.startswith("postgresql://"):
+        return "postgresql+asyncpg://" + raw.removeprefix("postgresql://")
+    if raw.startswith("postgres://"):
+        return "postgresql+asyncpg://" + raw.removeprefix("postgres://")
+    return raw
+
 async def init_db() -> None:
     """Create the async engine and session factory, then run migrations.
 
@@ -55,7 +66,7 @@ async def init_db() -> None:
         return
 
     engine = create_async_engine(
-        settings.database_url,
+        _async_database_url(settings.database_url),
         pool_size=5,
         max_overflow=10,
         echo=settings.debug,

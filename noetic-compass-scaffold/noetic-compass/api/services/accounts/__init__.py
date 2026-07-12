@@ -25,33 +25,30 @@ from .models import (
     ROLE_VALUES,
 )
 from .store import AccountStore, InviteRedemptionError
+from .tenant_provisioning import (
+    TenantProvisioningError,
+    TenantProvisioningResult,
+    provision_tenant_owner,
+)
 
 
-def build_account_store(settings) -> AccountStore | None:
-    """Open the durable account store for app startup, or return ``None`` when accounts are off.
+def build_account_store(
+    settings, *, store: StateStore | None
+) -> AccountStore | None:
+    """Wrap the lifespan-owned shared persistent store when account mode is enabled.
 
-    Dark path: ``settings.accounts_enabled`` False (the default) -> return ``None``. The app
-    behaves exactly as today; ``/auth/token`` keeps the shared-secret mint, and the account routes
-    return 503 (accounts unavailable).
-
-    Enabled path: select the SAME durable backend the state ledger uses
-    (:func:`api.state_ledger_bootstrap._build_state_store` -- a ``PostgresStateStore`` when
-    ``NC_DATABASE_URL`` is set, else a single-host ``SqliteStateStore``) and wrap it in an
-    :class:`AccountStore`. Account/invite records partition the store by their own ``kind``s, so
-    they coexist with any ledger records under one backend.
-
-    Fail-loud: if accounts are enabled but the durable store cannot be built (unwritable SQLite
-    path, unreachable/misconfigured Postgres), the underlying constructor raises and that error
-    propagates -- startup fails visibly rather than silently degrading account state to memory.
-    Account state is durable or absent, never ephemeral-but-pretending.
+    This builder never opens or closes a backend. Ownership belongs to the app lifespan, which
+    passes the exact same StateStore to accounts, sessions, quotas, and evidence ownership.
     """
     if not getattr(settings, "accounts_enabled", False):
         return None
+    if store is None:
+        raise RuntimeError("Account mode requires a shared persistent StateStore.")
 
-    # Import lazily so the dark default never imports the backend selection (and its drivers).
-    from api.state_ledger_bootstrap import _build_state_store
+    from api.services.production.state_substrate import InMemoryStateStore
 
-    store: StateStore = _build_state_store(settings)
+    if isinstance(store, InMemoryStateStore):
+        raise RuntimeError("Account mode refuses the transient in-memory StateStore.")
     return AccountStore(
         store, credential_pepper=settings.account_credential_pepper
     )
@@ -66,6 +63,9 @@ __all__ = [
     "InviteCode",
     "AccountStore",
     "InviteRedemptionError",
+    "TenantProvisioningError",
+    "TenantProvisioningResult",
+    "provision_tenant_owner",
     "build_account_store",
     "generate_invite_code",
     "is_redeemable",

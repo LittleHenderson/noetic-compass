@@ -111,8 +111,17 @@ def _build_state_store(settings) -> StateStore:
     """
 
     if settings.database_url:
-        return PostgresStateStore(settings.database_url)
+        return PostgresStateStore(_postgres_state_store_dsn(settings.database_url))
     return SqliteStateStore(settings.state_ledger_path)
+
+
+def _postgres_state_store_dsn(raw: str) -> str:
+    """Normalize SQLAlchemy-style hosted URLs for psycopg without exposing the DSN."""
+    if raw.startswith("postgresql+asyncpg://"):
+        return "postgresql://" + raw.removeprefix("postgresql+asyncpg://")
+    if raw.startswith("postgres://"):
+        return "postgresql://" + raw.removeprefix("postgres://")
+    return raw
 
 
 def install_state_ledger(settings) -> StateLedgerHandle | None:

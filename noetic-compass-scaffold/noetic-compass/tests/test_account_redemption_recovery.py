@@ -17,6 +17,9 @@ BOUNDARIES = (
     "after_account_write",
     "after_invite_completion_write",
 )
+TEST_API_CREDENTIAL = "casak_0123456789abcdefghijklmnopqrstuvwxyzABCDEFG"
+WRONG_API_CREDENTIAL = "casak_ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210abcdefgh"
+
 
 
 class SimulatedCrash(RuntimeError):
@@ -40,34 +43,38 @@ def test_retry_repairs_each_crash_boundary_without_double_spend(boundary: str) -
     invite = crashing.create_invite(code=f"crash-{boundary}", max_uses=1)
     with pytest.raises(SimulatedCrash):
         crashing.redeem_invite(
-            code=invite.code, email_or_username="recover@example.com"
+            code=invite.code, email_or_username="recover@example.com", api_credential=TEST_API_CREDENTIAL
         )
 
     recovered_store = AccountStore(backend, credential_pepper=PEPPER)
     recovered = recovered_store.redeem_invite(
-        code=invite.code, email_or_username="recover@example.com"
+        code=invite.code, email_or_username="recover@example.com", api_credential=TEST_API_CREDENTIAL
     )
     repeated = recovered_store.redeem_invite(
-        code=invite.code, email_or_username="recover@example.com"
+        code=invite.code, email_or_username="recover@example.com", api_credential=TEST_API_CREDENTIAL
     )
 
     assert recovered.account_id == repeated.account_id
-    assert recovered.api_credential == repeated.api_credential
-    assert recovered.api_credential
+    assert repeated.api_credential is None
+    if boundary == "after_invite_completion_write":
+        assert recovered.api_credential is None
+    else:
+        assert recovered.api_credential == TEST_API_CREDENTIAL
+    # The client-held credential survives every response-crash boundary without reissue.
     assert recovered_store.authenticate_account(
-        "recover@example.com", recovered.api_credential
+        "recover@example.com", TEST_API_CREDENTIAL
     ) == recovered_store.get_account_by_id(recovered.account_id)
     assert recovered_store.get_invite(invite.code).uses == 1
     assert len(backend.list("accounts", ACCOUNT_KIND)) == 1
     assert len(backend.list("accounts", ACCOUNT_EMAIL_INDEX_KIND)) == 1
 
 
-def test_persistence_contains_hash_and_nonce_but_never_bearer_credential() -> None:
+def test_completed_persistence_contains_hash_but_no_nonce_or_bearer() -> None:
     backend = InMemoryStateStore()
     store = AccountStore(backend, credential_pepper=PEPPER)
     invite = store.create_invite(code="hash-only")
     account = store.redeem_invite(
-        code=invite.code, email_or_username="hash-only@example.com"
+        code=invite.code, email_or_username="hash-only@example.com", api_credential=TEST_API_CREDENTIAL
     )
 
     account_record = backend.get("accounts", ACCOUNT_KIND, account.account_id)
@@ -76,6 +83,26 @@ def test_persistence_contains_hash_and_nonce_but_never_bearer_credential() -> No
     assert "api_credential" not in account_record.payload
     assert account.api_credential not in repr(account_record.payload)
     assert account.api_credential not in repr(invite_record.payload)
+    assert "credential_nonce" not in repr(invite_record.payload)
+
+
+def test_completed_retry_requires_the_original_client_credential() -> None:
+    backend = InMemoryStateStore()
+    store = AccountStore(backend, credential_pepper=PEPPER)
+    invite = store.create_invite(code="completed-key-check")
+    store.redeem_invite(
+        code=invite.code,
+        email_or_username="completed@example.com",
+        api_credential=TEST_API_CREDENTIAL,
+    )
+
+    with pytest.raises(InviteRedemptionError) as exc:
+        store.redeem_invite(
+            code=invite.code,
+            email_or_username="completed@example.com",
+            api_credential=WRONG_API_CREDENTIAL,
+        )
+    assert exc.value.reason == "credential_mismatch"
 
 
 def test_single_use_invite_never_materializes_two_accounts_under_race() -> None:
@@ -86,7 +113,7 @@ def test_single_use_invite_never_materializes_two_accounts_under_race() -> None:
     def redeem(identity: str):
         try:
             return store.redeem_invite(
-                code=invite.code, email_or_username=identity
+                code=invite.code, email_or_username=identity, api_credential=TEST_API_CREDENTIAL
             )
         except InviteRedemptionError as exc:
             return exc.reason

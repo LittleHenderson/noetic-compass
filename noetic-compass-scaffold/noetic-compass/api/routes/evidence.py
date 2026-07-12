@@ -99,10 +99,11 @@ def _evidence_state_store(request: Request):
     ran the lifespan, or a deployment with the ledger dark, simply yields ``None`` rather than
     raising. The CALLER decides what ``None`` means; in account mode the guard fails closed (404).
     """
+    shared = getattr(request.app.state, "shared_state_store", None)
+    if shared is not None:
+        return shared
     handle = getattr(request.app.state, "state_ledger", None)
-    if handle is None:
-        return None
-    return getattr(handle, "store", None)
+    return getattr(handle, "store", None) if handle is not None else None
 
 
 def _require_evidence_access(request: Request) -> None:

@@ -28,10 +28,28 @@ from jose import jwt
 
 from api.config import settings
 from api.middleware.auth import create_token
+from api.services.accounts.credentials import (
+    CREDENTIAL_VERSION,
+    LEGACY_CREDENTIAL_VERSION,
+    legacy_hash_account_credential,
+)
 from api.services.accounts.models import ACCOUNT_KIND, INVITE_KIND, invite_code_hash
 from api.services.accounts.store import AccountStore, InviteRedemptionError
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.services.sessions import SessionStore
+
+TEST_API_CREDENTIAL = "casak_0123456789abcdefghijklmnopqrstuvwxyzABCDEFG"
+ROTATED_API_CREDENTIAL = "casak_ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210abcdefgh"
+
+
+def _install_default_test_credential(account_store: AccountStore) -> AccountStore:
+    redeem = account_store.redeem_invite
+
+    def redeem_with_default(*, api_credential: str = TEST_API_CREDENTIAL, **kwargs):
+        return redeem(api_credential=api_credential, **kwargs)
+
+    account_store.redeem_invite = redeem_with_default  # type: ignore[method-assign]
+    return account_store
 
 
 # --- store-layer fixtures --------------------------------------------------
@@ -41,9 +59,10 @@ from api.services.sessions import SessionStore
 def store(tmp_path) -> AccountStore:
     """A durable account store on a fresh per-test SQLite file."""
     backend = SqliteStateStore(tmp_path / f"{uuid.uuid4().hex}.db")
-    return AccountStore(
+    account_store = AccountStore(
         backend, credential_pepper="test-account-credential-pepper-0123456789"
     )
+    return _install_default_test_credential(account_store)
 
 
 def _future_iso(seconds: int = 3600) -> str:
@@ -224,6 +243,7 @@ def accounts_login_client(tmp_path, monkeypatch):
     acct_store = AccountStore(
         backend, credential_pepper="test-account-credential-pepper-0123456789"
     )
+    _install_default_test_credential(acct_store)
     session_store = SessionStore(backend)
 
     # debug stays True (root conftest) so _authorize_mint's open path is permitted; the account
@@ -250,6 +270,56 @@ def test_unknown_user_cannot_log_in_when_accounts_enabled(accounts_login_client)
     assert resp.json()["detail"] == "Invalid account credentials."
 
 
+def test_bootstrap_route_is_header_gated_and_recovers_first_owner(
+    accounts_login_client, monkeypatch
+):
+    client, _store, sessions = accounts_login_client
+    secret = "bootstrap-secret-at-least-thirty-two-bytes-long"
+    monkeypatch.setattr(settings, "account_bootstrap_secret", secret)
+    monkeypatch.setattr(settings, "accounts_bootstrap_tenant_id", "primary")
+    body = {
+        "email_or_username": "first-owner@example.com",
+        "api_credential": TEST_API_CREDENTIAL,
+    }
+
+    denied = client.post(
+        "/accounts/bootstrap",
+        json=body,
+        headers={"X-Account-Bootstrap-Secret": "wrong"},
+    )
+    assert denied.status_code == 401
+    created = client.post(
+        "/accounts/bootstrap",
+        json=body,
+        headers={"X-Account-Bootstrap-Secret": secret},
+    )
+    assert created.status_code == 200, created.text
+    assert created.headers["cache-control"] == "no-store"
+    assert TEST_API_CREDENTIAL not in created.text
+    assert created.json()["api_credential"] is None
+
+    token, claims = _login_token(
+        client, "first-owner@example.com", TEST_API_CREDENTIAL
+    )
+    recovered_body = dict(body, api_credential=ROTATED_API_CREDENTIAL)
+    recovered = client.post(
+        "/accounts/bootstrap",
+        json=recovered_body,
+        headers={"X-Account-Bootstrap-Secret": secret},
+    )
+    assert recovered.status_code == 200, recovered.text
+    assert ROTATED_API_CREDENTIAL not in recovered.text
+    assert sessions.get_session(claims["jti"]).is_revoked
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 401
+    assert client.post(
+        "/auth/token",
+        json={
+            "username": "first-owner@example.com",
+            "api_credential": ROTATED_API_CREDENTIAL,
+        },
+    ).status_code == 200
+
+
 def test_valid_login_binds_server_derived_claims(accounts_login_client):
     client, store, sessions = accounts_login_client
     invite = store.create_invite(code="login-good", role="member", tenant_id="tenant-L")
@@ -273,6 +343,37 @@ def test_valid_login_binds_server_derived_claims(accounts_login_client):
     assert session.is_live()
     assert session.account_id == account.account_id
     assert session.tenant_id == "tenant-L"
+
+
+def test_legacy_v1_credential_is_verified_then_atomically_upgraded(accounts_login_client):
+    _client, store, _sessions = accounts_login_client
+    invite = store.create_invite(code="legacy-upgrade", role="owner", tenant_id="tenant-old")
+    account = store.redeem_invite(
+        code=invite.code, email_or_username="legacy-owner@example.com"
+    )
+    record = store._store.get(store._tenant, ACCOUNT_KIND, account.account_id)
+    assert record is not None
+    legacy_payload = dict(record.payload)
+    legacy_payload["credential_hash"] = legacy_hash_account_credential(
+        account.api_credential
+    )
+    legacy_payload["credential_version"] = LEGACY_CREDENTIAL_VERSION
+    store._store.put(
+        record.with_payload(legacy_payload), expected_version=record.version
+    )
+
+    assert store.has_active_owner() is True
+    assert store.authenticate_account(account.email_or_username, "wrong") is None
+    still_legacy = store.get_account_by_id(account.account_id)
+    assert still_legacy.credential_version == LEGACY_CREDENTIAL_VERSION
+
+    upgraded = store.authenticate_account(
+        account.email_or_username, account.api_credential
+    )
+    assert upgraded is not None
+    assert upgraded.credential_version == CREDENTIAL_VERSION
+    assert upgraded.auth_epoch == account.auth_epoch + 1
+    assert upgraded.credential_hash != legacy_payload["credential_hash"]
 
 
 def test_disabled_account_cannot_log_in(accounts_login_client, tmp_path):
@@ -333,6 +434,7 @@ def test_redeem_route_creates_one_account_and_is_fail_closed(accounts_login_clie
         json={
             "code": invite.code,
             "email_or_username": "router@example.com",
+            "api_credential": TEST_API_CREDENTIAL,
             "role": "owner",
             "tenant_id": "attacker",
         },
@@ -346,7 +448,11 @@ def test_redeem_route_creates_one_account_and_is_fail_closed(accounts_login_clie
     # Re-redeeming a single-use code with a different identity fails closed (single 400 shape).
     bad = client.post(
         "/accounts/invite/redeem",
-        json={"code": invite.code, "email_or_username": "late@example.com"},
+        json={
+            "code": invite.code,
+            "email_or_username": "late@example.com",
+            "api_credential": TEST_API_CREDENTIAL,
+        },
     )
     assert bad.status_code == 400
 
@@ -415,6 +521,109 @@ def test_admin_revoke_blocks_target_session_next_request(accounts_login_client):
     assert client.get("/notation/grammar", headers=_auth(member_token)).status_code == 401
 
 
+def test_admin_revoke_hides_cross_tenant_session(accounts_login_client):
+    client, store, sessions = accounts_login_client
+    operator_invite = store.create_invite(
+        code="operator-cross", role="operator", tenant_id="tenant-a"
+    )
+    member_invite = store.create_invite(
+        code="member-cross", role="member", tenant_id="tenant-b"
+    )
+    operator = store.redeem_invite(
+        code=operator_invite.code, email_or_username="operator-cross@example.com"
+    )
+    member = store.redeem_invite(
+        code=member_invite.code, email_or_username="member-cross@example.com"
+    )
+    operator_token, _ = _login_token(
+        client, operator.email_or_username, operator.api_credential
+    )
+    member_token, member_claims = _login_token(
+        client, member.email_or_username, member.api_credential
+    )
+
+    denied = client.post(
+        f"/auth/sessions/{member_claims['jti']}/revoke",
+        headers=_auth(operator_token),
+    )
+    assert denied.status_code == 404
+    assert sessions.get_session(member_claims["jti"]).is_live()
+    assert client.get("/notation/grammar", headers=_auth(member_token)).status_code == 200
+
+
+def test_admin_cannot_revoke_same_tenant_owner(accounts_login_client):
+    client, store, sessions = accounts_login_client
+    admin_invite = store.create_invite(code="admin-rank", role="admin", tenant_id="tenant-rank")
+    owner_invite = store.create_invite(code="owner-rank", role="owner", tenant_id="tenant-rank")
+    admin = store.redeem_invite(
+        code=admin_invite.code, email_or_username="admin-rank@example.com"
+    )
+    owner = store.redeem_invite(
+        code=owner_invite.code, email_or_username="owner-rank@example.com"
+    )
+    admin_token, _ = _login_token(client, admin.email_or_username, admin.api_credential)
+    _owner_token, owner_claims = _login_token(
+        client, owner.email_or_username, owner.api_credential
+    )
+
+    denied = client.post(
+        f"/auth/sessions/{owner_claims['jti']}/revoke",
+        headers=_auth(admin_token),
+    )
+    assert denied.status_code == 403
+    assert sessions.get_session(owner_claims["jti"]).is_live()
+
+
+def test_auth_epoch_rejects_unrevoked_pre_rotation_session(accounts_login_client):
+    client, store, sessions = accounts_login_client
+    invite = store.create_invite(code="epoch-race", role="member", tenant_id="tenant-epoch")
+    account = store.redeem_invite(
+        code=invite.code, email_or_username="epoch@example.com"
+    )
+    token, claims = _login_token(client, account.email_or_username, account.api_credential)
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 200
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 200
+
+    rotated = store.rotate_account_credential(
+        account.account_id, new_credential=ROTATED_API_CREDENTIAL
+    )
+    assert rotated is not None and rotated.auth_epoch == account.auth_epoch + 1
+    # Simulate a session missed by a concurrent revoke scan: it is still live in the session
+    # store, but middleware must reject its stale account epoch on the very next request.
+    assert sessions.get_session(claims["jti"]).is_live()
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 401
+
+    old_login = client.post(
+        "/auth/token",
+        json={"username": account.email_or_username, "api_credential": account.api_credential},
+    )
+    assert old_login.status_code == 401
+    new_login = client.post(
+        "/auth/token",
+        json={"username": account.email_or_username, "api_credential": ROTATED_API_CREDENTIAL},
+    )
+    assert new_login.status_code == 200
+
+
+def test_self_rotation_never_echoes_secret_and_revokes_sessions(accounts_login_client):
+    client, store, sessions = accounts_login_client
+    invite = store.create_invite(code="self-rotate", role="member", tenant_id="tenant-self")
+    account = store.redeem_invite(code=invite.code, email_or_username="self@example.com")
+    token, claims = _login_token(client, account.email_or_username, account.api_credential)
+
+    response = client.post(
+        "/accounts/credential/rotate",
+        json={"api_credential": ROTATED_API_CREDENTIAL},
+        headers=_auth(token),
+    )
+    assert response.status_code == 200, response.text
+    assert response.headers["cache-control"] == "no-store"
+    assert ROTATED_API_CREDENTIAL not in response.text
+    assert response.json()["rotated"] is True
+    assert sessions.get_session(claims["jti"]).is_revoked
+    assert client.get("/notation/grammar", headers=_auth(token)).status_code == 401
+
+
 def test_disabled_account_is_rejected_on_next_request(accounts_login_client):
     client, store, _sessions = accounts_login_client
     invite = store.create_invite(code="disable-next", role="member", tenant_id="tenant-disable")
@@ -426,6 +635,33 @@ def test_disabled_account_is_rejected_on_next_request(accounts_login_client):
     blocked = client.get("/notation/grammar", headers=_auth(token))
     assert blocked.status_code == 401
     assert "disabled" in blocked.json()["detail"].lower()
+
+
+def test_account_token_is_confined_to_explicit_customer_route_allowlist(
+    accounts_login_client,
+):
+    client, store, _sessions = accounts_login_client
+    invite = store.create_invite(code="boundary", role="member", tenant_id="tenant-boundary")
+    account = store.redeem_invite(
+        code=invite.code, email_or_username="boundary@example.com"
+    )
+    token, _ = _login_token(client, account.email_or_username, account.api_credential)
+    headers = _auth(token)
+
+    assert client.get("/notation/grammar", headers=headers).status_code == 200
+    for path in (
+        "/config",
+        "/api/crm/leads",
+        "/api/validation/jobs",
+        "/api/idea-atlas/maps",
+        "/api/cas-harness/fleet/jobs",
+        "/api/cas-harness/distributed/workers",
+    ):
+        response = client.get(path, headers=headers)
+        assert response.status_code == 403, (path, response.text)
+        assert response.json()["detail"] == (
+            "Route is unavailable to customer account credentials."
+        )
 
 
 def test_invite_create_requires_account_role_not_legacy_mint_secret(accounts_login_client):
@@ -452,21 +688,30 @@ def test_invite_create_requires_account_role_not_legacy_mint_secret(accounts_log
     denied = client.post("/accounts/invite", json={"role": "member"}, headers=_auth(member_token))
     assert denied.status_code == 403
 
-    ok = client.post(
+    cross_tenant = client.post(
         "/accounts/invite",
         json={"role": "member", "tenant_id": "tenant-created"},
+        headers=_auth(operator_token),
+    )
+    assert cross_tenant.status_code == 403
+
+    ok = client.post(
+        "/accounts/invite",
+        json={"role": "member"},
         headers=_auth(operator_token),
     )
     assert ok.status_code == 200
     body = ok.json()
     assert body["code"]
     assert body["role"] == "member"
-    assert body["tenant_id"] == "tenant-created"
+    assert body["tenant_id"] == "tenant-gate"
+    assert body["expires_at"]
 
     records = store._store.list(store._tenant, INVITE_KIND)
     created_payloads = [
-        rec.payload for rec in records if rec.payload.get("tenant_id") == "tenant-created"
+        rec.payload
+        for rec in records
+        if rec.payload.get("code_hash") == invite_code_hash(body["code"])
     ]
     assert len(created_payloads) == 1
     assert "code" not in created_payloads[0]
-    assert created_payloads[0]["code_hash"] == invite_code_hash(body["code"])

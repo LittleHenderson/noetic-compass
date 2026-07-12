@@ -133,6 +133,7 @@ class Account:
     credential_hash: Optional[str] = None
     credential_version: Optional[str] = None
     credential_issued_at: Optional[str] = None
+    auth_epoch: int = 1
     # Ephemeral delivery only. Public and persistence projections omit the bearer value.
     api_credential: Optional[str] = field(default=None, repr=False, compare=False)
     created_at: str = field(default_factory=_utc_now_iso)
@@ -167,6 +168,7 @@ class Account:
                 "credential_hash": self.credential_hash,
                 "credential_version": self.credential_version,
                 "credential_issued_at": self.credential_issued_at,
+                "auth_epoch": self.auth_epoch,
             }
         )
         payload["schema_version"] = ACCOUNT_SCHEMA_VERSION
@@ -185,6 +187,7 @@ class Account:
             credential_hash=_opt_str(payload.get("credential_hash")),
             credential_version=_opt_str(payload.get("credential_version")),
             credential_issued_at=_opt_str(payload.get("credential_issued_at")),
+            auth_epoch=max(0, int(payload.get("auth_epoch", 0))),
             created_at=str(payload.get("created_at") or _utc_now_iso()),
             updated_at=str(payload.get("updated_at") or _utc_now_iso()),
         )

@@ -293,8 +293,13 @@ def tenant_iso_client(tmp_path, monkeypatch):
 def _provision_login(client, store, *, code, identity, role, tenant_id):
     """Create+redeem an invite and log in; returns the account-mode bearer headers + account."""
     invite = store.create_invite(code=code, role=role, tenant_id=tenant_id)
-    account = store.redeem_invite(code=invite.code, email_or_username=identity)
-    resp = client.post("/auth/token", json={"username": identity})
+    api_credential = "casak_0123456789abcdefghijklmnopqrstuvwxyzABCDEFG"
+    account = store.redeem_invite(
+        code=invite.code, email_or_username=identity, api_credential=api_credential
+    )
+    resp = client.post(
+        "/auth/token", json={"username": identity, "api_credential": api_credential}
+    )
     assert resp.status_code == 200, resp.text
     token = resp.json()["token"]
     return {"Authorization": f"Bearer {token}"}, account

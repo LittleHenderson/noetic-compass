@@ -1,9 +1,9 @@
 """Crash-safe invite redemption over the versioned StateStore ledger.
 
 A use is reserved on the invite record before the email index or account becomes visible. The
-reservation contains only an account credential derivation nonce and hash, never the bearer value.
-Every later write is idempotent, so retrying the same (code, identity) repairs an interrupted
-redemption without consuming a second use or minting a second credential.
+reservation persists the account's pepper-keyed credential digest for crash recovery, never the
+literal bearer. The client supplies the same credential on a retry; completed reservations verify
+it in constant time and return the public account without reissuing or recovering any secret.
 """
 
 from __future__ import annotations
@@ -18,9 +18,9 @@ from api.services.production.state_substrate import LedgerRecord, VersionConflic
 
 from .credentials import (
     CREDENTIAL_VERSION,
-    derive_account_credential,
+    credential_matches,
     hash_account_credential,
-    new_credential_nonce,
+    validate_account_credential,
 )
 from .invites import is_redeemable
 from .models import ACCOUNT_KIND, Account, InviteCode, normalize_role
@@ -37,12 +37,17 @@ def redeem_invite_crash_safe(
     *,
     code: str,
     email_or_username: str,
+    api_credential: str,
     display_name: Optional[str] = None,
 ) -> Account:
-    """Reserve an invite use first, then idempotently materialize its account."""
+    """Reserve an invite use around a client-held retry-safe account credential."""
     from .store import InviteRedemptionError
 
     normalized_email = normalize_email(email_or_username)
+    try:
+        validate_account_credential(api_credential)
+    except ValueError as exc:
+        raise InviteRedemptionError("invalid_credential") from exc
     if not normalized_email:
         raise InviteRedemptionError("invalid_identity")
     account_id = _account_id_for(code=code, normalized_email=normalized_email)
@@ -55,7 +60,9 @@ def redeem_invite_crash_safe(
         reservations = _reservations(invite_record.payload)
         reserved = reservations.get(account_id)
         if reserved is not None:
-            return _materialize(store, invite_record.record_id, reserved)
+            if reserved.get("status") == "completed":
+                return _completed_account(store, reserved, api_credential)
+            return _materialize(store, invite_record.record_id, reserved, api_credential)
 
         invite = InviteCode.from_payload(invite_record.payload)
         if not is_redeemable(invite):
@@ -64,10 +71,6 @@ def redeem_invite_crash_safe(
             raise InviteRedemptionError("email_mismatch")
 
         now = datetime.now(UTC).isoformat()
-        nonce = new_credential_nonce()
-        raw_credential = derive_account_credential(
-            pepper=store._credential_pepper, nonce=nonce
-        )
         account = Account(
             account_id=account_id,
             email_or_username=normalized_email,
@@ -75,7 +78,9 @@ def redeem_invite_crash_safe(
             tenant_id=invite.tenant_id,
             status="active",
             display_name=_clean_display_name(display_name),
-            credential_hash=hash_account_credential(raw_credential),
+            credential_hash=hash_account_credential(
+                api_credential, pepper=store._credential_pepper
+            ),
             credential_version=CREDENTIAL_VERSION,
             credential_issued_at=now,
             created_at=now,
@@ -84,7 +89,6 @@ def redeem_invite_crash_safe(
         reservation: dict[str, Any] = {
             "account_id": account_id,
             "email_or_username": normalized_email,
-            "credential_nonce": nonce,
             "account": account.to_payload(),
             "status": "reserved",
             "reserved_at": now,
@@ -107,7 +111,7 @@ def redeem_invite_crash_safe(
             continue
 
         store._fail_after("after_invite_reservation_write")
-        return _materialize(store, invite_record.record_id, reservation)
+        return _materialize(store, invite_record.record_id, reservation, api_credential)
 
     raise InviteRedemptionError("race_lost")
 
@@ -116,22 +120,19 @@ def _materialize(
     store: "AccountStore",
     invite_record_id: str,
     reservation: Mapping[str, Any],
+    api_credential: str,
 ) -> Account:
-    """Idempotently finish all writes after the durable invite reservation."""
+    """Idempotently finish writes using the caller-held credential."""
     from .store import InviteRedemptionError
 
     account_payload = reservation.get("account")
     if not isinstance(account_payload, Mapping):
         raise InviteRedemptionError("corrupt_reservation")
     account = Account.from_payload(account_payload)
-    nonce = str(reservation.get("credential_nonce") or "")
-    if not nonce:
-        raise InviteRedemptionError("corrupt_reservation")
-    raw_credential = derive_account_credential(
-        pepper=store._credential_pepper, nonce=nonce
-    )
-    if hash_account_credential(raw_credential) != account.credential_hash:
-        raise InviteRedemptionError("corrupt_reservation")
+    if not credential_matches(
+        account, api_credential, pepper=store._credential_pepper
+    ):
+        raise InviteRedemptionError("credential_mismatch")
 
     store._claim_email(account.email_or_username, account_id=account.account_id)
     store._fail_after("after_email_index_write")
@@ -157,14 +158,16 @@ def _materialize(
         account = existing
     store._fail_after("after_account_write")
 
-    _mark_complete(store, invite_record_id, account.account_id)
+    completed_here = _mark_complete(store, invite_record_id, account.account_id)
     store._fail_after("after_invite_completion_write")
-    return replace(account, api_credential=raw_credential)
+    if not completed_here:
+        return account
+    return replace(account, api_credential=api_credential)
 
 
 def _mark_complete(
     store: "AccountStore", invite_record_id: str, account_id: str
-) -> None:
+) -> bool:
     from .store import INVITE_KIND, InviteRedemptionError
 
     for _ in range(_MAX_CAS_ATTEMPTS):
@@ -176,10 +179,11 @@ def _mark_complete(
         if reserved is None:
             raise InviteRedemptionError("corrupt_reservation")
         if reserved.get("status") == "completed":
-            return
+            return False
         completed = dict(reserved)
         completed["status"] = "completed"
         completed["completed_at"] = datetime.now(UTC).isoformat()
+        completed.pop("credential_nonce", None)
         next_reservations = dict(reservations)
         next_reservations[account_id] = completed
         next_payload = dict(current.payload)
@@ -188,7 +192,7 @@ def _mark_complete(
             store._store.put(
                 current.with_payload(next_payload), expected_version=current.version
             )
-            return
+            return True
         except VersionConflict:
             continue
     raise InviteRedemptionError("race_lost")
@@ -199,6 +203,28 @@ def _reservations(payload: Mapping[str, Any]) -> dict[str, Mapping[str, Any]]:
     if not isinstance(raw, Mapping):
         return {}
     return {str(key): value for key, value in raw.items() if isinstance(value, Mapping)}
+
+
+def _completed_account(
+    store: "AccountStore",
+    reservation: Mapping[str, Any],
+    api_credential: str,
+) -> Account:
+    """Return a completed account without ever reissuing its bearer credential."""
+    from .store import InviteRedemptionError
+
+    account_payload = reservation.get("account")
+    if not isinstance(account_payload, Mapping):
+        raise InviteRedemptionError("corrupt_reservation")
+    reserved = Account.from_payload(account_payload)
+    if not credential_matches(
+        reserved, api_credential, pepper=store._credential_pepper
+    ):
+        raise InviteRedemptionError("credential_mismatch")
+    existing = store.get_account_by_id(reserved.account_id)
+    if existing is None or not _same_reserved_identity(existing, reserved):
+        raise InviteRedemptionError("corrupt_reservation")
+    return existing
 
 
 def _same_reserved_identity(existing: Account, reserved: Account) -> bool:

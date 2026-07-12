@@ -31,7 +31,7 @@ backend can be built, startup FAILS LOUD -- session state never silently falls b
 
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Optional
 
 from api.services.production.state_substrate import (
@@ -46,6 +46,9 @@ from .models import SESSION_KIND, Session, _utc_now_iso
 # ledger storage key, NOT the tenant a session grants -- that granted tenant is a payload fact
 # carried into ``request.state``. Per-customer storage partitioning is later work.
 SESSIONS_STORAGE_TENANT = "sessions"
+MAX_ACTIVE_SESSIONS_PER_ACCOUNT = 10
+REVOKE_CAS_ATTEMPTS = 5
+TOUCH_MIN_INTERVAL_SECONDS = 60
 
 
 class SessionStore:
@@ -68,6 +71,7 @@ class SessionStore:
         *,
         account_id: str,
         tenant_id: str,
+        auth_epoch: int = 0,
         role: str,
         expires_at: Optional[str] = None,
         session_id: Optional[str] = None,
@@ -85,11 +89,13 @@ class SessionStore:
         always creates rather than races. The record's ``parent_ids`` points at the account, giving
         the session the project's load-bearing object traceability for free.
         """
+        self._prune_account_sessions(account_id)
         sid = session_id or _new_session_id()
         now = _utc_now_iso()
         session = Session(
             session_id=sid,
             account_id=account_id,
+            auth_epoch=auth_epoch,
             tenant_id=tenant_id,
             role=role,
             issued_at=now,
@@ -143,32 +149,43 @@ class SessionStore:
         After a successful revoke, the NEXT request bearing this session's token is rejected at the
         dispatch chokepoint (the middleware looks the session up and sees ``revoked_at`` set).
         """
-        record = self._read_session_record(session_id)
-        if record is None:
-            return False
-        session = Session.from_payload(record.payload)
-        if session.is_revoked:
-            return True
-        revoked = Session(
-            session_id=session.session_id,
-            account_id=session.account_id,
-            tenant_id=session.tenant_id,
-            role=session.role,
-            issued_at=session.issued_at,
-            expires_at=session.expires_at,
-            revoked_at=datetime.now(UTC).isoformat(),
-            last_seen=session.last_seen,
-        )
-        try:
-            self._store.put(record.with_payload(revoked.to_payload()), expected_version=record.version)
-        except VersionConflict:
-            # A concurrent writer advanced the record between our read and our write. Re-read: if it
-            # is now revoked, the goal is met; otherwise surface the conflict honestly.
-            current = self.get_session(session_id)
-            if current is not None and current.is_revoked:
+        last_conflict: VersionConflict | None = None
+        for _attempt in range(REVOKE_CAS_ATTEMPTS):
+            record = self._read_session_record(session_id)
+            if record is None:
+                return False
+            session = Session.from_payload(record.payload)
+            if session.is_revoked:
                 return True
-            raise
-        return True
+            revoked = Session(
+                session_id=session.session_id,
+                account_id=session.account_id,
+                tenant_id=session.tenant_id,
+                role=session.role,
+                auth_epoch=session.auth_epoch,
+                issued_at=session.issued_at,
+                expires_at=session.expires_at,
+                revoked_at=datetime.now(UTC).isoformat(),
+                last_seen=session.last_seen,
+            )
+            try:
+                self._store.put(
+                    record.with_payload(revoked.to_payload()),
+                    expected_version=record.version,
+                )
+                return True
+            except VersionConflict as exc:
+                # A best-effort last-seen touch may have won. Re-read and retry the revoke rather
+                # than returning 500 while leaving a still-live targeted session behind.
+                last_conflict = exc
+                continue
+        current = self.get_session(session_id)
+        if current is None:
+            return False
+        if current.is_revoked:
+            return True
+        assert last_conflict is not None
+        raise last_conflict
 
     # --- touch (best-effort last-seen) ------------------------------------
 
@@ -188,15 +205,25 @@ class SessionStore:
             session = Session.from_payload(record.payload)
             if not session.is_live():
                 return
+            touched_at = when or _utc_now_iso()
+            try:
+                previous = datetime.fromisoformat(session.last_seen.replace("Z", "+00:00"))
+                candidate = datetime.fromisoformat(touched_at.replace("Z", "+00:00"))
+                if candidate - previous < timedelta(seconds=TOUCH_MIN_INTERVAL_SECONDS):
+                    return
+            except (AttributeError, TypeError, ValueError):
+                # Old or malformed observability metadata must not affect authentication.
+                pass
             touched = Session(
                 session_id=session.session_id,
                 account_id=session.account_id,
                 tenant_id=session.tenant_id,
                 role=session.role,
+                auth_epoch=session.auth_epoch,
                 issued_at=session.issued_at,
                 expires_at=session.expires_at,
                 revoked_at=session.revoked_at,
-                last_seen=when or _utc_now_iso(),
+                last_seen=touched_at,
             )
             self._store.put(
                 record.with_payload(touched.to_payload()), expected_version=record.version
@@ -204,6 +231,40 @@ class SessionStore:
         except Exception:
             # Swallow: last-seen is best-effort cleanup, not a correctness dependency.
             pass
+
+    def revoke_account_sessions(self, account_id: str) -> int:
+        """Revoke every live session for an account after credential compromise/reset."""
+        revoked = 0
+        for record in self._store.list(self._tenant, SESSION_KIND):
+            session = Session.from_payload(record.payload)
+            if session.account_id == account_id and session.is_live():
+                if self.revoke_session(session.session_id):
+                    revoked += 1
+        return revoked
+
+    def _prune_account_sessions(self, account_id: str) -> None:
+        """Delete inactive rows and oldest live rows so login storage stays bounded."""
+        inactive: list[LedgerRecord] = []
+        active: list[tuple[Session, LedgerRecord]] = []
+        for record in self._store.list(self._tenant, SESSION_KIND):
+            session = Session.from_payload(record.payload)
+            if session.account_id != account_id:
+                continue
+            if session.is_live():
+                active.append((session, record))
+            else:
+                inactive.append(record)
+        active.sort(key=lambda item: (item[0].issued_at, item[0].session_id))
+        overflow = max(0, len(active) - (MAX_ACTIVE_SESSIONS_PER_ACCOUNT - 1))
+        doomed = inactive + [record for _session, record in active[:overflow]]
+        for record in doomed:
+            try:
+                self._store.delete(
+                    self._tenant, SESSION_KIND, record.record_id,
+                    expected_version=record.version,
+                )
+            except VersionConflict:
+                continue
 
     # --- helpers -----------------------------------------------------------
 

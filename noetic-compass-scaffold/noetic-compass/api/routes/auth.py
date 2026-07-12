@@ -27,9 +27,10 @@ per-key verification and the debug-gated open path should be removed.
 import hmac
 
 from pydantic import BaseModel
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 
 from api.dependencies.authz import require_role
+from api.services.accounts.models import can_manage_role
 from api.middleware.auth import create_token
 
 router = APIRouter(tags=["auth"])
@@ -84,7 +85,9 @@ def _authorize_mint(request: Request, body: TokenRequest) -> None:
 
 
 @router.post("/auth/token", response_model=TokenResponse)
-async def generate_token(body: TokenRequest, request: Request) -> TokenResponse:
+async def generate_token(
+    body: TokenRequest, request: Request, response: Response
+) -> TokenResponse:
     """Issue a JWT signed with the server's secret.
 
     Two postures, selected by ``settings.accounts_enabled`` (default OFF):
@@ -94,14 +97,15 @@ async def generate_token(body: TokenRequest, request: Request) -> TokenResponse:
       is minted for the supplied username. The shared-secret/debug-open path is untouched, so the
       current internal smoke flow keeps working exactly as before.
 
-    * **accounts_enabled=True.** The Phase-1 mint lock STILL runs first (preserved unchanged as the
-      credential gate), and THEN identity is enforced against the durable account store: the
-      supplied username/email must resolve to an EXISTING, ACTIVE account, or the mint is refused
-      (401). When it resolves, the token is bound to that account's SERVER-DERIVED
+    * **accounts_enabled=True.** The deployment-global mint secret is disabled. The supplied
+      username/email and per-account credential must authenticate an EXISTING, ACTIVE account,
+      or the mint is refused (401). When it resolves, the token is bound to that account's
+      SERVER-DERIVED
       ``account_id``/``tenant_id``/``role`` -- never to anything from the request body. An unknown
       identity cannot log in; a disabled account cannot log in.
     """
     from api.config import settings
+    response.headers["Cache-Control"] = "no-store"
 
     normalized = body.username.strip() or "dashboard-user"
     if settings.accounts_enabled:
@@ -112,11 +116,6 @@ async def generate_token(body: TokenRequest, request: Request) -> TokenResponse:
     # Phase-1 mint lock: PRESERVED unchanged, and it runs in BOTH postures. With accounts off this
     # is the whole gate; with accounts on it is the outer credential gate before the identity check.
     _authorize_mint(request, body)
-
-    normalized = body.username.strip() or "dashboard-user"
-
-    if settings.accounts_enabled:
-        return _mint_for_account(request, normalized, body.api_credential)
 
     # Default posture: unchanged shared-secret mint.
     api_key = f"dashboard:{normalized.lower()}"
@@ -177,6 +176,7 @@ def _mint_for_account(
         account_id=account.account_id,
         tenant_id=account.tenant_id,
         role=account.role,
+        auth_epoch=account.auth_epoch,
         expires_at=session_expires_at,
     )
 
@@ -255,11 +255,25 @@ async def revoke_session_admin(
     request is 401. The role is read from the SERVER-SET ``request.state.role`` (never the body).
     Idempotent -- revoking an unknown or already-revoked session returns ``revoked: true``.
 
-    NOTE (Phase 3 follow-on): this revoke does not yet check that the target session belongs to the
-    caller's tenant -- per-tenant scoping of session records is part of the tenant-isolation phase.
-    Until then the gate is role-based (operator/admin/owner), which is the launch-grade posture for
-    an invite-only beta.
+    The target session and its backing account must both belong to the caller's tenant, and the
+    caller must outrank the target role. Cross-tenant ids fail as indistinguishable 404s.
     """
     store = _session_store(request)
+    target = store.get_session(session_id)
+    if target is None:
+        return LogoutResponse(revoked=True)
+    actor_tenant = str(getattr(request.state, "tenant_id", "") or "")
+    if not actor_tenant or target.tenant_id != actor_tenant:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    account_store = getattr(request.app.state, "account_store", None)
+    target_account = (
+        account_store.get_account_by_id(target.account_id)
+        if account_store is not None
+        else None
+    )
+    if target_account is None or target_account.tenant_id != actor_tenant:
+        raise HTTPException(status_code=404, detail="Session not found.")
+    if not can_manage_role(_role, target_account.role):
+        raise HTTPException(status_code=403, detail="Role escalation is not permitted.")
     store.revoke_session(session_id)
     return LogoutResponse(revoked=True)

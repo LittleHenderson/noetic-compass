@@ -25,10 +25,11 @@ Run ONLY this file:
 from __future__ import annotations
 
 import uuid
+from datetime import datetime
 from types import SimpleNamespace
 
 import pytest
-from fastapi import Request
+from fastapi import HTTPException, Request
 from fastapi.testclient import TestClient
 
 from api.config import settings
@@ -39,7 +40,11 @@ from api.middleware.auth import (
 )
 from api.routes.cas_harness_audit import _record_audit_evidence_ownership
 from api.services.accounts.store import AccountStore
-from api.services.cas_harness_audit_sessions import reset_audit_sessions_for_tests
+from api.services.cas_harness_audit_sessions import (
+    configure_audit_session_store,
+    get_session as get_audit_session,
+    reset_audit_sessions_for_tests,
+)
 from api.services.cas_harness_merged_evidence_packets import (
     reset_merged_fleet_evidence_packets_for_tests,
 )
@@ -48,6 +53,7 @@ from api.services.evidence_ownership import (
     tenant_owns_trace,
 )
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
+from api.services.quotas import USAGE_COUNTER_KIND, get_usage, monthly_period_key
 from api.services.sessions import SessionStore
 
 # An audit-session route path (the create/run/get/list family) and a representative member of every
@@ -211,20 +217,21 @@ def test_ownership_write_is_noop_in_dark_mode(backend, monkeypatch):
     assert len(backend.list("tenant-A", EVIDENCE_OWNERSHIP_KIND)) == 0
 
 
-def test_ownership_write_skips_when_no_tenant_on_state(backend, monkeypatch):
-    """Account mode + a non-jti/legacy token (no tenant_id on request.state) -> safely skipped."""
+def test_ownership_write_fails_closed_without_identity(backend, monkeypatch):
     monkeypatch.setattr(settings, "accounts_enabled", True)
     req = _fake_request(tenant_id=None, account_id=None, store=backend)
-    # Must not raise, must not write.
-    _record_audit_evidence_ownership(req, "trace-no-identity")
+    with pytest.raises(HTTPException) as exc:
+        _record_audit_evidence_ownership(req, "trace-no-identity")
+    assert exc.value.status_code == 503
     assert len(backend.list("tenant-A", EVIDENCE_OWNERSHIP_KIND)) == 0
 
 
-def test_ownership_write_skips_when_no_store(monkeypatch):
-    """Account mode + identity present but NO state ledger installed -> safely skipped (no crash)."""
+def test_ownership_write_fails_closed_without_store(monkeypatch):
     monkeypatch.setattr(settings, "accounts_enabled", True)
     req = _fake_request(tenant_id="tenant-A", account_id="acct-A", store=None)
-    _record_audit_evidence_ownership(req, "trace-no-store")  # no exception
+    with pytest.raises(HTTPException) as exc:
+        _record_audit_evidence_ownership(req, "trace-no-store")
+    assert exc.value.status_code == 503
 
 
 def test_ownership_write_records_in_account_mode(backend, monkeypatch):
@@ -279,9 +286,11 @@ def account_audit_client(tmp_path, monkeypatch):
         app.state.account_store = acct_store
         app.state.session_store = session_store
         app.state.state_ledger = SimpleNamespace(store=backend)
+        configure_audit_session_store(backend)
         try:
             yield client, acct_store, backend
         finally:
+            configure_audit_session_store(None)
             app.state.account_store = None
             app.state.session_store = None
             app.state.state_ledger = prev_ledger
@@ -291,8 +300,13 @@ def account_audit_client(tmp_path, monkeypatch):
 def _provision_login(client, store, *, code, identity, role, tenant_id):
     """Create+redeem an invite and log in; returns account-mode bearer headers + account."""
     invite = store.create_invite(code=code, role=role, tenant_id=tenant_id)
-    account = store.redeem_invite(code=invite.code, email_or_username=identity)
-    resp = client.post("/auth/token", json={"username": identity})
+    api_credential = "casak_0123456789abcdefghijklmnopqrstuvwxyzABCDEFG"
+    account = store.redeem_invite(
+        code=invite.code, email_or_username=identity, api_credential=api_credential
+    )
+    resp = client.post(
+        "/auth/token", json={"username": identity, "api_credential": api_credential}
+    )
     assert resp.status_code == 200, resp.text
     token = resp.json()["token"]
     return {"Authorization": f"Bearer {token}"}, account
@@ -403,6 +417,143 @@ def test_account_mode_run_records_ownership_for_produced_trace(
     assert tenant_owns_trace(backend, tenant_id="tenant-A", trace_id=trace_id) is True
     # And no other tenant does (isolation holds end to end).
     assert tenant_owns_trace(backend, tenant_id="tenant-B", trace_id=trace_id) is False
+    assert not backend.list("tenant-A", USAGE_COUNTER_KIND)
+
+
+def test_quota_run_is_idempotent_capped_and_tenant_isolated(
+    account_audit_client, monkeypatch
+):
+    client, store, backend = account_audit_client
+    monkeypatch.setattr(settings, "quotas_enabled", True)
+    monkeypatch.setattr("api.routes.cas_harness_audit.get_quota_limit", lambda: 1)
+    headers_a, _ = _provision_login(
+        client,
+        store,
+        code="quota-a",
+        identity="quota-a@example.com",
+        role="member",
+        tenant_id="tenant-A",
+    )
+    calls = 0
+
+    async def fake_live_worker_audit(**_kwargs):
+        nonlocal calls
+        calls += 1
+        return _fake_live_result(f"quota-trace-{calls}")
+
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.run_live_worker_audit", fake_live_worker_audit
+    )
+
+    def create(headers, prompt):
+        response = client.post(
+            _AUDIT_SESSION_PATH,
+            json={
+                "model_id": "EleutherAI/pythia-160m",
+                "audit_mode": "BALANCED",
+                "prompt": prompt,
+                "selected_modules": ["active_trace"],
+            },
+            headers=headers,
+        )
+        assert response.status_code == 200, response.text
+        return response.json()
+
+    first = create(headers_a, "first quota audit")
+    first_run = client.post(
+        f"{_AUDIT_SESSION_PATH}/{first['audit_id']}/run", headers=headers_a
+    )
+    assert first_run.status_code == 200, first_run.text
+    retry = client.post(
+        f"{_AUDIT_SESSION_PATH}/{first['audit_id']}/run", headers=headers_a
+    )
+    assert retry.status_code == 200
+    assert calls == 1
+    period = monthly_period_key(
+        datetime.fromisoformat(first["created_at"].replace("Z", "+00:00"))
+    )
+    assert get_usage(backend, tenant_id="tenant-A", period_key=period) == 1
+
+    second = create(headers_a, "second quota audit")
+    capped = client.post(
+        f"{_AUDIT_SESSION_PATH}/{second['audit_id']}/run", headers=headers_a
+    )
+    assert capped.status_code == 429
+    assert capped.json()["detail"]["code"] == "audit_quota_exceeded"
+    assert "tenant" not in capped.text.lower()
+    assert calls == 1
+
+    headers_b, _ = _provision_login(
+        client,
+        store,
+        code="quota-b",
+        identity="quota-b@example.com",
+        role="member",
+        tenant_id="tenant-B",
+    )
+    tenant_b = create(headers_b, "tenant B quota audit")
+    allowed_b = client.post(
+        f"{_AUDIT_SESSION_PATH}/{tenant_b['audit_id']}/run", headers=headers_b
+    )
+    assert allowed_b.status_code == 200, allowed_b.text
+    assert calls == 2
+    assert get_usage(backend, tenant_id="tenant-B", period_key=period) == 1
+
+
+def test_ownership_failure_marks_claimed_attempt_failed_and_releases_lease(
+    account_audit_client, monkeypatch
+):
+    client, store, _backend = account_audit_client
+    headers, account = _provision_login(
+        client,
+        store,
+        code="ownership-fail",
+        identity="ownership-fail@example.com",
+        role="member",
+        tenant_id="tenant-A",
+    )
+    calls = 0
+
+    async def fake_live_worker_audit(**_kwargs):
+        nonlocal calls
+        calls += 1
+        return _fake_live_result("trace-ownership-fail")
+
+    def fail_ownership(*_args, **_kwargs):
+        raise HTTPException(
+            status_code=503, detail="Evidence ownership persistence is unavailable."
+        )
+
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.run_live_worker_audit", fake_live_worker_audit
+    )
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit._record_audit_evidence_ownership", fail_ownership
+    )
+    created = client.post(
+        _AUDIT_SESSION_PATH,
+        json={
+            "model_id": "EleutherAI/pythia-160m",
+            "audit_mode": "BALANCED",
+            "prompt": "ownership write must fail closed",
+            "selected_modules": ["active_trace"],
+        },
+        headers=headers,
+    )
+    assert created.status_code == 200
+    audit_id = created.json()["audit_id"]
+    failed = client.post(f"{_AUDIT_SESSION_PATH}/{audit_id}/run", headers=headers)
+    assert failed.status_code == 503
+
+    record = get_audit_session(
+        audit_id, tenant_id="tenant-A", account_id=account.account_id
+    )
+    assert record is not None and record.status == "FAILED"
+    assert record.run_state is None and record.run_lease_until is None
+    retried = client.post(f"{_AUDIT_SESSION_PATH}/{audit_id}/run", headers=headers)
+    assert retried.status_code == 200
+    assert retried.json()["status"] == "FAILED"
+    assert calls == 1
 
 
 def test_account_mode_no_token_run_is_401(account_audit_client, monkeypatch):

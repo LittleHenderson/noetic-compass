@@ -26,6 +26,13 @@ def test_missing_auth_header(client):
     assert "Missing" in resp.json()["detail"]
 
 
+def test_direct_auth_error_keeps_cors_headers(client):
+    origin = "https://account-preview.vercel.app"
+    resp = client.post("/assess", json={}, headers={"Origin": origin})
+    assert resp.status_code == 401
+    assert resp.headers.get("access-control-allow-origin") in {"*", origin}
+
+
 def test_invalid_token(client):
     resp = client.post("/assess", json={}, headers={"Authorization": "Bearer invalid.token.here"})
     assert resp.status_code == 401

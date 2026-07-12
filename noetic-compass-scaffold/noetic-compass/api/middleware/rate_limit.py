@@ -71,6 +71,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         self.rpm = rpm or settings.rate_limit_rpm
         self.buckets: dict[str, TokenBucket] = {}
         self.monthly = MonthlyCounter()
+        self.sensitive_buckets: dict[str, TokenBucket] = {}
+        self.sensitive_rpm = 60
 
     def _get_bucket(self, key: str) -> TokenBucket:
         if key not in self.buckets:
@@ -81,7 +83,32 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         return self.buckets[key]
 
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
-        if is_public_path(request.url.path) or request.method == "OPTIONS":
+        if request.method == "OPTIONS":
+            return await call_next(request)
+        sensitive_public = {
+            "/auth/token",
+            "/accounts/bootstrap",
+            "/accounts/invite/redeem",
+            "/platform/tenants",
+        }
+        if request.url.path in sensitive_public:
+            client_host = request.client.host if request.client is not None else "unknown"
+            key = f"{request.url.path}:{client_host}"
+            bucket = self.sensitive_buckets.get(key)
+            if bucket is None:
+                if len(self.sensitive_buckets) >= 10_000:
+                    self.sensitive_buckets.pop(next(iter(self.sensitive_buckets)))
+                bucket = TokenBucket(
+                    rate=self.sensitive_rpm / 60.0, capacity=self.sensitive_rpm
+                )
+                self.sensitive_buckets[key] = bucket
+            if not bucket.consume():
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": "Rate limit exceeded (credential endpoint)"},
+                )
+            return await call_next(request)
+        if is_public_path(request.url.path):
             return await call_next(request)
 
         api_key = getattr(request.state, "api_key", "default")
@@ -98,7 +125,8 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         # interactive app session, not a metered external API key; keep the
         # per-minute throttle above but do not let local/stakeholder demos
         # strand the compiler UI behind the community monthly cap.
-        monthly_limit = 0 if api_key.startswith(DASHBOARD_API_KEY_PREFIX) else self.monthly_limit
+        unmetered_interactive = api_key.startswith((DASHBOARD_API_KEY_PREFIX, "account:"))
+        monthly_limit = 0 if unmetered_interactive else self.monthly_limit
         if monthly_limit > 0:
             count = self.monthly.increment(api_key)
             if count > monthly_limit:

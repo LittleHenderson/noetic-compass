@@ -26,6 +26,8 @@ from api.routes.evidence import (
     load_stage9_40e_packet_payload_for_trace,
 )
 from api.services.cas_harness_audit_sessions import (
+    AuditRunInProgress,
+    claim_run_attempt,
     attach_runner_evidence,
     create_session,
     fail_session,
@@ -44,9 +46,18 @@ from api.services.cas_harness_distributed_audits import (
     record_worker_evidence,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
-from api.services.evidence_ownership import record_evidence_ownership
+from api.services.evidence_ownership import (
+    record_evidence_ownership,
+    tenant_owns_trace,
+)
 from api.services.cas_harness_architecture_adapter import (
     ModelArchitectureDeclaration as ServiceModelArchitectureDeclaration,
+)
+from api.services.quotas import (
+    QuotaExceeded,
+    consume_audit_quota,
+    get_quota_limit,
+    monthly_period_key,
 )
 from api.services.cas_harness_probe_compatibility import (
     ProbeReadoutSpecification as ServiceProbeReadoutSpecification,
@@ -209,6 +220,19 @@ def _caller_identity(request: Request) -> tuple[str | None, str | None]:
         return None, None
     return payload.get("sub"), payload.get("api_key")
 
+def _audit_storage_scope(request: Request) -> dict[str, str]:
+    """Route kwargs selecting durable tenant+account storage only in account mode."""
+    if not settings.accounts_enabled:
+        return {}
+    tenant_id = str(getattr(request.state, "tenant_id", "") or "")
+    account_id = str(getattr(request.state, "account_id", "") or "")
+    if not tenant_id or not account_id:
+        raise HTTPException(status_code=503, detail="Audit persistence identity is unavailable.")
+    if _audit_evidence_state_store(request) is None:
+        raise HTTPException(status_code=503, detail="Audit persistence is unavailable.")
+    return {"tenant_id": tenant_id, "account_id": account_id}
+
+
 
 def _audit_evidence_state_store(request: Request):
     """Return the durable ``StateStore`` the evidence-ownership ledger lives in, or ``None``.
@@ -220,45 +244,33 @@ def _audit_evidence_state_store(request: Request):
     rather than raising. The caller decides what ``None`` means; here a missing store simply skips the
     ownership write (it never breaks an audit run).
     """
+    shared = getattr(request.app.state, "shared_state_store", None)
+    if shared is not None:
+        return shared
     handle = getattr(request.app.state, "state_ledger", None)
-    if handle is None:
-        return None
-    return getattr(handle, "store", None)
+    return getattr(handle, "store", None) if handle is not None else None
 
 
 def _record_audit_evidence_ownership(request: Request, trace_id: str | None) -> None:
-    """Record per-tenant ownership of a just-produced evidence ``trace_id`` — account mode only.
-
-    Dark default (``settings.accounts_enabled`` False): a complete no-op. No identity read, no store
-    lookup, no new failure mode — the live audit-session routes behave byte-for-byte as today.
-
-    Account mode: the audit-session routes have left the public allowlist, so the auth middleware
-    decoded the jti token and set ``request.state.tenant_id``/``account_id`` (the seam). We assert
-    that the caller's tenant owns the trace the runner just produced, so a later evidence GET/verify/
-    anchor by that tenant is admitted and another tenant's is 404'd. Guarded so an account-mode token
-    that is NOT a jti/login token (no tenant_id on state), an absent store, or a missing trace_id all
-    SAFELY skip the write rather than crash. Ownership recording must never break an audit run, so any
-    store error is logged-and-swallowed (idempotency for re-runs is handled inside
-    ``record_evidence_ownership``).
-    """
+    """Persist ownership in account mode; never report a successful run without it."""
     if not settings.accounts_enabled:
         return
-    tenant_id = getattr(request.state, "tenant_id", None)
-    account_id = getattr(request.state, "account_id", None)
+    tenant_id = str(getattr(request.state, "tenant_id", "") or "")
+    account_id = str(getattr(request.state, "account_id", "") or "")
     store = _audit_evidence_state_store(request)
-    if tenant_id and account_id and store is not None and trace_id:
-        try:
-            record_evidence_ownership(
-                store, tenant_id=tenant_id, account_id=account_id, trace_id=trace_id
-            )
-        except Exception:
-            # Ownership recording must never break an audit run; log-and-continue.
-            logger.warning(
-                "evidence ownership write failed for trace_id=%s tenant_id=%s",
-                trace_id,
-                tenant_id,
-                exc_info=True,
-            )
+    if not tenant_id or not account_id or store is None or not trace_id:
+        raise HTTPException(
+            status_code=503, detail="Evidence ownership persistence is unavailable."
+        )
+    try:
+        record_evidence_ownership(
+            store, tenant_id=tenant_id, account_id=account_id, trace_id=trace_id
+        )
+    except Exception as exc:
+        logger.error("evidence ownership write failed", exc_info=True)
+        raise HTTPException(
+            status_code=503, detail="Evidence ownership persistence failed."
+        ) from exc
 
 
 class ProvenanceChip(BaseModel):
@@ -1592,8 +1604,29 @@ async def create_audit_session(req: AuditSessionRequest, request: Request) -> Au
     owner_sub, owner_api_key = _caller_identity(request)
     payload = req.model_dump(mode="json")
     if req.evidence_packet_trace_id:
+        if settings.accounts_enabled:
+            tenant_id = str(getattr(request.state, "tenant_id", "") or "")
+            account_id = str(getattr(request.state, "account_id", "") or "")
+            store = _audit_evidence_state_store(request)
+            if not tenant_id or not account_id or store is None:
+                raise HTTPException(
+                    status_code=503, detail="Evidence ownership persistence is unavailable."
+                )
+            if req.evidence_packet_trace_id == REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID:
+                record_evidence_ownership(
+                    store,
+                    tenant_id=tenant_id,
+                    account_id=account_id,
+                    trace_id=req.evidence_packet_trace_id,
+                )
+            elif not tenant_owns_trace(
+                store, tenant_id=tenant_id, trace_id=req.evidence_packet_trace_id
+            ):
+                raise HTTPException(status_code=404, detail="trace_id not found")
         payload.update(_audit_evidence_for_trace(req.evidence_packet_trace_id))
-    record = create_session(payload, owner_sub=owner_sub, owner_api_key=owner_api_key)
+    record = create_session(
+        payload, owner_sub=owner_sub, owner_api_key=owner_api_key, **_audit_storage_scope(request)
+    )
     return AuditSessionResponse.model_validate(record.to_dict())
 
 
@@ -1605,7 +1638,9 @@ async def get_audit_session_status(audit_id: str, request: Request) -> AuditSess
     another caller's session reads as 404, never disclosed.
     """
     owner_sub, owner_api_key = _caller_identity(request)
-    record = get_session(audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key)
+    record = get_session(
+        audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key, **_audit_storage_scope(request)
+    )
     if record is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
     return AuditSessionResponse.model_validate(record.to_dict())
@@ -1634,9 +1669,68 @@ async def run_audit_session(
     # mode (the default) the write is a complete no-op. Wired at the RUN point (not at create_session)
     # because the trace is produced HERE by attach_runner_evidence(...); create_session only attaches a
     # pre-existing evidence_packet_trace_id supplied by the caller and produces no new trace to own.
-    existing = get_session(audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key)
+    storage_scope = _audit_storage_scope(request)
+    existing = get_session(
+        audit_id, owner_sub=owner_sub, owner_api_key=owner_api_key, **storage_scope
+    )
     if existing is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
+    if settings.accounts_enabled:
+        tenant_id = str(getattr(request.state, "tenant_id", "") or "")
+        store = _audit_evidence_state_store(request)
+        if not tenant_id or store is None:
+            raise HTTPException(
+                status_code=503, detail="Evidence ownership persistence is unavailable."
+            )
+        if existing.evidence_packet_trace_id and not tenant_owns_trace(
+            store, tenant_id=tenant_id, trace_id=existing.evidence_packet_trace_id
+        ):
+            raise HTTPException(status_code=404, detail="trace_id not found")
+    if settings.quotas_enabled:
+        tenant_id = str(getattr(request.state, "tenant_id", "") or "")
+        store = _audit_evidence_state_store(request)
+        if not tenant_id or store is None:
+            raise HTTPException(status_code=503, detail="Quota persistence is unavailable.")
+        try:
+            created_at = datetime.fromisoformat(
+                str(existing.created_at).replace("Z", "+00:00")
+            )
+            period = monthly_period_key(created_at)
+            consume_audit_quota(
+                store,
+                tenant_id=tenant_id,
+                period_key=period,
+                audit_id=audit_id,
+                limit=get_quota_limit(),
+            )
+        except QuotaExceeded as exc:
+            raise HTTPException(
+                status_code=429,
+                detail={
+                    "code": "audit_quota_exceeded",
+                    "limit": exc.limit,
+                    "count": exc.count,
+                    "period": period,
+                },
+            ) from exc
+
+    # A retried HTTP request after evidence attachment must never call an external model again.
+    # Quota consumption above is keyed by audit_id, so this response path is idempotent as well.
+    if existing.status == "FAILED" or existing.evidence_packet_trace_id:
+        completed = run_session(audit_id, **storage_scope)
+        if completed is None:
+            raise HTTPException(status_code=404, detail="Audit session not found")
+        return AuditSessionResponse.model_validate(completed.to_dict())
+
+    run_attempt_id: str | None = None
+    if _should_run_hosted_open_weight(existing) or _should_run_api_endpoint(existing):
+        try:
+            run_attempt_id = claim_run_attempt(audit_id, **storage_scope)
+        except AuditRunInProgress as exc:
+            raise HTTPException(status_code=409, detail="Audit run already in progress.") from exc
+        if run_attempt_id is None:
+            raise HTTPException(status_code=404, detail="Audit session not found")
+
     ephemeral_api_key = (
         req.api_key.get_secret_value() if req is not None and req.api_key is not None else None
     )
@@ -1654,23 +1748,50 @@ async def run_audit_session(
             failed = fail_session(
                 audit_id,
                 message=f"Live hosted open-weight runner failed: {exc}",
+                **storage_scope,
+                run_attempt_id=run_attempt_id,
             )
             if failed is None:
                 raise HTTPException(status_code=404, detail="Audit session not found")
             return AuditSessionResponse.model_validate(failed.to_dict())
-        attached = attach_runner_evidence(
-            audit_id,
-            evidence_packet_trace_id=live_result.trace_id,
-            proof_chips=live_result.proof_chips,
-            verifier_decision=live_result.verifier_decision,
-            audit_scope=live_result.audit_scope,
-            message=live_result.message,
-        )
+        try:
+            _record_audit_evidence_ownership(request, live_result.trace_id)
+            attached = attach_runner_evidence(
+                audit_id,
+                evidence_packet_trace_id=live_result.trace_id,
+                proof_chips=live_result.proof_chips,
+                verifier_decision=live_result.verifier_decision,
+                audit_scope=live_result.audit_scope,
+                message=live_result.message,
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
+        except HTTPException:
+            fail_session(
+                audit_id,
+                message="Live audit result persistence failed after execution.",
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
+            raise
+        except Exception as exc:
+            fail_session(
+                audit_id,
+                message="Live audit result persistence failed after execution.",
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
+            raise HTTPException(
+                status_code=503, detail="Audit result persistence is unavailable."
+            ) from exc
         if attached is None:
+            fail_session(
+                audit_id,
+                message="Live audit result could not be attached.",
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
             raise HTTPException(status_code=404, detail="Audit session not found")
-        # Account mode only: assert this tenant owns the just-produced live-trace evidence. No-op in
-        # dark mode.
-        _record_audit_evidence_ownership(request, live_result.trace_id)
     elif _should_run_api_endpoint(existing):
         prompt = existing.prompt_text or existing.scenario_text or ""
         try:
@@ -1688,25 +1809,52 @@ async def run_audit_session(
             failed = fail_session(
                 audit_id,
                 message=f"Customer-API runner failed: {exc}",
+                **storage_scope,
+                run_attempt_id=run_attempt_id,
             )
             if failed is None:
                 raise HTTPException(status_code=404, detail="Audit session not found")
             return AuditSessionResponse.model_validate(failed.to_dict())
-        attached = attach_runner_evidence(
-            audit_id,
-            evidence_packet_trace_id=api_result.trace_id,
-            proof_chips=api_result.proof_chips,
-            verifier_decision=api_result.verifier_decision,
-            audit_scope=api_result.audit_scope,
-            message=api_result.message,
-        )
+        try:
+            _record_audit_evidence_ownership(request, api_result.trace_id)
+            attached = attach_runner_evidence(
+                audit_id,
+                evidence_packet_trace_id=api_result.trace_id,
+                proof_chips=api_result.proof_chips,
+                verifier_decision=api_result.verifier_decision,
+                audit_scope=api_result.audit_scope,
+                message=api_result.message,
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
+        except HTTPException:
+            fail_session(
+                audit_id,
+                message="Customer-API result persistence failed after execution.",
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
+            raise
+        except Exception as exc:
+            fail_session(
+                audit_id,
+                message="Customer-API result persistence failed after execution.",
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
+            raise HTTPException(
+                status_code=503, detail="Audit result persistence is unavailable."
+            ) from exc
         if attached is None:
+            fail_session(
+                audit_id,
+                message="Customer-API result could not be attached.",
+                run_attempt_id=run_attempt_id,
+                **storage_scope,
+            )
             raise HTTPException(status_code=404, detail="Audit session not found")
-        # Account mode only: assert this tenant owns the just-produced customer-API evidence. No-op in
-        # dark mode.
-        _record_audit_evidence_ownership(request, api_result.trace_id)
 
-    record = run_session(audit_id)
+    record = run_session(audit_id, **storage_scope)
     if record is None:
         raise HTTPException(status_code=404, detail="Audit session not found")
     return AuditSessionResponse.model_validate(record.to_dict())
@@ -1721,9 +1869,12 @@ async def list_audit_sessions(request: Request) -> AuditSessionListResponse:
     with no identity sees only the anonymous-owned bucket, never every session.
     """
     owner_sub, owner_api_key = _caller_identity(request)
+    storage_scope = _audit_storage_scope(request)
     sessions = [
         AuditSessionResponse.model_validate(record.to_dict())
-        for record in list_sessions(owner_sub=owner_sub, owner_api_key=owner_api_key)
+        for record in list_sessions(
+            owner_sub=owner_sub, owner_api_key=owner_api_key, **storage_scope
+        )
     ]
     return AuditSessionListResponse(sessions=sessions)
 

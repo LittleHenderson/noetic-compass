@@ -28,7 +28,7 @@ from typing import Any, Mapping, Optional
 
 # Schema version stamped into the persisted payload so a future migration can tell which shape a
 # stored record was written under. Mirrors ``ACCOUNT_SCHEMA_VERSION`` in accounts/models.py.
-SESSION_SCHEMA_VERSION = "cas_sessions.session.v1"
+SESSION_SCHEMA_VERSION = "cas_sessions.session.v2"
 
 # Ledger record kind. The generic ``kind``-keyed ``ledger_records`` table holds these; no new store
 # engine or table is introduced (the StateStore is the single persistence seam).
@@ -57,6 +57,7 @@ class Session:
     account_id: str
     tenant_id: str
     role: str
+    auth_epoch: int = 0
     issued_at: str = field(default_factory=_utc_now_iso)
     expires_at: Optional[str] = None  # ISO-8601 UTC; None == no independent session expiry
     revoked_at: Optional[str] = None  # ISO-8601 UTC; set once, by logout/admin-revoke
@@ -90,6 +91,7 @@ class Session:
             "account_id": self.account_id,
             "tenant_id": self.tenant_id,
             "role": self.role,
+            "auth_epoch": self.auth_epoch,
             "issued_at": self.issued_at,
             "expires_at": self.expires_at,
             "revoked_at": self.revoked_at,
@@ -110,6 +112,7 @@ class Session:
             account_id=str(payload["account_id"]),
             tenant_id=str(payload["tenant_id"]),
             role=str(payload["role"]),
+            auth_epoch=max(0, int(payload.get("auth_epoch", 0))),
             issued_at=str(payload.get("issued_at") or _utc_now_iso()),
             expires_at=_opt_str(payload.get("expires_at")),
             revoked_at=_opt_str(payload.get("revoked_at")),
