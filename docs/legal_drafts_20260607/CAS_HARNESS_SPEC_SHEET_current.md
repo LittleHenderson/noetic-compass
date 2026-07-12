@@ -554,4 +554,18 @@ This investor-facing document is distributed only under executed NDA. Recipients
 
 ---
 
-**End of investor-facing specification. Confidential, NDA-Gated. Version CURRENT (consolidated) · 2026-06-07 · Noetic Compass / CAS Harness · Built on the Cognitive Architecture System (CAS) v7.7 · Patent-pending — US Provisional Application No. 64/037,173, filed 04/13/2026 (Utility—Provisional).**
+## 12. Maintenance & Validation Update (2026-06-30)
+
+This addendum records an engineering-maintenance pass. It **strengthens no previously validated result** and changes **no claim boundary**; every LICENSED / NOT LICENSED / OPEN status in §1–§11 stands.
+
+**Operational re-validation (engineering, not a customer-production claim).** The checked-in product branch was re-verified locally: the CAS Harness API/service layer passes its full unit-test suite (harness, auth, middleware, CORS, audit — all green), and the offline worker's readout/ablation/neuron-cover/bridge/merge suites pass. This confirms the checked-in code is internally consistent and test-green; it is **not** a hosted-production, per-customer, or `ACCEPT` claim (those remain as bounded in §1, §5.15, §9).
+
+**Maintenance fixes landed** (on an internal review branch, pending owner sign-off before merge): a stale evidence-packet-merge test was aligned to the canonical verbatim-proof-chip behavior; a deprecated scikit-learn argument was removed from the probe constructors (behavior-neutral).
+
+**Pre-launch security review.** An authorized red-team of the launch/auth surface was performed. It confirmed several defenses are correctly in place (production JWT-secret enforcement, fail-closed token minting, fail-closed audit-session owner scoping, validated model-endpoint handling, path-traversal defenses). Two low-risk hardenings were applied (credentialed-CORS restricted to an explicit origin allowlist; failed-authentication requests are now audit-logged). Additional **paid-launch-gating** items were identified and are tracked internally (authentication of the alpha's currently-public reference audit lifecycle; role-based authorization on privileged fleet/anchor operations; removal of the debug-mode token mint). These do not affect any §8 claim; per-customer production `ACCEPT` remains **NOT LICENSED** and the durability/certification bounds of §9.10–§9.11 are unchanged. Consistent with the standing disclaimer, this review is not a third-party security certification.
+
+**New analytical primitive — directional (RPM/diode) causal-necessity knockout.** A fixed-probe cross-ablation test was added to the diagnostic toolset: it ablates one CAS-typed subspace and measures a **held-fixed** second probe (no retrain), yielding a causal-*necessity* read distinct from the existing recoverability-style ablation, with a two-leg asymmetry verdict and an explicit **subsumption control** that downgrades a geometrically-confounded directional result to GREY rather than a pass. **Status: PROTOTYPE — validated on synthetic ground-truth only; NOT yet run on a real model.** Verdict ceiling `FLAG_FOR_HUMAN_REVIEW` (no `ACCEPT`); open-weight-only. It does not license "detects/prevents/removes prompt injection internally" or "proves causal control" (both remain NOT LICENSED). It complements — does not replace — the validated §5.2 subspace-ablation necessity test.
+
+---
+
+**End of investor-facing specification. Confidential, NDA-Gated. Version CURRENT (consolidated) · 2026-06-07 (maintenance addendum 2026-06-30, §12) · Noetic Compass / CAS Harness · Built on the Cognitive Architecture System (CAS) v7.7 · Patent-pending — US Provisional Application No. 64/037,173, filed 04/13/2026 (Utility—Provisional).**
