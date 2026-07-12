@@ -73,6 +73,7 @@ class AccountResponse(BaseModel):
     tenant_id: str
     status: str
     display_name: Optional[str] = None
+    api_credential: Optional[str] = None
     created_at: str
     updated_at: str
 
@@ -97,7 +98,9 @@ async def redeem_invite(body: RedeemRequest, request: Request) -> AccountRespons
             status_code=400,
             detail="Invite code could not be redeemed.",
         ) from exc
-    return AccountResponse(**account.to_dict())
+    return AccountResponse(
+        **account.to_dict(), api_credential=account.api_credential
+    )
 
 
 # --- invite creation (gated; full RBAC is a later PR) ---------------------

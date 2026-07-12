@@ -48,6 +48,14 @@ from api.services.production.state_substrate import (
 )
 
 from .invites import generate_invite_code, is_redeemable
+from .credentials import (
+    CREDENTIAL_VERSION,
+    credential_matches,
+    derive_account_credential,
+    hash_account_credential,
+    new_credential_nonce,
+    validate_credential_pepper,
+)
 from .models import (
     ACCOUNT_EMAIL_INDEX_KIND,
     ACCOUNT_KIND,
@@ -89,10 +97,17 @@ class InviteRedemptionError(Exception):
 class AccountStore:
     """Durable account/invite store over a single :class:`StateStore` backend."""
 
-    def __init__(self, store: StateStore, *, storage_tenant: str = ACCOUNTS_STORAGE_TENANT) -> None:
+    def __init__(
+        self,
+        store: StateStore,
+        *,
+        credential_pepper: str,
+        storage_tenant: str = ACCOUNTS_STORAGE_TENANT,
+    ) -> None:
         self._store = store
         # The single ledger tenant every account-domain record is keyed under.
         self._tenant = storage_tenant
+        self._credential_pepper = validate_credential_pepper(credential_pepper)
 
     # --- invites -----------------------------------------------------------
 
@@ -176,6 +191,21 @@ class AccountStore:
             return None
         return self.get_account_by_id(account_id)
 
+    def authenticate_account(
+        self, email_or_username: str, api_credential: str | None
+    ) -> Optional[Account]:
+        """Resolve and verify one account without exposing which check failed.
+
+        credential_matches performs a constant-time digest comparison even when the identity is
+        unknown or the stored record predates per-account credentials.
+        """
+        account = self.get_account_by_email(email_or_username)
+        if not credential_matches(account, api_credential):
+            return None
+        if account is None or not account.is_active:
+            return None
+        return account
+
     # --- the security-critical redeem -------------------------------------
 
     def redeem_invite(
@@ -246,6 +276,11 @@ class AccountStore:
         #    index put raise VersionConflict -> email_taken (no invite consumed). A conflict that
         #    resolves to THIS account_id is an idempotent re-entry, not a collision.
         now = datetime.now(UTC).isoformat()
+        credential_nonce = new_credential_nonce()
+        raw_credential = derive_account_credential(
+            pepper=self._credential_pepper, nonce=credential_nonce
+        )
+        credential_hash = hash_account_credential(raw_credential)
         account = Account(
             account_id=account_id,
             email_or_username=normalized_email,
@@ -253,6 +288,10 @@ class AccountStore:
             tenant_id=invite.tenant_id,        # SERVER-DERIVED granted tenant, not the request
             status="active",
             display_name=_clean_display_name(display_name),
+            credential_hash=credential_hash,
+            credential_version=CREDENTIAL_VERSION,
+            credential_issued_at=now,
+            api_credential=raw_credential,
             created_at=now,
             updated_at=now,
         )

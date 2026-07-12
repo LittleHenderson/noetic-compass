@@ -52,7 +52,9 @@ def build_account_store(settings) -> AccountStore | None:
     from api.state_ledger_bootstrap import _build_state_store
 
     store: StateStore = _build_state_store(settings)
-    return AccountStore(store)
+    return AccountStore(
+        store, credential_pepper=settings.account_credential_pepper
+    )
 
 
 __all__ = [

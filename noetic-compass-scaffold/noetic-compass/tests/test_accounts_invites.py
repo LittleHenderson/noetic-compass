@@ -41,7 +41,9 @@ from api.services.sessions import SessionStore
 def store(tmp_path) -> AccountStore:
     """A durable account store on a fresh per-test SQLite file."""
     backend = SqliteStateStore(tmp_path / f"{uuid.uuid4().hex}.db")
-    return AccountStore(backend)
+    return AccountStore(
+        backend, credential_pepper="test-account-credential-pepper-0123456789"
+    )
 
 
 def _future_iso(seconds: int = 3600) -> str:
@@ -219,7 +221,9 @@ def accounts_login_client(tmp_path, monkeypatch):
     from api.main import app
 
     backend = SqliteStateStore(tmp_path / f"{uuid.uuid4().hex}.db")
-    acct_store = AccountStore(backend)
+    acct_store = AccountStore(
+        backend, credential_pepper="test-account-credential-pepper-0123456789"
+    )
     session_store = SessionStore(backend)
 
     # debug stays True (root conftest) so _authorize_mint's open path is permitted; the account
@@ -241,9 +245,9 @@ def _decode(token: str) -> dict:
 
 def test_unknown_user_cannot_log_in_when_accounts_enabled(accounts_login_client):
     client, _store, _sessions = accounts_login_client
-    resp = client.post("/auth/token", json={"username": "ghost@example.com"})
+    resp = client.post("/auth/token", json={"username": "ghost@example.com", "api_credential": "wrong"})
     assert resp.status_code == 401
-    assert "no account" in resp.json()["detail"].lower()
+    assert resp.json()["detail"] == "Invalid account credentials."
 
 
 def test_valid_login_binds_server_derived_claims(accounts_login_client):
@@ -251,7 +255,10 @@ def test_valid_login_binds_server_derived_claims(accounts_login_client):
     invite = store.create_invite(code="login-good", role="member", tenant_id="tenant-L")
     account = store.redeem_invite(code=invite.code, email_or_username="member@example.com")
 
-    resp = client.post("/auth/token", json={"username": "member@example.com"})
+    resp = client.post(
+        "/auth/token",
+        json={"username": "member@example.com", "api_credential": account.api_credential},
+    )
     assert resp.status_code == 200
     claims = _decode(resp.json()["token"])
     # Server-derived claims, straight from the account record.
@@ -281,21 +288,25 @@ def test_disabled_account_cannot_log_in(accounts_login_client, tmp_path):
     disabled_payload["status"] = "disabled"
     backend.put(rec.with_payload(disabled_payload), expected_version=rec.version)
 
-    resp = client.post("/auth/token", json={"username": "disable-me@example.com"})
+    resp = client.post(
+        "/auth/token",
+        json={"username": "disable-me@example.com", "api_credential": account.api_credential},
+    )
     assert resp.status_code == 401
-    assert "disabled" in resp.json()["detail"].lower()
+    assert resp.json()["detail"] == "Invalid account credentials."
 
 
 def test_body_supplied_tenant_and_role_are_ignored_on_login(accounts_login_client):
     client, store, _sessions = accounts_login_client
     invite = store.create_invite(code="no-inject", role="member", tenant_id="real-tenant")
-    store.redeem_invite(code=invite.code, email_or_username="honest@example.com")
+    account = store.redeem_invite(code=invite.code, email_or_username="honest@example.com")
 
     # A client tries to smuggle elevated role + a different tenant in the body.
     resp = client.post(
         "/auth/token",
         json={
             "username": "honest@example.com",
+            "api_credential": account.api_credential,
             "role": "owner",
             "tenant_id": "attacker-tenant",
             "account_id": "acct-attacker",
@@ -343,8 +354,8 @@ def test_redeem_route_creates_one_account_and_is_fail_closed(accounts_login_clie
 # --- session enforcement + role gate --------------------------------------
 
 
-def _login_token(client: TestClient, identity: str) -> tuple[str, dict]:
-    resp = client.post("/auth/token", json={"username": identity})
+def _login_token(client: TestClient, identity: str, api_credential: str) -> tuple[str, dict]:
+    resp = client.post("/auth/token", json={"username": identity, "api_credential": api_credential})
     assert resp.status_code == 200, resp.text
     token = resp.json()["token"]
     return token, _decode(token)
@@ -366,8 +377,8 @@ def _disable_account(store: AccountStore, account_id: str) -> None:
 def test_logout_revokes_current_session_and_blocks_next_request(accounts_login_client):
     client, store, sessions = accounts_login_client
     invite = store.create_invite(code="logout-code", role="member", tenant_id="tenant-logout")
-    store.redeem_invite(code=invite.code, email_or_username="logout@example.com")
-    token, claims = _login_token(client, "logout@example.com")
+    account = store.redeem_invite(code=invite.code, email_or_username="logout@example.com")
+    token, claims = _login_token(client, "logout@example.com", account.api_credential)
 
     assert client.get("/notation/grammar", headers=_auth(token)).status_code == 200
     logout = client.post("/auth/logout", headers=_auth(token))
@@ -386,10 +397,10 @@ def test_admin_revoke_blocks_target_session_next_request(accounts_login_client):
     operator_invite = store.create_invite(
         code="operator-session", role="operator", tenant_id="tenant-r"
     )
-    store.redeem_invite(code=member_invite.code, email_or_username="member-r@example.com")
-    store.redeem_invite(code=operator_invite.code, email_or_username="operator-r@example.com")
-    member_token, member_claims = _login_token(client, "member-r@example.com")
-    operator_token, _operator_claims = _login_token(client, "operator-r@example.com")
+    member = store.redeem_invite(code=member_invite.code, email_or_username="member-r@example.com")
+    operator = store.redeem_invite(code=operator_invite.code, email_or_username="operator-r@example.com")
+    member_token, member_claims = _login_token(client, "member-r@example.com", member.api_credential)
+    operator_token, _operator_claims = _login_token(client, "operator-r@example.com", operator.api_credential)
 
     revoke = client.post(
         f"/auth/sessions/{member_claims['jti']}/revoke",
@@ -408,7 +419,7 @@ def test_disabled_account_is_rejected_on_next_request(accounts_login_client):
     client, store, _sessions = accounts_login_client
     invite = store.create_invite(code="disable-next", role="member", tenant_id="tenant-disable")
     account = store.redeem_invite(code=invite.code, email_or_username="next-disable@example.com")
-    token, _claims = _login_token(client, "next-disable@example.com")
+    token, _claims = _login_token(client, "next-disable@example.com", account.api_credential)
 
     assert client.get("/notation/grammar", headers=_auth(token)).status_code == 200
     _disable_account(store, account.account_id)
@@ -431,10 +442,12 @@ def test_invite_create_requires_account_role_not_legacy_mint_secret(accounts_log
     operator_invite = store.create_invite(
         code="operator-role", role="operator", tenant_id="tenant-gate"
     )
-    store.redeem_invite(code=member_invite.code, email_or_username="member-gate@example.com")
-    store.redeem_invite(code=operator_invite.code, email_or_username="operator-gate@example.com")
-    member_token, _member_claims = _login_token(client, "member-gate@example.com")
-    operator_token, _operator_claims = _login_token(client, "operator-gate@example.com")
+    member = store.redeem_invite(code=member_invite.code, email_or_username="member-gate@example.com")
+    operator = store.redeem_invite(
+        code=operator_invite.code, email_or_username="operator-gate@example.com"
+    )
+    member_token, _member_claims = _login_token(client, "member-gate@example.com", member.api_credential)
+    operator_token, _operator_claims = _login_token(client, "operator-gate@example.com", operator.api_credential)
 
     denied = client.post("/accounts/invite", json={"role": "member"}, headers=_auth(member_token))
     assert denied.status_code == 403

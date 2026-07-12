@@ -99,6 +99,33 @@ class Settings(BaseSettings):
         default=False,
         validation_alias=AliasChoices("NC_ACCOUNTS_ENABLED", "ACCOUNTS_ENABLED"),
     )
+    # Server-only pepper used to derive recoverable high-entropy account API credentials.
+    # Account records persist only a one-way credential hash; this value must remain stable.
+    account_credential_pepper: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_ACCOUNT_CREDENTIAL_PEPPER", "ACCOUNT_CREDENTIAL_PEPPER"
+        ),
+    )
+    # One-time hosted first-owner bootstrap secret. It is never a normal login credential.
+    account_bootstrap_secret: str = Field(
+        default="",
+        validation_alias=AliasChoices("NC_ACCOUNT_BOOTSTRAP_SECRET", "ACCOUNT_BOOTSTRAP_SECRET"),
+    )
+    accounts_bootstrap_tenant_id: str = Field(
+        default="primary",
+        validation_alias=AliasChoices(
+            "NC_ACCOUNTS_BOOTSTRAP_TENANT_ID", "ACCOUNTS_BOOTSTRAP_TENANT_ID"
+        ),
+    )
+    # SQLite account storage is single-host and requires an explicit operator acknowledgement
+    # plus an absolute path. Postgres does not require this acknowledgement.
+    accounts_allow_single_host_sqlite: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE", "ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE"
+        ),
+    )
 
     # Per-tenant usage quotas (PAID-user metering spine). Dark by default — the engine is INERT.
     #   NC_QUOTAS_ENABLED=false (default) -> NO metering. The quota engine

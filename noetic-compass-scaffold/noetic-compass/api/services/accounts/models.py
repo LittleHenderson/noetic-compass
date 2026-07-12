@@ -33,6 +33,7 @@ from typing import Any, Literal, Mapping, Optional
 # stored record was written under. Mirrors ``BILLING_SCHEMA_VERSION`` in billing.py.
 ACCOUNT_SCHEMA_VERSION = "cas_accounts.account.v1"
 INVITE_SCHEMA_VERSION = "cas_accounts.invite.v1"
+ACCOUNT_SCHEMA_VERSION = "cas_accounts.account.v2"
 
 # Ledger record kinds. The generic ``kind``-keyed ``ledger_records`` table holds these; no new
 # store engine or table is introduced (the StateStore is the single persistence seam).
@@ -50,6 +51,37 @@ ACCOUNT_EMAIL_INDEX_KIND = "account_email_index"
 Role = Literal["owner", "admin", "member", "support", "operator", "system"]
 ROLE_VALUES: tuple[Role, ...] = ("owner", "admin", "member", "support", "operator", "system")
 DEFAULT_INVITE_ROLE: Role = "member"
+
+# Explicit human-role policy. The system role is service-only and never inviteable.
+INVITABLE_ROLES: dict[str, frozenset[Role]] = {
+    "owner": frozenset({"owner", "admin", "operator", "support", "member"}),
+    "admin": frozenset({"operator", "support", "member"}),
+    "operator": frozenset({"support", "member"}),
+}
+ROLE_RANK: dict[str, int] = {
+    "member": 10,
+    "support": 20,
+    "operator": 30,
+    "admin": 40,
+    "owner": 50,
+    "system": 100,
+}
+
+
+def can_invite_role(actor_role: str, invited_role: str) -> bool:
+    """Return whether a human actor may issue an invite for the requested role."""
+    return invited_role in INVITABLE_ROLES.get(actor_role, frozenset())
+
+
+def can_manage_role(actor_role: str, target_role: str) -> bool:
+    """Return whether an actor may revoke the target role's session."""
+    if target_role == "system":
+        return False
+    if actor_role == "owner":
+        return True
+    return actor_role in {"admin", "operator"} and ROLE_RANK.get(actor_role, 0) > ROLE_RANK.get(
+        target_role, 10_000
+    )
 
 # Account lifecycle. ``active`` may log in; ``disabled`` is locked out at login (the disabled-user
 # lockout the spine acceptance gate requires).
@@ -99,6 +131,11 @@ class Account:
     tenant_id: str
     status: AccountStatus = "active"
     display_name: Optional[str] = None
+    credential_hash: Optional[str] = None
+    credential_version: Optional[str] = None
+    credential_issued_at: Optional[str] = None
+    # Ephemeral delivery only. Public and persistence projections omit the bearer value.
+    api_credential: Optional[str] = field(default=None, repr=False, compare=False)
     created_at: str = field(default_factory=_utc_now_iso)
     updated_at: str = field(default_factory=_utc_now_iso)
 
@@ -126,6 +163,13 @@ class Account:
     def to_payload(self) -> dict[str, Any]:
         """The mapping persisted in a ``kind="account"`` ledger record's ``payload``."""
         payload = self.to_dict()
+        payload.update(
+            {
+                "credential_hash": self.credential_hash,
+                "credential_version": self.credential_version,
+                "credential_issued_at": self.credential_issued_at,
+            }
+        )
         payload["schema_version"] = ACCOUNT_SCHEMA_VERSION
         return payload
 
@@ -139,6 +183,9 @@ class Account:
             tenant_id=str(payload["tenant_id"]),
             status=_coerce_account_status(payload.get("status", "active")),
             display_name=_opt_str(payload.get("display_name")),
+            credential_hash=_opt_str(payload.get("credential_hash")),
+            credential_version=_opt_str(payload.get("credential_version")),
+            credential_issued_at=_opt_str(payload.get("credential_issued_at")),
             created_at=str(payload.get("created_at") or _utc_now_iso()),
             updated_at=str(payload.get("updated_at") or _utc_now_iso()),
         )

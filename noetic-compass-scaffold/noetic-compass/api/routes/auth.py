@@ -40,6 +40,7 @@ class TokenRequest(BaseModel):
     # Phase-1 shared mint credential. Optional in the model so it can also be
     # supplied via the X-Auth-Mint-Secret header; the route enforces presence.
     mint_secret: str | None = None
+    api_credential: str | None = None
 
 
 class TokenResponse(BaseModel):
@@ -102,6 +103,12 @@ async def generate_token(body: TokenRequest, request: Request) -> TokenResponse:
     """
     from api.config import settings
 
+    normalized = body.username.strip() or "dashboard-user"
+    if settings.accounts_enabled:
+        # Account mode never accepts the deployment-global mint secret. Authentication is bound to
+        # the individual account credential issued by invite redemption or first-owner bootstrap.
+        return _mint_for_account(request, normalized, body.api_credential)
+
     # Phase-1 mint lock: PRESERVED unchanged, and it runs in BOTH postures. With accounts off this
     # is the whole gate; with accounts on it is the outer credential gate before the identity check.
     _authorize_mint(request, body)
@@ -109,7 +116,7 @@ async def generate_token(body: TokenRequest, request: Request) -> TokenResponse:
     normalized = body.username.strip() or "dashboard-user"
 
     if settings.accounts_enabled:
-        return _mint_for_account(request, normalized)
+        return _mint_for_account(request, normalized, body.api_credential)
 
     # Default posture: unchanged shared-secret mint.
     api_key = f"dashboard:{normalized.lower()}"
@@ -117,7 +124,9 @@ async def generate_token(body: TokenRequest, request: Request) -> TokenResponse:
     return TokenResponse(token=token, expires_in_minutes=settings.jwt_expiry_minutes)
 
 
-def _mint_for_account(request: Request, identity: str) -> TokenResponse:
+def _mint_for_account(
+    request: Request, identity: str, api_credential: str | None
+) -> TokenResponse:
     """Identity-login branch (accounts_enabled=True): bind the token to a real account + session.
 
     Fails closed: an identity with no account, or a disabled account, is refused with 401 -- an
@@ -143,13 +152,11 @@ def _mint_for_account(request: Request, identity: str) -> TokenResponse:
             detail="Account login is enabled but the account store is unavailable.",
         )
 
-    account = store.get_account_by_email(identity)
+    account = store.authenticate_account(identity, api_credential)
     if account is None:
-        # Unknown identity: no account exists for it. Fail closed.
-        raise HTTPException(status_code=401, detail="No account exists for the supplied identity.")
-    if not account.is_active:
-        # Disabled account: locked out at login.
-        raise HTTPException(status_code=401, detail="This account is disabled.")
+        # Unknown identity, wrong/missing credential, and disabled account deliberately share one
+        # response so the public login endpoint cannot enumerate account existence or state.
+        raise HTTPException(status_code=401, detail="Invalid account credentials.")
 
     # Open a durable session. Its id becomes the token ``jti``; its expiry mirrors the token's so a
     # session never outlives the credential it backs. The session is what the chokepoint revokes

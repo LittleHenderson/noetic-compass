@@ -268,7 +268,9 @@ def tenant_iso_client(tmp_path, monkeypatch):
     from api.main import app
 
     backend = SqliteStateStore(tmp_path / f"{uuid.uuid4().hex}.db")
-    acct_store = AccountStore(backend)
+    acct_store = AccountStore(
+        backend, credential_pepper="test-account-credential-pepper-0123456789"
+    )
     session_store = SessionStore(backend)
 
     with TestClient(app) as client:

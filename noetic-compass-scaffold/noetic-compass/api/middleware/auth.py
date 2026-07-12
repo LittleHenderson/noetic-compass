@@ -107,6 +107,7 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         request.state.user = payload.get("sub", "anonymous")
         request.state.api_key = payload.get("api_key", "default")
 
+
         # --- account-mode enforcement (session + account-status) ---------------------------------
         # A token MINTED by the identity-login path carries a ``jti`` (its session id) and the
         # SERVER-DERIVED account_id/tenant_id/role claims. ONLY such tokens get the extra checks
@@ -115,11 +116,26 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
         # which is what preserves the default-off smoke flow byte-for-byte.
         jti = payload.get("jti")
         session_store = getattr(request.app.state, "session_store", None)
-        if (
-            jti is not None
-            and settings.accounts_enabled
-            and session_store is not None
-        ):
+        account_store = getattr(request.app.state, "account_store", None)
+        if settings.accounts_enabled:
+            # Account mode is all-or-nothing. Legacy no-jti tokens and unavailable stores must
+            # never fall through as authenticated legacy callers because that bypasses revocation.
+            if jti is None:
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Account session is required"},
+                )
+            if session_store is None:
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Session verification is unavailable"},
+                )
+            if account_store is None:
+                return JSONResponse(
+                    status_code=401,
+                    content={"detail": "Account verification is unavailable"},
+                )
+
             # Session must exist and be live (not revoked, not expired). A revoked session (logout /
             # admin revoke) or an expired one fails the NEXT request here -- enforcement at the
             # chokepoint, not merely at login.
@@ -132,12 +148,6 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
             # Re-check account status so a DISABLE takes effect on the next request, even though the
             # role/tenant were copied into the session at login. A missing account store while
             # account-mode is on is an honest failure, not a silent pass.
-            account_store = getattr(request.app.state, "account_store", None)
-            if account_store is None:
-                return JSONResponse(
-                    status_code=401,
-                    content={"detail": "Account verification is unavailable"},
-                )
             account = account_store.get_account_by_id(session.account_id)
             if account is None or not account.is_active:
                 return JSONResponse(
