@@ -12,7 +12,7 @@ def reset_live_state(monkeypatch):
     atlas_live._code_opens.clear()
     monkeypatch.setattr(atlas_live.settings, "atlas_live_invite_codes", "alpha-code")
     monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_url", "https://worker.example")
-    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_token", "")
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_token", "test-worker-secret")
     monkeypatch.setattr(atlas_live.settings, "atlas_live_session_rate_limit_per_ip_hour", 3)
     monkeypatch.setattr(atlas_live.settings, "atlas_live_invite_daily_limit", 10)
 
@@ -344,6 +344,15 @@ def test_live_health_realmode_disabled_when_worker_url_unset(client, monkeypatch
 
     assert resp.status_code == 503
     assert resp.json()["detail"] == "atlas_live_disabled"
+
+
+def test_live_health_blocks_remote_worker_without_service_token(client, monkeypatch):
+    monkeypatch.setattr(atlas_live.settings, "atlas_live_worker_token", "")
+
+    resp = client.get("/atlas/live/health/realmode")
+
+    assert resp.status_code == 503
+    assert resp.json()["detail"] == "atlas_live_worker_token_required"
 
 
 def test_live_health_realmode_returns_503_when_worker_unreachable(client, monkeypatch):

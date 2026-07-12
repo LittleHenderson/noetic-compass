@@ -114,6 +114,14 @@ services:
         sync: false
       - key: NC_QWEN_API_KEY
         sync: false
+      # CAS Harness hosted worker route. Keep the URL and shared secret paired
+      # and dashboard-managed. Blank URL means disabled; a non-loopback URL without
+      # its token is blocked before the API contacts the worker. The worker serves
+      # port 8080, not the retired 8888/Jupyter port.
+      - key: ATLAS_LIVE_WORKER_URL
+        sync: false
+      - key: ATLAS_LIVE_WORKER_TOKEN
+        sync: false
 
   - type: web
     name: noetic-compass-dashboard

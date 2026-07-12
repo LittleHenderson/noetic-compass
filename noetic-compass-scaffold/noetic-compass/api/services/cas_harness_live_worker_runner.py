@@ -22,6 +22,8 @@ from typing import Any, Mapping
 
 import httpx
 
+from api.services.atlas_live_worker_config import atlas_worker_target
+
 from api.config import settings
 from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
@@ -68,10 +70,13 @@ async def run_live_worker_audit(
     selected_modules: list[str],
 ) -> LiveAuditRunnerResult:
     """Run the hosted open-weight worker once and persist the Evidence Packet."""
+    target = atlas_worker_target()
+    if not target.allowed:
+        raise LiveAuditRunnerUnavailable(
+            f"live worker configuration blocked: {target.error}"
+        )
+    worker_base = target.base_url
 
-    worker_base = settings.atlas_live_worker_url.strip().rstrip("/")
-    if not worker_base:
-        raise LiveAuditRunnerUnavailable("ATLAS_LIVE_WORKER_URL is not configured")
     if model_id not in HOSTED_OPEN_WEIGHT_MODEL_IDS:
         raise LiveAuditRunnerUnavailable(f"{model_id} is not a hosted open-weight live target")
 

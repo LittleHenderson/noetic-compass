@@ -22,6 +22,12 @@ from fastapi import APIRouter
 from pydantic import BaseModel
 
 from api.config import settings
+from api.services.atlas_live_worker_config import (
+    WORKER_CONFIG_INVALID_URL,
+    WORKER_CONFIG_NOT_CONFIGURED,
+    WORKER_CONFIG_TOKEN_REQUIRED,
+    atlas_worker_target,
+)
 
 
 router = APIRouter(prefix="/api/cas-harness/live-worker", tags=["cas_harness_live_worker"])
@@ -36,6 +42,8 @@ _LABEL_NOT_CONFIGURED = "Live worker not configured"
 _LABEL_REAL = "Live worker connected · real Pythia weights"
 _LABEL_DEMO = "Live worker reachable · demo mode (not real weights)"
 _LABEL_UNREACHABLE = "Live worker unavailable · no live audit will run"
+_LABEL_TOKEN_REQUIRED = "Live worker blocked · service token required"
+_LABEL_INVALID_URL = "Live worker blocked · invalid worker URL"
 
 
 class CasHarnessLiveWorkerHealth(BaseModel):
@@ -46,6 +54,7 @@ class CasHarnessLiveWorkerHealth(BaseModel):
     real_weights: bool
     model_id: str | None = None
     worker_version: str | None = None
+    configuration_error: str | None = None
     label: str
 
 
@@ -68,8 +77,8 @@ async def get_live_worker_health() -> CasHarnessLiveWorkerHealth:
     honestly as ``reachable: false`` rather than propagated as a client error.
     """
 
-    base = settings.atlas_live_worker_url.strip().rstrip("/")
-    if not base:
+    target = atlas_worker_target()
+    if target.error == WORKER_CONFIG_NOT_CONFIGURED:
         return CasHarnessLiveWorkerHealth(
             configured=False,
             reachable=False,
@@ -78,6 +87,22 @@ async def get_live_worker_health() -> CasHarnessLiveWorkerHealth:
             worker_version=None,
             label=_LABEL_NOT_CONFIGURED,
         )
+    if not target.allowed:
+        label = (
+            _LABEL_TOKEN_REQUIRED
+            if target.error == WORKER_CONFIG_TOKEN_REQUIRED
+            else _LABEL_INVALID_URL
+        )
+        return CasHarnessLiveWorkerHealth(
+            configured=True,
+            reachable=False,
+            real_weights=False,
+            model_id=None,
+            worker_version=None,
+            configuration_error=target.error or WORKER_CONFIG_INVALID_URL,
+            label=label,
+        )
+    base = target.base_url
 
     timeout = httpx.Timeout(_health_timeout_seconds())
     payload: dict[str, object] | None = None
