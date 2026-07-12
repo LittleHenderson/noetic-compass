@@ -1,44 +1,19 @@
-"""Durable Account + InviteCode storage over the ``StateStore`` Protocol -- the security-critical
-half of the spine.
+"""Durable account, invitation, and credential storage over the shared StateStore.
 
-Everything here persists through the SAME tenant-scoped, version-checked ledger the run/worker
-substrate uses (``api/services/production/state_substrate``). No new store engine, no new table:
-accounts are ``kind="account"`` records, invites are ``kind="invite"``, and email uniqueness is an
-auxiliary ``kind="account_email_index"`` record. The ledger's optimistic concurrency
-(``VersionConflict``) is what makes the two hard guarantees real:
+Invitation redemption is a forward-only state machine. It first reserves one use in the
+version-checked invite record, then idempotently creates the unique email index and account.
+A process crash at any write boundary is repaired by retrying the same code and identity; no
+rollback window can expose an account before its invite use is counted.
 
-* **Single redemption under a race.** ``redeem_invite`` advances the invite's use-count with
-  ``put(expected_version=<the version it read>)``. Two concurrent redeemers read the same version;
-  the store lets exactly ONE ``put`` succeed and raises ``VersionConflict`` on the other. The loser
-  fails closed (4xx). A single-use invite therefore cannot mint two accounts, even under
-  simultaneous requests.
-* **Email uniqueness.** A new account also writes an ``account_email_index`` record at
-  ``expected_version=0``. If the email is already taken, that create raises ``VersionConflict`` --
-  two accounts can never share one normalized email.
-
-Storage tenant vs granted tenant (deliberate, and important):
-The ledger requires a ``tenant_id`` on every read/write. Account-domain records (invite, account,
-email index) are stored under ONE fixed *storage* tenant (``self._tenant``), so an invite is
-resolvable by its code alone -- the redeemer presents only a code, never a tenant. The tenant a
-redeemed account is *granted* (the ``tenant_id`` it carries into its token claims) is a server-side
-fact taken from the invite, stored in the account PAYLOAD, and surfaced as a claim. Per-customer
-tenant *partitioning* of these records (a real ``tenant_id`` as the storage key) is a later PR;
-until then the records are durable and live under one accounts tenant. This is honest: the records
-are durable and tenant-scoped at the storage layer; the granted-tenant value is just not yet the
-storage key.
-
-App wiring: the durable store is opened once at app startup (``api/main.py`` lifespan) using the
-same backend selection as the state ledger (``_build_state_store`` -- Postgres when
-``NC_DATABASE_URL`` is set, else SQLite) and stashed on ``app.state.account_store``. When
-``accounts_enabled`` is True but no durable backend can be built, startup FAILS LOUD -- account
-state never silently falls back to memory.
+All account-domain records use one internal storage tenant so an invitation can be resolved by
+code alone. The granted tenant remains a server-derived account payload field. Account records
+persist credential hashes only; raw account credentials exist solely in the redemption response.
 """
 
 from __future__ import annotations
 
 import hashlib
-from datetime import UTC, datetime
-from typing import Optional
+from typing import Callable, Optional
 
 from api.services.crm.models import normalize_email
 from api.services.production.state_substrate import (
@@ -48,14 +23,7 @@ from api.services.production.state_substrate import (
 )
 
 from .invites import generate_invite_code, is_redeemable
-from .credentials import (
-    CREDENTIAL_VERSION,
-    credential_matches,
-    derive_account_credential,
-    hash_account_credential,
-    new_credential_nonce,
-    validate_credential_pepper,
-)
+from .credentials import credential_matches, validate_credential_pepper
 from .models import (
     ACCOUNT_EMAIL_INDEX_KIND,
     ACCOUNT_KIND,
@@ -103,11 +71,13 @@ class AccountStore:
         *,
         credential_pepper: str,
         storage_tenant: str = ACCOUNTS_STORAGE_TENANT,
+        failure_injector: Optional[Callable[[str], None]] = None,
     ) -> None:
         self._store = store
         # The single ledger tenant every account-domain record is keyed under.
         self._tenant = storage_tenant
         self._credential_pepper = validate_credential_pepper(credential_pepper)
+        self._failure_injector = failure_injector
 
     # --- invites -----------------------------------------------------------
 
@@ -215,138 +185,22 @@ class AccountStore:
         email_or_username: str,
         display_name: Optional[str] = None,
     ) -> Account:
-        """Redeem an invite into EXACTLY ONE account, atomically and fail-closed.
+        """Crash-safe redemption: reserve the use before making an account visible."""
+        from .redemption import redeem_invite_crash_safe
 
-        Fail-closed contract -- any of these rejects with :class:`InviteRedemptionError` and
-        creates NOTHING:
-
-        * the code does not exist (``unknown_code``),
-        * the code is expired or has no uses left (``not_redeemable``),
-        * the invite pins a ``target_email`` and the supplied identity does not match it
-          (``email_mismatch``),
-        * the supplied identity is blank (``invalid_identity``),
-        * the email already belongs to a different account (``email_taken``),
-        * a concurrent redeem won the use-count race (``race_lost``).
-
-        Atomicity -- two mechanisms, both backed by the ledger's optimistic concurrency:
-
-        1. The account's ``account_id`` is DERIVED DETERMINISTICALLY from ``(code, normalized
-           email)``, and the account is created before the invite use-count is advanced. So two
-           concurrent redeems of the same code for the same identity converge on the *same* account
-           -- a re-delivery returns the existing account, never a second one.
-        2. The use-count is advanced with ``put(expected_version=<version read>)``. Under a race
-           the store admits exactly one such ``put`` and raises ``VersionConflict`` on the rest, so
-           a single-use invite cannot be spent twice. The loser fails closed.
-
-        SERVER-DERIVED claims: the returned account's ``role``/``tenant_id`` come from the INVITE
-        record, and ``account_id`` is server-computed. None of these are read from caller input --
-        a client cannot smuggle a role or tenant through this call.
-        """
-        normalized_email = normalize_email(email_or_username)
-        if not normalized_email:
-            raise InviteRedemptionError("invalid_identity")
-
-        # 1. Resolve the invite. ``None`` -> unknown code (fail closed, no mutation).
-        invite_record = self._read_invite_record(code)
-        if invite_record is None:
-            raise InviteRedemptionError("unknown_code")
-        invite = InviteCode.from_payload(invite_record.payload)
-        version_seen = invite_record.version
-
-        # 2. Idempotent re-delivery check FIRST. The account id is deterministic in (code,email), so
-        #    if this exact redemption already produced an account, return it -- even for a now-
-        #    exhausted single-use invite, because the use it would consume was ALREADY consumed by
-        #    that prior redemption. Checking this before the redeemability gate is what makes a
-        #    re-delivery converge on ONE account rather than tripping ``not_redeemable``.
-        account_id = _account_id_for(code=code, normalized_email=normalized_email)
-        existing = self.get_account_by_id(account_id)
-        if existing is not None:
-            return existing
-
-        # 3. Usability checks (pure; no mutation on failure). Reached only for a genuinely NEW
-        #    (code,email) redemption.
-        if not is_redeemable(invite):
-            raise InviteRedemptionError("not_redeemable")
-        if invite.target_email is not None and invite.target_email != normalized_email:
-            # A pinned invite may be redeemed only by its target identity.
-            raise InviteRedemptionError("email_mismatch")
-
-        # 4. Create the account + email-uniqueness index. The index create at expected_version=0
-        #    is the email-uniqueness gate: a DIFFERENT account already holding this email makes the
-        #    index put raise VersionConflict -> email_taken (no invite consumed). A conflict that
-        #    resolves to THIS account_id is an idempotent re-entry, not a collision.
-        now = datetime.now(UTC).isoformat()
-        credential_nonce = new_credential_nonce()
-        raw_credential = derive_account_credential(
-            pepper=self._credential_pepper, nonce=credential_nonce
+        return redeem_invite_crash_safe(
+            self,
+            code=code,
+            email_or_username=email_or_username,
+            display_name=display_name,
         )
-        credential_hash = hash_account_credential(raw_credential)
-        account = Account(
-            account_id=account_id,
-            email_or_username=normalized_email,
-            role=normalize_role(invite.role),  # SERVER-DERIVED from the invite, not the request
-            tenant_id=invite.tenant_id,        # SERVER-DERIVED granted tenant, not the request
-            status="active",
-            display_name=_clean_display_name(display_name),
-            credential_hash=credential_hash,
-            credential_version=CREDENTIAL_VERSION,
-            credential_issued_at=now,
-            api_credential=raw_credential,
-            created_at=now,
-            updated_at=now,
-        )
-        self._claim_email(normalized_email, account_id=account_id)
-        account_record = LedgerRecord.new(
-            tenant_id=self._tenant,
-            kind=ACCOUNT_KIND,
-            record_id=account_id,
-            payload=account.to_payload(),
-            parent_ids=(invite_record.record_id,),
-            source="accounts.redeem_invite",
-            trace_id=account_id,
-        )
-        try:
-            self._store.put(account_record, expected_version=0)
-        except VersionConflict:
-            # A concurrent redeem of the SAME (code,email) created this exact account between our
-            # existence check and our create. Idempotent: return the now-present account rather
-            # than minting a second or surfacing a raw conflict.
-            already = self.get_account_by_id(account_id)
-            if already is not None:
-                return already
-            raise
-
-        # 5. Commit the redemption by advancing the invite use-count. This is the race gate: the
-        #    put is version-checked against the version we read in step 1, so a concurrent redeem
-        #    that already advanced the invite makes THIS put raise VersionConflict.
-        redeemed_invite = InviteCode(
-            code="",
-            code_hash=invite.code_hash,
-            role=invite.role,
-            tenant_id=invite.tenant_id,
-            target_email=invite.target_email,
-            expires_at=invite.expires_at,
-            max_uses=invite.max_uses,
-            uses=invite.uses + 1,
-            redeemed_by=invite.redeemed_by or account_id,
-            redeemed_at=invite.redeemed_at or now,
-            created_at=invite.created_at,
-        )
-        updated_record = invite_record.with_payload(redeemed_invite.to_payload())
-        try:
-            self._store.put(updated_record, expected_version=version_seen)
-        except VersionConflict as exc:
-            # A concurrent redeem advanced the invite between our read and our write. We already
-            # created an account above, but it is deterministically keyed to THIS (code,email). To
-            # keep a single-use invite single-use, the loser must fail closed; best-effort roll back
-            # the account + email index we wrote so a rejected redeem leaves no orphan account.
-            # Rollback failures never mask the race signal.
-            self._rollback_account(account_id, normalized_email)
-            raise InviteRedemptionError("race_lost") from exc
-
-        return account
 
     # --- helpers -----------------------------------------------------------
+
+    def _fail_after(self, boundary: str) -> None:
+        """Deterministic crash hook used by boundary-recovery tests."""
+        if self._failure_injector is not None:
+            self._failure_injector(boundary)
 
     def _read_invite_record(self, code: str) -> Optional[LedgerRecord]:
         """Read the raw invite ledger record (so callers also get its version).
@@ -382,32 +236,6 @@ class AccountStore:
                 return
             raise InviteRedemptionError("email_taken") from exc
 
-    def _rollback_account(self, account_id: str, normalized_email: str) -> None:
-        """Best-effort removal of an account + email index written by a redeem that then lost the
-        use-count race. Never raises -- a rollback failure must not mask the original race signal.
-        """
-        for kind, record_id in (
-            (ACCOUNT_KIND, account_id),
-            (ACCOUNT_EMAIL_INDEX_KIND, _email_index_id(normalized_email)),
-        ):
-            try:
-                current = self._store.get(self._tenant, kind, record_id)
-                if current is not None:
-                    self._store.delete(
-                        self._tenant, kind, record_id, expected_version=current.version
-                    )
-            except Exception:
-                # Swallow: rollback is best-effort cleanup, not a correctness dependency.
-                pass
-
-
-def _clean_display_name(raw: Optional[str]) -> Optional[str]:
-    if raw is None:
-        return None
-    text = raw.strip()
-    return text or None
-
-
 def _invite_record_id(code: str) -> str:
     """Deterministic record-id for an invite, derived from a digest of its code.
 
@@ -421,15 +249,3 @@ def _invite_record_id(code: str) -> str:
 def _email_index_id(normalized_email: str) -> str:
     digest = hashlib.sha256(f"email:{normalized_email}".encode("utf-8")).hexdigest()[:32]
     return f"acctemail-{digest}"
-
-
-def _account_id_for(*, code: str, normalized_email: str) -> str:
-    """Server-derived, deterministic account id bound to (invite code, normalized email).
-
-    Determinism is what makes redemption idempotent under a re-delivery: the same (code,email)
-    always maps to the same account_id, so a duplicate redeem cannot mint a second account.
-    """
-    digest = hashlib.sha256(
-        f"account:{code}:{normalized_email}".encode("utf-8")
-    ).hexdigest()[:32]
-    return f"{_ACCOUNT_ID_PREFIX}-{digest}"

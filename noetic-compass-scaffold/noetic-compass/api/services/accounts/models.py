@@ -31,9 +31,8 @@ from typing import Any, Literal, Mapping, Optional
 
 # Schema versions stamped into the persisted payload so a future migration can tell which shape a
 # stored record was written under. Mirrors ``BILLING_SCHEMA_VERSION`` in billing.py.
-ACCOUNT_SCHEMA_VERSION = "cas_accounts.account.v1"
-INVITE_SCHEMA_VERSION = "cas_accounts.invite.v1"
 ACCOUNT_SCHEMA_VERSION = "cas_accounts.account.v2"
+INVITE_SCHEMA_VERSION = "cas_accounts.invite.v2"
 
 # Ledger record kinds. The generic ``kind``-keyed ``ledger_records`` table holds these; no new
 # store engine or table is introduced (the StateStore is the single persistence seam).
