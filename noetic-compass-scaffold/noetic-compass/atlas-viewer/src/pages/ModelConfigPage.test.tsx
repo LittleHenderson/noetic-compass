@@ -20,6 +20,10 @@ describe('ModelConfigPage', () => {
     );
 
     expect(screen.getByRole('radio', { name: /Pythia/i })).toHaveAttribute('aria-checked', 'true');
+    expect(screen.getByText('Reference')).toBeInTheDocument();
+    expect(screen.getAllByText(/Hosted real-weight worker operation remains OPEN/i).length).toBeGreaterThan(0);
+    expect(screen.queryByText('Live')).not.toBeInTheDocument();
+    expect(screen.queryByText(/wired end-to-end/i)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Choose model for CAS audit' }));
 
     expect(screen.getByTestId('location')).toHaveTextContent(

@@ -128,19 +128,16 @@ export function EvidencePacketActions({
       const blob = await response.blob();
       const objectUrl = URL.createObjectURL(blob);
       const revokeObjectUrl = URL.revokeObjectURL.bind(URL);
-      const openedWindow = window.open(objectUrl, '_blank', 'noopener,noreferrer');
-      if (openedWindow) {
-        window.setTimeout(() => revokeObjectUrl(objectUrl), 60_000);
-      } else {
-        const anchor = document.createElement('a');
-        anchor.href = objectUrl;
-        anchor.download = packetFilename(cleanedTraceId);
-        anchor.rel = 'noopener noreferrer';
-        document.body.appendChild(anchor);
-        anchor.click();
-        anchor.remove();
-        window.setTimeout(() => revokeObjectUrl(objectUrl), 0);
-      }
+      const anchor = document.createElement('a');
+      anchor.href = objectUrl;
+      anchor.download = packetFilename(cleanedTraceId);
+      anchor.rel = 'noopener noreferrer';
+      document.body.appendChild(anchor);
+      anchor.click();
+      anchor.remove();
+      // Give the browser time to consume the Blob URL before releasing it.
+      // Immediate revocation races downloads in Safari and some Chromium builds.
+      window.setTimeout(() => revokeObjectUrl(objectUrl), 60_000);
       setDownloadState('success');
     } catch {
       setDownloadState('error');
@@ -160,17 +157,18 @@ export function EvidencePacketActions({
     }
   };
 
-  const statusMessage = downloadState === 'loading'
-      ? 'Opening the authenticated Evidence Packet...'
+  const downloadStatusMessage = downloadState === 'loading'
+      ? 'Preparing the authenticated Evidence Packet download...'
     : downloadState === 'success'
-      ? 'Evidence Packet opened or downloaded.'
+      ? 'Evidence Packet download started.'
       : downloadState === 'error'
         ? 'Evidence Packet download failed. Check the protected API token and try again.'
-        : copyState === 'success'
-          ? 'Evidence Packet review link copied.'
-          : copyState === 'error'
-            ? 'Evidence Packet review link could not be copied.'
-            : null;
+        : null;
+  const copyStatusMessage = copyState === 'success'
+    ? 'Evidence Packet review link copied.'
+    : copyState === 'error'
+      ? 'Evidence Packet review link could not be copied.'
+      : null;
 
   return (
     <section style={shellStyle} aria-label="Evidence Packet actions">
@@ -189,8 +187,8 @@ export function EvidencePacketActions({
           }}
         >
           {downloadState === 'loading'
-            ? 'Opening Evidence Packet'
-            : 'Open / download Evidence Packet'}
+            ? 'Preparing Evidence Packet'
+            : 'Download Evidence Packet'}
         </button>
         <button
           type="button"
@@ -209,7 +207,12 @@ export function EvidencePacketActions({
           access and verification.
         </p>
       ) : null}
-      {statusMessage ? <p role="status" style={textStyle}>{statusMessage}</p> : null}
+      {downloadStatusMessage ? (
+        <p aria-live="polite" role="status" style={textStyle}>{downloadStatusMessage}</p>
+      ) : null}
+      {copyStatusMessage ? (
+        <p aria-live="polite" role="status" style={textStyle}>{copyStatusMessage}</p>
+      ) : null}
     </section>
   );
 }

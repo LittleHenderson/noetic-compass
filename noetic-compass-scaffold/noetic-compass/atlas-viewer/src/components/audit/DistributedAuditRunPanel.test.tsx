@@ -60,10 +60,28 @@ function audit(overrides: Partial<CasHarnessDistributedAudit> = {}): CasHarnessD
 }
 
 describe('DistributedAuditRunPanel', () => {
+  it('keeps every protected distributed action disabled without authenticated access', () => {
+    render(
+      <DistributedAuditRunPanel
+        audit={audit({ status: 'RUNNING', ready_workers: 1 })}
+        hasProtectedAccess={false}
+        onCreateRun={vi.fn()}
+        onDispatchRun={vi.fn()}
+        onMergeRun={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByRole('button', { name: 'Create run' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Dispatch workers' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Merge distributed receipts' })).toBeDisabled();
+    expect(screen.getByRole('note')).toHaveTextContent(/protected API token/i);
+  });
+
   it('distinguishes planner state from actual worker evidence', () => {
     render(
       <DistributedAuditRunPanel
         audit={null}
+        hasProtectedAccess
         onCreateRun={vi.fn()}
         onDispatchRun={vi.fn()}
         onMergeRun={vi.fn()}
@@ -81,6 +99,7 @@ describe('DistributedAuditRunPanel', () => {
     render(
       <DistributedAuditRunPanel
         audit={audit({ status: 'DISPATCHED', merge_status: 'partial' })}
+        hasProtectedAccess
         onCreateRun={vi.fn()}
         onDispatchRun={vi.fn()}
         onMergeRun={vi.fn()}
@@ -103,6 +122,7 @@ describe('DistributedAuditRunPanel', () => {
     render(
       <DistributedAuditRunPanel
         audit={audit()}
+        hasProtectedAccess
         onCreateRun={onCreateRun}
         onDispatchRun={onDispatchRun}
         onMergeRun={onMergeRun}
@@ -147,6 +167,7 @@ describe('DistributedAuditRunPanel', () => {
             },
           ],
         })}
+        hasProtectedAccess
         onCreateRun={vi.fn()}
         onDispatchRun={vi.fn()}
         onMergeRun={vi.fn()}
@@ -191,6 +212,7 @@ describe('DistributedAuditRunPanel', () => {
             },
           ],
         })}
+        hasProtectedAccess
         onCreateRun={vi.fn()}
         onDispatchRun={vi.fn()}
         onMergeRun={vi.fn()}
@@ -233,6 +255,7 @@ describe('DistributedAuditRunPanel', () => {
             },
           ],
         })}
+        hasProtectedAccess
         onCreateRun={vi.fn()}
         onDispatchRun={vi.fn()}
         onMergeRun={onMergeRun}

@@ -12,7 +12,7 @@ describe('EvidencePacketActions', () => {
     render(<EvidencePacketActions traceId={null} authToken="test-token" />);
 
     expect(
-      screen.getByRole('button', { name: 'Open / download Evidence Packet' }),
+      screen.getByRole('button', { name: 'Download Evidence Packet' }),
     ).toBeDisabled();
     expect(
       screen.getByRole('button', { name: 'Copy Evidence Packet review link' }),
@@ -23,7 +23,7 @@ describe('EvidencePacketActions', () => {
     render(<EvidencePacketActions traceId="trace-123" />);
 
     expect(
-      screen.getByRole('button', { name: 'Open / download Evidence Packet' }),
+      screen.getByRole('button', { name: 'Download Evidence Packet' }),
     ).toBeDisabled();
     expect(screen.getByRole('note')).toHaveTextContent('protected API token');
     expect(
@@ -31,7 +31,7 @@ describe('EvidencePacketActions', () => {
     ).toBeEnabled();
   });
 
-  it('fetches with the current Bearer token and downloads an authenticated Blob', async () => {
+  it('fetches with the current Bearer token and starts exactly one authenticated download', async () => {
     const fetchImpl = vi.fn().mockResolvedValue(
       new Response(JSON.stringify({ trace_id: 'trace with spaces' }), {
         status: 200,
@@ -41,7 +41,7 @@ describe('EvidencePacketActions', () => {
     const createObjectURL = vi.fn().mockReturnValue('blob:packet-123');
     const revokeObjectURL = vi.fn();
     vi.stubGlobal('URL', { createObjectURL, revokeObjectURL });
-    const open = vi.spyOn(window, 'open').mockReturnValue(null);
+    const open = vi.spyOn(window, 'open');
     const click = vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
 
     render(
@@ -52,9 +52,9 @@ describe('EvidencePacketActions', () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole('button', { name: 'Open / download Evidence Packet' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Download Evidence Packet' }));
 
-    expect(await screen.findByRole('status')).toHaveTextContent('opened or downloaded');
+    expect(await screen.findByRole('status')).toHaveTextContent('download started');
     expect(fetchImpl).toHaveBeenCalledWith('/api/evidence/trace%20with%20spaces', {
       method: 'GET',
       headers: {
@@ -63,8 +63,9 @@ describe('EvidencePacketActions', () => {
       },
     });
     expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
-    expect(open).toHaveBeenCalledWith('blob:packet-123', '_blank', 'noopener,noreferrer');
+    expect(open).not.toHaveBeenCalled();
     expect(click).toHaveBeenCalledTimes(1);
+    expect(revokeObjectURL).not.toHaveBeenCalled();
   });
 
   it('copies a real Audit Console review deep link, never the POST-only API URL', async () => {
@@ -104,5 +105,26 @@ describe('EvidencePacketActions', () => {
     expect(await screen.findByRole('status')).toHaveTextContent(
       'review link could not be copied',
     );
+  });
+
+  it('announces copy success even after a completed download', async () => {
+    const fetchImpl = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ trace_id: 'trace-123' }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      }),
+    );
+    vi.stubGlobal('URL', { createObjectURL: vi.fn().mockReturnValue('blob:packet-123'), revokeObjectURL: vi.fn() });
+    vi.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => undefined);
+    const writeText = vi.fn().mockResolvedValue(undefined);
+    vi.stubGlobal('navigator', { clipboard: { writeText } });
+    render(<EvidencePacketActions traceId="trace-123" authToken="token" fetchImpl={fetchImpl} />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Download Evidence Packet' }));
+    expect(await screen.findByText('Evidence Packet download started.')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Copy Evidence Packet review link' }));
+
+    expect(await screen.findByText('Evidence Packet review link copied.')).toBeInTheDocument();
+    expect(screen.getByText('Evidence Packet download started.')).toBeInTheDocument();
   });
 });
