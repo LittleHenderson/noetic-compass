@@ -2,13 +2,24 @@
 
 import importlib
 import sys
+import types
 from pathlib import Path
 
-# Import type_constraints directly to avoid torch-dependent model/__init__.py
+# Load type_constraints in a lightweight package shell. Giving the module a
+# package-qualified name preserves its relative sibling import without running
+# the torch-dependent model/__init__.py.
 _cas_native_root = Path(__file__).resolve().parent.parent / "cas-native"
-_tc_path = _cas_native_root / "model" / "type_constraints.py"
-spec = importlib.util.spec_from_file_location("type_constraints", _tc_path)
+_model_root = _cas_native_root / "model"
+_package_name = "_cas_native_model_for_type_constraint_tests"
+_package = types.ModuleType(_package_name)
+_package.__path__ = [str(_model_root)]
+sys.modules.setdefault(_package_name, _package)
+
+_tc_path = _model_root / "type_constraints.py"
+spec = importlib.util.spec_from_file_location(f"{_package_name}.type_constraints", _tc_path)
+assert spec is not None and spec.loader is not None
 _tc = importlib.util.module_from_spec(spec)
+sys.modules[spec.name] = _tc
 spec.loader.exec_module(_tc)
 
 validate_operator_output = _tc.validate_operator_output

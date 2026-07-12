@@ -152,12 +152,14 @@ app = FastAPI(
 # Regex matches every Vercel deployment alias (preview, team-scoped, canonical)
 # so stakeholder demos never hit "Failed to fetch" when Vercel rotates the URL.
 cors_origins = _parse_cors_origins(settings.cors_origins)
-# Wildcard origins ("*") combined with allow_credentials=True is rejected by
-# browsers and, in Starlette, causes the request Origin to be reflected back
-# with Access-Control-Allow-Credentials: true — letting any site make
-# credentialed cross-origin calls. Only enable credentials when the origin set
-# is an explicit allowlist; the Vercel-alias regex still applies for demos.
-allow_credentialed_cors = cors_origins != ["*"]
+# Browser-managed credentials stay disabled for every origin. Authentication
+# uses explicit Bearer headers rather than cookies, and allow_headers below
+# preserves Authorization after a successful preflight. This matters because
+# Starlette uses one credential flag for both the exact allowlist and the broad
+# Vercel preview regex; enabling credentials for the former would silently
+# enable cookies, client certificates, and browser-managed HTTP auth for every
+# regex-matched preview origin too.
+allow_credentialed_cors = False
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,

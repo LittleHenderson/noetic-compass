@@ -1,5 +1,7 @@
 """Tests for middleware: auth, rate limiting, audit."""
 
+import json
+import logging
 import time
 
 import pytest
@@ -25,6 +27,46 @@ def test_missing_auth_header(client):
 def test_invalid_token(client):
     resp = client.post("/assess", json={}, headers={"Authorization": "Bearer invalid.token.here"})
     assert resp.status_code == 401
+
+
+def test_failed_auth_is_written_to_structured_audit_log(client, caplog):
+    """Audit logging must wrap JWT auth so rejected probes remain observable."""
+    with caplog.at_level(logging.INFO, logger="noetic.audit"):
+        resp = client.post("/assess", json={})
+
+    assert resp.status_code == 401
+    entries = [
+        json.loads(record.message)
+        for record in caplog.records
+        if record.name == "noetic.audit" and record.message.startswith("{")
+    ]
+    assert any(
+        entry["method"] == "POST"
+        and entry["path"] == "/assess"
+        and entry["status"] == 401
+        and entry["user"] == "anonymous"
+        and entry["request_id"]
+        for entry in entries
+    )
+
+
+def test_cors_never_grants_browser_credentials_to_regex_preview_origin(client):
+    """A regex-matched preview may use Bearer headers but never browser credentials."""
+    resp = client.options(
+        "/assess",
+        headers={
+            "Origin": "https://attacker-preview.vercel.app",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "authorization,content-type",
+        },
+    )
+
+    assert resp.status_code == 200
+    assert resp.headers["access-control-allow-origin"] == "*"
+    assert "access-control-allow-credentials" not in resp.headers
+    allowed_headers = resp.headers["access-control-allow-headers"].lower()
+    assert "authorization" in allowed_headers
+    assert "content-type" in allowed_headers
 
 
 def test_valid_token(client, auth_headers, valid_assess_payload):

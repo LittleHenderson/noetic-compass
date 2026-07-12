@@ -15,9 +15,13 @@ def client() -> TestClient:
 
 
 @pytest.fixture
-def auth_headers() -> dict[str, str]:
-    """Valid JWT auth headers for testing."""
-    token = create_token(sub="test-user", api_key="test-key")
+def auth_headers(request: pytest.FixtureRequest) -> dict[str, str]:
+    """Valid JWT headers with a quota bucket isolated to the current test."""
+    # RateLimitMiddleware is attached to the process-global app, so its token
+    # buckets and monthly counters outlive each function-scoped TestClient.
+    # A per-test key preserves production rate limiting while preventing an
+    # earlier test from consuming a later test's allowance.
+    token = create_token(sub="test-user", api_key=f"test-key:{request.node.nodeid}")
     return {"Authorization": f"Bearer {token}"}
 
 
