@@ -3,6 +3,7 @@
 **Investor / Strategic Partner Distribution (NDA Required)**
 
 **Version**: CURRENT (consolidated) · **Date**: 2026-06-07 · **Classification**: Confidential, NDA-Gated
+**Maintenance addendum**: 2026-07-12
 **Framework**: Cognitive Architecture System (CAS) **v7.7**
 **Distribution**: Authorized recipients only, post-executed NDA
 
@@ -554,7 +555,21 @@ This investor-facing document is distributed only under executed NDA. Recipients
 
 ---
 
-## 12. Maintenance & Validation Update (2026-06-30)
+## 12. Maintenance & Validation Update (2026-07-12)
+
+This current addendum records a code-maintenance and red-team pass. It strengthens no previously validated result and changes no claim boundary; every `LICENSED` / `NOT LICENSED` / `OPEN` status in sections 1-11 stands.
+
+**Pushed maintenance branch; no pull request yet.** Branch `fix/cas-harness-findings-20260630` contains pushed commits `5583f7bf`, `9b44a6d1`, `08ad0a4d`, and `3b126f24`. No draft pull request has been opened and there is no PR URL to report. Branch evidence is `1526 passed, 8 skipped, 3 xfailed` full API, `22 passed` focused middleware/CORS, `358 passed` CAS Harness selection, and `233 passed` worker tree. The two prior pytest collection blockers are fixed. These are local/branch engineering results, not hosted-production proof, customer-production proof, or `ACCEPT`.
+
+**CORS/middleware repair (local branch complete; hosted proof OPEN).** Browser-managed CORS credentials are disabled for every origin while explicit Bearer `Authorization` headers remain available. Effective order is `CORS -> RequestId -> AuditLog -> JWTAuth -> RateLimit`. Real Origin-bearing `401` and deterministic `429` responses carry required CORS/request-id behavior without `Access-Control-Allow-Credentials`. Hosted/deployed CORS proof remains `OPEN`, and durable append-only security-audit storage remains `OPEN`.
+
+**RPM/diode correction after adversarial review.** The directional RPM/diode tool is exactly `PROTOTYPE` and `ENGINEERED-NOT-VALIDATED`; real-model result is `unavailable`, maximum claim route is `FLAG_FOR_HUMAN_REVIEW`, causal/prevention/product claims remain `NOT LICENSED`, and empirical bridge remains `OPEN`. It is not in the product branch. Its two executable/test files are removed from the legal-branch tip pending a claim-safe rebuild.
+
+The red team demonstrated concrete bypasses and missing controls: self-attested surface status with no artifact/hash/metric binding; `n_random=0` plus `subsumption_threshold=2.0` manufactured `PASS_DIRECTIONAL_PENDING_REVIEW`; missing hidden-minus-char/length and rank/accuracy-matched non-prerequisite controls; nondetection mislabeled as survival; invalid split fallback; unsafe `allow_pickle=True`; overclaiming reverse causality/no dependence; missing `PROTOTYPE`, provenance, and split evidence; and absent CI/API/Evidence-Packet/runbook integration. No synthetic run or directional output licenses a real-model or product claim.
+
+### Historical maintenance baseline (2026-06-30)
+
+The remainder of this subsection is retained as a dated engineering record. The 2026-07-12 update above governs where states differ.
 
 This addendum records an engineering-maintenance pass. It **strengthens no previously validated result** and changes **no claim boundary**; every LICENSED / NOT LICENSED / OPEN status in §1–§11 stands.
 
@@ -568,4 +583,4 @@ This addendum records an engineering-maintenance pass. It **strengthens no previ
 
 ---
 
-**End of investor-facing specification. Confidential, NDA-Gated. Version CURRENT (consolidated) · 2026-06-07 (maintenance addendum 2026-06-30, §12) · Noetic Compass / CAS Harness · Built on the Cognitive Architecture System (CAS) v7.7 · Patent-pending — US Provisional Application No. 64/037,173, filed 04/13/2026 (Utility—Provisional).**
+**End of investor-facing specification. Confidential, NDA-Gated. Version CURRENT (consolidated) · 2026-06-07 (maintenance addendum 2026-07-12, §12) · Noetic Compass / CAS Harness · Built on the Cognitive Architecture System (CAS) v7.7 · Patent-pending — US Provisional Application No. 64/037,173, filed 04/13/2026 (Utility—Provisional).**

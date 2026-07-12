@@ -5,6 +5,18 @@
 
 ---
 
+## 0. Current maintenance snapshot (2026-07-12)
+
+This entry supersedes the 2026-06-30 branch, test, CORS, and RPM/diode status below where they differ. It does not strengthen a product, hosted-production, customer-production, or `ACCEPT` claim.
+
+**Maintenance branch.** `fix/cas-harness-findings-20260630` is pushed through commits `5583f7bf`, `9b44a6d1`, `08ad0a4d`, and `3b126f24`. No draft pull request has been opened. Current branch evidence is `1526 passed, 8 skipped, 3 xfailed` for the full API suite, `358 passed` for the CAS Harness selection, `233 passed` for the worker tree, and `22 passed` for focused middleware/CORS. The two previously reported pytest collection blockers are fixed.
+
+**CORS/middleware boundary.** Browser-managed CORS credentials are disabled for every origin while explicit Bearer `Authorization` headers remain available. Effective order is `CORS -> RequestId -> AuditLog -> JWTAuth -> RateLimit`; real Origin-bearing `401` and deterministic `429` responses carry `Access-Control-Allow-Origin` and no `Access-Control-Allow-Credentials`. This is verified branch/local engineering evidence. Hosted CORS proof remains `OPEN`, and durable append-only security-audit storage remains `OPEN`.
+
+**RPM/diode red-team correction.** Status is exactly `PROTOTYPE` / `ENGINEERED-NOT-VALIDATED`; real-model result `unavailable`; verdict ceiling `FLAG_FOR_HUMAN_REVIEW`; product, causal, prevention, and removal claims `NOT LICENSED`; empirical bridge `OPEN`. The tool is not in the product branch, and its two files are removed from the legal-branch tip pending rebuild.
+
+Red-team bypass findings: the surface-screen gate trusted an unbound self-attested string; `n_random=0` with out-of-range `subsumption_threshold=2.0` manufactured `PASS_DIRECTIONAL_PENDING_REVIEW`; hidden-minus-char/length and rank/accuracy-matched non-prerequisite controls were absent; missed reverse collapse was mislabeled as survival; invalid group splits fell back; CLI NPZ loading used `allow_pickle=True`; reverse-causality/no-dependence wording overclaimed the measurement; reports lacked `PROTOTYPE`, provenance, and split evidence; and CI/API/Evidence-Packet/runbook integration was absent. No real-model or product result exists.
+
 ## 1. Where CAS Harness actually lives (branch topology)
 
 | Branch | Role | CAS Harness content |
