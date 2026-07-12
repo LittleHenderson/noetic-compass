@@ -8,7 +8,7 @@ Status: operational-reconciliation snapshot. This inventory locates source and e
 - Current legal/spec claim sheet: `docs/legal_drafts_20260607/CAS_HARNESS_SPEC_SHEET_current.md`.
 - Operational status: `docs/working/cas_harness_operational_status_20260630.md`.
 - Product repository: `https://github.com/LittleHenderson/noetic-compass`.
-- Public product branch: `origin/master` at `66b943f9` after merged PR #137.
+- Public product branch: `origin/master` at `b9e47ebe` after merged PRs #137 and #138.
 
 The production TODO controls status and next-action wording. This inventory is a locator and reconciliation aid.
 
@@ -18,7 +18,7 @@ The production TODO controls status and next-action wording. This inventory is a
 - Merged PR #137 is deployed. Origin-bearing protected-route 401 responses for both `https://atlas.noeticcompass.com` and a representative Vercel preview origin include `Access-Control-Allow-Origin` and `X-Request-ID`, and omit `Access-Control-Allow-Credentials`.
 - Bearer-header preflight returns HTTP 200 with the requested `authorization` header allowed and no browser-managed credential header.
 - Hosted deterministic 429 CORS proof remains `OPEN` until a valid hardened account token can drive the quota/rate-limit path.
-- Hosted worker status is currently `configured: true`, `reachable: false`, `real_weights: false`; the obsolete RunPod proxy returns HTTP 404 on both 8888 and 8080. Hosted live-worker operation therefore remains `OPEN`.
+- Hosted worker status after deployed PR #138 is `configured: true`, `reachable: false`, `real_weights: false`, `configuration_error: worker_token_required`; `/atlas/live/health/realmode` returns 503 `atlas_live_worker_token_required` without contacting the dead endpoint. The obsolete RunPod proxy returns HTTP 404 on both 8888 and 8080. Source/configuration fail-closed behavior is present, while actual hosted live-worker operation remains `OPEN`.
 - Production account mode remains dark. Paid/public account readiness is `OPEN` and hosted account-mode proof is `unavailable`.
 
 ## 3. Canonical source roots
@@ -51,6 +51,7 @@ git ls-files *cas_harness* *CasHarness* *AuditConsole* *EvidencePacket*
 ### Completed or retired
 
 - PR #137 `fix(cas-harness): harden CORS, auth audit, and CI isolation` is merged into `master`.
+- PR #138 `fix(cas-harness): harden hosted worker deployment` is merged and deployed. Remote worker targets now require a server-side token before any network access; Render worker URL/token are dashboard-managed; the no-SSH 8080 smoke and runbook are present.
 - PR #130 is closed as a literal no-op: its head was an ancestor of master and its merge tree equaled current master.
 - `wave5.5/harness-launch-declutter` must be retired as a deployment source. It is stale and would delete the modern Audit Console, API client, tests, progress, verdict, verification, and FAQ surfaces.
 
@@ -64,7 +65,7 @@ git ls-files *cas_harness* *CasHarness* *AuditConsole* *EvidencePacket*
 
 ### Active local integration branches
 
-- `build/cas-harness-operational-20260712`: account/tenant/quota integration base plus worker configuration hardening.
+- `build/cas-harness-operational-20260712`: account/tenant/quota integration base; the worker hardening formerly stacked here is already separated and merged through PR #138.
 - `build/cas-account-hardening-20260712`: secure per-account credential, session, bootstrap, RBAC, transaction-recovery, and lifecycle rebuild.
 - `build/cas-ui-launch-20260712`: five-stage public Audit Console shell and Evidence Packet actions.
 - `docs/cas-harness-status-20260712`: this inventory and current spec/status reconciliation.
@@ -98,7 +99,7 @@ Other top-level archive families are retained under the same root: CAS68 recipe 
 - Pythia-160M WORM packet: immutable and `FLAG_FOR_HUMAN_REVIEW`, not `ACCEPT`.
 - `control_proof`: `unavailable` on the live customer path until matched controls actually run and are packet-bound.
 - Hosted CORS exact/preview 401 and preflight: present as hosted engineering evidence after PR #137. Hosted deterministic 429 remains `OPEN`.
-- Hosted live worker: `OPEN` because the configured RunPod endpoint is absent.
+- Hosted live worker: source/configuration policy is deployed and fail-closed; actual worker operation remains `OPEN` because the configured RunPod endpoint is absent.
 - Paid accounts, billing, quotas, and customer management: `OPEN`.
 - Compliance minimum and legal/customer-data consent: `OPEN` pending owner/legal sign-off.
 

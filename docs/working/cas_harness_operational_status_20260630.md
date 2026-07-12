@@ -17,6 +17,8 @@ This entry supersedes the 2026-06-30 branch, test, CORS, and RPM/diode status be
 
 **Source inventory.** The authoritative GitHub, local-worktree, code-root, archive-root, and claim-boundary map is [CAS Harness Source and Evidence Inventory - 2026-07-12](cas_harness_source_inventory_20260712.md).
 
+**Hosted worker deployment boundary.** [PR #138](https://github.com/LittleHenderson/noetic-compass/pull/138) merged into `master` at `b9e47ebe` after `1546 passed, 8 skipped, 3 xfailed`. The deployed API now refuses every remote worker URL before network access unless `ATLAS_LIVE_WORKER_TOKEN` is configured; hosted health reports `configuration_error: worker_token_required`, and `/atlas/live/health/realmode` returns 503 `atlas_live_worker_token_required`. The dead hard-coded 8888 URL is removed, URL/token are dashboard-managed, and the 8080 no-SSH hosted WORM smoke/runbook are present. Actual hosted worker operation remains `OPEN`: the old RunPod pod is absent, a persistent GPU worker has not been redeployed, and no new hosted live audit/WORM packet proof exists.
+
 Red-team bypass findings: the surface-screen gate trusted an unbound self-attested string; `n_random=0` with out-of-range `subsumption_threshold=2.0` manufactured `PASS_DIRECTIONAL_PENDING_REVIEW`; hidden-minus-char/length and rank/accuracy-matched non-prerequisite controls were absent; missed reverse collapse was mislabeled as survival; invalid group splits fell back; CLI NPZ loading used `allow_pickle=True`; reverse-causality/no-dependence wording overclaimed the measurement; reports lacked `PROTOTYPE`, provenance, and split evidence; and CI/API/Evidence-Packet/runbook integration was absent. No real-model or product result exists.
 
 ## 1. Where CAS Harness actually lives (branch topology)
