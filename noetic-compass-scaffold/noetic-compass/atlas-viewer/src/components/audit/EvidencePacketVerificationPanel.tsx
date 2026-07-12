@@ -1,4 +1,4 @@
-import { useMemo, useState, type CSSProperties } from 'react';
+import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import {
   verifyEvidencePacket,
   type EvidenceVerifyCheck,
@@ -14,6 +14,7 @@ import {
 
 export interface EvidencePacketVerificationPanelProps {
   traceId: string | null | undefined;
+  authToken?: string | null;
   fetchImpl?: typeof fetch;
 }
 
@@ -136,6 +137,27 @@ const checkStyle: CSSProperties = {
   background: 'rgba(15, 23, 42, 0.42)',
 };
 
+const checksDetailsStyle: CSSProperties = {
+  borderRadius: 7,
+  border: '1px solid rgba(148, 163, 184, 0.18)',
+  background: 'rgba(2, 6, 23, 0.24)',
+};
+
+const checksSummaryStyle: CSSProperties = {
+  padding: '10px 12px',
+  color: COLORS.textSecondary,
+  cursor: 'pointer',
+  fontSize: 12,
+  fontWeight: 800,
+};
+
+const checkDetailStyle: CSSProperties = {
+  ...textStyle,
+  ...monoStyle,
+  marginTop: 5,
+  fontSize: 11.5,
+};
+
 function externalAnchorCheck(response: EvidenceVerifyResponse | undefined): EvidenceVerifyCheck | null {
   return response?.checks.find((check) => check.artifact === 'merged_packet_external_anchor') ?? null;
 }
@@ -154,12 +176,14 @@ function statusLabel(state: VerifyState): { label: string; tone: 'verified' | 'w
   if (state.status === 'idle') return { label: 'Not checked', tone: 'muted' };
   if (state.status === 'loading') return { label: 'Checking', tone: 'muted' };
   if (state.status === 'error') return { label: 'Verify failed', tone: 'failed' };
+  // Packet-wide integrity dominates any individual anchor check. A retained
+  // anchor must never hide a mismatch elsewhere in the packet.
+  if (state.response.overall === 'partial_mismatch') return { label: 'Mismatch', tone: 'failed' };
+  if (state.response.overall !== 'all_match') return { label: 'Unable to verify', tone: 'warning' };
   const anchor = externalAnchorCheck(state.response);
   if (isWormRetained(anchor)) return { label: 'WORM retained', tone: 'verified' };
   if (isS3Verified(anchor)) return { label: 'S3 verified', tone: 'verified' };
-  if (state.response.overall === 'all_match') return { label: 'Hashes match', tone: 'verified' };
-  if (state.response.overall === 'partial_mismatch') return { label: 'Mismatch', tone: 'failed' };
-  return { label: 'Unable to verify', tone: 'warning' };
+  return { label: 'Hashes match', tone: 'verified' };
 }
 
 function summaryText(state: VerifyState): string {
@@ -172,6 +196,12 @@ function summaryText(state: VerifyState): string {
   if (state.status === 'error') {
     return state.error;
   }
+  if (state.response.overall === 'partial_mismatch') {
+    return 'Packet verification found one or more mismatches. Inspect every failed check before trusting the packet or its anchor.';
+  }
+  if (state.response.overall !== 'all_match') {
+    return 'Packet verification could not establish integrity. Inspect the available checks before trusting this packet.';
+  }
   const anchor = externalAnchorCheck(state.response);
   if (isWormRetained(anchor)) {
     return anchor?.notes ?? 'S3 anchor re-read matched and Object Lock retention is active.';
@@ -179,24 +209,39 @@ function summaryText(state: VerifyState): string {
   if (isS3Verified(anchor)) {
     return anchor?.notes ?? 'S3 anchor object was re-read and matched the packet manifest.';
   }
-  if (state.response.overall === 'all_match') {
-    return 'All available packet hashes matched. No WORM-retention proof was returned for this packet.';
-  }
-  return 'Verification did not fully pass. Inspect failed checks before trusting this packet as tamper-evident.';
+  return 'All available packet hashes matched. No WORM-retention proof was returned for this packet.';
+}
+
+function orderedChecks(response: EvidenceVerifyResponse | undefined): EvidenceVerifyCheck[] {
+  if (!response) return [];
+  return [...response.checks].sort((left, right) => Number(left.match) - Number(right.match));
+}
+
+function checkSummary(response: EvidenceVerifyResponse): string {
+  const failed = response.checks.filter((check) => !check.match).length;
+  if (failed === 0) return `Verification checks (${response.checks.length} passed)`;
+  return `Verification checks (${failed} failed of ${response.checks.length})`;
 }
 
 export function EvidencePacketVerificationPanel({
   traceId,
+  authToken,
   fetchImpl,
 }: EvidencePacketVerificationPanelProps): JSX.Element | null {
   const [state, setState] = useState<VerifyState>({ status: 'idle' });
   const cleanedTraceId = traceId?.trim() ?? '';
-  const canVerify = cleanedTraceId.length > 0 && state.status !== 'loading';
+  const cleanedAuthToken = authToken?.trim() ?? '';
+  const canVerify =
+    cleanedTraceId.length > 0 && cleanedAuthToken.length > 0 && state.status !== 'loading';
   const status = statusLabel(state);
   const visibleChecks = useMemo(
-    () => (state.status === 'loaded' ? state.response.checks.slice(0, 4) : []),
+    () => orderedChecks(state.status === 'loaded' ? state.response : undefined),
     [state],
   );
+
+  useEffect(() => {
+    setState({ status: 'idle' });
+  }, [cleanedAuthToken, cleanedTraceId]);
 
   if (!cleanedTraceId) return null;
 
@@ -204,7 +249,10 @@ export function EvidencePacketVerificationPanel({
     if (!canVerify) return;
     setState({ status: 'loading' });
     try {
-      const response = await verifyEvidencePacket(cleanedTraceId, { fetchImpl });
+      const response = await verifyEvidencePacket(cleanedTraceId, {
+        authToken: cleanedAuthToken,
+        fetchImpl,
+      });
       setState({ status: 'loaded', response });
     } catch (error) {
       setState({
@@ -215,7 +263,11 @@ export function EvidencePacketVerificationPanel({
   };
 
   return (
-    <section style={panelStyle} aria-label="Evidence Packet verification">
+    <section
+      id="evidence-packet-verification"
+      style={panelStyle}
+      aria-label="Evidence Packet verification"
+    >
       <div style={headerStyle}>
         <div>
           <p style={eyebrowStyle}>Evidence Packet verification</p>
@@ -228,6 +280,7 @@ export function EvidencePacketVerificationPanel({
           </AuditPopover>
         </div>
         <button
+          aria-busy={state.status === 'loading'}
           type="button"
           style={buttonStyle(canVerify)}
           disabled={!canVerify}
@@ -239,21 +292,40 @@ export function EvidencePacketVerificationPanel({
         </button>
       </div>
 
-      <span style={statusPillStyle(status.tone)}>{status.label}</span>
-      <p style={textStyle}>{summaryText(state)}</p>
+      <div aria-atomic="true" aria-live="polite" role="status">
+        <span style={statusPillStyle(status.tone)}>{status.label}</span>
+        <p style={{ ...textStyle, marginTop: 8 }}>{summaryText(state)}</p>
+      </div>
       <p style={{ ...textStyle, ...monoStyle }}>trace_id: {cleanedTraceId}</p>
+      {!cleanedAuthToken ? (
+        <p role="note" style={textStyle}>
+          Enter the protected API token to run the authenticated POST verification.
+        </p>
+      ) : null}
 
-      {visibleChecks.length > 0 ? (
-        <div style={checkGridStyle} aria-label="Evidence Packet verify checks">
-          {visibleChecks.map((check) => (
-            <article key={check.artifact} style={checkStyle}>
-              <p style={{ ...textStyle, color: COLORS.textPrimary, fontWeight: 800 }}>
-                {check.artifact.replaceAll('_', ' ')}
-              </p>
-              <p style={textStyle}>{check.match ? 'match' : 'not matched'}</p>
-            </article>
-          ))}
-        </div>
+      {state.status === 'loaded' && visibleChecks.length > 0 ? (
+        <details
+          open={visibleChecks.some((check) => !check.match)}
+          style={checksDetailsStyle}
+        >
+          <summary style={checksSummaryStyle}>{checkSummary(state.response)}</summary>
+          <div
+            style={{ ...checkGridStyle, padding: '0 10px 10px' }}
+            aria-label="Evidence Packet verify checks"
+          >
+            {visibleChecks.map((check) => (
+              <article key={check.artifact} style={checkStyle} data-check-match={check.match}>
+                <p style={{ ...textStyle, color: COLORS.textPrimary, fontWeight: 800 }}>
+                  {check.artifact.replaceAll('_', ' ')}
+                </p>
+                <p style={textStyle}>{check.match ? 'match' : 'not matched'}</p>
+                <p style={checkDetailStyle}>expected: {check.expected ?? 'unavailable'}</p>
+                <p style={checkDetailStyle}>actual: {check.actual ?? 'unavailable'}</p>
+                {check.notes ? <p style={checkDetailStyle}>notes: {check.notes}</p> : null}
+              </article>
+            ))}
+          </div>
+        </details>
       ) : null}
     </section>
   );

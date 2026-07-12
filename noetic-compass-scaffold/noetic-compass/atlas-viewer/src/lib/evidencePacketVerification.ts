@@ -19,6 +19,7 @@ export interface EvidencePacketVerificationOptions {
   baseUrl?: string;
   fetchImpl?: typeof fetch;
   signal?: AbortSignal;
+  authToken?: string | null;
 }
 
 export class EvidencePacketVerificationError extends Error {
@@ -47,8 +48,12 @@ export function resolveEvidenceApiBaseUrl(explicit?: string): string {
   return atlasBaseUrl;
 }
 
+export function evidencePacketUrl(traceId: string, explicitBaseUrl?: string): string {
+  return `${resolveEvidenceApiBaseUrl(explicitBaseUrl)}/evidence/${encodeURIComponent(traceId)}`;
+}
+
 export function evidencePacketVerifyUrl(traceId: string, explicitBaseUrl?: string): string {
-  return `${resolveEvidenceApiBaseUrl(explicitBaseUrl)}/evidence/${encodeURIComponent(traceId)}/verify`;
+  return `${evidencePacketUrl(traceId, explicitBaseUrl)}/verify`;
 }
 
 export async function verifyEvidencePacket(
@@ -66,9 +71,13 @@ export async function verifyEvidencePacket(
 
   let response: Response;
   try {
+    const authorization = authorizationHeaderValue(options?.authToken);
     response = await fetchImpl(evidencePacketVerifyUrl(trimmed, options?.baseUrl), {
       method: 'POST',
-      headers: { Accept: 'application/json' },
+      headers: {
+        Accept: 'application/json',
+        ...(authorization ? { Authorization: authorization } : {}),
+      },
       signal: options?.signal,
     });
   } catch (error) {
@@ -97,6 +106,12 @@ export async function verifyEvidencePacket(
   }
 
   return parseEvidenceVerifyResponse(body);
+}
+
+export function authorizationHeaderValue(authToken?: string | null): string | null {
+  const trimmed = authToken?.trim();
+  if (!trimmed) return null;
+  return /^Bearer\s+/i.test(trimmed) ? trimmed : `Bearer ${trimmed}`;
 }
 
 function parseEvidenceVerifyResponse(raw: unknown): EvidenceVerifyResponse {

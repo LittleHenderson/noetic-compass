@@ -14,6 +14,7 @@ export interface DistributedAuditRunPanelProps {
   audit: CasHarnessDistributedAudit | null;
   isLoading?: boolean;
   error?: string | null;
+  hasProtectedAccess: boolean;
   onCreateRun: () => void;
   onDispatchRun: () => void;
   onMergeRun: () => void;
@@ -186,12 +187,14 @@ export function DistributedAuditRunPanel({
   audit,
   isLoading = false,
   error = null,
+  hasProtectedAccess,
   onCreateRun,
   onDispatchRun,
   onMergeRun,
 }: DistributedAuditRunPanelProps) {
-  const canDispatch = Boolean(audit && audit.status === 'PLANNED' && !isLoading);
-  const canMerge = canMergeEvidence(audit, isLoading);
+  const canCreate = hasProtectedAccess && !isLoading;
+  const canDispatch = hasProtectedAccess && Boolean(audit && audit.status === 'PLANNED' && !isLoading);
+  const canMerge = hasProtectedAccess && canMergeEvidence(audit, isLoading);
   const assignedWorkers = audit ? countAssignedWorkers(audit) : 0;
   const missingOutputCount = audit ? countMissingOutputs(audit) : 0;
   const pendingReceipts = audit
@@ -225,7 +228,7 @@ export function DistributedAuditRunPanel({
           <h2 style={titleStyle}>Worker evidence, not planner theater</h2>
         </div>
         <div style={buttonRowStyle}>
-          <button type="button" style={buttonStyle(!isLoading)} onClick={onCreateRun} disabled={isLoading}>
+          <button type="button" style={buttonStyle(canCreate)} onClick={onCreateRun} disabled={!canCreate}>
             Create run
           </button>
           <button type="button" style={buttonStyle(canDispatch)} onClick={onDispatchRun} disabled={!canDispatch}>
@@ -243,6 +246,12 @@ export function DistributedAuditRunPanel({
         return complete evidence receipts. Missing, failed, or partial worker
         evidence cannot become ACCEPT.
       </p>
+
+      {!hasProtectedAccess ? (
+        <p role="note" style={noticeStyle('warning')}>
+          Enter the protected API token to enable distributed and fleet actions.
+        </p>
+      ) : null}
 
       {isLoading ? <p style={noticeStyle('info')}>Distributed audit request in flight...</p> : null}
       {error ? <p role="status" style={noticeStyle('error')}>{error}</p> : null}

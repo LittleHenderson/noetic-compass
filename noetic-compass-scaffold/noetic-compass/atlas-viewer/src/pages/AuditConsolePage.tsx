@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
@@ -9,6 +9,7 @@ import { AuditVerdictExplainer } from '../components/audit/AuditVerdictExplainer
 import DistributedAuditRunPanel from '../components/audit/DistributedAuditRunPanel';
 import EvidencePacketVerificationPanel from '../components/audit/EvidencePacketVerificationPanel';
 import EvidencePacketFlightRecorderFaq from '../components/audit/EvidencePacketFlightRecorderFaq';
+import EvidencePacketActions from '../components/audit/EvidencePacketActions';
 import EnterpriseScalePlanCard from '../components/audit/EnterpriseScalePlanCard';
 import FleetExecutorPanel from '../components/audit/FleetExecutorPanel';
 import { ModelConnectionCard } from '../components/audit/ModelConnectionCard';
@@ -164,8 +165,13 @@ const STAGE9_40E_PACKET_TARGET: AuditTargetConfig = {
 
 const AUDIT_STEPS: AuditStep[] = [
   {
-    label: 'Connect model',
-    detail: 'Verify the model target, API route, and license gate.',
+    label: 'Choose model',
+    detail: 'Choose the supported model target that this audit will evaluate.',
+    command: 'CHOOSE',
+  },
+  {
+    label: 'Connect key or worker',
+    detail: 'Verify the selected target and show the live-worker connection truth.',
     command: 'CONNECT',
   },
   {
@@ -174,9 +180,14 @@ const AUDIT_STEPS: AuditStep[] = [
     command: 'RUN',
   },
   {
-    label: 'Return verdict + evidence',
-    detail: 'Return ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips.',
-    command: 'VERDICT',
+    label: 'Track progress',
+    detail: 'Follow the backend lifecycle while evidence is validated and packaged.',
+    command: 'PROGRESS',
+  },
+  {
+    label: 'Result + evidence',
+    detail: 'Review the evidence-gated verdict, proof chips, and Evidence Packet actions.',
+    command: 'RESULT',
   },
 ];
 
@@ -302,21 +313,39 @@ function verdictSummaryFor(session: CasHarnessAuditSession | null): string {
 
 function commandStateFor(
   index: number,
+  hasModelChoice: boolean,
   hasTarget: boolean,
   session: CasHarnessAuditSession | null,
   isAuditRunning: boolean,
-  error: string | null,
+  isTargetConnecting: boolean,
+  targetError: string | null,
+  sessionError: string | null,
+  isTraceReviewMode: boolean,
 ): CommandState {
-  if (error) return index < 2 ? 'done' : 'blocked';
-  if (index === 0) return hasTarget ? 'done' : 'active';
+  if (isTraceReviewMode) return index === 4 ? 'active' : 'done';
+  if (index === 0) return hasModelChoice ? 'done' : 'active';
   if (index === 1) {
-    if (!hasTarget) return 'waiting';
-    if (isAuditRunning) return 'active';
-    return session ? 'done' : 'ready';
+    if (!hasModelChoice) return 'waiting';
+    if (targetError) return 'blocked';
+    if (isTargetConnecting) return 'active';
+    return hasTarget ? 'done' : 'ready';
   }
-  if (!session) return hasTarget ? 'waiting' : 'waiting';
-  if (session.verdict) return 'done';
-  return 'blocked';
+  if (index === 2) {
+    if (!hasTarget) return 'waiting';
+    if (sessionError) return 'blocked';
+    if (!session) return isAuditRunning ? 'active' : 'ready';
+    return 'done';
+  }
+  if (index === 3) {
+    if (!session) return 'waiting';
+    if (sessionError) return 'waiting';
+    if (session.status === 'FAILED') return 'blocked';
+    if (session.verdict || session.status === 'COMPLETE') return 'done';
+    return 'active';
+  }
+  if (!session) return 'waiting';
+  if (sessionError || session.status === 'FAILED') return 'waiting';
+  return session.verdict || session.status === 'COMPLETE' ? 'done' : 'waiting';
 }
 
 function commandStatusLabel(state: CommandState): string {
@@ -726,9 +755,46 @@ const fleetNoticeStyle: CSSProperties = {
   lineHeight: 1.45,
 };
 
+const advancedDetailsStyle: CSSProperties = {
+  marginTop: 20,
+  border: `1px solid ${COLORS.borderSubtle}`,
+  borderRadius: 8,
+  background: 'rgba(2, 6, 23, 0.34)',
+};
+
+const advancedSummaryStyle: CSSProperties = {
+  padding: '13px 16px',
+  color: COLORS.textSecondary,
+  cursor: 'pointer',
+  fontFamily: FONT_FAMILY,
+  fontSize: 13,
+  fontWeight: 800,
+};
+
+const advancedStackStyle: CSSProperties = {
+  display: 'grid',
+  gap: 18,
+  padding: '2px 16px 16px',
+};
+
+const savedPacketActionsStyle: CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  gap: 8,
+};
+
 const verdictStackStyle: CSSProperties = {
   display: 'grid',
   gap: 16,
+};
+
+const protectedAccessStyle: CSSProperties = {
+  display: 'grid',
+  gap: 8,
+  padding: 14,
+  borderRadius: 8,
+  border: '1px solid rgba(45, 212, 191, 0.22)',
+  background: 'rgba(15, 23, 42, 0.42)',
 };
 
 const verdictLabelStyle: CSSProperties = {
@@ -784,6 +850,10 @@ function AuditScopeBanner({ scope }: { scope: CasHarnessAuditScope }) {
 
 export default function AuditConsolePage() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const requestedModel = searchParams.get('model');
+  const requestedTraceId = searchParams.get('trace')?.trim() ?? '';
+  const queryTarget = requestedModel === 'pythia-160m' ? M1_REFERENCE_TARGET : null;
   const [target, setTarget] = useState<AuditTargetConfig | null>(null);
   const [session, setSession] = useState<CasHarnessAuditSession | null>(null);
   const [sessionError, setSessionError] = useState<string | null>(null);
@@ -807,7 +877,7 @@ export default function AuditConsolePage() {
   const [leasedFleetJob, setLeasedFleetJob] = useState<CasHarnessFleetJob | null>(null);
   const [fleetVerifierDecision, setFleetVerifierDecision] =
     useState<CasHarnessFleetVerifierDecision | null>(null);
-  const [fleetAuthToken, setFleetAuthToken] = useState('');
+  const [protectedApiToken, setProtectedApiToken] = useState('');
   const [fleetExecutorError, setFleetExecutorError] = useState<string | null>(null);
   const [isFleetExecutorLoading, setIsFleetExecutorLoading] = useState(false);
   const [liveWorkerHealth, setLiveWorkerHealth] =
@@ -833,29 +903,42 @@ export default function AuditConsolePage() {
   }, []);
 
   const isConfigured = target !== null;
+  const hasModelChoice = Boolean(target ?? queryTarget);
+  const isTraceReviewMode = requestedTraceId.length > 0 && session === null;
+  const hasProtectedApiToken = protectedApiToken.trim().length > 0;
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
   const activeError = targetError ?? sessionError;
   const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning || isTargetConnecting, activeError);
-  const commandButtonEnabled =
-    !isAuditRunning && !isTargetConnecting && (!isConfigured || !session?.verdict);
-  const commandButtonLabel = !isConfigured
+  const commandButtonEnabled = !isAuditRunning && !isTargetConnecting && (
+    isTraceReviewMode ||
+    !isConfigured ||
+    (Boolean(target?.canRunAudit) && !session?.verdict)
+  );
+  const commandButtonLabel = isTraceReviewMode
+    ? 'Start a new audit'
+    : !hasModelChoice
+    ? 'Choose a model'
+    : !isConfigured
     ? isTargetConnecting
-      ? 'Connecting target'
-      : 'Prepare target'
+      ? 'Connecting selected model...'
+      : 'Connect selected model'
     : isAuditRunning
-      ? 'Running audit'
+      ? 'Running CAS audit...'
       : session?.verdict
         ? 'Verdict ready'
+        : !target?.canRunAudit
+          ? 'Audit unavailable'
         : 'Run CAS audit';
   const showVerdictExplainer = Boolean(session?.verdict || session?.verifier_decision);
+  const visibleEvidenceTraceId = session?.evidence_packet_trace_id ?? requestedTraceId;
   const liveWorkerChip = useMemo(
     () => liveWorkerChipView(liveWorkerHealth),
     [liveWorkerHealth],
   );
   const protectedAuditApiOptions = useMemo<CasHarnessAuditApiOptions | undefined>(() => {
-    const authToken = fleetAuthToken.trim();
+    const authToken = protectedApiToken.trim();
     return authToken ? { authToken } : undefined;
-  }, [fleetAuthToken]);
+  }, [protectedApiToken]);
   const fleetRegisteredWorkers = fleetRun
     ? Math.max(fleetRun.registered_workers, registeredFleetWorker ? 1 : 0)
     : registeredFleetWorker
@@ -865,21 +948,24 @@ export default function AuditConsolePage() {
   const targetFleetWorkerId = assignedFleetWorkerId(distributedAudit, fleetRun);
   const canPrepareFleet =
     Boolean(distributedAudit && distributedAudit.status !== 'PLANNED' && !fleetRun) &&
+    hasProtectedApiToken &&
     !isFleetExecutorLoading;
-  const canRegisterFleetWorker = Boolean(distributedAudit && targetFleetWorkerId && !registeredFleetWorker) &&
+  const canRegisterFleetWorker = hasProtectedApiToken &&
+    Boolean(distributedAudit && targetFleetWorkerId && !registeredFleetWorker) &&
     !isFleetExecutorLoading;
-  const canLeaseFleetJob = Boolean(fleetRun && registeredFleetWorker && !leasedFleetJob) &&
+  const canLeaseFleetJob = hasProtectedApiToken &&
+    Boolean(fleetRun && registeredFleetWorker && !leasedFleetJob) &&
     !isFleetExecutorLoading;
   const canSubmitFleetReceipt =
-    Boolean(
+    hasProtectedApiToken && Boolean(
       fleetRun &&
         leasedFleetJob &&
         leasedFleetJob.status === 'leased' &&
         leasedFleetJob.lease_token,
     ) && !isFleetExecutorLoading;
-  const canMergeFleet = canMergeFleetRun(fleetRun, isFleetExecutorLoading);
+  const canMergeFleet = hasProtectedApiToken && canMergeFleetRun(fleetRun, isFleetExecutorLoading);
   const canRunFleetVerifier =
-    Boolean(fleetRun?.merged_packet_trace_id && !fleetVerifierDecision) &&
+    hasProtectedApiToken && Boolean(fleetRun?.merged_packet_trace_id && !fleetVerifierDecision) &&
     !isFleetExecutorLoading;
 
   const connectReferenceTarget = async () => {
@@ -947,10 +1033,15 @@ export default function AuditConsolePage() {
     setTargetError(null);
     setIsTargetConnecting(false);
     setIsAuditRunning(false);
+    setByokApiKey('');
   };
 
   const runAudit = async () => {
-    if (!target) return;
+    if (!target || !target.canRunAudit) return;
+    const trimmedKey = byokApiKey.trim();
+    // The customer key is request-scoped. Keep it only in this local closure
+    // and clear the rendered/input state before any network work begins.
+    setByokApiKey('');
     setSessionError(null);
     setTargetError(null);
     setIsAuditRunning(true);
@@ -964,7 +1055,6 @@ export default function AuditConsolePage() {
         evidence_packet_trace_id: target.evidencePacketTraceId ?? undefined,
       });
       setSession(created);
-      const trimmedKey = byokApiKey.trim();
       const started = await startCasHarnessAuditSession(
         created.audit_id,
         trimmedKey ? { apiKey: trimmedKey } : undefined,
@@ -980,10 +1070,19 @@ export default function AuditConsolePage() {
   };
 
   const runPrimaryCommand = () => {
+    if (isTraceReviewMode) {
+      navigate('/model-config');
+      return;
+    }
+    if (!hasModelChoice) {
+      navigate('/model-config');
+      return;
+    }
     if (!isConfigured) {
       void connectReferenceTarget();
       return;
     }
+    if (!target.canRunAudit) return;
     void runAudit();
   };
 
@@ -1014,6 +1113,10 @@ export default function AuditConsolePage() {
   };
 
   const createDistributedRun = async () => {
+    if (!hasProtectedApiToken) {
+      setDistributedAuditError('Protected API token is required for distributed audit actions.');
+      return;
+    }
     setDistributedAuditError(null);
     setFleetRun(null);
     setRegisteredFleetWorker(null);
@@ -1038,6 +1141,10 @@ export default function AuditConsolePage() {
 
   const dispatchDistributedRun = async () => {
     if (!distributedAudit) return;
+    if (!hasProtectedApiToken) {
+      setDistributedAuditError('Protected API token is required for distributed audit actions.');
+      return;
+    }
     setDistributedAuditError(null);
     setIsDistributedAuditLoading(true);
     try {
@@ -1057,6 +1164,10 @@ export default function AuditConsolePage() {
 
   const mergeDistributedRun = async () => {
     if (!distributedAudit) return;
+    if (!hasProtectedApiToken) {
+      setDistributedAuditError('Protected API token is required for distributed audit actions.');
+      return;
+    }
     setDistributedAuditError(null);
     setIsDistributedAuditLoading(true);
     try {
@@ -1076,6 +1187,10 @@ export default function AuditConsolePage() {
 
   const prepareFleet = async () => {
     if (!distributedAudit) return;
+    if (!hasProtectedApiToken) {
+      setFleetExecutorError('Protected API token is required for fleet actions.');
+      return;
+    }
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
@@ -1097,6 +1212,10 @@ export default function AuditConsolePage() {
 
   const registerDemoFleetWorker = async () => {
     if (!distributedAudit || !targetFleetWorkerId) return;
+    if (!hasProtectedApiToken) {
+      setFleetExecutorError('Protected API token is required for fleet actions.');
+      return;
+    }
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
@@ -1137,6 +1256,10 @@ export default function AuditConsolePage() {
 
   const leaseOneFleetJob = async () => {
     if (!distributedAudit || !registeredFleetWorker) return;
+    if (!hasProtectedApiToken) {
+      setFleetExecutorError('Protected API token is required for fleet actions.');
+      return;
+    }
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
@@ -1165,6 +1288,10 @@ export default function AuditConsolePage() {
 
   const submitOneFleetReceipt = async () => {
     if (!distributedAudit || !registeredFleetWorker || !leasedFleetJob?.lease_token) return;
+    if (!hasProtectedApiToken) {
+      setFleetExecutorError('Protected API token is required for fleet actions.');
+      return;
+    }
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
@@ -1209,6 +1336,10 @@ export default function AuditConsolePage() {
 
   const mergeFleet = async () => {
     if (!distributedAudit) return;
+    if (!hasProtectedApiToken) {
+      setFleetExecutorError('Protected API token is required for fleet actions.');
+      return;
+    }
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
@@ -1229,6 +1360,10 @@ export default function AuditConsolePage() {
 
   const runFleetVerifier = async () => {
     if (!distributedAudit) return;
+    if (!hasProtectedApiToken) {
+      setFleetExecutorError('Protected API token is required for fleet actions.');
+      return;
+    }
     setFleetExecutorError(null);
     setIsFleetExecutorLoading(true);
     try {
@@ -1283,15 +1418,18 @@ export default function AuditConsolePage() {
                     ? 'connected'
                     : 'disconnected'
             }
-            modelName={target?.modelId ?? 'No model connected'}
-            provider={target?.provider ?? 'License/API connector pending'}
-            endpointLabel={target?.endpointLabel ?? 'Configure in Model'}
+            modelName={target?.modelId ?? queryTarget?.modelId ?? 'No model selected'}
+            provider={target?.provider ?? queryTarget?.provider ?? 'Choose a supported model first'}
+            endpointLabel={target?.endpointLabel ?? queryTarget?.endpointLabel ?? 'Configure in Model'}
+            showSelectionDetails={Boolean(target ?? queryTarget)}
             statusDetail={
               targetError
                 ? targetError
                 : isConfigured
                   ? target.statusDetail
-                  : 'Connect a supported target before running a CAS Harness audit.'
+                  : queryTarget
+                    ? 'Pythia-160M selected. Connect it before running a CAS Harness audit.'
+                    : 'Choose a supported target before connecting or running an audit.'
             }
             lastChecked={
               session
@@ -1302,7 +1440,7 @@ export default function AuditConsolePage() {
             }
             isAuditRunning={isAuditRunning}
             canRunAudit={Boolean(target?.canRunAudit)}
-            onConnect={connectReferenceTarget}
+            onConnect={hasModelChoice ? connectReferenceTarget : () => navigate('/model-config')}
             onDisconnect={disconnectTarget}
             onRunAudit={runAudit}
           />
@@ -1313,11 +1451,11 @@ export default function AuditConsolePage() {
             <div>
               <h2 style={commandTitleStyle}>Audit command center</h2>
               <AuditPopover
-                briefing="The user path is simple: connect the target, run CAS, then return a verdict with proof chips and an Evidence Packet."
+                briefing="The launch path stays linear: choose a model, connect the target, run CAS, track progress, then review the evidence-gated result."
                 placement="bottom"
                 width={340}
             >
-              <p style={commandSubtitleStyle}>Connect. Run. Decide.</p>
+              <p style={commandSubtitleStyle}>Choose. Connect. Run. Track. Review.</p>
             </AuditPopover>
           </div>
           <div style={commandActionsStyle}>
@@ -1335,22 +1473,6 @@ export default function AuditConsolePage() {
               <span style={liveWorkerDotStyle(liveWorkerChip.accent)} aria-hidden="true" />
               {liveWorkerChip.label}
             </span>
-            <button
-              type="button"
-              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-              onClick={loadStage940EPacketTarget}
-              disabled={isAuditRunning || isTargetConnecting}
-            >
-              Load 20B validation packet
-            </button>
-            <button
-              type="button"
-              style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
-              onClick={loadS7F28PacketTarget}
-              disabled={isAuditRunning || isTargetConnecting}
-            >
-              Load 20B review packet
-            </button>
             <input
               type="password"
               aria-label="Bring your own provider API key (optional)"
@@ -1386,13 +1508,22 @@ export default function AuditConsolePage() {
             {AUDIT_STEPS.map((step, index) => {
               const state = commandStateFor(
                 index,
+                hasModelChoice,
                 isConfigured,
                 session,
                 isAuditRunning,
+                isTargetConnecting,
+                targetError,
                 sessionError,
+                isTraceReviewMode,
               );
               return (
-                <article key={step.label} style={stepStyle(state)}>
+                <article
+                  key={step.label}
+                  style={stepStyle(state)}
+                  data-launch-step={step.command.toLowerCase()}
+                  data-state={state}
+                >
                   <AuditPopover briefing={step.detail} block placement="bottom">
                     <span style={stepNumberStyle}>{index + 1}</span>
                     <h2 style={stepLabelStyle}>{step.command}</h2>
@@ -1407,8 +1538,30 @@ export default function AuditConsolePage() {
           </section>
         </section>
 
-        <div style={singleColumnStyle}>
-          <EnterpriseScalePlanCard
+        <details style={advancedDetailsStyle} data-testid="advanced-scale-fleet-tools">
+          <summary style={advancedSummaryStyle}>Advanced scale &amp; fleet tools</summary>
+          <div style={advancedStackStyle}>
+            <section aria-label="Saved packet tools" style={savedPacketActionsStyle}>
+              <button
+                type="button"
+                style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+                onClick={loadStage940EPacketTarget}
+                disabled={isAuditRunning || isTargetConnecting}
+              >
+                Load 20B validation packet
+              </button>
+              <button
+                type="button"
+                style={commandActionStyle(!isAuditRunning && !isTargetConnecting)}
+                onClick={loadS7F28PacketTarget}
+                disabled={isAuditRunning || isTargetConnecting}
+              >
+                Load 20B review packet
+              </button>
+            </section>
+
+            <div style={singleColumnStyle}>
+              <EnterpriseScalePlanCard
             plan={enterprisePlan}
             selectedSize={enterprisePlanSize}
             isLoading={isEnterprisePlanLoading}
@@ -1416,14 +1569,15 @@ export default function AuditConsolePage() {
             onSelectSize={(size) => {
               void loadEnterprisePlan(size);
             }}
-          />
-        </div>
+              />
+            </div>
 
-        <div style={singleColumnStyle}>
-          <DistributedAuditRunPanel
+            <div style={singleColumnStyle}>
+              <DistributedAuditRunPanel
             audit={distributedAudit}
             isLoading={isDistributedAuditLoading}
             error={distributedAuditError}
+            hasProtectedAccess={hasProtectedApiToken}
             onCreateRun={() => {
               void createDistributedRun();
             }}
@@ -1433,11 +1587,11 @@ export default function AuditConsolePage() {
             onMergeRun={() => {
               void mergeDistributedRun();
             }}
-          />
-        </div>
+              />
+            </div>
 
-        <div style={singleColumnStyle}>
-          <FleetExecutorPanel
+            <div style={singleColumnStyle}>
+              <FleetExecutorPanel
             registeredWorkers={fleetRegisteredWorkers}
             leasedJobs={fleetRun?.leased_jobs ?? 0}
             staleWorkers={fleetRun?.stale_workers.length ?? 0}
@@ -1456,19 +1610,24 @@ export default function AuditConsolePage() {
                   stays blocked until a leased job returns an Evidence Packet
                   fragment.
                 </p>
-                <label htmlFor="fleet-auth-token" style={verdictLabelStyle}>
-                  Protected API token
+                <label htmlFor="advanced-api-token" style={verdictLabelStyle}>
+                  Advanced tools API token
                 </label>
                 <input
-                  id="fleet-auth-token"
+                  id="advanced-api-token"
                   type="password"
                   autoComplete="off"
                   spellCheck={false}
-                  value={fleetAuthToken}
-                  onChange={(event) => setFleetAuthToken(event.target.value)}
-                  placeholder="Optional bearer token"
+                  value={protectedApiToken}
+                  onChange={(event) => setProtectedApiToken(event.target.value)}
+                  placeholder="Bearer token required"
                   style={fleetAuthInputStyle}
                 />
+                {!hasProtectedApiToken ? (
+                  <p role="note" style={fleetNoticeStyle}>
+                    Protected distributed and fleet actions stay disabled until a token is entered.
+                  </p>
+                ) : null}
               </div>
               <div style={fleetButtonRowStyle}>
                 <button
@@ -1584,8 +1743,10 @@ export default function AuditConsolePage() {
                 Fleet merge reason: {fleetRun.merge_reason}
               </p>
             ) : null}
-          </section>
-        </div>
+              </section>
+            </div>
+          </div>
+        </details>
 
         <div style={session ? lowerGridStyle : singleColumnStyle}>
           <AuditSessionProgress
@@ -1624,6 +1785,29 @@ export default function AuditConsolePage() {
               }
               onInspectInAtlas={session ? () => navigate('/cockpit') : undefined}
             />
+            <section style={protectedAccessStyle} aria-label="Protected Evidence Packet access">
+              <label htmlFor="protected-api-token" style={verdictLabelStyle}>
+                Protected API token
+              </label>
+              <input
+                id="protected-api-token"
+                type="password"
+                autoComplete="off"
+                spellCheck={false}
+                value={protectedApiToken}
+                onChange={(event) => setProtectedApiToken(event.target.value)}
+                placeholder="Bearer token required for packet access"
+                style={fleetAuthInputStyle}
+              />
+              <p style={fleetNoticeStyle}>
+                Held only in this tab and shared with authenticated packet, distributed, and fleet requests.
+              </p>
+            </section>
+            <EvidencePacketActions
+              key={visibleEvidenceTraceId || 'no-evidence-packet'}
+              traceId={visibleEvidenceTraceId}
+              authToken={protectedApiToken}
+            />
             {showVerdictExplainer ? (
               <AuditVerdictExplainer
                 verdict={session?.verdict ?? null}
@@ -1633,9 +1817,13 @@ export default function AuditConsolePage() {
                 lifecycleMessage={latestLifecycleMessage(session)}
               />
             ) : null}
-            {session?.evidence_packet_trace_id ? (
+            {visibleEvidenceTraceId ? (
               <>
-                <EvidencePacketVerificationPanel traceId={session.evidence_packet_trace_id} />
+                <EvidencePacketVerificationPanel
+                  key={visibleEvidenceTraceId}
+                  traceId={visibleEvidenceTraceId}
+                  authToken={protectedApiToken}
+                />
                 <EvidencePacketFlightRecorderFaq />
               </>
             ) : null}

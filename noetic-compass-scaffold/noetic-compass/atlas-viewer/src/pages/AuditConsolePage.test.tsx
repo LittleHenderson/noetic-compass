@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
@@ -48,12 +48,28 @@ function stubFetchWithLiveWorker(
 const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
 const STAGE9_40E_TRACE_ID = 'stage9-40e-original-baseline-readout-20260527';
 
-function renderPage() {
+function renderPage(initialEntry = '/audit-console') {
   return render(
-    <MemoryRouter initialEntries={['/audit-console']}>
+    <MemoryRouter initialEntries={[initialEntry]}>
       <AuditConsolePage />
     </MemoryRouter>
   );
+}
+
+function openAdvancedTools() {
+  fireEvent.click(screen.getByText('Advanced scale & fleet tools'));
+}
+
+function customerAction(name: 'Connect selected model' | 'Run CAS audit' | 'Start a new audit') {
+  return screen.getAllByRole('button', { name })[0];
+}
+
+function deferred<T>() {
+  let resolve!: (value: T) => void;
+  const promise = new Promise<T>((next) => {
+    resolve = next;
+  });
+  return { promise, resolve };
 }
 
 function sessionResponse(overrides: Record<string, unknown> = {}) {
@@ -416,11 +432,13 @@ describe('AuditConsolePage', () => {
     expect(screen.getByText('TURN YOUR BLACK BOX INTO A GLASS HOUSE')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Audit command center' })).toBeInTheDocument();
     expect(screen.getByText(/Worker evidence, not planner theater/i)).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'CHOOSE' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'CONNECT' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'RUN' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'VERDICT' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'PROGRESS' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'RESULT' })).toBeInTheDocument();
     expect(screen.getAllByText('Run CAS audit').length).toBeGreaterThan(0);
-    expect(screen.getByText('Return verdict + evidence')).toBeInTheDocument();
+    expect(screen.getByText('Result + evidence')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'NO VERDICT YET' })).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Proof chips' })).not.toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Hover help' })).not.toBeInTheDocument();
@@ -430,13 +448,257 @@ describe('AuditConsolePage', () => {
     expect(screen.queryByText('Evidence count')).not.toBeInTheDocument();
     expect(screen.queryByText('Verdict vocabulary')).not.toBeInTheDocument();
 
-    expect(screen.getByRole('button', { name: 'Run audit' })).toBeDisabled();
+    const advanced = screen.getByTestId('advanced-scale-fleet-tools');
+    expect(advanced).not.toHaveAttribute('open');
+    const advancedPanels = [
+      screen.getByLabelText('Saved packet tools'),
+      screen.getByTestId('enterprise-scale-plan-card'),
+      screen.getByTestId('distributed-audit-run-panel'),
+      screen.getByLabelText('CAS Harness fleet executor'),
+      screen.getByLabelText('Fleet executor controls'),
+    ];
+    advancedPanels.forEach((panel) => expect(advanced).toContainElement(panel));
+    [
+      'Load 20B validation packet',
+      'Load 20B review packet',
+      '20B',
+      '100B',
+      '300B',
+      'Create run',
+      'Dispatch workers',
+      'Merge distributed receipts',
+      'Prepare fleet',
+      'Register demo worker',
+      'Lease one job',
+      'Submit one receipt',
+      'Merge fleet',
+      'Run fleet verifier',
+    ].forEach((name) => {
+      expect(advanced).toContainElement(screen.getByRole('button', { name }));
+    });
+    expect(
+      screen.getByRole('button', { name: 'Download Evidence Packet' }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole('button', { name: 'Copy Evidence Packet review link' }),
+    ).toBeDisabled();
+
+    expect(customerAction('Run CAS audit')).toBeDisabled();
     expect(screen.getByRole('heading', { name: 'Audit not started' })).toBeInTheDocument();
     expect(
       screen.getByRole('note', {
         name: 'Connect a supported target before running an audit.',
       }),
     ).toBeInTheDocument();
+  });
+
+  it('consumes the supported model query and advances the launch sequence to connect', () => {
+    const { container } = renderPage('/audit-console?model=pythia-160m');
+
+    expect(screen.getByText('EleutherAI/pythia-160m')).toBeInTheDocument();
+    expect(
+      screen.getByRole('note', {
+        name: /Pythia-160M selected\. Connect it before running/i,
+      }),
+    ).toBeInTheDocument();
+    expect(customerAction('Connect selected model')).toBeEnabled();
+    expect(container.querySelector('[data-launch-step="choose"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="connect"]')).toHaveAttribute('data-state', 'ready');
+    expect(container.querySelector('[data-launch-step="run"]')).toHaveAttribute('data-state', 'waiting');
+  });
+
+  it('keeps every run entry point disabled when target verification refuses the audit', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => targetVerification({ can_run_audit: false }),
+    });
+    stubFetchWithLiveWorker(fetchMock);
+    renderPage('/audit-console?model=pythia-160m');
+
+    fireEvent.click(customerAction('Connect selected model'));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
+
+    expect(screen.getByRole('button', { name: 'Audit unavailable' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Run CAS audit' })).toBeDisabled();
+    fireEvent.click(screen.getByRole('button', { name: 'Run CAS audit' }));
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+
+  it('blocks only CONNECT when target verification fails', async () => {
+    const fetchMock = vi.fn().mockResolvedValueOnce({
+      ok: false,
+      status: 503,
+      statusText: 'Unavailable',
+      json: async () => ({ detail: 'target offline' }),
+    });
+    stubFetchWithLiveWorker(fetchMock);
+    const { container } = renderPage('/audit-console?model=pythia-160m');
+
+    fireEvent.click(customerAction('Connect selected model'));
+    expect(await screen.findByRole('note', { name: /target offline/i })).toBeInTheDocument();
+
+    expect(container.querySelector('[data-launch-step="connect"]')).toHaveAttribute('data-state', 'blocked');
+    expect(container.querySelector('[data-launch-step="run"]')).toHaveAttribute('data-state', 'waiting');
+    expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute('data-state', 'waiting');
+    expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'waiting');
+  });
+
+  it('blocks only RUN when session creation fails', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => targetVerification() })
+      .mockResolvedValueOnce({
+        ok: false,
+        status: 500,
+        statusText: 'Server Error',
+        json: async () => ({ detail: 'session create failed' }),
+      });
+    stubFetchWithLiveWorker(fetchMock);
+    const { container } = renderPage('/audit-console?model=pythia-160m');
+    fireEvent.click(customerAction('Connect selected model'));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
+
+    fireEvent.click(customerAction('Run CAS audit'));
+    expect(await screen.findByRole('alert')).toHaveTextContent(/session create failed/i);
+
+    expect(container.querySelector('[data-launch-step="connect"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="run"]')).toHaveAttribute('data-state', 'blocked');
+    expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute('data-state', 'waiting');
+    expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'waiting');
+  });
+
+  it('consumes a shared trace query and exposes the real packet verifier target', () => {
+    const { container } = renderPage('/audit-console?trace=shared-trace-123');
+
+    expect(screen.getByText('trace_id: shared-trace-123')).toBeInTheDocument();
+    expect(container.querySelector('[data-launch-step="choose"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="connect"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="run"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'active');
+    expect(customerAction('Start a new audit')).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Verify packet' })).toBeDisabled();
+    expect(screen.getAllByRole('note').some((note) => note.textContent?.includes('protected API token')))
+      .toBe(true);
+
+    openAdvancedTools();
+    expect(screen.getByRole('button', { name: 'Create run' })).toBeDisabled();
+    fireEvent.change(screen.getByLabelText('Protected API token'), {
+      target: { value: 'shared-token' },
+    });
+    expect(screen.getByLabelText('Advanced tools API token')).toHaveValue('shared-token');
+    expect(screen.getByRole('button', { name: 'Create run' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Verify packet' })).toBeEnabled();
+    expect(
+      screen.getByRole('button', { name: 'Download Evidence Packet' }),
+    ).toBeEnabled();
+  });
+
+  it('keeps RUN and PROGRESS mutually exclusive while creation is pending and execution is running', async () => {
+    const pendingCreate = deferred<{
+      ok: boolean;
+      json: () => Promise<Record<string, unknown>>;
+    }>();
+    const pendingRun = deferred<{
+      ok: boolean;
+      json: () => Promise<Record<string, unknown>>;
+    }>();
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => targetVerification() })
+      .mockImplementationOnce(() => pendingCreate.promise)
+      .mockImplementationOnce(() => pendingRun.promise);
+    stubFetchWithLiveWorker(fetchMock);
+
+    const { container } = renderPage('/audit-console?model=pythia-160m');
+    fireEvent.click(customerAction('Connect selected model'));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
+
+    fireEvent.click(customerAction('Run CAS audit'));
+    await waitFor(() => {
+      expect(container.querySelector('[data-launch-step="run"]')).toHaveAttribute(
+        'data-state',
+        'active',
+      );
+      expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute(
+        'data-state',
+        'waiting',
+      );
+    });
+    expect(container.querySelectorAll('[data-launch-step="run"][data-state="active"], [data-launch-step="progress"][data-state="active"]')).toHaveLength(1);
+
+    await act(async () => {
+      pendingCreate.resolve({
+        ok: true,
+        json: async () => sessionResponse({ status: 'DRAFT' }),
+      });
+      await Promise.resolve();
+    });
+    await waitFor(() => {
+      expect(container.querySelector('[data-launch-step="run"]')).toHaveAttribute(
+        'data-state',
+        'done',
+      );
+      expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute(
+        'data-state',
+        'active',
+      );
+    });
+    expect(container.querySelectorAll('[data-launch-step="run"][data-state="active"], [data-launch-step="progress"][data-state="active"]')).toHaveLength(1);
+
+    await act(async () => {
+      pendingRun.resolve({
+        ok: true,
+        json: async () =>
+          sessionResponse({
+            status: 'COMPLETE',
+            verdict: 'FLAG_FOR_HUMAN_REVIEW',
+            evidence_packet_trace_id: 'trace-complete',
+          }),
+      });
+      await Promise.resolve();
+    });
+    await waitFor(() => {
+      expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute(
+        'data-state',
+        'done',
+      );
+      expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute(
+        'data-state',
+        'done',
+      );
+    });
+  });
+
+  it('marks only progress blocked when the backend returns a FAILED session', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => targetVerification() })
+      .mockResolvedValueOnce({ ok: true, json: async () => sessionResponse() })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => sessionResponse({
+          status: 'FAILED',
+          lifecycle: [
+            {
+              status: 'FAILED',
+              message: 'Live hosted open-weight runner failed: worker unavailable.',
+              timestamp: '2026-07-12T22:00:00Z',
+            },
+          ],
+        }),
+      });
+    stubFetchWithLiveWorker(fetchMock);
+
+    const { container } = renderPage('/audit-console?model=pythia-160m');
+    fireEvent.click(customerAction('Connect selected model'));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
+    fireEvent.click(customerAction('Run CAS audit'));
+
+    expect(await screen.findByRole('heading', { name: 'Audit failed' })).toBeInTheDocument();
+    expect(container.querySelector('[data-launch-step="run"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute('data-state', 'blocked');
+    expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'waiting');
   });
 
   it('keeps explanatory wording on hover targets instead of visible paragraphs', () => {
@@ -446,11 +708,11 @@ describe('AuditConsolePage', () => {
       screen.queryByText(/the UI shows ACCEPT or SUPPRESS only when the/i),
     ).not.toBeInTheDocument();
     expect(screen.queryByText(/Audit Console is the decision workflow/i)).not.toBeInTheDocument();
-    const commandSubtitle = screen.getByText('Connect. Run. Decide.');
+    const commandSubtitle = screen.getByText('Choose. Connect. Run. Track. Review.');
     expect(commandSubtitle).not.toHaveAttribute('title');
     fireEvent.mouseEnter(commandSubtitle);
     expect(screen.getByRole('tooltip')).toHaveTextContent(
-      'connect the target, run CAS, then return a verdict',
+      'choose a model, connect the target, run CAS, track progress',
     );
   });
 
@@ -527,19 +789,26 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    const { container } = renderPage('/audit-console?model=pythia-160m');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
+    fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
+    expect(customerAction('Run CAS audit')).toBeEnabled();
     expect(screen.getByRole('note', { name: /reference target verified/i })).toBeInTheDocument();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+    fireEvent.click(customerAction('Run CAS audit'));
 
     expect(await screen.findByText('cas-audit-test-session')).toBeInTheDocument();
     expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Audit complete' })).toBeInTheDocument();
     expect(screen.getByText('Confidence: 98%')).toBeInTheDocument();
+    expect(container.querySelector('[data-launch-step="progress"]')).toHaveAttribute('data-state', 'done');
+    expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'done');
+    expect(
+      screen.getByRole('button', { name: 'Download Evidence Packet' }),
+    ).toBeDisabled();
+    expect(screen.getAllByRole('note').some((note) => note.textContent?.includes('protected API token')))
+      .toBe(true);
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
       '/api/cas-harness/audit/target/verify',
@@ -600,16 +869,17 @@ describe('AuditConsolePage', () => {
     // so the BYOK call sequence (verify -> session -> run) keeps its indices.
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    renderPage('/audit-console?model=pythia-160m');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
+    fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
 
     fireEvent.change(
       screen.getByLabelText('Bring your own provider API key (optional)'),
       { target: { value: 'sk-customer-secret' } },
     );
-    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+    fireEvent.click(customerAction('Run CAS audit'));
+    expect(screen.getByLabelText('Bring your own provider API key (optional)')).toHaveValue('');
 
     expect(
       await screen.findByText(
@@ -622,6 +892,13 @@ describe('AuditConsolePage', () => {
     expect(JSON.parse(String((runCall[1] as RequestInit).body))).toEqual({
       api_key: 'sk-customer-secret',
     });
+
+    fireEvent.change(
+      screen.getByLabelText('Bring your own provider API key (optional)'),
+      { target: { value: 'must-not-survive-disconnect' } },
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Disconnect' }));
+    expect(screen.getByLabelText('Bring your own provider API key (optional)')).toHaveValue('');
   });
 
   it('loads the S7-F28 20B evidence packet into the audit lifecycle', async () => {
@@ -685,14 +962,15 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    openAdvancedTools();
 
     fireEvent.click(screen.getByRole('button', { name: 'Load 20B review packet' }));
 
     expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
     expect(screen.getByText('S7-F28 Balanced Bridge Method')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
+    expect(customerAction('Run CAS audit')).toBeEnabled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+    fireEvent.click(customerAction('Run CAS audit'));
 
     expect(
       await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' }),
@@ -777,14 +1055,15 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    openAdvancedTools();
 
     fireEvent.click(screen.getByRole('button', { name: 'Load 20B validation packet' }));
 
     expect(screen.getByText('EleutherAI/gpt-neox-20b')).toBeInTheDocument();
     expect(screen.getByText('Stage 9 original 40E validation packet')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Run audit' })).toBeEnabled();
+    expect(customerAction('Run CAS audit')).toBeEnabled();
 
-    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+    fireEvent.click(customerAction('Run CAS audit'));
 
     expect(await screen.findByRole('heading', { name: 'FLAG FOR HUMAN REVIEW' })).toBeInTheDocument();
     expect(screen.getByText('Confidence: not available')).toBeInTheDocument();
@@ -819,6 +1098,10 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    openAdvancedTools();
+    fireEvent.change(screen.getByLabelText('Protected API token'), {
+      target: { value: 'distributed-jwt' },
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
     expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
@@ -930,6 +1213,7 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    openAdvancedTools();
 
     expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
@@ -1059,6 +1343,10 @@ describe('AuditConsolePage', () => {
     stubFetchWithLiveWorker(fetchMock);
 
     renderPage();
+    openAdvancedTools();
+    fireEvent.change(screen.getByLabelText('Protected API token'), {
+      target: { value: 'blocked-fleet-jwt' },
+    });
 
     fireEvent.click(screen.getByRole('button', { name: 'Create run' }));
     expect(await screen.findByText('cas-dist-unit')).toBeInTheDocument();
@@ -1129,11 +1417,11 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    renderPage('/audit-console?model=pythia-160m');
 
-    fireEvent.click(screen.getByRole('button', { name: 'Prepare target' }));
+    fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: 'Run audit' }));
+    fireEvent.click(customerAction('Run CAS audit'));
 
     expect(await screen.findByRole('heading', { name: 'ACCEPT' })).toBeInTheDocument();
     expect(screen.getByText(/Accepted because the verifier explicitly allowed it/i)).toBeInTheDocument();
@@ -1229,7 +1517,7 @@ describe('AuditConsolePage', () => {
       expect(chip).toHaveTextContent('Checking live worker…');
       expect(chip).toHaveStyle({ color: 'rgb(100, 116, 139)' });
       // Page still renders its core controls.
-      expect(screen.getByRole('button', { name: 'Run audit' })).toBeInTheDocument();
+      expect(customerAction('Run CAS audit')).toBeInTheDocument();
     });
   });
 });
