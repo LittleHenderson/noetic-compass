@@ -27,9 +27,25 @@ def _isolated_packet_store(tmp_path, monkeypatch):
     monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
     monkeypatch.setenv("CAS_HARNESS_HARVEST_STORE_DIR", str(tmp_path / "harvest"))
     monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", raising=False)
+    monkeypatch.setattr(settings, "atlas_live_worker_token", "test-worker-secret")
     reset_merged_fleet_evidence_packets_for_tests()
     yield
     reset_merged_fleet_evidence_packets_for_tests()
+
+
+@pytest.mark.asyncio
+async def test_live_worker_runner_blocks_remote_url_without_service_token(monkeypatch):
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "https://worker.example")
+    monkeypatch.setattr(settings, "atlas_live_worker_token", "")
+
+    with pytest.raises(LiveAuditRunnerUnavailable, match="worker_token_required"):
+        await run_live_worker_audit(
+            audit_id="audit-insecure-worker",
+            model_id="EleutherAI/pythia-160m",
+            prompt="Do not send this prompt to an unprotected worker.",
+            audit_mode="BALANCED",
+            selected_modules=["active_trace"],
+        )
 
 
 @pytest.mark.asyncio

@@ -24,6 +24,10 @@ from pydantic import BaseModel, Field
 
 from api.config import settings
 from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
+from api.services.atlas_live_worker_config import (
+    WORKER_CONFIG_NOT_CONFIGURED,
+    atlas_worker_target,
+)
 
 
 router = APIRouter(prefix="/atlas/live", tags=["atlas_live"])
@@ -113,10 +117,15 @@ def _record_session_open(ip: str, code: str) -> None:
 
 
 def _worker_base_url() -> str:
-    base = settings.atlas_live_worker_url.strip().rstrip("/")
-    if not base:
-        raise HTTPException(status_code=503, detail="Atlas LIVE worker URL is not configured")
-    return base
+    target = atlas_worker_target()
+    if target.allowed:
+        return target.base_url
+    detail = (
+        "atlas_live_disabled"
+        if target.error == WORKER_CONFIG_NOT_CONFIGURED
+        else f"atlas_live_{target.error}"
+    )
+    raise HTTPException(status_code=503, detail=detail)
 
 
 def _token_secret() -> str:
@@ -181,9 +190,7 @@ async def _iter_worker_events(session_id: str) -> AsyncIterator[bytes]:
 
 async def _proxy_worker_get(path: str) -> dict:
     """Proxy a worker health GET with an operator-readable 503 contract."""
-    base = settings.atlas_live_worker_url.strip().rstrip("/")
-    if not base:
-        raise HTTPException(status_code=503, detail="atlas_live_disabled")
+    base = _worker_base_url()
 
     timeout = httpx.Timeout(settings.atlas_live_http_timeout_seconds)
     try:

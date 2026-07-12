@@ -1,8 +1,16 @@
 # Atlas LIVE Worker — Launch-Grade Exposure + Image Hardening (2026-05-31)
 
-Status: design proposal. No infra was changed; no pod, RunPod account, or SSH
-was accessed while writing this. Claims about RunPod product behaviour that I
-could not verify from this repo are flagged **[verify]**.
+Status: historical design proposal plus a 2026-07-12 implementation update.
+No pod or RunPod account was changed by the current source-only work. Claims
+about RunPod product behaviour that the repository cannot prove remain flagged
+**[verify]**.
+
+Current source posture: API-side token send is present; every API worker caller
+now shares a fail-closed target policy; remote targets without
+`ATLAS_LIVE_WORKER_TOKEN` are blocked; loopback development may remain
+tokenless; and both Render blueprints keep the URL/token dashboard-managed.
+No no-SSH worker is currently deployed or verified, so hosted proof remains
+`OPEN` and the live worker must not be described as production-operational.
 
 ## 1. Problem
 
@@ -247,23 +255,23 @@ scaling track, not the immediate launch step.
    fleet executor; resolve SSE-vs-batch streaming; keep the live cockpit on a
    warm pod if SSE must stay live.
 
-## 6. Auth shim contract (shipped in this PR, optional + backward-compatible)
+## 6. Auth and connection contract (current source)
 
-- Env var `ATLAS_LIVE_WORKER_TOKEN` (worker side).
-  - **Unset or empty -> auth disabled** (current behaviour; dev/CI/local smoke
-    unaffected). This is the default.
-  - **Set -> every request except the health endpoints must present
+- Env var `ATLAS_LIVE_WORKER_TOKEN` is configured on both API and worker.
+  - **Unset or empty on the worker -> worker auth disabled.** This is acceptable
+    only for loopback development; it is not a production posture.
+  - **Set on the worker -> every request except the health endpoints must present
     `X-Atlas-Worker-Token: <token>`** or receive `401`.
 - Health endpoints (`/health`, `/health/realmode`) are intentionally
   **exempt** so RunPod health checks and the API's liveness/real-mode proxy keep
   working without the secret. They expose no user data and no inference.
-- The API side already centralises worker calls in `api/routes/atlas_live.py`
-  (`_create_worker_session`, `_iter_worker_events`, `_proxy_worker_get`).
-  Wiring the API to send the header is a one-line addition per call site and is
-  **out of scope for this PR** (the task constrains edits to the worker + docs);
-  it is the infra/launch step. Until then, leaving `ATLAS_LIVE_WORKER_TOKEN`
-  unset keeps the system working exactly as it does today.
-- No secret is committed. The token is supplied via environment only.
+- The API sends the shared header from both `api/routes/atlas_live.py` and
+  `api/services/cas_harness_live_worker_runner.py` through the shared auth helper.
+- `api/services/atlas_live_worker_config.py` centralises the connection gate:
+  empty URL stays dark, malformed URL is rejected, loopback may be tokenless,
+  and every non-loopback target requires the API token before network access.
+- No secret is committed. Both Render blueprints keep URL and token
+  dashboard-managed with `sync: false`.
 
 ## 7. Honest caveats / open questions for the human
 
@@ -282,6 +290,6 @@ scaling track, not the immediate launch step.
 - The token is a shared secret, not per-request or per-user. User identity,
   license, invite codes, and rate limits remain entirely the API's job; the
   token only answers "is the caller our API."
-- This PR does **not** touch the API routes, frontend, runner, or `CHANGELOG.md`,
-  per task constraints. The API-side header send and the infra changes are the
-  follow-on launch step.
+- Source hardening does not prove deployment. A real worker URL, matching
+  worker/API token, hosted audit, packet write, and WORM verification remain
+  required before the no-SSH production gate can close.

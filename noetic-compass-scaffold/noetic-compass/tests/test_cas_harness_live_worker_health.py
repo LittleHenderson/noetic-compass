@@ -9,6 +9,7 @@ from api.routes import cas_harness_live_worker_health as live_worker
 @pytest.fixture(autouse=True)
 def reset_worker_settings(monkeypatch):
     monkeypatch.setattr(live_worker.settings, "atlas_live_worker_url", "https://worker.example")
+    monkeypatch.setattr(live_worker.settings, "atlas_live_worker_token", "test-worker-secret")
     monkeypatch.setattr(live_worker.settings, "atlas_live_http_timeout_seconds", 30.0)
 
 
@@ -172,3 +173,17 @@ def test_live_worker_health_not_configured(client, monkeypatch):
     assert body["model_id"] is None
     assert body["worker_version"] is None
     assert body["label"] == "Live worker not configured"
+
+
+def test_live_worker_health_blocks_remote_url_without_service_token(client, monkeypatch):
+    monkeypatch.setattr(live_worker.settings, "atlas_live_worker_token", "")
+
+    resp = client.get("/api/cas-harness/live-worker/health")
+
+    assert resp.status_code == 200
+    body = resp.json()
+    assert body["configured"] is True
+    assert body["reachable"] is False
+    assert body["real_weights"] is False
+    assert body["configuration_error"] == "worker_token_required"
+    assert body["label"] == "Live worker blocked · service token required"

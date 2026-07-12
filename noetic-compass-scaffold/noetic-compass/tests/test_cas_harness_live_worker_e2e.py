@@ -432,6 +432,9 @@ def test_live_worker_audit_e2e_create_run_packet_harvest(
     monkeypatch.setattr(
         "api.config.settings.atlas_live_worker_url", "http://worker.e2e.test", raising=False
     )
+    monkeypatch.setattr(
+        "api.config.settings.atlas_live_worker_token", "e2e-worker-token", raising=False
+    )
     _stub_worker_dump(monkeypatch)
     body = _create_and_run(client, auth_headers)
     trace_id = body["evidence_packet_trace_id"]

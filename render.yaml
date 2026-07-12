@@ -122,8 +122,14 @@ services:
         value: https://noeticcompass.com,https://www.noeticcompass.com,https://atlas.noeticcompass.com,https://atlas-viewer-app.onrender.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
       - key: NC_CORS_ORIGIN_REGEX
         value: 'https://(.*\.)?noeticcompass\.com|https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?|http://127\.0\.0\.1(:\d+)?'
+      # CAS Harness hosted worker route. These are intentionally dashboard-managed:
+      # an unset URL keeps the live lane dark, while every non-loopback URL is blocked
+      # unless the matching service token is also configured. The worker image serves
+      # port 8080; never restore the retired 8888/Jupyter endpoint here.
       - key: ATLAS_LIVE_WORKER_URL
-        value: https://6bmmab3vbf1yij-8888.proxy.runpod.net
+        sync: false
+      - key: ATLAS_LIVE_WORKER_TOKEN
+        sync: false
       # CAS Harness Evidence Packet anchoring. Keep these dashboard-managed:
       # setting mode=s3 without valid AWS credentials makes every new packet
       # report Anchor failed. See docs/DEPLOYMENT.md for the smoke verifier.
