@@ -152,20 +152,30 @@ app = FastAPI(
 # Regex matches every Vercel deployment alias (preview, team-scoped, canonical)
 # so stakeholder demos never hit "Failed to fetch" when Vercel rotates the URL.
 cors_origins = _parse_cors_origins(settings.cors_origins)
+# Wildcard origins ("*") combined with allow_credentials=True is rejected by
+# browsers and, in Starlette, causes the request Origin to be reflected back
+# with Access-Control-Allow-Credentials: true — letting any site make
+# credentialed cross-origin calls. Only enable credentials when the origin set
+# is an explicit allowlist; the Vercel-alias regex still applies for demos.
+allow_credentialed_cors = cors_origins != ["*"]
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
     allow_origin_regex=settings.cors_origin_regex or None,
-    allow_credentials=True,
+    allow_credentials=allow_credentialed_cors,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Middleware (order matters: outermost first)
-# RequestIdMiddleware runs first (outermost) so request_id is available to all others
-app.add_middleware(AuditLogMiddleware)
+# Middleware — Starlette applies the LAST-added as the OUTERMOST layer.
+# Order outermost -> innermost: RequestId -> AuditLog -> JWTAuth -> RateLimit.
+# RequestId stays outermost so request_id is available to all others. AuditLog
+# now wraps JWTAuth so failed-auth (401) requests are still logged; previously
+# it sat innermost and never saw auth rejections (credential-stuffing on
+# /auth/token, forged-token probes) — a security-observability gap.
 app.add_middleware(RateLimitMiddleware)
 app.add_middleware(JWTAuthMiddleware)
+app.add_middleware(AuditLogMiddleware)
 app.add_middleware(RequestIdMiddleware)
 
 # Exception handlers
