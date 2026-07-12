@@ -1,5 +1,7 @@
 """Tests for middleware: auth, rate limiting, audit."""
 
+import json
+import logging
 import time
 
 import pytest
@@ -7,6 +9,8 @@ from fastapi.testclient import TestClient
 
 from api.middleware.auth import create_token
 from api.config import settings
+from api.main import _browser_managed_cors_credentials_allowed, app
+from api.middleware.rate_limit import RateLimitMiddleware
 from jose import jwt
 
 
@@ -25,6 +29,90 @@ def test_missing_auth_header(client):
 def test_invalid_token(client):
     resp = client.post("/assess", json={}, headers={"Authorization": "Bearer invalid.token.here"})
     assert resp.status_code == 401
+
+
+def test_failed_auth_is_written_to_structured_audit_log(client, caplog):
+    """Audit logging must wrap JWT auth so rejected probes remain observable."""
+    with caplog.at_level(logging.INFO, logger="noetic.audit"):
+        resp = client.post("/assess", json={})
+
+    assert resp.status_code == 401
+    entries = [
+        json.loads(record.message)
+        for record in caplog.records
+        if record.name == "noetic.audit" and record.message.startswith("{")
+    ]
+    assert any(
+        entry["method"] == "POST"
+        and entry["path"] == "/assess"
+        and entry["status"] == 401
+        and entry["user"] == "anonymous"
+        and entry["request_id"]
+        for entry in entries
+    )
+
+
+def test_cors_never_grants_browser_credentials_to_regex_preview_origin(client):
+    """A regex-matched preview may use Bearer headers but never browser credentials."""
+    resp = client.options(
+        "/assess",
+        headers={
+            "Origin": "https://attacker-preview.vercel.app",
+            "Access-Control-Request-Method": "POST",
+            "Access-Control-Request-Headers": "authorization,content-type",
+        },
+    )
+
+    assert resp.status_code == 200
+    assert resp.headers["access-control-allow-origin"] == "*"
+    assert "access-control-allow-credentials" not in resp.headers
+    allowed_headers = resp.headers["access-control-allow-headers"].lower()
+    assert "authorization" in allowed_headers
+    assert "content-type" in allowed_headers
+
+def test_explicit_allowlist_plus_preview_regex_cannot_enable_browser_credentials():
+    assert _browser_managed_cors_credentials_allowed(
+        ["https://trusted.example"],
+        r"https://([a-z0-9-]+\.)*vercel\.app",
+    ) is False
+
+
+def test_cors_wraps_failed_auth_response(client):
+    origin = "https://attacker-preview.vercel.app"
+    resp = client.post("/assess", json={}, headers={"Origin": origin})
+
+    assert resp.status_code == 401
+    assert resp.headers["access-control-allow-origin"] == "*"
+    assert "access-control-allow-credentials" not in resp.headers
+    assert resp.headers["x-request-id"]
+
+
+def test_cors_wraps_rate_limit_response(client):
+    # Build the middleware stack, then exhaust one unique dashboard bucket.
+    client.get("/health")
+    current = app.middleware_stack
+    while current is not None and not isinstance(current, RateLimitMiddleware):
+        current = getattr(current, "app", None)
+    assert isinstance(current, RateLimitMiddleware)
+
+    api_key = "dashboard:cors-rate-limit-regression"
+    bucket = current._get_bucket(api_key)
+    bucket.tokens = 0.0
+    bucket.last_refill = time.monotonic()
+    token = create_token(sub="cors-test", api_key=api_key)
+    resp = client.get(
+        "/notation/grammar",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Origin": "https://attacker-preview.vercel.app",
+        },
+    )
+
+    assert resp.status_code == 429
+    assert resp.headers["access-control-allow-origin"] == "*"
+    assert "access-control-allow-credentials" not in resp.headers
+    assert resp.headers["x-request-id"]
+
 
 
 def test_valid_token(client, auth_headers, valid_assess_payload):

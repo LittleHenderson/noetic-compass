@@ -14,6 +14,16 @@ from .compiler import (
     compile_file,
     extract_register_activations,
 )
+from .turn_admissibility import (
+    TURN_TYPES,
+    MetaLogicRelation,
+    TurnAdmissibilityContext,
+    TurnAdmissibilityResult,
+    TurnAdmissibilityRule,
+    list_turn_admissibility_rules,
+    turn_admissibility_artifact,
+    validate_turn_admissibility,
+)
 
 __all__ = [
     "CAS_GRAMMAR_BNF",
@@ -24,4 +34,12 @@ __all__ = [
     "compile_expression",
     "compile_file",
     "extract_register_activations",
+    "TURN_TYPES",
+    "MetaLogicRelation",
+    "TurnAdmissibilityContext",
+    "TurnAdmissibilityResult",
+    "TurnAdmissibilityRule",
+    "list_turn_admissibility_rules",
+    "turn_admissibility_artifact",
+    "validate_turn_admissibility",
 ]

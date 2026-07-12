@@ -49,11 +49,15 @@ def test_merger_builds_packet_with_six_pass_ready_proof_chips(tmp_path: Path):
 
     normalized = normalize_evidence_packet_for_audit(packet)
     normalized_chips = {chip.id: chip for chip in normalized.chips}
+    # The audit normalizer passes an Evidence Packet's embedded proof chips
+    # through verbatim (see test_stage9_packet_uses_embedded_verification_proof_chips
+    # in tests/test_cas_harness_evidence_bridge.py). So the normalized statuses
+    # must equal the raw packet chip statuses above, not a downgraded copy.
     assert normalized_chips["model_proof"].status == "present"
-    assert normalized_chips["cas_readout"].status == "present"
+    assert normalized_chips["cas_readout"].status == "verified"
     assert normalized_chips["causal_proof"].status == "verified"
     assert normalized_chips["control_proof"].status == "verified"
-    assert normalized_chips["output_proof"].status == "present"
+    assert normalized_chips["output_proof"].status == "verified"
     assert normalized_chips["packet_proof"].status == "present"
 
 

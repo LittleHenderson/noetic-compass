@@ -122,7 +122,6 @@ def _build_linear_probe(C: float = 0.1, max_iter: int = 1000) -> Pipeline:
             max_iter=max_iter,
             class_weight="balanced",
             solver="lbfgs",
-            n_jobs=-1,
         ),
     )
 

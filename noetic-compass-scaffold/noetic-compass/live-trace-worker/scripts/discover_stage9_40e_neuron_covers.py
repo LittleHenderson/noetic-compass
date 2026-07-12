@@ -96,7 +96,6 @@ def _build_linear_probe(C: float, max_iter: int):
             max_iter=max_iter,
             class_weight="balanced",
             solver="lbfgs",
-            n_jobs=-1,
         ),
     )
 
