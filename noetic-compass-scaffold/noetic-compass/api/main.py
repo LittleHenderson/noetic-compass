@@ -59,6 +59,17 @@ def _parse_cors_origins(raw: str) -> list[str]:
         return ["*"]
     return [origin.strip() for origin in stripped.split(",") if origin.strip()]
 
+def _browser_managed_cors_credentials_allowed(
+    origins: list[str], origin_regex: str
+) -> bool:
+    """Fail closed while auth uses Bearer headers and preview origins use regex."""
+    # Starlette applies one credential flag to exact and regex-matched origins.
+    # With a broad preview regex, no exact allowlist can safely turn browser
+    # cookies, client certificates, or browser-managed HTTP auth back on.
+    del origins, origin_regex
+    return False
+
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
@@ -159,7 +170,19 @@ cors_origins = _parse_cors_origins(settings.cors_origins)
 # Vercel preview regex; enabling credentials for the former would silently
 # enable cookies, client certificates, and browser-managed HTTP auth for every
 # regex-matched preview origin too.
-allow_credentialed_cors = False
+allow_credentialed_cors = _browser_managed_cors_credentials_allowed(
+    cors_origins, settings.cors_origin_regex
+)
+# Middleware — Starlette applies the LAST-added as the OUTERMOST layer.
+# CORS is added last so browser-visible 401/429 responses carry CORS headers.
+# Inside CORS: RequestId -> AuditLog -> JWTAuth -> RateLimit. AuditLog wraps
+# JWTAuth so failed-auth (401) requests are still logged; previously
+# it sat innermost and never saw auth rejections (credential-stuffing on
+# /auth/token, forged-token probes) — a security-observability gap.
+app.add_middleware(RateLimitMiddleware)
+app.add_middleware(JWTAuthMiddleware)
+app.add_middleware(AuditLogMiddleware)
+app.add_middleware(RequestIdMiddleware)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=cors_origins,
@@ -168,17 +191,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# Middleware — Starlette applies the LAST-added as the OUTERMOST layer.
-# Order outermost -> innermost: RequestId -> AuditLog -> JWTAuth -> RateLimit.
-# RequestId stays outermost so request_id is available to all others. AuditLog
-# now wraps JWTAuth so failed-auth (401) requests are still logged; previously
-# it sat innermost and never saw auth rejections (credential-stuffing on
-# /auth/token, forged-token probes) — a security-observability gap.
-app.add_middleware(RateLimitMiddleware)
-app.add_middleware(JWTAuthMiddleware)
-app.add_middleware(AuditLogMiddleware)
-app.add_middleware(RequestIdMiddleware)
 
 # Exception handlers
 app.add_exception_handler(DialViolationError, dial_violation_handler)  # type: ignore[arg-type]
