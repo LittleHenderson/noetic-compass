@@ -258,7 +258,6 @@ def _build_linear_probe(C: float, max_iter: int):
             max_iter=max_iter,
             class_weight="balanced",
             solver="lbfgs",
-            n_jobs=-1,
         ),
     )
 
@@ -495,7 +494,6 @@ def main() -> int:
         max_iter=args.probe_max_iter,
         class_weight="balanced",
         solver="lbfgs",
-        n_jobs=-1,
     )
     text_clf.fit(text_train_X, y_train)
     text_pred = text_clf.predict(text_test_X)
