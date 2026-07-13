@@ -1,0 +1,280 @@
+{
+  "schema_version": "1.0",
+  "incident_id": "IR-2026-07-13-001",
+  "record_type": "operational_record_and_tabletop",
+  "title": "CAS Harness production credential and hook control recovery",
+  "status": "OPEN",
+  "severity": {
+    "current": "SEV-2",
+    "rationale": "A production security dependency and the public WORM write authority are degraded, while several credential and hook controls require recovery; no unauthorized use or customer impact is established in the evidence recorded here."
+  },
+  "compromise_status": "not_established",
+  "claim_boundary": {
+    "no_claim_of_compromise": true,
+    "customer_impact": "not_established",
+    "production_readiness_status": "OPEN",
+    "legal_conclusion": "none_recorded",
+    "notes": "An invalid credential, rotated token, or hook-control concern does not by itself establish unauthorized use. This record is not customer-production ACCEPT evidence."
+  },
+  "time_control": {
+    "event_date_utc": "2026-07-13",
+    "declared_at_utc": null,
+    "precise_event_times_available": false,
+    "notes": "Provider-specific timestamps were not copied into this non-secret record and must be added from provider audit logs by the assigned recorder."
+  },
+  "roles": {
+    "incident_commander": "[ASSIGN]",
+    "security_forensics_lead": "[ASSIGN]",
+    "infrastructure_lead": "[ASSIGN]",
+    "customer_operations_lead": "[ASSIGN]",
+    "privacy_legal_advisor": "[ASSIGN]",
+    "communications_lead": "[ASSIGN]",
+    "incident_recorder": "[ASSIGN]"
+  },
+  "systems": {
+    "RunPod": [
+      "pod hilj2rzs54gi06"
+    ],
+    "Render": [
+      "public service srv-d82ph683kofs73d210e0",
+      "account canary service srv-d9akoolaeets73bp3e7g",
+      "production Blueprint exs-d82lpanaqgkc7399m1g0",
+      "canary Blueprint exs-d9aknt8458ps73ftpkc0"
+    ],
+    "AWS": [
+      "cas-harness-render-production application IAM principal",
+      "production S3 Evidence Packet anchor path"
+    ],
+    "GitHub": [
+      "LittleHenderson/noetic-compass"
+    ],
+    "Vercel": [
+      "Noetic Compass production and preview deployments"
+    ]
+  },
+  "observed_events": [
+    {
+      "id": "worker_token_rotation",
+      "provider": "RunPod/Render",
+      "fact_status": "observed",
+      "status": "complete",
+      "description": "The live-worker service credential was rotated across the RunPod Secret and authorized Render callers; the old credential was removed.",
+      "old_credential_removed": true,
+      "verification": [
+        "protected worker request without a credential returned HTTP 401",
+        "protected worker request with the deployed credential returned HTTP 200",
+        "strict direct-plus-API verification passed 18/18",
+        "worker reported REAL_PYTHIA_WEIGHTS_LOADED for EleutherAI/pythia-160m with model_loaded=true and fake_runtime_env=false"
+      ],
+      "evidence_references": [
+        "RunPod pod hilj2rzs54gi06",
+        "public Render deploy dep-d9alsolaeets73a3osbg",
+        "canary Render deploy dep-d9also5aeets73a3or6g",
+        "public source SHA 657a16590da0420b817153155257268cc66174e2",
+        "canary service SHA ad2ac3fd5508535ee953a4a5fbd3b26165760d1c"
+      ],
+      "secret_material_recorded": false
+    },
+    {
+      "id": "canary_deploy_hook_rotation",
+      "provider": "Render",
+      "fact_status": "observed",
+      "status": "complete",
+      "description": "The account-canary service deploy hook was regenerated.",
+      "regenerated": true,
+      "old_hook_rejection_evidenced": false,
+      "evidence_references": [
+        "Render account-canary service settings; add the provider audit event and UTC timestamp"
+      ],
+      "secret_material_recorded": false
+    },
+    {
+      "id": "blueprint_sync_hook_rotation",
+      "provider": "Render",
+      "fact_status": "observed",
+      "status": "in_progress",
+      "description": "Server-side rotation of the Blueprint sync hook was requested and remains pending.",
+      "server_side_rotation_requested": true,
+      "rotation_pending": true,
+      "interim_control": "Both production and canary Blueprint Auto Sync remain disabled; use dashboard Manual Sync only.",
+      "evidence_references": [
+        "PR #143 and master SHA 657a16590da0420b817153155257268cc66174e2",
+        "Render Blueprint settings and support request; add non-secret request/event ID"
+      ],
+      "secret_material_recorded": false
+    },
+    {
+      "id": "aws_production_iam_key",
+      "provider": "AWS/Render",
+      "fact_status": "observed",
+      "status": "blocked",
+      "description": "The AWS application IAM access key configured for the public production API is invalid and recovery is pending.",
+      "credential_state": "invalid",
+      "recovery_pending": true,
+      "observed_response_classes": [
+        "STS InvalidClientTokenId",
+        "S3 InvalidAccessKeyId"
+      ],
+      "impact": "New public-production S3 Object Lock writes cannot authenticate; new hosted verification reports external-anchor partial_mismatch while packet payload, hash log, and hash chain match.",
+      "evidence_references": [
+        "public Render service srv-d82ph683kofs73d210e0",
+        "AWS IAM principal cas-harness-render-production",
+        "add CloudTrail/IAM/S3 audit event IDs after account recovery"
+      ],
+      "secret_material_recorded": false
+    },
+    {
+      "id": "runpod_mfa",
+      "provider": "RunPod",
+      "fact_status": "observed",
+      "status": "blocked",
+      "description": "RunPod account MFA remains a personal account-owner action and is pending.",
+      "personal_action_required": true,
+      "recovery_material_must_not_be_recorded": true,
+      "evidence_references": [
+        "RunPod account security settings; record enabled state and UTC only after owner action"
+      ],
+      "secret_material_recorded": false
+    }
+  ],
+  "response_checklist": [
+    {
+      "control_id": "declare_and_assign",
+      "status": "blocked",
+      "notes": "The incident ID and initial severity are recorded; named organizational roles remain [ASSIGN]."
+    },
+    {
+      "control_id": "freeze_and_preserve",
+      "status": "in_progress",
+      "notes": "Non-secret deploy, pod, service, Blueprint, commit, and CI identifiers are recorded. Provider audit-log exports and precise UTC events remain pending."
+    },
+    {
+      "control_id": "revoke_or_rotate",
+      "status": "in_progress",
+      "notes": "Worker token and canary deploy hook rotations are complete. Blueprint sync-hook rotation and AWS application key recovery remain pending."
+    },
+    {
+      "control_id": "scope_unauthorized_use",
+      "status": "not_started",
+      "notes": "RunPod, Render, AWS, GitHub, and Vercel provider audit-log review has not been recorded."
+    },
+    {
+      "control_id": "eradicate_root_cause",
+      "status": "in_progress",
+      "notes": "CI/Blueprint controls and credential rotation improved the posture, but hook rotation, AWS recovery, MFA, and provider-log scoping remain open."
+    },
+    {
+      "control_id": "recover_exact_sha",
+      "status": "in_progress",
+      "notes": "Public worker recovery is live at exact master SHA 657a16590da0420b817153155257268cc66174e2. AWS WORM recovery is pending."
+    },
+    {
+      "control_id": "verify_evidence_integrity",
+      "status": "blocked",
+      "notes": "Payload, hash log, and hash chain match; external S3 anchor remains partial_mismatch until AWS authority is restored and a new unique hosted audit returns overall all_match with active retention."
+    },
+    {
+      "control_id": "notification_decision",
+      "status": "not_started",
+      "notes": "No notification conclusion is recorded. Provider-log scoping and an assigned privacy/legal decision owner are required."
+    },
+    {
+      "control_id": "postmortem_and_actions",
+      "status": "in_progress",
+      "notes": "This incident/tabletop record and the postmortem template exist; organizational tabletop execution, owners, due dates, and signoff remain pending."
+    }
+  ],
+  "notification_decision": {
+    "status": "pending",
+    "decision": "none_recorded",
+    "owner_role": "privacy_legal_advisor",
+    "known_scope": "No unauthorized use, customer data access, or customer impact is established in this record.",
+    "limitations": "Provider audit-log review and tenant/data scoping are not complete, so this statement is not a no-breach conclusion.",
+    "next_gate": "Assign the decision owner, review applicable contracts/jurisdictions and scoped provider logs, then record a timestamped decision and next review time."
+  },
+  "evidence_handling": {
+    "raw_secret_material_present": false,
+    "full_hook_urls_present": false,
+    "immutable_evidence_policy": "Preserve original non-secret evidence and add access/redaction manifests; do not put raw credentials or full hook URLs into WORM.",
+    "worm_status": "OPEN",
+    "worm_status_reason": "The current public-production AWS application credential is invalid, so a new Object Lock write/re-read/retention proof is pending."
+  },
+  "tabletop": {
+    "scenario": "A worker request reports that a service token is required while a deploy hook has been regenerated, a Blueprint sync-hook rotation is pending, and the AWS production application key is invalid. Operators must contain authority without leaking secrets, preserve Evidence Packet integrity facts separately, decide whether notification analysis is triggered, and recover through exact-SHA CI.",
+    "exercise_status": "documentation_complete_participant_run_pending",
+    "participants": [
+      "[ASSIGN: Incident Commander]",
+      "[ASSIGN: Security/Forensics Lead]",
+      "[ASSIGN: Infrastructure Lead]",
+      "[ASSIGN: Privacy/Legal Advisor]",
+      "[ASSIGN: Recorder]"
+    ],
+    "success_criteria": [
+      "No raw credential or full hook URL enters the record or WORM evidence.",
+      "Invalid credentials are not mislabeled as evidence of compromise.",
+      "Worker recovery proves old-authority rejection and current-authority success.",
+      "Blueprint Auto Sync remains disabled while sync-hook rotation is pending.",
+      "AWS recovery uses a least-privilege application IAM key and ends with a unique Object Lock write/re-read/retention proof.",
+      "Notification is a timestamped decision gate, not an unreviewed technical assertion.",
+      "The incident remains OPEN until assigned owners close the named actions."
+    ]
+  },
+  "open_actions": [
+    {
+      "id": "IR-ACT-001",
+      "action": "Assign the incident-response roles, on-call contacts, communication cadence, and closure approver.",
+      "owner_role": "incident_commander",
+      "status": "OPEN",
+      "due_at_utc": null,
+      "verification": "Every required role has a named primary, backup, and reachable escalation path."
+    },
+    {
+      "id": "IR-ACT-002",
+      "action": "Export and review scoped RunPod, Render, AWS, GitHub, and Vercel audit activity; record non-secret event IDs, UTC window, digest, findings, and limitations.",
+      "owner_role": "security_forensics_lead",
+      "status": "OPEN",
+      "due_at_utc": null,
+      "verification": "Provider-by-provider fact/inference/unknown matrix is reviewed and signed."
+    },
+    {
+      "id": "IR-ACT-003",
+      "action": "Obtain and verify server-side Blueprint sync-hook rotation, then prove the prior hook can no longer initiate a sync without recording either URL.",
+      "owner_role": "infrastructure_lead",
+      "status": "OPEN",
+      "due_at_utc": null,
+      "verification": "Provider support/action ID, rotation UTC, old-hook rejection evidence, and reconfirmed Auto Sync disabled."
+    },
+    {
+      "id": "IR-ACT-004",
+      "action": "Restore AWS administration, replace the invalid key with a least-privilege cas-harness-render-production application key, redeploy Render, and rerun STS/IAM/S3/WORM verification.",
+      "owner_role": "infrastructure_lead",
+      "status": "OPEN",
+      "due_at_utc": null,
+      "verification": "STS identity, policy simulation, unique Object Lock write/re-read with active retention, and hosted /verify overall all_match."
+    },
+    {
+      "id": "IR-ACT-005",
+      "action": "Enable RunPod MFA through the account owner's personal action and record only the enabled state and verification UTC.",
+      "owner_role": "account_owner",
+      "status": "OPEN",
+      "due_at_utc": null,
+      "verification": "RunPod security settings show MFA enabled; no factor or recovery material is recorded."
+    },
+    {
+      "id": "IR-ACT-006",
+      "action": "Complete the customer/authority/insurer/vendor notification decision gate from scoped facts and applicable sources.",
+      "owner_role": "privacy_legal_advisor",
+      "status": "OPEN",
+      "due_at_utc": null,
+      "verification": "Timestamped decision, decision owner, factual/legal source basis, required recipients/deadlines if any, and next review trigger."
+    },
+    {
+      "id": "IR-ACT-007",
+      "action": "Run the tabletop with assigned participants and close resulting corrective actions through tested evidence.",
+      "owner_role": "incident_commander",
+      "status": "OPEN",
+      "due_at_utc": null,
+      "verification": "Participant list, exercise UTC, inject outcomes, lessons, action owners/dates, and closure signoff."
+    }
+  ]
+}

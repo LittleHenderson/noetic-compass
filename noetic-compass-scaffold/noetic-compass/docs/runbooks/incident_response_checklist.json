@@ -1,0 +1,252 @@
+{
+  "schema_version": "1.0",
+  "control_id": "cas-harness-incident-response",
+  "claim_boundary": {
+    "purpose": "Operational incident handling; not legal advice and not evidence of customer-production ACCEPT.",
+    "production_readiness_status": "OPEN",
+    "compromise_must_be_evidence_based": true
+  },
+  "allowed_task_statuses": [
+    "not_started",
+    "in_progress",
+    "blocked",
+    "complete",
+    "not_applicable"
+  ],
+  "severities": [
+    {
+      "id": "SEV-0",
+      "label": "Critical",
+      "criteria": "Confirmed active destructive access, broad secret compromise, material customer-data exfiltration, or loss of trust in retained Evidence Packet integrity.",
+      "initial_ack_target_minutes": 5,
+      "update_target_minutes": 30
+    },
+    {
+      "id": "SEV-1",
+      "label": "High",
+      "criteria": "Confirmed or strongly evidenced unauthorized production access, critical authentication bypass, or material customer-impacting outage with no safe workaround.",
+      "initial_ack_target_minutes": 15,
+      "update_target_minutes": 60
+    },
+    {
+      "id": "SEV-2",
+      "label": "Material",
+      "criteria": "Production security dependency degraded, credential integrity anomaly, or control exposure with no established unauthorized use and a bounded containment path.",
+      "initial_ack_target_minutes": 30,
+      "update_target_minutes": 120
+    },
+    {
+      "id": "SEV-3",
+      "label": "Low",
+      "criteria": "Low-risk weakness or near miss with no material production degradation, unauthorized access evidence, or customer impact.",
+      "initial_ack_target_minutes": 480,
+      "update_target_minutes": 1440
+    }
+  ],
+  "role_placeholders": [
+    {
+      "id": "incident_commander",
+      "required_for": ["SEV-0", "SEV-1", "SEV-2"],
+      "assignment": "[ASSIGN]",
+      "responsibility": "Own severity, priorities, decisions, cadence, and closure."
+    },
+    {
+      "id": "security_forensics_lead",
+      "required_for": ["SEV-0", "SEV-1", "SEV-2"],
+      "assignment": "[ASSIGN]",
+      "responsibility": "Preserve evidence, scope access, and separate fact from inference."
+    },
+    {
+      "id": "infrastructure_lead",
+      "required_for": ["SEV-0", "SEV-1", "SEV-2"],
+      "assignment": "[ASSIGN]",
+      "responsibility": "Contain credentials and recover RunPod, Render, AWS, GitHub, and Vercel services."
+    },
+    {
+      "id": "customer_operations_lead",
+      "required_for": ["SEV-0", "SEV-1"],
+      "assignment": "[ASSIGN]",
+      "responsibility": "Determine tenant impact and coordinate customer support."
+    },
+    {
+      "id": "privacy_legal_advisor",
+      "required_for": ["SEV-0", "SEV-1"],
+      "assignment": "[ASSIGN]",
+      "responsibility": "Decide contractual, privacy, regulator, insurer, and law-enforcement notification duties."
+    },
+    {
+      "id": "communications_lead",
+      "required_for": ["SEV-0", "SEV-1"],
+      "assignment": "[ASSIGN]",
+      "responsibility": "Prepare approved factual internal and external updates."
+    },
+    {
+      "id": "incident_recorder",
+      "required_for": ["SEV-0", "SEV-1", "SEV-2"],
+      "assignment": "[ASSIGN]",
+      "responsibility": "Maintain the UTC timeline, decisions, evidence index, and action register."
+    }
+  ],
+  "phase_checklist": [
+    {
+      "id": "declare_and_assign",
+      "phase": "declare",
+      "required": true,
+      "evidence": "Incident ID, UTC declaration time, severity rationale, named role assignments or explicit placeholders."
+    },
+    {
+      "id": "freeze_and_preserve",
+      "phase": "contain",
+      "required": true,
+      "evidence": "Change freeze scope, provider audit-log exports or IDs, exact commit/deploy identifiers, and collection timestamps."
+    },
+    {
+      "id": "revoke_or_rotate",
+      "phase": "contain",
+      "required": true,
+      "evidence": "Non-secret credential version or provider event IDs, rotation time, and old-credential rejection proof."
+    },
+    {
+      "id": "scope_unauthorized_use",
+      "phase": "investigate",
+      "required": true,
+      "evidence": "Provider logs reviewed, time window, identities/resources queried, findings, and unknowns."
+    },
+    {
+      "id": "eradicate_root_cause",
+      "phase": "eradicate",
+      "required": true,
+      "evidence": "Exposure path removed, stale copies removed, least-privilege boundary rechecked, and durable control added."
+    },
+    {
+      "id": "recover_exact_sha",
+      "phase": "recover",
+      "required": true,
+      "evidence": "Exact 40-character source SHA, required CI run URLs, deploy IDs, and feature-specific smoke results."
+    },
+    {
+      "id": "verify_evidence_integrity",
+      "phase": "recover",
+      "required": true,
+      "evidence": "Evidence Packet payload/hash-log/hash-chain result and external-anchor result kept as separate facts."
+    },
+    {
+      "id": "notification_decision",
+      "phase": "notify",
+      "required": true,
+      "evidence": "Decision owner, UTC decision time, facts considered, applicable contract/jurisdiction sources, decision, and next review time."
+    },
+    {
+      "id": "postmortem_and_actions",
+      "phase": "learn",
+      "required": true,
+      "evidence": "Blameless postmortem, causal/control analysis, owners, due dates, verification criteria, and closure approver."
+    }
+  ],
+  "provider_playbooks": {
+    "RunPod": {
+      "containment": [
+        "Rotate the worker credential in the RunPod Secret and every authorized caller without printing it.",
+        "Reset or restart the pod so the new secret is applied, then prove unauthenticated HTTP 401 and current-credential HTTP 200.",
+        "If the account API key or SSH authority may be exposed, revoke it and review pods, SSH keys, templates, secrets, and account activity."
+      ],
+      "recovery": [
+        "Require REAL_PYTHIA_WEIGHTS_LOADED, the expected model ID, model_loaded=true, fake_runtime_env=false, and the strict live-worker verification suite.",
+        "Enable account MFA through the account owner's personal credential/MFA action; do not ask an operator to record the factor or recovery code."
+      ]
+    },
+    "Render": {
+      "containment": [
+        "Rotate affected environment credentials, redeploy each caller, and prove the superseded value is absent from service configuration.",
+        "Regenerate exposed service deploy hooks and invalidate the prior hook; never preserve a full hook URL in incident evidence.",
+        "Request server-side Blueprint sync-hook rotation, keep Blueprint Auto Sync disabled, use dashboard Manual Sync only, and treat rotation as pending until old-hook rejection is evidenced."
+      ],
+      "recovery": [
+        "Require exact-SHA cas-ci-gate and cas-postgres-live-gate evidence before production deployment.",
+        "Review service, deploy, Blueprint sync, environment, member, and API audit activity for the scoped window."
+      ]
+    },
+    "AWS": {
+      "containment": [
+        "Disable or delete the affected application IAM access key; never create or deploy a root access key.",
+        "Review CloudTrail, IAM credential report, S3 data events where enabled, and Object Lock configuration for unexpected use or policy change.",
+        "Create a new least-privilege cas-harness-render-production application key only after IAM access is restored, then deliver it directly to Render's secret store."
+      ],
+      "recovery": [
+        "Require STS GetCallerIdentity and least-privilege policy simulation before an application write.",
+        "Run a unique S3 Object Lock write, re-read, retention check, and hosted Evidence Packet verify; keep production WORM status OPEN until overall all_match and active retention are observed."
+      ]
+    },
+    "GitHub": {
+      "containment": [
+        "Revoke affected PATs, GitHub App tokens, deploy keys, Actions secrets, or sessions and rotate downstream copies.",
+        "Review organization/repository audit logs, workflow runs, environments, hooks, deploy keys, collaborators, refs, releases, and secret changes.",
+        "Preserve suspicious commits and workflow artifacts by ID and digest; do not rewrite history during evidence collection."
+      ],
+      "recovery": [
+        "Require workflows at repository-root .github/workflows and exact-SHA aggregate CI evidence.",
+        "Verify protected deployment environments, least-privilege workflow permissions, and branch/ruleset enforcement where the repository plan supports it."
+      ]
+    },
+    "Vercel": {
+      "containment": [
+        "Revoke affected user/team tokens, sessions, deploy hooks, integrations, and environment values, then rotate upstream credentials they could access.",
+        "Review team audit logs, project members, domains, deployments, environment changes, integrations, and Git connections for the scoped window."
+      ],
+      "recovery": [
+        "Redeploy from an exact green Git commit and verify production domains, rewrites, headers, and account/API dark-or-enabled posture.",
+        "Keep preview and production credentials separated and verify no secret is exposed in build output, client bundles, source maps, or browser-visible configuration."
+      ]
+    }
+  },
+  "notification_gates": [
+    {
+      "id": "scope_data_and_tenants",
+      "question": "Is there evidence that customer, employee, authentication, payment, or regulated data was accessed, altered, lost, or disclosed?",
+      "owner_role": "security_forensics_lead"
+    },
+    {
+      "id": "identify_contracts_and_jurisdictions",
+      "question": "Which customer contracts, vendor terms, insurance conditions, and privacy/security jurisdictions apply?",
+      "owner_role": "privacy_legal_advisor"
+    },
+    {
+      "id": "start_or_reject_notification_clocks",
+      "question": "Do known facts trigger any customer, authority, insurer, vendor, or law-enforcement notice clock, even while investigation continues?",
+      "owner_role": "privacy_legal_advisor"
+    },
+    {
+      "id": "approve_factual_message",
+      "question": "Does the draft distinguish confirmed facts, reasonable inferences, unknowns, containment, customer action, and next update time?",
+      "owner_role": "communications_lead"
+    },
+    {
+      "id": "record_decision_and_revisit",
+      "question": "Is the decision, authority, evidence basis, timestamp, and next review time recorded without claiming legal clearance?",
+      "owner_role": "incident_commander"
+    }
+  ],
+  "evidence_rules": [
+    "Never put raw passwords, tokens, API keys, access keys, session cookies, recovery codes, private keys, or full deploy/sync-hook URLs into WORM, Git, tickets, chat, or the incident record.",
+    "Preserve provider event IDs, masked provider credential identifiers when safe, version IDs, deploy IDs, exact commit SHAs, timestamps, response classes, and artifact digests instead of secret values.",
+    "Keep immutable original evidence; add a redaction manifest or access restriction rather than silently changing historical evidence.",
+    "If secret material entered an immutable object, rotate it immediately, restrict access, record the affected object/version without copying the secret, and obtain the retention/privacy decision owner before any Governance bypass or deletion.",
+    "Do not claim WORM when Object Lock retention is absent, expired, unreadable, or unverified; report payload, hash log, hash chain, external anchor, and retention independently."
+  ],
+  "required_incident_record_fields": [
+    "schema_version",
+    "incident_id",
+    "record_type",
+    "title",
+    "status",
+    "severity",
+    "compromise_status",
+    "claim_boundary",
+    "roles",
+    "observed_events",
+    "response_checklist",
+    "notification_decision",
+    "evidence_handling",
+    "open_actions"
+  ]
+}
