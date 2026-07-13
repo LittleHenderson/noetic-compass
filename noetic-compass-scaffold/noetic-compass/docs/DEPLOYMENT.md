@@ -200,6 +200,12 @@ The live production service is a paid `starter` Web Service in Render's Oregon
 region with a 1 GB persistent disk; it is not a free service. Provider keys and
 other credentials remain dashboard-managed and must never be committed.
 
+For a suspected credential exposure, hook leak, unauthorized provider action,
+or Evidence Packet integrity concern, declare an incident and follow
+[`docs/runbooks/incident_response.md`](runbooks/incident_response.md). The
+runbook keeps raw credentials out of Git/WORM evidence and provides separate
+recovery playbooks for RunPod, Render, AWS, GitHub, and Vercel.
+
 ### Services Created
 | Service | Type / plan | Region | URL |
 |---------|-------------|--------|-----|
