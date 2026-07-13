@@ -2260,7 +2260,11 @@ async def run_audit_session(
                 limit=(
                     entitlement_decision.plan.monthly_audit_limit
                     if entitlement_decision is not None
-                    else get_quota_limit()
+                    else (
+                        settings.quota_monthly_audit_limit
+                        if settings.quota_monthly_audit_limit is not None
+                        else get_quota_limit()
+                    )
                 ),
             )
         except QuotaExceeded as exc:

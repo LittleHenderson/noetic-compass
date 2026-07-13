@@ -103,8 +103,17 @@ projects:
 
               # Deliberate phased rollout: earn account/session/tenant/storage
               # evidence first. Enable each later gate in a separate deploy.
+              - key: NC_DEPLOYMENT_PROFILE
+                value: accounts-canary
               - key: NC_QUOTAS_ENABLED
-                value: "false"
+                value: "true"
+              # Keep the private proof bounded: two local/no-provider audit
+              # runs per tenant are enough to prove success, idempotent retry,
+              # isolation, and the exact third-run 429 without paid compute.
+              # Public production remains on its separate Blueprint with
+              # accounts/quotas dark.
+              - key: NC_QUOTA_MONTHLY_AUDIT_LIMIT
+                value: "2"
               - key: NC_BILLING_ENTITLEMENTS_ENABLED
                 value: "false"
               - key: NC_BILLING_PROVIDER

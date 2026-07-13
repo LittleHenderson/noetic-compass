@@ -124,6 +124,66 @@ def _create_live(client: TestClient) -> str:
     return response.json()["audit_id"]
 
 
+def test_billing_dark_uses_configured_quota_override(
+    audit_billing_client, monkeypatch
+) -> None:
+    client, _, _, _ = audit_billing_client
+    monkeypatch.setattr(settings, "billing_entitlements_enabled", False)
+    monkeypatch.setattr(settings, "quota_monthly_audit_limit", 3)
+    observed_limits: list[int] = []
+
+    def capture_quota(*args, **kwargs):
+        observed_limits.append(kwargs["limit"])
+        return 1
+
+    def default_must_not_run():
+        raise AssertionError("configured canary quota must bypass the historical default")
+
+    async def fake_runner(**kwargs):
+        return _live_result("trace-dark-configured-quota")
+
+    monkeypatch.setattr(cas_harness_audit, "consume_audit_quota", capture_quota)
+    monkeypatch.setattr(cas_harness_audit, "get_quota_limit", default_must_not_run)
+    monkeypatch.setattr(cas_harness_audit, "run_live_worker_audit", fake_runner)
+    audit_id = _create_live(client)
+    response = client.post(f"/api/cas-harness/audit/session/{audit_id}/run")
+
+    assert response.status_code == 200, response.text
+    assert observed_limits == [3]
+
+
+def test_billing_dark_unset_override_preserves_historical_default(
+    audit_billing_client, monkeypatch
+) -> None:
+    client, _, _, _ = audit_billing_client
+    monkeypatch.setattr(settings, "billing_entitlements_enabled", False)
+    monkeypatch.setattr(settings, "quota_monthly_audit_limit", None)
+    observed_limits: list[int] = []
+    default_calls = 0
+
+    def historical_default():
+        nonlocal default_calls
+        default_calls += 1
+        return 37
+
+    def capture_quota(*args, **kwargs):
+        observed_limits.append(kwargs["limit"])
+        return 1
+
+    async def fake_runner(**kwargs):
+        return _live_result("trace-dark-default-quota")
+
+    monkeypatch.setattr(cas_harness_audit, "get_quota_limit", historical_default)
+    monkeypatch.setattr(cas_harness_audit, "consume_audit_quota", capture_quota)
+    monkeypatch.setattr(cas_harness_audit, "run_live_worker_audit", fake_runner)
+    audit_id = _create_live(client)
+    response = client.post(f"/api/cas-harness/audit/session/{audit_id}/run")
+
+    assert response.status_code == 200, response.text
+    assert default_calls == 1
+    assert observed_limits == [37]
+
+
 def test_free_reference_blocks_live_before_quota_or_provider(
     audit_billing_client, monkeypatch
 ) -> None:
@@ -152,6 +212,8 @@ def test_comped_plan_allows_live_and_applies_its_server_quota(
     audit_billing_client, monkeypatch
 ) -> None:
     client, backend, billing_store, _ = audit_billing_client
+    # A deployment override is only for the billing-dark canary. A verified entitlement must win.
+    monkeypatch.setattr(settings, "quota_monthly_audit_limit", 1)
     billing_store.grant_manual_comped(
         tenant_id="tenant-a",
         billing_account_id="acct-a",

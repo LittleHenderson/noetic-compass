@@ -189,6 +189,18 @@ class Settings(BaseSettings):
         default=False,
         validation_alias=AliasChoices("NC_QUOTAS_ENABLED", "QUOTAS_ENABLED"),
     )
+    # Optional deployment-level cap used only while billing entitlements are dark. The private
+    # account canary sets this to a deliberately small value so exact 429 and restart durability
+    # can be proven with local/no-provider audits. Paid plans continue to derive their limits from
+    # server-owned entitlement records, and an unset value preserves the historical default.
+    quota_monthly_audit_limit: int | None = Field(
+        default=None,
+        ge=1,
+        le=10_000,
+        validation_alias=AliasChoices(
+            "NC_QUOTA_MONTHLY_AUDIT_LIMIT", "QUOTA_MONTHLY_AUDIT_LIMIT"
+        ),
+    )
 
     # Server-derived plans/subscriptions/feature entitlements. Dark by default and valid only
     # with durable account identity + quota enforcement. The browser may request Checkout for a
