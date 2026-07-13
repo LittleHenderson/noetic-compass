@@ -89,7 +89,7 @@ describe('EvidencePacketVerificationPanel', () => {
     render(<EvidencePacketVerificationPanel traceId="trace-123" />);
 
     expect(screen.getByRole('button', { name: 'Verify packet' })).toBeDisabled();
-    expect(screen.getByRole('note')).toHaveTextContent('protected API token');
+    expect(screen.getByRole('note')).toHaveTextContent('Sign in with the customer account');
   });
 
   it('resets a loaded result when the trace changes', async () => {

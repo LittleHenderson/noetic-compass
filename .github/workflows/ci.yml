@@ -133,12 +133,22 @@ jobs:
         working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
         run: npm ci
 
+      - name: Audit Atlas Viewer production dependencies
+        working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
+        run: npm audit --omit=dev --audit-level=high
+
       - name: Run Atlas Viewer tests
         working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
         run: npm test
 
       - name: Build Atlas Viewer
         working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
+        run: npm run build
+
+      - name: Build Atlas Viewer with customer accounts enabled
+        working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
+        env:
+          VITE_ACCOUNTS_ENABLED: 'true'
         run: npm run build
 
   dashboard_tests:

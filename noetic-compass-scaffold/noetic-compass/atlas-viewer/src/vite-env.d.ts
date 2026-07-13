@@ -9,6 +9,11 @@ interface ImportMetaEnv {
    * can call api.noeticcompass.com directly without a same-origin proxy.
    */
   readonly VITE_ATLAS_API_BASE_URL?: string;
+  /**
+   * Customer account enforcement is opt-in and must match backend
+   * NC_ACCOUNTS_ENABLED. Only the exact string "true" enables account mode.
+   */
+  readonly VITE_ACCOUNTS_ENABLED?: string;
 }
 
 interface ImportMeta {

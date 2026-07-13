@@ -15,6 +15,7 @@ export interface DistributedAuditRunPanelProps {
   isLoading?: boolean;
   error?: string | null;
   hasProtectedAccess: boolean;
+  accessNote?: string;
   onCreateRun: () => void;
   onDispatchRun: () => void;
   onMergeRun: () => void;
@@ -188,6 +189,7 @@ export function DistributedAuditRunPanel({
   isLoading = false,
   error = null,
   hasProtectedAccess,
+  accessNote = 'Enter the operator API token to enable distributed and fleet actions.',
   onCreateRun,
   onDispatchRun,
   onMergeRun,
@@ -249,7 +251,7 @@ export function DistributedAuditRunPanel({
 
       {!hasProtectedAccess ? (
         <p role="note" style={noticeStyle('warning')}>
-          Enter the protected API token to enable distributed and fleet actions.
+          {accessNote}
         </p>
       ) : null}
 

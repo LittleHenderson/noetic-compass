@@ -1,20 +1,39 @@
 import { lazy, Suspense, type CSSProperties } from 'react';
+import type { ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import type { ReactNode } from 'react';
 import LoginPage from './pages/LoginPage';
-import LicensePage from './pages/LicensePage';
+import AccountSecurityPage from './pages/AccountSecurityPage';
 import ModelConfigPage from './pages/ModelConfigPage';
 import AuditConsolePage from './pages/AuditConsolePage';
+import { AccountAuthProvider, useAccountAuth } from './auth/AccountAuthProvider';
+import { AuthGate } from './components/auth/AuthGate';
 import { GlassPanel } from './components/ui/GlassPanel';
 import { ACCENT_BLUE, COLORS, THEME } from './lib/designTokens';
 
 // CockpitPage pulls in Three.js + framer-motion (~640 KB). Lazy-load it so the
-// initial bundle stays small for the eager Login / License / ModelConfig routes.
+// initial bundle stays small for the eager account / model-selection routes.
 const CockpitPage = lazy(() => import('./pages/CockpitPage'));
 
-function AuthGate({ children }: { children: ReactNode }) {
-  return <>{children}</>;
+function LandingRedirect() {
+  const { accountsEnabled, isAuthenticated } = useAccountAuth();
+  return <Navigate to={!accountsEnabled || isAuthenticated ? '/model-config' : '/login'} replace />;
+}
+
+function AccountLoginRoute() {
+  const { accountsEnabled } = useAccountAuth();
+  return accountsEnabled ? <LoginPage /> : <Navigate to="/model-config" replace />;
+}
+
+function AccountModeRoute({ children }: { children: ReactNode }) {
+  const { accountsEnabled } = useAccountAuth();
+  if (!accountsEnabled) return <Navigate to="/model-config" replace />;
+  return <AuthGate>{children}</AuthGate>;
+}
+
+function LegacyLicenseRedirect() {
+  const { accountsEnabled } = useAccountAuth();
+  return <Navigate to={accountsEnabled ? '/account-security' : '/model-config'} replace />;
 }
 
 const fallbackBackdropStyle: CSSProperties = {
@@ -65,44 +84,47 @@ function CockpitSuspenseFallback() {
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route
-        path="/license"
-        element={
-          <AuthGate>
-            <LicensePage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/model-config"
-        element={
-          <AuthGate>
-            <ModelConfigPage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/audit-console"
-        element={
-          <AuthGate>
-            <AuditConsolePage />
-          </AuthGate>
-        }
-      />
-      <Route
-        path="/cockpit"
-        element={
-          <AuthGate>
-            <Suspense fallback={<CockpitSuspenseFallback />}>
-              <CockpitPage />
-            </Suspense>
-          </AuthGate>
-        }
-      />
-      <Route path="*" element={<Navigate to="/login" replace />} />
-    </Routes>
+    <AccountAuthProvider>
+      <Routes>
+        <Route path="/" element={<LandingRedirect />} />
+        <Route path="/login" element={<AccountLoginRoute />} />
+        <Route path="/license" element={<LegacyLicenseRedirect />} />
+        <Route
+          path="/account-security"
+          element={
+            <AccountModeRoute>
+              <AccountSecurityPage />
+            </AccountModeRoute>
+          }
+        />
+        <Route
+          path="/model-config"
+          element={
+            <AuthGate>
+              <ModelConfigPage />
+            </AuthGate>
+          }
+        />
+        <Route
+          path="/audit-console"
+          element={
+            <AuthGate>
+              <AuditConsolePage />
+            </AuthGate>
+          }
+        />
+        <Route
+          path="/cockpit"
+          element={
+            <AuthGate>
+              <Suspense fallback={<CockpitSuspenseFallback />}>
+                <CockpitPage />
+              </Suspense>
+            </AuthGate>
+          }
+        />
+        <Route path="*" element={<LandingRedirect />} />
+      </Routes>
+    </AccountAuthProvider>
   );
 }

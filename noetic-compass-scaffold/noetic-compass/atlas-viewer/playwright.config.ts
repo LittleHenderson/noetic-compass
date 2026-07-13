@@ -1,5 +1,11 @@
 import { defineConfig, devices } from '@playwright/test';
 
+const previewPort = Number.parseInt(process.env.PLAYWRIGHT_PORT ?? '4173', 10);
+if (!Number.isInteger(previewPort) || previewPort < 1 || previewPort > 65535) {
+  throw new Error('PLAYWRIGHT_PORT must be an integer between 1 and 65535.');
+}
+const previewUrl = `http://127.0.0.1:${previewPort}`;
+
 // Atlas Viewer Wave 3: Playwright E2E config.
 // - Uses Vite's `preview` server (built bundle) for stable test runs.
 // - Chromium only at v0; firefox/webkit are wave-4 follow-ups.
@@ -12,7 +18,7 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   reporter: [['list'], ['html', { open: 'never' }]],
   use: {
-    baseURL: 'http://localhost:4173',
+    baseURL: previewUrl,
     trace: 'on-first-retry',
   },
   projects: [
@@ -22,9 +28,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: 'npm run preview',
-    port: 4173,
-    reuseExistingServer: !process.env.CI,
+    command: `npm run preview -- --host 127.0.0.1 --port ${previewPort} --strictPort`,
+    url: previewUrl,
+    reuseExistingServer: false,
     timeout: 60_000,
   },
 });

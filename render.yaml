@@ -70,6 +70,19 @@ services:
       # billing startup requires accounts + quotas together.
       - key: NC_ACCOUNTS_ENABLED
         value: "false"
+      # Account-mode secrets are dashboard-managed and must stay stable across
+      # every API replica. Bootstrap is one-time only: set it to create the first
+      # owner, then remove it after the owner can log in.
+      - key: NC_ACCOUNT_CREDENTIAL_PEPPER
+        sync: false
+      - key: NC_ACCOUNT_BOOTSTRAP_SECRET
+        sync: false
+      - key: NC_PLATFORM_TENANT_PROVISIONING_SECRET
+        sync: false
+      - key: NC_ACCOUNTS_BOOTSTRAP_TENANT_ID
+        value: primary
+      - key: NC_ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE
+        value: "false"
       - key: NC_QUOTAS_ENABLED
         value: "false"
       - key: NC_BILLING_ENTITLEMENTS_ENABLED

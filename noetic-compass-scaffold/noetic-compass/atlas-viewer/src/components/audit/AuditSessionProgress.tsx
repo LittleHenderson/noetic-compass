@@ -39,7 +39,7 @@ const progressSteps: ProgressStep[] = [
   {
     id: 'validating',
     label: 'Validating model',
-    description: 'Checking model access, license limits, and runtime proof.',
+    description: 'Checking model access, model-license provenance, and runtime proof.',
   },
   {
     id: 'running',
