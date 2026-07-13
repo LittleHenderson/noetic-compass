@@ -196,7 +196,13 @@ def test_mode7_stream_emits_empty_final_trace_id_when_persistence_fails():
         "generated_english": "stub",
         "traceability_v0": {
             "trace_id": "00000000-0000-4000-8000-000000000000",
-            "thought_tree": {"nodes": [{"id": "n0", "label": "root"}], "edges": []},
+            "thought_tree": {
+                "nodes": [
+                    {"id": "n0", "label": "root"},
+                    {"id": "n1", "label": "child", "kind": "test_node"},
+                ],
+                "edges": [],
+            },
         },
     }
 
@@ -232,3 +238,19 @@ def test_mode7_stream_emits_empty_final_trace_id_when_persistence_fails():
         f"final_trace_id must be empty when persistence failed; got "
         f"{payload.get('final_trace_id')!r}"
     )
+
+    head_commit_event = next(
+        (e for e in events if "structural_commit_linkage" in e),
+        None,
+    )
+    assert head_commit_event is not None, "no head_commit event was emitted"
+    head_data_line = next(
+        (line for line in head_commit_event.splitlines() if line.startswith("data:")),
+        None,
+    )
+    assert head_data_line is not None
+    head_payload = json.loads(head_data_line[len("data:") :].strip())
+    linkage_trace_id = head_payload["axis_attrs"]["structural_commit_linkage"][
+        "trace_id"
+    ]
+    assert linkage_trace_id == payload["final_trace_id"] == ""
