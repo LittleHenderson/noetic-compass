@@ -23,7 +23,7 @@ services:
     dockerfilePath: ./Dockerfile.api
     dockerContext: .
     plan: starter
-    autoDeployTrigger: commit
+    autoDeployTrigger: checksPass
     healthCheckPath: /health
     # Persistent disk = durable single-host storage for the state ledger + CRM leads.
     # Render disks attach only to PAID instance types (starter/standard/pro), billed
