@@ -24,6 +24,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import secrets
 from typing import Any, Literal, Protocol
 
 import httpx
@@ -48,7 +49,11 @@ class FleetWorkerConfig:
     worker_url: str
     gpu_type: str
     supported_methods: tuple[str, ...]
-    bearer_token: str | None = None
+    # Account-mode machine identity. The API returns this value once at issuance; keep it in the
+    # worker secret store, never a browser or customer JWT. ``bearer_token`` is legacy/dark mode.
+    tenant_id: str | None = None
+    service_credential: str | None = field(default=None, repr=False)
+    bearer_token: str | None = field(default=None, repr=False)
     capacity: int = 1
     lease_seconds: int = 900
     poll_interval_seconds: float = 5.0
@@ -76,6 +81,12 @@ class FleetWorkerConfig:
             raise ValueError("lease_seconds must be positive")
         if self.poll_interval_seconds < 0:
             raise ValueError("poll_interval_seconds must be non-negative")
+        if self.service_credential and not (self.tenant_id or "").strip():
+            raise ValueError("tenant_id is required with service_credential")
+        if self.tenant_id and not (self.service_credential or "").strip():
+            raise ValueError("service_credential is required with tenant_id")
+        if self.service_credential and self.bearer_token:
+            raise ValueError("choose service_credential or legacy bearer_token, not both")
 
     @property
     def base_url(self) -> str:
@@ -302,9 +313,25 @@ class FleetApiClient:
 
     async def _post(self, path: str, payload: dict[str, Any] | None) -> Any:
         headers = {"Content-Type": "application/json"}
-        token = (self.config.bearer_token or "").strip()
-        if token:
-            headers["Authorization"] = token if token.lower().startswith("bearer ") else f"Bearer {token}"
+        service_credential = (self.config.service_credential or "").strip()
+        if service_credential:
+            headers.update(
+                {
+                    "Authorization": f"CAS-Service {service_credential}",
+                    "X-CAS-Tenant-ID": str(self.config.tenant_id),
+                    "X-CAS-Audit-ID": self.config.audit_id,
+                    "X-CAS-Service-Timestamp": str(int(datetime.now(UTC).timestamp())),
+                    # A fresh high-entropy nonce for every HTTP attempt. The API consumes it in
+                    # the durable ledger, so a copied callback loses a cross-replica CAS race.
+                    "X-CAS-Service-Nonce": secrets.token_urlsafe(24),
+                }
+            )
+        else:
+            token = (self.config.bearer_token or "").strip()
+            if token:
+                headers["Authorization"] = (
+                    token if token.lower().startswith("bearer ") else f"Bearer {token}"
+                )
         response = await self._client.post(
             f"{self.config.base_url}{path}",
             json=payload,

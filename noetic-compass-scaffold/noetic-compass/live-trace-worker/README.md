@@ -128,9 +128,20 @@ python scripts/run_fleet_worker.py \
   --audit-id <cas-dist-id> \
   --worker-id probe-worker-001 \
   --model-id <exact-open-weight-model-id> \
-  --bearer-token "$CAS_HARNESS_API_TOKEN" \
+  --tenant-id "$CAS_FLEET_TENANT_ID" \
+  --service-credential "$CAS_FLEET_SERVICE_CREDENTIAL" \
   -- python scripts/run_open_weight_probe_shard.py
 ```
+
+In account mode, an owner/admin/operator first issues that worker-scoped secret with
+`POST /api/cas-harness/audit/distributed/session/{audit_id}/fleet/service-credentials`.
+The request names this exact `worker_id` and only the capabilities the daemon needs:
+`register_worker`, `heartbeat`, `lease_job`, and `submit_receipt`. The response returns
+`api_credential` once; store it as `CAS_FLEET_SERVICE_CREDENTIAL`, keep the matching
+tenant in `CAS_FLEET_TENANT_ID`, and never place either in browser code. Every daemon
+callback carries a fresh timestamp and one-time nonce. Customer Bearer tokens are not
+valid worker credentials when `NC_FLEET_SERVICE_AUTH_ENABLED=true`. The old
+`--bearer-token` option exists only for the default-dark/legacy posture.
 
 The command after `--` is the real probe executor. It receives the assigned
 layer/shard job through environment variables such as `CAS_FLEET_LAYER_START`,
@@ -170,7 +181,8 @@ python scripts/run_fleet_worker.py \
   --audit-id <cas-dist-id> \
   --worker-id probe-worker-001 \
   --model-id EleutherAI/gpt-neox-20b \
-  --bearer-token "$CAS_HARNESS_API_TOKEN" \
+  --tenant-id "$CAS_FLEET_TENANT_ID" \
+  --service-credential "$CAS_FLEET_SERVICE_CREDENTIAL" \
   -- python scripts/run_open_weight_probe_shard.py
 ```
 

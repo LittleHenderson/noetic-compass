@@ -49,6 +49,13 @@ services:
       # per-account issued API keys.
       - key: NC_AUTH_MINT_SECRET
         sync: false
+      # Tenant-bound distributed/fleet machine credentials. Keep dark until account mode,
+      # managed Postgres, and worker/verifier clients are deployed together. The pepper is
+      # server-only and must be stable across replicas; no browser or customer JWT receives it.
+      - key: NC_FLEET_SERVICE_AUTH_ENABLED
+        value: "false"
+      - key: NC_FLEET_SERVICE_CREDENTIAL_PEPPER
+        sync: false
       - key: NC_DEFAULT_LLM_PROVIDER
         value: mock
       - key: NC_MOCK_LLM

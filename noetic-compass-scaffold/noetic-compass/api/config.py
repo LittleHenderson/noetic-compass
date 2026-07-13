@@ -138,6 +138,33 @@ class Settings(BaseSettings):
         ),
     )
 
+    # Tenant-bound service credentials for distributed/fleet callbacks. Dark by default.
+    # These credentials are deliberately separate from customer JWTs and the legacy global
+    # Atlas worker token. When enabled, a durable account-mode store issues short-lived,
+    # capability-scoped credentials and records one-time request nonces to reject replays.
+    fleet_service_auth_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_FLEET_SERVICE_AUTH_ENABLED", "FLEET_SERVICE_AUTH_ENABLED"
+        ),
+    )
+    fleet_service_credential_pepper: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_FLEET_SERVICE_CREDENTIAL_PEPPER",
+            "FLEET_SERVICE_CREDENTIAL_PEPPER",
+        ),
+    )
+    fleet_service_max_clock_skew_seconds: int = Field(
+        default=300,
+        ge=30,
+        le=900,
+        validation_alias=AliasChoices(
+            "NC_FLEET_SERVICE_MAX_CLOCK_SKEW_SECONDS",
+            "FLEET_SERVICE_MAX_CLOCK_SKEW_SECONDS",
+        ),
+    )
+
     # Per-tenant usage quotas (PAID-user metering spine). Dark by default — the engine is INERT.
     #   NC_QUOTAS_ENABLED=false (default) -> NO metering. The quota engine
     #     (api/services/quotas.py) is never consulted, no usage counter is ever written or read,
@@ -249,6 +276,17 @@ class Settings(BaseSettings):
 
     def validate_account_storage(self) -> None:
         """Fail loud unless account mode has an explicitly persistent shared backend."""
+        if self.fleet_service_auth_enabled and not self.accounts_enabled:
+            raise RuntimeError(
+                "NC_FLEET_SERVICE_AUTH_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."
+            )
+        if self.fleet_service_auth_enabled and len(
+            self.fleet_service_credential_pepper.encode("utf-8")
+        ) < 32:
+            raise RuntimeError(
+                "Fleet service auth requires NC_FLEET_SERVICE_CREDENTIAL_PEPPER "
+                "with at least 32 bytes."
+            )
         if not self.accounts_enabled:
             return
 

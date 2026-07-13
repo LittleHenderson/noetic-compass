@@ -113,6 +113,14 @@ from api.services.cas_harness_tks_definition_lock import (
     assert_tks_definition_lock_for_audit,
 )
 from api.services.cas_harness_verifier_decision_adapter import verifier_decision_from_packet
+from api.services.fleet_service_auth import (
+    CAPABILITIES as FLEET_SERVICE_CAPABILITIES,
+    FleetServiceAuthError,
+    FleetServiceAuthenticationError,
+    FleetServiceAuthorizationError,
+    FleetServiceAuthStore,
+    FleetServicePrincipal,
+)
 
 
 router = APIRouter(prefix="/api/cas-harness/audit", tags=["cas_harness_audit"])
@@ -249,6 +257,118 @@ def _audit_evidence_state_store(request: Request):
         return shared
     handle = getattr(request.app.state, "state_ledger", None)
     return getattr(handle, "store", None) if handle is not None else None
+
+
+def _fleet_service_auth_store(request: Request) -> FleetServiceAuthStore:
+    """Build the fleet-auth domain over the one lifespan-owned durable store."""
+    if not settings.fleet_service_auth_enabled or not settings.accounts_enabled:
+        raise HTTPException(status_code=503, detail="Fleet service authentication is unavailable.")
+    store = _audit_evidence_state_store(request)
+    if store is None:
+        raise HTTPException(status_code=503, detail="Fleet service authentication is unavailable.")
+    try:
+        return FleetServiceAuthStore(
+            store,
+            pepper=settings.fleet_service_credential_pepper,
+            max_clock_skew_seconds=settings.fleet_service_max_clock_skew_seconds,
+        )
+    except FleetServiceAuthError as exc:
+        raise HTTPException(status_code=503, detail="Fleet service authentication is unavailable.") from exc
+
+
+def _customer_fleet_identity(request: Request) -> tuple[str, str]:
+    tenant_id = str(getattr(request.state, "tenant_id", "") or "").strip()
+    account_id = str(getattr(request.state, "account_id", "") or "").strip()
+    if not tenant_id or not account_id:
+        raise HTTPException(status_code=401, detail="Account authentication required.")
+    return tenant_id, account_id
+
+
+def _require_fleet_credential_manager(request: Request) -> tuple[str, str]:
+    identity = _customer_fleet_identity(request)
+    role = str(getattr(request.state, "role", "") or "")
+    if role not in {"owner", "admin", "operator"}:
+        raise HTTPException(
+            status_code=403,
+            detail="Fleet service credentials require owner, admin, or operator role.",
+        )
+    return identity
+
+
+def _require_owned_distributed_audit(request: Request, audit_id: str) -> None:
+    """Hide another tenant's audit behind the same 404 as a missing audit."""
+    if not settings.fleet_service_auth_enabled:
+        return
+    tenant_id, _account_id = _customer_fleet_identity(request)
+    auth_store = _fleet_service_auth_store(request)
+    try:
+        owned = auth_store.tenant_owns_audit(tenant_id=tenant_id, audit_id=audit_id)
+    except FleetServiceAuthError as exc:
+        raise HTTPException(status_code=503, detail="Fleet ownership verification is unavailable.") from exc
+    if not owned:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+
+
+def _record_distributed_audit_owner(request: Request, audit_id: str) -> None:
+    if not settings.fleet_service_auth_enabled:
+        return
+    tenant_id, account_id = _customer_fleet_identity(request)
+    try:
+        _fleet_service_auth_store(request).record_audit_owner(
+            tenant_id=tenant_id, account_id=account_id, audit_id=audit_id
+        )
+    except FleetServiceAuthError as exc:
+        logger.error("distributed audit ownership write failed", exc_info=True)
+        raise HTTPException(status_code=503, detail="Fleet ownership persistence failed.") from exc
+
+
+def _visible_fleet_worker_scopes(request: Request) -> set[tuple[str, str]]:
+    tenant_id, _account_id = _customer_fleet_identity(request)
+    auth_store = _fleet_service_auth_store(request)
+    return {
+        (audit_id, credential.worker_id)
+        for audit_id in auth_store.list_owned_audit_ids(tenant_id=tenant_id)
+        for credential in auth_store.list_credentials(
+            tenant_id=tenant_id, audit_id=audit_id
+        )
+        if credential.worker_id is not None
+    }
+
+
+def _require_fleet_service_callback(
+    request: Request,
+    *,
+    capability: str,
+    audit_id: str | None = None,
+    worker_id: str | None = None,
+) -> FleetServicePrincipal | None:
+    """Authenticate one machine callback; legacy/account-dark behavior is unchanged."""
+    if not settings.fleet_service_auth_enabled:
+        return None
+    authorization = request.headers.get("Authorization", "")
+    if not authorization.startswith("CAS-Service "):
+        raise HTTPException(status_code=401, detail="Invalid fleet service credential.")
+    header_audit_id = request.headers.get("X-CAS-Audit-ID", "").strip()
+    expected_audit_id = (audit_id or header_audit_id).strip()
+    if not expected_audit_id or (audit_id is not None and header_audit_id != audit_id):
+        raise HTTPException(status_code=403, detail="Fleet service scope denied.")
+    try:
+        return _fleet_service_auth_store(request).authenticate(
+            tenant_id=request.headers.get("X-CAS-Tenant-ID", ""),
+            api_credential=authorization[len("CAS-Service ") :],
+            timestamp=request.headers.get("X-CAS-Service-Timestamp", ""),
+            nonce=request.headers.get("X-CAS-Service-Nonce", ""),
+            required_capability=capability,
+            audit_id=expected_audit_id,
+            fleet_id=expected_audit_id,
+            worker_id=worker_id,
+        )
+    except FleetServiceAuthenticationError as exc:
+        raise HTTPException(status_code=401, detail="Invalid fleet service credential.") from exc
+    except FleetServiceAuthorizationError as exc:
+        raise HTTPException(status_code=403, detail="Fleet service scope denied.") from exc
+    except FleetServiceAuthError as exc:
+        raise HTTPException(status_code=503, detail="Fleet service authentication is unavailable.") from exc
 
 
 def _record_audit_evidence_ownership(request: Request, trace_id: str | None) -> None:
@@ -1239,6 +1359,48 @@ class FleetStaleWorkerRequest(BaseModel):
     max_heartbeat_age_seconds: int = Field(default=120, gt=0, le=86_400)
 
 
+class FleetServiceCredentialIssueRequest(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    capabilities: list[str] = Field(..., min_length=1, max_length=9)
+    worker_id: str | None = Field(default=None, min_length=1, max_length=120)
+    ttl_seconds: int = Field(default=3600, ge=60, le=86_400)
+
+    @field_validator("capabilities")
+    @classmethod
+    def validate_capabilities(cls, values: list[str]) -> list[str]:
+        cleaned = _clean_string_list(values, field_name="capabilities", max_length=64)
+        unknown = set(cleaned) - FLEET_SERVICE_CAPABILITIES
+        if unknown:
+            raise ValueError("unknown capabilities: " + ", ".join(sorted(unknown)))
+        return cleaned
+
+    @field_validator("worker_id")
+    @classmethod
+    def clean_worker_scope(cls, value: str | None) -> str | None:
+        return value.strip() if value is not None else None
+
+
+class FleetServiceCredentialResponse(BaseModel):
+    credential_id: str
+    tenant_id: str
+    audit_id: str
+    fleet_id: str
+    worker_id: str | None = None
+    capabilities: list[str]
+    issued_by_account_id: str
+    created_at: str
+    expires_at: str
+    revoked_at: str | None = None
+    revoked_by_account_id: str | None = None
+    status: Literal["active", "expired", "revoked"]
+    api_credential: str | None = None
+
+
+class FleetServiceCredentialListResponse(BaseModel):
+    credentials: list[FleetServiceCredentialResponse]
+
+
 @router.post("/target/verify", response_model=ModelTargetVerificationResponse)
 async def verify_model_target(
     req: ModelTargetVerificationRequest,
@@ -1277,7 +1439,9 @@ async def create_scale_plan(req: ScalePlanRequest) -> ScalePlanResponse:
 
 
 @router.post("/distributed/session", response_model=DistributedAuditResponse)
-async def create_distributed_audit_session(req: ScalePlanRequest) -> DistributedAuditResponse:
+async def create_distributed_audit_session(
+    req: ScalePlanRequest, request: Request
+) -> DistributedAuditResponse:
     """Create a real distributed audit control-plane run from an open-weight plan.
 
     Carries the same frontier gates as ``/scale-plan`` and more: a 300B-4T run is
@@ -1322,12 +1486,16 @@ async def create_distributed_audit_session(req: ScalePlanRequest) -> Distributed
         )
     except ValueError as exc:
         raise HTTPException(status_code=422, detail=str(exc))
+    _record_distributed_audit_owner(request, record.audit_id)
     return DistributedAuditResponse.model_validate(record.to_dict())
 
 
 @router.post("/distributed/session/{audit_id}/dispatch", response_model=DistributedAuditResponse)
-async def dispatch_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+async def dispatch_distributed_audit_session(
+    audit_id: str, request: Request
+) -> DistributedAuditResponse:
     """Mark planned Probe Worker assignments as dispatched."""
+    _require_owned_distributed_audit(request, audit_id)
     record = dispatch_distributed_audit(audit_id)
     if record is None:
         raise HTTPException(status_code=404, detail="Distributed audit session not found")
@@ -1338,8 +1506,16 @@ async def dispatch_distributed_audit_session(audit_id: str) -> DistributedAuditR
     "/distributed/session/{audit_id}/worker/{worker_id}/running",
     response_model=DistributedAuditResponse,
 )
-async def mark_distributed_worker_running(audit_id: str, worker_id: str) -> DistributedAuditResponse:
+async def mark_distributed_worker_running(
+    audit_id: str, worker_id: str, request: Request
+) -> DistributedAuditResponse:
     """Mark one Probe Worker as running."""
+    _require_fleet_service_callback(
+        request,
+        capability="mark_running",
+        audit_id=audit_id,
+        worker_id=worker_id,
+    )
     try:
         record = mark_worker_running(audit_id, worker_id)
     except KeyError:
@@ -1359,8 +1535,15 @@ async def submit_distributed_worker_evidence(
     audit_id: str,
     worker_id: str,
     req: DistributedWorkerEvidenceRequest,
+    request: Request,
 ) -> DistributedAuditResponse:
     """Attach one Probe Worker's evidence receipt to the distributed audit."""
+    _require_fleet_service_callback(
+        request,
+        capability="submit_evidence",
+        audit_id=audit_id,
+        worker_id=worker_id,
+    )
     if get_fleet_run(audit_id) is not None:
         raise HTTPException(
             status_code=409,
@@ -1386,8 +1569,13 @@ async def submit_distributed_worker_evidence(
 
 
 @router.post("/distributed/session/{audit_id}/merge", response_model=DistributedAuditResponse)
-async def merge_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+async def merge_distributed_audit_session(
+    audit_id: str, request: Request
+) -> DistributedAuditResponse:
     """Merge worker evidence receipts without fabricating ACCEPT."""
+    _require_fleet_service_callback(
+        request, capability="merge_distributed", audit_id=audit_id
+    )
     try:
         record = merge_distributed_audit(audit_id)
     except DistributedAuditStateError as exc:
@@ -1398,8 +1586,11 @@ async def merge_distributed_audit_session(audit_id: str) -> DistributedAuditResp
 
 
 @router.get("/distributed/session/{audit_id}", response_model=DistributedAuditResponse)
-async def get_distributed_audit_session(audit_id: str) -> DistributedAuditResponse:
+async def get_distributed_audit_session(
+    audit_id: str, request: Request
+) -> DistributedAuditResponse:
     """Return distributed audit worker and merge state."""
+    _require_owned_distributed_audit(request, audit_id)
     record = get_distributed_audit(audit_id)
     if record is None:
         raise HTTPException(status_code=404, detail="Distributed audit session not found")
@@ -1407,19 +1598,37 @@ async def get_distributed_audit_session(audit_id: str) -> DistributedAuditRespon
 
 
 @router.get("/distributed/sessions", response_model=DistributedAuditListResponse)
-async def list_distributed_audit_sessions() -> DistributedAuditListResponse:
+async def list_distributed_audit_sessions(request: Request) -> DistributedAuditListResponse:
     """List distributed audit runs held by this API process."""
+    owned_ids: set[str] | None = None
+    if settings.fleet_service_auth_enabled:
+        tenant_id, _account_id = _customer_fleet_identity(request)
+        owned_ids = set(
+            _fleet_service_auth_store(request).list_owned_audit_ids(tenant_id=tenant_id)
+        )
     return DistributedAuditListResponse(
         audits=[
             DistributedAuditResponse.model_validate(record.to_dict())
             for record in list_distributed_audits()
+            if owned_ids is None or record.audit_id in owned_ids
         ]
     )
 
 
 @router.post("/distributed/fleet/worker/register", response_model=FleetWorkerResponse)
-async def register_fleet_worker(req: FleetWorkerRegistrationRequest) -> FleetWorkerResponse:
+async def register_fleet_worker(
+    req: FleetWorkerRegistrationRequest, request: Request
+) -> FleetWorkerResponse:
     """Register one Probe Worker that can receive distributed audit jobs."""
+    principal = _require_fleet_service_callback(
+        request, capability="register_worker", worker_id=req.worker_id
+    )
+    if principal is not None:
+        audit = get_distributed_audit(principal.audit_id)
+        if audit is None or req.worker_id not in {
+            assignment.worker_id for assignment in audit.worker_evidence
+        }:
+            raise HTTPException(status_code=403, detail="Fleet service scope denied.")
     try:
         worker = register_worker(
             worker_id=req.worker_id,
@@ -1428,6 +1637,7 @@ async def register_fleet_worker(req: FleetWorkerRegistrationRequest) -> FleetWor
             gpu_type=req.gpu_type,
             capacity=req.capacity,
             supported_methods=req.supported_methods,
+            audit_id=principal.audit_id if principal is not None else None,
         )
     except FleetExecutorStateError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
@@ -1435,39 +1645,69 @@ async def register_fleet_worker(req: FleetWorkerRegistrationRequest) -> FleetWor
 
 
 @router.post("/distributed/fleet/worker/{worker_id}/heartbeat", response_model=FleetWorkerResponse)
-async def heartbeat_fleet_worker(worker_id: str) -> FleetWorkerResponse:
+async def heartbeat_fleet_worker(worker_id: str, request: Request) -> FleetWorkerResponse:
     """Refresh one Probe Worker's heartbeat."""
-    worker = heartbeat_worker(worker_id)
+    principal = _require_fleet_service_callback(
+        request, capability="heartbeat", worker_id=worker_id
+    )
+    worker = heartbeat_worker(
+        worker_id, audit_id=principal.audit_id if principal is not None else None
+    )
     if worker is None:
         raise HTTPException(status_code=404, detail="Fleet worker not found")
     return FleetWorkerResponse.model_validate(worker.to_dict())
 
 
 @router.post("/distributed/fleet/workers/stale-scan", response_model=FleetWorkerListResponse)
-async def scan_stale_fleet_workers(req: FleetStaleWorkerRequest) -> FleetWorkerListResponse:
+async def scan_stale_fleet_workers(
+    req: FleetStaleWorkerRequest, request: Request
+) -> FleetWorkerListResponse:
     """Mark stale Probe Workers using the requested heartbeat age threshold."""
+    visible_scopes: set[tuple[str, str]] | None = None
+    if settings.fleet_service_auth_enabled:
+        _require_fleet_credential_manager(request)
+        visible_scopes = _visible_fleet_worker_scopes(request)
     try:
         workers = mark_stale_workers(max_heartbeat_age_seconds=req.max_heartbeat_age_seconds)
     except FleetExecutorStateError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
     return FleetWorkerListResponse(
-        workers=[FleetWorkerResponse.model_validate(worker.to_dict()) for worker in workers]
+        workers=[
+            FleetWorkerResponse.model_validate(worker.to_dict())
+            for worker in workers
+            if visible_scopes is None
+            or (worker.audit_id, worker.worker_id) in visible_scopes
+        ]
     )
 
 
 @router.get("/distributed/fleet/workers", response_model=FleetWorkerListResponse)
-async def list_fleet_workers() -> FleetWorkerListResponse:
+async def list_fleet_workers(request: Request) -> FleetWorkerListResponse:
     """List registered Probe Workers."""
+    visible_scopes: set[tuple[str, str]] | None = None
+    if settings.fleet_service_auth_enabled:
+        visible_scopes = _visible_fleet_worker_scopes(request)
     return FleetWorkerListResponse(
-        workers=[FleetWorkerResponse.model_validate(worker.to_dict()) for worker in list_workers()]
+        workers=[
+            FleetWorkerResponse.model_validate(worker.to_dict())
+            for worker in list_workers()
+            if visible_scopes is None
+            or (worker.audit_id, worker.worker_id) in visible_scopes
+        ]
     )
 
 
 @router.post("/distributed/session/{audit_id}/fleet/prepare", response_model=FleetRunResponse)
-async def prepare_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
+async def prepare_distributed_fleet_run(
+    audit_id: str, request: Request
+) -> FleetRunResponse:
     """Create fleet jobs from a dispatched distributed audit run."""
+    _require_owned_distributed_audit(request, audit_id)
     try:
-        run = prepare_fleet_for_audit(audit_id)
+        run = prepare_fleet_for_audit(
+            audit_id,
+            require_scoped_workers=settings.fleet_service_auth_enabled,
+        )
     except FleetExecutorStateError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
     if run is None:
@@ -1475,17 +1715,109 @@ async def prepare_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
     return FleetRunResponse.model_validate(run.to_dict())
 
 
+@router.post(
+    "/distributed/session/{audit_id}/fleet/service-credentials",
+    response_model=FleetServiceCredentialResponse,
+    status_code=201,
+)
+async def issue_fleet_service_credential(
+    audit_id: str,
+    req: FleetServiceCredentialIssueRequest,
+    request: Request,
+) -> FleetServiceCredentialResponse:
+    """Issue one expiring, least-privilege callback credential; return its secret once."""
+    tenant_id, account_id = _require_fleet_credential_manager(request)
+    _require_owned_distributed_audit(request, audit_id)
+    audit = get_distributed_audit(audit_id)
+    if audit is None:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found")
+    if req.worker_id is not None and req.worker_id not in {
+        assignment.worker_id for assignment in audit.worker_evidence
+    }:
+        raise HTTPException(status_code=422, detail="worker_id is not assigned to this audit")
+    try:
+        credential = _fleet_service_auth_store(request).issue_credential(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            audit_id=audit_id,
+            fleet_id=audit_id,
+            worker_id=req.worker_id,
+            capabilities=req.capabilities,
+            ttl_seconds=req.ttl_seconds,
+        )
+    except FleetServiceAuthorizationError as exc:
+        raise HTTPException(status_code=404, detail="Distributed audit session not found") from exc
+    except FleetServiceAuthError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return FleetServiceCredentialResponse.model_validate(
+        credential.to_public_dict(include_secret=True)
+    )
+
+
+@router.get(
+    "/distributed/session/{audit_id}/fleet/service-credentials",
+    response_model=FleetServiceCredentialListResponse,
+)
+async def list_fleet_service_credentials(
+    audit_id: str, request: Request
+) -> FleetServiceCredentialListResponse:
+    tenant_id, _account_id = _require_fleet_credential_manager(request)
+    _require_owned_distributed_audit(request, audit_id)
+    credentials = _fleet_service_auth_store(request).list_credentials(
+        tenant_id=tenant_id, audit_id=audit_id
+    )
+    return FleetServiceCredentialListResponse(
+        credentials=[
+            FleetServiceCredentialResponse.model_validate(item.to_public_dict())
+            for item in credentials
+        ]
+    )
+
+
+@router.delete(
+    "/distributed/session/{audit_id}/fleet/service-credentials/{credential_id}",
+    response_model=FleetServiceCredentialResponse,
+)
+async def revoke_fleet_service_credential(
+    audit_id: str, credential_id: str, request: Request
+) -> FleetServiceCredentialResponse:
+    tenant_id, account_id = _require_fleet_credential_manager(request)
+    _require_owned_distributed_audit(request, audit_id)
+    try:
+        credential = _fleet_service_auth_store(request).revoke_credential(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            audit_id=audit_id,
+            credential_id=credential_id,
+        )
+    except FleetServiceAuthorizationError as exc:
+        raise HTTPException(status_code=404, detail="Fleet service credential not found") from exc
+    except FleetServiceAuthError as exc:
+        raise HTTPException(status_code=503, detail="Credential revocation failed.") from exc
+    if credential is None:
+        raise HTTPException(status_code=404, detail="Fleet service credential not found")
+    return FleetServiceCredentialResponse.model_validate(credential.to_public_dict())
+
+
 @router.post("/distributed/session/{audit_id}/fleet/job/lease", response_model=FleetJobResponse | None)
 async def lease_distributed_fleet_job(
     audit_id: str,
     req: FleetLeaseRequest,
+    request: Request,
 ) -> FleetJobResponse | None:
     """Lease the next queued fleet job assigned to a registered Probe Worker."""
+    principal = _require_fleet_service_callback(
+        request,
+        capability="lease_job",
+        audit_id=audit_id,
+        worker_id=req.worker_id,
+    )
     try:
         job = lease_next_job(
             audit_id=audit_id,
             worker_id=req.worker_id,
             lease_seconds=req.lease_seconds,
+            require_scoped_worker=principal is not None,
         )
     except FleetExecutorStateError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
@@ -1501,8 +1833,15 @@ async def submit_distributed_fleet_job_receipt(
     audit_id: str,
     job_id: str,
     req: FleetJobReceiptRequest,
+    request: Request,
 ) -> FleetRunResponse:
     """Submit one worker Evidence Packet fragment receipt for a leased job."""
+    principal = _require_fleet_service_callback(
+        request,
+        capability="submit_receipt",
+        audit_id=audit_id,
+        worker_id=req.worker_id,
+    )
     try:
         run = submit_job_receipt(
             audit_id=audit_id,
@@ -1515,6 +1854,7 @@ async def submit_distributed_fleet_job_receipt(
             evidence_packet_fragment_payload=req.evidence_packet_fragment_payload,
             error_message=req.error_message,
             job_status=req.job_status,
+            require_scoped_worker=principal is not None,
         )
     except KeyError:
         raise HTTPException(status_code=404, detail="Fleet job not found")
@@ -1526,8 +1866,11 @@ async def submit_distributed_fleet_job_receipt(
 
 
 @router.post("/distributed/session/{audit_id}/fleet/merge", response_model=FleetRunResponse)
-async def merge_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
+async def merge_distributed_fleet_run(
+    audit_id: str, request: Request
+) -> FleetRunResponse:
     """Merge fleet Evidence Packet fragments only after all receipts arrive."""
+    _require_fleet_service_callback(request, capability="merge_fleet", audit_id=audit_id)
     try:
         run = merge_fleet_evidence(audit_id)
     except (FleetExecutorStateError, DistributedAuditStateError) as exc:
@@ -1541,8 +1884,11 @@ async def merge_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
     "/distributed/session/{audit_id}/fleet/verifier",
     response_model=FleetVerifierDecisionResponse,
 )
-async def verify_distributed_fleet_packet(audit_id: str) -> FleetVerifierDecisionResponse:
+async def verify_distributed_fleet_packet(
+    audit_id: str, request: Request
+) -> FleetVerifierDecisionResponse:
     """Run the verifier-owned decision gate over a merged fleet packet."""
+    _require_fleet_service_callback(request, capability="verify_fleet", audit_id=audit_id)
     packet_decision = None
     packet_proof_chips = None
     packet_load_error = None
@@ -1581,8 +1927,11 @@ async def verify_distributed_fleet_packet(audit_id: str) -> FleetVerifierDecisio
 
 
 @router.get("/distributed/session/{audit_id}/fleet", response_model=FleetRunResponse)
-async def get_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
+async def get_distributed_fleet_run(
+    audit_id: str, request: Request
+) -> FleetRunResponse:
     """Return fleet executor state for one distributed audit."""
+    _require_owned_distributed_audit(request, audit_id)
     run = get_fleet_run(audit_id)
     if run is None:
         raise HTTPException(status_code=404, detail="Fleet run not found")
@@ -1590,10 +1939,20 @@ async def get_distributed_fleet_run(audit_id: str) -> FleetRunResponse:
 
 
 @router.get("/distributed/fleet/runs", response_model=FleetRunListResponse)
-async def list_distributed_fleet_runs() -> FleetRunListResponse:
+async def list_distributed_fleet_runs(request: Request) -> FleetRunListResponse:
     """List fleet executor runs held by this API process."""
+    owned_ids: set[str] | None = None
+    if settings.fleet_service_auth_enabled:
+        tenant_id, _account_id = _customer_fleet_identity(request)
+        owned_ids = set(
+            _fleet_service_auth_store(request).list_owned_audit_ids(tenant_id=tenant_id)
+        )
     return FleetRunListResponse(
-        runs=[FleetRunResponse.model_validate(run.to_dict()) for run in list_fleet_runs()]
+        runs=[
+            FleetRunResponse.model_validate(run.to_dict())
+            for run in list_fleet_runs()
+            if owned_ids is None or run.audit_id in owned_ids
+        ]
     )
 
 

@@ -53,6 +53,9 @@ class FleetWorkerRecord:
     supported_methods: tuple[str, ...]
     registered_at: str
     last_heartbeat_at: str
+    # ``None`` keeps the historical single-tenant namespace. Service-auth workers bind to one
+    # audit/fleet so identical public worker IDs in different tenants cannot touch each other.
+    audit_id: str | None = None
     status: FleetWorkerStatus = "active"
 
     def to_dict(self) -> dict[str, object]:
@@ -124,6 +127,7 @@ class FleetRunRecord:
     jobs: list[FleetJobRecord]
     created_at: str
     updated_at: str
+    require_scoped_workers: bool = False
     merged_packet_trace_id: str | None = None
     merge_reason: str = "Fleet jobs prepared; waiting for registered workers and receipts."
 
@@ -144,7 +148,13 @@ class FleetRunRecord:
             "leased_jobs": len(leased),
             "completed_fragments": len(completed),
             "failed_jobs": len(failed),
-            "registered_workers": sum(1 for job in self.jobs if _job_has_ready_worker(job)),
+            "registered_workers": sum(
+                1
+                for job in self.jobs
+                if _job_has_ready_worker(
+                    job, require_scoped=self.require_scoped_workers
+                )
+            ),
             "stale_workers": stale_workers,
             "readiness": _readiness_payload(
                 run=self,
@@ -195,6 +205,7 @@ def _worker_ledger_payload(worker: FleetWorkerRecord) -> dict[str, object]:
     heartbeat fact, not a staleness snapshot."""
     return {
         "worker_id": worker.worker_id,
+        "audit_id": worker.audit_id,
         "model_id": worker.model_id,
         "worker_url": worker.worker_url,
         "gpu_type": worker.gpu_type,
@@ -250,6 +261,7 @@ def _run_ledger_payload(run: FleetRunRecord) -> dict[str, object]:
     return {
         "audit_id": run.audit_id,
         "status": run.status,
+        "require_scoped_workers": run.require_scoped_workers,
         "merged_packet_trace_id": run.merged_packet_trace_id,
         "created_at": run.created_at,
         "updated_at": run.updated_at,
@@ -265,9 +277,10 @@ def _run_ledger_payload(run: FleetRunRecord) -> dict[str, object]:
 # production (no mirror) is byte-for-byte unchanged.
 def _mirror_worker(worker: FleetWorkerRecord) -> FleetWorkerRecord:
     if _STATE_MIRROR is not None:
-        _WORKERS[worker.worker_id] = worker
+        record_id = _worker_key(worker.worker_id, worker.audit_id)
+        _WORKERS[record_id] = worker
         _STATE_MIRROR.mirror_put(
-            _WORKER_KIND, worker.worker_id, _worker_ledger_payload(worker),
+            _WORKER_KIND, record_id, _worker_ledger_payload(worker),
             source=_MIRROR_SOURCE, trace_id=worker.worker_id,
         )
     return worker
@@ -338,6 +351,7 @@ def _worker_from_ledger_payload(
         supported_methods=tuple(payload["supported_methods"]),
         registered_at=payload["registered_at"],
         last_heartbeat_at=payload["last_heartbeat_at"],
+        audit_id=payload.get("audit_id"),
     )
     worker.status = "stale" if _parse_utc(worker.last_heartbeat_at) < cutoff else "active"
     return worker
@@ -389,6 +403,7 @@ def _run_from_ledger_payload(payload: Mapping[str, object]) -> FleetRunRecord:
         jobs=[_job_from_ledger_payload(job) for job in payload["jobs"]],
         created_at=payload["created_at"],
         updated_at=payload["updated_at"],
+        require_scoped_workers=bool(payload.get("require_scoped_workers", False)),
         merged_packet_trace_id=payload["merged_packet_trace_id"],
     )
 
@@ -417,7 +432,7 @@ def rehydrate_from_ledger(store: StateStore) -> dict[str, int]:
     workers: dict[str, FleetWorkerRecord] = {}
     for record in store.list(INTERIM_TENANT, _WORKER_KIND):
         worker = _worker_from_ledger_payload(record.payload, cutoff=cutoff)
-        workers[worker.worker_id] = worker
+        workers[_worker_key(worker.worker_id, worker.audit_id)] = worker
 
     runs: dict[str, FleetRunRecord] = {}
     for record in store.list(INTERIM_TENANT, _RUN_KIND):
@@ -451,6 +466,7 @@ def register_worker(
     gpu_type: str,
     supported_methods: list[str],
     capacity: int = 1,
+    audit_id: str | None = None,
 ) -> FleetWorkerRecord:
     _require_nonempty(worker_id, "worker_id")
     _require_nonempty(model_id, "model_id")
@@ -461,7 +477,9 @@ def register_worker(
     methods = tuple(_dedupe_nonempty(supported_methods))
     if not methods:
         raise FleetExecutorStateError("Worker registration requires at least one supported method.")
-    existing = _WORKERS.get(worker_id.strip())
+    scoped_audit_id = audit_id.strip() if audit_id is not None else None
+    key = _worker_key(worker_id.strip(), scoped_audit_id)
+    existing = _WORKERS.get(key)
     if existing is not None:
         raise FleetExecutorStateError("Worker ID is already registered; heartbeat the existing worker instead.")
 
@@ -475,34 +493,41 @@ def register_worker(
         supported_methods=methods,
         registered_at=now,
         last_heartbeat_at=now,
+        audit_id=scoped_audit_id,
     )
-    _WORKERS[record.worker_id] = record
+    _WORKERS[key] = record
     return _mirror_worker(record)
 
 
-def heartbeat_worker(worker_id: str) -> FleetWorkerRecord | None:
-    worker = _WORKERS.get(worker_id)
+def heartbeat_worker(worker_id: str, *, audit_id: str | None = None) -> FleetWorkerRecord | None:
+    worker = _worker_for(audit_id, worker_id, legacy_fallback=audit_id is None)
     if worker is None:
         return None
     if _mark_stale_worker_if_expired(worker):
-        _expire_worker_leases(worker.worker_id)
+        _expire_worker_leases(worker.worker_id, audit_id=worker.audit_id)
     worker.status = "active"
     worker.last_heartbeat_at = _utc_now()
     return _mirror_worker(worker)
 
 
-def list_workers() -> list[FleetWorkerRecord]:
+def list_workers(*, audit_id: str | None = None) -> list[FleetWorkerRecord]:
     # Phase 3 read-authority: reconstruct workers from the ledger, re-deriving each one's
     # staleness from its heartbeat against the same cutoff rehydrate uses (status is a
     # view, never stored). Dark by default (no mirror -> the dict path below).
     if _STATE_MIRROR is not None and _STATE_MIRROR.read_from_ledger:
         cutoff = datetime.now(UTC) - timedelta(seconds=DEFAULT_MAX_HEARTBEAT_AGE_SECONDS)
         payloads = _STATE_MIRROR.read_all_payloads(_WORKER_KIND)
-        return [_worker_from_ledger_payload(payload, cutoff=cutoff) for payload in payloads.values()]
-    workers = list(_WORKERS.values())
+        workers = [_worker_from_ledger_payload(payload, cutoff=cutoff) for payload in payloads.values()]
+        return [worker for worker in workers if audit_id is None or worker.audit_id == audit_id]
+    workers = [
+        worker
+        for worker in _WORKERS.values()
+        if audit_id is None or worker.audit_id == audit_id
+    ]
     if _STATE_MIRROR is not None:
         _STATE_MIRROR.shadow_compare_all(
-            _WORKER_KIND, {w.worker_id: _worker_ledger_payload(w) for w in workers}
+            _WORKER_KIND,
+            {_worker_key(w.worker_id, w.audit_id): _worker_ledger_payload(w) for w in workers},
         )
     return workers
 
@@ -520,7 +545,9 @@ def mark_stale_workers(*, max_heartbeat_age_seconds: int = DEFAULT_MAX_HEARTBEAT
     return stale
 
 
-def prepare_fleet_for_audit(audit_id: str) -> FleetRunRecord | None:
+def prepare_fleet_for_audit(
+    audit_id: str, *, require_scoped_workers: bool = False
+) -> FleetRunRecord | None:
     audit = get_distributed_audit(audit_id)
     if audit is None:
         return None
@@ -553,6 +580,7 @@ def prepare_fleet_for_audit(audit_id: str) -> FleetRunRecord | None:
         jobs=jobs,
         created_at=now,
         updated_at=now,
+        require_scoped_workers=require_scoped_workers,
     )
     _FLEET_RUNS[audit_id] = record
     _refresh_run_gate(record)
@@ -601,13 +629,16 @@ def lease_next_job(
     audit_id: str,
     worker_id: str,
     lease_seconds: int = 900,
+    require_scoped_worker: bool = False,
 ) -> FleetJobRecord | None:
     if lease_seconds <= 0:
         raise FleetExecutorStateError("lease_seconds must be positive.")
     run = _FLEET_RUNS.get(audit_id)
     if run is None:
         return None
-    worker = _WORKERS.get(worker_id)
+    worker = _worker_for(
+        audit_id, worker_id, legacy_fallback=not require_scoped_worker
+    )
     if worker is None:
         raise FleetExecutorStateError("Worker must register before leasing jobs.")
     _mark_stale_worker_if_expired(worker)
@@ -644,6 +675,7 @@ def submit_job_receipt(
     missing_outputs: list[str] | None = None,
     error_message: str | None = None,
     job_status: Literal["completed", "failed"] = "completed",
+    require_scoped_worker: bool = False,
 ) -> FleetRunRecord | None:
     run = _FLEET_RUNS.get(audit_id)
     if run is None:
@@ -653,7 +685,9 @@ def submit_job_receipt(
         raise KeyError(job_id)
     if job.assigned_worker_id != worker_id:
         raise FleetExecutorStateError("Worker cannot submit a receipt for another worker's job.")
-    worker = _WORKERS.get(worker_id)
+    worker = _worker_for(
+        audit_id, worker_id, legacy_fallback=not require_scoped_worker
+    )
     if worker is None:
         raise FleetExecutorStateError("Worker must register before submitting job receipts.")
     _mark_stale_worker_if_expired(worker)
@@ -756,7 +790,13 @@ def merge_fleet_evidence(audit_id: str) -> FleetRunRecord | None:
 
 
 def _refresh_run_gate(run: FleetRunRecord) -> None:
-    unregistered_jobs = [job for job in run.jobs if not _job_has_ready_worker(job)]
+    unregistered_jobs = [
+        job
+        for job in run.jobs
+        if not _job_has_ready_worker(
+            job, require_scoped=run.require_scoped_workers
+        )
+    ]
     failed_jobs = [job for job in run.jobs if job.status == "failed"]
     incomplete_jobs = [job for job in run.jobs if job.status not in {"completed", "failed"}]
     missing_jobs = [job for job in run.jobs if job.missing_outputs]
@@ -791,7 +831,11 @@ def _readiness_payload(
     leased_jobs: list[FleetJobRecord],
 ) -> dict[str, object]:
     total_jobs = len(run.jobs)
-    ready_workers = sum(1 for job in run.jobs if _job_has_ready_worker(job))
+    ready_workers = sum(
+        1
+        for job in run.jobs
+        if _job_has_ready_worker(job, require_scoped=run.require_scoped_workers)
+    )
     missing_ready_workers = max(total_jobs - ready_workers, 0)
     incomplete_jobs = [job for job in run.jobs if job.status not in {"completed", "failed"}]
     missing_output_jobs = [job for job in run.jobs if job.missing_outputs]
@@ -884,9 +928,11 @@ def _expire_stale_leases(run: FleetRunRecord) -> None:
         _mirror_run(run)
 
 
-def _expire_worker_leases(worker_id: str) -> None:
+def _expire_worker_leases(worker_id: str, *, audit_id: str | None = None) -> None:
     now = _utc_now()
     for run in _FLEET_RUNS.values():
+        if audit_id is not None and run.audit_id != audit_id:
+            continue
         changed = False
         for job in run.jobs:
             if job.assigned_worker_id == worker_id and job.status == "leased":
@@ -904,7 +950,11 @@ def _expire_worker_leases(worker_id: str) -> None:
 def _stale_assigned_workers(run: FleetRunRecord) -> list[str]:
     stale: set[str] = set()
     for job in run.jobs:
-        worker = _WORKERS.get(job.assigned_worker_id)
+        worker = _worker_for(
+            run.audit_id,
+            job.assigned_worker_id,
+            legacy_fallback=not run.require_scoped_workers,
+        )
         if worker is not None:
             _mark_stale_worker_if_expired(worker)
             if worker.status != "active":
@@ -922,13 +972,19 @@ def _mark_stale_worker_if_expired(
         was_active = worker.status == "active"
         worker.status = "stale"
         if was_active:
-            _expire_worker_leases(worker.worker_id)
+            _expire_worker_leases(worker.worker_id, audit_id=worker.audit_id)
         return True
     return worker.status == "stale"
 
 
-def _job_has_ready_worker(job: FleetJobRecord) -> bool:
-    worker = _WORKERS.get(job.assigned_worker_id)
+def _job_has_ready_worker(
+    job: FleetJobRecord, *, require_scoped: bool = False
+) -> bool:
+    worker = _worker_for(
+        job.audit_id,
+        job.assigned_worker_id,
+        legacy_fallback=not require_scoped,
+    )
     if worker is None or worker.status != "active":
         return False
     try:
@@ -943,6 +999,24 @@ def _job(run: FleetRunRecord, job_id: str) -> FleetJobRecord | None:
         if job.job_id == job_id:
             return job
     return None
+
+
+def _worker_key(worker_id: str, audit_id: str | None) -> str:
+    """Internal key; legacy workers retain their historical unscoped key."""
+    return worker_id if audit_id is None else f"{audit_id}\x1f{worker_id}"
+
+
+def _worker_for(
+    audit_id: str | None,
+    worker_id: str,
+    *,
+    legacy_fallback: bool = True,
+) -> FleetWorkerRecord | None:
+    if audit_id is not None:
+        scoped = _WORKERS.get(_worker_key(worker_id, audit_id))
+        if scoped is not None:
+            return scoped
+    return _WORKERS.get(worker_id) if legacy_fallback else None
 
 
 def _job_id_for(audit_id: str, worker_id: str, shard_id: str) -> str:

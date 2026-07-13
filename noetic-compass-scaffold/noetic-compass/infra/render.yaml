@@ -24,6 +24,12 @@ services:
     envVars:
       - key: NC_JWT_SECRET
         generateValue: true
+      # Separate machine-to-machine credentials for fleet callbacks. Dark by default; enable
+      # only with account mode + the shared Postgres state store and set a stable server pepper.
+      - key: NC_FLEET_SERVICE_AUTH_ENABLED
+        value: "false"
+      - key: NC_FLEET_SERVICE_CREDENTIAL_PEPPER
+        sync: false
       - key: NC_DEFAULT_LLM_PROVIDER
         value: mock
       - key: NC_MOCK_LLM
