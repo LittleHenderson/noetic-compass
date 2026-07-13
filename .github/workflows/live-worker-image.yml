@@ -1,0 +1,134 @@
+name: CAS Live Worker Image
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - '.github/workflows/live-worker-image.yml'
+      - 'noetic-compass-scaffold/noetic-compass/live-trace-worker/**'
+  push:
+    branches: [master]
+    paths:
+      - '.github/workflows/live-worker-image.yml'
+      - 'noetic-compass-scaffold/noetic-compass/live-trace-worker/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+concurrency:
+  group: live-worker-image-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  worker_image:
+    name: live-worker-image
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      IMAGE_NAME: ghcr.io/littlehenderson/noetic-compass-live-worker
+      WORKER_DIR: noetic-compass-scaffold/noetic-compass/live-trace-worker
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build the immutable CUDA worker image
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          docker build \
+            --file "$WORKER_DIR/Dockerfile" \
+            --label "org.opencontainers.image.revision=$GITHUB_SHA" \
+            --tag "$IMAGE_NAME:$GITHUB_SHA" \
+            "$WORKER_DIR"
+
+      - name: Verify worker auth inside the built image
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+
+          container='cas-live-worker-image-smoke'
+          token='ci-worker-token-012345678901234567890123456789'
+          cleanup() {
+            status=$?
+            trap - EXIT
+            if [[ $status -ne 0 ]]; then
+              docker logs "$container" || true
+            fi
+            docker rm --force "$container" >/dev/null 2>&1 || true
+            exit "$status"
+          }
+          trap cleanup EXIT
+
+          docker run --detach \
+            --name "$container" \
+            --publish 127.0.0.1:18080:8080 \
+            --env PORT=8080 \
+            --env LIVE_TRACE_DEMO_MODE=1 \
+            --env ATLAS_LIVE_WORKER_TOKEN="$token" \
+            "$IMAGE_NAME:$GITHUB_SHA"
+
+          ready=0
+          for _ in $(seq 1 90); do
+            if curl --fail --silent http://127.0.0.1:18080/health \
+              --output /tmp/worker-health.json; then
+              ready=1
+              break
+            fi
+            if [[ "$(docker inspect --format '{{.State.Running}}' "$container" 2>/dev/null || true)" != 'true' ]]; then
+              break
+            fi
+            sleep 2
+          done
+          [[ $ready -eq 1 ]]
+
+          unauthenticated_status="$(
+            curl --silent --show-error \
+              --output /tmp/worker-unauthenticated.json \
+              --write-out '%{http_code}' \
+              --request POST \
+              --header 'Content-Type: application/json' \
+              --data '{"prompt":"CI worker auth probe","seed":42}' \
+              http://127.0.0.1:18080/sessions
+          )"
+          [[ "$unauthenticated_status" == '401' ]]
+
+          authenticated_status="$(
+            curl --silent --show-error \
+              --output /tmp/worker-authenticated.json \
+              --write-out '%{http_code}' \
+              --request POST \
+              --header 'Content-Type: application/json' \
+              --header "X-Atlas-Worker-Token: $token" \
+              --data '{"prompt":"CI worker auth probe","seed":42}' \
+              http://127.0.0.1:18080/sessions
+          )"
+          [[ "$authenticated_status" == '200' ]]
+
+          docker exec --interactive "$container" python - <<'PY'
+          import json
+          import urllib.request
+
+          with urllib.request.urlopen("http://127.0.0.1:8080/health/realmode", timeout=5) as response:
+              health = json.load(response)
+          assert response.status == 200
+          assert health["verdict"] == "NOT_REAL_PYTHIA_WEIGHTS"
+          assert health["is_real_model"] is False
+          assert health["fake_runtime_env"] is True
+          PY
+
+      - name: Log in to GitHub Container Registry
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        shell: bash
+        run: printf '%s' "$GHCR_TOKEN" | docker login ghcr.io --username "$GITHUB_ACTOR" --password-stdin
+
+      - name: Publish immutable and master tags
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/master' }}
+        shell: bash
+        run: |
+          set -Eeuo pipefail
+          docker push "$IMAGE_NAME:$GITHUB_SHA"
+          docker tag "$IMAGE_NAME:$GITHUB_SHA" "$IMAGE_NAME:master"
+          docker push "$IMAGE_NAME:master"

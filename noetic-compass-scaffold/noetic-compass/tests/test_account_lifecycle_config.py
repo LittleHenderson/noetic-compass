@@ -1,5 +1,8 @@
 from __future__ import annotations
 
+from pathlib import Path
+import tempfile
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -18,7 +21,7 @@ def _account_settings(**overrides) -> Settings:
         "account_credential_pepper": "p" * 32,
         "account_bootstrap_secret": "b" * 32,
         "accounts_allow_single_host_sqlite": True,
-        "state_ledger_path": "C:/tmp/cas-account-test.db",
+        "state_ledger_path": str(Path(tempfile.gettempdir()).resolve() / "cas-account-test.db"),
         "database_url": None,
     }
     values.update(overrides)
