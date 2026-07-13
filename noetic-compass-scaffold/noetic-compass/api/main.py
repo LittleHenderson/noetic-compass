@@ -188,12 +188,6 @@ app = FastAPI(
 # CORS — configured via NC_CORS_ORIGINS env var (default "*")
 # Regex matches every Vercel deployment alias (preview, team-scoped, canonical)
 # so stakeholder demos never hit "Failed to fetch" when Vercel rotates the URL.
-# Starlette wraps later additions around earlier ones. CORS is added last so direct middleware
-# 401/403/429 responses still carry browser-readable CORS headers.
-app.add_middleware(AuditLogMiddleware)
-app.add_middleware(RateLimitMiddleware)
-app.add_middleware(JWTAuthMiddleware)
-app.add_middleware(RequestIdMiddleware)
 cors_origins = _parse_cors_origins(settings.cors_origins)
 # Browser-managed credentials stay disabled for every origin. Authentication
 # uses explicit Bearer headers rather than cookies, and allow_headers below
