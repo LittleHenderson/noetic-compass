@@ -428,7 +428,7 @@ def test_quota_run_is_idempotent_capped_and_tenant_isolated(
     prior_period = "audits:2026-06"
     next_period = "audits:2026-08"
     monkeypatch.setattr(settings, "quotas_enabled", True)
-    monkeypatch.setattr("api.routes.cas_harness_audit.get_quota_limit", lambda: 1)
+    monkeypatch.setattr(settings, "quota_monthly_audit_limit", 1)
     monkeypatch.setattr(
         "api.routes.cas_harness_audit.current_monthly_period_key",
         lambda: execution_period,
