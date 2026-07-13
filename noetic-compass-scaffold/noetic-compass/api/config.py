@@ -151,6 +151,69 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("NC_QUOTAS_ENABLED", "QUOTAS_ENABLED"),
     )
 
+    # Server-derived plans/subscriptions/feature entitlements. Dark by default and valid only
+    # with durable account identity + quota enforcement. The browser may request Checkout for a
+    # catalog plan, but effective access is read exclusively from the signature-verified durable
+    # subscription record.
+    billing_entitlements_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_BILLING_ENTITLEMENTS_ENABLED", "BILLING_ENTITLEMENTS_ENABLED"
+        ),
+    )
+    billing_provider: str = Field(
+        default="null",
+        validation_alias=AliasChoices("NC_BILLING_PROVIDER", "BILLING_PROVIDER"),
+    )
+    # Separate platform authority for expiring comped-beta grants. It is not a login credential
+    # and cannot grant a paid plan.
+    billing_admin_secret: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_ADMIN_SECRET", "BILLING_ADMIN_SECRET"
+        ),
+    )
+    stripe_secret_key: str = Field(
+        default="",
+        validation_alias=AliasChoices("NC_STRIPE_SECRET_KEY", "STRIPE_SECRET_KEY"),
+    )
+    stripe_webhook_secret: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_STRIPE_WEBHOOK_SECRET", "STRIPE_WEBHOOK_SECRET"
+        ),
+    )
+    stripe_professional_price_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_STRIPE_PROFESSIONAL_PRICE_ID", "STRIPE_PROFESSIONAL_PRICE_ID"
+        ),
+    )
+    stripe_enterprise_price_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_STRIPE_ENTERPRISE_PRICE_ID", "STRIPE_ENTERPRISE_PRICE_ID"
+        ),
+    )
+    stripe_checkout_success_url: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_STRIPE_CHECKOUT_SUCCESS_URL", "STRIPE_CHECKOUT_SUCCESS_URL"
+        ),
+    )
+    stripe_checkout_cancel_url: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_STRIPE_CHECKOUT_CANCEL_URL", "STRIPE_CHECKOUT_CANCEL_URL"
+        ),
+    )
+    stripe_portal_return_url: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_STRIPE_PORTAL_RETURN_URL", "STRIPE_PORTAL_RETURN_URL"
+        ),
+    )
+
     # Rate limiting
     rate_limit_rpm: int = 60
     rate_limit_tier: str = "community"  # community | professional | enterprise
@@ -249,6 +312,30 @@ class Settings(BaseSettings):
 
     def validate_account_storage(self) -> None:
         """Fail loud unless account mode has an explicitly persistent shared backend."""
+        if self.billing_entitlements_enabled and not self.accounts_enabled:
+            raise RuntimeError(
+                "NC_BILLING_ENTITLEMENTS_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."
+            )
+        if self.billing_entitlements_enabled and not self.quotas_enabled:
+            raise RuntimeError(
+                "NC_BILLING_ENTITLEMENTS_ENABLED=true requires NC_QUOTAS_ENABLED=true."
+            )
+        if self.billing_entitlements_enabled:
+            provider = self.billing_provider.strip().lower()
+            if provider not in {"null", "stripe"}:
+                raise RuntimeError("NC_BILLING_PROVIDER must be 'null' or 'stripe'.")
+            if self.billing_admin_secret and len(
+                self.billing_admin_secret.encode("utf-8")
+            ) < 32:
+                raise RuntimeError(
+                    "NC_BILLING_ADMIN_SECRET must contain at least 32 bytes when set."
+                )
+            professional = self.stripe_professional_price_id.strip()
+            enterprise = self.stripe_enterprise_price_id.strip()
+            if provider == "stripe" and professional == enterprise and professional:
+                raise RuntimeError(
+                    "Stripe professional and enterprise price ids must be distinct."
+                )
         if not self.accounts_enabled:
             return
 

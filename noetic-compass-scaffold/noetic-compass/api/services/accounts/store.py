@@ -153,6 +153,22 @@ class AccountStore:
             return None
         return Account.from_payload(record.payload)
 
+    def tenant_has_account(self, tenant_id: str, *, active_only: bool = True) -> bool:
+        """Return whether the durable account domain contains this tenant.
+
+        Platform-only provisioning/billing routes use this to refuse grants for a typo or a
+        fabricated tenant id. The fixed account-storage partition is scanned server-side; no
+        account/customer endpoint exposes this enumeration.
+        """
+        normalized = tenant_id.strip()
+        if not normalized:
+            return False
+        for record in self._store.list(self._tenant, ACCOUNT_KIND):
+            account = Account.from_payload(record.payload)
+            if account.tenant_id == normalized and (account.is_active or not active_only):
+                return True
+        return False
+
     def get_account_by_email(self, email_or_username: str) -> Optional[Account]:
         """Resolve the account for a login identity via the email-index record.
 

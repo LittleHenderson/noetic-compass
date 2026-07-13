@@ -19,6 +19,7 @@ from jose import JWTError, jwt
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, SecretStr, field_validator, model_validator
 
 from api.config import settings
+from api.services.billing_entitlements import BillingEntitlementError
 
 from api.routes.evidence import (
     _verify_packet_hashes,
@@ -1696,7 +1697,48 @@ async def run_audit_session(
             raise HTTPException(status_code=404, detail="Audit session not found")
         return AuditSessionResponse.model_validate(completed.to_dict())
 
-    if settings.quotas_enabled:
+    requires_live_entitlement = _should_run_hosted_open_weight(
+        existing
+    ) or _should_run_api_endpoint(existing)
+    entitlement_decision = None
+    if settings.billing_entitlements_enabled and requires_live_entitlement:
+        tenant_id = str(getattr(request.state, "tenant_id", "") or "")
+        billing_store = getattr(
+            request.app.state, "billing_entitlement_store", None
+        )
+        if not tenant_id or billing_store is None:
+            raise HTTPException(
+                status_code=503,
+                detail="Billing entitlement verification is unavailable.",
+            )
+        try:
+            entitlement_decision = billing_store.resolve_entitlement(tenant_id)
+        except BillingEntitlementError as exc:
+            logger.error("billing entitlement record is invalid", exc_info=True)
+            raise HTTPException(
+                status_code=503,
+                detail="Billing entitlement verification is unavailable.",
+            ) from exc
+        if not entitlement_decision.can_run_live_audit:
+            raise HTTPException(
+                status_code=402,
+                detail={
+                    "code": "entitlement_required",
+                    "plan_id": entitlement_decision.plan.plan_id,
+                    "subscription_status": (
+                        entitlement_decision.subscription_status
+                    ),
+                    "reason": entitlement_decision.reason,
+                },
+            )
+
+    # With billing enabled, plan quotas cover only the external/hosted executions
+    # that spend provider compute. Reference/demo runs remain available on the
+    # free plan. With billing dark, preserve the historical quota behavior.
+    should_consume_quota = settings.quotas_enabled and (
+        not settings.billing_entitlements_enabled or requires_live_entitlement
+    )
+    if should_consume_quota:
         tenant_id = str(getattr(request.state, "tenant_id", "") or "")
         store = _audit_evidence_state_store(request)
         if not tenant_id or store is None:
@@ -1711,7 +1753,11 @@ async def run_audit_session(
                 tenant_id=tenant_id,
                 period_key=period,
                 audit_id=audit_id,
-                limit=get_quota_limit(),
+                limit=(
+                    entitlement_decision.plan.monthly_audit_limit
+                    if entitlement_decision is not None
+                    else get_quota_limit()
+                ),
             )
         except QuotaExceeded as exc:
             raise HTTPException(
@@ -1725,7 +1771,7 @@ async def run_audit_session(
             ) from exc
 
     run_attempt_id: str | None = None
-    if _should_run_hosted_open_weight(existing) or _should_run_api_endpoint(existing):
+    if requires_live_entitlement:
         try:
             run_attempt_id = claim_run_attempt(audit_id, **storage_scope)
         except AuditRunInProgress as exc:

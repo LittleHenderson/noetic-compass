@@ -27,6 +27,7 @@ from api.routes import (
     auth,
     batch,
     benchmark,
+    billing,
     cas_harness_audit,
     cas_harness_live_worker_health,
     cohort,
@@ -93,6 +94,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.shared_state_store = None
     app.state.account_store = None
     app.state.session_store = None
+    app.state.billing_entitlement_store = None
+    app.state.billing_provider = None
 
     if (not settings.debug or settings.accounts_enabled) and (
         settings.jwt_secret == "change-me-in-production"
@@ -132,6 +135,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         )
         app.state.account_store = build_account_store(settings, store=shared_store)
         app.state.session_store = build_session_store(settings, store=shared_store)
+        if settings.billing_entitlements_enabled:
+            if shared_store is None:
+                raise RuntimeError(
+                    "Billing entitlements require the shared durable state store."
+                )
+            from api.services.billing_entitlements import BillingEntitlementStore
+            from api.services.stripe_billing import build_billing_provider
+
+            app.state.billing_entitlement_store = BillingEntitlementStore(shared_store)
+            app.state.billing_provider = build_billing_provider(settings)
         if (
             app.state.account_store is not None
             and not app.state.account_store.has_active_owner()
@@ -155,6 +168,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         logger.info(
             "quotas: %s", "ENABLED" if settings.quotas_enabled else "dark"
         )
+        logger.info(
+            "billing entitlements: %s (provider=%s)",
+            "ENABLED" if settings.billing_entitlements_enabled else "dark",
+            settings.billing_provider.strip().lower(),
+        )
 
         from api.services.crm import build_crm_service, build_public_lead_abuse_guard
 
@@ -167,6 +185,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         # a stale closed store after either normal shutdown or partial startup failure.
         app.state.account_store = None
         app.state.session_store = None
+        app.state.billing_entitlement_store = None
+        app.state.billing_provider = None
         app.state.shared_state_store = None
         try:
             if handle is not None:
@@ -229,6 +249,7 @@ app.include_router(health.router)
 app.include_router(auth.router)
 app.include_router(accounts.router)
 app.include_router(platform_accounts.router)
+app.include_router(billing.router)
 app.include_router(assess.router)
 app.include_router(wrap.router)
 app.include_router(batch.router)

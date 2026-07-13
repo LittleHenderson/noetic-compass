@@ -86,10 +86,14 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
         if request.method == "OPTIONS":
             return await call_next(request)
         sensitive_public = {
-            "/auth/token",
-            "/accounts/bootstrap",
-            "/accounts/invite/redeem",
-            "/platform/tenants",
+            "/auth/token": self.sensitive_rpm,
+            "/accounts/bootstrap": self.sensitive_rpm,
+            "/accounts/invite/redeem": self.sensitive_rpm,
+            "/platform/tenants": self.sensitive_rpm,
+            "/platform/billing/manual-comped-subscription": self.sensitive_rpm,
+            # Signed provider deliveries can legitimately burst at renewal time,
+            # but malformed-signature floods must not bypass all throttling.
+            "/billing/webhook/stripe": 600,
         }
         if request.url.path in sensitive_public:
             client_host = request.client.host if request.client is not None else "unknown"
@@ -98,8 +102,9 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             if bucket is None:
                 if len(self.sensitive_buckets) >= 10_000:
                     self.sensitive_buckets.pop(next(iter(self.sensitive_buckets)))
+                endpoint_rpm = sensitive_public[request.url.path]
                 bucket = TokenBucket(
-                    rate=self.sensitive_rpm / 60.0, capacity=self.sensitive_rpm
+                    rate=endpoint_rpm / 60.0, capacity=endpoint_rpm
                 )
                 self.sensitive_buckets[key] = bucket
             if not bucket.consume():

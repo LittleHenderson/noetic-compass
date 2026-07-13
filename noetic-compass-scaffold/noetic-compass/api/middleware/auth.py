@@ -28,6 +28,10 @@ PUBLIC_PATHS = {
     "/accounts/invite/redeem",
     "/accounts/bootstrap",
     "/platform/tenants",
+    # Stripe verifies this endpoint with the raw-body signature, not a CAS JWT.
+    "/billing/webhook/stripe",
+    # Platform-only route; its separate 32-byte admin secret is verified in-route.
+    "/platform/billing/manual-comped-subscription",
     "/docs",
     "/openapi.json",
     "/redoc",
@@ -71,6 +75,7 @@ def is_public_path(path: str) -> bool:
 ACCOUNT_MODE_ALLOWED_PREFIXES = (
     "/auth/",
     "/accounts/",
+    "/billing/",
     "/api/cas-harness/audit/session",
     "/api/cas-harness/audit/sessions",
     "/evidence",
