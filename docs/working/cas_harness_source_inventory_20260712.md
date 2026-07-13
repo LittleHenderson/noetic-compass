@@ -22,7 +22,11 @@ The production TODO controls status and next-action wording. This inventory is a
 - PR #139 is merged at `1c60d7f5`. The bounded five-stage Audit Console, hardened Evidence Packet actions, protected-token controls, truthful failure/progress states, and `can_run_audit` fail-closed behavior are deployed at `https://atlas-viewer-app.onrender.com/audit-console`; source verification is `552 passed, 2 skipped`, TypeScript compilation passed, and the production build passed.
 - DNS/TLS/custom-host delivery is `present` and operational. Public DNS authoritatively returns `CNAME atlas-viewer-app.onrender.com`; the trusted certificate has `CN=atlas.noeticcompass.com` and is valid from 2026-07-12 through 2026-10-10; `https://atlas.noeticcompass.com/audit-console` returns HTTP 200; and HTTP redirects 301 to the same HTTPS path. At 2026-07-13T00:12:18Z the custom host returned `strict-transport-security: max-age=31536000; includeSubDomains`, added through the Render dashboard, while the Render origin retained `max-age=315360000; includeSubdomains; preload`.
 - Custom/origin delivery parity is mechanically present: both HTML responses have SHA-256 `09b1b0367c2282db22796d9fe636846e30ce38c896114f91dda122686bbc3691`; both reference `/assets/index-AZfLzoo4.js`; and both bundle responses have SHA-256 `a4640e74a2d2f66944101a2af14460fe07209ce717fd837f494362c4740d7a1f`. Current-bundle markers include `Start a new audit`, `Reference/demo`, `Protected API token`, and `can_run_audit`.
-- Production account mode remains dark with `NC_ACCOUNTS_ENABLED=false`. Commit `df7c3e1e` is unmerged source hardening with `171 passed` in the combined focused verification and `188 passed` in an independent red-team run. Paid/public account readiness remains `OPEN` and hosted account-mode proof is `unavailable`.
+- Production account mode remains dark. Pushed backend commit `010ea8f13e2fde623369772b06679e86aec8245f` on `build/cas-account-hardening-20260712` retains `NC_ACCOUNTS_ENABLED=false` by default. Its prior authoritative full API/service run is `1652 passed, 8 skipped, 3 xfailed`; the final correction slice is `87 passed`. This is unmerged source evidence, not a later standalone full rerun.
+- Pushed customer UI commit `0f17cb562ff6a01f3598363b9fbddbc154e467a9` on `build/cas-account-ui-20260712` adds the hardened account-credential flow. TypeScript compilation passed, focused verification is `52/52 passed`, the full UI suite is `581 passed, 2 skipped`, and the production build passed. `VITE_ACCOUNTS_ENABLED=false` and `NC_ACCOUNTS_ENABLED=false` remain the defaults. Customer fleet operation remains `OPEN`; hosted tenant-bound fleet proof is `unavailable`.
+- Pushed Mode7 persistence-linkage commit `9ea1d13ade721606f72c17e143a225618fbc659e` on `fix/mode7-final-trace-20260712` makes streamed head-commit linkage use the same persistence-backed trace id as the final event and keeps both empty when persistence fails. Source verification is `12` Mode7 tests, `17` SGGS tests, and `2` targeted persistence/linkage tests. Merge, deploy, and hosted proof remain `OPEN`.
+- A disposable detached integration at `aeb86374`, combining exact backend `010ea8f1` with Mode7 `9ea1d13a`, passed the authoritative full source suite: `1654 passed, 8 skipped, 3 xfailed`; `git diff --check` passed. The source branches were untouched. Merge, deploy, paid/public account readiness, and hosted account-mode proof remain `OPEN` / `unavailable`.
+- PR publication/status verification is `OPEN` in this environment because GitHub GraphQL calls were blocked by host socket policy. Remote branch refs are present; direct review routes are [account backend](https://github.com/LittleHenderson/noetic-compass/compare/master...build%2Fcas-account-hardening-20260712), [customer account UI](https://github.com/LittleHenderson/noetic-compass/compare/master...build%2Fcas-account-ui-20260712), and [Mode7 linkage](https://github.com/LittleHenderson/noetic-compass/compare/master...fix%2Fmode7-final-trace-20260712).
 
 ## 3. Canonical source roots
 
@@ -33,8 +37,8 @@ All product code is under `noetic-compass-scaffold/noetic-compass/`.
 | HTTP product API | `api/routes/cas_harness_audit.py`, `api/routes/cas_harness_live_worker_health.py`, `api/routes/evidence.py` | Audit lifecycle, worker health, packet read/verify/anchor |
 | Product services | `api/services/cas_harness_*.py` | Audit runners, scale planner, distributed/fleet execution, evidence bridge, verifier, WORM |
 | Durable state | `api/services/production/state_substrate/`, `api/state_ledger_bootstrap.py` | SQLite single-host proof and Postgres contract/fencing path |
-| Accounts/security | `api/services/accounts/`, `api/services/sessions/`, `api/middleware/auth.py`, `api/dependencies/authz.py` | Hardened source at unmerged `df7c3e1e`; keep dark pending the paid/multi-replica gates below |
-| Usage quotas | `api/services/quotas.py` | Tenant-isolated idempotent source path exists at `df7c3e1e`; plan entitlement, billing attribution, and compute/storage quotas remain `OPEN` |
+| Accounts/security | `api/services/accounts/`, `api/services/sessions/`, `api/middleware/auth.py`, `api/dependencies/authz.py` | Pushed candidate at unmerged `010ea8f1`; default dark; integrated source proof present; merge/deploy/hosted proof `OPEN` / `unavailable` |
+| Usage quotas | `api/services/quotas.py` | Tenant-isolated idempotent candidate exists at `010ea8f1`; plan entitlement, billing attribution, and compute/storage quotas remain `OPEN` |
 | Worker | `live-trace-worker/` | Real open-weight capture/ablation worker, Docker and restart tooling |
 | Launch UI | `atlas-viewer/src/pages/AuditConsolePage.tsx`, `atlas-viewer/src/components/audit/`, `atlas-viewer/src/lib/casHarnessAuditApi.ts` | Current command center and Evidence Packet UI |
 | Evidence and WORM | `api/routes/evidence.py`, `api/services/cas_harness_static_evidence_anchor.py`, `api/services/cas_harness_evidence_anchor.py` | Production S3 Object-Lock path and honest packet gates |
@@ -61,7 +65,7 @@ git ls-files *cas_harness* *CasHarness* *AuditConsole* *EvidencePacket*
 
 ### Open items requiring deliberate treatment
 
-- PR #135: superseded security-incomplete account work. Do not enable or merge it as launch-ready. Replacement source is committed at `df7c3e1e`, but that replacement remains unmerged and dark pending the explicit paid-launch gates below.
+- PR #135: superseded security-incomplete account work. Do not enable or merge it as launch-ready. Replacement backend source is pushed at `010ea8f1`, and customer UI source at `0f17cb56`; both remain unmerged and default dark pending the explicit paid-launch gates below.
 - PR #128: useful Grok provenance work, but it conflicts with the newer Stage 9 packet merger and requires manual claim-safe reconciliation.
 - PRs #79 and #77: historical rollout/M4 planning branches. They are not current product bases and must not overwrite master.
 - PRs #53, #51, #50, #49, #48, and #47: older cockpit, worker-proof, demo, research, health, and scenario work. Reconcile individual commits only after comparing each assertion and test to current master; never merge the stack blindly.
@@ -70,7 +74,9 @@ git ls-files *cas_harness* *CasHarness* *AuditConsole* *EvidencePacket*
 ### Current integration and tracking branches
 
 - `build/cas-harness-operational-20260712`: account/tenant/quota integration base; the worker hardening formerly stacked here is already separated and merged through PR #138.
-- `build/cas-account-hardening-20260712`: source commit `df7c3e1e` for per-account credentials, durable sessions, bootstrap/recovery, same-tenant RBAC, platform-only tenant provisioning, auth-epoch invalidation, durable audit sessions, idempotent quotas, fail-closed evidence ownership, and fenced run claims. Verification is `171 passed` combined and `188 passed` independent; it is not deployed.
+- `build/cas-account-hardening-20260712`: pushed backend candidate `010ea8f13e2fde623369772b06679e86aec8245f`; prior full source verification `1652 passed, 8 skipped, 3 xfailed`; final corrections `87 passed`; default dark; not merged or deployed.
+- `build/cas-account-ui-20260712`: pushed customer UI candidate `0f17cb562ff6a01f3598363b9fbddbc154e467a9`; TypeScript passed; focused `52/52 passed`; full `581 passed, 2 skipped`; build passed; both account flags default false; not merged or deployed.
+- `fix/mode7-final-trace-20260712`: pushed linkage candidate `9ea1d13ade721606f72c17e143a225618fbc659e`; `12` Mode7, `17` SGGS, and `2` targeted tests passed; not merged or deployed.
 - `build/cas-ui-launch-20260712`: merged through PR #139 at `1c60d7f5`; no longer an unmerged deployment source.
 - `docs/cas-harness-status-20260712`: this inventory and current spec/status reconciliation.
 
@@ -110,12 +116,12 @@ Other top-level archive families are retained under the same root: CAS68 recipe 
 
 ## 7. Paid-account red-team gates
 
-The `df7c3e1e` verification counts are source evidence, not paid/multi-replica readiness.
+The pushed backend/UI candidates and detached `aeb86374` integration run are source evidence, not paid/multi-replica readiness. Deployed `master` remains at `1c60d7f5`, and both account flags remain false by default.
 
 **P0 — paid/multi-replica blockers:**
 
 1. Evidence Packet bytes and hash chains are host-local. The S3 anchor stores only manifest/hash/path metadata, so replicas cannot read one another's packet bytes and their chains may diverge. Required closure: a tenant-keyed immutable object store, durable packet index, concurrency-safe/WORM receipt, restart proof, and two-replica proof.
-2. The client account flow is incompatible with the hardened API: login/refresh still posts a username and relies on a baked legacy mint secret, and no bootstrap/redeem/rotate/recovery UX exists. Required closure: the per-account `api_credential` client flow plus end-to-end verification.
+2. Deployed `master` still lacks the hardened customer account flow. Unmerged `0f17cb56` supplies per-account login, invite redemption, credential rotation/logout UX plus an explicit operator-only bootstrap/recovery boundary, but closure still requires reviewed merge, deploy with `VITE_ACCOUNTS_ENABLED` and `NC_ACCOUNTS_ENABLED` deliberately enabled, and hosted end-to-end proof.
 3. Distributed/fleet execution is unavailable in account mode because tenant-scoped service credentials, mTLS, and capabilities are absent.
 4. No paid entitlement system exists. Quota remains hardcoded, with no plan/subscription/license/billing attribution or compute/storage quotas.
 
