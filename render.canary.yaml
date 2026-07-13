@@ -125,7 +125,9 @@ projects:
               - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE
                 value: GOVERNANCE
               - key: CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS
-                value: "30"
+                # One-day buffer above the bucket policy's enforced 30-day
+                # minimum avoids a rounding edge at request evaluation time.
+                value: "31"
               - key: AWS_ACCESS_KEY_ID
                 sync: false
               - key: AWS_SECRET_ACCESS_KEY
