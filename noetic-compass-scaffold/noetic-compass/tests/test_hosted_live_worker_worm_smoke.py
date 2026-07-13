@@ -45,3 +45,56 @@ def test_smoke_preserves_flag_for_human_review_proof_chip_vocabulary():
     )
     with pytest.raises(smoke.HostedSmokeFailure, match="unexpected"):
         smoke.chip_present({"packet_proof": "ACCEPT"}, "packet_proof")
+
+
+def test_smoke_audit_prompt_includes_unique_run_nonce():
+    first = smoke.build_audit_prompt("nonce-one")
+    second = smoke.build_audit_prompt("nonce-two")
+
+    assert first != second
+    assert "run_nonce=nonce-one" in first
+    assert "run_nonce=nonce-two" in second
+
+
+def test_smoke_audit_prompt_rejects_empty_run_nonce():
+    with pytest.raises(smoke.HostedSmokeFailure, match="run-nonce"):
+        smoke.build_audit_prompt("  ")
+
+
+def test_smoke_identifies_urllib_requests_for_runpod_proxy(monkeypatch):
+    captured = {}
+
+    class Response:
+        status = 200
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return None
+
+        def read(self):
+            return b"{}"
+
+    def fake_urlopen(request, timeout):
+        captured["user_agent"] = request.get_header("User-agent")
+        captured["timeout"] = timeout
+        return Response()
+
+    monkeypatch.setattr(smoke, "urlopen", fake_urlopen)
+
+    status, payload = smoke.request_json(
+        "https://pod-id-8080.proxy.runpod.net",
+        "/health",
+        method="GET",
+        payload=None,
+        bearer_token=None,
+        extra_headers=None,
+        expected_statuses={200},
+        gate="worker-health",
+    )
+
+    assert status == 200
+    assert payload == {}
+    assert captured["user_agent"] == smoke.USER_AGENT
+    assert captured["timeout"] == 120

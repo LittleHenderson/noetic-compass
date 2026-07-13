@@ -18,6 +18,7 @@ import argparse
 import json
 import os
 import sys
+import uuid
 from typing import Any, Mapping
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
@@ -27,6 +28,7 @@ DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
 MODEL_ID = "EleutherAI/pythia-160m"
 REALMODE_PASS = "REAL_PYTHIA_WEIGHTS_LOADED"
 WORKER_TOKEN_HEADER = "X-Atlas-Worker-Token"
+USER_AGENT = "CAS-Harness-Hosted-Smoke/1.0"
 API_TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 WORKER_TOKEN_ENV_VAR = "ATLAS_LIVE_WORKER_TOKEN"
 WORKER_URL_ENV_VARS = ("ATLAS_LIVE_WORKER_URL", "NC_ATLAS_LIVE_WORKER_URL")
@@ -48,6 +50,7 @@ def main(argv: list[str] | None = None) -> int:
     worker = resolve_worker_url(args.worker_url)
     worker_token = clean_token(args.worker_token) or clean_token(os.environ.get(WORKER_TOKEN_ENV_VAR))
     bearer_token = clean_token(args.bearer_token) or clean_token(os.environ.get(API_TOKEN_ENV_VAR))
+    run_nonce = uuid.uuid4().hex
 
     require_gate("worker-url", bool(worker), "--worker-url or ATLAS_LIVE_WORKER_URL is required")
     require_gate("worker-token", bool(worker_token), "--worker-token or ATLAS_LIVE_WORKER_TOKEN is required")
@@ -57,6 +60,7 @@ def main(argv: list[str] | None = None) -> int:
     print(f"Worker URL: {worker}")
     print(f"Authorization: {'provided bearer token' if bearer_token else 'none/demo-token fallback'}")
     print(f"Require Object Lock: {'yes' if args.require_object_lock else 'no'}")
+    print(f"Run nonce: {run_nonce}")
     print("Claim boundary: a live open-weight audit remains FLAG_FOR_HUMAN_REVIEW, never ACCEPT.")
     print()
 
@@ -114,7 +118,7 @@ def main(argv: list[str] | None = None) -> int:
         {
             "model_id": MODEL_ID,
             "audit_mode": "BALANCED",
-            "prompt": "Hosted no-SSH live-worker WORM smoke. Return a short factual trace.",
+            "prompt": build_audit_prompt(run_nonce),
             "selected_modules": ["active_trace", "confidence_margin"],
         },
         bearer_token=bearer_token,
@@ -254,6 +258,15 @@ def worker_session_payload() -> dict[str, Any]:
         "probes": ["active_trace"],
         "method_config": {"source": "hosted_live_worker_worm_smoke"},
     }
+
+
+def build_audit_prompt(run_nonce: str) -> str:
+    """Build an intentionally unique prompt so each smoke writes a fresh packet."""
+    require_gate("run-nonce", bool(run_nonce.strip()), "run nonce must be non-empty")
+    return (
+        "Hosted no-SSH live-worker WORM smoke. Return a short factual trace. "
+        f"run_nonce={run_nonce.strip()}"
+    )
 
 
 def assert_realmode(gate: str, payload: Mapping[str, Any]) -> None:
@@ -403,7 +416,10 @@ def request_json(
     gate: str,
 ) -> tuple[int, dict[str, Any]]:
     body = None if payload is None else json.dumps(payload).encode("utf-8")
-    headers = {"Accept": "application/json"}
+    # RunPod's Cloudflare-backed proxy rejects Python urllib's default
+    # browser signature (HTTP 403 / error 1010).  Identify this operational
+    # probe explicitly so the no-SSH production smoke reaches the worker.
+    headers = {"Accept": "application/json", "User-Agent": USER_AGENT}
     if payload is not None:
         headers["Content-Type"] = "application/json"
     authorization = authorization_header(bearer_token)
