@@ -245,6 +245,19 @@ Scope both actions to:
 arn:aws:s3:::<bucket-name>/<prefix>/*
 ```
 
+The non-writing production readiness probe also needs these read-only actions
+on the bucket ARN `arn:aws:s3:::<bucket-name>`:
+
+```text
+s3:GetBucketObjectLockConfiguration
+s3:GetBucketVersioning
+```
+
+They let `/health/ready` prove Object Lock and versioning authority without
+creating a canary object. See
+[`docs/runbooks/production_runtime_monitor.md`](runbooks/production_runtime_monitor.md)
+for normalized failure meanings and incident response.
+
 Optional object-lock retention:
 
 ```bash
@@ -445,7 +458,7 @@ All variables use the `NC_` prefix and are loaded via pydantic-settings.
 |----------|------|-------------|
 | `GET /health` | No | Basic liveness probe. Returns `{"status": "ok", "version": "0.1.0"}` |
 | `GET /health/db` | No | Database connectivity check. Returns 200 if connected, 503 if unreachable, 200 with `not_configured` if no DATABASE_URL |
-| `GET /health/ready` | No | Full readiness probe. Returns 200 only if ALL subsystems healthy (API, cas-engine, DB if configured). Returns 503 with details of unhealthy checks. |
+| `GET /health/ready` | No | Deployment readiness probe. Returns 200 only if API, cas-engine, configured DB, configured live worker, and configured S3 WORM authority are healthy. Returns a non-secret 503 contract when a load-bearing dependency fails. |
 
 ## Monitoring and Logging
 

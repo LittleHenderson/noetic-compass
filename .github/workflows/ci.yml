@@ -268,8 +268,13 @@ jobs:
           import urllib.request
           from pathlib import Path
 
+          import boto3
+          import botocore
+
           from api.config import settings
 
+          assert boto3.__version__
+          assert botocore.__version__
           assert settings.state_ledger_enabled is True
           assert settings.state_ledger_read_authority is True
           assert settings.accounts_enabled is False
