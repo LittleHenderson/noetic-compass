@@ -92,6 +92,10 @@ services:
       # defaults to temp storage, which is not a production verification surface.
       - key: CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR
         value: /var/data/evidence_packets
+      # Shared immutable packet bytes remain dark until account mode and the
+      # dashboard-managed Object-Lock settings below are deliberately enabled.
+      - key: NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED
+        value: "false"
       # External CRM sync. Default app behavior is capture-only (`NC_CRM_PROVIDER=null`).
       # To actually land leads in Airtable, set these dashboard-managed values together:
       # NC_CRM_PROVIDER=airtable, NC_AIRTABLE_TOKEN, NC_AIRTABLE_BASE_ID, and optionally

@@ -7,6 +7,7 @@ until a real audit runner is wired behind it.
 
 from __future__ import annotations
 
+from contextlib import nullcontext
 from datetime import UTC, datetime
 import hashlib
 import json
@@ -46,6 +47,10 @@ from api.services.cas_harness_distributed_audits import (
     record_worker_evidence,
 )
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
+from api.services.cas_harness_evidence_object_store import (
+    EvidenceObjectStoreError,
+    evidence_packet_storage_scope,
+)
 from api.services.evidence_ownership import (
     record_evidence_ownership,
     tenant_owns_trace,
@@ -249,6 +254,22 @@ def _audit_evidence_state_store(request: Request):
         return shared
     handle = getattr(request.app.state, "state_ledger", None)
     return getattr(handle, "store", None) if handle is not None else None
+
+
+def _audit_evidence_storage_context(request: Request):
+    """Carry server-derived tenant identity through packet/hash-log I/O."""
+    if not settings.evidence_packet_object_store_enabled:
+        return nullcontext()
+    tenant_id = str(getattr(request.state, "tenant_id", "") or "")
+    account_id = str(getattr(request.state, "account_id", "") or "")
+    if not settings.accounts_enabled or not tenant_id or not account_id:
+        raise HTTPException(
+            status_code=503, detail="Shared Evidence Packet identity is unavailable."
+        )
+    return evidence_packet_storage_scope(
+        tenant_id=tenant_id,
+        account_id=account_id,
+    )
 
 
 def _record_audit_evidence_ownership(request: Request, trace_id: str | None) -> None:
@@ -1623,7 +1644,13 @@ async def create_audit_session(req: AuditSessionRequest, request: Request) -> Au
                 store, tenant_id=tenant_id, trace_id=req.evidence_packet_trace_id
             ):
                 raise HTTPException(status_code=404, detail="trace_id not found")
-        payload.update(_audit_evidence_for_trace(req.evidence_packet_trace_id))
+        try:
+            with _audit_evidence_storage_context(request):
+                payload.update(_audit_evidence_for_trace(req.evidence_packet_trace_id))
+        except EvidenceObjectStoreError as exc:
+            raise HTTPException(
+                status_code=503, detail="Evidence Packet storage is unavailable."
+            ) from exc
     record = create_session(
         payload, owner_sub=owner_sub, owner_api_key=owner_api_key, **_audit_storage_scope(request)
     )
@@ -1739,14 +1766,15 @@ async def run_audit_session(
     if _should_run_hosted_open_weight(existing):
         prompt = existing.prompt_text or existing.scenario_text or ""
         try:
-            live_result = await run_live_worker_audit(
-                audit_id=audit_id,
-                model_id=existing.model_id or "",
-                prompt=prompt,
-                audit_mode=existing.audit_mode,
-                selected_modules=existing.selected_modules,
-            )
-        except LiveAuditRunnerUnavailable as exc:
+            with _audit_evidence_storage_context(request):
+                live_result = await run_live_worker_audit(
+                    audit_id=audit_id,
+                    model_id=existing.model_id or "",
+                    prompt=prompt,
+                    audit_mode=existing.audit_mode,
+                    selected_modules=existing.selected_modules,
+                )
+        except (LiveAuditRunnerUnavailable, EvidenceObjectStoreError) as exc:
             failed = fail_session(
                 audit_id,
                 message=f"Live hosted open-weight runner failed: {exc}",
@@ -1797,17 +1825,18 @@ async def run_audit_session(
     elif _should_run_api_endpoint(existing):
         prompt = existing.prompt_text or existing.scenario_text or ""
         try:
-            api_result = await run_api_endpoint_audit(
-                audit_id=audit_id,
-                provider=existing.provider or "",
-                model_id=existing.model_id or "",
-                prompt=prompt,
-                audit_mode=existing.audit_mode,
-                selected_modules=existing.selected_modules,
-                endpoint_url=existing.endpoint_url,
-                api_key=ephemeral_api_key,
-            )
-        except ApiEndpointRunnerUnavailable as exc:
+            with _audit_evidence_storage_context(request):
+                api_result = await run_api_endpoint_audit(
+                    audit_id=audit_id,
+                    provider=existing.provider or "",
+                    model_id=existing.model_id or "",
+                    prompt=prompt,
+                    audit_mode=existing.audit_mode,
+                    selected_modules=existing.selected_modules,
+                    endpoint_url=existing.endpoint_url,
+                    api_key=ephemeral_api_key,
+                )
+        except (ApiEndpointRunnerUnavailable, EvidenceObjectStoreError) as exc:
             failed = fail_session(
                 audit_id,
                 message=f"Customer-API runner failed: {exc}",

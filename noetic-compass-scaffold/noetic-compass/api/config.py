@@ -138,6 +138,18 @@ class Settings(BaseSettings):
         ),
     )
 
+    # Tenant-keyed immutable Evidence Packet bytes.  Dark by default.  When
+    # enabled, startup requires the shared StateStore plus the existing S3
+    # Object-Lock bucket/mode/retention settings and refuses host-local packet
+    # files for account traffic.
+    evidence_packet_object_store_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED",
+            "EVIDENCE_PACKET_OBJECT_STORE_ENABLED",
+        ),
+    )
+
     # Per-tenant usage quotas (PAID-user metering spine). Dark by default — the engine is INERT.
     #   NC_QUOTAS_ENABLED=false (default) -> NO metering. The quota engine
     #     (api/services/quotas.py) is never consulted, no usage counter is ever written or read,
@@ -255,6 +267,11 @@ class Settings(BaseSettings):
         from api.services.accounts.credentials import validate_credential_pepper
 
         validate_credential_pepper(self.account_credential_pepper)
+        if not self.debug and not self.evidence_packet_object_store_enabled:
+            raise RuntimeError(
+                "Hosted account mode requires "
+                "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=true."
+            )
         if self.jwt_algorithm != "HS256":
             raise RuntimeError("Account mode pins NC_JWT_ALGORITHM=HS256.")
         if len(self.jwt_secret.encode("utf-8")) < 32:

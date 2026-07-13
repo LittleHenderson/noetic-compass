@@ -82,6 +82,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     from api.services.accounts import build_account_store
     from api.services.sessions import build_session_store
     from api.services.cas_harness_audit_sessions import configure_audit_session_store
+    from api.services.cas_harness_evidence_object_store import (
+        build_s3_evidence_packet_repository,
+        configure_evidence_packet_repository,
+    )
     from api.state_ledger_bootstrap import (
         _build_state_store,
         install_state_ledger,
@@ -93,6 +97,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.shared_state_store = None
     app.state.account_store = None
     app.state.session_store = None
+    app.state.evidence_packet_repository = None
+    configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
         settings.jwt_secret == "change-me-in-production"
@@ -104,6 +110,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     if settings.quotas_enabled and not settings.accounts_enabled:
         raise RuntimeError(
             "NC_QUOTAS_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."
+        )
+    if settings.evidence_packet_object_store_enabled and not settings.accounts_enabled:
+        raise RuntimeError(
+            "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=true requires "
+            "NC_ACCOUNTS_ENABLED=true."
         )
 
     handle = None
@@ -126,6 +137,16 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             owned_state_store = _build_state_store(settings)
             shared_store = owned_state_store
         app.state.shared_state_store = shared_store
+
+        if settings.evidence_packet_object_store_enabled:
+            if shared_store is None:
+                raise RuntimeError(
+                    "Shared Evidence Packet storage requires a durable StateStore."
+                )
+            app.state.evidence_packet_repository = build_s3_evidence_packet_repository(
+                shared_store
+            )
+            configure_evidence_packet_repository(app.state.evidence_packet_repository)
 
         configure_audit_session_store(
             shared_store if settings.accounts_enabled else None
@@ -155,6 +176,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         logger.info(
             "quotas: %s", "ENABLED" if settings.quotas_enabled else "dark"
         )
+        logger.info(
+            "evidence packet object storage: %s",
+            "ENABLED" if app.state.evidence_packet_repository is not None else "dark",
+        )
 
         from api.services.crm import build_crm_service, build_public_lead_abuse_guard
 
@@ -164,9 +189,11 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     finally:
         # Clear wrappers before closing their shared backend so a repeated lifespan cannot reuse
         configure_audit_session_store(None)
+        configure_evidence_packet_repository(None)
         # a stale closed store after either normal shutdown or partial startup failure.
         app.state.account_store = None
         app.state.session_store = None
+        app.state.evidence_packet_repository = None
         app.state.shared_state_store = None
         try:
             if handle is not None:

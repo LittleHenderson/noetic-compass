@@ -54,7 +54,7 @@ import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, AsyncIterator
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
@@ -68,6 +68,10 @@ from api.services.cas_harness_static_evidence_anchor import (
     verify_anchored_static_packet,
 )
 from api.services.evidence_ownership import tenant_owns_trace
+from api.services.cas_harness_evidence_object_store import (
+    EvidenceObjectStoreError,
+    evidence_packet_storage_scope,
+)
 
 router = APIRouter(prefix="/evidence", tags=["evidence"])
 
@@ -106,7 +110,7 @@ def _evidence_state_store(request: Request):
     return getattr(handle, "store", None) if handle is not None else None
 
 
-def _require_evidence_access(request: Request) -> None:
+async def _require_evidence_access(request: Request) -> AsyncIterator[None]:
     """Per-tenant ownership guard for an evidence ``trace_id`` route.
 
     * ``settings.accounts_enabled`` False (dark default) -> return ``None`` immediately. NO identity
@@ -122,7 +126,8 @@ def _require_evidence_access(request: Request) -> None:
     """
     if not settings.accounts_enabled:
         # Dark default: complete no-op. Legacy shared-secret posture, byte-for-byte unchanged.
-        return None
+        yield
+        return
 
     # Account mode: a real, server-derived tenant must be present (else 401 -- "who are you?").
     tenant_id = current_tenant(request)
@@ -140,7 +145,21 @@ def _require_evidence_access(request: Request) -> None:
     if not tenant_owns_trace(store, tenant_id=tenant_id, trace_id=trace_id):
         raise HTTPException(status_code=404, detail=_NOT_FOUND_DETAIL)
 
-    return None
+    if not settings.evidence_packet_object_store_enabled:
+        yield
+        return
+
+    account_id = str(getattr(request.state, "account_id", "") or "") or None
+    try:
+        with evidence_packet_storage_scope(
+            tenant_id=tenant_id,
+            account_id=account_id,
+        ):
+            yield
+    except EvidenceObjectStoreError as exc:
+        raise HTTPException(
+            status_code=503, detail="Evidence Packet storage is unavailable."
+        ) from exc
 
 
 # ---------------------------------------------------------------------------
@@ -1312,7 +1331,16 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
                 )
             )
 
-    if packet.distributed_fleet is not None or packet.live_audit is not None:
+    has_packet_hash_chain = bool(
+        isinstance(packet.hashes, dict)
+        and isinstance(packet.hashes.get("packet_without_hashes_sha256"), str)
+        and isinstance(packet.hashes.get("hash_log_entry_sha256"), str)
+    )
+    if (
+        packet.distributed_fleet is not None
+        or packet.live_audit is not None
+        or has_packet_hash_chain
+    ):
         try:
             from api.services.cas_harness_merged_evidence_packets import (
                 verify_merged_fleet_evidence_packet_payload,

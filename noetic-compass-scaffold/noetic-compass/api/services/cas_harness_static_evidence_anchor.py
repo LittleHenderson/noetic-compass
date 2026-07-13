@@ -82,9 +82,6 @@ def anchor_static_evidence_packet(
             "hash_log_previous_entry_sha256": entry.get("previous_entry_sha256"),
             "hash_log_path": str(evidence_hash_log_path()),
         }
-        # Persist before anchoring so the anchor manifest can reference a real path.
-        write_evidence_packet_to_store(trace_id, anchored)
-
         anchored["hashes"]["external_anchor"] = anchor_hash_log_entry(
             trace_id=trace_id,
             hash_log_entry=entry,

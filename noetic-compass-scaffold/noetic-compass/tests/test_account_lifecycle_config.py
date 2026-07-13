@@ -26,8 +26,18 @@ def _account_settings(**overrides) -> Settings:
 
 
 def test_account_storage_validation_rejects_hosted_sqlite_and_weak_auth() -> None:
+    with pytest.raises(RuntimeError, match="EVIDENCE_PACKET_OBJECT_STORE_ENABLED"):
+        _account_settings(
+            debug=False,
+            database_url="postgresql://db/cas",
+            evidence_packet_object_store_enabled=False,
+        ).validate_account_storage()
     with pytest.raises(RuntimeError, match="Hosted account mode requires"):
-        _account_settings(debug=False, database_url=None).validate_account_storage()
+        _account_settings(
+            debug=False,
+            database_url=None,
+            evidence_packet_object_store_enabled=True,
+        ).validate_account_storage()
     with pytest.raises(RuntimeError, match="at least 32 bytes"):
         _account_settings(jwt_secret="short").validate_account_storage()
     with pytest.raises(RuntimeError, match="pins NC_JWT_ALGORITHM"):
@@ -37,7 +47,11 @@ def test_account_storage_validation_rejects_hosted_sqlite_and_weak_auth() -> Non
 
 
 def test_account_storage_validation_accepts_postgres_and_acknowledged_local_sqlite() -> None:
-    _account_settings(database_url="postgresql://db/cas", debug=False).validate_account_storage()
+    _account_settings(
+        database_url="postgresql://db/cas",
+        debug=False,
+        evidence_packet_object_store_enabled=True,
+    ).validate_account_storage()
     _account_settings().validate_account_storage()
 
 
