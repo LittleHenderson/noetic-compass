@@ -81,6 +81,7 @@ export default function CockpitPage(): JSX.Element {
   const runIdRef = useRef(0);
   const restartTimerRef = useRef<number | null>(null);
   const latestControlsRef = useRef<LiveMethodControls | null>(null);
+  const liveInviteCodeRef = useRef('');
 
   useEffect(() => {
     let cancelled = false;
@@ -138,11 +139,10 @@ export default function CockpitPage(): JSX.Element {
 
   const beginLive = useCallback(
     async (controls: LiveMethodControls, reason: 'manual' | 'controls'): Promise<void> => {
-      const storedCode = window.localStorage.getItem('atlas_live_invite_code') ?? '';
       const inviteCode =
         reason === 'manual'
-          ? window.prompt('Enter Atlas LIVE invite code', storedCode)
-          : storedCode;
+          ? window.prompt('Enter Atlas LIVE invite code', liveInviteCodeRef.current)
+          : liveInviteCodeRef.current;
       if (!inviteCode?.trim()) {
         setRuntimeMode('replay');
         setLiveStatus('error');
@@ -151,7 +151,10 @@ export default function CockpitPage(): JSX.Element {
         return;
       }
       const trimmedInviteCode = inviteCode.trim();
-      window.localStorage.setItem('atlas_live_invite_code', trimmedInviteCode);
+      // LIVE worker invitation credentials are memory-only. They may be reused
+      // while this cockpit remains mounted so a control change can restart the
+      // stream, but they never survive route changes, logout, or browser restart.
+      liveInviteCodeRef.current = trimmedInviteCode;
 
       sourceRef.current?.close();
       const runId = runIdRef.current + 1;

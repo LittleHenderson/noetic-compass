@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState, type CSSProperties } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useAccountAuth } from '../auth/AccountAuthProvider';
 import { GlassPanel } from '../components/ui/GlassPanel';
 import { PageShell } from '../components/ui/PageShell';
 import { AuditSessionProgress, type AuditLifecycleStatus } from '../components/audit/AuditSessionProgress';
@@ -788,15 +789,6 @@ const verdictStackStyle: CSSProperties = {
   gap: 16,
 };
 
-const protectedAccessStyle: CSSProperties = {
-  display: 'grid',
-  gap: 8,
-  padding: 14,
-  borderRadius: 8,
-  border: '1px solid rgba(45, 212, 191, 0.22)',
-  background: 'rgba(15, 23, 42, 0.42)',
-};
-
 const verdictLabelStyle: CSSProperties = {
   display: 'block',
   marginBottom: 4,
@@ -851,6 +843,7 @@ function AuditScopeBanner({ scope }: { scope: CasHarnessAuditScope }) {
 export default function AuditConsolePage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const accountAuth = useAccountAuth();
   const requestedModel = searchParams.get('model');
   const requestedTraceId = searchParams.get('trace')?.trim() ?? '';
   const queryTarget = requestedModel === 'pythia-160m' ? M1_REFERENCE_TARGET : null;
@@ -877,7 +870,7 @@ export default function AuditConsolePage() {
   const [leasedFleetJob, setLeasedFleetJob] = useState<CasHarnessFleetJob | null>(null);
   const [fleetVerifierDecision, setFleetVerifierDecision] =
     useState<CasHarnessFleetVerifierDecision | null>(null);
-  const [protectedApiToken, setProtectedApiToken] = useState('');
+  const [operatorApiToken, setOperatorApiToken] = useState('');
   const [fleetExecutorError, setFleetExecutorError] = useState<string | null>(null);
   const [isFleetExecutorLoading, setIsFleetExecutorLoading] = useState(false);
   const [liveWorkerHealth, setLiveWorkerHealth] =
@@ -905,7 +898,17 @@ export default function AuditConsolePage() {
   const isConfigured = target !== null;
   const hasModelChoice = Boolean(target ?? queryTarget);
   const isTraceReviewMode = requestedTraceId.length > 0 && session === null;
-  const hasProtectedApiToken = protectedApiToken.trim().length > 0;
+  const advancedApiToken = accountAuth.accountsEnabled ? '' : operatorApiToken.trim();
+  const hasAdvancedApiToken = advancedApiToken.length > 0;
+  const effectiveEvidenceToken = accountAuth.accountsEnabled
+    ? accountAuth.token
+    : advancedApiToken;
+  const evidenceAccessMessage = accountAuth.accountsEnabled
+    ? 'Sign in with the customer account that owns this audit to enable packet access.'
+    : 'Enter the memory-only operator token in Advanced scale & fleet tools to enable packet access.';
+  const advancedAccessMessage = accountAuth.accountsEnabled
+    ? 'Distributed/fleet customer account mode remains OPEN and is unavailable. Tenant-bound service credentials are not implemented.'
+    : 'An operator API token is required for distributed and fleet actions.';
   const sessionChips = useMemo(() => chipsForSession(session), [session]);
   const activeError = targetError ?? sessionError;
   const lifecycleStatus = lifecycleStatusFor(session, isAuditRunning || isTargetConnecting, activeError);
@@ -935,10 +938,13 @@ export default function AuditConsolePage() {
     () => liveWorkerChipView(liveWorkerHealth),
     [liveWorkerHealth],
   );
-  const protectedAuditApiOptions = useMemo<CasHarnessAuditApiOptions | undefined>(() => {
-    const authToken = protectedApiToken.trim();
-    return authToken ? { authToken } : undefined;
-  }, [protectedApiToken]);
+  const customerAuditApiOptions = useMemo<CasHarnessAuditApiOptions>(() => ({
+    authToken: accountAuth.token,
+    fetchImpl: accountAuth.authenticatedFetch,
+  }), [accountAuth.authenticatedFetch, accountAuth.token]);
+  const advancedAuditApiOptions = useMemo<CasHarnessAuditApiOptions | undefined>(() => (
+    advancedApiToken ? { authToken: advancedApiToken } : undefined
+  ), [advancedApiToken]);
   const fleetRegisteredWorkers = fleetRun
     ? Math.max(fleetRun.registered_workers, registeredFleetWorker ? 1 : 0)
     : registeredFleetWorker
@@ -948,24 +954,24 @@ export default function AuditConsolePage() {
   const targetFleetWorkerId = assignedFleetWorkerId(distributedAudit, fleetRun);
   const canPrepareFleet =
     Boolean(distributedAudit && distributedAudit.status !== 'PLANNED' && !fleetRun) &&
-    hasProtectedApiToken &&
+    hasAdvancedApiToken &&
     !isFleetExecutorLoading;
-  const canRegisterFleetWorker = hasProtectedApiToken &&
+  const canRegisterFleetWorker = hasAdvancedApiToken &&
     Boolean(distributedAudit && targetFleetWorkerId && !registeredFleetWorker) &&
     !isFleetExecutorLoading;
-  const canLeaseFleetJob = hasProtectedApiToken &&
+  const canLeaseFleetJob = hasAdvancedApiToken &&
     Boolean(fleetRun && registeredFleetWorker && !leasedFleetJob) &&
     !isFleetExecutorLoading;
   const canSubmitFleetReceipt =
-    hasProtectedApiToken && Boolean(
+    hasAdvancedApiToken && Boolean(
       fleetRun &&
         leasedFleetJob &&
         leasedFleetJob.status === 'leased' &&
         leasedFleetJob.lease_token,
     ) && !isFleetExecutorLoading;
-  const canMergeFleet = hasProtectedApiToken && canMergeFleetRun(fleetRun, isFleetExecutorLoading);
+  const canMergeFleet = hasAdvancedApiToken && canMergeFleetRun(fleetRun, isFleetExecutorLoading);
   const canRunFleetVerifier =
-    hasProtectedApiToken && Boolean(fleetRun?.merged_packet_trace_id && !fleetVerifierDecision) &&
+    hasAdvancedApiToken && Boolean(fleetRun?.merged_packet_trace_id && !fleetVerifierDecision) &&
     !isFleetExecutorLoading;
 
   const connectReferenceTarget = async () => {
@@ -1053,11 +1059,11 @@ export default function AuditConsolePage() {
         scenario_text: target.scenarioText,
         selected_modules: SELECTED_MODULES,
         evidence_packet_trace_id: target.evidencePacketTraceId ?? undefined,
-      });
+      }, customerAuditApiOptions);
       setSession(created);
       const started = await startCasHarnessAuditSession(
         created.audit_id,
-        trimmedKey ? { apiKey: trimmedKey } : undefined,
+        { ...customerAuditApiOptions, apiKey: trimmedKey || undefined },
       );
       setSession(started);
     } catch (error) {
@@ -1113,8 +1119,8 @@ export default function AuditConsolePage() {
   };
 
   const createDistributedRun = async () => {
-    if (!hasProtectedApiToken) {
-      setDistributedAuditError('Protected API token is required for distributed audit actions.');
+    if (!hasAdvancedApiToken) {
+      setDistributedAuditError(advancedAccessMessage);
       return;
     }
     setDistributedAuditError(null);
@@ -1127,7 +1133,7 @@ export default function AuditConsolePage() {
     try {
       const audit = await createCasHarnessDistributedAudit(
         SCALE_PLAN_REQUESTS[enterprisePlanSize],
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       setDistributedAudit(audit);
     } catch (error) {
@@ -1141,8 +1147,8 @@ export default function AuditConsolePage() {
 
   const dispatchDistributedRun = async () => {
     if (!distributedAudit) return;
-    if (!hasProtectedApiToken) {
-      setDistributedAuditError('Protected API token is required for distributed audit actions.');
+    if (!hasAdvancedApiToken) {
+      setDistributedAuditError(advancedAccessMessage);
       return;
     }
     setDistributedAuditError(null);
@@ -1150,7 +1156,7 @@ export default function AuditConsolePage() {
     try {
       const audit = await dispatchCasHarnessDistributedAudit(
         distributedAudit.audit_id,
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       setDistributedAudit(audit);
     } catch (error) {
@@ -1164,8 +1170,8 @@ export default function AuditConsolePage() {
 
   const mergeDistributedRun = async () => {
     if (!distributedAudit) return;
-    if (!hasProtectedApiToken) {
-      setDistributedAuditError('Protected API token is required for distributed audit actions.');
+    if (!hasAdvancedApiToken) {
+      setDistributedAuditError(advancedAccessMessage);
       return;
     }
     setDistributedAuditError(null);
@@ -1173,7 +1179,7 @@ export default function AuditConsolePage() {
     try {
       const audit = await mergeCasHarnessDistributedAudit(
         distributedAudit.audit_id,
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       setDistributedAudit(audit);
     } catch (error) {
@@ -1187,8 +1193,8 @@ export default function AuditConsolePage() {
 
   const prepareFleet = async () => {
     if (!distributedAudit) return;
-    if (!hasProtectedApiToken) {
-      setFleetExecutorError('Protected API token is required for fleet actions.');
+    if (!hasAdvancedApiToken) {
+      setFleetExecutorError(advancedAccessMessage);
       return;
     }
     setFleetExecutorError(null);
@@ -1196,7 +1202,7 @@ export default function AuditConsolePage() {
     try {
       const run = await prepareCasHarnessFleetRun(
         distributedAudit.audit_id,
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       setFleetRun(run);
       setLeasedFleetJob(null);
@@ -1212,8 +1218,8 @@ export default function AuditConsolePage() {
 
   const registerDemoFleetWorker = async () => {
     if (!distributedAudit || !targetFleetWorkerId) return;
-    if (!hasProtectedApiToken) {
-      setFleetExecutorError('Protected API token is required for fleet actions.');
+    if (!hasAdvancedApiToken) {
+      setFleetExecutorError(advancedAccessMessage);
       return;
     }
     setFleetExecutorError(null);
@@ -1233,7 +1239,7 @@ export default function AuditConsolePage() {
           'verification_stack',
           'evidence_packet',
         ],
-      }, protectedAuditApiOptions);
+      }, advancedAuditApiOptions);
       setRegisteredFleetWorker(worker);
       setFleetVerifierDecision(null);
       setFleetRun((run) =>
@@ -1256,8 +1262,8 @@ export default function AuditConsolePage() {
 
   const leaseOneFleetJob = async () => {
     if (!distributedAudit || !registeredFleetWorker) return;
-    if (!hasProtectedApiToken) {
-      setFleetExecutorError('Protected API token is required for fleet actions.');
+    if (!hasAdvancedApiToken) {
+      setFleetExecutorError(advancedAccessMessage);
       return;
     }
     setFleetExecutorError(null);
@@ -1268,7 +1274,7 @@ export default function AuditConsolePage() {
         {
           worker_id: registeredFleetWorker.worker_id,
         },
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       if (!job) {
         setFleetExecutorError('No fleet jobs are available for this worker.');
@@ -1288,8 +1294,8 @@ export default function AuditConsolePage() {
 
   const submitOneFleetReceipt = async () => {
     if (!distributedAudit || !registeredFleetWorker || !leasedFleetJob?.lease_token) return;
-    if (!hasProtectedApiToken) {
-      setFleetExecutorError('Protected API token is required for fleet actions.');
+    if (!hasAdvancedApiToken) {
+      setFleetExecutorError(advancedAccessMessage);
       return;
     }
     setFleetExecutorError(null);
@@ -1320,7 +1326,7 @@ export default function AuditConsolePage() {
           evidence_packet_fragment_ref: evidencePacketFragmentRef,
           job_status: 'completed',
         },
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       setFleetRun(run);
       setLeasedFleetJob(null);
@@ -1336,8 +1342,8 @@ export default function AuditConsolePage() {
 
   const mergeFleet = async () => {
     if (!distributedAudit) return;
-    if (!hasProtectedApiToken) {
-      setFleetExecutorError('Protected API token is required for fleet actions.');
+    if (!hasAdvancedApiToken) {
+      setFleetExecutorError(advancedAccessMessage);
       return;
     }
     setFleetExecutorError(null);
@@ -1345,7 +1351,7 @@ export default function AuditConsolePage() {
     try {
       const run = await mergeCasHarnessFleetRun(
         distributedAudit.audit_id,
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       setFleetRun(run);
       setFleetVerifierDecision(null);
@@ -1360,8 +1366,8 @@ export default function AuditConsolePage() {
 
   const runFleetVerifier = async () => {
     if (!distributedAudit) return;
-    if (!hasProtectedApiToken) {
-      setFleetExecutorError('Protected API token is required for fleet actions.');
+    if (!hasAdvancedApiToken) {
+      setFleetExecutorError(advancedAccessMessage);
       return;
     }
     setFleetExecutorError(null);
@@ -1369,7 +1375,7 @@ export default function AuditConsolePage() {
     try {
       const decision = await verifyCasHarnessFleetRun(
         distributedAudit.audit_id,
-        protectedAuditApiOptions,
+        advancedAuditApiOptions,
       );
       setFleetVerifierDecision(decision);
     } catch (error) {
@@ -1390,7 +1396,7 @@ export default function AuditConsolePage() {
           <div>
             <p style={eyebrowStyle}>CAS Harness Audit Console</p>
             <AuditPopover
-              briefing="Licensed users attach a model, run the audit, and receive ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips."
+              briefing="A reviewer attaches a model, runs the audit, and receives ACCEPT, SUPPRESS, or FLAG FOR HUMAN REVIEW with confidence and proof chips. Paid entitlement and billing remain OPEN."
               block
               placement="bottom"
               width={360}
@@ -1577,7 +1583,8 @@ export default function AuditConsolePage() {
             audit={distributedAudit}
             isLoading={isDistributedAuditLoading}
             error={distributedAuditError}
-            hasProtectedAccess={hasProtectedApiToken}
+            hasProtectedAccess={hasAdvancedApiToken}
+            accessNote={advancedAccessMessage}
             onCreateRun={() => {
               void createDistributedRun();
             }}
@@ -1610,22 +1617,35 @@ export default function AuditConsolePage() {
                   stays blocked until a leased job returns an Evidence Packet
                   fragment.
                 </p>
-                <label htmlFor="advanced-api-token" style={verdictLabelStyle}>
-                  Advanced tools API token
-                </label>
-                <input
-                  id="advanced-api-token"
-                  type="password"
-                  autoComplete="off"
-                  spellCheck={false}
-                  value={protectedApiToken}
-                  onChange={(event) => setProtectedApiToken(event.target.value)}
-                  placeholder="Bearer token required"
-                  style={fleetAuthInputStyle}
-                />
-                {!hasProtectedApiToken ? (
+                {accountAuth.accountsEnabled ? (
+                  <p role="note" style={{ ...fleetNoticeStyle, color: '#fef3c7' }}>
+                    Distributed/fleet customer account mode remains OPEN and is unavailable.
+                    Tenant-bound service credentials are not implemented, so customer Bearer tokens
+                    are never sent to these routes.
+                  </p>
+                ) : (
+                  <>
+                    <label htmlFor="advanced-api-token" style={verdictLabelStyle}>
+                      Operator tools API token
+                    </label>
+                    <input
+                      id="advanced-api-token"
+                      type="password"
+                      autoComplete="off"
+                      spellCheck={false}
+                      value={operatorApiToken}
+                      onChange={(event) => setOperatorApiToken(event.target.value)}
+                      placeholder="Memory-only operator token"
+                      style={fleetAuthInputStyle}
+                    />
+                    <p role="note" style={fleetNoticeStyle}>
+                      This memory-only override exists only in account-OFF operator posture.
+                    </p>
+                  </>
+                )}
+                {!hasAdvancedApiToken && !accountAuth.accountsEnabled ? (
                   <p role="note" style={fleetNoticeStyle}>
-                    Protected distributed and fleet actions stay disabled until a token is entered.
+                    Distributed and fleet actions stay disabled until operator authorization is available.
                   </p>
                 ) : null}
               </div>
@@ -1785,28 +1805,12 @@ export default function AuditConsolePage() {
               }
               onInspectInAtlas={session ? () => navigate('/cockpit') : undefined}
             />
-            <section style={protectedAccessStyle} aria-label="Protected Evidence Packet access">
-              <label htmlFor="protected-api-token" style={verdictLabelStyle}>
-                Protected API token
-              </label>
-              <input
-                id="protected-api-token"
-                type="password"
-                autoComplete="off"
-                spellCheck={false}
-                value={protectedApiToken}
-                onChange={(event) => setProtectedApiToken(event.target.value)}
-                placeholder="Bearer token required for packet access"
-                style={fleetAuthInputStyle}
-              />
-              <p style={fleetNoticeStyle}>
-                Held only in this tab and shared with authenticated packet, distributed, and fleet requests.
-              </p>
-            </section>
             <EvidencePacketActions
               key={visibleEvidenceTraceId || 'no-evidence-packet'}
               traceId={visibleEvidenceTraceId}
-              authToken={protectedApiToken}
+              authToken={effectiveEvidenceToken}
+              fetchImpl={accountAuth.accountsEnabled ? accountAuth.authenticatedFetch : undefined}
+              missingAuthMessage={evidenceAccessMessage}
             />
             {showVerdictExplainer ? (
               <AuditVerdictExplainer
@@ -1822,7 +1826,9 @@ export default function AuditConsolePage() {
                 <EvidencePacketVerificationPanel
                   key={visibleEvidenceTraceId}
                   traceId={visibleEvidenceTraceId}
-                  authToken={protectedApiToken}
+                  authToken={effectiveEvidenceToken}
+                  fetchImpl={accountAuth.accountsEnabled ? accountAuth.authenticatedFetch : undefined}
+                  missingAuthMessage={evidenceAccessMessage}
                 />
                 <EvidencePacketFlightRecorderFaq />
               </>

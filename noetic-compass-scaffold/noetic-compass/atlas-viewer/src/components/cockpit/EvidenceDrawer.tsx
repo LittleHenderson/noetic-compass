@@ -5,6 +5,7 @@ import { GlassPanel } from '../ui/GlassPanel';
 import { THEME, SPRING_GENTLE } from '../../lib/designTokens';
 import { ATLAS_STATUS_COLORS } from '../../lib/atlasPalette';
 import { resolveAtlasApiBaseUrl } from '../../lib/atlasLiveApi';
+import { useAccountAuth } from '../../auth/AccountAuthProvider';
 import BlindspotInterpretation from './BlindspotInterpretation';
 import type { DriveId, RegisterId } from '../../lib/driveTranslations';
 
@@ -634,6 +635,7 @@ function evidenceAnchorSummary(
 
 export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element {
   const { open, payload, onClose } = props;
+  const accountAuth = useAccountAuth();
   const closeBtnRef = useRef<HTMLButtonElement | null>(null);
   const traceId = useMemo(() => extractTraceId(payload), [payload]);
   const wordTokens = useMemo(() => extractWordTokens(payload), [payload]);
@@ -663,7 +665,7 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
     setPacketState({ status: 'loading' });
     setVerifyState({ status: 'loading' });
 
-    fetch(evidencePacketUrl(traceId), {
+    accountAuth.authenticatedFetch(evidencePacketUrl(traceId), {
       method: 'GET',
       headers: { Accept: 'application/json' },
       signal: controller.signal,
@@ -684,7 +686,7 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
         setPacketState({ status: 'error', error: message });
       });
 
-    fetch(evidencePacketVerifyUrl(traceId), {
+    accountAuth.authenticatedFetch(evidencePacketVerifyUrl(traceId), {
       method: 'POST',
       headers: { Accept: 'application/json' },
       signal: controller.signal,
@@ -706,7 +708,7 @@ export default function EvidenceDrawer(props: EvidenceDrawerProps): JSX.Element 
       });
 
     return () => controller.abort();
-  }, [open, traceId]);
+  }, [accountAuth.authenticatedFetch, open, traceId]);
 
   useEffect(() => {
     if (!open) return;

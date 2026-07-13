@@ -3,6 +3,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import AuditConsolePage from './AuditConsolePage';
 import { buildCasHarnessFleetEvidenceFragmentRef } from '../lib/casHarnessAuditApi';
+import { ACCOUNT_SESSION_STORAGE_KEY, AccountAuthProvider } from '../auth/AccountAuthProvider';
 
 const LIVE_WORKER_HEALTH_PATH = '/api/cas-harness/live-worker/health';
 
@@ -48,12 +49,28 @@ function stubFetchWithLiveWorker(
 const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
 const STAGE9_40E_TRACE_ID = 'stage9-40e-original-baseline-readout-20260527';
 
-function renderPage(initialEntry = '/audit-console') {
+function renderPage(
+  initialEntry = '/audit-console',
+  options: { accountsEnabled?: boolean } = {},
+) {
   return render(
-    <MemoryRouter initialEntries={[initialEntry]}>
-      <AuditConsolePage />
-    </MemoryRouter>
+    <AccountAuthProvider accountsEnabled={options.accountsEnabled ?? false}>
+      <MemoryRouter initialEntries={[initialEntry]}>
+        <AuditConsolePage />
+      </MemoryRouter>
+    </AccountAuthProvider>
   );
+}
+
+function jwtSegment(value: unknown): string {
+  return btoa(JSON.stringify(value)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function signedAccountToken(): string {
+  return `${jwtSegment({ alg: 'HS256' })}.${jwtSegment({
+    sub: 'owner@example.com', account_id: 'acct-1', tenant_id: 'tenant-1', role: 'owner',
+    jti: 'session-1', exp: Math.floor(Date.now() / 1000) + 3600,
+  })}.signature`;
 }
 
 function openAdvancedTools() {
@@ -400,6 +417,7 @@ async function fleetFragmentRef(
 
 describe('AuditConsolePage', () => {
   beforeEach(() => {
+    sessionStorage.clear();
     // Default global fetch answers only the mount-time live-worker health
     // probe so render-only tests have a deterministic, non-throwing stub.
     // Flow tests override this via stubFetchWithLiveWorker(...) before acting.
@@ -418,6 +436,7 @@ describe('AuditConsolePage', () => {
   });
 
   afterEach(() => {
+    sessionStorage.clear();
     vi.unstubAllGlobals();
   });
 
@@ -578,15 +597,15 @@ describe('AuditConsolePage', () => {
     expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'active');
     expect(customerAction('Start a new audit')).toBeEnabled();
     expect(screen.getByRole('button', { name: 'Verify packet' })).toBeDisabled();
-    expect(screen.getAllByRole('note').some((note) => note.textContent?.includes('protected API token')))
+    expect(screen.getAllByRole('note').some((note) => note.textContent?.includes('memory-only operator token')))
       .toBe(true);
 
     openAdvancedTools();
     expect(screen.getByRole('button', { name: 'Create run' })).toBeDisabled();
-    fireEvent.change(screen.getByLabelText('Protected API token'), {
+    fireEvent.change(screen.getByLabelText('Operator tools API token'), {
       target: { value: 'shared-token' },
     });
-    expect(screen.getByLabelText('Advanced tools API token')).toHaveValue('shared-token');
+    expect(screen.getByLabelText('Operator tools API token')).toHaveValue('shared-token');
     expect(screen.getByRole('button', { name: 'Create run' })).toBeEnabled();
     expect(screen.getByRole('button', { name: 'Verify packet' })).toBeEnabled();
     expect(
@@ -807,7 +826,7 @@ describe('AuditConsolePage', () => {
     expect(
       screen.getByRole('button', { name: 'Download Evidence Packet' }),
     ).toBeDisabled();
-    expect(screen.getAllByRole('note').some((note) => note.textContent?.includes('protected API token')))
+    expect(screen.getAllByRole('note').some((note) => note.textContent?.includes('memory-only operator token')))
       .toBe(true);
     expect(fetchMock).toHaveBeenNthCalledWith(
       1,
@@ -899,6 +918,43 @@ describe('AuditConsolePage', () => {
     );
     fireEvent.click(screen.getByRole('button', { name: 'Disconnect' }));
     expect(screen.getByLabelText('Bring your own provider API key (optional)')).toHaveValue('');
+  });
+
+  it('automatically propagates the signed-in account Bearer token to customer audit and evidence actions', async () => {
+    const token = signedAccountToken();
+    sessionStorage.setItem(ACCOUNT_SESSION_STORAGE_KEY, token);
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, json: async () => targetVerification() })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => sessionResponse({ evidence_packet_trace_id: 'tenant-owned-packet' }),
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => sessionResponse({
+          status: 'EVIDENCE_READY',
+          evidence_packet_trace_id: 'tenant-owned-packet',
+        }),
+      });
+    stubFetchWithLiveWorker(fetchMock);
+
+    renderPage('/audit-console?model=pythia-160m', { accountsEnabled: true });
+    fireEvent.click(customerAction('Connect selected model'));
+    expect(await screen.findByText('Target verified')).toBeInTheDocument();
+    fireEvent.click(customerAction('Run CAS audit'));
+    expect((await screen.findAllByText('tenant-owned-packet')).length).toBeGreaterThan(0);
+
+    for (const callIndex of [1, 2]) {
+      const init = fetchMock.mock.calls[callIndex][1] as RequestInit;
+      expect(new Headers(init.headers).get('Authorization')).toBe(`Bearer ${token}`);
+    }
+    expect(screen.getByRole('button', { name: 'Download Evidence Packet' })).toBeEnabled();
+    expect(screen.getByRole('button', { name: 'Verify packet' })).toBeEnabled();
+    openAdvancedTools();
+    expect(screen.queryByLabelText('Operator tools API token')).not.toBeInTheDocument();
+    expect(screen.getAllByText(/Distributed\/fleet customer account mode remains OPEN and is unavailable/i).length)
+      .toBeGreaterThan(0);
   });
 
   it('loads the S7-F28 20B evidence packet into the audit lifecycle', async () => {
@@ -1099,7 +1155,7 @@ describe('AuditConsolePage', () => {
 
     renderPage();
     openAdvancedTools();
-    fireEvent.change(screen.getByLabelText('Protected API token'), {
+    fireEvent.change(screen.getByLabelText('Operator tools API token'), {
       target: { value: 'distributed-jwt' },
     });
 
@@ -1218,7 +1274,7 @@ describe('AuditConsolePage', () => {
     expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Run fleet verifier' })).toBeDisabled();
-    fireEvent.change(screen.getByLabelText('Protected API token'), {
+    fireEvent.change(screen.getByLabelText('Operator tools API token'), {
       target: { value: 'fleet-jwt' },
     });
 
@@ -1344,7 +1400,7 @@ describe('AuditConsolePage', () => {
 
     renderPage();
     openAdvancedTools();
-    fireEvent.change(screen.getByLabelText('Protected API token'), {
+    fireEvent.change(screen.getByLabelText('Operator tools API token'), {
       target: { value: 'blocked-fleet-jwt' },
     });
 

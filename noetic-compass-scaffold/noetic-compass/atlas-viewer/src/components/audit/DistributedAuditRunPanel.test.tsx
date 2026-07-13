@@ -74,7 +74,7 @@ describe('DistributedAuditRunPanel', () => {
     expect(screen.getByRole('button', { name: 'Create run' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Dispatch workers' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Merge distributed receipts' })).toBeDisabled();
-    expect(screen.getByRole('note')).toHaveTextContent(/protected API token/i);
+    expect(screen.getByRole('note')).toHaveTextContent(/operator API token/i);
   });
 
   it('distinguishes planner state from actual worker evidence', () => {
