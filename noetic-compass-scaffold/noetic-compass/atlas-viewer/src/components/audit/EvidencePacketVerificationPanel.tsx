@@ -16,6 +16,7 @@ export interface EvidencePacketVerificationPanelProps {
   traceId: string | null | undefined;
   authToken?: string | null;
   fetchImpl?: typeof fetch;
+  missingAuthMessage?: string;
 }
 
 type VerifyState =
@@ -227,6 +228,7 @@ export function EvidencePacketVerificationPanel({
   traceId,
   authToken,
   fetchImpl,
+  missingAuthMessage = 'Sign in with the customer account that owns this audit to run authenticated verification.',
 }: EvidencePacketVerificationPanelProps): JSX.Element | null {
   const [state, setState] = useState<VerifyState>({ status: 'idle' });
   const cleanedTraceId = traceId?.trim() ?? '';
@@ -299,7 +301,7 @@ export function EvidencePacketVerificationPanel({
       <p style={{ ...textStyle, ...monoStyle }}>trace_id: {cleanedTraceId}</p>
       {!cleanedAuthToken ? (
         <p role="note" style={textStyle}>
-          Enter the protected API token to run the authenticated POST verification.
+          {missingAuthMessage}
         </p>
       ) : null}
 

@@ -1,6 +1,7 @@
 import type { CSSProperties, ReactNode } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
+import { useAccountAuth } from '../../auth/AccountAuthProvider';
 import { ACCENT_TEAL, ACCENT_CYAN, COLORS, SPRING_GENTLE, SPRING_SNAPPY, THEME } from '../../lib/designTokens';
 
 export interface PageShellProps {
@@ -9,13 +10,18 @@ export interface PageShellProps {
   cardMaxWidth?: number;
 }
 
-const STEPS: Array<{ to: string; label: string }> = [
+const SIGNED_OUT_STEPS: Array<{ to: string; label: string }> = [
   { to: '/login', label: 'Sign in' },
-  { to: '/license', label: 'License' },
+];
+
+const SIGNED_IN_STEPS: Array<{ to: string; label: string }> = [
   { to: '/model-config', label: 'Model' },
   { to: '/audit-console', label: 'Audit' },
   { to: '/cockpit', label: 'Cockpit' },
+  { to: '/account-security', label: 'Account' },
 ];
+
+const ACCOUNT_OFF_STEPS = SIGNED_IN_STEPS.filter((step) => step.to !== '/account-security');
 
 // Wave 5.2: dropped the big purple/blue ambient blobs. Replaced with a tight
 // slate-950 base + a single subtle radial darkening from bottom. No
@@ -113,6 +119,12 @@ export function PageShell({
   cardMaxWidth = 460,
 }: PageShellProps) {
   const location = useLocation();
+  const auth = useAccountAuth();
+  const steps = !auth.accountsEnabled
+    ? ACCOUNT_OFF_STEPS
+    : auth.isAuthenticated
+      ? SIGNED_IN_STEPS
+      : SIGNED_OUT_STEPS;
 
   const cardStyle: CSSProperties = {
     width: '100%',
@@ -137,7 +149,7 @@ export function PageShell({
             role="navigation"
             aria-label="Atlas Viewer flow"
           >
-            {STEPS.map((step) => {
+            {steps.map((step) => {
               const active = location.pathname.startsWith(step.to);
               return (
                 <Link
@@ -165,6 +177,27 @@ export function PageShell({
                 </Link>
               );
             })}
+            {auth.accountsEnabled && auth.isAuthenticated ? (
+              <button
+                type="button"
+                onClick={() => {
+                  void auth.logout().catch(() => {
+                    // AccountAuthProvider clears local state and records a
+                    // memory-only warning for LoginPage when server revocation
+                    // could not be confirmed.
+                  });
+                }}
+                style={{
+                  ...navStepStyle(false),
+                  border: 0,
+                  background: 'transparent',
+                  fontFamily: THEME.fontFamily,
+                  fontSize: 12,
+                }}
+              >
+                Sign out
+              </button>
+            ) : null}
           </div>
         </nav>
       ) : null}

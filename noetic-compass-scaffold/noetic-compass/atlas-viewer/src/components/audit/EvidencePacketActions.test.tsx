@@ -25,7 +25,7 @@ describe('EvidencePacketActions', () => {
     expect(
       screen.getByRole('button', { name: 'Download Evidence Packet' }),
     ).toBeDisabled();
-    expect(screen.getByRole('note')).toHaveTextContent('protected API token');
+    expect(screen.getByRole('note')).toHaveTextContent('Sign in with the customer account');
     expect(
       screen.getByRole('button', { name: 'Copy Evidence Packet review link' }),
     ).toBeEnabled();

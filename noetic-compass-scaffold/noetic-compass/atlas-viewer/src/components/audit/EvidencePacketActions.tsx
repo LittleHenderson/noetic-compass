@@ -9,6 +9,7 @@ export interface EvidencePacketActionsProps {
   traceId: string | null | undefined;
   authToken?: string | null;
   fetchImpl?: typeof fetch;
+  missingAuthMessage?: string;
 }
 
 type ActionState = 'idle' | 'loading' | 'success' | 'error';
@@ -84,6 +85,7 @@ export function EvidencePacketActions({
   traceId,
   authToken,
   fetchImpl,
+  missingAuthMessage = 'Sign in with the customer account that owns this audit to enable packet access.',
 }: EvidencePacketActionsProps): JSX.Element {
   const cleanedTraceId = traceId?.trim() ?? '';
   const cleanedAuthToken = authToken?.trim() ?? '';
@@ -162,7 +164,7 @@ export function EvidencePacketActions({
     : downloadState === 'success'
       ? 'Evidence Packet download started.'
       : downloadState === 'error'
-        ? 'Evidence Packet download failed. Check the protected API token and try again.'
+        ? 'Evidence Packet download failed. Check the signed-in account session and try again.'
         : null;
   const copyStatusMessage = copyState === 'success'
     ? 'Evidence Packet review link copied.'
@@ -203,8 +205,7 @@ export function EvidencePacketActions({
       </div>
       {hasPacket && !cleanedAuthToken ? (
         <p role="note" style={textStyle}>
-          Open Advanced scale &amp; fleet tools and enter the protected API token to enable packet
-          access and verification.
+          {missingAuthMessage}
         </p>
       ) : null}
       {downloadStatusMessage ? (
