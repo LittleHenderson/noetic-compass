@@ -62,7 +62,9 @@ describe('EvidencePacketActions', () => {
         Authorization: 'Bearer current-token',
       },
     });
-    expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    expect(createObjectURL).toHaveBeenCalledWith(
+      expect.objectContaining({ size: expect.any(Number), type: 'application/json' }),
+    );
     expect(open).not.toHaveBeenCalled();
     expect(click).toHaveBeenCalledTimes(1);
     expect(revokeObjectURL).not.toHaveBeenCalled();

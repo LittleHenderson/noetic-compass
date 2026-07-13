@@ -16,7 +16,7 @@ FROM pytorch/pytorch:2.4.0-cuda12.1-cudnn9-runtime
 
 LABEL org.opencontainers.image.title="atlas-live-trace-worker" \
       org.opencontainers.image.description="Private FastAPI worker: Pythia-160M + probe pipeline, SSE trace stream, behind the noetic-compass-api proxy." \
-      org.opencontainers.image.source="https://github.com/noetic-compass/noetic-compass"
+      org.opencontainers.image.source="https://github.com/LittleHenderson/noetic-compass"
 
 WORKDIR /worker
 

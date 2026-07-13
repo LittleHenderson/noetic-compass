@@ -19,6 +19,24 @@ def test_packaged_tks_definitions_match_locked_hash():
     assert sha256_file(DEFAULT_TKS_DEFINITION_PATH) == LOCKED_TKS_DEFINITION_SHA256
 
 
+def test_tks_definition_hash_is_checkout_line_ending_independent(tmp_path):
+    payload = DEFAULT_TKS_DEFINITION_PATH.read_bytes()
+    lf_payload = payload.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    crlf_payload = lf_payload.replace(b"\n", b"\r\n")
+
+    lf_path = tmp_path / "definitions-lf.json"
+    crlf_path = tmp_path / "definitions-crlf.json"
+    lf_path.write_bytes(lf_payload)
+    crlf_path.write_bytes(crlf_payload)
+
+    assert sha256_file(lf_path) == LOCKED_TKS_DEFINITION_SHA256
+    assert sha256_file(crlf_path) == LOCKED_TKS_DEFINITION_SHA256
+
+    tampered_path = tmp_path / "definitions-tampered.json"
+    tampered_path.write_bytes(lf_payload.replace(b'"element_count": 40', b'"element_count": 41', 1))
+    assert sha256_file(tampered_path) != LOCKED_TKS_DEFINITION_SHA256
+
+
 def test_tks_definition_lock_status_accepts_packaged_bundle():
     status = assert_tks_definition_lock_for_audit()
 

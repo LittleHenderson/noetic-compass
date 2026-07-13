@@ -38,11 +38,18 @@ class TKSDefinitionLockStatus:
 
 
 def sha256_file(path: Path) -> str:
-    digest = hashlib.sha256()
-    with path.open("rb") as fh:
-        for chunk in iter(lambda: fh.read(1024 * 1024), b""):
-            digest.update(chunk)
-    return digest.hexdigest()
+    """Hash the locked text artifact using its original CRLF representation.
+
+    Git may materialize the JSON with LF or CRLF line endings depending on the
+    checkout platform.  The owner lock was recorded from the original CRLF
+    artifact, so normalize only line endings before hashing; all substantive
+    bytes remain covered by the lock.
+    """
+
+    payload = path.read_bytes()
+    lf_payload = payload.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    canonical_payload = lf_payload.replace(b"\n", b"\r\n")
+    return hashlib.sha256(canonical_payload).hexdigest()
 
 
 def tks_definition_lock_status(
