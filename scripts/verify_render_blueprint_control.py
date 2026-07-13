@@ -36,7 +36,9 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
         "autoSyncRequired": False,
         "services": [
             {
+                "id": "srv-d82ph683kofs73d210e0",
                 "name": "noetic-compass-api",
+                "type": "web_service",
                 "branch": "master",
                 "region": "oregon",
                 "autoDeployTrigger": "checksPass",
@@ -52,7 +54,9 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
         "autoSyncRequired": False,
         "services": [
             {
+                "id": "srv-d9akoolaeets73bp3e7g",
                 "name": "cas-harness-api-accounts-canary",
+                "type": "private_service",
                 "branch": "release/accounts-canary-20260713",
                 "region": "oregon",
                 "autoDeployTrigger": "checksPass",
@@ -76,6 +80,10 @@ _HIGH_RISK_LITERAL_PATTERNS = (
     re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b"),
     re.compile(r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"),
 )
+_BLUEPRINT_SERVICE_TYPES = {
+    "web_service": "web",
+    "private_service": "pserv",
+}
 
 
 class ControlError(RuntimeError):
@@ -192,7 +200,7 @@ def validate_manifest(manifest: Mapping[str, Any]) -> None:
         "blueprints",
     }
     _require(set(manifest) == expected_keys, "Control manifest has missing or unknown fields")
-    _require(manifest.get("schemaVersion") == 1, "Control manifest schemaVersion must be 1")
+    _require(manifest.get("schemaVersion") == 2, "Control manifest schemaVersion must be 2")
     _require(manifest.get("repository") == REPOSITORY, "Control manifest repository drifted")
     _require(
         manifest.get("requiredAggregateChecks") == REQUIRED_AGGREGATE_CHECKS,
@@ -260,6 +268,10 @@ def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> No
 
     for expected in expected_services:
         actual = actual_by_name[expected["name"]]
+        _require(
+            actual.get("type") == _BLUEPRINT_SERVICE_TYPES[expected["type"]],
+            f"{relative_path}:{expected['name']} service type drifted",
+        )
         _require(
             actual.get("repo") == REPOSITORY_URL,
             f"{relative_path}:{expected['name']} must use {REPOSITORY_URL}",
@@ -397,6 +409,43 @@ def validate_live_payload(payload: Mapping[str, Any], expected: Mapping[str, Any
     )
 
 
+def validate_live_service_payload(
+    payload: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    *,
+    environment: str,
+) -> None:
+    """Validate one stable Render service without exposing its raw payload."""
+
+    label = f"{environment} service {expected['name']}"
+    _require(payload.get("id") == expected["id"], f"{label} stable ID drifted")
+    _require(payload.get("name") == expected["name"], f"{label} name drifted")
+    _require(payload.get("type") == expected["type"], f"{label} type drifted")
+    _require(
+        str(payload.get("repo", "")).rstrip("/") == REPOSITORY_URL,
+        f"{label} repository drifted",
+    )
+    _require(payload.get("branch") == expected["branch"], f"{label} branch drifted")
+    _require(
+        payload.get("autoDeployTrigger") == expected["autoDeployTrigger"],
+        f"{label} autoDeployTrigger drifted from {expected['autoDeployTrigger']}",
+    )
+
+    details = payload.get("serviceDetails")
+    _require(isinstance(details, Mapping), f"{label} serviceDetails are unavailable")
+    _require(details.get("region") == expected["region"], f"{label} region drifted")
+    if "healthCheckPath" in expected:
+        _require(
+            details.get("healthCheckPath") == expected["healthCheckPath"],
+            f"{label} healthCheckPath drifted from {expected['healthCheckPath']}",
+        )
+    else:
+        _require(
+            details.get("healthCheckPath") in (None, ""),
+            f"{label} unexpectedly exposes a healthCheckPath",
+        )
+
+
 def _read_json(request: urllib.request.Request, timeout: float) -> Mapping[str, Any]:
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
@@ -407,7 +456,7 @@ def _read_json(request: urllib.request.Request, timeout: float) -> Mapping[str, 
         raise ControlError(f"Render API request failed: {exc.reason}") from exc
     except (TimeoutError, json.JSONDecodeError) as exc:
         raise ControlError(f"Render API response was unavailable or invalid: {type(exc).__name__}") from exc
-    _require(isinstance(payload, dict), "Render API Blueprint response must be an object")
+    _require(isinstance(payload, dict), "Render API response must be an object")
     return payload
 
 
@@ -436,6 +485,33 @@ def validate_live(
             f"live Blueprint control PASS: {blueprint['environment']} "
             f"({blueprint['id']}) autoSync=false"
         )
+        for service in blueprint["services"]:
+            service_id = urllib.parse.quote(str(service["id"]), safe="")
+            service_request = urllib.request.Request(
+                f"{api_base.rstrip('/')}/services/{service_id}",
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {api_key}",
+                    "User-Agent": "noetic-compass-blueprint-control/1",
+                },
+                method="GET",
+            )
+            service_payload = _read_json(service_request, timeout)
+            validate_live_service_payload(
+                service_payload,
+                service,
+                environment=str(blueprint["environment"]),
+            )
+            health_suffix = (
+                f", healthCheckPath={service['healthCheckPath']}"
+                if "healthCheckPath" in service
+                else ""
+            )
+            print(
+                f"live Render service control PASS: {blueprint['environment']} "
+                f"{service['name']} ({service['id']}), branch={service['branch']}, "
+                f"autoDeployTrigger={service['autoDeployTrigger']}{health_suffix}"
+            )
 
 
 def _parser() -> argparse.ArgumentParser:

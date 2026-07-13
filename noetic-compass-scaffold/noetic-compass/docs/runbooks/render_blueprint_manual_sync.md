@@ -19,8 +19,10 @@ compliance, or customer-readiness `ACCEPT` claim. Preserve any `OPEN` or
 | Production | `exs-d82lpanaqgkc7399m1g0` | `render.yaml` / `master` | `noetic-compass-api` / `master` |
 | Account canary | `exs-d9aknt8458ps73ftpkc0` | `render.canary.yaml` / `master` | `cas-harness-api-accounts-canary` / `release/accounts-canary-20260713` |
 
-Both Blueprint Settings pages must show **Auto Sync: No**. Both services must
-show `autoDeployTrigger: checksPass`. The required aggregate GitHub checks are:
+Both Blueprint Settings pages must show **Auto Sync: No**. Both stable service
+IDs must show their policy-bound branch, service type, repository, region, and
+`autoDeployTrigger: checksPass`; production must also keep
+`healthCheckPath: /health`. The required aggregate GitHub checks are:
 
 - `cas-ci-gate`
 - `cas-postgres-live-gate`
@@ -87,10 +89,14 @@ Control** on `master`, or run its live verifier in an environment where
 python scripts/verify_render_blueprint_control.py --live
 ```
 
-The command must report `autoSync=false` for both Blueprint IDs. It suppresses
-Render error response bodies and never prints the key. Do not put the API key,
-a Blueprint sync hook, or any dashboard credential in a command argument,
-evidence file, issue, PR, or chat transcript.
+The command must report `autoSync=false` for both Blueprint IDs and a service
+control PASS for `srv-d82ph683kofs73d210e0` and
+`srv-d9akoolaeets73bp3e7g`. It reads each stable service through Render's
+authenticated service endpoint and fails closed on branch, service type,
+repository, region, deploy-trigger, or production health-path drift. It
+suppresses Render error response bodies and never prints the key or raw API
+payload. Do not put the API key, a Blueprint sync hook, or any dashboard
+credential in a command argument, evidence file, issue, PR, or chat transcript.
 
 If the optional GitHub live job says `RENDER_API_KEY` is not configured, the
 offline policy still ran, but live drift has not been checked. Verify **Auto

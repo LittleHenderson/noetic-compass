@@ -1,21 +1,51 @@
 from __future__ import annotations
 
+import io
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 from scripts.verify_render_blueprint_control import (
     ControlError,
     EXPECTED_BLUEPRINTS,
     assert_no_secret_literals,
     parse_service_blocks,
+    validate_live,
     validate_live_payload,
+    validate_live_service_payload,
     validate_offline,
     validate_workflow_locations,
 )
 
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def _blueprint_payload(expected: dict[str, object]) -> dict[str, object]:
+    return {
+        "id": expected["id"],
+        "autoSync": False,
+        "path": expected["path"],
+        "branch": expected["sourceBranch"],
+        "repo": "https://github.com/LittleHenderson/noetic-compass",
+    }
+
+
+def _service_payload(expected: dict[str, object]) -> dict[str, object]:
+    details = {"region": expected["region"]}
+    if "healthCheckPath" in expected:
+        details["healthCheckPath"] = expected["healthCheckPath"]
+    return {
+        "id": expected["id"],
+        "name": expected["name"],
+        "type": expected["type"],
+        "repo": "https://github.com/LittleHenderson/noetic-compass",
+        "branch": expected["branch"],
+        "autoDeployTrigger": expected["autoDeployTrigger"],
+        "serviceDetails": details,
+    }
 
 
 class BlueprintYamlPolicyTests(unittest.TestCase):
@@ -76,13 +106,7 @@ services:
 class LiveBlueprintPolicyTests(unittest.TestCase):
     def setUp(self) -> None:
         self.expected = EXPECTED_BLUEPRINTS[0]
-        self.payload = {
-            "id": self.expected["id"],
-            "autoSync": False,
-            "path": self.expected["path"],
-            "branch": self.expected["sourceBranch"],
-            "repo": "https://github.com/LittleHenderson/noetic-compass",
-        }
+        self.payload = _blueprint_payload(self.expected)
 
     def test_disabled_auto_sync_passes(self) -> None:
         validate_live_payload(self.payload, self.expected)
@@ -91,6 +115,90 @@ class LiveBlueprintPolicyTests(unittest.TestCase):
         self.payload["autoSync"] = True
         with self.assertRaisesRegex(ControlError, "Auto Sync drifted"):
             validate_live_payload(self.payload, self.expected)
+
+
+class LiveServicePolicyTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.expected = EXPECTED_BLUEPRINTS[0]["services"][0]
+
+    def test_expected_production_service_passes(self) -> None:
+        validate_live_service_payload(
+            _service_payload(self.expected),
+            self.expected,
+            environment="production",
+        )
+
+    def test_expected_private_canary_passes_without_http_health_path(self) -> None:
+        expected = EXPECTED_BLUEPRINTS[1]["services"][0]
+        validate_live_service_payload(
+            _service_payload(expected),
+            expected,
+            environment="accounts-canary",
+        )
+
+    def test_top_level_service_drift_fails_closed(self) -> None:
+        cases = (
+            ("id", "srv-unexpected", "stable ID drifted"),
+            ("name", "renamed-service", "name drifted"),
+            ("type", "private_service", "type drifted"),
+            ("repo", "https://github.com/example/other", "repository drifted"),
+            ("branch", "unsafe-branch", "branch drifted"),
+            ("autoDeployTrigger", "off", "autoDeployTrigger drifted"),
+        )
+        for field, value, error in cases:
+            with self.subTest(field=field):
+                payload = _service_payload(self.expected)
+                payload[field] = value
+                with self.assertRaisesRegex(ControlError, error):
+                    validate_live_service_payload(
+                        payload,
+                        self.expected,
+                        environment="production",
+                    )
+
+    def test_nested_service_drift_fails_closed(self) -> None:
+        cases = (
+            ("region", "frankfurt", "region drifted"),
+            ("healthCheckPath", "/health/ready", "healthCheckPath drifted"),
+        )
+        for field, value, error in cases:
+            with self.subTest(field=field):
+                payload = _service_payload(self.expected)
+                payload["serviceDetails"][field] = value
+                with self.assertRaisesRegex(ControlError, error):
+                    validate_live_service_payload(
+                        payload,
+                        self.expected,
+                        environment="production",
+                    )
+
+
+class LiveRequestCoverageTests(unittest.TestCase):
+    @patch("scripts.verify_render_blueprint_control._read_json")
+    def test_live_queries_every_stable_service_without_printing_key(self, read_json) -> None:
+        responses: list[dict[str, object]] = []
+        expected_urls: list[str] = []
+        for blueprint in EXPECTED_BLUEPRINTS:
+            responses.append(_blueprint_payload(blueprint))
+            expected_urls.append(f"https://render.invalid/v1/blueprints/{blueprint['id']}")
+            for service in blueprint["services"]:
+                responses.append(_service_payload(service))
+                expected_urls.append(f"https://render.invalid/v1/services/{service['id']}")
+        read_json.side_effect = responses
+
+        output = io.StringIO()
+        api_key = "unit-test-render-secret"
+        with redirect_stdout(output):
+            validate_live(
+                {"blueprints": EXPECTED_BLUEPRINTS},
+                api_key,
+                api_base="https://render.invalid/v1",
+            )
+
+        actual_urls = [call.args[0].full_url for call in read_json.call_args_list]
+        self.assertEqual(actual_urls, expected_urls)
+        self.assertNotIn(api_key, output.getvalue())
+        self.assertEqual(output.getvalue().count("live Render service control PASS"), 2)
 
 
 class WorkflowLocationPolicyTests(unittest.TestCase):
