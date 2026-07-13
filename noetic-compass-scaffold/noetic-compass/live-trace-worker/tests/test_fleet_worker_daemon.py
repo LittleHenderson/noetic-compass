@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import asyncio
+from dataclasses import replace
+from datetime import UTC, datetime
 import json
 from pathlib import Path
 import sys
@@ -175,6 +177,47 @@ def test_duplicate_registration_heartbeats_existing_worker_and_idles(tmp_path: P
     result = asyncio.run(daemon.run_once())
 
     assert result.status == "idle"
+
+
+def test_service_credential_headers_are_scoped_and_use_fresh_nonces(tmp_path: Path):
+    secret = "casfs_fsc_0123456789abcdef0123456789abcdef.worker-secret-material"
+    config = replace(
+        _config(tmp_path),
+        bearer_token=None,
+        tenant_id="tenant-a",
+        service_credential=secret,
+    )
+    nonces: set[str] = set()
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.headers["authorization"] == f"CAS-Service {secret}"
+        assert request.headers["x-cas-tenant-id"] == "tenant-a"
+        assert request.headers["x-cas-audit-id"] == config.audit_id
+        timestamp = int(request.headers["x-cas-service-timestamp"])
+        assert abs(datetime.now(UTC).timestamp() - timestamp) < 10
+        nonce = request.headers["x-cas-service-nonce"]
+        assert len(nonce) >= 16
+        assert nonce not in nonces
+        nonces.add(nonce)
+        if request.url.path == "/api/cas-harness/audit/distributed/fleet/worker/register":
+            return httpx.Response(200, json=_worker_payload(config))
+        if request.url.path == f"/api/cas-harness/audit/distributed/fleet/worker/{config.worker_id}/heartbeat":
+            return httpx.Response(200, json=_worker_payload(config))
+        if request.url.path == f"/api/cas-harness/audit/distributed/session/{config.audit_id}/fleet/job/lease":
+            return httpx.Response(200, json=None)
+        raise AssertionError(f"unexpected path {request.url.path}")
+
+    client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
+    daemon = FleetWorkerDaemon(
+        config,
+        DryRunFleetJobExecutor(),
+        api_client=FleetApiClient(config, client=client),
+    )
+    result = asyncio.run(daemon.run_once())
+
+    assert result.status == "idle"
+    assert len(nonces) == 3
+    assert secret not in repr(config)
 
 
 def test_command_executor_uses_probe_command_result(tmp_path: Path):

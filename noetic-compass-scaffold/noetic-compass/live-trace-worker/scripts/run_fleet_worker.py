@@ -7,7 +7,8 @@ Example dry-run control-plane check:
       --audit-id cas-dist-... \
       --worker-id probe-worker-001 \
       --model-id customer/open-70b \
-      --bearer-token "$CAS_HARNESS_API_TOKEN" \
+      --tenant-id "$CAS_FLEET_TENANT_ID" \
+      --service-credential "$CAS_FLEET_SERVICE_CREDENTIAL" \
       --dry-run
 
 Example real executor bridge:
@@ -56,6 +57,12 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--model-id", default=os.environ.get("CAS_FLEET_MODEL_ID"))
     parser.add_argument("--worker-url", default=os.environ.get("CAS_FLEET_WORKER_URL", "http://localhost:8080"))
     parser.add_argument("--gpu-type", default=os.environ.get("CAS_FLEET_GPU_TYPE", "unknown-gpu"))
+    parser.add_argument("--tenant-id", default=os.environ.get("CAS_FLEET_TENANT_ID"))
+    parser.add_argument(
+        "--service-credential",
+        default=os.environ.get("CAS_FLEET_SERVICE_CREDENTIAL"),
+        help="Server-issued fleet credential (prefer CAS_FLEET_SERVICE_CREDENTIAL over CLI).",
+    )
     parser.add_argument("--bearer-token", default=os.environ.get("CAS_HARNESS_API_TOKEN"))
     parser.add_argument("--capacity", type=int, default=int(os.environ.get("CAS_FLEET_CAPACITY", "1")))
     parser.add_argument("--lease-seconds", type=int, default=int(os.environ.get("CAS_FLEET_LEASE_SECONDS", "900")))
@@ -106,6 +113,8 @@ def main(argv: list[str] | None = None) -> int:
         worker_url=args.worker_url,
         gpu_type=args.gpu_type,
         supported_methods=tuple(args.supported_methods or DEFAULT_METHODS),
+        tenant_id=args.tenant_id,
+        service_credential=args.service_credential,
         bearer_token=args.bearer_token,
         capacity=args.capacity,
         lease_seconds=args.lease_seconds,

@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime, timezone
+import re
 
 from fastapi import Request
 from fastapi.responses import JSONResponse
@@ -83,9 +84,31 @@ ACCOUNT_MODE_ALLOWED_PREFIXES = (
     "/notation",
 )
 
+_FLEET_SERVICE_CALLBACK_PATTERNS = tuple(
+    re.compile(pattern)
+    for pattern in (
+        r"^/api/cas-harness/audit/distributed/fleet/worker/register$",
+        r"^/api/cas-harness/audit/distributed/fleet/worker/[^/]+/heartbeat$",
+        r"^/api/cas-harness/audit/distributed/session/[^/]+/worker/[^/]+/(?:running|evidence)$",
+        r"^/api/cas-harness/audit/distributed/session/[^/]+/merge$",
+        r"^/api/cas-harness/audit/distributed/session/[^/]+/fleet/job/lease$",
+        r"^/api/cas-harness/audit/distributed/session/[^/]+/fleet/job/[^/]+/receipt$",
+        r"^/api/cas-harness/audit/distributed/session/[^/]+/fleet/(?:merge|verifier)$",
+    )
+)
+
+
+def is_fleet_service_callback_path(path: str) -> bool:
+    """Return whether ``path`` is a callback guarded by fleet service auth at its route."""
+    return any(pattern.fullmatch(path) for pattern in _FLEET_SERVICE_CALLBACK_PATTERNS)
+
 
 def is_account_mode_allowed_path(path: str) -> bool:
     """Customer tokens may reach only routes with an explicit tenant/account boundary."""
+    if settings.fleet_service_auth_enabled and path.startswith(
+        "/api/cas-harness/audit/distributed"
+    ):
+        return True
     return any(path.startswith(prefix) for prefix in ACCOUNT_MODE_ALLOWED_PREFIXES)
 
 
@@ -96,6 +119,14 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
 
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
         if is_public_path(request.url.path) or request.method == "OPTIONS":
+            return await call_next(request)
+
+        # Worker/merger/verifier callbacks use a separate tenant-bound credential.  Let the
+        # matched route perform capability/scope/nonce verification; customer Bearer JWTs are
+        # deliberately not accepted for these machine-to-machine actions.
+        if settings.fleet_service_auth_enabled and is_fleet_service_callback_path(
+            request.url.path
+        ):
             return await call_next(request)
 
         auth_header = request.headers.get("Authorization", "")
