@@ -40,6 +40,7 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
                 "branch": "master",
                 "region": "oregon",
                 "autoDeployTrigger": "checksPass",
+                "healthCheckPath": "/health",
             }
         ],
     },
@@ -263,7 +264,9 @@ def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> No
             actual.get("repo") == REPOSITORY_URL,
             f"{relative_path}:{expected['name']} must use {REPOSITORY_URL}",
         )
-        for field in ("branch", "region", "autoDeployTrigger"):
+        for field in ("branch", "region", "autoDeployTrigger", "healthCheckPath"):
+            if field not in expected:
+                continue
             _require(
                 actual.get(field) == expected[field],
                 f"{relative_path}:{expected['name']} {field} must be {expected[field]}",

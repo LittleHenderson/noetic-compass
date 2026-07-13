@@ -25,7 +25,8 @@
           "name": "noetic-compass-api",
           "branch": "master",
           "region": "oregon",
-          "autoDeployTrigger": "checksPass"
+          "autoDeployTrigger": "checksPass",
+          "healthCheckPath": "/health"
         }
       ]
     },
