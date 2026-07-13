@@ -67,4 +67,4 @@ jobs:
         working-directory: noetic-compass-scaffold/noetic-compass
         run: >-
           python -m pytest tests/test_state_substrate_postgres.py
-          -q -p no:cacheprovider
+          -q --noconftest -p no:cacheprovider
