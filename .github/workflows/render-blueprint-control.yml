@@ -1,0 +1,61 @@
+name: Render Blueprint Control
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+  schedule:
+    - cron: '23 09 * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: render-blueprint-control-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  offline:
+    name: render-blueprint-control-offline
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify repository Blueprint controls
+        run: python scripts/verify_render_blueprint_control.py --offline
+
+      - name: Run Blueprint control unit tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_verify_render_blueprint_control.py'
+
+  live:
+    name: render-blueprint-auto-sync-live
+    needs: offline
+    if: ${{ needs.offline.result == 'success' && github.repository == 'LittleHenderson/noetic-compass' && github.ref == 'refs/heads/master' && github.event_name != 'pull_request' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Note an unconfigured optional live check
+        if: ${{ env.RENDER_API_KEY == '' }}
+        run: echo 'RENDER_API_KEY is not configured; offline policy still passed.'
+
+      - name: Verify live Blueprint Auto Sync remains disabled
+        if: ${{ env.RENDER_API_KEY != '' }}
+        run: python scripts/verify_render_blueprint_control.py --live

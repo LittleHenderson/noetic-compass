@@ -1,5 +1,10 @@
 # Render Blueprint - Noetic Compass platform
 #
+# DEPLOYMENT SAFETY: Blueprint Auto Sync MUST stay disabled in Render.
+# Manually sync only after `cas-ci-gate` and `cas-postgres-live-gate` pass
+# for the exact Blueprint source SHA. Record the Blueprint and service SHAs
+# separately; never treat a Blueprint sync as customer-readiness evidence.
+#
 # Render's Blueprint flow looks for this file at the Git repo root by default.
 #
 # This Blueprint manages ONE service:
@@ -11,7 +16,7 @@
 # The atlas-viewer-app static site (https://atlas-viewer-app.onrender.com)
 # is dashboard-managed (created 2026-05-22 via Render REST API after the
 # Blueprint validator rejected the inline static-site block). It tracks
-# the same master branch + auto-deploys on commit. Re-onboarding it into
+# the same master branch with checks-passing deploys. Re-onboarding it into
 # this Blueprint is a wave-5+ task; see
 # docs/working/atlas_viewer_full_roadmap_2026_05_22.md item 13.
 
@@ -19,10 +24,13 @@ services:
   - type: web
     name: noetic-compass-api
     runtime: docker
+    repo: https://github.com/LittleHenderson/noetic-compass
+    branch: master
     rootDir: noetic-compass-scaffold/noetic-compass
     dockerfilePath: ./Dockerfile.api
     dockerContext: .
     plan: starter
+    region: oregon
     autoDeployTrigger: checksPass
     healthCheckPath: /health
     # Persistent disk = durable single-host storage for the state ledger + CRM leads.

@@ -15,6 +15,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  blueprint_control:
+    name: Render Blueprint control (offline)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Verify the Render Blueprint deployment controls
+        run: python scripts/verify_render_blueprint_control.py --offline
+
+      - name: Run the Blueprint control unit tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_verify_render_blueprint_control.py'
+
   rust_tests:
     name: Rust workspace tests
     runs-on: ubuntu-latest
@@ -287,6 +307,7 @@ jobs:
     timeout-minutes: 5
     if: ${{ always() }}
     needs:
+      - blueprint_control
       - rust_tests
       - python_tests
       - live_trace_worker_tests
@@ -298,6 +319,7 @@ jobs:
         shell: bash
         run: |
           results=(
+            '${{ needs.blueprint_control.result }}'
             '${{ needs.rust_tests.result }}'
             '${{ needs.python_tests.result }}'
             '${{ needs.live_trace_worker_tests.result }}'

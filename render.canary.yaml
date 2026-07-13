@@ -1,5 +1,10 @@
 # Render Blueprint - CAS Harness account-mode canary
 #
+# DEPLOYMENT SAFETY: Blueprint Auto Sync MUST stay disabled in Render.
+# Manually sync only after `cas-ci-gate` and `cas-postgres-live-gate` pass
+# for the exact Blueprint source SHA and the exact canary service source SHA.
+# Record those two SHAs separately; a successful sync is not an `ACCEPT` claim.
+#
 # This is intentionally separate from the production `render.yaml`. Register it
 # as a separate Blueprint with this exact file path. It creates only an isolated
 # private API and a private managed Postgres database; it cannot receive public

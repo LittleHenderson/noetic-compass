@@ -186,18 +186,26 @@ railway domain add api.noetic-compass.com
 
 ## Cloud Deployment (Render API Backend)
 
-### Quick Start
-1. Push repo to GitHub
-2. Go to [Render Dashboard](https://dashboard.render.com/blueprints)
-3. New > Blueprint > connect `LittleHenderson/noetic-compass`
-4. Render auto-detects the repo-root `render.yaml`
-5. Review the free `noetic-compass-api` web service and click Deploy Blueprint
-6. Optional: set provider API keys in Render if you want live LLM calls
+### Managed production deployment
+
+The existing production Blueprint uses repo-root `render.yaml` from `master`.
+Keep **Blueprint Auto Sync set to No** in Render. A push must not apply
+infrastructure changes by itself. After `cas-ci-gate` and
+`cas-postgres-live-gate` pass for the exact Blueprint source SHA, follow
+[`docs/runbooks/render_blueprint_manual_sync.md`](runbooks/render_blueprint_manual_sync.md)
+and perform a manual Blueprint sync.
+
+The API service itself tracks `master` with `autoDeployTrigger: checksPass`.
+The live production service is a paid `starter` Web Service in Render's Oregon
+region with a 1 GB persistent disk; it is not a free service. Provider keys and
+other credentials remain dashboard-managed and must never be committed.
 
 ### Services Created
-| Service | Type | URL |
-|---------|------|-----|
-| noetic-compass-api | Web Service (Docker, free) | `https://noetic-compass-api.onrender.com` |
+| Service | Type / plan | Region | URL |
+|---------|-------------|--------|-----|
+| noetic-compass-api | Web Service (Docker, starter) | Oregon | `https://noetic-compass-api.onrender.com` |
+| cas-harness-api-accounts-canary | Private Service (Docker, starter) | Oregon | Private Render network only |
+| cas-harness-postgres-accounts-canary | Render Postgres (basic-1gb) | Oregon | Private Render network only |
 
 The Vercel dashboard routes `https://noeticcompass.com/api/*` to this Render API with `dashboard/vercel.json`.
 
@@ -211,7 +219,7 @@ Set these on the Render `noetic-compass-api` service:
 CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET=<bucket-name-only>
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX=cas-harness/evidence-anchors
-CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION=us-east-1
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION=us-west-2
 AWS_ACCESS_KEY_ID=<access-key-id>
 AWS_SECRET_ACCESS_KEY=<secret-access-key>
 ```
