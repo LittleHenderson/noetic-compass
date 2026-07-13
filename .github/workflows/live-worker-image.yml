@@ -30,7 +30,7 @@ jobs:
       IMAGE_NAME: ghcr.io/littlehenderson/noetic-compass-live-worker
       WORKER_DIR: noetic-compass-scaffold/noetic-compass/live-trace-worker
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build the immutable CUDA worker image
         shell: bash
