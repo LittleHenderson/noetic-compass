@@ -1,0 +1,10 @@
+# Deployment-control changes require review by the repository owner.
+/.github/CODEOWNERS @LittleHenderson
+/.github/workflows/ @LittleHenderson
+/.render/ @LittleHenderson
+/render.yaml @LittleHenderson
+/render.canary.yaml @LittleHenderson
+/scripts/verify_render_blueprint_control.py @LittleHenderson
+/scripts/tests/test_verify_render_blueprint_control.py @LittleHenderson
+/noetic-compass-scaffold/noetic-compass/docs/DEPLOYMENT.md @LittleHenderson
+/noetic-compass-scaffold/noetic-compass/docs/runbooks/render_blueprint_manual_sync.md @LittleHenderson

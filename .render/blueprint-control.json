@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "repository": "LittleHenderson/noetic-compass",
+  "requiredAggregateChecks": [
+    "cas-ci-gate",
+    "cas-postgres-live-gate"
+  ],
+  "attestations": {
+    "requiredFields": [
+      "blueprint_source_sha",
+      "service_source_sha"
+    ],
+    "shaFormat": "^[0-9a-f]{40}$",
+    "requirePostSyncEvidence": true
+  },
+  "blueprints": [
+    {
+      "environment": "production",
+      "id": "exs-d82lpanaqgkc7399m1g0",
+      "path": "render.yaml",
+      "sourceBranch": "master",
+      "autoSyncRequired": false,
+      "services": [
+        {
+          "name": "noetic-compass-api",
+          "branch": "master",
+          "region": "oregon",
+          "autoDeployTrigger": "checksPass"
+        }
+      ]
+    },
+    {
+      "environment": "accounts-canary",
+      "id": "exs-d9aknt8458ps73ftpkc0",
+      "path": "render.canary.yaml",
+      "sourceBranch": "master",
+      "autoSyncRequired": false,
+      "services": [
+        {
+          "name": "cas-harness-api-accounts-canary",
+          "branch": "release/accounts-canary-20260713",
+          "region": "oregon",
+          "autoDeployTrigger": "checksPass"
+        }
+      ]
+    }
+  ]
+}
