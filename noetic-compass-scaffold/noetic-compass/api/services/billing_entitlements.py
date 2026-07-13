@@ -292,6 +292,10 @@ class EntitlementDecision:
     def can_run_live_audit(self) -> bool:
         return self.active and self.plan.live_audit
 
+    @property
+    def can_run_distributed_audit(self) -> bool:
+        return self.active and self.plan.distributed_audit
+
     def to_dict(self) -> dict[str, object]:
         return {
             "tenant_id": self.tenant_id,
@@ -300,6 +304,7 @@ class EntitlementDecision:
             "subscription_source": self.subscription_source,
             "active": self.active,
             "can_run_live_audit": self.can_run_live_audit,
+            "can_run_distributed_audit": self.can_run_distributed_audit,
             "reason": self.reason,
             "current_period_end": self.current_period_end,
             "cancel_at_period_end": self.cancel_at_period_end,

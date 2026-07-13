@@ -9,6 +9,7 @@ from fastapi.testclient import TestClient
 import pytest
 
 from api.config import Settings, settings
+from api.routes import cas_harness_audit
 from api.middleware.auth import (
     is_account_mode_allowed_path,
     is_fleet_service_callback_path,
@@ -16,11 +17,17 @@ from api.middleware.auth import (
 from api.routes.cas_harness_audit import router
 from api.services.cas_harness_distributed_audits import reset_distributed_audits_for_tests
 from api.services.cas_harness_fleet_executor import (
+    FleetRunRecord,
     heartbeat_worker,
     list_workers,
     register_worker,
     reset_fleet_executor_for_tests,
 )
+from api.services.cas_harness_evidence_object_store import (
+    active_evidence_packet_storage_scope,
+    configure_evidence_packet_repository,
+)
+from api.services.evidence_ownership import tenant_owns_trace
 from api.services.fleet_service_auth import (
     FleetServiceAuthenticationError,
     FleetServiceAuthorizationError,
@@ -139,7 +146,7 @@ def test_controller_credentials_are_separate_from_worker_capabilities() -> None:
     _backend, auth = _owned_store()
     controller = auth.issue_credential(
         tenant_id="tenant-a",
-        account_id="account-a",
+        account_id="account-b",
         audit_id="audit-a",
         fleet_id="audit-a",
         worker_id=None,
@@ -150,8 +157,102 @@ def test_controller_credentials_are_separate_from_worker_capabilities() -> None:
         auth, controller, capability="merge_fleet", worker_id=None
     )
     assert principal.worker_id is None
+    assert principal.account_id == "account-a"
     with pytest.raises(FleetServiceAuthorizationError):
         _authenticate(auth, controller, capability="heartbeat")
+
+
+def test_service_merge_and_verifier_use_tenant_packet_scope_and_record_ownership(
+    monkeypatch, request,
+) -> None:
+    monkeypatch.setattr(settings, "accounts_enabled", True)
+    monkeypatch.setattr(settings, "fleet_service_auth_enabled", True)
+    monkeypatch.setattr(settings, "evidence_packet_object_store_enabled", True)
+    monkeypatch.setattr(settings, "billing_entitlements_enabled", False)
+    monkeypatch.setattr(settings, "fleet_service_credential_pepper", PEPPER)
+    # The route requires the lifespan-owned repository before it establishes
+    # the ContextVar. The merge/load calls are replaced below, so only the
+    # repository identity is needed for this route-level scope regression.
+    configure_evidence_packet_repository(object())  # type: ignore[arg-type]
+    request.addfinalizer(lambda: configure_evidence_packet_repository(None))
+
+    backend, auth = _owned_store()
+    credential = auth.issue_credential(
+        tenant_id="tenant-a",
+        account_id="account-a",
+        audit_id="audit-a",
+        fleet_id="audit-a",
+        worker_id=None,
+        capabilities=["merge_fleet", "verify_fleet"],
+        ttl_seconds=3600,
+    )
+    now = datetime.now(UTC).isoformat()
+    run = FleetRunRecord(
+        audit_id="audit-a",
+        status="COMPLETE",
+        verifier_gate_status="ready_for_verifier",
+        jobs=[],
+        created_at=now,
+        updated_at=now,
+        require_scoped_workers=True,
+        merged_packet_trace_id="trace-fleet-merged",
+        merge_reason="Merged under the tenant packet scope.",
+    )
+    observed: list[tuple[str, str]] = []
+
+    def fake_merge(audit_id: str):
+        scope = active_evidence_packet_storage_scope()
+        assert scope is not None
+        observed.append((scope.tenant_id, scope.account_id))
+        return run
+
+    monkeypatch.setattr(cas_harness_audit, "merge_fleet_evidence", fake_merge)
+    monkeypatch.setattr(cas_harness_audit, "get_fleet_run", lambda audit_id: run)
+
+    app = FastAPI()
+    app.state.shared_state_store = backend
+    app.include_router(router)
+    client = TestClient(app)
+
+    def service_headers() -> dict[str, str]:
+        return {
+            "Authorization": f"CAS-Service {credential.api_credential}",
+            "X-CAS-Tenant-ID": "tenant-a",
+            "X-CAS-Audit-ID": "audit-a",
+            "X-CAS-Service-Timestamp": str(int(datetime.now(UTC).timestamp())),
+            "X-CAS-Service-Nonce": secrets.token_urlsafe(24),
+        }
+
+    merged = client.post(
+        "/api/cas-harness/audit/distributed/session/audit-a/fleet/merge",
+        headers=service_headers(),
+    )
+    assert merged.status_code == 200, merged.text
+    assert observed == [("tenant-a", "account-a")]
+    assert tenant_owns_trace(backend, tenant_id="tenant-a", trace_id="trace-fleet-merged")
+    assert not tenant_owns_trace(
+        backend, tenant_id="tenant-b", trace_id="trace-fleet-merged"
+    )
+
+    class _VerifierScopeObserved(RuntimeError):
+        pass
+
+    def observe_verifier_load(trace_id: str):
+        scope = active_evidence_packet_storage_scope()
+        assert scope is not None
+        observed.append((scope.tenant_id, scope.account_id))
+        raise _VerifierScopeObserved
+
+    monkeypatch.setattr(cas_harness_audit, "_packet_payload_for_trace", observe_verifier_load)
+    with pytest.raises(_VerifierScopeObserved):
+        client.post(
+            "/api/cas-harness/audit/distributed/session/audit-a/fleet/verifier",
+            headers=service_headers(),
+        )
+    assert observed == [
+        ("tenant-a", "account-a"),
+        ("tenant-a", "account-a"),
+    ]
 
 
 def test_same_tenant_manager_can_revoke_after_original_issuer_is_unavailable() -> None:
@@ -355,3 +456,86 @@ def test_registration_route_rejects_customer_bearer_and_replayed_service_callbac
     accepted = client.post(url, json=payload, headers=headers)
     assert accepted.status_code == 200, accepted.text
     assert client.post(url, json=payload, headers=headers).status_code == 401
+
+    class _BombBillingStore:
+        def resolve_entitlement(self, tenant_id: str):
+            raise AssertionError("credential revocation consulted current billing")
+
+    monkeypatch.setattr(settings, "billing_entitlements_enabled", True)
+    app.state.billing_entitlement_store = _BombBillingStore()
+    revoked = client.delete(
+        (
+            f"/api/cas-harness/audit/distributed/session/{audit['audit_id']}"
+            f"/fleet/service-credentials/{issued.json()['credential_id']}"
+        ),
+        headers={"Authorization": "Bearer customer-jwt"},
+    )
+    assert revoked.status_code == 200, revoked.text
+    headers["X-CAS-Service-Nonce"] = secrets.token_urlsafe(24)
+    assert client.post(url, json=payload, headers=headers).status_code == 401
+
+
+def test_tenant_stale_scan_does_not_mutate_another_tenants_worker(monkeypatch) -> None:
+    monkeypatch.setattr(settings, "accounts_enabled", True)
+    monkeypatch.setattr(settings, "fleet_service_auth_enabled", True)
+    monkeypatch.setattr(settings, "fleet_service_credential_pepper", PEPPER)
+    app = FastAPI()
+
+    @app.middleware("http")
+    async def attach_test_identity(request, call_next):
+        authorization = request.headers.get("Authorization")
+        if authorization in {"Bearer tenant-a", "Bearer tenant-b"}:
+            tenant_id = authorization.removeprefix("Bearer ")
+            request.state.tenant_id = tenant_id
+            request.state.account_id = f"account-{tenant_id[-1]}"
+            request.state.role = "operator"
+        return await call_next(request)
+
+    app.include_router(router)
+    backend = InMemoryStateStore()
+    app.state.shared_state_store = backend
+    auth = FleetServiceAuthStore(backend, pepper=PEPPER)
+    workers = []
+    for suffix in ("a", "b"):
+        tenant_id = f"tenant-{suffix}"
+        account_id = f"account-{suffix}"
+        audit_id = f"audit-{suffix}"
+        worker_id = f"probe-worker-{suffix}"
+        auth.record_audit_owner(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            audit_id=audit_id,
+        )
+        auth.issue_credential(
+            tenant_id=tenant_id,
+            account_id=account_id,
+            audit_id=audit_id,
+            fleet_id=audit_id,
+            worker_id=worker_id,
+            capabilities=["heartbeat"],
+            ttl_seconds=3600,
+        )
+        worker = register_worker(
+            worker_id=worker_id,
+            audit_id=audit_id,
+            model_id="model-a",
+            worker_url=f"https://{suffix}.worker.example",
+            gpu_type="H100",
+            capacity=1,
+            supported_methods=["readout"],
+        )
+        worker.last_heartbeat_at = (datetime.now(UTC) - timedelta(minutes=10)).isoformat()
+        workers.append(worker)
+
+    response = TestClient(app).post(
+        "/api/cas-harness/audit/distributed/fleet/workers/stale-scan",
+        json={"max_heartbeat_age_seconds": 1},
+        headers={"Authorization": "Bearer tenant-a"},
+    )
+
+    assert response.status_code == 200, response.text
+    assert [worker["worker_id"] for worker in response.json()["workers"]] == [
+        "probe-worker-a"
+    ]
+    assert workers[0].status == "stale"
+    assert workers[1].status == "active"

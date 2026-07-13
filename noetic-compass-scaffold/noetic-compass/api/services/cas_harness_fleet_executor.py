@@ -532,11 +532,26 @@ def list_workers(*, audit_id: str | None = None) -> list[FleetWorkerRecord]:
     return workers
 
 
-def mark_stale_workers(*, max_heartbeat_age_seconds: int = DEFAULT_MAX_HEARTBEAT_AGE_SECONDS) -> list[FleetWorkerRecord]:
+def mark_stale_workers(
+    *,
+    max_heartbeat_age_seconds: int = DEFAULT_MAX_HEARTBEAT_AGE_SECONDS,
+    worker_scopes: set[tuple[str | None, str]] | None = None,
+) -> list[FleetWorkerRecord]:
+    """Mark expired workers, optionally within an exact audit/worker scope set.
+
+    ``None`` preserves the legacy global scan. Account-mode callers must pass the
+    tenant-derived scopes so marking a worker stale cannot expire another tenant's
+    leases before the route filters its response.
+    """
     if max_heartbeat_age_seconds <= 0:
         raise FleetExecutorStateError("max_heartbeat_age_seconds must be positive.")
     stale: list[FleetWorkerRecord] = []
     for worker in _WORKERS.values():
+        if (
+            worker_scopes is not None
+            and (worker.audit_id, worker.worker_id) not in worker_scopes
+        ):
+            continue
         if _mark_stale_worker_if_expired(
             worker,
             max_heartbeat_age_seconds=max_heartbeat_age_seconds,

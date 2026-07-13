@@ -6,6 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 import threading
+from types import SimpleNamespace
 
 import pytest
 from fastapi.testclient import TestClient
@@ -18,6 +19,7 @@ from api.services.cas_harness_evidence_object_store import (
     HASH_LOG_ENTRY_KIND,
     ImmutableEvidenceConflict,
     PACKET_INDEX_KIND,
+    PUBLICATION_INTENT_KIND,
     S3ObjectLockPacketBackend,
     configure_evidence_packet_repository,
     evidence_packet_storage_scope,
@@ -30,6 +32,7 @@ from api.services.cas_harness_merged_evidence_packets import (
     load_evidence_packet_from_store,
     verify_evidence_packet_hash_chain,
     write_evidence_packet_to_store,
+    write_merged_fleet_evidence_packet,
 )
 from api.services.evidence_ownership import record_evidence_ownership
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
@@ -509,6 +512,77 @@ def test_existing_packet_helpers_switch_to_shared_tenant_storage(tmp_path: Path)
     )
     first_store.close()
     second_store.close()
+
+
+def test_fleet_merge_publication_is_retry_and_concurrency_idempotent(
+    tmp_path: Path, monkeypatch
+) -> None:
+    from api.services import cas_harness_evidence_anchor
+
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+
+    def legacy_anchor_must_not_run(**kwargs):
+        raise AssertionError("tenant Object-Lock publication called the legacy S3 anchor")
+
+    monkeypatch.setattr(
+        cas_harness_evidence_anchor,
+        "anchor_hash_log_entry",
+        legacy_anchor_must_not_run,
+    )
+    store = SqliteStateStore(tmp_path / "fleet-merge-idempotent.db")
+    backend = _SharedVerifiedObjectBackend()
+    repository = _repository(store, backend, "fleet-merge-replica")
+    trace_id = "trace-fleet-merge-idempotent"
+    run = SimpleNamespace(
+        audit_id="audit-fleet-merge-idempotent",
+        created_at="2026-07-13T04:00:00+00:00",
+        status="COMPLETE",
+        verifier_gate_status="ready_for_verifier",
+        merged_packet_trace_id=trace_id,
+        jobs=[],
+    )
+    distributed = SimpleNamespace(
+        plan=SimpleNamespace(
+            model_id="customer/open-weight-20b",
+            parameter_count_b=20,
+            num_layers=8,
+        )
+    )
+    first_attempt_not_before = datetime.now(UTC)
+
+    def publish(_index: int) -> dict:
+        with evidence_packet_storage_scope(
+            tenant_id="tenant-fleet",
+            account_id="account-fleet",
+            repository=repository,
+        ):
+            packet = write_merged_fleet_evidence_packet(
+                run=run, distributed=distributed
+            )
+            assert packet is not None
+            return packet
+
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        packets = list(pool.map(publish, range(16)))
+
+    assert all(packet == packets[0] for packet in packets)
+    assert datetime.fromisoformat(packets[0]["generated_at"]) >= first_attempt_not_before
+    assert packets[0]["hashes"]["external_anchor"]["mode"] == (
+        "tenant_object_lock_repository"
+    )
+    assert backend.put_count == 1
+    assert len(store.list("tenant-fleet", HASH_LOG_ENTRY_KIND)) == 1
+    assert len(store.list("tenant-fleet", PACKET_INDEX_KIND)) == 1
+    assert len(store.list("tenant-fleet", PUBLICATION_INTENT_KIND)) == 1
+    with pytest.raises(ImmutableEvidenceConflict, match="publication intent"):
+        repository.claim_publication_timestamp(
+            tenant_id="tenant-fleet",
+            namespace="",
+            trace_id=trace_id,
+            audit_id="audit-fleet-merge-idempotent",
+            account_id="account-other",
+        )
+    store.close()
 
 
 def test_hash_append_without_worm_packet_is_invalid_until_retry_repairs_it(

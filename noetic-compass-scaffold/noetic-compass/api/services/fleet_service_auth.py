@@ -172,6 +172,7 @@ class FleetServiceCredential:
 class FleetServicePrincipal:
     credential_id: str
     tenant_id: str
+    account_id: str
     audit_id: str
     fleet_id: str
     worker_id: str | None
@@ -228,6 +229,22 @@ class FleetServiceAuthStore:
             record is not None
             and hmac.compare_digest(str(record.payload.get("tenant_id") or ""), tenant_id)
         )
+
+    def audit_owner_account_id(self, *, tenant_id: str, audit_id: str) -> str | None:
+        """Return the immutable creator account for tenant-scoped packet provenance."""
+        record = self._store.get(tenant_id, _AUDIT_OWNER_KIND, audit_id)
+        if (
+            record is None
+            or not hmac.compare_digest(
+                str(record.payload.get("tenant_id") or ""), tenant_id
+            )
+            or not hmac.compare_digest(
+                str(record.payload.get("audit_id") or ""), audit_id
+            )
+        ):
+            return None
+        account_id = str(record.payload.get("account_id") or "").strip()
+        return account_id or None
 
     def list_owned_audit_ids(self, *, tenant_id: str) -> tuple[str, ...]:
         return tuple(
@@ -372,7 +389,10 @@ class FleetServiceAuthStore:
             raise FleetServiceAuthenticationError("Invalid fleet service credential.")
         if not _NONCE_RE.fullmatch(nonce or ""):
             raise FleetServiceAuthenticationError("Invalid fleet service credential.")
-        if not self.tenant_owns_audit(tenant_id=tenant, audit_id=audit_id):
+        owner_account_id = self.audit_owner_account_id(
+            tenant_id=tenant, audit_id=audit_id
+        )
+        if owner_account_id is None:
             raise FleetServiceAuthorizationError("Fleet service scope denied.")
         if (
             credential.tenant_id != tenant
@@ -417,6 +437,7 @@ class FleetServiceAuthStore:
         return FleetServicePrincipal(
             credential_id=credential.credential_id,
             tenant_id=credential.tenant_id,
+            account_id=owner_account_id,
             audit_id=credential.audit_id,
             fleet_id=credential.fleet_id,
             worker_id=credential.worker_id,

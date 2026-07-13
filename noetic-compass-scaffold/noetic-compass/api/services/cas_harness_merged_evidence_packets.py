@@ -19,6 +19,7 @@ import tempfile
 from typing import Any, Iterator, Mapping
 
 from api.services.cas_harness_evidence_object_store import (
+    ImmutableEvidenceConflict,
     active_evidence_packet_storage_scope,
 )
 
@@ -163,6 +164,21 @@ def write_merged_fleet_evidence_packet(
     if not trace_id:
         return None
 
+    # Publication is immutable. A route retry after packet persistence (for
+    # example, because the following ownership-ledger write failed) must reuse
+    # the exact committed bytes instead of regenerating timestamps/anchors.
+    try:
+        existing = load_merged_fleet_evidence_packet_payload(trace_id)
+    except FileNotFoundError:
+        existing = None
+    if existing is not None:
+        existing_audit_id = (existing.get("distributed_fleet") or {}).get("audit_id")
+        if existing_audit_id != getattr(run, "audit_id", None):
+            raise ImmutableEvidenceConflict(
+                f"trace {trace_id!r} already belongs to a different fleet audit"
+            )
+        return existing
+
     jobs = list(getattr(run, "jobs", []))
     fragment_payloads = [
         payload
@@ -170,7 +186,21 @@ def write_merged_fleet_evidence_packet(
         if isinstance(payload, Mapping)
     ]
     verifier_fragment = _first_stage19_stage20_fragment(fragment_payloads)
-    now = datetime.now(UTC).isoformat()
+    scope = active_evidence_packet_storage_scope()
+    if scope is not None:
+        now = scope.repository.claim_publication_timestamp(
+            tenant_id=scope.tenant_id,
+            namespace=_STORE_SUBDIR.get() or "",
+            trace_id=trace_id,
+            audit_id=getattr(run, "audit_id", None),
+            account_id=scope.account_id,
+        )
+    else:
+        now = str(
+            getattr(distributed, "updated_at", None)
+            or getattr(run, "updated_at", None)
+            or datetime.now(UTC).isoformat()
+        )
     model_id = getattr(getattr(distributed, "plan", None), "model_id", "unknown")
 
     verification = (
@@ -239,12 +269,26 @@ def write_merged_fleet_evidence_packet(
     )
     from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
 
-    packet["hashes"]["external_anchor"] = anchor_hash_log_entry(
-        trace_id=trace_id,
-        hash_log_entry=hash_log_entry,
-        packet_path=evidence_packet_store_path(trace_id),
-        hash_log_path=evidence_hash_log_path(),
-    )
+    if scope is not None:
+        # The shared repository writes the packet itself to verified S3 Object
+        # Lock and stores its version/retention receipt outside the immutable
+        # packet bytes. Running the legacy anchor writer here would create a
+        # second, racing Object-Lock object and make packet bytes non-deterministic.
+        packet["hashes"]["external_anchor"] = {
+            "status": "disabled",
+            "mode": "tenant_object_lock_repository",
+            "reason": (
+                "Tenant packet bytes and hash-log entry use the repository's "
+                "separate re-read-verified Object-Lock receipt."
+            ),
+        }
+    else:
+        packet["hashes"]["external_anchor"] = anchor_hash_log_entry(
+            trace_id=trace_id,
+            hash_log_entry=hash_log_entry,
+            packet_path=evidence_packet_store_path(trace_id),
+            hash_log_path=evidence_hash_log_path(),
+        )
     _write_packet_to_store(trace_id, packet)
     if active_evidence_packet_storage_scope() is None:
         _MERGED_FLEET_PACKETS[trace_id] = packet
@@ -591,6 +635,14 @@ def _append_hash_log_entry(
         )
     path = _hash_log_path()
     path.parent.mkdir(parents=True, exist_ok=True)
+    for existing in _iter_hash_log_entries(path):
+        if existing.get("trace_id") != trace_id:
+            continue
+        if existing.get("packet_without_hashes_sha256") != packet_without_hashes_sha256:
+            raise ImmutableEvidenceConflict(
+                f"trace {trace_id!r} already has a different immutable hash-log entry"
+            )
+        return existing
     previous_hash = _last_hash_log_entry_sha256(path)
     entry: dict[str, Any] = {
         "schema_version": "cas_harness_evidence_packet_hash_log.v1",

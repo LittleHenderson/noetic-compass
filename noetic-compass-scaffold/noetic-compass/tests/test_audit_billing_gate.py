@@ -11,7 +11,9 @@ from api.config import settings
 from api.routes import cas_harness_audit
 from api.services.billing_entitlements import BillingEntitlementStore
 from api.services.cas_harness_audit_sessions import (
+    claim_run_attempt,
     configure_audit_session_store,
+    get_session,
     reset_audit_sessions_for_tests,
 )
 from api.services.production.state_substrate import InMemoryStateStore
@@ -31,6 +33,10 @@ LIVE_PAYLOAD = {
 def _live_result(trace_id: str):
     return SimpleNamespace(
         trace_id=trace_id,
+        # Provider reconciliation checkpoints persist the complete runner
+        # result. Keep this test double faithful to ``LiveAuditRunnerResult``
+        # so the billing seam exercises the durable provider lane too.
+        evidence_packet={"trace_id": trace_id},
         proof_chips=[
             {
                 "id": "model_proof",
@@ -239,6 +245,100 @@ def test_terminal_retry_bypasses_entitlement_quota_and_provider(
     assert retry.json() == first.json()
 
 
+def test_provider_recovery_bypasses_later_entitlement_and_quota(
+    audit_billing_client, monkeypatch
+) -> None:
+    client, backend, billing_store, app = audit_billing_client
+    billing_store.grant_manual_comped(
+        tenant_id="tenant-a",
+        billing_account_id="acct-a",
+        expires_at=(datetime.now(UTC) + timedelta(days=5)).isoformat(),
+    )
+    provider_calls = 0
+
+    async def crash_after_provider_completed(**kwargs):
+        nonlocal provider_calls
+        provider_calls += 1
+        result = _live_result("trace-billing-provider-recovery")
+        kwargs["on_request_started"]()
+        kwargs["on_provider_completed"](
+            cas_harness_audit.live_worker_result_to_checkpoint(result)
+        )
+        raise RuntimeError("crash after provider completion")
+
+    monkeypatch.setattr(cas_harness_audit, "run_live_worker_audit", crash_after_provider_completed)
+    monkeypatch.setattr(cas_harness_audit, "persist_live_worker_result", lambda *_a, **_k: None)
+    audit_id = _create_live(client)
+    first = client.post(f"/api/cas-harness/audit/session/{audit_id}/run")
+    assert first.status_code == 503, first.text
+    assert first.json()["detail"]["code"] == "provider_evidence_reconciliation_pending"
+    assert get_usage(
+        backend, tenant_id="tenant-a", period_key=current_monthly_period_key()
+    ) == 1
+
+    class _BombBillingStore:
+        def resolve_entitlement(self, tenant_id: str):
+            raise AssertionError("provider recovery consulted current billing")
+
+    def bomb(*args, **kwargs):
+        raise AssertionError("provider recovery consumed quota or called provider")
+
+    app.state.billing_entitlement_store = _BombBillingStore()
+    monkeypatch.setattr(cas_harness_audit, "consume_audit_quota", bomb)
+    monkeypatch.setattr(cas_harness_audit, "run_live_worker_audit", bomb)
+    retry = client.post(f"/api/cas-harness/audit/session/{audit_id}/run")
+    assert retry.status_code == 200, retry.text
+    assert retry.json()["evidence_packet_trace_id"] == "trace-billing-provider-recovery"
+    assert provider_calls == 1
+    assert get_usage(
+        backend, tenant_id="tenant-a", period_key=current_monthly_period_key()
+    ) == 1
+
+
+def test_legacy_prejournal_inflight_run_quarantines_before_billing_or_quota(
+    audit_billing_client, monkeypatch
+) -> None:
+    client, backend, _, app = audit_billing_client
+    audit_id = _create_live(client)
+    legacy_attempt = claim_run_attempt(
+        audit_id,
+        tenant_id="tenant-a",
+        account_id="acct-a",
+        lease_seconds=-1,
+    )
+    assert legacy_attempt is not None
+
+    class _BombBillingStore:
+        def resolve_entitlement(self, tenant_id: str):
+            raise AssertionError("legacy recovery consulted current billing")
+
+    def bomb(*args, **kwargs):
+        raise AssertionError("legacy recovery consumed quota or called provider")
+
+    app.state.billing_entitlement_store = _BombBillingStore()
+    monkeypatch.setattr(cas_harness_audit, "consume_audit_quota", bomb)
+    monkeypatch.setattr(cas_harness_audit, "run_live_worker_audit", bomb)
+
+    response = client.post(f"/api/cas-harness/audit/session/{audit_id}/run")
+    assert response.status_code == 409, response.text
+    assert response.json()["detail"] == {
+        "code": "provider_run_reconciliation_required",
+        "status": "OPEN",
+        "detail": (
+            "legacy in-flight provider attempt has no durable phase journal; "
+            "automatic retry could repeat external spend"
+        ),
+    }
+    record = get_session(
+        audit_id, tenant_id="tenant-a", account_id="acct-a"
+    )
+    assert record is not None
+    assert record.provider_run_phase == "ORPHANED"
+    assert get_usage(
+        backend, tenant_id="tenant-a", period_key=current_monthly_period_key()
+    ) == 0
+
+
 def test_reference_run_stays_available_without_live_entitlement(
     audit_billing_client, monkeypatch
 ) -> None:
@@ -262,6 +362,46 @@ def test_reference_run_stays_available_without_live_entitlement(
         f"/api/cas-harness/audit/session/{created.json()['audit_id']}/run"
     )
     assert response.status_code == 200, response.text
+    assert get_usage(
+        backend, tenant_id="tenant-a", period_key=current_monthly_period_key()
+    ) == 0
+
+
+def test_distributed_fleet_capability_fails_closed_for_current_catalog(
+    audit_billing_client,
+) -> None:
+    client, backend, billing_store, _ = audit_billing_client
+    billing_store.apply_stripe_subscription(
+        tenant_id="tenant-a",
+        plan_id="professional_live",
+        status="active",
+        external_customer_id="cus_professional",
+        external_subscription_id="sub_professional",
+        event_id="evt_professional",
+        event_created=1,
+        current_period_start=datetime.now(UTC).isoformat(),
+        current_period_end=(datetime.now(UTC) + timedelta(days=30)).isoformat(),
+        cancel_at_period_end=False,
+    )
+    response = client.post(
+        "/api/cas-harness/audit/distributed/session",
+        json={
+            "model_id": "customer/open-weight-20b",
+            "weight_access": "open_weight",
+            "parameter_count_b": 20,
+            "num_layers": 8,
+            "precision": "bf16",
+            "available_gpu_memory_gb": 80,
+            "accept_audit_data_capture": True,
+        },
+    )
+    assert response.status_code == 402, response.text
+    assert response.json()["detail"] == {
+        "code": "distributed_entitlement_required",
+        "plan_id": "professional_live",
+        "subscription_status": "active",
+        "reason": "active server-derived subscription entitlement",
+    }
     assert get_usage(
         backend, tenant_id="tenant-a", period_key=current_monthly_period_key()
     ) == 0

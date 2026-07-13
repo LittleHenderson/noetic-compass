@@ -47,6 +47,7 @@ HASH_LOG_ENTRY_KIND = "evidence_packet_hash_log_entry"
 HASH_LOG_HEAD_KIND = "evidence_packet_hash_log_head"
 HASH_LOG_TRACE_KIND = "evidence_packet_hash_log_trace"
 HASH_LOG_WORM_RECEIPT_KIND = "evidence_packet_hash_log_worm_receipt"
+PUBLICATION_INTENT_KIND = "evidence_packet_publication_intent"
 
 
 class EvidenceObjectStoreError(RuntimeError):
@@ -292,6 +293,63 @@ class EvidencePacketRepository:
 
     def assert_ready(self) -> None:
         self.backend.assert_ready(expected=self.policy)
+
+    def claim_publication_timestamp(
+        self,
+        *,
+        tenant_id: str,
+        namespace: str,
+        trace_id: str,
+        audit_id: str | None = None,
+        account_id: str | None = None,
+    ) -> str:
+        """Persist one cross-replica first-publication time for immutable bytes."""
+        _require_identity(tenant_id, trace_id)
+        record_id = self._packet_index_id(namespace, trace_id)
+        published_at = datetime.now(UTC).isoformat()
+        payload = {
+            "schema_version": "cas_harness_evidence_publication_intent.v1",
+            "namespace": namespace,
+            "trace_id": trace_id,
+            "audit_id": audit_id,
+            "account_id": account_id,
+            "first_publication_at": published_at,
+        }
+        record = LedgerRecord.new(
+            tenant_id=tenant_id,
+            kind=PUBLICATION_INTENT_KIND,
+            record_id=record_id,
+            payload=payload,
+            source="cas_harness_evidence_publication_intent",
+            trace_id=trace_id,
+        )
+        try:
+            self.store.put(record, expected_version=0)
+            return published_at
+        except VersionConflict:
+            current = self.store.get(tenant_id, PUBLICATION_INTENT_KIND, record_id)
+            if current is None:
+                raise EvidenceObjectStoreUnavailable(
+                    "Publication intent conflicted but cannot be re-read."
+                )
+            stored = current.payload
+            if (
+                stored.get("schema_version")
+                != "cas_harness_evidence_publication_intent.v1"
+                or stored.get("namespace") != namespace
+                or stored.get("trace_id") != trace_id
+                or stored.get("audit_id") != audit_id
+                or stored.get("account_id") != account_id
+            ):
+                raise ImmutableEvidenceConflict(
+                    f"trace {trace_id!r} has a different publication intent"
+                )
+            value = stored.get("first_publication_at")
+            if not isinstance(value, str) or not value:
+                raise EvidenceObjectStoreUnavailable(
+                    "Publication intent timestamp is unavailable."
+                )
+            return value
 
     def packet_reference(self, *, tenant_id: str, namespace: str, trace_id: str) -> str:
         return self.backend.object_url(self._object_key(tenant_id, namespace, trace_id))
@@ -1008,6 +1066,7 @@ __all__ = [
     "EvidencePacketRepository",
     "EvidenceStorageScope",
     "PACKET_INDEX_KIND",
+    "PUBLICATION_INTENT_KIND",
     "HASH_LOG_ENTRY_KIND",
     "HASH_LOG_HEAD_KIND",
     "HASH_LOG_TRACE_KIND",

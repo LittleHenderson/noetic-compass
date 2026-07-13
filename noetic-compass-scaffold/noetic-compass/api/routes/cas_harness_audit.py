@@ -279,12 +279,17 @@ def _audit_evidence_state_store(request: Request):
     return getattr(handle, "store", None) if handle is not None else None
 
 
-def _audit_evidence_storage_context(request: Request):
+def _audit_evidence_storage_context(
+    request: Request,
+    *,
+    tenant_id: str | None = None,
+    account_id: str | None = None,
+):
     """Carry server-derived tenant identity through packet/hash-log I/O."""
     if not settings.evidence_packet_object_store_enabled:
         return nullcontext()
-    tenant_id = str(getattr(request.state, "tenant_id", "") or "")
-    account_id = str(getattr(request.state, "account_id", "") or "")
+    tenant_id = (tenant_id or str(getattr(request.state, "tenant_id", "") or "")).strip()
+    account_id = (account_id or str(getattr(request.state, "account_id", "") or "")).strip()
     if not settings.accounts_enabled or not tenant_id or not account_id:
         raise HTTPException(
             status_code=503, detail="Shared Evidence Packet identity is unavailable."
@@ -318,6 +323,38 @@ def _customer_fleet_identity(request: Request) -> tuple[str, str]:
     if not tenant_id or not account_id:
         raise HTTPException(status_code=401, detail="Account authentication required.")
     return tenant_id, account_id
+
+
+def _require_distributed_audit_entitlement(request: Request):
+    """Enforce the server-derived billing capability on customer fleet traffic."""
+    if not settings.billing_entitlements_enabled:
+        return None
+    tenant_id, _account_id = _customer_fleet_identity(request)
+    billing_store = getattr(request.app.state, "billing_entitlement_store", None)
+    if billing_store is None:
+        raise HTTPException(
+            status_code=503,
+            detail="Billing entitlement verification is unavailable.",
+        )
+    try:
+        decision = billing_store.resolve_entitlement(tenant_id)
+    except BillingEntitlementError as exc:
+        logger.error("billing entitlement record is invalid", exc_info=True)
+        raise HTTPException(
+            status_code=503,
+            detail="Billing entitlement verification is unavailable.",
+        ) from exc
+    if not decision.can_run_distributed_audit:
+        raise HTTPException(
+            status_code=402,
+            detail={
+                "code": "distributed_entitlement_required",
+                "plan_id": decision.plan.plan_id,
+                "subscription_status": decision.subscription_status,
+                "reason": decision.reason,
+            },
+        )
+    return decision
 
 
 def _require_fleet_credential_manager(request: Request) -> tuple[str, str]:
@@ -407,12 +444,18 @@ def _require_fleet_service_callback(
         raise HTTPException(status_code=503, detail="Fleet service authentication is unavailable.") from exc
 
 
-def _record_audit_evidence_ownership(request: Request, trace_id: str | None) -> None:
+def _record_audit_evidence_ownership(
+    request: Request,
+    trace_id: str | None,
+    *,
+    tenant_id: str | None = None,
+    account_id: str | None = None,
+) -> None:
     """Persist ownership in account mode; never report a successful run without it."""
     if not settings.accounts_enabled:
         return
-    tenant_id = str(getattr(request.state, "tenant_id", "") or "")
-    account_id = str(getattr(request.state, "account_id", "") or "")
+    tenant_id = (tenant_id or str(getattr(request.state, "tenant_id", "") or "")).strip()
+    account_id = (account_id or str(getattr(request.state, "account_id", "") or "")).strip()
     store = _audit_evidence_state_store(request)
     if not tenant_id or not account_id or store is None or not trace_id:
         raise HTTPException(
@@ -1491,6 +1534,7 @@ async def create_distributed_audit_session(
     unless the caller acknowledges that the audit captures the model's signal to an
     immutable store reused as CAS-Native training data (gate 8). >4T is always refused.
     """
+    _require_distributed_audit_entitlement(request)
     _require_locked_tks_definitions()
     try:
         record = create_distributed_audit(
@@ -1546,7 +1590,7 @@ async def mark_distributed_worker_running(
     audit_id: str, worker_id: str, request: Request
 ) -> DistributedAuditResponse:
     """Mark one Probe Worker as running."""
-    _require_fleet_service_callback(
+    principal = _require_fleet_service_callback(
         request,
         capability="mark_running",
         audit_id=audit_id,
@@ -1574,7 +1618,7 @@ async def submit_distributed_worker_evidence(
     request: Request,
 ) -> DistributedAuditResponse:
     """Attach one Probe Worker's evidence receipt to the distributed audit."""
-    _require_fleet_service_callback(
+    principal = _require_fleet_service_callback(
         request,
         capability="submit_evidence",
         audit_id=audit_id,
@@ -1609,7 +1653,7 @@ async def merge_distributed_audit_session(
     audit_id: str, request: Request
 ) -> DistributedAuditResponse:
     """Merge worker evidence receipts without fabricating ACCEPT."""
-    _require_fleet_service_callback(
+    principal = _require_fleet_service_callback(
         request, capability="merge_distributed", audit_id=audit_id
     )
     try:
@@ -1704,7 +1748,10 @@ async def scan_stale_fleet_workers(
         _require_fleet_credential_manager(request)
         visible_scopes = _visible_fleet_worker_scopes(request)
     try:
-        workers = mark_stale_workers(max_heartbeat_age_seconds=req.max_heartbeat_age_seconds)
+        workers = mark_stale_workers(
+            max_heartbeat_age_seconds=req.max_heartbeat_age_seconds,
+            worker_scopes=visible_scopes,
+        )
     except FleetExecutorStateError as exc:
         raise HTTPException(status_code=409, detail=str(exc))
     return FleetWorkerListResponse(
@@ -1906,13 +1953,26 @@ async def merge_distributed_fleet_run(
     audit_id: str, request: Request
 ) -> FleetRunResponse:
     """Merge fleet Evidence Packet fragments only after all receipts arrive."""
-    _require_fleet_service_callback(request, capability="merge_fleet", audit_id=audit_id)
+    principal = _require_fleet_service_callback(
+        request, capability="merge_fleet", audit_id=audit_id
+    )
     try:
-        run = merge_fleet_evidence(audit_id)
+        with _audit_evidence_storage_context(
+            request,
+            tenant_id=principal.tenant_id if principal is not None else None,
+            account_id=principal.account_id if principal is not None else None,
+        ):
+            run = merge_fleet_evidence(audit_id)
     except (FleetExecutorStateError, DistributedAuditStateError) as exc:
         raise HTTPException(status_code=409, detail=str(exc))
     if run is None:
         raise HTTPException(status_code=404, detail="Fleet run not found")
+    _record_audit_evidence_ownership(
+        request,
+        run.merged_packet_trace_id,
+        tenant_id=principal.tenant_id if principal is not None else None,
+        account_id=principal.account_id if principal is not None else None,
+    )
     return FleetRunResponse.model_validate(run.to_dict())
 
 
@@ -1924,7 +1984,9 @@ async def verify_distributed_fleet_packet(
     audit_id: str, request: Request
 ) -> FleetVerifierDecisionResponse:
     """Run the verifier-owned decision gate over a merged fleet packet."""
-    _require_fleet_service_callback(request, capability="verify_fleet", audit_id=audit_id)
+    principal = _require_fleet_service_callback(
+        request, capability="verify_fleet", audit_id=audit_id
+    )
     packet_decision = None
     packet_proof_chips = None
     packet_load_error = None
@@ -1934,19 +1996,24 @@ async def verify_distributed_fleet_packet(
     if not run.merged_packet_trace_id:
         raise HTTPException(status_code=409, detail="Merge fleet evidence before verifier review.")
 
-    try:
-        packet_payload = _packet_payload_for_trace(run.merged_packet_trace_id)
-    except FileNotFoundError as exc:
-        packet_load_error = str(exc)
-    else:
-        packet_decision = verifier_decision_from_packet(packet_payload)
-        packet_proof_chips = [
-            chip.to_dict()
-            for chip in normalize_evidence_packet_for_audit(
-                packet_payload,
-                verify_hashes=_verify_hashes_for_trace(run.merged_packet_trace_id),
-            ).chips
-        ]
+    with _audit_evidence_storage_context(
+        request,
+        tenant_id=principal.tenant_id if principal is not None else None,
+        account_id=principal.account_id if principal is not None else None,
+    ):
+        try:
+            packet_payload = _packet_payload_for_trace(run.merged_packet_trace_id)
+        except FileNotFoundError as exc:
+            packet_load_error = str(exc)
+        else:
+            packet_decision = verifier_decision_from_packet(packet_payload)
+            packet_proof_chips = [
+                chip.to_dict()
+                for chip in normalize_evidence_packet_for_audit(
+                    packet_payload,
+                    verify_hashes=_verify_hashes_for_trace(run.merged_packet_trace_id),
+                ).chips
+            ]
 
     try:
         decision = verify_merged_fleet_packet(
@@ -2116,7 +2183,20 @@ async def run_audit_session(
     is_external_run = _should_run_hosted_open_weight(
         existing
     ) or _should_run_api_endpoint(existing)
-    is_fresh_provider_run = getattr(existing, "provider_run_phase", None) is None
+    # A pre-journal release could leave an external run fenced as RUNNING with
+    # no provider phase. That is not fresh authority: claim_provider_run must
+    # quarantine (or wait for) the ambiguous legacy attempt without consulting
+    # today's entitlement or charging today's quota first.
+    is_legacy_prejournal_run = (
+        bool(storage_scope)
+        and getattr(existing, "provider_run_phase", None) is None
+        and getattr(existing, "run_state", None) == "RUNNING"
+        and bool(getattr(existing, "run_attempt_id", None))
+    )
+    is_fresh_provider_run = (
+        getattr(existing, "provider_run_phase", None) is None
+        and not is_legacy_prejournal_run
+    )
     entitlement_decision = None
     if (
         settings.billing_entitlements_enabled
