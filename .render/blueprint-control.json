@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "repository": "LittleHenderson/noetic-compass",
   "requiredAggregateChecks": [
     "cas-ci-gate",
@@ -22,7 +22,9 @@
       "autoSyncRequired": false,
       "services": [
         {
+          "id": "srv-d82ph683kofs73d210e0",
           "name": "noetic-compass-api",
+          "type": "web_service",
           "branch": "master",
           "region": "oregon",
           "autoDeployTrigger": "checksPass",
@@ -38,7 +40,9 @@
       "autoSyncRequired": false,
       "services": [
         {
+          "id": "srv-d9akoolaeets73bp3e7g",
           "name": "cas-harness-api-accounts-canary",
+          "type": "private_service",
           "branch": "release/accounts-canary-20260713",
           "region": "oregon",
           "autoDeployTrigger": "checksPass"

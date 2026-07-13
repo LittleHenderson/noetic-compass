@@ -56,6 +56,6 @@ jobs:
         if: ${{ env.RENDER_API_KEY == '' }}
         run: echo 'RENDER_API_KEY is not configured; offline policy still passed.'
 
-      - name: Verify live Blueprint Auto Sync remains disabled
+      - name: Verify live Blueprint and managed-service deployment controls
         if: ${{ env.RENDER_API_KEY != '' }}
         run: python scripts/verify_render_blueprint_control.py --live
