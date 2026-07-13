@@ -46,6 +46,9 @@ COPY docs/working/pythia160m_gate1/ docs/working/pythia160m_gate1/
 COPY docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json
 COPY scenarios/ scenarios/
 COPY validation/ validation/
+# The private account-canary operator runs this one bounded proof from Render
+# Shell. Do not copy the wider development scripts directory into production.
+COPY scripts/verify_account_canary_quotas.py scripts/verify_account_canary_quotas.py
 
 # Set ownership to non-root user
 RUN chown -R ncuser:ncuser /app

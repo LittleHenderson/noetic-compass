@@ -25,7 +25,7 @@ import sys
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 import httpx
 
@@ -50,15 +50,35 @@ AUDIT_SESSION_PATH = "/api/cas-harness/audit/session"
 AUDIT_SESSIONS_PATH = "/api/cas-harness/audit/sessions"
 PROOF_KIND = "account_canary_quota_proof"
 PROOF_SCHEMA_VERSION = 1
+ACCOUNT_CANARY_SERVICE_ID = "srv-d9akoolaeets73bp3e7g"
+ACCOUNT_CANARY_SERVICE_TYPE = "pserv"
+ACCOUNT_CANARY_GIT_BRANCH = "release/accounts-canary-20260713"
+ACCOUNT_CANARY_DATABASE_HOST = "dpg-d9akobtaeets73bp29kg-a"
+ACCOUNT_CANARY_DATABASE_USER = "cas_harness_canary"
+ACCOUNT_CANARY_DATABASE_NAME = "cas_harness_accounts_canary"
+ACCOUNT_CANARY_QUOTA_LIMIT = 2
+ACCOUNT_CANARY_MODEL_ID = "quota-proof-local-no-provider"
+ACCOUNT_CANARY_OBJECT_STORE_PREFIX = "cas-harness/accounts-canary/evidence-anchors"
+ACCOUNT_CANARY_OBJECT_STORE_REGION = "us-west-2"
+ACCOUNT_CANARY_OBJECT_LOCK_MODE = "GOVERNANCE"
+ACCOUNT_CANARY_OBJECT_LOCK_RETENTION_DAYS = 31
 _PROOF_ID = re.compile(r"^[a-z0-9][a-z0-9-]{5,23}$")
 _SERVICE_ID = re.compile(r"^srv-[a-z0-9]{8,64}$")
-_RESTART_RECEIPT = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{5,119}$")
+_RESTART_RECEIPT = re.compile(r"^dep-[a-z0-9]{8,64}$")
 _SENSITIVE_KEY_PARTS = (
     "authorization",
     "credential",
     "password",
     "secret",
     "token",
+)
+_SENSITIVE_VALUE_PATTERNS = (
+    re.compile(r"\bcasak_[A-Za-z0-9_-]+", re.IGNORECASE),
+    re.compile(r"\bbearer\s+\S+", re.IGNORECASE),
+    re.compile(
+        r"\b[a-z][a-z0-9+.-]*://[^\s/:@]+:[^\s/@]+@",
+        re.IGNORECASE,
+    ),
 )
 
 
@@ -79,6 +99,10 @@ def _redact(value: Any) -> Any:
         }
     if isinstance(value, (list, tuple)):
         return [_redact(item) for item in value]
+    if isinstance(value, str) and any(
+        pattern.search(value) for pattern in _SENSITIVE_VALUE_PATTERNS
+    ):
+        return "[REDACTED]"
     return value
 
 
@@ -93,8 +117,7 @@ def _response_body(response: httpx.Response) -> Any:
 def _expect_status(response: httpx.Response, expected: int, label: str) -> Any:
     if response.status_code != expected:
         raise ProofFailure(
-            f"{label}: expected HTTP {expected}, received {response.status_code}; "
-            f"response={json.dumps(_response_body(response), sort_keys=True)}"
+            f"{label}: expected HTTP {expected}, received {response.status_code}"
         )
     return _response_body(response)
 
@@ -118,7 +141,7 @@ def _safe_loopback_url(raw: str) -> str:
     parsed = urlparse(raw)
     if parsed.scheme not in {"http", "https"}:
         raise ProofFailure("base URL must use http or https")
-    if parsed.hostname not in {"127.0.0.1", "localhost", "::1"}:
+    if parsed.hostname not in {"127.0.0.1", "::1"}:
         raise ProofFailure("quota proof refuses non-loopback HTTP targets")
     if parsed.username or parsed.password or parsed.query or parsed.fragment:
         raise ProofFailure("base URL must not contain credentials, a query, or a fragment")
@@ -126,30 +149,135 @@ def _safe_loopback_url(raw: str) -> str:
 
 
 def _is_true(name: str) -> bool:
-    return os.getenv(name, "").strip().lower() in {"1", "true", "yes", "on"}
+    return os.getenv(name, "") == "true"
+
+
+def _is_false(name: str) -> bool:
+    return os.getenv(name, "") == "false"
+
+
+def _require_canary_database_url(raw: str) -> str:
+    """Require the dedicated canary Postgres target without echoing its DSN."""
+    try:
+        parsed = urlparse(raw)
+        port = parsed.port
+        username = unquote(parsed.username or "", errors="strict")
+        database_path = unquote(parsed.path, errors="strict")
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise ProofFailure(
+            "NC_DATABASE_URL is not a valid dedicated account-canary Postgres URL"
+        ) from exc
+
+    if (
+        parsed.scheme != "postgresql"
+        or parsed.hostname != ACCOUNT_CANARY_DATABASE_HOST
+        or username != ACCOUNT_CANARY_DATABASE_USER
+        or not parsed.password
+        or database_path != f"/{ACCOUNT_CANARY_DATABASE_NAME}"
+        or ";" in parsed.path
+        or port not in {None, 5432}
+        or parsed.params
+        or parsed.query
+        or parsed.fragment
+    ):
+        raise ProofFailure(
+            "NC_DATABASE_URL does not target the dedicated account-canary Postgres host"
+        )
+    return raw
 
 
 def _require_canary_environment(*, expected_limit: int, expected_service_id: str) -> tuple[str, str]:
+    libpq_environment_is_clean = not any(
+        name.upper().startswith("PG") for name in os.environ
+    )
     assertions = {
         "NC_DEPLOYMENT_PROFILE=accounts-canary": (
             os.getenv("NC_DEPLOYMENT_PROFILE", "").strip() == "accounts-canary"
         ),
         "NC_ACCOUNTS_ENABLED=true": _is_true("NC_ACCOUNTS_ENABLED"),
         "NC_QUOTAS_ENABLED=true": _is_true("NC_QUOTAS_ENABLED"),
-        "NC_BILLING_ENTITLEMENTS_ENABLED=false": not _is_true(
+        "NC_BILLING_ENTITLEMENTS_ENABLED=false": _is_false(
             "NC_BILLING_ENTITLEMENTS_ENABLED"
         ),
         "NC_BILLING_PROVIDER=null": (
-            os.getenv("NC_BILLING_PROVIDER", "null").strip().lower() == "null"
+            os.getenv("NC_BILLING_PROVIDER", "").strip().lower() == "null"
+        ),
+        "NC_FLEET_SERVICE_AUTH_ENABLED=false": _is_false(
+            "NC_FLEET_SERVICE_AUTH_ENABLED"
+        ),
+        "NC_DEBUG=false": _is_false("NC_DEBUG"),
+        "NC_STATE_LEDGER_ENABLED=true": _is_true("NC_STATE_LEDGER_ENABLED"),
+        "NC_STATE_LEDGER_READ_AUTHORITY=true": _is_true(
+            "NC_STATE_LEDGER_READ_AUTHORITY"
+        ),
+        "NC_ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE=false": _is_false(
+            "NC_ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE"
+        ),
+        "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=true": _is_true(
+            "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED"
+        ),
+        "CAS_HARNESS_EVIDENCE_ANCHOR_MODE=disabled": (
+            os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "").strip().lower()
+            == "disabled"
+        ),
+        "NC_DEFAULT_LLM_PROVIDER=mock": (
+            os.getenv("NC_DEFAULT_LLM_PROVIDER", "").strip().lower() == "mock"
+        ),
+        "NC_ACCOUNT_BOOTSTRAP_SECRET is absent": (
+            os.getenv("NC_ACCOUNT_BOOTSTRAP_SECRET", "") == ""
+        ),
+        "ACCOUNT_BOOTSTRAP_SECRET is absent": (
+            os.getenv("ACCOUNT_BOOTSTRAP_SECRET", "") == ""
+        ),
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX is account-canary scoped": (
+            os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX", "").strip()
+            == ACCOUNT_CANARY_OBJECT_STORE_PREFIX
+        ),
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION=us-west-2": (
+            os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION", "").strip()
+            == ACCOUNT_CANARY_OBJECT_STORE_REGION
+        ),
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE": (
+            os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "").strip()
+            == ACCOUNT_CANARY_OBJECT_LOCK_MODE
+        ),
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=31": (
+            os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "").strip()
+            == str(ACCOUNT_CANARY_OBJECT_LOCK_RETENTION_DAYS)
+        ),
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET is present": bool(
+            os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "").strip()
+        ),
+        "AWS_ACCESS_KEY_ID is present": bool(
+            os.getenv("AWS_ACCESS_KEY_ID", "").strip()
+        ),
+        "AWS_SECRET_ACCESS_KEY is present": bool(
+            os.getenv("AWS_SECRET_ACCESS_KEY", "").strip()
         ),
         "NC_MOCK_LLM=true": _is_true("NC_MOCK_LLM"),
-        "RENDER_SERVICE_ID matches private canary": (
-            os.getenv("RENDER_SERVICE_ID", "").strip() == expected_service_id
+        "expected Render service id is the stable account canary": (
+            expected_service_id == ACCOUNT_CANARY_SERVICE_ID
         ),
-        "NC_QUOTA_MONTHLY_AUDIT_LIMIT matches bounded proof": (
+        "RENDER_SERVICE_ID is the stable account canary": (
+            os.getenv("RENDER_SERVICE_ID", "").strip()
+            == ACCOUNT_CANARY_SERVICE_ID
+        ),
+        "RENDER_SERVICE_TYPE=pserv": (
+            os.getenv("RENDER_SERVICE_TYPE", "").strip()
+            == ACCOUNT_CANARY_SERVICE_TYPE
+        ),
+        "RENDER_GIT_BRANCH=release/accounts-canary-20260713": (
+            os.getenv("RENDER_GIT_BRANCH", "").strip()
+            == ACCOUNT_CANARY_GIT_BRANCH
+        ),
+        "expected quota limit is the pinned account canary limit": (
+            expected_limit == ACCOUNT_CANARY_QUOTA_LIMIT
+        ),
+        "NC_QUOTA_MONTHLY_AUDIT_LIMIT=2": (
             os.getenv("NC_QUOTA_MONTHLY_AUDIT_LIMIT", "").strip()
-            == str(expected_limit)
+            == str(ACCOUNT_CANARY_QUOTA_LIMIT)
         ),
+        "no libpq PG* environment overrides": libpq_environment_is_clean,
     }
     failed = [label for label, passed in assertions.items() if not passed]
     if failed:
@@ -159,8 +287,13 @@ def _require_canary_environment(*, expected_limit: int, expected_service_id: str
     platform_secret = os.getenv("NC_PLATFORM_TENANT_PROVISIONING_SECRET", "")
     if not database_url:
         raise ProofFailure("NC_DATABASE_URL is required for the shared-Postgres proof")
-    if len(platform_secret.encode("utf-8")) < 32:
-        raise ProofFailure("platform provisioning authority is unavailable or too short")
+    _require_canary_database_url(database_url)
+    if (
+        len(platform_secret) < 32
+        or platform_secret != platform_secret.strip()
+        or any(not 0x21 <= ord(character) <= 0x7E for character in platform_secret)
+    ):
+        raise ProofFailure("platform provisioning authority has an unsafe syntax")
     return database_url, platform_secret
 
 
@@ -264,7 +397,7 @@ def _ensure_session(
         AUDIT_SESSION_PATH,
         headers=_headers(token),
         json={
-            "model_id": "quota-proof-local-no-provider",
+            "model_id": ACCOUNT_CANARY_MODEL_ID,
             "audit_mode": "BALANCED",
             "prompt": prompt,
             "selected_modules": ["active_trace"],
@@ -277,6 +410,27 @@ def _run(client: httpx.Client, token: str, audit_id: str) -> httpx.Response:
     return client.post(f"{AUDIT_SESSION_PATH}/{audit_id}/run", headers=_headers(token))
 
 
+def _safe_quota_contract_projection(
+    detail: Any, *, expected_period: str
+) -> dict[str, Any]:
+    """Project only non-secret quota-contract scalars for mismatch diagnostics."""
+    if not isinstance(detail, dict):
+        detail = {}
+    code = detail.get("code")
+    limit = detail.get("limit")
+    count = detail.get("count")
+    return {
+        "code": (
+            "audit_quota_exceeded"
+            if code == "audit_quota_exceeded"
+            else "[INVALID]"
+        ),
+        "limit": limit if type(limit) is int else "[INVALID]",
+        "count": count if type(count) is int else "[INVALID]",
+        "period_matches": detail.get("period") == expected_period,
+    }
+
+
 def _expect_quota_429(response: httpx.Response, *, expected_limit: int) -> dict[str, Any]:
     body = _expect_status(response, 429, "quota overflow")
     detail = body.get("detail") if isinstance(body, dict) else None
@@ -287,12 +441,25 @@ def _expect_quota_429(response: httpx.Response, *, expected_limit: int) -> dict[
         "period": current_monthly_period_key(),
     }
     if detail != expected:
+        observed = _safe_quota_contract_projection(
+            detail, expected_period=expected["period"]
+        )
         raise ProofFailure(
             "quota overflow body did not match the exact contract; "
             f"expected={json.dumps(expected, sort_keys=True)} "
-            f"actual={json.dumps(_redact(detail), sort_keys=True)}"
+            f"observed={json.dumps(observed, sort_keys=True)}"
         )
     return detail
+
+
+def _proof_client(*, base_url: str, timeout: float) -> httpx.Client:
+    """Create a loopback-only client that ignores proxies and never follows redirects."""
+    return httpx.Client(
+        base_url=base_url,
+        timeout=timeout,
+        trust_env=False,
+        follow_redirects=False,
+    )
 
 
 def _assert_cross_tenant_404(
@@ -747,7 +914,7 @@ def _parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--expected-limit",
         type=int,
-        default=int(os.getenv("NC_QUOTA_MONTHLY_AUDIT_LIMIT", "2")),
+        default=ACCOUNT_CANARY_QUOTA_LIMIT,
     )
     parser.add_argument("--restart-receipt")
     parser.add_argument("--timeout-seconds", type=float, default=30.0)
@@ -779,7 +946,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     store = PostgresStateStore(_postgres_state_store_dsn(database_url))
     try:
-        with httpx.Client(base_url=base_url, timeout=args.timeout_seconds) as client:
+        with _proof_client(base_url=base_url, timeout=args.timeout_seconds) as client:
             if args.phase == "pre":
                 report = _run_pre(
                     client,
