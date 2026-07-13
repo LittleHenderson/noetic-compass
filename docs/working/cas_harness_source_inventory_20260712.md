@@ -20,7 +20,8 @@ The production TODO controls status and next-action wording. This inventory is a
 - Hosted deterministic 429 CORS proof remains `OPEN` until a valid hardened account token can drive the quota/rate-limit path.
 - Hosted worker status after deployed PR #138 is `configured: true`, `reachable: false`, `real_weights: false`, `configuration_error: worker_token_required`; `/atlas/live/health/realmode` returns 503 `atlas_live_worker_token_required` without contacting the dead endpoint. The obsolete RunPod proxy returns HTTP 404 on both 8888 and 8080. Source/configuration fail-closed behavior is present, while actual hosted live-worker operation remains `OPEN`.
 - PR #139 is merged at `1c60d7f5`. The bounded five-stage Audit Console, hardened Evidence Packet actions, protected-token controls, truthful failure/progress states, and `can_run_audit` fail-closed behavior are deployed at `https://atlas-viewer-app.onrender.com/audit-console`; source verification is `552 passed, 2 skipped`, TypeScript compilation passed, and the production build passed.
-- DNS for `atlas.noeticcompass.com` now uses `CNAME atlas-viewer-app.onrender.com`. Render custom-domain TLS verification/provisioning may still be in progress, so working HTTPS on the custom hostname remains `OPEN` until a fresh public certificate/route smoke passes. The Render hostname is the current verified UI endpoint.
+- DNS/TLS/custom-host delivery is `present` and operational. Public DNS authoritatively returns `CNAME atlas-viewer-app.onrender.com`; the trusted certificate has `CN=atlas.noeticcompass.com` and is valid from 2026-07-12 through 2026-10-10; `https://atlas.noeticcompass.com/audit-console` returns HTTP 200; and HTTP redirects 301 to the same HTTPS path. At 2026-07-13T00:12:18Z the custom host returned `strict-transport-security: max-age=31536000; includeSubDomains`, added through the Render dashboard, while the Render origin retained `max-age=315360000; includeSubdomains; preload`.
+- Custom/origin delivery parity is mechanically present: both HTML responses have SHA-256 `09b1b0367c2282db22796d9fe636846e30ce38c896114f91dda122686bbc3691`; both reference `/assets/index-AZfLzoo4.js`; and both bundle responses have SHA-256 `a4640e74a2d2f66944101a2af14460fe07209ce717fd837f494362c4740d7a1f`. Current-bundle markers include `Start a new audit`, `Reference/demo`, `Protected API token`, and `can_run_audit`.
 - Production account mode remains dark with `NC_ACCOUNTS_ENABLED=false`. Commit `df7c3e1e` is unmerged source hardening with `171 passed` in the combined focused verification and `188 passed` in an independent red-team run. Paid/public account readiness remains `OPEN` and hosted account-mode proof is `unavailable`.
 
 ## 3. Canonical source roots
@@ -103,7 +104,7 @@ Other top-level archive families are retained under the same root: CAS68 recipe 
 - `control_proof`: `unavailable` on the live customer path until matched controls actually run and are packet-bound.
 - Hosted CORS exact/preview 401 and preflight: present as hosted engineering evidence after PR #137. Hosted deterministic 429 remains `OPEN`.
 - Hosted live worker: source/configuration policy is deployed and fail-closed; actual worker operation remains `OPEN` because the configured RunPod endpoint is absent.
-- Launch UI on the Render hostname: present after PR #139. Custom-domain HTTPS remains `OPEN` pending completed TLS verification/provisioning and fresh public smoke.
+- Launch UI and custom-domain delivery: `present` and operational after PR #139, with trusted TLS, HTTP-to-HTTPS redirect, HTML/bundle byte parity against the Render origin, and HSTS.
 - Paid accounts, billing, quotas, and customer management: `OPEN`; hosted account-mode proof is `unavailable`; keep `NC_ACCOUNTS_ENABLED=false`.
 - Compliance minimum and legal/customer-data consent: `OPEN` pending owner/legal sign-off.
 
@@ -132,6 +133,6 @@ The `df7c3e1e` verification counts are source evidence, not paid/multi-replica r
 2. Preserve large raw artifacts in `D:\tksCAS-archive\`; commit only summaries/manifests/hashes needed for reproducibility.
 3. Do not use a passing synthetic test as a real-model result.
 4. Do not convert `FLAG_FOR_HUMAN_REVIEW` into `ACCEPT` without every verifier gate, matched control, and WORM condition.
-5. Do not describe worker/account source as operational until hosted smoke proves the actual route. PR #139 UI is deployed on the Render hostname; custom-domain TLS remains separately `OPEN`.
+5. Do not describe worker/account source as operational until hosted smoke proves the actual route. PR #139 UI and custom-domain delivery are `present` and operational; this does not close the separate worker, account, billing, compliance, research, or customer-production gates.
 6. Any new evidence root must be added here and to the production TODO with its exact claim boundary.
 
