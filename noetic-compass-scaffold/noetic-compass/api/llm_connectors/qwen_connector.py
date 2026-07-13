@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from openai import AsyncOpenAI
 
-from .base import BaseLLMConnector, LLMResponse
+from .base import BaseLLMConnector, LLMResponse, provider_idempotency_headers
 
 
 class QwenConnector(BaseLLMConnector):
@@ -32,7 +32,11 @@ class QwenConnector(BaseLLMConnector):
         extra: dict[str, object] = {}
         if str(model).startswith("qwen3"):
             extra["extra_body"] = {"enable_thinking": False}
-        response = await self.client.chat.completions.create(
+        headers = provider_idempotency_headers(kwargs)
+        if headers:
+            extra["extra_headers"] = headers
+        client = self.client.with_options(max_retries=0) if headers else self.client
+        response = await client.chat.completions.create(
             model=model,  # type: ignore[arg-type]
             messages=messages,  # type: ignore[arg-type]
             temperature=temperature,

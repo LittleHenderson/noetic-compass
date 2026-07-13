@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from openai import AsyncOpenAI
 
-from .base import BaseLLMConnector, LLMResponse
+from .base import BaseLLMConnector, LLMResponse, provider_idempotency_headers
 
 
 class DeepSeekConnector(BaseLLMConnector):
@@ -29,10 +29,16 @@ class DeepSeekConnector(BaseLLMConnector):
 
         model = kwargs.get("model", self.model) or self.model
         temperature = float(kwargs.get("temperature", 0.0))
-        response = await self.client.chat.completions.create(
+        call_kwargs: dict[str, object] = {}
+        headers = provider_idempotency_headers(kwargs)
+        if headers:
+            call_kwargs["extra_headers"] = headers
+        client = self.client.with_options(max_retries=0) if headers else self.client
+        response = await client.chat.completions.create(
             model=model,  # type: ignore[arg-type]
             messages=messages,  # type: ignore[arg-type]
             temperature=temperature,
+            **call_kwargs,  # type: ignore[arg-type]
         )
 
         choice = response.choices[0]

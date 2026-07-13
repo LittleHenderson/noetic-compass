@@ -5,6 +5,7 @@ import json
 import pytest
 
 from api.errors import LLMError
+from api.llm_connectors.base import LLMResponse
 from api.routes.evidence import _verify_packet_hashes, build_packet_for_trace
 from api.services.cas_harness_api_endpoint_runner import (
     ApiEndpointRunnerUnavailable,
@@ -160,3 +161,50 @@ async def test_api_runner_surfaces_connector_failure_as_unavailable(monkeypatch)
             audit_mode="BALANCED",
             selected_modules=["active_trace"],
         )
+
+
+@pytest.mark.asyncio
+async def test_api_runner_checkpoints_boundaries_and_forwards_stable_key(monkeypatch):
+    events: list[str] = []
+    captured: dict[str, object] = {}
+
+    class CapturingConnector:
+        async def generate(self, prompt, system_prompt="", **kwargs):
+            events.append("provider_called")
+            captured.update(kwargs)
+            return LLMResponse(text="checkpointed output", model="provider-model")
+
+    monkeypatch.setattr(
+        "api.services.cas_harness_api_endpoint_runner.get_connector",
+        lambda *_args, **_kwargs: CapturingConnector(),
+    )
+    key = "cas-run-stable-provider-operation"
+    result = await run_api_endpoint_audit(
+        audit_id="cas-audit-provider-checkpoints",
+        provider="openai",
+        model_id="gpt-provider",
+        prompt="checkpoint every provider boundary",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+        provider_idempotency_key=key,
+        on_request_started=lambda: events.append("request_started"),
+        on_provider_completed=lambda checkpoint: events.append(
+            f"provider_completed:{checkpoint['trace_id']}"
+        ),
+        on_evidence_persisted=lambda trace_id: events.append(
+            f"evidence_persisted:{trace_id}"
+        ),
+    )
+
+    assert captured == {"idempotency_key": key, "retry_attempts": 1}
+    assert events == [
+        "request_started",
+        "provider_called",
+        f"provider_completed:{result.trace_id}",
+        f"evidence_persisted:{result.trace_id}",
+    ]
+    assert result.evidence_packet["live_audit"]["provider_idempotency"] == {
+        "key": key,
+        "scope": "logical_cas_audit_run",
+        "provider_enforcement": "not_assumed",
+    }

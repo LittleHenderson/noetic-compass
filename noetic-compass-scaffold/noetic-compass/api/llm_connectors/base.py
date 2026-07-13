@@ -11,6 +11,20 @@ from dataclasses import dataclass, field
 logger = logging.getLogger("noetic.llm")
 
 
+def provider_idempotency_headers(kwargs: dict[str, object]) -> dict[str, str] | None:
+    """Return the stable CAS operation key for HTTP-capable provider SDKs.
+
+    The header makes provider-side deduplication possible where supported. CAS
+    does not infer or claim that a provider honors it; the durable run journal
+    still blocks ambiguous automatic retries.
+    """
+
+    value = kwargs.get("idempotency_key")
+    if isinstance(value, str) and value.strip():
+        return {"Idempotency-Key": value.strip()}
+    return None
+
+
 @dataclass
 class LLMResponse:
     """Unified response from any LLM provider."""
@@ -397,8 +411,16 @@ class BaseLLMConnector(ABC):
         self, prompt: str, system_prompt: str = "", **kwargs: object
     ) -> LLMResponse:
         """Generate with exponential backoff retry and token usage logging."""
+        requested_attempts = kwargs.pop("retry_attempts", self.max_retries)
+        retry_attempts = (
+            requested_attempts
+            if isinstance(requested_attempts, int)
+            and not isinstance(requested_attempts, bool)
+            and requested_attempts > 0
+            else self.max_retries
+        )
         last_error: Exception | None = None
-        for attempt in range(self.max_retries):
+        for attempt in range(retry_attempts):
             try:
                 start = time.monotonic()
                 response = await self._generate(prompt, system_prompt, **kwargs)
@@ -419,11 +441,11 @@ class BaseLLMConnector(ABC):
                 logger.warning(
                     "LLM attempt %d/%d failed for %s: %s",
                     attempt + 1,
-                    self.max_retries,
+                    retry_attempts,
                     self.provider_name,
                     e,
                 )
-                if attempt < self.max_retries - 1:
+                if attempt < retry_attempts - 1:
                     delay = self.base_delay * (2**attempt)
                     await asyncio.sleep(delay)
         raise last_error  # type: ignore[misc]

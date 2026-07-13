@@ -29,6 +29,15 @@ AuditStatus = Literal[
     "FAILED",
 ]
 
+ProviderRunPhase = Literal[
+    "CLAIMED",
+    "REQUEST_STARTED",
+    "PROVIDER_COMPLETED",
+    "EVIDENCE_PERSISTED",
+    "FINALIZED",
+    "ORPHANED",
+]
+
 ModelStatus = Literal["NOT_CONNECTED_MOCK"]
 ProofChipStatus = Literal["verified", "present", "missing", "failed", "unavailable"]
 
@@ -78,6 +87,15 @@ class AuditSessionRecord:
     run_lease_until: str | None = None
     run_fence: int = 0
     run_state: str | None = None
+    # Account-mode provider crash-safety journal. These fields are internal and
+    # durable: they never enter the public session response. The idempotency key
+    # belongs to the logical audit run (not a lease holder), so it remains stable
+    # across process restarts and safe lease reclaims.
+    provider_run_phase: ProviderRunPhase | None = None
+    provider_idempotency_key: str | None = None
+    provider_result_checkpoint: dict[str, Any] | None = None
+    provider_trace_id: str | None = None
+    provider_reconciliation_detail: str | None = None
     verdict: str | None = None
     confidence: float | None = None
     evidence_packet_trace_id: str | None = None
@@ -98,6 +116,11 @@ class AuditSessionRecord:
         payload.pop("run_lease_until", None)
         payload.pop("run_fence", None)
         payload.pop("run_state", None)
+        payload.pop("provider_run_phase", None)
+        payload.pop("provider_idempotency_key", None)
+        payload.pop("provider_result_checkpoint", None)
+        payload.pop("provider_trace_id", None)
+        payload.pop("provider_reconciliation_detail", None)
         return payload
 
 
@@ -113,6 +136,19 @@ class AuditSessionPersistenceUnavailable(RuntimeError):
 
 class AuditRunInProgress(RuntimeError):
     pass
+
+
+class AuditRunReconciliationRequired(RuntimeError):
+    """The provider outcome is ambiguous and an automatic retry is unsafe."""
+
+
+@dataclass(frozen=True)
+class ProviderRunClaim:
+    run_attempt_id: str
+    provider_idempotency_key: str
+    phase: ProviderRunPhase
+    result_checkpoint: dict[str, Any] | None = None
+    provider_trace_id: str | None = None
 
 
 
@@ -324,6 +360,156 @@ def claim_run_attempt(
         if record is None:
             return None
         return _apply_run_claim(record, lease_seconds).run_attempt_id
+
+
+def claim_provider_run(
+    audit_id: str,
+    *,
+    tenant_id: str | None,
+    account_id: str | None,
+    lease_seconds: int = 300,
+) -> ProviderRunClaim | None:
+    """Claim or resume one durable account-mode external-provider operation.
+
+    The logical provider idempotency key is created once and survives every
+    safe reclaim. An expired ``REQUEST_STARTED`` lease is *not* reclaimable:
+    the provider may have succeeded even though CAS never received the result,
+    so the journal is durably moved to ``ORPHANED`` and automatic spend stops.
+    """
+
+    updated = _durable_update(
+        audit_id,
+        tenant_id,
+        account_id,
+        lambda record: _apply_provider_run_claim(record, lease_seconds),
+    )
+    if updated is None:
+        return None
+    if updated.provider_run_phase == "ORPHANED":
+        raise AuditRunReconciliationRequired(
+            updated.provider_reconciliation_detail
+            or "provider outcome is ambiguous; automatic retry is blocked"
+        )
+    if (
+        updated.run_attempt_id is None
+        or updated.provider_idempotency_key is None
+        or updated.provider_run_phase is None
+    ):
+        raise AuditSessionPersistenceUnavailable(
+            "provider run checkpoint could not be claimed"
+        )
+    return ProviderRunClaim(
+        run_attempt_id=updated.run_attempt_id,
+        provider_idempotency_key=updated.provider_idempotency_key,
+        phase=updated.provider_run_phase,
+        result_checkpoint=_json_copy(updated.provider_result_checkpoint),
+        provider_trace_id=updated.provider_trace_id,
+    )
+
+
+def mark_provider_request_started(
+    audit_id: str,
+    *,
+    tenant_id: str | None,
+    account_id: str | None,
+    run_attempt_id: str,
+) -> ProviderRunClaim | None:
+    """Durably cross the no-return boundary immediately before provider I/O."""
+
+    updated = _durable_update(
+        audit_id,
+        tenant_id,
+        account_id,
+        lambda record: _apply_provider_request_started(record, run_attempt_id),
+    )
+    return _provider_claim_from_record(updated)
+
+
+def checkpoint_provider_completed(
+    audit_id: str,
+    *,
+    tenant_id: str | None,
+    account_id: str | None,
+    run_attempt_id: str,
+    result_checkpoint: dict[str, Any],
+    trace_id: str,
+) -> ProviderRunClaim | None:
+    """Persist provider output before any Evidence Packet side effect begins."""
+
+    checkpoint = _json_copy(result_checkpoint)
+    if checkpoint is None:
+        raise ValueError("provider result checkpoint must be a JSON object")
+    updated = _durable_update(
+        audit_id,
+        tenant_id,
+        account_id,
+        lambda record: _apply_provider_completed(
+            record,
+            run_attempt_id=run_attempt_id,
+            result_checkpoint=checkpoint,
+            trace_id=trace_id,
+        ),
+    )
+    return _provider_claim_from_record(updated)
+
+
+def checkpoint_provider_evidence_persisted(
+    audit_id: str,
+    *,
+    tenant_id: str | None,
+    account_id: str | None,
+    run_attempt_id: str,
+    trace_id: str,
+) -> ProviderRunClaim | None:
+    """Record that packet/hash/harvest persistence finished for this output."""
+
+    updated = _durable_update(
+        audit_id,
+        tenant_id,
+        account_id,
+        lambda record: _apply_provider_evidence_persisted(
+            record, run_attempt_id=run_attempt_id, trace_id=trace_id
+        ),
+    )
+    return _provider_claim_from_record(updated)
+
+
+def finalize_provider_run(
+    audit_id: str,
+    *,
+    tenant_id: str | None,
+    account_id: str | None,
+    run_attempt_id: str,
+    trace_id: str,
+) -> AuditSessionRecord | None:
+    """Finalize only after the persisted evidence is attached to the session."""
+
+    return _durable_update(
+        audit_id,
+        tenant_id,
+        account_id,
+        lambda record: _apply_provider_finalized(
+            record, run_attempt_id=run_attempt_id, trace_id=trace_id
+        ),
+    )
+
+
+def orphan_provider_run(
+    audit_id: str,
+    *,
+    tenant_id: str | None,
+    account_id: str | None,
+    run_attempt_id: str,
+    detail: str,
+) -> AuditSessionRecord | None:
+    """Fail closed after an ambiguous provider request; never authorize a replay."""
+
+    return _durable_update(
+        audit_id,
+        tenant_id,
+        account_id,
+        lambda record: _apply_provider_orphaned(record, run_attempt_id, detail),
+    )
 
 
 def attach_runner_evidence(
@@ -634,6 +820,220 @@ def _apply_run_claim(
     record.run_state = "RUNNING"
     record.run_lease_until = (now + timedelta(seconds=lease_seconds)).isoformat()
     return record
+
+
+def _apply_provider_run_claim(
+    record: AuditSessionRecord, lease_seconds: int
+) -> AuditSessionRecord:
+    if lease_seconds <= 0:
+        raise ValueError("lease_seconds must be positive")
+    now = datetime.now(UTC)
+    lease_active = False
+    if record.run_state == "RUNNING" and record.run_lease_until:
+        try:
+            lease_active = datetime.fromisoformat(record.run_lease_until) > now
+        except ValueError:
+            # A corrupt deadline must not authorize another provider call.
+            record.provider_run_phase = "ORPHANED"
+            record.provider_reconciliation_detail = (
+                "provider run lease deadline is invalid; automatic retry is blocked"
+            )
+            record.run_state = "ORPHANED"
+            record.run_lease_until = None
+            return record
+    phase = record.provider_run_phase
+    if lease_active:
+        raise AuditRunInProgress("audit run already in progress")
+
+    if (
+        phase is None
+        and record.run_state == "RUNNING"
+        and record.run_attempt_id is not None
+    ):
+        # Upgrade safety for an in-flight record written by the pre-journal
+        # release. CAS cannot know whether that old provider request succeeded,
+        # so lease expiry must quarantine it instead of minting new authority.
+        record.provider_run_phase = "ORPHANED"
+        record.provider_reconciliation_detail = (
+            "legacy in-flight provider attempt has no durable phase journal; "
+            "automatic retry could repeat external spend"
+        )
+        record.run_state = "ORPHANED"
+        record.run_lease_until = None
+        return record
+
+    if phase == "REQUEST_STARTED":
+        record.provider_run_phase = "ORPHANED"
+        record.provider_reconciliation_detail = (
+            "the prior provider request crossed REQUEST_STARTED without a durable "
+            "provider result; automatic retry could repeat external spend"
+        )
+        record.run_state = "ORPHANED"
+        record.run_lease_until = None
+        return record
+    if phase == "ORPHANED":
+        return record
+    if phase == "FINALIZED":
+        raise AuditRunInProgress("audit run is already finalized")
+
+    if record.provider_idempotency_key is None:
+        record.provider_idempotency_key = f"cas-run-{uuid.uuid4().hex}"
+    if phase is None:
+        record.provider_run_phase = "CLAIMED"
+        record.provider_result_checkpoint = None
+        record.provider_trace_id = None
+        record.provider_reconciliation_detail = None
+    record.run_attempt_id = uuid.uuid4().hex
+    record.run_fence += 1
+    record.run_state = "RUNNING"
+    record.run_lease_until = (now + timedelta(seconds=lease_seconds)).isoformat()
+    return record
+
+
+def _apply_provider_request_started(
+    record: AuditSessionRecord, run_attempt_id: str
+) -> AuditSessionRecord:
+    _require_current_provider_attempt(record, run_attempt_id)
+    if record.provider_run_phase == "REQUEST_STARTED":
+        return record
+    if record.provider_run_phase != "CLAIMED":
+        raise AuditRunInProgress(
+            f"provider request cannot start from phase {record.provider_run_phase!r}"
+        )
+    record.provider_run_phase = "REQUEST_STARTED"
+    record.updated_at = _utc_now()
+    return record
+
+
+def _apply_provider_completed(
+    record: AuditSessionRecord,
+    *,
+    run_attempt_id: str,
+    result_checkpoint: dict[str, Any],
+    trace_id: str,
+) -> AuditSessionRecord:
+    _require_current_provider_attempt(record, run_attempt_id)
+    if record.provider_run_phase == "PROVIDER_COMPLETED":
+        if (
+            record.provider_trace_id != trace_id
+            or record.provider_result_checkpoint != result_checkpoint
+        ):
+            raise AuditRunInProgress("provider completion checkpoint conflicts")
+        return record
+    if record.provider_run_phase != "REQUEST_STARTED":
+        raise AuditRunInProgress(
+            f"provider completion cannot be recorded from phase {record.provider_run_phase!r}"
+        )
+    record.provider_result_checkpoint = _json_copy(result_checkpoint)
+    record.provider_trace_id = trace_id
+    record.provider_run_phase = "PROVIDER_COMPLETED"
+    record.updated_at = _utc_now()
+    return record
+
+
+def _apply_provider_evidence_persisted(
+    record: AuditSessionRecord, *, run_attempt_id: str, trace_id: str
+) -> AuditSessionRecord:
+    _require_current_provider_attempt(record, run_attempt_id)
+    if record.provider_run_phase not in {"PROVIDER_COMPLETED", "EVIDENCE_PERSISTED"}:
+        raise AuditRunInProgress(
+            f"evidence cannot be persisted from phase {record.provider_run_phase!r}"
+        )
+    if record.provider_trace_id != trace_id:
+        raise AuditRunInProgress("provider trace does not match the durable checkpoint")
+    if record.provider_run_phase == "EVIDENCE_PERSISTED":
+        return record
+    record.provider_run_phase = "EVIDENCE_PERSISTED"
+    record.updated_at = _utc_now()
+    return record
+
+
+def _apply_provider_finalized(
+    record: AuditSessionRecord, *, run_attempt_id: str, trace_id: str
+) -> AuditSessionRecord:
+    if record.run_attempt_id != run_attempt_id:
+        raise AuditRunInProgress("stale audit run attempt")
+    if record.provider_run_phase == "FINALIZED":
+        if record.provider_trace_id != trace_id:
+            raise AuditRunInProgress("finalized provider trace conflicts")
+        return record
+    if record.provider_run_phase != "EVIDENCE_PERSISTED":
+        raise AuditRunInProgress(
+            f"provider run cannot finalize from phase {record.provider_run_phase!r}"
+        )
+    if (
+        record.provider_trace_id != trace_id
+        or record.evidence_packet_trace_id != trace_id
+    ):
+        raise AuditRunInProgress("provider evidence is not attached to this audit")
+    record.provider_run_phase = "FINALIZED"
+    record.provider_result_checkpoint = None
+    record.provider_reconciliation_detail = None
+    record.run_state = None
+    record.run_lease_until = None
+    record.updated_at = _utc_now()
+    return record
+
+
+def _apply_provider_orphaned(
+    record: AuditSessionRecord, run_attempt_id: str, detail: str
+) -> AuditSessionRecord:
+    _require_current_provider_attempt(record, run_attempt_id)
+    if record.provider_run_phase in {"PROVIDER_COMPLETED", "EVIDENCE_PERSISTED", "FINALIZED"}:
+        # A durable result exists, so recovery must resume it rather than erase
+        # it. The current request is ending, however, so release only its local
+        # reconciliation lease; the next claimant gets a new fence and still
+        # cannot call the provider from these phases.
+        record.run_state = None
+        record.run_lease_until = None
+        record.updated_at = _utc_now()
+        return record
+    if record.provider_run_phase not in {"CLAIMED", "REQUEST_STARTED", "ORPHANED"}:
+        raise AuditRunInProgress("provider run cannot be orphaned from its current phase")
+    record.provider_run_phase = "ORPHANED"
+    record.provider_reconciliation_detail = detail
+    record.run_state = "ORPHANED"
+    record.run_lease_until = None
+    record.updated_at = _utc_now()
+    return record
+
+
+def _require_current_provider_attempt(
+    record: AuditSessionRecord, run_attempt_id: str
+) -> None:
+    if record.run_state != "RUNNING" or record.run_attempt_id != run_attempt_id:
+        raise AuditRunInProgress("stale audit run attempt")
+
+
+def _provider_claim_from_record(
+    record: AuditSessionRecord | None,
+) -> ProviderRunClaim | None:
+    if record is None:
+        return None
+    if (
+        record.run_attempt_id is None
+        or record.provider_idempotency_key is None
+        or record.provider_run_phase is None
+    ):
+        raise AuditSessionPersistenceUnavailable(
+            "provider run checkpoint is incomplete"
+        )
+    return ProviderRunClaim(
+        run_attempt_id=record.run_attempt_id,
+        provider_idempotency_key=record.provider_idempotency_key,
+        phase=record.provider_run_phase,
+        result_checkpoint=_json_copy(record.provider_result_checkpoint),
+        provider_trace_id=record.provider_trace_id,
+    )
+
+
+def _json_copy(value: dict[str, Any] | None) -> dict[str, Any] | None:
+    if value is None:
+        return None
+    copied = json.loads(json.dumps(value, ensure_ascii=True, separators=(",", ":")))
+    if not isinstance(copied, dict):
+        raise ValueError("checkpoint must be a JSON object")
+    return copied
 
 
 def _apply_evidence(
