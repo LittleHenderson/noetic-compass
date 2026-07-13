@@ -316,6 +316,26 @@ def test_platform_route_is_exact_public_and_requires_platform_secret(
     assert neighboring.json()["detail"] == "Missing or invalid Authorization header"
 
 
+def test_platform_non_ascii_configured_secret_fails_closed_without_500(
+    platform_client, monkeypatch
+) -> None:
+    client, _store = platform_client
+    monkeypatch.setattr(settings, "platform_tenant_provisioning_secret", "🔐" * 32)
+
+    response = client.post(
+        "/platform/tenants",
+        json=_platform_body(
+            "tenant-unicode", "owner@unicode.example", _credential()
+        ),
+        headers={"X-Platform-Provisioning-Secret": "wrong"},
+    )
+
+    assert response.status_code == 401
+    assert response.json() == {
+        "detail": "Platform provisioning credentials are invalid."
+    }
+
+
 def test_platform_route_provisions_and_retries_second_tenant_without_secret_echo(
     platform_client,
 ) -> None:

@@ -56,8 +56,8 @@ from api.services.cas_harness_architecture_adapter import (
 from api.services.quotas import (
     QuotaExceeded,
     consume_audit_quota,
+    current_monthly_period_key,
     get_quota_limit,
-    monthly_period_key,
 )
 from api.services.cas_harness_probe_compatibility import (
     ProbeReadoutSpecification as ServiceProbeReadoutSpecification,
@@ -1686,16 +1686,26 @@ async def run_audit_session(
             store, tenant_id=tenant_id, trace_id=existing.evidence_packet_trace_id
         ):
             raise HTTPException(status_code=404, detail="trace_id not found")
+
+    # A retried request after completion/failure must never call an external model or consume a
+    # second month's quota. Quota idempotency is period-scoped, so this terminal-state return must
+    # precede selection of the current execution period.
+    if existing.status == "FAILED" or existing.evidence_packet_trace_id:
+        completed = run_session(audit_id, **storage_scope)
+        if completed is None:
+            raise HTTPException(status_code=404, detail="Audit session not found")
+        return AuditSessionResponse.model_validate(completed.to_dict())
+
     if settings.quotas_enabled:
         tenant_id = str(getattr(request.state, "tenant_id", "") or "")
         store = _audit_evidence_state_store(request)
         if not tenant_id or store is None:
             raise HTTPException(status_code=503, detail="Quota persistence is unavailable.")
+        # Charge the month in which execution is attempted, not the month in which the draft
+        # session was created. Otherwise a tenant could bank unused drafts in an earlier month and
+        # burst them later without consuming the current execution month's allowance.
+        period = current_monthly_period_key()
         try:
-            created_at = datetime.fromisoformat(
-                str(existing.created_at).replace("Z", "+00:00")
-            )
-            period = monthly_period_key(created_at)
             consume_audit_quota(
                 store,
                 tenant_id=tenant_id,
@@ -1713,14 +1723,6 @@ async def run_audit_session(
                     "period": period,
                 },
             ) from exc
-
-    # A retried HTTP request after evidence attachment must never call an external model again.
-    # Quota consumption above is keyed by audit_id, so this response path is idempotent as well.
-    if existing.status == "FAILED" or existing.evidence_packet_trace_id:
-        completed = run_session(audit_id, **storage_scope)
-        if completed is None:
-            raise HTTPException(status_code=404, detail="Audit session not found")
-        return AuditSessionResponse.model_validate(completed.to_dict())
 
     run_attempt_id: str | None = None
     if _should_run_hosted_open_weight(existing) or _should_run_api_endpoint(existing):

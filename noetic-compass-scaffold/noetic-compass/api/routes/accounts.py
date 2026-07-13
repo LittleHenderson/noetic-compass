@@ -116,7 +116,9 @@ async def bootstrap_owner(
     response.headers["Cache-Control"] = "no-store"
     configured = settings.account_bootstrap_secret
     supplied = bootstrap_secret
-    if not configured or not hmac.compare_digest(configured, supplied):
+    if not configured or not hmac.compare_digest(
+        configured.encode("utf-8"), supplied.encode("utf-8")
+    ):
         raise HTTPException(status_code=401, detail="Bootstrap credentials are invalid.")
     store = _account_store(request)
     try:

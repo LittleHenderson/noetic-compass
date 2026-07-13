@@ -320,6 +320,25 @@ def test_bootstrap_route_is_header_gated_and_recovers_first_owner(
     ).status_code == 200
 
 
+def test_bootstrap_non_ascii_configured_secret_fails_closed_without_500(
+    accounts_login_client, monkeypatch
+):
+    client, _store, _sessions = accounts_login_client
+    monkeypatch.setattr(settings, "account_bootstrap_secret", "🔐" * 32)
+
+    response = client.post(
+        "/accounts/bootstrap",
+        json={
+            "email_or_username": "unicode-bootstrap@example.com",
+            "api_credential": TEST_API_CREDENTIAL,
+        },
+        headers={"X-Account-Bootstrap-Secret": "wrong"},
+    )
+
+    assert response.status_code == 401
+    assert response.json() == {"detail": "Bootstrap credentials are invalid."}
+
+
 def test_valid_login_binds_server_derived_claims(accounts_login_client):
     client, store, sessions = accounts_login_client
     invite = store.create_invite(code="login-good", role="member", tenant_id="tenant-L")
@@ -547,6 +566,12 @@ def test_admin_revoke_hides_cross_tenant_session(accounts_login_client):
         headers=_auth(operator_token),
     )
     assert denied.status_code == 404
+    unknown = client.post(
+        "/auth/sessions/sess-does-not-exist/revoke",
+        headers=_auth(operator_token),
+    )
+    assert unknown.status_code == 404
+    assert unknown.json() == denied.json()
     assert sessions.get_session(member_claims["jti"]).is_live()
     assert client.get("/notation/grammar", headers=_auth(member_token)).status_code == 200
 

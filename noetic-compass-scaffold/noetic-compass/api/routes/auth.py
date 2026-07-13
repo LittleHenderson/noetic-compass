@@ -253,7 +253,9 @@ async def revoke_session_admin(
 
     Gated by :func:`require_role`: a member-role token is refused with 403; an unauthenticated
     request is 401. The role is read from the SERVER-SET ``request.state.role`` (never the body).
-    Idempotent -- revoking an unknown or already-revoked session returns ``revoked: true``.
+    An unknown session and a session outside the caller's tenant both return the same 404 shape,
+    so this endpoint cannot be used as a cross-tenant session-existence oracle. Revoking an
+    already-revoked session in the caller's tenant remains idempotent.
 
     The target session and its backing account must both belong to the caller's tenant, and the
     caller must outrank the target role. Cross-tenant ids fail as indistinguishable 404s.
@@ -261,7 +263,7 @@ async def revoke_session_admin(
     store = _session_store(request)
     target = store.get_session(session_id)
     if target is None:
-        return LogoutResponse(revoked=True)
+        raise HTTPException(status_code=404, detail="Session not found.")
     actor_tenant = str(getattr(request.state, "tenant_id", "") or "")
     if not actor_tenant or target.tenant_id != actor_tenant:
         raise HTTPException(status_code=404, detail="Session not found.")

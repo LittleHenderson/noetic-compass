@@ -86,7 +86,9 @@ async def provision_platform_tenant(
             status_code=503,
             detail="Platform tenant provisioning is unavailable.",
         )
-    if not hmac.compare_digest(configured, supplied):
+    if not hmac.compare_digest(
+        configured.encode("utf-8"), supplied.encode("utf-8")
+    ):
         raise HTTPException(
             status_code=401,
             detail="Platform provisioning credentials are invalid.",

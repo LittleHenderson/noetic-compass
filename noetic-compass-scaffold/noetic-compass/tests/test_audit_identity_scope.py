@@ -25,7 +25,6 @@ Run ONLY this file:
 from __future__ import annotations
 
 import uuid
-from datetime import datetime
 from types import SimpleNamespace
 
 import pytest
@@ -53,7 +52,7 @@ from api.services.evidence_ownership import (
     tenant_owns_trace,
 )
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
-from api.services.quotas import USAGE_COUNTER_KIND, get_usage, monthly_period_key
+from api.services.quotas import USAGE_COUNTER_KIND, get_usage
 from api.services.sessions import SessionStore
 
 # An audit-session route path (the create/run/get/list family) and a representative member of every
@@ -424,8 +423,15 @@ def test_quota_run_is_idempotent_capped_and_tenant_isolated(
     account_audit_client, monkeypatch
 ):
     client, store, backend = account_audit_client
+    execution_period = "audits:2026-07"
+    prior_period = "audits:2026-06"
+    next_period = "audits:2026-08"
     monkeypatch.setattr(settings, "quotas_enabled", True)
     monkeypatch.setattr("api.routes.cas_harness_audit.get_quota_limit", lambda: 1)
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.current_monthly_period_key",
+        lambda: execution_period,
+    )
     headers_a, _ = _provision_login(
         client,
         store,
@@ -460,6 +466,15 @@ def test_quota_run_is_idempotent_capped_and_tenant_isolated(
         return response.json()
 
     first = create(headers_a, "first quota audit")
+    # This draft was left unused in a prior month. Its first execution must consume the current
+    # execution month, not the stale creation month.
+    first_ledger = backend.get("tenant-A", "cas_audit_session", first["audit_id"])
+    assert first_ledger is not None
+    prior_payload = dict(first_ledger.payload)
+    prior_payload["created_at"] = "2026-06-15T12:00:00+00:00"
+    backend.put(
+        first_ledger.with_payload(prior_payload), expected_version=first_ledger.version
+    )
     first_run = client.post(
         f"{_AUDIT_SESSION_PATH}/{first['audit_id']}/run", headers=headers_a
     )
@@ -469,10 +484,8 @@ def test_quota_run_is_idempotent_capped_and_tenant_isolated(
     )
     assert retry.status_code == 200
     assert calls == 1
-    period = monthly_period_key(
-        datetime.fromisoformat(first["created_at"].replace("Z", "+00:00"))
-    )
-    assert get_usage(backend, tenant_id="tenant-A", period_key=period) == 1
+    assert get_usage(backend, tenant_id="tenant-A", period_key=prior_period) == 0
+    assert get_usage(backend, tenant_id="tenant-A", period_key=execution_period) == 1
 
     second = create(headers_a, "second quota audit")
     capped = client.post(
@@ -497,7 +510,20 @@ def test_quota_run_is_idempotent_capped_and_tenant_isolated(
     )
     assert allowed_b.status_code == 200, allowed_b.text
     assert calls == 2
-    assert get_usage(backend, tenant_id="tenant-B", period_key=period) == 1
+    assert get_usage(backend, tenant_id="tenant-B", period_key=execution_period) == 1
+
+    # The already-completed audit is retried in a later month. It returns idempotently without
+    # consuming the later month's allowance or calling the provider again.
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.current_monthly_period_key",
+        lambda: next_period,
+    )
+    cross_month_retry = client.post(
+        f"{_AUDIT_SESSION_PATH}/{first['audit_id']}/run", headers=headers_a
+    )
+    assert cross_month_retry.status_code == 200
+    assert calls == 2
+    assert get_usage(backend, tenant_id="tenant-A", period_key=next_period) == 0
 
 
 def test_ownership_failure_marks_claimed_attempt_failed_and_releases_lease(
