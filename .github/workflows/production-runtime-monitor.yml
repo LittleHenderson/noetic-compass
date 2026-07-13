@@ -1,0 +1,87 @@
+name: CAS Production Runtime Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '7,22,37,52 * * * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cas-production-runtime-monitor
+  cancel-in-progress: true
+
+env:
+  CAS_PRODUCTION_API_BASE_URL: ${{ vars.CAS_PRODUCTION_API_BASE_URL }}
+
+jobs:
+  api_dependency_readiness:
+    name: production-api-dependency-readiness
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Require API, live-worker, and S3 WORM readiness
+        run: python scripts/verify_production_runtime_readiness.py --readiness
+
+  worker_realmode:
+    name: production-worker-realmode
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Require real Pythia metadata through the public API proxy
+        run: python scripts/verify_production_runtime_readiness.py --worker-realmode
+
+  blueprint_drift:
+    name: production-render-blueprint-drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Require repository and live Render Blueprint controls
+        run: python scripts/verify_render_blueprint_control.py --live
+
+  aggregate:
+    name: cas-production-runtime-monitor-gate
+    if: ${{ always() }}
+    needs:
+      - api_dependency_readiness
+      - worker_realmode
+      - blueprint_drift
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require every runtime monitor to pass
+        shell: bash
+        run: |
+          results=(
+            '${{ needs.api_dependency_readiness.result }}'
+            '${{ needs.worker_realmode.result }}'
+            '${{ needs.blueprint_drift.result }}'
+          )
+          for result in "${results[@]}"; do
+            if [[ "$result" != 'success' ]]; then
+              echo "Production runtime monitor result: $result" >&2
+              exit 1
+            fi
+          done
+          echo 'All production runtime monitors passed.'

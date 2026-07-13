@@ -298,10 +298,16 @@ def validate_workflow_locations(repo_root: Path) -> None:
 def validate_ci_integration(repo_root: Path) -> None:
     ci_path = repo_root / ".github/workflows/ci.yml"
     control_path = repo_root / ".github/workflows/render-blueprint-control.yml"
+    runtime_monitor_path = repo_root / ".github/workflows/production-runtime-monitor.yml"
     _require(ci_path.is_file(), "Missing root CAS CI workflow")
     _require(control_path.is_file(), "Missing root Render Blueprint control workflow")
+    _require(
+        runtime_monitor_path.is_file(),
+        "Missing root CAS production runtime monitor workflow",
+    )
     ci_text = ci_path.read_text(encoding="utf-8")
     control_text = control_path.read_text(encoding="utf-8")
+    runtime_monitor_text = runtime_monitor_path.read_text(encoding="utf-8")
 
     _require("blueprint_control:" in ci_text, "CAS CI is missing blueprint_control job")
     _require(
@@ -325,6 +331,39 @@ def validate_ci_integration(repo_root: Path) -> None:
         and "github.event_name != 'pull_request'" in control_text,
         "Live Blueprint check must be restricted to protected upstream master events",
     )
+    _require(
+        "schedule:" in runtime_monitor_text
+        and "workflow_dispatch:" in runtime_monitor_text,
+        "Production runtime monitor must be scheduled and manually dispatchable",
+    )
+    _require(
+        "python scripts/verify_production_runtime_readiness.py --readiness"
+        in runtime_monitor_text,
+        "Production runtime monitor is missing API dependency readiness",
+    )
+    _require(
+        "python scripts/verify_production_runtime_readiness.py --worker-realmode"
+        in runtime_monitor_text,
+        "Production runtime monitor is missing worker realmode proof",
+    )
+    _require(
+        "python scripts/verify_render_blueprint_control.py --live"
+        in runtime_monitor_text,
+        "Production runtime monitor is missing live Blueprint drift control",
+    )
+    _require(
+        "name: cas-production-runtime-monitor-gate" in runtime_monitor_text,
+        "Production runtime monitor aggregate check name drifted",
+    )
+    for result_name in (
+        "needs.api_dependency_readiness.result",
+        "needs.worker_realmode.result",
+        "needs.blueprint_drift.result",
+    ):
+        _require(
+            result_name in runtime_monitor_text,
+            f"Production runtime monitor gate does not aggregate {result_name}",
+        )
 
 
 def validate_offline(repo_root: Path) -> dict[str, Any]:
