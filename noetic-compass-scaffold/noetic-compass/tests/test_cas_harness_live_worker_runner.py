@@ -143,6 +143,69 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
     }
 
 
+@pytest.mark.asyncio
+async def test_live_worker_runner_forwards_key_and_checkpoints_in_order(monkeypatch):
+    events: list[str] = []
+    captured: dict[str, object] = {}
+
+    async def fake_dump(worker_base, payload, *, provider_idempotency_key=None):
+        events.append("provider_called")
+        captured["worker_base"] = worker_base
+        captured["provider_idempotency_key"] = provider_idempotency_key
+        return {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "runtime": "real_pythia",
+                    },
+                },
+                {"type": "token", "token_index": 0, "token": " result", "confidence": 0.8},
+                {"type": "complete", "total_tokens": 1},
+            ]
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump", fake_dump
+    )
+    key = "cas-run-live-worker-stable"
+    result = await run_live_worker_audit(
+        audit_id="cas-audit-live-checkpoints",
+        model_id="EleutherAI/pythia-160m",
+        prompt="checkpoint the live worker",
+        audit_mode="BALANCED",
+        selected_modules=["active_trace"],
+        provider_idempotency_key=key,
+        on_request_started=lambda: events.append("request_started"),
+        on_provider_completed=lambda checkpoint: events.append(
+            f"provider_completed:{checkpoint['trace_id']}"
+        ),
+        on_evidence_persisted=lambda trace_id: events.append(
+            f"evidence_persisted:{trace_id}"
+        ),
+    )
+
+    assert captured == {
+        "worker_base": "http://worker.test",
+        "provider_idempotency_key": key,
+    }
+    assert events == [
+        "request_started",
+        "provider_called",
+        f"provider_completed:{result.trace_id}",
+        f"evidence_persisted:{result.trace_id}",
+    ]
+    assert result.evidence_packet["live_audit"]["provider_idempotency"]["key"] == key
+    assert (
+        result.evidence_packet["live_audit"]["provider_idempotency"][
+            "provider_enforcement"
+        ]
+        == "not_assumed"
+    )
+
+
 # ---------------------------------------------------------------------------
 # Causal ablation consumption — the first causal proof, plumbed honestly.
 # ---------------------------------------------------------------------------
@@ -566,10 +629,15 @@ def _mock_async_client(monkeypatch, handler):
 
 @pytest.mark.asyncio
 async def test_post_worker_dump_sends_worker_token_header(monkeypatch):
-    seen_headers: list[str | None] = []
+    seen_headers: list[tuple[str | None, str | None]] = []
 
     def handler(request: httpx.Request) -> httpx.Response:
-        seen_headers.append(request.headers.get("X-Atlas-Worker-Token"))
+        seen_headers.append(
+            (
+                request.headers.get("X-Atlas-Worker-Token"),
+                request.headers.get("X-CAS-Provider-Idempotency-Key"),
+            )
+        )
         return httpx.Response(200, json={"events": [{"type": "complete", "total_tokens": 0}]})
 
     monkeypatch.setattr(settings, "atlas_live_worker_token", "worker-secret")
@@ -578,10 +646,11 @@ async def test_post_worker_dump_sends_worker_token_header(monkeypatch):
     body = await _post_worker_dump(
         "http://worker.test",
         {"prompt": "p", "model_id": "EleutherAI/pythia-160m", "probes": ["active_trace"]},
+        provider_idempotency_key="cas-run-worker-header",
     )
 
     assert body == {"events": [{"type": "complete", "total_tokens": 0}]}
-    assert seen_headers == ["worker-secret"]
+    assert seen_headers == [("worker-secret", "cas-run-worker-header")]
 
 
 @pytest.mark.asyncio

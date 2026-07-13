@@ -91,6 +91,30 @@ def append_evidence_packet_hash_log_entry(
     )
 
 
+def find_evidence_packet_hash_log_entry(
+    *,
+    trace_id: str,
+    packet_without_hashes_sha256: str,
+    operation: str,
+) -> dict[str, Any] | None:
+    """Find a prior exact persistence intent without appending another entry.
+
+    Provider-run reconciliation uses this after a process crash. A matching
+    append with no packet is an ambiguous partial write and must be repaired or
+    reviewed; blindly appending again would fork the local hash-chain story.
+    """
+
+    for entry in reversed(_iter_hash_log_entries(_hash_log_path())):
+        if (
+            entry.get("trace_id") == trace_id
+            and entry.get("packet_without_hashes_sha256")
+            == packet_without_hashes_sha256
+            and entry.get("operation") == operation
+        ):
+            return json.loads(json.dumps(entry))
+    return None
+
+
 def write_evidence_packet_to_store(trace_id: str, packet: Mapping[str, Any]) -> None:
     _write_packet_to_store(trace_id, packet)
 

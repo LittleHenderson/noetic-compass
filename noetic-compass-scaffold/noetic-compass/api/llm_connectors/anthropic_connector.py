@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from anthropic import AsyncAnthropic
 
-from .base import BaseLLMConnector, LLMResponse
+from .base import BaseLLMConnector, LLMResponse, provider_idempotency_headers
 
 
 class AnthropicConnector(BaseLLMConnector):
@@ -29,8 +29,12 @@ class AnthropicConnector(BaseLLMConnector):
         }
         if system_prompt:
             create_kwargs["system"] = system_prompt
+        headers = provider_idempotency_headers(kwargs)
+        if headers:
+            create_kwargs["extra_headers"] = headers
 
-        response = await self.client.messages.create(**create_kwargs)
+        client = self.client.with_options(max_retries=0) if headers else self.client
+        response = await client.messages.create(**create_kwargs)
 
         text = ""
         for block in response.content:

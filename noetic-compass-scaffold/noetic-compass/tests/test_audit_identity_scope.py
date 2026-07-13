@@ -318,6 +318,7 @@ def _fake_live_result(trace_id: str):
         (),
         {
             "trace_id": trace_id,
+            "evidence_packet": {"trace_id": trace_id},
             "proof_chips": [
                 {
                     "id": "model_proof",
@@ -526,7 +527,7 @@ def test_quota_run_is_idempotent_capped_and_tenant_isolated(
     assert get_usage(backend, tenant_id="tenant-A", period_key=next_period) == 0
 
 
-def test_ownership_failure_marks_claimed_attempt_failed_and_releases_lease(
+def test_ownership_failure_reconciles_persisted_result_without_provider_replay(
     account_audit_client, monkeypatch
 ):
     client, store, _backend = account_audit_client
@@ -545,10 +546,18 @@ def test_ownership_failure_marks_claimed_attempt_failed_and_releases_lease(
         calls += 1
         return _fake_live_result("trace-ownership-fail")
 
-    def fail_ownership(*_args, **_kwargs):
-        raise HTTPException(
-            status_code=503, detail="Evidence ownership persistence is unavailable."
-        )
+    from api.routes import cas_harness_audit as audit_routes
+
+    real_ownership_write = audit_routes._record_audit_evidence_ownership
+    fail_once = True
+
+    def fail_ownership(*args, **kwargs):
+        nonlocal fail_once
+        if fail_once:
+            raise HTTPException(
+                status_code=503, detail="Evidence ownership persistence is unavailable."
+            )
+        return real_ownership_write(*args, **kwargs)
 
     monkeypatch.setattr(
         "api.routes.cas_harness_audit.run_live_worker_audit", fake_live_worker_audit
@@ -574,12 +583,167 @@ def test_ownership_failure_marks_claimed_attempt_failed_and_releases_lease(
     record = get_audit_session(
         audit_id, tenant_id="tenant-A", account_id=account.account_id
     )
-    assert record is not None and record.status == "FAILED"
-    assert record.run_state is None and record.run_lease_until is None
+    assert record is not None and record.status == "DRAFT"
+    assert record.provider_run_phase == "EVIDENCE_PERSISTED"
+    assert record.provider_result_checkpoint is not None
+    assert calls == 1
+
+    fail_once = False
     retried = client.post(f"{_AUDIT_SESSION_PATH}/{audit_id}/run", headers=headers)
     assert retried.status_code == 200
-    assert retried.json()["status"] == "FAILED"
+    assert retried.json()["status"] == "COMPLETE"
     assert calls == 1
+    recovered = get_audit_session(
+        audit_id, tenant_id="tenant-A", account_id=account.account_id
+    )
+    assert recovered is not None
+    assert recovered.provider_run_phase == "FINALIZED"
+    assert recovered.run_state is None and recovered.run_lease_until is None
+
+
+def test_ambiguous_provider_failure_is_orphaned_and_retry_never_calls_again(
+    account_audit_client, monkeypatch
+):
+    client, store, backend = account_audit_client
+    first_period = "2026-07"
+    later_period = "2026-08"
+    monkeypatch.setattr(settings, "quotas_enabled", True)
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.get_quota_limit", lambda: 10
+    )
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.current_monthly_period_key",
+        lambda: first_period,
+    )
+    headers, account = _provision_login(
+        client,
+        store,
+        code="provider-orphan",
+        identity="provider-orphan@example.com",
+        role="member",
+        tenant_id="tenant-A",
+    )
+    calls = 0
+
+    async def crash_after_request_started(**kwargs):
+        nonlocal calls
+        calls += 1
+        kwargs["on_request_started"]()
+        raise RuntimeError("connection ended after provider may have accepted request")
+
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.run_live_worker_audit",
+        crash_after_request_started,
+    )
+    created = client.post(
+        _AUDIT_SESSION_PATH,
+        json={
+            "model_id": "EleutherAI/pythia-160m",
+            "audit_mode": "BALANCED",
+            "prompt": "provider ambiguity must never replay",
+            "selected_modules": ["active_trace"],
+        },
+        headers=headers,
+    )
+    assert created.status_code == 200
+    audit_id = created.json()["audit_id"]
+
+    first = client.post(f"{_AUDIT_SESSION_PATH}/{audit_id}/run", headers=headers)
+    assert first.status_code == 503
+    assert first.json()["detail"]["code"] == "provider_run_reconciliation_required"
+    record = get_audit_session(
+        audit_id, tenant_id="tenant-A", account_id=account.account_id
+    )
+    assert record is not None
+    assert record.provider_run_phase == "ORPHANED"
+    assert record.provider_result_checkpoint is None
+    assert get_usage(backend, tenant_id="tenant-A", period_key=first_period) == 1
+
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.current_monthly_period_key",
+        lambda: later_period,
+    )
+    retry = client.post(f"{_AUDIT_SESSION_PATH}/{audit_id}/run", headers=headers)
+    assert retry.status_code == 409
+    assert retry.json()["detail"]["code"] == "provider_run_reconciliation_required"
+    assert calls == 1
+    assert get_usage(backend, tenant_id="tenant-A", period_key=later_period) == 0
+
+
+def test_provider_completed_crash_resumes_checkpoint_without_provider_replay(
+    account_audit_client, monkeypatch
+):
+    client, store, _backend = account_audit_client
+    headers, account = _provision_login(
+        client,
+        store,
+        code="provider-completed-recovery",
+        identity="provider-completed@example.com",
+        role="member",
+        tenant_id="tenant-A",
+    )
+    calls = 0
+    trace_id = "trace-provider-completed-recovery"
+
+    async def crash_after_provider_completed(**kwargs):
+        nonlocal calls
+        calls += 1
+        result = _fake_live_result(trace_id)
+        kwargs["on_request_started"]()
+        kwargs["on_provider_completed"](
+            {
+                "schema_version": "cas_harness_provider_result_checkpoint.v1",
+                "runner": "live_worker",
+                "trace_id": trace_id,
+                "evidence_packet": result.evidence_packet,
+                "proof_chips": result.proof_chips,
+                "verifier_decision": result.verifier_decision,
+                "message": result.message,
+                "audit_scope": result.audit_scope,
+            }
+        )
+        raise RuntimeError("process crashed before Evidence Packet persistence")
+
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.run_live_worker_audit",
+        crash_after_provider_completed,
+    )
+    # The retry exercises route reconciliation, while this test double avoids
+    # requiring a fully formed packet file unrelated to the provider journal.
+    monkeypatch.setattr(
+        "api.routes.cas_harness_audit.persist_live_worker_result",
+        lambda *_args, **_kwargs: None,
+    )
+    created = client.post(
+        _AUDIT_SESSION_PATH,
+        json={
+            "model_id": "EleutherAI/pythia-160m",
+            "audit_mode": "BALANCED",
+            "prompt": "resume provider result checkpoint",
+            "selected_modules": ["active_trace"],
+        },
+        headers=headers,
+    )
+    assert created.status_code == 200
+    audit_id = created.json()["audit_id"]
+
+    first = client.post(f"{_AUDIT_SESSION_PATH}/{audit_id}/run", headers=headers)
+    assert first.status_code == 503
+    assert first.json()["detail"]["code"] == "provider_evidence_reconciliation_pending"
+    checkpointed = get_audit_session(
+        audit_id, tenant_id="tenant-A", account_id=account.account_id
+    )
+    assert checkpointed is not None
+    assert checkpointed.provider_run_phase == "PROVIDER_COMPLETED"
+
+    retry = client.post(f"{_AUDIT_SESSION_PATH}/{audit_id}/run", headers=headers)
+    assert retry.status_code == 200, retry.text
+    assert retry.json()["status"] == "COMPLETE"
+    assert calls == 1
+    recovered = get_audit_session(
+        audit_id, tenant_id="tenant-A", account_id=account.account_id
+    )
+    assert recovered is not None and recovered.provider_run_phase == "FINALIZED"
 
 
 def test_account_mode_no_token_run_is_401(account_audit_client, monkeypatch):

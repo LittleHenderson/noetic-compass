@@ -25,7 +25,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 import hashlib
 import json
 import subprocess
@@ -34,12 +34,17 @@ from api.errors import LLMError
 from api.llm_connectors.base import LLMResponse
 from api.llm_connectors.registry import get_connector
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
-from api.services.cas_harness_harvest import capture_live_audit_harvest
+from api.services.cas_harness_harvest import (
+    capture_live_audit_harvest,
+    iter_harvest_records,
+)
 from api.services.cas_harness_merged_evidence_packets import (
     append_evidence_packet_hash_log_entry,
     evidence_hash_log_path,
     evidence_packet_store_path,
     evidence_packet_without_hashes_sha256,
+    find_evidence_packet_hash_log_entry,
+    load_evidence_packet_from_store,
     write_evidence_packet_to_store,
 )
 
@@ -83,6 +88,10 @@ async def run_api_endpoint_audit(
     selected_modules: list[str],
     endpoint_url: str | None = None,
     api_key: str | None = None,
+    provider_idempotency_key: str | None = None,
+    on_request_started: Callable[[], None] | None = None,
+    on_provider_completed: Callable[[dict[str, Any]], None] | None = None,
+    on_evidence_persisted: Callable[[str], None] | None = None,
 ) -> ApiEndpointRunnerResult:
     """Call a customer's closed-API model once and persist an output-only packet.
 
@@ -109,7 +118,21 @@ async def run_api_endpoint_audit(
     # CAS system prompt here: that would contaminate the black-box capture of how
     # the customer's model actually responds.
     try:
-        response = await connector.generate(prompt, system_prompt="")
+        if on_request_started is not None:
+            on_request_started()
+        generate_kwargs: dict[str, object] = {}
+        if provider_idempotency_key:
+            # One application attempt only. The stable key is also forwarded to
+            # connectors that can place it on the provider request. Provider-side
+            # enforcement is never assumed; CAS's durable journal remains the
+            # authoritative guard against an automatic replay.
+            generate_kwargs = {
+                "idempotency_key": provider_idempotency_key,
+                "retry_attempts": 1,
+            }
+        response = await connector.generate(
+            prompt, system_prompt="", **generate_kwargs
+        )
     except LLMError as exc:
         raise ApiEndpointRunnerUnavailable(
             f"customer API call failed for provider {provider!r}: {exc}"
@@ -129,13 +152,10 @@ async def run_api_endpoint_audit(
         endpoint_url=endpoint_url,
         response=response,
         credential_mode=credential_mode,
+        provider_idempotency_key=provider_idempotency_key,
     )
-    _persist_packet(packet)
-    # Harvest the irreplaceable part (real model I/O on a model we don't own) the
-    # moment it exists, before the verdict gate runs. It joins back on trace_id.
-    capture_live_audit_harvest(packet, verdict_status="pending_verdict_gate")
     proof_chips = _proof_chips_for_api_packet(packet)
-    return ApiEndpointRunnerResult(
+    result = ApiEndpointRunnerResult(
         trace_id=str(packet["trace_id"]),
         evidence_packet=packet,
         proof_chips=proof_chips,
@@ -148,6 +168,16 @@ async def run_api_endpoint_audit(
             "human review."
         ),
     )
+    if on_provider_completed is not None:
+        # This callback is the first durable local record of the provider's
+        # successful output. It intentionally precedes packet/hash/anchor I/O.
+        on_provider_completed(api_endpoint_result_to_checkpoint(result))
+    persist_api_endpoint_result(
+        result, provider_idempotency_key=provider_idempotency_key
+    )
+    if on_evidence_persisted is not None:
+        on_evidence_persisted(result.trace_id)
+    return result
 
 
 def _credential_mode(provider: str, api_key: str | None) -> str:
@@ -175,6 +205,7 @@ def _packet_from_api_response(
     endpoint_url: str | None,
     response: LLMResponse,
     credential_mode: str = "server_config",
+    provider_idempotency_key: str | None = None,
 ) -> dict[str, Any]:
     output_text = response.text or ""
     is_real_model = provider != "mock"
@@ -275,6 +306,15 @@ def _packet_from_api_response(
             "credential_mode": credential_mode,
             "usage": dict(response.usage) if isinstance(response.usage, Mapping) else {},
             "latency_ms": response.latency_ms,
+            **(
+                {"provider_idempotency": {
+                    "key": provider_idempotency_key,
+                    "scope": "logical_cas_audit_run",
+                    "provider_enforcement": "not_assumed",
+                }}
+                if provider_idempotency_key
+                else {}
+            ),
         },
         "audit_scope": {
             "kind": "output_only_api_harvest",
@@ -308,13 +348,45 @@ def _output_token_count(response: LLMResponse) -> int | None:
     return None
 
 
-def _persist_packet(packet: dict[str, Any]) -> None:
+def _persist_packet(
+    packet: dict[str, Any], *, provider_idempotency_key: str | None = None
+) -> None:
     packet_hash = evidence_packet_without_hashes_sha256(packet)
+    operation = "write_api_endpoint_evidence_packet"
+    if provider_idempotency_key:
+        operation = f"{operation}:{provider_idempotency_key}"
+        try:
+            existing = load_evidence_packet_from_store(str(packet["trace_id"]))
+        except FileNotFoundError:
+            existing = None
+        if existing is not None:
+            if evidence_packet_without_hashes_sha256(existing) != packet_hash:
+                raise ApiEndpointRunnerUnavailable(
+                    "existing Evidence Packet conflicts with the provider checkpoint"
+                )
+            hashes = existing.get("hashes")
+            if not isinstance(hashes, Mapping) or not isinstance(
+                hashes.get("external_anchor"), Mapping
+            ):
+                raise ApiEndpointRunnerUnavailable(
+                    "Evidence Packet persistence is partial; automatic rewrite is blocked"
+                )
+            packet["hashes"] = dict(hashes)
+            return
+        prior_entry = find_evidence_packet_hash_log_entry(
+            trace_id=str(packet["trace_id"]),
+            packet_without_hashes_sha256=packet_hash,
+            operation=operation,
+        )
+        if prior_entry is not None:
+            raise ApiEndpointRunnerUnavailable(
+                "Evidence Packet hash-log persistence is partial; automatic replay is blocked"
+            )
     hash_log_entry = append_evidence_packet_hash_log_entry(
         trace_id=str(packet["trace_id"]),
         audit_id=packet["input"].get("audit_id") if isinstance(packet.get("input"), Mapping) else None,
         packet_without_hashes_sha256=packet_hash,
-        operation="write_api_endpoint_evidence_packet",
+        operation=operation,
     )
     packet["hashes"] = {
         "packet_without_hashes_sha256": packet_hash,
@@ -329,6 +401,65 @@ def _persist_packet(packet: dict[str, Any]) -> None:
         hash_log_path=evidence_hash_log_path(),
     )
     write_evidence_packet_to_store(str(packet["trace_id"]), packet)
+
+
+def persist_api_endpoint_result(
+    result: ApiEndpointRunnerResult, *, provider_idempotency_key: str | None = None
+) -> None:
+    """Persist/reconcile a checkpointed provider result without another API call."""
+
+    _persist_packet(
+        result.evidence_packet,
+        provider_idempotency_key=provider_idempotency_key,
+    )
+    if not any(
+        record.get("trace_id") == result.trace_id for record in iter_harvest_records()
+    ):
+        capture_live_audit_harvest(
+            result.evidence_packet, verdict_status="pending_verdict_gate"
+        )
+
+
+def api_endpoint_result_to_checkpoint(
+    result: ApiEndpointRunnerResult,
+) -> dict[str, Any]:
+    return {
+        "schema_version": "cas_harness_provider_result_checkpoint.v1",
+        "runner": "api_endpoint",
+        "trace_id": result.trace_id,
+        "evidence_packet": result.evidence_packet,
+        "proof_chips": result.proof_chips,
+        "verifier_decision": result.verifier_decision,
+        "message": result.message,
+        "audit_scope": result.audit_scope,
+    }
+
+
+def api_endpoint_result_from_checkpoint(
+    checkpoint: Mapping[str, Any],
+) -> ApiEndpointRunnerResult:
+    if (
+        checkpoint.get("schema_version")
+        != "cas_harness_provider_result_checkpoint.v1"
+        or checkpoint.get("runner") != "api_endpoint"
+        or not isinstance(checkpoint.get("evidence_packet"), Mapping)
+        or not isinstance(checkpoint.get("proof_chips"), list)
+    ):
+        raise ApiEndpointRunnerUnavailable("provider result checkpoint is invalid")
+    trace_id = str(checkpoint.get("trace_id") or "")
+    packet = dict(checkpoint["evidence_packet"])
+    if not trace_id or packet.get("trace_id") != trace_id:
+        raise ApiEndpointRunnerUnavailable("provider result checkpoint trace is invalid")
+    verifier = checkpoint.get("verifier_decision")
+    scope = checkpoint.get("audit_scope")
+    return ApiEndpointRunnerResult(
+        trace_id=trace_id,
+        evidence_packet=packet,
+        proof_chips=[dict(chip) for chip in checkpoint["proof_chips"] if isinstance(chip, Mapping)],
+        verifier_decision=dict(verifier) if isinstance(verifier, Mapping) else None,
+        message=str(checkpoint.get("message") or "Provider result recovered."),
+        audit_scope=dict(scope) if isinstance(scope, Mapping) else None,
+    )
 
 
 def _proof_chips_for_api_packet(packet: Mapping[str, Any]) -> list[dict[str, str]]:

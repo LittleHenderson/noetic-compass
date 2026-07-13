@@ -18,7 +18,7 @@ from pathlib import Path
 import hashlib
 import json
 import subprocess
-from typing import Any, Mapping
+from typing import Any, Callable, Mapping
 
 import httpx
 
@@ -27,12 +27,17 @@ from api.services.atlas_live_worker_config import atlas_worker_target
 from api.config import settings
 from api.services.atlas_live_worker_auth import atlas_worker_auth_headers
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
-from api.services.cas_harness_harvest import capture_live_audit_harvest
+from api.services.cas_harness_harvest import (
+    capture_live_audit_harvest,
+    iter_harvest_records,
+)
 from api.services.cas_harness_merged_evidence_packets import (
     append_evidence_packet_hash_log_entry,
     evidence_hash_log_path,
     evidence_packet_store_path,
     evidence_packet_without_hashes_sha256,
+    find_evidence_packet_hash_log_entry,
+    load_evidence_packet_from_store,
     write_evidence_packet_to_store,
 )
 
@@ -68,6 +73,10 @@ async def run_live_worker_audit(
     prompt: str,
     audit_mode: str,
     selected_modules: list[str],
+    provider_idempotency_key: str | None = None,
+    on_request_started: Callable[[], None] | None = None,
+    on_provider_completed: Callable[[dict[str, Any]], None] | None = None,
+    on_evidence_persisted: Callable[[str], None] | None = None,
 ) -> LiveAuditRunnerResult:
     """Run the hosted open-weight worker once and persist the Evidence Packet."""
     target = atlas_worker_target()
@@ -104,7 +113,17 @@ async def run_live_worker_audit(
             "source": "cas_harness_audit_run",
         },
     }
-    worker_dump = await _post_worker_dump(worker_base, request_payload)
+    if on_request_started is not None:
+        on_request_started()
+    if provider_idempotency_key:
+        worker_dump = await _post_worker_dump(
+            worker_base,
+            request_payload,
+            provider_idempotency_key=provider_idempotency_key,
+        )
+    else:
+        # Preserve the exact legacy call contract while account mode is dark.
+        worker_dump = await _post_worker_dump(worker_base, request_payload)
     packet = _packet_from_worker_dump(
         audit_id=audit_id,
         model_id=model_id,
@@ -113,14 +132,10 @@ async def run_live_worker_audit(
         selected_modules=selected_modules,
         request_payload=request_payload,
         worker_dump=worker_dump,
+        provider_idempotency_key=provider_idempotency_key,
     )
-    _persist_packet(packet)
-    # Harvest the real-world CAS-labelled signal the moment it exists. A hosted
-    # pod can disappear; the model I/O is the irreplaceable part. The verdict
-    # gate runs later and joins back on trace_id.
-    capture_live_audit_harvest(packet, verdict_status="pending_verdict_gate")
     proof_chips = _proof_chips_for_live_packet(packet)
-    return LiveAuditRunnerResult(
+    result = LiveAuditRunnerResult(
         trace_id=str(packet["trace_id"]),
         evidence_packet=packet,
         proof_chips=proof_chips,
@@ -132,14 +147,29 @@ async def run_live_worker_audit(
             "and WORM proof gates are satisfied."
         ),
     )
+    if on_provider_completed is not None:
+        on_provider_completed(live_worker_result_to_checkpoint(result))
+    persist_live_worker_result(
+        result, provider_idempotency_key=provider_idempotency_key
+    )
+    if on_evidence_persisted is not None:
+        on_evidence_persisted(result.trace_id)
+    return result
 
 
-async def _post_worker_dump(worker_base: str, payload: Mapping[str, Any]) -> dict[str, Any]:
+async def _post_worker_dump(
+    worker_base: str,
+    payload: Mapping[str, Any],
+    *,
+    provider_idempotency_key: str | None = None,
+) -> dict[str, Any]:
     timeout = httpx.Timeout(settings.atlas_live_http_timeout_seconds)
     url = f"{worker_base}/sessions/dump"
     try:
         async with httpx.AsyncClient(timeout=timeout) as client:
             headers = atlas_worker_auth_headers()
+            if provider_idempotency_key:
+                headers["X-CAS-Provider-Idempotency-Key"] = provider_idempotency_key
             resp = await client.post(url, json=dict(payload), headers=headers)
             # Graceful degradation for a worker that predates the causal-ablation
             # probe: it rejects the request with a 422 naming `causal_ablation`
@@ -205,6 +235,7 @@ def _packet_from_worker_dump(
     selected_modules: list[str],
     request_payload: Mapping[str, Any],
     worker_dump: Mapping[str, Any],
+    provider_idempotency_key: str | None = None,
 ) -> dict[str, Any]:
     events = [event for event in worker_dump.get("events", []) if isinstance(event, Mapping)]
     if any(event.get("type") == "error" for event in events):
@@ -308,6 +339,15 @@ def _packet_from_worker_dump(
             "request": dict(request_payload),
             "events": events,
             "event_counts": _event_counts(events),
+            **(
+                {"provider_idempotency": {
+                    "key": provider_idempotency_key,
+                    "scope": "logical_cas_audit_run",
+                    "provider_enforcement": "not_assumed",
+                }}
+                if provider_idempotency_key
+                else {}
+            ),
         },
         "audit_scope": {
             "kind": "open_weight_live_trace",
@@ -325,13 +365,45 @@ def _packet_from_worker_dump(
     }
 
 
-def _persist_packet(packet: dict[str, Any]) -> None:
+def _persist_packet(
+    packet: dict[str, Any], *, provider_idempotency_key: str | None = None
+) -> None:
     packet_hash = evidence_packet_without_hashes_sha256(packet)
+    operation = "write_live_audit_evidence_packet"
+    if provider_idempotency_key:
+        operation = f"{operation}:{provider_idempotency_key}"
+        try:
+            existing = load_evidence_packet_from_store(str(packet["trace_id"]))
+        except FileNotFoundError:
+            existing = None
+        if existing is not None:
+            if evidence_packet_without_hashes_sha256(existing) != packet_hash:
+                raise LiveAuditRunnerUnavailable(
+                    "existing Evidence Packet conflicts with the provider checkpoint"
+                )
+            hashes = existing.get("hashes")
+            if not isinstance(hashes, Mapping) or not isinstance(
+                hashes.get("external_anchor"), Mapping
+            ):
+                raise LiveAuditRunnerUnavailable(
+                    "Evidence Packet persistence is partial; automatic rewrite is blocked"
+                )
+            packet["hashes"] = dict(hashes)
+            return
+        prior_entry = find_evidence_packet_hash_log_entry(
+            trace_id=str(packet["trace_id"]),
+            packet_without_hashes_sha256=packet_hash,
+            operation=operation,
+        )
+        if prior_entry is not None:
+            raise LiveAuditRunnerUnavailable(
+                "Evidence Packet hash-log persistence is partial; automatic replay is blocked"
+            )
     hash_log_entry = append_evidence_packet_hash_log_entry(
         trace_id=str(packet["trace_id"]),
         audit_id=packet["input"].get("audit_id") if isinstance(packet.get("input"), Mapping) else None,
         packet_without_hashes_sha256=packet_hash,
-        operation="write_live_audit_evidence_packet",
+        operation=operation,
     )
     packet["hashes"] = {
         "packet_without_hashes_sha256": packet_hash,
@@ -346,6 +418,69 @@ def _persist_packet(packet: dict[str, Any]) -> None:
         hash_log_path=evidence_hash_log_path(),
     )
     write_evidence_packet_to_store(str(packet["trace_id"]), packet)
+
+
+def persist_live_worker_result(
+    result: LiveAuditRunnerResult, *, provider_idempotency_key: str | None = None
+) -> None:
+    """Persist/reconcile a checkpointed worker result without rerunning the worker."""
+
+    _persist_packet(
+        result.evidence_packet,
+        provider_idempotency_key=provider_idempotency_key,
+    )
+    if not any(
+        record.get("trace_id") == result.trace_id for record in iter_harvest_records()
+    ):
+        capture_live_audit_harvest(
+            result.evidence_packet, verdict_status="pending_verdict_gate"
+        )
+
+
+def live_worker_result_to_checkpoint(
+    result: LiveAuditRunnerResult,
+) -> dict[str, Any]:
+    return {
+        "schema_version": "cas_harness_provider_result_checkpoint.v1",
+        "runner": "live_worker",
+        "trace_id": result.trace_id,
+        "evidence_packet": result.evidence_packet,
+        "proof_chips": result.proof_chips,
+        "verifier_decision": result.verifier_decision,
+        "message": result.message,
+        "audit_scope": result.audit_scope,
+    }
+
+
+def live_worker_result_from_checkpoint(
+    checkpoint: Mapping[str, Any],
+) -> LiveAuditRunnerResult:
+    if (
+        checkpoint.get("schema_version")
+        != "cas_harness_provider_result_checkpoint.v1"
+        or checkpoint.get("runner") != "live_worker"
+        or not isinstance(checkpoint.get("evidence_packet"), Mapping)
+        or not isinstance(checkpoint.get("proof_chips"), list)
+    ):
+        raise LiveAuditRunnerUnavailable("provider result checkpoint is invalid")
+    trace_id = str(checkpoint.get("trace_id") or "")
+    packet = dict(checkpoint["evidence_packet"])
+    if not trace_id or packet.get("trace_id") != trace_id:
+        raise LiveAuditRunnerUnavailable("provider result checkpoint trace is invalid")
+    verifier = checkpoint.get("verifier_decision")
+    scope = checkpoint.get("audit_scope")
+    return LiveAuditRunnerResult(
+        trace_id=trace_id,
+        evidence_packet=packet,
+        proof_chips=[
+            dict(chip)
+            for chip in checkpoint["proof_chips"]
+            if isinstance(chip, Mapping)
+        ],
+        verifier_decision=dict(verifier) if isinstance(verifier, Mapping) else None,
+        message=str(checkpoint.get("message") or "Provider result recovered."),
+        audit_scope=dict(scope) if isinstance(scope, Mapping) else None,
+    )
 
 
 # ---------------------------------------------------------------------------

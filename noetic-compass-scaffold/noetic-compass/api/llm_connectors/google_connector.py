@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import google.generativeai as genai
+from google.api_core.retry import Retry
 
 from .base import BaseLLMConnector, LLMResponse
 
@@ -27,7 +28,18 @@ class GoogleConnector(BaseLLMConnector):
             generation_config={"temperature": temperature},
         )
 
-        response = await model.generate_content_async(prompt)
+        request_options: dict[str, object] = {}
+        if isinstance(kwargs.get("idempotency_key"), str) and str(
+            kwargs["idempotency_key"]
+        ).strip():
+            # Google GenAI's request-options surface has retry control but no
+            # portable idempotency-key transport. Disable SDK retries and rely
+            # on the CAS durable orphan/reconciliation journal; do not claim
+            # provider-side deduplication.
+            request_options["request_options"] = {
+                "retry": Retry(predicate=lambda _exc: False)
+            }
+        response = await model.generate_content_async(prompt, **request_options)
 
         usage = {}
         if hasattr(response, "usage_metadata") and response.usage_metadata:

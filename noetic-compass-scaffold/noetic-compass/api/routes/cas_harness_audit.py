@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 import hashlib
 import json
 import logging
-from typing import Literal
+from typing import Any, Callable, Literal
 from urllib.parse import urlparse
 
 from fastapi import APIRouter, HTTPException, Request
@@ -29,12 +29,20 @@ from api.routes.evidence import (
 )
 from api.services.cas_harness_audit_sessions import (
     AuditRunInProgress,
+    AuditRunReconciliationRequired,
+    ProviderRunClaim,
+    checkpoint_provider_completed,
+    checkpoint_provider_evidence_persisted,
+    claim_provider_run,
     claim_run_attempt,
     attach_runner_evidence,
     create_session,
     fail_session,
+    finalize_provider_run,
     get_session,
     list_sessions,
+    mark_provider_request_started,
+    orphan_provider_run,
     run_session,
 )
 from api.services.cas_harness_distributed_audits import (
@@ -102,11 +110,17 @@ from api.services.cas_harness_fleet_verifier import (
 from api.services.cas_harness_api_endpoint_runner import (
     API_ENDPOINT_PROVIDERS,
     ApiEndpointRunnerUnavailable,
+    api_endpoint_result_from_checkpoint,
+    api_endpoint_result_to_checkpoint,
+    persist_api_endpoint_result,
     run_api_endpoint_audit,
 )
 from api.services.cas_harness_live_worker_runner import (
     HOSTED_OPEN_WEIGHT_MODEL_IDS,
     LiveAuditRunnerUnavailable,
+    live_worker_result_from_checkpoint,
+    live_worker_result_to_checkpoint,
+    persist_live_worker_result,
     run_live_worker_audit,
 )
 from api.services.cas_harness_scale_planner import (
@@ -1719,16 +1733,37 @@ async def run_audit_session(
     # second month's quota. Quota idempotency is period-scoped, so this terminal-state return must
     # precede selection of the current execution period.
     if existing.status == "FAILED" or existing.evidence_packet_trace_id:
+        # Crash boundary: evidence attachment committed but the final journal
+        # checkpoint did not. Finish it idempotently before returning; never
+        # reopen the provider lane merely because the last local write was lost.
+        if (
+            storage_scope
+            and existing.provider_run_phase == "EVIDENCE_PERSISTED"
+            and existing.run_attempt_id
+            and existing.provider_trace_id
+            and existing.evidence_packet_trace_id == existing.provider_trace_id
+        ):
+            finalize_provider_run(
+                audit_id,
+                run_attempt_id=existing.run_attempt_id,
+                trace_id=existing.provider_trace_id,
+                **storage_scope,
+            )
         completed = run_session(audit_id, **storage_scope)
         if completed is None:
             raise HTTPException(status_code=404, detail="Audit session not found")
         return AuditSessionResponse.model_validate(completed.to_dict())
 
-    requires_live_entitlement = _should_run_hosted_open_weight(
+    is_external_run = _should_run_hosted_open_weight(
         existing
     ) or _should_run_api_endpoint(existing)
+    is_fresh_provider_run = getattr(existing, "provider_run_phase", None) is None
     entitlement_decision = None
-    if settings.billing_entitlements_enabled and requires_live_entitlement:
+    if (
+        settings.billing_entitlements_enabled
+        and is_external_run
+        and is_fresh_provider_run
+    ):
         tenant_id = str(getattr(request.state, "tenant_id", "") or "")
         billing_store = getattr(
             request.app.state, "billing_entitlement_store", None
@@ -1761,10 +1796,13 @@ async def run_audit_session(
 
     # With billing enabled, plan quotas cover only the external/hosted executions
     # that spend provider compute. Reference/demo runs remain available on the
-    # free plan. With billing dark, preserve the historical quota behavior.
+    # free plan. A durable provider journal means an admitted logical execution
+    # is being reconciled, so recovery never consumes a later month's quota or
+    # requires a newly active subscription. With billing dark, preserve the
+    # historical quota behavior.
     should_consume_quota = settings.quotas_enabled and (
-        not settings.billing_entitlements_enabled or requires_live_entitlement
-    )
+        not settings.billing_entitlements_enabled or is_external_run
+    ) and is_fresh_provider_run
     if should_consume_quota:
         tenant_id = str(getattr(request.state, "tenant_id", "") or "")
         store = _audit_evidence_state_store(request)
@@ -1798,9 +1836,27 @@ async def run_audit_session(
             ) from exc
 
     run_attempt_id: str | None = None
-    if requires_live_entitlement:
+    provider_claim: ProviderRunClaim | None = None
+    if is_external_run:
         try:
-            run_attempt_id = claim_run_attempt(audit_id, **storage_scope)
+            if storage_scope:
+                provider_claim = claim_provider_run(audit_id, **storage_scope)
+                run_attempt_id = (
+                    provider_claim.run_attempt_id if provider_claim is not None else None
+                )
+            else:
+                # Account mode is dark by default. Preserve the exact legacy
+                # in-memory fence and runner behavior outside the durable lane.
+                run_attempt_id = claim_run_attempt(audit_id, **storage_scope)
+        except AuditRunReconciliationRequired as exc:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "provider_run_reconciliation_required",
+                    "status": "OPEN",
+                    "detail": str(exc),
+                },
+            ) from exc
         except AuditRunInProgress as exc:
             raise HTTPException(status_code=409, detail="Audit run already in progress.") from exc
         if run_attempt_id is None:
@@ -1811,16 +1867,102 @@ async def run_audit_session(
     )
     if _should_run_hosted_open_weight(existing):
         prompt = existing.prompt_text or existing.scenario_text or ""
+        checkpoint_state: dict[str, bool] | None = None
         try:
-            with _audit_evidence_storage_context(request):
-                live_result = await run_live_worker_audit(
-                    audit_id=audit_id,
-                    model_id=existing.model_id or "",
-                    prompt=prompt,
-                    audit_mode=existing.audit_mode,
-                    selected_modules=existing.selected_modules,
+            if provider_claim is not None and provider_claim.phase in {
+                "PROVIDER_COMPLETED",
+                "EVIDENCE_PERSISTED",
+            }:
+                live_result = _recover_provider_result(existing, provider_claim)
+                if provider_claim.phase == "PROVIDER_COMPLETED":
+                    with _audit_evidence_storage_context(request):
+                        _persist_recovered_provider_result(
+                            existing, provider_claim, live_result
+                        )
+                    persisted = checkpoint_provider_evidence_persisted(
+                        audit_id,
+                        run_attempt_id=provider_claim.run_attempt_id,
+                        trace_id=live_result.trace_id,
+                        **storage_scope,
+                    )
+                    if persisted is None:
+                        raise AuditRunInProgress(
+                            "audit session disappeared during evidence reconciliation"
+                        )
+            else:
+                runner_kwargs: dict[str, Any] = {}
+                if provider_claim is not None:
+                    (
+                        checkpoint_state,
+                        on_request_started,
+                        on_provider_completed,
+                        on_evidence_persisted,
+                    ) = _provider_checkpoint_callbacks(
+                        audit_id, storage_scope, provider_claim
+                    )
+                    runner_kwargs = {
+                        "provider_idempotency_key": provider_claim.provider_idempotency_key,
+                        "on_request_started": on_request_started,
+                        "on_provider_completed": on_provider_completed,
+                        "on_evidence_persisted": on_evidence_persisted,
+                    }
+                with _audit_evidence_storage_context(request):
+                    live_result = await run_live_worker_audit(
+                        audit_id=audit_id,
+                        model_id=existing.model_id or "",
+                        prompt=prompt,
+                        audit_mode=existing.audit_mode,
+                        selected_modules=existing.selected_modules,
+                        **runner_kwargs,
+                    )
+                # Test doubles and future compatible runners may not invoke the
+                # callbacks themselves. Backfill all checkpoints before trusting
+                # their result; the production runners cross each boundary inline.
+                if provider_claim is not None and checkpoint_state is not None:
+                    if not checkpoint_state["request_started"]:
+                        on_request_started()
+                    if not checkpoint_state["provider_completed"]:
+                        on_provider_completed(
+                            _serialize_provider_result(existing, live_result)
+                        )
+                    if not checkpoint_state["evidence_persisted"]:
+                        on_evidence_persisted(live_result.trace_id)
+        except Exception as exc:
+            if provider_claim is not None:
+                request_started = bool(
+                    checkpoint_state and checkpoint_state["request_started"]
                 )
-        except (LiveAuditRunnerUnavailable, EvidenceObjectStoreError) as exc:
+                recovery_pending = provider_claim.phase in {
+                    "PROVIDER_COMPLETED",
+                    "EVIDENCE_PERSISTED",
+                }
+                if request_started or recovery_pending:
+                    latest = orphan_provider_run(
+                        audit_id,
+                        run_attempt_id=provider_claim.run_attempt_id,
+                        detail=(
+                            "live worker request outcome is ambiguous; automatic retry is blocked"
+                        ),
+                        **storage_scope,
+                    )
+                    code = (
+                        "provider_evidence_reconciliation_pending"
+                        if recovery_pending
+                        or (
+                            latest is not None
+                            and latest.provider_run_phase
+                            in {"PROVIDER_COMPLETED", "EVIDENCE_PERSISTED"}
+                        )
+                        else "provider_run_reconciliation_required"
+                    )
+                    raise HTTPException(
+                        status_code=503,
+                        detail={"code": code, "status": "OPEN"},
+                    ) from exc
+                if not isinstance(exc, LiveAuditRunnerUnavailable):
+                    raise
+            if not isinstance(exc, LiveAuditRunnerUnavailable):
+                raise
             failed = fail_session(
                 audit_id,
                 message=f"Live hosted open-weight runner failed: {exc}",
@@ -1843,46 +1985,170 @@ async def run_audit_session(
                 **storage_scope,
             )
         except HTTPException:
-            fail_session(
-                audit_id,
-                message="Live audit result persistence failed after execution.",
-                run_attempt_id=run_attempt_id,
-                **storage_scope,
-            )
+            if provider_claim is None:
+                fail_session(
+                    audit_id,
+                    message="Live audit result persistence failed after execution.",
+                    run_attempt_id=run_attempt_id,
+                    **storage_scope,
+                )
+            else:
+                orphan_provider_run(
+                    audit_id,
+                    run_attempt_id=provider_claim.run_attempt_id,
+                    detail="live evidence attachment requires reconciliation",
+                    **storage_scope,
+                )
             raise
         except Exception as exc:
-            fail_session(
-                audit_id,
-                message="Live audit result persistence failed after execution.",
-                run_attempt_id=run_attempt_id,
-                **storage_scope,
-            )
+            if provider_claim is None:
+                fail_session(
+                    audit_id,
+                    message="Live audit result persistence failed after execution.",
+                    run_attempt_id=run_attempt_id,
+                    **storage_scope,
+                )
+            else:
+                orphan_provider_run(
+                    audit_id,
+                    run_attempt_id=provider_claim.run_attempt_id,
+                    detail="live evidence attachment requires reconciliation",
+                    **storage_scope,
+                )
             raise HTTPException(
-                status_code=503, detail="Audit result persistence is unavailable."
+                status_code=503,
+                detail=(
+                    {
+                        "code": "provider_evidence_attachment_pending",
+                        "status": "OPEN",
+                    }
+                    if provider_claim is not None
+                    else "Audit result persistence is unavailable."
+                ),
             ) from exc
         if attached is None:
-            fail_session(
+            if provider_claim is None:
+                fail_session(
+                    audit_id,
+                    message="Live audit result could not be attached.",
+                    run_attempt_id=run_attempt_id,
+                    **storage_scope,
+                )
+            else:
+                orphan_provider_run(
+                    audit_id,
+                    run_attempt_id=provider_claim.run_attempt_id,
+                    detail="live evidence attachment requires reconciliation",
+                    **storage_scope,
+                )
+            raise HTTPException(status_code=404, detail="Audit session not found")
+        if provider_claim is not None:
+            finalized = finalize_provider_run(
                 audit_id,
-                message="Live audit result could not be attached.",
-                run_attempt_id=run_attempt_id,
+                run_attempt_id=provider_claim.run_attempt_id,
+                trace_id=live_result.trace_id,
                 **storage_scope,
             )
-            raise HTTPException(status_code=404, detail="Audit session not found")
+            if finalized is None:
+                raise HTTPException(status_code=404, detail="Audit session not found")
     elif _should_run_api_endpoint(existing):
         prompt = existing.prompt_text or existing.scenario_text or ""
+        checkpoint_state = None
         try:
-            with _audit_evidence_storage_context(request):
-                api_result = await run_api_endpoint_audit(
-                    audit_id=audit_id,
-                    provider=existing.provider or "",
-                    model_id=existing.model_id or "",
-                    prompt=prompt,
-                    audit_mode=existing.audit_mode,
-                    selected_modules=existing.selected_modules,
-                    endpoint_url=existing.endpoint_url,
-                    api_key=ephemeral_api_key,
+            if provider_claim is not None and provider_claim.phase in {
+                "PROVIDER_COMPLETED",
+                "EVIDENCE_PERSISTED",
+            }:
+                api_result = _recover_provider_result(existing, provider_claim)
+                if provider_claim.phase == "PROVIDER_COMPLETED":
+                    with _audit_evidence_storage_context(request):
+                        _persist_recovered_provider_result(
+                            existing, provider_claim, api_result
+                        )
+                    persisted = checkpoint_provider_evidence_persisted(
+                        audit_id,
+                        run_attempt_id=provider_claim.run_attempt_id,
+                        trace_id=api_result.trace_id,
+                        **storage_scope,
+                    )
+                    if persisted is None:
+                        raise AuditRunInProgress(
+                            "audit session disappeared during evidence reconciliation"
+                        )
+            else:
+                runner_kwargs = {}
+                if provider_claim is not None:
+                    (
+                        checkpoint_state,
+                        on_request_started,
+                        on_provider_completed,
+                        on_evidence_persisted,
+                    ) = _provider_checkpoint_callbacks(
+                        audit_id, storage_scope, provider_claim
+                    )
+                    runner_kwargs = {
+                        "provider_idempotency_key": provider_claim.provider_idempotency_key,
+                        "on_request_started": on_request_started,
+                        "on_provider_completed": on_provider_completed,
+                        "on_evidence_persisted": on_evidence_persisted,
+                    }
+                with _audit_evidence_storage_context(request):
+                    api_result = await run_api_endpoint_audit(
+                        audit_id=audit_id,
+                        provider=existing.provider or "",
+                        model_id=existing.model_id or "",
+                        prompt=prompt,
+                        audit_mode=existing.audit_mode,
+                        selected_modules=existing.selected_modules,
+                        endpoint_url=existing.endpoint_url,
+                        api_key=ephemeral_api_key,
+                        **runner_kwargs,
+                    )
+                if provider_claim is not None and checkpoint_state is not None:
+                    if not checkpoint_state["request_started"]:
+                        on_request_started()
+                    if not checkpoint_state["provider_completed"]:
+                        on_provider_completed(
+                            _serialize_provider_result(existing, api_result)
+                        )
+                    if not checkpoint_state["evidence_persisted"]:
+                        on_evidence_persisted(api_result.trace_id)
+        except Exception as exc:
+            if provider_claim is not None:
+                request_started = bool(
+                    checkpoint_state and checkpoint_state["request_started"]
                 )
-        except (ApiEndpointRunnerUnavailable, EvidenceObjectStoreError) as exc:
+                recovery_pending = provider_claim.phase in {
+                    "PROVIDER_COMPLETED",
+                    "EVIDENCE_PERSISTED",
+                }
+                if request_started or recovery_pending:
+                    latest = orphan_provider_run(
+                        audit_id,
+                        run_attempt_id=provider_claim.run_attempt_id,
+                        detail=(
+                            "customer API request outcome is ambiguous; automatic retry is blocked"
+                        ),
+                        **storage_scope,
+                    )
+                    code = (
+                        "provider_evidence_reconciliation_pending"
+                        if recovery_pending
+                        or (
+                            latest is not None
+                            and latest.provider_run_phase
+                            in {"PROVIDER_COMPLETED", "EVIDENCE_PERSISTED"}
+                        )
+                        else "provider_run_reconciliation_required"
+                    )
+                    raise HTTPException(
+                        status_code=503,
+                        detail={"code": code, "status": "OPEN"},
+                    ) from exc
+                if not isinstance(exc, ApiEndpointRunnerUnavailable):
+                    raise
+            if not isinstance(exc, ApiEndpointRunnerUnavailable):
+                raise
             failed = fail_session(
                 audit_id,
                 message=f"Customer-API runner failed: {exc}",
@@ -1905,31 +2171,72 @@ async def run_audit_session(
                 **storage_scope,
             )
         except HTTPException:
-            fail_session(
-                audit_id,
-                message="Customer-API result persistence failed after execution.",
-                run_attempt_id=run_attempt_id,
-                **storage_scope,
-            )
+            if provider_claim is None:
+                fail_session(
+                    audit_id,
+                    message="Customer-API result persistence failed after execution.",
+                    run_attempt_id=run_attempt_id,
+                    **storage_scope,
+                )
+            else:
+                orphan_provider_run(
+                    audit_id,
+                    run_attempt_id=provider_claim.run_attempt_id,
+                    detail="customer-API evidence attachment requires reconciliation",
+                    **storage_scope,
+                )
             raise
         except Exception as exc:
-            fail_session(
-                audit_id,
-                message="Customer-API result persistence failed after execution.",
-                run_attempt_id=run_attempt_id,
-                **storage_scope,
-            )
+            if provider_claim is None:
+                fail_session(
+                    audit_id,
+                    message="Customer-API result persistence failed after execution.",
+                    run_attempt_id=run_attempt_id,
+                    **storage_scope,
+                )
+            else:
+                orphan_provider_run(
+                    audit_id,
+                    run_attempt_id=provider_claim.run_attempt_id,
+                    detail="customer-API evidence attachment requires reconciliation",
+                    **storage_scope,
+                )
             raise HTTPException(
-                status_code=503, detail="Audit result persistence is unavailable."
+                status_code=503,
+                detail=(
+                    {
+                        "code": "provider_evidence_attachment_pending",
+                        "status": "OPEN",
+                    }
+                    if provider_claim is not None
+                    else "Audit result persistence is unavailable."
+                ),
             ) from exc
         if attached is None:
-            fail_session(
+            if provider_claim is None:
+                fail_session(
+                    audit_id,
+                    message="Customer-API result could not be attached.",
+                    run_attempt_id=run_attempt_id,
+                    **storage_scope,
+                )
+            else:
+                orphan_provider_run(
+                    audit_id,
+                    run_attempt_id=provider_claim.run_attempt_id,
+                    detail="customer-API evidence attachment requires reconciliation",
+                    **storage_scope,
+                )
+            raise HTTPException(status_code=404, detail="Audit session not found")
+        if provider_claim is not None:
+            finalized = finalize_provider_run(
                 audit_id,
-                message="Customer-API result could not be attached.",
-                run_attempt_id=run_attempt_id,
+                run_attempt_id=provider_claim.run_attempt_id,
+                trace_id=api_result.trace_id,
                 **storage_scope,
             )
-            raise HTTPException(status_code=404, detail="Audit session not found")
+            if finalized is None:
+                raise HTTPException(status_code=404, detail="Audit session not found")
 
     record = run_session(audit_id, **storage_scope)
     if record is None:
@@ -1974,6 +2281,102 @@ def _should_run_api_endpoint(record) -> bool:
     if not getattr(record, "provider", None):
         return False
     return record.provider in API_ENDPOINT_PROVIDERS
+
+
+def _provider_checkpoint_callbacks(
+    audit_id: str,
+    storage_scope: dict[str, str],
+    claim: ProviderRunClaim,
+) -> tuple[
+    dict[str, bool],
+    Callable[[], None],
+    Callable[[dict[str, Any]], None],
+    Callable[[str], None],
+]:
+    state = {
+        "request_started": False,
+        "provider_completed": False,
+        "evidence_persisted": False,
+    }
+
+    def request_started() -> None:
+        updated = mark_provider_request_started(
+            audit_id,
+            run_attempt_id=claim.run_attempt_id,
+            **storage_scope,
+        )
+        if updated is None:
+            raise AuditRunInProgress("audit session disappeared before provider request")
+        state["request_started"] = True
+
+    def provider_completed(checkpoint: dict[str, Any]) -> None:
+        trace_id = str(checkpoint.get("trace_id") or "")
+        if not trace_id:
+            raise AuditRunInProgress("provider result checkpoint has no trace_id")
+        updated = checkpoint_provider_completed(
+            audit_id,
+            run_attempt_id=claim.run_attempt_id,
+            result_checkpoint=checkpoint,
+            trace_id=trace_id,
+            **storage_scope,
+        )
+        if updated is None:
+            raise AuditRunInProgress("audit session disappeared after provider response")
+        state["provider_completed"] = True
+
+    def evidence_persisted(trace_id: str) -> None:
+        updated = checkpoint_provider_evidence_persisted(
+            audit_id,
+            run_attempt_id=claim.run_attempt_id,
+            trace_id=trace_id,
+            **storage_scope,
+        )
+        if updated is None:
+            raise AuditRunInProgress("audit session disappeared after evidence persistence")
+        state["evidence_persisted"] = True
+
+    return state, request_started, provider_completed, evidence_persisted
+
+
+def _recover_provider_result(record, claim: ProviderRunClaim):
+    checkpoint = claim.result_checkpoint
+    if checkpoint is None:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "provider_result_checkpoint_unavailable",
+                "status": "OPEN",
+            },
+        )
+    try:
+        if _should_run_hosted_open_weight(record):
+            return live_worker_result_from_checkpoint(checkpoint)
+        return api_endpoint_result_from_checkpoint(checkpoint)
+    except (LiveAuditRunnerUnavailable, ApiEndpointRunnerUnavailable) as exc:
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "provider_result_checkpoint_invalid",
+                "status": "OPEN",
+            },
+        ) from exc
+
+
+def _persist_recovered_provider_result(record, claim: ProviderRunClaim, result) -> None:
+    if _should_run_hosted_open_weight(record):
+        persist_live_worker_result(
+            result, provider_idempotency_key=claim.provider_idempotency_key
+        )
+    else:
+        persist_api_endpoint_result(
+            result, provider_idempotency_key=claim.provider_idempotency_key
+        )
+
+
+def _serialize_provider_result(record, result) -> dict[str, Any]:
+    if _should_run_hosted_open_weight(record):
+        return live_worker_result_to_checkpoint(result)
+    return api_endpoint_result_to_checkpoint(result)
 
 
 def _audit_evidence_for_trace(trace_id: str) -> dict[str, object]:
