@@ -18,6 +18,10 @@ from pathlib import Path
 import tempfile
 from typing import Any, Iterator, Mapping
 
+from api.services.cas_harness_evidence_object_store import (
+    active_evidence_packet_storage_scope,
+)
+
 
 _MERGED_FLEET_PACKETS: dict[str, dict[str, Any]] = {}
 
@@ -48,6 +52,10 @@ def reset_merged_fleet_evidence_packets_for_tests() -> None:
 
 
 def load_merged_fleet_evidence_packet_payload(trace_id: str) -> dict[str, Any]:
+    # A process-global cache cannot be tenant-keyed.  Shared account mode always
+    # resolves through the durable tenant index and immutable object version.
+    if active_evidence_packet_storage_scope() is not None:
+        return json.loads(json.dumps(_load_packet_from_store(trace_id)))
     packet = _MERGED_FLEET_PACKETS.get(trace_id)
     if packet is None:
         packet = _load_packet_from_store(trace_id)
@@ -91,11 +99,24 @@ def load_evidence_packet_from_store(trace_id: str) -> dict[str, Any]:
     return _load_packet_from_store(trace_id)
 
 
-def evidence_packet_store_path(trace_id: str) -> Path:
+def evidence_packet_store_path(trace_id: str) -> Path | str:
+    scope = active_evidence_packet_storage_scope()
+    if scope is not None:
+        return scope.repository.packet_reference(
+            tenant_id=scope.tenant_id,
+            namespace=_STORE_SUBDIR.get() or "",
+            trace_id=trace_id,
+        )
     return _packet_path(trace_id)
 
 
-def evidence_hash_log_path() -> Path:
+def evidence_hash_log_path() -> Path | str:
+    scope = active_evidence_packet_storage_scope()
+    if scope is not None:
+        return scope.repository.hash_log_reference(
+            tenant_id=scope.tenant_id,
+            namespace=_STORE_SUBDIR.get() or "",
+        )
     return _hash_log_path()
 
 
@@ -192,17 +213,17 @@ def write_merged_fleet_evidence_packet(
         packet_without_hashes_sha256=packet_hash,
         hash_log_entry=hash_log_entry,
     )
-    _write_packet_to_store(trace_id, packet)
     from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
 
     packet["hashes"]["external_anchor"] = anchor_hash_log_entry(
         trace_id=trace_id,
         hash_log_entry=hash_log_entry,
-        packet_path=_packet_path(trace_id),
-        hash_log_path=_hash_log_path(),
+        packet_path=evidence_packet_store_path(trace_id),
+        hash_log_path=evidence_hash_log_path(),
     )
     _write_packet_to_store(trace_id, packet)
-    _MERGED_FLEET_PACKETS[trace_id] = packet
+    if active_evidence_packet_storage_scope() is None:
+        _MERGED_FLEET_PACKETS[trace_id] = packet
     return load_merged_fleet_evidence_packet_payload(trace_id)
 
 
@@ -239,6 +260,9 @@ def verify_merged_fleet_evidence_packet_payload(packet: Mapping[str, Any]) -> li
                 "notes": "hash-log entry not found for this merged Evidence Packet",
             }
         )
+        object_check = _shared_object_store_check(trace_id)
+        if object_check is not None:
+            checks.append(object_check)
         return checks
 
     entry_hash = entry.get("entry_sha256")
@@ -266,7 +290,21 @@ def verify_merged_fleet_evidence_packet_payload(packet: Mapping[str, Any]) -> li
             "notes": "every hash-log row re-hashes and points to the previous row",
         }
     )
+    object_check = _shared_object_store_check(trace_id)
+    if object_check is not None:
+        checks.append(object_check)
     return checks
+
+
+def _shared_object_store_check(trace_id: str) -> dict[str, Any] | None:
+    scope = active_evidence_packet_storage_scope()
+    if scope is None:
+        return None
+    return scope.repository.verify_packet(
+        tenant_id=scope.tenant_id,
+        namespace=_STORE_SUBDIR.get() or "",
+        trace_id=trace_id,
+    )
 
 
 def _first_stage19_stage20_fragment(
@@ -401,7 +439,7 @@ def _hashes_for_packet(
         "packet_without_hashes_sha256": packet_without_hashes_sha256,
         "hash_log_entry_sha256": hash_log_entry.get("entry_sha256"),
         "hash_log_previous_entry_sha256": hash_log_entry.get("previous_entry_sha256"),
-        "hash_log_path": str(_hash_log_path()),
+        "hash_log_path": str(evidence_hash_log_path()),
     }
 
 
@@ -475,6 +513,16 @@ def _hash_log_path() -> Path:
 
 
 def _write_packet_to_store(trace_id: str, packet: Mapping[str, Any]) -> None:
+    scope = active_evidence_packet_storage_scope()
+    if scope is not None:
+        scope.repository.put_packet(
+            tenant_id=scope.tenant_id,
+            account_id=scope.account_id,
+            namespace=_STORE_SUBDIR.get() or "",
+            trace_id=trace_id,
+            packet=packet,
+        )
+        return
     path = _packet_path(trace_id)
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp_path = path.with_suffix(".json.tmp")
@@ -483,6 +531,13 @@ def _write_packet_to_store(trace_id: str, packet: Mapping[str, Any]) -> None:
 
 
 def _load_packet_from_store(trace_id: str) -> dict[str, Any]:
+    scope = active_evidence_packet_storage_scope()
+    if scope is not None:
+        return scope.repository.load_packet(
+            tenant_id=scope.tenant_id,
+            namespace=_STORE_SUBDIR.get() or "",
+            trace_id=trace_id,
+        )
     path = _packet_path(trace_id)
     try:
         payload = json.loads(path.read_text(encoding="utf-8"))
@@ -500,6 +555,16 @@ def _append_hash_log_entry(
     packet_without_hashes_sha256: str,
     operation: str = "write_merged_fleet_evidence_packet",
 ) -> dict[str, Any]:
+    scope = active_evidence_packet_storage_scope()
+    if scope is not None:
+        return scope.repository.append_hash_log(
+            tenant_id=scope.tenant_id,
+            namespace=_STORE_SUBDIR.get() or "",
+            trace_id=trace_id,
+            audit_id=audit_id,
+            packet_without_hashes_sha256=packet_without_hashes_sha256,
+            operation=operation,
+        )
     path = _hash_log_path()
     path.parent.mkdir(parents=True, exist_ok=True)
     previous_hash = _last_hash_log_entry_sha256(path)
@@ -531,6 +596,14 @@ def _last_hash_log_entry_sha256(path: Path) -> str | None:
 
 
 def _load_hash_log_entry(trace_id: str, entry_sha256: Any) -> tuple[dict[str, Any], bool]:
+    scope = active_evidence_packet_storage_scope()
+    if scope is not None:
+        return scope.repository.load_hash_log_entry(
+            tenant_id=scope.tenant_id,
+            namespace=_STORE_SUBDIR.get() or "",
+            trace_id=trace_id,
+            entry_sha256=entry_sha256,
+        )
     if not isinstance(entry_sha256, str):
         raise FileNotFoundError(trace_id)
     path = _hash_log_path()

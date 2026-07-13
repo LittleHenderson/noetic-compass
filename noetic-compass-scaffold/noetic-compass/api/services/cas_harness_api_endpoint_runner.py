@@ -322,7 +322,6 @@ def _persist_packet(packet: dict[str, Any]) -> None:
         "hash_log_previous_entry_sha256": hash_log_entry.get("previous_entry_sha256"),
         "hash_log_path": str(evidence_hash_log_path()),
     }
-    write_evidence_packet_to_store(str(packet["trace_id"]), packet)
     packet["hashes"]["external_anchor"] = anchor_hash_log_entry(
         trace_id=str(packet["trace_id"]),
         hash_log_entry=hash_log_entry,

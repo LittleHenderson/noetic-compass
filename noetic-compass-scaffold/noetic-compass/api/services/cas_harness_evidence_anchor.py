@@ -24,8 +24,8 @@ def anchor_hash_log_entry(
     *,
     trace_id: str,
     hash_log_entry: Mapping[str, Any],
-    packet_path: Path,
-    hash_log_path: Path,
+    packet_path: Path | str,
+    hash_log_path: Path | str,
 ) -> dict[str, Any]:
     """Anchor one hash-log entry according to environment configuration."""
 
@@ -85,8 +85,8 @@ def _anchor_manifest(
     *,
     trace_id: str,
     hash_log_entry: Mapping[str, Any],
-    packet_path: Path,
-    hash_log_path: Path,
+    packet_path: Path | str,
+    hash_log_path: Path | str,
 ) -> dict[str, Any]:
     return {
         "schema_version": "cas_harness_evidence_anchor.v1",
