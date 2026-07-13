@@ -1276,7 +1276,7 @@ async def _stream_report(
         for node in nodes
         if node.get("id") is not None
     }
-    trace_id = str(trace.get("trace_id") or "")
+    committed_trace_id = str(persisted_trace_id or "")
     mechanistic = dict((report.get("mode7") or {}).get("mechanistic_trace") or {})
 
     yield emit_turn_start(turn_id=turn_id, user_text=prompt or report["input_cas_expression"])
@@ -1306,7 +1306,7 @@ async def _stream_report(
         axis_attrs.update(
             _mode7_axis_attrs_for_commit(
                 turn_id=turn_id,
-                trace_id=trace_id,
+                trace_id=committed_trace_id,
                 head_index=head_count,
                 head_name=head_name,
                 node=node,
@@ -1347,12 +1347,11 @@ async def _stream_report(
     # Only expose the trace_id to the UI when persistence succeeded. If the
     # file is not on disk, the dashboard would offer "Open Evidence" for a
     # trace_id that 404s — the example-fixture fallback is the honest UX in
-    # that case. The trace_id is still attached to head_commit axis_attrs
-    # above for downstream Atlas tagging; only the user-facing final id is
-    # gated on persistence.
+    # that case. Head-commit linkage uses the same persistence-backed value
+    # so one streamed turn cannot advertise two contradictory trace ids.
     yield emit_turn_end(
         turn_id=turn_id,
-        final_trace_id=persisted_trace_id or "",
+        final_trace_id=committed_trace_id,
         total_heads=head_count,
         duration_ms=duration_ms,
     )

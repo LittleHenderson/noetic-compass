@@ -72,7 +72,13 @@ def test_mode7_runtime_reports_missing_artifacts(client, auth_headers, monkeypat
     assert any("cas_native_predictor_run_dir_missing" in item for item in payload["diagnostics"])
 
 
-def test_mode7_live_streams_sggs_events_from_expression(client, auth_headers):
+def test_mode7_live_streams_sggs_events_from_expression(
+    client, auth_headers, tmp_path, monkeypatch
+):
+    from api.routes import mode7
+
+    monkeypatch.setattr(mode7, "_scaffold_root_for_traces", lambda: tmp_path)
+
     resp = client.get(
         "/mode7/live",
         params={
