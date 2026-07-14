@@ -180,6 +180,17 @@ provider, verifies the provider result, and translates it into this contract:
 | `CAS_ALERT_SECONDARY_WEBHOOK_URL` | Actions secret | HTTPS bridge endpoint for `secondary_on_call` escalation |
 | `CAS_ALERT_SECONDARY_WEBHOOK_TOKEN` | Actions secret | Bearer credential for the secondary endpoint |
 
+The manual `workflow_dispatch` input `secondary_escalation_drill` defaults to
+`false`. Set it to `true` only for a documented customer-production delivery
+drill. After the incident is at least 600 seconds old and the bridge verifies a
+timely `incident_commander` acknowledgement, the adapter deliberately sends one
+idempotent `secondary_on_call` escalation as well. This is the only normal path
+that preserves both a timely human ACK and a secondary-delivery receipt in the
+same safe artifact. Scheduled runs and manual runs with the default input keep
+the ordinary policy: a timely ACK suppresses secondary escalation. The drill
+is accepted only while the runtime incident is still failing, because a
+recovery run does not replay the original primary-delivery receipt.
+
 Enabling the mode is fail-closed: all three authenticated endpoints are
 required. URLs must use public HTTPS on port 443, cannot contain credentials,
 query strings, or fragments, and redirects are refused so an Authorization
@@ -275,6 +286,13 @@ triggers action `escalate` to destination `secondary_on_call`. Its successful
 response uses the delivery object above with action `escalate` and destination
 `secondary_on_call`. Failure to obtain that exact secondary receipt fails the
 job.
+
+During an explicit `secondary_escalation_drill`, a valid timely ACK does not
+suppress the drill page. The escalation request reason is the stable value
+`customer_production_secondary_escalation_drill`; the safe artifact records
+`secondary_drill_requested=true`, the independently verified ACK, and the
+secondary receipt. The drill still fails closed if the secondary delivery
+cannot be verified, and it never creates or fabricates an acknowledgement.
 
 Recovery cannot erase the obligation. If all component monitors turn green
 before 600 seconds, a provider-marked GitHub incident remains open and the

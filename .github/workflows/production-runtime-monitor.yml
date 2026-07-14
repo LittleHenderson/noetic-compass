@@ -2,6 +2,12 @@ name: CAS Production Runtime Monitor
 
 on:
   workflow_dispatch:
+    inputs:
+      secondary_escalation_drill:
+        description: 'After a timely incident-commander ACK, also page secondary_on_call for acceptance evidence'
+        required: false
+        default: false
+        type: boolean
   schedule:
     - cron: '7,22,37,52 * * * *'
 
@@ -108,6 +114,7 @@ jobs:
       BLUEPRINT_RESULT: ${{ needs.blueprint_drift.result }}
       AGGREGATE_RESULT: ${{ needs.aggregate.result }}
       CAS_ALERT_PROVIDER_MODE: ${{ vars.CAS_ALERT_PROVIDER_MODE }}
+      CAS_ALERT_FORCE_SECONDARY_DRILL: ${{ github.event_name == 'workflow_dispatch' && inputs.secondary_escalation_drill || false }}
     steps:
       - name: Deliver or resolve the deduplicated production alert
         id: github_incident
@@ -424,8 +431,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          drill_args=()
+          if [[ "${CAS_ALERT_FORCE_SECONDARY_DRILL:-false}" == 'true' ]]; then
+            drill_args+=(--force-secondary-drill)
+          fi
           python scripts/deliver_production_runtime_alert.py \
             --mode "${CAS_ALERT_PROVIDER_MODE:-disabled}" \
+            "${drill_args[@]}" \
             --require-provider-obligation \
             --lifecycle "$ALERT_LIFECYCLE" \
             --repository "$GITHUB_REPOSITORY" \

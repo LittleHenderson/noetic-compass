@@ -384,6 +384,83 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
         )
         self.assertTrue(artifact["provider_obligation_satisfied"])
 
+    def test_explicit_drill_preserves_timely_ack_and_delivers_secondary(self) -> None:
+        event = _event(age_seconds=900)
+        acknowledged_at = event.emitted_at + timedelta(seconds=300)
+        transport = QueueTransport(
+            [
+                _response(_delivery_document(event)),
+                _response(
+                    _ack_document(
+                        event,
+                        status="acknowledged",
+                        acknowledged_at=acknowledged_at,
+                        actor_role="incident_commander",
+                    )
+                ),
+                _response(
+                    _delivery_document(
+                        event,
+                        action="escalate",
+                        role="secondary_on_call",
+                        receipt_id="secondary-drill-receipt-123",
+                    )
+                ),
+            ]
+        )
+
+        artifact, succeeded = delivery.deliver_alert(
+            config=_config(),
+            event=event,
+            force_secondary_drill=True,
+            transport=transport,
+        )
+
+        self.assertTrue(succeeded)
+        self.assertEqual(len(transport.calls), 3)
+        self.assertTrue(artifact["secondary_drill_requested"])
+        self.assertEqual(artifact["acknowledgement"]["status"], "acknowledged")
+        self.assertEqual(artifact["acknowledgement"]["latency_seconds"], 300)
+        self.assertEqual(
+            transport.calls[2][1]["reason"],
+            "customer_production_secondary_escalation_drill",
+        )
+        self.assertEqual(
+            artifact["secondary_escalation"]["trigger_reason"],
+            "explicit_secondary_escalation_drill",
+        )
+        self.assertEqual(artifact["secondary_escalation"]["status"], "delivered")
+        self.assertEqual(
+            artifact["outcome"],
+            "primary_delivered_acknowledged_secondary_drill_escalated",
+        )
+        self.assertTrue(artifact["provider_obligation_satisfied"])
+
+    def test_explicit_drill_fails_closed_when_provider_is_disabled(self) -> None:
+        artifact, succeeded = delivery.deliver_alert(
+            config=delivery.ProviderConfig(mode=delivery.MODE_DISABLED),
+            event=_event(age_seconds=900),
+            force_secondary_drill=True,
+        )
+
+        self.assertFalse(succeeded)
+        self.assertEqual(artifact["outcome"], "configuration_error")
+        self.assertEqual(artifact["errors"], ["secondary_drill_requires_provider"])
+
+    def test_explicit_drill_fails_closed_during_recovery(self) -> None:
+        artifact, succeeded = delivery.deliver_alert(
+            config=_config(),
+            event=_event(age_seconds=900),
+            lifecycle=delivery.LIFECYCLE_RECOVERY_PENDING,
+            force_secondary_drill=True,
+        )
+
+        self.assertFalse(succeeded)
+        self.assertEqual(artifact["outcome"], "configuration_error")
+        self.assertEqual(
+            artifact["errors"], ["secondary_drill_requires_failing_lifecycle"]
+        )
+
     def test_exact_600_second_boundary_queries_acknowledgement(self) -> None:
         event = _event(age_seconds=600)
         transport = QueueTransport(
