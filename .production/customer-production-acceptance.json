@@ -17,7 +17,7 @@
       "verdict": "ACCEPT",
       "scope": "stage9_40e_validation_packet",
       "artifact_path": "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_verifier_report_20260528T0455Z.json",
-      "artifact_sha256": "79d140f0d5028578d8c776eb6069cbad53a4733e0553004aa9ecb8366374a5f0",
+      "artifact_sha256": "5515b2076204d594d6a70619f1fdb9f8d14d8ebd5a91287b0602b78322e76b85",
       "customer_production_effect": "none"
     },
     "research_accept_does_not_imply_customer_production_accept": true,

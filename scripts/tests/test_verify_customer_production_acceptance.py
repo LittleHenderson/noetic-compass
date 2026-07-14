@@ -699,6 +699,14 @@ class CheckedInOpenContractTests(unittest.TestCase):
         ):
             self.assertIn(key, report)
 
+    def test_research_artifact_hash_is_checkout_newline_invariant(self) -> None:
+        lf = b'{\n  "verdict": "ACCEPT"\n}\n'
+        crlf = lf.replace(b"\n", b"\r\n")
+        self.assertEqual(
+            verifier._repository_text_sha256(lf),
+            verifier._repository_text_sha256(crlf),
+        )
+
     def test_validate_only_permits_open_but_normal_command_does_not(self) -> None:
         with redirect_stdout(io.StringIO()):
             valid = verifier.main(

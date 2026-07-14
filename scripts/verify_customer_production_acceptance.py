@@ -533,6 +533,13 @@ def _read_bounded(path: Path, source: str) -> bytes:
         ) from exc
 
 
+def _repository_text_sha256(raw: bytes) -> str:
+    """Hash tracked text independently of checkout newline conversion."""
+
+    normalized = raw.replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(normalized).hexdigest()
+
+
 def _b64url_decode(value: str) -> bytes:
     padding = "=" * (-len(value) % 4)
     return base64.urlsafe_b64decode(value + padding)
@@ -1762,7 +1769,7 @@ def _validate_research_boundary(
     except ManifestLoadError as exc:
         _error(errors, f"{path}.research_verdict.artifact_path", str(exc))
         return expected_hash
-    actual_hash = hashlib.sha256(raw).hexdigest()
+    actual_hash = _repository_text_sha256(raw)
     if expected_hash is not None:
         _require(actual_hash == expected_hash, f"{path}.research_verdict.artifact_sha256", "does not match the dereferenced research artifact", errors)
     decision = payload.get("explicit_verifier_decision")
