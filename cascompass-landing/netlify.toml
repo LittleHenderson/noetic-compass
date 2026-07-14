@@ -33,6 +33,9 @@
   status = 200
   force = true
 
+# Keep this policy synchronized with `_headers`. Netlify reads this file when
+# the landing directory is the project root; production `--dir` deploys apply
+# the publish-directory `_headers` file instead.
 [[headers]]
   for = "/*"
   [headers.values]

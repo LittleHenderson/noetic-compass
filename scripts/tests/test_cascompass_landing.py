@@ -137,11 +137,50 @@ class NetlifyContractTests(unittest.TestCase):
         self.assertEqual(config["build"]["base"], ".")
         self.assertEqual(config["build"]["publish"], ".")
         self.assertNotRegex(raw, re.compile(r"[A-Z]:\\", re.I))
-        headers = config["headers"][0]["values"]
+
+        publish_header_lines = [
+            line.rstrip()
+            for line in (SITE_ROOT / "_headers").read_text(encoding="utf-8").splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        ]
+        self.assertEqual(publish_header_lines[0], "/*")
+        headers: dict[str, str] = {}
+        for line in publish_header_lines[1:]:
+            self.assertTrue(line.startswith("  "), line)
+            name, separator, value = line.strip().partition(": ")
+            self.assertEqual(separator, ": ", line)
+            self.assertNotIn(name, headers)
+            headers[name] = value
+
+        # `netlify deploy --dir cascompass-landing` reads the special file from
+        # the published bytes, not the nested project configuration. Keep both
+        # supported deploy modes on exactly the same response-header policy.
+        self.assertEqual(headers, config["headers"][0]["values"])
+        self.assertEqual(
+            set(headers),
+            {
+                "Cache-Control",
+                "Content-Security-Policy",
+                "Cross-Origin-Opener-Policy",
+                "Permissions-Policy",
+                "Referrer-Policy",
+                "X-Content-Type-Options",
+                "X-Frame-Options",
+            },
+        )
         self.assertIn("script-src 'self'", headers["Content-Security-Policy"])
+        self.assertIn("frame-ancestors 'none'", headers["Content-Security-Policy"])
         self.assertIn(
             "https://noetic-compass-api.onrender.com",
             headers["Content-Security-Policy"],
+        )
+        self.assertEqual(headers["Cross-Origin-Opener-Policy"], "same-origin")
+        self.assertEqual(
+            headers["Permissions-Policy"],
+            "camera=(), microphone=(), geolocation=(), payment=()",
+        )
+        self.assertEqual(
+            headers["Referrer-Policy"], "strict-origin-when-cross-origin"
         )
         self.assertEqual(headers["X-Content-Type-Options"], "nosniff")
         self.assertEqual(headers["X-Frame-Options"], "DENY")
@@ -156,6 +195,9 @@ class NetlifyContractTests(unittest.TestCase):
             "https://noetic-compass-api.onrender.com/api/support/public/tickets",
             script,
         )
+        self.assertIn(r"Submitting your support request\u2026", script)
+        for mojibake in ("â€¦", "Ã¢", "Â"):
+            self.assertNotIn(mojibake, script)
         self.assertIn("textContent", script)
         self.assertNotIn("innerHTML", script)
 

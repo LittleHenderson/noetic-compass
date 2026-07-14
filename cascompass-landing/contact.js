@@ -12,7 +12,7 @@
 
     const submit = form.querySelector('button[type="submit"]');
     if (submit instanceof HTMLButtonElement) submit.disabled = true;
-    status.textContent = 'Submitting your support requestâ€¦';
+    status.textContent = 'Submitting your support request\u2026';
 
     const data = new FormData(form);
     const payload = {
