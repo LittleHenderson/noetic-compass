@@ -1,4 +1,20 @@
 {
   "schema_version": "cas_harness_trusted_issuer_registry.v2",
-  "issuers": []
+  "issuers": [
+    {
+      "issuer": "github-customer-production",
+      "key_id": "gh-env-2026-07-14-01",
+      "algorithm": "RS256",
+      "n_base64url": "vW1ltZqb3JZb85vJFX1fH_kII2-MPIcrU1uMC5bqWNZE-bLb3O38O04Jkb6mthN4dZwwoSCX3JIAqQHJ0YuQh_ukThRUxZguAgvXer29OiTmLkVnt25ujK9wmm6twKsN9MqnW8Kf6-CmyGk4m-BQb40Lw5LWyJoWWaLjOkOzWu48MyswrzjTYDKKr_c_1BLH2xEu1ty3Vhb_045PgUWp0-S3db1m6m7Y3fTL3m0kch5nuP66QvyevspYugFjarE0LO3fvnjSW6vKGzwLceiGRRaacL7ERpVMCs9beyO7pIzt4s2O4AtbQ9SMXHQiuYdimaROWwBXrS1GhFYLuRN1BPhO43ulCRGbISsvfPzbq7NF-y0NYg-HwQUhXx8iXtPhkVIDWjdpbeDNci2WBrC5HGv59zLWdDKQMujiGg2iR3hnCQkQ8yZAnXiB5c7tqxHwfRae88pzBOgPsRVeWpByLEoJio0tS583fy19cfX5XV_bJGKuXNBvxc2Xgki11U73",
+      "e": 65537,
+      "allowed_subjects": [
+        {
+          "gate": "root_ci_protected_deploy",
+          "uri": "https://github.com/LittleHenderson/noetic-compass/releases/download/customer-production-evidence/root-ci-protected-deploy.json"
+        }
+      ],
+      "valid_from_utc": "2026-07-14T07:56:55Z",
+      "valid_until_utc": "2027-07-14T07:56:55Z"
+    }
+  ]
 }
