@@ -107,13 +107,8 @@ jobs:
       WORKER_RESULT: ${{ needs.worker_realmode.result }}
       BLUEPRINT_RESULT: ${{ needs.blueprint_drift.result }}
       AGGREGATE_RESULT: ${{ needs.aggregate.result }}
+      CAS_ALERT_PROVIDER_MODE: ${{ vars.CAS_ALERT_PROVIDER_MODE }}
     steps:
-      - uses: actions/checkout@v6
-
-      - uses: actions/setup-python@v6
-        with:
-          python-version: '3.12'
-
       - name: Deliver or resolve the deduplicated production alert
         id: github_incident
         shell: bash
@@ -121,6 +116,7 @@ jobs:
           set -euo pipefail
 
           alert_label='cas-production-runtime-alert'
+          provider_obligation_label='cas-production-provider-obligation'
           alert_title='CAS production runtime monitor is failing'
           run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
           result_summary="api=${API_RESULT} worker=${WORKER_RESULT} blueprint=${BLUEPRINT_RESULT} aggregate=${AGGREGATE_RESULT}"
@@ -131,65 +127,234 @@ jobs:
             --description 'Deduplicated production runtime failure and recovery record' \
             --force
 
-          issue_numbers="$(gh issue list \
-            --repo "$GITHUB_REPOSITORY" \
-            --state open \
-            --label "$alert_label" \
-            --search "\"${alert_title}\" in:title" \
-            --limit 100 \
-            --json number,title \
-            --jq '.[] | select(.title == "CAS production runtime monitor is failing") | .number')"
+          ensure_provider_labels() {
+            gh label create "$provider_obligation_label" \
+              --repo "$GITHUB_REPOSITORY" \
+              --color D93F0B \
+              --description 'Incident must satisfy provider ACK or secondary escalation before recovery closure' \
+              --force
+            gh label create 'cas-production-provider-satisfied' \
+              --repo "$GITHUB_REPOSITORY" \
+              --color 0E8A16 \
+              --description 'Actions verified and preserved the provider obligation before closure' \
+              --force
+          }
 
-          issue_number=''
-          if [[ -n "$issue_numbers" ]]; then
-            if [[ "$issue_numbers" == *$'\n'* ]]; then
-              echo 'Multiple open production runtime alert issues exist; refusing an ambiguous update.' >&2
-              exit 1
-            fi
-            if [[ ! "$issue_numbers" =~ ^[0-9]+$ ]]; then
-              echo 'Production runtime alert lookup returned an invalid issue identifier.' >&2
-              exit 1
-            fi
-            issue_number="$issue_numbers"
-          fi
-
-          if [[ "$AGGREGATE_RESULT" != 'success' ]]; then
-            body="Automated production runtime alert. ${result_summary}. Run: ${run_url}. The workflow records only normalized job results and never copies credentials or provider response bodies."
-            if [[ -n "$issue_number" ]]; then
-              gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body "$body"
-              issue_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${issue_number}"
-            else
-              issue_url="$(gh issue create \
-                --repo "$GITHUB_REPOSITORY" \
-                --title "$alert_title" \
-                --label "$alert_label" \
-                --body "$body")"
-              issue_number="${issue_url##*/}"
-              if [[ ! "$issue_number" =~ ^[0-9]+$ ]]; then
-                echo 'Production runtime alert creation returned an invalid issue identifier.' >&2
-                exit 1
-              fi
-            fi
-
+          readback_issue() {
+            issue_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${issue_number}"
             issue_readback="$(gh issue view "$issue_number" \
               --repo "$GITHUB_REPOSITORY" \
-              --json createdAt,url,title,labels)"
+              --json createdAt,url,title,labels,state)"
             issue_created_at="$(jq -r '.createdAt // empty' <<< "$issue_readback")"
             issue_readback_url="$(jq -r '.url // empty' <<< "$issue_readback")"
             issue_readback_title="$(jq -r '.title // empty' <<< "$issue_readback")"
+            issue_state="$(jq -r '.state // empty' <<< "$issue_readback")"
             issue_label_count="$(jq -r '[.labels[].name | select(. == "cas-production-runtime-alert")] | length' <<< "$issue_readback")"
+            provider_obligation_count="$(jq -r '[.labels[].name | select(. == "cas-production-provider-obligation")] | length' <<< "$issue_readback")"
+            provider_satisfied_current_count="$(jq -r '[.labels[].name | select(. == "cas-production-provider-satisfied")] | length' <<< "$issue_readback")"
             if [[ ! "$issue_created_at" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T ]]; then
               echo 'Production runtime alert readback returned an invalid creation time.' >&2
               exit 1
             fi
-            if [[ "$issue_readback_url" != "$issue_url" || "$issue_readback_title" != "$alert_title" || "$issue_label_count" != '1' ]]; then
+            if [[ "$issue_readback_url" != "$issue_url" || "$issue_readback_title" != "$alert_title" || "$issue_label_count" != '1' || ! "$issue_state" =~ ^(OPEN|CLOSED)$ ]]; then
               echo 'Production runtime alert readback did not match its fixed identity.' >&2
               exit 1
+            fi
+            if [[ ! "$provider_obligation_count" =~ ^[01]$ || ! "$provider_satisfied_current_count" =~ ^[01]$ ]]; then
+              echo 'Production runtime alert current provider markers are ambiguous.' >&2
+              exit 1
+            fi
+
+            issue_events_page_one="$(gh api \
+              -H 'Accept: application/vnd.github+json' \
+              "/repos/${GITHUB_REPOSITORY}/issues/${issue_number}/events?per_page=100&page=1")"
+            issue_events_page_two="$(gh api \
+              -H 'Accept: application/vnd.github+json' \
+              "/repos/${GITHUB_REPOSITORY}/issues/${issue_number}/events?per_page=100&page=2")"
+            if ! jq -e 'type == "array"' >/dev/null <<< "$issue_events_page_one" || ! jq -e 'type == "array"' >/dev/null <<< "$issue_events_page_two"; then
+              echo 'Production runtime alert timeline readback was not an array.' >&2
+              exit 1
+            fi
+            if [[ "$(jq -r 'length' <<< "$issue_events_page_two")" != '0' ]]; then
+              echo 'Production runtime alert timeline exceeds the bounded complete-read limit.' >&2
+              exit 1
+            fi
+            provider_obligation_history_count="$(jq -r '[.[] | select(.event == "labeled" and .label.name == "cas-production-provider-obligation")] | length' <<< "$issue_events_page_one")"
+            provider_satisfied_history_count="$(jq -r '[.[] | select(.event == "labeled" and .label.name == "cas-production-provider-satisfied" and .actor.login == "github-actions[bot]")] | length' <<< "$issue_events_page_one")"
+            provider_obligation_first_id="$(jq -r '[.[] | select(.event == "labeled" and .label.name == "cas-production-provider-obligation") | .id] | sort | .[0] // empty' <<< "$issue_events_page_one")"
+            provider_satisfied_first_id="$(jq -r '[.[] | select(.event == "labeled" and .label.name == "cas-production-provider-satisfied" and .actor.login == "github-actions[bot]") | .id] | sort | .[0] // empty' <<< "$issue_events_page_one")"
+
+            if [[ "$provider_obligation_history_count" -gt 0 && ! "$provider_obligation_first_id" =~ ^[1-9][0-9]*$ ]]; then
+              echo 'Production runtime alert obligation event identifier is invalid.' >&2
+              exit 1
+            fi
+            if [[ "$provider_satisfied_history_count" -gt 0 && ! "$provider_satisfied_first_id" =~ ^[1-9][0-9]*$ ]]; then
+              echo 'Production runtime alert satisfaction event identifier is invalid.' >&2
+              exit 1
+            fi
+
+            if [[ "$provider_obligation_count" == '1' || "$provider_obligation_history_count" -gt 0 ]]; then
+              provider_obligation='true'
+            else
+              provider_obligation='false'
+            fi
+            provider_satisfied='false'
+            if [[ "$provider_satisfied_history_count" -gt 0 ]]; then
+              provider_satisfied='true'
+            fi
+            if [[ "$provider_satisfied" == 'true' && "$provider_obligation" != 'true' ]]; then
+              echo 'Production runtime alert has satisfaction without a provider obligation.' >&2
+              exit 1
+            fi
+            if [[ "$provider_satisfied" == 'true' ]]; then
+              if [[ ! "$provider_obligation_first_id" =~ ^[1-9][0-9]*$ || ! "$provider_satisfied_first_id" =~ ^[1-9][0-9]*$ ]]; then
+                echo 'Production runtime alert cannot order its provider markers.' >&2
+                exit 1
+              fi
+              if [[ "$provider_satisfied_first_id" -le "$provider_obligation_first_id" ]]; then
+                echo 'Production runtime alert satisfaction marker precedes its obligation.' >&2
+                exit 1
+              fi
+            fi
+          }
+
+          issue_inventory="$(gh issue list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state all \
+            --search "\"${alert_title}\" in:title sort:created-desc" \
+            --limit 1000 \
+            --json number,title,state,createdAt)"
+          if ! jq -e 'type == "array"' >/dev/null <<< "$issue_inventory"; then
+            echo 'Production runtime alert issue inventory was not an array.' >&2
+            exit 1
+          fi
+          if [[ "$(jq -r 'length' <<< "$issue_inventory")" == '1000' ]]; then
+            echo 'Production runtime alert issue inventory hit its bounded limit.' >&2
+            exit 1
+          fi
+          exact_issues="$(jq -c '[.[] | select(.title == "CAS production runtime monitor is failing")] | sort_by(.createdAt)' <<< "$issue_inventory")"
+          exact_issue_count="$(jq -r 'length' <<< "$exact_issues")"
+          if ! jq -e 'all(.[]; ((.number | type) == "number") and ((.number | tostring) | test("^[1-9][0-9]*$")) and (.state == "OPEN" or .state == "CLOSED") and ((.createdAt | type) == "string") and (.createdAt | test("^[0-9]{4}-[0-9]{2}-[0-9]{2}T")))' >/dev/null <<< "$exact_issues"; then
+            echo 'Production runtime alert exact-incident inventory has an invalid record.' >&2
+            exit 1
+          fi
+          if [[ "$exact_issue_count" -gt 50 ]]; then
+            echo 'Production runtime alert exact-incident inventory exceeds the bounded audit limit.' >&2
+            exit 1
+          fi
+          open_issue_numbers="$(jq -r '.[] | select(.state == "OPEN") | .number' <<< "$exact_issues")"
+          if [[ "$open_issue_numbers" == *$'\n'* ]]; then
+            echo 'Multiple open production runtime alert issues exist; refusing an ambiguous update.' >&2
+            exit 1
+          fi
+          latest_issue_number="$(jq -r '.[-1].number // empty' <<< "$exact_issues")"
+          mapfile -t closed_issue_numbers < <(jq -r 'reverse | .[] | select(.state == "CLOSED") | .number' <<< "$exact_issues")
+          unsatisfied_closed_numbers=()
+          for candidate_issue_number in "${closed_issue_numbers[@]}"; do
+            if [[ ! "$candidate_issue_number" =~ ^[0-9]+$ ]]; then
+              echo 'Production runtime alert closed issue identifier is invalid.' >&2
+              exit 1
+            fi
+            issue_number="$candidate_issue_number"
+            readback_issue
+            if [[ "$issue_state" != 'CLOSED' ]]; then
+              echo 'Production runtime alert inventory/readback state diverged.' >&2
+              exit 1
+            fi
+            if [[ "$provider_obligation" == 'true' && "$provider_satisfied" != 'true' ]]; then
+              unsatisfied_closed_numbers+=("$candidate_issue_number")
+            fi
+          done
+          if [[ "${#unsatisfied_closed_numbers[@]}" -gt 1 ]]; then
+            echo 'Multiple closed production incidents have unsatisfied provider obligations.' >&2
+            exit 1
+          fi
+          issue_number=''
+          if [[ -n "$open_issue_numbers" ]]; then
+            if [[ ! "$open_issue_numbers" =~ ^[0-9]+$ || "$open_issue_numbers" != "$latest_issue_number" ]]; then
+              echo 'Production runtime alert open/latest incident identity is ambiguous.' >&2
+              exit 1
+            fi
+            if [[ "${#unsatisfied_closed_numbers[@]}" -ne 0 ]]; then
+              echo 'An open production incident overlaps a closed unsatisfied provider obligation.' >&2
+              exit 1
+            fi
+            issue_number="$open_issue_numbers"
+            readback_issue
+            if [[ "$issue_state" != 'OPEN' ]]; then
+              echo 'Production runtime alert selected as open did not read back OPEN.' >&2
+              exit 1
+            fi
+          elif [[ "${#unsatisfied_closed_numbers[@]}" -eq 1 ]]; then
+            issue_number="${unsatisfied_closed_numbers[0]}"
+            readback_issue
+            if [[ "$issue_state" != 'CLOSED' ]]; then
+              echo 'Production runtime alert selected as closed did not read back CLOSED.' >&2
+              exit 1
+            fi
+            gh issue reopen "$issue_number" --repo "$GITHUB_REPOSITORY"
+            readback_issue
+            if [[ "$issue_state" != 'OPEN' ]]; then
+              echo 'Unsatisfied provider-obligated incident did not reopen.' >&2
+              exit 1
+            fi
+          fi
+
+          if [[ "$AGGREGATE_RESULT" != 'success' ]]; then
+            body="Automated production runtime alert. ${result_summary}. Run: ${run_url}. The workflow records only normalized job results and never copies credentials or provider response bodies."
+            issue_created='false'
+            provider_mode_requested='false'
+            if [[ -n "${CAS_ALERT_PROVIDER_MODE:-}" && "${CAS_ALERT_PROVIDER_MODE}" != 'disabled' ]]; then
+              provider_mode_requested='true'
+            fi
+            if [[ -z "$issue_number" ]]; then
+              if [[ "$provider_mode_requested" == 'true' ]]; then
+                ensure_provider_labels
+                created_issue_url="$(gh issue create \
+                  --repo "$GITHUB_REPOSITORY" \
+                  --title "$alert_title" \
+                  --label "$alert_label" \
+                  --label "$provider_obligation_label" \
+                  --body "$body")"
+              else
+                created_issue_url="$(gh issue create \
+                  --repo "$GITHUB_REPOSITORY" \
+                  --title "$alert_title" \
+                  --label "$alert_label" \
+                  --body "$body")"
+              fi
+              issue_number="${created_issue_url##*/}"
+              if [[ ! "$issue_number" =~ ^[0-9]+$ ]]; then
+                echo 'Production runtime alert creation returned an invalid issue identifier.' >&2
+                exit 1
+              fi
+              issue_created='true'
+              readback_issue
+            elif [[ "$provider_mode_requested" == 'true' && "$provider_obligation" != 'true' && "$provider_satisfied" != 'true' ]]; then
+              ensure_provider_labels
+              gh issue edit "$issue_number" \
+                --repo "$GITHUB_REPOSITORY" \
+                --add-label "$provider_obligation_label" >/dev/null
+              readback_issue
+              if [[ "$provider_obligation" != 'true' ]]; then
+                echo 'Production runtime alert provider obligation did not persist before delivery.' >&2
+                exit 1
+              fi
+            fi
+            if [[ "$issue_created" != 'true' ]]; then
+              gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body "$body"
+            fi
+            readback_issue
+            provider_action_required='false'
+            if [[ "$provider_obligation" == 'true' && "$provider_satisfied" != 'true' ]]; then
+              provider_action_required='true'
             fi
             {
               echo 'alert_state=failing'
               echo "issue_number=${issue_number}"
               echo "issue_created_at_utc=${issue_created_at}"
+              echo "provider_obligation=${provider_obligation}"
+              echo "provider_action_required=${provider_action_required}"
             } >> "$GITHUB_OUTPUT"
             {
               echo '### Production alert delivered'
@@ -198,15 +363,33 @@ jobs:
               echo '- Status: GitHub issue delivery `present`; the customer-production alert-delivery gate and human acknowledgement remain `OPEN` until their separate evidence requirements pass.'
             } >> "$GITHUB_STEP_SUMMARY"
           elif [[ -n "$issue_number" ]]; then
-            recovery_body="Automated recovery receipt. All runtime monitor jobs passed. Run: ${run_url}."
-            gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body "$recovery_body"
-            gh issue close "$issue_number" --repo "$GITHUB_REPOSITORY" --reason completed
-            echo 'alert_state=recovered' >> "$GITHUB_OUTPUT"
-            {
-              echo '### Production alert resolved'
-              echo "- Issue: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${issue_number}"
-              echo "- Recovery run: ${run_url}"
-            } >> "$GITHUB_STEP_SUMMARY"
+            readback_issue
+            if [[ "$provider_obligation" == 'false' || "$provider_satisfied" == 'true' ]]; then
+              recovery_body="Automated recovery receipt. All runtime monitor jobs passed. Run: ${run_url}."
+              gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body "$recovery_body"
+              gh issue close "$issue_number" --repo "$GITHUB_REPOSITORY" --reason completed
+              echo 'alert_state=recovered' >> "$GITHUB_OUTPUT"
+              {
+                echo '### Production alert resolved'
+                echo "- Issue: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${issue_number}"
+                echo "- Recovery run: ${run_url}"
+                echo '- No unsatisfied provider obligation remains on this incident.'
+              } >> "$GITHUB_STEP_SUMMARY"
+            else
+              {
+                echo 'alert_state=recovery_pending'
+                echo "issue_number=${issue_number}"
+                echo "issue_created_at_utc=${issue_created_at}"
+                echo 'provider_obligation=true'
+                echo 'provider_action_required=true'
+              } >> "$GITHUB_OUTPUT"
+              {
+                echo '### Production recovery pending provider obligation'
+                echo "- Issue remains open: ${issue_url}"
+                echo "- Recovery run: ${run_url}"
+                echo '- Exact ACK readback or required secondary escalation must finish before automated closure.'
+              } >> "$GITHUB_STEP_SUMMARY"
+            fi
           else
             {
               echo '### Production runtime healthy'
@@ -216,10 +399,18 @@ jobs:
             echo 'alert_state=healthy' >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Deliver configured primary on-call alert and secondary escalation
-        if: ${{ steps.github_incident.outputs.alert_state == 'failing' }}
+      - uses: actions/checkout@v6
+        if: ${{ steps.github_incident.outputs.provider_action_required == 'true' }}
+
+      - uses: actions/setup-python@v6
+        if: ${{ steps.github_incident.outputs.provider_action_required == 'true' }}
+        with:
+          python-version: '3.12'
+
+      - name: Deliver alert or preserve the recovery ACK and escalation obligation
+        id: provider_alert
+        if: ${{ steps.github_incident.outputs.provider_action_required == 'true' }}
         env:
-          CAS_ALERT_PROVIDER_MODE: ${{ vars.CAS_ALERT_PROVIDER_MODE }}
           CAS_ALERT_PRIMARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_PRIMARY_WEBHOOK_URL }}
           CAS_ALERT_PRIMARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_PRIMARY_WEBHOOK_TOKEN }}
           CAS_ALERT_ACK_WEBHOOK_URL: ${{ secrets.CAS_ALERT_ACK_WEBHOOK_URL }}
@@ -228,12 +419,15 @@ jobs:
           CAS_ALERT_SECONDARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_SECONDARY_WEBHOOK_TOKEN }}
           ALERT_ISSUE_NUMBER: ${{ steps.github_incident.outputs.issue_number }}
           ALERT_EMITTED_AT_UTC: ${{ steps.github_incident.outputs.issue_created_at_utc }}
+          ALERT_LIFECYCLE: ${{ steps.github_incident.outputs.alert_state }}
           SAFE_RECEIPT_PATH: ${{ runner.temp }}/cas-runtime-alert-provider-receipts.json
         shell: bash
         run: |
           set -euo pipefail
           python scripts/deliver_production_runtime_alert.py \
             --mode "${CAS_ALERT_PROVIDER_MODE:-disabled}" \
+            --require-provider-obligation \
+            --lifecycle "$ALERT_LIFECYCLE" \
             --repository "$GITHUB_REPOSITORY" \
             --run-id "$GITHUB_RUN_ID" \
             --issue-number "$ALERT_ISSUE_NUMBER" \
@@ -243,12 +437,92 @@ jobs:
             --blueprint-result "$BLUEPRINT_RESULT" \
             --aggregate-result "$AGGREGATE_RESULT" \
             --output "$SAFE_RECEIPT_PATH"
+          provider_obligation_satisfied="$(jq -er '.provider_obligation_satisfied | if type == "boolean" then tostring else error("invalid provider obligation") end' "$SAFE_RECEIPT_PATH")"
+          echo "provider_obligation_satisfied=${provider_obligation_satisfied}" >> "$GITHUB_OUTPUT"
 
       - name: Preserve secret-safe provider receipt hashes
-        if: ${{ always() && steps.github_incident.outputs.alert_state == 'failing' }}
+        if: ${{ always() && steps.github_incident.outputs.provider_action_required == 'true' }}
         uses: actions/upload-artifact@v7
         with:
           name: cas-runtime-alert-provider-receipts-${{ github.run_id }}-${{ github.run_attempt }}
           path: ${{ runner.temp }}/cas-runtime-alert-provider-receipts.json
           if-no-files-found: error
           retention-days: 30
+
+      - name: Record machine provider satisfaction after artifact preservation
+        id: provider_satisfaction
+        if: ${{ success() && steps.github_incident.outputs.provider_action_required == 'true' && steps.provider_alert.outputs.provider_obligation_satisfied == 'true' }}
+        env:
+          SATISFIED_ISSUE_NUMBER: ${{ steps.github_incident.outputs.issue_number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          satisfaction_label='cas-production-provider-satisfied'
+          gh label create "$satisfaction_label" \
+            --repo "$GITHUB_REPOSITORY" \
+            --color 0E8A16 \
+            --description 'Actions verified and preserved the provider obligation before closure' \
+            --force
+          if gh issue edit "$SATISFIED_ISSUE_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --remove-label "$satisfaction_label" >/dev/null 2>&1; then
+            :
+          fi
+          gh issue edit "$SATISFIED_ISSUE_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --add-label "$satisfaction_label" >/dev/null
+          marker_readback="$(gh issue view "$SATISFIED_ISSUE_NUMBER" \
+            --repo "$GITHUB_REPOSITORY" \
+            --json labels \
+            --jq '[.labels[].name | select(. == "cas-production-provider-satisfied")] | length')"
+          marker_events_page_one="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            "/repos/${GITHUB_REPOSITORY}/issues/${SATISFIED_ISSUE_NUMBER}/events?per_page=100&page=1")"
+          marker_events_page_two="$(gh api \
+            -H 'Accept: application/vnd.github+json' \
+            "/repos/${GITHUB_REPOSITORY}/issues/${SATISFIED_ISSUE_NUMBER}/events?per_page=100&page=2")"
+          if ! jq -e 'type == "array"' >/dev/null <<< "$marker_events_page_one" || ! jq -e 'type == "array"' >/dev/null <<< "$marker_events_page_two"; then
+            echo 'Provider satisfaction timeline readback was not an array.' >&2
+            exit 1
+          fi
+          if [[ "$(jq -r 'length' <<< "$marker_events_page_two")" != '0' ]]; then
+            echo 'Provider satisfaction timeline exceeds the bounded complete-read limit.' >&2
+            exit 1
+          fi
+          obligation_first_id="$(jq -r '[.[] | select(.event == "labeled" and .label.name == "cas-production-provider-obligation") | .id] | sort | .[0] // empty' <<< "$marker_events_page_one")"
+          satisfaction_first_id="$(jq -r '[.[] | select(.event == "labeled" and .label.name == "cas-production-provider-satisfied" and .actor.login == "github-actions[bot]") | .id] | sort | .[0] // empty' <<< "$marker_events_page_one")"
+          if [[ "$marker_readback" != '1' || ! "$obligation_first_id" =~ ^[1-9][0-9]*$ || ! "$satisfaction_first_id" =~ ^[1-9][0-9]*$ ]]; then
+            echo 'Provider satisfaction marker did not read back with valid event identifiers.' >&2
+            exit 1
+          fi
+          if [[ "$satisfaction_first_id" -le "$obligation_first_id" ]]; then
+            echo 'Provider satisfaction marker did not read back after its obligation with the expected Actions actor.' >&2
+            exit 1
+          fi
+          echo 'machine_satisfaction_recorded=true' >> "$GITHUB_OUTPUT"
+
+      - name: Close the recovered incident after its provider obligation
+        if: ${{ success() && steps.github_incident.outputs.alert_state == 'recovery_pending' && steps.provider_satisfaction.outputs.machine_satisfaction_recorded == 'true' }}
+        env:
+          RECOVERED_ISSUE_NUMBER: ${{ steps.github_incident.outputs.issue_number }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          recovery_body="Automated recovery receipt after exact provider ACK/escalation obligation. All runtime monitor jobs passed. Run: ${run_url}."
+          gh issue comment "$RECOVERED_ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --body "$recovery_body"
+          gh issue close "$RECOVERED_ISSUE_NUMBER" --repo "$GITHUB_REPOSITORY" --reason completed
+          {
+            echo '### Production alert resolved after provider obligation'
+            echo "- Issue: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${RECOVERED_ISSUE_NUMBER}"
+            echo "- Recovery run: ${run_url}"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Keep recovered incident open while the ACK window is active
+        if: ${{ success() && steps.github_incident.outputs.alert_state == 'recovery_pending' && steps.provider_alert.outputs.provider_obligation_satisfied != 'true' }}
+        shell: bash
+        run: |
+          {
+            echo '### Production recovery is healthy but not yet closable'
+            echo '- The GitHub incident remains open until exact ACK readback or required secondary escalation satisfies the provider obligation.'
+          } >> "$GITHUB_STEP_SUMMARY"

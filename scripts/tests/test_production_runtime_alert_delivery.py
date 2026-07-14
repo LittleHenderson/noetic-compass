@@ -40,7 +40,10 @@ def _config() -> object:
     )
 
 
-def _event(*, age_seconds: int = 30, run_id: int = 1234) -> object:
+def _event(
+    *, age_seconds: int = 30, run_id: int = 1234, aggregate_result: str = "failure"
+) -> object:
+    component_result = "success" if aggregate_result == "success" else "failure"
     return delivery.AlertEvent(
         repository="LittleHenderson/noetic-compass",
         run_id=run_id,
@@ -48,10 +51,10 @@ def _event(*, age_seconds: int = 30, run_id: int = 1234) -> object:
         emitted_at=NOW - timedelta(seconds=age_seconds),
         observed_at=NOW,
         results={
-            "api": "failure",
+            "api": component_result,
             "worker": "success",
             "blueprint": "success",
-            "aggregate": "failure",
+            "aggregate": aggregate_result,
         },
     )
 
@@ -143,6 +146,14 @@ class ProviderConfigurationTests(unittest.TestCase):
             delivery.load_provider_config(delivery.MODE_WEBHOOK_V1, {})
         self.assertEqual(caught.exception.code, "primary_configuration_incomplete")
 
+    def test_mode_is_exact_and_does_not_normalize_drift_to_disabled(self) -> None:
+        for value in ("DISABLED", " disabled ", "WEBHOOK_V1"):
+            with self.subTest(value=value), self.assertRaises(
+                delivery.ConfigurationError
+            ) as caught:
+                delivery.load_provider_config(value, {})
+            self.assertEqual(caught.exception.code, "provider_mode_invalid")
+
     def test_enabled_mode_loads_complete_configuration(self) -> None:
         env: dict[str, str] = {}
         for prefix in ("PRIMARY", "ACK", "SECONDARY"):
@@ -200,6 +211,125 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
         self.assertEqual(artifact["claim_status"], "OPEN")
         self.assertEqual(artifact["incident_channel"]["status"], "present")
 
+    def test_persisted_obligation_rejects_removed_provider_configuration(self) -> None:
+        event = _event(age_seconds=900, aggregate_result="success")
+        transport = QueueTransport([])
+        artifact, succeeded = delivery.deliver_alert(
+            config=delivery.ProviderConfig(mode=delivery.MODE_DISABLED),
+            event=event,
+            lifecycle=delivery.LIFECYCLE_RECOVERY_PENDING,
+            provider_obligation_required=True,
+            transport=transport,
+        )
+        self.assertFalse(succeeded)
+        self.assertEqual(transport.calls, [])
+        self.assertFalse(artifact["provider_obligation_satisfied"])
+        self.assertEqual(artifact["outcome"], "configuration_error")
+        self.assertEqual(
+            artifact["errors"],
+            ["provider_configuration_removed_with_open_obligation"],
+        )
+
+    def test_enabled_recovery_before_600_seconds_leaves_obligation_open(self) -> None:
+        event = _event(age_seconds=599, aggregate_result="success")
+        transport = QueueTransport([])
+        artifact, succeeded = delivery.deliver_alert(
+            config=_config(),
+            event=event,
+            lifecycle=delivery.LIFECYCLE_RECOVERY_PENDING,
+            transport=transport,
+        )
+        self.assertTrue(succeeded)
+        self.assertEqual(transport.calls, [])
+        self.assertFalse(artifact["provider_obligation_satisfied"])
+        self.assertEqual(
+            artifact["outcome"], "recovery_waiting_for_acknowledgement_window"
+        )
+        self.assertEqual(
+            artifact["primary_on_call"]["reason"],
+            "primary_delivery_not_replayed_during_recovery",
+        )
+
+    def test_enabled_recovery_closes_obligation_after_verified_ack(self) -> None:
+        event = _event(age_seconds=900, aggregate_result="success")
+        transport = QueueTransport(
+            [
+                _response(
+                    _ack_document(
+                        event,
+                        status="acknowledged",
+                        acknowledged_at=event.emitted_at + timedelta(seconds=300),
+                        actor_role="incident_commander",
+                    )
+                )
+            ]
+        )
+        artifact, succeeded = delivery.deliver_alert(
+            config=_config(),
+            event=event,
+            lifecycle=delivery.LIFECYCLE_RECOVERY_PENDING,
+            transport=transport,
+        )
+        self.assertTrue(succeeded)
+        self.assertEqual(len(transport.calls), 1)
+        self.assertEqual(
+            transport.calls[0][1]["action"], "check_acknowledgement"
+        )
+        self.assertTrue(artifact["provider_obligation_satisfied"])
+        self.assertEqual(
+            artifact["outcome"],
+            "recovery_acknowledgement_verified_before_closure",
+        )
+
+    def test_enabled_recovery_escalates_unacknowledged_incident_before_closure(
+        self,
+    ) -> None:
+        event = _event(age_seconds=900, aggregate_result="success")
+        transport = QueueTransport(
+            [
+                _response(_ack_document(event, status="unacknowledged")),
+                _response(
+                    _delivery_document(
+                        event, action="escalate", role="secondary_on_call"
+                    )
+                ),
+            ]
+        )
+        artifact, succeeded = delivery.deliver_alert(
+            config=_config(),
+            event=event,
+            lifecycle=delivery.LIFECYCLE_RECOVERY_PENDING,
+            transport=transport,
+        )
+        self.assertTrue(succeeded)
+        self.assertEqual([call[1]["action"] for call in transport.calls], [
+            "check_acknowledgement",
+            "escalate",
+        ])
+        self.assertTrue(artifact["provider_obligation_satisfied"])
+        self.assertEqual(
+            artifact["outcome"],
+            "recovery_secondary_escalation_verified_before_closure",
+        )
+
+    def test_enabled_recovery_secondary_failure_keeps_obligation_open(self) -> None:
+        event = _event(age_seconds=900, aggregate_result="success")
+        transport = QueueTransport(
+            [
+                _response(_ack_document(event, status="unacknowledged")),
+                delivery.ProviderTransportError("provider_unreachable"),
+            ]
+        )
+        artifact, succeeded = delivery.deliver_alert(
+            config=_config(),
+            event=event,
+            lifecycle=delivery.LIFECYCLE_RECOVERY_PENDING,
+            transport=transport,
+        )
+        self.assertFalse(succeeded)
+        self.assertFalse(artifact["provider_obligation_satisfied"])
+        self.assertEqual(artifact["outcome"], "secondary_escalation_unavailable")
+
     def test_primary_delivery_waits_while_ack_window_is_open(self) -> None:
         event = _event(age_seconds=599)
         receipt_id = "raw-primary-receipt-should-be-hashed"
@@ -223,6 +353,7 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
         self.assertEqual(
             artifact["secondary_escalation"]["status"], "not_triggered"
         )
+        self.assertFalse(artifact["provider_obligation_satisfied"])
 
     def test_verified_incident_commander_ack_suppresses_escalation(self) -> None:
         event = _event(age_seconds=900)
@@ -251,6 +382,7 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
             artifact["secondary_escalation"]["reason"],
             "acknowledgement_verified_within_600_seconds",
         )
+        self.assertTrue(artifact["provider_obligation_satisfied"])
 
     def test_exact_600_second_boundary_queries_acknowledgement(self) -> None:
         event = _event(age_seconds=600)
@@ -296,7 +428,12 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
         self.assertTrue(succeeded)
         self.assertEqual(len(transport.calls), 3)
         self.assertEqual(
-            transport.calls[2][1]["reason"], "unacknowledged_after_600_seconds"
+            transport.calls[2][1]["reason"],
+            "on_call_acknowledgement_unverified",
+        )
+        self.assertEqual(
+            artifact["secondary_escalation"]["trigger_reason"],
+            "unacknowledged_after_600_seconds",
         )
         self.assertEqual(
             artifact["secondary_escalation"]["status"], "delivered"
@@ -305,6 +442,7 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
             artifact["secondary_escalation"]["destination_role"],
             "secondary_on_call",
         )
+        self.assertTrue(artifact["provider_obligation_satisfied"])
 
     def test_malformed_ack_receipt_escalates_without_fabricating_ack(self) -> None:
         event = _event(age_seconds=901)
@@ -505,7 +643,7 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
             "delivery_receipt_precedes_emission",
         )
 
-    def test_stale_delivery_receipt_is_rejected_for_current_observation(self) -> None:
+    def test_incident_idempotent_primary_receipt_can_be_reused_on_retry(self) -> None:
         event = _event(age_seconds=901)
         primary = _delivery_document(
             event, delivered_at=event.observed_at - timedelta(seconds=301)
@@ -514,8 +652,11 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
             [
                 _response(primary),
                 _response(
-                    _delivery_document(
-                        event, action="escalate", role="secondary_on_call"
+                    _ack_document(
+                        event,
+                        status="acknowledged",
+                        acknowledged_at=event.emitted_at + timedelta(seconds=300),
+                        actor_role="incident_commander",
                     )
                 ),
             ]
@@ -523,19 +664,20 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
         artifact, succeeded = delivery.deliver_alert(
             config=_config(), event=event, transport=transport
         )
-        self.assertFalse(succeeded)
+        self.assertTrue(succeeded)
         self.assertEqual(
-            artifact["primary_on_call"]["reason"],
-            "delivery_receipt_stale_for_observation",
+            artifact["primary_on_call"]["status"],
+            "delivered",
         )
 
     def test_stable_event_id_is_bound_to_incident_not_monitor_retry(self) -> None:
         first = _event(run_id=100)
         retry = _event(run_id=101)
         self.assertEqual(first.event_id_sha256, retry.event_id_sha256)
+        self.assertEqual(first.provider_payload(), retry.provider_payload())
         self.assertNotEqual(first.run_url, retry.run_url)
 
-    def test_idempotency_key_is_stable_for_exact_bytes_and_changes_with_retry_payload(
+    def test_primary_idempotency_is_incident_stable_but_ack_queries_are_fresh(
         self,
     ) -> None:
         first = _event(run_id=100)
@@ -543,20 +685,29 @@ class RuntimeAlertDeliveryTests(unittest.TestCase):
         first_payload = delivery._request_payload(
             action="deliver", destination_role="primary_on_call", event=first
         )
-        identical_payload = delivery._request_payload(
-            action="deliver", destination_role="primary_on_call", event=first
-        )
         retry_payload = delivery._request_payload(
             action="deliver", destination_role="primary_on_call", event=retry
         )
-        self.assertEqual(first_payload, identical_payload)
+        self.assertEqual(first_payload, retry_payload)
         self.assertEqual(
             delivery._idempotency_key(first_payload),
-            delivery._idempotency_key(identical_payload),
+            delivery._idempotency_key(retry_payload),
+        )
+        first_ack = delivery._request_payload(
+            action="check_acknowledgement",
+            destination_role="primary_on_call",
+            event=first,
+            include_observation=True,
+        )
+        retry_ack = delivery._request_payload(
+            action="check_acknowledgement",
+            destination_role="primary_on_call",
+            event=retry,
+            include_observation=True,
         )
         self.assertNotEqual(
-            delivery._idempotency_key(first_payload),
-            delivery._idempotency_key(retry_payload),
+            delivery._idempotency_key(first_ack),
+            delivery._idempotency_key(retry_ack),
         )
 
 

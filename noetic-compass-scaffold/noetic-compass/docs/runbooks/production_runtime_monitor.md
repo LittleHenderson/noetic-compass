@@ -148,8 +148,10 @@ URL. It never copies environment values, credentials, or provider bodies. An
 assigned operator must comment `ACK` with the diagnosis and next action. GitHub
 issue delivery is `present`; the full customer-production alert-delivery gate
 and human acknowledgement remain `OPEN` until their separate evidence
-requirements pass. A later fully green run comments a recovery receipt and
-closes the issue, but that automated closure is not acknowledgement evidence.
+requirements pass. With the optional provider mode disabled, a later fully
+green run comments a recovery receipt and closes the issue, but that automated
+closure is not acknowledgement evidence. A provider-obligated incident follows
+the stricter recovery sequence below.
 Failure to create, update, or close the issue makes the delivery job fail rather
 than silently dropping the alert.
 
@@ -157,10 +159,9 @@ than silently dropping the alert.
 
 GitHub Issues remains the default incident channel. With no additional
 configuration, the workflow behaves exactly as described above: it creates or
-updates the deduplicated GitHub issue and the optional provider adapter exits
-successfully without making a network request. That default records the
-provider path as `unavailable` and keeps the customer-production
-`alert_delivery` gate `OPEN`.
+updates the deduplicated GitHub issue, skips checkout/Python/provider/artifact
+steps, and performs no provider network request. The provider path remains
+`unavailable`, and the customer-production `alert_delivery` gate stays `OPEN`.
 
 The optional `webhook_v1` mode is a **custom receipt-contract bridge**. It is
 not a direct Slack, Microsoft Teams, PagerDuty, Opsgenie, SMS, or email webhook
@@ -171,7 +172,7 @@ provider, verifies the provider result, and translates it into this contract:
 
 | GitHub setting | Kind | Purpose |
 |---|---|---|
-| `CAS_ALERT_PROVIDER_MODE=webhook_v1` | Actions variable | Explicitly enables the bridge; missing, empty, or `disabled` keeps it dark |
+| `CAS_ALERT_PROVIDER_MODE=webhook_v1` | Actions variable | Explicitly enables the bridge; missing, empty, or exact lowercase `disabled` keeps it dark; other values fail closed |
 | `CAS_ALERT_PRIMARY_WEBHOOK_URL` | Actions secret | HTTPS bridge endpoint for `primary_on_call` delivery |
 | `CAS_ALERT_PRIMARY_WEBHOOK_TOKEN` | Actions secret | Bearer credential for the primary endpoint |
 | `CAS_ALERT_ACK_WEBHOOK_URL` | Actions secret | HTTPS bridge endpoint for provider acknowledgement readback |
@@ -186,19 +187,47 @@ header cannot be forwarded to a different origin. Tokens and URLs are read
 only from the environment; they are never command-line arguments, log fields,
 step-summary fields, or artifact fields.
 
-For each failed monitor run, the workflow first performs an exact GitHub issue
-readback. The issue number identifies the incident and its `createdAt` value is
-the stable P1 emission clock. Duplicate matching issues, a wrong title or
-label, or malformed readback stops delivery. The adapter hashes the repository
-and issue number into the stable event identifier. Its `Idempotency-Key` is the
-SHA-256 of the exact canonical request, so a later 15-minute observation can
-never reuse an earlier key with changed request bytes.
+For each monitor run, the workflow searches all issue states by the exact fixed
+title before it performs an exact GitHub issue readback. It does not rely on a
+mutable current label to find an incident. The issue number identifies the
+incident and its `createdAt` value is the stable P1 emission clock. A wrong
+title, missing base label, malformed readback, more than one open incident, or
+another ambiguous inventory stops delivery. A manually closed incident with an
+unsatisfied provider obligation is reopened; if more than one such closed
+incident exists, the workflow fails instead of choosing one.
+
+When provider mode is configured for a new incident, the issue is created with
+both `cas-production-runtime-alert` and
+`cas-production-provider-obligation` in the same GitHub operation. For an
+existing incident, the workflow adds and reads back the obligation before it
+posts another failure comment or invokes the bridge. Obligation state is true
+when the exact label is currently present **or** the complete issue-event
+history contains its exact `labeled` event. Removing the current label cannot
+erase that historical obligation. A later empty/`disabled` mode therefore
+cannot downgrade the incident: the adapter fails with the issue still open
+until the original obligation can be satisfied.
+
+These reads are deliberately bounded and fail closed. The workflow refuses an
+issue search that fills its 1,000-result cap, more than 50 exact-title incident
+records, an issue timeline beyond 100 events, a non-array response, or any
+inventory/readback divergence. This keeps a truncated API result from being
+mistaken for proof that no obligation exists.
+
+The adapter hashes the repository and issue number into the stable event
+identifier. Primary delivery and secondary escalation requests contain only
+incident-stable bytes, so their `Idempotency-Key` (SHA-256 of the exact
+canonical request) is identical across 15-minute retries and the bridge must
+return the original receipt without paging the person again. ACK readback adds
+the current run observation, so a later query receives a new request/key rather
+than a cached acknowledgement answer. No changed request is ever sent under an
+earlier idempotency key.
 
 The bridge receives a bounded JSON request with schema
 `cas_runtime_alert_adapter_request.v1`, action `deliver`, destination
 `primary_on_call`, and a normalized event. The event contains only the P1
-severity, stable emission time, GitHub issue/run references, and normalized job
-results. A successful HTTP response must be exactly one JSON object:
+severity, stable emission time, repository, and GitHub issue reference. Current
+run identity/results appear only in the separate observation attached to an ACK
+readback. A successful HTTP response must be exactly one JSON object:
 
 ```json
 {
@@ -221,8 +250,8 @@ fabricated dual-destination success.
 
 Before the issue is 600 seconds old, a valid primary receipt leaves the adapter
 in `primary_delivered_waiting_for_acknowledgement`; it does not claim a human
-ACK. On the first later failing run, the acknowledgement bridge receives action
-`check_acknowledgement` and must return exactly:
+ACK. On the first later failing **or recovered** run, the acknowledgement bridge
+receives action `check_acknowledgement` and must return exactly:
 
 ```json
 {
@@ -247,7 +276,31 @@ response uses the delivery object above with action `escalate` and destination
 `secondary_on_call`. Failure to obtain that exact secondary receipt fails the
 job.
 
-Each failing run uploads
+Recovery cannot erase the obligation. If all component monitors turn green
+before 600 seconds, a provider-marked GitHub incident remains open and the
+workflow waits for a later poll. At or after 600 seconds, exact timely ACK
+readback satisfies the obligation; otherwise exact secondary delivery does.
+The adapter records that proof in the secret-safe JSON and the workflow must
+successfully upload the artifact before it writes the machine satisfaction
+marker `cas-production-provider-satisfied`.
+
+That marker counts only when the complete event history contains an exact
+`labeled` event by `github-actions[bot]` whose numeric event ID follows the
+obligation event ID. Current label presence, a human-added lookalike label, or
+timestamp ordering alone is not satisfaction evidence. The workflow removes
+any current lookalike and re-adds the marker with its Actions identity, then
+reads back both the label and bounded history. Only after that succeeds may a
+recovered incident be commented and closed. A later recovery can trust the
+historical machine event even if a current marker was removed.
+
+A missing provider configuration, adapter failure, invalid/missing artifact,
+artifact-upload failure, missing/ambiguous machine marker, or secondary failure
+leaves or reopens the issue. Incidents with neither a current nor historical
+provider-obligation marker preserve the original GitHub-only immediate
+recovery behavior. Automated closure still does not assert or fabricate human
+acknowledgement.
+
+Each provider-obligated failing or recovery run uploads
 `cas-runtime-alert-provider-receipts-<run-id>-<attempt>` for 30 days. The JSON
 artifact is deliberately non-authoritative and `OPEN`. It includes normalized
 states, timestamps, SHA-256 hashes of provider receipt identifiers and exact

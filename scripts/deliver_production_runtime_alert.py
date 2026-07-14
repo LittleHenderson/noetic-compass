@@ -32,7 +32,10 @@ from urllib import error, parse, request
 
 MODE_DISABLED = "disabled"
 MODE_WEBHOOK_V1 = "webhook_v1"
+LIFECYCLE_FAILING = "failing"
+LIFECYCLE_RECOVERY_PENDING = "recovery_pending"
 EVENT_SCHEMA = "cas_runtime_alert_event.v1"
+OBSERVATION_SCHEMA = "cas_runtime_alert_observation.v1"
 REQUEST_SCHEMA = "cas_runtime_alert_adapter_request.v1"
 RECEIPT_SCHEMA = "cas_runtime_alert_provider_receipt.v1"
 SAFE_ARTIFACT_SCHEMA = "cas_runtime_alert_safe_receipts.v1"
@@ -114,19 +117,29 @@ class AlertEvent:
         return f"https://github.com/{self.repository}/issues/{self.issue_number}"
 
     def provider_payload(self) -> dict[str, Any]:
+        """Return the incident-stable provider event used for paging writes."""
+
         return {
             "schema_version": EVENT_SCHEMA,
             "event_id_sha256": self.event_id_sha256,
             "severity": "P1",
             "source": "github_actions_production_runtime_monitor",
             "emitted_at_utc": _format_utc(self.emitted_at),
-            "observed_at_utc": _format_utc(self.observed_at),
             "incident_channel": {
                 "destination_role": "incident_channel",
                 "provider": "github",
+                "repository": self.repository,
                 "issue_number": self.issue_number,
                 "issue_url": self.issue_url,
             },
+        }
+
+    def observation_payload(self) -> dict[str, Any]:
+        """Return the current run observation used only for ACK readback."""
+
+        return {
+            "schema_version": OBSERVATION_SCHEMA,
+            "observed_at_utc": _format_utc(self.observed_at),
             "run": {
                 "repository": self.repository,
                 "run_id": self.run_id,
@@ -264,7 +277,7 @@ def load_provider_config(
     mode: str | None, environ: Mapping[str, str] | None = None
 ) -> ProviderConfig:
     env = os.environ if environ is None else environ
-    normalized = (mode or MODE_DISABLED).strip().lower()
+    normalized = mode or MODE_DISABLED
     if normalized in {"", MODE_DISABLED}:
         return ProviderConfig(mode=MODE_DISABLED)
     if normalized != MODE_WEBHOOK_V1:
@@ -331,7 +344,12 @@ def _default_transport(
 
 
 def _request_payload(
-    *, action: str, destination_role: str, event: AlertEvent, reason: str | None = None
+    *,
+    action: str,
+    destination_role: str,
+    event: AlertEvent,
+    reason: str | None = None,
+    include_observation: bool = False,
 ) -> dict[str, Any]:
     payload: dict[str, Any] = {
         "schema_version": REQUEST_SCHEMA,
@@ -341,16 +359,17 @@ def _request_payload(
     }
     if reason is not None:
         payload["reason"] = reason
+    if include_observation:
+        payload["observation"] = event.observation_payload()
     return payload
 
 
 def _idempotency_key(payload: Mapping[str, Any]) -> str:
-    """Bind idempotency to the exact request bytes, never just the incident.
+    """Bind idempotency to the exact canonical request bytes.
 
-    The incident event id and emission time stay stable across 15-minute
-    monitor retries, while the exact run observation may change.  Hashing the
-    canonical request prevents a provider from receiving changed bytes under
-    an earlier idempotency key.
+    Delivery and escalation requests contain only the incident-stable event,
+    so retries reuse the same bytes and key. ACK readback adds the current run
+    observation, so a later query gets a new key instead of a cached answer.
     """
 
     canonical = json.dumps(
@@ -397,8 +416,6 @@ def _delivery_receipt(
     )
     if delivered < event.emitted_at:
         raise ProviderReceiptError("delivery_receipt_precedes_emission")
-    if delivered < event.observed_at - timedelta(seconds=MAX_CLOCK_SKEW_SECONDS):
-        raise ProviderReceiptError("delivery_receipt_stale_for_observation")
     if delivered > event.observed_at + timedelta(seconds=MAX_CLOCK_SKEW_SECONDS):
         raise ProviderReceiptError("delivery_receipt_time_in_future")
     receipt_id = document.get("receipt_id")
@@ -492,11 +509,19 @@ def _acknowledgement_receipt(
     return safe
 
 
-def _safe_base_artifact(event: AlertEvent, mode: str) -> dict[str, Any]:
+def _safe_base_artifact(
+    event: AlertEvent,
+    mode: str,
+    lifecycle: str = LIFECYCLE_FAILING,
+    provider_obligation_required: bool = False,
+) -> dict[str, Any]:
     return {
         "schema_version": SAFE_ARTIFACT_SCHEMA,
         "claim_status": "OPEN",
         "provider_mode": mode,
+        "lifecycle": lifecycle,
+        "provider_obligation_required": provider_obligation_required,
+        "provider_obligation_satisfied": False,
         "event": {
             "event_id_sha256": event.event_id_sha256,
             "severity": "P1",
@@ -524,10 +549,24 @@ def deliver_alert(
     *,
     config: ProviderConfig,
     event: AlertEvent,
+    lifecycle: str = LIFECYCLE_FAILING,
+    provider_obligation_required: bool = False,
     transport: Transport = _default_transport,
 ) -> tuple[dict[str, Any], bool]:
-    artifact = _safe_base_artifact(event, config.mode)
+    artifact = _safe_base_artifact(
+        event, config.mode, lifecycle, provider_obligation_required
+    )
+    if lifecycle not in {LIFECYCLE_FAILING, LIFECYCLE_RECOVERY_PENDING}:
+        artifact["errors"] = ["lifecycle_invalid"]
+        artifact["outcome"] = "configuration_error"
+        return artifact, False
     if config.mode == MODE_DISABLED:
+        if provider_obligation_required:
+            artifact["errors"] = [
+                "provider_configuration_removed_with_open_obligation"
+            ]
+            artifact["outcome"] = "configuration_error"
+            return artifact, False
         artifact["outcome"] = "provider_disabled"
         return artifact, True
     if not config.primary or not config.acknowledgement or not config.secondary:
@@ -536,28 +575,34 @@ def deliver_alert(
         return artifact, False
 
     primary_error: AlertDeliveryError | None = None
-    try:
-        primary_payload = _request_payload(
-            action="deliver",
-            destination_role="primary_on_call",
-            event=event,
-        )
-        response = transport(
-            config.primary,
-            primary_payload,
-            _idempotency_key(primary_payload),
-        )
-        artifact["primary_on_call"] = _delivery_receipt(
-            response,
-            event=event,
-            action="deliver",
-            destination_role="primary_on_call",
-        )
-    except AlertDeliveryError as exc:
-        primary_error = exc
+    if lifecycle == LIFECYCLE_FAILING:
+        try:
+            primary_payload = _request_payload(
+                action="deliver",
+                destination_role="primary_on_call",
+                event=event,
+            )
+            response = transport(
+                config.primary,
+                primary_payload,
+                _idempotency_key(primary_payload),
+            )
+            artifact["primary_on_call"] = _delivery_receipt(
+                response,
+                event=event,
+                action="deliver",
+                destination_role="primary_on_call",
+            )
+        except AlertDeliveryError as exc:
+            primary_error = exc
+            artifact["primary_on_call"] = {
+                "status": "unavailable",
+                "reason": exc.code,
+            }
+    else:
         artifact["primary_on_call"] = {
             "status": "unavailable",
-            "reason": exc.code,
+            "reason": "primary_delivery_not_replayed_during_recovery",
         }
 
     incident_age_seconds = max(
@@ -576,7 +621,11 @@ def deliver_alert(
             "status": "not_triggered",
             "reason": "acknowledgement_window_open",
         }
-        artifact["outcome"] = "primary_delivered_waiting_for_acknowledgement"
+        artifact["outcome"] = (
+            "recovery_waiting_for_acknowledgement_window"
+            if lifecycle == LIFECYCLE_RECOVERY_PENDING
+            else "primary_delivered_waiting_for_acknowledgement"
+        )
         return artifact, True
 
     if primary_error is None:
@@ -585,6 +634,7 @@ def deliver_alert(
                 action="check_acknowledgement",
                 destination_role="primary_on_call",
                 event=event,
+                include_observation=True,
             )
             response = transport(
                 config.acknowledgement,
@@ -598,7 +648,15 @@ def deliver_alert(
                     "status": "not_triggered",
                     "reason": "acknowledgement_verified_within_600_seconds",
                 }
-                artifact["outcome"] = "primary_delivered_acknowledgement_verified"
+                artifact["provider_obligation_satisfied"] = True
+                if lifecycle == LIFECYCLE_RECOVERY_PENDING:
+                    artifact["outcome"] = (
+                        "recovery_acknowledgement_verified_before_closure"
+                    )
+                else:
+                    artifact["outcome"] = (
+                        "primary_delivered_acknowledgement_verified"
+                    )
                 return artifact, True
             should_escalate = True
             escalation_reason = "unacknowledged_after_600_seconds"
@@ -617,7 +675,10 @@ def deliver_alert(
                 action="escalate",
                 destination_role="secondary_on_call",
                 event=event,
-                reason=escalation_reason,
+                # Keep the provider page stable even when the local diagnostic
+                # reason changes across retries. The safe artifact retains the
+                # exact trigger reason for this run.
+                reason="on_call_acknowledgement_unverified",
             )
             response = transport(
                 config.secondary,
@@ -654,7 +715,12 @@ def deliver_alert(
     if escalation_error is not None:
         artifact["outcome"] = "secondary_escalation_unavailable"
         return artifact, False
-    artifact["outcome"] = "primary_delivered_secondary_escalated"
+    if lifecycle == LIFECYCLE_RECOVERY_PENDING:
+        artifact["provider_obligation_satisfied"] = True
+        artifact["outcome"] = "recovery_secondary_escalation_verified_before_closure"
+    else:
+        artifact["provider_obligation_satisfied"] = True
+        artifact["outcome"] = "primary_delivered_secondary_escalated"
     return artifact, True
 
 
@@ -691,6 +757,12 @@ def _build_parser() -> argparse.ArgumentParser:
         description="Deliver one normalized production runtime alert."
     )
     parser.add_argument("--mode", default=MODE_DISABLED)
+    parser.add_argument("--require-provider-obligation", action="store_true")
+    parser.add_argument(
+        "--lifecycle",
+        choices=(LIFECYCLE_FAILING, LIFECYCLE_RECOVERY_PENDING),
+        default=LIFECYCLE_FAILING,
+    )
     parser.add_argument("--repository", required=True)
     parser.add_argument("--run-id", required=True, type=int)
     parser.add_argument("--issue-number", required=True, type=int)
@@ -718,8 +790,13 @@ def _event_from_args(args: argparse.Namespace, *, now: datetime) -> AlertEvent:
     }
     if any(value not in RESULT_VALUES for value in results.values()):
         raise ConfigurationError("monitor_result_invalid")
-    if results["aggregate"] == "success":
+    if args.lifecycle == LIFECYCLE_FAILING and results["aggregate"] == "success":
         raise ConfigurationError("provider_delivery_requires_failed_aggregate")
+    if (
+        args.lifecycle == LIFECYCLE_RECOVERY_PENDING
+        and results["aggregate"] != "success"
+    ):
+        raise ConfigurationError("provider_recovery_requires_successful_aggregate")
     emitted = _parse_cli_utc(args.emitted_at_utc, label="emitted_at_utc")
     if emitted > now + timedelta(seconds=MAX_CLOCK_SKEW_SECONDS):
         raise ConfigurationError("emitted_at_utc_in_future")
@@ -747,13 +824,18 @@ def main(argv: Sequence[str] | None = None) -> int:
     try:
         config = load_provider_config(args.mode)
     except ConfigurationError as exc:
-        normalized_mode = str(args.mode or MODE_DISABLED).strip().lower()
+        normalized_mode = str(args.mode or MODE_DISABLED)
         safe_mode = (
             normalized_mode
             if normalized_mode in {MODE_DISABLED, MODE_WEBHOOK_V1}
             else "invalid"
         )
-        artifact = _safe_base_artifact(event, safe_mode)
+        artifact = _safe_base_artifact(
+            event,
+            safe_mode,
+            args.lifecycle,
+            args.require_provider_obligation,
+        )
         artifact["outcome"] = "configuration_error"
         artifact["errors"] = [exc.code]
         _write_safe_artifact(args.output, artifact)
@@ -761,9 +843,19 @@ def main(argv: Sequence[str] | None = None) -> int:
         return 2
 
     try:
-        artifact, succeeded = deliver_alert(config=config, event=event)
+        artifact, succeeded = deliver_alert(
+            config=config,
+            event=event,
+            lifecycle=args.lifecycle,
+            provider_obligation_required=args.require_provider_obligation,
+        )
     except Exception:
-        artifact = _safe_base_artifact(event, config.mode)
+        artifact = _safe_base_artifact(
+            event,
+            config.mode,
+            args.lifecycle,
+            args.require_provider_obligation,
+        )
         artifact["outcome"] = "internal_error"
         artifact["errors"] = ["provider_adapter_internal_error"]
         _write_safe_artifact(args.output, artifact)
