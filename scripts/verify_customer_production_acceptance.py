@@ -1278,8 +1278,9 @@ def _validate_root_ci(
         if run_id is not None:
             _require(run_id not in run_ids, f"{item_path}.run_id", "must be unique across required workflows", errors)
             run_ids.add(run_id)
-            expected_prefix = f"{REPOSITORY_URL}/actions/runs/{run_id}/job/"
-            _require(isinstance(check.get("details_url"), str) and str(check.get("details_url")).startswith(expected_prefix), f"{item_path}.details_url", "must bind the check to its exact workflow run and job", errors)
+            if check_run_id is not None:
+                expected_details_url = f"{REPOSITORY_URL}/actions/runs/{run_id}/job/{check_run_id}"
+                _require(check.get("details_url") == expected_details_url, f"{item_path}.details_url", "must bind the check to its exact workflow run and check-run job", errors)
         if check_run_id is not None:
             _require(check_run_id not in check_run_ids, f"{item_path}.check_run_id", "must be unique", errors)
             check_run_ids.add(check_run_id)

@@ -1169,6 +1169,12 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
             "details URL": lambda ci: ci["checks"][0].update(
                 details_url="https://github.com/other/repo/actions/runs/1/job/1"
             ),
+            "same-run wrong job URL": lambda ci: ci["checks"][0].update(
+                details_url=(
+                    f"{verifier.REPOSITORY_URL}/actions/runs/"
+                    f"{ci['checks'][0]['run_id']}/job/99999999999"
+                )
+            ),
         }
         for label, mutate_ci in mutations.items():
             with self.subTest(label=label):

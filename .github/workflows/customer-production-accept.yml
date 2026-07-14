@@ -55,7 +55,7 @@ jobs:
           test "$DISPATCH_SHA" = "$EXPECTED_MASTER_HEAD"
           [[ "$EXPECTED_DEPLOY_ID" =~ ^dep-[A-Za-z0-9]+$ ]]
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           ref: ${{ inputs.expected_master_head }}
           fetch-depth: 1
@@ -76,7 +76,7 @@ jobs:
           [[ "$EXPECTED_DEPLOY_ID" =~ ^dep-[A-Za-z0-9]+$ ]]
 
       - name: Download the signed customer-production evidence bundle
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           name: ${{ inputs.evidence_artifact_name }}
           path: .customer-production-evidence
@@ -101,7 +101,7 @@ jobs:
 
       - name: Archive the sanitized evidence bundle and acceptance report
         if: ${{ always() }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: customer-production-acceptance-${{ github.run_id }}
           path: customer-production-archive
