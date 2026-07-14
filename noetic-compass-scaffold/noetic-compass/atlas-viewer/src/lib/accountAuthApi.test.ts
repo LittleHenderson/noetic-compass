@@ -62,7 +62,13 @@ describe('accountAuthApi', () => {
   it('fetches the exact anonymous capability contract without browser credentials', async () => {
     const fetchImpl = vi.fn(async () => new Response(
       JSON.stringify({ accounts_enabled: true }),
-      { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } },
+      {
+        status: 200,
+        headers: {
+          'Cache-Control': 'private, no-store, max-age=0',
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      },
     ));
 
     await expect(fetchPublicAccountCapabilities({
@@ -104,6 +110,7 @@ describe('accountAuthApi', () => {
     ['duplicate field', '{"accounts_enabled":false,"accounts_enabled":true}', 'application/json', undefined],
     ['string boolean', '{"accounts_enabled":"true"}', 'application/json', undefined],
     ['wrong content type', '{"accounts_enabled":true}', 'text/html', undefined],
+    ['missing no-store', '{"accounts_enabled":true}', 'application/json', undefined],
     ['oversized declared body', '{"accounts_enabled":true}', 'application/json', '300'],
     ['oversized actual body', `{"accounts_enabled":true}${' '.repeat(300)}`, 'application/json', undefined],
   ])('fails closed on a capability response with %s', async (
@@ -113,8 +120,24 @@ describe('accountAuthApi', () => {
     contentLength,
   ) => {
     const headers = new Headers({ 'Content-Type': contentType });
+    if (_label !== 'missing no-store') headers.set('Cache-Control', 'no-store');
     if (contentLength) headers.set('Content-Length', contentLength);
     const fetchImpl = vi.fn(async () => new Response(body, { status: 200, headers }));
+
+    await expect(fetchPublicAccountCapabilities({ fetchImpl }))
+      .rejects.toThrow('Account capability response was malformed.');
+  });
+
+  it('fails closed even if a non-browser fetch implementation follows a capability redirect', async () => {
+    const response = new Response('{"accounts_enabled":true}', {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store',
+        'Content-Type': 'application/json',
+      },
+    });
+    Object.defineProperty(response, 'redirected', { value: true });
+    const fetchImpl = vi.fn(async () => response);
 
     await expect(fetchPublicAccountCapabilities({ fetchImpl }))
       .rejects.toThrow('Account capability response was malformed.');
@@ -137,6 +160,10 @@ describe('accountAuthApi', () => {
     expect(fetchImpl).toHaveBeenCalledWith('https://api.example.test/auth/token', expect.objectContaining({
       method: 'POST',
       body: JSON.stringify({ username: 'owner@example.com', api_credential: 'casak_secret' }),
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
     }));
   });
 

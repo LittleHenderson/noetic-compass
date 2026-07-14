@@ -23,7 +23,10 @@ function accountToken(): string {
 }
 
 function jsonResponse(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { 'Cache-Control': 'no-store', 'Content-Type': 'application/json' },
+  });
 }
 
 function capabilityAwareFetch(

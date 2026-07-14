@@ -334,7 +334,14 @@ export function AccountAuthProvider({
       // Strip even a stale inherited Authorization header on untrusted origins.
       headers.delete('Authorization');
     }
-    const response = await fetchImpl(input, { ...init, headers });
+    const response = await fetchImpl(input, {
+      ...init,
+      headers,
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+    });
     if (response.status === 401 && attachedAccountBearer) clearSession();
     return response;
   }, [apiOptions?.baseUrl, apiOptions?.fetchImpl, clearSession, token]);
@@ -373,7 +380,7 @@ export function AccountAuthProvider({
         aria-live="polite"
         data-account-capability-state="loading"
       >
-        Verifying customer account mode…
+        Verifying customer account mode...
       </div>
     );
   }

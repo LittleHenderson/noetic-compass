@@ -27,7 +27,10 @@ function accountToken(): string {
 function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), {
     status,
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Cache-Control': 'no-store',
+      'Content-Type': 'application/json',
+    },
   });
 }
 
@@ -75,7 +78,7 @@ describe('AccountAuthProvider', () => {
       </AccountAuthProvider>,
     );
 
-    expect(screen.getByRole('status')).toHaveTextContent(/verifying customer account mode/i);
+    expect(screen.getByRole('status')).toHaveTextContent('Verifying customer account mode...');
     expect(screen.queryByTestId('account-state')).not.toBeInTheDocument();
     expect(fetchImpl).toHaveBeenCalledWith(
       'https://api.example.test/public/capabilities',
@@ -279,6 +282,12 @@ describe('AccountAuthProvider', () => {
 
     const init = fetchImpl.mock.calls[1][1] as RequestInit;
     expect(new Headers(init.headers).get('Authorization')).toBe(`Bearer ${token}`);
+    expect(init).toMatchObject({
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+    });
     expect(result.current.isAuthenticated).toBe(false);
   });
 

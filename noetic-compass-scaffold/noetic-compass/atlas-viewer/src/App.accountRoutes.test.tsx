@@ -27,7 +27,10 @@ beforeEach(() => {
         accounts_enabled: import.meta.env.VITE_ACCOUNTS_ENABLED?.trim() === 'true',
       }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Cache-Control': 'no-store',
+          'Content-Type': 'application/json',
+        },
       });
     }
     return new Response(JSON.stringify({ detail: 'not stubbed in route contract test' }), {

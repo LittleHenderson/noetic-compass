@@ -149,12 +149,21 @@ export async function fetchPublicAccountCapabilities(
       httpStatus: response.status,
     });
   }
+  if (response.redirected) {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
 
   const contentType = response.headers.get('Content-Type')
     ?.split(';', 1)[0]
     .trim()
     .toLowerCase();
   if (contentType !== 'application/json') {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
+  const cacheControl = response.headers.get('Cache-Control')
+    ?.split(',')
+    .map((directive) => directive.trim().toLowerCase());
+  if (!cacheControl?.includes('no-store')) {
     throw new AccountAuthApiError('Account capability response was malformed.');
   }
   const declaredLength = Number(response.headers.get('Content-Length'));
@@ -321,7 +330,13 @@ async function requestJson(
 
   let response: Response;
   try {
-    response = await fetchImpl(`${resolveAccountApiBaseUrl(options?.baseUrl)}${path}`, init);
+    response = await fetchImpl(`${resolveAccountApiBaseUrl(options?.baseUrl)}${path}`, {
+      ...init,
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+    });
   } catch (cause) {
     throw new AccountAuthApiError('Account request failed before a response.', {
       detail: cause instanceof Error ? cause.message : String(cause),

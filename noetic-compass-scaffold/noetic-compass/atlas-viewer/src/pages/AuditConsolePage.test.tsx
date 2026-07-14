@@ -58,7 +58,7 @@ async function renderPage(
     if (String(input).endsWith('/public/capabilities')) {
       return new Response(JSON.stringify({ accounts_enabled: accountsEnabled }), {
         status: 200,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Cache-Control': 'no-store', 'Content-Type': 'application/json' },
       });
     }
     return globalThis.fetch(input, init);

@@ -32,7 +32,10 @@ describe('AccountSecurityPage', () => {
           rotated: true,
           credential_issued_at: '2026-07-12T17:00:00Z',
         },
-    ), { status: 200, headers: { 'Content-Type': 'application/json' } }));
+    ), {
+      status: 200,
+      headers: { 'Cache-Control': 'no-store', 'Content-Type': 'application/json' },
+    }));
 
     render(
       <AccountAuthProvider accountsEnabled apiOptions={{ fetchImpl }}>
