@@ -1416,7 +1416,9 @@ describe('AuditConsolePage', () => {
     expect(await screen.findByText('waiting for receipts')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Submit one receipt' }));
 
-    expect(await screen.findByTestId('fleet-executor-gate')).toHaveTextContent(/missing required outputs/i);
+    await waitFor(() => {
+      expect(screen.getByTestId('fleet-executor-gate')).toHaveTextContent(/missing required outputs/i);
+    });
     expect(screen.getByRole('button', { name: 'Merge fleet' })).toBeDisabled();
     expect(fetchMock).toHaveBeenCalledTimes(6);
   });
