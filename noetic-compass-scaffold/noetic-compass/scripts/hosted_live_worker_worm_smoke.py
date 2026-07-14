@@ -24,6 +24,17 @@ from typing import Any, Mapping
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+try:
+    from .object_lock_smoke_validation import (
+        ObjectLockReceiptError,
+        validate_object_lock_receipt,
+    )
+except ImportError:  # Direct ``python scripts/...`` execution.
+    from object_lock_smoke_validation import (
+        ObjectLockReceiptError,
+        validate_object_lock_receipt,
+    )
+
 
 DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
 MODEL_ID = "EleutherAI/pythia-160m"
@@ -169,8 +180,6 @@ def main(argv: list[str] | None = None) -> int:
     anchor_status = required_string(anchor, "status", "object-lock")
     anchor_mode = required_string(anchor, "mode", "object-lock")
     object_lock_mode = anchor.get("object_lock_mode")
-    notes = external_anchor_check.get("notes")
-    normalized_notes = notes.lower() if isinstance(notes, str) else ""
     if args.require_object_lock:
         require_gate("object-lock", anchor_status == "anchored", f"expected anchored status, got {anchor_status!r}")
         require_gate("object-lock", anchor_mode == "s3", f"expected s3 anchor mode, got {anchor_mode!r}")
@@ -182,12 +191,15 @@ def main(argv: list[str] | None = None) -> int:
         retention_days, requested_at, retain_until, remaining = (
             assert_customer_production_retention(anchor)
         )
+        try:
+            structured_proof = validate_object_lock_receipt(anchor, external_anchor_check)
+        except ObjectLockReceiptError as exc:
+            raise HostedSmokeFailure("object-lock", str(exc)) from exc
         require_gate(
             "object-lock",
-            "object was re-read" in normalized_notes
-            and "object lock" in normalized_notes
-            and "retention is active" in normalized_notes,
-            f"expected /verify to confirm active Object Lock retention, notes={notes!r}",
+            structured_proof["requested_at"] == requested_at
+            and structured_proof["retain_until"] == retain_until,
+            "structured receipt and packet retention boundaries disagree",
         )
         print(
             "     OK - "
