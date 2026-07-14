@@ -547,7 +547,9 @@ All nine gates must be `present`, current, and authoritative:
    Render deploy metadata.
 3. `hosted_customer_journey`: hosted tenant audit, terminal verdict, verified
    packet download, bound WORM receipt, read-only share lifecycle, and
-   cross-tenant `404` checks.
+   cross-tenant `404` checks. Collect this exact lifecycle with
+   `docs/runbooks/hosted_customer_journey_acceptance.md`; the narrower hosted
+   worker/WORM smoke is necessary but does not satisfy this full gate.
 4. `accounts_billing`: account lifecycle and isolation, durable quota and
    idempotency behavior, and live Stripe subscription/invoice/webhook/meter
    reconciliation using hashed provider identifiers only.
