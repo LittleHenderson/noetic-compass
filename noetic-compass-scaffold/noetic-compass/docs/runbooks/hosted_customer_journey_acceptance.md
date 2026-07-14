@@ -20,6 +20,10 @@ publish acceptance authority or change the checked-in acceptance manifest.
 - `NC_PLATFORM_TENANT_PROVISIONING_SECRET` and `NC_BILLING_ADMIN_SECRET` are
   available only in the production operator environment. Never place them on
   the command line or in an evidence file.
+- Run from Render Shell on service `srv-d82ph683kofs73d210e0`. The collector
+  refuses to run unless `RENDER_SERVICE_ID` matches that service and
+  `RENDER_GIT_COMMIT` matches `--master-head`; this prevents a plausible
+  receipt from being collected by a different service or source revision.
 
 ## Collect
 
@@ -36,9 +40,12 @@ python scripts/collect_hosted_customer_journey_evidence.py `
 The command intentionally pins `https://noetic-compass-api.onrender.com`; an
 alternate origin, credentialized URL, query, or redirect target is refused.
 It creates two probe tenants. The primary receives a two-hour `manual_comped`
-entitlement; that source represents no payment. Sessions are revoked on both
-success and failure. Probe account records remain durable and the entitlement
-expires automatically; do not describe this as account deletion.
+`beta_comped` entitlement; that source represents no payment. Its anonymous
+share expires after 15 minutes and is explicitly revoked sooner on the happy
+path. Known shares and sessions are cleaned up on both success and failure;
+response-lost login/share creation can still leave only their server-bounded
+session/share lifetime. Probe account records remain durable and the
+entitlement expires automatically; do not describe this as account deletion.
 
 ## Required pass conditions
 
@@ -48,13 +55,18 @@ expires automatically; do not describe this as account deletion.
   research verdict (`ACCEPT`, `FLAG_FOR_HUMAN_REVIEW`, or `SUPPRESS`). The
   collector does not upgrade or reinterpret that verdict.
 - The owner downloads JSON for the produced trace and `/verify` returns
-  `all_match`, including a successful `merged_packet_external_anchor` re-read.
+  `all_match`, including exactly one successful
+  `merged_packet_external_anchor` re-read. The structured verifier receipt must
+  bind the same bucket, key, VersionId, manifest SHA-256, mode, request time,
+  and retention deadline observed through S3 GET and HEAD.
 - The packet's anchor is S3 Object Lock `GOVERNANCE` or `COMPLIANCE`, configured
   for at least 31 days with at least 30 days remaining.
 - Anonymous share fetch returns the exact same canonical packet, the share is
-  revoked, and the same token then returns 404 or 410.
+  revoked with authenticated metadata readback, and the same token then
+  returns 404 or 410. Supplying that token to a management write returns 401.
 - The foreign tenant receives exact 404 responses for both the audit status and
-  packet. A 401 or 403 is not accepted because it can disclose existence.
+  packet, plus share creation, metadata, and revocation attempts. A 401 or 403
+  is not accepted because it can disclose existence.
 - Output contains only hashed tenant, account, trace, and share-token subjects;
   it contains no raw operator secret, account credential, JWT, tenant/account
   identifier, share ID, or share token.
