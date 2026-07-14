@@ -5,6 +5,7 @@ import re
 import httpx
 import pytest
 
+import scripts.verify_account_canary_quotas as quota_proof
 from api.routes.cas_harness_audit import (
     HOSTED_OPEN_WEIGHT_MODEL_IDS,
     _should_run_api_endpoint,
@@ -36,6 +37,27 @@ from scripts.verify_account_canary_quotas import (
 )
 
 
+_AUDIT_A1 = "cas-audit-1111111111111111"
+_AUDIT_A2 = "cas-audit-2222222222222222"
+_AUDIT_A_OVERFLOW = "cas-audit-3333333333333333"
+_AUDIT_B1 = "cas-audit-4444444444444444"
+_AUDIT_B2 = "cas-audit-5555555555555555"
+_AUDIT_B_OVERFLOW = "cas-audit-6666666666666666"
+
+
+def _valid_marker_payload() -> dict[str, object]:
+    return {
+        "schema_version": quota_proof.PROOF_SCHEMA_VERSION,
+        "phase": "awaiting_restart",
+        "pre_host_fingerprint": "pre-instance",
+        "expected_limit": ACCOUNT_CANARY_QUOTA_LIMIT,
+        "execution_period": quota_proof.current_monthly_period_key(),
+        "tenant_a_audit_ids": [_AUDIT_A1, _AUDIT_A2],
+        "tenant_a_overflow_audit_id": _AUDIT_A_OVERFLOW,
+        "tenant_b_first_audit_id": _AUDIT_B1,
+    }
+
+
 def test_derived_proof_credentials_are_stable_scoped_and_never_echo_secret() -> None:
     platform_secret = "platform-secret-" + ("x" * 48)
     first = _credential(platform_secret, "proof-123", "a")
@@ -45,6 +67,285 @@ def test_derived_proof_credentials_are_stable_scoped_and_never_echo_secret() -> 
     assert first != _credential(platform_secret, "proof-456", "a")
     assert re.fullmatch(r"casak_[A-Za-z0-9_-]{43}", first)
     assert platform_secret not in first
+
+
+def test_marker_audit_ids_accept_exact_v1_shape() -> None:
+    allowed_a, overflow_a, first_b = quota_proof._marker_audit_ids(
+        _valid_marker_payload(), expected_limit=ACCOUNT_CANARY_QUOTA_LIMIT
+    )
+
+    assert allowed_a == [_AUDIT_A1, _AUDIT_A2]
+    assert overflow_a == _AUDIT_A_OVERFLOW
+    assert first_b == _AUDIT_B1
+
+
+@pytest.mark.parametrize(
+    "updates",
+    (
+        {"schema_version": 2},
+        {"tenant_a_audit_ids": [_AUDIT_A1]},
+        {"tenant_a_audit_ids": "not-a-list"},
+        {"tenant_a_audit_ids": [_AUDIT_A1, 7]},
+        {"tenant_a_audit_ids": [_AUDIT_A1, "../../unsafe"]},
+        {"tenant_a_overflow_audit_id": "not-a-safe-id"},
+        {"tenant_b_first_audit_id": None},
+        {"tenant_a_audit_ids": [_AUDIT_A1, _AUDIT_A1]},
+        {"tenant_a_overflow_audit_id": _AUDIT_A1},
+        {"tenant_b_first_audit_id": _AUDIT_A2},
+    ),
+)
+def test_marker_audit_ids_reject_malformed_or_overlapping_references(
+    updates: dict[str, object],
+) -> None:
+    payload = _valid_marker_payload()
+    payload.update(updates)
+
+    with pytest.raises(ProofFailure) as exc_info:
+        quota_proof._marker_audit_ids(
+            payload, expected_limit=ACCOUNT_CANARY_QUOTA_LIMIT
+        )
+
+    message = str(exc_info.value)
+    assert "../../unsafe" not in message
+    assert "not-a-safe-id" not in message
+
+
+def test_load_durable_session_accepts_public_projection_without_prompt_text() -> None:
+    prompt = quota_proof._prompt("q20260713a1", "a", 1)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.url.path.endswith(f"/{_AUDIT_A1}/status")
+        return httpx.Response(
+            200,
+            json={
+                "audit_id": _AUDIT_A1,
+                "prompt_summary": prompt,
+                "model_id": ACCOUNT_CANARY_MODEL_ID,
+                "audit_mode": "BALANCED",
+                "selected_modules": ["active_trace"],
+                "endpoint_url": None,
+                "provider": None,
+            },
+        )
+
+    with httpx.Client(
+        base_url="http://127.0.0.1:10000", transport=httpx.MockTransport(handler)
+    ) as client:
+        observed = quota_proof._load_durable_session(
+            client,
+            token="safe-test-token",
+            audit_id=_AUDIT_A1,
+            expected_prompt=prompt,
+            label="tenant A allowed audit 1",
+        )
+
+    assert observed["audit_id"] == _AUDIT_A1
+    assert "prompt_text" not in observed
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    (
+        ("audit_id", _AUDIT_A2),
+        ("prompt_summary", "untrusted-response-value"),
+        ("model_id", "untrusted-response-value"),
+        ("audit_mode", "FAST"),
+        ("selected_modules", ["untrusted-response-value"]),
+        ("endpoint_url", "https://untrusted.example.invalid"),
+        ("provider", "untrusted-response-value"),
+    ),
+)
+def test_load_durable_session_rejects_contract_drift_without_echoing_body(
+    field: str, value: object
+) -> None:
+    prompt = quota_proof._prompt("q20260713a1", "a", 1)
+    body: dict[str, object] = {
+        "audit_id": _AUDIT_A1,
+        "prompt_summary": prompt,
+        "model_id": ACCOUNT_CANARY_MODEL_ID,
+        "audit_mode": "BALANCED",
+        "selected_modules": ["active_trace"],
+        "endpoint_url": None,
+        "provider": None,
+    }
+    body[field] = value
+
+    with httpx.Client(
+        base_url="http://127.0.0.1:10000",
+        transport=httpx.MockTransport(lambda request: httpx.Response(200, json=body)),
+    ) as client:
+        with pytest.raises(ProofFailure) as exc_info:
+            quota_proof._load_durable_session(
+                client,
+                token="safe-test-token",
+                audit_id=_AUDIT_A1,
+                expected_prompt=prompt,
+                label="tenant A allowed audit 1",
+            )
+
+    assert "untrusted-response-value" not in str(exc_info.value)
+
+
+def test_ensure_session_reuses_public_prompt_summary_without_posting() -> None:
+    prompt = quota_proof._prompt("q20260713a1", "a", 1)
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        assert request.method == "GET"
+        return httpx.Response(
+            200,
+            json={"sessions": [{"audit_id": _AUDIT_A1, "prompt_summary": prompt}]},
+        )
+
+    with httpx.Client(
+        base_url="http://127.0.0.1:10000", transport=httpx.MockTransport(handler)
+    ) as client:
+        observed = quota_proof._ensure_session(
+            client,
+            token="safe-test-token",
+            proof_id="q20260713a1",
+            lane="a",
+            ordinal=1,
+        )
+
+    assert observed["audit_id"] == _AUDIT_A1
+
+
+def test_run_post_uses_sealed_marker_ids_and_completes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    marker_payload = _valid_marker_payload()
+
+    class FakeStore:
+        def get(self, tenant_id: str, kind: str, record_id: str):
+            return type("Marker", (), {"payload": marker_payload})()
+
+    session_contracts = {
+        _AUDIT_A1: quota_proof._prompt("q20260713a1", "a", 1),
+        _AUDIT_A2: quota_proof._prompt("q20260713a1", "a", 2),
+        _AUDIT_A_OVERFLOW: quota_proof._prompt("q20260713a1", "a", 3),
+        _AUDIT_B1: quota_proof._prompt("q20260713a1", "b", 1),
+    }
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        audit_id = request.url.path.rsplit("/", 2)[-2]
+        return httpx.Response(
+            200,
+            json={
+                "audit_id": audit_id,
+                "prompt_summary": session_contracts[audit_id],
+                "model_id": ACCOUNT_CANARY_MODEL_ID,
+                "audit_mode": "BALANCED",
+                "selected_modules": ["active_trace"],
+                "endpoint_url": None,
+                "provider": None,
+            },
+        )
+
+    monkeypatch.setattr(quota_proof, "_provision", lambda *args, **kwargs: {})
+    monkeypatch.setattr(
+        quota_proof,
+        "_login",
+        lambda client, *, proof_id, lane, credential: f"token-{lane}",
+    )
+
+    def fake_run(client, token: str, audit_id: str) -> httpx.Response:
+        if audit_id in {_AUDIT_A_OVERFLOW, _AUDIT_B_OVERFLOW}:
+            return httpx.Response(
+                429,
+                json={
+                    "detail": {
+                        "code": "audit_quota_exceeded",
+                        "limit": ACCOUNT_CANARY_QUOTA_LIMIT,
+                        "count": ACCOUNT_CANARY_QUOTA_LIMIT,
+                        "period": quota_proof.current_monthly_period_key(),
+                    }
+                },
+            )
+        return httpx.Response(200, json={})
+
+    monkeypatch.setattr(quota_proof, "_run", fake_run)
+    monkeypatch.setattr(
+        quota_proof,
+        "_ensure_session",
+        lambda client, *, token, proof_id, lane, ordinal: {
+            "audit_id": _AUDIT_B2 if ordinal == 2 else _AUDIT_B_OVERFLOW
+        },
+    )
+    monkeypatch.setattr(
+        quota_proof, "_assert_cross_tenant_404", lambda *args, **kwargs: None
+    )
+    monkeypatch.setattr(
+        quota_proof,
+        "get_usage",
+        lambda store, *, tenant_id, period_key: ACCOUNT_CANARY_QUOTA_LIMIT,
+    )
+    monkeypatch.setattr(
+        quota_proof,
+        "_assert_boundary_survived",
+        lambda *args, **kwargs: {"status": "present"},
+    )
+    rotations: list[str] = []
+    monkeypatch.setattr(
+        quota_proof,
+        "_rotate_and_invalidate",
+        lambda client, *, token, proof_id, lane, old_credential: rotations.append(lane),
+    )
+    monkeypatch.setattr(
+        quota_proof,
+        "_update_marker",
+        lambda store, *, tenant_id, proof_id, updates: marker_payload.update(updates),
+    )
+
+    with httpx.Client(
+        base_url="http://127.0.0.1:10000", transport=httpx.MockTransport(handler)
+    ) as client:
+        report = quota_proof._run_post(
+            client,
+            FakeStore(),
+            proof_id="q20260713a1",
+            platform_secret="platform-secret-" + ("x" * 48),
+            expected_limit=ACCOUNT_CANARY_QUOTA_LIMIT,
+            host_fingerprint="post-instance",
+            restart_receipt="dep-12345678",
+        )
+
+    assert report["status"] == "present"
+    assert report["restart_shared_postgres"] == "present"
+    assert rotations == ["a", "b"]
+    assert marker_payload["phase"] == "complete"
+    assert marker_payload["restart_receipt"] == "dep-12345678"
+
+
+def test_run_post_rejects_corrupt_marker_before_rotation(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    marker_payload = _valid_marker_payload()
+    marker_payload["tenant_a_overflow_audit_id"] = _AUDIT_A1
+
+    class FakeStore:
+        def get(self, tenant_id: str, kind: str, record_id: str):
+            return type("Marker", (), {"payload": marker_payload})()
+
+    rotations: list[str] = []
+    monkeypatch.setattr(
+        quota_proof,
+        "_rotate_and_invalidate",
+        lambda *args, **kwargs: rotations.append("unexpected"),
+    )
+
+    with pytest.raises(ProofFailure):
+        quota_proof._run_post(
+            None,
+            FakeStore(),
+            proof_id="q20260713a1",
+            platform_secret="platform-secret-" + ("x" * 48),
+            expected_limit=ACCOUNT_CANARY_QUOTA_LIMIT,
+            host_fingerprint="post-instance",
+            restart_receipt="dep-12345678",
+        )
+
+    assert rotations == []
+    assert marker_payload["phase"] == "awaiting_restart"
 
 
 def test_report_redaction_is_recursive() -> None:

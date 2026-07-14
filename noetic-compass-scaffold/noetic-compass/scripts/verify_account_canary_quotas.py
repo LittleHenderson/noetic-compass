@@ -65,6 +65,7 @@ ACCOUNT_CANARY_OBJECT_LOCK_RETENTION_DAYS = 31
 _PROOF_ID = re.compile(r"^[a-z0-9][a-z0-9-]{5,23}$")
 _SERVICE_ID = re.compile(r"^srv-[a-z0-9]{8,64}$")
 _RESTART_RECEIPT = re.compile(r"^dep-[a-z0-9]{8,64}$")
+_AUDIT_ID = re.compile(r"^cas-audit-[0-9a-f]{16}$")
 _SENSITIVE_KEY_PARTS = (
     "authorization",
     "credential",
@@ -388,7 +389,9 @@ def _ensure_session(
     ordinal: int,
 ) -> dict[str, Any]:
     prompt = _prompt(proof_id, lane, ordinal)
-    matches = [row for row in _sessions(client, token) if row.get("prompt_text") == prompt]
+    # The public session contract deliberately redacts prompt_text. Proof prompts
+    # are shorter than the summary limit, so prompt_summary is exact here.
+    matches = [row for row in _sessions(client, token) if row.get("prompt_summary") == prompt]
     if len(matches) > 1:
         raise ProofFailure(f"duplicate durable sessions exist for {prompt}")
     if matches:
@@ -739,11 +742,59 @@ def _run_pre(
     }
 
 
-def _find_session(sessions: list[dict[str, Any]], prompt: str) -> dict[str, Any]:
-    matches = [item for item in sessions if item.get("prompt_text") == prompt]
-    if len(matches) != 1:
-        raise ProofFailure(f"expected one durable session after restart for {prompt}")
-    return matches[0]
+def _marker_audit_ids(
+    payload: dict[str, Any], *, expected_limit: int
+) -> tuple[list[str], str, str]:
+    allowed_a = payload.get("tenant_a_audit_ids")
+    overflow_a = payload.get("tenant_a_overflow_audit_id")
+    first_b = payload.get("tenant_b_first_audit_id")
+    if (
+        payload.get("schema_version") != PROOF_SCHEMA_VERSION
+        or not isinstance(allowed_a, list)
+        or len(allowed_a) != expected_limit
+        or any(
+            not isinstance(item, str) or not _AUDIT_ID.fullmatch(item)
+            for item in allowed_a
+        )
+        or not isinstance(overflow_a, str)
+        or not _AUDIT_ID.fullmatch(overflow_a)
+        or not isinstance(first_b, str)
+        or not _AUDIT_ID.fullmatch(first_b)
+    ):
+        raise ProofFailure("pre-restart durable audit references are missing or malformed")
+    references = [*allowed_a, overflow_a, first_b]
+    if len(set(references)) != len(references):
+        raise ProofFailure("pre-restart durable audit references are not unique")
+    return allowed_a, overflow_a, first_b
+
+
+def _load_durable_session(
+    client: httpx.Client,
+    *,
+    token: str,
+    audit_id: str,
+    expected_prompt: str,
+    label: str,
+) -> dict[str, Any]:
+    body = _expect_status(
+        client.get(
+            f"{AUDIT_SESSION_PATH}/{audit_id}/status", headers=_headers(token)
+        ),
+        200,
+        f"load {label} after restart",
+    )
+    if (
+        not isinstance(body, dict)
+        or body.get("audit_id") != audit_id
+        or body.get("prompt_summary") != expected_prompt
+        or body.get("model_id") != ACCOUNT_CANARY_MODEL_ID
+        or body.get("audit_mode") != "BALANCED"
+        or body.get("selected_modules") != ["active_trace"]
+        or body.get("endpoint_url") is not None
+        or body.get("provider") is not None
+    ):
+        raise ProofFailure(f"{label} durable session contract mismatch after restart")
+    return body
 
 
 def _run_post(
@@ -772,6 +823,9 @@ def _run_post(
             "restart/cap assertion and the separate synthetic month-boundary assertion stay "
             "unambiguous"
         )
+    allowed_a_ids, overflow_a_id, first_b_id = _marker_audit_ids(
+        marker.payload, expected_limit=expected_limit
+    )
 
     credential_a = _credential(platform_secret, proof_id, "a")
     credential_b = _credential(platform_secret, proof_id, "b")
@@ -792,16 +846,29 @@ def _run_post(
     token_a = _login(client, proof_id=proof_id, lane="a", credential=credential_a)
     token_b = _login(client, proof_id=proof_id, lane="b", credential=credential_b)
 
-    sessions_a = _sessions(client, token_a)
-    sessions_b = _sessions(client, token_b)
-    first_a = _find_session(sessions_a, _prompt(proof_id, "a", 1))
-    overflow_a = _find_session(
-        sessions_a, _prompt(proof_id, "a", expected_limit + 1)
+    for ordinal, audit_id in enumerate(allowed_a_ids, start=1):
+        _load_durable_session(
+            client,
+            token=token_a,
+            audit_id=audit_id,
+            expected_prompt=_prompt(proof_id, "a", ordinal),
+            label=f"tenant A allowed audit {ordinal}",
+        )
+    _load_durable_session(
+        client,
+        token=token_a,
+        audit_id=overflow_a_id,
+        expected_prompt=_prompt(proof_id, "a", expected_limit + 1),
+        label="tenant A overflow audit",
     )
-    first_b = _find_session(sessions_b, _prompt(proof_id, "b", 1))
-    first_a_id = str(first_a.get("audit_id") or "")
-    overflow_a_id = str(overflow_a.get("audit_id") or "")
-    first_b_id = str(first_b.get("audit_id") or "")
+    _load_durable_session(
+        client,
+        token=token_b,
+        audit_id=first_b_id,
+        expected_prompt=_prompt(proof_id, "b", 1),
+        label="tenant B first audit",
+    )
+    first_a_id = allowed_a_ids[0]
     _expect_status(
         _run(client, token_a, first_a_id),
         200,
