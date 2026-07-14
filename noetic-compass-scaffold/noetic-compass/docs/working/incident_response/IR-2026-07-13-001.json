@@ -14,7 +14,7 @@
     "customer_impact": "not_established",
     "production_readiness_status": "OPEN",
     "legal_conclusion": "none_recorded",
-    "notes": "An invalid credential, rotated token, or hook-control concern does not by itself establish unauthorized use. This record is not customer-production ACCEPT evidence."
+    "notes": "An invalid credential, rotated token, or hook-control concern does not by itself establish unauthorized use. Customer-production readiness is decided only by the separate production acceptance verifier."
   },
   "time_control": {
     "event_date_utc": "2026-07-13",
@@ -57,8 +57,8 @@
       "id": "worker_token_rotation",
       "provider": "RunPod/Render",
       "fact_status": "observed",
-      "status": "complete",
-      "description": "The live-worker service credential was rotated across the RunPod Secret and authorized Render callers; the old credential was removed.",
+      "status": "in_progress",
+      "description": "The live-worker service credential rotation and old-credential removal were observed, but this OPEN-only record does not certify completion without prior immutable chronology evidence.",
       "old_credential_removed": true,
       "verification": [
         "protected worker request without a credential returned HTTP 401",
@@ -79,8 +79,8 @@
       "id": "canary_deploy_hook_rotation",
       "provider": "Render",
       "fact_status": "observed",
-      "status": "complete",
-      "description": "The account-canary service deploy hook was regenerated.",
+      "status": "in_progress",
+      "description": "The account-canary service deploy hook regeneration was observed, but this OPEN-only record does not certify completion without prior immutable chronology evidence.",
       "regenerated": true,
       "old_hook_rejection_evidenced": false,
       "evidence_references": [
@@ -151,7 +151,7 @@
     {
       "control_id": "revoke_or_rotate",
       "status": "in_progress",
-      "notes": "Worker token and canary deploy hook rotations are complete. Blueprint sync-hook rotation and AWS application key recovery remain pending."
+      "notes": "Worker-token and canary-hook changes were observed but remain unresolved in this OPEN-only record; Blueprint sync-hook rotation and AWS application key recovery also remain pending."
     },
     {
       "control_id": "scope_unauthorized_use",
@@ -201,7 +201,7 @@
   },
   "tabletop": {
     "scenario": "A worker request reports that a service token is required while a deploy hook has been regenerated, a Blueprint sync-hook rotation is pending, and the AWS production application key is invalid. Operators must contain authority without leaking secrets, preserve Evidence Packet integrity facts separately, decide whether notification analysis is triggered, and recover through exact-SHA CI.",
-    "exercise_status": "documentation_complete_participant_run_pending",
+    "exercise_status": "participant_run_pending",
     "participants": [
       "[ASSIGN: Incident Commander]",
       "[ASSIGN: Security/Forensics Lead]",
