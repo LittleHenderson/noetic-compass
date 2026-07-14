@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "cas_claim_surface.v1",
+  "surfaces": {
+    "product_app": {
+      "route": "/",
+      "documentTitle": "Atlas Model Audit | Noetic Compass",
+      "description": "Scoped model-audit application with explicit research and customer-production boundaries.",
+      "eyebrow": "CAS Harness product boundary",
+      "heading": "Atlas Model Audit",
+      "summary": "Atlas is the interactive application for running and reviewing scoped model audits. This same-route summary is visible before the application hydrates.",
+      "statements": [
+        "Customer-production status: OPEN.",
+        "Research verdicts do not establish customer-production ACCEPT.",
+        "Individual audit results may be FLAG_FOR_HUMAN_REVIEW and require a qualified person to decide next steps.",
+        "Evidence is present only when a named artifact passes its contract; otherwise that evidence is unavailable.",
+        "Capabilities and results remain scoped to the named model, method, dataset, and run. No compliance certification or universal safety conclusion is asserted."
+      ],
+      "loadingLabel": "Loading the interactive application..."
+    },
+    "audit_console": {
+      "route": "/audit-console",
+      "documentTitle": "Audit Console | Noetic Compass",
+      "description": "Run and inspect a scoped model audit with explicit evidence and human-review boundaries.",
+      "eyebrow": "CAS Harness audit boundary",
+      "heading": "Audit Console",
+      "summary": "Use the Audit Console to start and inspect a scoped model audit. The interactive controls load after this same-route summary hydrates.",
+      "statements": [
+        "Customer-production status: OPEN.",
+        "An audit verdict of ACCEPT applies only to its named research validation; it does not establish customer-production ACCEPT.",
+        "Audit findings may be FLAG_FOR_HUMAN_REVIEW and require a qualified person to decide next steps.",
+        "Evidence is present only when a named artifact passes its contract; otherwise that evidence is unavailable.",
+        "The console reports scoped evidence, not a compliance certification or a universal safety conclusion."
+      ],
+      "loadingLabel": "Loading the interactive audit controls..."
+    }
+  }
+}

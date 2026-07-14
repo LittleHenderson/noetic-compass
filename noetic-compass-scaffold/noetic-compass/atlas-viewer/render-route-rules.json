@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "atlas_render_static_routes.v1",
+  "dashboardManaged": true,
+  "requiredApiBaseUrl": "https://noetic-compass-api.onrender.com/atlas",
+  "expectedCurrentRoutes": [
+    {
+      "type": "rewrite",
+      "source": "/*",
+      "destination": "/index.html"
+    }
+  ],
+  "applyOnlyAfterLiveResources": [
+    "/spa.html",
+    "/audit-console/index.html"
+  ],
+  "replacementRoutes": [
+    {
+      "type": "rewrite",
+      "source": "/audit-console",
+      "destination": "/audit-console/index.html"
+    },
+    {
+      "type": "rewrite",
+      "source": "/audit-console/",
+      "destination": "/audit-console/index.html"
+    },
+    {
+      "type": "rewrite",
+      "source": "/*",
+      "destination": "/spa.html"
+    }
+  ],
+  "smokePathsAfterReplacement": [
+    "/",
+    "/audit-console",
+    "/model-config"
+  ],
+  "rollbackRoutes": [
+    {
+      "type": "rewrite",
+      "source": "/*",
+      "destination": "/index.html"
+    }
+  ]
+}
