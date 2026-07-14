@@ -259,14 +259,14 @@ creating a canary object. See
 [`docs/runbooks/production_runtime_monitor.md`](runbooks/production_runtime_monitor.md)
 for normalized failure meanings and incident response.
 
-Optional object-lock retention:
+Customer-production Object Lock retention (minimum 31 configured days):
 
 ```bash
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE
-CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=30
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=31
 ```
 
-Only set these Object Lock variables when the bucket was created with Object Lock enabled. The API fails the anchor loudly if only one variable is set or if the retention value is invalid, so production cannot silently downgrade a requested WORM anchor into a plain S3 write.
+Only set these Object Lock variables when the bucket was created with Object Lock enabled. The API fails the anchor loudly if only one variable is set or if the retention value is invalid, so production cannot silently downgrade a requested WORM anchor into a plain S3 write. The generic anchor service supports shorter positive test policies, but customer-production requires at least 31 configured days; do not deploy `30` for that lane.
 
 `NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY` is a separate, server-only HMAC authority for exact-version verification receipts. Use the same stable value on every replica and keep it unchanged across restarts. The API refuses an Object Lock write when this key is absent or shorter than 32 bytes. Do not rotate it until a receipt-key keyring or explicit migration is in place; rotation intentionally makes older serialized receipts fail closed. Never commit or print the value.
 
@@ -315,10 +315,12 @@ Success means:
 Additional Object Lock success means:
 
 - packet `hashes.external_anchor.object_lock_mode` is `GOVERNANCE` or `COMPLIANCE`
-- packet `hashes.external_anchor.object_lock_retain_until` is present
+- packet `hashes.external_anchor.retention_days` is at least `31`
+- packet `hashes.external_anchor.retention_requested_at` is timezone-aware, and the requested retain-until boundary spans the full configured retention window
+- packet `hashes.external_anchor.object_lock_retain_until` is timezone-aware and at least 30 days in the future when verified
 - `/evidence/{trace_id}/verify` confirms active Object Lock retention by re-reading S3 object metadata
 
-Current claim boundary: S3 anchoring plus `/verify` proves that the anchor object was written, re-read, hashed, and matched to the Evidence Packet. WORM language is only allowed after the `--require-object-lock` smoke passes against an Object-Lock-enabled bucket.
+Current claim boundary: S3 anchoring plus `/verify` proves that the anchor object was written, re-read, hashed, and matched to the Evidence Packet. Generic WORM language is only allowed after the generic `--require-object-lock` smoke passes against an Object-Lock-enabled bucket. Customer-production additionally requires the hosted live-worker/WORM smoke, whose `--require-object-lock` path fails unless retention is configured for at least 31 days and at least 30 days remain at verification.
 
 Failure labels:
 

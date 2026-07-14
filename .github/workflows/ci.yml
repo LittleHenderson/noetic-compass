@@ -74,6 +74,12 @@ jobs:
           -s scripts/tests
           -p 'test_production_runtime_alert_contract.py'
 
+      - name: Run the production runtime alert provider adapter tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_production_runtime_alert_delivery.py'
+
       - name: Install the isolated RS256 signing dependency
         run: python -m pip install --disable-pip-version-check 'cryptography==49.0.0'
 

@@ -35,6 +35,7 @@ SAFE_DEPENDENCY_REASONS = frozenset(
         "invalid_worker_url",
         "object_lock_disabled",
         "object_lock_policy_invalid",
+        "object_lock_retention_below_minimum",
         "realmode_contract_failed",
         "s3_client_unavailable",
         "s3_configuration_incomplete",

@@ -33,6 +33,7 @@ from api.services.atlas_live_worker_config import (
 
 EXPECTED_MODEL_ID = "EleutherAI/pythia-160m"
 REALMODE_PASS = "REAL_PYTHIA_WEIGHTS_LOADED"
+MIN_CUSTOMER_PRODUCTION_RETENTION_DAYS = 31
 _MAX_WORKER_TIMEOUT_SECONDS = 5.0
 _CACHE_TTL_SECONDS = 30.0
 
@@ -224,6 +225,8 @@ async def check_s3_worm_readiness() -> dict[str, Any]:
         return _worm_error("object_lock_policy_invalid")
     if not retention_days.isdigit() or int(retention_days) < 1:
         return _worm_error("object_lock_policy_invalid")
+    if int(retention_days) < MIN_CUSTOMER_PRODUCTION_RETENTION_DAYS:
+        return _worm_error("object_lock_retention_below_minimum")
 
     try:
         probe = await asyncio.to_thread(_probe_s3_worm_authority, bucket, region)

@@ -157,7 +157,7 @@ def _configure_s3(monkeypatch):
     monkeypatch.setenv(
         "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE"
     )
-    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "30")
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "31")
 
 
 @pytest.mark.asyncio
@@ -179,9 +179,29 @@ async def test_s3_worm_probe_requires_object_lock_and_versioning(monkeypatch):
         "status": "ok",
         "authority": "verified",
         "object_lock_mode": "GOVERNANCE",
-        "retention_days": 30,
+        "retention_days": 31,
     }
     assert seen == {"bucket": "evidence-bucket", "region": "us-west-2"}
+
+
+@pytest.mark.asyncio
+async def test_s3_worm_readiness_rejects_acceptance_ineligible_retention(monkeypatch):
+    _configure_s3(monkeypatch)
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "30")
+
+    def _probe(*_args):
+        raise AssertionError("invalid retention must fail before provider access")
+
+    monkeypatch.setattr(readiness, "_probe_s3_worm_authority", _probe)
+
+    check = await readiness.check_s3_worm_readiness()
+
+    assert check == {
+        "configured": True,
+        "required": True,
+        "status": "error",
+        "reason": "object_lock_retention_below_minimum",
+    }
 
 
 @pytest.mark.asyncio

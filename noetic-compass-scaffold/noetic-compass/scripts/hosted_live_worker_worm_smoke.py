@@ -19,6 +19,7 @@ import json
 import os
 import sys
 import uuid
+from datetime import datetime, timedelta, timezone
 from typing import Any, Mapping
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
@@ -33,6 +34,8 @@ API_TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 WORKER_TOKEN_ENV_VAR = "ATLAS_LIVE_WORKER_TOKEN"
 WORKER_URL_ENV_VARS = ("ATLAS_LIVE_WORKER_URL", "NC_ATLAS_LIVE_WORKER_URL")
 PRESENT_STATUSES = {"present", "verified"}
+MIN_CONFIGURED_RETENTION_DAYS = 31
+MIN_REMAINING_RETENTION = timedelta(days=30)
 
 
 class HostedSmokeFailure(AssertionError):
@@ -176,13 +179,8 @@ def main(argv: list[str] | None = None) -> int:
             object_lock_mode in {"GOVERNANCE", "COMPLIANCE"},
             f"expected Object Lock mode GOVERNANCE or COMPLIANCE, got {object_lock_mode!r}",
         )
-        require_gate(
-            "object-lock",
-            isinstance(anchor.get("retention_days"), int)
-            and anchor.get("retention_days") >= 1
-            and isinstance(anchor.get("object_lock_retain_until"), str)
-            and bool(anchor.get("object_lock_retain_until")),
-            f"expected retention_days and object_lock_retain_until, got {anchor}",
+        retention_days, requested_at, retain_until, remaining = (
+            assert_customer_production_retention(anchor)
         )
         require_gate(
             "object-lock",
@@ -191,7 +189,12 @@ def main(argv: list[str] | None = None) -> int:
             and "retention is active" in normalized_notes,
             f"expected /verify to confirm active Object Lock retention, notes={notes!r}",
         )
-        print(f"     OK - Object Lock mode={object_lock_mode} retain_until={anchor.get('object_lock_retain_until')}")
+        print(
+            "     OK - "
+            f"Object Lock mode={object_lock_mode} configured_retention_days={retention_days} "
+            f"requested_at={requested_at.isoformat()} retain_until={retain_until.isoformat()} "
+            f"remaining_days={remaining.total_seconds() / 86400:.3f}"
+        )
     else:
         print(
             "     OK - "
@@ -239,7 +242,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--require-object-lock",
         action="store_true",
-        help="Fail unless the packet anchor proves S3 Object Lock GOVERNANCE or COMPLIANCE retention.",
+        help=(
+            "Fail unless the packet anchor proves S3 Object Lock GOVERNANCE or COMPLIANCE, "
+            "configured retention of at least 31 days, and at least 30 days remaining."
+        ),
     )
     parser.add_argument(
         "--username",
@@ -247,6 +253,107 @@ def build_parser() -> argparse.ArgumentParser:
         help="Username used only when fetching a fallback demo JWT from /auth/token.",
     )
     return parser
+
+
+def assert_customer_production_retention(
+    anchor: Mapping[str, Any],
+    *,
+    verified_at: datetime | None = None,
+) -> tuple[int, datetime, datetime, timedelta]:
+    """Require the customer-production retention window on one verified anchor.
+
+    ``retention_days`` and ``retention_requested_at`` prove the configured
+    policy spans the promised window. ``object_lock_retain_until`` also proves
+    enough of that policy remains when this smoke verifies the object. Both
+    checks are necessary because an old receipt can still describe a 31-day
+    policy after most of its immutable window has elapsed.
+    """
+
+    retention_days = anchor.get("retention_days")
+    require_gate(
+        "object-lock-retention",
+        isinstance(retention_days, int)
+        and not isinstance(retention_days, bool)
+        and retention_days >= MIN_CONFIGURED_RETENTION_DAYS,
+        (
+            f"customer-production requires configured retention_days >= "
+            f"{MIN_CONFIGURED_RETENTION_DAYS}, got {retention_days!r}"
+        ),
+    )
+
+    requested_at = parse_timezone_aware_timestamp(
+        anchor.get("retention_requested_at"),
+        field="retention_requested_at",
+    )
+    retain_until = parse_timezone_aware_timestamp(
+        anchor.get("object_lock_retain_until"),
+        field="object_lock_retain_until",
+    )
+    require_gate(
+        "object-lock-retention",
+        retain_until >= requested_at + timedelta(days=retention_days),
+        (
+            "object_lock_retain_until is shorter than the configured retention window; "
+            f"retention_requested_at={requested_at.isoformat()} "
+            f"retention_days={retention_days} retain_until={retain_until.isoformat()}"
+        ),
+    )
+    checked_at = verified_at or datetime.now(timezone.utc)
+    require_gate(
+        "object-lock-retention",
+        isinstance(checked_at, datetime)
+        and checked_at.tzinfo is not None
+        and checked_at.utcoffset() is not None,
+        "verification time must be a timezone-aware datetime",
+    )
+    checked_at_utc = checked_at.astimezone(timezone.utc)
+    require_gate(
+        "object-lock-retention",
+        checked_at_utc >= requested_at,
+        (
+            "verification time predates the Object Lock request boundary; "
+            f"retention_requested_at={requested_at.isoformat()} "
+            f"verified_at={checked_at_utc.isoformat()}"
+        ),
+    )
+    remaining = retain_until - checked_at_utc
+    require_gate(
+        "object-lock-retention",
+        remaining >= MIN_REMAINING_RETENTION,
+        (
+            "customer-production requires at least 30 days of Object Lock retention "
+            f"remaining at verification; retain_until={retain_until.isoformat()} "
+            f"verified_at={checked_at_utc.isoformat()} "
+            f"remaining_seconds={remaining.total_seconds():.6f}"
+        ),
+    )
+    return retention_days, requested_at, retain_until, remaining
+
+
+def parse_timezone_aware_timestamp(value: Any, *, field: str) -> datetime:
+    """Parse an ISO-8601 timestamp and normalize it to UTC, rejecting ambiguity."""
+
+    require_gate(
+        "object-lock-retention",
+        isinstance(value, str) and bool(value.strip()),
+        f"{field} must be a non-empty timezone-aware ISO-8601 timestamp, got {value!r}",
+    )
+    candidate = value.strip()
+    if candidate.endswith(("Z", "z")):
+        candidate = f"{candidate[:-1]}+00:00"
+    try:
+        parsed = datetime.fromisoformat(candidate)
+    except ValueError as exc:
+        raise HostedSmokeFailure(
+            "object-lock-retention",
+            f"{field} must be a timezone-aware ISO-8601 timestamp, got {value!r}",
+        ) from exc
+    require_gate(
+        "object-lock-retention",
+        parsed.tzinfo is not None and parsed.utcoffset() is not None,
+        f"{field} must include Z or a numeric UTC offset, got {value!r}",
+    )
+    return parsed.astimezone(timezone.utc)
 
 
 def worker_session_payload() -> dict[str, Any]:
