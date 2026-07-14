@@ -1931,7 +1931,9 @@ def _validate_accounts_billing_semantics(
         "login_http_status": 200,
         "revoked_session_http_status": 401,
         "durable_session_restart_verified": True,
-        "disabled_account_http_status": 403,
+        # Match the production authentication boundary: disabled identities
+        # are deliberately indistinguishable from unknown/bad credentials.
+        "disabled_account_http_status": 401,
         "cross_tenant_http_status": 404,
     }.items():
         _equal(session, field, expected, "account_session")

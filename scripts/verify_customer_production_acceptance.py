@@ -1491,7 +1491,9 @@ def _validate_accounts_billing(
             "login_http_status": 200,
             "revoked_session_http_status": 401,
             "durable_session_restart_verified": True,
-            "disabled_account_http_status": 403,
+            # Authentication deliberately collapses unknown, bad-credential,
+            # and disabled identities to the same non-enumerating 401.
+            "disabled_account_http_status": 401,
             "cross_tenant_http_status": 404,
         }
         for field, value in expected.items():

@@ -400,7 +400,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "logout_http_status": 204,
                 "revoked_session_http_status": 401,
                 "durable_session_restart_verified": True,
-                "disabled_account_http_status": 403,
+                "disabled_account_http_status": 401,
                 "cross_tenant_http_status": 404,
                 "verified_at_utc": "2026-07-14T11:45:00Z",
             },
@@ -1340,6 +1340,24 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertEqual(report["result"], "INVALID")
         self.assertTrue(any("app_url" in error for error in report["errors"]))
         self.assertTrue(any("api_base_url" in error for error in report["errors"]))
+
+    def test_disabled_account_receipt_requires_non_enumerating_401(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            mutate_payloads=lambda payloads: payloads["accounts_billing"][
+                "account_session"
+            ].update(disabled_account_http_status=403),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "disabled_account_http_status" in error and "401" in error
+                for error in report["errors"]
+            )
+        )
 
     def test_github_repository_workflow_and_app_identities_are_pinned(self) -> None:
         mutations = {
