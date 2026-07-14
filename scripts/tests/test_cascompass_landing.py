@@ -57,7 +57,8 @@ class LandingSourceTests(unittest.TestCase):
             document = (SITE_ROOT / name).read_text(encoding="utf-8")
             self.assertTrue(document.startswith("<!doctype html>"), name)
             self.assertEqual(document.count("<h1"), 1, name)
-            self.assertNotIn("<script", document.lower(), name)
+            if name != "contact.html":
+                self.assertNotIn("<script", document.lower(), name)
             self.assertIn('href="/site.css"', document, name)
 
     def test_pinned_pages_establish_static_route_coverage(self) -> None:
@@ -100,7 +101,15 @@ class LandingSourceTests(unittest.TestCase):
         self.assertIn("Do not include passwords", contact)
 
     def test_internal_navigation_uses_clean_known_routes(self) -> None:
-        allowed = {"/", "/legal", "/privacy", "/terms", "/contact", "/site.css"}
+        allowed = {
+            "/",
+            "/legal",
+            "/privacy",
+            "/terms",
+            "/contact",
+            "/site.css",
+            "/contact.js",
+        }
         for path in sorted(SITE_ROOT.glob("*.html")):
             document = path.read_text(encoding="utf-8")
             internal = set(re.findall(r'(?:href|src)="(/[^"]*)"', document))
@@ -129,9 +138,26 @@ class NetlifyContractTests(unittest.TestCase):
         self.assertEqual(config["build"]["publish"], ".")
         self.assertNotRegex(raw, re.compile(r"[A-Z]:\\", re.I))
         headers = config["headers"][0]["values"]
-        self.assertIn("script-src 'none'", headers["Content-Security-Policy"])
+        self.assertIn("script-src 'self'", headers["Content-Security-Policy"])
+        self.assertIn(
+            "https://noetic-compass-api.onrender.com",
+            headers["Content-Security-Policy"],
+        )
         self.assertEqual(headers["X-Content-Type-Options"], "nosniff")
         self.assertEqual(headers["X-Frame-Options"], "DENY")
+
+    def test_contact_form_posts_only_to_the_pinned_support_intake(self) -> None:
+        contact = (SITE_ROOT / "contact.html").read_text(encoding="utf-8")
+        script = (SITE_ROOT / "contact.js").read_text(encoding="utf-8")
+        self.assertIn('id="support-form"', contact)
+        self.assertIn('name="consent_to_contact"', contact)
+        self.assertIn('src="/contact.js"', contact)
+        self.assertIn(
+            "https://noetic-compass-api.onrender.com/api/support/public/tickets",
+            script,
+        )
+        self.assertIn("textContent", script)
+        self.assertNotIn("innerHTML", script)
 
 
 if __name__ == "__main__":

@@ -24,8 +24,42 @@
       </nav>
     </header>
 
+    <section class="panel" aria-labelledby="support-form-title">
+      <p class="eyebrow">Support request</p>
+      <h2 id="support-form-title">Create a tracked support ticket</h2>
+      <p>
+        This form records a ticket ID and response target. Submission is not an
+        acknowledgement or resolution; those require a recorded support-operator action.
+      </p>
+      <form class="contact-form" id="support-form">
+        <div class="form-grid">
+          <label>Email <input name="email" type="email" autocomplete="email" maxlength="320" required /></label>
+          <label>Name <input name="name" autocomplete="name" maxlength="200" /></label>
+          <label>Organization <input name="organization" autocomplete="organization" maxlength="200" /></label>
+          <label>Category
+            <select name="category">
+              <option value="product_support">Product support</option>
+              <option value="early_access">Early access</option>
+              <option value="privacy">Privacy</option>
+              <option value="security">Security</option>
+              <option value="legal">Legal notice</option>
+            </select>
+          </label>
+        </div>
+        <label>Subject <input name="subject" maxlength="240" required /></label>
+        <label>Message <textarea name="message" rows="7" maxlength="8000" required></textarea></label>
+        <label class="honeypot" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+        <label class="consent-row">
+          <input name="consent_to_contact" type="checkbox" required />
+          I consent to a reply about this request and have read the <a href="/privacy">Privacy Notice</a>.
+        </label>
+        <button type="submit">Create support ticket</button>
+        <p class="form-status" id="support-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
     <section class="panel" aria-labelledby="channels-title">
-      <p class="eyebrow">Email channels</p>
+      <p class="eyebrow">Email fallback</p>
       <h2 id="channels-title">hello@cascompass.ai</h2>
       <div class="contact-list">
         <a href="mailto:hello@cascompass.ai?subject=CAS%20Compass%20early%20access">Request early access</a>
@@ -46,5 +80,6 @@
       </nav>
     </footer>
   </main>
+  <script src="/contact.js" defer></script>
 </body>
 </html>
