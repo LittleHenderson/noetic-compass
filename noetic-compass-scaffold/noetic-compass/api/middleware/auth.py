@@ -41,6 +41,8 @@ PUBLIC_PATHS = {
     "/openapi.json",
     "/redoc",
 }
+
+PUBLIC_ACCOUNT_CAPABILITIES_PATH = "/public/capabilities"
 # ALWAYS public, in EVERY posture: these never carry per-tenant evidence ownership, so identity is
 # never required for them. Atlas LIVE has its own invite-code/session-token gate; target/verify and
 # scale-plan are stateless validators/planners; live-worker/health is a liveness probe; /api/crm/public
@@ -88,6 +90,24 @@ def is_public_path(path: str) -> bool:
     if not settings.accounts_enabled:
         return any(path.startswith(p) for p in ACCOUNT_GATED_PUBLIC_PREFIXES)
     return False
+
+
+def is_public_account_capability_request(
+    path: str, method: str, query: str = ""
+) -> bool:
+    """Allow only the exact, query-free Atlas startup handshake GET.
+
+    This deliberately cannot live in ``PUBLIC_PATHS``: that path-only set
+    would also make every other HTTP method anonymous.  Keeping the method and
+    query checks at the authentication chokepoint prevents a future route with
+    the same path from silently inheriting broader public access.
+    """
+
+    return (
+        method.upper() == "GET"
+        and not query
+        and path == PUBLIC_ACCOUNT_CAPABILITIES_PATH
+    )
 
 
 def is_public_acceptance_authority_request(
@@ -155,6 +175,9 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
         if (
             is_public_path(request.url.path)
+            or is_public_account_capability_request(
+                request.url.path, request.method, request.url.query
+            )
             or is_public_acceptance_authority_request(
                 request.url.path, request.method, request.url.query
             )

@@ -26,6 +26,17 @@ function jsonResponse(body: unknown, status = 200): Response {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
 }
 
+function capabilityAwareFetch(
+  next: (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>,
+) {
+  return vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+    if (String(input).endsWith('/public/capabilities')) {
+      return jsonResponse({ accounts_enabled: true });
+    }
+    return next(input, init);
+  });
+}
+
 function LocationProbe(): JSX.Element {
   return <span data-testid="location">{useLocation().pathname}</span>;
 }
@@ -57,7 +68,9 @@ afterEach(() => {
 describe('LoginPage', () => {
   it('authenticates with the per-account credential and returns to the gated destination', async () => {
     const user = userEvent.setup();
-    const fetchImpl = vi.fn(async () => jsonResponse({ token: accountToken(), expires_in_minutes: 60 }));
+    const fetchImpl = capabilityAwareFetch(
+      async () => jsonResponse({ token: accountToken(), expires_in_minutes: 60 }),
+    );
     render(
       <AccountAuthProvider accountsEnabled apiOptions={{ fetchImpl }}>
         <MemoryRouter initialEntries={[{ pathname: '/login', state: { from: '/audit-console' } }]}>
@@ -69,12 +82,13 @@ describe('LoginPage', () => {
       </AccountAuthProvider>,
     );
 
-    await user.type(screen.getByLabelText('Email or username'), 'owner@example.com');
+    await user.type(await screen.findByLabelText('Email or username'), 'owner@example.com');
     await user.type(screen.getByLabelText('Account credential'), `casak_${'A'.repeat(43)}`);
     await user.click(screen.getByRole('button', { name: 'Sign in securely' }));
 
     expect(await screen.findByTestId('location')).toHaveTextContent('/audit-console');
-    const body = JSON.parse(String((fetchImpl.mock.calls[0][1] as RequestInit).body));
+    const loginCall = fetchImpl.mock.calls.find(([input]) => String(input).endsWith('/auth/token'))!;
+    const body = JSON.parse(String((loginCall[1] as RequestInit).body));
     expect(body).toEqual({
       username: 'owner@example.com',
       api_credential: `casak_${'A'.repeat(43)}`,
@@ -84,7 +98,7 @@ describe('LoginPage', () => {
   it('keeps the exact browser-generated credential across an interrupted redemption retry', async () => {
     const user = userEvent.setup();
     let redemptionAttempts = 0;
-    const fetchImpl = vi.fn(async (input: RequestInfo | URL) => {
+    const fetchImpl = capabilityAwareFetch(async (input: RequestInfo | URL) => {
       const url = String(input);
       if (url.endsWith('/accounts/invite/redeem')) {
         redemptionAttempts += 1;
@@ -101,7 +115,7 @@ describe('LoginPage', () => {
     });
     renderLogin(fetchImpl as typeof fetch);
 
-    await user.click(screen.getByRole('tab', { name: 'Redeem invite' }));
+    await user.click(await screen.findByRole('tab', { name: 'Redeem invite' }));
     await user.type(screen.getByLabelText('Invite code'), 'INVITE-ONE');
     await user.type(screen.getByLabelText('Email or username'), 'new@example.com');
     await user.click(screen.getByRole('button', { name: 'Generate my account credential' }));
@@ -123,10 +137,10 @@ describe('LoginPage', () => {
     expect(localStorage.length).toBe(0);
   });
 
-  it('labels bootstrap and tenant provisioning as operator-only and exposes no secret field', () => {
-    const fetchImpl = vi.fn() as unknown as typeof fetch;
-    renderLogin(fetchImpl);
-    expect(screen.getByText(/operator-only deployment workflows/i)).toBeInTheDocument();
+  it('labels bootstrap and tenant provisioning as operator-only and exposes no secret field', async () => {
+    const fetchImpl = capabilityAwareFetch(async () => jsonResponse({}));
+    renderLogin(fetchImpl as typeof fetch);
+    expect(await screen.findByText(/operator-only deployment workflows/i)).toBeInTheDocument();
     expect(screen.queryByLabelText(/bootstrap secret/i)).not.toBeInTheDocument();
     expect(screen.queryByLabelText(/platform secret/i)).not.toBeInTheDocument();
   });
@@ -135,7 +149,9 @@ describe('LoginPage', () => {
     const user = userEvent.setup();
     sessionStorage.setItem(ACCOUNT_SESSION_STORAGE_KEY, accountToken());
     localStorage.setItem(LEGACY_LIVE_INVITE_STORAGE_KEY, 'legacy-live-secret');
-    const fetchImpl = vi.fn(async () => jsonResponse({ detail: 'revocation unavailable' }, 503));
+    const fetchImpl = capabilityAwareFetch(
+      async () => jsonResponse({ detail: 'revocation unavailable' }, 503),
+    );
 
     render(
       <AccountAuthProvider accountsEnabled apiOptions={{ fetchImpl }}>
@@ -148,7 +164,7 @@ describe('LoginPage', () => {
       </AccountAuthProvider>,
     );
 
-    await user.click(screen.getByRole('button', { name: 'Sign out' }));
+    await user.click(await screen.findByRole('button', { name: 'Sign out' }));
     expect(await screen.findByRole('heading', { name: 'Customer account access' })).toBeInTheDocument();
     expect(screen.getByRole('alert')).toHaveTextContent(
       /Local sign-out completed, but server session revocation is unavailable/i,

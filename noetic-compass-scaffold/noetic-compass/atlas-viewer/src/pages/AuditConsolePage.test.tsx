@@ -49,17 +49,29 @@ function stubFetchWithLiveWorker(
 const S7_F28_TRACE_ID = 's7-f28-balanced-bridge-gpt-neox-20b-20260526';
 const STAGE9_40E_TRACE_ID = 'stage9-40e-original-baseline-readout-20260527';
 
-function renderPage(
+async function renderPage(
   initialEntry = '/audit-console',
   options: { accountsEnabled?: boolean } = {},
 ) {
-  return render(
-    <AccountAuthProvider accountsEnabled={options.accountsEnabled ?? false}>
+  const accountsEnabled = options.accountsEnabled ?? false;
+  const capabilityFetch: typeof fetch = async (input, init) => {
+    if (String(input).endsWith('/public/capabilities')) {
+      return new Response(JSON.stringify({ accounts_enabled: accountsEnabled }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+    return globalThis.fetch(input, init);
+  };
+  const rendered = render(
+    <AccountAuthProvider accountsEnabled={accountsEnabled} apiOptions={{ fetchImpl: capabilityFetch }}>
       <MemoryRouter initialEntries={[initialEntry]}>
         <AuditConsolePage />
       </MemoryRouter>
     </AccountAuthProvider>
   );
+  await screen.findByRole('heading', { name: 'Audit command center' });
+  return rendered;
 }
 
 function jwtSegment(value: unknown): string {
@@ -440,8 +452,8 @@ describe('AuditConsolePage', () => {
     vi.unstubAllGlobals();
   });
 
-  it('presents the CAS audit workflow without the old explanatory clutter', () => {
-    renderPage();
+  it('presents the CAS audit workflow without the old explanatory clutter', async () => {
+    await renderPage();
 
     const heading = screen.getByRole('heading', {
       name: 'Connect a model. Run a CAS audit. Return a verdict with evidence.',
@@ -511,8 +523,8 @@ describe('AuditConsolePage', () => {
     ).toBeInTheDocument();
   });
 
-  it('consumes the supported model query and advances the launch sequence to connect', () => {
-    const { container } = renderPage('/audit-console?model=pythia-160m');
+  it('consumes the supported model query and advances the launch sequence to connect', async () => {
+    const { container } = await renderPage('/audit-console?model=pythia-160m');
 
     expect(screen.getByText('EleutherAI/pythia-160m')).toBeInTheDocument();
     expect(
@@ -532,7 +544,7 @@ describe('AuditConsolePage', () => {
       json: async () => targetVerification({ can_run_audit: false }),
     });
     stubFetchWithLiveWorker(fetchMock);
-    renderPage('/audit-console?model=pythia-160m');
+    await renderPage('/audit-console?model=pythia-160m');
 
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
@@ -551,7 +563,7 @@ describe('AuditConsolePage', () => {
       json: async () => ({ detail: 'target offline' }),
     });
     stubFetchWithLiveWorker(fetchMock);
-    const { container } = renderPage('/audit-console?model=pythia-160m');
+    const { container } = await renderPage('/audit-console?model=pythia-160m');
 
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByRole('note', { name: /target offline/i })).toBeInTheDocument();
@@ -573,7 +585,7 @@ describe('AuditConsolePage', () => {
         json: async () => ({ detail: 'session create failed' }),
       });
     stubFetchWithLiveWorker(fetchMock);
-    const { container } = renderPage('/audit-console?model=pythia-160m');
+    const { container } = await renderPage('/audit-console?model=pythia-160m');
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
 
@@ -586,8 +598,8 @@ describe('AuditConsolePage', () => {
     expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'waiting');
   });
 
-  it('consumes a shared trace query and exposes the real packet verifier target', () => {
-    const { container } = renderPage('/audit-console?trace=shared-trace-123');
+  it('consumes a shared trace query and exposes the real packet verifier target', async () => {
+    const { container } = await renderPage('/audit-console?trace=shared-trace-123');
 
     expect(screen.getByText('trace_id: shared-trace-123')).toBeInTheDocument();
     expect(container.querySelector('[data-launch-step="choose"]')).toHaveAttribute('data-state', 'done');
@@ -629,7 +641,7 @@ describe('AuditConsolePage', () => {
       .mockImplementationOnce(() => pendingRun.promise);
     stubFetchWithLiveWorker(fetchMock);
 
-    const { container } = renderPage('/audit-console?model=pythia-160m');
+    const { container } = await renderPage('/audit-console?model=pythia-160m');
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
 
@@ -709,7 +721,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    const { container } = renderPage('/audit-console?model=pythia-160m');
+    const { container } = await renderPage('/audit-console?model=pythia-160m');
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
     fireEvent.click(customerAction('Run CAS audit'));
@@ -720,8 +732,8 @@ describe('AuditConsolePage', () => {
     expect(container.querySelector('[data-launch-step="result"]')).toHaveAttribute('data-state', 'waiting');
   });
 
-  it('keeps explanatory wording on hover targets instead of visible paragraphs', () => {
-    renderPage();
+  it('keeps explanatory wording on hover targets instead of visible paragraphs', async () => {
+    await renderPage();
 
     expect(
       screen.queryByText(/the UI shows ACCEPT or SUPPRESS only when the/i),
@@ -735,8 +747,8 @@ describe('AuditConsolePage', () => {
     );
   });
 
-  it('keeps the pending verdict compact', () => {
-    renderPage();
+  it('keeps the pending verdict compact', async () => {
+    await renderPage();
 
     expect(screen.getByLabelText('Confidence not available')).toBeInTheDocument();
     expect(screen.queryByText(/No verdict yet\. Run a CAS audit/i)).not.toBeInTheDocument();
@@ -808,7 +820,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    const { container } = renderPage('/audit-console?model=pythia-160m');
+    const { container } = await renderPage('/audit-console?model=pythia-160m');
 
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
@@ -888,7 +900,7 @@ describe('AuditConsolePage', () => {
     // so the BYOK call sequence (verify -> session -> run) keeps its indices.
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage('/audit-console?model=pythia-160m');
+    await renderPage('/audit-console?model=pythia-160m');
 
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
@@ -939,7 +951,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage('/audit-console?model=pythia-160m', { accountsEnabled: true });
+    await renderPage('/audit-console?model=pythia-160m', { accountsEnabled: true });
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
     fireEvent.click(customerAction('Run CAS audit'));
@@ -1017,7 +1029,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    await renderPage();
     openAdvancedTools();
 
     fireEvent.click(screen.getByRole('button', { name: 'Load 20B review packet' }));
@@ -1110,7 +1122,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    await renderPage();
     openAdvancedTools();
 
     fireEvent.click(screen.getByRole('button', { name: 'Load 20B validation packet' }));
@@ -1153,7 +1165,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    await renderPage();
     openAdvancedTools();
     fireEvent.change(screen.getByLabelText('Operator tools API token'), {
       target: { value: 'distributed-jwt' },
@@ -1268,7 +1280,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    await renderPage();
     openAdvancedTools();
 
     expect(screen.getByRole('button', { name: 'Prepare fleet' })).toBeDisabled();
@@ -1398,7 +1410,7 @@ describe('AuditConsolePage', () => {
       .mockResolvedValueOnce({ ok: true, json: async () => blockedRun });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage();
+    await renderPage();
     openAdvancedTools();
     fireEvent.change(screen.getByLabelText('Operator tools API token'), {
       target: { value: 'blocked-fleet-jwt' },
@@ -1475,7 +1487,7 @@ describe('AuditConsolePage', () => {
       });
     stubFetchWithLiveWorker(fetchMock);
 
-    renderPage('/audit-console?model=pythia-160m');
+    await renderPage('/audit-console?model=pythia-160m');
 
     fireEvent.click(customerAction('Connect selected model'));
     expect(await screen.findByText('Target verified')).toBeInTheDocument();
@@ -1491,11 +1503,11 @@ describe('AuditConsolePage', () => {
   });
 
   describe('live-worker status chip', () => {
-    function renderWithLiveWorkerHealth(
+    async function renderWithLiveWorkerHealth(
       overrides: Record<string, unknown>,
     ) {
       stubFetchWithLiveWorker(vi.fn(), overrides);
-      renderPage();
+      await renderPage();
     }
 
     function findLiveWorkerChip() {
@@ -1503,7 +1515,7 @@ describe('AuditConsolePage', () => {
     }
 
     it('shows a teal "real Pythia weights" chip only when real weights are confirmed', async () => {
-      renderWithLiveWorkerHealth({
+      await renderWithLiveWorkerHealth({
         configured: true,
         reachable: true,
         real_weights: true,
@@ -1519,7 +1531,7 @@ describe('AuditConsolePage', () => {
     });
 
     it('shows an amber chip for a reachable-but-demo worker (no real weights)', async () => {
-      renderWithLiveWorkerHealth({
+      await renderWithLiveWorkerHealth({
         configured: true,
         reachable: true,
         real_weights: false,
@@ -1535,7 +1547,7 @@ describe('AuditConsolePage', () => {
     });
 
     it('shows an amber chip when the worker is configured but unreachable', async () => {
-      renderWithLiveWorkerHealth({
+      await renderWithLiveWorkerHealth({
         configured: true,
         reachable: false,
         real_weights: false,
@@ -1550,7 +1562,7 @@ describe('AuditConsolePage', () => {
     });
 
     it('shows a muted chip when the live worker is not configured', async () => {
-      renderWithLiveWorkerHealth({
+      await renderWithLiveWorkerHealth({
         configured: false,
         reachable: false,
         real_weights: false,
@@ -1565,11 +1577,11 @@ describe('AuditConsolePage', () => {
       expect(chip).toHaveStyle({ color: 'rgb(100, 116, 139)' });
     });
 
-    it('renders a calm "checking" chip before the health probe resolves and never blocks the page', () => {
+    it('renders a calm "checking" chip before the health probe resolves and never blocks the page', async () => {
       // A health probe that never settles leaves the chip in its unknown state.
       vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})));
 
-      renderPage();
+      await renderPage();
 
       const chip = screen.getByRole('status', { name: /Live worker status:/i });
       expect(chip).toHaveTextContent('Checking live worker…');

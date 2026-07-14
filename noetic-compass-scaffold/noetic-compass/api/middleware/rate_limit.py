@@ -12,6 +12,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from api.config import settings
 from api.middleware.auth import (
+    is_public_account_capability_request,
     is_public_acceptance_authority_request,
     is_public_path,
 )
@@ -30,6 +31,7 @@ _ANONYMOUS_EVIDENCE_SHARE_PATTERN = re.compile(
 _EVIDENCE_SHARE_CLIENT_RPM = 120
 _EVIDENCE_SHARE_CLIENT_AND_SHARE_RPM = 60
 _ACCEPTANCE_AUTHORITY_CLIENT_RPM = 120
+_PUBLIC_CAPABILITY_CLIENT_RPM = 120
 
 
 class TokenBucket:
@@ -149,6 +151,27 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                     headers={
                         "Cache-Control": "no-store, max-age=0",
                         "Pragma": "no-cache",
+                    },
+                )
+            return await call_next(request)
+        if is_public_account_capability_request(
+            request.url.path, request.method, request.url.query
+        ):
+            # The startup handshake is anonymous but still bounded by client
+            # IP.  Never put Authorization, query text, or response bytes in a
+            # limiter key.
+            if not self._consume_sensitive_bucket(
+                key=f"public-capability-client:{client_host}",
+                rpm=_PUBLIC_CAPABILITY_CLIENT_RPM,
+            ):
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": "Rate limit exceeded (public capability)"},
+                    headers={
+                        "Cache-Control": "no-store, max-age=0",
+                        "Pragma": "no-cache",
+                        "Expires": "0",
+                        "X-Content-Type-Options": "nosniff",
                     },
                 )
             return await call_next(request)

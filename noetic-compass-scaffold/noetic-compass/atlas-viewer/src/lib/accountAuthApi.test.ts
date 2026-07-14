@@ -2,10 +2,12 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import {
   AccountAuthApiError,
   decodeAccountToken,
+  fetchPublicAccountCapabilities,
   generateAccountCredential,
   loginAccount,
   redeemAccountInvite,
   resolveAccountApiBaseUrl,
+  resolveAccountCapabilityUrl,
   rotateOwnAccountCredential,
 } from './accountAuthApi';
 
@@ -50,7 +52,72 @@ describe('accountAuthApi', () => {
   it('derives account root URLs from the Atlas API configuration', () => {
     vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://noetic-compass-api.onrender.com/atlas');
     expect(resolveAccountApiBaseUrl()).toBe('https://noetic-compass-api.onrender.com');
+    expect(resolveAccountCapabilityUrl()).toBe(
+      'https://noetic-compass-api.onrender.com/public/capabilities',
+    );
     expect(resolveAccountApiBaseUrl('https://api.example.test/root/')).toBe('https://api.example.test/root');
+    expect(resolveAccountCapabilityUrl('/api')).toBe('/api/public/capabilities');
+  });
+
+  it('fetches the exact anonymous capability contract without browser credentials', async () => {
+    const fetchImpl = vi.fn(async () => new Response(
+      JSON.stringify({ accounts_enabled: true }),
+      { status: 200, headers: { 'Content-Type': 'application/json; charset=utf-8' } },
+    ));
+
+    await expect(fetchPublicAccountCapabilities({
+      baseUrl: 'https://api.example.test',
+      fetchImpl,
+    })).resolves.toEqual({ accounts_enabled: true });
+
+    expect(fetchImpl).toHaveBeenCalledWith(
+      'https://api.example.test/public/capabilities',
+      expect.objectContaining({
+        method: 'GET',
+        cache: 'no-store',
+        credentials: 'omit',
+        redirect: 'error',
+        referrerPolicy: 'no-referrer',
+      }),
+    );
+    const init = fetchImpl.mock.calls[0][1] as RequestInit;
+    expect(new Headers(init.headers).get('Authorization')).toBeNull();
+  });
+
+  it.each([
+    ['scheme-relative', '//evil.example'],
+    ['credentialed', 'https://user:secret@api.example.test'],
+    ['query-bearing', 'https://api.example.test?tenant=one'],
+    ['fragment-bearing', 'https://api.example.test#capabilities'],
+    ['non-network scheme', 'data:application/json,{}'],
+    ['route-relative', 'api'],
+  ])('rejects a %s capability base before fetch', async (_label, baseUrl) => {
+    const fetchImpl = vi.fn();
+
+    await expect(fetchPublicAccountCapabilities({ baseUrl, fetchImpl }))
+      .rejects.toThrow('Account API base URL is invalid.');
+    expect(fetchImpl).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ['extra field', '{"accounts_enabled":true,"provider":"stripe"}', 'application/json', undefined],
+    ['duplicate field', '{"accounts_enabled":false,"accounts_enabled":true}', 'application/json', undefined],
+    ['string boolean', '{"accounts_enabled":"true"}', 'application/json', undefined],
+    ['wrong content type', '{"accounts_enabled":true}', 'text/html', undefined],
+    ['oversized declared body', '{"accounts_enabled":true}', 'application/json', '300'],
+    ['oversized actual body', `{"accounts_enabled":true}${' '.repeat(300)}`, 'application/json', undefined],
+  ])('fails closed on a capability response with %s', async (
+    _label,
+    body,
+    contentType,
+    contentLength,
+  ) => {
+    const headers = new Headers({ 'Content-Type': contentType });
+    if (contentLength) headers.set('Content-Length', contentLength);
+    const fetchImpl = vi.fn(async () => new Response(body, { status: 200, headers }));
+
+    await expect(fetchPublicAccountCapabilities({ fetchImpl }))
+      .rejects.toThrow('Account capability response was malformed.');
   });
 
   it('posts per-account login credentials and accepts only account-scoped JWTs', async () => {

@@ -43,6 +43,7 @@ from api.routes import (
     mode7,
     notation,
     platform_accounts,
+    public_capabilities,
     reproducibility,
     scenarios,
     state_ledger_status,
@@ -340,6 +341,7 @@ app.add_exception_handler(PipelineStageError, pipeline_stage_error_handler)  # t
 
 # Routes
 app.include_router(health.router)
+app.include_router(public_capabilities.router)
 app.include_router(auth.router)
 app.include_router(accounts.router)
 app.include_router(platform_accounts.router)
