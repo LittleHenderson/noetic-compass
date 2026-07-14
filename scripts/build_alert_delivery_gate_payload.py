@@ -22,8 +22,8 @@ from typing import Any, Mapping, Sequence
 
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
 SAFE_ARTIFACT_SCHEMA = "cas_runtime_alert_safe_receipts.v2"
-REPOSITORY = "LittleHenderson/tksCAS"
-PRODUCTION_API_ORIGIN = "https://api.noeticcompass.com"
+REPOSITORY = "LittleHenderson/noetic-compass"
+PRODUCTION_API_ORIGIN = "https://noetic-compass-api.onrender.com"
 PRODUCTION_SERVICE_ID = "srv-d82ph683kofs73d210e0"
 AUTHORITY_URI = f"{PRODUCTION_API_ORIGIN}/internal/acceptance/alert-delivery"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
