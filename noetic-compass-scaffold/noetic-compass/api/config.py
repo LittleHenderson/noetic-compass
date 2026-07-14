@@ -62,6 +62,27 @@ class Settings(BaseSettings):
         default="https://api.airtable.com/v0",
         validation_alias=AliasChoices("NC_AIRTABLE_API_BASE_URL", "AIRTABLE_API_BASE_URL"),
     )
+    # Airtable sync remains dark while NC_CRM_PROVIDER=null. When deliberately enabled, one
+    # pseudonymous email key is upserted into the configured text field, and owner/lifecycle
+    # readback must match these configured fields before the lead may be called synced.
+    crm_airtable_dedup_field: str = Field(
+        default="Dedup Key",
+        validation_alias=AliasChoices("NC_AIRTABLE_DEDUP_FIELD", "AIRTABLE_DEDUP_FIELD"),
+    )
+    crm_airtable_owner_field: str = Field(
+        default="Owner",
+        validation_alias=AliasChoices("NC_AIRTABLE_OWNER_FIELD", "AIRTABLE_OWNER_FIELD"),
+    )
+    crm_airtable_owner_value: str = Field(
+        default="",
+        validation_alias=AliasChoices("NC_AIRTABLE_OWNER_VALUE", "AIRTABLE_OWNER_VALUE"),
+    )
+    crm_airtable_lifecycle_field: str = Field(
+        default="Pipeline Status",
+        validation_alias=AliasChoices(
+            "NC_AIRTABLE_LIFECYCLE_FIELD", "AIRTABLE_LIFECYCLE_FIELD"
+        ),
+    )
     crm_public_lead_rate_limit_max: int = Field(
         default=5,
         ge=0,

@@ -17,6 +17,7 @@ from api.services.crm.models import (
     CRM_SCHEMA_VERSION,
     CRMStateError,
     CRMSyncResult,
+    CRMVerificationReceipt,
     Lead,
     LeadPipelineStatus,
     LeadSubmission,
@@ -47,19 +48,24 @@ from api.services.crm.abuse import (
 from api.services.crm.sync import (
     AirtableCRMProvider,
     CRMConfigError,
+    CRMProviderError,
     CRMSyncProvider,
     NullCRMProvider,
+    airtable_email_dedup_key,
     build_crm_provider,
+    normalize_crm_provider_error,
 )
 
 __all__ = [
     "CRM_SCHEMA_VERSION",
     "AirtableCRMProvider",
     "CRMConfigError",
+    "CRMProviderError",
     "CRMService",
     "CRMStateError",
     "CRMSyncProvider",
     "CRMSyncResult",
+    "CRMVerificationReceipt",
     "InMemoryLeadStore",
     "JsonlFileLeadStore",
     "LeadAbuseRejected",
@@ -78,7 +84,9 @@ __all__ = [
     "build_dark_crm_service",
     "build_lead_store",
     "build_public_lead_abuse_guard",
+    "airtable_email_dedup_key",
     "normalize_email",
     "normalize_pipeline_status",
+    "normalize_crm_provider_error",
     "VALID_PIPELINE_STATUSES",
 ]

@@ -28,6 +28,7 @@ from api.services.crm import (
     CRMStateError,
     CRMSyncProvider,
     CRMSyncResult,
+    CRMVerificationReceipt,
     InMemoryLeadStore,
     JsonlFileLeadStore,
     Lead,
@@ -151,7 +152,20 @@ def test_sync_result_stub_cannot_report_a_real_landing() -> None:
 
 
 def test_sync_result_real_landing_is_allowed() -> None:
-    result = CRMSyncResult(provider="airtable", synced=True, is_real=True, external_id="rec-1")
+    result = CRMSyncResult(
+        provider="airtable",
+        synced=True,
+        is_real=True,
+        external_id="rec-1",
+        verification_receipt=CRMVerificationReceipt(
+            readback_verified=True,
+            deduplicated=True,
+            owner_assigned=True,
+            lifecycle_stage="new",
+            verified_at="2026-07-14T20:00:00Z",
+            response_digest="sha256:" + ("0" * 64),
+        ),
+    )
     assert result.synced and result.is_real and result.external_id == "rec-1"
 
 
@@ -349,12 +363,20 @@ class _Settings:
         airtable_base_id: str = "",
         airtable_table_name: str = "Leads",
         airtable_api_base_url: str = "https://api.airtable.com/v0",
+        airtable_dedup_field: str = "Dedup Key",
+        airtable_owner_field: str = "Owner",
+        airtable_owner_value: str = "sales-owner",
+        airtable_lifecycle_field: str = "Pipeline Status",
     ) -> None:
         self.crm_provider = provider
         self.crm_airtable_token = airtable_token
         self.crm_airtable_base_id = airtable_base_id
         self.crm_airtable_table_name = airtable_table_name
         self.crm_airtable_api_base_url = airtable_api_base_url
+        self.crm_airtable_dedup_field = airtable_dedup_field
+        self.crm_airtable_owner_field = airtable_owner_field
+        self.crm_airtable_owner_value = airtable_owner_value
+        self.crm_airtable_lifecycle_field = airtable_lifecycle_field
 
 
 def test_build_provider_default_is_null() -> None:
@@ -380,27 +402,45 @@ def test_build_provider_airtable_with_credentials() -> None:
 
 
 def test_airtable_provider_posts_record_and_reports_external_id() -> None:
-    """A lead earns synced only when Airtable returns a real record id."""
+    """A lead earns synced only after PATCH upsert plus both Airtable readbacks."""
     captured_requests = []
+    stored_fields = {}
 
     class _Response:
+        def __init__(self, body):
+            self._body = body
+
         def __enter__(self):
             return self
 
         def __exit__(self, exc_type, exc, tb):
             return False
 
-        def read(self):
-            return b'{"records":[{"id":"recAirtable123","fields":{}}]}'
+        def read(self, amount=-1):
+            body = json.dumps(self._body).encode("utf-8")
+            return body if amount < 0 else body[:amount]
 
     def fake_open(request, timeout):
         captured_requests.append((request, timeout))
-        return _Response()
+        if request.get_method() == "PATCH":
+            payload = json.loads(request.data.decode("utf-8"))
+            stored_fields.update(payload["records"][0]["fields"])
+            return _Response(
+                {
+                    "records": [{"id": "recAirtable123", "fields": dict(stored_fields)}],
+                    "createdRecords": ["recAirtable123"],
+                }
+            )
+        record = {"id": "recAirtable123", "fields": dict(stored_fields)}
+        if "filterByFormula=" in request.full_url:
+            return _Response({"records": [record]})
+        return _Response(record)
 
     provider = AirtableCRMProvider(
         token="pat-secret",
         base_id="app123",
         table_name="Leads Table",
+        owner_value="sales-owner",
         http_open=fake_open,
     )
     lead = Lead.from_submission(
@@ -414,17 +454,24 @@ def test_airtable_provider_posts_record_and_reports_external_id() -> None:
     assert result.synced is True
     assert result.is_real is True
     assert result.external_id == "recAirtable123"
+    assert result.verification_receipt is not None
+    assert result.verification_receipt.readback_verified is True
+    assert result.verification_receipt.deduplicated is True
+    assert result.verification_receipt.owner_assigned is True
     request, timeout = captured_requests[0]
     assert timeout == 15
     assert request.full_url.endswith("/app123/Leads%20Table")
-    assert request.get_method() == "POST"
+    assert request.get_method() == "PATCH"
     assert request.get_header("Authorization") == "Bearer pat-secret"
     payload = json.loads(request.data.decode("utf-8"))
+    assert payload["performUpsert"] == {"fieldsToMergeOn": ["Dedup Key"]}
     fields = payload["records"][0]["fields"]
     assert fields["Email"] == "lead@example.com"
     assert fields["Lead ID"] == lead.lead_id
     assert fields["Trace ID"] == "req-airtable"
     assert fields["Metadata JSON"] == '{"campaign":"alpha"}'
+    assert fields["Owner"] == "sales-owner"
+    assert len(captured_requests) == 3
 
 
 def test_airtable_provider_requires_record_id() -> None:
@@ -435,17 +482,19 @@ def test_airtable_provider_requires_record_id() -> None:
         def __exit__(self, exc_type, exc, tb):
             return False
 
-        def read(self):
-            return b'{"records":[{"fields":{}}]}'
+        def read(self, amount=-1):
+            body = b'{"records":[{"fields":{}}]}'
+            return body if amount < 0 else body[:amount]
 
     provider = AirtableCRMProvider(
         token="pat-secret",
         base_id="app123",
         table_name="Leads",
+        owner_value="sales-owner",
         http_open=lambda request, timeout: _Response(),
     )
     lead = Lead.from_submission(_submission().validated(), source="public_web_form", trace_id=None)
-    with pytest.raises(RuntimeError, match="record id"):
+    with pytest.raises(RuntimeError, match="missing_record_id"):
         provider.sync_lead(lead)
 
 
