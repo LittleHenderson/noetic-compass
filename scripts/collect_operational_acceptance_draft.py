@@ -80,7 +80,7 @@ CRM_OPERATIONS: tuple[tuple[str, str], ...] = (
     ("patch", "/api/crm/leads/{lead_id}/pipeline-status"),
 )
 SUPPORT_TICKET_OPERATIONS: tuple[tuple[str, str], ...] = (
-    ("post", "/api/support/tickets"),
+    ("post", "/api/support/public/tickets"),
     ("get", "/api/support/tickets/{ticket_id}"),
 )
 LIVE_AUTHORITY_OPERATIONS: Mapping[str, tuple[str, str]] = {

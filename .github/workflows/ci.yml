@@ -221,6 +221,10 @@ jobs:
         working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
         run: npm test
 
+      - name: Run Atlas Viewer claim-surface prerender tests
+        working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
+        run: npm run test:claim-surfaces
+
       - name: Build Atlas Viewer
         working-directory: noetic-compass-scaffold/noetic-compass/atlas-viewer
         run: npm run build

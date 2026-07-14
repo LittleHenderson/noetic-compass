@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "node scripts/prerender-claim-surfaces.mjs",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:claim-surfaces": "node --test scripts/prerender-claim-surfaces.test.mjs",
     "test:watch": "vitest",
     "build:e2e": "tsc -b && vite build --mode e2e",
     "test:e2e": "npm run build:e2e && playwright test",

@@ -277,7 +277,7 @@ claim surface from `/`.
 Before publishing Atlas, run its deterministic claim-surface checks and build:
 
 ```powershell
-cd noetic-compass-scaffold/noetic-compass/dashboard
+cd noetic-compass-scaffold/noetic-compass/atlas-viewer
 npm run test:claim-surfaces
 npm run build
 ```
@@ -286,6 +286,26 @@ The postbuild step must emit `dist/index.html`,
 `dist/audit-console/index.html`, and the neutral `dist/spa.html`. These files
 are build artifacts only; successful local generation does not establish that
 the same bytes are live or change any acceptance status.
+
+The Atlas Render static site is dashboard-managed. Deploy the new static build
+under the old `/*` to `/index.html` rule first and wait for that exact deploy
+to become LIVE. Before changing routes, verify that `/spa.html` is unmarked and
+that `/audit-console/index.html` carries the exact audit marker. Re-read
+provider state and fail closed unless it still has exactly the single current
+Rewrite from `/*` to `/index.html` and production
+`VITE_ATLAS_API_BASE_URL` is exactly
+`https://noetic-compass-api.onrender.com/atlas`.
+
+Only then replace the full route list, in order, with `/audit-console` to
+`/audit-console/index.html`, `/audit-console/` to
+`/audit-console/index.html`, and terminal `/*` to `/spa.html`. Immediately
+smoke `/`, `/audit-console`, one unrelated BrowserRouter deep link, and the
+absolute API path. If any smoke fails, restore the single old Rewrite from
+`/*` to `/index.html` and keep claim coverage `OPEN`. If any precondition
+differs, stop instead of overwriting provider state. The checked-in
+`atlas-viewer/render-route-rules.json` records the exact precondition,
+replacement, smoke paths, and rollback. This keeps unrelated paths neutral
+without routing API calls through the static-site fallback.
 
 Exit `0` means only that this deterministic machine scan found full static
 route coverage and no configured findings. Exit `1` means the draft contains

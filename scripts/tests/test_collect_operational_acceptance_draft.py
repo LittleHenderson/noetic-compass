@@ -199,6 +199,15 @@ def _github_documents() -> dict[str, object]:
 
 
 class OperationalAcceptanceCollectorTests(unittest.TestCase):
+    def test_support_contract_uses_public_intake_and_protected_readback(self) -> None:
+        self.assertEqual(
+            collector.SUPPORT_TICKET_OPERATIONS,
+            (
+                ("post", "/api/support/public/tickets"),
+                ("get", "/api/support/tickets/{ticket_id}"),
+            ),
+        )
+
     def test_root_ci_runs_this_collector_contract(self) -> None:
         workflow_path = (
             Path(__file__).resolve().parents[2]

@@ -36,3 +36,66 @@ button {
   background: rgba(59, 130, 246, 0.35);
   color: #f8fafc;
 }
+
+/* Visible exact-route HTML rendered before React hydrates the two claim surfaces. */
+.cas-claim-surface {
+  display: flex;
+  min-height: 100vh;
+  min-height: 100dvh;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1.5rem;
+  background: var(--atlas-bg);
+  color: #f8fafc;
+}
+
+.cas-claim-card {
+  width: min(100%, 48rem);
+  padding: 2rem;
+  border: 1px solid #334155;
+  border-radius: 1rem;
+  background: #0f172a;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.45);
+}
+
+.cas-claim-eyebrow {
+  margin: 0;
+  color: #67e8f9;
+  font-size: 0.875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cas-claim-heading {
+  margin: 0.75rem 0 0;
+  color: #ffffff;
+  font-size: clamp(2rem, 7vw, 2.75rem);
+  line-height: 1.1;
+}
+
+.cas-claim-summary {
+  margin: 1rem 0 0;
+  color: #e2e8f0;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.cas-claim-statements {
+  margin: 1.5rem 0 0;
+  padding-left: 1.5rem;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.cas-claim-statements li + li {
+  margin-top: 0.75rem;
+}
+
+.cas-claim-loading {
+  margin: 1.75rem 0 0;
+  color: #a5f3fc;
+  font-size: 0.875rem;
+  font-weight: 600;
+}

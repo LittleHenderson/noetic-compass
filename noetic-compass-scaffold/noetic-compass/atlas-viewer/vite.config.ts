@@ -74,6 +74,13 @@ export default defineConfig({
     css: false,
     // Exclude Playwright E2E specs; they have a different `test` import surface
     // (@playwright/test) and run via `npm run test:e2e`, not vitest.
-    exclude: ['node_modules', 'dist', 'e2e/**', 'test-results/**', 'playwright-report/**'],
+    exclude: [
+      'node_modules',
+      'dist',
+      'e2e/**',
+      'scripts/**',
+      'test-results/**',
+      'playwright-report/**',
+    ],
   },
 });
