@@ -50,6 +50,12 @@ jobs:
           -s scripts/tests
           -p 'test_collect_claim_honesty_evidence.py'
 
+      - name: Run the operational acceptance draft collector tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_collect_operational_acceptance_draft.py'
+
       - name: Run the production runtime alert contract tests
         run: >-
           python -m unittest discover

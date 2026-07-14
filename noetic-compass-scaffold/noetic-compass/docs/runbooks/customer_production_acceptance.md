@@ -219,6 +219,46 @@ output remains an unsigned `OPEN` draft with no approval records or authority;
 it can never promote a gate or final decision. Independent legal, product, and
 research review plus the authoritative receipt path remain mandatory.
 
+### Collect the operational-gate machine draft
+
+Use the read-only operational collector to inventory the machine-visible facts
+and exact remaining work for `hosted_customer_journey`, `support_crm`,
+`incident_tabletop`, and `alert_delivery` together. Bind the scan to one exact
+protected `master` SHA and public Render deploy. If a runtime-monitor failure
+is being inspected, also pin its exact Actions run and deduplicated issue:
+
+```powershell
+$env:GITHUB_TOKEN = gh auth token
+python scripts/collect_operational_acceptance_draft.py `
+  --target-master-head <40-character-protected-master-sha> `
+  --target-deploy-id <public-render-deploy-id> `
+  --runtime-monitor-run-id <exact-run-id> `
+  --alert-issue-number <exact-issue-number> `
+  --pretty `
+  --output .customer-production-evidence/operational-acceptance-machine-draft.json
+```
+
+The GitHub credential is used only for bounded readback from the pinned private
+repository and is never written to the report. The collector performs no
+customer, provider, account, issue, or CRM writes. It hashes exact response
+bytes but does not copy response bodies, issue comments, operator identities,
+or credentials into its output.
+
+The report is always unsigned, non-authoritative, and `OPEN`. Route presence
+does not count as a hosted journey, the checked-in incident record does not
+count as closure, and a bot-authored GitHub issue does not count as primary
+on-call delivery or human acknowledgement. A human-looking `ACK` or escalation
+comment is recorded only as a hashed candidate; it remains unverified until an
+assigned role and the required provider receipt are independently proven.
+
+Exit `0` means only that the collector found every machine prerequisite it can
+inspect. Exit `1` means one or more machine prerequisites are missing, and exit
+`2` means the collection request itself was unsafe or invalid. Even exit `0`
+cannot mark a manifest gate `present` or produce customer-production `ACCEPT`;
+the active journey, support/CRM handling, incident/tabletop participants, alert
+destinations, human acknowledgement, signed/live authority, and final release
+decision remain separate evidence.
+
 ## CI separation
 
 Ordinary root CI runs the visibly named step
