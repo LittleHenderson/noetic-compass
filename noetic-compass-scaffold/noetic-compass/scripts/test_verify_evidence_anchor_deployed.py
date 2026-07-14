@@ -5,6 +5,7 @@ from __future__ import annotations
 import io
 import json
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError
 from urllib.parse import urlparse
@@ -75,11 +76,11 @@ def test_main_fails_when_s3_is_required_but_anchor_is_disabled(monkeypatch: pyte
         verifier.main(["--base-url", "https://api.example.test", "--bearer-token", "cli-token"])
 
 
-def test_main_fails_when_s3_verify_did_not_reread_object(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_main_fails_when_s3_verify_manifest_does_not_match(monkeypatch: pytest.MonkeyPatch) -> None:
     api = _FakeAnchorApi(
         anchor_status="anchored",
         anchor_mode="s3",
-        verify_notes="S3 anchor write receipt is present; object re-read is intentionally out-of-band",
+        verify_actual="b" * 64,
     )
     monkeypatch.setattr(verifier, "urlopen", api.urlopen)
 
@@ -87,7 +88,7 @@ def test_main_fails_when_s3_verify_did_not_reread_object(monkeypatch: pytest.Mon
         verifier.main(["--base-url", "https://api.example.test", "--bearer-token", "cli-token"])
 
 
-def test_main_accepts_required_object_lock_when_receipt_and_verify_notes_agree(
+def test_main_accepts_required_object_lock_from_structured_receipt_not_display_notes(
     capsys: pytest.CaptureFixture[str],
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
@@ -95,11 +96,8 @@ def test_main_accepts_required_object_lock_when_receipt_and_verify_notes_agree(
         anchor_status="anchored",
         anchor_mode="s3",
         object_lock_mode="GOVERNANCE",
-        retention_days=30,
-        verify_notes=(
-            "S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, "
-            "and Object Lock GOVERNANCE retention is active until 2026-06-27T00:00:00+00:00"
-        ),
+        retention_days=31,
+        verify_notes="display prose is not the verification predicate",
     )
     monkeypatch.setattr(verifier, "urlopen", api.urlopen)
 
@@ -116,13 +114,59 @@ def test_main_accepts_required_object_lock_when_receipt_and_verify_notes_agree(
 
     assert exit_code == 0
     assert "Require Object Lock: yes" in output
+    assert "structured Object Lock receipt verified" in output
+
+
+def test_main_rejects_object_lock_prose_without_structured_receipt(monkeypatch: pytest.MonkeyPatch) -> None:
+    api = _FakeAnchorApi(
+        anchor_status="anchored",
+        anchor_mode="s3",
+        object_lock_mode="GOVERNANCE",
+        retention_days=31,
+        verify_notes="Object Lock retention is active",
+        omit_object_lock_verification=True,
+    )
+    monkeypatch.setattr(verifier, "urlopen", api.urlopen)
+
+    with pytest.raises(verifier.AnchorSmokeFailure, match="structured Object Lock receipt"):
+        verifier.main(
+            [
+                "--base-url",
+                "https://api.example.test",
+                "--bearer-token",
+                "cli-token",
+                "--require-object-lock",
+            ]
+        )
+
+
+def test_main_rejects_cross_wired_object_lock_version(monkeypatch: pytest.MonkeyPatch) -> None:
+    api = _FakeAnchorApi(
+        anchor_status="anchored",
+        anchor_mode="s3",
+        object_lock_mode="GOVERNANCE",
+        retention_days=31,
+        receipt_version_id="different-version",
+    )
+    monkeypatch.setattr(verifier, "urlopen", api.urlopen)
+
+    with pytest.raises(verifier.AnchorSmokeFailure, match="cross-wired"):
+        verifier.main(
+            [
+                "--base-url",
+                "https://api.example.test",
+                "--bearer-token",
+                "cli-token",
+                "--require-object-lock",
+            ]
+        )
 
 
 def test_main_fails_required_object_lock_when_receipt_lacks_lock(monkeypatch: pytest.MonkeyPatch) -> None:
     api = _FakeAnchorApi(anchor_status="anchored", anchor_mode="s3")
     monkeypatch.setattr(verifier, "urlopen", api.urlopen)
 
-    with pytest.raises(verifier.AnchorSmokeFailure, match="expected Object Lock mode"):
+    with pytest.raises(verifier.AnchorSmokeFailure, match="Object Lock mode"):
         verifier.main(
             [
                 "--base-url",
@@ -142,15 +186,28 @@ class _FakeAnchorApi:
         anchor_mode: str,
         worker_already_registered: bool = False,
         verify_notes: str = "S3 anchor object was re-read and its manifest commits to this packet hash and hash-log entry",
+        verify_actual: str = "a" * 64,
         object_lock_mode: str | None = None,
         retention_days: int | None = None,
+        omit_object_lock_verification: bool = False,
+        receipt_version_id: str = "version-001",
     ) -> None:
         self.anchor_status = anchor_status
         self.anchor_mode = anchor_mode
         self.worker_already_registered = worker_already_registered
         self.verify_notes = verify_notes
+        self.verify_actual = verify_actual
         self.object_lock_mode = object_lock_mode
         self.retention_days = retention_days
+        self.omit_object_lock_verification = omit_object_lock_verification
+        self.receipt_version_id = receipt_version_id
+        self.version_id = "version-001"
+        self.retention_requested_at = datetime.now(timezone.utc).replace(microsecond=0)
+        self.object_lock_retain_until = (
+            self.retention_requested_at + timedelta(days=retention_days)
+            if isinstance(retention_days, int) and not isinstance(retention_days, bool)
+            else None
+        )
         self.worker_heartbeat_count = 0
         self.audit_id = "audit-anchor-smoke"
         self.trace_id = f"{self.audit_id}-distributed-merge"
@@ -288,17 +345,23 @@ class _FakeAnchorApi:
                             "status": self.anchor_status,
                             "mode": self.anchor_mode,
                             "anchor_uri": (
-                                "s3://cas-harness-anchor/smoke/entry.json"
+                                f"s3://cas-harness-anchor/smoke/entry.json?versionId={self.version_id}"
                                 if self.anchor_mode == "s3"
                                 else None
                             ),
                             "bucket": "cas-harness-anchor" if self.anchor_mode == "s3" else None,
                             "key": "smoke/entry.json" if self.anchor_mode == "s3" else None,
+                            "version_id": self.version_id if self.anchor_mode == "s3" else None,
                             "manifest_sha256": "a" * 64,
                             "object_lock_mode": self.object_lock_mode,
                             "object_lock_retain_until": (
-                                "2026-06-27T00:00:00+00:00"
-                                if self.object_lock_mode and self.retention_days
+                                self.object_lock_retain_until.isoformat()
+                                if self.object_lock_mode and self.object_lock_retain_until
+                                else None
+                            ),
+                            "retention_requested_at": (
+                                self.retention_requested_at.isoformat()
+                                if self.object_lock_mode and self.object_lock_retain_until
                                 else None
                             ),
                             "retention_days": self.retention_days,
@@ -308,20 +371,45 @@ class _FakeAnchorApi:
             )
 
         if path == f"/evidence/{self.trace_id}/verify":
-            return _JsonResponse(
-                {
-                    "overall": "all_match",
-                    "checks": [
-                        {
-                            "artifact": "merged_packet_external_anchor",
-                            "expected": "a" * 64,
-                            "actual": "a" * 64,
-                            "match": True,
-                            "notes": self.verify_notes,
-                        }
-                    ],
+            anchor_check = {
+                "artifact": "merged_packet_external_anchor",
+                "expected": "a" * 64,
+                "actual": self.verify_actual,
+                "match": True,
+                "notes": self.verify_notes,
+            }
+            if self.object_lock_mode and self.object_lock_retain_until and not self.omit_object_lock_verification:
+                evaluated_at = datetime.now(timezone.utc)
+                anchor_check["object_lock_verification"] = {
+                    "schema_version": "cas_harness_object_lock_verification.v1",
+                    "verified": True,
+                    "verified_at": evaluated_at.isoformat(),
+                    "evaluated_at": evaluated_at.isoformat(),
+                    "retain_until_rule": "observed_not_before_requested",
+                    "expected": {
+                        "bucket": "cas-harness-anchor",
+                        "key": "smoke/entry.json",
+                        "version_id": self.receipt_version_id,
+                        "content_sha256": "a" * 64,
+                        "mode": self.object_lock_mode,
+                        "retention_days": self.retention_days,
+                        "requested_at": self.retention_requested_at.isoformat(),
+                        "retain_until": self.object_lock_retain_until.isoformat(),
+                    },
+                    "observed": {
+                        "bucket": "cas-harness-anchor",
+                        "key": "smoke/entry.json",
+                        "get_version_id": self.receipt_version_id,
+                        "head_version_id": self.receipt_version_id,
+                        "content_sha256": "a" * 64,
+                        "mode": self.object_lock_mode,
+                        "retain_until": self.object_lock_retain_until.isoformat(),
+                        "reread_verified": True,
+                    },
+                    "failure_reasons": [],
+                    "issuer_attestation": "b" * 64,
                 }
-            )
+            return _JsonResponse({"overall": "all_match", "trace_id": self.trace_id, "checks": [anchor_check]})
 
         raise AssertionError(f"unexpected request {request.get_method()} {path}")
 

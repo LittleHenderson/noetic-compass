@@ -27,6 +27,17 @@ from typing import Any, Mapping
 from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
+try:
+    from .object_lock_smoke_validation import (
+        ObjectLockReceiptError,
+        validate_object_lock_receipt,
+    )
+except ImportError:  # Direct ``python scripts/...`` execution.
+    from object_lock_smoke_validation import (
+        ObjectLockReceiptError,
+        validate_object_lock_receipt,
+    )
+
 
 DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
 TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
@@ -248,37 +259,28 @@ def main(argv: list[str] | None = None) -> int:
         f"expected /verify all_match with external anchor match; got {verify}",
     )
     if anchor_mode == "s3":
-        verify_notes = verify_check.get("notes")
-        normalized_notes = verify_notes.lower() if isinstance(verify_notes, str) else ""
+        manifest_sha = anchor.get("manifest_sha256")
         require_gate(
             "anchor-reread",
-            "object was re-read" in normalized_notes and "manifest commits" in normalized_notes,
+            isinstance(manifest_sha, str)
+            and bool(manifest_sha)
+            and verify_check.get("expected") == manifest_sha
+            and verify_check.get("actual") == manifest_sha,
             (
-                "expected /verify to re-read the S3 anchor object. "
-                f"External-anchor check notes were {verify_notes!r}."
+                "expected /verify to re-read the exact S3 anchor manifest; "
+                f"manifest={manifest_sha!r} expected={verify_check.get('expected')!r} "
+                f"actual={verify_check.get('actual')!r}."
             ),
         )
         if args.require_object_lock:
-            object_lock_mode = anchor.get("object_lock_mode")
-            retention_days = anchor.get("retention_days")
-            retain_until = anchor.get("object_lock_retain_until")
-            require_gate(
-                "object-lock-mode",
-                object_lock_mode in {"GOVERNANCE", "COMPLIANCE"},
-                f"expected Object Lock mode GOVERNANCE or COMPLIANCE, got {object_lock_mode!r}",
-            )
-            require_gate(
-                "object-lock-retention",
-                isinstance(retention_days, int) and retention_days >= 1 and isinstance(retain_until, str) and bool(retain_until),
-                (
-                    "expected positive retention_days and object_lock_retain_until "
-                    f"on anchor receipt, got retention_days={retention_days!r} retain_until={retain_until!r}"
-                ),
-            )
-            require_gate(
-                "object-lock-verify",
-                "object lock" in normalized_notes and "retention is active" in normalized_notes,
-                f"expected /verify to confirm active Object Lock retention, notes were {verify_notes!r}",
+            try:
+                proof = validate_object_lock_receipt(anchor, verify_check)
+            except ObjectLockReceiptError as exc:
+                raise AnchorSmokeFailure("object-lock-verify", str(exc)) from exc
+            ok(
+                "structured Object Lock receipt verified "
+                f"mode={proof['mode']} version_id={proof['version_id']} "
+                f"remaining_days={proof['remaining'].total_seconds() / 86400:.3f}"
             )
     elif args.require_object_lock:
         raise AnchorSmokeFailure(
