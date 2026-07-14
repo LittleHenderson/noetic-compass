@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contact — CAS Compass</title>
+  <meta name="description" content="Contact CAS Compass about early access, privacy, legal notices, or security concerns." />
+  <meta name="theme-color" content="#05080f" />
+  <link rel="canonical" href="https://cascompass.ai/contact" />
+  <link rel="stylesheet" href="/site.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <main class="page" id="main">
+    <header class="panel">
+      <p class="eyebrow">CAS Compass contact</p>
+      <h1>Contact the CAS Compass project</h1>
+      <p>
+        Use the project email for early-access requests, notice questions, and
+        responsible security reports. Send only the information needed for the request.
+      </p>
+      <nav class="site-nav" aria-label="Site pages">
+        <a href="/">Home</a><a href="/legal">Legal</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a>
+      </nav>
+    </header>
+
+    <section class="panel" aria-labelledby="support-form-title">
+      <p class="eyebrow">Support request</p>
+      <h2 id="support-form-title">Create a tracked support ticket</h2>
+      <p>
+        This form records a ticket ID and response target. Submission is not an
+        acknowledgement or resolution; those require a recorded support-operator action.
+      </p>
+      <form class="contact-form" id="support-form">
+        <div class="form-grid">
+          <label>Email <input name="email" type="email" autocomplete="email" maxlength="320" required /></label>
+          <label>Name <input name="name" autocomplete="name" maxlength="200" /></label>
+          <label>Organization <input name="organization" autocomplete="organization" maxlength="200" /></label>
+          <label>Category
+            <select name="category">
+              <option value="product_support">Product support</option>
+              <option value="early_access">Early access</option>
+              <option value="privacy">Privacy</option>
+              <option value="security">Security</option>
+              <option value="legal">Legal notice</option>
+            </select>
+          </label>
+        </div>
+        <label>Subject <input name="subject" maxlength="240" required /></label>
+        <label>Message <textarea name="message" rows="7" maxlength="8000" required></textarea></label>
+        <label class="honeypot" aria-hidden="true">Website <input name="website" tabindex="-1" autocomplete="off" /></label>
+        <label class="consent-row">
+          <input name="consent_to_contact" type="checkbox" required />
+          I consent to a reply about this request and have read the <a href="/privacy">Privacy Notice</a>.
+        </label>
+        <button type="submit">Create support ticket</button>
+        <p class="form-status" id="support-status" role="status" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="channels-title">
+      <p class="eyebrow">Email fallback</p>
+      <h2 id="channels-title">hello@cascompass.ai</h2>
+      <div class="contact-list">
+        <a href="mailto:hello@cascompass.ai?subject=CAS%20Compass%20early%20access">Request early access</a>
+        <a href="mailto:hello@cascompass.ai?subject=CAS%20Compass%20privacy%20request">Privacy question or request</a>
+        <a href="mailto:hello@cascompass.ai?subject=CAS%20Compass%20legal%20notice%20question">Legal-notice question</a>
+        <a href="mailto:hello@cascompass.ai?subject=CAS%20Compass%20security%20report">Responsible security report</a>
+      </div>
+      <p class="boundary">
+        Do not include passwords, access tokens, payment-card data, private keys,
+        regulated data, or production secrets in the first message.
+      </p>
+    </section>
+
+    <footer class="site-footer">
+      Customer-production status remains OPEN.
+      <nav class="footer-nav" aria-label="Footer links">
+        <a href="/">Home</a><a href="/legal">Legal</a><a href="/privacy">Privacy</a><a href="/terms">Terms</a>
+      </nav>
+    </footer>
+  </main>
+  <script src="/contact.js" defer></script>
+</body>
+</html>

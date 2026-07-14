@@ -61,7 +61,10 @@ SUBJECT_URIS = {
     "root_ci_protected_deploy": f"{verifier.GITHUB_API_ORIGIN}/repos/{verifier.REPOSITORY}/actions/runs/30000000001",
     "hosted_customer_journey": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/customer-journey",
     "accounts_billing": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/accounts-billing",
-    "legal_publication_approval": f"{verifier.LANDING_ORIGIN}/legal",
+    "legal_publication_approval": (
+        f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/"
+        "legal-publication-approval"
+    ),
     "support_crm": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/support-crm",
     "incident_tabletop": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/incident-tabletop",
     "alert_delivery": f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/alert-delivery",
@@ -958,6 +961,41 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertEqual(report["errors"], [])
         self.assertTrue(report["accepted"])
         fetch.assert_called_once()
+
+    def test_legal_live_authority_is_json_api_endpoint_not_html_page(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        payload = _gate_payloads()["legal_publication_approval"]
+        self.assertEqual(
+            SUBJECT_URIS["legal_publication_approval"],
+            (
+                f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/"
+                "legal-publication-approval"
+            ),
+        )
+        self.assertNotEqual(
+            SUBJECT_URIS["legal_publication_approval"],
+            f"{verifier.LANDING_ORIGIN}/legal",
+        )
+        payload["artifact_uri"] = SUBJECT_URIS["legal_publication_approval"]
+        payload["artifact_sha256"] = _digest("live-legal-subject")
+        raw = json.dumps(payload, sort_keys=True).encode("utf-8")
+        manifest["required_gates"]["legal_publication_approval"]["evidence"] = {
+            "uri": SUBJECT_URIS["legal_publication_approval"],
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "authority": {
+                "mode": "live_https",
+                "issuer": "noetic-production-live",
+                "key_id": None,
+            },
+        }
+        with patch.object(verifier, "_fetch_https", return_value=raw) as fetch:
+            report = _verify(manifest, self.bundle, live=True)
+        self.assertEqual(report["errors"], [])
+        self.assertTrue(report["accepted"])
+        fetch.assert_called_once_with(
+            SUBJECT_URIS["legal_publication_approval"],
+            frozenset({verifier.PRODUCTION_API_ORIGIN}),
+        )
 
     def test_unallowlisted_live_origin_is_rejected_before_fetch(self) -> None:
         manifest = _accepting_manifest(self.bundle)

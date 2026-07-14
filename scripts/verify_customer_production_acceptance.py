@@ -175,7 +175,11 @@ GATE_ALLOWED_ORIGINS = {
         {PRODUCTION_APP_ORIGIN, PRODUCTION_API_ORIGIN}
     ),
     "accounts_billing": frozenset({PRODUCTION_API_ORIGIN}),
-    "legal_publication_approval": frozenset({LANDING_ORIGIN}),
+    # The human-facing legal pages stay on cascompass.ai, while their
+    # secret-free machine authority is canonical JSON from the production API.
+    "legal_publication_approval": frozenset(
+        {LANDING_ORIGIN, PRODUCTION_API_ORIGIN}
+    ),
     "support_crm": frozenset({LANDING_ORIGIN, PRODUCTION_API_ORIGIN}),
     "incident_tabletop": frozenset({PRODUCTION_API_ORIGIN}),
     "alert_delivery": frozenset({PRODUCTION_API_ORIGIN}),
@@ -199,7 +203,10 @@ LIVE_AUTHORITY_ENDPOINTS = {
         "noetic-production-live": f"{PRODUCTION_API_ORIGIN}/internal/acceptance/accounts-billing",
     },
     "legal_publication_approval": {
-        "cascompass-live": f"{LANDING_ORIGIN}/legal",
+        "noetic-production-live": (
+            f"{PRODUCTION_API_ORIGIN}/internal/acceptance/"
+            "legal-publication-approval"
+        ),
     },
     "support_crm": {
         "noetic-production-live": f"{PRODUCTION_API_ORIGIN}/internal/acceptance/support-crm",

@@ -29,6 +29,16 @@ class Settings(BaseSettings):
     state_ledger_enabled: bool = False
     state_ledger_path: str = "state_ledger.db"
     state_ledger_read_authority: bool = False
+    # One-time source for the guarded SQLite -> shared-Postgres startup migration.
+    # The destination stores a source fingerprint marker, making repeated restarts
+    # idempotent. Old leases are deliberately not migrated.
+    state_ledger_sqlite_migration_source: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "NC_STATE_LEDGER_SQLITE_MIGRATION_SOURCE",
+            "STATE_LEDGER_SQLITE_MIGRATION_SOURCE",
+        ),
+    )
 
     # CRM lead capture (go-to-market workstream). Dark-by-default and honest about it:
     #   NC_CRM_PROVIDER (default "null") -> which external CRM leads sync to. "null" captures
@@ -63,6 +73,38 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices(
             "NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS",
             "CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS",
+        ),
+    )
+
+    # Public support intake. The default in-memory store is deliberately dark;
+    # production sets NC_SUPPORT_TICKET_STORE_PATH to a persistent-disk path.
+    support_ticket_store_path: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_TICKET_STORE_PATH", "SUPPORT_TICKET_STORE_PATH"
+        ),
+    )
+    support_ack_sla_seconds: int = Field(
+        default=86400,
+        ge=60,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_ACK_SLA_SECONDS", "SUPPORT_ACK_SLA_SECONDS"
+        ),
+    )
+    support_public_ticket_rate_limit_max: int = Field(
+        default=5,
+        ge=0,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX",
+            "SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX",
+        ),
+    )
+    support_public_ticket_rate_limit_window_seconds: int = Field(
+        default=3600,
+        ge=0,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS",
+            "SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS",
         ),
     )
 

@@ -33,6 +33,7 @@ from api.routes import (
     cohort,
     config,
     crm,
+    customer_production_acceptance_authority,
     evidence,
     evidence_shares,
     export,
@@ -45,6 +46,7 @@ from api.routes import (
     reproducibility,
     scenarios,
     state_ledger_status,
+    support,
     validation,
     atlas_live,
     visual_grounding,
@@ -103,6 +105,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.billing_provider = None
     app.state.evidence_packet_repository = None
     app.state.evidence_share_service = None
+    app.state.support_tickets = None
+    app.state.support_public_abuse_guard = None
+    app.state.acceptance_authority_store = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -153,6 +158,28 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 shared_store
             )
             configure_evidence_packet_repository(app.state.evidence_packet_repository)
+
+        if shared_store is not None:
+            from api.services.customer_production_acceptance_authority import (
+                CustomerProductionAcceptanceAuthorityStore,
+            )
+
+            immutable_repository = app.state.evidence_packet_repository
+            app.state.acceptance_authority_store = (
+                CustomerProductionAcceptanceAuthorityStore(
+                    shared_store,
+                    immutable_backend=(
+                        immutable_repository.backend
+                        if immutable_repository is not None
+                        else None
+                    ),
+                    retention_policy=(
+                        immutable_repository.policy
+                        if immutable_repository is not None
+                        else None
+                    ),
+                )
+            )
 
         if settings.evidence_shares_enabled:
             if shared_store is None or app.state.evidence_packet_repository is None:
@@ -218,11 +245,27 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             "evidence packet sharing: %s",
             "ENABLED" if app.state.evidence_share_service is not None else "dark",
         )
+        logger.info(
+            "customer-production acceptance authority: %s",
+            (
+                "ENABLED"
+                if app.state.acceptance_authority_store is not None
+                else "unavailable"
+            ),
+        )
 
         from api.services.crm import build_crm_service, build_public_lead_abuse_guard
 
         app.state.crm = build_crm_service(settings)
         app.state.crm_public_abuse_guard = build_public_lead_abuse_guard(settings)
+        from api.services.crm.abuse import PublicLeadAbuseGuard
+        from api.services.support_tickets import build_support_ticket_service
+
+        app.state.support_tickets = build_support_ticket_service(settings)
+        app.state.support_public_abuse_guard = PublicLeadAbuseGuard(
+            max_submissions=settings.support_public_ticket_rate_limit_max,
+            window_seconds=settings.support_public_ticket_rate_limit_window_seconds,
+        )
         yield
     finally:
         # Clear wrappers before closing their shared backend so a repeated lifespan cannot reuse
@@ -235,7 +278,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.billing_provider = None
         app.state.evidence_packet_repository = None
         app.state.evidence_share_service = None
+        app.state.acceptance_authority_store = None
         app.state.shared_state_store = None
+        app.state.support_tickets = None
+        app.state.support_public_abuse_guard = None
         try:
             if handle is not None:
                 teardown_state_ledger(handle)
@@ -304,6 +350,7 @@ app.include_router(batch.router)
 app.include_router(benchmark.router)
 app.include_router(cas_harness_audit.router)
 app.include_router(cas_harness_live_worker_health.router)
+app.include_router(customer_production_acceptance_authority.router)
 app.include_router(cohort.router)
 app.include_router(config.router)
 app.include_router(export.router)
@@ -320,3 +367,4 @@ app.include_router(atlas_live.router)
 app.include_router(visual_grounding.router)
 app.include_router(state_ledger_status.router)
 app.include_router(crm.router)
+app.include_router(support.router)

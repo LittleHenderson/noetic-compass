@@ -83,6 +83,56 @@ self-attestation and does not count. The aggregated root-CI gate deliberately
 has no live endpoint because neither the GitHub nor Render API returns the
 complete gate schema at one fixed URL; use a signed receipt for that gate.
 
+### Production JSON authority plane
+
+The production API exposes only these exact, query-free anonymous `GET`
+documents for `live_https` verification:
+
+| Gate | Exact path |
+|---|---|
+| `runtime_worm` | `/internal/acceptance/runtime-worm` |
+| `hosted_customer_journey` | `/internal/acceptance/customer-journey` |
+| `accounts_billing` | `/internal/acceptance/accounts-billing` |
+| `legal_publication_approval` | `/internal/acceptance/legal-publication-approval` |
+| `support_crm` | `/internal/acceptance/support-crm` |
+| `incident_tabletop` | `/internal/acceptance/incident-tabletop` |
+| `alert_delivery` | `/internal/acceptance/alert-delivery` |
+| `claim_honesty` | `/internal/acceptance/claim-honesty` |
+| `release_decision` | `/internal/acceptance/release-decision` |
+
+The legal endpoint is JSON from the API; `https://cascompass.ai/legal` remains
+the human-facing legal page and is never JSON-parsed as authority. The auth and
+rate-limit middleware share the same exact path map. `POST`, `PUT`, `PATCH`,
+`DELETE`, `HEAD`, a query string, a child path, or any future sibling below
+`/internal/acceptance` does not inherit anonymous access. `root_ci_protected_deploy`
+is intentionally absent and remains signed-receipt-only.
+
+The route never calculates a successful gate from current application state.
+It reads a content-addressed immutable revision selected by a version-checked
+head in the existing `StateStore`. The same service works over SQLite or
+Postgres. When the existing immutable Evidence Packet backend is configured,
+new revisions can store the exact canonical JSON bytes in S3 Object Lock and
+the StateStore keeps only the exact-version pointer; a WORM-backed head never
+falls back to mutable inline bytes. Every read rechecks the head/revision
+identity, byte length, SHA-256, canonical JSON, exact gate schema, exact
+authority URL, freshness, public-production binding, and secret/PII scans.
+
+There is deliberately no HTTP publish or approval route. A separately
+authenticated operational collector must obtain independent receipts and any
+human approvals, run the canonical verifier's full gate semantics, then call
+the persistence service with the current head version. The service does not
+create missing approval rows, infer successful values, or turn an unsigned
+draft into authority. Deploying this read plane creates no evidence records
+and closes no gate by itself.
+
+Response behavior is fail-closed and non-cacheable:
+
+- `200 application/json` only for the exact active, revalidated canonical bytes;
+- `404` when no active revision exists;
+- `503` when durable state, an immutable blob, or validation is unavailable;
+- no provider error, storage pointer, Object-Lock version ID, secret, or PII is
+  copied into an error response.
+
 ### Onboard a signing issuer
 
 Add only the issuer's public RSA key to
@@ -212,12 +262,113 @@ a published Legal, Privacy, or Terms page. Aliases such as
 `https://noeticcompass.com/legal` are not substitutes for the six URLs pinned
 by this contract.
 
+Atlas builds publish visible, route-specific HTML inside the application mount
+for exactly `/` and `/audit-console`. The mount must carry both the exact
+`data-cas-prerendered-route` value and the pinned
+`data-cas-prerender-schema="cas_claim_surface.v1"` value. The collector accepts
+that exception only when the requested route, marker, visible application-mount
+text, and route-specific primary heading all agree. An unmarked application
+shell, a mismatched marker, generic fallback content, or content placed only in
+`hidden` or `noscript` elements remains a coverage failure. The browser hydrates
+the same marked HTML before replacing it with the interactive application; all
+other SPA routes use the neutral `spa.html` fallback rather than inheriting a
+claim surface from `/`.
+
+Before publishing Atlas, run its deterministic claim-surface checks and build:
+
+```powershell
+cd noetic-compass-scaffold/noetic-compass/dashboard
+npm run test:claim-surfaces
+npm run build
+```
+
+The postbuild step must emit `dist/index.html`,
+`dist/audit-console/index.html`, and the neutral `dist/spa.html`. These files
+are build artifacts only; successful local generation does not establish that
+the same bytes are live or change any acceptance status.
+
 Exit `0` means only that this deterministic machine scan found full static
 route coverage and no configured findings. Exit `1` means the draft contains
 coverage or claim blockers, and exit `2` means collection itself failed. Every
 output remains an unsigned `OPEN` draft with no approval records or authority;
 it can never promote a gate or final decision. Independent legal, product, and
 research review plus the authoritative receipt path remain mandatory.
+
+### Collect the operational-gate machine draft
+
+Use the read-only operational collector to inventory the machine-visible facts
+and exact remaining work for `hosted_customer_journey`, `support_crm`,
+`incident_tabletop`, and `alert_delivery` together. Bind the scan to one exact
+protected `master` SHA and public Render deploy. If a runtime-monitor failure
+is being inspected, also pin its exact Actions run and deduplicated issue:
+
+```powershell
+$env:GITHUB_TOKEN = gh auth token
+python scripts/collect_operational_acceptance_draft.py `
+  --target-master-head <40-character-protected-master-sha> `
+  --target-deploy-id <public-render-deploy-id> `
+  --runtime-monitor-run-id <exact-run-id> `
+  --alert-issue-number <exact-issue-number> `
+  --pretty `
+  --output .customer-production-evidence/operational-acceptance-machine-draft.json
+```
+
+The GitHub credential is used only for bounded readback from the pinned private
+repository and is never written to the report. The collector performs no
+customer, provider, account, issue, or CRM writes. It hashes exact response
+bytes but does not copy response bodies, issue comments, operator identities,
+or credentials into its output.
+
+The report is always unsigned, non-authoritative, and `OPEN`. Route presence
+does not count as a hosted journey, the checked-in incident record does not
+count as closure, and a bot-authored GitHub issue does not count as primary
+on-call delivery or human acknowledgement. A human-looking `ACK` or escalation
+comment is recorded only as a hashed candidate; it remains unverified until an
+assigned role and the required provider receipt are independently proven.
+
+Exit `0` means only that the collector found every machine prerequisite it can
+inspect. Exit `1` means one or more machine prerequisites are missing, and exit
+`2` means the collection request itself was unsafe or invalid. Even exit `0`
+cannot mark a manifest gate `present` or produce customer-production `ACCEPT`;
+the active journey, support/CRM handling, incident/tabletop participants, alert
+destinations, human acknowledgement, signed/live authority, and final release
+decision remain separate evidence.
+
+### Collect unsigned customer-readiness facts
+
+The customer-readiness collector is a credential-free, read-only prerequisite
+check for `hosted_customer_journey` and `accounts_billing`. It reads exactly
+three pinned public-production JSON routes (`/health`, `/health/ready`, and
+`/openapi.json`) plus the checked-out `render.yaml` and `api/config.py` source
+files:
+
+```powershell
+python scripts/collect_customer_readiness_facts.py `
+  --pretty `
+  --output .customer-production-evidence/customer-readiness-machine-draft.json
+```
+
+The report hashes every bounded public response and both source files, records
+observation timestamps, and separates deployed route capability from live
+enablement. In particular, a route in OpenAPI proves only that code is
+deployed. It does not prove that Postgres, accounts, quotas, the Evidence
+Packet object store, anonymous shares, billing entitlements, or Stripe are
+enabled or working. Dashboard-managed source slots prove only that a slot is
+declared; they do not reveal whether its live value is configured.
+
+The collector sends only credential-free `GET` requests and never calls the
+account, audit, Evidence Packet, share, checkout, portal, webhook, or billing
+entitlement routes. It therefore never creates an account, audit, share,
+checkout, provider event, payment, approval, or authority record. A successful
+collection remains an unsigned, non-authoritative `OPEN` draft and cannot mark
+either gate `present` or dispatch `ACCEPT`.
+
+Exit `1` means the public prerequisites were not established; this is the
+expected result while a required fact is disabled, unavailable on the bounded
+public surfaces, or still requires a real lifecycle receipt. Exit `2` means
+the source contract or collection itself failed closed. Ordinary CI runs only
+the collector's deterministic unit tests and performs no production network
+requests.
 
 ## CI separation
 

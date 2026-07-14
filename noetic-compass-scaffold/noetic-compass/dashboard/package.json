@@ -6,9 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "postbuild": "node scripts/prerender-claim-surfaces.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:claim-surfaces": "node --test scripts/prerender-claim-surfaces.test.mjs",
     "test:watch": "vitest"
   },
   "dependencies": {

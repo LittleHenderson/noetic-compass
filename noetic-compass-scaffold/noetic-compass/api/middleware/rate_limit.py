@@ -11,7 +11,10 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from api.config import settings
-from api.middleware.auth import is_public_path
+from api.middleware.auth import (
+    is_public_acceptance_authority_request,
+    is_public_path,
+)
 
 # Tier definitions: (requests_per_minute, monthly_limit)
 # monthly_limit=0 means unlimited
@@ -26,6 +29,7 @@ _ANONYMOUS_EVIDENCE_SHARE_PATTERN = re.compile(
 )
 _EVIDENCE_SHARE_CLIENT_RPM = 120
 _EVIDENCE_SHARE_CLIENT_AND_SHARE_RPM = 60
+_ACCEPTANCE_AUTHORITY_CLIENT_RPM = 120
 
 
 class TokenBucket:
@@ -124,6 +128,24 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 return JSONResponse(
                     status_code=429,
                     content={"detail": "Rate limit exceeded (evidence share)"},
+                    headers={
+                        "Cache-Control": "no-store, max-age=0",
+                        "Pragma": "no-cache",
+                    },
+                )
+            return await call_next(request)
+        if is_public_acceptance_authority_request(
+            request.url.path, request.method, request.url.query
+        ):
+            # Public verifier reads have no API key, so give them a bounded
+            # client-IP bucket without retaining evidence bytes or credentials.
+            if not self._consume_sensitive_bucket(
+                key=f"acceptance-authority-client:{client_host}",
+                rpm=_ACCEPTANCE_AUTHORITY_CLIENT_RPM,
+            ):
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": "Rate limit exceeded (acceptance authority)"},
                     headers={
                         "Cache-Control": "no-store, max-age=0",
                         "Pragma": "no-cache",

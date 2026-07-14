@@ -50,6 +50,24 @@ jobs:
           -s scripts/tests
           -p 'test_collect_claim_honesty_evidence.py'
 
+      - name: Run the operational acceptance draft collector tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_collect_operational_acceptance_draft.py'
+
+      - name: Run the customer-readiness machine collector tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_collect_customer_readiness_facts.py'
+
+      - name: Run the CAS Compass public-surface contract tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cascompass_landing.py'
+
       - name: Run the production runtime alert contract tests
         run: >-
           python -m unittest discover
@@ -140,6 +158,12 @@ jobs:
         working-directory: noetic-compass-scaffold/noetic-compass
         run: python -m pytest -q
 
+      - name: Run the acceptance-authority alignment tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_acceptance_authority_contract_alignment.py'
+
   live_trace_worker_tests:
     name: Live trace worker tests
     runs-on: ubuntu-latest
@@ -227,6 +251,10 @@ jobs:
       - name: Run dashboard tests
         working-directory: noetic-compass-scaffold/noetic-compass/dashboard
         run: npm test
+
+      - name: Run dashboard claim-surface prerender tests
+        working-directory: noetic-compass-scaffold/noetic-compass/dashboard
+        run: npm run test:claim-surfaces
 
       - name: Build dashboard
         working-directory: noetic-compass-scaffold/noetic-compass/dashboard

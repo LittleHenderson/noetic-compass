@@ -126,14 +126,20 @@ services:
       # what lets that served state survive deploy / restart / idle spin-down instead of
       # resetting to empty on every cold start (the prior /tmp free-tier behaviour, which
       # showed as audit_count=0 after each spin-down). This is single-host durability. It
-      # is NOT multi-host durability: that needs the PostgresStateStore (built + verified
-      # at commit c32f639, PG 16.4, 10/10) wired into install_state_ledger, which still
-      # hard-codes SqliteStateStore. Phase 4 (dict deletion) stays HELD.
+      # is NOT multi-host durability by itself. When NC_DATABASE_URL is configured,
+      # install_state_ledger selects the shared PostgresStateStore and the guarded
+      # migration below copies the legacy SQLite records before read authority starts.
+      # Phase 4 (dict deletion) stays HELD.
       - key: NC_STATE_LEDGER_ENABLED
         value: "true"
       - key: NC_STATE_LEDGER_READ_AUTHORITY
         value: "true"
       - key: NC_STATE_LEDGER_PATH
+        value: /var/data/state_ledger.db
+      # When NC_DATABASE_URL is configured, migrate the exact legacy SQLite
+      # records before installing Postgres read authority. A durable fingerprint
+      # marker makes repeated starts idempotent; stale leases are not replayed.
+      - key: NC_STATE_LEDGER_SQLITE_MIGRATION_SOURCE
         value: /var/data/state_ledger.db
       # CRM lead capture durability: persist captured leads to the durable disk as an
       # append-only JSONL file. Unset (the prior hosted state) falls back to the
@@ -142,6 +148,16 @@ services:
       # database is the eventual backend behind the unchanged LeadStore seam.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      # Public support tickets are append-only and fsync'd on the persistent
+      # disk. Lifecycle routes remain authenticated operator actions.
+      - key: NC_SUPPORT_TICKET_STORE_PATH
+        value: /var/data/support_tickets.jsonl
+      - key: NC_SUPPORT_ACK_SLA_SECONDS
+        value: "86400"
+      - key: NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX
+        value: "5"
+      - key: NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS
+        value: "3600"
       # CAS Harness Evidence Packet store durability: persisted hash logs and static
       # anchor receipts must survive deploy/restart so /evidence/{trace_id}/verify can
       # re-read the receipt after an Object-Lock anchor. Without this env var the store
@@ -185,7 +201,7 @@ services:
       # origins. The NC_CORS_ORIGIN_REGEX below also permits *.noeticcompass.com
       # but explicit > implicit for production CORS.
       - key: NC_CORS_ORIGINS
-        value: https://noeticcompass.com,https://www.noeticcompass.com,https://atlas.noeticcompass.com,https://atlas-viewer-app.onrender.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
+        value: https://noeticcompass.com,https://www.noeticcompass.com,https://atlas.noeticcompass.com,https://atlas-viewer-app.onrender.com,https://cascompass.ai,https://www.cascompass.ai,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
       - key: NC_CORS_ORIGIN_REGEX
         value: 'https://(.*\.)?noeticcompass\.com|https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?|http://127\.0\.0\.1(:\d+)?'
       # CAS Harness hosted worker route. These are intentionally dashboard-managed:

@@ -66,6 +66,9 @@ from api.services import cas_harness_fleet_executor as fe
 from api.services.production.state_substrate import LedgerMirror, StateStore
 from api.services.production.state_substrate.postgres_store import PostgresStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
+from api.services.production.state_substrate.sqlite_to_shared_migration import (
+    migrate_sqlite_ledger_records_once,
+)
 
 
 @dataclass(frozen=True, slots=True)
@@ -164,6 +167,15 @@ def install_state_ledger(settings) -> StateLedgerHandle | None:
     # failed startup would leave the seam half-wired -- a worse state than either fully dark or
     # fully enabled.
     try:
+        migration_source = str(
+            getattr(settings, "state_ledger_sqlite_migration_source", "") or ""
+        ).strip()
+        if migration_source:
+            if not settings.database_url:
+                raise RuntimeError(
+                    "NC_STATE_LEDGER_SQLITE_MIGRATION_SOURCE requires NC_DATABASE_URL."
+                )
+            migrate_sqlite_ledger_records_once(migration_source, store)
         da.set_state_mirror(mirror)
         fe.set_state_mirror(mirror)
         audit_count = da.rehydrate_from_ledger(store)
