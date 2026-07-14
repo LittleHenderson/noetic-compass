@@ -250,9 +250,11 @@ arn:aws:s3:::<bucket-name>/<prefix>/*
 `s3:GetObjectVersion` is load-bearing for the Object-Lock verifier: the
 receipt records the `VersionId`, and both the byte re-read and metadata re-read
 pin that exact version. `s3:GetObject` alone authorizes only the unversioned
-read. If the bucket uses a customer-managed KMS key, also grant the same
-application principal the narrowly scoped `kms:Decrypt` authority for that
-key.
+read. If the bucket uses a customer-managed KMS key, also grant the application
+principal `kms:GenerateDataKey` for writes and `kms:Decrypt` for exact-version
+readback (and for multipart uploads). Scope both actions to that exact KMS key
+ARN and, where the key policy supports it, the S3 encryption context for this
+bucket; do not grant account-wide KMS authority.
 
 The non-writing production readiness probe also needs these read-only actions
 on the bucket ARN `arn:aws:s3:::<bucket-name>`:

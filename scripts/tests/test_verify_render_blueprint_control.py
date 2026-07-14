@@ -15,6 +15,7 @@ from scripts.verify_render_blueprint_control import (
     assert_no_secret_literals,
     assert_production_provider_env_declarations,
     assert_receipt_attestation_key_declaration,
+    parse_service_env_blocks,
     parse_service_blocks,
     validate_auxiliary_blueprint_yaml,
     validate_live,
@@ -131,24 +132,82 @@ services:
                     assert_receipt_attestation_key_declaration(text, "test.yaml")
 
     def test_production_provider_slots_must_be_complete_and_dashboard_managed(self) -> None:
-        lines = ["services:", "  - type: web", "    name: api", "    envVars:"]
+        service_name = "noetic-compass-api"
+        lines = [
+            "services:",
+            "  - type: web",
+            f"    name: {service_name}",
+            "    envVars:",
+        ]
         for key in PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS:
             lines.extend((f"      - key: {key}", "        sync: false"))
         valid = "\n".join(lines) + "\n"
-        assert_production_provider_env_declarations(valid, "test.yaml")
+        assert_production_provider_env_declarations(valid, "test.yaml", service_name)
+        self.assertEqual(
+            len(parse_service_env_blocks(valid, service_name)),
+            len(PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS),
+        )
 
         missing = valid.replace(
             "      - key: NC_STRIPE_USAGE_PRICE_ID\n        sync: false\n", ""
         )
         with self.assertRaisesRegex(ControlError, "NC_STRIPE_USAGE_PRICE_ID"):
-            assert_production_provider_env_declarations(missing, "test.yaml")
+            assert_production_provider_env_declarations(
+                missing, "test.yaml", service_name
+            )
 
         committed = valid.replace(
             "      - key: NC_AIRTABLE_TOKEN\n        sync: false",
             "      - key: NC_AIRTABLE_TOKEN\n        value: committed-token",
         )
         with self.assertRaisesRegex(ControlError, "dashboard-managed"):
-            assert_production_provider_env_declarations(committed, "test.yaml")
+            assert_production_provider_env_declarations(
+                committed, "test.yaml", service_name
+            )
+
+    def test_unlinked_env_group_cannot_satisfy_production_provider_slots(self) -> None:
+        service_name = "noetic-compass-api"
+        lines = [
+            "services:",
+            "  - type: web",
+            f"    name: {service_name}",
+            "    envVars:",
+            "      - key: NC_JWT_SECRET",
+            "        generateValue: true",
+            "envVarGroups:",
+            "  - name: unlinked-provider-slots",
+            "    envVars:",
+        ]
+        for key in PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS:
+            lines.extend((f"      - key: {key}", "        sync: false"))
+        misplaced = "\n".join(lines) + "\n"
+
+        with self.assertRaisesRegex(ControlError, "NC_STRIPE_SECRET_KEY"):
+            assert_production_provider_env_declarations(
+                misplaced, "test.yaml", service_name
+            )
+
+    def test_second_service_cannot_satisfy_production_provider_slots(self) -> None:
+        service_name = "noetic-compass-api"
+        lines = [
+            "services:",
+            "  - type: web",
+            f"    name: {service_name}",
+            "    envVars:",
+            "      - key: NC_JWT_SECRET",
+            "        generateValue: true",
+            "  - type: web",
+            "    name: unrelated-service",
+            "    envVars:",
+        ]
+        for key in PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS:
+            lines.extend((f"      - key: {key}", "        sync: false"))
+        misplaced = "\n".join(lines) + "\n"
+
+        with self.assertRaisesRegex(ControlError, "NC_STRIPE_SECRET_KEY"):
+            assert_production_provider_env_declarations(
+                misplaced, "test.yaml", service_name
+            )
 
 
 class LiveBlueprintPolicyTests(unittest.TestCase):
