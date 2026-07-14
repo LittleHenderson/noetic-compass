@@ -284,6 +284,42 @@ the active journey, support/CRM handling, incident/tabletop participants, alert
 destinations, human acknowledgement, signed/live authority, and final release
 decision remain separate evidence.
 
+### Collect unsigned customer-readiness facts
+
+The customer-readiness collector is a credential-free, read-only prerequisite
+check for `hosted_customer_journey` and `accounts_billing`. It reads exactly
+three pinned public-production JSON routes (`/health`, `/health/ready`, and
+`/openapi.json`) plus the checked-out `render.yaml` and `api/config.py` source
+files:
+
+```powershell
+python scripts/collect_customer_readiness_facts.py `
+  --pretty `
+  --output .customer-production-evidence/customer-readiness-machine-draft.json
+```
+
+The report hashes every bounded public response and both source files, records
+observation timestamps, and separates deployed route capability from live
+enablement. In particular, a route in OpenAPI proves only that code is
+deployed. It does not prove that Postgres, accounts, quotas, the Evidence
+Packet object store, anonymous shares, billing entitlements, or Stripe are
+enabled or working. Dashboard-managed source slots prove only that a slot is
+declared; they do not reveal whether its live value is configured.
+
+The collector sends only credential-free `GET` requests and never calls the
+account, audit, Evidence Packet, share, checkout, portal, webhook, or billing
+entitlement routes. It therefore never creates an account, audit, share,
+checkout, provider event, payment, approval, or authority record. A successful
+collection remains an unsigned, non-authoritative `OPEN` draft and cannot mark
+either gate `present` or dispatch `ACCEPT`.
+
+Exit `1` means the public prerequisites were not established; this is the
+expected result while a required fact is disabled, unavailable on the bounded
+public surfaces, or still requires a real lifecycle receipt. Exit `2` means
+the source contract or collection itself failed closed. Ordinary CI runs only
+the collector's deterministic unit tests and performs no production network
+requests.
+
 ## CI separation
 
 Ordinary root CI runs the visibly named step
