@@ -8,8 +8,9 @@ boundaries:
 * ``record_fleet_measurement`` accepts only a caller-verified, hash-bound fleet
   receipt and stores the measurement plus delivery state in one versioned
   aggregate after a fail-safe global receipt reservation;
-* ``pending_usage`` returns the exact provider delivery facts and deterministic
-  idempotency key an external dispatcher must use;
+* ``pending_usage`` returns bounded delivery candidates, while
+  ``reserve_usage_delivery`` must durably freeze one candidate before an
+  external dispatcher makes any provider call;
 * ``mark_usage_submitted`` records a provider acknowledgement but never calls it
   paid; and
 * ``reconcile_paid_invoice`` accepts a signature-verified, freshly retrieved
@@ -81,6 +82,7 @@ MAX_FLEET_RECEIPT_BYTES = 2_000_000
 MAX_CUSTOMER_RECEIPT_BYTES = 10_000_000
 MAX_PROVIDER_SUBMISSION_LAG = timedelta(days=31)
 MAX_CLOCK_SKEW = timedelta(minutes=5)
+MAX_STRIPE_METER_EVENT_AGE = timedelta(days=35)
 MAX_PROVIDER_READBACK_AGE = timedelta(minutes=5)
 MAX_PROVIDER_INVOICE_OBSERVATIONS = 100
 MAX_DURABLE_BILLING_NODES = 25_000
@@ -109,6 +111,7 @@ _STRIPE_ID_PATTERNS = {
 DELIVERY_FAILURE_CODES = frozenset(
     {
         "configuration_error",
+        "delivery_outcome_unknown",
         "dispatcher_error",
         "internal_error",
         "network_error",
@@ -1154,6 +1157,13 @@ class BillingReconciliationStore:
     def pending_usage(
         self, tenant_id: str, *, limit: int = 100
     ) -> tuple[UsageOutboxRecord, ...]:
+        """Return bounded candidates, never authority to contact Stripe.
+
+        A dispatcher MUST call :meth:`reserve_usage_delivery` and durably receive
+        its ``delivery_uncertain`` row before making the first provider call.  A
+        row returned here is still ``pending`` and therefore is not safe to send.
+        """
+
         if limit < 1 or limit > 1000:
             raise BillingReconciliationError("pending usage limit must be 1..1000")
         rows = [
@@ -1165,6 +1175,14 @@ class BillingReconciliationStore:
     def record_delivery_failure(
         self, *, tenant_id: str, usage_id: str, failure_code: str
     ) -> UsageOutboxRecord:
+        """Record a definite failure only when Stripe was not contacted.
+
+        Once delivery has been reserved, every non-acknowledged outcome remains
+        ``delivery_uncertain`` and non-retryable.  This method deliberately
+        refuses that state so a timeout cannot accidentally make a request
+        dispatchable again.
+        """
+
         safe_failure = _delivery_failure_code(failure_code)
         lease = self._acquire_tenant_lock(tenant_id, holder=f"failure-{uuid4().hex}")
         try:
@@ -1201,19 +1219,28 @@ class BillingReconciliationStore:
             self._store.release_lease(lease.token)
         raise BillingReconciliationError("usage delivery failure contention exceeded")
 
-    def mark_delivery_uncertain(
-        self, *, tenant_id: str, usage_id: str, failure_code: str
+    def reserve_usage_delivery(
+        self, *, tenant_id: str, usage_id: str
     ) -> UsageOutboxRecord:
-        """Freeze a request whose send may have reached Stripe.
+        """Durably freeze one request *before* any Stripe side effect.
 
-        An uncertain row is intentionally excluded from ``pending_usage``.  It
-        can move only to ``submitted`` when the exact reserved identifier is
-        later read back; it is never made dispatchable again automatically.
+        The returned row is the dispatcher's authority to make exactly one
+        attempt using its stored request and identifier.  Reservation first
+        closes the crash window in which a process could POST to Stripe and die
+        while the durable row was still resendable as ``pending``.  Stripe only
+        promises identifier uniqueness for a rolling period, so local safety
+        cannot depend on a later provider retry being deduplicated.
+
+        If the exact Meter Event response is received, ``mark_usage_submitted``
+        may advance this row to ``submitted``.  Otherwise it remains
+        ``delivery_uncertain`` across restarts and never re-enters
+        ``pending_usage``.  Stripe v1 exposes no exact Meter Event retrieval
+        endpoint, so this method makes no unsupported later-readback claim.
         """
 
-        safe_failure = _delivery_failure_code(failure_code)
+        safe_failure = "delivery_outcome_unknown"
         lease = self._acquire_tenant_lock(
-            tenant_id, holder=f"uncertain-{uuid4().hex}"
+            tenant_id, holder=f"reserve-{uuid4().hex}"
         )
         try:
             for _ in range(MAX_WRITE_RETRIES):
@@ -1231,6 +1258,24 @@ class BillingReconciliationStore:
                     raise BillingReconciliationConflict(
                         "delivery-uncertain usage cannot be rewritten"
                     )
+                try:
+                    meter_clock = datetime.fromtimestamp(
+                        current.meter_event_timestamp, tz=UTC
+                    )
+                except (OverflowError, OSError, ValueError) as exc:
+                    raise BillingReconciliationError(
+                        "meter-event timestamp is outside the supported range"
+                    ) from exc
+                now_clock = datetime.now(UTC)
+                if not (
+                    now_clock - MAX_STRIPE_METER_EVENT_AGE
+                    <= meter_clock
+                    <= now_clock + MAX_CLOCK_SKEW
+                ):
+                    raise BillingReconciliationError(
+                        "meter-event timestamp is outside Stripe's 35-day/+5-minute delivery window"
+                    )
+                attempted_at = now_clock.isoformat()
                 payload = dict(existing.payload)
                 outbox = dict(payload["outbox"])  # type: ignore[arg-type]
                 outbox.update(
@@ -1238,7 +1283,7 @@ class BillingReconciliationStore:
                         "state": "delivery_uncertain",
                         "attempt_count": current.attempt_count + 1,
                         "last_failure_code": safe_failure,
-                        "last_attempt_at": _now_iso(),
+                        "last_attempt_at": attempted_at,
                     }
                 )
                 payload["outbox"] = outbox
@@ -1254,7 +1299,7 @@ class BillingReconciliationStore:
                     continue
         finally:
             self._store.release_lease(lease.token)
-        raise BillingReconciliationError("usage uncertainty contention exceeded")
+        raise BillingReconciliationError("usage delivery reservation contention exceeded")
 
     def mark_usage_submitted(
         self,
@@ -1328,6 +1373,10 @@ class BillingReconciliationStore:
                     raise BillingReconciliationConflict(
                         "usage was already submitted with a different provider receipt"
                     )
+                if current.outbox_state != "delivery_uncertain":
+                    raise BillingReconciliationConflict(
+                        "usage delivery must be durably reserved before provider acknowledgement"
+                    )
                 if request_id is not None:
                     self._bind_provider_identity(
                         kind=PROVIDER_REQUEST_INDEX_KIND,
@@ -1344,11 +1393,7 @@ class BillingReconciliationStore:
                 outbox.update(
                     {
                         "state": "submitted",
-                        "attempt_count": (
-                            current.attempt_count
-                            if current.outbox_state == "delivery_uncertain"
-                            else current.attempt_count + 1
-                        ),
+                        "attempt_count": current.attempt_count,
                         "last_failure_code": None,
                         "provider_request_id": request_id,
                         "provider_response_created": provider_created,
@@ -1803,7 +1848,9 @@ class BillingReconciliationStore:
             "receipt_size_bytes": usage.receipt_size_bytes,
             "meter_event_version": usage.meter_event_version,
             "meter_event_timestamp": usage.meter_event_timestamp,
-            "meter_event_identifier": usage.meter_event_identifier,
+            "meter_event_ref": self._provider_ref(
+                "meter_event_identifier", usage.meter_event_identifier
+            ),
             "meter_event_request_sha256": usage.meter_event_request_sha256,
             "currency": usage.currency,
             "livemode": usage.livemode,

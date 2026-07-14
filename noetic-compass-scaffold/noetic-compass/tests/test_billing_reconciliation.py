@@ -198,6 +198,10 @@ def _submit(
     event_id: str = "MeterA",
 ):
     usage, _ = service.record_fleet_measurement(measurement)
+    service.reserve_usage_delivery(
+        tenant_id=measurement.tenant_id,
+        usage_id=usage.usage_id,
+    )
     created = usage.meter_event_timestamp + 60
     return service.mark_usage_submitted(
         tenant_id=measurement.tenant_id,
@@ -445,6 +449,9 @@ def test_outbox_failure_and_submission_transitions_are_idempotent() -> None:
     assert failed.outbox_state == "pending"
     assert failed.attempt_count == 1
     assert failed.last_failure_code == "timeout"
+    service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
+    )
     submitted = service.mark_usage_submitted(
         tenant_id="tenant-a",
         usage_id=usage.usage_id,
@@ -484,33 +491,24 @@ def test_outbox_failure_and_submission_transitions_are_idempotent() -> None:
         )
 
 
-def test_delivery_uncertain_is_durable_non_retryable_and_exactly_reconcilable() -> None:
+def test_delivery_reservation_is_durable_non_retryable_and_exactly_acknowledged() -> None:
     service, _, _ = _service()
     usage, _ = service.record_fleet_measurement(_measurement())
 
-    uncertain = service.mark_delivery_uncertain(
-        tenant_id="tenant-a",
-        usage_id=usage.usage_id,
-        failure_code="provider_timeout",
+    uncertain = service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
     )
     assert uncertain.outbox_state == "delivery_uncertain"
     assert uncertain.attempt_count == 1
     assert uncertain.last_attempt_at is not None
+    assert uncertain.last_failure_code == "delivery_outcome_unknown"
     assert service.pending_usage("tenant-a") == ()
     assert (
-        service.mark_delivery_uncertain(
-            tenant_id="tenant-a",
-            usage_id=usage.usage_id,
-            failure_code="provider_timeout",
+        service.reserve_usage_delivery(
+            tenant_id="tenant-a", usage_id=usage.usage_id
         )
         == uncertain
     )
-    with pytest.raises(BillingReconciliationConflict, match="cannot be rewritten"):
-        service.mark_delivery_uncertain(
-            tenant_id="tenant-a",
-            usage_id=usage.usage_id,
-            failure_code="network_error",
-        )
     with pytest.raises(BillingReconciliationConflict, match="only pending"):
         service.record_delivery_failure(
             tenant_id="tenant-a",
@@ -532,6 +530,47 @@ def test_delivery_uncertain_is_durable_non_retryable_and_exactly_reconcilable() 
     assert submitted.submitted_at == datetime.fromtimestamp(created, tz=UTC).isoformat()
     assert submitted.last_attempt_at == submitted.submitted_at
     assert service.pending_usage("tenant-a") == ()
+
+
+def test_provider_acknowledgement_is_refused_before_durable_reservation() -> None:
+    service, _, _ = _service()
+    usage, _ = service.record_fleet_measurement(_measurement())
+
+    with pytest.raises(BillingReconciliationConflict, match="durably reserved"):
+        service.mark_usage_submitted(
+            tenant_id="tenant-a",
+            usage_id=usage.usage_id,
+            response=_provider_readback(
+                usage, created=usage.meter_event_timestamp + 60
+            ),
+            provider_request_id="req_Unreserved",
+            provider_response_sha256="7" * 64,
+        )
+
+    unchanged = service.get_usage("tenant-a", usage.usage_id)
+    assert unchanged is not None and unchanged.outbox_state == "pending"
+    assert unchanged.attempt_count == 0
+
+
+@pytest.mark.parametrize(
+    "offset",
+    [timedelta(days=-36), timedelta(minutes=10)],
+)
+def test_delivery_reservation_enforces_stripe_timestamp_window(offset) -> None:
+    service, _, _ = _service()
+    started = datetime.now(UTC).replace(microsecond=0) + offset
+    usage, _ = service.record_fleet_measurement(
+        _measurement(
+            started_at=started,
+            ended_at=started + timedelta(hours=1),
+        )
+    )
+
+    with pytest.raises(BillingReconciliationError, match=r"35-day/\+5-minute"):
+        service.reserve_usage_delivery(
+            tenant_id="tenant-a", usage_id=usage.usage_id
+        )
+    assert service.get_usage("tenant-a", usage.usage_id).outbox_state == "pending"
 
 
 @pytest.mark.parametrize(
@@ -564,6 +603,9 @@ def test_meter_event_response_requires_the_literal_stripe_v1_schema(
     response = _provider_readback(
         usage, created=usage.meter_event_timestamp + 60
     )
+    service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
+    )
     with pytest.raises(BillingReconciliationError, match=message):
         service.mark_usage_submitted(
             tenant_id="tenant-a",
@@ -573,7 +615,7 @@ def test_meter_event_response_requires_the_literal_stripe_v1_schema(
             provider_response_sha256="8" * 64,
         )
     current = service.get_usage("tenant-a", usage.usage_id)
-    assert current is not None and current.outbox_state == "pending"
+    assert current is not None and current.outbox_state == "delivery_uncertain"
 
 
 def test_delivery_failure_rejects_arbitrary_provider_data_without_leaking_it() -> None:
@@ -663,6 +705,20 @@ def test_resealed_unknown_fields_and_cross_index_tampering_fail_closed() -> None
         second.get_usage("tenant-a", second_usage.usage_id)
 
 
+def test_legacy_or_unknown_durable_schema_fails_closed() -> None:
+    service, _, backend = _service()
+    usage, _ = service.record_fleet_measurement(_measurement())
+    existing = backend.get("tenant-a", USAGE_OUTBOX_KIND, usage.usage_id)
+    assert existing is not None
+    payload = dict(existing.payload)
+    payload["schema_version"] = "cas_harness_billing_reconciliation.v1"
+    payload = _reseal(payload, "payload_sha256")
+    backend.put(existing.with_payload(payload), expected_version=existing.version)
+
+    with pytest.raises(BillingReconciliationConflict, match="schema version"):
+        service.get_usage("tenant-a", usage.usage_id)
+
+
 def test_resealed_provider_response_facts_still_self_verify() -> None:
     service, _, backend = _service()
     usage = _submit(service, _measurement())
@@ -688,6 +744,9 @@ def test_provider_request_receipts_bind_to_one_usage() -> None:
         run_id="run-b", worker_id="worker-b", receipt_char="b"
     )
     second, _ = service.record_fleet_measurement(second_measurement)
+    service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=second.usage_id
+    )
     with pytest.raises(BillingReconciliationConflict, match="already bound"):
         service.mark_usage_submitted(
             tenant_id="tenant-a",
@@ -706,6 +765,9 @@ def test_submission_time_and_provider_meter_readback_must_be_exact() -> None:
     usage, _ = service.record_fleet_measurement(measurement)
     readback = _provider_readback(
         usage, created=usage.meter_event_timestamp + 60
+    )
+    service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
     )
     with pytest.raises(BillingReconciliationError, match="predate"):
         service.mark_usage_submitted(
@@ -765,6 +827,9 @@ def test_live_provider_acknowledgements_require_request_receipts() -> None:
     service, _, _ = _service()
     measurement = _measurement()
     usage, _ = service.record_fleet_measurement(measurement)
+    service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
+    )
     with pytest.raises(BillingReconciliationError, match="request receipt"):
         service.mark_usage_submitted(
             tenant_id="tenant-a",
@@ -775,7 +840,10 @@ def test_live_provider_acknowledgements_require_request_receipts() -> None:
             ),
             provider_response_sha256="d" * 64,
         )
-    assert service.get_usage("tenant-a", usage.usage_id).outbox_state == "pending"
+    assert (
+        service.get_usage("tenant-a", usage.usage_id).outbox_state
+        == "delivery_uncertain"
+    )
 
     _submit(service, measurement)
     with pytest.raises(BillingReconciliationError, match="request receipt"):
@@ -872,6 +940,42 @@ def test_usage_and_outbox_survive_sqlite_restart(tmp_path) -> None:
     second_backend.close()
 
 
+def test_uncertain_reservation_survives_restart_and_is_not_redispatched(tmp_path) -> None:
+    path = tmp_path / "billing-reservation.db"
+    first_backend = SqliteStateStore(path)
+    first, _, _ = _service(first_backend)
+    usage, _ = first.record_fleet_measurement(_measurement())
+    reserved = first.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
+    )
+    first_backend.close()
+
+    second_backend = SqliteStateStore(path)
+    second = BillingReconciliationStore(
+        second_backend,
+        BillingEntitlementStore(second_backend),
+        provider_reference_hash_key=HASH_KEY,
+        usage_price_id=PRICE_ID,
+        meter_event_name=METER_NAME,
+        meter_event_version=METER_VERSION,
+        currency="usd",
+        livemode=True,
+        customer_receipt_allowed_hosts=(RECEIPT_HOST,),
+    )
+    restored = second.get_usage("tenant-a", usage.usage_id)
+    assert restored is not None
+    assert restored.outbox_state == "delivery_uncertain"
+    assert restored.attempt_count == reserved.attempt_count == 1
+    assert second.pending_usage("tenant-a") == ()
+    assert (
+        second.reserve_usage_delivery(
+            tenant_id="tenant-a", usage_id=usage.usage_id
+        )
+        == restored
+    )
+    second_backend.close()
+
+
 def test_paid_invoice_matches_only_exact_submitted_usage() -> None:
     service, _, _ = _service()
     usage = _submit(service, _measurement())
@@ -911,6 +1015,9 @@ def test_provider_acceptance_must_strictly_precede_invoice_finalization() -> Non
     service, _, _ = _service()
     measurement = _measurement()
     usage, _ = service.record_fleet_measurement(measurement)
+    service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
+    )
     finalized_at = _invoice().status_transitions_finalized_at
     service.mark_usage_submitted(
         tenant_id="tenant-a",
@@ -1008,6 +1115,9 @@ def test_unresolved_invoice_is_durable_and_can_converge_after_outbox_ack() -> No
     assert len(unresolved_rows) == 1
     assert unresolved_rows[0].payload["reconciliation_state"] == "unresolved"
 
+    service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=usage.usage_id
+    )
     service.mark_usage_submitted(
         tenant_id="tenant-a",
         usage_id=usage.usage_id,
@@ -1359,6 +1469,9 @@ def test_provider_event_and_request_receipts_cannot_cross_tenants_or_subjects() 
     )
     _submit(service, measurement_a, event_id="mtr_evt_tenant_a")
     usage_b, _ = service.record_fleet_measurement(measurement_b)
+    service.reserve_usage_delivery(
+        tenant_id="tenant-b", usage_id=usage_b.usage_id
+    )
 
     with pytest.raises(BillingReconciliationConflict, match="already bound"):
         service.mark_usage_submitted(
@@ -1445,6 +1558,7 @@ def test_public_projections_hmac_every_provider_identifier() -> None:
         f"https://{RECEIPT_HOST}/in_InvoiceA",
         f"https://{RECEIPT_HOST}/in_InvoiceA.pdf",
         PRICE_ID,
+        usage.meter_event_identifier,
     ):
         assert raw_provider_id not in encoded
     refs = [
@@ -1464,6 +1578,7 @@ def test_public_projections_hmac_every_provider_identifier() -> None:
     assert str(invoice_public["invoice_pdf_ref"]).startswith(
         "hmac-sha256:"
     )
+    assert str(usage_public["meter_event_ref"]).startswith("hmac-sha256:")
 
 
 def test_hmac_provider_refs_are_deployment_keyed() -> None:
