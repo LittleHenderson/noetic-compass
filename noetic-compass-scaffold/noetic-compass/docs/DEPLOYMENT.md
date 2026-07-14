@@ -238,13 +238,21 @@ The IAM user for these credentials needs S3 access on the selected prefix:
 ```text
 s3:PutObject
 s3:GetObject
+s3:GetObjectVersion
 ```
 
-Scope both actions to:
+Scope these actions to:
 
 ```text
 arn:aws:s3:::<bucket-name>/<prefix>/*
 ```
+
+`s3:GetObjectVersion` is load-bearing for the Object-Lock verifier: the
+receipt records the `VersionId`, and both the byte re-read and metadata re-read
+pin that exact version. `s3:GetObject` alone authorizes only the unversioned
+read. If the bucket uses a customer-managed KMS key, also grant the same
+application principal the narrowly scoped `kms:Decrypt` authority for that
+key.
 
 The non-writing production readiness probe also needs these read-only actions
 on the bucket ARN `arn:aws:s3:::<bucket-name>`:

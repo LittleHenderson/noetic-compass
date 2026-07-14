@@ -80,6 +80,11 @@ All CRM config is dark by default.
 - `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX` (default `5`)
 - `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS` (default `3600`)
 
+Use a least-privilege Airtable personal access token restricted to the one
+target base. The adapter performs record PATCH and GET calls only, so the token
+needs `data.records:write` and `data.records:read` plus a base role that can edit
+the target table; it does not need workspace-wide or schema-write authority.
+
 The Airtable provider fails startup when `NC_CRM_PROVIDER=airtable` is set without the complete
 token/base/table/dedup/owner/lifecycle contract. That is intentional: a half-configured provider
 would capture locally while looking externally synced. The API base must resolve to the exact
@@ -151,7 +156,9 @@ Hosted Render production currently has the durable lead store under `/var/data/l
 external CRM sync is still not enabled. To turn it on:
 
 1. Create or confirm an Airtable base/table with the fields listed above.
-2. Set these Render env vars together:
+2. Create a personal access token scoped only to that base with
+   `data.records:read` and `data.records:write`.
+3. Set these Render env vars together:
    - `NC_CRM_PROVIDER=airtable`
    - `NC_AIRTABLE_TOKEN=<secret>`
    - `NC_AIRTABLE_BASE_ID=<base id>`
@@ -160,9 +167,9 @@ external CRM sync is still not enabled. To turn it on:
    - `NC_AIRTABLE_OWNER_FIELD=<text owner field>`
    - `NC_AIRTABLE_OWNER_VALUE=<non-empty accountable owner>`
    - `NC_AIRTABLE_LIFECYCLE_FIELD=<lifecycle field>`
-3. Redeploy.
-4. Submit a hosted lead through `POST /api/crm/public/leads`.
-5. Confirm the public response has `sync_status: "synced"` and `synced: true`; then use the authed
+4. Redeploy.
+5. Submit a hosted lead through `POST /api/crm/public/leads`.
+6. Confirm the public response has `sync_status: "synced"` and `synced: true`; then use the authed
    lead read route to verify the non-empty `external_id` and persisted verification receipt.
 
 Until that hosted proof passes, the honest production posture is: **captured durably, not externally

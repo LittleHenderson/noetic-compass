@@ -345,6 +345,11 @@ class DraftReportContractTests(unittest.TestCase):
         self.assertFalse(draft["authoritative"])
         self.assertFalse(draft["eligible_for_acceptance"])
         self.assertFalse(draft["configured_vs_observed"]["accounts"]["repository_declared_enabled"])
+        self.assertFalse(
+            draft["configured_vs_observed"]["billing_reconciliation"][
+                "repository_declared_enabled"
+            ]
+        )
         self.assertFalse(draft["configured_vs_observed"]["postgres"]["database_configured"])
         self.assertEqual(
             draft["configured_vs_observed"]["stripe"]["repository_provider_value"],
