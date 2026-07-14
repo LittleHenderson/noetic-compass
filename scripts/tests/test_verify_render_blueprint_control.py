@@ -11,7 +11,9 @@ from scripts.verify_render_blueprint_control import (
     AUXILIARY_BLUEPRINT_PATHS,
     ControlError,
     EXPECTED_BLUEPRINTS,
+    PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS,
     assert_no_secret_literals,
+    assert_production_provider_env_declarations,
     assert_receipt_attestation_key_declaration,
     parse_service_blocks,
     validate_auxiliary_blueprint_yaml,
@@ -127,6 +129,26 @@ services:
             with self.subTest(error=error):
                 with self.assertRaisesRegex(ControlError, error):
                     assert_receipt_attestation_key_declaration(text, "test.yaml")
+
+    def test_production_provider_slots_must_be_complete_and_dashboard_managed(self) -> None:
+        lines = ["services:", "  - type: web", "    name: api", "    envVars:"]
+        for key in PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS:
+            lines.extend((f"      - key: {key}", "        sync: false"))
+        valid = "\n".join(lines) + "\n"
+        assert_production_provider_env_declarations(valid, "test.yaml")
+
+        missing = valid.replace(
+            "      - key: NC_STRIPE_USAGE_PRICE_ID\n        sync: false\n", ""
+        )
+        with self.assertRaisesRegex(ControlError, "NC_STRIPE_USAGE_PRICE_ID"):
+            assert_production_provider_env_declarations(missing, "test.yaml")
+
+        committed = valid.replace(
+            "      - key: NC_AIRTABLE_TOKEN\n        sync: false",
+            "      - key: NC_AIRTABLE_TOKEN\n        value: committed-token",
+        )
+        with self.assertRaisesRegex(ControlError, "dashboard-managed"):
+            assert_production_provider_env_declarations(committed, "test.yaml")
 
 
 class LiveBlueprintPolicyTests(unittest.TestCase):

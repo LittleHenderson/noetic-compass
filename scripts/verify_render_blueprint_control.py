@@ -88,6 +88,44 @@ _BLUEPRINT_SERVICE_TYPES = {
     "private_service": "pserv",
 }
 OBJECT_LOCK_RECEIPT_ATTESTATION_ENV = "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY"
+PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS = (
+    # Stripe subscriptions and usage/invoice reconciliation.
+    "NC_STRIPE_SECRET_KEY",
+    "NC_STRIPE_WEBHOOK_SECRET",
+    "NC_STRIPE_PROFESSIONAL_PRICE_ID",
+    "NC_STRIPE_ENTERPRISE_PRICE_ID",
+    "NC_STRIPE_CHECKOUT_SUCCESS_URL",
+    "NC_STRIPE_CHECKOUT_CANCEL_URL",
+    "NC_STRIPE_PORTAL_RETURN_URL",
+    "NC_BILLING_PROVIDER_REFERENCE_HASH_KEY",
+    "NC_BILLING_USAGE_METER_EVENT_NAME",
+    "NC_BILLING_USAGE_METER_VERSION",
+    "NC_BILLING_USAGE_CURRENCY",
+    "NC_STRIPE_USAGE_PRICE_ID",
+    "NC_STRIPE_LIVEMODE",
+    "NC_BILLING_CUSTOMER_RECEIPT_ALLOWED_HOSTS",
+    # Airtable CRM.
+    "NC_CRM_PROVIDER",
+    "NC_AIRTABLE_TOKEN",
+    "NC_AIRTABLE_BASE_ID",
+    "NC_AIRTABLE_TABLE_NAME",
+    "NC_AIRTABLE_API_BASE_URL",
+    "NC_AIRTABLE_DEDUP_FIELD",
+    "NC_AIRTABLE_OWNER_FIELD",
+    "NC_AIRTABLE_OWNER_VALUE",
+    "NC_AIRTABLE_LIFECYCLE_FIELD",
+    # AWS S3 Object Lock.
+    "CAS_HARNESS_EVIDENCE_ANCHOR_MODE",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS",
+    "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY",
+    "AWS_ACCESS_KEY_ID",
+    "AWS_SECRET_ACCESS_KEY",
+    "AWS_SESSION_TOKEN",
+)
 
 
 class ControlError(RuntimeError):
@@ -203,6 +241,24 @@ def assert_receipt_attestation_key_declaration(text: str, label: str) -> None:
     )
 
 
+def assert_production_provider_env_declarations(text: str, label: str) -> None:
+    """Require every provider setting to have one non-committed Render slot."""
+
+    env_vars = parse_env_blocks(text)
+    by_key: dict[str, list[dict[str, str]]] = {}
+    for env_var in env_vars:
+        by_key.setdefault(env_var.get("key", ""), []).append(env_var)
+    for key in PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS:
+        matches = by_key.get(key, [])
+        _require(len(matches) == 1, f"{label}: must declare exactly one {key}")
+        declaration = matches[0]
+        _require(
+            set(declaration) == {"key", "sync"}
+            and declaration.get("sync", "").lower() == "false",
+            f"{label}: {key} must be a dashboard-managed sync:false slot",
+        )
+
+
 def _load_manifest(repo_root: Path) -> dict[str, Any]:
     path = repo_root / MANIFEST_PATH
     _require(path.is_file(), f"Missing control manifest: {MANIFEST_PATH.as_posix()}")
@@ -282,6 +338,8 @@ def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> No
 
     assert_no_secret_literals(text, relative_path)
     assert_receipt_attestation_key_declaration(text, relative_path)
+    if blueprint.get("environment") == "production":
+        assert_production_provider_env_declarations(text, relative_path)
     actual_services = parse_service_blocks(text)
     actual_by_name = {service["name"]: service for service in actual_services}
     expected_services = blueprint["services"]

@@ -97,6 +97,25 @@ services:
         value: "false"
       - key: NC_BILLING_RECONCILIATION_ENABLED
         value: "false"
+      # Stripe usage/invoice reconciliation is a separate, dark foundation.
+      # These dashboard-managed slots are required before the flag above may
+      # be enabled. The reference hash key must be a dedicated stable secret;
+      # the remaining values bind one exact Stripe meter, usage price,
+      # livemode, currency, and receipt-origin contract.
+      - key: NC_BILLING_PROVIDER_REFERENCE_HASH_KEY
+        sync: false
+      - key: NC_BILLING_USAGE_METER_EVENT_NAME
+        sync: false
+      - key: NC_BILLING_USAGE_METER_VERSION
+        sync: false
+      - key: NC_BILLING_USAGE_CURRENCY
+        sync: false
+      - key: NC_STRIPE_USAGE_PRICE_ID
+        sync: false
+      - key: NC_STRIPE_LIVEMODE
+        sync: false
+      - key: NC_BILLING_CUSTOMER_RECEIPT_ALLOWED_HOSTS
+        sync: false
       - key: NC_BILLING_PROVIDER
         value: "null"
       - key: NC_BILLING_ADMIN_SECRET
