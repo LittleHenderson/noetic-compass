@@ -38,7 +38,7 @@ EVENT_SCHEMA = "cas_runtime_alert_event.v1"
 OBSERVATION_SCHEMA = "cas_runtime_alert_observation.v1"
 REQUEST_SCHEMA = "cas_runtime_alert_adapter_request.v1"
 RECEIPT_SCHEMA = "cas_runtime_alert_provider_receipt.v1"
-SAFE_ARTIFACT_SCHEMA = "cas_runtime_alert_safe_receipts.v1"
+SAFE_ARTIFACT_SCHEMA = "cas_runtime_alert_safe_receipts.v2"
 ACK_WINDOW_SECONDS = 600
 MAX_CLOCK_SKEW_SECONDS = 300
 MAX_RESPONSE_BYTES = 65_536
@@ -514,6 +514,7 @@ def _safe_base_artifact(
     mode: str,
     lifecycle: str = LIFECYCLE_FAILING,
     provider_obligation_required: bool = False,
+    force_secondary_drill: bool = False,
 ) -> dict[str, Any]:
     return {
         "schema_version": SAFE_ARTIFACT_SCHEMA,
@@ -521,6 +522,7 @@ def _safe_base_artifact(
         "provider_mode": mode,
         "lifecycle": lifecycle,
         "provider_obligation_required": provider_obligation_required,
+        "secondary_drill_requested": force_secondary_drill,
         "provider_obligation_satisfied": False,
         "event": {
             "event_id_sha256": event.event_id_sha256,
@@ -551,16 +553,29 @@ def deliver_alert(
     event: AlertEvent,
     lifecycle: str = LIFECYCLE_FAILING,
     provider_obligation_required: bool = False,
+    force_secondary_drill: bool = False,
     transport: Transport = _default_transport,
 ) -> tuple[dict[str, Any], bool]:
     artifact = _safe_base_artifact(
-        event, config.mode, lifecycle, provider_obligation_required
+        event,
+        config.mode,
+        lifecycle,
+        provider_obligation_required,
+        force_secondary_drill,
     )
     if lifecycle not in {LIFECYCLE_FAILING, LIFECYCLE_RECOVERY_PENDING}:
         artifact["errors"] = ["lifecycle_invalid"]
         artifact["outcome"] = "configuration_error"
         return artifact, False
+    if force_secondary_drill and lifecycle != LIFECYCLE_FAILING:
+        artifact["errors"] = ["secondary_drill_requires_failing_lifecycle"]
+        artifact["outcome"] = "configuration_error"
+        return artifact, False
     if config.mode == MODE_DISABLED:
+        if force_secondary_drill:
+            artifact["errors"] = ["secondary_drill_requires_provider"]
+            artifact["outcome"] = "configuration_error"
+            return artifact, False
         if provider_obligation_required:
             artifact["errors"] = [
                 "provider_configuration_removed_with_open_obligation"
@@ -644,22 +659,34 @@ def deliver_alert(
             acknowledgement = _acknowledgement_receipt(response, event=event)
             artifact["acknowledgement"] = acknowledgement
             if acknowledgement["status"] == "acknowledged":
+                if not force_secondary_drill:
+                    artifact["secondary_escalation"] = {
+                        "status": "not_triggered",
+                        "reason": "acknowledgement_verified_within_600_seconds",
+                    }
+                    artifact["provider_obligation_satisfied"] = True
+                    if lifecycle == LIFECYCLE_RECOVERY_PENDING:
+                        artifact["outcome"] = (
+                            "recovery_acknowledgement_verified_before_closure"
+                        )
+                    else:
+                        artifact["outcome"] = (
+                            "primary_delivered_acknowledgement_verified"
+                        )
+                    return artifact, True
+                # A customer-production drill deliberately proves the secondary
+                # destination even though the primary incident commander did the
+                # right thing.  The safe artifact retains both independent facts;
+                # normal production behavior continues to suppress escalation.
+                should_escalate = True
+                escalation_reason = "explicit_secondary_escalation_drill"
                 artifact["secondary_escalation"] = {
-                    "status": "not_triggered",
-                    "reason": "acknowledgement_verified_within_600_seconds",
+                    "status": "pending",
+                    "reason": escalation_reason,
                 }
-                artifact["provider_obligation_satisfied"] = True
-                if lifecycle == LIFECYCLE_RECOVERY_PENDING:
-                    artifact["outcome"] = (
-                        "recovery_acknowledgement_verified_before_closure"
-                    )
-                else:
-                    artifact["outcome"] = (
-                        "primary_delivered_acknowledgement_verified"
-                    )
-                return artifact, True
-            should_escalate = True
-            escalation_reason = "unacknowledged_after_600_seconds"
+            else:
+                should_escalate = True
+                escalation_reason = "unacknowledged_after_600_seconds"
         except AlertDeliveryError as exc:
             artifact["acknowledgement"] = {
                 "status": "unavailable",
@@ -678,7 +705,11 @@ def deliver_alert(
                 # Keep the provider page stable even when the local diagnostic
                 # reason changes across retries. The safe artifact retains the
                 # exact trigger reason for this run.
-                reason="on_call_acknowledgement_unverified",
+                reason=(
+                    "customer_production_secondary_escalation_drill"
+                    if escalation_reason == "explicit_secondary_escalation_drill"
+                    else "on_call_acknowledgement_unverified"
+                ),
             )
             response = transport(
                 config.secondary,
@@ -715,6 +746,14 @@ def deliver_alert(
     if escalation_error is not None:
         artifact["outcome"] = "secondary_escalation_unavailable"
         return artifact, False
+    if escalation_reason == "explicit_secondary_escalation_drill":
+        artifact["provider_obligation_satisfied"] = True
+        artifact["outcome"] = (
+            "recovery_acknowledged_secondary_drill_escalated"
+            if lifecycle == LIFECYCLE_RECOVERY_PENDING
+            else "primary_delivered_acknowledged_secondary_drill_escalated"
+        )
+        return artifact, True
     if lifecycle == LIFECYCLE_RECOVERY_PENDING:
         artifact["provider_obligation_satisfied"] = True
         artifact["outcome"] = "recovery_secondary_escalation_verified_before_closure"
@@ -758,6 +797,14 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--mode", default=MODE_DISABLED)
     parser.add_argument("--require-provider-obligation", action="store_true")
+    parser.add_argument(
+        "--force-secondary-drill",
+        action="store_true",
+        help=(
+            "after a verified timely incident-commander acknowledgement, also "
+            "deliver to secondary_on_call as an explicit acceptance drill"
+        ),
+    )
     parser.add_argument(
         "--lifecycle",
         choices=(LIFECYCLE_FAILING, LIFECYCLE_RECOVERY_PENDING),
@@ -835,6 +882,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             safe_mode,
             args.lifecycle,
             args.require_provider_obligation,
+            args.force_secondary_drill,
         )
         artifact["outcome"] = "configuration_error"
         artifact["errors"] = [exc.code]
@@ -848,6 +896,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             event=event,
             lifecycle=args.lifecycle,
             provider_obligation_required=args.require_provider_obligation,
+            force_secondary_drill=args.force_secondary_drill,
         )
     except Exception:
         artifact = _safe_base_artifact(
@@ -855,6 +904,7 @@ def main(argv: Sequence[str] | None = None) -> int:
             config.mode,
             args.lifecycle,
             args.require_provider_obligation,
+            args.force_secondary_drill,
         )
         artifact["outcome"] = "internal_error"
         artifact["errors"] = ["provider_adapter_internal_error"]

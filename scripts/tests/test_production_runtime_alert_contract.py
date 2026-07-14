@@ -117,6 +117,21 @@ class ProductionRuntimeAlertContractTests(unittest.TestCase):
             self.alert_job,
         )
 
+    def test_manual_secondary_drill_is_explicit_and_adapter_bounded(self) -> None:
+        dispatch = self.workflow.split("workflow_dispatch:", maxsplit=1)[1].split(
+            "schedule:", maxsplit=1
+        )[0]
+        self.assertIn("secondary_escalation_drill:", dispatch)
+        self.assertIn("type: boolean", dispatch)
+        self.assertIn("default: false", dispatch)
+        self.assertIn(
+            "CAS_ALERT_FORCE_SECONDARY_DRILL: ${{ github.event_name == 'workflow_dispatch' && inputs.secondary_escalation_drill || false }}",
+            self.alert_job,
+        )
+        self.assertIn("drill_args=()", self.alert_job)
+        self.assertIn("drill_args+=(--force-secondary-drill)", self.alert_job)
+        self.assertIn('"${drill_args[@]}"', self.alert_job)
+
     def test_recovery_cannot_erase_enabled_provider_obligation(self) -> None:
         self.assertIn(
             "provider_obligation_label='cas-production-provider-obligation'",
