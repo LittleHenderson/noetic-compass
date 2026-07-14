@@ -1,0 +1,87 @@
+{
+  "schema_version": "cas_harness_customer_production_acceptance.v2",
+  "manifest_id": "cas-harness-customer-production",
+  "generated_at_utc": "2026-07-14T00:00:00Z",
+  "product": {
+    "name": "CAS Harness",
+    "environment": "public-production",
+    "status": "OPEN",
+    "status_reason": "Required customer-production evidence gates are not yet all present.",
+    "release_decision": {
+      "status": "OPEN",
+      "evidence": null
+    }
+  },
+  "claim_boundary": {
+    "research_verdict": {
+      "verdict": "ACCEPT",
+      "scope": "stage9_40e_validation_packet",
+      "artifact_path": "noetic-compass-scaffold/noetic-compass/docs/working/gpt_neox_20b_stage9_original_40e_verifier_report_20260528T0455Z.json",
+      "artifact_sha256": "79d140f0d5028578d8c776eb6069cbad53a4733e0553004aa9ecb8366374a5f0",
+      "customer_production_effect": "none"
+    },
+    "research_accept_does_not_imply_customer_production_accept": true,
+    "product_accept_requires_all_gates_present": true,
+    "evidence_status_meaning": {
+      "OPEN": "Required customer-production evidence is missing, stale, invalid, or awaiting approval.",
+      "present": "Required customer-production evidence exists and passes this manifest contract; it is not a research verdict."
+    }
+  },
+  "authority_policy": {
+    "mode": "authoritative_only",
+    "trusted_issuer_registry": "repo://.production/customer-production-trusted-issuers.json",
+    "https_requires": "signed_receipt_or_live_verification",
+    "private_canary_satisfies_public_gate": false
+  },
+  "freshness_policy": {
+    "runtime_worm_max_age_minutes": 30,
+    "root_ci_protected_deploy_max_age_minutes": 1440,
+    "hosted_customer_journey_max_age_minutes": 4320,
+    "accounts_billing_max_age_minutes": 4320,
+    "legal_publication_approval_max_age_minutes": 43200,
+    "support_crm_max_age_minutes": 4320,
+    "incident_tabletop_max_age_minutes": 129600,
+    "alert_delivery_max_age_minutes": 1440,
+    "claim_honesty_max_age_minutes": 1440,
+    "worm_configured_min_retention_days": 31,
+    "worm_min_remaining_retention_minutes": 43200
+  },
+  "required_gates": {
+    "runtime_worm": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "root_ci_protected_deploy": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "hosted_customer_journey": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "accounts_billing": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "legal_publication_approval": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "support_crm": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "incident_tabletop": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "alert_delivery": {
+      "status": "OPEN",
+      "evidence": null
+    },
+    "claim_honesty": {
+      "status": "OPEN",
+      "evidence": null
+    }
+  }
+}

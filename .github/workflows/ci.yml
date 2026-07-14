@@ -35,6 +35,15 @@ jobs:
           -s scripts/tests
           -p 'test_verify_render_blueprint_control.py'
 
+      - name: Validate customer-production contract (OPEN permitted)
+        run: python scripts/verify_customer_production_acceptance.py --validate-only
+
+      - name: Run the customer-production acceptance verifier tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_verify_customer_production_acceptance.py'
+
   rust_tests:
     name: Rust workspace tests
     runs-on: ubuntu-latest
