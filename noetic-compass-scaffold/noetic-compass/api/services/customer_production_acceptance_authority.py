@@ -26,7 +26,7 @@ import hashlib
 import json
 import re
 from typing import Any, Protocol
-from urllib.parse import unquote, urlparse
+from urllib.parse import parse_qs, unquote, urlparse
 
 from api.acceptance_authority_contract import (
     ACCEPTANCE_AUTHORITY_PATH_BY_GATE,
@@ -39,11 +39,15 @@ from api.services.production.state_substrate import (
     VersionConflict,
 )
 from api.services.production.worm_writes import RetentionPolicy
+from api.services.cas_harness_retention_disclosure import (
+    revalidate_object_lock_verification,
+)
 
 
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
-RECORD_SCHEMA_VERSION = "cas_harness_acceptance_authority_revision.v1"
-HEAD_SCHEMA_VERSION = "cas_harness_acceptance_authority_head.v1"
+RECORD_SCHEMA_VERSION = "cas_harness_acceptance_authority_revision.v2"
+HEAD_SCHEMA_VERSION = "cas_harness_acceptance_authority_head.v3"
+OPERATION_SCHEMA_VERSION = "cas_harness_acceptance_authority_operation.v1"
 REPOSITORY = "LittleHenderson/noetic-compass"
 ENVIRONMENT = "public-production"
 PRODUCTION_APP_ORIGIN = "https://atlas.noeticcompass.com"
@@ -56,6 +60,7 @@ EXPECTED_REALMODE_VERDICT = "REAL_PYTHIA_WEIGHTS_LOADED"
 AUTHORITY_TENANT_ID = "cas-harness-customer-production"
 REVISION_KIND = "customer_production_acceptance_authority_revision"
 HEAD_KIND = "customer_production_acceptance_authority_head"
+OPERATION_KIND = "customer_production_acceptance_authority_operation"
 MAX_EVIDENCE_BYTES = 2_000_000
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
@@ -554,6 +559,9 @@ _STORAGE_KEYS = frozenset(
         "version_id",
         "retain_until_utc",
         "receipt_sha256",
+        "receipt_verification",
+        "lock_mode",
+        "retention_days",
     }
 )
 _HEAD_KEYS = frozenset(
@@ -562,15 +570,51 @@ _HEAD_KEYS = frozenset(
         "gate",
         "revision_record_id",
         "evidence_sha256",
-        "activated_at_utc",
+        "active",
+        "changed_at_utc",
+        "operation_record_id",
+        "operation_sha256",
     }
 )
+_OPERATION_KEYS = frozenset(
+    {
+        "schema_version",
+        "gate",
+        "action",
+        "changed_at_utc",
+        "previous",
+        "next",
+        "authorization",
+    }
+)
+_OPERATION_PREVIOUS_KEYS = frozenset(
+    {"head_version", "evidence_sha256", "active", "operation_record_id"}
+)
+_OPERATION_NEXT_KEYS = frozenset(
+    {"head_version", "evidence_sha256", "active"}
+)
+_OPERATION_AUTHORIZATION_KEYS = frozenset(
+    {"artifact_uri", "artifact_sha256", "reason"}
+)
+_PUBLISH_OPERATION_REASONS = frozenset({"authorized_publication"})
+_DEACTIVATE_OPERATION_REASONS = frozenset(
+    {
+        "approval_withdrawn",
+        "evidence_expired",
+        "incident_response",
+        "operator_safety_action",
+    }
+)
+_API_ONLY_ORIGINS = frozenset({PRODUCTION_API_ORIGIN})
+_API_LANDING_ORIGINS = frozenset({PRODUCTION_API_ORIGIN, LANDING_ORIGIN})
 
 
 class ImmutableAcceptanceEvidenceBackend(Protocol):
     """Subset implemented by the existing S3 Object-Lock packet backend."""
 
     def assert_ready(self, *, expected: RetentionPolicy) -> None: ...
+
+    def object_url(self, key: str, *, version_id: str | None = None) -> str: ...
 
     def put_immutable(
         self,
@@ -617,6 +661,28 @@ class PublishedAcceptanceEvidence:
     sha256: str
     head_version: int
     storage_mode: str
+    operation_record_id: str
+    operation_sha256: str
+
+
+@dataclass(frozen=True, slots=True)
+class DeactivatedAcceptanceEvidence:
+    gate: str
+    sha256: str
+    head_version: int
+    already_inactive: bool
+    operation_record_id: str
+    operation_sha256: str
+
+
+@dataclass(frozen=True, slots=True)
+class AcceptanceAuthorityHead:
+    gate: str
+    sha256: str
+    head_version: int
+    active: bool
+    operation_record_id: str
+    operation_sha256: str
 
 
 class CustomerProductionAcceptanceAuthorityStore:
@@ -637,8 +703,8 @@ class CustomerProductionAcceptanceAuthorityStore:
         self._immutable_backend = immutable_backend
         self._retention_policy = retention_policy
 
-    def current_head_version(self, gate: str) -> int:
-        """Return 0 for an absent head, otherwise its validated StateStore version."""
+    def current_head(self, gate: str) -> AcceptanceAuthorityHead | None:
+        """Return the validated active-or-tombstoned head, or ``None``."""
 
         _require_gate(gate)
         try:
@@ -650,9 +716,435 @@ class CustomerProductionAcceptanceAuthorityStore:
                 "acceptance authority state store is unavailable"
             ) from exc
         if head is None:
-            return 0
-        _validate_head(head.payload, gate)
-        return head.version
+            return None
+        payload = _validate_head(head.payload, gate)
+        operation_record_id = str(payload["operation_record_id"])
+        operation_sha256 = str(payload["operation_sha256"])
+        operation = self._operation_payload(
+            gate,
+            operation_record_id,
+            operation_sha256,
+        )
+        _validate_head_operation_binding(
+            payload,
+            operation,
+            head_version=head.version,
+        )
+        if (
+            head.source != "customer_production_acceptance_authority"
+            or head.trace_id != payload["evidence_sha256"]
+            or head.parent_ids
+            != (str(payload["revision_record_id"]), operation_record_id)
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority head traceability is invalid"
+            )
+        self._validate_operation_chain(
+            gate=gate,
+            operation_record_id=operation_record_id,
+            operation=operation,
+            head_version=head.version,
+        )
+        return AcceptanceAuthorityHead(
+            gate=gate,
+            sha256=str(payload["evidence_sha256"]),
+            head_version=head.version,
+            active=bool(payload["active"]),
+            operation_record_id=operation_record_id,
+            operation_sha256=operation_sha256,
+        )
+
+    def current_head_version(self, gate: str) -> int:
+        """Return 0 for an absent head, otherwise its validated StateStore version."""
+
+        head = self.current_head(gate)
+        return 0 if head is None else head.head_version
+
+    def _operation_payload(
+        self,
+        gate: str,
+        operation_record_id: str,
+        expected_digest: str,
+    ) -> Mapping[str, Any]:
+        try:
+            operation = self._store.get(
+                AUTHORITY_TENANT_ID,
+                OPERATION_KIND,
+                operation_record_id,
+            )
+        except Exception as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority operation store is unavailable"
+            ) from exc
+        if operation is None:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority operation record is missing"
+            )
+        payload = _validate_operation(
+            operation.payload,
+            gate=gate,
+            operation_record_id=operation_record_id,
+            expected_digest=expected_digest,
+        )
+        previous = payload["previous"]
+        assert isinstance(previous, Mapping)
+        expected_parents = (
+            ()
+            if previous["operation_record_id"] is None
+            else (str(previous["operation_record_id"]),)
+        )
+        if (
+            operation.version != 1
+            or operation.source != "customer_production_acceptance_authority"
+            or operation.trace_id != expected_digest
+            or operation.parent_ids != expected_parents
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority operation traceability is invalid"
+            )
+        return payload
+
+    def _validate_operation_chain(
+        self,
+        *,
+        gate: str,
+        operation_record_id: str,
+        operation: Mapping[str, Any],
+        head_version: int,
+    ) -> None:
+        """Validate every bound predecessor exactly once back to version zero."""
+
+        if head_version < 1:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority head version is invalid"
+            )
+        seen = {operation_record_id}
+        cursor = operation
+        expected_next_version = head_version
+        for _ in range(head_version):
+            next_head = cursor["next"]
+            previous = cursor["previous"]
+            assert isinstance(next_head, Mapping)
+            assert isinstance(previous, Mapping)
+            if next_head["head_version"] != expected_next_version:
+                raise AcceptanceAuthorityUnavailable(
+                    "acceptance authority operation chain version is invalid"
+                )
+            if expected_next_version == 1:
+                if (
+                    previous["head_version"] != 0
+                    or previous["operation_record_id"] is not None
+                ):
+                    raise AcceptanceAuthorityUnavailable(
+                        "acceptance authority operation chain root is invalid"
+                    )
+                return
+
+            previous_record_id = str(previous["operation_record_id"])
+            if previous_record_id in seen:
+                raise AcceptanceAuthorityUnavailable(
+                    "acceptance authority operation chain contains a cycle"
+                )
+            seen.add(previous_record_id)
+            previous_digest = _operation_digest_from_record_id(
+                gate, previous_record_id
+            )
+            prior_operation = self._operation_payload(
+                gate,
+                previous_record_id,
+                previous_digest,
+            )
+            prior_next = prior_operation["next"]
+            assert isinstance(prior_next, Mapping)
+            if (
+                prior_next["head_version"] != previous["head_version"]
+                or prior_next["evidence_sha256"]
+                != previous["evidence_sha256"]
+                or prior_next["active"] is not previous["active"]
+            ):
+                raise AcceptanceAuthorityUnavailable(
+                    "acceptance authority operation chain is invalid"
+                )
+            cursor = prior_operation
+            expected_next_version -= 1
+
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation chain is incomplete"
+        )
+
+    def _append_operation(
+        self,
+        *,
+        gate: str,
+        action: str,
+        current_head: AcceptanceAuthorityHead | None,
+        next_sha256: str,
+        next_active: bool,
+        authorization_artifact_uri: str,
+        authorization_artifact_sha256: str,
+        operation_reason: str,
+        now: datetime,
+    ) -> tuple[str, str]:
+        _validate_operation_authorization(
+            action=action,
+            artifact_uri=authorization_artifact_uri,
+            artifact_sha256=authorization_artifact_sha256,
+            reason=operation_reason,
+        )
+        previous_version = 0 if current_head is None else current_head.head_version
+        payload = {
+            "schema_version": OPERATION_SCHEMA_VERSION,
+            "gate": gate,
+            "action": action,
+            "changed_at_utc": _format_utc(now),
+            "previous": {
+                "head_version": previous_version,
+                "evidence_sha256": (
+                    None if current_head is None else current_head.sha256
+                ),
+                "active": None if current_head is None else current_head.active,
+                "operation_record_id": (
+                    None
+                    if current_head is None
+                    else current_head.operation_record_id
+                ),
+            },
+            "next": {
+                "head_version": previous_version + 1,
+                "evidence_sha256": next_sha256,
+                "active": next_active,
+            },
+            "authorization": {
+                "artifact_uri": authorization_artifact_uri,
+                "artifact_sha256": authorization_artifact_sha256,
+                "reason": operation_reason,
+            },
+        }
+        canonical = _canonical_json_bytes(payload)
+        digest = hashlib.sha256(canonical).hexdigest()
+        record_id = _operation_record_id(gate, digest)
+        operation = LedgerRecord.new(
+            tenant_id=AUTHORITY_TENANT_ID,
+            kind=OPERATION_KIND,
+            record_id=record_id,
+            payload=payload,
+            parent_ids=(
+                ()
+                if current_head is None
+                else (current_head.operation_record_id,)
+            ),
+            source="customer_production_acceptance_authority",
+            trace_id=digest,
+            now=now,
+        )
+        try:
+            stored = self._store.put(operation, expected_version=0)
+        except VersionConflict:
+            existing = self._operation_payload(gate, record_id, digest)
+            if _canonical_json_bytes(existing) != canonical:
+                raise AcceptanceAuthorityUnavailable(
+                    "content-addressed acceptance operation conflicted"
+                )
+        except Exception as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority operation persistence failed"
+            ) from exc
+        else:
+            if stored.version != 1:
+                raise AcceptanceAuthorityUnavailable(
+                    "acceptance authority operation version is invalid"
+                )
+            _validate_operation(
+                stored.payload,
+                gate=gate,
+                operation_record_id=record_id,
+                expected_digest=digest,
+            )
+        return record_id, digest
+
+    def _revision_payload(
+        self,
+        gate: str,
+        revision_id: str,
+        digest: str,
+        *,
+        required: bool,
+    ) -> Mapping[str, Any] | None:
+        try:
+            revision = self._store.get(
+                AUTHORITY_TENANT_ID, REVISION_KIND, revision_id
+            )
+        except Exception as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority revision store is unavailable"
+            ) from exc
+        if revision is None:
+            if required:
+                raise AcceptanceAuthorityUnavailable(
+                    "active acceptance revision is missing"
+                )
+            return None
+        payload = _validate_revision(
+            revision.payload,
+            gate=gate,
+            revision_id=revision_id,
+            expected_digest=digest,
+        )
+        if (
+            revision.version != 1
+            or revision.source != "customer_production_acceptance_authority"
+            or revision.trace_id != digest
+            or revision.parent_ids != ()
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority revision traceability is invalid"
+            )
+        return payload
+
+    def _revision_body(self, payload: Mapping[str, Any]) -> bytes:
+        storage = payload["storage"]
+        assert isinstance(storage, Mapping)
+        if storage["mode"] == "state_store":
+            evidence_json = payload["evidence_json"]
+            if not isinstance(evidence_json, str):
+                raise AcceptanceAuthorityUnavailable(
+                    "inline acceptance evidence bytes are unavailable"
+                )
+            try:
+                return evidence_json.encode("ascii")
+            except UnicodeEncodeError as exc:
+                raise AcceptanceAuthorityUnavailable(
+                    "inline acceptance evidence is not canonical ASCII JSON"
+                ) from exc
+
+        if self._immutable_backend is None:
+            raise AcceptanceAuthorityUnavailable(
+                "active acceptance evidence requires its immutable backend"
+            )
+        key = storage.get("object_key")
+        version_id = storage.get("version_id")
+        if not isinstance(key, str) or not isinstance(version_id, str):
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance evidence pointer is invalid"
+            )
+        try:
+            return self._immutable_backend.get_immutable(
+                key=key, version_id=version_id
+            )
+        except Exception as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance evidence re-read failed"
+            ) from exc
+
+    def _assert_revision_storage_policy(
+        self,
+        payload: Mapping[str, Any],
+        *,
+        now: datetime,
+        check_backend_readiness: bool = True,
+    ) -> None:
+        storage = payload["storage"]
+        assert isinstance(storage, Mapping)
+        expected_mode = (
+            "worm" if self._immutable_backend is not None else "state_store"
+        )
+        if storage["mode"] != expected_mode:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance revision storage does not match the current "
+                "immutable policy"
+            )
+        if expected_mode == "state_store":
+            return
+
+        assert self._immutable_backend is not None
+        assert self._retention_policy is not None
+        verification_payload = storage.get("receipt_verification")
+        if not isinstance(verification_payload, Mapping):
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance receipt verification is unavailable"
+            )
+        expected = verification_payload.get("expected")
+        if not isinstance(expected, Mapping):
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance receipt expectation is unavailable"
+            )
+        object_key = str(storage.get("object_key"))
+        version_id = str(storage.get("version_id"))
+        try:
+            canonical_object_url = self._immutable_backend.object_url(
+                object_key,
+                version_id=version_id,
+            )
+        except Exception as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance object identity is unavailable"
+            ) from exc
+        if canonical_object_url != storage.get("object_url"):
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance object URL is not canonical"
+            )
+        receipt_bucket, receipt_key, receipt_version = _parse_s3_object_url(
+            canonical_object_url
+        )
+        if (
+            storage.get("lock_mode") != self._retention_policy.mode
+            or storage.get("retention_days")
+            != self._retention_policy.retention_days
+            or expected.get("mode") != self._retention_policy.mode
+            or expected.get("retention_days")
+            != self._retention_policy.retention_days
+            or expected.get("content_sha256") != payload["evidence_sha256"]
+            or expected.get("bucket") != receipt_bucket
+            or expected.get("key") != receipt_key
+            or expected.get("version_id") != receipt_version
+            or receipt_version != version_id
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance receipt does not match the current policy"
+            )
+        if _parse_iso_utc_unavailable(
+            expected.get("retain_until"), "receipt retention timestamp"
+        ) != _parse_utc_unavailable(
+            storage.get("retain_until_utc"), "WORM retention timestamp"
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance receipt retention is inconsistent"
+            )
+        if check_backend_readiness:
+            try:
+                self._immutable_backend.assert_ready(expected=self._retention_policy)
+            except Exception as exc:
+                raise AcceptanceAuthorityUnavailable(
+                    "immutable acceptance backend readiness failed"
+                ) from exc
+        verification = revalidate_object_lock_verification(
+            verification_payload,
+            expected=expected,
+            evaluated_at=now,
+        )
+        if verification is None or not verification.verified:
+            raise AcceptanceAuthorityUnavailable(
+                "immutable acceptance receipt revalidation failed"
+            )
+
+    @staticmethod
+    def _verify_revision_bytes(
+        payload: Mapping[str, Any], body: bytes, *, expected: bytes | None = None
+    ) -> None:
+        expected_length = payload["byte_length"]
+        expected_hash = str(payload["evidence_sha256"])
+        if not isinstance(expected_length, int) or len(body) != expected_length:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance evidence byte length does not match its durable revision"
+            )
+        if hashlib.sha256(body).hexdigest() != expected_hash:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance evidence bytes do not match their durable revision"
+            )
+        if expected is not None and body != expected:
+            raise AcceptanceAuthorityUnavailable(
+                "content-addressed acceptance revision bytes conflicted"
+            )
 
     def publish(
         self,
@@ -660,6 +1152,10 @@ class CustomerProductionAcceptanceAuthorityStore:
         evidence: Mapping[str, Any],
         *,
         expected_head_version: int,
+        expected_previous_sha256: str | None,
+        authorization_artifact_uri: str,
+        authorization_artifact_sha256: str,
+        operation_reason: str,
         now: datetime | None = None,
     ) -> PublishedAcceptanceEvidence:
         """Persist one independently collected evidence document.
@@ -677,102 +1173,184 @@ class CustomerProductionAcceptanceAuthorityStore:
             or expected_head_version < 0
         ):
             raise ValueError("expected_head_version must be a non-negative integer")
+        if expected_head_version == 0:
+            if expected_previous_sha256 is not None:
+                raise ValueError(
+                    "expected_previous_sha256 must be absent for an absent head"
+                )
+        elif not _is_sha256(expected_previous_sha256):
+            raise ValueError(
+                "expected_previous_sha256 is required for an existing head"
+            )
+        current_head = self.current_head(gate)
+        if expected_head_version == 0:
+            if current_head is not None:
+                raise AcceptanceAuthorityConflict(
+                    "acceptance authority head changed; re-read before publishing"
+                )
+        elif (
+            current_head is None
+            or current_head.head_version != expected_head_version
+            or current_head.sha256 != expected_previous_sha256
+        ):
+            raise AcceptanceAuthorityConflict(
+                "acceptance authority head changed; re-read before publishing"
+            )
+        _validate_operation_authorization(
+            action="publish",
+            artifact_uri=authorization_artifact_uri,
+            artifact_sha256=authorization_artifact_sha256,
+            reason=operation_reason,
+        )
         stamp = _utc_now(now)
-        canonical = _validated_canonical_evidence(evidence, gate=gate, now=stamp)
+        canonical = canonicalize_acceptance_evidence(
+            gate, evidence, now=stamp
+        )
         digest = hashlib.sha256(canonical).hexdigest()
         revision_id = _revision_record_id(gate, digest)
-
-        evidence_json: str | None
-        if self._immutable_backend is None:
-            evidence_json = canonical.decode("ascii")
-            storage = {
-                "mode": "state_store",
-                "object_key": None,
-                "object_url": None,
-                "version_id": None,
-                "retain_until_utc": None,
-                "receipt_sha256": None,
-            }
+        revision_payload = self._revision_payload(
+            gate, revision_id, digest, required=False
+        )
+        if revision_payload is not None:
+            storage = revision_payload["storage"]
+            assert isinstance(storage, Mapping)
+            self._assert_revision_storage_policy(revision_payload, now=stamp)
+            body = self._revision_body(revision_payload)
+            self._verify_revision_bytes(revision_payload, body, expected=canonical)
         else:
-            assert self._retention_policy is not None
-            key = f"customer-production-authority/{gate}/{digest}.json"
+            evidence_json: str | None
+            if self._immutable_backend is None:
+                evidence_json = canonical.decode("ascii")
+                storage = {
+                    "mode": "state_store",
+                    "object_key": None,
+                    "object_url": None,
+                    "version_id": None,
+                    "retain_until_utc": None,
+                    "receipt_sha256": None,
+                    "receipt_verification": None,
+                    "lock_mode": None,
+                    "retention_days": None,
+                }
+            else:
+                assert self._retention_policy is not None
+                key = f"customer-production-authority/{gate}/{digest}.json"
+                try:
+                    self._immutable_backend.assert_ready(
+                        expected=self._retention_policy
+                    )
+                    receipt = self._immutable_backend.put_immutable(
+                        key=key,
+                        body=canonical,
+                        content_hash=digest,
+                        policy=self._retention_policy,
+                    )
+                except Exception as exc:
+                    raise AcceptanceAuthorityUnavailable(
+                        "immutable acceptance evidence write failed"
+                    ) from exc
+                if not bool(getattr(receipt, "is_verifiable", lambda: False)()):
+                    raise AcceptanceAuthorityUnavailable(
+                        "immutable acceptance evidence write lacked a verified receipt"
+                    )
+                verification = getattr(
+                    receipt, "validated_verification", lambda: None
+                )()
+                if verification is None or not bool(
+                    getattr(verification, "verified", False)
+                ):
+                    raise AcceptanceAuthorityUnavailable(
+                        "immutable acceptance evidence receipt is invalid"
+                    )
+                verification_payload = verification.to_dict()
+                receipt_body = _canonical_json_bytes(verification_payload)
+                evidence_json = None
+                storage = {
+                    "mode": "worm",
+                    "object_key": key,
+                    "object_url": str(receipt.object_url),
+                    "version_id": str(receipt.version_id),
+                    "retain_until_utc": _format_utc(receipt.retain_until),
+                    "receipt_sha256": hashlib.sha256(receipt_body).hexdigest(),
+                    "receipt_verification": verification_payload,
+                    "lock_mode": self._retention_policy.mode,
+                    "retention_days": self._retention_policy.retention_days,
+                }
+
+            revision_payload = {
+                "schema_version": RECORD_SCHEMA_VERSION,
+                "gate": gate,
+                "evidence_sha256": digest,
+                "byte_length": len(canonical),
+                "persisted_at_utc": _format_utc(stamp),
+                "evidence_json": evidence_json,
+                "storage": storage,
+            }
+            self._assert_revision_storage_policy(
+                revision_payload,
+                now=stamp,
+                check_backend_readiness=False,
+            )
+            revision = LedgerRecord.new(
+                tenant_id=AUTHORITY_TENANT_ID,
+                kind=REVISION_KIND,
+                record_id=revision_id,
+                payload=revision_payload,
+                source="customer_production_acceptance_authority",
+                trace_id=digest,
+                now=stamp,
+            )
             try:
-                self._immutable_backend.assert_ready(expected=self._retention_policy)
-                receipt = self._immutable_backend.put_immutable(
-                    key=key,
-                    body=canonical,
-                    content_hash=digest,
-                    policy=self._retention_policy,
+                self._store.put(revision, expected_version=0)
+            except VersionConflict:
+                # Another publisher may have stored these exact content-addressed
+                # bytes after our initial read. Re-read and compare the bytes,
+                # not its call-time persistence timestamp or WORM version.
+                revision_payload = self._revision_payload(
+                    gate, revision_id, digest, required=True
+                )
+                assert revision_payload is not None
+                storage = revision_payload["storage"]
+                assert isinstance(storage, Mapping)
+                self._assert_revision_storage_policy(
+                    revision_payload, now=stamp
+                )
+                body = self._revision_body(revision_payload)
+                self._verify_revision_bytes(
+                    revision_payload, body, expected=canonical
                 )
             except Exception as exc:
                 raise AcceptanceAuthorityUnavailable(
-                    "immutable acceptance evidence write failed"
+                    "acceptance revision persistence failed"
                 ) from exc
-            if not bool(getattr(receipt, "is_verifiable", lambda: False)()):
-                raise AcceptanceAuthorityUnavailable(
-                    "immutable acceptance evidence write lacked a verified receipt"
-                )
-            verification = getattr(receipt, "validated_verification", lambda: None)()
-            if verification is None or not bool(getattr(verification, "verified", False)):
-                raise AcceptanceAuthorityUnavailable(
-                    "immutable acceptance evidence receipt is invalid"
-                )
-            receipt_body = _canonical_json_bytes(verification.to_dict())
-            evidence_json = None
-            storage = {
-                "mode": "worm",
-                "object_key": key,
-                "object_url": str(receipt.object_url),
-                "version_id": str(receipt.version_id),
-                "retain_until_utc": _format_utc(receipt.retain_until),
-                "receipt_sha256": hashlib.sha256(receipt_body).hexdigest(),
-            }
 
-        revision_payload = {
-            "schema_version": RECORD_SCHEMA_VERSION,
-            "gate": gate,
-            "evidence_sha256": digest,
-            "byte_length": len(canonical),
-            "persisted_at_utc": _format_utc(stamp),
-            "evidence_json": evidence_json,
-            "storage": storage,
-        }
-        revision = LedgerRecord.new(
-            tenant_id=AUTHORITY_TENANT_ID,
-            kind=REVISION_KIND,
-            record_id=revision_id,
-            payload=revision_payload,
-            source="customer_production_acceptance_authority",
-            trace_id=digest,
+        operation_record_id, operation_sha256 = self._append_operation(
+            gate=gate,
+            action="publish",
+            current_head=current_head,
+            next_sha256=digest,
+            next_active=True,
+            authorization_artifact_uri=authorization_artifact_uri,
+            authorization_artifact_sha256=authorization_artifact_sha256,
+            operation_reason=operation_reason,
             now=stamp,
         )
-        try:
-            self._store.put(revision, expected_version=0)
-        except VersionConflict:
-            current = self._store.get(
-                AUTHORITY_TENANT_ID, REVISION_KIND, revision_id
-            )
-            if current is None or dict(current.payload) != revision_payload:
-                raise AcceptanceAuthorityUnavailable(
-                    "content-addressed acceptance revision conflicted"
-                )
-        except Exception as exc:
-            raise AcceptanceAuthorityUnavailable(
-                "acceptance revision persistence failed"
-            ) from exc
-
         head_payload = {
             "schema_version": HEAD_SCHEMA_VERSION,
             "gate": gate,
             "revision_record_id": revision_id,
             "evidence_sha256": digest,
-            "activated_at_utc": _format_utc(stamp),
+            "active": True,
+            "changed_at_utc": _format_utc(stamp),
+            "operation_record_id": operation_record_id,
+            "operation_sha256": operation_sha256,
         }
         head = LedgerRecord.new(
             tenant_id=AUTHORITY_TENANT_ID,
             kind=HEAD_KIND,
             record_id=_head_record_id(gate),
             payload=head_payload,
+            parent_ids=(revision_id, operation_record_id),
             source="customer_production_acceptance_authority",
             trace_id=digest,
             now=stamp,
@@ -794,6 +1372,111 @@ class CustomerProductionAcceptanceAuthorityStore:
             sha256=digest,
             head_version=stored_head.version,
             storage_mode=str(storage["mode"]),
+            operation_record_id=operation_record_id,
+            operation_sha256=operation_sha256,
+        )
+
+    def deactivate(
+        self,
+        gate: str,
+        *,
+        expected_head_version: int,
+        expected_evidence_sha256: str,
+        authorization_artifact_uri: str,
+        authorization_artifact_sha256: str,
+        operation_reason: str,
+        now: datetime | None = None,
+    ) -> DeactivatedAcceptanceEvidence:
+        """CAS-tombstone an active head while retaining its immutable revision."""
+
+        _require_gate(gate)
+        if (
+            not isinstance(expected_head_version, int)
+            or isinstance(expected_head_version, bool)
+            or expected_head_version <= 0
+        ):
+            raise ValueError("expected_head_version must be a positive integer")
+        if not _is_sha256(expected_evidence_sha256):
+            raise ValueError("expected_evidence_sha256 must be a SHA-256 digest")
+        _validate_operation_authorization(
+            action="deactivate",
+            artifact_uri=authorization_artifact_uri,
+            artifact_sha256=authorization_artifact_sha256,
+            reason=operation_reason,
+        )
+        current = self.current_head(gate)
+        if (
+            current is None
+            or current.head_version != expected_head_version
+            or current.sha256 != expected_evidence_sha256
+        ):
+            raise AcceptanceAuthorityConflict(
+                "acceptance authority head changed; re-read before deactivation"
+            )
+        if not current.active:
+            return DeactivatedAcceptanceEvidence(
+                gate=gate,
+                sha256=current.sha256,
+                head_version=current.head_version,
+                already_inactive=True,
+                operation_record_id=current.operation_record_id,
+                operation_sha256=current.operation_sha256,
+            )
+
+        stamp = _utc_now(now)
+        operation_record_id, operation_sha256 = self._append_operation(
+            gate=gate,
+            action="deactivate",
+            current_head=current,
+            next_sha256=current.sha256,
+            next_active=False,
+            authorization_artifact_uri=authorization_artifact_uri,
+            authorization_artifact_sha256=authorization_artifact_sha256,
+            operation_reason=operation_reason,
+            now=stamp,
+        )
+        payload = {
+            "schema_version": HEAD_SCHEMA_VERSION,
+            "gate": gate,
+            "revision_record_id": _revision_record_id(gate, current.sha256),
+            "evidence_sha256": current.sha256,
+            "active": False,
+            "changed_at_utc": _format_utc(stamp),
+            "operation_record_id": operation_record_id,
+            "operation_sha256": operation_sha256,
+        }
+        tombstone = LedgerRecord.new(
+            tenant_id=AUTHORITY_TENANT_ID,
+            kind=HEAD_KIND,
+            record_id=_head_record_id(gate),
+            payload=payload,
+            parent_ids=(
+                _revision_record_id(gate, current.sha256),
+                operation_record_id,
+            ),
+            source="customer_production_acceptance_authority",
+            trace_id=current.sha256,
+            now=stamp,
+        )
+        try:
+            stored = self._store.put(
+                tombstone, expected_version=expected_head_version
+            )
+        except VersionConflict as exc:
+            raise AcceptanceAuthorityConflict(
+                "acceptance authority head changed; re-read before deactivation"
+            ) from exc
+        except Exception as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "acceptance authority deactivation failed"
+            ) from exc
+        return DeactivatedAcceptanceEvidence(
+            gate=gate,
+            sha256=current.sha256,
+            head_version=stored.version,
+            already_inactive=False,
+            operation_record_id=operation_record_id,
+            operation_sha256=operation_sha256,
         )
 
     def load(
@@ -803,81 +1486,20 @@ class CustomerProductionAcceptanceAuthorityStore:
 
         _require_gate(gate)
         stamp = _utc_now(now)
-        try:
-            head = self._store.get(
-                AUTHORITY_TENANT_ID, HEAD_KIND, _head_record_id(gate)
-            )
-        except Exception as exc:
-            raise AcceptanceAuthorityUnavailable(
-                "acceptance authority state store is unavailable"
-            ) from exc
+        head = self.current_head(gate)
         if head is None:
             raise AcceptanceAuthorityNotFound("acceptance evidence is absent")
-        head_payload = _validate_head(head.payload, gate)
-        revision_id = str(head_payload["revision_record_id"])
-        try:
-            revision = self._store.get(
-                AUTHORITY_TENANT_ID, REVISION_KIND, revision_id
-            )
-        except Exception as exc:
-            raise AcceptanceAuthorityUnavailable(
-                "acceptance authority revision store is unavailable"
-            ) from exc
-        if revision is None:
-            raise AcceptanceAuthorityUnavailable(
-                "active acceptance revision is missing"
-            )
-        payload = _validate_revision(
-            revision.payload,
-            gate=gate,
-            revision_id=revision_id,
-            head_payload=head_payload,
+        if head.active is not True:
+            raise AcceptanceAuthorityNotFound("acceptance evidence is inactive")
+        revision_id = _revision_record_id(gate, head.sha256)
+        expected_hash = head.sha256
+        payload = self._revision_payload(
+            gate, revision_id, expected_hash, required=True
         )
-        storage = payload["storage"]
-        assert isinstance(storage, Mapping)
-        mode = storage["mode"]
-        if mode == "state_store":
-            evidence_json = payload["evidence_json"]
-            if not isinstance(evidence_json, str):
-                raise AcceptanceAuthorityUnavailable(
-                    "inline acceptance evidence bytes are unavailable"
-                )
-            try:
-                body = evidence_json.encode("ascii")
-            except UnicodeEncodeError as exc:
-                raise AcceptanceAuthorityUnavailable(
-                    "inline acceptance evidence is not canonical ASCII JSON"
-                ) from exc
-        else:
-            if self._immutable_backend is None:
-                raise AcceptanceAuthorityUnavailable(
-                    "active acceptance evidence requires its immutable backend"
-                )
-            key = storage.get("object_key")
-            version_id = storage.get("version_id")
-            if not isinstance(key, str) or not isinstance(version_id, str):
-                raise AcceptanceAuthorityUnavailable(
-                    "immutable acceptance evidence pointer is invalid"
-                )
-            try:
-                body = self._immutable_backend.get_immutable(
-                    key=key, version_id=version_id
-                )
-            except Exception as exc:
-                raise AcceptanceAuthorityUnavailable(
-                    "immutable acceptance evidence re-read failed"
-                ) from exc
-
-        expected_length = payload["byte_length"]
-        expected_hash = str(payload["evidence_sha256"])
-        if not isinstance(expected_length, int) or len(body) != expected_length:
-            raise AcceptanceAuthorityUnavailable(
-                "acceptance evidence byte length does not match its durable revision"
-            )
-        if hashlib.sha256(body).hexdigest() != expected_hash:
-            raise AcceptanceAuthorityUnavailable(
-                "acceptance evidence bytes do not match their durable revision"
-            )
+        assert payload is not None
+        self._assert_revision_storage_policy(payload, now=stamp)
+        body = self._revision_body(payload)
+        self._verify_revision_bytes(payload, body)
         try:
             document = json.loads(body.decode("ascii"))
         except (UnicodeDecodeError, json.JSONDecodeError) as exc:
@@ -896,6 +1518,25 @@ class CustomerProductionAcceptanceAuthorityStore:
         return AcceptanceEvidenceDocument(
             gate=gate, sha256=expected_hash, body=body
         )
+
+
+def canonicalize_acceptance_evidence(
+    gate: str,
+    evidence: Mapping[str, Any],
+    *,
+    now: datetime | None = None,
+) -> bytes:
+    """Validate one authority document and return its exact canonical bytes.
+
+    Operational publishers use this public seam to hash and pin the bytes before
+    they open a production StateStore connection.  It intentionally applies the
+    same structural, freshness, public-production, secret/PII, and gate-semantic
+    checks used by :meth:`CustomerProductionAcceptanceAuthorityStore.publish` and
+    :meth:`CustomerProductionAcceptanceAuthorityStore.load`.
+    """
+
+    _require_gate(gate)
+    return _validated_canonical_evidence(evidence, gate=gate, now=_utc_now(now))
 
 
 def _validated_canonical_evidence(
@@ -943,7 +1584,7 @@ def _validated_canonical_evidence(
         now=now,
     )
     _scan_safe_values(evidence)
-    serialized = json.dumps(evidence, sort_keys=True)
+    serialized = json.dumps(evidence, sort_keys=True).lower()
     if "srv-d9akoolaeets73bp3e7g" in serialized or "accounts-canary" in serialized:
         raise AcceptanceAuthorityInvalid(
             "private-canary evidence cannot be public authority"
@@ -1391,6 +2032,11 @@ def _validate_legal_semantics(
         evidence["approvals"], "role", _LEGAL_APPROVER_ROLES, "approvals"
     )
     for role, approval in approvals.items():
+        _validate_public_https_url(
+            str(approval["approval_artifact_uri"]),
+            f"approvals[{role}].approval_artifact_uri",
+            allowed_origins=_API_LANDING_ORIGINS,
+        )
         _sha_value(approval["approval_sha256"], f"approvals[{role}].approval_sha256")
         _proof_time(
             approval["approved_at_utc"],
@@ -1486,6 +2132,11 @@ def _validate_incident_tabletop_semantics(
         "incident.closed_at_utc",
     )
     _equal(incident, "open_actions", 0, "incident")
+    _validate_public_https_url(
+        str(incident["postmortem_uri"]),
+        "incident.postmortem_uri",
+        allowed_origins=_API_ONLY_ORIGINS,
+    )
     _sha_value(incident["postmortem_sha256"], "incident.postmortem_sha256")
     _equal(incident, "credential_rotation_complete", True, "incident")
     _equal(incident, "recovery_verified", True, "incident")
@@ -1505,6 +2156,11 @@ def _validate_incident_tabletop_semantics(
     _exact_string_set(tabletop["participant_roles"], _TABLETOP_ROLES, "tabletop.participant_roles")
     _exact_string_set(tabletop["scenarios"], _TABLETOP_SCENARIOS, "tabletop.scenarios")
     _equal(tabletop, "open_actions", 0, "tabletop")
+    _validate_public_https_url(
+        str(tabletop["evidence_uri"]),
+        "tabletop.evidence_uri",
+        allowed_origins=_API_ONLY_ORIGINS,
+    )
     _sha_value(tabletop["evidence_sha256"], "tabletop.evidence_sha256")
 
 
@@ -1643,6 +2299,11 @@ def _validate_claim_honesty_semantics(
         evidence["approvals"], "role", _CLAIM_APPROVER_ROLES, "approvals"
     )
     for role, approval in approvals.items():
+        _validate_public_https_url(
+            str(approval["approval_artifact_uri"]),
+            f"approvals[{role}].approval_artifact_uri",
+            allowed_origins=_API_LANDING_ORIGINS,
+        )
         _sha_value(approval["approval_sha256"], f"approvals[{role}].approval_sha256")
         _proof_time(
             approval["approved_at_utc"],
@@ -1673,6 +2334,11 @@ def _validate_release_decision_semantics(
         raise AcceptanceAuthorityInvalid("release approval follows observation")
     _exact_string_set(
         evidence["approver_roles"], _RELEASE_APPROVER_ROLES, "approver_roles"
+    )
+    _validate_public_https_url(
+        str(evidence["decision_record_uri"]),
+        "decision_record_uri",
+        allowed_origins=_API_ONLY_ORIGINS,
     )
     _sha_value(evidence["decision_record_sha256"], "decision_record_sha256")
 
@@ -1797,8 +2463,17 @@ def _scan_safe_values(value: Any, path: str = "$") -> None:
                 )
 
 
-def _validate_public_https_url(value: str, path: str) -> None:
-    parsed = urlparse(value)
+def _validate_public_https_url(
+    value: str,
+    path: str,
+    *,
+    allowed_origins: frozenset[str] = _ALLOWED_URL_ORIGINS,
+) -> None:
+    try:
+        parsed = urlparse(value)
+        port = parsed.port
+    except ValueError as exc:
+        raise AcceptanceAuthorityInvalid(f"{path} must be a clean HTTPS URL") from exc
     if (
         parsed.scheme != "https"
         or not parsed.hostname
@@ -1806,18 +2481,214 @@ def _validate_public_https_url(value: str, path: str) -> None:
         or parsed.password is not None
         or parsed.query
         or parsed.fragment
-        or parsed.port not in {None, 443}
+        or port not in {None, 443}
     ):
         raise AcceptanceAuthorityInvalid(f"{path} must be a clean HTTPS URL")
-    port = f":{parsed.port}" if parsed.port is not None else ""
-    origin = f"https://{parsed.hostname.lower()}{port}"
-    if origin not in _ALLOWED_URL_ORIGINS:
+    port_suffix = f":{port}" if port is not None else ""
+    origin = f"https://{parsed.hostname.lower()}{port_suffix}"
+    if origin not in allowed_origins:
         raise AcceptanceAuthorityInvalid(f"{path} origin is not allowlisted")
     decoded_path = unquote(parsed.path)
     if decoded_path != parsed.path:
         raise AcceptanceAuthorityInvalid(f"{path} must not use encoded path material")
     if any(part == ".." for part in decoded_path.split("/")):
         raise AcceptanceAuthorityInvalid(f"{path} contains path traversal")
+
+
+def _parse_s3_object_url(value: Any) -> tuple[str, str, str]:
+    if not isinstance(value, str):
+        raise AcceptanceAuthorityUnavailable(
+            "immutable acceptance object URL is invalid"
+        )
+    try:
+        parsed = urlparse(value)
+        port = parsed.port
+        query = parse_qs(
+            parsed.query,
+            keep_blank_values=True,
+            strict_parsing=True,
+        )
+    except ValueError as exc:
+        raise AcceptanceAuthorityUnavailable(
+            "immutable acceptance object URL is invalid"
+        ) from exc
+    decoded_path = unquote(parsed.path)
+    versions = query.get("versionId", [])
+    if (
+        parsed.scheme != "s3"
+        or not parsed.netloc
+        or parsed.username is not None
+        or parsed.password is not None
+        or port is not None
+        or parsed.fragment
+        or not parsed.path.startswith("/")
+        or decoded_path != parsed.path
+        or not decoded_path.lstrip("/")
+        or set(query) != {"versionId"}
+        or len(versions) != 1
+        or not versions[0]
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "immutable acceptance object URL is invalid"
+        )
+    return parsed.netloc, decoded_path.lstrip("/"), versions[0]
+
+
+def _validate_operation_authorization(
+    *, action: str, artifact_uri: Any, artifact_sha256: Any, reason: Any
+) -> None:
+    if action == "publish":
+        allowed_reasons = _PUBLISH_OPERATION_REASONS
+    elif action == "deactivate":
+        allowed_reasons = _DEACTIVATE_OPERATION_REASONS
+    else:
+        raise AcceptanceAuthorityInvalid("authority operation action is invalid")
+    if reason not in allowed_reasons:
+        raise AcceptanceAuthorityInvalid("authority operation reason is invalid")
+    if not isinstance(artifact_uri, str):
+        raise AcceptanceAuthorityInvalid(
+            "authority operation artifact URI is invalid"
+        )
+    _validate_public_https_url(
+        artifact_uri,
+        "authority operation authorization.artifact_uri",
+        allowed_origins=_API_LANDING_ORIGINS,
+    )
+    if not _is_sha256(artifact_sha256):
+        raise AcceptanceAuthorityInvalid(
+            "authority operation artifact digest is invalid"
+        )
+
+
+def _validate_operation(
+    payload: Mapping[str, Any],
+    *,
+    gate: str,
+    operation_record_id: str,
+    expected_digest: str,
+) -> Mapping[str, Any]:
+    if set(payload) != _OPERATION_KEYS:
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation schema is invalid"
+        )
+    if (
+        payload.get("schema_version") != OPERATION_SCHEMA_VERSION
+        or payload.get("gate") != gate
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation identity is invalid"
+        )
+    try:
+        canonical = _canonical_json_bytes(payload)
+    except AcceptanceAuthorityInvalid as exc:
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation encoding is invalid"
+        ) from exc
+    digest = hashlib.sha256(canonical).hexdigest()
+    if (
+        digest != expected_digest
+        or operation_record_id != _operation_record_id(gate, digest)
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation digest is invalid"
+        )
+    action = payload.get("action")
+    _parse_utc_unavailable(payload.get("changed_at_utc"), "operation timestamp")
+    previous = payload.get("previous")
+    next_head = payload.get("next")
+    authorization = payload.get("authorization")
+    if not isinstance(previous, Mapping) or set(previous) != _OPERATION_PREVIOUS_KEYS:
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority previous-operation schema is invalid"
+        )
+    if not isinstance(next_head, Mapping) or set(next_head) != _OPERATION_NEXT_KEYS:
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority next-operation schema is invalid"
+        )
+    if (
+        not isinstance(authorization, Mapping)
+        or set(authorization) != _OPERATION_AUTHORIZATION_KEYS
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority authorization schema is invalid"
+        )
+    try:
+        _validate_operation_authorization(
+            action=str(action),
+            artifact_uri=authorization.get("artifact_uri"),
+            artifact_sha256=authorization.get("artifact_sha256"),
+            reason=authorization.get("reason"),
+        )
+    except AcceptanceAuthorityInvalid as exc:
+        raise AcceptanceAuthorityUnavailable(str(exc)) from exc
+
+    previous_version = previous.get("head_version")
+    next_version = next_head.get("head_version")
+    if (
+        not isinstance(previous_version, int)
+        or isinstance(previous_version, bool)
+        or previous_version < 0
+        or not isinstance(next_version, int)
+        or isinstance(next_version, bool)
+        or next_version != previous_version + 1
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation versions are invalid"
+        )
+    previous_sha = previous.get("evidence_sha256")
+    previous_active = previous.get("active")
+    previous_operation_id = previous.get("operation_record_id")
+    if previous_version == 0:
+        if any(
+            value is not None
+            for value in (previous_sha, previous_active, previous_operation_id)
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "initial acceptance operation predecessor is invalid"
+            )
+    elif (
+        not _is_sha256(previous_sha)
+        or not isinstance(previous_active, bool)
+        or not isinstance(previous_operation_id, str)
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance operation predecessor is invalid"
+        )
+    else:
+        _operation_digest_from_record_id(gate, previous_operation_id)
+
+    next_sha = next_head.get("evidence_sha256")
+    next_active = next_head.get("active")
+    if not _is_sha256(next_sha) or not isinstance(next_active, bool):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation target is invalid"
+        )
+    if (action == "publish" and next_active is not True) or (
+        action == "deactivate" and next_active is not False
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation action is inconsistent"
+        )
+    return payload
+
+
+def _validate_head_operation_binding(
+    head: Mapping[str, Any],
+    operation: Mapping[str, Any],
+    *,
+    head_version: int,
+) -> None:
+    next_head = operation["next"]
+    assert isinstance(next_head, Mapping)
+    if (
+        next_head["head_version"] != head_version
+        or next_head["evidence_sha256"] != head["evidence_sha256"]
+        or next_head["active"] is not head["active"]
+        or operation["changed_at_utc"] != head["changed_at_utc"]
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority head operation binding is invalid"
+        )
 
 
 def _validate_head(payload: Mapping[str, Any], gate: str) -> Mapping[str, Any]:
@@ -1830,7 +2701,20 @@ def _validate_head(payload: Mapping[str, Any], gate: str) -> Mapping[str, Any]:
         raise AcceptanceAuthorityUnavailable("acceptance authority head digest is invalid")
     if payload.get("revision_record_id") != _revision_record_id(gate, str(digest)):
         raise AcceptanceAuthorityUnavailable("acceptance authority head pointer is invalid")
-    _parse_utc_unavailable(payload.get("activated_at_utc"), "head timestamp")
+    if not isinstance(payload.get("active"), bool):
+        raise AcceptanceAuthorityUnavailable("acceptance authority head state is invalid")
+    _parse_utc_unavailable(payload.get("changed_at_utc"), "head timestamp")
+    operation_digest = payload.get("operation_sha256")
+    operation_record_id = payload.get("operation_record_id")
+    if (
+        not _is_sha256(operation_digest)
+        or not isinstance(operation_record_id, str)
+        or operation_record_id
+        != _operation_record_id(gate, str(operation_digest))
+    ):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority head operation pointer is invalid"
+        )
     return payload
 
 
@@ -1839,7 +2723,7 @@ def _validate_revision(
     *,
     gate: str,
     revision_id: str,
-    head_payload: Mapping[str, Any],
+    expected_digest: str,
 ) -> Mapping[str, Any]:
     if set(payload) != _REVISION_KEYS:
         raise AcceptanceAuthorityUnavailable("acceptance authority revision schema is invalid")
@@ -1848,7 +2732,7 @@ def _validate_revision(
     digest = payload.get("evidence_sha256")
     if (
         not _is_sha256(digest)
-        or digest != head_payload.get("evidence_sha256")
+        or digest != expected_digest
         or revision_id != _revision_record_id(gate, str(digest))
     ):
         raise AcceptanceAuthorityUnavailable("acceptance authority revision digest is invalid")
@@ -1886,6 +2770,36 @@ def _validate_revision(
             raise AcceptanceAuthorityUnavailable("WORM acceptance object key is invalid")
         if not _is_sha256(storage.get("receipt_sha256")):
             raise AcceptanceAuthorityUnavailable("WORM acceptance receipt digest is invalid")
+        receipt_verification = storage.get("receipt_verification")
+        if not isinstance(receipt_verification, Mapping):
+            raise AcceptanceAuthorityUnavailable(
+                "WORM acceptance receipt verification is invalid"
+            )
+        try:
+            receipt_body = _canonical_json_bytes(receipt_verification)
+        except AcceptanceAuthorityInvalid as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "WORM acceptance receipt verification is invalid"
+            ) from exc
+        if hashlib.sha256(receipt_body).hexdigest() != storage.get(
+            "receipt_sha256"
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "WORM acceptance receipt hash is invalid"
+            )
+        if storage.get("lock_mode") not in {"GOVERNANCE", "COMPLIANCE"}:
+            raise AcceptanceAuthorityUnavailable(
+                "WORM acceptance lock mode is invalid"
+            )
+        retention_days = storage.get("retention_days")
+        if (
+            not isinstance(retention_days, int)
+            or isinstance(retention_days, bool)
+            or retention_days < 1
+        ):
+            raise AcceptanceAuthorityUnavailable(
+                "WORM acceptance retention policy is invalid"
+            )
         _parse_utc_unavailable(storage.get("retain_until_utc"), "WORM retention timestamp")
     else:
         raise AcceptanceAuthorityUnavailable("acceptance authority storage mode is invalid")
@@ -1903,6 +2817,30 @@ def _head_record_id(gate: str) -> str:
 
 def _revision_record_id(gate: str, digest: str) -> str:
     return f"customer-production-authority-{gate.replace('_', '-')}-{digest}"
+
+
+def _operation_record_id(gate: str, digest: str) -> str:
+    return (
+        "customer-production-authority-operation-"
+        f"{gate.replace('_', '-')}-{digest}"
+    )
+
+
+def _operation_digest_from_record_id(gate: str, record_id: str) -> str:
+    prefix = (
+        "customer-production-authority-operation-"
+        f"{gate.replace('_', '-')}-"
+    )
+    if not record_id.startswith(prefix):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation pointer is invalid"
+        )
+    digest = record_id[len(prefix) :]
+    if not _is_sha256(digest) or record_id != _operation_record_id(gate, digest):
+        raise AcceptanceAuthorityUnavailable(
+            "acceptance authority operation pointer is invalid"
+        )
+    return digest
 
 
 def _canonical_json_bytes(value: Any) -> bytes:
@@ -1937,6 +2875,18 @@ def _parse_utc_unavailable(value: Any, label: str) -> datetime:
         raise AcceptanceAuthorityUnavailable(str(exc)) from exc
 
 
+def _parse_iso_utc_unavailable(value: Any, label: str) -> datetime:
+    if not isinstance(value, str):
+        raise AcceptanceAuthorityUnavailable(f"{label} is invalid")
+    try:
+        parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
+    except ValueError as exc:
+        raise AcceptanceAuthorityUnavailable(f"{label} is invalid") from exc
+    if parsed.tzinfo is None or parsed.utcoffset() is None:
+        raise AcceptanceAuthorityUnavailable(f"{label} is invalid")
+    return parsed.astimezone(UTC).replace(microsecond=0)
+
+
 def _utc_now(value: datetime | None) -> datetime:
     stamp = value or datetime.now(UTC)
     if stamp.tzinfo is None or stamp.utcoffset() is None:
@@ -1961,10 +2911,13 @@ def _is_sha1(value: Any) -> bool:
 __all__ = [
     "AcceptanceAuthorityConflict",
     "AcceptanceAuthorityError",
+    "AcceptanceAuthorityHead",
     "AcceptanceAuthorityInvalid",
     "AcceptanceAuthorityNotFound",
     "AcceptanceAuthorityUnavailable",
     "AcceptanceEvidenceDocument",
+    "canonicalize_acceptance_evidence",
     "CustomerProductionAcceptanceAuthorityStore",
+    "DeactivatedAcceptanceEvidence",
     "PublishedAcceptanceEvidence",
 ]

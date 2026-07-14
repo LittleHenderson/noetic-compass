@@ -678,6 +678,25 @@ def _verify(manifest: dict, bundle: SignedBundle, **kwargs) -> dict:
     )
 
 
+def _mutate_signed_reference(
+    bundle: SignedBundle,
+    reference: dict,
+    mutate,
+) -> None:
+    path = bundle.root / reference["uri"].removeprefix("repo://")
+    receipt = json.loads(path.read_text(encoding="utf-8"))
+    mutate(receipt)
+    unsigned = {
+        key: value
+        for key, value in receipt.items()
+        if key != "signature_base64url"
+    }
+    receipt["signature_base64url"] = _sign(unsigned)
+    raw = json.dumps(receipt, indent=2, sort_keys=True).encode("utf-8") + b"\n"
+    path.write_bytes(raw)
+    reference["sha256"] = hashlib.sha256(raw).hexdigest()
+
+
 class CheckedInOpenContractTests(unittest.TestCase):
     def test_checked_in_manifest_is_valid_and_truthfully_open(self) -> None:
         report = verifier.verify_manifest(
@@ -962,6 +981,34 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertTrue(report["accepted"])
         fetch.assert_called_once()
 
+    def test_live_payload_artifact_uri_must_match_the_exact_endpoint(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        endpoint = SUBJECT_URIS["runtime_worm"]
+        payload = _gate_payloads()["runtime_worm"]
+        payload["artifact_uri"] = f"{endpoint}/child"
+        payload["artifact_sha256"] = _digest("noncanonical-live-runtime-subject")
+        raw = json.dumps(payload, sort_keys=True).encode("utf-8")
+        manifest["required_gates"]["runtime_worm"]["evidence"] = {
+            "uri": endpoint,
+            "sha256": hashlib.sha256(raw).hexdigest(),
+            "authority": {
+                "mode": "live_https",
+                "issuer": "noetic-production-live",
+                "key_id": None,
+            },
+        }
+
+        with patch.object(verifier, "_fetch_https", return_value=raw):
+            report = _verify(manifest, self.bundle, live=True)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "exact authoritative receipt/live source" in error
+                for error in report["errors"]
+            )
+        )
+
     def test_legal_live_authority_is_json_api_endpoint_not_html_page(self) -> None:
         manifest = _accepting_manifest(self.bundle)
         payload = _gate_payloads()["legal_publication_approval"]
@@ -1187,6 +1234,98 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
                 finally:
                     bundle.close()
 
+    def test_raw_pii_fields_and_email_values_are_rejected(self) -> None:
+        cases = {
+            "email value": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(system="ops@example.com"),
+            "PII field": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(customer_email="redacted"),
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                    expected = "email address" if label == "email value" else "raw-PII"
+                    self.assertTrue(
+                        any(expected in error for error in report["errors"])
+                    )
+                finally:
+                    bundle.close()
+
+    def test_boolean_and_integer_fields_do_not_alias_each_other(self) -> None:
+        cases = {
+            "true as one": (
+                lambda payloads: payloads["runtime_worm"]["readiness"].update(
+                    ready=1
+                ),
+                ".readiness.ready",
+            ),
+            "false as zero": (
+                lambda payloads: payloads["runtime_worm"]["worker"].update(
+                    fake_runtime_env=0
+                ),
+                ".worker.fake_runtime_env",
+            ),
+            "zero as false": (
+                lambda payloads: payloads["incident_tabletop"]["incident"].update(
+                    open_actions=False
+                ),
+                ".incident.open_actions",
+            ),
+        }
+        for label, (mutate, expected_path) in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                    self.assertTrue(
+                        any(
+                            expected_path in error
+                            for error in report["errors"]
+                        )
+                    )
+                finally:
+                    bundle.close()
+
+    def test_encoded_and_traversing_evidence_urls_are_rejected(self) -> None:
+        cases = {
+            "encoded": (
+                f"{verifier.PRODUCTION_API_ORIGIN}/internal/approvals/"
+                "%2e%2e/legal"
+            ),
+            "traversal": (
+                f"{verifier.PRODUCTION_API_ORIGIN}/internal/approvals/"
+                "../legal"
+            ),
+        }
+        for label, unsafe_uri in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(
+                        bundle,
+                        mutate_payloads=lambda payloads: payloads[
+                            "legal_publication_approval"
+                        ]["approvals"][0].update(
+                            approval_artifact_uri=unsafe_uri
+                        ),
+                    )
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                    expected = "encoded path" if label == "encoded" else "path traversal"
+                    self.assertTrue(
+                        any(expected in error for error in report["errors"])
+                    )
+                finally:
+                    bundle.close()
+
     def test_public_app_and_api_origins_are_exact(self) -> None:
         def mutate(payloads):
             payloads["hosted_customer_journey"]["app_url"] = (
@@ -1390,22 +1529,39 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
     def test_release_approval_must_follow_newest_gate_evidence(self) -> None:
         manifest = _accepting_manifest(self.bundle)
         reference = manifest["product"]["release_decision"]["evidence"]
-        path = self.bundle.root / reference["uri"].removeprefix("repo://")
-        receipt = json.loads(path.read_text(encoding="utf-8"))
-        receipt["evidence"]["approved_at_utc"] = "2026-07-14T11:49:00Z"
-        unsigned = {
-            key: value
-            for key, value in receipt.items()
-            if key != "signature_base64url"
-        }
-        receipt["signature_base64url"] = _sign(unsigned)
-        raw = json.dumps(receipt, indent=2, sort_keys=True).encode("utf-8") + b"\n"
-        path.write_bytes(raw)
-        reference["sha256"] = hashlib.sha256(raw).hexdigest()
+        _mutate_signed_reference(
+            self.bundle,
+            reference,
+            lambda receipt: receipt["evidence"].update(
+                approved_at_utc="2026-07-14T11:49:00Z"
+            ),
+        )
         report = _verify(manifest, self.bundle)
         self.assertEqual(report["result"], "INVALID")
         self.assertTrue(
             any("newest gate evidence" in error for error in report["errors"])
+        )
+
+    def test_release_approval_cannot_predate_its_release_event(self) -> None:
+        manifest = _accepting_manifest(self.bundle)
+        reference = manifest["product"]["release_decision"]["evidence"]
+        _mutate_signed_reference(
+            self.bundle,
+            reference,
+            lambda receipt: receipt["evidence"].update(
+                event_at_utc="2026-07-14T11:57:00Z"
+            ),
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "approved_at_utc" in error
+                and "at or after the gate event" in error
+                for error in report["errors"]
+            )
         )
 
     def test_worm_must_be_active_and_cover_configured_minimum(self) -> None:

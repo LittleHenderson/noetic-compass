@@ -26,6 +26,7 @@ from api.services import customer_production_acceptance_authority as authority
 from api.services.customer_production_acceptance_authority import (
     AcceptanceAuthorityConflict,
     AcceptanceAuthorityInvalid,
+    AcceptanceAuthorityNotFound,
     AcceptanceAuthorityUnavailable,
     CustomerProductionAcceptanceAuthorityStore,
 )
@@ -33,6 +34,41 @@ from api.services.production.state_substrate import LedgerRecord
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.services.production.worm_writes import RetentionPolicy
+from api.services.cas_harness_retention_disclosure import (
+    _issue_live_s3_object_lock_receipt,
+)
+
+
+_AUTHORIZATION_URI = (
+    "https://noetic-compass-api.onrender.com/internal/acceptance-authorizations/test"
+)
+_AUTHORIZATION_SHA256 = hashlib.sha256(b"test-authorization").hexdigest()
+
+
+def _operation_authorization(action: str) -> dict[str, str]:
+    return {
+        "authorization_artifact_uri": _AUTHORIZATION_URI,
+        "authorization_artifact_sha256": _AUTHORIZATION_SHA256,
+        "operation_reason": (
+            "authorized_publication"
+            if action == "publish"
+            else "operator_safety_action"
+        ),
+    }
+
+
+@pytest.fixture(autouse=True)
+def _stable_test_receipt_attestation_key(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from api.config import settings
+
+    value = "acceptance-authority-test-attestation-key-v1"
+    monkeypatch.setenv(
+        "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY",
+        value,
+    )
+    monkeypatch.setattr(settings, "object_lock_receipt_attestation_key", value)
 
 
 def _sha(label: str) -> str:
@@ -105,25 +141,50 @@ def _app(store: CustomerProductionAcceptanceAuthorityStore | None) -> FastAPI:
     return app
 
 
-class _FakeVerification:
-    verified = True
-
-    def to_dict(self) -> dict[str, object]:
-        return {"schema_version": "test-object-lock-receipt", "verified": True}
-
-
 class _FakeReceipt:
-    def __init__(self, digest: str, retain_until: datetime) -> None:
-        self.object_url = "s3://test/authority?versionId=version-1"
+    def __init__(
+        self,
+        *,
+        digest: str,
+        key: str,
+        policy: RetentionPolicy,
+        requested_at: datetime,
+        retain_until: datetime,
+    ) -> None:
+        self.object_url = f"s3://test/{key}?versionId=version-1"
         self.version_id = "version-1"
         self.retain_until = retain_until
         self.content_hash = digest
+        self.mode = policy.mode
+        self._verification = _issue_live_s3_object_lock_receipt(
+            expected={
+                "bucket": "test",
+                "key": key,
+                "version_id": self.version_id,
+                "content_sha256": digest,
+                "mode": policy.mode,
+                "retention_days": policy.retention_days,
+                "requested_at": requested_at,
+                "retain_until": retain_until,
+            },
+            observed={
+                "bucket": "test",
+                "key": key,
+                "get_version_id": self.version_id,
+                "head_version_id": self.version_id,
+                "content_sha256": digest,
+                "mode": policy.mode,
+                "retain_until": retain_until,
+                "reread_verified": True,
+            },
+            verified_at=requested_at,
+        )
 
     def is_verifiable(self) -> bool:
         return True
 
-    def validated_verification(self) -> _FakeVerification:
-        return _FakeVerification()
+    def validated_verification(self):  # type: ignore[no-untyped-def]
+        return self._verification
 
 
 class _FakeImmutableBackend:
@@ -132,8 +193,12 @@ class _FakeImmutableBackend:
         self.ready_checks = 0
 
     def assert_ready(self, *, expected: RetentionPolicy) -> None:
-        assert expected.retention_days == 31
+        assert expected.retention_days >= 1
         self.ready_checks += 1
+
+    def object_url(self, key: str, *, version_id: str | None = None) -> str:
+        suffix = f"?versionId={version_id}" if version_id else ""
+        return f"s3://test/{key}{suffix}"
 
     def put_immutable(
         self,
@@ -145,7 +210,14 @@ class _FakeImmutableBackend:
     ) -> _FakeReceipt:
         assert hashlib.sha256(body).hexdigest() == content_hash
         self.objects[(key, "version-1")] = body
-        return _FakeReceipt(content_hash, policy.retain_until())
+        requested_at = datetime.now(UTC).replace(microsecond=0)
+        return _FakeReceipt(
+            digest=content_hash,
+            key=key,
+            policy=policy,
+            requested_at=requested_at,
+            retain_until=policy.retain_until(now=requested_at),
+        )
 
     def get_immutable(self, *, key: str, version_id: str) -> bytes:
         return self.objects[(key, version_id)]
@@ -178,6 +250,8 @@ def test_sqlite_revision_survives_restart_and_bytes_are_canonical(tmp_path) -> N
         "legal_publication_approval",
         _legal_evidence(now),
         expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
         now=now,
     )
     assert published.head_version == 1
@@ -206,6 +280,8 @@ def test_publish_requires_current_head_version() -> None:
         "legal_publication_approval",
         _legal_evidence(now),
         expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
         now=now,
     )
     with pytest.raises(AcceptanceAuthorityConflict):
@@ -213,8 +289,305 @@ def test_publish_requires_current_head_version() -> None:
             "legal_publication_approval",
             _legal_evidence(now),
             expected_head_version=0,
+            expected_previous_sha256=None,
+            **_operation_authorization("publish"),
             now=now,
         )
+
+
+def test_publish_requires_the_exact_previous_evidence_hash() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    store = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+    first = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    with pytest.raises(AcceptanceAuthorityConflict):
+        store.publish(
+            "legal_publication_approval",
+            _legal_evidence(now),
+            expected_head_version=first.head_version,
+            expected_previous_sha256="b" * 64,
+            **_operation_authorization("publish"),
+            now=now + timedelta(seconds=1),
+        )
+
+
+def test_deactivate_is_immediate_monotonic_and_same_bytes_can_be_reactivated() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    store = CustomerProductionAcceptanceAuthorityStore(state)
+    first = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    deactivated = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=first.head_version,
+        expected_evidence_sha256=first.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+    assert deactivated.head_version == 2
+    assert deactivated.already_inactive is False
+    head = store.current_head("legal_publication_approval")
+    assert head is not None and head.active is False and head.head_version == 2
+    with pytest.raises(AcceptanceAuthorityNotFound, match="inactive"):
+        store.load("legal_publication_approval", now=now + timedelta(seconds=1))
+
+    reactivated = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=deactivated.head_version,
+        expected_previous_sha256=first.sha256,
+        **_operation_authorization("publish"),
+        now=now + timedelta(seconds=2),
+    )
+    assert reactivated.sha256 == first.sha256
+    assert reactivated.head_version == 3
+    assert len(
+        state.list(authority.AUTHORITY_TENANT_ID, authority.REVISION_KIND)
+    ) == 1
+    assert store.load(
+        "legal_publication_approval", now=now + timedelta(seconds=2)
+    ).sha256 == first.sha256
+
+    already_inactive_head = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=reactivated.head_version,
+        expected_evidence_sha256=first.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=3),
+    )
+    repeated = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=already_inactive_head.head_version,
+        expected_evidence_sha256=first.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=4),
+    )
+    assert repeated.already_inactive is True
+    assert repeated.head_version == already_inactive_head.head_version
+
+
+def test_head_binds_an_append_only_authorized_operation_chain() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    store = CustomerProductionAcceptanceAuthorityStore(state)
+    published = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    deactivated = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+    reactivated = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=deactivated.head_version,
+        expected_previous_sha256=published.sha256,
+        **_operation_authorization("publish"),
+        now=now + timedelta(seconds=2),
+    )
+
+    operations = state.list(
+        authority.AUTHORITY_TENANT_ID, authority.OPERATION_KIND
+    )
+    assert len(operations) == 3
+    head = store.current_head("legal_publication_approval")
+    assert head is not None
+    assert head.operation_record_id == reactivated.operation_record_id
+    assert head.operation_sha256 == reactivated.operation_sha256
+    latest = state.get(
+        authority.AUTHORITY_TENANT_ID,
+        authority.OPERATION_KIND,
+        head.operation_record_id,
+    )
+    assert latest is not None
+    assert latest.payload["previous"]["operation_record_id"] == (  # type: ignore[index]
+        deactivated.operation_record_id
+    )
+    assert latest.payload["authorization"] == {  # type: ignore[index]
+        "artifact_uri": _AUTHORIZATION_URI,
+        "artifact_sha256": _AUTHORIZATION_SHA256,
+        "reason": "authorized_publication",
+    }
+
+
+def test_missing_bound_operation_or_predecessor_fails_closed() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    store = CustomerProductionAcceptanceAuthorityStore(state)
+    published = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    deactivated = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+    reactivated = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=deactivated.head_version,
+        expected_previous_sha256=published.sha256,
+        **_operation_authorization("publish"),
+        now=now + timedelta(seconds=2),
+    )
+    state.delete(
+        authority.AUTHORITY_TENANT_ID,
+        authority.OPERATION_KIND,
+        published.operation_record_id,
+        expected_version=1,
+    )
+
+    with pytest.raises(AcceptanceAuthorityUnavailable, match="missing"):
+        store.current_head("legal_publication_approval")
+    assert reactivated.head_version == 3
+
+
+def test_invalid_authorization_pointer_writes_no_authority_state() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    store = CustomerProductionAcceptanceAuthorityStore(state)
+    with pytest.raises(AcceptanceAuthorityInvalid, match="origin"):
+        store.publish(
+            "legal_publication_approval",
+            _legal_evidence(now),
+            expected_head_version=0,
+            expected_previous_sha256=None,
+            authorization_artifact_uri="https://example.com/fake-approval",
+            authorization_artifact_sha256=_AUTHORIZATION_SHA256,
+            operation_reason="authorized_publication",
+            now=now,
+        )
+
+    assert state.list(authority.AUTHORITY_TENANT_ID, authority.REVISION_KIND) == ()
+    assert state.list(authority.AUTHORITY_TENANT_ID, authority.OPERATION_KIND) == ()
+    assert state.list(authority.AUTHORITY_TENANT_ID, authority.HEAD_KIND) == ()
+
+
+def test_out_of_range_url_port_is_a_controlled_validation_error() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    evidence = _legal_evidence(now)
+    approvals = evidence["approvals"]
+    assert isinstance(approvals, list)
+    approvals[0]["approval_artifact_uri"] = (  # type: ignore[index]
+        "https://noetic-compass-api.onrender.com:99999/internal/approval"
+    )
+
+    with pytest.raises(AcceptanceAuthorityInvalid, match="clean HTTPS URL"):
+        authority.canonicalize_acceptance_evidence(
+            "legal_publication_approval", evidence, now=now
+        )
+
+
+def test_unbound_prewritten_operation_is_harmless() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    store = CustomerProductionAcceptanceAuthorityStore(state)
+    operation_id, _ = store._append_operation(
+        gate="legal_publication_approval",
+        action="publish",
+        current_head=None,
+        next_sha256=_sha("orphan-target"),
+        next_active=True,
+        authorization_artifact_uri=_AUTHORIZATION_URI,
+        authorization_artifact_sha256=_AUTHORIZATION_SHA256,
+        operation_reason="authorized_publication",
+        now=now,
+    )
+
+    assert state.get(
+        authority.AUTHORITY_TENANT_ID, authority.OPERATION_KIND, operation_id
+    ) is not None
+    assert store.current_head("legal_publication_approval") is None
+
+
+@pytest.mark.parametrize("target", ["operation", "revision"])
+def test_content_addressed_records_reject_even_same_payload_overwrite(
+    target: str,
+) -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    store = CustomerProductionAcceptanceAuthorityStore(state)
+    published = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    if target == "operation":
+        kind = authority.OPERATION_KIND
+        record_id = published.operation_record_id
+    else:
+        kind = authority.REVISION_KIND
+        record_id = authority._revision_record_id(
+            "legal_publication_approval", published.sha256
+        )
+    record = state.get(authority.AUTHORITY_TENANT_ID, kind, record_id)
+    assert record is not None
+    state.put(record.with_payload(record.payload), expected_version=1)
+
+    with pytest.raises(AcceptanceAuthorityUnavailable, match="traceability"):
+        if target == "operation":
+            store.current_head("legal_publication_approval")
+        else:
+            store.load("legal_publication_approval", now=now)
+
+
+def test_deactivated_route_fails_closed_without_deleting_revision() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    store = CustomerProductionAcceptanceAuthorityStore(state)
+    published = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+    path = ACCEPTANCE_AUTHORITY_PATH_BY_GATE["legal_publication_approval"]
+    with TestClient(_app(store)) as client:
+        response = client.get(path)
+        assert response.status_code == 404
+        assert response.headers["cache-control"].startswith("no-store")
+    assert len(
+        state.list(authority.AUTHORITY_TENANT_ID, authority.REVISION_KIND)
+    ) == 1
 
 
 def test_optional_worm_backend_has_no_inline_fallback_and_rechecks_exact_bytes() -> None:
@@ -230,6 +603,8 @@ def test_optional_worm_backend_has_no_inline_fallback_and_rechecks_exact_bytes()
         "legal_publication_approval",
         _legal_evidence(now),
         expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
         now=now,
     )
     assert published.storage_mode == "worm"
@@ -244,11 +619,233 @@ def test_optional_worm_backend_has_no_inline_fallback_and_rechecks_exact_bytes()
     assert revision.payload["evidence_json"] is None
     assert revision.payload["storage"]["mode"] == "worm"  # type: ignore[index]
     assert store.load("legal_publication_approval", now=now).sha256 == published.sha256
+    assert immutable.ready_checks == 2
+
+    deactivated = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+    reactivated = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=deactivated.head_version,
+        expected_previous_sha256=published.sha256,
+        **_operation_authorization("publish"),
+        now=now + timedelta(seconds=2),
+    )
+    assert reactivated.sha256 == published.sha256
+    assert immutable.ready_checks == 3
 
     key = f"customer-production-authority/legal_publication_approval/{published.sha256}.json"
     immutable.objects[(key, "version-1")] = b"{}"
     with pytest.raises(AcceptanceAuthorityUnavailable, match="byte length"):
         store.load("legal_publication_approval", now=now)
+
+
+def test_cross_wired_worm_receipt_cannot_create_a_head() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+
+    class CrossWiredBackend(_FakeImmutableBackend):
+        def put_immutable(self, **kwargs):  # type: ignore[no-untyped-def]
+            key = kwargs["key"]
+            body = kwargs["body"]
+            digest = kwargs["content_hash"]
+            policy = kwargs["policy"]
+            self.objects[(key, "version-1")] = body
+            requested_at = datetime.now(UTC).replace(microsecond=0)
+            receipt = _FakeReceipt(
+                digest=digest,
+                key=f"cross-wired/{key}",
+                policy=policy,
+                requested_at=requested_at,
+                retain_until=policy.retain_until(now=requested_at),
+            )
+            receipt.object_url = self.object_url(key, version_id="version-1")
+            return receipt
+
+    store = CustomerProductionAcceptanceAuthorityStore(
+        state,
+        immutable_backend=CrossWiredBackend(),
+        retention_policy=RetentionPolicy(mode="COMPLIANCE", retention_days=31),
+    )
+    with pytest.raises(AcceptanceAuthorityUnavailable, match="current policy"):
+        store.publish(
+            "legal_publication_approval",
+            _legal_evidence(now),
+            expected_head_version=0,
+            expected_previous_sha256=None,
+            **_operation_authorization("publish"),
+            now=now,
+        )
+
+    assert state.list(authority.AUTHORITY_TENANT_ID, authority.REVISION_KIND) == ()
+    assert state.list(authority.AUTHORITY_TENANT_ID, authority.OPERATION_KIND) == ()
+    assert state.list(authority.AUTHORITY_TENANT_ID, authority.HEAD_KIND) == ()
+
+
+def test_inline_revision_cannot_be_reactivated_under_worm_policy() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    inline = CustomerProductionAcceptanceAuthorityStore(state)
+    published = inline.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    deactivated = inline.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+
+    immutable = _FakeImmutableBackend()
+    worm = CustomerProductionAcceptanceAuthorityStore(
+        state,
+        immutable_backend=immutable,
+        retention_policy=RetentionPolicy(mode="COMPLIANCE", retention_days=31),
+    )
+    with pytest.raises(AcceptanceAuthorityUnavailable, match="immutable policy"):
+        worm.publish(
+            "legal_publication_approval",
+            _legal_evidence(now),
+            expected_head_version=deactivated.head_version,
+            expected_previous_sha256=published.sha256,
+            **_operation_authorization("publish"),
+            now=now + timedelta(seconds=2),
+        )
+
+    assert immutable.ready_checks == 0
+    assert immutable.objects == {}
+    head = inline.current_head("legal_publication_approval")
+    assert head is not None and head.active is False
+    assert head.head_version == deactivated.head_version
+
+
+def test_worm_revision_cannot_be_reactivated_without_worm_policy() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    immutable = _FakeImmutableBackend()
+    worm = CustomerProductionAcceptanceAuthorityStore(
+        state,
+        immutable_backend=immutable,
+        retention_policy=RetentionPolicy(mode="COMPLIANCE", retention_days=31),
+    )
+    published = worm.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    deactivated = worm.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+
+    inline = CustomerProductionAcceptanceAuthorityStore(state)
+    with pytest.raises(AcceptanceAuthorityUnavailable, match="immutable policy"):
+        inline.publish(
+            "legal_publication_approval",
+            _legal_evidence(now),
+            expected_head_version=deactivated.head_version,
+            expected_previous_sha256=published.sha256,
+            **_operation_authorization("publish"),
+            now=now + timedelta(seconds=2),
+        )
+
+    head = worm.current_head("legal_publication_approval")
+    assert head is not None and head.active is False
+    assert head.head_version == deactivated.head_version
+
+
+def test_worm_revision_reuse_rejects_current_policy_drift() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    immutable = _FakeImmutableBackend()
+    original = CustomerProductionAcceptanceAuthorityStore(
+        state,
+        immutable_backend=immutable,
+        retention_policy=RetentionPolicy(mode="COMPLIANCE", retention_days=31),
+    )
+    published = original.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    deactivated = original.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+    strengthened = CustomerProductionAcceptanceAuthorityStore(
+        state,
+        immutable_backend=immutable,
+        retention_policy=RetentionPolicy(mode="COMPLIANCE", retention_days=32),
+    )
+
+    with pytest.raises(AcceptanceAuthorityUnavailable, match="current policy"):
+        strengthened.publish(
+            "legal_publication_approval",
+            _legal_evidence(now),
+            expected_head_version=deactivated.head_version,
+            expected_previous_sha256=published.sha256,
+            **_operation_authorization("publish"),
+            now=now + timedelta(seconds=2),
+        )
+
+
+def test_expired_worm_receipt_cannot_be_reactivated() -> None:
+    now = datetime.now(UTC).replace(microsecond=0)
+    state = InMemoryStateStore()
+    immutable = _FakeImmutableBackend()
+    store = CustomerProductionAcceptanceAuthorityStore(
+        state,
+        immutable_backend=immutable,
+        retention_policy=RetentionPolicy(mode="COMPLIANCE", retention_days=1),
+    )
+    published = store.publish(
+        "legal_publication_approval",
+        _legal_evidence(now),
+        expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
+        now=now,
+    )
+    deactivated = store.deactivate(
+        "legal_publication_approval",
+        expected_head_version=published.head_version,
+        expected_evidence_sha256=published.sha256,
+        **_operation_authorization("deactivate"),
+        now=now + timedelta(seconds=1),
+    )
+
+    with pytest.raises(AcceptanceAuthorityUnavailable, match="revalidation"):
+        store.publish(
+            "legal_publication_approval",
+            _legal_evidence(now),
+            expected_head_version=deactivated.head_version,
+            expected_previous_sha256=published.sha256,
+            **_operation_authorization("publish"),
+            now=now + timedelta(days=2),
+        )
 
 
 @pytest.mark.parametrize(
@@ -277,6 +874,8 @@ def test_publish_rejects_schema_semantic_pii_endpoint_and_environment_failures(
             "legal_publication_approval",
             evidence,
             expected_head_version=0,
+            expected_previous_sha256=None,
+            **_operation_authorization("publish"),
             now=now,
         )
 
@@ -288,6 +887,8 @@ def test_load_rejects_stale_evidence() -> None:
         "legal_publication_approval",
         _legal_evidence(now),
         expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
         now=now,
     )
     with pytest.raises(AcceptanceAuthorityInvalid, match="stale"):
@@ -301,6 +902,8 @@ def test_route_returns_exact_document_without_auth_and_no_store_cache() -> None:
         "legal_publication_approval",
         _legal_evidence(now),
         expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
         now=now,
     )
     path = ACCEPTANCE_AUTHORITY_PATH_BY_GATE["legal_publication_approval"]
@@ -340,6 +943,8 @@ def test_route_returns_404_for_absent_and_503_for_unavailable_or_corrupt() -> No
         "legal_publication_approval",
         _legal_evidence(now),
         expected_head_version=0,
+        expected_previous_sha256=None,
+        **_operation_authorization("publish"),
         now=now,
     )
     head_id = authority._head_record_id("legal_publication_approval")
