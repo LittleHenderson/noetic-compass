@@ -98,6 +98,7 @@ Common normalized reasons:
 | `bucket_unavailable` | Named bucket is absent or inaccessible | Correct the bucket/region/account binding |
 | `object_lock_disabled` | S3 did not report Object Lock enabled | Use an Object-Lock-enabled bucket; do not claim WORM |
 | `versioning_disabled` | Bucket versioning is not enabled | Restore versioning before resuming production writes |
+| `object_lock_retention_below_minimum` | Configured retention is positive but below the 31-day customer-production minimum | Set retention to at least 31 days, redeploy, and prove a fresh write with at least 30 days remaining |
 | `unreachable` | S3 endpoint timed out or could not be reached | Check provider/network status and retry after the 30-second cache window |
 
 Readiness proves authority and bucket capability without writing. After any

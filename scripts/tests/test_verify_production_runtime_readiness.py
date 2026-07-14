@@ -83,6 +83,22 @@ class ReadinessContractTests(unittest.TestCase):
         with self.assertRaisesRegex(RuntimeMonitorError, "s3_worm=authentication_failed"):
             validate_readiness_payload(503, payload)
 
+    def test_short_worm_retention_uses_normalized_reason(self) -> None:
+        payload = _ready_payload()
+        payload["status"] = "degraded"
+        payload["ready"] = False
+        payload["checks"]["s3_worm"] = {
+            "configured": True,
+            "required": True,
+            "status": "error",
+            "reason": "object_lock_retention_below_minimum",
+        }
+        with self.assertRaisesRegex(
+            RuntimeMonitorError,
+            "s3_worm=object_lock_retention_below_minimum",
+        ):
+            validate_readiness_payload(503, payload)
+
     def test_unknown_dependency_detail_is_not_echoed(self) -> None:
         payload = _ready_payload()
         payload["checks"]["s3_worm"] = {
