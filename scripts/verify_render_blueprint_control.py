@@ -197,6 +197,105 @@ def parse_env_blocks(text: str) -> list[dict[str, str]]:
     return env_vars
 
 
+def parse_service_env_blocks(text: str, service_name: str) -> list[dict[str, str]]:
+    """Return only the direct envVars items attached to one named service."""
+
+    _require("\t" not in text, "Blueprint YAML must use spaces, not tabs")
+    lines = text.splitlines()
+    service_section_starts: list[int] = []
+    for index, line in enumerate(lines):
+        match = _DIRECT_FIELD.match(line)
+        if (
+            match
+            and not match.group("indent")
+            and match.group("key") == "services"
+            and not _scalar(match.group("value") or "")
+        ):
+            service_section_starts.append(index)
+    _require(
+        len(service_section_starts) == 1,
+        "Blueprint must declare exactly one top-level services block",
+    )
+    service_section_start = service_section_starts[0]
+    service_section_end = len(lines)
+    for index in range(service_section_start + 1, len(lines)):
+        line = lines[index]
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        if len(line) == len(line.lstrip(" ")):
+            service_section_end = index
+            break
+
+    service_ranges: list[tuple[int, int, int]] = []
+    for index in range(service_section_start + 1, service_section_end):
+        line = lines[index]
+        match = _SERVICE_ITEM.match(line)
+        if not match or len(match.group("indent")) != 2:
+            continue
+        item_indent = len(match.group("indent"))
+        fields = {"type": _scalar(match.group("value"))}
+        fields.update(_direct_fields(lines, index, item_indent))
+        if fields.get("name") != service_name:
+            continue
+        end = service_section_end
+        for offset in range(index + 1, service_section_end):
+            candidate = lines[offset]
+            stripped = candidate.strip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            current_indent = len(candidate) - len(candidate.lstrip(" "))
+            if current_indent <= item_indent:
+                end = offset
+                break
+        service_ranges.append((index, end, item_indent))
+
+    _require(
+        len(service_ranges) == 1,
+        f"Blueprint must declare exactly one service named {service_name}",
+    )
+    start, end, item_indent = service_ranges[0]
+    env_block_starts: list[int] = []
+    for index in range(start + 1, end):
+        line = lines[index]
+        current_indent = len(line) - len(line.lstrip(" "))
+        if current_indent != item_indent + 2:
+            continue
+        match = _DIRECT_FIELD.match(line)
+        if match and match.group("key") == "envVars" and not _scalar(
+            match.group("value") or ""
+        ):
+            env_block_starts.append(index)
+
+    _require(
+        len(env_block_starts) == 1,
+        f"Blueprint service {service_name} must declare exactly one envVars block",
+    )
+    env_start = env_block_starts[0]
+    env_indent = item_indent + 2
+    env_end = end
+    for index in range(env_start + 1, end):
+        line = lines[index]
+        stripped = line.strip()
+        if not stripped or stripped.startswith("#"):
+            continue
+        current_indent = len(line) - len(line.lstrip(" "))
+        if current_indent <= env_indent:
+            env_end = index
+            break
+
+    env_vars: list[dict[str, str]] = []
+    for index in range(env_start + 1, env_end):
+        match = _ENV_ITEM.match(lines[index])
+        if not match or len(match.group("indent")) != env_indent + 2:
+            continue
+        item_indent = len(match.group("indent"))
+        fields = {"key": _scalar(match.group("value"))}
+        fields.update(_direct_fields(lines[:env_end], index, item_indent))
+        env_vars.append(fields)
+    return env_vars
+
+
 def assert_no_secret_literals(text: str, label: str) -> None:
     for pattern in _HIGH_RISK_LITERAL_PATTERNS:
         _require(
@@ -241,21 +340,28 @@ def assert_receipt_attestation_key_declaration(text: str, label: str) -> None:
     )
 
 
-def assert_production_provider_env_declarations(text: str, label: str) -> None:
-    """Require every provider setting to have one non-committed Render slot."""
+def assert_production_provider_env_declarations(
+    text: str,
+    label: str,
+    service_name: str,
+) -> None:
+    """Require every provider setting on the production service to be a safe slot."""
 
-    env_vars = parse_env_blocks(text)
+    env_vars = parse_service_env_blocks(text, service_name)
     by_key: dict[str, list[dict[str, str]]] = {}
     for env_var in env_vars:
         by_key.setdefault(env_var.get("key", ""), []).append(env_var)
     for key in PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS:
         matches = by_key.get(key, [])
-        _require(len(matches) == 1, f"{label}: must declare exactly one {key}")
+        _require(
+            len(matches) == 1,
+            f"{label}:{service_name} must declare exactly one {key}",
+        )
         declaration = matches[0]
         _require(
             set(declaration) == {"key", "sync"}
             and declaration.get("sync", "").lower() == "false",
-            f"{label}: {key} must be a dashboard-managed sync:false slot",
+            f"{label}:{service_name} {key} must be a dashboard-managed sync:false slot",
         )
 
 
@@ -338,11 +444,19 @@ def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> No
 
     assert_no_secret_literals(text, relative_path)
     assert_receipt_attestation_key_declaration(text, relative_path)
+    expected_services = blueprint["services"]
     if blueprint.get("environment") == "production":
-        assert_production_provider_env_declarations(text, relative_path)
+        _require(
+            len(expected_services) == 1,
+            f"{relative_path} production Blueprint must pin exactly one service",
+        )
+        assert_production_provider_env_declarations(
+            text,
+            relative_path,
+            str(expected_services[0]["name"]),
+        )
     actual_services = parse_service_blocks(text)
     actual_by_name = {service["name"]: service for service in actual_services}
-    expected_services = blueprint["services"]
     expected_names = {service["name"] for service in expected_services}
     _require(
         set(actual_by_name) == expected_names,
