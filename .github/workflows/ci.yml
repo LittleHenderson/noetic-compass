@@ -62,6 +62,18 @@ jobs:
           -s scripts/tests
           -p 'test_collect_customer_readiness_facts.py'
 
+      - name: Run the CAS Compass public-surface contract tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_cascompass_landing.py'
+
+      - name: Run the acceptance-authority alignment tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_acceptance_authority_contract_alignment.py'
+
       - name: Run the production runtime alert contract tests
         run: >-
           python -m unittest discover

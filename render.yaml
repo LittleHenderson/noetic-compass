@@ -126,9 +126,10 @@ services:
       # what lets that served state survive deploy / restart / idle spin-down instead of
       # resetting to empty on every cold start (the prior /tmp free-tier behaviour, which
       # showed as audit_count=0 after each spin-down). This is single-host durability. It
-      # is NOT multi-host durability: that needs the PostgresStateStore (built + verified
-      # at commit c32f639, PG 16.4, 10/10) wired into install_state_ledger, which still
-      # hard-codes SqliteStateStore. Phase 4 (dict deletion) stays HELD.
+      # is NOT multi-host durability by itself. When NC_DATABASE_URL is configured,
+      # install_state_ledger selects the shared PostgresStateStore and the guarded
+      # migration below copies the legacy SQLite records before read authority starts.
+      # Phase 4 (dict deletion) stays HELD.
       - key: NC_STATE_LEDGER_ENABLED
         value: "true"
       - key: NC_STATE_LEDGER_READ_AUTHORITY
