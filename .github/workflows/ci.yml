@@ -234,6 +234,10 @@ jobs:
         working-directory: noetic-compass-scaffold/noetic-compass/dashboard
         run: npm test
 
+      - name: Run dashboard claim-surface prerender tests
+        working-directory: noetic-compass-scaffold/noetic-compass/dashboard
+        run: npm run test:claim-surfaces
+
       - name: Build dashboard
         working-directory: noetic-compass-scaffold/noetic-compass/dashboard
         run: npm run build

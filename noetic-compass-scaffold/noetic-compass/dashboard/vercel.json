@@ -9,7 +9,10 @@
       "source": "/api/:path*",
       "destination": "https://noetic-compass-api.onrender.com/:path*"
     },
-    { "source": "/((?!assets/|api/).*)", "destination": "/index.html" }
+    { "source": "/", "destination": "/index.html" },
+    { "source": "/audit-console", "destination": "/audit-console/index.html" },
+    { "source": "/audit-console/", "destination": "/audit-console/index.html" },
+    { "source": "/((?!assets/|api/).*)", "destination": "/spa.html" }
   ],
   "headers": [
     {

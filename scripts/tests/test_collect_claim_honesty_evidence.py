@@ -251,6 +251,107 @@ class RouteCoverageTests(unittest.TestCase):
             "client_rendered_route_coverage_not_established", analysis.errors
         )
 
+    def test_explicit_same_route_prerendered_application_mount_establishes_coverage(self) -> None:
+        body = (
+            "<html><body><div id='root' "
+            "data-cas-prerendered-route='/audit-console' "
+            "data-cas-prerender-schema='cas_claim_surface.v1'>"
+            "<main><h1>Audit Console</h1><p>Run and review a scoped model "
+            "audit. Customer-production status: OPEN.</p><ul>"
+            "<li>Research results do not establish customer-production ACCEPT.</li>"
+            "<li>Audit results may be FLAG_FOR_HUMAN_REVIEW.</li>"
+            "<li>Evidence is present only when its named contract passes; "
+            "otherwise it is unavailable.</li></ul></main></div>"
+            "<script type='module' src='/assets/app.js'></script></body></html>"
+        ).encode("utf-8")
+        analysis = collector.analyze_surface(
+            _completed_fetch("audit_console", body)
+        )
+        self.assertTrue(analysis.coverage_established)
+        self.assertTrue(analysis.route_identity_established)
+        self.assertTrue(analysis.prerendered_application_mount_detected)
+        self.assertTrue(analysis.prerender_contract_matches_requested_route)
+        self.assertFalse(analysis.client_rendered_shell_detected)
+        self.assertEqual(
+            analysis.visibility_basis,
+            "prerendered_same_route_application_mount",
+        )
+        self.assertEqual(collector.scan_visible_text([analysis]), [])
+
+    def test_wrong_route_prerender_marker_fails_closed(self) -> None:
+        body = (
+            "<html><body><div id='root' "
+            "data-cas-prerendered-route='/' "
+            "data-cas-prerender-schema='cas_claim_surface.v1'>"
+            "<main><h1>Audit Console</h1><p>This route contains substantial "
+            "visible audit scope and human-review boundary text for users.</p>"
+            "</main></div><script src='/assets/app.js'></script></body></html>"
+        ).encode("utf-8")
+        analysis = collector.analyze_surface(
+            _completed_fetch("audit_console", body)
+        )
+        self.assertFalse(analysis.coverage_established)
+        self.assertFalse(analysis.prerender_contract_matches_requested_route)
+        self.assertTrue(analysis.client_rendered_shell_detected)
+        self.assertIn(
+            "client_rendered_route_coverage_not_established", analysis.errors
+        )
+
+    def test_empty_marked_mount_cannot_borrow_content_from_another_mount(self) -> None:
+        body = (
+            "<html><body><div id='root' "
+            "data-cas-prerendered-route='/audit-console' "
+            "data-cas-prerender-schema='cas_claim_surface.v1'></div>"
+            "<div id='app'><main><h1>Audit Console</h1><p>This separate "
+            "application mount contains substantial visible audit scope and "
+            "human-review boundary text, but it is not the contracted mount."
+            "</p></main></div><script src='/assets/app.js'></script></body></html>"
+        ).encode("utf-8")
+        analysis = collector.analyze_surface(
+            _completed_fetch("audit_console", body)
+        )
+        self.assertFalse(analysis.coverage_established)
+        self.assertTrue(analysis.prerender_contract_matches_requested_route)
+        self.assertFalse(analysis.prerendered_application_mount_detected)
+        self.assertTrue(analysis.client_rendered_shell_detected)
+
+    def test_marked_generic_login_fallback_cannot_satisfy_audit_console(self) -> None:
+        body = (
+            "<html><body><div id='root' "
+            "data-cas-prerendered-route='/audit-console' "
+            "data-cas-prerender-schema='cas_claim_surface.v1'>"
+            "<main><h1>Log in to Noetic Compass</h1><p>Sign in to continue "
+            "to your account and manage workspace tools and settings.</p>"
+            "</main></div><script src='/assets/app.js'></script></body></html>"
+        ).encode("utf-8")
+        analysis = collector.analyze_surface(
+            _completed_fetch("audit_console", body)
+        )
+        self.assertFalse(analysis.coverage_established)
+        self.assertFalse(analysis.route_identity_established)
+        self.assertFalse(analysis.prerendered_application_mount_detected)
+        self.assertTrue(analysis.client_rendered_shell_detected)
+
+    def test_hidden_or_noscript_prerender_text_cannot_establish_coverage(self) -> None:
+        for wrapper in ("div hidden", "noscript"):
+            with self.subTest(wrapper=wrapper):
+                tag = wrapper.split()[0]
+                body = (
+                    "<html><body><div id='root' "
+                    "data-cas-prerendered-route='/audit-console' "
+                    "data-cas-prerender-schema='cas_claim_surface.v1'>"
+                    f"<{wrapper}><h1>Audit Console</h1><p>This hidden audit "
+                    "description contains enough words to look substantive but "
+                    f"must not establish visible route coverage.</p></{tag}>"
+                    "</div><script src='/assets/app.js'></script></body></html>"
+                ).encode("utf-8")
+                analysis = collector.analyze_surface(
+                    _completed_fetch("audit_console", body)
+                )
+                self.assertFalse(analysis.coverage_established)
+                self.assertFalse(analysis.prerendered_application_mount_detected)
+                self.assertTrue(analysis.client_rendered_shell_detected)
+
     def test_http_200_generic_login_cannot_satisfy_legal_route(self) -> None:
         body = (
             "<html><body><div id='root'><main><h1>Log in to Noetic Compass</h1>"

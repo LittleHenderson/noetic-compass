@@ -56,6 +56,7 @@ SUPPRESSED_ELEMENTS = frozenset(
 APPLICATION_MOUNT_IDS = frozenset(
     {"__next", "app", "app-root", "application", "root"}
 )
+PRERENDER_SCHEMA_VERSION = "cas_claim_surface.v1"
 ROUTE_HEADING_PATTERNS: dict[str, re.Pattern[str]] = {
     "product_app": re.compile(
         r"\b(?:atlas|audit\s+cockpit|model\s+audit|neural\s+network\s+cockpit)\b",
@@ -260,6 +261,8 @@ class SurfaceAnalysis:
     visible_text_characters: int
     visible_word_count: int
     client_rendered_shell_detected: bool
+    prerendered_application_mount_detected: bool
+    prerender_contract_matches_requested_route: bool
     route_identity_established: bool
     errors: list[str]
     visible_text: str = field(default="", repr=False)
@@ -281,6 +284,8 @@ class SurfaceAnalysis:
             "visible_text_characters": self.visible_text_characters,
             "visible_word_count": self.visible_word_count,
             "client_rendered_shell_detected": self.client_rendered_shell_detected,
+            "prerendered_application_mount_detected": self.prerendered_application_mount_detected,
+            "prerender_contract_matches_requested_route": self.prerender_contract_matches_requested_route,
             "route_identity_established": self.route_identity_established,
             "errors": list(self.errors),
         }
@@ -289,12 +294,15 @@ class SurfaceAnalysis:
 class _VisibleBodyParser(HTMLParser):
     def __init__(self) -> None:
         super().__init__(convert_charrefs=True)
-        self._stack: list[tuple[str, bool]] = []
+        self._stack: list[tuple[str, bool, bool, bool]] = []
         self.body_seen = False
         self.script_seen = False
         self.application_mount_seen = False
+        self.application_mount_contracts: list[tuple[str, str]] = []
         self.text_parts: list[str] = []
         self.primary_heading_parts: list[str] = []
+        self.prerender_contract_text_parts: list[str] = []
+        self.prerender_contract_heading_parts: list[str] = []
 
     @staticmethod
     def _attribute_map(attrs: Sequence[tuple[str, str | None]]) -> dict[str, str]:
@@ -315,19 +323,46 @@ class _VisibleBodyParser(HTMLParser):
         normalized_tag = tag.lower()
         attributes = self._attribute_map(attrs)
         parent_hidden = bool(self._stack and self._stack[-1][1])
+        parent_inside_application_mount = bool(
+            self._stack and self._stack[-1][2]
+        )
+        parent_inside_prerender_contract_mount = bool(
+            self._stack and self._stack[-1][3]
+        )
         hidden = (
             parent_hidden
             or normalized_tag in SUPPRESSED_ELEMENTS
             or self._explicitly_hidden(attributes)
         )
-        self._stack.append((normalized_tag, hidden))
+        element_id = attributes.get("id", "").strip().lower()
+        is_application_mount = (
+            element_id in APPLICATION_MOUNT_IDS or "data-reactroot" in attributes
+        )
+        inside_application_mount = (
+            parent_inside_application_mount or is_application_mount
+        )
+        route = attributes.get("data-cas-prerendered-route", "").strip()
+        schema = attributes.get("data-cas-prerender-schema", "").strip()
+        is_prerender_contract_mount = is_application_mount and bool(route or schema)
+        inside_prerender_contract_mount = (
+            parent_inside_prerender_contract_mount or is_prerender_contract_mount
+        )
+        self._stack.append(
+            (
+                normalized_tag,
+                hidden,
+                inside_application_mount,
+                inside_prerender_contract_mount,
+            )
+        )
         if normalized_tag == "body":
             self.body_seen = True
         if normalized_tag == "script":
             self.script_seen = True
-        element_id = attributes.get("id", "").strip().lower()
-        if element_id in APPLICATION_MOUNT_IDS or "data-reactroot" in attributes:
+        if is_application_mount:
             self.application_mount_seen = True
+            if route or schema:
+                self.application_mount_contracts.append((route, schema))
 
     def handle_startendtag(
         self, tag: str, attrs: list[tuple[str, str | None]]
@@ -343,12 +378,25 @@ class _VisibleBodyParser(HTMLParser):
                 return
 
     def handle_data(self, data: str) -> None:
-        inside_body = any(tag == "body" for tag, _hidden in self._stack)
+        inside_body = any(
+            tag == "body"
+            for tag, _hidden, _mount, _contract_mount in self._stack
+        )
         hidden = bool(self._stack and self._stack[-1][1])
         if inside_body and not hidden and data.strip():
             self.text_parts.append(data)
-            if any(tag == "h1" for tag, _hidden in self._stack):
+            inside_prerender_contract_mount = bool(
+                self._stack and self._stack[-1][3]
+            )
+            if inside_prerender_contract_mount:
+                self.prerender_contract_text_parts.append(data)
+            if any(
+                tag == "h1"
+                for tag, _hidden, _mount, _contract_mount in self._stack
+            ):
                 self.primary_heading_parts.append(data)
+                if inside_prerender_contract_mount:
+                    self.prerender_contract_heading_parts.append(data)
 
 
 def _utc_now() -> datetime:
@@ -529,6 +577,8 @@ def analyze_surface(fetch: SurfaceFetch) -> SurfaceAnalysis:
             visible_text_characters=0,
             visible_word_count=0,
             client_rendered_shell_detected=False,
+            prerendered_application_mount_detected=False,
+            prerender_contract_matches_requested_route=False,
             route_identity_established=False,
             errors=list(dict.fromkeys(errors)),
         )
@@ -544,6 +594,8 @@ def analyze_surface(fetch: SurfaceFetch) -> SurfaceAnalysis:
             visible_text_characters=0,
             visible_word_count=0,
             client_rendered_shell_detected=False,
+            prerendered_application_mount_detected=False,
+            prerender_contract_matches_requested_route=False,
             route_identity_established=False,
             errors=list(dict.fromkeys(errors)),
         )
@@ -563,10 +615,40 @@ def analyze_surface(fetch: SurfaceFetch) -> SurfaceAnalysis:
         if visible_text
         else None
     )
-    client_shell = parser.script_seen and parser.application_mount_seen
     visible_headings = " ".join(" ".join(parser.primary_heading_parts).split())
     route_identity = (
         ROUTE_HEADING_PATTERNS[fetch.kind].search(visible_headings) is not None
+    )
+    requested_path = urllib.parse.urlsplit(fetch.url).path or "/"
+    prerender_contract_matches_requested_route = (
+        parser.application_mount_contracts
+        == [(requested_path, PRERENDER_SCHEMA_VERSION)]
+    )
+    application_mount_text = " ".join(
+        " ".join(parser.prerender_contract_text_parts).split()
+    )
+    application_mount_characters = len(application_mount_text)
+    application_mount_words = len(
+        re.findall(r"\b\w+\b", application_mount_text, re.UNICODE)
+    )
+    application_mount_headings = " ".join(
+        " ".join(parser.prerender_contract_heading_parts).split()
+    )
+    application_mount_route_identity = (
+        ROUTE_HEADING_PATTERNS[fetch.kind].search(application_mount_headings)
+        is not None
+    )
+    prerendered_application_mount = (
+        parser.application_mount_seen
+        and prerender_contract_matches_requested_route
+        and application_mount_characters >= MIN_VISIBLE_TEXT_CHARACTERS
+        and application_mount_words >= MIN_VISIBLE_WORDS
+        and application_mount_route_identity
+    )
+    client_shell = (
+        parser.script_seen
+        and parser.application_mount_seen
+        and not prerendered_application_mount
     )
     if not parser.body_seen:
         errors.append("html_body_missing")
@@ -584,11 +666,17 @@ def analyze_surface(fetch: SurfaceFetch) -> SurfaceAnalysis:
     return SurfaceAnalysis(
         fetch=fetch,
         coverage_established=not errors,
-        visibility_basis="static_same_route_html",
+        visibility_basis=(
+            "prerendered_same_route_application_mount"
+            if prerendered_application_mount
+            else "static_same_route_html"
+        ),
         visible_text_sha256=visible_hash,
         visible_text_characters=visible_characters,
         visible_word_count=visible_words,
         client_rendered_shell_detected=client_shell,
+        prerendered_application_mount_detected=prerendered_application_mount,
+        prerender_contract_matches_requested_route=prerender_contract_matches_requested_route,
         route_identity_established=route_identity,
         errors=errors,
         visible_text=visible_text,

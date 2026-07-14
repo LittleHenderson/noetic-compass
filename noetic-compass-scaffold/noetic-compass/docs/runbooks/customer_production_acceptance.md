@@ -212,6 +212,31 @@ a published Legal, Privacy, or Terms page. Aliases such as
 `https://noeticcompass.com/legal` are not substitutes for the six URLs pinned
 by this contract.
 
+Atlas builds publish visible, route-specific HTML inside the application mount
+for exactly `/` and `/audit-console`. The mount must carry both the exact
+`data-cas-prerendered-route` value and the pinned
+`data-cas-prerender-schema="cas_claim_surface.v1"` value. The collector accepts
+that exception only when the requested route, marker, visible application-mount
+text, and route-specific primary heading all agree. An unmarked application
+shell, a mismatched marker, generic fallback content, or content placed only in
+`hidden` or `noscript` elements remains a coverage failure. The browser hydrates
+the same marked HTML before replacing it with the interactive application; all
+other SPA routes use the neutral `spa.html` fallback rather than inheriting a
+claim surface from `/`.
+
+Before publishing Atlas, run its deterministic claim-surface checks and build:
+
+```powershell
+cd noetic-compass-scaffold/noetic-compass/dashboard
+npm run test:claim-surfaces
+npm run build
+```
+
+The postbuild step must emit `dist/index.html`,
+`dist/audit-console/index.html`, and the neutral `dist/spa.html`. These files
+are build artifacts only; successful local generation does not establish that
+the same bytes are live or change any acceptance status.
+
 Exit `0` means only that this deterministic machine scan found full static
 route coverage and no configured findings. Exit `1` means the draft contains
 coverage or claim blockers, and exit `2` means collection itself failed. Every
