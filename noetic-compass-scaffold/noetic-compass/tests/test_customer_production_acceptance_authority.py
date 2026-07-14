@@ -369,11 +369,9 @@ def test_route_returns_404_for_absent_and_503_for_unavailable_or_corrupt() -> No
 
 
 def test_router_registers_only_exact_get_routes() -> None:
-    app = FastAPI()
-    app.include_router(router)
     authority_routes = {
         route.path: route.methods
-        for route in app.routes
+        for route in router.routes
         if getattr(route, "path", None) in ACCEPTANCE_AUTHORITY_PUBLIC_PATHS
     }
     assert set(authority_routes) == ACCEPTANCE_AUTHORITY_PUBLIC_PATHS
