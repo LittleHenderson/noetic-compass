@@ -1,6 +1,7 @@
 target/
 node_modules/
 __pycache__/
+.tmp/
 .env
 *.pyc
 dist/

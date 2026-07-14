@@ -10,6 +10,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any, Literal, Mapping
 
+from api.services.cas_harness_retention_disclosure import (
+    revalidate_object_lock_verification,
+)
+
 
 Verdict = Literal["ACCEPT", "SUPPRESS", "FLAG_FOR_HUMAN_REVIEW"]
 AuditStatus = Literal["SCAFFOLD_PENDING_RUNNER", "COMPLETE", "FAILED"]
@@ -24,7 +28,6 @@ REQUIRED_PROOF_CHIPS: tuple[str, ...] = (
     "packet_proof",
 )
 PASSING_PROOF_STATUSES = {"verified", "present"}
-WORM_PACKET_DETAIL_TERMS = ("worm retained", "object lock", "retention is active")
 
 
 @dataclass(frozen=True)
@@ -151,11 +154,13 @@ def packet_proof_is_worm_retained(proof_chips: list[Mapping[str, Any]]) -> bool:
     chip = _chips_by_id(proof_chips).get("packet_proof")
     if _chip_status(chip) != "verified":
         return False
-    detail = chip.get("detail") if isinstance(chip, Mapping) else None
-    if not isinstance(detail, str):
-        return False
-    lowered = detail.lower()
-    return all(term in lowered for term in WORM_PACKET_DETAIL_TERMS)
+    raw_receipt = (
+        chip.get("object_lock_verification") if isinstance(chip, Mapping) else None
+    )
+    verification = revalidate_object_lock_verification(
+        raw_receipt if isinstance(raw_receipt, Mapping) else None
+    )
+    return bool(verification is not None and verification.verified)
 
 
 def _chips_by_id(proof_chips: list[Mapping[str, Any]]) -> dict[str, Mapping[str, Any]]:

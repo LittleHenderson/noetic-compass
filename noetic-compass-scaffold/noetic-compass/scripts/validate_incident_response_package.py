@@ -46,6 +46,91 @@ EXPECTED_ROLES = {
     "communications_lead",
     "incident_recorder",
 }
+OPEN_ONLY_INCIDENT_ID = "IR-2026-07-13-001"
+OPEN_ONLY_RECORD_FIELDS = {
+    "schema_version",
+    "incident_id",
+    "record_type",
+    "title",
+    "status",
+    "severity",
+    "compromise_status",
+    "claim_boundary",
+    "time_control",
+    "roles",
+    "systems",
+    "observed_events",
+    "response_checklist",
+    "notification_decision",
+    "evidence_handling",
+    "tabletop",
+    "open_actions",
+}
+OPEN_ONLY_EVENT_STATUSES = {"not_started", "in_progress", "blocked"}
+OPEN_ONLY_TASK_STATUSES = {"not_started", "in_progress", "blocked"}
+OPEN_ONLY_ACTION_STATUSES = {"OPEN", "IN_PROGRESS", "BLOCKED"}
+PINNED_SYSTEM_SCOPE = {
+    "RunPod": ["pod hilj2rzs54gi06"],
+    "Render": [
+        "public service srv-d82ph683kofs73d210e0",
+        "account canary service srv-d9akoolaeets73bp3e7g",
+        "production Blueprint exs-d82lpanaqgkc7399m1g0",
+        "canary Blueprint exs-d9aknt8458ps73ftpkc0",
+    ],
+    "AWS": [
+        "cas-harness-render-production application IAM principal",
+        "production S3 Evidence Packet anchor path",
+    ],
+    "GitHub": ["LittleHenderson/noetic-compass"],
+    "Vercel": ["Noetic Compass production and preview deployments"],
+}
+PINNED_EVENT_PROVIDERS = {
+    "worker_token_rotation": "RunPod/Render",
+    "canary_deploy_hook_rotation": "Render",
+    "blueprint_sync_hook_rotation": "Render",
+    "aws_production_iam_key": "AWS/Render",
+    "runpod_mfa": "RunPod",
+}
+PINNED_ACTIONS = {
+    "IR-ACT-001": (
+        "Assign the incident-response roles, on-call contacts, communication cadence, and closure approver.",
+        "incident_commander",
+    ),
+    "IR-ACT-002": (
+        "Export and review scoped RunPod, Render, AWS, GitHub, and Vercel audit activity; record non-secret event IDs, UTC window, digest, findings, and limitations.",
+        "security_forensics_lead",
+    ),
+    "IR-ACT-003": (
+        "Obtain and verify server-side Blueprint sync-hook rotation, then prove the prior hook can no longer initiate a sync without recording either URL.",
+        "infrastructure_lead",
+    ),
+    "IR-ACT-004": (
+        "Restore AWS administration, replace the invalid key with a least-privilege cas-harness-render-production application key, redeploy Render, and rerun STS/IAM/S3/WORM verification.",
+        "infrastructure_lead",
+    ),
+    "IR-ACT-005": (
+        "Enable RunPod MFA through the account owner's personal action and record only the enabled state and verification UTC.",
+        "account_owner",
+    ),
+    "IR-ACT-006": (
+        "Complete the customer/authority/insurer/vendor notification decision gate from scoped facts and applicable sources.",
+        "privacy_legal_advisor",
+    ),
+    "IR-ACT-007": (
+        "Run the tabletop with assigned participants and close resulting corrective actions through tested evidence.",
+        "incident_commander",
+    ),
+}
+PLACEHOLDER_IDENTITY_RE = re.compile(r"^\[(?:ASSIGN|PENDING|SET|SCHEDULE)(?::[^]]+)?]$")
+ACCEPT_CLAIM_RE = re.compile(r"\bACCEPT\b")
+TERMINAL_STATE_VALUES = {
+    "MONITORING",
+    "CLOSED",
+    "COMPLETE",
+    "complete",
+    "not_applicable",
+    "present",
+}
 PROHIBITED_SECRET_FIELD_NAMES = {
     "password",
     "token",
@@ -126,6 +211,159 @@ def _scan_text_for_secret_shapes(text: str, *, source: str) -> list[str]:
     return errors
 
 
+def _find_accept_claims(value: Any, *, location: str = "$") -> list[str]:
+    """Reject ACCEPT anywhere in an incident record.
+
+    Incident handling is not the customer-production acceptance authority.  A
+    separate verifier owns that verdict, so this validator deliberately has no
+    positive ACCEPT representation.
+    """
+
+    errors: list[str] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            errors.extend(_find_accept_claims(child, location=f"{location}.{key}"))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            errors.extend(_find_accept_claims(child, location=f"{location}[{index}]"))
+    elif isinstance(value, str) and ACCEPT_CLAIM_RE.search(value):
+        errors.append(f"customer-production ACCEPT is prohibited at {location}")
+    return errors
+
+
+def _find_terminal_state_claims(value: Any, *, location: str = "$") -> list[str]:
+    """Reject terminal state scalars anywhere in an OPEN-only record."""
+
+    errors: list[str] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            errors.extend(
+                _find_terminal_state_claims(child, location=f"{location}.{key}")
+            )
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            errors.extend(
+                _find_terminal_state_claims(child, location=f"{location}[{index}]")
+            )
+    elif isinstance(value, str) and value.strip() in TERMINAL_STATE_VALUES:
+        errors.append(
+            f"terminal state {value.strip()!r} is prohibited in OPEN-only mode at {location}"
+        )
+    return errors
+
+
+def _validate_open_only_references(
+    value: Any, *, source: str, location: str = "$"
+) -> list[str]:
+    """Keep evidence references informational while closure support is disabled.
+
+    Object-shaped references formerly allowed an untracked local JSON file to
+    attest to its own authority.  OPEN-only records may name non-secret provider
+    IDs as strings, but this validator never dereferences them or treats them as
+    completion evidence.
+    """
+
+    errors: list[str] = []
+    if isinstance(value, dict):
+        for key, child in value.items():
+            child_location = f"{location}.{key}"
+            if key.endswith("references"):
+                if not isinstance(child, list) or not all(
+                    isinstance(reference, str) and reference.strip() for reference in child
+                ):
+                    errors.append(
+                        f"{source}: {child_location} must contain only non-empty informational strings; "
+                        "typed/local evidence artifacts are disabled in OPEN-only mode"
+                    )
+                elif any(
+                    reference.strip().lower().endswith(".json")
+                    or "/evidence/" in reference.replace("\\", "/").lower()
+                    or reference.replace("\\", "/").lower().startswith(("tmp/", "/tmp/"))
+                    for reference in child
+                ):
+                    errors.append(
+                        f"{source}: {child_location} cannot cite local or temporary artifact paths "
+                        "in OPEN-only mode"
+                    )
+            errors.extend(
+                _validate_open_only_references(
+                    child, source=source, location=child_location
+                )
+            )
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            errors.extend(
+                _validate_open_only_references(
+                    child, source=source, location=f"{location}[{index}]"
+                )
+            )
+    return errors
+
+
+def _validate_distinct_assigned_roles(
+    roles: Any, *, source: str
+) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(roles, dict):
+        return errors
+    seen: dict[str, str] = {}
+    for role, identity in roles.items():
+        if not isinstance(identity, str) or not identity.strip():
+            errors.append(f"{source}: role {role!r} must have a non-empty identity or placeholder")
+            continue
+        normalized = identity.strip()
+        if PLACEHOLDER_IDENTITY_RE.fullmatch(normalized):
+            continue
+        identity_key = normalized.casefold()
+        prior_role = seen.get(identity_key)
+        if prior_role is not None:
+            errors.append(
+                f"{source}: assigned role identities must be distinct; {prior_role!r} and {role!r} "
+                "cannot be the same person"
+            )
+        else:
+            seen[identity_key] = role
+    return errors
+
+
+def _validate_markdown_twin(
+    record: dict[str, Any], markdown: str, *, source: str
+) -> list[str]:
+    errors: list[str] = []
+    incident_id = record.get("incident_id")
+    if not isinstance(incident_id, str) or incident_id not in markdown:
+        errors.append(f"{source}: incident ID does not match JSON record")
+    if ACCEPT_CLAIM_RE.search(markdown):
+        errors.append(
+            f"{source}: customer-production ACCEPT is prohibited in incident Markdown"
+        )
+    if not re.search(r"(?m)^\| Status \| `OPEN` \|\s*$", markdown):
+        errors.append(f"{source}: Markdown record status must be exactly OPEN")
+    if not re.search(
+        r"(?m)^\| Customer-production readiness \| `OPEN` \|\s*$", markdown
+    ):
+        errors.append(f"{source}: Markdown customer-production readiness must be exactly OPEN")
+    if re.search(r"\b(?:MONITORING|CLOSED)\b", markdown):
+        errors.append(f"{source}: Markdown contradicts the OPEN-only JSON status")
+    action_rows = {
+        action_id: status
+        for action_id, status in re.findall(
+            r"(?m)^\| (IR-ACT-\d{3}) \|.*\| `(OPEN|IN_PROGRESS|BLOCKED|COMPLETE)` \|\s*$",
+            markdown,
+        )
+    }
+    expected_action_statuses = {
+        action.get("id"): action.get("status")
+        for action in record.get("open_actions", [])
+        if isinstance(action, dict) and isinstance(action.get("id"), str)
+    }
+    if action_rows != expected_action_statuses:
+        errors.append(
+            f"{source}: Markdown action statuses must exactly match the JSON action register"
+        )
+    return errors
+
+
 def validate_control(control: dict[str, Any], *, source: str) -> list[str]:
     errors: list[str] = []
     if control.get("schema_version") != "1.0":
@@ -196,6 +434,13 @@ def validate_incident_record(
     record: dict[str, Any], control: dict[str, Any], *, source: str
 ) -> list[str]:
     errors: list[str] = []
+    extra_fields = set(record) - OPEN_ONLY_RECORD_FIELDS
+    missing_pinned_fields = OPEN_ONLY_RECORD_FIELDS - set(record)
+    if extra_fields or missing_pinned_fields:
+        errors.append(
+            f"{source}: OPEN-only incident fields must match the pinned schema; "
+            f"extra={sorted(extra_fields)}, missing={sorted(missing_pinned_fields)}"
+        )
     required_fields = control.get("required_incident_record_fields", [])
     if not isinstance(required_fields, list):
         errors.append(f"{source}: control required_incident_record_fields must be a list")
@@ -209,8 +454,23 @@ def validate_incident_record(
     incident_id = record.get("incident_id")
     if not isinstance(incident_id, str) or not re.fullmatch(r"IR-\d{4}-\d{2}-\d{2}-\d{3}", incident_id):
         errors.append(f"{source}: incident_id must match IR-YYYY-MM-DD-NNN")
-    if record.get("status") not in {"OPEN", "MONITORING", "CLOSED"}:
-        errors.append(f"{source}: status must be OPEN, MONITORING, or CLOSED")
+    if incident_id != OPEN_ONLY_INCIDENT_ID:
+        errors.append(
+            f"{source}: incident {incident_id!r} has no pinned immutable scope; "
+            "register it in a reviewed validator change before use"
+        )
+    if record.get("record_type") != "operational_record_and_tabletop":
+        errors.append(f"{source}: record_type must match the pinned incident scope")
+    if record.get("title") != "CAS Harness production credential and hook control recovery":
+        errors.append(f"{source}: title must match the pinned incident scope")
+    time_control = record.get("time_control")
+    if not isinstance(time_control, dict) or time_control.get("event_date_utc") != "2026-07-13":
+        errors.append(f"{source}: event_date_utc must match the pinned incident scope")
+    if record.get("status") != "OPEN":
+        errors.append(
+            f"{source}: incident status must remain OPEN; MONITORING/CLOSED transitions "
+            "require the separate acceptance/closure verifier"
+        )
     severity = record.get("severity")
     if not isinstance(severity, dict) or severity.get("current") not in EXPECTED_SEVERITIES:
         errors.append(f"{source}: severity.current must be one of {sorted(EXPECTED_SEVERITIES)}")
@@ -231,33 +491,32 @@ def validate_incident_record(
         errors.append(f"{source}: roles must be an object")
     elif set(roles) != EXPECTED_ROLES:
         errors.append(f"{source}: record roles must be {sorted(EXPECTED_ROLES)}")
+    errors.extend(_validate_distinct_assigned_roles(roles, source=source))
 
     systems = record.get("systems")
-    if not isinstance(systems, dict) or set(systems) != EXPECTED_PROVIDERS:
-        errors.append(f"{source}: systems must cover {sorted(EXPECTED_PROVIDERS)}")
+    if systems != PINNED_SYSTEM_SCOPE:
+        errors.append(
+            f"{source}: systems must exactly match the immutable scope for {OPEN_ONLY_INCIDENT_ID}"
+        )
 
     observed_events = record.get("observed_events")
     event_ids = _ids(observed_events, source=source, field="observed_events", errors=errors)
-    required_event_ids = {
-        "worker_token_rotation",
-        "canary_deploy_hook_rotation",
-        "blueprint_sync_hook_rotation",
-        "aws_production_iam_key",
-        "runpod_mfa",
-    }
-    if not required_event_ids.issubset(event_ids):
-        errors.append(f"{source}: missing required event facts {sorted(required_event_ids - event_ids)}")
+    if event_ids != set(PINNED_EVENT_PROVIDERS):
+        errors.append(
+            f"{source}: observed event IDs must exactly match the immutable scope "
+            f"{sorted(PINNED_EVENT_PROVIDERS)}"
+        )
     events_by_id = {
         item["id"]: item
         for item in observed_events or []
         if isinstance(item, dict) and isinstance(item.get("id"), str)
     }
     worker = events_by_id.get("worker_token_rotation", {})
-    if worker.get("status") != "complete" or worker.get("old_credential_removed") is not True:
-        errors.append(f"{source}: worker token rotation must be complete with old_credential_removed=true")
+    if worker.get("old_credential_removed") is not True:
+        errors.append(f"{source}: worker token rotation must retain old_credential_removed=true")
     canary_hook = events_by_id.get("canary_deploy_hook_rotation", {})
-    if canary_hook.get("status") != "complete" or canary_hook.get("regenerated") is not True:
-        errors.append(f"{source}: canary deploy hook must be recorded as regenerated and complete")
+    if canary_hook.get("regenerated") is not True:
+        errors.append(f"{source}: canary deploy hook must retain regenerated=true")
     blueprint_hook = events_by_id.get("blueprint_sync_hook_rotation", {})
     if (
         blueprint_hook.get("server_side_rotation_requested") is not True
@@ -279,6 +538,20 @@ def validate_incident_record(
     }:
         errors.append(f"{source}: RunPod MFA must remain a pending personal action")
     for event_id, event in events_by_id.items():
+        expected_provider = PINNED_EVENT_PROVIDERS.get(event_id)
+        if event.get("provider") != expected_provider:
+            errors.append(
+                f"{source}: {event_id} provider must remain pinned to {expected_provider!r}"
+            )
+        if event.get("fact_status") != "observed":
+            errors.append(f"{source}: {event_id} must retain fact_status='observed'")
+        if not isinstance(event.get("description"), str) or not event["description"].strip():
+            errors.append(f"{source}: {event_id} must retain a substantive description")
+        if event.get("status") not in OPEN_ONLY_EVENT_STATUSES:
+            errors.append(
+                f"{source}: {event_id} status must remain an unresolved OPEN-only state; "
+                "completed event claims require the separate chronology/evidence verifier"
+            )
         if event.get("secret_material_recorded") is not False:
             errors.append(f"{source}: {event_id} must explicitly set secret_material_recorded=false")
 
@@ -287,7 +560,6 @@ def validate_incident_record(
         errors.append(f"{source}: response_checklist must be a list")
     else:
         checklist_ids: set[str] = set()
-        allowed_statuses = set(control.get("allowed_task_statuses", []))
         for index, item in enumerate(checklist):
             if not isinstance(item, dict):
                 errors.append(f"{source}: response_checklist[{index}] must be an object")
@@ -299,18 +571,43 @@ def validate_incident_record(
             if control_id in checklist_ids:
                 errors.append(f"{source}: duplicate response checklist control {control_id!r}")
             checklist_ids.add(control_id)
-            if item.get("status") not in allowed_statuses:
-                errors.append(f"{source}: invalid status for response checklist control {control_id!r}")
+            if item.get("status") not in OPEN_ONLY_TASK_STATUSES:
+                errors.append(
+                    f"{source}: response checklist control {control_id!r} must remain unresolved; "
+                    "complete/not_applicable claims require the separate chronology/evidence verifier"
+                )
         if checklist_ids != EXPECTED_PHASE_CONTROLS:
             errors.append(f"{source}: response checklist must cover {sorted(EXPECTED_PHASE_CONTROLS)}")
 
     notification = record.get("notification_decision")
-    if not isinstance(notification, dict) or notification.get("status") not in {
-        "pending",
-        "complete",
-        "not_applicable",
-    }:
-        errors.append(f"{source}: notification_decision must have an allowed status")
+    if not isinstance(notification, dict) or notification.get("status") != "pending":
+        errors.append(
+            f"{source}: notification_decision must remain pending in OPEN-only mode"
+        )
+
+    tabletop = record.get("tabletop")
+    if not isinstance(tabletop, dict):
+        errors.append(f"{source}: tabletop must be an object")
+    else:
+        if tabletop.get("exercise_status") != "participant_run_pending":
+            errors.append(
+                f"{source}: tabletop must remain participant_run_pending in OPEN-only mode"
+            )
+        participants = tabletop.get("participants")
+        if not isinstance(participants, list) or not participants:
+            errors.append(f"{source}: tabletop participants must be a non-empty list")
+        else:
+            assigned_participants = [
+                participant.strip()
+                for participant in participants
+                if isinstance(participant, str)
+                and participant.strip()
+                and not PLACEHOLDER_IDENTITY_RE.fullmatch(participant.strip())
+            ]
+            if len({participant.casefold() for participant in assigned_participants}) != len(
+                assigned_participants
+            ):
+                errors.append(f"{source}: assigned tabletop participants must be distinct")
 
     evidence = record.get("evidence_handling")
     if not isinstance(evidence, dict):
@@ -321,7 +618,10 @@ def validate_incident_record(
         if evidence.get("full_hook_urls_present") is not False:
             errors.append(f"{source}: full_hook_urls_present must be false")
         if evidence.get("worm_status") != "OPEN":
-            errors.append(f"{source}: WORM status must remain OPEN while AWS recovery is pending")
+            errors.append(
+                f"{source}: WORM status must remain OPEN; present/ACCEPT claims belong to the "
+                "separate production acceptance verifier"
+            )
 
     open_actions = record.get("open_actions")
     if not isinstance(open_actions, list) or not open_actions:
@@ -339,11 +639,31 @@ def validate_incident_record(
             if action_id in action_ids:
                 errors.append(f"{source}: duplicate open action {action_id!r}")
             action_ids.add(action_id)
-            if action.get("status") not in {"OPEN", "IN_PROGRESS", "BLOCKED", "COMPLETE"}:
-                errors.append(f"{source}: {action_id} has invalid status")
+            if action.get("status") not in OPEN_ONLY_ACTION_STATUSES:
+                errors.append(
+                    f"{source}: {action_id} must remain unresolved; COMPLETE requires the "
+                    "separate chronology/evidence verifier"
+                )
+            pinned_action = PINNED_ACTIONS.get(action_id)
+            if pinned_action is not None and (
+                action.get("action"), action.get("owner_role")
+            ) != pinned_action:
+                errors.append(
+                    f"{source}: {action_id} action text and owner must match the immutable scope"
+                )
+        if action_ids != set(PINNED_ACTIONS):
+            errors.append(
+                f"{source}: open action IDs must exactly match the seven immutable actions "
+                f"{sorted(PINNED_ACTIONS)}"
+            )
 
     for field_error in _find_prohibited_fields(record):
         errors.append(f"{source}: {field_error}")
+    for claim_error in _find_accept_claims(record):
+        errors.append(f"{source}: {claim_error}")
+    for state_error in _find_terminal_state_claims(record):
+        errors.append(f"{source}: {state_error}")
+    errors.extend(_validate_open_only_references(record, source=source))
     serialized = json.dumps(record, sort_keys=True)
     errors.extend(_scan_text_for_secret_shapes(serialized, source=source))
     return errors
@@ -378,8 +698,9 @@ def validate_package(repo_root: Path = REPO_ROOT) -> list[str]:
             errors.append(f"{markdown_twin}: markdown twin is missing")
         else:
             markdown = markdown_twin.read_text(encoding="utf-8")
-            if record.get("incident_id") not in markdown:
-                errors.append(f"{markdown_twin}: incident ID does not match JSON record")
+            errors.extend(
+                _validate_markdown_twin(record, markdown, source=str(markdown_twin))
+            )
             errors.extend(_scan_text_for_secret_shapes(markdown, source=str(markdown_twin)))
 
     for doc_path in (runbook_path, postmortem_path):

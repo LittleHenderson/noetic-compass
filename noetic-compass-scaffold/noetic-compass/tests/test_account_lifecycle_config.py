@@ -20,6 +20,7 @@ def _account_settings(**overrides) -> Settings:
         "jwt_algorithm": "HS256",
         "account_credential_pepper": "p" * 32,
         "account_bootstrap_secret": "b" * 32,
+        "object_lock_receipt_attestation_key": "r" * 32,
         "accounts_allow_single_host_sqlite": True,
         "state_ledger_path": str(Path(tempfile.gettempdir()).resolve() / "cas-account-test.db"),
         "database_url": None,
@@ -43,6 +44,11 @@ def test_account_storage_validation_rejects_hosted_sqlite_and_weak_auth() -> Non
         ).validate_account_storage()
     with pytest.raises(RuntimeError, match="at least 32 bytes"):
         _account_settings(jwt_secret="short").validate_account_storage()
+    with pytest.raises(RuntimeError, match="OBJECT_LOCK_RECEIPT_ATTESTATION_KEY"):
+        _account_settings(
+            evidence_packet_object_store_enabled=True,
+            object_lock_receipt_attestation_key="short",
+        ).validate_account_storage()
     with pytest.raises(RuntimeError, match="pins NC_JWT_ALGORITHM"):
         _account_settings(jwt_algorithm="RS256").validate_account_storage()
     with pytest.raises(RuntimeError, match="absolute NC_STATE_LEDGER_PATH"):
@@ -56,6 +62,20 @@ def test_account_storage_validation_accepts_postgres_and_acknowledged_local_sqli
         evidence_packet_object_store_enabled=True,
     ).validate_account_storage()
     _account_settings().validate_account_storage()
+
+
+def test_static_s3_object_lock_startup_requires_stable_receipt_key(monkeypatch) -> None:
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv(
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE"
+    )
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "30")
+
+    with pytest.raises(RuntimeError, match="OBJECT_LOCK_RECEIPT_ATTESTATION_KEY"):
+        _account_settings(
+            evidence_packet_object_store_enabled=False,
+            object_lock_receipt_attestation_key="",
+        ).validate_object_lock_receipt_attestation()
 
 
 @pytest.mark.parametrize(

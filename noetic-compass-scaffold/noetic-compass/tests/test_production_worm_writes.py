@@ -9,6 +9,8 @@ API tier) and the verdict runner's WORM gate.
 
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
+
 import pytest
 
 from api.services.production.worm_writes import (
@@ -25,6 +27,16 @@ from api.services.production.worm_writes import (
 
 def _policy() -> RetentionPolicy:
     return RetentionPolicy(mode="COMPLIANCE", retention_days=3650)
+
+
+def test_retention_policy_rounds_up_without_shortening_full_day_window() -> None:
+    requested_at = datetime(2026, 7, 14, 1, 2, 3, 900_000, tzinfo=UTC)
+    policy = RetentionPolicy(mode="GOVERNANCE", retention_days=31)
+
+    deadline = policy.retain_until(now=requested_at)
+
+    assert deadline >= requested_at + timedelta(days=31)
+    assert deadline == datetime(2026, 8, 14, 1, 2, 4, tzinfo=UTC)
 
 
 def test_stub_conforms_to_protocol() -> None:
@@ -95,7 +107,13 @@ def test_only_a_verified_receipt_licenses_worm_committed() -> None:
     )
     assert summary.status == "DATA_CAPTURE_WORM_COMMITTED"
     assert summary.capture_committed is True
-    assert summary.retention_model == "write_once_read_many"
+    assert summary.retention_model == "s3_object_lock_compliance_time_bounded"
+    assert summary.retention_disclosure.mode == "COMPLIANCE"
+    assert summary.retention_disclosure.receipt_verified is True
+    assert summary.retention_disclosure.permanent_or_indefinite is False
+    assert summary.retention_disclosure.commit_status_requires_verified_receipt is True
+    assert "actual re-read-verified" in summary.notice
+    assert "DATA_CAPTURE_WORM_COMMITTED is not asserted" not in summary.notice
     assert summary.reasons == ()
 
 

@@ -226,6 +226,7 @@ CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET=<bucket-name-only>
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX=cas-harness/evidence-anchors
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION=us-west-2
+NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY=<stable-random-secret-at-least-32-bytes>
 AWS_ACCESS_KEY_ID=<access-key-id>
 AWS_SECRET_ACCESS_KEY=<secret-access-key>
 ```
@@ -266,6 +267,8 @@ CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=30
 ```
 
 Only set these Object Lock variables when the bucket was created with Object Lock enabled. The API fails the anchor loudly if only one variable is set or if the retention value is invalid, so production cannot silently downgrade a requested WORM anchor into a plain S3 write.
+
+`NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY` is a separate, server-only HMAC authority for exact-version verification receipts. Use the same stable value on every replica and keep it unchanged across restarts. The API refuses an Object Lock write when this key is absent or shorter than 32 bytes. Do not rotate it until a receipt-key keyring or explicit migration is in place; rotation intentionally makes older serialized receipts fail closed. Never commit or print the value.
 
 If Object Lock retention is enabled, the IAM user also needs permission to write object-retention metadata on the selected prefix:
 

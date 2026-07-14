@@ -51,9 +51,11 @@ Hosted account mode now requires all of the following:
 - `CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION` when the bucket is not in the SDK default region
 - `CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE` or `COMPLIANCE`
 - positive `CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS`
+- stable server-only `NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY` with at least 32 bytes, shared by
+  every replica and kept unchanged until a receipt-key migration/keyring exists
 - AWS credentials able to put/get/head the versioned objects
 
-Startup verifies bucket Object Lock and versioning. Keep
+Startup verifies bucket Object Lock, versioning, and stable receipt authority. Keep
 `NC_ACCOUNTS_ENABLED=false` and
 `NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=false` until the deployment gates
 below pass.

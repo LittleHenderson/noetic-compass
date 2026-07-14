@@ -67,7 +67,12 @@ CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE|COMPLIANCE
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=<positive integer>
+NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY=<stable server-only value of at least 32 bytes>
 ```
+
+The receipt-attestation key must be identical across replicas and persist across
+restarts. Do not rotate it until an explicit historical-receipt migration or
+keyring exists; old receipts intentionally fail closed under a different key.
 
 The readiness principal needs these bucket-level read actions on
 `arn:aws:s3:::<bucket>`:
@@ -105,12 +110,15 @@ packet path.
 The repository-root workflow
 `.github/workflows/production-runtime-monitor.yml` runs at minutes 7, 22, 37,
 and 52 of each hour and can also be dispatched manually. GitHub may delay a
-scheduled run during platform load. Its stable checks are:
+scheduled run during platform load. Runs are serialized and an in-progress run
+is never canceled by a newer invocation before its alert stage. Its stable
+checks are:
 
 - `production-api-dependency-readiness`
 - `production-worker-realmode`
 - `production-render-blueprint-drift`
 - aggregate `cas-production-runtime-monitor-gate`
+- delivery `cas-production-runtime-alert-delivery`
 
 The repository variable `CAS_PRODUCTION_API_BASE_URL` may override the default
 public Render URL. The `RENDER_API_KEY` repository secret is required only for
@@ -128,6 +136,20 @@ Treat a failed aggregate as an incident:
    workflow.
 4. Preserve failed workflow URLs and timestamps in the incident record. Never
    copy response secrets or dashboard environment values into it.
+
+The delivery job creates one deduplicated open GitHub issue labeled
+`cas-production-runtime-alert`, or comments on the existing issue when another
+failure occurs. The workflow binds that issue to both the fixed label and fixed
+title and fails on duplicate matching issues instead of updating an ambiguous
+record. It records only the normalized component results and the Actions run
+URL. It never copies environment values, credentials, or provider bodies. An
+assigned operator must comment `ACK` with the diagnosis and next action. GitHub
+issue delivery is `present`; the full customer-production alert-delivery gate
+and human acknowledgement remain `OPEN` until their separate evidence
+requirements pass. A later fully green run comments a recovery receipt and
+closes the issue, but that automated closure is not acknowledgement evidence.
+Failure to create, update, or close the issue makes the delivery job fail rather
+than silently dropping the alert.
 
 Enable GitHub Actions failure notifications for the operators responsible for
 this repository. For RunPod funding continuity, use RunPod's native Billing

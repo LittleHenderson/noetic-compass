@@ -25,12 +25,13 @@ import base64
 from contextlib import contextmanager
 from contextvars import ContextVar
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 import hashlib
 import json
 import os
 import time
 from typing import Any, Iterator, Mapping, Protocol, runtime_checkable
+from urllib.parse import parse_qs, quote, unquote, urlparse
 import uuid
 
 from api.services.production.state_substrate import (
@@ -40,6 +41,12 @@ from api.services.production.state_substrate import (
     VersionConflict,
 )
 from api.services.production.worm_writes import LockReceipt, RetentionPolicy
+from api.services.cas_harness_retention_disclosure import (
+    _issue_live_s3_object_lock_receipt,
+    require_stable_object_lock_receipt_attestation_key,
+    revalidate_object_lock_verification,
+    runtime_object_lock_policy_target,
+)
 
 
 PACKET_INDEX_KIND = "evidence_packet_object_index"
@@ -88,6 +95,10 @@ class ImmutablePacketBackend(Protocol):
         version_id: str,
         content_hash: str,
         policy: RetentionPolicy,
+        requested_at: datetime,
+        requested_retain_until: datetime,
+        minimum_retain_until: datetime,
+        original_verified_at: datetime,
     ) -> LockReceipt: ...
 
 
@@ -142,8 +153,9 @@ class S3ObjectLockPacketBackend:
 
     def object_url(self, key: str, *, version_id: str | None = None) -> str:
         full_key = self._full_key(key)
-        suffix = f"?versionId={version_id}" if version_id else ""
-        return f"s3://{self.bucket}/{full_key}{suffix}"
+        encoded_key = quote(full_key, safe="/")
+        suffix = f"?versionId={quote(version_id, safe='')}" if version_id else ""
+        return f"s3://{self.bucket}/{encoded_key}{suffix}"
 
     def put_immutable(
         self,
@@ -156,7 +168,8 @@ class S3ObjectLockPacketBackend:
         if hashlib.sha256(body).hexdigest() != content_hash:
             raise ValueError("content_hash does not match Evidence Packet bytes")
         full_key = self._full_key(key)
-        retain_until = policy.retain_until()
+        requested_at = datetime.now(UTC).replace(microsecond=0)
+        retain_until = policy.retain_until(now=requested_at)
         kwargs: dict[str, Any] = {
             "Bucket": self.bucket,
             "Key": full_key,
@@ -166,7 +179,13 @@ class S3ObjectLockPacketBackend:
             "IfNoneMatch": "*",
             "ObjectLockMode": policy.mode,
             "ObjectLockRetainUntilDate": retain_until,
-            "Metadata": {"content-sha256": content_hash},
+            "Metadata": {
+                "content-sha256": content_hash,
+                "retention-mode": policy.mode,
+                "retention-days": str(policy.retention_days),
+                "retention-requested-at": requested_at.isoformat(),
+                "retention-requested-until": retain_until.isoformat(),
+            },
         }
         try:
             response = self._client.put_object(**kwargs)
@@ -184,6 +203,10 @@ class S3ObjectLockPacketBackend:
             version_id=version_id,
             content_hash=content_hash,
             policy=policy,
+            requested_at=requested_at if version_id else None,
+            requested_retain_until=retain_until if version_id else None,
+            minimum_retain_until=retain_until if version_id else None,
+            original_verified_at=None,
         )
         if not receipt.is_verifiable():
             raise EvidenceObjectStoreUnavailable(
@@ -211,12 +234,20 @@ class S3ObjectLockPacketBackend:
         version_id: str,
         content_hash: str,
         policy: RetentionPolicy,
+        requested_at: datetime,
+        requested_retain_until: datetime,
+        minimum_retain_until: datetime,
+        original_verified_at: datetime,
     ) -> LockReceipt:
         return self._reread_receipt(
             key=key,
             version_id=version_id,
             content_hash=content_hash,
             policy=policy,
+            requested_at=requested_at,
+            requested_retain_until=requested_retain_until,
+            minimum_retain_until=minimum_retain_until,
+            original_verified_at=original_verified_at,
         )
 
     def _reread_receipt(
@@ -226,6 +257,10 @@ class S3ObjectLockPacketBackend:
         version_id: str | None,
         content_hash: str,
         policy: RetentionPolicy,
+        requested_at: datetime | None,
+        requested_retain_until: datetime | None,
+        minimum_retain_until: datetime | None,
+        original_verified_at: datetime | None,
     ) -> LockReceipt:
         full_key = self._full_key(key)
         head_kwargs: dict[str, Any] = {"Bucket": self.bucket, "Key": full_key}
@@ -238,7 +273,12 @@ class S3ObjectLockPacketBackend:
                 raise EvidenceObjectStoreUnavailable(
                     "S3 Object-Lock packet receipt is missing VersionId."
                 )
-            body = self.get_immutable(key=key, version_id=resolved_version)
+            response = self._client.get_object(
+                Bucket=self.bucket,
+                Key=full_key,
+                VersionId=resolved_version,
+            )
+            body = response["Body"].read()
         except EvidenceObjectStoreError:
             raise
         except Exception as exc:
@@ -248,20 +288,79 @@ class S3ObjectLockPacketBackend:
         actual_hash = hashlib.sha256(body).hexdigest()
         actual_mode = _text(head.get("ObjectLockMode"))
         retain_until = _aware_datetime(head.get("ObjectLockRetainUntilDate"))
-        verified = (
-            actual_hash == content_hash
-            and actual_mode == policy.mode
-            and retain_until is not None
-            and retain_until > datetime.now(UTC)
+        metadata_expectation = _s3_metadata_expectation(
+            head,
+            expected_content_hash=content_hash,
+        )
+        if requested_at is None:
+            requested_at = metadata_expectation["requested_at"]
+            requested_retain_until = metadata_expectation["requested_retain_until"]
+            minimum_retain_until = requested_retain_until
+            expected_mode = policy.mode
+            expected_days = policy.retention_days
+            if (
+                metadata_expectation["mode"] != expected_mode
+                or metadata_expectation["retention_days"] != expected_days
+            ):
+                raise EvidenceObjectStoreUnavailable(
+                    "A byte-identical existing S3 object uses a weaker or different "
+                    "retention policy than this write requires."
+                )
+        else:
+            expected_mode = policy.mode
+            expected_days = policy.retention_days
+            if (
+                metadata_expectation["mode"] != expected_mode
+                or metadata_expectation["retention_days"] != expected_days
+                or metadata_expectation["requested_at"] != requested_at
+                or metadata_expectation["requested_retain_until"]
+                != requested_retain_until
+            ):
+                raise EvidenceObjectStoreUnavailable(
+                    "S3 packet retention request metadata does not match the durable expectation."
+                )
+        if requested_retain_until is None or minimum_retain_until is None:
+            raise EvidenceObjectStoreUnavailable(
+                "S3 packet receipt is missing its original retention request boundary."
+            )
+        if retain_until is None or retain_until < minimum_retain_until:
+            raise EvidenceObjectStoreUnavailable(
+                "S3 packet retention was shortened below its durable observed minimum."
+            )
+        # Trusted issuer boundary: ``response`` and ``head`` were obtained above
+        # by exact-VersionId SDK reads, never from packet/API mappings.
+        verification = _issue_live_s3_object_lock_receipt(
+            expected={
+                "bucket": self.bucket,
+                "key": full_key,
+                "version_id": resolved_version,
+                "content_sha256": content_hash,
+                "mode": expected_mode,
+                "retention_days": expected_days,
+                "requested_at": requested_at,
+                "retain_until": requested_retain_until,
+            },
+            observed={
+                "bucket": self.bucket,
+                "key": full_key,
+                "get_version_id": response.get("VersionId"),
+                "head_version_id": head.get("VersionId"),
+                "content_sha256": actual_hash,
+                "mode": actual_mode,
+                "retain_until": retain_until,
+                "reread_verified": True,
+            },
+            verified_at=original_verified_at,
         )
         return LockReceipt(
             object_url=self.object_url(key, version_id=resolved_version),
             version_id=resolved_version,
             retain_until=retain_until or datetime.now(UTC),
-            mode=policy.mode,
-            content_hash=content_hash,
+            mode=actual_mode or "",
+            content_hash=actual_hash,
             legal_hold=bool(head.get("ObjectLockLegalHoldStatus") == "ON"),
-            reread_verified=verified,
+            reread_verified=verification.verified,
+            verification_receipt=verification,
         )
 
     def _full_key(self, key: str) -> str:
@@ -405,6 +504,32 @@ class EvidencePacketRepository:
             raise EvidenceObjectStoreUnavailable(
                 "Immutable packet backend returned an unverified WORM receipt."
             )
+        verification = receipt.validated_verification()
+        if verification is None or not verification.verified:
+            raise EvidenceObjectStoreUnavailable(
+                "Immutable packet backend omitted the structured Object-Lock receipt."
+            )
+        requested_at = _required_text(
+            verification.expected.get("requested_at"),
+            "Object-Lock receipt requested_at",
+        )
+        requested_until = _required_text(
+            verification.expected.get("retain_until"),
+            "Object-Lock receipt requested retain_until",
+        )
+        expected_mode = _required_text(
+            verification.expected.get("mode"),
+            "Object-Lock receipt mode",
+        )
+        expected_days = verification.expected.get("retention_days")
+        if (
+            not isinstance(expected_days, int)
+            or isinstance(expected_days, bool)
+            or expected_days < 1
+        ):
+            raise EvidenceObjectStoreUnavailable(
+                "Object-Lock receipt retention_days is unavailable."
+            )
         payload = {
             "schema_version": "cas_harness_evidence_packet_object_index.v1",
             "trace_id": trace_id,
@@ -415,9 +540,16 @@ class EvidencePacketRepository:
             "content_sha256": content_hash,
             "byte_length": len(body),
             "version_id": receipt.version_id,
-            "object_lock_mode": receipt.mode,
+            "object_lock_mode": expected_mode,
             "object_lock_retain_until": receipt.retain_until.astimezone(UTC).isoformat(),
+            "object_lock_minimum_retain_until": receipt.retain_until.astimezone(
+                UTC
+            ).isoformat(),
+            "retention_days": expected_days,
+            "retention_requested_at": requested_at,
+            "retention_requested_until": requested_until,
             "reread_verified": receipt.reread_verified,
+            "object_lock_verification": verification.to_dict(),
         }
         record = LedgerRecord.new(
             tenant_id=tenant_id,
@@ -503,6 +635,7 @@ class EvidencePacketRepository:
                 "notes": "tenant packet index entry is unavailable",
             }
         payload = record.payload
+        verification = None
         try:
             key = _required_text(payload.get("object_key"), "packet index object_key")
             if key != self._object_key(tenant_id, namespace, trace_id):
@@ -511,30 +644,55 @@ class EvidencePacketRepository:
                 )
             version_id = _required_text(payload.get("version_id"), "packet index version_id")
             content_hash = _required_text(payload.get("content_sha256"), "packet index content hash")
+            requirements = self._stored_packet_receipt_requirements(
+                payload,
+                expected_key=key,
+                expected_version=version_id,
+                expected_content_hash=content_hash,
+            )
             receipt = self.backend.verify_receipt(
                 key=key,
                 version_id=version_id,
                 content_hash=content_hash,
-                policy=self.policy,
+                policy=requirements["policy"],
+                requested_at=requirements["requested_at"],
+                requested_retain_until=requirements["requested_retain_until"],
+                minimum_retain_until=requirements["minimum_retain_until"],
+                original_verified_at=requirements["original_verified_at"],
             )
             match = receipt.is_verifiable() and receipt.content_hash == content_hash
             actual = receipt.content_hash
-            notes = (
-                f"durable tenant index re-read S3 version {receipt.version_id}; "
-                f"Object Lock {receipt.mode} is active until "
-                f"{receipt.retain_until.astimezone(UTC).isoformat()}"
-            )
+            verification = receipt.validated_verification()
+            if match:
+                notes = (
+                    f"durable tenant index re-read S3 version {receipt.version_id}; "
+                    f"Object Lock {receipt.mode} is active until "
+                    f"{receipt.retain_until.astimezone(UTC).isoformat()}"
+                )
+            else:
+                reasons = (
+                    "; ".join(verification.failure_reasons)
+                    if verification is not None
+                    else "structured Object-Lock receipt is unavailable"
+                )
+                notes = f"durable tenant packet Object-Lock re-verification failed: {reasons}"
         except EvidenceObjectStoreError as exc:
             match = False
             actual = None
             notes = str(exc)
-        return {
+        result = {
             "artifact": "tenant_packet_object_store",
             "expected": payload.get("content_sha256"),
             "actual": actual,
             "match": match,
             "notes": notes,
         }
+        if verification is not None:
+            result["object_lock_verification"] = verification.to_dict()
+        if match and (verification is None or not verification.verified):
+            result["match"] = False
+            result["notes"] = "tenant packet Object-Lock receipt is malformed"
+        return result
 
     def append_hash_log(
         self,
@@ -670,17 +828,159 @@ class EvidencePacketRepository:
                 "Packet index object key does not match its tenant/namespace/trace identity."
             )
         version_id = _required_text(existing.get("version_id"), "packet index version_id")
+        requirements = self._stored_packet_receipt_requirements(
+            existing,
+            expected_key=key,
+            expected_version=version_id,
+            expected_content_hash=content_hash,
+        )
         receipt = self.backend.verify_receipt(
             key=key,
             version_id=version_id,
             content_hash=content_hash,
-            policy=self.policy,
+            policy=requirements["policy"],
+            requested_at=requirements["requested_at"],
+            requested_retain_until=requirements["requested_retain_until"],
+            minimum_retain_until=requirements["minimum_retain_until"],
+            original_verified_at=requirements["original_verified_at"],
         )
         if not receipt.is_verifiable():
             raise EvidenceObjectStoreUnavailable(
                 "Existing packet index does not have a verifiable Object-Lock receipt."
             )
         return receipt
+
+    def _stored_packet_receipt_requirements(
+        self,
+        payload: Mapping[str, Any],
+        *,
+        expected_key: str,
+        expected_version: str,
+        expected_content_hash: str,
+    ) -> dict[str, Any]:
+        """Rebuild the immutable minimum from the durable packet index.
+
+        Runtime configuration is deliberately irrelevant here.  A later
+        re-verification must meet the exact stored version/hash/mode and may
+        not fall below either the original request window or the longer
+        deadline that was actually observed when the packet was indexed.
+        """
+
+        object_url = _required_text(payload.get("object_url"), "packet index object_url")
+        canonical_url = self.backend.object_url(
+            expected_key,
+            version_id=expected_version,
+        )
+        if object_url != canonical_url:
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index object_url does not match its canonical S3 receipt."
+            )
+        parsed = urlparse(object_url)
+        try:
+            query = parse_qs(parsed.query, keep_blank_values=True, strict_parsing=True)
+        except ValueError as exc:
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index object_url has a malformed version query."
+            ) from exc
+        if (
+            parsed.scheme != "s3"
+            or not parsed.netloc
+            or not unquote(parsed.path.lstrip("/"))
+            or set(query) != {"versionId"}
+            or query.get("versionId") != [expected_version]
+        ):
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index object_url is not an exact s3:// version receipt."
+            )
+
+        mode = _required_text(payload.get("object_lock_mode"), "packet index Object Lock mode")
+        days = payload.get("retention_days")
+        if mode not in {"GOVERNANCE", "COMPLIANCE"}:
+            raise EvidenceObjectStoreUnavailable("Packet index Object Lock mode is invalid.")
+        if not isinstance(days, int) or isinstance(days, bool) or days < 1:
+            raise EvidenceObjectStoreUnavailable("Packet index retention_days is invalid.")
+        requested_at = _aware_datetime(payload.get("retention_requested_at"))
+        requested_until = _aware_datetime(payload.get("retention_requested_until"))
+        minimum_until = _aware_datetime(
+            payload.get("object_lock_minimum_retain_until")
+        )
+        if requested_at is None or requested_until is None or minimum_until is None:
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index is missing its durable retention request/minimum deadline."
+            )
+        if requested_until < requested_at + timedelta(days=days):
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index request is shorter than the full retention_days window."
+            )
+        if minimum_until < requested_until:
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index minimum deadline is shorter than its write request."
+            )
+        if _aware_datetime(payload.get("object_lock_retain_until")) != minimum_until:
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index observed and minimum retention deadlines diverge."
+            )
+
+        raw_verification = payload.get("object_lock_verification")
+        if not isinstance(raw_verification, Mapping):
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index has no structured Object-Lock verification receipt."
+            )
+        raw_expected = raw_verification.get("expected")
+        raw_observed = raw_verification.get("observed")
+        if not isinstance(raw_expected, Mapping) or not isinstance(raw_observed, Mapping):
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index Object-Lock verification receipt is malformed."
+            )
+        full_key = unquote(parsed.path.lstrip("/"))
+        original_expected = {
+            "bucket": parsed.netloc,
+            "key": full_key,
+            "version_id": expected_version,
+            "content_sha256": expected_content_hash,
+            "mode": mode,
+            "retention_days": days,
+            "requested_at": requested_at,
+            "retain_until": requested_until,
+        }
+        for field, value in original_expected.items():
+            canonical_value = (
+                value.astimezone(UTC).isoformat()
+                if isinstance(value, datetime)
+                else value
+            )
+            if raw_expected.get(field) != canonical_value:
+                raise EvidenceObjectStoreUnavailable(
+                    f"Packet index structured receipt does not match stored {field}."
+                )
+        if _aware_datetime(raw_observed.get("retain_until")) != minimum_until:
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index structured receipt does not match the stored minimum deadline."
+            )
+        revalidated = revalidate_object_lock_verification(
+            raw_verification,
+            expected=original_expected,
+        )
+        if (
+            revalidated is None
+            or not revalidated.verified
+            or revalidated.issuer_attestation is None
+        ):
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index structured Object-Lock receipt no longer verifies."
+            )
+        original_verified_at = _aware_datetime(raw_verification.get("verified_at"))
+        if original_verified_at is None:
+            raise EvidenceObjectStoreUnavailable(
+                "Packet index structured receipt has no original verified_at."
+            )
+        return {
+            "policy": RetentionPolicy(mode=mode, retention_days=days),  # type: ignore[arg-type]
+            "requested_at": requested_at,
+            "requested_retain_until": requested_until,
+            "minimum_retain_until": minimum_until,
+            "original_verified_at": original_verified_at,
+        }
 
     def _record_hash_log_worm_receipt(
         self,
@@ -715,17 +1015,42 @@ class EvidencePacketRepository:
             raise EvidenceObjectStoreUnavailable(
                 "Hash-log WORM receipt requires a re-read-verifiable packet object."
             )
+        packet_index = self.store.get(
+            tenant_id,
+            PACKET_INDEX_KIND,
+            self._packet_index_id(namespace, trace_id),
+        )
+        if packet_index is None:
+            raise EvidenceObjectStoreUnavailable(
+                "Hash-log WORM receipt requires the durable packet index."
+            )
+        index_payload = packet_index.payload
+        index_verification = index_payload.get("object_lock_verification")
+        if not isinstance(index_verification, Mapping):
+            raise EvidenceObjectStoreUnavailable(
+                "Hash-log WORM receipt requires the packet index's structured receipt."
+            )
+        verification_payload = dict(index_verification)
         payload = {
             "schema_version": "cas_harness_evidence_packet_hash_log_worm_receipt.v1",
             "namespace": namespace,
             "trace_id": trace_id,
             "entry_sha256": entry_hash,
             "packet_content_sha256": content_hash,
-            "object_key": self._object_key(tenant_id, namespace, trace_id),
-            "version_id": receipt.version_id,
-            "object_lock_mode": receipt.mode,
-            "object_lock_retain_until": receipt.retain_until.astimezone(UTC).isoformat(),
+            "object_key": index_payload.get("object_key"),
+            "version_id": index_payload.get("version_id"),
+            "object_lock_mode": index_payload.get("object_lock_mode"),
+            "object_lock_retain_until": index_payload.get("object_lock_retain_until"),
+            "object_lock_minimum_retain_until": index_payload.get(
+                "object_lock_minimum_retain_until"
+            ),
+            "retention_days": index_payload.get("retention_days"),
+            "retention_requested_at": index_payload.get("retention_requested_at"),
+            "retention_requested_until": index_payload.get(
+                "retention_requested_until"
+            ),
             "reread_verified": True,
+            "object_lock_verification": verification_payload,
         }
         record_id = self._hash_receipt_id(entry_hash)
         record = LedgerRecord.new(
@@ -854,15 +1179,81 @@ class EvidencePacketRepository:
                 != packet_index.payload.get("object_key")
                 or receipt.payload.get("version_id")
                 != packet_index.payload.get("version_id")
-                or receipt.payload.get("reread_verified") is not True
-                or not _retain_until_is_future(
-                    receipt.payload.get("object_lock_retain_until")
+                or not self._stored_worm_receipt_matches(
+                    receipt.payload, packet_index.payload
                 )
             ):
                 chain_ok = False
             found[current] = entry
             current = _text(entry.get("previous_entry_sha256"))
         return found, chain_ok
+
+    def _stored_worm_receipt_matches(
+        self,
+        receipt: Mapping[str, Any],
+        packet_index: Mapping[str, Any],
+    ) -> bool:
+        """Re-run the shared exact-binding predicate for durable ledger rows."""
+
+        raw_verification = receipt.get("object_lock_verification")
+        if not isinstance(raw_verification, Mapping):
+            # Legacy prose/boolean rows cannot license a current WORM claim.
+            return False
+        stable_fields = (
+            "object_key",
+            "version_id",
+            "object_lock_mode",
+            "object_lock_retain_until",
+            "object_lock_minimum_retain_until",
+            "retention_days",
+            "retention_requested_at",
+            "retention_requested_until",
+        )
+        if any(receipt.get(field) != packet_index.get(field) for field in stable_fields):
+            return False
+        key = _text(packet_index.get("object_key"))
+        version_id = _text(packet_index.get("version_id"))
+        content_hash = _text(packet_index.get("content_sha256"))
+        if key is None or version_id is None or content_hash is None:
+            return False
+        try:
+            self._stored_packet_receipt_requirements(
+                packet_index,
+                expected_key=key,
+                expected_version=version_id,
+                expected_content_hash=content_hash,
+            )
+        except EvidenceObjectStoreError:
+            return False
+        object_url = _text(packet_index.get("object_url"))
+        assert object_url is not None
+        parsed = urlparse(object_url)
+        object_key = unquote(parsed.path.lstrip("/"))
+        expected = {
+            "bucket": parsed.netloc,
+            "key": object_key,
+            "version_id": version_id,
+            "content_sha256": content_hash,
+            "mode": packet_index.get("object_lock_mode"),
+            "retention_days": packet_index.get("retention_days"),
+            "requested_at": packet_index.get("retention_requested_at"),
+            # The authenticated expected binding is the original write request.
+            # A stronger bucket default belongs to observed/minimum state and is
+            # enforced separately by _stored_packet_receipt_requirements.
+            "retain_until": packet_index.get("retention_requested_until"),
+        }
+        verification = revalidate_object_lock_verification(
+            raw_verification,
+            expected=expected,
+        )
+        return bool(
+            receipt.get("reread_verified") is True
+            and verification is not None
+            and verification.verified
+            and verification.issuer_attestation is not None
+            and packet_index.get("object_lock_verification")
+            == receipt.get("object_lock_verification")
+        )
 
     def _acquire_hash_log_lease(self, tenant_id: str, namespace: str):
         resource = self._hash_lease_resource(namespace)
@@ -967,21 +1358,19 @@ def build_s3_evidence_packet_repository(store: StateStore) -> EvidencePacketRepo
         "CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX", "cas-harness/evidence-anchors"
     ).strip("/ ")
     region = os.environ.get("CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION", "").strip()
-    mode = os.environ.get(
-        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", ""
-    ).strip().upper()
-    days = os.environ.get(
-        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", ""
-    ).strip()
-    if mode not in {"GOVERNANCE", "COMPLIANCE"}:
+    require_stable_object_lock_receipt_attestation_key()
+    target = runtime_object_lock_policy_target()
+    if not target.configured or not target.valid or target.mode is None:
         raise EvidenceObjectStoreUnavailable(
             "Shared Evidence Packet storage requires Object Lock mode GOVERNANCE or COMPLIANCE."
         )
-    if not days.isdigit() or int(days) < 1:
+    if target.retention_days is None:
         raise EvidenceObjectStoreUnavailable(
             "Shared Evidence Packet storage requires a positive Object Lock retention period."
         )
-    policy = RetentionPolicy(mode=mode, retention_days=int(days))  # type: ignore[arg-type]
+    policy = RetentionPolicy(
+        mode=target.mode, retention_days=target.retention_days
+    )  # type: ignore[arg-type]
     backend = S3ObjectLockPacketBackend(
         bucket=bucket,
         prefix=f"{prefix}/packet-objects" if prefix else "packet-objects",
@@ -1027,23 +1416,72 @@ def _text(value: Any) -> str | None:
 
 def _aware_datetime(value: Any) -> datetime | None:
     if isinstance(value, datetime):
-        if value.tzinfo is None:
-            return value.replace(tzinfo=UTC)
+        if value.tzinfo is None or value.utcoffset() is None:
+            return None
         return value.astimezone(UTC)
     if isinstance(value, str):
         try:
             parsed = datetime.fromisoformat(value.replace("Z", "+00:00"))
         except ValueError:
             return None
-        if parsed.tzinfo is None:
-            parsed = parsed.replace(tzinfo=UTC)
+        if parsed.tzinfo is None or parsed.utcoffset() is None:
+            return None
         return parsed.astimezone(UTC)
     return None
 
 
-def _retain_until_is_future(value: Any) -> bool:
-    parsed = _aware_datetime(value)
-    return parsed is not None and parsed > datetime.now(UTC)
+def _s3_metadata_expectation(
+    head: Mapping[str, Any],
+    *,
+    expected_content_hash: str,
+) -> dict[str, Any]:
+    """Recover the winning writer's request boundary without trusting lock output.
+
+    A conditional-create collision has no local write timestamp.  The winner's
+    request metadata is therefore the only admissible source; using the
+    currently observed retain-until value as its own expectation would make a
+    shortened deadline self-validating.
+    """
+
+    metadata = head.get("Metadata")
+    if not isinstance(metadata, Mapping):
+        raise EvidenceObjectStoreUnavailable(
+            "S3 packet receipt is missing retention request metadata."
+        )
+    content_hash = _text(metadata.get("content-sha256"))
+    mode = _text(metadata.get("retention-mode"))
+    days_text = _text(metadata.get("retention-days"))
+    requested_at = _aware_datetime(metadata.get("retention-requested-at"))
+    requested_until = _aware_datetime(metadata.get("retention-requested-until"))
+    if content_hash != expected_content_hash:
+        raise EvidenceObjectStoreUnavailable(
+            "S3 packet retention metadata does not bind the expected content hash."
+        )
+    if mode not in {"GOVERNANCE", "COMPLIANCE"}:
+        raise EvidenceObjectStoreUnavailable(
+            "S3 packet retention metadata has no valid Object Lock mode."
+        )
+    if days_text is None or not days_text.isdigit() or int(days_text) < 1:
+        raise EvidenceObjectStoreUnavailable(
+            "S3 packet retention metadata has no positive retention_days value."
+        )
+    retention_days = int(days_text)
+    if requested_at is None or requested_until is None:
+        raise EvidenceObjectStoreUnavailable(
+            "S3 packet retention metadata has no timezone-aware request boundary."
+        )
+    if requested_until < requested_at + timedelta(days=retention_days):
+        raise EvidenceObjectStoreUnavailable(
+            "S3 packet retention metadata is shorter than the full retention_days window."
+        )
+    return {
+        "mode": mode,
+        "retention_days": retention_days,
+        "requested_at": requested_at,
+        "requested_retain_until": requested_until,
+    }
+
+
 
 
 def _is_precondition_failure(exc: Exception) -> bool:

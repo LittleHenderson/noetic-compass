@@ -1,27 +1,60 @@
 from __future__ import annotations
 
+from datetime import UTC, datetime, timedelta
+
+from tests.object_lock_test_support import issue_test_object_lock_receipt
 from api.services.cas_harness_verdict_runner import (
     packet_proof_is_worm_retained,
     run_evidence_gated_verdict,
 )
 
 
-def _chip(chip_id: str, status: str) -> dict[str, str]:
+def _verified_receipt() -> dict[str, object]:
+    retain_until = datetime.now(UTC) + timedelta(days=30)
+    requested_at = retain_until - timedelta(days=30)
+    return issue_test_object_lock_receipt(
+        expected={
+            "bucket": "verdict-bucket",
+            "key": "trace-123.json",
+            "version_id": "version-123",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retention_days": 30,
+            "requested_at": requested_at,
+            "retain_until": retain_until,
+        },
+        observed={
+            "bucket": "verdict-bucket",
+            "key": "trace-123.json",
+            "get_version_id": "version-123",
+            "head_version_id": "version-123",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retain_until": retain_until,
+            "reread_verified": True,
+        },
+    ).to_dict()
+
+
+def _chip(chip_id: str, status: str) -> dict[str, object]:
     detail = f"{chip_id} is {status}"
     if chip_id == "packet_proof" and status == "verified":
         detail = (
             "Evidence Packet trace-123 is WORM retained: S3 anchor re-read matched "
             "the packet/hash-log manifest and Object Lock GOVERNANCE retention is active."
         )
-    return {
+    chip: dict[str, object] = {
         "id": chip_id,
         "name": chip_id,
         "status": status,
         "detail": detail,
     }
+    if chip_id == "packet_proof" and status == "verified":
+        chip["object_lock_verification"] = _verified_receipt()
+    return chip
 
 
-def _complete_chips(status: str = "present") -> list[dict[str, str]]:
+def _complete_chips(status: str = "present") -> list[dict[str, object]]:
     return [
         _chip("model_proof", status),
         _chip("cas_readout", status),
@@ -101,7 +134,7 @@ def test_explicit_verifier_decision_can_accept_when_required_proof_is_worm_retai
 
 def test_explicit_accept_is_blocked_when_packet_is_not_worm_retained():
     chips = _complete_chips("verified")
-    chips[-1]["detail"] = "Evidence Packet trace-123 is present and hash verification matched."
+    chips[-1].pop("object_lock_verification")
 
     result = run_evidence_gated_verdict(
         evidence_packet_trace_id="trace-123",
@@ -130,11 +163,14 @@ def test_explicit_suppress_is_blocked_when_packet_is_not_worm_retained():
     assert "WORM-retained Evidence Packet" in result.message
 
 
-def test_packet_worm_gate_requires_object_lock_and_active_retention_text():
+def test_packet_worm_gate_requires_structured_receipt_not_prose():
     chips = _complete_chips("verified")
     assert packet_proof_is_worm_retained(chips) is True
 
-    chips[-1]["detail"] = "Evidence Packet trace-123 is S3 verified but Object Lock was not requested."
+    chips[-1].pop("object_lock_verification")
+    chips[-1]["detail"] = (
+        "Evidence Packet trace-123 is WORM retained and Object Lock retention is active forever."
+    )
     assert packet_proof_is_worm_retained(chips) is False
 
 

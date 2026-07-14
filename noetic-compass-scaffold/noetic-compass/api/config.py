@@ -1,6 +1,7 @@
 """Application configuration via environment variables."""
 
 from pathlib import Path
+import os
 
 from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings
@@ -147,6 +148,17 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices(
             "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED",
             "EVIDENCE_PACKET_OBJECT_STORE_ENABLED",
+        ),
+    )
+    # Stable server-only HMAC key for serialized exact-version Object Lock
+    # verifier receipts.  It is intentionally distinct from JWT signing.  A
+    # rotation invalidates existing durable receipts, so production must retain
+    # this key unchanged unless a keyring/migration is introduced first.
+    object_lock_receipt_attestation_key: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY",
+            "OBJECT_LOCK_RECEIPT_ATTESTATION_KEY",
         ),
     )
 
@@ -361,6 +373,29 @@ class Settings(BaseSettings):
     db_user: str = "noetic"
     db_password: str = "noetic_dev"
 
+    def validate_object_lock_receipt_attestation(self) -> None:
+        """Require a stable MAC key for every production-capable S3 lock path."""
+
+        anchor_mode = os.environ.get(
+            "CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "disabled"
+        ).strip().lower()
+        lock_target_present = bool(
+            os.environ.get(
+                "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", ""
+            ).strip()
+            or os.environ.get(
+                "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", ""
+            ).strip()
+        )
+        if (
+            self.evidence_packet_object_store_enabled
+            or (anchor_mode == "s3" and lock_target_present)
+        ) and len(self.object_lock_receipt_attestation_key.encode("utf-8")) < 32:
+            raise RuntimeError(
+                "S3 Object Lock receipts require stable "
+                "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY with at least 32 bytes."
+            )
+
     def validate_account_storage(self) -> None:
         """Fail loud unless account mode has an explicitly persistent shared backend."""
         if self.billing_entitlements_enabled and not self.accounts_enabled:
@@ -413,6 +448,7 @@ class Settings(BaseSettings):
             raise RuntimeError("Account mode pins NC_JWT_ALGORITHM=HS256.")
         if len(self.jwt_secret.encode("utf-8")) < 32:
             raise RuntimeError("Account mode requires NC_JWT_SECRET with at least 32 bytes.")
+        self.validate_object_lock_receipt_attestation()
         if self.account_bootstrap_secret and len(
             self.account_bootstrap_secret.encode("utf-8")
         ) < 32:

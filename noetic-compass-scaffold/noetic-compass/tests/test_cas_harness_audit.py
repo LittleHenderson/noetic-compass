@@ -10,6 +10,11 @@ from api.services.cas_harness_merged_evidence_packets import (
     reset_merged_fleet_evidence_packets_for_tests,
 )
 from api.services.cas_harness_tks_definition_lock import LOCKED_TKS_DEFINITION_SHA256
+from tests.object_lock_test_support import issue_test_object_lock_receipt
+
+
+_TEST_WORM_RETAIN_UNTIL = "2099-06-28T00:00:00+00:00"
+_TEST_WORM_REQUESTED_AT = "2026-01-01T00:00:00+00:00"
 
 
 def setup_function() -> None:
@@ -91,22 +96,50 @@ def _complete_stage21_packet(*, action: str = "allow", accepted: bool = True) ->
 
 
 def _attach_worm_anchor(packet: dict) -> dict:
+    key = f"cas-harness/evidence-anchors/{packet['trace_id']}/anchor.json"
     packet.setdefault("hashes", {})["external_anchor"] = {
         "status": "anchored",
         "mode": "s3",
         "anchor_uri": (
             "s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/"
-            f"{packet['trace_id']}/anchor.json"
+            f"{packet['trace_id']}/anchor.json?versionId=version-test"
         ),
+        "bucket": "cas-harness-runpod-92754088",
+        "key": key,
+        "version_id": "version-test",
         "manifest_sha256": "a" * 64,
         "object_lock_mode": "GOVERNANCE",
-        "object_lock_retain_until": "2026-06-28T00:00:00+00:00",
+        "retention_requested_at": _TEST_WORM_REQUESTED_AT,
+        "object_lock_retain_until": _TEST_WORM_RETAIN_UNTIL,
         "retention_days": 30,
     }
     return packet
 
 
 def _worm_verify_hashes(trace_id: str) -> dict:
+    key = f"cas-harness/evidence-anchors/{trace_id}/anchor.json"
+    verification = issue_test_object_lock_receipt(
+        expected={
+            "bucket": "cas-harness-runpod-92754088",
+            "key": key,
+            "version_id": "version-test",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retention_days": 30,
+            "requested_at": _TEST_WORM_REQUESTED_AT,
+            "retain_until": _TEST_WORM_RETAIN_UNTIL,
+        },
+        observed={
+            "bucket": "cas-harness-runpod-92754088",
+            "key": key,
+            "get_version_id": "version-test",
+            "head_version_id": "version-test",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retain_until": _TEST_WORM_RETAIN_UNTIL,
+            "reread_verified": True,
+        },
+    )
     return {
         "trace_id": trace_id,
         "overall": "all_match",
@@ -117,9 +150,9 @@ def _worm_verify_hashes(trace_id: str) -> dict:
                 "actual": "a" * 64,
                 "match": True,
                 "notes": (
-                    "S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, "
-                    "and Object Lock GOVERNANCE retention is active until 2026-06-28T00:00:00+00:00"
+                    "display prose is not the WORM verification predicate"
                 ),
+                "object_lock_verification": verification.to_dict(),
             }
         ],
     }

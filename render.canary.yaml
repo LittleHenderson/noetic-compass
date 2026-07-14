@@ -142,6 +142,11 @@ projects:
                 # One-day buffer above the bucket policy's enforced 30-day
                 # minimum avoids a rounding edge at request evaluation time.
                 value: "31"
+              # Stable server-only HMAC authority for exact-version Object Lock
+              # receipts. Keep identical across canary replicas and do not rotate
+              # until a receipt-key migration/keyring exists.
+              - key: NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY
+                sync: false
               - key: AWS_ACCESS_KEY_ID
                 sync: false
               - key: AWS_SECRET_ACCESS_KEY

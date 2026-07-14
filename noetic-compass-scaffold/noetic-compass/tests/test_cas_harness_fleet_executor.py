@@ -10,6 +10,7 @@ import types
 
 import pytest
 
+from api.config import settings
 from api.middleware.auth import create_token
 from api.services.cas_harness_distributed_audits import reset_distributed_audits_for_tests
 from api.services.cas_harness_fleet_executor import (
@@ -26,6 +27,15 @@ from api.services.cas_harness_merged_evidence_packets import (
 def setup_function() -> None:
     reset_fleet_executor_for_tests()
     reset_distributed_audits_for_tests()
+
+
+@pytest.fixture(autouse=True)
+def _stable_object_lock_receipt_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        settings,
+        "object_lock_receipt_attestation_key",
+        "test-object-lock-receipt-key-32-bytes-minimum",
+    )
 
 
 @pytest.fixture
@@ -166,6 +176,7 @@ class _FakeS3Body:
 class _FakeS3Client:
     def __init__(self) -> None:
         self.objects: dict[tuple[str, str], bytes] = {}
+        self.versions: dict[tuple[str, str], str] = {}
         self.object_locks: dict[tuple[str, str], dict] = {}
         self.put_calls: list[dict] = []
         self.get_calls: list[tuple[str, str]] = []
@@ -179,24 +190,38 @@ class _FakeS3Client:
         if isinstance(body, str):
             body = body.encode("utf-8")
         self.objects[(bucket, key)] = body
+        version_id = f"version-{len(self.put_calls)}"
+        self.versions[(bucket, key)] = version_id
         if kwargs.get("ObjectLockMode") and kwargs.get("ObjectLockRetainUntilDate"):
             self.object_locks[(bucket, key)] = {
                 "ObjectLockMode": kwargs["ObjectLockMode"],
                 "ObjectLockRetainUntilDate": kwargs["ObjectLockRetainUntilDate"],
+                "Metadata": dict(kwargs.get("Metadata") or {}),
             }
-        return {"ETag": f'"{hashlib.md5(body).hexdigest()}"'}
+        return {
+            "ETag": f'"{hashlib.md5(body).hexdigest()}"',
+            "VersionId": version_id,
+        }
 
     def get_object(self, **kwargs) -> dict:
         bucket = kwargs["Bucket"]
         key = kwargs["Key"]
+        assert kwargs.get("VersionId") == self.versions[(bucket, key)]
         self.get_calls.append((bucket, key))
-        return {"Body": _FakeS3Body(self.objects[(bucket, key)])}
+        return {
+            "Body": _FakeS3Body(self.objects[(bucket, key)]),
+            "VersionId": self.versions[(bucket, key)],
+        }
 
     def head_object(self, **kwargs) -> dict:
         bucket = kwargs["Bucket"]
         key = kwargs["Key"]
+        assert kwargs.get("VersionId") == self.versions[(bucket, key)]
         self.head_calls.append((bucket, key))
-        return self.object_locks.get((bucket, key), {})
+        return {
+            **self.object_locks.get((bucket, key), {}),
+            "VersionId": self.versions[(bucket, key)],
+        }
 
 
 def test_fleet_routes_registered(client):
@@ -518,7 +543,8 @@ def test_s3_anchor_verify_detects_remote_object_tampering(client, auth_headers, 
         headers=auth_headers,
     ).json()
     trace_id = merged["merged_packet_trace_id"]
-    anchor = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()["hashes"]["external_anchor"]
+    packet = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()
+    anchor = packet["hashes"]["external_anchor"]
 
     fake_s3.objects[(anchor["bucket"], anchor["key"])] = b'{"tampered":true}'
     verified = client.post(f"/evidence/{trace_id}/verify", headers=auth_headers).json()
@@ -570,7 +596,8 @@ def test_s3_anchor_object_lock_is_verified(client, auth_headers, monkeypatch, tm
         headers=auth_headers,
     ).json()
     trace_id = merged["merged_packet_trace_id"]
-    anchor = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()["hashes"]["external_anchor"]
+    packet = client.get(f"/evidence/{trace_id}", headers=auth_headers).json()
+    anchor = packet["hashes"]["external_anchor"]
 
     assert anchor["status"] == "anchored"
     assert anchor["object_lock_mode"] == "GOVERNANCE"
@@ -589,9 +616,82 @@ def test_s3_anchor_object_lock_is_verified(client, auth_headers, monkeypatch, tm
     assert any(
         check["artifact"] == "merged_packet_external_anchor"
         and check["match"] is True
-        and "Object Lock GOVERNANCE retention is active" in check["notes"]
+        and check["object_lock_verification"]["verified"] is True
+        and check["object_lock_verification"]["expected"]["version_id"]
+        == anchor["version_id"]
+        and check["object_lock_verification"]["observed"]["get_version_id"]
+        == anchor["version_id"]
+        and check["object_lock_verification"]["observed"]["head_version_id"]
+        == anchor["version_id"]
         for check in verified["checks"]
     )
+
+    # Local packet fields are mutable storage, not the authority for the write
+    # request.  S3 metadata remains original and both substitutions must fail.
+    from api.services.cas_harness_evidence_anchor import verify_anchor
+
+    for field, value in (
+        ("retention_days", 1),
+        ("retention_requested_at", "2026-01-01T00:00:00+00:00"),
+    ):
+        substituted = json.loads(json.dumps(packet))
+        substituted["hashes"]["external_anchor"][field] = value
+        check = verify_anchor(substituted)
+        assert check["match"] is False
+        assert "do not match authoritative S3" in check["notes"]
+        assert check["object_lock_verification"]["verified"] is False
+        assert check["object_lock_verification"]["issuer_attestation"] is None
+
+    fragment = json.loads(json.dumps(packet))
+    fragment["hashes"]["external_anchor"]["anchor_uri"] += "#ignored"
+    fragment_check = verify_anchor(fragment)
+    assert fragment_check["match"] is False
+    assert "exact s3:// object-version receipt" in fragment_check["notes"]
+
+    metadata = fake_s3.object_locks[(anchor["bucket"], anchor["key"])]["Metadata"]
+    metadata["retention-requested-at"] = "2026-01-01T00:00:00"
+    naive = verify_anchor(packet)
+    assert naive["match"] is False
+    assert "timezone-aware request boundary" in naive["notes"]
+
+
+def test_s3_object_lock_anchor_refuses_write_without_stable_receipt_key(
+    monkeypatch,
+    tmp_path,
+) -> None:
+    from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry
+
+    fake_s3 = _FakeS3Client()
+    monkeypatch.setitem(
+        sys.modules,
+        "boto3",
+        types.SimpleNamespace(client=lambda service, **kwargs: fake_s3),
+    )
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", "s3")
+    monkeypatch.setenv(
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "cas-harness-test-anchor"
+    )
+    monkeypatch.setenv(
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE"
+    )
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "30")
+    monkeypatch.setattr(settings, "object_lock_receipt_attestation_key", "")
+
+    result = anchor_hash_log_entry(
+        trace_id="trace-missing-receipt-key",
+        hash_log_entry={
+            "audit_id": "audit-missing-receipt-key",
+            "packet_without_hashes_sha256": "a" * 64,
+            "entry_sha256": "b" * 64,
+            "previous_entry_sha256": None,
+        },
+        packet_path=tmp_path / "packet.json",
+        hash_log_path=tmp_path / "hash-log.jsonl",
+    )
+
+    assert result["status"] == "failed"
+    assert "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY" in result["reason"]
+    assert fake_s3.put_calls == []
 
 
 def test_s3_anchor_object_lock_metadata_missing_fails_verify(client, auth_headers, monkeypatch, tmp_path):
@@ -641,7 +741,9 @@ def test_s3_anchor_object_lock_metadata_missing_fails_verify(client, auth_header
     assert any(
         check["artifact"] == "merged_packet_external_anchor"
         and check["match"] is False
-        and "Object Lock mode did not match" in check["notes"]
+        and check["object_lock_verification"]["verified"] is False
+        and "Object Lock mode mismatch"
+        in check["object_lock_verification"]["failure_reasons"]
         for check in verified["checks"]
     )
 

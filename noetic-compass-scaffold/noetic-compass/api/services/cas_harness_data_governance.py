@@ -4,15 +4,15 @@ The distributed CAS Harness audit is not only a measurement -- it is a data
 *harvest*. Every run captures the target model's real signal -- its inputs and
 outputs, the pooled hidden-state activations the probe hooks, the CAS axis readout
 each worker shard emits (declared in every shard's ``expected_outputs``), and the
-run's verdict -- and commits it to an immutable, write-once store, where it becomes
-labelled training signal for CAS-Native. That harvest is a property of the *method*:
+run's verdict -- for fleet-side evidence processing and labelled CAS-Native training
+signal. That harvest is a property of the *method*:
 it happens on **every** distributed run, frontier or not, because every run hooks
 real activations and emits a real readout.
 
 This gate makes that capture explicit and requires the caller to acknowledge it.
-The specific dishonest-by-omission failure it prevents: a customer's model signal
-being persisted (immutably, indefinitely) and reused to improve a product we sell,
-without the customer ever having been told or asked.
+The specific dishonest-by-omission failure it prevents is a customer's model signal
+being captured and reused to improve a product we sell without the customer ever
+having been told or asked. Storage claims remain separate and receipt-backed.
 
 It is **universal, not frontier-only** -- mirroring gate (2) and for the same kind of
 reason. The frontier artifact gates (3)/(5)/(6)/(7) relax below the frontier because
@@ -24,9 +24,9 @@ acknowledgment is required for *every* distributed run regardless of scale. It i
 captures nothing, so it is never asked for there.
 
 Honesty contract, mirroring the other gates' declared-vs-verified split:
-  * ``DATA_CAPTURE_WORM_COMMITTED`` -- the fleet actually wrote the captured signal
-      to the immutable store. Fleet-side only; **never** produced at the API tier,
-      where no capture has happened yet.
+  * ``DATA_CAPTURE_WORM_COMMITTED`` -- the fleet has an actual re-read-verified S3
+      Object Lock receipt for the captured signal. Fleet-side only; **never** produced
+      at the API tier, where no capture has happened yet.
   * ``DATA_CAPTURE_ACKNOWLEDGED``   -- the caller acknowledged the capture/retention/
       reuse terms. Enough to *create* a run, never on its own a customer ACCEPT.
   * ``DATA_CAPTURE_NOT_ACKNOWLEDGED`` -- a run with no acknowledgment -> a
@@ -37,6 +37,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from typing import Literal
+
+from api.services.cas_harness_retention_disclosure import (
+    RETENTION_MODEL,
+    ObjectLockRetentionDisclosure,
+    configured_object_lock_retention_disclosure,
+    retention_model_for_mode,
+)
 
 
 DataCaptureStatus = Literal[
@@ -56,9 +63,6 @@ CAPTURED_SIGNAL_CLASSES: tuple[str, ...] = (
     "cas_axis_readout",
     "audit_verdict",
 )
-# Write-once-read-many: the store is immutable, so captured signal cannot be
-# selectively redacted after the fact. Stated plainly rather than softened.
-RETENTION_MODEL = "write_once_read_many"
 REUSE_PURPOSE = "cas_native_training_corpus"
 
 
@@ -74,12 +78,12 @@ class DataCaptureSummary:
 
     status: DataCaptureStatus
     acknowledged: bool
-    # Always False at the API tier: the captured signal is written to the immutable
-    # store fleet-side, when the workers run, never at this tier where no model has
-    # executed. Mirrors the other gates' *_verified / *_metered fields.
+    # Always False at the API tier: only an actual re-read-verified fleet-side
+    # Object Lock receipt can make this True.
     capture_committed: bool
     captured_signal_classes: tuple[str, ...]
     retention_model: str
+    retention_disclosure: ObjectLockRetentionDisclosure
     reuse_purpose: str
     notice: str
     reasons: tuple[str, ...] = ()
@@ -95,43 +99,59 @@ class DataCaptureSummary:
             "capture_committed": self.capture_committed,
             "captured_signal_classes": list(self.captured_signal_classes),
             "retention_model": self.retention_model,
+            "retention_disclosure": self.retention_disclosure.to_dict(),
             "reuse_purpose": self.reuse_purpose,
             "notice": self.notice,
             "reasons": list(self.reasons),
         }
 
 
-def data_capture_requirement_notice() -> str:
-    return (
+def data_capture_requirement_notice(
+    *, retention_disclosure: ObjectLockRetentionDisclosure | None = None
+) -> str:
+    capture_notice = (
         "A distributed CAS Harness audit captures the target model's real signal -- its "
         "inputs and outputs, the pooled hidden-state activations the probe hooks, the CAS "
-        "axis readout each worker shard emits, and the run's verdict -- and commits it to an "
-        "immutable, write-once store, where it becomes labelled training signal for CAS-Native. "
-        "This capture happens on every distributed run regardless of model size and is retained "
-        "indefinitely; it is not billed back and cannot be selectively deleted from the "
-        "write-once store. This gate requires the caller to acknowledge that capture, retention, "
-        "and reuse before a run is created. The actual write is performed fleet-side when the "
-        "workers run -- nothing is captured at the API tier, which only records the acknowledgment."
+        "axis readout each worker shard emits, and the run's verdict -- for fleet-side evidence "
+        "processing and labelled CAS-Native training signal. This capture happens on every "
+        "distributed run regardless of model size. This gate requires the caller to acknowledge "
+        "capture and reuse before a run is created. The API tier only records the acknowledgment; "
+        "nothing is captured at the API tier. "
     )
+    retention = retention_disclosure or configured_object_lock_retention_disclosure(
+        subject="captured audit signal"
+    )
+    return capture_notice + retention.notice
+
+
+DATA_CAPTURE_OPENAPI_DESCRIPTION = (
+    "Required to CREATE any real distributed run via /distributed/session, frontier or not. "
+    + data_capture_requirement_notice()
+    + " Setting accept_audit_data_capture=true records acknowledgment only; it never creates "
+    "DATA_CAPTURE_WORM_COMMITTED. Ignored by the planning-only /scale-plan endpoint. Run-gate (8)."
+)
 
 
 def summarize_data_capture(*, acknowledged: bool) -> DataCaptureSummary:
     """Resolve a data-capture acknowledgement to its honest tri-state summary.
 
     Acknowledged -> ``DATA_CAPTURE_ACKNOWLEDGED`` (never ``DATA_CAPTURE_WORM_COMMITTED``
-    here; the immutable write happens fleet-side). Not acknowledged ->
+    here; only a verified fleet-side receipt can prove the write). Not acknowledged ->
     ``DATA_CAPTURE_NOT_ACKNOWLEDGED`` with a reason that names what is captured, where
     it goes, and the acknowledgement flag.
     """
 
+    retention_disclosure = configured_object_lock_retention_disclosure(
+        subject="captured audit signal"
+    )
     reasons: list[str] = []
     if not acknowledged:
         reasons.append(
             "a distributed CAS Harness audit captures the target model's inputs/outputs, "
-            "pooled hidden-state activations, CAS axis readout, and verdict and commits them to "
-            "an immutable write-once store reused as CAS-Native training signal. Set "
-            "accept_audit_data_capture=true to acknowledge that capture, indefinite WORM "
-            "retention, and reuse before the run is created."
+            "pooled hidden-state activations, CAS axis readout, and verdict for fleet-side "
+            "evidence processing and CAS-Native training reuse. Set "
+            "accept_audit_data_capture=true to acknowledge that capture and reuse. "
+            + retention_disclosure.notice
         )
 
     status: DataCaptureStatus = (
@@ -142,9 +162,12 @@ def summarize_data_capture(*, acknowledged: bool) -> DataCaptureSummary:
         acknowledged=acknowledged,
         capture_committed=False,
         captured_signal_classes=CAPTURED_SIGNAL_CLASSES,
-        retention_model=RETENTION_MODEL,
+        retention_model=retention_model_for_mode(retention_disclosure.mode),
+        retention_disclosure=retention_disclosure,
         reuse_purpose=REUSE_PURPOSE,
-        notice=data_capture_requirement_notice(),
+        notice=data_capture_requirement_notice(
+            retention_disclosure=retention_disclosure
+        ),
         reasons=tuple(reasons),
     )
 

@@ -736,6 +736,40 @@ def test_evidence_anchor_worm_retained_flag_packet_stays_flag(
     Without this, console_state keyed on worm_retained alone and silently upgraded
     a FLAG to a SCOPED-VALIDATION ACCEPT on lock."""
     import api.routes.evidence as evidence_route
+    from datetime import UTC, datetime, timedelta
+    from api.services.cas_harness_retention_disclosure import (
+        object_lock_retention_disclosure,
+    )
+    from tests.object_lock_test_support import issue_test_object_lock_receipt
+
+    retain_until = datetime.now(UTC) + timedelta(days=31)
+    requested_at = retain_until - timedelta(days=31)
+    verification = issue_test_object_lock_receipt(
+        expected={
+            "bucket": "test-bucket",
+            "key": "cas-harness/evidence-anchors/x.json",
+            "version_id": "version-x",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retention_days": 31,
+            "requested_at": requested_at,
+            "retain_until": retain_until,
+        },
+        observed={
+            "bucket": "test-bucket",
+            "key": "cas-harness/evidence-anchors/x.json",
+            "get_version_id": "version-x",
+            "head_version_id": "version-x",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retain_until": retain_until,
+            "reread_verified": True,
+        },
+    )
+    disclosure = object_lock_retention_disclosure(
+        subject=f"Evidence Packet {_STAGE9_40E_PYTHIA_TRACE_ID}",
+        verification_receipt=verification,
+    )
 
     def _fake_worm_retained(_anchored, _verify):
         return {
@@ -748,6 +782,11 @@ def test_evidence_anchor_worm_retained_flag_packet_stays_flag(
             "external_anchor_notes": (
                 "object was re-read; object lock GOVERNANCE; retention is active"
             ),
+            "object_lock_mode": "GOVERNANCE",
+            "object_lock_retain_until": retain_until.isoformat(),
+            "retention_days": 31,
+            "object_lock_verification": verification.to_dict(),
+            "retention_disclosure": disclosure.to_dict(),
         }
 
     monkeypatch.setattr(
@@ -763,6 +802,9 @@ def test_evidence_anchor_worm_retained_flag_packet_stays_flag(
     assert resp.status_code == 200, resp.text
     body = resp.json()
     assert body["worm_retained"] is True
+    assert body["retention_disclosure"]["receipt_verified"] is True
+    assert body["retention_disclosure"]["retention_days"] == 31
+    assert body["retention_disclosure"]["permanent_or_indefinite"] is False
     # ... but the FLAG verdict must hold: NOT accept_scoped_validation.
     assert body["console_state"] == "flag_for_human_review"
     assert "never upgrades a FLAG to an ACCEPT" in body["message"]

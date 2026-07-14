@@ -509,6 +509,7 @@ def _set_valid_canary_environment(monkeypatch) -> None:
         "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS": str(
             ACCOUNT_CANARY_OBJECT_LOCK_RETENTION_DAYS
         ),
+        "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY": "r" * 32,
         "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET": "test-only-canary-bucket",
         "AWS_ACCESS_KEY_ID": "test-only-access-key",
         "AWS_SECRET_ACCESS_KEY": "test-only-secret-key",
@@ -758,6 +759,36 @@ def test_canary_environment_guard_rejects_object_store_boundary_drift(
             expected_limit=ACCOUNT_CANARY_QUOTA_LIMIT,
             expected_service_id=ACCOUNT_CANARY_SERVICE_ID,
         )
+
+
+@pytest.mark.parametrize(
+    "secret",
+    (
+        "",
+        "r" * 31,
+        ("r" * 31) + " ",
+        " " + ("r" * 32),
+        ("r" * 32) + "\n",
+        ("r" * 31) + "é",
+    ),
+)
+def test_canary_environment_guard_requires_safe_receipt_attestation_authority(
+    monkeypatch, secret: str
+) -> None:
+    _set_valid_canary_environment(monkeypatch)
+    monkeypatch.setenv("NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY", secret)
+
+    with pytest.raises(
+        ProofFailure,
+        match="Object Lock receipt attestation authority has safe syntax",
+    ) as exc_info:
+        _require_canary_environment(
+            expected_limit=ACCOUNT_CANARY_QUOTA_LIMIT,
+            expected_service_id=ACCOUNT_CANARY_SERVICE_ID,
+        )
+
+    if secret:
+        assert secret not in str(exc_info.value)
 
 
 @pytest.mark.parametrize(

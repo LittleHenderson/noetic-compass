@@ -1,18 +1,21 @@
 from __future__ import annotations
 
 from concurrent.futures import ThreadPoolExecutor
+from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 import hashlib
 import json
 from pathlib import Path
 import threading
 from types import SimpleNamespace
+from urllib.parse import quote
 
 import pytest
 from fastapi.testclient import TestClient
 
 from api.config import settings
 from api.services.accounts.store import AccountStore
+from api.services.cas_harness_audit_sessions import configure_audit_session_store
 from api.services.cas_harness_evidence_object_store import (
     EvidenceObjectStoreUnavailable,
     EvidencePacketRepository,
@@ -37,23 +40,34 @@ from api.services.cas_harness_merged_evidence_packets import (
 from api.services.evidence_ownership import record_evidence_ownership
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.services.production.worm_writes import LockReceipt, RetentionPolicy
+from tests.object_lock_test_support import issue_test_object_lock_receipt
 from api.services.sessions import SessionStore
+
+
+@pytest.fixture(autouse=True)
+def _stable_object_lock_receipt_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        settings,
+        "object_lock_receipt_attestation_key",
+        "test-object-lock-receipt-key-32-bytes-minimum",
+    )
 
 
 class _SharedVerifiedObjectBackend:
     """Test-only shared byte backend; never installed by application startup."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, extra_retention_days: int = 0) -> None:
         self._lock = threading.RLock()
         self._objects: dict[str, dict[str, object]] = {}
         self.put_count = 0
+        self.extra_retention_days = extra_retention_days
 
     def assert_ready(self, *, expected: RetentionPolicy) -> None:
         assert expected.retention_days >= 1
 
     def object_url(self, key: str, *, version_id: str | None = None) -> str:
-        suffix = f"?versionId={version_id}" if version_id else ""
-        return f"test-object-lock://shared/{key}{suffix}"
+        suffix = f"?versionId={quote(version_id, safe='')}" if version_id else ""
+        return f"s3://shared/{quote(key, safe='/')}{suffix}"
 
     def put_immutable(
         self,
@@ -67,12 +81,20 @@ class _SharedVerifiedObjectBackend:
             existing = self._objects.get(key)
             if existing is None:
                 self.put_count += 1
+                requested_at = datetime.now(UTC).replace(microsecond=0)
                 existing = {
                     "body": bytes(body),
                     "content_hash": content_hash,
                     "version_id": f"version-{self.put_count}",
                     "mode": policy.mode,
-                    "retain_until": datetime.now(UTC) + timedelta(days=policy.retention_days),
+                    "retention_days": policy.retention_days,
+                    "requested_at": requested_at,
+                    "requested_until": requested_at
+                    + timedelta(days=policy.retention_days),
+                    "retain_until": requested_at
+                    + timedelta(
+                        days=policy.retention_days + self.extra_retention_days
+                    ),
                 }
                 self._objects[key] = existing
             elif existing["content_hash"] != content_hash:
@@ -92,29 +114,86 @@ class _SharedVerifiedObjectBackend:
         version_id: str,
         content_hash: str,
         policy: RetentionPolicy,
+        requested_at: datetime,
+        requested_retain_until: datetime,
+        minimum_retain_until: datetime,
+        original_verified_at: datetime,
     ) -> LockReceipt:
         with self._lock:
             obj = self._objects[key]
             assert obj["version_id"] == version_id
             assert obj["content_hash"] == content_hash
             assert obj["mode"] == policy.mode
-            return self._receipt(key, obj)
+            assert obj["requested_at"] == requested_at
+            assert obj["requested_until"] == requested_retain_until
+            if obj["retain_until"] < minimum_retain_until:  # type: ignore[operator]
+                raise EvidenceObjectStoreUnavailable(
+                    "Object Lock retention was shortened below the durable observed minimum."
+                )
+            return self._receipt(
+                key,
+                obj,
+                minimum_retain_until=minimum_retain_until,
+                original_verified_at=original_verified_at,
+            )
 
     def tamper_for_test(self, key: str, body: bytes) -> None:
         with self._lock:
             self._objects[key]["body"] = body
 
-    def _receipt(self, key: str, obj: dict[str, object]) -> LockReceipt:
+    def shorten_retention_for_test(self, key: str, retain_until: datetime) -> None:
+        with self._lock:
+            self._objects[key]["retain_until"] = retain_until
+
+    def _receipt(
+        self,
+        key: str,
+        obj: dict[str, object],
+        *,
+        minimum_retain_until: datetime | None = None,
+        original_verified_at: datetime | None = None,
+    ) -> LockReceipt:
         version_id = str(obj["version_id"])
+        actual_hash = hashlib.sha256(bytes(obj["body"])).hexdigest()
+        observed_until = obj["retain_until"]
+        minimum_ok = (
+            minimum_retain_until is None
+            or (
+                isinstance(observed_until, datetime)
+                and observed_until >= minimum_retain_until
+            )
+        )
+        verification = issue_test_object_lock_receipt(
+            expected={
+                "bucket": "shared",
+                "key": key,
+                "version_id": version_id,
+                "content_sha256": str(obj["content_hash"]),
+                "mode": obj["mode"],
+                "retention_days": obj["retention_days"],
+                "requested_at": obj["requested_at"],
+                "retain_until": obj["requested_until"],
+            },
+            observed={
+                "bucket": "shared",
+                "key": key,
+                "get_version_id": version_id,
+                "head_version_id": version_id,
+                "content_sha256": actual_hash,
+                "mode": obj["mode"],
+                "retain_until": obj["retain_until"],
+                "reread_verified": minimum_ok,
+            },
+            verified_at=original_verified_at,
+        )
         return LockReceipt(
             object_url=self.object_url(key, version_id=version_id),
             version_id=version_id,
             retain_until=obj["retain_until"],  # type: ignore[arg-type]
             mode=obj["mode"],  # type: ignore[arg-type]
-            content_hash=str(obj["content_hash"]),
-            reread_verified=(
-                hashlib.sha256(bytes(obj["body"])).hexdigest() == obj["content_hash"]
-            ),
+            content_hash=actual_hash,
+            reread_verified=verification.verified,
+            verification_receipt=verification,
         )
 
 
@@ -134,8 +213,16 @@ class _PreconditionFailed(Exception):
 
 
 class _ObjectLockS3:
-    def __init__(self, *, ready: bool = True) -> None:
+    def __init__(
+        self,
+        *,
+        ready: bool = True,
+        version_id: str = "s3-version-1",
+        naive_retention_metadata: bool = False,
+    ) -> None:
         self.ready = ready
+        self.version_id = version_id
+        self.naive_retention_metadata = naive_retention_metadata
         self.objects: dict[tuple[str, str], dict[str, object]] = {}
         self.put_calls: list[dict[str, object]] = []
 
@@ -156,12 +243,18 @@ class _ObjectLockS3:
         address = (str(kwargs["Bucket"]), str(kwargs["Key"]))
         if address in self.objects:
             raise _PreconditionFailed()
-        version = "s3-version-1"
+        version = self.version_id
+        metadata = dict(kwargs["Metadata"])
+        if self.naive_retention_metadata:
+            metadata["retention-requested-at"] = str(
+                metadata["retention-requested-at"]
+            ).replace("+00:00", "")
         self.objects[address] = {
             "body": bytes(kwargs["Body"]),
             "version_id": version,
             "mode": kwargs["ObjectLockMode"],
             "retain_until": kwargs["ObjectLockRetainUntilDate"],
+            "metadata": metadata,
         }
         return {"VersionId": version, "ETag": '"etag"'}
 
@@ -172,12 +265,16 @@ class _ObjectLockS3:
             "VersionId": obj["version_id"],
             "ObjectLockMode": obj["mode"],
             "ObjectLockRetainUntilDate": obj["retain_until"],
+            "Metadata": dict(obj["metadata"]),
         }
 
     def get_object(self, **kwargs) -> dict:
         obj = self.objects[(str(kwargs["Bucket"]), str(kwargs["Key"]))]
         assert kwargs["VersionId"] == obj["version_id"]
-        return {"Body": _FakeS3Body(bytes(obj["body"]))}
+        return {
+            "Body": _FakeS3Body(bytes(obj["body"])),
+            "VersionId": obj["version_id"],
+        }
 
 
 def _repository(
@@ -238,6 +335,110 @@ def test_s3_backend_requires_versioning_and_object_lock_and_rereads_receipt() ->
     assert fake.put_calls[0]["ContentMD5"]
 
 
+def test_s3_receipt_percent_encodes_opaque_version_and_rejects_non_s3_scheme() -> None:
+    opaque_version = "opaque+aws/version=="
+    fake = _ObjectLockS3(version_id=opaque_version)
+    backend = S3ObjectLockPacketBackend(
+        bucket="packet-bucket",
+        prefix="cas/packet-objects",
+        client=fake,
+    )
+    body = b'{"trace_id":"trace-opaque-version"}'
+    receipt = backend.put_immutable(
+        key="tenants/key/packet.json",
+        body=body,
+        content_hash=hashlib.sha256(body).hexdigest(),
+        policy=RetentionPolicy(mode="GOVERNANCE", retention_days=30),
+    )
+
+    assert receipt.is_verifiable() is True
+    assert "versionId=opaque%2Baws%2Fversion%3D%3D" in receipt.object_url
+    assert "+" not in receipt.object_url.split("versionId=", 1)[1]
+    assert replace(receipt, object_url=receipt.object_url.replace("s3://", "https://")).is_verifiable() is False
+
+
+def test_s3_collision_never_uses_shortened_observed_deadline_as_expectation() -> None:
+    fake = _ObjectLockS3()
+    backend = S3ObjectLockPacketBackend(
+        bucket="packet-bucket",
+        prefix="cas/packet-objects",
+        client=fake,
+    )
+    policy = RetentionPolicy(mode="GOVERNANCE", retention_days=30)
+    body = b'{"trace_id":"trace-collision"}'
+    content_hash = hashlib.sha256(body).hexdigest()
+    backend.put_immutable(
+        key="tenants/key/collision.json",
+        body=body,
+        content_hash=content_hash,
+        policy=policy,
+    )
+    stored = fake.objects[("packet-bucket", "cas/packet-objects/tenants/key/collision.json")]
+    metadata = stored["metadata"]
+    assert isinstance(metadata, dict)
+    requested_at = datetime.fromisoformat(str(metadata["retention-requested-at"]))
+    stored["retain_until"] = requested_at + timedelta(days=2)
+
+    with pytest.raises(
+        EvidenceObjectStoreUnavailable,
+        match="shortened below its durable observed minimum",
+    ):
+        backend.put_immutable(
+            key="tenants/key/collision.json",
+            body=body,
+            content_hash=content_hash,
+            policy=policy,
+        )
+
+
+def test_s3_collision_rejects_byte_identical_weaker_winner_policy() -> None:
+    fake = _ObjectLockS3()
+    backend = S3ObjectLockPacketBackend(
+        bucket="packet-bucket",
+        prefix="cas/packet-objects",
+        client=fake,
+    )
+    body = b'{"trace_id":"trace-weaker-collision"}'
+    content_hash = hashlib.sha256(body).hexdigest()
+    backend.put_immutable(
+        key="tenants/key/weaker.json",
+        body=body,
+        content_hash=content_hash,
+        policy=RetentionPolicy(mode="GOVERNANCE", retention_days=1),
+    )
+
+    with pytest.raises(
+        EvidenceObjectStoreUnavailable,
+        match="weaker or different retention policy",
+    ):
+        backend.put_immutable(
+            key="tenants/key/weaker.json",
+            body=body,
+            content_hash=content_hash,
+            policy=RetentionPolicy(mode="COMPLIANCE", retention_days=30),
+        )
+
+
+def test_s3_retention_metadata_rejects_naive_request_timestamp() -> None:
+    backend = S3ObjectLockPacketBackend(
+        bucket="packet-bucket",
+        prefix="cas/packet-objects",
+        client=_ObjectLockS3(naive_retention_metadata=True),
+    )
+    body = b'{"trace_id":"trace-naive-metadata"}'
+
+    with pytest.raises(
+        EvidenceObjectStoreUnavailable,
+        match="timezone-aware request boundary",
+    ):
+        backend.put_immutable(
+            key="tenants/key/naive.json",
+            body=body,
+            content_hash=hashlib.sha256(body).hexdigest(),
+            policy=RetentionPolicy(mode="GOVERNANCE", retention_days=30),
+        )
+
+
 def test_s3_backend_fails_closed_without_bucket_object_lock() -> None:
     backend = S3ObjectLockPacketBackend(
         bucket="packet-bucket",
@@ -284,6 +485,161 @@ def test_packet_bytes_and_index_survive_restart_and_second_replica(tmp_path: Pat
         tenant_id="tenant-a", namespace="", trace_id="trace-restart"
     ) == packet
     reopened_store.close()
+
+
+def test_durable_reverify_uses_stored_minimum_and_preserves_original_verified_at(
+    tmp_path: Path,
+) -> None:
+    store = SqliteStateStore(tmp_path / "durable-minimum.db")
+    backend = _SharedVerifiedObjectBackend()
+    first = _repository(store, backend, "writer")
+    packet = _packet("trace-durable-minimum")
+    first.put_packet(
+        tenant_id="tenant-minimum",
+        namespace="",
+        trace_id="trace-durable-minimum",
+        packet=packet,
+    )
+    index = store.list("tenant-minimum", PACKET_INDEX_KIND)[0]
+    original = index.payload["object_lock_verification"]
+    assert isinstance(original, dict)
+
+    # Current runtime policy is deliberately weaker and a different mode.  A
+    # restart must still evaluate the immutable receipt against the index that
+    # was written under GOVERNANCE/30 days.
+    restarted = EvidencePacketRepository(
+        store=store,
+        backend=backend,
+        policy=RetentionPolicy(mode="COMPLIANCE", retention_days=1),
+        replica_id="restart-with-drift",
+    )
+    first_check = restarted.verify_packet(
+        tenant_id="tenant-minimum",
+        namespace="",
+        trace_id="trace-durable-minimum",
+    )
+    current = first_check["object_lock_verification"]
+    assert first_check["match"] is True
+    assert current["expected"]["mode"] == "GOVERNANCE"
+    assert current["expected"]["retention_days"] == 30
+    assert current["expected"]["version_id"] == index.payload["version_id"]
+    assert current["expected"]["content_sha256"] == index.payload["content_sha256"]
+    assert current["verified_at"] == original["verified_at"]
+    assert current["evaluated_at"] >= current["verified_at"]
+
+    key = str(index.payload["object_key"])
+    requested_at = datetime.fromisoformat(str(index.payload["retention_requested_at"]))
+    backend.shorten_retention_for_test(key, requested_at + timedelta(days=2))
+    shortened = restarted.verify_packet(
+        tenant_id="tenant-minimum",
+        namespace="",
+        trace_id="trace-durable-minimum",
+    )
+
+    assert shortened["match"] is False
+    assert "shortened below the durable observed minimum" in shortened["notes"]
+    assert "object_lock_verification" not in shortened
+    store.close()
+
+
+def test_bucket_default_stronger_deadline_survives_restart_and_reverify(
+    tmp_path: Path,
+) -> None:
+    store = SqliteStateStore(tmp_path / "stronger-bucket-default.db")
+    backend = _SharedVerifiedObjectBackend(extra_retention_days=45)
+    writer = _repository(store, backend, "writer")
+    packet = _packet("trace-stronger")
+    packet_hash = evidence_packet_without_hashes_sha256(packet)
+    entry = writer.append_hash_log(
+        tenant_id="tenant-stronger",
+        namespace="",
+        trace_id="trace-stronger",
+        audit_id="audit-stronger",
+        packet_without_hashes_sha256=packet_hash,
+        operation="test_stronger_bucket_default",
+    )
+    packet["hashes"] = {
+        "packet_without_hashes_sha256": packet_hash,
+        "hash_log_entry_sha256": entry["entry_sha256"],
+        "hash_log_previous_entry_sha256": entry["previous_entry_sha256"],
+    }
+    writer.put_packet(
+        tenant_id="tenant-stronger",
+        namespace="",
+        trace_id="trace-stronger",
+        packet=packet,
+    )
+    index = store.list("tenant-stronger", PACKET_INDEX_KIND)[0]
+    requested = datetime.fromisoformat(str(index.payload["retention_requested_until"]))
+    minimum = datetime.fromisoformat(
+        str(index.payload["object_lock_minimum_retain_until"])
+    )
+    raw_verification = index.payload["object_lock_verification"]
+    assert isinstance(raw_verification, dict)
+    assert datetime.fromisoformat(
+        str(raw_verification["expected"]["retain_until"])
+    ) == requested
+    assert datetime.fromisoformat(
+        str(raw_verification["observed"]["retain_until"])
+    ) == minimum
+    assert minimum == requested + timedelta(days=45)
+
+    restarted = EvidencePacketRepository(
+        store=store,
+        backend=backend,
+        policy=RetentionPolicy(mode="COMPLIANCE", retention_days=1),
+        replica_id="restart",
+    )
+    check = restarted.verify_packet(
+        tenant_id="tenant-stronger",
+        namespace="",
+        trace_id="trace-stronger",
+    )
+    assert check["match"] is True
+    assert check["object_lock_verification"]["verified"] is True
+    assert datetime.fromisoformat(
+        check["object_lock_verification"]["expected"]["retain_until"]
+    ) == requested
+    assert datetime.fromisoformat(
+        check["object_lock_verification"]["observed"]["retain_until"]
+    ) == minimum
+    loaded_entry, chain_ok = restarted.load_hash_log_entry(
+        tenant_id="tenant-stronger",
+        namespace="",
+        trace_id="trace-stronger",
+        entry_sha256=entry["entry_sha256"],
+    )
+    assert loaded_entry["entry_sha256"] == entry["entry_sha256"]
+    assert chain_ok is True
+    store.close()
+
+
+def test_durable_packet_index_rejects_naive_retention_timestamp(tmp_path: Path) -> None:
+    store = SqliteStateStore(tmp_path / "naive-index.db")
+    backend = _SharedVerifiedObjectBackend()
+    repository = _repository(store, backend, "writer")
+    repository.put_packet(
+        tenant_id="tenant-naive",
+        namespace="",
+        trace_id="trace-naive-index",
+        packet=_packet("trace-naive-index"),
+    )
+    index = store.list("tenant-naive", PACKET_INDEX_KIND)[0]
+    corrupted = dict(index.payload)
+    corrupted["retention_requested_at"] = str(
+        corrupted["retention_requested_at"]
+    ).replace("+00:00", "")
+    store.put(index.with_payload(corrupted), expected_version=index.version)
+
+    check = repository.verify_packet(
+        tenant_id="tenant-naive",
+        namespace="",
+        trace_id="trace-naive-index",
+    )
+
+    assert check["match"] is False
+    assert "missing its durable retention request" in check["notes"]
+    store.close()
 
 
 def test_trace_is_immutable_but_same_trace_can_exist_in_two_tenants(tmp_path: Path) -> None:
@@ -494,7 +850,7 @@ def test_existing_packet_helpers_switch_to_shared_tenant_storage(tmp_path: Path)
             "hash_log_path": str(evidence_hash_log_path()),
         }
         assert str(evidence_packet_store_path("trace-helper")).startswith(
-            "test-object-lock://shared/tenants/"
+            "s3://shared/tenants/"
         )
         write_evidence_packet_to_store("trace-helper", packet)
 
@@ -665,8 +1021,16 @@ def test_packet_verify_detects_remote_byte_tampering(tmp_path: Path) -> None:
     store.close()
 
 
+@pytest.mark.parametrize(
+    ("accepted", "generation_action", "expected_verdict"),
+    ((True, "allow", "ACCEPT"), (False, "suppress", "SUPPRESS")),
+)
 def test_account_evidence_route_reads_shared_packet_from_repository(
-    tmp_path: Path, monkeypatch
+    tmp_path: Path,
+    monkeypatch,
+    accepted: bool,
+    generation_action: str,
+    expected_verdict: str,
 ) -> None:
     """The FastAPI ownership dependency keeps tenant scope alive through the handler."""
     from api.main import app
@@ -696,6 +1060,7 @@ def test_account_evidence_route_reads_shared_packet_from_repository(
         app.state.session_store = sessions
         app.state.evidence_packet_repository = repository
         configure_evidence_packet_repository(repository)
+        configure_audit_session_store(store)
 
         invite = accounts.create_invite(
             code="route-packet-invite", role="member", tenant_id="tenant-route"
@@ -716,7 +1081,44 @@ def test_account_evidence_route_reads_shared_packet_from_repository(
         assert login.status_code == 200, login.text
         headers = {"Authorization": f"Bearer {login.json()['token']}"}
 
-        packet = _packet("trace-route-shared")
+        trace_id = f"trace-route-shared-{expected_verdict.lower()}"
+        packet = _packet(trace_id)
+        packet.update(
+            {
+                "model": {
+                    "model_key": "openai:gpt-4.1-mini",
+                    "name": "openai:gpt-4.1-mini",
+                },
+                "provenance": {
+                    "source_stage": "Stage 21A",
+                    "source_reports": [
+                        "stage19_verification_stack_report.json",
+                        "stage20_generation_readiness_report.json",
+                    ],
+                },
+                "readout": {"axis": "drive", "label": "F1", "confidence": 0.86},
+                "ablation": {"status": "present", "effect": "targeted_drop"},
+                "matched_controls": {
+                    "status": "present",
+                    "control": "random_same_rank",
+                },
+                "verification": {
+                    "accepted": accepted,
+                    "mode": "BALANCED",
+                    "confidence_tier": "high",
+                    "mode_profile": {"accepted_accuracy": 0.9816, "coverage": 0.7173},
+                    "suppression_reasons": (
+                        [] if accepted else ["verification_stack_rejected"]
+                    ),
+                },
+                "generation_readiness": {
+                    "generation_readiness": generation_action,
+                    "risk_score": 0.11 if accepted else 0.9,
+                    "policy_version": "stage20_v1",
+                    "reasons": [],
+                },
+            }
+        )
         packet_hash = evidence_packet_without_hashes_sha256(packet)
         with evidence_packet_storage_scope(
             tenant_id="tenant-route",
@@ -724,7 +1126,7 @@ def test_account_evidence_route_reads_shared_packet_from_repository(
             repository=repository,
         ):
             entry = append_evidence_packet_hash_log_entry(
-                trace_id="trace-route-shared",
+                trace_id=trace_id,
                 audit_id="audit-route-shared",
                 packet_without_hashes_sha256=packet_hash,
                 operation="test_route_shared_packet",
@@ -736,27 +1138,61 @@ def test_account_evidence_route_reads_shared_packet_from_repository(
                 "hash_log_path": str(evidence_hash_log_path()),
                 "external_anchor": {"status": "disabled", "mode": "disabled"},
             }
-            write_evidence_packet_to_store("trace-route-shared", packet)
+            write_evidence_packet_to_store(trace_id, packet)
         record_evidence_ownership(
             store,
             tenant_id="tenant-route",
             account_id=account.account_id,
-            trace_id="trace-route-shared",
+            trace_id=trace_id,
         )
 
-        got = client.get("/evidence/trace-route-shared", headers=headers)
-        verified = client.post("/evidence/trace-route-shared/verify", headers=headers)
+        got = client.get(f"/evidence/{trace_id}", headers=headers)
+        verified = client.post(f"/evidence/{trace_id}/verify", headers=headers)
 
         assert got.status_code == 200, got.text
         assert got.json()["output"]["text"] == "measured output"
         assert verified.status_code == 200, verified.text
         assert verified.json()["overall"] == "all_match"
-        assert any(
-            row["artifact"] == "tenant_packet_object_store" and row["match"] is True
+        tenant_check = next(
+            row
             for row in verified.json()["checks"]
+            if row["artifact"] == "tenant_packet_object_store"
         )
+        assert tenant_check["match"] is True
+        assert tenant_check["object_lock_verification"]["verified"] is True
+        assert tenant_check["object_lock_verification"]["verified_at"]
+        assert tenant_check["object_lock_verification"]["evaluated_at"]
+
+        created = client.post(
+            "/api/cas-harness/audit/session",
+            json={
+                "model_id": "openai:gpt-4.1-mini",
+                "audit_mode": "BALANCED",
+                "prompt": "Assess this tenant packet.",
+                "selected_modules": ["cognitive_bias", "provenance_trace"],
+                "license_key": "placeholder-license",
+                "evidence_packet_trace_id": trace_id,
+            },
+            headers=headers,
+        )
+        assert created.status_code == 200, created.text
+        created_packet_chip = next(
+            chip
+            for chip in created.json()["provenance_chips"]
+            if chip["id"] == "packet_proof"
+        )
+        assert created_packet_chip["status"] == "verified"
+        assert created_packet_chip["object_lock_verification"]["verified"] is True
+
+        ran = client.post(
+            f"/api/cas-harness/audit/session/{created.json()['audit_id']}/run",
+            headers=headers,
+        )
+        assert ran.status_code == 200, ran.text
+        assert ran.json()["verdict"] == expected_verdict
 
     configure_evidence_packet_repository(None)
+    configure_audit_session_store(None)
     for name, value in previous.items():
         setattr(app.state, name, value)
     store.close()

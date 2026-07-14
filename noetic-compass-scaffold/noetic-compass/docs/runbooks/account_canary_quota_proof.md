@@ -31,6 +31,8 @@ Auto Sync disabled. Before starting, verify the private canary has exactly this 
 - `CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION=us-west-2`
 - `CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE`
 - `CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=31`
+- stable server-only `NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY` with at least 32 bytes, shared by
+  every canary replica and unchanged across restarts
 - nonempty canary bucket, `AWS_ACCESS_KEY_ID`, and `AWS_SECRET_ACCESS_KEY`
 - operator-generated random `NC_PLATFORM_TENANT_PROVISIONING_SECRET` with at least 32 visible ASCII
   characters and no whitespace (the verifier validates this shape, not its entropy)

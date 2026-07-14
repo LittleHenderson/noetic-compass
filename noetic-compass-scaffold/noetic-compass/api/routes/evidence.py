@@ -42,7 +42,8 @@ The GET/verify endpoints are intentionally side-effect free: no DB, no global
 state, reads only. The ``/anchor`` endpoint is the one deliberate exception --
 anchoring is an explicit operational write, never triggered by a normal read,
 and it fabricates nothing: the receipt comes straight from the configured anchor
-mode (disabled/local = NOT WORM; s3 + object-lock = real WORM). ``hashlib``
+mode (disabled/local = NOT WORM; s3 + a re-read-verified, time-bounded
+Object Lock receipt = WORM retained for that receipt's window). ``hashlib``
 (stdlib) is used for sha256.
 """
 
@@ -54,7 +55,7 @@ import os
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, AsyncIterator
+from typing import Any, AsyncIterator, Mapping
 
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
@@ -70,7 +71,13 @@ from api.services.cas_harness_static_evidence_anchor import (
 from api.services.evidence_ownership import tenant_owns_trace
 from api.services.cas_harness_evidence_object_store import (
     EvidenceObjectStoreError,
+    active_evidence_packet_storage_scope,
     evidence_packet_storage_scope,
+)
+from api.services.cas_harness_retention_disclosure import (
+    ObjectLockReceiptVerificationResultModel,
+    ObjectLockRetentionDisclosureModel,
+    canonical_retention_disclosure,
 )
 
 router = APIRouter(prefix="/evidence", tags=["evidence"])
@@ -209,6 +216,10 @@ class VerifyCheck(BaseModel):
     actual: str | None
     match: bool
     notes: str | None = None
+    object_lock_verification: ObjectLockReceiptVerificationResultModel | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
 
 
 class VerifyHashesResponse(BaseModel):
@@ -249,6 +260,12 @@ class AnchorEvidenceResponse(BaseModel):
     verify_overall: str | None = None
     external_anchor_match: bool | None = None
     external_anchor_notes: str | None = None
+    retention_disclosure: ObjectLockRetentionDisclosureModel = Field(
+        description=(
+            "Canonical S3 Object Lock target or exact-version verifier receipt. Stored prose "
+            "and booleans cannot assert WORM retention."
+        )
+    )
     hash_log_path: str | None = None
     decision_scope: str = "stage9_40e_validation_packet"
     message: str
@@ -1336,10 +1353,12 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
         and isinstance(packet.hashes.get("packet_without_hashes_sha256"), str)
         and isinstance(packet.hashes.get("hash_log_entry_sha256"), str)
     )
+    has_tenant_object_store = active_evidence_packet_storage_scope() is not None
     if (
         packet.distributed_fleet is not None
         or packet.live_audit is not None
         or has_packet_hash_chain
+        or has_tenant_object_store
     ):
         try:
             from api.services.cas_harness_merged_evidence_packets import (
@@ -1352,13 +1371,14 @@ def _verify_packet_hashes(packet: EvidencePacket) -> VerifyHashesResponse:
                     packet.model_dump(mode="json", exclude_none=True)
                 )
             )
-            from api.services.cas_harness_evidence_anchor import verify_anchor
+            if isinstance((packet.hashes or {}).get("external_anchor"), Mapping):
+                from api.services.cas_harness_evidence_anchor import verify_anchor
 
-            checks.append(
-                VerifyCheck.model_validate(
-                    verify_anchor(packet.model_dump(mode="json", exclude_none=True))
+                checks.append(
+                    VerifyCheck.model_validate(
+                        verify_anchor(packet.model_dump(mode="json", exclude_none=True))
+                    )
                 )
-            )
         except FileNotFoundError as exc:
             checks.append(
                 VerifyCheck(
@@ -1487,8 +1507,9 @@ async def anchor_evidence_packet(
     The receipt is honest. With no S3 object-lock bucket configured the packet is
     anchored at mode ``disabled``/``local`` (NOT WORM) and the console correctly
     stays at FLAG_FOR_HUMAN_REVIEW; ``worm_retained`` is False. A real S3
-    object-lock write — re-read and confirmed — flips ``worm_retained`` to True, but
-    WORM retention records the packet's verdict immutably; it never changes it. The
+    Object Lock write with a re-read-verified, active, time-bounded receipt flips
+    ``worm_retained`` to True for that receipt window. The lock records the
+    packet's verdict for tamper-evident re-verification; it never changes the verdict. The
     console shows a SCOPED-VALIDATION ACCEPT only when the packet's own verdict is
     ACCEPT/SUPPRESS *and* the packet is WORM-retained (never a per-customer
     production ACCEPT); a WORM-retained FLAG_FOR_HUMAN_REVIEW packet stays at
@@ -1507,7 +1528,17 @@ async def anchor_evidence_packet(
     anchored = anchor_static_evidence_packet(packet)
     verify = verify_anchored_static_packet(anchored)
     summary = summarize_static_anchor_worm_status(anchored, verify)
-    worm_retained = bool(summary["worm_retained"])
+    raw_disclosure = summary.get("retention_disclosure")
+    retention_disclosure = canonical_retention_disclosure(
+        raw_disclosure if isinstance(raw_disclosure, dict) else None,
+        subject=f"Evidence Packet {trace_id}",
+    )
+    worm_retained = bool(
+        summary.get("worm_retained")
+        and retention_disclosure.receipt_verified
+        and retention_disclosure.verification_receipt is not None
+    )
+    retention_notice = retention_disclosure.notice
 
     hashes = anchored.get("hashes") if isinstance(anchored, dict) else None
     hash_log_path = hashes.get("hash_log_path") if isinstance(hashes, dict) else None
@@ -1522,17 +1553,17 @@ async def anchor_evidence_packet(
     if worm_retained and verdict_is_accept:
         console_state = "accept_scoped_validation"
         message = (
-            "Packet is WORM-retained. The Audit Console will show a SCOPED-VALIDATION "
+            "The Audit Console will show a SCOPED-VALIDATION "
             "ACCEPT for this packet (decision_scope stage9_40e_validation_packet) — "
-            "NOT a per-customer production ACCEPT."
+            f"NOT a per-customer production ACCEPT. {retention_notice}"
         )
     elif worm_retained:
         console_state = "flag_for_human_review"
         message = (
-            "Packet is WORM-retained (immutably anchored), but its verdict is "
+            "The packet has a verified, time-bounded Object Lock receipt, but its verdict is "
             f"{packet_verdict or 'FLAG_FOR_HUMAN_REVIEW'}, so the Audit Console "
-            "correctly stays at FLAG_FOR_HUMAN_REVIEW. WORM anchoring records a "
-            "verdict immutably; it never upgrades a FLAG to an ACCEPT."
+            "correctly stays at FLAG_FOR_HUMAN_REVIEW. Anchoring never upgrades a FLAG "
+            f"to an ACCEPT. {retention_notice}"
         )
     else:
         console_state = "flag_for_human_review"
@@ -1541,7 +1572,8 @@ async def anchor_evidence_packet(
             f"{summary['anchor_status']!r}); this is NOT WORM retention, so the console "
             "correctly stays at FLAG_FOR_HUMAN_REVIEW. Set "
             "CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3 with an Object-Lock bucket + AWS "
-            "credentials, then re-run to produce a real per-packet WORM anchor."
+            "credentials, then re-run to produce a receipt-backed, time-bounded per-packet "
+            f"WORM anchor. {retention_notice}"
         )
 
     if require_object_lock and not worm_retained:
@@ -1553,6 +1585,7 @@ async def anchor_evidence_packet(
                 "anchor_mode": summary["anchor_mode"],
                 "anchor_status": summary["anchor_status"],
                 "verify_overall": summary["verify_overall"],
+                "retention_disclosure": retention_disclosure.to_dict(),
                 "message": message,
             },
         )
@@ -1568,6 +1601,7 @@ async def anchor_evidence_packet(
         verify_overall=summary["verify_overall"],
         external_anchor_match=summary["external_anchor_match"],
         external_anchor_notes=summary["external_anchor_notes"],
+        retention_disclosure=retention_disclosure.to_dict(),
         hash_log_path=hash_log_path if isinstance(hash_log_path, str) else None,
         message=message,
     )

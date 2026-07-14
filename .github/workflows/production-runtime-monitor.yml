@@ -10,7 +10,8 @@ permissions:
 
 concurrency:
   group: cas-production-runtime-monitor
-  cancel-in-progress: true
+  # Never cancel a run before it has had a chance to deliver its alert.
+  cancel-in-progress: false
 
 env:
   CAS_PRODUCTION_API_BASE_URL: ${{ vars.CAS_PRODUCTION_API_BASE_URL }}
@@ -85,3 +86,97 @@ jobs:
             fi
           done
           echo 'All production runtime monitors passed.'
+
+  alert_delivery:
+    name: cas-production-runtime-alert-delivery
+    # Run after failed/skipped dependencies, but honor an explicit workflow cancel.
+    if: ${{ !cancelled() }}
+    needs:
+      - api_dependency_readiness
+      - worker_realmode
+      - blueprint_drift
+      - aggregate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      API_RESULT: ${{ needs.api_dependency_readiness.result }}
+      WORKER_RESULT: ${{ needs.worker_realmode.result }}
+      BLUEPRINT_RESULT: ${{ needs.blueprint_drift.result }}
+      AGGREGATE_RESULT: ${{ needs.aggregate.result }}
+    steps:
+      - name: Deliver or resolve the deduplicated production alert
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          alert_label='cas-production-runtime-alert'
+          alert_title='CAS production runtime monitor is failing'
+          run_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}"
+          result_summary="api=${API_RESULT} worker=${WORKER_RESULT} blueprint=${BLUEPRINT_RESULT} aggregate=${AGGREGATE_RESULT}"
+
+          gh label create "$alert_label" \
+            --repo "$GITHUB_REPOSITORY" \
+            --color B60205 \
+            --description 'Deduplicated production runtime failure and recovery record' \
+            --force
+
+          issue_numbers="$(gh issue list \
+            --repo "$GITHUB_REPOSITORY" \
+            --state open \
+            --label "$alert_label" \
+            --search "\"${alert_title}\" in:title" \
+            --limit 100 \
+            --json number,title \
+            --jq '.[] | select(.title == "CAS production runtime monitor is failing") | .number')"
+
+          issue_number=''
+          if [[ -n "$issue_numbers" ]]; then
+            if [[ "$issue_numbers" == *$'\n'* ]]; then
+              echo 'Multiple open production runtime alert issues exist; refusing an ambiguous update.' >&2
+              exit 1
+            fi
+            if [[ ! "$issue_numbers" =~ ^[0-9]+$ ]]; then
+              echo 'Production runtime alert lookup returned an invalid issue identifier.' >&2
+              exit 1
+            fi
+            issue_number="$issue_numbers"
+          fi
+
+          if [[ "$AGGREGATE_RESULT" != 'success' ]]; then
+            body="Automated production runtime alert. ${result_summary}. Run: ${run_url}. The workflow records only normalized job results and never copies credentials or provider response bodies."
+            if [[ -n "$issue_number" ]]; then
+              gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body "$body"
+              issue_url="${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${issue_number}"
+            else
+              issue_url="$(gh issue create \
+                --repo "$GITHUB_REPOSITORY" \
+                --title "$alert_title" \
+                --label "$alert_label" \
+                --body "$body")"
+            fi
+            {
+              echo '### Production alert delivered'
+              echo "- Issue: ${issue_url}"
+              echo "- Results: ${result_summary}"
+              echo '- Status: GitHub issue delivery `present`; the customer-production alert-delivery gate and human acknowledgement remain `OPEN` until their separate evidence requirements pass.'
+            } >> "$GITHUB_STEP_SUMMARY"
+          elif [[ -n "$issue_number" ]]; then
+            recovery_body="Automated recovery receipt. All runtime monitor jobs passed. Run: ${run_url}."
+            gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body "$recovery_body"
+            gh issue close "$issue_number" --repo "$GITHUB_REPOSITORY" --reason completed
+            {
+              echo '### Production alert resolved'
+              echo "- Issue: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${issue_number}"
+              echo "- Recovery run: ${run_url}"
+            } >> "$GITHUB_STEP_SUMMARY"
+          else
+            {
+              echo '### Production runtime healthy'
+              echo "- Run: ${run_url}"
+              echo '- No open deduplicated production alert exists.'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi

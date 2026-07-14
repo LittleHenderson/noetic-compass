@@ -250,8 +250,12 @@ const FAQ_ITEMS: FaqItem[] = [
         </p>
         <p>
           The honest gaps are important. A real flight recorder is physically armored and legally
-          mandatory; an Evidence Packet also needs immutable hash logging, protected signing keys,
-          durable storage, and enforcement that every CAS-wrapped inference writes a packet. For
+          mandatory; an Evidence Packet also needs tamper-evident hash logging with re-verification,
+          protected signing keys, durable storage, and enforcement that every CAS-wrapped inference
+          writes a packet. S3 Object Lock policy is time-bounded, not permanent: the product must
+          surface the runtime-configured target separately from the exact verified receipt, mode,
+          object version, and retain-until date. GOVERNANCE mode, when actually used, can be
+          bypassed by a sufficiently privileged operator. For
           multi-turn sessions, packets should be bound by a session_id so reviewers can reconstruct
           what happened three turns ago, not only the latest decision.
         </p>
