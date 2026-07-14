@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+import re
 import unittest
 
 
@@ -57,8 +58,60 @@ class ProductionRuntimeAlertContractTests(unittest.TestCase):
         self.assertIn(
             "The workflow records only normalized job results", self.alert_job
         )
-        self.assertNotIn("${{ secrets.", self.alert_job)
-        self.assertNotIn("${{ vars.", self.alert_job)
+
+    def test_github_issue_readback_supplies_stable_incident_identity(self) -> None:
+        self.assertIn("id: github_incident", self.alert_job)
+        self.assertIn("--json createdAt,url,title,labels", self.alert_job)
+        self.assertEqual(self.alert_job.count('gh issue view "$issue_number"'), 1)
+        self.assertIn("issue_readback_url", self.alert_job)
+        self.assertIn("issue_readback_title", self.alert_job)
+        self.assertIn("issue_label_count", self.alert_job)
+        self.assertIn("issue_created_at_utc=${issue_created_at}", self.alert_job)
+        self.assertIn(
+            "ALERT_EMITTED_AT_UTC: ${{ steps.github_incident.outputs.issue_created_at_utc }}",
+            self.alert_job,
+        )
+        self.assertIn('--emitted-at-utc "$ALERT_EMITTED_AT_UTC"', self.alert_job)
+        self.assertNotIn(
+            "--emitted-at-utc '${{ steps.github_incident.outputs", self.alert_job
+        )
+
+    def test_optional_provider_configuration_is_bounded_and_secret_safe(self) -> None:
+        expected_secrets = {
+            "CAS_ALERT_PRIMARY_WEBHOOK_URL",
+            "CAS_ALERT_PRIMARY_WEBHOOK_TOKEN",
+            "CAS_ALERT_ACK_WEBHOOK_URL",
+            "CAS_ALERT_ACK_WEBHOOK_TOKEN",
+            "CAS_ALERT_SECONDARY_WEBHOOK_URL",
+            "CAS_ALERT_SECONDARY_WEBHOOK_TOKEN",
+        }
+        observed_secrets = set(
+            re.findall(r"\$\{\{ secrets\.([A-Z0-9_]+) \}\}", self.alert_job)
+        )
+        self.assertEqual(observed_secrets, expected_secrets)
+        self.assertEqual(
+            re.findall(r"\$\{\{ vars\.([A-Z0-9_]+) \}\}", self.alert_job),
+            ["CAS_ALERT_PROVIDER_MODE"],
+        )
+        self.assertIn(
+            '--mode "${CAS_ALERT_PROVIDER_MODE:-disabled}"', self.alert_job
+        )
+        self.assertIn(
+            "python scripts/deliver_production_runtime_alert.py", self.alert_job
+        )
+        self.assertNotRegex(self.alert_job, r"echo .*CAS_ALERT_.*WEBHOOK")
+        self.assertNotRegex(self.alert_job, r"--(?:url|token) .*CAS_ALERT_")
+
+    def test_provider_receipt_hashes_are_preserved_even_after_adapter_failure(
+        self,
+    ) -> None:
+        self.assertIn("if: ${{ always() &&", self.alert_job)
+        self.assertIn("actions/upload-artifact@v7", self.alert_job)
+        self.assertIn(
+            "cas-runtime-alert-provider-receipts.json", self.alert_job
+        )
+        self.assertIn("if-no-files-found: error", self.alert_job)
+        self.assertIn("retention-days: 30", self.alert_job)
 
     def test_runbook_keeps_delivery_and_acknowledgement_separate(self) -> None:
         self.assertIn("issue delivery is `present`;", self.runbook)
@@ -67,10 +120,17 @@ class ProductionRuntimeAlertContractTests(unittest.TestCase):
         self.assertIn(
             "automated closure is not acknowledgement evidence", self.runbook
         )
+        self.assertIn("custom receipt-contract bridge", self.runbook)
+        self.assertIn("not a direct Slack", self.runbook)
+        self.assertIn("does not claim a human", self.runbook)
+        self.assertIn("does not publish acceptance", self.runbook)
 
     def test_root_ci_runs_this_contract(self) -> None:
         self.assertIn(
             "-p 'test_production_runtime_alert_contract.py'", self.ci_workflow
+        )
+        self.assertIn(
+            "-p 'test_production_runtime_alert_delivery.py'", self.ci_workflow
         )
 
 

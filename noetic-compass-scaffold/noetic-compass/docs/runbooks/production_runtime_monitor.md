@@ -153,6 +153,110 @@ closes the issue, but that automated closure is not acknowledgement evidence.
 Failure to create, update, or close the issue makes the delivery job fail rather
 than silently dropping the alert.
 
+### Optional primary on-call and secondary escalation adapter
+
+GitHub Issues remains the default incident channel. With no additional
+configuration, the workflow behaves exactly as described above: it creates or
+updates the deduplicated GitHub issue and the optional provider adapter exits
+successfully without making a network request. That default records the
+provider path as `unavailable` and keeps the customer-production
+`alert_delivery` gate `OPEN`.
+
+The optional `webhook_v1` mode is a **custom receipt-contract bridge**. It is
+not a direct Slack, Microsoft Teams, PagerDuty, Opsgenie, SMS, or email webhook
+integration. Those provider webhooks generally do not return the exact,
+event-bound delivery and acknowledgement receipt below. Point these settings
+only at a separately operated bridge that authenticates to the selected
+provider, verifies the provider result, and translates it into this contract:
+
+| GitHub setting | Kind | Purpose |
+|---|---|---|
+| `CAS_ALERT_PROVIDER_MODE=webhook_v1` | Actions variable | Explicitly enables the bridge; missing, empty, or `disabled` keeps it dark |
+| `CAS_ALERT_PRIMARY_WEBHOOK_URL` | Actions secret | HTTPS bridge endpoint for `primary_on_call` delivery |
+| `CAS_ALERT_PRIMARY_WEBHOOK_TOKEN` | Actions secret | Bearer credential for the primary endpoint |
+| `CAS_ALERT_ACK_WEBHOOK_URL` | Actions secret | HTTPS bridge endpoint for provider acknowledgement readback |
+| `CAS_ALERT_ACK_WEBHOOK_TOKEN` | Actions secret | Bearer credential for acknowledgement readback |
+| `CAS_ALERT_SECONDARY_WEBHOOK_URL` | Actions secret | HTTPS bridge endpoint for `secondary_on_call` escalation |
+| `CAS_ALERT_SECONDARY_WEBHOOK_TOKEN` | Actions secret | Bearer credential for the secondary endpoint |
+
+Enabling the mode is fail-closed: all three authenticated endpoints are
+required. URLs must use public HTTPS on port 443, cannot contain credentials,
+query strings, or fragments, and redirects are refused so an Authorization
+header cannot be forwarded to a different origin. Tokens and URLs are read
+only from the environment; they are never command-line arguments, log fields,
+step-summary fields, or artifact fields.
+
+For each failed monitor run, the workflow first performs an exact GitHub issue
+readback. The issue number identifies the incident and its `createdAt` value is
+the stable P1 emission clock. Duplicate matching issues, a wrong title or
+label, or malformed readback stops delivery. The adapter hashes the repository
+and issue number into the stable event identifier. Its `Idempotency-Key` is the
+SHA-256 of the exact canonical request, so a later 15-minute observation can
+never reuse an earlier key with changed request bytes.
+
+The bridge receives a bounded JSON request with schema
+`cas_runtime_alert_adapter_request.v1`, action `deliver`, destination
+`primary_on_call`, and a normalized event. The event contains only the P1
+severity, stable emission time, GitHub issue/run references, and normalized job
+results. A successful HTTP response must be exactly one JSON object:
+
+```json
+{
+  "schema_version": "cas_runtime_alert_provider_receipt.v1",
+  "action": "deliver",
+  "event_id_sha256": "<same 64-lowercase-hex event id>",
+  "destination_role": "primary_on_call",
+  "status": "delivered",
+  "delivered_at_utc": "<UTC timestamp at or after emission>",
+  "receipt_id": "<non-secret provider receipt identifier>"
+}
+```
+
+HTTP redirects, non-200 status, more than 64 KiB, invalid UTF-8/JSON, duplicate
+keys, extra or missing fields, wrong event/action/destination, a non-delivered
+status, impossible timestamp, or invalid receipt identifier do not count as
+delivery. If primary delivery fails, the adapter attempts the secondary path
+immediately, but still fails the workflow: a fallback page never becomes a
+fabricated dual-destination success.
+
+Before the issue is 600 seconds old, a valid primary receipt leaves the adapter
+in `primary_delivered_waiting_for_acknowledgement`; it does not claim a human
+ACK. On the first later failing run, the acknowledgement bridge receives action
+`check_acknowledgement` and must return exactly:
+
+```json
+{
+  "schema_version": "cas_runtime_alert_provider_receipt.v1",
+  "action": "check_acknowledgement",
+  "event_id_sha256": "<same event id>",
+  "status": "acknowledged",
+  "checked_at_utc": "<UTC provider readback time>",
+  "acknowledged_at_utc": "<UTC human acknowledgement time>",
+  "actor_role": "incident_commander",
+  "receipt_id": "<non-secret provider receipt identifier>"
+}
+```
+
+For an unacknowledged incident, `status` is `unacknowledged` and both
+`acknowledged_at_utc` and `actor_role` must be JSON `null`. Only an exact
+`incident_commander` receipt at or after emission and no more than 600 seconds
+later suppresses escalation. An explicit unacknowledged response, late ACK,
+wrong role, malformed receipt, timeout, or unavailable acknowledgement bridge
+triggers action `escalate` to destination `secondary_on_call`. Its successful
+response uses the delivery object above with action `escalate` and destination
+`secondary_on_call`. Failure to obtain that exact secondary receipt fails the
+job.
+
+Each failing run uploads
+`cas-runtime-alert-provider-receipts-<run-id>-<attempt>` for 30 days. The JSON
+artifact is deliberately non-authoritative and `OPEN`. It includes normalized
+states, timestamps, SHA-256 hashes of provider receipt identifiers and exact
+response bodies, and safe reason codes. It never contains a raw provider body,
+endpoint URL, token, or raw receipt identifier. The artifact helps an operator
+assemble independently verified evidence; it does not publish acceptance
+authority, assign an incident role, fabricate an ACK, or make customer
+production `ACCEPT`.
+
 Enable GitHub Actions failure notifications for the operators responsible for
 this repository. For RunPod funding continuity, use RunPod's native Billing
 controls: enable Auto-Pay with an owner-approved threshold and reload amount,

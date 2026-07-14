@@ -108,7 +108,14 @@ jobs:
       BLUEPRINT_RESULT: ${{ needs.blueprint_drift.result }}
       AGGREGATE_RESULT: ${{ needs.aggregate.result }}
     steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
       - name: Deliver or resolve the deduplicated production alert
+        id: github_incident
         shell: bash
         run: |
           set -euo pipefail
@@ -157,7 +164,33 @@ jobs:
                 --title "$alert_title" \
                 --label "$alert_label" \
                 --body "$body")"
+              issue_number="${issue_url##*/}"
+              if [[ ! "$issue_number" =~ ^[0-9]+$ ]]; then
+                echo 'Production runtime alert creation returned an invalid issue identifier.' >&2
+                exit 1
+              fi
             fi
+
+            issue_readback="$(gh issue view "$issue_number" \
+              --repo "$GITHUB_REPOSITORY" \
+              --json createdAt,url,title,labels)"
+            issue_created_at="$(jq -r '.createdAt // empty' <<< "$issue_readback")"
+            issue_readback_url="$(jq -r '.url // empty' <<< "$issue_readback")"
+            issue_readback_title="$(jq -r '.title // empty' <<< "$issue_readback")"
+            issue_label_count="$(jq -r '[.labels[].name | select(. == "cas-production-runtime-alert")] | length' <<< "$issue_readback")"
+            if [[ ! "$issue_created_at" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}T ]]; then
+              echo 'Production runtime alert readback returned an invalid creation time.' >&2
+              exit 1
+            fi
+            if [[ "$issue_readback_url" != "$issue_url" || "$issue_readback_title" != "$alert_title" || "$issue_label_count" != '1' ]]; then
+              echo 'Production runtime alert readback did not match its fixed identity.' >&2
+              exit 1
+            fi
+            {
+              echo 'alert_state=failing'
+              echo "issue_number=${issue_number}"
+              echo "issue_created_at_utc=${issue_created_at}"
+            } >> "$GITHUB_OUTPUT"
             {
               echo '### Production alert delivered'
               echo "- Issue: ${issue_url}"
@@ -168,6 +201,7 @@ jobs:
             recovery_body="Automated recovery receipt. All runtime monitor jobs passed. Run: ${run_url}."
             gh issue comment "$issue_number" --repo "$GITHUB_REPOSITORY" --body "$recovery_body"
             gh issue close "$issue_number" --repo "$GITHUB_REPOSITORY" --reason completed
+            echo 'alert_state=recovered' >> "$GITHUB_OUTPUT"
             {
               echo '### Production alert resolved'
               echo "- Issue: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/issues/${issue_number}"
@@ -179,4 +213,42 @@ jobs:
               echo "- Run: ${run_url}"
               echo '- No open deduplicated production alert exists.'
             } >> "$GITHUB_STEP_SUMMARY"
+            echo 'alert_state=healthy' >> "$GITHUB_OUTPUT"
           fi
+
+      - name: Deliver configured primary on-call alert and secondary escalation
+        if: ${{ steps.github_incident.outputs.alert_state == 'failing' }}
+        env:
+          CAS_ALERT_PROVIDER_MODE: ${{ vars.CAS_ALERT_PROVIDER_MODE }}
+          CAS_ALERT_PRIMARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_PRIMARY_WEBHOOK_URL }}
+          CAS_ALERT_PRIMARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_PRIMARY_WEBHOOK_TOKEN }}
+          CAS_ALERT_ACK_WEBHOOK_URL: ${{ secrets.CAS_ALERT_ACK_WEBHOOK_URL }}
+          CAS_ALERT_ACK_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_ACK_WEBHOOK_TOKEN }}
+          CAS_ALERT_SECONDARY_WEBHOOK_URL: ${{ secrets.CAS_ALERT_SECONDARY_WEBHOOK_URL }}
+          CAS_ALERT_SECONDARY_WEBHOOK_TOKEN: ${{ secrets.CAS_ALERT_SECONDARY_WEBHOOK_TOKEN }}
+          ALERT_ISSUE_NUMBER: ${{ steps.github_incident.outputs.issue_number }}
+          ALERT_EMITTED_AT_UTC: ${{ steps.github_incident.outputs.issue_created_at_utc }}
+          SAFE_RECEIPT_PATH: ${{ runner.temp }}/cas-runtime-alert-provider-receipts.json
+        shell: bash
+        run: |
+          set -euo pipefail
+          python scripts/deliver_production_runtime_alert.py \
+            --mode "${CAS_ALERT_PROVIDER_MODE:-disabled}" \
+            --repository "$GITHUB_REPOSITORY" \
+            --run-id "$GITHUB_RUN_ID" \
+            --issue-number "$ALERT_ISSUE_NUMBER" \
+            --emitted-at-utc "$ALERT_EMITTED_AT_UTC" \
+            --api-result "$API_RESULT" \
+            --worker-result "$WORKER_RESULT" \
+            --blueprint-result "$BLUEPRINT_RESULT" \
+            --aggregate-result "$AGGREGATE_RESULT" \
+            --output "$SAFE_RECEIPT_PATH"
+
+      - name: Preserve secret-safe provider receipt hashes
+        if: ${{ always() && steps.github_incident.outputs.alert_state == 'failing' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: cas-runtime-alert-provider-receipts-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/cas-runtime-alert-provider-receipts.json
+          if-no-files-found: error
+          retention-days: 30
