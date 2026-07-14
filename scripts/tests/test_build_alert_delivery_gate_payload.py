@@ -3,7 +3,9 @@ from __future__ import annotations
 import copy
 import importlib.util
 from pathlib import Path
+import sys
 import unittest
+from datetime import datetime, timezone
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -12,6 +14,15 @@ SPEC = importlib.util.spec_from_file_location("alert_delivery_gate_builder", MOD
 assert SPEC and SPEC.loader
 builder = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(builder)
+
+VERIFIER_PATH = ROOT / "scripts" / "verify_customer_production_acceptance.py"
+VERIFIER_SPEC = importlib.util.spec_from_file_location(
+    "customer_production_acceptance_verifier_for_alert_builder", VERIFIER_PATH
+)
+assert VERIFIER_SPEC and VERIFIER_SPEC.loader
+verifier = importlib.util.module_from_spec(VERIFIER_SPEC)
+sys.modules[VERIFIER_SPEC.name] = verifier
+VERIFIER_SPEC.loader.exec_module(verifier)
 
 
 def _digest(seed: str) -> str:
@@ -79,6 +90,15 @@ def _artifact() -> dict:
 
 
 class AlertDeliveryGateBuilderTests(unittest.TestCase):
+    def test_production_binding_matches_authoritative_acceptance_contract(self) -> None:
+        self.assertEqual(builder.REPOSITORY, verifier.REPOSITORY)
+        self.assertEqual(builder.PRODUCTION_API_ORIGIN, verifier.PRODUCTION_API_ORIGIN)
+        self.assertEqual(builder.PRODUCTION_SERVICE_ID, verifier.PRODUCTION_SERVICE_ID)
+        self.assertEqual(
+            builder.AUTHORITY_URI,
+            verifier.LIVE_AUTHORITY_ENDPOINTS["alert_delivery"]["noetic-production-live"],
+        )
+
     def test_builds_exact_gate_shape_from_independent_receipts(self) -> None:
         payload = builder.build_payload(
             _artifact(),
@@ -97,6 +117,27 @@ class AlertDeliveryGateBuilderTests(unittest.TestCase):
         self.assertTrue(payload["escalation"]["triggered"])
         self.assertTrue(payload["escalation"]["delivered"])
         self.assertNotIn("response_sha256", str(payload))
+
+        context = verifier.ValidationContext(
+            repo_root=ROOT,
+            evidence_root=ROOT,
+            verification_time=datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc),
+            generated_at=datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc),
+            expected_master_head="1" * 40,
+            expected_deploy_id="dep-d9b7ssh9rddc738q7om0",
+            repository_commit="1" * 40,
+            live=True,
+            trusted_issuers={},
+            registry_sha256="2" * 64,
+            authorities={
+                "alert_delivery": {
+                    "mode": "live_https",
+                    "subject_uri": builder.AUTHORITY_URI,
+                }
+            },
+        )
+        verifier._validate_alert_delivery(payload, context)
+        self.assertEqual(context.errors, [])
 
     def test_rejects_normal_ack_suppression_artifact(self) -> None:
         artifact = _artifact()
