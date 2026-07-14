@@ -2,9 +2,40 @@
 
 from pathlib import Path
 import os
+from urllib.parse import unquote, urlsplit
 
 from pydantic import AliasChoices, Field
 from pydantic_settings import BaseSettings
+
+
+# Audited inventory of every Settings value that can authorize an actor or
+# authenticate to another service.  Billing reference HMACs are public-facing
+# pseudonyms, so their key must not share a failure/rotation domain with any of
+# these credentials.  Keep this explicit when adding a new credential setting.
+_BILLING_REFERENCE_CREDENTIAL_FIELDS = (
+    "crm_airtable_token",
+    "jwt_secret",
+    "auth_mint_secret",
+    "account_credential_pepper",
+    "account_bootstrap_secret",
+    "platform_tenant_provisioning_secret",
+    "evidence_share_token_pepper",
+    "object_lock_receipt_attestation_key",
+    "fleet_service_credential_pepper",
+    "billing_admin_secret",
+    "stripe_secret_key",
+    "stripe_webhook_secret",
+    "openai_api_key",
+    "anthropic_api_key",
+    "google_api_key",
+    "meta_api_key",
+    "xai_api_key",
+    "deepseek_api_key",
+    "qwen_api_key",
+    "atlas_live_worker_token",
+    "atlas_live_invite_codes",
+    "db_password",
+)
 
 
 class Settings(BaseSettings):
@@ -357,6 +388,65 @@ class Settings(BaseSettings):
             "NC_STRIPE_PORTAL_RETURN_URL", "STRIPE_PORTAL_RETURN_URL"
         ),
     )
+    # Durable Stripe usage/invoice reconciliation. This remains separate from
+    # subscription entitlements and is dark by default. Enabling it installs only
+    # the persistence/reconciliation service: no HTTP charge or meter-submission
+    # endpoint is exposed. The reference key is dedicated to HMAC-redacting Stripe
+    # ids in future tenant-scoped projections; it must never reuse a WORM, JWT, or
+    # credential key.
+    billing_reconciliation_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_BILLING_RECONCILIATION_ENABLED",
+            "BILLING_RECONCILIATION_ENABLED",
+        ),
+    )
+    billing_provider_reference_hash_key: str = Field(
+        default="",
+        exclude=True,
+        repr=False,
+        validation_alias=AliasChoices(
+            "NC_BILLING_PROVIDER_REFERENCE_HASH_KEY",
+            "BILLING_PROVIDER_REFERENCE_HASH_KEY",
+        ),
+    )
+    billing_usage_meter_event_name: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_USAGE_METER_EVENT_NAME",
+            "BILLING_USAGE_METER_EVENT_NAME",
+        ),
+    )
+    billing_usage_meter_version: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_USAGE_METER_VERSION",
+            "BILLING_USAGE_METER_VERSION",
+        ),
+    )
+    billing_usage_currency: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_USAGE_CURRENCY", "BILLING_USAGE_CURRENCY"
+        ),
+    )
+    stripe_usage_price_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_STRIPE_USAGE_PRICE_ID", "STRIPE_USAGE_PRICE_ID"
+        ),
+    )
+    stripe_livemode: bool = Field(
+        default=False,
+        validation_alias=AliasChoices("NC_STRIPE_LIVEMODE", "STRIPE_LIVEMODE"),
+    )
+    billing_customer_receipt_allowed_hosts: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_CUSTOMER_RECEIPT_ALLOWED_HOSTS",
+            "BILLING_CUSTOMER_RECEIPT_ALLOWED_HOSTS",
+        ),
+    )
 
     # Rate limiting
     rate_limit_rpm: int = 60
@@ -522,6 +612,112 @@ class Settings(BaseSettings):
                 raise RuntimeError(
                     "Stripe professional and enterprise price ids must be distinct."
                 )
+        if self.billing_reconciliation_enabled:
+            if not self.billing_entitlements_enabled:
+                raise RuntimeError(
+                    "NC_BILLING_RECONCILIATION_ENABLED=true requires "
+                    "NC_BILLING_ENTITLEMENTS_ENABLED=true."
+                )
+            if self.billing_provider.strip().lower() != "stripe":
+                raise RuntimeError(
+                    "NC_BILLING_RECONCILIATION_ENABLED=true requires "
+                    "NC_BILLING_PROVIDER=stripe."
+                )
+            reference_key = self.billing_provider_reference_hash_key
+            other_authority_keys: set[str] = set()
+            for field_name in _BILLING_REFERENCE_CREDENTIAL_FIELDS:
+                value = str(getattr(self, field_name, "") or "")
+                if field_name == "atlas_live_invite_codes":
+                    other_authority_keys.update(
+                        code.strip() for code in value.split(",") if code.strip()
+                    )
+                elif value:
+                    other_authority_keys.add(value)
+            database_url = str(self.database_url or "").strip()
+            if database_url:
+                try:
+                    database_password = urlsplit(database_url).password
+                except ValueError:
+                    database_password = None
+                if database_password:
+                    other_authority_keys.add(unquote(database_password))
+            if reference_key in other_authority_keys:
+                raise RuntimeError(
+                    "NC_BILLING_PROVIDER_REFERENCE_HASH_KEY must be dedicated; "
+                    "do not reuse any server authority or credential secret."
+                )
+            from api.services.billing_reconciliation import (
+                BillingReconciliationError,
+                validate_billing_meter_event_name,
+                validate_customer_receipt_allowed_hosts,
+                validate_provider_reference_hash_key,
+                validate_stripe_usage_price_id,
+            )
+
+            try:
+                validate_provider_reference_hash_key(reference_key)
+            except BillingReconciliationError as exc:
+                raise RuntimeError(
+                    "Billing reconciliation requires dedicated "
+                    "NC_BILLING_PROVIDER_REFERENCE_HASH_KEY: " + str(exc)
+                ) from exc
+            event_name = self.billing_usage_meter_event_name
+            meter_version = self.billing_usage_meter_version
+            usage_price = self.stripe_usage_price_id
+            currency = self.billing_usage_currency
+            safe_codes = set(
+                "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789._:-"
+            )
+            try:
+                validate_billing_meter_event_name(event_name)
+            except BillingReconciliationError as exc:
+                raise RuntimeError(
+                    "NC_BILLING_USAGE_METER_EVENT_NAME must be a non-empty "
+                    "safe Stripe identifier of at most 100 characters."
+                ) from exc
+            if (
+                not meter_version
+                or len(meter_version) > 128
+                or any(character not in safe_codes for character in meter_version)
+            ):
+                raise RuntimeError(
+                    "NC_BILLING_USAGE_METER_VERSION must be a non-empty "
+                    "safe identifier."
+                )
+            try:
+                validate_stripe_usage_price_id(usage_price)
+            except BillingReconciliationError as exc:
+                raise RuntimeError(
+                    "Billing reconciliation requires a canonical typed "
+                    "NC_STRIPE_USAGE_PRICE_ID."
+                ) from exc
+            if usage_price in {
+                self.stripe_professional_price_id.strip(),
+                self.stripe_enterprise_price_id.strip(),
+            }:
+                raise RuntimeError(
+                    "Stripe usage price id must be distinct from flat "
+                    "subscription price ids."
+                )
+            if (
+                len(currency) != 3
+                or not currency.isascii()
+                or not currency.isalpha()
+                or currency != currency.lower()
+            ):
+                raise RuntimeError(
+                    "NC_BILLING_USAGE_CURRENCY must be a canonical lowercase "
+                    "three-letter currency code."
+                )
+            raw_receipt_hosts = self.billing_customer_receipt_allowed_hosts
+            receipt_hosts = tuple(raw_receipt_hosts.split(","))
+            try:
+                validate_customer_receipt_allowed_hosts(receipt_hosts)
+            except BillingReconciliationError as exc:
+                raise RuntimeError(
+                    "NC_BILLING_CUSTOMER_RECEIPT_ALLOWED_HOSTS must contain "
+                    "one or more comma-separated exact HTTPS host names."
+                ) from exc
         if self.fleet_service_auth_enabled and not self.accounts_enabled:
             raise RuntimeError(
                 "NC_FLEET_SERVICE_AUTH_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."
