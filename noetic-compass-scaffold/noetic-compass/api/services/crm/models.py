@@ -100,6 +100,12 @@ def _now_iso() -> str:
     return datetime.now(UTC).isoformat()
 
 
+def _verification_now_iso() -> str:
+    """Canonical whole-second UTC timestamp used by external verification receipts."""
+
+    return datetime.now(UTC).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def normalize_email(raw: str) -> str:
     """Canonicalize an email for identity/dedup: trimmed + lowercased.
 
@@ -152,6 +158,100 @@ class LeadSubmission:
 
 
 @dataclass(frozen=True)
+class CRMVerificationReceipt:
+    """Secret-safe proof that the external CRM write survived strict readback.
+
+    The receipt deliberately stores booleans, the expected lifecycle stage, a timestamp, and a
+    digest of the provider responses. It never stores response bodies, URLs, credentials, or the
+    lead's email/message. The digest is useful for binding a later acceptance artifact to the exact
+    provider exchange without turning the local lead ledger into a second copy of CRM PII.
+    """
+
+    readback_verified: bool
+    deduplicated: bool
+    owner_assigned: bool
+    lifecycle_stage: str
+    verified_at: str
+    response_digest: str
+
+    def __post_init__(self) -> None:
+        for field_name, value in (
+            ("readback_verified", self.readback_verified),
+            ("deduplicated", self.deduplicated),
+            ("owner_assigned", self.owner_assigned),
+        ):
+            if type(value) is not bool:
+                raise CRMStateError(
+                    f"CRM verification receipt {field_name} must be a boolean"
+                )
+            if value is not True:
+                raise CRMStateError(
+                    "CRM verification receipts exist only after readback, deduplication, and "
+                    "owner assignment are all verified"
+                )
+        if (
+            type(self.lifecycle_stage) is not str
+            or self.lifecycle_stage not in VALID_PIPELINE_STATUSES
+        ):
+            allowed = ", ".join(VALID_PIPELINE_STATUSES)
+            raise CRMStateError(
+                "CRM verification receipt lifecycle_stage must be one exact canonical value: "
+                f"{allowed}"
+            )
+        if type(self.verified_at) is not str or not self.verified_at:
+            raise CRMStateError("CRM verification receipt requires verified_at")
+        try:
+            verified_at = datetime.strptime(self.verified_at, "%Y-%m-%dT%H:%M:%SZ")
+        except ValueError as exc:
+            raise CRMStateError(
+                "CRM verification receipt verified_at must be whole-second UTC "
+                "YYYY-MM-DDTHH:MM:SSZ"
+            ) from exc
+        if verified_at.strftime("%Y-%m-%dT%H:%M:%SZ") != self.verified_at:
+            raise CRMStateError(
+                "CRM verification receipt verified_at must be canonical whole-second UTC"
+            )
+        if type(self.response_digest) is not str:
+            raise CRMStateError(
+                "CRM verification receipt response_digest must be sha256:<64 lowercase hex>"
+            )
+        prefix, separator, digest = self.response_digest.partition(":")
+        if (
+            separator != ":"
+            or prefix != "sha256"
+            or len(digest) != 64
+            or any(character not in "0123456789abcdef" for character in digest)
+        ):
+            raise CRMStateError(
+                "CRM verification receipt response_digest must be sha256:<64 lowercase hex>"
+            )
+
+    def to_dict(self) -> dict[str, object]:
+        return {
+            "readback_verified": self.readback_verified,
+            "deduplicated": self.deduplicated,
+            "owner_assigned": self.owner_assigned,
+            "lifecycle_stage": self.lifecycle_stage,
+            "verified_at": self.verified_at,
+            "response_digest": self.response_digest,
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, object]) -> "CRMVerificationReceipt":
+        lifecycle_stage = data.get("lifecycle_stage")
+        verified_at = data.get("verified_at")
+        response_digest = data.get("response_digest")
+        return cls(
+            readback_verified=data.get("readback_verified") is True,
+            deduplicated=data.get("deduplicated") is True,
+            owner_assigned=data.get("owner_assigned") is True,
+            lifecycle_stage=lifecycle_stage if isinstance(lifecycle_stage, str) else "",
+            verified_at=verified_at if isinstance(verified_at, str) else "",
+            response_digest=response_digest if isinstance(response_digest, str) else "",
+        )
+
+
+@dataclass(frozen=True)
 class CRMSyncResult:
     """The outcome of asking a :class:`~api.services.crm.sync.CRMSyncProvider` to land a lead.
 
@@ -166,6 +266,7 @@ class CRMSyncResult:
     external_id: str | None = None
     synced_at: str | None = None
     note: str = ""
+    verification_receipt: CRMVerificationReceipt | None = None
 
     def __post_init__(self) -> None:
         # Structural guard: you cannot claim a real synced landing with no external id to show.
@@ -179,6 +280,21 @@ class CRMSyncResult:
                 f"provider {self.provider!r} returned synced=True but is_real=False; a stub may "
                 f"never report a real landing"
             )
+        if self.synced and self.provider.strip().lower() == "airtable":
+            receipt = self.verification_receipt
+            if receipt is None:
+                raise CRMStateError(
+                    "provider 'airtable' returned synced=True without a verification receipt"
+                )
+            if not (
+                receipt.readback_verified is True
+                and receipt.deduplicated is True
+                and receipt.owner_assigned is True
+            ):
+                raise CRMStateError(
+                    "provider 'airtable' returned synced=True without verified readback, "
+                    "deduplication, and owner assignment"
+                )
 
     def to_dict(self) -> dict[str, object]:
         return {
@@ -188,6 +304,11 @@ class CRMSyncResult:
             "external_id": self.external_id,
             "synced_at": self.synced_at,
             "note": self.note,
+            "verification_receipt": (
+                None
+                if self.verification_receipt is None
+                else self.verification_receipt.to_dict()
+            ),
         }
 
 
@@ -215,6 +336,7 @@ class Lead:
     sync_status: LeadSyncStatus = "captured"
     pipeline_status: LeadPipelineStatus = "new"
     external_id: str | None = None
+    verification_receipt: CRMVerificationReceipt | None = None
     schema_version: str = CRM_SCHEMA_VERSION
 
     @classmethod
@@ -279,6 +401,9 @@ class Lead:
             sync_status=new_status,
             pipeline_status=self.pipeline_status,
             external_id=result.external_id if result.synced else self.external_id,
+            verification_receipt=(
+                result.verification_receipt if result.synced else self.verification_receipt
+            ),
             schema_version=self.schema_version,
         )
 
@@ -309,6 +434,7 @@ class Lead:
             sync_status=self.sync_status,
             pipeline_status=normalized,
             external_id=self.external_id,
+            verification_receipt=self.verification_receipt,
             schema_version=self.schema_version,
         )
 
@@ -330,12 +456,26 @@ class Lead:
             "sync_status": self.sync_status,
             "pipeline_status": self.pipeline_status,
             "external_id": self.external_id,
+            "verification_receipt": (
+                None
+                if self.verification_receipt is None
+                else self.verification_receipt.to_dict()
+            ),
             "schema_version": self.schema_version,
         }
 
     @classmethod
     def from_dict(cls, data: Mapping[str, object]) -> "Lead":
         """Rehydrate a lead from its ``to_dict`` form (used by the durable file store)."""
+        raw_receipt = data.get("verification_receipt")
+        if raw_receipt is None:
+            verification_receipt = None
+        elif isinstance(raw_receipt, Mapping):
+            verification_receipt = CRMVerificationReceipt.from_dict(raw_receipt)
+        else:
+            raise CRMStateError(
+                "persisted verification_receipt must be a JSON object or null"
+            )
         return cls(
             email=str(data["email"]),
             lead_id=str(data["lead_id"]),
@@ -353,5 +493,6 @@ class Lead:
             sync_status=str(data.get("sync_status", "captured")),  # type: ignore[arg-type]
             pipeline_status=str(data.get("pipeline_status", "new")),  # type: ignore[arg-type]
             external_id=(None if data.get("external_id") is None else str(data["external_id"])),
+            verification_receipt=verification_receipt,
             schema_version=str(data.get("schema_version", CRM_SCHEMA_VERSION)),
         )

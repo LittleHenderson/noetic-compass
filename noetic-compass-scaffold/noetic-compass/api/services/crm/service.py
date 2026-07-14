@@ -34,7 +34,12 @@ from api.services.crm.store import (
     JsonlFileLeadStore,
     LeadStore,
 )
-from api.services.crm.sync import CRMSyncProvider, NullCRMProvider, build_crm_provider
+from api.services.crm.sync import (
+    CRMSyncProvider,
+    NullCRMProvider,
+    build_crm_provider,
+    normalize_crm_provider_error,
+)
 
 
 class CRMService:
@@ -97,7 +102,9 @@ class CRMService:
                 is_real=getattr(self._provider, "is_real", True),
                 external_id=None,
                 synced_at=_now_iso(),
-                note=f"sync attempt raised {type(exc).__name__}: {exc}",
+                note=normalize_crm_provider_error(
+                    getattr(self._provider, "provider_name", "unknown"), exc
+                ),
             )
 
         # 5. Fold the outcome in as a new version and persist it. Never a mutation of the captured

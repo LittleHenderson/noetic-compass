@@ -176,9 +176,9 @@ services:
         sync: false
       # External CRM sync. Default app behavior is capture-only (`NC_CRM_PROVIDER=null`).
       # To actually land leads in Airtable, set these dashboard-managed values together:
-      # NC_CRM_PROVIDER=airtable, NC_AIRTABLE_TOKEN, NC_AIRTABLE_BASE_ID, and optionally
-      # NC_AIRTABLE_TABLE_NAME (defaults to "Leads"). A half-configured provider fails
-      # startup loudly rather than pretending sync works.
+      # NC_CRM_PROVIDER=airtable, token/base/table, one text dedup field, and an explicit
+      # owner value. PATCH performUpsert plus direct+filtered readback must prove one current,
+      # owned lifecycle record before a lead is marked synced. Half-configuration fails loud.
       - key: NC_CRM_PROVIDER
         sync: false
       - key: NC_AIRTABLE_TOKEN
@@ -188,6 +188,14 @@ services:
       - key: NC_AIRTABLE_TABLE_NAME
         sync: false
       - key: NC_AIRTABLE_API_BASE_URL
+        sync: false
+      - key: NC_AIRTABLE_DEDUP_FIELD
+        sync: false
+      - key: NC_AIRTABLE_OWNER_FIELD
+        sync: false
+      - key: NC_AIRTABLE_OWNER_VALUE
+        sync: false
+      - key: NC_AIRTABLE_LIFECYCLE_FIELD
         sync: false
       # Anonymous public lead-capture abuse guard. This is separate from the API-key rate
       # limiter because /api/crm/public is intentionally unauthenticated.

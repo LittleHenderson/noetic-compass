@@ -73,45 +73,66 @@ All CRM config is dark by default.
 - `NC_AIRTABLE_BASE_ID`
 - `NC_AIRTABLE_TABLE_NAME` (default `Leads`)
 - `NC_AIRTABLE_API_BASE_URL` (default `https://api.airtable.com/v0`)
+- `NC_AIRTABLE_DEDUP_FIELD` (default `Dedup Key`; must be a single-line text field)
+- `NC_AIRTABLE_OWNER_FIELD` (default `Owner`; this integration writes a configured text value)
+- `NC_AIRTABLE_OWNER_VALUE` (required and non-empty whenever Airtable is enabled)
+- `NC_AIRTABLE_LIFECYCLE_FIELD` (default `Pipeline Status`)
 - `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX` (default `5`)
 - `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS` (default `3600`)
 
-The Airtable provider fails startup when `NC_CRM_PROVIDER=airtable` is set without token/base/table.
-That is intentional: a half-configured provider would capture locally while looking externally synced.
+The Airtable provider fails startup when `NC_CRM_PROVIDER=airtable` is set without the complete
+token/base/table/dedup/owner/lifecycle contract. That is intentional: a half-configured provider
+would capture locally while looking externally synced. The API base must resolve to the exact
+canonical `https://api.airtable.com/v0` value; userinfo, alternate hosts, HTTP, queries, fragments,
+and alternate paths are rejected before the bearer token can be sent, and the production transport
+does not follow credential-bearing redirects.
 
 ## Airtable mapping
 
-The provider creates one Airtable record per lead by POSTing JSON to
-`/v0/{base_id}/{table_name}` with bearer-token auth. A lead reaches `synced` only when Airtable
-returns a record id.
+The provider PATCHes Airtable's records endpoint with `performUpsert.fieldsToMergeOn` containing
+exactly the configured dedup field. The value is a stable domain-separated SHA-256 pseudonym of the
+normalized email, so the filter URL does not expose the address. A write response is not enough to
+reach `synced`: the provider GETs the returned record id and then performs a filtered list GET for
+the dedup key. Both readbacks must contain the exact current fields, owner, and lifecycle; the list
+must return exactly one record and it must be the same record id.
 
 Fields sent:
 
 - `Lead ID`
 - `Email`
+- configured dedup field (pseudonymous key)
+- configured owner field/value
+- configured lifecycle field (`pipeline_status` value)
 - `Name`
 - `Organization`
 - `Message`
 - `Interest`
 - `Source`
 - `Trace ID`
-- `Pipeline Status`
 - `Schema Version`
 - `Metadata JSON`
 
 Operational note: the Airtable table must have compatible field names before enabling the provider.
-If Airtable rejects the schema or credentials, the lead remains locally captured and is annotated
-`sync_failed`.
+If Airtable rejects the schema/credentials or either readback is stale, missing, wrongly owned, or
+ambiguous, the lead remains locally captured and is annotated `sync_failed`. Provider exceptions
+are normalized without response bodies, URLs, tokens, or lead PII. A successful lead stores a
+secret-safe verification receipt with readback/dedup/owner booleans, lifecycle, verification time,
+and a SHA-256 digest of the three parsed provider responses. Provider reads are bounded, duplicate
+JSON keys and non-standard `NaN`/infinity constants are rejected, and receipt time is canonical
+whole-second UTC (`YYYY-MM-DDTHH:MM:SSZ`).
 
 ## What the tests prove
 
 `tests/test_crm_lead_capture.py` now covers:
 
 - the null provider never reports a landing;
-- Airtable provider construction fails loud without credentials;
-- Airtable provider construction succeeds with token/base/table;
-- the provider POSTs the expected record shape and marks a lead `synced` only when Airtable returns a
-  real record id;
+- Airtable provider construction fails loud without credentials or an owner value;
+- PATCH `performUpsert` uses one configured pseudonymous email key;
+- create then retry/update returns the same external id and the filtered list remains unique;
+- direct and filtered readbacks reject ambiguous duplicates, a different record id, missing/wrong
+  owner, wrong lifecycle/dedup key, and stale lead/email fields;
+- provider HTTP/transport/JSON errors do not expose test secrets or lead PII;
+- verification receipts survive a JSONL restart and legacy JSON without a receipt still loads;
 - missing record id is an error;
 - a sync failure leaves the lead captured locally and annotated `sync_failed`;
 - the durable JSONL store survives simulated restart;
@@ -121,11 +142,8 @@ If Airtable rejects the schema or credentials, the lead remains locally captured
 - pipeline status hardening proves store-level atomicity for concurrent updates, JSONL appends one
   new version per status change, and route validation uses the same domain normalizer as the model.
 
-Targeted verification for the Airtable slice: `40 passed` in `tests/test_crm_lead_capture.py`.
-Targeted verification after the pipeline-status slice: `52 passed` in
-`tests/test_crm_lead_capture.py`.
-Targeted verification after the pipeline-status hardening pass: `55 passed` in
-`tests/test_crm_lead_capture.py`; focused CRM/config/startup sweep: `71 passed`.
+Current focused Airtable/CRM verification: `97 passed` across
+`tests/test_crm_lead_capture.py` and `tests/test_crm_airtable_verification.py`.
 
 ## Hosted production status
 
@@ -138,10 +156,14 @@ external CRM sync is still not enabled. To turn it on:
    - `NC_AIRTABLE_TOKEN=<secret>`
    - `NC_AIRTABLE_BASE_ID=<base id>`
    - `NC_AIRTABLE_TABLE_NAME=<table name>`
+   - `NC_AIRTABLE_DEDUP_FIELD=<single-line text field>`
+   - `NC_AIRTABLE_OWNER_FIELD=<text owner field>`
+   - `NC_AIRTABLE_OWNER_VALUE=<non-empty accountable owner>`
+   - `NC_AIRTABLE_LIFECYCLE_FIELD=<lifecycle field>`
 3. Redeploy.
 4. Submit a hosted lead through `POST /api/crm/public/leads`.
-5. Confirm the response has `sync_status: "synced"`, `synced: true`, and a non-empty
-   `external_id`.
+5. Confirm the public response has `sync_status: "synced"` and `synced: true`; then use the authed
+   lead read route to verify the non-empty `external_id` and persisted verification receipt.
 
 Until that hosted proof passes, the honest production posture is: **captured durably, not externally
 synced**.
