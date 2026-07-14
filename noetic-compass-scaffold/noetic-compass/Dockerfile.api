@@ -28,7 +28,8 @@ FROM python:3.12-slim
 
 # Create non-root user
 RUN groupadd --gid 1000 ncuser && \
-    useradd --uid 1000 --gid ncuser --create-home ncuser
+    useradd --uid 1000 --gid ncuser --create-home --shell /bin/bash ncuser && \
+    install -d -m 0700 -o ncuser -g ncuser /home/ncuser/.ssh
 
 WORKDIR /app
 
@@ -46,9 +47,10 @@ COPY docs/working/pythia160m_gate1/ docs/working/pythia160m_gate1/
 COPY docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json docs/working/gpt_neox_20b_stage9_original_40e_evidence_packet_20260528T0455Z.json
 COPY scenarios/ scenarios/
 COPY validation/ validation/
-# The private account-canary operator runs this one bounded proof from Render
-# Shell. Do not copy the wider development scripts directory into production.
+# Operators run only these bounded, fail-closed commands from Render Shell.
+# Do not copy the wider development scripts directory into production.
 COPY scripts/verify_account_canary_quotas.py scripts/verify_account_canary_quotas.py
+COPY scripts/publish_customer_production_acceptance_authority.py scripts/publish_customer_production_acceptance_authority.py
 
 # Set ownership to non-root user
 RUN chown -R ncuser:ncuser /app

@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import sys
 import unittest
+from copy import deepcopy
 from pathlib import Path
 
 
@@ -12,7 +13,9 @@ APP_ROOT = ROOT / "noetic-compass-scaffold" / "noetic-compass"
 sys.path.insert(0, str(APP_ROOT))
 
 from api.services.customer_production_acceptance_authority import (  # noqa: E402
+    AcceptanceAuthorityInvalid,
     CustomerProductionAcceptanceAuthorityStore,
+    canonicalize_acceptance_evidence,
 )
 from api.services.production.state_substrate.memory_store import (  # noqa: E402
     InMemoryStateStore,
@@ -73,11 +76,89 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 gate,
                 payload,
                 expected_head_version=0,
+                expected_previous_sha256=None,
+                authorization_artifact_uri=(
+                    f"{verifier.PRODUCTION_API_ORIGIN}/internal/"
+                    "acceptance-authorizations/alignment-test"
+                ),
+                authorization_artifact_sha256=_digest(
+                    "alignment-test-authorization"
+                ),
+                operation_reason="authorized_publication",
                 now=NOW,
             )
             loaded = store.load(gate, now=NOW)
             self.assertEqual(loaded.sha256, published.sha256)
             self.assertEqual(loaded.gate, gate)
+
+    def test_live_route_rejects_verifier_forbidden_origins_and_private_canary_case(self) -> None:
+        payloads = _gate_payloads()
+        release = _common(
+            "release_decision",
+            event="2026-07-14T11:56:00Z",
+            observed="2026-07-14T11:58:00Z",
+        )
+        release.update(
+            {
+                "status": "ACCEPT",
+                "approved_at_utc": "2026-07-14T11:56:00Z",
+                "approver_roles": sorted(verifier.RELEASE_APPROVER_ROLES),
+                "decision_record_uri": (
+                    f"{verifier.PRODUCTION_API_ORIGIN}/internal/acceptance/release-record"
+                ),
+                "decision_record_sha256": _digest("release-record"),
+            }
+        )
+        payloads["release_decision"] = release
+        for gate, payload in payloads.items():
+            if gate == "root_ci_protected_deploy":
+                continue
+            payload["master_head_sha"] = MASTER_SHA
+            payload["deploy_id"] = DEPLOY_ID
+            payload["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[gate][
+                "noetic-production-live"
+            ]
+            payload["artifact_sha256"] = _digest(f"live-authority-{gate}")
+
+        cases: list[tuple[str, dict]] = []
+        legal = deepcopy(payloads["legal_publication_approval"])
+        legal["approvals"][0]["approval_artifact_uri"] = (  # type: ignore[index]
+            "https://atlas.noeticcompass.com/approvals/legal"
+        )
+        cases.append(("legal_publication_approval", legal))
+
+        incident = deepcopy(payloads["incident_tabletop"])
+        incident["incident"]["postmortem_uri"] = (  # type: ignore[index]
+            "https://cascompass.ai/postmortems/incident"
+        )
+        cases.append(("incident_tabletop", incident))
+
+        tabletop = deepcopy(payloads["incident_tabletop"])
+        tabletop["tabletop"]["evidence_uri"] = (  # type: ignore[index]
+            "https://atlas.noeticcompass.com/tabletops/proof"
+        )
+        cases.append(("incident_tabletop", tabletop))
+
+        claim = deepcopy(payloads["claim_honesty"])
+        claim["approvals"][0]["approval_artifact_uri"] = (  # type: ignore[index]
+            "https://atlas.noeticcompass.com/approvals/claim"
+        )
+        cases.append(("claim_honesty", claim))
+
+        decision = deepcopy(payloads["release_decision"])
+        decision["decision_record_uri"] = "https://cascompass.ai/release/decision"
+        cases.append(("release_decision", decision))
+
+        mixed_case_canary = deepcopy(payloads["legal_publication_approval"])
+        mixed_case_canary["approvals"][0]["approval_artifact_uri"] = (  # type: ignore[index]
+            f"{verifier.PRODUCTION_API_ORIGIN}/approvals/ACCOUNTS-CANARY"
+        )
+        cases.append(("legal_publication_approval", mixed_case_canary))
+
+        for gate, payload in cases:
+            with self.subTest(gate=gate):
+                with self.assertRaises(AcceptanceAuthorityInvalid):
+                    canonicalize_acceptance_evidence(gate, payload, now=NOW)
 
 
 if __name__ == "__main__":

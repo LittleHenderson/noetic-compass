@@ -265,6 +265,19 @@ PROHIBITED_SECRET_FIELD_NAMES = frozenset(
         "webhook_secret",
     }
 )
+PROHIBITED_PII_FIELD_NAMES = frozenset(
+    {
+        "address",
+        "customer_email",
+        "email",
+        "full_name",
+        "ip_address",
+        "name",
+        "phone",
+        "postal_address",
+        "user_email",
+    }
+)
 SUSPICIOUS_SECRET_PATTERNS = {
     "AWS access key": re.compile(r"\b(?:AKIA|ASIA)[0-9A-Z]{16}\b"),
     "GitHub token": re.compile(
@@ -281,6 +294,9 @@ SUSPICIOUS_SECRET_PATTERNS = {
     ),
     "private key": re.compile(
         r"-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----"
+    ),
+    "email address": re.compile(
+        r"(?i)(?<![A-Za-z0-9._%+-])[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}"
     ),
 }
 
@@ -325,6 +341,20 @@ def _error(errors: list[str], path: str, message: str) -> None:
 def _require(condition: bool, path: str, message: str, errors: list[str]) -> None:
     if not condition:
         _error(errors, path, message)
+
+
+def _json_scalar_equals(value: Any, expected: Any) -> bool:
+    """Compare JSON scalars without Python's bool/int aliasing."""
+
+    if isinstance(expected, bool):
+        return value is expected
+    if isinstance(expected, int):
+        return (
+            isinstance(value, int)
+            and not isinstance(value, bool)
+            and value == expected
+        )
+    return value == expected
 
 
 def _pairs_without_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
@@ -429,6 +459,7 @@ def _format_timestamp(value: datetime) -> str:
 def _origin(value: str) -> str | None:
     try:
         parsed = urllib.parse.urlsplit(value)
+        port_value = parsed.port
     except ValueError:
         return None
     if (
@@ -440,7 +471,7 @@ def _origin(value: str) -> str | None:
         or parsed.fragment
     ):
         return None
-    port = f":{parsed.port}" if parsed.port else ""
+    port = f":{port_value}" if port_value else ""
     return f"https://{parsed.hostname.lower()}{port}"
 
 
@@ -464,6 +495,14 @@ def _safe_https_url(
         return None
     if allowed_origins is not None and url_origin not in set(allowed_origins):
         _error(errors, path, "origin is not allowlisted for this evidence class")
+        return None
+    parsed = urllib.parse.urlsplit(value)
+    decoded_path = urllib.parse.unquote(parsed.path)
+    if decoded_path != parsed.path:
+        _error(errors, path, "must not use encoded path material")
+        return None
+    if any(part == ".." for part in decoded_path.split("/")):
+        _error(errors, path, "must not contain path traversal")
         return None
     return value
 
@@ -909,7 +948,16 @@ def _resolve_authoritative_evidence(
     except ManifestLoadError as exc:
         _error(errors, f"{path}.uri", str(exc))
         return None
-    errors.extend(_find_prohibited_fields(document, f"{path}.document"))
+    errors.extend(
+        _find_prohibited_fields(
+            document,
+            f"{path}.document",
+            # The live authority service has no root-CI route. Its other gate
+            # schemas prohibit PII-named fields, while root-CI legitimately
+            # contains workflow ``name`` and repository ``full_name`` keys.
+            include_pii=gate != "root_ci_protected_deploy",
+        )
+    )
     errors.extend(_scan_secret_shapes(document, f"{path}.document"))
     context.resolved_documents[gate] = raw
     if mode == "signed_receipt":
@@ -994,10 +1042,11 @@ def _validate_common_evidence(
     if artifact_hash is not None:
         context.subject_hashes.setdefault(gate, artifact_hash)
     if artifact_uri is not None and gate in context.authorities:
+        subject_uri = context.authorities[gate].get("subject_uri")
         _require(
-            context.authorities[gate]["subject_origin"] == _origin(artifact_uri),
+            isinstance(subject_uri, str) and artifact_uri == subject_uri,
             f"{path}.artifact_uri",
-            "origin must match the authoritative receipt/live source",
+            "must match the exact authoritative receipt/live source",
             errors,
         )
     return event, observed
@@ -1086,7 +1135,7 @@ def _validate_runtime_worm(
             "branch": "master",
             "status": "live",
         }.items():
-            _require(deployment.get(field) == expected, f"{path}.deployment.{field}", f"must equal {expected!r}", errors)
+            _require(_json_scalar_equals(deployment.get(field), expected), f"{path}.deployment.{field}", f"must equal {expected!r}", errors)
         _require(deployment.get("deploy_id") == context.expected_deploy_id, f"{path}.deployment.deploy_id", "must match expected production deployment", errors)
         _require(deployment.get("commit_sha") == context.expected_master_head, f"{path}.deployment.commit_sha", "must match expected master HEAD", errors)
         _critical_proof_timestamp(deployment.get("deployed_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.deployment.deployed_at_utc")
@@ -1101,7 +1150,7 @@ def _validate_runtime_worm(
             "status": "ok",
             "authority": "verified",
         }.items():
-            _require(readiness.get(field) == expected, f"{path}.readiness.{field}", f"must equal {expected!r}", errors)
+            _require(_json_scalar_equals(readiness.get(field), expected), f"{path}.readiness.{field}", f"must equal {expected!r}", errors)
         _critical_proof_timestamp(readiness.get("verified_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.readiness.verified_at_utc")
 
     worker = evidence.get("worker")
@@ -1136,7 +1185,7 @@ def _validate_runtime_worm(
             "model_id": EXPECTED_MODEL_ID,
         }
         for field, value in expected.items():
-            _require(worker.get(field) == value, f"{path}.worker.{field}", f"must equal {value!r}", errors)
+            _require(_json_scalar_equals(worker.get(field), value), f"{path}.worker.{field}", f"must equal {value!r}", errors)
         _nonempty_string(worker.get("worker_id"), f"{path}.worker.worker_id", errors)
         _critical_proof_timestamp(worker.get("verified_at_utc"), gate="runtime_worm", event=event, observed=observed, context=context, path=f"{path}.worker.verified_at_utc")
 
@@ -1168,7 +1217,7 @@ def _validate_runtime_worm(
             "write_verified": True,
             "readback_verified": True,
         }.items():
-            _require(worm.get(field) == expected, f"{path}.worm.{field}", f"must equal {expected!r}", errors)
+            _require(_json_scalar_equals(worm.get(field), expected), f"{path}.worm.{field}", f"must equal {expected!r}", errors)
         configured_days = _positive_int(worm.get("configured_retention_days"), f"{path}.worm.configured_retention_days", errors)
         if configured_days is not None:
             _require(configured_days >= FRESHNESS_POLICY["worm_configured_min_retention_days"], f"{path}.worm.configured_retention_days", f"must be at least {FRESHNESS_POLICY['worm_configured_min_retention_days']}", errors)
@@ -1223,10 +1272,10 @@ def _validate_root_ci(
             "api_url": REPOSITORY_API_URL,
         }
         for field, value in expected.items():
-            _require(repository.get(field) == value, f"{path}.github_repository.{field}", f"must equal {value!r}", errors)
+            _require(_json_scalar_equals(repository.get(field), value), f"{path}.github_repository.{field}", f"must equal {value!r}", errors)
     _require(evidence.get("branch") == "master", f"{path}.branch", "must be master", errors)
     _require(evidence.get("workflow_directory") == ".github/workflows", f"{path}.workflow_directory", "must be repository-root .github/workflows", errors)
-    _require(evidence.get("misplaced_workflow_count") == 0, f"{path}.misplaced_workflow_count", "must be zero", errors)
+    _require(_json_scalar_equals(evidence.get("misplaced_workflow_count"), 0), f"{path}.misplaced_workflow_count", "must be zero", errors)
     app = evidence.get("github_app")
     if _is_mapping(app, f"{path}.github_app", errors):
         _exact_keys(app, set(GITHUB_ACTIONS_APP), f"{path}.github_app", errors)
@@ -1273,7 +1322,7 @@ def _validate_root_ci(
         )
         contract = WORKFLOW_CONTRACTS[name]
         for field, value in contract.items():
-            _require(check.get(field) == value, f"{item_path}.{field}", f"must equal {value!r}", errors)
+            _require(_json_scalar_equals(check.get(field), value), f"{item_path}.{field}", f"must equal {value!r}", errors)
         for field, value in {
             "event": "push",
             "status": "completed",
@@ -1284,7 +1333,7 @@ def _validate_root_ci(
             "app_node_id": GITHUB_ACTIONS_APP["node_id"],
             "app_slug": GITHUB_ACTIONS_APP["slug"],
         }.items():
-            _require(check.get(field) == value, f"{item_path}.{field}", f"must equal {value!r}", errors)
+            _require(_json_scalar_equals(check.get(field), value), f"{item_path}.{field}", f"must equal {value!r}", errors)
         run_id = _positive_int(check.get("run_id"), f"{item_path}.run_id", errors)
         _positive_int(check.get("run_attempt"), f"{item_path}.run_attempt", errors)
         check_run_id = _positive_int(check.get("check_run_id"), f"{item_path}.check_run_id", errors)
@@ -1335,7 +1384,7 @@ def _validate_root_ci(
             "health_check_path": "/health",
         }
         for field, value in expected.items():
-            _require(deployment.get(field) == value, f"{path}.deployment.{field}", f"must equal {value!r}", errors)
+            _require(_json_scalar_equals(deployment.get(field), value), f"{path}.deployment.{field}", f"must equal {value!r}", errors)
         _critical_proof_timestamp(deployment.get("deployed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{path}.deployment.deployed_at_utc")
 
 
@@ -1371,7 +1420,7 @@ def _validate_hosted_customer(
         "service_id": PRODUCTION_SERVICE_ID,
         "customer_lane": "public-customer",
     }.items():
-        _require(evidence.get(field) == value, f"{path}.{field}", f"must equal {value!r}", errors)
+        _require(_json_scalar_equals(evidence.get(field), value), f"{path}.{field}", f"must equal {value!r}", errors)
     _sha256(evidence.get("tenant_subject_sha256"), f"{path}.tenant_subject_sha256", errors)
     _sha256(evidence.get("account_subject_sha256"), f"{path}.account_subject_sha256", errors)
     audit = evidence.get("audit")
@@ -1390,7 +1439,7 @@ def _validate_hosted_customer(
     if _is_mapping(packet, f"{path}.packet_download", errors):
         _exact_keys(packet, {"audit_id", "http_status", "content_type", "packet_sha256", "verification_overall", "worm_receipt_bound", "downloaded_at_utc"}, f"{path}.packet_download", errors)
         _require(packet.get("audit_id") == audit_id, f"{path}.packet_download.audit_id", "must match the audit", errors)
-        _require(packet.get("http_status") == 200, f"{path}.packet_download.http_status", "must be 200", errors)
+        _require(_json_scalar_equals(packet.get("http_status"), 200), f"{path}.packet_download.http_status", "must be 200", errors)
         _require(packet.get("content_type") == "application/json", f"{path}.packet_download.content_type", "must be application/json", errors)
         _sha256(packet.get("packet_sha256"), f"{path}.packet_download.packet_sha256", errors)
         _require(packet.get("verification_overall") == "all_match", f"{path}.packet_download.verification_overall", "must be all_match", errors)
@@ -1400,7 +1449,7 @@ def _validate_hosted_customer(
     if _is_mapping(share, f"{path}.share", errors):
         _exact_keys(share, {"create_http_status", "anonymous_fetch_http_status", "scope", "share_token_sha256", "created_at_utc", "fetched_at_utc", "expires_at_utc", "revoke_http_status", "revoked_at_utc", "revoked_fetch_http_status"}, f"{path}.share", errors)
         _require(share.get("create_http_status") in {200, 201}, f"{path}.share.create_http_status", "must be 200 or 201", errors)
-        _require(share.get("anonymous_fetch_http_status") == 200, f"{path}.share.anonymous_fetch_http_status", "must be 200", errors)
+        _require(_json_scalar_equals(share.get("anonymous_fetch_http_status"), 200), f"{path}.share.anonymous_fetch_http_status", "must be 200", errors)
         _require(share.get("scope") == "read_only", f"{path}.share.scope", "must be read_only", errors)
         _sha256(share.get("share_token_sha256"), f"{path}.share.share_token_sha256", errors)
         created = _critical_proof_timestamp(share.get("created_at_utc"), gate="hosted_customer_journey", event=event, observed=observed, context=context, path=f"{path}.share.created_at_utc")
@@ -1417,7 +1466,7 @@ def _validate_hosted_customer(
     if _is_mapping(isolation, f"{path}.tenant_isolation", errors):
         _exact_keys(isolation, {"foreign_audit_http_status", "foreign_packet_http_status", "verified_at_utc"}, f"{path}.tenant_isolation", errors)
         for field in ("foreign_audit_http_status", "foreign_packet_http_status"):
-            _require(isolation.get(field) == 404, f"{path}.tenant_isolation.{field}", "must be 404", errors)
+            _require(_json_scalar_equals(isolation.get(field), 404), f"{path}.tenant_isolation.{field}", "must be 404", errors)
         _critical_proof_timestamp(isolation.get("verified_at_utc"), gate="hosted_customer_journey", event=event, observed=observed, context=context, path=f"{path}.tenant_isolation.verified_at_utc")
 
 
@@ -1433,7 +1482,7 @@ def _validate_accounts_billing(
         "service_id": PRODUCTION_SERVICE_ID,
         "customer_lane": "public-customer",
     }.items():
-        _require(evidence.get(field) == value, f"{path}.{field}", f"must equal {value!r}", errors)
+        _require(_json_scalar_equals(evidence.get(field), value), f"{path}.{field}", f"must equal {value!r}", errors)
     _sha256(evidence.get("tenant_subject_sha256"), f"{path}.tenant_subject_sha256", errors)
     session = evidence.get("account_session")
     if _is_mapping(session, f"{path}.account_session", errors):
@@ -1446,7 +1495,7 @@ def _validate_accounts_billing(
             "cross_tenant_http_status": 404,
         }
         for field, value in expected.items():
-            _require(session.get(field) == value, f"{path}.account_session.{field}", f"must equal {value!r}", errors)
+            _require(_json_scalar_equals(session.get(field), value), f"{path}.account_session.{field}", f"must equal {value!r}", errors)
         _require(session.get("invite_redeem_http_status") in {200, 201}, f"{path}.account_session.invite_redeem_http_status", "must be 200 or 201", errors)
         _require(session.get("logout_http_status") in {200, 204}, f"{path}.account_session.logout_http_status", "must be 200 or 204", errors)
         _critical_proof_timestamp(session.get("verified_at_utc"), gate="accounts_billing", event=event, observed=observed, context=context, path=f"{path}.account_session.verified_at_utc")
@@ -1457,7 +1506,7 @@ def _validate_accounts_billing(
         usage = _positive_int(quota.get("usage_at_limit"), f"{path}.quota.usage_at_limit", errors)
         if limit is not None and usage is not None:
             _require(limit == usage, f"{path}.quota.usage_at_limit", "must equal monthly_limit", errors)
-        _require(quota.get("overflow_http_status") == 429, f"{path}.quota.overflow_http_status", "must be 429", errors)
+        _require(_json_scalar_equals(quota.get("overflow_http_status"), 429), f"{path}.quota.overflow_http_status", "must be 429", errors)
         _require(quota.get("overflow_error") == "audit_quota_exceeded", f"{path}.quota.overflow_error", "must be audit_quota_exceeded", errors)
         for field in ("idempotent_retry_non_double_consuming", "adjacent_month_isolated", "shared_postgres_restart_verified"):
             _require(quota.get(field) is True, f"{path}.quota.{field}", "must be true", errors)
@@ -1478,7 +1527,7 @@ def _validate_accounts_billing(
             "meter_to_invoice_reconciled": True,
         }
         for field, value in expected.items():
-            _require(billing.get(field) == value, f"{path}.billing.{field}", f"must equal {value!r}", errors)
+            _require(_json_scalar_equals(billing.get(field), value), f"{path}.billing.{field}", f"must equal {value!r}", errors)
         for field in ("provider_customer_id_sha256", "provider_subscription_id_sha256", "invoice_id_sha256"):
             _sha256(billing.get(field), f"{path}.billing.{field}", errors)
         _critical_proof_timestamp(billing.get("paid_at_utc"), gate="accounts_billing", event=event, observed=observed, context=context, path=f"{path}.billing.paid_at_utc")
@@ -1497,7 +1546,7 @@ def _validate_legal(
         item_path = f"{path}.documents[{kind}]"
         _exact_keys(document, {"kind", "url", "http_status", "content_sha256", "published_at_utc", "verified_at_utc"}, item_path, errors)
         _require(document.get("url") == f"{LANDING_ORIGIN}/{kind}", f"{item_path}.url", f"must be {LANDING_ORIGIN}/{kind}", errors)
-        _require(document.get("http_status") == 200, f"{item_path}.http_status", "must be 200", errors)
+        _require(_json_scalar_equals(document.get("http_status"), 200), f"{item_path}.http_status", "must be 200", errors)
         _sha256(document.get("content_sha256"), f"{item_path}.content_sha256", errors)
         published = _critical_proof_timestamp(document.get("published_at_utc"), gate="legal_publication_approval", event=event, observed=observed, context=context, path=f"{item_path}.published_at_utc")
         verified = _critical_proof_timestamp(document.get("verified_at_utc"), gate="legal_publication_approval", event=event, observed=observed, context=context, path=f"{item_path}.verified_at_utc")
@@ -1567,7 +1616,7 @@ def _validate_incident_tabletop(
         _require(isinstance(incident.get("record_id"), str) and INCIDENT_ID_RE.fullmatch(str(incident.get("record_id"))) is not None, f"{path}.incident.record_id", "must match IR-YYYY-MM-DD-NNN", errors)
         _require(incident.get("status") == "CLOSED", f"{path}.incident.status", "must be CLOSED", errors)
         _critical_proof_timestamp(incident.get("closed_at_utc"), gate="incident_tabletop", event=event, observed=observed, context=context, path=f"{path}.incident.closed_at_utc")
-        _require(incident.get("open_actions") == 0, f"{path}.incident.open_actions", "must be zero", errors)
+        _require(_json_scalar_equals(incident.get("open_actions"), 0), f"{path}.incident.open_actions", "must be zero", errors)
         _safe_https_url(incident.get("postmortem_uri"), f"{path}.incident.postmortem_uri", errors, allowed_origins={PRODUCTION_API_ORIGIN})
         _sha256(incident.get("postmortem_sha256"), f"{path}.incident.postmortem_sha256", errors)
         for field in ("credential_rotation_complete", "recovery_verified"):
@@ -1579,7 +1628,7 @@ def _validate_incident_tabletop(
         _critical_proof_timestamp(tabletop.get("completed_at_utc"), gate="incident_tabletop", event=event, observed=observed, context=context, path=f"{path}.tabletop.completed_at_utc")
         _set_of_strings(tabletop.get("participant_roles"), TABLETOP_ROLES, f"{path}.tabletop.participant_roles", errors)
         _set_of_strings(tabletop.get("scenarios"), TABLETOP_SCENARIOS, f"{path}.tabletop.scenarios", errors)
-        _require(tabletop.get("open_actions") == 0, f"{path}.tabletop.open_actions", "must be zero", errors)
+        _require(_json_scalar_equals(tabletop.get("open_actions"), 0), f"{path}.tabletop.open_actions", "must be zero", errors)
         _safe_https_url(tabletop.get("evidence_uri"), f"{path}.tabletop.evidence_uri", errors, allowed_origins={PRODUCTION_API_ORIGIN})
         _sha256(tabletop.get("evidence_sha256"), f"{path}.tabletop.evidence_sha256", errors)
 
@@ -1672,14 +1721,14 @@ def _validate_claim_honesty(
         item_path = f"{path}.scanned_surfaces[{kind}]"
         _exact_keys(surface, {"kind", "url", "http_status", "content_sha256", "verified_at_utc"}, item_path, errors)
         _require(surface.get("url") == expected_urls[kind], f"{item_path}.url", f"must equal {expected_urls[kind]!r}", errors)
-        _require(surface.get("http_status") == 200, f"{item_path}.http_status", "must be 200", errors)
+        _require(_json_scalar_equals(surface.get("http_status"), 200), f"{item_path}.http_status", "must be 200", errors)
         _sha256(surface.get("content_sha256"), f"{item_path}.content_sha256", errors)
         _critical_proof_timestamp(surface.get("verified_at_utc"), gate="claim_honesty", event=event, observed=observed, context=context, path=f"{item_path}.verified_at_utc")
     scan = evidence.get("scan")
     if _is_mapping(scan, f"{path}.scan", errors):
         _exact_keys(scan, {"misleading_claim_count", "unsupported_compliance_claim_count", "unsupported_universality_claim_count", "status_vocabulary_exact"}, f"{path}.scan", errors)
         for field in ("misleading_claim_count", "unsupported_compliance_claim_count", "unsupported_universality_claim_count"):
-            _require(scan.get(field) == 0, f"{path}.scan.{field}", "must be zero", errors)
+            _require(_json_scalar_equals(scan.get(field), 0), f"{path}.scan.{field}", "must be zero", errors)
         _require(scan.get("status_vocabulary_exact") is True, f"{path}.scan.status_vocabulary_exact", "must be true", errors)
     boundaries = evidence.get("boundaries")
     if _is_mapping(boundaries, f"{path}.boundaries", errors):
@@ -1709,17 +1758,37 @@ GATE_VALIDATORS: dict[str, GateValidator] = {
 }
 
 
-def _find_prohibited_fields(value: Any, path: str = "$") -> list[str]:
+def _find_prohibited_fields(
+    value: Any,
+    path: str = "$",
+    *,
+    include_pii: bool = False,
+) -> list[str]:
     errors: list[str] = []
     if isinstance(value, Mapping):
         for key, child in value.items():
             child_path = f"{path}.{key}"
-            if str(key).lower() in PROHIBITED_SECRET_FIELD_NAMES:
+            normalized = str(key).lower()
+            if normalized in PROHIBITED_SECRET_FIELD_NAMES:
                 errors.append(f"{child_path}: raw-secret field is prohibited")
-            errors.extend(_find_prohibited_fields(child, child_path))
+            if include_pii and normalized in PROHIBITED_PII_FIELD_NAMES:
+                errors.append(f"{child_path}: raw-PII field is prohibited")
+            errors.extend(
+                _find_prohibited_fields(
+                    child,
+                    child_path,
+                    include_pii=include_pii,
+                )
+            )
     elif isinstance(value, list):
         for index, child in enumerate(value):
-            errors.extend(_find_prohibited_fields(child, f"{path}[{index}]"))
+            errors.extend(
+                _find_prohibited_fields(
+                    child,
+                    f"{path}[{index}]",
+                    include_pii=include_pii,
+                )
+            )
     return errors
 
 
@@ -1872,13 +1941,20 @@ def _validate_release_decision(
         return
     path = "$.product.release_decision.evidence.payload"
     _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"status", "approved_at_utc", "approver_roles", "decision_record_uri", "decision_record_sha256"}, path, context.errors)
-    _, observed = _validate_common_evidence(evidence, "release_decision", context)
+    event, observed = _validate_common_evidence(
+        evidence, "release_decision", context
+    )
     _require(evidence.get("status") == "ACCEPT", f"{path}.status", "must be ACCEPT", context.errors)
-    approved = _timestamp(evidence.get("approved_at_utc"), f"{path}.approved_at_utc", context.errors)
+    approved = _critical_proof_timestamp(
+        evidence.get("approved_at_utc"),
+        gate="release_decision",
+        event=event,
+        observed=observed,
+        context=context,
+        path=f"{path}.approved_at_utc",
+    )
     if approved is not None:
         _require(approved >= newest_gate_observed, f"{path}.approved_at_utc", "must be at or after the newest gate evidence", context.errors)
-        if observed is not None:
-            _require(approved <= observed, f"{path}.approved_at_utc", "must be at or before release observation", context.errors)
     _set_of_strings(evidence.get("approver_roles"), RELEASE_APPROVER_ROLES, f"{path}.approver_roles", context.errors)
     _safe_https_url(evidence.get("decision_record_uri"), f"{path}.decision_record_uri", context.errors, allowed_origins={PRODUCTION_API_ORIGIN})
     _sha256(evidence.get("decision_record_sha256"), f"{path}.decision_record_sha256", context.errors)

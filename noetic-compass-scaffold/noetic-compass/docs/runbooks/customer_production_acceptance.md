@@ -5,12 +5,13 @@ This runbook governs the public CAS Harness release decision. The contract is
 `.production/customer-production-trusted-issuers.json`, and the fail-closed
 verifier is `scripts/verify_customer_production_acceptance.py`.
 
-The checked-in contract is deliberately `OPEN`, and the checked-in issuer
-registry is deliberately empty. Contract CI can prove that this truthful OPEN
-state is well formed; it cannot turn OPEN into ACCEPT. A real ACCEPT requires a
-separately supplied evidence bundle, exact deployment bindings, and either
-signed receipts from an explicitly onboarded issuer or live verification of an
-allowlisted production endpoint.
+The checked-in contract is deliberately `OPEN`. The checked-in issuer registry
+contains only the narrowly scoped root-CI signing issuer; no issuer is trusted
+for any other gate. Contract CI can prove that this truthful OPEN state is well
+formed; it cannot turn OPEN into ACCEPT. A real ACCEPT requires a separately
+supplied evidence bundle, exact deployment bindings, and either signed receipts
+from an explicitly onboarded issuer or live verification of an allowlisted
+production endpoint.
 
 ## Status and authority contract
 
@@ -113,17 +114,32 @@ head in the existing `StateStore`. The same service works over SQLite or
 Postgres. When the existing immutable Evidence Packet backend is configured,
 new revisions can store the exact canonical JSON bytes in S3 Object Lock and
 the StateStore keeps only the exact-version pointer; a WORM-backed head never
-falls back to mutable inline bytes. Every read rechecks the head/revision
+falls back to mutable inline bytes. The revision retains the authenticated
+Object-Lock verification receipt; every WORM read or reuse revalidates its
+attestation, exact version, lock mode, configured retention, unexpired deadline,
+backend readiness, and bytes. Policy drift or an expired receipt fails closed.
+Every read rechecks the head/revision
 identity, byte length, SHA-256, canonical JSON, exact gate schema, exact
 authority URL, freshness, public-production binding, and secret/PII scans.
 
+Head schema v3 also binds the exact SHA-256 and record ID of an append-only
+operation record. The operation is content-addressed and written before the
+head compare-and-swap; an interrupted prewrite is an unbound harmless intent,
+while a serving head without its exact operation fails `503`. Each operation
+records the action, previous and next version/hash/active state, timestamp,
+reason enum, authorization artifact URI/SHA-256, and predecessor operation ID.
+The predecessor binding preserves publish/deactivate/reactivate history instead
+of letting a later head overwrite the audit trail.
+
 There is deliberately no HTTP publish or approval route. A separately
 authenticated operational collector must obtain independent receipts and any
-human approvals, run the canonical verifier's full gate semantics, then call
-the persistence service with the current head version. The service does not
-create missing approval rows, infer successful values, or turn an unsigned
-draft into authority. Deploying this read plane creates no evidence records
-and closes no gate by itself.
+human approvals, prepare one canonical gate document, then call the persistence
+service with the current head version and previous evidence hash. The service
+applies the matching single-document gate validator; only the final canonical
+manifest verifier can enforce cross-gate hashes, release ordering, and the full
+`ACCEPT` contract. The service does not create missing approval rows, infer
+successful values, or turn an unsigned draft into authority. Deploying this
+read plane creates no evidence records and closes no gate by itself.
 
 Response behavior is fail-closed and non-cacheable:
 
@@ -132,6 +148,100 @@ Response behavior is fail-closed and non-cacheable:
 - `503` when durable state, an immutable blob, or validation is unavailable;
 - no provider error, storage pointer, Object-Lock version ID, secret, or PII is
   copied into an error response.
+
+### Publish one verified authority document
+
+`scripts.publish_customer_production_acceptance_authority` is the operational
+write command. Its `validate` action is local and opens no database or object
+store connection. Its `head`, `publish`, and `deactivate` actions fail unless
+they are running inside the exact public Render API service/repository/branch at
+the expected protected-master commit, with non-debug mode, the shared state
+ledger, and Postgres configured.
+
+From `noetic-compass-scaffold/noetic-compass`, validate and compute the exact
+canonical document hash first:
+
+```powershell
+python -m scripts.publish_customer_production_acceptance_authority validate `
+  --gate claim_honesty `
+  --evidence <independently-assembled-evidence.json> `
+  --expected-master-head <40-character-protected-master-sha> `
+  --expected-deploy-id <public-render-deploy-id>
+```
+
+Transfer only the validated, secret-free evidence file through an authenticated
+Render Shell/SSH channel to a mode-`0600` transient path. Do not put it in an
+environment variable, image layer, repository commit, or command argument.
+Inside the Linux Render Shell, read the current compare-and-swap head version,
+active state, exact previous evidence hash, and bound operation ID/hash:
+
+```bash
+python -m scripts.publish_customer_production_acceptance_authority head \
+  --gate claim_honesty \
+  --expected-master-head <40-character-protected-master-sha>
+```
+
+Only after independently checking every required approval and receipt, publish
+the same document. For a replacement or reactivation, also pass the exact
+`evidence_sha256` returned by `head` as
+`--expected-previous-evidence-sha256`; omit it only when `head_version` is `0`:
+
+```bash
+python -m scripts.publish_customer_production_acceptance_authority publish \
+  --gate claim_honesty \
+  --evidence /tmp/independently-assembled-evidence.json \
+  --expected-master-head <40-character-protected-master-sha> \
+  --expected-deploy-id <public-render-deploy-id> \
+  --expected-evidence-sha256 <canonical-sha256-from-validate> \
+  --expected-head-version <version-from-head> \
+  --expected-previous-evidence-sha256 <hash-from-head-if-version-is-nonzero> \
+  --authorization-artifact-uri <clean-api-or-landing-https-uri> \
+  --authorization-artifact-sha256 <sha256-of-independent-authorization-artifact> \
+  --operation-reason authorized_publication
+```
+
+If an approval is withdrawn or evidence is suspected, immediately tombstone the
+exact active head. This retains its content-addressed/WORM revision for audit but
+makes the public route return `404`:
+
+```bash
+python -m scripts.publish_customer_production_acceptance_authority deactivate \
+  --gate claim_honesty \
+  --expected-master-head <40-character-protected-master-sha> \
+  --expected-evidence-sha256 <exact-active-hash-from-head> \
+  --expected-head-version <version-from-head> \
+  --authorization-artifact-uri <clean-api-or-landing-incident-or-session-record-uri> \
+  --authorization-artifact-sha256 <sha256-of-that-record> \
+  --operation-reason <incident_response|approval_withdrawn|evidence_expired|operator_safety_action>
+```
+
+Delete the transient file after the exact public `GET` body is read back and its
+SHA-256 matches the local canonical hash. A command result with
+`publication_state: unknown` is not success: run `head`, inspect the exact hash
+and active bit, then either verify the public bytes or deactivate them.
+
+The command applies the serving API's exact schema, freshness, secret/PII, and
+gate-semantic checks before connecting to production. Publication uses the
+StateStore compare-and-swap head, then reloads and byte-compares the active
+revision and operation binding before reporting success. When the immutable Evidence Packet backend
+is enabled, it uses that same verified Object-Lock backend and never falls back
+to inline bytes. It does not collect evidence, create approvals, sign receipts,
+dereference an approval artifact, or change the acceptance manifest. Its Render
+runtime checks independently bind the service, repository, branch, and commit;
+Render exposes no documented runtime deploy-ID variable, so the operator-supplied
+deploy ID still requires provider readback and the final root-CI/protected-deploy
+receipt. The final manifest verifier remains mandatory for cross-gate hashes,
+product-status alignment, release timing, and authoritative `ACCEPT`.
+
+The authorization URI/hash is an append-only audit pointer, not authentication
+by itself: this command deliberately does not dereference it or manufacture an
+approval. Publish access therefore remains restricted to the production Render
+service's least-privilege root-operator role with provider MFA, protected
+environment controls, and retained Render session/audit event evidence. The
+pointed artifact must independently prove the human/provider authorization
+required by the gate. Deactivation is the emergency fail-closed action: it
+requires a reason and incident/session artifact pointer for audit, but never a
+second approval or a live artifact fetch before tombstoning an active head.
 
 ### Onboard a signing issuer
 
