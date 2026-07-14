@@ -100,7 +100,7 @@ class AuditSessionRecord:
     confidence: float | None = None
     evidence_packet_trace_id: str | None = None
     atlas_deep_link: str | None = None
-    provenance_chips: list[dict[str, str]] = field(default_factory=list)
+    provenance_chips: list[dict[str, Any]] = field(default_factory=list)
     verifier_decision: dict[str, Any] | None = None
     audit_scope: dict[str, Any] | None = None
     lifecycle: list[AuditLifecycleEvent] = field(default_factory=list)
@@ -516,7 +516,7 @@ def attach_runner_evidence(
     audit_id: str,
     *,
     evidence_packet_trace_id: str,
-    proof_chips: list[dict[str, str]],
+    proof_chips: list[dict[str, Any]],
     verifier_decision: dict[str, Any] | None = None,
     audit_scope: dict[str, Any] | None = None,
     message: str,
@@ -1040,7 +1040,7 @@ def _apply_evidence(
     record: AuditSessionRecord,
     *,
     evidence_packet_trace_id: str,
-    proof_chips: list[dict[str, str]],
+    proof_chips: list[dict[str, Any]],
     verifier_decision: dict[str, Any] | None,
     audit_scope: dict[str, Any] | None,
     message: str,

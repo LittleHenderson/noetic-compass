@@ -8,8 +8,14 @@ metrics.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import dataclass
 from typing import Any, Literal, Mapping
+from urllib.parse import parse_qs, unquote, urlparse
+
+from api.services.cas_harness_retention_disclosure import (
+    object_lock_retention_disclosure,
+    revalidate_object_lock_verification,
+)
 
 
 ProofChipId = Literal[
@@ -49,9 +55,18 @@ class AuditEvidenceProofChip:
     name: str
     status: ProofChipStatus
     detail: str
+    object_lock_verification: dict[str, object] | None = None
 
-    def to_dict(self) -> dict[str, str]:
-        return asdict(self)
+    def to_dict(self) -> dict[str, Any]:
+        payload: dict[str, Any] = {
+            "id": self.id,
+            "name": self.name,
+            "status": self.status,
+            "detail": self.detail,
+        }
+        if self.object_lock_verification is not None:
+            payload["object_lock_verification"] = dict(self.object_lock_verification)
+        return payload
 
 
 @dataclass(frozen=True)
@@ -271,11 +286,15 @@ def _packet_chip(
     verify_status = _verify_status(verify_hashes)
     if verify_status == "verified":
         anchor_detail = _verified_anchor_detail(packet, verify_hashes)
+        verification = _verified_anchor_verification(packet, verify_hashes)
         return _chip(
             "packet_proof",
             "verified",
             anchor_detail
             or f"Evidence Packet {trace_id} is present and hash verification matched.",
+            object_lock_verification=(
+                verification.to_dict() if verification is not None else None
+            ),
         )
     if verify_status == "failed":
         anchor_failure = _anchor_failure_detail(verify_hashes)
@@ -493,31 +512,81 @@ def _verified_anchor_detail(
     packet: Mapping[str, Any],
     verify_hashes: Mapping[str, Any] | None,
 ) -> str | None:
-    anchor = _packet_external_anchor(packet)
-    if anchor is None:
-        return None
-    check = _external_anchor_check(verify_hashes)
-    notes = _string_or_none(check.get("notes")) if check is not None else None
-    notes_lower = notes.lower() if notes else ""
-    if not (check and check.get("match") is True and "object was re-read" in notes_lower):
-        return None
-
     trace_id = _string_or_none(packet.get("trace_id")) or "unknown"
-    if _anchor_receipt_has_object_lock(anchor) and "object lock" in notes_lower and "retention is active" in notes_lower:
-        mode = _string_or_none(anchor.get("object_lock_mode")) or "Object Lock"
-        retain_until = _string_or_none(anchor.get("object_lock_retain_until"))
-        suffix = f" until {retain_until}" if retain_until else ""
-        return (
-            f"Evidence Packet {trace_id} is WORM retained: S3 anchor re-read matched "
-            f"the packet/hash-log manifest and Object Lock {mode} retention is active{suffix}."
-        )
+    verification = _verified_anchor_verification(packet, verify_hashes)
+    if verification is not None and verification.verified:
+        return object_lock_retention_disclosure(
+            subject=f"Evidence Packet {trace_id}",
+            verification_receipt=verification,
+        ).notice
+    anchor = _packet_external_anchor(packet)
+    check = _external_anchor_check(verify_hashes)
+    if not (
+        anchor is not None
+        and anchor.get("status") == "anchored"
+        and anchor.get("mode") == "s3"
+        and check is not None
+        and check.get("match") is True
+    ):
+        return None
     return (
         f"Evidence Packet {trace_id} is S3 verified: the anchor object was re-read "
         "and matched to the packet hash and hash-log entry."
     )
 
 
+def _verified_anchor_verification(
+    packet: Mapping[str, Any],
+    verify_hashes: Mapping[str, Any] | None,
+):
+    tenant_check = _tenant_object_store_check(verify_hashes)
+    if tenant_check is not None and tenant_check.get("match") is True:
+        raw_verification = tenant_check.get("object_lock_verification")
+        verification = revalidate_object_lock_verification(
+            raw_verification if isinstance(raw_verification, Mapping) else None,
+        )
+        check_hash = _string_or_none(tenant_check.get("expected"))
+        if (
+            verification is not None
+            and verification.verified
+            and check_hash is not None
+            and tenant_check.get("actual") == check_hash
+            and verification.expected.get("content_sha256") == check_hash
+        ):
+            return verification
+
+    anchor = _packet_external_anchor(packet)
+    check = _external_anchor_check(verify_hashes)
+    if (
+        anchor is None
+        or not _s3_anchor_uri_matches(anchor)
+        or check is None
+        or check.get("match") is not True
+    ):
+        return None
+    raw_verification = check.get("object_lock_verification")
+    verification = revalidate_object_lock_verification(
+        raw_verification if isinstance(raw_verification, Mapping) else None,
+        expected={
+            "bucket": anchor.get("bucket"),
+            "key": anchor.get("key"),
+            "version_id": anchor.get("version_id"),
+            "content_sha256": anchor.get("manifest_sha256"),
+            "mode": anchor.get("object_lock_mode"),
+            "retention_days": anchor.get("retention_days"),
+            "requested_at": anchor.get("retention_requested_at"),
+            "retain_until": anchor.get("object_lock_retain_until"),
+        },
+    )
+    return verification if verification is not None and verification.verified else None
+
+
 def _anchor_failure_detail(verify_hashes: Mapping[str, Any] | None) -> str | None:
+    tenant_check = _tenant_object_store_check(verify_hashes)
+    if tenant_check is not None and tenant_check.get("match") is False:
+        notes = _string_or_none(tenant_check.get("notes"))
+        if notes:
+            return f"Evidence Packet tenant object-store verification failed: {notes}"
     check = _external_anchor_check(verify_hashes)
     if check is None or check.get("match") is not False:
         return None
@@ -543,15 +612,36 @@ def _external_anchor_check(verify_hashes: Mapping[str, Any] | None) -> Mapping[s
     return None
 
 
-def _anchor_receipt_has_object_lock(anchor: Mapping[str, Any]) -> bool:
-    mode = _string_or_none(anchor.get("object_lock_mode"))
-    retain_until = _string_or_none(anchor.get("object_lock_retain_until"))
-    retention_days = anchor.get("retention_days")
-    return (
-        mode in {"GOVERNANCE", "COMPLIANCE"}
-        and retain_until is not None
-        and isinstance(retention_days, int)
-        and retention_days > 0
+def _tenant_object_store_check(
+    verify_hashes: Mapping[str, Any] | None,
+) -> Mapping[str, Any] | None:
+    checks = verify_hashes.get("checks") if isinstance(verify_hashes, Mapping) else None
+    if not isinstance(checks, list):
+        return None
+    for check in checks:
+        if isinstance(check, Mapping) and check.get("artifact") == "tenant_packet_object_store":
+            return check
+    return None
+
+
+def _s3_anchor_uri_matches(anchor: Mapping[str, Any]) -> bool:
+    uri = _string_or_none(anchor.get("anchor_uri"))
+    bucket = _string_or_none(anchor.get("bucket"))
+    key = _string_or_none(anchor.get("key"))
+    version_id = _string_or_none(anchor.get("version_id"))
+    if uri is None or bucket is None or key is None or version_id is None:
+        return False
+    parsed = urlparse(uri)
+    try:
+        query = parse_qs(parsed.query, keep_blank_values=True, strict_parsing=True)
+    except ValueError:
+        return False
+    return bool(
+        parsed.scheme == "s3"
+        and not parsed.fragment
+        and parsed.netloc == bucket
+        and unquote(parsed.path.lstrip("/")) == key
+        and query == {"versionId": [version_id]}
     )
 
 
@@ -559,12 +649,15 @@ def _chip(
     chip_id: ProofChipId,
     status: ProofChipStatus,
     detail: str,
+    *,
+    object_lock_verification: dict[str, object] | None = None,
 ) -> AuditEvidenceProofChip:
     return AuditEvidenceProofChip(
         id=chip_id,
         name=_CHIP_NAMES[chip_id],
         status=status,
         detail=detail,
+        object_lock_verification=object_lock_verification,
     )
 
 

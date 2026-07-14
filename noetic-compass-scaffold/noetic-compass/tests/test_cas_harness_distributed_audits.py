@@ -20,6 +20,16 @@ def auth_headers(request) -> dict[str, str]:
     return {"Authorization": f"Bearer {token}"}
 
 
+@pytest.fixture(autouse=True)
+def configured_retention_target(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Distributed-gate assertions use an explicit runtime Object Lock target."""
+
+    monkeypatch.setenv(
+        "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", "GOVERNANCE"
+    )
+    monkeypatch.setenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "31")
+
+
 def _scale_payload(parameter_count_b: int = 100, num_layers: int = 20) -> dict:
     # Every distributed run -- frontier or not -- must acknowledge audit data capture
     # (universal run-gate 8), so the base body carries it. Tests that exercise a
@@ -1202,7 +1212,7 @@ def test_below_frontier_run_refused_without_data_capture_acknowledgment(client, 
     # The universal-enforcement proof: gate (8) is NOT frontier-only. A 100B run is
     # ENGINEERED_NOT_VALIDATED -- below the frontier, so gates (3)-(7) never fire -- yet
     # it still harvests the model's real signal (I/O + pooled activations + readout +
-    # verdict) to the immutable store exactly as a 1T run does. So the data-capture ack
+    # verdict) exactly as a 1T run does. So the data-capture ack
     # is required here too; with it popped, the only remaining run gate is gate (8), so
     # the 422 we assert is unambiguously the data-capture gate firing on a small run.
     payload = _scale_payload(100, 20)
@@ -1218,9 +1228,10 @@ def test_below_frontier_run_refused_without_data_capture_acknowledgment(client, 
     text = resp.text.lower()
     assert "data capture not acknowledged" in text
     assert "accept_audit_data_capture" in resp.text
-    # The refusal names what is actually captured and where it is retained.
+    # The refusal names what is captured and the configured retention boundary.
     assert "activations" in text
-    assert "write-once" in text
+    assert "object lock governance" in text
+    assert "31 days" in text
 
 
 def test_below_frontier_run_with_data_capture_ack_surfaces_real_scope(client, auth_headers):
@@ -1238,8 +1249,8 @@ def test_below_frontier_run_with_data_capture_ack_surfaces_real_scope(client, au
     assert data_capture is not None
     assert data_capture["status"] == "DATA_CAPTURE_ACKNOWLEDGED"
     assert data_capture["acknowledged"] is True
-    # Honest: acknowledged is never WORM_COMMITTED at the API tier -- the immutable write
-    # happens fleet-side, when the workers run and a model has actually executed.
+    # Honest: acknowledged is never WORM_COMMITTED at the API tier; only an actual
+    # re-read-verified fleet receipt can produce that status.
     assert data_capture["capture_committed"] is False
     # Every captured class is real signal the audit already produces.
     assert data_capture["captured_signal_classes"] == [
@@ -1248,7 +1259,15 @@ def test_below_frontier_run_with_data_capture_ack_surfaces_real_scope(client, au
         "cas_axis_readout",
         "audit_verdict",
     ]
-    assert data_capture["retention_model"] == "write_once_read_many"
+    assert data_capture["retention_model"] == "s3_object_lock_governance_time_bounded"
+    disclosure = data_capture["retention_disclosure"]
+    assert disclosure["mode"] == "GOVERNANCE"
+    assert disclosure["retention_days"] == 31
+    assert disclosure["permanent_or_indefinite"] is False
+    assert disclosure["privileged_operator_override_possible"] is True
+    assert disclosure["tamper_evident_on_reverify"] is False
+    assert disclosure["commit_status_requires_verified_receipt"] is True
+    assert disclosure["receipt_verified"] is False
     assert data_capture["reuse_purpose"] == "cas_native_training_corpus"
     assert data_capture["reasons"] == []
 

@@ -191,6 +191,9 @@ def _require_canary_environment(*, expected_limit: int, expected_service_id: str
     libpq_environment_is_clean = not any(
         name.upper().startswith("PG") for name in os.environ
     )
+    receipt_attestation_key = os.getenv(
+        "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY", ""
+    )
     assertions = {
         "NC_DEPLOYMENT_PROFILE=accounts-canary": (
             os.getenv("NC_DEPLOYMENT_PROFILE", "").strip() == "accounts-canary"
@@ -245,6 +248,14 @@ def _require_canary_environment(*, expected_limit: int, expected_service_id: str
         "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=31": (
             os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", "").strip()
             == str(ACCOUNT_CANARY_OBJECT_LOCK_RETENTION_DAYS)
+        ),
+        "Object Lock receipt attestation authority has safe syntax": (
+            len(receipt_attestation_key) >= 32
+            and receipt_attestation_key == receipt_attestation_key.strip()
+            and all(
+                0x21 <= ord(character) <= 0x7E
+                for character in receipt_attestation_key
+            )
         ),
         "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET is present": bool(
             os.getenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET", "").strip()

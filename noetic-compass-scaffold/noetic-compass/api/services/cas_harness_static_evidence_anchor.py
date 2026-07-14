@@ -17,9 +17,9 @@ Honesty contract:
   FLAG_FOR_HUMAN_REVIEW.
 * ``local`` mode anchors to same-host storage, which is not WORM. Its verify note
   never claims object-lock retention, so it also stays at human review.
-* Only a real ``s3`` object-lock write -- re-read and confirmed by ``verify_anchor``
-  -- produces the ``WORM retained ... object lock ... retention is active`` packet
-  proof that the verdict runner accepts.
+* Only a real ``s3`` object-lock write -- re-read and confirmed by the structured
+  exact-version verifier receipt -- produces packet proof that the verdict runner
+  accepts. Display prose is never a predicate.
 
 The module never fabricates an anchor receipt: every receipt comes straight from
 ``anchor_hash_log_entry`` / ``verify_anchor``.
@@ -31,6 +31,11 @@ import json
 from typing import Any, Mapping
 
 from api.services.cas_harness_evidence_anchor import anchor_hash_log_entry, verify_anchor
+from api.services.cas_harness_retention_disclosure import (
+    configured_object_lock_retention_disclosure,
+    object_lock_retention_disclosure,
+    revalidate_object_lock_verification,
+)
 from api.services.cas_harness_merged_evidence_packets import (
     append_evidence_packet_hash_log_entry,
     evidence_hash_log_path,
@@ -129,16 +134,6 @@ def verify_anchored_static_packet(packet: Mapping[str, Any]) -> dict[str, Any]:
 
 _EXTERNAL_ANCHOR_ARTIFACT = "merged_packet_external_anchor"
 
-# The independent facts a verify re-read must report before a static packet may be
-# called WORM-retained. Kept as one tuple so the CLI anchor step and the HTTP
-# anchor endpoint can never drift apart on what "retained" means.
-_WORM_RETENTION_NOTE_TERMS = (
-    "object was re-read",
-    "object lock",
-    "retention is active",
-)
-
-
 def external_anchor_check(verify_response: Mapping[str, Any]) -> dict[str, Any]:
     """Return the external object-lock anchor check from a verify response.
 
@@ -166,11 +161,8 @@ def summarize_static_anchor_worm_status(
     about whether a packet is WORM-retained.
 
     A packet is WORM-retained ONLY when a real S3 object-lock write was re-read and
-    confirmed: status ``anchored``, mode ``s3``, every integrity check matched, and
-    the re-read note independently confirms the object was re-read, object lock is
-    set, and retention is active. Anything weaker (disabled / local / partial
-    verify) is honestly NOT retained, and the console correctly stays at human
-    review. This function fabricates nothing; it only reads the receipt + verify.
+    the structured verifier receipt binds the exact bucket, key, version, bytes,
+    mode, and non-shortened future deadline. Verifier prose is display-only.
     """
 
     hashes = anchored.get("hashes")
@@ -179,15 +171,46 @@ def summarize_static_anchor_worm_status(
         anchor = {}
     check = external_anchor_check(verify_response)
     notes = check.get("notes")
-    notes_lower = notes.lower() if isinstance(notes, str) else ""
+    raw_verification = check.get("object_lock_verification")
+    expected_receipt = {
+        "bucket": anchor.get("bucket"),
+        "key": anchor.get("key"),
+        "version_id": anchor.get("version_id"),
+        "content_sha256": anchor.get("manifest_sha256"),
+        "mode": anchor.get("object_lock_mode"),
+        "retention_days": anchor.get("retention_days"),
+        "requested_at": anchor.get("retention_requested_at"),
+        "retain_until": anchor.get("object_lock_retain_until"),
+    }
+    verification = revalidate_object_lock_verification(
+        raw_verification if isinstance(raw_verification, Mapping) else None,
+        expected=expected_receipt,
+    )
 
     worm_retained = bool(
         anchor.get("status") == "anchored"
         and anchor.get("mode") == "s3"
         and verify_response.get("overall") == "all_match"
         and check.get("match") is True
-        and all(term in notes_lower for term in _WORM_RETENTION_NOTE_TERMS)
+        and verification is not None
+        and verification.verified
     )
+    trace_id = anchored.get("trace_id")
+    subject = (
+        f"Evidence Packet {trace_id}" if isinstance(trace_id, str) else "Evidence Packet"
+    )
+    object_lock_mode = anchor.get("object_lock_mode")
+    retention_days = anchor.get("retention_days")
+    retain_until = anchor.get("object_lock_retain_until")
+    if worm_retained and verification is not None:
+        retention_disclosure = object_lock_retention_disclosure(
+            subject=subject,
+            verification_receipt=verification,
+        )
+    else:
+        retention_disclosure = configured_object_lock_retention_disclosure(
+            subject=subject
+        )
 
     return {
         "worm_retained": worm_retained,
@@ -197,4 +220,11 @@ def summarize_static_anchor_worm_status(
         "verify_overall": verify_response.get("overall"),
         "external_anchor_match": check.get("match"),
         "external_anchor_notes": notes,
+        "object_lock_verification": (
+            verification.to_dict() if verification is not None else None
+        ),
+        "object_lock_mode": object_lock_mode,
+        "object_lock_retain_until": retain_until,
+        "retention_days": retention_days,
+        "retention_disclosure": retention_disclosure.to_dict(),
     }

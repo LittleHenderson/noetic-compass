@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 import json
+from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 from api.services.cas_harness_evidence_bridge import (
     normalize_evidence_packet_for_audit,
     normalize_public_evidence_manifest_for_audit,
 )
+from tests.object_lock_test_support import issue_test_object_lock_receipt
+from api.services.cas_harness_verdict_runner import packet_proof_is_worm_retained
 
 
 def _chips_by_id(result):
@@ -81,14 +84,42 @@ def test_hash_verification_upgrades_packet_and_model_only_when_all_match():
 
 
 def test_packet_chip_surfaces_worm_retained_anchor_from_live_verify():
+    retain_until = datetime.now(UTC) + timedelta(days=30)
+    requested_at = retain_until - timedelta(days=30)
+    verification = issue_test_object_lock_receipt(
+        expected={
+            "bucket": "cas-harness-runpod-92754088",
+            "key": "cas-harness/evidence-anchors/trace-123/hash.json",
+            "version_id": "version-123",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retention_days": 30,
+            "requested_at": requested_at,
+            "retain_until": retain_until,
+        },
+        observed={
+            "bucket": "cas-harness-runpod-92754088",
+            "key": "cas-harness/evidence-anchors/trace-123/hash.json",
+            "get_version_id": "version-123",
+            "head_version_id": "version-123",
+            "content_sha256": "a" * 64,
+            "mode": "GOVERNANCE",
+            "retain_until": retain_until,
+            "reread_verified": True,
+        },
+    )
     packet = _packet_fixture()
     packet["hashes"]["external_anchor"] = {
         "status": "anchored",
         "mode": "s3",
-        "anchor_uri": "s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/trace-123/hash.json",
+        "anchor_uri": "s3://cas-harness-runpod-92754088/cas-harness/evidence-anchors/trace-123/hash.json?versionId=version-123",
+        "bucket": "cas-harness-runpod-92754088",
+        "key": "cas-harness/evidence-anchors/trace-123/hash.json",
+        "version_id": "version-123",
         "manifest_sha256": "a" * 64,
         "object_lock_mode": "GOVERNANCE",
-        "object_lock_retain_until": "2026-06-28T00:00:00+00:00",
+        "retention_requested_at": requested_at.isoformat(),
+        "object_lock_retain_until": retain_until.isoformat(),
         "retention_days": 30,
     }
     packet["verification"] = {
@@ -113,9 +144,9 @@ def test_packet_chip_surfaces_worm_retained_anchor_from_live_verify():
                     "actual": "a" * 64,
                     "match": True,
                     "notes": (
-                        "S3 anchor object was re-read, its manifest commits to this packet hash and hash-log entry, "
-                        "and Object Lock GOVERNANCE retention is active until 2026-06-28T00:00:00+00:00"
+                        "display prose is not the verification predicate"
                     ),
+                    "object_lock_verification": verification.to_dict(),
                 }
             ],
         },
@@ -124,8 +155,12 @@ def test_packet_chip_surfaces_worm_retained_anchor_from_live_verify():
 
     assert chips["cas_readout"].detail == "readout passed"
     assert chips["packet_proof"].status == "verified"
-    assert "WORM retained" in chips["packet_proof"].detail
-    assert "Object Lock GOVERNANCE retention is active" in chips["packet_proof"].detail
+    assert "actual re-read-verified" in chips["packet_proof"].detail
+    assert "Object Lock GOVERNANCE" in chips["packet_proof"].detail
+    assert "through" in chips["packet_proof"].detail
+    assert "not permanent or indefinite" in chips["packet_proof"].detail
+    assert "authorized AWS identity" in chips["packet_proof"].detail
+    assert chips["packet_proof"].object_lock_verification is not None
 
 
 def test_packet_chip_distinguishes_s3_verified_without_worm_lock():
@@ -157,6 +192,58 @@ def test_packet_chip_distinguishes_s3_verified_without_worm_lock():
     assert chips["packet_proof"].status == "verified"
     assert "S3 verified" in chips["packet_proof"].detail
     assert "WORM retained" not in chips["packet_proof"].detail
+
+
+def test_tenant_object_store_receipt_reaches_packet_proof_and_verdict_gate():
+    requested_at = datetime.now(UTC).replace(microsecond=0)
+    retain_until = requested_at + timedelta(days=30)
+    content_hash = "c" * 64
+    verification = issue_test_object_lock_receipt(
+        expected={
+            "bucket": "tenant-packet-bucket",
+            "key": "packet-objects/tenants/t1/trace-123.json",
+            "version_id": "tenant-version+7",
+            "content_sha256": content_hash,
+            "mode": "GOVERNANCE",
+            "retention_days": 30,
+            "requested_at": requested_at,
+            "retain_until": retain_until,
+        },
+        observed={
+            "bucket": "tenant-packet-bucket",
+            "key": "packet-objects/tenants/t1/trace-123.json",
+            "get_version_id": "tenant-version+7",
+            "head_version_id": "tenant-version+7",
+            "content_sha256": content_hash,
+            "mode": "GOVERNANCE",
+            "retain_until": retain_until,
+            "reread_verified": True,
+        },
+        verified_at=requested_at,
+    )
+
+    result = normalize_evidence_packet_for_audit(
+        _packet_fixture(),
+        verify_hashes={
+            "overall": "all_match",
+            "checks": [
+                {
+                    "artifact": "tenant_packet_object_store",
+                    "expected": content_hash,
+                    "actual": content_hash,
+                    "match": True,
+                    "notes": "display prose is irrelevant",
+                    "object_lock_verification": verification.to_dict(),
+                }
+            ],
+        },
+    )
+    packet_chip = _chips_by_id(result)["packet_proof"]
+
+    assert packet_chip.status == "verified"
+    assert packet_chip.object_lock_verification is not None
+    assert "actual re-read-verified" in packet_chip.detail
+    assert packet_proof_is_worm_retained([packet_chip.to_dict()]) is True
 
 
 def test_hash_verification_mismatch_marks_hash_backed_chips_failed():

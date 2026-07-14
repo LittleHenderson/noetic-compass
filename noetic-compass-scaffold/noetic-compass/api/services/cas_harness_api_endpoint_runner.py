@@ -68,7 +68,7 @@ API_ENDPOINT_PROVIDERS = {
 class ApiEndpointRunnerResult:
     trace_id: str
     evidence_packet: dict[str, Any]
-    proof_chips: list[dict[str, str]]
+    proof_chips: list[dict[str, Any]]
     verifier_decision: dict[str, Any] | None
     message: str
     audit_scope: dict[str, Any] | None = None

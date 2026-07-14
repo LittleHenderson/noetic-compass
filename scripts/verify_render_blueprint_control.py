@@ -84,6 +84,7 @@ _BLUEPRINT_SERVICE_TYPES = {
     "web_service": "web",
     "private_service": "pserv",
 }
+OBJECT_LOCK_RECEIPT_ATTESTATION_ENV = "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY"
 
 
 class ControlError(RuntimeError):
@@ -179,6 +180,26 @@ def assert_no_secret_literals(text: str, label: str) -> None:
         )
 
 
+def assert_receipt_attestation_key_declaration(text: str, label: str) -> None:
+    """Require one dashboard-managed stable receipt authority per Blueprint."""
+
+    matches = [
+        env_var
+        for env_var in parse_env_blocks(text)
+        if env_var.get("key") == OBJECT_LOCK_RECEIPT_ATTESTATION_ENV
+    ]
+    _require(
+        len(matches) == 1,
+        f"{label}: must declare exactly one {OBJECT_LOCK_RECEIPT_ATTESTATION_ENV}",
+    )
+    declaration = matches[0]
+    _require(
+        set(declaration) == {"key", "sync"}
+        and declaration.get("sync", "").lower() == "false",
+        f"{label}: {OBJECT_LOCK_RECEIPT_ATTESTATION_ENV} must be server-only sync:false",
+    )
+
+
 def _load_manifest(repo_root: Path) -> dict[str, Any]:
     path = repo_root / MANIFEST_PATH
     _require(path.is_file(), f"Missing control manifest: {MANIFEST_PATH.as_posix()}")
@@ -257,6 +278,7 @@ def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> No
         )
 
     assert_no_secret_literals(text, relative_path)
+    assert_receipt_attestation_key_declaration(text, relative_path)
     actual_services = parse_service_blocks(text)
     actual_by_name = {service["name"]: service for service in actual_services}
     expected_services = blueprint["services"]

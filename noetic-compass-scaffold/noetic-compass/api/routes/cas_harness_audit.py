@@ -12,7 +12,7 @@ from datetime import UTC, datetime
 import hashlib
 import json
 import logging
-from typing import Any, Callable, Literal
+from typing import Any, Callable, Literal, Mapping
 from urllib.parse import urlparse
 
 from fastapi import APIRouter, HTTPException, Request
@@ -55,9 +55,14 @@ from api.services.cas_harness_distributed_audits import (
     merge_distributed_audit,
     record_worker_evidence,
 )
+from api.services.cas_harness_data_governance import (
+    DATA_CAPTURE_OPENAPI_DESCRIPTION,
+    data_capture_requirement_notice,
+)
 from api.services.cas_harness_evidence_bridge import normalize_evidence_packet_for_audit
 from api.services.cas_harness_evidence_object_store import (
     EvidenceObjectStoreError,
+    active_evidence_packet_storage_scope,
     evidence_packet_storage_scope,
 )
 from api.services.evidence_ownership import (
@@ -85,6 +90,13 @@ from api.services.cas_harness_model_access import (
 from api.services.cas_harness_model_provenance import (
     ModelProvenanceManifest as ServiceModelProvenanceManifest,
     WeightFileRef as ServiceWeightFileRef,
+)
+from api.services.cas_harness_retention_disclosure import (
+    ObjectLockReceiptVerificationResultModel,
+    ObjectLockRetentionDisclosureModel,
+    canonical_retention_disclosure,
+    configured_object_lock_retention_disclosure,
+    retention_model_for_mode,
 )
 from api.services.cas_harness_static_evidence_anchor import (
     load_anchored_static_packet_payload,
@@ -477,6 +489,10 @@ class ProvenanceChip(BaseModel):
     name: str = Field(..., min_length=1, max_length=64)
     status: ProofChipStatus
     detail: str = Field(..., min_length=1, max_length=1000)
+    object_lock_verification: ObjectLockReceiptVerificationResultModel | None = Field(
+        default=None,
+        exclude_if=lambda value: value is None,
+    )
 
 
 class AuditLifecycleEvent(BaseModel):
@@ -955,18 +971,7 @@ class ScalePlanRequest(BaseModel):
     )
     accept_audit_data_capture: bool = Field(
         default=False,
-        description=(
-            "Required to CREATE *any* real distributed run via /distributed/session, "
-            "frontier or not. Every distributed audit captures the target model's "
-            "inputs/outputs, the pooled hidden-state activations the probe hooks, the CAS "
-            "axis readout each shard emits, and the verdict, and commits them to an "
-            "immutable write-once store reused as CAS-Native training signal. This "
-            "acknowledges that capture, indefinite WORM retention, and reuse. It is "
-            "universal (not frontier-only): the harvest is intrinsic to the method and "
-            "does not scale with model size, so a 20B run requires it exactly as a 1T one. "
-            "Ignored by the planning-only /scale-plan endpoint, which captures nothing. "
-            "Run-gate (8)."
-        ),
+        description=DATA_CAPTURE_OPENAPI_DESCRIPTION,
     )
     provenance: ModelProvenanceManifestRequest | None = Field(
         default=None,
@@ -1182,10 +1187,61 @@ class DataCaptureSummaryResponse(BaseModel):
     acknowledged: bool
     capture_committed: bool
     captured_signal_classes: list[str]
-    retention_model: str
+    retention_model: str = Field(
+        description=(
+            "Time-bounded S3 Object Lock model. Mode and duration come from the runtime "
+            "target or an exact verified receipt, never a hardcoded deployment claim."
+        )
+    )
+    retention_disclosure: ObjectLockRetentionDisclosureModel = Field(
+        default_factory=lambda: ObjectLockRetentionDisclosureModel.model_validate(
+            configured_object_lock_retention_disclosure(
+                subject="captured audit signal"
+            ).to_dict()
+        ),
+        description=(
+            "Canonical Object Lock target or verified exact-version receipt. Stored prose "
+            "and booleans are reconstructed and cannot license WORM status."
+        ),
+    )
     reuse_purpose: str
     notice: str
     reasons: list[str]
+
+    @model_validator(mode="before")
+    @classmethod
+    def normalize_legacy_retention_claims(cls, value: object) -> object:
+        if not isinstance(value, Mapping):
+            return value
+        payload = dict(value)
+        raw_disclosure = payload.get("retention_disclosure")
+        if isinstance(raw_disclosure, BaseModel):
+            raw_disclosure = raw_disclosure.model_dump()
+        disclosure = canonical_retention_disclosure(
+            raw_disclosure if isinstance(raw_disclosure, Mapping) else None,
+            subject="captured audit signal",
+        )
+        receipt_backed_commit = bool(
+            payload.get("status") == "DATA_CAPTURE_WORM_COMMITTED"
+            and payload.get("capture_committed") is True
+            and disclosure.receipt_verified
+            and disclosure.verification_receipt is not None
+        )
+        if not receipt_backed_commit and payload.get("status") == "DATA_CAPTURE_WORM_COMMITTED":
+            payload["status"] = "DATA_CAPTURE_ACKNOWLEDGED"
+            reasons = list(payload.get("reasons") or [])
+            reasons.append(
+                "DATA_CAPTURE_WORM_COMMITTED was withheld because no actual "
+                "re-read-verified Object Lock receipt was supplied."
+            )
+            payload["reasons"] = reasons
+        payload["capture_committed"] = receipt_backed_commit
+        payload["retention_model"] = retention_model_for_mode(disclosure.mode)
+        payload["retention_disclosure"] = disclosure.to_dict()
+        payload["notice"] = data_capture_requirement_notice(
+            retention_disclosure=disclosure
+        )
+        return payload
 
 
 class DistributedAuditResponse(BaseModel):
@@ -1531,8 +1587,10 @@ async def create_distributed_audit_session(
     envelope can physically hold the model (gate 3), and unless the caller acknowledges
     the run's caller-owned, unquoted compute cost (gate 4). Two gates apply at every
     size: a non-open-weight access mode is refused (gate 2), and *any* run is refused
-    unless the caller acknowledges that the audit captures the model's signal to an
-    immutable store reused as CAS-Native training data (gate 8). >4T is always refused.
+    unless the caller acknowledges capture and CAS-Native training reuse (gate 8).
+    That acknowledgment is not a storage receipt: the fleet-side S3 Object Lock target
+    is read from runtime configuration, and only an exact re-read-verified receipt can
+    establish ``DATA_CAPTURE_WORM_COMMITTED``. >4T is always refused.
     """
     _require_distributed_audit_entitlement(request)
     _require_locked_tks_definitions()
@@ -2867,7 +2925,10 @@ def _verify_hashes_for_trace(trace_id: str) -> dict[str, object] | None:
             return verify_anchored_static_packet(anchored)
         return None
     hashes = getattr(packet, "hashes", None)
-    if not isinstance(hashes, dict) or not isinstance(hashes.get("external_anchor"), dict):
+    has_external_anchor = isinstance(hashes, dict) and isinstance(
+        hashes.get("external_anchor"), dict
+    )
+    if not has_external_anchor and active_evidence_packet_storage_scope() is None:
         return None
     try:
         return _verify_packet_hashes(packet).model_dump(mode="json")

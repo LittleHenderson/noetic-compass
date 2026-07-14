@@ -67,7 +67,12 @@ CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE|COMPLIANCE
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=<positive integer>
+NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY=<stable server-only value of at least 32 bytes>
 ```
+
+The receipt-attestation key must be identical across replicas and persist across
+restarts. Do not rotate it until an explicit historical-receipt migration or
+keyring exists; old receipts intentionally fail closed under a different key.
 
 The readiness principal needs these bucket-level read actions on
 `arn:aws:s3:::<bucket>`:

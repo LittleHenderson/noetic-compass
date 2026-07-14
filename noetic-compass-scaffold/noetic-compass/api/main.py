@@ -109,6 +109,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         raise RuntimeError(
             "Refusing to start: NC_JWT_SECRET is still change-me-in-production."
         )
+    settings.validate_object_lock_receipt_attestation()
     settings.validate_account_storage()
     if settings.quotas_enabled and not settings.accounts_enabled:
         raise RuntimeError(

@@ -20,14 +20,22 @@ from __future__ import annotations
 
 from dataclasses import dataclass, replace
 from datetime import UTC, datetime, timedelta
-from typing import Literal, Protocol, runtime_checkable
+from typing import Any, Literal, Mapping, Protocol, runtime_checkable
+from urllib.parse import parse_qs, quote, unquote, urlparse
 
 from api.services.cas_harness_data_governance import (
     CAPTURED_SIGNAL_CLASSES,
     REUSE_PURPOSE,
-    RETENTION_MODEL,
     DataCaptureSummary,
     data_capture_requirement_notice,
+)
+from api.services.cas_harness_retention_disclosure import (
+    ObjectLockReceiptVerification,
+    _issue_live_s3_object_lock_receipt,
+    configured_object_lock_retention_disclosure,
+    object_lock_retention_disclosure,
+    revalidate_object_lock_verification,
+    retention_model_for_mode,
 )
 
 ObjectLockMode = Literal["GOVERNANCE", "COMPLIANCE"]
@@ -45,11 +53,21 @@ class RetentionPolicy:
     def __post_init__(self) -> None:
         if self.mode not in ("GOVERNANCE", "COMPLIANCE"):
             raise ValueError("RetentionPolicy.mode must be GOVERNANCE or COMPLIANCE")
-        if not isinstance(self.retention_days, int) or self.retention_days < 1:
+        if (
+            not isinstance(self.retention_days, int)
+            or isinstance(self.retention_days, bool)
+            or self.retention_days < 1
+        ):
             raise ValueError("RetentionPolicy.retention_days must be a positive integer")
 
     def retain_until(self, *, now: datetime | None = None) -> datetime:
-        return (now or datetime.now(UTC)) + timedelta(days=self.retention_days)
+        # S3 Object Lock metadata is returned at whole-second precision.  Round
+        # *up*, never down: truncating microseconds would silently request less
+        # than the advertised full N-day window.
+        deadline = (now or datetime.now(UTC)) + timedelta(days=self.retention_days)
+        if deadline.microsecond:
+            deadline = deadline.replace(microsecond=0) + timedelta(seconds=1)
+        return deadline
 
 
 @dataclass(frozen=True)
@@ -65,18 +83,62 @@ class LockReceipt:
     object_url: str
     version_id: str
     retain_until: datetime
-    mode: ObjectLockMode
+    mode: str
     content_hash: str
     legal_hold: bool = False
     reread_verified: bool = False
+    verification_receipt: ObjectLockReceiptVerification | Mapping[str, Any] | None = None
 
     def is_verifiable(self) -> bool:
-        return (
+        verification = self.validated_verification()
+        if verification is None or not verification.verified:
+            return False
+        observed = verification.observed
+        expected = verification.expected
+        if self.retain_until.tzinfo is None or self.retain_until.utcoffset() is None:
+            return False
+        parsed_url = urlparse(self.object_url)
+        try:
+            query = parse_qs(
+                parsed_url.query,
+                keep_blank_values=True,
+                strict_parsing=True,
+            )
+        except ValueError:
+            return False
+        url_versions = query.get("versionId", [])
+        if (
+            parsed_url.scheme != "s3"
+            or not parsed_url.netloc
+            or bool(parsed_url.fragment)
+            or set(query) != {"versionId"}
+            or parsed_url.netloc != expected.get("bucket")
+            or unquote(parsed_url.path.lstrip("/")) != expected.get("key")
+            or url_versions != [self.version_id]
+        ):
+            return False
+        return bool(
             self.reread_verified
-            and bool(self.version_id)
+            and self.version_id == observed.get("get_version_id")
+            and self.version_id == observed.get("head_version_id")
             and not self.version_id.startswith(_STUB_VERSION_PREFIX)
-            and self.retain_until > datetime.now(UTC)
+            and self.content_hash.lower() == observed.get("content_sha256")
+            and self.mode == observed.get("mode")
+            and self.retain_until.astimezone(UTC).isoformat()
+            == observed.get("retain_until")
         )
+
+    def validated_verification(self) -> ObjectLockReceiptVerification | None:
+        """Re-run the shared predicate so stored ``verified`` flags are powerless."""
+
+        verification = revalidate_object_lock_verification(self.verification_receipt)
+        if (
+            verification is not None
+            and verification.verified
+            and verification.issuer_attestation is None
+        ):
+            return None
+        return verification
 
 
 @dataclass(frozen=True)
@@ -188,14 +250,30 @@ def data_capture_committed_summary(result: WormCommitResult) -> DataCaptureSumma
             result.reason
             or "no re-read-verified Object-Lock receipt; capture is acknowledged but not committed",
         )
+    if committed and receipt is not None:
+        verification = receipt.validated_verification()
+        assert verification is not None and verification.verified
+        retention_model = retention_model_for_mode(receipt.mode)
+        retention_disclosure = object_lock_retention_disclosure(
+            subject="captured audit signal",
+            verification_receipt=verification,
+        )
+    else:
+        retention_disclosure = configured_object_lock_retention_disclosure(
+            subject="captured audit signal"
+        )
+        retention_model = retention_model_for_mode(retention_disclosure.mode)
     return DataCaptureSummary(
         status="DATA_CAPTURE_WORM_COMMITTED" if committed else "DATA_CAPTURE_ACKNOWLEDGED",
         acknowledged=True,
         capture_committed=committed,
         captured_signal_classes=CAPTURED_SIGNAL_CLASSES,
-        retention_model=RETENTION_MODEL,
+        retention_model=retention_model,
+        retention_disclosure=retention_disclosure,
         reuse_purpose=REUSE_PURPOSE,
-        notice=data_capture_requirement_notice(),
+        notice=data_capture_requirement_notice(
+            retention_disclosure=retention_disclosure
+        ),
         reasons=reasons,
     )
 
@@ -211,4 +289,44 @@ def _verified_receipt_for_tests(receipt: LockReceipt) -> LockReceipt:
     version_id = receipt.version_id
     if version_id.startswith(_STUB_VERSION_PREFIX):
         version_id = version_id[len(_STUB_VERSION_PREFIX) :] or "v-reread"
-    return replace(receipt, version_id=version_id, reread_verified=True)
+    parsed_url = urlparse(receipt.object_url)
+    key = unquote(parsed_url.path.lstrip("/")) or "test-object"
+    bucket = "test-only-object-lock-bucket"
+    if parsed_url.scheme == "s3" and parsed_url.netloc:
+        bucket = parsed_url.netloc
+    object_url = (
+        f"s3://{bucket}/{quote(key, safe='/')}"
+        f"?versionId={quote(version_id, safe='')}"
+    )
+    retain_until = receipt.retain_until.astimezone(UTC)
+    requested_at = datetime.now(UTC).replace(microsecond=0)
+    verification = _issue_live_s3_object_lock_receipt(
+        expected={
+            "bucket": bucket,
+            "key": key,
+            "version_id": version_id,
+            "content_sha256": receipt.content_hash,
+            "mode": receipt.mode,
+            "retention_days": 1,
+            "requested_at": requested_at,
+            "retain_until": retain_until,
+        },
+        observed={
+            "bucket": bucket,
+            "key": key,
+            "get_version_id": version_id,
+            "head_version_id": version_id,
+            "content_sha256": receipt.content_hash,
+            "mode": receipt.mode,
+            "retain_until": retain_until,
+            "reread_verified": True,
+        },
+        _allow_ephemeral_for_tests=True,
+    )
+    return replace(
+        receipt,
+        object_url=object_url,
+        version_id=version_id,
+        reread_verified=True,
+        verification_receipt=verification,
+    )

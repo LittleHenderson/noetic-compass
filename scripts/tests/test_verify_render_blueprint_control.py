@@ -11,6 +11,7 @@ from scripts.verify_render_blueprint_control import (
     ControlError,
     EXPECTED_BLUEPRINTS,
     assert_no_secret_literals,
+    assert_receipt_attestation_key_declaration,
     parse_service_blocks,
     validate_live,
     validate_live_payload,
@@ -101,6 +102,29 @@ services:
         sync: false
 """
         assert_no_secret_literals(text, "test.yaml")
+
+    def test_receipt_attestation_key_must_be_unique_and_dashboard_managed(self) -> None:
+        valid = """
+services:
+  - type: web
+    name: api
+    envVars:
+      - key: NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY
+        sync: false
+"""
+        assert_receipt_attestation_key_declaration(valid, "test.yaml")
+
+        invalid_cases = (
+            (valid.replace("sync: false", "value: committed-secret"), "server-only"),
+            (valid.replace("sync: false", "generateValue: true"), "server-only"),
+            (valid.replace("sync: false", "sync: true"), "server-only"),
+            (valid.replace("      - key: NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY\n        sync: false\n", ""), "exactly one"),
+            (valid + "\n      - key: NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY\n        sync: false\n", "exactly one"),
+        )
+        for text, error in invalid_cases:
+            with self.subTest(error=error):
+                with self.assertRaisesRegex(ControlError, error):
+                    assert_receipt_attestation_key_declaration(text, "test.yaml")
 
 
 class LiveBlueprintPolicyTests(unittest.TestCase):
