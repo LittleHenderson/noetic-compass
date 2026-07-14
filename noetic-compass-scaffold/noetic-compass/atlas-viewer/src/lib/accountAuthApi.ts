@@ -1,4 +1,6 @@
 const DEFAULT_ACCOUNT_API_BASE_URL = '/api';
+export const ACCOUNT_CAPABILITIES_PATH = '/public/capabilities';
+const MAX_ACCOUNT_CAPABILITIES_RESPONSE_BYTES = 256;
 const ACCOUNT_CREDENTIAL_PREFIX = 'casak_';
 const ACCOUNT_CREDENTIAL_BYTES = 32;
 
@@ -27,6 +29,10 @@ export interface AccountPublicProfile {
 export interface AccountCredentialRotationResponse {
   rotated: boolean;
   credential_issued_at: string;
+}
+
+export interface PublicAccountCapabilities {
+  accounts_enabled: boolean;
 }
 
 export interface AccountJwtClaims {
@@ -70,6 +76,120 @@ export function resolveAccountApiBaseUrl(explicit?: string): string {
     if (trimmed.endsWith(suffix)) return trimmed.slice(0, -suffix.length);
   }
   return trimmed;
+}
+
+/** Build the one trusted capability URL without accepting scheme-relative or credentialed bases. */
+export function resolveAccountCapabilityUrl(explicit?: string): string {
+  const base = resolveAccountApiBaseUrl(explicit);
+  if (base.startsWith('/')) {
+    if (base.startsWith('//') || base.includes('\\') || /[?#]/.test(base)) {
+      throw new AccountAuthApiError('Account API base URL is invalid.');
+    }
+    return `${base}${ACCOUNT_CAPABILITIES_PATH}`;
+  }
+
+  let parsed: URL;
+  try {
+    parsed = new URL(base);
+  } catch {
+    throw new AccountAuthApiError('Account API base URL is invalid.');
+  }
+  if (
+    !['http:', 'https:'].includes(parsed.protocol) ||
+    parsed.username !== '' ||
+    parsed.password !== '' ||
+    parsed.search !== '' ||
+    parsed.hash !== ''
+  ) {
+    throw new AccountAuthApiError('Account API base URL is invalid.');
+  }
+  if (globalThis.location?.protocol === 'https:' && parsed.protocol !== 'https:') {
+    throw new AccountAuthApiError('Account API base URL is invalid.');
+  }
+
+  parsed.pathname = `${trimTrailingSlash(parsed.pathname)}${ACCOUNT_CAPABILITIES_PATH}`;
+  return parsed.toString();
+}
+
+/**
+ * Read the secret-free account-mode handshake from the exact configured API
+ * base. This request is deliberately anonymous even when a prior account JWT
+ * exists in browser storage: no Bearer, cookie, redirect, or referrer is sent.
+ */
+export async function fetchPublicAccountCapabilities(
+  options?: AccountAuthApiOptions,
+): Promise<PublicAccountCapabilities> {
+  const fetchImpl = options?.fetchImpl ?? globalThis.fetch;
+  if (!fetchImpl) {
+    throw new AccountAuthApiError('Account capability verification requires fetch support.');
+  }
+
+  const requestUrl = resolveAccountCapabilityUrl(options?.baseUrl);
+  let response: Response;
+  try {
+    response = await fetchImpl(requestUrl, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+      },
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+      signal: options?.signal,
+    });
+  } catch (cause) {
+    throw new AccountAuthApiError('Account capability verification is unavailable.', {
+      detail: cause instanceof Error ? cause.message : String(cause),
+      cause,
+    });
+  }
+  if (!response.ok) {
+    throw new AccountAuthApiError('Account capability verification is unavailable.', {
+      httpStatus: response.status,
+    });
+  }
+  if (response.redirected) {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
+
+  const contentType = response.headers.get('Content-Type')
+    ?.split(';', 1)[0]
+    .trim()
+    .toLowerCase();
+  if (contentType !== 'application/json') {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
+  const cacheControl = response.headers.get('Cache-Control')
+    ?.split(',')
+    .map((directive) => directive.trim().toLowerCase());
+  if (!cacheControl?.includes('no-store')) {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
+  const declaredLength = Number(response.headers.get('Content-Length'));
+  if (
+    Number.isFinite(declaredLength) &&
+    declaredLength > MAX_ACCOUNT_CAPABILITIES_RESPONSE_BYTES
+  ) {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
+
+  let serialized: string;
+  try {
+    serialized = await response.text();
+  } catch (cause) {
+    throw new AccountAuthApiError('Account capability response was malformed.', { cause });
+  }
+  if (new TextEncoder().encode(serialized).byteLength > MAX_ACCOUNT_CAPABILITIES_RESPONSE_BYTES) {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
+  const exactContract = serialized.match(
+    /^\s*\{\s*"accounts_enabled"\s*:\s*(true|false)\s*\}\s*$/,
+  );
+  if (!exactContract) {
+    throw new AccountAuthApiError('Account capability response was malformed.');
+  }
+  return { accounts_enabled: exactContract[1] === 'true' };
 }
 
 /**
@@ -210,7 +330,13 @@ async function requestJson(
 
   let response: Response;
   try {
-    response = await fetchImpl(`${resolveAccountApiBaseUrl(options?.baseUrl)}${path}`, init);
+    response = await fetchImpl(`${resolveAccountApiBaseUrl(options?.baseUrl)}${path}`, {
+      ...init,
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+    });
   } catch (cause) {
     throw new AccountAuthApiError('Account request failed before a response.', {
       detail: cause instanceof Error ? cause.message : String(cause),

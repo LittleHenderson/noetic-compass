@@ -21,11 +21,29 @@ function renderAt(path: string) {
 
 beforeEach(() => {
   sessionStorage.clear();
+  vi.stubGlobal('fetch', vi.fn(async (input: RequestInfo | URL) => {
+    if (String(input).endsWith('/public/capabilities')) {
+      return new Response(JSON.stringify({
+        accounts_enabled: import.meta.env.VITE_ACCOUNTS_ENABLED?.trim() === 'true',
+      }), {
+        status: 200,
+        headers: {
+          'Cache-Control': 'no-store',
+          'Content-Type': 'application/json',
+        },
+      });
+    }
+    return new Response(JSON.stringify({ detail: 'not stubbed in route contract test' }), {
+      status: 503,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  }));
 });
 
 afterEach(() => {
   cleanup();
   vi.unstubAllEnvs();
+  vi.unstubAllGlobals();
   vi.restoreAllMocks();
 });
 

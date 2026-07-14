@@ -25,10 +25,17 @@ describe('AccountSecurityPage', () => {
     const user = userEvent.setup();
     const token = accountToken();
     sessionStorage.setItem(ACCOUNT_SESSION_STORAGE_KEY, token);
-    const fetchImpl = vi.fn(async () => new Response(JSON.stringify({
-      rotated: true,
-      credential_issued_at: '2026-07-12T17:00:00Z',
-    }), { status: 200, headers: { 'Content-Type': 'application/json' } }));
+    const fetchImpl = vi.fn(async (input: RequestInfo | URL) => new Response(JSON.stringify(
+      String(input).endsWith('/public/capabilities')
+        ? { accounts_enabled: true }
+        : {
+          rotated: true,
+          credential_issued_at: '2026-07-12T17:00:00Z',
+        },
+    ), {
+      status: 200,
+      headers: { 'Cache-Control': 'no-store', 'Content-Type': 'application/json' },
+    }));
 
     render(
       <AccountAuthProvider accountsEnabled apiOptions={{ fetchImpl }}>
@@ -41,7 +48,7 @@ describe('AccountSecurityPage', () => {
       </AccountAuthProvider>,
     );
 
-    expect(screen.getByText('acct-1')).toBeInTheDocument();
+    expect(await screen.findByText('acct-1')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Generate replacement credential' }));
     const generated = screen.getByText(/^casak_[A-Za-z0-9_-]{43}$/).textContent!;
     await user.click(screen.getByLabelText(/I securely saved this replacement credential/i));
@@ -52,7 +59,10 @@ describe('AccountSecurityPage', () => {
     expect(screen.getAllByText(generated).length).toBeGreaterThan(0);
     expect(sessionStorage.getItem(ACCOUNT_SESSION_STORAGE_KEY)).toBeNull();
     expect(localStorage.length).toBe(0);
-    const init = fetchImpl.mock.calls[0][1] as RequestInit;
+    const rotationCall = fetchImpl.mock.calls.find(
+      ([input]) => String(input).endsWith('/accounts/credential/rotate'),
+    )!;
+    const init = rotationCall[1] as RequestInit;
     expect(new Headers(init.headers).get('Authorization')).toBe(`Bearer ${token}`);
     expect(JSON.parse(String(init.body))).toEqual({ api_credential: generated });
   });

@@ -9,6 +9,7 @@ import {
 } from 'react';
 import {
   decodeAccountToken,
+  fetchPublicAccountCapabilities,
   loginAccount,
   logoutAccount,
   redeemAccountInvite,
@@ -22,6 +23,7 @@ import {
 
 export const ACCOUNT_SESSION_STORAGE_KEY = 'cas_harness.account.jwt.v1';
 export const LEGACY_LIVE_INVITE_STORAGE_KEY = 'atlas_live_invite_code';
+export const ACCOUNT_CAPABILITY_TIMEOUT_MS = 10_000;
 
 export interface CredentialHandoff {
   credential: string;
@@ -113,6 +115,11 @@ export interface AccountAuthProviderProps {
   accountsEnabled?: boolean;
 }
 
+type AccountCapabilityState =
+  | { status: 'loading' }
+  | { status: 'ready'; accountsEnabled: boolean }
+  | { status: 'error'; reason: 'mismatch' | 'unavailable' };
+
 export function resolveAccountsEnabled(explicit?: boolean): boolean {
   if (typeof explicit === 'boolean') return explicit;
   return import.meta.env?.VITE_ACCOUNTS_ENABLED?.trim() === 'true';
@@ -136,10 +143,16 @@ export function AccountAuthProvider({
   apiOptions,
   accountsEnabled: accountsEnabledOverride,
 }: AccountAuthProviderProps): JSX.Element {
-  const accountsEnabled = resolveAccountsEnabled(accountsEnabledOverride);
-  const [token, setToken] = useState<string | null>(() => (
-    accountsEnabled ? readRestoredToken() : null
-  ));
+  const configuredAccountsEnabled = resolveAccountsEnabled(accountsEnabledOverride);
+  const [capabilityState, setCapabilityState] = useState<AccountCapabilityState>({
+    status: 'loading',
+  });
+  const accountsEnabled = capabilityState.status === 'ready'
+    ? capabilityState.accountsEnabled
+    : false;
+  // Restoring a browser JWT is intentionally deferred until the unauthenticated
+  // server capability agrees with the Atlas build flag.
+  const [token, setToken] = useState<string | null>(null);
   const [credentialHandoff, setCredentialHandoff] = useState<CredentialHandoff | null>(null);
   const [logoutWarning, setLogoutWarning] = useState<string | null>(null);
   const claims = useMemo(() => (token ? decodeAccountToken(token) : null), [token]);
@@ -159,6 +172,67 @@ export function AccountAuthProvider({
       // Locked-down contexts may deny storage access; no new secret is written.
     }
   }, []);
+
+  useEffect(() => {
+    let active = true;
+    const controller = new AbortController();
+    const upstreamSignal = apiOptions?.signal;
+    const abortFromUpstream = () => controller.abort();
+    if (upstreamSignal?.aborted) {
+      controller.abort();
+    } else {
+      upstreamSignal?.addEventListener('abort', abortFromUpstream, { once: true });
+    }
+
+    setCapabilityState({ status: 'loading' });
+    let timeoutId: ReturnType<typeof setTimeout> | undefined;
+    const deadline = new Promise<never>((_resolve, reject) => {
+      timeoutId = setTimeout(() => {
+        controller.abort();
+        reject(new Error('Account capability verification timed out.'));
+      }, ACCOUNT_CAPABILITY_TIMEOUT_MS);
+    });
+    void Promise.race([fetchPublicAccountCapabilities({
+      baseUrl: apiOptions?.baseUrl,
+      fetchImpl: apiOptions?.fetchImpl,
+      signal: controller.signal,
+    }), deadline]).then((capabilities) => {
+      if (!active) return;
+      if (capabilities.accounts_enabled !== configuredAccountsEnabled) {
+        clearSession();
+        setCapabilityState({ status: 'error', reason: 'mismatch' });
+        return;
+      }
+      if (capabilities.accounts_enabled) {
+        setToken(readRestoredToken());
+      } else {
+        clearSession();
+      }
+      setCapabilityState({
+        status: 'ready',
+        accountsEnabled: capabilities.accounts_enabled,
+      });
+    }).catch(() => {
+      if (!active) return;
+      clearSession();
+      setCapabilityState({ status: 'error', reason: 'unavailable' });
+    }).finally(() => {
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
+    });
+
+    return () => {
+      active = false;
+      if (timeoutId !== undefined) clearTimeout(timeoutId);
+      upstreamSignal?.removeEventListener('abort', abortFromUpstream);
+      controller.abort();
+    };
+  }, [
+    apiOptions?.baseUrl,
+    apiOptions?.fetchImpl,
+    apiOptions?.signal,
+    clearSession,
+    configuredAccountsEnabled,
+  ]);
 
   const installSession = useCallback((newToken: string): AccountJwtClaims => {
     const newClaims = decodeAccountToken(newToken);
@@ -182,13 +256,6 @@ export function AccountAuthProvider({
       // Best-effort migration cleanup; current code never writes the key.
     }
   }, []);
-
-  useEffect(() => {
-    if (!accountsEnabled) {
-      clearSession();
-      setCredentialHandoff(null);
-    }
-  }, [accountsEnabled, clearSession]);
 
   useEffect(() => {
     if (!claims) {
@@ -267,7 +334,14 @@ export function AccountAuthProvider({
       // Strip even a stale inherited Authorization header on untrusted origins.
       headers.delete('Authorization');
     }
-    const response = await fetchImpl(input, { ...init, headers });
+    const response = await fetchImpl(input, {
+      ...init,
+      headers,
+      cache: 'no-store',
+      credentials: 'omit',
+      redirect: 'error',
+      referrerPolicy: 'no-referrer',
+    });
     if (response.status === 401 && attachedAccountBearer) clearSession();
     return response;
   }, [apiOptions?.baseUrl, apiOptions?.fetchImpl, clearSession, token]);
@@ -298,6 +372,28 @@ export function AccountAuthProvider({
     rotateCredential,
     token,
   ]);
+
+  if (capabilityState.status === 'loading') {
+    return (
+      <div
+        role="status"
+        aria-live="polite"
+        data-account-capability-state="loading"
+      >
+        Verifying customer account mode...
+      </div>
+    );
+  }
+  if (capabilityState.status === 'error') {
+    return (
+      <div
+        role="alert"
+        data-account-capability-state={capabilityState.reason}
+      >
+        Customer account mode could not be verified. Please try again later.
+      </div>
+    );
+  }
 
   return <AccountAuthContext.Provider value={value}>{children}</AccountAuthContext.Provider>;
 }
