@@ -100,6 +100,51 @@ smallest exact subject grants possible. Key rotation is a reviewed repository
 change. Until a valid key is onboarded, signed evidence cannot produce ACCEPT;
 this is intentional.
 
+### Produce the root-CI protected-deploy receipt
+
+The root-CI collector is intentionally local and unsigned. It needs a GitHub
+credential that can read branch protection plus `RENDER_API_KEY`; the default
+Actions `GITHUB_TOKEN` does not have GitHub Administration read permission.
+Never move a personal administration token into Actions or weaken the branch
+protection proof. Run the collector from the exact checked-out protected
+`master` SHA and bind one explicit Render deploy ID:
+
+```powershell
+$env:GITHUB_TOKEN = gh auth token
+python scripts/collect_root_ci_protected_deploy_facts.py `
+  --expected-master-head <40-character-protected-master-sha> `
+  --expected-deploy-id <public-render-deploy-id> `
+  --deploy-wait-seconds 600 `
+  --output root-ci-protected-deploy.json
+```
+
+The collector queries only `/deploys/<expected-deploy-id>` while waiting; it
+never substitutes the latest deploy. It fails closed on repository, workflow,
+job, check, GitHub App, branch-protection, Render service, commit, trigger,
+health, freshness, pagination, or local workflow-layout drift. HTTP reads are
+bounded, redirects are forbidden, and response bodies and credentials are not
+printed on errors. Exit zero produces only a canonical unsigned v2 facts
+document; it does not create authority, mark a gate `present`, or dispatch
+`ACCEPT`.
+
+Publish those exact bytes as the stable release asset
+`customer-production-evidence/root-ci-protected-deploy.json`. Then manually
+dispatch `Customer Production Evidence` from that same protected `master` SHA
+with the exact SHA and deploy ID. The protected `customer-production`
+environment workflow downloads the asset, hashes and strict-parses it, runs
+the hostile verifier/producer tests, binds the expected SHA and deploy ID, and
+signs a receipt with `CUSTOMER_PRODUCTION_SIGNING_KEY_PEM`. The private key is
+available only to the signing step and is never logged. The uploaded artifact
+contains the receipt and the subject checksum; the checked-in manifest remains
+`OPEN`, and the workflow never dispatches final `ACCEPT`.
+
+```powershell
+gh release upload customer-production-evidence `
+  'root-ci-protected-deploy.json#Unsigned root CI protected deploy source facts' `
+  --repo LittleHenderson/noetic-compass `
+  --clobber
+```
+
 ## Commands
 
 Run from the repository root.
