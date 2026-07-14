@@ -66,6 +66,38 @@ class Settings(BaseSettings):
         ),
     )
 
+    # Public support intake. The default in-memory store is deliberately dark;
+    # production sets NC_SUPPORT_TICKET_STORE_PATH to a persistent-disk path.
+    support_ticket_store_path: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_TICKET_STORE_PATH", "SUPPORT_TICKET_STORE_PATH"
+        ),
+    )
+    support_ack_sla_seconds: int = Field(
+        default=86400,
+        ge=60,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_ACK_SLA_SECONDS", "SUPPORT_ACK_SLA_SECONDS"
+        ),
+    )
+    support_public_ticket_rate_limit_max: int = Field(
+        default=5,
+        ge=0,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX",
+            "SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX",
+        ),
+    )
+    support_public_ticket_rate_limit_window_seconds: int = Field(
+        default=3600,
+        ge=0,
+        validation_alias=AliasChoices(
+            "NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS",
+            "SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS",
+        ),
+    )
+
     # JWT Auth
     jwt_secret: str = "change-me-in-production"
     jwt_algorithm: str = "HS256"

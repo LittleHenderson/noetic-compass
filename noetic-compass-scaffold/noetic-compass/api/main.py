@@ -45,6 +45,7 @@ from api.routes import (
     reproducibility,
     scenarios,
     state_ledger_status,
+    support,
     validation,
     atlas_live,
     visual_grounding,
@@ -103,6 +104,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.billing_provider = None
     app.state.evidence_packet_repository = None
     app.state.evidence_share_service = None
+    app.state.support_tickets = None
+    app.state.support_public_abuse_guard = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -223,6 +226,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
         app.state.crm = build_crm_service(settings)
         app.state.crm_public_abuse_guard = build_public_lead_abuse_guard(settings)
+        from api.services.crm.abuse import PublicLeadAbuseGuard
+        from api.services.support_tickets import build_support_ticket_service
+
+        app.state.support_tickets = build_support_ticket_service(settings)
+        app.state.support_public_abuse_guard = PublicLeadAbuseGuard(
+            max_submissions=settings.support_public_ticket_rate_limit_max,
+            window_seconds=settings.support_public_ticket_rate_limit_window_seconds,
+        )
         yield
     finally:
         # Clear wrappers before closing their shared backend so a repeated lifespan cannot reuse
@@ -236,6 +247,8 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.evidence_packet_repository = None
         app.state.evidence_share_service = None
         app.state.shared_state_store = None
+        app.state.support_tickets = None
+        app.state.support_public_abuse_guard = None
         try:
             if handle is not None:
                 teardown_state_ledger(handle)
@@ -320,3 +333,4 @@ app.include_router(atlas_live.router)
 app.include_router(visual_grounding.router)
 app.include_router(state_ledger_status.router)
 app.include_router(crm.router)
+app.include_router(support.router)

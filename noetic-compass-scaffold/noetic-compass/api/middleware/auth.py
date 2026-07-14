@@ -33,6 +33,9 @@ PUBLIC_PATHS = {
     "/billing/webhook/stripe",
     # Platform-only route; its separate 32-byte admin secret is verified in-route.
     "/platform/billing/manual-comped-subscription",
+    # Exact public support-intake route. Do not use a broad prefix: ticket
+    # listing and lifecycle transitions remain authenticated operator actions.
+    "/api/support/public/tickets",
     "/docs",
     "/openapi.json",
     "/redoc",
@@ -93,6 +96,7 @@ ACCOUNT_MODE_ALLOWED_PREFIXES = (
     "/evidence",
     "/health",
     "/notation",
+    "/api/support/tickets",
 )
 
 _FLEET_SERVICE_CALLBACK_PATTERNS = tuple(

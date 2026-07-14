@@ -142,6 +142,16 @@ services:
       # database is the eventual backend behind the unchanged LeadStore seam.
       - key: NC_CRM_LEAD_STORE_PATH
         value: /var/data/leads.jsonl
+      # Public support tickets are append-only and fsync'd on the persistent
+      # disk. Lifecycle routes remain authenticated operator actions.
+      - key: NC_SUPPORT_TICKET_STORE_PATH
+        value: /var/data/support_tickets.jsonl
+      - key: NC_SUPPORT_ACK_SLA_SECONDS
+        value: "86400"
+      - key: NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX
+        value: "5"
+      - key: NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS
+        value: "3600"
       # CAS Harness Evidence Packet store durability: persisted hash logs and static
       # anchor receipts must survive deploy/restart so /evidence/{trace_id}/verify can
       # re-read the receipt after an Object-Lock anchor. Without this env var the store
@@ -185,7 +195,7 @@ services:
       # origins. The NC_CORS_ORIGIN_REGEX below also permits *.noeticcompass.com
       # but explicit > implicit for production CORS.
       - key: NC_CORS_ORIGINS
-        value: https://noeticcompass.com,https://www.noeticcompass.com,https://atlas.noeticcompass.com,https://atlas-viewer-app.onrender.com,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
+        value: https://noeticcompass.com,https://www.noeticcompass.com,https://atlas.noeticcompass.com,https://atlas-viewer-app.onrender.com,https://cascompass.ai,https://www.cascompass.ai,http://localhost:3000,http://localhost:3002,http://127.0.0.1:3000,http://127.0.0.1:3002
       - key: NC_CORS_ORIGIN_REGEX
         value: 'https://(.*\.)?noeticcompass\.com|https://([a-z0-9-]+\.)*vercel\.app|http://localhost(:\d+)?|http://127\.0\.0\.1(:\d+)?'
       # CAS Harness hosted worker route. These are intentionally dashboard-managed:
