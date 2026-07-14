@@ -8,11 +8,13 @@ from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from scripts.verify_render_blueprint_control import (
+    AUXILIARY_BLUEPRINT_PATHS,
     ControlError,
     EXPECTED_BLUEPRINTS,
     assert_no_secret_literals,
     assert_receipt_attestation_key_declaration,
     parse_service_blocks,
+    validate_auxiliary_blueprint_yaml,
     validate_live,
     validate_live_payload,
     validate_live_service_payload,
@@ -240,10 +242,36 @@ class WorkflowLocationPolicyTests(unittest.TestCase):
                 validate_workflow_locations(repo_root)
 
 
+class AuxiliaryBlueprintPolicyTests(unittest.TestCase):
+    def test_auxiliary_blueprint_requires_checks_pass(self) -> None:
+        with TemporaryDirectory() as temporary_directory:
+            repo_root = Path(temporary_directory)
+            relative_path = "app/infra/render.yaml"
+            path = repo_root / relative_path
+            path.parent.mkdir(parents=True)
+            path.write_text(
+                "services:\n"
+                "  - type: web\n"
+                "    name: legacy-api\n"
+                "    autoDeployTrigger: commit\n",
+                encoding="utf-8",
+            )
+
+            with self.assertRaisesRegex(ControlError, "must be checksPass"):
+                validate_auxiliary_blueprint_yaml(repo_root, relative_path)
+
+            path.write_text(
+                path.read_text(encoding="utf-8").replace("commit", "checksPass"),
+                encoding="utf-8",
+            )
+            validate_auxiliary_blueprint_yaml(repo_root, relative_path)
+
+
 class RepositoryIntegrationTests(unittest.TestCase):
     def test_checked_in_control_passes_offline(self) -> None:
         manifest = validate_offline(REPO_ROOT)
         self.assertEqual(len(manifest["blueprints"]), 2)
+        self.assertEqual(len(AUXILIARY_BLUEPRINT_PATHS), 1)
 
 
 if __name__ == "__main__":

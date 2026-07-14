@@ -1,7 +1,8 @@
 # Legacy Render Blueprint - Noetic Compass
 #
 # Prefer the repo-root render.yaml for new Render Blueprint setup. This file is
-# kept aligned for anyone who already points Render at this custom path.
+# kept aligned for anyone who already points Render at this custom path. Every
+# service remains CI-gated even though this is not a live controlled Blueprint.
 
 services:
   - type: web
@@ -11,7 +12,7 @@ services:
     dockerfilePath: ./Dockerfile.api
     dockerContext: .
     plan: starter
-    autoDeployTrigger: commit
+    autoDeployTrigger: checksPass
     healthCheckPath: /health
     # Persistent disk = durable single-host storage for the state ledger + CRM leads.
     # Render disks attach only to PAID instance types (starter/standard/pro), ~$0.25/GB/mo.
@@ -138,7 +139,7 @@ services:
     runtime: static
     rootDir: noetic-compass-scaffold/noetic-compass
     plan: free
-    autoDeployTrigger: commit
+    autoDeployTrigger: checksPass
     buildCommand: cd dashboard && npm ci && npm run build
     staticPublishPath: dashboard/dist
     routes:

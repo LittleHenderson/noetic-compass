@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import hashlib
+import re
 import time
 
 from fastapi import Request
@@ -19,6 +21,11 @@ TIER_LIMITS: dict[str, tuple[int, int]] = {
     "enterprise": (120, 0),
 }
 DASHBOARD_API_KEY_PREFIX = "dashboard:"
+_ANONYMOUS_EVIDENCE_SHARE_PATTERN = re.compile(
+    r"^/evidence/shared/(?P<share_id>shr_[A-Za-z0-9_-]{20,64})$"
+)
+_EVIDENCE_SHARE_CLIENT_RPM = 120
+_EVIDENCE_SHARE_CLIENT_AND_SHARE_RPM = 60
 
 
 class TokenBucket:
@@ -82,8 +89,46 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             )
         return self.buckets[key]
 
+    def _consume_sensitive_bucket(self, *, key: str, rpm: int) -> bool:
+        bucket = self.sensitive_buckets.get(key)
+        if bucket is None:
+            if len(self.sensitive_buckets) >= 10_000:
+                self.sensitive_buckets.pop(next(iter(self.sensitive_buckets)))
+            bucket = TokenBucket(rate=rpm / 60.0, capacity=rpm)
+            self.sensitive_buckets[key] = bucket
+        return bucket.consume()
+
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
         if request.method == "OPTIONS":
+            return await call_next(request)
+        client_host = request.client.host if request.client is not None else "unknown"
+        share_match = _ANONYMOUS_EVIDENCE_SHARE_PATTERN.fullmatch(request.url.path)
+        if share_match is not None:
+            # The bearer token is intentionally never part of a limiter key. A
+            # client-wide bucket stops path cycling; a second, hashed-share
+            # bucket limits repeated valid S3 reads without retaining a public
+            # share identifier in middleware state.
+            share_digest = hashlib.sha256(
+                share_match.group("share_id").encode("ascii")
+            ).hexdigest()[:24]
+            allowed = self._consume_sensitive_bucket(
+                key=f"evidence-share-client:{client_host}",
+                rpm=_EVIDENCE_SHARE_CLIENT_RPM,
+            )
+            if allowed:
+                allowed = self._consume_sensitive_bucket(
+                    key=f"evidence-share:{client_host}:{share_digest}",
+                    rpm=_EVIDENCE_SHARE_CLIENT_AND_SHARE_RPM,
+                )
+            if not allowed:
+                return JSONResponse(
+                    status_code=429,
+                    content={"detail": "Rate limit exceeded (evidence share)"},
+                    headers={
+                        "Cache-Control": "no-store, max-age=0",
+                        "Pragma": "no-cache",
+                    },
+                )
             return await call_next(request)
         sensitive_public = {
             "/auth/token": self.sensitive_rpm,
@@ -96,18 +141,10 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
             "/billing/webhook/stripe": 600,
         }
         if request.url.path in sensitive_public:
-            client_host = request.client.host if request.client is not None else "unknown"
             key = f"{request.url.path}:{client_host}"
-            bucket = self.sensitive_buckets.get(key)
-            if bucket is None:
-                if len(self.sensitive_buckets) >= 10_000:
-                    self.sensitive_buckets.pop(next(iter(self.sensitive_buckets)))
-                endpoint_rpm = sensitive_public[request.url.path]
-                bucket = TokenBucket(
-                    rate=endpoint_rpm / 60.0, capacity=endpoint_rpm
-                )
-                self.sensitive_buckets[key] = bucket
-            if not bucket.consume():
+            if not self._consume_sensitive_bucket(
+                key=key, rpm=sensitive_public[request.url.path]
+            ):
                 return JSONResponse(
                     status_code=429,
                     content={"detail": "Rate limit exceeded (credential endpoint)"},

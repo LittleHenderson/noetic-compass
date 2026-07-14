@@ -206,6 +206,40 @@ def test_fetch_is_read_only_and_records_sanitized_audit(service_fixture) -> None
         assert event["trace_id"] == "trace-share-1"
 
 
+def test_fetch_audit_is_bounded_to_one_receipt_per_utc_hour(service_fixture) -> None:
+    ctx = service_fixture
+    created = _create(ctx, expires_at=ctx.clock.now + timedelta(hours=3))
+
+    for request_id in ("same-hour-1", "same-hour-2", "same-hour-3"):
+        assert ctx.service.fetch_shared_packet(
+            share_id=created.share.share_id,
+            token=created.token,
+            request_id=request_id,
+        )["trace_id"] == "trace-share-1"
+
+    events = ctx.service.list_events(
+        tenant_id="tenant-a",
+        account_id="acct-creator",
+        actor_role="member",
+        share_id=created.share.share_id,
+    )
+    assert [event["event_type"] for event in events].count("fetched") == 1
+
+    ctx.clock.now += timedelta(hours=1)
+    ctx.service.fetch_shared_packet(
+        share_id=created.share.share_id,
+        token=created.token,
+        request_id="next-hour",
+    )
+    events = ctx.service.list_events(
+        tenant_id="tenant-a",
+        account_id="acct-creator",
+        actor_role="member",
+        share_id=created.share.share_id,
+    )
+    assert [event["event_type"] for event in events].count("fetched") == 2
+
+
 def test_revoke_is_idempotent_and_all_public_negative_states_collapse(
     service_fixture,
 ) -> None:

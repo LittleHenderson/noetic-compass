@@ -5,6 +5,7 @@ import logging
 import time
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 
 from api.middleware.auth import create_token
@@ -119,6 +120,52 @@ def test_cors_wraps_rate_limit_response(client):
     assert resp.headers["access-control-allow-origin"] == "*"
     assert "access-control-allow-credentials" not in resp.headers
     assert resp.headers["x-request-id"]
+
+
+def test_anonymous_evidence_share_has_dedicated_rate_limit() -> None:
+    isolated = FastAPI()
+
+    @isolated.get("/evidence/shared/{share_id}")
+    def fetch_share(share_id: str) -> dict[str, str]:
+        return {"share_id": share_id}
+
+    isolated.add_middleware(RateLimitMiddleware)
+    path = "/evidence/shared/shr_" + "a" * 24
+    with TestClient(isolated) as isolated_client:
+        assert isolated_client.get(path).status_code == 200
+        current = isolated.middleware_stack
+        while current is not None and not isinstance(current, RateLimitMiddleware):
+            current = getattr(current, "app", None)
+        assert isinstance(current, RateLimitMiddleware)
+        client_buckets = [
+            bucket
+            for key, bucket in current.sensitive_buckets.items()
+            if key.startswith("evidence-share-client:")
+        ]
+        assert len(client_buckets) == 1
+        share_buckets = [
+            bucket
+            for key, bucket in current.sensitive_buckets.items()
+            if key.startswith("evidence-share:")
+        ]
+        assert len(share_buckets) == 1
+
+        # The client-wide bucket is consumed before allocating a per-share
+        # bucket, so cycling random share ids cannot bypass the edge guard.
+        client_buckets[0].tokens = 0.0
+        client_buckets[0].last_refill = time.monotonic()
+        cycled = isolated_client.get("/evidence/shared/shr_" + "b" * 24)
+        assert cycled.status_code == 429
+        assert len(current.sensitive_buckets) == 2
+
+        client_buckets[0].tokens = float(client_buckets[0].capacity)
+        share_buckets[0].tokens = 0.0
+        share_buckets[0].last_refill = time.monotonic()
+
+        limited = isolated_client.get(path)
+        assert limited.status_code == 429
+        assert limited.json() == {"detail": "Rate limit exceeded (evidence share)"}
+        assert limited.headers["cache-control"].startswith("no-store")
 
 
 

@@ -350,6 +350,10 @@ class EvidenceShareService:
 
         All negative capability states deliberately collapse to
         :class:`EvidenceShareUnavailable`; the route maps that to one 404 shape.
+
+        Authorization linearizes when the locator, token, and active status are
+        validated. A request admitted before a concurrent revoke/expiry may
+        finish; every request beginning after revoke (locator removal) fails.
         """
 
         try:
@@ -393,7 +397,10 @@ class EvidenceShareService:
                 request_id_sha256=_request_id_sha256(request_id),
                 actor_account_id=None,
                 occurred_at=now,
-                deterministic=False,
+                # One immutable receipt per UTC hour bounds audit storage to
+                # at most 721 fetch rows over the 30-day share lifetime. The
+                # edge limiter bounds object-store reads inside each window.
+                deterministic=True,
             )
             # The repository returns a fresh JSON mapping. Nothing in this path
             # writes packet bytes or changes the packet mapping.
@@ -537,7 +544,10 @@ class EvidenceShareService:
     ) -> None:
         if event_type not in {"created", "fetched", "revoked"}:
             raise ValueError("unknown evidence share event")
-        suffix = event_type if deterministic else f"fetched-{uuid.uuid4().hex}"
+        if event_type == "fetched" and deterministic:
+            suffix = f"fetched-{occurred_at.strftime('%Y%m%dT%H')}"
+        else:
+            suffix = event_type if deterministic else f"fetched-{uuid.uuid4().hex}"
         event_id = f"{share.share_id}-{suffix}"
         payload: dict[str, object] = {
             "schema_version": SHARE_EVENT_SCHEMA_VERSION,
@@ -570,6 +580,34 @@ class EvidenceShareService:
             existing = self.store.get(
                 share.tenant_id, EVIDENCE_SHARE_EVENT_KIND, event_id
             )
+            if event_type == "fetched" and existing is not None:
+                # The first successful fetch in the hour owns the receipt's
+                # timestamp/request digest. Later fetches in that same bucket
+                # are already represented and must not append new rows.
+                stable_fields = (
+                    "schema_version",
+                    "event_id",
+                    "event_type",
+                    "share_id",
+                    "trace_id",
+                    "actor_account_id",
+                    "packet_content_sha256",
+                )
+                existing_request_hash = existing.payload.get("request_id_sha256")
+                same_hour = _parse_payload_datetime(
+                    existing.payload, "occurred_at"
+                ).strftime("%Y%m%dT%H") == occurred_at.strftime("%Y%m%dT%H")
+                if (
+                    set(existing.payload) == set(payload)
+                    and all(
+                        existing.payload.get(key) == payload.get(key)
+                        for key in stable_fields
+                    )
+                    and isinstance(existing_request_hash, str)
+                    and re.fullmatch(r"[0-9a-f]{64}", existing_request_hash)
+                    and same_hour
+                ):
+                    return
             if existing is None or dict(existing.payload) != payload:
                 raise EvidenceShareStorageError(
                     "Evidence share audit event conflicted."

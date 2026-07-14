@@ -64,6 +64,9 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
         ],
     },
 ]
+AUXILIARY_BLUEPRINT_PATHS = (
+    "noetic-compass-scaffold/noetic-compass/infra/render.yaml",
+)
 
 _SERVICE_ITEM = re.compile(r"^(?P<indent> *)-\s+type:\s*(?P<value>[^#]+?)\s*(?:#.*)?$")
 _ENV_ITEM = re.compile(r"^(?P<indent> *)-\s+key:\s*(?P<value>[^#]+?)\s*(?:#.*)?$")
@@ -307,6 +310,35 @@ def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> No
             )
 
 
+def validate_auxiliary_blueprint_yaml(repo_root: Path, relative_path: str) -> None:
+    """Keep non-live/legacy Render files from reintroducing commit-trigger deploys."""
+
+    path = _safe_repo_path(repo_root, relative_path)
+    _require(path.is_file(), f"Missing auxiliary Blueprint file: {relative_path}")
+    text = path.read_text(encoding="utf-8")
+    assert_no_secret_literals(text, relative_path)
+    triggers: list[str] = []
+    for line in text.splitlines():
+        if line.lstrip().startswith("#"):
+            continue
+        match = re.match(r"^\s*autoDeployTrigger:\s*(?P<value>[^#]+?)\s*$", line)
+        if match:
+            triggers.append(_scalar(match.group("value")))
+        _require(
+            re.match(r"^\s*autoDeploy\s*:", line) is None,
+            f"{relative_path} must use autoDeployTrigger, not deprecated autoDeploy",
+        )
+        _require(
+            re.match(r"^\s*(?:-\s+)?commit\s*:", line, re.IGNORECASE) is None,
+            f"{relative_path} must not pin a service commit",
+        )
+    _require(triggers, f"{relative_path} must declare autoDeployTrigger for its services")
+    _require(
+        all(trigger == "checksPass" for trigger in triggers),
+        f"{relative_path} autoDeployTrigger must be checksPass for every service",
+    )
+
+
 def validate_workflow_locations(repo_root: Path) -> None:
     ignored = {".git", "node_modules", ".pytest_cache", "__pycache__"}
     misplaced: list[str] = []
@@ -409,6 +441,8 @@ def validate_offline(repo_root: Path) -> dict[str, Any]:
     validate_manifest(manifest)
     for blueprint in manifest["blueprints"]:
         validate_blueprint_yaml(repo_root, blueprint)
+    for relative_path in AUXILIARY_BLUEPRINT_PATHS:
+        validate_auxiliary_blueprint_yaml(repo_root, relative_path)
     validate_workflow_locations(repo_root)
     validate_ci_integration(repo_root)
     return manifest
