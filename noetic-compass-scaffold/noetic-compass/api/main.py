@@ -104,6 +104,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.session_store = None
     app.state.billing_entitlement_store = None
     app.state.billing_provider = None
+    app.state.billing_reconciliation_store = None
     app.state.evidence_packet_repository = None
     app.state.evidence_share_service = None
     app.state.support_tickets = None
@@ -210,6 +211,32 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
             app.state.billing_entitlement_store = BillingEntitlementStore(shared_store)
             app.state.billing_provider = build_billing_provider(settings)
+            if settings.billing_reconciliation_enabled:
+                from api.services.billing_reconciliation import (
+                    BillingReconciliationStore,
+                )
+
+                app.state.billing_reconciliation_store = BillingReconciliationStore(
+                    shared_store,
+                    app.state.billing_entitlement_store,
+                    provider_reference_hash_key=(
+                        settings.billing_provider_reference_hash_key
+                    ),
+                    usage_price_id=settings.stripe_usage_price_id,
+                    meter_event_name=settings.billing_usage_meter_event_name,
+                    meter_event_version=settings.billing_usage_meter_version,
+                    currency=settings.billing_usage_currency,
+                    livemode=settings.stripe_livemode,
+                    customer_receipt_allowed_hosts=tuple(
+                        host.strip()
+                        for host in (
+                            settings.billing_customer_receipt_allowed_hosts.split(
+                                ","
+                            )
+                        )
+                        if host.strip()
+                    ),
+                )
         if (
             app.state.account_store is not None
             and not app.state.account_store.has_active_owner()
@@ -237,6 +264,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             "billing entitlements: %s (provider=%s)",
             "ENABLED" if settings.billing_entitlements_enabled else "dark",
             settings.billing_provider.strip().lower(),
+        )
+        logger.info(
+            "billing usage/invoice reconciliation: %s (no submission route)",
+            "ENABLED" if settings.billing_reconciliation_enabled else "dark",
         )
         logger.info(
             "evidence packet object storage: %s",
@@ -277,6 +308,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.session_store = None
         app.state.billing_entitlement_store = None
         app.state.billing_provider = None
+        app.state.billing_reconciliation_store = None
         app.state.evidence_packet_repository = None
         app.state.evidence_share_service = None
         app.state.acceptance_authority_store = None

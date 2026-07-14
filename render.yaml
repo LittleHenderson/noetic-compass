@@ -95,6 +95,8 @@ services:
         value: "false"
       - key: NC_BILLING_ENTITLEMENTS_ENABLED
         value: "false"
+      - key: NC_BILLING_RECONCILIATION_ENABLED
+        value: "false"
       - key: NC_BILLING_PROVIDER
         value: "null"
       - key: NC_BILLING_ADMIN_SECRET
