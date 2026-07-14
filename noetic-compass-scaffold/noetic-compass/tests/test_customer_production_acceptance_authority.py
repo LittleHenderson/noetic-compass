@@ -374,7 +374,7 @@ def test_router_registers_only_exact_get_routes() -> None:
     authority_routes = {
         route.path: route.methods
         for route in app.routes
-        if route.path in ACCEPTANCE_AUTHORITY_PUBLIC_PATHS
+        if getattr(route, "path", None) in ACCEPTANCE_AUTHORITY_PUBLIC_PATHS
     }
     assert set(authority_routes) == ACCEPTANCE_AUTHORITY_PUBLIC_PATHS
     assert all(methods == {"GET"} for methods in authority_routes.values())
