@@ -10,6 +10,7 @@ from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
 from starlette.middleware.base import BaseHTTPMiddleware
 
+from api.acceptance_authority_contract import ACCEPTANCE_AUTHORITY_PUBLIC_PATHS
 from api.config import settings
 
 # Paths that don't require JWT authentication. Atlas LIVE has its own
@@ -87,6 +88,25 @@ def is_public_path(path: str) -> bool:
     if not settings.accounts_enabled:
         return any(path.startswith(p) for p in ACCOUNT_GATED_PUBLIC_PREFIXES)
     return False
+
+
+def is_public_acceptance_authority_request(
+    path: str, method: str, query: str = ""
+) -> bool:
+    """Allow only exact, query-free GETs to the public authority documents.
+
+    These paths cannot live in ``PUBLIC_PATHS`` because that path-only helper
+    would also make POST/PUT/DELETE anonymous.  Keeping the method check here is
+    the authentication boundary for this deliberately secret-free read surface.
+    """
+
+    return (
+        method.upper() == "GET"
+        and not query
+        and path in ACCEPTANCE_AUTHORITY_PUBLIC_PATHS
+    )
+
+
 ACCOUNT_MODE_ALLOWED_PREFIXES = (
     "/auth/",
     "/accounts/",
@@ -133,7 +153,13 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
     """Validates JWT Bearer tokens on protected endpoints."""
 
     async def dispatch(self, request: Request, call_next):  # type: ignore[override]
-        if is_public_path(request.url.path) or request.method == "OPTIONS":
+        if (
+            is_public_path(request.url.path)
+            or is_public_acceptance_authority_request(
+                request.url.path, request.method, request.url.query
+            )
+            or request.method == "OPTIONS"
+        ):
             return await call_next(request)
 
         # Worker/merger/verifier callbacks use a separate tenant-bound credential.  Let the

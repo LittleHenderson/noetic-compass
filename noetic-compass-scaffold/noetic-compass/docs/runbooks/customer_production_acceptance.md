@@ -83,6 +83,56 @@ self-attestation and does not count. The aggregated root-CI gate deliberately
 has no live endpoint because neither the GitHub nor Render API returns the
 complete gate schema at one fixed URL; use a signed receipt for that gate.
 
+### Production JSON authority plane
+
+The production API exposes only these exact, query-free anonymous `GET`
+documents for `live_https` verification:
+
+| Gate | Exact path |
+|---|---|
+| `runtime_worm` | `/internal/acceptance/runtime-worm` |
+| `hosted_customer_journey` | `/internal/acceptance/customer-journey` |
+| `accounts_billing` | `/internal/acceptance/accounts-billing` |
+| `legal_publication_approval` | `/internal/acceptance/legal-publication-approval` |
+| `support_crm` | `/internal/acceptance/support-crm` |
+| `incident_tabletop` | `/internal/acceptance/incident-tabletop` |
+| `alert_delivery` | `/internal/acceptance/alert-delivery` |
+| `claim_honesty` | `/internal/acceptance/claim-honesty` |
+| `release_decision` | `/internal/acceptance/release-decision` |
+
+The legal endpoint is JSON from the API; `https://cascompass.ai/legal` remains
+the human-facing legal page and is never JSON-parsed as authority. The auth and
+rate-limit middleware share the same exact path map. `POST`, `PUT`, `PATCH`,
+`DELETE`, `HEAD`, a query string, a child path, or any future sibling below
+`/internal/acceptance` does not inherit anonymous access. `root_ci_protected_deploy`
+is intentionally absent and remains signed-receipt-only.
+
+The route never calculates a successful gate from current application state.
+It reads a content-addressed immutable revision selected by a version-checked
+head in the existing `StateStore`. The same service works over SQLite or
+Postgres. When the existing immutable Evidence Packet backend is configured,
+new revisions can store the exact canonical JSON bytes in S3 Object Lock and
+the StateStore keeps only the exact-version pointer; a WORM-backed head never
+falls back to mutable inline bytes. Every read rechecks the head/revision
+identity, byte length, SHA-256, canonical JSON, exact gate schema, exact
+authority URL, freshness, public-production binding, and secret/PII scans.
+
+There is deliberately no HTTP publish or approval route. A separately
+authenticated operational collector must obtain independent receipts and any
+human approvals, run the canonical verifier's full gate semantics, then call
+the persistence service with the current head version. The service does not
+create missing approval rows, infer successful values, or turn an unsigned
+draft into authority. Deploying this read plane creates no evidence records
+and closes no gate by itself.
+
+Response behavior is fail-closed and non-cacheable:
+
+- `200 application/json` only for the exact active, revalidated canonical bytes;
+- `404` when no active revision exists;
+- `503` when durable state, an immutable blob, or validation is unavailable;
+- no provider error, storage pointer, Object-Lock version ID, secret, or PII is
+  copied into an error response.
+
 ### Onboard a signing issuer
 
 Add only the issuer's public RSA key to

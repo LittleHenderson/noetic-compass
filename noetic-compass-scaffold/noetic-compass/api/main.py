@@ -33,6 +33,7 @@ from api.routes import (
     cohort,
     config,
     crm,
+    customer_production_acceptance_authority,
     evidence,
     evidence_shares,
     export,
@@ -106,6 +107,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.evidence_share_service = None
     app.state.support_tickets = None
     app.state.support_public_abuse_guard = None
+    app.state.acceptance_authority_store = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -156,6 +158,28 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 shared_store
             )
             configure_evidence_packet_repository(app.state.evidence_packet_repository)
+
+        if shared_store is not None:
+            from api.services.customer_production_acceptance_authority import (
+                CustomerProductionAcceptanceAuthorityStore,
+            )
+
+            immutable_repository = app.state.evidence_packet_repository
+            app.state.acceptance_authority_store = (
+                CustomerProductionAcceptanceAuthorityStore(
+                    shared_store,
+                    immutable_backend=(
+                        immutable_repository.backend
+                        if immutable_repository is not None
+                        else None
+                    ),
+                    retention_policy=(
+                        immutable_repository.policy
+                        if immutable_repository is not None
+                        else None
+                    ),
+                )
+            )
 
         if settings.evidence_shares_enabled:
             if shared_store is None or app.state.evidence_packet_repository is None:
@@ -221,6 +245,14 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             "evidence packet sharing: %s",
             "ENABLED" if app.state.evidence_share_service is not None else "dark",
         )
+        logger.info(
+            "customer-production acceptance authority: %s",
+            (
+                "ENABLED"
+                if app.state.acceptance_authority_store is not None
+                else "unavailable"
+            ),
+        )
 
         from api.services.crm import build_crm_service, build_public_lead_abuse_guard
 
@@ -246,6 +278,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.billing_provider = None
         app.state.evidence_packet_repository = None
         app.state.evidence_share_service = None
+        app.state.acceptance_authority_store = None
         app.state.shared_state_store = None
         app.state.support_tickets = None
         app.state.support_public_abuse_guard = None
@@ -317,6 +350,7 @@ app.include_router(batch.router)
 app.include_router(benchmark.router)
 app.include_router(cas_harness_audit.router)
 app.include_router(cas_harness_live_worker_health.router)
+app.include_router(customer_production_acceptance_authority.router)
 app.include_router(cohort.router)
 app.include_router(config.router)
 app.include_router(export.router)
