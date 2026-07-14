@@ -264,7 +264,10 @@ jobs:
             --output /tmp/noetic-health.json
 
           docker exec --interactive "$container" python - <<'PY'
+          import importlib.util
           import json
+          import subprocess
+          import sys
           import urllib.request
           from pathlib import Path
 
@@ -284,6 +287,42 @@ jobs:
           assert settings.evidence_packet_object_store_enabled is False
           assert settings.fleet_service_auth_enabled is False
           assert Path(settings.state_ledger_path).is_file()
+
+          quota_verifier = Path("/app/scripts/verify_account_canary_quotas.py")
+          assert quota_verifier.is_file()
+          verifier_spec = importlib.util.spec_from_file_location(
+              "account_canary_quota_verifier", quota_verifier
+          )
+          assert verifier_spec is not None and verifier_spec.loader is not None
+          verifier_module = importlib.util.module_from_spec(verifier_spec)
+          verifier_spec.loader.exec_module(verifier_module)
+          assert (
+              verifier_module.ACCOUNT_CANARY_SERVICE_ID
+              == "srv-d9akoolaeets73bp3e7g"
+          )
+          assert verifier_module.ACCOUNT_CANARY_QUOTA_LIMIT == 2
+          assert verifier_module.ACCOUNT_CANARY_DATABASE_USER == "cas_harness_canary"
+          assert (
+              verifier_module.ACCOUNT_CANARY_DATABASE_NAME
+              == "cas_harness_accounts_canary"
+          )
+          assert (
+              verifier_module.ACCOUNT_CANARY_MODEL_ID
+              == "quota-proof-local-no-provider"
+          )
+          assert (
+              verifier_module.ACCOUNT_CANARY_OBJECT_STORE_PREFIX
+              == "cas-harness/accounts-canary/evidence-anchors"
+          )
+          help_result = subprocess.run(
+              [sys.executable, str(quota_verifier), "--help"],
+              check=True,
+              stdout=subprocess.PIPE,
+              stderr=subprocess.PIPE,
+              text=True,
+          )
+          assert "--expected-service-id" in help_result.stdout
+          assert "{pre,post}" in help_result.stdout
 
           with urllib.request.urlopen("http://127.0.0.1:8000/health", timeout=5) as response:
               health = json.load(response)
