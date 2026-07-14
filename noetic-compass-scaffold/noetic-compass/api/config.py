@@ -29,6 +29,16 @@ class Settings(BaseSettings):
     state_ledger_enabled: bool = False
     state_ledger_path: str = "state_ledger.db"
     state_ledger_read_authority: bool = False
+    # One-time source for the guarded SQLite -> shared-Postgres startup migration.
+    # The destination stores a source fingerprint marker, making repeated restarts
+    # idempotent. Old leases are deliberately not migrated.
+    state_ledger_sqlite_migration_source: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices(
+            "NC_STATE_LEDGER_SQLITE_MIGRATION_SOURCE",
+            "STATE_LEDGER_SQLITE_MIGRATION_SOURCE",
+        ),
+    )
 
     # CRM lead capture (go-to-market workstream). Dark-by-default and honest about it:
     #   NC_CRM_PROVIDER (default "null") -> which external CRM leads sync to. "null" captures

@@ -369,6 +369,31 @@ class PostgresStateStore(StateStore):
         # stable order is served in SQL (docs 11 §3.1). No Python re-sort needed.
         return tuple(rows)
 
+    def migration_record_keys(self) -> tuple[tuple[str, str, str], ...]:
+        """Return payload-free keys for the guarded one-time SQLite migration.
+
+        This is deliberately not part of ``StateStore``: normal product code has
+        no authority to enumerate tenants. The startup migration uses it only to
+        prove an unmarked destination contains no unrelated records before copy.
+        """
+        self._ensure_open()
+        with self._lock:
+            try:
+                rows = self._conn.execute(
+                    """
+                    SELECT tenant_id, kind, record_id
+                      FROM ledger_records
+                     ORDER BY tenant_id, kind, record_id
+                    """
+                ).fetchall()
+                self._conn.commit()
+            except self._psycopg.Error as exc:  # pragma: no cover - live server only
+                self._conn.rollback()
+                raise StateStoreError(
+                    "migration destination-key preflight failed"
+                ) from exc
+        return tuple((str(row[0]), str(row[1]), str(row[2])) for row in rows)
+
     def delete(self, tenant_id: TenantId, kind: Kind, record_id: RecordId, *, expected_version: Version) -> None:
         self._ensure_open()
         psycopg = self._psycopg

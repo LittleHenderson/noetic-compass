@@ -135,6 +135,11 @@ services:
         value: "true"
       - key: NC_STATE_LEDGER_PATH
         value: /var/data/state_ledger.db
+      # When NC_DATABASE_URL is configured, migrate the exact legacy SQLite
+      # records before installing Postgres read authority. A durable fingerprint
+      # marker makes repeated starts idempotent; stale leases are not replayed.
+      - key: NC_STATE_LEDGER_SQLITE_MIGRATION_SOURCE
+        value: /var/data/state_ledger.db
       # CRM lead capture durability: persist captured leads to the durable disk as an
       # append-only JSONL file. Unset (the prior hosted state) falls back to the
       # in-memory store that forgets EVERY restart — a captured lead is a revenue record,
