@@ -34,6 +34,7 @@ from api.routes import (
     config,
     crm,
     evidence,
+    evidence_shares,
     export,
     forecast,
     health,
@@ -101,6 +102,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.billing_entitlement_store = None
     app.state.billing_provider = None
     app.state.evidence_packet_repository = None
+    app.state.evidence_share_service = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -152,6 +154,19 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             )
             configure_evidence_packet_repository(app.state.evidence_packet_repository)
 
+        if settings.evidence_shares_enabled:
+            if shared_store is None or app.state.evidence_packet_repository is None:
+                raise RuntimeError(
+                    "Evidence Packet sharing requires durable state and immutable packet storage."
+                )
+            from api.services.evidence_shares import EvidenceShareService
+
+            app.state.evidence_share_service = EvidenceShareService(
+                store=shared_store,
+                repository=app.state.evidence_packet_repository,
+                token_pepper=settings.evidence_share_token_pepper,
+            )
+
         configure_audit_session_store(
             shared_store if settings.accounts_enabled else None
         )
@@ -199,6 +214,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             "evidence packet object storage: %s",
             "ENABLED" if app.state.evidence_packet_repository is not None else "dark",
         )
+        logger.info(
+            "evidence packet sharing: %s",
+            "ENABLED" if app.state.evidence_share_service is not None else "dark",
+        )
 
         from api.services.crm import build_crm_service, build_public_lead_abuse_guard
 
@@ -215,6 +234,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.billing_entitlement_store = None
         app.state.billing_provider = None
         app.state.evidence_packet_repository = None
+        app.state.evidence_share_service = None
         app.state.shared_state_store = None
         try:
             if handle is not None:
@@ -295,6 +315,7 @@ app.include_router(reproducibility.router)
 app.include_router(idea_atlas.router)
 app.include_router(mode7.router)
 app.include_router(evidence.router)
+app.include_router(evidence_shares.router)
 app.include_router(atlas_live.router)
 app.include_router(visual_grounding.router)
 app.include_router(state_ledger_status.router)

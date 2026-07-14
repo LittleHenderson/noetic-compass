@@ -100,6 +100,51 @@ smallest exact subject grants possible. Key rotation is a reviewed repository
 change. Until a valid key is onboarded, signed evidence cannot produce ACCEPT;
 this is intentional.
 
+### Produce the root-CI protected-deploy receipt
+
+The root-CI collector is intentionally local and unsigned. It needs a GitHub
+credential that can read branch protection plus `RENDER_API_KEY`; the default
+Actions `GITHUB_TOKEN` does not have GitHub Administration read permission.
+Never move a personal administration token into Actions or weaken the branch
+protection proof. Run the collector from the exact checked-out protected
+`master` SHA and bind one explicit Render deploy ID:
+
+```powershell
+$env:GITHUB_TOKEN = gh auth token
+python scripts/collect_root_ci_protected_deploy_facts.py `
+  --expected-master-head <40-character-protected-master-sha> `
+  --expected-deploy-id <public-render-deploy-id> `
+  --deploy-wait-seconds 600 `
+  --output root-ci-protected-deploy.json
+```
+
+The collector queries only `/deploys/<expected-deploy-id>` while waiting; it
+never substitutes the latest deploy. It fails closed on repository, workflow,
+job, check, GitHub App, branch-protection, Render service, commit, trigger,
+health, freshness, pagination, or local workflow-layout drift. HTTP reads are
+bounded, redirects are forbidden, and response bodies and credentials are not
+printed on errors. Exit zero produces only a canonical unsigned v2 facts
+document; it does not create authority, mark a gate `present`, or dispatch
+`ACCEPT`.
+
+Publish those exact bytes as the stable release asset
+`customer-production-evidence/root-ci-protected-deploy.json`. Then manually
+dispatch `Customer Production Evidence` from that same protected `master` SHA
+with the exact SHA and deploy ID. The protected `customer-production`
+environment workflow downloads the asset, hashes and strict-parses it, runs
+the hostile verifier/producer tests, binds the expected SHA and deploy ID, and
+signs a receipt with `CUSTOMER_PRODUCTION_SIGNING_KEY_PEM`. The private key is
+available only to the signing step and is never logged. The uploaded artifact
+contains the receipt and the subject checksum; the checked-in manifest remains
+`OPEN`, and the workflow never dispatches final `ACCEPT`.
+
+```powershell
+gh release upload customer-production-evidence `
+  'root-ci-protected-deploy.json#Unsigned root CI protected deploy source facts' `
+  --repo LittleHenderson/noetic-compass `
+  --clobber
+```
+
 ## Commands
 
 Run from the repository root.
@@ -137,6 +182,42 @@ for a normal ACCEPT so production verification always uses the real clock.
 Conversely, `--sanitized-bundle-path` is forbidden with `--validate-only`, so a
 test-time validation cannot emit an artifact that resembles a production
 acceptance archive.
+
+### Collect an unsigned claim-honesty draft
+
+The machine collector reads exactly the six public URLs pinned by the
+acceptance verifier. It performs credential-free `GET` requests, refuses
+redirects, query strings, fragments, and embedded credentials, and hashes the
+exact bounded response bytes:
+
+```powershell
+python scripts/collect_claim_honesty_evidence.py `
+  --pretty `
+  --output .customer-production-evidence/claim-honesty-machine-draft.json
+```
+
+The report records the exact HTTP status and raw-byte SHA-256 for every
+bounded response. It scans visible UTF-8 text from the body returned by the
+same exact route and applies versioned deterministic checks for misleading
+production/verdict language, unsupported compliance and universal claims,
+unsupported patent language, and noncanonical status vocabulary. Matched text
+is not copied into the report; only the rule, offsets, and matched-text digest
+are recorded.
+
+The collector does not execute JavaScript. A client-routed application shell,
+insufficient visible text, or a primary heading that does not identify the
+requested route is a coverage failure. In particular, an HTTP `200` page
+whose application renders or routes to a generic login screen cannot count as
+a published Legal, Privacy, or Terms page. Aliases such as
+`https://noeticcompass.com/legal` are not substitutes for the six URLs pinned
+by this contract.
+
+Exit `0` means only that this deterministic machine scan found full static
+route coverage and no configured findings. Exit `1` means the draft contains
+coverage or claim blockers, and exit `2` means collection itself failed. Every
+output remains an unsigned `OPEN` draft with no approval records or authority;
+it can never promote a gate or final decision. Independent legal, product, and
+research review plus the authoritative receipt path remain mandatory.
 
 ## CI separation
 

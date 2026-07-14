@@ -585,6 +585,22 @@ class EvidencePacketRepository:
         return receipt
 
     def load_packet(self, *, tenant_id: str, namespace: str, trace_id: str) -> dict[str, Any]:
+        packet, _content_sha256 = self.load_packet_with_content_sha256(
+            tenant_id=tenant_id,
+            namespace=namespace,
+            trace_id=trace_id,
+        )
+        return packet
+
+    def load_packet_with_content_sha256(
+        self, *, tenant_id: str, namespace: str, trace_id: str
+    ) -> tuple[dict[str, Any], str]:
+        """Load verified immutable bytes plus their exact durable byte hash.
+
+        Consumers that bind a capability to a specific packet version must use
+        this hash, not re-serialize the decoded mapping and assume byte identity.
+        The returned digest is the one checked against the exact VersionId read.
+        """
         record = self.store.get(
             tenant_id, PACKET_INDEX_KIND, self._packet_index_id(namespace, trace_id)
         )
@@ -618,7 +634,7 @@ class EvidencePacketRepository:
             raise EvidenceObjectStoreUnavailable(
                 "Immutable Evidence Packet object does not match the tenant index."
             )
-        return packet
+        return packet, expected_hash
 
     def verify_packet(
         self, *, tenant_id: str, namespace: str, trace_id: str

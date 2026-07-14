@@ -1,0 +1,119 @@
+name: Customer Production Evidence
+
+on:
+  workflow_dispatch:
+    inputs:
+      expected_master_head:
+        description: Exact protected master HEAD deployed to public production
+        required: true
+        type: string
+      expected_deploy_id:
+        description: Exact public Render deployment ID (dep-...)
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: customer-production-evidence
+  cancel-in-progress: false
+
+jobs:
+  root_ci_protected_deploy_receipt:
+    name: collect-and-sign-root-ci-protected-deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment: customer-production
+    steps:
+      - name: Require protected exact-master dispatch
+        shell: bash
+        env:
+          DISPATCH_REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: ${{ github.ref }}
+          DISPATCH_SHA: ${{ github.sha }}
+          DISPATCH_REF_PROTECTED: ${{ github.ref_protected }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+        run: |
+          set -euo pipefail
+          test "$DISPATCH_REPOSITORY" = "LittleHenderson/noetic-compass"
+          test "$DEFAULT_BRANCH" = "master"
+          test "$DISPATCH_REF" = "refs/heads/master"
+          test "$DISPATCH_REF_PROTECTED" = "true"
+          [[ "$EXPECTED_MASTER_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          test "$DISPATCH_SHA" = "$EXPECTED_MASTER_HEAD"
+          [[ "$EXPECTED_DEPLOY_ID" =~ ^dep-[A-Za-z0-9]+$ ]]
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.expected_master_head }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Install the isolated RS256 signing dependency
+        run: python -m pip install --disable-pip-version-check 'cryptography==49.0.0'
+
+      - name: Run the fail-closed verifier and producer tests
+        run: |
+          set -euo pipefail
+          python -m unittest discover -s scripts/tests -p 'test_verify_customer_production_acceptance.py'
+          python -m unittest discover -s scripts/tests -p 'test_collect_root_ci_protected_deploy_facts.py'
+          python -m unittest discover -s scripts/tests -p 'test_sign_root_ci_protected_deploy_receipt.py'
+
+      - name: Download and hash the exact unsigned subject asset
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          tag='customer-production-evidence'
+          mkdir -p customer-production-evidence/subject
+          gh release download "$tag" \
+            --repo "$GITHUB_REPOSITORY" \
+            --pattern 'root-ci-protected-deploy.json' \
+            --dir customer-production-evidence/subject
+          test -s customer-production-evidence/subject/root-ci-protected-deploy.json
+          sha256sum customer-production-evidence/subject/root-ci-protected-deploy.json \
+            > customer-production-evidence/subject/root-ci-protected-deploy.sha256
+
+      - name: Sign the exact read-back subject with the pinned environment issuer
+        env:
+          CUSTOMER_PRODUCTION_SIGNING_KEY_PEM: ${{ secrets.CUSTOMER_PRODUCTION_SIGNING_KEY_PEM }}
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+        run: |
+          set -euo pipefail
+          mkdir -p customer-production-evidence/receipts
+          python scripts/sign_root_ci_protected_deploy_receipt.py \
+            --payload customer-production-evidence/subject/root-ci-protected-deploy.json \
+            --subject-file customer-production-evidence/subject/root-ci-protected-deploy.json \
+            --expected-master-head "$EXPECTED_MASTER_HEAD" \
+            --expected-deploy-id "$EXPECTED_DEPLOY_ID" \
+            --output customer-production-evidence/receipts/root-ci-protected-deploy.json
+
+      - name: Upload the partial receipt bundle
+        uses: actions/upload-artifact@v7
+        with:
+          name: root-ci-protected-deploy-receipt-${{ github.run_id }}
+          path: |
+            customer-production-evidence/subject/root-ci-protected-deploy.sha256
+            customer-production-evidence/receipts/root-ci-protected-deploy.json
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Preserve the OPEN claim boundary
+        shell: bash
+        run: |
+          {
+            echo '### Root CI protected deploy receipt created'
+            echo '- The stable release asset contains unsigned, sanitized source facts collected locally with admin-read access.'
+            echo '- The artifact contains one RS256 receipt for `root_ci_protected_deploy`.'
+            echo '- The checked-in gate manifest remains `OPEN`.'
+            echo '- This workflow never dispatches Customer Production ACCEPT.'
+          } >> "$GITHUB_STEP_SUMMARY"
