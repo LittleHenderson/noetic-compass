@@ -66,7 +66,7 @@ store is enabled. Configure all of these on the API service:
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE=GOVERNANCE|COMPLIANCE
-CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=<positive integer>
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS=<integer at least 31 for customer-production>
 NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY=<stable server-only value of at least 32 bytes>
 ```
 
@@ -102,8 +102,9 @@ Common normalized reasons:
 
 Readiness proves authority and bucket capability without writing. After any
 WORM fix, still run the hosted smoke with `--require-object-lock`; only a real
-write, re-read, hash match, and future retention receipt proves the complete
-packet path.
+write, re-read, hash match, configured retention of at least 31 days, and at
+least 30 days remaining on the verified receipt proves the complete
+customer-production packet path.
 
 ## Scheduled GitHub monitor
 

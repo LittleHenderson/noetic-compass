@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
+
 import pytest
 
 from scripts import hosted_live_worker_worm_smoke as smoke
@@ -98,3 +100,130 @@ def test_smoke_identifies_urllib_requests_for_runpod_proxy(monkeypatch):
     assert payload == {}
     assert captured["user_agent"] == smoke.USER_AGENT
     assert captured["timeout"] == 120
+
+
+def test_customer_production_retention_accepts_exact_minimum_with_offset_timestamp():
+    verified_at = datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc)
+    retention_days, requested_at, retain_until, remaining = (
+        smoke.assert_customer_production_retention(
+            {
+                "retention_days": 31,
+                "retention_requested_at": "2026-07-13T05:00:00-07:00",
+                "object_lock_retain_until": "2026-08-13T05:00:00-07:00",
+            },
+            verified_at=verified_at,
+        )
+    )
+
+    assert retention_days == 31
+    assert requested_at == datetime(2026, 7, 13, 12, 0, tzinfo=timezone.utc)
+    assert retain_until == datetime(2026, 8, 13, 12, 0, tzinfo=timezone.utc)
+    assert remaining == timedelta(days=30)
+
+
+def test_customer_production_retention_parses_z_timestamp():
+    parsed = smoke.parse_timezone_aware_timestamp(
+        "2026-08-14T12:00:00.123456Z",
+        field="object_lock_retain_until",
+    )
+
+    assert parsed == datetime(2026, 8, 14, 12, 0, 0, 123456, tzinfo=timezone.utc)
+
+
+@pytest.mark.parametrize("retention_days", [30, 0, True, 31.0, None])
+def test_customer_production_retention_rejects_short_or_non_integer_configuration(retention_days):
+    with pytest.raises(
+        smoke.HostedSmokeFailure,
+        match=r"configured retention_days >= 31",
+    ):
+        smoke.assert_customer_production_retention(
+            {
+                "retention_days": retention_days,
+                "retention_requested_at": "2026-07-14T12:00:00Z",
+                "object_lock_retain_until": "2026-09-14T12:00:00Z",
+            },
+            verified_at=datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc),
+        )
+
+
+def test_customer_production_retention_rejects_less_than_30_days_remaining():
+    verified_at = datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc)
+
+    with pytest.raises(smoke.HostedSmokeFailure, match="at least 30 days"):
+        smoke.assert_customer_production_retention(
+            {
+                "retention_days": 31,
+                "retention_requested_at": "2026-07-13T11:59:59.999999Z",
+                "object_lock_retain_until": "2026-08-13T11:59:59.999999Z",
+            },
+            verified_at=verified_at,
+        )
+
+
+@pytest.mark.parametrize(
+    "retain_until",
+    [
+        "2026-08-14T12:00:00",
+        "not-a-timestamp",
+        "",
+        None,
+    ],
+)
+def test_customer_production_retention_rejects_ambiguous_or_invalid_timestamp(retain_until):
+    with pytest.raises(smoke.HostedSmokeFailure, match="timezone-aware|include Z"):
+        smoke.assert_customer_production_retention(
+            {
+                "retention_days": 31,
+                "retention_requested_at": "2026-07-14T12:00:00Z",
+                "object_lock_retain_until": retain_until,
+            },
+            verified_at=datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc),
+        )
+
+
+@pytest.mark.parametrize(
+    "requested_at",
+    ["2026-07-14T12:00:00", "not-a-timestamp", "", None],
+)
+def test_customer_production_retention_requires_timezone_aware_request_boundary(
+    requested_at,
+):
+    with pytest.raises(smoke.HostedSmokeFailure, match="retention_requested_at"):
+        smoke.assert_customer_production_retention(
+            {
+                "retention_days": 31,
+                "retention_requested_at": requested_at,
+                "object_lock_retain_until": "2026-08-14T12:00:00Z",
+            },
+            verified_at=datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc),
+        )
+
+
+def test_customer_production_retention_rejects_receipt_shorter_than_configured_window():
+    with pytest.raises(
+        smoke.HostedSmokeFailure,
+        match="shorter than the configured retention window",
+    ):
+        smoke.assert_customer_production_retention(
+            {
+                "retention_days": 31,
+                "retention_requested_at": "2026-07-14T12:00:00Z",
+                "object_lock_retain_until": "2026-08-14T11:59:59.999999Z",
+            },
+            verified_at=datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc),
+        )
+
+
+def test_customer_production_retention_rejects_verification_before_request_boundary():
+    with pytest.raises(
+        smoke.HostedSmokeFailure,
+        match="predates the Object Lock request boundary",
+    ):
+        smoke.assert_customer_production_retention(
+            {
+                "retention_days": 31,
+                "retention_requested_at": "2026-07-14T12:00:01Z",
+                "object_lock_retain_until": "2026-08-14T12:00:01Z",
+            },
+            verified_at=datetime(2026, 7, 14, 12, 0, tzinfo=timezone.utc),
+        )

@@ -10,7 +10,7 @@ quotas, legal copy, or account smoke scripts.
 - `--bearer-token`: API bearer token, or set `CAS_HARNESS_API_TOKEN`
 - `--worker-url`: hosted live worker URL, or set `ATLAS_LIVE_WORKER_URL`
 - `--worker-token`: worker shared secret, or set `ATLAS_LIVE_WORKER_TOKEN`
-- `--require-object-lock`: fail unless the Evidence Packet proves S3 Object Lock `GOVERNANCE` or `COMPLIANCE`
+- `--require-object-lock`: fail unless the Evidence Packet proves S3 Object Lock `GOVERNANCE` or `COMPLIANCE`, configured for at least 31 days with at least 30 days remaining at verification
 
 ## Command
 
@@ -33,6 +33,7 @@ python scripts/hosted_live_worker_worm_smoke.py `
 - The audit verdict is `FLAG_FOR_HUMAN_REVIEW`, not `ACCEPT`.
 - `POST /evidence/{trace_id}/verify` returns `overall: all_match`.
 - With `--require-object-lock`, packet anchor mode is `s3`, status is `anchored`, and Object Lock mode is exactly `GOVERNANCE` or `COMPLIANCE`.
+- The packet reports integer `retention_days >= 31`, timezone-aware `retention_requested_at` and `object_lock_retain_until` boundaries spanning at least the full configured window, and at least 30 full days remaining when the smoke verifies it. Exactly 30 days remaining passes; anything less fails closed.
 - Proof chips mirror packet evidence: `present` only when the underlying evidence exists, `unavailable` when it does not.
 
 ## Failure Meaning
@@ -41,4 +42,5 @@ python scripts/hosted_live_worker_worm_smoke.py `
 - API audit run fails after direct token success: the API likely is not sending `X-Atlas-Worker-Token` or is pointed at a different worker.
 - `/verify overall` is not `all_match`: packet/hash-log/anchor verification is not production-clean.
 - Object Lock mode is absent or not `GOVERNANCE` / `COMPLIANCE`: do not use WORM language.
+- Configured retention is below 31 days, either timestamp boundary is malformed or lacks a timezone, retain-until is shorter than the configured window, or less than 30 days remain: keep customer-production `OPEN` and correct the retention configuration before writing a fresh packet.
 - Verdict is `ACCEPT`: stop. The live open-weight worker smoke must not upgrade `FLAG_FOR_HUMAN_REVIEW`.
