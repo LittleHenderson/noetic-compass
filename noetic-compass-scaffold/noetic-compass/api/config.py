@@ -150,6 +150,24 @@ class Settings(BaseSettings):
             "EVIDENCE_PACKET_OBJECT_STORE_ENABLED",
         ),
     )
+    # Expiring, anonymous, read-only capabilities over immutable tenant packet
+    # bytes. Kept behind its own dark flag so account/object-store canaries do
+    # not accidentally publish a new anonymous surface.
+    evidence_shares_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_EVIDENCE_SHARES_ENABLED", "EVIDENCE_SHARES_ENABLED"
+        ),
+    )
+    # Stable server-only HMAC key for client-held share tokens. Raw tokens are
+    # returned once and never stored. Rotating this key invalidates every live
+    # share, so a future rotation needs a keyring/migration first.
+    evidence_share_token_pepper: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_EVIDENCE_SHARE_TOKEN_PEPPER", "EVIDENCE_SHARE_TOKEN_PEPPER"
+        ),
+    )
     # Stable server-only HMAC key for serialized exact-version Object Lock
     # verifier receipts.  It is intentionally distinct from JWT signing.  A
     # rotation invalidates existing durable receipts, so production must retain
@@ -398,6 +416,25 @@ class Settings(BaseSettings):
 
     def validate_account_storage(self) -> None:
         """Fail loud unless account mode has an explicitly persistent shared backend."""
+        if self.evidence_shares_enabled and not self.accounts_enabled:
+            raise RuntimeError(
+                "NC_EVIDENCE_SHARES_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."
+            )
+        if (
+            self.evidence_shares_enabled
+            and not self.evidence_packet_object_store_enabled
+        ):
+            raise RuntimeError(
+                "NC_EVIDENCE_SHARES_ENABLED=true requires "
+                "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED=true."
+            )
+        if self.evidence_shares_enabled and len(
+            self.evidence_share_token_pepper.encode("utf-8")
+        ) < 32:
+            raise RuntimeError(
+                "Evidence sharing requires NC_EVIDENCE_SHARE_TOKEN_PEPPER "
+                "with at least 32 bytes."
+            )
         if self.billing_entitlements_enabled and not self.accounts_enabled:
             raise RuntimeError(
                 "NC_BILLING_ENTITLEMENTS_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."

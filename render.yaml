@@ -152,6 +152,12 @@ services:
       # dashboard-managed Object-Lock settings below are deliberately enabled.
       - key: NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED
         value: "false"
+      # Anonymous packet sharing remains independently dark. Its stable HMAC
+      # key is dashboard-managed and is never exposed to browser builds.
+      - key: NC_EVIDENCE_SHARES_ENABLED
+        value: "false"
+      - key: NC_EVIDENCE_SHARE_TOKEN_PEPPER
+        sync: false
       # External CRM sync. Default app behavior is capture-only (`NC_CRM_PROVIDER=null`).
       # To actually land leads in Airtable, set these dashboard-managed values together:
       # NC_CRM_PROVIDER=airtable, NC_AIRTABLE_TOKEN, NC_AIRTABLE_BASE_ID, and optionally

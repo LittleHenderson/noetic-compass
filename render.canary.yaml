@@ -100,6 +100,12 @@ projects:
                 value: "false"
               - key: NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED
                 value: "true"
+              # Sharing is earned separately from account/object-store proof;
+              # pre-provision its stable key but keep the anonymous surface dark.
+              - key: NC_EVIDENCE_SHARES_ENABLED
+                value: "false"
+              - key: NC_EVIDENCE_SHARE_TOKEN_PEPPER
+                generateValue: true
 
               # Deliberate phased rollout: earn account/session/tenant/storage
               # evidence first. Enable each later gate in a separate deploy.

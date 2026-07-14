@@ -63,9 +63,20 @@ ACCOUNT_GATED_PUBLIC_PREFIXES = (
     "/api/cas-harness/audit/sessions",
 )
 
+# The anonymous Evidence Packet share has exactly one public GET-shaped path.
+# Keep this as a full match rather than a broad prefix so no future management
+# route below /evidence can accidentally inherit anonymous access.
+_ANONYMOUS_EVIDENCE_SHARE_PATTERN = re.compile(
+    r"^/evidence/shared/shr_[A-Za-z0-9_-]{20,64}$"
+)
+
 
 def is_public_path(path: str) -> bool:
-    if path in PUBLIC_PATHS or any(path.startswith(p) for p in ALWAYS_PUBLIC_PREFIXES):
+    if (
+        path in PUBLIC_PATHS
+        or any(path.startswith(p) for p in ALWAYS_PUBLIC_PREFIXES)
+        or _ANONYMOUS_EVIDENCE_SHARE_PATTERN.fullmatch(path) is not None
+    ):
         return True
     # The audit-session routes are public ONLY in the legacy/dark posture. Once accounts are
     # enabled they require identity so the middleware sets request.state.tenant_id (the seam the
