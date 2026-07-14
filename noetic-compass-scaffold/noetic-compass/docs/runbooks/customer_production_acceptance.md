@@ -138,6 +138,42 @@ Conversely, `--sanitized-bundle-path` is forbidden with `--validate-only`, so a
 test-time validation cannot emit an artifact that resembles a production
 acceptance archive.
 
+### Collect an unsigned claim-honesty draft
+
+The machine collector reads exactly the six public URLs pinned by the
+acceptance verifier. It performs credential-free `GET` requests, refuses
+redirects, query strings, fragments, and embedded credentials, and hashes the
+exact bounded response bytes:
+
+```powershell
+python scripts/collect_claim_honesty_evidence.py `
+  --pretty `
+  --output .customer-production-evidence/claim-honesty-machine-draft.json
+```
+
+The report records the exact HTTP status and raw-byte SHA-256 for every
+bounded response. It scans visible UTF-8 text from the body returned by the
+same exact route and applies versioned deterministic checks for misleading
+production/verdict language, unsupported compliance and universal claims,
+unsupported patent language, and noncanonical status vocabulary. Matched text
+is not copied into the report; only the rule, offsets, and matched-text digest
+are recorded.
+
+The collector does not execute JavaScript. A client-routed application shell,
+insufficient visible text, or a primary heading that does not identify the
+requested route is a coverage failure. In particular, an HTTP `200` page
+whose application renders or routes to a generic login screen cannot count as
+a published Legal, Privacy, or Terms page. Aliases such as
+`https://noeticcompass.com/legal` are not substitutes for the six URLs pinned
+by this contract.
+
+Exit `0` means only that this deterministic machine scan found full static
+route coverage and no configured findings. Exit `1` means the draft contains
+coverage or claim blockers, and exit `2` means collection itself failed. Every
+output remains an unsigned `OPEN` draft with no approval records or authority;
+it can never promote a gate or final decision. Independent legal, product, and
+research review plus the authoritative receipt path remain mandatory.
+
 ## CI separation
 
 Ordinary root CI runs the visibly named step
