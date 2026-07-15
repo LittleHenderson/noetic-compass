@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 import importlib.util
 import json
 import os
@@ -491,6 +491,139 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
     )
     verifier._validate_hosted_customer(evidence, context)
     assert context.errors == []
+
+
+def _journey_times(**changes: datetime) -> dict[str, datetime]:
+    base = FIXED_NOW
+    values = {
+        "audit_completed": base,
+        "packet_downloaded": base + timedelta(microseconds=100_000),
+        "share_created": base,
+        "share_expires": base + timedelta(minutes=15),
+        "share_fetched": base + timedelta(microseconds=800_000),
+        "isolation_verified": base + timedelta(seconds=1, microseconds=200_000),
+        "share_revoked": base + timedelta(seconds=1),
+        "observed": base + timedelta(seconds=1, microseconds=500_000),
+    }
+    values.update(changes)
+    return values
+
+
+def test_timestamp_order_accepts_whole_second_share_quantization() -> None:
+    collector_module._assert_journey_timestamp_order(**_journey_times())
+
+
+def test_timestamp_order_accepts_exact_clock_skew_boundary() -> None:
+    collector_module._assert_journey_timestamp_order(
+        **_journey_times(
+            audit_completed=FIXED_NOW
+            + timedelta(seconds=5, microseconds=100_000),
+            share_created=FIXED_NOW + timedelta(seconds=1),
+            share_fetched=FIXED_NOW + timedelta(seconds=1, microseconds=800_000),
+            isolation_verified=FIXED_NOW
+            + timedelta(seconds=2, microseconds=200_000),
+            share_revoked=FIXED_NOW + timedelta(seconds=2),
+            observed=FIXED_NOW + timedelta(seconds=2, microseconds=500_000),
+        )
+    )
+
+
+def test_timestamp_order_rejects_clock_skew_beyond_boundary() -> None:
+    with pytest.raises(collector_module.JourneyFailure, match="timestamp-order"):
+        collector_module._assert_journey_timestamp_order(
+            **_journey_times(
+                audit_completed=FIXED_NOW
+                + timedelta(seconds=5, microseconds=100_001),
+                share_created=FIXED_NOW + timedelta(seconds=1),
+                share_fetched=FIXED_NOW
+                + timedelta(seconds=1, microseconds=800_000),
+                isolation_verified=FIXED_NOW
+                + timedelta(seconds=2, microseconds=200_000),
+                share_revoked=FIXED_NOW + timedelta(seconds=2),
+                observed=FIXED_NOW
+                + timedelta(seconds=2, microseconds=500_000),
+            )
+        )
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {
+            "share_created": FIXED_NOW + timedelta(seconds=6),
+            "share_fetched": FIXED_NOW + timedelta(seconds=1),
+            "isolation_verified": FIXED_NOW + timedelta(seconds=2),
+            "share_revoked": FIXED_NOW + timedelta(seconds=6),
+            "observed": FIXED_NOW + timedelta(seconds=3),
+        },
+        {
+            "share_fetched": FIXED_NOW + timedelta(seconds=6),
+            "isolation_verified": FIXED_NOW + timedelta(seconds=6),
+            "share_revoked": FIXED_NOW + timedelta(seconds=1),
+            "observed": FIXED_NOW + timedelta(seconds=7),
+        },
+        {
+            "share_revoked": FIXED_NOW + timedelta(seconds=7),
+            "observed": FIXED_NOW + timedelta(seconds=2),
+        },
+    ],
+)
+def test_timestamp_order_accepts_each_exact_cross_clock_boundary(
+    changes: dict[str, datetime],
+) -> None:
+    collector_module._assert_journey_timestamp_order(
+        **_journey_times(**changes)
+    )
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {
+            "share_created": FIXED_NOW + timedelta(seconds=7),
+            "share_fetched": FIXED_NOW + timedelta(seconds=1),
+            "isolation_verified": FIXED_NOW + timedelta(seconds=2),
+            "share_revoked": FIXED_NOW + timedelta(seconds=7),
+            "observed": FIXED_NOW + timedelta(seconds=3),
+        },
+        {
+            "share_fetched": FIXED_NOW + timedelta(seconds=6),
+            "isolation_verified": FIXED_NOW + timedelta(seconds=6),
+            "share_revoked": FIXED_NOW,
+            "observed": FIXED_NOW + timedelta(seconds=7),
+        },
+        {
+            "share_revoked": FIXED_NOW + timedelta(seconds=8),
+            "observed": FIXED_NOW + timedelta(seconds=2),
+        },
+    ],
+)
+def test_timestamp_order_rejects_each_cross_clock_rollback_beyond_bound(
+    changes: dict[str, datetime],
+) -> None:
+    with pytest.raises(collector_module.JourneyFailure, match="timestamp-order"):
+        collector_module._assert_journey_timestamp_order(
+            **_journey_times(**changes)
+        )
+
+
+def test_timestamp_order_keeps_local_and_share_lifecycle_strict() -> None:
+    invalid_cases = (
+        {
+            "packet_downloaded": FIXED_NOW + timedelta(seconds=2),
+            "share_fetched": FIXED_NOW + timedelta(seconds=1),
+        },
+        {
+            "share_created": FIXED_NOW + timedelta(seconds=2),
+            "share_revoked": FIXED_NOW + timedelta(seconds=1),
+        },
+        {"share_expires": FIXED_NOW},
+    )
+    for changes in invalid_cases:
+        with pytest.raises(collector_module.JourneyFailure, match="timestamp-order"):
+            collector_module._assert_journey_timestamp_order(
+                **_journey_times(**changes)
+            )
 
 
 def test_fails_closed_without_verified_worm_anchor() -> None:
