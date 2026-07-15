@@ -105,10 +105,10 @@ async def run_live_worker_audit(
             "mode7_attribution",
             "confidence_margin",
             # Ask the worker for the first causal proof: a single-target
-            # ablation. On real weights the worker returns measured deltas;
-            # in demo mode it returns a schema-valid event flagged
-            # is_real_model=False (no deltas) and causal_proof stays
-            # unavailable. The target is declared, not inferred, for this slice.
+            # ablation. A hosted run is accepted only when the same dump begins
+            # with the exact real-model manifest; per-probe failures may still
+            # keep causal_proof unavailable. The target is declared, not
+            # inferred, for this slice.
             "causal_ablation",
         ],
         "ablation_target": dict(LIVE_ABLATION_TARGET),
@@ -133,6 +133,9 @@ async def run_live_worker_audit(
     else:
         # Preserve the exact legacy call contract while account mode is dark.
         worker_dump = await _post_worker_dump(worker_base, request_payload)
+    _require_real_worker_events(
+        worker_dump.get("events"), expected_model_id=model_id
+    )
     if billing_measurement_context is not None:
         receipt = worker_dump.get("billing_measurement_receipt")
         if not isinstance(receipt, Mapping) or on_billing_measurement_receipt is None:
@@ -245,6 +248,57 @@ def _payload_without_ablation(payload: Mapping[str, Any]) -> dict[str, Any]:
     out["probes"] = [p for p in list(payload.get("probes") or []) if p != "causal_ablation"]
     out.pop("ablation_target", None)
     return out
+
+
+def _require_real_worker_events(
+    events: object, *, expected_model_id: str
+) -> None:
+    """Bind evidence to one exact real-model manifest from the same dump."""
+
+    if not isinstance(events, list) or not events:
+        raise LiveAuditRunnerUnavailable(
+            "live worker dump did not begin with a manifest event"
+        )
+    first = events[0]
+    if not isinstance(first, Mapping) or first.get("type") != "manifest":
+        raise LiveAuditRunnerUnavailable(
+            "live worker dump did not begin with a manifest event"
+        )
+    if any(
+        isinstance(event, Mapping) and event.get("type") == "manifest"
+        for event in events[1:]
+    ):
+        raise LiveAuditRunnerUnavailable(
+            "live worker dump included multiple manifest events"
+        )
+    manifest = first.get("manifest")
+    if not isinstance(manifest, Mapping):
+        raise LiveAuditRunnerUnavailable("live worker dump manifest is invalid")
+    if manifest.get("model_id") != expected_model_id:
+        raise LiveAuditRunnerUnavailable(
+            "live worker dump manifest model does not match requested target"
+        )
+    if manifest.get("is_real_model") is not True:
+        raise LiveAuditRunnerUnavailable(
+            "live worker dump manifest did not prove real model weights"
+        )
+
+
+def _require_real_worker_packet(packet: Mapping[str, Any]) -> None:
+    """Revalidate checkpointed packets before any recovery persistence."""
+
+    model = packet.get("model")
+    live_audit = packet.get("live_audit")
+    if not isinstance(model, Mapping) or not isinstance(live_audit, Mapping):
+        raise LiveAuditRunnerUnavailable("live worker Evidence Packet is invalid")
+    expected_model_id = model.get("model_key")
+    if expected_model_id not in HOSTED_OPEN_WEIGHT_MODEL_IDS:
+        raise LiveAuditRunnerUnavailable(
+            "live worker Evidence Packet model is not a hosted target"
+        )
+    _require_real_worker_events(
+        live_audit.get("events"), expected_model_id=str(expected_model_id)
+    )
 
 
 def _packet_from_worker_dump(
@@ -446,6 +500,7 @@ def persist_live_worker_result(
 ) -> None:
     """Persist/reconcile a checkpointed worker result without rerunning the worker."""
 
+    _require_real_worker_packet(result.evidence_packet)
     _persist_packet(
         result.evidence_packet,
         provider_idempotency_key=provider_idempotency_key,
@@ -488,6 +543,7 @@ def live_worker_result_from_checkpoint(
     packet = dict(checkpoint["evidence_packet"])
     if not trace_id or packet.get("trace_id") != trace_id:
         raise LiveAuditRunnerUnavailable("provider result checkpoint trace is invalid")
+    _require_real_worker_packet(packet)
     verifier = checkpoint.get("verifier_decision")
     scope = checkpoint.get("audit_scope")
     return LiveAuditRunnerResult(

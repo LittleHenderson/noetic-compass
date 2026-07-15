@@ -9,12 +9,15 @@ from api.config import settings
 from api.routes.evidence import _verify_packet_hashes, build_packet_for_trace
 from api.services.cas_harness_harvest import iter_harvest_records
 from api.services.cas_harness_live_worker_runner import (
+    LiveAuditRunnerResult,
     LiveAuditRunnerUnavailable,
     _ablation_block_from_events,
     _code_commit_sha,
     _control_block_from_events,
     _post_worker_dump,
     _proof_chips_for_live_packet,
+    live_worker_result_from_checkpoint,
+    persist_live_worker_result,
     run_live_worker_audit,
 )
 from api.services.cas_harness_merged_evidence_packets import (
@@ -48,6 +51,151 @@ async def test_live_worker_runner_blocks_remote_url_without_service_token(monkey
         )
 
 
+@pytest.mark.parametrize(
+    ("events", "error"),
+    (
+        ([{"type": "complete", "total_tokens": 0}], "did not begin"),
+        (
+            [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": False,
+                    },
+                }
+            ],
+            "did not prove real model weights",
+        ),
+        (
+            [
+                {
+                    "type": "manifest",
+                    "manifest": {"model_id": "EleutherAI/pythia-160m"},
+                }
+            ],
+            "did not prove real model weights",
+        ),
+        (
+            [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "attacker/mismatched-model",
+                        "is_real_model": True,
+                    },
+                }
+            ],
+            "does not match requested target",
+        ),
+        (
+            [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": True,
+                    },
+                },
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "attacker/conflicting-model",
+                        "is_real_model": True,
+                    },
+                },
+            ],
+            "multiple manifest events",
+        ),
+    ),
+    ids=("missing", "demo", "missing-real-flag", "wrong-model", "conflicting"),
+)
+@pytest.mark.asyncio
+async def test_live_worker_runner_rejects_unbound_real_model_dumps_before_persistence(
+    monkeypatch, tmp_path, events, error
+):
+    callbacks: list[str] = []
+
+    async def fake_dump(_worker_base, _payload):
+        return {
+            "billing_measurement_receipt": {"schema_version": "untrusted"},
+            "events": events,
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump", fake_dump
+    )
+
+    with pytest.raises(LiveAuditRunnerUnavailable, match=error):
+        await run_live_worker_audit(
+            audit_id="cas-audit-hostile-manifest",
+            model_id="EleutherAI/pythia-160m",
+            prompt="Do not persist unbound output.",
+            audit_mode="BALANCED",
+            selected_modules=["active_trace"],
+            billing_measurement_context={
+                "tenant_id": "tenant-a",
+                "billing_account_id": "acct-a",
+                "run_id": "attempt-a",
+            },
+            on_billing_measurement_receipt=lambda _value: callbacks.append("billing"),
+            on_provider_completed=lambda _value: callbacks.append("provider"),
+            on_evidence_persisted=lambda _value: callbacks.append("evidence"),
+        )
+
+    assert callbacks == []
+    assert list(iter_harvest_records()) == []
+    assert list(tmp_path.rglob("*.json")) == []
+    assert list(tmp_path.rglob("*.jsonl")) == []
+
+
+def test_checkpoint_recovery_rejects_demo_manifest_before_persistence(tmp_path):
+    packet = {
+        "trace_id": "cas-checkpoint-demo-manifest",
+        "model": {"model_key": "EleutherAI/pythia-160m"},
+        "live_audit": {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": False,
+                    },
+                }
+            ]
+        },
+    }
+    checkpoint = {
+        "schema_version": "cas_harness_provider_result_checkpoint.v1",
+        "runner": "live_worker",
+        "trace_id": "cas-checkpoint-demo-manifest",
+        "evidence_packet": packet,
+        "proof_chips": [],
+        "verifier_decision": None,
+        "message": "Untrusted checkpoint",
+        "audit_scope": None,
+    }
+
+    with pytest.raises(LiveAuditRunnerUnavailable, match="real model weights"):
+        live_worker_result_from_checkpoint(checkpoint)
+    with pytest.raises(LiveAuditRunnerUnavailable, match="real model weights"):
+        persist_live_worker_result(
+            LiveAuditRunnerResult(
+                trace_id="cas-checkpoint-demo-manifest",
+                evidence_packet=packet,
+                proof_chips=[],
+                verifier_decision=None,
+                message="Untrusted checkpoint",
+                audit_scope=None,
+            )
+        )
+
+    assert list(iter_harvest_records()) == []
+    assert list(tmp_path.rglob("*.json")) == []
+    assert list(tmp_path.rglob("*.jsonl")) == []
+
+
 @pytest.mark.asyncio
 async def test_billing_context_requires_and_delivers_one_worker_receipt(monkeypatch):
     receipt = {"schema_version": "signed-test-receipt"}
@@ -68,6 +216,7 @@ async def test_billing_context_requires_and_delivers_one_worker_receipt(monkeypa
                     "manifest": {
                         "model_id": "EleutherAI/pythia-160m",
                         "runtime": "real_pythia",
+                        "is_real_model": True,
                     },
                 },
                 {
@@ -107,7 +256,17 @@ async def test_billing_context_requires_and_delivers_one_worker_receipt(monkeypa
 @pytest.mark.asyncio
 async def test_billing_context_fails_closed_when_worker_omits_receipt(monkeypatch):
     async def fake_dump(_worker_base, _payload):
-        return {"events": []}
+        return {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": True,
+                    },
+                }
+            ]
+        }
 
     monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
     monkeypatch.setattr(
@@ -141,6 +300,7 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
                     "manifest": {
                         "model_id": "EleutherAI/pythia-160m",
                         "runtime": "real_pythia",
+                        "is_real_model": True,
                     },
                 },
                 {
@@ -210,9 +370,8 @@ async def test_live_worker_runner_writes_packet_loadable_harvest_record(monkeypa
     assert harvest[0]["trace_id"] == result.trace_id
     assert harvest[0]["output"]["text"] == " Hello world"
     assert harvest[0]["join"] == {"key": "trace_id", "pairs_with": "native_nl.v1"}
-    # The fake dump's manifest does not assert is_real_model, so the harvest
-    # record must conservatively flag it as demo fallback — never silently real.
-    assert harvest[0]["model_io_is_demo_fallback"] is True
+    # The same-dump real manifest is retained in both packet and harvest.
+    assert harvest[0]["model_io_is_demo_fallback"] is False
 
     assert chips == {
         "model_proof": "present",
@@ -240,6 +399,7 @@ async def test_live_worker_runner_forwards_key_and_checkpoints_in_order(monkeypa
                     "manifest": {
                         "model_id": "EleutherAI/pythia-160m",
                         "runtime": "real_pythia",
+                        "is_real_model": True,
                     },
                 },
                 {"type": "token", "token_index": 0, "token": " result", "confidence": 0.8},
@@ -441,7 +601,10 @@ async def test_demo_flagged_ablation_keeps_causal_proof_unavailable(monkeypatch)
             "events": [
                 {
                     "type": "manifest",
-                    "manifest": {"model_id": "EleutherAI/pythia-160m"},
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": True,
+                    },
                 },
                 {
                     "type": "token",

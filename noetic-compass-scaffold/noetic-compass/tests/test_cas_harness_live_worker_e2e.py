@@ -15,36 +15,29 @@ It asserts six honesty-load-bearing properties:
   (c) the audit scope is honestly labelled ``open_weight_live_trace``;
   (d) the proof-chip HONESTY INVARIANT holds (each chip's present/absent state
       matches the underlying packet evidence — NOT hardcoded chip values);
-  (e) real-vs-demo provenance is consistent (manifest ``is_real_model`` truthy
-      <=> harvest ``model_io_is_demo_fallback`` false);
+  (e) the same-dump manifest proves real weights and the harvest is not marked
+      as demo fallback;
   (f) the live open-weight path lands at FLAG_FOR_HUMAN_REVIEW, never a
       fabricated ACCEPT, because causal/control proofs are not yet run.
 
 Worker source priority (most-real first; never hard-fails):
-  1. A live worker reachable at ``ATLAS_LIVE_WORKER_URL`` (or 127.0.0.1:18080).
-     Used as-is — may be real Pythia (is_real_model true) or demo.
-  2. A worker started locally in demo mode (``LIVE_TRACE_DEMO_MODE=1``). The
-     demo honesty path is asserted (is_real_model false => demo fallback true).
-  3. An in-process stub of the worker dump (no network). Still drives the real
-     runner + harvest + verdict chain; asserts the demo-fallback honesty path.
+  1. A real-weight worker reachable at ``ATLAS_LIVE_WORKER_URL`` (or
+     127.0.0.1:18080) with the exact Pythia real-mode contract.
+  2. An in-process real-authority stub of the worker dump (no network). It still
+     drives the real runner, harvest, and verdict chain.
 
 If the live-run implementation modules are not present on this branch (e.g. a
 worktree that predates the live-worker wiring), the whole module SKIPS with a
 clear message rather than failing red.
 
 The packet store and harvest corpus are pinned to per-test tmp dirs via env
-overrides for hermeticity, and any worker process this test starts is torn down.
+overrides for hermeticity.
 """
 
 from __future__ import annotations
 
-import contextlib
 import json
 import os
-import socket
-import subprocess
-import sys
-import time
 from pathlib import Path
 from typing import Any, Iterator
 from urllib.error import URLError
@@ -110,85 +103,22 @@ def _http_get_json(url: str, timeout: float = 2.0) -> dict[str, Any] | None:
         return None
 
 
-def _worker_is_live(base_url: str) -> bool:
-    """A worker is 'live' if its health endpoint answers. Real OR demo both ok."""
-    base = base_url.rstrip("/")
-    for path in ("/health/realmode", "/health"):
-        if _http_get_json(f"{base}{path}") is not None:
-            return True
-    return False
-
-
-def _free_port() -> int:
-    with contextlib.closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
-        sock.bind(("127.0.0.1", 0))
-        return int(sock.getsockname()[1])
-
-
-def _worker_app_dir() -> Path | None:
-    """Locate the live-trace-worker package dir (holds app/main.py)."""
-    here = Path(__file__).resolve()
-    for parent in here.parents:
-        candidate = parent / "live-trace-worker"
-        if (candidate / "app" / "main.py").exists():
-            return candidate
-    return None
-
-
-def _wait_for_worker(base_url: str, *, timeout_s: float = 40.0) -> bool:
-    deadline = time.time() + timeout_s
-    while time.time() < deadline:
-        if _worker_is_live(base_url):
-            return True
-        time.sleep(0.5)
-    return False
-
-
-@contextlib.contextmanager
-def _local_demo_worker() -> Iterator[str | None]:
-    """Start the live-trace worker locally in demo mode; yield its base URL.
-
-    Yields ``None`` if the worker package or uvicorn is not importable, so the
-    caller can fall back to the in-process stub instead of hard-failing.
-    """
-    app_dir = _worker_app_dir()
-    if app_dir is None:
-        yield None
-        return
-
-    port = _free_port()
-    env = dict(os.environ)
-    env["LIVE_TRACE_DEMO_MODE"] = "1"  # never download weights in a unit test
-    env["PYTHONUNBUFFERED"] = "1"
-    proc = subprocess.Popen(
-        [sys.executable, "-m", "uvicorn", "app.main:app", "--host", "127.0.0.1", "--port", str(port)],
-        cwd=str(app_dir),
-        env=env,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,
+def _worker_is_real(base_url: str) -> bool:
+    payload = _http_get_json(f"{base_url.rstrip('/')}/health/realmode")
+    return bool(
+        payload
+        and payload.get("verdict") == "REAL_PYTHIA_WEIGHTS_LOADED"
+        and payload.get("is_real_model") is True
+        and payload.get("fake_runtime_env") is False
+        and payload.get("model_loaded") is True
+        and payload.get("load_error") is None
+        and payload.get("manifest_is_real_model") is True
+        and payload.get("model_id") == HOSTED_MODEL_ID
     )
-    base_url = f"http://127.0.0.1:{port}"
-    try:
-        if not _wait_for_worker(base_url):
-            yield None
-            return
-        yield base_url
-    finally:
-        proc.terminate()
-        with contextlib.suppress(subprocess.TimeoutExpired):
-            proc.wait(timeout=10)
-        if proc.poll() is None:
-            proc.kill()
-            with contextlib.suppress(Exception):
-                proc.wait(timeout=5)
 
 
 def _stub_worker_dump(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Patch the runner's worker call so the full chain runs with no network.
-
-    The stubbed manifest deliberately omits ``is_real_model``, exercising the
-    conservative honesty path: absent/false provenance => demo fallback true.
-    """
+    """Patch the runner with the exact same-dump real-authority contract."""
 
     async def fake_dump(worker_base: str, payload: dict[str, Any]) -> dict[str, Any]:
         assert payload["model_id"] == HOSTED_MODEL_ID
@@ -198,8 +128,8 @@ def _stub_worker_dump(monkeypatch: pytest.MonkeyPatch) -> None:
                     "type": "manifest",
                     "manifest": {
                         "model_id": HOSTED_MODEL_ID,
-                        "runtime": "demo_stub",
-                        # no is_real_model -> harvest must flag demo fallback
+                        "runtime": "real_stub",
+                        "is_real_model": True,
                     },
                 },
                 {
@@ -343,6 +273,8 @@ def _assert_live_audit_honesty(*, body: dict[str, Any], trace_id: str) -> None:
     )
     # The harvest's own model.is_real_model echo must agree with the manifest.
     assert bool((harvest.get("model") or {}).get("is_real_model")) == manifest_is_real
+    assert manifest_is_real is True
+    assert demo_fallback is False
 
 
 def _create_and_run(client: Any, auth_headers: dict[str, str]) -> dict[str, Any]:
@@ -394,11 +326,11 @@ def test_live_worker_audit_e2e_create_run_packet_harvest(
         or ""
     ).strip()
 
-    # ---- Source 1: a live worker already reachable (real OR demo). ---------- #
+    # ---- Source 1: an exact real-weight worker already reachable. ----------- #
     live_url = ""
-    if configured and _worker_is_live(configured):
+    if configured and _worker_is_real(configured):
         live_url = configured
-    elif _worker_is_live(DEFAULT_WORKER_URL):
+    elif _worker_is_real(DEFAULT_WORKER_URL):
         live_url = DEFAULT_WORKER_URL
 
     if live_url:
@@ -409,23 +341,7 @@ def test_live_worker_audit_e2e_create_run_packet_harvest(
         _assert_live_audit_honesty(body=body, trace_id=trace_id)
         return
 
-    # ---- Source 2: start the worker locally in demo mode. ------------------- #
-    with _local_demo_worker() as demo_url:
-        if demo_url:
-            monkeypatch.setattr(
-                "api.config.settings.atlas_live_worker_url", demo_url, raising=False
-            )
-            body = _create_and_run(client, auth_headers)
-            trace_id = body["evidence_packet_trace_id"]
-            assert trace_id, "demo run must persist an evidence_packet_trace_id"
-            _assert_live_audit_honesty(body=body, trace_id=trace_id)
-            # Demo mode reports is_real_model False -> the honesty path must
-            # have flagged the harvest as demo fallback.
-            harvest = next(r for r in iter_harvest_records() if r["trace_id"] == trace_id)
-            assert harvest["model_io_is_demo_fallback"] is True
-            return
-
-    # ---- Source 3: in-process stub (no network, full real chain). ----------- #
+    # ---- Source 2: in-process stub (no network, full real chain). ----------- #
     # Configure a non-empty worker URL so the runner's guard passes, then stub
     # the network call. This still drives the real runner, packet writer,
     # harvest capture, and verdict gate.
@@ -440,6 +356,5 @@ def test_live_worker_audit_e2e_create_run_packet_harvest(
     trace_id = body["evidence_packet_trace_id"]
     assert trace_id, "stubbed run must persist an evidence_packet_trace_id"
     _assert_live_audit_honesty(body=body, trace_id=trace_id)
-    # The stub omits is_real_model, so the conservative honesty path applies.
     harvest = next(r for r in iter_harvest_records() if r["trace_id"] == trace_id)
-    assert harvest["model_io_is_demo_fallback"] is True
+    assert harvest["model_io_is_demo_fallback"] is False
