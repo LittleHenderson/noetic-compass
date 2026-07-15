@@ -15,6 +15,7 @@ from api.acceptance_authority_contract import (
     ACCEPTANCE_PUBLICATION_AUTHORIZATION_PATH_PATTERN,
 )
 from api.config import settings
+from api.services.human_attestations import PUBLIC_PATH_PATTERN as HUMAN_ATTESTATION_PATH_PATTERN
 
 # Paths that don't require JWT authentication. Atlas LIVE has its own
 # invite-code/session-token gate because the alpha does not have the full
@@ -156,6 +157,18 @@ def is_public_acceptance_publication_authorization_request(
     )
 
 
+def is_public_human_attestation_request(
+    path: str, method: str, query: str = ""
+) -> bool:
+    """Allow only an exact query-free GET addressed by lowercase SHA-256."""
+
+    return (
+        method.upper() == "GET"
+        and not query
+        and HUMAN_ATTESTATION_PATH_PATTERN.fullmatch(path) is not None
+    )
+
+
 ACCOUNT_MODE_ALLOWED_PREFIXES = (
     "/auth/",
     "/accounts/",
@@ -214,6 +227,9 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
                 request.url.path, request.method, request.url.query
             )
             or is_public_acceptance_publication_authorization_request(
+                request.url.path, request.method, request.url.query
+            )
+            or is_public_human_attestation_request(
                 request.url.path, request.method, request.url.query
             )
             or request.method == "OPTIONS"

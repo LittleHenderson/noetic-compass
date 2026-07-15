@@ -217,6 +217,7 @@ def _production_authority(
     # Imports stay inside the production-only path so ``validate`` never opens a
     # database connection or initializes an object-store client.
     from api.config import Settings
+    from api.services.human_attestations import HumanAttestationStore
     from api.state_ledger_bootstrap import _build_state_store
 
     settings = Settings()
@@ -240,6 +241,10 @@ def _production_authority(
             immutable_repository = build_s3_evidence_packet_repository(state_store)
         yield CustomerProductionAcceptanceAuthorityStore(
             state_store,
+            human_attestation_store=HumanAttestationStore(
+                state_store,
+                primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+            ),
             publication_authorization_store=(
                 AcceptancePublicationAuthorizationStore(
                     state_store,

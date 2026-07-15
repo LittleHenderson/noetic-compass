@@ -17,6 +17,7 @@ import pytest
 
 from api.acceptance_authority_contract import acceptance_authority_url
 from api.services.customer_production_acceptance_authority import (
+    AcceptanceAuthorityInvalid,
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
@@ -781,6 +782,14 @@ def test_head_and_deactivate_authority_setup_does_not_touch_s3(
         include_immutable_backend=False,
     ) as authority:
         assert authority.current_head("legal_publication_approval") is None
+        from api.services.human_attestations import HumanAttestationStore
+
+        assert isinstance(authority._human_attestations, HumanAttestationStore)
+        now = datetime(2026, 7, 15, 12, 0, tzinfo=UTC)
+        with pytest.raises(AcceptanceAuthorityInvalid, match="invalid or revoked"):
+            authority.assert_human_attestations(
+                "legal_publication_approval", _legal_evidence(now), now=now
+            )
 
     assert calls == {"s3": 0}
     assert state_store.closed is True

@@ -50,6 +50,13 @@ from api.services.acceptance_publication_authorizations import (
 from api.services.cas_harness_retention_disclosure import (
     revalidate_object_lock_verification,
 )
+from api.services.human_attestations import (
+    HumanAttestationInvalid,
+    HumanAttestationNotFound,
+    HumanAttestationStore,
+    HumanAttestationUnavailable,
+    canonical_evidence_binding_sha256,
+)
 
 
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
@@ -769,6 +776,7 @@ class CustomerProductionAcceptanceAuthorityStore:
         publication_authorization_store: (
             AcceptancePublicationAuthorizationStore | None
         ) = None,
+        human_attestation_store: HumanAttestationStore | None = None,
     ) -> None:
         if (immutable_backend is None) != (retention_policy is None):
             raise ValueError(
@@ -784,6 +792,168 @@ class CustomerProductionAcceptanceAuthorityStore:
                 store, primary_tenant_id="primary"
             )
         )
+        # Optional only for backwards-compatible offline/schema-only callers.
+        # The production composition always supplies this store and therefore
+        # cannot publish or serve a human-gated revision without dereferencing
+        # every nested attestation at request time.
+        self._human_attestations = human_attestation_store
+
+    def assert_human_attestations(
+        self,
+        gate: str,
+        evidence: Mapping[str, Any],
+        *,
+        now: datetime | None = None,
+        serving_active_revision: bool = False,
+    ) -> None:
+        """Dereference and bind every human artifact used by ``gate``."""
+
+        if gate not in {
+            "legal_publication_approval",
+            "claim_honesty",
+            "incident_tabletop",
+            "release_decision",
+        }:
+            return
+        if self._human_attestations is None:
+            return
+        stamp = _utc_now(now)
+        event = _parse_utc(evidence.get("event_at_utc"), "event_at_utc")
+        observed = _parse_utc(evidence.get("observed_at_utc"), "observed_at_utc")
+        binding = canonical_evidence_binding_sha256(gate, evidence)
+        master = str(evidence.get("master_head_sha") or "")
+        deploy = str(evidence.get("deploy_id") or "")
+        records = []
+        try:
+            if gate in {"legal_publication_approval", "claim_honesty"}:
+                purpose = (
+                    "legal_approval"
+                    if gate == "legal_publication_approval"
+                    else "claim_approval"
+                )
+                approvals = evidence.get("approvals")
+                if not isinstance(approvals, list):
+                    raise HumanAttestationInvalid("approval list is invalid")
+                for approval in approvals:
+                    if not isinstance(approval, Mapping):
+                        raise HumanAttestationInvalid("approval reference is invalid")
+                    records.append(
+                        self._human_attestations.assert_reference(
+                            uri=str(approval.get("approval_artifact_uri") or ""),
+                            sha256=str(approval.get("approval_sha256") or ""),
+                            purpose=purpose,
+                            gate=gate,
+                            role=str(approval.get("role") or ""),
+                            master_head_sha=master,
+                            deploy_id=deploy,
+                            evidence_binding_sha256=binding,
+                            attested_at_utc=str(approval.get("approved_at_utc") or ""),
+                            now=stamp,
+                        )
+                    )
+            elif gate == "incident_tabletop":
+                incident = evidence.get("incident")
+                tabletop = evidence.get("tabletop")
+                if not isinstance(incident, Mapping) or not isinstance(tabletop, Mapping):
+                    raise HumanAttestationInvalid("incident/tabletop references are invalid")
+                records.extend(
+                    [
+                        self._human_attestations.assert_reference(
+                            uri=str(incident.get("postmortem_uri") or ""),
+                            sha256=str(incident.get("postmortem_sha256") or ""),
+                            purpose="incident_postmortem",
+                            gate=gate,
+                            role="incident_commander",
+                            master_head_sha=master,
+                            deploy_id=deploy,
+                            evidence_binding_sha256=binding,
+                            now=stamp,
+                        ),
+                        self._human_attestations.assert_reference(
+                            uri=str(tabletop.get("evidence_uri") or ""),
+                            sha256=str(tabletop.get("evidence_sha256") or ""),
+                            purpose="tabletop_evidence",
+                            gate=gate,
+                            role="incident_commander",
+                            master_head_sha=master,
+                            deploy_id=deploy,
+                            evidence_binding_sha256=binding,
+                            now=stamp,
+                        ),
+                    ]
+                )
+            else:
+                records.append(
+                    self._human_attestations.assert_reference(
+                        uri=str(evidence.get("decision_record_uri") or ""),
+                        sha256=str(evidence.get("decision_record_sha256") or ""),
+                        purpose="release_decision_record",
+                        gate=gate,
+                        role="product_owner",
+                        master_head_sha=master,
+                        deploy_id=deploy,
+                        evidence_binding_sha256=binding,
+                        now=stamp,
+                    )
+                )
+            actor_hashes: set[str] = set()
+            for record in records:
+                # ``load`` has already dereferenced and validated every child,
+                # but the authority must also bind each individual action to
+                # the evidence window.  Checking only the aggregate would let
+                # participant/release approvals be pre-created for a future
+                # event and later wrapped by an in-window record.
+                timestamp_records = [record]
+                pending = list(record.payload.get("supporting_attestations") or [])
+                seen = {record.sha256}
+                while pending:
+                    reference = pending.pop()
+                    if not isinstance(reference, Mapping):
+                        raise HumanAttestationUnavailable(
+                            "supporting attestation reference is invalid"
+                        )
+                    child_sha = str(reference.get("attestation_sha256") or "")
+                    if child_sha in seen:
+                        raise HumanAttestationUnavailable(
+                            "supporting attestation graph is cyclic"
+                        )
+                    seen.add(child_sha)
+                    child = self._human_attestations.load(child_sha, now=stamp)
+                    timestamp_records.append(child)
+                    pending.extend(
+                        child.payload.get("supporting_attestations") or []
+                    )
+                for timestamp_record in timestamp_records:
+                    attested = _parse_utc(
+                        timestamp_record.payload.get("attested_at_utc"),
+                        "attestation.attested_at_utc",
+                    )
+                    if attested < event or attested > observed:
+                        raise HumanAttestationInvalid(
+                            "attestation timestamp is outside the evidence window"
+                        )
+                actor = record.payload.get("actor")
+                if not isinstance(actor, Mapping):
+                    raise HumanAttestationUnavailable("attestation actor is invalid")
+                actor_hash = str(actor.get("account_id_sha256") or "")
+                if gate in {"legal_publication_approval", "claim_honesty"}:
+                    if actor_hash in actor_hashes:
+                        raise HumanAttestationInvalid(
+                            "approvals require distinct authenticated accounts"
+                        )
+                    actor_hashes.add(actor_hash)
+        except (HumanAttestationInvalid, HumanAttestationNotFound) as exc:
+            if serving_active_revision:
+                raise AcceptanceAuthorityUnavailable(
+                    "active acceptance evidence references an invalid or revoked attestation"
+                ) from exc
+            raise AcceptanceAuthorityInvalid(
+                "acceptance evidence references an invalid or revoked attestation"
+            ) from exc
+        except HumanAttestationUnavailable as exc:
+            raise AcceptanceAuthorityUnavailable(
+                "human attestation storage is unavailable"
+            ) from exc
 
     def assert_publication_authorized(
         self,
@@ -1329,6 +1499,7 @@ class CustomerProductionAcceptanceAuthorityStore:
         canonical = canonicalize_acceptance_evidence(
             gate, evidence, now=stamp
         )
+        self.assert_human_attestations(gate, evidence, now=stamp)
         digest = hashlib.sha256(canonical).hexdigest()
         self.assert_publication_authorized(
             gate=gate,
@@ -1650,6 +1821,9 @@ class CustomerProductionAcceptanceAuthorityStore:
             raise AcceptanceAuthorityUnavailable(
                 "acceptance evidence bytes are not canonical"
             )
+        self.assert_human_attestations(
+            gate, document, now=stamp, serving_active_revision=True
+        )
         return AcceptanceEvidenceDocument(
             gate=gate, sha256=expected_hash, body=body
         )
