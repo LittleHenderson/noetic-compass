@@ -57,7 +57,10 @@ export type CasHarnessModelStatus =
   | 'NOT_CONNECTED_MOCK'
   | string;
 
-export type CasHarnessModelTargetKind = 'demo_reference' | 'api_endpoint';
+export type CasHarnessModelTargetKind =
+  | 'demo_reference'
+  | 'hosted_open_weight'
+  | 'api_endpoint';
 export type CasHarnessModelConnectionState = 'CONNECTED' | 'CONFIGURED';
 export type CasHarnessVerifiedModelStatus = 'CONNECTED' | 'READY';
 export type CasHarnessCredentialMode =
@@ -1784,7 +1787,11 @@ function parseVerifiedModelStatus(raw: unknown): CasHarnessVerifiedModelStatus {
 }
 
 function parseModelTargetKind(raw: unknown): CasHarnessModelTargetKind {
-  if (raw === 'demo_reference' || raw === 'api_endpoint') return raw;
+  if (
+    raw === 'demo_reference'
+    || raw === 'hosted_open_weight'
+    || raw === 'api_endpoint'
+  ) return raw;
   throw new CasHarnessAuditApiError(
     `Unsupported CAS Harness model target kind: ${String(raw)}`,
   );

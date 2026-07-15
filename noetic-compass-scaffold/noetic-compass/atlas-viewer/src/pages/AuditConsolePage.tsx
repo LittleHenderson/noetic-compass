@@ -117,16 +117,16 @@ const SCALE_PLAN_REQUESTS: Record<EnterpriseScalePlanSize, CasHarnessScalePlanRe
   },
 };
 
-const M1_REFERENCE_TARGET: AuditTargetConfig = {
+const HOSTED_PYTHIA_TARGET: AuditTargetConfig = {
   modelId: 'EleutherAI/pythia-160m',
-  provider: 'CAS Harness reference path',
-  endpointLabel: '/api/cas-harness/audit/target/verify',
+  provider: 'CAS Harness hosted live worker',
+  endpointLabel: '/api/cas-harness/live-worker/health',
   scenarioText:
-    'Reference audit smoke scenario: validate the CAS Harness audit contract without fabricating a verdict.',
+    'Hosted real-weight Pythia audit: run the selected CAS modules and preserve the resulting Evidence Packet.',
   endpointUrl: null,
   connectionId: 'cas-target-reference-pending',
   checkedAt: '',
-  statusDetail: 'Reference target has not been verified by the backend yet.',
+  statusDetail: 'Hosted Pythia target has not been verified by the backend yet.',
   canRunAudit: false,
   evidencePacketTraceId: null,
 };
@@ -846,7 +846,7 @@ export default function AuditConsolePage() {
   const accountAuth = useAccountAuth();
   const requestedModel = searchParams.get('model');
   const requestedTraceId = searchParams.get('trace')?.trim() ?? '';
-  const queryTarget = requestedModel === 'pythia-160m' ? M1_REFERENCE_TARGET : null;
+  const queryTarget = requestedModel === 'pythia-160m' ? HOSTED_PYTHIA_TARGET : null;
   const [target, setTarget] = useState<AuditTargetConfig | null>(null);
   const [session, setSession] = useState<CasHarnessAuditSession | null>(null);
   const [sessionError, setSessionError] = useState<string | null>(null);
@@ -974,29 +974,28 @@ export default function AuditConsolePage() {
     hasAdvancedApiToken && Boolean(fleetRun?.merged_packet_trace_id && !fleetVerifierDecision) &&
     !isFleetExecutorLoading;
 
-  const connectReferenceTarget = async () => {
+  const connectHostedPythiaTarget = async () => {
     setSession(null);
     setSessionError(null);
     setTargetError(null);
     setIsTargetConnecting(true);
     try {
       const verification = await verifyCasHarnessModelTarget({
-        target: { kind: 'demo_reference' },
+        target: {
+          kind: 'hosted_open_weight',
+          model_id: HOSTED_PYTHIA_TARGET.modelId,
+        },
       });
       setTarget({
-        ...M1_REFERENCE_TARGET,
+        ...HOSTED_PYTHIA_TARGET,
         modelId: verification.target.model_id,
-        provider: verification.target.kind === 'demo_reference'
-          ? 'CAS Harness reference path'
-          : verification.target.provider,
+        provider: verification.target.provider,
         endpointUrl: verification.target.endpoint_url,
         connectionId: verification.connection_id,
         checkedAt: verification.checked_at,
-        statusDetail: verification.reference_evidence_packet_trace_id
-          ? `${verification.detail} Reference Evidence Packet ready: ${verification.reference_evidence_packet_trace_id}.`
-          : verification.detail,
+        statusDetail: verification.detail,
         canRunAudit: verification.can_run_audit,
-        evidencePacketTraceId: verification.reference_evidence_packet_trace_id,
+        evidencePacketTraceId: null,
       });
     } catch (error) {
       setTarget(null);
@@ -1085,7 +1084,7 @@ export default function AuditConsolePage() {
       return;
     }
     if (!isConfigured) {
-      void connectReferenceTarget();
+      void connectHostedPythiaTarget();
       return;
     }
     if (!target.canRunAudit) return;
@@ -1446,7 +1445,7 @@ export default function AuditConsolePage() {
             }
             isAuditRunning={isAuditRunning}
             canRunAudit={Boolean(target?.canRunAudit)}
-            onConnect={hasModelChoice ? connectReferenceTarget : () => navigate('/model-config')}
+            onConnect={hasModelChoice ? connectHostedPythiaTarget : () => navigate('/model-config')}
             onDisconnect={disconnectTarget}
             onRunAudit={runAudit}
           />

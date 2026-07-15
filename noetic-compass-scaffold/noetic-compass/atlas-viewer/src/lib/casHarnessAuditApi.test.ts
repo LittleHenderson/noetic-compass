@@ -402,6 +402,47 @@ describe('casHarnessAuditApi', () => {
     });
   });
 
+  it('parses the authenticated hosted open-weight target contract', async () => {
+    const fetchImpl = vi.fn(async () => jsonResponse(targetVerification({
+      connection_id: 'cas-target-live-pythia',
+      target: {
+        kind: 'hosted_open_weight',
+        provider: 'cas_harness_live_worker',
+        model_id: 'EleutherAI/pythia-160m',
+        endpoint_url: null,
+        credential_mode: 'none',
+        timeout_ms: 10000,
+      },
+      reference_evidence_packet_trace_id: null,
+    })));
+
+    const result = await verifyCasHarnessModelTarget(
+      {
+        target: {
+          kind: 'hosted_open_weight',
+          model_id: 'EleutherAI/pythia-160m',
+        },
+      },
+      {
+        baseUrl: '/api/cas-harness/audit/',
+        fetchImpl,
+      },
+    );
+
+    expect(result.target).toMatchObject({
+      kind: 'hosted_open_weight',
+      provider: 'cas_harness_live_worker',
+      model_id: 'EleutherAI/pythia-160m',
+    });
+    expect(result.reference_evidence_packet_trace_id).toBeNull();
+    expect(JSON.parse(String((fetchImpl.mock.calls[0][1] as RequestInit).body))).toEqual({
+      target: {
+        kind: 'hosted_open_weight',
+        model_id: 'EleutherAI/pythia-160m',
+      },
+    });
+  });
+
   it('creates an enterprise scale plan through the audit API', async () => {
     const fetchImpl = vi.fn(async () => jsonResponse(scalePlan()));
     const result = await createCasHarnessScalePlan(

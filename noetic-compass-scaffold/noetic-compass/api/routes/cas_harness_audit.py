@@ -135,6 +135,10 @@ from api.services.cas_harness_live_worker_runner import (
     persist_live_worker_result,
     run_live_worker_audit,
 )
+from api.services.production_dependency_readiness import (
+    EXPECTED_MODEL_ID as HOSTED_OPEN_WEIGHT_MODEL_ID,
+    check_live_worker_readiness,
+)
 from api.services.cas_harness_scale_planner import (
     ScalePlanRequest as PlannerScalePlanRequest,
     build_scale_plan,
@@ -185,7 +189,7 @@ AuditStatus = Literal[
     "FAILED",
 ]
 ModelStatus = Literal["NOT_CONNECTED_MOCK"]
-ModelTargetKind = Literal["demo_reference", "api_endpoint"]
+ModelTargetKind = Literal["demo_reference", "hosted_open_weight", "api_endpoint"]
 ModelConnectionState = Literal["CONNECTED", "CONFIGURED"]
 VerifiedModelStatus = Literal["CONNECTED", "READY"]
 CredentialMode = Literal["none", "credential_ref", "ephemeral_secret"]
@@ -578,6 +582,21 @@ class ModelTargetConfig(BaseModel):
             if self.model_id and self.model_id != REFERENCE_TARGET_MODEL_ID:
                 raise ValueError(
                     f"demo_reference target only supports {REFERENCE_TARGET_MODEL_ID}"
+                )
+            return self
+
+        if self.kind == "hosted_open_weight":
+            if self.endpoint_url is not None:
+                raise ValueError("hosted_open_weight target must not include endpoint_url")
+            if self.credential_ref is not None or self.api_key is not None:
+                raise ValueError("hosted_open_weight target must not include credentials")
+            if self.allow_unauthenticated:
+                raise ValueError(
+                    "hosted_open_weight target uses server-held service authentication"
+                )
+            if self.model_id and self.model_id != HOSTED_OPEN_WEIGHT_MODEL_ID:
+                raise ValueError(
+                    f"hosted_open_weight target only supports {HOSTED_OPEN_WEIGHT_MODEL_ID}"
                 )
             return self
 
@@ -1544,6 +1563,8 @@ async def verify_model_target(
     target = req.target
     if target.kind == "demo_reference":
         return _reference_target_response(target)
+    if target.kind == "hosted_open_weight":
+        return await _hosted_open_weight_target_response(target)
     return _api_endpoint_target_response(target)
 
 
@@ -3029,6 +3050,62 @@ def _reference_target_response(target: ModelTargetConfig) -> ModelTargetVerifica
             ),
         ),
         reference_evidence_packet_trace_id=REFERENCE_TARGET_EVIDENCE_PACKET_TRACE_ID,
+    )
+
+
+async def _hosted_open_weight_target_response(
+    target: ModelTargetConfig,
+) -> ModelTargetVerificationResponse:
+    """Verify the server-authenticated real-weight worker without running inference."""
+
+    readiness = await check_live_worker_readiness()
+    if (
+        readiness.get("status") != "ok"
+        or readiness.get("real_weights") is not True
+        or readiness.get("model_id") != HOSTED_OPEN_WEIGHT_MODEL_ID
+    ):
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "hosted_open_weight_unavailable",
+                "status": "OPEN",
+                "reason": str(
+                    readiness.get("reason") or "real_weight_authority_unavailable"
+                ),
+            },
+        )
+
+    verified = VerifiedModelTarget(
+        kind="hosted_open_weight",
+        provider="cas_harness_live_worker",
+        model_id=HOSTED_OPEN_WEIGHT_MODEL_ID,
+        endpoint_url=None,
+        credential_mode="none",
+        timeout_ms=target.timeout_ms,
+    )
+    worker_version = str(readiness.get("worker_version") or "").strip()
+    version_detail = f" Worker version: {worker_version}." if worker_version else ""
+    return ModelTargetVerificationResponse(
+        connection_id=_connection_id_for(verified),
+        connection_state="CONNECTED",
+        model_status="CONNECTED",
+        can_run_audit=True,
+        target=verified,
+        detail=(
+            "Hosted Pythia-160M target verified against authenticated worker real-mode "
+            "metadata. No inference, Evidence Packet, or audit verdict was created by "
+            f"this connection check.{version_detail}"
+        ),
+        checked_at=_utc_now(),
+        provenance_chip=ProvenanceChip(
+            id="model_proof",
+            name="Model proof",
+            status="verified",
+            detail=(
+                "The configured live worker authenticated successfully and reported the "
+                "exact EleutherAI/pythia-160m real-weight readiness contract."
+            ),
+        ),
     )
 
 
