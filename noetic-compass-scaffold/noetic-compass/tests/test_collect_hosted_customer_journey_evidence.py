@@ -4,7 +4,11 @@ from collections.abc import Mapping
 from datetime import UTC, datetime
 import importlib.util
 import json
+import os
 from pathlib import Path
+import re
+import shutil
+import subprocess
 import sys
 from typing import Any
 
@@ -34,6 +38,9 @@ VERIFIER_SPEC.loader.exec_module(verifier)
 FIXED_NOW = datetime(2026, 7, 14, 20, 10, tzinfo=UTC)
 MASTER_SHA = "a" * 40
 DEPLOY_ID = "dep-d9ba0km7r5hc73e9ojkg"
+RENDER_TOKEN = "private-render-api-key"
+RENDER_CREATED_AT = "2026-07-14T19:58:00Z"
+RENDER_FINISHED_AT = "2026-07-14T19:59:00Z"
 PLATFORM_SECRET = "platform-secret-value"
 BILLING_SECRET = "billing-secret-value"
 TOKEN_A = "token-a-private-value"
@@ -44,6 +51,7 @@ AUDIT_ID = "cas-audit-0123456789abcdef"
 RUNTIME_ENV = {
     "RENDER_SERVICE_ID": collector_module.PRODUCTION_SERVICE_ID,
     "RENDER_GIT_COMMIT": MASTER_SHA,
+    collector_module.RENDER_API_KEY_ENV: RENDER_TOKEN,
 }
 ANCHOR_MANIFEST_SHA = "c" * 64
 ANCHOR_BUCKET = "acceptance-evidence-bucket"
@@ -67,6 +75,20 @@ def _result(
 
 def _empty_result(status: int):
     return collector_module.HttpResult(status=status, headers={}, body=b"")
+
+
+def _render_deploy(**changes: Any) -> dict[str, Any]:
+    deployment = {
+        "id": DEPLOY_ID,
+        "status": "live",
+        "trigger": "new_commit",
+        "createdAt": RENDER_CREATED_AT,
+        "finishedAt": RENDER_FINISHED_AT,
+        "updatedAt": RENDER_FINISHED_AT,
+        "commit": {"id": MASTER_SHA},
+    }
+    deployment.update(changes)
+    return deployment
 
 
 def _packet(*, anchored: bool = True) -> dict[str, Any]:
@@ -161,6 +183,8 @@ class FakeJourneyTransport:
         run_transient_once: bool = False,
         revoked_at: str = "2026-07-14T20:10:00Z",
         revoke_status: int = 200,
+        render_payloads: tuple[Mapping[str, Any], Mapping[str, Any]] | None = None,
+        render_statuses: tuple[int, int] = (200, 200),
     ) -> None:
         self.calls: list[dict[str, Any]] = []
         self.packet = _packet(anchored=anchored)
@@ -174,6 +198,9 @@ class FakeJourneyTransport:
         self.run_attempts = 0
         self.revoked_at = revoked_at
         self.revoke_status = revoke_status
+        self.render_payloads = render_payloads or (_render_deploy(), _render_deploy())
+        self.render_statuses = render_statuses
+        self.render_read_count = 0
 
     @staticmethod
     def _share_metadata(*, revoked: bool, revoked_at: str) -> dict[str, Any]:
@@ -206,6 +233,20 @@ class FakeJourneyTransport:
                 "timeout": timeout,
             }
         )
+        if base_url == collector_module.RENDER_API_ORIGIN:
+            assert path == (
+                f"/v1/services/{collector_module.PRODUCTION_SERVICE_ID}"
+                f"/deploys/{DEPLOY_ID}"
+            )
+            assert method == "GET"
+            assert payload is None
+            assert headers == {"Authorization": f"Bearer {RENDER_TOKEN}"}
+            assert timeout == 30.0
+            index = min(self.render_read_count, 1)
+            self.render_read_count += 1
+            return _result(
+                self.render_statuses[index], self.render_payloads[index]
+            )
         assert base_url == collector_module.PRODUCTION_API_ORIGIN
 
         if method == "POST" and path == "/platform/tenants":
@@ -328,6 +369,8 @@ def _collect(
     run_transient_once: bool = False,
     revoked_at: str = "2026-07-14T20:10:00Z",
     revoke_status: int = 200,
+    render_payloads: tuple[Mapping[str, Any], Mapping[str, Any]] | None = None,
+    render_statuses: tuple[int, int] = (200, 200),
 ):
     transport = FakeJourneyTransport(
         anchored=anchored,
@@ -335,6 +378,8 @@ def _collect(
         run_transient_once=run_transient_once,
         revoked_at=revoked_at,
         revoke_status=revoke_status,
+        render_payloads=render_payloads,
+        render_statuses=render_statuses,
     )
     collector = collector_module.JourneyCollector(
         base_url=collector_module.PRODUCTION_API_ORIGIN,
@@ -380,6 +425,17 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
         "verified_at_utc": "2026-07-14T20:10:00Z",
     }
     assert artifact["schema_version"] == collector_module.SAFE_ARTIFACT_SCHEMA_VERSION
+    assert artifact["render_service_id"] == collector_module.PRODUCTION_SERVICE_ID
+    assert artifact["render_deploy_commit_sha"] == MASTER_SHA
+    assert artifact["render_deploy_status"] == "live"
+    assert artifact["render_deploy_trigger"] == "new_commit"
+    assert artifact["render_deploy_created_at_utc"] == RENDER_CREATED_AT
+    assert artifact["render_deploy_finished_at_utc"] == RENDER_FINISHED_AT
+    assert artifact["render_deploy_preflight_http_status"] == 200
+    assert artifact["render_deploy_final_http_status"] == 200
+    assert artifact["render_deploy_preflight_sha256"] == artifact[
+        "render_deploy_final_sha256"
+    ]
     assert artifact["packet_canonical_sha256"] == artifact[
         "share_packet_canonical_sha256"
     ]
@@ -398,6 +454,7 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
     forbidden = [
         PLATFORM_SECRET,
         BILLING_SECRET,
+        RENDER_TOKEN,
         TOKEN_A,
         TOKEN_B,
         SHARE_TOKEN,
@@ -408,6 +465,9 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
     forbidden.extend(str(payload["email_or_username"]) for payload in provision_payloads)
     forbidden.extend(str(payload["api_credential"]) for payload in provision_payloads)
     assert all(secret not in serialized for secret in forbidden)
+    assert transport.render_read_count == 2
+    assert transport.calls[0]["base_url"] == collector_module.RENDER_API_ORIGIN
+    assert transport.calls[-1]["base_url"] == collector_module.RENDER_API_ORIGIN
 
     context = verifier.ValidationContext(
         repo_root=REPO_ROOT,
@@ -474,6 +534,153 @@ def test_rejects_nonproduction_origin_and_missing_operator_credentials() -> None
             deploy_id=DEPLOY_ID,
             runtime_environment=RUNTIME_ENV,
         )
+
+
+@pytest.mark.parametrize("render_api_key", ["", " leading-space", "line\nbreak"])
+def test_rejects_missing_or_malformed_environment_only_render_key(
+    render_api_key: str,
+) -> None:
+    runtime_env = {**RUNTIME_ENV, collector_module.RENDER_API_KEY_ENV: render_api_key}
+    with pytest.raises(collector_module.JourneyFailure, match="RENDER_API_KEY"):
+        collector_module.JourneyCollector(
+            base_url=collector_module.PRODUCTION_API_ORIGIN,
+            platform_secret=PLATFORM_SECRET,
+            billing_secret=BILLING_SECRET,
+            master_head_sha=MASTER_SHA,
+            deploy_id=DEPLOY_ID,
+            runtime_environment=runtime_env,
+        )
+
+
+@pytest.mark.parametrize(
+    "render_payload",
+    [
+        _render_deploy(id="dep-different"),
+        _render_deploy(status="build_in_progress"),
+        _render_deploy(trigger="manual"),
+        _render_deploy(commit={"id": "b" * 40}),
+    ],
+)
+def test_render_preflight_refuses_deploy_identity_or_state_drift_before_mutation(
+    render_payload: Mapping[str, Any],
+) -> None:
+    transport = FakeJourneyTransport(
+        render_payloads=(render_payload, render_payload)
+    )
+    collector = collector_module.JourneyCollector(
+        base_url=collector_module.PRODUCTION_API_ORIGIN,
+        platform_secret=PLATFORM_SECRET,
+        billing_secret=BILLING_SECRET,
+        master_head_sha=MASTER_SHA,
+        deploy_id=DEPLOY_ID,
+        transport=transport,
+        clock=lambda: FIXED_NOW,
+        nonce="0123456789abcdef01234567",
+        runtime_environment=RUNTIME_ENV,
+    )
+    with pytest.raises(
+        collector_module.JourneyFailure,
+        match="exact deployment is not live at the pinned commit and trigger",
+    ):
+        collector.collect()
+    assert transport.render_read_count == 1
+    assert all(call["path"] != "/platform/tenants" for call in transport.calls)
+
+
+@pytest.mark.parametrize(
+    ("render_payload", "message"),
+    [
+        (
+            _render_deploy(
+                createdAt="2026-07-14T20:01:00Z",
+                finishedAt="2026-07-14T20:00:00Z",
+            ),
+            "finished before it was created",
+        ),
+        (
+            _render_deploy(finishedAt="2026-07-14T20:11:00Z"),
+            "finish time is in the future",
+        ),
+    ],
+)
+def test_render_preflight_refuses_impossible_provider_timing(
+    render_payload: Mapping[str, Any], message: str
+) -> None:
+    transport = FakeJourneyTransport(
+        render_payloads=(render_payload, render_payload)
+    )
+    collector = collector_module.JourneyCollector(
+        base_url=collector_module.PRODUCTION_API_ORIGIN,
+        platform_secret=PLATFORM_SECRET,
+        billing_secret=BILLING_SECRET,
+        master_head_sha=MASTER_SHA,
+        deploy_id=DEPLOY_ID,
+        transport=transport,
+        clock=lambda: FIXED_NOW,
+        nonce="0123456789abcdef01234567",
+        runtime_environment=RUNTIME_ENV,
+    )
+    with pytest.raises(collector_module.JourneyFailure, match=message):
+        collector.collect()
+    assert transport.render_read_count == 1
+    assert all(call["path"] != "/platform/tenants" for call in transport.calls)
+
+
+def test_render_final_readback_refuses_provider_payload_mutation() -> None:
+    preflight = _render_deploy()
+    final = _render_deploy(updatedAt="2026-07-14T20:10:00Z")
+    transport = FakeJourneyTransport(render_payloads=(preflight, final))
+    collector = collector_module.JourneyCollector(
+        base_url=collector_module.PRODUCTION_API_ORIGIN,
+        platform_secret=PLATFORM_SECRET,
+        billing_secret=BILLING_SECRET,
+        master_head_sha=MASTER_SHA,
+        deploy_id=DEPLOY_ID,
+        transport=transport,
+        clock=lambda: FIXED_NOW,
+        nonce="0123456789abcdef01234567",
+        runtime_environment=RUNTIME_ENV,
+    )
+    with pytest.raises(collector_module.JourneyFailure, match="mutated during collection"):
+        collector.collect()
+    assert transport.render_read_count == 2
+    assert transport.revoked is True
+    assert sum(call["path"] == "/auth/logout" for call in transport.calls) == 2
+
+
+def test_render_provider_body_is_hashed_and_never_copied_to_output() -> None:
+    provider_payload = _render_deploy(hostileEcho=RENDER_TOKEN)
+    _transport, evidence, artifact = _collect(
+        render_payloads=(provider_payload, provider_payload)
+    )
+    serialized = json.dumps({"evidence": evidence, "artifact": artifact})
+    assert RENDER_TOKEN not in serialized
+    assert "hostileEcho" not in serialized
+    assert artifact["render_deploy_preflight_sha256"] == (
+        collector_module._digest_bytes(
+            collector_module._canonical_bytes(provider_payload)
+        )
+    )
+
+
+def test_render_final_readback_failure_stays_open_after_cleanup() -> None:
+    transport = FakeJourneyTransport(render_statuses=(200, 503))
+    collector = collector_module.JourneyCollector(
+        base_url=collector_module.PRODUCTION_API_ORIGIN,
+        platform_secret=PLATFORM_SECRET,
+        billing_secret=BILLING_SECRET,
+        master_head_sha=MASTER_SHA,
+        deploy_id=DEPLOY_ID,
+        transport=transport,
+        clock=lambda: FIXED_NOW,
+        nonce="0123456789abcdef01234567",
+        runtime_environment=RUNTIME_ENV,
+    )
+    with pytest.raises(collector_module.JourneyFailure, match="unexpected HTTP status 503"):
+        collector.collect()
+    assert transport.render_read_count == 2
+    assert transport.revoked is True
+    assert sum(call["path"] == "/auth/logout" for call in transport.calls) == 2
 
 
 def test_duplicate_json_keys_are_rejected() -> None:
@@ -549,6 +756,7 @@ def test_timestamp_order_and_runtime_identity_fail_closed() -> None:
             runtime_environment={
                 "RENDER_SERVICE_ID": "srv-wrong",
                 "RENDER_GIT_COMMIT": MASTER_SHA,
+                collector_module.RENDER_API_KEY_ENV: RENDER_TOKEN,
             },
         )
 
@@ -571,3 +779,99 @@ def test_production_image_contains_collector() -> None:
         "COPY scripts/collect_hosted_customer_journey_evidence.py "
         "scripts/collect_hosted_customer_journey_evidence.py"
     ) in dockerfile
+
+
+def test_runbook_uses_transient_process_only_render_key_in_bash() -> None:
+    runbook = (
+        MODULE_PATH.parent.parent
+        / "docs"
+        / "runbooks"
+        / "hosted_customer_journey_acceptance.md"
+    ).read_text(encoding="utf-8")
+
+    assert "```powershell" not in runbook
+    assert runbook.count("```bash") == 2
+    blocks = re.findall(r"```bash\n(.*?)\n```", runbook, flags=re.DOTALL)
+    assert len(blocks) == 2
+    collector_block = blocks[0]
+    assert "if [[ -v RENDER_API_KEY ]]" in collector_block
+    assert "IFS= read -r -s -p" in collector_block
+    assert "trap 'unset RENDER_API_KEY' EXIT" in collector_block
+    assert "trap 'exit 130' HUP INT TERM" in collector_block
+    assert collector_block.index("set +x") < collector_block.index("IFS= read")
+    assert collector_block.index("set +o history") < collector_block.index(
+        "IFS= read"
+    )
+    assert 'RENDER_API_KEY="$RENDER_API_KEY" \\\n    python' in collector_block
+    assert "export RENDER_API_KEY" not in runbook
+    assert "revoke only that dedicated single-use" in runbook
+    assert "Do not\nrevoke or rotate an existing CI/automation key" in runbook
+
+    bash_candidates: list[Path] = []
+    if os.name == "nt":
+        program_files = Path(os.environ.get("ProgramFiles", r"C:\Program Files"))
+        bash_candidates.extend(
+            (
+                program_files / "Git" / "bin" / "bash.exe",
+                program_files / "Git" / "usr" / "bin" / "bash.exe",
+            )
+        )
+    discovered_bash = shutil.which("bash")
+    if discovered_bash:
+        bash_candidates.append(Path(discovered_bash))
+    bash = next((candidate for candidate in bash_candidates if candidate.is_file()), None)
+    if bash is None:
+        pytest.skip("Bash is required to execute the runbook security contract")
+
+    command_start = '  RENDER_API_KEY="$RENDER_API_KEY" \\\n'
+    command_end = "  status=$?\n"
+    prefix, command_and_suffix = collector_block.split(command_start, 1)
+    _real_collector_command, suffix = command_and_suffix.split(command_end, 1)
+    stub_collector = """  if env | grep -q '^RENDER_API_KEY='; then
+    printf 'pre-collector-key=leaked\\n'
+    exit 91
+  fi
+  printf 'pre-collector-key=absent\\n'
+
+  RENDER_API_KEY="$RENDER_API_KEY" bash -c '
+    if [[ -n "$RENDER_API_KEY" ]]; then
+      printf "collector-key=present\\n"
+      exit 37
+    fi
+    printf "collector-key=missing\\n"
+    exit 92
+  '
+  status=$?
+"""
+    post_subshell = """
+subshell_status=$?
+if [[ -v RENDER_API_KEY ]] || env | grep -q '^RENDER_API_KEY='; then
+  printf 'post-subshell-key=leaked\\n'
+  exit 93
+fi
+printf 'post-subshell-key=absent\\n'
+exit "$subshell_status"
+"""
+    harness = prefix + stub_collector + suffix + post_subshell
+    fake_key = "fake-render-key-must-never-appear"
+    environment = os.environ.copy()
+    environment.pop("RENDER_API_KEY", None)
+    completed = subprocess.run(
+        [str(bash), "-x", "-c", harness],
+        input=f"{fake_key}\n",
+        text=True,
+        capture_output=True,
+        timeout=10,
+        check=False,
+        env=environment,
+    )
+
+    captured = completed.stdout + completed.stderr
+    assert completed.returncode == 37, captured
+    assert "+ set +x" in completed.stderr
+    assert fake_key not in captured
+    assert "pre-collector-key=absent" in completed.stdout
+    assert "collector-key=present" in completed.stdout
+    assert "post-subshell-key=absent" in completed.stdout
+    assert "key=leaked" not in completed.stdout
+    assert "collector-key=missing" not in completed.stdout
