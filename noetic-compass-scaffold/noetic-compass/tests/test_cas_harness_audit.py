@@ -4,9 +4,11 @@ from typing import get_args
 
 import pytest
 
+from api.config import settings
 from api.routes import cas_harness_audit as audit_routes
 from api.routes.cas_harness_audit import Verdict
 from api.services.cas_harness_audit_sessions import reset_audit_sessions_for_tests
+from api.services.cas_harness_harvest import iter_harvest_records
 from api.services.cas_harness_merged_evidence_packets import (
     reset_merged_fleet_evidence_packets_for_tests,
 )
@@ -32,6 +34,7 @@ def _isolated_evidence_store(tmp_path, monkeypatch):
     """
 
     monkeypatch.setenv("CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR", str(tmp_path))
+    monkeypatch.setenv("CAS_HARNESS_HARVEST_STORE_DIR", str(tmp_path / "harvest"))
     monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_MODE", raising=False)
     monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE", raising=False)
     monkeypatch.delenv("CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS", raising=False)
@@ -1073,6 +1076,56 @@ def test_run_route_calls_live_worker_for_hosted_pythia_and_routes_to_review(
         "COMPLETE",
     ]
     assert "missing required proof" in body["lifecycle"][-1]["message"]
+
+
+def test_run_route_rejects_demo_worker_dump_without_persisting_evidence(
+    client, auth_headers, tmp_path, monkeypatch
+):
+    async def fake_dump(_worker_base, _payload):
+        return {
+            "events": [
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": False,
+                    },
+                },
+                {"type": "token", "token_index": 0, "token": " synthetic"},
+                {"type": "complete", "total_tokens": 1},
+            ]
+        }
+
+    monkeypatch.setattr(settings, "atlas_live_worker_url", "http://worker.test")
+    monkeypatch.setattr(settings, "atlas_live_worker_token", "test-worker-token")
+    monkeypatch.setattr(
+        "api.services.cas_harness_live_worker_runner._post_worker_dump", fake_dump
+    )
+    created = client.post(
+        "/api/cas-harness/audit/session",
+        json={
+            "model_id": "EleutherAI/pythia-160m",
+            "audit_mode": "BALANCED",
+            "prompt": "Reject demo output.",
+            "selected_modules": ["active_trace"],
+        },
+        headers=auth_headers,
+    )
+
+    ran = client.post(
+        f"/api/cas-harness/audit/session/{created.json()['audit_id']}/run",
+        headers=auth_headers,
+    )
+
+    assert ran.status_code == 200
+    body = ran.json()
+    assert body["status"] == "FAILED"
+    assert body["verdict"] is None
+    assert body["evidence_packet_trace_id"] is None
+    assert "did not prove real model weights" in body["lifecycle"][-1]["message"]
+    assert list(iter_harvest_records()) == []
+    assert list(tmp_path.rglob("*.json")) == []
+    assert list(tmp_path.rglob("*.jsonl")) == []
 
 
 def test_run_route_calls_customer_api_and_routes_to_review(

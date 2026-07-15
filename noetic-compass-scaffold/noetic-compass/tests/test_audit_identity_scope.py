@@ -318,7 +318,21 @@ def _fake_live_result(trace_id: str):
         (),
         {
             "trace_id": trace_id,
-            "evidence_packet": {"trace_id": trace_id},
+            "evidence_packet": {
+                "trace_id": trace_id,
+                "model": {"model_key": "EleutherAI/pythia-160m"},
+                "live_audit": {
+                    "events": [
+                        {
+                            "type": "manifest",
+                            "manifest": {
+                                "model_id": "EleutherAI/pythia-160m",
+                                "is_real_model": True,
+                            },
+                        }
+                    ]
+                },
+            },
             "proof_chips": [
                 {
                     "id": "model_proof",
