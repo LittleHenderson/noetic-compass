@@ -97,6 +97,36 @@ services:
         value: "false"
       - key: NC_BILLING_RECONCILIATION_ENABLED
         value: "false"
+      # A real CUDA worker may emit signed measured-usage receipts only after
+      # this independent effect gate is enabled. The HMAC key is shared only
+      # between this API and the RunPod worker (worker env name:
+      # CAS_BILLING_WORKER_RECEIPT_HMAC_KEY). The source identities must match
+      # the worker's own immutable configuration. Populating slots is inert.
+      - key: NC_BILLING_WORKER_MEASUREMENT_ENABLED
+        value: "false"
+      - key: NC_BILLING_WORKER_RECEIPT_HMAC_KEY
+        sync: false
+      - key: NC_BILLING_WORKER_RECEIPT_KEY_ID
+        sync: false
+      - key: NC_BILLING_WORKER_RECEIPT_ISSUER
+        sync: false
+      - key: NC_BILLING_WORKER_PROVIDER_ID
+        sync: false
+      - key: NC_BILLING_WORKER_ID
+        sync: false
+      - key: NC_BILLING_WORKER_RECEIPT_MAX_AGE_SECONDS
+        value: "300"
+      # This is the only switch that starts a Stripe Meter Event sender.
+      # It stays false until signed worker receipts and live provider readback
+      # have passed the hosted acceptance run.
+      - key: NC_BILLING_USAGE_DISPATCH_ENABLED
+        value: "false"
+      - key: NC_BILLING_USAGE_DISPATCH_INTERVAL_SECONDS
+        value: "5"
+      - key: NC_BILLING_USAGE_DISPATCH_BATCH_SIZE
+        value: "25"
+      - key: NC_BILLING_USAGE_DISPATCH_PREFLIGHT_RETRIES
+        value: "3"
       # Stripe usage/invoice reconciliation is a separate, dark foundation.
       # These dashboard-managed slots are required before the flag above may
       # be enabled. The reference hash key must be a dedicated stable secret;

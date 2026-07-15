@@ -1,9 +1,10 @@
 """Durable measured-usage outbox and paid-invoice reconciliation.
 
-This is a deliberately bounded financial-record slice.  It does **not** expose a
-charge endpoint, submit a Stripe Meter Event, verify a webhook signature, or turn
-an estimate into measured usage.  Those effects remain at explicit integration
-boundaries:
+This is a deliberately bounded financial-record slice. It does **not** expose a
+charge or Meter Event endpoint, verify a webhook signature, or turn an estimate
+into measured usage. Provider submission lives in the separately gated
+``billing_meter_dispatch`` service; this store remains the durable transition
+authority around that effect:
 
 * ``record_fleet_measurement`` accepts only a caller-verified, hash-bound fleet
   receipt and stores the measurement plus delivery state in one versioned
@@ -17,11 +18,12 @@ boundaries:
   provider snapshot and reports ``matched`` only when its metered quantity exactly
   equals the locally submitted measurements for that period.
 
-The upstream fleet receipt verifier and Stripe webhook/refresh adapter are trust
-boundaries.  This module validates and persists their hash-bound output; it does
-not pretend that a Python dataclass proves a signature.  Until those adapters are
-wired, this service is useful as a tested persistence contract but closes no
-customer-production billing gate.
+The upstream live-worker receipt verifier and Stripe webhook/refresh adapter are
+trust boundaries. The worker verifier now authenticates one canonical HMAC
+receipt and supplies only its hash-bound output; this module still does not
+pretend that a Python dataclass proves a signature. Both worker measurement and
+Meter Event dispatch remain independent dark-by-default gates, and this source
+capability alone closes no customer-production billing gate.
 
 Provider identifiers are retained only in the private ledger because dispatch and
 reconciliation need exact values.  Public projections replace every provider
@@ -63,7 +65,7 @@ from api.services.production.state_substrate.interface import (
 )
 
 
-BILLING_RECONCILIATION_SCHEMA_VERSION = "cas_harness_billing_reconciliation.v2"
+BILLING_RECONCILIATION_SCHEMA_VERSION = "cas_harness_billing_reconciliation.v3"
 USAGE_OUTBOX_KIND = "billing_usage_outbox"
 USAGE_RECEIPT_INDEX_KIND = "billing_usage_receipt_index"
 USAGE_MEASUREMENT_INDEX_KIND = "billing_usage_measurement_index"
@@ -94,6 +96,8 @@ InvoiceReconciliationState = Literal["unresolved", "matched"]
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 _SAFE_CODE_RE = re.compile(r"^[A-Za-z0-9._:-]{1,128}$")
+_WORKER_PROVIDER_ID_RE = re.compile(r"^[A-Za-z0-9._:-]{1,160}$")
+_MODEL_IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:/-]{1,200}$")
 _METER_EVENT_NAME_RE = re.compile(r"^[A-Za-z0-9._:-]{1,100}$")
 _METER_IDENTIFIER_RE = re.compile(r"^[A-Za-z0-9._:-]{1,100}$")
 _STRIPE_ID_PATTERNS = {
@@ -135,6 +139,8 @@ _USAGE_PAYLOAD_FIELDS = frozenset(
         "source",
         "run_id",
         "worker_id",
+        "worker_provider_id",
+        "model_id",
         "accelerator_milliseconds",
         "accelerator_count",
         "measurement_started_at",
@@ -282,12 +288,16 @@ class FleetUsageMeasurement:
     caller.  The ledger makes receipt reuse deterministic and cross-tenant safe.
     ``accelerator_milliseconds`` is an integer to avoid floating-point money and
     quantity drift.  It may not exceed wall time multiplied by accelerator count.
+    The verified provider and model bindings remain first-class durable facts,
+    rather than being recoverable only from an unavailable raw receipt.
     """
 
     tenant_id: str
     billing_account_id: str
     run_id: str
     worker_id: str
+    worker_provider_id: str
+    model_id: str
     accelerator_milliseconds: int
     accelerator_count: int
     measurement_started_at: str
@@ -300,12 +310,25 @@ class FleetUsageMeasurement:
 
 
 @dataclass(frozen=True, slots=True)
+class UsageDispatchContract:
+    """Current operator-selected contract for one Stripe usage stream."""
+
+    meter_event_name: str
+    meter_event_version: str
+    usage_price_id: str
+    currency: str
+    livemode: bool
+
+
+@dataclass(frozen=True, slots=True)
 class UsageOutboxRecord:
     tenant_id: str
     billing_account_id: str
     usage_id: str
     run_id: str
     worker_id: str
+    worker_provider_id: str
+    model_id: str
     accelerator_milliseconds: int
     accelerator_count: int
     measurement_started_at: str
@@ -380,6 +403,10 @@ class UsageOutboxRecord:
             usage_id=usage_id,
             run_id=_required_text(payload.get("run_id"), "run_id"),
             worker_id=_required_text(payload.get("worker_id"), "worker_id"),
+            worker_provider_id=_worker_provider_id(
+                payload.get("worker_provider_id"), "worker_provider_id"
+            ),
+            model_id=_model_identifier(payload.get("model_id"), "model_id"),
             accelerator_milliseconds=_nonnegative_int(
                 payload.get("accelerator_milliseconds"),
                 "accelerator_milliseconds",
@@ -475,6 +502,8 @@ class UsageOutboxRecord:
                 billing_account_id=result.billing_account_id,
                 run_id=result.run_id,
                 worker_id=result.worker_id,
+                worker_provider_id=result.worker_provider_id,
+                model_id=result.model_id,
                 accelerator_milliseconds=result.accelerator_milliseconds,
                 accelerator_count=result.accelerator_count,
                 measurement_started_at=result.measurement_started_at,
@@ -950,6 +979,48 @@ class BillingReconciliationStore:
             customer_receipt_allowed_hosts
         )
 
+    @property
+    def usage_dispatch_contract(self) -> UsageDispatchContract:
+        """Return the immutable active contract used for new usage rows."""
+
+        return UsageDispatchContract(
+            meter_event_name=self._meter_event_name,
+            meter_event_version=self._meter_event_version,
+            usage_price_id=self._usage_price_id,
+            currency=self._currency,
+            livemode=self._livemode,
+        )
+
+    def require_active_usage_dispatch_contract(
+        self, usage: UsageOutboxRecord
+    ) -> None:
+        """Refuse a sealed row created under a different active contract.
+
+        Pending rows can survive a process restart while operator configuration
+        changes.  They must not inherit fresh send authority under a different
+        meter, price, currency, or Stripe mode merely because their own sealed
+        payload is internally valid.
+        """
+
+        active = self.usage_dispatch_contract
+        row_contract = UsageDispatchContract(
+            meter_event_name=usage.meter_event_name,
+            meter_event_version=usage.meter_event_version,
+            usage_price_id=usage.usage_price_id,
+            currency=usage.currency,
+            livemode=usage.livemode,
+        )
+        if row_contract != active:
+            mismatched = [
+                field_name
+                for field_name in UsageDispatchContract.__dataclass_fields__
+                if getattr(row_contract, field_name) != getattr(active, field_name)
+            ]
+            raise BillingReconciliationConflict(
+                "sealed pending usage contract does not match the active billing "
+                "contract: " + ", ".join(mismatched)
+            )
+
     def record_fleet_measurement(
         self, measurement: FleetUsageMeasurement
     ) -> tuple[UsageOutboxRecord, bool]:
@@ -1032,6 +1103,8 @@ class BillingReconciliationStore:
                 "billing_account_id": normalized["billing_account_id"],
                 "run_id": normalized["run_id"],
                 "worker_id": normalized["worker_id"],
+                "worker_provider_id": normalized["worker_provider_id"],
+                "model_id": normalized["model_id"],
                 "measurement_started_at": normalized[
                     "measurement_started_at"
                 ],
@@ -1091,6 +1164,8 @@ class BillingReconciliationStore:
                 "source": "fleet_measured",
                 "run_id": normalized["run_id"],
                 "worker_id": normalized["worker_id"],
+                "worker_provider_id": normalized["worker_provider_id"],
+                "model_id": normalized["model_id"],
                 "accelerator_milliseconds": normalized[
                     "accelerator_milliseconds"
                 ],
@@ -1172,6 +1247,58 @@ class BillingReconciliationStore:
         rows.sort(key=lambda row: (row.measurement_ended_at, row.usage_id))
         return tuple(rows[:limit])
 
+    def pending_usage_global(
+        self, *, limit: int = 100
+    ) -> tuple[UsageOutboxRecord, ...]:
+        """Discover pending rows through authenticated platform receipt indexes.
+
+        ``StateStore`` intentionally has no cross-tenant scan. Every measured
+        receipt already creates a globally unique, sealed platform index, so the
+        dispatcher walks those indexes and then performs an ordinary tenant read.
+        A crash that reserved an index but did not yet create its tenant aggregate
+        is skipped (an exact ingestion retry repairs it); a malformed or
+        contradictory index fails closed.
+
+        Like :meth:`pending_usage`, these are candidates only. The caller has no
+        provider-send authority until :meth:`reserve_usage_delivery` returns its
+        newly persisted ``delivery_uncertain`` row.
+        """
+
+        if limit < 1 or limit > 1000:
+            raise BillingReconciliationError(
+                "global pending usage limit must be 1..1000"
+            )
+        rows: list[UsageOutboxRecord] = []
+        indexes = self._store.list(
+            BILLING_RECONCILIATION_PLATFORM_TENANT,
+            USAGE_RECEIPT_INDEX_KIND,
+        )
+        for index in indexes:
+            _validate_index_record(
+                index,
+                kind=USAGE_RECEIPT_INDEX_KIND,
+                record_id=index.record_id,
+            )
+            tenant_id = _required_text(index.payload.get("tenant_id"), "tenant_id")
+            usage_id = _required_text(index.payload.get("usage_id"), "usage_id")
+            usage = self.get_usage(tenant_id, usage_id)
+            if usage is None:
+                continue
+            if (
+                usage.receipt_sha256 != index.payload.get("receipt_sha256")
+                or usage.billing_account_id
+                != index.payload.get("billing_account_id")
+            ):
+                raise BillingReconciliationConflict(
+                    "usage receipt index contradicts its tenant aggregate"
+                )
+            if usage.outbox_state == "pending":
+                rows.append(usage)
+        rows.sort(
+            key=lambda row: (row.measurement_ended_at, row.tenant_id, row.usage_id)
+        )
+        return tuple(rows[:limit])
+
     def record_delivery_failure(
         self, *, tenant_id: str, usage_id: str, failure_code: str
     ) -> UsageOutboxRecord:
@@ -1250,6 +1377,7 @@ class BillingReconciliationStore:
                 if existing is None:
                     raise BillingReconciliationError("usage record not found")
                 current = self._usage_from_record(existing)
+                self.require_active_usage_dispatch_contract(current)
                 if current.outbox_state == "submitted":
                     raise BillingReconciliationConflict(
                         "submitted usage cannot become delivery uncertain"
@@ -1839,6 +1967,9 @@ class BillingReconciliationStore:
             "schema_version": BILLING_RECONCILIATION_SCHEMA_VERSION,
             "usage_id": usage.usage_id,
             "run_id": usage.run_id,
+            "worker_id": usage.worker_id,
+            "worker_provider_id": usage.worker_provider_id,
+            "model_id": usage.model_id,
             "source": "fleet_measured",
             "accelerator_milliseconds": usage.accelerator_milliseconds,
             "measurement_started_at": usage.measurement_started_at,
@@ -1980,6 +2111,8 @@ class BillingReconciliationStore:
             "billing_account_id": usage.billing_account_id,
             "run_id": usage.run_id,
             "worker_id": usage.worker_id,
+            "worker_provider_id": usage.worker_provider_id,
+            "model_id": usage.model_id,
             "measurement_started_at": usage.measurement_started_at,
             "measurement_ended_at": usage.measurement_ended_at,
         }
@@ -2610,6 +2743,10 @@ def _validate_measurement(measurement: FleetUsageMeasurement) -> dict[str, objec
     )
     run_id = _required_text(measurement.run_id, "run_id")
     worker_id = _required_text(measurement.worker_id, "worker_id")
+    worker_provider_id = _worker_provider_id(
+        measurement.worker_provider_id, "worker_provider_id"
+    )
+    model_id = _model_identifier(measurement.model_id, "model_id")
     quantity = _positive_int(
         measurement.accelerator_milliseconds, "accelerator_milliseconds"
     )
@@ -2639,6 +2776,8 @@ def _validate_measurement(measurement: FleetUsageMeasurement) -> dict[str, objec
         "billing_account_id": billing_account_id,
         "run_id": run_id,
         "worker_id": worker_id,
+        "worker_provider_id": worker_provider_id,
+        "model_id": model_id,
         "accelerator_milliseconds": quantity,
         "accelerator_count": accelerator_count,
         "measurement_started_at": started,
@@ -2782,6 +2921,8 @@ def _usage_immutable_from_record(usage: UsageOutboxRecord) -> dict[str, object]:
         "billing_account_id": usage.billing_account_id,
         "run_id": usage.run_id,
         "worker_id": usage.worker_id,
+        "worker_provider_id": usage.worker_provider_id,
+        "model_id": usage.model_id,
         "accelerator_milliseconds": usage.accelerator_milliseconds,
         "accelerator_count": usage.accelerator_count,
         "measurement_started_at": usage.measurement_started_at,
@@ -2927,6 +3068,8 @@ def _validate_index_payload(
             "billing_account_id",
             "run_id",
             "worker_id",
+            "worker_provider_id",
+            "model_id",
             "measurement_started_at",
             "measurement_ended_at",
             "usage_id",
@@ -3810,6 +3953,18 @@ def _safe_code(value: object, field: str) -> str:
     if len(text) > 128 or not _SAFE_CODE_RE.fullmatch(text):
         raise BillingReconciliationError(f"{field} is invalid")
     return text
+
+
+def _worker_provider_id(value: object, field: str) -> str:
+    if not isinstance(value, str) or _WORKER_PROVIDER_ID_RE.fullmatch(value) is None:
+        raise BillingReconciliationError(f"{field} is invalid")
+    return value
+
+
+def _model_identifier(value: object, field: str) -> str:
+    if not isinstance(value, str) or _MODEL_IDENTIFIER_RE.fullmatch(value) is None:
+        raise BillingReconciliationError(f"{field} is invalid")
+    return value
 
 
 def _optional_safe_code(value: object, field: str) -> str | None:

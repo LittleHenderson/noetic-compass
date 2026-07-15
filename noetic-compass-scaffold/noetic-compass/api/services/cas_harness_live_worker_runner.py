@@ -77,6 +77,9 @@ async def run_live_worker_audit(
     on_request_started: Callable[[], None] | None = None,
     on_provider_completed: Callable[[dict[str, Any]], None] | None = None,
     on_evidence_persisted: Callable[[str], None] | None = None,
+    billing_measurement_context: Mapping[str, str] | None = None,
+    on_billing_measurement_receipt: Callable[[Mapping[str, object]], None]
+    | None = None,
 ) -> LiveAuditRunnerResult:
     """Run the hosted open-weight worker once and persist the Evidence Packet."""
     target = atlas_worker_target()
@@ -115,6 +118,10 @@ async def run_live_worker_audit(
     }
     if on_request_started is not None:
         on_request_started()
+    if billing_measurement_context is not None:
+        request_payload["billing_measurement_context"] = dict(
+            billing_measurement_context
+        )
     if provider_idempotency_key:
         worker_dump = await _post_worker_dump(
             worker_base,
@@ -124,6 +131,18 @@ async def run_live_worker_audit(
     else:
         # Preserve the exact legacy call contract while account mode is dark.
         worker_dump = await _post_worker_dump(worker_base, request_payload)
+    if billing_measurement_context is not None:
+        receipt = worker_dump.get("billing_measurement_receipt")
+        if not isinstance(receipt, Mapping) or on_billing_measurement_receipt is None:
+            raise LiveAuditRunnerUnavailable(
+                "trusted live-worker usage receipt was not returned"
+            )
+        try:
+            on_billing_measurement_receipt(receipt)
+        except Exception as exc:
+            raise LiveAuditRunnerUnavailable(
+                "trusted live-worker usage receipt was rejected"
+            ) from exc
     packet = _packet_from_worker_dump(
         audit_id=audit_id,
         model_id=model_id,

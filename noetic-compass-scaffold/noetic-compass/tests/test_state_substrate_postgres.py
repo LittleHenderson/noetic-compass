@@ -480,6 +480,8 @@ def test_billing_reconciliation_races_fail_closed_across_independent_connections
                 billing_account_id="account-billing-race",
                 run_id="run-independent-race",
                 worker_id="worker-independent-race",
+                worker_provider_id="runpod-independent-race",
+                model_id="EleutherAI/pythia-160m",
                 accelerator_milliseconds=1_000,
                 accelerator_count=1,
                 measurement_started_at=measurement_start.isoformat(),

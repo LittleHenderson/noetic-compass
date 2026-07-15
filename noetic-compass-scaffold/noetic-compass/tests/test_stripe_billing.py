@@ -89,9 +89,29 @@ class _StripeClient:
             }
         )
         self.subscriptions = _AsyncRetrieve(self.subscription)
+        meter_response = {
+            "object": "billing.meter_event",
+            "created": 1_900_000_060,
+            "event_name": "cas.accelerator_milliseconds",
+            "identifier": "cas_usage_abc123",
+            "livemode": False,
+            "payload": {
+                "stripe_customer_id": "cus_bound",
+                "value": "900000",
+            },
+            "timestamp": 1_900_000_000,
+        }
+        meter_body = json.dumps(meter_response, separators=(",", ":"))
+        meter_event = _StripeObject(meter_response)
+        meter_event.last_response = SimpleNamespace(
+            body=meter_body,
+            request_id="req_MeterEvent",
+        )
+        self.meter_events = _AsyncCreate(meter_event)
         self.v1 = SimpleNamespace(
             checkout=SimpleNamespace(sessions=self.checkout),
             billing_portal=SimpleNamespace(sessions=self.portal),
+            billing=SimpleNamespace(meter_events=self.meter_events),
             subscriptions=self.subscriptions,
         )
         self.construct_calls: list[tuple[bytes, str, str]] = []
@@ -152,6 +172,8 @@ async def test_checkout_parameters_are_server_derived_and_idempotent(provider) -
     assert client.secret_key == "sk_test_private"
     assert client.stripe_version == STRIPE_API_VERSION
     assert client.max_network_retries == 2
+    assert provider.meter_event_contract.usage_price_id == "price_usage"
+    assert provider.meter_event_contract.livemode is False
     assert params["line_items"] == [
         {"price": "price_pro", "quantity": 1},
         {"price": "price_usage"},
@@ -351,6 +373,167 @@ async def test_real_sdk_subscription_object_is_converted_after_refresh() -> None
         "metadata": {"cas_tenant_id": "tenant-a"},
     }
     assert snapshot.provider_request_id is None
+
+
+@pytest.mark.asyncio
+async def test_meter_event_is_one_exact_no_retry_idempotent_provider_attempt(provider) -> None:
+    request = {
+        "event_name": "cas.accelerator_milliseconds",
+        "payload": {
+            "stripe_customer_id": "cus_bound",
+            "value": "900000",
+        },
+        "identifier": "cas_usage_abc123",
+        "timestamp": 1_900_000_000,
+    }
+    receipt = await provider.submit_meter_event(request=request)
+    client = _StripeClient.instances[0]
+
+    assert client.meter_events.calls == [
+        (
+            request,
+            {
+                "idempotency_key": "cas-meter:cas_usage_abc123",
+                "max_network_retries": 0,
+            },
+        )
+    ]
+    event = client.meter_events.response
+    body = event.last_response.body.encode()
+    assert receipt.response == event.payload
+    assert event.to_dict_calls == [(True, True)]
+    assert receipt.provider_request_id == "req_MeterEvent"
+    assert receipt.response_sha256 == hashlib.sha256(body).hexdigest()
+
+
+@pytest.mark.asyncio
+async def test_real_sdk_meter_event_object_is_converted_offline_without_network() -> None:
+    import stripe
+    from stripe._stripe_response import StripeResponse
+
+    provider = _real_sdk_provider(webhook_secret="whsec_meter_event_regression")
+    response_payload = {
+        "object": "billing.meter_event",
+        "created": 1_900_000_060,
+        "event_name": "cas.accelerator_milliseconds",
+        "identifier": "cas_usage_abc123",
+        "livemode": False,
+        "payload": {
+            "stripe_customer_id": "cus_bound",
+            "value": "900000",
+        },
+        "timestamp": 1_900_000_000,
+    }
+    response_body = json.dumps(response_payload, separators=(",", ":"))
+    event = stripe.billing.MeterEvent.construct_from(
+        response_payload,
+        "sk_test_offline",
+        stripe_version=STRIPE_API_VERSION,
+        last_response=StripeResponse(
+            response_body,
+            200,
+            {"request-id": "req_RealMeterEvent"},
+        ),
+    )
+    meter_events = _AsyncCreate(event)
+    provider._client = SimpleNamespace(
+        v1=SimpleNamespace(
+            billing=SimpleNamespace(meter_events=meter_events)
+        )
+    )
+    request = {
+        "event_name": "cas.accelerator_milliseconds",
+        "payload": {
+            "stripe_customer_id": "cus_bound",
+            "value": "900000",
+        },
+        "identifier": "cas_usage_abc123",
+        "timestamp": 1_900_000_000,
+    }
+
+    receipt = await provider.submit_meter_event(request=request)
+
+    assert not hasattr(event, "to_dict_recursive")
+    assert meter_events.calls == [
+        (
+            request,
+            {
+                "idempotency_key": "cas-meter:cas_usage_abc123",
+                "max_network_retries": 0,
+            },
+        )
+    ]
+    assert receipt.response == response_payload
+    assert receipt.provider_request_id == "req_RealMeterEvent"
+    assert receipt.response_sha256 == hashlib.sha256(
+        response_body.encode("utf-8")
+    ).hexdigest()
+
+
+@pytest.mark.asyncio
+async def test_meter_event_provider_refuses_invalid_request_without_network(provider) -> None:
+    with pytest.raises(StripeBillingProviderError, match="request schema"):
+        await provider.submit_meter_event(
+            request={
+                "event_name": "cas.accelerator_milliseconds",
+                "payload": {
+                    "stripe_customer_id": "cus_bound",
+                    "value": "900000",
+                },
+                "identifier": "cas_usage_abc123",
+                "timestamp": 1_900_000_000,
+                "unexpected": "field",
+            }
+        )
+    assert _StripeClient.instances[0].meter_events.calls == []
+
+
+@pytest.mark.asyncio
+async def test_meter_event_raw_receipt_mismatch_fails_uncertain_without_retry(provider) -> None:
+    client = _StripeClient.instances[0]
+    response = client.meter_events.response
+    response.last_response.body = json.dumps(
+        {**response.payload, "identifier": "cas_usage_other"}
+    )
+    request = {
+        "event_name": "cas.accelerator_milliseconds",
+        "payload": {
+            "stripe_customer_id": "cus_bound",
+            "value": "900000",
+        },
+        "identifier": "cas_usage_abc123",
+        "timestamp": 1_900_000_000,
+    }
+    with pytest.raises(StripeBillingProviderError, match="contradicts"):
+        await provider.submit_meter_event(request=request)
+    assert len(client.meter_events.calls) == 1
+
+
+@pytest.mark.asyncio
+async def test_meter_event_provider_exception_is_not_retried(provider) -> None:
+    class _FailingCreate:
+        def __init__(self):
+            self.calls = 0
+
+        async def create_async(self, *_args, **_kwargs):
+            self.calls += 1
+            raise TimeoutError("ambiguous timeout")
+
+    failing = _FailingCreate()
+    _StripeClient.instances[0].v1.billing.meter_events = failing
+    with pytest.raises(StripeBillingProviderError, match="outcome is uncertain"):
+        await provider.submit_meter_event(
+            request={
+                "event_name": "cas.accelerator_milliseconds",
+                "payload": {
+                    "stripe_customer_id": "cus_bound",
+                    "value": "900000",
+                },
+                "identifier": "cas_usage_abc123",
+                "timestamp": 1_900_000_000,
+            }
+        )
+    assert failing.calls == 1
 
 
 def test_incomplete_configuration_fails_loud_without_importing_sdk() -> None:

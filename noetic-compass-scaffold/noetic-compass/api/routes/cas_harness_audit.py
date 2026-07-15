@@ -2407,6 +2407,60 @@ async def run_audit_session(
                         "on_provider_completed": on_provider_completed,
                         "on_evidence_persisted": on_evidence_persisted,
                     }
+                if settings.billing_worker_measurement_enabled:
+                    reconciliation_store = getattr(
+                        request.app.state, "billing_reconciliation_store", None
+                    )
+                    if (
+                        reconciliation_store is None
+                        or provider_claim is None
+                        or not storage_scope
+                        or not run_attempt_id
+                    ):
+                        raise HTTPException(
+                            status_code=503,
+                            detail="Trusted live-worker billing measurement is unavailable.",
+                        )
+                    from api.services.live_worker_billing_receipts import (
+                        LiveWorkerMeasurementReceiptVerifier,
+                    )
+
+                    receipt_verifier = LiveWorkerMeasurementReceiptVerifier(
+                        hmac_key=settings.billing_worker_receipt_hmac_key,
+                        key_id=settings.billing_worker_receipt_key_id,
+                        issuer=settings.billing_worker_receipt_issuer,
+                        provider_id=settings.billing_worker_provider_id,
+                        worker_id=settings.billing_worker_id,
+                        max_age_seconds=settings.billing_worker_receipt_max_age_seconds,
+                    )
+                    billing_context = {
+                        "tenant_id": storage_scope["tenant_id"],
+                        "billing_account_id": storage_scope["account_id"],
+                        "run_id": run_attempt_id,
+                    }
+
+                    def record_billing_measurement(
+                        receipt: Mapping[str, object],
+                    ) -> None:
+                        verified = receipt_verifier.verify(
+                            receipt,
+                            expected_tenant_id=billing_context["tenant_id"],
+                            expected_billing_account_id=billing_context[
+                                "billing_account_id"
+                            ],
+                            expected_run_id=billing_context["run_id"],
+                            expected_model_id=existing.model_id or "",
+                        )
+                        reconciliation_store.record_fleet_measurement(
+                            verified.measurement
+                        )
+
+                    runner_kwargs.update(
+                        {
+                            "billing_measurement_context": billing_context,
+                            "on_billing_measurement_receipt": record_billing_measurement,
+                        }
+                    )
                 with _audit_evidence_storage_context(request):
                     live_result = await run_live_worker_audit(
                         audit_id=audit_id,

@@ -18,7 +18,13 @@ from typing import AsyncIterator
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
 
-from ..runtime import get_manifest, stream_trace
+from ..runtime import get_loaded_model, get_manifest, stream_trace
+from ..runtime.billing_receipt import (
+    WorkerBillingReceiptConfig,
+    WorkerBillingReceiptError,
+    begin_cuda_measurement,
+    finish_cuda_measurement_receipt,
+)
 from ..schemas.requests import CreateSessionRequest, CreateSessionResponse
 
 router = APIRouter()
@@ -79,7 +85,35 @@ async def dump_session(req: CreateSessionRequest) -> dict:
         get_manifest(req.model_id)
     except ValueError as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
+    measurement_clock = None
+    receipt_config = None
+    if req.billing_measurement_context is not None:
+        try:
+            receipt_config = WorkerBillingReceiptConfig.from_environment()
+            measurement_clock = begin_cuda_measurement(get_loaded_model())
+        except WorkerBillingReceiptError as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="Trusted CUDA usage measurement is unavailable.",
+            ) from exc
+
     events: list[dict] = []
     async for event in stream_trace(req):
         events.append(json.loads(event.model_dump_json()))
-    return {"events": events}
+    response: dict[str, object] = {"events": events}
+    if measurement_clock is not None and receipt_config is not None:
+        try:
+            response["billing_measurement_receipt"] = (
+                finish_cuda_measurement_receipt(
+                    measurement_clock,
+                    loaded_model=get_loaded_model(),
+                    context=req.billing_measurement_context.model_dump(),
+                    config=receipt_config,
+                )
+            )
+        except WorkerBillingReceiptError as exc:
+            raise HTTPException(
+                status_code=503,
+                detail="Trusted CUDA usage measurement is unavailable.",
+            ) from exc
+    return response

@@ -4,7 +4,22 @@ from __future__ import annotations
 
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
+
+
+class BillingMeasurementContext(BaseModel):
+    """Server-derived identity the worker must bind into its signed receipt.
+
+    The browser never supplies this object.  It is sent only by the API proxy
+    after account admission and is useful only when the worker also owns the
+    separately configured receipt-signing key.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    tenant_id: str = Field(..., pattern=r"^[A-Za-z0-9._:-]{1,160}$")
+    billing_account_id: str = Field(..., pattern=r"^[A-Za-z0-9._:-]{1,160}$")
+    run_id: str = Field(..., pattern=r"^[A-Za-z0-9._:-]{1,160}$")
 
 
 class AblationTargetRequest(BaseModel):
@@ -80,6 +95,14 @@ class CreateSessionRequest(BaseModel):
     method_config: dict[str, Any] = Field(
         default_factory=dict,
         description="Live testing-module controls forwarded by Atlas Viewer.",
+    )
+    billing_measurement_context: BillingMeasurementContext | None = Field(
+        default=None,
+        description=(
+            "Private API-to-worker billing identity. When present, the worker "
+            "must be running real CUDA weights and return one signed measured-usage "
+            "receipt; absent preserves the non-billing worker contract."
+        ),
     )
 
 

@@ -25,6 +25,7 @@ _BILLING_REFERENCE_CREDENTIAL_FIELDS = (
     "billing_admin_secret",
     "stripe_secret_key",
     "stripe_webhook_secret",
+    "billing_worker_receipt_hmac_key",
     "openai_api_key",
     "anthropic_api_key",
     "google_api_key",
@@ -472,6 +473,97 @@ class Settings(BaseSettings):
             "BILLING_CUSTOMER_RECEIPT_ALLOWED_HOSTS",
         ),
     )
+    # Trusted worker metering and provider dispatch are separate effect gates.
+    # Both remain dark by default. Measurement requires a dedicated HMAC key
+    # shared only with the real CUDA worker. Dispatch additionally starts the
+    # lifespan-owned Stripe Meter Event loop; merely populating any secret slot
+    # never enables either capability.
+    billing_worker_measurement_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_BILLING_WORKER_MEASUREMENT_ENABLED",
+            "BILLING_WORKER_MEASUREMENT_ENABLED",
+        ),
+    )
+    billing_worker_receipt_hmac_key: str = Field(
+        default="",
+        exclude=True,
+        repr=False,
+        validation_alias=AliasChoices(
+            "NC_BILLING_WORKER_RECEIPT_HMAC_KEY",
+            "BILLING_WORKER_RECEIPT_HMAC_KEY",
+        ),
+    )
+    billing_worker_receipt_key_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_WORKER_RECEIPT_KEY_ID",
+            "BILLING_WORKER_RECEIPT_KEY_ID",
+        ),
+    )
+    billing_worker_receipt_issuer: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_WORKER_RECEIPT_ISSUER",
+            "BILLING_WORKER_RECEIPT_ISSUER",
+        ),
+    )
+    billing_worker_provider_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_WORKER_PROVIDER_ID",
+            "BILLING_WORKER_PROVIDER_ID",
+        ),
+    )
+    billing_worker_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_BILLING_WORKER_ID", "BILLING_WORKER_ID"
+        ),
+    )
+    billing_worker_receipt_max_age_seconds: int = Field(
+        default=300,
+        ge=30,
+        le=3600,
+        validation_alias=AliasChoices(
+            "NC_BILLING_WORKER_RECEIPT_MAX_AGE_SECONDS",
+            "BILLING_WORKER_RECEIPT_MAX_AGE_SECONDS",
+        ),
+    )
+    billing_usage_dispatch_enabled: bool = Field(
+        default=False,
+        validation_alias=AliasChoices(
+            "NC_BILLING_USAGE_DISPATCH_ENABLED",
+            "BILLING_USAGE_DISPATCH_ENABLED",
+        ),
+    )
+    billing_usage_dispatch_interval_seconds: float = Field(
+        default=5.0,
+        ge=0.1,
+        le=300.0,
+        validation_alias=AliasChoices(
+            "NC_BILLING_USAGE_DISPATCH_INTERVAL_SECONDS",
+            "BILLING_USAGE_DISPATCH_INTERVAL_SECONDS",
+        ),
+    )
+    billing_usage_dispatch_batch_size: int = Field(
+        default=25,
+        ge=1,
+        le=100,
+        validation_alias=AliasChoices(
+            "NC_BILLING_USAGE_DISPATCH_BATCH_SIZE",
+            "BILLING_USAGE_DISPATCH_BATCH_SIZE",
+        ),
+    )
+    billing_usage_dispatch_preflight_retries: int = Field(
+        default=3,
+        ge=1,
+        le=5,
+        validation_alias=AliasChoices(
+            "NC_BILLING_USAGE_DISPATCH_PREFLIGHT_RETRIES",
+            "BILLING_USAGE_DISPATCH_PREFLIGHT_RETRIES",
+        ),
+    )
 
     # Rate limiting
     rate_limit_rpm: int = 60
@@ -782,6 +874,70 @@ class Settings(BaseSettings):
                     "NC_BILLING_CUSTOMER_RECEIPT_ALLOWED_HOSTS must contain "
                     "one or more comma-separated exact HTTPS host names."
                 ) from exc
+        if self.billing_worker_measurement_enabled:
+            if not self.billing_reconciliation_enabled:
+                raise RuntimeError(
+                    "NC_BILLING_WORKER_MEASUREMENT_ENABLED=true requires "
+                    "NC_BILLING_RECONCILIATION_ENABLED=true."
+                )
+            from api.services.live_worker_billing_receipts import (
+                LiveWorkerBillingReceiptError,
+                LiveWorkerMeasurementReceiptVerifier,
+            )
+
+            try:
+                LiveWorkerMeasurementReceiptVerifier(
+                    hmac_key=self.billing_worker_receipt_hmac_key,
+                    key_id=self.billing_worker_receipt_key_id,
+                    issuer=self.billing_worker_receipt_issuer,
+                    provider_id=self.billing_worker_provider_id,
+                    worker_id=self.billing_worker_id,
+                    max_age_seconds=self.billing_worker_receipt_max_age_seconds,
+                )
+            except LiveWorkerBillingReceiptError as exc:
+                raise RuntimeError(
+                    "Trusted worker billing receipt configuration is invalid: "
+                    + str(exc)
+                ) from exc
+            receipt_key = self.billing_worker_receipt_hmac_key
+            other_receipt_authorities: set[str] = set()
+            for field_name in _BILLING_REFERENCE_CREDENTIAL_FIELDS:
+                if field_name == "billing_worker_receipt_hmac_key":
+                    continue
+                value = str(getattr(self, field_name, "") or "")
+                if field_name == "atlas_live_invite_codes":
+                    other_receipt_authorities.update(
+                        code.strip() for code in value.split(",") if code.strip()
+                    )
+                elif value:
+                    other_receipt_authorities.add(value)
+            other_receipt_authorities.add(
+                self.billing_provider_reference_hash_key
+            )
+            database_url = str(self.database_url or "").strip()
+            if database_url:
+                try:
+                    database_password = urlsplit(database_url).password
+                except ValueError:
+                    database_password = None
+                if database_password:
+                    other_receipt_authorities.add(unquote(database_password))
+            if receipt_key in other_receipt_authorities:
+                raise RuntimeError(
+                    "NC_BILLING_WORKER_RECEIPT_HMAC_KEY must be dedicated; "
+                    "do not reuse another server authority or credential secret."
+                )
+        if self.billing_usage_dispatch_enabled:
+            if not self.billing_worker_measurement_enabled:
+                raise RuntimeError(
+                    "NC_BILLING_USAGE_DISPATCH_ENABLED=true requires "
+                    "NC_BILLING_WORKER_MEASUREMENT_ENABLED=true."
+                )
+            if self.billing_provider.strip().lower() != "stripe":
+                raise RuntimeError(
+                    "NC_BILLING_USAGE_DISPATCH_ENABLED=true requires "
+                    "NC_BILLING_PROVIDER=stripe."
+                )
         if self.fleet_service_auth_enabled and not self.accounts_enabled:
             raise RuntimeError(
                 "NC_FLEET_SERVICE_AUTH_ENABLED=true requires NC_ACCOUNTS_ENABLED=true."
