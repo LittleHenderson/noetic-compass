@@ -28,6 +28,9 @@ from api.services import customer_production_acceptance_authority as authority_s
 from api.services.production.state_substrate.memory_store import (  # noqa: E402
     InMemoryStateStore,
 )
+from tests.acceptance_attestation_test_support import (  # noqa: E402
+    materialize_human_attestations,
+)
 from scripts import verify_customer_production_acceptance as verifier  # noqa: E402
 from scripts import build_alert_delivery_gate_payload as alert_builder  # noqa: E402
 from scripts import collect_customer_readiness_facts as readiness_collector  # noqa: E402
@@ -160,6 +163,17 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             payload["artifact_uri"] = endpoint
             payload["artifact_sha256"] = _digest(f"live-authority-{gate}")
             backend = InMemoryStateStore()
+            attestations = (
+                materialize_human_attestations(backend, payload)
+                if gate
+                in {
+                    "legal_publication_approval",
+                    "claim_honesty",
+                    "incident_tabletop",
+                    "release_decision",
+                }
+                else None
+            )
             authorization_store = AcceptancePublicationAuthorizationStore(
                 backend, primary_tenant_id="primary"
             )
@@ -181,6 +195,7 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             )
             store = CustomerProductionAcceptanceAuthorityStore(
                 backend,
+                human_attestation_store=attestations,
                 publication_authorization_store=authorization_store,
             )
             published = store.publish(

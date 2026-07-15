@@ -51,6 +51,9 @@ from api.services.production.state_substrate.memory_store import InMemoryStateSt
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.services.production.worm_writes import RetentionPolicy
 from api.services.sessions import SessionStore
+from tests.acceptance_attestation_test_support import (
+    materialize_human_attestations,
+)
 import scripts.publish_customer_production_acceptance_authority as publisher
 
 
@@ -540,19 +543,21 @@ class _NoWriteImmutableBackend:
 
 def test_authority_publish_requires_local_exact_record_before_any_write() -> None:
     now = NOW
+    backend = InMemoryStateStore()
     evidence = _legal_evidence(now)
+    attestations = materialize_human_attestations(backend, evidence)
     digest = hashlib.sha256(
         canonicalize_acceptance_evidence(
             "legal_publication_approval", evidence, now=now
         )
     ).hexdigest()
-    backend = InMemoryStateStore()
     authorizations = AcceptancePublicationAuthorizationStore(
         backend, primary_tenant_id="primary"
     )
     worm = _NoWriteImmutableBackend()
     authority = CustomerProductionAcceptanceAuthorityStore(
         backend,
+        human_attestation_store=attestations,
         publication_authorization_store=authorizations,
         immutable_backend=worm,
         retention_policy=RetentionPolicy(mode="GOVERNANCE", retention_days=31),
@@ -591,19 +596,22 @@ def test_authority_publish_requires_local_exact_record_before_any_write() -> Non
 
 def test_authority_publish_binds_exact_record_but_deactivation_stays_available() -> None:
     now = NOW
+    backend = InMemoryStateStore()
     evidence = _legal_evidence(now)
+    attestations = materialize_human_attestations(backend, evidence)
     digest = hashlib.sha256(
         canonicalize_acceptance_evidence(
             "legal_publication_approval", evidence, now=now
         )
     ).hexdigest()
-    backend = InMemoryStateStore()
     authorizations = AcceptancePublicationAuthorizationStore(
         backend, primary_tenant_id="primary"
     )
     authorization = _create(authorizations, evidence_sha256=digest)
     authority = CustomerProductionAcceptanceAuthorityStore(
-        backend, publication_authorization_store=authorizations
+        backend,
+        human_attestation_store=attestations,
+        publication_authorization_store=authorizations,
     )
 
     published = authority.publish(
@@ -920,7 +928,9 @@ def test_publisher_rejects_dummy_reference_before_opening_production(
 def test_publisher_locally_asserts_exact_record_before_publish(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
+    backend = InMemoryStateStore()
     evidence = _legal_evidence(NOW)
+    attestations = materialize_human_attestations(backend, evidence)
     path = tmp_path / "legal.json"
     path.write_text(json.dumps(evidence), encoding="utf-8")
     digest = hashlib.sha256(
@@ -928,13 +938,14 @@ def test_publisher_locally_asserts_exact_record_before_publish(
             "legal_publication_approval", evidence, now=NOW
         )
     ).hexdigest()
-    backend = InMemoryStateStore()
     authorization_store = AcceptancePublicationAuthorizationStore(
         backend, primary_tenant_id="primary"
     )
     authorization = _create(authorization_store, evidence_sha256=digest)
     base = CustomerProductionAcceptanceAuthorityStore(
-        backend, publication_authorization_store=authorization_store
+        backend,
+        human_attestation_store=attestations,
+        publication_authorization_store=authorization_store,
     )
     calls: list[str] = []
 
