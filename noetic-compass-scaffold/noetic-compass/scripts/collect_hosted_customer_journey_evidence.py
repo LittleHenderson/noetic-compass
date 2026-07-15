@@ -78,6 +78,59 @@ class JourneyFailure(RuntimeError):
         super().__init__(f"{gate}: {detail}")
 
 
+def _assert_journey_timestamp_order(
+    *,
+    audit_completed: datetime,
+    packet_downloaded: datetime,
+    share_created: datetime,
+    share_expires: datetime,
+    share_fetched: datetime,
+    isolation_verified: datetime,
+    share_revoked: datetime,
+    observed: datetime,
+) -> None:
+    """Validate causal order across collector and API timestamp precisions.
+
+    Collector timestamps retain microseconds, while the share service
+    deliberately stores creation and revocation at whole-second precision.
+    Keep each same-clock sequence strict, then allow only the existing bounded
+    clock-skew window at cross-clock/precision boundaries.
+    """
+
+    local_times = (
+        packet_downloaded,
+        share_fetched,
+        isolation_verified,
+        observed,
+    )
+    if any(earlier > later for earlier, later in zip(local_times, local_times[1:])):
+        raise JourneyFailure("timestamp-order", "journey timestamps are not monotonic")
+    if share_created > share_revoked or share_expires <= share_created:
+        raise JourneyFailure("timestamp-order", "journey timestamps are not monotonic")
+
+    causal_times = (
+        audit_completed,
+        packet_downloaded,
+        share_created,
+        share_fetched,
+        isolation_verified,
+        share_revoked,
+        observed,
+    )
+    if any(
+        earlier > later + MAX_CLOCK_SKEW
+        for earlier, later in zip(causal_times, causal_times[1:])
+    ):
+        raise JourneyFailure("timestamp-order", "journey timestamps are not monotonic")
+    critical_times = causal_times[1:-1]
+    if any(
+        value < audit_completed - MAX_CLOCK_SKEW
+        or value > observed + MAX_CLOCK_SKEW
+        for value in critical_times
+    ):
+        raise JourneyFailure("timestamp-order", "journey timestamps are not monotonic")
+
+
 @dataclass(frozen=True)
 class HttpResult:
     status: int
@@ -978,19 +1031,16 @@ class JourneyCollector:
             )
         observed_dt = self._now()
 
-        critical_times = (
-            packet_downloaded_dt,
-            share_created_dt,
-            share_fetched_dt,
-            isolation_verified_dt,
-            revoked_at_dt,
+        _assert_journey_timestamp_order(
+            audit_completed=audit_completed_dt,
+            packet_downloaded=packet_downloaded_dt,
+            share_created=share_created_dt,
+            share_expires=share_expires_dt,
+            share_fetched=share_fetched_dt,
+            isolation_verified=isolation_verified_dt,
+            share_revoked=revoked_at_dt,
+            observed=observed_dt,
         )
-        if (
-            any(value < audit_completed_dt or value > observed_dt for value in critical_times)
-            or not share_created_dt <= share_fetched_dt <= revoked_at_dt
-            or share_expires_dt <= share_created_dt
-        ):
-            raise JourneyFailure("timestamp-order", "journey timestamps are not monotonic")
 
         share_created = _stamp(share_created_dt)
         share_fetched = _stamp(share_fetched_dt)
