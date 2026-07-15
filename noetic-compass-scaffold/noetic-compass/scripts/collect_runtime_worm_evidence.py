@@ -40,17 +40,20 @@ from api.services.customer_production_acceptance_authority import (
 
 try:
     from .object_lock_smoke_validation import (
+        MAX_CLOCK_SKEW,
         ObjectLockReceiptError,
         validate_object_lock_receipt,
     )
 except ImportError:
     try:
         from scripts.object_lock_smoke_validation import (
+            MAX_CLOCK_SKEW,
             ObjectLockReceiptError,
             validate_object_lock_receipt,
         )
     except ImportError:  # Direct ``python scripts/...`` execution.
         from object_lock_smoke_validation import (
+            MAX_CLOCK_SKEW,
             ObjectLockReceiptError,
             validate_object_lock_receipt,
         )
@@ -598,7 +601,10 @@ class RuntimeWormCollector:
         )
         written_at = lock["requested_at"]
         verified_at = _parse_timestamp(receipt.get("verified_at"), "worm")
-        if verified_at < written_at or verified_at > evaluated_at:
+        if (
+            verified_at < written_at
+            or verified_at > evaluated_at + MAX_CLOCK_SKEW
+        ):
             raise RuntimeWormFailure("worm", "WORM verification timestamp is invalid")
 
         render_final_result, render_final, final_deployed_at = (
@@ -609,7 +615,11 @@ class RuntimeWormCollector:
                 "render-deployment", "deployment identity changed during collection"
             )
 
-        observed = self._now()
+        # A verified issuer timestamp may be a few seconds ahead of the
+        # collector host within the bounded skew accepted above.  Preserve the
+        # authoritative proof time as the evidence observation boundary rather
+        # than emitting a document whose proof appears to be in its own future.
+        observed = max(self._now(), verified_at)
         probe_id = f"worm-probe-{self.nonce}"
         object_key_sha = _subject_digest(
             "s3-object-key", f"{lock['bucket']}/{lock['key']}"

@@ -17,6 +17,10 @@ OBJECT_LOCK_VERIFICATION_SCHEMA = "cas_harness_object_lock_verification.v1"
 OBJECT_LOCK_RETAIN_UNTIL_RULE = "observed_not_before_requested"
 MIN_CONFIGURED_RETENTION_DAYS = 31
 MIN_REMAINING_RETENTION = timedelta(days=30)
+# The receipt issuer and an operator collector run on different hosts.  Permit
+# only a small, explicit amount of positive clock skew while retaining the
+# strict ordering inside the issuer-signed receipt itself.
+MAX_CLOCK_SKEW = timedelta(seconds=5)
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
@@ -97,7 +101,10 @@ def validate_object_lock_receipt(
     expected_retain_until = _timestamp(expected.get("retain_until"), "expected retain_until")
     observed_retain_until = _timestamp(observed.get("retain_until"), "observed retain_until")
 
-    if verified_at > receipt_evaluated_at or receipt_evaluated_at > now:
+    if (
+        verified_at > receipt_evaluated_at
+        or receipt_evaluated_at > now + MAX_CLOCK_SKEW
+    ):
         raise ObjectLockReceiptError("structured Object Lock receipt timestamps are invalid")
     if (
         expected.get("bucket") != bucket

@@ -51,6 +51,10 @@ RENDER_API_KEY_ENV = "RENDER_API_KEY"
 MAX_RESPONSE_BYTES = 2_000_000
 MIN_CONFIGURED_RETENTION_DAYS = 31
 MIN_REMAINING_RETENTION = timedelta(days=30)
+# The production receipt issuer and Render Shell collector are separate hosts.
+# This bound covers ordinary NTP skew without weakening receipt-internal order,
+# exact-version binding, or the 30-day remaining-retention requirement.
+MAX_CLOCK_SKEW = timedelta(seconds=5)
 SHARE_LIFETIME = timedelta(minutes=15)
 OBJECT_LOCK_VERIFICATION_SCHEMA = "cas_harness_object_lock_verification.v1"
 OBJECT_LOCK_RETAIN_UNTIL_RULE = "observed_not_before_requested"
@@ -522,7 +526,7 @@ class JourneyCollector:
         requested_at = _parse_timestamp(anchor.get("retention_requested_at"), "worm")
         retain_until = _parse_timestamp(anchor.get("object_lock_retain_until"), "worm")
         now = self._now()
-        if requested_at > now:
+        if requested_at > now + MAX_CLOCK_SKEW:
             raise JourneyFailure("worm", "Object Lock request timestamp is in the future")
         if retain_until < requested_at + timedelta(days=retention_days):
             raise JourneyFailure("worm", "Object Lock receipt is shorter than policy")
@@ -612,7 +616,7 @@ class JourneyCollector:
             or observed.get("reread_verified") is not True
             or observed_retain_until < expected_retain_until
             or verified_at > evaluated_at
-            or evaluated_at > now
+            or evaluated_at > now + MAX_CLOCK_SKEW
         ):
             raise JourneyFailure("worm", "structured Object Lock receipt is cross-wired")
         return {

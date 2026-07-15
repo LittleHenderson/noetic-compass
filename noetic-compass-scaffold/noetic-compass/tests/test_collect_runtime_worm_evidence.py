@@ -129,7 +129,10 @@ def _anchor(*, retention_days: int = 31) -> dict[str, Any]:
 
 
 def _receipt(
-    *, retention_days: int = 31, observed_version_id: str = VERSION_ID
+    *,
+    retention_days: int = 31,
+    observed_version_id: str = VERSION_ID,
+    receipt_timestamp: str = "2026-07-14T20:05:00Z",
 ) -> dict[str, Any]:
     retain_until = (
         "2026-08-14T20:01:00Z"
@@ -139,8 +142,8 @@ def _receipt(
     return {
         "schema_version": "cas_harness_object_lock_verification.v1",
         "verified": True,
-        "verified_at": "2026-07-14T20:05:00Z",
-        "evaluated_at": "2026-07-14T20:05:00Z",
+        "verified_at": receipt_timestamp,
+        "evaluated_at": receipt_timestamp,
         "retain_until_rule": "observed_not_before_requested",
         "expected": {
             "bucket": BUCKET,
@@ -215,7 +218,10 @@ def _packet(
 
 
 def _verification(
-    *, retention_days: int = 31, observed_version_id: str = VERSION_ID
+    *,
+    retention_days: int = 31,
+    observed_version_id: str = VERSION_ID,
+    receipt_timestamp: str = "2026-07-14T20:05:00Z",
 ) -> dict[str, Any]:
     return {
         "trace_id": TRACE_ID,
@@ -229,6 +235,7 @@ def _verification(
                 "object_lock_verification": _receipt(
                     retention_days=retention_days,
                     observed_version_id=observed_version_id,
+                    receipt_timestamp=receipt_timestamp,
                 ),
             }
         ],
@@ -247,6 +254,7 @@ class FakeTransport:
         render_commit: str = MASTER_SHA,
         packet_prompt: str = EXPECTED_PROMPT,
         packet_commit: str = MASTER_SHA,
+        receipt_timestamp: str = "2026-07-14T20:05:00Z",
     ) -> None:
         self.model_id = model_id
         self.worm_status = worm_status
@@ -256,6 +264,7 @@ class FakeTransport:
         self.render_commit = render_commit
         self.packet_prompt = packet_prompt
         self.packet_commit = packet_commit
+        self.receipt_timestamp = receipt_timestamp
         self.calls: list[dict[str, Any]] = []
 
     def __call__(
@@ -348,6 +357,7 @@ class FakeTransport:
                 _verification(
                     retention_days=self.retention_days,
                     observed_version_id=self.observed_version_id,
+                    receipt_timestamp=self.receipt_timestamp,
                 ),
             )
         raise AssertionError(f"unexpected call: {method} {path}")
@@ -514,6 +524,24 @@ def test_rejects_configured_retention_below_31_days() -> None:
         match="configured retention_days must be >= 31",
     ):
         _collector(FakeTransport(retention_days=30)).collect()
+
+
+def test_accepts_bounded_positive_receipt_issuer_clock_skew() -> None:
+    evidence, _artifact = _collector(
+        FakeTransport(receipt_timestamp="2026-07-14T20:10:05Z")
+    ).collect()
+
+    assert evidence["worm"]["verified_at_utc"] == "2026-07-14T20:10:05Z"
+
+
+def test_rejects_receipt_issuer_clock_skew_beyond_bound() -> None:
+    with pytest.raises(
+        collector_module.RuntimeWormFailure,
+        match="structured Object Lock receipt timestamps are invalid",
+    ):
+        _collector(
+            FakeTransport(receipt_timestamp="2026-07-14T20:10:06Z")
+        ).collect()
 
 
 def test_rejects_stale_deployment_before_network_or_worm_write() -> None:

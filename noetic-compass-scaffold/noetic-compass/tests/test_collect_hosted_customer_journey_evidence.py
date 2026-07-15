@@ -743,6 +743,31 @@ def test_structured_worm_receipt_cross_wire_is_rejected() -> None:
         )
 
 
+def test_structured_worm_receipt_accepts_bounded_positive_clock_skew() -> None:
+    verification = _verification()
+    receipt = verification["checks"][0]["object_lock_verification"]
+    receipt["verified_at"] = "2026-07-14T20:10:05Z"
+    receipt["evaluated_at"] = "2026-07-14T20:10:05Z"
+
+    result = _bound_collector()._assert_worm(
+        _packet(), verification, trace_id=TRACE_ID
+    )
+
+    assert result["object_lock_verification_sha256"]
+
+
+def test_structured_worm_receipt_rejects_clock_skew_beyond_bound() -> None:
+    verification = _verification()
+    receipt = verification["checks"][0]["object_lock_verification"]
+    receipt["verified_at"] = "2026-07-14T20:10:06Z"
+    receipt["evaluated_at"] = "2026-07-14T20:10:06Z"
+
+    with pytest.raises(collector_module.JourneyFailure, match="cross-wired"):
+        _bound_collector()._assert_worm(
+            _packet(), verification, trace_id=TRACE_ID
+        )
+
+
 def test_timestamp_order_and_runtime_identity_fail_closed() -> None:
     with pytest.raises(collector_module.JourneyFailure, match="revocation time"):
         _collect(revoked_at="2026-07-14T19:59:00Z")
