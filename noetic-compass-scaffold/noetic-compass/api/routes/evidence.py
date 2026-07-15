@@ -1202,32 +1202,46 @@ def _packet_from_trace(trace_id: str, trace: dict[str, Any]) -> EvidencePacket:
     )
 
 
-def build_packet_for_trace(trace_id: str) -> EvidencePacket:
-    """Top-level packet builder. Returns the dev fixture for the dev id; for
-    any other id loads the on-disk trace artifact; raises ``FileNotFoundError``
-    if neither path applies.
+def load_packet_payload_for_trace(trace_id: str) -> dict[str, Any]:
+    """Load a validated packet without changing an immutable stored mapping.
+
+    Tenant packet objects and packet-shaped trace artifacts are already the
+    canonical Evidence Packet payload.  Validate those mappings, but return
+    them unchanged so authenticated downloads remain byte-semantically equal
+    to read-only share downloads.  Generated legacy/dev packets have no stored
+    mapping to preserve, so their normal model projection remains appropriate.
     """
     if trace_id == _DEV_FIXTURE_TRACE_ID:
         try:
-            return _dev_fixture_packet()
+            return _dev_fixture_packet().model_dump()
         except Exception as exc:
-            return _dev_fixture_fallback_packet(f"{type(exc).__name__}: {exc}")
+            return _dev_fixture_fallback_packet(
+                f"{type(exc).__name__}: {exc}"
+            ).model_dump()
     if trace_id == _CAS_HARNESS_REFERENCE_TRACE_ID:
-        return _cas_harness_reference_packet()
+        return _cas_harness_reference_packet().model_dump()
     try:
         from api.services.cas_harness_merged_evidence_packets import (
             load_merged_fleet_evidence_packet_payload,
         )
 
-        return EvidencePacket.model_validate(load_merged_fleet_evidence_packet_payload(trace_id))
+        payload = load_merged_fleet_evidence_packet_payload(trace_id)
+        EvidencePacket.model_validate(payload)
+        return payload
     except FileNotFoundError:
         pass
     trace = _load_trace_artifact(trace_id)
     if trace is None:
         raise FileNotFoundError(trace_id)
     if _is_evidence_packet_payload(trace):
-        return EvidencePacket.model_validate(trace)
-    return _packet_from_trace(trace_id, trace)
+        EvidencePacket.model_validate(trace)
+        return trace
+    return _packet_from_trace(trace_id, trace).model_dump()
+
+
+def build_packet_for_trace(trace_id: str) -> EvidencePacket:
+    """Build a model view of the validated packet for internal consumers."""
+    return EvidencePacket.model_validate(load_packet_payload_for_trace(trace_id))
 
 
 def _is_evidence_packet_payload(payload: dict[str, Any]) -> bool:
@@ -1436,7 +1450,7 @@ async def get_evidence_packet(trace_id: str) -> dict[str, Any]:
     except FileNotFoundError:
         pass
     try:
-        return build_packet_for_trace(trace_id).model_dump()
+        return load_packet_payload_for_trace(trace_id)
     except FileNotFoundError:
         raise HTTPException(status_code=404, detail="trace_id not found")
 

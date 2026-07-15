@@ -183,6 +183,7 @@ class FakeJourneyTransport:
         run_transient_once: bool = False,
         revoked_at: str = "2026-07-14T20:10:00Z",
         revoke_status: int = 200,
+        anonymous_packet_changes: Mapping[str, Any] | None = None,
         render_payloads: tuple[Mapping[str, Any], Mapping[str, Any]] | None = None,
         render_statuses: tuple[int, int] = (200, 200),
     ) -> None:
@@ -198,6 +199,7 @@ class FakeJourneyTransport:
         self.run_attempts = 0
         self.revoked_at = revoked_at
         self.revoke_status = revoke_status
+        self.anonymous_packet_changes = anonymous_packet_changes or {}
         self.render_payloads = render_payloads or (_render_deploy(), _render_deploy())
         self.render_statuses = render_statuses
         self.render_read_count = 0
@@ -339,7 +341,7 @@ class FakeJourneyTransport:
             assert headers == {"X-Evidence-Share-Token": SHARE_TOKEN}
             if self.revoked:
                 return _result(404, {"detail": "Shared Evidence Packet is unavailable."})
-            return _result(200, self.packet)
+            return _result(200, {**self.packet, **self.anonymous_packet_changes})
         if path == "/evidence/shares/shr_0123456789abcdef01234567":
             if headers == {"Authorization": f"Bearer {TOKEN_B}"}:
                 return _result(self.foreign_status, {"detail": "not found"})
@@ -494,6 +496,32 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
 def test_fails_closed_without_verified_worm_anchor() -> None:
     with pytest.raises(collector_module.JourneyFailure, match="Object Lock anchor"):
         _collect(anchored=False)
+
+
+def test_fails_closed_when_owner_and_anonymous_packet_mappings_differ() -> None:
+    transport = FakeJourneyTransport(
+        anonymous_packet_changes={"cas_expression": None}
+    )
+    collector = collector_module.JourneyCollector(
+        base_url=collector_module.PRODUCTION_API_ORIGIN,
+        platform_secret=PLATFORM_SECRET,
+        billing_secret=BILLING_SECRET,
+        master_head_sha=MASTER_SHA,
+        deploy_id=DEPLOY_ID,
+        transport=transport,
+        clock=lambda: FIXED_NOW,
+        nonce="0123456789abcdef01234567",
+        runtime_environment=RUNTIME_ENV,
+    )
+
+    with pytest.raises(
+        collector_module.JourneyFailure,
+        match="share-fetch: anonymous packet differs from owner packet",
+    ):
+        collector.collect()
+
+    assert transport.revoked is True
+    assert sum(call["path"] == "/auth/logout" for call in transport.calls) == 1
 
 
 def test_fails_closed_when_foreign_tenant_can_enumerate() -> None:
