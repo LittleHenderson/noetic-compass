@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 2,
+  "schemaVersion": 3,
   "repository": "LittleHenderson/noetic-compass",
   "requiredAggregateChecks": [
     "cas-ci-gate",
@@ -46,6 +46,25 @@
           "branch": "release/accounts-canary-20260713",
           "region": "oregon",
           "autoDeployTrigger": "checksPass"
+        }
+      ]
+    }
+  ],
+  "pendingBlueprints": [
+    {
+      "environment": "customer-production",
+      "path": "render.customer.yaml",
+      "sourceBranch": "master",
+      "autoSyncRequired": false,
+      "identityLockRequired": true,
+      "services": [
+        {
+          "name": "cas-harness-customer-api",
+          "type": "web_service",
+          "branch": "master",
+          "region": "oregon",
+          "autoDeployTrigger": "checksPass",
+          "healthCheckPath": "/health"
         }
       ]
     }

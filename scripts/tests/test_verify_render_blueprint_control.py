@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import io
 import json
+import re
 import threading
 import time
 import unittest
@@ -15,8 +16,15 @@ from unittest.mock import patch
 
 from scripts.verify_render_blueprint_control import (
     AUXILIARY_BLUEPRINT_PATHS,
+    CUSTOMER_BLUEPRINT_PATH,
+    CUSTOMER_DATABASE_NAME,
+    CUSTOMER_GENERATED_SECRET_ENV_KEYS,
+    CUSTOMER_INJECTED_PROVIDER_ENV_KEYS,
+    CUSTOMER_LITERAL_ENV_VALUES,
+    CUSTOMER_SERVICE_NAME,
     ControlError,
     EXPECTED_BLUEPRINTS,
+    EXPECTED_PENDING_BLUEPRINTS,
     LIVE_REQUEST_ATTEMPTS,
     LIVE_REQUEST_TIMEOUT_SECONDS,
     LIVE_RETRY_BACKOFF_SECONDS,
@@ -24,11 +32,13 @@ from scripts.verify_render_blueprint_control import (
     PRODUCTION_PROVIDER_DASHBOARD_ENV_KEYS,
     _read_json,
     assert_no_secret_literals,
+    assert_customer_blueprint_contract,
     assert_production_provider_env_declarations,
     assert_receipt_attestation_key_declaration,
     parse_service_env_blocks,
     parse_service_blocks,
     validate_auxiliary_blueprint_yaml,
+    validate_customer_blueprint_yaml,
     validate_live,
     validate_live_payload,
     validate_live_service_payload,
@@ -232,6 +242,136 @@ services:
             assert_production_provider_env_declarations(
                 misplaced, "test.yaml", service_name
             )
+
+
+class CustomerBlueprintPolicyTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.path = REPO_ROOT / CUSTOMER_BLUEPRINT_PATH
+        self.text = self.path.read_text(encoding="utf-8")
+
+    def test_checked_in_customer_blueprint_passes_exact_contract(self) -> None:
+        validate_customer_blueprint_yaml(REPO_ROOT)
+        assert_customer_blueprint_contract(self.text, CUSTOMER_BLUEPRINT_PATH)
+
+        env_vars = parse_service_env_blocks(self.text, CUSTOMER_SERVICE_NAME)
+        generated = {
+            item["key"]
+            for item in env_vars
+            if item.get("generateValue") == "true"
+        }
+        injected = {
+            item["key"] for item in env_vars if item.get("sync") == "false"
+        }
+        self.assertEqual(generated, CUSTOMER_GENERATED_SECRET_ENV_KEYS)
+        self.assertEqual(injected, CUSTOMER_INJECTED_PROVIDER_ENV_KEYS)
+        self.assertEqual(
+            {item["key"] for item in env_vars},
+            set(CUSTOMER_LITERAL_ENV_VALUES)
+            | CUSTOMER_GENERATED_SECRET_ENV_KEYS
+            | CUSTOMER_INJECTED_PROVIDER_ENV_KEYS
+            | {"NC_DATABASE_URL"},
+        )
+
+    def test_customer_effect_gates_fail_closed_on_drift(self) -> None:
+        cases = (
+            (
+                '              - key: NC_BILLING_PROVIDER\n                value: "null"',
+                '              - key: NC_BILLING_PROVIDER\n                value: stripe',
+                "NC_BILLING_PROVIDER",
+            ),
+            (
+                '              - key: NC_BILLING_RECONCILIATION_ENABLED\n                value: "false"',
+                '              - key: NC_BILLING_RECONCILIATION_ENABLED\n                value: "true"',
+                "NC_BILLING_RECONCILIATION_ENABLED",
+            ),
+            (
+                '              - key: NC_BILLING_WORKER_MEASUREMENT_ENABLED\n                value: "false"',
+                '              - key: NC_BILLING_WORKER_MEASUREMENT_ENABLED\n                value: "true"',
+                "NC_BILLING_WORKER_MEASUREMENT_ENABLED",
+            ),
+            (
+                '              - key: NC_BILLING_USAGE_DISPATCH_ENABLED\n                value: "false"',
+                '              - key: NC_BILLING_USAGE_DISPATCH_ENABLED\n                value: "true"',
+                "NC_BILLING_USAGE_DISPATCH_ENABLED",
+            ),
+            (
+                '              - key: NC_FLEET_SERVICE_AUTH_ENABLED\n                value: "false"',
+                '              - key: NC_FLEET_SERVICE_AUTH_ENABLED\n                value: "true"',
+                "NC_FLEET_SERVICE_AUTH_ENABLED",
+            ),
+        )
+        for original, replacement, error in cases:
+            with self.subTest(error=error):
+                self.assertIn(original, self.text)
+                unsafe = self.text.replace(original, replacement, 1)
+                with self.assertRaisesRegex(ControlError, error):
+                    assert_customer_blueprint_contract(unsafe, "test.yaml")
+
+    def test_every_customer_literal_fails_closed_on_drift(self) -> None:
+        for key in sorted(CUSTOMER_LITERAL_ENV_VALUES):
+            with self.subTest(key=key):
+                pattern = (
+                    rf"(?m)^(\s*- key: {re.escape(key)}\s*\n"
+                    r"\s+value:)\s*[^\r\n]+$"
+                )
+                drifted, replacements = re.subn(
+                    pattern,
+                    r"\1 __hostile_drift__",
+                    self.text,
+                    count=1,
+                )
+                self.assertEqual(replacements, 1)
+                with self.assertRaisesRegex(ControlError, re.escape(key)):
+                    assert_customer_blueprint_contract(drifted, "test.yaml")
+
+    def test_customer_env_inventory_rejects_missing_and_extra_keys(self) -> None:
+        missing = self.text.replace(
+            '              - key: NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX\n'
+            '                value: "5"\n',
+            "",
+            1,
+        )
+        with self.assertRaisesRegex(ControlError, "env key inventory drifted"):
+            assert_customer_blueprint_contract(missing, "test.yaml")
+
+        extra = self.text.replace(
+            "              - key: NC_CORS_ORIGIN_REGEX",
+            "              - key: NC_UNREVIEWED_CUSTOMER_SWITCH\n"
+            "                value: enabled\n"
+            "              - key: NC_CORS_ORIGIN_REGEX",
+            1,
+        )
+        with self.assertRaisesRegex(ControlError, "env key inventory drifted"):
+            assert_customer_blueprint_contract(extra, "test.yaml")
+
+    def test_customer_cannot_share_database_or_expand_sync_false_inputs(self) -> None:
+        shared_database = self.text.replace(
+            "                  name: cas-harness-customer-postgres\n"
+            "                  property: connectionString",
+            "                  name: noetic-compass-postgres\n"
+            "                  property: connectionString",
+            1,
+        )
+        with self.assertRaisesRegex(ControlError, CUSTOMER_DATABASE_NAME):
+            assert_customer_blueprint_contract(shared_database, "test.yaml")
+
+        injected_billing = self.text.replace(
+            "              - key: NC_CORS_ORIGIN_REGEX",
+            "              - key: NC_STRIPE_SECRET_KEY\n"
+            "                sync: false\n"
+            "              - key: NC_CORS_ORIGIN_REGEX",
+            1,
+        )
+        with self.assertRaisesRegex(ControlError, "env key inventory drifted"):
+            assert_customer_blueprint_contract(injected_billing, "test.yaml")
+
+    def test_pending_identity_contract_contains_no_render_ids(self) -> None:
+        self.assertEqual(len(EXPECTED_PENDING_BLUEPRINTS), 1)
+        pending = EXPECTED_PENDING_BLUEPRINTS[0]
+        self.assertEqual(pending["path"], CUSTOMER_BLUEPRINT_PATH)
+        self.assertTrue(pending["identityLockRequired"])
+        self.assertNotIn("id", pending)
+        self.assertNotIn("id", pending["services"][0])
 
 
 class LiveBlueprintPolicyTests(unittest.TestCase):
@@ -617,6 +757,7 @@ class RepositoryIntegrationTests(unittest.TestCase):
     def test_checked_in_control_passes_offline(self) -> None:
         manifest = validate_offline(REPO_ROOT)
         self.assertEqual(len(manifest["blueprints"]), 2)
+        self.assertEqual(manifest["pendingBlueprints"], EXPECTED_PENDING_BLUEPRINTS)
         self.assertEqual(len(AUXILIARY_BLUEPRINT_PATHS), 1)
 
 

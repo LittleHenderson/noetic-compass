@@ -67,10 +67,106 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
         ],
     },
 ]
+EXPECTED_PENDING_BLUEPRINTS: list[dict[str, Any]] = [
+    {
+        "environment": "customer-production",
+        "path": "render.customer.yaml",
+        "sourceBranch": "master",
+        "autoSyncRequired": False,
+        "identityLockRequired": True,
+        "services": [
+            {
+                "name": "cas-harness-customer-api",
+                "type": "web_service",
+                "branch": "master",
+                "region": "oregon",
+                "autoDeployTrigger": "checksPass",
+                "healthCheckPath": "/health",
+            }
+        ],
+    }
+]
 AUXILIARY_BLUEPRINT_PATHS = (
     "noetic-compass-scaffold/noetic-compass/infra/render.yaml",
 )
-
+CUSTOMER_BLUEPRINT_PATH = "render.customer.yaml"
+CUSTOMER_SERVICE_NAME = "cas-harness-customer-api"
+CUSTOMER_DATABASE_NAME = "cas-harness-customer-postgres"
+CUSTOMER_GENERATED_SECRET_ENV_KEYS = frozenset(
+    {
+        "NC_JWT_SECRET",
+        "NC_ACCOUNT_CREDENTIAL_PEPPER",
+        "NC_ACCOUNT_BOOTSTRAP_SECRET",
+        "NC_PLATFORM_TENANT_PROVISIONING_SECRET",
+        "NC_BILLING_ADMIN_SECRET",
+        "NC_EVIDENCE_SHARE_TOKEN_PEPPER",
+        "NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY",
+    }
+)
+CUSTOMER_INJECTED_PROVIDER_ENV_KEYS = frozenset(
+    {
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "ATLAS_LIVE_WORKER_URL",
+        "ATLAS_LIVE_WORKER_TOKEN",
+    }
+)
+CUSTOMER_LITERAL_ENV_VALUES = {
+    "NC_DEBUG": "false",
+    "NC_DEPLOYMENT_PROFILE": "customer-production",
+    "NC_JWT_ALGORITHM": "HS256",
+    "NC_JWT_EXPIRY_MINUTES": "60",
+    "NC_STATE_LEDGER_ENABLED": "true",
+    "NC_STATE_LEDGER_READ_AUTHORITY": "true",
+    "NC_ACCOUNTS_ENABLED": "true",
+    "NC_ACCOUNTS_BOOTSTRAP_TENANT_ID": "primary",
+    "NC_ACCOUNTS_ALLOW_SINGLE_HOST_SQLITE": "false",
+    "NC_QUOTAS_ENABLED": "true",
+    "NC_BILLING_ENTITLEMENTS_ENABLED": "true",
+    "NC_BILLING_PROVIDER": "null",
+    "NC_BILLING_RECONCILIATION_ENABLED": "false",
+    "NC_BILLING_WORKER_MEASUREMENT_ENABLED": "false",
+    "NC_BILLING_USAGE_DISPATCH_ENABLED": "false",
+    "NC_FLEET_SERVICE_AUTH_ENABLED": "false",
+    "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED": "true",
+    "CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR": (
+        "/var/customer-support/evidence_packets"
+    ),
+    "NC_EVIDENCE_SHARES_ENABLED": "true",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_MODE": "s3",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET": "cas-harness-runpod-92754088",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX": (
+        "cas-harness/customer-production/evidence-anchors"
+    ),
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION": "us-west-2",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_OBJECT_LOCK_MODE": "GOVERNANCE",
+    "CAS_HARNESS_EVIDENCE_ANCHOR_S3_RETENTION_DAYS": "31",
+    "NC_CRM_PROVIDER": "null",
+    "NC_CRM_LEAD_STORE_PATH": "/var/customer-support/leads.jsonl",
+    "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS": "OPEN",
+    "NC_CRM_PRIVACY_NOTICE_VERSION": "draft-2026-07-14",
+    "NC_CRM_PRIVACY_NOTICE_CONTENT_SHA256": (
+        "e94df1615dde4122836b47a74e32d45c79b63c1603db3bd1aee01f62d7ddae28"
+    ),
+    "NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX": "5",
+    "NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS": "3600",
+    "NC_SUPPORT_TICKET_STORE_PATH": (
+        "/var/customer-support/support_tickets.jsonl"
+    ),
+    "NC_SUPPORT_ACK_SLA_SECONDS": "86400",
+    "NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_MAX": "5",
+    "NC_SUPPORT_PUBLIC_TICKET_RATE_LIMIT_WINDOW_SECONDS": "3600",
+    "ATLAS_ALLOWED_ORIGINS": (
+        "https://atlas.noeticcompass.com,"
+        "https://atlas-viewer-app.onrender.com,"
+        "https://cascompass.ai,https://www.cascompass.ai"
+    ),
+    "NC_CORS_ORIGIN_REGEX": "^$",
+    "NC_DEFAULT_LLM_PROVIDER": "mock",
+    "NC_MOCK_LLM": "true",
+    "NC_RATE_LIMIT_TIER": "enterprise",
+    "NC_RATE_LIMIT_RPM": "120",
+}
 _SERVICE_ITEM = re.compile(r"^(?P<indent> *)-\s+type:\s*(?P<value>[^#]+?)\s*(?:#.*)?$")
 _ENV_ITEM = re.compile(r"^(?P<indent> *)-\s+key:\s*(?P<value>[^#]+?)\s*(?:#.*)?$")
 _DIRECT_FIELD = re.compile(
@@ -242,44 +338,18 @@ def parse_service_env_blocks(text: str, service_name: str) -> list[dict[str, str
 
     _require("\t" not in text, "Blueprint YAML must use spaces, not tabs")
     lines = text.splitlines()
-    service_section_starts: list[int] = []
-    for index, line in enumerate(lines):
-        match = _DIRECT_FIELD.match(line)
-        if (
-            match
-            and not match.group("indent")
-            and match.group("key") == "services"
-            and not _scalar(match.group("value") or "")
-        ):
-            service_section_starts.append(index)
-    _require(
-        len(service_section_starts) == 1,
-        "Blueprint must declare exactly one top-level services block",
-    )
-    service_section_start = service_section_starts[0]
-    service_section_end = len(lines)
-    for index in range(service_section_start + 1, len(lines)):
-        line = lines[index]
-        stripped = line.strip()
-        if not stripped or stripped.startswith("#"):
-            continue
-        if len(line) == len(line.lstrip(" ")):
-            service_section_end = index
-            break
-
     service_ranges: list[tuple[int, int, int]] = []
-    for index in range(service_section_start + 1, service_section_end):
-        line = lines[index]
+    for index, line in enumerate(lines):
         match = _SERVICE_ITEM.match(line)
-        if not match or len(match.group("indent")) != 2:
+        if not match:
             continue
         item_indent = len(match.group("indent"))
         fields = {"type": _scalar(match.group("value"))}
         fields.update(_direct_fields(lines, index, item_indent))
         if fields.get("name") != service_name:
             continue
-        end = service_section_end
-        for offset in range(index + 1, service_section_end):
+        end = len(lines)
+        for offset in range(index + 1, len(lines)):
             candidate = lines[offset]
             stripped = candidate.strip()
             if not stripped or stripped.startswith("#"):
@@ -360,7 +430,12 @@ def assert_no_secret_literals(text: str, label: str) -> None:
         )
 
 
-def assert_receipt_attestation_key_declaration(text: str, label: str) -> None:
+def assert_receipt_attestation_key_declaration(
+    text: str,
+    label: str,
+    *,
+    generated: bool = False,
+) -> None:
     """Require one dashboard-managed stable receipt authority per Blueprint."""
 
     matches = [
@@ -373,10 +448,15 @@ def assert_receipt_attestation_key_declaration(text: str, label: str) -> None:
         f"{label}: must declare exactly one {OBJECT_LOCK_RECEIPT_ATTESTATION_ENV}",
     )
     declaration = matches[0]
+    expected = (
+        {"key", "generateValue"} if generated else {"key", "sync"}
+    )
+    field = "generateValue" if generated else "sync"
     _require(
-        set(declaration) == {"key", "sync"}
-        and declaration.get("sync", "").lower() == "false",
-        f"{label}: {OBJECT_LOCK_RECEIPT_ATTESTATION_ENV} must be server-only sync:false",
+        set(declaration) == expected
+        and declaration.get(field, "").lower() == ("true" if generated else "false"),
+        f"{label}: {OBJECT_LOCK_RECEIPT_ATTESTATION_ENV} must be server-only "
+        + ("generateValue:true" if generated else "sync:false"),
     )
 
 
@@ -405,6 +485,169 @@ def assert_production_provider_env_declarations(
         )
 
 
+def assert_customer_blueprint_contract(text: str, label: str) -> None:
+    """Pin the pre-provision customer lane to its fail-closed effect posture."""
+
+    service = parse_service_blocks(text)[0]
+    for field, expected in {
+        "runtime": "docker",
+        "rootDir": "noetic-compass-scaffold/noetic-compass",
+        "dockerfilePath": "./Dockerfile.api",
+        "dockerContext": ".",
+        "plan": "starter",
+        "numInstances": "1",
+    }.items():
+        _require(
+            service.get(field) == expected,
+            f"{label}:{CUSTOMER_SERVICE_NAME} {field} must be {expected}",
+        )
+
+    database_block = re.search(
+        r"(?ms)^        databases:\s*$\n(?P<body>.*?)(?=^        services:\s*$)",
+        text,
+    )
+    _require(
+        database_block is not None,
+        f"{label} must declare one dedicated {CUSTOMER_DATABASE_NAME}",
+    )
+    database_lines = {
+        line.strip()
+        for line in database_block.group("body").splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    }
+    _require(
+        database_lines
+        == {
+            f"- name: {CUSTOMER_DATABASE_NAME}",
+            "plan: basic-256mb",
+            "region: oregon",
+            'postgresMajorVersion: "16"',
+            "databaseName: cas_harness_customer",
+            "user: cas_harness_customer",
+            "diskSizeGB: 1",
+            "storageAutoscalingEnabled: false",
+            "ipAllowList: []",
+        },
+        f"{label} dedicated customer Postgres contract drifted",
+    )
+
+    disk_block = re.search(
+        r"(?ms)^            disk:\s*$\n(?P<body>.*?)(?=^            envVars:\s*$)",
+        text,
+    )
+    _require(
+        disk_block is not None
+        and [
+            line.strip()
+            for line in disk_block.group("body").splitlines()
+            if line.strip() and not line.lstrip().startswith("#")
+        ]
+        == [
+            "name: cas-harness-customer-support",
+            "mountPath: /var/customer-support",
+            "sizeGB: 1",
+        ],
+        f"{label}:{CUSTOMER_SERVICE_NAME} dedicated support disk drifted",
+    )
+
+    env_vars = parse_service_env_blocks(text, CUSTOMER_SERVICE_NAME)
+    by_key: dict[str, dict[str, str]] = {}
+    for declaration in env_vars:
+        key = declaration.get("key", "")
+        _require(bool(key), f"{label}:{CUSTOMER_SERVICE_NAME} has an empty env key")
+        _require(
+            key not in by_key,
+            f"{label}:{CUSTOMER_SERVICE_NAME} declares duplicate env key {key}",
+        )
+        by_key[key] = declaration
+
+    expected_env_keys = (
+        set(CUSTOMER_LITERAL_ENV_VALUES)
+        | CUSTOMER_GENERATED_SECRET_ENV_KEYS
+        | CUSTOMER_INJECTED_PROVIDER_ENV_KEYS
+        | {"NC_DATABASE_URL"}
+    )
+    _require(
+        set(by_key) == expected_env_keys,
+        f"{label}:{CUSTOMER_SERVICE_NAME} env key inventory drifted; "
+        f"missing={sorted(expected_env_keys - set(by_key))}, "
+        f"extra={sorted(set(by_key) - expected_env_keys)}",
+    )
+
+    for key, expected in CUSTOMER_LITERAL_ENV_VALUES.items():
+        _require(
+            by_key.get(key) == {"key": key, "value": expected},
+            f"{label}:{CUSTOMER_SERVICE_NAME} {key} must be literal {expected}",
+        )
+    for key in CUSTOMER_GENERATED_SECRET_ENV_KEYS:
+        _require(
+            by_key.get(key) == {"key": key, "generateValue": "true"},
+            f"{label}:{CUSTOMER_SERVICE_NAME} {key} must be independently generated",
+        )
+    for key in CUSTOMER_INJECTED_PROVIDER_ENV_KEYS:
+        _require(
+            by_key.get(key) == {"key": key, "sync": "false"},
+            f"{label}:{CUSTOMER_SERVICE_NAME} {key} must be provider-injected sync:false",
+        )
+
+    actual_sync_false = {
+        key
+        for key, declaration in by_key.items()
+        if declaration.get("sync", "").lower() == "false"
+    }
+    _require(
+        actual_sync_false == CUSTOMER_INJECTED_PROVIDER_ENV_KEYS,
+        f"{label}:{CUSTOMER_SERVICE_NAME} sync:false is limited to required provider inputs",
+    )
+    actual_generated = {
+        key
+        for key, declaration in by_key.items()
+        if declaration.get("generateValue", "").lower() == "true"
+    }
+    _require(
+        actual_generated == CUSTOMER_GENERATED_SECRET_ENV_KEYS,
+        f"{label}:{CUSTOMER_SERVICE_NAME} generated authority inventory drifted",
+    )
+    database_declaration = by_key.get("NC_DATABASE_URL")
+    _require(
+        database_declaration == {"key": "NC_DATABASE_URL", "fromDatabase": ""},
+        f"{label}:{CUSTOMER_SERVICE_NAME} NC_DATABASE_URL must reference Render Postgres",
+    )
+    database_reference = re.compile(
+        r"(?m)^(?P<indent> *)- key: NC_DATABASE_URL\s*$\n"
+        r"(?P=indent)  fromDatabase:\s*$\n"
+        rf"(?P=indent)    name: {re.escape(CUSTOMER_DATABASE_NAME)}\s*$\n"
+        r"(?P=indent)    property: connectionString\s*$"
+    )
+    _require(
+        database_reference.search(text) is not None,
+        f"{label}:{CUSTOMER_SERVICE_NAME} must reference only {CUSTOMER_DATABASE_NAME}",
+    )
+
+    for required_fragment in (
+        "  - name: cas-harness-customer",
+        "      - name: production",
+        "          isolation: enabled",
+        "          protection: enabled",
+    ):
+        _require(
+            required_fragment in text,
+            f"{label} is missing protected isolated customer environment metadata",
+        )
+
+
+def validate_customer_blueprint_yaml(repo_root: Path) -> None:
+    path = _safe_repo_path(repo_root, CUSTOMER_BLUEPRINT_PATH)
+    _require(path.is_file(), f"Missing customer Blueprint file: {CUSTOMER_BLUEPRINT_PATH}")
+    text = path.read_text(encoding="utf-8")
+    validate_blueprint_yaml(
+        repo_root,
+        EXPECTED_PENDING_BLUEPRINTS[0],
+        receipt_key_generated=True,
+    )
+    assert_customer_blueprint_contract(text, CUSTOMER_BLUEPRINT_PATH)
+
+
 def _load_manifest(repo_root: Path) -> dict[str, Any]:
     path = repo_root / MANIFEST_PATH
     _require(path.is_file(), f"Missing control manifest: {MANIFEST_PATH.as_posix()}")
@@ -424,9 +667,10 @@ def validate_manifest(manifest: Mapping[str, Any]) -> None:
         "requiredAggregateChecks",
         "attestations",
         "blueprints",
+        "pendingBlueprints",
     }
     _require(set(manifest) == expected_keys, "Control manifest has missing or unknown fields")
-    _require(manifest.get("schemaVersion") == 2, "Control manifest schemaVersion must be 2")
+    _require(manifest.get("schemaVersion") == 3, "Control manifest schemaVersion must be 3")
     _require(manifest.get("repository") == REPOSITORY, "Control manifest repository drifted")
     _require(
         manifest.get("requiredAggregateChecks") == REQUIRED_AGGREGATE_CHECKS,
@@ -445,6 +689,10 @@ def validate_manifest(manifest: Mapping[str, Any]) -> None:
         manifest.get("blueprints") == EXPECTED_BLUEPRINTS,
         "Blueprint IDs, paths, source branches, or service mappings drifted",
     )
+    _require(
+        manifest.get("pendingBlueprints") == EXPECTED_PENDING_BLUEPRINTS,
+        "Pending Blueprint paths or pre-provider identity contracts drifted",
+    )
 
 
 def _safe_repo_path(repo_root: Path, relative: str) -> Path:
@@ -456,7 +704,12 @@ def _safe_repo_path(repo_root: Path, relative: str) -> Path:
     return candidate
 
 
-def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> None:
+def validate_blueprint_yaml(
+    repo_root: Path,
+    blueprint: Mapping[str, Any],
+    *,
+    receipt_key_generated: bool = False,
+) -> None:
     relative_path = str(blueprint["path"])
     path = _safe_repo_path(repo_root, relative_path)
     _require(path.is_file(), f"Missing Blueprint file: {relative_path}")
@@ -483,7 +736,11 @@ def validate_blueprint_yaml(repo_root: Path, blueprint: Mapping[str, Any]) -> No
         )
 
     assert_no_secret_literals(text, relative_path)
-    assert_receipt_attestation_key_declaration(text, relative_path)
+    assert_receipt_attestation_key_declaration(
+        text,
+        relative_path,
+        generated=receipt_key_generated,
+    )
     expected_services = blueprint["services"]
     if blueprint.get("environment") == "production":
         _require(
@@ -653,6 +910,7 @@ def validate_offline(repo_root: Path) -> dict[str, Any]:
     validate_manifest(manifest)
     for blueprint in manifest["blueprints"]:
         validate_blueprint_yaml(repo_root, blueprint)
+    validate_customer_blueprint_yaml(repo_root)
     for relative_path in AUXILIARY_BLUEPRINT_PATHS:
         validate_auxiliary_blueprint_yaml(repo_root, relative_path)
     validate_workflow_locations(repo_root)
@@ -940,7 +1198,8 @@ def main(argv: Iterable[str] | None = None) -> int:
         manifest = validate_offline(args.repo_root)
         print(
             "offline Blueprint control PASS: "
-            f"{len(manifest['blueprints'])} Blueprints, "
+            f"{len(manifest['blueprints'])} identity-locked Blueprints, "
+            f"{len(manifest['pendingBlueprints'])} pending identity lock, "
             f"required checks {', '.join(REQUIRED_AGGREGATE_CHECKS)}"
         )
         if args.live:
