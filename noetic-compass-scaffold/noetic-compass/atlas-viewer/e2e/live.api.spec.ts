@@ -1,6 +1,6 @@
 import { expect, test, type APIRequestContext } from '@playwright/test';
 
-const DEFAULT_ATLAS_API_BASE_URL = 'https://noetic-compass-api.onrender.com/atlas';
+const DEFAULT_ATLAS_API_BASE_URL = 'https://cas-harness-customer-api.onrender.com/atlas';
 const REALMODE_PASS = 'REAL_PYTHIA_WEIGHTS_LOADED';
 
 interface RealModeProof {

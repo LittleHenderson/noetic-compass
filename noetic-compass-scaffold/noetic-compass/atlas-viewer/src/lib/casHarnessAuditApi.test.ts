@@ -1327,15 +1327,15 @@ describe('casHarnessAuditApi', () => {
   });
 
   it('derives the audit API URL from the Atlas API env var used by hosted builds', () => {
-    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://noetic-compass-api.onrender.com/atlas');
+    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://cas-harness-customer-api.onrender.com/atlas');
 
     expect(resolveCasHarnessAuditBaseUrl()).toBe(
-      'https://noetic-compass-api.onrender.com/api/cas-harness/audit',
+      'https://cas-harness-customer-api.onrender.com/api/cas-harness/audit',
     );
   });
 
   it('uses the derived hosted audit API URL for target verification', async () => {
-    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://noetic-compass-api.onrender.com/atlas');
+    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://cas-harness-customer-api.onrender.com/atlas');
     const fetchImpl = vi.fn(async () => jsonResponse(targetVerification()));
 
     await verifyCasHarnessModelTarget(
@@ -1344,7 +1344,7 @@ describe('casHarnessAuditApi', () => {
     );
 
     expect(fetchImpl.mock.calls[0][0]).toBe(
-      'https://noetic-compass-api.onrender.com/api/cas-harness/audit/target/verify',
+      'https://cas-harness-customer-api.onrender.com/api/cas-harness/audit/target/verify',
     );
   });
 

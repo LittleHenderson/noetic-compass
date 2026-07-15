@@ -1,7 +1,7 @@
 """Verify deployed CAS Harness Evidence Packet external anchoring.
 
 This script performs a small end-to-end fleet smoke run against a deployed
-noetic-compass-api service:
+customer CAS Harness API service:
 
 1. create a 1-worker distributed audit;
 2. register, lease, and receipt the assigned worker job;
@@ -39,7 +39,7 @@ except ImportError:  # Direct ``python scripts/...`` execution.
     )
 
 
-DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
+DEFAULT_BASE_URL = "https://cas-harness-customer-api.onrender.com"
 TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 
 
@@ -59,7 +59,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--base-url",
         default=DEFAULT_BASE_URL,
-        help=f"Deployed noetic-compass-api base URL. Default: {DEFAULT_BASE_URL}",
+        help=f"Deployed customer CAS Harness API base URL. Default: {DEFAULT_BASE_URL}",
     )
     parser.add_argument(
         "--bearer-token",

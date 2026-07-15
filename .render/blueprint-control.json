@@ -48,25 +48,63 @@
           "autoDeployTrigger": "checksPass"
         }
       ]
-    }
-  ],
-  "pendingBlueprints": [
+    },
     {
       "environment": "customer-production",
+      "id": "exs-d9biqt37uimc73ajh99g",
       "path": "render.customer.yaml",
       "sourceBranch": "master",
       "autoSyncRequired": false,
-      "identityLockRequired": true,
+      "project": {
+        "id": "prj-d9biitbtqb8s73cn3le0",
+        "name": "cas-harness-customer"
+      },
+      "providerEnvironment": {
+        "id": "evm-d9biitbtqb8s73cn3leg",
+        "name": "production",
+        "projectId": "prj-d9biitbtqb8s73cn3le0",
+        "databasesIds": [
+          "dpg-d9biitbtqb8s73cn3mgg-a"
+        ],
+        "serviceIds": [
+          "srv-d9bijbjtqb8s73cn4n20"
+        ],
+        "protectedStatus": "protected",
+        "networkIsolationEnabled": true
+      },
+      "databases": [
+        {
+          "id": "dpg-d9biitbtqb8s73cn3mgg-a",
+          "name": "cas-harness-customer-postgres",
+          "databaseName": "cas_harness_customer",
+          "databaseUser": "cas_harness_customer",
+          "plan": "basic_256mb",
+          "region": "oregon",
+          "version": "16",
+          "diskSizeGB": 1,
+          "diskAutoscalingEnabled": false,
+          "ipAllowList": []
+        }
+      ],
       "services": [
         {
+          "id": "srv-d9bijbjtqb8s73cn4n20",
           "name": "cas-harness-customer-api",
           "type": "web_service",
           "branch": "master",
           "region": "oregon",
           "autoDeployTrigger": "checksPass",
-          "healthCheckPath": "/health"
+          "healthCheckPath": "/health",
+          "url": "https://cas-harness-customer-api.onrender.com",
+          "disk": {
+            "id": "dsk-d9bijbjtqb8s73cn4o60",
+            "name": "cas-harness-customer-support",
+            "mountPath": "/var/customer-support",
+            "sizeGB": 1
+          }
         }
       ]
     }
-  ]
+  ],
+  "pendingBlueprints": []
 }

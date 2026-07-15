@@ -1,7 +1,7 @@
 (() => {
   'use strict';
 
-  const endpoint = 'https://noetic-compass-api.onrender.com/api/support/public/tickets';
+  const endpoint = 'https://cas-harness-customer-api.onrender.com/api/support/public/tickets';
   const form = document.getElementById('support-form');
   const status = document.getElementById('support-status');
   if (!(form instanceof HTMLFormElement) || !(status instanceof HTMLElement)) return;

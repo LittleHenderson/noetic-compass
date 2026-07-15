@@ -36,7 +36,7 @@ except ImportError:  # Direct ``python scripts/...`` execution.
     )
 
 
-DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
+DEFAULT_BASE_URL = "https://cas-harness-customer-api.onrender.com"
 MODEL_ID = "EleutherAI/pythia-160m"
 REALMODE_PASS = "REAL_PYTHIA_WEIGHTS_LOADED"
 WORKER_TOKEN_HEADER = "X-Atlas-Worker-Token"
@@ -234,7 +234,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--base-url",
         default=DEFAULT_BASE_URL,
-        help=f"Deployed noetic-compass-api base URL. Default: {DEFAULT_BASE_URL}",
+        help=f"Deployed customer CAS Harness API base URL. Default: {DEFAULT_BASE_URL}",
     )
     parser.add_argument(
         "--bearer-token",

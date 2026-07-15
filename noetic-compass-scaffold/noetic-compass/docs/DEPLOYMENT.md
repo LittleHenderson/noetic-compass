@@ -188,17 +188,20 @@ railway domain add api.noetic-compass.com
 
 ### Managed production deployment
 
-The existing production Blueprint uses repo-root `render.yaml` from `master`.
-Keep **Blueprint Auto Sync set to No** in Render. A push must not apply
+Render has two permanent public API lanes. Repository-root `render.yaml` owns
+the accounts-off legacy API used by the Vercel dashboard. The separate
+`render.customer.yaml` Blueprint owns the customer API, dedicated Postgres,
+and support disk. Do not point either Blueprint at the other's resources.
+Keep **Blueprint Auto Sync set to No** for both. A push must not apply
 infrastructure changes by itself. After `cas-ci-gate` and
 `cas-postgres-live-gate` pass for the exact Blueprint source SHA, follow
 [`docs/runbooks/render_blueprint_manual_sync.md`](runbooks/render_blueprint_manual_sync.md)
 and perform a manual Blueprint sync.
 
-The API service itself tracks `master` with `autoDeployTrigger: checksPass`.
-The live production service is a paid `starter` Web Service in Render's Oregon
-region with a 1 GB persistent disk; it is not a free service. Provider keys and
-other credentials remain dashboard-managed and must never be committed.
+Both API services track `master` with `autoDeployTrigger: checksPass`. They are
+paid `starter` Web Services in Render's Oregon region with separate persistent
+disks. Provider keys and other credentials remain dashboard-managed and must
+never be committed.
 
 For a suspected credential exposure, hook leak, unauthorized provider action,
 or Evidence Packet integrity concern, declare an incident and follow
@@ -209,22 +212,30 @@ recovery playbooks for RunPod, Render, AWS, GitHub, and Vercel.
 ### Services Created
 | Service | Type / plan | Region | URL |
 |---------|-------------|--------|-----|
-| noetic-compass-api | Web Service (Docker, starter) | Oregon | `https://noetic-compass-api.onrender.com` |
+| noetic-compass-api (legacy accounts-off lane) | Web Service (Docker, starter) | Oregon | `https://noetic-compass-api.onrender.com` |
+| cas-harness-customer-api | Web Service (Docker, starter) | Oregon | `https://cas-harness-customer-api.onrender.com` |
+| cas-harness-customer-postgres | Render Postgres (basic-256mb, 1 GB) | Oregon | Private customer environment only |
+| cas-harness-customer-support | Render persistent disk (1 GB) | Oregon | Customer service mount `/var/customer-support` |
 | cas-harness-api-accounts-canary | Private Service (Docker, starter) | Oregon | Private Render network only |
 | cas-harness-postgres-accounts-canary | Render Postgres (basic-1gb) | Oregon | Private Render network only |
 
-The Vercel dashboard routes `https://noeticcompass.com/api/*` to this Render API with `dashboard/vercel.json`.
+The Vercel dashboard intentionally routes `https://noeticcompass.com/api/*` to
+the legacy API with `dashboard/vercel.json`; do not change that rewrite during
+the Atlas/customer-lane cutover.
 
 ### CAS Harness Evidence Packet S3 Anchoring
 
-Evidence Packets can be written with a local hash-chain receipt or an external S3 anchor receipt. For the alpha production API, use S3 once the bucket and AWS credentials are ready.
+Evidence Packets can be written with a local hash-chain receipt or an external
+S3 anchor receipt. Customer-production evidence uses the isolated customer
+service and customer-only S3 prefix.
 
-Set these on the Render `noetic-compass-api` service:
+The non-secret values below are pinned by `render.customer.yaml`; inject only
+the dedicated customer IAM credentials on `cas-harness-customer-api`:
 
 ```bash
 CAS_HARNESS_EVIDENCE_ANCHOR_MODE=s3
-CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET=<bucket-name-only>
-CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX=cas-harness/evidence-anchors
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_BUCKET=cas-harness-runpod-92754088
+CAS_HARNESS_EVIDENCE_ANCHOR_S3_PREFIX=cas-harness/customer-production/evidence-anchors
 CAS_HARNESS_EVIDENCE_ANCHOR_S3_REGION=us-west-2
 NC_OBJECT_LOCK_RECEIPT_ATTESTATION_KEY=<stable-random-secret-at-least-32-bytes>
 AWS_ACCESS_KEY_ID=<access-key-id>
@@ -294,7 +305,7 @@ After setting the Render env vars and redeploying, run the deployed smoke verifi
 ```bash
 cd noetic-compass-scaffold/noetic-compass
 python scripts/verify_evidence_anchor_deployed.py \
-  --base-url https://noetic-compass-api.onrender.com \
+  --base-url https://cas-harness-customer-api.onrender.com \
   --require-anchor-mode s3
 ```
 
@@ -309,7 +320,7 @@ To require WORM verification in the deployed smoke, use:
 ```bash
 cd noetic-compass-scaffold/noetic-compass
 python scripts/verify_evidence_anchor_deployed.py \
-  --base-url https://noetic-compass-api.onrender.com \
+  --base-url https://cas-harness-customer-api.onrender.com \
   --require-anchor-mode s3 \
   --require-object-lock
 ```

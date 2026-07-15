@@ -18,7 +18,7 @@ from urllib.error import HTTPError
 from urllib.request import Request, urlopen
 
 
-DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
+DEFAULT_BASE_URL = "https://cas-harness-customer-api.onrender.com"
 DEFAULT_WORKERS = 25
 TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 
@@ -42,7 +42,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--base-url",
         default=DEFAULT_BASE_URL,
-        help=f"Deployed noetic-compass-api base URL. Default: {DEFAULT_BASE_URL}",
+        help=f"Deployed customer CAS Harness API base URL. Default: {DEFAULT_BASE_URL}",
     )
     parser.add_argument(
         "--workers",

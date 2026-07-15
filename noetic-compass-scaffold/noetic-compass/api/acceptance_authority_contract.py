@@ -16,7 +16,7 @@ from collections.abc import Mapping
 from types import MappingProxyType
 
 
-PRODUCTION_API_ORIGIN = "https://noetic-compass-api.onrender.com"
+PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
 
 # Canonical gate name -> exact public, read-only path.  Do not replace this with
 # a broad ``/internal/acceptance`` prefix: a future management/write route must

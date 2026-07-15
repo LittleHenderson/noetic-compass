@@ -30,8 +30,8 @@ Production authority is limited to these exact lanes:
 
 - repository `LittleHenderson/noetic-compass`;
 - app origin `https://atlas.noeticcompass.com`;
-- API origin `https://noetic-compass-api.onrender.com`;
-- Render service `srv-d82ph683kofs73d210e0` / `noetic-compass-api` on
+- API origin `https://cas-harness-customer-api.onrender.com`;
+- Render service `srv-d9bijbjtqb8s73cn4n20` / `cas-harness-customer-api` on
   protected `master`;
 - the externally supplied protected `master` SHA and public Render deploy ID;
 - the pinned GitHub repository, workflow, job, run, and GitHub Actions App
@@ -421,7 +421,9 @@ that `/audit-console/index.html` carries the exact audit marker. Re-read
 provider state and fail closed unless it still has exactly the single current
 Rewrite from `/*` to `/index.html` and production
 `VITE_ATLAS_API_BASE_URL` is exactly
-`https://noetic-compass-api.onrender.com/atlas`.
+`https://cas-harness-customer-api.onrender.com/atlas` and
+`VITE_ACCOUNTS_ENABLED` is exactly `true`. Treat those provider values as one
+atomic cutover; changing only one is a failed precondition.
 
 Only then replace the full route list, in order, with `/audit-console` to
 `/audit-console/index.html`, `/audit-console/` to
@@ -486,7 +488,7 @@ decision remain separate evidence.
 The customer-readiness collector is a credential-free, read-only prerequisite
 check for `hosted_customer_journey` and `accounts_billing`. It reads exactly
 three pinned public-production JSON routes (`/health`, `/health/ready`, and
-`/openapi.json`) plus the checked-out `render.yaml` and `api/config.py` source
+`/openapi.json`) plus the checked-out `render.customer.yaml` and `api/config.py` source
 files:
 
 ```powershell
@@ -500,8 +502,10 @@ observation timestamps, and separates deployed route capability from live
 enablement. In particular, a route in OpenAPI proves only that code is
 deployed. It does not prove that Postgres, accounts, quotas, the Evidence
 Packet object store, anonymous shares, billing entitlements, or Stripe are
-enabled or working. Dashboard-managed source slots prove only that a slot is
-declared; they do not reveal whether its live value is configured.
+enabled or working. The source check proves only that `NC_DATABASE_URL` binds
+the dedicated customer Blueprint database and that Stripe slots are absent
+while `NC_BILLING_PROVIDER=null`; neither fact proves live database reachability
+or a configured billing provider.
 
 The collector sends only credential-free `GET` requests and never calls the
 account, audit, Evidence Packet, share, checkout, portal, webhook, or billing

@@ -31,8 +31,13 @@ readback are reviewed.
 
 ## API configuration
 
-Render declares all slots in repository-root `render.yaml`. Values alone are
-inert. Keep these switches dark during setup:
+The legacy lane declares provider slots in repository-root `render.yaml`, but
+those slots do not configure the isolated customer service. The customer
+Blueprint currently pins `NC_BILLING_PROVIDER=null` and deliberately declares
+no Stripe slots. Customer billing therefore remains `OPEN`; a future protected
+`render.customer.yaml` change must add the exact customer-only provider slots
+and pass its own deployment/readback gates before dispatch can be considered.
+Keep these switches dark during setup:
 
 ```text
 NC_BILLING_WORKER_MEASUREMENT_ENABLED=false

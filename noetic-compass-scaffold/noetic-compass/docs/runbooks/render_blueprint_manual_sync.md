@@ -18,10 +18,10 @@ compliance, or customer-readiness `ACCEPT` claim. Preserve any `OPEN` or
 |---|---|---|---|
 | Production | `exs-d82lpanaqgkc7399m1g0` | `render.yaml` / `master` | `noetic-compass-api` / `master` |
 | Account canary | `exs-d9aknt8458ps73ftpkc0` | `render.canary.yaml` / `master` | `cas-harness-api-accounts-canary` / `release/accounts-canary-20260713` |
-| Customer production (identity pending) | `pending` | `render.customer.yaml` / `master` | `cas-harness-customer-api` / `master` |
+| Customer production | `exs-d9biqt37uimc73ajh99g` | `render.customer.yaml` / `master` | `cas-harness-customer-api` / `master` |
 
-The two identity-locked Blueprint Settings pages must show **Auto Sync: No**.
-Both stable service IDs must show their policy-bound branch, service type, repository, region, and
+All three identity-locked Blueprint Settings pages must show **Auto Sync: No**.
+All three stable service IDs must show their policy-bound branch, service type, repository, region, and
 `autoDeployTrigger: checksPass`; production must also keep
 `healthCheckPath: /health`. The required aggregate GitHub checks are:
 
@@ -32,16 +32,38 @@ The account canary intentionally has two commit identities. The Blueprint file
 comes from `master`, while its service source comes from the release branch.
 Never collapse those identities into a single ambiguous `commit_sha` field.
 
-`render.customer.yaml` is repository-controlled but deliberately absent from
-the live-ID list until Render creates it. Its pending manifest entry contains no
-guessed `exs-*` or `srv-*` value. Before first creation, require exact-master CI,
-select this custom Blueprint path, keep Auto Sync disabled, and provide only the
-dedicated-prefix AWS credentials plus the temporary worker URL/token. Review the
-plan for exactly one new web service, one new Postgres database, and one new disk.
-After provider readback, a protected identity-lock commit must move this entry
-from `pendingBlueprints` to `blueprints` with the exact Render-assigned IDs. Until
-that commit passes and the live verifier reads those IDs, the customer lane is
-not under live drift control and customer-production `ACCEPT` remains `OPEN`.
+`render.customer.yaml` is repository-controlled and provider identity is now
+locked to project `prj-d9biitbtqb8s73cn3le0`, protected isolated environment
+`evm-d9biitbtqb8s73cn3leg`, Blueprint `exs-d9biqt37uimc73ajh99g`, web service
+`srv-d9bijbjtqb8s73cn4n20`, database URL identity
+`dpg-d9biitbtqb8s73cn3mgg-a`, and service disk
+`dsk-d9bijbjtqb8s73cn4o60`. The disk must remain named
+`cas-harness-customer-support`, mounted at `/var/customer-support`, and exactly
+1 GB while this bootstrap topology exists. A replacement, re-association, or
+different provider identity requires fresh readback and a protected manifest
+change before it can be trusted.
+
+The live verifier reads the exact Postgres resource without using Render's
+credential-bearing connection-info endpoint. It pins database/user name,
+region, PostgreSQL version, plan, disk size, autoscaling posture, and empty
+public IP allowlist. It also reads the disk independently and binds it back to
+the exact customer service. The project/environment reads require exact project
+linkage and resource membership plus `protectedStatus=protected` and
+`networkIsolationEnabled=true`. The Render UI currently reports **Protected
+environment** and **Block cross-environment connections** enabled; an
+authenticated live-verifier pass is still required for release evidence.
+
+Initial deploy `dep-d9bijbrtqb8s73cn4ot0` used trigger `blueprint_sync`. It is
+live bootstrap lineage only and must **not** satisfy
+`root_ci_protected_deploy`. The first eligible customer deploy must be a later
+exact-master `new_commit` deploy that begins only after all required checks for
+that same SHA pass. Provider identity lock and a live service do not change
+customer-production `ACCEPT`, which remains `OPEN`.
+
+Blueprint re-association sync `exe-d9biqtb7uimc73ajh9l0` is provider lineage
+for the current `master` / `render.customer.yaml` association only. A sync
+event is not a checks-gated service deploy and cannot substitute for the later
+eligible `new_commit` deploy or its exact-SHA CI receipt.
 
 ### Customer source prerequisite
 
@@ -50,7 +72,7 @@ The public support privacy guard is protected on `master` at exact commit
 notice a prerequisite for both CRM and support persistence: while publication
 status is `OPEN`, public intake returns `503` and persists zero PII. The current
 customer-Blueprint source must contain that guard and must not be deployed
-directly. Before first creation, the final `service_source_sha` must pass:
+directly. Before every sync or deploy, the final `service_source_sha` must pass:
 
 ```bash
 git merge-base --is-ancestor \
@@ -232,16 +254,18 @@ Control** on `master`, or run its live verifier in an environment where
 python scripts/verify_render_blueprint_control.py --live
 ```
 
-Before the customer identity-lock commit, the command reports `autoSync=false`
-for both stable Blueprint IDs and a service
-control PASS for `srv-d82ph683kofs73d210e0` and
-`srv-d9akoolaeets73bp3e7g`. It reads each stable service through Render's
+The command reports `autoSync=false` for all three stable Blueprint IDs and a
+service control PASS for `srv-d82ph683kofs73d210e0`,
+`srv-d9akoolaeets73bp3e7g`, and `srv-d9bijbjtqb8s73cn4n20`. It reads each stable service through Render's
 authenticated service endpoint and fails closed on branch, service type,
 repository, region, deploy-trigger, or production health-path drift. It
+also verifies the customer service's exact origin and disk, then independently
+reads the project/environment protection and isolation state, the disk, and
+Postgres identities/configuration. It
 suppresses Render error response bodies and never prints the key or raw API
 payload. Transient transport failures and Render HTTP `408`, `429`, `500`,
 `502`, `503`, and `504` responses receive at most three 30-second attempts
-with 2- and 5-second backoffs; all four live reads share one 210-second
+with 2- and 5-second backoffs; all ten live reads share one 210-second
 deadline. A wall-clock watchdog covers connection, bounded body read, and JSON
 parsing, and a response that completes at or after the shared deadline is
 rejected. Redirects are disabled so the Render Bearer token is never forwarded
@@ -249,9 +273,6 @@ to another origin. Authentication, invalid JSON, non-object payloads, and
 policy drift are never retried. Do not put the API key, a Blueprint sync hook,
 or any dashboard credential in a command argument, evidence file, issue, PR,
 or chat transcript.
-
-After the customer identity-lock commit, the same command must also read the
-new exact customer Blueprint/service IDs and fail closed on their drift.
 
 If the optional GitHub live job says `RENDER_API_KEY` is not configured, the
 offline policy still ran, but live drift has not been checked. Verify **Auto

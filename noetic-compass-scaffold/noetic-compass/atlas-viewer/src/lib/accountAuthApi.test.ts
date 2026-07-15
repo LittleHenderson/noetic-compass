@@ -50,10 +50,10 @@ describe('accountAuthApi', () => {
   });
 
   it('derives account root URLs from the Atlas API configuration', () => {
-    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://noetic-compass-api.onrender.com/atlas');
-    expect(resolveAccountApiBaseUrl()).toBe('https://noetic-compass-api.onrender.com');
+    vi.stubEnv('VITE_ATLAS_API_BASE_URL', 'https://cas-harness-customer-api.onrender.com/atlas');
+    expect(resolveAccountApiBaseUrl()).toBe('https://cas-harness-customer-api.onrender.com');
     expect(resolveAccountCapabilityUrl()).toBe(
-      'https://noetic-compass-api.onrender.com/public/capabilities',
+      'https://cas-harness-customer-api.onrender.com/public/capabilities',
     );
     expect(resolveAccountApiBaseUrl('https://api.example.test/root/')).toBe('https://api.example.test/root');
     expect(resolveAccountCapabilityUrl('/api')).toBe('/api/public/capabilities');

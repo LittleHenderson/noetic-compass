@@ -24,6 +24,7 @@ from scripts.verify_render_blueprint_control import (
     CUSTOMER_SERVICE_NAME,
     ControlError,
     EXPECTED_BLUEPRINTS,
+    EXPECTED_CUSTOMER_BLUEPRINT,
     EXPECTED_PENDING_BLUEPRINTS,
     LIVE_REQUEST_ATTEMPTS,
     LIVE_REQUEST_TIMEOUT_SECONDS,
@@ -40,7 +41,11 @@ from scripts.verify_render_blueprint_control import (
     validate_auxiliary_blueprint_yaml,
     validate_customer_blueprint_yaml,
     validate_live,
+    validate_live_database_payload,
+    validate_live_disk_payload,
+    validate_live_environment_payload,
     validate_live_payload,
+    validate_live_project_payload,
     validate_live_service_payload,
     validate_offline,
     validate_workflow_locations,
@@ -64,19 +69,40 @@ def _running_http_server(handler):  # noqa: ANN001
 
 
 def _blueprint_payload(expected: dict[str, object]) -> dict[str, object]:
-    return {
+    payload = {
         "id": expected["id"],
         "autoSync": False,
         "path": expected["path"],
         "branch": expected["sourceBranch"],
         "repo": "https://github.com/LittleHenderson/noetic-compass",
     }
+    if "databases" in expected:
+        payload["resources"] = [
+            {
+                "id": service["id"],
+                "name": service["name"],
+                "type": service["type"],
+            }
+            for service in expected["services"]
+        ] + [
+            {
+                "id": database["id"],
+                "name": database["name"],
+                "type": "postgres",
+            }
+            for database in expected["databases"]
+        ]
+    return payload
 
 
 def _service_payload(expected: dict[str, object]) -> dict[str, object]:
     details = {"region": expected["region"]}
     if "healthCheckPath" in expected:
         details["healthCheckPath"] = expected["healthCheckPath"]
+    if "disk" in expected:
+        details["disk"] = expected["disk"]
+    if "url" in expected:
+        details["url"] = expected["url"]
     return {
         "id": expected["id"],
         "name": expected["name"],
@@ -86,6 +112,24 @@ def _service_payload(expected: dict[str, object]) -> dict[str, object]:
         "autoDeployTrigger": expected["autoDeployTrigger"],
         "serviceDetails": details,
     }
+
+
+def _database_payload(expected: dict[str, object]) -> dict[str, object]:
+    return dict(expected)
+
+
+def _disk_payload(
+    expected: dict[str, object], *, service_id: str
+) -> dict[str, object]:
+    return {**expected, "serviceId": service_id}
+
+
+def _project_payload(expected: dict[str, object]) -> dict[str, object]:
+    return dict(expected)
+
+
+def _environment_payload(expected: dict[str, object]) -> dict[str, object]:
+    return dict(expected)
 
 
 class BlueprintYamlPolicyTests(unittest.TestCase):
@@ -365,13 +409,58 @@ class CustomerBlueprintPolicyTests(unittest.TestCase):
         with self.assertRaisesRegex(ControlError, "env key inventory drifted"):
             assert_customer_blueprint_contract(injected_billing, "test.yaml")
 
-    def test_pending_identity_contract_contains_no_render_ids(self) -> None:
-        self.assertEqual(len(EXPECTED_PENDING_BLUEPRINTS), 1)
-        pending = EXPECTED_PENDING_BLUEPRINTS[0]
-        self.assertEqual(pending["path"], CUSTOMER_BLUEPRINT_PATH)
-        self.assertTrue(pending["identityLockRequired"])
-        self.assertNotIn("id", pending)
-        self.assertNotIn("id", pending["services"][0])
+    def test_customer_identity_contract_pins_provider_resources(self) -> None:
+        self.assertEqual(EXPECTED_PENDING_BLUEPRINTS, [])
+        customer = EXPECTED_CUSTOMER_BLUEPRINT
+        self.assertEqual(customer["path"], CUSTOMER_BLUEPRINT_PATH)
+        self.assertEqual(customer["id"], "exs-d9biqt37uimc73ajh99g")
+        self.assertEqual(
+            customer["project"],
+            {
+                "id": "prj-d9biitbtqb8s73cn3le0",
+                "name": "cas-harness-customer",
+            },
+        )
+        self.assertEqual(
+            customer["providerEnvironment"],
+            {
+                "id": "evm-d9biitbtqb8s73cn3leg",
+                "name": "production",
+                "projectId": "prj-d9biitbtqb8s73cn3le0",
+                "databasesIds": ["dpg-d9biitbtqb8s73cn3mgg-a"],
+                "serviceIds": ["srv-d9bijbjtqb8s73cn4n20"],
+                "protectedStatus": "protected",
+                "networkIsolationEnabled": True,
+            },
+        )
+        database = customer["databases"][0]
+        self.assertEqual(database["id"], "dpg-d9biitbtqb8s73cn3mgg-a")
+        self.assertEqual(database["name"], "cas-harness-customer-postgres")
+        self.assertEqual(database["databaseName"], "cas_harness_customer")
+        self.assertEqual(database["databaseUser"], "cas_harness_customer")
+        self.assertEqual(database["plan"], "basic_256mb")
+        self.assertEqual(database["region"], "oregon")
+        self.assertEqual(database["version"], "16")
+        self.assertEqual(database["diskSizeGB"], 1)
+        self.assertFalse(database["diskAutoscalingEnabled"])
+        self.assertEqual(database["ipAllowList"], [])
+        self.assertEqual(
+            customer["services"][0]["id"],
+            "srv-d9bijbjtqb8s73cn4n20",
+        )
+        self.assertEqual(
+            customer["services"][0]["url"],
+            "https://cas-harness-customer-api.onrender.com",
+        )
+        self.assertEqual(
+            customer["services"][0]["disk"],
+            {
+                "id": "dsk-d9bijbjtqb8s73cn4o60",
+                "name": "cas-harness-customer-support",
+                "mountPath": "/var/customer-support",
+                "sizeGB": 1,
+            },
+        )
 
 
 class LiveBlueprintPolicyTests(unittest.TestCase):
@@ -386,6 +475,13 @@ class LiveBlueprintPolicyTests(unittest.TestCase):
         self.payload["autoSync"] = True
         with self.assertRaisesRegex(ControlError, "Auto Sync drifted"):
             validate_live_payload(self.payload, self.expected)
+
+    def test_customer_blueprint_resource_identity_drift_fails_closed(self) -> None:
+        expected = EXPECTED_CUSTOMER_BLUEPRINT
+        payload = _blueprint_payload(expected)
+        payload["resources"][1]["id"] = "dpg-wrong"
+        with self.assertRaisesRegex(ControlError, "resource identities drifted"):
+            validate_live_payload(payload, expected)
 
 
 class LiveServicePolicyTests(unittest.TestCase):
@@ -406,6 +502,130 @@ class LiveServicePolicyTests(unittest.TestCase):
             expected,
             environment="accounts-canary",
         )
+
+    def test_expected_customer_service_passes_with_identity_locked_disk(self) -> None:
+        expected = EXPECTED_CUSTOMER_BLUEPRINT["services"][0]
+        validate_live_service_payload(
+            _service_payload(expected),
+            expected,
+            environment="customer-production",
+        )
+
+    def test_customer_disk_identity_drift_fails_closed(self) -> None:
+        expected = EXPECTED_CUSTOMER_BLUEPRINT["services"][0]
+        payload = _service_payload(expected)
+        payload["serviceDetails"]["disk"] = {
+            **expected["disk"],
+            "id": "dsk-unexpected",
+        }
+        with self.assertRaisesRegex(ControlError, "persistent disk identity"):
+            validate_live_service_payload(
+                payload,
+                expected,
+                environment="customer-production",
+            )
+
+
+class LiveCustomerResourcePolicyTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.expected = EXPECTED_BLUEPRINTS[0]["services"][0]
+
+    def test_expected_database_and_disk_pass(self) -> None:
+        customer = EXPECTED_CUSTOMER_BLUEPRINT
+        database = customer["databases"][0]
+        service = customer["services"][0]
+        disk = service["disk"]
+        validate_live_database_payload(
+            _database_payload(database),
+            database,
+            environment="customer-production",
+        )
+        validate_live_disk_payload(
+            _disk_payload(disk, service_id=service["id"]),
+            disk,
+            environment="customer-production",
+            service_id=service["id"],
+        )
+
+    def test_expected_project_and_protected_isolated_environment_pass(self) -> None:
+        customer = EXPECTED_CUSTOMER_BLUEPRINT
+        validate_live_project_payload(
+            _project_payload(customer["project"]),
+            customer["project"],
+            environment="customer-production",
+        )
+        validate_live_environment_payload(
+            _environment_payload(customer["providerEnvironment"]),
+            customer["providerEnvironment"],
+            environment="customer-production",
+        )
+
+    def test_environment_control_or_membership_drift_fails_closed(self) -> None:
+        expected = EXPECTED_CUSTOMER_BLUEPRINT["providerEnvironment"]
+        cases = (
+            ("projectId", "prj-wrong", "projectId drifted"),
+            ("protectedStatus", "unprotected", "protectedStatus drifted"),
+            ("networkIsolationEnabled", False, "networkIsolationEnabled drifted"),
+            ("databasesIds", [], "databasesIds membership drifted"),
+            ("serviceIds", [], "serviceIds membership drifted"),
+        )
+        for key, value, message in cases:
+            with self.subTest(key=key):
+                payload = _environment_payload(expected)
+                payload[key] = value
+                with self.assertRaisesRegex(ControlError, message):
+                    validate_live_environment_payload(
+                        payload,
+                        expected,
+                        environment="customer-production",
+                    )
+
+    def test_database_field_drift_fails_closed(self) -> None:
+        database = EXPECTED_CUSTOMER_BLUEPRINT["databases"][0]
+        for key, value in (
+            ("id", "dpg-wrong"),
+            ("name", "shared-postgres"),
+            ("region", "frankfurt"),
+            ("version", "17"),
+            ("databaseName", "shared"),
+            ("databaseUser", "shared"),
+            ("plan", "basic_1gb"),
+            ("diskSizeGB", 2),
+            ("diskAutoscalingEnabled", True),
+            ("ipAllowList", [{"cidrBlock": "0.0.0.0/0"}]),
+        ):
+            with self.subTest(key=key):
+                payload = _database_payload(database)
+                payload[key] = value
+                with self.assertRaisesRegex(ControlError, f"{key} drifted"):
+                    validate_live_database_payload(
+                        payload,
+                        database,
+                        environment="customer-production",
+                    )
+
+    def test_disk_service_binding_drift_fails_closed(self) -> None:
+        service = EXPECTED_CUSTOMER_BLUEPRINT["services"][0]
+        disk = service["disk"]
+        payload = _disk_payload(disk, service_id="srv-wrong")
+        with self.assertRaisesRegex(ControlError, "service binding drifted"):
+            validate_live_disk_payload(
+                payload,
+                disk,
+                environment="customer-production",
+                service_id=service["id"],
+            )
+
+    def test_customer_origin_binding_drift_fails_closed(self) -> None:
+        expected = EXPECTED_CUSTOMER_BLUEPRINT["services"][0]
+        payload = _service_payload(expected)
+        payload["serviceDetails"]["url"] = "https://wrong-service.onrender.com"
+        with self.assertRaisesRegex(ControlError, "external URL drifted"):
+            validate_live_service_payload(
+                payload,
+                expected,
+                environment="customer-production",
+            )
 
     def test_top_level_service_drift_fails_closed(self) -> None:
         cases = (
@@ -452,9 +672,34 @@ class LiveRequestCoverageTests(unittest.TestCase):
         for blueprint in EXPECTED_BLUEPRINTS:
             responses.append(_blueprint_payload(blueprint))
             expected_urls.append(f"https://render.invalid/v1/blueprints/{blueprint['id']}")
+            if "project" in blueprint:
+                responses.append(_project_payload(blueprint["project"]))
+                expected_urls.append(
+                    f"https://render.invalid/v1/projects/{blueprint['project']['id']}"
+                )
+            if "providerEnvironment" in blueprint:
+                responses.append(
+                    _environment_payload(blueprint["providerEnvironment"])
+                )
+                expected_urls.append(
+                    "https://render.invalid/v1/environments/"
+                    f"{blueprint['providerEnvironment']['id']}"
+                )
             for service in blueprint["services"]:
                 responses.append(_service_payload(service))
                 expected_urls.append(f"https://render.invalid/v1/services/{service['id']}")
+                if "disk" in service:
+                    responses.append(
+                        _disk_payload(service["disk"], service_id=service["id"])
+                    )
+                    expected_urls.append(
+                        f"https://render.invalid/v1/disks/{service['disk']['id']}"
+                    )
+            for database in blueprint.get("databases", []):
+                responses.append(_database_payload(database))
+                expected_urls.append(
+                    f"https://render.invalid/v1/postgres/{database['id']}"
+                )
         read_json.side_effect = responses
 
         output = io.StringIO()
@@ -469,7 +714,11 @@ class LiveRequestCoverageTests(unittest.TestCase):
         actual_urls = [call.args[0].full_url for call in read_json.call_args_list]
         self.assertEqual(actual_urls, expected_urls)
         self.assertNotIn(api_key, output.getvalue())
-        self.assertEqual(output.getvalue().count("live Render service control PASS"), 2)
+        self.assertEqual(output.getvalue().count("live Render service control PASS"), 3)
+        self.assertEqual(output.getvalue().count("live Render disk control PASS"), 1)
+        self.assertEqual(output.getvalue().count("live Render Postgres control PASS"), 1)
+        self.assertEqual(output.getvalue().count("live Render project control PASS"), 1)
+        self.assertEqual(output.getvalue().count("live Render environment control PASS"), 1)
         self.assertTrue(
             all(
                 call.args[1] == LIVE_REQUEST_TIMEOUT_SECONDS
@@ -756,7 +1005,7 @@ class AuxiliaryBlueprintPolicyTests(unittest.TestCase):
 class RepositoryIntegrationTests(unittest.TestCase):
     def test_checked_in_control_passes_offline(self) -> None:
         manifest = validate_offline(REPO_ROOT)
-        self.assertEqual(len(manifest["blueprints"]), 2)
+        self.assertEqual(len(manifest["blueprints"]), 3)
         self.assertEqual(manifest["pendingBlueprints"], EXPECTED_PENDING_BLUEPRINTS)
         self.assertEqual(len(AUXILIARY_BLUEPRINT_PATHS), 1)
 

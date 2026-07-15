@@ -1,4 +1,4 @@
-"""Verify a deployed noetic-compass-api is running the state-ledger ENABLED, clean.
+"""Verify a deployed customer CAS Harness API has a clean enabled state ledger.
 
 This is the hosted counterpart of the local operational-enable evidence in
 ``docs/working/production_readiness/14_operational_enable_evidence_2026_06_02.md``.
@@ -64,7 +64,7 @@ from typing import Any, Mapping
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-DEFAULT_BASE_URL = "https://noetic-compass-api.onrender.com"
+DEFAULT_BASE_URL = "https://cas-harness-customer-api.onrender.com"
 TOKEN_ENV_VAR = "CAS_HARNESS_API_TOKEN"
 
 POSTURE_SHADOW = "enabled_shadow_dict_authoritative"
@@ -114,12 +114,12 @@ def read_odometer_key(posture: str) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
-        description="Verify a deployed noetic-compass-api is running the state-ledger enabled and clean."
+        description="Verify a deployed customer CAS Harness API has a clean enabled state ledger."
     )
     parser.add_argument(
         "--base-url",
         default=DEFAULT_BASE_URL,
-        help=f"Deployed noetic-compass-api base URL. Default: {DEFAULT_BASE_URL}",
+        help=f"Deployed customer CAS Harness API base URL. Default: {DEFAULT_BASE_URL}",
     )
     parser.add_argument(
         "--bearer-token",
