@@ -351,7 +351,6 @@ class HostedRuntimeWormCollector:
         evidence: dict[str, Any] | None = None
         artifact: dict[str, Any] | None = None
         collection_error: BaseException | None = None
-        cleanup_error: BaseException | None = None
         logout_status = 0
         try:
             token = self._login(identity, credential)
@@ -369,20 +368,25 @@ class HostedRuntimeWormCollector:
             evidence, artifact = collector.collect()
         except BaseException as exc:  # Preserve cancellation and the exact gate.
             collection_error = exc
-        try:
-            logout_status = self._logout()
-        except BaseException as exc:
-            cleanup_error = exc
-            self._best_effort_logout()
-
-        if collection_error is not None:
-            if cleanup_error is not None and hasattr(collection_error, "add_note"):
-                collection_error.add_note("probe session cleanup could not be confirmed")
-            raise collection_error
-        if cleanup_error is not None:
-            if hasattr(cleanup_error, "add_note"):
-                cleanup_error.add_note("probe session cleanup could not be confirmed")
-            raise cleanup_error
+            raise
+        finally:
+            try:
+                logout_status = self._logout()
+            except BaseException as cleanup_error:
+                self._best_effort_logout()
+                if collection_error is not None:
+                    # Never replace the active collection failure (including
+                    # KeyboardInterrupt/SystemExit) with a cleanup failure.
+                    BaseException.add_note(
+                        collection_error,
+                        "probe session cleanup could not be confirmed",
+                    )
+                else:
+                    BaseException.add_note(
+                        cleanup_error,
+                        "probe session cleanup could not be confirmed",
+                    )
+                    raise
         if evidence is None or artifact is None:
             raise runtime.RuntimeWormFailure(
                 "runtime-worm", "collector produced no evidence"

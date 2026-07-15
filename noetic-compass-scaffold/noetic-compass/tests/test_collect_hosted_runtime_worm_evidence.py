@@ -388,15 +388,40 @@ def test_runtime_failure_logs_out_and_returns_no_evidence() -> None:
     assert collector._active_token is None
 
 
-def test_keyboard_interrupt_after_login_still_logs_out() -> None:
+@pytest.mark.parametrize(
+    "failure",
+    [KeyboardInterrupt(), SystemExit(17)],
+    ids=["keyboard-interrupt", "system-exit"],
+)
+def test_base_exception_after_login_still_logs_out_without_replacement(
+    failure: BaseException,
+) -> None:
     transport = FakeTransport()
-    collector = _collector(
-        transport, FakeRuntimeFactory([], failure=KeyboardInterrupt())
-    )
-    with pytest.raises(KeyboardInterrupt):
+    collector = _collector(transport, FakeRuntimeFactory([], failure=failure))
+    with pytest.raises(type(failure)) as captured:
         collector.collect()
+    assert captured.value is failure
     assert transport.calls[-1]["path"] == "/auth/logout"
     assert collector._active_token is None
+
+
+@pytest.mark.parametrize(
+    "failure",
+    [KeyboardInterrupt(), SystemExit(17)],
+    ids=["keyboard-interrupt", "system-exit"],
+)
+def test_base_exception_remains_primary_when_logout_also_fails(
+    failure: BaseException,
+) -> None:
+    transport = FakeTransport(logout_status=500)
+    collector = _collector(transport, FakeRuntimeFactory([], failure=failure))
+    with pytest.raises(type(failure)) as captured:
+        collector.collect()
+    assert captured.value is failure
+    assert sum(call["path"] == "/auth/logout" for call in transport.calls) == 4
+    assert "probe session cleanup could not be confirmed" in tuple(
+        getattr(captured.value, "__notes__", ())
+    )
 
 
 def test_runtime_failure_remains_primary_when_logout_also_fails() -> None:
@@ -508,6 +533,59 @@ def test_second_create_only_publish_failure_rolls_back_first_target(
             artifact={"gate": "runtime_worm"},
         )
     assert not evidence_path.exists()
+    assert not artifact_path.exists()
+    assert not list(tmp_path.glob("*.stage"))
+
+
+def test_pre_existing_output_pair_is_preserved_byte_for_byte(tmp_path: Path) -> None:
+    evidence_path = tmp_path / "evidence.json"
+    artifact_path = tmp_path / "artifact.json"
+    original_evidence = b"existing evidence\n"
+    original_artifact = b"existing artifact\n"
+    evidence_path.write_bytes(original_evidence)
+    artifact_path.write_bytes(original_artifact)
+
+    with pytest.raises(runtime.RuntimeWormFailure, match="pre-existing output"):
+        module._write_output_pair(
+            evidence_path=evidence_path,
+            evidence={"gate": "runtime_worm"},
+            artifact_path=artifact_path,
+            artifact={"gate": "runtime_worm"},
+        )
+
+    assert evidence_path.read_bytes() == original_evidence
+    assert artifact_path.read_bytes() == original_artifact
+    assert not list(tmp_path.glob("*.stage"))
+
+
+def test_concurrent_second_target_is_preserved_when_first_target_rolls_back(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    evidence_path = tmp_path / "evidence.json"
+    artifact_path = tmp_path / "artifact.json"
+    concurrent_evidence = b"concurrent evidence\n"
+    original = os.link
+    calls = 0
+
+    def occupy_second_target(
+        source: os.PathLike[str], target: os.PathLike[str]
+    ) -> None:
+        nonlocal calls
+        calls += 1
+        if calls == 2:
+            Path(target).write_bytes(concurrent_evidence)
+        original(source, target)
+
+    monkeypatch.setattr(os, "link", occupy_second_target)
+    with pytest.raises(FileExistsError):
+        module._write_output_pair(
+            evidence_path=evidence_path,
+            evidence={"gate": "runtime_worm"},
+            artifact_path=artifact_path,
+            artifact={"gate": "runtime_worm"},
+        )
+
+    assert evidence_path.read_bytes() == concurrent_evidence
     assert not artifact_path.exists()
     assert not list(tmp_path.glob("*.stage"))
 
