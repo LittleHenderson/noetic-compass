@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+from copy import deepcopy
 from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 import hashlib
@@ -519,10 +520,33 @@ def test_direct_approvals_are_dereferenced_bound_and_distinct(
             claim_status_vocabulary=["OPEN", "ACCEPT"],
         )
     else:
+        stamp = NOW.strftime("%Y-%m-%dT%H:%M:%SZ")
+        machine_subject = {
+            "schema_version": "cas_harness_claim_honesty_machine_subject.v1",
+            "generated_at_utc": stamp,
+            "scanned_surfaces": [
+                {
+                    "kind": "product_app",
+                    "content_sha256": "2" * 64,
+                    "verified_at_utc": stamp,
+                }
+            ],
+            "findings": [],
+        }
+        machine_subject_sha256 = hashlib.sha256(
+            json.dumps(
+                machine_subject,
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=True,
+            ).encode("ascii")
+        ).hexdigest()
         evidence.update(
-            scanned_surfaces=[{"kind": "product_app", "content_sha256": "2" * 64}],
-            scan={"misleading_claim_count": 0},
+            artifact_sha256=machine_subject_sha256,
+            machine_subject=machine_subject,
+            machine_subject_sha256=machine_subject_sha256,
             boundaries={"research_scope_disclosed": True},
+            claim_status_vocabulary=["OPEN", "ACCEPT"],
         )
     binding = canonical_evidence_binding_sha256(gate, evidence)
     records = [
@@ -543,9 +567,113 @@ def test_direct_approvals_are_dereferenced_bound_and_distinct(
     )
     authority.assert_human_attestations(gate, evidence, now=NOW)
 
+    if gate == "claim_honesty":
+        tampered = deepcopy(evidence)
+        tampered["machine_subject"]["scanned_surfaces"][0][
+            "content_sha256"
+        ] = "e" * 64
+        tampered["machine_subject_sha256"] = hashlib.sha256(
+            json.dumps(
+                tampered["machine_subject"],
+                sort_keys=True,
+                separators=(",", ":"),
+                ensure_ascii=True,
+            ).encode("ascii")
+        ).hexdigest()
+        with pytest.raises(AcceptanceAuthorityInvalid, match="invalid or revoked"):
+            authority.assert_human_attestations(gate, tampered, now=NOW)
+
+        vocabulary_tamper = deepcopy(evidence)
+        vocabulary_tamper["claim_status_vocabulary"] = ["OPEN", "ACCEPTED"]
+        with pytest.raises(AcceptanceAuthorityInvalid, match="invalid or revoked"):
+            authority.assert_human_attestations(
+                gate, vocabulary_tamper, now=NOW
+            )
+
+        artifact_tamper = deepcopy(evidence)
+        artifact_tamper["artifact_sha256"] = "e" * 64
+        with pytest.raises(AcceptanceAuthorityInvalid, match="invalid or revoked"):
+            authority.assert_human_attestations(
+                gate, artifact_tamper, now=NOW
+            )
+
     evidence["approvals"][0]["approval_sha256"] = "f" * 64
     with pytest.raises(AcceptanceAuthorityInvalid, match="invalid or revoked"):
         authority.assert_human_attestations(gate, evidence, now=NOW)
+
+
+def test_claim_actual_attestations_cannot_precede_machine_subject_generation() -> None:
+    state = InMemoryStateStore()
+    attestations = _attestation_store(state)
+    event = NOW - timedelta(minutes=10)
+    verified = NOW - timedelta(minutes=8)
+    approved = NOW - timedelta(minutes=6)
+    generated = NOW - timedelta(minutes=5)
+    machine_subject = {
+        "schema_version": "cas_harness_claim_honesty_machine_subject.v1",
+        "generated_at_utc": generated.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "scanned_surfaces": [
+            {
+                "kind": "product_app",
+                "content_sha256": "2" * 64,
+                "verified_at_utc": verified.strftime("%Y-%m-%dT%H:%M:%SZ"),
+            }
+        ],
+        "findings": [],
+    }
+    machine_subject_sha256 = hashlib.sha256(
+        json.dumps(
+            machine_subject,
+            sort_keys=True,
+            separators=(",", ":"),
+            ensure_ascii=True,
+        ).encode("ascii")
+    ).hexdigest()
+    evidence = _common("claim_honesty")
+    evidence.update({
+        "event_at_utc": event.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "observed_at_utc": NOW.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        "artifact_sha256": machine_subject_sha256,
+        "machine_subject": machine_subject,
+        "machine_subject_sha256": machine_subject_sha256,
+        "boundaries": {"research_scope_disclosed": True},
+        "claim_status_vocabulary": ["OPEN", "ACCEPT"],
+    })
+    binding = canonical_evidence_binding_sha256("claim_honesty", evidence)
+    records = [
+        _create(
+            attestations,
+            purpose="claim_approval",
+            gate="claim_honesty",
+            role=role,
+            binding=binding,
+            now=approved,
+        )
+        for role in ("legal_owner", "product_owner", "research_owner")
+    ]
+    evidence["approvals"] = [
+        {
+            "role": role,
+            "approval_artifact_uri": record.uri,
+            "approval_sha256": record.sha256,
+            "approved_at_utc": record.payload["attested_at_utc"],
+        }
+        for role, record in zip(
+            ("legal_owner", "product_owner", "research_owner"),
+            records,
+            strict=True,
+        )
+    ]
+    authority = CustomerProductionAcceptanceAuthorityStore(
+        state, human_attestation_store=attestations
+    )
+
+    with pytest.raises(
+        AcceptanceAuthorityInvalid, match="invalid or revoked attestation"
+    ):
+        authority.assert_human_attestations(
+            "claim_honesty", evidence, now=NOW
+        )
 
 
 def test_legal_approvals_reject_two_roles_from_the_same_authenticated_account() -> None:
