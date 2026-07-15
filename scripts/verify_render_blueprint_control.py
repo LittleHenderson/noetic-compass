@@ -94,8 +94,8 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
                 "plan": "basic_256mb",
                 "region": "oregon",
                 "version": "16",
-                "diskSizeGB": 1,
-                "diskAutoscalingEnabled": False,
+                "diskSizeGB": 5,
+                "diskAutoscalingEnabled": True,
                 # Render's live Postgres API serializes the Blueprint's
                 # `ipAllowList: []` (no public database ingress) as null.
                 "ipAllowList": None,
@@ -573,8 +573,8 @@ def assert_customer_blueprint_contract(text: str, label: str) -> None:
             'postgresMajorVersion: "16"',
             "databaseName: cas_harness_customer",
             "user: cas_harness_customer",
-            "diskSizeGB: 1",
-            "storageAutoscalingEnabled: false",
+            "diskSizeGB: 5",
+            "storageAutoscalingEnabled: true",
             "ipAllowList: []",
         },
         f"{label} dedicated customer Postgres contract drifted",

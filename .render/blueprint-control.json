@@ -81,8 +81,8 @@
           "plan": "basic_256mb",
           "region": "oregon",
           "version": "16",
-          "diskSizeGB": 1,
-          "diskAutoscalingEnabled": false,
+          "diskSizeGB": 5,
+          "diskAutoscalingEnabled": true,
           "ipAllowList": null
         }
       ],

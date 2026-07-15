@@ -46,10 +46,11 @@ projects:
             postgresMajorVersion: "16"
             databaseName: cas_harness_customer
             user: cas_harness_customer
-            diskSizeGB: 1
-            storageAutoscalingEnabled: false
-            # This 1 GB, autoscaling-off database is an intentionally small
-            # bootstrap tier, not customer-production capacity evidence.
+            diskSizeGB: 5
+            storageAutoscalingEnabled: true
+            # Five GB plus storage autoscaling establishes the minimum
+            # database-storage floor. The basic-256mb compute tier still is not
+            # customer-production capacity or high-availability evidence.
             # Require Render private networking; no public database ingress.
             ipAllowList: []
 
