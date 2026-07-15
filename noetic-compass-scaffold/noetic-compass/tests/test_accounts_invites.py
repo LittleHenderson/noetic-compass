@@ -381,7 +381,7 @@ def test_legacy_v1_credential_is_verified_then_atomically_upgraded(accounts_logi
         record.with_payload(legacy_payload), expected_version=record.version
     )
 
-    assert store.has_active_owner() is True
+    assert store.has_active_owner(tenant_id="tenant-old") is True
     assert store.authenticate_account(account.email_or_username, "wrong") is None
     still_legacy = store.get_account_by_id(account.account_id)
     assert still_legacy.credential_version == LEGACY_CREDENTIAL_VERSION

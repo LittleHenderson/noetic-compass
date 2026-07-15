@@ -25,6 +25,16 @@ publish acceptance authority or change the checked-in acceptance manifest.
   `RENDER_GIT_COMMIT` matches `--master-head`; this prevents a plausible
   receipt from being collected by a different service or source revision.
 
+Bootstrap ordering warning: the collector's platform-provisioned probe owners
+are synthetic customer-journey identities, not the permanent primary owner.
+They must neither satisfy nor block first-owner bootstrap. Account bootstrap
+and startup checks are scoped to the exact granted tenant named by
+`NC_ACCOUNTS_BOOTSTRAP_TENANT_ID` (normally `primary`), even though all account
+records share one internal storage partition. Keep
+`NC_ACCOUNT_BOOTSTRAP_SECRET` available until the permanent primary owner has
+been bootstrapped and its login/recovery path is verified; never retire it
+because a probe tenant merely has an active owner.
+
 ## Collect
 
 Run from the exact deployed production service environment:

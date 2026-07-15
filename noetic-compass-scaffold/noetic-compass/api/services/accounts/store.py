@@ -255,13 +255,22 @@ class AccountStore:
     def has_accounts(self) -> bool:
         return bool(self._store.list(self._tenant, ACCOUNT_KIND))
 
-    def has_active_owner(self) -> bool:
-        """Return whether account mode has an active administrative owner."""
+    def has_active_owner(self, *, tenant_id: str) -> bool:
+        """Return whether one granted tenant has an active administrative owner.
+
+        Account records share one internal storage tenant, so an unscoped scan would let a
+        platform-provisioned synthetic tenant satisfy (or block) the permanent first-owner
+        bootstrap.  Callers must name the granted tenant whose owner authority they mean.
+        """
+        tenant = tenant_id.strip()
+        if not tenant:
+            return False
         return any(
             (account := Account.from_payload(record.payload)).role == "owner"
             and account.is_active
             and bool(account.credential_hash)
             and account.credential_version in SUPPORTED_CREDENTIAL_VERSIONS
+            and account.tenant_id == tenant
             for record in self._store.list(self._tenant, ACCOUNT_KIND)
         )
 

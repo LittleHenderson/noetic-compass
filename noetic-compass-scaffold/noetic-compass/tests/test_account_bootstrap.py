@@ -5,13 +5,15 @@ from concurrent.futures import ThreadPoolExecutor
 import pytest
 
 from api.services.accounts.bootstrap import AccountBootstrapError
-from api.services.accounts.models import ACCOUNT_KIND
+from api.services.accounts.models import ACCOUNT_KIND, Account
 from api.services.accounts.store import AccountStore
+from api.services.accounts.tenant_provisioning import provision_tenant_owner
 from api.services.production.state_substrate import InMemoryStateStore
 
 
 PEPPER = "test-account-credential-pepper-0123456789"
 CREDENTIAL = "casak_0123456789abcdefghijklmnopqrstuvwxyzABCDEFG"
+SECOND_CREDENTIAL = "casak_ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210abcdefgh"
 BOUNDARIES = (
     "after_bootstrap_reservation_write",
     "after_bootstrap_email_write",
@@ -88,5 +90,60 @@ def test_completed_bootstrap_requires_original_credential() -> None:
         store.bootstrap_owner(
             email_or_username="owner@example.com",
             tenant_id="primary",
-            api_credential="casak_ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210abcdefgh",
+            api_credential=SECOND_CREDENTIAL,
         )
+
+
+def test_platform_owner_created_first_does_not_block_primary_bootstrap() -> None:
+    backend = InMemoryStateStore()
+    store = AccountStore(backend, credential_pepper=PEPPER)
+
+    synthetic = provision_tenant_owner(
+        store,
+        tenant_id="journey-probe",
+        email_or_username="owner@journey-probe.example",
+        api_credential=SECOND_CREDENTIAL,
+    ).account
+
+    assert store.has_active_owner(tenant_id="journey-probe") is True
+    assert store.has_active_owner(tenant_id="primary") is False
+
+    primary = store.bootstrap_owner(
+        email_or_username="owner@primary.example",
+        tenant_id="primary",
+        api_credential=CREDENTIAL,
+    )
+
+    assert primary.role == synthetic.role == "owner"
+    assert primary.tenant_id == "primary"
+    assert synthetic.tenant_id == "journey-probe"
+    assert store.has_active_owner(tenant_id="primary") is True
+    assert sorted(
+        Account.from_payload(record.payload).tenant_id
+        for record in backend.list("accounts", ACCOUNT_KIND)
+    ) == ["journey-probe", "primary"]
+
+
+def test_primary_bootstrap_still_rejects_a_second_primary_owner() -> None:
+    backend = InMemoryStateStore()
+    store = AccountStore(backend, credential_pepper=PEPPER)
+    store.bootstrap_owner(
+        email_or_username="first@primary.example",
+        tenant_id="primary",
+        api_credential=CREDENTIAL,
+    )
+
+    with pytest.raises(AccountBootstrapError, match="already_bootstrapped"):
+        store.bootstrap_owner(
+            email_or_username="second@primary.example",
+            tenant_id="primary",
+            api_credential=SECOND_CREDENTIAL,
+        )
+
+    primary_owners = [
+        Account.from_payload(record.payload)
+        for record in backend.list("accounts", ACCOUNT_KIND)
+        if record.payload.get("tenant_id") == "primary"
+    ]
+    assert len(primary_owners) == 1
+    assert primary_owners[0].email_or_username == "first@primary.example"

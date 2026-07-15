@@ -8,7 +8,10 @@ from fastapi.testclient import TestClient
 
 from api.config import Settings, settings
 from api.db import _async_database_url
+from api.services.accounts.store import AccountStore
+from api.services.accounts.tenant_provisioning import provision_tenant_owner
 from api.services.cas_harness_audit_sessions import create_session
+from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.state_ledger_bootstrap import _postgres_state_store_dsn
 
 
@@ -143,3 +146,69 @@ def test_lifespan_shares_one_store_and_clears_it_on_shutdown(tmp_path, monkeypat
     assert app.state.shared_state_store is None
     assert app.state.account_store is None
     assert app.state.session_store is None
+
+
+def test_lifespan_requires_then_allows_primary_bootstrap_after_platform_owner(
+    tmp_path, monkeypatch
+) -> None:
+    from api.main import app
+
+    state_path = (tmp_path / "platform-first.db").resolve()
+    pepper = "p" * 32
+    platform_credential = "casak_ZYXWVUTSRQPONMLKJIHGFEDCBA9876543210abcdefgh"
+    primary_credential = "casak_0123456789abcdefghijklmnopqrstuvwxyzABCDEFG"
+    backend = SqliteStateStore(state_path)
+    provision_tenant_owner(
+        AccountStore(backend, credential_pepper=pepper),
+        tenant_id="journey-probe",
+        email_or_username="owner@journey-probe.example",
+        api_credential=platform_credential,
+    )
+    backend.close()
+
+    patches = {
+        "accounts_enabled": True,
+        "debug": True,
+        "jwt_secret": "j" * 32,
+        "jwt_algorithm": "HS256",
+        "account_credential_pepper": pepper,
+        "account_bootstrap_secret": "",
+        "accounts_bootstrap_tenant_id": "primary",
+        "accounts_allow_single_host_sqlite": True,
+        "state_ledger_path": str(state_path),
+        "state_ledger_enabled": False,
+        "state_ledger_read_authority": False,
+        "database_url": None,
+        "quotas_enabled": False,
+        "billing_entitlements_enabled": False,
+        "billing_reconciliation_enabled": False,
+        "billing_usage_dispatch_enabled": False,
+        "evidence_packet_object_store_enabled": False,
+        "evidence_shares_enabled": False,
+    }
+    for name, value in patches.items():
+        monkeypatch.setattr(settings, name, value)
+
+    with pytest.raises(RuntimeError, match="Account mode has no owner"):
+        with TestClient(app):
+            pass
+
+    bootstrap_secret = "b" * 32
+    monkeypatch.setattr(settings, "account_bootstrap_secret", bootstrap_secret)
+    with TestClient(app) as client:
+        store = app.state.account_store
+        assert store.has_active_owner(tenant_id="journey-probe") is True
+        assert store.has_active_owner(tenant_id="primary") is False
+
+        created = client.post(
+            "/accounts/bootstrap",
+            json={
+                "email_or_username": "owner@primary.example",
+                "api_credential": primary_credential,
+            },
+            headers={"X-Account-Bootstrap-Secret": bootstrap_secret},
+        )
+
+        assert created.status_code == 200, created.text
+        assert created.json()["tenant_id"] == "primary"
+        assert store.has_active_owner(tenant_id="primary") is True

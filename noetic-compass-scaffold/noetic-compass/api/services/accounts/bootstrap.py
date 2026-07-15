@@ -50,7 +50,7 @@ def bootstrap_first_owner(
         store._tenant, BOOTSTRAP_KIND, BOOTSTRAP_RECORD_ID
     )
     if marker is None:
-        if store.has_active_owner():
+        if store.has_active_owner(tenant_id=tenant):
             raise AccountBootstrapError("already_bootstrapped")
         account_id = _owner_account_id(email, tenant)
         now = datetime.now(UTC).isoformat()

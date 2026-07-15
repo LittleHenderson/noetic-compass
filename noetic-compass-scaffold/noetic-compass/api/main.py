@@ -245,7 +245,9 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
                 )
         if (
             app.state.account_store is not None
-            and not app.state.account_store.has_active_owner()
+            and not app.state.account_store.has_active_owner(
+                tenant_id=settings.accounts_bootstrap_tenant_id
+            )
             and not settings.account_bootstrap_secret
         ):
             raise RuntimeError(
