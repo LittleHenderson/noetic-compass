@@ -1150,6 +1150,13 @@ def test_account_evidence_route_reads_shared_packet_from_repository(
         verified = client.post(f"/evidence/{trace_id}/verify", headers=headers)
 
         assert got.status_code == 200, got.text
+        assert got.json() == packet
+        for absent_optional_field in (
+            "cas_expression",
+            "copy_slot_trace",
+            "distributed_fleet",
+        ):
+            assert absent_optional_field not in got.json()
         assert got.json()["output"]["text"] == "measured output"
         assert verified.status_code == 200, verified.text
         assert verified.json()["overall"] == "all_match"
