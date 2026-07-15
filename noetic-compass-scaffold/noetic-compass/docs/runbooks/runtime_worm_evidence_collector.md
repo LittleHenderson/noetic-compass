@@ -11,9 +11,9 @@ manifest, or create customer-production `ACCEPT`.
 - The exact protected `master` SHA deployed by the public Render service.
 - The exact Render deploy ID and its live completion timestamp. The deployment
   must still be inside the gate's 30-minute freshness window.
-- A current account bearer token in `CAS_HARNESS_API_TOKEN`. Keep the token in
-  the environment; the command has no token argument, so it cannot leak through
-  process arguments.
+- For the existing account-token command only, a current account bearer token
+  in `CAS_HARNESS_API_TOKEN`. The preferred hosted wrapper instead creates one
+  synthetic session in memory and refuses an inherited bearer.
 - A Render API key with read access to the production service in
   `RENDER_API_KEY`. It is likewise environment-only.
 
@@ -21,7 +21,75 @@ The fixed production API is
 `https://cas-harness-customer-api.onrender.com`. A different origin, redirect,
 embedded credential, query, or fragment fails closed.
 
-## Command
+## Hosted Render Shell command (preferred)
+
+The production image includes a bounded wrapper that creates one random
+synthetic probe owner, grants that tenant a two-hour `manual_comped`
+`beta_comped` entitlement, keeps its generated credential and bearer token in
+one Python process, invokes the same runtime/WORM collector, and confirms
+logout before writing either output. The synthetic owner is never the
+configured primary owner and cannot authorize publication.
+
+Use a separate single-use Render operator API key. Run this block from Render
+Shell on service `srv-d9bijbjtqb8s73cn4n20`; enter the key only at the hidden
+prompt, then revoke that key immediately after the command exits:
+
+```bash
+(
+  set +x
+  set +o history
+  trap 'unset RENDER_API_KEY' EXIT
+  trap 'exit 130' HUP INT TERM
+
+  if [[ -v RENDER_API_KEY ]]; then
+    printf 'Refusing persistent RENDER_API_KEY; remove it from the service environment.\n' >&2
+    exit 2
+  fi
+  if [[ -v CAS_HARNESS_API_TOKEN ]]; then
+    printf 'Refusing inherited CAS_HARNESS_API_TOKEN.\n' >&2
+    exit 2
+  fi
+
+  IFS= read -r -s -p 'Temporary single-use Render API key: ' RENDER_API_KEY
+  printf '\n'
+  if [[ -z "$RENDER_API_KEY" ]]; then
+    printf 'RENDER_API_KEY is required.\n' >&2
+    exit 2
+  fi
+
+  RENDER_API_KEY="$RENDER_API_KEY" \
+    python scripts/collect_hosted_runtime_worm_evidence.py \
+      --master-head <exact-40-character-master-sha> \
+      --deploy-id <exact-live-render-deploy-id> \
+      --deployed-at-utc <exact-live-finishedAt-timestamp> \
+      --output /tmp/runtime-worm-evidence.json \
+      --safe-artifact-output /tmp/runtime-worm-source-receipt.json
+  status=$?
+  unset RENDER_API_KEY
+  trap - EXIT HUP INT TERM
+  exit "$status"
+)
+```
+
+Before the first account mutation, the wrapper re-reads and validates the
+caller-selected `live` / `new_commit` deployment, exact commit, exact finish
+time, and 30-minute freshness window. It refuses any inherited account bearer.
+Only crash-resumable tenant provisioning is retried with the exact same
+payload; entitlement, login, and audit ambiguity are never retried. A
+collector failure triggers best-effort
+logout and writes no output. Even after success, the account and provisioning
+rows remain durable, its discarded credential remains valid for
+login, the entitlement expires after two hours, and the audit/WORM object is
+immutable. A lost entitlement response may have committed the entitlement and
+its durable ledger revision even though the wrapper does not retry or proceed.
+A lost login response may have committed a durable server-side session before
+the bearer is known; that unknowable session cannot be explicitly logged out
+and remains until the configured session expiry (normally 60 minutes). A
+process crash after login can likewise leave a session until expiry. These
+failure paths write no evidence, but their durable rows remain; run exactly one
+probe per fresh deployment and never loop this command.
+
+## Existing account-token command
 
 Run from `noetic-compass-scaffold/noetic-compass`:
 
