@@ -349,14 +349,38 @@ python scripts/collect_root_ci_protected_deploy_facts.py `
   --output root-ci-protected-deploy.json
 ```
 
-The collector queries only `/deploys/<expected-deploy-id>` while waiting; it
-never substitutes the latest deploy. It fails closed on repository, workflow,
-job, check, GitHub App, branch-protection, Render service, commit, trigger,
-health, freshness, pagination, or local workflow-layout drift. HTTP reads are
-bounded, redirects are forbidden, and response bodies and credentials are not
-printed on errors. Exit zero produces only a canonical unsigned v2 facts
-document; it does not create authority, mark a gate `present`, or dispatch
-`ACCEPT`.
+While waiting, the collector polls only
+`/deploys/<expected-deploy-id>` and never substitutes another deployment. Once
+that exact `new_commit` deployment is `live`, it begins a clean final
+observation cycle. During that cycle it proves that the supplied SHA is still
+GitHub's current protected `master`, that the supplied deployment is Render's
+sole current `live` deployment, and that the required root workflows/checks
+remain exact. It reads and validates the full GitHub repository, protected
+master, branch-protection, and workflow-registry records before and after the
+public health probe. The signed subject binds canonical preflight/final hashes
+for every one of those records plus the timestamp of the completed final
+controls readback. It also retains the first exact live-deploy response and
+requires that record to be canonically identical to both the Render preflight
+and final exact-deploy responses. The full Render service, current-live list,
+and latest-deploy list are likewise sampled before and after health; any
+canonical provider-record change fails closed. It also fails closed
+on repository, workflow, job, check, GitHub App, branch-protection, Render
+service, commit, trigger, health, 24-hour observation freshness, pagination, or
+local workflow-layout drift. HTTP reads are bounded, redirects are forbidden,
+and response bodies and credentials are not printed on errors. Exit zero
+produces only a canonical unsigned v2 gate document with root-specific schema
+`cas_harness_root_ci_protected_deploy_observation.v1`; it does not create
+authority, mark a gate `present`, or dispatch `ACCEPT`.
+
+The check-run creation/completion times and Render deployment
+creation/completion times are historical release provenance. They must retain
+their exact chronology: push checks complete before the `new_commit`
+deployment, and the deployment is live before the fresh observation begins.
+They do not become false merely because an unchanged protected release is
+older than 24 hours. The 24-hour limit applies to the new current-master,
+protection, workflow, current-live-deploy, provider-stability, and health
+observations. Therefore an unchanged, still-current protected release can
+receive a fresh receipt without a no-op commit or redeploy.
 
 Only an exact Render deployment whose actual trigger is `new_commit` can
 satisfy `root_ci_protected_deploy`. The service policy
@@ -386,9 +410,10 @@ available only to the signing step and is never logged. The uploaded artifact
 contains the receipt, its exact SHA-256 pin, and the subject checksum; the
 checked-in manifest remains `OPEN`, and the workflow never dispatches final
 `ACCEPT`. The signed receipt expires, so candidate assembly must use the exact
-current receipt rather than recycling an older successful run. The current
-signer default is 120 minutes; both candidate assembly and the final workflow
-must finish before the receipt's exact `expires_at_utc`.
+current receipt rather than recycling an older successful run. Root-CI
+receipts have an exact, fail-closed 120-minute TTL (not merely a default); both
+candidate assembly and the final workflow must finish before the receipt's
+exact `expires_at_utc`.
 
 ```powershell
 gh release upload customer-production-evidence `
@@ -741,12 +766,15 @@ For every evidence item, time must move forward monotonically:
 
 `event_at_utc <= observed_at_utc <= manifest generated_at_utc <= verification time`
 
-Every critical nested proof time—workflow run, audit, packet,
+Every mutable critical nested proof time—runtime readiness, audit, packet,
 share, billing payment, publication, approval, support, CRM, incident, alert,
 or claim scan—must fall between its gate's `event_at_utc` and
-`observed_at_utc`. The event itself and every nested proof time must satisfy the
-same gate-specific age limit, so a fresh observation cannot wrap a stale 2020
-event.
+`observed_at_utc`. The event itself and every mutable nested proof time must
+satisfy the same gate-specific age limit, so a fresh observation cannot wrap a
+stale mutable event. Root-CI is the explicit historical-provenance exception:
+its exact protected check-run and `new_commit` deployment timestamps must be at
+or before the fresh observation and in valid release order, while its current
+GitHub/Render/health observations remain inside the 24-hour window.
 
 For `runtime_worm`, the exact deployment completion is historical provenance:
 it must be at or before the gate event, but it is not itself a fresh runtime
@@ -763,7 +791,7 @@ fails:
 | Gate | Maximum age |
 |---|---:|
 | Runtime/WORM | 30 minutes |
-| Root CI/protected deploy | 24 hours |
+| Root CI/protected deploy current-state observation | 24 hours |
 | Hosted customer journey | 72 hours |
 | Accounts/billing | 72 hours |
 | Legal publication/approval | 30 days |

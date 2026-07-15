@@ -95,6 +95,7 @@ jobs:
             --subject-file customer-production-evidence/subject/root-ci-protected-deploy.json \
             --expected-master-head "$EXPECTED_MASTER_HEAD" \
             --expected-deploy-id "$EXPECTED_DEPLOY_ID" \
+            --expiry-minutes 120 \
             --output customer-production-evidence/receipts/root-ci-protected-deploy.json
 
       - name: Record the external pin for the exact signed receipt bytes
@@ -124,6 +125,7 @@ jobs:
             echo '### Root CI protected deploy receipt created'
             echo '- The stable release asset contains unsigned, sanitized source facts collected locally with admin-read access.'
             echo '- The artifact contains one RS256 receipt for `root_ci_protected_deploy`.'
+            echo '- The root-CI source uses the fresh-current-state/historical-release-provenance schema and the receipt TTL is exactly 120 minutes.'
             echo "- Exact signed-receipt SHA-256 pin: \`$receipt_sha256\`."
             echo '- The checked-in gate manifest remains `OPEN`.'
             echo '- This workflow never dispatches Customer Production ACCEPT.'

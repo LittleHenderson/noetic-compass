@@ -152,6 +152,21 @@ class ReceiptSignerTests(unittest.TestCase):
         with self.assertRaisesRegex(signer.SigningError, "production validation"):
             self._sign(payload=payload)
 
+    def test_receipt_ttl_is_fixed_at_120_minutes(self) -> None:
+        for expiry in (119, 121, 1440):
+            with self.subTest(expiry=expiry), self.assertRaisesRegex(
+                signer.SigningError, "exactly 120 minutes"
+            ):
+                self._sign(expiry_minutes=expiry)
+
+    def test_protected_signing_workflow_pins_the_same_120_minute_ttl(self) -> None:
+        workflow = (ROOT / ".github/workflows/customer-production-evidence.yml").read_text(
+            encoding="utf-8"
+        )
+        self.assertEqual(signer.DEFAULT_EXPIRY_MINUTES, 120)
+        self.assertIn("--expiry-minutes 120", workflow)
+        self.assertNotIn("--expiry-minutes \"$", workflow)
+
     def test_subject_must_be_the_same_canonical_raw_facts_document(self) -> None:
         payload = _draft_payload()
         other = deepcopy(payload)
