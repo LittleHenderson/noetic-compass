@@ -237,6 +237,8 @@ COMMON_EVIDENCE_KEYS = {
     "artifact_sha256",
 }
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+TAGGED_SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+PRIVACY_NOTICE_VERSION_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
 AUDIT_ID_RE = re.compile(r"^cas-audit-[0-9a-f]{16}$")
@@ -414,6 +416,13 @@ def _nonempty_string(value: Any, path: str, errors: list[str]) -> str | None:
 def _sha256(value: Any, path: str, errors: list[str]) -> str | None:
     if not isinstance(value, str) or SHA256_RE.fullmatch(value) is None:
         _error(errors, path, "must be a lowercase SHA-256 digest")
+        return None
+    return value
+
+
+def _tagged_sha256(value: Any, path: str, errors: list[str]) -> str | None:
+    if not isinstance(value, str) or TAGGED_SHA256_RE.fullmatch(value) is None:
+        _error(errors, path, "must be sha256:<64 lowercase hex>")
         return None
     return value
 
@@ -1587,20 +1596,30 @@ def _validate_support_crm(
             _require(response <= sla, f"{path}.support_ticket.first_response_minutes", "must be within SLA", errors)
         _critical_proof_timestamp(ticket.get("resolved_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.support_ticket.resolved_at_utc")
     lead = evidence.get("crm_lead")
+    lead_verified: datetime | None = None
     if _is_mapping(lead, f"{path}.crm_lead", errors):
-        _exact_keys(lead, {"system", "lead_id_sha256", "persisted", "readback_verified", "deduplicated", "owner_assigned", "lifecycle_stage", "verified_at_utc"}, f"{path}.crm_lead", errors)
-        _nonempty_string(lead.get("system"), f"{path}.crm_lead.system", errors)
+        _exact_keys(lead, {"system", "provider", "lead_id_sha256", "airtable_record_id_sha256", "adapter_response_digest", "source_receipt_sha256", "persisted", "readback_verified", "deduplicated", "owner_assigned", "lifecycle_stage", "verified_at_utc"}, f"{path}.crm_lead", errors)
+        _require(lead.get("system") == "airtable", f"{path}.crm_lead.system", "must be exact airtable", errors)
+        _require(lead.get("provider") == "airtable", f"{path}.crm_lead.provider", "must be exact airtable", errors)
         _sha256(lead.get("lead_id_sha256"), f"{path}.crm_lead.lead_id_sha256", errors)
+        _sha256(lead.get("airtable_record_id_sha256"), f"{path}.crm_lead.airtable_record_id_sha256", errors)
+        _tagged_sha256(lead.get("adapter_response_digest"), f"{path}.crm_lead.adapter_response_digest", errors)
+        _sha256(lead.get("source_receipt_sha256"), f"{path}.crm_lead.source_receipt_sha256", errors)
         for field in ("persisted", "readback_verified", "deduplicated", "owner_assigned"):
             _require(lead.get(field) is True, f"{path}.crm_lead.{field}", "must be true", errors)
-        _nonempty_string(lead.get("lifecycle_stage"), f"{path}.crm_lead.lifecycle_stage", errors)
-        _critical_proof_timestamp(lead.get("verified_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.crm_lead.verified_at_utc")
+        _require(lead.get("lifecycle_stage") in {"new", "contacted", "qualified", "won", "lost"}, f"{path}.crm_lead.lifecycle_stage", "must be an exact canonical CRM lifecycle stage", errors)
+        lead_verified = _critical_proof_timestamp(lead.get("verified_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.crm_lead.verified_at_utc")
     consent = evidence.get("consent")
     if _is_mapping(consent, f"{path}.consent", errors):
-        _exact_keys(consent, {"capture_consent_recorded", "source_attribution_recorded", "privacy_notice_linked", "recorded_at_utc"}, f"{path}.consent", errors)
-        for field in ("capture_consent_recorded", "source_attribution_recorded", "privacy_notice_linked"):
+        _exact_keys(consent, {"capture_consent_recorded", "consent_to_contact", "source_attribution_recorded", "privacy_notice_linked", "privacy_notice_url", "privacy_notice_version", "consent_schema_version", "recorded_at_utc"}, f"{path}.consent", errors)
+        for field in ("capture_consent_recorded", "consent_to_contact", "source_attribution_recorded", "privacy_notice_linked"):
             _require(consent.get(field) is True, f"{path}.consent.{field}", "must be true", errors)
-        _critical_proof_timestamp(consent.get("recorded_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.consent.recorded_at_utc")
+        _require(consent.get("privacy_notice_url") == f"{LANDING_ORIGIN}/privacy", f"{path}.consent.privacy_notice_url", f"must be {LANDING_ORIGIN}/privacy", errors)
+        _require(isinstance(consent.get("privacy_notice_version"), str) and PRIVACY_NOTICE_VERSION_RE.fullmatch(str(consent.get("privacy_notice_version"))) is not None, f"{path}.consent.privacy_notice_version", "must be an exact privacy notice version identifier", errors)
+        _require(consent.get("consent_schema_version") == "noetic_crm_consent.v1", f"{path}.consent.consent_schema_version", "must be exact noetic_crm_consent.v1", errors)
+        consent_recorded = _critical_proof_timestamp(consent.get("recorded_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.consent.recorded_at_utc")
+        if consent_recorded is not None and lead_verified is not None:
+            _require(consent_recorded <= lead_verified, f"{path}.consent.recorded_at_utc", "must be at or before Airtable readback verification", errors)
 
 
 def _validate_incident_tabletop(

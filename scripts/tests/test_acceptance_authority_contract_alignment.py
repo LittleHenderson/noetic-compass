@@ -160,6 +160,36 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 with self.assertRaises(AcceptanceAuthorityInvalid):
                     canonicalize_acceptance_evidence(gate, payload, now=NOW)
 
+    def test_support_crm_runtime_rejects_unbound_provider_and_consent_evidence(self) -> None:
+        support = _gate_payloads()["support_crm"]
+        support["master_head_sha"] = MASTER_SHA
+        support["deploy_id"] = DEPLOY_ID
+        support["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS["support_crm"][
+            "noetic-production-live"
+        ]
+        support["artifact_sha256"] = _digest("live-authority-support-crm")
+        cases = (
+            lambda payload: payload["crm_lead"].update(provider="hubspot"),
+            lambda payload: payload["crm_lead"].update(
+                adapter_response_digest=_digest("unprefixed")
+            ),
+            lambda payload: payload["crm_lead"].update(
+                airtable_record_id_sha256=""
+            ),
+            lambda payload: payload["consent"].update(consent_to_contact=False),
+            lambda payload: payload["consent"].update(
+                privacy_notice_version="privacy version with spaces"
+            ),
+            lambda payload: payload["consent"].update(
+                recorded_at_utc="2026-07-14T11:46:00Z"
+            ),
+        )
+        for mutate in cases:
+            payload = deepcopy(support)
+            mutate(payload)
+            with self.assertRaises(AcceptanceAuthorityInvalid):
+                canonicalize_acceptance_evidence("support_crm", payload, now=NOW)
+
 
 if __name__ == "__main__":
     unittest.main()

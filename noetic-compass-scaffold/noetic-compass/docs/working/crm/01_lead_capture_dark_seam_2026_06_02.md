@@ -45,8 +45,10 @@ Wiring: `api/main.py` builds the service at startup (`build_crm_service(settings
 ## Endpoints
 
 - `POST /api/crm/public/leads` - public, no JWT. The anonymous lead-capture form posts here.
-  Body: `{email, name, organization, message, interest, source, metadata}`. Returns:
-  `{lead_id, captured, sync_status, synced, schema_version, message}`.
+  Body: `{email, name, organization, message, interest, source, metadata,
+  consent_to_contact, privacy_notice_version}`. Consent must be exact `true`; the notice version
+  must identify what was actually published and shown. Returns the original receipt fields plus
+  the pinned privacy URL, notice version, immutable consent timestamp, and consent schema version.
 - `GET /api/crm/leads` - authed. Sales list view, newest first.
 - `GET /api/crm/leads/{lead_id}` - authed. One lead, or `404`.
 - `PATCH /api/crm/leads/{lead_id}/pipeline-status` - authed. Moves one captured lead through the
@@ -168,7 +170,9 @@ external CRM sync is still not enabled. To turn it on:
    - `NC_AIRTABLE_OWNER_VALUE=<non-empty accountable owner>`
    - `NC_AIRTABLE_LIFECYCLE_FIELD=<lifecycle field>`
 4. Redeploy.
-5. Submit a hosted lead through `POST /api/crm/public/leads`.
+5. Provision the fixed consent fields listed in
+   `docs/runbooks/airtable_crm_acceptance_source.md`, then submit a hosted lead through
+   `POST /api/crm/public/leads` with explicit consent and the approved published-notice version.
 6. Confirm the public response has `sync_status: "synced"` and `synced: true`; then use the authed
    lead read route to verify the non-empty `external_id` and persisted verification receipt.
 

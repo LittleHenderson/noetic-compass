@@ -23,6 +23,8 @@ import pytest
 from api.middleware.auth import create_token
 from api.services.crm import (
     AirtableCRMProvider,
+    CRM_CONSENT_SCHEMA_VERSION,
+    CRM_PRIVACY_NOTICE_URL,
     CRMConfigError,
     CRMService,
     CRMStateError,
@@ -95,13 +97,15 @@ class _RaisingProvider(CRMSyncProvider):
         raise RuntimeError("external CRM exploded")
 
 
-def _submission(email: str = "lead@example.com", **overrides: str) -> LeadSubmission:
+def _submission(email: str = "lead@example.com", **overrides: object) -> LeadSubmission:
     base = {
         "email": email,
         "name": "Ada Lovelace",
         "organization": "Analytical Engines Ltd",
         "message": "Interested in the CAS Harness.",
         "interest": "cas_harness",
+        "consent_to_contact": True,
+        "privacy_notice_version": "privacy-2026-07-15",
     }
     base.update(overrides)
     return LeadSubmission(**base)  # type: ignore[arg-type]
@@ -129,7 +133,12 @@ def test_validated_refuses_uncontactable_addresses(bad: str) -> None:
 
 
 def test_validated_coerces_metadata_to_str() -> None:
-    sub = LeadSubmission(email="a@b.com", metadata={"utm": "spring", "n": 5})  # type: ignore[dict-item]
+    sub = LeadSubmission(
+        email="a@b.com",
+        metadata={"utm": "spring", "n": 5},  # type: ignore[dict-item]
+        consent_to_contact=True,
+        privacy_notice_version="privacy-2026-07-15",
+    )
     cleaned = sub.validated()
     assert cleaned.metadata == {"utm": "spring", "n": "5"}
 
@@ -187,6 +196,11 @@ def test_from_submission_captures_with_provenance() -> None:
     assert lead.trace_id == "req-123"
     assert lead.external_id is None
     assert lead.version == 1
+    assert lead.consent_to_contact is True
+    assert lead.privacy_notice_url == CRM_PRIVACY_NOTICE_URL
+    assert lead.privacy_notice_version == "privacy-2026-07-15"
+    assert lead.consent_schema_version == CRM_CONSENT_SCHEMA_VERSION
+    assert len(lead.consent_recorded_at_utc) == 20
 
 
 def test_with_sync_result_dark_null_is_sync_pending() -> None:
@@ -471,6 +485,11 @@ def test_airtable_provider_posts_record_and_reports_external_id() -> None:
     assert fields["Trace ID"] == "req-airtable"
     assert fields["Metadata JSON"] == '{"campaign":"alpha"}'
     assert fields["Owner"] == "sales-owner"
+    assert fields["Consent to Contact"] is True
+    assert fields["Consent Recorded At UTC"] == lead.consent_recorded_at_utc
+    assert fields["Consent Schema Version"] == CRM_CONSENT_SCHEMA_VERSION
+    assert fields["Privacy Notice URL"] == CRM_PRIVACY_NOTICE_URL
+    assert fields["Privacy Notice Version"] == "privacy-2026-07-15"
     assert len(captured_requests) == 3
 
 
@@ -592,20 +611,98 @@ def _auth_headers() -> dict[str, str]:
     return {"Authorization": f"Bearer {token}"}
 
 
+def _public_payload(email: str, **overrides: object) -> dict[str, object]:
+    payload: dict[str, object] = {
+        "email": email,
+        "consent_to_contact": True,
+        "privacy_notice_version": "privacy-2026-07-15",
+    }
+    payload.update(overrides)
+    return payload
+
+
 def test_public_capture_needs_no_auth_and_does_not_overclaim(client) -> None:
     email = f"public-{uuid4().hex}@example.com"
-    resp = client.post("/api/crm/public/leads", json={"email": email, "name": "Web Lead"})
+    resp = client.post(
+        "/api/crm/public/leads",
+        json=_public_payload(email, name="Web Lead"),
+    )
     assert resp.status_code == 200, resp.text
     body = resp.json()
     assert body["captured"] is True
     assert body["synced"] is False  # dark default never claims an external landing
     assert body["sync_status"] in ("captured", "sync_pending")
     assert "lead_id" in body
+    assert body["consent_to_contact"] is True
+    assert body["privacy_notice_url"] == CRM_PRIVACY_NOTICE_URL
+    assert body["privacy_notice_version"] == "privacy-2026-07-15"
+    assert body["consent_schema_version"] == CRM_CONSENT_SCHEMA_VERSION
 
 
 def test_public_capture_rejects_bad_email(client) -> None:
-    resp = client.post("/api/crm/public/leads", json={"email": "not-an-email"})
+    resp = client.post(
+        "/api/crm/public/leads",
+        json=_public_payload("not-an-email"),
+    )
     assert resp.status_code == 422
+
+
+@pytest.mark.parametrize(
+    "payload",
+    [
+        {"email": "missing@example.com", "privacy_notice_version": "privacy-2026-07-15"},
+        {
+            "email": "declined@example.com",
+            "consent_to_contact": False,
+            "privacy_notice_version": "privacy-2026-07-15",
+        },
+        {
+            "email": "bad-version@example.com",
+            "consent_to_contact": True,
+            "privacy_notice_version": "privacy notice with spaces",
+        },
+    ],
+)
+def test_public_capture_requires_explicit_consent_and_notice_version(
+    client, payload: dict[str, object]
+) -> None:
+    before = client.get("/api/crm/leads", headers=_auth_headers()).json()["count"]
+
+    response = client.post("/api/crm/public/leads", json=payload)
+
+    assert response.status_code == 422
+    after = client.get("/api/crm/leads", headers=_auth_headers()).json()["count"]
+    assert after == before
+
+
+def test_consent_evidence_is_immutable_across_sync_and_pipeline_versions() -> None:
+    captured = Lead.from_submission(
+        _submission().validated(), source="public_web_form", trace_id="req-consent"
+    )
+    annotated = captured.with_sync_result(NullCRMProvider().sync_lead(captured))
+    contacted = annotated.with_pipeline_status("contacted")
+
+    expected = (
+        captured.consent_to_contact,
+        captured.privacy_notice_url,
+        captured.privacy_notice_version,
+        captured.consent_recorded_at_utc,
+        captured.consent_schema_version,
+    )
+    assert (
+        annotated.consent_to_contact,
+        annotated.privacy_notice_url,
+        annotated.privacy_notice_version,
+        annotated.consent_recorded_at_utc,
+        annotated.consent_schema_version,
+    ) == expected
+    assert (
+        contacted.consent_to_contact,
+        contacted.privacy_notice_url,
+        contacted.privacy_notice_version,
+        contacted.consent_recorded_at_utc,
+        contacted.consent_schema_version,
+    ) == expected
 
 
 def test_public_capture_honeypot_rejects_before_capture(client) -> None:
@@ -613,11 +710,11 @@ def test_public_capture_honeypot_rejects_before_capture(client) -> None:
     email = f"honeypot-{uuid4().hex}@example.com"
     resp = client.post(
         "/api/crm/public/leads",
-        json={
-            "email": email,
-            "name": "Bot Lead",
-            "website": "https://spam.example",
-        },
+        json=_public_payload(
+            email,
+            name="Bot Lead",
+            website="https://spam.example",
+        ),
     )
     assert resp.status_code == 400
     listing = client.get("/api/crm/leads", headers=_auth_headers())
@@ -633,14 +730,14 @@ def test_public_capture_rate_limit_is_separate_from_api_key_limiter(client) -> N
     )
     first = client.post(
         "/api/crm/public/leads",
-        json={"email": f"first-{uuid4().hex}@example.com"},
+        json=_public_payload(f"first-{uuid4().hex}@example.com"),
         headers={"X-Forwarded-For": "203.0.113.10"},
     )
     assert first.status_code == 200, first.text
 
     second = client.post(
         "/api/crm/public/leads",
-        json={"email": f"second-{uuid4().hex}@example.com"},
+        json=_public_payload(f"second-{uuid4().hex}@example.com"),
         headers={"X-Forwarded-For": "203.0.113.10"},
     )
     assert second.status_code == 429
@@ -652,7 +749,7 @@ def test_public_capture_records_trace_id(client) -> None:
     email = f"trace-{uuid4().hex}@example.com"
     resp = client.post(
         "/api/crm/public/leads",
-        json={"email": email},
+        json=_public_payload(email),
         headers={"X-Request-ID": "req-traceable-1"},
     )
     lead_id = resp.json()["lead_id"]
@@ -669,7 +766,7 @@ def test_sales_views_require_auth(client) -> None:
 def test_authed_list_and_get_404(client) -> None:
     headers = _auth_headers()
     email = f"list-{uuid4().hex}@example.com"
-    created = client.post("/api/crm/public/leads", json={"email": email})
+    created = client.post("/api/crm/public/leads", json=_public_payload(email))
     lead_id = created.json()["lead_id"]
 
     listing = client.get("/api/crm/leads", headers=headers)
@@ -682,7 +779,7 @@ def test_authed_list_and_get_404(client) -> None:
 def test_pipeline_status_update_requires_auth(client) -> None:
     created = client.post(
         "/api/crm/public/leads",
-        json={"email": f"pipeline-auth-{uuid4().hex}@example.com"},
+        json=_public_payload(f"pipeline-auth-{uuid4().hex}@example.com"),
     )
     lead_id = created.json()["lead_id"]
 
@@ -698,7 +795,7 @@ def test_authed_pipeline_status_update_changes_only_sales_status(client) -> None
     headers = _auth_headers()
     created = client.post(
         "/api/crm/public/leads",
-        json={"email": f"pipeline-{uuid4().hex}@example.com"},
+        json=_public_payload(f"pipeline-{uuid4().hex}@example.com"),
     )
     lead_id = created.json()["lead_id"]
 
@@ -725,7 +822,7 @@ def test_pipeline_status_update_rejects_unknown_status(client) -> None:
     headers = _auth_headers()
     created = client.post(
         "/api/crm/public/leads",
-        json={"email": f"pipeline-invalid-{uuid4().hex}@example.com"},
+        json=_public_payload(f"pipeline-invalid-{uuid4().hex}@example.com"),
     )
     lead_id = created.json()["lead_id"]
 
@@ -743,7 +840,7 @@ def test_pipeline_status_update_normalizes_human_label(client) -> None:
     headers = _auth_headers()
     created = client.post(
         "/api/crm/public/leads",
-        json={"email": f"pipeline-label-{uuid4().hex}@example.com"},
+        json=_public_payload(f"pipeline-label-{uuid4().hex}@example.com"),
     )
     lead_id = created.json()["lead_id"]
 

@@ -64,6 +64,8 @@ OPERATION_KIND = "customer_production_acceptance_authority_operation"
 MAX_EVIDENCE_BYTES = 2_000_000
 
 _SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
+_TAGGED_SHA256_RE = re.compile(r"^sha256:[0-9a-f]{64}$")
+_PRIVACY_NOTICE_VERSION_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
 _SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 _DEPLOY_ID_RE = re.compile(r"^dep-[A-Za-z0-9]+$")
 _UTC_RE = re.compile(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$")
@@ -357,7 +359,11 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         "crm_lead": frozenset(
             {
                 "system",
+                "provider",
                 "lead_id_sha256",
+                "airtable_record_id_sha256",
+                "adapter_response_digest",
+                "source_receipt_sha256",
                 "persisted",
                 "readback_verified",
                 "deduplicated",
@@ -369,8 +375,12 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
         "consent": frozenset(
             {
                 "capture_consent_recorded",
+                "consent_to_contact",
                 "source_attribution_recorded",
                 "privacy_notice_linked",
+                "privacy_notice_url",
+                "privacy_notice_version",
+                "consent_schema_version",
                 "recorded_at_utc",
             }
         ),
@@ -2082,12 +2092,23 @@ def _validate_support_crm_semantics(
         "support_ticket.resolved_at_utc",
     )
     lead = _object(evidence, "crm_lead")
-    _nonempty(lead["system"], "crm_lead.system")
+    _equal(lead, "system", "airtable", "crm_lead")
+    _equal(lead, "provider", "airtable", "crm_lead")
     _sha_value(lead["lead_id_sha256"], "crm_lead.lead_id_sha256")
+    _sha_value(
+        lead["airtable_record_id_sha256"],
+        "crm_lead.airtable_record_id_sha256",
+    )
+    _tagged_sha_value(
+        lead["adapter_response_digest"],
+        "crm_lead.adapter_response_digest",
+    )
+    _sha_value(lead["source_receipt_sha256"], "crm_lead.source_receipt_sha256")
     for field in ("persisted", "readback_verified", "deduplicated", "owner_assigned"):
         _equal(lead, field, True, "crm_lead")
-    _nonempty(lead["lifecycle_stage"], "crm_lead.lifecycle_stage")
-    _proof_time(
+    if lead["lifecycle_stage"] not in {"new", "contacted", "qualified", "won", "lost"}:
+        raise AcceptanceAuthorityInvalid("crm_lead lifecycle_stage is invalid")
+    lead_verified = _proof_time(
         lead["verified_at_utc"],
         "support_crm",
         event,
@@ -2098,11 +2119,27 @@ def _validate_support_crm_semantics(
     consent = _object(evidence, "consent")
     for field in (
         "capture_consent_recorded",
+        "consent_to_contact",
         "source_attribution_recorded",
         "privacy_notice_linked",
     ):
         _equal(consent, field, True, "consent")
-    _proof_time(
+    _equal(consent, "privacy_notice_url", f"{LANDING_ORIGIN}/privacy", "consent")
+    if (
+        not isinstance(consent["privacy_notice_version"], str)
+        or _PRIVACY_NOTICE_VERSION_RE.fullmatch(consent["privacy_notice_version"])
+        is None
+    ):
+        raise AcceptanceAuthorityInvalid(
+            "consent.privacy_notice_version is invalid"
+        )
+    _equal(
+        consent,
+        "consent_schema_version",
+        "noetic_crm_consent.v1",
+        "consent",
+    )
+    consent_recorded = _proof_time(
         consent["recorded_at_utc"],
         "support_crm",
         event,
@@ -2110,6 +2147,10 @@ def _validate_support_crm_semantics(
         now,
         "consent.recorded_at_utc",
     )
+    if consent_recorded > lead_verified:
+        raise AcceptanceAuthorityInvalid(
+            "consent.recorded_at_utc is after Airtable readback verification"
+        )
 
 
 def _validate_incident_tabletop_semantics(
@@ -2415,6 +2456,12 @@ def _sha_value(value: Any, path: str) -> str:
     if not _is_sha256(value):
         raise AcceptanceAuthorityInvalid(f"{path} is not a SHA-256 digest")
     return str(value)
+
+
+def _tagged_sha_value(value: Any, path: str) -> str:
+    if not isinstance(value, str) or _TAGGED_SHA256_RE.fullmatch(value) is None:
+        raise AcceptanceAuthorityInvalid(f"{path} must be sha256:<64 lowercase hex>")
+    return value
 
 
 def _nonempty(value: Any, path: str) -> str:

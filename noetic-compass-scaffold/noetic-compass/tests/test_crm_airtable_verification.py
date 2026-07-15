@@ -131,6 +131,8 @@ def _lead(email: str = "Lead@Example.com") -> Lead:
             message="Please arrange a CAS Harness demo.",
             interest="cas_harness",
             metadata={"campaign": "acceptance"},
+            consent_to_contact=True,
+            privacy_notice_version="privacy-2026-07-15",
         ).validated(),
         source="customer_production_acceptance_probe",
         trace_id="crm-verification-test",
@@ -201,6 +203,7 @@ def test_create_then_retry_updates_the_same_external_record_and_unique_list() ->
     assert retried.verification_receipt.readback_verified is True
     assert retried.verification_receipt.deduplicated is True
     assert retried.verification_receipt.owner_assigned is True
+    assert retried.verification_receipt.provider == "airtable"
     assert retried.verification_receipt.lifecycle_stage == "new"
     assert len(retried.verification_receipt.verified_at) == 20
     datetime.strptime(retried.verification_receipt.verified_at, "%Y-%m-%dT%H:%M:%SZ")
@@ -222,7 +225,11 @@ def test_verification_receipt_survives_jsonl_restart(tmp_path) -> None:
     service = CRMService(JsonlFileLeadStore(path), _provider(fake))
 
     synced = service.capture(
-        LeadSubmission(email="lead@example.com"),
+        LeadSubmission(
+            email="lead@example.com",
+            consent_to_contact=True,
+            privacy_notice_version="privacy-2026-07-15",
+        ),
         source="acceptance",
         trace_id="receipt-persistence",
     )
@@ -305,12 +312,16 @@ def test_filtered_readback_rejects_even_an_empty_pagination_offset() -> None:
     [
         ("Lead ID", "lead-stale-version", "stale_readback"),
         ("Email", "other@example.com", "stale_readback"),
+        ("Consent to Contact", False, "stale_readback"),
+        ("Consent Recorded At UTC", "2026-01-01T00:00:00Z", "stale_readback"),
+        ("Privacy Notice URL", "https://example.invalid/privacy", "stale_readback"),
+        ("Privacy Notice Version", "stale-version", "stale_readback"),
         ("Lifecycle", "qualified", "lifecycle_mismatch"),
         ("Email Dedup Key", "nc-email-sha256-v1:" + ("f" * 64), "dedup_key_mismatch"),
     ],
 )
 def test_wrong_or_stale_direct_readback_is_not_synced(
-    field_name: str, wrong_value: str, category: str
+    field_name: str, wrong_value: object, category: str
 ) -> None:
     fake = _FakeAirtable()
     fake.direct_field_overrides[field_name] = wrong_value
@@ -323,7 +334,11 @@ def test_cleared_optional_field_cannot_leave_stale_airtable_pii() -> None:
     fake = _FakeAirtable()
     fake.direct_field_overrides["Message"] = "stale message from an older submission"
     lead = Lead.from_submission(
-        LeadSubmission(email="lead@example.com").validated(),
+        LeadSubmission(
+            email="lead@example.com",
+            consent_to_contact=True,
+            privacy_notice_version="privacy-2026-07-15",
+        ).validated(),
         source="acceptance",
         trace_id=None,
     )
@@ -395,6 +410,33 @@ def test_legacy_lead_json_without_verification_receipt_remains_readable() -> Non
     assert restored.sync_status == "synced"
     assert restored.external_id == "recLegacy0000001"
     assert restored.verification_receipt is None
+
+
+def test_v1_lead_without_consent_fields_remains_readable_but_not_acceptance_ready() -> None:
+    legacy = _lead().to_dict()
+    legacy["schema_version"] = "noetic_crm.v1"
+    for field in (
+        "consent_to_contact",
+        "privacy_notice_url",
+        "privacy_notice_version",
+        "consent_recorded_at_utc",
+        "consent_schema_version",
+    ):
+        legacy.pop(field)
+
+    restored = Lead.from_dict(legacy)
+
+    assert restored.schema_version == "noetic_crm.v1"
+    assert restored.consent_to_contact is False
+    assert restored.consent_recorded_at_utc == ""
+
+
+def test_v2_lead_missing_consent_fields_fails_closed() -> None:
+    corrupt = _lead().to_dict()
+    corrupt.pop("consent_recorded_at_utc")
+
+    with pytest.raises(CRMStateError, match="consent_recorded_at_utc"):
+        Lead.from_dict(corrupt)
 
 
 def test_corrupt_persisted_verification_receipt_fails_loud() -> None:

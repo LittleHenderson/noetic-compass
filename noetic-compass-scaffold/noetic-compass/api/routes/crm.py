@@ -21,7 +21,7 @@ from __future__ import annotations
 from typing import Mapping
 
 from fastapi import APIRouter, HTTPException, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StrictBool
 
 from api.services.crm.abuse import PublicLeadAbuseGuard, build_public_lead_abuse_guard
 from api.services.crm.models import LeadSubmission, LeadValidationError
@@ -70,10 +70,11 @@ def _client_key(request: Request) -> str:
 
 
 class LeadSubmissionRequest(BaseModel):
-    """The inbound public lead-capture payload. ``email`` is the only hard requirement.
+    """Inbound lead payload with explicit contact consent and notice version.
 
     ``source`` defaults to a neutral public-form marker; a richer form may set it to name the exact
-    page/campaign the lead came from (provenance, captured verbatim onto the lead).
+    page/campaign the lead came from (provenance, captured verbatim onto the lead). The server,
+    not the browser, records the consent timestamp and pins the privacy-notice URL.
     """
 
     email: str = Field(..., min_length=1, max_length=320)
@@ -83,6 +84,13 @@ class LeadSubmissionRequest(BaseModel):
     interest: str = Field(default="", max_length=120)
     source: str = Field(default="public_web_form", min_length=1, max_length=120)
     metadata: dict[str, str] = Field(default_factory=dict)
+    consent_to_contact: StrictBool
+    privacy_notice_version: str = Field(
+        ...,
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+    )
     # Hidden form field. Real users leave it blank; simple bots fill it and are rejected before
     # persistence. It is intentionally excluded from LeadSubmission.
     website: str = Field(default="", max_length=500)
@@ -96,6 +104,11 @@ class LeadCaptureResponse(BaseModel):
     sync_status: str
     synced: bool
     schema_version: str
+    consent_to_contact: bool
+    privacy_notice_url: str
+    privacy_notice_version: str
+    consent_recorded_at_utc: str
+    consent_schema_version: str
     message: str
 
 
@@ -121,7 +134,7 @@ def _receipt_message(sync_status: str) -> str:
 async def capture_public_lead(request: Request, payload: LeadSubmissionRequest) -> LeadCaptureResponse:
     """Capture a lead from a public form. Public, no auth. Durable capture before any sync.
 
-    Returns 422 if the email is unusable (we refuse to capture an uncontactable lead). The
+    Returns 422 if the email is unusable or explicit consent/notice version is absent. The
     ``trace_id`` is the request's ``X-Request-ID`` so the captured lead walks back to this request.
     """
     decision = _abuse_guard(request).check(
@@ -145,6 +158,8 @@ async def capture_public_lead(request: Request, payload: LeadSubmissionRequest) 
         message=payload.message,
         interest=payload.interest,
         metadata=dict(payload.metadata),
+        consent_to_contact=payload.consent_to_contact,
+        privacy_notice_version=payload.privacy_notice_version,
     )
     trace_id = getattr(request.state, "request_id", None)
     try:
@@ -159,6 +174,11 @@ async def capture_public_lead(request: Request, payload: LeadSubmissionRequest) 
         sync_status=lead.sync_status,
         synced=lead.sync_status == "synced",
         schema_version=lead.schema_version,
+        consent_to_contact=lead.consent_to_contact,
+        privacy_notice_url=lead.privacy_notice_url,
+        privacy_notice_version=lead.privacy_notice_version,
+        consent_recorded_at_utc=lead.consent_recorded_at_utc,
+        consent_schema_version=lead.consent_schema_version,
         message=_receipt_message(lead.sync_status),
     )
 

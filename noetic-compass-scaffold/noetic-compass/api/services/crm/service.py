@@ -71,9 +71,10 @@ class CRMService:
         """Capture a submission as a durable lead, then attempt sync and annotate the outcome.
 
         Raises :class:`~api.services.crm.models.LeadValidationError` if the submission is unusable
-        (no contactable email) — the caller turns that into a 4xx at the HTTP edge. On success the
-        returned lead is the post-sync version: ``synced`` only if a real provider actually landed
-        it, otherwise ``sync_pending`` (dark default) or ``sync_failed`` (real provider errored).
+        (no contactable email or no explicit consent/published-notice version) — the caller turns
+        that into a 4xx at the HTTP edge. On success the returned lead is the post-sync version:
+        ``synced`` only if a real provider actually landed it, otherwise ``sync_pending`` (dark
+        default) or ``sync_failed`` (real provider errored).
         """
         # 1. Validate at the boundary. A junk submission never becomes a stored lead.
         validated = submission.validated()

@@ -472,8 +472,12 @@ def _gate_payloads() -> dict[str, dict]:
                 "resolved_at_utc": "2026-07-14T11:44:00Z",
             },
             "crm_lead": {
-                "system": "production-crm",
+                "system": "airtable",
+                "provider": "airtable",
                 "lead_id_sha256": _digest("lead"),
+                "airtable_record_id_sha256": _digest("airtable-record"),
+                "adapter_response_digest": "sha256:" + _digest("adapter-response"),
+                "source_receipt_sha256": _digest("crm-source-receipt"),
                 "persisted": True,
                 "readback_verified": True,
                 "deduplicated": True,
@@ -483,8 +487,12 @@ def _gate_payloads() -> dict[str, dict]:
             },
             "consent": {
                 "capture_consent_recorded": True,
+                "consent_to_contact": True,
                 "source_attribution_recorded": True,
                 "privacy_notice_linked": True,
+                "privacy_notice_url": f"{verifier.LANDING_ORIGIN}/privacy",
+                "privacy_notice_version": "privacy-2026-07-15",
+                "consent_schema_version": "noetic_crm_consent.v1",
                 "recorded_at_utc": "2026-07-14T11:42:00Z",
             },
         }
@@ -1254,6 +1262,46 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
                     self.assertTrue(
                         any(expected in error for error in report["errors"])
                     )
+                finally:
+                    bundle.close()
+
+    def test_support_crm_requires_provider_bound_airtable_receipts_and_consent(self) -> None:
+        cases = {
+            "wrong provider": lambda payloads: payloads["support_crm"]["crm_lead"].update(
+                provider="hubspot"
+            ),
+            "missing record hash": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(airtable_record_id_sha256=""),
+            "malformed adapter digest": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(adapter_response_digest=_digest("unprefixed")),
+            "missing source receipt": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(source_receipt_sha256=""),
+            "declined contact": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(consent_to_contact=False),
+            "wrong privacy URL": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(privacy_notice_url="https://example.invalid/privacy"),
+            "invalid privacy version": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(privacy_notice_version="privacy version with spaces"),
+            "wrong consent schema": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(consent_schema_version="noetic_crm_consent.v0"),
+            "consent after readback": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(recorded_at_utc="2026-07-14T11:46:00Z"),
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
                 finally:
                     bundle.close()
 

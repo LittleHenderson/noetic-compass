@@ -14,6 +14,8 @@ views over it.
 from __future__ import annotations
 
 from api.services.crm.models import (
+    CRM_CONSENT_SCHEMA_VERSION,
+    CRM_PRIVACY_NOTICE_URL,
     CRM_SCHEMA_VERSION,
     CRMStateError,
     CRMSyncResult,
@@ -57,6 +59,8 @@ from api.services.crm.sync import (
 )
 
 __all__ = [
+    "CRM_CONSENT_SCHEMA_VERSION",
+    "CRM_PRIVACY_NOTICE_URL",
     "CRM_SCHEMA_VERSION",
     "AirtableCRMProvider",
     "CRMConfigError",

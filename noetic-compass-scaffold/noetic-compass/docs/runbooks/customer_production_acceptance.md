@@ -556,7 +556,11 @@ All nine gates must be `present`, current, and authoritative:
 5. `legal_publication_approval`: live Legal, Privacy, and Terms pages with
    exact hashes, approved by legal, privacy, and product owners.
 6. `support_crm`: real support-ticket persistence/routing/SLA/resolution and
-   CRM lead persistence, deduplication, ownership, consent, and attribution.
+   Airtable lead persistence, deduplication, ownership, consent, and attribution. The CRM proof
+   binds a hashed Airtable record ID, the adapter response digest, its source-receipt hash, and
+   exact consent timestamp/privacy-notice version without PII. Collect that source first with
+   `docs/runbooks/airtable_crm_acceptance_source.md`; it remains `OPEN` until the separate resolved
+   support-ticket/SLA proof is also present.
 7. `incident_tabletop`: closed incident and actions, verified recovery and
    rotation, hashed postmortem, and current cross-functional tabletop.
 8. `alert_delivery`: P1 delivery to on-call and incident channel,
