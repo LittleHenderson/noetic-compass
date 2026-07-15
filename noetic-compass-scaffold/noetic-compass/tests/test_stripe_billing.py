@@ -1,6 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import hmac
+import json
 import sys
+import time
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
 
@@ -40,6 +44,21 @@ class _AsyncRetrieve:
         return self.response
 
 
+class _StripeObject:
+    """Test double that exposes the same public conversion API as stripe v15."""
+
+    def __init__(self, payload: dict[str, object]) -> None:
+        self.payload = payload
+        self.to_dict_calls: list[tuple[bool, bool]] = []
+        self.last_response = None
+
+    def to_dict(
+        self, recursive: bool = True, for_json: bool = False
+    ) -> dict[str, object]:
+        self.to_dict_calls.append((recursive, for_json))
+        return dict(self.payload)
+
+
 class _StripeClient:
     instances: list["_StripeClient"] = []
 
@@ -62,15 +81,14 @@ class _StripeClient:
         self.portal = _AsyncCreate(
             SimpleNamespace(url="https://billing.stripe.com/p/session/server")
         )
-        self.subscriptions = _AsyncRetrieve(
-            SimpleNamespace(
-                to_dict_recursive=lambda: {
-                    "id": "sub_current",
-                    "customer": "cus_bound",
-                    "status": "active",
-                }
-            )
+        self.subscription = _StripeObject(
+            {
+                "id": "sub_current",
+                "customer": "cus_bound",
+                "status": "active",
+            }
         )
+        self.subscriptions = _AsyncRetrieve(self.subscription)
         self.v1 = SimpleNamespace(
             checkout=SimpleNamespace(sessions=self.checkout),
             billing_portal=SimpleNamespace(sessions=self.portal),
@@ -83,11 +101,13 @@ class _StripeClient:
             "api_version": STRIPE_API_VERSION,
             "livemode": False,
         }
+        self.last_event_object: _StripeObject | None = None
         self.instances.append(self)
 
     def construct_event(self, payload: bytes, signature: str, secret: str):
         self.construct_calls.append((payload, signature, secret))
-        return SimpleNamespace(to_dict_recursive=lambda: self.event)
+        self.last_event_object = _StripeObject(self.event)
+        return self.last_event_object
 
 
 def _install_fake_stripe(monkeypatch) -> None:
@@ -185,6 +205,8 @@ def test_raw_webhook_signature_is_verified_by_sdk_client(provider) -> None:
         "livemode": False,
     }
     assert client.construct_calls == [(payload, "t=1,v1=abc", "whsec_private")]
+    assert client.last_event_object is not None
+    assert client.last_event_object.to_dict_calls == [(True, True)]
 
 
 @pytest.mark.parametrize(
@@ -237,6 +259,98 @@ async def test_subscription_webhook_refresh_reads_latest_provider_state(provider
     client = _StripeClient.instances[0]
     assert latest.payload["status"] == "active"
     assert client.subscriptions.calls == ["sub_current"]
+    assert client.subscription.to_dict_calls == [(True, True)]
+
+
+def _real_sdk_provider(*, webhook_secret: str) -> StripeBillingProvider:
+    return StripeBillingProvider(
+        secret_key="sk_test_offline",
+        webhook_secret=webhook_secret,
+        price_by_plan={
+            "professional_live": "price_pro",
+            "enterprise_live": "price_ent",
+        },
+        livemode=False,
+        success_url="https://app.example.com/billing/success",
+        cancel_url="https://app.example.com/billing/cancel",
+        portal_return_url="https://app.example.com/billing",
+    )
+
+
+def test_real_sdk_verifies_and_converts_offline_signed_webhook() -> None:
+    webhook_secret = "whsec_offline_regression"
+    provider = _real_sdk_provider(webhook_secret=webhook_secret)
+    timestamp = int(time.time())
+    payload = json.dumps(
+        {
+            "id": "evt_real_sdk",
+            "object": "event",
+            "api_version": STRIPE_API_VERSION,
+            "created": timestamp,
+            "data": {
+                "object": {
+                    "id": "sub_real_sdk",
+                    "object": "subscription",
+                    "status": "active",
+                }
+            },
+            "livemode": False,
+            "pending_webhooks": 1,
+            "request": {"id": "req_real_sdk", "idempotency_key": None},
+            "type": "customer.subscription.updated",
+        },
+        sort_keys=True,
+        separators=(",", ":"),
+    ).encode("utf-8")
+    signed_payload = f"{timestamp}.".encode("ascii") + payload
+    digest = hmac.new(
+        webhook_secret.encode("utf-8"), signed_payload, hashlib.sha256
+    ).hexdigest()
+
+    event = provider.construct_webhook_event(
+        payload=payload,
+        signature=f"t={timestamp},v1={digest}",
+    )
+
+    assert event["id"] == "evt_real_sdk"
+    assert event["data"]["object"]["id"] == "sub_real_sdk"
+    assert isinstance(event["data"], dict)
+
+
+@pytest.mark.asyncio
+async def test_real_sdk_subscription_object_is_converted_after_refresh() -> None:
+    import stripe
+
+    provider = _real_sdk_provider(webhook_secret="whsec_offline_regression")
+    subscription = stripe.Subscription.construct_from(
+        {
+            "id": "sub_real_sdk",
+            "object": "subscription",
+            "customer": "cus_real_sdk",
+            "status": "active",
+            "metadata": {"cas_tenant_id": "tenant-a"},
+        },
+        "sk_test_offline",
+        stripe_version=STRIPE_API_VERSION,
+    )
+    retriever = _AsyncRetrieve(subscription)
+    provider._client = SimpleNamespace(
+        v1=SimpleNamespace(subscriptions=retriever)
+    )
+
+    snapshot = await provider.retrieve_subscription(
+        external_subscription_id="sub_real_sdk"
+    )
+
+    assert retriever.calls == ["sub_real_sdk"]
+    assert snapshot.payload == {
+        "id": "sub_real_sdk",
+        "object": "subscription",
+        "customer": "cus_real_sdk",
+        "status": "active",
+        "metadata": {"cas_tenant_id": "tenant-a"},
+    }
+    assert snapshot.provider_request_id is None
 
 
 def test_incomplete_configuration_fails_loud_without_importing_sdk() -> None:

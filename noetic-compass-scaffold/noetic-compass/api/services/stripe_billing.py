@@ -34,7 +34,7 @@ class StripeBillingProviderError(RuntimeError):
 def validate_stripe_secret_key_mode(
     secret_key: str, *, expected_livemode: bool
 ) -> None:
-    """Bind usage billing mode to the configured Stripe credential mode."""
+    """Bind Stripe billing mode to the configured Stripe credential mode."""
 
     key = secret_key.strip()
     if key != secret_key:
@@ -272,7 +272,7 @@ class StripeBillingProvider:
             event = self._client.construct_event(
                 payload, signature, self._webhook_secret
             )
-            plain = event.to_dict_recursive()
+            plain = event.to_dict(recursive=True, for_json=True)
         except Exception as exc:
             raise StripeBillingProviderError(
                 "Stripe webhook signature verification failed"
@@ -301,7 +301,7 @@ class StripeBillingProvider:
             subscription = await self._client.v1.subscriptions.retrieve_async(
                 external_subscription_id
             )
-            plain = subscription.to_dict_recursive()
+            plain = subscription.to_dict(recursive=True, for_json=True)
             last_response = getattr(subscription, "last_response", None)
             request_id = str(
                 getattr(last_response, "request_id", "") or ""

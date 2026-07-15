@@ -41,7 +41,9 @@ from __future__ import annotations
 
 import os
 import uuid
+from concurrent.futures import ThreadPoolExecutor
 from datetime import UTC, datetime, timedelta
+from threading import Barrier
 
 import pytest
 
@@ -409,3 +411,114 @@ def test_fence_strictly_increases_per_resource(pg_schema):
             guard.check(a1.fence)  # stalled worker-a wakes with its old fence
     finally:
         store.close()
+
+
+def test_billing_reconciliation_blocks_double_bill_across_independent_connections(
+    pg_schema,
+):
+    """Two application instances cannot bill one measurement under two receipts."""
+
+    from api.services.billing_entitlements import BillingEntitlementStore
+    from api.services.billing_reconciliation import (
+        BillingReconciliationConflict,
+        BillingReconciliationStore,
+        FleetUsageMeasurement,
+    )
+    from api.services.production.state_substrate.postgres_store import PostgresStateStore
+
+    first_store = PostgresStateStore(pg_schema)
+    second_store = PostgresStateStore(pg_schema)
+    try:
+        first_entitlements = BillingEntitlementStore(first_store)
+        second_entitlements = BillingEntitlementStore(second_store)
+        now = datetime.now(UTC).replace(microsecond=0)
+        period_start = now - timedelta(days=1)
+        period_end = now + timedelta(days=30)
+        first_entitlements.grant_manual_comped(
+            tenant_id="tenant-billing-race",
+            billing_account_id="account-billing-race",
+            expires_at=period_end.isoformat(),
+        )
+        first_entitlements.apply_stripe_subscription(
+            tenant_id="tenant-billing-race",
+            plan_id="professional_live",
+            status="active",
+            external_customer_id="cus_IndependentRace",
+            external_subscription_id="sub_IndependentRace",
+            event_id="evt_IndependentRace",
+            event_created=int(now.timestamp()),
+            current_period_start=period_start.isoformat(),
+            current_period_end=period_end.isoformat(),
+            cancel_at_period_end=False,
+        )
+
+        def service(store, entitlements):
+            return BillingReconciliationStore(
+                store,
+                entitlements,
+                provider_reference_hash_key=(
+                    "postgres-race-dedicated-reference-key-0123456789"
+                ),
+                usage_price_id="price_IndependentRace",
+                meter_event_name="cas.accelerator_milliseconds",
+                meter_event_version="cas_meter.v1",
+                currency="usd",
+                livemode=False,
+                customer_receipt_allowed_hosts=("receipts.stripe.test",),
+            )
+
+        first_service = service(first_store, first_entitlements)
+        second_service = service(second_store, second_entitlements)
+        measurement_start = now - timedelta(minutes=10)
+        measurement_end = now - timedelta(minutes=5)
+
+        def measurement(receipt_character: str) -> FleetUsageMeasurement:
+            return FleetUsageMeasurement(
+                tenant_id="tenant-billing-race",
+                billing_account_id="account-billing-race",
+                run_id="run-independent-race",
+                worker_id="worker-independent-race",
+                accelerator_milliseconds=1_000,
+                accelerator_count=1,
+                measurement_started_at=measurement_start.isoformat(),
+                measurement_ended_at=measurement_end.isoformat(),
+                receipt_sha256=receipt_character * 64,
+                receipt_schema_version="fleet_usage_receipt.v1",
+                receipt_size_bytes=4_096,
+                receipt_issuer="authenticated-fleet-gateway",
+                source="fleet_measured",
+            )
+
+        start_together = Barrier(2)
+
+        def attempt(service_instance, candidate):
+            start_together.wait(timeout=10)
+            try:
+                return service_instance.record_fleet_measurement(candidate)
+            except BillingReconciliationConflict as exc:
+                return exc
+
+        with ThreadPoolExecutor(max_workers=2) as executor:
+            futures = (
+                executor.submit(
+                    attempt, first_service, measurement("a")
+                ),
+                executor.submit(
+                    attempt, second_service, measurement("b")
+                ),
+            )
+            results = [future.result(timeout=20) for future in futures]
+
+        successes = [result for result in results if isinstance(result, tuple)]
+        conflicts = [
+            result
+            for result in results
+            if isinstance(result, BillingReconciliationConflict)
+        ]
+        assert len(successes) == 1
+        assert len(conflicts) == 1
+        assert len(first_service.list_usage("tenant-billing-race")) == 1
+        assert len(second_service.list_usage("tenant-billing-race")) == 1
+    finally:
+        second_store.close()
+        first_store.close()
