@@ -14,7 +14,13 @@ success redirect.
 from __future__ import annotations
 
 from dataclasses import dataclass
+import re
 from typing import Any, Mapping, Protocol
+
+
+STRIPE_SDK_VERSION = "15.2.1"
+STRIPE_API_VERSION = "2026-06-24.dahlia"
+_STRIPE_PRICE_ID_RE = re.compile(r"^price_[A-Za-z0-9_]{1,249}$")
 
 
 class StripeBillingConfigurationError(RuntimeError):
@@ -23,6 +29,31 @@ class StripeBillingConfigurationError(RuntimeError):
 
 class StripeBillingProviderError(RuntimeError):
     pass
+
+
+def validate_stripe_secret_key_mode(
+    secret_key: str, *, expected_livemode: bool
+) -> None:
+    """Bind Stripe billing mode to the configured Stripe credential mode."""
+
+    key = secret_key.strip()
+    if key != secret_key:
+        raise StripeBillingConfigurationError(
+            "NC_STRIPE_SECRET_KEY must not contain surrounding whitespace"
+        )
+    if key.startswith(("sk_live_", "rk_live_")):
+        key_livemode = True
+    elif key.startswith(("sk_test_", "rk_test_")):
+        key_livemode = False
+    else:
+        raise StripeBillingConfigurationError(
+            "NC_STRIPE_SECRET_KEY must have a recognizable Stripe live/test prefix "
+            "when Stripe billing is enabled"
+        )
+    if key_livemode != expected_livemode:
+        raise StripeBillingConfigurationError(
+            "NC_STRIPE_SECRET_KEY mode does not match NC_STRIPE_LIVEMODE"
+        )
 
 
 @dataclass(frozen=True, slots=True)
@@ -90,6 +121,8 @@ class StripeBillingProvider:
         secret_key: str,
         webhook_secret: str,
         price_by_plan: Mapping[str, str],
+        livemode: bool,
+        usage_price_id: str | None = None,
         success_url: str,
         cancel_url: str,
         portal_return_url: str,
@@ -118,6 +151,23 @@ class StripeBillingProvider:
             raise StripeBillingConfigurationError(
                 "Stripe professional and enterprise price ids must be distinct"
             )
+        if not isinstance(livemode, bool):
+            raise StripeBillingConfigurationError(
+                "NC_STRIPE_LIVEMODE must be a Boolean"
+            )
+        validate_stripe_secret_key_mode(
+            secret_key, expected_livemode=livemode
+        )
+        if usage_price_id is not None:
+            if not _STRIPE_PRICE_ID_RE.fullmatch(usage_price_id):
+                raise StripeBillingConfigurationError(
+                    "NC_STRIPE_USAGE_PRICE_ID must be a canonical Stripe price id"
+                )
+            if usage_price_id in {professional_price, enterprise_price}:
+                raise StripeBillingConfigurationError(
+                    "Stripe usage price id must be distinct from flat subscription "
+                    "price ids"
+                )
         for name, url in (
             ("NC_STRIPE_CHECKOUT_SUCCESS_URL", success_url),
             ("NC_STRIPE_CHECKOUT_CANCEL_URL", cancel_url),
@@ -126,15 +176,27 @@ class StripeBillingProvider:
             if not url.startswith("https://"):
                 raise StripeBillingConfigurationError(f"{name} must use https://")
         try:
+            from stripe import VERSION as installed_stripe_version
             from stripe import StripeClient
         except ImportError as exc:  # pragma: no cover - exercised through builder tests
             raise StripeBillingConfigurationError(
                 "NC_BILLING_PROVIDER=stripe requires stripe-python"
             ) from exc
+        if installed_stripe_version != STRIPE_SDK_VERSION:
+            raise StripeBillingConfigurationError(
+                "installed stripe-python version does not match the pinned "
+                "financial API contract"
+            )
 
-        self._client = StripeClient(secret_key, max_network_retries=2)
+        self._client = StripeClient(
+            secret_key,
+            stripe_version=STRIPE_API_VERSION,
+            max_network_retries=2,
+        )
         self._webhook_secret = webhook_secret
+        self._livemode = livemode
         self._price_by_plan = dict(price_by_plan)
+        self._usage_price_id = usage_price_id
         self._success_url = success_url
         self._cancel_url = cancel_url
         self._portal_return_url = portal_return_url
@@ -157,9 +219,12 @@ class StripeBillingProvider:
             "cas_account_id": account_id,
             "cas_plan_id": plan_id,
         }
+        line_items = [{"price": price_id, "quantity": 1}]
+        if self._usage_price_id is not None:
+            line_items.append({"price": self._usage_price_id})
         params: dict[str, object] = {
             "mode": "subscription",
-            "line_items": [{"price": price_id, "quantity": 1}],
+            "line_items": line_items,
             "client_reference_id": tenant_id,
             "success_url": self._success_url,
             "cancel_url": self._cancel_url,
@@ -207,13 +272,26 @@ class StripeBillingProvider:
             event = self._client.construct_event(
                 payload, signature, self._webhook_secret
             )
-            plain = event.to_dict_recursive()
+            plain = event.to_dict(recursive=True, for_json=True)
         except Exception as exc:
             raise StripeBillingProviderError(
                 "Stripe webhook signature verification failed"
             ) from exc
         if not isinstance(plain, Mapping):
             raise StripeBillingProviderError("Stripe webhook event was malformed")
+        if plain.get("api_version") != STRIPE_API_VERSION:
+            raise StripeBillingProviderError(
+                "Stripe webhook API version does not match the pinned contract"
+            )
+        event_livemode = plain.get("livemode")
+        if not isinstance(event_livemode, bool):
+            raise StripeBillingProviderError(
+                "Stripe webhook livemode was malformed"
+            )
+        if event_livemode != self._livemode:
+            raise StripeBillingProviderError(
+                "Stripe webhook livemode does not match NC_STRIPE_LIVEMODE"
+            )
         return plain
 
     async def retrieve_subscription(
@@ -223,7 +301,7 @@ class StripeBillingProvider:
             subscription = await self._client.v1.subscriptions.retrieve_async(
                 external_subscription_id
             )
-            plain = subscription.to_dict_recursive()
+            plain = subscription.to_dict(recursive=True, for_json=True)
             last_response = getattr(subscription, "last_response", None)
             request_id = str(
                 getattr(last_response, "request_id", "") or ""
@@ -250,6 +328,9 @@ def build_billing_provider(settings: object) -> BillingProvider:
         raise StripeBillingConfigurationError(
             f"unsupported NC_BILLING_PROVIDER {provider_name!r}"
         )
+    reconciliation_enabled = bool(
+        getattr(settings, "billing_reconciliation_enabled", False)
+    )
     return StripeBillingProvider(
         secret_key=str(getattr(settings, "stripe_secret_key", "")),
         webhook_secret=str(getattr(settings, "stripe_webhook_secret", "")),
@@ -261,6 +342,12 @@ def build_billing_provider(settings: object) -> BillingProvider:
                 getattr(settings, "stripe_enterprise_price_id", "")
             ),
         },
+        livemode=bool(getattr(settings, "stripe_livemode", False)),
+        usage_price_id=(
+            str(getattr(settings, "stripe_usage_price_id", ""))
+            if reconciliation_enabled
+            else None
+        ),
         success_url=str(getattr(settings, "stripe_checkout_success_url", "")),
         cancel_url=str(getattr(settings, "stripe_checkout_cancel_url", "")),
         portal_return_url=str(getattr(settings, "stripe_portal_return_url", "")),

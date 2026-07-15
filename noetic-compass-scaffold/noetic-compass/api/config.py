@@ -612,6 +612,19 @@ class Settings(BaseSettings):
                 raise RuntimeError(
                     "Stripe professional and enterprise price ids must be distinct."
                 )
+            if provider == "stripe" and not self.billing_reconciliation_enabled:
+                from api.services.stripe_billing import (
+                    StripeBillingConfigurationError,
+                    validate_stripe_secret_key_mode,
+                )
+
+                try:
+                    validate_stripe_secret_key_mode(
+                        self.stripe_secret_key,
+                        expected_livemode=self.stripe_livemode,
+                    )
+                except StripeBillingConfigurationError as exc:
+                    raise RuntimeError(str(exc)) from exc
         if self.billing_reconciliation_enabled:
             if not self.billing_entitlements_enabled:
                 raise RuntimeError(
@@ -623,6 +636,21 @@ class Settings(BaseSettings):
                     "NC_BILLING_RECONCILIATION_ENABLED=true requires "
                     "NC_BILLING_PROVIDER=stripe."
                 )
+            database_url = str(self.database_url or "").strip()
+            try:
+                database_scheme = urlsplit(database_url).scheme.lower()
+            except ValueError:
+                database_scheme = ""
+            if database_scheme not in {
+                "postgres",
+                "postgresql",
+                "postgresql+asyncpg",
+            }:
+                raise RuntimeError(
+                    "NC_BILLING_RECONCILIATION_ENABLED=true requires "
+                    "NC_DATABASE_URL backed by PostgreSQL; acknowledged "
+                    "single-host SQLite/debug storage is not supported."
+                )
             reference_key = self.billing_provider_reference_hash_key
             other_authority_keys: set[str] = set()
             for field_name in _BILLING_REFERENCE_CREDENTIAL_FIELDS:
@@ -633,7 +661,6 @@ class Settings(BaseSettings):
                     )
                 elif value:
                     other_authority_keys.add(value)
-            database_url = str(self.database_url or "").strip()
             if database_url:
                 try:
                     database_password = urlsplit(database_url).password
@@ -699,6 +726,18 @@ class Settings(BaseSettings):
                     "Stripe usage price id must be distinct from flat "
                     "subscription price ids."
                 )
+            from api.services.stripe_billing import (
+                StripeBillingConfigurationError,
+                validate_stripe_secret_key_mode,
+            )
+
+            try:
+                validate_stripe_secret_key_mode(
+                    self.stripe_secret_key,
+                    expected_livemode=self.stripe_livemode,
+                )
+            except StripeBillingConfigurationError as exc:
+                raise RuntimeError(str(exc)) from exc
             if (
                 len(currency) != 3
                 or not currency.isascii()

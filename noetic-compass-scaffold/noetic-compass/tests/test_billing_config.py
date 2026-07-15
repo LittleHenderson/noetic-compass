@@ -11,6 +11,9 @@ from api.services.stripe_billing import NullBillingProvider
 
 
 BILLING_REFERENCE_KEY = "billing-ref-HMAC-v1-7f3a9c2e5d8b1a6f4c0e"
+POSTGRES_DATABASE_URL = (
+    "postgresql+asyncpg://cas:database-password@db.internal/cas"
+)
 
 
 def _settings(**overrides) -> Settings:
@@ -53,6 +56,20 @@ def test_billing_rejects_unknown_provider_and_weak_admin_secret() -> None:
         ).validate_account_storage()
 
 
+def test_stripe_key_mode_binding_applies_while_reconciliation_is_dark() -> None:
+    base = {
+        "billing_provider": "stripe",
+        "billing_reconciliation_enabled": False,
+        "stripe_professional_price_id": "price_pro",
+        "stripe_enterprise_price_id": "price_ent",
+        "stripe_secret_key": "sk_test_private",
+        "stripe_livemode": False,
+    }
+    _settings(**base).validate_account_storage()
+    with pytest.raises(RuntimeError, match="does not match NC_STRIPE_LIVEMODE"):
+        _settings(**{**base, "stripe_livemode": True}).validate_account_storage()
+
+
 def test_dark_defaults_are_inert() -> None:
     dark = Settings.model_construct(
         accounts_enabled=False,
@@ -67,7 +84,9 @@ def test_dark_defaults_are_inert() -> None:
         billing_usage_meter_event_name="unsafe placeholder with spaces",
         billing_usage_meter_version="",
         billing_usage_currency="not-a-currency",
+        stripe_secret_key="untyped-unused-placeholder",
         stripe_usage_price_id="",
+        stripe_livemode=True,
         billing_customer_receipt_allowed_hosts="unsafe host",
     )
     dark.validate_account_storage()
@@ -86,6 +105,27 @@ def test_reconciliation_enablement_requires_entitlements_and_stripe() -> None:
         ).validate_account_storage()
 
 
+def test_reconciliation_rejects_acknowledged_debug_sqlite_backend() -> None:
+    with pytest.raises(RuntimeError, match="requires NC_DATABASE_URL backed by PostgreSQL"):
+        _settings(
+            billing_reconciliation_enabled=True,
+            billing_provider="stripe",
+            stripe_professional_price_id="price_pro",
+            stripe_enterprise_price_id="price_ent",
+            billing_provider_reference_hash_key=BILLING_REFERENCE_KEY,
+            billing_usage_meter_event_name="cas.accelerator_milliseconds",
+            billing_usage_meter_version="cas_meter.v1",
+            billing_usage_currency="usd",
+            stripe_secret_key="sk_test_private",
+            stripe_usage_price_id="price_usage",
+            stripe_livemode=False,
+            billing_customer_receipt_allowed_hosts="receipts.stripe.test",
+            debug=True,
+            accounts_allow_single_host_sqlite=True,
+            database_url=None,
+        ).validate_account_storage()
+
+
 def test_reconciliation_enablement_fails_loud_on_incomplete_contract() -> None:
     base = {
         "billing_reconciliation_enabled": True,
@@ -96,8 +136,11 @@ def test_reconciliation_enablement_fails_loud_on_incomplete_contract() -> None:
         "billing_usage_meter_event_name": "cas.accelerator_milliseconds",
         "billing_usage_meter_version": "cas_meter.v1",
         "billing_usage_currency": "usd",
+        "stripe_secret_key": "sk_test_private",
         "stripe_usage_price_id": "price_usage",
+        "stripe_livemode": False,
         "billing_customer_receipt_allowed_hosts": "receipts.stripe.test",
+        "database_url": POSTGRES_DATABASE_URL,
     }
     _settings(**base).validate_account_storage()
     with pytest.raises(RuntimeError, match="HASH_KEY.*32 bytes"):
@@ -135,6 +178,29 @@ def test_reconciliation_enablement_fails_loud_on_incomplete_contract() -> None:
         _settings(
             **{**base, "stripe_usage_price_id": "price_pro"}
         ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="does not match NC_STRIPE_LIVEMODE"):
+        _settings(
+            **{**base, "stripe_livemode": True}
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="does not match NC_STRIPE_LIVEMODE"):
+        _settings(
+            **{
+                **base,
+                "stripe_secret_key": "rk_live_private",
+                "stripe_livemode": False,
+            }
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="recognizable Stripe live/test prefix"):
+        _settings(
+            **{**base, "stripe_secret_key": "untyped-private-key"}
+        ).validate_account_storage()
+    _settings(
+        **{
+            **base,
+            "stripe_secret_key": "rk_live_private",
+            "stripe_livemode": True,
+        }
+    ).validate_account_storage()
     with pytest.raises(RuntimeError, match="CURRENCY"):
         _settings(
             **{**base, "billing_usage_currency": "dollars"}
@@ -182,6 +248,7 @@ def test_reconciliation_rejects_blank_control_and_predictable_reference_keys(
             billing_usage_currency="usd",
             stripe_usage_price_id="price_usage",
             billing_customer_receipt_allowed_hosts="receipts.stripe.test",
+            database_url=POSTGRES_DATABASE_URL,
         ).validate_account_storage()
 
 
@@ -228,6 +295,10 @@ def test_reconciliation_reference_key_is_separate_from_every_credential(
     credential_field: str, credential_value: str
 ) -> None:
     with pytest.raises(RuntimeError, match="must be dedicated"):
+        credentials = {
+            "database_url": POSTGRES_DATABASE_URL,
+            credential_field: credential_value,
+        }
         _settings(
             billing_reconciliation_enabled=True,
             billing_provider="stripe",
@@ -239,7 +310,7 @@ def test_reconciliation_reference_key_is_separate_from_every_credential(
             billing_usage_currency="usd",
             stripe_usage_price_id="price_usage",
             billing_customer_receipt_allowed_hosts="receipts.stripe.test",
-            **{credential_field: credential_value},
+            **credentials,
         ).validate_account_storage()
 
 
@@ -278,17 +349,10 @@ def test_lifespan_installs_billing_on_shared_store_and_clears_it(
     assert app.state.billing_provider is None
 
 
-def test_lifespan_installs_enabled_reconciliation_service_without_api_claim(
+def test_lifespan_rejects_enabled_reconciliation_on_debug_sqlite(
     tmp_path, monkeypatch
 ) -> None:
     from api.main import app
-    from api.services import stripe_billing
-
-    monkeypatch.setattr(
-        stripe_billing,
-        "build_billing_provider",
-        lambda _settings: NullBillingProvider(),
-    )
     patches = {
         "accounts_enabled": True,
         "quotas_enabled": True,
@@ -302,6 +366,7 @@ def test_lifespan_installs_enabled_reconciliation_service_without_api_claim(
         "stripe_usage_price_id": "price_usage",
         "stripe_professional_price_id": "price_pro",
         "stripe_enterprise_price_id": "price_ent",
+        "stripe_secret_key": "sk_test_private",
         "stripe_livemode": False,
         "billing_customer_receipt_allowed_hosts": "receipts.stripe.test",
         "billing_admin_secret": "a" * 32,
@@ -319,15 +384,10 @@ def test_lifespan_installs_enabled_reconciliation_service_without_api_claim(
     for name, value in patches.items():
         monkeypatch.setattr(settings, name, value)
 
-    with TestClient(app):
-        shared = app.state.shared_state_store
-        reconciliation = app.state.billing_reconciliation_store
-        assert reconciliation is not None
-        assert reconciliation._store is shared
-        assert reconciliation._entitlements is app.state.billing_entitlement_store
-        assert not any(
-            "reconciliation" in str(getattr(route, "path", ""))
-            for route in app.routes
-        )
+    with pytest.raises(
+        RuntimeError, match="requires NC_DATABASE_URL backed by PostgreSQL"
+    ):
+        with TestClient(app):
+            pass
 
     assert app.state.billing_reconciliation_store is None

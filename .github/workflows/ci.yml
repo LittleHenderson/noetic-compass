@@ -350,17 +350,30 @@ jobs:
 
           import boto3
           import botocore
+          import stripe
 
           from api.config import settings
+          from api.services.stripe_billing import (
+              STRIPE_API_VERSION,
+              STRIPE_SDK_VERSION,
+          )
 
           assert boto3.__version__
           assert botocore.__version__
+          # Import-only production-image proof: no Stripe client or provider
+          # call is constructed while the billing flags remain dark below.
+          assert stripe.VERSION == STRIPE_SDK_VERSION == "15.2.1"
+          # The SDK-generated default is older; the adapter explicitly passes
+          # the provider-selectable webhook/request revision below.
+          assert stripe.api_version == "2026-05-27.dahlia"
+          assert STRIPE_API_VERSION == "2026-06-24.dahlia"
           assert settings.state_ledger_enabled is True
           assert settings.state_ledger_read_authority is True
           assert settings.accounts_enabled is False
           assert settings.quotas_enabled is False
           assert settings.billing_entitlements_enabled is False
           assert settings.billing_provider == "null"
+          assert settings.billing_reconciliation_enabled is False
           assert settings.evidence_packet_object_store_enabled is False
           assert settings.fleet_service_auth_enabled is False
           assert Path(settings.state_ledger_path).is_file()
