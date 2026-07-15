@@ -129,6 +129,14 @@ _ALERT_DESTINATIONS = frozenset({"incident_channel", "primary_on_call"})
 _RELEASE_APPROVER_ROLES = frozenset(
     {"legal_owner", "operations_owner", "product_owner", "security_owner"}
 )
+_HUMAN_ATTESTATION_GATES = frozenset(
+    {
+        "legal_publication_approval",
+        "claim_honesty",
+        "incident_tabletop",
+        "release_decision",
+    }
+)
 _CLAIM_STATUS_VOCABULARY = [
     "ACCEPT",
     "FLAG_FOR_HUMAN_REVIEW",
@@ -728,6 +736,12 @@ class AcceptanceAuthorityAuthorizationUnavailable(AcceptanceAuthorityUnavailable
     """The pre-write publication-authorization store failed integrity/readback."""
 
 
+class AcceptanceAuthorityHumanAttestationUnavailable(
+    AcceptanceAuthorityUnavailable
+):
+    """Human-attestation verification failed before authority mutation."""
+
+
 @dataclass(frozen=True, slots=True)
 class AcceptanceEvidenceDocument:
     gate: str
@@ -793,10 +807,9 @@ class CustomerProductionAcceptanceAuthorityStore:
                 store, primary_tenant_id="primary"
             )
         )
-        # Optional only for backwards-compatible offline/schema-only callers.
-        # The production composition always supplies this store and therefore
-        # cannot publish or serve a human-gated revision without dereferencing
-        # every nested attestation at request time.
+        # ``None`` preserves non-human offline callers. Human-gated publish and
+        # serving paths fail closed below rather than treating an omitted
+        # verifier as permission to skip dereferencing.
         self._human_attestations = human_attestation_store
 
     def assert_human_attestations(
@@ -809,15 +822,13 @@ class CustomerProductionAcceptanceAuthorityStore:
     ) -> None:
         """Dereference and bind every human artifact used by ``gate``."""
 
-        if gate not in {
-            "legal_publication_approval",
-            "claim_honesty",
-            "incident_tabletop",
-            "release_decision",
-        }:
+        if gate not in _HUMAN_ATTESTATION_GATES:
             return
-        if self._human_attestations is None:
-            return
+        attestations = self._human_attestations
+        if attestations is None:
+            raise AcceptanceAuthorityHumanAttestationUnavailable(
+                "human attestation storage is unavailable"
+            )
         stamp = _utc_now(now)
         event = _parse_utc(evidence.get("event_at_utc"), "event_at_utc")
         observed = _parse_utc(evidence.get("observed_at_utc"), "observed_at_utc")
@@ -839,7 +850,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                     if not isinstance(approval, Mapping):
                         raise HumanAttestationInvalid("approval reference is invalid")
                     records.append(
-                        self._human_attestations.assert_reference(
+                        attestations.assert_reference(
                             uri=str(approval.get("approval_artifact_uri") or ""),
                             sha256=str(approval.get("approval_sha256") or ""),
                             purpose=purpose,
@@ -859,7 +870,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                     raise HumanAttestationInvalid("incident/tabletop references are invalid")
                 records.extend(
                     [
-                        self._human_attestations.assert_reference(
+                        attestations.assert_reference(
                             uri=str(incident.get("postmortem_uri") or ""),
                             sha256=str(incident.get("postmortem_sha256") or ""),
                             purpose="incident_postmortem",
@@ -870,7 +881,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                             evidence_binding_sha256=binding,
                             now=stamp,
                         ),
-                        self._human_attestations.assert_reference(
+                        attestations.assert_reference(
                             uri=str(tabletop.get("evidence_uri") or ""),
                             sha256=str(tabletop.get("evidence_sha256") or ""),
                             purpose="tabletop_evidence",
@@ -885,7 +896,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                 )
             else:
                 records.append(
-                    self._human_attestations.assert_reference(
+                    attestations.assert_reference(
                         uri=str(evidence.get("decision_record_uri") or ""),
                         sha256=str(evidence.get("decision_record_sha256") or ""),
                         purpose="release_decision_record",
@@ -919,7 +930,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                             "supporting attestation graph is cyclic"
                         )
                     seen.add(child_sha)
-                    child = self._human_attestations.load(child_sha, now=stamp)
+                    child = attestations.load(child_sha, now=stamp)
                     timestamp_records.append(child)
                     pending.extend(
                         child.payload.get("supporting_attestations") or []
@@ -952,7 +963,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                 "acceptance evidence references an invalid or revoked attestation"
             ) from exc
         except HumanAttestationUnavailable as exc:
-            raise AcceptanceAuthorityUnavailable(
+            raise AcceptanceAuthorityHumanAttestationUnavailable(
                 "human attestation storage is unavailable"
             ) from exc
 
@@ -3514,6 +3525,7 @@ __all__ = [
     "AcceptanceAuthorityConflict",
     "AcceptanceAuthorityError",
     "AcceptanceAuthorityHead",
+    "AcceptanceAuthorityHumanAttestationUnavailable",
     "AcceptanceAuthorityInvalid",
     "AcceptanceAuthorityNotFound",
     "AcceptanceAuthorityUnavailable",

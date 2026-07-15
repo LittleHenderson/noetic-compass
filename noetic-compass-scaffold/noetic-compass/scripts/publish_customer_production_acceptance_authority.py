@@ -43,6 +43,7 @@ from api.services.customer_production_acceptance_authority import (
     PRODUCTION_SERVICE_ID,
     REPOSITORY,
     AcceptanceAuthorityConflict,
+    AcceptanceAuthorityHumanAttestationUnavailable,
     AcceptanceAuthorityInvalid,
     AcceptanceAuthorityNotFound,
     AcceptanceAuthorityUnavailable,
@@ -548,6 +549,11 @@ def run(
             except AcceptanceAuthorityAuthorizationUnavailable:
                 # Same pre-write guarantee as above; state is unavailable, not
                 # mutation-unknown.
+                raise
+            except AcceptanceAuthorityHumanAttestationUnavailable:
+                # Human-attestation dereferencing also completes before any
+                # revision/WORM/operation/head write, so its failure has a
+                # known pre-mutation state.
                 raise
             except AcceptanceAuthorityUnavailable as exc:
                 # A failed return does not prove the transaction rolled back.

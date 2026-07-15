@@ -25,6 +25,9 @@ from api.services.acceptance_publication_authorizations import (
     AcceptancePublicationAuthorizationStore,
 )
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
+from tests.acceptance_attestation_test_support import (
+    materialize_human_attestations,
+)
 import scripts.publish_customer_production_acceptance_authority as publisher
 
 
@@ -115,6 +118,17 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             "unavailable",
         ],
     }
+
+
+def _bound_legal_authority(
+    now: datetime,
+) -> tuple[dict[str, object], CustomerProductionAcceptanceAuthorityStore]:
+    state = InMemoryStateStore()
+    evidence = _legal_evidence(now)
+    attestations = materialize_human_attestations(state, evidence)
+    return evidence, CustomerProductionAcceptanceAuthorityStore(
+        state, human_attestation_store=attestations
+    )
 
 
 def _write(path: Path, value: object) -> Path:
@@ -279,14 +293,12 @@ def test_publish_uses_expected_head_and_verifies_exact_readback(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, authority = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
-
     @contextmanager
     def fake_production_authority(**_: object):
         yield authority
@@ -317,12 +329,46 @@ def test_publish_uses_expected_head_and_verifies_exact_readback(
     assert authority.load("legal_publication_approval", now=now).body == canonical
 
 
-def test_head_returns_version_hash_and_active_state(
+def test_missing_attestation_store_is_known_prewrite_authority_unavailable(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
     evidence = _legal_evidence(now)
+    path = _write(tmp_path / "legal.json", evidence)
+    digest = hashlib.sha256(
+        canonicalize_acceptance_evidence(
+            "legal_publication_approval", evidence, now=now
+        )
+    ).hexdigest()
     authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+
+    @contextmanager
+    def fake_production_authority(**_: object):
+        yield authority
+
+    monkeypatch.setattr(
+        publisher, "_production_authority", fake_production_authority
+    )
+    stdout, stderr = io.StringIO(), io.StringIO()
+    result = publisher.run(
+        _publish_args(path, digest), now=now, stdout=stdout, stderr=stderr
+    )
+
+    assert result == 4
+    assert stdout.getvalue() == ""
+    assert json.loads(stderr.getvalue()) == {
+        "code": "authority_unavailable",
+        "detail": "authority persistence or readback is unavailable",
+        "status": "error",
+    }
+    assert authority.current_head_version("legal_publication_approval") == 0
+
+
+def test_head_returns_version_hash_and_active_state(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
+    evidence, authority = _bound_legal_authority(now)
     published = authority.publish(
         "legal_publication_approval",
         evidence,
@@ -370,8 +416,7 @@ def test_deactivate_tombstones_exact_hash_and_verifies_readback(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
-    authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+    evidence, authority = _bound_legal_authority(now)
     published = authority.publish(
         "legal_publication_approval",
         evidence,
@@ -435,7 +480,7 @@ def test_replacement_requires_previous_hash_before_opening_production(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, base = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     digest = hashlib.sha256(
         canonicalize_acceptance_evidence(
@@ -487,14 +532,12 @@ def test_post_mutation_readback_failure_reports_unknown_state(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, base = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
-
     class FailingReadback:
         def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
             return base.assert_publication_authorized(**kwargs)
@@ -532,14 +575,12 @@ def test_publish_commit_then_disconnect_reports_unknown_state(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, base = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
-
     class CommitThenDisconnect:
         def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
             return base.assert_publication_authorized(**kwargs)
@@ -570,8 +611,7 @@ def test_deactivate_commit_then_disconnect_reports_unknown_state(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
-    base = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+    evidence, base = _bound_legal_authority(now)
     published = base.publish(
         "legal_publication_approval",
         evidence,
@@ -628,13 +668,12 @@ def test_stale_head_fails_closed_without_replacing_active_revision(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     now = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
-    evidence = _legal_evidence(now)
+    evidence, authority = _bound_legal_authority(now)
     path = _write(tmp_path / "legal.json", evidence)
     canonical = canonicalize_acceptance_evidence(
         "legal_publication_approval", evidence, now=now
     )
     digest = hashlib.sha256(canonical).hexdigest()
-    authority = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
     authority.publish(
         "legal_publication_approval",
         evidence,
