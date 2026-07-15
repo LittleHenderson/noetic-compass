@@ -81,6 +81,31 @@ async def test_live_worker_runner_blocks_remote_url_without_service_token(monkey
                 {
                     "type": "manifest",
                     "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": 1,
+                    },
+                }
+            ],
+            "did not prove real model weights",
+        ),
+        (
+            [
+                {"type": "token", "token_index": 0, "token": "unbound"},
+                {
+                    "type": "manifest",
+                    "manifest": {
+                        "model_id": "EleutherAI/pythia-160m",
+                        "is_real_model": True,
+                    },
+                },
+            ],
+            "did not begin",
+        ),
+        (
+            [
+                {
+                    "type": "manifest",
+                    "manifest": {
                         "model_id": "attacker/mismatched-model",
                         "is_real_model": True,
                     },
@@ -108,7 +133,15 @@ async def test_live_worker_runner_blocks_remote_url_without_service_token(monkey
             "multiple manifest events",
         ),
     ),
-    ids=("missing", "demo", "missing-real-flag", "wrong-model", "conflicting"),
+    ids=(
+        "missing",
+        "demo",
+        "missing-real-flag",
+        "truthy-real-surrogate",
+        "late-real-manifest",
+        "wrong-model",
+        "conflicting",
+    ),
 )
 @pytest.mark.asyncio
 async def test_live_worker_runner_rejects_unbound_real_model_dumps_before_persistence(
