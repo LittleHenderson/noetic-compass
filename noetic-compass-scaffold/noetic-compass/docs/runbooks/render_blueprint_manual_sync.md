@@ -95,7 +95,12 @@ control PASS for `srv-d82ph683kofs73d210e0` and
 authenticated service endpoint and fails closed on branch, service type,
 repository, region, deploy-trigger, or production health-path drift. It
 suppresses Render error response bodies and never prints the key or raw API
-payload. Do not put the API key, a Blueprint sync hook, or any dashboard
+payload. Transient transport failures and Render HTTP `408`, `429`, `500`,
+`502`, `503`, and `504` responses receive at most three 30-second attempts
+with 2- and 5-second backoffs; all four live reads share one 210-second
+deadline. Authentication, invalid JSON, non-object payloads, and policy drift
+are never retried. Do not put the API key, a Blueprint sync hook, or any
+dashboard
 credential in a command argument, evidence file, issue, PR, or chat transcript.
 
 If the optional GitHub live job says `RENDER_API_KEY` is not configured, the
