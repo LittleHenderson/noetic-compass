@@ -44,6 +44,8 @@ from api.services.customer_production_acceptance_authority import (
     REPOSITORY,
     AcceptanceAuthorityConflict,
     AcceptanceAuthorityAccountsBillingSourceUnavailable,
+    AcceptanceAuthorityHostedJourneySourceUnavailable,
+    AcceptanceAuthoritySupportCRMSourceUnavailable,
     AcceptanceAuthorityHumanAttestationUnavailable,
     AcceptanceAuthorityInvalid,
     AcceptanceAuthorityNotFound,
@@ -63,6 +65,7 @@ _SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 _DEPLOY_ID_RE = re.compile(r"^dep-[A-Za-z0-9]+$")
 _PRIVATE_SOURCE_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,199}$")
 _POSTGRES_SCHEMES = ("postgres://", "postgresql://", "postgresql+asyncpg://")
+_MAX_PRIVATE_SELECTOR_BYTES = 16_384
 
 
 class PublisherInputError(ValueError):
@@ -186,6 +189,76 @@ def _read_accounts_billing_source(path: Path) -> tuple[str, str]:
     return tenant_id, invoice_record_id
 
 
+def _read_private_source_selector(
+    path: Path, *, gate: str
+) -> Mapping[str, Any]:
+    """Read one strict mode-0600 selector without exposing its raw values."""
+
+    expected = {
+        "hosted_customer_journey": (
+            "cas_harness_hosted_customer_journey_acceptance_selector.v1",
+            {"schema_version", "gate", "tenant_id", "account_id", "audit_id"},
+        ),
+        "support_crm": (
+            "cas_harness_support_crm_acceptance_selector.v1",
+            {
+                "schema_version",
+                "gate",
+                "support_ticket_id",
+                "crm_lead_id",
+            },
+        ),
+    }.get(gate)
+    if expected is None:
+        raise PublisherInputError(
+            "private_source_gate_invalid", "private selector gate is invalid"
+        )
+    try:
+        if os.name == "posix" and path.stat().st_mode & 0o077:
+            raise PublisherInputError(
+                "private_source_permissions_invalid",
+                "private source file must be readable only by its owner",
+            )
+        raw = path.read_bytes()
+    except PublisherInputError:
+        raise
+    except OSError as exc:
+        raise PublisherInputError(
+            "private_source_unreadable", "private source file could not be read"
+        ) from exc
+    if not raw or len(raw) > _MAX_PRIVATE_SELECTOR_BYTES:
+        raise PublisherInputError(
+            "private_source_invalid", "private source file size is invalid"
+        )
+    try:
+        value = json.loads(
+            raw.decode("utf-8"), object_pairs_hook=_unique_object
+        )
+    except PublisherInputError:
+        raise
+    except (UnicodeDecodeError, json.JSONDecodeError) as exc:
+        raise PublisherInputError(
+            "private_source_invalid", "private source file is not strict JSON"
+        ) from exc
+    schema_version, keys = expected
+    if (
+        not isinstance(value, Mapping)
+        or set(value) != keys
+        or value.get("schema_version") != schema_version
+        or value.get("gate") != gate
+        or any(
+            not isinstance(item, str)
+            or _PRIVATE_SOURCE_ID_RE.fullmatch(item) is None
+            for key, item in value.items()
+            if key not in {"schema_version", "gate"}
+        )
+    ):
+        raise PublisherInputError(
+            "private_source_invalid", "private source selector is invalid"
+        )
+    return value
+
+
 def _assert_production_binding(
     settings: Any,
     *,
@@ -255,6 +328,19 @@ def _production_authority(
     from api.services.accounts_billing_acceptance_binding import (
         AccountsBillingAcceptanceSourceBindingStore,
     )
+    from api.services.hosted_customer_journey_acceptance_binding import (
+        HostedCustomerJourneyAcceptanceSourceBindingStore,
+    )
+    from api.services.support_crm_acceptance_binding import (
+        SupportCRMAcceptanceSourceBindingStore,
+    )
+    from api.services.support_public_intake_receipts import (
+        SupportPublicIntakeReceiptStore,
+    )
+    from api.services.crm.state_store import StateStoreLeadStore
+    from api.services.support_ticket_state_store import (
+        StateStoreSupportTicketStore,
+    )
     from api.services.accounts import build_account_store
     from api.services.billing_entitlements import BillingEntitlementStore
     from api.services.billing_reconciliation import BillingReconciliationStore
@@ -288,9 +374,43 @@ def _production_authority(
             ),
             active_key_id=settings.customer_production_pseudonym_active_key_id,
         )
+        account_store = build_account_store(settings, store=state_store)
+        hosted_journey_source_bindings = (
+            HostedCustomerJourneyAcceptanceSourceBindingStore(
+                state_store,
+                accounts=account_store,
+                pseudonymizer=customer_production_pseudonymizer,
+            )
+            if account_store is not None
+            else None
+        )
+        support_crm_source_bindings = None
+        if (
+            str(getattr(settings, "crm_lead_store_backend", "auto"))
+            .strip()
+            .lower()
+            == "state_store"
+            and str(getattr(settings, "support_ticket_store_backend", "auto"))
+            .strip()
+            .lower()
+            == "state_store"
+        ):
+            public_intake_receipts = SupportPublicIntakeReceiptStore(
+                state_store,
+                pseudonymizer=customer_production_pseudonymizer,
+            )
+            support_crm_source_bindings = SupportCRMAcceptanceSourceBindingStore(
+                state_store,
+                leads=StateStoreLeadStore(state_store),
+                support_tickets=StateStoreSupportTicketStore(state_store),
+                public_intake_receipts=public_intake_receipts,
+                pseudonymizer=customer_production_pseudonymizer,
+                support_ack_sla_seconds=int(
+                    getattr(settings, "support_ack_sla_seconds", 86400)
+                ),
+            )
         accounts_billing_source_bindings = None
         if settings.billing_reconciliation_enabled:
-            account_store = build_account_store(settings, store=state_store)
             entitlement_store = BillingEntitlementStore(state_store)
             billing_store = BillingReconciliationStore(
                 state_store,
@@ -342,6 +462,10 @@ def _production_authority(
             accounts_billing_source_binding_store=(
                 accounts_billing_source_bindings
             ),
+            hosted_journey_source_binding_store=(
+                hosted_journey_source_bindings
+            ),
+            support_crm_source_binding_store=support_crm_source_bindings,
             immutable_backend=(
                 immutable_repository.backend
                 if immutable_repository is not None
@@ -410,6 +534,16 @@ def _build_parser() -> argparse.ArgumentParser:
             "private JSON file containing tenant_id and invoice_record_id; "
             "required only for accounts_billing"
         ),
+    )
+    publish.add_argument(
+        "--hosted-journey-source",
+        type=Path,
+        help="private mode-0600 hosted-customer-journey selector JSON",
+    )
+    publish.add_argument(
+        "--support-crm-source",
+        type=Path,
+        help="private mode-0600 support/CRM selector JSON",
     )
     publish.add_argument(
         "--expected-previous-evidence-sha256",
@@ -613,6 +747,36 @@ def run(
                 "accounts_billing_source_unexpected",
                 "accounts/billing source file is valid only for accounts_billing",
             )
+        hosted_journey_source: Mapping[str, Any] | None = None
+        if args.gate == "hosted_customer_journey":
+            if args.hosted_journey_source is None:
+                raise PublisherInputError(
+                    "hosted_journey_source_required",
+                    "hosted journey publication requires a private source file",
+                )
+            hosted_journey_source = _read_private_source_selector(
+                args.hosted_journey_source, gate="hosted_customer_journey"
+            )
+        elif args.hosted_journey_source is not None:
+            raise PublisherInputError(
+                "hosted_journey_source_unexpected",
+                "hosted journey source file is valid only for hosted_customer_journey",
+            )
+        support_crm_source: Mapping[str, Any] | None = None
+        if args.gate == "support_crm":
+            if args.support_crm_source is None:
+                raise PublisherInputError(
+                    "support_crm_source_required",
+                    "support/CRM publication requires a private source file",
+                )
+            support_crm_source = _read_private_source_selector(
+                args.support_crm_source, gate="support_crm"
+            )
+        elif args.support_crm_source is not None:
+            raise PublisherInputError(
+                "support_crm_source_unexpected",
+                "support/CRM source file is valid only for support_crm",
+            )
         with _production_authority(
             expected_master_head=args.expected_master_head,
             environ=runtime_environ,
@@ -645,6 +809,14 @@ def run(
                     tenant_id=tenant_id,
                     invoice_record_id=invoice_record_id,
                     now=now,
+                )
+            if hosted_journey_source is not None:
+                authority.create_hosted_journey_source_binding(
+                    evidence, selector=hosted_journey_source, now=now
+                )
+            if support_crm_source is not None:
+                authority.create_support_crm_source_binding(
+                    evidence, selector=support_crm_source, now=now
                 )
             try:
                 published = authority.publish(
@@ -679,6 +851,14 @@ def run(
             except AcceptanceAuthorityAccountsBillingSourceUnavailable:
                 # Raw account/invoice dereferencing also completes before any
                 # public revision, WORM object, operation, or head write.
+                raise
+            except AcceptanceAuthorityHostedJourneySourceUnavailable:
+                # Hosted account/audit dereferencing completes before public
+                # revision, WORM, operation, or head mutation.
+                raise
+            except AcceptanceAuthoritySupportCRMSourceUnavailable:
+                # Global customer-operations source dereferencing likewise
+                # completes before every public authority mutation.
                 raise
             except AcceptanceAuthorityUnavailable as exc:
                 # A failed return does not prove the transaction rolled back.

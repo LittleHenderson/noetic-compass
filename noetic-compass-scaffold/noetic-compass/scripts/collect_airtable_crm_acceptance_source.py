@@ -45,13 +45,34 @@ from api.services.crm import (
     CRMPrivacyNoticeConfigError,
     CRMPrivacyNoticeContract,
     CRMVerificationReceipt,
-    JsonlFileLeadStore,
     Lead,
+)
+from api.services.crm.state_store import (
+    CRM_LEAD_JSONL_MIGRATION_ID,
+    StateStoreLeadStore,
+)
+from api.services.customer_production_pseudonyms import (
+    AIRTABLE_RECORD_DOMAIN,
+    CRM_LEAD_DOMAIN,
+    SUBJECT_PATTERN,
+    SUPPORT_CRM_REQUEST_TRACE_DOMAIN,
+    CustomerProductionPseudonymizer,
+    parse_customer_production_pseudonym_keyring,
+    validate_public_pseudonym_metadata,
+)
+from api.services.production.state_substrate import StateStore
+from api.services.revisioned_contact_store import (
+    CONTACT_MIGRATION_KIND,
+    CONTACT_MIGRATION_SCHEMA_VERSION,
+    CONTACT_STATE_TENANT,
 )
 
 
-SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
-FRAGMENT_SCHEMA_VERSION = "cas_harness_support_crm_acceptance_fragment.v2"
+SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v3"
+FRAGMENT_SCHEMA_VERSION = "cas_harness_support_crm_acceptance_fragment.v3"
+PRIVATE_LEAD_SELECTOR_SCHEMA_VERSION = (
+    "cas_harness_support_crm_lead_selector.v1"
+)
 REPOSITORY = "LittleHenderson/noetic-compass"
 REPOSITORY_URL = "https://github.com/LittleHenderson/noetic-compass"
 PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
@@ -121,11 +142,15 @@ SOURCE_RECEIPT_KEYS = frozenset(
         "render_deploy_trigger",
         "render_deploy_finished_at_utc",
         "render_deploy_response_sha256",
-        "render_disk_id",
-        "render_disk_name",
-        "render_disk_mount_path",
-        "render_disk_size_gb",
-        "lead_store_path",
+        "pseudonymization_scheme",
+        "pseudonym_key_id",
+        "lead_subject",
+        "airtable_record_subject",
+        "lead_store_backend",
+        "state_store_backend",
+        "state_store_read_authority",
+        "lead_migration_marker_verified",
+        "lead_head_revision_verified",
         "provider",
         "airtable_api_base",
         "airtable_base_id",
@@ -150,9 +175,7 @@ SOURCE_RECEIPT_KEYS = frozenset(
         "privacy_notice_content_type",
         "privacy_notice_verified_at_utc",
         "capture_http_status",
-        "lead_id_sha256",
-        "trace_id_sha256",
-        "airtable_record_id_sha256",
+        "trace_subject",
         "adapter_response_digest",
         "lead_schema_version",
         "lead_record_version",
@@ -215,10 +238,6 @@ def _canonical_bytes(value: Mapping[str, Any]) -> bytes:
 
 def _digest_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
-
-
-def _subject_digest(kind: str, value: str) -> str:
-    return _digest_bytes(f"{kind}:{value}".encode("utf-8"))
 
 
 def _decode_object(result: HttpResult, gate: str) -> Mapping[str, Any]:
@@ -331,8 +350,61 @@ def _default_transport(
         raise CRMCollectionFailure("network", "public CRM request failed") from exc
 
 
-def _default_lead_reader(path: str, lead_id: str) -> Lead | None:
-    return JsonlFileLeadStore(path).get(lead_id)
+def _verified_state_store_lead_reader(store: StateStore) -> LeadReader:
+    """Build a reader that proves the migration marker plus head/revision path."""
+
+    leads = StateStoreLeadStore(store)
+
+    def read(_migration_path: str, lead_id: str) -> Lead | None:
+        marker = store.get(
+            CONTACT_STATE_TENANT,
+            CONTACT_MIGRATION_KIND,
+            CRM_LEAD_JSONL_MIGRATION_ID,
+        )
+        payload = None if marker is None else marker.payload
+        if (
+            marker is None
+            or marker.version != 1
+            or marker.tenant_id != CONTACT_STATE_TENANT
+            or marker.kind != CONTACT_MIGRATION_KIND
+            or marker.record_id != CRM_LEAD_JSONL_MIGRATION_ID
+            or marker.source != "contact_jsonl_migration"
+            or marker.trace_id is not None
+            or not isinstance(payload, Mapping)
+            or payload.get("schema_version")
+            != CONTACT_MIGRATION_SCHEMA_VERSION
+            or payload.get("domain") != "crm_lead"
+            or type(payload.get("source_present")) is not bool
+            or any(
+                type(payload.get(field)) is not int
+                or int(payload.get(field, -1)) < 0
+                for field in (
+                    "line_count",
+                    "revision_count",
+                    "head_count",
+                )
+            )
+            or any(
+                SHA256_RE.fullmatch(str(payload.get(field) or "")) is None
+                for field in ("source_sha256", "records_sha256")
+            )
+        ):
+            raise CRMCollectionFailure(
+                "persistence", "CRM migration marker is absent or invalid"
+            )
+        lead = leads.get(lead_id)
+        if lead is None:
+            return None
+        revisions = [
+            item for item in leads.list_revisions(lead_id) if item.version == lead.version
+        ]
+        if len(revisions) != 1 or revisions[0].to_dict() != lead.to_dict():
+            raise CRMCollectionFailure(
+                "persistence", "CRM head and immutable revision diverged"
+            )
+        return lead
+
+    return read
 
 
 class AirtableCRMSourceCollector:
@@ -344,7 +416,7 @@ class AirtableCRMSourceCollector:
         deploy_id: str,
         runtime_environment: Mapping[str, str] = os.environ,
         transport: Transport = _default_transport,
-        lead_reader: LeadReader = _default_lead_reader,
+        lead_reader: LeadReader,
         clock: Callable[[], datetime] = lambda: datetime.now(UTC),
         nonce: str | None = None,
     ) -> None:
@@ -358,6 +430,7 @@ class AirtableCRMSourceCollector:
         self.nonce = nonce or secrets.token_hex(12)
         self.lead_store_path = ""
         self.render_api_key = ""
+        self.pseudonymizer: CustomerProductionPseudonymizer
         self.privacy_notice_contract: CRMPrivacyNoticeContract
         self.airtable_contract: dict[str, str]
         self._validate_binding()
@@ -434,12 +507,40 @@ class AirtableCRMSourceCollector:
             **AIRTABLE_CONSENT_FIELD_CONTRACT,
         }
         self.lead_store_path = env.get("NC_CRM_LEAD_STORE_PATH", "").strip()
-        if self.lead_store_path != PRODUCTION_LEAD_STORE_PATH:
+        if env.get("NC_CRM_LEAD_STORE_BACKEND", "").strip().lower() != "state_store":
             raise CRMCollectionFailure(
                 "persistence",
-                "NC_CRM_LEAD_STORE_PATH must be exact "
-                "/var/customer-support/leads.jsonl on the attached disk",
+                "NC_CRM_LEAD_STORE_BACKEND must be exact state_store",
             )
+        if env.get("NC_STATE_LEDGER_ENABLED", "").strip().lower() != "true":
+            raise CRMCollectionFailure(
+                "persistence", "NC_STATE_LEDGER_ENABLED must be exact true"
+            )
+        if env.get("NC_STATE_LEDGER_READ_AUTHORITY", "").strip().lower() != "true":
+            raise CRMCollectionFailure(
+                "persistence", "NC_STATE_LEDGER_READ_AUTHORITY must be exact true"
+            )
+        database_url = env.get("NC_DATABASE_URL", "").strip().lower()
+        if not database_url.startswith(("postgres://", "postgresql://")):
+            raise CRMCollectionFailure(
+                "persistence", "CRM read authority requires shared Postgres"
+            )
+        try:
+            active_key_id = env.get(
+                "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID", ""
+            )
+            self.pseudonymizer = CustomerProductionPseudonymizer(
+                parse_customer_production_pseudonym_keyring(
+                    env.get("NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON", ""),
+                    active_key_id=active_key_id,
+                ),
+                active_key_id=active_key_id,
+            )
+        except (TypeError, ValueError) as exc:
+            raise CRMCollectionFailure(
+                "pseudonymization",
+                "customer-production pseudonym keyring is unavailable",
+            ) from exc
         self.render_api_key = env.get("RENDER_API_KEY", "").strip()
         if not self.render_api_key:
             raise CRMCollectionFailure(
@@ -546,11 +647,6 @@ class AirtableCRMSourceCollector:
             "render_deploy_trigger": trigger,
             "render_deploy_finished_at_utc": _stamp(finished),
             "render_deploy_response_sha256": _digest_bytes(deploy_result.body),
-            "render_disk_id": PRODUCTION_DISK_ID,
-            "render_disk_name": PRODUCTION_DISK_NAME,
-            "render_disk_mount_path": PRODUCTION_DISK_MOUNT_PATH,
-            "render_disk_size_gb": int(disk["sizeGB"]),
-            "lead_store_path": PRODUCTION_LEAD_STORE_PATH,
         }
 
     def _collect_privacy_notice_facts(self) -> dict[str, object]:
@@ -634,7 +730,9 @@ class AirtableCRMSourceCollector:
             )
         return receipt
 
-    def collect(self) -> tuple[dict[str, Any], dict[str, Any]]:
+    def collect(
+        self,
+    ) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
         render_facts = self._collect_render_facts()
         privacy_facts = self._collect_privacy_notice_facts()
         synthetic_email = f"crm-acceptance-{self.nonce}@acceptance.invalid"
@@ -714,20 +812,46 @@ class AirtableCRMSourceCollector:
         ):
             raise CRMCollectionFailure("airtable-readback", "Airtable record ID is invalid")
         receipt = self._require_receipt(persisted)
+        deployed_time = _parse_timestamp(
+            render_facts["render_deploy_finished_at_utc"], "render-deployed"
+        )
+        privacy_time = _parse_timestamp(
+            privacy_facts["privacy_notice_verified_at_utc"], "privacy-verified"
+        )
         consent_time = _parse_timestamp(
             persisted.consent_recorded_at_utc, "consent-recorded"
         )
         verified_time = _parse_timestamp(receipt.verified_at, "airtable-verified")
         observed_time = self._now()
-        if not consent_time <= verified_time <= observed_time:
+        if not (
+            deployed_time
+            <= privacy_time
+            <= consent_time
+            <= verified_time
+            <= observed_time
+        ):
             raise CRMCollectionFailure(
-                "timestamp-order", "consent, readback, and observation are not monotonic"
+                "timestamp-order",
+                "deploy, privacy, consent, readback, and observation are not monotonic",
             )
 
         observed_at = _stamp(observed_time)
-        lead_hash = _subject_digest("crm-lead", lead_id)
-        trace_hash = _subject_digest("crm-request-trace", persisted.trace_id)
-        record_hash = _subject_digest("airtable-record", external_id)
+        pseudonym_metadata = self.pseudonymizer.metadata()
+        lead_subject = self.pseudonymizer.subject(
+            domain=CRM_LEAD_DOMAIN,
+            tenant_scope=CONTACT_STATE_TENANT,
+            value=lead_id,
+        )
+        record_subject = self.pseudonymizer.subject(
+            domain=AIRTABLE_RECORD_DOMAIN,
+            tenant_scope=CONTACT_STATE_TENANT,
+            value=external_id,
+        )
+        trace_subject = self.pseudonymizer.subject(
+            domain=SUPPORT_CRM_REQUEST_TRACE_DOMAIN,
+            tenant_scope=CONTACT_STATE_TENANT,
+            value=persisted.trace_id,
+        )
         airtable_contract_sha = _digest_bytes(_canonical_bytes(self.airtable_contract))
         source_receipt = {
             "schema_version": SOURCE_SCHEMA_VERSION,
@@ -737,6 +861,14 @@ class AirtableCRMSourceCollector:
             "deploy_id": self.deploy_id,
             "service_id": PRODUCTION_SERVICE_ID,
             **render_facts,
+            **pseudonym_metadata,
+            "lead_subject": lead_subject,
+            "airtable_record_subject": record_subject,
+            "lead_store_backend": "state_store",
+            "state_store_backend": "postgres",
+            "state_store_read_authority": True,
+            "lead_migration_marker_verified": True,
+            "lead_head_revision_verified": True,
             "provider": "airtable",
             "airtable_api_base": self.airtable_contract["api_base_url"],
             "airtable_base_id": self.airtable_contract["base_id"],
@@ -769,9 +901,7 @@ class AirtableCRMSourceCollector:
             "airtable_contract_sha256": airtable_contract_sha,
             **privacy_facts,
             "capture_http_status": result.status,
-            "lead_id_sha256": lead_hash,
-            "trace_id_sha256": trace_hash,
-            "airtable_record_id_sha256": record_hash,
+            "trace_subject": trace_subject,
             "adapter_response_digest": receipt.response_digest,
             "lead_schema_version": persisted.schema_version,
             "lead_record_version": persisted.version,
@@ -797,6 +927,7 @@ class AirtableCRMSourceCollector:
             "master_head_sha": self.master_head_sha,
             "deploy_id": self.deploy_id,
             "service_id": PRODUCTION_SERVICE_ID,
+            **pseudonym_metadata,
             "event_at_utc": receipt.verified_at,
             "observed_at_utc": observed_at,
             "source_receipt_sha256": source_receipt_sha,
@@ -805,8 +936,8 @@ class AirtableCRMSourceCollector:
             "crm_lead": {
                 "system": "airtable",
                 "provider": "airtable",
-                "lead_id_sha256": lead_hash,
-                "airtable_record_id_sha256": record_hash,
+                "lead_subject": lead_subject,
+                "airtable_record_subject": record_subject,
                 "adapter_response_digest": receipt.response_digest,
                 "source_receipt_sha256": source_receipt_sha,
                 "persisted": True,
@@ -833,8 +964,21 @@ class AirtableCRMSourceCollector:
                 "recorded_at_utc": persisted.consent_recorded_at_utc,
             },
         }
+        private_selector = {
+            "schema_version": PRIVATE_LEAD_SELECTOR_SCHEMA_VERSION,
+            "gate": "support_crm",
+            "crm_lead_id": lead_id,
+        }
         _validate_output_pair(source_receipt, fragment)
-        return source_receipt, fragment
+        rendered_public = json.dumps(
+            [source_receipt, fragment], ensure_ascii=True, sort_keys=True
+        )
+        if persisted.trace_id in rendered_public:
+            raise CRMCollectionFailure(
+                "privacy", "public output contains the private request trace ID"
+            )
+        _validate_private_lead_selector(private_selector)
+        return source_receipt, fragment, private_selector
 
 
 def _validate_output_pair(
@@ -849,6 +993,20 @@ def _validate_output_pair(
     embedded_bytes = _canonical_bytes(embedded)
     if embedded_bytes != source_bytes:
         raise CRMCollectionFailure("output", "embedded source receipt diverged")
+    if any(
+        fragment.get(field) != source_receipt.get(field)
+        for field in ("pseudonymization_scheme", "pseudonym_key_id")
+    ):
+        raise CRMCollectionFailure(
+            "output", "source receipt and fragment pseudonym metadata diverged"
+        )
+    try:
+        validate_public_pseudonym_metadata(source_receipt)
+        validate_public_pseudonym_metadata(fragment)
+    except ValueError as exc:
+        raise CRMCollectionFailure(
+            "output", "source receipt or fragment pseudonym metadata is invalid"
+        ) from exc
     source_hash = _digest_bytes(embedded_bytes)
     lead = fragment.get("crm_lead")
     consent = fragment.get("consent")
@@ -862,9 +1020,9 @@ def _validate_output_pair(
         or fragment.get("missing_required_evidence") != ["resolved_support_ticket_sla"]
         or fragment.get("source_receipt_sha256") != source_hash
         or lead.get("source_receipt_sha256") != source_hash
-        or lead.get("lead_id_sha256") != source_receipt.get("lead_id_sha256")
-        or lead.get("airtable_record_id_sha256")
-        != source_receipt.get("airtable_record_id_sha256")
+        or lead.get("lead_subject") != source_receipt.get("lead_subject")
+        or lead.get("airtable_record_subject")
+        != source_receipt.get("airtable_record_subject")
         or lead.get("adapter_response_digest")
         != source_receipt.get("adapter_response_digest")
         or lead.get("verified_at_utc") != source_receipt.get("verified_at_utc")
@@ -888,10 +1046,11 @@ def _validate_output_pair(
         "render_auto_deploy_trigger": "checksPass",
         "render_deploy_status": "live",
         "render_deploy_commit_sha": source_receipt.get("master_head_sha"),
-        "render_disk_id": PRODUCTION_DISK_ID,
-        "render_disk_name": PRODUCTION_DISK_NAME,
-        "render_disk_mount_path": PRODUCTION_DISK_MOUNT_PATH,
-        "lead_store_path": PRODUCTION_LEAD_STORE_PATH,
+        "lead_store_backend": "state_store",
+        "state_store_backend": "postgres",
+        "state_store_read_authority": True,
+        "lead_migration_marker_verified": True,
+        "lead_head_revision_verified": True,
         "provider": "airtable",
         "airtable_api_base": CANONICAL_AIRTABLE_API_BASE_URL,
         "airtable_base_id": PRODUCTION_AIRTABLE_BASE_ID,
@@ -914,8 +1073,6 @@ def _validate_output_pair(
         or SHA1_RE.fullmatch(str(source_receipt.get("master_head_sha") or "")) is None
     ):
         raise CRMCollectionFailure("output", "source master commit diverged")
-    if source_receipt.get("render_disk_size_gb") != 1:
-        raise CRMCollectionFailure("output", "source disk size drifted")
     airtable_contract = {
         "api_base_url": source_receipt.get("airtable_api_base"),
         "base_id": source_receipt.get("airtable_base_id"),
@@ -962,15 +1119,17 @@ def _validate_output_pair(
         _canonical_bytes(expected_airtable_contract)
     ):
         raise CRMCollectionFailure("output", "Airtable contract digest diverged")
-    for key in (
-        "lead_id_sha256",
-        "airtable_record_id_sha256",
-        "source_receipt_sha256",
-    ):
-        if SHA256_RE.fullmatch(str(lead.get(key) or "")) is None:
+    for key in ("lead_subject", "airtable_record_subject"):
+        if re.fullmatch(r"hmac-sha256:[0-9a-f]{64}", str(lead.get(key) or "")) is None:
             raise CRMCollectionFailure("output", f"{key} is invalid")
-    if SHA256_RE.fullmatch(str(source_receipt.get("trace_id_sha256") or "")) is None:
-        raise CRMCollectionFailure("output", "trace_id_sha256 is invalid")
+    if SHA256_RE.fullmatch(str(lead.get("source_receipt_sha256") or "")) is None:
+        raise CRMCollectionFailure("output", "source_receipt_sha256 is invalid")
+    if "trace_id_sha256" in source_receipt:
+        raise CRMCollectionFailure(
+            "output", "legacy unkeyed trace digest is forbidden"
+        )
+    if SUBJECT_PATTERN.fullmatch(str(source_receipt.get("trace_subject") or "")) is None:
+        raise CRMCollectionFailure("output", "trace_subject is invalid")
     for key in (
         "render_service_response_sha256",
         "render_deploy_response_sha256",
@@ -989,6 +1148,17 @@ def _validate_output_pair(
         for forbidden in ("nc_airtable_token", "authorization", "bearer ", "api_key")
     ):
         raise CRMCollectionFailure("output", "output contains credential-shaped material")
+
+
+def _validate_private_lead_selector(selector: Mapping[str, Any]) -> None:
+    if (
+        set(selector) != {"schema_version", "gate", "crm_lead_id"}
+        or selector.get("schema_version") != PRIVATE_LEAD_SELECTOR_SCHEMA_VERSION
+        or selector.get("gate") != "support_crm"
+        or not isinstance(selector.get("crm_lead_id"), str)
+        or LEAD_ID_RE.fullmatch(str(selector.get("crm_lead_id"))) is None
+    ):
+        raise CRMCollectionFailure("private-selector", "private lead selector is invalid")
 
 
 def _atomic_write(path: Path, payload: Mapping[str, Any]) -> None:
@@ -1022,23 +1192,38 @@ def _parser() -> argparse.ArgumentParser:
     parser.add_argument("--deploy-id", required=True)
     parser.add_argument("--source-receipt-output", type=Path, required=True)
     parser.add_argument("--fragment-output", type=Path, required=True)
+    parser.add_argument("--private-lead-selector-output", type=Path, required=True)
     return parser
 
 
 def run(argv: list[str] | None = None) -> int:
     args = _parser().parse_args(argv)
+    state_store = None
     try:
-        if args.source_receipt_output.resolve() == args.fragment_output.resolve():
+        if len(
+            {
+                args.source_receipt_output.resolve(),
+                args.fragment_output.resolve(),
+                args.private_lead_selector_output.resolve(),
+            }
+        ) != 3:
             raise CRMCollectionFailure("output", "output paths must differ")
+        from api.config import Settings
+        from api.state_ledger_bootstrap import _build_state_store
+
+        state_store = _build_state_store(Settings())
         collector = AirtableCRMSourceCollector(
             base_url=args.base_url,
             master_head_sha=args.master_head,
             deploy_id=args.deploy_id,
+            lead_reader=_verified_state_store_lead_reader(state_store),
         )
-        source_receipt, fragment = collector.collect()
+        source_receipt, fragment, private_selector = collector.collect()
         _validate_output_pair(source_receipt, fragment)
+        _validate_private_lead_selector(private_selector)
         _atomic_write(args.source_receipt_output, source_receipt)
         _atomic_write(args.fragment_output, fragment)
+        _atomic_write(args.private_lead_selector_output, private_selector)
         print(
             json.dumps(
                 {
@@ -1062,6 +1247,26 @@ def run(argv: list[str] | None = None) -> int:
             file=sys.stderr,
         )
         return 2
+    except Exception as exc:  # pragma: no cover - final secret-safe boundary
+        print(
+            json.dumps(
+                {
+                    "gate": "collector",
+                    "status": "OPEN",
+                    "error_type": type(exc).__name__,
+                },
+                sort_keys=True,
+                separators=(",", ":"),
+            ),
+            file=sys.stderr,
+        )
+        return 3
+    finally:
+        if state_store is not None:
+            try:
+                state_store.close()
+            except Exception:
+                pass
 
 
 if __name__ == "__main__":

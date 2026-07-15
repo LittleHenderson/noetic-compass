@@ -10,6 +10,8 @@ import pytest
 
 from api.services.customer_production_pseudonyms import (
     ACCOUNT_DOMAIN,
+    HOSTED_JOURNEY_TRACE_DOMAIN,
+    SUPPORT_CRM_REQUEST_TRACE_DOMAIN,
     TENANT_DOMAIN,
     CustomerProductionPseudonymizer,
     parse_customer_production_pseudonym_keyring,
@@ -51,6 +53,15 @@ def test_keyring_is_strict_and_public_subjects_are_domain_and_tenant_scoped() ->
         domain=TENANT_DOMAIN,
         tenant_scope="tenant-one",
         value="acct-raw-private",
+    )
+    assert pseudonyms.subject(
+        domain=HOSTED_JOURNEY_TRACE_DOMAIN,
+        tenant_scope="tenant-one",
+        value="caller-trace",
+    ) != pseudonyms.subject(
+        domain=SUPPORT_CRM_REQUEST_TRACE_DOMAIN,
+        tenant_scope="tenant-one",
+        value="caller-trace",
     )
     assert subject != pseudonyms.subject(
         domain=ACCOUNT_DOMAIN,

@@ -427,8 +427,11 @@ def _gate_payloads() -> dict[str, dict]:
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
             "service_id": verifier.PRODUCTION_SERVICE_ID,
             "customer_lane": "public-customer",
-            "tenant_subject_sha256": _digest("tenant"),
-            "account_subject_sha256": _digest("account"),
+            "pseudonymization_scheme": verifier.CUSTOMER_PSEUDONYMIZATION_SCHEME,
+            "pseudonym_key_id": "cpk_0123456789abcdef0123456789abcdef",
+            "tenant_subject": _pseudonym("hosted-tenant"),
+            "account_subject": _pseudonym("hosted-account"),
+            "trace_subject": _pseudonym("hosted-trace"),
             "audit": {
                 "audit_id": "cas-audit-0123456789abcdef",
                 "create_http_status": 201,
@@ -571,11 +574,15 @@ def _gate_payloads() -> dict[str, dict]:
         "render_deploy_trigger": "service_updated",
         "render_deploy_finished_at_utc": "2026-07-14T11:35:00Z",
         "render_deploy_response_sha256": _digest("render-deploy-response"),
-        "render_disk_id": verifier.CRM_RENDER_DISK_ID,
-        "render_disk_name": verifier.CRM_RENDER_DISK_NAME,
-        "render_disk_mount_path": verifier.CRM_RENDER_DISK_MOUNT_PATH,
-        "render_disk_size_gb": 1,
-        "lead_store_path": verifier.CRM_LEAD_STORE_PATH,
+        "pseudonymization_scheme": verifier.CUSTOMER_PSEUDONYMIZATION_SCHEME,
+        "pseudonym_key_id": "cpk_0123456789abcdef0123456789abcdef",
+        "lead_subject": _pseudonym("crm-lead"),
+        "airtable_record_subject": _pseudonym("airtable-record"),
+        "lead_store_backend": "state_store",
+        "state_store_backend": "postgres",
+        "state_store_read_authority": True,
+        "lead_migration_marker_verified": True,
+        "lead_head_revision_verified": True,
         "provider": "airtable",
         "airtable_api_base": verifier.CRM_AIRTABLE_API_BASE_URL,
         "airtable_base_id": verifier.CRM_AIRTABLE_BASE_ID,
@@ -600,9 +607,7 @@ def _gate_payloads() -> dict[str, dict]:
         "privacy_notice_content_type": "text/html",
         "privacy_notice_verified_at_utc": "2026-07-14T11:40:00Z",
         "capture_http_status": 200,
-        "lead_id_sha256": _digest("lead"),
-        "trace_id_sha256": _digest("crm-trace"),
-        "airtable_record_id_sha256": _digest("airtable-record"),
+        "trace_subject": _pseudonym("crm-trace"),
         "adapter_response_digest": "sha256:" + _digest("adapter-response"),
         "lead_schema_version": "noetic_crm.v2",
         "lead_record_version": 2,
@@ -625,10 +630,13 @@ def _gate_payloads() -> dict[str, dict]:
             "public_support_url": f"{verifier.LANDING_ORIGIN}/contact",
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
             "service_id": verifier.PRODUCTION_SERVICE_ID,
+            "pseudonymization_scheme": verifier.CUSTOMER_PSEUDONYMIZATION_SCHEME,
+            "pseudonym_key_id": "cpk_0123456789abcdef0123456789abcdef",
             "crm_source_receipt": crm_source_receipt,
             "support_ticket": {
-                "ticket_id_sha256": _digest("ticket"),
-                "create_http_status": 202,
+                "ticket_subject": _pseudonym("support-ticket"),
+                "ticket_record_version": 4,
+                "create_http_status": 201,
                 "persisted": True,
                 "routed": True,
                 "acknowledged": True,
@@ -640,8 +648,10 @@ def _gate_payloads() -> dict[str, dict]:
             "crm_lead": {
                 "system": "airtable",
                 "provider": "airtable",
-                "lead_id_sha256": _digest("lead"),
-                "airtable_record_id_sha256": _digest("airtable-record"),
+                "lead_subject": crm_source_receipt["lead_subject"],
+                "airtable_record_subject": crm_source_receipt[
+                    "airtable_record_subject"
+                ],
                 "adapter_response_digest": "sha256:" + _digest("adapter-response"),
                 "source_receipt_sha256": crm_source_sha,
                 "persisted": True,
@@ -1802,12 +1812,15 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
             ).hexdigest()
 
         cases = {
+            "non-201 support route": lambda payloads: payloads["support_crm"][
+                "support_ticket"
+            ].update(create_http_status=202),
             "wrong provider": lambda payloads: payloads["support_crm"]["crm_lead"].update(
                 provider="hubspot"
             ),
-            "missing record hash": lambda payloads: payloads["support_crm"][
+            "missing record subject": lambda payloads: payloads["support_crm"][
                 "crm_lead"
-            ].update(airtable_record_id_sha256=""),
+            ].update(airtable_record_subject=""),
             "malformed adapter digest": lambda payloads: payloads["support_crm"][
                 "crm_lead"
             ].update(adapter_response_digest=_digest("unprefixed")),
@@ -1832,11 +1845,16 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
             "embedded source owner re-bound": lambda payloads: rebind_source(
                 payloads, "airtable_owner_value", "Other Owner"
             ),
-            "embedded source ephemeral store re-bound": lambda payloads: rebind_source(
-                payloads, "lead_store_path", "/tmp/leads.jsonl"
+            "embedded source non-Postgres store re-bound": lambda payloads: rebind_source(
+                payloads, "state_store_backend", "memory"
             ),
             "embedded source non-live deploy re-bound": lambda payloads: rebind_source(
                 payloads, "render_deploy_status", "deactivated"
+            ),
+            "embedded source pseudonym key cross-wired": lambda payloads: rebind_source(
+                payloads,
+                "pseudonym_key_id",
+                "cpk_fedcba9876543210fedcba9876543210",
             ),
             "embedded source privacy re-bound away from legal": rebind_privacy_hash,
         }
@@ -1847,6 +1865,51 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
                     manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
                     report = _verify(manifest, bundle)
                     self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_legacy_unkeyed_customer_identity_fields_are_rejected(self) -> None:
+        cases = {
+            "hosted tenant hash": lambda payloads: payloads[
+                "hosted_customer_journey"
+            ].update(tenant_subject_sha256=_digest("legacy-tenant")),
+            "hosted account hash": lambda payloads: payloads[
+                "hosted_customer_journey"
+            ].update(account_subject_sha256=_digest("legacy-account")),
+            "hosted trace hash": lambda payloads: payloads[
+                "hosted_customer_journey"
+            ].update(trace_id_sha256=_digest("legacy-hosted-trace")),
+            "support ticket hash": lambda payloads: payloads["support_crm"][
+                "support_ticket"
+            ].update(ticket_id_sha256=_digest("legacy-ticket")),
+            "CRM lead hash": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(lead_id_sha256=_digest("legacy-lead")),
+            "Airtable record hash": lambda payloads: payloads["support_crm"][
+                "crm_source_receipt"
+            ].update(airtable_record_id_sha256=_digest("legacy-record")),
+            "CRM trace hash": lambda payloads: payloads["support_crm"][
+                "crm_source_receipt"
+            ].update(trace_id_sha256=_digest("legacy-crm-trace")),
+            "disk-backed lead authority": lambda payloads: payloads[
+                "support_crm"
+            ]["crm_source_receipt"].update(
+                lead_store_path="/var/customer-support/leads.jsonl"
+            ),
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                    self.assertTrue(
+                        any(
+                            "unknown fields" in error
+                            for error in report["errors"]
+                        )
+                    )
                 finally:
                     bundle.close()
 

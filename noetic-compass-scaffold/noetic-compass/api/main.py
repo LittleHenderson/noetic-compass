@@ -116,12 +116,15 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     app.state.crm_public_abuse_guard = None
     app.state.support_tickets = None
     app.state.support_public_abuse_guard = None
+    app.state.support_public_intake_receipt_store = None
     app.state.crm_privacy_notice_contract = None
     app.state.acceptance_authority_store = None
     app.state.acceptance_publication_authorization_store = None
     app.state.human_attestation_store = None
     app.state.customer_production_pseudonymizer = None
     app.state.accounts_billing_source_binding_store = None
+    app.state.hosted_journey_source_binding_store = None
+    app.state.support_crm_source_binding_store = None
     configure_evidence_packet_repository(None)
 
     if (not settings.debug or settings.accounts_enabled) and (
@@ -278,6 +281,26 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         )
         app.state.account_store = build_account_store(settings, store=shared_store)
         app.state.session_store = build_session_store(settings, store=shared_store)
+        if (
+            app.state.acceptance_authority_store is not None
+            and shared_store is not None
+            and app.state.account_store is not None
+            and app.state.customer_production_pseudonymizer is not None
+        ):
+            from api.services.hosted_customer_journey_acceptance_binding import (
+                HostedCustomerJourneyAcceptanceSourceBindingStore,
+            )
+
+            app.state.hosted_journey_source_binding_store = (
+                HostedCustomerJourneyAcceptanceSourceBindingStore(
+                    shared_store,
+                    accounts=app.state.account_store,
+                    pseudonymizer=app.state.customer_production_pseudonymizer,
+                )
+            )
+            app.state.acceptance_authority_store.configure_hosted_journey_source_binding_store(
+                app.state.hosted_journey_source_binding_store
+            )
         if settings.billing_entitlements_enabled:
             if shared_store is None:
                 raise RuntimeError(
@@ -408,10 +431,60 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.support_tickets = build_support_ticket_service(
             settings, state_store=shared_store
         )
+        if (
+            shared_store is not None
+            and app.state.customer_production_pseudonymizer is not None
+            and settings.support_ticket_store_backend.strip().lower()
+            == "state_store"
+        ):
+            from api.services.support_public_intake_receipts import (
+                SupportPublicIntakeReceiptStore,
+            )
+
+            app.state.support_public_intake_receipt_store = (
+                SupportPublicIntakeReceiptStore(
+                    shared_store,
+                    pseudonymizer=(
+                        app.state.customer_production_pseudonymizer
+                    ),
+                )
+            )
         app.state.support_public_abuse_guard = PublicLeadAbuseGuard(
             max_submissions=settings.support_public_ticket_rate_limit_max,
             window_seconds=settings.support_public_ticket_rate_limit_window_seconds,
         )
+        if (
+            app.state.acceptance_authority_store is not None
+            and shared_store is not None
+            and app.state.customer_production_pseudonymizer is not None
+            and settings.crm_lead_store_backend.strip().lower() == "state_store"
+            and settings.support_ticket_store_backend.strip().lower()
+            == "state_store"
+            and app.state.support_public_intake_receipt_store is not None
+        ):
+            from api.services.crm.state_store import StateStoreLeadStore
+            from api.services.support_crm_acceptance_binding import (
+                SupportCRMAcceptanceSourceBindingStore,
+            )
+            from api.services.support_ticket_state_store import (
+                StateStoreSupportTicketStore,
+            )
+
+            app.state.support_crm_source_binding_store = (
+                SupportCRMAcceptanceSourceBindingStore(
+                    shared_store,
+                    leads=StateStoreLeadStore(shared_store),
+                    support_tickets=StateStoreSupportTicketStore(shared_store),
+                    public_intake_receipts=(
+                        app.state.support_public_intake_receipt_store
+                    ),
+                    pseudonymizer=app.state.customer_production_pseudonymizer,
+                    support_ack_sla_seconds=settings.support_ack_sla_seconds,
+                )
+            )
+            app.state.acceptance_authority_store.configure_support_crm_source_binding_store(
+                app.state.support_crm_source_binding_store
+            )
         if settings.billing_usage_dispatch_enabled:
             if (
                 app.state.billing_reconciliation_store is None
@@ -472,10 +545,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         app.state.human_attestation_store = None
         app.state.customer_production_pseudonymizer = None
         app.state.accounts_billing_source_binding_store = None
+        app.state.hosted_journey_source_binding_store = None
+        app.state.support_crm_source_binding_store = None
         app.state.shared_state_store = None
         app.state.crm = None
         app.state.crm_public_abuse_guard = None
         app.state.support_tickets = None
+        app.state.support_public_intake_receipt_store = None
         app.state.crm_privacy_notice_contract = None
         app.state.support_public_abuse_guard = None
         try:

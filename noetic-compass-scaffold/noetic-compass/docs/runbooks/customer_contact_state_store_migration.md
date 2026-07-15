@@ -9,6 +9,9 @@ retaining the existing JSONL files as one-time migration sources.
 `render.customer.yaml` pins:
 
 ```text
+NC_STATE_LEDGER_ENABLED=true
+NC_STATE_LEDGER_READ_AUTHORITY=true
+NC_DATABASE_URL=<shared Render PostgreSQL connection>
 NC_CRM_LEAD_STORE_BACKEND=state_store
 NC_CRM_LEAD_STORE_PATH=/var/customer-support/leads.jsonl
 NC_SUPPORT_TICKET_STORE_BACKEND=state_store
@@ -34,6 +37,20 @@ Per-object leases serialize lifecycle transitions across processes, and the head
 write also uses StateStore optimistic concurrency. Equal revision numbers with
 different content fail closed.
 
+## Exact global authority scope
+
+Both domains are stored beneath the literal internal partition
+`CONTACT_STATE_TENANT="__cas_customer_operations__"`. This value is a global
+customer-operations storage and authority scope. It is not a customer tenant
+ID, tenant-owner identity, customer-isolation boundary, or proof that a lead or
+ticket belongs to any particular customer tenant. Code, evidence, and operator
+notes must not invent customer tenancy from this value.
+
+The lead and ticket migration markers, immutable revisions, current heads, and
+private `support_crm` acceptance source binding all use this same exact scope.
+Changing it would create a different authority and requires a new explicit
+migration; an operator must not substitute a selected customer tenant.
+
 ## Migration contract
 
 Before writing anything, migration reads and validates the whole UTF-8 JSONL
@@ -58,12 +75,35 @@ Startup logs one secret-safe receipt per configured domain with only
 and the canonical-record SHA-256. No source path, PII, credential, raw record, or
 provider identifier is logged.
 
+## Acceptance-source binding after cutover
+
+The v3 Airtable CRM source collector is Postgres-authoritative. It verifies the
+lead migration marker, reads the exact immutable lead revision/current head,
+and publishes keyed `lead_subject`, `airtable_record_subject`, and
+`trace_subject` values. A CRM request trace is caller-supplied and potentially
+low entropy, so it uses the exact global authority scope rather than a public
+`trace_id_sha256`. The support/CRM finalizer separately verifies the support
+migration marker and an already resolved within-SLA ticket revision/head, then
+publishes a keyed `ticket_subject`. Raw ticket, lead, Airtable record, and trace
+values never become public identity hashes. Raw ticket and lead IDs remain in
+owner-only selectors; all four raw source values are revalidated only through
+private content-addressed bindings.
+
+All four subjects use the dedicated customer-production pseudonym keyring and
+the global authority scope above. The key ID referenced by collected evidence
+must remain in `NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON` through
+finalization, publication, and every active-authority read, even after a new
+active key is selected. Missing markers, missing immutable revisions, head
+drift, source drift, or a missing retained key fails closed before public
+authority mutation and while actively serving.
+
 ## What this does not prove
 
 The checked-in privacy status remains exact `OPEN`; this change does not enable
 public PII intake. The attached disk and `numInstances: 1` also remain. Therefore
-this phase does not prove a hosted migration, two-replica continuity, rolling
-deploys, zero downtime, capacity, HA, `support_crm` `ACCEPT`, or overall
-customer-production `ACCEPT`. Hosted marker/parity readback is required before
-calling the migration `present`; remaining file-backed Evidence Packet/hash state
-must move before the disk can be removed.
+this phase does not prove two-replica continuity, rolling deploys, zero
+downtime, capacity, HA, `support_crm` `ACCEPT`, or overall customer-production
+`ACCEPT`. A successful marker/revision read is a necessary source-authority
+check, not the real consent, Airtable effect, resolved support lifecycle, SLA,
+publication authorization, or active-authority receipt. Remaining file-backed
+Evidence Packet/hash state must move before the disk can be removed.

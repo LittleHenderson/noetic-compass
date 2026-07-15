@@ -57,7 +57,7 @@ GITHUB_API_ORIGIN = "https://api.github.com"
 RENDER_API_ORIGIN = "https://api.render.com"
 PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
 PRODUCTION_SERVICE_NAME = "cas-harness-customer-api"
-CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
+CRM_SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v3"
 CUSTOMER_PSEUDONYMIZATION_SCHEME = "hmac-sha256-tenant-scoped-v1"
 CRM_PRIVACY_NOTICE_URL = "https://cascompass.ai/privacy"
 CRM_PRIVACY_NOTICE_PRESENT_STATUS = "present"
@@ -68,10 +68,6 @@ CRM_AIRTABLE_DEDUP_FIELD = "Dedup Key"
 CRM_AIRTABLE_OWNER_FIELD = "Owner"
 CRM_AIRTABLE_OWNER_VALUE = "CAS Harness"
 CRM_AIRTABLE_LIFECYCLE_FIELD = "Pipeline Status"
-CRM_RENDER_DISK_ID = "dsk-d9bijbjtqb8s73cn4o60"
-CRM_RENDER_DISK_NAME = "cas-harness-customer-support"
-CRM_RENDER_DISK_MOUNT_PATH = "/var/customer-support"
-CRM_LEAD_STORE_PATH = "/var/customer-support/leads.jsonl"
 PRIVATE_CANARY_SERVICE_ID = "srv-d9akoolaeets73bp3e7g"
 PRIVATE_CANARY_BRANCH = "release/accounts-canary-20260713"
 EXPECTED_MODEL_ID = "EleutherAI/pythia-160m"
@@ -333,8 +329,10 @@ CRM_SOURCE_RECEIPT_KEYS = {
     "render_auto_deploy_trigger", "render_service_response_sha256",
     "render_deploy_status", "render_deploy_commit_sha", "render_deploy_trigger",
     "render_deploy_finished_at_utc", "render_deploy_response_sha256",
-    "render_disk_id", "render_disk_name", "render_disk_mount_path",
-    "render_disk_size_gb", "lead_store_path", "provider", "airtable_api_base",
+    "pseudonymization_scheme", "pseudonym_key_id", "lead_subject",
+    "airtable_record_subject", "lead_store_backend", "state_store_backend",
+    "state_store_read_authority", "lead_migration_marker_verified",
+    "lead_head_revision_verified", "provider", "airtable_api_base",
     "airtable_base_id", "airtable_table_name", "airtable_dedup_field",
     "airtable_owner_field", "airtable_owner_value", "airtable_lifecycle_field",
     "airtable_consent_to_contact_field", "airtable_consent_recorded_at_field",
@@ -345,8 +343,8 @@ CRM_SOURCE_RECEIPT_KEYS = {
     "privacy_notice_publication_status", "privacy_notice_url", "privacy_notice_version",
     "privacy_notice_content_sha256", "privacy_notice_http_status",
     "privacy_notice_content_type", "privacy_notice_verified_at_utc",
-    "capture_http_status", "lead_id_sha256", "trace_id_sha256",
-    "airtable_record_id_sha256", "adapter_response_digest", "lead_schema_version",
+    "capture_http_status", "trace_subject", "adapter_response_digest",
+    "lead_schema_version",
     "lead_record_version", "persisted", "readback_verified", "deduplicated",
     "owner_assigned", "lifecycle_stage", "verified_at_utc", "consent_to_contact",
     "consent_schema_version", "consent_recorded_at_utc",
@@ -1954,8 +1952,11 @@ def _validate_hosted_customer(
             "api_base_url",
             "service_id",
             "customer_lane",
-            "tenant_subject_sha256",
-            "account_subject_sha256",
+            "pseudonymization_scheme",
+            "pseudonym_key_id",
+            "tenant_subject",
+            "account_subject",
+            "trace_subject",
             "audit",
             "packet_download",
             "share",
@@ -1974,8 +1975,10 @@ def _validate_hosted_customer(
         "customer_lane": "public-customer",
     }.items():
         _require(_json_scalar_equals(evidence.get(field), value), f"{path}.{field}", f"must equal {value!r}", errors)
-    _sha256(evidence.get("tenant_subject_sha256"), f"{path}.tenant_subject_sha256", errors)
-    _sha256(evidence.get("account_subject_sha256"), f"{path}.account_subject_sha256", errors)
+    _validate_customer_pseudonym_metadata(evidence, path, errors)
+    _pseudonym(evidence.get("tenant_subject"), f"{path}.tenant_subject", errors)
+    _pseudonym(evidence.get("account_subject"), f"{path}.account_subject", errors)
+    _pseudonym(evidence.get("trace_subject"), f"{path}.trace_subject", errors)
     audit = evidence.get("audit")
     audit_id: str | None = None
     if _is_mapping(audit, f"{path}.audit", errors):
@@ -2161,11 +2164,11 @@ def _validate_crm_source_receipt(
         "render_auto_deploy_trigger": "checksPass",
         "render_deploy_status": "live",
         "render_deploy_commit_sha": evidence.get("master_head_sha"),
-        "render_disk_id": CRM_RENDER_DISK_ID,
-        "render_disk_name": CRM_RENDER_DISK_NAME,
-        "render_disk_mount_path": CRM_RENDER_DISK_MOUNT_PATH,
-        "render_disk_size_gb": 1,
-        "lead_store_path": CRM_LEAD_STORE_PATH,
+        "lead_store_backend": "state_store",
+        "state_store_backend": "postgres",
+        "state_store_read_authority": True,
+        "lead_migration_marker_verified": True,
+        "lead_head_revision_verified": True,
         "provider": "airtable",
         "airtable_api_base": CRM_AIRTABLE_API_BASE_URL,
         "airtable_base_id": CRM_AIRTABLE_BASE_ID,
@@ -2200,12 +2203,19 @@ def _validate_crm_source_receipt(
         )
     for field in ("persisted", "readback_verified", "deduplicated", "owner_assigned"):
         _require(source.get(field) is True, f"{path}.{field}", "must be true", errors)
+    _validate_customer_pseudonym_metadata(source, path, errors)
+    _pseudonym(source.get("lead_subject"), f"{path}.lead_subject", errors)
+    _pseudonym(
+        source.get("airtable_record_subject"),
+        f"{path}.airtable_record_subject",
+        errors,
+    )
     for field in (
         "render_service_response_sha256", "render_deploy_response_sha256",
         "airtable_contract_sha256", "privacy_notice_content_sha256",
-        "lead_id_sha256", "trace_id_sha256", "airtable_record_id_sha256",
     ):
         _sha256(source.get(field), f"{path}.{field}", errors)
+    _pseudonym(source.get("trace_subject"), f"{path}.trace_subject", errors)
     _tagged_sha256(source.get("adapter_response_digest"), f"{path}.adapter_response_digest", errors)
     _nonempty_string(source.get("render_deploy_trigger"), f"{path}.render_deploy_trigger", errors)
     _positive_int(source.get("lead_record_version"), f"{path}.lead_record_version", errors)
@@ -2271,14 +2281,22 @@ def _validate_support_crm(
 ) -> None:
     path = "$.required_gates.support_crm.evidence.payload"
     errors = context.errors
-    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_support_url", "api_base_url", "service_id", "support_ticket", "crm_lead", "consent", "crm_source_receipt"}, path, errors)
+    _exact_keys(evidence, COMMON_EVIDENCE_KEYS | {"public_support_url", "api_base_url", "service_id", "pseudonymization_scheme", "pseudonym_key_id", "support_ticket", "crm_lead", "consent", "crm_source_receipt"}, path, errors)
     event, observed = _validate_common_evidence(evidence, "support_crm", context)
     _require(evidence.get("public_support_url") == f"{LANDING_ORIGIN}/contact", f"{path}.public_support_url", f"must be {LANDING_ORIGIN}/contact", errors)
     _require(evidence.get("api_base_url") == PRODUCTION_API_ORIGIN, f"{path}.api_base_url", f"must be {PRODUCTION_API_ORIGIN}", errors)
     _require(evidence.get("service_id") == PRODUCTION_SERVICE_ID, f"{path}.service_id", "must be the public production service", errors)
+    _validate_customer_pseudonym_metadata(evidence, path, errors)
     source = evidence.get("crm_source_receipt")
     source_hash: str | None = None
     if _is_mapping(source, f"{path}.crm_source_receipt", errors):
+        for field in ("pseudonymization_scheme", "pseudonym_key_id"):
+            _require(
+                source.get(field) == evidence.get(field),
+                f"{path}.crm_source_receipt.{field}",
+                "must equal the outer support_crm pseudonym metadata",
+                errors,
+            )
         source_hash = _validate_crm_source_receipt(
             source,
             evidence,
@@ -2289,9 +2307,10 @@ def _validate_support_crm(
         )
     ticket = evidence.get("support_ticket")
     if _is_mapping(ticket, f"{path}.support_ticket", errors):
-        _exact_keys(ticket, {"ticket_id_sha256", "create_http_status", "persisted", "routed", "acknowledged", "first_response_minutes", "sla_minutes", "resolution_recorded", "resolved_at_utc"}, f"{path}.support_ticket", errors)
-        _sha256(ticket.get("ticket_id_sha256"), f"{path}.support_ticket.ticket_id_sha256", errors)
-        _require(ticket.get("create_http_status") in {200, 201, 202}, f"{path}.support_ticket.create_http_status", "must be 200, 201, or 202", errors)
+        _exact_keys(ticket, {"ticket_subject", "ticket_record_version", "create_http_status", "persisted", "routed", "acknowledged", "first_response_minutes", "sla_minutes", "resolution_recorded", "resolved_at_utc"}, f"{path}.support_ticket", errors)
+        _pseudonym(ticket.get("ticket_subject"), f"{path}.support_ticket.ticket_subject", errors)
+        _positive_int(ticket.get("ticket_record_version"), f"{path}.support_ticket.ticket_record_version", errors)
+        _require(ticket.get("create_http_status") == 201, f"{path}.support_ticket.create_http_status", "must be exact HTTP 201", errors)
         for field in ("persisted", "routed", "acknowledged", "resolution_recorded"):
             _require(ticket.get(field) is True, f"{path}.support_ticket.{field}", "must be true", errors)
         response = _nonnegative_int(ticket.get("first_response_minutes"), f"{path}.support_ticket.first_response_minutes", errors)
@@ -2302,11 +2321,11 @@ def _validate_support_crm(
     lead = evidence.get("crm_lead")
     lead_verified: datetime | None = None
     if _is_mapping(lead, f"{path}.crm_lead", errors):
-        _exact_keys(lead, {"system", "provider", "lead_id_sha256", "airtable_record_id_sha256", "adapter_response_digest", "source_receipt_sha256", "persisted", "readback_verified", "deduplicated", "owner_assigned", "lifecycle_stage", "verified_at_utc"}, f"{path}.crm_lead", errors)
+        _exact_keys(lead, {"system", "provider", "lead_subject", "airtable_record_subject", "adapter_response_digest", "source_receipt_sha256", "persisted", "readback_verified", "deduplicated", "owner_assigned", "lifecycle_stage", "verified_at_utc"}, f"{path}.crm_lead", errors)
         _require(lead.get("system") == "airtable", f"{path}.crm_lead.system", "must be exact airtable", errors)
         _require(lead.get("provider") == "airtable", f"{path}.crm_lead.provider", "must be exact airtable", errors)
-        _sha256(lead.get("lead_id_sha256"), f"{path}.crm_lead.lead_id_sha256", errors)
-        _sha256(lead.get("airtable_record_id_sha256"), f"{path}.crm_lead.airtable_record_id_sha256", errors)
+        _pseudonym(lead.get("lead_subject"), f"{path}.crm_lead.lead_subject", errors)
+        _pseudonym(lead.get("airtable_record_subject"), f"{path}.crm_lead.airtable_record_subject", errors)
         _tagged_sha256(lead.get("adapter_response_digest"), f"{path}.crm_lead.adapter_response_digest", errors)
         _sha256(lead.get("source_receipt_sha256"), f"{path}.crm_lead.source_receipt_sha256", errors)
         if source_hash is not None:
@@ -2316,7 +2335,7 @@ def _validate_support_crm(
         _require(lead.get("lifecycle_stage") in {"new", "contacted", "qualified", "won", "lost"}, f"{path}.crm_lead.lifecycle_stage", "must be an exact canonical CRM lifecycle stage", errors)
         lead_verified = _critical_proof_timestamp(lead.get("verified_at_utc"), gate="support_crm", event=event, observed=observed, context=context, path=f"{path}.crm_lead.verified_at_utc")
         if isinstance(source, Mapping):
-            for field in ("lead_id_sha256", "airtable_record_id_sha256", "adapter_response_digest", "lifecycle_stage", "verified_at_utc"):
+            for field in ("lead_subject", "airtable_record_subject", "adapter_response_digest", "lifecycle_stage", "verified_at_utc"):
                 _require(lead.get(field) == source.get(field), f"{path}.crm_lead.{field}", "must match the embedded source receipt", errors)
     consent = evidence.get("consent")
     if _is_mapping(consent, f"{path}.consent", errors):
