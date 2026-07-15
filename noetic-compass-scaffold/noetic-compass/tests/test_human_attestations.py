@@ -19,6 +19,7 @@ from api.services.customer_production_acceptance_authority import (
     AcceptanceAuthorityInvalid,
     AcceptanceAuthorityUnavailable,
     CustomerProductionAcceptanceAuthorityStore,
+    RELEASE_DECISION_EVIDENCE_HASH_GATES,
 )
 from api.services.human_attestations import (
     HumanAttestation,
@@ -98,6 +99,13 @@ def _common(gate: str) -> dict[str, object]:
         "event_at_utc": stamp,
         "observed_at_utc": stamp,
         "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
+    }
+
+
+def _release_evidence_hashes() -> dict[str, str]:
+    return {
+        gate: hashlib.sha256(f"required-gate:{gate}".encode()).hexdigest()
+        for gate in RELEASE_DECISION_EVIDENCE_HASH_GATES
     }
 
 
@@ -910,6 +918,7 @@ def test_release_aggregate_requires_four_roles_and_child_revocation_fails_closed
         status="ACCEPT",
         approved_at_utc="2026-07-15T12:00:00Z",
         approver_roles=["legal_owner", "operations_owner", "product_owner", "security_owner"],
+        evidence_hashes=_release_evidence_hashes(),
         decision_record_uri="excluded-from-binding",
         decision_record_sha256="0" * 64,
     )
@@ -1047,6 +1056,7 @@ def test_release_aggregate_rejects_a_child_created_before_the_evidence_window() 
         status="ACCEPT",
         approved_at_utc="2026-07-15T12:00:00Z",
         approver_roles=["legal_owner", "operations_owner", "product_owner", "security_owner"],
+        evidence_hashes=_release_evidence_hashes(),
         decision_record_uri="excluded-from-binding",
         decision_record_sha256="0" * 64,
     )

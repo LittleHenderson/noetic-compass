@@ -63,6 +63,7 @@ def materialize_human_attestations(
     evidence: MutableMapping[str, Any],
     *,
     primary_tenant_id: str = "primary",
+    attested_at_overrides: Mapping[tuple[str, str], datetime] | None = None,
 ) -> HumanAttestationStore:
     """Replace placeholder references with real content-addressed records.
 
@@ -87,6 +88,7 @@ def materialize_human_attestations(
     attestations = human_attestation_store(
         state_store, primary_tenant_id=primary_tenant_id
     )
+    overrides = attested_at_overrides or {}
 
     def create(
         *,
@@ -95,6 +97,7 @@ def materialize_human_attestations(
         at: datetime,
         supports: list[Mapping[str, Any]] | None = None,
     ) -> HumanAttestation:
+        attested_at = overrides.get((purpose, role), at)
         return attestations.create(
             actor_tenant_id=primary_tenant_id,
             actor_account_id=_ROLE_ACCOUNT_IDS[role],
@@ -106,7 +109,7 @@ def materialize_human_attestations(
             deploy_id=deploy_id,
             evidence_binding_sha256=binding,
             supporting_attestations=supports,
-            now=at,
+            now=attested_at,
         )
 
     if gate in {"legal_publication_approval", "claim_honesty"}:

@@ -951,7 +951,10 @@ All nine gates must be `present`, current, and authoritative:
    valid final candidate remains `OPEN` operationally until publication and
    exact active-authority verification succeed.
 7. `incident_tabletop`: closed incident and actions, verified recovery and
-   rotation, hashed postmortem, and current cross-functional tabletop.
+   rotation, hashed postmortem, and current cross-functional tabletop. Every
+   postmortem/closure attestation must be made at or after
+   `incident.closed_at_utc`; every tabletop evidence/completion attestation
+   must be made at or after `tabletop.completed_at_utc`.
 8. `alert_delivery`: P1 delivery to on-call and incident channel,
     acknowledgement within ten minutes, and secondary escalation receipts. All
     deliveries, acknowledgement, and escalation must follow emission; recorded
@@ -966,7 +969,14 @@ All nine gates must be `present`, current, and authoritative:
 
 After all gates pass, the signed or live `release_decision` must include exactly
 the legal, operations, product, and security owner approvals. Its approval and
-observation times must be after the newest gate observation.
+observation times must be at or after the newest gate observation. Release
+evidence uses the backwards-incompatible
+`cas_harness_customer_production_release_decision_evidence.v1` schema and must
+carry an exact `evidence_hashes` object with one SHA-256 for every one of the
+nine `required_gates`. The canonical human-attestation binding includes that
+complete map, every release approval/decision attestation must be at or after
+`approved_at_utc`, and the final verifier compares the map byte-identity hashes
+to the exact nine authoritative documents or receipts it dereferenced.
 
 ## Time and freshness rules
 

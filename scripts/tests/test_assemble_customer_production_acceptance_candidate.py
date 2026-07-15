@@ -36,12 +36,17 @@ def _authority_document(
     deploy_id: str = DEPLOY_ID,
     event: datetime | None = None,
     observed: datetime | None = None,
+    evidence_hashes: dict[str, str] | None = None,
 ) -> bytes:
     uri = assembler._exact_live_endpoint(gate)
     event = event or (NOW - timedelta(minutes=10))
     observed = observed or (NOW - timedelta(minutes=5))
     document = {
-        "schema_version": acceptance.EVIDENCE_SCHEMA_VERSION,
+        "schema_version": (
+            acceptance.RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION
+            if gate == "release_decision"
+            else acceptance.EVIDENCE_SCHEMA_VERSION
+        ),
         "gate": gate,
         "environment": "public-production",
         "repository": acceptance.REPOSITORY,
@@ -52,6 +57,13 @@ def _authority_document(
         "artifact_uri": uri,
         "artifact_sha256": hashlib.sha256(f"artifact:{gate}".encode()).hexdigest(),
     }
+    if gate == "release_decision":
+        document["evidence_hashes"] = evidence_hashes or {
+            required_gate: hashlib.sha256(
+                f"placeholder:{required_gate}".encode()
+            ).hexdigest()
+            for required_gate in acceptance.REQUIRED_GATES
+        }
     return json.dumps(document, sort_keys=True).encode("utf-8")
 
 
@@ -297,8 +309,21 @@ class CandidateAssemblerTests(unittest.TestCase):
                 raw=_authority_document(gate),
                 sha256=hashlib.sha256(_authority_document(gate)).hexdigest(),
             )
-            for gate in assembler.LIVE_AUTHORITIES
+            for gate in assembler.LIVE_GATES
         }
+        release_hashes = {
+            assembler.ROOT_CI_GATE: receipt.sha256,
+            **{gate: authorities[gate].sha256 for gate in assembler.LIVE_GATES},
+        }
+        release_raw = _authority_document(
+            "release_decision", evidence_hashes=release_hashes
+        )
+        authorities["release_decision"] = assembler.LiveAuthority(
+            gate="release_decision",
+            uri=assembler._exact_live_endpoint("release_decision"),
+            raw=release_raw,
+            sha256=hashlib.sha256(release_raw).hexdigest(),
+        )
         manifest = assembler._build_candidate_manifest(
             template=template,
             generated_at=NOW,
@@ -320,6 +345,35 @@ class CandidateAssemblerTests(unittest.TestCase):
         self.assertEqual(
             release["uri"], assembler._exact_live_endpoint("release_decision")
         )
+
+    def test_candidate_manifest_rejects_release_bound_to_a_different_evidence_set(
+        self,
+    ) -> None:
+        receipt = assembler.PinnedReceipt(
+            raw=b"root receipt",
+            sha256=RECEIPT_HASH,
+            issuer="github-customer-production",
+            key_id="gh-env-2026-07-14-01",
+        )
+        authorities = {
+            gate: assembler.LiveAuthority(
+                gate=gate,
+                uri=assembler._exact_live_endpoint(gate),
+                raw=_authority_document(gate),
+                sha256=hashlib.sha256(_authority_document(gate)).hexdigest(),
+            )
+            for gate in assembler.LIVE_AUTHORITIES
+        }
+
+        with self.assertRaisesRegex(
+            assembler.AssemblyError, "do not bind the exact candidate evidence set"
+        ):
+            assembler._build_candidate_manifest(
+                template=assembler._load_open_template(ROOT),
+                generated_at=NOW,
+                receipt=receipt,
+                authorities=authorities,
+            )
 
     def test_built_candidate_passes_existing_verifier_with_live_authorities(self) -> None:
         bundle = verifier_test.SignedBundle()
@@ -355,6 +409,14 @@ class CandidateAssemblerTests(unittest.TestCase):
                 evidence = json.loads(receipt_path.read_text(encoding="utf-8"))[
                     "evidence"
                 ]
+                if gate == "release_decision":
+                    evidence["evidence_hashes"] = {
+                        assembler.ROOT_CI_GATE: root_reference["sha256"],
+                        **{
+                            required_gate: authorities[required_gate].sha256
+                            for required_gate in assembler.LIVE_GATES
+                        },
+                    }
                 raw = (
                     json.dumps(evidence, indent=2, sort_keys=True).encode("utf-8")
                     + b"\n"
@@ -451,8 +513,21 @@ class CandidateAssemblerTests(unittest.TestCase):
                 raw=_authority_document(gate),
                 sha256=hashlib.sha256(_authority_document(gate)).hexdigest(),
             )
-            for gate in assembler.LIVE_AUTHORITIES
+            for gate in assembler.LIVE_GATES
         }
+        release_hashes = {
+            assembler.ROOT_CI_GATE: receipt.sha256,
+            **{gate: authorities[gate].sha256 for gate in assembler.LIVE_GATES},
+        }
+        release_raw = _authority_document(
+            "release_decision", evidence_hashes=release_hashes
+        )
+        authorities["release_decision"] = assembler.LiveAuthority(
+            gate="release_decision",
+            uri=assembler._exact_live_endpoint("release_decision"),
+            raw=release_raw,
+            sha256=hashlib.sha256(release_raw).hexdigest(),
+        )
 
         def reject_after_partial_output(**kwargs):
             output = kwargs["output_dir"]

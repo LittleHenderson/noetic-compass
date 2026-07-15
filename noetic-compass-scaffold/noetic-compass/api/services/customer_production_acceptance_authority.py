@@ -71,6 +71,7 @@ from api.services.customer_production_pseudonyms import (
     SUBJECT_PATTERN as CUSTOMER_PSEUDONYM_SUBJECT_PATTERN,
 )
 from api.services.human_attestations import (
+    HumanAttestation,
     HumanAttestationInvalid,
     HumanAttestationNotFound,
     HumanAttestationStore,
@@ -81,6 +82,9 @@ from api.services.human_attestations import (
 
 
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v3"
+RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION = (
+    "cas_harness_customer_production_release_decision_evidence.v1"
+)
 RECORD_SCHEMA_VERSION = "cas_harness_acceptance_authority_revision.v2"
 HEAD_SCHEMA_VERSION = "cas_harness_acceptance_authority_head.v3"
 OPERATION_SCHEMA_VERSION = "cas_harness_acceptance_authority_operation.v1"
@@ -149,6 +153,17 @@ _TABLETOP_SCENARIOS = frozenset(
 _ALERT_DESTINATIONS = frozenset({"incident_channel", "primary_on_call"})
 _RELEASE_APPROVER_ROLES = frozenset(
     {"legal_owner", "operations_owner", "product_owner", "security_owner"}
+)
+RELEASE_DECISION_EVIDENCE_HASH_GATES = (
+    "runtime_worm",
+    "root_ci_protected_deploy",
+    "hosted_customer_journey",
+    "accounts_billing",
+    "legal_publication_approval",
+    "support_crm",
+    "incident_tabletop",
+    "alert_delivery",
+    "claim_honesty",
 )
 _HUMAN_ATTESTATION_GATES = frozenset(
     {
@@ -286,6 +301,7 @@ _EXTRA_FIELDS: dict[str, frozenset[str]] = {
             "status",
             "approved_at_utc",
             "approver_roles",
+            "evidence_hashes",
             "decision_record_uri",
             "decision_record_sha256",
             "human_assurance_boundary",
@@ -567,6 +583,7 @@ _OBJECT_FIELDS: dict[str, dict[str, frozenset[str]]] = {
     },
     "release_decision": {
         "human_assurance_boundary": frozenset(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
+        "evidence_hashes": frozenset(RELEASE_DECISION_EVIDENCE_HASH_GATES),
     },
 }
 
@@ -1213,7 +1230,7 @@ class CustomerProductionAcceptanceAuthorityStore:
         binding = canonical_evidence_binding_sha256(gate, evidence)
         master = str(evidence.get("master_head_sha") or "")
         deploy = str(evidence.get("deploy_id") or "")
-        records = []
+        records: list[tuple[HumanAttestation, datetime]] = []
         try:
             if gate in {"legal_publication_approval", "claim_honesty"}:
                 purpose = (
@@ -1228,17 +1245,24 @@ class CustomerProductionAcceptanceAuthorityStore:
                     if not isinstance(approval, Mapping):
                         raise HumanAttestationInvalid("approval reference is invalid")
                     records.append(
-                        attestations.assert_reference(
-                            uri=str(approval.get("approval_artifact_uri") or ""),
-                            sha256=str(approval.get("approval_sha256") or ""),
-                            purpose=purpose,
-                            gate=gate,
-                            role=str(approval.get("role") or ""),
-                            master_head_sha=master,
-                            deploy_id=deploy,
-                            evidence_binding_sha256=binding,
-                            attested_at_utc=str(approval.get("approved_at_utc") or ""),
-                            now=stamp,
+                        (
+                            attestations.assert_reference(
+                                uri=str(
+                                    approval.get("approval_artifact_uri") or ""
+                                ),
+                                sha256=str(approval.get("approval_sha256") or ""),
+                                purpose=purpose,
+                                gate=gate,
+                                role=str(approval.get("role") or ""),
+                                master_head_sha=master,
+                                deploy_id=deploy,
+                                evidence_binding_sha256=binding,
+                                attested_at_utc=str(
+                                    approval.get("approved_at_utc") or ""
+                                ),
+                                now=stamp,
+                            ),
+                            approval_floor,
                         )
                     )
             elif gate == "incident_tabletop":
@@ -1246,48 +1270,70 @@ class CustomerProductionAcceptanceAuthorityStore:
                 tabletop = evidence.get("tabletop")
                 if not isinstance(incident, Mapping) or not isinstance(tabletop, Mapping):
                     raise HumanAttestationInvalid("incident/tabletop references are invalid")
+                incident_floor = _parse_utc(
+                    incident.get("closed_at_utc"), "incident.closed_at_utc"
+                )
+                tabletop_floor = _parse_utc(
+                    tabletop.get("completed_at_utc"), "tabletop.completed_at_utc"
+                )
                 records.extend(
                     [
-                        attestations.assert_reference(
-                            uri=str(incident.get("postmortem_uri") or ""),
-                            sha256=str(incident.get("postmortem_sha256") or ""),
-                            purpose="incident_postmortem",
-                            gate=gate,
-                            role="incident_commander",
-                            master_head_sha=master,
-                            deploy_id=deploy,
-                            evidence_binding_sha256=binding,
-                            now=stamp,
+                        (
+                            attestations.assert_reference(
+                                uri=str(incident.get("postmortem_uri") or ""),
+                                sha256=str(
+                                    incident.get("postmortem_sha256") or ""
+                                ),
+                                purpose="incident_postmortem",
+                                gate=gate,
+                                role="incident_commander",
+                                master_head_sha=master,
+                                deploy_id=deploy,
+                                evidence_binding_sha256=binding,
+                                now=stamp,
+                            ),
+                            incident_floor,
                         ),
-                        attestations.assert_reference(
-                            uri=str(tabletop.get("evidence_uri") or ""),
-                            sha256=str(tabletop.get("evidence_sha256") or ""),
-                            purpose="tabletop_evidence",
-                            gate=gate,
-                            role="incident_commander",
-                            master_head_sha=master,
-                            deploy_id=deploy,
-                            evidence_binding_sha256=binding,
-                            now=stamp,
+                        (
+                            attestations.assert_reference(
+                                uri=str(tabletop.get("evidence_uri") or ""),
+                                sha256=str(
+                                    tabletop.get("evidence_sha256") or ""
+                                ),
+                                purpose="tabletop_evidence",
+                                gate=gate,
+                                role="incident_commander",
+                                master_head_sha=master,
+                                deploy_id=deploy,
+                                evidence_binding_sha256=binding,
+                                now=stamp,
+                            ),
+                            tabletop_floor,
                         ),
                     ]
                 )
             else:
+                release_floor = _parse_utc(
+                    evidence.get("approved_at_utc"), "approved_at_utc"
+                )
                 records.append(
-                    attestations.assert_reference(
-                        uri=str(evidence.get("decision_record_uri") or ""),
-                        sha256=str(evidence.get("decision_record_sha256") or ""),
-                        purpose="release_decision_record",
-                        gate=gate,
-                        role="product_owner",
-                        master_head_sha=master,
-                        deploy_id=deploy,
-                        evidence_binding_sha256=binding,
-                        now=stamp,
+                    (
+                        attestations.assert_reference(
+                            uri=str(evidence.get("decision_record_uri") or ""),
+                            sha256=str(evidence.get("decision_record_sha256") or ""),
+                            purpose="release_decision_record",
+                            gate=gate,
+                            role="product_owner",
+                            master_head_sha=master,
+                            deploy_id=deploy,
+                            evidence_binding_sha256=binding,
+                            now=stamp,
+                        ),
+                        release_floor,
                     )
                 )
             actor_accounts: set[str] = set()
-            for record in records:
+            for record, attestation_floor in records:
                 # ``load`` has already dereferenced and validated every child,
                 # but the authority must also bind each individual action to
                 # the evidence window.  Checking only the aggregate would let
@@ -1318,7 +1364,7 @@ class CustomerProductionAcceptanceAuthorityStore:
                         timestamp_record.payload.get("attested_at_utc"),
                         "attestation.attested_at_utc",
                     )
-                    if attested < approval_floor or attested > observed:
+                    if attested < attestation_floor or attested > observed:
                         raise HumanAttestationInvalid(
                             "attestation timestamp is outside the evidence window"
                         )
@@ -2263,7 +2309,12 @@ def _validated_canonical_evidence(
     evidence: Mapping[str, Any], *, gate: str, now: datetime
 ) -> bytes:
     _validate_structure(evidence, gate)
-    if evidence.get("schema_version") != EVIDENCE_SCHEMA_VERSION:
+    expected_schema_version = (
+        RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION
+        if gate == "release_decision"
+        else EVIDENCE_SCHEMA_VERSION
+    )
+    if evidence.get("schema_version") != expected_schema_version:
         raise AcceptanceAuthorityInvalid("unexpected evidence schema version")
     if evidence.get("gate") != gate:
         raise AcceptanceAuthorityInvalid("evidence gate does not match route")
@@ -3494,6 +3545,9 @@ def _validate_release_decision_semantics(
     _exact_string_set(
         evidence["approver_roles"], _RELEASE_APPROVER_ROLES, "approver_roles"
     )
+    evidence_hashes = _object(evidence, "evidence_hashes")
+    for gate in RELEASE_DECISION_EVIDENCE_HASH_GATES:
+        _sha_value(evidence_hashes[gate], f"evidence_hashes.{gate}")
     _validate_public_https_url(
         str(evidence["decision_record_uri"]),
         "decision_record_uri",

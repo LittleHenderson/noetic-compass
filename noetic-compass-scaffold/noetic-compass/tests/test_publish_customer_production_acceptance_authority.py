@@ -19,6 +19,8 @@ from api.acceptance_authority_contract import acceptance_authority_url
 from api.services.customer_production_acceptance_authority import (
     AcceptanceAuthorityInvalid,
     CustomerProductionAcceptanceAuthorityStore,
+    RELEASE_DECISION_EVIDENCE_HASH_GATES,
+    RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION,
     canonicalize_acceptance_evidence,
 )
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
@@ -115,6 +117,39 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             "present",
             "unavailable",
         ],
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
+    }
+
+
+def _release_evidence(now: datetime) -> dict[str, object]:
+    stamp = _utc(now)
+    return {
+        "schema_version": RELEASE_DECISION_EVIDENCE_SCHEMA_VERSION,
+        "gate": "release_decision",
+        "environment": "public-production",
+        "repository": "LittleHenderson/noetic-compass",
+        "master_head_sha": MASTER,
+        "deploy_id": DEPLOY,
+        "event_at_utc": stamp,
+        "observed_at_utc": stamp,
+        "artifact_uri": acceptance_authority_url("release_decision"),
+        "artifact_sha256": _sha("independent-release-artifact"),
+        "status": "ACCEPT",
+        "approved_at_utc": stamp,
+        "approver_roles": [
+            "legal_owner",
+            "operations_owner",
+            "product_owner",
+            "security_owner",
+        ],
+        "evidence_hashes": {
+            gate: _sha(f"required-gate:{gate}")
+            for gate in RELEASE_DECISION_EVIDENCE_HASH_GATES
+        },
+        "decision_record_uri": (
+            f"{publisher.PRODUCTION_API_ORIGIN}/internal/decisions/release"
+        ),
+        "decision_record_sha256": _sha("release-decision-record"),
         "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     }
 
@@ -658,6 +693,56 @@ def test_publish_uses_expected_head_and_verifies_exact_readback(
         "storage_mode": "state_store",
     }
     assert authority.load("legal_publication_approval", now=now).body == canonical
+
+
+def test_publisher_rejects_preapproval_release_attestation_before_any_mutation(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    event = datetime(2026, 7, 14, 12, 0, tzinfo=UTC)
+    approved = event.replace(minute=5)
+    observed = event.replace(minute=10)
+    evidence = _release_evidence(event)
+    evidence["approved_at_utc"] = _utc(approved)
+    evidence["observed_at_utc"] = _utc(observed)
+    backend = InMemoryStateStore()
+    attestations = materialize_human_attestations(
+        backend,
+        evidence,
+        attested_at_overrides={
+            ("release_approval", "security_owner"): approved.replace(minute=4)
+        },
+    )
+    authority = CustomerProductionAcceptanceAuthorityStore(
+        backend, human_attestation_store=attestations
+    )
+    path = _write(tmp_path / "release.json", evidence)
+    canonical = canonicalize_acceptance_evidence(
+        "release_decision", evidence, now=observed
+    )
+    digest = hashlib.sha256(canonical).hexdigest()
+
+    @contextmanager
+    def fake_production_authority(**_: object):
+        yield authority
+
+    monkeypatch.setattr(
+        publisher, "_production_authority", fake_production_authority
+    )
+    args = _publish_args(path, digest)
+    args[args.index("legal_publication_approval")] = "release_decision"
+    stdout, stderr = io.StringIO(), io.StringIO()
+
+    result = publisher.run(
+        args,
+        now=observed,
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert result == 2
+    assert stdout.getvalue() == ""
+    assert json.loads(stderr.getvalue())["code"] == "evidence_invalid"
+    assert authority.current_head_version("release_decision") == 0
 
 
 def test_missing_attestation_store_is_known_prewrite_authority_unavailable(
