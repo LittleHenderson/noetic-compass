@@ -193,6 +193,11 @@ The customer Blueprint remains bootstrap infrastructure:
 
 - The attached 1 GB service disk forces `numInstances: 1`, prevents horizontal
   scaling, and disables Render zero-downtime deploys. Deploys include an outage.
+- CRM leads and support tickets are configured with exact backend
+  `state_store`. Their domain revisions and current heads use the lifespan-owned
+  shared StateStore; the two JSONL paths remain mounted only as strict,
+  idempotent migration sources. This is source configuration until a hosted
+  deploy proves the migration markers and record parity.
 - The Postgres storage floor is 5 GB with
   `storageAutoscalingEnabled: true`; Render's live API exposes that same policy
   as `diskAutoscalingEnabled: true`. The `basic-256mb` plan still has limited
@@ -207,10 +212,12 @@ path, and preserve one non-secret delivery/readback drill.
 
 The following are hard prerequisites before customer-production `ACCEPT`:
 
-1. Migrate support tickets, CRM JSONL, and the file-backed Evidence Packet/hash
-   log off the attached service disk to shared Postgres/S3-backed stores, remove
-   the disk, run at least two API replicas, and prove a rolling deploy plus
-   replica/restart continuity with no lost records.
+1. Deploy the CRM/support shared-store cutover, read back both exact migration
+   markers, and prove source/destination revision and head parity. Then migrate
+   the remaining file-backed Evidence Packet/hash state, remove the disk, run at
+   least two API replicas, and prove a rolling deploy plus replica/restart
+   continuity with no lost records. The source implementation alone is not that
+   hosted proof.
 2. Keep Postgres storage at or above 5 GB with storage autoscaling enabled, and
    prove both the Blueprint declaration and the live API readback after sync.
    A source-only change is not provider evidence. Increase storage headroom

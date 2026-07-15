@@ -2,7 +2,8 @@
 
 This is the storage half of the CAPTURED-vs-SYNCED honesty rule in :mod:`.models`. ``captured``
 means "durably persisted on our side" — and that durability claim is only as honest as the store
-behind it. So this module ships two backends and is loud about the difference:
+behind it. This module keeps the legacy memory/file backends; the shared
+revision/head backend lives in :mod:`.state_store`:
 
 * :class:`InMemoryLeadStore` — the dark, non-durable default. Holds leads in a dict that vanishes
   on process exit. It proves the contract for tests and lets the app boot with zero config, but it
@@ -13,6 +14,9 @@ behind it. So this module ships two backends and is loud about the difference:
   it captured before the restart come back. This is what a deployment that actually wants to keep
   its leads configures (``NC_CRM_LEAD_STORE_PATH``). It is honestly single-host — one file on one
   disk — not a replicated multi-host database; that is a later backend swap behind the same seam.
+
+Customer production uses :class:`~api.services.crm.state_store.StateStoreLeadStore`, which stores
+immutable revisions plus an OCC head and treats JSONL only as a strict migration source.
 
 Append-only is deliberate. A :class:`~api.services.crm.models.Lead` is immutable and versioned: a
 sync attempt produces a *new* version (``with_sync_result`` bumps ``version``), it never mutates the
@@ -29,7 +33,7 @@ import threading
 from pathlib import Path
 from typing import Protocol, runtime_checkable
 
-from api.services.crm.models import Lead, normalize_email
+from api.services.crm.models import CRMSyncResult, Lead, normalize_email
 
 
 @runtime_checkable
@@ -51,6 +55,10 @@ class LeadStore(Protocol):
     def find_by_email(self, email: str) -> list[Lead]: ...
 
     def update_pipeline_status(self, lead_id: str, pipeline_status: str) -> Lead | None: ...
+
+    def record_sync_result(
+        self, lead_id: str, result: CRMSyncResult
+    ) -> Lead | None: ...
 
 
 def _supersedes(incoming: Lead, existing: Lead | None) -> bool:
@@ -116,6 +124,18 @@ class InMemoryLeadStore:
             updated = lead.with_pipeline_status(pipeline_status)
             if updated is lead:
                 return lead
+            self._by_id[lead_id] = updated
+            return updated
+
+    def record_sync_result(
+        self, lead_id: str, result: CRMSyncResult
+    ) -> Lead | None:
+        """Atomically annotate the freshest lead head with a provider result."""
+        with self._lock:
+            lead = self._by_id.get(lead_id)
+            if lead is None:
+                return None
+            updated = lead.with_sync_result(result)
             self._by_id[lead_id] = updated
             return updated
 
@@ -215,6 +235,19 @@ class JsonlFileLeadStore:
             updated = lead.with_pipeline_status(pipeline_status)
             if updated is lead:
                 return lead
+            self._append(updated)
+            self._by_id[lead_id] = updated
+            return updated
+
+    def record_sync_result(
+        self, lead_id: str, result: CRMSyncResult
+    ) -> Lead | None:
+        """Append a provider annotation derived from the freshest file-backed head."""
+        with self._lock:
+            lead = self._by_id.get(lead_id)
+            if lead is None:
+                return None
+            updated = lead.with_sync_result(result)
             self._append(updated)
             self._by_id[lead_id] = updated
             return updated

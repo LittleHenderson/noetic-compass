@@ -88,6 +88,8 @@ def test_customer_blueprint_enables_airtable_while_privacy_intake_stays_closed()
         "NC_FLEET_SERVICE_AUTH_ENABLED": "false",
         "NC_CRM_PROVIDER": "airtable",
         "NC_AIRTABLE_API_BASE_URL": "https://api.airtable.com/v0",
+        "NC_CRM_LEAD_STORE_BACKEND": "state_store",
+        "NC_SUPPORT_TICKET_STORE_BACKEND": "state_store",
         "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS": "OPEN",
         "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED": "true",
         "CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR": (

@@ -40,6 +40,7 @@ from api.services.crm.sync import (
     build_crm_provider,
     normalize_crm_provider_error,
 )
+from api.services.production.state_substrate import StateStore
 
 
 class CRMService:
@@ -110,8 +111,10 @@ class CRMService:
 
         # 5. Fold the outcome in as a new version and persist it. Never a mutation of the captured
         #    record — an immutable annotation that preserves the capture → sync lineage.
-        annotated = captured.with_sync_result(result)
-        return self._store.save(annotated)
+        annotated = self._store.record_sync_result(captured.lead_id, result)
+        if annotated is None:  # A captured lead is never deleted by the LeadStore contract.
+            raise RuntimeError("captured CRM lead disappeared before sync annotation")
+        return annotated
 
     def get_lead(self, lead_id: str) -> Lead | None:
         return self._store.get(lead_id)
@@ -129,27 +132,60 @@ class CRMService:
         return self._store.update_pipeline_status(lead_id, pipeline_status)
 
 
-def build_lead_store(settings) -> LeadStore:
-    """Pick the lead store from config: durable file if a path is set, else in-memory (dark).
+def build_lead_store(settings, *, state_store: StateStore | None = None) -> LeadStore:
+    """Pick shared-state or legacy auto-mode lead persistence.
 
-    ``NC_CRM_LEAD_STORE_PATH`` set → :class:`JsonlFileLeadStore` (real single-host durability).
-    Unset → :class:`InMemoryLeadStore`, which is honest that it forgets on restart. A production
-    deployment that means to keep its leads sets the path; an unconfigured one boots and works but
-    does not pretend its leads are durable.
+    Exact ``state_store`` requires the lifespan-owned shared backend and treats
+    the retained JSONL path only as a one-time migration source. ``auto`` keeps
+    the legacy path-to-file / no-path-to-memory behavior for other deployments.
     """
     path = (getattr(settings, "crm_lead_store_path", None) or "").strip()
+    backend = str(
+        getattr(settings, "crm_lead_store_backend", "auto") or "auto"
+    ).strip().lower()
+    if backend == "state_store":
+        if state_store is None:
+            raise RuntimeError(
+                "NC_CRM_LEAD_STORE_BACKEND=state_store requires the shared StateStore"
+            )
+        from api.services.crm.state_store import (
+            StateStoreLeadStore,
+            migrate_jsonl_leads_once,
+        )
+
+        shared = StateStoreLeadStore(state_store)
+        if path:
+            receipt = migrate_jsonl_leads_once(path, shared)
+            import logging
+
+            logging.getLogger("noetic.startup").info(
+                "CRM lead JSONL source receipt: present=%s lines=%s revisions=%s "
+                "heads=%s already_completed=%s source_sha256=%s records_sha256=%s",
+                receipt["source_present"],
+                receipt["line_count"],
+                receipt["revision_count"],
+                receipt["head_count"],
+                receipt["already_completed"],
+                receipt["source_sha256"],
+                receipt["records_sha256"],
+            )
+        return shared
+    if backend != "auto":
+        raise RuntimeError(
+            "NC_CRM_LEAD_STORE_BACKEND must be exact auto or state_store"
+        )
     if path:
         return JsonlFileLeadStore(path)
     return InMemoryLeadStore()
 
 
-def build_crm_service(settings) -> CRMService:
+def build_crm_service(settings, *, state_store: StateStore | None = None) -> CRMService:
     """Assemble the CRM service from settings: a lead store + a sync provider.
 
     Fails loud (via :func:`~api.services.crm.sync.build_crm_provider`) if configured for a provider
     we have not implemented, rather than booting a CRM that would silently sync nothing.
     """
-    store = build_lead_store(settings)
+    store = build_lead_store(settings, state_store=state_store)
     provider = build_crm_provider(settings)
     return CRMService(store, provider)
 

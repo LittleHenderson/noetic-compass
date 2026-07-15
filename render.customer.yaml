@@ -71,10 +71,10 @@ projects:
             numInstances: 1
             autoDeployTrigger: checksPass
             healthCheckPath: /health
-            # This disk keeps customer support/CRM records and the existing
-            # file-backed Evidence Packet/hash-log surface durable. Account,
-            # session, quota, entitlement, and tenant object-store metadata use
-            # the dedicated Postgres DB; immutable packet bytes also use S3.
+            # This disk retains the CRM/support JSONL migration sources and the
+            # existing file-backed Evidence Packet/hash-log surface. CRM/support
+            # runtime authority now uses the shared StateStore. The disk remains
+            # until every other file authority migrates and hosted parity is proven.
             disk:
               name: cas-harness-customer-support
               mountPath: /var/customer-support
@@ -196,6 +196,8 @@ projects:
                 sync: false
               - key: NC_AIRTABLE_LIFECYCLE_FIELD
                 sync: false
+              - key: NC_CRM_LEAD_STORE_BACKEND
+                value: state_store
               - key: NC_CRM_LEAD_STORE_PATH
                 value: /var/customer-support/leads.jsonl
               - key: NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS
@@ -208,6 +210,8 @@ projects:
                 value: "5"
               - key: NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS
                 value: "3600"
+              - key: NC_SUPPORT_TICKET_STORE_BACKEND
+                value: state_store
               - key: NC_SUPPORT_TICKET_STORE_PATH
                 value: /var/customer-support/support_tickets.jsonl
               - key: NC_SUPPORT_ACK_SLA_SECONDS

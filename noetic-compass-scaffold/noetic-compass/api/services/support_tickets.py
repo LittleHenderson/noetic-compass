@@ -24,6 +24,7 @@ from api.services.crm.privacy import (
     CRMPrivacyNoticeConfigError,
     CRMPrivacyNoticeContract,
 )
+from api.services.production.state_substrate import StateStore
 
 
 SUPPORT_TICKET_SCHEMA_VERSION_V1 = "cas_support_ticket.v1"
@@ -769,6 +770,12 @@ class SupportTicketStore(Protocol):
 
     def list_all(self) -> list[SupportTicket]: ...
 
+    def mutate(
+        self,
+        ticket_id: str,
+        mutation: Callable[[SupportTicket], SupportTicket],
+    ) -> SupportTicket | None: ...
+
 
 class InMemorySupportTicketStore:
     """Thread-safe non-durable test/dark store."""
@@ -795,6 +802,25 @@ class InMemorySupportTicketStore:
         with self._lock:
             values = list(self._records.values())
         return sorted(values, key=lambda item: item.created_at_utc, reverse=True)
+
+    def mutate(
+        self,
+        ticket_id: str,
+        mutation: Callable[[SupportTicket], SupportTicket],
+    ) -> SupportTicket | None:
+        with self._lock:
+            current = self._records.get(ticket_id)
+            if current is None:
+                return None
+            candidate = mutation(current)
+            if candidate.ticket_id != ticket_id:
+                raise SupportTicketValidationError(
+                    "support mutation changed ticket identity"
+                )
+            if candidate.version < current.version:
+                return current
+            self._records[ticket_id] = candidate
+            return candidate
 
 
 class JsonlSupportTicketStore(InMemorySupportTicketStore):
@@ -860,6 +886,32 @@ class JsonlSupportTicketStore(InMemorySupportTicketStore):
             self._records[ticket.ticket_id] = ticket
             return ticket
 
+    def mutate(
+        self,
+        ticket_id: str,
+        mutation: Callable[[SupportTicket], SupportTicket],
+    ) -> SupportTicket | None:
+        with self._lock:
+            current = self._records.get(ticket_id)
+            if current is None:
+                return None
+            candidate = mutation(current)
+            if candidate.ticket_id != ticket_id:
+                raise SupportTicketValidationError(
+                    "support mutation changed ticket identity"
+                )
+            if candidate.version < current.version:
+                return current
+            if candidate == current:
+                return current
+            self._path.parent.mkdir(parents=True, exist_ok=True)
+            with self._path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(candidate.to_dict(), sort_keys=True) + "\n")
+                handle.flush()
+                os.fsync(handle.fileno())
+            self._records[ticket_id] = candidate
+            return candidate
+
 
 class SupportTicketService:
     def __init__(
@@ -886,30 +938,66 @@ class SupportTicketService:
         return self._store.list_all()
 
     def route(self, ticket_id: str, *, owner: str) -> SupportTicket | None:
-        ticket = self._store.get(ticket_id)
-        if ticket is None:
-            return None
-        return self._store.save(ticket.route(owner=owner, now=self._clock()))
+        return self._store.mutate(
+            ticket_id,
+            lambda ticket: ticket.route(owner=owner, now=self._clock()),
+        )
 
     def acknowledge(self, ticket_id: str, *, actor: str) -> SupportTicket | None:
-        ticket = self._store.get(ticket_id)
-        if ticket is None:
-            return None
-        return self._store.save(ticket.acknowledge(actor=actor, now=self._clock()))
+        return self._store.mutate(
+            ticket_id,
+            lambda ticket: ticket.acknowledge(actor=actor, now=self._clock()),
+        )
 
     def resolve(
         self, ticket_id: str, *, actor: str, summary: str
     ) -> SupportTicket | None:
-        ticket = self._store.get(ticket_id)
-        if ticket is None:
-            return None
-        return self._store.save(
-            ticket.resolve(actor=actor, summary=summary, now=self._clock())
+        return self._store.mutate(
+            ticket_id,
+            lambda ticket: ticket.resolve(
+                actor=actor, summary=summary, now=self._clock()
+            ),
         )
 
 
-def build_support_ticket_service(settings: object) -> SupportTicketService:
+def build_support_ticket_service(
+    settings: object, *, state_store: StateStore | None = None
+) -> SupportTicketService:
     path = str(getattr(settings, "support_ticket_store_path", "") or "").strip()
+    backend = str(
+        getattr(settings, "support_ticket_store_backend", "auto") or "auto"
+    ).strip().lower()
+    if backend == "state_store":
+        if state_store is None:
+            raise RuntimeError(
+                "NC_SUPPORT_TICKET_STORE_BACKEND=state_store requires the shared StateStore"
+            )
+        from api.services.support_ticket_state_store import (
+            StateStoreSupportTicketStore,
+            migrate_jsonl_support_tickets_once,
+        )
+
+        shared = StateStoreSupportTicketStore(state_store)
+        if path:
+            receipt = migrate_jsonl_support_tickets_once(path, shared)
+            import logging
+
+            logging.getLogger("noetic.startup").info(
+                "support JSONL source receipt: present=%s lines=%s revisions=%s "
+                "heads=%s already_completed=%s source_sha256=%s records_sha256=%s",
+                receipt["source_present"],
+                receipt["line_count"],
+                receipt["revision_count"],
+                receipt["head_count"],
+                receipt["already_completed"],
+                receipt["source_sha256"],
+                receipt["records_sha256"],
+            )
+        return SupportTicketService(shared)
+    if backend != "auto":
+        raise RuntimeError(
+            "NC_SUPPORT_TICKET_STORE_BACKEND must be exact auto or state_store"
+        )
     # Keep process startup compatible with accounts-off/dark deployments that do not expose
     # durable support intake. The route boundary owns the security decision: in production or
     # account mode, ``_service`` refuses this non-durable store with HTTP 503 before anti-abuse

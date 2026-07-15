@@ -215,7 +215,7 @@ recovery playbooks for RunPod, Render, AWS, GitHub, and Vercel.
 | noetic-compass-api (legacy accounts-off lane) | Web Service (Docker, starter) | Oregon | `https://noetic-compass-api.onrender.com` |
 | cas-harness-customer-api | Web Service (Docker, starter) | Oregon | `https://cas-harness-customer-api.onrender.com` |
 | cas-harness-customer-postgres | Render Postgres (basic-256mb, 5 GB, storage autoscaling enabled) | Oregon | Private customer environment only |
-| cas-harness-customer-support | Render persistent disk (1 GB) | Oregon | Customer service mount `/var/customer-support` |
+| cas-harness-customer-support | Render persistent disk (1 GB) | Oregon | Retained migration source at `/var/customer-support`; its presence still pins the API to one instance |
 | cas-harness-api-accounts-canary | Private Service (Docker, starter) | Oregon | Private Render network only |
 | cas-harness-postgres-accounts-canary | Render Postgres (basic-1gb) | Oregon | Private Render network only |
 
