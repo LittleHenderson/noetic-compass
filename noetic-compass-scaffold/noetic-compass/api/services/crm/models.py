@@ -23,20 +23,31 @@ same declared-vs-verified discipline the rest of the platform runs on, applied t
 Traceability (the spine)
 ------------------------
 Every :class:`Lead` carries ``lead_id`` / ``created_at`` / ``version`` / ``source`` /
-``trace_id`` / ``parent_ids`` so any captured lead walks back to the request that created it and
-to any prior submission it descends from (a repeat submission links to its predecessor). Show
-your work, or don't ship it.
+``trace_id`` / ``parent_ids`` plus explicit contact consent, a pinned privacy URL, the exact
+published-notice version, and an immutable server timestamp. Any captured lead walks back to the
+request that created it and to any prior submission it descends from (a repeat submission links to
+its predecessor). Show your work, or don't ship it.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
+import re
 from typing import Literal, Mapping, cast
 from uuid import uuid4
 
+from api.services.crm.privacy import (
+    CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+    CRM_PRIVACY_NOTICE_URL,
+)
 
-CRM_SCHEMA_VERSION = "noetic_crm.v1"
+
+CRM_SCHEMA_VERSION = "noetic_crm.v2"
+LEGACY_CRM_SCHEMA_VERSION = "noetic_crm.v1"
+CRM_CONSENT_SCHEMA_VERSION = "noetic_crm_consent.v2"
+_PRIVACY_NOTICE_VERSION_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$")
+_SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 
 
 # --------------------------------------------------------------------------
@@ -106,6 +117,49 @@ def _verification_now_iso() -> str:
     return datetime.now(UTC).replace(microsecond=0).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def _require_canonical_whole_second_utc(value: object, *, field_name: str) -> str:
+    """Validate an immutable evidence timestamp without accepting alternate spellings."""
+
+    if type(value) is not str or not value:
+        raise CRMStateError(f"{field_name} is required")
+    try:
+        parsed = datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ")
+    except ValueError as exc:
+        raise CRMStateError(
+            f"{field_name} must be whole-second UTC YYYY-MM-DDTHH:MM:SSZ"
+        ) from exc
+    if parsed.strftime("%Y-%m-%dT%H:%M:%SZ") != value:
+        raise CRMStateError(f"{field_name} must be canonical whole-second UTC")
+    return value
+
+
+def _normalize_privacy_notice_version(raw: object) -> str:
+    """Return one explicit, log-safe published-notice version identifier."""
+
+    if type(raw) is not str:
+        raise LeadValidationError("privacy_notice_version must be a string")
+    value = raw.strip()
+    if _PRIVACY_NOTICE_VERSION_RE.fullmatch(value) is None:
+        raise LeadValidationError(
+            "privacy_notice_version must be 1-128 characters using only letters, numbers, "
+            "dot, underscore, colon, or hyphen"
+        )
+    return value
+
+
+def _normalize_privacy_notice_content_sha256(raw: object) -> str:
+    """Return the exact server-owned byte digest of the notice shown."""
+
+    if type(raw) is not str:
+        raise LeadValidationError("privacy_notice_content_sha256 must be a string")
+    value = raw.strip().lower()
+    if _SHA256_RE.fullmatch(value) is None:
+        raise LeadValidationError(
+            "privacy_notice_content_sha256 must be 64 lowercase hexadecimal characters"
+        )
+    return value
+
+
 def normalize_email(raw: str) -> str:
     """Canonicalize an email for identity/dedup: trimmed + lowercased.
 
@@ -130,13 +184,19 @@ class LeadSubmission:
     message: str = ""
     interest: str = ""  # which offering: "cas_harness", "atlas", "platform", …
     metadata: Mapping[str, str] = field(default_factory=dict)
+    consent_to_contact: bool = False
+    privacy_notice_version: str = ""
+    privacy_notice_content_sha256: str = ""
+    privacy_notice_publication_status: str = ""
 
     def validated(self) -> "LeadSubmission":
         """Return a normalized copy, or raise :class:`LeadValidationError`.
 
-        The bar is deliberately low and honest: an email that is present and shaped like an
-        address (one ``@`` with a dotted domain). We would rather accept a reachable lead than
-        reject it on an over-strict regex; we refuse only input we could never act on.
+        The contact-address bar is deliberately low: one ``@`` with a dotted domain. Consent is
+        deliberately strict: the caller must supply exact boolean ``true`` plus the server-owned
+        notice version/content digest/publication status. The public route injects those values;
+        the browser never chooses them. The timestamp and canonical notice URL are supplied later
+        by :meth:`Lead.from_submission`.
         """
         email = self.email.strip()
         local, sep, domain = email.partition("@")
@@ -144,6 +204,20 @@ class LeadSubmission:
             raise LeadValidationError(
                 f"submission email {self.email!r} is not a usable address "
                 f"(need local@dotted.domain); refusing to capture an uncontactable lead"
+            )
+        if type(self.consent_to_contact) is not bool or self.consent_to_contact is not True:
+            raise LeadValidationError(
+                "consent_to_contact must be true before a public lead is persisted"
+            )
+        privacy_notice_version = _normalize_privacy_notice_version(
+            self.privacy_notice_version
+        )
+        privacy_notice_content_sha256 = _normalize_privacy_notice_content_sha256(
+            self.privacy_notice_content_sha256
+        )
+        if self.privacy_notice_publication_status != CRM_PRIVACY_NOTICE_PRESENT_STATUS:
+            raise LeadValidationError(
+                "privacy_notice_publication_status must be exact present"
             )
         # Keep string metadata values only — a public form must not smuggle structured payloads.
         clean_meta = {str(k): str(v) for k, v in dict(self.metadata).items()}
@@ -154,6 +228,10 @@ class LeadSubmission:
             message=self.message.strip(),
             interest=self.interest.strip(),
             metadata=clean_meta,
+            consent_to_contact=True,
+            privacy_notice_version=privacy_notice_version,
+            privacy_notice_content_sha256=privacy_notice_content_sha256,
+            privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
         )
 
 
@@ -173,8 +251,13 @@ class CRMVerificationReceipt:
     lifecycle_stage: str
     verified_at: str
     response_digest: str
+    provider: str = "airtable"
 
     def __post_init__(self) -> None:
+        if self.provider != "airtable":
+            raise CRMStateError(
+                "CRM verification receipt provider must be exact 'airtable'"
+            )
         for field_name, value in (
             ("readback_verified", self.readback_verified),
             ("deduplicated", self.deduplicated),
@@ -228,6 +311,7 @@ class CRMVerificationReceipt:
 
     def to_dict(self) -> dict[str, object]:
         return {
+            "provider": self.provider,
             "readback_verified": self.readback_verified,
             "deduplicated": self.deduplicated,
             "owner_assigned": self.owner_assigned,
@@ -241,7 +325,9 @@ class CRMVerificationReceipt:
         lifecycle_stage = data.get("lifecycle_stage")
         verified_at = data.get("verified_at")
         response_digest = data.get("response_digest")
+        provider = data.get("provider", "airtable")
         return cls(
+            provider=provider if isinstance(provider, str) else "",
             readback_verified=data.get("readback_verified") is True,
             deduplicated=data.get("deduplicated") is True,
             owner_assigned=data.get("owner_assigned") is True,
@@ -333,11 +419,54 @@ class Lead:
     message: str = ""
     interest: str = ""
     metadata: Mapping[str, str] = field(default_factory=dict)
+    consent_to_contact: bool = False
+    privacy_notice_url: str = ""
+    privacy_notice_version: str = ""
+    privacy_notice_content_sha256: str = ""
+    privacy_notice_publication_status: str = ""
+    consent_recorded_at_utc: str = ""
+    consent_schema_version: str = ""
     sync_status: LeadSyncStatus = "captured"
     pipeline_status: LeadPipelineStatus = "new"
     external_id: str | None = None
     verification_receipt: CRMVerificationReceipt | None = None
     schema_version: str = CRM_SCHEMA_VERSION
+
+    def __post_init__(self) -> None:
+        """Keep new consent evidence complete while allowing old v1 rows to replay."""
+
+        if self.schema_version == LEGACY_CRM_SCHEMA_VERSION:
+            return
+        if self.schema_version != CRM_SCHEMA_VERSION:
+            raise CRMStateError(
+                f"lead schema_version must be {CRM_SCHEMA_VERSION} or "
+                f"{LEGACY_CRM_SCHEMA_VERSION}"
+            )
+        if type(self.consent_to_contact) is not bool or self.consent_to_contact is not True:
+            raise CRMStateError("v2 lead requires consent_to_contact=true")
+        if self.privacy_notice_url != CRM_PRIVACY_NOTICE_URL:
+            raise CRMStateError(
+                f"v2 lead privacy_notice_url must be exact {CRM_PRIVACY_NOTICE_URL}"
+            )
+        try:
+            _normalize_privacy_notice_version(self.privacy_notice_version)
+            _normalize_privacy_notice_content_sha256(
+                self.privacy_notice_content_sha256
+            )
+        except LeadValidationError as exc:
+            raise CRMStateError(str(exc)) from exc
+        if self.privacy_notice_publication_status != CRM_PRIVACY_NOTICE_PRESENT_STATUS:
+            raise CRMStateError(
+                "v2 lead privacy_notice_publication_status must be exact present"
+            )
+        _require_canonical_whole_second_utc(
+            self.consent_recorded_at_utc,
+            field_name="consent_recorded_at_utc",
+        )
+        if self.consent_schema_version != CRM_CONSENT_SCHEMA_VERSION:
+            raise CRMStateError(
+                f"v2 lead consent_schema_version must be exact {CRM_CONSENT_SCHEMA_VERSION}"
+            )
 
     @classmethod
     def from_submission(
@@ -355,6 +484,7 @@ class Lead:
         captured lead walks back to its origin.
         """
         v = submission.validated()
+        recorded_at = _verification_now_iso()
         return cls(
             email=normalize_email(v.email),
             source=source,
@@ -365,6 +495,13 @@ class Lead:
             message=v.message,
             interest=v.interest,
             metadata=dict(v.metadata),
+            consent_to_contact=True,
+            privacy_notice_url=CRM_PRIVACY_NOTICE_URL,
+            privacy_notice_version=v.privacy_notice_version,
+            privacy_notice_content_sha256=v.privacy_notice_content_sha256,
+            privacy_notice_publication_status=v.privacy_notice_publication_status,
+            consent_recorded_at_utc=recorded_at,
+            consent_schema_version=CRM_CONSENT_SCHEMA_VERSION,
             sync_status="captured",
         )
 
@@ -398,6 +535,13 @@ class Lead:
             message=self.message,
             interest=self.interest,
             metadata=dict(self.metadata),
+            consent_to_contact=self.consent_to_contact,
+            privacy_notice_url=self.privacy_notice_url,
+            privacy_notice_version=self.privacy_notice_version,
+            privacy_notice_content_sha256=self.privacy_notice_content_sha256,
+            privacy_notice_publication_status=self.privacy_notice_publication_status,
+            consent_recorded_at_utc=self.consent_recorded_at_utc,
+            consent_schema_version=self.consent_schema_version,
             sync_status=new_status,
             pipeline_status=self.pipeline_status,
             external_id=result.external_id if result.synced else self.external_id,
@@ -431,6 +575,13 @@ class Lead:
             message=self.message,
             interest=self.interest,
             metadata=dict(self.metadata),
+            consent_to_contact=self.consent_to_contact,
+            privacy_notice_url=self.privacy_notice_url,
+            privacy_notice_version=self.privacy_notice_version,
+            privacy_notice_content_sha256=self.privacy_notice_content_sha256,
+            privacy_notice_publication_status=self.privacy_notice_publication_status,
+            consent_recorded_at_utc=self.consent_recorded_at_utc,
+            consent_schema_version=self.consent_schema_version,
             sync_status=self.sync_status,
             pipeline_status=normalized,
             external_id=self.external_id,
@@ -453,6 +604,13 @@ class Lead:
             "message": self.message,
             "interest": self.interest,
             "metadata": dict(self.metadata),
+            "consent_to_contact": self.consent_to_contact,
+            "privacy_notice_url": self.privacy_notice_url,
+            "privacy_notice_version": self.privacy_notice_version,
+            "privacy_notice_content_sha256": self.privacy_notice_content_sha256,
+            "privacy_notice_publication_status": self.privacy_notice_publication_status,
+            "consent_recorded_at_utc": self.consent_recorded_at_utc,
+            "consent_schema_version": self.consent_schema_version,
             "sync_status": self.sync_status,
             "pipeline_status": self.pipeline_status,
             "external_id": self.external_id,
@@ -476,6 +634,7 @@ class Lead:
             raise CRMStateError(
                 "persisted verification_receipt must be a JSON object or null"
             )
+        schema_version = str(data.get("schema_version", LEGACY_CRM_SCHEMA_VERSION))
         return cls(
             email=str(data["email"]),
             lead_id=str(data["lead_id"]),
@@ -490,9 +649,20 @@ class Lead:
             message=str(data.get("message", "")),
             interest=str(data.get("interest", "")),
             metadata={str(k): str(v) for k, v in dict(data.get("metadata") or {}).items()},
+            consent_to_contact=data.get("consent_to_contact") is True,
+            privacy_notice_url=str(data.get("privacy_notice_url", "")),
+            privacy_notice_version=str(data.get("privacy_notice_version", "")),
+            privacy_notice_content_sha256=str(
+                data.get("privacy_notice_content_sha256", "")
+            ),
+            privacy_notice_publication_status=str(
+                data.get("privacy_notice_publication_status", "")
+            ),
+            consent_recorded_at_utc=str(data.get("consent_recorded_at_utc", "")),
+            consent_schema_version=str(data.get("consent_schema_version", "")),
             sync_status=str(data.get("sync_status", "captured")),  # type: ignore[arg-type]
             pipeline_status=str(data.get("pipeline_status", "new")),  # type: ignore[arg-type]
             external_id=(None if data.get("external_id") is None else str(data["external_id"])),
             verification_receipt=verification_receipt,
-            schema_version=str(data.get("schema_version", CRM_SCHEMA_VERSION)),
+            schema_version=schema_version,
         )

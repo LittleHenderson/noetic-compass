@@ -45,8 +45,13 @@ Wiring: `api/main.py` builds the service at startup (`build_crm_service(settings
 ## Endpoints
 
 - `POST /api/crm/public/leads` - public, no JWT. The anonymous lead-capture form posts here.
-  Body: `{email, name, organization, message, interest, source, metadata}`. Returns:
-  `{lead_id, captured, sync_status, synced, schema_version, message}`.
+  Body: `{email, name, organization, message, interest, source, metadata,
+  consent_to_contact}`. Consent must be exact `true`. The server owns the privacy publication
+  status, version, URL, and content SHA-256; an optional legacy `privacy_notice_version` is only a
+  stale-form assertion. Returns the original receipt fields plus the pinned privacy URL, server
+  notice version/content hash/status, immutable consent timestamp, and consent schema version.
+  The checked-in/live notice remains exact `OPEN`, so persistence currently fails closed with
+  HTTP `503` until an approved different notice is configured as exact `present`.
 - `GET /api/crm/leads` - authed. Sales list view, newest first.
 - `GET /api/crm/leads/{lead_id}` - authed. One lead, or `404`.
 - `PATCH /api/crm/leads/{lead_id}/pipeline-status` - authed. Moves one captured lead through the
@@ -79,6 +84,9 @@ All CRM config is dark by default.
 - `NC_AIRTABLE_LIFECYCLE_FIELD` (default `Pipeline Status`)
 - `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_MAX` (default `5`)
 - `NC_CRM_PUBLIC_LEAD_RATE_LIMIT_WINDOW_SECONDS` (default `3600`)
+- `NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS` (default exact `OPEN`)
+- `NC_CRM_PRIVACY_NOTICE_VERSION` (default `draft-2026-07-14`)
+- `NC_CRM_PRIVACY_NOTICE_CONTENT_SHA256` (default exact live draft digest)
 
 Use a least-privilege Airtable personal access token restricted to the one
 target base. The adapter performs record PATCH and GET calls only, so the token
@@ -168,7 +176,9 @@ external CRM sync is still not enabled. To turn it on:
    - `NC_AIRTABLE_OWNER_VALUE=<non-empty accountable owner>`
    - `NC_AIRTABLE_LIFECYCLE_FIELD=<lifecycle field>`
 4. Redeploy.
-5. Submit a hosted lead through `POST /api/crm/public/leads`.
+5. Provision the fixed consent fields listed in
+   `docs/runbooks/airtable_crm_acceptance_source.md`, then submit a hosted lead through
+   `POST /api/crm/public/leads` with explicit consent and the approved published-notice version.
 6. Confirm the public response has `sync_status: "synced"` and `synced: true`; then use the authed
    lead read route to verify the non-empty `external_id` and persisted verification receipt.
 

@@ -476,6 +476,25 @@ jobs:
           assert "--authorization-artifact-uri" in deactivate_help.stdout
           assert "--authorization-artifact-sha256" in deactivate_help.stdout
           assert "--operation-reason" in deactivate_help.stdout
+
+          crm_collector = Path(
+              "/app/scripts/collect_airtable_crm_acceptance_source.py"
+          )
+          assert crm_collector.is_file()
+          crm_collector_help = subprocess.run(
+              [sys.executable, str(crm_collector), "--help"],
+              check=True,
+              cwd="/tmp",
+              stdout=subprocess.PIPE,
+              stderr=subprocess.PIPE,
+              text=True,
+          )
+          assert "--privacy-notice-version" not in crm_collector_help.stdout
+          assert "--master-head" in crm_collector_help.stdout
+          assert "--deploy-id" in crm_collector_help.stdout
+          assert "--source-receipt-output" in crm_collector_help.stdout
+          assert "--fragment-output" in crm_collector_help.stdout
+
           ssh_directory = Path.home() / ".ssh"
           assert ssh_directory.is_dir()
           assert stat.S_IMODE(ssh_directory.stat().st_mode) == 0o700

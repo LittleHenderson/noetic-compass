@@ -21,10 +21,15 @@ from __future__ import annotations
 from typing import Mapping
 
 from fastapi import APIRouter, HTTPException, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, StrictBool
 
 from api.services.crm.abuse import PublicLeadAbuseGuard, build_public_lead_abuse_guard
 from api.services.crm.models import LeadSubmission, LeadValidationError
+from api.services.crm.privacy import (
+    CRMPrivacyNoticeConfigError,
+    CRMPrivacyNoticeContract,
+    build_privacy_notice_contract,
+)
 from api.services.crm.service import CRMService, build_dark_crm_service
 from api.config import settings
 
@@ -59,6 +64,15 @@ def _abuse_guard(request: Request) -> PublicLeadAbuseGuard:
     return _FALLBACK_ABUSE_GUARD
 
 
+def _privacy_notice_contract(request: Request) -> CRMPrivacyNoticeContract:
+    """Return the server-owned notice identity; never accept one chosen by a browser."""
+
+    contract = getattr(request.app.state, "crm_privacy_notice_contract", None)
+    if isinstance(contract, CRMPrivacyNoticeContract):
+        return contract.validated()
+    return build_privacy_notice_contract(settings)
+
+
 def _client_key(request: Request) -> str:
     """Best-effort anonymous client key for public lead throttling."""
     forwarded_for = request.headers.get("x-forwarded-for", "")
@@ -70,10 +84,11 @@ def _client_key(request: Request) -> str:
 
 
 class LeadSubmissionRequest(BaseModel):
-    """The inbound public lead-capture payload. ``email`` is the only hard requirement.
+    """Inbound lead payload with explicit contact consent.
 
     ``source`` defaults to a neutral public-form marker; a richer form may set it to name the exact
-    page/campaign the lead came from (provenance, captured verbatim onto the lead).
+    page/campaign the lead came from (provenance, captured verbatim onto the lead). The server,
+    not the browser, owns the notice status/version/content digest and records the consent time.
     """
 
     email: str = Field(..., min_length=1, max_length=320)
@@ -83,6 +98,15 @@ class LeadSubmissionRequest(BaseModel):
     interest: str = Field(default="", max_length=120)
     source: str = Field(default="public_web_form", min_length=1, max_length=120)
     metadata: dict[str, str] = Field(default_factory=dict)
+    consent_to_contact: StrictBool
+    # Deprecated compatibility assertion. New callers omit this field. If an old caller sends it,
+    # the value must match the server-owned version; it never becomes the storage authority.
+    privacy_notice_version: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=128,
+        pattern=r"^[A-Za-z0-9][A-Za-z0-9._:-]{0,127}$",
+    )
     # Hidden form field. Real users leave it blank; simple bots fill it and are rejected before
     # persistence. It is intentionally excluded from LeadSubmission.
     website: str = Field(default="", max_length=500)
@@ -96,6 +120,13 @@ class LeadCaptureResponse(BaseModel):
     sync_status: str
     synced: bool
     schema_version: str
+    consent_to_contact: bool
+    privacy_notice_url: str
+    privacy_notice_version: str
+    privacy_notice_content_sha256: str
+    privacy_notice_publication_status: str
+    consent_recorded_at_utc: str
+    consent_schema_version: str
     message: str
 
 
@@ -121,9 +152,35 @@ def _receipt_message(sync_status: str) -> str:
 async def capture_public_lead(request: Request, payload: LeadSubmissionRequest) -> LeadCaptureResponse:
     """Capture a lead from a public form. Public, no auth. Durable capture before any sync.
 
-    Returns 422 if the email is unusable (we refuse to capture an uncontactable lead). The
+    Returns 422 if the email is unusable or explicit consent is absent, 409 for a stale legacy
+    notice assertion, and 503 while the server-owned privacy publication remains ``OPEN``. The
     ``trace_id`` is the request's ``X-Request-ID`` so the captured lead walks back to this request.
     """
+    try:
+        notice = _privacy_notice_contract(request)
+    except CRMPrivacyNoticeConfigError as exc:
+        raise HTTPException(
+            status_code=503,
+            detail="public lead capture is unavailable because the server privacy notice "
+            "contract is invalid",
+        ) from exc
+    if not notice.permits_contact_capture:
+        raise HTTPException(
+            status_code=503,
+            detail=(
+                "public lead capture is unavailable while privacy notice publication "
+                f"status is {notice.publication_status}"
+            ),
+        )
+    if (
+        payload.privacy_notice_version is not None
+        and payload.privacy_notice_version != notice.version
+    ):
+        raise HTTPException(
+            status_code=409,
+            detail="the submitted privacy notice acknowledgement is stale; reload the form",
+        )
+
     decision = _abuse_guard(request).check(
         client_key=_client_key(request),
         honeypot_value=payload.website,
@@ -145,6 +202,10 @@ async def capture_public_lead(request: Request, payload: LeadSubmissionRequest) 
         message=payload.message,
         interest=payload.interest,
         metadata=dict(payload.metadata),
+        consent_to_contact=payload.consent_to_contact,
+        privacy_notice_version=notice.version,
+        privacy_notice_content_sha256=notice.content_sha256,
+        privacy_notice_publication_status=notice.publication_status,
     )
     trace_id = getattr(request.state, "request_id", None)
     try:
@@ -159,6 +220,13 @@ async def capture_public_lead(request: Request, payload: LeadSubmissionRequest) 
         sync_status=lead.sync_status,
         synced=lead.sync_status == "synced",
         schema_version=lead.schema_version,
+        consent_to_contact=lead.consent_to_contact,
+        privacy_notice_url=lead.privacy_notice_url,
+        privacy_notice_version=lead.privacy_notice_version,
+        privacy_notice_content_sha256=lead.privacy_notice_content_sha256,
+        privacy_notice_publication_status=lead.privacy_notice_publication_status,
+        consent_recorded_at_utc=lead.consent_recorded_at_utc,
+        consent_schema_version=lead.consent_schema_version,
         message=_receipt_message(lead.sync_status),
     )
 

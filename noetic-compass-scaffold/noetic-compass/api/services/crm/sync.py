@@ -297,6 +297,13 @@ class AirtableCRMProvider(CRMSyncProvider):
             "trace id",
             "schema version",
             "metadata json",
+            "consent to contact",
+            "consent recorded at utc",
+            "consent schema version",
+            "privacy notice url",
+            "privacy notice version",
+            "privacy notice content sha-256",
+            "privacy notice publication status",
         }
         if dedup_field.casefold() in fixed_fields or owner_field.casefold() in fixed_fields:
             raise CRMConfigError(
@@ -413,6 +420,15 @@ class AirtableCRMProvider(CRMSyncProvider):
             "Lead ID": lead.lead_id,
             "Email": lead.email,
             "Schema Version": lead.schema_version,
+            "Consent to Contact": lead.consent_to_contact,
+            "Consent Recorded At UTC": lead.consent_recorded_at_utc,
+            "Consent Schema Version": lead.consent_schema_version,
+            "Privacy Notice URL": lead.privacy_notice_url,
+            "Privacy Notice Version": lead.privacy_notice_version,
+            "Privacy Notice Content SHA-256": lead.privacy_notice_content_sha256,
+            "Privacy Notice Publication Status": (
+                lead.privacy_notice_publication_status
+            ),
             "Metadata JSON": json.dumps(
                 dict(lead.metadata), sort_keys=True, separators=(",", ":")
             ),
@@ -583,6 +599,7 @@ class AirtableCRMProvider(CRMSyncProvider):
 
         verified_at = _verification_now_iso()
         receipt = CRMVerificationReceipt(
+            provider=self.provider_name,
             readback_verified=True,
             deduplicated=True,
             owner_assigned=True,

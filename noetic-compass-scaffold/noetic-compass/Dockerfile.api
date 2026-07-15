@@ -51,6 +51,7 @@ COPY validation/ validation/
 # Do not copy the wider development scripts directory into production.
 COPY scripts/verify_account_canary_quotas.py scripts/verify_account_canary_quotas.py
 COPY scripts/collect_hosted_customer_journey_evidence.py scripts/collect_hosted_customer_journey_evidence.py
+COPY scripts/collect_airtable_crm_acceptance_source.py scripts/collect_airtable_crm_acceptance_source.py
 COPY scripts/publish_customer_production_acceptance_authority.py scripts/publish_customer_production_acceptance_authority.py
 
 # Set ownership to non-root user

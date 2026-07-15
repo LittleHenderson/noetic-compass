@@ -108,6 +108,11 @@ CRITICAL_TIMESTAMP_PATHS: dict[str, list[tuple[str | int, ...]]] = {
         ("support_ticket", "resolved_at_utc"),
         ("crm_lead", "verified_at_utc"),
         ("consent", "recorded_at_utc"),
+        ("crm_source_receipt", "render_deploy_finished_at_utc"),
+        ("crm_source_receipt", "privacy_notice_verified_at_utc"),
+        ("crm_source_receipt", "consent_recorded_at_utc"),
+        ("crm_source_receipt", "verified_at_utc"),
+        ("crm_source_receipt", "observed_at_utc"),
     ],
     "incident_tabletop": [
         ("incident", "closed_at_utc"),
@@ -454,12 +459,94 @@ def _gate_payloads() -> dict[str, dict]:
         }
     )
 
+    airtable_contract = {
+        "api_base_url": verifier.CRM_AIRTABLE_API_BASE_URL,
+        "base_id": verifier.CRM_AIRTABLE_BASE_ID,
+        "table_name": verifier.CRM_AIRTABLE_TABLE_NAME,
+        "dedup_field": verifier.CRM_AIRTABLE_DEDUP_FIELD,
+        "owner_field": verifier.CRM_AIRTABLE_OWNER_FIELD,
+        "owner_value": verifier.CRM_AIRTABLE_OWNER_VALUE,
+        "lifecycle_field": verifier.CRM_AIRTABLE_LIFECYCLE_FIELD,
+        "consent_to_contact_field": "Consent to Contact",
+        "consent_recorded_at_field": "Consent Recorded At UTC",
+        "consent_schema_version_field": "Consent Schema Version",
+        "privacy_notice_url_field": "Privacy Notice URL",
+        "privacy_notice_version_field": "Privacy Notice Version",
+        "privacy_notice_content_sha256_field": "Privacy Notice Content SHA-256",
+        "privacy_notice_publication_status_field": "Privacy Notice Publication Status",
+    }
+    crm_source_receipt = {
+        "schema_version": verifier.CRM_SOURCE_SCHEMA_VERSION,
+        "environment": "public-production",
+        "repository": verifier.REPOSITORY,
+        "master_head_sha": MASTER_SHA,
+        "deploy_id": DEPLOY_ID,
+        "service_id": verifier.PRODUCTION_SERVICE_ID,
+        "render_service_name": verifier.PRODUCTION_SERVICE_NAME,
+        "render_repository": verifier.REPOSITORY_URL,
+        "render_branch": "master",
+        "render_auto_deploy_trigger": "checksPass",
+        "render_service_response_sha256": _digest("render-service-response"),
+        "render_deploy_status": "live",
+        "render_deploy_commit_sha": MASTER_SHA,
+        "render_deploy_trigger": "service_updated",
+        "render_deploy_finished_at_utc": "2026-07-14T11:35:00Z",
+        "render_deploy_response_sha256": _digest("render-deploy-response"),
+        "render_disk_id": verifier.CRM_RENDER_DISK_ID,
+        "render_disk_name": verifier.CRM_RENDER_DISK_NAME,
+        "render_disk_mount_path": verifier.CRM_RENDER_DISK_MOUNT_PATH,
+        "render_disk_size_gb": 1,
+        "lead_store_path": verifier.CRM_LEAD_STORE_PATH,
+        "provider": "airtable",
+        "airtable_api_base": verifier.CRM_AIRTABLE_API_BASE_URL,
+        "airtable_base_id": verifier.CRM_AIRTABLE_BASE_ID,
+        "airtable_table_name": verifier.CRM_AIRTABLE_TABLE_NAME,
+        "airtable_dedup_field": verifier.CRM_AIRTABLE_DEDUP_FIELD,
+        "airtable_owner_field": verifier.CRM_AIRTABLE_OWNER_FIELD,
+        "airtable_owner_value": verifier.CRM_AIRTABLE_OWNER_VALUE,
+        "airtable_lifecycle_field": verifier.CRM_AIRTABLE_LIFECYCLE_FIELD,
+        "airtable_consent_to_contact_field": "Consent to Contact",
+        "airtable_consent_recorded_at_field": "Consent Recorded At UTC",
+        "airtable_consent_schema_version_field": "Consent Schema Version",
+        "airtable_privacy_notice_url_field": "Privacy Notice URL",
+        "airtable_privacy_notice_version_field": "Privacy Notice Version",
+        "airtable_privacy_notice_content_sha256_field": "Privacy Notice Content SHA-256",
+        "airtable_privacy_notice_publication_status_field": "Privacy Notice Publication Status",
+        "airtable_contract_sha256": hashlib.sha256(_canonical(airtable_contract)).hexdigest(),
+        "privacy_notice_publication_status": "present",
+        "privacy_notice_url": f"{verifier.LANDING_ORIGIN}/privacy",
+        "privacy_notice_version": "privacy-2026-07-15",
+        "privacy_notice_content_sha256": legal_hashes["privacy"],
+        "privacy_notice_http_status": 200,
+        "privacy_notice_content_type": "text/html",
+        "privacy_notice_verified_at_utc": "2026-07-14T11:40:00Z",
+        "capture_http_status": 200,
+        "lead_id_sha256": _digest("lead"),
+        "trace_id_sha256": _digest("crm-trace"),
+        "airtable_record_id_sha256": _digest("airtable-record"),
+        "adapter_response_digest": "sha256:" + _digest("adapter-response"),
+        "lead_schema_version": "noetic_crm.v2",
+        "lead_record_version": 2,
+        "persisted": True,
+        "readback_verified": True,
+        "deduplicated": True,
+        "owner_assigned": True,
+        "lifecycle_stage": "qualified",
+        "verified_at_utc": "2026-07-14T11:45:00Z",
+        "consent_to_contact": True,
+        "consent_schema_version": "noetic_crm_consent.v2",
+        "consent_recorded_at_utc": "2026-07-14T11:42:00Z",
+        "source_attribution_recorded": True,
+        "observed_at_utc": "2026-07-14T11:46:00Z",
+    }
+    crm_source_sha = hashlib.sha256(_canonical(crm_source_receipt)).hexdigest()
     support = _common("support_crm")
     support.update(
         {
             "public_support_url": f"{verifier.LANDING_ORIGIN}/contact",
             "api_base_url": verifier.PRODUCTION_API_ORIGIN,
             "service_id": verifier.PRODUCTION_SERVICE_ID,
+            "crm_source_receipt": crm_source_receipt,
             "support_ticket": {
                 "ticket_id_sha256": _digest("ticket"),
                 "create_http_status": 202,
@@ -472,8 +559,12 @@ def _gate_payloads() -> dict[str, dict]:
                 "resolved_at_utc": "2026-07-14T11:44:00Z",
             },
             "crm_lead": {
-                "system": "production-crm",
+                "system": "airtable",
+                "provider": "airtable",
                 "lead_id_sha256": _digest("lead"),
+                "airtable_record_id_sha256": _digest("airtable-record"),
+                "adapter_response_digest": "sha256:" + _digest("adapter-response"),
+                "source_receipt_sha256": crm_source_sha,
                 "persisted": True,
                 "readback_verified": True,
                 "deduplicated": True,
@@ -483,8 +574,14 @@ def _gate_payloads() -> dict[str, dict]:
             },
             "consent": {
                 "capture_consent_recorded": True,
+                "consent_to_contact": True,
                 "source_attribution_recorded": True,
                 "privacy_notice_linked": True,
+                "privacy_notice_url": f"{verifier.LANDING_ORIGIN}/privacy",
+                "privacy_notice_version": "privacy-2026-07-15",
+                "privacy_notice_content_sha256": legal_hashes["privacy"],
+                "privacy_notice_publication_status": "present",
+                "consent_schema_version": "noetic_crm_consent.v2",
                 "recorded_at_utc": "2026-07-14T11:42:00Z",
             },
         }
@@ -1254,6 +1351,72 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
                     self.assertTrue(
                         any(expected in error for error in report["errors"])
                     )
+                finally:
+                    bundle.close()
+
+    def test_support_crm_requires_provider_bound_airtable_receipts_and_consent(self) -> None:
+        def rebind_source(payloads: dict, field: str, value: object) -> None:
+            support = payloads["support_crm"]
+            support["crm_source_receipt"][field] = value
+            support["crm_lead"]["source_receipt_sha256"] = hashlib.sha256(
+                _canonical(support["crm_source_receipt"])
+            ).hexdigest()
+
+        def rebind_privacy_hash(payloads: dict) -> None:
+            support = payloads["support_crm"]
+            digest = _digest("different-published-privacy")
+            support["crm_source_receipt"]["privacy_notice_content_sha256"] = digest
+            support["consent"]["privacy_notice_content_sha256"] = digest
+            support["crm_lead"]["source_receipt_sha256"] = hashlib.sha256(
+                _canonical(support["crm_source_receipt"])
+            ).hexdigest()
+
+        cases = {
+            "wrong provider": lambda payloads: payloads["support_crm"]["crm_lead"].update(
+                provider="hubspot"
+            ),
+            "missing record hash": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(airtable_record_id_sha256=""),
+            "malformed adapter digest": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(adapter_response_digest=_digest("unprefixed")),
+            "missing source receipt": lambda payloads: payloads["support_crm"][
+                "crm_lead"
+            ].update(source_receipt_sha256=""),
+            "declined contact": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(consent_to_contact=False),
+            "wrong privacy URL": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(privacy_notice_url="https://example.invalid/privacy"),
+            "invalid privacy version": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(privacy_notice_version="privacy version with spaces"),
+            "wrong consent schema": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(consent_schema_version="noetic_crm_consent.v0"),
+            "consent after readback": lambda payloads: payloads["support_crm"][
+                "consent"
+            ].update(recorded_at_utc="2026-07-14T11:46:00Z"),
+            "embedded source owner re-bound": lambda payloads: rebind_source(
+                payloads, "airtable_owner_value", "Other Owner"
+            ),
+            "embedded source ephemeral store re-bound": lambda payloads: rebind_source(
+                payloads, "lead_store_path", "/tmp/leads.jsonl"
+            ),
+            "embedded source non-live deploy re-bound": lambda payloads: rebind_source(
+                payloads, "render_deploy_status", "deactivated"
+            ),
+            "embedded source privacy re-bound away from legal": rebind_privacy_hash,
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(bundle, mutate_payloads=mutate)
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
                 finally:
                     bundle.close()
 
