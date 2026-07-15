@@ -443,7 +443,7 @@ class CustomerBlueprintPolicyTests(unittest.TestCase):
         self.assertEqual(database["version"], "16")
         self.assertEqual(database["diskSizeGB"], 1)
         self.assertFalse(database["diskAutoscalingEnabled"])
-        self.assertEqual(database["ipAllowList"], [])
+        self.assertIsNone(database["ipAllowList"])
         self.assertEqual(
             customer["services"][0]["id"],
             "srv-d9bijbjtqb8s73cn4n20",
@@ -603,6 +603,18 @@ class LiveCustomerResourcePolicyTests(unittest.TestCase):
                         database,
                         environment="customer-production",
                     )
+
+    def test_missing_database_field_fails_closed_even_when_expected_value_is_null(self) -> None:
+        database = EXPECTED_CUSTOMER_BLUEPRINT["databases"][0]
+        payload = _database_payload(database)
+        del payload["ipAllowList"]
+
+        with self.assertRaisesRegex(ControlError, "ipAllowList is unavailable"):
+            validate_live_database_payload(
+                payload,
+                database,
+                environment="customer-production",
+            )
 
     def test_disk_service_binding_drift_fails_closed(self) -> None:
         service = EXPECTED_CUSTOMER_BLUEPRINT["services"][0]

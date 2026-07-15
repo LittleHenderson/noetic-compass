@@ -45,9 +45,12 @@ change before it can be trusted.
 
 The live verifier reads the exact Postgres resource without using Render's
 credential-bearing connection-info endpoint. It pins database/user name,
-region, PostgreSQL version, plan, disk size, autoscaling posture, and empty
-public IP allowlist. It also reads the disk independently and binds it back to
-the exact customer service. The project/environment reads require exact project
+region, PostgreSQL version, plan, disk size, autoscaling posture, and public-IP
+posture. Render's live API serializes the Blueprint's `ipAllowList: []` private
+database configuration as JSON `null`; the identity manifest pins that exact
+provider readback while `render.customer.yaml` still requires the empty YAML
+list. The verifier also reads the disk independently and binds it back to the
+exact customer service. The project/environment reads require exact project
 linkage and resource membership plus `protectedStatus=protected` and
 `networkIsolationEnabled=true`. The Render UI currently reports **Protected
 environment** and **Block cross-environment connections** enabled; an

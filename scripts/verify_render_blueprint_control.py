@@ -96,7 +96,9 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
                 "version": "16",
                 "diskSizeGB": 1,
                 "diskAutoscalingEnabled": False,
-                "ipAllowList": [],
+                # Render's live Postgres API serializes the Blueprint's
+                # `ipAllowList: []` (no public database ingress) as null.
+                "ipAllowList": None,
             }
         ],
         "services": [
@@ -1064,6 +1066,7 @@ def validate_live_database_payload(
         "diskAutoscalingEnabled",
         "ipAllowList",
     ):
+        _require(key in payload, f"{label} {key} is unavailable")
         _require(payload.get(key) == expected[key], f"{label} {key} drifted")
 
 
