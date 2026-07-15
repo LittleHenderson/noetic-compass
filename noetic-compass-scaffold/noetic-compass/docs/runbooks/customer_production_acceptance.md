@@ -287,6 +287,23 @@ printed on errors. Exit zero produces only a canonical unsigned v2 facts
 document; it does not create authority, mark a gate `present`, or dispatch
 `ACCEPT`.
 
+Only an exact Render deployment whose actual trigger is `new_commit` can
+satisfy `root_ci_protected_deploy`. The service policy
+`autoDeployTrigger=checksPass` is necessary but is not evidence of the trigger
+used by a particular deployment. A later `service_updated`, manual, or API
+deployment can preserve the same source SHA while applying dashboard-managed
+environment, feature-flag, root-directory, runtime, or Docker-command changes
+that the source checks did not test. A same-SHA deployment chain is therefore
+supplemental source-lineage evidence only; it must not mark this gate `present`.
+
+After any provider or dashboard change creates a later `service_updated`
+deployment, make a small reviewed repository change that records or codifies
+the intended operational state, wait for every required check on that exact
+protected `master` SHA, and bind the receipt to the resulting live
+`new_commit` deployment. Do not sign the deactivated predecessor or the later
+same-SHA `service_updated` successor: runtime and root-CI evidence must identify
+the same final deployment ID.
+
 Publish those exact bytes as the stable release asset
 `customer-production-evidence/root-ci-protected-deploy.json`. Then manually
 dispatch `Customer Production Evidence` from that same protected `master` SHA
