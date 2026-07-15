@@ -23,6 +23,7 @@ EVENT = "2026-07-14T11:30:00Z"
 OBSERVED = "2026-07-14T11:50:00Z"
 ISSUED = "2026-07-14T11:55:00Z"
 EXPIRES = "2026-07-15T12:00:00Z"
+ROOT_CI_EXPIRES = "2026-07-14T13:55:00Z"
 MASTER_SHA = "a" * 40
 DEPLOY_ID = "dep-publicacceptance001"
 TEST_ISSUER = "customer-production-test-issuer"
@@ -82,10 +83,14 @@ CRITICAL_TIMESTAMP_PATHS: dict[str, list[tuple[str | int, ...]]] = {
     ],
     "root_ci_protected_deploy": [
         ("branch_protection", "observed_at_utc"),
-        ("checks", 0, "completed_at_utc"),
-        ("checks", 1, "completed_at_utc"),
-        ("checks", 2, "completed_at_utc"),
-        ("deployment", "deployed_at_utc"),
+        ("observation", "started_at_utc"),
+        ("observation", "render_preflight_verified_at_utc"),
+        ("observation", "github_controls_verified_at_utc"),
+        ("observation", "health_verified_at_utc"),
+        ("observation", "github_master_verified_at_utc"),
+        ("observation", "github_controls_final_verified_at_utc"),
+        ("observation", "render_final_verified_at_utc"),
+        ("observation", "completed_at_utc"),
     ],
     "hosted_customer_journey": [
         ("audit", "completed_at_utc"),
@@ -163,7 +168,7 @@ class SignedBundle:
         evidence: dict,
         *,
         issued: str = ISSUED,
-        expires: str = EXPIRES,
+        expires: str | None = None,
         issuer: str = TEST_ISSUER,
         key_id: str = TEST_KEY_ID,
         subject_uri: str | None = None,
@@ -171,6 +176,8 @@ class SignedBundle:
     ) -> dict:
         self.counter += 1
         subject_uri = subject_uri or SUBJECT_URIS[gate]
+        if expires is None:
+            expires = ROOT_CI_EXPIRES if gate == "root_ci_protected_deploy" else EXPIRES
         subject_hash = _digest(f"subject-{gate}-{self.counter}")
         evidence["artifact_uri"] = subject_uri
         evidence["artifact_sha256"] = subject_hash
@@ -283,9 +290,11 @@ def _gate_payloads() -> dict[str, dict]:
         }
     )
 
-    ci = _common("root_ci_protected_deploy")
+    root_ci_event = "2026-07-14T11:43:00Z"
+    ci = _common("root_ci_protected_deploy", event=root_ci_event)
     ci.update(
         {
+            "root_ci_schema_version": verifier.ROOT_CI_SCHEMA_VERSION,
             "github_repository": {
                 "id": verifier.REPOSITORY_ID,
                 "node_id": verifier.REPOSITORY_NODE_ID,
@@ -301,7 +310,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "strict": True,
                 "required_checks": list(verifier.REQUIRED_CHECKS),
                 "source": "github-api",
-                "observed_at_utc": "2026-07-14T11:49:00Z",
+                "observed_at_utc": "2026-07-14T11:48:00Z",
             },
             "checks": [],
             "deployment": {
@@ -316,7 +325,38 @@ def _gate_payloads() -> dict[str, dict]:
                 "commit_sha": MASTER_SHA,
                 "auto_deploy_trigger": "checksPass",
                 "health_check_path": "/health",
+                "created_at_utc": "2026-07-14T11:41:00Z",
                 "deployed_at_utc": "2026-07-14T11:42:00Z",
+            },
+            "observation": {
+                "semantics": verifier.ROOT_CI_OBSERVATION_SEMANTICS,
+                "started_at_utc": root_ci_event,
+                "render_preflight_verified_at_utc": "2026-07-14T11:43:00Z",
+                "github_controls_verified_at_utc": "2026-07-14T11:46:00Z",
+                "health_verified_at_utc": "2026-07-14T11:47:00Z",
+                "github_master_verified_at_utc": "2026-07-14T11:48:00Z",
+                "github_controls_final_verified_at_utc": "2026-07-14T11:48:00Z",
+                "render_final_verified_at_utc": "2026-07-14T11:49:00Z",
+                "completed_at_utc": OBSERVED,
+                "github_master_preflight_sha256": _digest("root-master"),
+                "github_master_final_sha256": _digest("root-master"),
+                "github_repository_preflight_sha256": _digest("root-repository"),
+                "github_repository_final_sha256": _digest("root-repository"),
+                "github_protection_preflight_sha256": _digest("root-protection"),
+                "github_protection_final_sha256": _digest("root-protection"),
+                "github_workflows_preflight_sha256": _digest("root-workflows"),
+                "github_workflows_final_sha256": _digest("root-workflows"),
+                "render_service_preflight_sha256": _digest("root-service"),
+                "render_service_final_sha256": _digest("root-service"),
+                "render_deploy_initial_sha256": _digest("root-deploy"),
+                "render_deploy_preflight_sha256": _digest("root-deploy"),
+                "render_deploy_final_sha256": _digest("root-deploy"),
+                "render_active_preflight_sha256": _digest("root-active"),
+                "render_active_final_sha256": _digest("root-active"),
+                "render_latest_preflight_sha256": _digest("root-latest"),
+                "render_latest_final_sha256": _digest("root-latest"),
+                "current_master_head_sha": MASTER_SHA,
+                "current_active_deploy_id": DEPLOY_ID,
             },
         }
     )
@@ -341,6 +381,7 @@ def _gate_payloads() -> dict[str, dict]:
                 "app_node_id": verifier.GITHUB_ACTIONS_APP["node_id"],
                 "app_slug": verifier.GITHUB_ACTIONS_APP["slug"],
                 "details_url": f"{verifier.REPOSITORY_URL}/actions/runs/{run_id}/job/{check_run_id}",
+                "run_created_at_utc": "2026-07-14T11:30:00Z",
                 "completed_at_utc": "2026-07-14T11:40:00Z",
             }
         )
@@ -1671,6 +1712,132 @@ class AuthoritativeAcceptanceTests(unittest.TestCase):
         self.assertEqual(
             len(chronology_errors),
             sum(len(paths) for paths in CRITICAL_TIMESTAMP_PATHS.values()),
+        )
+
+    def test_root_ci_old_release_provenance_can_be_wrapped_only_by_fresh_current_observations(self) -> None:
+        def old_release(payloads):
+            ci = payloads["root_ci_protected_deploy"]
+            for check in ci["checks"]:
+                check["run_created_at_utc"] = "2020-01-01T00:00:00Z"
+                check["completed_at_utc"] = "2020-01-01T01:00:00Z"
+            ci["deployment"]["created_at_utc"] = "2020-01-01T02:00:00Z"
+            ci["deployment"]["deployed_at_utc"] = "2020-01-01T03:00:00Z"
+
+        manifest = _accepting_manifest(self.bundle, mutate_payloads=old_release)
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "ACCEPT", report["errors"])
+        self.assertEqual(report["errors"], [])
+
+    def test_root_ci_historical_provenance_chronology_fails_closed(self) -> None:
+        cases = {
+            "run completes before creation": lambda ci: ci["checks"][0].update(
+                run_created_at_utc="2026-07-14T11:41:00Z",
+                completed_at_utc="2026-07-14T11:40:00Z",
+            ),
+            "deploy starts before checks": lambda ci: ci["deployment"].update(
+                created_at_utc="2026-07-14T11:39:00Z"
+            ),
+            "deploy finishes before creation": lambda ci: ci["deployment"].update(
+                created_at_utc="2026-07-14T11:42:30Z",
+                deployed_at_utc="2026-07-14T11:42:00Z",
+            ),
+            "historical proof after fresh event": lambda ci: ci["deployment"].update(
+                deployed_at_utc="2026-07-14T11:44:00Z"
+            ),
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(
+                        bundle,
+                        mutate_payloads=lambda payloads: mutate(
+                            payloads["root_ci_protected_deploy"]
+                        ),
+                    )
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_root_ci_current_observation_schema_and_provider_pairs_fail_closed(self) -> None:
+        cases = {
+            "schema marker": lambda ci: ci.update(
+                root_ci_schema_version="legacy-root-ci"
+            ),
+            "semantics": lambda ci: ci["observation"].update(
+                semantics="fresh-deploy-required"
+            ),
+            "current master": lambda ci: ci["observation"].update(
+                current_master_head_sha="b" * 40
+            ),
+            "current deploy": lambda ci: ci["observation"].update(
+                current_active_deploy_id="dep-attacker"
+            ),
+            "service changed": lambda ci: ci["observation"].update(
+                render_service_final_sha256=_digest("changed-service")
+            ),
+            "master changed": lambda ci: ci["observation"].update(
+                github_master_final_sha256=_digest("changed-master")
+            ),
+            "repository changed": lambda ci: ci["observation"].update(
+                github_repository_final_sha256=_digest("changed-repository")
+            ),
+            "protection changed": lambda ci: ci["observation"].update(
+                github_protection_final_sha256=_digest("changed-protection")
+            ),
+            "workflow registry changed": lambda ci: ci["observation"].update(
+                github_workflows_final_sha256=_digest("changed-workflows")
+            ),
+            "initial deploy changed": lambda ci: ci["observation"].update(
+                render_deploy_initial_sha256=_digest("changed-initial-deploy")
+            ),
+            "latest deploy changed": lambda ci: ci["observation"].update(
+                render_latest_final_sha256=_digest("changed-latest")
+            ),
+            "non-monotonic": lambda ci: ci["observation"].update(
+                health_verified_at_utc="2026-07-14T11:45:00Z",
+                github_controls_verified_at_utc="2026-07-14T11:46:00Z",
+            ),
+            "unbound branch protection": lambda ci: ci[
+                "branch_protection"
+            ].update(observed_at_utc="2026-07-14T11:46:00Z"),
+        }
+        for label, mutate in cases.items():
+            with self.subTest(label=label):
+                bundle = SignedBundle()
+                try:
+                    manifest = _accepting_manifest(
+                        bundle,
+                        mutate_payloads=lambda payloads: mutate(
+                            payloads["root_ci_protected_deploy"]
+                        ),
+                    )
+                    report = _verify(manifest, bundle)
+                    self.assertEqual(report["result"], "INVALID")
+                finally:
+                    bundle.close()
+
+    def test_root_ci_signed_receipt_ttl_is_exactly_120_minutes(self) -> None:
+        manifest = _accepting_manifest(
+            self.bundle,
+            receipt_options={
+                "root_ci_protected_deploy": {
+                    "expires": "2026-07-14T14:00:00Z"
+                }
+            },
+        )
+
+        report = _verify(manifest, self.bundle)
+
+        self.assertEqual(report["result"], "INVALID")
+        self.assertTrue(
+            any(
+                "root_ci_protected_deploy" in error
+                and "exactly 120 minutes" in error
+                for error in report["errors"]
+            )
         )
 
     def test_alert_chronology_and_reported_latency_bind_actual_clock_delta(self) -> None:

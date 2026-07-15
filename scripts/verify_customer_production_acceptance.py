@@ -40,6 +40,9 @@ REPORT_SCHEMA_VERSION = "cas_harness_customer_production_acceptance_report.v2"
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
 RECEIPT_SCHEMA_VERSION = "cas_harness_authoritative_receipt.v1"
 REGISTRY_SCHEMA_VERSION = "cas_harness_trusted_issuer_registry.v2"
+ROOT_CI_SCHEMA_VERSION = "cas_harness_root_ci_protected_deploy_observation.v1"
+ROOT_CI_OBSERVATION_SEMANTICS = "fresh_current_state_with_historical_release_provenance.v1"
+ROOT_CI_RECEIPT_TTL_MINUTES = 120
 MANIFEST_ID = "cas-harness-customer-production"
 REPOSITORY = "LittleHenderson/noetic-compass"
 REPOSITORY_ID = 1203465584
@@ -864,6 +867,14 @@ def _validate_receipt(
         _require(expires >= context.verification_time, f"{path}.expires_at_utc", "must still be active at verification", errors)
     if issued is not None and expires is not None:
         _require(issued <= expires, f"{path}.expires_at_utc", "must be at or after receipt issuance", errors)
+        if gate == "root_ci_protected_deploy":
+            _require(
+                expires - issued
+                == timedelta(minutes=ROOT_CI_RECEIPT_TTL_MINUTES),
+                f"{path}.expires_at_utc",
+                f"must be exactly {ROOT_CI_RECEIPT_TTL_MINUTES} minutes after issuance",
+                errors,
+            )
     subject_uri = _safe_https_url(
         receipt.get("subject_uri"),
         f"{path}.subject_uri",
@@ -1144,6 +1155,48 @@ def _critical_proof_timestamp(
     return timestamp
 
 
+def _root_ci_historical_timestamp(
+    value: Any,
+    *,
+    event: datetime | None,
+    observed: datetime | None,
+    context: ValidationContext,
+    path: str,
+) -> datetime | None:
+    """Validate immutable root-CI provenance outside the freshness clock.
+
+    Protected workflow runs and the exact ``new_commit`` deployment can
+    legitimately predate a fresh observation of their still-current state.
+    They must already exist when that observation begins, while every mutable
+    observation timestamp continues to use the fixed 24-hour policy.
+    """
+
+    errors = context.errors
+    timestamp = _timestamp(value, path, errors)
+    if timestamp is not None:
+        if event is not None:
+            _require(
+                timestamp <= event,
+                path,
+                "must be at or before the fresh root-CI observation",
+                errors,
+            )
+        if observed is not None:
+            _require(
+                timestamp <= observed,
+                path,
+                "must be at or before evidence observation",
+                errors,
+            )
+        _require(
+            timestamp <= context.verification_time,
+            path,
+            "must be at or before verification",
+            errors,
+        )
+    return timestamp
+
+
 def _validate_runtime_worm(
     evidence: Mapping[str, Any], context: ValidationContext
 ) -> None:
@@ -1294,6 +1347,7 @@ def _validate_root_ci(
         evidence,
         COMMON_EVIDENCE_KEYS
         | {
+            "root_ci_schema_version",
             "github_repository",
             "branch",
             "workflow_directory",
@@ -1302,12 +1356,19 @@ def _validate_root_ci(
             "branch_protection",
             "checks",
             "deployment",
+            "observation",
         },
         path,
         errors,
     )
     event, observed = _validate_common_evidence(
         evidence, "root_ci_protected_deploy", context
+    )
+    _require(
+        evidence.get("root_ci_schema_version") == ROOT_CI_SCHEMA_VERSION,
+        f"{path}.root_ci_schema_version",
+        f"must be {ROOT_CI_SCHEMA_VERSION}",
+        errors,
     )
     repository = evidence.get("github_repository")
     if _is_mapping(repository, f"{path}.github_repository", errors):
@@ -1329,17 +1390,19 @@ def _validate_root_ci(
         _exact_keys(app, set(GITHUB_ACTIONS_APP), f"{path}.github_app", errors)
         _require(dict(app) == GITHUB_ACTIONS_APP, f"{path}.github_app", "must be the pinned GitHub Actions App identity", errors)
 
+    protection_observed: datetime | None = None
     protection = evidence.get("branch_protection")
     if _is_mapping(protection, f"{path}.branch_protection", errors):
         _exact_keys(protection, {"strict", "required_checks", "source", "observed_at_utc"}, f"{path}.branch_protection", errors)
         _require(protection.get("strict") is True, f"{path}.branch_protection.strict", "must be true", errors)
         _set_of_strings(protection.get("required_checks"), frozenset(REQUIRED_CHECKS), f"{path}.branch_protection.required_checks", errors)
         _require(protection.get("source") == "github-api", f"{path}.branch_protection.source", "must be github-api", errors)
-        _critical_proof_timestamp(protection.get("observed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{path}.branch_protection.observed_at_utc")
+        protection_observed = _critical_proof_timestamp(protection.get("observed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{path}.branch_protection.observed_at_utc")
 
     checks = _list_by_key(evidence.get("checks"), "name", frozenset(REQUIRED_CHECKS), f"{path}.checks", errors)
     run_ids: set[int] = set()
     check_run_ids: set[int] = set()
+    completed_times: list[datetime] = []
     for name, check in checks.items():
         item_path = f"{path}.checks[{name}]"
         _exact_keys(
@@ -1363,6 +1426,7 @@ def _validate_root_ci(
                 "app_node_id",
                 "app_slug",
                 "details_url",
+                "run_created_at_utc",
                 "completed_at_utc",
             },
             item_path,
@@ -1395,7 +1459,28 @@ def _validate_root_ci(
         if check_run_id is not None:
             _require(check_run_id not in check_run_ids, f"{item_path}.check_run_id", "must be unique", errors)
             check_run_ids.add(check_run_id)
-        _critical_proof_timestamp(check.get("completed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{item_path}.completed_at_utc")
+        run_created = _root_ci_historical_timestamp(
+            check.get("run_created_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{item_path}.run_created_at_utc",
+        )
+        completed = _root_ci_historical_timestamp(
+            check.get("completed_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{item_path}.completed_at_utc",
+        )
+        if run_created is not None and completed is not None:
+            _require(
+                run_created <= completed,
+                f"{item_path}.completed_at_utc",
+                "must be at or after workflow run creation",
+                errors,
+            )
+            completed_times.append(completed)
 
     deployment = evidence.get("deployment")
     if _is_mapping(deployment, f"{path}.deployment", errors):
@@ -1413,6 +1498,7 @@ def _validate_root_ci(
                 "commit_sha",
                 "auto_deploy_trigger",
                 "health_check_path",
+                "created_at_utc",
                 "deployed_at_utc",
             },
             f"{path}.deployment",
@@ -1433,7 +1519,176 @@ def _validate_root_ci(
         }
         for field, value in expected.items():
             _require(_json_scalar_equals(deployment.get(field), value), f"{path}.deployment.{field}", f"must equal {value!r}", errors)
-        _critical_proof_timestamp(deployment.get("deployed_at_utc"), gate="root_ci_protected_deploy", event=event, observed=observed, context=context, path=f"{path}.deployment.deployed_at_utc")
+        deploy_created = _root_ci_historical_timestamp(
+            deployment.get("created_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.deployment.created_at_utc",
+        )
+        deployed = _root_ci_historical_timestamp(
+            deployment.get("deployed_at_utc"),
+            event=event,
+            observed=observed,
+            context=context,
+            path=f"{path}.deployment.deployed_at_utc",
+        )
+        if deploy_created is not None and deployed is not None:
+            _require(
+                deploy_created <= deployed,
+                f"{path}.deployment.deployed_at_utc",
+                "must be at or after deployment creation",
+                errors,
+            )
+            for completed in completed_times:
+                _require(
+                    completed <= deploy_created,
+                    f"{path}.deployment.created_at_utc",
+                    "must be at or after every required check completion",
+                    errors,
+                )
+
+    observation = evidence.get("observation")
+    if _is_mapping(observation, f"{path}.observation", errors):
+        timestamp_fields = (
+            "started_at_utc",
+            "render_preflight_verified_at_utc",
+            "github_controls_verified_at_utc",
+            "health_verified_at_utc",
+            "github_master_verified_at_utc",
+            "github_controls_final_verified_at_utc",
+            "render_final_verified_at_utc",
+            "completed_at_utc",
+        )
+        digest_fields = (
+            "github_master_preflight_sha256",
+            "github_master_final_sha256",
+            "github_repository_preflight_sha256",
+            "github_repository_final_sha256",
+            "github_protection_preflight_sha256",
+            "github_protection_final_sha256",
+            "github_workflows_preflight_sha256",
+            "github_workflows_final_sha256",
+            "render_service_preflight_sha256",
+            "render_service_final_sha256",
+            "render_deploy_initial_sha256",
+            "render_deploy_preflight_sha256",
+            "render_deploy_final_sha256",
+            "render_active_preflight_sha256",
+            "render_active_final_sha256",
+            "render_latest_preflight_sha256",
+            "render_latest_final_sha256",
+        )
+        _exact_keys(
+            observation,
+            {
+                "semantics",
+                *timestamp_fields,
+                *digest_fields,
+                "current_master_head_sha",
+                "current_active_deploy_id",
+            },
+            f"{path}.observation",
+            errors,
+        )
+        _require(
+            observation.get("semantics") == ROOT_CI_OBSERVATION_SEMANTICS,
+            f"{path}.observation.semantics",
+            f"must be {ROOT_CI_OBSERVATION_SEMANTICS}",
+            errors,
+        )
+        _require(
+            observation.get("current_master_head_sha")
+            == context.expected_master_head,
+            f"{path}.observation.current_master_head_sha",
+            "must match the current expected master HEAD",
+            errors,
+        )
+        _require(
+            observation.get("current_active_deploy_id")
+            == context.expected_deploy_id,
+            f"{path}.observation.current_active_deploy_id",
+            "must match the current active production deployment",
+            errors,
+        )
+        observation_times: list[datetime] = []
+        for field in timestamp_fields:
+            timestamp = _critical_proof_timestamp(
+                observation.get(field),
+                gate="root_ci_protected_deploy",
+                event=event,
+                observed=observed,
+                context=context,
+                path=f"{path}.observation.{field}",
+            )
+            if timestamp is not None:
+                observation_times.append(timestamp)
+        if event is not None and observation_times:
+            _require(
+                observation_times[0] == event,
+                f"{path}.observation.started_at_utc",
+                "must equal the root-CI gate event",
+                errors,
+            )
+        if observed is not None and len(observation_times) == len(timestamp_fields):
+            _require(
+                observation_times[-1] == observed,
+                f"{path}.observation.completed_at_utc",
+                "must equal the evidence observation time",
+                errors,
+            )
+            _require(
+                all(
+                    left <= right
+                    for left, right in zip(
+                        observation_times, observation_times[1:]
+                    )
+                ),
+                f"{path}.observation",
+                "timestamps must be monotonic",
+                errors,
+            )
+        if protection_observed is not None and len(observation_times) >= 6:
+            _require(
+                protection_observed == observation_times[5],
+                f"{path}.branch_protection.observed_at_utc",
+                "must equal the final GitHub controls observation timestamp",
+                errors,
+            )
+        for field in digest_fields:
+            _sha256(observation.get(field), f"{path}.observation.{field}", errors)
+        for preflight, final in (
+            ("github_master_preflight_sha256", "github_master_final_sha256"),
+            (
+                "github_repository_preflight_sha256",
+                "github_repository_final_sha256",
+            ),
+            (
+                "github_protection_preflight_sha256",
+                "github_protection_final_sha256",
+            ),
+            (
+                "github_workflows_preflight_sha256",
+                "github_workflows_final_sha256",
+            ),
+            ("render_service_preflight_sha256", "render_service_final_sha256"),
+            ("render_deploy_preflight_sha256", "render_deploy_final_sha256"),
+            ("render_active_preflight_sha256", "render_active_final_sha256"),
+            ("render_latest_preflight_sha256", "render_latest_final_sha256"),
+        ):
+            _require(
+                observation.get(preflight) == observation.get(final),
+                f"{path}.observation.{final}",
+                "must equal the canonical preflight provider record",
+                errors,
+            )
+        _require(
+            observation.get("render_deploy_initial_sha256")
+            == observation.get("render_deploy_preflight_sha256"),
+            f"{path}.observation.render_deploy_preflight_sha256",
+            "must equal the canonical initial live deployment record",
+            errors,
+        )
 
 
 def _validate_hosted_customer(

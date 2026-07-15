@@ -57,7 +57,7 @@ def _authority_document(
 
 def _receipt_document(**overrides) -> dict:
     issued = NOW - timedelta(minutes=20)
-    expires = NOW + timedelta(minutes=20)
+    expires = issued + timedelta(minutes=acceptance.ROOT_CI_RECEIPT_TTL_MINUTES)
     subject_uri = (
         f"{acceptance.REPOSITORY_URL}/releases/download/"
         "customer-production-evidence/root-ci-protected-deploy.json"
@@ -77,6 +77,7 @@ def _receipt_document(**overrides) -> dict:
         "subject_uri": subject_uri,
         "subject_sha256": subject_hash,
         "evidence": {
+            "root_ci_schema_version": acceptance.ROOT_CI_SCHEMA_VERSION,
             "master_head_sha": MASTER_SHA,
             "deploy_id": DEPLOY_ID,
             "artifact_uri": subject_uri,
@@ -196,6 +197,27 @@ class CandidateAssemblerTests(unittest.TestCase):
         with self.assertRaisesRegex(assembler.AssemblyError, "expired"):
             assembler._preflight_receipt_identity(
                 expired,
+                expected_master_head=MASTER_SHA,
+                expected_deploy_id=DEPLOY_ID,
+                verification_time=NOW,
+            )
+
+        wrong_ttl = _receipt_document(
+            expires_at_utc=assembler._utc_seconds(NOW + timedelta(minutes=101))
+        )
+        with self.assertRaisesRegex(assembler.AssemblyError, "exactly 120 minutes"):
+            assembler._preflight_receipt_identity(
+                wrong_ttl,
+                expected_master_head=MASTER_SHA,
+                expected_deploy_id=DEPLOY_ID,
+                verification_time=NOW,
+            )
+
+        wrong_schema = _receipt_document()
+        wrong_schema["evidence"]["root_ci_schema_version"] = "legacy-root-ci"
+        with self.assertRaisesRegex(assembler.AssemblyError, "schema marker"):
+            assembler._preflight_receipt_identity(
+                wrong_schema,
                 expected_master_head=MASTER_SHA,
                 expected_deploy_id=DEPLOY_ID,
                 verification_time=NOW,

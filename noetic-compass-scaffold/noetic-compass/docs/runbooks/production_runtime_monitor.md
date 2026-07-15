@@ -202,7 +202,9 @@ reopen, or close the runtime incident. Before any provider write it requires:
 1. dispatch from protected `master` at the exact supplied 40-character HEAD;
 2. the exact supplied live Render deploy ID, revalidated with
    `scripts/collect_root_ci_protected_deploy_facts.py` against protected CI and
-   provider state; and
+   a fresh current-master/current-live-deploy provider observation (the
+   historical protected check and deploy timestamps do not require no-op
+   release churn); and
 3. the exact typed confirmation `RUN-NON-DISRUPTIVE-P1-DRILL`.
 
 Configure the custom receipt bridge in the `customer-production` Actions

@@ -40,7 +40,7 @@ SUBJECT_URI = (
     "customer-production-evidence/root-ci-protected-deploy.json"
 )
 PRIVATE_KEY_ENV = "CUSTOMER_PRODUCTION_SIGNING_KEY_PEM"
-DEFAULT_EXPIRY_MINUTES = 120
+DEFAULT_EXPIRY_MINUTES = acceptance.ROOT_CI_RECEIPT_TTL_MINUTES
 
 
 class SigningError(RuntimeError):
@@ -108,8 +108,11 @@ def sign_root_ci_protected_deploy_receipt(
     issuer: str = ISSUER,
     key_id: str = KEY_ID,
 ) -> dict[str, Any]:
-    if not 1 <= expiry_minutes <= 1440:
-        raise SigningError("receipt expiry must be between 1 and 1440 minutes")
+    if expiry_minutes != acceptance.ROOT_CI_RECEIPT_TTL_MINUTES:
+        raise SigningError(
+            "root-CI receipt expiry must be exactly "
+            f"{acceptance.ROOT_CI_RECEIPT_TTL_MINUTES} minutes"
+        )
     try:
         subject_payload = collector._strict_json(subject_bytes, "release subject")
     except collector.CollectorError as exc:

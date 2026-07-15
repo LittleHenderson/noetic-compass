@@ -21,7 +21,7 @@ import re
 import subprocess
 import sys
 import time
-from typing import Any, Mapping, Protocol
+from typing import Any, Callable, Mapping, Protocol
 import urllib.error
 import urllib.request
 
@@ -41,6 +41,10 @@ RENDER_SERVICE_URL = (
     f"https://api.render.com/v1/services/{acceptance.PRODUCTION_SERVICE_ID}"
 )
 PRODUCTION_HEALTH_URL = f"{acceptance.PRODUCTION_API_ORIGIN}/health"
+RENDER_ACTIVE_DEPLOYS_URL = f"{RENDER_SERVICE_URL}/deploys?status=live&limit=2"
+RENDER_LATEST_DEPLOY_URL = f"{RENDER_SERVICE_URL}/deploys?limit=1"
+ROOT_CI_SCHEMA_VERSION = acceptance.ROOT_CI_SCHEMA_VERSION
+ROOT_CI_OBSERVATION_SEMANTICS = acceptance.ROOT_CI_OBSERVATION_SEMANTICS
 
 _SHA1_RE = re.compile(r"^[0-9a-f]{40}$")
 _DEPLOY_RE = re.compile(r"^dep-[A-Za-z0-9]+$")
@@ -62,7 +66,7 @@ class _NoRedirect(urllib.request.HTTPRedirectHandler):
 class HttpDocument:
     url: str
     raw: bytes
-    payload: Mapping[str, Any]
+    payload: Any
     headers: Mapping[str, str]
 
 
@@ -75,8 +79,16 @@ class JsonTransport(Protocol):
         label: str,
     ) -> HttpDocument: ...
 
+    def get_json_array(
+        self,
+        url: str,
+        *,
+        headers: Mapping[str, str],
+        label: str,
+    ) -> HttpDocument: ...
 
-def _strict_json(raw: bytes, label: str) -> Mapping[str, Any]:
+
+def _strict_json_value(raw: bytes, label: str) -> Any:
     def reject_duplicates(pairs: list[tuple[str, Any]]) -> dict[str, Any]:
         value: dict[str, Any] = {}
         for key, child in pairs:
@@ -92,8 +104,20 @@ def _strict_json(raw: bytes, label: str) -> Mapping[str, Any]:
         raise
     except (UnicodeDecodeError, json.JSONDecodeError) as exc:
         raise CollectorError(f"{label} did not return valid UTF-8 JSON") from exc
+    return payload
+
+
+def _strict_json(raw: bytes, label: str) -> Mapping[str, Any]:
+    payload = _strict_json_value(raw, label)
     if not isinstance(payload, Mapping):
         raise CollectorError(f"{label} JSON root must be an object")
+    return payload
+
+
+def _strict_json_array(raw: bytes, label: str) -> list[Any]:
+    payload = _strict_json_value(raw, label)
+    if not isinstance(payload, list):
+        raise CollectorError(f"{label} JSON root must be an array")
     return payload
 
 
@@ -121,6 +145,35 @@ class HttpJsonClient:
         *,
         headers: Mapping[str, str],
         label: str,
+    ) -> HttpDocument:
+        return self._get_json(
+            url,
+            headers=headers,
+            label=label,
+            parser=_strict_json,
+        )
+
+    def get_json_array(
+        self,
+        url: str,
+        *,
+        headers: Mapping[str, str],
+        label: str,
+    ) -> HttpDocument:
+        return self._get_json(
+            url,
+            headers=headers,
+            label=label,
+            parser=_strict_json_array,
+        )
+
+    def _get_json(
+        self,
+        url: str,
+        *,
+        headers: Mapping[str, str],
+        label: str,
+        parser: Callable[[bytes, str], Any],
     ) -> HttpDocument:
         request_headers = {
             "Accept": "application/json",
@@ -167,7 +220,7 @@ class HttpJsonClient:
         return HttpDocument(
             url=url,
             raw=raw,
-            payload=_strict_json(raw, label),
+            payload=parser(raw, label),
             headers=response_headers,
         )
 
@@ -213,10 +266,31 @@ def _utc_seconds(value: datetime) -> str:
     )
 
 
+def _canonical_bytes(value: Any) -> bytes:
+    return json.dumps(
+        value,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+
+
+def _sha256(value: Any) -> str:
+    return hashlib.sha256(_canonical_bytes(value)).hexdigest()
+
+
+def _read_clock(clock: Callable[[], datetime], label: str) -> datetime:
+    value = clock()
+    _require(isinstance(value, datetime), f"{label} clock did not return a datetime")
+    _require(value.tzinfo is not None, f"{label} clock must include a timezone")
+    return value.astimezone(timezone.utc)
+
+
 def _require_single_page(document: HttpDocument, items: list[Any], label: str) -> None:
     link = document.headers.get("link", "")
     _require('rel="next"' not in link, f"{label} pagination is unsupported; refusing partial data")
-    total = document.payload.get("total_count")
+    payload = _mapping(document.payload, label)
+    total = payload.get("total_count")
     if total is not None:
         _require(
             isinstance(total, int) and not isinstance(total, bool),
@@ -301,7 +375,8 @@ def _render_headers(api_key: str) -> dict[str, str]:
 
 
 def _workflow_index(document: HttpDocument) -> dict[str, Mapping[str, Any]]:
-    workflows = _list(document.payload.get("workflows"), "GitHub workflows")
+    payload = _mapping(document.payload, "GitHub workflows response")
+    workflows = _list(payload.get("workflows"), "GitHub workflows")
     _require_single_page(document, workflows, "GitHub workflows")
     by_name: dict[str, Mapping[str, Any]] = {}
     for item in workflows:
@@ -317,6 +392,20 @@ def _workflow_index(document: HttpDocument) -> dict[str, Mapping[str, Any]]:
     return by_name
 
 
+def _validate_workflow_registry(document: HttpDocument) -> None:
+    workflow_by_name = _workflow_index(document)
+    for contract in acceptance.WORKFLOW_CONTRACTS.values():
+        workflow = workflow_by_name.get(contract["workflow_name"])
+        _require(
+            workflow is not None,
+            f"workflow {contract['workflow_name']} is unavailable",
+        )
+        assert workflow is not None
+        _require(workflow.get("id") == contract["workflow_id"], "workflow ID drifted")
+        _require(workflow.get("path") == contract["workflow_path"], "workflow path drifted")
+        _require(workflow.get("state") == "active", "required workflow is not active")
+
+
 def _validate_repository(payload: Mapping[str, Any]) -> None:
     expected = {
         "id": acceptance.REPOSITORY_ID,
@@ -328,6 +417,23 @@ def _validate_repository(payload: Mapping[str, Any]) -> None:
     }
     for field, value in expected.items():
         _require(payload.get(field) == value, f"GitHub repository {field} drifted")
+
+
+def _validate_master_branch(
+    payload: Mapping[str, Any], expected_master_head: str
+) -> None:
+    _require(payload.get("name") == "master", "GitHub master branch name drifted")
+    _require(payload.get("protected") is True, "GitHub master is not protected")
+    _require(
+        payload.get("protection_url")
+        == f"{GITHUB_API}/branches/master/protection",
+        "GitHub master protection URL drifted",
+    )
+    commit = _mapping(payload.get("commit"), "GitHub master commit")
+    _require(
+        commit.get("sha") == expected_master_head,
+        "GitHub current master HEAD does not match expected master HEAD",
+    )
 
 
 def _validate_protection(payload: Mapping[str, Any]) -> None:
@@ -364,6 +470,72 @@ def _validate_protection(payload: Mapping[str, Any]) -> None:
         _require(value is expected, f"branch protection {field} drifted")
 
 
+def _validate_render_service(payload: Mapping[str, Any]) -> None:
+    expected_service = {
+        "id": acceptance.PRODUCTION_SERVICE_ID,
+        "name": acceptance.PRODUCTION_SERVICE_NAME,
+        "type": "web_service",
+        "repo": acceptance.REPOSITORY_URL,
+        "branch": "master",
+        "autoDeployTrigger": "checksPass",
+    }
+    for field, value in expected_service.items():
+        _require(payload.get(field) == value, f"Render service {field} drifted")
+    service_details = _mapping(payload.get("serviceDetails"), "Render serviceDetails")
+    _require(
+        service_details.get("healthCheckPath") == "/health",
+        "Render production healthCheckPath drifted",
+    )
+
+
+def _validate_render_deploy_identity(
+    payload: Mapping[str, Any],
+    *,
+    expected_master_head: str,
+    expected_deploy_id: str,
+    require_live: bool,
+) -> None:
+    _require(payload.get("id") == expected_deploy_id, "Render deployment ID drifted")
+    _require(
+        payload.get("trigger") == "new_commit",
+        "Render deployment was not triggered by a new commit",
+    )
+    commit = _mapping(payload.get("commit"), "Render deployment commit")
+    _require(commit.get("id") == expected_master_head, "Render deployment commit drifted")
+    if require_live:
+        _require(payload.get("status") == "live", "exact Render deployment is not live")
+
+
+def _validate_current_active_deploy(
+    document: HttpDocument,
+    *,
+    expected_master_head: str,
+    expected_deploy_id: str,
+) -> Mapping[str, Any]:
+    items = _list(document.payload, "Render active deployments")
+    _require(
+        len(items) == 1,
+        "Render current live deployment is missing or ambiguous",
+    )
+    wrapper = _mapping(items[0], "Render active deployment wrapper")
+    _require(
+        set(wrapper) == {"deploy", "cursor"},
+        "Render active deployment wrapper schema drifted",
+    )
+    _require(
+        isinstance(wrapper.get("cursor"), str) and bool(wrapper.get("cursor")),
+        "Render active deployment cursor is invalid",
+    )
+    deploy = _mapping(wrapper.get("deploy"), "Render current live deployment")
+    _validate_render_deploy_identity(
+        deploy,
+        expected_master_head=expected_master_head,
+        expected_deploy_id=expected_deploy_id,
+        require_live=True,
+    )
+    return deploy
+
+
 def collect_root_ci_protected_deploy_facts(
     *,
     expected_master_head: str,
@@ -373,12 +545,21 @@ def collect_root_ci_protected_deploy_facts(
     github_token: str,
     render_api_key: str,
     now: datetime | None = None,
+    clock: Callable[[], datetime] | None = None,
     repository_head: str | None = None,
     deploy_wait_seconds: int = 0,
     deploy_poll_seconds: int = 10,
     sleeper: Any = time.sleep,
 ) -> dict[str, Any]:
-    """Collect one verifier-compatible unsigned gate payload."""
+    """Collect one verifier-compatible unsigned gate payload.
+
+    The protected checks and ``new_commit`` deployment are immutable release
+    provenance.  Freshness comes from a new final observation cycle that starts
+    only after that exact deploy is live, then proves the expected SHA is still
+    current on GitHub and the exact deploy is still Render's sole active live
+    deploy.  Full provider records are compared before and after the health
+    read so a stable release can be observed again without no-op redeploy churn.
+    """
 
     _require(
         _SHA1_RE.fullmatch(expected_master_head) is not None,
@@ -400,40 +581,157 @@ def collect_root_ci_protected_deploy_facts(
         and 1 <= deploy_poll_seconds <= 60,
         "deploy poll interval must be an integer between 1 and 60 seconds",
     )
+    _require(
+        not (now is not None and clock is not None),
+        "supply either now or clock, not both",
+    )
+    if clock is None:
+        if now is None:
+            evidence_clock = lambda: datetime.now(timezone.utc)
+        else:
+            evidence_clock = lambda: now
+    else:
+        evidence_clock = clock
     repo_root = repo_root.resolve()
     _require(repo_root.is_dir(), "repository root is unavailable")
     actual_head = repository_head or _git_head(repo_root)
     _require(actual_head == expected_master_head, "local HEAD does not match expected master HEAD")
-    _validate_local_workflows(repo_root)
 
     github_headers = _github_headers(github_token)
     render_headers = _render_headers(render_api_key)
 
-    repository_document = transport.get_json(
-        GITHUB_API, headers=github_headers, label="GitHub repository"
-    )
-    _validate_repository(repository_document.payload)
+    deploy_url = f"{RENDER_SERVICE_URL}/deploys/{expected_deploy_id}"
+    pending_statuses = {
+        "created",
+        "queued",
+        "build_in_progress",
+        "update_in_progress",
+        "pre_deploy_in_progress",
+    }
+    remaining_wait = deploy_wait_seconds
+    deploy: Mapping[str, Any] | None = None
+    deploy_initial_document: HttpDocument | None = None
+    while True:
+        candidate_document = transport.get_json(
+            deploy_url,
+            headers=render_headers,
+            label="Render production deployment",
+        )
+        candidate = _mapping(candidate_document.payload, "Render production deployment")
+        _validate_render_deploy_identity(
+            candidate,
+            expected_master_head=expected_master_head,
+            expected_deploy_id=expected_deploy_id,
+            require_live=False,
+        )
+        status = candidate.get("status")
+        if status == "live":
+            deploy = candidate
+            deploy_initial_document = candidate_document
+            break
+        _require(status in pending_statuses, "Render deployment entered a non-live terminal or unknown status")
+        if remaining_wait <= 0:
+            raise CollectorError("exact Render deployment did not become live before the wait expired")
+        sleep_seconds = min(deploy_poll_seconds, remaining_wait)
+        sleeper(sleep_seconds)
+        remaining_wait -= sleep_seconds
+    assert deploy is not None
+    assert deploy_initial_document is not None
+    deploy_created = _parse_timestamp(deploy.get("createdAt"), "Render deploy createdAt")
+    deploy_finished = _parse_timestamp(deploy.get("finishedAt"), "Render deploy finishedAt")
+    _require(deploy_finished >= deploy_created, "Render deployment finished before it started")
 
-    protection_document = transport.get_json(
+    # The fresh cycle begins only after a deployment that finished during an
+    # optional wait has become immutable historical provenance.
+    event = _read_clock(evidence_clock, "observation start")
+    _require(
+        deploy_finished <= event,
+        "Render deployment completion is after the fresh observation start",
+    )
+    _validate_local_workflows(repo_root)
+
+    service_preflight_document = transport.get_json(
+        RENDER_SERVICE_URL,
+        headers=render_headers,
+        label="Render production service preflight",
+    )
+    service_preflight = _mapping(
+        service_preflight_document.payload, "Render production service preflight"
+    )
+    _validate_render_service(service_preflight)
+    deploy_preflight_document = transport.get_json(
+        deploy_url,
+        headers=render_headers,
+        label="Render production deployment preflight",
+    )
+    deploy_preflight = _mapping(
+        deploy_preflight_document.payload, "Render production deployment preflight"
+    )
+    _validate_render_deploy_identity(
+        deploy_preflight,
+        expected_master_head=expected_master_head,
+        expected_deploy_id=expected_deploy_id,
+        require_live=True,
+    )
+    active_preflight_document = transport.get_json_array(
+        RENDER_ACTIVE_DEPLOYS_URL,
+        headers=render_headers,
+        label="Render current live deployment preflight",
+    )
+    _validate_current_active_deploy(
+        active_preflight_document,
+        expected_master_head=expected_master_head,
+        expected_deploy_id=expected_deploy_id,
+    )
+    latest_preflight_document = transport.get_json_array(
+        RENDER_LATEST_DEPLOY_URL,
+        headers=render_headers,
+        label="Render latest deployment preflight",
+    )
+    _validate_current_active_deploy(
+        latest_preflight_document,
+        expected_master_head=expected_master_head,
+        expected_deploy_id=expected_deploy_id,
+    )
+    render_preflight_verified = _read_clock(
+        evidence_clock, "Render preflight observation"
+    )
+
+    repository_preflight_document = transport.get_json(
+        GITHUB_API, headers=github_headers, label="GitHub repository preflight"
+    )
+    repository_preflight = _mapping(
+        repository_preflight_document.payload, "GitHub repository preflight"
+    )
+    _validate_repository(repository_preflight)
+
+    master_url = f"{GITHUB_API}/branches/master"
+    master_preflight_document = transport.get_json(
+        master_url,
+        headers=github_headers,
+        label="GitHub current master preflight",
+    )
+    master_preflight = _mapping(
+        master_preflight_document.payload, "GitHub current master preflight"
+    )
+    _validate_master_branch(master_preflight, expected_master_head)
+
+    protection_preflight_document = transport.get_json(
         f"{GITHUB_API}/branches/master/protection",
         headers=github_headers,
-        label="GitHub branch protection",
+        label="GitHub branch protection preflight",
     )
-    _validate_protection(protection_document.payload)
+    protection_preflight = _mapping(
+        protection_preflight_document.payload, "GitHub branch protection preflight"
+    )
+    _validate_protection(protection_preflight)
 
-    workflows_document = transport.get_json(
+    workflows_preflight_document = transport.get_json(
         f"{GITHUB_API}/actions/workflows?per_page=100",
         headers=github_headers,
-        label="GitHub workflows",
+        label="GitHub workflows preflight",
     )
-    workflow_by_name = _workflow_index(workflows_document)
-    for contract in acceptance.WORKFLOW_CONTRACTS.values():
-        workflow = workflow_by_name.get(contract["workflow_name"])
-        _require(workflow is not None, f"workflow {contract['workflow_name']} is unavailable")
-        assert workflow is not None
-        _require(workflow.get("id") == contract["workflow_id"], "workflow ID drifted")
-        _require(workflow.get("path") == contract["workflow_path"], "workflow path drifted")
-        _require(workflow.get("state") == "active", "required workflow is not active")
+    _validate_workflow_registry(workflows_preflight_document)
 
     check_runs_url = f"{GITHUB_API}/commits/{expected_master_head}/check-runs?per_page=100"
     check_runs_document = transport.get_json(
@@ -441,7 +739,10 @@ def collect_root_ci_protected_deploy_facts(
         headers=github_headers,
         label="GitHub check runs",
     )
-    check_runs = _list(check_runs_document.payload.get("check_runs"), "GitHub check runs")
+    check_runs_payload = _mapping(
+        check_runs_document.payload, "GitHub check runs response"
+    )
+    check_runs = _list(check_runs_payload.get("check_runs"), "GitHub check runs")
     _require_single_page(check_runs_document, check_runs, "GitHub check runs")
     by_name: dict[str, list[Mapping[str, Any]]] = {
         name: [] for name in acceptance.REQUIRED_CHECKS
@@ -453,7 +754,6 @@ def collect_root_ci_protected_deploy_facts(
             by_name[name].append(check)
 
     evidence_checks: list[dict[str, Any]] = []
-    run_event_times: list[datetime] = []
     completed_times: list[datetime] = []
     seen_run_ids: set[int] = set()
     for name in acceptance.REQUIRED_CHECKS:
@@ -483,7 +783,7 @@ def collect_root_ci_protected_deploy_facts(
             headers=github_headers,
             label=f"GitHub workflow run {name}",
         )
-        run = run_document.payload
+        run = _mapping(run_document.payload, f"GitHub workflow run {name}")
         contract = acceptance.WORKFLOW_CONTRACTS[name]
         expected_run = {
             "id": run_id,
@@ -501,14 +801,17 @@ def collect_root_ci_protected_deploy_facts(
         for field, value in expected_run.items():
             _require(run.get(field) == value, f"{name} workflow run {field} drifted")
         run_attempt = _positive_int(run.get("run_attempt"), f"{name} run attempt")
-        run_event_times.append(_parse_timestamp(run.get("created_at"), f"{name} created_at"))
+        run_created = _parse_timestamp(run.get("created_at"), f"{name} created_at")
 
         jobs_document = transport.get_json(
             f"{run_url}/jobs?per_page=100",
             headers=github_headers,
             label=f"GitHub workflow jobs {name}",
         )
-        jobs = _list(jobs_document.payload.get("jobs"), f"{name} workflow jobs")
+        jobs_payload = _mapping(
+            jobs_document.payload, f"{name} workflow jobs response"
+        )
+        jobs = _list(jobs_payload.get("jobs"), f"{name} workflow jobs")
         _require_single_page(jobs_document, jobs, f"{name} workflow jobs")
         matching_jobs = [
             _mapping(job, f"{name} workflow job")
@@ -524,6 +827,8 @@ def collect_root_ci_protected_deploy_facts(
         completed = _parse_timestamp(check.get("completed_at"), f"{name} completed_at")
         job_completed = _parse_timestamp(job.get("completed_at"), f"{name} job completed_at")
         _require(job_completed == completed, f"{name} job and check completion times disagree")
+        _require(run_created <= completed, f"{name} completed before its workflow run was created")
+        _require(completed <= event, f"{name} completed after the fresh observation started")
         completed_times.append(completed)
 
         evidence_checks.append(
@@ -543,74 +848,17 @@ def collect_root_ci_protected_deploy_facts(
                 "app_node_id": app["node_id"],
                 "app_slug": app["slug"],
                 "details_url": details_url,
+                "run_created_at_utc": _utc_seconds(run_created),
                 "completed_at_utc": _utc_seconds(completed),
             }
         )
 
-    service_document = transport.get_json(
-        RENDER_SERVICE_URL,
-        headers=render_headers,
-        label="Render production service",
-    )
-    service = service_document.payload
-    expected_service = {
-        "id": acceptance.PRODUCTION_SERVICE_ID,
-        "name": acceptance.PRODUCTION_SERVICE_NAME,
-        "type": "web_service",
-        "repo": acceptance.REPOSITORY_URL,
-        "branch": "master",
-        "autoDeployTrigger": "checksPass",
-    }
-    for field, value in expected_service.items():
-        _require(service.get(field) == value, f"Render service {field} drifted")
-    service_details = _mapping(service.get("serviceDetails"), "Render serviceDetails")
-    _require(
-        service_details.get("healthCheckPath") == "/health",
-        "Render production healthCheckPath drifted",
-    )
-
-    deploy_url = f"{RENDER_SERVICE_URL}/deploys/{expected_deploy_id}"
-    pending_statuses = {
-        "created",
-        "build_in_progress",
-        "update_in_progress",
-        "pre_deploy_in_progress",
-    }
-    remaining_wait = deploy_wait_seconds
-    deploy_document: HttpDocument | None = None
-    deploy: Mapping[str, Any] | None = None
-    while True:
-        candidate_document = transport.get_json(
-            deploy_url,
-            headers=render_headers,
-            label="Render production deployment",
-        )
-        candidate = candidate_document.payload
-        _require(candidate.get("id") == expected_deploy_id, "Render deployment ID drifted")
-        _require(
-            candidate.get("trigger") == "new_commit",
-            "Render deployment was not triggered by a new commit",
-        )
-        commit = _mapping(candidate.get("commit"), "Render deployment commit")
-        _require(commit.get("id") == expected_master_head, "Render deployment commit drifted")
-        status = candidate.get("status")
-        if status == "live":
-            deploy_document = candidate_document
-            deploy = candidate
-            break
-        _require(status in pending_statuses, "Render deployment entered a non-live terminal or unknown status")
-        if remaining_wait <= 0:
-            raise CollectorError("exact Render deployment did not become live before the wait expired")
-        sleep_seconds = min(deploy_poll_seconds, remaining_wait)
-        sleeper(sleep_seconds)
-        remaining_wait -= sleep_seconds
-    assert deploy_document is not None and deploy is not None
-    deploy_created = _parse_timestamp(deploy.get("createdAt"), "Render deploy createdAt")
-    deploy_finished = _parse_timestamp(deploy.get("finishedAt"), "Render deploy finishedAt")
-    _require(deploy_finished >= deploy_created, "Render deployment finished before it started")
     _require(
         deploy_created >= max(completed_times),
         "Render deployment started before all required checks completed",
+    )
+    github_controls_verified = _read_clock(
+        evidence_clock, "GitHub controls observation"
     )
 
     health_document = transport.get_json(
@@ -618,14 +866,112 @@ def collect_root_ci_protected_deploy_facts(
         headers={},
         label="production /health",
     )
-    health = health_document.payload
+    health = _mapping(health_document.payload, "production /health")
     _require(health.get("status") == "ok", "production /health is not ok")
     _require(health.get("engine") == "cas-engine", "production /health engine drifted")
+    health_verified = _read_clock(evidence_clock, "production health observation")
 
-    observed = (now or datetime.now(timezone.utc)).astimezone(timezone.utc)
-    event = min(run_event_times)
-    _require(event <= min(completed_times), "workflow completion precedes the push event")
-    _require(deploy_finished <= observed, "deployment completion is in the future")
+    master_final_document = transport.get_json(
+        master_url,
+        headers=github_headers,
+        label="GitHub current master final",
+    )
+    master_final = _mapping(
+        master_final_document.payload, "GitHub current master final"
+    )
+    _validate_master_branch(master_final, expected_master_head)
+    github_master_verified = _read_clock(
+        evidence_clock, "GitHub final master observation"
+    )
+
+    repository_final_document = transport.get_json(
+        GITHUB_API, headers=github_headers, label="GitHub repository final"
+    )
+    repository_final = _mapping(
+        repository_final_document.payload, "GitHub repository final"
+    )
+    _validate_repository(repository_final)
+    protection_final_document = transport.get_json(
+        f"{GITHUB_API}/branches/master/protection",
+        headers=github_headers,
+        label="GitHub branch protection final",
+    )
+    protection_final = _mapping(
+        protection_final_document.payload, "GitHub branch protection final"
+    )
+    _validate_protection(protection_final)
+    workflows_final_document = transport.get_json(
+        f"{GITHUB_API}/actions/workflows?per_page=100",
+        headers=github_headers,
+        label="GitHub workflows final",
+    )
+    _validate_workflow_registry(workflows_final_document)
+    github_controls_final_verified = _read_clock(
+        evidence_clock, "GitHub final controls observation"
+    )
+
+    service_final_document = transport.get_json(
+        RENDER_SERVICE_URL,
+        headers=render_headers,
+        label="Render production service final",
+    )
+    service_final = _mapping(
+        service_final_document.payload, "Render production service final"
+    )
+    _validate_render_service(service_final)
+    deploy_final_document = transport.get_json(
+        deploy_url,
+        headers=render_headers,
+        label="Render production deployment final",
+    )
+    deploy_final = _mapping(
+        deploy_final_document.payload, "Render production deployment final"
+    )
+    _validate_render_deploy_identity(
+        deploy_final,
+        expected_master_head=expected_master_head,
+        expected_deploy_id=expected_deploy_id,
+        require_live=True,
+    )
+    active_final_document = transport.get_json_array(
+        RENDER_ACTIVE_DEPLOYS_URL,
+        headers=render_headers,
+        label="Render current live deployment final",
+    )
+    _validate_current_active_deploy(
+        active_final_document,
+        expected_master_head=expected_master_head,
+        expected_deploy_id=expected_deploy_id,
+    )
+    latest_final_document = transport.get_json_array(
+        RENDER_LATEST_DEPLOY_URL,
+        headers=render_headers,
+        label="Render latest deployment final",
+    )
+    _validate_current_active_deploy(
+        latest_final_document,
+        expected_master_head=expected_master_head,
+        expected_deploy_id=expected_deploy_id,
+    )
+    render_final_verified = _read_clock(
+        evidence_clock, "Render final observation"
+    )
+    observed = _read_clock(evidence_clock, "observation completion")
+
+    observation_times = (
+        event,
+        render_preflight_verified,
+        github_controls_verified,
+        health_verified,
+        github_master_verified,
+        github_controls_final_verified,
+        render_final_verified,
+        observed,
+    )
+    _require(
+        all(left <= right for left, right in zip(observation_times, observation_times[1:])),
+        "fresh observation clock moved backwards",
+    )
     _require(
         observed - event
         <= timedelta(
@@ -633,11 +979,53 @@ def collect_root_ci_protected_deploy_facts(
                 "root_ci_protected_deploy_max_age_minutes"
             ]
         ),
-        "root-CI/deployment facts are stale",
+        "root-CI observation cycle is stale",
+    )
+    _require(
+        _canonical_bytes(master_preflight) == _canonical_bytes(master_final),
+        "GitHub current master record changed during collection",
+    )
+    _require(
+        _canonical_bytes(repository_preflight)
+        == _canonical_bytes(repository_final),
+        "GitHub repository record changed during collection",
+    )
+    _require(
+        _canonical_bytes(protection_preflight)
+        == _canonical_bytes(protection_final),
+        "GitHub branch protection record changed during collection",
+    )
+    _require(
+        _canonical_bytes(workflows_preflight_document.payload)
+        == _canonical_bytes(workflows_final_document.payload),
+        "GitHub workflow registry changed during collection",
+    )
+    _require(
+        _canonical_bytes(service_preflight) == _canonical_bytes(service_final),
+        "Render service record changed during collection",
+    )
+    _require(
+        _canonical_bytes(deploy) == _canonical_bytes(deploy_preflight),
+        "Render deployment record changed between initial and preflight collection",
+    )
+    _require(
+        _canonical_bytes(deploy_preflight) == _canonical_bytes(deploy_final),
+        "Render deployment record changed during collection",
+    )
+    _require(
+        _canonical_bytes(active_preflight_document.payload)
+        == _canonical_bytes(active_final_document.payload),
+        "Render current live deployment changed during collection",
+    )
+    _require(
+        _canonical_bytes(latest_preflight_document.payload)
+        == _canonical_bytes(latest_final_document.payload),
+        "Render latest deployment changed during collection",
     )
 
     payload: dict[str, Any] = {
         "schema_version": acceptance.EVIDENCE_SCHEMA_VERSION,
+        "root_ci_schema_version": ROOT_CI_SCHEMA_VERSION,
         "gate": "root_ci_protected_deploy",
         "environment": "public-production",
         "repository": acceptance.REPOSITORY,
@@ -646,7 +1034,7 @@ def collect_root_ci_protected_deploy_facts(
         "event_at_utc": _utc_seconds(event),
         "observed_at_utc": _utc_seconds(observed),
         "artifact_uri": deploy_url,
-        "artifact_sha256": hashlib.sha256(deploy_document.raw).hexdigest(),
+        "artifact_sha256": hashlib.sha256(deploy_final_document.raw).hexdigest(),
         "github_repository": {
             "id": acceptance.REPOSITORY_ID,
             "node_id": acceptance.REPOSITORY_NODE_ID,
@@ -662,7 +1050,7 @@ def collect_root_ci_protected_deploy_facts(
             "strict": True,
             "required_checks": list(acceptance.REQUIRED_CHECKS),
             "source": "github-api",
-            "observed_at_utc": _utc_seconds(observed),
+            "observed_at_utc": _utc_seconds(github_controls_final_verified),
         },
         "checks": evidence_checks,
         "deployment": {
@@ -677,7 +1065,62 @@ def collect_root_ci_protected_deploy_facts(
             "commit_sha": expected_master_head,
             "auto_deploy_trigger": "checksPass",
             "health_check_path": "/health",
+            "created_at_utc": _utc_seconds(deploy_created),
             "deployed_at_utc": _utc_seconds(deploy_finished),
+        },
+        "observation": {
+            "semantics": ROOT_CI_OBSERVATION_SEMANTICS,
+            "started_at_utc": _utc_seconds(event),
+            "render_preflight_verified_at_utc": _utc_seconds(
+                render_preflight_verified
+            ),
+            "github_controls_verified_at_utc": _utc_seconds(
+                github_controls_verified
+            ),
+            "health_verified_at_utc": _utc_seconds(health_verified),
+            "github_master_verified_at_utc": _utc_seconds(
+                github_master_verified
+            ),
+            "github_controls_final_verified_at_utc": _utc_seconds(
+                github_controls_final_verified
+            ),
+            "render_final_verified_at_utc": _utc_seconds(render_final_verified),
+            "completed_at_utc": _utc_seconds(observed),
+            "github_master_preflight_sha256": _sha256(master_preflight),
+            "github_master_final_sha256": _sha256(master_final),
+            "github_repository_preflight_sha256": _sha256(
+                repository_preflight
+            ),
+            "github_repository_final_sha256": _sha256(repository_final),
+            "github_protection_preflight_sha256": _sha256(
+                protection_preflight
+            ),
+            "github_protection_final_sha256": _sha256(protection_final),
+            "github_workflows_preflight_sha256": _sha256(
+                workflows_preflight_document.payload
+            ),
+            "github_workflows_final_sha256": _sha256(
+                workflows_final_document.payload
+            ),
+            "render_service_preflight_sha256": _sha256(service_preflight),
+            "render_service_final_sha256": _sha256(service_final),
+            "render_deploy_initial_sha256": _sha256(deploy),
+            "render_deploy_preflight_sha256": _sha256(deploy_preflight),
+            "render_deploy_final_sha256": _sha256(deploy_final),
+            "render_active_preflight_sha256": _sha256(
+                active_preflight_document.payload
+            ),
+            "render_active_final_sha256": _sha256(
+                active_final_document.payload
+            ),
+            "render_latest_preflight_sha256": _sha256(
+                latest_preflight_document.payload
+            ),
+            "render_latest_final_sha256": _sha256(
+                latest_final_document.payload
+            ),
+            "current_master_head_sha": expected_master_head,
+            "current_active_deploy_id": expected_deploy_id,
         },
     }
     serialized = json.dumps(payload, sort_keys=True, separators=(",", ":"))

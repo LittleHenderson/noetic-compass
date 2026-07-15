@@ -39,6 +39,9 @@ class FakeTransport:
             raise AssertionError(f"unexpected URL: {url}")
         return self.documents[url]
 
+    def get_json_array(self, url: str, *, headers, label: str) -> collector.HttpDocument:
+        return self.get_json(url, headers=headers, label=label)
+
 
 class SequencedDeployTransport(FakeTransport):
     def __init__(
@@ -56,11 +59,36 @@ class SequencedDeployTransport(FakeTransport):
             return super().get_json(url, headers=headers, label=label)
         self.requests.append((url, dict(headers), label))
         if not self.deploy_payloads:
-            raise AssertionError("exact deploy was polled too many times")
+            return self.documents[url]
         return _document(url, self.deploy_payloads.pop(0))
 
 
-def _document(url: str, payload: dict, *, headers: dict[str, str] | None = None) -> collector.HttpDocument:
+class SequencedTransport(FakeTransport):
+    def __init__(
+        self,
+        documents: dict[str, collector.HttpDocument],
+        sequences: dict[str, list[collector.HttpDocument]],
+    ) -> None:
+        super().__init__(documents)
+        self.sequences = {url: list(values) for url, values in sequences.items()}
+
+    def _next(self, url: str, *, headers, label: str) -> collector.HttpDocument:
+        self.requests.append((url, dict(headers), label))
+        values = self.sequences.get(url)
+        if values:
+            return values.pop(0)
+        if url not in self.documents:
+            raise AssertionError(f"unexpected URL: {url}")
+        return self.documents[url]
+
+    def get_json(self, url: str, *, headers, label: str) -> collector.HttpDocument:
+        return self._next(url, headers=headers, label=label)
+
+    def get_json_array(self, url: str, *, headers, label: str) -> collector.HttpDocument:
+        return self._next(url, headers=headers, label=label)
+
+
+def _document(url: str, payload, *, headers: dict[str, str] | None = None) -> collector.HttpDocument:
     raw = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
     return collector.HttpDocument(
         url=url,
@@ -103,6 +131,16 @@ def _fixture(root: Path) -> tuple[FakeTransport, dict[str, collector.HttpDocumen
             "url": acceptance.REPOSITORY_API_URL,
             "default_branch": "master",
             "ignored_secret": "must-not-escape",
+        },
+    )
+    master_url = f"{collector.GITHUB_API}/branches/master"
+    documents[master_url] = _document(
+        master_url,
+        {
+            "name": "master",
+            "protected": True,
+            "protection_url": f"{collector.GITHUB_API}/branches/master/protection",
+            "commit": {"sha": MASTER_SHA, "secret": "must-not-escape"},
         },
     )
     protection_url = f"{collector.GITHUB_API}/branches/master/protection"
@@ -225,6 +263,24 @@ def _fixture(root: Path) -> tuple[FakeTransport, dict[str, collector.HttpDocumen
             "secret": "must-not-escape",
         },
     )
+    documents[collector.RENDER_ACTIVE_DEPLOYS_URL] = _document(
+        collector.RENDER_ACTIVE_DEPLOYS_URL,
+        [
+            {
+                "deploy": deepcopy(documents[deploy_url].payload),
+                "cursor": "current-live-cursor",
+            }
+        ],
+    )
+    documents[collector.RENDER_LATEST_DEPLOY_URL] = _document(
+        collector.RENDER_LATEST_DEPLOY_URL,
+        [
+            {
+                "deploy": deepcopy(documents[deploy_url].payload),
+                "cursor": "latest-deploy-cursor",
+            }
+        ],
+    )
     documents[collector.PRODUCTION_HEALTH_URL] = _document(
         collector.PRODUCTION_HEALTH_URL,
         {"status": "ok", "engine": "cas-engine", "version": "0.1.0"},
@@ -253,9 +309,33 @@ class CollectorTests(unittest.TestCase):
             payload = _collect(root, transport)
 
         self.assertEqual(payload["schema_version"], acceptance.EVIDENCE_SCHEMA_VERSION)
+        self.assertEqual(payload["root_ci_schema_version"], collector.ROOT_CI_SCHEMA_VERSION)
         self.assertEqual(payload["gate"], "root_ci_protected_deploy")
         self.assertEqual(payload["misplaced_workflow_count"], 0)
         self.assertEqual(payload["deployment"]["commit_sha"], MASTER_SHA)
+        self.assertEqual(payload["event_at_utc"], "2026-07-14T08:00:00Z")
+        self.assertEqual(payload["deployment"]["deployed_at_utc"], "2026-07-14T07:35:00Z")
+        self.assertEqual(
+            payload["observation"]["semantics"],
+            collector.ROOT_CI_OBSERVATION_SEMANTICS,
+        )
+        self.assertEqual(
+            payload["branch_protection"]["observed_at_utc"],
+            payload["observation"]["github_controls_final_verified_at_utc"],
+        )
+        for preflight, final in (
+            ("github_repository_preflight_sha256", "github_repository_final_sha256"),
+            ("github_protection_preflight_sha256", "github_protection_final_sha256"),
+            ("github_workflows_preflight_sha256", "github_workflows_final_sha256"),
+        ):
+            self.assertEqual(
+                payload["observation"][preflight],
+                payload["observation"][final],
+            )
+        self.assertEqual(
+            payload["observation"]["render_deploy_initial_sha256"],
+            payload["observation"]["render_deploy_preflight_sha256"],
+        )
         deploy_url = f"{collector.RENDER_SERVICE_URL}/deploys/{DEPLOY_ID}"
         self.assertEqual(payload["artifact_uri"], deploy_url)
         self.assertEqual(
@@ -293,6 +373,7 @@ class CollectorTests(unittest.TestCase):
     def test_hostile_source_drift_fails_closed(self) -> None:
         cases = {
             "repository identity": lambda docs: docs[collector.GITHUB_API].payload.__setitem__("id", 1),
+            "current master": lambda docs: docs[f"{collector.GITHUB_API}/branches/master"].payload["commit"].__setitem__("sha", "3" * 40),
             "non-strict protection": lambda docs: docs[f"{collector.GITHUB_API}/branches/master/protection"].payload["required_status_checks"].__setitem__("strict", False),
             "extra required check": lambda docs: docs[f"{collector.GITHUB_API}/branches/master/protection"].payload["required_status_checks"]["contexts"].append("attacker-green"),
             "wrong check app": lambda docs: docs[f"{collector.GITHUB_API}/commits/{MASTER_SHA}/check-runs?per_page=100"].payload["check_runs"][0]["app"].__setitem__("id", 1),
@@ -303,6 +384,8 @@ class CollectorTests(unittest.TestCase):
             "commit trigger policy": lambda docs: docs[collector.RENDER_SERVICE_URL].payload.__setitem__("autoDeployTrigger", "commit"),
             "wrong health path": lambda docs: docs[collector.RENDER_SERVICE_URL].payload["serviceDetails"].__setitem__("healthCheckPath", "/"),
             "degraded health": lambda docs: docs[collector.PRODUCTION_HEALTH_URL].payload.__setitem__("status", "degraded"),
+            "wrong current live deploy": lambda docs: docs[collector.RENDER_ACTIVE_DEPLOYS_URL].payload[0]["deploy"].__setitem__("id", "dep-attacker"),
+            "wrong latest deploy": lambda docs: docs[collector.RENDER_LATEST_DEPLOY_URL].payload[0]["deploy"].__setitem__("id", "dep-attacker"),
         }
         for label, mutate in cases.items():
             with self.subTest(label=label), tempfile.TemporaryDirectory() as directory:
@@ -401,7 +484,7 @@ class CollectorTests(unittest.TestCase):
         self.assertEqual(payload["deploy_id"], DEPLOY_ID)
         self.assertEqual(sleeps, [1])
         deploy_requests = [url for url, _, _ in transport.requests if "/deploys/" in url]
-        self.assertEqual(deploy_requests, [deploy_url, deploy_url])
+        self.assertEqual(deploy_requests, [deploy_url, deploy_url, deploy_url, deploy_url])
 
     def test_wait_never_tolerates_terminal_or_unknown_deploy_status(self) -> None:
         for status in ("build_failed", "canceled", "attacker_green"):
@@ -427,6 +510,249 @@ class CollectorTests(unittest.TestCase):
                         sleeper=lambda _: None,
                     )
 
+    def test_fresh_cycle_starts_after_a_deploy_that_finishes_during_wait(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            _, documents = _fixture(root)
+            deploy_url = f"{collector.RENDER_SERVICE_URL}/deploys/{DEPLOY_ID}"
+            live = deepcopy(documents[deploy_url].payload)
+            live["createdAt"] = "2026-07-14T08:01:00Z"
+            live["finishedAt"] = "2026-07-14T08:05:00Z"
+            documents[deploy_url] = _document(deploy_url, live)
+            documents[collector.RENDER_ACTIVE_DEPLOYS_URL] = _document(
+                collector.RENDER_ACTIVE_DEPLOYS_URL,
+                [{"deploy": deepcopy(live), "cursor": "current-live-cursor"}],
+            )
+            documents[collector.RENDER_LATEST_DEPLOY_URL] = _document(
+                collector.RENDER_LATEST_DEPLOY_URL,
+                [{"deploy": deepcopy(live), "cursor": "latest-deploy-cursor"}],
+            )
+            pending = deepcopy(live)
+            pending["status"] = "build_in_progress"
+            pending["finishedAt"] = None
+            transport = SequencedDeployTransport(
+                documents,
+                deploy_url,
+                [pending, live],
+            )
+            observation_time = datetime(
+                2026, 7, 14, 8, 6, 0, tzinfo=timezone.utc
+            )
+            payload = collector.collect_root_ci_protected_deploy_facts(
+                expected_master_head=MASTER_SHA,
+                expected_deploy_id=DEPLOY_ID,
+                repo_root=root,
+                transport=transport,
+                github_token=GITHUB_TOKEN,
+                render_api_key=RENDER_KEY,
+                now=observation_time,
+                repository_head=MASTER_SHA,
+                deploy_wait_seconds=10,
+                deploy_poll_seconds=1,
+                sleeper=lambda _: None,
+            )
+
+        self.assertEqual(payload["deployment"]["deployed_at_utc"], "2026-07-14T08:05:00Z")
+        self.assertEqual(payload["event_at_utc"], "2026-07-14T08:06:00Z")
+
+    def test_current_live_deploy_must_be_unique(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            transport, documents = _fixture(root)
+            documents[collector.RENDER_ACTIVE_DEPLOYS_URL].payload.append(
+                deepcopy(documents[collector.RENDER_ACTIVE_DEPLOYS_URL].payload[0])
+            )
+            with self.assertRaisesRegex(collector.CollectorError, "ambiguous"):
+                _collect(root, transport)
+
+    def test_provider_and_master_records_must_not_change_during_observation(self) -> None:
+        cases = (
+            "repository",
+            "master",
+            "protection",
+            "workflows",
+            "service",
+            "deploy",
+            "active",
+            "latest",
+        )
+        for case in cases:
+            with self.subTest(case=case), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                _, documents = _fixture(root)
+                deploy_url = f"{collector.RENDER_SERVICE_URL}/deploys/{DEPLOY_ID}"
+                master_url = f"{collector.GITHUB_API}/branches/master"
+                sequences: dict[str, list[collector.HttpDocument]] = {}
+                if case == "repository":
+                    changed = deepcopy(documents[collector.GITHUB_API].payload)
+                    changed["provider_revision"] = "changed"
+                    sequences[collector.GITHUB_API] = [
+                        documents[collector.GITHUB_API],
+                        _document(collector.GITHUB_API, changed),
+                    ]
+                elif case == "master":
+                    changed = deepcopy(documents[master_url].payload)
+                    changed["provider_revision"] = "changed"
+                    sequences[master_url] = [
+                        documents[master_url],
+                        _document(master_url, changed),
+                    ]
+                elif case == "protection":
+                    protection_url = f"{collector.GITHUB_API}/branches/master/protection"
+                    changed = deepcopy(documents[protection_url].payload)
+                    changed["provider_revision"] = "changed"
+                    sequences[protection_url] = [
+                        documents[protection_url],
+                        _document(protection_url, changed),
+                    ]
+                elif case == "workflows":
+                    workflows_url = f"{collector.GITHUB_API}/actions/workflows?per_page=100"
+                    changed = deepcopy(documents[workflows_url].payload)
+                    changed["provider_revision"] = "changed"
+                    sequences[workflows_url] = [
+                        documents[workflows_url],
+                        _document(workflows_url, changed),
+                    ]
+                elif case == "service":
+                    changed = deepcopy(documents[collector.RENDER_SERVICE_URL].payload)
+                    changed["provider_revision"] = "changed"
+                    sequences[collector.RENDER_SERVICE_URL] = [
+                        documents[collector.RENDER_SERVICE_URL],
+                        _document(collector.RENDER_SERVICE_URL, changed),
+                    ]
+                elif case == "deploy":
+                    changed = deepcopy(documents[deploy_url].payload)
+                    changed["provider_revision"] = "changed"
+                    sequences[deploy_url] = [
+                        documents[deploy_url],
+                        documents[deploy_url],
+                        _document(deploy_url, changed),
+                    ]
+                elif case == "active":
+                    changed = deepcopy(
+                        documents[collector.RENDER_ACTIVE_DEPLOYS_URL].payload
+                    )
+                    changed[0]["cursor"] = "changed-cursor"
+                    sequences[collector.RENDER_ACTIVE_DEPLOYS_URL] = [
+                        documents[collector.RENDER_ACTIVE_DEPLOYS_URL],
+                        _document(collector.RENDER_ACTIVE_DEPLOYS_URL, changed),
+                    ]
+                else:
+                    changed = deepcopy(
+                        documents[collector.RENDER_LATEST_DEPLOY_URL].payload
+                    )
+                    changed[0]["cursor"] = "changed-cursor"
+                    sequences[collector.RENDER_LATEST_DEPLOY_URL] = [
+                        documents[collector.RENDER_LATEST_DEPLOY_URL],
+                        _document(collector.RENDER_LATEST_DEPLOY_URL, changed),
+                    ]
+                transport = SequencedTransport(documents, sequences)
+                with self.assertRaisesRegex(collector.CollectorError, "changed"):
+                    _collect(root, transport)
+
+    def test_final_github_controls_drift_after_valid_preflight_fails_closed(self) -> None:
+        cases = {
+            "repository default branch": (
+                collector.GITHUB_API,
+                lambda payload: payload.__setitem__("default_branch", "attacker"),
+                "default_branch",
+            ),
+            "branch protection enforce admins": (
+                f"{collector.GITHUB_API}/branches/master/protection",
+                lambda payload: payload["enforce_admins"].__setitem__("enabled", False),
+                "enforce_admins",
+            ),
+            "workflow registry state": (
+                f"{collector.GITHUB_API}/actions/workflows?per_page=100",
+                lambda payload: payload["workflows"][0].__setitem__(
+                    "state", "disabled_manually"
+                ),
+                "workflow",
+            ),
+        }
+        for label, (url, mutate, error) in cases.items():
+            with self.subTest(label=label), tempfile.TemporaryDirectory() as directory:
+                root = Path(directory)
+                _, documents = _fixture(root)
+                changed = deepcopy(documents[url].payload)
+                mutate(changed)
+                transport = SequencedTransport(
+                    documents,
+                    {url: [documents[url], _document(url, changed)]},
+                )
+                with self.assertRaisesRegex(collector.CollectorError, error):
+                    _collect(root, transport)
+
+    def test_initial_live_deploy_must_equal_preflight_and_final_records(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            _, documents = _fixture(root)
+            deploy_url = f"{collector.RENDER_SERVICE_URL}/deploys/{DEPLOY_ID}"
+            changed = deepcopy(documents[deploy_url].payload)
+            changed["finishedAt"] = "2026-07-14T07:50:00Z"
+            changed["provider_revision"] = "changed-after-initial-read"
+            transport = SequencedTransport(
+                documents,
+                {
+                    deploy_url: [
+                        documents[deploy_url],
+                        _document(deploy_url, changed),
+                        _document(deploy_url, changed),
+                    ]
+                },
+            )
+
+            with self.assertRaisesRegex(
+                collector.CollectorError,
+                "initial and preflight",
+            ):
+                _collect(root, transport)
+
+    def test_observation_clock_must_be_monotonic_and_complete_within_24_hours(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            transport, _ = _fixture(root)
+            times = iter(
+                [
+                    NOW,
+                    NOW,
+                    NOW,
+                    NOW,
+                    NOW.replace(minute=1),
+                    NOW,
+                    NOW,
+                    NOW,
+                ]
+            )
+            with self.assertRaisesRegex(collector.CollectorError, "moved backwards"):
+                collector.collect_root_ci_protected_deploy_facts(
+                    expected_master_head=MASTER_SHA,
+                    expected_deploy_id=DEPLOY_ID,
+                    repo_root=root,
+                    transport=transport,
+                    github_token=GITHUB_TOKEN,
+                    render_api_key=RENDER_KEY,
+                    clock=lambda: next(times),
+                    repository_head=MASTER_SHA,
+                )
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            transport, _ = _fixture(root)
+            late = datetime(2026, 7, 15, 8, 0, 1, tzinfo=timezone.utc)
+            times = iter([NOW, late, late, late, late, late, late, late])
+            with self.assertRaisesRegex(collector.CollectorError, "cycle is stale"):
+                collector.collect_root_ci_protected_deploy_facts(
+                    expected_master_head=MASTER_SHA,
+                    expected_deploy_id=DEPLOY_ID,
+                    repo_root=root,
+                    transport=transport,
+                    github_token=GITHUB_TOKEN,
+                    render_api_key=RENDER_KEY,
+                    clock=lambda: next(times),
+                    repository_head=MASTER_SHA,
+                )
+
     def test_misplaced_workflow_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -437,7 +763,7 @@ class CollectorTests(unittest.TestCase):
             with self.assertRaisesRegex(collector.CollectorError, "misplaced"):
                 _collect(root, transport)
 
-    def test_stale_facts_and_local_head_mismatch_are_rejected(self) -> None:
+    def test_old_release_provenance_is_allowed_but_local_head_mismatch_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             transport, _ = _fixture(root)
@@ -456,17 +782,18 @@ class CollectorTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
             transport, _ = _fixture(root)
-            with self.assertRaisesRegex(collector.CollectorError, "stale"):
-                collector.collect_root_ci_protected_deploy_facts(
-                    expected_master_head=MASTER_SHA,
-                    expected_deploy_id=DEPLOY_ID,
-                    repo_root=root,
-                    transport=transport,
-                    github_token=GITHUB_TOKEN,
-                    render_api_key=RENDER_KEY,
-                    now=datetime(2026, 7, 16, tzinfo=timezone.utc),
-                    repository_head=MASTER_SHA,
-                )
+            payload = collector.collect_root_ci_protected_deploy_facts(
+                expected_master_head=MASTER_SHA,
+                expected_deploy_id=DEPLOY_ID,
+                repo_root=root,
+                transport=transport,
+                github_token=GITHUB_TOKEN,
+                render_api_key=RENDER_KEY,
+                now=datetime(2026, 7, 16, tzinfo=timezone.utc),
+                repository_head=MASTER_SHA,
+            )
+            self.assertEqual(payload["deployment"]["deployed_at_utc"], "2026-07-14T07:35:00Z")
+            self.assertEqual(payload["event_at_utc"], "2026-07-16T00:00:00Z")
 
 
 class _FakeHeaders(dict):
