@@ -76,7 +76,7 @@ def _safe_customer_settings(**overrides: object) -> Settings:
     return Settings(**values)
 
 
-def test_customer_blueprint_enables_manual_customer_lane_with_effects_dark() -> None:
+def test_customer_blueprint_enables_airtable_while_privacy_intake_stays_closed() -> None:
     expected_literals = {
         "NC_ACCOUNTS_ENABLED": "true",
         "NC_QUOTAS_ENABLED": "true",
@@ -86,6 +86,9 @@ def test_customer_blueprint_enables_manual_customer_lane_with_effects_dark() -> 
         "NC_BILLING_WORKER_MEASUREMENT_ENABLED": "false",
         "NC_BILLING_USAGE_DISPATCH_ENABLED": "false",
         "NC_FLEET_SERVICE_AUTH_ENABLED": "false",
+        "NC_CRM_PROVIDER": "airtable",
+        "NC_AIRTABLE_API_BASE_URL": "https://api.airtable.com/v0",
+        "NC_CRM_PRIVACY_NOTICE_PUBLICATION_STATUS": "OPEN",
         "NC_EVIDENCE_PACKET_OBJECT_STORE_ENABLED": "true",
         "CAS_HARNESS_EVIDENCE_PACKET_STORE_DIR": (
             "/var/customer-support/evidence_packets"
@@ -120,6 +123,13 @@ def test_customer_blueprint_enables_manual_customer_lane_with_effects_dark() -> 
         "AWS_SECRET_ACCESS_KEY",
         "ATLAS_LIVE_WORKER_URL",
         "ATLAS_LIVE_WORKER_TOKEN",
+        "NC_AIRTABLE_TOKEN",
+        "NC_AIRTABLE_BASE_ID",
+        "NC_AIRTABLE_TABLE_NAME",
+        "NC_AIRTABLE_DEDUP_FIELD",
+        "NC_AIRTABLE_OWNER_FIELD",
+        "NC_AIRTABLE_OWNER_VALUE",
+        "NC_AIRTABLE_LIFECYCLE_FIELD",
     }
     assert {_declaration_mode(key) for key in injected} == {"sync:false"}
     assert _declaration_mode("NC_DATABASE_URL") == "fromDatabase:"
