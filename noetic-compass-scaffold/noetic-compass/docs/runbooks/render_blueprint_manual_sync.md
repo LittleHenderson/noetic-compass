@@ -208,7 +208,9 @@ Wire provider alerts before any customer journey: warning at 60% and critical
 at 75% for both service-disk and Postgres storage; warning/critical at 70%/85%
 for Postgres CPU, memory, and connection utilization sustained for 15 minutes.
 Route critical alerts through the primary on-call ACK and secondary escalation
-path, and preserve one non-secret delivery/readback drill.
+path, and preserve one secret-safe delivery/readback drill through the dedicated
+dispatch-only `.github/workflows/alert-delivery-drill.yml` lane. A runtime
+incident or configured alert route alone does not satisfy `alert_delivery`.
 
 The following are hard prerequisites before customer-production `ACCEPT`:
 
