@@ -260,6 +260,23 @@ smallest exact subject grants possible. Key rotation is a reviewed repository
 change. Until a valid key is onboarded, signed evidence cannot produce ACCEPT;
 this is intentional.
 
+### Collect the runtime/WORM evidence draft
+
+Run `scripts/collect_runtime_worm_evidence.py` within 30 minutes of the exact
+public Render deployment becoming live. Pin its protected `master` SHA, deploy
+ID, and live timestamp, and provide the account bearer token only through
+`CAS_HARNESS_API_TOKEN` plus a read-capable Render key through
+`RENDER_API_KEY`. The collector reads the exact Render deploy before and after
+the probe, verifies public readiness and exact real Pythia metadata, creates one
+nonce-bound audit, validates the packet's exact S3 Object Lock version and
+re-read receipt, and writes a canonical gate document plus a hashed source
+receipt.
+
+See [runtime_worm_evidence_collector.md](runtime_worm_evidence_collector.md) for
+the command and pass criteria. The output is an unsigned local draft. It does
+not publish the authority endpoint, change this manifest, or create
+customer-production `ACCEPT`.
+
 ### Produce the root-CI protected-deploy receipt
 
 The root-CI collector is intentionally local and unsigned. It needs a GitHub
