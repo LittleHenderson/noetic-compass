@@ -20,6 +20,9 @@ from api.services.customer_production_acceptance_authority import (  # noqa: E40
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
+from api.services.acceptance_publication_authorizations import (  # noqa: E402
+    AcceptancePublicationAuthorizationStore,
+)
 from api import acceptance_authority_contract as authority_contract  # noqa: E402
 from api.services import customer_production_acceptance_authority as authority_service  # noqa: E402
 from api.services.production.state_substrate.memory_store import (  # noqa: E402
@@ -156,19 +159,37 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             payload["deploy_id"] = DEPLOY_ID
             payload["artifact_uri"] = endpoint
             payload["artifact_sha256"] = _digest(f"live-authority-{gate}")
-            store = CustomerProductionAcceptanceAuthorityStore(InMemoryStateStore())
+            backend = InMemoryStateStore()
+            authorization_store = AcceptancePublicationAuthorizationStore(
+                backend, primary_tenant_id="primary"
+            )
+            evidence_sha256 = hashlib.sha256(
+                canonicalize_acceptance_evidence(gate, payload, now=NOW)
+            ).hexdigest()
+            authorization = authorization_store.create(
+                actor_tenant_id="primary",
+                actor_account_id="acct-" + "a" * 32,
+                actor_role="owner",
+                gate=gate,
+                master_head_sha=MASTER_SHA,
+                deploy_id=DEPLOY_ID,
+                evidence_sha256=evidence_sha256,
+                expected_head_version=0,
+                expected_previous_evidence_sha256=None,
+                reason="authorized_publication",
+                now=NOW,
+            )
+            store = CustomerProductionAcceptanceAuthorityStore(
+                backend,
+                publication_authorization_store=authorization_store,
+            )
             published = store.publish(
                 gate,
                 payload,
                 expected_head_version=0,
                 expected_previous_sha256=None,
-                authorization_artifact_uri=(
-                    f"{verifier.PRODUCTION_API_ORIGIN}/internal/"
-                    "acceptance-authorizations/alignment-test"
-                ),
-                authorization_artifact_sha256=_digest(
-                    "alignment-test-authorization"
-                ),
+                authorization_artifact_uri=authorization.uri,
+                authorization_artifact_sha256=authorization.sha256,
                 operation_reason="authorized_publication",
                 now=NOW,
             )
