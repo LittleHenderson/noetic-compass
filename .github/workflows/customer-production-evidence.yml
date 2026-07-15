@@ -97,6 +97,13 @@ jobs:
             --expected-deploy-id "$EXPECTED_DEPLOY_ID" \
             --output customer-production-evidence/receipts/root-ci-protected-deploy.json
 
+      - name: Record the external pin for the exact signed receipt bytes
+        shell: bash
+        run: |
+          set -euo pipefail
+          sha256sum customer-production-evidence/receipts/root-ci-protected-deploy.json \
+            > customer-production-evidence/receipts/root-ci-protected-deploy.sha256
+
       - name: Upload the partial receipt bundle
         uses: actions/upload-artifact@v7
         with:
@@ -104,16 +111,20 @@ jobs:
           path: |
             customer-production-evidence/subject/root-ci-protected-deploy.sha256
             customer-production-evidence/receipts/root-ci-protected-deploy.json
+            customer-production-evidence/receipts/root-ci-protected-deploy.sha256
           if-no-files-found: error
           retention-days: 30
 
       - name: Preserve the OPEN claim boundary
         shell: bash
         run: |
+          set -euo pipefail
+          receipt_sha256="$(cut -d ' ' -f 1 customer-production-evidence/receipts/root-ci-protected-deploy.sha256)"
           {
             echo '### Root CI protected deploy receipt created'
             echo '- The stable release asset contains unsigned, sanitized source facts collected locally with admin-read access.'
             echo '- The artifact contains one RS256 receipt for `root_ci_protected_deploy`.'
+            echo "- Exact signed-receipt SHA-256 pin: \`$receipt_sha256\`."
             echo '- The checked-in gate manifest remains `OPEN`.'
             echo '- This workflow never dispatches Customer Production ACCEPT.'
           } >> "$GITHUB_STEP_SUMMARY"

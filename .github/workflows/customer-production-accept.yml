@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       evidence_run_id:
-        description: GitHub Actions run ID containing the signed production evidence bundle
+        description: Customer Production Candidate Bundle run ID
         required: true
         type: string
       evidence_artifact_name:
-        description: Exact artifact name containing customer-production-acceptance.json and receipts
+        description: Exact customer-production-candidate-<run-id> artifact name
         required: true
         type: string
       expected_master_head:

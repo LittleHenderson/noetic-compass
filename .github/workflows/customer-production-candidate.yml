@@ -1,0 +1,134 @@
+name: Customer Production Candidate Bundle
+
+on:
+  workflow_dispatch:
+    inputs:
+      root_ci_receipt_run_id:
+        description: Same-repository Actions run ID containing the pinned signed root-CI receipt
+        required: true
+        type: string
+      root_ci_receipt_artifact_name:
+        description: Exact artifact name containing receipts/root-ci-protected-deploy.json
+        required: true
+        type: string
+      root_ci_receipt_sha256:
+        description: Externally recorded SHA-256 of the exact signed root-CI receipt bytes
+        required: true
+        type: string
+      expected_master_head:
+        description: Exact protected master HEAD deployed to public production
+        required: true
+        type: string
+      expected_deploy_id:
+        description: Exact public Render deployment ID (dep-...)
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: read
+
+concurrency:
+  group: customer-production-candidate
+  cancel-in-progress: false
+
+jobs:
+  assemble_candidate_bundle:
+    name: assemble-customer-production-candidate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Fail closed unless dispatched from protected exact master
+        shell: bash
+        env:
+          DISPATCH_REPOSITORY: ${{ github.repository }}
+          DISPATCH_REF: ${{ github.ref }}
+          DISPATCH_SHA: ${{ github.sha }}
+          DISPATCH_REF_PROTECTED: ${{ github.ref_protected }}
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+          ROOT_CI_RECEIPT_SHA256: ${{ inputs.root_ci_receipt_sha256 }}
+          ROOT_CI_RECEIPT_RUN_ID: ${{ inputs.root_ci_receipt_run_id }}
+        run: |
+          set -euo pipefail
+          test "$DISPATCH_REPOSITORY" = "LittleHenderson/noetic-compass"
+          test "$DEFAULT_BRANCH" = "master"
+          test "$DISPATCH_REF" = "refs/heads/master"
+          test "$DISPATCH_REF_PROTECTED" = "true"
+          [[ "$EXPECTED_MASTER_HEAD" =~ ^[0-9a-f]{40}$ ]]
+          test "$DISPATCH_SHA" = "$EXPECTED_MASTER_HEAD"
+          [[ "$EXPECTED_DEPLOY_ID" =~ ^dep-[A-Za-z0-9]+$ ]]
+          [[ "$ROOT_CI_RECEIPT_SHA256" =~ ^[0-9a-f]{64}$ ]]
+          [[ "$ROOT_CI_RECEIPT_RUN_ID" =~ ^[1-9][0-9]*$ ]]
+
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.expected_master_head }}
+          fetch-depth: 1
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+
+      - name: Re-run the hostile candidate-assembler tests
+        run: >-
+          python -m unittest discover
+          -s scripts/tests
+          -p 'test_assemble_customer_production_acceptance_candidate.py'
+
+      - name: Download the exact signed root-CI receipt artifact
+        uses: actions/download-artifact@v8
+        with:
+          name: ${{ inputs.root_ci_receipt_artifact_name }}
+          path: ${{ runner.temp }}/root-ci-receipt-input
+          github-token: ${{ github.token }}
+          repository: LittleHenderson/noetic-compass
+          run-id: ${{ inputs.root_ci_receipt_run_id }}
+
+      - name: Assemble and live-verify the ephemeral candidate bundle
+        shell: bash
+        env:
+          EXPECTED_MASTER_HEAD: ${{ inputs.expected_master_head }}
+          EXPECTED_DEPLOY_ID: ${{ inputs.expected_deploy_id }}
+          ROOT_CI_RECEIPT_SHA256: ${{ inputs.root_ci_receipt_sha256 }}
+          ROOT_CI_RECEIPT_PATH: ${{ runner.temp }}/root-ci-receipt-input/receipts/root-ci-protected-deploy.json
+          CANDIDATE_OUTPUT: ${{ runner.temp }}/customer-production-candidate
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_MASTER_HEAD"
+          test -s "$ROOT_CI_RECEIPT_PATH"
+          python scripts/assemble_customer_production_acceptance_candidate.py \
+            --root-ci-receipt "$ROOT_CI_RECEIPT_PATH" \
+            --root-ci-receipt-sha256 "$ROOT_CI_RECEIPT_SHA256" \
+            --expected-master-head "$EXPECTED_MASTER_HEAD" \
+            --expected-deploy-id "$EXPECTED_DEPLOY_ID" \
+            --output-dir "$CANDIDATE_OUTPUT"
+          test -s "$CANDIDATE_OUTPUT/customer-production-acceptance.json"
+          test -s "$CANDIDATE_OUTPUT/receipts/root-ci-protected-deploy.json"
+          test -s "$CANDIDATE_OUTPUT/candidate-verification-report.json"
+          test -s "$CANDIDATE_OUTPUT/candidate-assembly.json"
+          test -s "$CANDIDATE_OUTPUT/sanitized-bundle-index.json"
+          test -s "$CANDIDATE_OUTPUT/.production/customer-production-trusted-issuers.json"
+          test "$(find "$CANDIDATE_OUTPUT/live-evidence" -maxdepth 1 -type f -name '*.json' | wc -l)" -eq 9
+
+      - name: Upload candidate for the separate final workflow
+        uses: actions/upload-artifact@v7
+        with:
+          name: customer-production-candidate-${{ github.run_id }}
+          path: ${{ runner.temp }}/customer-production-candidate
+          include-hidden-files: true
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Preserve the candidate-only boundary
+        shell: bash
+        run: |
+          {
+            echo '### Customer-production candidate bundle assembled'
+            echo '- The root-CI signed receipt was externally SHA-256 pinned.'
+            echo '- Eight exact live gate authorities plus `release_decision` were GET-fetched, hashed, and verified.'
+            echo '- The checked-in manifest remains `OPEN`.'
+            echo '- This workflow performed no authority write, created no approval, and did not dispatch Customer Production ACCEPT.'
+            echo '- Supply this run ID and artifact name to the separate `Customer Production ACCEPT` workflow.'
+          } >> "$GITHUB_STEP_SUMMARY"
