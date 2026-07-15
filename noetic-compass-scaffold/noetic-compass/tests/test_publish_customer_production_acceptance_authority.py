@@ -135,6 +135,12 @@ def _write(path: Path, value: object) -> Path:
     return path
 
 
+def _restrict_to_owner(path: Path) -> Path:
+    if os.name == "posix":
+        path.chmod(0o600)
+    return path
+
+
 def _validate_args(path: Path, digest: str | None = None) -> list[str]:
     args = [
         "validate",
@@ -192,6 +198,23 @@ def _accounts_publish_args(
     args[gate_index] = "accounts_billing"
     if source_path is not None:
         args.extend(["--accounts-billing-source", str(source_path)])
+    return args
+
+
+def _source_bound_publish_args(
+    gate: str,
+    path: Path,
+    digest: str,
+    source_path: Path | None = None,
+) -> list[str]:
+    args = _publish_args(path, digest)
+    args[args.index("legal_publication_approval")] = gate
+    if source_path is not None:
+        option = {
+            "hosted_customer_journey": "--hosted-journey-source",
+            "support_crm": "--support-crm-source",
+        }[gate]
+        args.extend([option, str(source_path)])
     return args
 
 
@@ -287,6 +310,210 @@ def test_accounts_publish_creates_source_binding_before_authority_publish(
 
     assert result == 0, stderr.getvalue()
     assert calls == ["authorization", "source_binding", "publish"]
+
+
+@pytest.mark.parametrize(
+    ("gate", "expected_code"),
+    [
+        ("hosted_customer_journey", "hosted_journey_source_required"),
+        ("support_crm", "support_crm_source_required"),
+    ],
+)
+def test_source_bound_publish_requires_private_selector_before_provider_access(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    gate: str,
+    expected_code: str,
+) -> None:
+    digest = _sha(f"{gate}-evidence")
+    monkeypatch.setattr(
+        publisher,
+        "_prepare_evidence",
+        lambda **kwargs: (
+            {"master_head_sha": MASTER, "deploy_id": DEPLOY},
+            b"{}",
+            digest,
+        ),
+    )
+
+    @contextmanager
+    def forbidden_authority(**kwargs):  # type: ignore[no-untyped-def]
+        raise AssertionError("production authority must not open")
+        yield
+
+    monkeypatch.setattr(publisher, "_production_authority", forbidden_authority)
+    stdout, stderr = io.StringIO(), io.StringIO()
+
+    result = publisher.run(
+        _source_bound_publish_args(gate, tmp_path / "unused.json", digest),
+        now=datetime(2026, 7, 15, 18, 0, tzinfo=UTC),
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert result == 2
+    assert json.loads(stderr.getvalue())["code"] == expected_code
+
+
+@pytest.mark.parametrize(
+    ("gate", "selector", "method"),
+    [
+        (
+            "hosted_customer_journey",
+            {
+                "schema_version": (
+                    "cas_harness_hosted_customer_journey_acceptance_selector.v1"
+                ),
+                "gate": "hosted_customer_journey",
+                "tenant_id": "tenant-private-one",
+                "account_id": "account-private-one",
+                "audit_id": "audit-private-one",
+            },
+            "create_hosted_journey_source_binding",
+        ),
+        (
+            "support_crm",
+            {
+                "schema_version": "cas_harness_support_crm_acceptance_selector.v1",
+                "gate": "support_crm",
+                "support_ticket_id": "ticket-private-one",
+                "crm_lead_id": "lead-private-one",
+            },
+            "create_support_crm_source_binding",
+        ),
+    ],
+)
+def test_source_bound_publish_creates_private_binding_before_public_mutation(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    gate: str,
+    selector: dict[str, str],
+    method: str,
+) -> None:
+    digest = _sha(f"{gate}-evidence")
+    canonical = b"{}"
+    source_path = _restrict_to_owner(
+        _write(tmp_path / f"{gate}-private-source.json", selector)
+    )
+    monkeypatch.setattr(
+        publisher,
+        "_prepare_evidence",
+        lambda **kwargs: (
+            {"master_head_sha": MASTER, "deploy_id": DEPLOY},
+            canonical,
+            digest,
+        ),
+    )
+    calls: list[str] = []
+
+    class TrackingAuthority:
+        def assert_publication_authorized(self, **kwargs):  # type: ignore[no-untyped-def]
+            calls.append("authorization")
+
+        def create_hosted_journey_source_binding(self, evidence, **kwargs):  # type: ignore[no-untyped-def]
+            assert method == "create_hosted_journey_source_binding"
+            assert kwargs["selector"] == selector
+            calls.append("source_binding")
+            return digest
+
+        def create_support_crm_source_binding(self, evidence, **kwargs):  # type: ignore[no-untyped-def]
+            assert method == "create_support_crm_source_binding"
+            assert kwargs["selector"] == selector
+            calls.append("source_binding")
+            return digest
+
+        def publish(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+            calls.append("publish")
+            return SimpleNamespace(
+                sha256=digest,
+                gate=gate,
+                head_version=1,
+                operation_record_id="operation-001",
+                operation_sha256=_sha("operation"),
+                storage_mode="state_store",
+            )
+
+        def load(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+            return SimpleNamespace(sha256=digest, body=canonical)
+
+        def current_head(self, *args, **kwargs):  # type: ignore[no-untyped-def]
+            return SimpleNamespace(
+                active=True,
+                head_version=1,
+                operation_record_id="operation-001",
+                operation_sha256=_sha("operation"),
+            )
+
+    @contextmanager
+    def local_authority(**kwargs):  # type: ignore[no-untyped-def]
+        yield TrackingAuthority()
+
+    monkeypatch.setattr(publisher, "_production_authority", local_authority)
+    stdout, stderr = io.StringIO(), io.StringIO()
+    result = publisher.run(
+        _source_bound_publish_args(
+            gate, tmp_path / "unused.json", digest, source_path
+        ),
+        now=datetime(2026, 7, 15, 18, 0, tzinfo=UTC),
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert result == 0, stderr.getvalue()
+    assert calls == ["authorization", "source_binding", "publish"]
+    public_output = stdout.getvalue() + stderr.getvalue()
+    for key, value in selector.items():
+        if key not in {"schema_version", "gate"}:
+            assert value not in public_output
+
+
+def test_private_source_selector_duplicate_keys_fail_before_provider_access(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    digest = _sha("hosted-evidence")
+    source_path = tmp_path / "duplicate-private-source.json"
+    source_path.write_text(
+        '{"schema_version":"cas_harness_hosted_customer_journey_acceptance_selector.v1",'
+        '"gate":"hosted_customer_journey","tenant_id":"tenant-one",'
+        '"tenant_id":"tenant-two","account_id":"account-one",'
+        '"audit_id":"audit-one"}',
+        encoding="utf-8",
+    )
+    _restrict_to_owner(source_path)
+    monkeypatch.setattr(
+        publisher,
+        "_prepare_evidence",
+        lambda **kwargs: (
+            {"master_head_sha": MASTER, "deploy_id": DEPLOY},
+            b"{}",
+            digest,
+        ),
+    )
+
+    @contextmanager
+    def forbidden_authority(**kwargs):  # type: ignore[no-untyped-def]
+        raise AssertionError("production authority must not open")
+        yield
+
+    monkeypatch.setattr(publisher, "_production_authority", forbidden_authority)
+    stdout, stderr = io.StringIO(), io.StringIO()
+    result = publisher.run(
+        _source_bound_publish_args(
+            "hosted_customer_journey",
+            tmp_path / "unused.json",
+            digest,
+            source_path,
+        ),
+        now=datetime(2026, 7, 15, 18, 0, tzinfo=UTC),
+        stdout=stdout,
+        stderr=stderr,
+    )
+
+    assert result == 2
+    failure = json.loads(stderr.getvalue())
+    assert failure["code"] == "duplicate_json_key"
+    assert "tenant-one" not in stderr.getvalue()
+    assert "tenant-two" not in stderr.getvalue()
 
 
 def _render_environ() -> dict[str, str]:

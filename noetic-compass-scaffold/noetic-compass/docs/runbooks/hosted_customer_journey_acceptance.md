@@ -5,8 +5,12 @@ customer lane. This is broader than the worker/WORM smoke: it proves account
 provisioning, an entitled account-scoped audit, immutable packet readback, a
 read-only anonymous share through revocation, and cross-tenant non-enumeration.
 
-The collector produces secret-safe evidence and a source receipt. It does not
-publish acceptance authority or change the checked-in acceptance manifest.
+The collector produces public gate evidence under
+`cas_harness_customer_production_gate_evidence.v3`, a secret-safe
+`cas_hosted_customer_journey_receipt.v4` receipt, and a separate owner-only
+`cas_harness_hosted_customer_journey_acceptance_selector.v1` source selector.
+It does not publish acceptance authority or change the checked-in acceptance
+manifest.
 
 ## Prerequisites
 
@@ -17,6 +21,14 @@ publish acceptance authority or change the checked-in acceptance manifest.
   enabled and healthy.
 - S3 authentication works and a fresh packet can be re-read with active Object
   Lock retention of at least 31 configured days and 30 days remaining.
+- `NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON` and
+  `NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID` are configured in the
+  production service. The active key ID must be an opaque
+  `cpk_<32-lowercase-hex>` label and its retained key material must remain
+  available for publication and every later active-authority read. The opaque
+  ID is emitted only as public `pseudonym_key_id`; the keyring and raw key
+  material must never enter GitHub Actions, a command argument, an evidence
+  file, or a repository commit.
 - `NC_PLATFORM_TENANT_PROVISIONING_SECRET` and `NC_BILLING_ADMIN_SECRET` are
   available only in the production operator environment. Never place them on
   the command line or in an evidence file.
@@ -78,7 +90,8 @@ or interruption:
       --master-head <exact-40-character-master-sha> \
       --deploy-id <exact-live-render-deploy-id> \
       --output /tmp/hosted-customer-journey-evidence.json \
-      --safe-artifact-output /tmp/hosted-customer-journey-receipt.json
+      --safe-artifact-output /tmp/hosted-customer-journey-receipt.json \
+      --private-selector-output /tmp/hosted-customer-journey-selector.json
   status=$?
   unset RENDER_API_KEY
   trap - EXIT HUP INT TERM
@@ -93,6 +106,35 @@ revoke or rotate an existing CI/automation key. If the single-use key was ever
 entered anywhere other than the hidden prompt, treat it as exposed and revoke
 it immediately.
 
+The evidence and v4 receipt publish only the exact
+`hmac-sha256-tenant-scoped-v1` scheme, opaque `pseudonym_key_id`,
+`tenant_subject`, `account_subject`, and keyed `trace_subject`. The trace uses
+the same retained key ID and primary tenant scope; a raw trace or unkeyed
+`trace_id_sha256` is not public evidence. Among output artifacts, raw tenant
+and account IDs exist only in the mode-`0600` private selector. Its exact shape
+also carries the audit ID needed for source lookup:
+
+```json
+{
+  "schema_version": "cas_harness_hosted_customer_journey_acceptance_selector.v1",
+  "gate": "hosted_customer_journey",
+  "tenant_id": "<private-raw-tenant-id>",
+  "account_id": "<private-raw-account-id>",
+  "audit_id": "<public-high-entropy-durable-audit-id>"
+}
+```
+
+Do not print, attach, commit, or place that selector in a public evidence
+bundle. Keep it owner-readable only until exact publication readback succeeds,
+then delete it through the operator's approved secure-file procedure. The
+raw `audit_id` intentionally also remains in public audit and packet evidence:
+it is the high-entropy durable audit/packet locator, not a customer identity.
+The selector duplicates it only so the private source binding can reopen that
+exact audit. The receipt and evidence may retain content and high-entropy
+operational digests such as packet, share-token, provider-response, and
+Object-Lock SHA-256 values; those are not replacements for customer identity
+or trace subjects.
+
 The command intentionally pins `https://cas-harness-customer-api.onrender.com`; an
 alternate origin, credentialized URL, query, or redirect target is refused.
 Before any tenant, account, entitlement, audit, or share mutation, it performs
@@ -104,8 +146,8 @@ master SHA to status `live`, trigger `new_commit`, and monotonic, non-future
 logouts, the collector performs the same provider read again and requires the
 entire parsed deployment response and its SHA-256 to be unchanged. A missing
 key, non-200 response, redirect, identity/state/timing drift, or provider
-payload mutation leaves the gate `OPEN`; the collector does not write either
-output file.
+payload mutation leaves the gate `OPEN`; the collector does not write any of
+the three output files.
 
 It creates two probe tenants. The primary receives a two-hour `manual_comped`
 `beta_comped` entitlement; that source represents no payment. Its anonymous
@@ -135,12 +177,13 @@ entitlement expires automatically; do not describe this as account deletion.
 - The foreign tenant receives exact 404 responses for both the audit status and
   packet, plus share creation, metadata, and revocation attempts. A 401 or 403
   is not accepted because it can disclose existence.
-- Output contains only hashed tenant, account, trace, and share-token subjects;
-  it contains no raw operator secret, Render API key, account credential, JWT,
-  tenant/account identifier, share ID, or share token. The v3 source receipt
-  records only the exact Render service/deploy facts, provider response
-  SHA-256 values, HTTP statuses, and deployment timing needed to prove the two
-  provider readbacks.
+- Public output contains keyed tenant/account/trace subjects and no raw
+  operator secret, Render API key, account credential, JWT, tenant/account
+  identifier, raw trace, share ID, or share token. The intentional public raw
+  `audit_id` is the high-entropy audit/packet locator. The v4 receipt records
+  only the keyed identity metadata plus exact Render service/deploy facts,
+  provider response SHA-256 values, HTTP statuses, audit/packet facts, and
+  deployment timing needed to prove the two provider readbacks.
 
 ## Validate and publish separately
 
@@ -159,8 +202,15 @@ head, then have an authenticated owner of the configured primary tenant create
 the exact fixed-15-minute `authority_operation` / `AUTHORIZE` record through
 `POST /accounts/acceptance-authorizations` as documented in
 `customer_production_acceptance.md`. Pin its returned URI/SHA-256 together with
-the validated evidence SHA-256, publish before expiry, and verify the public
-authority endpoint readback. That operation record is permission to publish
-the already validated evidence only; it is not journey evidence or a release
-approval.
+the validated evidence SHA-256, and pass the owner-only selector to the
+publisher as
+`--hosted-journey-source /tmp/hosted-customer-journey-selector.json`.
+Publication reopens the active account and exact durable completed audit,
+recomputes all three keyed subjects, and stores a private content-addressed binding
+before any public authority revision, WORM object, operation, or head mutation.
+Every active serve repeats that source and retained-key validation; missing or
+drifted source state leaves the authority unavailable. Publish before the
+authorization expires and verify the public endpoint readback. The operation
+record is permission to publish the already validated evidence only; it is not
+journey evidence or a release approval.
 Never convert a failed or partial collector result into `present` manually.

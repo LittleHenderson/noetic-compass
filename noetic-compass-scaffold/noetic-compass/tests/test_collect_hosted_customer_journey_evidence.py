@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+import base64
 from datetime import UTC, datetime, timedelta
+import hashlib
 import importlib.util
 import json
 import os
@@ -48,10 +50,21 @@ TOKEN_B = "token-b-private-value"
 SHARE_TOKEN = "share_token_private_value_0123456789abcdef01234567"
 TRACE_ID = "cas-live-0123456789abcdef-0123456789ab"
 AUDIT_ID = "cas-audit-0123456789abcdef"
+PSEUDONYM_KEY_ID = "cpk_0123456789abcdef0123456789abcdef"
+PSEUDONYM_KEY = hashlib.sha256(b"hosted-collector-test-key").digest()
+PSEUDONYM_KEYRING = json.dumps(
+    {
+        PSEUDONYM_KEY_ID: "base64url:"
+        + base64.urlsafe_b64encode(PSEUDONYM_KEY).rstrip(b"=").decode("ascii")
+    },
+    separators=(",", ":"),
+)
 RUNTIME_ENV = {
     "RENDER_SERVICE_ID": collector_module.PRODUCTION_SERVICE_ID,
     "RENDER_GIT_COMMIT": MASTER_SHA,
     collector_module.RENDER_API_KEY_ENV: RENDER_TOKEN,
+    collector_module.PSEUDONYM_ACTIVE_KEY_ID_ENV: PSEUDONYM_KEY_ID,
+    collector_module.PSEUDONYM_KEYRING_ENV: PSEUDONYM_KEYRING,
 }
 ANCHOR_MANIFEST_SHA = "c" * 64
 ANCHOR_BUCKET = "acceptance-evidence-bucket"
@@ -394,8 +407,8 @@ def _collect(
         nonce="0123456789abcdef01234567",
         runtime_environment=RUNTIME_ENV,
     )
-    evidence, artifact = collector.collect()
-    return transport, evidence, artifact
+    evidence, artifact, selector = collector.collect()
+    return transport, evidence, artifact, selector
 
 
 def _bound_collector() -> Any:
@@ -413,7 +426,7 @@ def _bound_collector() -> Any:
 
 
 def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
-    transport, evidence, artifact = _collect()
+    transport, evidence, artifact, selector = _collect()
 
     assert evidence["gate"] == "hosted_customer_journey"
     assert evidence["audit"]["terminal_status"] == "completed"
@@ -421,6 +434,13 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
     assert evidence["packet_download"]["worm_receipt_bound"] is True
     assert evidence["share"]["scope"] == "read_only"
     assert evidence["share"]["revoked_fetch_http_status"] == 404
+    assert evidence["pseudonym_key_id"] == PSEUDONYM_KEY_ID
+    assert evidence["tenant_subject"].startswith("hmac-sha256:")
+    assert evidence["account_subject"].startswith("hmac-sha256:")
+    assert evidence["trace_subject"].startswith("hmac-sha256:")
+    assert evidence["trace_subject"] == artifact["trace_subject"]
+    assert "trace_id_sha256" not in evidence
+    assert "trace_id_sha256" not in artifact
     assert evidence["tenant_isolation"] == {
         "foreign_audit_http_status": 404,
         "foreign_packet_http_status": 404,
@@ -448,6 +468,18 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
     assert evidence["artifact_sha256"] == collector_module._digest_bytes(
         collector_module._canonical_bytes(artifact)
     )
+    primary_tenant = next(
+        str(call["payload"]["tenant_id"])
+        for call in transport.calls
+        if call["path"] == "/platform/tenants"
+    )
+    assert selector == {
+        "schema_version": collector_module.PRIVATE_SELECTOR_SCHEMA_VERSION,
+        "gate": "hosted_customer_journey",
+        "tenant_id": primary_tenant,
+        "account_id": transport.account_a,
+        "audit_id": AUDIT_ID,
+    }
 
     serialized = json.dumps({"evidence": evidence, "artifact": artifact})
     provision_payloads = [
@@ -460,6 +492,7 @@ def test_collects_contract_valid_secret_safe_hosted_journey() -> None:
         TOKEN_A,
         TOKEN_B,
         SHARE_TOKEN,
+        TRACE_ID,
         transport.account_a,
         transport.account_b,
     ]
@@ -811,7 +844,7 @@ def test_render_final_readback_refuses_provider_payload_mutation() -> None:
 
 def test_render_provider_body_is_hashed_and_never_copied_to_output() -> None:
     provider_payload = _render_deploy(hostileEcho=RENDER_TOKEN)
-    _transport, evidence, artifact = _collect(
+    _transport, evidence, artifact, _selector = _collect(
         render_payloads=(provider_payload, provider_payload)
     )
     serialized = json.dumps({"evidence": evidence, "artifact": artifact})
@@ -940,6 +973,7 @@ def test_timestamp_order_and_runtime_identity_fail_closed() -> None:
             master_head_sha=MASTER_SHA,
             deploy_id=DEPLOY_ID,
             runtime_environment={
+                **RUNTIME_ENV,
                 "RENDER_SERVICE_ID": "srv-wrong",
                 "RENDER_GIT_COMMIT": MASTER_SHA,
                 collector_module.RENDER_API_KEY_ENV: RENDER_TOKEN,
@@ -948,7 +982,7 @@ def test_timestamp_order_and_runtime_identity_fail_closed() -> None:
 
 
 def test_idempotent_run_retry_204_revoke_and_source_receipt_binding() -> None:
-    transport, evidence, artifact = _collect(
+    transport, evidence, artifact, _selector = _collect(
         run_transient_once=True, revoke_status=204
     )
     assert transport.run_attempts == 2
@@ -957,6 +991,43 @@ def test_idempotent_run_retry_204_revoke_and_source_receipt_binding() -> None:
     tampered["packet_sha256"] = "f" * 64
     with pytest.raises(collector_module.JourneyFailure, match="diverged"):
         collector_module._validate_output_pair(evidence, tampered)
+
+    legacy = dict(artifact)
+    legacy["trace_id_sha256"] = hashlib.sha256(TRACE_ID.encode()).hexdigest()
+    with pytest.raises(collector_module.JourneyFailure, match="legacy unkeyed"):
+        collector_module._validate_output_pair(evidence, legacy)
+
+
+@pytest.mark.parametrize(
+    "field",
+    ["tenant_subject_sha256", "account_subject_sha256", "trace_id_sha256"],
+)
+def test_safe_receipt_rejects_rebound_legacy_identity_hash_extra(
+    field: str,
+) -> None:
+    _transport, evidence, artifact, _selector = _collect()
+    tampered = dict(artifact)
+    tampered[field] = hashlib.sha256(field.encode("ascii")).hexdigest()
+    rebound = dict(evidence)
+    rebound["artifact_sha256"] = collector_module._digest_bytes(
+        collector_module._canonical_bytes(tampered)
+    )
+
+    with pytest.raises(collector_module.JourneyFailure, match="legacy unkeyed"):
+        collector_module._validate_output_pair(rebound, tampered)
+
+
+def test_safe_receipt_rejects_rebound_unknown_raw_extra_field() -> None:
+    _transport, evidence, artifact, _selector = _collect()
+    tampered = dict(artifact)
+    tampered["debug_raw_account_id"] = "acct-" + "a" * 32
+    rebound = dict(evidence)
+    rebound["artifact_sha256"] = collector_module._digest_bytes(
+        collector_module._canonical_bytes(tampered)
+    )
+
+    with pytest.raises(collector_module.JourneyFailure, match="fields drifted"):
+        collector_module._validate_output_pair(rebound, tampered)
 
 
 def test_production_image_contains_collector() -> None:

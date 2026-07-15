@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from datetime import UTC, datetime
+from collections.abc import Mapping
+from datetime import UTC, datetime, timedelta
+import base64
+import hashlib
 import importlib.util
 import json
 import os
@@ -20,6 +23,25 @@ from api.services.crm import (
     Lead,
     LeadSubmission,
 )
+from api.services.customer_production_pseudonyms import (
+    PSEUDONYMIZATION_SCHEME,
+    CustomerProductionPseudonymizer,
+)
+from api.services.production.state_substrate import LedgerRecord
+from api.services.production.state_substrate.memory_store import InMemoryStateStore
+from api.services.revisioned_contact_store import (
+    CONTACT_MIGRATION_KIND,
+    CONTACT_MIGRATION_SCHEMA_VERSION,
+    CONTACT_STATE_TENANT,
+)
+from api.services.support_ticket_state_store import (
+    SUPPORT_TICKET_JSONL_MIGRATION_ID,
+    StateStoreSupportTicketStore,
+)
+from api.services.support_public_intake_receipts import (
+    SupportPublicIntakeReceiptStore,
+)
+from api.services.support_tickets import SupportTicket
 
 
 MODULE_PATH = (
@@ -33,6 +55,19 @@ collector_module = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = collector_module
 SPEC.loader.exec_module(collector_module)
 
+FINALIZER_MODULE_PATH = (
+    Path(__file__).resolve().parents[1]
+    / "scripts"
+    / "build_support_crm_acceptance_evidence.py"
+)
+FINALIZER_SPEC = importlib.util.spec_from_file_location(
+    "support_crm_acceptance_finalizer", FINALIZER_MODULE_PATH
+)
+assert FINALIZER_SPEC and FINALIZER_SPEC.loader
+finalizer_module = importlib.util.module_from_spec(FINALIZER_SPEC)
+sys.modules[FINALIZER_SPEC.name] = finalizer_module
+FINALIZER_SPEC.loader.exec_module(finalizer_module)
+
 
 FIXED_NOW = datetime(2026, 7, 15, 0, 2, tzinfo=UTC)
 MASTER_SHA = "a" * 40
@@ -41,11 +76,20 @@ NONCE = "0123456789abcdef01234567"
 LEAD_ID = "lead-0123456789abcdef"
 EXTERNAL_ID = "rec0123456789ABCD"
 PRIVACY_VERSION = "privacy-2026-07-15"
-CONSENT_AT = "2026-07-15T00:00:00Z"
-VERIFIED_AT = "2026-07-15T00:01:00Z"
+CONSENT_AT = "2026-07-15T00:02:00Z"
+VERIFIED_AT = "2026-07-15T00:02:00Z"
 RESPONSE_DIGEST = "sha256:" + ("b" * 64)
 PRIVACY_BODY = b"<!doctype html><title>Final privacy notice</title>"
 PRIVACY_CONTENT_SHA256 = collector_module._digest_bytes(PRIVACY_BODY)
+PSEUDONYM_KEY_ID = "cpk_0123456789abcdef0123456789abcdef"
+PSEUDONYM_KEY = hashlib.sha256(b"crm-collector-test-key").digest()
+PSEUDONYM_KEYRING = json.dumps(
+    {
+        PSEUDONYM_KEY_ID: "base64url:"
+        + base64.urlsafe_b64encode(PSEUDONYM_KEY).rstrip(b"=").decode("ascii")
+    },
+    separators=(",", ":"),
+)
 
 
 def _runtime_env() -> dict[str, str]:
@@ -55,6 +99,12 @@ def _runtime_env() -> dict[str, str]:
         "RENDER_API_KEY": "rnd-secret-never-output",
         "NC_CRM_PROVIDER": "airtable",
         "NC_CRM_LEAD_STORE_PATH": collector_module.PRODUCTION_LEAD_STORE_PATH,
+        "NC_CRM_LEAD_STORE_BACKEND": "state_store",
+        "NC_STATE_LEDGER_ENABLED": "true",
+        "NC_STATE_LEDGER_READ_AUTHORITY": "true",
+        "NC_DATABASE_URL": "postgresql://test.invalid/test",
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON": PSEUDONYM_KEYRING,
+        "NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID": PSEUDONYM_KEY_ID,
         "NC_AIRTABLE_TOKEN": "pat-secret-never-output",
         "NC_AIRTABLE_BASE_ID": collector_module.PRODUCTION_AIRTABLE_BASE_ID,
         "NC_AIRTABLE_TABLE_NAME": collector_module.PRODUCTION_AIRTABLE_TABLE_NAME,
@@ -227,18 +277,20 @@ def _collector(
 
 
 def test_collects_provider_bound_pii_free_open_fragment(tmp_path: Path) -> None:
-    source, fragment = _collector(tmp_path).collect()
+    source, fragment, selector = _collector(tmp_path).collect()
 
     assert source["provider"] == "airtable"
     assert source["adapter_response_digest"] == RESPONSE_DIGEST
-    assert source["lead_id_sha256"] != LEAD_ID
-    assert source["trace_id_sha256"] != "req-collector"
-    assert source["airtable_record_id_sha256"] != EXTERNAL_ID
+    assert source["lead_subject"].startswith("hmac-sha256:")
+    assert source["trace_subject"].startswith("hmac-sha256:")
+    assert "trace_id_sha256" not in source
+    assert source["airtable_record_subject"].startswith("hmac-sha256:")
     assert source["render_deploy_status"] == "live"
     assert source["render_deploy_commit_sha"] == MASTER_SHA
     assert source["airtable_base_id"] == collector_module.PRODUCTION_AIRTABLE_BASE_ID
     assert source["airtable_owner_value"] == collector_module.PRODUCTION_AIRTABLE_OWNER_VALUE
-    assert source["lead_store_path"] == collector_module.PRODUCTION_LEAD_STORE_PATH
+    assert source["lead_store_backend"] == "state_store"
+    assert source["state_store_backend"] == "postgres"
     assert fragment["status"] == "OPEN"
     assert fragment["source_receipt"] == source
     assert collector_module._digest_bytes(
@@ -248,8 +300,8 @@ def test_collects_provider_bound_pii_free_open_fragment(tmp_path: Path) -> None:
     assert fragment["crm_lead"] == {
         "system": "airtable",
         "provider": "airtable",
-        "lead_id_sha256": source["lead_id_sha256"],
-        "airtable_record_id_sha256": source["airtable_record_id_sha256"],
+        "lead_subject": source["lead_subject"],
+        "airtable_record_subject": source["airtable_record_subject"],
         "adapter_response_digest": RESPONSE_DIGEST,
         "source_receipt_sha256": fragment["source_receipt_sha256"],
         "persisted": True,
@@ -271,9 +323,15 @@ def test_collects_provider_bound_pii_free_open_fragment(tmp_path: Path) -> None:
         "consent_schema_version": CRM_CONSENT_SCHEMA_VERSION,
         "recorded_at_utc": CONSENT_AT,
     }
+    assert selector == {
+        "schema_version": collector_module.PRIVATE_LEAD_SELECTOR_SCHEMA_VERSION,
+        "gate": "support_crm",
+        "crm_lead_id": LEAD_ID,
+    }
     rendered = json.dumps([source, fragment], sort_keys=True)
     assert "@acceptance.invalid" not in rendered
     assert LEAD_ID not in rendered
+    assert "req-collector" not in rendered
     assert EXTERNAL_ID not in rendered
     assert "pat-secret" not in rendered
 
@@ -375,18 +433,18 @@ def test_adapter_receipt_must_be_airtable_bound(
         _collector(tmp_path, lead=lead).collect()
 
 
-def test_airtable_record_id_is_hashed_only_after_shape_validation(tmp_path: Path) -> None:
+def test_airtable_record_id_is_keyed_only_after_shape_validation(tmp_path: Path) -> None:
     with pytest.raises(collector_module.CRMCollectionFailure, match="record ID is invalid"):
         _collector(tmp_path, lead=_synced_lead(external_id="not-airtable")).collect()
 
 
 def test_timestamp_order_fails_closed(tmp_path: Path) -> None:
-    lead = _synced_lead(consent_recorded_at_utc="2026-07-15T00:01:01Z")
+    lead = _synced_lead(consent_recorded_at_utc="2026-07-15T00:02:01Z")
     with pytest.raises(collector_module.CRMCollectionFailure, match="not monotonic"):
         _collector(
             tmp_path,
             lead=lead,
-            response=_response(consent_recorded_at_utc="2026-07-15T00:01:01Z"),
+            response=_response(consent_recorded_at_utc="2026-07-15T00:02:01Z"),
         ).collect()
 
 
@@ -404,10 +462,12 @@ def test_timestamp_order_fails_closed(tmp_path: Path) -> None:
             "does not match the exact production contract",
         ),
         (
-            "NC_CRM_LEAD_STORE_PATH",
-            "/tmp/leads.jsonl",
-            "must be exact /var/customer-support/leads.jsonl",
+            "NC_CRM_LEAD_STORE_BACKEND",
+            "auto",
+            "must be exact state_store",
         ),
+        ("NC_STATE_LEDGER_READ_AUTHORITY", "false", "must be exact true"),
+        ("NC_DATABASE_URL", "sqlite:///tmp.db", "requires shared Postgres"),
     ],
 )
 def test_runtime_and_provider_binding_fail_closed(
@@ -494,15 +554,34 @@ def test_live_privacy_bytes_must_match_server_owned_digest(tmp_path: Path) -> No
 
 
 def test_fragment_tampering_breaks_source_receipt_binding(tmp_path: Path) -> None:
-    source, fragment = _collector(tmp_path).collect()
+    source, fragment, _selector = _collector(tmp_path).collect()
     fragment["crm_lead"]["adapter_response_digest"] = "sha256:" + ("c" * 64)
 
     with pytest.raises(collector_module.CRMCollectionFailure, match="diverged"):
         collector_module._validate_output_pair(source, fragment)
 
 
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("pseudonymization_scheme", "hmac-sha512-v1"),
+        ("pseudonym_key_id", "cpk_fedcba9876543210fedcba9876543210"),
+    ],
+)
+def test_fragment_pseudonym_metadata_cannot_crosswire_source_receipt(
+    tmp_path: Path, field: str, value: str
+) -> None:
+    source, fragment, _selector = _collector(tmp_path).collect()
+    fragment[field] = value
+
+    with pytest.raises(
+        collector_module.CRMCollectionFailure, match="pseudonym metadata diverged"
+    ):
+        collector_module._validate_output_pair(source, fragment)
+
+
 def test_embedded_source_receipt_is_rehashed_not_shape_checked(tmp_path: Path) -> None:
-    source, fragment = _collector(tmp_path).collect()
+    source, fragment, _selector = _collector(tmp_path).collect()
     fragment["source_receipt"]["render_deploy_trigger"] = "manual"
 
     with pytest.raises(collector_module.CRMCollectionFailure, match="embedded source"):
@@ -510,7 +589,7 @@ def test_embedded_source_receipt_is_rehashed_not_shape_checked(tmp_path: Path) -
 
 
 def test_airtable_contract_tampering_breaks_embedded_receipt(tmp_path: Path) -> None:
-    source, fragment = _collector(tmp_path).collect()
+    source, fragment, _selector = _collector(tmp_path).collect()
     source["airtable_owner_value"] = "Someone Else"
     fragment["source_receipt"] = dict(source)
     rebound = collector_module._digest_bytes(collector_module._canonical_bytes(source))
@@ -524,7 +603,7 @@ def test_airtable_contract_tampering_breaks_embedded_receipt(tmp_path: Path) -> 
 
 
 def test_atomic_output_is_owner_only_and_canonical(tmp_path: Path) -> None:
-    source, _fragment = _collector(tmp_path).collect()
+    source, _fragment, _selector = _collector(tmp_path).collect()
     target = tmp_path / "receipt.json"
 
     collector_module._atomic_write(target, source)
@@ -550,3 +629,177 @@ def test_production_image_contains_the_bounded_collector() -> None:
         "COPY scripts/collect_airtable_crm_acceptance_source.py "
         "scripts/collect_airtable_crm_acceptance_source.py"
     ) in dockerfile
+
+
+def _support_marker() -> LedgerRecord:
+    return LedgerRecord.new(
+        tenant_id=CONTACT_STATE_TENANT,
+        kind=CONTACT_MIGRATION_KIND,
+        record_id=SUPPORT_TICKET_JSONL_MIGRATION_ID,
+        payload={
+            "schema_version": CONTACT_MIGRATION_SCHEMA_VERSION,
+            "domain": "support_ticket",
+            "source_present": False,
+            "source_sha256": hashlib.sha256(b"").hexdigest(),
+            "line_count": 0,
+            "revision_count": 0,
+            "head_count": 0,
+            "records_sha256": hashlib.sha256(b"[]").hexdigest(),
+        },
+        source="contact_jsonl_migration",
+        now=FIXED_NOW,
+    )
+
+
+def _resolved_support_ticket(
+    store: InMemoryStateStore,
+    *,
+    pseudonymizer: CustomerProductionPseudonymizer,
+    resolve: bool = True,
+    create_receipt: bool = True,
+) -> SupportTicket:
+    store.put(_support_marker(), expected_version=0)
+    tickets = StateStoreSupportTicketStore(store)
+    received = SupportTicket.receive(
+        email="private-support@example.test",
+        name="Private Support Person",
+        organization="Private Support Org",
+        subject="Production support",
+        message="Please help",
+        category="support",
+        source="cascompass_contact",
+        consent_to_contact=True,
+        privacy_notice_version=PRIVACY_VERSION,
+        privacy_notice_content_sha256=PRIVACY_CONTENT_SHA256,
+        privacy_notice_publication_status=CRM_PRIVACY_NOTICE_PRESENT_STATUS,
+        trace_id="trace-private-ticket-collector-finalizer",
+        now=FIXED_NOW - timedelta(minutes=2),
+    )
+    tickets.save(received)
+    if create_receipt:
+        SupportPublicIntakeReceiptStore(
+            store, pseudonymizer=pseudonymizer
+        ).create(received.ticket_id, now=FIXED_NOW - timedelta(minutes=2))
+    routed = received.route(owner="support-owner", now=FIXED_NOW - timedelta(minutes=1))
+    tickets.save(routed)
+    acknowledged = routed.acknowledge(
+        actor="support-owner", now=FIXED_NOW - timedelta(seconds=30)
+    )
+    tickets.save(acknowledged)
+    if not resolve:
+        return acknowledged
+    resolved = acknowledged.resolve(
+        actor="support-owner",
+        summary="Resolved against durable source",
+        now=FIXED_NOW,
+    )
+    tickets.save(resolved)
+    return resolved
+
+
+def _finalize(
+    tmp_path: Path,
+    *,
+    resolve_ticket: bool = True,
+    create_receipt: bool = True,
+    lead_selector_override: str | None = None,
+    ticket_selector_extra: Mapping[str, object] | None = None,
+):
+    source, fragment, lead_selector = _collector(tmp_path).collect()
+    backend = InMemoryStateStore()
+    pseudonymizer = CustomerProductionPseudonymizer(
+        {PSEUDONYM_KEY_ID: PSEUDONYM_KEY}, active_key_id=PSEUDONYM_KEY_ID
+    )
+    ticket = _resolved_support_ticket(
+        backend,
+        pseudonymizer=pseudonymizer,
+        resolve=resolve_ticket,
+        create_receipt=create_receipt,
+    )
+    if lead_selector_override is not None:
+        lead_selector = {**lead_selector, "crm_lead_id": lead_selector_override}
+    ticket_selector = {
+        "schema_version": (
+            finalizer_module.PRIVATE_TICKET_SELECTOR_SCHEMA_VERSION
+        ),
+        "gate": "support_crm",
+        "support_ticket_id": ticket.ticket_id,
+    }
+    if ticket_selector_extra is not None:
+        ticket_selector.update(ticket_selector_extra)
+    result = finalizer_module.build(
+        source_receipt=source,
+        fragment=fragment,
+        private_lead_selector=lead_selector,
+        private_ticket_selector=ticket_selector,
+        store=backend,
+        pseudonymizer=pseudonymizer,
+        support_ack_sla_seconds=600,
+        now=FIXED_NOW + timedelta(minutes=1),
+    )
+    return result, ticket
+
+
+def test_finalizer_builds_authority_valid_pseudonymous_evidence(
+    tmp_path: Path,
+) -> None:
+    (evidence, artifact, selector), ticket = _finalize(tmp_path)
+
+    rendered_public = json.dumps([evidence, artifact], sort_keys=True)
+    assert ticket.ticket_id not in rendered_public
+    assert LEAD_ID not in rendered_public
+    assert selector == {
+        "schema_version": finalizer_module.PRIVATE_SELECTOR_SCHEMA_VERSION,
+        "gate": "support_crm",
+        "support_ticket_id": ticket.ticket_id,
+        "crm_lead_id": LEAD_ID,
+    }
+    assert evidence["pseudonymization_scheme"] == (
+        PSEUDONYMIZATION_SCHEME
+    )
+    assert evidence["pseudonym_key_id"] == PSEUDONYM_KEY_ID
+    assert evidence["support_ticket"]["ticket_record_version"] == ticket.version
+    assert evidence["crm_source_receipt"]["schema_version"] == (
+        "cas_harness_airtable_crm_acceptance_source.v3"
+    )
+    assert all(
+        legacy not in rendered_public
+        for legacy in (
+            "ticket_id_sha256",
+            "lead_id_sha256",
+            "airtable_record_id_sha256",
+        )
+    )
+
+
+def test_finalizer_rejects_unresolved_ticket(tmp_path: Path) -> None:
+    with pytest.raises(
+        finalizer_module.SupportCRMFinalizationFailure,
+        match="not a resolved within-SLA",
+    ):
+        _finalize(tmp_path, resolve_ticket=False)
+
+
+def test_finalizer_rejects_cross_wired_private_lead_selector(tmp_path: Path) -> None:
+    with pytest.raises(
+        finalizer_module.SupportCRMFinalizationFailure, match="cross-wired"
+    ):
+        _finalize(tmp_path, lead_selector_override="lead-private-cross-wire")
+
+
+def test_finalizer_rejects_direct_seed_without_public_intake_receipt(
+    tmp_path: Path,
+) -> None:
+    with pytest.raises(
+        finalizer_module.SupportCRMFinalizationFailure,
+        match="public-intake receipt is absent or invalid",
+    ):
+        _finalize(tmp_path, create_receipt=False)
+
+
+def test_finalizer_rejects_self_asserted_create_http_status(tmp_path: Path) -> None:
+    with pytest.raises(
+        finalizer_module.SupportCRMFinalizationFailure,
+        match="private support-ticket selector is invalid",
+    ):
+        _finalize(tmp_path, ticket_selector_extra={"create_http_status": 201})

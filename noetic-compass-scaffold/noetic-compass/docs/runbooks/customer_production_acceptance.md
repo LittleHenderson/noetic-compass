@@ -201,8 +201,9 @@ active-key-missing keyring. The same parsing, strength, and secret-isolation
 checks run when the variables are present even if accounts are disabled;
 accounts-disabled with neither variable remains valid.
 
-Publication authorizations and accounts/billing evidence use a second,
-independent rotation domain. Configure both settings before enabling accounts:
+Publication authorizations and customer-production gate identities use a
+second, independent rotation domain. Configure both settings before enabling
+accounts or collecting/publishing source-bound customer evidence:
 
 - `NC_CUSTOMER_PRODUCTION_PSEUDONYM_KEYRING_JSON`: the same canonical
   `base64url:` 32--64 byte keyring shape, with independently generated key
@@ -210,6 +211,12 @@ independent rotation domain. Configure both settings before enabling accounts:
   database, provider, signing, or authentication secret;
 - `NC_CUSTOMER_PRODUCTION_PSEUDONYM_ACTIVE_KEY_ID`: an opaque
   `cpk_<32 lowercase hex>` label used for new records.
+
+The keyring and raw key material are production-service secrets. They must
+never appear in GitHub Actions, operator command arguments, public evidence,
+logs, or a repository commit. The opaque active key ID may appear only as
+public `pseudonym_key_id`; public evidence otherwise carries only the exact
+`hmac-sha256-tenant-scoped-v1` scheme and domain-separated keyed subjects.
 
 `cas_harness_acceptance_publication_authorization.v2` publishes only keyed
 tenant/account subjects. Its private content-addressed identity row retains the
@@ -227,25 +234,65 @@ every active serve. The offline public verifier can validate only pseudonym
 shape; it is not a substitute for this private live-source check. Do not reuse
 the billing provider-reference hash key for this purpose.
 
-This remains a deliberately bounded migration. Hosted-customer-journey and
-support/CRM raw-source bindings are not migrated by this checkpoint and their
-gates remain `OPEN`. Alert acknowledgement evidence discards the raw actor ID
-after validating the required human role/type instead of publishing a stable
-actor hash. Do not claim that every CAS artifact has completed the keyed
-migration until the deferred source-bound contracts are implemented and
+`hosted_customer_journey` gate evidence v3 publishes keyed `tenant_subject`,
+`account_subject`, and `trace_subject` values and binds its safe artifact to
+exact receipt schema `cas_hosted_customer_journey_receipt.v4`. The collector
+writes raw tenant and account IDs only to a separate mode-`0600` private
+selector. The raw `audit_id` intentionally remains public as the high-entropy
+durable audit/packet locator; the selector duplicates it only for exact source
+lookup. Before publication, the API reopens the active account and exact
+durable completed audit, recomputes the keyed subjects with the evidence's
+retained key ID, and stores a private content-addressed binding. It repeats the
+source check before public mutation and on every active serve.
+
+`support_crm` gate evidence v3 publishes keyed ticket, CRM lead, Airtable
+record, and request-trace subjects. Its Airtable source receipt and `OPEN`
+fragment are exact v3. The source collector and finalizer require PostgreSQL
+`state_store` authority, completed lead/support migration markers, and
+immutable revision/current-head agreement. Both contact domains and the keyed
+trace use exact internal authority scope
+`CONTACT_STATE_TENANT="__cas_customer_operations__"`; that is a global storage
+scope, not customer tenant ownership. The request trace is caller-supplied and
+potentially low entropy, so neither its raw value nor `trace_id_sha256` is an
+accepted public field. Raw ticket and lead IDs exist only in owner-only
+selectors and private bindings. Before publication and on every active serve,
+the API reopens both durable sources, recomputes the subjects, and revalidates
+resolved-ticket SLA and Airtable consent/provider facts. Exact support-create
+HTTP `201` comes only from the immutable private
+`support_public_intake_receipt.v1`, which binds the initial ticket revision,
+request trace, server-owned `cascompass_contact` source, consent/privacy facts,
+and receipt envelope under a retained HMAC key. The private selector carries
+no status assertion. A missing or invalid receipt keeps `support_crm` `OPEN`,
+even though the customer-authoritative ticket route remains available and may
+have returned `201` after its two bounded auxiliary receipt attempts. Receipt
+creation is per-ticket, create-only, and idempotent; it cannot be backfilled
+after ticket lifecycle movement. Server status `201` proves route execution,
+not that the client received the response bytes.
+
+Legacy public `*_id_sha256`, `tenant_subject_sha256`,
+`account_subject_sha256`, and `trace_id_sha256` identity fields are not
+accepted for these migrated contracts. Content and high-entropy operational
+SHA-256 values such as packet, share-token, adapter-response,
+provider-response, receipt, and artifact digests remain part of their exact
+evidence contracts. Alert acknowledgement
+evidence continues to discard the raw actor ID after validating the required
+human role/type instead of publishing a stable actor hash. These source-bound
+capabilities do not close a gate by themselves; all affected gates remain
+`OPEN` until their real evidence is collected, authorized, published, and
 independently verified.
 
-Rotate without rewriting evidence:
+Rotate without rewriting evidence or private bindings:
 
-1. Add the new key while retaining every key referenced by a durable record,
-   deploy, and verify that old public attestations still load exactly.
-2. Change only the active key ID, deploy, and create new attestations under the
-   new key ID.
-3. Re-attest any evidence that must move to the new key; do not transform an
-   old digest or copy its asserted facts into a new record automatically.
-4. Remove an old key only after no retained attestation or revocation status
-   references it. A referenced but missing key makes the record unavailable
-   and the gate fails closed.
+1. Add the new key while retaining every key referenced by any durable
+   authorization, attestation, gate evidence, or private source binding;
+   deploy and verify that existing active records still load exactly.
+2. Change only the active key ID, deploy, and create new records/evidence under
+   the new key ID.
+3. Recollect and republish any evidence that must move to the new key. Do not
+   transform an old digest or copy its asserted facts automatically.
+4. Remove an old key only after no retained public record, private binding,
+   active authority, or revocation status references it. A referenced but
+   missing key makes the record unavailable and the gate fails closed.
 
 Legacy `cas_harness_human_attestation.v1` records used stable unkeyed hashes and
 have no durable private identity binding. They remain historical artifacts but
@@ -347,12 +394,26 @@ python -m scripts.publish_customer_production_acceptance_authority publish \
   --operation-reason authorized_publication
 ```
 
-For `--gate accounts_billing`, also pass
-`--accounts-billing-source /path/to/mode-0600-private-source.json`; the file
-must contain exactly `{"tenant_id":"...","invoice_record_id":"..."}` and
-must be deleted through the operator's approved secure-file procedure after
-the exact readback succeeds. Never add that private selector to the public gate
-document or evidence bundle.
+Three gates require one matching owner-only source selector at publication:
+
+- `accounts_billing`: pass
+  `--accounts-billing-source /path/to/mode-0600-private-source.json`; the file
+  contains exactly `tenant_id` and `invoice_record_id`.
+- `hosted_customer_journey`: pass
+  `--hosted-journey-source /path/to/hosted-customer-journey-selector.json` from
+  the v3 collector/v4 receipt run. Its exact selector schema carries
+  `tenant_id`, `account_id`, and `audit_id`.
+- `support_crm`: pass
+  `--support-crm-source /path/to/support-crm-private-source-selector.json` from
+  `build_support_crm_acceptance_evidence.py`. Its exact selector schema carries
+  `support_ticket_id` and `crm_lead_id`.
+
+The publisher rejects a missing selector for its matching gate and rejects any
+selector supplied to a different gate. On POSIX, hosted/support selectors must
+be mode `0600`. Raw selector values are never copied to stdout, stderr, public
+evidence, WORM artifacts, or public operation records. Delete each private file
+through the operator's approved secure-file procedure only after exact
+publication and active endpoint readback succeed.
 
 The publisher parses that URI as an exact same-service content-addressed path,
 loads the record directly from the shared StateStore (it never dereferences an
@@ -864,23 +925,31 @@ All nine gates must be `present`, current, and authoritative:
    Render deploy metadata.
 3. `hosted_customer_journey`: hosted tenant audit, terminal verdict, verified
    packet download, bound WORM receipt, read-only share lifecycle, and
-   cross-tenant `404` checks. Collect this exact lifecycle with
+   cross-tenant `404` checks. Tenant/account/trace identities are keyed; the
+   raw high-entropy `audit_id` remains the intentional public audit/packet
+   locator. Collect this exact lifecycle with
    `docs/runbooks/hosted_customer_journey_acceptance.md`; the narrower hosted
    worker/WORM smoke is necessary but does not satisfy this full gate.
 4. `accounts_billing`: account lifecycle and isolation, durable quota and
    idempotency behavior, and live Stripe subscription/invoice/webhook/meter
-   reconciliation using hashed provider identifiers only.
+   reconciliation using keyed customer/provider subjects only.
 5. `legal_publication_approval`: live Legal, Privacy, and Terms pages with
    exact hashes, approved by legal, privacy, and product owners.
 6. `support_crm`: real support-ticket persistence/routing/SLA/resolution and
-   Airtable lead persistence, deduplication, ownership, consent, and attribution. The CRM proof
-   embeds and re-hashes the complete secret-safe source receipt, including the exact live Render
-   deploy/commit/disk, Airtable base/table/field/owner contract, hashed Airtable record ID, adapter
-   response digest, and exact consent timestamp/server-owned privacy version/content hash without
-   PII. The privacy content hash must equal the authoritative legal-publication privacy hash.
-   Collect that source first with
-   `docs/runbooks/airtable_crm_acceptance_source.md`; it remains `OPEN` until the separate resolved
-   support-ticket/SLA proof is also present.
+   Airtable lead persistence, deduplication, ownership, consent, and
+   attribution. The CRM source v3 proof embeds and re-hashes the complete
+   secret-safe source receipt, including exact live Render deploy/commit,
+   Postgres migration-marker/revision/head facts, Airtable
+   base/table/field/owner contract, keyed lead/Airtable/request-trace subjects,
+   adapter response digest, and exact consent timestamp/server-owned privacy
+   version/content hash without PII. The privacy content hash must equal the
+   authoritative legal-publication privacy hash. Collect the source, then run
+   the non-mutating support/CRM finalizer against an already resolved
+   within-SLA StateStore ticket as documented in
+   `docs/runbooks/airtable_crm_acceptance_source.md`. The source fragment
+   remains `OPEN` until that separate real support lifecycle is present; even a
+   valid final candidate remains `OPEN` operationally until publication and
+   exact active-authority verification succeed.
 7. `incident_tabletop`: closed incident and actions, verified recovery and
    rotation, hashed postmortem, and current cross-functional tabletop.
 8. `alert_delivery`: P1 delivery to on-call and incident channel,

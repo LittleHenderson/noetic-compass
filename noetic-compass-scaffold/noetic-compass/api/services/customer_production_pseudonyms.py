@@ -42,6 +42,11 @@ AIRTABLE_RECORD_DOMAIN = "airtable-record"
 ALERT_ACKNOWLEDGEMENT_ACTOR_DOMAIN = "alert-acknowledgement-actor"
 HOSTED_JOURNEY_CONTENT_BINDING_DOMAIN = "hosted-journey-content-binding"
 SUPPORT_CRM_CONTENT_BINDING_DOMAIN = "support-crm-content-binding"
+HOSTED_JOURNEY_TRACE_DOMAIN = "hosted-journey-trace"
+SUPPORT_CRM_REQUEST_TRACE_DOMAIN = "support-crm-request-trace"
+SUPPORT_PUBLIC_INTAKE_CONTENT_BINDING_DOMAIN = (
+    "support-public-intake-content-binding"
+)
 
 ALLOWED_DOMAINS = frozenset(
     {
@@ -60,6 +65,9 @@ ALLOWED_DOMAINS = frozenset(
         ALERT_ACKNOWLEDGEMENT_ACTOR_DOMAIN,
         HOSTED_JOURNEY_CONTENT_BINDING_DOMAIN,
         SUPPORT_CRM_CONTENT_BINDING_DOMAIN,
+        HOSTED_JOURNEY_TRACE_DOMAIN,
+        SUPPORT_CRM_REQUEST_TRACE_DOMAIN,
+        SUPPORT_PUBLIC_INTAKE_CONTENT_BINDING_DOMAIN,
     }
 )
 
@@ -329,6 +337,7 @@ __all__ = [
     "CRM_LEAD_DOMAIN",
     "CustomerProductionPseudonymizer",
     "HOSTED_JOURNEY_CONTENT_BINDING_DOMAIN",
+    "HOSTED_JOURNEY_TRACE_DOMAIN",
     "KEY_ID_PATTERN",
     "PSEUDONYMIZATION_SCHEME",
     "PUBLICATION_ACCOUNT_DOMAIN",
@@ -337,6 +346,8 @@ __all__ = [
     "SUBJECT_PATTERN",
     "SUPPORT_TICKET_DOMAIN",
     "SUPPORT_CRM_CONTENT_BINDING_DOMAIN",
+    "SUPPORT_CRM_REQUEST_TRACE_DOMAIN",
+    "SUPPORT_PUBLIC_INTAKE_CONTENT_BINDING_DOMAIN",
     "TENANT_DOMAIN",
     "customer_production_pseudonym_key_matches_secret",
     "parse_customer_production_pseudonym_keyring",

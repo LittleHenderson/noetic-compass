@@ -16,7 +16,9 @@ sys.path.insert(0, str(APP_ROOT))
 sys.path.insert(0, str(ROOT / "scripts"))
 
 from api.services.customer_production_acceptance_authority import (  # noqa: E402
+    AcceptanceAuthorityHostedJourneySourceUnavailable,
     AcceptanceAuthorityInvalid,
+    AcceptanceAuthoritySupportCRMSourceUnavailable,
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
@@ -302,10 +304,16 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
 
         for module in (verifier, authority_service):
             self.assertEqual(module.PRODUCTION_SERVICE_NAME, service_name)
-            self.assertEqual(module.CRM_RENDER_DISK_ID, disk_id)
-            self.assertEqual(module.CRM_RENDER_DISK_NAME, disk_name)
-            self.assertEqual(module.CRM_RENDER_DISK_MOUNT_PATH, disk_mount)
-            self.assertEqual(module.CRM_LEAD_STORE_PATH, lead_path)
+            for retired_public_authority_constant in (
+                "CRM_RENDER_DISK_ID",
+                "CRM_RENDER_DISK_NAME",
+                "CRM_RENDER_DISK_MOUNT_PATH",
+                "CRM_LEAD_STORE_PATH",
+            ):
+                self.assertFalse(
+                    hasattr(module, retired_public_authority_constant),
+                    retired_public_authority_constant,
+                )
         self.assertEqual(crm_collector.PRODUCTION_SERVICE_NAME, service_name)
         self.assertEqual(crm_collector.PRODUCTION_DISK_ID, disk_id)
         self.assertEqual(crm_collector.PRODUCTION_DISK_NAME, disk_name)
@@ -350,7 +358,7 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             active_key_id=pseudonym_key_id,
         )
 
-        class ShapeOnlyAccountsBinding:
+        class ShapeOnlySourceBinding:
             """This test covers schema alignment; live source binding is separate."""
 
             def assert_matches(self, evidence, *, evidence_sha256):  # type: ignore[no-untyped-def]
@@ -436,8 +444,18 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 human_attestation_store=attestations,
                 publication_authorization_store=authorization_store,
                 accounts_billing_source_binding_store=(
-                    ShapeOnlyAccountsBinding()
+                    ShapeOnlySourceBinding()
                     if gate == "accounts_billing"
+                    else None
+                ),
+                hosted_journey_source_binding_store=(
+                    ShapeOnlySourceBinding()
+                    if gate == "hosted_customer_journey"
+                    else None
+                ),
+                support_crm_source_binding_store=(
+                    ShapeOnlySourceBinding()
+                    if gate == "support_crm"
                     else None
                 ),
             )
@@ -454,6 +472,137 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             loaded = store.load(gate, now=NOW)
             self.assertEqual(loaded.sha256, published.sha256)
             self.assertEqual(loaded.gate, gate)
+
+    def test_source_bound_gates_fail_before_public_mutation_and_while_serving(
+        self,
+    ) -> None:
+        pseudonymizer = CustomerProductionPseudonymizer(
+            {
+                "cpk_0123456789abcdef0123456789abcdef": hashlib.sha256(
+                    b"source-bound-authority-ordering-test"
+                ).digest()
+            },
+            active_key_id="cpk_0123456789abcdef0123456789abcdef",
+        )
+
+        class AlwaysValidSourceBinding:
+            def assert_matches(self, evidence, *, evidence_sha256):  # type: ignore[no-untyped-def]
+                return None
+
+        cases = (
+            (
+                "hosted_customer_journey",
+                AcceptanceAuthorityHostedJourneySourceUnavailable,
+                "_hosted_journey_source_bindings",
+            ),
+            (
+                "support_crm",
+                AcceptanceAuthoritySupportCRMSourceUnavailable,
+                "_support_crm_source_bindings",
+            ),
+        )
+        for gate, failure, binding_attribute in cases:
+            with self.subTest(gate=gate):
+                payload = _gate_payloads()[gate]
+                payload["master_head_sha"] = MASTER_SHA
+                payload["deploy_id"] = DEPLOY_ID
+                payload["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[gate][
+                    "noetic-production-live"
+                ]
+                payload["artifact_sha256"] = _digest(f"source-bound-{gate}")
+                evidence_sha256 = hashlib.sha256(
+                    canonicalize_acceptance_evidence(gate, payload, now=NOW)
+                ).hexdigest()
+
+                blocked_backend = InMemoryStateStore()
+                blocked_authorizations = AcceptancePublicationAuthorizationStore(
+                    blocked_backend,
+                    primary_tenant_id="primary",
+                    pseudonymizer=pseudonymizer,
+                )
+                blocked_authorization = blocked_authorizations.create(
+                    actor_tenant_id="primary",
+                    actor_account_id="acct-" + "a" * 32,
+                    actor_role="owner",
+                    gate=gate,
+                    master_head_sha=MASTER_SHA,
+                    deploy_id=DEPLOY_ID,
+                    evidence_sha256=evidence_sha256,
+                    expected_head_version=0,
+                    expected_previous_evidence_sha256=None,
+                    reason="authorized_publication",
+                    now=NOW,
+                )
+                blocked = CustomerProductionAcceptanceAuthorityStore(
+                    blocked_backend,
+                    publication_authorization_store=blocked_authorizations,
+                )
+                with self.assertRaises(failure):
+                    blocked.publish(
+                        gate,
+                        payload,
+                        expected_head_version=0,
+                        expected_previous_sha256=None,
+                        authorization_artifact_uri=blocked_authorization.uri,
+                        authorization_artifact_sha256=blocked_authorization.sha256,
+                        operation_reason="authorized_publication",
+                        now=NOW,
+                    )
+                for kind in (
+                    authority_service.REVISION_KIND,
+                    authority_service.OPERATION_KIND,
+                    authority_service.HEAD_KIND,
+                ):
+                    self.assertEqual(
+                        blocked_backend.list(
+                            authority_service.AUTHORITY_TENANT_ID, kind
+                        ),
+                        (),
+                    )
+
+                serving_backend = InMemoryStateStore()
+                serving_authorizations = AcceptancePublicationAuthorizationStore(
+                    serving_backend,
+                    primary_tenant_id="primary",
+                    pseudonymizer=pseudonymizer,
+                )
+                serving_authorization = serving_authorizations.create(
+                    actor_tenant_id="primary",
+                    actor_account_id="acct-" + "a" * 32,
+                    actor_role="owner",
+                    gate=gate,
+                    master_head_sha=MASTER_SHA,
+                    deploy_id=DEPLOY_ID,
+                    evidence_sha256=evidence_sha256,
+                    expected_head_version=0,
+                    expected_previous_evidence_sha256=None,
+                    reason="authorized_publication",
+                    now=NOW,
+                )
+                bindings = AlwaysValidSourceBinding()
+                serving = CustomerProductionAcceptanceAuthorityStore(
+                    serving_backend,
+                    publication_authorization_store=serving_authorizations,
+                    hosted_journey_source_binding_store=(
+                        bindings if gate == "hosted_customer_journey" else None
+                    ),
+                    support_crm_source_binding_store=(
+                        bindings if gate == "support_crm" else None
+                    ),
+                )
+                serving.publish(
+                    gate,
+                    payload,
+                    expected_head_version=0,
+                    expected_previous_sha256=None,
+                    authorization_artifact_uri=serving_authorization.uri,
+                    authorization_artifact_sha256=serving_authorization.sha256,
+                    operation_reason="authorized_publication",
+                    now=NOW,
+                )
+                setattr(serving, binding_attribute, None)
+                with self.assertRaises(failure):
+                    serving.load(gate, now=NOW)
 
     def test_live_route_rejects_verifier_forbidden_origins_and_private_canary_case(self) -> None:
         payloads = _gate_payloads()
@@ -594,7 +743,7 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 adapter_response_digest=_digest("unprefixed")
             ),
             lambda payload: payload["crm_lead"].update(
-                airtable_record_id_sha256=""
+                airtable_record_subject=""
             ),
             lambda payload: payload["consent"].update(consent_to_contact=False),
             lambda payload: payload["consent"].update(
@@ -607,7 +756,7 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
                 payload, "airtable_owner_value", "Other Owner"
             ),
             lambda payload: rebind_source(
-                payload, "lead_store_path", "/tmp/leads.jsonl"
+                payload, "state_store_backend", "memory"
             ),
             lambda payload: rebind_source(
                 payload, "render_deploy_status", "deactivated"
@@ -618,6 +767,107 @@ class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
             mutate(payload)
             with self.assertRaises(AcceptanceAuthorityInvalid):
                 canonicalize_acceptance_evidence("support_crm", payload, now=NOW)
+
+    def test_keyed_customer_identity_contract_is_exact_across_all_layers(self) -> None:
+        self.assertEqual(
+            verifier.CUSTOMER_PSEUDONYMIZATION_SCHEME,
+            authority_service.CUSTOMER_PSEUDONYMIZATION_SCHEME,
+        )
+        self.assertEqual(
+            verifier.CRM_SOURCE_SCHEMA_VERSION,
+            crm_collector.SOURCE_SCHEMA_VERSION,
+        )
+        self.assertEqual(
+            verifier.CRM_SOURCE_SCHEMA_VERSION,
+            authority_service.CRM_SOURCE_SCHEMA_VERSION,
+        )
+        self.assertEqual(
+            verifier.CRM_SOURCE_RECEIPT_KEYS,
+            set(authority_service._CRM_SOURCE_RECEIPT_FIELDS),
+        )
+
+        payloads = _gate_payloads()
+        hosted = payloads["hosted_customer_journey"]
+        support = payloads["support_crm"]
+        self.assertEqual(
+            hosted["pseudonymization_scheme"],
+            verifier.CUSTOMER_PSEUDONYMIZATION_SCHEME,
+        )
+        self.assertTrue(hosted["tenant_subject"].startswith("hmac-sha256:"))
+        self.assertTrue(hosted["account_subject"].startswith("hmac-sha256:"))
+        self.assertTrue(
+            support["support_ticket"]["ticket_subject"].startswith(
+                "hmac-sha256:"
+            )
+        )
+        self.assertTrue(
+            support["crm_lead"]["lead_subject"].startswith("hmac-sha256:")
+        )
+        self.assertTrue(
+            support["crm_lead"]["airtable_record_subject"].startswith(
+                "hmac-sha256:"
+            )
+        )
+
+        legacy_cases = (
+            (
+                "hosted_customer_journey",
+                hosted,
+                lambda payload: payload.update(
+                    tenant_subject_sha256=_digest("legacy-tenant")
+                ),
+            ),
+            (
+                "support_crm",
+                support,
+                lambda payload: payload["support_ticket"].update(
+                    ticket_id_sha256=_digest("legacy-ticket")
+                ),
+            ),
+            (
+                "support_crm",
+                support,
+                lambda payload: payload["crm_source_receipt"].update(
+                    lead_store_path="/var/customer-support/leads.jsonl"
+                ),
+            ),
+        )
+        for gate, base, mutate in legacy_cases:
+            payload = deepcopy(base)
+            payload["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS[gate][
+                "noetic-production-live"
+            ]
+            payload["artifact_sha256"] = _digest(f"keyed-contract-{gate}")
+            canonicalize_acceptance_evidence(gate, payload, now=NOW)
+            mutate(payload)
+            with self.assertRaises(AcceptanceAuthorityInvalid):
+                canonicalize_acceptance_evidence(gate, payload, now=NOW)
+
+    def test_support_crm_authority_rejects_embedded_pseudonym_metadata_crosswire(
+        self,
+    ) -> None:
+        base = _gate_payloads()["support_crm"]
+        base["artifact_uri"] = verifier.LIVE_AUTHORITY_ENDPOINTS["support_crm"][
+            "noetic-production-live"
+        ]
+        base["artifact_sha256"] = _digest(
+            "support-crm-pseudonym-metadata-crosswire"
+        )
+        cases = {
+            "pseudonym_key_id": "cpk_fedcba9876543210fedcba9876543210",
+            "pseudonymization_scheme": "hmac-sha512-v1",
+        }
+
+        for field, value in cases.items():
+            with self.subTest(field=field):
+                payload = deepcopy(base)
+                payload["crm_source_receipt"][field] = value
+                with self.assertRaisesRegex(
+                    AcceptanceAuthorityInvalid, rf"{field} diverges"
+                ):
+                    canonicalize_acceptance_evidence(
+                        "support_crm", payload, now=NOW
+                    )
 
 
 if __name__ == "__main__":

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from datetime import UTC, datetime, timedelta
+import hashlib
 import json
 from types import SimpleNamespace
 from uuid import uuid4
@@ -22,6 +23,17 @@ from api.services.crm.privacy import (
     CRM_PRIVACY_NOTICE_PRESENT_STATUS,
     CRMPrivacyNoticeContract,
 )
+from api.services.customer_production_pseudonyms import (
+    CustomerProductionPseudonymizer,
+)
+from api.services.production.state_substrate.memory_store import InMemoryStateStore
+from api.services.support_public_intake_receipts import (
+    SERVER_OWNED_REQUEST_SOURCE,
+    SupportPublicIntakeReceiptInvalid,
+    SupportPublicIntakeReceiptStore,
+    SupportPublicIntakeReceiptUnavailable,
+)
+from api.services.support_ticket_state_store import StateStoreSupportTicketStore
 from api.services.support_tickets import (
     JsonlSupportTicketStore,
     InMemorySupportTicketStore,
@@ -459,6 +471,9 @@ def test_production_builder_without_path_is_non_durable_for_route_to_refuse() ->
 @pytest.fixture
 def support_client(client):
     old_notice = getattr(client.app.state, "crm_privacy_notice_contract", _MISSING)
+    old_receipts = getattr(
+        client.app.state, "support_public_intake_receipt_store", _MISSING
+    )
     client.app.state.support_tickets = SupportTicketService(
         InMemorySupportTicketStore()
     )
@@ -473,6 +488,11 @@ def support_client(client):
     yield client
     client.app.state.support_tickets = None
     client.app.state.support_public_abuse_guard = None
+    if old_receipts is _MISSING:
+        if hasattr(client.app.state, "support_public_intake_receipt_store"):
+            delattr(client.app.state, "support_public_intake_receipt_store")
+    else:
+        client.app.state.support_public_intake_receipt_store = old_receipts
     if old_notice is _MISSING:
         delattr(client.app.state, "crm_privacy_notice_contract")
     else:
@@ -606,6 +626,123 @@ def test_public_create_returns_non_pii_receipt_and_exact_privacy_url(support_cli
     assert "email" not in body
     assert body["message"] != "Please contact me about an exact model-audit Evidence Packet."
     assert response.headers["Cache-Control"] == "no-store"
+
+
+def _install_public_intake_receipts(support_client):
+    backend = InMemoryStateStore()
+    ticket_store = StateStoreSupportTicketStore(backend)
+    service = SupportTicketService(ticket_store)
+    pseudonymizer = CustomerProductionPseudonymizer(
+        {
+            "cpk_0123456789abcdef0123456789abcdef": hashlib.sha256(
+                b"route-public-intake-receipt-test-key"
+            ).digest()
+        },
+        active_key_id="cpk_0123456789abcdef0123456789abcdef",
+    )
+    receipts = SupportPublicIntakeReceiptStore(
+        backend, pseudonymizer=pseudonymizer
+    )
+    support_client.app.state.support_tickets = service
+    support_client.app.state.support_public_intake_receipt_store = receipts
+    return service, receipts
+
+
+def test_public_route_owns_source_and_persists_exact_intake_receipt(
+    support_client,
+) -> None:
+    service, receipts = _install_public_intake_receipts(support_client)
+
+    response = support_client.post(
+        "/api/support/public/tickets",
+        json=_public_payload(source="caller-forged-provenance"),
+        headers={"X-Request-ID": "req-server-owned-support-source"},
+    )
+
+    assert response.status_code == 201, response.text
+    ticket_id = response.json()["ticket_id"]
+    ticket = service.get(ticket_id)
+    assert ticket is not None
+    assert ticket.source == SERVER_OWNED_REQUEST_SOURCE
+    receipt = receipts.revalidate(ticket_id)
+    assert receipt.payload["source"] == SERVER_OWNED_REQUEST_SOURCE
+    assert receipt.payload["http_status"] == 201
+    assert receipt.payload["request_trace_id"] == ticket.trace_id
+
+
+def test_public_route_retries_transient_receipt_failure_before_201(
+    support_client, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    _service, receipts = _install_public_intake_receipts(support_client)
+    real_create = receipts.create
+    attempts = 0
+
+    def transient_create(ticket_id, *, now=None):  # type: ignore[no-untyped-def]
+        nonlocal attempts
+        attempts += 1
+        if attempts == 1:
+            raise SupportPublicIntakeReceiptUnavailable("transient store outage")
+        return real_create(ticket_id, now=now)
+
+    monkeypatch.setattr(receipts, "create", transient_create)
+    response = support_client.post(
+        "/api/support/public/tickets", json=_public_payload()
+    )
+
+    assert response.status_code == 201, response.text
+    assert attempts == 2
+    receipts.revalidate(response.json()["ticket_id"])
+
+
+def test_public_route_persistent_receipt_failure_keeps_ticket_but_not_acceptance(
+    support_client, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    service, receipts = _install_public_intake_receipts(support_client)
+    attempts = 0
+
+    def unavailable_create(*args, **kwargs):  # type: ignore[no-untyped-def]
+        nonlocal attempts
+        attempts += 1
+        raise SupportPublicIntakeReceiptUnavailable("persistent store outage")
+
+    monkeypatch.setattr(receipts, "create", unavailable_create)
+    response = support_client.post(
+        "/api/support/public/tickets", json=_public_payload()
+    )
+
+    assert response.status_code == 201, response.text
+    ticket_id = response.json()["ticket_id"]
+    assert attempts == 2
+    assert service.get(ticket_id) is not None
+    with pytest.raises(SupportPublicIntakeReceiptInvalid, match="absent"):
+        receipts.revalidate(ticket_id)
+
+
+def test_public_route_unexpected_receipt_error_is_secret_safe_and_keeps_201(
+    support_client, monkeypatch: pytest.MonkeyPatch, caplog: pytest.LogCaptureFixture
+) -> None:
+    service, receipts = _install_public_intake_receipts(support_client)
+    attempts = 0
+
+    def unexpected_create(*args, **kwargs):  # type: ignore[no-untyped-def]
+        nonlocal attempts
+        attempts += 1
+        raise RuntimeError("should-not-log-secret unexpected receipt failure")
+
+    monkeypatch.setattr(receipts, "create", unexpected_create)
+    response = support_client.post(
+        "/api/support/public/tickets",
+        json=_public_payload(email="receipt-secret@example.test"),
+    )
+
+    assert response.status_code == 201, response.text
+    ticket_id = response.json()["ticket_id"]
+    assert attempts == 2
+    assert service.get(ticket_id) is not None
+    with pytest.raises(SupportPublicIntakeReceiptInvalid, match="absent"):
+        receipts.revalidate(ticket_id)
+    assert "receipt-secret@example.test" not in caplog.text
+    assert "should-not-log-secret" not in caplog.text
 
 
 @pytest.mark.parametrize(

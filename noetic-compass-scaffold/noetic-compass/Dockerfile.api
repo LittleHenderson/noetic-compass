@@ -55,6 +55,7 @@ COPY scripts/object_lock_smoke_validation.py scripts/object_lock_smoke_validatio
 COPY scripts/collect_runtime_worm_evidence.py scripts/collect_runtime_worm_evidence.py
 COPY scripts/collect_hosted_runtime_worm_evidence.py scripts/collect_hosted_runtime_worm_evidence.py
 COPY scripts/collect_airtable_crm_acceptance_source.py scripts/collect_airtable_crm_acceptance_source.py
+COPY scripts/build_support_crm_acceptance_evidence.py scripts/build_support_crm_acceptance_evidence.py
 COPY scripts/publish_customer_production_acceptance_authority.py scripts/publish_customer_production_acceptance_authority.py
 
 # Set ownership to non-root user
