@@ -11,7 +11,7 @@ acceptance authority document, edits the release manifest, or claims ACCEPT.
 from __future__ import annotations
 
 import argparse
-from collections.abc import Callable, Mapping
+from collections.abc import Callable, Iterator, Mapping
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 import hashlib
@@ -130,6 +130,37 @@ def _subject_digest(kind: str, value: str) -> str:
     return _digest_bytes(f"{kind}:{value}".encode("utf-8"))
 
 
+def _semantic_strings(value: Any) -> Iterator[str]:
+    """Yield decoded JSON string semantics, including mapping keys."""
+
+    if isinstance(value, str):
+        yield value
+        return
+    if isinstance(value, Mapping):
+        for key, item in value.items():
+            if isinstance(key, str):
+                yield key
+            yield from _semantic_strings(item)
+        return
+    if isinstance(value, (list, tuple)):
+        for item in value:
+            yield from _semantic_strings(item)
+
+
+def _semantic_contains_any(
+    outputs: tuple[Mapping[str, Any], ...], raw_values: tuple[str, ...]
+) -> bool:
+    strings = tuple(
+        candidate
+        for output in outputs
+        for candidate in _semantic_strings(output)
+    )
+    return any(
+        raw_value and any(raw_value in candidate for candidate in strings)
+        for raw_value in raw_values
+    )
+
+
 def _parse_timestamp(value: Any, gate: str) -> datetime:
     if not isinstance(value, str) or not value.strip():
         raise RuntimeWormFailure(gate, "timestamp is missing")
@@ -245,6 +276,102 @@ def _required_string(value: Mapping[str, Any], key: str, gate: str) -> str:
     return item.strip()
 
 
+def read_exact_render_deployment(
+    *,
+    render_api_key: str,
+    master_head_sha: str,
+    deploy_id: str,
+    deployed_at_utc: str | datetime,
+    transport: Transport = _default_transport,
+    clock: Callable[[], datetime] = lambda: datetime.now(UTC),
+) -> tuple[HttpResult, Mapping[str, Any], datetime]:
+    """Read one caller-selected fresh Render deployment without mutations.
+
+    The hosted wrapper uses this seam before it creates a synthetic account.
+    ``RuntimeWormCollector`` also uses it for its pre/post collection reads, so
+    both paths enforce the same provider identity, trigger, timestamp, and
+    freshness contract.
+    """
+
+    token = render_api_key.strip()
+    if (
+        not token
+        or len(token) > 8192
+        or any(character.isspace() for character in token)
+    ):
+        raise RuntimeWormFailure("authentication", "Render API key is unavailable")
+    if SHA1_RE.fullmatch(master_head_sha) is None:
+        raise RuntimeWormFailure("binding", "master head is not a lowercase commit SHA")
+    if DEPLOY_ID_RE.fullmatch(deploy_id) is None:
+        raise RuntimeWormFailure("binding", "deploy ID is invalid")
+    deployed_at = (
+        deployed_at_utc.astimezone(UTC)
+        if isinstance(deployed_at_utc, datetime)
+        and deployed_at_utc.tzinfo is not None
+        and deployed_at_utc.utcoffset() is not None
+        else _parse_timestamp(deployed_at_utc, "deployment")
+    )
+    checked_before = clock()
+    if checked_before.tzinfo is None or checked_before.utcoffset() is None:
+        raise RuntimeWormFailure("clock", "collector clock must be timezone-aware")
+    checked_before = checked_before.astimezone(UTC)
+    if deployed_at > checked_before:
+        raise RuntimeWormFailure("deployment", "deployment timestamp is in the future")
+    if checked_before - deployed_at > timedelta(minutes=30):
+        raise RuntimeWormFailure(
+            "deployment", "deployment is older than the 30-minute evidence window"
+        )
+
+    result = transport(
+        base_url=RENDER_API_ORIGIN,
+        path=f"/v1/services/{PRODUCTION_SERVICE_ID}/deploys/{deploy_id}",
+        method="GET",
+        payload=None,
+        headers={"Authorization": f"Bearer {token}"},
+        timeout=30.0,
+    )
+    if result.status != 200:
+        raise RuntimeWormFailure(
+            "render-deployment", f"unexpected HTTP status {result.status}"
+        )
+    deploy = _decode_object(result, "render-deployment")
+    commit = _mapping(deploy.get("commit"), "render-deployment", "commit")
+    if (
+        deploy.get("id") != deploy_id
+        or deploy.get("status") != "live"
+        or deploy.get("trigger") != "new_commit"
+        or commit.get("id") != master_head_sha
+    ):
+        raise RuntimeWormFailure(
+            "render-deployment", "exact deployment is not live at the pinned commit"
+        )
+    created = _parse_timestamp(deploy.get("createdAt"), "render-deployment")
+    finished = _parse_timestamp(deploy.get("finishedAt"), "render-deployment")
+    checked_after = clock()
+    if checked_after.tzinfo is None or checked_after.utcoffset() is None:
+        raise RuntimeWormFailure("clock", "collector clock must be timezone-aware")
+    checked_after = checked_after.astimezone(UTC)
+    if checked_after < checked_before:
+        raise RuntimeWormFailure("clock", "collector clock moved backwards")
+    if finished < created:
+        raise RuntimeWormFailure(
+            "render-deployment", "deployment finished before it started"
+        )
+    if finished != deployed_at:
+        raise RuntimeWormFailure(
+            "render-deployment", "deployment finish time differs from the pinned input"
+        )
+    if finished > checked_after:
+        raise RuntimeWormFailure(
+            "render-deployment", "deployment finish time is in the future"
+        )
+    if checked_after - finished > timedelta(minutes=30):
+        raise RuntimeWormFailure(
+            "deployment", "deployment is older than the 30-minute evidence window"
+        )
+    return result, deploy, finished
+
+
 class RuntimeWormCollector:
     def __init__(
         self,
@@ -337,36 +464,14 @@ class RuntimeWormCollector:
         )
 
     def _read_render_deploy(self) -> tuple[HttpResult, Mapping[str, Any], datetime]:
-        result = self.transport(
-            base_url=RENDER_API_ORIGIN,
-            path=f"/v1/services/{PRODUCTION_SERVICE_ID}/deploys/{self.deploy_id}",
-            method="GET",
-            payload=None,
-            headers={"Authorization": f"Bearer {self.render_api_key}"},
-            timeout=30.0,
+        return read_exact_render_deployment(
+            render_api_key=self.render_api_key,
+            master_head_sha=self.master_head_sha,
+            deploy_id=self.deploy_id,
+            deployed_at_utc=self.deployed_at,
+            transport=self.transport,
+            clock=self.clock,
         )
-        deploy = self._expect(result, {200}, "render-deployment")
-        commit = _mapping(deploy.get("commit"), "render-deployment", "commit")
-        if (
-            deploy.get("id") != self.deploy_id
-            or deploy.get("status") != "live"
-            or deploy.get("trigger") != "new_commit"
-            or commit.get("id") != self.master_head_sha
-        ):
-            raise RuntimeWormFailure(
-                "render-deployment", "exact deployment is not live at the pinned commit"
-            )
-        created = _parse_timestamp(deploy.get("createdAt"), "render-deployment")
-        finished = _parse_timestamp(deploy.get("finishedAt"), "render-deployment")
-        if finished < created:
-            raise RuntimeWormFailure(
-                "render-deployment", "deployment finished before it started"
-            )
-        if _stamp(finished) != _stamp(self.deployed_at):
-            raise RuntimeWormFailure(
-                "render-deployment", "deployment finish time differs from the pinned input"
-            )
-        return result, deploy, finished
 
     @staticmethod
     def _expect(
@@ -749,8 +854,7 @@ class RuntimeWormCollector:
             self.bearer_token,
             self.render_api_key,
         )
-        serialized_outputs = _canonical_bytes(evidence) + _canonical_bytes(safe_artifact)
-        if any(value.encode("utf-8") in serialized_outputs for value in raw_identifiers):
+        if _semantic_contains_any((evidence, safe_artifact), raw_identifiers):
             raise RuntimeWormFailure("secret-safety", "raw identifier reached output")
         return evidence, safe_artifact
 
