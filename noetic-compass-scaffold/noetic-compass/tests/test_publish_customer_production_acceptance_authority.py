@@ -27,7 +27,7 @@ import scripts.publish_customer_production_acceptance_authority as publisher
 MASTER = "a" * 40
 DEPLOY = "dep-publishertest001"
 AUTHORIZATION_URI = (
-    "https://noetic-compass-api.onrender.com/internal/acceptance-authorizations/test"
+    f"{publisher.PRODUCTION_API_ORIGIN}/internal/acceptance-authorizations/test"
 )
 AUTHORIZATION_SHA256 = hashlib.sha256(b"test-authorization").hexdigest()
 
@@ -81,7 +81,7 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             {
                 "role": role,
                 "approval_artifact_uri": (
-                    "https://noetic-compass-api.onrender.com/"
+                    f"{publisher.PRODUCTION_API_ORIGIN}/"
                     f"internal/approvals/{role}"
                 ),
                 "approval_sha256": _sha(f"approval-{role}"),
@@ -245,7 +245,7 @@ def test_validate_reports_out_of_range_url_port_as_evidence_invalid(
     approvals = evidence["approvals"]
     assert isinstance(approvals, list)
     approvals[0]["approval_artifact_uri"] = (  # type: ignore[index]
-        "https://noetic-compass-api.onrender.com:99999/internal/approval"
+        f"{publisher.PRODUCTION_API_ORIGIN}:99999/internal/approval"
     )
     path = _write(tmp_path / "bad-port.json", evidence)
     stdout, stderr = io.StringIO(), io.StringIO()

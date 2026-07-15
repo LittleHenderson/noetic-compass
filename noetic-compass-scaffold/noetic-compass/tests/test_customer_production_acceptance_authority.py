@@ -40,7 +40,7 @@ from api.services.cas_harness_retention_disclosure import (
 
 
 _AUTHORIZATION_URI = (
-    "https://noetic-compass-api.onrender.com/internal/acceptance-authorizations/test"
+    f"{authority.PRODUCTION_API_ORIGIN}/internal/acceptance-authorizations/test"
 )
 _AUTHORIZATION_SHA256 = hashlib.sha256(b"test-authorization").hexdigest()
 
@@ -99,7 +99,7 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             {
                 "role": role,
                 "approval_artifact_uri": (
-                    "https://noetic-compass-api.onrender.com/"
+                    f"{authority.PRODUCTION_API_ORIGIN}/"
                     f"internal/approvals/{role}"
                 ),
                 "approval_sha256": _sha(f"approval-{role}"),
@@ -496,7 +496,7 @@ def test_out_of_range_url_port_is_a_controlled_validation_error() -> None:
     approvals = evidence["approvals"]
     assert isinstance(approvals, list)
     approvals[0]["approval_artifact_uri"] = (  # type: ignore[index]
-        "https://noetic-compass-api.onrender.com:99999/internal/approval"
+        f"{authority.PRODUCTION_API_ORIGIN}:99999/internal/approval"
     )
 
     with pytest.raises(AcceptanceAuthorityInvalid, match="clean HTTPS URL"):

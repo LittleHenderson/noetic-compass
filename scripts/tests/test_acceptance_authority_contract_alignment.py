@@ -13,16 +13,27 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 APP_ROOT = ROOT / "noetic-compass-scaffold" / "noetic-compass"
 sys.path.insert(0, str(APP_ROOT))
+sys.path.insert(0, str(ROOT / "scripts"))
 
 from api.services.customer_production_acceptance_authority import (  # noqa: E402
     AcceptanceAuthorityInvalid,
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
+from api import acceptance_authority_contract as authority_contract  # noqa: E402
+from api.services import customer_production_acceptance_authority as authority_service  # noqa: E402
 from api.services.production.state_substrate.memory_store import (  # noqa: E402
     InMemoryStateStore,
 )
 from scripts import verify_customer_production_acceptance as verifier  # noqa: E402
+from scripts import build_alert_delivery_gate_payload as alert_builder  # noqa: E402
+from scripts import collect_customer_readiness_facts as readiness_collector  # noqa: E402
+from scripts import collect_hosted_customer_journey_evidence as journey_collector  # noqa: E402
+from scripts import collect_airtable_crm_acceptance_source as crm_collector  # noqa: E402
+from scripts import collect_operational_acceptance_draft as operational_collector  # noqa: E402
+from scripts import collect_root_ci_protected_deploy_facts as root_ci_collector  # noqa: E402
+from scripts import verify_production_runtime_readiness as runtime_verifier  # noqa: E402
+from scripts import verify_render_blueprint_control as blueprint_verifier  # noqa: E402
 from scripts.tests.test_verify_customer_production_acceptance import (  # noqa: E402
     DEPLOY_ID,
     MASTER_SHA,
@@ -34,6 +45,78 @@ from scripts.tests.test_verify_customer_production_acceptance import (  # noqa: 
 
 
 class AcceptanceAuthorityContractAlignmentTests(unittest.TestCase):
+    def test_customer_provider_identity_is_aligned_across_active_contracts(self) -> None:
+        origin = "https://cas-harness-customer-api.onrender.com"
+        service_id = "srv-d9bijbjtqb8s73cn4n20"
+        service_name = "cas-harness-customer-api"
+        disk_id = "dsk-d9bijbjtqb8s73cn4o60"
+        disk_name = "cas-harness-customer-support"
+        disk_mount = "/var/customer-support"
+        lead_path = f"{disk_mount}/leads.jsonl"
+
+        for module in (
+            verifier,
+            authority_contract,
+            authority_service,
+            journey_collector,
+            crm_collector,
+            alert_builder,
+            operational_collector,
+        ):
+            self.assertEqual(module.PRODUCTION_API_ORIGIN, origin)
+        for module in (
+            verifier,
+            authority_service,
+            journey_collector,
+            crm_collector,
+            alert_builder,
+            operational_collector,
+        ):
+            self.assertEqual(module.PRODUCTION_SERVICE_ID, service_id)
+        self.assertEqual(runtime_verifier.DEFAULT_API_BASE_URL, origin)
+        self.assertEqual(readiness_collector.PRODUCTION_API_ORIGIN, origin)
+        self.assertEqual(readiness_collector.PUBLIC_SERVICE_NAME, service_name)
+        self.assertEqual(
+            readiness_collector.RENDER_PATH.as_posix(), "render.customer.yaml"
+        )
+        self.assertEqual(root_ci_collector.PRODUCTION_HEALTH_URL, f"{origin}/health")
+        self.assertTrue(root_ci_collector.RENDER_SERVICE_URL.endswith(service_id))
+
+        for module in (verifier, authority_service):
+            self.assertEqual(module.PRODUCTION_SERVICE_NAME, service_name)
+            self.assertEqual(module.CRM_RENDER_DISK_ID, disk_id)
+            self.assertEqual(module.CRM_RENDER_DISK_NAME, disk_name)
+            self.assertEqual(module.CRM_RENDER_DISK_MOUNT_PATH, disk_mount)
+            self.assertEqual(module.CRM_LEAD_STORE_PATH, lead_path)
+        self.assertEqual(crm_collector.PRODUCTION_SERVICE_NAME, service_name)
+        self.assertEqual(crm_collector.PRODUCTION_DISK_ID, disk_id)
+        self.assertEqual(crm_collector.PRODUCTION_DISK_NAME, disk_name)
+        self.assertEqual(crm_collector.PRODUCTION_DISK_MOUNT_PATH, disk_mount)
+        self.assertEqual(crm_collector.PRODUCTION_LEAD_STORE_PATH, lead_path)
+
+        customer = blueprint_verifier.EXPECTED_CUSTOMER_BLUEPRINT
+        self.assertEqual(customer["id"], "exs-d9biqt37uimc73ajh99g")
+        self.assertEqual(customer["project"]["id"], "prj-d9biitbtqb8s73cn3le0")
+        self.assertEqual(
+            customer["providerEnvironment"]["id"],
+            "evm-d9biitbtqb8s73cn3leg",
+        )
+        self.assertEqual(customer["services"][0]["id"], service_id)
+        self.assertEqual(customer["services"][0]["url"], origin)
+        self.assertEqual(customer["services"][0]["disk"]["id"], disk_id)
+        self.assertEqual(
+            customer["databases"][0]["id"], "dpg-d9biitbtqb8s73cn3mgg-a"
+        )
+        self.assertEqual(blueprint_verifier.EXPECTED_PENDING_BLUEPRINTS, [])
+
+        route_contract = json.loads(
+            (
+                APP_ROOT / "atlas-viewer" / "render-route-rules.json"
+            ).read_text(encoding="utf-8")
+        )
+        self.assertEqual(route_contract["requiredApiBaseUrl"], f"{origin}/atlas")
+        self.assertEqual(route_contract["requiredAccountsEnabled"], "true")
+
     def test_every_live_route_accepts_the_verifiers_exact_gate_shape(self) -> None:
         payloads = _gate_payloads()
         release = _common(

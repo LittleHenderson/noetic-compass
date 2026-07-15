@@ -100,7 +100,7 @@ Verification:
 ```bash
 curl http://127.0.0.1:8080/health
 curl http://127.0.0.1:8080/health/realmode
-curl https://noetic-compass-api.onrender.com/atlas/live/health/realmode
+curl https://cas-harness-customer-api.onrender.com/atlas/live/health/realmode
 ```
 
 The real-mode endpoint must show:
@@ -124,7 +124,7 @@ The API fleet executor can now be driven by this worker process:
 
 ```bash
 python scripts/run_fleet_worker.py \
-  --api-base-url https://noetic-compass-api.onrender.com \
+  --api-base-url https://cas-harness-customer-api.onrender.com \
   --audit-id <cas-dist-id> \
   --worker-id probe-worker-001 \
   --model-id <exact-open-weight-model-id> \
@@ -142,6 +142,12 @@ tenant in `CAS_FLEET_TENANT_ID`, and never place either in browser code. Every d
 callback carries a fresh timestamp and one-time nonce. Customer Bearer tokens are not
 valid worker credentials when `NC_FLEET_SERVICE_AUTH_ENABLED=true`. The old
 `--bearer-token` option exists only for the default-dark/legacy posture.
+
+The current customer Blueprint pins `NC_FLEET_SERVICE_AUTH_ENABLED=false`, so
+the account-mode credential issuance and fleet daemon path above are presently
+`unavailable`. The customer origin is the correct future target, but do not run
+or claim this path until a protected customer-Blueprint change enables it and a
+hosted credential/lease/receipt proof passes.
 
 The command after `--` is the real probe executor. It receives the assigned
 layer/shard job through environment variables such as `CAS_FLEET_LAYER_START`,
@@ -177,7 +183,7 @@ CAS_FLEET_SCENARIO_PATH=/workspace/cas/scenarios/alpha_25.json \
 CAS_FLEET_PROBE_WEIGHTS_PATH=/workspace/cas/probes/gpt-neox-20b_probe.json \
 CAS_FLEET_COVER_MAP_PATH=/workspace/cas/covers/gpt-neox-20b_covers.json \
 python scripts/run_fleet_worker.py \
-  --api-base-url https://noetic-compass-api.onrender.com \
+  --api-base-url https://cas-harness-customer-api.onrender.com \
   --audit-id <cas-dist-id> \
   --worker-id probe-worker-001 \
   --model-id EleutherAI/gpt-neox-20b \

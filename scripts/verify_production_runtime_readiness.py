@@ -17,7 +17,7 @@ import urllib.request
 from typing import Any, Iterable, Mapping
 
 
-DEFAULT_API_BASE_URL = "https://noetic-compass-api.onrender.com"
+DEFAULT_API_BASE_URL = "https://cas-harness-customer-api.onrender.com"
 DEFAULT_TIMEOUT_SECONDS = 15.0
 MAX_RESPONSE_BYTES = 1_000_000
 EXPECTED_MODEL_ID = "EleutherAI/pythia-160m"

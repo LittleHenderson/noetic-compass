@@ -118,28 +118,35 @@ def _source_config_text() -> str:
 def _render_text(*, enabled: bool, provider: str) -> str:
     literal = "true" if enabled else "false"
     lines = [
-        "services:",
-        "  - type: web",
-        "    name: noetic-compass-api",
-        "    repo: https://github.com/LittleHenderson/noetic-compass",
-        "    branch: master",
-        "    rootDir: noetic-compass-scaffold/noetic-compass",
-        "    autoDeployTrigger: checksPass",
-        "    healthCheckPath: /health",
-        "    envVars:",
+        "projects:",
+        "  - name: cas-harness-customer",
+        "    environments:",
+        "      - name: production",
+        "        services:",
+        "          - type: web",
+        "            name: cas-harness-customer-api",
+        "            repo: https://github.com/LittleHenderson/noetic-compass",
+        "            branch: master",
+        "            rootDir: noetic-compass-scaffold/noetic-compass",
+        "            autoDeployTrigger: checksPass",
+        "            healthCheckPath: /health",
+        "            envVars:",
     ]
     for key in collector.FEATURE_ENV_KEYS.values():
-        lines.extend((f"      - key: {key}", f'        value: "{literal}"'))
+        lines.extend((f"              - key: {key}", f'                value: "{literal}"'))
     lines.extend(
         (
-            f"      - key: {collector.BILLING_PROVIDER_ENV_KEY}",
-            f'        value: "{provider}"',
-            f"      - key: {collector.DATABASE_ENV_KEY}",
-            "        sync: false",
+            f"              - key: {collector.BILLING_PROVIDER_ENV_KEY}",
+            f'                value: "{provider}"',
+            f"              - key: {collector.DATABASE_ENV_KEY}",
+            "                fromDatabase:",
+            f"                  name: {collector.CUSTOMER_DATABASE_NAME}",
+            "                  property: connectionString",
         )
     )
-    for key in collector.STRIPE_SLOT_KEYS:
-        lines.extend((f"      - key: {key}", "        sync: false"))
+    if provider == "stripe":
+        for key in collector.STRIPE_SLOT_KEYS:
+            lines.extend((f"              - key: {key}", "                sync: false"))
     return "\n".join(lines) + "\n"
 
 
@@ -158,15 +165,15 @@ class SurfaceUrlPolicyTests(unittest.TestCase):
             (
                 (
                     "health",
-                    "https://noetic-compass-api.onrender.com/health",
+                    "https://cas-harness-customer-api.onrender.com/health",
                 ),
                 (
                     "readiness",
-                    "https://noetic-compass-api.onrender.com/health/ready",
+                    "https://cas-harness-customer-api.onrender.com/health/ready",
                 ),
                 (
                     "openapi",
-                    "https://noetic-compass-api.onrender.com/openapi.json",
+                    "https://cas-harness-customer-api.onrender.com/openapi.json",
                 ),
             ),
         )
@@ -181,19 +188,19 @@ class SurfaceUrlPolicyTests(unittest.TestCase):
         with self.assertRaises(collector.CollectorError):
             collector.validate_surface_url(
                 "health",
-                "https://noetic-compass-api.onrender.com/health?probe=1",
+                f"{collector.PRODUCTION_API_ORIGIN}/health?probe=1",
             )
         with self.assertRaises(collector.CollectorError) as context:
             collector.validate_surface_url(
                 "health",
-                "https://user:do-not-print@noetic-compass-api.onrender.com/health",
+                "https://user:do-not-print@cas-harness-customer-api.onrender.com/health",
             )
         self.assertNotIn("do-not-print", str(context.exception))
 
     def test_unpinned_path_is_rejected(self) -> None:
         with self.assertRaisesRegex(collector.CollectorError, "not the pinned"):
             collector.validate_surface_url(
-                "openapi", "https://noetic-compass-api.onrender.com/docs"
+                "openapi", f"{collector.PRODUCTION_API_ORIGIN}/docs"
             )
 
 
@@ -269,18 +276,35 @@ class StrictInputTests(unittest.TestCase):
         with self.assertRaisesRegex(collector.CollectorError, "duplicate key"):
             collector._strict_json_object(b'{"status":"ok","status":"bad"}')
 
-    def test_current_public_blueprint_is_dark_and_exactly_hashed(self) -> None:
+    def test_current_customer_blueprint_is_identity_enabled_provider_dark_and_hashed(self) -> None:
         snapshot = collector.load_repository_snapshot(REPOSITORY_ROOT)
-        for key in collector.FEATURE_ENV_KEYS.values():
+        expected_literals = {
+            "accounts": "true",
+            "quotas": "true",
+            "billing_entitlements": "true",
+            "billing_reconciliation": "false",
+            "object_store": "true",
+            "shares": "true",
+        }
+        for feature, key in collector.FEATURE_ENV_KEYS.items():
             self.assertEqual(snapshot.env[key]["mode"], "literal")
-            self.assertEqual(snapshot.env[key]["repository_value"], "false")
+            self.assertEqual(
+                snapshot.env[key]["repository_value"], expected_literals[feature]
+            )
         self.assertEqual(
             snapshot.env[collector.BILLING_PROVIDER_ENV_KEY]["repository_value"],
             "null",
         )
         self.assertEqual(
             snapshot.env[collector.DATABASE_ENV_KEY]["mode"],
-            "dashboard_managed_slot",
+            "blueprint_database_binding",
+        )
+        self.assertEqual(
+            snapshot.env[collector.DATABASE_ENV_KEY]["database_name"],
+            collector.CUSTOMER_DATABASE_NAME,
+        )
+        self.assertTrue(
+            all(key not in snapshot.env for key in collector.STRIPE_SLOT_KEYS)
         )
         self.assertEqual(
             snapshot.render_sha256,
@@ -290,8 +314,8 @@ class StrictInputTests(unittest.TestCase):
     def test_duplicate_render_env_key_fails_closed(self) -> None:
         raw = _render_text(enabled=False, provider="null")
         duplicate = (
-            f"      - key: {collector.FEATURE_ENV_KEYS['accounts']}\n"
-            '        value: "false"\n'
+            f"              - key: {collector.FEATURE_ENV_KEYS['accounts']}\n"
+            '                value: "false"\n'
         )
         with self.assertRaisesRegex(collector.CollectorError, "duplicate env key"):
             collector.parse_render_public_service((raw + duplicate).encode("utf-8"))
@@ -327,7 +351,7 @@ class DraftReportContractTests(unittest.TestCase):
         )
         return report, calls
 
-    def test_dark_production_report_is_complete_but_open_and_non_authoritative(self) -> None:
+    def test_provider_dark_customer_report_is_complete_but_open_and_non_authoritative(self) -> None:
         report, calls = self._report()
         draft = report["draft_payload"]
 
@@ -344,7 +368,7 @@ class DraftReportContractTests(unittest.TestCase):
         self.assertTrue(draft["draft_only"])
         self.assertFalse(draft["authoritative"])
         self.assertFalse(draft["eligible_for_acceptance"])
-        self.assertFalse(draft["configured_vs_observed"]["accounts"]["repository_declared_enabled"])
+        self.assertTrue(draft["configured_vs_observed"]["accounts"]["repository_declared_enabled"])
         self.assertFalse(
             draft["configured_vs_observed"]["billing_reconciliation"][
                 "repository_declared_enabled"
@@ -355,8 +379,12 @@ class DraftReportContractTests(unittest.TestCase):
             draft["configured_vs_observed"]["stripe"]["repository_provider_value"],
             "null",
         )
+        self.assertEqual(
+            draft["configured_vs_observed"]["stripe"]["repository_dashboard_managed_slots"],
+            [],
+        )
         self.assertIn("public_production:postgres:not_configured", report["blockers"])
-        self.assertIn("repository_configuration:accounts:disabled", report["blockers"])
+        self.assertNotIn("repository_configuration:accounts:disabled", report["blockers"])
         self.assertIn(
             "repository_configuration:stripe:provider_is_not_stripe",
             report["blockers"],

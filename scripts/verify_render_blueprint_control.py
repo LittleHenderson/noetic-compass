@@ -66,26 +66,61 @@ EXPECTED_BLUEPRINTS: list[dict[str, Any]] = [
             }
         ],
     },
-]
-EXPECTED_PENDING_BLUEPRINTS: list[dict[str, Any]] = [
     {
         "environment": "customer-production",
+        "id": "exs-d9biqt37uimc73ajh99g",
         "path": "render.customer.yaml",
         "sourceBranch": "master",
         "autoSyncRequired": False,
-        "identityLockRequired": True,
+        "project": {
+            "id": "prj-d9biitbtqb8s73cn3le0",
+            "name": "cas-harness-customer",
+        },
+        "providerEnvironment": {
+            "id": "evm-d9biitbtqb8s73cn3leg",
+            "name": "production",
+            "projectId": "prj-d9biitbtqb8s73cn3le0",
+            "databasesIds": ["dpg-d9biitbtqb8s73cn3mgg-a"],
+            "serviceIds": ["srv-d9bijbjtqb8s73cn4n20"],
+            "protectedStatus": "protected",
+            "networkIsolationEnabled": True,
+        },
+        "databases": [
+            {
+                "id": "dpg-d9biitbtqb8s73cn3mgg-a",
+                "name": "cas-harness-customer-postgres",
+                "databaseName": "cas_harness_customer",
+                "databaseUser": "cas_harness_customer",
+                "plan": "basic_256mb",
+                "region": "oregon",
+                "version": "16",
+                "diskSizeGB": 1,
+                "diskAutoscalingEnabled": False,
+                "ipAllowList": [],
+            }
+        ],
         "services": [
             {
+                "id": "srv-d9bijbjtqb8s73cn4n20",
                 "name": "cas-harness-customer-api",
                 "type": "web_service",
                 "branch": "master",
                 "region": "oregon",
                 "autoDeployTrigger": "checksPass",
                 "healthCheckPath": "/health",
+                "url": "https://cas-harness-customer-api.onrender.com",
+                "disk": {
+                    "id": "dsk-d9bijbjtqb8s73cn4o60",
+                    "name": "cas-harness-customer-support",
+                    "mountPath": "/var/customer-support",
+                    "sizeGB": 1,
+                },
             }
         ],
-    }
+    },
 ]
+EXPECTED_PENDING_BLUEPRINTS: list[dict[str, Any]] = []
+EXPECTED_CUSTOMER_BLUEPRINT = EXPECTED_BLUEPRINTS[2]
 AUXILIARY_BLUEPRINT_PATHS = (
     "noetic-compass-scaffold/noetic-compass/infra/render.yaml",
 )
@@ -642,7 +677,7 @@ def validate_customer_blueprint_yaml(repo_root: Path) -> None:
     text = path.read_text(encoding="utf-8")
     validate_blueprint_yaml(
         repo_root,
-        EXPECTED_PENDING_BLUEPRINTS[0],
+        EXPECTED_CUSTOMER_BLUEPRINT,
         receipt_key_generated=True,
     )
     assert_customer_blueprint_contract(text, CUSTOMER_BLUEPRINT_PATH)
@@ -909,8 +944,10 @@ def validate_offline(repo_root: Path) -> dict[str, Any]:
     manifest = _load_manifest(repo_root)
     validate_manifest(manifest)
     for blueprint in manifest["blueprints"]:
-        validate_blueprint_yaml(repo_root, blueprint)
-    validate_customer_blueprint_yaml(repo_root)
+        if blueprint["environment"] == "customer-production":
+            validate_customer_blueprint_yaml(repo_root)
+        else:
+            validate_blueprint_yaml(repo_root, blueprint)
     for relative_path in AUXILIARY_BLUEPRINT_PATHS:
         validate_auxiliary_blueprint_yaml(repo_root, relative_path)
     validate_workflow_locations(repo_root)
@@ -933,6 +970,28 @@ def validate_live_payload(payload: Mapping[str, Any], expected: Mapping[str, Any
         str(payload.get("repo", "")).rstrip("/") == REPOSITORY_URL,
         f"{expected['environment']} Blueprint repository drifted",
     )
+    if "databases" in expected:
+        resources = payload.get("resources")
+        _require(
+            isinstance(resources, list),
+            f"{expected['environment']} Blueprint resources are unavailable",
+        )
+        actual_resources = {
+            (item.get("id"), item.get("name"), item.get("type"))
+            for item in resources
+            if isinstance(item, Mapping)
+        }
+        expected_resources = {
+            (service["id"], service["name"], service["type"])
+            for service in expected["services"]
+        } | {
+            (database["id"], database["name"], "postgres")
+            for database in expected["databases"]
+        }
+        _require(
+            actual_resources == expected_resources,
+            f"{expected['environment']} Blueprint resource identities drifted",
+        )
 
 
 def validate_live_service_payload(
@@ -970,6 +1029,96 @@ def validate_live_service_payload(
             details.get("healthCheckPath") in (None, ""),
             f"{label} unexpectedly exposes a healthCheckPath",
         )
+    if "disk" in expected:
+        disk = details.get("disk")
+        _require(
+            isinstance(disk, Mapping)
+            and all(disk.get(key) == value for key, value in expected["disk"].items()),
+            f"{label} persistent disk identity or attachment drifted",
+        )
+    if "url" in expected:
+        _require(
+            details.get("url") == expected["url"],
+            f"{label} external URL drifted from its identity-locked origin",
+        )
+
+
+def validate_live_database_payload(
+    payload: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    *,
+    environment: str,
+) -> None:
+    """Validate non-secret Postgres identity and configuration fields."""
+
+    label = f"{environment} Postgres {expected['name']}"
+    for key in (
+        "id",
+        "name",
+        "databaseName",
+        "databaseUser",
+        "plan",
+        "region",
+        "version",
+        "diskSizeGB",
+        "diskAutoscalingEnabled",
+        "ipAllowList",
+    ):
+        _require(payload.get(key) == expected[key], f"{label} {key} drifted")
+
+
+def validate_live_project_payload(
+    payload: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    *,
+    environment: str,
+) -> None:
+    """Validate the Render project container without reading member identity."""
+
+    label = f"{environment} project {expected['name']}"
+    for key in ("id", "name"):
+        _require(payload.get(key) == expected[key], f"{label} {key} drifted")
+
+
+def validate_live_environment_payload(
+    payload: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    *,
+    environment: str,
+) -> None:
+    """Validate protected membership and network isolation for one environment."""
+
+    label = f"{environment} provider environment {expected['name']}"
+    for key in (
+        "id",
+        "name",
+        "projectId",
+        "protectedStatus",
+        "networkIsolationEnabled",
+    ):
+        _require(payload.get(key) == expected[key], f"{label} {key} drifted")
+    for key in ("databasesIds", "serviceIds"):
+        actual = payload.get(key)
+        _require(isinstance(actual, list), f"{label} {key} are unavailable")
+        _require(
+            set(actual) == set(expected[key]) and len(actual) == len(expected[key]),
+            f"{label} {key} membership drifted",
+        )
+
+
+def validate_live_disk_payload(
+    payload: Mapping[str, Any],
+    expected: Mapping[str, Any],
+    *,
+    environment: str,
+    service_id: str,
+) -> None:
+    """Validate the customer disk independently of its service projection."""
+
+    label = f"{environment} disk {expected['name']}"
+    for key in ("id", "name", "mountPath", "sizeGB"):
+        _require(payload.get(key) == expected[key], f"{label} {key} drifted")
+    _require(payload.get("serviceId") == service_id, f"{label} service binding drifted")
 
 
 def _open_and_parse_render_response(
@@ -1138,6 +1287,64 @@ def validate_live(
             f"live Blueprint control PASS: {blueprint['environment']} "
             f"({blueprint['id']}) autoSync=false"
         )
+        project = blueprint.get("project")
+        if isinstance(project, Mapping):
+            project_id = urllib.parse.quote(str(project["id"]), safe="")
+            project_request = urllib.request.Request(
+                f"{api_base.rstrip('/')}/projects/{project_id}",
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {api_key}",
+                    "User-Agent": "noetic-compass-blueprint-control/1",
+                },
+                method="GET",
+            )
+            project_payload = _read_json(
+                project_request,
+                timeout,
+                attempts=attempts,
+                backoff_seconds=backoff_seconds,
+                deadline=deadline,
+            )
+            validate_live_project_payload(
+                project_payload,
+                project,
+                environment=str(blueprint["environment"]),
+            )
+            print(
+                f"live Render project control PASS: {blueprint['environment']} "
+                f"{project['name']} ({project['id']})"
+            )
+        provider_environment = blueprint.get("providerEnvironment")
+        if isinstance(provider_environment, Mapping):
+            environment_id = urllib.parse.quote(
+                str(provider_environment["id"]), safe=""
+            )
+            environment_request = urllib.request.Request(
+                f"{api_base.rstrip('/')}/environments/{environment_id}",
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {api_key}",
+                    "User-Agent": "noetic-compass-blueprint-control/1",
+                },
+                method="GET",
+            )
+            environment_payload = _read_json(
+                environment_request,
+                timeout,
+                attempts=attempts,
+                backoff_seconds=backoff_seconds,
+                deadline=deadline,
+            )
+            validate_live_environment_payload(
+                environment_payload,
+                provider_environment,
+                environment=str(blueprint["environment"]),
+            )
+            print(
+                f"live Render environment control PASS: {blueprint['environment']} "
+                f"{provider_environment['name']} ({provider_environment['id']})"
+            )
         for service in blueprint["services"]:
             service_id = urllib.parse.quote(str(service["id"]), safe="")
             service_request = urllib.request.Request(
@@ -1170,6 +1377,62 @@ def validate_live(
                 f"live Render service control PASS: {blueprint['environment']} "
                 f"{service['name']} ({service['id']}), branch={service['branch']}, "
                 f"autoDeployTrigger={service['autoDeployTrigger']}{health_suffix}"
+            )
+            disk = service.get("disk")
+            if isinstance(disk, Mapping):
+                disk_id = urllib.parse.quote(str(disk["id"]), safe="")
+                disk_request = urllib.request.Request(
+                    f"{api_base.rstrip('/')}/disks/{disk_id}",
+                    headers={
+                        "Accept": "application/json",
+                        "Authorization": f"Bearer {api_key}",
+                        "User-Agent": "noetic-compass-blueprint-control/1",
+                    },
+                    method="GET",
+                )
+                disk_payload = _read_json(
+                    disk_request,
+                    timeout,
+                    attempts=attempts,
+                    backoff_seconds=backoff_seconds,
+                    deadline=deadline,
+                )
+                validate_live_disk_payload(
+                    disk_payload,
+                    disk,
+                    environment=str(blueprint["environment"]),
+                    service_id=str(service["id"]),
+                )
+                print(
+                    f"live Render disk control PASS: {blueprint['environment']} "
+                    f"{disk['name']} ({disk['id']})"
+                )
+        for database in blueprint.get("databases", []):
+            database_id = urllib.parse.quote(str(database["id"]), safe="")
+            database_request = urllib.request.Request(
+                f"{api_base.rstrip('/')}/postgres/{database_id}",
+                headers={
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {api_key}",
+                    "User-Agent": "noetic-compass-blueprint-control/1",
+                },
+                method="GET",
+            )
+            database_payload = _read_json(
+                database_request,
+                timeout,
+                attempts=attempts,
+                backoff_seconds=backoff_seconds,
+                deadline=deadline,
+            )
+            validate_live_database_payload(
+                database_payload,
+                database,
+                environment=str(blueprint["environment"]),
+            )
+            print(
+                f"live Render Postgres control PASS: {blueprint['environment']} "
+                f"{database['name']} ({database['id']})"
             )
 
 

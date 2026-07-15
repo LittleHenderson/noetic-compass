@@ -62,7 +62,7 @@ closed as `sync_failed`; it cannot earn `synced`.
 
 ## Prerequisites
 
-- Run from Render Shell on service `srv-d82ph683kofs73d210e0`.
+- Run from Render Shell on customer service `srv-d9bijbjtqb8s73cn4n20`.
 - `RENDER_GIT_COMMIT` must equal the supplied exact protected `master` SHA.
 - Provide `RENDER_API_KEY` to that shell process only. The collector performs
   authenticated, no-redirect reads of the exact service and supplied deploy,
@@ -72,9 +72,10 @@ closed as `sync_failed`; it cannot earn `synced`.
   must match exact production: base `appXBoYskbfjNaFTs`, table `Leads`, dedup
   field `Dedup Key`, owner field/value `Owner` / `CAS Harness`, lifecycle field
   `Pipeline Status`, and API base `https://api.airtable.com/v0`.
-- `NC_CRM_LEAD_STORE_PATH` must be exact `/var/data/leads.jsonl`. The collector
-  also verifies Render disk `dsk-d8fomrd8nd3s738rnee0` (`noetic-data`) is
-  mounted at `/var/data`; `/tmp`, relative paths, and other absolute paths are
+- `NC_CRM_LEAD_STORE_PATH` must be exact
+  `/var/customer-support/leads.jsonl`. The collector also verifies Render disk
+  `dsk-d9bijbjtqb8s73cn4o60` (`cas-harness-customer-support`) is mounted at
+  `/var/customer-support`; `/tmp`, relative paths, and other absolute paths are
   rejected.
 - The exact deployed build must include the v2 public lead contract. Existing
   v1 ledger rows remain readable, but they cannot satisfy this acceptance
@@ -96,7 +97,7 @@ python scripts/collect_airtable_crm_acceptance_source.py \
 ```
 
 The `/tmp` paths above are output artifacts only; the lead authority remains
-the exact `/var/data/leads.jsonl` persistent-disk ledger. The command creates
+the exact `/var/customer-support/leads.jsonl` persistent-disk ledger. The command creates
 one non-customer probe address below
 `acceptance.invalid`. It is intentionally persisted in the local lead ledger
 and Airtable so the receipt proves a real provider effect and restart-safe

@@ -2,21 +2,24 @@
 # yaml-language-server: $schema=https://render.com/schema/render.yaml.json
 #
 # DEPLOYMENT SAFETY: Blueprint Auto Sync MUST stay disabled in Render.
-# Create and manually sync this as a separate Blueprint only after
+# Manually sync this separate Blueprint only after
 # `cas-ci-gate` and `cas-postgres-live-gate` pass for the exact Blueprint source SHA.
 # The existing `render.yaml` service remains the accounts-off
 # legacy lane and must not be adopted into this Blueprint.
 # SOURCE PREREQUISITE: the deployed service SHA must contain protected master
 # commit ed6a0f9fa433052fa48ce4d70dbbbc990042538e (the fail-closed public
-# support privacy guard). Prove ancestry and exact-SHA CI before first creation;
+# support privacy guard). Prove ancestry and exact-SHA CI before every sync;
 # never deploy a branch that does not contain that guard.
 #
-# Render assigns the Blueprint and service IDs. Do not add guessed IDs to
-# `.render/blueprint-control.json`; identity-lock them in a follow-up commit
-# after provider readback. Customer-production `ACCEPT` remains `OPEN` until
-# the hosted account journey and every independent acceptance gate pass.
+# Render-assigned Blueprint, service, database, and disk identities are locked
+# in `.render/blueprint-control.json`. Do not replace or re-associate them
+# without provider readback in a protected commit. The initial
+# `blueprint_sync` deploy is not checks-gated deploy evidence; use only a later
+# exact-SHA `new_commit` deploy after required CI. Customer-production `ACCEPT`
+# remains `OPEN` until the hosted account journey and every independent gate
+# pass.
 #
-# Initial operator inputs are limited to the two dedicated AWS credentials
+# Provider-injected operator inputs are limited to the two dedicated AWS credentials
 # and the temporary live-worker URL/token. Render generates every other
 # authority independently only while its env key is absent. Deleting a declared
 # generateValue key makes a later sync create a different value; that is a

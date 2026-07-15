@@ -1,9 +1,11 @@
 # Private account-canary quota proof
 
 This runbook proves the quota gate only on the isolated private Render service
-`cas-harness-api-accounts-canary` (`srv-d9akoolaeets73bp3e7g`). It must not be run on the public
-`noetic-compass-api` service. It does not enable accounts or billing on public production, call
-Stripe, create a charge, or call a paid model provider.
+`cas-harness-api-accounts-canary` (`srv-d9akoolaeets73bp3e7g`). It must not be
+run on either the legacy `noetic-compass-api` service or the public customer
+service `cas-harness-customer-api`. This canary proof cannot establish the new
+customer lane's hosted account, billing, isolation, or deployment gates; it
+does not call Stripe, create a charge, or call a paid model provider.
 
 ## Required deployed posture
 

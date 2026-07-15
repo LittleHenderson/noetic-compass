@@ -23,8 +23,8 @@ from typing import Any, Mapping, Sequence
 EVIDENCE_SCHEMA_VERSION = "cas_harness_customer_production_gate_evidence.v2"
 SAFE_ARTIFACT_SCHEMA = "cas_runtime_alert_safe_receipts.v2"
 REPOSITORY = "LittleHenderson/noetic-compass"
-PRODUCTION_API_ORIGIN = "https://noetic-compass-api.onrender.com"
-PRODUCTION_SERVICE_ID = "srv-d82ph683kofs73d210e0"
+PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
+PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
 AUTHORITY_URI = f"{PRODUCTION_API_ORIGIN}/internal/acceptance/alert-delivery"
 SHA256_RE = re.compile(r"^[0-9a-f]{64}$")
 SHA1_RE = re.compile(r"^[0-9a-f]{40}$")

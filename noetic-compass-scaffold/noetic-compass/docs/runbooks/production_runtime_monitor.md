@@ -15,7 +15,9 @@ They do not write an object or run model inference.
 A green runtime monitor is operational evidence only. It does not upgrade an
 audit from `FLAG_FOR_HUMAN_REVIEW` to `ACCEPT`; production WORM and the wider
 public-launch program remain `OPEN` until their own evidence gates pass.
-Accounts, quotas, billing entitlements, and the billing provider remain dark.
+Accounts, quotas, and manual billing entitlements are enabled on the customer
+lane; the external billing provider, reconciliation, measurement, and dispatch
+remain dark.
 Proof chips remain `present` only when their evidence exists and `unavailable`
 when it does not.
 
@@ -30,15 +32,15 @@ in that half-configured state.
    argument, or an evidence file.
 2. Set `ATLAS_LIVE_WORKER_TOKEN` to that value in the RunPod worker environment
    and restart the worker process/pod so its middleware reads the value.
-3. Set the same value on the Render `noetic-compass-api` service as the
+3. Set the same value on the Render `cas-harness-customer-api` service as the
    dashboard-managed `ATLAS_LIVE_WORKER_TOKEN` secret.
 4. Confirm `ATLAS_LIVE_WORKER_URL` on the API is the worker HTTP base URL (no
    `/health` suffix), then redeploy the API.
 5. Check the non-secret readiness response:
 
    ```bash
-   curl --fail-with-body https://noetic-compass-api.onrender.com/health/ready
-   curl --fail-with-body https://noetic-compass-api.onrender.com/atlas/live/health/realmode
+   curl --fail-with-body https://cas-harness-customer-api.onrender.com/health/ready
+   curl --fail-with-body https://cas-harness-customer-api.onrender.com/atlas/live/health/realmode
    ```
 
 6. Run the protected end-to-end worker/WORM smoke in

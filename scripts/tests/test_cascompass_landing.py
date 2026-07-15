@@ -171,7 +171,7 @@ class NetlifyContractTests(unittest.TestCase):
         self.assertIn("script-src 'self'", headers["Content-Security-Policy"])
         self.assertIn("frame-ancestors 'none'", headers["Content-Security-Policy"])
         self.assertIn(
-            "https://noetic-compass-api.onrender.com",
+            "https://cas-harness-customer-api.onrender.com",
             headers["Content-Security-Policy"],
         )
         self.assertEqual(headers["Cross-Origin-Opener-Policy"], "same-origin")
@@ -192,7 +192,7 @@ class NetlifyContractTests(unittest.TestCase):
         self.assertIn('name="consent_to_contact"', contact)
         self.assertIn('src="/contact.js"', contact)
         self.assertIn(
-            "https://noetic-compass-api.onrender.com/api/support/public/tickets",
+            "https://cas-harness-customer-api.onrender.com/api/support/public/tickets",
             script,
         )
         self.assertIn(r"Submitting your support request\u2026", script)

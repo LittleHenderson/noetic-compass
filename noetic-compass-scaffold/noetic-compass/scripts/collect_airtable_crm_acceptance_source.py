@@ -54,9 +54,9 @@ SOURCE_SCHEMA_VERSION = "cas_harness_airtable_crm_acceptance_source.v2"
 FRAGMENT_SCHEMA_VERSION = "cas_harness_support_crm_acceptance_fragment.v2"
 REPOSITORY = "LittleHenderson/noetic-compass"
 REPOSITORY_URL = "https://github.com/LittleHenderson/noetic-compass"
-PRODUCTION_API_ORIGIN = "https://noetic-compass-api.onrender.com"
-PRODUCTION_SERVICE_ID = "srv-d82ph683kofs73d210e0"
-PRODUCTION_SERVICE_NAME = "noetic-compass-api"
+PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
+PRODUCTION_SERVICE_ID = "srv-d9bijbjtqb8s73cn4n20"
+PRODUCTION_SERVICE_NAME = "cas-harness-customer-api"
 RENDER_API_ORIGIN = "https://api.render.com"
 PUBLIC_LEAD_PATH = "/api/crm/public/leads"
 CANONICAL_AIRTABLE_API_BASE_URL = "https://api.airtable.com/v0"
@@ -66,10 +66,10 @@ PRODUCTION_AIRTABLE_DEDUP_FIELD = "Dedup Key"
 PRODUCTION_AIRTABLE_OWNER_FIELD = "Owner"
 PRODUCTION_AIRTABLE_OWNER_VALUE = "CAS Harness"
 PRODUCTION_AIRTABLE_LIFECYCLE_FIELD = "Pipeline Status"
-PRODUCTION_DISK_ID = "dsk-d8fomrd8nd3s738rnee0"
-PRODUCTION_DISK_NAME = "noetic-data"
-PRODUCTION_DISK_MOUNT_PATH = "/var/data"
-PRODUCTION_LEAD_STORE_PATH = "/var/data/leads.jsonl"
+PRODUCTION_DISK_ID = "dsk-d9bijbjtqb8s73cn4o60"
+PRODUCTION_DISK_NAME = "cas-harness-customer-support"
+PRODUCTION_DISK_MOUNT_PATH = "/var/customer-support"
+PRODUCTION_LEAD_STORE_PATH = "/var/customer-support/leads.jsonl"
 AIRTABLE_CONSENT_FIELD_CONTRACT = {
     "consent_to_contact_field": "Consent to Contact",
     "consent_recorded_at_field": "Consent Recorded At UTC",
@@ -437,7 +437,8 @@ class AirtableCRMSourceCollector:
         if self.lead_store_path != PRODUCTION_LEAD_STORE_PATH:
             raise CRMCollectionFailure(
                 "persistence",
-                "NC_CRM_LEAD_STORE_PATH must be exact /var/data/leads.jsonl on the attached disk",
+                "NC_CRM_LEAD_STORE_PATH must be exact "
+                "/var/customer-support/leads.jsonl on the attached disk",
             )
         self.render_api_key = env.get("RENDER_API_KEY", "").strip()
         if not self.render_api_key:

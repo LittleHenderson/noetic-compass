@@ -26,7 +26,7 @@ from typing import Any, Callable, Mapping, Sequence
 
 REPORT_SCHEMA_VERSION = "cas_harness_customer_readiness_machine_report.v1"
 DRAFT_SCHEMA_VERSION = "cas_harness_customer_readiness_machine_draft.v1"
-PRODUCTION_API_ORIGIN = "https://noetic-compass-api.onrender.com"
+PRODUCTION_API_ORIGIN = "https://cas-harness-customer-api.onrender.com"
 PINNED_SURFACES: tuple[tuple[str, str], ...] = (
     ("health", f"{PRODUCTION_API_ORIGIN}/health"),
     ("readiness", f"{PRODUCTION_API_ORIGIN}/health/ready"),
@@ -43,9 +43,9 @@ MAX_TIMEOUT_SECONDS = 30.0
 DEFAULT_MAX_RESPONSE_BYTES = 2_000_000
 MAX_RESPONSE_BYTES = 4_000_000
 
-RENDER_PATH = Path("render.yaml")
+RENDER_PATH = Path("render.customer.yaml")
 CONFIG_PATH = Path("noetic-compass-scaffold/noetic-compass/api/config.py")
-PUBLIC_SERVICE_NAME = "noetic-compass-api"
+PUBLIC_SERVICE_NAME = "cas-harness-customer-api"
 PUBLIC_SERVICE_SCALARS: Mapping[str, str] = {
     "repo": "https://github.com/LittleHenderson/noetic-compass",
     "branch": "master",
@@ -62,6 +62,7 @@ FEATURE_ENV_KEYS: Mapping[str, str] = {
     "shares": "NC_EVIDENCE_SHARES_ENABLED",
 }
 DATABASE_ENV_KEY = "NC_DATABASE_URL"
+CUSTOMER_DATABASE_NAME = "cas-harness-customer-postgres"
 BILLING_PROVIDER_ENV_KEY = "NC_BILLING_PROVIDER"
 STRIPE_SLOT_KEYS: tuple[str, ...] = (
     "NC_STRIPE_SECRET_KEY",
@@ -380,30 +381,55 @@ def parse_render_public_service(raw: bytes) -> tuple[dict[str, str], dict[str, d
     try:
         text = raw.decode("utf-8", errors="strict")
     except UnicodeDecodeError as exc:
-        raise CollectorError("render.yaml must be UTF-8") from exc
+        raise CollectorError("render.customer.yaml must be UTF-8") from exc
     lines = text.splitlines()
-    starts = [index for index, line in enumerate(lines) if re.fullmatch(r"  - type: .+", line)]
-    candidates: list[list[str]] = []
-    for offset, start in enumerate(starts):
-        end = starts[offset + 1] if offset + 1 < len(starts) else len(lines)
+    starts = [
+        (index, len(match.group("indent")))
+        for index, line in enumerate(lines)
+        if (match := re.fullmatch(r"(?P<indent> *)- type: .+", line))
+    ]
+    candidates: list[tuple[list[str], int]] = []
+    for start, service_indent in starts:
+        end = len(lines)
+        for index in range(start + 1, len(lines)):
+            stripped = lines[index].lstrip()
+            if not stripped or stripped.startswith("#"):
+                continue
+            indent = len(lines[index]) - len(stripped)
+            if indent < service_indent or (
+                indent == service_indent and stripped.startswith("- ")
+            ):
+                end = index
+                break
         block = lines[start:end]
+        field_prefix = " " * (service_indent + 2)
         names = [
             _yaml_scalar(match.group(1))
             for line in block
-            if (match := re.fullmatch(r"    name: (.+)", line))
+            if (match := re.fullmatch(rf"{re.escape(field_prefix)}name: (.+)", line))
         ]
         if names == [PUBLIC_SERVICE_NAME]:
-            candidates.append(block)
+            candidates.append((block, service_indent))
     if len(candidates) != 1:
-        raise CollectorError("render.yaml must contain exactly one pinned public service")
-    block = candidates[0]
+        raise CollectorError(
+            "render.customer.yaml must contain exactly one pinned customer service"
+        )
+    block, service_indent = candidates[0]
+    field_prefix = " " * (service_indent + 2)
+    env_item_prefix = " " * (service_indent + 4)
+    env_value_prefix = " " * (service_indent + 6)
+    env_nested_prefix = " " * (service_indent + 8)
 
     service: dict[str, str] = {"name": PUBLIC_SERVICE_NAME}
     for key, expected in PUBLIC_SERVICE_SCALARS.items():
         values = [
             _yaml_scalar(match.group(1))
             for line in block
-            if (match := re.fullmatch(rf"    {re.escape(key)}: (.+)", line))
+            if (
+                match := re.fullmatch(
+                    rf"{re.escape(field_prefix)}{re.escape(key)}: (.+)", line
+                )
+            )
         ]
         if values != [expected]:
             raise CollectorError(f"public Render service {key} drifted from its pinned value")
@@ -411,7 +437,10 @@ def parse_render_public_service(raw: bytes) -> tuple[dict[str, str], dict[str, d
 
     key_lines: list[tuple[int, str]] = []
     for index, line in enumerate(block):
-        match = re.fullmatch(r"      - key: ([A-Z][A-Z0-9_]*)", line)
+        match = re.fullmatch(
+            rf"{re.escape(env_item_prefix)}- key: ([A-Z][A-Z0-9_]*)",
+            line,
+        )
         if match:
             key_lines.append((index, match.group(1)))
     env: dict[str, dict[str, Any]] = {}
@@ -423,12 +452,44 @@ def parse_render_public_service(raw: bytes) -> tuple[dict[str, str], dict[str, d
         literal_values = [
             _yaml_scalar(match.group(1))
             for line in item
-            if (match := re.fullmatch(r"        value: (.+)", line))
+            if (
+                match := re.fullmatch(
+                    rf"{re.escape(env_value_prefix)}value: (.+)", line
+                )
+            )
         ]
         sync_values = [
             _yaml_scalar(match.group(1)).lower()
             for line in item
-            if (match := re.fullmatch(r"        sync: (.+)", line))
+            if (
+                match := re.fullmatch(
+                    rf"{re.escape(env_value_prefix)}sync: (.+)", line
+                )
+            )
+        ]
+        from_database = any(
+            re.fullmatch(
+                rf"{re.escape(env_value_prefix)}fromDatabase:\s*", line
+            )
+            for line in item
+        )
+        database_names = [
+            _yaml_scalar(match.group(1))
+            for line in item
+            if (
+                match := re.fullmatch(
+                    rf"{re.escape(env_nested_prefix)}name: (.+)", line
+                )
+            )
+        ]
+        database_properties = [
+            _yaml_scalar(match.group(1))
+            for line in item
+            if (
+                match := re.fullmatch(
+                    rf"{re.escape(env_nested_prefix)}property: (.+)", line
+                )
+            )
         ]
         if len(literal_values) == 1 and not sync_values:
             env[key] = {"mode": "literal", "repository_value": literal_values[0]}
@@ -436,6 +497,19 @@ def parse_render_public_service(raw: bytes) -> tuple[dict[str, str], dict[str, d
             env[key] = {
                 "mode": "dashboard_managed_slot",
                 "repository_value": None,
+            }
+        elif (
+            from_database
+            and database_names == [CUSTOMER_DATABASE_NAME]
+            and database_properties == ["connectionString"]
+            and not literal_values
+            and not sync_values
+        ):
+            env[key] = {
+                "mode": "blueprint_database_binding",
+                "repository_value": None,
+                "database_name": CUSTOMER_DATABASE_NAME,
+                "property": "connectionString",
             }
         else:
             # Other Blueprint constructs are irrelevant unless one of the required
@@ -445,7 +519,6 @@ def parse_render_public_service(raw: bytes) -> tuple[dict[str, str], dict[str, d
     required_keys = set(FEATURE_ENV_KEYS.values()) | {
         DATABASE_ENV_KEY,
         BILLING_PROVIDER_ENV_KEY,
-        *STRIPE_SLOT_KEYS,
     }
     missing = sorted(required_keys - env.keys())
     if missing:
@@ -588,9 +661,30 @@ def collect_customer_readiness_report(
         provider.get("repository_value"), str
     ):
         raise CollectorError("NC_BILLING_PROVIDER must be an exact literal")
-    for key in (DATABASE_ENV_KEY, *STRIPE_SLOT_KEYS):
-        if snapshot.env[key].get("mode") != "dashboard_managed_slot":
-            raise CollectorError(f"{key} must remain a dashboard-managed source slot")
+    database_declaration = snapshot.env[DATABASE_ENV_KEY]
+    if (
+        database_declaration.get("mode") != "blueprint_database_binding"
+        or database_declaration.get("database_name") != CUSTOMER_DATABASE_NAME
+        or database_declaration.get("property") != "connectionString"
+    ):
+        raise CollectorError(
+            "NC_DATABASE_URL must bind the dedicated customer Blueprint database"
+        )
+    declared_stripe_slots = [key for key in STRIPE_SLOT_KEYS if key in snapshot.env]
+    provider_value = str(provider["repository_value"]).lower()
+    if provider_value == "null":
+        if declared_stripe_slots:
+            raise CollectorError(
+                "Stripe provider slots must be absent while NC_BILLING_PROVIDER is null"
+            )
+    elif provider_value == "stripe":
+        if declared_stripe_slots != list(STRIPE_SLOT_KEYS) or any(
+            snapshot.env[key].get("mode") != "dashboard_managed_slot"
+            for key in STRIPE_SLOT_KEYS
+        ):
+            raise CollectorError(
+                "Stripe provider mode requires every dashboard-managed source slot"
+            )
 
     if fetcher is None:
         active_opener = opener or urllib.request.build_opener(_NoRedirect)
@@ -632,8 +726,10 @@ def collect_customer_readiness_report(
     configured_vs_observed: dict[str, Any] = {
         "postgres": {
             "repository_env_key": DATABASE_ENV_KEY,
-            "repository_value_mode": "dashboard_managed_slot",
+            "repository_value_mode": "blueprint_database_binding",
             "repository_value_available": False,
+            "repository_database_name": CUSTOMER_DATABASE_NAME,
+            "repository_database_property": "connectionString",
             **database,
             "observation_basis": "sanitized_public_health_ready_database_check",
         },
@@ -646,7 +742,12 @@ def collect_customer_readiness_report(
         "stripe": {
             "repository_provider_env_key": BILLING_PROVIDER_ENV_KEY,
             "repository_provider_value": provider["repository_value"],
-            "repository_dashboard_managed_slots": list(STRIPE_SLOT_KEYS),
+            "repository_dashboard_managed_slots": declared_stripe_slots,
+            "repository_slot_posture": (
+                "absent_while_provider_null"
+                if provider_value == "null"
+                else "declared_for_stripe_provider"
+            ),
             "repository_slot_values_available": False,
             "public_runtime_live_enablement": None,
             "public_runtime_observation_basis": (

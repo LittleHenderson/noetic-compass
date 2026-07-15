@@ -20,7 +20,7 @@ publish acceptance authority or change the checked-in acceptance manifest.
 - `NC_PLATFORM_TENANT_PROVISIONING_SECRET` and `NC_BILLING_ADMIN_SECRET` are
   available only in the production operator environment. Never place them on
   the command line or in an evidence file.
-- Run from Render Shell on service `srv-d82ph683kofs73d210e0`. The collector
+- Run from Render Shell on customer service `srv-d9bijbjtqb8s73cn4n20`. The collector
   refuses to run unless `RENDER_SERVICE_ID` matches that service and
   `RENDER_GIT_COMMIT` matches `--master-head`; this prevents a plausible
   receipt from being collected by a different service or source revision.
@@ -37,7 +37,7 @@ python scripts/collect_hosted_customer_journey_evidence.py `
   --safe-artifact-output /tmp/hosted-customer-journey-receipt.json
 ```
 
-The command intentionally pins `https://noetic-compass-api.onrender.com`; an
+The command intentionally pins `https://cas-harness-customer-api.onrender.com`; an
 alternate origin, credentialized URL, query, or redirect target is refused.
 It creates two probe tenants. The primary receives a two-hour `manual_comped`
 `beta_comped` entitlement; that source represents no payment. Its anonymous

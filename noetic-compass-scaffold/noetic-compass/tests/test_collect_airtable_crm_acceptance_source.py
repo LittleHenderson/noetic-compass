@@ -406,7 +406,7 @@ def test_timestamp_order_fails_closed(tmp_path: Path) -> None:
         (
             "NC_CRM_LEAD_STORE_PATH",
             "/tmp/leads.jsonl",
-            "must be exact /var/data/leads.jsonl",
+            "must be exact /var/customer-support/leads.jsonl",
         ),
     ],
 )
