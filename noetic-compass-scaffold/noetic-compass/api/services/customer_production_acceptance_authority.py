@@ -30,6 +30,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 from api.acceptance_authority_contract import (
     ACCEPTANCE_AUTHORITY_PATH_BY_GATE,
+    ACCEPTANCE_PUBLICATION_AUTHORIZATION_PATH_PATTERN,
     PRODUCTION_API_ORIGIN,
     acceptance_authority_url,
 )
@@ -39,6 +40,13 @@ from api.services.production.state_substrate import (
     VersionConflict,
 )
 from api.services.production.worm_writes import RetentionPolicy
+from api.services.acceptance_publication_authorizations import (
+    AcceptancePublicationAuthorizationInvalid,
+    AcceptancePublicationAuthorizationNotFound,
+    AcceptancePublicationAuthorizationStore,
+    AcceptancePublicationAuthorizationUnavailable,
+    validate_publication_authorization_reference,
+)
 from api.services.cas_harness_retention_disclosure import (
     revalidate_object_lock_verification,
 )
@@ -704,6 +712,14 @@ class AcceptanceAuthorityConflict(AcceptanceAuthorityError):
     """The publisher did not hold the current version of the gate head."""
 
 
+class AcceptanceAuthorityAuthorizationInvalid(AcceptanceAuthorityInvalid):
+    """The pre-write publication authorization is absent/expired/mismatched."""
+
+
+class AcceptanceAuthorityAuthorizationUnavailable(AcceptanceAuthorityUnavailable):
+    """The pre-write publication-authorization store failed integrity/readback."""
+
+
 @dataclass(frozen=True, slots=True)
 class AcceptanceEvidenceDocument:
     gate: str
@@ -750,6 +766,9 @@ class CustomerProductionAcceptanceAuthorityStore:
         *,
         immutable_backend: ImmutableAcceptanceEvidenceBackend | None = None,
         retention_policy: RetentionPolicy | None = None,
+        publication_authorization_store: (
+            AcceptancePublicationAuthorizationStore | None
+        ) = None,
     ) -> None:
         if (immutable_backend is None) != (retention_policy is None):
             raise ValueError(
@@ -758,6 +777,54 @@ class CustomerProductionAcceptanceAuthorityStore:
         self._store = store
         self._immutable_backend = immutable_backend
         self._retention_policy = retention_policy
+        self._publication_authorizations = (
+            publication_authorization_store
+            if publication_authorization_store is not None
+            else AcceptancePublicationAuthorizationStore(
+                store, primary_tenant_id="primary"
+            )
+        )
+
+    def assert_publication_authorized(
+        self,
+        *,
+        gate: str,
+        master_head_sha: str,
+        deploy_id: str,
+        evidence_sha256: str,
+        expected_head_version: int,
+        expected_previous_sha256: str | None,
+        authorization_artifact_uri: str,
+        authorization_artifact_sha256: str,
+        operation_reason: str,
+        now: datetime | None = None,
+    ) -> None:
+        """Resolve and exactly match one local owner authorization record."""
+
+        try:
+            self._publication_authorizations.assert_matches(
+                authorization_artifact_uri=authorization_artifact_uri,
+                authorization_artifact_sha256=authorization_artifact_sha256,
+                gate=gate,
+                master_head_sha=master_head_sha,
+                deploy_id=deploy_id,
+                evidence_sha256=evidence_sha256,
+                expected_head_version=expected_head_version,
+                expected_previous_evidence_sha256=expected_previous_sha256,
+                reason=operation_reason,
+                now=now,
+            )
+        except (
+            AcceptancePublicationAuthorizationInvalid,
+            AcceptancePublicationAuthorizationNotFound,
+        ) as exc:
+            raise AcceptanceAuthorityAuthorizationInvalid(
+                "publication authorization is absent, expired, or mismatched"
+            ) from exc
+        except AcceptancePublicationAuthorizationUnavailable as exc:
+            raise AcceptanceAuthorityAuthorizationUnavailable(
+                "publication authorization storage is unavailable"
+            ) from exc
 
     def current_head(self, gate: str) -> AcceptanceAuthorityHead | None:
         """Return the validated active-or-tombstoned head, or ``None``."""
@@ -1263,6 +1330,18 @@ class CustomerProductionAcceptanceAuthorityStore:
             gate, evidence, now=stamp
         )
         digest = hashlib.sha256(canonical).hexdigest()
+        self.assert_publication_authorized(
+            gate=gate,
+            master_head_sha=str(evidence["master_head_sha"]),
+            deploy_id=str(evidence["deploy_id"]),
+            evidence_sha256=digest,
+            expected_head_version=expected_head_version,
+            expected_previous_sha256=expected_previous_sha256,
+            authorization_artifact_uri=authorization_artifact_uri,
+            authorization_artifact_sha256=authorization_artifact_sha256,
+            operation_reason=operation_reason,
+            now=stamp,
+        )
         revision_id = _revision_record_id(gate, digest)
         revision_payload = self._revision_payload(
             gate, revision_id, digest, required=False
@@ -2732,6 +2811,9 @@ def _scan_safe_values(value: Any, path: str = "$") -> None:
                 or field in {"url", "artifact_uri"}
             ):
                 _validate_public_https_url(child, f"{path}.{key}")
+                _reject_publication_authorization_evidence_uri(
+                    child, f"{path}.{key}"
+                )
             _scan_safe_values(child, f"{path}.{key}")
     elif isinstance(value, list):
         for index, child in enumerate(value):
@@ -2742,6 +2824,25 @@ def _scan_safe_values(value: Any, path: str = "$") -> None:
                 raise AcceptanceAuthorityInvalid(
                     f"{path} contains prohibited {label} material"
                 )
+
+
+def _reject_publication_authorization_evidence_uri(
+    value: str, path: str
+) -> None:
+    """Keep the operation capability out of every gate-evidence URL field."""
+
+    parsed = urlparse(value)
+    if (
+        parsed.scheme == "https"
+        and parsed.netloc.lower() == urlparse(PRODUCTION_API_ORIGIN).netloc.lower()
+        and ACCEPTANCE_PUBLICATION_AUTHORIZATION_PATH_PATTERN.fullmatch(
+            parsed.path
+        )
+        is not None
+    ):
+        raise AcceptanceAuthorityInvalid(
+            f"{path} must not use a publication authorization as gate evidence"
+        )
 
 
 def _validate_public_https_url(
@@ -2830,15 +2931,25 @@ def _validate_operation_authorization(
         raise AcceptanceAuthorityInvalid(
             "authority operation artifact URI is invalid"
         )
-    _validate_public_https_url(
-        artifact_uri,
-        "authority operation authorization.artifact_uri",
-        allowed_origins=_API_LANDING_ORIGINS,
-    )
-    if not _is_sha256(artifact_sha256):
-        raise AcceptanceAuthorityInvalid(
-            "authority operation artifact digest is invalid"
+    if action == "publish":
+        try:
+            validate_publication_authorization_reference(
+                artifact_uri, artifact_sha256
+            )
+        except AcceptancePublicationAuthorizationInvalid as exc:
+            raise AcceptanceAuthorityInvalid(
+                "authority publication authorization reference is invalid"
+            ) from exc
+    else:
+        _validate_public_https_url(
+            artifact_uri,
+            "authority operation authorization.artifact_uri",
+            allowed_origins=_API_LANDING_ORIGINS,
         )
+        if not _is_sha256(artifact_sha256):
+            raise AcceptanceAuthorityInvalid(
+                "authority operation artifact digest is invalid"
+            )
 
 
 def _validate_operation(
@@ -3190,6 +3301,8 @@ def _is_sha1(value: Any) -> bool:
 
 
 __all__ = [
+    "AcceptanceAuthorityAuthorizationInvalid",
+    "AcceptanceAuthorityAuthorizationUnavailable",
     "AcceptanceAuthorityConflict",
     "AcceptanceAuthorityError",
     "AcceptanceAuthorityHead",

@@ -14,6 +14,7 @@ from api.config import settings
 from api.middleware.auth import (
     is_public_account_capability_request,
     is_public_acceptance_authority_request,
+    is_public_acceptance_publication_authorization_request,
     is_public_path,
     is_public_support_privacy_notice_request,
 )
@@ -32,6 +33,7 @@ _ANONYMOUS_EVIDENCE_SHARE_PATTERN = re.compile(
 _EVIDENCE_SHARE_CLIENT_RPM = 120
 _EVIDENCE_SHARE_CLIENT_AND_SHARE_RPM = 60
 _ACCEPTANCE_AUTHORITY_CLIENT_RPM = 120
+_ACCEPTANCE_PUBLICATION_AUTHORIZATION_CLIENT_RPM = 60
 _PUBLIC_CAPABILITY_CLIENT_RPM = 120
 _PUBLIC_SUPPORT_NOTICE_CLIENT_RPM = 120
 
@@ -150,6 +152,26 @@ class RateLimitMiddleware(BaseHTTPMiddleware):
                 return JSONResponse(
                     status_code=429,
                     content={"detail": "Rate limit exceeded (acceptance authority)"},
+                    headers={
+                        "Cache-Control": "no-store, max-age=0",
+                        "Pragma": "no-cache",
+                    },
+                )
+            return await call_next(request)
+        if is_public_acceptance_publication_authorization_request(
+            request.url.path, request.method, request.url.query
+        ):
+            # A separate, tighter bucket prevents content-address cycling from
+            # consuming the public gate-document allowance.
+            if not self._consume_sensitive_bucket(
+                key=f"acceptance-publication-authorization-client:{client_host}",
+                rpm=_ACCEPTANCE_PUBLICATION_AUTHORIZATION_CLIENT_RPM,
+            ):
+                return JSONResponse(
+                    status_code=429,
+                    content={
+                        "detail": "Rate limit exceeded (publication authorization)"
+                    },
                     headers={
                         "Cache-Control": "no-store, max-age=0",
                         "Pragma": "no-cache",
