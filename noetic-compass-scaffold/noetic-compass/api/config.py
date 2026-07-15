@@ -129,8 +129,9 @@ class Settings(BaseSettings):
         ),
     )
 
-    # Server-owned privacy notice identity for public CRM consent. The checked-in/live page is
-    # currently an OPEN draft, so these defaults deliberately disable public lead persistence.
+    # Server-owned privacy notice identity for public CRM and support consent. The checked-in/live
+    # page is currently an OPEN draft, so these defaults deliberately disable persistence of
+    # public contact details.
     # A legal/publication operation must supply one different finalized digest and exact version,
     # then change the status to exact ``present``. The browser never supplies these authorities.
     crm_privacy_notice_publication_status: str = Field(
