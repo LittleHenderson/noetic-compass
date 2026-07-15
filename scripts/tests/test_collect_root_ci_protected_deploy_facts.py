@@ -130,6 +130,7 @@ def _fixture(root: Path) -> tuple[FakeTransport, dict[str, collector.HttpDocumen
             "html_url": acceptance.REPOSITORY_URL,
             "url": acceptance.REPOSITORY_API_URL,
             "default_branch": "master",
+            "temp_clone_token": "provider-ephemeral-never-output",
             "ignored_secret": "must-not-escape",
         },
     )
@@ -346,6 +347,7 @@ class CollectorTests(unittest.TestCase):
         for forbidden in (
             GITHUB_TOKEN,
             RENDER_KEY,
+            "provider-ephemeral-never-output",
             "must-not-escape",
             "signature_base64url",
             '"issuer"',
@@ -369,6 +371,34 @@ class CollectorTests(unittest.TestCase):
         )
         acceptance._validate_root_ci(payload, context)
         self.assertEqual(context.errors, [])
+
+    def test_ephemeral_clone_credential_rotation_is_not_repository_drift(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            _, documents = _fixture(root)
+            preflight = deepcopy(documents[collector.GITHUB_API].payload)
+            final = deepcopy(preflight)
+            preflight["temp_clone_token"] = "first-ephemeral-credential"
+            final["temp_clone_token"] = "second-ephemeral-credential"
+            transport = SequencedTransport(
+                documents,
+                {
+                    collector.GITHUB_API: [
+                        _document(collector.GITHUB_API, preflight),
+                        _document(collector.GITHUB_API, final),
+                    ]
+                },
+            )
+            payload = _collect(root, transport)
+
+        observation = payload["observation"]
+        self.assertEqual(
+            observation["github_repository_preflight_sha256"],
+            observation["github_repository_final_sha256"],
+        )
+        rendered = json.dumps(payload, sort_keys=True)
+        self.assertNotIn("first-ephemeral-credential", rendered)
+        self.assertNotIn("second-ephemeral-credential", rendered)
 
     def test_hostile_source_drift_fails_closed(self) -> None:
         cases = {
