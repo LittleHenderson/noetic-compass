@@ -1,14 +1,18 @@
 from __future__ import annotations
 
 import sys
+from pathlib import Path
 from types import ModuleType, SimpleNamespace
 
 import pytest
 
 from api.services.stripe_billing import (
+    STRIPE_API_VERSION,
+    STRIPE_SDK_VERSION,
     StripeBillingConfigurationError,
     StripeBillingProvider,
     StripeBillingProviderError,
+    build_billing_provider,
 )
 
 
@@ -39,8 +43,15 @@ class _AsyncRetrieve:
 class _StripeClient:
     instances: list["_StripeClient"] = []
 
-    def __init__(self, secret_key: str, *, max_network_retries: int) -> None:
+    def __init__(
+        self,
+        secret_key: str,
+        *,
+        stripe_version: str,
+        max_network_retries: int,
+    ) -> None:
         self.secret_key = secret_key
+        self.stripe_version = stripe_version
         self.max_network_retries = max_network_retries
         self.checkout = _AsyncCreate(
             SimpleNamespace(
@@ -66,7 +77,12 @@ class _StripeClient:
             subscriptions=self.subscriptions,
         )
         self.construct_calls: list[tuple[bytes, str, str]] = []
-        self.event = {"id": "evt_verified", "type": "test"}
+        self.event = {
+            "id": "evt_verified",
+            "type": "test",
+            "api_version": STRIPE_API_VERSION,
+            "livemode": False,
+        }
         self.instances.append(self)
 
     def construct_event(self, payload: bytes, signature: str, secret: str):
@@ -74,12 +90,17 @@ class _StripeClient:
         return SimpleNamespace(to_dict_recursive=lambda: self.event)
 
 
-@pytest.fixture
-def provider(monkeypatch) -> StripeBillingProvider:
+def _install_fake_stripe(monkeypatch) -> None:
     _StripeClient.instances.clear()
     stripe = ModuleType("stripe")
+    stripe.VERSION = STRIPE_SDK_VERSION  # type: ignore[attr-defined]
     stripe.StripeClient = _StripeClient  # type: ignore[attr-defined]
     monkeypatch.setitem(sys.modules, "stripe", stripe)
+
+
+@pytest.fixture
+def provider(monkeypatch) -> StripeBillingProvider:
+    _install_fake_stripe(monkeypatch)
     return StripeBillingProvider(
         secret_key="sk_test_private",
         webhook_secret="whsec_private",
@@ -87,6 +108,8 @@ def provider(monkeypatch) -> StripeBillingProvider:
             "professional_live": "price_pro",
             "enterprise_live": "price_ent",
         },
+        livemode=False,
+        usage_price_id="price_usage",
         success_url="https://app.example.com/billing/success",
         cancel_url="https://app.example.com/billing/cancel",
         portal_return_url="https://app.example.com/billing",
@@ -107,8 +130,13 @@ async def test_checkout_parameters_are_server_derived_and_idempotent(provider) -
     params, options = client.checkout.calls[0]
     assert result.session_id == "cs_server"
     assert client.secret_key == "sk_test_private"
+    assert client.stripe_version == STRIPE_API_VERSION
     assert client.max_network_retries == 2
-    assert params["line_items"] == [{"price": "price_pro", "quantity": 1}]
+    assert params["line_items"] == [
+        {"price": "price_pro", "quantity": 1},
+        {"price": "price_usage"},
+    ]
+    assert "quantity" not in params["line_items"][1]
     assert params["client_reference_id"] == "tenant-a"
     assert params["customer_email"] == "owner@example.com"
     assert params["metadata"] == {
@@ -150,8 +178,55 @@ def test_raw_webhook_signature_is_verified_by_sdk_client(provider) -> None:
     payload = b'{"id":"evt_verified"}'
     event = provider.construct_webhook_event(payload=payload, signature="t=1,v1=abc")
     client = _StripeClient.instances[0]
-    assert event == {"id": "evt_verified", "type": "test"}
+    assert event == {
+        "id": "evt_verified",
+        "type": "test",
+        "api_version": STRIPE_API_VERSION,
+        "livemode": False,
+    }
     assert client.construct_calls == [(payload, "t=1,v1=abc", "whsec_private")]
+
+
+@pytest.mark.parametrize(
+    ("event", "message"),
+    (
+        (
+            {"livemode": False},
+            "webhook API version does not match",
+        ),
+        (
+            {"api_version": "2019-12-03", "livemode": False},
+            "webhook API version does not match",
+        ),
+        (
+            {"api_version": STRIPE_API_VERSION},
+            "webhook livemode was malformed",
+        ),
+        (
+            {"api_version": STRIPE_API_VERSION, "livemode": "false"},
+            "webhook livemode was malformed",
+        ),
+        (
+            {"api_version": STRIPE_API_VERSION, "livemode": True},
+            "webhook livemode does not match",
+        ),
+    ),
+)
+def test_webhook_rejects_unpinned_schema_and_wrong_provider_mode(
+    provider, event: dict[str, object], message: str
+) -> None:
+    client = _StripeClient.instances[0]
+    client.event = {"id": "evt_adversarial", "type": "test", **event}
+    with pytest.raises(StripeBillingProviderError, match=message):
+        provider.construct_webhook_event(
+            payload=b'{"id":"evt_adversarial"}',
+            signature="t=1,v1=abc",
+        )
+    assert client.construct_calls[-1] == (
+        b'{"id":"evt_adversarial"}',
+        "t=1,v1=abc",
+        "whsec_private",
+    )
 
 
 @pytest.mark.asyncio
@@ -170,6 +245,7 @@ def test_incomplete_configuration_fails_loud_without_importing_sdk() -> None:
             secret_key="secret-not-printed",
             webhook_secret="",
             price_by_plan={},
+            livemode=False,
             success_url="",
             cancel_url="",
             portal_return_url="",
@@ -177,6 +253,149 @@ def test_incomplete_configuration_fails_loud_without_importing_sdk() -> None:
     message = str(exc_info.value)
     assert "NC_STRIPE_WEBHOOK_SECRET" in message
     assert "secret-not-printed" not in message
+
+
+@pytest.mark.parametrize(
+    ("secret_key", "expected_livemode", "message"),
+    (
+        ("sk_test_private", True, "does not match NC_STRIPE_LIVEMODE"),
+        ("rk_live_private", False, "does not match NC_STRIPE_LIVEMODE"),
+        ("untyped-private-key", False, "recognizable Stripe live/test prefix"),
+        (" sk_test_private", False, "must not contain surrounding whitespace"),
+    ),
+)
+def test_stripe_provider_rejects_secret_key_mode_mismatch_without_leaking_key(
+    monkeypatch, secret_key: str, expected_livemode: bool, message: str
+) -> None:
+    _install_fake_stripe(monkeypatch)
+    with pytest.raises(StripeBillingConfigurationError, match=message) as exc_info:
+        StripeBillingProvider(
+            secret_key=secret_key,
+            webhook_secret="whsec_private",
+            price_by_plan={
+                "professional_live": "price_pro",
+                "enterprise_live": "price_ent",
+            },
+            livemode=expected_livemode,
+            success_url="https://app.example.com/billing/success",
+            cancel_url="https://app.example.com/billing/cancel",
+            portal_return_url="https://app.example.com/billing",
+        )
+    assert secret_key not in str(exc_info.value)
+    assert _StripeClient.instances == []
+
+
+@pytest.mark.parametrize("usage_price_id", ("price_pro", "not-a-price"))
+def test_usage_billing_requires_a_distinct_canonical_price_before_sdk_import(
+    monkeypatch, usage_price_id: str
+) -> None:
+    _install_fake_stripe(monkeypatch)
+    with pytest.raises(
+        StripeBillingConfigurationError, match="USAGE_PRICE_ID|usage price"
+    ):
+        StripeBillingProvider(
+            secret_key="sk_test_private",
+            webhook_secret="whsec_private",
+            price_by_plan={
+                "professional_live": "price_pro",
+                "enterprise_live": "price_ent",
+            },
+            livemode=False,
+            usage_price_id=usage_price_id,
+            success_url="https://app.example.com/billing/success",
+            cancel_url="https://app.example.com/billing/cancel",
+            portal_return_url="https://app.example.com/billing",
+        )
+    assert _StripeClient.instances == []
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    ("reconciliation_enabled", "expected_line_items"),
+    (
+        (False, [{"price": "price_pro", "quantity": 1}]),
+        (
+            True,
+            [
+                {"price": "price_pro", "quantity": 1},
+                {"price": "price_usage"},
+            ],
+        ),
+    ),
+)
+async def test_builder_wires_usage_price_only_when_reconciliation_is_enabled(
+    monkeypatch, reconciliation_enabled: bool, expected_line_items: list[dict[str, object]]
+) -> None:
+    _install_fake_stripe(monkeypatch)
+    built = build_billing_provider(
+        SimpleNamespace(
+            billing_provider="stripe",
+            billing_reconciliation_enabled=reconciliation_enabled,
+            stripe_secret_key="sk_test_private",
+            stripe_webhook_secret="whsec_private",
+            stripe_professional_price_id="price_pro",
+            stripe_enterprise_price_id="price_ent",
+            # A populated dark slot must not silently alter Checkout.
+            stripe_usage_price_id="price_usage",
+            stripe_livemode=False,
+            stripe_checkout_success_url="https://app.example.com/billing/success",
+            stripe_checkout_cancel_url="https://app.example.com/billing/cancel",
+            stripe_portal_return_url="https://app.example.com/billing",
+        )
+    )
+    await built.create_checkout_session(
+        tenant_id="tenant-a",
+        account_id="acct-a",
+        email="owner@example.com",
+        plan_id="professional_live",
+        external_customer_id=None,
+        idempotency_key="req-builder",
+    )
+    params, _ = _StripeClient.instances[0].checkout.calls[0]
+    assert params["line_items"] == expected_line_items
+
+
+def test_stripe_financial_contract_is_exactly_pinned() -> None:
+    root = Path(__file__).resolve().parents[1]
+    for relative_path in ("requirements.txt", "requirements-runtime.txt"):
+        requirements = (root / relative_path).read_text(encoding="utf-8")
+        dependency_lines = [
+            line.split("#", 1)[0].strip()
+            for line in requirements.splitlines()
+            if line.split("#", 1)[0].strip().startswith("stripe")
+        ]
+        assert dependency_lines == [f"stripe=={STRIPE_SDK_VERSION}"]
+    assert STRIPE_API_VERSION == "2026-05-27.dahlia"
+
+
+def test_installed_stripe_package_matches_the_financial_contract() -> None:
+    import stripe
+
+    assert stripe.VERSION == STRIPE_SDK_VERSION
+    assert stripe.api_version == STRIPE_API_VERSION
+
+
+def test_provider_rejects_an_unpinned_installed_stripe_package(monkeypatch) -> None:
+    stripe = ModuleType("stripe")
+    stripe.VERSION = "15.2.0"  # type: ignore[attr-defined]
+    stripe.StripeClient = _StripeClient  # type: ignore[attr-defined]
+    monkeypatch.setitem(sys.modules, "stripe", stripe)
+
+    with pytest.raises(
+        StripeBillingConfigurationError, match="pinned financial API contract"
+    ):
+        StripeBillingProvider(
+            secret_key="sk_test_private",
+            webhook_secret="whsec_private",
+            price_by_plan={
+                "professional_live": "price_pro",
+                "enterprise_live": "price_ent",
+            },
+            livemode=False,
+            success_url="https://app.example.com/billing/success",
+            cancel_url="https://app.example.com/billing/cancel",
+            portal_return_url="https://app.example.com/billing",
+        )
 
 
 @pytest.mark.asyncio

@@ -612,6 +612,19 @@ class Settings(BaseSettings):
                 raise RuntimeError(
                     "Stripe professional and enterprise price ids must be distinct."
                 )
+            if provider == "stripe" and not self.billing_reconciliation_enabled:
+                from api.services.stripe_billing import (
+                    StripeBillingConfigurationError,
+                    validate_stripe_secret_key_mode,
+                )
+
+                try:
+                    validate_stripe_secret_key_mode(
+                        self.stripe_secret_key,
+                        expected_livemode=self.stripe_livemode,
+                    )
+                except StripeBillingConfigurationError as exc:
+                    raise RuntimeError(str(exc)) from exc
         if self.billing_reconciliation_enabled:
             if not self.billing_entitlements_enabled:
                 raise RuntimeError(
@@ -699,6 +712,18 @@ class Settings(BaseSettings):
                     "Stripe usage price id must be distinct from flat "
                     "subscription price ids."
                 )
+            from api.services.stripe_billing import (
+                StripeBillingConfigurationError,
+                validate_stripe_secret_key_mode,
+            )
+
+            try:
+                validate_stripe_secret_key_mode(
+                    self.stripe_secret_key,
+                    expected_livemode=self.stripe_livemode,
+                )
+            except StripeBillingConfigurationError as exc:
+                raise RuntimeError(str(exc)) from exc
             if (
                 len(currency) != 3
                 or not currency.isascii()

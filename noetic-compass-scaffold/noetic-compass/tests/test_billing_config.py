@@ -53,6 +53,20 @@ def test_billing_rejects_unknown_provider_and_weak_admin_secret() -> None:
         ).validate_account_storage()
 
 
+def test_stripe_key_mode_binding_applies_while_reconciliation_is_dark() -> None:
+    base = {
+        "billing_provider": "stripe",
+        "billing_reconciliation_enabled": False,
+        "stripe_professional_price_id": "price_pro",
+        "stripe_enterprise_price_id": "price_ent",
+        "stripe_secret_key": "sk_test_private",
+        "stripe_livemode": False,
+    }
+    _settings(**base).validate_account_storage()
+    with pytest.raises(RuntimeError, match="does not match NC_STRIPE_LIVEMODE"):
+        _settings(**{**base, "stripe_livemode": True}).validate_account_storage()
+
+
 def test_dark_defaults_are_inert() -> None:
     dark = Settings.model_construct(
         accounts_enabled=False,
@@ -67,7 +81,9 @@ def test_dark_defaults_are_inert() -> None:
         billing_usage_meter_event_name="unsafe placeholder with spaces",
         billing_usage_meter_version="",
         billing_usage_currency="not-a-currency",
+        stripe_secret_key="untyped-unused-placeholder",
         stripe_usage_price_id="",
+        stripe_livemode=True,
         billing_customer_receipt_allowed_hosts="unsafe host",
     )
     dark.validate_account_storage()
@@ -96,7 +112,9 @@ def test_reconciliation_enablement_fails_loud_on_incomplete_contract() -> None:
         "billing_usage_meter_event_name": "cas.accelerator_milliseconds",
         "billing_usage_meter_version": "cas_meter.v1",
         "billing_usage_currency": "usd",
+        "stripe_secret_key": "sk_test_private",
         "stripe_usage_price_id": "price_usage",
+        "stripe_livemode": False,
         "billing_customer_receipt_allowed_hosts": "receipts.stripe.test",
     }
     _settings(**base).validate_account_storage()
@@ -135,6 +153,29 @@ def test_reconciliation_enablement_fails_loud_on_incomplete_contract() -> None:
         _settings(
             **{**base, "stripe_usage_price_id": "price_pro"}
         ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="does not match NC_STRIPE_LIVEMODE"):
+        _settings(
+            **{**base, "stripe_livemode": True}
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="does not match NC_STRIPE_LIVEMODE"):
+        _settings(
+            **{
+                **base,
+                "stripe_secret_key": "rk_live_private",
+                "stripe_livemode": False,
+            }
+        ).validate_account_storage()
+    with pytest.raises(RuntimeError, match="recognizable Stripe live/test prefix"):
+        _settings(
+            **{**base, "stripe_secret_key": "untyped-private-key"}
+        ).validate_account_storage()
+    _settings(
+        **{
+            **base,
+            "stripe_secret_key": "rk_live_private",
+            "stripe_livemode": True,
+        }
+    ).validate_account_storage()
     with pytest.raises(RuntimeError, match="CURRENCY"):
         _settings(
             **{**base, "billing_usage_currency": "dollars"}
@@ -302,6 +343,7 @@ def test_lifespan_installs_enabled_reconciliation_service_without_api_claim(
         "stripe_usage_price_id": "price_usage",
         "stripe_professional_price_id": "price_pro",
         "stripe_enterprise_price_id": "price_ent",
+        "stripe_secret_key": "sk_test_private",
         "stripe_livemode": False,
         "billing_customer_receipt_allowed_hosts": "receipts.stripe.test",
         "billing_admin_secret": "a" * 32,

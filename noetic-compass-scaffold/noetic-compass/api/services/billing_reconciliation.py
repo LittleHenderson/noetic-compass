@@ -1236,6 +1236,8 @@ class BillingReconciliationStore:
         ``delivery_uncertain`` across restarts and never re-enters
         ``pending_usage``.  Stripe v1 exposes no exact Meter Event retrieval
         endpoint, so this method makes no unsupported later-readback claim.
+        Every later reservation request raises rather than returning a second
+        apparent authority to dispatch the same request.
         """
 
         safe_failure = "delivery_outcome_unknown"
@@ -1253,10 +1255,8 @@ class BillingReconciliationStore:
                         "submitted usage cannot become delivery uncertain"
                     )
                 if current.outbox_state == "delivery_uncertain":
-                    if current.last_failure_code == safe_failure:
-                        return current
                     raise BillingReconciliationConflict(
-                        "delivery-uncertain usage cannot be rewritten"
+                        "usage delivery reservation is non-replayable"
                     )
                 try:
                     meter_clock = datetime.fromtimestamp(

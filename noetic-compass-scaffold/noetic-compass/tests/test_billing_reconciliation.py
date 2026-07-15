@@ -5,6 +5,7 @@ from dataclasses import replace
 from datetime import UTC, datetime, timedelta
 import hashlib
 import json
+from threading import Event
 
 import pytest
 
@@ -22,6 +23,7 @@ from api.services.billing_reconciliation import (
     BillingReconciliationUnresolved,
     FleetUsageMeasurement,
     ProviderPaidInvoice,
+    UsageOutboxRecord,
 )
 from api.services.production.state_substrate import (
     InMemoryStateStore,
@@ -50,6 +52,28 @@ class _CrashAfterUsageIndexesStore(InMemoryStateStore):
         if self.fail_usage_once and record.kind == USAGE_OUTBOX_KIND:
             self.fail_usage_once = False
             raise StateStoreError("simulated crash after usage indexes")
+        return super().put(record, expected_version=expected_version)
+
+
+class _BlockedReservationWriteStore(InMemoryStateStore):
+    def __init__(self) -> None:
+        super().__init__()
+        self.block_reservation_once = False
+        self.reservation_write_entered = Event()
+        self.allow_reservation_write = Event()
+
+    def put(self, record, *, expected_version):
+        outbox = record.payload.get("outbox")
+        if (
+            self.block_reservation_once
+            and record.kind == USAGE_OUTBOX_KIND
+            and isinstance(outbox, dict)
+            and outbox.get("state") == "delivery_uncertain"
+        ):
+            self.block_reservation_once = False
+            self.reservation_write_entered.set()
+            if not self.allow_reservation_write.wait(timeout=5):
+                raise StateStoreError("timed out releasing reservation write")
         return super().put(record, expected_version=expected_version)
 
 
@@ -503,12 +527,12 @@ def test_delivery_reservation_is_durable_non_retryable_and_exactly_acknowledged(
     assert uncertain.last_attempt_at is not None
     assert uncertain.last_failure_code == "delivery_outcome_unknown"
     assert service.pending_usage("tenant-a") == ()
-    assert (
+    with pytest.raises(
+        BillingReconciliationConflict, match="reservation is non-replayable"
+    ):
         service.reserve_usage_delivery(
             tenant_id="tenant-a", usage_id=usage.usage_id
         )
-        == uncertain
-    )
     with pytest.raises(BillingReconciliationConflict, match="only pending"):
         service.record_delivery_failure(
             tenant_id="tenant-a",
@@ -530,6 +554,79 @@ def test_delivery_reservation_is_durable_non_retryable_and_exactly_acknowledged(
     assert submitted.submitted_at == datetime.fromtimestamp(created, tz=UTC).isoformat()
     assert submitted.last_attempt_at == submitted.submitted_at
     assert service.pending_usage("tenant-a") == ()
+
+
+def test_concurrent_delivery_reservation_grants_one_send_authority() -> None:
+    backend = _BlockedReservationWriteStore()
+    service, _, _ = _service(backend)
+    contender = BillingReconciliationStore(
+        backend,
+        BillingEntitlementStore(backend),
+        provider_reference_hash_key=HASH_KEY,
+        usage_price_id=PRICE_ID,
+        meter_event_name=METER_NAME,
+        meter_event_version=METER_VERSION,
+        currency="usd",
+        livemode=True,
+        customer_receipt_allowed_hosts=(RECEIPT_HOST,),
+    )
+    usage, _ = service.record_fleet_measurement(_measurement())
+    backend.block_reservation_once = True
+
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        winner = executor.submit(
+            service.reserve_usage_delivery,
+            tenant_id="tenant-a",
+            usage_id=usage.usage_id,
+        )
+        try:
+            assert backend.reservation_write_entered.wait(timeout=5)
+            with pytest.raises(
+                BillingReconciliationError,
+                match="another billing reconciliation transition",
+            ):
+                contender.reserve_usage_delivery(
+                    tenant_id="tenant-a", usage_id=usage.usage_id
+                )
+        finally:
+            backend.allow_reservation_write.set()
+        authority = winner.result(timeout=5)
+
+    with pytest.raises(
+        BillingReconciliationConflict, match="reservation is non-replayable"
+    ):
+        contender.reserve_usage_delivery(
+            tenant_id="tenant-a", usage_id=usage.usage_id
+        )
+
+    assert isinstance(authority, UsageOutboxRecord)
+    assert authority.outbox_state == "delivery_uncertain"
+    assert authority.attempt_count == 1
+    assert authority.meter_event_request() == usage.meter_event_request()
+    assert service.pending_usage("tenant-a") == ()
+    stored = service.get_usage("tenant-a", usage.usage_id)
+    assert stored == authority
+
+
+def test_stale_pending_candidates_cannot_replay_send_authority() -> None:
+    service, _, _ = _service()
+    usage, _ = service.record_fleet_measurement(_measurement())
+    first_candidate = service.pending_usage("tenant-a")[0]
+    stale_candidate = service.pending_usage("tenant-a")[0]
+    assert first_candidate == stale_candidate
+
+    authority = service.reserve_usage_delivery(
+        tenant_id="tenant-a", usage_id=first_candidate.usage_id
+    )
+    with pytest.raises(
+        BillingReconciliationConflict, match="reservation is non-replayable"
+    ):
+        service.reserve_usage_delivery(
+            tenant_id="tenant-a", usage_id=stale_candidate.usage_id
+        )
+
+    assert authority.attempt_count == 1
+    assert service.get_usage("tenant-a", usage.usage_id) == authority
 
 
 def test_provider_acknowledgement_is_refused_before_durable_reservation() -> None:
@@ -845,7 +942,15 @@ def test_live_provider_acknowledgements_require_request_receipts() -> None:
         == "delivery_uncertain"
     )
 
-    _submit(service, measurement)
+    service.mark_usage_submitted(
+        tenant_id="tenant-a",
+        usage_id=usage.usage_id,
+        provider_request_id="req_MeterA",
+        response=_provider_readback(
+            usage, created=usage.meter_event_timestamp + 60
+        ),
+        provider_response_sha256="d" * 64,
+    )
     with pytest.raises(BillingReconciliationError, match="request receipt"):
         service.reconcile_paid_invoice(
             replace(_invoice(), provider_request_id=None)
@@ -967,12 +1072,12 @@ def test_uncertain_reservation_survives_restart_and_is_not_redispatched(tmp_path
     assert restored.outbox_state == "delivery_uncertain"
     assert restored.attempt_count == reserved.attempt_count == 1
     assert second.pending_usage("tenant-a") == ()
-    assert (
+    with pytest.raises(
+        BillingReconciliationConflict, match="reservation is non-replayable"
+    ):
         second.reserve_usage_delivery(
             tenant_id="tenant-a", usage_id=usage.usage_id
         )
-        == restored
-    )
     second_backend.close()
 
 
@@ -1483,7 +1588,15 @@ def test_provider_event_and_request_receipts_cannot_cross_tenants_or_subjects() 
             provider_request_id="req_mtr_evt_tenant_a",
             provider_response_sha256="7" * 64,
         )
-    _submit(service, measurement_b, event_id="mtr_evt_tenant_b")
+    service.mark_usage_submitted(
+        tenant_id="tenant-b",
+        usage_id=usage_b.usage_id,
+        response=_provider_readback(
+            usage_b, created=usage_b.meter_event_timestamp + 60
+        ),
+        provider_request_id="req_mtr_evt_tenant_b",
+        provider_response_sha256="d" * 64,
+    )
 
     service.reconcile_paid_invoice(
         _invoice(
