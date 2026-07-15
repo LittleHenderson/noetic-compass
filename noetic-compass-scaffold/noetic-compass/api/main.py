@@ -180,7 +180,10 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             from api.services.customer_production_acceptance_authority import (
                 CustomerProductionAcceptanceAuthorityStore,
             )
-            from api.services.human_attestations import HumanAttestationStore
+            from api.services.human_attestations import (
+                HumanAttestationStore,
+                parse_human_attestation_pseudonym_keyring,
+            )
 
             immutable_repository = app.state.evidence_packet_repository
             publication_authorizations = AcceptancePublicationAuthorizationStore(
@@ -190,10 +193,25 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
             app.state.acceptance_publication_authorization_store = (
                 publication_authorizations
             )
-            human_attestation_store = HumanAttestationStore(
-                shared_store,
-                primary_tenant_id=settings.accounts_bootstrap_tenant_id,
-            )
+            human_attestation_store = None
+            if (
+                settings.accounts_enabled
+                or settings.human_attestation_pseudonym_keyring_json
+                or settings.human_attestation_pseudonym_active_key_id
+            ):
+                human_attestation_store = HumanAttestationStore(
+                    shared_store,
+                    primary_tenant_id=settings.accounts_bootstrap_tenant_id,
+                    pseudonym_keyring=parse_human_attestation_pseudonym_keyring(
+                        settings.human_attestation_pseudonym_keyring_json,
+                        active_key_id=(
+                            settings.human_attestation_pseudonym_active_key_id
+                        ),
+                    ),
+                    active_pseudonym_key_id=(
+                        settings.human_attestation_pseudonym_active_key_id
+                    ),
+                )
             app.state.human_attestation_store = human_attestation_store
             app.state.acceptance_authority_store = (
                 CustomerProductionAcceptanceAuthorityStore(

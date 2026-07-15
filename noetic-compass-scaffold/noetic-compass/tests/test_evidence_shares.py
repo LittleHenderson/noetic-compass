@@ -618,6 +618,13 @@ def _share_settings(**overrides) -> Settings:
         "jwt_secret": "j" * 32,
         "jwt_algorithm": "HS256",
         "account_credential_pepper": "a" * 32,
+        "human_attestation_pseudonym_active_key_id": (
+            "hatk_0123456789abcdef0123456789abcdef"
+        ),
+        "human_attestation_pseudonym_keyring_json": (
+            '{"hatk_0123456789abcdef0123456789abcdef":'
+            '"base64url:5EfvyXp5BYNrpodyw-DoiFemHziedgI06tZHVjtmvow"}'
+        ),
         "object_lock_receipt_attestation_key": "r" * 32,
         "accounts_allow_single_host_sqlite": True,
         "state_ledger_path": str(Path.cwd().resolve() / "share-config-test.db"),

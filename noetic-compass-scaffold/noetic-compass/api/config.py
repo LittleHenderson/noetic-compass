@@ -17,6 +17,7 @@ _BILLING_REFERENCE_CREDENTIAL_FIELDS = (
     "jwt_secret",
     "auth_mint_secret",
     "account_credential_pepper",
+    "human_attestation_pseudonym_keyring_json",
     "account_bootstrap_secret",
     "platform_tenant_provisioning_secret",
     "evidence_share_token_pepper",
@@ -262,6 +263,24 @@ class Settings(BaseSettings):
         default="primary",
         validation_alias=AliasChoices(
             "NC_ACCOUNTS_BOOTSTRAP_TENANT_ID", "ACCOUNTS_BOOTSTRAP_TENANT_ID"
+        ),
+    )
+    # Dedicated rotation-aware keys for public human-attestation pseudonyms.
+    # The JSON object maps non-secret key IDs to server-only keys. New records
+    # use the active ID; every key referenced by an existing immutable record
+    # must remain present until that record is permanently retired.
+    human_attestation_pseudonym_keyring_json: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON",
+            "HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON",
+        ),
+    )
+    human_attestation_pseudonym_active_key_id: str = Field(
+        default="",
+        validation_alias=AliasChoices(
+            "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID",
+            "HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID",
         ),
     )
     # SQLite account storage is single-host and requires an explicit operator acknowledgement
@@ -963,6 +982,74 @@ class Settings(BaseSettings):
                 "Fleet service auth requires NC_FLEET_SERVICE_CREDENTIAL_PEPPER "
                 "with at least 32 bytes."
             )
+
+        keyring_configured = bool(
+            str(self.human_attestation_pseudonym_keyring_json or "").strip()
+        )
+        active_key_configured = bool(
+            str(self.human_attestation_pseudonym_active_key_id or "").strip()
+        )
+        if keyring_configured != active_key_configured:
+            raise RuntimeError(
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON and "
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID must be "
+                "configured together."
+            )
+        if self.accounts_enabled and not keyring_configured:
+            raise RuntimeError(
+                "Account mode requires both "
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_KEYRING_JSON and "
+                "NC_HUMAN_ATTESTATION_PSEUDONYM_ACTIVE_KEY_ID."
+            )
+        if keyring_configured:
+            from api.services.human_attestations import (
+                human_attestation_pseudonym_key_matches_secret,
+                parse_human_attestation_pseudonym_keyring,
+            )
+
+            try:
+                attestation_pseudonym_keys = (
+                    parse_human_attestation_pseudonym_keyring(
+                        self.human_attestation_pseudonym_keyring_json,
+                        active_key_id=(
+                            self.human_attestation_pseudonym_active_key_id
+                        ),
+                    )
+                )
+            except ValueError as exc:
+                raise RuntimeError(str(exc)) from exc
+            other_attestation_authorities: set[str] = {
+                self.billing_provider_reference_hash_key
+            }
+            for field_name in _BILLING_REFERENCE_CREDENTIAL_FIELDS:
+                if field_name == "human_attestation_pseudonym_keyring_json":
+                    continue
+                value = str(getattr(self, field_name, "") or "")
+                if field_name == "atlas_live_invite_codes":
+                    other_attestation_authorities.update(
+                        code.strip() for code in value.split(",") if code.strip()
+                    )
+                elif value:
+                    other_attestation_authorities.add(value)
+            database_url_for_key_isolation = str(self.database_url or "").strip()
+            if database_url_for_key_isolation:
+                try:
+                    database_password = urlsplit(
+                        database_url_for_key_isolation
+                    ).password
+                except ValueError:
+                    database_password = None
+                if database_password:
+                    other_attestation_authorities.add(unquote(database_password))
+            if any(
+                human_attestation_pseudonym_key_matches_secret(key, authority)
+                for key in attestation_pseudonym_keys.values()
+                for authority in other_attestation_authorities
+            ):
+                raise RuntimeError(
+                    "Human attestation pseudonym keys must be dedicated; do "
+                    "not reuse another server authority or credential secret."
+                )
         if not self.accounts_enabled:
             return
 

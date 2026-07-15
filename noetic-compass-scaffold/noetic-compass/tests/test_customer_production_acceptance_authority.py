@@ -43,8 +43,10 @@ from api.services.cas_harness_retention_disclosure import (
     _issue_live_s3_object_lock_receipt,
 )
 from tests.acceptance_attestation_test_support import (
+    human_attestation_store,
     materialize_human_attestations,
 )
+from api.services.human_attestations import PUBLIC_HUMAN_ASSURANCE_BOUNDARY
 
 
 _AUTHORIZATION_SHA256 = hashlib.sha256(b"test-authorization").hexdigest()
@@ -156,6 +158,7 @@ def _legal_evidence(now: datetime) -> dict[str, object]:
             "present",
             "unavailable",
         ],
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     }
 
 
@@ -299,9 +302,7 @@ def test_sqlite_revision_survives_restart_and_bytes_are_canonical(tmp_path) -> N
     second_backend = SqliteStateStore(path)
     second = CustomerProductionAcceptanceAuthorityStore(
         second_backend,
-        human_attestation_store=HumanAttestationStore(
-            second_backend, primary_tenant_id="primary"
-        ),
+        human_attestation_store=human_attestation_store(second_backend),
     )
     loaded = second.load("legal_publication_approval", now=now)
     assert loaded.sha256 == published.sha256

@@ -47,6 +47,7 @@ from api.services.customer_production_acceptance_authority import (
     CustomerProductionAcceptanceAuthorityStore,
     canonicalize_acceptance_evidence,
 )
+from api.services.human_attestations import PUBLIC_HUMAN_ASSURANCE_BOUNDARY
 from api.services.production.state_substrate.memory_store import InMemoryStateStore
 from api.services.production.state_substrate.sqlite_store import SqliteStateStore
 from api.services.production.worm_writes import RetentionPolicy
@@ -118,6 +119,7 @@ def _legal_evidence(now: datetime, *, evidence_master: str = MASTER) -> dict[str
         "observed_at_utc": stamp,
         "artifact_uri": acceptance_authority_url("legal_publication_approval"),
         "artifact_sha256": hashlib.sha256(b"independent-legal-artifact").hexdigest(),
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
         "public_base_url": "https://cascompass.ai",
         "documents": [
             {
@@ -166,6 +168,7 @@ def _base_evidence(gate: str, now: datetime) -> dict[str, object]:
         "observed_at_utc": stamp,
         "artifact_uri": acceptance_authority_url(gate),
         "artifact_sha256": hashlib.sha256(f"{gate}-artifact".encode()).hexdigest(),
+        "human_assurance_boundary": dict(PUBLIC_HUMAN_ASSURANCE_BOUNDARY),
     }
 
 
